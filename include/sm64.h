@@ -61,7 +61,7 @@
 #define INPUT_IN_WATER               0x0200
 #define INPUT_STOMPED                0x0400
 #define INPUT_INTERACT_OBJ_GRABBABLE 0x0800
-#define INPUT_UNKNOWN_12             0x1000
+#define INPUT_B_DOWN                 0x1000
 #define INPUT_B_PRESSED              0x2000
 #define INPUT_Z_DOWN                 0x4000
 #define INPUT_Z_PRESSED              0x8000
