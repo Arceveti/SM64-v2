@@ -121,17 +121,17 @@
 #define MARIO_CAP_IN_HAND               0x00000020
 #define MARIO_METAL_SHOCK               0x00000040
 #define MARIO_TELEPORTING               0x00000080
-#define MARIO_UNKNOWN_08                0x00000100
-#define MARIO_UNKNOWN_13                0x00002000
+#define MARIO_JUMPING                   0x00000100
+#define MARIO_NO_PURPLE_SWITCH          0x00002000
 #define MARIO_ACTION_SOUND_PLAYED       0x00010000
 #define MARIO_MARIO_SOUND_PLAYED        0x00020000
-#define MARIO_UNKNOWN_18                0x00040000
+#define MARIO_FALL_SOUND_PLAYED         0x00040000
 #define MARIO_PUNCHING                  0x00100000
 #define MARIO_KICKING                   0x00200000
 #define MARIO_TRIPPING                  0x00400000
-#define MARIO_UNKNOWN_25                0x02000000
-#define MARIO_UNKNOWN_30                0x40000000
-#define MARIO_UNKNOWN_31                0x80000000
+#define MARIO_LEDGE_CLIMB_CAMERA        0x02000000
+#define MARIO_AIR_HIT_WALL              0x40000000
+#define MARIO_PUSHING                   0x80000000
 
 #define MARIO_SPECIAL_CAPS (MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_WING_CAP)
 #define MARIO_CAPS (MARIO_NORMAL_CAP | MARIO_SPECIAL_CAPS)

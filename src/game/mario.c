@@ -890,7 +890,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
     }
 
     m->peakHeight = m->pos[1];
-    m->flags |= MARIO_UNKNOWN_08;
+    m->flags |= MARIO_JUMPING;
 
     return action;
 }
@@ -1004,7 +1004,7 @@ u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
     m->flags &= ~(MARIO_ACTION_SOUND_PLAYED | MARIO_MARIO_SOUND_PLAYED);
 
     if (!(m->action & ACT_FLAG_AIR)) {
-        m->flags &= ~MARIO_UNKNOWN_18;
+        m->flags &= ~MARIO_FALL_SOUND_PLAYED;
     }
 
     // Initialize the action information.
@@ -1547,7 +1547,7 @@ void update_mario_info_for_cam(struct MarioState *m) {
 
     vec3s_copy(m->statusForCamera->faceAngle, m->faceAngle);
 
-    if (!(m->flags & MARIO_UNKNOWN_25)) {
+    if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) {
         vec3f_copy(m->statusForCamera->pos, m->pos);
     }
 }

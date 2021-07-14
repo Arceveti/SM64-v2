@@ -1314,7 +1314,7 @@ s32 act_bbh_enter_spin(struct MarioState *m) {
                 play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
             }
 
-            m->flags &= ~MARIO_UNKNOWN_08;
+            m->flags &= ~MARIO_JUMPING;
             perform_air_step(m, 0);
             if (m->vel[1] <= 0) {
                 m->actionState = 2;
@@ -1326,7 +1326,7 @@ s32 act_bbh_enter_spin(struct MarioState *m) {
         case 3:
             m->faceAngle[1] = atan2s(cageDZ, cageDX);
             mario_set_forward_vel(m, forwardVel);
-            m->flags &= ~MARIO_UNKNOWN_08;
+            m->flags &= ~MARIO_JUMPING;
             if (perform_air_step(m, 0) == AIR_STEP_LANDED) {
                 level_trigger_warp(m, WARP_OP_UNKNOWN_02);
 #if ENABLE_RUMBLE
@@ -1378,7 +1378,7 @@ s32 act_bbh_enter_jump(struct MarioState *m) {
         m->faceAngle[1] = atan2s(cageDZ, cageDX);
         mario_set_forward_vel(m, cageDist / 20.0f);
 
-        m->flags &= ~MARIO_UNKNOWN_08;
+        m->flags &= ~MARIO_JUMPING;
         m->actionState = 1;
     }
 
