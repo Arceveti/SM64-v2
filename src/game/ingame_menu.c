@@ -31,6 +31,7 @@ u16 gDialogTextAlpha;
 s16 gCutsceneMsgXOffset;
 s16 gCutsceneMsgYOffset;
 s8 gRedCoinsCollected;
+s8 gSecretsCollected;
 #ifdef WIDE
 u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
 u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
@@ -443,37 +444,32 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
     u8 index = 0;
 
     if (scrollDirection == MENU_SCROLL_VERTICAL) {
-        if (gPlayer3Controller->rawStickY > 60) {
+        if (gPlayer3Controller->rawStickY > 60 || gPlayer3Controller->buttonDown & U_CBUTTONS || gPlayer3Controller->buttonDown & U_JPAD) {
             index++;
         }
 
-        if (gPlayer3Controller->rawStickY < -60) {
+        if (gPlayer3Controller->rawStickY < -60 || gPlayer3Controller->buttonDown & D_CBUTTONS || gPlayer3Controller->buttonDown & D_JPAD) {
             index += 2;
         }
     } else if (scrollDirection == MENU_SCROLL_HORIZONTAL) {
-        if (gPlayer3Controller->rawStickX > 60) {
+        if (gPlayer3Controller->rawStickX > 60 || gPlayer3Controller->buttonDown & R_CBUTTONS || gPlayer3Controller->buttonDown & R_JPAD) {
             index += 2;
         }
 
-        if (gPlayer3Controller->rawStickX < -60) {
+        if (gPlayer3Controller->rawStickX < -60 || gPlayer3Controller->buttonDown & L_CBUTTONS || gPlayer3Controller->buttonDown & L_JPAD) {
             index++;
         }
     }
 
     if (((index ^ gMenuHoldKeyIndex) & index) == 2) {
-        if (currentIndex[0] == maxIndex) {
-            //! Probably originally a >=, but later replaced with an == and an else statement.
-            currentIndex[0] = maxIndex;
-        } else {
+        if (currentIndex[0] < maxIndex) {
             play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
             currentIndex[0]++;
         }
     }
 
     if (((index ^ gMenuHoldKeyIndex) & index) == 1) {
-        if (currentIndex[0] == minIndex) {
-            // Same applies to here as above
-        } else {
+        if (currentIndex[0] > minIndex) {
             play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
             currentIndex[0]--;
         }
@@ -504,7 +500,7 @@ s16 get_str_x_pos_from_center(s16 centerPos, u8 *str, UNUSED f32 scale) {
     }
     // return the x position of where the string starts as half the string's
     // length from the position of the provided center.
-    return (s16)(centerPos - (s16)(spacesWidth / 2.0));
+    return (s16)(centerPos - (s16)(spacesWidth / 2.0f));
 }
 
 
@@ -665,7 +661,7 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
     }
 
     create_dl_translation_matrix(MENU_MTX_PUSH, X_VAL1, Y_VAL1, 0);
-    create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.1f, ((f32) linesPerBox / Y_VAL2) + 0.1, 1.0f);
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.1f, ((f32) linesPerBox / Y_VAL2) + 0.1f, 1.0f);
 
     gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
@@ -1039,11 +1035,11 @@ void render_dialog_entries(void) {
             }
 
             if (gDialogBoxType == DIALOG_TYPE_ROTATE) {
-                gDialogBoxOpenTimer -= 7.5;
-                gDialogBoxScale -= 1.5;
+                gDialogBoxOpenTimer -= 7.5f;
+                gDialogBoxScale -= 1.5f;
             } else {
-                gDialogBoxOpenTimer -= 10.0;
-                gDialogBoxScale -= 2.0;
+                gDialogBoxOpenTimer -= 10.0f;
+                gDialogBoxScale -= 2.0f;
             }
 
             if (gDialogBoxOpenTimer == 0.0f) {
@@ -1348,6 +1344,7 @@ void render_hud_cannon_reticle(void) {
 
 void reset_red_coins_collected(void) {
     gRedCoinsCollected = 0;
+    gSecretsCollected  = 0;
 }
 
 void change_dialog_camera_angle(void) {
@@ -1375,11 +1372,37 @@ void shade_screen(void) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
+void print_bowser_key(s32 x, s32 y, s16 rotation) { // bowser key
+    create_dl_translation_matrix(MENU_MTX_PUSH,               x+4,    y+18,    0.0f);
+    create_dl_rotation_matrix(   MENU_MTX_PUSH,      -90,    0.0f,    0.0f,    1.0f);
+    create_dl_rotation_matrix(   MENU_MTX_PUSH, rotation,    1.0f,    0.0f,    0.0f);
+    create_dl_scale_matrix(    MENU_MTX_NOPUSH,           0.0625f, 0.0625f, 0.0625f);
+    gSPSetGeometryMode(  gDisplayListHead++, G_ZBUFFER);
+    gSPDisplayList(      gDisplayListHead++, bowser_key_dl);
+    gSPPopMatrix(        gDisplayListHead++, G_MTX_MODELVIEW);
+    gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
+}
+
+void render_pause_bowser_keys(void) {
+    // s8 x;
+    s32 speed = 12;
+    s16 rotation;
+
+    if (gHudDisplay.keys > 0) {
+        rotation = (gGlobalTimer % (360 / speed)) * speed;
+        
+        print_bowser_key(GFX_DIMENSIONS_FROM_LEFT_EDGE(16), 16, -rotation);
+        // for (x = 0; x < gHudDisplay.keys; x++) {
+        //     print_bowser_key(GFX_DIMENSIONS_FROM_LEFT_EDGE((x * 16)+4), 16, -rotation);
+        // }
+    }
+}
+
 void print_animated_red_coin(s16 x, s16 y) {
     s32 timer = gGlobalTimer;
 
     create_dl_translation_matrix(MENU_MTX_PUSH, x, y, 0);
-    create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.2f, 0.2f, 1.0f);
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.25f, 0.25f, 1.0f);
     gDPSetRenderMode(gDisplayListHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
 
     switch (timer & 6) {
@@ -1759,9 +1782,7 @@ s16 render_pause_courses_and_castle(void) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
             #endif
 
-            if (gPlayer3Controller->buttonPressed & A_BUTTON
-             || gPlayer3Controller->buttonPressed & START_BUTTON)
-            {
+            if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_2, gGlobalSoundSource);
                 gDialogBoxState = DIALOG_STATE_OPENING;
@@ -1781,10 +1802,9 @@ s16 render_pause_courses_and_castle(void) {
             print_hud_pause_colorful_str();
             render_pause_castle_menu_box(160, 143);
             render_pause_castle_main_strings(104, 60);
+            render_pause_bowser_keys();
 
-            if (gPlayer3Controller->buttonPressed & A_BUTTON
-             || gPlayer3Controller->buttonPressed & START_BUTTON)
-            {
+            if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_2, gGlobalSoundSource);
                 gMenuMode = MENU_MODE_NONE;
@@ -1855,7 +1875,7 @@ void print_hud_course_complete_coins(s16 x, s16 y) {
             gCourseCompleteCoins++;
             play_sound(SOUND_MENU_YOSHI_GAIN_LIVES, gGlobalSoundSource);
 
-            if (gCourseCompleteCoins == 50 || gCourseCompleteCoins == 100 || gCourseCompleteCoins == 150) {
+            if (gCourseCompleteCoins % 50 == 0) {
                 play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
                 gMarioState->numLives++;
             }

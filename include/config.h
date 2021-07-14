@@ -57,7 +57,7 @@
 // The end quote should be here:               "
 #define INTERNAL_ROM_NAME "SUPERMARIO64        "
 // Disable lives and hide the lives counter
-#define DISABLE_LIVES
+// #define DISABLE_LIVES
 // Skip peach letter cutscene
 #define PEACH_SKIP
 // Fixes the castle music sometimes triggering after getting a dialog
@@ -89,6 +89,7 @@
 // Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
 #define IA8_COINS
 
+#define FPS30_COINS
 
 // HACKER QOL 
 // Enable widescreen (16:9) support
@@ -151,5 +152,7 @@
 #define STAR_GLOW
 
 #define HELD_TRANSPARENT_STAR
+
+#define ORANGE_LETTERS
 
 #endif // CONFIG_H

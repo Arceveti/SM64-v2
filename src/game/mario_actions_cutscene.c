@@ -1328,7 +1328,7 @@ s32 act_bbh_enter_spin(struct MarioState *m) {
             mario_set_forward_vel(m, forwardVel);
             m->flags &= ~MARIO_JUMPING;
             if (perform_air_step(m, 0) == AIR_STEP_LANDED) {
-                level_trigger_warp(m, WARP_OP_UNKNOWN_02);
+                level_trigger_warp(m, WARP_OP_SPIN_SHRINK);
 #if ENABLE_RUMBLE
                 queue_rumble_data(15, 80);
 #endif

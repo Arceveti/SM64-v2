@@ -86,9 +86,9 @@ void format_integer(s32 n, s32 base, char *dest, s32 *totalLength, u8 width, s8 
             }
         }
 
-        // Use 'M' prefix to indicate negative numbers.
+        // Use '-' prefix to indicate negative numbers.
         if (negative == TRUE) {
-            dest[len] = 'M';
+            dest[len] = '-';
             len++;
         }
 
@@ -134,7 +134,7 @@ void parse_width_field(const char *str, s32 *srcIndex, u8 *width, s8 *zeroPad) {
     }
 
     // Read width digits up until the 'd' or 'x' format specifier.
-    while (str[*srcIndex] != 'd' && str[*srcIndex] != 'x') {
+    while (str[*srcIndex] != 'b' && str[*srcIndex] != 't' && str[*srcIndex] != 'q' && str[*srcIndex] != 'o' && str[*srcIndex] != 'd' && str[*srcIndex] != 'x') {
         digits[digitsLen] = str[*srcIndex] - '0';
 
         if (digits[digitsLen] < 0 || digits[digitsLen] >= 10) // not a valid digit
@@ -192,8 +192,20 @@ void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n) {
 
             parse_width_field(str, &srcIndex, &width, &zeroPad);
 
-            if (str[srcIndex] != 'd' && str[srcIndex] != 'x') {
+            if (str[srcIndex] != 'b' && str[srcIndex] != 't' && str[srcIndex] != 'q' && str[srcIndex] != 'o' && str[srcIndex] != 'd' && str[srcIndex] != 'x') {
                 break;
+            }
+            if (str[srcIndex] == 'b') {
+                base = 2;
+            }
+            if (str[srcIndex] == 't') {
+                base = 3;
+            }
+            if (str[srcIndex] == 'q') {
+                base = 4;
+            }
+            if (str[srcIndex] == 'o') {
+                base = 2;
             }
             if (str[srcIndex] == 'd') {
                 base = 10;
@@ -317,23 +329,31 @@ s8 char_to_glyph_index(char c) {
         return GLYPH_AMPERSAND; // &, JP only
     }
 
-    if (c == '%') {
+    if (c == '/') {
         return GLYPH_PERCENT; // %, JP only
+    }
+
+    if (c == '-') {
+        return GLYPH_MINUS; // star
     }
 
     if (c == '*') {
         return GLYPH_MULTIPLY; // x
     }
 
-    if (c == '+') {
+    if (c == '$') {
         return GLYPH_COIN; // coin
+    }
+
+    if (c == '@') {
+        return GLYPH_RED_COIN; // red coin
     }
 
     if (c == ',') {
         return GLYPH_MARIO_HEAD; // Imagine I drew Mario's head
     }
 
-    if (c == '-') {
+    if (c == '^') {
         return GLYPH_STAR; // star
     }
 
@@ -341,7 +361,7 @@ s8 char_to_glyph_index(char c) {
         return GLYPH_PERIOD; // large shaded dot, JP only
     }
 
-    if (c == '/') {
+    if (c == '|') {
         return GLYPH_BETA_KEY; // beta key, JP only. Reused for Ü in EU.
     }
 
@@ -435,7 +455,7 @@ void render_text_labels(void) {
 #ifdef VERSION_EU
                 // Beta Key was removed by EU, so glyph slot reused.
                 // This produces a colorful Ü.
-                if (glyphIndex == GLYPH_BETA_KEY) {
+                if (glyphIndex == GLYPH_UMLAUT) {
                     add_glyph_texture(GLYPH_U);
                     render_textrect(sTextLabels[i]->x, sTextLabels[i]->y, j);
 
