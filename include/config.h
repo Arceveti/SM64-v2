@@ -9,30 +9,30 @@
 // Bug Fixes
 // --| Post-JP Version Nintendo Bug Fixes
 /// Fixes bug where obtaining over 999 coins sets the number of lives to 999 (or -25)
-#define BUGFIX_MAX_LIVES (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_MAX_LIVES (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where the Boss music won't fade out after defeating King Bob-omb
-#define BUGFIX_KING_BOB_OMB_FADE_MUSIC (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_KING_BOB_OMB_FADE_MUSIC (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug in Bob-Omb Battlefield where entering a warp stops the Koopa race music
-#define BUGFIX_KOOPA_RACE_MUSIC (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_KOOPA_RACE_MUSIC (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where Piranha Plants do not reset their action state when the
 /// player exits their activation radius.
-#define BUGFIX_PIRANHA_PLANT_STATE_RESET (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_PIRANHA_PLANT_STATE_RESET (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where sleeping Piranha Plants damage players that bump into them
-#define BUGFIX_PIRANHA_PLANT_SLEEP_DAMAGE (0 || VERSION_US || VERSION_SH)
+#define BUGFIX_PIRANHA_PLANT_SLEEP_DAMAGE (1 || VERSION_US || VERSION_SH)
 /// Fixes bug where it shows a star when you grab a key in bowser battle stages
-#define BUGFIX_STAR_BOWSER_KEY (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_STAR_BOWSER_KEY (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug that enables Mario in time stop even if is not ready to speak
-#define BUGFIX_DIALOG_TIME_STOP (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_DIALOG_TIME_STOP (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug that causes Mario to still collide with Bowser in BITS after his defeat
-#define BUGFIX_BOWSER_COLLIDE_BITS_DEAD (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_BOWSER_COLLIDE_BITS_DEAD (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where Bowser wouldn't reset his speed when fallen off (and adds missing checks)
-#define BUGFIX_BOWSER_FALLEN_OFF_STAGE (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_BOWSER_FALLEN_OFF_STAGE (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where Bowser would look weird while fading out
-#define BUGFIX_BOWSER_FADING_OUT (0 || VERSION_US || VERSION_EU || VERSION_SH)
+#define BUGFIX_BOWSER_FADING_OUT (1 || VERSION_US || VERSION_EU || VERSION_SH)
 
 // Support Rumble Pak
 // Currently not recommended, as it may cause random crashes.
-//#define ENABLE_RUMBLE (1 || VERSION_SH)
+// #define ENABLE_RUMBLE (1 || VERSION_SH)
 
 // Clear RAM on boot
 #define CLEARRAM 1
@@ -69,11 +69,11 @@
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
 #define TIGHTER_HANGING_CONTROLS
 // Makes Mario turn around instantly when moving on the ground
-//#define SUPER_RESPONSIVE_CONTROLS
+#define SUPER_RESPONSIVE_CONTROLS
 // Disables fall damage
 #define NO_FALL_DAMAGE
 // Disables the scream that mario makes when falling off a great height (this is separate from actual fall damage)
-//#define NO_FALL_DAMAGE_SOUND
+// #define NO_FALL_DAMAGE_SOUND
 // Number of coins to spawn the "100 coin" star. If you remove the define altogether, then there won't be a 100 coin star at all.
 #define X_COIN_STAR 100
 // Platform displacement 2 also known as momentum patch. Makes Mario keep the momemtum from moving platforms. Breaks treadmills.
@@ -81,11 +81,11 @@
 // Stars don't kick you out of the level
 // #define NON_STOP_STARS
 // Uncomment this if you want global star IDs (useful for creating an open world hack ala MVC)
-//#define GLOBAL_STAR_IDS
+// #define GLOBAL_STAR_IDS
 // Uncomment this if you want to skip the title screen (Super Mario 64 logo)
-//#define SKIP_TITLE_SCREEN
+// #define SKIP_TITLE_SCREEN
 // Uncomment this if you want to keep the mario head and not skip it
-//#define KEEP_MARIO_HEAD
+#define KEEP_MARIO_HEAD
 // Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
 #define IA8_COINS
 
@@ -119,16 +119,16 @@
 #define HANGING_FIX
 // The last frame that will be considered a firsty when wallkicking
 #define FIRSTY_LAST_FRAME 1
-// 46 degree walkicks
-//#define WALLKICKS_46_DEGREES
+// 46 degree wallkicks
+#define WALLKICKS_46_DEGREES
 // Disable BLJs and crush SimpleFlips's dreams
-//#define DISABLE_BLJ
+// #define DISABLE_BLJ
 
 // RELATING TO EXIT COURSE
 // Disable exit course
-//#define DISABLE_EXIT_COURSE
+// #define DISABLE_EXIT_COURSE
 // Decides whether you can exit course while moving (has no effect if you disable exit course)
-//#define EXIT_COURSE_WHILE_MOVING
+#define EXIT_COURSE_WHILE_MOVING
 // Decides which level "exit course" takes you to (has no effect if you disable exit course)
 #define EXIT_COURSE_LEVEL LEVEL_CASTLE
 // Decides the area node "exit course" takes you to (has no effect if you disable exit course)
