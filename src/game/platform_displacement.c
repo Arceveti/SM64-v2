@@ -9,6 +9,7 @@
 #include "platform_displacement.h"
 #include "types.h"
 #include "sm64.h"
+#include "behavior_data.h"
 
 #include "config.h"
 
@@ -142,6 +143,13 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
 	} else {
 		// First frame of standing on the platform, don't calculate a new position
 		vec3f_sub(pos, platformPos);
+	}
+
+    // Apply displacement for TTC Treadmills
+	if (platform->behavior == segmented_to_virtual(bhvTTCTreadmill)) {
+		pos[0] += platform->oVelX;
+		pos[1] += platform->oVelY;
+		pos[2] += platform->oVelZ;
 	}
 
 	// Transform from world positions to relative positions for use next frame
