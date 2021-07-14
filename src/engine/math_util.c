@@ -140,12 +140,17 @@ void *vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
 
 /// Scale vector 'dest' so it has length 1
 void *vec3f_normalize(Vec3f dest) {
-    //! Possible division by zero
-    f32 invsqrt = 1.0f / sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
+     if (dest == gVec3fZero) {
+        dest[0] = 0.0f;
+        dest[1] = 0.0f;
+        dest[2] = 0.0f;
+    } else {
+        f32 invsqrt = 1.0f / sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
 
-    dest[0] *= invsqrt;
-    dest[1] *= invsqrt;
-    dest[2] *= invsqrt;
+        dest[0] *= invsqrt;
+        dest[1] *= invsqrt;
+        dest[2] *= invsqrt;
+    }
     return &dest; //! warning: function returns address of local variable
 }
 
@@ -417,7 +422,7 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw) {
  * 'radius' is the distance from each triangle vertex to the center
  */
 void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
-    struct Surface *sp74;
+    struct Surface *floor;
     Vec3f point0;
     Vec3f point1;
     Vec3f point2;
@@ -435,9 +440,9 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
     point2[0] = pos[0] + radius * sins(yaw + 0xD555);
     point2[2] = pos[2] + radius * coss(yaw + 0xD555);
 
-    point0[1] = find_floor(point0[0], pos[1] + 150, point0[2], &sp74);
-    point1[1] = find_floor(point1[0], pos[1] + 150, point1[2], &sp74);
-    point2[1] = find_floor(point2[0], pos[1] + 150, point2[2], &sp74);
+    point0[1] = find_floor(point0[0], pos[1] + 150, point0[2], &floor);
+    point1[1] = find_floor(point1[0], pos[1] + 150, point1[2], &floor);
+    point2[1] = find_floor(point2[0], pos[1] + 150, point2[2], &floor);
 
     if (point0[1] - pos[1] < minY) {
         point0[1] = pos[1];
