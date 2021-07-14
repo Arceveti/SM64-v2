@@ -12,5 +12,5 @@ const GeoLayout boo_castle_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };

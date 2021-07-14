@@ -24,5 +24,5 @@ const GeoLayout haunted_chair_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };

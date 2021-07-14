@@ -21,7 +21,7 @@ const GeoLayout castle_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x1600043C
@@ -47,7 +47,7 @@ const GeoLayout cabin_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x160004D0
@@ -73,7 +73,7 @@ const GeoLayout wooden_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x16000564
@@ -99,7 +99,7 @@ const GeoLayout wooden_door2_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x160005F8
@@ -125,7 +125,7 @@ const GeoLayout metal_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x1600068C
@@ -151,7 +151,7 @@ const GeoLayout hazy_maze_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x16000720
@@ -177,7 +177,7 @@ const GeoLayout haunted_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x160007B4
@@ -209,7 +209,7 @@ const GeoLayout castle_door_0_star_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x16000868
@@ -241,7 +241,7 @@ const GeoLayout castle_door_1_star_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x1600091C
@@ -273,7 +273,7 @@ const GeoLayout castle_door_3_stars_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
 
 // 0x160009D0
@@ -305,5 +305,5 @@ const GeoLayout key_door_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };

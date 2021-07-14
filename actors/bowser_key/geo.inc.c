@@ -26,5 +26,5 @@ const GeoLayout bowser_key_cutscene_geo[] = {
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
-GEO_END(),
+   GEO_END(),
 };
