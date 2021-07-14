@@ -31,6 +31,66 @@ extern const GeoLayout blue_coin_geo[];
 extern const GeoLayout blue_coin_no_shadow_geo[];
 extern const GeoLayout red_coin_geo[];
 extern const GeoLayout red_coin_no_shadow_geo[];
+#ifdef IA8_30FPS_COINS
+extern const GeoLayout secret_coin_geo[];
+extern const GeoLayout secret_coin_no_shadow_geo[];
+
+extern const Gfx coin_seg3_dl_yellow_0[];
+extern const Gfx coin_seg3_dl_yellow_22_5[];
+extern const Gfx coin_seg3_dl_yellow_45[];
+extern const Gfx coin_seg3_dl_yellow_67_5[];
+extern const Gfx coin_seg3_dl_yellow_90[];
+extern const Gfx coin_seg3_dl_yellow_67_5_r[];
+extern const Gfx coin_seg3_dl_yellow_45_r[];
+extern const Gfx coin_seg3_dl_yellow_22_5_r[];
+
+extern const Gfx coin_seg3_dl_blue_0[];
+extern const Gfx coin_seg3_dl_blue_22_5[];
+extern const Gfx coin_seg3_dl_blue_45[];
+extern const Gfx coin_seg3_dl_blue_67_5[];
+extern const Gfx coin_seg3_dl_blue_90[];
+extern const Gfx coin_seg3_dl_blue_67_5_r[];
+extern const Gfx coin_seg3_dl_blue_45_r[];
+extern const Gfx coin_seg3_dl_blue_22_5_r[];
+
+extern const Gfx coin_seg3_dl_red_0[];
+extern const Gfx coin_seg3_dl_red_22_5[];
+extern const Gfx coin_seg3_dl_red_45[];
+extern const Gfx coin_seg3_dl_red_67_5[];
+extern const Gfx coin_seg3_dl_red_90[];
+extern const Gfx coin_seg3_dl_red_67_5_r[];
+extern const Gfx coin_seg3_dl_red_45_r[];
+extern const Gfx coin_seg3_dl_red_22_5_r[];
+
+extern const Gfx coin_seg3_dl_secret_0[];
+extern const Gfx coin_seg3_dl_secret_22_5[];
+extern const Gfx coin_seg3_dl_secret_45[];
+extern const Gfx coin_seg3_dl_secret_67_5[];
+extern const Gfx coin_seg3_dl_secret_90[];
+extern const Gfx coin_seg3_dl_secret_67_5_r[];
+extern const Gfx coin_seg3_dl_secret_45_r[];
+extern const Gfx coin_seg3_dl_secret_22_5_r[];
+
+extern const Gfx coin_seg3_dl_yellow_front[];
+extern const Gfx coin_seg3_dl_yellow_tilt_right[];
+extern const Gfx coin_seg3_dl_yellow_side[];
+extern const Gfx coin_seg3_dl_yellow_tilt_left[];
+
+extern const Gfx coin_seg3_dl_blue_front[];
+extern const Gfx coin_seg3_dl_blue_tilt_right[];
+extern const Gfx coin_seg3_dl_blue_side[];
+extern const Gfx coin_seg3_dl_blue_tilt_left[];
+
+extern const Gfx coin_seg3_dl_red_front[];
+extern const Gfx coin_seg3_dl_red_tilt_right[];
+extern const Gfx coin_seg3_dl_red_side[];
+extern const Gfx coin_seg3_dl_red_tilt_left[];
+
+extern const Gfx coin_seg3_dl_secret_front[];
+extern const Gfx coin_seg3_dl_secret_tilt_right[];
+extern const Gfx coin_seg3_dl_secret_side[];
+extern const Gfx coin_seg3_dl_secret_tilt_left[];
+#else
 extern const Gfx coin_seg3_dl_03007780[];
 extern const Gfx coin_seg3_dl_030077D0[];
 extern const Gfx coin_seg3_dl_03007800[];
@@ -45,6 +105,7 @@ extern const Gfx coin_seg3_dl_03007940[];
 extern const Gfx coin_seg3_dl_03007968[];
 extern const Gfx coin_seg3_dl_03007990[];
 extern const Gfx coin_seg3_dl_030079B8[];
+#endif
 
 // dirt
 extern const GeoLayout dirt_animation_geo[];

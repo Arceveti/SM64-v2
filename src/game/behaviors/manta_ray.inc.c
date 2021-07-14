@@ -110,7 +110,7 @@ void bhv_manta_ray_loop(void) {
         case MANTA_ACT_SPAWN_RINGS:
             manta_ray_move();
             manta_ray_act_spawn_ring();
-
+            gSecretsCollected = o->oWaterRingSpawnerRingsCollected;
             // Spawn a star after collecting 5 rings.
             if (o->oWaterRingSpawnerRingsCollected == 5) {
                 spawn_mist_particles();
@@ -125,6 +125,6 @@ void bhv_manta_ray_loop(void) {
     }
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     }
 }

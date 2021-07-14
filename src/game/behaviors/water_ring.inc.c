@@ -176,7 +176,7 @@ void bhv_jet_stream_ring_spawner_loop(void) {
     switch (o->oAction) {
         case JS_RING_SPAWNER_ACT_ACTIVE:
             water_ring_spawner_act_inactive();
-
+            gSecretsCollected = o->oWaterRingSpawnerRingsCollected;
             if (o->oWaterRingSpawnerRingsCollected == 5) {
                 spawn_mist_particles();
 

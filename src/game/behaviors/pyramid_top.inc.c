@@ -91,6 +91,7 @@ void bhv_pyramid_top_explode(void) {
 }
 
 void bhv_pyramid_top_loop(void) {
+    gSecretsCollected = o->oPyramidTopPillarsTouched;
     switch (o->oAction) {
         case PYRAMID_TOP_ACT_CHECK_IF_SOLVED:
             if (o->oPyramidTopPillarsTouched == 4) {
@@ -147,7 +148,7 @@ void bhv_pyramid_top_fragment_loop(void) {
  */
 void bhv_pyramid_pillar_touch_detector_loop(void) {
     cur_obj_become_tangible();
-    if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)) {
         // Increase the pyramid top's count of pillars touched.
         o->parentObj->oPyramidTopPillarsTouched++;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;

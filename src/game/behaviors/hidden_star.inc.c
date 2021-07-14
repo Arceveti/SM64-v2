@@ -1,21 +1,21 @@
 // hidden_star.c.inc
 
 void bhv_hidden_star_init(void) {
-    s16 sp36;
-    struct Object *sp30;
+    s16 remainingTriggers;
+    struct Object *starObj;
 
-    sp36 = count_objects_with_behavior(bhvHiddenStarTrigger);
-    if (sp36 == 0) {
-        sp30 =
-            spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
-        sp30->oBehParams = o->oBehParams;
+    remainingTriggers = count_objects_with_behavior(bhvHiddenStarTrigger);
+    if (remainingTriggers == 0) {
+        starObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0, 0, 0);
+        starObj->oBehParams = o->oBehParams;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 
-    o->oHiddenStarTriggerCounter = 5 - sp36;
+    o->oHiddenStarTriggerCounter = 5 - remainingTriggers;
 }
 
 void bhv_hidden_star_loop(void) {
+    gSecretsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
             if (o->oHiddenStarTriggerCounter == 5)
@@ -35,7 +35,7 @@ void bhv_hidden_star_loop(void) {
 /* TODO: this is likely not a checkpoint but a Secret */
 void bhv_hidden_star_trigger_loop(void) {
     struct Object *hiddenStar;
-    if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)) {
         hiddenStar = cur_obj_nearest_object_with_behavior(bhvHiddenStar);
         if (hiddenStar != NULL) {
             hiddenStar->oHiddenStarTriggerCounter++;
