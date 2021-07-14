@@ -12,7 +12,7 @@ struct UnusedChuckyaData sUnusedChuckyaData[] = { { 2, 0.f,  1.f },
                                                   { 2, 20.f, 1.f }, 
                                                   { 8, 10.f, 1.f }};
 
-void common_anchor_mario_behavior(f32 sp28, f32 sp2C, s32 sp30) {
+void common_anchor_mario_behavior(f32 forwardVel, f32 velY, s32 flag) {
     switch (o->parentObj->oChuckyaUnk88) {
         case 0:
             break;
@@ -20,9 +20,9 @@ void common_anchor_mario_behavior(f32 sp28, f32 sp2C, s32 sp30) {
             obj_set_gfx_pos_at_obj_pos(gMarioObject, o);
             break;
         case 2:
-            gMarioObject->oInteractStatus |= (sp30 + INT_STATUS_MARIO_UNK2);
-            gMarioStates[0].forwardVel = sp28;
-            gMarioStates[0].vel[1] = sp2C;
+            gMarioObject->oInteractStatus |= (flag + INT_STATUS_MARIO_UNK2);
+            gMarioStates[0].forwardVel = forwardVel;
+            gMarioStates[0].vel[1] = velY;
             o->parentObj->oChuckyaUnk88 = 0;
             break;
         case 3:

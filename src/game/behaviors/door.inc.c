@@ -6,7 +6,7 @@ struct DoorAction
     s32 action;
 };
 
-static struct DoorAction sDoorActions[] = { { 0x40000, 3 }, { 0x80000, 4 }, { 0x10000, 1 }, { 0x20000, 2 }, { -1, 0 }, };
+static struct DoorAction sDoorActions[] = { { INT_STATUS_WARP_DOOR_ANIM_3, 3 }, { INT_STATUS_WARP_DOOR_ANIM_4, 4 }, { INT_STATUS_DOOR_PULLED, 1 }, { INT_STATUS_DOOR_PUSHED, 2 }, { -1, 0 }, };
 
 static s32 sDoorOpenSounds[] = { SOUND_GENERAL_OPEN_WOOD_DOOR, SOUND_GENERAL_OPEN_IRON_DOOR };
 
@@ -58,19 +58,19 @@ void bhv_door_loop(void) {
         case 0:
             cur_obj_init_animation_with_sound(0);
             break;
-        case 1:
+        case 1: // INT_STATUS_DOOR_PULLED
             door_animation_and_reset(1);
             play_door_open_noise();
             break;
-        case 2:
+        case 2: // INT_STATUS_DOOR_PUSHED
             door_animation_and_reset(2);
             play_door_open_noise();
             break;
-        case 3:
+        case 3: // INT_STATUS_WARP_DOOR_ANIM_3
             door_animation_and_reset(3);
             play_warp_door_open_noise();
             break;
-        case 4:
+        case 4: // INT_STATUS_WARP_DOOR_ANIM_4
             door_animation_and_reset(4);
             play_warp_door_open_noise();
             break;

@@ -51,7 +51,7 @@ void bhv_fish_group_loop(void);
 void bhv_cannon_base_loop(void);
 void bhv_cannon_barrel_loop(void);
 void bhv_cannon_base_unused_loop(void);
-void common_anchor_mario_behavior(f32 sp28, f32 sp2C, s32 sp30);
+void common_anchor_mario_behavior(f32 forwardVel, f32 velY, s32 flag);
 void bhv_chuckya_loop(void);
 void bhv_chuckya_anchor_mario_loop(void);
 void bhv_rotating_platform_loop(void);

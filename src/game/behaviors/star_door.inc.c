@@ -14,7 +14,7 @@ void bhv_star_door_loop(void) {
     switch (o->oAction) {
         case 0:
             cur_obj_become_tangible();
-            if (0x30000 & o->oInteractStatus)
+            if (o->oInteractStatus & (INT_STATUS_DOOR_PULLED | INT_STATUS_DOOR_PUSHED))
                 o->oAction = 1;
             if (sp18 != NULL && sp18->oAction != 0)
                 o->oAction = 1;

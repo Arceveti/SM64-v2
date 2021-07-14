@@ -67,7 +67,7 @@ u32 interact_shock(struct MarioState *, u32, struct Object *);
 u32 interact_mr_blizzard(struct MarioState *, u32, struct Object *);
 u32 interact_hit_from_below(struct MarioState *, u32, struct Object *);
 u32 interact_bounce_top(struct MarioState *, u32, struct Object *);
-u32 interact_unknown_08(struct MarioState *, u32, struct Object *);
+u32 interact_spiny_walking(struct MarioState *, u32, struct Object *);
 u32 interact_damage(struct MarioState *, u32, struct Object *);
 u32 interact_breakable(struct MarioState *, u32, struct Object *);
 u32 interact_koopa_shell(struct MarioState *, u32, struct Object *);
@@ -110,7 +110,7 @@ static struct InteractionHandler sInteractionHandlers[] = {
     { INTERACT_BREAKABLE,      interact_breakable },
     { INTERACT_KOOPA,          interact_bounce_top },
     { INTERACT_KOOPA_SHELL,    interact_koopa_shell },
-    { INTERACT_UNKNOWN_08,     interact_unknown_08 },
+    { INTERACT_SPINY_WALKING,  interact_spiny_walking },
     { INTERACT_CAP,            interact_cap },
     { INTERACT_GRABBABLE,      interact_grabbable },
     { INTERACT_TEXT,           interact_text },
@@ -1411,7 +1411,7 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
     return FALSE;
 }
 
-u32 interact_unknown_08(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+u32 interact_spiny_walking(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     u32 interaction = determine_interaction(m, o);
 
     if (interaction & INT_PUNCH) {
