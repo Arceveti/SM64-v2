@@ -7,7 +7,7 @@ void bhv_orange_number_init(void) {
 
 void bhv_orange_number_loop(void) {
     struct Object *sparkleObj;
-#ifdef ORANGE_LETTERS
+#ifdef DIALOG_INDICATOR
     if (o->oAnimState <= 0x09) {
 #endif
         o->oPosY += o->oVelY;
@@ -20,7 +20,7 @@ void bhv_orange_number_loop(void) {
             sparkleObj->oPosY -= 30.0f;
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         }
-#ifdef ORANGE_LETTERS
+#ifdef DIALOG_INDICATOR
     } else {
         if (o->oTimer >= 1 || gMarioState->action == ACT_READING_SIGN) {
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;

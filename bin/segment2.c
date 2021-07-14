@@ -2400,7 +2400,7 @@ const Gfx dl_billboard_num_9[] = {
     gsSPEndDisplayList(),
 };
 
-#ifdef ORANGE_LETTERS
+#ifdef DIALOG_INDICATOR
 const Gfx dl_billboard_num_A[] = {
     gsSPDisplayList(dl_billboard_num_begin),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture_hud_char_A),

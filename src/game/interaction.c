@@ -301,11 +301,8 @@ void mario_drop_held_object(struct MarioState *m) {
 
         obj_set_held_state(m->heldObj, bhvCarrySomething4);
 
-        // ! When dropping an object instead of throwing it, it will be put at Mario's
-        // y-positon instead of the HOLP's y-position. This fact is often exploited when
-        // cloning objects.
         m->heldObj->oPosX = m->marioBodyState->heldObjLastPosition[0];
-        m->heldObj->oPosY = m->pos[1];
+        m->heldObj->oPosY = m->marioBodyState->heldObjLastPosition[1];
         m->heldObj->oPosZ = m->marioBodyState->heldObjLastPosition[2];
 
         m->heldObj->oMoveAngleYaw = m->faceAngle[1];
@@ -620,6 +617,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     f32 offsetX = m->pos[0] - o->oPosX;
     f32 offsetZ = m->pos[2] - o->oPosZ;
     f32 distance = sqrtf(offsetX * offsetX + offsetZ * offsetZ);
+    f32 floorHeight;
 
     if (distance < minDistance) {
         struct Surface *floor;
@@ -638,12 +636,14 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
 
         f32_find_wall_collision(&newMarioX, &m->pos[1], &newMarioZ, 60.0f, 50.0f);
 
-        find_floor(newMarioX, m->pos[1], newMarioZ, &floor);
+        floorHeight = find_floor(newMarioX, m->pos[1], newMarioZ, &floor);
         if (floor != NULL) {
             //! Doesn't update Mario's referenced floor (allows oob death when
             // an object pushes you into a steep slope while in a ground action)
             m->pos[0] = newMarioX;
             m->pos[2] = newMarioZ;
+            m->floor = floor;
+            m->floorHeight = floorHeight;
         }
     }
 }
@@ -756,6 +756,7 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     if (o->oDamageOrCoinValue >= 2) {
         queue_rumble_data(5, 80);
     }
+    // queue_rumble_data(o->oDamageOrCoinValue, o->oDamageOrCoinValue * 10);
 #endif
 
     return FALSE;
@@ -771,7 +772,7 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
     u32 starIndex;
     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
 #ifdef NON_STOP_STARS
-    u32 noExit = 1;
+    u32 noExit = TRUE;
 #else
     u32 noExit = (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
 #endif
@@ -804,7 +805,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
         }
 
         if (m->action & ACT_FLAG_AIR) {
+#ifdef AIR_STAR_DANCE
+            starGrabAction = ((m->pos[1] < m->floorHeight + 1024.0f) ? ACT_FALL_AFTER_STAR_GRAB : ACT_STAR_DANCE_WATER);
+#else
             starGrabAction = ACT_FALL_AFTER_STAR_GRAB;
+#endif
         }
 
         spawn_object(o, MODEL_NONE, bhvStarKeyCollectionPuffSpawner);
@@ -1351,7 +1356,7 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
         }
 
         if (interaction & INT_HIT_FROM_ABOVE) {
-            if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE) {
+            if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE || m->action == ACT_TWIRLING) {
                 bounce_off_object(m, o, 80.0f);
                 reset_mario_pitch(m);
 #ifndef VERSION_JP
@@ -1359,7 +1364,11 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
+#ifdef BOUNCE_BOOST
+                bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 50.0f : 30.0f);
+#else
                 bounce_off_object(m, o, 30.0f);
+#endif
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1389,7 +1398,7 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
         bounce_back_from_attack(m, interaction);
 
         if (interaction & INT_HIT_FROM_ABOVE) {
-            if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE) {
+            if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE || m->action == ACT_TWIRLING) {
                 bounce_off_object(m, o, 80.0f);
                 reset_mario_pitch(m);
 #ifndef VERSION_JP
@@ -1397,7 +1406,11 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
 #endif
                 return drop_and_set_mario_action(m, ACT_TWIRLING, 0);
             } else {
+#ifdef BOUNCE_BOOST
+                bounce_off_object(m, o, (m->input & INPUT_A_DOWN) ? 50.0f : 30.0f);
+#else
                 bounce_off_object(m, o, 30.0f);
+#endif
             }
         }
     } else if (take_damage_and_knock_back(m, o)) {
@@ -1480,9 +1493,7 @@ u32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct O
             play_shell_music();
             mario_drop_held_object(m);
 
-            //! Puts Mario in ground action even when in air, making it easy to
-            // escape air actions into crouch slide (shell cancel)
-            return set_mario_action(m, ACT_RIDING_SHELL_GROUND, 0);
+            return set_mario_action(m, ACT_RIDING_SHELL_FALL, 0);
         }
 
         push_mario_out_of_object(m, o, 2.0f);
@@ -1677,8 +1688,44 @@ u32 interact_grabbable(struct MarioState *m, u32 interactType, struct Object *o)
 }
 
 u32 mario_can_talk(struct MarioState *m, u32 arg) {
-    s16 val6;
+    s16 animID;
+#ifdef EASIER_DIALOG_TRIGGER
+    if (m->action & (ACT_FLAG_AIR
+     | ACT_FLAG_SHORT_HITBOX
+     | ACT_FLAG_RIDING_SHELL
+     | ACT_FLAG_BUTT_OR_STOMACH_SLIDE
+     | ACT_FLAG_DIVING
+     | ACT_FLAG_ON_POLE
+     | ACT_FLAG_HANGING
+     | ACT_FLAG_INTANGIBLE)) {
+        return FALSE;
+    }
 
+    if (m->action == ACT_FIRST_PERSON) {
+        return FALSE;
+    }
+
+    if (m->action & (ACT_FLAG_IDLE
+     | ACT_FLAG_STATIONARY
+     | ACT_FLAG_ALLOW_FIRST_PERSON)) {
+        return TRUE;
+    }
+
+    if (m->action == ACT_WALKING
+     || m->action == ACT_DECELERATING
+     || m->action == ACT_BRAKING
+     || m->action == ACT_BRAKING_STOP) {
+        if (arg) {
+            return TRUE;
+        }
+
+        animID = m->marioObj->header.gfx.animInfo.animID;
+
+        if (animID == 0x0080 || animID == 0x007F || animID == 0x006C) {
+            return TRUE;
+        }
+     }
+#else
     if ((m->action & ACT_FLAG_IDLE) != 0x00000000) {
         return TRUE;
     }
@@ -1694,7 +1741,7 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
             return TRUE;
         }
     }
-
+#endif
     return FALSE;
 }
 
@@ -1711,33 +1758,62 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
 #endif
 
 u32 check_read_sign(struct MarioState *m, struct Object *o) {
+#ifdef EASIER_DIALOG_TRIGGER
+    s16 facingDYaw   = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
+    s16 dAngleToSign = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
+    if (mario_can_talk(m, TRUE) && object_facing_mario(m, o, SIGN_RANGE)
+        && facingDYaw   >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE
+        && dAngleToSign >= -SIGN_RANGE && dAngleToSign <= SIGN_RANGE) {
+#ifdef DIALOG_INDICATOR
+        if (o->behavior == segmented_to_virtual(bhvSignOnWall)) {
+            spawn_object_relative(10, 0, 180, 32, o, MODEL_NUMBER, bhvOrangeNumber);
+        } else {
+            spawn_object_relative(10, 0, 160,  8, o, MODEL_NUMBER, bhvOrangeNumber);
+        }
+#endif
+        if (m->input & READ_MASK) {
+#else
+
     if ((m->input & READ_MASK) && mario_can_talk(m, 0) && object_facing_mario(m, o, SIGN_RANGE)) {
         s16 facingDYaw = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
         if (facingDYaw >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE) {
+#endif
             f32 targetX = o->oPosX + 105.0f * sins(o->oMoveAngleYaw);
             f32 targetZ = o->oPosZ + 105.0f * coss(o->oMoveAngleYaw);
 
-            m->marioObj->oMarioReadingSignDYaw = facingDYaw;
+            m->marioObj->oMarioReadingSignDYaw  = facingDYaw;
             m->marioObj->oMarioReadingSignDPosX = targetX - m->pos[0];
             m->marioObj->oMarioReadingSignDPosZ = targetZ - m->pos[2];
 
             m->interactObj = o;
-            m->usedObj = o;
+            m->usedObj     = o;
             return set_mario_action(m, ACT_READING_SIGN, 0);
         }
     }
-
     return FALSE;
 }
 
 u32 check_npc_talk(struct MarioState *m, struct Object *o) {
+#ifdef EASIER_DIALOG_TRIGGER
+    s16 facingDYaw = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
+    if (mario_can_talk(m, TRUE) && facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
+#ifdef DIALOG_INDICATOR
+        if (o->behavior == segmented_to_virtual(bhvYoshi)) {
+            spawn_object_relative(10, 0, 256, 64, o, MODEL_NUMBER, bhvOrangeNumber);
+        } else {
+            spawn_object_relative(10, 0, 160,  0, o, MODEL_NUMBER, bhvOrangeNumber);
+        }
+#endif
+        if (m->input & READ_MASK) {
+#else
     if ((m->input & READ_MASK) && mario_can_talk(m, 1)) {
         s16 facingDYaw = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
         if (facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
+#endif
             o->oInteractStatus = INT_STATUS_INTERACTED;
 
             m->interactObj = o;
-            m->usedObj = o;
+            m->usedObj     = o;
 
             push_mario_out_of_object(m, o, -10.0f);
             return set_mario_action(m, ACT_WAITING_FOR_DIALOG, 0);
@@ -1810,7 +1886,7 @@ void mario_process_interactions(struct MarioState *m) {
     }
 
     if (m->invincTimer > 0 && !sDelayInvincTimer) {
-        m->invincTimer -= 1;
+        m->invincTimer--;
     }
 
     //! If the kick/punch flags are set and an object collision changes Mario's
@@ -1891,8 +1967,11 @@ void mario_handle_special_floors(struct MarioState *m) {
                 pss_end_slide(m);
                 break;
         }
-
+#ifdef LAVA_FIX
+        if (!(m->action & ACT_FLAG_SWIMMING)) {
+#else
         if (!(m->action & ACT_FLAG_AIR) && !(m->action & ACT_FLAG_SWIMMING)) {
+#endif
             switch (floorType) {
                 case SURFACE_BURNING:
                     check_lava_boost(m);

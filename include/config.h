@@ -65,7 +65,7 @@
 // Remove course specific camera processing
 #define CAMERA_FIX
 // Change the movement speed when hanging from a ceiling
-#define HANGING_SPEED 12.f
+#define HANGING_SPEED 12.0f
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
 #define TIGHTER_HANGING_CONTROLS
 // Makes Mario turn around instantly when moving on the ground
@@ -153,6 +153,15 @@
 
 #define HELD_TRANSPARENT_STAR
 
-#define ORANGE_LETTERS
+
+#define AIR_STAR_DANCE
+
+#define BOUNCE_BOOST
+
+#define EASIER_DIALOG_TRIGGER
+// requires EASIER_DIALOG_TRIGGER
+#define DIALOG_INDICATOR
+
+#define LAVA_FIX
 
 #endif // CONFIG_H

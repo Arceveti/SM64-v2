@@ -2,7 +2,7 @@
 const GeoLayout number_geo[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-#ifdef ORANGE_LETTERS
+#ifdef DIALOG_INDICATOR
       GEO_SWITCH_CASE(16, geo_switch_anim_state),
 #else
       GEO_SWITCH_CASE(10, geo_switch_anim_state),
@@ -18,7 +18,7 @@ const GeoLayout number_geo[] = {
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_7),
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_8),
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_9),
-#ifdef ORANGE_LETTERS
+#ifdef DIALOG_INDICATOR
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_A),
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_B),
          GEO_DISPLAY_LIST(LAYER_ALPHA, dl_billboard_num_C),
