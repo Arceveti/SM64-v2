@@ -249,6 +249,7 @@ struct GraphNodeBillboard
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *displayList;
     /*0x18*/ Vec3s translation;
+    /*0x1E*/ s32 zOffset;
 };
 
 /** A GraphNode that simply draws a display list without doing any
@@ -388,7 +389,7 @@ struct GraphNodeCullingRadius *init_graph_node_culling_radius(struct AllocOnlyPo
 struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool *pool, struct GraphNodeAnimatedPart *graphNode,
                                                             s32 drawingLayer, void *displayList, Vec3s translation);
 struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool, struct GraphNodeBillboard *graphNode,
-                                                     s32 drawingLayer, void *displayList, Vec3s translation);
+                                                     s32 drawingLayer, void *displayList, Vec3s translation, s32 zOffset);
 struct GraphNodeDisplayList *init_graph_node_display_list(struct AllocOnlyPool *pool, struct GraphNodeDisplayList *graphNode,
                                                           s32 drawingLayer, void *displayList);
 struct GraphNodeShadow *init_graph_node_shadow(struct AllocOnlyPool *pool, struct GraphNodeShadow *graphNode,

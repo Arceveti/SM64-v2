@@ -346,7 +346,7 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
  * 'position' is the position of the object in the world
  * 'angle' rotates the object while still facing the camera.
  */
-void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle) {
+void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset) {
     dest[0][0] = coss(angle);
     dest[0][1] = sins(angle);
     dest[0][2] = 0;
@@ -368,7 +368,49 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle) {
         mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
     dest[3][2] =
         mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
-    dest[3][3] = 1;
+    dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
+}
+
+/**
+ * Set 'dest' to a transformation matrix that turns an object to face directly at the camera
+ * as opposed to mtxf_billboard which turns to face parallel to the camera.
+ * 'mtx' is the look-at matrix from the camera
+ * 'position' is the position of the object in the world
+ * 'angle' rotates the object while still facing the camera.
+ */
+void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffset) {
+    s16 xrot;
+    s16 yrot;
+    f32 cx, cy, cz;
+
+    dest[3][0] =
+        mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+    dest[3][1] =
+        mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+    dest[3][2] =
+        mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
+
+    // angle to camera pos
+    xrot = -atan2s(dest[3][2], dest[3][0]);
+    yrot =  atan2s(dest[3][2], dest[3][1]);
+
+    cx = coss(xrot);
+    cy = coss(yrot);
+    cz = coss(roll);
+
+    dest[2][0] = sins(xrot);
+    dest[0][2] = -dest[2][0];
+    dest[1][2] = sins(yrot);
+    dest[2][1] = -dest[1][2];
+    dest[0][1] = sins(roll);
+    dest[1][0] = -dest[0][1];
+    dest[0][0] = -cx *  cz;
+    dest[1][1] = -cy *  cz;
+    dest[2][2] = -cx * -cy;
+    dest[0][3] = 0;
+    dest[1][3] = 0;
+    dest[2][3] = 0;
 }
 
 /**

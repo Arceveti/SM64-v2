@@ -147,4 +147,9 @@
 // Makes obj_resolve_object_collisions work consistently
 #define OBJ_COLLISIONS_FIX
 
+// Glowing effect on power stars
+#define STAR_GLOW
+
+#define HELD_TRANSPARENT_STAR
+
 #endif // CONFIG_H

@@ -933,6 +933,19 @@
     #define ACTIVATED_BF_PLAT_TYPE_BITFS_MESH_PLAT 1
     #define ACTIVATED_BF_PLAT_TYPE_BITFS_ELEVATOR  2
 
+/* Unagi */
+    /* oAction */
+    #define UNAGI_ACT_1_RESET_PATH                  0
+    #define UNAGI_ACT_1_PATH                        1
+    #define UNAGI_RETURN_TO_CAVE                    2
+    #define UNAGI_IN_CAVE                           3
+    #define UNAGI_ACT_2_PATH                        4
+
+    /* oAnimState */
+    #define UNAGI_ANIM_STATE_NO_STAR                0
+    #define UNAGI_ANIM_STATE_HAS_STAR               1
+    #define UNAGI_ANIM_STATE_HAS_TRANSPARENT_STAR   2
+
 /* Dorrie */
     /* oAction */
     #define DORRIE_ACT_MOVE 0
@@ -996,6 +1009,7 @@
     #define KLEPTO_ANIM_STATE_HOLDING_NOTHING 0
     #define KLEPTO_ANIM_STATE_HOLDING_CAP 1
     #define KLEPTO_ANIM_STATE_HOLDING_STAR 2
+    #define KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR 3
 
 /* Bird */
     /* oAction */

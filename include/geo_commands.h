@@ -300,15 +300,18 @@
  *   0x06: s16 zTranslation
  *   0x08: [u32 displayList: if MSbit of params is set, display list segmented address]
  */
-#define GEO_BILLBOARD_WITH_PARAMS(layer, tx, ty, tz) \
+#define GEO_BILLBOARD_WITH_PARAMS(layer, tx, ty, tz, zOffset) \
     CMD_BBH(0x14, layer, tx), \
-    CMD_HH(ty, tz)
+    CMD_HH(ty, tz), \
+    CMD_W(zOffset)
 #define GEO_BILLBOARD_WITH_PARAMS_AND_DL(layer, tx, ty, tz, displayList) \
     CMD_BBH(0x14, (layer | 0x80), tx), \
     CMD_HH(ty, tz), \
     CMD_PTR(displayList)
 #define GEO_BILLBOARD() \
-    GEO_BILLBOARD_WITH_PARAMS(0, 0, 0, 0)
+    GEO_BILLBOARD_WITH_PARAMS(LAYER_FORCE, 0, 0, 0, 0)
+#define GEO_BILLBOARD_WITH_ZOFFSET(zOffset) \
+    GEO_BILLBOARD_WITH_PARAMS(LAYER_FORCE, 0, 0, 0, zOffset)
 
 /**
  * 0x15: Create plain display list scene graph node

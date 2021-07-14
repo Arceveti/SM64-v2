@@ -598,7 +598,8 @@ void geo_layout_cmd_node_animated_part(void) {
 void geo_layout_cmd_node_billboard(void) {
     struct GraphNodeBillboard *graphNode;
     Vec3s translation;
-    s16 drawingLayer = 0;
+    s16 drawingLayer = LAYER_FORCE;
+    s32 zOffset       = 0;
     s16 params = cur_geo_cmd_u8(0x01);
     s16 *cmdPos = (s16 *) gGeoLayoutCommand;
     void *displayList = NULL;
@@ -609,9 +610,12 @@ void geo_layout_cmd_node_billboard(void) {
         displayList = *(void **) &cmdPos[0];
         drawingLayer = params & 0x0F;
         cmdPos += 2 << CMD_SIZE_SHIFT;
+    } else {
+        zOffset = (*(s32 *) &cmdPos[0]);
+        cmdPos += 2 << CMD_SIZE_SHIFT;
     }
 
-    graphNode = init_graph_node_billboard(gGraphNodePool, NULL, drawingLayer, displayList, translation);
+    graphNode = init_graph_node_billboard(gGraphNodePool, NULL, drawingLayer, displayList, translation, zOffset);
 
     register_scene_graph_node(&graphNode->node);
 

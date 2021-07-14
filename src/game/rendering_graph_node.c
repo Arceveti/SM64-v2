@@ -512,9 +512,14 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
     gMatStackIndex++;
-    vec3s_to_vec3f(translation, node->translation);
-    mtxf_billboard(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation,
-                   gCurGraphNodeCamera->roll);
+    vec3s_to_vec3f(translation, node->translation);\
+    if (node->zOffset < 0) {
+        mtxf_align_camera(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation,
+                    gCurGraphNodeCamera->roll, node->zOffset);
+    } else {
+        mtxf_billboard(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation,
+                    gCurGraphNodeCamera->roll, node->zOffset);
+    }
     if (gCurGraphNodeHeldObject != NULL) {
         mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex],
                          gCurGraphNodeHeldObject->objNode->header.gfx.scale);
@@ -881,7 +886,7 @@ static void geo_process_object(struct Object *node) {
                      gMatStack[gMatStackIndex]);
         } else if (node->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
             mtxf_billboard(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex],
-                           node->header.gfx.pos, gCurGraphNodeCamera->roll);
+                           node->header.gfx.pos, gCurGraphNodeCamera->roll, 0.0f);
         } else {
             mtxf_rotate_zxy_and_translate(mtxf, node->header.gfx.pos, node->header.gfx.angle);
             mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);

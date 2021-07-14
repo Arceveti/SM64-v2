@@ -75,7 +75,15 @@ static void klepto_anim_dive(void) {
 
 void bhv_klepto_init(void) {
     if (o->oBehParams2ndByte != 0) {
+#ifdef HELD_TRANSPARENT_STAR
+        if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_SSL) & 1) {
+            o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR;
+        } else {
+            o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
+        }
+#else
         o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
+#endif
     } else {
         o->oKleptoStartPosX = o->oPosX;
         o->oKleptoStartPosY = o->oPosY;
@@ -180,7 +188,7 @@ static void klepto_act_wait_for_mario(void) {
         klepto_target_mario();
         if (o->oKleptoDistanceToTarget < 1000.0f) {
             o->oAction = KLEPTO_ACT_TURN_TOWARD_MARIO;
-            o->oFlags &= ~0x00000008;
+            o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         }
     }
 
@@ -195,7 +203,7 @@ static void klepto_act_turn_toward_mario(void) {
         cur_obj_play_sound_2(SOUND_OBJ_KLEPTO1);
         o->oAction = KLEPTO_ACT_DIVE_AT_MARIO;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
-        o->oFlags |= 0x00000008;
+        o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
 
         cur_obj_init_animation_with_sound(3);
     }
@@ -287,7 +295,7 @@ static void klepto_act_retreat(void) {
             o->oAction = KLEPTO_ACT_RESET_POSITION;
             o->oHomeY = 1500.0f;
             o->oKleptoUnk1AE = -100;
-            o->oFlags |= 0x00000008;
+            o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             cur_obj_become_tangible();
         }
     }
@@ -359,7 +367,7 @@ void bhv_klepto_update(void) {
         if (obj_handle_attacks(&sKleptoHitbox, o->oAction, sKleptoAttackHandlers)) {
             cur_obj_play_sound_2(SOUND_OBJ_KLEPTO2);
 
-            if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_CAP) {
+            if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_CAP || o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR) {
                 save_file_clear_flags(SAVE_FLAG_CAP_ON_KLEPTO);
                 spawn_object(o, MODEL_MARIOS_CAP, bhvNormalCap);
             } else if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_STAR) {
