@@ -551,45 +551,35 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     struct Object *otherObject;
     f32 dx;
     f32 dz;
+    s32 i;
     s16 angle;
     f32 radius;
     f32 otherRadius;
     f32 relativeRadius;
-    f32 newCenterX;
-    f32 newCenterZ;
+    f32 distance;
 
     if (o->numCollidedObjs != 0) {
-        otherObject = o->collidedObjs[0];
-        if (otherObject != gMarioObject) {
-            //! If one object moves after collisions are detected and this code
-            //  runs, the objects can move toward each other (transport cloning)
+        for (i = 0; i < o->numCollidedObjs; i++) {
+            otherObject = o->collidedObjs[i];
+            if (otherObject == gMarioObject) continue;
+            if (otherObject->oInteractType & INTERACT_MASK_NO_OBJ_COLLISIONS) continue; // 0x00053430
 
-            dx = otherObject->oPosX - o->oPosX;
-            dz = otherObject->oPosZ - o->oPosZ;
-            angle = atan2s(dx, dz); //! This should be atan2s(dz, dx)
-
-            radius = o->hitboxRadius;
-            otherRadius = otherObject->hitboxRadius;
-            relativeRadius = radius / (radius + otherRadius);
-
-            newCenterX = o->oPosX + dx * relativeRadius;
-            newCenterZ = o->oPosZ + dz * relativeRadius;
-
-            o->oPosX = newCenterX - radius * coss(angle);
-            o->oPosZ = newCenterZ - radius * sins(angle);
-
-            otherObject->oPosX = newCenterX + otherRadius * coss(angle);
-            otherObject->oPosZ = newCenterZ + otherRadius * sins(angle);
-
-            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
-                // Bounce off object (or it would, if the above atan2s bug
-                // were fixed)
-                *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
+            dx = o->oPosX - otherObject->oPosX;
+            dz = o->oPosZ - otherObject->oPosZ;
+            distance = sqrtf(dx*dx + dz*dz);
+            radius = (o->hurtboxRadius > 0) ? o->hurtboxRadius : o->hitboxRadius;
+            otherRadius = (otherObject->hurtboxRadius > 0) ? otherObject->hurtboxRadius : otherObject->hitboxRadius;
+            relativeRadius = radius + otherRadius;
+            if (distance > relativeRadius) continue;
+                angle = atan2s(dz, dx);
+                o->oPosX = otherObject->oPosX + relativeRadius * sins(angle);
+                o->oPosZ = otherObject->oPosZ + relativeRadius * coss(angle);
+                if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
+                    *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
+                }
                 return TRUE;
-            }
         }
     }
-
     return FALSE;
 }
 
