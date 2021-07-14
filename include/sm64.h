@@ -109,7 +109,8 @@
 #define PARTICLE_TRIANGLE             /* 0x00040000 */ (1 << 18)
 #define PARTICLE_19                   /* 0x00080000 */ (1 << 19)
 
-#define MODEL_STATE_NOISE_ALPHA 0x180
+#define MODEL_STATE_ALPHA       0x100
+#define MODEL_STATE_NOISE_ALPHA (0x080 | MODEL_STATE_ALPHA)
 #define MODEL_STATE_METAL       0x200
 
 #define MARIO_NORMAL_CAP                0x00000001
