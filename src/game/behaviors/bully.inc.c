@@ -54,7 +54,7 @@ void bhv_big_bully_init(void) {
 void bully_check_mario_collision(void) {
     if (
 #ifdef VERSION_SH
-    o->oAction != BULLY_ACT_LAVA_DEATH && o->oAction != BULLY_ACT_DEATH_PLANE_DEATH &&
+    o->oAction != OBJ_ACT_LAVA_DEATH && o->oAction != OBJ_ACT_DEATH_PLANE_DEATH &&
 #endif
     o->oInteractStatus & INT_STATUS_INTERACTED) {
         if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL)
@@ -175,7 +175,7 @@ void bully_step(void) {
 
     if (o->oBullySubtype & BULLY_STYPE_CHILL) {
         if (o->oPosY < 1030.0f)
-            o->oAction = BULLY_ACT_LAVA_DEATH;
+            o->oAction = OBJ_ACT_LAVA_DEATH;
     }
 }
 
@@ -252,11 +252,11 @@ void bhv_bully_loop(void) {
             bully_step();
             break;
 
-        case BULLY_ACT_LAVA_DEATH:
+        case OBJ_ACT_LAVA_DEATH:
             bully_act_level_death();
             break;
 
-        case BULLY_ACT_DEATH_PLANE_DEATH:
+        case OBJ_ACT_DEATH_PLANE_DEATH:
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
     }
@@ -359,11 +359,11 @@ void bhv_big_bully_with_minions_loop(void) {
             cur_obj_become_tangible();
             break;
 
-        case BULLY_ACT_LAVA_DEATH:
+        case OBJ_ACT_LAVA_DEATH:
             big_bully_spawn_star();
             break;
 
-        case BULLY_ACT_DEATH_PLANE_DEATH:
+        case OBJ_ACT_DEATH_PLANE_DEATH:
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
     }

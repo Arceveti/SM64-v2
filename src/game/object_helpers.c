@@ -478,7 +478,7 @@ struct Object *spawn_object_rel_with_rot(struct Object *parent, u32 model, const
 
 struct Object *spawn_obj_with_transform_flags(struct Object *sp20, s32 model, const BehaviorScript *sp28) {
     struct Object *sp1C = spawn_object(sp20, model, sp28);
-    sp1C->oFlags |= OBJ_FLAG_0020 | OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM;
+    sp1C->oFlags |= OBJ_FLAG_UPDATE_TRANSFORM_FOR_THROW_MATRIX | OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM;
     return sp1C;
 }
 
@@ -1318,7 +1318,7 @@ static f32 cur_obj_move_y_and_get_water_level(f32 gravity, f32 buoyancy) {
     }
 
     o->oPosY += o->oVelY;
-    if (o->activeFlags & ACTIVE_FLAG_UNK10) {
+    if (o->activeFlags & ACTIVE_FLAG_IGNORE_WATER_LEVEL) {
         waterLevel = FLOOR_LOWER_LIMIT;
     } else {
         waterLevel = find_water_level(o->oPosX, o->oPosZ);
@@ -1920,7 +1920,7 @@ void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s1
 }
 
 void obj_set_throw_matrix_from_transform(struct Object *obj) {
-    if (obj->oFlags & OBJ_FLAG_0020) {
+    if (obj->oFlags & OBJ_FLAG_UPDATE_TRANSFORM_FOR_THROW_MATRIX) {
         obj_build_transform_from_pos_and_angle(obj, O_POS_INDEX, O_FACE_ANGLE_INDEX);
         obj_apply_scale_to_transform(obj);
     }
@@ -2117,8 +2117,8 @@ void cur_obj_spawn_particles(struct SpawnParticlesInfo *info) {
 }
 
 void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox) {
-    if (!(obj->oFlags & OBJ_FLAG_30)) {
-        obj->oFlags |= OBJ_FLAG_30;
+    if (!(obj->oFlags & OBJ_FLAG_HITBOX_WAS_SET)) {
+        obj->oFlags |= OBJ_FLAG_HITBOX_WAS_SET;
 
         obj->oInteractType = hitbox->interactType;
         obj->oDamageOrCoinValue = hitbox->damageOrCoinValue;
