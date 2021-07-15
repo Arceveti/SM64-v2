@@ -325,6 +325,8 @@ struct MarioState
     /*0xBC*/ f32 peakHeight;
     /*0xC0*/ f32 quicksandDepth;
     /*0xC4*/ f32 unkC4;
+    /*0xC8*/ u8 hurtShadeAlpha;
+    /*0xC9*/ u8 coyoteTimer;
 };
 
 #endif // TYPES_H

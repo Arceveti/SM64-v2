@@ -25,49 +25,15 @@ struct Object *gMarioPlatform = NULL;
  */
 void update_mario_platform(void) {
     struct Surface *floor;
-    UNUSED u32 unused;
-    f32 marioX;
-    f32 marioY;
-    f32 marioZ;
-    f32 floorHeight;
-    u32 awayFromFloor;
-
-    if (gMarioObject == NULL) {
-        return;
-    }
-
-    //! If Mario moves onto a rotating platform in a PU, the find_floor call
-    //  will detect the platform and he will end up receiving a large amount
-    //  of displacement since he is considered to be far from the platform's
-    //  axis of rotation.
-
-    marioX = gMarioObject->oPosX;
-    marioY = gMarioObject->oPosY;
-    marioZ = gMarioObject->oPosZ;
-    floorHeight = find_floor(marioX, marioY, marioZ, &floor);
-
-    if (absf(marioY - floorHeight) < 4.0f) {
-        awayFromFloor = 0;
+    if (gMarioObject == NULL) return;
+	floor 	    = gMarioState->floor;
+    if (absf(gMarioObject->oPosY - gMarioState->floorHeight) < 4.0f && floor != NULL && floor->object != NULL) {
+		gMarioPlatform 		   = floor->object;
+		gMarioObject->platform = floor->object;
     } else {
-        awayFromFloor = 1;
-    }
-
-    switch (awayFromFloor) {
-        case 1:
-            gMarioPlatform = NULL;
-            gMarioObject->platform = NULL;
-            break;
-
-        case 0:
-            if (floor != NULL && floor->object != NULL) {
-                gMarioPlatform = floor->object;
-                gMarioObject->platform = floor->object;
-            } else {
-                gMarioPlatform = NULL;
-                gMarioObject->platform = NULL;
-            }
-            break;
-    }
+		gMarioPlatform 		   = NULL;
+		gMarioObject->platform = NULL;
+	}
 }
 
 /**

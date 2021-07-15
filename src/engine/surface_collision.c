@@ -57,54 +57,30 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         //  the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
         if (surf->flags & SURFACE_FLAG_X_PROJECTION) {
-            w1 = -surf->vertex1[2];            w2 = -surf->vertex2[2];            w3 = -surf->vertex3[2];
-            y1 = surf->vertex1[1];            y2 = surf->vertex2[1];            y3 = surf->vertex3[1];
+            w1 = -surf->vertex1[2]; w2 = -surf->vertex2[2]; w3 = -surf->vertex3[2];
+            y1 =  surf->vertex1[1]; y2 =  surf->vertex2[1]; y3 =  surf->vertex3[1];
 
             if (surf->normal.x > 0.0f) {
-                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) > 0.0f) {
-                    continue;
-                }
-                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) > 0.0f) {
-                    continue;
-                }
-                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) > 0.0f) {
-                    continue;
-                }
+                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) > 0.0f) continue;
+                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) > 0.0f) continue;
+                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) > 0.0f) continue;
             } else {
-                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) < 0.0f) {
-                    continue;
-                }
-                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) < 0.0f) {
-                    continue;
-                }
-                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) < 0.0f) {
-                    continue;
-                }
+                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) < 0.0f) continue;
+                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) < 0.0f) continue;
+                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) < 0.0f) continue;
             }
         } else {
-            w1 = surf->vertex1[0];            w2 = surf->vertex2[0];            w3 = surf->vertex3[0];
-            y1 = surf->vertex1[1];            y2 = surf->vertex2[1];            y3 = surf->vertex3[1];
+            w1 =  surf->vertex1[0]; w2 =  surf->vertex2[0]; w3 =  surf->vertex3[0];
+            y1 =  surf->vertex1[1]; y2 =  surf->vertex2[1]; y3 =  surf->vertex3[1];
 
             if (surf->normal.z > 0.0f) {
-                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) > 0.0f) {
-                    continue;
-                }
-                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) > 0.0f) {
-                    continue;
-                }
-                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) > 0.0f) {
-                    continue;
-                }
+                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) > 0.0f) continue;
+                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) > 0.0f) continue;
+                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) > 0.0f) continue;
             } else {
-                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) < 0.0f) {
-                    continue;
-                }
-                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) < 0.0f) {
-                    continue;
-                }
-                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) < 0.0f) {
-                    continue;
-                }
+                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) < 0.0f) continue;
+                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) < 0.0f) continue;
+                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) < 0.0f) continue;
             }
         }
 
@@ -135,17 +111,12 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             }
         }
 
-        //! (Wall Overlaps) Because this doesn't update the x and z local variables,
-        //  multiple walls can push mario more than is required.
         data->x += surf->normal.x * (radius - offset);
         data->z += surf->normal.z * (radius - offset);
+        x = data->x;
+        z = data->z;
 
-        //! (Unreferenced Walls) Since this only returns the first four walls,
-        //  this can lead to wall interaction being missed. Typically unreferenced walls
-        //  come from only using one wall, however.
-        if (data->numWalls < 4) {
-            data->walls[data->numWalls++] = surf;
-        }
+        data->walls[data->numWalls++] = surf;
 
         numCols++;
     }
@@ -190,12 +161,10 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 
     colData->numWalls = 0;
 
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) {
-        return numCollisions;
-    }
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) {
-        return numCollisions;
-    }
+    if (x <= -LEVEL_BOUNDARY_MAX
+     || x >=  LEVEL_BOUNDARY_MAX
+     || z <= -LEVEL_BOUNDARY_MAX
+     || z >=  LEVEL_BOUNDARY_MAX) return numCollisions;
 
     // World (level) consists of a 16x16 grid. Find where the collision is on
     // the grid (round toward -inf)
@@ -211,9 +180,33 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
     numCollisions += find_wall_collisions_from_list(node, colData);
 
     // Increment the debug tracker.
-    gNumCalls.wall += 1;
+    gNumCalls.wall++;
 
     return numCollisions;
+}
+
+static s32 check_within_floor_triangle_bounds(s32 x, s32 z, struct Surface *surf) {
+    register s32 x1 = surf->vertex1[0];
+    register s32 z1 = surf->vertex1[2];
+    register s32 x2 = surf->vertex2[0];
+    register s32 z2 = surf->vertex2[2];
+
+    // Checking if point is in bounds of the triangle laterally.
+    if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0) return FALSE; // 12
+
+    // Slight optimization by checking these later.
+    register s32 x3 = surf->vertex3[0];
+    register s32 z3 = surf->vertex3[2];
+
+    if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0) return FALSE; // 23
+    if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0) return FALSE; // 31
+
+    return TRUE;
+}
+
+// Find the height of the floor at a given location
+static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
+    return -(x * surf->normal.x + surf->normal.z * z + surf->originOffset) / surf->normal.y;
 }
 
 /**************************************************
@@ -226,65 +219,45 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight) {
     register struct Surface *surf;
     register s32 x1, z1, x2, z2, x3, z3;
-    f32 nx, ny, nz, oo, height;
+    f32 height;
     struct Surface *ceil = NULL;
-    *pheight = CELL_HEIGHT_LIMIT;
+    // *pheight = CELL_HEIGHT_LIMIT;
     // Stay in this loop until out of ceilings.
     while (surfaceNode != NULL) {
         surf = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+
+        // Determine if checking for the camera or not.
+        if (gCheckingSurfaceCollisionsForCamera) {
+            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
+        // Ignore camera only surfaces.
+        } else if (surf->type == SURFACE_CAMERA_BOUNDARY) {
+            continue;
+        }
+
+        if (surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) continue;
+
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
         z2 = surf->vertex2[2];
         x2 = surf->vertex2[0];
         // Checking if point is in bounds of the triangle laterally.
-        if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) {
-            continue;
-        }
+        if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) continue;
         // Slight optimization by checking these later.
         x3 = surf->vertex3[0];
         z3 = surf->vertex3[2];
-        if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) {
-            continue;
-        }
-        if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0) {
-            continue;
-        }
-        // Determine if checking for the camera or not.
-        if (gCheckingSurfaceCollisionsForCamera != 0) {
-            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) {
-                continue;
-            }
-        }
-        // Ignore camera only surfaces.
-        else if (surf->type == SURFACE_CAMERA_BOUNDARY || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) {
-            continue;
-        }
-		nx = surf->normal.x;
-		ny = surf->normal.y;
-		nz = surf->normal.z;
-		oo = surf->originOffset;		
-		// If a wall, ignore it. Likely a remnant, should never occur.
-		if (ny == 0.0f) {
-			continue;
-		}
+        if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) continue;
+        if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0) continue;
+
 		// Find the ceil height at the specific point.
-		height = -(x * nx + nz * z + oo) / ny;
-		if (height > *pheight) {
-			continue;
-		}
+		height = get_surface_height_at_location(x, z, surf);
+		if (height >= *pheight) continue;
 		// Checks for ceiling interaction
-		if (y > height) {
-			continue;
-		}
-		if (y >= surf->upperY) {
-			continue;
-		}
+		if (y > height) continue;
+		if (y >= surf->upperY) continue;
 		*pheight = height;
 		ceil = surf;
-		if (height == y) {
-			break;
-		}
+		if (height == y) break;
     }
     return ceil;
 }
@@ -308,24 +281,20 @@ f32 find_ceil(f32 posX, f32 posY, f32 posZ, struct Surface **pceil) {
     z = (s16) posZ;
     *pceil = NULL;
 
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
+    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX || z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) return height;
 
     // Each level is split into cells to limit load, find the appropriate cell.
     cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
 
-    // Check for surfaces belonging to objects.
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
-    dynamicCeil = find_ceil_from_list(surfaceList, x, y, z, &dynamicHeight);
-
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
+    dynamicHeight = height;
+
+    // Check for surfaces belonging to objects.
+    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
+    dynamicCeil = find_ceil_from_list(surfaceList, x, y, z, &dynamicHeight);
 
     if (dynamicHeight < height) {
         ceil = dynamicCeil;
@@ -335,7 +304,7 @@ f32 find_ceil(f32 posX, f32 posY, f32 posZ, struct Surface **pceil) {
     *pceil = ceil;
 
     // Increment the debug tracker.
-    gNumCalls.ceil += 1;
+    gNumCalls.ceil++;
 
     return height;
 }
@@ -387,63 +356,35 @@ f32 find_floor_height_and_data(f32 xPos, f32 yPos, f32 zPos, struct FloorGeometr
  */
 static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight) {
     register struct Surface *surf;
-    register s32 x1, z1, x2, z2, x3, z3;
-    f32 nx, ny, nz, oo, height;
+    f32 height;
     struct Surface *floor = NULL;
-    *pheight = FLOOR_LOWER_LIMIT;
+    // *pheight = FLOOR_LOWER_LIMIT;
     // Iterate through the list of floors until there are no more floors.
     while (surfaceNode != NULL) {
-        surf = surfaceNode->surface;
+        surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
-        x1 = surf->vertex1[0];
-        z1 = surf->vertex1[2];
-        x2 = surf->vertex2[0];
-        z2 = surf->vertex2[2];
-        // Check that the point is within the triangle bounds.
-        if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0) {
-            continue;
-        }
-        // To slightly save on computation time, set this later.
-        x3 = surf->vertex3[0];
-        z3 = surf->vertex3[2];
-        if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0) {
-            continue;
-        }
-        if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0) {
-            continue;
-        }
+
+        // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
+        // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
+        // Mario to pass through.
+        if (!gFindFloorIncludeSurfaceIntangible && surf->type == SURFACE_INTANGIBLE) continue;
+
         // Determine if we are checking for the camera or not.
-        if (gCheckingSurfaceCollisionsForCamera != 0) {
-            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) {
-                continue;
-            }
-        }
+        if (gCheckingSurfaceCollisionsForCamera && (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM)) {
+            continue;
         // If we are not checking for the camera, ignore camera only floors.
-        else if (surf->type == SURFACE_CAMERA_BOUNDARY) {
-            continue;
-        }
-        nx = surf->normal.x;
-        ny = surf->normal.y;
-        nz = surf->normal.z;
-        oo = surf->originOffset;
-		// If a wall, ignore it. Likely a remnant, should never occur.
-		if (ny == 0.0f) {
-			continue;
-		}
-        // Find the height of the floor at a given location.
-        height = -(x * nx + nz * z + oo) / ny;
-        if (height < *pheight) {
-            continue;
-        }
+        } else if (surf->type == SURFACE_CAMERA_BOUNDARY) continue;
+
+        if (!check_within_floor_triangle_bounds(x, z, surf)) continue;
+
+        height = get_surface_height_at_location(x, z, surf);
+        if (height <= *pheight) continue;
         // Checks for floor interaction with a 78 unit buffer.
-        if (y < (height - 78.0f)) {
-            continue;
-        }
+        if (y < (height - 78.0f)) continue;
+
         *pheight = height;
-        floor = surf;
-        if (height - 78.0f == y) {
-            break;
-        }
+        floor    = surf;
+        if (height - 78.0f == y) break;
     }
     return floor;
 }
@@ -467,11 +408,6 @@ static s16 check_within_triangle_bounds(s32 x, s32 z, struct Surface *surf) {
     return TRUE;
 }
 
-// Find the height of the floor at a given location
-static f32 get_floor_height_at_location(s32 x, s32 z, struct Surface *surf) {
-    return -(x * surf->normal.x + surf->normal.z * z + surf->originOffset) / surf->normal.y;
-}
-
 /**
  * Iterate through the list of water floors and find the first water floor under a given point.
  */
@@ -492,7 +428,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
 
         if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
 
-        curBottomHeight = get_floor_height_at_location(x, z, surf);
+        curBottomHeight = get_surface_height_at_location(x, z, surf);
 
         if (curBottomHeight < y - 78.0f) continue;
         if (curBottomHeight >= y - 78.0f) bottomHeight = curBottomHeight;
@@ -506,7 +442,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
 
         if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
 
-        curHeight = get_floor_height_at_location(x, z, surf);
+        curHeight = get_surface_height_at_location(x, z, surf);
 
         if (bottomHeight != FLOOR_LOWER_LIMIT && curHeight > bottomHeight) continue;
 
@@ -526,9 +462,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
 f32 find_floor_height(f32 x, f32 y, f32 z) {
     struct Surface *floor;
 
-    f32 floorHeight = find_floor(x, y, z, &floor);
-
-    return floorHeight;
+    return find_floor(x, y, z, &floor);
 }
 
 /**
@@ -578,44 +512,32 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 
     *pfloor = NULL;
 
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
+    if (x <= -LEVEL_BOUNDARY_MAX
+     || x >=  LEVEL_BOUNDARY_MAX
+     || z <= -LEVEL_BOUNDARY_MAX
+     || z >=  LEVEL_BOUNDARY_MAX) return height;
 
     // Each level is split into cells to limit load, find the appropriate cell.
     cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
 
+    // Check for surfaces that are a part of level geometry.
+    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    floor = find_floor_from_list(surfaceList, x, y, z, &height);
+    dynamicHeight = height;
     // Check for surfaces belonging to objects.
     surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     dynamicFloor = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
 
-    // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    floor = find_floor_from_list(surfaceList, x, y, z, &height);
-
     // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
     // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
     // Mario to pass through.
-    if (!gFindFloorIncludeSurfaceIntangible) {
-        //! (BBH Crash) Most NULL checking is done by checking the height of the floor returned
-        //  instead of checking directly for a NULL floor. If this check returns a NULL floor
-        //  (happens when there is no floor under the SURFACE_INTANGIBLE floor) but returns the height
-        //  of the SURFACE_INTANGIBLE floor instead of the typical -11000 returned for a NULL floor.
-        if (floor != NULL && floor->type == SURFACE_INTANGIBLE) {
-            floor = find_floor_from_list(surfaceList, x, (s32)(height - 200.0f), z, &height);
-        }
-    } else {
-        // To prevent accidentally leaving the floor tangible, stop checking for it.
-        gFindFloorIncludeSurfaceIntangible = FALSE;
-    }
+    // To prevent accidentally leaving the floor tangible, stop checking for it.
+    gFindFloorIncludeSurfaceIntangible = FALSE;
 
     // If a floor was missed, increment the debug counter.
     if (floor == NULL) {
-        gNumFindFloorMisses += 1;
+        gNumFindFloorMisses++;
     }
 
     if (dynamicHeight > height) {
@@ -646,12 +568,7 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 y = (s16) yPos;
     s16 z = (s16) zPos;
 
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) {
-        return height;
-    }
+    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX || z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) return height;
 
     // Each level is split into cells to limit load, find the appropriate cell.
     cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
@@ -881,9 +798,7 @@ void debug_surface_list_info(f32 xPos, f32 zPos) {
 s32 unused_resolve_floor_or_ceil_collisions(s32 checkCeil, f32 *px, f32 *py, f32 *pz, f32 radius,
                                             struct Surface **psurface, f32 *surfaceHeight) {
     f32 nx, ny, nz, oo;
-    f32 x = *px;
-    f32 y = *py;
-    f32 z = *pz;
+    f32 x = *px, y = *py, z = *pz;
     f32 offset, distance;
 
     *psurface = NULL;
@@ -894,9 +809,7 @@ s32 unused_resolve_floor_or_ceil_collisions(s32 checkCeil, f32 *px, f32 *py, f32
         *surfaceHeight = find_floor(x, y, z, psurface);
     }
 
-    if (*psurface == NULL) {
-        return -1;
-    }
+    if (*psurface == NULL) return -1;
 
     nx = (*psurface)->normal.x;
     ny = (*psurface)->normal.y;

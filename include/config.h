@@ -68,7 +68,7 @@
 #define HANGING_SPEED 12.0f
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
 #define TIGHTER_HANGING_CONTROLS
-// Makes Mario turn around instantly when moving on the ground
+// Makes Mario turn around instantly when moving on the ground (broken)
 #define SUPER_RESPONSIVE_CONTROLS
 // Disables fall damage
 #define NO_FALL_DAMAGE
@@ -88,8 +88,6 @@
 #define KEEP_MARIO_HEAD
 // Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
 #define IA8_COINS
-
-#define IA8_30FPS_COINS
 
 // HACKER QOL 
 // Enable widescreen (16:9) support
@@ -153,9 +151,12 @@
 
 #define HELD_TRANSPARENT_STAR
 
+#define IA8_30FPS_COINS
+
+#define WALL_QUICKSAND
 
 #define AIR_STAR_DANCE
-
+// Press A when jumping on an enemy to jump higher
 #define BOUNCE_BOOST
 
 #define EASIER_DIALOG_TRIGGER
@@ -163,5 +164,26 @@
 #define DIALOG_INDICATOR
 
 #define LAVA_FIX
+//! not implemented
+#define SCREEN_SHADE
+
+#define IMPROVED_COLLISION
+
+#define NULL_FLOOR_MISSES 3
+
+#define IMPROVED_MOVEMENT
+
+// The following require IMPROVED_MOVEMENT
+#define WALL_SLIDE
+
+#define GROUND_POUND_DIVE
+//! not implemented
+#define GROUND_POUND_JUMP
+
+#define WATER_GROUND_POUND
+// Press Z while twirling to descend faster
+#define Z_TWIRL
+// Number of frames
+#define COYOTE_TIME 8
 
 #endif // CONFIG_H

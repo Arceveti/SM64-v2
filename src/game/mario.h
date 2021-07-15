@@ -36,6 +36,7 @@ s32 mario_floor_is_slope(struct MarioState *m);
 s32 mario_floor_is_steep(struct MarioState *m);
 f32 find_floor_height_relative_polar(struct MarioState *m, s16 angleFromMario, f32 distFromMario);
 s16 find_floor_slope(struct MarioState *m, s16 yawOffset);
+s32 analog_stick_held_back(struct MarioState *m, s16 range);
 void update_mario_sound_and_camera(struct MarioState *m);
 void set_steep_jump_action(struct MarioState *m);
 u32 set_mario_action(struct MarioState *, u32 action, u32 actionArg);

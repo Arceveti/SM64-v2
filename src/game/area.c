@@ -69,8 +69,8 @@ const BehaviorScript *sWarpBhvSpawnTable[] = {
 };
 
 u8 sSpawnTypeFromWarpBhv[] = {
-    MARIO_SPAWN_DOOR_WARP,             MARIO_SPAWN_IDLE,           MARIO_SPAWN_PIPE,            MARIO_SPAWN_PIPE,
-    MARIO_SPAWN_PIPE,            MARIO_SPAWN_TELEPORT,             MARIO_SPAWN_INSTANT_ACTIVE,        MARIO_SPAWN_AIRBORNE,
+    MARIO_SPAWN_DOOR_WARP,             MARIO_SPAWN_IDLE,                 MARIO_SPAWN_PIPE,                  MARIO_SPAWN_PIPE,
+    MARIO_SPAWN_PIPE,                  MARIO_SPAWN_TELEPORT,             MARIO_SPAWN_INSTANT_ACTIVE,        MARIO_SPAWN_AIRBORNE,
     MARIO_SPAWN_HARD_AIR_KNOCKBACK,    MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE, MARIO_SPAWN_DEATH,                 MARIO_SPAWN_SPIN_AIRBORNE,
     MARIO_SPAWN_FLYING,                MARIO_SPAWN_SWIMMING,             MARIO_SPAWN_PAINTING_STAR_COLLECT, MARIO_SPAWN_PAINTING_DEATH,
     MARIO_SPAWN_AIRBORNE_STAR_COLLECT, MARIO_SPAWN_AIRBORNE_DEATH,       MARIO_SPAWN_LAUNCH_STAR_COLLECT,   MARIO_SPAWN_LAUNCH_DEATH,
@@ -119,10 +119,10 @@ void print_intro_text(void) {
 #endif
         } else {
 #ifdef VERSION_EU
-            print_text(20, 20, "START");
+            print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(20), 20, "START");
 #else
-            print_text_centered(60, 38, "PRESS");
-            print_text_centered(60, 20, "START");
+            print_text_centered(GFX_DIMENSIONS_FROM_LEFT_EDGE(60), 38, "PRESS");
+            print_text_centered(GFX_DIMENSIONS_FROM_LEFT_EDGE(60), 20, "START");
 #endif
         }
     }
@@ -361,6 +361,97 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     play_transition(transType, time, red, green, blue);
 }
 
+#ifdef SCREEN_SHADE
+// 0x0200EDA8 - 0x0200EDE8
+static const Vtx vertex_screen_shade_box[] = {
+    {{{     0,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   130,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   130,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+};
+
+// 0x0200EDE8 - 0x0200EE28
+const Gfx dl_draw_screen_shade_box[] = {
+    gsDPPipeSync(),
+    gsSPClearGeometryMode(G_LIGHTING),
+    gsDPSetCombineMode(G_CC_FADE, G_CC_FADE),
+    gsDPSetRenderMode(G_RM_XLU_SURF, G_RM_XLU_SURF2),
+    gsSPVertex(vertex_screen_shade_box, 4, 0),
+    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsSPEndDisplayList(),
+};
+
+void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
+
+    // create_dl_ortho_matrix();
+    create_dl_translation_matrix(MENU_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
+
+    // This is a bit weird. It reuses the dialog text box (width 130, height -80),
+    // so scale to at least fit the screen.
+#ifndef WIDESCREEN
+    create_dl_scale_matrix(MENU_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
+#else
+    create_dl_scale_matrix(MENU_MTX_NOPUSH,
+                           GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
+#endif
+
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
+    gSPDisplayList(gDisplayListHead++, dl_draw_screen_shade_box);
+    gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
+}
+
+void render_screen_overlay(void) {
+    struct MarioState *m = gMarioState;
+    Vec3s rgbWater = {   5,  80, 150};
+    Vec3s rgbHurt  = { 255,   0,   0};
+    Vec3s rgb      = {   0,   0,   0};
+    u32 aWater     = 0;
+    u32 aHurt      = 0;
+    u32 a          = 0;
+    f32 surfaceHeight = -(gLakituState.oldPitch / 90.0f);
+    f32 waterLevel = find_water_level(     gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
+    f32 gasLevel   = find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
+
+    if (gLakituState.pos[1] < waterLevel) {
+        aWater = (waterLevel - gLakituState.pos[1]);
+    } else if (gLakituState.pos[1] < gasLevel) {
+        aWater = (  gasLevel - gLakituState.pos[1]);
+        vec3s_set(rgbWater, 255, 255, 0);
+    }
+
+    if (aWater > 63) {
+        aWater = 63;
+    }
+
+    if (m->health < 0x100 && m->hurtShadeAlpha > 0) {
+        m->hurtShadeAlpha--;
+    } else if (m->hurtShadeAlpha >= 4) {
+        m->hurtShadeAlpha -= 4;
+    }
+
+    aHurt = m->hurtShadeAlpha;
+    
+    a = aWater + aHurt;
+    if (a > 0) {
+        if (m->action == ACT_SHOCKED || m->action == ACT_WATER_SHOCKED || m->action == ACT_SHOCKWAVE_BOUNCE) {
+            vec3s_set(rgbHurt, 255, 238, 0);
+        }
+        rgb[0] = ((rgbWater[0] * aWater) + (rgbHurt[0] * aHurt))/a;
+        rgb[1] = ((rgbWater[1] * aWater) + (rgbHurt[1] * aHurt))/a;
+        rgb[2] = ((rgbWater[2] * aWater) + (rgbHurt[2] * aHurt))/a;
+
+        if (rgb[0] <   0) rgb[0] =   0;
+        if (rgb[1] <   0) rgb[1] =   0;
+        if (rgb[2] <   0) rgb[2] =   0;
+        if (rgb[0] > 255) rgb[0] = 255;
+        if (rgb[1] > 255) rgb[1] = 255;
+        if (rgb[2] > 255) rgb[2] = 255;
+        if (    a  > 255)     a  = 255;
+        shade_screen_color(rgb[0], rgb[1], rgb[2], a);
+    }
+}
+#endif
+
 void render_game(void) {
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         geo_process_root(gCurrentArea->unk04, D_8032CE74, D_8032CE78, gFBSetColor);
@@ -370,6 +461,9 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
         render_hud();
+#ifdef SHADE_SCREEN
+        render_screen_overlay();
+#endif
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render_text_labels();

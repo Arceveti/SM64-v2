@@ -32,11 +32,7 @@ void add_tree_leaf_particles(struct MarioState *m) {
 
     if (m->usedObj->behavior == segmented_to_virtual(bhvTree)) {
         // make leaf effect spawn higher on the Shifting Sand Land palm tree
-        if (gCurrLevelNum == LEVEL_SSL) {
-            leafHeight = 250.0f;
-        } else {
-            leafHeight = 100.0f;
-        }
+        leafHeight = (m->usedObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SSL_PALM_TREE]) ? 250.0f : 100.0f;
         if (m->pos[1] - m->floorHeight > leafHeight) {
             m->particleFlags |= PARTICLE_LEAF;
         }
@@ -58,9 +54,6 @@ void play_climbing_sounds(struct MarioState *m, s32 b) {
 }
 
 s32 set_pole_position(struct MarioState *m, f32 offsetY) {
-    UNUSED s32 unused1;
-    UNUSED s32 unused2;
-    UNUSED s32 unused3;
     struct Surface *floor;
     struct Surface *ceil;
     f32 floorHeight;
@@ -68,6 +61,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     s32 collided;
     s32 result = POLE_NONE;
     f32 poleTop = m->usedObj->hitboxHeight - 100.0f;
+    f32 poleBottom = -m->usedObj->hitboxDownOffset - 100.0f;
     struct Object *marioObj = m->marioObj;
 
     if (marioObj->oMarioPolePos > poleTop) {
@@ -87,19 +81,19 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
         marioObj->oMarioPolePos = m->pos[1] - m->usedObj->oPosY;
     }
 
-    floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor);
+    floorHeight = find_floor(m->pos[0], m->pos[1]+100.0f, m->pos[2], &floor);
     if (m->pos[1] < floorHeight) {
         m->pos[1] = floorHeight;
         set_mario_action(m, ACT_IDLE, 0);
         result = POLE_TOUCHED_FLOOR;
-    } else if (marioObj->oMarioPolePos < -m->usedObj->hitboxDownOffset) {
-        m->pos[1] = m->usedObj->oPosY - m->usedObj->hitboxDownOffset;
+    } else if (marioObj->oMarioPolePos < poleBottom) {
+        m->pos[1] = m->usedObj->oPosY + poleBottom;
         set_mario_action(m, ACT_FREEFALL, 0);
         result = POLE_FELL_OFF;
     } else if (collided) {
         if (m->pos[1] > floorHeight + 20.0f) {
-            m->forwardVel = -2.0f;
-            set_mario_action(m, ACT_SOFT_BONK, 0);
+            m->forwardVel = -8.0f;
+            set_mario_action(m, ACT_FREEFALL, 0);
             result = POLE_FELL_OFF;
         } else {
             set_mario_action(m, ACT_IDLE, 0);
@@ -117,23 +111,10 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
 s32 act_holding_pole(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
 
-#ifdef VERSION_JP
-    if (m->input & INPUT_A_PRESSED) {
+    if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
         add_tree_leaf_particles(m);
-        m->faceAngle[1] += 0x8000;
-        return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
-    }
-
-    if (m->input & INPUT_Z_PRESSED) {
-        add_tree_leaf_particles(m);
-        m->forwardVel = -2.0f;
-        return set_mario_action(m, ACT_SOFT_BONK, 0);
-    }
-#else
-    if ((m->input & INPUT_Z_PRESSED) || m->health < 0x100) {
-        add_tree_leaf_particles(m);
-        m->forwardVel = -2.0f;
-        return set_mario_action(m, ACT_SOFT_BONK, 0);
+        m->forwardVel = -8.0f;
+        return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
     if (m->input & INPUT_A_PRESSED) {
@@ -141,7 +122,6 @@ s32 act_holding_pole(struct MarioState *m) {
         m->faceAngle[1] += 0x8000;
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
-#endif
 
     if (m->controller->stickY > 16.0f) {
         f32 poleTop = m->usedObj->hitboxHeight - 100.0f;
@@ -166,9 +146,8 @@ s32 act_holding_pole(struct MarioState *m) {
         marioObj->oMarioPolePos -= marioObj->oMarioPoleYawVel / 0x100;
 
         if (m->usedObj->behavior == segmented_to_virtual(bhvTree)) {
-            //! The Shifting Sand Land palm tree check is done climbing up in
-            // add_tree_leaf_particles, but not here, when climbing down.
-            if (m->pos[1] - m->floorHeight > 100.0f) {
+            f32 leafHeight = (m->usedObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SSL_PALM_TREE]) ? 250.0f : 100.0f;
+            if (m->pos[1] - m->floorHeight > leafHeight) {
                 m->particleFlags |= PARTICLE_LEAF;
             }
         }
@@ -190,17 +169,15 @@ s32 act_holding_pole(struct MarioState *m) {
 }
 
 s32 act_climbing_pole(struct MarioState *m) {
-    s32 sp24;
+    s32 animSpeed;
     struct Object *marioObj = m->marioObj;
     s16 cameraAngle = m->area->camera->yaw;
 
-#ifndef VERSION_JP
-    if (m->health < 0x100) {
+    if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
         add_tree_leaf_particles(m);
-        m->forwardVel = -2.0f;
-        return set_mario_action(m, ACT_SOFT_BONK, 0);
+        m->forwardVel = -8.0f;
+        return set_mario_action(m, ACT_FREEFALL, 0);
     }
-#endif
 
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
@@ -217,8 +194,8 @@ s32 act_climbing_pole(struct MarioState *m) {
     m->faceAngle[1] = cameraAngle - approach_s32((s16)(cameraAngle - m->faceAngle[1]), 0, 0x400, 0x400);
 
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
-        sp24 = m->controller->stickY / 4.0f * 0x10000;
-        set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, sp24);
+        animSpeed = m->controller->stickY / 4.0f * 0x10000;
+        set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, animSpeed);
         add_tree_leaf_particles(m);
         play_climbing_sounds(m, 1);
     }
@@ -228,6 +205,19 @@ s32 act_climbing_pole(struct MarioState *m) {
 
 s32 act_grab_pole_slow(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
+#ifdef IMPROVED_MOVEMENT
+    if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
+        add_tree_leaf_particles(m);
+        m->forwardVel = -8.0f;
+        return set_mario_action(m, ACT_FREEFALL, 0);
+    }
+
+    if (m->input & INPUT_A_PRESSED) {
+        add_tree_leaf_particles(m);
+        m->faceAngle[1] += 0x8000;
+        return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
+    }
+#endif
 
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SHORT);
@@ -246,6 +236,19 @@ s32 act_grab_pole_fast(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     m->faceAngle[1] += marioObj->oMarioPoleYawVel;
     marioObj->oMarioPoleYawVel = marioObj->oMarioPoleYawVel * 8 / 10;
+#ifdef IMPROVED_MOVEMENT
+    if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
+        add_tree_leaf_particles(m);
+        m->forwardVel = -8.0f;
+        return set_mario_action(m, ACT_FREEFALL, 0);
+    }
+
+    if (m->input & INPUT_A_PRESSED) {
+        add_tree_leaf_particles(m);
+        m->faceAngle[1] += 0x8000;
+        return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
+    }
+#endif
 
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         if (marioObj->oMarioPoleYawVel > 0x800) {
@@ -318,14 +321,14 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
     if (ceil == NULL) {
         return HANG_LEFT_CEIL;
     }
-    if (ceilHeight - floorHeight <= 160.0f) {
+    if (ceilHeight - floorHeight <= 144.0f) {
         return HANG_HIT_CEIL_OR_OOB;
     }
     if (ceil->type != SURFACE_HANGABLE) {
         return HANG_LEFT_CEIL;
     }
 
-    ceilOffset = ceilHeight - (nextPos[1] + 160.0f);
+    ceilOffset = ceilHeight - (nextPos[1] + 144.0f);
     if (ceilOffset < -30.0f) {
         return HANG_HIT_CEIL_OR_OOB;
     }
@@ -333,7 +336,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
         return HANG_LEFT_CEIL;
     }
 
-    nextPos[1] = m->ceilHeight - 160.0f;
+    nextPos[1] = m->ceilHeight - 144.0f;
     vec3f_copy(m->pos, nextPos);
 
     m->floor = floor;
@@ -347,7 +350,11 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
 s32 update_hang_moving(struct MarioState *m) {
     s32 stepResult;
     Vec3f nextPos;
+#ifdef IMPROVED_MOVEMENT
+    f32 maxSpeed = m->intendedMag / 2.0f;
+#else
     f32 maxSpeed = HANGING_SPEED;
+#endif
 
     m->forwardVel += 1.0f;
     if (m->forwardVel > maxSpeed) {
@@ -385,9 +392,12 @@ void update_hang_stationary(struct MarioState *m) {
     m->slideVelX = 0.0f;
     m->slideVelZ = 0.0f;
 
-    m->pos[1] = m->ceilHeight - 160.0f;
+    m->pos[1] = m->ceilHeight - 144.0f;
     vec3f_copy(m->vel, gVec3fZero);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+#ifdef IMPROVED_MOVEMENT
+    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+#endif
 }
 
 s32 act_start_hanging(struct MarioState *m) {
@@ -398,12 +408,18 @@ s32 act_start_hanging(struct MarioState *m) {
 #else
     m->actionTimer++;
 #endif
-
+#ifdef IMPROVED_MOVEMENT
+    if ((m->input & INPUT_NONZERO_ANALOG && m->intendedMag > 16.0f) && m->actionTimer > 1) {
+#else
     if ((m->input & INPUT_NONZERO_ANALOG) && m->actionTimer >= 31) {
+#endif
         return set_mario_action(m, ACT_HANGING, 0);
     }
-
+#ifdef IMPROVED_MOVEMENT
+    if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
+#else
     if (!(m->input & INPUT_A_DOWN)) {
+#endif
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -411,8 +427,7 @@ s32 act_start_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
 
-    //! Crash if Mario's referenced ceiling is NULL (same for other hanging actions)
-    if (m->ceil->type != SURFACE_HANGABLE) {
+    if (m->ceil == NULL || m->ceil->type != SURFACE_HANGABLE) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -432,7 +447,11 @@ s32 act_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_HANG_MOVING, m->actionArg);
     }
 
+#ifdef IMPROVED_MOVEMENT
+    if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
+#else
     if (!(m->input & INPUT_A_DOWN)) {
+#endif
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -440,7 +459,7 @@ s32 act_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
 
-    if (m->ceil->type != SURFACE_HANGABLE) {
+    if (m->ceil == NULL || m->ceil->type != SURFACE_HANGABLE) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -456,7 +475,11 @@ s32 act_hanging(struct MarioState *m) {
 }
 
 s32 act_hang_moving(struct MarioState *m) {
+#ifdef IMPROVED_MOVEMENT
+    if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
+#else
     if (!(m->input & INPUT_A_DOWN)) {
+#endif
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
@@ -464,16 +487,19 @@ s32 act_hang_moving(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
 
-    if (m->ceil->type != SURFACE_HANGABLE) {
+    if (m->ceil == NULL || m->ceil->type != SURFACE_HANGABLE) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
+#ifdef IMPROVED_MOVEMENT
+    set_mario_anim_with_accel(m, (m->actionArg & 1) ? MARIO_ANIM_MOVE_ON_WIRE_NET_RIGHT : MARIO_ANIM_MOVE_ON_WIRE_NET_LEFT, (m->forwardVel+1)*0x2000);
+#else
     if (m->actionArg & 1) {
         set_mario_animation(m, MARIO_ANIM_MOVE_ON_WIRE_NET_RIGHT);
     } else {
         set_mario_animation(m, MARIO_ANIM_MOVE_ON_WIRE_NET_LEFT);
     }
-
+#endif
     if (m->marioObj->header.gfx.animInfo.animFrame == 12) {
         play_sound(SOUND_ACTION_HANGING_STEP, m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
@@ -483,9 +509,10 @@ s32 act_hang_moving(struct MarioState *m) {
 
     if (is_anim_past_end(m)) {
         m->actionArg ^= 1;
-        if (m->input & INPUT_UNKNOWN_5) {
-            return set_mario_action(m, ACT_HANGING, m->actionArg);
-        }
+    }
+
+    if (m->input & INPUT_IDLE) {
+        return set_mario_action(m, ACT_HANGING, m->actionArg);
     }
 
     if (update_hang_moving(m) == HANG_LEFT_CEIL) {
@@ -522,15 +549,15 @@ void climb_up_ledge(struct MarioState *m) {
 }
 
 void update_ledge_climb_camera(struct MarioState *m) {
-    f32 sp4;
+    f32 dist;
 
     if (m->actionTimer < 14) {
-        sp4 = m->actionTimer;
+        dist = m->actionTimer;
     } else {
-        sp4 = 14.0f;
+        dist = 14.0f;
     }
-    m->statusForCamera->pos[0] = m->pos[0] + sp4 * sins(m->faceAngle[1]);
-    m->statusForCamera->pos[2] = m->pos[2] + sp4 * coss(m->faceAngle[1]);
+    m->statusForCamera->pos[0] = m->pos[0] + dist * sins(m->faceAngle[1]);
+    m->statusForCamera->pos[2] = m->pos[2] + dist * coss(m->faceAngle[1]);
     m->statusForCamera->pos[1] = m->pos[1];
     m->actionTimer++;
     m->flags |= MARIO_LEDGE_CLIMB_CAMERA;
@@ -553,7 +580,11 @@ s32 act_ledge_grab(struct MarioState *m) {
     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
     s32 hasSpaceForMario = (m->ceilHeight - m->floorHeight >= 160.0f);
 
+#ifdef IMPROVED_MOVEMENT
+    if (m->actionTimer < 5) {
+#else
     if (m->actionTimer < 10) {
+#endif
         m->actionTimer++;
     }
 #ifndef NO_FALSE_LEDGEGRABS
@@ -561,7 +592,11 @@ s32 act_ledge_grab(struct MarioState *m) {
         return let_go_of_ledge(m);
     }
 #endif
+#ifdef IMPROVED_MOVEMENT
+    if (m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) {
+#else
     if (m->input & (INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) {
+#endif
         return let_go_of_ledge(m);
     }
 
@@ -575,13 +610,11 @@ s32 act_ledge_grab(struct MarioState *m) {
         }
         return let_go_of_ledge(m);
     }
-#ifdef VERSION_EU
-    // On EU, you can't slow climb up ledges while holding A.
-    if (m->actionTimer == 10 && (m->input & INPUT_NONZERO_ANALOG) && !(m->input & INPUT_A_DOWN))
+#ifdef IMPROVED_MOVEMENT
+    if (m->actionTimer == 5 && (m->input & INPUT_NONZERO_ANALOG)) {
 #else
-    if (m->actionTimer == 10 && (m->input & INPUT_NONZERO_ANALOG))
+    if (m->actionTimer == 10 && (m->input & INPUT_NONZERO_ANALOG)) {
 #endif
-    {
         if (intendedDYaw >= -0x4000 && intendedDYaw <= 0x4000) {
             if (hasSpaceForMario) {
                 return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
@@ -887,6 +920,7 @@ s32 mario_execute_automatic_action(struct MarioState *m) {
         case ACT_GRABBED:                cancel = act_grabbed(m);                break;
         case ACT_IN_CANNON:              cancel = act_in_cannon(m);              break;
         case ACT_TORNADO_TWIRLING:       cancel = act_tornado_twirling(m);       break;
+        default:                         cancel = act_ledge_grab(m);             break;
     }
     /* clang-format on */
 

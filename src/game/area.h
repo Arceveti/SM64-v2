@@ -171,6 +171,7 @@ void change_area(s32 index);
 void area_update_objects(void);
 void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue);
 void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 blue, s16 delay);
+void shade_screen_color(u32 r, u32 g, u32 b, u32 a);
 void render_game(void);
 
 #endif // AREA_H
