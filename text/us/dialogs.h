@@ -1314,11 +1314,11 @@ the Big Boo!\n\
 Ka ha ha ha..."))
 
 DEFINE_DIALOG(DIALOG_109, 1, 4, 95, 200, _("\
-Ooooo Nooooo!\n\
+Oooooh Nooooo!\n\
 Talk about out-of-body\n\
 experiences--my body\n\
 has melted away!\n\
-Have you run in to any\n\
+Have you run into any\n\
 headhunters lately??\n\
 I could sure use a new\n\
 body!\n\
@@ -1982,7 +1982,7 @@ Enjoy!!!"
 
 DEFINE_DIALOG(DIALOG_161, 1, 4, 30, 200, _("\
 Mario!!!\n\
-It that really you???\n\
+Is that really you???\n\
 It has been so long since\n\
 our last adventure!\n\
 They told me that I might\n\
