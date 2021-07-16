@@ -875,7 +875,7 @@ const BehaviorScript bhvMrIBlueCoin[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     BILLBOARD(),
     SET_INT(oIntangibleTimer, 0),
-    SET_FLOAT(oCoinUnk110, 20),
+    SET_FLOAT(oCoinBaseYVel, 20),
     SET_INT(oAnimState, -1),
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 30, /*Gravity*/ -400, /*Bounciness*/ -70, /*Drag strength*/ 1000, /*Friction*/ 1000, /*Buoyancy*/ 200, /*Unused*/ 0, 0),
     CALL_NATIVE(bhv_coin_init),
@@ -2576,7 +2576,7 @@ const BehaviorScript bhvWdwExpressElevatorPlatform[] = {
 
 const BehaviorScript bhvChirpChirp[] = {
     BEGIN(OBJ_LIST_DEFAULT),
-    SET_INT(oBirdChirpChirpUnkF4, 1),
+    SET_INT(oCheepCheepSpawnerSpawnAmount, 1),
     GOTO(bhvChirpChirpUnused),
 };
 
@@ -3508,7 +3508,7 @@ const BehaviorScript bhvMario[] = {
     BEGIN(OBJ_LIST_PLAYER),
     SET_INT(oIntangibleTimer, 0),
     OR_INT(oFlags, OBJ_FLAG_IS_MARIO),
-    OR_INT(oUnk94, 0x0001),
+    OR_INT(oUnkPlayerID, 0x0001),
     SET_HITBOX(/*Radius*/ 37, /*Height*/ 160),
     BEGIN_LOOP(),
         CALL_NATIVE(try_print_debug_mario_level_info),

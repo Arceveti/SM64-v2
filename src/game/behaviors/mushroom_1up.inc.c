@@ -216,7 +216,7 @@ void bhv_1up_hidden_loop(void) {
     switch (o->oAction) {
         case 0:
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-            if (o->o1UpHiddenUnkF4 == o->oBehParams2ndByte) {
+            if (o->o1UpHiddenTimesTriggered == o->oBehParams2ndByte) {
                 o->oVelY = 40.0f;
                 o->oAction = 3;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
@@ -257,7 +257,7 @@ void bhv_1up_hidden_trigger_loop(void) {
     if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
         sp1C = cur_obj_nearest_object_with_behavior(bhvHidden1up);
         if (sp1C != NULL)
-            sp1C->o1UpHiddenUnkF4++;
+            sp1C->o1UpHiddenTimesTriggered++;
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
@@ -268,7 +268,7 @@ void bhv_1up_hidden_in_pole_loop(void) {
     switch (o->oAction) {
         case 0:
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-            if (o->o1UpHiddenUnkF4 == o->oBehParams2ndByte) {
+            if (o->o1UpHiddenTimesTriggered == o->oBehParams2ndByte) {
                 o->oVelY = 40.0f;
                 o->oAction = 3;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
@@ -303,7 +303,7 @@ void bhv_1up_hidden_in_pole_trigger_loop(void) {
     if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
         sp1C = cur_obj_nearest_object_with_behavior(bhvHidden1upInPole);
         if (sp1C != NULL) {
-            sp1C->o1UpHiddenUnkF4++;
+            sp1C->o1UpHiddenTimesTriggered++;
         }
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;

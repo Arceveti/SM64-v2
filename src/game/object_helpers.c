@@ -1611,7 +1611,7 @@ static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 sp30,
         coin = spawn_object(obj, model, coinBehavior);
         obj_translate_xz_random(coin, posJitter);
         coin->oPosY = spawnHeight;
-        coin->oCoinUnk110 = sp30;
+        coin->oCoinBaseYVel = sp30;
     }
 }
 
