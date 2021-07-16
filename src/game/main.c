@@ -61,10 +61,18 @@ s8 sAudioEnabled = TRUE;
 u32 gNumVblanks = 0;
 s8 gResetTimer = 0;
 s8 gNmiResetBarsTimer = 0;
+#ifdef DEBUG_MODE
+s8 gDebugLevelSelect = TRUE;
+#else
 s8 gDebugLevelSelect = FALSE;
+#endif
 
 s8 gShowProfiler = FALSE;
+#ifdef DEBUG_MODE
+s8 gShowDebugText = TRUE;
+#else
 s8 gShowDebugText = FALSE;
+#endif
 
 // unused
 void handle_debug_key_sequences(void) {

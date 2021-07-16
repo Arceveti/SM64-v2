@@ -145,6 +145,8 @@
 
 // If you want to change the extended boundaries mode, go to engine/extended_bounds.h and change EXTENDED_BOUNDS_MODE
 
+#define DEBUG_MODE
+
 // Makes obj_resolve_object_collisions work consistently
 #define OBJ_COLLISIONS_FIX
 
