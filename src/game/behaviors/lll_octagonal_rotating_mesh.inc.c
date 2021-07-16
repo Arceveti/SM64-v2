@@ -61,16 +61,16 @@ s32 lll_octagonal_mesh_find_y_offset(s32 *a0, f32 *a1, s32 a2, s32 a3) {
 
 void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     if (o->oAction == 0) {
-        o->oHorizontalMovementUnkF8 = 0;
+        o->oHorizontalMovementPosIndex = 0;
         o->oAction++;
     } else
-        o->oHorizontalMovementUnkF8 =
-            lll_octagonal_mesh_move(D_8032F8C8[o->oBehParams2ndByte], o->oHorizontalMovementUnkF8);
-    print_debug_top_down_objectinfo("number %d\n", o->oHorizontalMovementUnkF8);
+        o->oHorizontalMovementPosIndex =
+            lll_octagonal_mesh_move(D_8032F8C8[o->oBehParams2ndByte], o->oHorizontalMovementPosIndex);
+    print_debug_top_down_objectinfo("number %d\n", o->oHorizontalMovementPosIndex);
     cur_obj_move_using_fvel_and_gravity();
-    if (lll_octagonal_mesh_find_y_offset(&o->oHorizontalMovementUnk104, &o->oHorizontalMovementUnk108, 0x400, -80)) {
-        o->oHorizontalMovementUnkF4 += 0x800;
-        o->oHorizontalMovementUnk100 -= sins(o->oHorizontalMovementUnkF4) * 2;
+    if (lll_octagonal_mesh_find_y_offset(&o->oHorizontalMovementLavaSinkTimer, &o->oHorizontalMovementYOffsetFromHome, 0x400, -80)) {
+        o->oHorizontalMovementLavaWobbleTimer += 0x800;
+        o->oHorizontalMovementLavaWobbleYOffset -= sins(o->oHorizontalMovementLavaWobbleTimer) * 2;
     }
-    o->oPosY = o->oHorizontalMovementUnk100 + o->oHomeY + o->oHorizontalMovementUnk108;
+    o->oPosY = o->oHorizontalMovementLavaWobbleYOffset + o->oHomeY + o->oHorizontalMovementYOffsetFromHome;
 }

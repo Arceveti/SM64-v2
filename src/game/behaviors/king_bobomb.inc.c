@@ -67,12 +67,12 @@ void king_bobomb_act_2(void) {
             o->oKingBobombUnk100 = 2;
         } else
             cur_obj_init_animation_with_sound(11);
-        if (o->oKingBobombUnk108 == 0) {
+        if (o->oKingBobombPlayerGrabEscapeCooldown == 0) {
             o->oForwardVel = 3.0f;
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
         } else {
             o->oForwardVel = 0.0f;
-            o->oKingBobombUnk108--;
+            o->oKingBobombPlayerGrabEscapeCooldown--;
         }
     }
     if (cur_obj_check_grabbed_mario())
@@ -87,7 +87,7 @@ void king_bobomb_act_3(void) {
     if (o->oSubAction == 0) {
         o->oForwardVel = 0;
         o->oKingBobombUnk104 = 0;
-        o->oKingBobombUnkFC = 0;
+        o->oKingBobombPlayerGrabEscapeActions = 0;
         if (o->oTimer == 0)
             cur_obj_play_sound_2(SOUND_OBJ_UNKNOWN3);
         if (cur_obj_init_animation_and_check_if_near_end(0)) {
@@ -97,12 +97,12 @@ void king_bobomb_act_3(void) {
     } else {
         if (o->oSubAction == 1) {
             cur_obj_init_animation_with_sound(1);
-            o->oKingBobombUnkFC += player_performed_grab_escape_action();
-            print_debug_bottom_up("%d", o->oKingBobombUnkFC);
-            if (o->oKingBobombUnkFC > 10) {
-                o->oKingBobombUnk88 = 3;
+            o->oKingBobombPlayerGrabEscapeActions += player_performed_grab_escape_action();
+            print_debug_bottom_up("%d", o->oKingBobombPlayerGrabEscapeActions);
+            if (o->oKingBobombPlayerGrabEscapeActions > 10) {
+                o->oKingBobombHoldingMarioState = 3;
                 o->oAction = 2;
-                o->oKingBobombUnk108 = 35;
+                o->oKingBobombPlayerGrabEscapeCooldown = 35;
                 o->oInteractStatus &= ~(INT_STATUS_GRABBED_MARIO);
             } else {
                 o->oForwardVel = 3.0f;
@@ -115,7 +115,7 @@ void king_bobomb_act_3(void) {
         } else {
             cur_obj_init_animation_with_sound(9);
             if (cur_obj_check_anim_frame(31)) {
-                o->oKingBobombUnk88 = 2;
+                o->oKingBobombHoldingMarioState = 2;
                 cur_obj_play_sound_2(SOUND_OBJ_UNKNOWN4);
             } else if (cur_obj_check_if_near_animation_end()) {
                 o->oAction = 1;
@@ -227,7 +227,7 @@ void king_bobomb_act_5(void) { // bobomb returns home
         case 0:
             if (o->oTimer == 0)
                 cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB_JUMP);
-            o->oKingBobombUnkF8 = 1;
+            o->oKingBobombReturningHomeUnkF8 = 1;
             cur_obj_init_animation_and_extend_if_at_end(8);
             o->oMoveAngleYaw =  cur_obj_angle_to_home();
             if (o->oPosY < o->oHomeY)
@@ -244,7 +244,7 @@ void king_bobomb_act_5(void) { // bobomb returns home
                 o->oVelY = 0;
                 o->oForwardVel = 0;
                 o->oGravity = -4.0f;
-                o->oKingBobombUnkF8 = 0;
+                o->oKingBobombReturningHomeUnkF8 = 0;
                 cur_obj_init_animation_with_sound(7);
                 cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB);
                 cur_obj_shake_screen(SHAKE_POS_SMALL);
@@ -292,7 +292,7 @@ struct SoundState sKingBobombSoundStates[] = {
 
 void king_bobomb_move(void) {
     cur_obj_update_floor_and_walls();
-    if (o->oKingBobombUnkF8 == 0)
+    if (o->oKingBobombReturningHomeUnkF8 == 0)
         cur_obj_move_standard(-78);
     else
         cur_obj_move_using_fvel_and_gravity();

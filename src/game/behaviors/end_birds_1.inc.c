@@ -7,14 +7,14 @@ void bhv_end_birds_1_loop(void) {
     switch (gCurrentObject->oAction) {
         case 0:
             cur_obj_scale(0.7f);
-            gCurrentObject->oIntroLakituUnk110 = -554.f;
-            gCurrentObject->oIntroLakituUnk10C = 3044.f;
-            gCurrentObject->oIntroLakituUnk108 = -1314.f;
+            gCurrentObject->oIntroLakituEndBirds1DestX = -554.f;
+            gCurrentObject->oIntroLakituEndBirds1DestY = 3044.f;
+            gCurrentObject->oIntroLakituEndBirds1DestZ = -1314.f;
             gCurrentObject->oAction += 1;
             break;
         case 1:
-            vec3f_set(sp34, gCurrentObject->oIntroLakituUnk110, gCurrentObject->oIntroLakituUnk10C,
-                      gCurrentObject->oIntroLakituUnk108);
+            vec3f_set(sp34, gCurrentObject->oIntroLakituEndBirds1DestX, gCurrentObject->oIntroLakituEndBirds1DestY,
+                      gCurrentObject->oIntroLakituEndBirds1DestZ);
 
             if (gCurrentObject->oTimer < 100)
                 obj_rotate_towards_point(gCurrentObject, sp34, 0, 0, 0x20, 0x20);

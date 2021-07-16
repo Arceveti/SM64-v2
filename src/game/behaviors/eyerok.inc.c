@@ -106,8 +106,8 @@ static void eyerok_boss_act_fight(void) {
                     o->oEyerokBossUnk108 = 1.0f;
                 }
 
-                o->oEyerokBossUnk10C = gMarioObject->oPosZ;
-                clamp_f32(&o->oEyerokBossUnk10C, o->oPosZ + 400.0f, o->oPosZ + 1600.0f);
+                o->oEyerokBossClampedMarioPosZ = gMarioObject->oPosZ;
+                clamp_f32(&o->oEyerokBossClampedMarioPosZ, o->oPosZ + 400.0f, o->oPosZ + 1600.0f);
             } else if ((o->oEyerokBossActiveHand = o->oEyerokBossUnkFC & 0x1) == 0) {
                 o->oEyerokBossActiveHand = -1;
             }
@@ -245,8 +245,8 @@ static void eyerok_hand_act_open(void) {
 
     if (cur_obj_init_anim_and_check_if_end(4)) {
         o->oAction = EYEROK_HAND_ACT_SHOW_EYE;
-        o->oEyerokHandUnkFC = 2;
-        o->oEyerokHandUnk100 = 60;
+        o->oEyerokHandAnimStateIndex = 2;
+        o->oEyerokHandEyeShownTimer = 60;
 
         o->collisionData = segmented_to_virtual(ssl_seg7_collision_070282F8);
 
@@ -276,14 +276,14 @@ static void eyerok_hand_act_show_eye(void) {
                 o->oAction = EYEROK_HAND_ACT_CLOSE;
             }
         } else {
-            if (o->oEyerokHandUnk100--) {
-                if (o->oEyerokHandUnkFC != 0) {
-                    o->oEyerokHandUnkFC -= 1;
+            if (o->oEyerokHandEyeShownTimer--) {
+                if (o->oEyerokHandAnimStateIndex != 0) {
+                    o->oEyerokHandAnimStateIndex -= 1;
                 }
-                o->oAnimState = D_80331BA4[o->oEyerokHandUnkFC];
+                o->oAnimState = D_80331BA4[o->oEyerokHandAnimStateIndex];
             } else {
-                o->oEyerokHandUnkFC = 5;
-                o->oEyerokHandUnk100 = random_linear_offset(20, 50);
+                o->oEyerokHandAnimStateIndex = 5;
+                o->oEyerokHandEyeShownTimer = random_linear_offset(20, 50);
             }
 
             if (o->parentObj->oEyerokBossNumHands != 2) {
@@ -454,7 +454,7 @@ static void eyerok_hand_act_begin_double_pound(void) {
         o->oPosX = o->oHomeX + (sp4 - o->oHomeX) * o->parentObj->oEyerokBossUnk110;
         o->oPosY = o->oHomeY + 300.0f * o->parentObj->oEyerokBossUnk110;
         o->oPosZ =
-            o->oHomeZ + (o->parentObj->oEyerokBossUnk10C - o->oHomeZ) * o->parentObj->oEyerokBossUnk110;
+            o->oHomeZ + (o->parentObj->oEyerokBossClampedMarioPosZ - o->oHomeZ) * o->parentObj->oEyerokBossUnk110;
     }
 }
 

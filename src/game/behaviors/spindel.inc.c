@@ -2,17 +2,17 @@
 
 void bhv_spindel_init(void) {
     o->oHomeY = o->oPosY;
-    o->oSpindelUnkF4 = 0;
-    o->oSpindelUnkF8 = 0;
+    o->oSpindelMoveTimer = 0;
+    o->oSpindelMoveDirection = 0;
 }
 
 void bhv_spindel_loop(void) {
     f32 sp1C;
     s32 sp18;
 
-    if (o->oSpindelUnkF4 == -1) {
+    if (o->oSpindelMoveTimer == -1) {
         if (o->oTimer == 32) {
-            o->oSpindelUnkF4 = 0;
+            o->oSpindelMoveTimer = 0;
             o->oTimer = 0;
         } else {
             o->oVelZ = 0.0f;
@@ -21,7 +21,7 @@ void bhv_spindel_loop(void) {
         }
     }
 
-    sp18 = 10 - o->oSpindelUnkF4;
+    sp18 = 10 - o->oSpindelMoveTimer;
 
     if (sp18 < 0)
         sp18 *= -1;
@@ -32,15 +32,15 @@ void bhv_spindel_loop(void) {
 
     if (o->oTimer == sp18 + 8) {
         o->oTimer = 0;
-        o->oSpindelUnkF4++;
-        if (o->oSpindelUnkF4 == 20) {
-            if (o->oSpindelUnkF8 == 0) {
-                o->oSpindelUnkF8 = 1;
+        o->oSpindelMoveTimer++;
+        if (o->oSpindelMoveTimer == 20) {
+            if (o->oSpindelMoveDirection == 0) {
+                o->oSpindelMoveDirection = 1;
             } else {
-                o->oSpindelUnkF8 = 0;
+                o->oSpindelMoveDirection = 0;
             }
 
-            o->oSpindelUnkF4 = -1;
+            o->oSpindelMoveTimer = -1;
         }
     }
 
@@ -52,7 +52,7 @@ void bhv_spindel_loop(void) {
         sp18 = 1;
 
     if (o->oTimer < sp18 * 8) {
-        if (o->oSpindelUnkF8 == 0) {
+        if (o->oSpindelMoveDirection == 0) {
             o->oVelZ = 20 / sp18;
             o->oAngleVelPitch = 1024 / sp18;
         } else {
