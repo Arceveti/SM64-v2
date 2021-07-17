@@ -379,7 +379,7 @@ void bhv_klepto_update(void) {
             o->oGravity = -2.0f;
 
             o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
-            o->oFlags &= ~0x00000008;
+            o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             cur_obj_become_intangible();
         } else if (gMarioStates[0].action == ACT_SLEEPING
                    || (gMarioStates[0].action
