@@ -71,8 +71,19 @@ build/*
 !/assets/**/*custom*.bin
 !/assets/**/*custom*/**/*.bin
 !/textures/crash_custom/*.png
-# libultra
 
+# Specific assets
+!/textures/segment2/shadow_quarter_circle_16.ia8.png
+!/textures/segment2/shadow_quarter_square_16.ia8.png
+!/textures/segment2/segment2.minus.rgba16.png
+!/textures/segment2/segment2.yellow_coin.rgba16.png
+!/textures/segment2/segment2.blue_coin.rgba16.png
+!/textures/segment2/segment2.red_coin.rgba16.png
+!/textures/segment2/segment2.silver_coin.rgba16.png
+!/actors/coin/coin_*.ia8.png
+!/actors/star/light_quarter_circle.ia16.png
+
+# libultra
 !/lib/*.a
 lib/libs2d_engine.a
 !/lib/gcclib/*.a

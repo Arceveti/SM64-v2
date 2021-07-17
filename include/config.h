@@ -162,9 +162,9 @@
 #define IA8_30FPS_COINS
 // Vertical quicksand support (Wiseguy)
 #define WALL_QUICKSAND
-// Koopa Shell boxes respawn
+// Koopa Shell boxes respawn (Arceveti)
 #define KOOPA_SHELL_BOXES_RESPAWN
-// Allows for retries on collecting the remaining blue coins from a blue coin switch
+// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
 #define BLUE_COIN_SWITCH_RETRY
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
