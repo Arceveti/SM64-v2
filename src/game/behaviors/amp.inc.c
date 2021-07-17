@@ -25,8 +25,8 @@ void bhv_homing_amp_init(void) {
     o->oHomeY = o->oPosY;
     o->oHomeZ = o->oPosZ;
     o->oGravity = 0;
-    o->oFriction = 1.0;
-    o->oBuoyancy = 1.0;
+    o->oFriction = 1.0f;
+    o->oBuoyancy = 1.0f;
     o->oHomingAmpAvgY = o->oHomeY;
 
     // Homing amps start at 1/10th their normal size.
@@ -47,18 +47,12 @@ static void check_amp_attack(void) {
     obj_set_hitbox(o, &sAmpHitbox);
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        // Unnecessary if statement, maybe caused by a macro for
-        //     if (o->oInteractStatus & INT_STATUS_INTERACTED)
-        //         o->oAction = X;
-        // ?
-        if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-            // This function is used for both normal amps and homing amps,
-            // AMP_ACT_ATTACK_COOLDOWN == HOMING_AMP_ACT_ATTACK_COOLDOWN
-            o->oAction = AMP_ACT_ATTACK_COOLDOWN;
-        }
+        // This function is used for both normal amps and homing amps,
+        // AMP_ACT_ATTACK_COOLDOWN == HOMING_AMP_ACT_ATTACK_COOLDOWN
+        o->oAction = AMP_ACT_ATTACK_COOLDOWN;
 
         // Clear interact status
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     }
 }
 
@@ -81,7 +75,7 @@ static void homing_amp_appear_loop(void) {
     // evaluates to 0.1, which is the same as it was before. After 30 frames, it ends at
     // a scale factor of 0.97. The amp remains at 97% of its real height for 60 more frames.
     if (o->oTimer < 30) {
-        cur_obj_scale(0.1 + 0.9 * (f32)(o->oTimer / 30.0f));
+        cur_obj_scale(0.1f + 0.9f * (f32)(o->oTimer / 30.0f));
     } else {
         o->oAnimState = 1;
     }
@@ -108,7 +102,7 @@ static void homing_amp_chase_loop(void) {
 
     // If the amp is locked on to Mario, start "chasing" him by moving
     // in a straight line at 15 units/second for 32 frames.
-    if (o->oHomingAmpLockedOn == TRUE) {
+    if (o->oHomingAmpLockedOn) {
         o->oForwardVel = 15.0f;
 
         // Move the amp's average Y (the Y value it oscillates around) to align with
@@ -155,8 +149,6 @@ static void homing_amp_chase_loop(void) {
  * Give up on chasing Mario.
  */
 static void homing_amp_give_up_loop(void) {
-    UNUSED u8 filler[8];
-
     // Move forward for 152 frames
     o->oForwardVel = 15.0f;
 
@@ -200,7 +192,7 @@ static void amp_attack_cooldown_loop(void) {
 void bhv_homing_amp_loop(void) {
     switch (o->oAction) {
         case HOMING_AMP_ACT_INACTIVE:
-            if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800) == TRUE) {
+            if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800)) {
                 // Make the amp start to appear, and un-hide it.
                 o->oAction = HOMING_AMP_ACT_APPEAR;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;

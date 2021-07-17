@@ -62,10 +62,10 @@ struct Struct8032F34C {
     const void *segAddr;
 };
 
-struct Struct802C0DF0 {
-    u8 unk0;
+struct ExclamationBoxContents {
+    u8 id;
     u8 unk1;
-    u8 unk2;
+    u8 behParams;
     ModelID model;
     const BehaviorScript *behavior;
 };
