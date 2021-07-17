@@ -15,8 +15,6 @@
 #include "game/object_list_processor.h"
 #include "surface_load.h"
 
-s32 unused8038BE90;
-
 /**
  * Partitions for course and object surfaces. The arrays represent
  * the 16x16 cells that each level is split into.
@@ -34,8 +32,6 @@ struct Surface *sSurfacePool;
  * The size of the surface pool (2300).
  */
 s16 sSurfacePoolSize;
-
-u8 unused8038EEA8[0x30];
 
 u8 gSurfacePoolError = 0;
 
@@ -122,7 +118,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     s16 listIndex;
     s16 isWater = surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM;
 
-    if (surface->normal.y > 0.01) {
+    if (surface->normal.y > 0.01f) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
         sortDir = 1; // highest to lowest, then insertion order
     } else if (surface->normal.y < -0.01) {
@@ -132,7 +128,8 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir = 0; // insertion order
 
-        if (surface->normal.x < -0.707 || surface->normal.x > 0.707) {
+        // if (surface->normal.x < -0.70710678118654752440084436210485 || surface->normal.x > 0.70710678118654752440084436210485) {
+        if (surface->normal.x < -0.70710678118654752 || surface->normal.x > 0.70710678118654752) {
             surface->flags |= SURFACE_FLAG_X_PROJECTION;
         }
     }
@@ -143,7 +140,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     //  many functions only use the first triangle in surface order that fits,
     //  missing higher surfaces.
     //  upperY would be a better sort method.
-    surfacePriority = surface->vertex1[1] * sortDir;
+    surfacePriority = surface->upperY * sortDir;
 
     newNode->surface = surface;
 
@@ -219,7 +216,7 @@ static s16 lower_cell_index(s32 coord) {
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
     if (coord % CELL_SIZE < 50) {
-        index -= 1;
+        index--;
     }
 
     if (index < 0) {
@@ -251,7 +248,7 @@ static s16 upper_cell_index(s32 coord) {
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
     if (coord % CELL_SIZE > CELL_SIZE - 50) {
-        index += 1;
+        index++;
     }
 
     if (index > NUM_CELLS_INDEX) {
@@ -270,15 +267,11 @@ static s16 upper_cell_index(s32 coord) {
  * @param dynamic Boolean determining whether the surface is static or dynamic
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
-    // minY/maxY maybe? s32 instead of s16, though.
-    UNUSED s32 unused1, unused2;
     s16 minX, minZ, maxX, maxZ;
 
     s16 minCellX, minCellZ, maxCellX, maxCellZ;
 
     s16 cellZ, cellX;
-    // cellY maybe? s32 instead of s16, though.
-    UNUSED s32 unused3 = 0;
 
     minX = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
     minZ = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
@@ -295,9 +288,6 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
             add_surface_to_cell(dynamic, cellX, cellZ, surface);
         }
     }
-}
-
-UNUSED static void stub_surface_load_1(void) {
 }
 
 /**
@@ -337,22 +327,8 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
     mag = sqrtf(nx * nx + ny * ny + nz * nz);
 
-    // Could have used min_3 and max_3 for this...
-    minY = y1;
-    if (y2 < minY) {
-        minY = y2;
-    }
-    if (y3 < minY) {
-        minY = y3;
-    }
-
-    maxY = y1;
-    if (y2 > maxY) {
-        maxY = y2;
-    }
-    if (y3 > maxY) {
-        maxY = y3;
-    }
+    minY = min_3(y1, y2, y3);
+    maxY = max_3(y1, y2, y3);
 
     // Checking to make sure no DIV/0
     if (mag < 0.0001) {
@@ -448,12 +424,11 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
     s16 flags = surf_has_no_cam_collision(surfaceType);
 
     numSurfaces = *(*data);
-    *data += 1;
+    (*data)++;
 
     for (i = 0; i < numSurfaces; i++) {
         if (*surfaceRooms != NULL) {
-            room = *(*surfaceRooms);
-            *surfaceRooms += 1;
+            room = *(*surfaceRooms)++;
         }
 
         surface = read_surface_data(vertexData, data);
@@ -471,10 +446,7 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
             add_surface(surface, FALSE);
         }
 
-        *data += 3;
-        if (hasForce) {
-            *data += 1;
-        }
+        *data += (hasForce ? 4 : 3);
     }
 }
 
@@ -483,8 +455,6 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
  */
 static s16 *read_vertex_data(s16 **data) {
     s32 numVertices;
-    UNUSED s16 unused1[3];
-    UNUSED s16 unused2[3];
     s16 *vertexData;
 
     numVertices = *(*data);
@@ -506,23 +476,9 @@ static void load_environmental_regions(s16 **data) {
     gEnvironmentRegions = *data;
     numRegions = *(*data)++;
 
-    if (numRegions > 20) {
-    }
-
     for (i = 0; i < numRegions; i++) {
-        UNUSED s16 val, loX, loZ, hiX, hiZ;
-        s16 height;
-
-        val = *(*data)++;
-
-        loX = *(*data)++;
-        hiX = *(*data)++;
-        loZ = *(*data)++;
-        hiZ = *(*data)++;
-
-        height = *(*data)++;
-
-        gEnvironmentLevels[i] = height;
+        *data += 5;
+        gEnvironmentLevels[i] = *(*data)++;
     }
 }
 
@@ -595,12 +551,10 @@ u32 get_area_terrain_size(s16 *data) {
  */
 void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects) {
     s16 terrainLoadType;
-    s16 *vertexData;
-    UNUSED s32 unused;
+    s16 *vertexData = NULL;
 
     // Initialize the data for this.
     gEnvironmentRegions = NULL;
-    unused8038BE90 = 0;
     gSurfaceNodesAllocated = 0;
     gSurfacesAllocated = 0;
 
@@ -659,9 +613,6 @@ void clear_dynamic_surfaces(void) {
     }
 }
 
-UNUSED static void unused_80383604(void) {
-}
-
 /**
  * Applies an object's transformation to the object's vertices.
  */
@@ -692,11 +643,16 @@ void transform_object_vertices(s16 **data, s16 *vertexData) {
         vx = *(vertices++);
         vy = *(vertices++);
         vz = *(vertices++);
-
-        //! No bounds check on vertex data
-        *vertexData++ = (s16)(vx * m[0][0] + vy * m[1][0] + vz * m[2][0] + m[3][0]);
-        *vertexData++ = (s16)(vx * m[0][1] + vy * m[1][1] + vz * m[2][1] + m[3][1]);
-        *vertexData++ = (s16)(vx * m[0][2] + vy * m[1][2] + vz * m[2][2] + m[3][2]);
+        if (vx == 0 && vy == 0 && vz == 0) {
+            *vertexData++ = (s16)(m[3][0]);
+            *vertexData++ = (s16)(m[3][1]);
+            *vertexData++ = (s16)(m[3][2]);
+        } else {
+            //! No bounds check on vertex data
+            *vertexData++ = (s16)(vx * m[0][0] + vy * m[1][0] + vz * m[2][0] + m[3][0]);
+            *vertexData++ = (s16)(vx * m[0][1] + vy * m[1][1] + vz * m[2][1] + m[3][1]);
+            *vertexData++ = (s16)(vx * m[0][2] + vy * m[1][2] + vz * m[2][2] + m[3][2]);
+        }
     }
 
     *data = vertices;
@@ -762,7 +718,6 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
  * Transform an object's vertices, reload them, and render the object.
  */
 void load_object_collision_model(void) {
-    UNUSED s32 unused;
     s16 vertexData[600];
 
     s16 *collisionData = gCurrentObject->collisionData;
@@ -777,7 +732,7 @@ void load_object_collision_model(void) {
 
     // If the object collision is supposed to be loaded more than the
     // drawing distance of 4000, extend the drawing range.
-    if (gCurrentObject->oCollisionDistance > 4000.0f) {
+    if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) {
         gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
     }
 

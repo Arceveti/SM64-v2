@@ -40,15 +40,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         surfaceNode = surfaceNode->next;
 
         // Exclude a large number of walls immediately to optimize.
-        if (y < surf->lowerY || y > surf->upperY) {
-            continue;
-        }
+        if (y < surf->lowerY || y > surf->upperY) continue;
 
         offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
 
-        if (offset < -radius || offset > radius) {
-            continue;
-        }
+        if (offset < -radius || offset > radius)  continue;
 
         px = x;
         pz = z;
@@ -96,18 +92,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             }
 
             // If an object can pass through a vanish cap wall, pass through.
-            if (surf->type == SURFACE_VANISH_CAP_WALLS) {
+            if (surf->type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
                 // If an object can pass through a vanish cap wall, pass through.
-                if (gCurrentObject != NULL
-                    && (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE)) {
-                    continue;
-                }
-
+                if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
                 // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject != NULL && gCurrentObject == gMarioObject
-                    && (gMarioState->flags & MARIO_VANISH_CAP)) {
-                    continue;
-                }
+                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
 
@@ -327,8 +316,6 @@ f32 unused_obj_find_floor_height(struct Object *obj) {
  */
 struct FloorGeometry sFloorGeo;
 
-UNUSED static u8 unused8038BE50[0x40];
-
 /**
  * Return the floor height underneath (xPos, yPos, zPos) and populate `floorGeo`
  * with data about the floor's normal vector and origin offset. Also update
@@ -381,7 +368,6 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         if (height <= *pheight) continue;
         // Checks for floor interaction with a 78 unit buffer.
         if (y < (height - 78.0f)) continue;
-
         *pheight = height;
         floor    = surf;
         if (height - 78.0f == y) break;

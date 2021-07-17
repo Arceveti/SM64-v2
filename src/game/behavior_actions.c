@@ -54,7 +54,7 @@ struct WFRotatingPlatformData {
     s16 collisionDistance;
 };
 
-struct Struct8032F34C {
+struct TumblingBridgeType {
     s16 numBridgeSections;
     s16 bridgeRelativeStartingXorZ;
     s16 platformWidth;
@@ -164,14 +164,14 @@ void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
 // not sure what this is doing here. not in a behavior file.
 Gfx *geo_move_mario_part_from_parent(s32 run, UNUSED struct GraphNode *node, Mat4 mtx) {
     Mat4 sp20;
-    struct Object *sp1C;
+    struct Object *obj;
 
     if (run == TRUE) {
-        sp1C = (struct Object *) gCurGraphNodeObject;
-        if (sp1C == gMarioObject && sp1C->prevObj != NULL) {
+        obj = (struct Object *) gCurGraphNodeObject;
+        if (obj == gMarioObject && obj->prevObj != NULL) {
             create_transformation_from_matrices(sp20, mtx, *gCurGraphNodeCamera->matrixPtr);
-            obj_update_pos_from_parent_transformation(sp20, sp1C->prevObj);
-            obj_set_gfx_pos_from_pos(sp1C->prevObj);
+            obj_update_pos_from_parent_transformation(sp20, obj->prevObj);
+            obj_set_gfx_pos_from_pos(obj->prevObj);
         }
     }
     return NULL;
@@ -237,14 +237,14 @@ void vec3f_copy_2(Vec3f dest, Vec3f src) {
 #include "behaviors/bowser_puzzle_piece.inc.c"
 
 s32 set_obj_anim_with_accel_and_sound(s16 a0, s16 a1, s32 a2) {
-    f32 sp1C;
-    if ((sp1C = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0)
-        sp1C = 1.0f;
-    if (cur_obj_check_anim_frame_in_range(a0, sp1C) || cur_obj_check_anim_frame_in_range(a1, sp1C)) {
+    f32 range;
+    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0)
+        range = 1.0f;
+    if (cur_obj_check_anim_frame_in_range(a0, range) || cur_obj_check_anim_frame_in_range(a1, range)) {
         cur_obj_play_sound_2(a2);
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 #include "behaviors/tuxie.inc.c"
