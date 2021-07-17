@@ -740,7 +740,6 @@ const BehaviorScript bhvWfBreakableWallLeft[] = {
     SET_INT(oIntangibleTimer, 0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_wf_breakable_wall_loop),
-        CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
 };
 
