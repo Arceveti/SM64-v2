@@ -191,11 +191,7 @@ s32 bowser_set_anim_look_up_and_walk(void) {
     if (cur_obj_check_anim_frame(21)) {
         o->oForwardVel = 3.0f;
     }
-    if (cur_obj_check_if_near_animation_end()) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return cur_obj_check_if_near_animation_end();
 }
 
 /**
@@ -205,11 +201,7 @@ s32 bowser_set_anim_look_up_and_walk(void) {
 s32 bowser_set_anim_slow_gait(void) {
     o->oForwardVel = 3.0f;
     cur_obj_init_animation_with_sound(BOWSER_ANIM_SLOW_GAIT);
-    if (cur_obj_check_if_near_animation_end()) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return cur_obj_check_if_near_animation_end();
 }
 
 /**
@@ -221,11 +213,7 @@ s32 bowser_set_anim_look_down_stop_walk(void) {
     if (cur_obj_check_anim_frame(20)) {
         o->oForwardVel = 0.0f;
     }
-    if (cur_obj_check_if_near_animation_end()) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return cur_obj_check_if_near_animation_end();
 }
 
 
@@ -677,11 +665,7 @@ void bowser_act_hit_mine(void) {
  */
 s32 bowser_set_anim_jump(void) {
     cur_obj_init_animation_with_sound(BOWSER_ANIM_JUMP_START);
-    if (cur_obj_check_anim_frame(11)) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return cur_obj_check_anim_frame(11);
 }
 
 /**
@@ -871,11 +855,7 @@ s32 bowser_turn_on_timer(s32 time, s16 yaw) {
     }
     o->oForwardVel = 0.0f;
     o->oMoveAngleYaw += yaw;
-    if (o->oTimer >= time) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return (o->oTimer >= time);
 }
 
 /**
@@ -1892,6 +1872,101 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
     return NULL;
 }
 
+#include "actors/bowser/vtx.h"
+
+void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
+    u8 h;
+
+    f32 min = min(min(color[0], color[1]), color[2]);
+    f32 max = max(max(color[0], color[1]), color[2]);
+
+    if (min == max) {
+        return color;
+    }
+
+    f32 hue = 0.0f;
+    if (max == color[0]) {
+        hue =        (color[1] - color[2]) / (max - min);
+    } else if (max == color[1]) {
+        hue = 2.0f + (color[2] - color[0]) / (max - min);
+    } else {
+        hue = 4.0f + (color[0] - color[1]) / (max - min);
+    }
+
+    if (hue < 0) hue += 6;
+
+    // h = (hue * (128.0f/3.0f))+hueAdd;
+    h = (hue * (42.6666666f))+hueAdd;
+    
+    // this is the algorithm to convert from RGB to HSV
+    // h = (h * 3) / 4; // 0..191
+    h *= 0.75f; // 0..191
+    // h = (((hue * (128.0f/3.0f))+hueAdd) * 3) / 4; // 0..191 // needs to u8 cycle h before multiplying
+    // u32 i =  h / 32; // We want a value of 0 thru 5
+    u32 i = (h * 0.03125f); // We want a value of 0 thru 5
+    u32 f = (h % 32) * 8; // 'fractional' part of 'i' 0..248 in jumps
+
+    u8 pv = (255 - s); // pv will be in range 0 - 255
+    // u8 qv = (256 - s *        f  / 256);
+    // u8 tv = (256 - s * (255 - f) / 256);
+    u8 qv = (256 - s *        f  * 0.00390625f);
+    u8 tv = (256 - s * (255 - f) * 0.00390625f);
+    
+    switch (i) {
+        case 0:
+            color[0] = 255;
+            color[1] = tv;
+            color[2] = pv;
+            break;
+        case 1:
+            color[0] = qv;
+            color[1] = 255;
+            color[2] = pv;
+            break;
+        case 2:
+            color[0] = pv;
+            color[1] = 255;
+            color[2] = tv;
+            break;
+        case 3:
+            color[0] = pv;
+            color[1] = qv;
+            color[2] = 255;
+            break;
+        case 4:
+            color[0] = tv;
+            color[1] = pv;
+            color[2] = 255;
+            break;
+        case 5:
+            color[0] = 255;
+            color[1] = pv;
+            color[2] = qv;
+            break;
+    }
+    return color;
+}
+
+
+void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
+    s32 i = 0;
+    s32 j = 0;
+    Vec3s color;
+    for (i = 0; i < 140; i++) {
+        Vtx *verts = segmented_to_virtual(sBowserVertexGroups[i].vertexData);
+
+        for (j = 0; j < sBowserVertexGroups[i].vertexCount; j++) {
+            color[0] = verts[j].v.cn[0];
+            color[1] = verts[j].v.cn[1];
+            color[2] = verts[j].v.cn[2];
+            add_hue(color, speed, sat);
+            verts[j].v.cn[0] = color[0];
+            verts[j].v.cn[1] = color[1];
+            verts[j].v.cn[2] = color[2];
+        }
+    }
+}
+
 /**
  * Geo switch that sets Bowser's Rainbow coloring (in BITS)
  */
@@ -1916,7 +1991,20 @@ Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s3
         gfx = gfxHead = alloc_display_list(2 * sizeof(Gfx));
         // If TRUE, clear lighting to give rainbow color
         if (obj->oBowserRainbowLight != 0) {
+#ifdef RAINBOW_BOWSER
+            if (obj->oHealth >= 3) {
+                gSPClearGeometryMode(gfx++, G_LIGHTING);
+                bowser_cycle_rainbow(10, 255, 255);
+            } else if (obj->oHealth == 2) {
+                gSPClearGeometryMode(gfx++, G_LIGHTING);
+                bowser_cycle_rainbow(10, 191, 255);
+            } else if (obj->oHealth == 1) {
+                gSPClearGeometryMode(gfx++, G_LIGHTING);
+                bowser_cycle_rainbow(10, 127, 255);
+            }
+#else
             gSPClearGeometryMode(gfx++, G_LIGHTING);
+#endif
         }
         gSPEndDisplayList(gfx);
     }

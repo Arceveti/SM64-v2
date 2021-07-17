@@ -152,7 +152,6 @@ extern const BehaviorScript bhvBetaBooKey[];
 extern const BehaviorScript bhvAlphaBooKey[];
 extern const BehaviorScript bhvBulletBill[];
 extern const BehaviorScript bhvWhitePuffSmoke[];
-extern const BehaviorScript bhvUnused1820[];
 extern const BehaviorScript bhvBowserTailAnchor[];
 extern const BehaviorScript bhvBowser[];
 extern const BehaviorScript bhvBowserBodyAnchor[];

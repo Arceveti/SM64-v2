@@ -1924,11 +1924,6 @@ const BehaviorScript bhvWhitePuffSmoke[] = {
     DEACTIVATE(),
 };
 
-const BehaviorScript bhvUnused1820[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BREAK(),
-};
-
 const BehaviorScript bhvBowserTailAnchor[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     SET_HITBOX_WITH_OFFSET(/*Radius*/ 100, /*Height*/ 50, /*Downwards offset*/ -50),

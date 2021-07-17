@@ -70,16 +70,21 @@ struct ExclamationBoxContents {
     const BehaviorScript *behavior;
 };
 
-struct Struct8032F754 {
-    s32 unk0;
-    Vec3f unk1;
-    f32 unk2;
+struct CheckerBoardPlatformInitPosition {
+    s32 relPosZ;
+    Vec3f scaleVec;
+    f32 radius;
 };
 
 struct OpenableGrill {
     s16 halfWidth;
     ModelID modelID;
     const Collision *collision;
+};
+
+struct ModifiableVertexGroup {
+    const Vtx *vertexData;
+    const s16 vertexCount;
 };
 
 static s32 sCapSaveFlags[] = { SAVE_FLAG_HAVE_WING_CAP, SAVE_FLAG_HAVE_METAL_CAP, SAVE_FLAG_HAVE_VANISH_CAP };

@@ -179,6 +179,10 @@
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
 #define NULL_FLOOR_MISSES 3
+// Collecting a 1-Up Mushroom will fully heal Mario
+#define MUSHROOMS_HEAL
+// Animate Bowser 3's rainbow effect
+#define RAINBOW_BOWSER
 
 //! not implemented
 #define SCREEN_SHADE

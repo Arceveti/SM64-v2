@@ -165,6 +165,10 @@ UNUSED static const Lights1 bowser_lights_unused2 = gdSPDefLights1(
     0xd2, 0xd2, 0x00, 0x28, 0x28, 0x28
 );
 
+#ifdef RAINBOW_BOWSER
+#define static
+#endif
+
 // 0x06038C80
 static const Vtx bowser_seg6_vertex_06038C80[] = {
     {{{    46,     36,     22}, 0, {    -8,    978}, {0x41, 0x5e, 0x35, 0xff}}},
