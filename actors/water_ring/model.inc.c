@@ -7,7 +7,7 @@ static const Lights1 water_ring_seg6_lights_06012368 = gdSPDefLights1(
 );
 
 // 0x06012380
-ALIGNED8 static const Texture water_ring_seg6_texture_06012380[] = {
+ALIGNED8 static const Texture water_ring_seg6_texture_env[] = {
 #include "actors/water_ring/water_ring.rgba16.inc.c"
 };
 
@@ -164,7 +164,7 @@ const Gfx water_ring_seg6_dl_06013AC0[] = {
     gsDPPipeSync(),
     gsSPSetGeometryMode(G_TEXTURE_GEN),
     gsDPSetCombineMode(G_CC_DECALFADE, G_CC_DECALFADE),
-    gsDPLoadTextureBlock(water_ring_seg6_texture_06012380, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(water_ring_seg6_texture_env, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 6, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPTexture(0x1800, 0x07C0, 0, G_TX_RENDERTILE, G_ON),
     gsSPLight(&water_ring_seg6_lights_06012368.l, 1),
     gsSPLight(&water_ring_seg6_lights_06012368.a, 2),
