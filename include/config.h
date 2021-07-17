@@ -152,47 +152,57 @@
 
 #define DEBUG_MODE
 
-// Makes obj_resolve_object_collisions work consistently
+// Makes obj_resolve_object_collisions work consistently (Arceveti)
 #define OBJ_COLLISIONS_FIX
-
-// Glowing effect on power stars
+// Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
-
+// Unagi's and Klepto's star becomes transparent after it's collected like other stars (Unknown)
 #define HELD_TRANSPARENT_STAR
-
+// Higher definition coins rotating at 30 FPS (Arceveti)
 #define IA8_30FPS_COINS
-
+// Vertical quicksand support (Wiseguy)
 #define WALL_QUICKSAND
-
+// Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
-// Press A when jumping on an enemy to jump higher
+// Press A when jumping on an enemy to jump higher (Arceveti)
 #define BOUNCE_BOOST
-
+// Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER
-// requires EASIER_DIALOG_TRIGGER
+// Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
 #define DIALOG_INDICATOR
-
+// Detect Mario's collision with lava regardless of action
 #define LAVA_FIX
-//! not implemented
-#define SCREEN_SHADE
-
-#define IMPROVED_COLLISION
-
+// Number of null floors to check ahead through during a qstep.
+// Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
 #define NULL_FLOOR_MISSES 3
 
-#define IMPROVED_MOVEMENT
-
-// The following require IMPROVED_MOVEMENT
-#define WALL_SLIDE
-
-#define GROUND_POUND_DIVE
 //! not implemented
-#define GROUND_POUND_JUMP
+#define SCREEN_SHADE
+//! not implemented
+#define KOOPA_SHELL_BOXES_RESPAWN
+//! not implemented
+#define SSL_CUTSCENE
 
+// General movement improvements, including turn circle fix,
+// midair turn, better ceiling handling, less softlocks, etc.
+// (Arceveti)
+#define IMPROVED_MOVEMENT
+// -- The following require IMPROVED_MOVEMENT -- 
+
+// Unique sideways momentum-based wall slide (Arceveti)
+#define WALL_SLIDE
+// Ground pound dive similar to SMO, can also be used to cancel
+// a ground pound if the analog stick is held back (Arceveti)
+#define GROUND_POUND_DIVE
+// Ground pound jump similar to SMO (Unknown)
+#define GROUND_POUND_JUMP
+// Underwater Ground pound similar to SMO, ! not implemented
 #define WATER_GROUND_POUND
-// Press Z while twirling to descend faster
+// Press Z while twirling to descend faster (Arceveti)
 #define Z_TWIRL
-// Number of frames
+// Number of frames before Mario falls off a ledge.
+// This also helps prevent ledge jittering
+// (Arceveti)
 #define COYOTE_TIME 8
 
 #endif // CONFIG_H
