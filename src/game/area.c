@@ -8,6 +8,7 @@
 #include "behavior_data.h"
 #include "game_init.h"
 #include "object_list_processor.h"
+#include "engine/math_util.h"
 #include "engine/surface_load.h"
 #include "ingame_menu.h"
 #include "screen_transition.h"

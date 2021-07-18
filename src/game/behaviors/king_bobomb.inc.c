@@ -146,7 +146,7 @@ void king_bobomb_act_6(void) {
             cur_obj_play_sound_2(SOUND_OBJ2_KING_BOBOMB_DAMAGE);
             cur_obj_shake_screen(SHAKE_POS_SMALL);
             spawn_mist_particles_variable(0, 0, 100.0f);
-            o->oInteractType = 8;
+            o->oInteractType = INTERACT_DAMAGE;
             cur_obj_become_tangible();
         }
         if (cur_obj_init_animation_and_check_if_near_end(2))
@@ -158,7 +158,7 @@ void king_bobomb_act_6(void) {
         if (o->oSubAction == 1) {
             if (cur_obj_init_animation_and_check_if_near_end(10)) {
                 o->oSubAction++;
-                o->oInteractType = 2;
+                o->oInteractType = INTERACT_GRABBABLE;
                 cur_obj_become_intangible();
             }
         } else {
@@ -323,5 +323,5 @@ void bhv_king_bobomb_loop(void) {
             o->oPosY += 20.0f;
             break;
     }
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }

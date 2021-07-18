@@ -779,12 +779,12 @@ static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActi
                     break;
             }
 
-            o->oInteractStatus = 0;
+            o->oInteractStatus = INT_STATUS_NONE;
             return attackType;
         }
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     return 0;
 }
 
@@ -864,12 +864,12 @@ static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActio
         } else {
             attackType = o->oInteractStatus & INT_STATUS_ATTACK_MASK;
             obj_die_if_health_non_positive();
-            o->oInteractStatus = 0;
+            o->oInteractStatus = INT_STATUS_NONE;
             return attackType;
         }
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     return 0;
 }
 

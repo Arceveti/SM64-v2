@@ -1818,7 +1818,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         }
 
         play_infinite_stairs_music();
-        gMarioState->marioObj->oInteractStatus = 0;
+        gMarioState->marioObj->oInteractStatus = INT_STATUS_NONE;
 #if ENABLE_RUMBLE
         queue_rumble_particles();
 #endif

@@ -95,17 +95,12 @@ static u8 *sMemBlockPoolBase; // @ 801BB00C
 static u32 sAllocMemory;      // @ 801BB010; malloc-ed bytes
 static s16 sVtxCvrtTCBuf[2];            // @ 801BB0A0
 static s32 sCarGdDlNum;                 // @ 801BB0A4
-static struct ObjGroup *sYoshiSceneGrp; // @ 801BB0A8
 static struct ObjGroup *sMarioSceneGrp; // @ 801BB0B0
 static s32 D_801BB0B4;                  // second offset into sTriangleBuf
-static struct ObjGroup *sCarSceneGrp;   // @ 801BB0B8
 static s32 sVertexBufCount; // vtx's to load into RPD? Vtx len in GD Dl and in the lower bank (AF30)
-static struct ObjView *sYoshiSceneView; // @ 801BB0C0
 static s32 sTriangleBufCount;                  // number of triangles in sTriangleBuf
 static struct ObjView *sMSceneView;     // @ 801BB0C8; Mario scene view
 static s32 sVertexBufStartIndex;                  // Vtx start in GD Dl
-static struct ObjView *sCarSceneView;   // @ 801BB0D0
-static s32 sUpdateYoshiScene;           // @ 801BB0D4; update dl Vtx from ObjVertex?
 static s32 sUpdateMarioScene;           // @ 801BB0D8; update dl Vtx from ObjVertex?
 static Mtx sIdnMtx;           // @ 801BB100
 static Mat4f sInitIdnMat4;    // @ 801BB140
@@ -835,9 +830,7 @@ void gdm_init(void *blockpool, u32 size) {
  * Initializes the Mario head demo
  */
 void gdm_setup(void) {
-    sYoshiSceneGrp = NULL;
     sMarioSceneGrp = NULL;
-    sUpdateYoshiScene = FALSE;
     sUpdateMarioScene = FALSE;
     sCarGdDlNum = 0;
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
@@ -883,13 +876,9 @@ void gdm_maketestdl(s32 isIntro) {
  */
 void gd_vblank(void) {
     gd_sfx_update();
-    if (sUpdateYoshiScene) {
-        apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) convert_net_verts, sYoshiSceneGrp);
-    }
     if (sUpdateMarioScene) {
         apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) convert_net_verts, sMarioSceneGrp);
     }
-    sUpdateYoshiScene = FALSE;
     sUpdateMarioScene = FALSE;
     gGdFrameBufNum ^= 1;
     reset_cur_dl_indices();
@@ -917,7 +906,6 @@ s32 gd_sfx_to_play(void) {
 
 /* 24B088 -> 24B418 */
 Gfx *gdm_gettestdl(UNUSED s32 id) {
-    struct GdObj *dobj;
     struct GdDisplayList *gddl;
     struct GdVec3f vec;
 

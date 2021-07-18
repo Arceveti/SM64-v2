@@ -6,7 +6,7 @@ void bhv_cannon_base_unused_loop(void) {
 
 void opened_cannon_act_0(void) {
     if (o->oTimer == 0) {
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
         o->oPosX = o->oHomeX;
         o->oPosY = o->oHomeY;
         o->oPosZ = o->oHomeZ;
@@ -22,13 +22,12 @@ void opened_cannon_act_0(void) {
         cur_obj_enable_rendering();
         if (o->oInteractStatus & INT_STATUS_INTERACTED
             && (!(o->oInteractStatus
-                  & INT_STATUS_TOUCHED_BOB_OMB))) // bob-omb explodes when it gets into a cannon
-        {
+                  & INT_STATUS_TOUCHED_BOB_OMB))) {// bob-omb explodes when it gets into a cannon
             o->oAction = 4;
             o->oCannonIsActive = TRUE;
             o->oCannonTimeSinceActivated = 1;
         } else
-            o->oInteractStatus = 0;
+            o->oInteractStatus = INT_STATUS_NONE;
     } else {
         cur_obj_become_intangible();
         cur_obj_disable_rendering();
@@ -111,7 +110,7 @@ void bhv_cannon_base_loop(void) {
     cur_obj_call_action_function(sOpenedCannonActions);
     if (o->oCannonTimeSinceActivated)
         o->oCannonTimeSinceActivated++;
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }
 
 void bhv_cannon_barrel_loop(void) {

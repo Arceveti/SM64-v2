@@ -62,10 +62,12 @@ void hidden_breakable_box_actions(void) {
     } else {
         cur_obj_become_intangible();
         cur_obj_disable_rendering();
-        o->oInteractStatus = 0;
-        if ((sp1C = o->oHiddenObjectSwitchObj) != NULL)
-            if (sp1C->oAction == 0)
+        o->oInteractStatus = INT_STATUS_NONE;
+        if ((sp1C = o->oHiddenObjectSwitchObj) != NULL) {
+            if (sp1C->oAction == 0) {
                 o->oAction = 0;
+            }
+        }
     }
 }
 

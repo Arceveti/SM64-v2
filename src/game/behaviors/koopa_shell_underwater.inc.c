@@ -34,5 +34,5 @@ void bhv_koopa_shell_underwater_loop(void) {
         obj_mark_for_deletion(o);
         spawn_mist_particles();
     }
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }

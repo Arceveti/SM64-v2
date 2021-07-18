@@ -85,7 +85,7 @@ void bub_act_2(void) {
         if (o->oInteractStatus & INT_STATUS_INTERACTED)
             spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
     } else
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     if (o->oTimer == 0)
         cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
     if (o->oForwardVel == 0.0f)
@@ -100,8 +100,9 @@ void bub_act_2(void) {
             bub_move_vertically(4);
     } else {
         o->oPosY = o->oCheepCheepWaterLevel - 50.0f;
-        if (dy > 300.0f)
+        if (dy > 300.0f) {
             o->oPosY -= 1.0f;
+        }
     }
     if (cur_obj_lateral_dist_from_mario_to_home() > 800.0f)
         o->oAngleToMario = cur_obj_angle_to_home();

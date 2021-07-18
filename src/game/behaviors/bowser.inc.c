@@ -71,7 +71,7 @@ void bhv_bowser_tail_anchor_loop(void) {
         o->parentObj->oIntangibleTimer = -1;
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }
 
 // Bowser's Flame
@@ -151,7 +151,7 @@ void bhv_bowser_body_anchor_loop(void) {
     if (o->parentObj->oHeldState != HELD_FREE) {
         cur_obj_become_intangible();
     }
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }
 
 /**
@@ -1542,10 +1542,12 @@ s8 sBowserHealth[] = { 1, 1, 3 };
 void bowser_free_update(void) {
     struct Surface *floor;
     struct Object *platform;
+    s16 nextYaw = o->oFaceAngleYaw;
     UNUSED f32 floorHeight;
 #ifdef PLATFORM_DISPLACEMENT_2
     if ((platform = o->platform) != NULL) {
-        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosX, &o->oFaceAngleYaw, platform);
+        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosX, &nextYaw, platform);
+        o->oFaceAngleYaw = nextYaw;
     }
 #else
     if ((platform = o->platform) != NULL) {

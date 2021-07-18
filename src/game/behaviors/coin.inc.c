@@ -21,7 +21,7 @@ s32 bhv_coin_sparkles_init(void) {
         obj_mark_for_deletion(o);
         return 1;
     }
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     return 0;
 }
 

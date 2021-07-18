@@ -39,7 +39,7 @@ void bhv_collect_star_loop(void) {
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         mark_obj_for_deletion(o);
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     }
 }
 
@@ -110,7 +110,7 @@ void bhv_star_spawn_loop(void) {
 
             if (o->oInteractStatus & INT_STATUS_INTERACTED) {
                 mark_obj_for_deletion(o);
-                o->oInteractStatus = 0;
+                o->oInteractStatus = INT_STATUS_NONE;
             }
             break;
     }

@@ -51,7 +51,7 @@ s32 piranha_plant_check_interactions(void) {
         } else {
             o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
         }
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     } else {
         interacted = 0;
     }
@@ -152,7 +152,7 @@ void piranha_plant_reset_when_far(void) {
 void piranha_plant_attacked(void) {
     cur_obj_become_intangible();
     cur_obj_init_animation_with_sound(2);
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     if (cur_obj_check_if_near_animation_end())
         o->oAction = PIRANHA_PLANT_ACT_SHRINK_AND_DIE;
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
@@ -331,10 +331,11 @@ void bhv_piranha_plant_loop(void) {
 
     // In WF, hide all Piranha Plants once high enough up.
     if (gCurrLevelNum == LEVEL_WF) {
-        if (gMarioObject->oPosY > 3400.0f)
+        if (gMarioObject->oPosY > 3400.0f) {
             cur_obj_hide();
-        else
+        } else {
             cur_obj_unhide();
+        }
     }
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }

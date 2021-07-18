@@ -47,11 +47,13 @@ void bhv_jet_stream_water_ring_init(void) {
 // sp28 = arg0
 // sp2c = ringManager
 
-void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
-    struct Object *ringSpawner;
 #ifdef WATER_RING_FIX
+void water_ring_check_collection(UNUSED f32 avgScale, struct Object *ringManager) {
+    struct Object *ringSpawner;
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
 #else
+void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
+    struct Object *ringSpawner;
     f32 marioDistInFront = water_ring_calc_mario_dist();
 
     if (!is_point_close_to_object(o, gMarioObject->header.gfx.pos[0],
@@ -65,8 +67,9 @@ void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
 #endif
         ringSpawner = o->parentObj;
         if (ringSpawner) {
-            if ((o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1)
-                || (ringSpawner->oWaterRingSpawnerRingsCollected == 0) && ringSpawner->oWaterRingSpawnerRingsCollected < 5) {
+            if (((o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1)
+                || (ringSpawner->oWaterRingSpawnerRingsCollected == 0))
+                && ringSpawner->oWaterRingSpawnerRingsCollected < 5) {
                 ringSpawner->oWaterRingSpawnerRingsCollected++;
                 if (ringSpawner->oWaterRingSpawnerRingsCollected < 6) {
                     spawn_orange_number(ringSpawner->oWaterRingSpawnerRingsCollected, 0, -40, 0);

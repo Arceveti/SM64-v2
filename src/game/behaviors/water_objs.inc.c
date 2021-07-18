@@ -26,12 +26,14 @@ void bhv_water_air_bubble_loop(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED || o->oTimer > 200) {
         cur_obj_play_sound_2(SOUND_GENERAL_QUIET_BUBBLE);
         obj_mark_for_deletion(o);
-        for (i = 0; i < 30; i++)
+        for (i = 0; i < 30; i++) {
             spawn_object(o, MODEL_BUBBLE, bhvBubbleMaybe);
+        }
     }
-    if (find_water_level(o->oPosX, o->oPosZ) < o->oPosY)
+    if (find_water_level(o->oPosX, o->oPosZ) < o->oPosY) {
         obj_mark_for_deletion(o);
-    o->oInteractStatus = 0;
+    }
+    o->oInteractStatus = INT_STATUS_NONE;
 }
 
 void bhv_bubble_wave_init(void) {

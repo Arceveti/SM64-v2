@@ -643,12 +643,12 @@ void transform_object_vertices(s16 **data, s16 *vertexData) {
         vx = *(vertices++);
         vy = *(vertices++);
         vz = *(vertices++);
+        //! No bounds check on vertex data
         if (vx == 0 && vy == 0 && vz == 0) {
             *vertexData++ = (s16)(m[3][0]);
             *vertexData++ = (s16)(m[3][1]);
             *vertexData++ = (s16)(m[3][2]);
         } else {
-            //! No bounds check on vertex data
             *vertexData++ = (s16)(vx * m[0][0] + vy * m[1][0] + vz * m[2][0] + m[3][0]);
             *vertexData++ = (s16)(vx * m[0][1] + vy * m[1][1] + vz * m[2][1] + m[3][1]);
             *vertexData++ = (s16)(vx * m[0][2] + vy * m[1][2] + vz * m[2][2] + m[3][2]);

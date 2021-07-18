@@ -90,7 +90,7 @@ void bhv_scuttlebug_loop(void) {
                 o->oVelY = 0.0f;
                 o->oScuttlebugTimer = 0;
                 o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
-                o->oInteractStatus = 0;
+                o->oInteractStatus = INT_STATUS_NONE;
             }
             break;
         case 5:

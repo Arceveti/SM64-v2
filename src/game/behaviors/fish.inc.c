@@ -33,6 +33,10 @@ static void fish_spawner_act_spawn(void) {
         case FISH_SPAWNER_BP_FEW_CYAN:
             model = MODEL_CYAN_FISH; schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = cyan_fish_seg6_anims_0600E264;
             break;
+
+        default:
+            model = MODEL_FISH;      schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0;
+            break;
     }
 
 
@@ -155,7 +159,6 @@ static void fish_act_roam(void) {
  */
 static void fish_act_flee(void) {
     f32 fishY = o->oPosY - gMarioObject->oPosY;
-    UNUSED s32 distance;
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
 
     // Initialize some variables when the flee action first starts.
@@ -163,12 +166,6 @@ static void fish_act_flee(void) {
         o->oFishActiveDistance = random_float() * 300.0f;
         o->oFishYawVel = random_float() * 1024.0f + 1024.0f;
         o->oFishGoalVel = random_float() * 4.0f + 8.0f + 5.0f;
-        if (o->oDistanceToMario < 600.0f) {
-            distance = 1;
-        } else {
-            distance = (s32)(1.0 / (o->oDistanceToMario / 600.0));
-        }
-        distance *= 127;
         cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
     }
 
@@ -181,7 +178,7 @@ static void fish_act_flee(void) {
 
     // Accelerate over time.
     if (o->oForwardVel < o->oFishGoalVel) {
-        o->oForwardVel = o->oForwardVel + 0.5;
+        o->oForwardVel = o->oForwardVel + 0.5f;
     }
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
 
@@ -220,7 +217,7 @@ static void fish_act_init(void) {
     cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
     o->header.gfx.animInfo.animFrame = (s16)(random_float() * 28.0f);
     o->oFishDepthDistance = random_float() * 300.0f;
-    cur_obj_scale(random_float() * 0.4 + 0.8);
+    cur_obj_scale(random_float() * 0.4f + 0.8f);
     o->oAction = FISH_ACT_ROAM;
 }
 
@@ -231,9 +228,7 @@ static void (*sFishActions[])(void) = {
 /**
  * Main loop for fish
  */
-void bhv_fish_loop(void)
-{
-    UNUSED s32 unused[4];
+void bhv_fish_loop(void) {
     cur_obj_scale(1.0f);
 
     // oFishWaterLevel tracks if a fish has roamed out of water.
@@ -254,7 +249,7 @@ void bhv_fish_loop(void)
             return;
         }
 
-    // Unreachable code, perhaps for debugging or testing.
+    // Unreachable code, perhaps for debugging or testing. (used in stage 32)
     } else {
         o->oFishWaterLevel = 1000.0f;
     }

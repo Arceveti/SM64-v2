@@ -119,7 +119,7 @@ static void toad_message_opaque(void) {
     } else if (!gCurrentObject->oToadMessageRecentlyTalked) {
         gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
         if (gCurrentObject->oInteractStatus & INT_STATUS_INTERACTED) {
-            gCurrentObject->oInteractStatus = 0;
+            gCurrentObject->oInteractStatus = INT_STATUS_NONE;
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_TALKING;
             play_toads_jingle();
         }

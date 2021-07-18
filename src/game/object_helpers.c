@@ -1825,16 +1825,16 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
     }
 }
 
-static s32 cur_obj_within_12k_bounds(void) {
-    if (o->oPosX < -12000.0f || 12000.0f < o->oPosX) {
+static s32 cur_obj_within_bounds(f32 bounds) {
+    if (o->oPosX < -bounds || bounds < o->oPosX) {
         return FALSE;
     }
 
-    if (o->oPosY < -12000.0f || 12000.0f < o->oPosY) {
+    if (o->oPosY < -bounds || bounds < o->oPosY) {
         return FALSE;
     }
 
-    if (o->oPosZ < -12000.0f || 12000.0f < o->oPosZ) {
+    if (o->oPosZ < -bounds || bounds < o->oPosZ) {
         return FALSE;
     }
 
@@ -2455,7 +2455,7 @@ s32 cur_obj_set_hitbox_and_die_if_attacked(struct ObjectHitbox *hitbox, s32 deat
         }
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     return interacted;
 }
 
@@ -2817,7 +2817,7 @@ s32 cur_obj_was_attacked_or_ground_pounded(void) {
         attacked = TRUE;
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
     return attacked;
 }
 
@@ -2889,7 +2889,7 @@ void disable_time_stop_including_mario(void) {
 
 s32 cur_obj_check_interacted(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
         return TRUE;
     } else {
         return FALSE;

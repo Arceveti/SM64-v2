@@ -15,9 +15,9 @@ void mr_i_piranha_particle_act_0(void) {
     cur_obj_scale(3.0f);
     o->oForwardVel = 20.0f;
     cur_obj_update_floor_and_walls();
-    if (0x8000 & o->oInteractStatus)
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->oAction = 1;
-    else if ((o->oTimer >= 101) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
+    } else if ((o->oTimer >= 101) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
         obj_mark_for_deletion(o);
         spawn_mist_particles();
     }
@@ -26,8 +26,9 @@ void mr_i_piranha_particle_act_0(void) {
 void mr_i_piranha_particle_act_1(void) {
     s32 i;
     obj_mark_for_deletion(o);
-    for (i = 0; i < 10; i++)
+    for (i = 0; i < 10; i++) {
         spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
+    }
 }
 
 void (*sMrIParticleActions[])(void) = { mr_i_piranha_particle_act_0, mr_i_piranha_particle_act_1 };
@@ -250,5 +251,5 @@ void bhv_mr_i_loop(void) {
     if (o->oAction != 3)
         if (o->oDistanceToMario > 3000.0f || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)
             o->oAction = 0;
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }

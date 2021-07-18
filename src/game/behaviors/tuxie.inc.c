@@ -141,7 +141,7 @@ void bhv_tuxies_mother_loop(void) {
     cur_obj_call_action_function(sTuxiesMotherActions);
     cur_obj_move_standard(-78);
     play_penguin_walking_sound(PENGUIN_WALK_BIG);
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }
 
 void small_penguin_dive_with_mario(void) {

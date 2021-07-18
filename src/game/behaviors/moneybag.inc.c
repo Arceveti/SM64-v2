@@ -48,7 +48,7 @@ void moneybag_check_mario_collision(void) {
             o->oAction = MONEYBAG_ACT_DEATH;
         }
 
-        o->oInteractStatus = 0;
+        o->oInteractStatus = INT_STATUS_NONE;
     }
 }
 
@@ -229,5 +229,5 @@ void bhv_moneybag_hidden_loop(void) {
             break;
     }
 
-    o->oInteractStatus = 0;
+    o->oInteractStatus = INT_STATUS_NONE;
 }
