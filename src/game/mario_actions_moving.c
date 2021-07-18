@@ -1385,7 +1385,8 @@ s32 act_crawling(struct MarioState *m) {
             if (m->forwardVel > 10.0f) {
                 mario_set_forward_vel(m, 10.0f);
             }
-            break;
+            //! Possibly unintended missing break
+            // fall through
 
         case GROUND_STEP_NONE:
             align_with_floor(m);

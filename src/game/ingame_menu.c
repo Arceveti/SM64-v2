@@ -1016,7 +1016,7 @@ s8 gDialogCourseActNum = 1;
 void render_dialog_entries(void) {
     void **dialogTable;
     struct DialogEntry *dialog;
-    s8 lowerBound;
+    s8 lowerBound = 0;
     dialogTable = segmented_to_virtual(seg2_dialog_table);
     dialog = segmented_to_virtual(dialogTable[gDialogID]);
 
@@ -1732,11 +1732,7 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
             }
         }
     }
-#ifdef WIDE
-    if (gPlayer1Controller->buttonPressed & L_TRIG){
-        gWidescreen ^= 1;
-    }
-#endif
+
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     if (gDialogLineNum < COURSE_STAGES_COUNT) {
@@ -1786,11 +1782,6 @@ s16 render_pause_courses_and_castle(void) {
             shade_screen();
             render_pause_my_score_coins();
             render_pause_red_coins();
-        #ifdef WIDE
-        if (gPlayer1Controller->buttonPressed & L_TRIG){
-            gWidescreen ^= 1;
-        }
-        #endif
         #ifndef EXIT_COURSE_WHILE_MOVING
             s32 exitCheck = gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT;
         #else
@@ -1835,6 +1826,10 @@ s16 render_pause_courses_and_castle(void) {
     }
     #ifdef WIDE
         render_widescreen_setting();
+        if (gPlayer1Controller->buttonPressed & L_TRIG){
+            gWidescreen ^= 1;
+            save_file_set_widescreen_mode(gWidescreen);
+        }
     #endif
     if (gDialogTextAlpha < 250) {
         gDialogTextAlpha += 25;
