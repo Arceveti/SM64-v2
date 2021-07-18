@@ -1624,16 +1624,16 @@ s32 update_boss_fight_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
         pos[1] = 300.f - (nx * pos[0] + nz * pos[2] + oo) / ny;
         switch (gCurrLevelArea) {
             case AREA_BOB:
-                pos[1] += 125.f;
-                //! fall through, makes the BoB boss fight camera move up twice as high as it should
             case AREA_WF:
-                pos[1] += 125.f;
+                pos[1] += 125.0f;
+                break;
         }
     }
 
-    //! Must be same line to match on -O2
     // Prevent the camera from going to the ground in the outside boss fight
-    if (gCurrLevelNum == LEVEL_BBH) { pos[1] = 2047.f; }
+    if (gCurrLevelNum == LEVEL_BBH) {
+        pos[1] = 2047.f;
+    }
 
     // Rotate from C-Button input
     if (sCSideButtonYaw < 0) {

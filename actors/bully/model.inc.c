@@ -4,9 +4,9 @@
 static const Vtx bully_seg5_vertex_05000000[] = {
     {{{   196,     17,    114}, 0, {   325,    310}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   259,      2,    106}, 0, {   422,      7}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   184,    -14,    137}, 0, {   399,    416}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   184,    -14,    137}, 0, {   400,    416}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   196,     17,   -113}, 0, {   105,    286}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   259,      2,   -105}, 0, {    69,    -34}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   259,      2,   -105}, 0, {    69,    -32}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   171,     17,   -157}, 0, {  -107,    540}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   184,    -14,   -136}, 0, {   -34,    392}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    91,     42,   -114}, 0, {   236,    784}, {0xff, 0xff, 0xff, 0xff}}},
@@ -72,7 +72,7 @@ static const Lights1 bully_seg5_lights_05000420 = gdSPDefLights1(
 );
 
 // Unreferenced light group
-UNUSED static const Lights1 bully_lights_unused = gdSPDefLights1(
+static const Lights1 bully_lights_unused = gdSPDefLights1(
     0x3f, 0x29, 0x00,
     0xff, 0xa5, 0x00, 0x28, 0x28, 0x28
 );
@@ -83,7 +83,6 @@ static const Lights1 bully_seg5_lights_05000450 = gdSPDefLights1(
     0x00, 0x00, 0x00, 0x28, 0x28, 0x28
 );
 
-// //! There's another malformed light entry here.
 // 0x05000468
 ALIGNED8 static const Texture bully_seg5_texture_05000468[] = {
 #include "actors/bully/bully_left_side.rgba16.inc.c"
@@ -355,8 +354,8 @@ const Gfx bully_seg5_dl_050037A0[] = {
 
 // 0x05003838 - 0x05003878
 const Gfx bully_seg5_dl_05003838[] = {
-    gsSPLight((u8*)bully_seg5_texture_05000468 + 0x8, 1), //! yet another malformed light...
-    gsSPLight(bully_seg5_texture_05000468, 2),
+    gsSPLight(bully_lights_unused.l, 1),
+    gsSPLight(bully_lights_unused.a, 2),
     gsSPVertex(bully_seg5_vertex_05002EA8, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 3,  4,  5, 0x0,  3,  5,  0, 0x0),
@@ -436,18 +435,18 @@ const Gfx bully_seg5_dl_05003878[] = {
 
 // 0x05003C50
 static const Vtx bully_seg5_vertex_05003C50[] = {
-    {{{     0,     57,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -55,    -55,      0}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -55,      0}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -55,     57,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,    -56,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05003C90
 static const Vtx bully_seg5_vertex_05003C90[] = {
-    {{{    57,     57,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -55,      0}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    57,    -55,      0}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     57,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    -56,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05003CD0 - 0x05003D08
@@ -491,18 +490,18 @@ const Gfx bully_seg5_dl_05003D40[] = {
 
 // 0x05003DB8
 static const Vtx bully_seg5_vertex_05003DB8[] = {
-    {{{     0,    114,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -111,   -111,      0}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,   -111,      0}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -111,    114,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    112,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -112,   -112,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,   -112,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -112,    112,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05003DF8
 static const Vtx bully_seg5_vertex_05003DF8[] = {
-    {{{   114,    114,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,   -111,      0}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   114,   -111,      0}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    114,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   112,    112,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,   -112,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   112,   -112,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    112,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05003E38 - 0x05003E70
@@ -546,12 +545,12 @@ const Gfx bully_seg5_dl_05003EA8[] = {
 
 // 0x05003F20
 static const Vtx bully_seg5_vertex_05003F20[] = {
-    {{{   -36,    152,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,    136,     68}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    124,     68}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -36,    152,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    136,     68}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    124,     68}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    60,    140,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    124,    -64}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,    136,    -64}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    124,    -64}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    136,    -64}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05003F80 - 0x05003FC8
