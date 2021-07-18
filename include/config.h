@@ -152,6 +152,9 @@
 
 #define DEBUG_MODE
 
+// Makes obj_resolve_object_collisions work consistently
+#define OBJ_COLLISIONS_FIX
+
 // Makes obj_resolve_object_collisions work consistently (Arceveti)
 #define OBJ_COLLISIONS_FIX
 // Glowing effect on power stars (Arceveti)
