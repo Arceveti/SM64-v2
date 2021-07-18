@@ -543,7 +543,6 @@ void clear_objects(void) {
     init_free_object_list();
     clear_object_lists(gObjectListArray);
 
-    stub_behavior_script_2();
     stub_obj_list_processor_1();
 
     for (i = 0; i < OBJECT_POOL_CAPACITY; i++) {

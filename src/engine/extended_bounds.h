@@ -9,13 +9,13 @@
     0: Regular bounds
         Same as vanilla sm64, boundaries are (-8192 to 8191)
         16x16 collision cells.
-    1: 2x extended bounds
+    1: Regular bounds (performance)
+        Same boundaries as vanilla (-8192 to 8191), but with twice the amount of collision cells
+        Trades more RAM usage for faster collision calculations.
+    2: 2x extended bounds
         level boundaries are twice as big (-16384 to 16383)
         Collision calculations remain as fast as vanilla, at the cost of using more RAM.
         32x32 collision cells.
-    2: Regular bounds (performance)
-        Same boundaries as vanilla (-8192 to 8191), but with twice the amount of collision cells
-        Trades more RAM usage for faster collision calculations.
         32x32 collision cells.
     3: 4x extended bounds
         level boundaries are 4 times as big (-32768 to 32767)
@@ -58,14 +58,14 @@
     #define WORLD_SCALE        1.f
 #elif EXTENDED_BOUNDS_MODE == 1
     #undef LEVEL_BOUNDARY_MAX
-    #define LEVEL_BOUNDARY_MAX 0x4000L
-    #define CELL_SIZE          0x400
-    #define WORLD_SCALE        2.f
-#elif EXTENDED_BOUNDS_MODE == 2
-    #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX 0x2000L
     #define CELL_SIZE          0x200
     #define WORLD_SCALE        1.f
+#elif EXTENDED_BOUNDS_MODE == 2
+    #undef LEVEL_BOUNDARY_MAX
+    #define LEVEL_BOUNDARY_MAX 0x4000L
+    #define CELL_SIZE          0x400
+    #define WORLD_SCALE        2.f
 #elif EXTENDED_BOUNDS_MODE == 3
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX 0x8000L

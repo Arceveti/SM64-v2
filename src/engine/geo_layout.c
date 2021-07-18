@@ -48,8 +48,6 @@ struct GraphNode gObjParentGraphNode;
 struct AllocOnlyPool *gGraphNodePool;
 struct GraphNode *gCurRootGraphNode;
 
-UNUSED s32 D_8038BCA8;
-
 /* The gGeoViews array is a mysterious one. Some background:
  *
  * If there are e.g. multiple Goombas, the multiple Goomba objects share one
@@ -96,11 +94,8 @@ uintptr_t gGeoLayoutStack[16];
 struct GraphNode *gCurGraphNodeList[32];
 s16 gCurGraphNodeIndex;
 s16 gGeoLayoutStackIndex; // similar to SP register in MIPS
-UNUSED s16 D_8038BD7C;
 s16 gGeoLayoutReturnIndex; // similar to RA register in MIPS
 u8 *gGeoLayoutCommand;
-
-u32 unused_8038B894[3] = { 0 };
 
 /*
   0x00: Branch and store return address
@@ -417,7 +412,7 @@ void geo_layout_cmd_node_translation_rotation(void) {
     Vec3s translation, rotation;
 
     void *displayList = NULL;
-    s16 drawingLayer = 0;
+    s16 drawingLayer = LAYER_FORCE;
 
     s16 params = cur_geo_cmd_u8(0x01);
     s16 *cmdPos = (s16 *) gGeoLayoutCommand;
@@ -470,7 +465,7 @@ void geo_layout_cmd_node_translation(void) {
 
     Vec3s translation;
 
-    s16 drawingLayer = 0;
+    s16 drawingLayer = LAYER_FORCE;
     s16 params = cur_geo_cmd_u8(0x01);
     s16 *cmdPos = (s16 *) gGeoLayoutCommand;
     void *displayList = NULL;
@@ -504,14 +499,14 @@ void geo_layout_cmd_node_translation(void) {
 void geo_layout_cmd_node_rotation(void) {
     struct GraphNodeRotation *graphNode;
 
-    Vec3s sp2c;
+    Vec3s angle;
 
-    s16 drawingLayer = 0;
+    s16 drawingLayer = LAYER_FORCE;
     s16 params = cur_geo_cmd_u8(0x01);
     s16 *cmdPos = (s16 *) gGeoLayoutCommand;
     void *displayList = NULL;
 
-    cmdPos = read_vec3s_angle(sp2c, &cmdPos[1]);
+    cmdPos = read_vec3s_angle(angle, &cmdPos[1]);
 
     if (params & 0x80) {
         displayList = *(void **) &cmdPos[0];
@@ -519,7 +514,7 @@ void geo_layout_cmd_node_rotation(void) {
         cmdPos += 2 << CMD_SIZE_SHIFT;
     }
 
-    graphNode = init_graph_node_rotation(gGraphNodePool, NULL, drawingLayer, displayList, sp2c);
+    graphNode = init_graph_node_rotation(gGraphNodePool, NULL, drawingLayer, displayList, angle);
 
     register_scene_graph_node(&graphNode->node);
 
@@ -537,7 +532,7 @@ void geo_layout_cmd_node_rotation(void) {
 void geo_layout_cmd_node_scale(void) {
     struct GraphNodeScale *graphNode;
 
-    s16 drawingLayer = 0;
+    s16 drawingLayer = LAYER_FORCE;
     s16 params = cur_geo_cmd_u8(0x01);
     f32 scale = cur_geo_cmd_u32(0x04) / 65536.0f;
     void *displayList = NULL;
