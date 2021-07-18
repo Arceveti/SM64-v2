@@ -16,8 +16,8 @@
  * @see camera.c
  */
 
-#define ABS(x) ((x) > 0.f ? (x) : -(x))
-#define ABS2(x) ((x) >= 0.f ? (x) : -(x))
+#define ABS(x) ((x) > 0.0f ? (x) : -(x))
+#define ABS2(x) ((x) >= 0.0f ? (x) : -(x))
 
 /**
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000
@@ -346,7 +346,7 @@ struct HandheldShakePoint
  * A function that is called by CameraTriggers and cutscene shots.
  * These are concurrent: multiple CameraEvents can occur on the same frame.
  */
-typedef BAD_RETURN(s32) (*CameraEvent)(struct Camera *c);
+typedef void (*CameraEvent)(struct Camera *c);
 /**
  * The same type as a CameraEvent, but because these are generally longer, and happen in sequential
  * order, they're are called "shots," a term taken from cinematography.
@@ -521,8 +521,6 @@ struct CutsceneVariable
     Vec3f point;
     Vec3f unusedPoint;
     Vec3s angle;
-    /// Perhaps a boolean or an extra angle
-    s16 unused2;
 };
 
 /**
@@ -686,8 +684,6 @@ void reset_camera(struct Camera *c);
 void init_camera(struct Camera *c);
 void select_mario_cam_mode(void);
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context);
-void stub_camera_2(UNUSED struct Camera *c);
-void stub_camera_3(UNUSED struct Camera *c);
 void vec3f_sub(Vec3f dst, Vec3f src);
 void object_pos_to_vec3f(Vec3f dst, struct Object *o);
 void vec3f_to_object_pos(struct Object *o, Vec3f src);
@@ -754,13 +750,13 @@ s16 camera_course_processing(struct Camera *c);
 void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood);
 s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, s16 *avoidYaw, s16 yawRange);
 void find_mario_floor_and_ceil(struct PlayerGeometry *pg);
-u8 start_object_cutscene_without_focus(u8 cutscene);
+void start_object_cutscene_without_focus(u8 cutscene);
 s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, s16 dialogID);
 s16 cutscene_object_without_dialog(u8 cutscene, struct Object *o);
 s16 cutscene_object(u8 cutscene, struct Object *o);
 void play_cutscene(struct Camera *c);
-s32 cutscene_event(CameraEvent event, struct Camera * c, s16 start, s16 end);
-s32 cutscene_spawn_obj(u32 obj, s16 frame);
+void cutscene_event(CameraEvent event, struct Camera * c, s16 start, s16 end);
+void cutscene_spawn_obj(u32 obj, s16 frame);
 void set_fov_shake(s16 amplitude, s16 decay, s16 shakeSpeed);
 
 void set_fov_function(u8 func);

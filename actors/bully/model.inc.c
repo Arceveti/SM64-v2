@@ -354,8 +354,8 @@ const Gfx bully_seg5_dl_050037A0[] = {
 
 // 0x05003838 - 0x05003878
 const Gfx bully_seg5_dl_05003838[] = {
-    gsSPLight(bully_lights_unused.l, 1),
-    gsSPLight(bully_lights_unused.a, 2),
+    gsSPLight(&bully_lights_unused.l, 1),
+    gsSPLight(&bully_lights_unused.a, 2),
     gsSPVertex(bully_seg5_vertex_05002EA8, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 3,  4,  5, 0x0,  3,  5,  0, 0x0),
