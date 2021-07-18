@@ -249,9 +249,9 @@ SECTIONS
    __mainPoolSize = RAM_END - .;
 
    __expansionRamStart = 0x80400000;
-   #ifndef USE_EXT_RAM
+#ifndef USE_EXT_RAM
       ASSERT((. <= __expansionRamStart), "Error: RDRAM expanded into Expansion RAM, despite Expansion RAM not being defined.")
-   #endif
+#endif
 
    BEGIN_SEG(entry, 0x10000000)
    {
@@ -447,6 +447,13 @@ SECTIONS
       KEEP(BUILD_DIR/sound/sound_data.o(.data));
    }
    END_SEG(assets)
+#ifdef HVQM 
+   BEGIN_SEG(hvqm, __romPos) SUBALIGN(2)
+   {
+      KEEP(BUILD_DIR/data/hvqm.o(.data));
+   }
+	END_SEG(hvqm)
+#endif
    /* DWARF debug sections.
       Symbols in the DWARF debugging sections are relative to the beginning
       of the section so we begin them at 0.  */

@@ -1,34 +1,22 @@
 // Swoop
 
-// Unreferenced light group
-UNUSED static const Lights1 swoop_lights_unused1 = gdSPDefLights1(
-    0x0a, 0x00, 0x25,
-    0x2a, 0x00, 0x95, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 swoop_lights_unused2 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x06004270
-ALIGNED8 static const Texture swoop_seg6_texture_06004270[] = {
+ALIGNED8 static const Texture swoop_seg6_texture_body[] = {
 #include "actors/swoop/swoop_body.rgba16.inc.c"
 };
 
 // 0x06004A70
-ALIGNED8 static const Texture swoop_seg6_texture_06004A70[] = {
+ALIGNED8 static const Texture swoop_seg6_texture_eye[] = {
 #include "actors/swoop/swoop_eye.rgba16.inc.c"
 };
 
 // 0x06005270
-ALIGNED8 static const Texture swoop_seg6_texture_06005270[] = {
+ALIGNED8 static const Texture swoop_seg6_texture_nose[] = {
 #include "actors/swoop/swoop_nose.rgba16.inc.c"
 };
 
 // 0x06005A70
-ALIGNED8 static const Texture swoop_seg6_texture_06005A70[] = {
+ALIGNED8 static const Texture swoop_seg6_texture_wing[] = {
 #include "actors/swoop/swoop_wing.rgba16.inc.c"
 };
 
@@ -107,7 +95,7 @@ static const Vtx swoop_seg6_vertex_06006518[] = {
 
 // 0x060065B8 - 0x060066F8
 const Gfx swoop_seg6_dl_060065B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06004A70),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&swoop_seg6_lights_06006270.l, 1),
@@ -136,7 +124,7 @@ const Gfx swoop_seg6_dl_060065B8[] = {
 
 // 0x060066F8 - 0x06006758
 const Gfx swoop_seg6_dl_060066F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06005270),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_nose),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(swoop_seg6_vertex_06006518, 10, 0),
@@ -175,15 +163,15 @@ const Gfx swoop_seg6_dl_06006758[] = {
 
 // 0x06006808
 static const Vtx swoop_seg6_vertex_06006808[] = {
-    {{{    15,     15,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -14,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -14,    -14,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -14,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,    -15,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,    -15,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006848 - 0x06006880
 const Gfx swoop_seg6_dl_06006848[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06004270),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(swoop_seg6_vertex_06006808, 4, 0),
@@ -228,9 +216,9 @@ static const Lights1 swoop_seg6_lights_06006938 = gdSPDefLights1(
 static const Vtx swoop_seg6_vertex_06006950[] = {
     {{{   187,     48,    -55}, 0, {   426,    722}, {0xc6, 0x6b, 0xdf, 0xff}}},
     {{{   194,     32,   -119}, 0, {   334,    706}, {0xdf, 0x7a, 0x05, 0xff}}},
-    {{{    80,     -3,    -32}, 0, {   458,    990}, {0xdf, 0x7a, 0x05, 0xff}}},
+    {{{    80,     -3,    -32}, 0, {   458,  31<<5}, {0xdf, 0x7a, 0x05, 0xff}}},
     {{{   116,     34,   -130}, 0, {   318,    900}, {0xfd, 0x77, 0x2b, 0xff}}},
-    {{{    80,     -3,     33}, 0, {   552,    990}, {0xdf, 0x7a, 0xfb, 0xff}}},
+    {{{    80,     -3,     33}, 0, {   552,  31<<5}, {0xdf, 0x7a, 0xfb, 0xff}}},
     {{{   194,     32,    120}, 0, {   676,    706}, {0xdf, 0x7a, 0xfb, 0xff}}},
     {{{   187,     48,     56}, 0, {   584,    722}, {0xc6, 0x6b, 0x21, 0xff}}},
     {{{   116,     34,    131}, 0, {   692,    900}, {0xfd, 0x77, 0xd5, 0xff}}},
@@ -246,7 +234,7 @@ static const Vtx swoop_seg6_vertex_060069D0[] = {
 
 // 0x06006A10 - 0x06006A68
 const Gfx swoop_seg6_dl_06006A10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06005270),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_nose),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&swoop_seg6_lights_06006938.l, 1),
@@ -297,14 +285,14 @@ const Gfx swoop_seg6_dl_06006A88[] = {
 // 0x06006B58
 static const Vtx swoop_seg6_vertex_06006B58[] = {
     {{{     0,      1,    133}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,   -133}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,   -133}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,    133}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,   -133}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,   -133}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,    133}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006B98 - 0x06006BD0
 const Gfx swoop_seg6_dl_06006B98[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06005A70),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(swoop_seg6_vertex_06006B58, 4, 0),
@@ -341,15 +329,15 @@ const Gfx swoop_seg6_dl_06006BD0[] = {
 
 // 0x06006C88
 static const Vtx swoop_seg6_vertex_06006C88[] = {
-    {{{   265,      1,   -132}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,    134}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,    134}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,   -132}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,   -133}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,    133}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,    133}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,   -133}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006CC8 - 0x06006D00
 const Gfx swoop_seg6_dl_06006CC8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_06005A70),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, swoop_seg6_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(swoop_seg6_vertex_06006C88, 4, 0),

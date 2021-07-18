@@ -24,7 +24,6 @@ struct PoolSplit2 {
 #if defined(VERSION_JP) || defined(VERSION_US)
 s16 gVolume;
 s8 gReverbDownsampleRate;
-u8 sReverbDownsampleRateLog; // never read
 #endif
 
 struct SoundAllocPool gAudioSessionPool;
@@ -121,8 +120,6 @@ f64 kth_root(f64 d, s32 k) {
         root = 1.0;
     } else {
         for (i = 0; i < 64; i++) {
-            if (1) {
-            }
             next = root_newton_step(root, k, d);
             diff = next - root;
 
@@ -329,11 +326,6 @@ void temporary_pool_clear(struct TemporaryPool *temporary) {
     temporary->entries[1].id = -1;
 }
 
-void unused_803160F8(struct SoundAllocPool *pool) {
-    pool->numAllocatedEntries = 0;
-    pool->cur = pool->start;
-}
-
 extern s32 D_SH_80315EE8;
 void sound_init_main_pools(s32 sizeForAudioInitPool) {
     sound_alloc_pool_init(&gAudioInitPool, gAudioHeap, sizeForAudioInitPool);
@@ -380,11 +372,6 @@ void temporary_pools_init(struct PoolSplit *a) {
     temporary_pool_clear(&gUnusedLoadedPool.temporary);
 }
 #undef SOUND_ALLOC_FUNC
-
-#if defined(VERSION_JP) || defined(VERSION_US)
-UNUSED static void unused_803163D4(void) {
-}
-#endif
 
 #ifdef VERSION_SH
 void *alloc_bank_or_seq(s32 poolIdx, s32 size, s32 arg3, s32 id) {
@@ -497,14 +484,6 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
             return NULL;
         }
 #else
-#ifdef VERSION_EU
-        if (0) {
-            // It's unclear where these string literals go.
-            eu_stubbed_printf_0("DataHeap Not Allocate \n");
-            eu_stubbed_printf_1("StayHeap Not Allocate %d\n", 0);
-            eu_stubbed_printf_1("AutoHeap Not Allocate %d\n", 0);
-        }
-#endif
 
 #ifdef VERSION_SH
         if (poolIdx == 1) {
@@ -639,7 +618,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
         pool = &arg0->temporary.pool;
         if (tp->entries[tp->nextSide].id != (s8)nullID) {
             table[tp->entries[tp->nextSide].id] = SOUND_LOAD_STATUS_NOT_LOADED;
-            if (isSound == TRUE) {
+            if (isSound) {
                 discard_bank(tp->entries[tp->nextSide].id);
             }
         }
@@ -884,15 +863,14 @@ void func_eu_802e27e4_unused(f32 arg0, f32 arg1, u16 *arg2) {
     s32 i;
     f32 tmp[16];
 
-    tmp[0] = (f32) (arg1 * 262159.0f);
-    tmp[8] = (f32) (arg0 * 262159.0f);
-    tmp[1] = (f32) ((arg1 * arg0) * 262159.0f);
+    tmp[0] = (f32)   (arg1                 * 262159.0f);
+    tmp[8] = (f32)   (arg0                 * 262159.0f);
+    tmp[1] = (f32)  ((arg1 * arg0)         * 262159.0f);
     tmp[9] = (f32) (((arg0 * arg0) + arg1) * 262159.0f);
 
     for (i = 2; i < 8; i++) {
-        //! @bug they probably meant to store the value to tmp[i] and tmp[8 + i]
-        arg2[i] = arg1 * tmp[i - 2] + arg0 * tmp[i - 1];
-        arg2[8 + i] = arg1 * tmp[6 + i] + arg0 * tmp[7 + i];
+        tmp[i] = arg1 * tmp[i - 2] + arg0 * tmp[i - 1];
+        tmp[8 + i] = arg1 * tmp[6 + i] + arg0 * tmp[7 + i];
     }
 
     for (i = 0; i < 16; i++) {
@@ -1029,10 +1007,6 @@ s32 audio_shut_down_and_reset_step(void) {
         case 3:
             if (gAudioResetFadeOutFramesLeft != 0) {
                 gAudioResetFadeOutFramesLeft--;
-#ifdef VERSION_SH
-                if (1) {
-                }
-#endif
                 decrease_reverb_gain();
             } else {
                 for (i = 0; i < NUMAIBUFFERS; i++) {
@@ -1073,10 +1047,6 @@ s32 audio_shut_down_and_reset_step(void) {
             }
 #endif
     }
-#ifdef VERSION_SH
-    if (gAudioResetFadeOutFramesLeft) {
-    }
-#endif
     if (gAudioResetStatus < 3) {
         return 0;
     }
@@ -1230,27 +1200,6 @@ void audio_reset_session(void) {
     gSamplesPerFrameTarget = ALIGN16(gAiFrequency / 60);
     gReverbDownsampleRate = preset->reverbDownsampleRate;
 
-    switch (gReverbDownsampleRate) {
-        case 1:
-            sReverbDownsampleRateLog = 0;
-            break;
-        case 2:
-            sReverbDownsampleRateLog = 1;
-            break;
-        case 4:
-            sReverbDownsampleRateLog = 2;
-            break;
-        case 8:
-            sReverbDownsampleRateLog = 3;
-            break;
-        case 16:
-            sReverbDownsampleRateLog = 4;
-            break;
-        default:
-            sReverbDownsampleRateLog = 0;
-    }
-
-    gReverbDownsampleRate = preset->reverbDownsampleRate;
     gVolume = preset->volume;
     gMinAiBufferLength = gSamplesPerFrameTarget - 0x10;
     updatesPerFrame = gSamplesPerFrameTarget / 160 + 1;
@@ -1470,11 +1419,7 @@ void *unk_pool1_alloc(s32 poolIndex, s32 arg1, u32 size) {
     gUnkPool1.entries[pos].id = arg1;
     gUnkPool1.entries[pos].size = size;
 
-#ifdef AVOID_UB
-    //! @bug UB: missing return. "ret" is in v0 at this point, but doing an
-    //  explicit return uses an additional register.
     return ret;
-#endif
 }
 
 u8 *func_sh_802f1d40(u32 size, s32 bank, u8 *arg2, s8 medium) {
@@ -1688,7 +1633,6 @@ void func_sh_802f23ec(void) {
     s32 drumId;
     struct Drum *drum;
     struct Instrument *inst;
-    UNUSED s32 pad;
     struct UnkEntry *entry; //! @bug: not initialized but nevertheless used
 
     seqCount = gAlCtlHeader->seqCount;

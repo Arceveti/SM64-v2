@@ -65,7 +65,7 @@ extern f32 gVolRampingRhs128[128];
 
 // non-constant .data
 extern s16 gTatumsPerBeat;
-extern s8 gUnusedCount80333EE8;
+// extern s8 gUnusedCount80333EE8;
 extern s32 gAudioHeapSize; // AUDIO_HEAP_SIZE
 extern s32 gAudioInitPoolSize; // AUDIO_INIT_POOL_SIZE
 extern volatile s32 gAudioLoadLock;

@@ -16,7 +16,6 @@
         level boundaries are twice as big (-16384 to 16383)
         Collision calculations remain as fast as vanilla, at the cost of using more RAM.
         32x32 collision cells.
-        32x32 collision cells.
     3: 4x extended bounds
         level boundaries are 4 times as big (-32768 to 32767)
         Collision calculations remain as fast as vanilla, at the cost of using far more RAM (16 times vanilla).
