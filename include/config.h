@@ -152,9 +152,6 @@
 
 #define DEBUG_MODE
 
-// Makes obj_resolve_object_collisions work consistently
-#define OBJ_COLLISIONS_FIX
-
 // Makes obj_resolve_object_collisions work consistently (Arceveti)
 #define OBJ_COLLISIONS_FIX
 // Glowing effect on power stars (Arceveti)
@@ -177,16 +174,17 @@
 #define EASIER_DIALOG_TRIGGER
 // Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
 #define DIALOG_INDICATOR
-// Detect Mario's collision with lava regardless of action
+// Detect Mario's collision with lava regardless of action (Arceveti)
 #define LAVA_FIX
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
+// (Arceveti)
 #define NULL_FLOOR_MISSES 3
 // Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
 #define MUSHROOMS_HEAL
 // Animate Bowser 3's rainbow effect (Arceveti)
 #define RAINBOW_BOWSER
-// Fix DDD water rings
+// Fix DDD water rings (Arceveti)
 # define WATER_RING_FIX
 // Goddard easter egg from Shindou
 #define GODDARD_EASTER_EGG
