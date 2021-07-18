@@ -10,27 +10,18 @@
 // types
 /// Properties types used in [gd_setproperty](@ref gd_setproperty); most are stubbed out.
 enum GdProperty {
-    GD_PROP_OVERLAY       = 4,
     GD_PROP_LIGHTING      = 11,
     GD_PROP_AMB_COLOUR    = 12,
     GD_PROP_DIFUSE_COLOUR = 13,
     GD_PROP_LIGHT_DIR     = 15,
-    GD_PROP_CULLING       = 16,
-    GD_PROP_STUB17        = 17,
-    GD_PROP_STUB18        = 18,
-    GD_PROP_STUB19        = 19,
-    GD_PROP_STUB20        = 20,
-    GD_PROP_STUB21        = 21,
-    GD_PROP_ZBUF_FN       = 22
+    GD_PROP_CULLING       = 16
 };
 
 enum GdSceneId {
     GD_SCENE_YOSHI,  // create yoshi?
     GD_SCENE_YOSHI1,  // destroy yoshi?
     GD_SCENE_REGULAR_MARIO,
-    GD_SCENE_DIZZY_MARIO,
-    GD_SCENE_CAR,   // create car?
-    GD_SCENE_CAR5  // destroy car?
+    GD_SCENE_DIZZY_MARIO
 };
 
 // data
@@ -46,10 +37,8 @@ f64 gd_sqrt_d(f64 x);
 
 #if defined(ISVPRINT) || defined(UNF)
 #define gd_printf osSyncPrintf
-#else
-void gd_printf(const char *format, ...);
 #endif
-void gd_exit(UNUSED s32 code) NORETURN;
+void gd_exit(void) NORETURN;
 void gd_free(void *ptr);
 void *gd_allocblock(u32 size);
 void *gd_malloc(u32 size, u8 perm);
@@ -64,9 +53,6 @@ void gd_vblank(void);
 void gd_copy_p1_contpad(OSContPad *p1cont);
 s32 gd_sfx_to_play(void);
 Gfx *gdm_gettestdl(s32 id);
-void gd_draw_rect(f32 ulx, f32 uly, f32 lrx, f32 lry);
-void gd_draw_border_rect(f32 ulx, f32 uly, f32 lrx, f32 lry);
-void gd_dl_set_fill(struct GdColour *colour);
 void stash_current_gddl(void);
 void pop_gddl_stash(void);
 s32 gd_startdisplist(s32 memarea);
@@ -88,39 +74,24 @@ void gd_dl_flush_vertices(void);
 void set_render_alpha(f32 arg0);
 void set_light_id(s32 index);
 void set_light_num(s32 n);
-s32 create_mtl_gddl(s32 mtlType);
+s32 create_mtl_gddl(void);
 void branch_to_gddl(s32 dlNum);
-void gd_dl_hilite(s32, struct ObjCamera *, struct GdVec3f *, struct GdVec3f *, struct GdVec3f *, struct GdColour *);
-void gd_dl_hilite(s32 idx, struct ObjCamera *cam, UNUSED struct GdVec3f *arg2, UNUSED struct GdVec3f *arg3,
-                   struct GdVec3f *arg4, struct GdColour *colour);
+void gd_dl_hilite(s32 idx, struct ObjCamera *cam, struct GdVec3f *arg4, struct GdColour *colour);
 s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material);
-void set_Vtx_norm_buf_1(struct GdVec3f *norm);
 void set_Vtx_norm_buf_2(struct GdVec3f *norm);
 void set_gd_mtx_parameters(s32 params);
 void gd_set_one_cycle(void);
-void gddl_is_loading_stub_dl(UNUSED s32 dlLoad);
 void start_view_dl(struct ObjView *view);
-void border_active_view(void);
-void gd_shading(s32 model);
-s32 gd_getproperty(s32 prop, UNUSED void *arg1);
 void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3);
 void gd_create_ortho_matrix(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f);
 void gd_create_perspective_matrix(f32 fovy, f32 aspect, f32 near, f32 far);
-s32 setup_view_buffers(const char *name, struct ObjView *view, UNUSED s32 ulx, UNUSED s32 uly,
-                       UNUSED s32 lrx, UNUSED s32 lry);
+s32 setup_view_buffers(const char *name, struct ObjView *view);
 void gd_init_controllers(void);
-long defpup(UNUSED const char *menufmt, ...);
-void menu_cb_control_type(u32);
-void menu_cb_recalibrate_controller(u32);
-void func_801A4438(f32 x, f32 y, f32 z);
-void stub_draw_label_text(UNUSED char *s);
 void set_active_view(struct ObjView *v);
-void func_801A520C(void);
 void gd_init(void);
 void init_pick_buf(s16 *buf, s32 len);
 void store_in_pickbuf(s16 data);
-s32 get_cur_pickbuf_offset(UNUSED s16 *arg0);
-void set_vtx_tc_buf(f32 tcS, f32 tcT);
+s32 get_cur_pickbuf_offset(void);
 struct GdObj *load_dynlist(struct DynList *dynlist);
 
 #endif // GD_RENDERER_H

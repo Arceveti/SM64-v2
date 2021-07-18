@@ -32,8 +32,8 @@
 #define WHIRLPOOL_COND_AT_LEAST_SECOND_STAR 3
 
 // Head defines
-#define REGULAR_FACE 0x0002
-#define DIZZY_FACE 0x0003
+#define REGULAR_FACE TRUE
+#define DIZZY_FACE FALSE
 
 #ifdef NO_SEGMENTED_MEMORY
 #define EXECUTE(seg, script, scriptEnd, entry) \

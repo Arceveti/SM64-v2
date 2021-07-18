@@ -185,6 +185,8 @@
 #define RAINBOW_BOWSER
 // Fix DDD water rings
 # define WATER_RING_FIX
+// Goddard easter egg from Shindou
+#define GODDARD_EASTER_EGG
 
 //! not implemented
 #define SCREEN_SHADE

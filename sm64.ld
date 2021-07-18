@@ -326,7 +326,6 @@ SECTIONS
       BUILD_DIR/libgoddard.a:skin_movement.o(.rodata*);
       BUILD_DIR/libgoddard.a:particles.o(.rodata*);
       BUILD_DIR/libgoddard.a:dynlist_proc.o(.rodata*);
-      BUILD_DIR/libgoddard.a:old_menu.o(.rodata*);
       BUILD_DIR/libgoddard.a:debug_utils.o(.rodata*);
       BUILD_DIR/libgoddard.a:joints.o(.rodata*);
       BUILD_DIR/libgoddard.a:skin.o(.rodata*);
@@ -367,8 +366,6 @@ SECTIONS
 #ifdef KEEP_MARIO_HEAD
    BEGIN_SEG(gd_dynlists, 0x04000000)
    {
-      BUILD_DIR/libgoddard.a:dynlist_test_cube.o(.data);
-      BUILD_DIR/libgoddard.a:dynlist_unused.o(.data);
       BUILD_DIR/libgoddard.a:dynlist_mario_face.o(.data);
       BUILD_DIR/libgoddard.a:dynlists_mario_eyes.o(.data);
       BUILD_DIR/libgoddard.a:dynlists_mario_eyebrows_mustache.o(.data);
@@ -380,8 +377,6 @@ SECTIONS
       BUILD_DIR/libgoddard.a:anim_mario_eyebrows_1.o(.data);
       BUILD_DIR/libgoddard.a:anim_group_1.o(.data);
       BUILD_DIR/libgoddard.a:anim_group_2.o(.data);
-      BUILD_DIR/libgoddard.a:dynlist_test_cube.o(.rodata*);
-      BUILD_DIR/libgoddard.a:dynlist_unused.o(.rodata*);
       BUILD_DIR/libgoddard.a:*.o(.data);
       BUILD_DIR/libgoddard.a:*.o(.rodata);
    }

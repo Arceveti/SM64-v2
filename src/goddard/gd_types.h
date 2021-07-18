@@ -149,38 +149,6 @@ struct ObjGroup {
     /* 0x74 */ s32 id;
 }; /* sizeof = 0x78 */
 
-/* Known linkTypes
- * 0x00 : Normal (link to GdObj)
- * 0x01 : Compressed (vtx or face data)
- */
-
-struct ObjBone {
-    /* 0x000 */ struct GdObj header;
-    /* 0x014 */ struct GdVec3f worldPos;   // "position"?? from dead code in draw_bone
-    /* 0x020 */ struct ObjBone *prev;   // maybe, based on make_bone
-    /* 0x024 */ struct ObjBone *next;   // maybe, based on make_bone
-    /* 0x028 */ struct GdVec3f unk28;   // "rotation"?? from dead code in draw_bone
-    /* 0x034 */ u8  pad34[0x40-0x34];
-    /* 0x040 */ struct GdVec3f unk40;
-    /* 0x04C */ u8  pad4C[0x58-0x4C];
-    /* 0x058 */ struct GdVec3f unk58;  // orientation?
-    /* 0x064 */ struct GdVec3f unk64;
-    /* 0x070 */ Mat4f mat70;
-    /* 0x0B0 */ Mat4f matB0;
-    /* 0x0F0 */ struct ObjShape *shapePtr; // from dead code in draw_bone
-    /* 0x0F4 */ f32 unkF4;              // also length?
-    /* 0x0F8 */ f32 unkF8;              // length?
-    /* 0x0FC */ f32 unkFC;              // also length?
-    /* 0x100 */ s32 colourNum;             // "colour"
-    /* 0x104 */ s32 unk104;             // "flags"
-    /* 0x108 */ s32 id;
-    /* 0x10C */ struct ObjGroup *unk10C; // group of joints?
-    /* 0x110 */ f32 spring;
-    /* 0x114 */ f32 unk114;
-    /* 0x118 */ f32 unk118;
-    /* 0x11C */ u8  pad11C[0x124-0x11C];
-}; /* sizeof = 0x124 */
-
 struct ObjJoint {
     /* 0x000 */ struct GdObj header;
     /* 0x014 */ struct GdVec3f worldPos;    // position in world space
@@ -348,14 +316,12 @@ struct ObjNet {
     /* 0x200 */ struct GdVec3f unk200;
     /* 0x20C */ struct ObjGroup *unk20C;
     /* 0x210 */ s32 ctrlType;     // has no purpose
-    /* 0x214 */ u8  pad214[0x21C-0x214];
-    /* 0x21C */ struct ObjGroup *unk21C;
 }; /* sizeof = 0x220 */
 
 struct ObjPlane {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ u32 id;
-    /* 0x18 */ s32 unk18; //bool;  contained within zone? (from its parent Net?)
+    /* 0x18 */ s32 inZone; //bool;  contained within zone? (from its parent Net?)
     /* 0x1C */ f32 unk1C;
     /* 0x20 */ s32 unk20;
     /* 0x24 */ s32 unk24;
@@ -451,35 +417,6 @@ struct ObjWeight {
     /* 0x3C */ struct ObjVertex* vtx;
 }; /* sizeof = 0x40 */
 
-/* This union is used in ObjGadget for a variable typed field.
-** The type can be found by checking group unk4C */
-union ObjVarVal {
-    s32 i;
-    f32 f;
-    u64 l;
-};
-
-/*
- * A slider control used to adjust the value of a variable
- */
-struct ObjGadget {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ struct GdVec3f worldPos;    // "world" position vec?
-    /* 0x20 */ s32 unk20;  // unused; only ever set to 0
-    /* 0x24 */ s32 type;
-    /* 0x28 */ f32 sliderPos;  // position of the slider (from 0 to 1)
-    /* 0x2C */ u8 pad2C[4];
-    /* 0x30 */ union ObjVarVal varval; //retype and rename varval30
-    /* 0x38 */ f32 rangeMin;
-    /* 0x3C */ f32 rangeMax;
-    /* 0x40 */ struct GdVec3f size;   // size (x = width, y = height)
-    /* 0x4C */ struct ObjGroup *valueGrp;  // group containing `ObjValPtr`s controlled by this gadget 
-    /* 0x50 */ struct ObjShape *shapePtr;
-    /* 0x54 */ struct ObjGroup *unk54;  //node group?
-    /* 0x58 */ u8 pad58[4];
-    /* 0x5C */ s32 colourNum;
-}; /* sizeof = 0x60 */
-
 enum GdViewFlags {
     VIEW_2_COL_BUF      = 0x000008,
     VIEW_ALLOC_ZBUF     = 0x000010,
@@ -528,23 +465,6 @@ struct ObjView {
     /* 0x9C */ s32 unk9C;
 }; /* sizeof = 0xA0 */
 
-
-typedef union ObjVarVal * (*valptrproc_t)(union ObjVarVal *, union ObjVarVal);
-
-struct ObjLabel {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ struct GdVec3f position;
-    /* 0x20 */ char *fmtstr;  // format string for displaying the value contained in `valptr`
-    /* 0x24 */ s32 unk24;  // always 8
-    /* 0x28 */ struct ObjValPtr *valptr;
-    /* 0x2C */ valptrproc_t valfn;
-    /* 0x30 */ s32 unk30;       // set to 3 or 4 in the code, but never actually used. could possibly be colourNum?
-}; /* sizeof = 0x34 */
-
-/* unk30 types:
- * 3 = f32? f32 pointer?
-**/
-
 struct ObjAnimator {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ struct ObjGroup* animatedPartsGrp;  // group containing objects animated by this animator. I think all of them are joints.
@@ -590,24 +510,6 @@ struct AnimMtxVec {
     /* 0x40 */ struct GdVec3f vec;  // seems to be a scale vec
 };
 
-enum ValPtrType {
-    OBJ_VALUE_INT   = 1,
-    OBJ_VALUE_FLOAT = 2
-};
-
-/**
- * An object that points to a value in memory (either a field of another object,
- * or a standalone variable). Used by `ObjLabel` and `ObjGadget` to manage their
- * values.
- */
-struct ObjValPtr {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ struct GdObj *obj;   // maybe just a void *?
-    /* 0x18 */ uintptr_t offset;  // value pointed to is `obj` + `offset`
-    /* 0x1C */ enum ValPtrType datatype;
-    /* 0x20 */ s32 flag;       // TODO: better name for this? If 0x40000, then `offset` is an offset to a field in `obj`. Otherwise, `obj` is NULL, and `offset` is the address of a variable. 
-}; /* sizeof = 0x24 */
-
 enum GdLightFlags {
     LIGHT_UNK02 = 0x02, // old type of light?
     LIGHT_NEW_UNCOUNTED = 0x10,
@@ -637,20 +539,5 @@ struct ObjLight {
     /* 0x98 */ s32 unk98;
     /* 0x9C */ struct ObjShape *unk9C;
 }; /* sizeof = 0xA0 */
-
-struct ObjZone {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ struct GdBoundingBox boundingBox;
-    /* 0x2C */ struct ObjGroup *unk2C;   // plane group?
-    /* 0x30 */ struct ObjGroup *unk30;   // guess based on Unknown801781DC; might have to change later
-    /* 0x34 */ u8  pad[4];
-}; /* sizeof = 0x38*/
-
-struct ObjUnk200000 {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ u8  pad14[0x30-0x14];
-    /* 0x30 */ struct ObjVertex *unk30; //not sure; guessing for Unknown801781DC; 30 and 34 could switch with ObjZone
-    /* 0x34 */ struct ObjFace *unk34;   //not sure; guessing for Unknown801781DC
-}; /* sizeof = 0x38*/
 
 #endif // GD_TYPES_H

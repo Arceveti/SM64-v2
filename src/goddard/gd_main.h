@@ -43,13 +43,7 @@ struct GdControl { // gGdCtrl
     /* 0x58 */ u8  pad58[0x7C-0x58];
     /* 0x7C */ f32 stickXf;
     /* 0x80 */ f32 stickYf;
-    /* 0x84 */ u8  pad84[4];
-    /* 0x88 */ f32 unk88;  // set but never used
-    /* 0x8C */ u8  pad8c[0xA0-0x8C];
-    /* 0xA0 */ f32 unkA0;  // set but never used
-    /* 0xA4 */ u8  padA4[0xAC-0xA4];
-    /* 0xAC */ f32 unkAC;
-    /* 0xB0 */ u8  padB0[0xB8-0xB0];
+    /* 0x84 */ u8  pad84[0xB8-0x84];
     /* 0xB8 */ s32 dragStartX; // cursor x position when there was a new (A) press?
     /* 0xBC */ s32 dragStartY; // cursor y position when there was a new (A) press?
     /* 0xC0 */ s32 stickDeltaX;
@@ -72,11 +66,6 @@ struct GdControl { // gGdCtrl
     /* 0xEC */ u8  padEC[0xF0-0xEC];
     /* 0xF0 */ struct GdControl *prevFrame; // previous frame data
 };
-
-// data
-extern s32 gGdMoveScene;
-extern f32 D_801A8058;
-extern s32 gGdUseVtxNormal;
 
 // bss
 extern struct GdControl gGdCtrl;

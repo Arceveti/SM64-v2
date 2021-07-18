@@ -12,6 +12,7 @@
 
 #define ABS(val) (((val) < 0 ? (-(val)) : (val)))
 #define SQ(val) ((val) * (val))
+#undef ALIGN
 #define ALIGN(VAL_, ALIGNMENT_) (((VAL_) + ((ALIGNMENT_) - 1)) & ~((ALIGNMENT_) - 1))
 
 #endif // GD_MACROS_H

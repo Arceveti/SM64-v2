@@ -123,8 +123,8 @@ const Texture *const game_over_texture_table[] = {
 
 UNUSED static const u64 title_screen_bg_unused_0 = 0;
 
-#ifdef VERSION_SH
-const Gfx title_screen_bg_dl_0A0065E8[] = {
+#ifdef GODDARD_EASTER_EGG
+const Gfx title_screen_bg_dl_face_easter_egg_begin[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_COPY),
     gsDPSetTexturePersp(G_TP_NONE),
@@ -133,7 +133,7 @@ const Gfx title_screen_bg_dl_0A0065E8[] = {
     gsSPEndDisplayList(),
 };
 
-const Gfx title_screen_bg_dl_0A006618[] = {
+const Gfx title_screen_bg_dl_face_easter_egg_end[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsDPSetTexturePersp(G_TP_PERSP),
@@ -141,12 +141,13 @@ const Gfx title_screen_bg_dl_0A006618[] = {
     gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
     gsSPEndDisplayList(),
 };
-
+#endif
+#ifdef ENABLE_RUMBLE
 ALIGNED8 static const u8 title_texture_rumble_pak[] = {
 #include "textures/title_screen_bg/title_screen_bg.06648.rgba16.inc.c"
 };
 
-const Gfx title_screen_bg_dl_0A007548[] = {
+const Gfx title_screen_bg_dl_rumble_pak[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_COPY),
     gsDPSetTexturePersp(G_TP_NONE),

@@ -28,9 +28,6 @@ struct GraphNodeMore {
 };
 
 // intro geo bss
-#ifdef VERSION_SH
-static u16 *sFrameBuffers[3];
-#endif
 static s32 sGameOverFrameCounter;
 static s32 sGameOverTableIndex;
 static s16 sIntroFrameCounter;
@@ -271,12 +268,14 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
     return dl;
 }
 
-#ifdef VERSION_SH
-extern Gfx title_screen_bg_dl_0A0065E8[];
-extern Gfx title_screen_bg_dl_0A006618[];
-extern Gfx title_screen_bg_dl_0A007548[];
+#ifdef ENABLE_RUMBLE
+extern Gfx title_screen_bg_dl_rumble_pak[];
+#endif
+#ifdef GODDARD_EASTER_EGG
+extern Gfx title_screen_bg_dl_face_easter_egg_begin[];
+extern Gfx title_screen_bg_dl_face_easter_egg_end[];
 
-//Data
+// Data
 s8 sFaceVisible[] = {
     1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1,
@@ -296,95 +295,85 @@ s8 sFaceToggleOrder[] = {
 
 s8 sFaceCounter = 0;
 
-void intro_gen_face_texrect(Gfx **dlIter)
-{
-    s32 x;
-    s32 y;
+void intro_gen_face_texrect(Gfx **dlIter, s32 imageW, s32 imageH) {
+    s32 x, y;
+
+    s32 x1 = 0;
+    s32 y1 = 0;
+    s32 x2 = imageW-1;
+    s32 y2 = imageH-1;
 
     for (y = 0; y < 6; y++) {
         for (x = 0; x < 8; x++) {
             if (sFaceVisible[y*8 + x] != 0) {
-                gSPTextureRectangle((*dlIter)++, (x * 40) << 2, (y * 40) << 2, (x * 40 + 39) << 2, (y * 40 + 39) << 2, 0,
-                                    0, 0, 4 << 10, 1 << 10);
+                gSPTextureRectangle((*dlIter)++, (x * imageW + x1) << 2, (y * imageH + y1) << 2, (x * imageW + x2) << 2, (y * imageH + y2) << 2, 0,
+                                    0, 0, (4 << 10), (1 << 10));
             }
         }
     }
 }
 
-Gfx *intro_draw_face(u16 *image, s32 imageW, s32 imageH)
-{
+Gfx *intro_draw_face(u16 *image, s32 imageW, s32 imageH) {
     Gfx *dl;
     Gfx *dlIter;
 
-    dl = alloc_display_list(110 * sizeof(Gfx));
+    dl = alloc_display_list(130 * sizeof(Gfx));
 
     if (dl == NULL) {
-        return dl;
+        return NULL;
     } else {
         dlIter = dl;
     }
 
-    gSPDisplayList(dlIter++, title_screen_bg_dl_0A0065E8);
+    gSPDisplayList(dlIter++, title_screen_bg_dl_face_easter_egg_begin);
 
     gDPLoadTextureBlock(dlIter++, VIRTUAL_TO_PHYSICAL(image), G_IM_FMT_RGBA, G_IM_SIZ_16b, imageW, imageH, 0, G_TX_CLAMP | G_TX_NOMIRROR, G_TX_CLAMP | G_TX_NOMIRROR, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
 
-    intro_gen_face_texrect(&dlIter);
+    intro_gen_face_texrect(&dlIter, imageW, imageH);
 
-    gSPDisplayList(dlIter++, title_screen_bg_dl_0A006618);
+    gSPDisplayList(dlIter++, title_screen_bg_dl_face_easter_egg_end);
 
     gSPEndDisplayList(dlIter++);
 
     return dl;
 }
 
-u16 *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH) {
+u16 *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
     u16 *fb;
     u16 *image;
     s32 pixel;
-    f32 size;
+    f32 size = sampleW * sampleH;
     f32 r, g, b;
     s32 iy, ix, sy, sx;
 
-    s32 xOffset = 120;
-    s32 yOffset = 80;
+    s32 idy, idx, sdy;
 
-    fb = sFrameBuffers[sRenderingFrameBuffer];
+    fb = gFrameBuffers[sRenderingFrameBuffer];
     image = alloc_display_list(imageW * imageH * sizeof(u16));
 
-    if (image == NULL) {
-        return image;
-    }
+    if (image == NULL) return NULL;
 
     for (iy = 0; iy < imageH; iy++) {
+        idy = sampleH * iy + yOffset;
         for (ix = 0; ix < imageW; ix++) {
             r = 0;
             g = 0;
             b = 0;
-
+            idx = sampleW * ix + xOffset;
             for (sy = 0; sy < sampleH; sy++) {
+                sdy = SCREEN_WIDTH * (idy + sy) + idx;
                 for (sx = 0; sx < sampleW; sx++) {
-                    u16 fbr, fbg, fbb;
-                    f32 f1, f2, f3;
-                    pixel = 320 * (sampleH * iy + sy + yOffset) + (sampleW * ix + xOffset) + sx;
+                    pixel = sdy + sx;
 
-                    fbr = fb[pixel];
-                    fbg = fb[pixel];
-                    fbb = fb[pixel];
-
-                    f1 = ((fbr >> 0xB) & 0x1F);
-                    f2 = ((fbg >> 0x6) & 0x1F);
-                    f3 = ((fbb >> 0x1) & 0x1F);
-
-                    r += f1;
-                    g += f2;
-                    b += f3;
+                    r += ((fb[pixel] >> 0xB) & 0x1F);
+                    g += ((fb[pixel] >> 0x6) & 0x1F);
+                    b += ((fb[pixel] >> 0x1) & 0x1F);
                 }
             }
-
             size = sampleW * sampleH;
-            image[imageH * iy + ix] = ((((u16) (r / size + 0.5) << 0xB) & 0xF800) & 0xffff) +
-                                      ((((u16) (g / size + 0.5) << 0x6) &  0x7C0) & 0xffff) +
-                                      ((((u16) (b / size + 0.5) << 0x1) &   0x3E) & 0xffff) + 1;
+            image[imageH * iy + ix] = ((((u16) (r / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
+                                      ((((u16) (g / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
+                                      ((((u16) (b / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 1;
         }
     }
 
@@ -398,31 +387,27 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
     s32 i;
 
     if (state != 1) {
-        sFrameBuffers[0] = gFrameBuffer0;
-        sFrameBuffers[1] = gFrameBuffer1;
-        sFrameBuffers[2] = gFrameBuffer2;
-
         for (i = 0; i < 48; i++) {
-            sFaceVisible[i] = 0;
+            sFaceVisible[i] = FALSE;
         }
 
     } else if (state == 1) {
         if (sFaceCounter == 0) {
             if (gPlayer1Controller->buttonPressed & Z_TRIG) {
                 play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
-                sFaceVisible[0] ^= 1;
+                sFaceVisible[0] ^= TRUE;
                 sFaceCounter++;
             }
         } else {
-            sFaceVisible[sFaceToggleOrder[sFaceCounter++]] ^= 1;
+            sFaceVisible[sFaceToggleOrder[sFaceCounter++]] ^= TRUE;
             if (sFaceCounter >= 40) {
                 sFaceCounter = 0;
             }
         }
 
         // Draw while the first or last face is visible.
-        if (sFaceVisible[0] == 1 || sFaceVisible[17] == 1) {
-            image = intro_sample_frame_buffer(40, 40, 2, 2);
+        if (sFaceVisible[0] || sFaceVisible[17]) {
+            image = intro_sample_frame_buffer(40, 40, 2, 2, 120, 80);
             if (image != NULL) {
                 genNode->fnNode.node.flags = (genNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
                 dl = intro_draw_face(image, 40, 40);
@@ -432,17 +417,16 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
 
     return dl;
 }
-
+#endif
+#ifdef ENABLE_RUMBLE
 Gfx *geo_intro_rumble_pak_graphic(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *genNode = (struct GraphNodeGenerated *)node;
     Gfx *dlIter;
     Gfx *dl;
     s32 introContext;
     s8 backgroundTileSix;
-#ifdef AVOID_UB
     dl = NULL;
-    backgroundTileSix = 0;
-#endif
+    backgroundTileSix = INTRO_BACKGROUND_SUPER_MARIO;
 
     if (state != 1) {
         dl = NULL;
@@ -458,7 +442,7 @@ Gfx *geo_intro_rumble_pak_graphic(s32 state, struct GraphNode *node, UNUSED void
             dl = alloc_display_list(3 * sizeof(*dl));
             if (dl != NULL) {
                 dlIter = dl;
-                gSPDisplayList(dlIter++, &title_screen_bg_dl_0A007548);
+                gSPDisplayList(dlIter++, &title_screen_bg_dl_rumble_pak);
                 gSPEndDisplayList(dlIter);
             }
         } else {
