@@ -447,13 +447,6 @@ SECTIONS
       KEEP(BUILD_DIR/sound/sound_data.o(.data));
    }
    END_SEG(assets)
-#ifdef HVQM 
-   BEGIN_SEG(capcom, __romPos) SUBALIGN(2)
-   {
-      KEEP(BUILD_DIR/data/capcom.o(.data));
-   }
-	END_SEG(capcom)
-#endif
    /* DWARF debug sections.
       Symbols in the DWARF debugging sections are relative to the beginning
       of the section so we begin them at 0.  */

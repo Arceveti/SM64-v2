@@ -51,7 +51,9 @@ OSViMode VI;
 
 struct VblankHandler *gVblankHandler1 = NULL;
 struct VblankHandler *gVblankHandler2 = NULL;
+#ifdef HVQM
 struct VblankHandler *gVblankHandler3 = NULL;
+#endif
 struct SPTask *gActiveSPTask = NULL;
 struct SPTask *sCurrentAudioSPTask = NULL;
 struct SPTask *sCurrentDisplaySPTask = NULL;
@@ -255,9 +257,11 @@ void handle_vblank(void) {
     if (gVblankHandler2 != NULL) {
         osSendMesg(gVblankHandler2->queue, gVblankHandler2->msg, OS_MESG_NOBLOCK);
     }
+#ifdef HVQM
     if (gVblankHandler3 != NULL) {
         osSendMesg(gVblankHandler3->queue, gVblankHandler3->msg, OS_MESG_NOBLOCK);
     }
+#endif
 }
 
 void handle_sp_complete(void) {
@@ -376,9 +380,11 @@ void set_vblank_handler(s32 index, struct VblankHandler *handler, OSMesgQueue *q
         case 2:
             gVblankHandler2 = handler;
             break;
+#ifdef HVQM
         case 3:
             gVblankHandler3 = handler;
             break;
+#endif
     }
 }
 

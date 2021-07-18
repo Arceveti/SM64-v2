@@ -1,3 +1,4 @@
+#ifdef HVQM
 /* 
  *  N64-HVQM2 library  Sample program
  * 
@@ -44,3 +45,4 @@ romcpy(void *dest, void *src, u32 len, s32 pri, OSIoMesg *mb, OSMesgQueue *mq)
 }
 
 /* end */
+#endif

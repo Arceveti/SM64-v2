@@ -1,3 +1,4 @@
+#ifdef HVQM
 /* 
  *  N64-HVQM2 library  Sample program
  * 
@@ -41,3 +42,4 @@ HVQM2Info hvq_spfifo[HVQ_SPFIFO_SIZE];
 u64 hvq_yieldbuf[HVQM2_YIELD_DATA_SIZE/8];
 
 /* end */
+#endif

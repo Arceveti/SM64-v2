@@ -1,3 +1,4 @@
+#ifdef HQVM
 /* 
  *  N64-HVQM2 library  Sample program
  * 
@@ -22,3 +23,4 @@
 ALIGNED16 u8 hvqbuf[HVQ_DATASIZE_MAX];
 
 /* end */
+#endif

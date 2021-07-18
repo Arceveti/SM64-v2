@@ -1,3 +1,4 @@
+#ifdef HVQM
 #include <ultra64.h>
 #include <sm64.h>
 #include <buffers/framebuffers.h>
@@ -236,3 +237,4 @@ void createHvqmThread(void) {
 		 NULL, hvqmStack + (STACKSIZE/sizeof(u64)), 
 		 (OSPri)HVQM_PRIORITY );
 }
+#endif

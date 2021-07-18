@@ -1,3 +1,4 @@
+#ifdef HVQM
 /* 
  *  N64-HVQM2 library Sample program
  * 
@@ -75,3 +76,4 @@ get_record( HVQM2Record *headerbuf, void *bodybuf, u16 type, u8 *stream, OSIoMes
 }
 
 /* end */
+#endif

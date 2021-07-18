@@ -1,3 +1,4 @@
+#ifdef HVQM
 /* 
  *  N64-HVQM2 library   Sample program
  * 
@@ -21,3 +22,4 @@
 ALIGNED16 u8 adpcmbuf[AUDIO_RECORD_SIZE_MAX];
 
 /* end */
+#endif

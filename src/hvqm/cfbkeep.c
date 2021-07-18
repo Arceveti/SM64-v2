@@ -1,3 +1,4 @@
+#ifdef HVQM
 /* 
  *  N64-HVQM2 library  Sample program
  * 
@@ -108,3 +109,4 @@ get_cfb()
 }
 
 /* end */
+#endif
