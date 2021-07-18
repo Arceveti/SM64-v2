@@ -431,7 +431,7 @@ void render_screen_overlay(void) {
     }
 
     aHurt = m->hurtShadeAlpha;
-    
+
     a = aWater + aHurt;
     if (a > 0) {
         if (m->action == ACT_SHOCKED || m->action == ACT_WATER_SHOCKED || m->action == ACT_SHOCKWAVE_BOUNCE) {
@@ -462,7 +462,7 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
         render_hud();
-#ifdef SHADE_SCREEN
+#ifdef SCREEN_SHADE
         render_screen_overlay();
 #endif
 

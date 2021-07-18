@@ -48,8 +48,9 @@ void bhv_bowling_ball_init(void) {
 void bowling_ball_set_hitbox(void) {
     obj_set_hitbox(o, &sBowlingBallHitbox);
 
-    if (o->oInteractStatus & INT_STATUS_INTERACTED)
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->oInteractStatus = INT_STATUS_NONE;
+    }
 }
 
 void bowling_ball_set_waypoints(void) {
@@ -222,12 +223,12 @@ void bhv_bob_pit_bowling_ball_init(void) {
 
 void bhv_bob_pit_bowling_ball_loop(void) {
     struct FloorGeometry *floorGeometry;
-    object_step();
+    UNUSED s32 collisionFlags = object_step();
 
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
-    if ((floorGeometry->normalX == 0) && (floorGeometry->normalZ == 0))
+    if ((floorGeometry->normalX == 0) && (floorGeometry->normalZ == 0)) {
         o->oForwardVel = 28.0f;
-
+    }
     bowling_ball_set_hitbox();
     set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
     cur_obj_play_sound_1(SOUND_ENV_UNKNOWN2);

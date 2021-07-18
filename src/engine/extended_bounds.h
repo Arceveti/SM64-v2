@@ -32,7 +32,11 @@
 #include "macros.h"
 
 //set this to the extended bounds mode you want, then do "make clean".
+#ifdef USE_EXT_RAM
 #define EXTENDED_BOUNDS_MODE 1
+#else
+#define EXTENDED_BOUNDS_MODE 0
+#endif
 
 //the maximum amount of collision surfaces (static and dynamic combined)
 //8200 should work fine for a 2x extended stage, the vanilla value is 2300

@@ -499,12 +499,7 @@ s8 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
     f32 mGfxY = gMarioObject->header.gfx.pos[1];
     f32 mGfxZ = gMarioObject->header.gfx.pos[2];
 
-    if ((x - mGfxX) * (x - mGfxX) + (y - mGfxY) * (y - mGfxY) + (z - mGfxZ) * (z - mGfxZ)
-        < (f32)(dist * dist)) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((x - mGfxX) * (x - mGfxX) + (y - mGfxY) * (y - mGfxY) + (z - mGfxZ) * (z - mGfxZ) < (f32)(dist * dist));
 }
 
 /**
@@ -515,12 +510,7 @@ s8 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
     f32 objY = obj->oPosY;
     f32 objZ = obj->oPosZ;
 
-    if ((x - objX) * (x - objX) + (y - objY) * (y - objY) + (z - objZ) * (z - objZ)
-        < (f32)(dist * dist)) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((x - objX) * (x - objX) + (y - objY) * (y - objY) + (z - objZ) * (z - objZ) < (f32)(dist * dist));
 }
 
 /**
