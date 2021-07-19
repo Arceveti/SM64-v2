@@ -1814,7 +1814,7 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
     }
 }
 
-UNUSED static s32 cur_obj_within_bounds(f32 bounds) {
+static s32 cur_obj_within_bounds(f32 bounds) {
     if (o->oPosX < -bounds || bounds < o->oPosX) {
         return FALSE;
     }
@@ -1831,6 +1831,7 @@ UNUSED static s32 cur_obj_within_bounds(f32 bounds) {
 }
 
 void cur_obj_move_using_vel_and_gravity(void) {
+    if (cur_obj_within_bounds(LEVEL_BOUNDARY_MAX + 4096.0f)) {
         o->oPosX += o->oVelX;
         o->oPosZ += o->oVelZ;
         if (o->oVelY > -80.0f) {
@@ -1839,6 +1840,7 @@ void cur_obj_move_using_vel_and_gravity(void) {
             o->oVelY = -80.0f;
         }
         o->oPosY += o->oVelY;
+    }
 }
 
 void cur_obj_move_using_fvel_and_gravity(void) {

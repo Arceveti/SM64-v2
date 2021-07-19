@@ -408,13 +408,21 @@ void update_flying(struct MarioState *m) {
     m->slideVelZ = m->vel[2];
 }
 
-u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, u32 stepArg, u32 withTurn) {
+u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, u32 stepArg,
+#ifndef IMPROVED_MOVEMENT
+UNUSED
+#endif
+u32 withTurn) {
     u32 stepResult;
+#ifdef IMPROVED_MOVEMENT
     if (withTurn) {
         update_air_with_turn(m);
     } else {
         update_air_without_turn(m);
     }
+#else
+    update_air_without_turn(m);
+#endif
 
     stepResult = perform_air_step(m, stepArg);
     switch (stepResult) {
@@ -1629,8 +1637,8 @@ s32 act_getting_blown(struct MarioState *m) {
 s32 act_air_hit_wall(struct MarioState *m) {
 #ifdef WALL_SLIDE
     s16 wallDIntendedYaw;
-    s32 ret = FALSE;
 #endif
+    s32 ret = FALSE;
     if (m->heldObj != NULL) {
         mario_drop_held_object(m);
     }
@@ -1685,11 +1693,11 @@ s32 act_air_hit_wall(struct MarioState *m) {
     }
 
 #if FIRSTY_LAST_FRAME > 1
-    set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
+    ret = set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
     m->marioObj->header.gfx.angle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
 #endif
 
-    return FALSE;
+    return ret;
 
     //! Missing return statement. The returned value is the result of the call
     // to set_mario_animation. In practice, this value is nonzero.

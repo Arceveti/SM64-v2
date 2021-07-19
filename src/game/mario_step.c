@@ -340,11 +340,12 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
         } else {
             m->coyoteTimer = 0;
             return GROUND_STEP_LEFT_GROUND;
-#endif
         }
-#if COYOTE_TIME > 0
     }
     m->coyoteTimer = 0;
+#else
+        return GROUND_STEP_LEFT_GROUND;
+    }
 #endif
 
 #ifdef IMPROVED_MOVEMENT

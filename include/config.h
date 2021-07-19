@@ -230,7 +230,7 @@
 #define IMPROVED_MOVEMENT
 
 // -- The following require IMPROVED_MOVEMENT -- 
-
+#ifdef IMPROVED_MOVEMENT
 // Unique sideways momentum-based wall slide (Arceveti)
 #define WALL_SLIDE
 // Ground pound dive similar to SMO, can also be used to cancel
@@ -244,6 +244,7 @@
 // This also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME 8
+#endif
 
 // -- Misc --
 
