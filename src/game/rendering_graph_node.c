@@ -15,6 +15,8 @@
 
 #include "config.h"
 
+#define static
+
 #define WIDESCREEN
 
 /**
@@ -75,9 +77,76 @@ s16 *gCurAnimData;
 struct AllocOnlyPool *gDisplayListHeap;
 
 struct RenderModeContainer {
-    u32 modes[8];
+    u32 modes[GFX_NUM_MASTER_LISTS];
 };
 
+#ifdef SILHOUETTE
+/* Rendermode settings for cycle 1 for all 13 layers. */
+struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
+    G_RM_OPA_SURF,                      // LAYER_FORCE
+    G_RM_AA_OPA_SURF,                   // LAYER_OPAQUE
+    G_RM_AA_OPA_SURF,                   // LAYER_OPAQUE_INTER
+    G_RM_AA_OPA_SURF,                   // LAYER_OPAQUE_DECAL
+    G_RM_AA_TEX_EDGE,                   // LAYER_ALPHA
+    G_RM_AA_TEX_EDGE | ZMODE_DEC,       // LAYER_ALPHA_DECAL
+    G_RM_AA_OPA_SURF,                   // LAYER_SILHOUETTE_OPAQUE
+    G_RM_AA_TEX_EDGE,                   // LAYER_SILHOUETTE_ALPHA
+    G_RM_AA_OPA_SURF,                   // LAYER_NO_SILHOUETTE
+    G_RM_AA_TEX_EDGE,                   // LAYER_NO_SILHOUETTE_ALPHA
+    G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT_DECAL
+    G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT
+    G_RM_AA_XLU_SURF,                   // LAYER_TRANSPARENT_INTER
+    } },
+    { {
+    /* z-buffered */
+    G_RM_ZB_OPA_SURF,                   // LAYER_FORCE
+    G_RM_AA_ZB_OPA_SURF,                // LAYER_OPAQUE
+    G_RM_AA_ZB_OPA_INTER,               // LAYER_OPAQUE_INTER
+    G_RM_AA_ZB_OPA_DECAL,               // LAYER_OPAQUE_DECAL
+    G_RM_AA_ZB_TEX_EDGE,                // LAYER_ALPHA
+    G_RM_AA_ZB_TEX_EDGE | ZMODE_DEC,    // LAYER_ALPHA_DECAL
+    G_RM_AA_ZB_OPA_SURF,                // LAYER_SILHOUETTE_OPAQUE
+    G_RM_AA_ZB_TEX_EDGE,                // LAYER_SILHOUETTE_ALPHA
+    G_RM_AA_ZB_OPA_SURF,                // LAYER_NO_SILHOUETTE
+    G_RM_AA_ZB_TEX_EDGE,                // LAYER_NO_SILHOUETTE_ALPHA
+    G_RM_AA_ZB_XLU_DECAL,               // LAYER_TRANSPARENT_DECAL
+    G_RM_AA_ZB_XLU_SURF,                // LAYER_TRANSPARENT
+    G_RM_AA_ZB_XLU_INTER,               // LAYER_TRANSPARENT_INTER
+    } } };
+
+/* Rendermode settings for cycle 2 for all 13 layers. */
+struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
+    G_RM_OPA_SURF2,                     // LAYER_FORCE
+    G_RM_AA_OPA_SURF2,                  // LAYER_OPAQUE
+    G_RM_AA_OPA_SURF2,                  // LAYER_OPAQUE_INTER
+    G_RM_AA_OPA_SURF2,                  // LAYER_OPAQUE_DECAL
+    G_RM_AA_TEX_EDGE2,                  // LAYER_ALPHA
+    G_RM_AA_TEX_EDGE2 | ZMODE_DEC,      // LAYER_ALPHA_DECAL
+    G_RM_AA_OPA_SURF2,                  // LAYER_SILHOUETTE_OPAQUE
+    G_RM_AA_TEX_EDGE2,                  // LAYER_SILHOUETTE_ALPHA
+    G_RM_AA_OPA_SURF2,                  // LAYER_NO_SILHOUETTE
+    G_RM_AA_TEX_EDGE2,                  // LAYER_NO_SILHOUETTE_ALPHA
+    G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT_DECAL
+    G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT
+    G_RM_AA_XLU_SURF2,                  // LAYER_TRANSPARENT_INTER
+    } },
+    { {
+    /* z-buffered */
+    G_RM_ZB_OPA_SURF2,                  // LAYER_FORCE
+    G_RM_AA_ZB_OPA_SURF2,               // LAYER_OPAQUE
+    G_RM_AA_ZB_OPA_INTER2,              // LAYER_OPAQUE_INTER
+    G_RM_AA_ZB_OPA_DECAL2,              // LAYER_OPAQUE_DECAL
+    G_RM_AA_ZB_TEX_EDGE2,               // LAYER_ALPHA
+    G_RM_AA_ZB_TEX_EDGE2 | ZMODE_DEC,   // LAYER_ALPHA_DECAL
+    G_RM_AA_ZB_OPA_SURF2,               // LAYER_SILHOUETTE_OPAQUE
+    G_RM_AA_ZB_TEX_EDGE2,               // LAYER_SILHOUETTE_ALPHA
+    G_RM_AA_ZB_OPA_SURF2,               // LAYER_NO_SILHOUETTE
+    G_RM_AA_ZB_TEX_EDGE2,               // LAYER_NO_SILHOUETTE_ALPHA
+    G_RM_AA_ZB_XLU_DECAL2,              // LAYER_TRANSPARENT_DECAL
+    G_RM_AA_ZB_XLU_SURF2,               // LAYER_TRANSPARENT
+    G_RM_AA_ZB_XLU_INTER2,              // LAYER_TRANSPARENT_INTER
+    } } };
+#else
 /* Rendermode settings for cycle 1 for all 8 layers. */
 #ifdef DISABLE_AA
 struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
@@ -170,6 +239,7 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
     G_RM_AA_ZB_XLU_INTER2,
     } } };
 #endif
+#endif
 
 struct GraphNodeRoot *gCurGraphNodeRoot = NULL;
 struct GraphNodeMasterList *gCurGraphNodeMasterList = NULL;
@@ -179,8 +249,15 @@ struct GraphNodeObject *gCurGraphNodeObject = NULL;
 struct GraphNodeHeldObject *gCurGraphNodeHeldObject = NULL;
 u16 gAreaUpdateCounter = 0;
 
-#ifdef F3DEX_GBI_2
+// #ifdef F3DEX_GBI_2
 LookAt lookAt;
+// #endif
+
+#ifdef SILHOUETTE
+#define SIL_ALPHA            127
+#define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA
+#define NUM_EXTRA_SIL_LAYERS 1
+#define SCHWA AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL
 #endif
 
 /**
@@ -189,26 +266,61 @@ LookAt lookAt;
 static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     struct DisplayListNode *currList;
     s32 i;
+#ifdef SILHOUETTE
+    s32 j;
+#endif
     s32 enableZBuffer = (node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0;
-    struct RenderModeContainer *modeList = &renderModeTable_1Cycle[enableZBuffer];
+    struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
 
-    // @bug This is where the LookAt values should be calculated but aren't.
-    // As a result, environment mapping is broken on Fast3DEX2 without the
-    // changes below.
-#ifdef F3DEX_GBI_2
     Mtx lMtx;
     guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
-#endif
 
-    if (enableZBuffer != 0) {
+    if (enableZBuffer) {
         gDPPipeSync(gDisplayListHead++);
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
-
+#ifdef SILHOUETTE
+for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
+        if ((currList = node->listHeads[i]) != NULL) {
+            while (currList != NULL) {
+                if ((i == LAYER_SILHOUETTE_OPAQUE || i == LAYER_SILHOUETTE_ALPHA)) { // silhouette layers
+                    gDPSetRenderMode(   gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA),
+                                                            SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA));
+                    gSPSetGeometryMode( gDisplayListHead++, G_FOG); // enable fog for silhouette
+                    gSPFogPosition(     gDisplayListHead++, 0, 1);
+                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA);   // silhouette color & alpha
+                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA/2); // silhouette env transparency
+                } else { // non-silhouette layers
+                    gDPSetRenderMode(   gDisplayListHead++, mode1List->modes[i],
+                                                            mode2List->modes[i]);
+                }
+                gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+                                                    G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD | G_MTX_NOPUSH);
+                gSPDisplayList( gDisplayListHead++, currList->displayList);
+                currList = currList->next;
+            }
+        }
+        if (i == LAST_SIL_LAYER) { // "normal" modes for silhouette layers:
+            for (j = i-NUM_EXTRA_SIL_LAYERS; j <= LAST_SIL_LAYER; j++) {
+                gSPClearGeometryMode(   gDisplayListHead++, G_FOG); // disable fog for silhouette
+                gDPSetEnvColor(         gDisplayListHead++, 255, 255, 255, 255); // reset silhouette env color
+                gDPSetRenderMode(       gDisplayListHead++, mode1List->modes[j] & ~IM_RD,
+                                                            mode2List->modes[j] & ~IM_RD);
+                currList = node->listHeads[j];
+                while (currList != NULL) {
+                    gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+                                                        G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD | G_MTX_NOPUSH);
+                    gSPDisplayList( gDisplayListHead++, currList->displayList);
+                    currList = currList->next;
+                }
+            }
+        }
+    }
+#else
     for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
         if ((currList = node->listHeads[i]) != NULL) {
-            gDPSetRenderMode(gDisplayListHead++, modeList->modes[i], mode2List->modes[i]);
+            gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i], mode2List->modes[i]);
             while (currList != NULL) {
                 gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
                           G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
@@ -217,7 +329,8 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
             }
         }
     }
-    if (enableZBuffer != 0) {
+#endif
+    if (enableZBuffer) {
         gDPPipeSync(gDisplayListHead++);
         gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
@@ -230,9 +343,9 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
  */
 static void geo_append_display_list(void *displayList, s16 layer) {
 
-#ifdef F3DEX_GBI_2
+// #ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
-#endif
+// #endif
     if (gCurGraphNodeMasterList != 0) {
         struct DisplayListNode *listNode =
             alloc_only_pool_alloc(gDisplayListHeap, sizeof(struct DisplayListNode));
@@ -240,7 +353,7 @@ static void geo_append_display_list(void *displayList, s16 layer) {
         listNode->transform = gMatStackFixed[gMatStackIndex];
         listNode->displayList = displayList;
         listNode->next = 0;
-        if (gCurGraphNodeMasterList->listHeads[layer] == 0) {
+        if (gCurGraphNodeMasterList->listHeads[layer] == LAYER_FORCE) {
             gCurGraphNodeMasterList->listHeads[layer] = listNode;
         } else {
             gCurGraphNodeMasterList->listTails[layer]->next = listNode;
@@ -254,7 +367,6 @@ static void geo_append_display_list(void *displayList, s16 layer) {
  */
 static void geo_process_master_list(struct GraphNodeMasterList *node) {
     s32 i;
-    UNUSED s32 sp1C;
 
     if (gCurGraphNodeMasterList == NULL && node->node.children != NULL) {
         gCurGraphNodeMasterList = node;
@@ -296,20 +408,19 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
     if (node->fnNode.node.children != NULL) {
         u16 perspNorm;
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
-        #ifdef WIDE
+#ifdef WIDE
         if (gWidescreen){
             if (gCurrLevelNum == 0x01) {
                 aspect = 1.33333f;
             } else {
                 aspect = 1.775f;
             }
-        }
-        else{
+        } else {
             aspect = 1.33333f;
         }
-        #else
+#else
         aspect = 1.33333f;
-        #endif
+#endif
 
         guPerspective(mtx, &perspNorm, node->fov, aspect, node->near / WORLD_SCALE, node->far / WORLD_SCALE, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, perspNorm);
@@ -374,7 +485,7 @@ static void make_roll_matrix(Mtx *mtx, s16 angle) {
     temp[0][0] = coss(angle);
     temp[0][1] = sins(angle);
     temp[1][0] = -temp[0][1];
-    temp[1][1] = temp[0][0];
+    temp[1][1] =  temp[0][0];
     guMtxF2L(temp, mtx);
 }
 
@@ -487,7 +598,6 @@ static void geo_process_rotation(struct GraphNodeRotation *node) {
  * For the rest it acts as a normal display list node.
  */
 static void geo_process_scale(struct GraphNodeScale *node) {
-    UNUSED Mat4 transform;
     Vec3f scaleVec;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
@@ -606,7 +716,7 @@ static void geo_process_background(struct GraphNodeBackground *node) {
         gDPSetCycleType(gfx++, G_CYC_1CYCLE);
         gSPEndDisplayList(gfx++);
 
-        geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(gfxStart), 0);
+        geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(gfxStart), LAYER_FORCE);
     }
     if (node->fnNode.node.children != NULL) {
         geo_process_node_and_siblings(node->fnNode.node.children);
@@ -773,13 +883,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             mtxf_mul(gMatStack[gMatStackIndex], mtxf, *gCurGraphNodeCamera->matrixPtr);
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
-            if (gShadowAboveWaterOrLava == TRUE) {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), 4);
-            } else if (gMarioOnIceOrCarpet == 1 || gShadowAboveCustomWater == 1) {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), 5);
-            } else {
-                geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), 6);
-            }
+            geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), (gShadowAboveWaterOrLava || gShadowAboveCustomWater || gMarioOnIceOrCarpet) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_DECAL);
             gMatStackIndex--;
         }
     }
@@ -868,13 +972,7 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     }
 
     // Check whether the object is horizontally in view
-    if (matrix[3][0] > hScreenEdge + cullingRadius) {
-        return FALSE;
-    }
-    if (matrix[3][0] < -hScreenEdge - cullingRadius) {
-        return FALSE;
-    }
-    return TRUE;
+    return !((matrix[3][0] > hScreenEdge + cullingRadius) || (matrix[3][0] < -hScreenEdge - cullingRadius));
 }
 
 /**
@@ -954,9 +1052,9 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
-#ifdef F3DEX_GBI_2
+// #ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
-#endif
+// #endif
 
     if (node->fnNode.func != NULL) {
         node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
@@ -1119,8 +1217,6 @@ void geo_process_node_and_siblings(struct GraphNode *firstNode) {
  * to set up the projection and draw display lists.
  */
 void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) {
-    UNUSED s32 unused;
-
     if (node->node.flags & GRAPH_RENDER_ACTIVE) {
         Mtx *initialMatrix;
         Vp *viewport = alloc_display_list(sizeof(*viewport));
@@ -1155,7 +1251,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         }
         gCurGraphNodeRoot = NULL;
         if (gShowDebugText) {
-            print_text_fmt_int(180, 36, "MEM %d",
+            print_text_fmt_int(180, 24, "MEM %07d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
         }
         main_pool_free(gDisplayListHeap);

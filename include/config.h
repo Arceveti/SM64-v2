@@ -188,13 +188,14 @@
 # define WATER_RING_FIX
 // Goddard easter egg from Shindou
 #define GODDARD_EASTER_EGG
-// Overlay effects
+// Overlay effects (Arceveti)
 // - Red flash when damaged
 // - Yellow flashed when shocked
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
-// (Arceveti)
 #define SCREEN_SHADE
+// Mario's silhouette when behind solid objects/surfaces (Arceveti)
+#define SILHOUETTE
 
 //! not implemented
 #define SSL_CUTSCENE

@@ -142,9 +142,9 @@ void init_rsp(void) {
 
     // @bug Failing to set the clip ratio will result in warped triangles in F3DEX2
     // without this change: https://jrra.zone/n64/doc/n64man/gsp/gSPClipRatio.htm
-#ifdef F3DEX_GBI_2
+// #ifdef F3DEX_GBI_2
     gSPClipRatio(gDisplayListHead++, FRUSTRATIO_1);
-#endif
+// #endif
 }
 
 /**
@@ -466,8 +466,6 @@ UNUSED static void record_demo(void) {
  * Take the updated controller struct and calculate the new x, y, and distance floats.
  */
 void adjust_analog_stick(struct Controller *controller) {
-    UNUSED u8 pad[8];
-
     // Reset the controller's x and y floats.
     controller->stickX = 0;
     controller->stickY = 0;
@@ -660,8 +658,6 @@ void init_controllers(void) {
  * Setup main segments and framebuffers.
  */
 void setup_game_memory(void) {
-    UNUSED u64 padding;
-
     // Setup general Segment 0
     set_segment_base_addr(0, (void *) 0x80000000);
     // Create Mesg Queues
@@ -741,11 +737,11 @@ void thread5_game_loop(UNUSED void *arg) {
 
         display_and_vsync();
 
-        // when debug info is enabled, print the "BUF %d" information.
+        // when debug info is enabled, print the "BUF %07d" information.
         if (gShowDebugText) {
             // subtract the end of the gfx pool with the display list to obtain the
             // amount of free space remaining.
-            print_text_fmt_int(180, 20, "BUF %d", gGfxPoolEnd - (u8 *) gDisplayListHead);
+            print_text_fmt_int(180, 8, "BUF %07d", gGfxPoolEnd - (u8 *) gDisplayListHead);
         }
     }
 }

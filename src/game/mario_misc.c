@@ -307,7 +307,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
     Gfx *gfxHead = NULL;
 
     if (alpha == 255) {
-        node->fnNode.node.flags = (node->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
+        node->fnNode.node.flags = (node->fnNode.node.flags & 0xFF) | (LAYER_SILHOUETTE_OPAQUE << 8);
         gfxHead = alloc_display_list(2 * sizeof(*gfxHead));
         gfx = gfxHead;
     } else {
@@ -324,7 +324,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
 /**
  * Sets the correct blend mode and color for mirror Mario.
  */
-Gfx *geo_mirror_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
+Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
     UNUSED u8 unused1[4];
     Gfx *gfx = NULL;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
@@ -646,7 +646,7 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
             gSPSetGeometryMode(&gfx[1], G_CULL_BACK);
             gSPEndDisplayList(&gfx[2]);
         }
-        asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
+        asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_SILHOUETTE_OPAQUE << 8);
     }
     return gfx;
 }

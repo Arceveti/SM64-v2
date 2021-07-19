@@ -25,8 +25,8 @@ const GeoLayout unagi_geo[] = {
                            GEO_OPEN_NODE(),
                               GEO_SCALE(0x00, 16384),
                               GEO_OPEN_NODE(),
-                                 GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OPAQUE, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302B870),
-                                 GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_ALPHA, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302BA18),
+                                 GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_NO_SILHOUETTE, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302B870),
+                                 GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_NO_SILHOUETTE_ALPHA, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302BA18),
 #ifdef STAR_GLOW
                                  GEO_TRANSLATE_ROTATE(LAYER_FORCE, 2000, 0, 0, 0, 0, 0),
                                  GEO_OPEN_NODE(),
