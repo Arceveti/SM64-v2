@@ -22,26 +22,26 @@
  **/
 
 #define HUD_TOP_Y 209
-
-#define HUD_BOTTOM_Y 16
-
-#define HUD_LIVES_X 8
-
-#define HUD_RED_COINS_X 70
-
-#define HUD_POWER_METER_X 142
-
-#define HUD_COINS_X 152
-
-#define HUD_STARS_X 78
-
-#define HUD_SECRETS_X 8
-
-#define HUD_TIMER_X 
-
+#define HUD_BOTTOM_Y 31
+#define HUD_TIMER_X 150
 #define HUD_KEYS_X 8
+#define HUD_COINS_X 152
+#define HUD_STARS_X 78
+#define HUD_CAMERA_X 54
+#define HUD_CAMERA_Y (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
+#define HUD_POWER_METER_Y 166
 
-#define HUD_CAMERA_X 
+#ifdef NEW_HUD
+#define HUD_LIVES_X 8
+#define HUD_POWER_METER_X 142
+#define HUD_RED_COINS_X 70
+#define HUD_SECRETS_X 8
+#else
+#define HUD_LIVES_X 22
+#define HUD_POWER_METER_X 140
+#define HUD_RED_COINS_X 8
+#define HUD_SECRETS_X 8
+#endif
 
 // ------------- FPS COUNTER ---------------
 // To use it, call print_fps(x,y); every frame.
@@ -53,8 +53,7 @@ u8 curFrameTimeIndex = 0;
 #include "PR/os_convert.h"
 
 // Call once per frame
-f32 calculate_and_update_fps()
-{
+f32 calculate_and_update_fps() {
     OSTime newTime = osGetTime();
     OSTime oldTime = frameTimes[curFrameTimeIndex];
     frameTimes[curFrameTimeIndex] = newTime;
@@ -67,8 +66,7 @@ f32 calculate_and_update_fps()
     return ((f32)FRAMETIME_COUNT * 1000000.0f) / (s32)OS_CYCLES_TO_USEC(newTime - oldTime);
 }
 
-void print_fps(s32 x, s32 y)
-{
+void print_fps(s32 x, s32 y) {
     f32 fps = calculate_and_update_fps();
     char text[10];
 
@@ -83,13 +81,6 @@ struct PowerMeterHUD {
     s8 animation;
     s16 x;
     s16 y;
-    f32 unused;
-};
-
-struct UnusedHUDStruct {
-    u32 unused1;
-    u16 unused2;
-    u16 unused3;
 };
 
 struct CameraHUD {
@@ -102,17 +93,14 @@ static s16 sPowerMeterStoredHealth;
 
 static struct PowerMeterHUD sPowerMeterHUD = {
     POWER_METER_HIDDEN,
-    140,
-    166,
-    1.0,
+    HUD_POWER_METER_X,
+    HUD_POWER_METER_Y,
 };
 
 // Power Meter timer that keeps counting when it's visible.
 // Gets reset when the health is filled and stops counting
 // when the power meter is hidden.
 s32 sPowerMeterVisibleTimer = 0;
-
-UNUSED static struct UnusedHUDStruct sUnusedHUDValues = { 0x00, 0x0A, 0x00 };
 
 static struct CameraHUD sCameraHUD = { CAM_STATUS_NONE };
 
@@ -326,22 +314,30 @@ void render_hud_power_meter(void) {
  */
 void render_hud_mario_lives(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X), HUD_TOP_Y, ","); // 'Mario Head' glyph
-    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X+18), HUD_TOP_Y, "*"); // 'X' glyph
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X+32), HUD_TOP_Y, "%02d", gHudDisplay.lives);
+    print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 18, HUD_TOP_Y, "*"); // 'X' glyph
+#ifdef NEW_HUD
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 32, HUD_TOP_Y, "%02d", gHudDisplay.lives);
+#else
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 32, HUD_TOP_Y, "%d", gHudDisplay.lives);
+#endif
 }
 
 /**
  * Renders the amount of coins collected.
  */
 void render_hud_coins(void) {
-    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(152), HUD_TOP_Y, "$"); // 'Coin' glyph
-    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(136), HUD_TOP_Y, "*"); // 'X' glyph
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(122), HUD_TOP_Y, "%03d", gHudDisplay.coins);
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X), HUD_TOP_Y, "$"); // 'Coin' glyph
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
+#ifdef NEW_HUD
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%03d", gHudDisplay.coins);
     if (gRedCoinsCollected > 0) {
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X   ), HUD_TOP_Y, "@"); // 'Red Coin' glyph
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X+16), HUD_TOP_Y, "*"); // 'X' glyph
-        print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X+30), HUD_TOP_Y, "%d", gRedCoinsCollected);
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X), HUD_TOP_Y, "@"); // 'Red Coin' glyph
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
+        print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X) + 30, HUD_TOP_Y, "%d", gRedCoinsCollected);
     }
+#else
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%d", gHudDisplay.coins);
+#endif
 }
 
 #ifdef VERSION_JP
@@ -369,8 +365,12 @@ void render_hud_stars(void) {
     if (showX == 1) {
         print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
     }
-    print_text_fmt_int((showX * 14) + GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X - 16),
+    print_text_fmt_int((showX * 14) + GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16,
+#ifdef NEW_HUD
                        HUD_TOP_Y, "%03d", gHudDisplay.stars);
+#else
+                       HUD_TOP_Y, "%d", gHudDisplay.stars);
+#endif
 }
 
 /**
@@ -411,13 +411,13 @@ void render_hud_timer(void) {
 #ifdef VERSION_EU
     switch (eu_get_language()) {
         case LANGUAGE_ENGLISH:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(150), HUD_TOP_Y-24, "TIME");
+            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TIME");
             break;
         case LANGUAGE_FRENCH:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(155), HUD_TOP_Y-24, "TEMPS");
+            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TEMPS");
             break;
         case LANGUAGE_GERMAN:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(150), HUD_TOP_Y-24, "ZEIT");
+            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "ZEIT");
             break;
     }
 #endif
@@ -426,14 +426,14 @@ void render_hud_timer(void) {
 
     timerFracSecs = ((timerValFrames - (timerMins * 1800) - (timerSecs * 30)) & 0xFFFF) / 3;
 #ifndef VERSION_EU
-    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(150), HUD_TOP_Y-24, "TIME");
+    print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TIME");
 #endif
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(91), HUD_TOP_Y-24, "%0d", timerMins);
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(71), HUD_TOP_Y-24, "%02d", timerSecs);
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(37), HUD_TOP_Y-24, "%d", timerFracSecs);
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 59, HUD_TOP_Y-24, "%0d", timerMins);
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 79, HUD_TOP_Y-24, "%02d", timerSecs);
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 115, HUD_TOP_Y-24, "%d", timerFracSecs);
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
-    render_hud_tex_lut(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(81), HUD_TOP_Y-177, (*hudLUT)[GLYPH_APOSTROPHE]);
-    render_hud_tex_lut(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(46), HUD_TOP_Y-177, (*hudLUT)[GLYPH_DOUBLE_QUOTE]);
+    render_hud_tex_lut(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 69, HUD_TOP_Y-177, (*hudLUT)[GLYPH_APOSTROPHE]);
+    render_hud_tex_lut(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 104, HUD_TOP_Y-177, (*hudLUT)[GLYPH_DOUBLE_QUOTE]);
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
@@ -455,8 +455,8 @@ void render_hud_camera_status(void) {
     s32 y;
 
     cameraLUT = segmented_to_virtual(&main_hud_camera_lut);
-    x = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(54);
-    y = 205;
+    x = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
+    y = HUD_CAMERA_Y;
 
     if (sCameraHUD.status == CAM_STATUS_NONE) {
         return;
@@ -537,11 +537,11 @@ void render_hud(void) {
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) {
             render_hud_stars();
         }
-
+#ifdef NEW_HUD
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) {
             render_hud_secrets();
         }
-
+#endif
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
             render_hud_power_meter();
             render_hud_camera_status();

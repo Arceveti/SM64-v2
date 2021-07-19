@@ -209,6 +209,8 @@
 #define MUSHROOMS_HEAL
 // The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
 #define CONTROLLABLE_PLATFORM_SPEED
+// HUD with leadding zeroes, & Red Coin & Secrets counters (Arceveti)
+#define NEW_HUD
 
 // -- Movement --
 

@@ -1251,8 +1251,13 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         }
         gCurGraphNodeRoot = NULL;
         if (gShowDebugText) {
+#ifdef NEW_HUD
             print_text_fmt_int(180, 24, "MEM %07d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
+#else
+            print_text_fmt_int(180, 36, "MEM %d",
+                               gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
+#endif
         }
         main_pool_free(gDisplayListHeap);
     }

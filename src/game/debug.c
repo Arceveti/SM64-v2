@@ -113,7 +113,7 @@ void print_text_array_info(s16 *printState, const char *str, s32 number) {
             || (printState[DEBUG_PSTATE_MAX_X_CURSOR] < printState[DEBUG_PSTATE_Y_CURSOR])) {
             print_text(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR],
                        "DPRINT OVER");
-            printState[DEBUG_PSTATE_DISABLED] += 1; // why not just = TRUE...
+            printState[DEBUG_PSTATE_DISABLED] = TRUE;
         } else {
             print_text_fmt_int(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR],
                                str, number);
