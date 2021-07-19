@@ -131,9 +131,9 @@
 #define MODEL_BOB_BARS_GRILLS                  0x38        // bob_geo_000470
 
 // sl
-#define MODEL_SL_SNOW_TRIANGLE                 0x36        // sl_geo_000390
-#define MODEL_SL_CRACKED_ICE                   0x37        // sl_geo_000360 - unused
-#define MODEL_SL_CRACKED_ICE_CHUNK             0x38        // sl_geo_000378 - unused
+#define MODEL_SL_SNOW_TRIANGLE                 0x36        // sl_geo_snow_mound
+#define MODEL_SL_CRACKED_ICE                   0x37        // sl_geo_cracked_ice - unused
+#define MODEL_SL_CRACKED_ICE_CHUNK             0x38        // sl_geo_ice_shard - unused
 
 // wdw
 #define MODEL_WDW_SQUARE_FLOATING_PLATFORM        0x36        // wdw_geo_000580

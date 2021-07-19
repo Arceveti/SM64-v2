@@ -89,10 +89,9 @@ void bhv_wiggler_body_part_update(void) {
         //! Since position is recomputed each frame, tilting the wiggler up
         //  while on the ground could cause the tail segments to clip through
         //  the floor
-        o->oPosY += -30.0f;
+        o->oPosY -= 30.0f;
         cur_obj_update_floor_height();
-        if (o->oFloorHeight > o->oPosY) // TODO: Check ineq swap
-        {
+        if (o->oFloorHeight > o->oPosY) {// TODO: Check ineq swap
             o->oPosY = o->oFloorHeight;
         }
     }
@@ -153,9 +152,7 @@ void wiggler_init_segments(void) {
         cur_obj_unhide();
     }
 
-#if defined(VERSION_EU) || defined(AVOID_UB)
     o->oHealth = 4; // This fixes Wiggler reading UB on his first frame of his acceleration, as his health is not set.
-#endif
 }
 
 /**
@@ -240,7 +237,7 @@ static void wiggler_act_walk(void) {
         obj_forward_vel_approach(sWigglerSpeeds[o->oHealth - 1], 1.0f);
 
         if (o->oWigglerWalkAwayFromWallTimer != 0) {
-            o->oWigglerWalkAwayFromWallTimer -= 1;
+            o->oWigglerWalkAwayFromWallTimer--;
         } else {
             if (o->oDistanceToMario >= 25000.0f) {
                 // If >1200 away from home, turn to home
@@ -256,7 +253,7 @@ static void wiggler_act_walk(void) {
                 if (o->oHealth < 4) {
                     o->oWigglerTargetYaw = o->oAngleToMario;
                 } else if (o->oWigglerTimeUntilRandomTurn != 0) {
-                    o->oWigglerTimeUntilRandomTurn -= 1;
+                    o->oWigglerTimeUntilRandomTurn--;
                 } else {
                     o->oWigglerTargetYaw = o->oMoveAngleYaw + 0x4000 * (s16) random_sign();
                     o->oWigglerTimeUntilRandomTurn = random_linear_offset(30, 50);

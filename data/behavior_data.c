@@ -1780,13 +1780,13 @@ const BehaviorScript bhvCcmTouchedStarSpawn[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvUnusedPoundablePlatform[] = {
+const BehaviorScript bhvSlCrackedIce[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(sl_seg7_collision_pound_explodes),
     SET_HOME(),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_unused_poundable_platform),
+        CALL_NATIVE(bhv_sl_cracked_ice_loop),
     END_LOOP(),
 };
 

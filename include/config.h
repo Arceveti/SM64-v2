@@ -152,58 +152,81 @@
 
 #define DEBUG_MODE
 
-// Makes obj_resolve_object_collisions work consistently (Arceveti)
-#define OBJ_COLLISIONS_FIX
+// -- Graphics --
+
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
-// Unagi's and Klepto's star becomes transparent after it's collected like other stars (Unknown)
-#define HELD_TRANSPARENT_STAR
 // Higher definition coins rotating at 30 FPS (Arceveti)
 #define IA8_30FPS_COINS
-// Vertical quicksand support (Wiseguy)
-#define WALL_QUICKSAND
-// Koopa Shell boxes respawn (Arceveti)
-#define KOOPA_SHELL_BOXES_RESPAWN
-// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
-#define BLUE_COIN_SWITCH_RETRY
-// Don't fall after star grab if the floor is too far below (Arceveti)
-#define AIR_STAR_DANCE
-// Press A when jumping on an enemy to jump higher (Arceveti)
-#define BOUNCE_BOOST
-// Makes signs and NPCs easier to talk to (Arceveti)
-#define EASIER_DIALOG_TRIGGER
-// Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
-#define DIALOG_INDICATOR
-// Detect Mario's collision with lava regardless of action (Arceveti)
-#define LAVA_FIX
-// Number of null floors to check ahead through during a qstep.
-// Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
-// (Arceveti)
-#define NULL_FLOOR_MISSES 3
-// Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
-#define MUSHROOMS_HEAL
-// Animate Bowser 3's rainbow effect (Arceveti)
-#define RAINBOW_BOWSER
-// Fix DDD water rings (Arceveti)
-# define WATER_RING_FIX
-// Goddard easter egg from Shindou
-#define GODDARD_EASTER_EGG
 // Overlay effects (Arceveti)
 // - Red flash when damaged
 // - Yellow flashed when shocked
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
 #define SCREEN_SHADE
-// Mario's silhouette when behind solid objects/surfaces (Arceveti)
+// Mario's silhouette when behind solid objects/surfaces
+// Also enables new render layers
+// (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti)
 #define SILHOUETTE
+// Animate Bowser 3's rainbow effect (Arceveti)
+#define RAINBOW_BOWSER
 
-//! not implemented
-#define SSL_CUTSCENE
+// -- Vanilla Level Changes --
 
+//! not implemented, Fixes Lakitu cutscene detection
+#define FIX_LAKITU_SKIP
+// Makes the WF star spawn from the wall instead of existing already
+#define FIX_CANNONLESS
+//! not implemented, Re-implements unused SSL pillars cutscene
+#define SSL_PILLARS_CUTSCENE
+// Re-implements cracked ice in SL (SunlitSpace542, Arceveti)
+#define DEEP_FREEZE_CRACKED_ICE
+
+// -- Bugfixes --
+
+// Makes obj_resolve_object_collisions work consistently (Arceveti)
+#define OBJ_COLLISIONS_FIX
+// Fix DDD water rings (Arceveti)
+#define WATER_RING_FIX
+// Fix bomb clip
+#define FIX_BOMB_CLIP
+// Detect Mario's collision with lava regardless of action (Arceveti)
+#define LAVA_FIX
+// Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
+#define HELD_TRANSPARENT_STAR
+
+// -- Gameplay QoL --
+
+// Koopa Shell boxes respawn (Arceveti)
+#define KOOPA_SHELL_BOXES_RESPAWN
+// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
+#define BLUE_COIN_SWITCH_RETRY
+// Makes signs and NPCs easier to talk to (Arceveti)
+#define EASIER_DIALOG_TRIGGER
+// Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
+#define DIALOG_INDICATOR
+// Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
+#define MUSHROOMS_HEAL
+// The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
+#define CONTROLLABLE_PLATFORM_SPEED
+
+// -- Movement --
+
+// Don't fall after star grab if the floor is too far below (Arceveti)
+#define AIR_STAR_DANCE
+// Press A when jumping on an enemy to jump higher (Arceveti)
+#define BOUNCE_BOOST
+// Press Z while twirling to descend faster (Arceveti)
+#define Z_TWIRL
+// Number of null floors to check ahead through during a qstep.
+// Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
+// (Arceveti)
+#define NULL_FLOOR_MISSES 3
 // General movement improvements, including turn circle fix,
 // midair turn, better ceiling handling, less softlocks, etc.
 // (Arceveti)
 #define IMPROVED_MOVEMENT
+
 // -- The following require IMPROVED_MOVEMENT -- 
 
 // Unique sideways momentum-based wall slide (Arceveti)
@@ -213,13 +236,18 @@
 #define GROUND_POUND_DIVE
 // Ground pound jump similar to SMO (Unknown)
 #define GROUND_POUND_JUMP
-// Underwater Ground pound similar to SMO, ! not implemented
+//! not implemented, Underwater Ground pound similar to SMO
 #define WATER_GROUND_POUND
-// Press Z while twirling to descend faster (Arceveti)
-#define Z_TWIRL
 // Number of frames before Mario falls off a ledge.
 // This also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME 8
+
+// -- Misc --
+
+// Vertical quicksand support (Wiseguy)
+#define WALL_QUICKSAND
+// Goddard easter egg from Shindou (Nintendo, Arceveti)
+#define GODDARD_EASTER_EGG
 
 #endif // CONFIG_H

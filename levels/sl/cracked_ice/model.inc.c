@@ -6,10 +6,10 @@ static const Lights1 sl_seg7_lights_0700A7F0 = gdSPDefLights1(
 
 // 0x0700A808 - 0x0700A848
 static const Vtx sl_seg7_vertex_0700A808[] = {
-    {{{  -101,      0,    102}, 0, {   734,    734}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   102,      0,    102}, 0, {   734,    224}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -101,      0,   -101}, 0, {   224,    734}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   102,      0,   -101}, 0, {   224,    224}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,    102}, 0, { 23<<5,  23<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,      0,    102}, 0, { 23<<5,   7<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,   -102}, 0, {  7<<5,  23<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,      0,   -102}, 0, {  7<<5,   7<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0700A848 - 0x0700A890
@@ -25,7 +25,7 @@ static const Gfx sl_seg7_dl_0700A848[] = {
 };
 
 // 0x0700A890 - 0x0700A910
-const Gfx sl_seg7_dl_0700A890[] = {
+const Gfx sl_seg7_dl_cracked_ice[] = {
     gsDPPipeSync(),
     gsDPSetEnvColor(255, 255, 255, 100),
     gsDPSetCombineMode(G_CC_MODULATERGBFADE, G_CC_MODULATERGBFADE),

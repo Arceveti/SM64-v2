@@ -97,8 +97,10 @@ static void platform_on_track_act_init(void) {
     }
 
     // Spawn track balls
-    for (i = 1; i < 6; i++) {
-        platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
+    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
+        for (i = 1; i < 6; i++) {
+            platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
+        }
     }
 
     o->oAction = PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO;
@@ -127,7 +129,9 @@ static void platform_on_track_act_wait_for_mario(void) {
  */
 static void platform_on_track_act_move_along_track(void) {
     s16 initialAngle;
-
+#ifdef CONTROLLABLE_PLATFORM_SPEED
+    f32 targetVel = 10.0f;
+#endif
     if (!o->oPlatformOnTrackIsNotSkiLift) {
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR3);
     } else if (!o->oPlatformOnTrackIsNotHMC) {
@@ -155,9 +159,23 @@ static void platform_on_track_act_move_along_track(void) {
         } else {
             // The ski lift accelerates, while the others instantly start
             if (!o->oPlatformOnTrackIsNotSkiLift) {
-                obj_forward_vel_approach(10.0, 0.1f);
+                obj_forward_vel_approach(10.0f, 0.1f);
             } else {
+#ifdef CONTROLLABLE_PLATFORM_SPEED
+                if (gMarioObject->platform == o) {
+                    targetVel = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) - 10.0f;
+                } else {
+                    targetVel = 10.0f;
+                }
+                if (targetVel < 10.0f) {
+                    targetVel = 10.0f;
+                } else if (targetVel > 16.0f) {
+                    targetVel = 16.0f;
+                }
+                obj_forward_vel_approach(targetVel, 0.1f);
+#else
                 o->oForwardVel = 10.0f;
+#endif
             }
 
             // Spawn a new track ball if necessary
@@ -243,7 +261,6 @@ static void platform_on_track_act_fall(void) {
  */
 static void platform_on_track_rock_ski_lift(void) {
     s32 targetRoll = 0;
-    UNUSED s32 initialRoll = o->oFaceAngleRoll;
 
     o->oFaceAngleRoll += (s32) o->oPlatformOnTrackSkiLiftRollVel;
 
@@ -267,6 +284,9 @@ static void platform_on_track_rock_ski_lift(void) {
  * Update function for bhvPlatformOnTrack.
  */
 void bhv_platform_on_track_update(void) {
+#ifdef CONTROLLABLE_PLATFORM_SPEED
+    s16 targetRoll; // visually pitch, since these platforms are technically sideways
+#endif
     switch (o->oAction) {
         case PLATFORM_ON_TRACK_ACT_INIT:
             platform_on_track_act_init();
@@ -288,6 +308,18 @@ void bhv_platform_on_track_update(void) {
     if (!o->oPlatformOnTrackIsNotSkiLift) {
         platform_on_track_rock_ski_lift();
     } else if (o->oPlatformOnTrackType == PLATFORM_ON_TRACK_TYPE_CARPET) {
+#ifdef CONTROLLABLE_PLATFORM_SPEED
+        if (gMarioObject->platform == o) {
+            if (!o->oPlatformOnTrackWasStoodOn) {
+                o->oPlatformOnTrackOffsetY    = -8.0f;
+                o->oPlatformOnTrackWasStoodOn = TRUE;
+            }
+            targetRoll = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) * 0x4;
+        } else {
+            targetRoll = 0x0;
+        }
+        o->oFaceAngleRoll = approach_s32(o->oFaceAngleRoll, targetRoll, 0x100, 0x100);
+#else
         if (!o->oPlatformOnTrackWasStoodOn && gMarioObject->platform == o) {
             o->oPlatformOnTrackOffsetY = -8.0f;
             o->oPlatformOnTrackWasStoodOn = TRUE;
@@ -295,6 +327,7 @@ void bhv_platform_on_track_update(void) {
 
         approach_f32_ptr(&o->oPlatformOnTrackOffsetY, 0.0f, 0.5f);
         o->oPosY += o->oPlatformOnTrackOffsetY;
+#endif
     }
 }
 

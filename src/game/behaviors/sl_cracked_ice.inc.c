@@ -1,5 +1,5 @@
 /**
- * Behavior for bhvUnusedPoundablePlatform.
+ * Behavior for bhvSlCrackedIce.
  *
  * This unused behavior controls a platform that shatters into small triangles
  * if Mario ground pounds it.
@@ -12,17 +12,18 @@
  * is not used anywhere else.
  */
 
-void bhv_unused_poundable_platform(void) {
-    cur_obj_scale(1.02f);
-
+void bhv_sl_cracked_ice_loop(void) {
     if (o->oAction == 0) {
         if (cur_obj_is_mario_ground_pounding_platform()) {
+            gMarioStates[0].vel[1] = 0.0f;
             spawn_mist_particles();
             spawn_triangle_break_particles(20, MODEL_SL_CRACKED_ICE_CHUNK, 3.0f, 0);
+            create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
             o->oAction++;
+        } else {
+            load_object_collision_model();
         }
     } else if (o->oTimer > 7) {
         obj_mark_for_deletion(o);
     }
-    load_object_collision_model();
 }

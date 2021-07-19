@@ -138,7 +138,7 @@ extern const BehaviorScript bhvPushableMetalBox[];
 extern const BehaviorScript bhvHeaveHo[];
 extern const BehaviorScript bhvHeaveHoThrowMario[];
 extern const BehaviorScript bhvCcmTouchedStarSpawn[];
-extern const BehaviorScript bhvUnusedPoundablePlatform[];
+extern const BehaviorScript bhvSlCrackedIce[];
 extern const BehaviorScript bhvBetaTrampolineTop[];
 extern const BehaviorScript bhvBetaTrampolineSpring[];
 extern const BehaviorScript bhvJumpingBox[];
