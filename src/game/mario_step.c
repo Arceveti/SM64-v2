@@ -271,7 +271,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     f32 ceilHeight;
     f32 floorHeight;
     f32 waterLevel;
-#if NULL_FLOOR_MISSES > 0
+#if NULL_FLOOR_STEPS > 0
     u32 missedFloors = 0;
 #endif
 #ifdef IMPROVED_MOVEMENT
@@ -282,8 +282,8 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-#if NULL_FLOOR_MISSES > 0
-    while (floor == NULL && missedFloors < NULL_FLOOR_MISSES) {
+#if NULL_FLOOR_STEPS > 0
+    while (floor == NULL && missedFloors < NULL_FLOOR_STEPS) {
         nextPos[0] += m->floor->normal.y * (m->vel[0] / 4.0f);
         nextPos[2] += m->floor->normal.y * (m->vel[2] / 4.0f);
 #ifndef IMPROVED_MOVEMENT
@@ -510,7 +510,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 #ifdef IMPROVED_MOVEMENT
     f32 ceilSteepness;
 #endif
-#if NULL_FLOOR_MISSES > 0
+#if NULL_FLOOR_STEPS > 0
     u32 missedFloors = 0;
 #endif
 
@@ -520,8 +520,8 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 50.0f);
 
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-#if NULL_FLOOR_MISSES > 0
-    while (floor == NULL && missedFloors < NULL_FLOOR_MISSES) {
+#if NULL_FLOOR_STEPS > 0
+    while (floor == NULL && missedFloors < NULL_FLOOR_STEPS) {
         nextPos[0] += m->vel[0] / 4.0f;
         nextPos[2] += m->vel[2] / 4.0f;
 

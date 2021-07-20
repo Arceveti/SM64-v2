@@ -70,8 +70,6 @@
 #define HANGING_SPEED 12.f
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
 #define TIGHTER_HANGING_CONTROLS
-// Makes Mario turn around instantly when moving on the ground (broken)
-#define SUPER_RESPONSIVE_CONTROLS
 // Disables fall damage
 #define NO_FALL_DAMAGE
 // Disables the scream that mario makes when falling off a great height (this is separate from actual fall damage)
@@ -90,9 +88,6 @@
 #define KEEP_MARIO_HEAD
 // Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
 #define IA8_COINS
-// Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad
-#define PARALLEL_LAKITU_CAM
-
 // Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad
 #define PARALLEL_LAKITU_CAM
 
@@ -175,7 +170,7 @@
 
 // Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
-// Makes the WF star spawn from the wall instead of existing already
+// Makes the WF star spawn from the wall instead of existing already (Unknown)
 #define FIX_CANNONLESS
 // Re-implements and fixes unused SSL pillars cutscene
 // (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti)
@@ -224,7 +219,7 @@
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
 // (Arceveti)
-#define NULL_FLOOR_MISSES 3
+#define NULL_FLOOR_STEPS 3
 // General movement improvements, including turn circle fix,
 // midair turn, better ceiling handling, less softlocks, etc.
 // (Arceveti)
