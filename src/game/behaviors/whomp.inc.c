@@ -115,8 +115,7 @@ void whomp_prepare_jump(void) {
 void whomp_jump(void) {
     if (o->oTimer == 0)
         o->oVelY = 40.0f;
-    if (o->oTimer < 8) {
-    } else {
+    if (o->oTimer >= 8) {
         o->oAngleVelPitch += 0x100;
         o->oFaceAnglePitch += o->oAngleVelPitch;
         if (o->oFaceAnglePitch > 0x4000) {

@@ -441,7 +441,7 @@ void exit_score_file_to_score_menu(struct Object *scoreFileButton, s8 scoreButto
  */
 void render_score_menu_buttons(struct Object *scoreButton) {
     // File A
-    if (save_file_exists(SAVE_FILE_A) == TRUE) {
+    if (save_file_exists(SAVE_FILE_A)) {
         sMainMenuButtons[MENU_BUTTON_SCORE_FILE_A] =
             spawn_object_rel_with_rot(scoreButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       711, 311, -100, 0, -0x8000, 0);
@@ -452,7 +452,7 @@ void render_score_menu_buttons(struct Object *scoreButton) {
     }
     sMainMenuButtons[MENU_BUTTON_SCORE_FILE_A]->oMenuButtonScale = 0.11111111f;
     // File B
-    if (save_file_exists(SAVE_FILE_B) == TRUE) {
+    if (save_file_exists(SAVE_FILE_B)) {
         sMainMenuButtons[MENU_BUTTON_SCORE_FILE_B] =
             spawn_object_rel_with_rot(scoreButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       -166, 311, -100, 0, -0x8000, 0);
@@ -463,7 +463,7 @@ void render_score_menu_buttons(struct Object *scoreButton) {
     }
     sMainMenuButtons[MENU_BUTTON_SCORE_FILE_B]->oMenuButtonScale = 0.11111111f;
     // File C
-    if (save_file_exists(SAVE_FILE_C) == TRUE) {
+    if (save_file_exists(SAVE_FILE_C)) {
         sMainMenuButtons[MENU_BUTTON_SCORE_FILE_C] = spawn_object_rel_with_rot(
             scoreButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton, 711, 0, -100, 0, -0x8000, 0);
     } else {
@@ -472,7 +472,7 @@ void render_score_menu_buttons(struct Object *scoreButton) {
     }
     sMainMenuButtons[MENU_BUTTON_SCORE_FILE_C]->oMenuButtonScale = 0.11111111f;
     // File D
-    if (save_file_exists(SAVE_FILE_D) == TRUE) {
+    if (save_file_exists(SAVE_FILE_D)) {
         sMainMenuButtons[MENU_BUTTON_SCORE_FILE_D] =
             spawn_object_rel_with_rot(scoreButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       -166, 0, -100, 0, -0x8000, 0);
@@ -507,7 +507,7 @@ void check_score_menu_clicked_buttons(struct Object *scoreButton) {
             s16 buttonX = sMainMenuButtons[buttonID]->oPosX;
             s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
-            if (check_clicked_button(buttonX, buttonY, 22.0f) == TRUE && sMainMenuTimer >= SCORE_TIMER) {
+            if (check_clicked_button(buttonX, buttonY, 22.0f) && sMainMenuTimer >= SCORE_TIMER) {
                 // If menu button clicked, select it
                 if (buttonID == MENU_BUTTON_SCORE_RETURN || buttonID == MENU_BUTTON_SCORE_COPY_FILE
                     || buttonID == MENU_BUTTON_SCORE_ERASE_FILE) {
@@ -521,7 +521,7 @@ void check_score_menu_clicked_buttons(struct Object *scoreButton) {
                 else { // Check if a save file is clicked
                     if (sMainMenuTimer >= SCORE_TIMER) {
                         // If clicked in a existing save file, select it too see it's score
-                        if (save_file_exists(buttonID - MENU_BUTTON_SCORE_MIN) == TRUE) {
+                        if (save_file_exists(buttonID - MENU_BUTTON_SCORE_MIN)) {
                             play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gGlobalSoundSource);
 #if ENABLE_RUMBLE
                             queue_rumble_data(5, 80);
@@ -558,7 +558,7 @@ void check_score_menu_clicked_buttons(struct Object *scoreButton) {
  */
 void render_copy_menu_buttons(struct Object *copyButton) {
     // File A
-    if (save_file_exists(SAVE_FILE_A) == TRUE) {
+    if (save_file_exists(SAVE_FILE_A)) {
         sMainMenuButtons[MENU_BUTTON_COPY_FILE_A] =
             spawn_object_rel_with_rot(copyButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton, 711,
                                       311, -100, 0, -0x8000, 0);
@@ -568,7 +568,7 @@ void render_copy_menu_buttons(struct Object *copyButton) {
     }
     sMainMenuButtons[MENU_BUTTON_COPY_FILE_A]->oMenuButtonScale = 0.11111111f;
     // File B
-    if (save_file_exists(SAVE_FILE_B) == TRUE) {
+    if (save_file_exists(SAVE_FILE_B)) {
         sMainMenuButtons[MENU_BUTTON_COPY_FILE_B] =
             spawn_object_rel_with_rot(copyButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       -166, 311, -100, 0, -0x8000, 0);
@@ -579,7 +579,7 @@ void render_copy_menu_buttons(struct Object *copyButton) {
     }
     sMainMenuButtons[MENU_BUTTON_COPY_FILE_B]->oMenuButtonScale = 0.11111111f;
     // File C
-    if (save_file_exists(SAVE_FILE_C) == TRUE) {
+    if (save_file_exists(SAVE_FILE_C)) {
         sMainMenuButtons[MENU_BUTTON_COPY_FILE_C] = spawn_object_rel_with_rot(
             copyButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton, 711, 0, -100, 0, -0x8000, 0);
     } else {
@@ -588,7 +588,7 @@ void render_copy_menu_buttons(struct Object *copyButton) {
     }
     sMainMenuButtons[MENU_BUTTON_COPY_FILE_C]->oMenuButtonScale = 0.11111111f;
     // File D
-    if (save_file_exists(SAVE_FILE_D) == TRUE) {
+    if (save_file_exists(SAVE_FILE_D)) {
         sMainMenuButtons[MENU_BUTTON_COPY_FILE_D] = spawn_object_rel_with_rot(
             copyButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton, -166, 0, -100, 0, -0x8000, 0);
     } else {
@@ -618,10 +618,9 @@ void render_copy_menu_buttons(struct Object *copyButton) {
 void copy_action_file_button(struct Object *copyButton, s32 copyFileButtonID) {
     switch (copyButton->oMenuButtonActionPhase) {
         case COPY_PHASE_MAIN: // Copy Menu Main Phase
-            if (sAllFilesExist == TRUE) { // Don't enable copy if all save files exists
-                return;
-            }
-            if (save_file_exists(copyFileButtonID - MENU_BUTTON_COPY_MIN) == TRUE) {
+            if (sAllFilesExist) return; // Don't enable copy if all save files exists
+
+            if (save_file_exists(copyFileButtonID - MENU_BUTTON_COPY_MIN)) {
                 // If clicked in a existing save file, ask where it wants to copy
                 play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -647,7 +646,7 @@ void copy_action_file_button(struct Object *copyButton, s32 copyFileButtonID) {
             break;
         case COPY_PHASE_COPY_WHERE: // Copy Menu "COPY IT TO WHERE?" Phase (after a file is selected)
             sMainMenuButtons[copyFileButtonID]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_IN_OUT;
-            if (save_file_exists(copyFileButtonID - MENU_BUTTON_COPY_MIN) == FALSE) {
+            if (!save_file_exists(copyFileButtonID - MENU_BUTTON_COPY_MIN)) {
                 // If clicked in a non-existing save file, copy the file
                 play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -697,7 +696,7 @@ void check_copy_menu_clicked_buttons(struct Object *copyButton) {
             s16 buttonX = sMainMenuButtons[buttonID]->oPosX;
             s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
-            if (check_clicked_button(buttonX, buttonY, 22.0f) == TRUE) {
+            if (check_clicked_button(buttonX, buttonY, 22.0f)) {
                 // If menu button clicked, select it
                 if (buttonID == MENU_BUTTON_COPY_RETURN || buttonID == MENU_BUTTON_COPY_CHECK_SCORE
                     || buttonID == MENU_BUTTON_COPY_ERASE_FILE) {
@@ -738,7 +737,7 @@ void check_copy_menu_clicked_buttons(struct Object *copyButton) {
  */
 void render_erase_menu_buttons(struct Object *eraseButton) {
     // File A
-    if (save_file_exists(SAVE_FILE_A) == TRUE) {
+    if (save_file_exists(SAVE_FILE_A)) {
         sMainMenuButtons[MENU_BUTTON_ERASE_FILE_A] =
             spawn_object_rel_with_rot(eraseButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       711, 311, -100, 0, -0x8000, 0);
@@ -749,7 +748,7 @@ void render_erase_menu_buttons(struct Object *eraseButton) {
     }
     sMainMenuButtons[MENU_BUTTON_ERASE_FILE_A]->oMenuButtonScale = 0.11111111f;
     // File B
-    if (save_file_exists(SAVE_FILE_B) == TRUE) {
+    if (save_file_exists(SAVE_FILE_B)) {
         sMainMenuButtons[MENU_BUTTON_ERASE_FILE_B] =
             spawn_object_rel_with_rot(eraseButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       -166, 311, -100, 0, -0x8000, 0);
@@ -760,7 +759,7 @@ void render_erase_menu_buttons(struct Object *eraseButton) {
     }
     sMainMenuButtons[MENU_BUTTON_ERASE_FILE_B]->oMenuButtonScale = 0.11111111f;
     // File C
-    if (save_file_exists(SAVE_FILE_C) == TRUE) {
+    if (save_file_exists(SAVE_FILE_C)) {
         sMainMenuButtons[MENU_BUTTON_ERASE_FILE_C] = spawn_object_rel_with_rot(
             eraseButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton, 711, 0, -100, 0, -0x8000, 0);
     } else {
@@ -769,7 +768,7 @@ void render_erase_menu_buttons(struct Object *eraseButton) {
     }
     sMainMenuButtons[MENU_BUTTON_ERASE_FILE_C]->oMenuButtonScale = 0.11111111f;
     // File D
-    if (save_file_exists(SAVE_FILE_D) == TRUE) {
+    if (save_file_exists(SAVE_FILE_D)) {
         sMainMenuButtons[MENU_BUTTON_ERASE_FILE_D] =
             spawn_object_rel_with_rot(eraseButton, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON, bhvMenuButton,
                                       -166, 0, -100, 0, -0x8000, 0);
@@ -798,7 +797,7 @@ void render_erase_menu_buttons(struct Object *eraseButton) {
 void erase_action_file_button(struct Object *eraseButton, s32 eraseFileButtonID) {
     switch (eraseButton->oMenuButtonActionPhase) {
         case ERASE_PHASE_MAIN: // Erase Menu Main Phase
-            if (save_file_exists(eraseFileButtonID - MENU_BUTTON_ERASE_MIN) == TRUE) {
+            if (save_file_exists(eraseFileButtonID - MENU_BUTTON_ERASE_MIN)) {
                 // If clicked in a existing save file, ask if it wants to delete it
                 play_sound(SOUND_MENU_CLICK_FILE_SELECT, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -853,7 +852,7 @@ void check_erase_menu_clicked_buttons(struct Object *eraseButton) {
             s16 buttonX = sMainMenuButtons[buttonID]->oPosX;
             s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
-            if (check_clicked_button(buttonX, buttonY, 22.0f) == TRUE) {
+            if (check_clicked_button(buttonX, buttonY, 22.0f)) {
                 // If menu button clicked, select it
                 if (buttonID == MENU_BUTTON_ERASE_RETURN || buttonID == MENU_BUTTON_ERASE_CHECK_SCORE
                     || buttonID == MENU_BUTTON_ERASE_COPY_FILE) {
@@ -923,7 +922,7 @@ void check_sound_mode_menu_clicked_buttons(struct Object *soundModeButton) {
             s16 buttonX = sMainMenuButtons[buttonID]->oPosX;
             s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
-            if (check_clicked_button(buttonX, buttonY, 22.0f) == TRUE) {
+            if (check_clicked_button(buttonX, buttonY, 22.0f)) {
                 // If sound mode button clicked, select it and define sound mode
                 // The check will always be true because of the group configured above (In JP & US)
                 if (buttonID == MENU_BUTTON_STEREO || buttonID == MENU_BUTTON_MONO
@@ -1132,7 +1131,7 @@ void load_erase_menu_from_submenu(s16 prevMenuButtonID, struct Object *sourceBut
  */
 void bhv_menu_button_manager_init(void) {
     // File A
-    if (save_file_exists(SAVE_FILE_A) == TRUE) {
+    if (save_file_exists(SAVE_FILE_A)) {
         sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A] =
             spawn_object_rel_with_rot(gCurrentObject, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE,
                                       bhvMenuButton, -6400, 2800, 0, 0, 0, 0);
@@ -1143,7 +1142,7 @@ void bhv_menu_button_manager_init(void) {
     }
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A]->oMenuButtonScale = 1.0f;
     // File B
-    if (save_file_exists(SAVE_FILE_B) == TRUE) {
+    if (save_file_exists(SAVE_FILE_B)) {
         sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B] =
             spawn_object_rel_with_rot(gCurrentObject, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE,
                                       bhvMenuButton, 1500, 2800, 0, 0, 0, 0);
@@ -1154,7 +1153,7 @@ void bhv_menu_button_manager_init(void) {
     }
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B]->oMenuButtonScale = 1.0f;
     // File C
-    if (save_file_exists(SAVE_FILE_C) == TRUE) {
+    if (save_file_exists(SAVE_FILE_C)) {
         sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C] =
             spawn_object_rel_with_rot(gCurrentObject, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE,
                                       bhvMenuButton, -6400, 0, 0, 0, 0, 0);
@@ -1164,7 +1163,7 @@ void bhv_menu_button_manager_init(void) {
     }
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C]->oMenuButtonScale = 1.0f;
     // File D
-    if (save_file_exists(SAVE_FILE_D) == TRUE) {
+    if (save_file_exists(SAVE_FILE_D)) {
         sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D] = spawn_object_rel_with_rot(
             gCurrentObject, MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE, bhvMenuButton, 1500, 0, 0, 0, 0, 0);
     } else {
@@ -1202,7 +1201,7 @@ void check_main_menu_clicked_buttons(void) {
         // Sound mode menu is handled separately because the button ID for it
         // is not grouped with the IDs of the other submenus.
         if (check_clicked_button(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosX,
-                                sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosY, 200.0f) == TRUE) {
+                                sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosY, 200.0f)) {
             sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
             sSelectedButtonID = MENU_BUTTON_SOUND_MODE;
         } else {
@@ -1213,7 +1212,7 @@ void check_main_menu_clicked_buttons(void) {
                 s16 buttonX = sMainMenuButtons[buttonID]->oPosX;
                 s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
-                if (check_clicked_button(buttonX, buttonY, 200.0f) == TRUE) {
+                if (check_clicked_button(buttonX, buttonY, 200.0f)) {
                     // If menu button clicked, select it
                     sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
                     sSelectedButtonID = buttonID;
@@ -1519,7 +1518,7 @@ void print_generic_string_fade(s16 x, s16 y, const unsigned char *text) {
  * Updates text fade at the top of a menu.
  */
 s32 update_text_fade_out(void) {
-    if (sFadeOutText == TRUE) {
+    if (sFadeOutText) {
         sTextFadeAlpha += 50;
         if (sTextFadeAlpha == 250) {
             sFadeOutText = FALSE;
@@ -1542,7 +1541,7 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
     s8 offset = 0;
     s16 starCount;
 
-    if (save_file_exists(fileIndex) == TRUE) {
+    if (save_file_exists(fileIndex)) {
         starCount = save_file_get_total_star_count(fileIndex, COURSE_MIN - 1, COURSE_MAX - 1);
         // Print star icon
         print_hud_lut_string(HUD_LUT_GLOBAL, x, y, starIcon);
@@ -1642,7 +1641,7 @@ void print_score_menu_strings(void) {
     if (sMainMenuTimer == FADEOUT_TIMER) {
         sFadeOutText = TRUE;
     }
-    if (update_text_fade_out() == TRUE) {
+    if (update_text_fade_out()) {
         if (sStatusMessageID == SCORE_MSG_CHECK_FILE) {
             sStatusMessageID = SCORE_MSG_NOSAVE_DATA;
         } else {
@@ -1693,7 +1692,7 @@ void copy_menu_display_message(s8 messageID) {
 
     switch (messageID) {
         case COPY_MSG_MAIN_TEXT:
-            if (sAllFilesExist == TRUE) {
+            if (sAllFilesExist) {
                 print_generic_string_fade(NOFILE_COPY_X, 190, LANGUAGE_ARRAY(textNoFileToCopyFrom));
             } else {
                 print_hud_lut_string_fade(HUD_LUT_DIFF, COPY_FILE_X, 35, LANGUAGE_ARRAY(textCopyFile));
@@ -1723,7 +1722,7 @@ void copy_menu_update_message(void) {
             if (sMainMenuTimer == FADEOUT_TIMER) {
                 sFadeOutText = TRUE;
             }
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID == COPY_MSG_MAIN_TEXT) {
                     sStatusMessageID = COPY_MSG_NOSAVE_EXISTS;
                 } else {
@@ -1736,7 +1735,7 @@ void copy_menu_update_message(void) {
                 && sStatusMessageID == COPY_MSG_SAVE_EXISTS) {
                 sFadeOutText = TRUE;
             }
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID != COPY_MSG_COPY_WHERE) {
                     sStatusMessageID = COPY_MSG_COPY_WHERE;
                 } else {
@@ -1748,7 +1747,7 @@ void copy_menu_update_message(void) {
             if (sMainMenuTimer == FADEOUT_TIMER) {
                 sFadeOutText = TRUE;
             }
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID != COPY_MSG_COPY_COMPLETE) {
                     sStatusMessageID = COPY_MSG_COPY_COMPLETE;
                 } else {
@@ -1925,7 +1924,7 @@ void erase_menu_update_message(void) {
                 && sStatusMessageID == ERASE_MSG_NOSAVE_EXISTS) {
                 sFadeOutText = TRUE;
             }
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID == ERASE_MSG_MAIN_TEXT) {
                     sStatusMessageID = ERASE_MSG_NOSAVE_EXISTS;
                 } else {
@@ -1934,7 +1933,7 @@ void erase_menu_update_message(void) {
             }
             break;
         case ERASE_PHASE_PROMPT:
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID != ERASE_MSG_PROMPT) {
                     sStatusMessageID = ERASE_MSG_PROMPT;
                 }
@@ -1946,7 +1945,7 @@ void erase_menu_update_message(void) {
             if (sMainMenuTimer == FADEOUT_TIMER) {
                 sFadeOutText = TRUE;
             }
-            if (update_text_fade_out() == TRUE) {
+            if (update_text_fade_out()) {
                 if (sStatusMessageID != ERASE_MSG_MARIO_ERASED) {
                     sStatusMessageID = ERASE_MSG_MARIO_ERASED;
                 } else {
@@ -2234,12 +2233,8 @@ static void print_file_select_strings(void) {
             break;
     }
     // If all 4 save file exists, define true to sAllFilesExist to prevent more copies in copy menu
-    if (save_file_exists(SAVE_FILE_A) == TRUE && save_file_exists(SAVE_FILE_B) == TRUE &&
-        save_file_exists(SAVE_FILE_C) == TRUE && save_file_exists(SAVE_FILE_D) == TRUE) {
-        sAllFilesExist = TRUE;
-    } else {
-        sAllFilesExist = FALSE;
-    }
+    sAllFilesExist = (save_file_exists(SAVE_FILE_A) && save_file_exists(SAVE_FILE_B) &&
+                      save_file_exists(SAVE_FILE_C) && save_file_exists(SAVE_FILE_D));
     // Timers for menu alpha text and the main menu itself
     if (sTextBaseAlpha < 250) {
         sTextBaseAlpha += 10;

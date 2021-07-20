@@ -320,7 +320,6 @@ void *load_to_fixed_pool_addr(u8 *destAddr, u8 *srcStart, u8 *srcEnd) {
             osInvalICache(dest, destSize);
             osInvalDCache(dest, destSize);
         }
-    } else {
     }
     return dest;
 }
@@ -370,9 +369,7 @@ void *load_segment_decompress(s32 segment, u8 *srcStart, u8 *srcEnd) {
 			osSyncPrintf("end decompress\n");
             set_segment_base_addr(segment, dest);
             main_pool_free(compressed);
-        } else {
         }
-    } else {
     }
     return dest;
 }
@@ -409,7 +406,6 @@ void *load_segment_decompress_heap(u32 segment, u8 *srcStart, u8 *srcEnd) {
 #endif
         set_segment_base_addr(segment, gDecompressionHeap);
         main_pool_free(compressed);
-    } else {
     }
     return gDecompressionHeap;
 }
@@ -583,7 +579,6 @@ void *alloc_display_list(u32 size) {
     if (gGfxPoolEnd - size >= (u8 *) gDisplayListHead) {
         gGfxPoolEnd -= size;
         ptr = gGfxPoolEnd;
-    } else {
     }
     return ptr;
 }

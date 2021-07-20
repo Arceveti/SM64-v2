@@ -715,7 +715,7 @@ u8 get_missing_bank(u32 seqId, s32 *nonNullCount, s32 *nullCount) {
         bankId = gAlBankSets[offset - 1];
 #endif
 
-        if (IS_BANK_LOAD_COMPLETE(bankId) == TRUE) {
+        if (IS_BANK_LOAD_COMPLETE(bankId)) {
 #if defined(VERSION_EU)
             temp = get_bank_or_seq(&gBankLoadedPool, 2, bankId);
 #else
@@ -753,7 +753,7 @@ struct AudioBank *load_banks_immediate(s32 seqId, u8 *outDefaultBank) {
         bankId = gAlBankSets[offset - 1];
 #endif
 
-        if (IS_BANK_LOAD_COMPLETE(bankId) == TRUE) {
+        if (IS_BANK_LOAD_COMPLETE(bankId)) {
 #ifdef VERSION_EU
             ret = get_bank_or_seq(&gBankLoadedPool, 2, bankId);
 #else

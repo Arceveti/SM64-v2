@@ -5948,66 +5948,66 @@ struct CameraTrigger sCamCastle[] = {
  * The triggers are also responsible for warping the camera below platforms.
  */
 struct CameraTrigger sCamBBH[] = {
-    { 1, cam_bbh_enter_front_door, 742, 0, 2369, 200, 200, 200, 0 },
-    { 1, cam_bbh_leave_front_door, 741, 0, 1827, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 222, 0, 1458, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 222, 0, 639, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 435, 0, 222, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1613, 0, 222, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1827, 0, 1459, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, -495, 819, 1407, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, -495, 819, 640, 250, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 179, 819, 222, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1613, 819, 222, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1827, 819, 486, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1827, 819, 1818, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_lower, 2369, 0, 1459, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_lower, 3354, 0, 1347, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_lower, 2867, 514, 1843, 512, 102, 409, 0 },
-    { 1, cam_bbh_room_4, 3354, 0, 804, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_4, 1613, 0, -320, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_8, 435, 0, -320, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_5_library, -2021, 0, 803, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_5_library, -320, 0, 640, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_5_library_to_hidden_transition, -1536, 358, -254, 716, 363, 102, 0 },
-    { 1, cam_bbh_room_5_hidden_to_library_transition, -1536, 358, -459, 716, 363, 102, 0 },
-    { 1, cam_bbh_room_5_hidden, -1560, 0, -1314, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_3, -320, 0, 1459, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_3, -2021, 0, 1345, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_library, 2369, 819, 486, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_library, 2369, 1741, 486, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_2_library_to_trapdoor_transition, 2867, 1228, 1174, 716, 414, 102, 0 },
-    { 1, cam_bbh_room_2_trapdoor_transition, 2867, 1228, 1378, 716, 414, 102, 0 },
-    { 1, cam_bbh_room_2_trapdoor, 2369, 819, 1818, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_9_attic, 1829, 1741, 486, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_9_attic, 741, 1741, 1587, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_9_attic_transition, 102, 2048, -191, 100, 310, 307, 0 },
-    { 1, cam_bbh_room_9_mr_i_transition, 409, 2048, -191, 100, 310, 307, 0 },
-    { 1, cam_bbh_room_13_balcony, 742, 1922, 2164, 200, 200, 200, 0 },
-    { 1, cam_bbh_fall_off_roof, 587, 1322, 2677, 1000, 400, 600, 0 },
-    { 1, cam_bbh_room_3, -1037, 819, 1408, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_3, -1970, 1024, 1345, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_8, 179, 819, -320, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_7_mr_i, 1613, 819, -320, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_7_mr_i_to_coffins_transition, 2099, 1228, -819, 102, 414, 716, 0 },
-    { 1, cam_bbh_room_7_coffins_to_mr_i_transition, 2304, 1228, -819, 102, 414, 716, 0 },
-    { 1, cam_bbh_room_6, -1037, 819, 640, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_6, -1970, 1024, 803, 200, 200, 200, 0 },
-    { 1, cam_bbh_room_1, 1827, 819, 1818, 200, 200, 200, 0 },
-    { 1, cam_bbh_fall_into_pool, 2355, -1112, -193, 1228, 500, 1343, 0 },
-    { 1, cam_bbh_fall_into_pool, 2355, -1727, 1410, 1228, 500, 705, 0 },
-    { 1, cam_bbh_elevator_room_lower, 0, -2457, 1827, 250, 200, 250, 0 },
-    { 1, cam_bbh_elevator_room_lower, 0, -2457, 2369, 250, 200, 250, 0 },
-    { 1, cam_bbh_elevator_room_lower, 0, -2457, 4929, 250, 200, 250, 0 },
-    { 1, cam_bbh_elevator_room_lower, 0, -2457, 4387, 250, 200, 250, 0 },
-    { 1, cam_bbh_room_0_back_entrance, 1887, -2457, 204, 250, 200, 250, 0 },
-    { 1, cam_bbh_room_0, 1272, -2457, 204, 250, 200, 250, 0 },
-    { 1, cam_bbh_room_0, -1681, -2457, 204, 250, 200, 250, 0 },
-    { 1, cam_bbh_room_0_back_entrance, -2296, -2457, 204, 250, 200, 250, 0 },
-    { 1, cam_bbh_elevator, -2939, -605, 5367, 800, 100, 800, 0 },
-    { 1, cam_bbh_room_12_upper, -2939, -205, 5367, 300, 100, 300, 0 },
-    { 1, cam_bbh_room_12_upper, -2332, -204, 4714, 250, 200, 250, 0x6000 },
-    { 1, cam_bbh_room_0_back_entrance, -1939, -204, 4340, 250, 200, 250, 0x6000 },
+    { 1, cam_bbh_enter_front_door,                       742,     0,  2369,  200, 200,  200, 0 },
+    { 1, cam_bbh_leave_front_door,                       741,     0,  1827,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                 222,     0,  1458,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                 222,     0,   639,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                 435,     0,   222,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1613,     0,   222,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1827,     0,  1459,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                -495,   819,  1407,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                -495,   819,   640,  250, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                 179,   819,   222,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1613,   819,   222,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1827,   819,   486,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_lower,                          2369,     0,  1459,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_lower,                          3354,     0,  1347,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_lower,                          2867,   514,  1843,  512, 102,  409, 0 },
+    { 1, cam_bbh_room_4,                                3354,     0,   804,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_4,                                1613,     0,  -320,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_8,                                 435,     0,  -320,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_5_library,                       -2021,     0,   803,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_5_library,                        -320,     0,   640,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_5_library_to_hidden_transition,  -1536,   358,  -254,  716, 363,  102, 0 },
+    { 1, cam_bbh_room_5_hidden_to_library_transition,  -1536,   358,  -459,  716, 363,  102, 0 },
+    { 1, cam_bbh_room_5_hidden,                        -1560,     0, -1314,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_3,                                -320,     0,  1459,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_3,                               -2021,     0,  1345,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_library,                        2369,   819,   486,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_library,                        2369,  1741,   486,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_2_library_to_trapdoor_transition, 2867,  1228,  1174,  716, 414,  102, 0 },
+    { 1, cam_bbh_room_2_trapdoor_transition,            2867,  1228,  1378,  716, 414,  102, 0 },
+    { 1, cam_bbh_room_2_trapdoor,                       2369,   819,  1818,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_9_attic,                          1829,  1741,   486,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_9_attic,                           741,  1741,  1587,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_9_attic_transition,                102,  2048,  -191,  100, 310,  307, 0 },
+    { 1, cam_bbh_room_9_mr_i_transition,                 409,  2048,  -191,  100, 310,  307, 0 },
+    { 1, cam_bbh_room_13_balcony,                        742,  1922,  2164,  200, 200,  200, 0 },
+    { 1, cam_bbh_fall_off_roof,                          587,  1322,  2677, 1000, 400,  600, 0 },
+    { 1, cam_bbh_room_3,                               -1037,   819,  1408,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_3,                               -1970,  1024,  1345,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_8,                                 179,   819,  -320,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_7_mr_i,                           1613,   819,  -320,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_7_mr_i_to_coffins_transition,     2099,  1228,  -819,  102, 414,  716, 0 },
+    { 1, cam_bbh_room_7_coffins_to_mr_i_transition,     2304,  1228,  -819,  102, 414,  716, 0 },
+    { 1, cam_bbh_room_6,                               -1037,   819,   640,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_6,                               -1970,  1024,   803,  200, 200,  200, 0 },
+    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200, 0 },
+    { 1, cam_bbh_fall_into_pool,                        2355, -1112,  -193, 1228, 500, 1343, 0 },
+    { 1, cam_bbh_fall_into_pool,                        2355, -1727,  1410, 1228, 500,  705, 0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  1827,  250, 200,  250, 0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  2369,  250, 200,  250, 0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4929,  250, 200,  250, 0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4387,  250, 200,  250, 0 },
+    { 1, cam_bbh_room_0_back_entrance,                  1887, -2457,   204,  250, 200,  250, 0 },
+    { 1, cam_bbh_room_0,                                1272, -2457,   204,  250, 200,  250, 0 },
+    { 1, cam_bbh_room_0,                               -1681, -2457,   204,  250, 200,  250, 0 },
+    { 1, cam_bbh_room_0_back_entrance,                 -2296, -2457,   204,  250, 200,  250, 0 },
+    { 1, cam_bbh_elevator,                             -2939,  -605,  5367,  800, 100,  800, 0 },
+    { 1, cam_bbh_room_12_upper,                        -2939,  -205,  5367,  300, 100,  300, 0 },
+    { 1, cam_bbh_room_12_upper,                        -2332,  -204,  4714,  250, 200,  250, 0x6000 },
+    { 1, cam_bbh_room_0_back_entrance,                 -1939,  -204,  4340,  250, 200,  250, 0x6000 },
     NULL_TRIGGER
 };
 
@@ -6032,29 +6032,29 @@ struct CameraTrigger *sCameraTriggers[LEVEL_COUNT + 1] = {
 #undef DEFINE_LEVEL
 
 struct CutsceneSplinePoint sIntroStartToPipePosition[] = {
-    { 0, 0, { 2122, 8762, 9114 } },  { 0, 0, { 2122, 8762, 9114 } },  { 1, 0, { 2122, 7916, 9114 } },
-    { 1, 0, { 2122, 7916, 9114 } },  { 2, 0, { 957, 5166, 8613 } },   { 3, 0, { 589, 4338, 7727 } },
-    { 4, 0, { 690, 3366, 6267 } },   { 5, 0, { -1600, 2151, 4955 } }, { 6, 0, { -1557, 232, 1283 } },
-    { 7, 0, { -6962, -295, 2729 } }, { 8, 0, { -6979, 131, 3246 } },  { 9, 0, { -6360, -283, 4044 } },
-    { 0, 0, { -5695, -334, 5264 } }, { 1, 0, { -5568, -319, 7933 } }, { 2, 0, { -3848, -200, 6278 } },
-    { 3, 0, { -965, -263, 6092 } },  { 4, 0, { 1607, 2465, 6329 } },  { 5, 0, { 2824, 180, 3548 } },
-    { 6, 0, { 1236, 136, 945 } },    { 0, 0, { 448, 136, 564 } },     { 0, 0, { 448, 136, 564 } },
-    { 0, 0, { 448, 136, 564 } },     { -1, 0, { 448, 136, 564 } }
+    { 0, 0, {  2122, 8762, 9114 } }, {  0, 0, {  2122, 8762, 9114 } }, { 1, 0, {  2122, 7916, 9114 } },
+    { 1, 0, {  2122, 7916, 9114 } }, {  2, 0, {   957, 5166, 8613 } }, { 3, 0, {   589, 4338, 7727 } },
+    { 4, 0, {   690, 3366, 6267 } }, {  5, 0, { -1600, 2151, 4955 } }, { 6, 0, { -1557,  232, 1283 } },
+    { 7, 0, { -6962, -295, 2729 } }, {  8, 0, { -6979,  131, 3246 } }, { 9, 0, { -6360, -283, 4044 } },
+    { 0, 0, { -5695, -334, 5264 } }, {  1, 0, { -5568, -319, 7933 } }, { 2, 0, { -3848, -200, 6278 } },
+    { 3, 0, {  -965, -263, 6092 } }, {  4, 0, {  1607, 2465, 6329 } }, { 5, 0, {  2824,  180, 3548 } },
+    { 6, 0, {  1236,  136,  945 } }, {  0, 0, {   448,  136,  564 } }, { 0, 0, {   448,  136,  564 } },
+    { 0, 0, {   448,  136,  564 } }, { -1, 0, {   448,  136,  564 } }
 };
 
 struct CutsceneSplinePoint sIntroStartToPipeFocus[] = {
-    { 0, 50, { 1753, 29800, 8999 } }, { 0, 50, { 1753, 29800, 8999 } },
-    { 1, 50, { 1753, 8580, 8999 } },  { 1, 100, { 1753, 8580, 8999 } },
-    { 2, 50, { 520, 5400, 8674 } },   { 3, 50, { 122, 4437, 7875 } },
-    { 4, 50, { 316, 3333, 6538 } },   { 5, 36, { -1526, 2189, 5448 } },
-    { 6, 50, { -1517, 452, 1731 } },  { 7, 50, { -6659, -181, 3109 } },
-    { 8, 17, { -6649, 183, 3618 } },  { 9, 20, { -6009, -214, 4395 } },
-    { 0, 50, { -5258, -175, 5449 } }, { 1, 36, { -5158, -266, 7651 } },
-    { 2, 26, { -3351, -192, 6222 } }, { 3, 25, { -483, -137, 6060 } },
-    { 4, 100, { 1833, 2211, 5962 } }, { 5, 26, { 3022, 207, 3090 } },
-    { 6, 20, { 1250, 197, 449 } },    { 7, 50, { 248, 191, 227 } },
-    { 7, 0, { 48, 191, 227 } },       { 7, 0, { 48, 191, 227 } },
-    { -1, 0, { 48, 191, 227 } }
+    {  0,  50, {  1753, 29800, 8999 } }, { 0,  50, {  1753, 29800, 8999 } },
+    {  1,  50, {  1753,  8580, 8999 } }, { 1, 100, {  1753,  8580, 8999 } },
+    {  2,  50, {   520,  5400, 8674 } }, { 3,  50, {   122,  4437, 7875 } },
+    {  4,  50, {   316,  3333, 6538 } }, { 5,  36, { -1526,  2189, 5448 } },
+    {  6,  50, { -1517,   452, 1731 } }, { 7,  50, { -6659,  -181, 3109 } },
+    {  8,  17, { -6649,   183, 3618 } }, { 9,  20, { -6009,  -214, 4395 } },
+    {  0,  50, { -5258,  -175, 5449 } }, { 1,  36, { -5158,  -266, 7651 } },
+    {  2,  26, { -3351,  -192, 6222 } }, { 3,  25, {  -483,  -137, 6060 } },
+    {  4, 100, {  1833,  2211, 5962 } }, { 5,  26, {  3022,   207, 3090 } },
+    {  6,  20, {  1250,   197,  449 } }, { 7,  50, {   248,   191,  227 } },
+    {  7,   0, {    48,   191,  227 } }, { 7,   0, {    48,   191,  227 } },
+    { -1,   0, {    48,   191,  227 } }
 };
 
 /**
@@ -6063,10 +6063,10 @@ struct CutsceneSplinePoint sIntroStartToPipeFocus[] = {
  * camera's position.
  */
 struct CutsceneSplinePoint sIntroPipeToDialogPosition[] = {
-    { 0, 0, { -785, 625, 4527 } },  { 1, 0, { -785, 625, 4527 } },  { 2, 0, { -1286, 644, 4376 } },
-    { 3, 0, { -1286, 623, 4387 } }, { 4, 0, { -1286, 388, 3963 } }, { 5, 0, { -1286, 358, 4093 } },
-    { 6, 0, { -1386, 354, 4159 } }, { 7, 0, { -1477, 306, 4223 } }, { 8, 0, { -1540, 299, 4378 } },
-    { 9, 0, { -1473, 316, 4574 } }, { 0, 0, { -1328, 485, 5017 } }, { 0, 0, { -1328, 485, 5017 } },
+    { 0, 0, {  -785, 625, 4527 } }, {  1, 0, {  -785, 625, 4527 } }, { 2, 0, { -1286, 644, 4376 } },
+    { 3, 0, { -1286, 623, 4387 } }, {  4, 0, { -1286, 388, 3963 } }, { 5, 0, { -1286, 358, 4093 } },
+    { 6, 0, { -1386, 354, 4159 } }, {  7, 0, { -1477, 306, 4223 } }, { 8, 0, { -1540, 299, 4378 } },
+    { 9, 0, { -1473, 316, 4574 } }, {  0, 0, { -1328, 485, 5017 } }, { 0, 0, { -1328, 485, 5017 } },
     { 0, 0, { -1328, 485, 5017 } }, { -1, 0, { -1328, 485, 5017 } }
 };
 
@@ -6074,59 +6074,59 @@ struct CutsceneSplinePoint sIntroPipeToDialogPosition[] = {
  * Describes the spline that the camera's focus follows, during the same part of the intro as the above.
  */
 struct CutsceneSplinePoint sIntroPipeToDialogFocus[] = {
-    { 0, 25, { -1248, 450, 4596 } }, { 1, 71, { -1258, 485, 4606 } }, { 2, 71, { -1379, 344, 4769 } },
-    { 3, 22, { -1335, 366, 4815 } }, { 4, 23, { -1315, 370, 4450 } }, { 5, 40, { -1322, 333, 4591 } },
-    { 6, 25, { -1185, 329, 4616 } }, { 7, 21, { -1059, 380, 4487 } }, { 8, 14, { -1086, 421, 4206 } },
-    { 9, 21, { -1321, 346, 4098 } }, { 0, 0, { -1328, 385, 4354 } },  { 0, 0, { -1328, 385, 4354 } },
-    { 0, 0, { -1328, 385, 4354 } },  { -1, 0, { -1328, 385, 4354 } }
+    { 0, 25, { -1248, 450, 4596 } }, {  1, 71, { -1258, 485, 4606 } }, { 2, 71, { -1379, 344, 4769 } },
+    { 3, 22, { -1335, 366, 4815 } }, {  4, 23, { -1315, 370, 4450 } }, { 5, 40, { -1322, 333, 4591 } },
+    { 6, 25, { -1185, 329, 4616 } }, {  7, 21, { -1059, 380, 4487 } }, { 8, 14, { -1086, 421, 4206 } },
+    { 9, 21, { -1321, 346, 4098 } }, {  0,  0, { -1328, 385, 4354 } }, { 0,  0, { -1328, 385, 4354 } },
+    { 0,  0, { -1328, 385, 4354 } }, { -1,  0, { -1328, 385, 4354 } }
 };
 
 struct CutsceneSplinePoint sEndingFlyToWindowPos[] = {
-    { 0, 0, { -86, 876, 640 } },   { 1, 0, { -86, 876, 610 } },   { 2, 0, { -66, 945, 393 } },
-    { 3, 0, { -80, 976, 272 } },   { 4, 0, { -66, 1306, -36 } },  { 5, 0, { -70, 1869, -149 } },
+    { 0, 0, { -86,  876,  640 } }, { 1, 0, { -86,  876,  610 } }, { 2, 0, { -66,  945,  393 } },
+    { 3, 0, { -80,  976,  272 } }, { 4, 0, { -66, 1306,  -36 } }, { 5, 0, { -70, 1869, -149 } },
     { 6, 0, { -10, 2093, -146 } }, { 7, 0, { -10, 2530, -248 } }, { 8, 0, { -10, 2530, -263 } },
     { 9, 0, { -10, 2530, -273 } }
 };
 
 struct CutsceneSplinePoint sEndingFlyToWindowFocus[] = {
-    { 0, 50, { -33, 889, -7 } },    { 1, 35, { -33, 889, -7 } },    { 2, 31, { -17, 1070, -193 } },
-    { 3, 25, { -65, 1182, -272 } }, { 4, 20, { -64, 1559, -542 } }, { 5, 25, { -68, 2029, -677 } },
-    { 6, 25, { -9, 2204, -673 } },  { 7, 25, { -8, 2529, -772 } },  { 8, 0, { -8, 2529, -772 } },
-    { 9, 0, { -8, 2529, -772 } },   { -1, 0, { -8, 2529, -772 } }
+    { 0, 50, { -33,  889,   -7 } }, {  1, 35, { -33,  889,   -7 } }, { 2, 31, { -17, 1070, -193 } },
+    { 3, 25, { -65, 1182, -272 } }, {  4, 20, { -64, 1559, -542 } }, { 5, 25, { -68, 2029, -677 } },
+    { 6, 25, {  -9, 2204, -673 } }, {  7, 25, {  -8, 2529, -772 } }, { 8,  0, {  -8, 2529, -772 } },
+    { 9,  0, {  -8, 2529, -772 } }, { -1,  0, {  -8, 2529, -772 } }
 };
 
 struct CutsceneSplinePoint sEndingPeachDescentCamPos[] = {
-    { 0, 50, { 1, 120, -1150 } },    { 1, 50, { 1, 120, -1150 } },    { 2, 40, { 118, 121, -1199 } },
-    { 3, 40, { 147, 74, -1306 } },   { 4, 40, { 162, 95, -1416 } },   { 5, 40, { 25, 111, -1555 } },
-    { 6, 40, { -188, 154, -1439 } }, { 7, 40, { -203, 181, -1242 } }, { 8, 40, { 7, 191, -1057 } },
-    { 9, 40, { 262, 273, -1326 } },  { 0, 40, { -4, 272, -1627 } },   { 1, 35, { -331, 206, -1287 } },
-    { 2, 30, { -65, 219, -877 } },   { 3, 25, { 6, 216, -569 } },     { 4, 25, { -8, 157, 40 } },
-    { 5, 25, { -4, 106, 200 } },     { 6, 25, { -6, 72, 574 } },      { 7, 0, { -6, 72, 574 } },
-    { 8, 0, { -6, 72, 574 } },       { -1, 0, { -6, 72, 574 } }
+    { 0, 50, {    1, 120, -1150 } }, {  1, 50, {    1, 120, -1150 } }, { 2, 40, {  118, 121, -1199 } },
+    { 3, 40, {  147,  74, -1306 } }, {  4, 40, {  162,  95, -1416 } }, { 5, 40, {   25, 111, -1555 } },
+    { 6, 40, { -188, 154, -1439 } }, {  7, 40, { -203, 181, -1242 } }, { 8, 40, {    7, 191, -1057 } },
+    { 9, 40, {  262, 273, -1326 } }, {  0, 40, {   -4, 272, -1627 } }, { 1, 35, { -331, 206, -1287 } },
+    { 2, 30, {  -65, 219,  -877 } }, {  3, 25, {    6, 216,  -569 } }, { 4, 25, {   -8, 157,    40 } },
+    { 5, 25, {   -4, 106,   200 } }, {  6, 25, {   -6,  72,   574 } }, { 7,  0, {   -6,  72,   574 } },
+    { 8,  0, {   -6,  72,   574 } }, { -1,  0, {   -6,  72,   574 } }
 };
 
 struct CutsceneSplinePoint sEndingMarioToPeachPos[] = {
-    { 0, 0, { -130, 1111, -1815 } }, { 1, 0, { -131, 1052, -1820 } }, { 2, 0, { -271, 1008, -1651 } },
-    { 3, 0, { -439, 1043, -1398 } }, { 4, 0, { -433, 1040, -1120 } }, { 5, 0, { -417, 1040, -1076 } },
+    { 0, 0, { -130, 1111, -1815 } }, { 1, 0, { -131, 1052, -1820 } }, {  2, 0, { -271, 1008, -1651 } },
+    { 3, 0, { -439, 1043, -1398 } }, { 4, 0, { -433, 1040, -1120 } }, {  5, 0, { -417, 1040, -1076 } },
     { 6, 0, { -417, 1040, -1076 } }, { 7, 0, { -417, 1040, -1076 } }, { -1, 0, { -417, 1040, -1076 } }
 };
 
 struct CutsceneSplinePoint sEndingMarioToPeachFocus[] = {
-    { 0, 50, { -37, 1020, -1332 } }, { 1, 20, { -36, 1012, -1330 } }, { 2, 20, { -24, 1006, -1215 } },
-    { 3, 20, { 28, 1002, -1224 } },  { 4, 24, { 45, 1013, -1262 } },  { 5, 35, { 34, 1000, -1287 } },
-    { 6, 0, { 34, 1000, -1287 } },   { 7, 0, { 34, 1000, -1287 } },   { -1, 0, { 34, 1000, -1287 } }
+    { 0, 50, { -37, 1020, -1332 } }, { 1, 20, { -36, 1012, -1330 } }, {  2, 20, { -24, 1006, -1215 } },
+    { 3, 20, {  28, 1002, -1224 } }, { 4, 24, {  45, 1013, -1262 } }, {  5, 35, {  34, 1000, -1287 } },
+    { 6,  0, {  34, 1000, -1287 } }, { 7,  0, {  34, 1000, -1287 } }, { -1,  0, {  34, 1000, -1287 } }
 };
 
 struct CutsceneSplinePoint sEndingLookUpAtCastle[] = {
-    { 0, 50, { 200, 1066, -1414 } }, { 0, 50, { 200, 1066, -1414 } }, { 0, 30, { 198, 1078, -1412 } },
-    { 0, 33, { 15, 1231, -1474 } },  { 0, 39, { -94, 1381, -1368 } }, { 0, 0, { -92, 1374, -1379 } },
-    { 0, 0, { -92, 1374, -1379 } },  { -1, 0, { -92, 1374, -1379 } }
+    { 0, 50, { 200, 1066, -1414 } }, {  0, 50, { 200, 1066, -1414 } }, { 0, 30, { 198, 1078, -1412 } },
+    { 0, 33, {  15, 1231, -1474 } }, {  0, 39, { -94, 1381, -1368 } }, { 0,  0, { -92, 1374, -1379 } },
+    { 0,  0, { -92, 1374, -1379 } }, { -1,  0, { -92, 1374, -1379 } }
 };
 
 struct CutsceneSplinePoint sEndingLookAtSkyFocus[] = {
-    { 0, 50, { 484, 1368, -868 } }, { 0, 72, { 479, 1372, -872 } }, { 0, 50, { 351, 1817, -918 } },
-    { 0, 50, { 351, 1922, -598 } }, { 0, 0, { 636, 2027, -415 } },  { 0, 0, { 636, 2027, -415 } },
-    { -1, 0, { 636, 2027, -415 } }
+    {  0, 50, { 484, 1368, -868 } }, { 0, 72, { 479, 1372, -872 } }, { 0, 50, { 351, 1817, -918 } },
+    {  0, 50, { 351, 1922, -598 } }, { 0,  0, { 636, 2027, -415 } }, { 0,  0, { 636, 2027, -415 } },
+    { -1,  0, { 636, 2027, -415 } }
 };
 
 /**
@@ -7270,16 +7270,16 @@ void cutscene_dance_default_rotate(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     sYawSpeed = 0;
     set_fov_function(CAM_FOV_DEFAULT);
-    cutscene_event(cutscene_dance_default_focus_mario, c, 0, 20);
-    cutscene_event(cutscene_dance_move_to_mario, c, 0, 39);
+    cutscene_event(cutscene_dance_default_focus_mario, c,  0, 20);
+    cutscene_event(cutscene_dance_move_to_mario,       c,  0, 39);
     // Shake the camera on the 4th beat of the music, when Mario gives the peace sign.
-    cutscene_event(cutscene_dance_shake_fov, c, 40, 40);
+    cutscene_event(cutscene_dance_shake_fov,           c, 40, 40);
 
     if (c->cutscene != CUTSCENE_DANCE_DEFAULT) { // CUTSCENE_DANCE_ROTATE
         cutscene_event(cutscene_dance_rotate_focus_mario, c, 75, 102);
-        cutscene_event(cutscene_dance_rotate, c, 50, -1);
+        cutscene_event(cutscene_dance_rotate,             c, 50,  -1);
         // These two functions move the camera away and then towards Mario.
-        cutscene_event(cutscene_dance_rotate_move_back, c, 50, 80);
+        cutscene_event(cutscene_dance_rotate_move_back,          c, 50, 80);
         cutscene_event(cutscene_dance_rotate_move_towards_mario, c, 70, 90);
     } else {
         // secret star, 100 coin star, or bowser red coin star.
@@ -7400,20 +7400,20 @@ void cutscene_dance_closeup(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 
     if (sMarioCamState->action == ACT_STAR_DANCE_WATER) {
-        cutscene_event(cutscene_dance_closeup_start, c, 0, 0);
-        cutscene_event(cutscene_dance_closeup_focus_mario, c, 0, -1);
-        cutscene_event(cutscene_dance_closeup_fly_above, c, 0, 62);
-        cutscene_event(cutscene_dance_closeup_fly_closer, c, 63, -1);
-        cutscene_event(cutscene_dance_closeup_zoom, c, 63, 63);
-        cutscene_event(cutscene_dance_closeup_shake_fov, c, 70, 70);
+        cutscene_event(cutscene_dance_closeup_start,       c,  0,  0);
+        cutscene_event(cutscene_dance_closeup_focus_mario, c,  0, -1);
+        cutscene_event(cutscene_dance_closeup_fly_above,   c,  0, 62);
+        cutscene_event(cutscene_dance_closeup_fly_closer,  c, 63, -1);
+        cutscene_event(cutscene_dance_closeup_zoom,        c, 63, 63);
+        cutscene_event(cutscene_dance_closeup_shake_fov,   c, 70, 70);
     } else {
-        cutscene_event(cutscene_dance_closeup_start, c, 0, 0);
-        cutscene_event(cutscene_dance_closeup_focus_mario, c, 0, -1);
+        cutscene_event(cutscene_dance_closeup_start,       c,  0,  0);
+        cutscene_event(cutscene_dance_closeup_focus_mario, c,  0, -1);
         // Almost twice as fast as under water
-        cutscene_event(cutscene_dance_closeup_fly_above, c, 0, 32);
-        cutscene_event(cutscene_dance_closeup_fly_closer, c, 33, -1);
-        cutscene_event(cutscene_dance_closeup_zoom, c, 33, 33);
-        cutscene_event(cutscene_dance_closeup_shake_fov, c, 40, 40);
+        cutscene_event(cutscene_dance_closeup_fly_above,   c,  0, 32);
+        cutscene_event(cutscene_dance_closeup_fly_closer,  c, 33, -1);
+        cutscene_event(cutscene_dance_closeup_zoom,        c, 33, 33);
+        cutscene_event(cutscene_dance_closeup_shake_fov,   c, 40, 40);
     }
     set_handheld_shake(HAND_CAM_SHAKE_CUTSCENE);
 }
@@ -7501,12 +7501,12 @@ void cutscene_dance_fly_away_shake_fov(UNUSED struct Camera *c) {
  */
 void cutscene_dance_fly_away(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-    cutscene_event(cutscene_dance_fly_away_start, c, 0, 0);
-    cutscene_event(cutscene_dance_fly_away_focus_mario, c, 0, 30);
-    cutscene_event(cutscene_dance_fly_away_approach_mario, c, 0, 30);
-    cutscene_event(cutscene_dance_fly_rotate_around_mario, c, 55, 124);
+    cutscene_event(cutscene_dance_fly_away_start,               c,  0,   0);
+    cutscene_event(cutscene_dance_fly_away_focus_mario,         c,  0,  30);
+    cutscene_event(cutscene_dance_fly_away_approach_mario,      c,  0,  30);
+    cutscene_event(cutscene_dance_fly_rotate_around_mario,      c, 55, 124);
     cutscene_event(cutscene_dance_fly_away_rotate_while_flying, c, 55, 124);
-    cutscene_event(cutscene_dance_fly_away_shake_fov, c, 40, 40);
+    cutscene_event(cutscene_dance_fly_away_shake_fov,           c, 40,  40);
     set_fov_function(CAM_FOV_DEFAULT);
     set_handheld_shake(HAND_CAM_SHAKE_STAR_DANCE);
 }
@@ -7524,8 +7524,8 @@ void cutscene_key_dance_jump_cvar(struct Camera *c) {
  * Jump to a closeup view of Mario and the key.
  */
 void cutscene_key_dance_jump_closeup(UNUSED struct Camera *c) {
-    vec3f_set(sCutsceneVars[8].point, 38.0f, 171.0f, -248.0f);
-    vec3f_set(sCutsceneVars[7].point, -57.0f, 51.0f, 187.0f);
+    vec3f_set(sCutsceneVars[8].point,  38.0f, 171.0f, -248.0f);
+    vec3f_set(sCutsceneVars[7].point, -57.0f,  51.0f,  187.0f);
 }
 
 /**
@@ -7533,7 +7533,7 @@ void cutscene_key_dance_jump_closeup(UNUSED struct Camera *c) {
  */
 void cutscene_key_dance_jump_lower_left(UNUSED struct Camera *c) {
     vec3f_set(sCutsceneVars[8].point, -178.0f, 62.0f, -132.0f);
-    vec3f_set(sCutsceneVars[7].point, 299.0f, 91.0f, 58.0f);
+    vec3f_set(sCutsceneVars[7].point,  299.0f, 91.0f,   58.0f);
 }
 
 /**
@@ -7542,7 +7542,7 @@ void cutscene_key_dance_jump_lower_left(UNUSED struct Camera *c) {
 void cutscene_key_dance_jump_above(UNUSED struct Camera *c) {
     gLakituState.keyDanceRoll = 0x2800;
     vec3f_set(sCutsceneVars[8].point, 89.0f, 373.0f, -304.0f);
-    vec3f_set(sCutsceneVars[7].point, 0.0f, 127.0f, 0.0f);
+    vec3f_set(sCutsceneVars[7].point,  0.0f, 127.0f,    0.0f);
 }
 
 /**
@@ -7571,15 +7571,15 @@ void cutscene_key_dance_focus_mario(struct Camera *c) {
  * cuts.
  */
 void cutscene_key_dance(struct Camera *c) {
-    cutscene_event(cutscene_dance_move_to_mario, c, 0, 10);
-    cutscene_event(cutscene_key_dance_focus_mario, c, 0, 10);
-    cutscene_event(cutscene_key_dance_jump_closeup, c, 0, 0);
+    cutscene_event(cutscene_dance_move_to_mario,       c,  0, 10);
+    cutscene_event(cutscene_key_dance_focus_mario,     c,  0, 10);
+    cutscene_event(cutscene_key_dance_jump_closeup,    c,  0,  0);
     cutscene_event(cutscene_key_dance_jump_lower_left, c, 20, 20);
-    cutscene_event(cutscene_key_dance_jump_above, c, 35, 35);
-    cutscene_event(cutscene_key_dance_jump_last, c, 52, 52);
-    cutscene_event(cutscene_key_dance_jump_cvar, c, 11, -1);
-    cutscene_event(cutscene_key_dance_shake_fov, c, 54, 54);
-    cutscene_event(cutscene_key_dance_handheld_shake, c, 52, -1);
+    cutscene_event(cutscene_key_dance_jump_above,      c, 35, 35);
+    cutscene_event(cutscene_key_dance_jump_last,       c, 52, 52);
+    cutscene_event(cutscene_key_dance_jump_cvar,       c, 11, -1);
+    cutscene_event(cutscene_key_dance_shake_fov,       c, 54, 54);
+    cutscene_event(cutscene_key_dance_handheld_shake,  c, 52, -1);
 }
 
 void cutscene_bowser_area_shake_fov(UNUSED struct Camera *c) {
@@ -7632,7 +7632,7 @@ void cutscene_bowser_arena_set_focus(struct Camera *c) {
 void cutscene_bowser_arena_adjust_offsets(UNUSED struct Camera *c) {
     approach_s16_asymptotic_bool(&sCutsceneVars[3].angle[0], 0x6C8, 30);
     approach_f32_asymptotic_bool(&sCutsceneVars[0].point[2], -200.0f, 0.02f);
-    approach_f32_asymptotic_bool(&sCutsceneVars[3].point[2], 550.0f, 0.02f);
+    approach_f32_asymptotic_bool(&sCutsceneVars[3].point[2],  550.0f, 0.02f);
 }
 
 /**
@@ -7727,19 +7727,19 @@ void cutscene_bowser_arena_end(struct Camera *c) {
  */
 void cutscene_bowser_arena(struct Camera *c) {
     if (gSecondCameraFocus != NULL) {
-        cutscene_event(cutscene_bowser_arena_mario_dialog, c, 0, -1);
-        cutscene_event(cutscene_bowser_arena_start, c, 0, 5);
-        cutscene_event(cutscene_bowser_area_start_bowser_walking, c, 40, 40);
-        cutscene_event(cutscene_bowser_area_shake_fov, c, 145, 145);
-        cutscene_event(cutscene_bowser_arena_set_pos, c, 40, -1);
-        cutscene_event(cutscene_bowser_arena_pan_left, c, 40, 99);
-        cutscene_event(cutscene_bowser_arena_adjust_offsets, c, 100, -1);
-        cutscene_event(cutscene_bowser_arena_focus_sine, c, 40, 140);
-        cutscene_event(cutscene_bowser_arena_set_focus, c, 40, -1);
-        cutscene_event(cutscene_shake_explosion, c, 60, 60);
-        cutscene_event(cutscene_shake_explosion, c, 82, 82);
-        cutscene_event(cutscene_shake_explosion, c, 109, 109);
-        cutscene_event(cutscene_shake_explosion, c, 127, 127);
+        cutscene_event(cutscene_bowser_arena_mario_dialog,        c,   0,  -1);
+        cutscene_event(cutscene_bowser_arena_start,               c,   0,   5);
+        cutscene_event(cutscene_bowser_area_start_bowser_walking, c,  40,  40);
+        cutscene_event(cutscene_bowser_area_shake_fov,            c, 145, 145);
+        cutscene_event(cutscene_bowser_arena_set_pos,             c,  40,  -1);
+        cutscene_event(cutscene_bowser_arena_pan_left,            c,  40,  99);
+        cutscene_event(cutscene_bowser_arena_adjust_offsets,      c, 100,  -1);
+        cutscene_event(cutscene_bowser_arena_focus_sine,          c,  40, 140);
+        cutscene_event(cutscene_bowser_arena_set_focus,           c,  40,  -1);
+        cutscene_event(cutscene_shake_explosion,                  c,  60,  60);
+        cutscene_event(cutscene_shake_explosion,                  c,  82,  82);
+        cutscene_event(cutscene_shake_explosion,                  c, 109, 109);
+        cutscene_event(cutscene_shake_explosion,                  c, 127, 127);
     }
 }
 
@@ -7924,12 +7924,12 @@ void cutscene_red_coin_star_set_fov(UNUSED struct Camera *c) {
 
 void cutscene_red_coin_star(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-    cutscene_event(cutscene_red_coin_star_start, c, 0, 0);
-    cutscene_event(cutscene_red_coin_star_warp, c, 30, 30);
-    cutscene_event(cutscene_red_coin_star_focus_xz, c, 0, -1);
-    cutscene_event(cutscene_red_coin_star_focus_y, c, 0, 29);
+    cutscene_event(cutscene_red_coin_star_start,           c,  0,  0);
+    cutscene_event(cutscene_red_coin_star_warp,            c, 30, 30);
+    cutscene_event(cutscene_red_coin_star_focus_xz,        c,  0, -1);
+    cutscene_event(cutscene_red_coin_star_focus_y,         c,  0, 29);
     cutscene_event(cutscene_red_coin_star_look_up_at_star, c, 30, -1);
-    cutscene_event(cutscene_red_coin_star_set_fov, c, 30, -1);
+    cutscene_event(cutscene_red_coin_star_set_fov,         c, 30, -1);
 
     if (gObjCutsceneDone) {
         // Set the timer to CUTSCENE_LOOP, which start the next shot.
@@ -8069,9 +8069,9 @@ void cutscene_prepare_cannon_fly_back(struct Camera *c) {
  */
 void cutscene_prepare_cannon(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-    cutscene_event(cutscene_prepare_cannon_start, c, 0, 0);
-    cutscene_event(cutscene_prepare_cannon_fly_to_cannon, c, 0, 140);
-    cutscene_event(cutscene_prepare_cannon_fly_back, c, 141, -1);
+    cutscene_event(cutscene_prepare_cannon_start,         c,   0,   0);
+    cutscene_event(cutscene_prepare_cannon_fly_to_cannon, c,   0, 140);
+    cutscene_event(cutscene_prepare_cannon_fly_back,      c, 141,  -1);
 }
 
 /**
@@ -8143,7 +8143,7 @@ void cutscene_death_stomach_goto_mario(struct Camera *c) {
  * Cutscene that plays when Mario dies on his stomach.
  */
 void cutscene_death_stomach(struct Camera *c) {
-    cutscene_event(cutscene_death_stomach_start, c, 0, 0);
+    cutscene_event(cutscene_death_stomach_start,      c, 0,  0);
     cutscene_event(cutscene_death_stomach_goto_mario, c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     set_handheld_shake(HAND_CAM_SHAKE_CUTSCENE);
@@ -8164,7 +8164,7 @@ void cutscene_bbh_death_goto_mario(struct Camera *c) {
  * Cutscene that plays when Mario dies in BBH.
  */
 void cutscene_bbh_death(struct Camera *c) {
-    cutscene_event(cutscene_bbh_death_start, c, 0, 0);
+    cutscene_event(cutscene_bbh_death_start,      c, 0,  0);
     cutscene_event(cutscene_bbh_death_goto_mario, c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     set_handheld_shake(HAND_CAM_SHAKE_CUTSCENE);
@@ -8245,10 +8245,10 @@ void cutscene_suffocation_rotate(struct Camera *c) {
  * Cutscene that plays when Mario dies from suffocation (ie due to HMC gas).
  */
 void cutscene_suffocation(struct Camera *c) {
-    cutscene_event(cutscene_death_stomach_start, c, 0, 0);
-    cutscene_event(cutscene_suffocation_rotate, c, 0, -1);
-    cutscene_event(cutscene_suffocation_stay_above_gas, c, 0, -1);
-    cutscene_event(cutscene_suffocation_fly_away, c, 50, -1);
+    cutscene_event(cutscene_death_stomach_start,        c,  0,  0);
+    cutscene_event(cutscene_suffocation_rotate,         c,  0, -1);
+    cutscene_event(cutscene_suffocation_stay_above_gas, c,  0, -1);
+    cutscene_event(cutscene_suffocation_fly_away,       c, 50, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     set_handheld_shake(HAND_CAM_SHAKE_HIGH);
 }
@@ -8271,8 +8271,8 @@ void cutscene_enter_pool_loop(struct Camera *c) {
 }
 
 void cutscene_enter_pool(struct Camera *c) {
-    cutscene_event(cutscene_enter_pool_start, c, 0, 0);
-    cutscene_event(cutscene_enter_pool_loop, c, 0, -1);
+    cutscene_event(cutscene_enter_pool_start, c, 0,  0);
+    cutscene_event(cutscene_enter_pool_loop,  c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 }
 
@@ -8685,12 +8685,12 @@ void cutscene_exit_succ_shake_landing(UNUSED struct Camera *c) {
  * Cutscene that plays when Mario beats bowser and exits the level.
  */
 void cutscene_exit_bowser_succ(struct Camera *c) {
-    cutscene_event(cutscene_exit_succ_start, c, 0, 0);
-    cutscene_event(cutscene_non_painting_set_cam_pos, c, 0, -1);
-    cutscene_event(cutscene_exit_bowser_succ_focus_left, c, 18, -1);
-    cutscene_event(cutscene_non_painting_set_cam_focus, c, 0, -1);
-    cutscene_event(cutscene_exit_bowser_key_toss_shake, c, 125, 125);
-    cutscene_event(cutscene_exit_succ_shake_landing, c, 41, 41);
+    cutscene_event(cutscene_exit_succ_start,             c,   0,   0);
+    cutscene_event(cutscene_non_painting_set_cam_pos,    c,   0,  -1);
+    cutscene_event(cutscene_exit_bowser_succ_focus_left, c,  18,  -1);
+    cutscene_event(cutscene_non_painting_set_cam_focus,  c,   0,  -1);
+    cutscene_event(cutscene_exit_bowser_key_toss_shake,  c, 125, 125);
+    cutscene_event(cutscene_exit_succ_shake_landing,     c,  41,  41);
 }
 
 /**
@@ -8722,12 +8722,12 @@ void cutscene_exit_non_painting_succ_override_cvar(UNUSED struct Camera *c) {
  * Cutscene that plays when Mario collects a star and leaves a non-painting course, like HMC or BBH.
  */
 void cutscene_exit_non_painting_succ(struct Camera *c) {
-    cutscene_event(cutscene_exit_succ_start, c, 0, 0);
-    cutscene_event(cutscene_exit_non_painting_succ_override_cvar, c, 0, 0);
-    cutscene_event(cutscene_non_painting_set_cam_pos, c, 0, -1);
-    cutscene_event(cutscene_exit_bowser_succ_focus_left, c, 18, -1);
-    cutscene_event(cutscene_non_painting_set_cam_focus, c, 0, -1);
-    cutscene_event(cutscene_exit_succ_shake_landing, c, 41, 41);
+    cutscene_event(cutscene_exit_succ_start,                      c,  0,  0);
+    cutscene_event(cutscene_exit_non_painting_succ_override_cvar, c,  0,  0);
+    cutscene_event(cutscene_non_painting_set_cam_pos,             c,  0, -1);
+    cutscene_event(cutscene_exit_bowser_succ_focus_left,          c, 18, -1);
+    cutscene_event(cutscene_non_painting_set_cam_focus,           c,  0, -1);
+    cutscene_event(cutscene_exit_succ_shake_landing,              c, 41, 41);
     update_camera_yaw(c);
 }
 
@@ -8753,8 +8753,8 @@ void cutscene_non_painting_death_start(UNUSED struct Camera *c) {
  * hub.
  */
 void cutscene_exit_bowser_death(struct Camera *c) {
-    cutscene_event(cutscene_non_painting_death_start, c, 0, 0);
-    cutscene_event(cutscene_non_painting_set_cam_pos, c, 0, -1);
+    cutscene_event(cutscene_non_painting_death_start,   c, 0,  0);
+    cutscene_event(cutscene_non_painting_set_cam_pos,   c, 0, -1);
     cutscene_event(cutscene_non_painting_set_cam_focus, c, 0, -1);
 }
 
@@ -8780,10 +8780,10 @@ void cutscene_non_painting_death_override_offset(UNUSED struct Camera *c) {
  * Cutscene played when Mario dies in a non-painting course, like HMC or BBH.
  */
 void cutscene_non_painting_death(struct Camera *c) {
-    cutscene_event(cutscene_non_painting_death_start, c, 0, 0);
-    cutscene_event(cutscene_non_painting_death_override_offset, c, 0, 0);
-    cutscene_event(cutscene_non_painting_set_cam_pos, c, 0, -1);
-    cutscene_event(cutscene_non_painting_set_cam_focus, c, 0, -1);
+    cutscene_event(cutscene_non_painting_death_start,           c, 0,  0);
+    cutscene_event(cutscene_non_painting_death_override_offset, c, 0,  0);
+    cutscene_event(cutscene_non_painting_set_cam_pos,           c, 0, -1);
+    cutscene_event(cutscene_non_painting_set_cam_focus,         c, 0, -1);
     sStatusFlags |= CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
 }
 
@@ -8880,12 +8880,12 @@ void cutscene_cap_switch_press(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     sStatusFlags |= CAM_FLAG_UNUSED_CUTSCENE_ACTIVE;
 
-    cutscene_event(cutscene_cap_switch_press_start, c, 0, 0);
-    cutscene_event(cutscene_cap_switch_press_approach_mario, c, 0, 30);
-    cutscene_event(cutscene_cap_switch_press_pan_left, c, 0, -1);
+    cutscene_event(cutscene_cap_switch_press_start,               c,  0,  0);
+    cutscene_event(cutscene_cap_switch_press_approach_mario,      c,  0, 30);
+    cutscene_event(cutscene_cap_switch_press_pan_left,            c,  0, -1);
     cutscene_event(cutscene_cap_switch_press_rotate_around_mario, c, 30, -1);
-    cutscene_event(cutscene_cap_switch_press_lower_cam, c, 10, 70);
-    cutscene_event(cutscene_cap_switch_press_create_dialog, c, 10, 10);
+    cutscene_event(cutscene_cap_switch_press_lower_cam,           c, 10, 70);
+    cutscene_event(cutscene_cap_switch_press_create_dialog,       c, 10, 10);
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
 
     if (gDialogResponse != DIALOG_RESPONSE_NONE) {
@@ -8958,12 +8958,12 @@ void cutscene_unlock_key_door_fov_shake(UNUSED struct Camera *c) {
  * Cutscene that plays when Mario unlocks a key door.
  */
 void cutscene_unlock_key_door(UNUSED struct Camera *c) {
-    cutscene_event(cutscene_unlock_key_door_start, c, 0, 0);
-    cutscene_event(cutscene_unlock_key_door_approach_mario, c, 0, 123);
-    cutscene_event(cutscene_unlock_key_door_fly_back, c, 124, -1);
-    cutscene_event(cutscene_unlock_key_door_fov_shake, c, 79, 79);
-    cutscene_event(cutscene_unlock_key_door_focus_lock, c, 70, 110);
-    cutscene_event(cutscene_unlock_key_door_stub, c, 112, 112);
+    cutscene_event(cutscene_unlock_key_door_start,          c,   0,   0);
+    cutscene_event(cutscene_unlock_key_door_approach_mario, c,   0, 123);
+    cutscene_event(cutscene_unlock_key_door_fly_back,       c, 124,  -1);
+    cutscene_event(cutscene_unlock_key_door_fov_shake,      c,  79,  79);
+    cutscene_event(cutscene_unlock_key_door_focus_lock,     c,  70, 110);
+    cutscene_event(cutscene_unlock_key_door_stub,           c, 112, 112);
 }
 
 /**
@@ -9083,13 +9083,13 @@ void play_sound_intro_turn_on_hud(UNUSED struct Camera *c) {
  */
 void cutscene_intro_peach_fly_to_pipe(struct Camera *c) {
 #if defined(VERSION_US) || defined(VERSION_SH)
-    cutscene_event(play_sound_intro_turn_on_hud, c, 818, 818);
+    cutscene_event(play_sound_intro_turn_on_hud,               c, 818, 818);
 #elif defined(VERSION_EU)
-    cutscene_event(play_sound_intro_turn_on_hud, c, 673, 673);
+    cutscene_event(play_sound_intro_turn_on_hud,               c, 673, 673);
 #endif
     cutscene_spawn_obj(6, 1);
-    cutscene_event(cutscene_intro_peach_start_flying_music, c, 0, 0);
-    cutscene_event(cutscene_intro_peach_start_to_pipe_spline, c, 0, -1);
+    cutscene_event(cutscene_intro_peach_start_flying_music,    c,   0,   0);
+    cutscene_event(cutscene_intro_peach_start_to_pipe_spline,  c,   0,  -1);
 #ifdef VERSION_EU
     cutscene_event(cutscene_intro_peach_clear_cutscene_status, c, 572, 572);
 #else
@@ -9104,10 +9104,10 @@ void cutscene_intro_peach_fly_to_pipe(struct Camera *c) {
  */
 void cutscene_intro_peach_mario_appears(struct Camera *c) {
     sMarioCamState->cameraEvent = 0;
-    cutscene_event(cutscene_intro_peach_reset_spline, c, 0, 0);
-    cutscene_event(cutscene_intro_peach_follow_pipe_spline, c, 0, -1);
-    cutscene_event(cutscene_intro_peach_handheld_shake_off, c, 70, 70);
-    cutscene_event(intro_pipe_exit_text, c, 250, 250);
+    cutscene_event(cutscene_intro_peach_reset_spline,       c,   0,   0);
+    cutscene_event(cutscene_intro_peach_follow_pipe_spline, c,   0,  -1);
+    cutscene_event(cutscene_intro_peach_handheld_shake_off, c,  70,  70);
+    cutscene_event(intro_pipe_exit_text,                    c, 250, 250);
 
     approach_f32_asymptotic_bool(&sCutsceneVars[1].point[1], 80.0f + sMarioGeometry.currFloorHeight +
                                  (sMarioCamState->pos[1] - sMarioGeometry.currFloorHeight) * 1.1f, 0.4f);
@@ -9132,14 +9132,14 @@ void cutscene_intro_peach_reset_fov(UNUSED struct Camera *c) {
  */
 void cutscene_intro_peach_letter(struct Camera *c) {
     cutscene_spawn_obj(5, 0);
-    cutscene_event(cutscene_intro_peach_zoom_fov, c, 0, 0);
-    cutscene_event(cutscene_intro_peach_start_letter_music, c, 65, 65);
+    cutscene_event(cutscene_intro_peach_zoom_fov,             c,  0,  0);
+    cutscene_event(cutscene_intro_peach_start_letter_music,   c, 65, 65);
 #ifdef VERSION_EU
-    cutscene_event(cutscene_intro_peach_eu_lower_volume, c, 68, 68);
+    cutscene_event(cutscene_intro_peach_eu_lower_volume,      c, 68, 68);
 #endif
-    cutscene_event(cutscene_intro_peach_start_to_pipe_spline, c, 0, 0);
-    cutscene_event(peach_letter_text, c, 65, 65);
-    cutscene_event(play_sound_peach_reading_letter, c, 83, 83);
+    cutscene_event(cutscene_intro_peach_start_to_pipe_spline, c,  0,  0);
+    cutscene_event(peach_letter_text,                         c, 65, 65);
+    cutscene_event(play_sound_peach_reading_letter,           c, 83, 83);
 
     if ((gCutsceneTimer > 120) && (get_dialog_id() == DIALOG_NONE)) {
         // Start the next scene
@@ -9158,45 +9158,45 @@ void cutscene_end_waving_start(UNUSED struct Camera *c) {
 
 // 3rd part of data
 struct CutsceneSplinePoint gIntroLakituStartToPipeFocus[] = {
-    { 0, 32, { 58, -250, 346 } },    { 1, 50, { -159, -382, 224 } }, { 2, 37, { 0, -277, 237 } },
-    { 3, 15, { 1, -44, 245 } },      { 4, 35, { 0, -89, 228 } },     { 5, 15, { 28, 3, 259 } },
-    { 6, 25, { -38, -201, 371 } },   { 7, 20, { -642, 118, 652 } },  { 8, 25, { 103, -90, 861 } },
-    { 9, 25, { 294, 145, 579 } },    { 10, 30, { 220, -42, 500 } },  { 11, 20, { 10, -134, 200 } },
-    { 12, 20, { -143, -145, 351 } }, { 13, 14, { -256, -65, 528 } }, { 14, 20, { -251, -52, 459 } },
-    { 15, 25, { -382, 520, 395 } },  { 16, 25, { -341, 240, 653 } }, { 17, 5, { -262, 700, 143 } },
-    { 18, 15, { -760, 32, 27 } },    { 19, 20, { -756, -6, -26 } },  { 20, 20, { -613, 5, 424 } },
-    { 21, 20, { -22, -100, 312 } },  { 22, 25, { 212, 80, 61 } },    { 23, 20, { 230, -28, 230 } },
-    { 24, 35, { -83, -51, 303 } },   { 25, 17, { 126, 90, 640 } },   { 26, 9, { 158, 95, 763 } },
-    { 27, 8, { 113, -25, 1033 } },   { 28, 20, { 57, -53, 1291 } },  { 29, 15, { 73, -34, 1350 } },
-    { 30, 7, { 0, 96, 1400 } },      { 31, 8, { -59, 269, 1450 } },  { 32, 15, { 57, 1705, 1500 } },
-    { 0, 15, { -227, 511, 1550 } },  { -1, 15, { -227, 511, 1600 } }
+    {  0, 32, {   58, -250,  346 } }, {  1, 50, { -159, -382,  224 } }, {  2, 37, {    0, -277,  237 } },
+    {  3, 15, {    1,  -44,  245 } }, {  4, 35, {    0,  -89,  228 } }, {  5, 15, {   28,    3,  259 } },
+    {  6, 25, {  -38, -201,  371 } }, {  7, 20, { -642,  118,  652 } }, {  8, 25, {  103,  -90,  861 } },
+    {  9, 25, {  294,  145,  579 } }, { 10, 30, {  220,  -42,  500 } }, { 11, 20, {   10, -134,  200 } },
+    { 12, 20, { -143, -145,  351 } }, { 13, 14, { -256,  -65,  528 } }, { 14, 20, { -251,  -52,  459 } },
+    { 15, 25, { -382,  520,  395 } }, { 16, 25, { -341,  240,  653 } }, { 17,  5, { -262,  700,  143 } },
+    { 18, 15, { -760,   32,   27 } }, { 19, 20, { -756,   -6,  -26 } }, { 20, 20, { -613,    5,  424 } },
+    { 21, 20, {  -22, -100,  312 } }, { 22, 25, {  212,   80,   61 } }, { 23, 20, {  230,  -28,  230 } },
+    { 24, 35, {  -83,  -51,  303 } }, { 25, 17, {  126,   90,  640 } }, { 26,  9, {  158,   95,  763 } },
+    { 27,  8, {  113,  -25, 1033 } }, { 28, 20, {   57,  -53, 1291 } }, { 29, 15, {   73,  -34, 1350 } },
+    { 30,  7, {    0,   96, 1400 } }, { 31,  8, {  -59,  269, 1450 } }, { 32, 15, {   57, 1705, 1500 } },
+    {  0, 15, { -227,  511, 1550 } }, { -1, 15, { -227,  511, 1600 } }
 };
 
 struct CutsceneSplinePoint gIntroLakituStartToPipeOffsetFromCamera[] = {
-    { 0, 0, { -46, 87, -15 } },   { 1, 0, { -38, 91, -11 } },  { 2, 0, { -31, 93, -13 } },
-    { 3, 0, { -50, 84, -16 } },   { 4, 0, { -52, 83, -17 } },  { 5, 0, { -10, 99, 3 } },
-    { 6, 0, { -54, 83, -10 } },   { 7, 0, { -31, 85, -40 } },  { 8, 0, { -34, 91, 19 } },
-    { 9, 0, { -9, 95, 28 } },     { 10, 0, { 17, 72, 66 } },   { 11, 0, { 88, -7, 45 } },
-    { 12, 0, { 96, -6, -26 } },   { 13, 0, { 56, -1, -82 } },  { 14, 0, { 40, 65, -63 } },
-    { 15, 0, { -26, -3, -96 } },  { 16, 0, { 92, 82, 19 } },   { 17, 0, { 92, 32, 19 } },
-    { 18, 0, { 92, 32, 19 } },    { 19, 0, { 92, 102, 19 } },  { 20, 0, { -69, 59, -70 } },
-    { 21, 0, { -77, 109, -61 } }, { 22, 0, { -87, 59, -46 } }, { 23, 0, { -99, -3, 11 } },
-    { 24, 0, { -99, -11, 5 } },   { 25, 0, { -97, -6, 19 } },  { 26, 0, { -97, 22, -7 } },
-    { 27, 0, { -98, -11, -13 } }, { 28, 0, { -97, -11, 19 } }, { 29, 0, { -91, -11, 38 } },
-    { 30, 0, { -76, -11, 63 } },  { 31, 0, { -13, 33, 93 } },  { 32, 0, { 51, -11, 84 } },
-    { 33, 0, { 51, -11, 84 } },   { -1, 0, { 51, -11, 84 } }
+    {  0, 0, { -46,  87, -15 } }, {  1, 0, { -38,  91, -11 } }, {  2, 0, { -31,  93, -13 } },
+    {  3, 0, { -50,  84, -16 } }, {  4, 0, { -52,  83, -17 } }, {  5, 0, { -10,  99,   3 } },
+    {  6, 0, { -54,  83, -10 } }, {  7, 0, { -31,  85, -40 } }, {  8, 0, { -34,  91,  19 } },
+    {  9, 0, {  -9,  95,  28 } }, { 10, 0, {  17,  72,  66 } }, { 11, 0, {  88,  -7,  45 } },
+    { 12, 0, {  96,  -6, -26 } }, { 13, 0, {  56,  -1, -82 } }, { 14, 0, {  40,  65, -63 } },
+    { 15, 0, { -26,  -3, -96 } }, { 16, 0, {  92,  82,  19 } }, { 17, 0, {  92,  32,  19 } },
+    { 18, 0, {  92,  32,  19 } }, { 19, 0, {  92, 102,  19 } }, { 20, 0, { -69,  59, -70 } },
+    { 21, 0, { -77, 109, -61 } }, { 22, 0, { -87,  59, -46 } }, { 23, 0, { -99,  -3,  11 } },
+    { 24, 0, { -99, -11,   5 } }, { 25, 0, { -97,  -6,  19 } }, { 26, 0, { -97,  22,  -7 } },
+    { 27, 0, { -98, -11, -13 } }, { 28, 0, { -97, -11,  19 } }, { 29, 0, { -91, -11,  38 } },
+    { 30, 0, { -76, -11,  63 } }, { 31, 0, { -13,  33,  93 } }, { 32, 0, {  51, -11,  84 } },
+    { 33, 0, {  51, -11,  84 } }, { -1, 0, {  51, -11,  84 } }
 };
 
 struct CutsceneSplinePoint gEndWavingPos[] = {
-    { 0, 0, { -5, 975, -917 } },    { 0, 0, { -5, 975, -917 } },    { 0, 0, { -5, 975, -917 } },
-    { 0, 0, { -76, 1067, 742 } },   { 0, 0, { -105, 1576, 3240 } }, { 0, 0, { -177, 1709, 5586 } },
+    { 0, 0, {   -5,  975, -917 } }, { 0, 0, {   -5,  975, -917 } }, { 0, 0, {   -5,  975, -917 } },
+    { 0, 0, {  -76, 1067,  742 } }, { 0, 0, { -105, 1576, 3240 } }, { 0, 0, { -177, 1709, 5586 } },
     { 0, 0, { -177, 1709, 5586 } }, { 0, 0, { -177, 1709, 5586 } }, { 0, 0, { -177, 1709, 5586 } }
 };
 
 struct CutsceneSplinePoint gEndWavingFocus[] = {
-    { 0, 50, { 18, 1013, -1415 } }, { 0, 100, { 17, 1037, -1412 } }, { 0, 100, { 16, 1061, -1408 } },
-    { 0, 100, { -54, 1053, 243 } }, { 0, 100, { -84, 1575, 2740 } }, { 0, 50, { -156, 1718, 5086 } },
-    { 0, 0, { -156, 1718, 5086 } }, { 0, 0, { -156, 1718, 5086 } },  { 0, 0, { -156, 1718, 5086 } }
+    { 0,  50, {   18, 1013, -1415 } }, { 0, 100, {   17, 1037, -1412 } }, { 0, 100, {   16, 1061, -1408 } },
+    { 0, 100, {  -54, 1053,   243 } }, { 0, 100, {  -84, 1575,  2740 } }, { 0,  50, { -156, 1718,  5086 } },
+    { 0,   0, { -156, 1718,  5086 } }, { 0,   0, { -156, 1718,  5086 } }, { 0,   0, { -156, 1718,  5086 } }
 };
 
 void cutscene_end_waving(struct Camera *c) {
@@ -9432,11 +9432,11 @@ void cutscene_sliding_doors_follow_mario(struct Camera *c) {
  */
 void cutscene_sliding_doors_open(struct Camera *c) {
     reset_pan_distance(c);
-    cutscene_event(cutscene_sliding_doors_open_start, c, 0, 8);
-    cutscene_event(cutscene_sliding_doors_open_set_cvars, c, 8, 8);
-    cutscene_event(cutscene_sliding_doors_go_under_doorway, c, 8, 28);
-    cutscene_event(cutscene_sliding_doors_fly_back_up, c, 29, -1);
-    cutscene_event(cutscene_sliding_doors_follow_mario, c, 8, -1);
+    cutscene_event(cutscene_sliding_doors_open_start,       c,  0,  8);
+    cutscene_event(cutscene_sliding_doors_open_set_cvars,   c,  8,  8);
+    cutscene_event(cutscene_sliding_doors_go_under_doorway, c,  8, 28);
+    cutscene_event(cutscene_sliding_doors_fly_back_up,      c, 29, -1);
+    cutscene_event(cutscene_sliding_doors_follow_mario,     c,  8, -1);
 }
 
 /**
@@ -9824,50 +9824,50 @@ void cutscene_door_mode(struct Camera *c) {
  * Cutscene that plays when Mario beats the game.
  */
 struct Cutscene sCutsceneEnding[] = {
-    { cutscene_ending_mario_fall, 170 },
-    { cutscene_ending_mario_land, 70 },
+    { cutscene_ending_mario_fall,           170 },
+    { cutscene_ending_mario_land,            70 },
 #ifdef VERSION_EU
-    { cutscene_ending_mario_land_closeup, 0x44 },
-    { cutscene_ending_stars_free_peach,  0x15c },
-    { cutscene_ending_peach_appears, 0x6d  },
-    { cutscene_ending_peach_descends, 0x212 },
-    { cutscene_ending_mario_to_peach, 0x69 },
-    { cutscene_ending_peach_wakeup, 0x1a4 },
-    { cutscene_ending_dialog, 0x114 },
-    { cutscene_ending_kiss, 0x10b },
+    { cutscene_ending_mario_land_closeup,  0x44 },
+    { cutscene_ending_stars_free_peach,   0x15c },
+    { cutscene_ending_peach_appears,       0x6d },
+    { cutscene_ending_peach_descends,     0x212 },
+    { cutscene_ending_mario_to_peach,      0x69 },
+    { cutscene_ending_peach_wakeup,       0x1a4 },
+    { cutscene_ending_dialog,             0x114 },
+    { cutscene_ending_kiss,               0x10b },
 #else
-    { cutscene_ending_mario_land_closeup, 75 },
+    { cutscene_ending_mario_land_closeup,    75 },
 #ifdef VERSION_SH
-    { cutscene_ending_stars_free_peach, 431 },
+    { cutscene_ending_stars_free_peach,     431 },
 #else
-    { cutscene_ending_stars_free_peach, 386 },
+    { cutscene_ending_stars_free_peach,     386 },
 #endif
-    { cutscene_ending_peach_appears, 139 },
-    { cutscene_ending_peach_descends, 590 },
-    { cutscene_ending_mario_to_peach, 95 },
+    { cutscene_ending_peach_appears,        139 },
+    { cutscene_ending_peach_descends,       590 },
+    { cutscene_ending_mario_to_peach,        95 },
 #ifdef VERSION_SH
-    { cutscene_ending_peach_wakeup, 455 },
-    { cutscene_ending_dialog, 286 },
+    { cutscene_ending_peach_wakeup,         455 },
+    { cutscene_ending_dialog,               286 },
 #else
-    { cutscene_ending_peach_wakeup, 425 },
-    { cutscene_ending_dialog, 236 },
+    { cutscene_ending_peach_wakeup,         425 },
+    { cutscene_ending_dialog,               236 },
 #endif
-    { cutscene_ending_kiss, 245 },
+    { cutscene_ending_kiss,                 245 },
 #endif
     { cutscene_ending_cake_for_mario, CUTSCENE_LOOP },
-    { cutscene_ending_stop, 0 }
+    { cutscene_ending_stop,                       0 }
 };
 
 /**
  * Cutscene that plays when Mario collects the grand star from bowser.
  */
 struct Cutscene sCutsceneGrandStar[] = {
-    { cutscene_grand_star, 360 },
+    { cutscene_grand_star,               360 },
     { cutscene_grand_star_fly, CUTSCENE_LOOP }
 };
 
 struct Cutscene sCutsceneUnused[] = {
-    { cutscene_unused_start, 1 },
+    { cutscene_unused_start,            1 },
     { cutscene_unused_loop, CUTSCENE_LOOP }
 };
 
@@ -9875,7 +9875,7 @@ struct Cutscene sCutsceneUnused[] = {
  * Cutscene that plays when Mario enters a door that warps to another area.
  */
 struct Cutscene sCutsceneDoorWarp[] = {
-    { cutscene_door_start, 1 },
+    { cutscene_door_start,            1 },
     { cutscene_door_loop, CUTSCENE_LOOP }
 };
 
@@ -9897,22 +9897,22 @@ struct Cutscene sCutsceneCredits[] = {
  * Cutscene that plays when Mario pulls open a door.
  */
 struct Cutscene sCutsceneDoorPull[] = {
-    { cutscene_door_start, 1 },
-    { cutscene_door_fix_cam, 30 },
-    { cutscene_door_move_behind_mario, 1 },
-    { cutscene_door_follow_mario, 50 },
-    { cutscene_door_end, 0 }
+    { cutscene_door_start,              1 },
+    { cutscene_door_fix_cam,           30 },
+    { cutscene_door_move_behind_mario,  1 },
+    { cutscene_door_follow_mario,      50 },
+    { cutscene_door_end,                0 }
 };
 
 /**
  * Cutscene that plays when Mario pushes open a door.
  */
 struct Cutscene sCutsceneDoorPush[] = {
-    { cutscene_door_start, 1 },
-    { cutscene_door_fix_cam, 20 },
-    { cutscene_door_move_behind_mario, 1 },
-    { cutscene_door_follow_mario, 50 },
-    { cutscene_door_end, 0 }
+    { cutscene_door_start,              1 },
+    { cutscene_door_fix_cam,           20 },
+    { cutscene_door_move_behind_mario,  1 },
+    { cutscene_door_follow_mario,      50 },
+    { cutscene_door_end,                0 }
 };
 
 /**
@@ -9920,8 +9920,8 @@ struct Cutscene sCutsceneDoorPush[] = {
  * side.
  */
 struct Cutscene sCutsceneDoorPullMode[] = {
-    { cutscene_door_start, 1 },
-    { cutscene_door_fix_cam, 30 },
+    { cutscene_door_start,            1 },
+    { cutscene_door_fix_cam,         30 },
     { cutscene_door_mode, CUTSCENE_LOOP }
 };
 
@@ -9930,8 +9930,8 @@ struct Cutscene sCutsceneDoorPullMode[] = {
  * side.
  */
 struct Cutscene sCutsceneDoorPushMode[] = {
-    { cutscene_door_start, 1 },
-    { cutscene_door_fix_cam, 20 },
+    { cutscene_door_start,            1 },
+    { cutscene_door_fix_cam,         20 },
     { cutscene_door_mode, CUTSCENE_LOOP }
 };
 
@@ -9939,9 +9939,9 @@ struct Cutscene sCutsceneDoorPushMode[] = {
  * Cutscene that plays when Mario enters the cannon and it rises out of the hole.
  */
 struct Cutscene sCutsceneEnterCannon[] = {
-    { cutscene_enter_cannon_start, 1 },
+    { cutscene_enter_cannon_start,   1 },
     { cutscene_enter_cannon_raise, 121 },
-    { cutscene_enter_cannon_end, 0 }
+    { cutscene_enter_cannon_end,     0 }
 };
 
 /**
@@ -9949,8 +9949,8 @@ struct Cutscene sCutsceneEnterCannon[] = {
  */
 struct Cutscene sCutsceneStarSpawn[] = {
     { cutscene_star_spawn, CUTSCENE_LOOP },
-    { cutscene_star_spawn_back, 15 },
-    { cutscene_star_spawn_end, 0 }
+    { cutscene_star_spawn_back,       15 },
+    { cutscene_star_spawn_end,         0 }
 };
 
 /**
@@ -9959,7 +9959,7 @@ struct Cutscene sCutsceneStarSpawn[] = {
  */
 struct Cutscene sCutsceneRedCoinStarSpawn[] = {
     { cutscene_red_coin_star, CUTSCENE_LOOP },
-    { cutscene_red_coin_star_end, 0 }
+    { cutscene_red_coin_star_end,         0 }
 };
 
 /**
@@ -9973,7 +9973,7 @@ struct Cutscene sCutsceneEnterPainting[] = {
  * Cutscene that plays when Mario dies and warps back to the castle.
  */
 struct Cutscene sCutsceneDeathExit[] = {
-    { cutscene_exit_painting, 118 },
+    { cutscene_exit_painting,   118 },
     { cutscene_exit_painting_end, 0 }
 };
 
@@ -9981,14 +9981,14 @@ struct Cutscene sCutsceneDeathExit[] = {
  * Cutscene that plays when Mario warps to the castle after collecting a star.
  */
 struct Cutscene sCutsceneExitPaintingSuccess[] = {
-    { cutscene_exit_painting, 180 },
+    { cutscene_exit_painting,   180 },
     { cutscene_exit_painting_end, 0 }
 };
 
 struct Cutscene sCutsceneUnusedExit[] = {
-    { cutscene_unused_exit_start, 1 },
+    { cutscene_unused_exit_start,        1 },
     { cutscene_unused_exit_focus_mario, 60 },
-    { cutscene_exit_painting_end, 0 }
+    { cutscene_exit_painting_end,        0 }
 };
 
 /**
@@ -9996,13 +9996,13 @@ struct Cutscene sCutsceneUnusedExit[] = {
  */
 struct Cutscene sCutsceneIntroPeach[] = {
     { cutscene_intro_peach_letter, CUTSCENE_LOOP },
-    { cutscene_intro_peach_reset_fov, 35 },
+    { cutscene_intro_peach_reset_fov,         35 },
 #ifdef VERSION_EU
-    { cutscene_intro_peach_fly_to_pipe, 675 },
+    { cutscene_intro_peach_fly_to_pipe,      675 },
 #else
-    { cutscene_intro_peach_fly_to_pipe, 820 },
+    { cutscene_intro_peach_fly_to_pipe,      820 },
 #endif
-    { cutscene_intro_peach_mario_appears, 270 },
+    { cutscene_intro_peach_mario_appears,    270 },
     { cutscene_intro_peach_dialog, CUTSCENE_LOOP }
 };
 
@@ -10010,7 +10010,7 @@ struct Cutscene sCutsceneIntroPeach[] = {
  * Cutscene that plays when a cannon door is opened.
  */
 struct Cutscene sCutscenePrepareCannon[] = {
-    { cutscene_prepare_cannon, 170 },
+    { cutscene_prepare_cannon,   170 },
     { cutscene_prepare_cannon_end, 0 }
 };
 
@@ -10018,7 +10018,7 @@ struct Cutscene sCutscenePrepareCannon[] = {
  * Cutscene that plays when Mario enters the castle grounds after leaving CotMC through the waterfall.
  */
 struct Cutscene sCutsceneExitWaterfall[] = {
-    { cutscene_exit_waterfall, 52 },
+    { cutscene_exit_waterfall,            52 },
     { cutscene_exit_to_castle_grounds_end, 0 }
 };
 
@@ -10027,7 +10027,7 @@ struct Cutscene sCutsceneExitWaterfall[] = {
  */
 struct Cutscene sCutsceneFallToCastleGrounds[] = {
     { cutscene_exit_fall_to_castle_grounds, 73 },
-    { cutscene_exit_to_castle_grounds_end, 0 }
+    { cutscene_exit_to_castle_grounds_end,   0 }
 };
 
 /**
@@ -10058,7 +10058,7 @@ struct Cutscene sCutsceneStandingDeath[] = {
  * Cutscene that plays when Mario enters HMC or CotMC.
  */
 struct Cutscene sCutsceneEnterPool[] = {
-    { cutscene_enter_pool, 100 },
+    { cutscene_enter_pool,               100 },
     { cutscene_exit_to_castle_grounds_end, 0 }
 };
 
@@ -10101,9 +10101,9 @@ struct Cutscene sCutsceneSuffocation[] = {
  * Cutscene that plays when entering bowser's arenas.
  */
 struct Cutscene sCutsceneEnterBowserArena[] = {
-    { cutscene_bowser_arena, 180 },
+    { cutscene_bowser_arena,                  180 },
     { cutscene_bowser_arena_dialog, CUTSCENE_LOOP },
-    { cutscene_bowser_arena_end, 0 }
+    { cutscene_bowser_arena_end,                0 }
 };
 
 // The dance cutscenes are automatically stopped since reset_camera() is called after Mario warps.
@@ -10153,7 +10153,7 @@ struct Cutscene sCutsceneCapSwitchPress[] = {
  */
 struct Cutscene sCutsceneSlidingDoorsOpen[] = {
     { cutscene_sliding_doors_open, 50 },
-    { cutscene_double_doors_end, 0 }
+    { cutscene_double_doors_end,    0 }
 };
 
 /**
@@ -10161,7 +10161,7 @@ struct Cutscene sCutsceneSlidingDoorsOpen[] = {
  */
 struct Cutscene sCutsceneUnlockKeyDoor[] = {
     { cutscene_unlock_key_door, 200 },
-    { cutscene_double_doors_end, 0 }
+    { cutscene_double_doors_end,  0 }
 };
 
 /**
@@ -10177,7 +10177,7 @@ struct Cutscene sCutsceneExitBowserSuccess[] = {
  */
 struct Cutscene sCutsceneExitBowserDeath[] = {
     { cutscene_exit_bowser_death, 120 },
-    { cutscene_non_painting_end, 0 }
+    { cutscene_non_painting_end,    0 }
 };
 
 /**
@@ -10185,7 +10185,7 @@ struct Cutscene sCutsceneExitBowserDeath[] = {
  */
 struct Cutscene sCutsceneExitSpecialSuccess[] = {
     { cutscene_exit_non_painting_succ, 163 },
-    { cutscene_non_painting_end, 0 }
+    { cutscene_non_painting_end,         0 }
 };
 
 /**
@@ -10193,7 +10193,7 @@ struct Cutscene sCutsceneExitSpecialSuccess[] = {
  */
 struct Cutscene sCutsceneNonPaintingDeath[] = {
     { cutscene_non_painting_death, 120 },
-    { cutscene_non_painting_end, 0 }
+    { cutscene_non_painting_end,     0 }
 };
 
 /**
@@ -10201,8 +10201,8 @@ struct Cutscene sCutsceneNonPaintingDeath[] = {
  */
 struct Cutscene sCutsceneDialog[] = {
     { cutscene_dialog, CUTSCENE_LOOP },
-    { cutscene_dialog_set_flag, 12 },
-    { cutscene_dialog_end, 0 }
+    { cutscene_dialog_set_flag,   12 },
+    { cutscene_dialog_end,         0 }
 };
 
 /**
@@ -10210,8 +10210,8 @@ struct Cutscene sCutsceneDialog[] = {
  */
 struct Cutscene sCutsceneReadMessage[] = {
     { cutscene_read_message, CUTSCENE_LOOP },
-    { cutscene_read_message_set_flag, 15 },
-    { cutscene_read_message_end, 0 }
+    { cutscene_read_message_set_flag,   15 },
+    { cutscene_read_message_end,         0 }
 };
 
 /* TODO:
@@ -10293,320 +10293,320 @@ STATIC_ASSERT(ARRAY_COUNT(sZoomOutAreaMasks) - 1 == LEVEL_MAX / 2, "Make sure yo
  */
 
 struct CutsceneSplinePoint sBobCreditsSplinePositions[] = {
-    { 1, 0, { 5984, 3255, 4975 } },
-    { 2, 0, { 4423, 3315, 1888 } },
-    { 3, 0, { 776, 2740, -1825 } },
-    { 4, 0, { -146, 3894, -3167 } },
-    { -1, 0, { 741, 4387, -5474 } }
+    {  1, 0, { 5984, 3255,  4975 } },
+    {  2, 0, { 4423, 3315,  1888 } },
+    {  3, 0, {  776, 2740, -1825 } },
+    {  4, 0, { -146, 3894, -3167 } },
+    { -1, 0, {  741, 4387, -5474 } }
 };
 
 struct CutsceneSplinePoint sBobCreditsSplineFocus[] = {
-    { 0, 30, { 5817, 3306, 4507 } },
-    { 0, 40, { 4025, 3378, 1593 } },
-    { 0, 50, { 1088, 2652, -2205 } },
-    { 0, 60, { 205, 3959, -3517 } },
+    {  0, 30, { 5817, 3306,  4507 } },
+    {  0, 40, { 4025, 3378,  1593 } },
+    {  0, 50, { 1088, 2652, -2205 } },
+    {  0, 60, {  205, 3959, -3517 } },
     { -1, 60, { 1231, 4400, -5649 } }
 };
 
 struct CutsceneSplinePoint sWfCreditsSplinePositions[] = {
-    { 0, 0, { -301, 1399, 2643 } },
-    { 0, 0, { -182, 2374, 4572 } },
-    { 0, 0, { 4696, 3864, 413 } },
-    { 0, 0, { 1738, 4891, -1516 } },
+    {  0, 0, { -301, 1399,  2643 } },
+    {  0, 0, { -182, 2374,  4572 } },
+    {  0, 0, { 4696, 3864,   413 } },
+    {  0, 0, { 1738, 4891, -1516 } },
     { -1, 0, { 1783, 4891, -1516 } }
 };
 
 struct CutsceneSplinePoint sWfCreditsSplineFocus[] = {
-    { 1, 30, { -249, 1484, 2153 } },
-    { 2, 40, { -200, 2470, 4082 } },
-    { 3, 40, { 4200, 3916, 370 } },
-    { 4, 40, { 1523, 4976, -1072 } },
+    {  1, 30, { -249, 1484,  2153 } },
+    {  2, 40, { -200, 2470,  4082 } },
+    {  3, 40, { 4200, 3916,   370 } },
+    {  4, 40, { 1523, 4976, -1072 } },
     { -1, 40, { 1523, 4976, -1072 } }
 };
 
 struct CutsceneSplinePoint sJrbCreditsSplinePositions[] = {
-    { 0, 0, { 5538, -4272, 2376 } },
-    { 0, 0, { 5997, -3303, 2261 } },
-    { 0, 0, { 6345, -3255, 2179 } },
-    { 0, 0, { 6345, -3255, 2179 } },
+    {  0, 0, { 5538, -4272, 2376 } },
+    {  0, 0, { 5997, -3303, 2261 } },
+    {  0, 0, { 6345, -3255, 2179 } },
+    {  0, 0, { 6345, -3255, 2179 } },
     { -1, 0, { 6694, -3203, 2116 } }
 };
 
 struct CutsceneSplinePoint sJrbCreditsSplineFocus[] = {
-    { 0, 50, { 5261, -4683, 2443 } },
-    { 0, 50, { 5726, -3675, 2456 } },
-    { 0, 50, { 6268, -2817, 2409 } },
-    { 0, 50, { 6596, -2866, 2369 } },
+    {  0, 50, { 5261, -4683, 2443 } },
+    {  0, 50, { 5726, -3675, 2456 } },
+    {  0, 50, { 6268, -2817, 2409 } },
+    {  0, 50, { 6596, -2866, 2369 } },
     { -1, 50, { 7186, -3153, 2041 } }
 };
 
 struct CutsceneSplinePoint sCcmSlideCreditsSplinePositions[] = {
-    { 0, 0, { -6324, 6745, -5626 } },
-    { 1, 0, { -6324, 6745, -5626 } },
-    { 2, 0, { -6108, 6762, -5770 } },
-    { 3, 0, { -5771, 6787, -5962 } },
+    {  0, 0, { -6324, 6745, -5626 } },
+    {  1, 0, { -6324, 6745, -5626 } },
+    {  2, 0, { -6108, 6762, -5770 } },
+    {  3, 0, { -5771, 6787, -5962 } },
     { -1, 0, { -5672, 6790, -5979 } }
 };
 
 struct CutsceneSplinePoint sCcmSlideCreditsSplineFocus[] = {
-    { 0, 50, { -5911, 6758, -5908 } },
-    { 1, 50, { -5911, 6758, -5908 } },
-    { 2, 50, { -5652, 6814, -5968 } },
-    { 3, 50, { -5277, 6801, -6043 } },
+    {  0, 50, { -5911, 6758, -5908 } },
+    {  1, 50, { -5911, 6758, -5908 } },
+    {  2, 50, { -5652, 6814, -5968 } },
+    {  3, 50, { -5277, 6801, -6043 } },
     { -1, 50, { -5179, 6804, -6060 } }
 };
 
 struct CutsceneSplinePoint sBbhCreditsSplinePositions[] = {
-    { 1, 0, { 1088, 341, 2447 } },
-    { 2, 0, { 1338, 610, 2808 } },
-    { 3, 0, { 2267, 1612, 2966 } },
+    {  1, 0, { 1088,  341, 2447 } },
+    {  2, 0, { 1338,  610, 2808 } },
+    {  3, 0, { 2267, 1612, 2966 } },
     { -1, 0, { 2296, 1913, 2990 } }
 };
 
 struct CutsceneSplinePoint sBbhCreditsSplineFocus[] = {
-    { 1, 50, { 1160, 263, 1958 } },
-    { 2, 50, { 1034, 472, 2436 } },
-    { 3, 50, { 1915, 1833, 2688 } },
+    {  1, 50, { 1160,  263, 1958 } },
+    {  2, 50, { 1034,  472, 2436 } },
+    {  3, 50, { 1915, 1833, 2688 } },
     { -1, 50, { 2134, 2316, 2742 } }
 };
 
 struct CutsceneSplinePoint sHmcCreditsSplinePositions[] = {
-    { 1, 0, { -5952, 1807, -5882 } },
-    { 2, 0, { -5623, 1749, -4863 } },
-    { 3, 0, { -5472, 1955, -2520 } },
-    { 4, 0, { -5544, 1187, -1085 } },
-    { -1, 0, { -5547, 391, -721 } }
+    {  1, 0, { -5952, 1807, -5882 } },
+    {  2, 0, { -5623, 1749, -4863 } },
+    {  3, 0, { -5472, 1955, -2520 } },
+    {  4, 0, { -5544, 1187, -1085 } },
+    { -1, 0, { -5547,  391,  -721 } }
 };
 
 struct CutsceneSplinePoint sHmcCreditsSplineFocus[] = {
-    { 1, 210, { -5952, 1884, -6376 } },
-    { 2, 58, { -5891, 1711, -5283 } },
-    { 3, 30, { -5595, 1699, -2108 } },
-    { 4, 31, { -5546, 794, -777 } },
-    { -1, 31, { -5548, -85, -572 } }
+    {  1, 210, { -5952, 1884, -6376 } },
+    {  2,  58, { -5891, 1711, -5283 } },
+    {  3,  30, { -5595, 1699, -2108 } },
+    {  4,  31, { -5546,  794,  -777 } },
+    { -1,  31, { -5548,  -85,  -572 } }
 };
 
 struct CutsceneSplinePoint sThiWigglerCreditsSplinePositions[] = {
-    { 1, 0, { -1411, 2474, -1276 } },
-    { 2, 0, { -1606, 2479, -434 } },
-    { -1, 0, { -1170, 2122, 1337 } }
+    {  1, 0, { -1411, 2474, -1276 } },
+    {  2, 0, { -1606, 2479,  -434 } },
+    { -1, 0, { -1170, 2122,  1337 } }
 };
 
 struct CutsceneSplinePoint sThiWigglerCreditsSplineFocus[] = {
-    { 1, 50, { -1053, 2512, -928 } },
-    { 2, 50, { -1234, 2377, -114 } },
-    { -1, 50, { -758, 2147, 1054 } }
+    {  1, 50, { -1053, 2512, -928 } },
+    {  2, 50, { -1234, 2377, -114 } },
+    { -1, 50, {  -758, 2147, 1054 } }
 };
 
 struct CutsceneSplinePoint sVolcanoCreditsSplinePositions[] = {
-    { 0, 0, { -1445, 1094, 1617 } },
-    { 0, 0, { -1509, 649, 871 } },
-    { 0, 0, { -1133, 420, -248 } },
-    { 0, 0, { -778, 359, -1052 } },
-    { 0, 0, { -565, 260, -1730 } },
-    { -1, 0, { 1274, 473, -275 } }
+    {  0, 0, { -1445, 1094,  1617 } },
+    {  0, 0, { -1509,  649,   871 } },
+    {  0, 0, { -1133,  420,  -248 } },
+    {  0, 0, {  -778,  359, -1052 } },
+    {  0, 0, {  -565,  260, -1730 } },
+    { -1, 0, {  1274,  473,  -275 } }
 };
 
 struct CutsceneSplinePoint sVolcanoCreditsSplineFocus[] = {
-    { 0, 50, { -1500, 757, 1251 } },
-    { 0, 50, { -1401, 439, 431 } },
-    { 0, 50, { -749, 270, -532 } },
-    { 0, 50, { -396, 270, -1363 } },
-    { 0, 50, { -321, 143, -2151 } },
-    { -1, 50, { 1002, 460, -694 } }
+    {  0, 50, { -1500, 757,  1251 } },
+    {  0, 50, { -1401, 439,   431 } },
+    {  0, 50, {  -749, 270,  -532 } },
+    {  0, 50, {  -396, 270, -1363 } },
+    {  0, 50, {  -321, 143, -2151 } },
+    { -1, 50, {  1002, 460,  -694 } }
 };
 
 struct CutsceneSplinePoint sSslCreditsSplinePositions[] = {
-    { 0, 0, { -4262, 4658, -5015 } },
-    { 0, 0, { -3274, 2963, -4661 } },
-    { 0, 0, { -2568, 812, -6528 } },
-    { 0, 0, { -414, 660, -7232 } },
-    { 0, 0, { 1466, 660, -6898 } },
-    { -1, 0, { 2724, 660, -6298 } }
+    {  0, 0, { -4262, 4658, -5015 } },
+    {  0, 0, { -3274, 2963, -4661 } },
+    {  0, 0, { -2568,  812, -6528 } },
+    {  0, 0, {  -414,  660, -7232 } },
+    {  0, 0, {  1466,  660, -6898 } },
+    { -1, 0, {  2724,  660, -6298 } }
 };
 
 struct CutsceneSplinePoint sSslCreditsSplineFocus[] = {
-    { 0, 50, { -4083, 4277, -4745 } },
-    { 0, 50, { -2975, 2574, -4759 } },
-    { 0, 50, { -2343, 736, -6088 } },
-    { 0, 50, { -535, 572, -6755 } },
-    { 0, 50, { 1311, 597, -6427 } },
-    { -1, 50, { 2448, 612, -5884 } }
+    {  0, 50, { -4083, 4277, -4745 } },
+    {  0, 50, { -2975, 2574, -4759 } },
+    {  0, 50, { -2343,  736, -6088 } },
+    {  0, 50, {  -535,  572, -6755 } },
+    {  0, 50, {  1311,  597, -6427 } },
+    { -1, 50, {  2448,  612, -5884 } }
 };
 
 struct CutsceneSplinePoint sDddCreditsSplinePositions[] = {
-    { 0, 0, { -874, -4933, 366 } },
-    { 0, 0, { -1463, -4782, 963 } },
-    { 0, 0, { -1893, -4684, 1303 } },
-    { 0, 0, { -2818, -4503, 1583 } },
-    { 0, 0, { -4095, -2924, 730 } },
-    { 0, 0, { -4737, -1594, -63 } },
+    {  0, 0, {  -874, -4933,  366 } },
+    {  0, 0, { -1463, -4782,  963 } },
+    {  0, 0, { -1893, -4684, 1303 } },
+    {  0, 0, { -2818, -4503, 1583 } },
+    {  0, 0, { -4095, -2924,  730 } },
+    {  0, 0, { -4737, -1594,  -63 } },
     { -1, 0, { -4681, -1084, -623 } }
 };
 
 struct CutsceneSplinePoint sDddCreditsSplineFocus[] = {
-    { 0, 50, { -1276, -4683, 622 } },
-    { 0, 50, { -1858, -4407, 1097 } },
-    { 0, 50, { -2324, -4332, 1318 } },
-    { 0, 50, { -3138, -4048, 1434 } },
-    { 0, 50, { -4353, -2444, 533 } },
-    { 0, 50, { -4807, -1169, -436 } },
-    { -1, 50, { -4665, -664, -1007 } }
+    {  0, 50, { -1276, -4683,   622 } },
+    {  0, 50, { -1858, -4407,  1097 } },
+    {  0, 50, { -2324, -4332,  1318 } },
+    {  0, 50, { -3138, -4048,  1434 } },
+    {  0, 50, { -4353, -2444,   533 } },
+    {  0, 50, { -4807, -1169,  -436 } },
+    { -1, 50, { -4665,  -664, -1007 } }
 };
 
 struct CutsceneSplinePoint sSlCreditsSplinePositions[] = {
-    { 0, 0, { 939, 6654, 6196 } },
-    { 0, 0, { 1873, 5160, 3714 } },
-    { 0, 0, { 3120, 3564, 1314 } },
-    { -1, 0, { 2881, 4231, 573 } }
+    {  0, 0, {  939, 6654, 6196 } },
+    {  0, 0, { 1873, 5160, 3714 } },
+    {  0, 0, { 3120, 3564, 1314 } },
+    { -1, 0, { 2881, 4231,  573 } }
 };
 
 struct CutsceneSplinePoint sSlCreditsSplineFocus[] = {
-    { 0, 50, { 875, 6411, 5763 } },
-    { 0, 50, { 1659, 4951, 3313 } },
-    { 0, 50, { 2630, 3565, 1215 } },
-    { -1, 50, { 2417, 4056, 639 } }
+    {  0, 50, {  875, 6411, 5763 } },
+    {  0, 50, { 1659, 4951, 3313 } },
+    {  0, 50, { 2630, 3565, 1215 } },
+    { -1, 50, { 2417, 4056,  639 } }
 };
 
 struct CutsceneSplinePoint sWdwCreditsSplinePositions[] = {
-    { 0, 0, { 3927, 2573, 3685 } },
-    { 0, 0, { 2389, 2054, 1210 } },
-    { 0, 0, { 2309, 2069, 22 } },
+    {  0, 0, { 3927, 2573, 3685 } },
+    {  0, 0, { 2389, 2054, 1210 } },
+    {  0, 0, { 2309, 2069,   22 } },
     { -1, 0, { 2122, 2271, -979 } }
 };
 
 struct CutsceneSplinePoint sWdwCreditsSplineFocus[] = {
-    { 0, 50, { 3637, 2460, 3294 } },
-    { 0, 50, { 1984, 2067, 918 } },
-    { 0, 50, { 1941, 2255, -261 } },
+    {  0, 50, { 3637, 2460,  3294 } },
+    {  0, 50, { 1984, 2067,   918 } },
+    {  0, 50, { 1941, 2255,  -261 } },
     { -1, 50, { 1779, 2587, -1158 } }
 };
 
 struct CutsceneSplinePoint sTtmCreditsSplinePositions[] = {
-    { 0, 0, { 386, 2535, 644 } },
-    { 0, 0, { 1105, 2576, 918 } },
-    { 0, 0, { 3565, 2261, 2098 } },
-    { 0, 0, { 6715, -2791, 4554 } },
-    { 0, 0, { 3917, -3130, 3656 } },
+    {  0, 0, {  386,  2535,  644 } },
+    {  0, 0, { 1105,  2576,  918 } },
+    {  0, 0, { 3565,  2261, 2098 } },
+    {  0, 0, { 6715, -2791, 4554 } },
+    {  0, 0, { 3917, -3130, 3656 } },
     { -1, 0, { 3917, -3130, 3656 } }
 };
 
 struct CutsceneSplinePoint sTtmCreditsSplineFocus[] = {
-    { 1, 50, { 751, 2434, 318 } },
-    { 2, 50, { 768, 2382, 603 } },
-    { 3, 60, { 3115, 2086, 1969 } },
-    { 4, 30, { 6370, -3108, 4727 } },
-    { 5, 50, { 4172, -3385, 4001 } },
+    {  1, 50, {  751,  2434,  318 } },
+    {  2, 50, {  768,  2382,  603 } },
+    {  3, 60, { 3115,  2086, 1969 } },
+    {  4, 30, { 6370, -3108, 4727 } },
+    {  5, 50, { 4172, -3385, 4001 } },
     { -1, 50, { 4172, -3385, 4001 } }
 };
 
 struct CutsceneSplinePoint sThiHugeCreditsSplinePositions[] = {
-    { 0, 0, { 6990, -1000, -4858 } },
-    { 0, 0, { 7886, -1055, 2878 } },
-    { 0, 0, { 1952, -1481, 10920 } },
-    { 0, 0, { -1684, -219, 2819 } },
-    { 0, 0, { -2427, -131, 2755 } },
-    { 0, 0, { -3246, 416, 3286 } },
-    { -1, 0, { -3246, 416, 3286 } }
+    {  0, 0, {  6990, -1000, -4858 } },
+    {  0, 0, {  7886, -1055,  2878 } },
+    {  0, 0, {  1952, -1481, 10920 } },
+    {  0, 0, { -1684,  -219,  2819 } },
+    {  0, 0, { -2427,  -131,  2755 } },
+    {  0, 0, { -3246,   416,  3286 } },
+    { -1, 0, { -3246,   416,  3286 } }
 };
 
 struct CutsceneSplinePoint sThiHugeCreditsSplineFocus[] = {
-    { 1, 70, { 7022, -965, -5356 } },
-    { 2, 40, { 7799, -915, 2405 } },
-    { 3, 60, { 1878, -1137, 10568 } },
-    { 4, 50, { -1931, -308, 2394 } },
-    { 5, 50, { -2066, -386, 2521 } },
-    { 6, 50, { -2875, 182, 3045 } },
-    { -1, 50, { -2875, 182, 3045 } }
+    {  1, 70, {  7022,  -965, -5356 } },
+    {  2, 40, {  7799,  -915,  2405 } },
+    {  3, 60, {  1878, -1137, 10568 } },
+    {  4, 50, { -1931,  -308,  2394 } },
+    {  5, 50, { -2066,  -386,  2521 } },
+    {  6, 50, { -2875,   182,  3045 } },
+    { -1, 50, { -2875,   182,  3045 } }
 };
 
 struct CutsceneSplinePoint sTtcCreditsSplinePositions[] = {
-    { 1, 0, { -1724, 277, -994 } },
-    { 2, 0, { -1720, 456, -995 } },
-    { 3, 0, { -1655, 810, -1014 } },
+    {  1, 0, { -1724, 277,  -994 } },
+    {  2, 0, { -1720, 456,  -995 } },
+    {  3, 0, { -1655, 810, -1014 } },
     { -1, 0, { -1753, 883, -1009 } }
 };
 
 struct CutsceneSplinePoint sTtcCreditsSplineFocus[] = {
-    { 1, 50, { -1554, 742, -1063 } },
-    { 2, 50, { -1245, 571, -1102 } },
-    { 3, 50, { -1220, 603, -1151 } },
+    {  1, 50, { -1554, 742, -1063 } },
+    {  2, 50, { -1245, 571, -1102 } },
+    {  3, 50, { -1220, 603, -1151 } },
     { -1, 50, { -1412, 520, -1053 } }
 };
 
 struct CutsceneSplinePoint sRrCreditsSplinePositions[] = {
-    { 0, 0, { -1818, 4036, 97 } },
-    { 0, 0, { -575, 3460, -505 } },
-    { 0, 0, { 1191, 3611, -1134 } },
-    { -1, 0, { 2701, 3777, -3686 } }
+    {  0, 0, { -1818, 4036,    97 } },
+    {  0, 0, {  -575, 3460,  -505 } },
+    {  0, 0, {  1191, 3611, -1134 } },
+    { -1, 0, {  2701, 3777, -3686 } }
 };
 
 struct CutsceneSplinePoint sRrCreditsSplineFocus[] = {
-    { 0, 50, { -1376, 3885, -81 } },
-    { 0, 50, { -146, 3343, -734 } },
-    { 0, 50, { 1570, 3446, -1415 } },
-    { -1, 50, { 2794, 3627, -3218 } }
+    {  0, 50, { -1376, 3885,   -81 } },
+    {  0, 50, {  -146, 3343,  -734 } },
+    {  0, 50, {  1570, 3446, -1415 } },
+    { -1, 50, {  2794, 3627, -3218 } }
 };
 
 struct CutsceneSplinePoint sSaCreditsSplinePositions[] = {
-    { 0, 0, { -295, -396, -585 } },
-    { 1, 0, { -295, -396, -585 } },
-    { 2, 0, { -292, -856, -573 } },
-    { 3, 0, { -312, -856, -541 } },
-    { -1, 0, { 175, -856, -654 } }
+    {  0, 0, { -295, -396, -585 } },
+    {  1, 0, { -295, -396, -585 } },
+    {  2, 0, { -292, -856, -573 } },
+    {  3, 0, { -312, -856, -541 } },
+    { -1, 0, {  175, -856, -654 } }
 };
 
 struct CutsceneSplinePoint sSaCreditsSplineFocus[] = {
-    { 0, 50, { -175, -594, -142 } },
-    { 1, 50, { -175, -594, -142 } },
-    { 2, 50, { -195, -956, -92 } },
-    { 3, 50, { -572, -956, -150 } },
+    {  0, 50, { -175, -594, -142 } },
+    {  1, 50, { -175, -594, -142 } },
+    {  2, 50, { -195, -956,  -92 } },
+    {  3, 50, { -572, -956, -150 } },
     { -1, 50, { -307, -956, -537 } }
 };
 
 struct CutsceneSplinePoint sCotmcCreditsSplinePositions[] = {
-    { 0, 0, { -296, 495, 1607 } },
-    { 0, 0, { -430, 541, 654 } },
-    { 0, 0, { -466, 601, -359 } },
-    { 0, 0, { -217, 433, -1549 } },
-    { -1, 0, { -95, 366, -2922 } }
+    {  0, 0, { -296, 495,  1607 } },
+    {  0, 0, { -430, 541,   654 } },
+    {  0, 0, { -466, 601,  -359 } },
+    {  0, 0, { -217, 433, -1549 } },
+    { -1, 0, {  -95, 366, -2922 } }
 };
 
 struct CutsceneSplinePoint sCotmcCreditsSplineFocus[] = {
-    { 0, 50, { -176, 483, 2092 } },
-    { 0, 50, { -122, 392, 1019 } },
-    { 0, 50, { -268, 450, -792 } },
-    { 0, 50, { -172, 399, -2046 } },
-    { -1, 50, { -51, 355, -3420 } }
+    {  0, 50, { -176, 483,  2092 } },
+    {  0, 50, { -122, 392,  1019 } },
+    {  0, 50, { -268, 450,  -792 } },
+    {  0, 50, { -172, 399, -2046 } },
+    { -1, 50, {  -51, 355, -3420 } }
 };
 
 struct CutsceneSplinePoint sDddSubCreditsSplinePositions[] = {
-    { 0, 0, { 4656, 2171, 5028 } },
-    { 0, 0, { 4548, 1182, 4596 } },
-    { 0, 0, { 5007, 813, 3257 } },
-    { 0, 0, { 5681, 648, 1060 } },
-    { -1, 0, { 4644, 774, 113 } }
+    {  0, 0, { 4656, 2171, 5028 } },
+    {  0, 0, { 4548, 1182, 4596 } },
+    {  0, 0, { 5007,  813, 3257 } },
+    {  0, 0, { 5681,  648, 1060 } },
+    { -1, 0, { 4644,  774,  113 } }
 };
 
 struct CutsceneSplinePoint sDddSubCreditsSplineFocus[] = {
-    { 0, 50, { 4512, 2183, 4549 } },
-    { 0, 50, { 4327, 838, 4308 } },
-    { 0, 50, { 4774, 749, 2819 } },
-    { 0, 50, { 5279, 660, 763 } },
-    { -1, 50, { 4194, 885, -75 } }
+    {  0, 50, { 4512, 2183, 4549 } },
+    {  0, 50, { 4327,  838, 4308 } },
+    {  0, 50, { 4774,  749, 2819 } },
+    {  0, 50, { 5279,  660,  763 } },
+    { -1, 50, { 4194,  885,  -75 } }
 };
 
 struct CutsceneSplinePoint sCcmOutsideCreditsSplinePositions[] = {
-    { 1, 0, { 1427, -1387, 5409 } },
-    { 2, 0, { -1646, -1536, 4526 } },
-    { 3, 0, { -3852, -1448, 3913 } },
+    {  1, 0, {  1427, -1387, 5409 } },
+    {  2, 0, { -1646, -1536, 4526 } },
+    {  3, 0, { -3852, -1448, 3913 } },
     { -1, 0, { -5199, -1366, 1886 } }
 };
 
 struct CutsceneSplinePoint sCcmOutsideCreditsSplineFocus[] = {
-    { 1, 50, { 958, -1481, 5262 } },
-    { 2, 50, { -2123, -1600, 4391 } },
-    { 3, 50, { -3957, -1401, 3426 } },
+    {  1, 50, {   958, -1481, 5262 } },
+    {  2, 50, { -2123, -1600, 4391 } },
+    {  3, 50, { -3957, -1401, 3426 } },
     { -1, 50, { -4730, -1215, 1795 } }
 };
 
@@ -10631,50 +10631,50 @@ void play_cutscene(struct Camera *c) {
         break;
 
     switch (c->cutscene) {
-        CUTSCENE(CUTSCENE_STAR_SPAWN, sCutsceneStarSpawn)
+        CUTSCENE(CUTSCENE_STAR_SPAWN,          sCutsceneStarSpawn)
         CUTSCENE(CUTSCENE_RED_COIN_STAR_SPAWN, sCutsceneRedCoinStarSpawn)
-        CUTSCENE(CUTSCENE_ENDING, sCutsceneEnding)
-        CUTSCENE(CUTSCENE_GRAND_STAR, sCutsceneGrandStar)
-        CUTSCENE(CUTSCENE_DOOR_WARP, sCutsceneDoorWarp)
-        CUTSCENE(CUTSCENE_DOOR_PULL, sCutsceneDoorPull)
-        CUTSCENE(CUTSCENE_DOOR_PUSH, sCutsceneDoorPush)
-        CUTSCENE(CUTSCENE_DOOR_PULL_MODE, sCutsceneDoorPullMode)
-        CUTSCENE(CUTSCENE_DOOR_PUSH_MODE, sCutsceneDoorPushMode)
-        CUTSCENE(CUTSCENE_ENTER_CANNON, sCutsceneEnterCannon)
-        CUTSCENE(CUTSCENE_ENTER_PAINTING, sCutsceneEnterPainting)
-        CUTSCENE(CUTSCENE_DEATH_EXIT, sCutsceneDeathExit)
-        CUTSCENE(CUTSCENE_EXIT_PAINTING_SUCC, sCutsceneExitPaintingSuccess)
-        CUTSCENE(CUTSCENE_UNUSED_EXIT, sCutsceneUnusedExit)
-        CUTSCENE(CUTSCENE_INTRO_PEACH, sCutsceneIntroPeach)
-        CUTSCENE(CUTSCENE_ENTER_BOWSER_ARENA, sCutsceneEnterBowserArena)
-        CUTSCENE(CUTSCENE_DANCE_ROTATE, sCutsceneDanceDefaultRotate)
-        CUTSCENE(CUTSCENE_DANCE_DEFAULT, sCutsceneDanceDefaultRotate)
-        CUTSCENE(CUTSCENE_DANCE_FLY_AWAY, sCutsceneDanceFlyAway)
-        CUTSCENE(CUTSCENE_DANCE_CLOSEUP, sCutsceneDanceCloseup)
-        CUTSCENE(CUTSCENE_KEY_DANCE, sCutsceneKeyDance)
-        CUTSCENE(CUTSCENE_0F_UNUSED, sCutsceneUnused)
-        CUTSCENE(CUTSCENE_END_WAVING, sCutsceneEndWaving)
-        CUTSCENE(CUTSCENE_CREDITS, sCutsceneCredits)
-        CUTSCENE(CUTSCENE_CAP_SWITCH_PRESS, sCutsceneCapSwitchPress)
-        CUTSCENE(CUTSCENE_SLIDING_DOORS_OPEN, sCutsceneSlidingDoorsOpen)
-        CUTSCENE(CUTSCENE_PREPARE_CANNON, sCutscenePrepareCannon)
-        CUTSCENE(CUTSCENE_UNLOCK_KEY_DOOR, sCutsceneUnlockKeyDoor)
-        CUTSCENE(CUTSCENE_STANDING_DEATH, sCutsceneStandingDeath)
-        CUTSCENE(CUTSCENE_ENTER_POOL, sCutsceneEnterPool)
-        CUTSCENE(CUTSCENE_DEATH_ON_STOMACH, sCutsceneDeathStomach)
-        CUTSCENE(CUTSCENE_DEATH_ON_BACK, sCutsceneDeathOnBack)
-        CUTSCENE(CUTSCENE_QUICKSAND_DEATH, sCutsceneQuicksandDeath)
-        CUTSCENE(CUTSCENE_SUFFOCATION_DEATH, sCutsceneSuffocation)
-        CUTSCENE(CUTSCENE_EXIT_BOWSER_SUCC, sCutsceneExitBowserSuccess)
-        CUTSCENE(CUTSCENE_EXIT_BOWSER_DEATH, sCutsceneExitBowserDeath)
-        CUTSCENE(CUTSCENE_EXIT_SPECIAL_SUCC, sCutsceneExitSpecialSuccess)
-        CUTSCENE(CUTSCENE_EXIT_WATERFALL, sCutsceneExitWaterfall)
-        CUTSCENE(CUTSCENE_EXIT_FALL_WMOTR, sCutsceneFallToCastleGrounds)
-        CUTSCENE(CUTSCENE_NONPAINTING_DEATH, sCutsceneNonPaintingDeath)
-        CUTSCENE(CUTSCENE_DIALOG, sCutsceneDialog)
-        CUTSCENE(CUTSCENE_READ_MESSAGE, sCutsceneReadMessage)
-        CUTSCENE(CUTSCENE_RACE_DIALOG, sCutsceneDialog)
-        CUTSCENE(CUTSCENE_ENTER_PYRAMID_TOP, sCutsceneEnterPyramidTop)
+        CUTSCENE(CUTSCENE_ENDING,              sCutsceneEnding)
+        CUTSCENE(CUTSCENE_GRAND_STAR,          sCutsceneGrandStar)
+        CUTSCENE(CUTSCENE_DOOR_WARP,           sCutsceneDoorWarp)
+        CUTSCENE(CUTSCENE_DOOR_PULL,           sCutsceneDoorPull)
+        CUTSCENE(CUTSCENE_DOOR_PUSH,           sCutsceneDoorPush)
+        CUTSCENE(CUTSCENE_DOOR_PULL_MODE,      sCutsceneDoorPullMode)
+        CUTSCENE(CUTSCENE_DOOR_PUSH_MODE,      sCutsceneDoorPushMode)
+        CUTSCENE(CUTSCENE_ENTER_CANNON,        sCutsceneEnterCannon)
+        CUTSCENE(CUTSCENE_ENTER_PAINTING,      sCutsceneEnterPainting)
+        CUTSCENE(CUTSCENE_DEATH_EXIT,          sCutsceneDeathExit)
+        CUTSCENE(CUTSCENE_EXIT_PAINTING_SUCC,  sCutsceneExitPaintingSuccess)
+        CUTSCENE(CUTSCENE_UNUSED_EXIT,         sCutsceneUnusedExit)
+        CUTSCENE(CUTSCENE_INTRO_PEACH,         sCutsceneIntroPeach)
+        CUTSCENE(CUTSCENE_ENTER_BOWSER_ARENA,  sCutsceneEnterBowserArena)
+        CUTSCENE(CUTSCENE_DANCE_ROTATE,        sCutsceneDanceDefaultRotate)
+        CUTSCENE(CUTSCENE_DANCE_DEFAULT,       sCutsceneDanceDefaultRotate)
+        CUTSCENE(CUTSCENE_DANCE_FLY_AWAY,      sCutsceneDanceFlyAway)
+        CUTSCENE(CUTSCENE_DANCE_CLOSEUP,       sCutsceneDanceCloseup)
+        CUTSCENE(CUTSCENE_KEY_DANCE,           sCutsceneKeyDance)
+        CUTSCENE(CUTSCENE_0F_UNUSED,           sCutsceneUnused)
+        CUTSCENE(CUTSCENE_END_WAVING,          sCutsceneEndWaving)
+        CUTSCENE(CUTSCENE_CREDITS,             sCutsceneCredits)
+        CUTSCENE(CUTSCENE_CAP_SWITCH_PRESS,    sCutsceneCapSwitchPress)
+        CUTSCENE(CUTSCENE_SLIDING_DOORS_OPEN,  sCutsceneSlidingDoorsOpen)
+        CUTSCENE(CUTSCENE_PREPARE_CANNON,      sCutscenePrepareCannon)
+        CUTSCENE(CUTSCENE_UNLOCK_KEY_DOOR,     sCutsceneUnlockKeyDoor)
+        CUTSCENE(CUTSCENE_STANDING_DEATH,      sCutsceneStandingDeath)
+        CUTSCENE(CUTSCENE_ENTER_POOL,          sCutsceneEnterPool)
+        CUTSCENE(CUTSCENE_DEATH_ON_STOMACH,    sCutsceneDeathStomach)
+        CUTSCENE(CUTSCENE_DEATH_ON_BACK,       sCutsceneDeathOnBack)
+        CUTSCENE(CUTSCENE_QUICKSAND_DEATH,     sCutsceneQuicksandDeath)
+        CUTSCENE(CUTSCENE_SUFFOCATION_DEATH,   sCutsceneSuffocation)
+        CUTSCENE(CUTSCENE_EXIT_BOWSER_SUCC,    sCutsceneExitBowserSuccess)
+        CUTSCENE(CUTSCENE_EXIT_BOWSER_DEATH,   sCutsceneExitBowserDeath)
+        CUTSCENE(CUTSCENE_EXIT_SPECIAL_SUCC,   sCutsceneExitSpecialSuccess)
+        CUTSCENE(CUTSCENE_EXIT_WATERFALL,      sCutsceneExitWaterfall)
+        CUTSCENE(CUTSCENE_EXIT_FALL_WMOTR,     sCutsceneFallToCastleGrounds)
+        CUTSCENE(CUTSCENE_NONPAINTING_DEATH,   sCutsceneNonPaintingDeath)
+        CUTSCENE(CUTSCENE_DIALOG,              sCutsceneDialog)
+        CUTSCENE(CUTSCENE_READ_MESSAGE,        sCutsceneReadMessage)
+        CUTSCENE(CUTSCENE_RACE_DIALOG,         sCutsceneDialog)
+        CUTSCENE(CUTSCENE_ENTER_PYRAMID_TOP,   sCutsceneEnterPyramidTop)
         CUTSCENE(CUTSCENE_SSL_PYRAMID_EXPLODE, sCutscenePyramidTopExplode)
     }
 

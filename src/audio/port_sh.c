@@ -57,8 +57,6 @@ struct SPTask *create_next_audio_frame_task(void) {
     }
 
     oldDmaCount = gCurrAudioFrameDmaCount;
-    if (oldDmaCount > AUDIO_FRAME_DMA_QUEUE_SIZE) {
-    }
     gCurrAudioFrameDmaCount = 0;
 
     decrease_sample_dma_ttls();

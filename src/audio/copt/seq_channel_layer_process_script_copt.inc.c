@@ -144,9 +144,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
 #endif
 
     sameSound = TRUE;
-    if ((*layer).enabled == FALSE) {
-        return;
-    }
+    if (!(*layer).enabled) return;
 
     if ((*layer).delay > 1) {
         (*layer).delay--;
@@ -301,7 +299,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     } else {
         layer->stopSomething = FALSE;
 
-        if (seqChannel->largeNotes == TRUE) {
+        if (seqChannel->largeNotes) {
             switch (cmd & 0xc0) {
                 case 0x00: // layer_note0 (play percentage, velocity, duration)
                     M64_READ_COMPRESSED_U16(state, sp3A);
@@ -456,7 +454,7 @@ l13cc:
         }
     }
 
-    if (layer->stopSomething == TRUE) {
+    if (layer->stopSomething) {
         if (layer->note != NULL || layer->continuousNotes) {
             seq_channel_layer_note_decay(layer);
         }
@@ -468,7 +466,7 @@ l13cc:
         cmdSemitone = TRUE;
     } else if (layer->note == NULL || layer->status == SOUND_LOAD_STATUS_NOT_LOADED) {
         cmdSemitone = TRUE;
-    } else if (sameSound == FALSE) {
+    } else if (!sameSound) {
         seq_channel_layer_note_decay(layer);
         cmdSemitone = TRUE;
     } else if (layer->sound == NULL) {

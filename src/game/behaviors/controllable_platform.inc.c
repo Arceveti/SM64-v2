@@ -146,7 +146,6 @@ void controllable_platform_tilt_from_mario(void) {
             o->oTimer = 0;
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         }
-    } else {
     }
 }
 

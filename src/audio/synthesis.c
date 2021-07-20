@@ -484,7 +484,7 @@ u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateI
     }
     for (; i < notePos; i++) {
         temp = updateIndex * gMaxSimultaneousNotes;
-        if (IS_BANK_LOAD_COMPLETE(gNoteSubsEu[temp + noteIndices[i]].bankId) == TRUE) {
+        if (IS_BANK_LOAD_COMPLETE(gNoteSubsEu[temp + noteIndices[i]].bankId)) {
             cmd = synthesis_process_note(&gNotes[noteIndices[i]],
                                          &gNoteSubsEu[temp + noteIndices[i]],
                                          &gNotes[noteIndices[i]].synthesisState,
@@ -672,14 +672,14 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
 #ifdef VERSION_US
         //! This function requires note->enabled to be volatile, but it breaks other functions like note_enable.
         //! Casting to a struct with just the volatile bitfield works, but there may be a better way to match.
-        if (((struct vNote *)note)->enabled && IS_BANK_LOAD_COMPLETE(note->bankId) == FALSE) {
+        if (((struct vNote *)note)->enabled && !IS_BANK_LOAD_COMPLETE(note->bankId)) {
 #else
-        if (IS_BANK_LOAD_COMPLETE(note->bankId) == FALSE) {
+        if (!IS_BANK_LOAD_COMPLETE(note->bankId)) {
 #endif
             gAudioErrorFlags = (note->bankId << 8) + noteIndex + 0x1000000;
         } else if (((struct vNote *)note)->enabled) {
 #else
-        if (note->noteSubEu.enabled == FALSE) {
+        if (!note->noteSubEu.enabled) {
             return cmd;
         } else {
 #endif
@@ -689,9 +689,9 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
 #endif
 
 #ifdef VERSION_EU
-            if (noteSubEu->needsInit == TRUE) {
+            if (noteSubEu->needsInit) {
 #else
-            if (note->needsInit == TRUE) {
+            if (note->needsInit) {
 #endif
                 flags = A_INIT;
 #ifndef VERSION_EU
@@ -810,11 +810,11 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
 #endif
 
 #ifdef VERSION_EU
-                        if (s2 == 0 && synthesisState->restart == FALSE) {
+                        if (s2 == 0 && !synthesisState->restart) {
                             s2 = 16;
                         }
 #else
-                        if (s2 == 0 && note->restart == FALSE) {
+                        if (s2 == 0 && !note->restart) {
                             s2 = 16;
                         }
 #endif
@@ -1022,7 +1022,7 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
             flags = 0;
 
 #ifdef VERSION_EU
-            if (noteSubEu->needsInit == TRUE) {
+            if (noteSubEu->needsInit) {
                 flags = A_INIT;
                 noteSubEu->needsInit = FALSE;
             }
@@ -1030,7 +1030,7 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
             cmd = final_resample(cmd, synthesisState, bufLen * 2, resamplingRateFixedPoint,
                                  noteSamplesDmemAddrBeforeResampling, flags);
 #else
-            if (note->needsInit == TRUE) {
+            if (note->needsInit) {
                 flags = A_INIT;
                 note->needsInit = FALSE;
             }
@@ -1361,8 +1361,6 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32
 
 #ifdef VERSION_EU
             pitch = (bufLen << 0xf) / (bufLen + panShift - prevPanShift + 8);
-            if (pitch) {
-            }
 #else
             pitch = (bufLen << 0xf) / (panShift + bufLen - prevPanShift + 8);
 #endif
@@ -1526,7 +1524,7 @@ void note_enable(struct Note *note) {
 }
 
 void note_disable(struct Note *note) {
-    if (note->needsInit == TRUE) {
+    if (note->needsInit) {
         note->needsInit = FALSE;
     } else {
         note_set_vel_pan_reverb(note, 0, .5, 0);

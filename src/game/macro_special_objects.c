@@ -273,9 +273,6 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
                 break;
             }
 
-            if (SpecialObjectPresets[offset].preset_id == 0xFF) {
-            }
-
             offset++;
         }
 

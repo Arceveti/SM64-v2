@@ -352,7 +352,7 @@ void preload_sequence(u32 seqId, s32 preloadMask) {
 s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
     u8 *sp24;
 
-    if (sample->isPatched == TRUE && sample->medium != 0) {
+    if (sample->isPatched && sample->medium != 0) {
         sp24 = func_sh_802f1d90(sample->size, bankId, sample->sampleAddr, sample->medium);
         if (sp24 == NULL) {
             return -1;
@@ -753,8 +753,6 @@ void patch_audio_bank(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
     numDrums = gCtlEntries[bankId].numDrums;
     numInstruments = gCtlEntries[bankId].numInstruments;
     itInstrs = (void **) mem->drums;
-    if (mem->drums) {
-    }
     if (itInstrs != NULL && numDrums != 0) {
         if (1) {
             mem->drums = PATCH(itInstrs, mem);
@@ -1459,8 +1457,6 @@ void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
                 case 0:
                     temp = temp_s0->medium = patchInfo->medium1;
                     if (temp != 0) {
-                        if (temp_s0->size) {
-                        }
                         addr = func_sh_802f1d90(temp_s0->size, patchInfo->bankId1, temp_s0->sampleAddr, temp_s0->medium);
                     } else {
                         temp = temp_s0->medium = patchInfo->medium2;
@@ -1550,7 +1546,7 @@ s32 func_sh_802f573c(s32 audioResetStatus) {
             return 0;
         }
         idx >>= 0x18;
-        if (D_SH_8034EC88[idx].isFree == FALSE) {
+        if (!D_SH_8034EC88[idx].isFree) {
             sample = D_SH_8034EC88[idx].sample;
             added = (sample->sampleAddr + sample->size + sample->medium);
             if (added == D_SH_8034EC88[idx].endAndMediumIdentification) {
@@ -1562,7 +1558,7 @@ s32 func_sh_802f573c(s32 audioResetStatus) {
 
 next:
         if (D_SH_8034F68C > 0) {
-            if (D_SH_8034EC88[D_SH_8034F68C - 1].isFree == TRUE) {
+            if (D_SH_8034EC88[D_SH_8034F68C - 1].isFree) {
                 D_SH_8034F68C--;
                 goto next;
             }

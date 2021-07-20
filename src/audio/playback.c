@@ -212,7 +212,7 @@ struct AudioBankSound *instrument_get_audio_bank_sound(struct Instrument *instru
 struct Instrument *get_instrument_inner(s32 bankId, s32 instId) {
     struct Instrument *inst;
 
-    if (IS_BANK_LOAD_COMPLETE(bankId) == FALSE) {
+    if (!IS_BANK_LOAD_COMPLETE(bankId)) {
         stubbed_printf("Audio: voiceman: No bank error %d\n", bankId);
         gAudioErrorFlags = bankId + 0x10000000;
         return NULL;
@@ -254,7 +254,7 @@ struct Drum *get_drum(s32 bankId, s32 drumId) {
     struct Drum *drum;
 
 #ifdef VERSION_SH
-    if (IS_BANK_LOAD_COMPLETE(bankId) == FALSE) {
+    if (!IS_BANK_LOAD_COMPLETE(bankId)) {
         stubbed_printf("Audio: voiceman: No bank error %d\n", bankId);
         gAudioErrorFlags = bankId + 0x10000000;
         return NULL;
@@ -312,7 +312,7 @@ void note_init(struct Note *note) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
 #define note_disable2 note_disable
 void note_disable(struct Note *note) {
-    if (note->noteSubEu.needsInit == TRUE) {
+    if (note->noteSubEu.needsInit) {
         note->noteSubEu.needsInit = FALSE;
     }
 #ifdef VERSION_EU
@@ -551,7 +551,7 @@ void process_notes(void) {
                     if (note->wantedParentLayer != NO_LAYER) {
                         note_disable2(note);
                         if (note->wantedParentLayer->seqChannel != NULL) {
-                            if (note_init_for_layer(note, note->wantedParentLayer) == TRUE) {
+                            if (note_init_for_layer(note, note->wantedParentLayer)) {
                                 note_disable2(note);
                                 POP(&note->listItem);
                                 PREPEND(&note->listItem, &gNoteFreeLists.disabled);
@@ -631,7 +631,7 @@ struct AudioBankSound *instrument_get_audio_bank_sound(struct Instrument *instru
 struct Instrument *get_instrument_inner(s32 bankId, s32 instId) {
     struct Instrument *inst;
 
-    if (IS_BANK_LOAD_COMPLETE(bankId) == FALSE) {
+    if (!IS_BANK_LOAD_COMPLETE(bankId)) {
         gAudioErrorFlags = bankId + 0x10000000;
         return NULL;
     }
@@ -653,7 +653,7 @@ struct Instrument *get_instrument_inner(s32 bankId, s32 instId) {
 struct Drum *get_drum(s32 bankId, s32 drumId) {
     struct Drum *drum;
 
-    if (IS_BANK_LOAD_COMPLETE(bankId) == FALSE) {
+    if (!IS_BANK_LOAD_COMPLETE(bankId)) {
         gAudioErrorFlags = bankId + 0x10000000;
         return NULL;
     }
@@ -1155,9 +1155,7 @@ s32 note_init_for_layer(struct Note *note, struct SequenceChannelLayer *seqLayer
     note->prevParentLayer = NO_LAYER;
     note->parentLayer = seqLayer;
     note->priority = seqLayer->seqChannel->notePriority;
-    if (IS_BANK_LOAD_COMPLETE(seqLayer->seqChannel->bankId) == FALSE) {
-        return TRUE;
-    }
+    if (!IS_BANK_LOAD_COMPLETE(seqLayer->seqChannel->bankId)) return TRUE;
 
     note->bankId = seqLayer->seqChannel->bankId;
     note->stereoHeadsetEffects = seqLayer->seqChannel->stereoHeadsetEffects;
@@ -1201,7 +1199,7 @@ struct Note *alloc_note_from_disabled(struct NotePool *pool, struct SequenceChan
 #if defined(VERSION_EU) || defined(VERSION_SH)
         note_init_for_layer(note, seqLayer);
 #else
-        if (note_init_for_layer(note, seqLayer) == TRUE) {
+        if (note_init_for_layer(note, seqLayer)) {
             audio_list_push_front(&gNoteFreeLists.disabled, &note->listItem);
             return NULL;
         }

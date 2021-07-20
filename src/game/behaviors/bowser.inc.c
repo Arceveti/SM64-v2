@@ -307,7 +307,7 @@ void bowser_bitdw_actions(void) {
     // Generate random float
     f32 rand = random_float();
     // Set attacks when Bowser Reacts
-    if (o->oBowserIsReacting == FALSE) {
+    if (!o->oBowserIsReacting) {
         if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
             if (o->oDistanceToMario < 1500.0f) {
                 o->oAction = BOWSER_ACT_BREATH_FIRE; // nearby
@@ -350,7 +350,7 @@ void bowser_bitfs_actions(void) {
     // Generate random float
     f32 rand = random_float();
     // Set attacks when Bowser Reacts
-    if (o->oBowserIsReacting == FALSE) {
+    if (!o->oBowserIsReacting) {
         if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
             if (o->oDistanceToMario < 1300.0f) {  // nearby
                 if (rand < 0.5) { // 50% chance
@@ -418,7 +418,7 @@ void bowser_bits_actions(void) {
         case FALSE:
             // oBowserBitsJustJump never changes value, 
             // so its always FALSE, maybe a debug define
-            if (o->oBowserBitsJustJump == FALSE) {
+            if (!o->oBowserBitsJustJump) {
                 bowser_bits_action_list();
             } else {
                 bowser_set_act_big_jump();
@@ -655,7 +655,6 @@ void bowser_act_hit_mine(void) {
             }
             o->oBowserEyesShut = FALSE; // open eyes
         }
-    } else {
     }
 }
 
@@ -742,7 +741,6 @@ void bowser_act_big_jump(void) {
             if (o->oBehParams2ndByte == BOWSER_BP_BITFS) {
                 o->oAction = BOWSER_ACT_TILT_LAVA_PLATFORM;
             }
-        } else {
         }
     // Set to default action when the animation is over
     } else if (cur_obj_check_if_near_animation_end()) {
@@ -1063,7 +1061,7 @@ void bowser_act_jump_onto_stage(void) {
                 o->oDragStrength = 10.0f;
                 o->oSubAction++;
                 // Spawn shockwave (BITS only) if is not on a platform
-                if (onDynamicFloor == FALSE) {
+                if (!onDynamicFloor) {
                     bowser_spawn_shockwave();
                 // If is on a dynamic floor in BITS, then jump
                 // because of the falling platform

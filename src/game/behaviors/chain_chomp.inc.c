@@ -212,7 +212,7 @@ static void chain_chomp_sub_act_lunge(void) {
     if (o->oForwardVel != 0.0f) {
         f32 val04;
 
-        if (o->oChainChompRestrictedByChain == TRUE) {
+        if (o->oChainChompRestrictedByChain) {
             o->oForwardVel = o->oVelY = 0.0f;
             o->oChainChompSignedMaxDistBetweenChainParts = 30.0f;
         }

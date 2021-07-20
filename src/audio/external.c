@@ -1534,8 +1534,8 @@ static void update_game_sound(void) {
                     sSoundBanks[bank][soundIndex].soundStatus = SOUND_STATUS_STOPPED;
                     delete_sound_from_bank(bank, soundIndex);
                 } else if (soundStatus == SOUND_STATUS_STOPPED
-                           && gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]
-                                      ->layers[0]->finished == FALSE) {
+                           && !gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]
+                                      ->layers[0]->finished) {
                     update_background_music_after_sound(bank, soundIndex);
                     gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[0] = 0;
                     delete_sound_from_bank(bank, soundIndex);
@@ -1547,8 +1547,7 @@ static void update_game_sound(void) {
                 // many sounds playing at once. This crash is comparatively common; RTA
                 // speedrunners even have a setup for avoiding it within the SSL pyramid:
                 // https://www.youtube.com/watch?v=QetyTgbQxcw
-                else if (gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->layers[0]->enabled
-                         == FALSE) {
+                else if (!gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->layers[0]->enabled) {
                     update_background_music_after_sound(bank, soundIndex);
                     sSoundBanks[bank][soundIndex].soundStatus = SOUND_STATUS_STOPPED;
                     delete_sound_from_bank(bank, soundIndex);
@@ -2012,7 +2011,7 @@ void seq_player_lower_volume(u8 player, u16 fadeDuration, u8 percentage) {
     if (player == SEQ_PLAYER_LEVEL) {
         sLowerBackgroundMusicVolume = TRUE;
         begin_background_music_fade(fadeDuration);
-    } else if (gSequencePlayers[player].enabled == TRUE) {
+    } else if (gSequencePlayers[player].enabled) {
         seq_player_fade_to_percentage_of_volume(player, fadeDuration, percentage);
     }
 }
@@ -2032,7 +2031,7 @@ void seq_player_unlower_volume(u8 player, u16 fadeDuration) {
             begin_background_music_fade(fadeDuration);
         }
     } else {
-        if (gSequencePlayers[player].enabled == TRUE) {
+        if (gSequencePlayers[player].enabled) {
             seq_player_fade_to_normal_volume(player, fadeDuration);
         }
     }
@@ -2078,7 +2077,7 @@ static u8 begin_background_music_fade(u16 fadeDuration) {
         targetVolume = 20;
     }
 
-    if (gSequencePlayers[SEQ_PLAYER_LEVEL].enabled == TRUE) {
+    if (gSequencePlayers[SEQ_PLAYER_LEVEL].enabled) {
         if (targetVolume != 0xff) {
             seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, fadeDuration, targetVolume);
         } else {
@@ -2566,7 +2565,7 @@ void func_803210D4(u16 fadeDuration) {
         return;
     }
 
-    if (gSequencePlayers[SEQ_PLAYER_LEVEL].enabled == TRUE) {
+    if (gSequencePlayers[SEQ_PLAYER_LEVEL].enabled) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
         func_802ad74c(0x83000000, fadeDuration);
 #else
@@ -2574,7 +2573,7 @@ void func_803210D4(u16 fadeDuration) {
 #endif
     }
 
-    if (gSequencePlayers[SEQ_PLAYER_ENV].enabled == TRUE) {
+    if (gSequencePlayers[SEQ_PLAYER_ENV].enabled) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
         func_802ad74c(0x83010000, fadeDuration);
 #else
@@ -2722,11 +2721,3 @@ void audio_set_sound_mode(u8 soundMode) {
     D_80332108 = (D_80332108 & 0xf) + (soundMode << 4);
     gSoundMode = soundMode;
 }
-
-#if defined(VERSION_JP) || defined(VERSION_US)
-void unused_80321460(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2, UNUSED s32 arg3) {
-}
-
-void unused_80321474(UNUSED s32 arg0) {
-}
-#endif

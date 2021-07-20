@@ -52,7 +52,7 @@ void format_integer(s32 n, s32 base, char *dest, s32 *totalLength, u8 width, s8 
     s8 negative = FALSE;
     char pad;
 
-    if (zeroPad == TRUE) {
+    if (zeroPad) {
         pad = '0';
     } else {
         pad = -1;
@@ -81,13 +81,13 @@ void format_integer(s32 n, s32 base, char *dest, s32 *totalLength, u8 width, s8 
             for (len = 0; len < width - numDigits; len++) dest[len] = pad;
 
             // Needs 1 length to print negative prefix.
-            if (negative == TRUE) {
+            if (negative) {
                 len--;
             }
         }
 
         // Use '-' prefix to indicate negative numbers.
-        if (negative == TRUE) {
+        if (negative) {
             dest[len] = '-';
             len++;
         }

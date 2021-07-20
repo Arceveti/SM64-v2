@@ -157,7 +157,7 @@ s32 intro_regular(void) {
     // so Mario greets the player. After that, he will always say
     // "press start to play" when it goes back to the title screen
     // (using SAVE AND QUIT)
-    if (sPlayMarioGreeting == TRUE) {
+    if (sPlayMarioGreeting) {
         if (gGlobalTimer < 129) {
             play_sound(SOUND_MARIO_HELLO, gGlobalSoundSource);
         } else {
@@ -192,7 +192,7 @@ s32 intro_game_over(void) {
     s32 level = LEVEL_NONE;
 
 #ifndef VERSION_JP
-    if (sPlayMarioGameOver == TRUE) {
+    if (sPlayMarioGameOver) {
         play_sound(SOUND_MARIO_GAME_OVER, gGlobalSoundSource);
         sPlayMarioGameOver = FALSE;
     }

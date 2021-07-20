@@ -38,9 +38,8 @@ void bhv_bub_spawner_loop(void) {
 void bub_move_vertically(s32 a0) {
     f32 sp1C = o->parentObj->oPosY;
     if (sp1C - 100.0f - o->oCheepCheepMaxYOffset < o->oPosY
-        && o->oPosY < sp1C + 1000.0f + o->oCheepCheepMaxYOffset)
+        && o->oPosY < sp1C + 1000.0f + o->oCheepCheepMaxYOffset) {
         o->oPosY = approach_f32_symmetric(o->oPosY, o->oCheepCheepTargetY, a0);
-    else {
     }
 }
 

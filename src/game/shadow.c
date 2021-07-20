@@ -853,7 +853,7 @@ Gfx *create_shadow_hardcoded_rectangle(f32 xPos, f32 yPos, f32 zPos, UNUSED s16 
      * the `rectangles` array. In practice, it never is, because this was
      * only used twice.
      */
-    if (rectangles[idx].scaleWithDistance == TRUE) {
+    if (rectangles[idx].scaleWithDistance) {
         halfWidth = scale_shadow_with_distance(rectangles[idx].halfWidth, distFromShadow);
         halfLength = scale_shadow_with_distance(rectangles[idx].halfLength, distFromShadow);
     } else {

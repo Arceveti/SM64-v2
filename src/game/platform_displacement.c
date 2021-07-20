@@ -212,9 +212,6 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
     Vec3f relativeOffset;
     Vec3f newObjectOffset;
     Vec3s rotation;
-    UNUSED s16 unused1;
-    UNUSED s16 unused2;
-    UNUSED s16 unused3;
     f32 displaceMatrix[4][4];
 
     rotation[0] = platform->oAngleVelPitch;

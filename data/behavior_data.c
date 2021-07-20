@@ -648,18 +648,6 @@ const BehaviorScript bhvCannonBarrel[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvCannonBaseUnused[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    BILLBOARD(),
-    SET_INT(oAnimState, -1),
-    BEGIN_REPEAT(8),
-        CALL_NATIVE(bhv_cannon_base_unused_loop),
-        ADD_INT(oAnimState, 1),
-    END_REPEAT(),
-    DEACTIVATE(),
-};
-
 const BehaviorScript bhvChuckya[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_HOLDABLE | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -1238,19 +1226,6 @@ const BehaviorScript bhvWaterMist2[] = {
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_water_mist_2_loop),
     END_LOOP(),
-};
-
-const BehaviorScript bhvUnused0DFC[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    SET_INT(oAnimState, -1),
-    SET_FLOAT(oFaceAnglePitch, 0),
-    SET_FLOAT(oFaceAngleYaw, 0),
-    SET_FLOAT(oFaceAngleRoll, 0),
-    BEGIN_REPEAT(6),
-        ADD_INT(oAnimState, 1),
-    END_REPEAT(),
-    DEACTIVATE(),
 };
 
 const BehaviorScript bhvMistCircParticleSpawner[] = {
@@ -2365,12 +2340,6 @@ const BehaviorScript bhvLllTiltingInvertedPyramid[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvUnused1F30[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    BREAK(),
-};
-
 const BehaviorScript bhvKoopaShell[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -2472,7 +2441,7 @@ const BehaviorScript bhvPenguinBaby[] = {
     BREAK(),
 };
 
-const BehaviorScript bhvUnused20E0[] = {
+const BehaviorScript bhvSmallPenguinReturned[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     BREAK(),
 };
@@ -2546,13 +2515,9 @@ const BehaviorScript bhvWdwExpressElevatorPlatform[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvChirpChirp[] = {
+const BehaviorScript bhvBubSpawner[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     SET_INT(oCheepCheepSpawnerSpawnAmount, 1),
-    GOTO(bhvChirpChirpUnused),
-};
-
-const BehaviorScript bhvChirpChirpUnused[] = {
     DISABLE_RENDERING(),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     BEGIN_LOOP(),
@@ -3098,13 +3063,6 @@ const BehaviorScript bhvStaticCheckeredPlatform[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvUnused2A10[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BILLBOARD(),
-    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    BREAK(),
-};
-
 const BehaviorScript bhvUnusedFakeStar[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -3114,22 +3072,9 @@ const BehaviorScript bhvUnusedFakeStar[] = {
     END_LOOP(),
 };
 
-// What is this?
-UNUSED static const BehaviorScript unused_1[] = {
-    BREAK(),
-    BREAK(),
-    BREAK(),
-    BREAK(),
-};
-
 const BehaviorScript bhvStaticObject[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    BREAK(),
-};
-
-const BehaviorScript bhvUnused2A54[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
     BREAK(),
 };
 

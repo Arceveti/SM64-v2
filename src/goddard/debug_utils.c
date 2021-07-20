@@ -61,7 +61,7 @@ struct MemTracker *get_memtracker(const char *name) {
 
     for (i = 0; i < ARRAY_COUNT(sMemTrackers); i++) {
         if (sMemTrackers[i].name != NULL) {
-            if (gd_str_not_equal(sMemTrackers[i].name, name) == FALSE) {
+            if (!gd_str_not_equal(sMemTrackers[i].name, name)) {
                 return &sMemTrackers[i];
             }
         }

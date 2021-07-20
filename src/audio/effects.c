@@ -129,8 +129,8 @@ void sequence_player_process_sound(struct SequencePlayer *seqPlayer) {
 
     // Process channels
     for (i = 0; i < CHANNELS_MAX; i++) {
-        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[i]) == TRUE
-            && seqPlayer->channels[i]->enabled == TRUE) {
+        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[i])
+            && seqPlayer->channels[i]->enabled) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
             sequence_channel_process_sound(seqPlayer->channels[i], seqPlayer->recalculateVolume);
 #else

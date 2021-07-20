@@ -227,7 +227,7 @@ void draw_material(struct ObjMaterial *mtl) {
             mtlType = GD_MTL_BREAK;
         }
     }
-    if (sUseSelectedColor == FALSE) {
+    if (!sUseSelectedColor) {
         gd_dl_material_lighting(mtl->gddlNumber, &mtl->Kd, mtlType);
     } else {
         gd_dl_material_lighting(mtl->gddlNumber, sSelectedColour, GD_MTL_LIGHTS);
@@ -312,7 +312,7 @@ void draw_face(struct ObjFace *face) {
     s32 i;             // 20; also used to store mtl's gddl number
     Vtx *gbiVtx;       // 18
 
-    if (sUseSelectedColor == FALSE && face->mtlId >= 0) {// -1 == colored face
+    if (!sUseSelectedColor && face->mtlId >= 0) {// -1 == colored face
         if (face->mtl != NULL) {
             if ((i = face->mtl->gddlNumber) != 0) {
                 if (i != sUpdateViewState.mtlDlNum) {

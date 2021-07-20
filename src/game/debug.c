@@ -57,34 +57,17 @@ s8 sDebugSysCursor = 0;
 s8 sDebugInfoButtonSeqID = 0;
 s16 sDebugInfoButtonSeq[] = { U_CBUTTONS, L_CBUTTONS, D_CBUTTONS, R_CBUTTONS, -1 };
 
-// most likely present in an ifdef DEBUG build. TODO: check DD version?
-void stub_debug_1(void) {
-}
-
-void stub_debug_2(void) {
-}
-
-void stub_debug_3(void) {
-}
-
-void stub_debug_4(void) {
-}
-
 /*
  * These 2 functions are called from the object list processor in regards to cycle
  * counts. They likely have stubbed out code that calculated the clock count and
  * its difference for consecutive calls.
  */
 s64 get_current_clock(void) {
-    s64 wtf = 0;
-
-    return wtf;
+    return 0;
 }
 
 s64 get_clock_difference(UNUSED s64 arg0) {
-    s64 wtf = 0;
-
-    return wtf;
+    return 0;
 }
 
 /*
@@ -162,7 +145,6 @@ void print_debug_top_down_normal(const char *str, s32 number) {
     }
 }
 
-#ifndef VERSION_EU
 void print_mapinfo(void) {
     struct Surface *pfloor;
     f32 bgY;
@@ -196,41 +178,6 @@ void print_mapinfo(void) {
         print_debug_top_down_mapinfo("water %d", water);
     }
 }
-#else
-void print_mapinfo(void) {
-    // EU mostly stubbed this function out.
-    struct Surface *pfloor;
-    UNUSED f32 bgY;
-    UNUSED f32 water;
-    UNUSED s32 area;
-    // s32 angY;
-    //
-    // angY = gCurrentObject->oMoveAngleYaw / 182.044000;
-    // area  = ((s32)gCurrentObject->oPosX + 0x2000) / 1024
-    //      + ((s32)gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
-    //
-    bgY = find_floor(gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
-    water = find_water_level(gCurrentObject->oPosX, gCurrentObject->oPosZ);
-
-    print_debug_top_down_normal("mapinfo", 0);
-    // print_debug_top_down_mapinfo("area %x", area);
-    // print_debug_top_down_mapinfo("wx   %d", gCurrentObject->oPosX);
-    // print_debug_top_down_mapinfo("wy   %d", gCurrentObject->oPosY);
-    // print_debug_top_down_mapinfo("wz   %d", gCurrentObject->oPosZ);
-    // print_debug_top_down_mapinfo("bgY  %d", bgY);
-    // print_debug_top_down_mapinfo("angY %d", angY);
-    //
-    // if(pfloor) // not null
-    //{
-    //    print_debug_top_down_mapinfo("bgcode   %d", pfloor->type);
-    //    print_debug_top_down_mapinfo("bgstatus %d", pfloor->flags);
-    //    print_debug_top_down_mapinfo("bgarea   %d", pfloor->room);
-    //}
-    //
-    // if(gCurrentObject->oPosY < water)
-    //    print_debug_top_down_mapinfo("water %d", water);
-}
-#endif
 
 void print_checkinfo(void) {
     print_debug_top_down_normal("checkinfo", 0);

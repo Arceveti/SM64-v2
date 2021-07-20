@@ -437,7 +437,7 @@ u64 *synthesis_process_note(s32 noteIndex, struct NoteSubEu *noteSubEu, struct N
     curLoadedBook = NULL;
     note = &gNotes[noteIndex];
     flags = 0;
-    if (noteSubEu->needsInit == TRUE) {
+    if (noteSubEu->needsInit) {
         flags = A_INIT;
         synthesisState->restart = 0;
         synthesisState->samplePosInt = 0;
@@ -523,7 +523,7 @@ u64 *synthesis_process_note(s32 noteIndex, struct NoteSubEu *noteSubEu, struct N
                 samplesRemaining = endPos - synthesisState->samplePosInt;
                 nSamplesToProcess = samplesLenAdjusted - nAdpcmSamplesProcessed;
 
-                if (s2 == 0 && synthesisState->restart == FALSE) {
+                if (s2 == 0 && !synthesisState->restart) {
                     s2 = 16;
                 }
                 s6 = 16 - s2; // a1
@@ -676,7 +676,7 @@ skip:
         }
     }
     flags = 0;
-    if (noteSubEu->needsInit == TRUE) {
+    if (noteSubEu->needsInit) {
         flags = A_INIT;
         noteSubEu->needsInit = FALSE;
     }

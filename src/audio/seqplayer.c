@@ -214,12 +214,12 @@ void sequence_player_init_channels(struct SequencePlayer *seqPlayer, u16 channel
     for (i = 0; i < CHANNELS_MAX; i++) {
         if (channelBits & 1) {
             seqChannel = seqPlayer->channels[i];
-            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == TRUE && seqChannel->seqPlayer == seqPlayer) {
+            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) && seqChannel->seqPlayer == seqPlayer) {
                 sequence_channel_disable(seqChannel);
                 seqChannel->seqPlayer = NULL;
             }
             seqChannel = allocate_sequence_channel();
-            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == FALSE) {
+            if (!IS_SEQUENCE_CHANNEL_VALID(seqChannel)) {
                 eu_stubbed_printf_0("Audio:Track:Warning: No Free Notetrack\n");
                 gAudioErrorFlags = i + 0x10000;
                 seqPlayer->channels[i] = seqChannel;
@@ -248,7 +248,7 @@ void sequence_player_disable_channels(struct SequencePlayer *seqPlayer, u16 chan
     for (i = 0; i < CHANNELS_MAX; i++) {
         if (channelBits & 1) {
             seqChannel = seqPlayer->channels[i];
-            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == TRUE) {
+            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel)) {
                 if (seqChannel->seqPlayer == seqPlayer) {
                     sequence_channel_disable(seqChannel);
                     seqChannel->seqPlayer = NULL;
@@ -274,7 +274,7 @@ void sequence_player_disable_channels(struct SequencePlayer *seqPlayer, u16 chan
 void sequence_channel_enable(struct SequencePlayer *seqPlayer, u8 channelIndex, void *script) {
     struct SequenceChannel *seqChannel = seqPlayer->channels[channelIndex];
     s32 i;
-    if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == FALSE) {
+    if (!IS_SEQUENCE_CHANNEL_VALID(seqChannel)) {
 #ifdef VERSION_EU
         struct SequencePlayer *bgMusic = &gSequencePlayers[0];
         struct SequencePlayer *miscMusic = &gSequencePlayers[1];
@@ -425,9 +425,7 @@ u16 m64_read_compressed_u16(struct M64ScriptState *state) {
 void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     s32 cmd;
 
-    if (layer->enabled == FALSE) {
-        return;
-    }
+    if (!layer->enabled) return;
 
     if (layer->delay > 1) {
         layer->delay--;
@@ -449,7 +447,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
             seq_channel_layer_process_script_part5(layer, cmd);
         }
 
-        if (layer->stopSomething == TRUE) {
+        if (layer->stopSomething) {
             if (layer->note != NULL || layer->continuousNotes) {
                 seq_channel_layer_note_decay(layer);
             }
@@ -493,9 +491,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     f32 temp_f2;
 
     sameSound = TRUE;
-    if (layer->enabled == FALSE) {
-        return;
-    }
+    if (!layer->enabled) return;
 
     if (layer->delay > 1) {
         layer->delay--;
@@ -630,9 +626,6 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
                         layer->instrument = NULL;
                     }
 
-                    if (1) {
-                    }
-
                     if (cmd == 0xff) {
                         layer->adsr.releaseRate = 0;
                     }
@@ -707,7 +700,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     } else {
         layer->stopSomething = FALSE;
 
-        if (seqChannel->largeNotes == TRUE) {
+        if (seqChannel->largeNotes) {
             switch (cmd & 0xc0) {
                 case 0x00: // layer_note0 (play percentage, velocity, duration)
                     sp3A = m64_read_compressed_u16(state);
@@ -924,7 +917,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
         }
     }
 
-    if (layer->stopSomething == TRUE) {
+    if (layer->stopSomething) {
         if (layer->note != NULL || layer->continuousNotes) {
             seq_channel_layer_note_decay(layer);
         }
@@ -936,7 +929,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
         cmd = TRUE;
     } else if (layer->note == NULL || layer->status == SOUND_LOAD_STATUS_NOT_LOADED) {
         cmd = TRUE;
-    } else if (sameSound == FALSE) {
+    } else if (!sameSound) {
         seq_channel_layer_note_decay(layer);
         cmd = TRUE;
     }
@@ -956,10 +949,6 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     if (layer->note != NULL && layer->note->parentLayer == layer) {
         note_vibrato_init(layer->note);
     }
-#if defined(VERSION_EU) || defined(VERSION_SH)
-    if (seqChannel) {
-    }
-#endif
 }
 
 #ifdef VERSION_EU
@@ -1116,9 +1105,6 @@ s32 seq_channel_layer_process_script_part2(struct SequenceChannelLayer *layer) {
                     } else {
                         layer->instOrWave = cmd;
                         layer->instrument = NULL;
-                    }
-
-                    if (1) {
                     }
 
                     if (cmd == 0xff) {
@@ -1339,7 +1325,7 @@ s32 seq_channel_layer_process_script_part3(struct SequenceChannelLayer *layer, s
 
     layer->stopSomething = FALSE;
 
-    if (seqChannel->largeNotes == TRUE) {
+    if (seqChannel->largeNotes) {
         switch (cmd & 0xc0) {
             case 0x00: // layer_note0 (play percentage, velocity, duration)
                 sp3A = m64_read_compressed_u16(state);
@@ -2230,9 +2216,6 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
 
 void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
     u8 cmd;
-#ifdef VERSION_SH
-    UNUSED u32 pad;
-#endif
     u8 loBits;
     u8 temp;
     s32 value = 0;
@@ -2244,12 +2227,10 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
     s32 temp32;
 #endif
 
-    if (seqPlayer->enabled == FALSE) {
-        return;
-    }
+    if (!seqPlayer->enabled) return;
 
 #ifndef VERSION_SH
-    if (seqPlayer->bankDmaInProgress == TRUE) {
+    if (seqPlayer->bankDmaInProgress) {
 #ifdef VERSION_EU
         if (osRecvMesg(&seqPlayer->bankDmaMesgQueue, NULL, 0) == -1) {
             return;
@@ -2293,15 +2274,11 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
         return;
     }
 
-    if (seqPlayer->seqDmaInProgress == TRUE) {
+    if (seqPlayer->seqDmaInProgress) {
 #ifdef VERSION_EU
         if (osRecvMesg(&seqPlayer->seqDmaMesgQueue, NULL, 0) == -1) {
             return;
         }
-#ifndef AVOID_UB
-        if (temp) {
-        }
-#endif
 #else
         if (seqPlayer->seqDmaMesg == NULL) {
             return;
@@ -2313,12 +2290,12 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 #endif
 
     // If discarded, bail out.
-    if (IS_SEQ_LOAD_COMPLETE(seqPlayer->seqId) == FALSE
+    if (!IS_SEQ_LOAD_COMPLETE(seqPlayer->seqId)
         || (
 #ifdef VERSION_SH
         seqPlayer->defaultBank[0] != 0xff &&
 #endif
-        IS_BANK_LOAD_COMPLETE(seqPlayer->defaultBank[0]) == FALSE)) {
+        !IS_BANK_LOAD_COMPLETE(seqPlayer->defaultBank[0]))) {
         eu_stubbed_printf_1("Disappear Sequence or Bank %d\n", seqPlayer->seqId);
         sequence_player_disable(seqPlayer);
         return;
@@ -2351,10 +2328,6 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 
     state = &seqPlayer->scriptState;
     if (seqPlayer->delay > 1) {
-#ifndef AVOID_UB
-        if (temp) {
-        }
-#endif
         seqPlayer->delay--;
     } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
@@ -2668,7 +2641,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
                         value = seqPlayer->channels[loBits]->finished;
 #else
-                        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[loBits]) == TRUE) {
+                        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[loBits])) {
                             value = seqPlayer->channels[loBits]->finished;
                         }
 #endif
@@ -2725,7 +2698,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 
     for (i = 0; i < CHANNELS_MAX; i++) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[i]) == TRUE) {
+        if (IS_SEQUENCE_CHANNEL_VALID(seqPlayer->channels[i])) {
             sequence_channel_process_script(seqPlayer->channels[i]);
         }
 #else
@@ -2740,7 +2713,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 void process_sequences(UNUSED s32 iterationsRemaining) {
     s32 i;
     for (i = 0; i < SEQUENCE_PLAYERS; i++) {
-        if (gSequencePlayers[i].enabled == TRUE) {
+        if (gSequencePlayers[i].enabled) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
             sequence_player_process_sequence(&gSequencePlayers[i]);
             sequence_player_process_sound(&gSequencePlayers[i]);
