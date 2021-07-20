@@ -47,17 +47,26 @@
 #define MARIO_SPAWN_AIRBORNE_DEATH        0x23
 #define MARIO_SPAWN_LAUNCH_STAR_COLLECT   0x24
 #define MARIO_SPAWN_LAUNCH_DEATH          0x25
-#define MARIO_SPAWN_UNKNOWN_27            0x27
+#define MARIO_SPAWN_FADE_FROM_BLACK            0x27
 
+// Screen top left - Bottom text
+#define CREDITS_POS_ONE 0
+// Screen top right - Bottom text
+#define CREDITS_POS_TWO 0x10
+// Screen bottom left - Top text
+#define CREDITS_POS_THREE 0x20
+// Screen bottom right - Top text
+#define CREDITS_POS_FOUR 0x30
 
 struct CreditsEntry
 {
     /*0x00*/ u8 levelNum;
     /*0x01*/ u8 areaIndex;
-    /*0x02*/ u8 unk02;
+    /*0x02*/ u8 actNum;
     /*0x03*/ s8 marioAngle;
     /*0x04*/ Vec3s marioPos;
-    /*0x0C*/ const char **unk0C;
+             u8 posVpAndText;
+    /*0x0C*/ const char **string;
 };
 
 extern struct CreditsEntry *gCurrCreditsEntry;
@@ -66,10 +75,8 @@ extern struct MarioState gMarioStates[];
 extern struct MarioState *gMarioState;
 
 extern s16 sCurrPlayMode;
-extern u16 D_80339ECA;
 extern s16 sTransitionTimer;
 extern void (*sTransitionUpdate)(s16 *);
-extern u8 unused3[4];
 
 struct WarpDest {
     u8 type;
@@ -102,14 +109,15 @@ extern struct HudDisplay gHudDisplay;
 extern s8 gNeverEnteredCastle;
 
 enum HUDDisplayFlag {
-    HUD_DISPLAY_FLAG_LIVES = 0x0001,
-    HUD_DISPLAY_FLAG_COIN_COUNT = 0x0002,
-    HUD_DISPLAY_FLAG_STAR_COUNT = 0x0004,
+    HUD_DISPLAY_FLAG_LIVES            = 0x0001,
+    HUD_DISPLAY_FLAG_COIN_COUNT       = 0x0002,
+    HUD_DISPLAY_FLAG_STAR_COUNT       = 0x0004,
     HUD_DISPLAY_FLAG_CAMERA_AND_POWER = 0x0008,
-    HUD_DISPLAY_FLAG_KEYS = 0x0010,
-    HUD_DISPLAY_FLAG_SECRETS = 0x0020,
-    HUD_DISPLAY_FLAG_TIMER = 0x0040,
-    HUD_DISPLAY_FLAG_EMPHASIZE_POWER = 0x8000,
+    HUD_DISPLAY_FLAG_KEYS             = 0x0010,
+    HUD_DISPLAY_FLAG_SECRETS          = 0x0020,
+    HUD_DISPLAY_FLAG_TIMER            = 0x0040,
+
+    HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = 0x8000,
 
     HUD_DISPLAY_NONE = 0x0000,
     HUD_DISPLAY_DEFAULT = HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS

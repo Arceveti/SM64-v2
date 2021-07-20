@@ -1736,7 +1736,7 @@ void queue_rumble_particles(void) {
         queue_rumble_data(5, 80);
     }
     if (gMarioState->heldObj && gMarioState->heldObj->behavior == segmented_to_virtual(bhvBobomb)) {
-        reset_rumble_timers();
+        reset_rumble_timers_slip();
     }
 }
 #endif

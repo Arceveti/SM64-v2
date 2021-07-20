@@ -14,14 +14,10 @@
  * Spawn the four pillars' touch detectors.
  */
 void bhv_pyramid_top_init(void) {
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, 1789, 1024, 764, 0, 0,
-                              0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, 1789, 896, -2579, 0, 0,
-                              0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024, -2579, 0, 0,
-                              0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024, 764, 0, 0,
-                              0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789, 1024,   764, 0, 0, 0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789,  896, -2580, 0, 0, 0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024, -2580, 0, 0, 0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024,   764, 0, 0, 0);
 }
 
 /**
@@ -76,16 +72,18 @@ void bhv_pyramid_top_explode(void) {
 
     // Generate 30 pyramid fragments with random properties.
     for (i = 0; i < 30; i++) {
-        pyramidFragment = spawn_object(
-            o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment
-        );
+        pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
         pyramidFragment->oForwardVel = random_float() * 50 + 80;
         pyramidFragment->oVelY = random_float() * 80 + 20;
         pyramidFragment->oMoveAngleYaw = random_u16();
         pyramidFragment->oPyramidTopFragmentsScale = 3;
         pyramidFragment->oGravity = random_float() * 2 + 5;
     }
-
+#ifdef SSL_PILLARS_CUTSCENE
+    if (gMarioState->action & ACT_FLAG_RIDING_SHELL) {
+        disable_time_stop_including_mario();
+    }
+#endif
     // Deactivate the pyramid top.
     o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
@@ -96,12 +94,21 @@ void bhv_pyramid_top_loop(void) {
         case PYRAMID_TOP_ACT_CHECK_IF_SOLVED:
             if (o->oPyramidTopPillarsTouched == 4) {
                 play_puzzle_jingle();
+#ifdef SSL_PILLARS_CUTSCENE
+                cutscene_object(CUTSCENE_SSL_PYRAMID_EXPLODE, o);
+#endif
                 o->oAction = PYRAMID_TOP_ACT_SPINNING;
             }
             break;
 
         case PYRAMID_TOP_ACT_SPINNING:
             if (o->oTimer == 0) {
+#ifdef SSL_PILLARS_CUTSCENE
+                if (gMarioState->action & ACT_FLAG_RIDING_SHELL) {
+                    gMarioState->forwardVel = 0.0f;
+                    enable_time_stop_including_mario();
+                }
+#endif
                 cur_obj_play_sound_2(SOUND_GENERAL2_PYRAMID_TOP_SPIN);
             }
 

@@ -4670,16 +4670,6 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
 }
 
 /**
- * Starts a cutscene dialog. Only has an effect when `trigger` is 1
- */
-s32 trigger_cutscene_dialog(s32 trigger) {
-    if (trigger == 1) {
-        start_object_cutscene_without_focus(CUTSCENE_READ_MESSAGE);
-    }
-    return 0;
-}
-
-/**
  * Updates the camera based on which C buttons are pressed this frame
  */
 void handle_c_button_movement(struct Camera *c) {
@@ -6591,10 +6581,10 @@ void copy_spline_segment(struct CutsceneSplinePoint dst[], struct CutsceneSpline
     } while (j > 16);
 
     // Create the end of the spline by duplicating the last point
-    do { init_spline_point(&dst[i], 0, src[j].speed, src[j].point); } while (0);
-    do { init_spline_point(&dst[i + 1], 0, 0, src[j].point); } while (0);
-    do { init_spline_point(&dst[i + 2], 0, 0, src[j].point); } while (0);
-    do { init_spline_point(&dst[i + 3], -1, 0, src[j].point); } while (0);
+    init_spline_point(&dst[i    ],  0, src[j].speed, src[j].point);
+    init_spline_point(&dst[i + 1],  0,            0, src[j].point);
+    init_spline_point(&dst[i + 2],  0,            0, src[j].point);
+    init_spline_point(&dst[i + 3], -1,            0, src[j].point);
 }
 
 /**
@@ -6605,19 +6595,14 @@ void copy_spline_segment(struct CutsceneSplinePoint dst[], struct CutsceneSpline
  * @return if Mario left the dialog state, return CUTSCENE_LOOP, else return gCutsceneTimer
  */
 s16 cutscene_common_set_dialog_state(s32 state) {
-    return ((set_mario_npc_dialog(state) == 2) ? CUTSCENE_LOOP : gCutsceneTimer);
+    return ((set_mario_npc_dialog(state) == MARIO_DIALOG_STATUS_SPEAK) ? CUTSCENE_LOOP : gCutsceneTimer);
 }
 
 /**
  * Cause Mario to enter the normal dialog state.
  */
 static void cutscene_mario_dialog(UNUSED struct Camera *c) {
-    gCutsceneTimer = (gMarioState->action & ACT_FLAG_RIDING_SHELL) ? CUTSCENE_LOOP : cutscene_common_set_dialog_state(1);
-}
-
-/// Unused SSL cutscene?
-static UNUSED void unused_cutscene_mario_dialog_looking_up(UNUSED struct Camera *c) {
-    gCutsceneTimer = cutscene_common_set_dialog_state(MARIO_DIALOG_LOOK_UP);
+    gCutsceneTimer = (gMarioState->action & ACT_FLAG_RIDING_SHELL) ? CUTSCENE_LOOP : cutscene_common_set_dialog_state(MARIO_DIALOG_LOOK_FRONT);
 }
 
 /**
@@ -7658,7 +7643,7 @@ void cutscene_bowser_arena_pan_left(UNUSED struct Camera *c) {
 }
 
 /**
- * Duplicate of cutscene_mario_dialog().
+ * Duplicate of cutscene_mario_dialog(), but nonstatic and doesn't set gCutsceneTimer.
  */
 void cutscene_bowser_arena_mario_dialog(UNUSED struct Camera *c) {
     cutscene_common_set_dialog_state(MARIO_DIALOG_LOOK_FRONT);
@@ -8374,13 +8359,13 @@ void cutscene_pyramid_top_explode_warp_back(struct Camera *c) {
  * An unused cutscene for when the pyramid explodes.
  */
 void cutscene_pyramid_top_explode(struct Camera *c) {
-    cutscene_event(cutscene_pyramid_top_explode_start, c, 0, 0);
-    cutscene_event(cutscene_pyramid_top_explode_focus, c, 0, 30);
-    cutscene_event(cutscene_pyramid_top_explode_warp, c, 31, 31);
-    cutscene_event(cutscene_pyramid_top_explode_closeup, c, 31, 139);
-    cutscene_event(cutscene_pyramid_top_explode_zoom_in, c, 23, 23);
+    cutscene_event(cutscene_pyramid_top_explode_start,     c,   0,   0);
+    cutscene_event(cutscene_pyramid_top_explode_focus,     c,   0,  30);
+    cutscene_event(cutscene_pyramid_top_explode_warp,      c,  31,  31);
+    cutscene_event(cutscene_pyramid_top_explode_closeup,   c,  31, 139);
+    cutscene_event(cutscene_pyramid_top_explode_zoom_in,   c,  23,  23);
     cutscene_event(cutscene_pyramid_top_explode_warp_back, c, 140, 140);
-    cutscene_event(cutscene_pyramid_top_explode_cam_shake, c, 31, 139);
+    cutscene_event(cutscene_pyramid_top_explode_cam_shake, c,  31, 139);
 }
 
 /**
@@ -10049,7 +10034,7 @@ struct Cutscene sCutsceneFallToCastleGrounds[] = {
  * Cutscene that plays when Mario enters the pyramid through the hole at the top.
  */
 struct Cutscene sCutsceneEnterPyramidTop[] = {
-    { cutscene_enter_pyramid_top, 90 },
+    { cutscene_enter_pyramid_top,         90 },
     { cutscene_exit_to_castle_grounds_end, 0 }
 };
 
@@ -10058,7 +10043,7 @@ struct Cutscene sCutsceneEnterPyramidTop[] = {
  */
 struct Cutscene sCutscenePyramidTopExplode[] = {
     { cutscene_mario_dialog, CUTSCENE_LOOP },
-    { cutscene_pyramid_top_explode, 150 },
+    { cutscene_pyramid_top_explode,   150 },
     { cutscene_pyramid_top_explode_end, 0 }
 };
 

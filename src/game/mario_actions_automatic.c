@@ -153,7 +153,7 @@ s32 act_holding_pole(struct MarioState *m) {
         }
         play_climbing_sounds(m, 2);
 #if ENABLE_RUMBLE
-        reset_rumble_timers();
+        reset_rumble_timers_slip();
 #endif
         set_sound_moving_speed(SOUND_BANK_MOVING, marioObj->oMarioPoleYawVel / 0x100 * 2);
     } else {
@@ -287,8 +287,6 @@ s32 act_top_of_pole_transition(struct MarioState *m) {
 }
 
 s32 act_top_of_pole(struct MarioState *m) {
-    UNUSED struct Object *marioObj = m->marioObj;
-
     if (m->input & INPUT_A_PRESSED) {
         return set_mario_action(m, ACT_TOP_OF_POLE_JUMP, 0);
     }
@@ -362,11 +360,11 @@ s32 update_hang_moving(struct MarioState *m) {
     }
 
     m->faceAngle[1] =
-    #ifdef TIGHTER_HANGING_CONTROLS
+#ifdef TIGHTER_HANGING_CONTROLS
         m->intendedYaw;
-    #else
+#else
         m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
-    #endif
+#endif
 
     m->slideYaw = m->faceAngle[1];
     m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -791,7 +789,7 @@ s32 act_in_cannon(struct MarioState *m) {
             } else if (m->faceAngle[0] != startFacePitch || m->faceAngle[1] != startFaceYaw) {
                 play_sound(SOUND_MOVING_AIM_CANNON, m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
-                reset_rumble_timers_2(0);
+                reset_rumble_timers_vibrate(0);
 #endif
             }
     }
@@ -878,7 +876,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1] + m->twirlYaw, 0);
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
 
     return FALSE;

@@ -784,7 +784,7 @@ s32 act_side_flip(struct MarioState *m) {
             break;
     }
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
     m->actionTimer++;
@@ -913,7 +913,7 @@ s32 act_twirling(struct MarioState *m) {
 
     m->marioObj->header.gfx.angle[1] += m->twirlYaw;
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -1296,7 +1296,7 @@ s32 act_burning_jump(struct MarioState *m) {
         m->health = 0xFF;
     }
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -1319,7 +1319,7 @@ s32 act_burning_fall(struct MarioState *m) {
         m->health = 0xFF;
     }
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -1960,7 +1960,7 @@ s32 act_lava_boost(struct MarioState *m) {
 
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -2116,7 +2116,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
         m->particleFlags |= PARTICLE_DUST;
     }
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }

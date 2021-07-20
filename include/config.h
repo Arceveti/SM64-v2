@@ -173,11 +173,12 @@
 
 // -- Vanilla Level Changes --
 
-//! not implemented, Fixes Lakitu cutscene detection
+// Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
 // Makes the WF star spawn from the wall instead of existing already
 #define FIX_CANNONLESS
-//! not implemented, Re-implements unused SSL pillars cutscene
+// Re-implements and fixes unused SSL pillars cutscene
+// (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti)
 #define SSL_PILLARS_CUTSCENE
 // Re-implements cracked ice in SL (SunlitSpace542, Arceveti)
 #define DEEP_FREEZE_CRACKED_ICE
@@ -241,7 +242,8 @@
 //! not implemented, Underwater Ground pound similar to SMO
 #define WATER_GROUND_POUND
 // Number of frames before Mario falls off a ledge.
-// This also helps prevent ledge jittering
+// This allows Mario to walk over small gaps
+// and also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME 8
 #endif

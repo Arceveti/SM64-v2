@@ -18,7 +18,6 @@
 
 #define MUSIC_NONE 0xFFFF
 
-static Vec3f unused80339DC0;
 static OSMesgQueue sSoundMesgQueue;
 static OSMesg sSoundMesgBuf[1];
 static struct VblankHandler sSoundVblankHandler;
@@ -31,7 +30,6 @@ static u16 sCurrentMusic = MUSIC_NONE;
 static u16 sCurrentShellMusic = MUSIC_NONE;
 static u16 sCurrentCapMusic = MUSIC_NONE;
 static u8 sPlayingInfiniteStairs = FALSE;
-UNUSED static u8 unused8032C6D8[16] = { 0 };
 static s16 sSoundMenuModeToSoundMode[] = { SOUND_MODE_STEREO, SOUND_MODE_MONO, SOUND_MODE_HEADSET };
 // Only the 20th array element is used.
 static u32 sMenuSoundsExtra[] = {
@@ -74,7 +72,7 @@ static u32 sMenuSoundsExtra[] = {
 };
 static s8 sPaintingEjectSoundPlayed = FALSE;
 
-void play_menu_sounds_extra(s32 a, void *b);
+void play_menu_sounds_extra(s32 soundIndex, void *b);
 
 /**
  * Called from threads: thread5_game_loop
@@ -318,8 +316,9 @@ void stop_cap_music(void) {
 /**
  * Called from threads: thread5_game_loop
  */
-void play_menu_sounds_extra(s32 a, void *b) {
-    play_sound(sMenuSoundsExtra[a], b);
+void play_menu_sounds_extra(s32 soundIndex, void *b) {
+    // soundIndex = 20, b = NULL
+    play_sound(sMenuSoundsExtra[soundIndex], b);
 }
 
 /**
@@ -335,9 +334,6 @@ void audio_game_loop_tick(void) {
 void thread4_sound(UNUSED void *arg) {
     audio_init();
     sound_init();
-
-    // Zero-out unused vector
-    vec3f_copy(unused80339DC0, gVec3fZero);
 
     osCreateMesgQueue(&sSoundMesgQueue, sSoundMesgBuf, ARRAY_COUNT(sSoundMesgBuf));
     set_vblank_handler(1, &sSoundVblankHandler, &sSoundMesgQueue, (OSMesg) 512);

@@ -1337,7 +1337,7 @@ s32 act_riding_shell_ground(struct MarioState *m) {
 
     adjust_sound_for_speed(m);
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -1445,7 +1445,7 @@ s32 act_burning_ground(struct MarioState *m) {
 
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
     return FALSE;
 }
@@ -1463,7 +1463,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
     play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
 
 #if ENABLE_RUMBLE
-    reset_rumble_timers();
+    reset_rumble_timers_slip();
 #endif
 
     adjust_sound_for_speed(m);
