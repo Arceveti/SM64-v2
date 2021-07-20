@@ -98,10 +98,11 @@ void s2d_print(int x, int y, char *str) {
 				// break;
 			default:
 				break;
-				// if (myDegrees == 0)
+				// if (myDegrees == 0) {
 				// 	// draw_s2d_glyph(r, (x += (8 * myScale)) + tx, y + ty, (buf++));
-				// else
-					// draw_s2d_glyph(r, (x += ((8 * myScale))) + tx, y + ty, (buf++));
+				// } else {
+				//	// draw_s2d_glyph(r, (x += ((8 * myScale))) + tx, y + ty, (buf++));
+				// }
 		}
 		p++;
 		// myDegrees += saved_degrees;

@@ -16,7 +16,6 @@ void bhv_hoot_init(void) {
 
 f32 hoot_find_next_floor(struct FloorGeometry **arg0, f32 arg1) {
     f32 sp24 = arg1 * sins(o->oMoveAngleYaw) + o->oPosX;
-    UNUSED f32 sp20 = o->oPosY;
     f32 sp1c = arg1 * coss(o->oMoveAngleYaw) + o->oPosZ;
     f32 floorY = find_floor_height_and_data(sp24, 10000.0f, sp1c, arg0);
 
@@ -28,18 +27,20 @@ void hoot_floor_bounce(void) {
     f32 floorY;
 
     floorY = hoot_find_next_floor(&sp1c, 375.0f);
-    if (floorY + 75.0f > o->oPosY)
-        o->oMoveAnglePitch -= 3640.8888;
-
+    if (floorY + 75.0f > o->oPosY) {
+        o->oMoveAnglePitch -= 3640.8888f;
+    }
     floorY = hoot_find_next_floor(&sp1c, 200.0f);
-    if (floorY + 125.0f > o->oPosY)
-        o->oMoveAnglePitch -= 7281.7776;
-
+    if (floorY + 125.0f > o->oPosY) {
+        o->oMoveAnglePitch -= 7281.7776f;
+    }
     floorY = hoot_find_next_floor(&sp1c, 0);
-    if (floorY + 125.0f > o->oPosY)
+    if (floorY + 125.0f > o->oPosY) {
         o->oPosY = floorY + 125.0f;
-    if (o->oMoveAnglePitch < -21845.3328)
+    }
+    if (o->oMoveAnglePitch < -21845.3328f) {
         o->oMoveAnglePitch = -21845;
+    }
 }
 
 // sp30 = fastOscY
@@ -60,10 +61,7 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
     o->oVelZ = coss(yaw) * hSpeed;
 
     o->oPosX += o->oVelX;
-    if (fastOscY == 0)
-        o->oPosY -= o->oVelY + coss((s32)(sp26 * 3276.8)) * 50.0f / 4;
-    else
-        o->oPosY -= o->oVelY + coss((s32)(sp26 * 6553.6)) * 50.0f / 4;
+    o->oPosY -= o->oVelY + coss((s32)(sp26 * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4;
     o->oPosZ += o->oVelZ;
 
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &sp2c);
@@ -72,19 +70,20 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
         o->oPosZ = zPrev;
     }
 
-    if (sp26 == 0)
+    if (sp26 == 0) {
         cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
+    }
 }
 
 void hoot_player_set_yaw(void) {
     s16 stickX = gPlayer3Controller->rawStickX;
     s16 stickY = gPlayer3Controller->rawStickY;
-    UNUSED s16 pitch = o->oMoveAnglePitch;
-    if (stickX < 10 && stickX >= -9)
+    if (stickX < 10 && stickX >= -9) {
         stickX = 0;
-    if (stickY < 10 && stickY >= -9)
+    }
+    if (stickY < 10 && stickY >= -9) {
         stickY = 0;
-
+    }
     o->oMoveAngleYaw -= 5 * stickX;
 }
 
@@ -104,11 +103,12 @@ void hoot_carry_step(s32 speed, UNUSED f32 xPrev, UNUSED f32 zPrev) {
     o->oVelZ = coss(yaw) * hSpeed;
 
     o->oPosX += o->oVelX;
-    o->oPosY -= o->oVelY + coss((s32)(sp22 * 6553.6)) * 50.0f / 4;
+    o->oPosY -= o->oVelY + coss((s32)(sp22 * 6553.6f)) * 50.0f / 4;
     o->oPosZ += o->oVelZ;
 
-    if (sp22 == 0)
+    if (sp22 == 0) {
         cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
+    }
 }
 
 // sp48 = xPrev
@@ -123,8 +123,8 @@ void hoot_surface_collision(f32 xPrev, UNUSED f32 yPrev, f32 zPrev) {
     hitbox.x = o->oPosX;
     hitbox.y = o->oPosY;
     hitbox.z = o->oPosZ;
-    hitbox.offsetY = 10.0;
-    hitbox.radius = 50.0;
+    hitbox.offsetY = 10.0f;
+    hitbox.radius = 50.0f;
 
     if (find_wall_collisions(&hitbox) != 0) {
         o->oPosX = hitbox.x;
@@ -140,12 +140,15 @@ void hoot_surface_collision(f32 xPrev, UNUSED f32 yPrev, f32 zPrev) {
         return;
     }
 
-    if (absf_2(o->oPosX) > 8000.0f)
+    if (absf_2(o->oPosX) > 8000.0f) {
         o->oPosX = xPrev;
-    if (absf_2(o->oPosZ) > 8000.0f)
+    }
+    if (absf_2(o->oPosZ) > 8000.0f) {
         o->oPosZ = zPrev;
-    if (floorY + 125.0f > o->oPosY)
+    }
+    if (floorY + 125.0f > o->oPosY) {
         o->oPosY = floorY + 125.0f;
+    }
 }
 
 // sp28 = xPrev
@@ -164,9 +167,9 @@ void hoot_act_ascent(f32 xPrev, f32 zPrev) {
         o->header.gfx.animInfo.animFrame = 1;
     }
 
-    if (o->oPosY > 6500.0f)
+    if (o->oPosY > 6500.0f) {
         o->oAction = HOOT_ACT_CARRY;
-
+    }
     hoot_carry_step(60, xPrev, zPrev);
 }
 
@@ -205,8 +208,9 @@ void hoot_action_loop(void) {
 
             hoot_carry_step(20, xPrev, zPrev);
 
-            if (o->oTimer >= 61)
+            if (o->oTimer >= 61) {
                 gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
+            }
             break;
     }
 

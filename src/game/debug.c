@@ -152,7 +152,7 @@ void print_mapinfo(void) {
     s32 area;
     s32 angY;
 
-    angY = gCurrentObject->oMoveAngleYaw / 182.044000;
+    angY = gCurrentObject->oMoveAngleYaw / 182.044000f;
     area = ((s32) gCurrentObject->oPosX + 0x2000) / 1024
            + ((s32) gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
 

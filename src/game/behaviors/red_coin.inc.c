@@ -23,17 +23,13 @@ static struct ObjectHitbox sRedCoinHitbox = {
  * Red coin initialization function. Sets the coin's hitbox and parent object.
  */
 void bhv_red_coin_init(void) {
-    // This floor and floor height are unused. Perhaps for orange number spawns originally?
-    struct Surface *dummyFloor;
-    UNUSED f32 floorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &dummyFloor);
-
     struct Object *hiddenRedCoinStar;
 
     // Set the red coins to have a parent of the closest red coin star.
     hiddenRedCoinStar = cur_obj_nearest_object_with_behavior(bhvHiddenRedCoinStar);
-    if (hiddenRedCoinStar != NULL)
+    if (hiddenRedCoinStar != NULL) {
         o->parentObj = hiddenRedCoinStar;
-    else {
+    } else {
         hiddenRedCoinStar = cur_obj_nearest_object_with_behavior(bhvBowserCourseRedCoinStar);
         if (hiddenRedCoinStar != NULL) {
             o->parentObj = hiddenRedCoinStar;

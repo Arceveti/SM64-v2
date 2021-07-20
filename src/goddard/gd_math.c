@@ -553,7 +553,7 @@ void gd_create_rot_matrix(Mat4f *mtx, struct GdVec3f *vec, f32 s, f32 c) {
     rev.y = vec->y;
     rev.x = vec->z;
 
-    oneMinusCos = 1.0 - c;
+    oneMinusCos = 1.0f - c;
 
     (*mtx)[0][0] = oneMinusCos * rev.z * rev.z + c;
     (*mtx)[0][1] = oneMinusCos * rev.z * rev.y + s * rev.x;

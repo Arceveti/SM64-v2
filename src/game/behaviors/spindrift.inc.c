@@ -14,16 +14,18 @@ struct ObjectHitbox sSpindriftHitbox = {
 
 void bhv_spindrift_loop(void) {
     o->activeFlags |= ACTIVE_FLAG_IGNORE_WATER_LEVEL;
-    if (cur_obj_set_hitbox_and_die_if_attacked(&sSpindriftHitbox, SOUND_OBJ_DYING_ENEMY1, 0))
+    if (cur_obj_set_hitbox_and_die_if_attacked(&sSpindriftHitbox, SOUND_OBJ_DYING_ENEMY1, 0)) {
         cur_obj_change_action(1);
+    }
     cur_obj_update_floor_and_walls();
     switch (o->oAction) {
         case 0:
             approach_forward_vel(&o->oForwardVel, 4.0f, 1.0f);
-            if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f)
+            if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f) {
                 o->oAngleToMario = cur_obj_angle_to_home();
-            else if (o->oDistanceToMario > 300.0f)
+            } else if (o->oDistanceToMario > 300.0f) {
                 o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
+            }
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
             break;
         case 1:

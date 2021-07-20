@@ -6,17 +6,19 @@ struct SpawnParticlesInfo sThiTopPuffs = {
 
 void bhv_thi_huge_island_top_loop(void) {
     if (gTHIWaterDrained & 1) {
-        if (o->oTimer == 0)
+        if (o->oTimer == 0) {
             gEnvironmentRegions[18] = 3000;
+        }
         cur_obj_hide();
-    } else
+    } else {
         load_object_collision_model();
+    }
 }
 
 void bhv_thi_tiny_island_top_loop(void) {
     if (!(gTHIWaterDrained & 1)) {
         if (o->oAction == 0) {
-            if (o->oDistanceToMario < 500.0f)
+            if (o->oDistanceToMario < 500.0f) {
                 if (gMarioStates[0].action == ACT_GROUND_POUND_LAND) {
                     o->oAction++;
                     cur_obj_spawn_particles(&sThiTopPuffs);
@@ -24,6 +26,7 @@ void bhv_thi_tiny_island_top_loop(void) {
                     cur_obj_play_sound_2(SOUND_GENERAL_ACTIVATE_CAP_SWITCH);
                     cur_obj_hide();
                 }
+            }
         } else {
             if (o->oTimer < 50) {
                 gEnvironmentRegions[18]--;
@@ -35,8 +38,9 @@ void bhv_thi_tiny_island_top_loop(void) {
             }
         }
     } else {
-        if (o->oTimer == 0)
+        if (o->oTimer == 0) {
             gEnvironmentRegions[18] = 700;
+        }
         cur_obj_hide();
     }
 }

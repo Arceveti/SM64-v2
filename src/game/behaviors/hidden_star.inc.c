@@ -18,8 +18,9 @@ void bhv_hidden_star_loop(void) {
     gSecretsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 5)
+            if (o->oHiddenStarTriggerCounter == 5) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:
@@ -60,8 +61,9 @@ void bhv_bowser_course_red_coin_star_loop(void) {
     gRedCoinsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 8)
+            if (o->oHiddenStarTriggerCounter == 8) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:

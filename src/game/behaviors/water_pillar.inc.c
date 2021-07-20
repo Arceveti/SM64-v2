@@ -10,16 +10,18 @@ void water_level_pillar_undrained(void) {
             }
             break;
         case 1:
-            if (o->oTimer < 4)
+            if (o->oTimer < 4) {
                 o->oPosY -= 20.0f;
-            else
+            } else {
                 o->oAction++;
+            }
             break;
         case 2:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
             if (otherWaterPillar != NULL) {
-                if (otherWaterPillar->oAction < 2)
+                if (otherWaterPillar->oAction < 2) {
                     o->oAction++;
+                }
             }
             break;
         case 3:
@@ -43,8 +45,9 @@ void water_level_pillar_undrained(void) {
 #if ENABLE_RUMBLE
                 reset_rumble_timers_vibrate(2);
 #endif
-            } else
+            } else {
                 o->oAction++;
+            }
             break;
         case 5:
             break;
@@ -60,15 +63,17 @@ void water_level_pillar_drained(void) {
 }
 
 void bhv_water_level_pillar_init(void) {
-    if (save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED)
+    if (save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED) {
         o->oWaterLevelPillarDrained = 1;
+    }
 }
 
 void bhv_water_level_pillar_loop(void) {
-    if (o->oWaterLevelPillarDrained)
+    if (o->oWaterLevelPillarDrained) {
         water_level_pillar_drained();
-    else
+    } else {
         water_level_pillar_undrained();
+    }
     gEnvironmentRegions[18] = gEnvironmentLevels[2];
     gEnvironmentRegions[6] = gEnvironmentLevels[0];
 }

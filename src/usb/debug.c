@@ -495,9 +495,9 @@ https://github.com/buu342/N64-UNFLoader
             while (slot->next != NULL)
                 slot = slot->next;
             slot->next = &debug_commands_elements[debug_commands_count];
-        }
-        else
+        } else {
             debug_commands_hashtable[entry] = &debug_commands_elements[debug_commands_count];
+        }
             
         // Fill this spot with info about this command
         debug_commands_elements[debug_commands_count].command     = command;
@@ -910,10 +910,11 @@ https://github.com/buu342/N64-UNFLoader
                         // Print the basic info
                         debug_printf("Fault in thread: %d\n\n", curr->id);
                         debug_printf("pc\t\t0x%08x\n", context->pc);
-                        if (assert_file == NULL)
+                        if (assert_file == NULL) {
                             debug_printreg(context->cause, "cause", causeDesc);
-                        else
+                        } else {
                             debug_printf("cause\t\tAssertion failed in file '%s', line %d.\n", assert_file, assert_line);
+                        }
                         debug_printreg(context->sr, "sr", srDesc);
                         debug_printf("badvaddr\t0x%08x\n\n", context->badvaddr);
                         

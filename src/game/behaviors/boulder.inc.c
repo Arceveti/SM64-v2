@@ -19,11 +19,12 @@ void boulder_act_1(void) {
         spawn_mist_particles();
     }
 
-    if (o->oForwardVel > 70.0)
+    if (o->oForwardVel > 70.0f) {
         o->oForwardVel = 70.0f;
-
-    if (o->oPosY < -1000.0f)
+    }
+    if (o->oPosY < -1000.0f) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    }
 }
 
 void bhv_big_boulder_loop(void) {
@@ -51,8 +52,7 @@ void bhv_big_boulder_generator_loop(void) {
         o->oTimer = 0;
     }
 
-    if (!current_mario_room_check(4) || is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500))
-        return;
+    if (!current_mario_room_check(4) || is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500)) return;
 
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 6000)) {
         if ((o->oTimer & 0x3F) == 0) {

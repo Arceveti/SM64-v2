@@ -59,9 +59,9 @@ f32 calculate_and_update_fps() {
     frameTimes[curFrameTimeIndex] = newTime;
 
     curFrameTimeIndex++;
-    if (curFrameTimeIndex >= FRAMETIME_COUNT)
+    if (curFrameTimeIndex >= FRAMETIME_COUNT) {
         curFrameTimeIndex = 0;
-
+    }
 
     return ((f32)FRAMETIME_COUNT * 1000000.0f) / (s32)OS_CYCLES_TO_USEC(newTime - oldTime);
 }
@@ -551,12 +551,10 @@ void render_hud(void) {
             render_hud_timer();
         }
 
-        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES)
-        {
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES) {
             print_text(10, 40, "SURFACE POOL FULL");
         }
-        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES)
-        {
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES) {
             print_text(10, 60, "SURFACE NODE POOL FULL");
         }
     }

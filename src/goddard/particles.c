@@ -60,9 +60,7 @@ static void connect_vertices(struct ObjVertex *vtx1, struct ObjVertex *vtx2) {
         struct Connection *conn = (struct Connection *) link->obj;
 
         if ((conn->node1.vtx == vtx1 || conn->node1.vtx == vtx2)
-         && (conn->node2.vtx == vtx1 || conn->node2.vtx == vtx2)) {
-            break;
-        }
+         && (conn->node2.vtx == vtx1 || conn->node2.vtx == vtx2)) break;
         link = link->next;
     }
 }

@@ -73,8 +73,9 @@ void bhv_jrb_sliding_box_loop(void) {
         }
     }
     obj_set_hitbox(o, &sSkullSlidingBoxHitbox);
-    if (!(o->oJrbSlidingBoxAngle & 0x7FFF))
+    if (!(o->oJrbSlidingBoxAngle & 0x7FFF)) {
         cur_obj_become_tangible();
+    }
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         o->oInteractStatus = INT_STATUS_NONE;
         cur_obj_become_intangible();

@@ -86,8 +86,9 @@ void bhv_falling_pillar_loop(void) {
             o->oFaceAngleYaw = approach_s16_symmetric(o->oFaceAngleYaw, angleInFrontOfMario, 0x400);
 
             // After 10 ticks, start falling.
-            if (o->oTimer > 10)
+            if (o->oTimer > 10) {
                 o->oAction = FALLING_PILLAR_ACT_FALLING;
+            }
             break;
 
         case FALLING_PILLAR_ACT_FALLING:
@@ -139,6 +140,7 @@ void bhv_falling_pillar_hitbox_loop(void) {
     obj_set_hitbox(o, &sFallingPillarHitbox);
 
     // When the pillar goes inactive, the hitboxes also go inactive.
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED)
+    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    }
 }

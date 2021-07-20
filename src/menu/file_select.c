@@ -330,7 +330,7 @@ static void bhv_menu_button_zoom_in_out(struct Object *button) {
  * Used while selecting a target copy/erase file or yes/no erase confirmation prompt.
  */
 static void bhv_menu_button_zoom_in(struct Object *button) {
-    button->oMenuButtonScale += 0.0022;
+    button->oMenuButtonScale += 0.0022f;
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 10) {
         button->oMenuButtonState = MENU_BUTTON_STATE_DEFAULT;
@@ -344,7 +344,7 @@ static void bhv_menu_button_zoom_in(struct Object *button) {
  * yes/no erase confirmation prompt to undo the zoom in.
  */
 static void bhv_menu_button_zoom_out(struct Object *button) {
-    button->oMenuButtonScale -= 0.0022;
+    button->oMenuButtonScale -= 0.0022f;
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 10) {
         button->oMenuButtonState = MENU_BUTTON_STATE_DEFAULT;
@@ -1473,12 +1473,14 @@ void print_menu_cursor(void) {
     handle_controller_cursor_input();
     create_dl_translation_matrix(MENU_MTX_PUSH, sCursorPos[0] + 155.0f, sCursorPos[1] + 95.0f, 0.0f);
     // Get the right graphic to use for the cursor.
-    if (sCursorClickingTimer == 0)
+    if (sCursorClickingTimer == 0) {
         // Idle
         gSPDisplayList(gDisplayListHead++, dl_menu_idle_hand);
-    if (sCursorClickingTimer != 0)
+    }
+    if (sCursorClickingTimer != 0) {
         // Grabbing
         gSPDisplayList(gDisplayListHead++, dl_menu_grabbing_hand);
+    }
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     if (sCursorClickingTimer != 0) {
         sCursorClickingTimer++; // This is a very strange way to implement a timer? It counts up and

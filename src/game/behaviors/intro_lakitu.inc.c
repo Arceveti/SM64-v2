@@ -46,9 +46,9 @@ s32 intro_lakitu_set_pos_and_focus(struct Object *o, struct CutsceneSplinePoint 
     s16 splineSegment = o->oIntroLakituSplineSegment;
 
     if ((move_point_along_spline(newFocus, offset, &splineSegment, &(o->oIntroLakituSplineSegmentProgress)) == 1)
-        || (move_point_along_spline(newOffset, focus, &splineSegment, &(o->oIntroLakituSplineSegmentProgress)) == 1))
+        || (move_point_along_spline(newOffset, focus, &splineSegment, &(o->oIntroLakituSplineSegmentProgress)) == 1)) {
         splineFinished++;
-
+    }
     o->oIntroLakituSplineSegment = splineSegment;
     intro_lakitu_set_offset_from_camera(o, newOffset);
     intro_lakitu_set_focus(o, newFocus);
@@ -66,10 +66,11 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oIntroLakituSplineSegmentProgress = 0.f;
             gCurrentObject->oIntroLakituCloud =
                 spawn_object_relative_with_scale(1, 0, 0, 0, 2.f, gCurrentObject, MODEL_MIST, bhvCloud);
-            if (gCamera->cutscene == CUTSCENE_END_WAVING)
+            if (gCamera->cutscene == CUTSCENE_END_WAVING) {
                 gCurrentObject->oAction = 100;
-            else
+            } else {
                 gCurrentObject->oAction++;
+            }
             break;
 
         case 1:
@@ -79,13 +80,13 @@ void bhv_intro_lakitu_loop(void) {
                 gCurrentObject->oPosY = gCamera->pos[1] + 500.f;
                 gCurrentObject->oPosZ = gCamera->pos[2];
             }
-            if (gCutsceneTimer > 52)
+            if (gCutsceneTimer > 52) {
                 cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
-
+            }
             if (intro_lakitu_set_pos_and_focus(gCurrentObject, gIntroLakituStartToPipeOffsetFromCamera,
-                                               gIntroLakituStartToPipeFocus) == 1)
+                                               gIntroLakituStartToPipeFocus) == 1) {
                 gCurrentObject->oAction++;
-
+            }
             switch (gCurrentObject->oTimer) {
 #if defined(VERSION_US) || defined(VERSION_SH)
                 case 534:
@@ -109,10 +110,12 @@ void bhv_intro_lakitu_loop(void) {
                     break;
             }
 #ifdef VERSION_EU
-            if (gCurrentObject->oTimer == 446)
+            if (gCurrentObject->oTimer == 446) {
                 cur_obj_play_sound_2(SOUND_ACTION_FLYING_FAST);
-            if (gCurrentObject->oTimer == 485)
+            }
+            if (gCurrentObject->oTimer == 485) {
                 cur_obj_play_sound_2(SOUND_ACTION_INTRO_UNK45E);
+            }
 #endif
             break;
         case 2:
@@ -170,8 +173,9 @@ void bhv_intro_lakitu_loop(void) {
                 obj_mark_for_deletion(gCurrentObject->oIntroLakituCloud);
             }
 #ifndef VERSION_JP
-            if (gCurrentObject->oTimer == 14)
+            if (gCurrentObject->oTimer == 14) {
                 cur_obj_play_sound_2(SOUND_ACTION_INTRO_UNK45F);
+            }
 #endif
             break;
         case 100:
@@ -211,9 +215,10 @@ void bhv_intro_lakitu_loop(void) {
                 approach_f32_asymptotic(gCurrentObject->oForwardVel, 60.f, 0.05f);
             gCurrentObject->oFaceAngleYaw = camera_approach_s16_symmetric(
                 gCurrentObject->oFaceAngleYaw, (s16) calculate_yaw(sp4C, gCamera->pos), 0x200);
-            if (gCurrentObject->oTimer < 62)
+            if (gCurrentObject->oTimer < 62) {
                 gCurrentObject->oMoveAngleYaw =
                     approach_s16_asymptotic(gCurrentObject->oMoveAngleYaw, 0x1800, 0x1E);
+            }
             gCurrentObject->oMoveAnglePitch =
                 camera_approach_s16_symmetric(gCurrentObject->oMoveAnglePitch, -0x2000, 0x5A);
             gCurrentObject->oFaceAnglePitch = 0;

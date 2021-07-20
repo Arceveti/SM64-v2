@@ -129,11 +129,12 @@ void create_dl_translation_matrix(s8 pushOp, f32 x, f32 y, f32 z) {
 
     guTranslate(matrix, x, y, z);
 
-    if (pushOp == MENU_MTX_PUSH)
+    if (pushOp == MENU_MTX_PUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-
-    if (pushOp == MENU_MTX_NOPUSH)
+    }
+    if (pushOp == MENU_MTX_NOPUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_NOPUSH);
+    }
 }
 
 void create_dl_rotation_matrix(s8 pushOp, f32 a, f32 x, f32 y, f32 z) {
@@ -145,35 +146,33 @@ void create_dl_rotation_matrix(s8 pushOp, f32 a, f32 x, f32 y, f32 z) {
 
     guRotate(matrix, a, x, y, z);
 
-    if (pushOp == MENU_MTX_PUSH)
+    if (pushOp == MENU_MTX_PUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-
-    if (pushOp == MENU_MTX_NOPUSH)
+    }
+    if (pushOp == MENU_MTX_NOPUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_NOPUSH);
+    }
 }
 
 void create_dl_scale_matrix(s8 pushOp, f32 x, f32 y, f32 z) {
     Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
 
-    if (matrix == NULL) {
-        return;
-    }
+    if (matrix == NULL) return;
 
     guScale(matrix, x, y, z);
 
-    if (pushOp == MENU_MTX_PUSH)
+    if (pushOp == MENU_MTX_PUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-
-    if (pushOp == MENU_MTX_NOPUSH)
+    }
+    if (pushOp == MENU_MTX_NOPUSH) {
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(matrix), G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_NOPUSH);
+    }
 }
 
 void create_dl_ortho_matrix(void) {
     Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
 
-    if (matrix == NULL) {
-        return;
-    }
+    if (matrix == NULL) return;
 
     create_dl_identity_matrix();
 
@@ -246,8 +245,7 @@ enum MultiStringIDs { STRING_THE, STRING_YOU };
  * 0: 'the'
  * 1: 'you'
  */
-void render_multi_text_string(s8 multiTextID)
-{
+void render_multi_text_string(s8 multiTextID) {
     s8 i;
     struct MultiTextEntry textLengths[2] = {
         { 3, { TEXT_THE_RAW } },
@@ -637,7 +635,7 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
     switch (gDialogBoxType) {
         case DIALOG_TYPE_ROTATE: // Renders a dialog black box with zoom and rotation
             if (gDialogBoxState == DIALOG_STATE_OPENING || gDialogBoxState == DIALOG_STATE_CLOSING) {
-                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0 / gDialogBoxScale, 1.0 / gDialogBoxScale, 1.0f);
+                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0 / gDialogBoxScale, 1.0f / gDialogBoxScale, 1.0f);
                 // convert the speed into angle
                 create_dl_rotation_matrix(MENU_MTX_NOPUSH, gDialogBoxOpenTimer * 4.0f, 0, 0, 1.0f);
             }
@@ -645,9 +643,9 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
             break;
         case DIALOG_TYPE_ZOOM: // Renders a dialog white box with zoom
             if (gDialogBoxState == DIALOG_STATE_OPENING || gDialogBoxState == DIALOG_STATE_CLOSING) {
-                create_dl_translation_matrix(MENU_MTX_NOPUSH, 65.0 - (65.0 / gDialogBoxScale),
-                                              (40.0 / gDialogBoxScale) - 40, 0);
-                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0 / gDialogBoxScale, 1.0 / gDialogBoxScale, 1.0f);
+                create_dl_translation_matrix(MENU_MTX_NOPUSH, 65.0f - (65.0f / gDialogBoxScale),
+                                              (40.0f / gDialogBoxScale) - 40, 0);
+                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0f / gDialogBoxScale, 1.0f / gDialogBoxScale, 1.0f);
             }
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 150);
             break;
@@ -1767,8 +1765,9 @@ s16 render_pause_courses_and_castle(void) {
             s32 exitCheck = 1;
         #endif
             #ifndef DISABLE_EXIT_COURSE
-            if (exitCheck)
+            if (exitCheck) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
+            }
             #endif
 
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {

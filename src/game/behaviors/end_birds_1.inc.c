@@ -2,7 +2,6 @@
 
 void bhv_end_birds_1_loop(void) {
     Vec3f sp34;
-    UNUSED f32 sp30 = random_float();
 
     switch (gCurrentObject->oAction) {
         case 0:
@@ -16,12 +15,15 @@ void bhv_end_birds_1_loop(void) {
             vec3f_set(sp34, gCurrentObject->oIntroLakituEndBirds1DestX, gCurrentObject->oIntroLakituEndBirds1DestY,
                       gCurrentObject->oIntroLakituEndBirds1DestZ);
 
-            if (gCurrentObject->oTimer < 100)
+            if (gCurrentObject->oTimer < 100) {
                 obj_rotate_towards_point(gCurrentObject, sp34, 0, 0, 0x20, 0x20);
-            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.f) && (gCurrentObject->oTimer == 0))
+            }
+            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.f) && (gCurrentObject->oTimer == 0)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
-            if (gCutsceneTimer == 0)
+            }
+            if (gCutsceneTimer == 0) {
                 obj_mark_for_deletion(gCurrentObject);
+            }
             break;
     }
 

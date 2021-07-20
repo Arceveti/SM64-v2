@@ -226,8 +226,9 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     }
                     if (len) {
                         PUP(out) = PUP(from);
-                        if (len > 1)
+                        if (len > 1) {
                             PUP(out) = PUP(from);
+                        }
                     }
                 }
                 else {
@@ -240,8 +241,9 @@ unsigned start;         /* inflate()'s starting value for strm->avail_out */
                     } while (len > 2);
                     if (len) {
                         PUP(out) = PUP(from);
-                        if (len > 1)
+                        if (len > 1) {
                             PUP(out) = PUP(from);
+                        }
                     }
                 }
             }

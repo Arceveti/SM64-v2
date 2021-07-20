@@ -229,8 +229,8 @@ f32 painting_mario_y(struct Painting *painting) {
 f32 painting_mario_z(struct Painting *painting) {
     f32 relZ = painting->posZ - gPaintingMarioZPos;
 
-    if (relZ < 0.0) {
-        relZ = 0.0;
+    if (relZ < 0.0f) {
+        relZ = 0.0f;
     } else if (relZ > painting->size) {
         relZ = painting->size;
     }
@@ -250,12 +250,10 @@ f32 painting_ripple_y(struct Painting *painting, s8 ySource) {
             return painting_mario_z(painting); // floor paintings use X and Z
             break;
         case MIDDLE_Y:
-            return painting->size / 2.0; // some concentric ripples don't care about Mario
+            return painting->size / 2.0f; // some concentric ripples don't care about Mario
             break;
     }
-#ifdef AVOID_UB
     return 0.0f;
-#endif
 }
 
 /**
@@ -310,7 +308,7 @@ f32 painting_ripple_x(struct Painting *painting, s8 xSource) {
             return painting_mario_x(painting);
             break;
         case MIDDLE_X: // concentric rippling may not care about Mario
-            return painting->size / 2.0;
+            return painting->size / 2.0f;
             break;
     }
     return 0.0f;

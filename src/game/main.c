@@ -429,17 +429,14 @@ void change_vi(OSViMode *mode, int width, int height){
 
     mode->comRegs.width = width;
     mode->comRegs.xScale = (width*512)/320;
-    if(height > 240)
-    {
+    if (height > 240) {
         mode->comRegs.ctrl |= 0x40;
         mode->fldRegs[0].origin = width*2;
         mode->fldRegs[1].origin = width*4;
         mode->fldRegs[0].yScale = 0x2000000|((height*1024)/240);
         mode->fldRegs[1].yScale = 0x2000000|((height*1024)/240);
         mode->fldRegs[0].vStart = mode->fldRegs[1].vStart-0x20002;
-    }
-    else
-    {
+    } else {
         mode->fldRegs[0].origin = width*2;
         mode->fldRegs[1].origin = width*4;
         mode->fldRegs[0].yScale = ((height*1024)/240);

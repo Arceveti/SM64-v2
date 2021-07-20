@@ -32,16 +32,15 @@ void small_breakable_box_act_move(void) {
     s16 collisionFlags = object_step();
 
     obj_attack_collided_from_other_object(o);
-    if (collisionFlags == 1)
+    if (collisionFlags == OBJ_COL_FLAG_GROUNDED) {
         cur_obj_play_sound_2(SOUND_GENERAL_BOX_LANDING_2);
-    if (collisionFlags & 1) {
-        if (o->oForwardVel > 20.0f) {
-            cur_obj_play_sound_2(SOUND_ENV_SLIDING);
-            small_breakable_box_spawn_dust();
-        }
+    }
+    if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oForwardVel > 20.0f)) {
+        cur_obj_play_sound_2(SOUND_ENV_SLIDING);
+        small_breakable_box_spawn_dust();
     }
 
-    if (collisionFlags & 2) {
+    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
         spawn_mist_particles();
         spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 0.7f, 3);
         obj_spawn_yellow_coins(o, 3);
@@ -57,10 +56,11 @@ void breakable_box_small_released_loop(void) {
 
     // Begin flashing
     if (o->oBreakableBoxSmallFramesSinceReleased > 810) {
-        if (o->oBreakableBoxSmallFramesSinceReleased & 1)
+        if (o->oBreakableBoxSmallFramesSinceReleased & 1) {
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-        else
+        } else {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
+        }
     }
 
     // Despawn, and create a corkbox respawner
@@ -86,8 +86,9 @@ void breakable_box_small_idle_loop(void) {
             break;
     }
 
-    if (o->oBreakableBoxSmallReleased == 1)
+    if (o->oBreakableBoxSmallReleased) {
         breakable_box_small_released_loop();
+    }
 }
 
 void breakable_box_small_get_dropped(void) {

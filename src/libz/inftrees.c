@@ -234,15 +234,15 @@ unsigned short FAR *work;
 
         /* backwards increment the len-bit code huff */
         incr = 1U << (len - 1);
-        while (huff & incr)
+        while (huff & incr) {
             incr >>= 1;
+        }
         if (incr != 0) {
             huff &= incr - 1;
             huff += incr;
-        }
-        else
+        } else {
             huff = 0;
-
+        }
         /* go to next symbol, update count, len */
         sym++;
         if (--(count[len]) == 0) {
@@ -253,9 +253,9 @@ unsigned short FAR *work;
         /* create new sub-table if needed */
         if (len > root && (huff & mask) != low) {
             /* if first time, transition to sub-tables */
-            if (drop == 0)
+            if (drop == 0) {
                 drop = root;
-
+            }
             /* increment past last table */
             next += 1U << curr;
 
@@ -307,14 +307,15 @@ unsigned short FAR *work;
 
         /* backwards increment the len-bit code huff */
         incr = 1U << (len - 1);
-        while (huff & incr)
+        while (huff & incr) {
             incr >>= 1;
+        }
         if (incr != 0) {
             huff &= incr - 1;
             huff += incr;
-        }
-        else
+        } else {
             huff = 0;
+        }
     }
 
     /* set return parameters */

@@ -88,8 +88,8 @@ void bhv_bowling_ball_roll_loop(void) {
 
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
-    if (o->oForwardVel > 70.0) {
-        o->oForwardVel = 70.0;
+    if (o->oForwardVel > 70.0f) {
+        o->oForwardVel = 70.0f;
     }
 
     bowling_ball_set_hitbox();
@@ -199,9 +199,9 @@ void bhv_generic_bowling_ball_spawner_loop(void) {
 void bhv_thi_bowling_ball_spawner_loop(void) {
     struct Object *bowlingBall;
 
-    if (o->oTimer == 256)
+    if (o->oTimer == 256) {
         o->oTimer = 0;
-
+    }
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 800)
         || (o->oPosY < gMarioObject->header.gfx.pos[1])) return;
 

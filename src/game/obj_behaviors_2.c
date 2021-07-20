@@ -79,11 +79,7 @@ void wiggler_jumped_on_attack_handler(void);
 void huge_goomba_weakly_attacked(void);
 
 static s32 obj_is_rendering_enabled(void) {
-    if (o->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    return (o->header.gfx.node.flags & GRAPH_RENDER_ACTIVE);
 }
 
 static s16 obj_get_pitch_from_vel(void) {
@@ -116,11 +112,7 @@ static void obj_set_dist_from_home(f32 distFromHome) {
 }
 
 static s32 obj_is_near_to_and_facing_mario(f32 maxDist, s16 maxAngleDiff) {
-    if (o->oDistanceToMario < maxDist
-        && abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < maxAngleDiff) {
-        return TRUE;
-    }
-    return FALSE;
+    return (o->oDistanceToMario < maxDist && abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < maxAngleDiff);
 }
 
 static void obj_perform_position_op(s32 op) {
@@ -408,41 +400,25 @@ static s32 obj_y_vel_approach(f32 target, f32 delta) {
 static s32 obj_move_pitch_approach(s16 target, s16 delta) {
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, target, delta);
 
-    if ((s16) o->oMoveAnglePitch == target) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((s16) o->oMoveAnglePitch == target);
 }
 
 static s32 obj_face_pitch_approach(s16 targetPitch, s16 deltaPitch) {
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, targetPitch, deltaPitch);
 
-    if ((s16) o->oFaceAnglePitch == targetPitch) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((s16) o->oFaceAnglePitch == targetPitch);
 }
 
 static s32 obj_face_yaw_approach(s16 targetYaw, s16 deltaYaw) {
     o->oFaceAngleYaw = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, deltaYaw);
 
-    if ((s16) o->oFaceAngleYaw == targetYaw) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((s16) o->oFaceAngleYaw == targetYaw);
 }
 
 static s32 obj_face_roll_approach(s16 targetRoll, s16 deltaRoll) {
     o->oFaceAngleRoll = approach_s16_symmetric(o->oFaceAngleRoll, targetRoll, deltaRoll);
 
-    if ((s16) o->oFaceAngleRoll == targetRoll) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return ((s16) o->oFaceAngleRoll == targetRoll);
 }
 
 static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targetSpeedProportion,
@@ -532,7 +508,7 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
 static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLengthRange,
                                 s16 blinkLength) {
     if (*blinkTimer != 0) {
-        *blinkTimer--;
+        (*blinkTimer)--;
     } else {
         *blinkTimer = random_linear_offset(baseCycleLength, cycleLengthRange);
     }

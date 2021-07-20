@@ -118,7 +118,7 @@ struct SpawnParticlesInfo sMistParticles = { 2, 20, MODEL_MIST, 0, 40, 5, 30, 20
 // generate_wind_puffs/dust (something like that)
 void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
     sMistParticles.sizeBase = size;
-    sMistParticles.sizeRange = size / 20.0;
+    sMistParticles.sizeRange = size / 20.0f;
     sMistParticles.offsetY = offsetY;
     if (count == 0) {
         sMistParticles.count = 20;
@@ -238,8 +238,9 @@ void vec3f_copy_2(Vec3f dest, Vec3f src) {
 
 s32 set_obj_anim_with_accel_and_sound(s16 a0, s16 a1, s32 a2) {
     f32 range;
-    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0)
+    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0) {
         range = 1.0f;
+    }
     if (cur_obj_check_anim_frame_in_range(a0, range) || cur_obj_check_anim_frame_in_range(a1, range)) {
         cur_obj_play_sound_2(a2);
         return TRUE;

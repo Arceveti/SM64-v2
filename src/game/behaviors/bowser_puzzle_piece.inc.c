@@ -164,9 +164,9 @@ void bhv_lll_bowser_puzzle_piece_update(void) {
     s8 *nextAction = o->oBowserPuzzlePieceNextAction;
 
     // If Mario is standing on this puzzle piece, set a flag in the parent.
-    if (gMarioObject->platform == o)
+    if (gMarioObject->platform == o) {
         o->parentObj->oBowserPuzzleCompletionFlags = 1;
-
+    }
     // If we should advance to the next action...
     if (o->oBowserPuzzlePieceContinuePerformingAction == 0) {
         // Start doing the next action.
@@ -221,9 +221,10 @@ void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UN
 
 void bhv_lll_bowser_puzzle_piece_idle(void) {
     // For the first 24 frames, do nothing.
-    if (o->oTimer >= 24)
+    if (o->oTimer >= 24) {
         // Then advance to the next action.
         o->oBowserPuzzlePieceContinuePerformingAction = 0;
+    }
 }
 
 void bhv_lll_bowser_puzzle_piece_move_left(void) {

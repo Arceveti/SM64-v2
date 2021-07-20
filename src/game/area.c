@@ -480,10 +480,10 @@ void render_game(void) {
 
         if (D_8032CE78 != NULL) {
             make_viewport_clip_rect(D_8032CE78);
-        } else
+        } else {
             gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                           SCREEN_HEIGHT - gBorderHeight);
-
+        }
         if (gWarpTransition.isActive) {
             if (gWarpTransDelay == 0) {
                 gWarpTransition.isActive = !render_screen_transition(0, gWarpTransition.type, gWarpTransition.time,

@@ -1260,9 +1260,7 @@ u32 interact_bully(struct MarioState *m, UNUSED u32 interactType, struct Object 
         attack_object(o, interaction);
         bounce_back_from_attack(m, interaction);
         return TRUE;
-    }
-
-    else if (!sInvulnerable && !(m->flags & MARIO_VANISH_CAP)
+    } else if (!sInvulnerable && !(m->flags & MARIO_VANISH_CAP)
              && !(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) {
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->invincTimer = 2;

@@ -60,12 +60,12 @@ static void manta_ray_move(void) {
     // This causes the ray to tilt as it turns.
     if ((s16) o->oMantaTargetYaw != (s16) o->oMoveAngleYaw) {
         o->oMoveAngleRoll -= 91;
-        if (o->oMoveAngleRoll < -5461.3332) {
+        if (o->oMoveAngleRoll < -5461.3332f) {
             o->oMoveAngleRoll = -0x4000 / 3;
         }
     } else {
         o->oMoveAngleRoll += 91;
-        if (o->oMoveAngleRoll > 5461.3332) {
+        if (o->oMoveAngleRoll > 5461.3332f) {
             o->oMoveAngleRoll = 0x4000 / 3;
         }
     }

@@ -6288,7 +6288,6 @@ s16 camera_course_processing(struct Camera *c) {
                     if (((sMarioCamState->action & ACT_FLAG_ON_POLE) != 0)
                         || (sMarioGeometry.currFloorHeight > 800.0f)) {
                         transition_to_camera_mode(c, CAMERA_MODE_8_DIRECTIONS, 60);
-
                     } else {
                         if (sMarioCamState->pos[1] < 800.0f) {
                             transition_to_camera_mode(c, CAMERA_MODE_FREE_ROAM, 60);

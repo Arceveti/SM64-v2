@@ -112,12 +112,12 @@ void bhv_1up_running_away_loop(void) {
     stepResult = object_step();
     switch (o->oAction) {
         case 0:
-            if (o->oTimer >= 18)
+            if (o->oTimer >= 18) {
                 spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-
-            if (o->oTimer == 0)
+            }
+            if (o->oTimer == 0) {
                 play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
-
+            }
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
@@ -149,10 +149,10 @@ void sliding_1up_move(void) {
         o->oForwardVel += 25.0f;
         o->oVelY = 0;
     } else {
-        o->oForwardVel *= 0.98;
+        o->oForwardVel *= 0.98f;
     }
 
-    if (o->oForwardVel > 40.0) {
+    if (o->oForwardVel > 40.0f) {
         o->oForwardVel = 40.0f;
     }
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 5000)) {
@@ -164,8 +164,9 @@ void bhv_1up_sliding_loop(void) {
     switch (o->oAction) {
         case 0:
             set_object_visibility(o, 3000);
-            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000))
+            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:
@@ -259,9 +260,9 @@ void bhv_1up_hidden_trigger_loop(void) {
     struct Object *nearestHidden1up;
     if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
         nearestHidden1up = cur_obj_nearest_object_with_behavior(bhvHidden1up);
-        if (nearestHidden1up != NULL)
+        if (nearestHidden1up != NULL) {
             nearestHidden1up->o1UpHiddenTimesTriggered++;
-
+        }
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

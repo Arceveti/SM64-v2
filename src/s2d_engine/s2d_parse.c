@@ -319,16 +319,19 @@ static int s2d_width(const char *str, int line, int len) {
 				curLine++;
 				break;
 			case '\t':
-				if (curLine == line)
+				if (curLine == line) {
 					width += TAB_WIDTH_H / TEX_RES;
+				}
 				break;
 			case '\v':
-				if (curLine == line)
+				if (curLine == line) {
 					width += TAB_WIDTH_V / TEX_RES;
+				}
 				break;
 			default:
-				if (current_char != '\0' && curLine == line)
+				if (current_char != '\0' && curLine == line) {
 					width += s2d_kerning_table[(int) current_char] * scale;
+				}
 		}
 		if (*p == '\0') break;
 		p++;

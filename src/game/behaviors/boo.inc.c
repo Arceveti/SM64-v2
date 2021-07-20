@@ -31,11 +31,7 @@ void bhv_boo_init(void) {
 
 static s32 boo_should_be_stopped(void) {
     if (cur_obj_has_behavior(bhvMerryGoRoundBigBoo) || cur_obj_has_behavior(bhvMerryGoRoundBoo)) {
-        if (!gMarioOnMerryGoRound) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
+        return (!gMarioOnMerryGoRound);
     } else {
         if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
             return TRUE;

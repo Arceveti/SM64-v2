@@ -22,8 +22,9 @@ struct BowserFallingPlatformData sBowserFallingPlatform[] = {
 void falling_bowser_plat_act_start(void) {
     o->oBitsPlatformBowser = cur_obj_nearest_object_with_behavior(bhvBowser);
     obj_set_collision_data(o, sBowserFallingPlatform[o->oBehParams2ndByte].collision);
-    if (o->oBitsPlatformBowser != 0)
+    if (o->oBitsPlatformBowser != 0) {
         o->oAction = BOWSER_BITS_PLAT_ACT_CHECK;
+    }
 }
 
 void falling_bowser_plat_act_check(void) {
@@ -39,8 +40,9 @@ void falling_bowser_plat_act_check(void) {
     if (o->oSubAction == 0) {
         o->oBitsPlatformTimer = 0;
     } else {
-        if ((gDebugInfo[4][6] + 20) * (o->oBehParams2ndByte - 1) < o->oBitsPlatformTimer)
+        if ((gDebugInfo[4][6] + 20) * (o->oBehParams2ndByte - 1) < o->oBitsPlatformTimer) {
             o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
+        }
         o->oBitsPlatformTimer++;
     }
 }
@@ -49,7 +51,6 @@ void falling_bowser_plat_act_fall(void) {
     Vec3f pos;
     s16 angle;
     f32 val;
-    UNUSED struct Object *bowser = o->oBitsPlatformBowser;
     if (o->oTimer == 0 || o->oTimer == 22) {
         cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_2);
     }
@@ -57,8 +58,9 @@ void falling_bowser_plat_act_fall(void) {
         set_environmental_camera_shake(SHAKE_ENV_FALLING_BITS_PLAT);
         o->oVelY = 8.0f;
         o->oGravity = 0.0f;
-    } else
+    } else {
         o->oGravity = -4.0f;
+    }
     if ((o->oTimer & 1) == 0 && o->oTimer < 14) {
         angle = sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8);
         val = -(o->oTimer / 2) * 290 + 1740;

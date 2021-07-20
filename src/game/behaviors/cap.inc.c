@@ -30,8 +30,7 @@ void cap_despawn(void) {
 }
 
 void cap_check_quicksand(void) {
-    if (sObjFloor == NULL)
-        return;
+    if (sObjFloor == NULL) return;
 
     switch (sObjFloor->type) {
         case SURFACE_DEATH_PLANE:
@@ -76,24 +75,24 @@ void cap_sink_quicksand(void) {
             break;
 
         case 11:
-            if (o->oTimer < 10)
+            if (o->oTimer < 10) {
                 o->oGraphYOffset += -3.0f;
-
+            }
             o->oFaceAnglePitch = 0x2000;
             break;
 
         case 12:
             o->oGraphYOffset += -1.0f;
-            if (o->oTimer >= 21)
+            if (o->oTimer >= 21) {
                 o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-
+            }
             break;
 
         case 13:
             o->oGraphYOffset += -6.0f;
-            if (o->oTimer >= 21)
+            if (o->oTimer >= 21) {
                 o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-
+            }
             o->oFaceAnglePitch = 0x2000;
             break;
     }
@@ -110,7 +109,7 @@ void bhv_wing_cap_init(void) {
 
 void cap_scale_vertically(void) {
     o->oCapScaleAngle += 0x2000;
-    o->header.gfx.scale[1] = coss(o->oCapScaleAngle) * 0.3 + 0.7;
+    o->header.gfx.scale[1] = coss(o->oCapScaleAngle) * 0.3f + 0.7f;
     if (o->oCapScaleAngle == 0x10000) {
         o->oCapScaleAngle = 0;
         o->oCapDoScaleVertically = 2;
@@ -130,8 +129,9 @@ void wing_vanish_cap_act_0(void) {
         }
     }
 
-    if (o->oCapDoScaleVertically == 1)
+    if (o->oCapDoScaleVertically == 1) {
         cap_scale_vertically();
+    }
 }
 
 void bhv_wing_vanish_cap_loop(void) {
@@ -146,9 +146,9 @@ void bhv_wing_vanish_cap_loop(void) {
             break;
     }
 
-    if (o->oTimer > 20)
+    if (o->oTimer > 20) {
         cur_obj_become_tangible();
-
+    }
     cap_despawn();
     cap_set_hitbox();
 }
@@ -165,8 +165,9 @@ void metal_cap_act_0(void) {
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
     sp1E = object_step();
-    if (sp1E & 0x01)
+    if (sp1E & 0x01) {
         cap_check_quicksand();
+    }
 }
 
 void bhv_metal_cap_loop(void) {
@@ -181,9 +182,9 @@ void bhv_metal_cap_loop(void) {
             break;
     }
 
-    if (o->oTimer > 20)
+    if (o->oTimer > 20) {
         cur_obj_become_tangible();
-
+    }
     cap_set_hitbox();
     cap_despawn();
 }
@@ -235,8 +236,9 @@ void normal_cap_act_0(void) {
         }
     }
 
-    if (o->oCapDoScaleVertically == 1)
+    if (o->oCapDoScaleVertically == 1) {
         cap_scale_vertically();
+    }
 }
 
 void bhv_normal_cap_loop(void) {
@@ -251,14 +253,15 @@ void bhv_normal_cap_loop(void) {
             break;
     }
 
-    if ((s32) o->oForwardVel != 0)
+    if ((s32) o->oForwardVel != 0) {
         save_file_set_cap_pos(o->oPosX, o->oPosY, o->oPosZ);
-
-    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED)
+    }
+    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         normal_cap_set_save_flags();
-
-    if (cap_set_hitbox() == 1)
+    }
+    if (cap_set_hitbox() == 1) {
         save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
+    }
 }
 
 void bhv_vanish_cap_init(void) {

@@ -169,14 +169,15 @@ void bhv_mips_act_fall_down(void) {
     collisionFlags = object_step();
     o->header.gfx.animInfo.animFrame = 0;
 
-    if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == 1) {
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         o->oAction = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
 
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
 
-        if (collisionFlags & OBJ_COL_FLAG_UNDERWATER)
+        if (collisionFlags & OBJ_COL_FLAG_UNDERWATER) {
             spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
+        }
     }
 }
 
@@ -237,11 +238,11 @@ void bhv_mips_held(void) {
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        if (o->oBehParams2ndByte == 0)
+        if (o->oBehParams2ndByte == 0) {
             dialogID = DIALOG_084;
-        else
+        } else {
             dialogID = DIALOG_162;
-
+        }
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID)) {

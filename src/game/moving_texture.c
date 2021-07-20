@@ -310,9 +310,9 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
         gWdwWaterLevelSet = FALSE;
     } else if (callContext == GEO_CONTEXT_RENDER && gEnvironmentRegions != NULL
                && !gWdwWaterLevelSet) {
-        if (gPaintingMarioYEntry <= 1382.4) {
+        if (gPaintingMarioYEntry <= 1382.4f) {
             wdwWaterHeight = 31;
-        } else if (gPaintingMarioYEntry >= 1600.0) {
+        } else if (gPaintingMarioYEntry >= 1600.0f) {
             wdwWaterHeight = 2816;
         } else {
             wdwWaterHeight = 1024;
@@ -352,8 +352,8 @@ Gfx *geo_movtex_pause_control(s32 callContext, UNUSED struct GraphNode *node, UN
  */
 void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot, s16 rotOffset,
                              f32 scale, u8 alpha) {
-    s16 s = 32.0 * (32.0 * scale - 1.0) * sins(rot + rotOffset);
-    s16 t = 32.0 * (32.0 * scale - 1.0) * coss(rot + rotOffset);
+    s16 s = 32.0f * (32.0f * scale - 1.0f) * sins(rot + rotOffset);
+    s16 t = 32.0f * (32.0f * scale - 1.0f) * coss(rot + rotOffset);
 
     if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
         make_vertex(verts, index, x, y, z, s, t, 255, 255, 0, alpha);
@@ -631,9 +631,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
 
     if (callContext == GEO_CONTEXT_RENDER) {
         gMovtexVtxColor = MOVTEX_VTX_COLOR_DEFAULT;
-        if (gEnvironmentRegions == NULL) {
-            return NULL;
-        }
+        if (gEnvironmentRegions == NULL) return NULL;
         numWaterBoxes = gEnvironmentRegions[0];
         gfxHead = alloc_display_list((numWaterBoxes + 3) * sizeof(*gfxHead));
         if (gfxHead == NULL) {
@@ -643,21 +641,15 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         }
         asGenerated = (struct GraphNodeGenerated *) node;
         if (asGenerated->parameter == JRB_MOVTEX_INTIAL_MIST) {
-            if (gLakituState.goalPos[1] < 1024.0) { // if camera under water
-                return NULL;
-            }
-            if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 1) { // first star in JRB complete
-                return NULL;
-            }
+            if (gLakituState.goalPos[1] < 1024.0f) return NULL; // if camera under water
+            if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 1) return NULL; // first star in JRB complete
         } else if (asGenerated->parameter == HMC_MOVTEX_TOXIC_MAZE_MIST) {
             gMovtexVtxColor = MOVTEX_VTX_COLOR_YELLOW;
         } else if (asGenerated->parameter == SSL_MOVTEX_TOXBOX_QUICKSAND_MIST) {
             gMovtexVtxColor = MOVTEX_VTX_COLOR_RED;
         }
         quadCollection = get_quad_collection_from_id(asGenerated->parameter);
-        if (quadCollection == NULL) {
-            return NULL;
-        }
+        if (quadCollection == NULL) return NULL;
 
         asGenerated->fnNode.node.flags =
             (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT_INTER << 8);
@@ -668,8 +660,9 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
             waterId = gEnvironmentRegions[i * 6 + 1];
             waterY = gEnvironmentRegions[i * 6 + 6];
             subList = movtex_gen_quads_id(waterId, waterY, quadCollection);
-            if (subList != NULL)
+            if (subList != NULL) {
                 gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
+            }
         }
         gSPDisplayList(gfx++, dl_waterbox_end);
         gSPEndDisplayList(gfx);

@@ -1100,8 +1100,7 @@ s32 act_braking(struct MarioState *m) {
     vec3f_copy(startPos, m->pos);
 #endif
     if (!(m->input & INPUT_FIRST_PERSON)
-        && (m->input
-            & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE))) {
+        && (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE))) {
         return check_common_action_exits(m);
     }
 

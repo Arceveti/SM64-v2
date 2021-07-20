@@ -9,8 +9,8 @@ void bhv_water_air_bubble_init(void) {
 
 void bhv_water_air_bubble_loop(void) {
     s32 i;
-    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.5 + 4.0;
-    o->header.gfx.scale[1] = -sins(o->oWaterObjUnkF4) * 0.5 + 4.0;
+    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.5f + 4.0f;
+    o->header.gfx.scale[1] = -sins(o->oWaterObjUnkF4) * 0.5f + 4.0f;
     o->oWaterObjUnkF4 += 0x400;
     if (o->oTimer < 30) {
         cur_obj_become_intangible();
@@ -43,39 +43,41 @@ void bhv_bubble_wave_init(void) {
 }
 
 void scale_bubble_random(void) {
-    cur_obj_scale(random_float() + 1.0);
+    cur_obj_scale(random_float() + 1.0f);
 }
 
 void bhv_bubble_maybe_loop(void) {
     o->oPosY += random_float() * 3.0f + 6.0f;
     o->oPosX += random_float() * 10.0f - 5.0f;
     o->oPosZ += random_float() * 10.0f - 5.0f;
-    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.2 + 1.0;
+    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.2f + 1.0f;
     o->oWaterObjUnkF4 += o->oWaterObjUnkFC;
-    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.2 + 1.0;
+    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.2f + 1.0f;
     o->oWaterObjUnkF8 += o->oWaterObjUnk100;
 }
 
 void bhv_small_water_wave_loop(void) {
     f32 sp1C = find_water_level(o->oPosX, o->oPosZ);
-    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.2 + 1.0;
+    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.2f + 1.0f;
     o->oWaterObjUnkF4 += o->oWaterObjUnkFC;
-    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.2 + 1.0;
+    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.2f + 1.0f;
     o->oWaterObjUnkF8 += o->oWaterObjUnk100;
     if (o->oPosY > sp1C) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         o->oPosY += 5.0f;
-        if (gFreeObjectList.next != NULL)
+        if (gFreeObjectList.next != NULL) {
             spawn_object(o, MODEL_SMALL_WATER_SPLASH, bhvObjectWaterSplash);
+        }
     }
-    if (o->oInteractStatus & INT_STATUS_INTERACTED)
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         obj_mark_for_deletion(o);
+    }
 }
 
 void scale_bubble_sin(void) {
-    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.5 + 2.0;
+    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.5f + 2.0f;
     o->oWaterObjUnkF4 += o->oWaterObjUnkFC;
-    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.5 + 2.0;
+    o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.5f + 2.0f;
     o->oWaterObjUnkF8 += o->oWaterObjUnk100;
 }
 
@@ -104,9 +106,11 @@ void bhv_small_bubbles_loop(void) {
 }
 
 void bhv_fish_group_loop(void) {
-    if (gMarioCurrentRoom == 15 || gMarioCurrentRoom == 7)
-        if (gGlobalTimer & 1)
+    if (gMarioCurrentRoom == 15 || gMarioCurrentRoom == 7) {
+        if (gGlobalTimer & 1) {
             spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleBubbles);
+        }
+    }
 }
 
 void bhv_water_waves_init(void) {

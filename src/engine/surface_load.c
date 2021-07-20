@@ -121,7 +121,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     if (surface->normal.y > 0.01f) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
         sortDir = 1; // highest to lowest, then insertion order
-    } else if (surface->normal.y < -0.01) {
+    } else if (surface->normal.y < -0.01f) {
         listIndex = SPATIAL_PARTITION_CEILS;
         sortDir = -1; // lowest to highest, then insertion order
     } else {
@@ -331,10 +331,10 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     maxY = max_3(y1, y2, y3);
 
     // Checking to make sure no DIV/0
-    if (mag < 0.0001) {
+    if (mag < 0.0001f) {
         return NULL;
     }
-    mag = (f32)(1.0 / mag);
+    mag = (f32)(1.0f / mag);
     nx *= mag;
     ny *= mag;
     nz *= mag;

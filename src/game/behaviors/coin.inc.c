@@ -30,10 +30,12 @@ void bhv_yellow_coin_init(void) {
     obj_set_hitbox(o, &sYellowCoinHitbox);
     bhv_init_room();
     cur_obj_update_floor_height();
-    if (500.0f < absf(o->oPosY - o->oFloorHeight))
+    if (500.0f < absf(o->oPosY - o->oFloorHeight)) {
         cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
-    if (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC)
+    }
+    if (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
         obj_mark_for_deletion(o);
+    }
 }
 
 void bhv_yellow_coin_loop(void) {
@@ -43,8 +45,9 @@ void bhv_yellow_coin_loop(void) {
 
 void bhv_temp_coin_loop(void) {
     o->oAnimState++;
-    if (cur_obj_wait_then_blink(200, 20))
+    if (cur_obj_wait_then_blink(200, 20)) {
         obj_mark_for_deletion(o);
+    }
     bhv_coin_sparkles_init();
 }
 
@@ -64,17 +67,18 @@ void bhv_coin_loop(void) {
     cur_obj_if_hit_wall_bounce_away();
     cur_obj_move_standard(-62);
     if ((sp1C = o->oFloor) != NULL) {
-        if (o->oMoveFlags & OBJ_MOVE_ON_GROUND)
+        if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
             o->oSubAction = 1;
+        }
         if (o->oSubAction == 1) {
             o->oBounciness = 0;
-            if (sp1C->normal.y < 0.9) {
+            if (sp1C->normal.y < 0.9f) {
                 sp1A = atan2s(sp1C->normal.z, sp1C->normal.x);
                 cur_obj_rotate_yaw_toward(sp1A, 0x400);
             }
         }
     }
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
 #if defined(VERSION_US)
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_2);
 #elif defined(VERSION_EU) || defined(VERSION_SH)
@@ -82,28 +86,34 @@ void bhv_coin_loop(void) {
 #else
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT);
 #endif
-    if (o->oVelY < 0)
+    }
+    if (o->oVelY < 0) {
         cur_obj_become_tangible();
+    }
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
 #ifndef VERSION_JP
-        if (o->oMoveFlags & (OBJ_MOVE_ABOVE_DEATH_BARRIER | OBJ_MOVE_ABOVE_LAVA))
+        if (o->oMoveFlags & (OBJ_MOVE_ABOVE_DEATH_BARRIER | OBJ_MOVE_ABOVE_LAVA)) {
 #else
-        if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA)
+        if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA) {
 #endif
             obj_mark_for_deletion(o);
+        }
     }
 #ifndef VERSION_JP
     if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
-        if (o->oCoinBounceTimer < 5)
+        if (o->oCoinBounceTimer < 5) {
             cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
+        }
         o->oCoinBounceTimer++;
     }
 #else
-    if (o->oMoveFlags & OBJ_MOVE_BOUNCE)
+    if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
+    }
 #endif
-    if (cur_obj_wait_then_blink(400, 20))
+    if (cur_obj_wait_then_blink(400, 20)) {
         obj_mark_for_deletion(o);
+    }
     bhv_coin_sparkles_init();
 }
 
@@ -115,22 +125,26 @@ void bhv_coin_formation_spawn_loop(void) {
         if (o->oCoinSnapToGround) {
             o->oPosY += 300.0f;
             cur_obj_update_floor_height();
-            if (o->oPosY < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC)
+            if (o->oPosY < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
                 obj_mark_for_deletion(o);
-            else
+            } else {
                 o->oPosY = o->oFloorHeight;
+            }
         } else {
             cur_obj_update_floor_height();
-            if (absf(o->oPosY - o->oFloorHeight) > 250.0f)
+            if (absf(o->oPosY - o->oFloorHeight) > 250.0f) {
                 cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
+            }
         }
     } else {
-        if (bhv_coin_sparkles_init())
+        if (bhv_coin_sparkles_init()) {
             o->parentObj->oCoinRespawnBits |= bit_shift_left(o->oBehParams2ndByte);
+        }
         o->oAnimState++;
     }
-    if (o->parentObj->oAction == 2)
+    if (o->parentObj->oAction == 2) {
         obj_mark_for_deletion(o);
+    }
 }
 
 void spawn_coin_in_formation(s32 sp50, s32 sp54) {
@@ -142,14 +156,16 @@ void spawn_coin_in_formation(s32 sp50, s32 sp54) {
     switch (sp54 & 7) {
         case 0:
             sp40[2] = 160 * (sp50 - 2);
-            if (sp50 > 4)
+            if (sp50 > 4) {
                 sp3C = 0;
+            }
             break;
         case 1:
             sp38 = 0;
-            sp40[1] = 160 * sp50 * 0.8; // 128 * sp50
-            if (sp50 > 4)
+            sp40[1] = 160 * sp50 * 0.8f; // 128 * sp50
+            if (sp50 > 4) {
                 sp3C = 0;
+            }
             break;
         case 2:
             sp40[0] = sins(sp50 << 13) * 300.0f;
@@ -165,8 +181,9 @@ void spawn_coin_in_formation(s32 sp50, s32 sp54) {
             sp40[2] = sCoinArrowPositions[sp50][1];
             break;
     }
-    if (sp54 & 0x10)
+    if (sp54 & 0x10) {
         sp38 = 0;
+    }
     if (sp3C) {
         sp4C = spawn_object_relative(sp50, sp40[0], sp40[1], sp40[2], o, MODEL_YELLOW_COIN,
                                      bhvCoinFormationSpawn);
@@ -184,15 +201,17 @@ void bhv_coin_formation_loop(void) {
         case 0:
             if (o->oDistanceToMario < 2000.0f) {
                 for (bitIndex = 0; bitIndex < 8; bitIndex++) {
-                    if (!(o->oCoinRespawnBits & (1 << bitIndex)))
+                    if (!(o->oCoinRespawnBits & (1 << bitIndex))) {
                         spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
+                    }
                 }
                 o->oAction++;
             }
             break;
         case 1:
-            if (o->oDistanceToMario > 2100.0f)
+            if (o->oDistanceToMario > 2100.0f) {
                 o->oAction++;
+            }
             break;
         case 2:
             o->oAction = 0;
@@ -206,8 +225,9 @@ void bhv_coin_formation_loop(void) {
 void coin_inside_boo_act_1(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_if_hit_wall_bounce_away();
-    if (o->oMoveFlags & OBJ_MOVE_BOUNCE)
+    if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
+    }
     if (o->oTimer > 90 || (o->oMoveFlags & OBJ_MOVE_LANDED)) {
         obj_set_hitbox(o, &sYellowCoinHitbox);
         cur_obj_become_tangible();
@@ -215,10 +235,12 @@ void coin_inside_boo_act_1(void) {
     }
     cur_obj_move_standard(-30);
     bhv_coin_sparkles_init();
-    if (cur_obj_has_model(MODEL_BLUE_COIN))
+    if (cur_obj_has_model(MODEL_BLUE_COIN)) {
         o->oDamageOrCoinValue = 5;
-    if (cur_obj_wait_then_blink(400, 20))
+    }
+    if (cur_obj_wait_then_blink(400, 20)) {
         obj_mark_for_deletion(o);
+    }
 }
 
 void coin_inside_boo_act_0(void) {
@@ -228,7 +250,7 @@ void coin_inside_boo_act_0(void) {
     cur_obj_become_intangible();
     if (o->oTimer == 0 && gCurrLevelNum == LEVEL_BBH) {
         cur_obj_set_model(MODEL_BLUE_COIN);
-        cur_obj_scale(0.7);
+        cur_obj_scale(0.7f);
     }
     obj_copy_pos(o, parent);
     if (parent->oBooDeathStatus == BOO_DEATH_STATUS_DYING) {

@@ -42,16 +42,18 @@ void heave_ho_act_1(void) {
 
 void heave_ho_act_2(void) {
     s16 angleVel;
-    if (1000.0f < cur_obj_lateral_dist_from_mario_to_home())
+    if (1000.0f < cur_obj_lateral_dist_from_mario_to_home()) {
         o->oAngleToMario = cur_obj_angle_to_home();
+    }
     if (o->oTimer > 150) {
         o->oHeaveHoTimedSpeed = (302 - o->oTimer) / 152.0f;
-        if (o->oHeaveHoTimedSpeed < 0.1) {
-            o->oHeaveHoTimedSpeed = 0.1;
+        if (o->oHeaveHoTimedSpeed < 0.1f) {
+            o->oHeaveHoTimedSpeed = 0.1f;
             o->oAction = 1;
         }
-    } else
+    } else {
         o->oHeaveHoTimedSpeed = 1.0f;
+    }
     cur_obj_init_animation_with_accel_and_sound(0, o->oHeaveHoTimedSpeed);
     o->oForwardVel = o->oHeaveHoTimedSpeed * 10.0f;
     angleVel = o->oHeaveHoTimedSpeed * 0x400;
@@ -60,14 +62,16 @@ void heave_ho_act_2(void) {
 
 void heave_ho_act_3(void) {
     o->oForwardVel = 0.0f;
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
         o->oHeaveHoThrowState = 2;
+    }
     if (o->oTimer == 1) {
         cur_obj_init_animation_with_accel_and_sound(1, 1.0f);
         o->numCollidedObjs = 20;
     }
-    if (cur_obj_check_if_near_animation_end())
+    if (cur_obj_check_if_near_animation_end()) {
         o->oAction = 1;
+    }
 }
 
 void heave_ho_act_0(void) {
@@ -88,14 +92,17 @@ void heave_ho_move(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sHeaveHoActions);
     cur_obj_move_standard(-78);
-    if (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER)
+    if (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) {
         o->oGraphYOffset = -15.0f;
-    else
+    } else {
         o->oGraphYOffset = 0.0f;
-    if (o->oForwardVel > 3.0f)
+    }
+    if (o->oForwardVel > 3.0f) {
         cur_obj_play_sound_1(SOUND_AIR_HEAVEHO_MOVE);
-    if (o->oAction != 0 && o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER)
+    }
+    if (o->oAction != 0 && o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) {
         o->oAction = 0;
+    }
     if (o->oInteractStatus & INT_STATUS_GRABBED_MARIO) {
         o->oInteractStatus = INT_STATUS_NONE;
         o->oHeaveHoThrowState = 1;

@@ -49,11 +49,11 @@ void bhv_star_spawn_init(void) {
     o->oVelY = (o->oHomeY - o->oPosY) / 30.0f;
     o->oForwardVel = o->oStarSpawnDisFromHome / 30.0f;
     o->oStarSpawnVelY = o->oPosY;
-    if (o->oBehParams2ndByte == 0 || gCurrCourseNum == COURSE_BBH)
+    if (o->oBehParams2ndByte == 0 || gCurrCourseNum == COURSE_BBH) {
         cutscene_object(CUTSCENE_STAR_SPAWN, o);
-    else
+    } else {
         cutscene_object(CUTSCENE_RED_COIN_STAR_SPAWN, o);
-
+    }
     set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
     o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
     cur_obj_become_intangible();
@@ -63,8 +63,9 @@ void bhv_star_spawn_loop(void) {
     switch (o->oAction) {
         case 0:
             o->oFaceAngleYaw += 0x1000;
-            if (o->oTimer > 20)
+            if (o->oTimer > 20) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:
@@ -82,11 +83,11 @@ void bhv_star_spawn_loop(void) {
             break;
 
         case 2:
-            if (o->oTimer < 20)
+            if (o->oTimer < 20) {
                 o->oVelY = 20 - o->oTimer;
-            else
+            } else {
                 o->oVelY = -10.0f;
-
+            }
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             obj_move_xyz_using_fvel_and_yaw(o);
             o->oFaceAngleYaw = o->oFaceAngleYaw - o->oTimer * 0x10 + 0x1000;
@@ -160,9 +161,9 @@ void bhv_hidden_red_coin_star_init(void) {
     s16 sp36;
     struct Object *sp30;
 
-    if (gCurrCourseNum != COURSE_JRB)
+    if (gCurrCourseNum != COURSE_JRB) {
         spawn_object(o, MODEL_TRANSPARENT_STAR, bhvRedCoinStarMarker);
-
+    }
     sp36 = count_objects_with_behavior(bhvRedCoin);
     if (sp36 == 0) {
         sp30 =
@@ -178,8 +179,9 @@ void bhv_hidden_red_coin_star_loop(void) {
     gRedCoinsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 8)
+            if (o->oHiddenStarTriggerCounter == 8) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:

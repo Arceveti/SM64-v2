@@ -276,8 +276,7 @@ static struct DynObjInfo *get_dynobj_info(DynObjName name) {
     gd_strcat(buf, sDynNameSuffix);
     foundDynobj = NULL;
     for (i = 0; i < sLoadedDynObjs; i++) {
-        if (gd_str_not_equal(sGdDynObjList[i].name, buf) == 0)
-        {
+        if (gd_str_not_equal(sGdDynObjList[i].name, buf) == 0) {
             foundDynobj = &sGdDynObjList[i];
             break;
         }

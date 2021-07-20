@@ -173,7 +173,7 @@ index 0000000..d7f27ad
 ++                                                            bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
 ++        }
 ++
-+         sStarSelectorModels[6]->oStarSelectorSize = 0.8;
++         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
 +         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
 +     }
 +@@ -147,11 +154,21 @@ void bhv_act_selector_init(void) {
@@ -406,7 +406,7 @@ index 0000000..667e6e2
 ++            sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR,
 ++                                                            bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
 ++        }
-+         sStarSelectorModels[6]->oStarSelectorSize = 0.8;
++         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
 +         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
 +     }
 +@@ -147,11 +154,21 @@ void bhv_act_selector_init(void) {
@@ -684,7 +684,7 @@ index 025dbf2..4840898 100644
 +                                                            bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
 +        }
 +
-         sStarSelectorModels[6]->oStarSelectorSize = 0.8;
+         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
          sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
      }
 @@ -147,11 +154,21 @@ void bhv_act_selector_init(void) {

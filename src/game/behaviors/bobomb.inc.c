@@ -33,7 +33,7 @@ void bobomb_act_explode(void) {
     cur_obj_become_intangible();
 #endif
     if (o->oTimer < 5) {
-        cur_obj_scale(1.0 + (f32) o->oTimer / 5.0f);
+        cur_obj_scale(1.0f + (f32) o->oTimer / 5.0f);
     } else {
         explosion = spawn_object(o, MODEL_EXPLOSION, bhvExplosion);
         explosion->oGraphYOffset += 100.0f;
@@ -50,8 +50,8 @@ void bobomb_check_interactions(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         if (o->oInteractStatus & INT_STATUS_MARIO_KNOCKBACK_DMG) {
             o->oMoveAngleYaw = gMarioObject->header.gfx.angle[1];
-            o->oForwardVel = 25.0;
-            o->oVelY = 30.0;
+            o->oForwardVel = 25.0f;
+            o->oVelY = 30.0f;
             o->oAction = BOBOMB_ACT_LAUNCHED;
         }
 
@@ -101,7 +101,7 @@ void bobomb_act_launched(void) {
 #ifdef FIX_BOMB_CLIP
     cur_obj_become_intangible();
 #endif
-    if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == OBJ_COL_FLAG_GROUNDED) {
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         o->oAction = BOBOMB_ACT_EXPLODE; /* bit 0 */
     }
 }

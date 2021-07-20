@@ -26,41 +26,37 @@ void floating_platform_act_0(void) {
         o->oFaceAnglePitch = sp4 * 2;
         o->oFaceAngleRoll = -sp6 * 2;
         o->oVelY -= 1.0f;
-        if (o->oVelY < 0.0f)
+        if (o->oVelY < 0.0f) {
             o->oVelY = 0.0f;
-
+        }
         o->oFloatingPlatformMarioWeightWobbleOffset += o->oVelY;
-        if (o->oFloatingPlatformMarioWeightWobbleOffset > 90.0f)
+        if (o->oFloatingPlatformMarioWeightWobbleOffset > 90.0f) {
             o->oFloatingPlatformMarioWeightWobbleOffset = 90.0f;
+        }
     } else {
         o->oFaceAnglePitch /= 2;
         o->oFaceAngleRoll /= 2;
-        o->oFloatingPlatformMarioWeightWobbleOffset -= 5.0;
+        o->oFloatingPlatformMarioWeightWobbleOffset -= 5.0f;
         o->oVelY = 10.0f;
-        if (o->oFloatingPlatformMarioWeightWobbleOffset < 0.0f)
+        if (o->oFloatingPlatformMarioWeightWobbleOffset < 0.0f) {
             o->oFloatingPlatformMarioWeightWobbleOffset = 0.0f;
+        }
     }
 
     o->oPosY = o->oHomeY - 64.0f - o->oFloatingPlatformMarioWeightWobbleOffset + sins(o->oFloatingPlatformWaterSurfaceWobbleOffset * 0x800) * 10.0f;
     o->oFloatingPlatformWaterSurfaceWobbleOffset++;
-    if (o->oFloatingPlatformWaterSurfaceWobbleOffset == 32)
+    if (o->oFloatingPlatformWaterSurfaceWobbleOffset == 32) {
         o->oFloatingPlatformWaterSurfaceWobbleOffset = 0;
+    }
 }
 
 void bhv_floating_platform_loop(void) {
     o->oHomeY = floating_platform_find_home_y();
-    if (o->oFloatingPlatformIsOnFloor == 0)
+    if (o->oFloatingPlatformIsOnFloor == 0) {
         o->oAction = 0;
-    else
+        floating_platform_act_0();
+    } else {
         o->oAction = 1;
-
-    switch (o->oAction) {
-        case 0:
-            floating_platform_act_0();
-            break;
-
-        case 1:
-            o->oPosY = o->oHomeY;
-            break;
+        o->oPosY = o->oHomeY;
     }
 }

@@ -980,9 +980,9 @@ int flush;
                 if (copy > state->write) {
                     copy -= state->write;
                     from = state->window + (state->wsize - copy);
-                }
-                else
+                } else {
                     from = state->window + (state->write - copy);
+                }
                 if (copy > state->length) copy = state->length;
             }
             else {                              /* copy from output */
@@ -1155,12 +1155,14 @@ unsigned len;
     got = *have;
     next = 0;
     while (next < len && got < 4) {
-        if ((int)(buf[next]) == (got < 2 ? 0 : 0xff))
+        if ((int)(buf[next]) == (got < 2 ? 0 : 0xff)) {
             got++;
-        else if (buf[next])
+        }
+        else if (buf[next]) {
             got = 0;
-        else
+        } else {
             got = 4 - got;
+        }
         next++;
     }
     *have = got;

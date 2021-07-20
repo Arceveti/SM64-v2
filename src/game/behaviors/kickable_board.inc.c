@@ -3,18 +3,16 @@
 s32 check_mario_attacking(UNUSED s32 sp18) {
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         if (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000) {
-            if (gMarioStates[0].action == ACT_SLIDE_KICK)
+            if (gMarioStates[0].action == ACT_SLIDE_KICK
+             || gMarioStates[0].action == ACT_PUNCHING
+             || gMarioStates[0].action == ACT_MOVE_PUNCHING
+             || gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE) {
                 return 1;
-            if (gMarioStates[0].action == ACT_PUNCHING)
-                return 1;
-            if (gMarioStates[0].action == ACT_MOVE_PUNCHING)
-                return 1;
-            if (gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE)
-                return 1;
-            if (gMarioStates[0].action == ACT_JUMP_KICK)
+            }
+            if (gMarioStates[0].action == ACT_JUMP_KICK
+             || gMarioStates[0].action == ACT_WALL_KICK_AIR) {
                 return 2;
-            if (gMarioStates[0].action == ACT_WALL_KICK_AIR)
-                return 2;
+            }
         }
     }
     return 0;
@@ -44,17 +42,21 @@ void bhv_kickable_board_loop(void) {
                 if (gMarioObject->oPosY > o->oPosY + 160.0f && sp24 == 2) {
                     o->oAction++;
                     cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
-                } else
+                } else {
                     o->oTimer = 0;
+                }
             }
             if (o->oTimer != 0) {
                 o->oKickableBoardRockingTimer -= 8;
-                if (o->oKickableBoardRockingTimer < 0)
+                if (o->oKickableBoardRockingTimer < 0) {
                     o->oAction = 0;
-            } else
+                }
+            } else {
                 init_kickable_board_rock();
-            if (!(o->oKickableBoardRockingAngleAmount & 0x7FFF))
+            }
+            if (!(o->oKickableBoardRockingAngleAmount & 0x7FFF)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
+            }
             o->oKickableBoardRockingAngleAmount += 0x400;
             break;
         case 2:

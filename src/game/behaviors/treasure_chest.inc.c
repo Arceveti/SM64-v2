@@ -20,8 +20,9 @@ void bhv_treasure_chest_top_loop(void) {
 
     switch (o->oAction) {
         case 0:
-            if (o->parentObj->oAction == 1)
+            if (o->parentObj->oAction == 1) {
                 o->oAction = 1;
+            }
             break;
 
         case 1:
@@ -38,14 +39,16 @@ void bhv_treasure_chest_top_loop(void) {
             if (o->oFaceAnglePitch < -0x4000) {
                 o->oFaceAnglePitch = -0x4000;
                 o->oAction++;
-                if (o->parentObj->oBehParams2ndByte != 4)
+                if (o->parentObj->oBehParams2ndByte != 4) {
                     spawn_orange_number(o->parentObj->oBehParams2ndByte, 0, -40, 0);
+                }
             }
             break;
 
         case 2:
-            if (o->parentObj->oAction == 0)
+            if (o->parentObj->oAction == 0) {
                 o->oAction = 3;
+            }
             break;
 
         case 3:
@@ -85,8 +88,9 @@ void bhv_treasure_chest_bottom_loop(void) {
             break;
 
         case 1:
-            if (o->parentObj->oTreasureChestDoCloseChests == 1)
+            if (o->parentObj->oTreasureChestDoCloseChests == 1) {
                 o->oAction = 0;
+            }
             break;
 
         case 2:

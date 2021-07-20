@@ -27,21 +27,23 @@ struct ExclamationBoxContents sExclamationBoxContents[] = { {  0, 0, 0, MODEL_MA
                                                             { 12, 0, 3, MODEL_STAR,             bhvSpawnedStar           },
                                                             { 13, 0, 4, MODEL_STAR,             bhvSpawnedStar           },
                                                             { 14, 0, 5, MODEL_STAR,             bhvSpawnedStar           },
-                                                            { 99, 0, 0, 0, NULL } };
+                                                            { 99, 0, 0, 0,                      NULL                     } };
 
 void bhv_rotating_exclamation_box_loop(void) {
-    if (o->parentObj->oAction != EXCLAMATION_BOX_ACT_OUTLINE)
+    if (o->parentObj->oAction != EXCLAMATION_BOX_ACT_OUTLINE) {
         obj_mark_for_deletion(o);
+    }
 }
 
 void exclamation_box_act_0(void) {
     if (o->oBehParams2ndByte < 3) {
         o->oAnimState = o->oBehParams2ndByte;
         if ((save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte])
-            || ((o->oBehParams >> 24) & 0xFF) != 0)
+            || ((o->oBehParams >> 24) & 0xFF) != 0) {
             o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
-        else
+        } else {
             o->oAction = EXCLAMATION_BOX_ACT_OUTLINE;
+        }
     } else {
         o->oAnimState = 3;
         o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;

@@ -11,8 +11,7 @@ void controllable_platform_act_1(void) {
 }
 
 void controllable_platform_act_2(void) {
-    if (o->oBehParams2ndByte == D_80331694)
-        return;
+    if (o->oBehParams2ndByte == D_80331694) return;
 
     o->oParentRelativePosY += 4.0f;
     if (o->oParentRelativePosY > 51.0f) {
@@ -24,8 +23,7 @@ void controllable_platform_act_2(void) {
 void bhv_controllable_platform_sub_loop(void) {
     switch (o->oAction) {
         case 0:
-            if (o->oTimer < 30)
-                break;
+            if (o->oTimer < 30) break;
 
             if (gMarioObject->platform == o) {
                 D_80331694 = o->oBehParams2ndByte;
@@ -49,8 +47,9 @@ void bhv_controllable_platform_sub_loop(void) {
     o->oVelX = o->parentObj->oVelX;
     o->oVelZ = o->parentObj->oVelZ;
 
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED)
+    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    }
 }
 
 void bhv_controllable_platform_init(void) {
@@ -85,8 +84,9 @@ void controllable_platform_hit_wall(s8 sp1B) {
 }
 
 void controllable_platform_check_walls(s8 sp1B, s8 sp1C[3], Vec3f sp20, UNUSED Vec3f sp24, Vec3f sp28) {
-    if (sp1C[1] == 1 || (sp1C[0] == 1 && sp1C[2] == 1))
+    if (sp1C[1] == 1 || (sp1C[0] == 1 && sp1C[2] == 1)) {
         controllable_platform_hit_wall(sp1B);
+    }
     else {
         if (sp1C[0] == 1) {
             if (((sp1B == 1 || sp1B == 2) && (s32) sp20[2] != 0)
@@ -118,10 +118,10 @@ void controllable_platform_check_walls(s8 sp1B, s8 sp1C[3], Vec3f sp20, UNUSED V
 
 void controllable_platform_shake_on_wall_hit(void) {
     if (o->oControllablePlatformWallHitDirection == 1 || o->oControllablePlatformWallHitDirection == 2) {
-        o->oFaceAnglePitch = sins(o->oTimer * 0x1000) * 182.04444 * 10.0;
+        o->oFaceAnglePitch = sins(o->oTimer * 0x1000) * 182.04444f * 10.0f;
         o->oPosY = o->oControllablePlatformInitPosY + sins(o->oTimer * 0x2000) * 20.0f;
     } else {
-        o->oFaceAngleRoll = sins(o->oTimer * 0x1000) * 182.04444 * 10.0;
+        o->oFaceAngleRoll = sins(o->oTimer * 0x1000) * 182.04444f * 10.0f;
         o->oPosY = o->oControllablePlatformInitPosY + sins(o->oTimer * 0x2000) * 20.0f;
     }
 
@@ -172,33 +172,33 @@ void bhv_controllable_platform_loop(void) {
 
         case 1:
             o->oVelZ = 10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0, o->oPosY, o->oPosZ + 300.0, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ + 300.0, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0, o->oPosY, o->oPosZ + 300.0, 50.0f);
+            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
+            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ + 300.0f, 50.0f);
+            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
             controllable_platform_check_walls(2, sp54, sp48, sp3C, sp30);
             break;
 
         case 2:
             o->oVelZ = -10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0, o->oPosY, o->oPosZ - 300.0, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ - 300.0, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0, o->oPosY, o->oPosZ - 300.0, 50.0f);
+            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
+            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ - 300.0f, 50.0f);
+            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
             controllable_platform_check_walls(1, sp54, sp48, sp3C, sp30);
             break;
 
         case 3:
             o->oVelX = 10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 300.0, o->oPosY, o->oPosZ + 250.0, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX + 300.0, o->oPosY, o->oPosZ, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX + 300.0, o->oPosY, o->oPosZ - 250.0, 50.0f);
+            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
+            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX + 300.0f, o->oPosY, o->oPosZ, 50.0f);
+            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX + 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
             controllable_platform_check_walls(4, sp54, sp48, sp3C, sp30);
             break;
 
         case 4:
             o->oVelX = -10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX - 300.0, o->oPosY, o->oPosZ + 250.0, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX - 300.0, o->oPosY, o->oPosZ, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 300.0, o->oPosY, o->oPosZ - 250.0, 50.0f);
+            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX - 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
+            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX - 300.0f, o->oPosY, o->oPosZ, 50.0f);
+            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
             controllable_platform_check_walls(3, sp54, sp48, sp3C, sp30);
             break;
 
@@ -208,15 +208,17 @@ void bhv_controllable_platform_loop(void) {
             break;
 
         case 6:
-            if (obj_flicker_and_disappear(o, 150))
+            if (obj_flicker_and_disappear(o, 150)) {
                 spawn_object_abs_with_rot(o, 0, MODEL_HMC_METAL_PLATFORM, bhvControllablePlatform,
                                           o->oHomeX, o->oHomeY, o->oHomeZ, 0, 0, 0);
+            }
             break;
     }
 
     controllable_platform_tilt_from_mario();
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
-    if (D_80331694 != 0 && D_80331694 != 6)
+    if (D_80331694 != 0 && D_80331694 != 6) {
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
+    }
 }

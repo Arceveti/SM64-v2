@@ -26,8 +26,9 @@ void opened_cannon_act_0(void) {
             o->oAction = 4;
             o->oCannonIsActive = TRUE;
             o->oCannonTimeSinceActivated = 1;
-        } else
+        } else {
             o->oInteractStatus = INT_STATUS_NONE;
+        }
     } else {
         cur_obj_become_intangible();
         cur_obj_disable_rendering();
@@ -36,24 +37,26 @@ void opened_cannon_act_0(void) {
 }
 
 void opened_cannon_act_4(void) {
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
         cur_obj_play_sound_2(SOUND_OBJ_CANNON1);
+    }
     o->oPosY += 5.0f;
-    o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5) * 2;
-    o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5) * 2;
+    o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
+    o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
     if (o->oTimer > 67) {
-        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5) * 4;
-        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5) * 4;
+        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4;
+        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4;
         o->oAction = 6;
     }
 }
 
 void opened_cannon_act_6(void) {
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
         cur_obj_play_sound_2(SOUND_OBJ_CANNON2);
+    }
     if (o->oTimer < 4) {
-        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5) * 4.0f;
-        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5) * 4.0f;
+        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4.0f;
+        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4.0f;
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
@@ -69,8 +72,9 @@ void opened_cannon_act_6(void) {
 }
 
 void opened_cannon_act_5(void) {
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
         cur_obj_play_sound_2(SOUND_OBJ_CANNON3);
+    }
     if (o->oTimer >= 4) {
         if (o->oTimer < 20) {
             o->oCannonAngle += 0x400;
@@ -102,8 +106,9 @@ void (*sOpenedCannonActions[])(void) = { opened_cannon_act_0, opened_cannon_act_
 
 void bhv_cannon_base_loop(void) {
     cur_obj_call_action_function(sOpenedCannonActions);
-    if (o->oCannonTimeSinceActivated)
+    if (o->oCannonTimeSinceActivated) {
         o->oCannonTimeSinceActivated++;
+    }
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
@@ -114,6 +119,7 @@ void bhv_cannon_barrel_loop(void) {
         obj_copy_pos(o, o->parentObj);
         o->oMoveAngleYaw = o->parentObj->oMoveAngleYaw;
         o->oFaceAnglePitch = o->parentObj->oMoveAnglePitch;
-    } else
+    } else {
         cur_obj_disable_rendering();
+    }
 }

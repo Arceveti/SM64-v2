@@ -53,8 +53,9 @@ void tuxies_mother_act_1(void) {
                     o->oSubAction = (dialogID == DIALOG_058) ? 1 : 2;
                     o->prevObj->oInteractionSubtype |= INT_SUBTYPE_DROP_IMMEDIATELY;
                 }
-            } else
+            } else {
                 cur_obj_init_animation_with_sound(0);
+            }
             break;
         case 1:
             if (o->prevObj->oHeldState == HELD_FREE) {

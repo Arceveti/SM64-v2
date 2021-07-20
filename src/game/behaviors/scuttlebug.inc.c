@@ -66,8 +66,9 @@ void bhv_scuttlebug_loop(void) {
                     }
                 }
             }
-            if (update_angle_from_move_flags(&o->oAngleToMario))
+            if (update_angle_from_move_flags(&o->oAngleToMario)) {
                 o->oSubAction = 2;
+            }
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
             break;
         case 2:

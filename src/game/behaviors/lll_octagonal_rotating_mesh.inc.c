@@ -40,32 +40,31 @@ s32 lll_octagonal_mesh_move(s16 *a0, s32 a1) {
     return a1;
 }
 
-s32 lll_octagonal_mesh_find_y_offset(s32 *a0, f32 *a1, s32 a2, s32 a3) {
+s32 lll_octagonal_mesh_find_y_offset(s32 *a0, UNUSED f32 *a1, s32 a2, UNUSED s32 a3) {
     if (cur_obj_is_mario_on_platform()) {
-        if (a0[0] < 0x4000)
+        if (a0[0] < 0x4000) {
             a0[0] += a2;
-        else
+        } else {
             a0[0] = 0x4000;
+        }
     } else {
-        if (a0[0] > 0)
+        if (a0[0] > 0) {
             a0[0] -= a2;
-        else
+        } else {
             a0[0] = 0;
+        }
     }
-    a1[0] = sins(a0[0]) * a3;
-    if (a0[0] == 0 || a0[0] == 0x4000)
-        return 1;
-    else
-        return 0;
+    return (a0[0] == 0 || a0[0] == 0x4000);
 }
 
 void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     if (o->oAction == 0) {
         o->oHorizontalMovementPosIndex = 0;
         o->oAction++;
-    } else
+    } else {
         o->oHorizontalMovementPosIndex =
             lll_octagonal_mesh_move(D_8032F8C8[o->oBehParams2ndByte], o->oHorizontalMovementPosIndex);
+    }
     print_debug_top_down_objectinfo("number %d\n", o->oHorizontalMovementPosIndex);
     cur_obj_move_using_fvel_and_gravity();
     if (lll_octagonal_mesh_find_y_offset(&o->oHorizontalMovementLavaSinkTimer, &o->oHorizontalMovementYOffsetFromHome, 0x400, -80)) {

@@ -24,16 +24,16 @@ void yoshi_walk_loop(void) {
     o->oForwardVel = 10.0f;
     sp26 = object_step();
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oYoshiTargetYaw, 0x500);
-    if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200))
+    if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) {
         o->oAction = YOSHI_ACT_IDLE;
-
+    }
     cur_obj_init_animation(1);
-    if (sp24 == 0 || sp24 == 15)
+    if (sp24 == 0 || sp24 == 15) {
         cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);
-
-    if (o->oInteractStatus == INT_STATUS_INTERACTED)
+    }
+    if (o->oInteractStatus == INT_STATUS_INTERACTED) {
         o->oAction = YOSHI_ACT_TALK;
-
+    }
     if (o->oPosY < 2100.0f) {
         create_respawner(MODEL_YOSHI, bhvYoshi, 3000);
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
@@ -60,9 +60,9 @@ void yoshi_idle_loop(void) {
     }
 
     cur_obj_init_animation(0);
-    if (o->oInteractStatus == INT_STATUS_INTERACTED)
+    if (o->oInteractStatus == INT_STATUS_INTERACTED) {
         o->oAction = YOSHI_ACT_TALK;
-
+    }
     // Credits; Yoshi appears at this position overlooking the castle near the end of the credits
     if (gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING ||
         gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING) {
@@ -100,9 +100,9 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
     o->oForwardVel = 10.0f;
     object_step();
     cur_obj_init_animation(1);
-    if (o->oTimer == 0)
+    if (o->oTimer == 0) {
         cutscene_object(CUTSCENE_STAR_SPAWN, o);
-
+    }
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oYoshiTargetYaw, 0x500);
     if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) {
         cur_obj_init_animation(2);
@@ -121,7 +121,7 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
 void yoshi_finish_jumping_and_despawn_loop(void) {
     cur_obj_extend_animation_if_at_end();
     obj_move_xyz_using_fvel_and_yaw(o);
-    o->oVelY -= 2.0;
+    o->oVelY -= 2.0f;
     if (o->oPosY < 2100.0f) {
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
         gObjCutsceneDone = TRUE;

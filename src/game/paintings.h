@@ -11,7 +11,7 @@
 #define PAINTING_ID(id, grp) id | (grp << 8)
 
 /// The default painting side length
-#define PAINTING_SIZE 614.0
+#define PAINTING_SIZE 614.0f
 
 #define PAINTING_ID_DDD 7
 
@@ -113,7 +113,7 @@ struct Painting
     s8 marioWentUnder;
 
     /// Uniformly scales the painting to a multiple of PAINTING_SIZE.
-    /// By default a painting is 614.0 x 614.0
+    /// By default a painting is 614.0f x 614.0f
     f32 size;
 };
 

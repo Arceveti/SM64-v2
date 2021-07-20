@@ -14,11 +14,13 @@ struct ObjectHitbox sSparkleSpawnStarHitbox = {
 
 void bhv_spawned_star_init(void) {
     s32 sp24;
-    if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT))
+    if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) {
         o->oBehParams = o->parentObj->oBehParams;
+    }
     sp24 = (o->oBehParams >> 24) & 0xFF;
-    if (bit_shift_left(sp24) & save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1))
+    if (bit_shift_left(sp24) & save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1)) {
         cur_obj_set_model(MODEL_TRANSPARENT_STAR);
+    }
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 }
 
@@ -49,8 +51,9 @@ void set_y_home_to_pos(void) {
 }
 
 void slow_star_rotation(void) {
-    if (o->oAngleVelYaw > 0x400)
+    if (o->oAngleVelYaw > 0x400) {
         o->oAngleVelYaw -= 0x40;
+    }
 }
 
 void bhv_spawned_star_loop(void) {
@@ -60,10 +63,11 @@ void bhv_spawned_star_loop(void) {
             set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             o->oAngleVelYaw = 0x800;
-            if (o->oBehParams2ndByte == 0)
+            if (o->oBehParams2ndByte == 0) {
                 set_home_to_mario();
-            else
+            } else {
                 set_y_home_to_pos();
+            }
             o->oMoveAngleYaw = cur_obj_angle_to_home();
             o->oVelY = 50.0f;
             o->oGravity = -4.0f;
@@ -76,18 +80,20 @@ void bhv_spawned_star_loop(void) {
             o->oForwardVel = 0;
             o->oVelY = 20.0f;
             o->oGravity = -1.0f;
-            if (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)
+            if (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) {
 #ifdef VERSION_JP
                 play_power_star_jingle(FALSE);
 #else
                 play_power_star_jingle(TRUE);
 #endif
-            else
+            } else {
                 play_power_star_jingle(TRUE);
+            }
         }
     } else if (o->oAction == 1) {
-        if (o->oVelY < -4.0f)
+        if (o->oVelY < -4.0f) {
             o->oVelY = -4.0f;
+        }
         if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
             gObjCutsceneDone = TRUE;
             o->oVelY = 0;

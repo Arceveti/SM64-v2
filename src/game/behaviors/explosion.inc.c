@@ -12,15 +12,16 @@ void bhv_explosion_loop(void) {
 
     if (o->oTimer == 9) {
         if (find_water_level(o->oPosX, o->oPosZ) > o->oPosY) {
-            for (i = 0; i < 40; i++)
+            for (i = 0; i < 40; i++) {
                 spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvBobombExplosionBubble);
-        } else
+            }
+        } else {
             spawn_object(o, MODEL_SMOKE, bhvBobombBullyDeathSmoke);
-
+        }
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 
     o->oOpacity -= 14;
 
-    cur_obj_scale((f32) o->oTimer / 9.0f + 1.0);
+    cur_obj_scale((f32) o->oTimer / 9.0f + 1.0f);
 }

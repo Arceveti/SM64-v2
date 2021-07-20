@@ -19,10 +19,10 @@ void bhv_bobomb_explosion_bubble_init(void) {
 void bhv_bobomb_explosion_bubble_loop(void) {
     f32 waterY = gMarioStates[0].waterLevel;
 
-    o->header.gfx.scale[0] = sins(o->oBobombExpBubGfxScaleFacX) * 0.5 + 2.0;
+    o->header.gfx.scale[0] = sins(o->oBobombExpBubGfxScaleFacX) * 0.5f + 2.0f;
     o->oBobombExpBubGfxScaleFacX += o->oBobombExpBubGfxExpRateX;
 
-    o->header.gfx.scale[1] = sins(o->oBobombExpBubGfxScaleFacY) * 0.5 + 2.0;
+    o->header.gfx.scale[1] = sins(o->oBobombExpBubGfxScaleFacY) * 0.5f + 2.0f;
     o->oBobombExpBubGfxScaleFacY += o->oBobombExpBubGfxExpRateY;
 
     if (o->oPosY > waterY) {
@@ -31,9 +31,9 @@ void bhv_bobomb_explosion_bubble_loop(void) {
         spawn_object(o, MODEL_SMALL_WATER_SPLASH, bhvObjectWaterSplash);
     }
 
-    if (o->oTimer >= 61)
+    if (o->oTimer >= 61) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-
+    }
     o->oPosY += o->oVelY;
     o->oTimer++;
 }

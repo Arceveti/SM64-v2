@@ -325,7 +325,7 @@ void bowser_bitdw_actions(void) {
         // dancing after the introduction
 #ifndef VERSION_JP
         if (!gCurrDemoInput) { // demo check because entry exits post JP
-            if (rand < 0.1) {
+            if (rand < 0.1f) {
                 o->oAction = BOWSER_ACT_DANCE; // 10% chance
             } else {
                 o->oAction = BOWSER_ACT_WALK_TO_MARIO; // common
@@ -334,7 +334,7 @@ void bowser_bitdw_actions(void) {
             o->oAction = BOWSER_ACT_WALK_TO_MARIO;
         }
 #else
-        if (rand < 0.1) {
+        if (rand < 0.1f) {
             o->oAction = BOWSER_ACT_DANCE; // 10% chance
         } else {
             o->oAction = BOWSER_ACT_WALK_TO_MARIO; // common
@@ -353,7 +353,7 @@ void bowser_bitfs_actions(void) {
     if (!o->oBowserIsReacting) {
         if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
             if (o->oDistanceToMario < 1300.0f) {  // nearby
-                if (rand < 0.5) { // 50% chance
+                if (rand < 0.5f) { // 50% chance
                     o->oAction = BOWSER_ACT_TELEPORT;
                 } else {
                     o->oAction = BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR;
@@ -361,7 +361,7 @@ void bowser_bitfs_actions(void) {
             } else { // far away
                 o->oAction = BOWSER_ACT_CHARGE_MARIO;
                 if (500.0f < o->oBowserDistToCentre && o->oBowserDistToCentre < 1500.0f
-                    && rand < 0.5) { // 50% chance
+                    && rand < 0.5f) { // 50% chance
                     o->oAction = BOWSER_ACT_BIG_JUMP;
                 }
             }
@@ -384,14 +384,14 @@ void bowser_bits_action_list(void) {
     f32 rand = random_float();
     if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
         if (o->oDistanceToMario < 1000.0f) { // nearby
-            if (rand < 0.4) {
+            if (rand < 0.4f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR; // 40% chance
-            } else if (rand < 0.8) {
+            } else if (rand < 0.8f) {
                 o->oAction = BOWSER_ACT_SPIT_FIRE_INTO_SKY; // 80% chance
             } else {
                 o->oAction = BOWSER_ACT_BREATH_FIRE;
             } // far away
-        } else if (rand < 0.5) {
+        } else if (rand < 0.5f) {
             o->oAction = BOWSER_ACT_BIG_JUMP; // 50% chance
         } else {
             o->oAction = BOWSER_ACT_CHARGE_MARIO;
@@ -698,10 +698,10 @@ s32 bowser_land(void) {
  * Makes Bowser do a second hop speed only in BITS
  */
 void bowser_short_second_hop(void) {
-    if (o->oBehParams2ndByte == BOWSER_BP_BITS && o->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
-        if (o->oBowserDistToCentre > 1000.0f) {
-            o->oForwardVel = 60.0f;
-        }
+    if (o->oBehParams2ndByte == BOWSER_BP_BITS &&
+        o->oBowserStatus & BOWSER_STATUS_BIG_JUMP &&
+        o->oBowserDistToCentre > 1000.0f) {
+        o->oForwardVel = 60.0f;
     }
 }
 
@@ -1052,8 +1052,9 @@ void bowser_act_jump_onto_stage(void) {
                     } else {
                         cur_obj_forward_vel_approach_upward(150.0f, 2.0f);
                     }
-                } else
+                } else {
                     cur_obj_forward_vel_approach_upward(150.0f, 2.0f);
+                }
             }
             // Land on stage
             if (bowser_land()) {
@@ -1184,21 +1185,21 @@ s32 bowser_dead_wait_for_mario(void) {
 s32 bowser_dead_twirl_up(void) {
     s32 ret = FALSE;
     // Set angle rotation once he has low X scale value
-    if (o->header.gfx.scale[0] < 0.8) {
+    if (o->header.gfx.scale[0] < 0.8f) {
         o->oAngleVelYaw += 0x80;
     }
     // Slowly scale down his X and Z value
-    if (o->header.gfx.scale[0] > 0.2) {
-        o->header.gfx.scale[0] = o->header.gfx.scale[0] - 0.02;
-        o->header.gfx.scale[2] = o->header.gfx.scale[2] - 0.02;
+    if (o->header.gfx.scale[0] > 0.2f) {
+        o->header.gfx.scale[0] = o->header.gfx.scale[0] - 0.02f;
+        o->header.gfx.scale[2] = o->header.gfx.scale[2] - 0.02f;
     } else {
         // Now scale down his Y value (and send Bowser up)
-        o->header.gfx.scale[1] = o->header.gfx.scale[1] - 0.01;
+        o->header.gfx.scale[1] = o->header.gfx.scale[1] - 0.01f;
         o->oVelY = 20.0f;
         o->oGravity = 0.0f;
     }
     // At half Y scale value, he is high enough, so we are done
-    if (o->header.gfx.scale[1] < 0.5) {
+    if (o->header.gfx.scale[1] < 0.5f) {
         ret = TRUE;
     }
     // Copy angle rotation to moving rotation
@@ -1288,9 +1289,9 @@ s32 bowser_dead_final_stage_ending(void) {
             o->oBowserTimer++;
         }
     // Slowly fade him out
-    } else if (o->oOpacity > 4)
+    } else if (o->oOpacity > 4) {
         o->oOpacity -= 4;
-    else {
+    } else {
         // And at last, hide him
         bowser_dead_hide();
         ret = TRUE;
@@ -1441,8 +1442,7 @@ void bowser_act_tilt_lava_platform(void) {
  */
 s32 bowser_check_fallen_off_stage(void) {
     if (o->oAction != BOWSER_ACT_JUMP_ONTO_STAGE && o->oAction != BOWSER_ACT_TILT_LAVA_PLATFORM) {
-        if (o->oPosY < o->oHomeY - 1000.0f)
-            return TRUE;
+        if (o->oPosY < o->oHomeY - 1000.0f) return TRUE;
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             // Check for Fire Sea
             if (o->oFloorType == SURFACE_BURNING) {
@@ -1613,14 +1613,14 @@ void bowser_thrown_dropped_update(void) {
     // Set throw action and vel values
     cur_obj_get_thrown_or_placed(1.0f, 1.0f, BOWSER_ACT_THROWN);
     // Set swing speed based of angle
-    swingSpd = o->oBowserHeldAngleVelYaw / 3000.0 * 70.0f;
+    swingSpd = o->oBowserHeldAngleVelYaw / 3000.0f * 70.0f;
     // If less than 0, reduce speed
     if (swingSpd < 0.0f) {
         swingSpd = -swingSpd;
     }
     // If more than 90, increase speed
     if (swingSpd > 90.0f) {
-        swingSpd *= 2.5;
+        swingSpd *= 2.5f;
     }
     // Set distance speed when throwing
     o->oForwardVel = coss(o->oBowserHeldAnglePitch) * swingSpd;
@@ -1782,57 +1782,67 @@ void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *swit
         case BOWSER_EYES_OPEN:
             // Mario is in Bowser's field of view
             if (angleFromMario > 0x2000) {
-                if (obj->oAngleVelYaw > 0)
+                if (obj->oAngleVelYaw > 0) {
                     switchCase->selectedCase = BOWSER_EYES_RIGHT;
-                if (obj->oAngleVelYaw < 0)
+                }
+                if (obj->oAngleVelYaw < 0) {
                     switchCase->selectedCase = BOWSER_EYES_LEFT;
+                }
             }
             // Half close, start blinking
-            if (obj->oBowserEyesTimer > 50)
+            if (obj->oBowserEyesTimer > 50) {
                 switchCase->selectedCase = BOWSER_EYES_HALF_CLOSED;
+            }
             break;
         case BOWSER_EYES_HALF_CLOSED:
             // Close, blinking
-            if (obj->oBowserEyesTimer > 2)
+            if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_CLOSED;
+            }
             break;
         case BOWSER_EYES_CLOSED:
             // Reset blinking
-            if (obj->oBowserEyesTimer > 2)
+            if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_RESET;
+            }
             break;
         case BOWSER_EYES_RESET:
             // Open, no longer blinking
-            if (obj->oBowserEyesTimer > 2)
+            if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_OPEN;
+            }
             break;
         case BOWSER_EYES_RIGHT:
             // Look more on the right if angle didn't change
             // Otherwise, look at the center (open)
             if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_FAR_RIGHT;
-                if (obj->oAngleVelYaw <= 0)
+                if (obj->oAngleVelYaw <= 0) {
                     switchCase->selectedCase = BOWSER_EYES_OPEN;
+                }
             }
             break;
         case BOWSER_EYES_FAR_RIGHT:
             // Look close right if angle was drastically changed
-            if (obj->oAngleVelYaw <= 0)
+            if (obj->oAngleVelYaw <= 0) {
                 switchCase->selectedCase = BOWSER_EYES_RIGHT;
+            }
             break;
         case BOWSER_EYES_LEFT:
             // Look more on the left if angle didn't change
             // Otherwise, look at the center (open)
             if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_FAR_LEFT;
-                if (obj->oAngleVelYaw >= 0)
+                if (obj->oAngleVelYaw >= 0) {
                     switchCase->selectedCase = BOWSER_EYES_OPEN;
+                }
             }
             break;
         case BOWSER_EYES_FAR_LEFT:
             // Look close left if angle was drastically changed
-            if (obj->oAngleVelYaw >= 0)
+            if (obj->oAngleVelYaw >= 0) {
                 switchCase->selectedCase = BOWSER_EYES_LEFT;
+            }
             break;
         default:
             switchCase->selectedCase = BOWSER_EYES_OPEN;
@@ -1849,19 +1859,16 @@ void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *swit
  * direction otherwise.
  */
 Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    UNUSED s16 eyeShut;
     struct Object *obj = (struct Object *) gCurGraphNodeObject;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (gCurGraphNodeHeldObject != NULL)
+        if (gCurGraphNodeHeldObject != NULL) {
             obj = gCurGraphNodeHeldObject->objNode;
-        switch (eyeShut = obj->oBowserEyesShut) {
-            case FALSE: // eyes open, handle eye looking direction
-                bowser_open_eye_switch(obj, switchCase);
-                break;
-            case TRUE: // eyes closed, blinking
-                switchCase->selectedCase = BOWSER_EYES_CLOSED;
-                break;
+        }
+        if (obj->oBowserEyesShut) {
+            switchCase->selectedCase = BOWSER_EYES_CLOSED; // eyes closed, blinking
+        } else {
+            bowser_open_eye_switch(obj, switchCase); // eyes open, handle eye looking direction
         }
         obj->oBowserEyesTimer++;
     }
