@@ -27,13 +27,14 @@ void bhv_checkerboard_elevator_group_init(void) {
     }
 }
 
-void checkerboard_plat_act_move_y(UNUSED s32 unused, f32 vel, s32 time) {
+void checkerboard_plat_act_move_y(f32 vel, s32 time) {
     o->oMoveAnglePitch = 0;
     o->oAngleVelPitch = 0;
     o->oForwardVel = 0.0f;
     o->oVelY = vel;
-    if (o->oTimer > time)
+    if (o->oTimer > time) {
         o->oAction++;
+    }
 }
 
 void checkerboard_plat_act_rotate(s32 nextAction, s16 pitchAmt) {
@@ -63,13 +64,13 @@ void bhv_checkerboard_platform_loop(void) {
             }
             break;
         case 1:
-            checkerboard_plat_act_move_y(2, 10.0f, o->oCheckerBoardPlatformHeight);
+            checkerboard_plat_act_move_y(10.0f, o->oCheckerBoardPlatformHeight);
             break;
         case 2:
             checkerboard_plat_act_rotate(3, 512);
             break;
         case 3:
-            checkerboard_plat_act_move_y(4, -10.0f, o->oCheckerBoardPlatformHeight);
+            checkerboard_plat_act_move_y(-10.0f, o->oCheckerBoardPlatformHeight);
             break;
         case 4:
             checkerboard_plat_act_rotate(1, -512);

@@ -8477,7 +8477,7 @@ void MipsOpcodeFormatter::handleOpcodeParameters(const MipsOpcodeData& opData, c
 		{
 		case 'r':	// forced register
 			buffer += formatString(L"r%d",*encoding);
-			encoding += 1;
+			encoding++;
 			break;
 		case 's':	// register
 			buffer += regData.grs.name;
@@ -15714,7 +15714,7 @@ static bool parseArguments(const StringList& arguments, ArmipsArguments& setting
 			if (arguments[argpos] == L"--")
 			{
 				readflags = false;
-				argpos += 1;
+				argpos++;
 			}
 			else if (arguments[argpos] == L"-temp" && argpos + 1 < arguments.size())
 			{
@@ -15736,7 +15736,7 @@ static bool parseArguments(const StringList& arguments, ArmipsArguments& setting
 			else if (arguments[argpos] == L"-erroronwarning")
 			{
 				settings.errorOnWarning = true;
-				argpos += 1;
+				argpos++;
 			}
 			else if (arguments[argpos] == L"-equ" && argpos + 2 < arguments.size())
 			{
@@ -15791,7 +15791,7 @@ static bool parseArguments(const StringList& arguments, ArmipsArguments& setting
 			else if (arguments[argpos] == L"-time")
 			{
 				Logger::printError(Logger::Warning, L"-time flag is deprecated");
-				argpos += 1;
+				argpos++;
 			}
 			else if (arguments[argpos] == L"-root" && argpos + 1 < arguments.size())
 			{

@@ -174,8 +174,6 @@ void ukiki_act_idle(void) {
  * Only used for the cap ukiki.
  */
 void ukiki_act_return_home(void) {
-    UNUSED s32 unused;
-
     cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
     o->oMoveAngleYaw = cur_obj_angle_to_home();
     o->oForwardVel = 10.0f;

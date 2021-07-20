@@ -221,8 +221,8 @@ int mio0_encode(const unsigned char *in, unsigned int length, unsigned char *out
    // special case for first byte
    lookback_push(lookbacks, in[0], 0);
    uncomp_buf[uncomp_idx] = in[0];
-   uncomp_idx += 1;
-   bytes_proc += 1;
+   uncomp_idx++;
+   bytes_proc++;
    PUT_BIT(bit_buf, bit_idx++, 1);
    while (bytes_proc < length) {
       int offset;

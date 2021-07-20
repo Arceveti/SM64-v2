@@ -201,7 +201,7 @@ void print_string_array_info(const char **strArr) {
     s32 i;
 
     if (!sDebugStringArrPrinted) {
-        sDebugStringArrPrinted += 1; // again, why not = TRUE...
+        sDebugStringArrPrinted++; // again, why not = TRUE...
         for (i = 0; i < 8; i++) {
             // sDebugPage is assumed to be 4 or 5 here.
             print_debug_top_down_mapinfo(strArr[i], gDebugInfo[sDebugPage][i]);
@@ -240,7 +240,7 @@ void update_debug_dpadmask(void) {
         } else {
             sDebugInfoDPadMask = 0;
         }
-        sDebugInfoDPadUpdID += 1;
+        sDebugInfoDPadUpdID++;
         if (sDebugInfoDPadUpdID >= 8) {
             sDebugInfoDPadUpdID = 6; // rapidly set to 6 from 8 as long as dPadMask is being set.
         }
@@ -249,7 +249,7 @@ void update_debug_dpadmask(void) {
 
 void debug_unknown_level_select_check(void) {
     if (!sDebugLvSelectCheckFlag) {
-        sDebugLvSelectCheckFlag += 1; // again, just do = TRUE...
+        sDebugLvSelectCheckFlag++; // again, just do = TRUE...
 
         if (!gDebugLevelSelect) {
             gDebugInfoFlags = DEBUG_INFO_NOFLAGS;
@@ -292,7 +292,7 @@ UNUSED static void check_debug_button_seq(void) {
     } else {
         if ((s16)(cButtonMask = (gPlayer1Controller->buttonPressed & C_BUTTONS))) {
             if (buttonArr[sDebugInfoButtonSeqID] == cButtonMask) {
-                sDebugInfoButtonSeqID += 1;
+                sDebugInfoButtonSeqID++;
                 if (buttonArr[sDebugInfoButtonSeqID] == -1) {
                     if (gDebugInfoFlags == DEBUG_INFO_FLAG_ALL) {
                         gDebugInfoFlags = DEBUG_INFO_FLAG_LSELECT;
@@ -315,11 +315,11 @@ UNUSED static void try_change_debug_page(void) {
     if (gDebugInfoFlags & DEBUG_INFO_FLAG_DPRINT) {
         if ((gPlayer1Controller->buttonPressed & L_JPAD)
             && (gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG))) {
-            sDebugPage += 1;
+            sDebugPage++;
         }
         if ((gPlayer1Controller->buttonPressed & R_JPAD)
             && (gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG))) {
-            sDebugPage -= 1;
+            sDebugPage--;
         }
         if (sDebugPage >= (DEBUG_PAGE_MAX + 1)) {
             sDebugPage = DEBUG_PAGE_MIN;
@@ -352,14 +352,14 @@ void try_modify_debug_controls(void) {
         }
 
         if (sDebugInfoDPadMask & U_JPAD) {
-            sDebugSysCursor -= 1;
+            sDebugSysCursor--;
             if (sDebugSysCursor < 0) {
                 sDebugSysCursor = 0;
             }
         }
 
         if (sDebugInfoDPadMask & D_JPAD) {
-            sDebugSysCursor += 1;
+            sDebugSysCursor++;
             if (sDebugSysCursor >= 8) {
                 sDebugSysCursor = 7;
             }
@@ -451,8 +451,6 @@ void try_print_debug_mario_level_info(void) {
  * [5][7] (b7 in the string array) to 1 to enable debug spawn.
  */
 void try_do_mario_debug_object_spawn(void) {
-    UNUSED s32 unused;
-
     if (sDebugPage == DEBUG_PAGE_STAGEINFO && gDebugInfo[DEBUG_PAGE_ENEMYINFO][7] == 1) {
         if (gPlayer1Controller->buttonPressed & R_JPAD) {
             spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL, bhvKoopaShell);

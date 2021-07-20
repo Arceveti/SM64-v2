@@ -61,8 +61,6 @@ void bhv_activated_back_and_forth_platform_init(void) {
  * Activated back-and-forth platform update function.
  */
 void bhv_activated_back_and_forth_platform_update(void) {
-    UNUSED s32 unused[3];
-
     // oVelY is used for vertical platforms' movement and also for
     // horizontal platforms' dipping up/down when Mario gets on/off them
     if (gMarioObject->platform == o) {
@@ -78,7 +76,7 @@ void bhv_activated_back_and_forth_platform_update(void) {
         // and one more frame of "lag" after it finally reaches 0 here,
         // Mario actually has to wait 22 frames before the platform starts moving.
         if (o->oActivatedBackAndForthPlatformCountdown != 0) {
-            o->oActivatedBackAndForthPlatformCountdown -= 1;
+            o->oActivatedBackAndForthPlatformCountdown--;
         } else {
             // After the wait period is over, we start moving, by adding the velocity
             // to the positional offset.

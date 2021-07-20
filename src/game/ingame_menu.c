@@ -540,7 +540,6 @@ void print_hud_my_score_stars(s8 fileNum, s8 courseNum, s16 x, s16 y) {
     u8 strStarCount[4];
     s16 starCount;
     u8 textSymStar[] = { GLYPH_STAR, GLYPH_SPACE };
-    UNUSED u16 unused;
     u8 textSymX[] = { GLYPH_MULTIPLY, GLYPH_SPACE };
 
     starCount = save_file_get_course_star_count(fileNum, courseNum);
@@ -633,8 +632,6 @@ void reset_dialog_render_state(void) {
 #define Y_VAL2 5.0f
 
 void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
-    UNUSED s32 unused;
-
     create_dl_translation_matrix(MENU_MTX_NOPUSH, dialog->leftOffset, dialog->width, 0);
 
     switch (gDialogBoxType) {
@@ -755,17 +752,11 @@ void render_multi_text_string_lines(s8 multiTextId, s8 lineNum, s16 *linePos, s8
 
 
 u32 ensure_nonnegative(s16 value) {
-    if (value < 0) {
-        value = 0;
-    }
-
+    if (value < 0) value = 0;
     return value;
 }
 
-void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 lowerBound)
-{
-    UNUSED s32 pad[2];
-
+void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 lowerBound) {
     u8 strChar;
 
     u8 *str = segmented_to_virtual(dialog->str);

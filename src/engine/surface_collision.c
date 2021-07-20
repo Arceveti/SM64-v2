@@ -534,7 +534,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     *pfloor = floor;
 
     // Increment the debug tracker.
-    gNumCalls.floor += 1;
+    gNumCalls.floor++;
 
     return height;
 }
@@ -669,7 +669,6 @@ f32 find_water_level(f32 x, f32 z) {
 f32 find_poison_gas_level(f32 x, f32 z) {
     s32 i;
     s32 numRegions;
-    UNUSED s32 unused;
     s16 val;
     f32 loX, hiX, loZ, hiZ;
     f32 gasLevel = FLOOR_LOWER_LIMIT;

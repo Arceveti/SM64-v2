@@ -34,9 +34,9 @@
 // The current sound mode is automatically centered on US and Shindou.
 static s16 sSoundTextX;
 
-//! @Bug (UB Array Access) For EU, more buttons were added than the array was extended.
-//! This causes no currently known issues on console (as the other variables are not changed
-//! while this is used) but can cause issues with other compilers.
+// @Bug (UB Array Access) For EU, more buttons were added than the array was extended.
+// This causes no currently known issues on console (as the other variables are not changed
+// while this is used) but can cause issues with other compilers.
 #define NUM_BUTTONS MENU_BUTTON_OPTION_MAX
 
 // Amount of main menu buttons defined in the code called by spawn_object_rel_with_rot.
@@ -181,18 +181,15 @@ void beh_yellow_background_menu_loop(void) {
  * depth = 200.0 for main menu, 22.0 for submenus.
  */
 s32 check_clicked_button(s16 x, s16 y, f32 depth) {
-    f32 a = 52.4213;
-    f32 newX = ((f32) x * 160.0) / (a * depth);
-    f32 newY = ((f32) y * 120.0) / (a * 3 / 4 * depth);
+    f32 a = 52.4213f;
+    f32 newX = ((f32) x * 160.0f) / (a * depth);
+    f32 newY = ((f32) y * 120.0f) / (a * 3 / 4 * depth);
     s16 maxX = newX + 25.0f;
     s16 minX = newX - 25.0f;
     s16 maxY = newY + 21.0f;
     s16 minY = newY - 21.0f;
 
-    if (sClickPos[0] < maxX && minX < sClickPos[0] && sClickPos[1] < maxY && minY < sClickPos[1]) {
-        return TRUE;
-    }
-    return FALSE;
+    return (sClickPos[0] < maxX && minX < sClickPos[0] && sClickPos[1] < maxY && minY < sClickPos[1]);
 }
 
 /**
@@ -208,10 +205,10 @@ static void bhv_menu_button_growing_from_main_menu(struct Object *button) {
     if (button->oMenuButtonTimer >= 8 && button->oMenuButtonTimer < 16) {
         button->oFaceAnglePitch -= 0x800;
     }
-    button->oParentRelativePosX -= button->oMenuButtonOrigPosX / 16.0;
-    button->oParentRelativePosY -= button->oMenuButtonOrigPosY / 16.0;
-    if (button->oPosZ < button->oMenuButtonOrigPosZ + 17800.0) {
-        button->oParentRelativePosZ += 1112.5;
+    button->oParentRelativePosX -= button->oMenuButtonOrigPosX / 16.0f;
+    button->oParentRelativePosY -= button->oMenuButtonOrigPosY / 16.0f;
+    if (button->oPosZ < button->oMenuButtonOrigPosZ + 17800.0f) {
+        button->oParentRelativePosZ += 1112.5f;
     }
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 16) {
@@ -235,10 +232,10 @@ static void bhv_menu_button_shrinking_to_main_menu(struct Object *button) {
     if (button->oMenuButtonTimer >= 8 && button->oMenuButtonTimer < 16) {
         button->oFaceAnglePitch += 0x800;
     }
-    button->oParentRelativePosX += button->oMenuButtonOrigPosX / 16.0;
-    button->oParentRelativePosY += button->oMenuButtonOrigPosY / 16.0;
+    button->oParentRelativePosX += button->oMenuButtonOrigPosX / 16.0f;
+    button->oParentRelativePosY += button->oMenuButtonOrigPosY / 16.0f;
     if (button->oPosZ > button->oMenuButtonOrigPosZ) {
-        button->oParentRelativePosZ -= 1112.5;
+        button->oParentRelativePosZ -= 1112.5f;
     }
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 16) {
@@ -262,9 +259,9 @@ static void bhv_menu_button_growing_from_submenu(struct Object *button) {
     if (button->oMenuButtonTimer >= 8 && button->oMenuButtonTimer < 16) {
         button->oFaceAnglePitch -= 0x800;
     }
-    button->oParentRelativePosX -= button->oMenuButtonOrigPosX / 16.0;
-    button->oParentRelativePosY -= button->oMenuButtonOrigPosY / 16.0;
-    button->oParentRelativePosZ -= 116.25;
+    button->oParentRelativePosX -= button->oMenuButtonOrigPosX / 16.0f;
+    button->oParentRelativePosY -= button->oMenuButtonOrigPosY / 16.0f;
+    button->oParentRelativePosZ -= 116.25f;
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 16) {
         button->oParentRelativePosX = 0.0f;
@@ -287,10 +284,10 @@ static void bhv_menu_button_shrinking_to_submenu(struct Object *button) {
     if (button->oMenuButtonTimer >= 8 && button->oMenuButtonTimer < 16) {
         button->oFaceAnglePitch += 0x800;
     }
-    button->oParentRelativePosX += button->oMenuButtonOrigPosX / 16.0;
-    button->oParentRelativePosY += button->oMenuButtonOrigPosY / 16.0;
+    button->oParentRelativePosX += button->oMenuButtonOrigPosX / 16.0f;
+    button->oParentRelativePosY += button->oMenuButtonOrigPosY / 16.0f;
     if (button->oPosZ > button->oMenuButtonOrigPosZ) {
-        button->oParentRelativePosZ += 116.25;
+        button->oParentRelativePosZ += 116.25f;
     }
     button->oMenuButtonTimer++;
     if (button->oMenuButtonTimer == 16) {
@@ -517,8 +514,7 @@ void check_score_menu_clicked_buttons(struct Object *scoreButton) {
 #endif
                     sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_IN_OUT;
                     sSelectedButtonID = buttonID;
-                }
-                else { // Check if a save file is clicked
+                } else { // Check if a save file is clicked
                     if (sMainMenuTimer >= SCORE_TIMER) {
                         // If clicked in a existing save file, select it too see it's score
                         if (save_file_exists(buttonID - MENU_BUTTON_SCORE_MIN)) {
@@ -528,8 +524,7 @@ void check_score_menu_clicked_buttons(struct Object *scoreButton) {
 #endif
                             sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
                             sSelectedButtonID = buttonID;
-                        }
-                        else {
+                        } else {
                             // If clicked in a non-existing save file, play buzz sound
                             play_sound(SOUND_MENU_CAMERA_BUZZ, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -1476,7 +1471,7 @@ void handle_controller_cursor_input(void) {
  */
 void print_menu_cursor(void) {
     handle_controller_cursor_input();
-    create_dl_translation_matrix(MENU_MTX_PUSH, sCursorPos[0] + 160.0f - 5.0, sCursorPos[1] + 120.0f - 25.0, 0.0f);
+    create_dl_translation_matrix(MENU_MTX_PUSH, sCursorPos[0] + 155.0f, sCursorPos[1] + 95.0f, 0.0f);
     // Get the right graphic to use for the cursor.
     if (sCursorClickingTimer == 0)
         // Idle
@@ -2029,9 +2024,9 @@ void print_sound_mode_menu_strings(void) {
         } else {
             gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
         }
-            // Mode names are centered correctly on US and Shindou
-            textX = get_str_x_pos_from_center(mode * 74 + 87, textSoundModes[mode], 10.0f);
-            print_generic_string(textX, 87, textSoundModes[mode]);
+        // Mode names are centered correctly on US and Shindou
+        textX = get_str_x_pos_from_center(mode * 74 + 87, textSoundModes[mode], 10.0f);
+        print_generic_string(textX, 87, textSoundModes[mode]);
     }
 
 
@@ -2131,6 +2126,7 @@ void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
  * Prints save file score strings that shows when a save file is chosen inside the score menu.
  */
 void print_save_file_scores(s8 fileIndex) {
+    u32 i;
     unsigned char textMario[] = { TEXT_MARIO };
     unsigned char textHiScore[] = { TEXT_HI_SCORE };
     unsigned char textMyScore[] = { TEXT_MY_SCORE };
@@ -2152,31 +2148,12 @@ void print_save_file_scores(s8 fileIndex) {
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
 
-//! Huge print list, for loops exist for a reason!
-#define PRINT_COURSE_SCORES(courseIndex, pad) \
-    print_menu_generic_string(LEVEL_NAME_X + (pad * LEVEL_NUM_PAD), 23 + 12 * courseIndex, \
-                              segmented_to_virtual(levelNameTable[courseIndex - 1])); \
-    print_score_file_star_score(fileIndex, courseIndex - 1, STAR_SCORE_X, 23 + 12 * courseIndex); \
-    print_score_file_course_coin_score(fileIndex, courseIndex - 1, 213, 23 + 12 * courseIndex);
-
-    // Course values are indexed, from Bob-omb Battlefield to Rainbow Ride
-    PRINT_COURSE_SCORES(COURSE_BOB, 1)
-    PRINT_COURSE_SCORES(COURSE_WF,  1)
-    PRINT_COURSE_SCORES(COURSE_JRB, 1)
-    PRINT_COURSE_SCORES(COURSE_CCM, 1)
-    PRINT_COURSE_SCORES(COURSE_BBH, 1)
-    PRINT_COURSE_SCORES(COURSE_HMC, 1)
-    PRINT_COURSE_SCORES(COURSE_LLL, 1)
-    PRINT_COURSE_SCORES(COURSE_SSL, 1)
-    PRINT_COURSE_SCORES(COURSE_DDD, 1)
-    PRINT_COURSE_SCORES(COURSE_SL,  0)
-    PRINT_COURSE_SCORES(COURSE_WDW, 0)
-    PRINT_COURSE_SCORES(COURSE_TTM, 0)
-    PRINT_COURSE_SCORES(COURSE_THI, 0)
-    PRINT_COURSE_SCORES(COURSE_TTC, 0)
-    PRINT_COURSE_SCORES(COURSE_RR,  0)
-
-#undef PRINT_COURSE_SCORES
+    for (i = 0; i < COURSE_STAGES_MAX; i++) {
+        print_menu_generic_string(LEVEL_NAME_X + ((i < 9) * LEVEL_NUM_PAD), 23 + 12 * (i+1),
+                                  segmented_to_virtual(levelNameTable[i]));
+        print_score_file_star_score(            fileIndex, i, STAR_SCORE_X, 23 + 12 * (i+1));
+        print_score_file_course_coin_score(     fileIndex, i,          213, 23 + 12 * (i+1));
+    }
 
     // Print castle secret stars text
     print_menu_generic_string(LEVEL_NAME_X + SECRET_STARS_PAD, 23 + 12 * 16,
@@ -2198,9 +2175,6 @@ void print_save_file_scores(s8 fileIndex) {
  * Also checks if all saves exists and defines text and main menu timers.
  */
 static void print_file_select_strings(void) {
-    UNUSED s32 unused1;
-    UNUSED s32 unused2;
-
     create_dl_ortho_matrix();
     switch (sSelectedButtonID) {
         case MENU_BUTTON_NONE:
@@ -2240,7 +2214,7 @@ static void print_file_select_strings(void) {
         sTextBaseAlpha += 10;
     }
     if (sMainMenuTimer < 1000) {
-        sMainMenuTimer += 1;
+        sMainMenuTimer++;
     }
 }
 
@@ -2296,10 +2270,7 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
     sMainMenuTimer = 0;
     sEraseYesNoHoverState = MENU_ERASE_HOVER_NONE;
     sSoundMode = save_file_get_sound_mode();
-    //! no return value
-#ifdef AVOID_UB
     return 0;
-#endif
 }
 
 /**

@@ -24,11 +24,9 @@ void intro_lakitu_set_offset_from_camera(struct Object *o, Vec3f offset) {
 }
 
 void intro_lakitu_set_focus(struct Object *o, Vec3f newFocus) {
-    UNUSED Vec3f unusedVec3f;
     Vec3f origin;
     f32 dist;
     s16 pitch, yaw;
-    UNUSED u32 unused;
 
     // newFocus is an offset from lakitu's origin, not a point in the world.
     vec3f_set(origin, 0.f, 0.f, 0.f);
@@ -49,7 +47,7 @@ s32 intro_lakitu_set_pos_and_focus(struct Object *o, struct CutsceneSplinePoint 
 
     if ((move_point_along_spline(newFocus, offset, &splineSegment, &(o->oIntroLakituSplineSegmentProgress)) == 1)
         || (move_point_along_spline(newOffset, focus, &splineSegment, &(o->oIntroLakituSplineSegmentProgress)) == 1))
-        splineFinished += 1;
+        splineFinished++;
 
     o->oIntroLakituSplineSegment = splineSegment;
     intro_lakitu_set_offset_from_camera(o, newOffset);
@@ -71,7 +69,7 @@ void bhv_intro_lakitu_loop(void) {
             if (gCamera->cutscene == CUTSCENE_END_WAVING)
                 gCurrentObject->oAction = 100;
             else
-                gCurrentObject->oAction += 1;
+                gCurrentObject->oAction++;
             break;
 
         case 1:
@@ -86,7 +84,7 @@ void bhv_intro_lakitu_loop(void) {
 
             if (intro_lakitu_set_pos_and_focus(gCurrentObject, gIntroLakituStartToPipeOffsetFromCamera,
                                                gIntroLakituStartToPipeFocus) == 1)
-                gCurrentObject->oAction += 1;
+                gCurrentObject->oAction++;
 
             switch (gCurrentObject->oTimer) {
 #if defined(VERSION_US) || defined(VERSION_SH)
@@ -98,16 +96,16 @@ void bhv_intro_lakitu_loop(void) {
                     break;
 #endif
                 case 73:
-                    gCurrentObject->oAnimState += 1;
+                    gCurrentObject->oAnimState++;
                     break;
                 case 74:
-                    gCurrentObject->oAnimState -= 1;
+                    gCurrentObject->oAnimState--;
                     break;
                 case 82:
-                    gCurrentObject->oAnimState += 1;
+                    gCurrentObject->oAnimState++;
                     break;
                 case 84:
-                    gCurrentObject->oAnimState -= 1;
+                    gCurrentObject->oAnimState--;
                     break;
             }
 #ifdef VERSION_EU
@@ -123,7 +121,7 @@ void bhv_intro_lakitu_loop(void) {
 #else
             if (gCutsceneTimer > 720) {
 #endif
-                gCurrentObject->oAction += 1;
+                gCurrentObject->oAction++;
                 gCurrentObject->oIntroLakituDistToBirdsX = 1400.f;
                 gCurrentObject->oIntroLakituDistToBirdsZ = -4096.f;
                 gCurrentObject->oIntroLakituEndBirds1DestZ = 2048.f;
@@ -185,7 +183,7 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oMoveAngleYaw = 0x9000;
             gCurrentObject->oFaceAnglePitch = gCurrentObject->oMoveAnglePitch / 2;
             gCurrentObject->oFaceAngleYaw = gCurrentObject->oMoveAngleYaw;
-            gCurrentObject->oAction += 1;
+            gCurrentObject->oAction++;
             break;
 
         case 101:
@@ -200,7 +198,7 @@ void bhv_intro_lakitu_loop(void) {
                     0x200);
             }
             if (gCurrentObject->oTimer > 105) {
-                gCurrentObject->oAction += 1;
+                gCurrentObject->oAction++;
                 gCurrentObject->oMoveAnglePitch = 0xE00;
             }
             gCurrentObject->oFaceAnglePitch = 0;

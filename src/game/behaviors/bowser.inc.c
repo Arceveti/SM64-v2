@@ -709,7 +709,6 @@ void bowser_short_second_hop(void) {
  * Makes Bowser do a big jump
  */
 void bowser_act_big_jump(void) {
-    UNUSED s32 unused;
     if (o->oSubAction == 0) {
         // Set jump animation
         if (bowser_set_anim_jump()) {
@@ -960,10 +959,10 @@ s32 bowser_check_hit_mine(void) {
  * Bowser's thrown act that gets called after Mario releases him
  */
 void bowser_act_thrown(void) {
-    UNUSED s32 unused;
     // Keep Bowser's timer at 0 unless he lands
-    if (o->oTimer < 2)
+    if (o->oTimer < 2) {
         o->oBowserTimer = 0;
+    }
     if (o->oSubAction == 0) {
         // Play shake animations and do bounce effects
         cur_obj_init_animation_with_sound(BOWSER_ANIM_SHAKING);
@@ -974,8 +973,9 @@ void bowser_act_thrown(void) {
             o->oSubAction++; // stops this current subaction
         }
     // Stand up and after play, set to default act
-    } else if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_STAND_UP))
+    } else if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_STAND_UP)) {
         o->oAction = BOWSER_ACT_DEFAULT;
+    }
     // Hit mine check, reduce health and set specific action depending of it
     if (bowser_check_hit_mine()) {
         o->oHealth--;
@@ -1004,7 +1004,6 @@ void bowser_set_goal_invisible(void) {
  */
 void bowser_act_jump_onto_stage(void) {
     s32 onDynamicFloor;
-    UNUSED s32 unused;
     struct Surface *floor = o->oFloor;
 
     // Set dynamic floor check (Object platforms)
@@ -1264,7 +1263,6 @@ s32 bowser_dead_default_stage_ending(void) {
  * Returns TRUE once done
  */
 s32 bowser_dead_final_stage_ending(void) {
-    UNUSED s32 unused;
     s32 ret = FALSE;
     s32 dialogID;
     if (o->oBowserTimer < 2) {
@@ -1392,9 +1390,7 @@ struct BowserTiltPlatformInfo sBowsertiltPlatformData[] = {
 void bowser_act_tilt_lava_platform(void) {
     // Set platform object
     struct Object *platform = cur_obj_nearest_object_with_behavior(bhvTiltingBowserLavaPlatform);
-    UNUSED s16 angle = o->oBowserAngleToCentre + 0x8000;
     s16 angSpeed;
-    UNUSED s32 unused;
     s32 i;
     s32 isNotTilting;
     // If there's not platform, return to default action
@@ -1854,7 +1850,6 @@ void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *swit
  */
 Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     UNUSED s16 eyeShut;
-    UNUSED s32 unused;
     struct Object *obj = (struct Object *) gCurGraphNodeObject;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {

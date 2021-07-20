@@ -1303,13 +1303,8 @@ static u8 get_sound_reverb(UNUSED u8 bank, UNUSED u8 soundIndex, u8 channelIndex
                   + (US_FLOAT(1.0) - gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume)
                         * LOW_VOLUME_REVERB);
 
-    if (reverb > 0x7f) {
-        reverb = 0x7f;
-    }
+    if (reverb > 0x7f) reverb = 0x7f;
     return reverb;
-}
-
-static void noop_8031EEC8(void) {
 }
 
 /**
@@ -1323,7 +1318,6 @@ void audio_signal_game_loop_tick(void) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
     maybe_tick_game_sound();
 #endif
-    noop_8031EEC8();
 }
 
 /**

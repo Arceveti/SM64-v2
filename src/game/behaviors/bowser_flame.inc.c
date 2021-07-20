@@ -116,7 +116,6 @@ void bhv_flame_moving_forward_growing_init(void) {
 }
 
 void bhv_flame_moving_forward_growing_loop(void) {
-    UNUSED s32 unused;
     UNUSED struct Object *flame;
     obj_set_hitbox(o, &sGrowingBowserFlameHitbox);
     o->oFlameScale = o->oFlameScale + 0.5;
@@ -152,7 +151,6 @@ void bhv_flame_floating_landing_init(void) {
 f32 sFlameFloatingYLimit[] = { -8.0f, -6.0f, -3.0f };
 
 void bhv_flame_floating_landing_loop(void) {
-    UNUSED s32 unused;
     cur_obj_update_floor_and_walls();
     cur_obj_move_standard(78);
     bowser_flame_move();

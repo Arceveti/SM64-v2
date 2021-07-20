@@ -39,7 +39,7 @@ void bhv_water_bomb_spawner_update(void) {
     if (!o->oWaterBombSpawnerBombActive && latDistToMario < spawnerRadius
         && gMarioObject->oPosY - o->oPosY < 1000.0f) {
         if (o->oWaterBombSpawnerTimeToSpawn != 0) {
-            o->oWaterBombSpawnerTimeToSpawn -= 1;
+            o->oWaterBombSpawnerTimeToSpawn--;
         } else {
             struct Object *waterBomb =
                 spawn_object_relative(0, 0, 2000, 0, o, MODEL_WATER_BOMB, bhvWaterBomb);

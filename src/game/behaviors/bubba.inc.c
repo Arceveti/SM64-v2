@@ -38,7 +38,7 @@ void bubba_act_0(void) {
         } else if (o->oTimer > 30 && o->oDistanceToMario < 2000.0f) {
             o->oAction = 1;
         } else if (o->oBubbaRandomTimer != 0) {
-            o->oBubbaRandomTimer -= 1;
+            o->oBubbaRandomTimer--;
         } else {
             o->oBubbaTargetYaw = obj_random_fixed_turn(0x2000);
             o->oBubbaRandomTimer = random_linear_offset(100, 100);
@@ -96,8 +96,6 @@ void bubba_act_1(void) {
 }
 
 void bhv_bubba_loop(void) {
-    UNUSED s32 unused;
-
     o->oInteractionSubtype &= ~INT_SUBTYPE_EATS_MARIO;
     o->oBubbaNextTargetPitchTowardMario = obj_turn_pitch_toward_mario(120.0f, 0);
 

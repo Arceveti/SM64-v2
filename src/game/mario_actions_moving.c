@@ -524,14 +524,7 @@ s32 should_begin_sliding(struct MarioState *m) {
     return FALSE;
 }
 
-// s32 analog_stick_held_back(struct MarioState *m) {
-//     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
-//     return intendedDYaw < -0x471C || intendedDYaw > 0x471C;
-// }
-
 s32 check_ground_dive_or_punch(struct MarioState *m) {
-    UNUSED s32 unused;
-
     if (m->input & INPUT_B_PRESSED) {
         //! Speed kick (shoutouts to SimpleFlips)
 #ifdef IMPROVED_MOVEMENT

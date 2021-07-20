@@ -112,8 +112,6 @@ void dorrie_act_raise_head(void) {
 
 void bhv_dorrie_update(void) {
     f32 boundsShift;
-    UNUSED s32 unused1;
-    UNUSED s32 unused2;
     f32 maxOffsetY;
 
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {

@@ -2069,7 +2069,6 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
                         case 0x88:
                             sp5A = m64_read_s16(state);
                             if (seq_channel_set_layer(seqChannel, loBits) == 0) {
-                                if (1) {}
                                 seqChannel->layers[loBits]->scriptState.pc = seqPlayer->seqData + sp5A;
                             }
                             break;
@@ -2146,9 +2145,6 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
                     case 0x90: // chan_setlayer
                         sp5A = m64_read_s16(state);
                         if (seq_channel_set_layer(seqChannel, loBits) == 0) {
-#ifdef VERSION_EU
-                            if (1) {}
-#endif
                             seqChannel->layers[loBits]->scriptState.pc = seqPlayer->seqData + sp5A;
                         }
                         break;

@@ -104,7 +104,7 @@ void bhv_monty_mole_hole_update(void) {
         sMontyMoleHoleList = link_objects_with_behavior(bhvMontyMoleHole);
         sMontyMoleKillStreak = 0;
     } else if (o->oMontyMoleHoleCooldown > 0) {
-        o->oMontyMoleHoleCooldown -= 1;
+        o->oMontyMoleHoleCooldown--;
     }
 }
 
@@ -388,7 +388,7 @@ void bhv_monty_mole_update(void) {
         }
 
         //! No overflow check
-        sMontyMoleKillStreak += 1;
+        sMontyMoleKillStreak++;
 
         sMontyMoleLastKilledPosX = o->oPosX;
         sMontyMoleLastKilledPosY = o->oPosY;

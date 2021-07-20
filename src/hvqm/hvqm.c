@@ -223,11 +223,9 @@ void hvqm_main_proc() {
         disptime += usec_per_frame;
         --video_remain;
         
-        //if (1) {
-            //osAiSetFrequency(gAudioSessionPresets[0].frequency);
-            //osSendMesg(&gDmaMesgQueue, 0, OS_MESG_BLOCK);
-            //osDestroyThread(&hvqmMesgQ);
-        //}
+        // osAiSetFrequency(gAudioSessionPresets[0].frequency);
+        // osSendMesg(&gDmaMesgQueue, 0, OS_MESG_BLOCK);
+        // osDestroyThread(&hvqmMesgQ);
     }
 }
 
