@@ -434,13 +434,6 @@ end:;
 }
 
 /**
- * Unused action function.
- */
-static void koopa_unshelled_act_unused3(void) {
-    cur_obj_init_anim_extend(0);
-}
-
-/**
  * Update function for koopa after losing his shell.
  */
 static void koopa_unshelled_update(void) {
@@ -456,7 +449,7 @@ static void koopa_unshelled_update(void) {
             koopa_unshelled_act_dive();
             break;
         case KOOPA_UNSHELLED_ACT_UNUSED3:
-            koopa_unshelled_act_unused3();
+            cur_obj_init_anim_extend(0);
             break;
     }
 
@@ -560,9 +553,11 @@ static s32 koopa_the_quick_detect_bowling_ball(void) {
                 } else {
                     // The ball is moving relatively quickly, so we'll just
                     // slow down a bit
-                    //! This can go negative and is unbounded. If placed next to
-                    //  oob, ktq can get PU speed.
-                    o->oForwardVel -= 2.0f;
+                    if (o->oForwardVel - 2.0f > 0.0f) {
+                        o->oForwardVel -= 2.0f;
+                    } else {
+                        o->oForwardVel = 0.0f;
+                    }
                 }
             }
         } else if (distToBall < 300.0f && ballSpeedInKoopaRunDir > o->oForwardVel) {

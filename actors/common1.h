@@ -32,8 +32,8 @@ extern const GeoLayout blue_coin_no_shadow_geo[];
 extern const GeoLayout red_coin_geo[];
 extern const GeoLayout red_coin_no_shadow_geo[];
 #ifdef IA8_30FPS_COINS
-extern const GeoLayout secret_coin_geo[];
-extern const GeoLayout secret_coin_no_shadow_geo[];
+extern const GeoLayout silver_coin_geo[];
+extern const GeoLayout silver_coin_no_shadow_geo[];
 
 extern const Gfx coin_seg3_dl_yellow_0[];
 extern const Gfx coin_seg3_dl_yellow_22_5[];

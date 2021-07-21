@@ -216,7 +216,7 @@ const GeoLayout red_coin_no_shadow_geo[] = {
 };
 
 // 0x160002C4
-const GeoLayout secret_coin_geo[] = {
+const GeoLayout silver_coin_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0xB4, 80),
    GEO_OPEN_NODE(),
       GEO_RENDER_RANGE(-2048, 3072),
@@ -252,7 +252,7 @@ const GeoLayout secret_coin_geo[] = {
 };
 
 // 0x16000328
-const GeoLayout secret_coin_no_shadow_geo[] = {
+const GeoLayout silver_coin_no_shadow_geo[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
       GEO_RENDER_RANGE(-2048, 3072),

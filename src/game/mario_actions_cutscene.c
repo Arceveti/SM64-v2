@@ -2618,15 +2618,15 @@ static s32 act_credits_cutscene(struct MarioState *m) {
             m->actionState += 2;
         }
 
-        width = m->actionState * 640 / 100;
-        height = m->actionState * 480 / 100;
+        width = m->actionState * (SCREEN_WIDTH * 2) / 100;
+        height = m->actionState * (SCREEN_HEIGHT * 2) / 100;
 
-        sEndCutsceneVp.vp.vscale[0] = 640 - width;
-        sEndCutsceneVp.vp.vscale[1] = 480 - height;
+        sEndCutsceneVp.vp.vscale[0] = (SCREEN_WIDTH * 2) - width;
+        sEndCutsceneVp.vp.vscale[1] = (SCREEN_HEIGHT * 2) - height;
         sEndCutsceneVp.vp.vtrans[0] =
-            (gCurrCreditsEntry->posVpAndText & CREDITS_POS_TWO ? width : -width) * 56 / 100 + 640;
+            (gCurrCreditsEntry->posVpAndText & CREDITS_POS_TWO ? width : -width) * 56 / 100 + (SCREEN_WIDTH * 2);
         sEndCutsceneVp.vp.vtrans[1] =
-            (gCurrCreditsEntry->posVpAndText & CREDITS_POS_THREE ? height : -height) * 66 / 100 + 480;
+            (gCurrCreditsEntry->posVpAndText & CREDITS_POS_THREE ? height : -height) * 66 / 100 + (SCREEN_HEIGHT * 2);
 
         override_viewport_and_clip(&sEndCutsceneVp, 0, 0, 0, 0);
     }
@@ -2652,18 +2652,13 @@ static s32 act_end_waving_cutscene(struct MarioState *m) {
     if (m->actionState == 0) {
         m->statusForCamera->cameraEvent = CAM_EVENT_START_END_WAVING;
 
-        sEndPeachObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach, 60, 906,
-                                                 -1180, 0, 0, 0);
+        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,  60, 906, -1180, 0, 0, 0);
+        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  180, 906, -1170, 0, 0, 0);
+        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -180, 906, -1170, 0, 0, 0);
 
-        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD, bhvEndToad, 180,
-                                                     906, -1170, 0, 0, 0);
-
-        sEndLeftToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD, bhvEndToad, -180,
-                                                    906, -1170, 0, 0, 0);
-
-        sEndPeachObj->oOpacity = 255;
+        sEndPeachObj->oOpacity     = 255;
         sEndRightToadObj->oOpacity = 255;
-        sEndLeftToadObj->oOpacity = 255;
+        sEndLeftToadObj->oOpacity  = 255;
 
         sEndPeachAnimation = 11;
         sEndToadAnims[0] = 6;

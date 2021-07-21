@@ -1,6 +1,6 @@
 // controllable_platform.c.inc
 
-static s8 D_80331694 = 0;
+static s8 sControllablePlatformDirectionState = DIRECTION_STATE_STOPPED;
 
 void controllable_platform_act_1(void) {
     o->oParentRelativePosY -= 4.0f;
@@ -11,7 +11,7 @@ void controllable_platform_act_1(void) {
 }
 
 void controllable_platform_act_2(void) {
-    if (o->oBehParams2ndByte == D_80331694) return;
+    if (o->oBehParams2ndByte == sControllablePlatformDirectionState) return;
 
     o->oParentRelativePosY += 4.0f;
     if (o->oParentRelativePosY > 51.0f) {
@@ -26,10 +26,8 @@ void bhv_controllable_platform_sub_loop(void) {
             if (o->oTimer < 30) break;
 
             if (gMarioObject->platform == o) {
-                D_80331694 = o->oBehParams2ndByte;
-#ifdef VERSION_SH
+                sControllablePlatformDirectionState = o->oBehParams2ndByte;
                 o->parentObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-#endif
                 o->oAction = 1;
                 cur_obj_play_sound_2(SOUND_GENERAL_MOVING_PLATFORM_SWITCH);
             }
@@ -53,29 +51,25 @@ void bhv_controllable_platform_sub_loop(void) {
 }
 
 void bhv_controllable_platform_init(void) {
-    struct Object *sp34;
-    sp34 = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0,
-                                     51, 204, 0, 0, 0);
-    sp34->oBehParams2ndByte = 1;
-    sp34 = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0,
-                                     51, -204, 0, -0x8000, 0);
-    sp34->oBehParams2ndByte = 2;
-    sp34 = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 204,
-                                     51, 0, 0, 0x4000, 0);
-    sp34->oBehParams2ndByte = 3;
-    sp34 = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub,
-                                     -204, 51, 0, 0, -0x4000, 0);
-    sp34->oBehParams2ndByte = 4;
+    struct Object *buttonObj;
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0, 51, 205, 0, 0, 0);
+    buttonObj->oBehParams2ndByte = DIRECTION_STATE_SOUTH;
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0, 51, -205, 0, -0x8000, 0);
+    buttonObj->oBehParams2ndByte = DIRECTION_STATE_NORTH;
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 205, 51, 0, 0, 0x4000, 0);
+    buttonObj->oBehParams2ndByte = DIRECTION_STATE_EAST;
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, -205, 51, 0, 0, -0x4000, 0);
+    buttonObj->oBehParams2ndByte = DIRECTION_STATE_WEST;
 
-    D_80331694 = 0;
+    sControllablePlatformDirectionState = DIRECTION_STATE_STOPPED;
 
     o->oControllablePlatformInitPosY = o->oPosY;
 }
 
-void controllable_platform_hit_wall(s8 sp1B) {
-    o->oControllablePlatformWallHitDirection = sp1B;
+void controllable_platform_hit_wall(s8 nextDirection) {
+    o->oControllablePlatformWallHitDirection = nextDirection;
     o->oTimer = 0;
-    D_80331694 = 5;
+    sControllablePlatformDirectionState = DIRECTION_STATE_HIT_WALL;
 
     cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1);
 #if ENABLE_RUMBLE
@@ -83,35 +77,35 @@ void controllable_platform_hit_wall(s8 sp1B) {
 #endif
 }
 
-void controllable_platform_check_walls(s8 sp1B, s8 sp1C[3], Vec3f sp20, UNUSED Vec3f sp24, Vec3f sp28) {
-    if (sp1C[1] == 1 || (sp1C[0] == 1 && sp1C[2] == 1)) {
-        controllable_platform_hit_wall(sp1B);
+void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3], Vec3f dist1, UNUSED Vec3f dist2, Vec3f dist3) {
+    if (wallDisplacement[1] == 1 || (wallDisplacement[0] == 1 && wallDisplacement[2] == 1)) {
+        controllable_platform_hit_wall(nextDirection);
     }
     else {
-        if (sp1C[0] == 1) {
-            if (((sp1B == 1 || sp1B == 2) && (s32) sp20[2] != 0)
-                || ((sp1B == 3 || sp1B == 4) && (s32) sp20[0] != 0)) {
-                controllable_platform_hit_wall(sp1B);
+        if (wallDisplacement[0] == 1) {
+            if (((nextDirection == MOVE_DIRECTION_SOUTH || nextDirection == MOVE_DIRECTION_NORTH) && (s32) dist1[2] != 0)
+                || ((nextDirection == MOVE_DIRECTION_WEST || nextDirection == MOVE_DIRECTION_EAST) && (s32) dist1[0] != 0)) {
+                controllable_platform_hit_wall(nextDirection);
             } else {
-                o->oPosX += sp20[0];
-                o->oPosZ += sp20[2];
+                o->oPosX += dist1[0];
+                o->oPosZ += dist1[2];
             }
         }
 
-        if (sp1C[2] == 1) {
-            if (((sp1B == 1 || sp1B == 2) && (s32) sp28[2] != 0)
-                || ((sp1B == 3 || sp1B == 4) && (s32) sp28[0] != 0)) {
-                controllable_platform_hit_wall(sp1B);
+        if (wallDisplacement[2] == 1) {
+            if (((nextDirection == MOVE_DIRECTION_SOUTH || nextDirection == MOVE_DIRECTION_NORTH) && (s32) dist3[2] != 0)
+                || ((nextDirection == MOVE_DIRECTION_WEST || nextDirection == MOVE_DIRECTION_EAST) && (s32) dist3[0] != 0)) {
+                controllable_platform_hit_wall(nextDirection);
             } else {
-                o->oPosX += sp28[0];
-                o->oPosZ += sp28[2];
+                o->oPosX += dist3[0];
+                o->oPosZ += dist3[2];
             }
         }
     }
 
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 400)) {
-        D_80331694 = 6;
-        o->oControllablePlatformIsFarFromMario = 1;
+        sControllablePlatformDirectionState = DIRECTION_STATE_DISAPPEARING;
+        o->oControllablePlatformIsFarFromMario = TRUE;
         o->oTimer = 0;
     }
 }
@@ -126,7 +120,7 @@ void controllable_platform_shake_on_wall_hit(void) {
     }
 
     if (o->oTimer == 32) {
-        D_80331694 = o->oControllablePlatformWallHitDirection;
+        sControllablePlatformDirectionState = o->oControllablePlatformWallHitDirection;
         o->oFaceAnglePitch = 0;
         o->oFaceAngleRoll = 0;
         o->oPosY = o->oControllablePlatformInitPosY;
@@ -134,15 +128,15 @@ void controllable_platform_shake_on_wall_hit(void) {
 }
 
 void controllable_platform_tilt_from_mario(void) {
-    s16 sp1E = gMarioObject->header.gfx.pos[0] - o->oPosX;
-    s16 sp1C = gMarioObject->header.gfx.pos[2] - o->oPosZ;
+    s16 dx = gMarioObject->header.gfx.pos[0] - o->oPosX;
+    s16 dz = gMarioObject->header.gfx.pos[2] - o->oPosZ;
 
     if (gMarioObject->platform == o
         || gMarioObject->platform == cur_obj_nearest_object_with_behavior(bhvControllablePlatformSub)) {
-        o->oFaceAnglePitch = sp1C * 4;
-        o->oFaceAngleRoll = -sp1E * 4;
-        if (D_80331694 == 6) {
-            D_80331694 = 0;
+        o->oFaceAnglePitch = dz * 4;
+        o->oFaceAngleRoll = -dx * 4;
+        if (sControllablePlatformDirectionState == DIRECTION_STATE_DISAPPEARING) {
+            sControllablePlatformDirectionState = DIRECTION_STATE_STOPPED;
             o->oTimer = 0;
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         }
@@ -150,64 +144,64 @@ void controllable_platform_tilt_from_mario(void) {
 }
 
 void bhv_controllable_platform_loop(void) {
-    s8 sp54[3];
-    Vec3f sp48;
-    Vec3f sp3C;
-    Vec3f sp30;
+    s8 wallDisplacement[3];
+    Vec3f dist1;
+    Vec3f dist2;
+    Vec3f dist3;
 
     o->oAngleVelRoll = 0;
     o->oAngleVelPitch = 0;
     o->oVelX = 0;
     o->oVelZ = 0;
 
-    switch (D_80331694) {
-        case 0:
+    switch (sControllablePlatformDirectionState) {
+        case DIRECTION_STATE_STOPPED:
             o->oFaceAnglePitch /= 2;
             o->oFaceAngleRoll /= 2;
             if (o->oControllablePlatformIsFarFromMario == 1 && o->oTimer > 30) {
-                D_80331694 = 6;
+                sControllablePlatformDirectionState = 6;
                 o->oTimer = 0;
             }
             break;
 
-        case 1:
+        case DIRECTION_STATE_SOUTH:
             o->oVelZ = 10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ + 300.0f, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
-            controllable_platform_check_walls(2, sp54, sp48, sp3C, sp30);
+            wallDisplacement[0] = obj_find_wall_displacement(dist1, o->oPosX + 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
+            // wallDisplacement[1] = obj_find_wall_displacement(dist2, o->oPosX, o->oPosY, o->oPosZ + 300.0f, 50.0f);
+            wallDisplacement[2] = obj_find_wall_displacement(dist3, o->oPosX - 250.0f, o->oPosY, o->oPosZ + 300.0f, 50.0f);
+            controllable_platform_check_walls(MOVE_DIRECTION_SOUTH, wallDisplacement, dist1, dist2, dist3);
             break;
 
-        case 2:
+        case DIRECTION_STATE_NORTH:
             o->oVelZ = -10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX, o->oPosY, o->oPosZ - 300.0f, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
-            controllable_platform_check_walls(1, sp54, sp48, sp3C, sp30);
+            wallDisplacement[0] = obj_find_wall_displacement(dist1, o->oPosX + 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
+            // wallDisplacement[1] = obj_find_wall_displacement(dist2, o->oPosX, o->oPosY, o->oPosZ - 300.0f, 50.0f);
+            wallDisplacement[2] = obj_find_wall_displacement(dist3, o->oPosX - 250.0f, o->oPosY, o->oPosZ - 300.0f, 50.0f);
+            controllable_platform_check_walls(MOVE_DIRECTION_NORTH, wallDisplacement, dist1, dist2, dist3);
             break;
 
-        case 3:
+        case DIRECTION_STATE_EAST:
             o->oVelX = 10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX + 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX + 300.0f, o->oPosY, o->oPosZ, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX + 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
-            controllable_platform_check_walls(4, sp54, sp48, sp3C, sp30);
+            wallDisplacement[0] = obj_find_wall_displacement(dist1, o->oPosX + 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
+            // wallDisplacement[1] = obj_find_wall_displacement(dist2, o->oPosX + 300.0f, o->oPosY, o->oPosZ, 50.0f);
+            wallDisplacement[2] = obj_find_wall_displacement(dist3, o->oPosX + 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
+            controllable_platform_check_walls(MOVE_DIRECTION_EAST, wallDisplacement, dist1, dist2, dist3);
             break;
 
-        case 4:
+        case DIRECTION_STATE_WEST:
             o->oVelX = -10.0f;
-            sp54[0] = obj_find_wall_displacement(sp48, o->oPosX - 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
-            sp54[1] = obj_find_wall_displacement(sp3C, o->oPosX - 300.0f, o->oPosY, o->oPosZ, 50.0f);
-            sp54[2] = obj_find_wall_displacement(sp30, o->oPosX - 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
-            controllable_platform_check_walls(3, sp54, sp48, sp3C, sp30);
+            wallDisplacement[0] = obj_find_wall_displacement(dist1, o->oPosX - 300.0f, o->oPosY, o->oPosZ + 250.0f, 50.0f);
+            // wallDisplacement[1] = obj_find_wall_displacement(dist2, o->oPosX - 300.0f, o->oPosY, o->oPosZ, 50.0f);
+            wallDisplacement[2] = obj_find_wall_displacement(dist3, o->oPosX - 300.0f, o->oPosY, o->oPosZ - 250.0f, 50.0f);
+            controllable_platform_check_walls(MOVE_DIRECTION_WEST, wallDisplacement, dist1, dist2, dist3);
             break;
 
-        case 5:
+        case DIRECTION_STATE_HIT_WALL:
             controllable_platform_shake_on_wall_hit();
             return;
             break;
 
-        case 6:
+        case DIRECTION_STATE_DISAPPEARING:
             if (obj_flicker_and_disappear(o, 150)) {
                 spawn_object_abs_with_rot(o, 0, MODEL_HMC_METAL_PLATFORM, bhvControllablePlatform,
                                           o->oHomeX, o->oHomeY, o->oHomeZ, 0, 0, 0);
@@ -218,7 +212,7 @@ void bhv_controllable_platform_loop(void) {
     controllable_platform_tilt_from_mario();
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
-    if (D_80331694 != 0 && D_80331694 != 6) {
+    if (sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) {
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
     }
 }

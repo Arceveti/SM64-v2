@@ -37,7 +37,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Many smaller optimizations
 
 **Hacker QoL:**
-- Many unnamed variables have been named (Arceveti)
+- Many unnamed variables have been named (Arceveti, AloXado320)
 - Hardcoded render layers are replaced with their defines
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled *
 

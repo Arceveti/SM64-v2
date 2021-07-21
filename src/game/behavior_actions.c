@@ -231,7 +231,6 @@ void vec3f_copy_2(Vec3f dest, Vec3f src) {
 #include "behaviors/lll_hexagonal_ring.inc.c"
 #include "behaviors/lll_sinking_rectangle.inc.c"
 #include "behaviors/tilting_inverted_pyramid.inc.c"
-#include "behaviors/koopa_shell.inc.c"
 #include "behaviors/tox_box.inc.c"
 #include "behaviors/piranha_plant.inc.c"
 #include "behaviors/bowser_puzzle_piece.inc.c"

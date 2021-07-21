@@ -29,7 +29,7 @@ void bhv_hidden_blue_coin_loop(void) {
             blueCoinSwitch = o->oHiddenBlueCoinSwitch;
 
             if (blueCoinSwitch->oAction == BLUE_COIN_SWITCH_ACT_TICKING) {
-                o->oAction++; // Set to HIDDEN_BLUE_COIN_ACT_ACTIVE
+                o->oAction = HIDDEN_BLUE_COIN_ACT_ACTIVE;
             }
 
             break;
@@ -55,7 +55,6 @@ void bhv_hidden_blue_coin_loop(void) {
                 obj_mark_for_deletion(o);
 #endif
             }
-
             break;
     }
 
