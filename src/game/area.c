@@ -362,7 +362,7 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     play_transition(transType, time, red, green, blue);
 }
 
-#ifdef SCREEN_SHADE
+#ifdef SCREEN_TINT_EFFECTS
 // 0x0200EDA8 - 0x0200EDE8
 static const Vtx vertex_screen_shade_box[] = {
     {{{     0,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -409,6 +409,7 @@ void render_screen_overlay(void) {
     u32 aWater     = 0;
     u32 aHurt      = 0;
     u32 a          = 0;
+#ifdef ENVIRONMENT_SCREEN_TINT
     f32 surfaceHeight = -(gLakituState.oldPitch / 90.0f);
     f32 waterLevel = find_water_level(     gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
     f32 gasLevel   = find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
@@ -423,7 +424,8 @@ void render_screen_overlay(void) {
     if (aWater > 63) {
         aWater = 63;
     }
-
+#endif
+#ifdef DAMAGE_SCREEN_TINT
     if (m->health < 0x100 && m->hurtShadeAlpha > 0) {
         m->hurtShadeAlpha--;
     } else if (m->hurtShadeAlpha >= 4) {
@@ -431,12 +433,14 @@ void render_screen_overlay(void) {
     }
 
     aHurt = m->hurtShadeAlpha;
-
+#endif
     a = aWater + aHurt;
     if (a > 0) {
+#ifdef DAMAGE_SCREEN_TINT
         if (m->action == ACT_SHOCKED || m->action == ACT_WATER_SHOCKED || m->action == ACT_SHOCKWAVE_BOUNCE) {
             vec3s_set(rgbHurt, 255, 238, 0);
         }
+#endif
         rgb[0] = ((rgbWater[0] * aWater) + (rgbHurt[0] * aHurt))/a;
         rgb[1] = ((rgbWater[1] * aWater) + (rgbHurt[1] * aHurt))/a;
         rgb[2] = ((rgbWater[2] * aWater) + (rgbHurt[2] * aHurt))/a;
@@ -462,7 +466,7 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
         render_hud();
-#ifdef SCREEN_SHADE
+#ifdef SCREEN_TINT_EFFECTS
         render_screen_overlay();
 #endif
 

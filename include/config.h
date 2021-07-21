@@ -151,20 +151,25 @@
 
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
-// Higher definition coins rotating at 30 FPS (Arceveti)
+// Higher resolution coins rotating at 30 FPS (Arceveti)
 #define IA8_30FPS_COINS
-// Overlay effects (Arceveti)
-// - Red flash when damaged
-// - Yellow flashed when shocked
-// - Blueish tint when underwater
-// - Greenish tint when in toxic gas
-#define SCREEN_SHADE
 // Mario's silhouette when behind solid objects/surfaces
 // Also enables new render layers
 // (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti)
 #define SILHOUETTE
 // Animate Bowser 3's rainbow effect (Arceveti)
 #define RAINBOW_BOWSER
+// Overlay effects (Arceveti)
+#define SCREEN_TINT_EFFECTS
+
+#ifdef SCREEN_TINT_EFFECTS
+// - Red flash when damaged
+// - Yellow flashed when shocked
+#define DAMAGE_SCREEN_TINT
+// - Blueish tint when underwater
+// - Greenish tint when in toxic gas
+#define ENVIRONMENT_SCREEN_TINT
+#endif
 
 // -- Vanilla Level Changes --
 
@@ -190,6 +195,8 @@
 #define LAVA_FIX
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
+//! not implemented, Adds a moving texture to the warp behind the Bowser's Sub door in DDD
+#define DDD_WARP_CURRENT_TEXTURE
 
 // -- Gameplay QoL --
 
@@ -227,7 +234,7 @@
 
 // -- The following require IMPROVED_MOVEMENT -- 
 #ifdef IMPROVED_MOVEMENT
-// Unique sideways momentum-based wall slide (Arceveti)
+// Unique wall slide which takes horizontal momentum into account (Arceveti)
 #define WALL_SLIDE
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)
@@ -249,5 +256,7 @@
 #define WALL_QUICKSAND
 // Goddard easter egg from Shindou (Nintendo, Arceveti)
 #define GODDARD_EASTER_EGG
+// Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
+#define COMPLETE_EN_US_SEGMENT2
 
 #endif // CONFIG_H

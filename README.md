@@ -3,10 +3,72 @@
 
 This repo needs gcc in order to be able to build it. To install it, run `sudo apt install gcc-mips-linux-gnu`
 
+This is a fork of HackerSM64 by Reonu, with the following additional features, fixes, and optimizations (patches marked with `*` are toggleable in `config.h`):
+
+**Graphics:**
+- Power stars have a glowing effect. (Arceveti) *
+- 30 FPS ia8 (64x64) coins. (Arceveti) *
+- Screen tint effects based on damage & environment (Arceveti) *
+- Mario's silhouette is shown when behind most surfaces (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
+- Bowser 3's rainbow effect is animated (Arceveti) *
+
+**Vanilla level changes:**
+- Fix for Lakitu cutscene detection bounds *
+- Makes the Blast Away The Wall star spawn from the wall instead of existing in the world already *
+- Re-implement and fix unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
+- Re-implement and fix unused cracked ice in SL (SunlitSpace542, Arceveti) *
+- Bowser's puzzle in LLL is now seamless
+
+**Bugfixes:**
+- Make obj_resolve_object_collisions work consistently (Arceveti) *
+- Fix for DDD water rings by using interaction checking instead (Arceveti) *
+- Fix for bomb clip (Arceveti) *
+- Detect Mario's collision with lava regardless of action *
+- Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542) *
+- Many smaller bugs patched
+
+**Optimizations:**
+- Most doubles are now floats
+- Removed a few unecessary find_floor checks
+- Removed almost all unused code/data from the Goddard folder
+- Removed many stubbed/unused functions/variables
+- Many smaller optimizations
+
+**Hacker QoL:**
+- Named many unnamed variables (Arceveti)
+- New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled *
+
+**Gameplay QoL:**
+- Respawning Koopa shell boxes *
+- Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti) *
+- Make signs and NPCs easier to talk to (Arceveti) *
+- Show an "A" when Mario is able to talk to a sign or NPC (Arceveti) *
+- Collecting a 1-Up Mushroom will fully heal Mario *
+- The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
+- New HUD with leadding zeroes, & Red Coin & Secrets counters (Arceveti) *
+
+**Collision/Movement:**
+- Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
+- Press A when jumping on an enemy to jump higher (Arceveti) *
+- Press Z while twirling to descend faster (Arceveti) *
+- Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
+- General movement improvements, including turn circle fix, midair turn, better ceiling handling, less softlocks, etc. (Arceveti) *
+- Unique wall slide which takes horizontal momentum into account (Arceveti) *
+- Ground pound dive similar to SMO, and can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
+- Ground pound jump similar to SMO *
+- Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
+
+**Misc:**
+- Vertical quicksand support (Wiseguy) *
+- Goddard easter egg from Shindou *
+- Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
+
+# HackerSM64:
+
 This is a fork of the ultrasm64 repo by CrashOveride which includes the following commonly used patches (patches marked with `*` are toggleable in `config.h`): 
 
 **Collision:**
-- Slope fix and exposed ceilings fix
+- Slope fix and exposed ceilings fix by Arceveti
 - No false ledgegrabs fix * 
 - Jump kick fix * 
 - 46 degree wallkicks * 
