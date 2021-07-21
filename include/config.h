@@ -157,12 +157,15 @@
 // Also enables new render layers
 // (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti)
 #define SILHOUETTE
+// Use 64x64 quarter shadow textures instead of 16x16 (Arceveti)
+#define HD_SHADOW
 // Animate Bowser 3's rainbow effect (Arceveti)
 #define RAINBOW_BOWSER
 // Overlay effects (Arceveti)
-#define SCREEN_TINT_EFFECTS
+#define ENABLE_SCREEN_TINT_EFFECTS
 
-#ifdef SCREEN_TINT_EFFECTS
+// -- The following require ENABLE_SCREEN_TINT_EFFECTS -- 
+#ifdef ENABLE_SCREEN_TINT_EFFECTS
 // - Red flash when damaged
 // - Yellow flashed when shocked
 #define DAMAGE_SCREEN_TINT

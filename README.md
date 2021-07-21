@@ -1,4 +1,4 @@
-# SM64v2, Forked from HackerSM64
+# SM64v2
 **AFTER CLONING THE REPO, CHECK OUT THE `include/config.h` FILE BEFORE ANYTHING ELSE! IT THERE'S A LOT OF STUFF IN THIS REPO THAT CAN BE TOGGLED THERE.**
 
 This repo needs gcc in order to be able to build it. To install it, run `sudo apt install gcc-mips-linux-gnu`
@@ -11,6 +11,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Screen tint effects based on damage & environment (Arceveti) *
 - Mario's silhouette is shown when behind most surfaces (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
 - Bowser 3's rainbow effect is animated (Arceveti) *
+- Use 64x64 quarter shadow textures instead of 16x16 (Arceveti) *
 
 **Vanilla level changes:**
 - Fix for Lakitu cutscene detection bounds *

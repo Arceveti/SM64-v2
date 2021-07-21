@@ -74,14 +74,11 @@ void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16
     rectX1 = ((((durationStart * 1000000) / osClockRate * 3) / 1000) + 30);
     rectX2 = ((((durationEnd * 1000000) / osClockRate * 3) / 1000) + 30);
 
-    //! I believe this is supposed to cap rectX1 and rectX2 to 320, but the
-    //  code seems to use the wrong variables... it's possible that the variable
-    //  names were very similar within a single letter.
     if (rectX1 > 319) {
-        clockStart = 319;
+        rectX1 = 319;
     }
     if (rectX2 > 319) {
-        clockEnd = 319;
+        rectX2 = 319;
     }
 
     // perform the render if start is less than end. in most cases, it should be.

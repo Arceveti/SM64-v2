@@ -564,12 +564,12 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     if (o->numCollidedObjs != 0) {
         otherObject = o->collidedObjs[0];
         if (otherObject != gMarioObject) {
-            //! If one object moves after collisions are detected and this code
-            //  runs, the objects can move toward each other (transport cloning)
+            // If one object moves after collisions are detected and this code
+            // runs, the objects can move toward each other (transport cloning)
 
             dx = otherObject->oPosX - o->oPosX;
             dz = otherObject->oPosZ - o->oPosZ;
-            angle = atan2s(dx, dz); //! This should be atan2s(dz, dx)
+            angle = atan2s(dx, dz); // This should be atan2s(dz, dx)
 
             radius = o->hitboxRadius;
             otherRadius = otherObject->hitboxRadius;

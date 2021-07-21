@@ -211,12 +211,7 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
 
     waterLevel = get_water_level_below_shadow(s, &waterFloor);
 
-    // if (gEnvironmentRegions != 0) {
-    //     waterLevel = get_water_level_below_shadow(s);
-    // }
-
     if (gShadowAboveWaterOrLava) {
-        //! @bug Use of potentially undefined variable `waterLevel`
         s->floorHeight = waterLevel;
 
         if (waterFloor != NULL) {
@@ -239,9 +234,7 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
     } else {
         // Don't draw a shadow if the floor is lower than expected possible,
         // or if the y-normal is negative (an unexpected result).
-        if (s->floorHeight < FLOOR_LOWER_LIMIT_SHADOW || floorGeometry->normalY <= 0.0f) {
-            return 1;
-        }
+        if (s->floorHeight < FLOOR_LOWER_LIMIT_SHADOW || floorGeometry->normalY <= 0.0f) return TRUE;
 
         s->floorNormalX = floorGeometry->normalX;
         s->floorNormalY = floorGeometry->normalY;
@@ -265,7 +258,7 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
     } else {
         s->floorTilt = 90.0f - atan2_deg(floorSteepness, s->floorNormalY);
     }
-    return 0;
+    return FALSE;
 }
 
 /**
@@ -276,8 +269,13 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
  *      6 = (-15,  15)         7 = (0,  15)         8 = (15,  15)
  */
 void get_texture_coords_9_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
+#ifdef HD_SHADOW
+    *textureX = vertexNum % 3 * 63 - 63;
+    *textureY = vertexNum / 3 * 63 - 63;
+#else
     *textureX = vertexNum % 3 * 15 - 15;
     *textureY = vertexNum / 3 * 15 - 15;
+#endif
 }
 
 /**
@@ -287,8 +285,13 @@ void get_texture_coords_9_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
  *      2 = (-15,  15)         3 = (15,  15)
  */
 void get_texture_coords_4_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
+#ifdef HD_SHADOW
+    *textureX = (vertexNum % 2) * 2 * 63 - 63;
+    *textureY = (vertexNum / 2) * 2 * 63 - 63;
+#else
     *textureX = (vertexNum % 2) * 2 * 15 - 15;
     *textureY = (vertexNum / 2) * 2 * 15 - 15;
+#endif
 }
 
 /**
@@ -315,6 +318,9 @@ void make_shadow_vertex_at_xyz(Vtx *vertices, s8 index, f32 relX, f32 relY, f32 
         case SHADOW_WITH_4_VERTS:
             get_texture_coords_4_vertices(index, &textureX, &textureY);
             break;
+        default:
+            get_texture_coords_4_vertices(index, &textureX, &textureY);
+            break;
     }
 
     // Move the shadow up and over slightly while standing on a flying carpet.
@@ -323,9 +329,7 @@ void make_shadow_vertex_at_xyz(Vtx *vertices, s8 index, f32 relX, f32 relY, f32 
         vtxY += 5;
         vtxZ += 5;
     }
-    make_vertex(vertices, index, vtxX, vtxY, vtxZ, textureX << 5, textureY << 5, 255, 255, 255,
-                alpha // shadows are black
-    );
+    make_vertex(vertices, index, vtxX, vtxY, vtxZ, textureX << 5, textureY << 5, 255, 255, 255, alpha); // shadows are black
 }
 
 /**
@@ -535,31 +539,12 @@ void linearly_interpolate_solidity_negative(struct Shadow *s, u8 initialSolidity
 /**
  * Change a shadow's solidity based on the player's current animation frame.
  */
-s8 correct_shadow_solidity_for_animations(s32 isLuigi, u8 initialSolidity, struct Shadow *shadow) {
-    struct Object *player;
+s8 correct_shadow_solidity_for_animations(UNUSED s32 isLuigi, u8 initialSolidity, struct Shadow *shadow) {
     s8 ret;
     s16 animFrame;
 
-    switch (isLuigi) {
-        case 1:
-            /**
-             * This is evidence of a removed second player, likely Luigi.
-             * This variable lies in memory just after the gMarioObject and
-             * has the same type of shadow that Mario does. The `isLuigi`
-             * variable is never 1 in the game. Note that since this was a
-             * switch-case, not an if-statement, the programmers possibly
-             * intended there to be even more than 2 characters.
-             */
-            player = gLuigiObject;
-            break;
-        case 0:
-        default:
-            player = gMarioObject;
-            break;
-    }
-
-    animFrame = player->header.gfx.animInfo.animFrame;
-    switch (player->header.gfx.animInfo.animID) {
+    animFrame = gMarioObject->header.gfx.animInfo.animFrame;
+    switch (gMarioObject->header.gfx.animInfo.animID) {
         case MARIO_ANIM_IDLE_ON_LEDGE:
             ret = SHADOW_SOLIDITY_NO_SHADOW;
             break;
@@ -616,11 +601,11 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     if (gCurrLevelNum == LEVEL_RR && sSurfaceTypeBelowShadow != SURFACE_DEATH_PLANE) {
         switch (gFlyingCarpetState) {
             case FLYING_CARPET_MOVING_WITHOUT_MARIO:
-                gMarioOnIceOrCarpet = 1;
-                sMarioOnFlyingCarpet = 1;
+                gMarioOnIceOrCarpet = TRUE;
+                sMarioOnFlyingCarpet = TRUE;
                 break;
             case FLYING_CARPET_MOVING_WITH_MARIO:
-                gMarioOnIceOrCarpet = 1;
+                gMarioOnIceOrCarpet = TRUE;
                 break;
         }
     }
@@ -634,6 +619,9 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
             break;
         case SHADOW_SOLIDITY_NOT_YET_SET:
             ret = init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity);
+            break;
+        default:
+            return NULL;
             break;
     }
     if (ret != 0) {
@@ -781,19 +769,17 @@ s32 get_shadow_height_solidity(f32 xPos, f32 yPos, f32 zPos, f32 *shadowHeight, 
     *shadowHeight = find_floor_height_and_data(xPos, yPos, zPos, &dummy);
 
     if (*shadowHeight < FLOOR_LOWER_LIMIT_SHADOW) {
-        return 1;
+        return TRUE;
     } else {
         waterLevel = find_water_level(xPos, zPos);
 
-        if (waterLevel < FLOOR_LOWER_LIMIT_SHADOW) {
-            // Dead if-statement. There may have been an assert here.
-        } else if (yPos >= waterLevel && waterLevel >= *shadowHeight) {
+        if (waterLevel >= FLOOR_LOWER_LIMIT_SHADOW && yPos >= waterLevel && waterLevel >= *shadowHeight) {
             gShadowAboveWaterOrLava = TRUE;
             *shadowHeight = waterLevel;
             *solidity = 200;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 /**
@@ -872,11 +858,11 @@ Gfx *create_shadow_below_xyz(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 s
 
     gShadowAboveWaterOrLava = FALSE;
     gShadowAboveCustomWater = FALSE;
-    gMarioOnIceOrCarpet = 0;
-    sMarioOnFlyingCarpet = 0;
+    gMarioOnIceOrCarpet = FALSE;
+    sMarioOnFlyingCarpet = FALSE;
     if (pfloor != NULL) {
         if (pfloor->type == SURFACE_ICE) {
-            gMarioOnIceOrCarpet = 1;
+            gMarioOnIceOrCarpet = TRUE;
         }
         sSurfaceTypeBelowShadow = pfloor->type;
     }
@@ -888,28 +874,22 @@ Gfx *create_shadow_below_xyz(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 s
             displayList = create_shadow_circle_4_verts(xPos, yPos, zPos, shadowScale, shadowSolidity);
             break;
         case SHADOW_CIRCLE_4_VERTS_FLAT_UNUSED: // unused shadow type
-            displayList = create_shadow_circle_assuming_flat_ground(xPos, yPos, zPos, shadowScale,
-                                                                    shadowSolidity);
+            displayList = create_shadow_circle_assuming_flat_ground(xPos, yPos, zPos, shadowScale, shadowSolidity);
             break;
         case SHADOW_SQUARE_PERMANENT:
-            displayList =
-                create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
+            displayList = create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
             break;
         case SHADOW_SQUARE_SCALABLE:
-            displayList =
-                create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
+            displayList = create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
             break;
         case SHADOW_SQUARE_TOGGLABLE:
-            displayList =
-                create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
+            displayList = create_shadow_square(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
             break;
         case SHADOW_CIRCLE_PLAYER:
-            displayList = create_shadow_player(xPos, yPos, zPos, shadowScale, shadowSolidity,
-                                               /* isLuigi */ FALSE);
+            displayList = create_shadow_player(xPos, yPos, zPos, shadowScale, shadowSolidity, /* isLuigi */ FALSE);
             break;
         default:
-            displayList = create_shadow_hardcoded_rectangle(xPos, yPos, zPos, shadowScale,
-                                                            shadowSolidity, shadowType);
+            displayList = create_shadow_hardcoded_rectangle(xPos, yPos, zPos, shadowScale, shadowSolidity, shadowType);
             break;
     }
     return displayList;

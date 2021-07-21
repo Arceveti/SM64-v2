@@ -2523,6 +2523,15 @@ const Gfx dl_billboard_num_F[] = {
 };
 #endif
 
+#ifdef HD_SHADOW
+ALIGNED8 static const Texture texture_shadow_quarter_circle_64[] = {
+#include "textures/segment2/shadow_quarter_circle_64.ia8.inc.c"
+};
+
+ALIGNED8 static const Texture texture_shadow_quarter_square_64[] = {
+#include "textures/segment2/shadow_quarter_square_64.ia8.inc.c"
+};
+#else
 ALIGNED8 static const Texture texture_shadow_quarter_circle[] = {
 #include "textures/segment2/shadow_quarter_circle.ia8.inc.c"
 };
@@ -2530,6 +2539,7 @@ ALIGNED8 static const Texture texture_shadow_quarter_circle[] = {
 ALIGNED8 static const Texture texture_shadow_quarter_square[] = {
 #include "textures/segment2/shadow_quarter_square.ia8.inc.c"
 };
+#endif
 
 const Texture texture_transition_star_half[] = {
 #include "textures/segment2/segment2.0F458.ia8.inc.c"
@@ -2586,9 +2596,9 @@ static const Mtx matrix_identity = {
       0x00000000, 0x00000000}}
 #else
     {{1.0f, 0.0f, 0.0f, 0.0f},
-    {0.0f, 1.0f, 0.0f, 0.0f},
-    {0.0f, 0.0f, 1.0f, 0.0f},
-    {0.0f, 0.0f, 0.0f, 1.0f}}
+     {0.0f, 1.0f, 0.0f, 0.0f},
+     {0.0f, 0.0f, 1.0f, 0.0f},
+     {0.0f, 0.0f, 0.0f, 1.0f}}
 #endif
 };
 
@@ -2605,10 +2615,10 @@ static const Mtx matrix_fullscreen = {
      {0x00000000, 0x00000000,
       0x00000000, 0x00000000}}
 #else
-    {{2.0f / SCREEN_WIDTH, 0.0f, 0.0f, 0.0f},
-    {0.0f, 2.0f / SCREEN_HEIGHT, 0.0f, 0.0f},
-    {0.0f, 0.0f, -1.0f, 0.0f},
-    {-1.0f, -1.0f, -1.0f, 1.0f}}
+    {{2.0f / SCREEN_WIDTH, 0.0f,                 0.0f, 0.0f},
+    { 0.0f,                2.0f / SCREEN_HEIGHT, 0.0f, 0.0f},
+    { 0.0f,                0.0f,                -1.0f, 0.0f},
+    {-1.0f,               -1.0f,                -1.0f, 1.0f}}
 #endif
 };
 
@@ -2633,6 +2643,19 @@ const Gfx dl_shadow_begin[] = {
     gsSPEndDisplayList(),
 };
 
+#ifdef HD_SHADOW
+const Gfx dl_shadow_circle[] = {
+    gsSPDisplayList(dl_shadow_begin),
+    gsDPLoadTextureBlock(texture_shadow_quarter_circle_64, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 6, 6, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPEndDisplayList(),
+};
+
+const Gfx dl_shadow_square[] = {
+    gsSPDisplayList(dl_shadow_begin),
+    gsDPLoadTextureBlock(texture_shadow_quarter_square_64, G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 6, 6, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPEndDisplayList(),
+};
+#else
 const Gfx dl_shadow_circle[] = {
     gsSPDisplayList(dl_shadow_begin),
     gsDPLoadTextureBlock(texture_shadow_quarter_circle, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 4, 4, G_TX_NOLOD, G_TX_NOLOD),
@@ -2644,6 +2667,7 @@ const Gfx dl_shadow_square[] = {
     gsDPLoadTextureBlock(texture_shadow_quarter_square, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 16, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 4, 4, G_TX_NOLOD, G_TX_NOLOD),
     gsSPEndDisplayList(),
 };
+#endif
 
 // 0x020145D8 - 0x02014620
 const Gfx dl_shadow_9_verts[] = {
@@ -2773,17 +2797,6 @@ const Gfx dl_ia8_up_arrow_begin[] = {
     gsDPSetRenderMode(G_RM_XLU_SURF, G_RM_NOOP2),
     gsSPPerspNormalize(0xFFFF),
     gsSPMatrix(&matrix_identity, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH),
-    gsSPEndDisplayList(),
-};
-
-// 0x020148B0 - 0x020148E0
-// Unused, seems to be an early DL for the power meter, seeing that is loading a 64x32 texture
-const Gfx dl_rgba16_unused[] = {
-    gsSPMatrix(&matrix_identity, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH),
-    gsDPTileSync(),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPEndDisplayList(),
 };
 

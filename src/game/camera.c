@@ -788,11 +788,7 @@ void pan_ahead_of_player(struct Camera *c) {
 
     // Slowly make the actual pan, sPanDistance, approach the calculated pan
     // If Mario is sleeping, then don't pan
-    if (sStatusFlags & CAM_FLAG_SLEEPING) {
-        approach_f32_asymptotic_bool(&sPanDistance, 0.0f, 0.025f);
-    } else {
-        approach_f32_asymptotic_bool(&sPanDistance, pan[0], 0.025f);
-    }
+    approach_f32_asymptotic_bool(&sPanDistance, (sStatusFlags & CAM_FLAG_SLEEPING) ? 0.0f : pan[0], 0.025f);
 
     // Now apply the pan. It's a dir vector to the left or right, rotated by the camera's yaw to Mario
     pan[0] = sPanDistance;
@@ -802,20 +798,22 @@ void pan_ahead_of_player(struct Camera *c) {
 }
 
 s16 find_in_bounds_yaw_wdw_bob_thi(UNUSED Vec3f pos, UNUSED Vec3f origin, s16 yaw) {
-    // switch (gCurrLevelArea) {
-    //     case AREA_WDW_MAIN:
-    //         yaw = clamp_positions_and_find_yaw(pos, origin, 4508.0f, -3739.0f, 4508.0f, -3739.0f);
-    //         break;
-    //     case AREA_BOB:
-    //         yaw = clamp_positions_and_find_yaw(pos, origin, 8000.0f, -8000.0f, 7050.0f, -8000.0f);
-    //         break;
-    //     case AREA_THI_HUGE:
-    //         yaw = clamp_positions_and_find_yaw(pos, origin, 8192.0f, -8192.0f, 8192.0f, -8192.0f);
-    //         break;
-    //     case AREA_THI_TINY:
-    //         yaw = clamp_positions_and_find_yaw(pos, origin, 2458.0f, -2458.0f, 2458.0f, -2458.0f);
-    //         break;
-    // }
+#if EXTENDED_BOUNDS_MODE > 1
+    switch (gCurrLevelArea) {
+        case AREA_WDW_MAIN:
+            yaw = clamp_positions_and_find_yaw(pos, origin, 4508.0f, -3739.0f, 4508.0f, -3739.0f);
+            break;
+        case AREA_BOB:
+            yaw = clamp_positions_and_find_yaw(pos, origin, 8000.0f, -8000.0f, 7050.0f, -8000.0f);
+            break;
+        case AREA_THI_HUGE:
+            yaw = clamp_positions_and_find_yaw(pos, origin, 8192.0f, -8192.0f, 8192.0f, -8192.0f);
+            break;
+        case AREA_THI_TINY:
+            yaw = clamp_positions_and_find_yaw(pos, origin, 2458.0f, -2458.0f, 2458.0f, -2458.0f);
+            break;
+    }
+#endif
     return yaw;
 }
 
