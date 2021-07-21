@@ -3,10 +3,10 @@ static Movtex ddd_movtex_area1_water_data[] = {
     MOV_TEX_INIT_LOAD(    2),
     MOV_TEX_ROT_SPEED(   20), // area 1 general water
     MOV_TEX_ROT_SCALE(   20),
-    MOV_TEX_4_BOX_TRIS(-7167, -4095),
-    MOV_TEX_4_BOX_TRIS(-7167,  4096),
+    MOV_TEX_4_BOX_TRIS(-7168, -4096),
+    MOV_TEX_4_BOX_TRIS(-7168,  4096),
     MOV_TEX_4_BOX_TRIS( 1024,  4096),
-    MOV_TEX_4_BOX_TRIS( 1024, -4095),
+    MOV_TEX_4_BOX_TRIS( 1024, -4096),
     MOV_TEX_ROT(     ROTATE_CLOCKWISE),
     MOV_TEX_ALPHA(    0xA0),
     MOV_TEX_DEFINE(  TEXTURE_WATER),

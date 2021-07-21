@@ -36,6 +36,10 @@ extern const Collision ddd_seg7_collision_submarine[];
 extern const Collision ddd_seg7_collision_bowser_sub_door[];
 extern const struct MovtexQuadCollection ddd_movtex_area1_water[];
 extern const struct MovtexQuadCollection ddd_movtex_area2_water[];
+#ifdef DDD_WARP_CURRENT_TEXTURE
+extern Movtex ddd_movtex_tris_sub_hole[];
+extern const Gfx ddd_dl_movtex_sub_hole[];
+#endif
 
 // script
 extern const LevelScript level_ddd_entry[];

@@ -18,9 +18,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Re-implement and fix unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - Re-implement and fix unused cracked ice in SL (SunlitSpace542, Arceveti) *
 - Bowser's puzzle in LLL is now seamless
+- Optimized DDD Submarine collision model (Arceveti)
 
 **Bugfixes:**
-- Make obj_resolve_object_collisions work consistently (Arceveti) *
+- Make `obj_resolve_object_collisions()` work consistently (Arceveti) *
 - Fix for DDD water rings by using interaction checking instead (Arceveti) *
 - Fix for bomb clip (Arceveti) *
 - Detect Mario's collision with lava regardless of action *
@@ -61,7 +62,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Misc:**
 - Vertical quicksand support (Wiseguy) *
 - Goddard easter egg from Shindou *
-- Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
+- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
 
 # HackerSM64:
 

@@ -182,6 +182,8 @@
 #define SSL_PILLARS_CUTSCENE
 // Re-implements cracked ice in SL (SunlitSpace542, Arceveti)
 #define DEEP_FREEZE_CRACKED_ICE
+// Adds a moving texture to the warp behind the Bowser's Sub door in DDD
+#define DDD_WARP_CURRENT_TEXTURE
 
 // -- Bugfixes --
 
@@ -195,8 +197,6 @@
 #define LAVA_FIX
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
-//! not implemented, Adds a moving texture to the warp behind the Bowser's Sub door in DDD
-#define DDD_WARP_CURRENT_TEXTURE
 
 // -- Gameplay QoL --
 

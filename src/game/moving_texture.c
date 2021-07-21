@@ -153,6 +153,10 @@ extern s16 lll_movtex_tris_lava_floor[];
 extern Gfx lll_dl_lava_floor[];
 extern s16 lll_movtex_tris_lavafall_volcano[];
 extern Gfx lll_dl_lavafall_volcano[];
+#ifdef DDD_WARP_CURRENT_TEXTURE
+extern s16 ddd_movtex_tris_sub_hole[];
+extern Gfx ddd_dl_movtex_sub_hole[];
+#endif
 extern s16 cotmc_movtex_tris_water[];
 extern Gfx cotmc_dl_water_begin[];
 extern Gfx cotmc_dl_water_end[];
@@ -236,7 +240,15 @@ struct MovtexObject gMovtexNonColored[] = {
     { MOVTEX_VOLCANO_LAVA_FALL, TEXTURE_LAVA, 16, lll_movtex_tris_lavafall_volcano,
       dl_waterbox_rgba16_begin, dl_waterbox_end, lll_dl_lavafall_volcano, 0xff, 0xff, 0xff, 0xb4,
       LAYER_TRANSPARENT_INTER },
-
+#ifdef DDD_WARP_CURRENT_TEXTURE
+    // Dire Dire Docks Submarine Hole
+    { MOVTEX_DDD_SUB_HOLE, TEXTURE_UNK_WATER, 9,
+      ddd_movtex_tris_sub_hole,
+      dl_waterbox_rgba16_begin, dl_waterbox_end,
+      ddd_dl_movtex_sub_hole,
+      0xff, 0xff, 0xff, 0x40,
+      LAYER_TRANSPARENT },
+#endif
     // Cavern of the metal Cap has a waterfall source above the switch platform,
     // the stream, around the switch, and the waterfall that's the same as the one
     // outside the castle. They are all part of the same mesh.
@@ -652,7 +664,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         if (quadCollection == NULL) return NULL;
 
         asGenerated->fnNode.node.flags =
-            (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT_INTER << 8);
+            (asGenerated->fnNode.node.flags & 0xFF) | (((asGenerated->parameter == LLL_MOVTEX_VOLCANO_FLOOR_LAVA) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_INTER) << 8);
 
         movtex_change_texture_format(asGenerated->parameter, &gfx);
         gMovetexLastTextureId = -1;
@@ -830,6 +842,11 @@ Gfx *geo_movtex_draw_nocolor(s32 callContext, struct GraphNode *node, UNUSED Mat
     if (callContext == GEO_CONTEXT_RENDER) {
         i = 0;
         asGenerated = (struct GraphNodeGenerated *) node;
+#ifdef DDD_WARP_CURRENT_TEXTURE
+        if (asGenerated->parameter == MOVTEX_DDD_SUB_HOLE && !(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
+            return NULL;
+        }
+#endif
         while (gMovtexNonColored[i].movtexVerts != 0) {
             if (gMovtexNonColored[i].geoId == asGenerated->parameter) {
                 asGenerated->fnNode.node.flags =

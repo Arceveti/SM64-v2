@@ -486,6 +486,6 @@ const Collision ddd_seg7_area_1_collision[] = {
     COL_TRI(2, 5, 0),
     COL_TRI_STOP(),
     COL_WATER_BOX_INIT(1),
-    COL_WATER_BOX(0, -7167, -4095,  6144,  4096, 0),
+    COL_WATER_BOX(0, -7168, -4096,  6144,  4096, 0),
     COL_END(),
 };

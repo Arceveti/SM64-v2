@@ -22,6 +22,9 @@ const GeoLayout ddd_geo_000570[] = {
                GEO_DISPLAY_LIST(LAYER_ALPHA, ddd_seg7_dl_0700BAE0),
                GEO_DISPLAY_LIST(LAYER_OPAQUE, ddd_seg7_dl_0700CE48),
                GEO_ASM(   0, geo_movtex_pause_control),
+#ifdef DDD_WARP_CURRENT_TEXTURE
+               GEO_ASM(0x2302, geo_movtex_draw_nocolor),
+#endif
                GEO_ASM(0x2302, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(  14, geo_envfx_main),
