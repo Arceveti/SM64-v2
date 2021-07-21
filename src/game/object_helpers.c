@@ -2662,15 +2662,8 @@ void cur_obj_align_gfx_with_floor(void) {
 }
 
 s32 mario_is_within_rectangle(s16 minX, s16 maxX, s16 minZ, s16 maxZ) {
-    if (gMarioObject->oPosX < minX || maxX < gMarioObject->oPosX) {
-        return FALSE;
-    }
-
-    if (gMarioObject->oPosZ < minZ || maxZ < gMarioObject->oPosZ) {
-        return FALSE;
-    }
-
-    return TRUE;
+    return !(gMarioObject->oPosX < minX || maxX < gMarioObject->oPosX
+          || gMarioObject->oPosZ < minZ || maxZ < gMarioObject->oPosZ);
 }
 
 void cur_obj_shake_screen(s32 shake) {

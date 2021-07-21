@@ -757,7 +757,6 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
 
 void tilt_body_walking(struct MarioState *m, s16 startYaw) {
     struct MarioBodyState *marioBodyState = m->marioBodyState;
-    UNUSED struct Object *marioObj = m->marioObj;
     s16 animID = m->marioObj->header.gfx.animInfo.animID;
 
     if (animID == MARIO_ANIM_WALKING || animID == MARIO_ANIM_RUNNING) {

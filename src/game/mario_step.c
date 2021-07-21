@@ -59,16 +59,16 @@ void transfer_bully_speed(struct BullyCollisionData *obj1, struct BullyCollision
     f32 rz = obj2->posZ - obj1->posZ;
 
     //! Bully NaN crash
-    f32 projectedV1 = (rx * obj1->velX + rz * obj1->velZ) / (rx * rx + rz * rz);
+    f32 projectedV1 = ( rx * obj1->velX + rz * obj1->velZ) / (rx * rx + rz * rz);
     f32 projectedV2 = (-rx * obj2->velX - rz * obj2->velZ) / (rx * rx + rz * rz);
 
     // Kill speed along r. Convert one object's speed along r and transfer it to
     // the other object.
-    obj2->velX += obj2->conversionRatio * projectedV1 * rx - projectedV2 * -rx;
-    obj2->velZ += obj2->conversionRatio * projectedV1 * rz - projectedV2 * -rz;
+    obj2->velX += (obj2->conversionRatio * projectedV1 * rx - projectedV2 * -rx);
+    obj2->velZ += (obj2->conversionRatio * projectedV1 * rz - projectedV2 * -rz);
 
-    obj1->velX += -projectedV1 * rx + obj1->conversionRatio * projectedV2 * -rx;
-    obj1->velZ += -projectedV1 * rz + obj1->conversionRatio * projectedV2 * -rz;
+    obj1->velX += (-projectedV1 * rx + obj1->conversionRatio * projectedV2 * -rx);
+    obj1->velZ += (-projectedV1 * rz + obj1->conversionRatio * projectedV2 * -rz);
 
     //! Bully battery
 }
@@ -444,18 +444,14 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 #ifdef IMPROVED_MOVEMENT
     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
 #endif
-    if (m->vel[1] > 0) {
-        return FALSE;
-    }
+    if (m->vel[1] > 0) return FALSE;
 
     displacementX = nextPos[0] - intendedPos[0];
     displacementZ = nextPos[2] - intendedPos[2];
 
     // Only ledge grab if the wall displaced Mario in the opposite direction of
     // his velocity.
-    if (displacementX * m->vel[0] + displacementZ * m->vel[2] > 0.0f) {
-        return FALSE;
-    }
+    if (displacementX * m->vel[0] + displacementZ * m->vel[2] > 0.0f) return FALSE;
 
     //! Since the search for floors starts at y + 160, we will sometimes grab
     // a higher ledge than expected (glitchy ledge grab)
@@ -463,12 +459,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     ledgePos[2] = nextPos[2] - wall->normal.z * 60.0f;
 #ifdef IMPROVED_MOVEMENT
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &ledgeFloor);
-    if (ledgeFloor == NULL) {
-        return FALSE;
-    }
-    if (ledgeFloor->normal.y < 0.9063078f || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) {
-        return FALSE;
-    }
+    if (ledgeFloor == NULL || ledgeFloor->normal.y < 0.9063078f || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
     if (m->input & INPUT_NONZERO_ANALOG) {
         if (intendedDYaw < -0x4000 || intendedDYaw > 0x4000) {
             return FALSE;
@@ -478,9 +469,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], &ledgeFloor);
 #endif
 
-    if (ledgePos[1] - nextPos[1] <= 100.0f) {
-        return FALSE;
-    }
+    if (ledgePos[1] - nextPos[1] <= 100.0f) return FALSE;
 
     vec3f_copy(m->pos, ledgePos);
     m->floor = ledgeFloor;

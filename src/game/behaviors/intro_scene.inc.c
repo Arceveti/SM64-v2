@@ -11,7 +11,7 @@ void spawn_child_obj_relative(struct Object *parent, s16 xOffset, s16 yOffset, s
     sp1C->oPosX += xOffset;
     sp1C->oPosY += yOffset;
     if (gCutsceneTimer > 700) {
-        sp1C->oPosY += -150.f;
+        sp1C->oPosY -= 150.f;
     }
     sp1C->oPosZ += zOffset;
     sp1C->oMoveAnglePitch += pitchOffset;

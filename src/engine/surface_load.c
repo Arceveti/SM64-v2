@@ -44,9 +44,6 @@ static struct SurfaceNode *alloc_surface_node(void) {
 
     node->next = NULL;
 
-    //! A bounds check! If there's more surface nodes than 7000 allowed,
-    //  we, um...
-    // Perhaps originally just debug feedback?
     if (gSurfaceNodesAllocated >= SURFACE_NODE_POOL_SIZE) {
         gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_NODES;
     }
@@ -63,9 +60,6 @@ static struct Surface *alloc_surface(void) {
     struct Surface *surface = &sSurfacePool[gSurfacesAllocated];
     gSurfacesAllocated++;
 
-    //! A bounds check! If there's more surfaces than the 2300 allowed,
-    //  we, um...
-    // Perhaps originally just debug feedback?
     if (gSurfacesAllocated >= sSurfacePoolSize) {
         gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_SURFACES;
     }
@@ -134,12 +128,6 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         }
     }
 
-    //! (Surface Cucking) Surfaces are sorted by the height of their first
-    //  vertex. Since vertices aren't ordered by height, this causes many
-    //  lower triangles to be sorted higher. This worsens surface cucking since
-    //  many functions only use the first triangle in surface order that fits,
-    //  missing higher surfaces.
-    //  upperY would be a better sort method.
     surfacePriority = surface->upperY * sortDir;
 
     newNode->surface = surface;

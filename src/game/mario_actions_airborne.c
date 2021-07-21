@@ -1585,7 +1585,7 @@ s32 act_soft_bonk(struct MarioState *m) {
     return FALSE;
 }
 
-s32 act_getting_blown(struct MarioState *m) {
+s32 act_getting_blown(struct MarioState *m) { // :flushed:
     if (m->actionState == 0) {
         if (m->forwardVel > -60.0f) {
             m->forwardVel -= 6.0f;
@@ -1689,20 +1689,11 @@ s32 act_air_hit_wall(struct MarioState *m) {
         }
         return set_mario_action(m, ACT_SOFT_BONK, 0);
     }
-
 #if FIRSTY_LAST_FRAME > 1
     ret = set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
     m->marioObj->header.gfx.angle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
 #endif
-
     return ret;
-
-    //! Missing return statement. The returned value is the result of the call
-    // to set_mario_animation. In practice, this value is nonzero.
-    // This results in this action "cancelling" into itself. It is supposed to
-    // execute on two frames, but instead it executes twice on the same frame.
-    // This results in firsties only being possible for a single frame, instead
-    // of two.
 #endif
 }
 

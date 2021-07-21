@@ -69,27 +69,27 @@ void cap_sink_quicksand(void) {
     switch (o->oAction) {
         case 10:
             if (o->oTimer < 10) {
-                o->oGraphYOffset += -1.0f;
+                o->oGraphYOffset -= 1.0f;
                 o->oFaceAnglePitch = 0x2000;
             }
             break;
 
         case 11:
             if (o->oTimer < 10) {
-                o->oGraphYOffset += -3.0f;
+                o->oGraphYOffset -= 3.0f;
             }
             o->oFaceAnglePitch = 0x2000;
             break;
 
         case 12:
-            o->oGraphYOffset += -1.0f;
+            o->oGraphYOffset -= 1.0f;
             if (o->oTimer >= 21) {
                 o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             }
             break;
 
         case 13:
-            o->oGraphYOffset += -6.0f;
+            o->oGraphYOffset -= 6.0f;
             if (o->oTimer >= 21) {
                 o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             }

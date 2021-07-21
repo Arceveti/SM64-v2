@@ -869,8 +869,8 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
                 sinAng = sins(gCurGraphNodeObject->angle[1]);
                 cosAng = coss(gCurGraphNodeObject->angle[1]);
 
-                shadowPos[0] += animOffset[0] * cosAng + animOffset[2] * sinAng;
-                shadowPos[2] += -animOffset[0] * sinAng + animOffset[2] * cosAng;
+                shadowPos[0] += ( animOffset[0] * cosAng + animOffset[2] * sinAng);
+                shadowPos[2] += (-animOffset[0] * sinAng + animOffset[2] * cosAng);
             }
         }
 
