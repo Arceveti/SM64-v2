@@ -112,7 +112,7 @@ ALIGNED8 const Texture effect_0B00684C[] = {
 };
 
 // 0x0B006A50 - 0x0B006AB0
-const Gfx tiny_bubble_dl_0B006A50[] = {
+const Gfx tiny_bubble_dl_gray[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
@@ -142,7 +142,7 @@ ALIGNED8 static const Texture effect_0B006AD8[] = {
 };
 
 // 0x0B006CD8 - 0x0B006D38
-const Gfx tiny_bubble_dl_0B006CD8[] = {
+const Gfx tiny_bubble_dl_blue[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, effect_0B006AD8),

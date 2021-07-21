@@ -103,9 +103,7 @@ s32 gDialogResponse = DIALOG_RESPONSE_NONE;
 void create_dl_identity_matrix(void) {
     Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
 
-    if (matrix == NULL) {
-        return;
-    }
+    if (matrix == NULL) return;
 
 #ifndef GBI_FLOATS
     matrix->m[0][0] = 0x00010000;    matrix->m[1][0] = 0x00000000;    matrix->m[2][0] = 0x00000000;    matrix->m[3][0] = 0x00000000;
@@ -1753,11 +1751,12 @@ s16 render_pause_courses_and_castle(void) {
             shade_screen();
             render_pause_my_score_coins();
             render_pause_red_coins();
-        #ifndef EXIT_COURSE_WHILE_MOVING
+#ifndef EXIT_COURSE_WHILE_MOVING
             s32 exitCheck = gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT;
-        #else
-            s32 exitCheck = 1;
-        #endif
+#else
+            s32 exitCheck = ((gMarioStates[0].pos[1] <= gMarioStates[0].floorHeight)
+                || (gMarioStates[0].action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT)));
+#endif
             #ifndef DISABLE_EXIT_COURSE
             if (exitCheck) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);

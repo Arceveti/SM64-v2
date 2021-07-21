@@ -160,29 +160,6 @@ void clear_object_lists(struct ObjectNode *objLists) {
 }
 
 /**
- * This function looks broken, but it appears to attempt to delete the leaf
- * graph nodes under obj and obj's siblings.
- */
-UNUSED static void unused_delete_leaf_nodes(struct Object *obj) {
-    struct Object *children;
-    struct Object *sibling;
-    struct Object *obj0 = obj;
-
-    if ((children = (struct Object *) obj->header.gfx.node.children) != NULL) {
-        unused_delete_leaf_nodes(children);
-    } else {
-        // No children
-        mark_obj_for_deletion(obj);
-    }
-
-    // Probably meant to be !=
-    while ((sibling = (struct Object *) obj->header.gfx.node.next) == obj0) {
-        unused_delete_leaf_nodes(sibling);
-        obj = (struct Object *) sibling->header.gfx.node.next;
-    }
-}
-
-/**
  * Free the given object.
  */
 void unload_object(struct Object *obj) {
@@ -252,7 +229,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     for (i = 0; i < 0x50; i++) obj->rawData.asS32[i] = 0;
 #endif
 
-    obj->unused1 = 0;
+    // obj->unused1 = 0;
     obj->bhvStackIndex = 0;
     obj->bhvDelayTimer = 0;
 
@@ -270,11 +247,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->oHealth = 2048;
 
     obj->oCollisionDistance = 1000.0f;
-    if (gCurrLevelNum == LEVEL_TTC) {
-        obj->oDrawingDistance = 2000.0f;
-    } else {
-        obj->oDrawingDistance = 4000.0f;
-    }
+    obj->oDrawingDistance = (gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f;
 
     mtxf_identity(obj->transform);
 

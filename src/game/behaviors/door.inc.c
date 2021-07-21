@@ -136,7 +136,7 @@ void bhv_star_door_loop_2(void) {
     }
     if (doorIsRendering) {
         o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-        D_8035FEE4++;
+        gDoorRenderingTimer++;
     }
     if (!doorIsRendering) {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;

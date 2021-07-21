@@ -85,11 +85,10 @@ struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mi
 /**
  * Geo node script that draws Mario's head on the title screen.
  */
-Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, Mat4 *c) {
+Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
     Gfx *gfx = NULL;
     s16 sfx = 0;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
-    UNUSED Mat4 *transform = c;
 
     if (callContext == GEO_CONTEXT_RENDER) {
         if (gPlayer1Controller->controllerData != NULL && !gWarpTransition.isActive) {
@@ -529,7 +528,7 @@ Gfx *geo_mario_rotate_wing_cap_wings(s32 callContext, struct GraphNode *node, UN
         if (!gBodyStates[asGenerated->parameter >> 1].wingFlutter) {
             rotX = (coss((gAreaUpdateCounter & 0xF) << 12) + 1.0f) * 4096.0f;
         } else {
-            rotX = (coss((gAreaUpdateCounter & 7) << 13) + 1.0f) * 6144.0f;
+            rotX = (coss((gAreaUpdateCounter & 0x7) << 13) + 1.0f) * 6144.0f;
         }
         if (!(asGenerated->parameter & 1)) {
             rotNode->rotation[0] = -rotX;
@@ -636,12 +635,11 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
         if (asGenerated->parameter == 0) {
             gSPClearGeometryMode(&gfx[0], G_CULL_BACK);
             gSPSetGeometryMode(&gfx[1], G_CULL_FRONT);
-            gSPEndDisplayList(&gfx[2]);
         } else {
             gSPClearGeometryMode(&gfx[0], G_CULL_FRONT);
             gSPSetGeometryMode(&gfx[1], G_CULL_BACK);
-            gSPEndDisplayList(&gfx[2]);
         }
+        gSPEndDisplayList(&gfx[2]);
         asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_SILHOUETTE_OPAQUE << 8);
     }
     return gfx;

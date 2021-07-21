@@ -115,9 +115,8 @@ void bhv_blue_coin_switch_loop(void) {
                 o->oPosY = gMarioObject->oPosY - 40.0f;
 #endif
 
-                // Spawn particles. There's a function that calls this same function
-                // with the same arguments, spawn_mist_particles, why didn't they just call that?
-                spawn_mist_particles_variable(0, 0, 46.0f);
+                // Spawn particles.
+                spawn_mist_particles();
             } else {
                 // Have collision while receding
                 load_object_collision_model();

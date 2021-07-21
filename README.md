@@ -40,6 +40,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Many unnamed variables have been named (Arceveti, AloXado320)
 - Hardcoded render layers are replaced with their defines
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled *
+- Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *
 
 **Gameplay QoL:**
 - Respawning Koopa shell boxes *
@@ -59,6 +60,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Unique wall slide which takes horizontal momentum into account (Arceveti) *
 - Ground pound dive similar to SMO, and can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Ground pound jump similar to SMO *
+- Underwater Ground pound similar to SMO *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 
 **Misc:**

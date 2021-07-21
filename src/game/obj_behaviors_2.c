@@ -46,7 +46,7 @@
 #include "seq_ids.h"
 #include "spawn_sound.h"
 
-#define POS_OP_SAVE_POSITION 0
+#define POS_OP_SAVE_POSITION    0
 #define POS_OP_COMPUTE_VELOCITY 1
 #define POS_OP_RESTORE_POSITION 2
 
@@ -524,12 +524,12 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     struct Object *otherObject;
     f32 dx;
     f32 dz;
-    s32 i;
     s16 angle;
     f32 radius;
     f32 otherRadius;
     f32 relativeRadius;
 #ifdef OBJ_COLLISIONS_FIX
+    s32 i;
     f32 distance;
     if (o->numCollidedObjs != 0) {
         for (i = 0; i < o->numCollidedObjs; i++) {
@@ -643,11 +643,6 @@ static void obj_die_if_health_non_positive(void) {
             obj_mark_for_deletion(o);
         }
     }
-}
-
-UNUSED static void obj_unused_die(void) {
-    o->oHealth = 0;
-    obj_die_if_health_non_positive();
 }
 
 static void obj_set_knockback_action(s32 attackType) {

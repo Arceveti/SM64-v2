@@ -90,15 +90,12 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
     Gfx *gfx;
     struct Object *heldObject;
     struct Object *obj;
-    UNUSED struct Object *unusedObject;
-    UNUSED s32 pad;
 
     gfxHead = NULL;
 
     if (callContext == GEO_CONTEXT_RENDER) {
         heldObject = (struct Object *) gCurGraphNodeObject;
         obj = (struct Object *) node;
-        unusedObject = (struct Object *) node;
 
 
         if (gCurGraphNodeHeldObject != NULL) {
@@ -183,7 +180,7 @@ s8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objV
 
     if (objFloor == NULL) {
         //! (OOB Object Crash) TRUNC overflow exception after 36 minutes
-        o->oMoveAngleYaw += 32767.999200000002; /* ¯\_(ツ)_/¯ */
+        o->oMoveAngleYaw += 0x8000; // 32767.999200000002; /* ¯\_(ツ)_/¯ */
         return FALSE;
     }
 
@@ -213,20 +210,14 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
     Mat4 *throwMatrix;
 
     // Passes on orienting certain objects that shouldn't be oriented, like boulders.
-    if (!sOrientObjWithFloor) {
-        return;
-    }
+    if (!sOrientObjWithFloor) return;
 
     // Passes on orienting billboard objects, i.e. coins, trees, etc.
-    if (obj->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) {
-        return;
-    }
+    if (obj->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) return;
 
     throwMatrix = alloc_display_list(sizeof(*throwMatrix));
     // If out of memory, fail to try orienting the object.
-    if (throwMatrix == NULL) {
-        return;
-    }
+    if (throwMatrix == NULL) return;
 
     objVisualPosition[0] = obj->oPosX;
     objVisualPosition[1] = obj->oPosY + obj->oGraphYOffset;
@@ -444,8 +435,7 @@ s16 object_step(void) {
         }
     } else {
         // Treat any awkward floors similar to a wall.
-        collisionFlags +=
-            ((collisionFlags & OBJ_COL_FLAG_HIT_WALL) ^ OBJ_COL_FLAG_HIT_WALL);
+        collisionFlags += ((collisionFlags & OBJ_COL_FLAG_HIT_WALL) ^ OBJ_COL_FLAG_HIT_WALL);
     }
 
     obj_update_pos_vel_xz();
@@ -577,7 +567,6 @@ s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, s16 range) {
  */
 s8 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
-    UNUSED u8 filler[0x20];
 
     hitbox.x = x;
     hitbox.y = y;
@@ -688,7 +677,7 @@ void obj_check_floor_death(s16 collisionFlags, struct Surface *floor) {
             case SURFACE_BURNING:
                 o->oAction = OBJ_ACT_LAVA_DEATH;
                 break;
-            //! @BUG Doesn't check for the vertical wind death floor.
+            case SURFACE_VERTICAL_WIND:
             case SURFACE_DEATH_PLANE:
                 o->oAction = OBJ_ACT_DEATH_PLANE_DEATH;
                 break;
@@ -731,9 +720,11 @@ s8 obj_lava_death(void) {
 void spawn_orange_number(s8 behParam, s16 relX, s16 relY, s16 relZ) {
     struct Object *orangeNumber;
 
-    if (behParam >= 10) {
-        return;
-    }
+#ifdef DIALOG_INDICATOR
+    if (behParam >= 16) return;
+#else
+    if (behParam >= 10) return;
+#endif
 
     orangeNumber = spawn_object_relative(behParam, relX, relY, relZ, o, MODEL_NUMBER, bhvOrangeNumber);
     orangeNumber->oPosY += 25.0f;

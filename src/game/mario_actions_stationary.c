@@ -1082,13 +1082,11 @@ s32 act_ground_pound_land(struct MarioState *m) {
 }
 
 s32 act_first_person(struct MarioState *m) {
-    s32 inputCancelled = (m->input & (INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE | INPUT_STOMPED)) != 0;
-
     if (m->actionState == 0) {
         lower_background_noise(2);
         set_camera_mode(m->area->camera, CAMERA_MODE_C_UP, 0x10);
         m->actionState = 1;
-    } else if (!(m->input & INPUT_FIRST_PERSON) || inputCancelled) {
+    } else if (!(m->input & INPUT_FIRST_PERSON) || (m->input & (INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE | INPUT_STOMPED))) {
         raise_background_noise(2);
         // Go back to the last camera mode
         set_camera_mode(m->area->camera, -1, 1);

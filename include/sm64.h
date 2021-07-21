@@ -39,6 +39,12 @@
 #define SET_HIGH_S16_OF_32(var, x) ((((s16 *)&(var))[0]) = (x))
 #endif
 
+// Debug Info Flags
+#define DEBUG_INFO_NOFLAGS      (0 << 0)
+#define DEBUG_INFO_FLAG_DPRINT  (1 << 0)
+#define DEBUG_INFO_FLAG_LSELECT (1 << 1)
+#define DEBUG_INFO_FLAG_ALL     0xFF
+
 // Layers
 #ifdef SILHOUETTE
 #define LAYER_FORCE                  0

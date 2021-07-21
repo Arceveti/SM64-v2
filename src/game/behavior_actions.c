@@ -91,8 +91,8 @@ static s32 sCapSaveFlags[] = { SAVE_FLAG_HAVE_WING_CAP, SAVE_FLAG_HAVE_METAL_CAP
 
 // Boo Roll
 static s16 sBooHitRotations[] = { 6047, 5664, 5292, 4934, 4587, 4254, 3933, 3624, 3329, 3046, 2775,
-                     2517, 2271, 2039, 1818, 1611, 1416, 1233, 1063, 906,  761,  629,
-                     509,  402,  308,  226,  157,  100,  56,   25,   4,    0 };
+                                  2517, 2271, 2039, 1818, 1611, 1416, 1233, 1063, 906,  761,  629,
+                                  509,  402,  308,  226,  157,  100,  56,   25,   4,    0 };
 
 #include "behaviors/star_door.inc.c"
 #include "behaviors/mr_i.inc.c"
@@ -267,9 +267,7 @@ s32 set_obj_anim_with_accel_and_sound(s16 a0, s16 a1, s32 a2) {
 #include "behaviors/bbh_merry_go_round.inc.c"
 #include "behaviors/static_checkered_platform.inc.c"
 #include "behaviors/beta_bowser_anchor.inc.c"
-#ifndef VERSION_JP
 #include "behaviors/music_touch.inc.c"
-#endif
 #include "behaviors/castle_floor_trap.inc.c"
 #include "behaviors/pole_base.inc.c"
 #include "behaviors/sparkle_spawn.inc.c"

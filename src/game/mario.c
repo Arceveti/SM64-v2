@@ -33,6 +33,8 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 
+u32 sDebugMode;
+
 /**************************************************
  *                    ANIMATIONS                  *
  **************************************************/
@@ -533,8 +535,8 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
     pos[1] = collisionData.y;
     pos[2] = collisionData.z;
 
-    // This only returns the most recent wall and can also return NULL
-    // there are no wall collisions.
+    //! This only returns the most recent wall and can also return NULL
+    //! there are no wall collisions.
     return wall;
 }
 
@@ -542,8 +544,6 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
  * Finds the ceiling from a vec3f horizontally and a height (with 80 vertical buffer).
  */
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
-    UNUSED f32 unused;
-
     return find_ceil(pos[0], height + 3.0f, pos[2], ceil);
 }
 
@@ -696,13 +696,9 @@ s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
     f32 z = coss(m->faceAngle[1] + yawOffset) * 5.0f;
 
     forwardFloorY = find_floor(m->pos[0] + x, m->pos[1] + 100.0f, m->pos[2] + z, &floor);
-    if (floor == NULL) {
-        forwardFloorY = m->floorHeight;
-    }
+    if (floor == NULL) forwardFloorY = m->floorHeight; // handle OOB slopes
     backwardFloorY = find_floor(m->pos[0] - x, m->pos[1] + 100.0f, m->pos[2] - z, &floor);
-    if (floor == NULL) {
-        backwardFloorY = m->floorHeight;
-    }
+    if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
 
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
@@ -937,19 +933,11 @@ static u32 set_mario_action_moving(struct MarioState *m, u32 action, UNUSED u32 
             break;
 
         case ACT_BEGIN_SLIDING:
-            if (mario_facing_downhill(m, FALSE)) {
-                action = ACT_BUTT_SLIDE;
-            } else {
-                action = ACT_STOMACH_SLIDE;
-            }
+            action = mario_facing_downhill(m, FALSE) ? ACT_BUTT_SLIDE : ACT_STOMACH_SLIDE;
             break;
 
         case ACT_HOLD_BEGIN_SLIDING:
-            if (mario_facing_downhill(m, FALSE)) {
-                action = ACT_HOLD_BUTT_SLIDE;
-            } else {
-                action = ACT_HOLD_STOMACH_SLIDE;
-            }
+            action = mario_facing_downhill(m, FALSE) ? ACT_HOLD_BUTT_SLIDE : ACT_HOLD_STOMACH_SLIDE;
             break;
     }
 
@@ -1093,8 +1081,6 @@ s32 set_jump_from_landing(struct MarioState *m) {
  * either a quicksand or steep jump.
  */
 s32 set_jumping_action(struct MarioState *m, u32 action, u32 actionArg) {
-    UNUSED u32 currAction = m->action;
-
     if (m->quicksandDepth >= 11.0f) {
         // Checks whether Mario is holding an object or not.
         if (m->heldObj == NULL) {
@@ -1198,11 +1184,17 @@ s32 transition_submerged_to_airborne(struct MarioState *m) {
     vec3s_set(m->angleVel, 0, 0, 0);
 
     if (m->heldObj == NULL) {
-        if (m->input & INPUT_A_DOWN) return set_mario_action(m, ACT_DIVE, 0);
-        else return set_mario_action(m, ACT_FREEFALL, 0);
+        if (m->input & INPUT_A_DOWN) {
+            return set_mario_action(m, ACT_DIVE, 0);
+        } else {
+            return set_mario_action(m, ACT_FREEFALL, 0);
+        }
     } else {
-        if (m->input & INPUT_A_DOWN) return set_mario_action(m, ACT_HOLD_JUMP, 0);
-        else return set_mario_action(m, ACT_HOLD_FREEFALL, 0);
+        if (m->input & INPUT_A_DOWN) {
+            return set_mario_action(m, ACT_HOLD_JUMP, 0);
+        } else {
+            return set_mario_action(m, ACT_HOLD_FREEFALL, 0);
+        }
     }
 }
 
@@ -1213,9 +1205,6 @@ s32 transition_submerged_to_airborne(struct MarioState *m) {
 s32 set_water_plunge_action(struct MarioState *m) {
     m->forwardVel = m->forwardVel / 4.0f;
     m->vel[1] = m->vel[1] / 2.0f;
-
-    // !BUG: Causes waterbox upwarp
-    // m->pos[1] = m->waterLevel - 100;
 
     m->faceAngle[2] = 0;
 
@@ -1228,8 +1217,17 @@ s32 set_water_plunge_action(struct MarioState *m) {
     if (m->area->camera->mode != CAMERA_MODE_WATER_SURFACE) {
         set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
     }
-
+#ifdef WATER_GROUND_POUND
+    m->particleFlags |= PARTICLE_WATER_SPLASH;
+    if (m->action == ACT_GROUND_POUND) {
+        play_sound(SOUND_ACTION_UNKNOWN430, m->marioObj->header.gfx.cameraToObject);
+        return set_mario_action(m, ACT_WATER_GROUND_POUND, 1);
+    } else {
+        return set_mario_action(m, ACT_WATER_PLUNGE, 0);
+    }
+#else
     return set_mario_action(m, ACT_WATER_PLUNGE, 0);
+#endif
 }
 
 /**
@@ -1271,20 +1269,141 @@ void squish_mario_model(struct MarioState *m) {
  */
 void debug_print_speed_action_normal(struct MarioState *m) {
     f32 steepness;
-    f32 floor_nY;
-
+    f32 surf_nY;
     if (gShowDebugText) {
-        steepness = sqrtf(
-            ((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
-        floor_nY = m->floor->normal.y;
+#ifdef EXTENDED_DEBUG_INFO
+        print_text_fmt_int(210, 184, "PX %d", m->pos[0]);
+        print_text_fmt_int(210, 168, "PY %d", m->pos[1]);
+        print_text_fmt_int(210, 152, "PZ %d", m->pos[2]);
+        // print_text_fmt_int(210, 184, "SX %d", screenX);
+        // print_text_fmt_int(210, 168, "SY %d", screenY);
+        switch (sDebugMode) {
+            case 0:
+                print_text_fmt_int(210, 136, "VX %d", m->vel[0]);
+                print_text_fmt_int(210, 120, "VY %d", m->vel[1]);
+                print_text_fmt_int(210, 104, "VZ %d", m->vel[2]);
 
-        print_text_fmt_int(210, 88, "ANG %d", (atan2s(floor_nY, steepness) * 180.0f) / 32768.0f);
+                print_text_fmt_int(210,  88, "RY %d", (m->faceAngle[1] * 45.0f) / 8192.0f);
+                print_text_fmt_int(210,  72, "FWD %d", m->forwardVel);
+                print_text_fmt_int(210,  56, "MY %d", (atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f);
+                // print_text_fmt_int(210,  56, "VEL", 0);
+                break;
+            case 1:
+                if (m->floor != NULL) {
+                    steepness = sqrtf(
+                        ((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
+                    surf_nY = m->floor->normal.y;
+                    print_text_fmt_int( 80, 136, "F1 %d", m->floor->vertex1[0]);
+                    print_text_fmt_int(184, 136,    "%d", m->floor->vertex1[1]);
+                    print_text_fmt_int(248, 136,    "%d", m->floor->vertex1[2]);
 
-        print_text_fmt_int(210, 72, "SPD %d", m->forwardVel);
+                    print_text_fmt_int( 80, 120, "F2 %d", m->floor->vertex2[0]);
+                    print_text_fmt_int(184, 120,    "%d", m->floor->vertex2[1]);
+                    print_text_fmt_int(248, 120,    "%d", m->floor->vertex2[2]);
+
+                    print_text_fmt_int( 80, 104, "F3 %d", m->floor->vertex3[0]);
+                    print_text_fmt_int(184, 104,    "%d", m->floor->vertex3[1]);
+                    print_text_fmt_int(248, 104,    "%d", m->floor->vertex3[2]);
+
+                    print_text_fmt_int(210,  88, "FH %d", m->floorHeight);
+
+                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
+                    print_text_fmt_int(226,  56, "0*%x", m->floor->force);
+                }
+                // print_text_fmt_int(210, 56, "FLOOR", 0);
+                break;
+            case 2:
+                if (m->ceil != NULL) {
+                    steepness = sqrtf(
+                        ((m->ceil->normal.x * m->ceil->normal.x) + (m->ceil->normal.z * m->ceil->normal.z)));
+                    surf_nY = m->ceil->normal.y;
+                    print_text_fmt_int( 80, 136, "C1 %d", m->ceil->vertex1[0]);
+                    print_text_fmt_int(184, 136,    "%d", m->ceil->vertex1[1]);
+                    print_text_fmt_int(248, 136,    "%d", m->ceil->vertex1[2]);
+
+                    print_text_fmt_int( 80, 120, "C2 %d", m->ceil->vertex2[0]);
+                    print_text_fmt_int(184, 120,    "%d", m->ceil->vertex2[1]);
+                    print_text_fmt_int(248, 120,    "%d", m->ceil->vertex2[2]);
+
+                    print_text_fmt_int( 80, 104, "C3 %d", m->ceil->vertex3[0]);
+                    print_text_fmt_int(184, 104,    "%d", m->ceil->vertex3[1]);
+                    print_text_fmt_int(248, 104,    "%d", m->ceil->vertex3[2]);
+
+                    print_text_fmt_int(210,  88, "CH %d", m->ceilHeight);
+
+                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(128,  56, "SURF %x", m->ceil->type);
+                    print_text_fmt_int(226,  56, "0*%x", m->ceil->force);
+                }
+                // print_text_fmt_int(210, 56, "CEIL", 0);
+                break;
+            case 3:
+                if (m->wall != NULL) {
+                    steepness = sqrtf(
+                        ((m->wall->normal.x * m->wall->normal.x) + (m->wall->normal.z * m->wall->normal.z)));
+                    surf_nY = m->wall->normal.y;
+                    print_text_fmt_int( 80, 136, "W1 %d", m->wall->vertex1[0]);
+                    print_text_fmt_int(184, 136,    "%d", m->wall->vertex1[1]);
+                    print_text_fmt_int(248, 136,    "%d", m->wall->vertex1[2]);
+
+                    print_text_fmt_int( 80, 120, "W2 %d", m->wall->vertex2[0]);
+                    print_text_fmt_int(184, 120,    "%d", m->wall->vertex2[1]);
+                    print_text_fmt_int(248, 120,    "%d", m->wall->vertex2[2]);
+
+                    print_text_fmt_int( 80, 104, "W3 %d", m->wall->vertex3[0]);
+                    print_text_fmt_int(184, 104,    "%d", m->wall->vertex3[1]);
+                    print_text_fmt_int(248, 104,    "%d", m->wall->vertex3[2]);
+                    
+                    print_text_fmt_int(210,  88, "WRY %d", (atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f);
+
+                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(128,  56, "SURF %x", m->wall->type);
+                    print_text_fmt_int(226,  56, "0*%x",    m->wall->force);
+                }
+                // print_text_fmt_int(210, 56, "WALL", 0);
+                break;
+            case 4:
+                print_text_fmt_int(210, 120, "C2 %d", (gGlobalTimer % 32767));
+                print_text_fmt_int(210, 104, "AT %d", m->actionTimer);
+
+                print_text_fmt_int(210,  88, "AY %d", (coss(m->intendedYaw) * m->intendedMag)); // far to near
+                print_text_fmt_int(210,  72, "AX %d", (sins(m->intendedYaw) * m->intendedMag)); // left to right
+                print_text_fmt_int(64,   56, "INP %016b", m->input);
+                break;
+        }
+
+
+        print_text_fmt_int(16, 48, "F %d", gNumCalls.floor);
+        print_text_fmt_int(16, 32, "C %d", gNumCalls.ceil);
+        print_text_fmt_int(16, 16, "W %d", gNumCalls.wall);
+        gNumCalls.floor = 0;
+        gNumCalls.ceil  = 0;
+        gNumCalls.wall  = 0;
 
         // STA short for "status," the official action name via SMS map.
+        print_text_fmt_int(210, 40, "STA %x", (m->action & ACT_ID_MASK));
+        if (gPlayer1Controller->buttonPressed & L_TRIG) {
+            sDebugMode++;
+            if (sDebugMode > 4) {
+                sDebugMode = 0;
+            }
+        }
+#else
+        steepness = sqrtf(((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
+        surf_nY = m->floor->normal.y;
+        print_text_fmt_int(210, 88, "ANG %d", (atan2s(floor_nY, steepness) * 180.0f) / 32768.0f);
+        print_text_fmt_int(210, 72, "SPD %d", m->forwardVel);
+        // STA short for "status," the official action name via SMS map.
         print_text_fmt_int(210, 56, "STA %x", (m->action & ACT_ID_MASK));
+#endif
     }
+#ifdef DEBUG_INFO
+    if (gPlayer1Controller->buttonDown & Z_TRIG && gPlayer1Controller->buttonPressed & L_JPAD) {
+        gShowDebugText ^= TRUE;
+        gDebugInfoFlags = gShowDebugText ? DEBUG_INFO_FLAG_ALL : DEBUG_INFO_NOFLAGS;
+    }
+#endif
 }
 
 /**
@@ -1389,7 +1508,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
             || (m->ceil && m->ceil->flags & SURFACE_FLAG_DYNAMIC)) {
             ceilToFloorDist = m->ceilHeight - m->floorHeight;
 
-            if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= 150.0f)) {
+            if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= gMarioObject->hitboxHeight-10.0f)) {
                 m->input |= INPUT_SQUISHED;
             }
         }
@@ -1531,7 +1650,6 @@ void update_mario_health(struct MarioState *m) {
             m->hurtCounter--;
             m->hurtShadeAlpha = 0x40;
         }
-
         if (m->health > 0x880) {
             m->health = 0x880;
         }
@@ -1692,11 +1810,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     }
 
     // Short hitbox for crouching/crawling/etc.
-    if (m->action & ACT_FLAG_SHORT_HITBOX) {
-        m->marioObj->hitboxHeight = 100.0f;
-    } else {
-        m->marioObj->hitboxHeight = 160.0f;
-    }
+    m->marioObj->hitboxHeight = (m->action & ACT_FLAG_SHORT_HITBOX) ? 100.0f : 160.0f;
 
     if ((m->flags & MARIO_TELEPORTING) && (m->fadeWarpOpacity != 0xFF)) {
         bodyState->modelState &= ~0xFF;
@@ -1726,9 +1840,9 @@ UNUSED static void debug_update_mario_cap(u16 button, s32 flags, u16 capTimer, u
 
 #if ENABLE_RUMBLE
 void queue_rumble_particles(void) {
-    if (gMarioState->particleFlags & PARTICLE_HORIZONTAL_STAR ||
-        gMarioState->particleFlags & PARTICLE_VERTICAL_STAR ||
-        gMarioState->particleFlags & PARTICLE_TRIANGLE) {
+    if (gMarioState->particleFlags & PARTICLE_HORIZONTAL_STAR
+     || gMarioState->particleFlags & PARTICLE_VERTICAL_STAR
+     || gMarioState->particleFlags & PARTICLE_TRIANGLE) {
         queue_rumble_data(5, 80);
     }
     if (gMarioState->heldObj && gMarioState->heldObj->behavior == segmented_to_virtual(bhvBobomb)) {
@@ -1751,9 +1865,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         mario_process_interactions(gMarioState);
 
         // If Mario is OOB, stop executing actions.
-        if (gMarioState->floor == NULL) {
-            return 0;
-        }
+        if (gMarioState->floor == NULL) return FALSE;
 
         // The function can loop through many action shifts in one frame,
         // which can lead to unexpected sub-frame behavior. Could potentially hang
@@ -1801,16 +1913,12 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         // non-Japanese releases.
         if (gMarioState->floor->type == SURFACE_HORIZONTAL_WIND) {
             spawn_wind_particles(0, (gMarioState->floor->force << 8));
-#ifndef VERSION_JP
             play_sound(SOUND_ENV_WIND2, gMarioState->marioObj->header.gfx.cameraToObject);
-#endif
         }
 
         if (gMarioState->floor->type == SURFACE_VERTICAL_WIND) {
             spawn_wind_particles(1, 0);
-#ifndef VERSION_JP
             play_sound(SOUND_ENV_WIND2, gMarioState->marioObj->header.gfx.cameraToObject);
-#endif
         }
 
         play_infinite_stairs_music();
@@ -1822,7 +1930,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         return gMarioState->particleFlags;
     }
 
-    return 0;
+    return FALSE;
 }
 
 /**************************************************
@@ -1832,6 +1940,8 @@ s32 execute_mario_action(UNUSED struct Object *o) {
 void init_mario(void) {
     Vec3s capPos;
     struct Object *capObject;
+
+    sDebugMode = 0;
 
     gMarioState->actionTimer = 0;
     gMarioState->framesSinceA = 0xFF;

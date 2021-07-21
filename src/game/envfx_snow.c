@@ -41,18 +41,18 @@ s16 gSnowParticleMaxCount;
 s8 gEnvFxMode = 0;
 
 /// Template for a snow particle triangle
-Vtx gSnowTempVtx[3] = { { { { -5, 5, 0 }, 0, { 0, 0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { { -5, -5, 0 }, 0, { 0, 960 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { { 5, 5, 0 }, 0, { 960, 0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
+Vtx gSnowTempVtx[3] = { { { { -5,  5, 0 }, 0, {   0, 0   }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { { -5, -5, 0 }, 0, {   0, 960 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { {  5,  5, 0 }, 0, { 960,   0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
 
 // Change these to make snowflakes smaller or bigger
-struct SnowFlakeVertex gSnowFlakeVertex1 = { -5, 5, 0 };
+struct SnowFlakeVertex gSnowFlakeVertex1 = { -5,  5, 0 };
 struct SnowFlakeVertex gSnowFlakeVertex2 = { -5, -5, 0 };
-struct SnowFlakeVertex gSnowFlakeVertex3 = { 5, 5, 0 };
+struct SnowFlakeVertex gSnowFlakeVertex3 = {  5,  5, 0 };
 
 extern void *tiny_bubble_dl_0B006AB0;
-extern void *tiny_bubble_dl_0B006A50;
-extern void *tiny_bubble_dl_0B006CD8;
+extern void *tiny_bubble_dl_gray;
+extern void *tiny_bubble_dl_blue;
 
 /**
  * Initialize snow particles by allocating a buffer for storing their state
@@ -61,7 +61,7 @@ extern void *tiny_bubble_dl_0B006CD8;
 s32 envfx_init_snow(s32 mode) {
     switch (mode) {
         case ENVFX_MODE_NONE:
-            return 0;
+            return FALSE;
 
         case ENVFX_SNOW_NORMAL:
             gSnowParticleMaxCount = 140;
@@ -81,13 +81,13 @@ s32 envfx_init_snow(s32 mode) {
 
     gEnvFxBuffer = mem_pool_alloc(gEffectsMemoryPool, gSnowParticleMaxCount * sizeof(struct EnvFxParticle));
     if (!gEnvFxBuffer) {
-        return 0;
+        return FALSE;
     }
 
     bzero(gEnvFxBuffer, gSnowParticleMaxCount * sizeof(struct EnvFxParticle));
 
     gEnvFxMode = mode;
-    return 1;
+    return TRUE;
 }
 
 /**
@@ -112,7 +112,7 @@ void envfx_update_snowflake_count(s32 mode, Vec3s marioPos) {
             waterLevel = find_water_level(marioPos[0], marioPos[2]);
 
             gSnowParticleCount =
-                (((s32)((waterLevel - 400.f - (f32) marioPos[1]) * 1.0e-3) << 0x10) >> 0x10) * 5;
+                (((s32)((waterLevel - 400.f - (f32) marioPos[1]) * 1.0e-3f) << 0x10) >> 0x10) * 5;
 
             if (gSnowParticleCount < 0) {
                 gSnowParticleCount = 0;
@@ -176,15 +176,9 @@ s32 envfx_is_snowflake_alive(s32 index, s32 snowCylinderX, s32 snowCylinderY, s3
     s32 y = (gEnvFxBuffer + index)->yPos;
     s32 z = (gEnvFxBuffer + index)->zPos;
 
-    if (sqr(x - snowCylinderX) + sqr(z - snowCylinderZ) > sqr(300)) {
-        return 0;
-    }
+    if (sqr(x - snowCylinderX) + sqr(z - snowCylinderZ) > sqr(300)) return FALSE;
 
-    if ((y < snowCylinderY - 201) || (snowCylinderY + 201 < y)) {
-        return 0;
-    }
-
-    return 1;
+    return !((y < snowCylinderY - 201) || (snowCylinderY + 201 < y));
 }
 
 /**
@@ -261,22 +255,6 @@ void envfx_update_snow_blizzard(s32 snowCylinderX, s32 snowCylinderY, s32 snowCy
     gSnowCylinderLastPos[0] = snowCylinderX;
     gSnowCylinderLastPos[1] = snowCylinderY;
     gSnowCylinderLastPos[2] = snowCylinderZ;
-}
-
-/*! Unused function. Checks whether a position is laterally within 3000 units
- *  to the point (x: 3380, z: -520). Considering there is an unused blizzard
- *  snow mode, this could have been used to check whether Mario is in a
- *  'blizzard area'. In Cool Cool Mountain and Snowman's Land the area lies
- *  near the starting point and doesn't seem meaningful. Notably, the point is
- *  close to the entrance of SL, so maybe there were plans for an extra hint to
- *  find it. The radius of 3000 units is quite large for that though, covering
- *  more than half of the mirror room.
- */
-UNUSED static s32 is_in_mystery_snow_area(s32 x, UNUSED s32 y, s32 z) {
-    if (sqr(x - 3380) + sqr(z + 520) < sqr(3000)) {
-        return 1;
-    }
-    return 0;
 }
 
 /**
@@ -436,9 +414,9 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
     rotate_triangle_vertices((s16 *) &vertex1, (s16 *) &vertex2, (s16 *) &vertex3, pitch, yaw);
 
     if (snowMode == ENVFX_SNOW_NORMAL || snowMode == ENVFX_SNOW_BLIZZARD) {
-        gSPDisplayList(gfx++, &tiny_bubble_dl_0B006A50); // snowflake with gray edge
+        gSPDisplayList(gfx++, &tiny_bubble_dl_gray); // snowflake with gray edge
     } else if (snowMode == ENVFX_SNOW_WATER) {
-        gSPDisplayList(gfx++, &tiny_bubble_dl_0B006CD8); // snowflake with blue edge
+        gSPDisplayList(gfx++, &tiny_bubble_dl_blue); // snowflake with blue edge
     }
 
     for (i = 0; i < gSnowParticleCount; i += 5) {

@@ -14,9 +14,9 @@ static struct ObjectHitbox sBooGivingStarHitbox = {
 
 // Relative positions
 static s16 sCourtyardBooTripletPositions[][3] = {
-    {0, 50, 0},
-    {210, 110, 210},
-    {-210, 70, -210}
+    {   0,  50,    0},
+    { 210, 110,  210},
+    {-210,  70, -210}
 };
 
 static void boo_stop(void) {
@@ -111,7 +111,7 @@ static void boo_approach_target_opacity_and_update_scale(void) {
     }
 
     scale = (o->oOpacity/255.0f * 0.4f + 0.6f) * o->oBooBaseScale;
-    obj_scale(o, scale); // why no cur_obj_scale? was cur_obj_scale written later?
+    cur_obj_scale(scale);
 }
 
 static void boo_oscillate(s32 ignoreOpacity) {
@@ -339,10 +339,7 @@ static void boo_chase_mario(f32 a0, s16 a1, f32 a2) {
         }
     } else {
         o->oInteractType = 0;
-        // why is boo_stop not used here
-        o->oForwardVel = 0.0f;
-        o->oVelY = 0.0f;
-        o->oGravity = 0.0f;
+        boo_stop();
     }
 }
 

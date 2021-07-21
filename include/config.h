@@ -145,8 +145,6 @@
 
 // If you want to change the extended boundaries mode, go to engine/extended_bounds.h and change EXTENDED_BOUNDS_MODE
 
-#define DEBUG_MODE
-
 // -- Graphics --
 
 // Glowing effect on power stars (Arceveti)
@@ -201,6 +199,21 @@
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
 
+// -- Hacker QoL --
+
+// Enable debug level select (doesn't work if Goddard is skipped)
+#define DEBUG_LEVEL_SELECT
+// Enable debug info
+#define DEBUG_INFO
+// Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti)
+#define EXTENDED_DEBUG_INFO
+// Debug Free Move by pressind Dpad up (Arceveti)
+#define ENABLE_DEBUG_FREE_MOVE
+// Vertical quicksand support (Wiseguy)
+#define WALL_QUICKSAND
+// Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
+#define COMPLETE_EN_US_SEGMENT2
+
 // -- Gameplay QoL --
 
 // Koopa Shell boxes respawn (Arceveti)
@@ -244,7 +257,7 @@
 #define GROUND_POUND_DIVE
 // Ground pound jump similar to SMO (Unknown)
 #define GROUND_POUND_JUMP
-//! not implemented, Underwater Ground pound similar to SMO
+// Underwater Ground pound similar to SMO (Unknown)
 #define WATER_GROUND_POUND
 // Number of frames before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
@@ -255,11 +268,7 @@
 
 // -- Misc --
 
-// Vertical quicksand support (Wiseguy)
-#define WALL_QUICKSAND
 // Goddard easter egg from Shindou (Nintendo, Arceveti)
 #define GODDARD_EASTER_EGG
-// Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
-#define COMPLETE_EN_US_SEGMENT2
 
 #endif // CONFIG_H

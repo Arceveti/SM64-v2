@@ -24,7 +24,11 @@
 /**
  * Flags controlling what debug info is displayed.
  */
-s32 gDebugInfoFlags;
+#ifdef DEBUG_INFO
+s32 gDebugInfoFlags = DEBUG_INFO_FLAG_ALL;
+#else
+s32 gDebugInfoFlags = DEBUG_INFO_NOFLAGS;
+#endif
 
 /**
  * The number of times per frame find_floor found no floor beneath an
@@ -148,8 +152,7 @@ s16 *gEnvironmentRegions;
 s32 gEnvironmentLevels[20];
 s8 gDoorAdjacentRooms[60][2];
 s16 gMarioCurrentRoom;
-s16 D_8035FEE2;
-s16 D_8035FEE4;
+s16 gDoorRenderingTimer;
 s16 gTHIWaterDrained;
 s16 gTTCSpeedSetting;
 s16 gMarioShotFromCannon;
@@ -212,7 +215,7 @@ struct ParticleProperties sParticleTypes[] = {
     { PARTICLE_DIRT,                 ACTIVE_PARTICLE_DIRT,                 MODEL_NONE,                 bhvDirtParticleSpawner },
     { PARTICLE_MIST_CIRCLE,          ACTIVE_PARTICLE_MIST_CIRCLE,          MODEL_NONE,                 bhvMistCircParticleSpawner },
     { PARTICLE_TRIANGLE,             ACTIVE_PARTICLE_TRIANGLE,             MODEL_NONE,                 bhvTriangleParticleSpawner },
-    { 0, 0, MODEL_NONE, NULL },
+    { 0,                             0,                                    MODEL_NONE,                 NULL },
 };
 
 /**
@@ -276,7 +279,8 @@ void bhv_mario_update(void) {
     i = 0;
     while (sParticleTypes[i].particleFlag != 0) {
         if (particleFlags & sParticleTypes[i].particleFlag) {
-            spawn_particle(sParticleTypes[i].activeParticleFlag, sParticleTypes[i].model,
+            spawn_particle(sParticleTypes[i].activeParticleFlag,
+                           sParticleTypes[i].model,
                            sParticleTypes[i].behavior);
         }
 
@@ -374,7 +378,7 @@ s32 update_objects_in_list(struct ObjectNode *objList) {
 /**
  * Unload any objects in the list that have been deactivated.
  */
-s32 unload_deactivated_objects_in_list(struct ObjectNode *objList) {
+void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
     struct ObjectNode *obj = objList->next;
 
     while (objList != obj) {
@@ -392,8 +396,6 @@ s32 unload_deactivated_objects_in_list(struct ObjectNode *objList) {
             unload_object(gCurrentObject);
         }
     }
-
-    return 0;
 }
 
 /**
@@ -464,7 +466,6 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
     while (spawnInfo != NULL) {
         struct Object *object;
         const BehaviorScript *script;
-        UNUSED s16 arg16 = (s16)(spawnInfo->behaviorArg & 0xFFFF);
 
         script = segmented_to_virtual(spawnInfo->behaviorScript);
 
@@ -481,7 +482,7 @@ void spawn_objects_from_info(UNUSED s32 unused, struct SpawnInfo *spawnInfo) {
             object->oBehParams2ndByte = ((spawnInfo->behaviorArg) >> 16) & 0xFF;
 
             object->behavior = script;
-            object->unused1 = 0;
+            // object->unused1 = 0;
 
             // Record death/collection in the SpawnInfo
             object->respawnInfoType = RESPAWN_INFO_TYPE_32;
@@ -582,25 +583,25 @@ void unload_deactivated_objects(void) {
     gTimeStopState &= ~TIME_STOP_UNKNOWN_0;
 }
 
-/**
- * Unused profiling function.
- */
-UNUSED static u16 unused_get_elapsed_time(u64 *cycleCounts, s32 index) {
-    u16 time;
-    f64 cycles;
+// /**
+//  * Unused profiling function.
+//  */
+// UNUSED static u16 unused_get_elapsed_time(u64 *cycleCounts, s32 index) {
+//     u16 time;
+//     f64 cycles;
 
-    cycles = cycleCounts[index] - cycleCounts[index - 1];
-    if (cycles < 0) {
-        cycles = 0;
-    }
+//     cycles = cycleCounts[index] - cycleCounts[index - 1];
+//     if (cycles < 0) {
+//         cycles = 0;
+//     }
 
-    time = (u16)(((u64) cycles * 1000000 / osClockRate) / 16667.0 * 1000.0);
-    if (time > 999) {
-        time = 999;
-    }
+//     time = (u16)(((u64) cycles * 1000000 / osClockRate) / 16667.0 * 1000.0);
+//     if (time > 999) {
+//         time = 999;
+//     }
 
-    return time;
-}
+//     return time;
+// }
 
 /**
  * Update all objects. This includes script execution, object collision detection,

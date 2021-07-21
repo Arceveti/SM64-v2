@@ -14,11 +14,6 @@
 #include "sm64.h"
 #include "types.h"
 
-#define DEBUG_INFO_NOFLAGS (0 << 0)
-#define DEBUG_INFO_FLAG_DPRINT (1 << 0)
-#define DEBUG_INFO_FLAG_LSELECT (1 << 1)
-#define DEBUG_INFO_FLAG_ALL 0xFF
-
 s16 gDebugPrintState1[6]; // prints top-down?
 s16 gDebugPrintState2[6]; // prints bottom-up?
 
@@ -167,8 +162,7 @@ void print_mapinfo(void) {
     print_debug_top_down_mapinfo("bgY  %d", bgY);
     print_debug_top_down_mapinfo("angY %d", angY);
 
-    if (pfloor) // not null
-    {
+    if (pfloor) {// not null
         print_debug_top_down_mapinfo("bgcode   %d", pfloor->type);
         print_debug_top_down_mapinfo("bgstatus %d", pfloor->flags);
         print_debug_top_down_mapinfo("bgarea   %d", pfloor->room);
@@ -201,7 +195,7 @@ void print_string_array_info(const char **strArr) {
     s32 i;
 
     if (!sDebugStringArrPrinted) {
-        sDebugStringArrPrinted++; // again, why not = TRUE...
+        sDebugStringArrPrinted = TRUE;
         for (i = 0; i < 8; i++) {
             // sDebugPage is assumed to be 4 or 5 here.
             print_debug_top_down_mapinfo(strArr[i], gDebugInfo[sDebugPage][i]);
@@ -268,8 +262,7 @@ void reset_debug_objectinfo(void) {
     gUnknownWallCount = 0;
     gObjectCounter = 0;
     sDebugStringArrPrinted = FALSE;
-    D_8035FEE2 = 0;
-    D_8035FEE4 = 0;
+    gDoorRenderingTimer = 0;
 
     set_print_state_info(gDebugPrintState1, 20, 185, 40, 200, -15);
     set_print_state_info(gDebugPrintState2, 180, 30, 0, 150, 15);
@@ -343,7 +336,7 @@ void try_modify_debug_controls(void) {
     s32 sp4;
 
     if (gPlayer1Controller->buttonPressed & Z_TRIG) {
-        sNoExtraDebug ^= 1;
+        sNoExtraDebug ^= TRUE;
     }
     if (!(gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG)) && !sNoExtraDebug) {
         sp4 = 1;
@@ -385,6 +378,8 @@ void try_modify_debug_controls(void) {
 
 // possibly a removed debug control (TODO: check DD)
 void stub_debug_5(void) {
+    try_modify_debug_controls();
+    try_change_debug_page();
 }
 
 /*
@@ -462,6 +457,10 @@ void try_do_mario_debug_object_spawn(void) {
         if (gPlayer1Controller->buttonPressed & D_JPAD) {
             spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL,
                                   bhvKoopaShellUnderwater);
+        }
+        if (gPlayer1Controller->buttonPressed & U_JPAD) {
+            spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL,
+                                  bhvBreakableBoxSmall);
         }
     }
 }

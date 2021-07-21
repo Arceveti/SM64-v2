@@ -261,9 +261,9 @@ extern const u8 water_0900B800[];
 extern const u8 *const flower_bubbles_textures_ptr_0B002008[];
 extern const u8 *const lava_bubble_ptr_0B006020[];
 extern const u8 *const bubble_ptr_0B006848[];
-extern const Gfx tiny_bubble_dl_0B006A50[];
+extern const Gfx tiny_bubble_dl_gray[];
 extern const Gfx tiny_bubble_dl_0B006AB0[];
-extern const Gfx tiny_bubble_dl_0B006CD8[];
+extern const Gfx tiny_bubble_dl_blue[];
 extern const Gfx tiny_bubble_dl_0B006D38[];
 extern const Gfx tiny_bubble_dl_0B006D68[];
 
