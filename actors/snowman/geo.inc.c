@@ -1,6 +1,6 @@
 // 0x0C00021C
 const GeoLayout mr_blizzard_hidden_geo[] = {
-   GEO_SCALE(0x00, 16384),
+   GEO_SCALE(LAYER_FORCE, 16384),
    GEO_OPEN_NODE(),
       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
       GEO_OPEN_NODE(),
@@ -26,7 +26,7 @@ const GeoLayout mr_blizzard_hidden_geo[] = {
                GEO_NODE_START(),
                GEO_NODE_START(),
                GEO_OPEN_NODE(),
-                  GEO_SCALE(0x00, 65536),
+                  GEO_SCALE(LAYER_FORCE, 65536),
                   GEO_OPEN_NODE(),
                      GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OPAQUE, 490, 14, 43, 305, 0, 248, mario_cap_seg3_dl_03022F48),
                   GEO_CLOSE_NODE(),

@@ -55,10 +55,8 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct NoteSubEu *noteSubEu, struc
 u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd);
 u64 *load_wave_samples(u64 *cmd, struct Note *note, s32 nSamplesToLoad);
 u64 *final_resample(u64 *cmd, struct Note *note, s32 count, u16 pitch, u16 dmemIn, u32 flags);
-u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings,
-                      u32 flags);
-u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf,
-                            s32 headsetPanSettings, struct VolumeChange *vol);
+u64 *process_envelope(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings, u32 flags);
+u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf, s32 headsetPanSettings, struct VolumeChange *vol);
 u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32 flags, s32 leftRight);
 #endif
 
@@ -97,7 +95,6 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex, s32 reverbIndex) 
     s32 dstPos;
     s32 nSamples;
     s32 excessiveSamples;
-    s32 UNUSED pad[3];
     if (reverb->downsampleRate != 1) {
         if (reverb->framesLeftToIgnore == 0) {
             // Now that the RSP has finished, downsample the samples produced two frames ago by skipping
@@ -137,9 +134,9 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex, s32 reverbIndex) 
         item->startPos = reverb->nextRingBufferPos;
         reverb->nextRingBufferPos = excessiveSamples;
     }
-    // These fields are never read later
-    item->numSamplesAfterDownsampling = nSamples;
-    item->chunkLen = chunkLen;
+    // // These fields are never read later
+    // item->numSamplesAfterDownsampling = nSamples;
+    // item->chunkLen = chunkLen;
 }
 #else
 void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex) {
@@ -503,13 +500,9 @@ u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateI
 }
 #else
 u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateIndex) {
-    UNUSED s32 pad1[1];
     s16 ra;
     s16 t4;
-    UNUSED s32 pad[2];
     struct ReverbRingBufferItem *v1;
-    UNUSED s32 pad2[1];
-    s16 temp;
 
     v1 = &gSynthesisReverb.items[gSynthesisReverb.curFrame][updateIndex];
 
@@ -523,7 +516,6 @@ u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateI
             if (v1->lengthB != 0) {
                 // Ring buffer wrapped
                 aSetLoadBufferPair(cmd++, v1->lengthA, 0);
-                temp = 0;
             }
 
             // Use the reverb sound as initial sound for this audio update
@@ -537,18 +529,12 @@ u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateI
                  /*out*/ DMEM_ADDR_WET_LEFT_CH);
         } else {
             // Same as above but upsample the previously downsampled samples used for reverb first
-            temp = 0; //! jesus christ
             t4 = (v1->startPos & 7) * 2;
             ra = AUDIO_ALIGN(v1->lengthA + t4, 4);
             aSetLoadBufferPair(cmd++, 0, v1->startPos - t4 / 2);
             if (v1->lengthB != 0) {
                 // Ring buffer wrapped
                 aSetLoadBufferPair(cmd++, ra, 0);
-                //! We need an empty statement (even an empty ';') here to make the function match (because IDO).
-                //! However, copt removes extraneous statements and dead code. So we need to trick copt
-                //! into thinking 'temp' could be undefined, and luckily the compiler optimizes out the
-                //! useless assignment.
-                ra = ra + temp;
             }
             aSetBuffer(cmd++, 0, t4 + DMEM_ADDR_WET_LEFT_CH, DMEM_ADDR_LEFT_CH, bufLen << 1);
             aResample(cmd++, gSynthesisReverb.resampleFlags, (u16) gSynthesisReverb.resampleRate, VIRTUAL_TO_PHYSICAL2(gSynthesisReverb.resampleStateLeft));
@@ -580,20 +566,14 @@ u64 *synthesis_do_one_audio_update(s16 *aiBuf, s32 bufLen, u64 *cmd, s32 updateI
 #ifdef VERSION_EU
 // Processes just one note, not all
 u64 *synthesis_process_note(struct Note *note, struct NoteSubEu *noteSubEu, struct NoteSynthesisState *synthesisState, UNUSED s16 *aiBuf, s32 bufLen, u64 *cmd) {
-    UNUSED s32 pad0[3];
 #else
 u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
     s32 noteIndex;                           // sp174
     struct Note *note;                       // s7
-    UNUSED u8 pad0[0x08];
 #endif
     struct AudioBankSample *audioBookSample; // sp164, sp138
     struct AdpcmLoop *loopInfo;              // sp160, sp134
     s16 *curLoadedBook = NULL;               // sp154, sp130
-#ifdef VERSION_EU
-    UNUSED u8 padEU[0x04];
-#endif
-    UNUSED u8 pad8[0x04];
 #ifndef VERSION_EU
     u16 resamplingRateFixedPoint;            // sp5c, sp11A
 #endif
@@ -603,15 +583,8 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
 #ifdef VERSION_EU
     u16 resamplingRateFixedPoint;            // sp5c, sp11A
 #endif
-    UNUSED u8 pad7[0x0c];                    // sp100
     UNUSED s32 tempBufLen;
-#ifdef VERSION_EU
     s32 sp130 = 0;  //sp128, sp104
-    UNUSED u32 pad9;
-#else
-    UNUSED u32 pad9;
-    s32 sp130 = 0;  //sp128, sp104
-#endif
     s32 nAdpcmSamplesProcessed; // signed required for US
     s32 t0;
 #ifdef VERSION_EU
@@ -626,14 +599,14 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
     s32 samplesLenAdjusted; // 108,      spEC
     // Might have been used to store (samplesLenFixedPoint >> 0x10), but doing so causes strange
     // behavior with the break near the end of the loop, causing US and JP to need a goto instead
-    UNUSED s32 samplesLenInt;
+    // UNUSED s32 samplesLenInt;
     s32 endPos;             // sp110,    spE4
     s32 nSamplesToProcess;  // sp10c/a0, spE0
     s32 s2;
 #else
     // Might have been used to store (samplesLenFixedPoint >> 0x10), but doing so causes strange
     // behavior with the break near the end of the loop, causing US and JP to need a goto instead
-    UNUSED s32 samplesLenInt;
+    // UNUSED s32 samplesLenInt;
     s32 samplesLenAdjusted; // 108
     s32 s2;
     s32 endPos;             // sp110,    spE4
@@ -1159,10 +1132,8 @@ u64 *process_envelope_inner(u64 *cmd, struct Note *note, s32 nSamples, u16 inBuf
     s32 rampLeft, rampRight;
 #elif defined(VERSION_EU)
 u64 *process_envelope(u64 *cmd, struct NoteSubEu *note, struct NoteSynthesisState *synthesisState, s32 nSamples, u16 inBuf, s32 headsetPanSettings, UNUSED u32 flags) {
-    UNUSED u8 pad1[20];
     u16 sourceRight;
     u16 sourceLeft;
-    UNUSED u8 pad2[4];
     u16 targetLeft;
     u16 targetRight;
     s32 mixerFlags;
@@ -1313,7 +1284,6 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32
 #ifdef VERSION_EU
     u8 prevPanShift;
     u8 panShift;
-    UNUSED u8 unkDebug;
 #else
     u16 prevPanShift;
     u16 panShift;
@@ -1373,10 +1343,6 @@ u64 *note_apply_headset_pan_effects(u64 *cmd, struct Note *note, s32 bufLen, s32
                 pitch = (bufLen << 0xf) / (bufLen + panShift - prevPanShift);
             }
 
-#if defined(VERSION_EU) && !defined(AVOID_UB)
-            if (unkDebug) { // UB
-            }
-#endif
             aSetBuffer(cmd++, 0, DMEM_ADDR_NOTE_PAN_TEMP, DMEM_ADDR_TEMP, panShift + bufLen - prevPanShift);
             aResample(cmd++, 0, pitch, VIRTUAL_TO_PHYSICAL2(note->synthesisBuffers->panResampleState));
         }
@@ -1415,7 +1381,7 @@ void note_init_volume(struct Note *note) {
     note->targetVolRight = 0;
     note->reverbVol = 0;
     note->reverbVolShifted = 0;
-    note->unused2 = 0;
+    // note->unused2 = 0;
     note->curVolLeft = 1;
     note->curVolRight = 1;
     note->frequency = 0.0f;
@@ -1527,7 +1493,7 @@ void note_disable(struct Note *note) {
     if (note->needsInit) {
         note->needsInit = FALSE;
     } else {
-        note_set_vel_pan_reverb(note, 0, .5, 0);
+        note_set_vel_pan_reverb(note, 0, 0.5, 0);
     }
     note->priority = NOTE_PRIORITY_DISABLED;
     note->enabled = FALSE;

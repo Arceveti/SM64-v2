@@ -2,7 +2,7 @@
 const GeoLayout enemy_lakitu_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0x96, 100),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 63, -62, lakitu_enemy_seg5_dl_050138B0),
          GEO_OPEN_NODE(),

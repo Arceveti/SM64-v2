@@ -2,7 +2,7 @@
 const GeoLayout spiny_ball_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0x96, 100),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_NO_SILHOUETTE, -18, -34, 10, spiny_egg_seg5_dl_05015368),
          GEO_OPEN_NODE(),

@@ -17,7 +17,7 @@ const GeoLayout thi_geo_0006D4[] = {
          GEO_OPEN_NODE(),
             GEO_CAMERA(1, 0, 2000, 6000, 0, 0, 0, geo_camera_main),
             GEO_OPEN_NODE(),
-               GEO_SCALE(0x00, 19660),
+               GEO_SCALE(LAYER_FORCE, 19660),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, thi_seg7_dl_07005260),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, thi_seg7_dl_07006968),

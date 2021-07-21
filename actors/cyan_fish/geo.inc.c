@@ -1,6 +1,6 @@
 // 0x0D000324
 const GeoLayout cyan_fish_geo[] = {
-   GEO_SCALE(0x00, 16384),
+   GEO_SCALE(LAYER_FORCE, 16384),
    GEO_OPEN_NODE(),
       GEO_ANIMATED_PART(LAYER_NO_SILHOUETTE, 0, 0, 0, NULL),
       GEO_OPEN_NODE(),

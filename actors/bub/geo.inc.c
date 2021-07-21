@@ -1,6 +1,6 @@
 // 0x0D00038C
 const GeoLayout bub_geo[] = {
-   GEO_SCALE(0x00, 16384),
+   GEO_SCALE(LAYER_FORCE, 16384),
    GEO_OPEN_NODE(),
       GEO_ANIMATED_PART(LAYER_OPAQUE, -13, 0, 0, NULL),
       GEO_OPEN_NODE(),

@@ -6,7 +6,7 @@ const GeoLayout penguin_geo[] = {
        GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0x96, 100),
 #endif
        GEO_OPEN_NODE(),
-          GEO_SCALE(0x00, 16384),
+          GEO_SCALE(LAYER_FORCE, 16384),
           GEO_OPEN_NODE(),
              GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 40, penguin_seg5_dl_05007540),
              GEO_OPEN_NODE(),

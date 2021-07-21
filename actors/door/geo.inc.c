@@ -1,8 +1,8 @@
 // 0x160003A8
 const GeoLayout castle_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -26,9 +26,9 @@ const GeoLayout castle_door_geo[] = {
 
 // 0x1600043C
 const GeoLayout cabin_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -52,9 +52,9 @@ const GeoLayout cabin_door_geo[] = {
 
 // 0x160004D0
 const GeoLayout wooden_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -78,9 +78,9 @@ const GeoLayout wooden_door_geo[] = {
 
 // 0x16000564
 const GeoLayout wooden_door2_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -104,9 +104,9 @@ const GeoLayout wooden_door2_geo[] = {
 
 // 0x160005F8
 const GeoLayout metal_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -130,9 +130,9 @@ const GeoLayout metal_door_geo[] = {
 
 // 0x1600068C
 const GeoLayout hazy_maze_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -156,9 +156,9 @@ const GeoLayout hazy_maze_door_geo[] = {
 
 // 0x16000720
 const GeoLayout haunted_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -182,9 +182,9 @@ const GeoLayout haunted_door_geo[] = {
 
 // 0x160007B4
 const GeoLayout castle_door_0_star_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -214,9 +214,9 @@ const GeoLayout castle_door_0_star_geo[] = {
 
 // 0x16000868
 const GeoLayout castle_door_1_star_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -246,9 +246,9 @@ const GeoLayout castle_door_1_star_geo[] = {
 
 // 0x1600091C
 const GeoLayout castle_door_3_stars_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -278,9 +278,9 @@ const GeoLayout castle_door_3_stars_geo[] = {
 
 // 0x160009D0
 const GeoLayout key_door_geo[] = {
-   GEO_TRANSLATE_NODE(0x00, 78, 0, 0),
+   GEO_TRANSLATE_NODE(LAYER_FORCE, 78, 0, 0),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, -300, 0, 0, NULL),
          GEO_OPEN_NODE(),

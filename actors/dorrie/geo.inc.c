@@ -2,7 +2,7 @@
 const GeoLayout dorrie_geo[] = {
    GEO_CULLING_RADIUS(5000),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),

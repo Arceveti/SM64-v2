@@ -108,7 +108,7 @@ const GeoLayout eyerok_geo_0002AC[] = {
 const GeoLayout eyerok_left_hand_geo[] = {
    GEO_SHADOW(SHADOW_SQUARE_SCALABLE, 0xB4, 300),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_DISPLAY_LIST(LAYER_OPAQUE, eyerok_seg5_dl_0500CC18),
          GEO_BRANCH(1, eyerok_geo_0002AC),
@@ -122,7 +122,7 @@ const GeoLayout eyerok_left_hand_geo[] = {
 const GeoLayout eyerok_right_hand_geo[] = {
    GEO_SHADOW(SHADOW_SQUARE_SCALABLE, 0xB4, 300),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_BRANCH(1, eyerok_geo_0002AC),
       GEO_CLOSE_NODE(),

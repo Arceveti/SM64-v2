@@ -2,7 +2,7 @@
 const GeoLayout castle_grounds_geo_000660[] = {
    GEO_CULLING_RADIUS(1000),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 24576),
+      GEO_SCALE(LAYER_FORCE, 24576),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),

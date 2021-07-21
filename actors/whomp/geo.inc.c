@@ -2,11 +2,11 @@
 const GeoLayout whomp_geo[] = {
    GEO_CULLING_RADIUS(2000),
    GEO_OPEN_NODE(),
-      GEO_TRANSLATE_NODE(0x00, 0, 0, -50),
+      GEO_TRANSLATE_NODE(LAYER_FORCE, 0, 0, -50),
       GEO_OPEN_NODE(),
          GEO_SHADOW(0x01 + SHADOW_RECTANGLE_HARDCODED_OFFSET, 0xB4, 0),
          GEO_OPEN_NODE(),
-            GEO_SCALE(0x00, 16384),
+            GEO_SCALE(LAYER_FORCE, 16384),
             GEO_OPEN_NODE(),
                GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
                GEO_OPEN_NODE(),

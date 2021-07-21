@@ -138,7 +138,7 @@ const GeoLayout peach_geo_000254[] = {
 const GeoLayout peach_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_9_VERTS, 0x96, 100),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 16384),
+      GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
          GEO_ASM(10, geo_update_layer_transparency),
          GEO_SWITCH_CASE(2, geo_switch_anim_state),

@@ -2,7 +2,7 @@
 const GeoLayout unagi_geo[] = {
    GEO_CULLING_RADIUS(2000),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 49152),
+      GEO_SCALE(LAYER_FORCE, 49152),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -23,7 +23,7 @@ const GeoLayout unagi_geo[] = {
                            GEO_NODE_START(),
                            GEO_NODE_START(),
                            GEO_OPEN_NODE(),
-                              GEO_SCALE(0x00, 16384),
+                              GEO_SCALE(LAYER_FORCE, 16384),
                               GEO_OPEN_NODE(),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_NO_SILHOUETTE, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302B870),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_NO_SILHOUETTE_ALPHA, 2000, 0, 0, 0, 0, 0, star_seg3_dl_0302BA18),
@@ -41,7 +41,7 @@ const GeoLayout unagi_geo[] = {
 #ifdef HELD_TRANSPARENT_STAR
                            GEO_NODE_START(),
                            GEO_OPEN_NODE(),
-                              GEO_SCALE(0x00, 16384),
+                              GEO_SCALE(LAYER_FORCE, 16384),
                               GEO_OPEN_NODE(),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_TRANSPARENT, 2000, 0, 0, 0, 0, 0, transparent_star_seg3_dl_0302C620),
                               GEO_CLOSE_NODE(),

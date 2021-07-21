@@ -2,7 +2,7 @@
 const GeoLayout bully_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0xC8, 70),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 24576),
+      GEO_SCALE(LAYER_FORCE, 24576),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),
@@ -48,7 +48,7 @@ const GeoLayout bully_geo[] = {
 const GeoLayout bully_boss_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_4_VERTS, 0xC8, 210),
    GEO_OPEN_NODE(),
-      GEO_SCALE(0x00, 49152),
+      GEO_SCALE(LAYER_FORCE, 49152),
       GEO_OPEN_NODE(),
          GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),
          GEO_OPEN_NODE(),
