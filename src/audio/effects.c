@@ -448,9 +448,7 @@ s32 adsr_update(struct AdsrState *adsr) {
                     adsr->envIndex++;
                     break;
             }
-            if (adsr->state != ADSR_STATE_FADE) {
-                break;
-            }
+            if (adsr->state != ADSR_STATE_FADE) break;
             // fallthrough
 
         case ADSR_STATE_FADE:

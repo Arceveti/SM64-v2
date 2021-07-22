@@ -61,7 +61,7 @@ void falling_bowser_plat_act_fall(void) {
     } else {
         o->oGravity = -4.0f;
     }
-    if ((o->oTimer & 1) == 0 && o->oTimer < 14) {
+    if (!(o->oTimer & 1) && o->oTimer < 14) {
         angle = sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8);
         val = -(o->oTimer / 2) * 290 + 1740;
         vec3f_copy_2(pos, &o->oPosX);

@@ -314,9 +314,7 @@ f32 gd_vec3f_magnitude(struct GdVec3f *vec) {
  */
 s32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
-    if ((mag = SQ(vec->x) + SQ(vec->y) + SQ(vec->z)) == 0.0f) {
-        return FALSE;
-    }
+    if ((mag = SQ(vec->x) + SQ(vec->y) + SQ(vec->z)) == 0.0f) return FALSE;
 
     mag = gd_sqrt_f(mag);
     // gd_sqrt_f rounds near 0 numbers to 0, so verify again.

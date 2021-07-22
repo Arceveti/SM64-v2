@@ -15,7 +15,7 @@ void bhv_sushi_shark_loop(void) {
             spawn_object_with_scale(o, MODEL_WAVE_TRAIL, bhvObjectWaveTrail, 4.0f);
         }
     }
-    if ((o->oTimer & 0xF) == 0) {
+    if (!(o->oTimer & 0xF)) {
         cur_obj_play_sound_2(SOUND_OBJ_SUSHI_SHARK_WATER_SOUND);
     }
     o->oInteractStatus = INT_STATUS_NONE;

@@ -203,9 +203,7 @@ void *gd_request_mem(u32 size, u8 permanence) {
         curBlock = curBlock->next;
     }
 
-    if (foundBlock == NULL) {
-        return NULL;
-    }
+    if (foundBlock == NULL) return NULL;
 
     if (foundBlock->size > size) { /* split free block */
         newBlock->ptr = foundBlock->ptr;

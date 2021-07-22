@@ -253,11 +253,11 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
 
     // Caps vertical speed with a "terminal velocity".
     o->oVelY -= o->oGravity;
-    if (o->oVelY > 75.0f) {
-        o->oVelY = 75.0f;
+    if (o->oVelY > TERMINAL_GRAVITY_VELOCITY) {
+        o->oVelY = TERMINAL_GRAVITY_VELOCITY;
     }
-    if (o->oVelY < -75.0f) {
-        o->oVelY = -75.0f;
+    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) {
+        o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
     }
 
     o->oPosY += o->oVelY;
@@ -312,11 +312,11 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     o->oVelY -= netYAccel;
 
     // Caps vertical speed with a "terminal velocity".
-    if (o->oVelY > 75.0f) {
-        o->oVelY = 75.0f;
+    if (o->oVelY > TERMINAL_GRAVITY_VELOCITY) {
+        o->oVelY = TERMINAL_GRAVITY_VELOCITY;
     }
-    if (o->oVelY < -75.0f) {
-        o->oVelY = -75.0f;
+    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) {
+        o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
     }
 
     o->oPosY += o->oVelY;
@@ -604,10 +604,7 @@ void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
  * Controls whether certain objects should flicker/when to despawn.
  */
 s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
-    if (obj->oTimer < lifeSpan) {
-        return FALSE;
-    }
-
+    if (obj->oTimer < lifeSpan) return FALSE;
     if (obj->oTimer < lifeSpan + 40) {
         if (obj->oTimer % 2 != 0) {
             obj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;

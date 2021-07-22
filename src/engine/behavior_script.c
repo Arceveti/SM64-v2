@@ -52,7 +52,7 @@ u16 random_u16(void) {
     temp1 = ((temp1 & 0x00FF) << 1) ^ gRandomSeed16;
     temp2 = (temp1 >> 1) ^ 0xFF80;
 
-    if ((temp1 & 1) == 0) {
+    if (!(temp1 & 1)) {
         if (temp2 == 43605) {
             gRandomSeed16 = 0;
         } else {

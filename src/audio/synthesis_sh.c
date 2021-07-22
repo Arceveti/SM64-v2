@@ -670,9 +670,7 @@ skip:
                             break;
                     }
             }
-            if (noteSubEu->finished != FALSE) {
-                break;
-            }
+            if (noteSubEu->finished != FALSE) break;
         }
     }
     flags = 0;

@@ -51,9 +51,8 @@ void func_80182A08(struct ObjParticle *, struct GdVec3f *b);
 static void connect_vertices(struct ObjVertex *vtx1, struct ObjVertex *vtx2) {
     register struct ListNode *link;
 
-    if (vtx1 == vtx2) {
-        return;
-    }
+    if (vtx1 == vtx2) return;
+
     link = gGdSkinNet->unk1C0->firstMember;
     while (link != NULL) {
         // FIXME: types
@@ -275,12 +274,10 @@ void move_particle(struct ObjParticle *ptc) {
     struct GdVec3f sp40;
     struct GdVec3f sp34;
 
-    if (ptc->flags & 2) {
-        return;
-    }
-    if (!(ptc->flags & 8)) {
-        return;
-    }
+    if (ptc->flags & 2) return;
+
+    if (!(ptc->flags & 8)) return;
+
     if (ptc->unk60 == 3) {
         sp40.x = -gViewUpdateCamera->unkE8[2][0] *  50.0f;
         sp40.y = -gViewUpdateCamera->unkE8[2][1] *  50.0f;

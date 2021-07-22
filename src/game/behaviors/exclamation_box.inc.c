@@ -35,7 +35,7 @@ void bhv_rotating_exclamation_box_loop(void) {
     }
 }
 
-void exclamation_box_act_0(void) {
+void exclamation_box_act_init(void) {
     if (o->oBehParams2ndByte < 3) {
         o->oAnimState = o->oBehParams2ndByte;
         if ((save_file_get_flags() & sCapSaveFlags[o->oBehParams2ndByte])
@@ -50,7 +50,7 @@ void exclamation_box_act_0(void) {
     }
 }
 
-void exclamation_box_act_1(void) {
+void exclamation_box_act_outline(void) {
     cur_obj_become_intangible();
     if (o->oTimer == 0) {
         spawn_object(o, MODEL_EXCLAMATION_POINT, bhvRotatingExclamationMark);
@@ -63,7 +63,7 @@ void exclamation_box_act_1(void) {
     }
 }
 
-void exclamation_box_act_2(void) {
+void exclamation_box_act_active(void) {
     obj_set_hitbox(o, &sExclamationBoxHitbox);
     if (o->oTimer == 0) {
         cur_obj_unhide();
@@ -86,15 +86,15 @@ void exclamation_box_act_2(void) {
     load_object_collision_model();
 }
 
-void exclamation_box_act_3(void) {
+void exclamation_box_act_scaling(void) {
     cur_obj_move_using_fvel_and_gravity();
     if (o->oVelY < 0.0f) {
         o->oVelY = 0.0f;
         o->oGravity = 0.0f;
     }
-    o->oExclamationBoxVerticalScale = (sins(o->oExclamationBoxScaleAngle) + 1.0f) * 0.3f + 0.0f;
-    o->oExclamationBoxHorizontalScale = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 0.5f + 1.0f;
-    o->oGraphYOffset = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f;
+    o->oExclamationBoxVerticalScale   = ( sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.3f + 0.0f;
+    o->oExclamationBoxHorizontalScale = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.5f + 1.0f;
+    o->oGraphYOffset                  = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f;
     o->oExclamationBoxScaleAngle += 0x1000;
     o->header.gfx.scale[0] = o->oExclamationBoxHorizontalScale * 2.0f;
     o->header.gfx.scale[1] = o->oExclamationBoxVerticalScale * 2.0f;
@@ -123,7 +123,7 @@ void exclamation_box_spawn_contents(struct ExclamationBoxContents *contentsList,
     }
 }
 
-void exclamation_box_act_4(void) {
+void exclamation_box_act_explode(void) {
     exclamation_box_spawn_contents(sExclamationBoxContents, o->oBehParams2ndByte);
     spawn_mist_particles_variable(0, 0, 46.0f);
     spawn_triangle_break_particles(20, MODEL_CARTOON_STAR, 0.3f, o->oAnimState);
@@ -140,15 +140,15 @@ void exclamation_box_act_4(void) {
     }
 }
 
-void exclamation_box_act_5(void) {
+void exclamation_box_act_wait_for_respawn(void) {
     if (o->oTimer > 300) {
         o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
     }
 }
 
-void (*sExclamationBoxActions[])(void) = { exclamation_box_act_0, exclamation_box_act_1,
-                                           exclamation_box_act_2, exclamation_box_act_3,
-                                           exclamation_box_act_4, exclamation_box_act_5 };
+void (*sExclamationBoxActions[])(void) = { exclamation_box_act_init,    exclamation_box_act_outline,
+                                           exclamation_box_act_active,  exclamation_box_act_scaling,
+                                           exclamation_box_act_explode, exclamation_box_act_wait_for_respawn };
 
 void bhv_exclamation_box_loop(void) {
     cur_obj_scale(2.0f);

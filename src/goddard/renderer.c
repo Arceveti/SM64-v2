@@ -736,9 +736,7 @@ void *gd_malloc(u32 size, u8 perm) {
     size = ALIGN(size, 8);
     ptr = gd_request_mem(size, perm);
 
-    if (ptr == NULL) {
-        return NULL;
-    }
+    if (ptr == NULL) return NULL;
 
     sAllocMemory += size;
 

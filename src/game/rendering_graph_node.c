@@ -929,9 +929,7 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     struct GraphNode *geo;
     f32 hScreenEdge;
 
-    if (node->node.flags & GRAPH_RENDER_INVISIBLE) {
-        return FALSE;
-    }
+    if (node->node.flags & GRAPH_RENDER_INVISIBLE) return FALSE;
 
     geo = node->sharedChild;
 
@@ -1243,7 +1241,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         }
         gCurGraphNodeRoot = NULL;
         if (gShowDebugText) {
-#ifdef NEW_HUD
+#ifdef HUD_LEADING_ZEROES
             print_text_fmt_int(180, 24, "MEM %07d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
 #else

@@ -349,18 +349,18 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #endif
 
 #ifdef IMPROVED_MOVEMENT
-    if (nextPos[1] + m->marioObj->hitboxHeight > ceilHeight && floorHeight < ceilHeight) { // hitboxheight
+    if (nextPos[1] + m->marioObj->hitboxHeight > ceilHeight && floorHeight < ceilHeight) {
     // softlock fix
         s16 surfAngle;
         s32 underSteepSurf = FALSE;
         if (floor != NULL && ceil != NULL) {
             // steep floor
-            if (floor->normal.y < 0.9063078f) {
+            if (floor->normal.y < COS25) {
                 surfAngle = atan2s(m->floor->normal.z, floor->normal.x);
                 underSteepSurf = TRUE;
             }
             // steep ceiling
-            if (-0.9063078f < ceil->normal.y) {
+            if (-COS25 < ceil->normal.y) {
                 surfAngle = atan2s(ceil->normal.z, ceil->normal.x);
                 underSteepSurf = TRUE;
             }
@@ -411,9 +411,7 @@ s32 perform_ground_step(struct MarioState *m) {
         intendedPos[1] = m->pos[1];
 
         stepResult = perform_ground_quarter_step(m, intendedPos);
-        if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) {
-            break;
-        }
+        if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) break;
     }
 
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
@@ -459,11 +457,9 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     ledgePos[2] = nextPos[2] - wall->normal.z * 60.0f;
 #ifdef IMPROVED_MOVEMENT
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &ledgeFloor);
-    if (ledgeFloor == NULL || ledgeFloor->normal.y < 0.9063078f || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
+    if (ledgeFloor == NULL || ledgeFloor->normal.y < COS25 || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
     if (m->input & INPUT_NONZERO_ANALOG) {
-        if (intendedDYaw < -0x4000 || intendedDYaw > 0x4000) {
-            return FALSE;
-        }
+        if (intendedDYaw < -0x4000 || intendedDYaw > 0x4000) return FALSE;
     }
 #else
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], &ledgeFloor);
@@ -572,7 +568,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             m->vel[1] = 0.0f;
             return AIR_STEP_GRABBED_CEILING;
         }
-        if (-0.9063078f >= ceil->normal.y) {
+        if (-COS25 >= ceil->normal.y) {
             if (m->vel[1] > 0.0f) {
                 m->vel[1] = 0.0f;
             }
@@ -651,7 +647,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         if (m->wall->type == SURFACE_BURNING) {
             return AIR_STEP_HIT_LAVA_WALL;
         }
-#ifdef IMPROVED_MOVEMENT
+#ifdef WALL_SLIDE
     if ((wallDYaw < -0x5000 || wallDYaw > 0x5000) && m->vel[1] <= 0) {
 #else
     #ifdef WALLKICKS_46_DEGREES
@@ -679,9 +675,9 @@ void apply_twirl_gravity(struct MarioState *m) {
         heaviness = 1024.0f / m->angleVel[1];
     }
 #ifdef Z_TWIRL
-    terminalVelocity = -75.0f * heaviness * Zmodifier;
+    terminalVelocity = -TERMINAL_GRAVITY_VELOCITY * heaviness * Zmodifier;
 #else
-    terminalVelocity = -75.0f * heaviness;
+    terminalVelocity = -TERMINAL_GRAVITY_VELOCITY * heaviness;
 #endif
 
 #ifdef Z_TWIRL
@@ -695,14 +691,8 @@ void apply_twirl_gravity(struct MarioState *m) {
 }
 
 u32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
-    if (!(m->flags & MARIO_JUMPING)) {
-        return FALSE;
-    }
-
-    if (m->action & (ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE)) {
-        return FALSE;
-    }
-
+    if (!(m->flags & MARIO_JUMPING)) return FALSE;
+    if (m->action & (ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE)) return FALSE;
     if (!(m->input & INPUT_A_DOWN) && m->vel[1] > 20.0f) {
         return (m->action & ACT_FLAG_CONTROL_JUMP_HEIGHT) != 0;
     }
@@ -715,20 +705,20 @@ void apply_gravity(struct MarioState *m) {
         apply_twirl_gravity(m);
     } else if (m->action == ACT_SHOT_FROM_CANNON) {
         m->vel[1] -= 1.0f;
-        if (m->vel[1] < -75.0f) {
-            m->vel[1] = -75.0f;
+        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) {
+            m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;
         }
     } else if (m->action == ACT_LONG_JUMP || m->action == ACT_SLIDE_KICK
                || m->action == ACT_BBH_ENTER_SPIN) {
         m->vel[1] -= 2.0f;
-        if (m->vel[1] < -75.0f) {
-            m->vel[1] = -75.0f;
+        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) {
+            m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;
         }
 #ifdef WALL_SLIDE
     } else if (m->action == ACT_WALL_SLIDE) {
         m->vel[1] -= 3.2f;
-        if (m->vel[1] < -32.0f) {
-            m->vel[1] = -32.0f;
+        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY*0.5f) {
+            m->vel[1] = -TERMINAL_GRAVITY_VELOCITY*0.5f;
         }
 #endif
     } else if (m->action == ACT_LAVA_BOOST || m->action == ACT_FALL_AFTER_STAR_GRAB) {
@@ -738,8 +728,8 @@ void apply_gravity(struct MarioState *m) {
         }
     } else if (m->action == ACT_GETTING_BLOWN) {
         m->vel[1] -= m->unkC4;
-        if (m->vel[1] < -75.0f) {
-            m->vel[1] = -75.0f;
+        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) {
+            m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;
         }
     } else if (should_strengthen_gravity_for_jump_ascent(m)) {
         m->vel[1] /= 4.0f;
@@ -759,8 +749,8 @@ void apply_gravity(struct MarioState *m) {
         }
     } else {
         m->vel[1] -= 4.0f;
-        if (m->vel[1] < -75.0f) {
-            m->vel[1] = -75.0f;
+        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) {
+            m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;
         }
     }
 }
@@ -815,11 +805,10 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
             stepResult = quarterStepResult;
         }
 
-        if (quarterStepResult == AIR_STEP_LANDED || quarterStepResult == AIR_STEP_GRABBED_LEDGE
-            || quarterStepResult == AIR_STEP_GRABBED_CEILING
-            || quarterStepResult == AIR_STEP_HIT_LAVA_WALL) {
-            break;
-        }
+        if (quarterStepResult == AIR_STEP_LANDED
+         || quarterStepResult == AIR_STEP_GRABBED_LEDGE
+         || quarterStepResult == AIR_STEP_GRABBED_CEILING
+         || quarterStepResult == AIR_STEP_HIT_LAVA_WALL) break;
 #ifdef WALL_QUICKSAND
         if (quarterStepResult == AIR_STEP_HIT_WALL && m->wall && m->wall->type == SURFACE_INSTANT_QUICKSAND) {
             stepResult = AIR_STEP_DEATH;

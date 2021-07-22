@@ -183,13 +183,8 @@ static u16 calc_checksum(u8 *data, s32 size) {
  */
 static s32 verify_save_block_signature(void *buffer, s32 size, u16 magic) {
     struct SaveBlockSignature *sig = (struct SaveBlockSignature *) ((size - 4) + (u8 *) buffer);
-
-    if (sig->magic != magic) {
-        return FALSE;
-    }
-    if (sig->chksum != calc_checksum(buffer, size)) {
-        return FALSE;
-    }
+    if (sig->magic != magic) return FALSE;
+    if (sig->chksum != calc_checksum(buffer, size)) return FALSE;
     return TRUE;
 }
 

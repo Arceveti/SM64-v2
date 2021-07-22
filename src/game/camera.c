@@ -2423,18 +2423,12 @@ s32 exit_c_up(struct Camera *c) {
 
                         // Check if we're zooming out into a floor or ceiling
                         ceilHeight = find_ceil(curPos[0], curPos[1] - 150.0f, curPos[2], &surface) + -10.0f;
-                        if (surface != NULL && ceilHeight < curPos[1]) {
-                            break;
-                        }
+                        if (surface != NULL && ceilHeight < curPos[1]) break;
                         floorHeight = find_floor(curPos[0], curPos[1] + 150.0f, curPos[2], &surface) + 10.0f;
-                        if (surface != NULL && floorHeight > curPos[1]) {
-                            break;
-                        }
+                        if (surface != NULL && floorHeight > curPos[1]) break;
 
                         // Stop checking this direction if there is a wall blocking the way
-                        if (f32_find_wall_collision(&curPos[0], &curPos[1], &curPos[2], 20.0f, 50.0f) == 1) {
-                            break;
-                        }
+                        if (f32_find_wall_collision(&curPos[0], &curPos[1], &curPos[2], 20.0f, 50.0f) == 1) break;
                     }
 
                     // If there was no collision found all the way to the max distance, it's an opening
@@ -3399,9 +3393,9 @@ s32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *s
         segment = 0;
         u = 0;
     }
-    if (spline[segment].index == -1 || spline[segment + 1].index == -1 || spline[segment + 2].index == -1) {
-        return TRUE;
-    }
+    if (spline[segment    ].index == -1
+     || spline[segment + 1].index == -1
+     || spline[segment + 2].index == -1) return TRUE;
 
     for (i = 0; i < 4; i++) {
         controlPoints[i][0] = spline[segment + i].point[0];
@@ -4228,12 +4222,9 @@ s32 is_pos_in_bounds(Vec3f pos, Vec3f center, Vec3f bounds, s16 boundsYaw) {
 
     rotate_in_xz(rel, rel, boundsYaw);
 
-    if (-bounds[0] < rel[0] && rel[0] < bounds[0] &&
-        -bounds[1] < rel[1] && rel[1] < bounds[1] &&
-        -bounds[2] < rel[2] && rel[2] < bounds[2]) {
-        return TRUE;
-    }
-    return FALSE;
+    return (-bounds[0] < rel[0] && rel[0] < bounds[0] &&
+            -bounds[1] < rel[1] && rel[1] < bounds[1] &&
+            -bounds[2] < rel[2] && rel[2] < bounds[2]);
 }
 
 s16 calculate_pitch(Vec3f from, Vec3f to) {

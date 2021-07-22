@@ -46,6 +46,23 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
 
         if (offset < -radius || offset > radius)  continue;
 
+        if (surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) continue;
+        // Determine if checking for the camera or not.
+        if (gCheckingSurfaceCollisionsForCamera) {
+            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
+        } else {
+            // Ignore camera only surfaces.
+            if (surf->type == SURFACE_CAMERA_BOUNDARY) continue;
+
+            // If an object can pass through a vanish cap wall, pass through.
+            if (surf->type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
+                // If an object can pass through a vanish cap wall, pass through.
+                if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
+                // If Mario has a vanish cap, pass through the vanish cap wall.
+                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
+            }
+        }
+
         px = x;
         pz = z;
 
@@ -77,26 +94,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
                 if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) < 0.0f) continue;
                 if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) < 0.0f) continue;
                 if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) < 0.0f) continue;
-            }
-        }
-
-        // Determine if checking for the camera or not.
-        if (gCheckingSurfaceCollisionsForCamera) {
-            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) {
-                continue;
-            }
-        } else {
-            // Ignore camera only surfaces.
-            if (surf->type == SURFACE_CAMERA_BOUNDARY || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) {
-                continue;
-            }
-
-            // If an object can pass through a vanish cap wall, pass through.
-            if (surf->type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
-                // If an object can pass through a vanish cap wall, pass through.
-                if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
-                // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
 

@@ -564,9 +564,7 @@ static void seq_player_fade_to_zero_volume(s32 player, FadeT fadeDuration) {
 static void func_8031D690(s32 player, FadeT fadeInTime) {
     struct SequencePlayer *seqPlayer = &gSequencePlayers[player];
 
-    if (fadeInTime == 0 || seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) {
-        return;
-    }
+    if (fadeInTime == 0 || seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) return;
 
     seqPlayer->state = SEQUENCE_PLAYER_STATE_2;
     seqPlayer->fadeRemainingFrames = fadeInTime;
@@ -583,13 +581,9 @@ static void seq_player_fade_to_percentage_of_volume(s32 player, FadeT fadeDurati
     f32 targetVolume;
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    if (seqPlayer->state == 2) {
-        return;
-    }
+    if (seqPlayer->state == 2) return;
 #else
-    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) {
-        return;
-    }
+    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) return;
 #endif
 
     targetVolume = (FLOAT_CAST(percentage) / EU_FLOAT(100.0)) * seqPlayer->fadeVolume;
@@ -617,13 +611,9 @@ static void seq_player_fade_to_normal_volume(s32 player, FadeT fadeDuration) {
     struct SequencePlayer *seqPlayer = &gSequencePlayers[player];
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    if (seqPlayer->state == 2) {
-        return;
-    }
+    if (seqPlayer->state == 2) return;
 #else
-    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) {
-        return;
-    }
+    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) return;
 #endif
 
     seqPlayer->fadeRemainingFrames = 0;
@@ -648,9 +638,7 @@ static void seq_player_fade_to_target_volume(s32 player, FadeT fadeDuration, u8 
     struct SequencePlayer *seqPlayer = &gSequencePlayers[player];
 
 #if defined(VERSION_JP) || defined(VERSION_US)
-    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) {
-        return;
-    }
+    if (seqPlayer->state == SEQUENCE_PLAYER_STATE_FADE_OUT) return;
 #endif
 
     seqPlayer->fadeRemainingFrames = 0;
@@ -824,9 +812,7 @@ static void process_sound_request(u32 bits, f32 *pos) {
     bank = (bits & SOUNDARGS_MASK_BANK) >> SOUNDARGS_SHIFT_BANK;
     soundId = (bits & SOUNDARGS_MASK_SOUNDID) >> SOUNDARGS_SHIFT_SOUNDID;
 
-    if (soundId >= sNumSoundsPerBank[bank] || sSoundBankDisabled[bank]) {
-        return;
-    }
+    if (soundId >= sNumSoundsPerBank[bank] || sSoundBankDisabled[bank]) return;
 
     soundIndex = sSoundBanks[bank][0].next;
     while (soundIndex != 0xff && soundIndex != 0) {
@@ -1337,9 +1323,7 @@ static void update_game_sound(void) {
     process_all_sound_requests();
     process_level_music_dynamics();
 
-    if (gSequencePlayers[SEQ_PLAYER_SFX].channels[0] == &gSequenceChannelNone) {
-        return;
-    }
+    if (gSequencePlayers[SEQ_PLAYER_SFX].channels[0] == &gSequenceChannelNone) return;
 
     for (bank = 0; bank < SOUND_BANK_COUNT; bank++) {
         select_current_sounds(bank);
@@ -1857,9 +1841,7 @@ void process_level_music_dynamics(void) {
         sBackgroundMusicForDynamics = sCurrentBackgroundMusicSeqId;
     }
 
-    if (sBackgroundMusicForDynamics != sLevelDynamics[gCurrLevelNum][0]) {
-        return;
-    }
+    if (sBackgroundMusicForDynamics != sLevelDynamics[gCurrLevelNum][0]) return;
 
     conditionBits = sLevelDynamics[gCurrLevelNum][1] & 0xff00;
     musicDynIndex = (u8) sLevelDynamics[gCurrLevelNum][1] & 0xff;
@@ -2362,9 +2344,7 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
     }
 
     // Abort if the queue is already full.
-    if (sBackgroundMusicQueueSize == MAX_BACKGROUND_MUSIC_QUEUE_SIZE) {
-        return;
-    }
+    if (sBackgroundMusicQueueSize == MAX_BACKGROUND_MUSIC_QUEUE_SIZE) return;
 
     // If already in the queue, abort, after first restarting the sequence if
     // it is first, and handling disabled music somehow.
@@ -2414,9 +2394,7 @@ void stop_background_music(u16 seqId) {
     u8 foundIndex;
     u8 i;
 
-    if (sBackgroundMusicQueueSize == 0) {
-        return;
-    }
+    if (sBackgroundMusicQueueSize == 0) return;
 
     // If sequence is not found, remove an empty queue item (the next empty
     // queue slot).
@@ -2516,9 +2494,7 @@ void play_secondary_music(u8 seqId, u8 bgMusicVolume, u8 volume, u16 fadeTimer) 
     UNUSED u32 dummy;
 
     sUnused80332118 = 0;
-    if (sCurrentBackgroundMusicSeqId == 0xff || sCurrentBackgroundMusicSeqId == SEQ_MENU_TITLE_SCREEN) {
-        return;
-    }
+    if (sCurrentBackgroundMusicSeqId == 0xff || sCurrentBackgroundMusicSeqId == SEQ_MENU_TITLE_SCREEN) return;
 
     if (sBackgroundMusicTargetVolume == TARGET_VOLUME_UNSET) {
         sBackgroundMusicTargetVolume = bgMusicVolume + TARGET_VOLUME_IS_PRESENT_FLAG;
@@ -2556,9 +2532,7 @@ void func_80321080(u16 fadeTimer) {
 void func_803210D4(u16 fadeDuration) {
     u8 i;
 
-    if (sHasStartedFadeOut) {
-        return;
-    }
+    if (sHasStartedFadeOut) return;
 
     if (gSequencePlayers[SEQ_PLAYER_LEVEL].enabled) {
 #if defined(VERSION_EU) || defined(VERSION_SH)

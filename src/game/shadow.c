@@ -624,15 +624,11 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
             return NULL;
             break;
     }
-    if (ret != 0) {
-        return NULL;
-    }
+    if (ret != 0) return NULL;
 
     verts = alloc_display_list(9 * sizeof(Vtx));
     displayList = alloc_display_list(5 * sizeof(Gfx));
-    if (verts == NULL || displayList == NULL) {
-        return NULL;
-    }
+    if (verts == NULL || displayList == NULL) return NULL;
 
     correct_lava_shadow_height(&shadow);
 
@@ -652,9 +648,7 @@ Gfx *create_shadow_circle_9_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
     struct Shadow shadow;
     s32 i;
 
-    if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) {
-        return NULL;
-    }
+    if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) return NULL;
 
     verts = alloc_display_list(9 * sizeof(Vtx));
     displayList = alloc_display_list(5 * sizeof(Gfx));
@@ -678,16 +672,12 @@ Gfx *create_shadow_circle_4_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
     struct Shadow shadow;
     s32 i;
 
-    if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) {
-        return NULL;
-    }
+    if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) return NULL;
 
     verts = alloc_display_list(4 * sizeof(Vtx));
     displayList = alloc_display_list(5 * sizeof(Gfx));
 
-    if (verts == NULL || displayList == NULL) {
-        return 0;
-    }
+    if (verts == NULL || displayList == NULL) return 0;
 
     for (i = 0; i < 4; i++) {
         make_shadow_vertex(verts, i, shadow, SHADOW_WITH_4_VERTS);
@@ -740,20 +730,18 @@ Gfx *create_shadow_rectangle(f32 halfWidth, f32 halfLength, f32 relY, u8 solidit
     Gfx *displayList = alloc_display_list(5 * sizeof(Gfx));
     f32 frontLeftX, frontLeftZ, frontRightX, frontRightZ, backLeftX, backLeftZ, backRightX, backRightZ;
 
-    if (verts == NULL || displayList == NULL) {
-        return NULL;
-    }
+    if (verts == NULL || displayList == NULL) return NULL;
 
     // Rotate the shadow based on the parent object's face angle.
-    rotate_rectangle(&frontLeftZ, &frontLeftX, -halfLength, -halfWidth);
-    rotate_rectangle(&frontRightZ, &frontRightX, -halfLength, halfWidth);
-    rotate_rectangle(&backLeftZ, &backLeftX, halfLength, -halfWidth);
-    rotate_rectangle(&backRightZ, &backRightX, halfLength, halfWidth);
+    rotate_rectangle(&frontLeftZ,  &frontLeftX,  -halfLength, -halfWidth);
+    rotate_rectangle(&frontRightZ, &frontRightX, -halfLength,  halfWidth);
+    rotate_rectangle(&backLeftZ,   &backLeftX,    halfLength, -halfWidth);
+    rotate_rectangle(&backRightZ,  &backRightX,   halfLength,  halfWidth);
 
-    make_shadow_vertex_at_xyz(verts, 0, frontLeftX, relY, frontLeftZ, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 0,  frontLeftX, relY,  frontLeftZ, solidity, 1);
     make_shadow_vertex_at_xyz(verts, 1, frontRightX, relY, frontRightZ, solidity, 1);
-    make_shadow_vertex_at_xyz(verts, 2, backLeftX, relY, backLeftZ, solidity, 1);
-    make_shadow_vertex_at_xyz(verts, 3, backRightX, relY, backRightZ, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 2,   backLeftX, relY,   backLeftZ, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 3,  backRightX, relY,  backRightZ, solidity, 1);
 
     add_shadow_to_display_list(displayList, verts, SHADOW_WITH_4_VERTS, SHADOW_SHAPE_SQUARE);
     return displayList;
@@ -790,9 +778,7 @@ Gfx *create_shadow_square(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     f32 distFromShadow;
     f32 shadowRadius;
 
-    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity) != 0) {
-        return NULL;
-    }
+    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity) != 0) return NULL;
 
     distFromShadow = yPos - shadowHeight;
     switch (shadowType) {
@@ -824,9 +810,7 @@ Gfx *create_shadow_hardcoded_rectangle(f32 xPos, f32 yPos, f32 zPos, UNUSED s16 
     f32 halfLength;
     s8 idx = shadowType - SHADOW_RECTANGLE_HARDCODED_OFFSET;
 
-    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity) != 0) {
-        return NULL;
-    }
+    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity) != 0) return NULL;
 
     distFromShadow = yPos - shadowHeight;
     /**

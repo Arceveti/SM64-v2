@@ -67,9 +67,9 @@
 // Remove course specific camera processing
 #define CAMERA_FIX
 // Change the movement speed when hanging from a ceiling (the vanilla value is 4.f)
-#define HANGING_SPEED 12.f
+#define HANGING_SPEED 12.0f
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
-#define TIGHTER_HANGING_CONTROLS
+// #define TIGHTER_HANGING_CONTROLS
 // Disables fall damage
 #define NO_FALL_DAMAGE
 // Disables the scream that mario makes when falling off a great height (this is separate from actual fall damage)
@@ -164,12 +164,14 @@
 
 // -- The following require ENABLE_SCREEN_TINT_EFFECTS -- 
 #ifdef ENABLE_SCREEN_TINT_EFFECTS
+
 // - Red flash when damaged
 // - Yellow flashed when shocked
 #define DAMAGE_SCREEN_TINT
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
 #define ENVIRONMENT_SCREEN_TINT
+
 #endif
 
 // -- Vanilla Level Changes --
@@ -183,7 +185,7 @@
 #define SSL_PILLARS_CUTSCENE
 // Re-implements cracked ice in SL (SunlitSpace542, Arceveti)
 #define DEEP_FREEZE_CRACKED_ICE
-// Adds a moving texture to the warp behind the Bowser's Sub door in DDD
+// Adds a visual moving water current to the warp behind the Bowser's Sub door in DDD (Arceveti)
 #define DDD_WARP_CURRENT_TEXTURE
 
 // -- Bugfixes --
@@ -213,6 +215,8 @@
 #define WALL_QUICKSAND
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 #define COMPLETE_EN_US_SEGMENT2
+// Terminal velovity for gravity (Arceveti)
+#define TERMINAL_GRAVITY_VELOCITY 75.0f
 
 // -- Gameplay QoL --
 
@@ -228,17 +232,23 @@
 #define MUSHROOMS_HEAL
 // The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
 #define CONTROLLABLE_PLATFORM_SPEED
-// HUD with leadding zeroes, & Red Coin & Secrets counters (Arceveti)
+// Rearranged HUD with Red Coin & Secrets counters (Arceveti)
 #define NEW_HUD
+// Adds leading zeroes to the counters on the HUD
+#define HUD_LEADING_ZEROES
+// Prevents falling when grabbing a star high enough above the floor (Arceveti)
+#define AIR_STAR_GRAB
 
 // -- Movement --
 
+// Hold A when bouncing on an enemy to go higher (Arceveti)
+#define BOUNCE_BOOST
+// Hold Z while twirling to descend faster (Arceveti)
+#define Z_TWIRL
+// Enables the shindou pole fix and allows Mario to swing around poles when grabbing them (Arceveti)
+#define POLE_SWING
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
-// Press A when jumping on an enemy to jump higher (Arceveti)
-#define BOUNCE_BOOST
-// Press Z while twirling to descend faster (Arceveti)
-#define Z_TWIRL
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
 // (Arceveti)
@@ -248,8 +258,15 @@
 // (Arceveti)
 #define IMPROVED_MOVEMENT
 
-// -- The following require IMPROVED_MOVEMENT -- 
+// -- The following require IMPROVED_MOVEMENT --
 #ifdef IMPROVED_MOVEMENT
+
+// Lets Mario transition to more other actions (Arceveti)
+#define ACTION_CANCELS
+// Fixes turning around on the ground (Arceveti)
+#define GROUND_TURN_FIX
+// Allows for turning in midair (Arceveti)
+#define AIR_TURN
 // Unique wall slide which takes horizontal momentum into account (Arceveti)
 #define WALL_SLIDE
 // Ground pound dive similar to SMO, can also be used to cancel
@@ -264,6 +281,11 @@
 // and also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME 8
+// Split water steps into quarter frames just like ground and air steps (Arceveti)
+#define WATER_QSTEPS
+// Improved hanging which doesn't require holding down the A button (Arceveti)
+#define EASIER_HANGING
+
 #endif
 
 // -- Misc --

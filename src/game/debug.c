@@ -243,7 +243,7 @@ void update_debug_dpadmask(void) {
 
 void debug_unknown_level_select_check(void) {
     if (!sDebugLvSelectCheckFlag) {
-        sDebugLvSelectCheckFlag++; // again, just do = TRUE...
+        sDebugLvSelectCheckFlag = TRUE;
 
         if (!gDebugLevelSelect) {
             gDebugInfoFlags = DEBUG_INFO_NOFLAGS;

@@ -69,9 +69,7 @@ void format_integer(s32 n, s32 base, char *dest, s32 *totalLength, u8 width, s8 
         while (TRUE) {
             powBase = int_pow(base, numDigits);
 
-            if (powBase > (u32) n) {
-                break;
-            }
+            if (powBase > (u32) n) break;
 
             numDigits++;
         }
@@ -148,9 +146,7 @@ void parse_width_field(const char *str, s32 *srcIndex, u8 *width, s8 *zeroPad) {
     }
 
     // No digits
-    if (digitsLen == 0) {
-        return;
-    }
+    if (digitsLen == 0) return;
 
     // Sum the digits to calculate the total width.
     for (i = 0; i < digitsLen - 1; i++) {
@@ -177,9 +173,7 @@ void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n) {
 
     // Don't continue if there is no memory to do so.
     if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
-                                                        sizeof(struct TextLabel))) == NULL) {
-        return;
-    }
+                                                        sizeof(struct TextLabel))) == NULL) return;
 
     sTextLabels[sTextLabelsCount]->x = x;
     sTextLabels[sTextLabelsCount]->y = y;
@@ -192,27 +186,22 @@ void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n) {
 
             parse_width_field(str, &srcIndex, &width, &zeroPad);
 
-            if (str[srcIndex] != 'b' && str[srcIndex] != 't' && str[srcIndex] != 'q' && str[srcIndex] != 'o' && str[srcIndex] != 'd' && str[srcIndex] != 'x') {
-                break;
-            }
-            if (str[srcIndex] == 'b') {
-                base = 2;
-            }
-            if (str[srcIndex] == 't') {
-                base = 3;
-            }
-            if (str[srcIndex] == 'q') {
-                base = 4;
-            }
-            if (str[srcIndex] == 'o') {
-                base = 2;
-            }
-            if (str[srcIndex] == 'd') {
-                base = 10;
-            }
-            if (str[srcIndex] == 'x') {
-                base = 16;
-            }
+            if (str[srcIndex] != 'b'
+             && str[srcIndex] != 't'
+             && str[srcIndex] != 'q'
+             && str[srcIndex] != 'h'
+             && str[srcIndex] != 'o'
+             && str[srcIndex] != 'd'
+             && str[srcIndex] != 'w'
+             && str[srcIndex] != 'x') break;
+            if (str[srcIndex] == 'b') base = 2;
+            if (str[srcIndex] == 't') base = 3;
+            if (str[srcIndex] == 'q') base = 4;
+            if (str[srcIndex] == 'h') base = 6;
+            if (str[srcIndex] == 'o') base = 8;
+            if (str[srcIndex] == 'd') base = 10;
+            if (str[srcIndex] == 'w') base = 12;
+            if (str[srcIndex] == 'x') base = 16;
 
             srcIndex++;
 
@@ -240,9 +229,7 @@ void print_text(s32 x, s32 y, const char *str) {
 
     // Don't continue if there is no memory to do so.
     if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
-                                                        sizeof(struct TextLabel))) == NULL) {
-        return;
-    }
+                                                        sizeof(struct TextLabel))) == NULL) return;
 
     sTextLabels[sTextLabelsCount]->x = x;
     sTextLabels[sTextLabelsCount]->y = y;
@@ -271,9 +258,7 @@ void print_text_centered(s32 x, s32 y, const char *str) {
 
     // Don't continue if there is no memory to do so.
     if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
-                                                        sizeof(struct TextLabel))) == NULL) {
-        return;
-    }
+                                                        sizeof(struct TextLabel))) == NULL) return;
 
     c = str[srcIndex];
 
@@ -429,9 +414,7 @@ void render_text_labels(void) {
     s8 glyphIndex;
     Mtx *mtx;
 
-    if (sTextLabelsCount == 0) {
-        return;
-    }
+    if (sTextLabelsCount == 0) return;
 
     mtx = alloc_display_list(sizeof(*mtx));
 

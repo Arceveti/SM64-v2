@@ -39,6 +39,17 @@
 #define SET_HIGH_S16_OF_32(var, x) ((((s16 *)&(var))[0]) = (x))
 #endif
 
+// Common cos values, used for slope normals
+#define COS1    0.9998477f
+#define COS5    0.9961947f
+#define COS10   0.9848077f
+#define COS15   0.9659258f
+#define COS20   0.9396926f
+#define COS25   0.9063078f  // ledge grabs
+#define COS30   0.8660254f
+#define COS38   0.7880108f
+#define COS80   0.17364818f // braking action
+
 // Debug Info Flags
 #define DEBUG_INFO_NOFLAGS      (0 << 0)
 #define DEBUG_INFO_FLAG_DPRINT  (1 << 0)

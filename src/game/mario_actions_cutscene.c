@@ -425,7 +425,7 @@ s32 act_disappeared(struct MarioState *m) {
     m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     if (m->actionArg) {
         m->actionArg--;
-        if ((m->actionArg & 0xFFFF) == 0) {
+        if (!(m->actionArg & 0xFFFF)) {
             level_trigger_warp(m, m->actionArg >> 16);
         }
     }
@@ -571,9 +571,7 @@ s32 act_debug_free_move(struct MarioState *m) {
 
     floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], pos[1], pos[2], &ceil);
-    if (floor == NULL) {
-        return FALSE;
-    }
+    if (floor == NULL) return FALSE;
     if (ceilHeight - floorHeight >= 160.0f) {
         if (floor != NULL) {
             if (pos[1] < floorHeight) {
@@ -618,7 +616,7 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
                 break;
 
             case 80:
-                if ((m->actionArg & 1) == 0) {
+                if (!(m->actionArg & 1)) {
                     level_trigger_warp(m, WARP_OP_STAR_EXIT);
                 } else {
                     enable_time_stop();
@@ -1563,12 +1561,12 @@ s32 act_squished(struct MarioState *m) {
     if ((m->floor != NULL && m->ceil != NULL) && (m->actionArg > 8 || m->floor->type == SURFACE_BURNING || m->ceil->type == SURFACE_BURNING)) {
 
         // steep floor
-            if (m->floor->normal.y < 0.9063078f) {
+            if (m->floor->normal.y < COS25) {
             surfAngle = atan2s(m->floor->normal.z, m->floor->normal.x);
             underSteepSurf = TRUE;
         }
         // steep ceiling
-            if (-0.9063078f < m->ceil->normal.y) {
+            if (-COS25 < m->ceil->normal.y) {
             surfAngle = atan2s(m->ceil->normal.z, m->ceil->normal.x);
             underSteepSurf = TRUE;
         }
@@ -2693,9 +2691,7 @@ static s32 check_for_instant_quicksand(struct MarioState *m) {
 s32 mario_execute_cutscene_action(struct MarioState *m) {
     s32 cancel;
 
-    if (check_for_instant_quicksand(m)) {
-        return TRUE;
-    }
+    if (check_for_instant_quicksand(m)) return TRUE;
 
     /* clang-format off */
     switch (m->action) {

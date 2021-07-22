@@ -263,9 +263,7 @@ static struct DynObjInfo *get_dynobj_info(DynObjName name) {
     char buf[0x100];
     s32 i;
 
-    if (sLoadedDynObjs == 0) {
-        return NULL;
-    }
+    if (sLoadedDynObjs == 0) return NULL;
 
     if (sUseIntegerNames) {
         sprintf(buf, "N%d", DynNameAsInt(name));
@@ -500,9 +498,7 @@ void d_attach_to(s32 flag, struct GdObj *obj) {
             gd_exit();
     }
 
-    if (group_contains_obj(attgrp, sDynListCurObj)) {
-        return;
-    }
+    if (group_contains_obj(attgrp, sDynListCurObj)) return;
 
     addto_group(attgrp, sDynListCurObj);
 
@@ -552,9 +548,8 @@ void d_attach_to(s32 flag, struct GdObj *obj) {
 void d_attachto_dynid(s32 flag, DynObjName name) {
     struct DynObjInfo *info;
 
-    if (name == NULL) {
-        return;
-    }
+    if (name == NULL) return;
+
     if (sDynListCurObj == NULL) {
         gd_exit();
     }
@@ -572,9 +567,7 @@ void d_attachto_dynid(s32 flag, DynObjName name) {
  * Helper function to copy bytes. Where's memcpy when you need it?
  */
 void copy_bytes(u8 *src, u8 *dst, s32 num) {
-    if (num == 0) {
-        return;
-    }
+    if (num == 0) return;
     while (num--) {
         *dst++ = *src++;
     }
@@ -983,9 +976,7 @@ void d_set_shapeptrptr(struct ObjShape **shpPtrptr) {
  */
 void d_set_shapeptr(DynObjName name) {
     struct DynObjInfo *info;
-    if (name == NULL) {
-        return;
-    }
+    if (name == NULL) return;
 
     info = get_dynobj_info(name);
     if (info == NULL) {

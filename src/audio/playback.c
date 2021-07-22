@@ -388,9 +388,7 @@ void process_notes(void) {
         playbackState = (struct NotePlaybackState *) &note->priority;
         if (note->parentLayer != NO_LAYER) {
 #ifndef NO_SEGMENTED_MEMORY
-            if ((uintptr_t) playbackState->parentLayer < 0x7fffffffU) {
-                continue;
-            }
+            if ((uintptr_t) playbackState->parentLayer < 0x7fffffffU) continue;
 #endif
 #ifdef VERSION_SH
             if (note != playbackState->parentLayer->note && playbackState->unkSH34 == 0) {
@@ -664,9 +662,7 @@ struct Drum *get_drum(s32 bankId, s32 drumId) {
     }
 
 #ifndef NO_SEGMENTED_MEMORY
-    if ((uintptr_t) gCtlEntries[bankId].drums < 0x80000000U) {
-        return NULL;
-    }
+    if ((uintptr_t) gCtlEntries[bankId].drums < 0x80000000U) return NULL;
 #endif
 
     drum = gCtlEntries[bankId].drums[drumId];
@@ -681,17 +677,13 @@ void seq_channel_layer_decay_release_internal(struct SequenceChannelLayer *seqLa
     struct Note *note;
     struct NoteAttributes *attributes;
 
-    if (seqLayer == NO_LAYER) {
-        return;
-    }
+    if (seqLayer == NO_LAYER) return;
 
 #ifdef VERSION_SH
     seqLayer->status = SOUND_LOAD_STATUS_NOT_LOADED;
 #endif
 
-    if (seqLayer->note == NULL) {
-        return;
-    }
+    if (seqLayer->note == NULL) return;
 
     note = seqLayer->note;
     attributes = &note->attributes;
@@ -864,9 +856,7 @@ void build_synthetic_wave(struct Note *note, struct SequenceChannelLayer *seqLay
         stepSize = 8;
     }
 
-    if (note->sampleCount == origSampleCount && seqLayer->seqChannel->instOrWave == note->instOrWave) {
-        return;
-    }
+    if (note->sampleCount == origSampleCount && seqLayer->seqChannel->instOrWave == note->instOrWave) return;
 
     // Load wave sample
     note->instOrWave = (u8) seqLayer->seqChannel->instOrWave;
@@ -980,9 +970,7 @@ void note_pool_clear(struct NotePool *pool) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
         for (;;) {
             cur = source->next;
-            if (cur == source) {
-                break;
-            }
+            if (cur == source) break;
             if (cur == NULL) {
                 eu_stubbed_printf_0("Audio: C-Alloc : Dealloc voice is NULL\n");
                 break;
@@ -994,9 +982,7 @@ void note_pool_clear(struct NotePool *pool) {
         j = 0;
         do {
             cur = source->next;
-            if (cur == source) {
-                break;
-            }
+            if (cur == source) break;
             audio_list_remove(cur);
             audio_list_push_back(dest, cur);
             j++;
@@ -1044,9 +1030,7 @@ void note_pool_fill(struct NotePool *pool, s32 count) {
 
         while (j < count) {
             note = audio_list_pop_back(source);
-            if (note == NULL) {
-                break;
-            }
+            if (note == NULL) break;
             audio_list_push_back(dest, &note->listItem);
             j++;
         }
@@ -1082,9 +1066,7 @@ struct Note *pop_node_with_lower_prio(struct AudioListItem *list, s32 limit) {
     struct AudioListItem *cur = list->next;
     struct AudioListItem *best;
 
-    if (cur == list) {
-        return NULL;
-    }
+    if (cur == list) return NULL;
 
     for (best = cur; cur != list; cur = cur->next) {
         if (((struct Note *) best->u.value)->priority >= ((struct Note *) cur->u.value)->priority) {
@@ -1093,17 +1075,11 @@ struct Note *pop_node_with_lower_prio(struct AudioListItem *list, s32 limit) {
     }
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    if (best == NULL) {
-        return NULL;
-    }
+    if (best == NULL) return NULL;
 
-    if (limit <= ((struct Note *) best->u.value)->priority) {
-        return NULL;
-    }
+    if (limit <= ((struct Note *) best->u.value)->priority) return NULL;
 #else
-    if (limit < ((struct Note *) best->u.value)->priority) {
-        return NULL;
-    }
+    if (limit < ((struct Note *) best->u.value)->priority) return NULL;
 #endif
 
 #ifndef VERSION_SH
@@ -1248,9 +1224,7 @@ struct Note *alloc_note_from_active(struct NotePool *pool, struct SequenceChanne
     }
 
 #ifdef VERSION_SH
-    if (rNote == NULL && aNote == NULL) {
-        return NULL;
-    }
+    if (rNote == NULL && aNote == NULL) return NULL;
 
     if (aPriority < rPriority) {
         audio_list_remove(&aNote->listItem);

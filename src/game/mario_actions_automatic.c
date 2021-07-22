@@ -205,7 +205,7 @@ s32 act_climbing_pole(struct MarioState *m) {
 
 s32 act_grab_pole_slow(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
-#ifdef IMPROVED_MOVEMENT
+#if defined(ACTION_CANCELS) || defined(POLE_SWING)
     if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
         add_tree_leaf_particles(m);
         m->forwardVel = -8.0f;
@@ -236,7 +236,7 @@ s32 act_grab_pole_fast(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     m->faceAngle[1] += marioObj->oMarioPoleYawVel;
     marioObj->oMarioPoleYawVel = marioObj->oMarioPoleYawVel * 8 / 10;
-#ifdef IMPROVED_MOVEMENT
+#if defined(ACTION_CANCELS) || defined(POLE_SWING)
     if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || m->health < 0x100) {
         add_tree_leaf_particles(m);
         m->forwardVel = -8.0f;
@@ -347,7 +347,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
 s32 update_hang_moving(struct MarioState *m) {
     s32 stepResult;
     Vec3f nextPos;
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     f32 maxSpeed = m->intendedMag / 2.0f;
 #else
     f32 maxSpeed = HANGING_SPEED;
@@ -392,7 +392,7 @@ void update_hang_stationary(struct MarioState *m) {
     m->pos[1] = m->ceilHeight - 144.0f;
     vec3f_copy(m->vel, gVec3fZero);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
 #endif
 }
@@ -405,14 +405,14 @@ s32 act_start_hanging(struct MarioState *m) {
 #else
     m->actionTimer++;
 #endif
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     if ((m->input & INPUT_NONZERO_ANALOG && m->intendedMag > 16.0f) && m->actionTimer > 1) {
 #else
     if ((m->input & INPUT_NONZERO_ANALOG) && m->actionTimer >= 31) {
 #endif
         return set_mario_action(m, ACT_HANGING, 0);
     }
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
 #else
     if (!(m->input & INPUT_A_DOWN)) {
@@ -444,7 +444,7 @@ s32 act_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_HANG_MOVING, m->actionArg);
     }
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
 #else
     if (!(m->input & INPUT_A_DOWN)) {
@@ -472,7 +472,7 @@ s32 act_hanging(struct MarioState *m) {
 }
 
 s32 act_hang_moving(struct MarioState *m) {
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
 #else
     if (!(m->input & INPUT_A_DOWN)) {
@@ -488,7 +488,7 @@ s32 act_hang_moving(struct MarioState *m) {
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef EASIER_HANGING
     set_mario_anim_with_accel(m, (m->actionArg & 1) ? MARIO_ANIM_MOVE_ON_WIRE_NET_RIGHT : MARIO_ANIM_MOVE_ON_WIRE_NET_LEFT, (m->forwardVel+1)*0x2000);
 #else
     if (m->actionArg & 1) {
@@ -577,7 +577,7 @@ s32 act_ledge_grab(struct MarioState *m) {
     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
     s32 hasSpaceForMario = (m->ceilHeight - m->floorHeight >= 160.0f);
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
     if (m->actionTimer < 5) {
 #else
     if (m->actionTimer < 10) {
@@ -585,11 +585,11 @@ s32 act_ledge_grab(struct MarioState *m) {
         m->actionTimer++;
     }
 #ifndef NO_FALSE_LEDGEGRABS
-    if (m->floor->normal.y < 0.9063078f) {
+    if (m->floor->normal.y < COS25) {
         return let_go_of_ledge(m);
     }
 #endif
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
     if (m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) {
 #else
     if (m->input & (INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) {
@@ -607,7 +607,7 @@ s32 act_ledge_grab(struct MarioState *m) {
         }
         return let_go_of_ledge(m);
     }
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
     if (m->actionTimer == 5 && (m->input & INPUT_NONZERO_ANALOG)) {
 #else
     if (m->actionTimer == 10 && (m->input & INPUT_NONZERO_ANALOG)) {
@@ -892,9 +892,7 @@ s32 check_common_automatic_cancels(struct MarioState *m) {
 s32 mario_execute_automatic_action(struct MarioState *m) {
     s32 cancel = FALSE;
 
-    if (check_common_automatic_cancels(m)) {
-        return TRUE;
-    }
+    if (check_common_automatic_cancels(m)) return TRUE;
 
     m->quicksandDepth = 0.0f;
 

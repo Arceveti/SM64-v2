@@ -203,10 +203,7 @@ char *gd_strcat(char *dst, const char *src) {
 /* Returns a bool, not the position of the mismatch */
 s32 gd_str_not_equal(const char *str1, const char *str2) {
     while (*str1 && *str2) {
-        if (*str1++ != *str2++) {
-            return TRUE;
-        }
+        if (*str1++ != *str2++) return TRUE;
     }
-
     return *str1 != '\0' || *str2 != '\0';
 }

@@ -187,9 +187,7 @@ struct ObjShape *make_shape(const char *name) {
 void scale_obj_position(struct GdObj *obj) {
     struct GdVec3f pos;
 
-    if (obj->type == OBJ_TYPE_GROUPS) {
-        return;
-    }
+    if (obj->type == OBJ_TYPE_GROUPS) return;
 
     set_cur_dynobj(obj);
     d_get_rel_pos(&pos);

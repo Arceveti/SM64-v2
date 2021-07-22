@@ -33,15 +33,8 @@ static s32 boo_should_be_stopped(void) {
     if (cur_obj_has_behavior(bhvMerryGoRoundBigBoo) || cur_obj_has_behavior(bhvMerryGoRoundBoo)) {
         return (!gMarioOnMerryGoRound);
     } else {
-        if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
-            return TRUE;
-        }
-
-        if (o->oRoom == 10) {
-            if (gTimeStopState & TIME_STOP_MARIO_OPENED_DOOR) {
-                return TRUE;
-            }
-        }
+        if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) return TRUE;
+        if ((o->oRoom == 10) && (gTimeStopState & TIME_STOP_MARIO_OPENED_DOOR)) return TRUE;
     }
 
     return FALSE;

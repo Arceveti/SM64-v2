@@ -255,9 +255,7 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
 
     for (i = 0; i < gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4; i++)
     {
-        if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) {
-            break;
-        }
+        if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) break;
         sSampleDmas[gSampleDmaNumListItems].bufSize = sDmaBufSize;
         sSampleDmas[gSampleDmaNumListItems].source = 0;
         sSampleDmas[gSampleDmaNumListItems].sizeUnused = 0;
@@ -281,9 +279,7 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
 
     sDmaBufSize = 0x2D0;
     for (i = 0; i < gMaxSimultaneousNotes; i++) {
-        if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) {
-            break;
-        }
+        if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) break;
         sSampleDmas[gSampleDmaNumListItems].bufSize = sDmaBufSize;
         sSampleDmas[gSampleDmaNumListItems].source = 0;
         sSampleDmas[gSampleDmaNumListItems].sizeUnused = 0;
@@ -423,9 +419,7 @@ u8 *func_sh_802f3220(u32 seqId, u32 *a1) {
 
     val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
     *a1 = gAlBankSets[val++];
-    if (*a1 == 0) {
-        return NULL;
-    }
+    if (*a1 == 0) return NULL;
     return &gAlBankSets[val];
 }
 
@@ -587,9 +581,7 @@ void *func_sh_802f3688(s32 bankId) {
         patchInfo.baseAddr2 = NULL;
     }
 
-    if ((ret = func_sh_802f3764(1, bankId, &sp38)) == NULL) {
-        return NULL;
-    }
+    if ((ret = func_sh_802f3764(1, bankId, &sp38)) == NULL) return NULL;
 
     if (sp38 == 1) {
         func_sh_802f5310(bankId, ret, &patchInfo, 0);
@@ -1142,15 +1134,11 @@ struct AudioBankSample *func_sh_802f4978(s32 bankId, s32 idx) {
 
     if (idx < 128) {
         inst = get_instrument_inner(bankId, idx);
-        if (inst == 0) {
-            return NULL;
-        }
+        if (inst == 0) return NULL;
         ret = inst->normalNotesSound.sample;
     } else {
         drum = get_drum(bankId, idx - 128);
-        if (drum == 0) {
-            return NULL;
-        }
+        if (drum == 0) return NULL;
         ret = drum->sound.sample;
     }
     return ret;
@@ -1236,9 +1224,7 @@ struct PendingDmaAudioBank *func_sh_802f4cb4(uintptr_t devAddr, void *vAddr, s32
             break;
         }
     }
-    if (i == ARRAY_COUNT(sPendingDmaAudioBanks)) {
-        return NULL;
-    }
+    if (i == ARRAY_COUNT(sPendingDmaAudioBanks)) return NULL;
 
     item->inProgress = 1;
     item->devAddr = devAddr;
@@ -1295,9 +1281,7 @@ void func_sh_802f4e50(struct PendingDmaAudioBank *audioBank, s32 audioResetStatu
             audioBank->inProgress = 0;
             return;
         }
-        if (osRecvMesg(&audioBank->dmaRetQueue, NULL, OS_MESG_NOBLOCK) == -1) {
-            return;
-        }
+        if (osRecvMesg(&audioBank->dmaRetQueue, NULL, OS_MESG_NOBLOCK) == -1) return;
     }
 
     encodedInfo = &audioBank->encodedInfo;
@@ -1579,9 +1563,7 @@ s32 func_sh_802f5900(struct AudioBankSample *sample, s32 numLoaded, struct Audio
     s32 i;
 
     for (i = 0; i < numLoaded; i++) {
-        if (sample->sampleAddr == arg2[i]->sampleAddr) {
-            break;
-        }
+        if (sample->sampleAddr == arg2[i]->sampleAddr) break;
     }
     if (i == numLoaded) {
         arg2[numLoaded++] = sample;
@@ -1603,17 +1585,12 @@ s32 func_sh_802f5948(s32 bankId, struct AudioBankSample *list[]) {
 
     for (i = 0; i < numDrums; i++) {
         drum = get_drum(bankId, i);
-        if (drum == NULL) {
-            continue;
-        }
+        if (drum == NULL) continue;
         numLoaded = func_sh_802f5900(drum->sound.sample, numLoaded, list);
     }
     for (i = 0; i < numInstruments; i++) {
         inst = get_instrument_inner(bankId, i);
-        if (inst == NULL) {
-            continue;
-
-        }
+        if (inst == NULL) continue;
         if (inst->normalRangeLo != 0) {
             numLoaded = func_sh_802f5900(inst->lowNotesSound.sample, numLoaded, list);
         }

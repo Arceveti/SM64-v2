@@ -77,9 +77,7 @@ struct SPTask *create_next_audio_frame_task(void) {
             return NULL;
         }
     }
-    if (gAudioLoadLockSH >= 0x11U) {
-        return NULL;
-    }
+    if (gAudioLoadLockSH >= 0x11U) return NULL;
     if (gAudioLoadLockSH != 0) {
         gAudioLoadLockSH++;
     }

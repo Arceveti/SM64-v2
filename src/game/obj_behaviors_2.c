@@ -610,12 +610,7 @@ static s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {
 
 static s32 obj_resolve_collisions_and_turn(s16 targetYaw, s16 turnSpeed) {
     obj_resolve_object_collisions(NULL);
-
-    if (cur_obj_rotate_yaw_toward(targetYaw, turnSpeed)) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
+    return (!cur_obj_rotate_yaw_toward(targetYaw, turnSpeed));
 }
 
 static void obj_die_if_health_non_positive(void) {
@@ -673,9 +668,7 @@ static void obj_set_squished_action(void) {
 static s32 obj_die_if_above_lava_and_health_non_positive(void) {
     if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND) {
         if (o->oGravity + o->oBuoyancy > 0.0f
-            || find_water_level(o->oPosX, o->oPosZ) - o->oPosY < 150.0f) {
-            return FALSE;
-        }
+            || find_water_level(o->oPosX, o->oPosZ) - o->oPosY < 150.0f) return FALSE;
     } else if (!(o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA)) {
         if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER) {
             if (o->oWallHitboxRadius < 200.0f) {

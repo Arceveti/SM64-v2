@@ -47,9 +47,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             }
 
             if (m->marioObj->header.gfx.animInfo.animFrame >= 2) {
-                if (mario_check_object_grab(m)) {
-                    return TRUE;
-                }
+                if (mario_check_object_grab(m)) return TRUE;
 
                 m->flags |= MARIO_PUNCHING;
             }
@@ -182,12 +180,11 @@ s32 act_picking_up(struct MarioState *m) {
     }
 
     if (m->actionState == 0 && is_anim_at_end(m)) {
-        //! While the animation is playing, it is possible for the used object
-        // to unload. This allows you to pick up a vacant or newly loaded object
-        // slot (cloning via fake object).
-        mario_grab_used_object(m);
-        play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
-        m->actionState = 1;
+        if (m->usedObj != NULL) {
+            mario_grab_used_object(m);
+            play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
+            m->actionState = 1;
+        }
     }
 
     if (m->actionState == 1) {
@@ -215,15 +212,12 @@ s32 act_dive_picking_up(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
 
-    //! Hands-free holding. Landing on a slope or being pushed off a ledge while
-    // landing from a dive grab sets Mario's action to a non-holding action
-    // without dropping the object, causing the hands-free holding glitch.
     if (m->input & INPUT_OFF_FLOOR) {
-        return set_mario_action(m, ACT_FREEFALL, 0);
+        return drop_and_set_mario_action(m, ACT_FREEFALL, 0);
     }
 
     if (m->input & INPUT_ABOVE_SLIDE) {
-        return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
+        return drop_and_set_mario_action(m, ACT_BEGIN_SLIDING, 0);
     }
 
     animated_stationary_ground_step(m, MARIO_ANIM_STOP_SLIDE_LIGHT_OBJ, ACT_HOLD_IDLE);
@@ -296,6 +290,14 @@ s32 act_heavy_throw(struct MarioState *m) {
 }
 
 s32 act_stomach_slide_stop(struct MarioState *m) {
+#ifdef ACTION_CANCELS
+    if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
+#if ENABLE_RUMBLE
+        queue_rumble_data(5, 80);
+#endif
+        return drop_and_set_mario_action(m, analog_stick_held_back(m, 0x4000) ? ACT_BACKWARD_ROLLOUT : (m->forwardVel >= 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT), 0);
+    }
+#endif
     if (m->input & INPUT_STOMPED) {
         return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
@@ -458,13 +460,8 @@ s32 check_common_object_cancels(struct MarioState *m) {
 s32 mario_execute_object_action(struct MarioState *m) {
     s32 cancel = FALSE;
 
-    if (check_common_object_cancels(m)) {
-        return TRUE;
-    }
-
-    if (mario_update_quicksand(m, 0.5f)) {
-        return TRUE;
-    }
+    if (check_common_object_cancels(m)) return TRUE;
+    if (mario_update_quicksand(m, 0.5f)) return TRUE;
 
     /* clang-format off */
     switch (m->action) {
@@ -478,6 +475,7 @@ s32 mario_execute_object_action(struct MarioState *m) {
         case ACT_PICKING_UP_BOWSER:  cancel = act_picking_up_bowser(m);  break;
         case ACT_HOLDING_BOWSER:     cancel = act_holding_bowser(m);     break;
         case ACT_RELEASING_BOWSER:   cancel = act_releasing_bowser(m);   break;
+        default:                     cancel = act_punching(m);           break;
     }
     /* clang-format on */
 

@@ -1,21 +1,21 @@
 // kickable_board.c.inc
 
-s32 check_mario_attacking(UNUSED s32 sp18) {
-    if (obj_check_if_collided_with_object(o, gMarioObject)) {
-        if (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000) {
-            if (gMarioStates[0].action == ACT_SLIDE_KICK
-             || gMarioStates[0].action == ACT_PUNCHING
-             || gMarioStates[0].action == ACT_MOVE_PUNCHING
-             || gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE) {
-                return 1;
-            }
-            if (gMarioStates[0].action == ACT_JUMP_KICK
-             || gMarioStates[0].action == ACT_WALL_KICK_AIR) {
-                return 2;
-            }
-        }
+s32 check_mario_attacking(void) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)
+     && abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000) {
+        if (gMarioStates[0].action == ACT_SLIDE_KICK
+         || gMarioStates[0].action == ACT_PUNCHING
+         || gMarioStates[0].action == ACT_MOVE_PUNCHING
+         || gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE
+         || gMarioStates[0].action == ACT_BACKWARD_GROUND_KB
+         || gMarioStates[0].action == ACT_SOFT_BACKWARD_GROUND_KB
+         || gMarioStates[0].action == ACT_HARD_BACKWARD_GROUND_KB) return WF_ATTACK_GROUND;
+        if (gMarioStates[0].action == ACT_JUMP_KICK
+         || gMarioStates[0].action == ACT_WALL_KICK_AIR
+         || gMarioStates[0].action == ACT_BACKWARD_AIR_KB
+         || gMarioStates[0].action == ACT_HARD_BACKWARD_AIR_KB) return WF_ATTACK_AIR;
     }
-    return 0;
+    return WF_ATTACK_NONE;
 }
 
 void init_kickable_board_rock(void) {
@@ -24,23 +24,23 @@ void init_kickable_board_rock(void) {
 }
 
 void bhv_kickable_board_loop(void) {
-    s32 sp24;
+    s32 attackValue;
     switch (o->oAction) {
-        case 0:
+        case KICKABLE_BOARD_ACT_IDLE_VERTICAL:
             o->oFaceAnglePitch = 0;
-            if (check_mario_attacking(0)) {
+            if (check_mario_attacking()) {
                 init_kickable_board_rock();
-                o->oAction++;
+                o->oAction = KICKABLE_BOARD_ACT_ROCKING;
             }
             load_object_collision_model();
             break;
-        case 1:
+        case KICKABLE_BOARD_ACT_ROCKING:
             o->oFaceAnglePitch = 0;
             load_object_collision_model();
             o->oFaceAnglePitch = -sins(o->oKickableBoardRockingAngleAmount) * o->oKickableBoardRockingTimer;
-            if (o->oTimer > 30 && (sp24 = check_mario_attacking(0))) {
-                if (gMarioObject->oPosY > o->oPosY + 160.0f && sp24 == 2) {
-                    o->oAction++;
+            if (o->oTimer > 30 && (attackValue = check_mario_attacking())) {
+                if (gMarioObject->oPosY > o->oPosY + 160.0f && attackValue == WF_ATTACK_AIR) {
+                    o->oAction = KICKABLE_BOARD_ACT_FALLING;
                     cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
                 } else {
                     o->oTimer = 0;
@@ -49,7 +49,7 @@ void bhv_kickable_board_loop(void) {
             if (o->oTimer != 0) {
                 o->oKickableBoardRockingTimer -= 8;
                 if (o->oKickableBoardRockingTimer < 0) {
-                    o->oAction = 0;
+                    o->oAction = KICKABLE_BOARD_ACT_IDLE_VERTICAL;
                 }
             } else {
                 init_kickable_board_rock();
@@ -59,7 +59,7 @@ void bhv_kickable_board_loop(void) {
             }
             o->oKickableBoardRockingAngleAmount += 0x400;
             break;
-        case 2:
+        case KICKABLE_BOARD_ACT_FALLING:
             cur_obj_become_intangible();
             cur_obj_set_model(MODEL_WF_KICKABLE_BOARD_FELLED);
             o->oAngleVelPitch -= 0x80;
@@ -67,13 +67,13 @@ void bhv_kickable_board_loop(void) {
             if (o->oFaceAnglePitch < -0x4000) {
                 o->oFaceAnglePitch = -0x4000;
                 o->oAngleVelPitch = 0;
-                o->oAction++;
+                o->oAction = KICKABLE_BOARD_ACT_IDLE_HORIZONTAL;
                 cur_obj_shake_screen(SHAKE_POS_SMALL);
                 cur_obj_play_sound_2(SOUND_GENERAL_UNKNOWN4);
             }
             load_object_collision_model();
             break;
-        case 3:
+        case KICKABLE_BOARD_ACT_IDLE_HORIZONTAL:
             load_object_collision_model();
             break;
     }

@@ -175,9 +175,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
             cmd = *_ptr_pc;
         }
 
-        if (cmd <= 0xc0) {
-            break;
-        }
+        if (cmd <= 0xc0) break;
 
         switch (cmd) {
             case 0xff: // layer_end; function return or end of script

@@ -121,9 +121,7 @@ void create_dl_identity_matrix(void) {
 void create_dl_translation_matrix(s8 pushOp, f32 x, f32 y, f32 z) {
     Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
 
-    if (matrix == NULL) {
-        return;
-    }
+    if (matrix == NULL) return;
 
     guTranslate(matrix, x, y, z);
 
@@ -138,9 +136,7 @@ void create_dl_translation_matrix(s8 pushOp, f32 x, f32 y, f32 z) {
 void create_dl_rotation_matrix(s8 pushOp, f32 a, f32 x, f32 y, f32 z) {
     Mtx *matrix = (Mtx *) alloc_display_list(sizeof(Mtx));
 
-    if (matrix == NULL) {
-        return;
-    }
+    if (matrix == NULL) return;
 
     guRotate(matrix, a, x, y, z);
 
@@ -193,9 +189,7 @@ static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) {
 
     out = alloc_display_list((u32) width * (u32) height);
 
-    if (out == NULL) {
-        return NULL;
-    }
+    if (out == NULL) return NULL;
 
     for (inPos = 0; inPos < (width * height) / 16; inPos++) {
         bitMask = 0x8000;
@@ -479,7 +473,7 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
         gMenuHoldKeyIndex = index;
     }
 
-    if ((index & 3) == 0) {
+    if (!(index & 3)) {
         gMenuHoldKeyTimer = 0;
     }
 }
@@ -884,9 +878,7 @@ void render_dialog_triangle_choice(void) {
 void render_dialog_string_color(s8 linesPerBox) {
     s32 timer = gGlobalTimer;
 
-    if (timer & 0x08) {
-        return;
-    }
+    if (timer & 0x08) return;
 
     create_dl_translation_matrix(MENU_MTX_PUSH, X_VAL5, (linesPerBox * Y_VAL5_1) + Y_VAL5_2, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, X_Y_VAL6, X_Y_VAL6, 1.0f);
@@ -1181,9 +1173,7 @@ void do_cutscene_handler(void) {
     s16 x;
 
     // is a cutscene playing? do not perform this handler's actions if so.
-    if (gCutsceneMsgIndex == -1) {
-        return;
-    }
+    if (gCutsceneMsgIndex == -1) return;
 
     create_dl_ortho_matrix();
 

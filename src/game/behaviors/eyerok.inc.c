@@ -10,7 +10,7 @@ struct ObjectHitbox sEyerokHitbox = {
     /* hurtboxHeight:     */ 1,
 };
 
-s8 D_80331BA4[] = { 0, 1, 3, 2, 1, 0 };
+s8 sEyerokAnimStatesList[] = { 0, 1, 3, 2, 1, 0 };
 
 static s32 eyerok_check_mario_relative_z(s32 arg0) {
     return (gMarioObject->oPosZ - o->oHomeZ < arg0);
@@ -19,7 +19,7 @@ static s32 eyerok_check_mario_relative_z(s32 arg0) {
 static void eyerok_spawn_hand(s16 side, s32 model, const BehaviorScript *behavior) {
     struct Object *hand;
 
-    hand = spawn_object_relative_with_scale(side, -500 * side, 0, 300, 1.5f, o, model, behavior);
+    hand = spawn_object_relative_with_scale(side, -496 * side, 0, 300, 1.5f, o, model, behavior);
     if (hand != NULL) {
         hand->oFaceAngleYaw -= 0x4000 * side;
     }
@@ -50,7 +50,7 @@ static void eyerok_boss_act_wake_up(void) {
                     o->oTimer = 0;
                 }
             } else if (o->oTimer > 90) {
-                approach_f32_ptr(&o->oEyerokBossUnk110, 300.f, 10.0f);
+                approach_f32_ptr(&o->oEyerokBossUnk110, 300.0f, 10.0f);
             }
         }
     } else {
@@ -247,9 +247,9 @@ static void eyerok_hand_act_open(void) {
         o->collisionData = segmented_to_virtual(ssl_seg7_collision_070282F8);
 
         if (o->parentObj->oEyerokBossNumHands != 2) {
-            s16 sp1E = o->oAngleToMario;
-            clamp_s16(&sp1E, -0x3000, 0x3000);
-            o->oMoveAngleYaw = sp1E;
+            s16 angleToMario = o->oAngleToMario;
+            clamp_s16(&angleToMario, -0x3000, 0x3000);
+            o->oMoveAngleYaw = angleToMario;
             o->oForwardVel = 50.0f;
         } else {
             o->oMoveAngleYaw = 0;
@@ -258,8 +258,6 @@ static void eyerok_hand_act_open(void) {
 }
 
 static void eyerok_hand_act_show_eye(void) {
-    UNUSED s16 val06;
-
     cur_obj_init_animation_with_sound(5);
     cur_obj_play_sound_at_anim_range(0, 0, SOUND_OBJ_EYEROK_SHOW_EYE);
 
@@ -268,7 +266,6 @@ static void eyerok_hand_act_show_eye(void) {
             if (o->oAnimState < 3) {
                 o->oAnimState++;
             } else if (cur_obj_check_if_near_animation_end()) {
-                val06 = (s16)(o->oAngleToMario - o->oFaceAngleYaw) * o->oBehParams2ndByte;
                 o->oAction = EYEROK_HAND_ACT_CLOSE;
             }
         } else {
@@ -276,7 +273,7 @@ static void eyerok_hand_act_show_eye(void) {
                 if (o->oEyerokHandAnimStateIndex != 0) {
                     o->oEyerokHandAnimStateIndex--;
                 }
-                o->oAnimState = D_80331BA4[o->oEyerokHandAnimStateIndex];
+                o->oAnimState = sEyerokAnimStatesList[o->oEyerokHandAnimStateIndex];
             } else {
                 o->oEyerokHandAnimStateIndex = 5;
                 o->oEyerokHandEyeShownTimer = random_linear_offset(20, 50);
@@ -384,7 +381,7 @@ static void eyerok_hand_act_target_mario(void) {
 }
 
 static void eyerok_hand_act_smash(void) {
-    s16 sp1E;
+    s16 dYawToMario;
 
     if (o->oTimer > 20) {
         if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
@@ -392,8 +389,8 @@ static void eyerok_hand_act_smash(void) {
                 eyerok_hand_pound_ground();
                 o->oGravity = -4.0f;
             } else {
-                sp1E = abs_angle_diff(o->oFaceAngleYaw, o->oAngleToMario);
-                if (o->oDistanceToMario < 300.0f && sp1E > 0x2000 && sp1E < 0x6000) {
+                dYawToMario = abs_angle_diff(o->oFaceAngleYaw, o->oAngleToMario);
+                if (o->oDistanceToMario < 300.0f && dYawToMario > 0x2000 && dYawToMario < 0x6000) {
                     o->oAction = EYEROK_HAND_ACT_FIST_SWEEP;
                     if ((s16)(o->oFaceAngleYaw - o->oAngleToMario) < 0) {
                         o->oMoveAngleYaw = 0x4000;

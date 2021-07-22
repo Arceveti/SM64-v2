@@ -1517,10 +1517,7 @@ static void usb_sc64_write(int datatype, const void* data, int size)
         transfer_length = sdram_address - (SC64_SDRAM_BASE + DEBUG_ADDRESS);
 
         // Continue filling SDRAM buffer if total length is lower than maximum transfer length or if there's no more data
-        if ((transfer_length < usb_block_max_size) && (left > 0))
-        {
-            continue;
-        }
+        if ((transfer_length < usb_block_max_size) && (left > 0)) continue;
 
         // Disable SDRAM writes if there's no more data to write
         if (left <= 0)

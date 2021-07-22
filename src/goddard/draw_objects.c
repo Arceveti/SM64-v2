@@ -92,9 +92,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
 
     sUpdateViewState.shapesDrawn++;
 
-    if (shape == NULL) {
-        return;
-    }
+    if (shape == NULL) return;
 
     sp1C.x = sp1C.y = sp1C.z = 0.0f;
     if (flag & 2) {
@@ -165,9 +163,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 pos
 
     sUpdateViewState.shapesDrawn++;
 
-    if (shape == NULL) {
-        return;
-    }
+    if (shape == NULL) return;
 
     if (flag & 2) {
         pos.x = posX;
@@ -186,9 +182,7 @@ void draw_light(struct ObjLight *light) {
     Mat4f sp54;
     struct ObjShape *shape;
 
-    if (sSceneProcessType == FIND_PICKS) {
-        return;
-    }
+    if (sSceneProcessType == FIND_PICKS) return;
 
     sLightColours[0].r = light->colour.r;
     sLightColours[0].g = light->colour.g;
@@ -347,9 +341,7 @@ void draw_net(struct ObjNet *self) {
     struct ObjNet *net = self;
     s32 netColor;
 
-    if (sSceneProcessType == FIND_PICKS) {
-        return;
-    }
+    if (sSceneProcessType == FIND_PICKS) return;
 
     if (net->header.drawFlags & OBJ_HIGHLIGHTED) {
         netColor = COLOUR_YELLOW;
@@ -396,9 +388,7 @@ void draw_camera(struct ObjCamera *cam) {
 /* 22836C -> 228498 */
 void world_pos_to_screen_coords(struct GdVec3f *pos, struct ObjCamera *cam, struct ObjView *view) {
     gd_rotate_and_translate_vec3f(pos, &cam->unkE8);
-    if (pos->z > -256.0f) {
-        return;
-    }
+    if (pos->z > -256.0f) return;
 
     pos->x *= 256.0f / -pos->z;
     pos->y *= 256.0f /  pos->z;
@@ -422,13 +412,9 @@ void check_grabable_click(struct GdObj *input) {
     struct GdObj *obj;
     Mat4f *mtx;
 
-    if (gViewUpdateCamera == NULL) {
-        return;
-    }
+    if (gViewUpdateCamera == NULL) return;
     obj = input;
-    if (!(obj->drawFlags & OBJ_IS_GRABBALE)) {
-        return;
-    }
+    if (!(obj->drawFlags & OBJ_IS_GRABBALE)) return;
 
     set_cur_dynobj(obj);
     mtx = d_get_rot_mtx_ptr();
@@ -574,9 +560,7 @@ void draw_joint(struct GdObj *obj) {
     s32 colour;
     struct ObjShape *boneShape;
 
-    if ((boneShape = joint->shapePtr) == NULL) {
-        return;
-    }
+    if ((boneShape = joint->shapePtr) == NULL) return;
 
     if (joint->header.drawFlags & OBJ_HIGHLIGHTED) {
         colour = COLOUR_YELLOW;
@@ -628,9 +612,7 @@ void apply_obj_draw_fn(struct GdObj *obj) {
         // fatal_print("Bad object!");
         gd_exit();
     }
-    if (obj->drawFlags & OBJ_INVISIBLE) {
-        return;
-    }
+    if (obj->drawFlags & OBJ_INVISIBLE) return;
 
     obj->objDrawFn(obj);
 }
@@ -784,9 +766,7 @@ void map_face_materials(struct ObjGroup *faces, struct ObjGroup *mtls) {
         linkMtls = mtls->firstMember;
         while (linkMtls != NULL) {
             mtl = (struct ObjMaterial *) linkMtls->obj;
-            if (mtl->id == face->mtlId) {
-                break;
-            }
+            if (mtl->id == face->mtlId) break;
             linkMtls = linkMtls->next;
         }
 
@@ -836,10 +816,7 @@ void find_closest_pickable_obj(struct GdObj *input) {
  * @return void
  */
 void set_view_update_camera(struct ObjCamera *cam) {
-    if (gViewUpdateCamera != NULL) {
-        return;
-    }
-
+    if (gViewUpdateCamera != NULL) return;
     gViewUpdateCamera = cam;
 }
 
@@ -893,9 +870,7 @@ void update_view(struct ObjView *view) {
         gViewUpdateCamera = view->activeCam;
     }
 
-    if (!(view->flags & VIEW_DRAW)) {
-        return;
-    }
+    if (!(view->flags & VIEW_DRAW)) return;
 
     sUpdateViewState.view = view;
     set_active_view(view);

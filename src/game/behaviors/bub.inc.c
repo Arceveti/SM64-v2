@@ -5,62 +5,62 @@
 // to do nothing, which indicates this behavior set is incomplete.
 
 // TODO: Rename these. These have nothing to do with birds.
-void bub_spawner_act_0(void) {
+void bub_spawner_act_spawn_bubs(void) {
     s32 i;
-    s32 sp18 = o->oCheepCheepSpawnerSpawnAmount;
+    s32 amt = o->oCheepCheepSpawnerSpawnAmount;
     if (o->oDistanceToMario < 1500.0f) {
-        for (i = 0; i < sp18; i++) {
+        for (i = 0; i < amt; i++) {
             spawn_object(o, MODEL_BUB, bhvBub);
         }
-        o->oAction = 1;
+        o->oAction = BUB_SPAWNER_ACT_IDLE;
     }
 }
 
-void bub_spawner_act_1(void) {
+void bub_spawner_act_idle(void) {
     if (gMarioObject->oPosY - o->oPosY > 2000.0f) {
-        o->oAction = 2;
+        o->oAction = BUB_SPAWNER_ACT_REMOVE_BUBS;
     }
 }
 
-void bub_spawner_act_2(void) {
-    o->oAction = 3;
+void bub_spawner_act_remove_bubs(void) {
+    o->oAction = BUB_SPAWNER_ACT_RESET;
 }
 
-void bub_spawner_act_3(void) {
-    o->oAction = 0;
+void bub_spawner_act_reset(void) {
+    o->oAction = BUB_SPAWNER_ACT_SPAWN_BUBS;
 }
 
-void (*sBirdChirpChirpActions[])(void) = { bub_spawner_act_0, bub_spawner_act_1,
-                                           bub_spawner_act_2, bub_spawner_act_3 };
+void (*sBirdChirpChirpActions[])(void) = { bub_spawner_act_spawn_bubs, bub_spawner_act_idle,
+                                           bub_spawner_act_remove_bubs, bub_spawner_act_reset };
 
 void bhv_bub_spawner_loop(void) {
     cur_obj_call_action_function(sBirdChirpChirpActions);
 }
 
 void bub_move_vertically(s32 a0) {
-    f32 sp1C = o->parentObj->oPosY;
-    if (sp1C - 100.0f - o->oCheepCheepMaxYOffset < o->oPosY
-        && o->oPosY < sp1C + 1000.0f + o->oCheepCheepMaxYOffset) {
+    f32 parentY = o->parentObj->oPosY;
+    if (parentY - 100.0f - o->oCheepCheepMaxYOffset < o->oPosY
+        && o->oPosY < parentY + 1000.0f + o->oCheepCheepMaxYOffset) {
         o->oPosY = approach_f32_symmetric(o->oPosY, o->oCheepCheepTargetY, a0);
     }
 }
 
-void bub_act_0(void) {
+void bub_act_init(void) {
     o->oCheepCheepTargetYOffset = random_float() * 100.0f;
     o->oCheepCheepMaxYOffset = random_float() * 300.0f;
-    o->oAction = 1;
+    o->oAction = BUB_ACT_SWIMMING_TOWARDS_MARIO;
 }
 
-void bub_act_1(void) {
+void bub_act_swimming_towards_mario(void) {
     f32 dy;
     if (o->oTimer == 0) {
-        o->oForwardVel = random_float() * 2 + 2;
+        o->oForwardVel = random_float() * 2.0f + 2.0f;
         o->oCheepCheepRandomSwimAway = random_float();
     }
     dy = o->oPosY - gMarioObject->oPosY;
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
         if (dy < 0.0f) {
-            dy = 0.0f - dy;
+            dy = -dy;
         }
         if (dy < 500.0f) {
             bub_move_vertically(1);
@@ -70,7 +70,7 @@ void bub_act_1(void) {
     } else {
         o->oPosY = o->oCheepCheepWaterLevel - 50.0f;
         if (dy > 300.0f) {
-            o->oPosY = o->oPosY - 1.0f;
+            o->oPosY -= 1.0f;
         }
     }
     if (800.0f < cur_obj_lateral_dist_from_mario_to_home()) {
@@ -79,15 +79,15 @@ void bub_act_1(void) {
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
     if (o->oDistanceToMario < 200.0f) {
         if (o->oCheepCheepRandomSwimAway < 0.5f) {
-            o->oAction = 2;
+            o->oAction = BUB_ACT_SWIMMING_AWAY_FROM_MARIO;
         }
     }
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oAction = 2;
+        o->oAction = BUB_ACT_SWIMMING_AWAY_FROM_MARIO;
     }
 }
 
-void bub_act_2(void) {
+void bub_act_swimming_away_from_mario(void) {
     f32 dy;
     if (o->oTimer < 20) {
         if (o->oInteractStatus & INT_STATUS_INTERACTED) {
@@ -105,7 +105,7 @@ void bub_act_2(void) {
     dy = o->oPosY - gMarioObject->oPosY;
     if (o->oPosY < o->oCheepCheepWaterLevel - 50.0f) {
         if (dy < 0.0f) {
-            dy = 0.0f - dy;
+            dy = -dy;
         }
         if (dy < 500.0f) {
             bub_move_vertically(2);
@@ -123,11 +123,11 @@ void bub_act_2(void) {
     }
     cur_obj_rotate_yaw_toward(o->oAngleToMario + 0x8000, 0x400);
     if (o->oTimer > 200 && o->oDistanceToMario > 600.0f) {
-        o->oAction = 1;
+        o->oAction = BUB_ACT_SWIMMING_TOWARDS_MARIO;
     }
 }
 
-void (*sCheepCheepActions[])(void) = { bub_act_0, bub_act_1, bub_act_2 };
+void (*sCheepCheepActions[])(void) = { bub_act_init, bub_act_swimming_towards_mario, bub_act_swimming_away_from_mario };
 
 void bhv_bub_loop(void) {
     o->oCheepCheepWaterLevel = find_water_level(o->oPosX, o->oPosZ);
@@ -136,7 +136,7 @@ void bhv_bub_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sCheepCheepActions);
     cur_obj_move_using_fvel_and_gravity();
-    if (o->parentObj->oAction == 2) {
+    if (o->parentObj->oAction == BUB_SPAWNER_ACT_REMOVE_BUBS) {
         obj_mark_for_deletion(o);
     }
 }

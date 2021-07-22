@@ -576,9 +576,7 @@ struct AudioBank *bank_load_immediate(s32 bankId, s32 arg1) {
     alloc -= 0x10;
     ctlData = gAlCtlHeader->seqArray[bankId].offset;
     ret = alloc_bank_or_seq(&gBankLoadedPool, 1, alloc, arg1, bankId);
-    if (ret == NULL) {
-        return NULL;
-    }
+    if (ret == NULL) return NULL;
 
     audio_dma_copy_immediate((uintptr_t) ctlData, buf, 0x10);
     numInstruments = buf[0];
@@ -606,9 +604,7 @@ struct AudioBank *bank_load_async(s32 bankId, s32 arg1, struct SequencePlayer *s
     alloc -= 0x10;
     ctlData = gAlCtlHeader->seqArray[bankId].offset;
     ret = alloc_bank_or_seq(&gBankLoadedPool, 1, alloc, arg1, bankId);
-    if (ret == NULL) {
-        return NULL;
-    }
+    if (ret == NULL) return NULL;
 
     audio_dma_copy_immediate((uintptr_t) ctlData, buf, 0x10);
     numInstruments = buf[0];
@@ -651,9 +647,7 @@ void *sequence_dma_immediate(s32 seqId, s32 arg1) {
     seqLength = ALIGN16(seqLength);
     seqData = gSeqFileHeader->seqArray[seqId].offset;
     ptr = alloc_bank_or_seq(&gSeqLoadedPool, 1, seqLength, arg1, seqId);
-    if (ptr == NULL) {
-        return NULL;
-    }
+    if (ptr == NULL) return NULL;
 
     audio_dma_copy_immediate((uintptr_t) seqData, ptr, seqLength);
     gSeqLoadStatus[seqId] = SOUND_LOAD_STATUS_COMPLETE;
@@ -775,9 +769,7 @@ void preload_sequence(u32 seqId, u8 preloadMask) {
     void *sequenceData;
     u8 temp;
 
-    if (seqId >= gSequenceCount) {
-        return;
-    }
+    if (seqId >= gSequenceCount) return;
 
     gAudioLoadLock = AUDIO_LOCK_LOADING;
     if (preloadMask & PRELOAD_BANKS) {
@@ -816,9 +808,7 @@ void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
     void *sequenceData;
     struct SequencePlayer *seqPlayer = &gSequencePlayers[player];
 
-    if (seqId >= gSequenceCount) {
-        return;
-    }
+    if (seqId >= gSequenceCount) return;
 
     sequence_player_disable(seqPlayer);
     if (loadAsync) {
@@ -827,22 +817,16 @@ void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
         s32 bankId = get_missing_bank(seqId, &dummy, &numMissingBanks);
         if (numMissingBanks == 1) {
             eu_stubbed_printf_0("Ok,one bank slow load Start \n");
-            if (bank_load_async(bankId, 2, seqPlayer) == NULL) {
-                return;
-            }
+            if (bank_load_async(bankId, 2, seqPlayer) == NULL) return;
             //! @bug This should set the last bank (i.e. the first in the JSON)
             // as default, not the missing one. This code path never gets
             // taken, though -- all sequence loading is synchronous.
             seqPlayer->defaultBank[0] = bankId;
         } else {
             eu_stubbed_printf_1("Sorry,too many %d bank is none.fast load Start \n", numMissingBanks);
-            if (load_banks_immediate(seqId, &seqPlayer->defaultBank[0]) == NULL) {
-                return;
-            }
+            if (load_banks_immediate(seqId, &seqPlayer->defaultBank[0]) == NULL) return;
         }
-    } else if (load_banks_immediate(seqId, &seqPlayer->defaultBank[0]) == NULL) {
-        return;
-    }
+    } else if (load_banks_immediate(seqId, &seqPlayer->defaultBank[0]) == NULL) return;
 
     eu_stubbed_printf_2("Seq %d:Default Load Id is %d\n", seqId, seqPlayer->defaultBank[0]);
     eu_stubbed_printf_0("Seq Loading Start\n");
@@ -861,9 +845,7 @@ void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
             sequenceData = sequence_dma_immediate(seqId, 2);
         }
 
-        if (sequenceData == NULL) {
-            return;
-        }
+        if (sequenceData == NULL) return;
     }
 
     eu_stubbed_printf_1("SEQ  %d ALREADY CACHED\n", seqId);

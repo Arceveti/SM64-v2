@@ -186,9 +186,7 @@ void func_80192CCC(struct ObjNet *net) {
         net->torque.x = net->torque.y = net->torque.z = 0.0f;
     }
 
-    if (gGdCtrl.newStartPress) {
-        return;
-    } // start was pressed
+    if (gGdCtrl.newStartPress) return; // start was pressed
 
     func_80192528(net);
     if ((group = net->unk1C8) != NULL) {

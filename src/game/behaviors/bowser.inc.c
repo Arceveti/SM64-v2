@@ -1445,13 +1445,9 @@ s32 bowser_check_fallen_off_stage(void) {
         if (o->oPosY < o->oHomeY - 1000.0f) return TRUE;
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             // Check for Fire Sea
-            if (o->oFloorType == SURFACE_BURNING) {
-                return TRUE;
-            }
+            if (o->oFloorType == SURFACE_BURNING) return TRUE;
             // Check for Dark World - Sky
-            if (o->oFloorType == SURFACE_DEATH_PLANE) {
-                return TRUE;
-            }
+            if (o->oFloorType == SURFACE_DEATH_PLANE) return TRUE;
         }
     }
     return FALSE;

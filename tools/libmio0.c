@@ -98,9 +98,7 @@ static int find_longest(const unsigned char *buf, int start_offset, int max_sear
       // check at most requested max or up until start
       search_len = MIN(max_search, start_offset - off);
       for (i = 0; i < search_len; i++) {
-         if (buf[start_offset + i] != buf[off + i]) {
-            break;
-         }
+         if (buf[start_offset + i] != buf[off + i]) break;
       }
       cur_length = i;
       // if matched up until start, continue matching in already matched parts
@@ -108,9 +106,7 @@ static int find_longest(const unsigned char *buf, int start_offset, int max_sear
          // check at most requested max less current length
          search_len = max_search - cur_length;
          for (i = 0; i < search_len; i++) {
-            if (buf[start_offset + cur_length + i] != buf[off + i]) {
-               break;
-            }
+            if (buf[start_offset + cur_length + i] != buf[off + i]) break;
          }
          cur_length += i;
       }
@@ -321,9 +317,7 @@ int mio0_decode_file(const char *in_file, unsigned long offset, const char *out_
    int valid;
 
    in = fopen(in_file, "rb");
-   if (in == NULL) {
-      return 1;
-   }
+   if (in == NULL) return 1;
 
    // allocate buffer to read from offset to end of file
    fseek(in, 0, SEEK_END);
@@ -395,9 +389,7 @@ int mio0_encode_file(const char *in_file, const char *out_file)
    int ret_val = 0;
 
    in = fopen(in_file, "rb");
-   if (in == NULL) {
-      return 1;
-   }
+   if (in == NULL) return 1;
 
    // allocate buffer to read entire contents of files
    fseek(in, 0, SEEK_END);

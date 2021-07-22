@@ -1,7 +1,7 @@
 // mushroom_1up.c.inc
 
 void bhv_1up_interact(void) {
-    if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)) {
 #ifdef MUSHROOMS_HEAL
          gMarioState->healCounter = 31;
 #endif
@@ -62,7 +62,7 @@ void one_up_move_away_from_mario(s16 stepResult) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     bhv_1up_interact();
-    if (stepResult & 0x02) {
+    if (stepResult & OBJ_COL_FLAG_HIT_WALL) {
         o->oAction = 2;
     }
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) {
@@ -145,7 +145,7 @@ void sliding_1up_move(void) {
     s16 stepResult;
 
     stepResult = object_step();
-    if (stepResult & 0x01) {
+    if (stepResult & OBJ_COL_FLAG_GROUNDED) {
         o->oForwardVel += 25.0f;
         o->oVelY = 0;
     } else {
@@ -258,7 +258,7 @@ void bhv_1up_hidden_loop(void) {
 
 void bhv_1up_hidden_trigger_loop(void) {
     struct Object *nearestHidden1up;
-    if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)) {
         nearestHidden1up = cur_obj_nearest_object_with_behavior(bhvHidden1up);
         if (nearestHidden1up != NULL) {
             nearestHidden1up->o1UpHiddenTimesTriggered++;
@@ -304,7 +304,7 @@ void bhv_1up_hidden_in_pole_loop(void) {
 void bhv_1up_hidden_in_pole_trigger_loop(void) {
     struct Object *nearestHidden1upInPole;
 
-    if (obj_check_if_collided_with_object(o, gMarioObject) == 1) {
+    if (obj_check_if_collided_with_object(o, gMarioObject)) {
         nearestHidden1upInPole = cur_obj_nearest_object_with_behavior(bhvHidden1upInPole);
         if (nearestHidden1upInPole != NULL) {
             nearestHidden1upInPole->o1UpHiddenTimesTriggered++;

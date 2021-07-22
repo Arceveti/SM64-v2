@@ -17,10 +17,10 @@ s32 cap_set_hitbox(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         o->oInteractStatus = INT_STATUS_NONE;
-        return 1;
+        return TRUE;
     }
 
-    return 0;
+    return FALSE;
 }
 
 void cap_despawn(void) {
@@ -117,33 +117,29 @@ void cap_scale_vertically(void) {
 }
 
 void wing_vanish_cap_act_0(void) {
-    s16 sp1E;
+    s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
-    sp1E = object_step();
-    if (sp1E & 0x01) {
+    collisionFlags = object_step();
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
         if (o->oVelY != 0.0f) {
-            o->oCapDoScaleVertically = 1;
+            o->oCapDoScaleVertically = TRUE;
             o->oVelY = 0.0f;
         }
     }
 
-    if (o->oCapDoScaleVertically == 1) {
+    if (o->oCapDoScaleVertically) {
         cap_scale_vertically();
     }
 }
 
 void bhv_wing_vanish_cap_loop(void) {
-    switch (o->oAction) {
-        case 0:
-            wing_vanish_cap_act_0();
-            break;
-
-        default:
-            object_step();
-            cap_sink_quicksand();
-            break;
+    if (o->oAction == 0) {
+        wing_vanish_cap_act_0();
+    } else {
+        object_step();
+        cap_sink_quicksand();
     }
 
     if (o->oTimer > 20) {
@@ -161,25 +157,22 @@ void bhv_metal_cap_init(void) {
 }
 
 void metal_cap_act_0(void) {
-    s16 sp1E;
+    s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
-    sp1E = object_step();
-    if (sp1E & 0x01) {
+    collisionFlags = object_step();
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
     }
 }
 
 void bhv_metal_cap_loop(void) {
-    switch (o->oAction) {
-        case 0:
-            metal_cap_act_0();
-            break;
-
-        default:
-            object_step();
-            cap_sink_quicksand();
-            break;
+    
+    if (o->oAction == 0) {
+        metal_cap_act_0();
+    } else {
+        object_step();
+        cap_sink_quicksand();
     }
 
     if (o->oTimer > 20) {
@@ -221,12 +214,12 @@ void normal_cap_set_save_flags(void) {
 }
 
 void normal_cap_act_0(void) {
-    s16 sp1E;
+    s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
     o->oFaceAnglePitch += o->oForwardVel * 80.0f;
-    sp1E = object_step();
-    if (sp1E & 0x01) {
+    collisionFlags = object_step();
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
 
         if (o->oVelY != 0.0f) {
@@ -242,15 +235,11 @@ void normal_cap_act_0(void) {
 }
 
 void bhv_normal_cap_loop(void) {
-    switch (o->oAction) {
-        case 0:
-            normal_cap_act_0();
-            break;
-
-        default:
-            object_step();
-            cap_sink_quicksand();
-            break;
+    if (o->oAction == 0) {
+        normal_cap_act_0();
+    } else {
+        object_step();
+        cap_sink_quicksand();
     }
 
     if ((s32) o->oForwardVel != 0) {

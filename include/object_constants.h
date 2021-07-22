@@ -341,7 +341,7 @@
 
 /* Exclamation Box */
     /* oAction */
-    #define EXCLAMATION_BOX_ACT_0                0
+    #define EXCLAMATION_BOX_ACT_INIT             0
     #define EXCLAMATION_BOX_ACT_OUTLINE          1
     #define EXCLAMATION_BOX_ACT_ACTIVE           2
     #define EXCLAMATION_BOX_ACT_SCALING          3
@@ -1183,5 +1183,16 @@
     #define MR_I_ACT_IDLE               1
     #define MR_I_ACT_LOOKING_AT_MARIO   2
     #define MR_I_ACT_SPIN_DEATH         3
+
+/* WF Kickable Board */
+    /* oAction */
+    #define KICKABLE_BOARD_ACT_IDLE_VERTICAL   0
+    #define KICKABLE_BOARD_ACT_ROCKING         1
+    #define KICKABLE_BOARD_ACT_FALLING         2
+    #define KICKABLE_BOARD_ACT_IDLE_HORIZONTAL 3
+    /* check_mario_attacking */
+    #define WF_ATTACK_NONE   0
+    #define WF_ATTACK_GROUND 1
+    #define WF_ATTACK_AIR    2
 
 #endif // OBJECT_CONSTANTS_H

@@ -49,12 +49,6 @@ UNUSED static const Lights1 flyguy_lights_unused3 = gdSPDefLights1(
 );
 
 // Unreferenced light group
-UNUSED static const Lights1 flyguy_lights_unused4 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
 UNUSED static const Lights1 flyguy_lights_unused5 = gdSPDefLights1(
     0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x28, 0x28, 0x28

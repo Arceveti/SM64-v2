@@ -110,14 +110,10 @@ void eye_joint_update_func(struct ObjJoint *self) {
     register struct ListNode *att;
     struct GdObj *attobj;
 
-    if (sCurrentMoveCamera == NULL) {
-        return;
-    }
+    if (sCurrentMoveCamera == NULL) return;
 
     if (self->rootAnimator != NULL) {
-        if (self->rootAnimator->state != 7) {
-            return;
-        }
+        if (self->rootAnimator->state != 7) return;
     }
 
     set_cur_dynobj((struct GdObj *)self);

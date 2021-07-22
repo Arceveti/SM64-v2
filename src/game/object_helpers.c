@@ -999,15 +999,10 @@ s32 cur_obj_check_anim_frame_in_range(s32 startFrame, s32 rangeLength) {
 
 s32 cur_obj_check_frame_prior_current_frame(s16 *a0) {
     s16 animFrame = o->header.gfx.animInfo.animFrame;
-
     while (*a0 != -1) {
-        if (*a0 == animFrame) {
-            return TRUE;
-        }
-
+        if (*a0 == animFrame) return TRUE;
         a0++;
     }
-
     return FALSE;
 }
 
@@ -1461,11 +1456,8 @@ f32 increment_velocity_toward_range(f32 value, f32 center, f32 zeroThreshold, f3
 s32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj2) {
     s32 i;
     for (i = 0; i < obj1->numCollidedObjs; i++) {
-        if (obj1->collidedObjs[i] == obj2) {
-            return TRUE;
-        }
+        if (obj1->collidedObjs[i] == obj2) return TRUE;
     }
-
     return FALSE;
 }
 
@@ -1504,42 +1496,18 @@ f32 cur_obj_lateral_dist_to_home(void) {
 }
 
 s32 cur_obj_outside_home_square(f32 halfLength) {
-    if (o->oHomeX - halfLength > o->oPosX) {
-        return TRUE;
-    }
-
-    if (o->oHomeX + halfLength < o->oPosX) {
-        return TRUE;
-    }
-
-    if (o->oHomeZ - halfLength > o->oPosZ) {
-        return TRUE;
-    }
-
-    if (o->oHomeZ + halfLength < o->oPosZ) {
-        return TRUE;
-    }
-
+    if (o->oHomeX - halfLength > o->oPosX) return TRUE;
+    if (o->oHomeX + halfLength < o->oPosX) return TRUE;
+    if (o->oHomeZ - halfLength > o->oPosZ) return TRUE;
+    if (o->oHomeZ + halfLength < o->oPosZ) return TRUE;
     return FALSE;
 }
 
 s32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
-    if (o->oHomeX + minX > o->oPosX) {
-        return TRUE;
-    }
-
-    if (o->oHomeX + maxX < o->oPosX) {
-        return TRUE;
-    }
-
-    if (o->oHomeZ + minZ > o->oPosZ) {
-        return TRUE;
-    }
-
-    if (o->oHomeZ + maxZ < o->oPosZ) {
-        return TRUE;
-    }
-
+    if (o->oHomeX + minX > o->oPosX) return TRUE;
+    if (o->oHomeX + maxX < o->oPosX) return TRUE;
+    if (o->oHomeZ + minZ > o->oPosZ) return TRUE;
+    if (o->oHomeZ + maxZ < o->oPosZ) return TRUE;
     return FALSE;
 }
 
@@ -1605,9 +1573,7 @@ static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel,
     }
 
     for (i = 0; i < numCoins; i++) {
-        if (obj->oNumLootCoins <= 0) {
-            break;
-        }
+        if (obj->oNumLootCoins <= 0) break;
 
         obj->oNumLootCoins--;
 
@@ -1628,9 +1594,7 @@ void obj_spawn_loot_yellow_coins(struct Object *obj, s32 numCoins, f32 baseYVel)
 
 void cur_obj_spawn_loot_coin_at_mario_pos(void) {
     struct Object *coin;
-    if (o->oNumLootCoins <= 0) {
-        return;
-    }
+    if (o->oNumLootCoins <= 0) return;
 
     o->oNumLootCoins--;
 
@@ -1815,18 +1779,9 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
 }
 
 static s32 cur_obj_within_bounds(f32 bounds) {
-    if (o->oPosX < -bounds || bounds < o->oPosX) {
-        return FALSE;
-    }
-
-    if (o->oPosY < -bounds || bounds < o->oPosY) {
-        return FALSE;
-    }
-
-    if (o->oPosZ < -bounds || bounds < o->oPosZ) {
-        return FALSE;
-    }
-
+    if (o->oPosX < -bounds || bounds < o->oPosX) return FALSE;
+    if (o->oPosY < -bounds || bounds < o->oPosY) return FALSE;
+    if (o->oPosZ < -bounds || bounds < o->oPosZ) return FALSE;
     return TRUE;
 }
 
@@ -1834,10 +1789,10 @@ void cur_obj_move_using_vel_and_gravity(void) {
     if (cur_obj_within_bounds(LEVEL_BOUNDARY_MAX + 4096.0f)) {
         o->oPosX += o->oVelX;
         o->oPosZ += o->oVelZ;
-        if (o->oVelY > -80.0f) {
+        if (o->oVelY > -TERMINAL_GRAVITY_VELOCITY) {
             o->oVelY += o->oGravity;
-        } else if (o->oVelY < -80.0f) {
-            o->oVelY = -80.0f;
+        } else if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) {
+            o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
         }
         o->oPosY += o->oVelY;
     }
@@ -2268,10 +2223,7 @@ s32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
 }
 
 s32 jiggle_bbh_stair(s32 timer) {
-    if (timer >= 4 || timer < 0) {
-        return TRUE;
-    }
-
+    if (timer >= 4 || timer < 0) return TRUE;
     o->oPosY += sBbhStairJiggleOffsets[timer];
     return FALSE;
 }
@@ -2282,12 +2234,12 @@ void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
 }
 
 static struct Object *spawn_star_with_no_lvl_exit(UNUSED s32 sparkleSpawnUnk1B0, UNUSED s32 param) {
-    struct Object *sp1C = spawn_object(o, MODEL_STAR, bhvSpawnedStarNoLevelExit);
-    sp1C->oSparkleSpawnUnk1B0 = 0;
-    sp1C->oBehParams = o->oBehParams;
-    sp1C->oBehParams2ndByte = 0;
+    struct Object *star = spawn_object(o, MODEL_STAR, bhvSpawnedStarNoLevelExit);
+    star->oSparkleSpawnUnk1B0 = 0;
+    star->oBehParams = o->oBehParams;
+    star->oBehParams2ndByte = 0;
 
-    return sp1C;
+    return star;
 }
 
 // old unused initializer for 2d star spawn behavior.
@@ -2310,22 +2262,14 @@ s32 cur_obj_mario_far_away(void) {
 }
 
 s32 is_mario_moving_fast_or_in_air(s32 speedThreshold) {
-    if (gMarioStates[0].forwardVel > speedThreshold) {
-        return TRUE;
-    }
-
-    return (gMarioStates[0].action & ACT_FLAG_AIR);
+    return ((gMarioStates[0].forwardVel > speedThreshold) || (gMarioStates[0].action & ACT_FLAG_AIR));
 }
 
 s32 is_item_in_array(s8 item, s8 *array) {
     while (*array != -1) {
-        if (*array == item) {
-            return TRUE;
-        }
-
+        if (*array == item) return TRUE;
         array++;
     }
-
     return FALSE;
 }
 
@@ -2468,17 +2412,12 @@ void clear_time_stop_flags(s32 flags) {
 }
 
 s32 cur_obj_can_mario_activate_textbox(f32 radius, f32 height, UNUSED s32 unused) {
-    if (o->oDistanceToMario < 1500.0f) {
-        f32 latDistToMario = lateral_dist_between_objects(o, gMarioObject);
-
-        if (latDistToMario < radius && o->oPosY < gMarioObject->oPosY + 160.0f
-            && gMarioObject->oPosY < o->oPosY + height && !(gMarioStates[0].action & ACT_FLAG_AIR)
-            && mario_ready_to_speak()) {
-            return TRUE;
-        }
-    }
-
-    return FALSE;
+    return (o->oDistanceToMario < 1500.0f
+         && lateral_dist_between_objects(o, gMarioObject) < radius
+         && o->oPosY < gMarioObject->oPosY + 160.0f
+         && gMarioObject->oPosY < o->oPosY + height
+         && !(gMarioStates[0].action & ACT_FLAG_AIR)
+         && mario_ready_to_speak());
 }
 
 s32 cur_obj_can_mario_activate_textbox_2(f32 radius, f32 height) {
@@ -2489,7 +2428,6 @@ s32 cur_obj_can_mario_activate_textbox_2(f32 radius, f32 height) {
 static void cur_obj_end_dialog(s32 dialogFlags, s32 dialogResult) {
     o->oDialogResponse = dialogResult;
     o->oDialogState++;
-
     if (!(dialogFlags & DIALOG_FLAG_TIME_STOP_ENABLED)) {
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
     }

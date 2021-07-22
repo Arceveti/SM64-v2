@@ -489,9 +489,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
         if (poolIdx == 1) {
             if (firstVal == SOUND_LOAD_STATUS_4) {
                 for (i = 0; i < gMaxSimultaneousNotes; i++) {
-                    if (gNotes[i].bankId == tp->entries[0].id && gNotes[i].noteSubEu.enabled) {
-                        break;
-                    }
+                    if (gNotes[i].bankId == tp->entries[0].id && gNotes[i].noteSubEu.enabled) break;
                 }
                 if (i == gMaxSimultaneousNotes) {
                     if (gBankLoadStatus[tp->entries[0].id] != SOUND_LOAD_STATUS_5) {
@@ -502,9 +500,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
             }
             if (secondVal == SOUND_LOAD_STATUS_4) {
                 for (i = 0; i < gMaxSimultaneousNotes; i++) {
-                    if (gNotes[i].bankId == tp->entries[1].id && gNotes[i].noteSubEu.enabled) {
-                        break;
-                    }
+                    if (gNotes[i].bankId == tp->entries[1].id && gNotes[i].noteSubEu.enabled) break;
                 }
                 if (i == gMaxSimultaneousNotes) {
                     if (gBankLoadStatus[tp->entries[1].id] != SOUND_LOAD_STATUS_5) {
@@ -545,9 +541,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
                 if (poolIdx == 0) {
                     if (firstVal == SOUND_LOAD_STATUS_COMPLETE) {
                         for (i = 0; i < SEQUENCE_PLAYERS; i++) {
-                            if (gSequencePlayers[i].enabled && gSequencePlayers[i].seqId == tp->entries[0].id) {
-                                break;
-                            }
+                            if (gSequencePlayers[i].enabled && gSequencePlayers[i].seqId == tp->entries[0].id) break;
                         }
                         if (i == SEQUENCE_PLAYERS) {
                             tp->nextSide = 0;
@@ -556,9 +550,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
                     }
                     if (secondVal == SOUND_LOAD_STATUS_COMPLETE) {
                         for (i = 0; i < SEQUENCE_PLAYERS; i++) {
-                            if (gSequencePlayers[i].enabled && gSequencePlayers[i].seqId == tp->entries[1].id) {
-                                break;
-                            }
+                            if (gSequencePlayers[i].enabled && gSequencePlayers[i].seqId == tp->entries[1].id) break;
                         }
                         if (i == SEQUENCE_PLAYERS) {
                             tp->nextSide = 1;
@@ -568,9 +560,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
                 } else if (poolIdx == 1) {
                     if (firstVal == SOUND_LOAD_STATUS_COMPLETE) {
                         for (i = 0; i < gMaxSimultaneousNotes; i++) {
-                            if (gNotes[i].bankId == tp->entries[0].id && gNotes[i].noteSubEu.enabled) {
-                                break;
-                            }
+                            if (gNotes[i].bankId == tp->entries[0].id && gNotes[i].noteSubEu.enabled) break;
                         }
                         if (i == gMaxSimultaneousNotes) {
                             tp->nextSide = 0;
@@ -579,9 +569,7 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
                     }
                     if (secondVal == SOUND_LOAD_STATUS_COMPLETE) {
                         for (i = 0; i < gMaxSimultaneousNotes; i++) {
-                            if (gNotes[i].bankId == tp->entries[1].id && gNotes[i].noteSubEu.enabled) {
-                                break;
-                            }
+                            if (gNotes[i].bankId == tp->entries[1].id && gNotes[i].noteSubEu.enabled) break;
                         }
                         if (i == gMaxSimultaneousNotes) {
                             tp->nextSide = 1;
@@ -765,12 +753,8 @@ void *get_bank_or_seq(s32 poolIdx, s32 arg1, s32 id) {
     void *ret;
 
     ret = unk_pool1_lookup(poolIdx, id);
-    if (ret != NULL) {
-        return ret;
-    }
-    if (arg1 == 3) {
-        return NULL;
-    }
+    if (ret != NULL) return ret;
+    if (arg1 == 3) return NULL;
     return get_bank_or_seq_inner(poolIdx, arg1, id);
 }
 void *get_bank_or_seq_inner(s32 poolIdx, s32 arg1, s32 bankId) {
@@ -1412,9 +1396,7 @@ void *unk_pool1_alloc(s32 poolIndex, s32 arg1, u32 size) {
     pos = gUnkPool1.pool.numAllocatedEntries;
     ret = sound_alloc_uninitialized(&gUnkPool1.pool, size);
     gUnkPool1.entries[pos].ptr = ret;
-    if (ret == NULL) {
-        return NULL;
-    }
+    if (ret == NULL) return NULL;
     gUnkPool1.entries[pos].poolIndex = poolIndex;
     gUnkPool1.entries[pos].id = arg1;
     gUnkPool1.entries[pos].size = size;
@@ -1514,33 +1496,18 @@ struct UnkEntry *func_sh_802f1ec4(u32 size) {
         if (!unkStruct->isFree) {
             itemStart = unkStruct->ramAddr;
             itemEnd = unkStruct->ramAddr + unkStruct->sample->size - 1;
-            if (itemEnd < phi_s3 && itemStart < phi_s3) {
-                continue;
-
-            }
-            if (itemEnd >= temp_s2 && itemStart >= temp_s2) {
-                continue;
-
-            }
-
+            if (itemEnd < phi_s3 && itemStart < phi_s3) continue;
+            if (itemEnd >= temp_s2 && itemStart >= temp_s2)  continue;
             unkStruct->isFree = TRUE;
         }
     }
 
     for (i = 0; i < pool->numEntries; i++) {
-        if (!pool->entries[i].used) {
-            continue;
-        }
+        if (!pool->entries[i].used) continue;
         itemStart = pool->entries[i].srcAddr;
         itemEnd = itemStart + pool->entries[i].size - 1;
-
-        if (itemEnd < phi_s3 && itemStart < phi_s3) {
-            continue;
-        }
-
-        if (itemEnd >= temp_s2 && itemStart >= temp_s2) {
-            continue;
-        }
+        if (itemEnd < phi_s3 && itemStart < phi_s3) continue;
+        if (itemEnd >= temp_s2 && itemStart >= temp_s2) continue;
 
         func_sh_802f2158(&pool->entries[i]);
         if (chosenIndex == -1) {
@@ -1612,9 +1579,7 @@ struct UnkEntry *unk_pool2_alloc(u32 size) {
     s32 *numEntries = &gUnkPool2.numEntries;
 
     data = sound_alloc_uninitialized(&gUnkPool2.pool, size);
-    if (data == NULL) {
-        return NULL;
-    }
+    if (data == NULL) return NULL;
     ret = &gUnkPool2.entries[*numEntries];
     ret->used = TRUE;
     ret->srcAddr = data;

@@ -368,9 +368,7 @@ void audio_list_push_back(struct AudioListItem *list, struct AudioListItem *item
  */
 void *audio_list_pop_back(struct AudioListItem *list) {
     struct AudioListItem *item = list->prev;
-    if (item == list) {
-        return NULL;
-    }
+    if (item == list) return NULL;
     item->prev->next = list;
     list->prev = item->prev;
     item->prev = NULL;
@@ -521,9 +519,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
         state = &layer->scriptState;
         cmd = m64_read_u8(state);
 
-        if (cmd <= 0xc0) {
-            break;
-        }
+        if (cmd <= 0xc0) break;
 
         switch (cmd) {
             case 0xff: // layer_end; function return or end of script
@@ -1417,9 +1413,7 @@ u8 get_instrument(struct SequenceChannel *seqChannel, u8 instId, struct Instrume
 
         while (instId != 0xff) {
             inst = gCtlEntries[seqChannelCpy.bankId].instruments[instId];
-            if (inst != NULL) {
-                break;
-            }
+            if (inst != NULL)  break;
             instId--;
         }
     }
@@ -1483,9 +1477,7 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
     s32 i;
     u8 *seqData;
 
-    if (!seqChannel->enabled) {
-        return;
-    }
+    if (!seqChannel->enabled) return;
 
     if (seqChannel->stopScript) {
         for (i = 0; i < LAYERS_MAX; i++) {
@@ -1497,9 +1489,7 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
     }
 
     seqPlayer = seqChannel->seqPlayer;
-    if (seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT) != 0) {
-        return;
-    }
+    if (seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT) != 0) return;
 
     if (seqChannel->delay != 0) {
         seqChannel->delay--;
@@ -2228,9 +2218,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 #ifndef VERSION_SH
     if (seqPlayer->bankDmaInProgress) {
 #ifdef VERSION_EU
-        if (osRecvMesg(&seqPlayer->bankDmaMesgQueue, NULL, 0) == -1) {
-            return;
-        }
+        if (osRecvMesg(&seqPlayer->bankDmaMesgQueue, NULL, 0) == -1) return;
         if (seqPlayer->bankDmaRemaining == 0) {
             seqPlayer->bankDmaInProgress = FALSE;
             patch_audio_bank(
@@ -2247,9 +2235,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                                          &seqPlayer->bankDmaIoMesg);
         }
 #else
-        if (seqPlayer->bankDmaMesg == NULL) {
-            return;
-        }
+        if (seqPlayer->bankDmaMesg == NULL) return;
         if (seqPlayer->bankDmaRemaining == 0) {
             seqPlayer->bankDmaInProgress = FALSE;
             patch_audio_bank(seqPlayer->loadingBank, gAlTbl->seqArray[seqPlayer->loadingBankId].offset,
@@ -2272,13 +2258,9 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 
     if (seqPlayer->seqDmaInProgress) {
 #ifdef VERSION_EU
-        if (osRecvMesg(&seqPlayer->seqDmaMesgQueue, NULL, 0) == -1) {
-            return;
-        }
+        if (osRecvMesg(&seqPlayer->seqDmaMesgQueue, NULL, 0) == -1) return;
 #else
-        if (seqPlayer->seqDmaMesg == NULL) {
-            return;
-        }
+        if (seqPlayer->seqDmaMesg == NULL) return;
 #endif
         seqPlayer->seqDmaInProgress = FALSE;
         gSeqLoadStatus[seqPlayer->seqId] = SOUND_LOAD_STATUS_COMPLETE;
@@ -2308,18 +2290,14 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 #endif
         gBankLoadStatus[seqPlayer->defaultBank[0]] = SOUND_LOAD_STATUS_COMPLETE;
 
-    if (seqPlayer->muted && (seqPlayer->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT) != 0) {
-        return;
-    }
+    if (seqPlayer->muted && (seqPlayer->muteBehavior & MUTE_BEHAVIOR_STOP_SCRIPT) != 0) return;
 
     // Check if we surpass the number of ticks needed for a tatum, else stop.
     seqPlayer->tempoAcc += seqPlayer->tempo;
 #ifdef VERSION_SH
     seqPlayer->tempoAcc += seqPlayer->tempoAdd;
 #endif
-    if (seqPlayer->tempoAcc < gTempoInternalToExternal) {
-        return;
-    }
+    if (seqPlayer->tempoAcc < gTempoInternalToExternal) return;
     seqPlayer->tempoAcc -= (u16) gTempoInternalToExternal;
 
     state = &seqPlayer->scriptState;
@@ -2400,15 +2378,9 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                     case 0xf9: // seq_bltz; jump if < 0
                     case 0xf5: // seq_bgez; jump if >= 0
                         u16v = m64_read_s16(state);
-                        if (cmd == 0xfa && value != 0) {
-                            break;
-                        }
-                        if (cmd == 0xf9 && value >= 0) {
-                            break;
-                        }
-                        if (cmd == 0xf5 && value < 0) {
-                            break;
-                        }
+                        if (cmd == 0xfa && value != 0) break;
+                        if (cmd == 0xf9 && value >= 0) break;
+                        if (cmd == 0xf5 && value < 0) break;
                         state->pc = seqPlayer->seqData + u16v;
                         break;
 
@@ -2417,12 +2389,8 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                     case 0xf3:
                     case 0xf2:
                         temp = m64_read_u8(state);
-                        if (cmd == 0xf3 && value != 0) {
-                            break;
-                        }
-                        if (cmd == 0xf2 && value >= 0) {
-                            break;
-                        }
+                        if (cmd == 0xf3 && value != 0) break;
+                        if (cmd == 0xf2 && value >= 0) break;
                         state->pc += (s8) temp;
                         break;
 #endif

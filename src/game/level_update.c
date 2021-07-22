@@ -208,15 +208,11 @@ u16 level_control_timer(s32 timerOp) {
 }
 
 u32 pressed_pause(void) {
-    u32 dialogActive = get_dialog_id() >= 0;
-    u32 intangible = (gMarioState->action & ACT_FLAG_INTANGIBLE) != 0;
-
-    if (!intangible && !dialogActive && !gWarpTransition.isActive && sDelayedWarpOp == WARP_OP_NONE
-        && (gPlayer1Controller->buttonPressed & START_BUTTON)) {
-        return TRUE;
-    }
-
-    return FALSE;
+    return (!(gMarioState->action & ACT_FLAG_INTANGIBLE)
+        && (get_dialog_id() < 0)
+        && !gWarpTransition.isActive
+        && sDelayedWarpOp == WARP_OP_NONE
+        && (gPlayer1Controller->buttonPressed & START_BUTTON));
 }
 
 void set_play_mode(s16 playMode) {
@@ -525,9 +521,7 @@ void check_instant_warp(void) {
     struct Surface *floor;
 
     if (gCurrLevelNum == LEVEL_CASTLE
-        && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 70) {
-        return;
-    }
+        && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 70) return;
 
     if ((floor = gMarioState->floor) != NULL) {
         s32 index = floor->type - SURFACE_INSTANT_WARP_1B;
@@ -1266,9 +1260,7 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
 
-    if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) {
-        return FALSE;
-    }
+    if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) return FALSE;
 
     if (gCurrLevelNum != LEVEL_BOWSER_1 && gCurrLevelNum != LEVEL_BOWSER_2 && gCurrLevelNum != LEVEL_BOWSER_3) {
         gMarioState->numCoins = 0;
@@ -1282,9 +1274,7 @@ s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum) {
         disable_warp_checkpoint();
     }
 
-    if (gCurrCourseNum > COURSE_STAGES_MAX || warpCheckpointActive) {
-        return FALSE;
-    }
+    if (gCurrCourseNum > COURSE_STAGES_MAX || warpCheckpointActive) return FALSE;
 
     return !(gDebugLevelSelect && !gShowProfiler);
 }

@@ -141,9 +141,7 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
         displayList = alloc_display_list(7 * sizeof(*displayList));
         displayListHead = displayList;
 
-        if (verts == NULL || displayList == NULL) {
-            return NULL;
-        }
+        if (verts == NULL || displayList == NULL) return NULL;
 
         generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
 

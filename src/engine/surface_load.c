@@ -142,9 +142,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     while (list->next != NULL) {
         priority = list->next->surface->vertex1[1] * sortDir;
 
-        if (surfacePriority > priority) {
-            break;
-        }
+        if (surfacePriority > priority) break;
 
         list = list->next;
     }
@@ -319,9 +317,7 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     maxY = max_3(y1, y2, y3);
 
     // Checking to make sure no DIV/0
-    if (mag < 0.0001f) {
-        return NULL;
-    }
+    if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);
     nx *= mag;
     ny *= mag;

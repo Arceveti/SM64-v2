@@ -16,7 +16,7 @@
 #include "game/profiler.h"
 #include "game/save_file.h"
 #include "game/sound_init.h"
-#ifdef GODDARD
+#ifdef KEEP_MARIO_HEAD
 #include "goddard/renderer.h"
 #endif
 #include "geo_layout.h"

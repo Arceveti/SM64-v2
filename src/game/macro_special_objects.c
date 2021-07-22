@@ -116,15 +116,11 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
 
     while (TRUE) {
-        if (*macroObjList == -1) { // An encountered value of -1 means the list has ended.
-            break;
-        }
+        if (*macroObjList == -1) break; // An encountered value of -1 means the list has ended.
 
         presetID = (*macroObjList & 0x1FF) - 31; // Preset identifier for MacroObjectPresets array
 
-        if (presetID < 0) {
-            break;
-        }
+        if (presetID < 0) break;
 
         // Set macro object properties from the list
         macroObject[MACRO_OBJ_Y_ROT] = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
@@ -190,9 +186,7 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
     while (TRUE) {
         macroObjPreset = *macroObjList++;
 
-        if (macroObjPreset < 0) {
-            break;
-        }
+        if (macroObjPreset < 0) break;
 
         macroObjX = *macroObjList++;
         macroObjY = *macroObjList++;
@@ -269,10 +263,7 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
 
         offset = 0;
         while (TRUE) {
-            if (SpecialObjectPresets[offset].preset_id == presetID) {
-                break;
-            }
-
+            if (SpecialObjectPresets[offset].preset_id == presetID) break;
             offset++;
         }
 
@@ -337,9 +328,7 @@ u32 get_special_objects_size(s16 *data) {
         offset = 0;
 
         while (TRUE) {
-            if (SpecialObjectPresets[offset].preset_id == presetID) {
-                break;
-            }
+            if (SpecialObjectPresets[offset].preset_id == presetID) break;
             offset++;
         }
 

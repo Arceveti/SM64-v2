@@ -23,9 +23,8 @@
 
 #define HUD_TOP_Y 209
 #define HUD_BOTTOM_Y 31
-#define HUD_TIMER_X 150
-#define HUD_KEYS_X 8
-#define HUD_COINS_X 152
+#define HUD_TIMER_X 150 // from right edge
+#define HUD_COINS_X 152 // from right edge
 #define HUD_STARS_X 78
 #define HUD_CAMERA_X 54
 #define HUD_CAMERA_Y (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
@@ -159,9 +158,7 @@ void render_dl_power_meter(s16 numHealthWedges) {
 
     mtx = alloc_display_list(sizeof(Mtx));
 
-    if (mtx == NULL) {
-        return;
-    }
+    if (mtx == NULL) return;
 
     guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
 
@@ -280,9 +277,7 @@ void render_hud_power_meter(void) {
         handle_power_meter_actions(shownHealthWedges);
     }
 
-    if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) {
-        return;
-    }
+    if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) return;
 
     switch (sPowerMeterHUD.animation) {
         case POWER_METER_EMPHASIZED:
@@ -315,7 +310,7 @@ void render_hud_power_meter(void) {
 void render_hud_mario_lives(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X), HUD_TOP_Y, ","); // 'Mario Head' glyph
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 18, HUD_TOP_Y, "*"); // 'X' glyph
-#ifdef NEW_HUD
+#ifdef HUD_LEADING_ZEROES
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 32, HUD_TOP_Y, "%02d", gHudDisplay.lives);
 #else
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_LIVES_X) + 32, HUD_TOP_Y, "%d", gHudDisplay.lives);
@@ -328,15 +323,18 @@ void render_hud_mario_lives(void) {
 void render_hud_coins(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X), HUD_TOP_Y, "$"); // 'Coin' glyph
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
-#ifdef NEW_HUD
+
+#ifdef HUD_LEADING_ZEROES
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%03d", gHudDisplay.coins);
+#else
+    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%d", gHudDisplay.coins);
+#endif
+#ifdef NEW_HUD
     if (gRedCoinsCollected > 0) {
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X), HUD_TOP_Y, "@"); // 'Red Coin' glyph
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
         print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X) + 30, HUD_TOP_Y, "%d", gRedCoinsCollected);
     }
-#else
-    print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%d", gHudDisplay.coins);
 #endif
 }
 
@@ -353,9 +351,7 @@ void render_hud_coins(void) {
 void render_hud_stars(void) {
     s8 showX = 0;
 
-    if (gHudFlash == 1 && gGlobalTimer & 0x08) {
-        return;
-    }
+    if (gHudFlash == 1 && gGlobalTimer & 0x08) return;
 
     if (gHudDisplay.stars < 100) {
         showX = 1;
@@ -366,7 +362,7 @@ void render_hud_stars(void) {
         print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
     }
     print_text_fmt_int((showX * 14) + GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16,
-#ifdef NEW_HUD
+#ifdef HUD_LEADING_ZEROES
                        HUD_TOP_Y, "%03d", gHudDisplay.stars);
 #else
                        HUD_TOP_Y, "%d", gHudDisplay.stars);
@@ -458,9 +454,7 @@ void render_hud_camera_status(void) {
     x = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
     y = HUD_CAMERA_Y;
 
-    if (sCameraHUD.status == CAM_STATUS_NONE) {
-        return;
-    }
+    if (sCameraHUD.status == CAM_STATUS_NONE) return;
 
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
     render_hud_tex_lut(x, y, (*cameraLUT)[GLYPH_CAM_CAMERA]);
@@ -510,9 +504,7 @@ void render_hud(void) {
         // basically create_dl_ortho_matrix but guOrtho screen width is different
 
         mtx = alloc_display_list(sizeof(*mtx));
-        if (mtx == NULL) {
-            return;
-        }
+        if (mtx == NULL) return;
         create_dl_identity_matrix();
         guOrtho(mtx, -16.0f, SCREEN_WIDTH + 16, 0, SCREEN_HEIGHT, -10.0f, 10.0f, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, 0xFFFF);

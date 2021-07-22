@@ -561,9 +561,7 @@ struct ObjGroup *make_group_of_type(enum ObjTypeFlag type, struct GdObj *fromObj
             addto_group(newGroup, curObj);
         }
 
-        if (curObj == NULL) {
-            break;
-        }
+        if (curObj == NULL) break;
 
         curObj = curObj->prev;
     }
@@ -666,12 +664,9 @@ s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) {
     struct ListNode *node = group->firstMember;
 
     while (node != NULL) {
-        if (node->obj->index == obj->index) {
-            return TRUE;
-        }
+        if (node->obj->index == obj->index) return TRUE;
         node = node->next;
     }
-
     return FALSE;
 }
 
@@ -923,9 +918,7 @@ void move_animator(struct ObjAnimator *animObj) {
         animObj->controlFunc(animObj);
     }
 
-    if (animObj->animatedPartsGrp == NULL) {
-        return;  // nothing to animate
-    }
+    if (animObj->animatedPartsGrp == NULL) return;  // nothing to animate
 
     animData = (struct AnimDataInfo *) animObj->animdataGrp->firstMember->obj;
 
@@ -935,9 +928,7 @@ void move_animator(struct ObjAnimator *animObj) {
         animData += ((struct ObjAnimator *) animObj->attachedToObj)->animSeqNum;
     }
 
-    if (animData->type == 0) {
-        return;
-    }
+    if (animData->type == 0) return;
 
     if (animObj->frame > (f32) animData->count) {
         animObj->frame = 1.0f;
@@ -1149,9 +1140,7 @@ void drag_picked_object(struct GdObj *inputObj) {
 
     ctrl = &gGdCtrl;
 
-    if (gViewUpdateCamera == NULL) {
-        return;
-    }
+    if (gViewUpdateCamera == NULL) return;
 
     dispMag = gd_vec3f_magnitude(&gViewUpdateCamera->unk40);
     dispMag /= 1000.0f;
@@ -1218,9 +1207,7 @@ void move_camera(struct ObjCamera *cam) {
     struct GdControl *ctrl;
 
     ctrl = &gGdCtrl;
-    if (!(cam->flags & 0x10)) {
-        return;
-    }
+    if (!(cam->flags & 0x10)) return;
 
     spE0.x = spE0.y = spE0.z = 0.0f;
     spB0.x = spB0.y = spB0.z = 0.0f;

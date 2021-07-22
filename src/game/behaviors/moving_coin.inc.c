@@ -126,8 +126,8 @@ void bhv_moving_blue_coin_loop(void) {
             } else {
                 o->oForwardVel *= 0.98f;
             }
-            if (o->oForwardVel > 75.0f) {
-                o->oForwardVel = 75.0f;
+            if (o->oForwardVel > TERMINAL_GRAVITY_VELOCITY) {
+                o->oForwardVel = TERMINAL_GRAVITY_VELOCITY;
             }
             obj_flicker_and_disappear(o, 600);
             break;

@@ -433,24 +433,23 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
         gfxHead = alloc_display_list(8 * sizeof(*gfxHead));
     }
 
-    if (gfxHead == NULL || verts == NULL) {
-        return NULL;
-    }
+    if (gfxHead == NULL || verts == NULL) return NULL;
+
     gfx = gfxHead;
     if (gMovtexCounter != gMovtexCounterPrev) {
         quad->rot += rotspeed;
     }
     rot = quad->rot;
     if (rotDir == ROTATE_CLOCKWISE) {
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot, 0, scale, alpha);
-        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, 16384, scale, alpha);
+        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0, scale, alpha);
+        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot,  16384, scale, alpha);
         movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
         movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, -16384, scale, alpha);
     } else { // ROTATE_COUNTER_CLOCKWISE
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot, 0, scale, alpha);
+        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0, scale, alpha);
         movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, -16384, scale, alpha);
         movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
-        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, 16384, scale, alpha);
+        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot,  16384, scale, alpha);
     }
 
     // Only add commands to change the texture when necessary
@@ -485,9 +484,8 @@ Gfx *movtex_gen_from_quad_array(s16 y, void *quadArrSegmented) {
     Gfx *subList;
     s32 i;
 
-    if (gfxHead == NULL) {
-        return NULL;
-    }
+    if (gfxHead == NULL) return NULL;
+
     for (i = 0; i < numLists; i++) {
         // quadArr is an array of s16, so sizeof(MovtexQuad) gets divided by 2
         subList = movtex_gen_from_quad(
@@ -812,9 +810,7 @@ Gfx *movtex_gen_list(s16 *movtexVerts, struct MovtexObject *movtexList, s8 attrL
     Gfx *gfx = gfxHead;
     s32 i;
 
-    if (verts == NULL || gfxHead == NULL) {
-        return NULL;
-    }
+    if (verts == NULL || gfxHead == NULL) return NULL;
 
     movtex_write_vertex_first(verts, movtexVerts, movtexList, attrLayout);
     for (i = 1; i < movtexList->vtx_count; i++) {
@@ -843,9 +839,7 @@ Gfx *geo_movtex_draw_nocolor(s32 callContext, struct GraphNode *node, UNUSED Mat
         i = 0;
         asGenerated = (struct GraphNodeGenerated *) node;
 #ifdef DDD_WARP_CURRENT_TEXTURE
-        if (asGenerated->parameter == MOVTEX_DDD_SUB_HOLE && !(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
-            return NULL;
-        }
+        if (asGenerated->parameter == MOVTEX_DDD_SUB_HOLE && !(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) return NULL;
 #endif
         while (gMovtexNonColored[i].movtexVerts != 0) {
             if (gMovtexNonColored[i].geoId == asGenerated->parameter) {

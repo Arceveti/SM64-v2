@@ -552,9 +552,7 @@ void mem_pool_free(struct MemoryPool *pool, void *addr) {
             }
         } else {
             while (freeList->next != NULL) {
-                if (freeList < block && block < freeList->next) {
-                    break;
-                }
+                if (freeList < block && block < freeList->next) break;
                 freeList = freeList->next;
             }
             if ((u8 *) freeList + freeList->size == (u8 *) block) {

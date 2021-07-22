@@ -46,9 +46,7 @@ void release_rumble_pak_control(void) {
 }
 
 static void start_rumble(void) {
-    if (!sRumblePakActive) {
-        return;
-    }
+    if (!sRumblePakActive) return;
 
     block_until_rumble_pak_free();
 
@@ -62,9 +60,7 @@ static void start_rumble(void) {
 }
 
 static void stop_rumble(void) {
-    if (!sRumblePakActive) {
-        return;
-    }
+    if (!sRumblePakActive) return;
 
     block_until_rumble_pak_free();
 
@@ -139,9 +135,7 @@ static void update_rumble_data_queue(void) {
 }
 
 void queue_rumble_data(s16 time, s16 level) {
-    if (gCurrDemoInput != NULL) {
-        return;
-    }
+    if (gCurrDemoInput != NULL) return;
 
     gRumbleDataQueue[2].comm = (level > 70) ? RUMBLE_EVENT_CONSTON : RUMBLE_EVENT_LEVELON;
 
@@ -155,29 +149,15 @@ void queue_rumble_decay(s16 decay) {
 }
 
 u8 is_rumble_finished_and_queue_empty(void) {
-    if (gCurrRumbleSettings.start + gCurrRumbleSettings.timer >= 4) {
-        return FALSE;
-    }
-
-    if (gRumbleDataQueue[0].comm != RUMBLE_EVENT_NOMESG) {
-        return FALSE;
-    }
-
-    if (gRumbleDataQueue[1].comm != RUMBLE_EVENT_NOMESG) {
-        return FALSE;
-    }
-
-    if (gRumbleDataQueue[2].comm != RUMBLE_EVENT_NOMESG) {
-        return FALSE;
-    }
-
+    if (gCurrRumbleSettings.start + gCurrRumbleSettings.timer >= 4) return FALSE;
+    if (gRumbleDataQueue[0].comm != RUMBLE_EVENT_NOMESG) return FALSE;
+    if (gRumbleDataQueue[1].comm != RUMBLE_EVENT_NOMESG) return FALSE;
+    if (gRumbleDataQueue[2].comm != RUMBLE_EVENT_NOMESG) return FALSE;
     return TRUE;
 }
 
 void reset_rumble_timers_slip(void) {
-    if (gCurrDemoInput != NULL) {
-        return;
-    }
+    if (gCurrDemoInput != NULL) return;
 
     if (gCurrRumbleSettings.slip == 0) {
         gCurrRumbleSettings.slip = 7;
@@ -191,9 +171,7 @@ void reset_rumble_timers_slip(void) {
 }
 
 void reset_rumble_timers_vibrate(s32 a0) {
-    if (gCurrDemoInput != NULL) {
-        return;
-    }
+    if (gCurrDemoInput != NULL) return;
 
     if (gCurrRumbleSettings.slip == 0) {
         gCurrRumbleSettings.slip = 7;
@@ -225,9 +203,7 @@ void reset_rumble_timers_vibrate(s32 a0) {
 }
 
 void queue_rumble_submerged(void) {
-    if (gCurrDemoInput != NULL) {
-        return;
-    }
+    if (gCurrDemoInput != NULL) return;
 
     gCurrRumbleSettings.unk0A = 4;
     gCurrRumbleSettings.unk0C = 4;
@@ -288,9 +264,7 @@ void create_thread_6(void) {
 }
 
 void rumble_thread_update_vi(void) {
-    if (!sRumblePakThreadActive) {
-        return;
-    }
+    if (!sRumblePakThreadActive) return;
 
     // 0x56525443 = 'VRTC'
     osSendMesg(&gRumbleThreadVIMesgQueue, (OSMesg) 0x56525443, OS_MESG_NOBLOCK);
