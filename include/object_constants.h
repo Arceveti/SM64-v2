@@ -961,7 +961,7 @@
     #define PENGUIN_ANIM_WALK 0
     #define PENGUIN_ANIM_IDLE 3
 
-/* Racing penguin */
+/* Racing Penguin */
     /* oAction */
     #define RACING_PENGUIN_ACT_WAIT_FOR_MARIO   0
     #define RACING_PENGUIN_ACT_SHOW_INIT_TEXT   1
@@ -970,7 +970,34 @@
     #define RACING_PENGUIN_ACT_FINISH_RACE      4
     #define RACING_PENGUIN_ACT_SHOW_FINAL_TEXT  5
 
-/* SL walking penguin */
+/* Mother Penguin */
+    /* oAction */
+    #define MOTHER_PENGUIN_ACT_IDLE                     0
+    #define MOTHER_PENGUIN_ACT_RECEIVE_BABY             1
+    #define MOTHER_PENGUIN_ACT_RECEIVED_BABY            2
+    /* oSubAction */
+    /* Act 0 */
+    #define MOTHER_PENGUIN_SUB_ACT_READY_TO_ASK         0
+    #define MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY         1
+    #define MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED        2
+    /* Act 1 */
+    #define MOTHER_PENGUIN_SUB_ACT_RECEIVE_BABY         0
+    #define MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY         1
+    #define MOTHER_PENGUIN_SUB_ACT_WRONG_BABY           2
+    /* Act 2 */
+    #define MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO          0
+    #define MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO   1
+
+/* Small Penguin */
+    /* oAction */
+    #define SMALL_PENGUIN_ACT_WALKING                   0
+    #define SMALL_PENGUIN_ACT_WALKING_TOWARD_MARIO      1
+    #define SMALL_PENGUIN_ACT_WALKING_AWAY_FROM_MARIO   2
+    #define SMALL_PENGUIN_ACT_DIVE_SLIDING              3
+    #define SMALL_PENGUIN_ACT_DIVE_SLIDING_STOP         4
+    #define SMALL_PENGUIN_ACT_NEAR_MOTHER               5
+
+/* SL walking Penguin */
     /* oAction */
     #define SL_WALKING_PENGUIN_ACT_MOVING_FORWARDS  0
     #define SL_WALKING_PENGUIN_ACT_TURNING_BACK     1
@@ -1051,6 +1078,11 @@
     /* oAction */
     #define MAD_PIANO_ACT_WAIT   0
     #define MAD_PIANO_ACT_ATTACK 1
+
+/* Haunted Chair */
+    /* oAction */
+    #define HAUNTED_CHAIR_ACT_0 0
+    #define HAUNTED_CHAIR_ACT_1 1
 
 /* Fire piranha plant */
     /* oAction */

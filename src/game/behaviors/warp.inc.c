@@ -16,7 +16,7 @@ void bhv_warp_loop(void) {
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
-void bhv_fading_warp_loop() {// identical to the above function except for o->hitboxRadius
+void bhv_fading_warp_loop() { // identical to the above function except for o->hitboxRadius
 #ifdef VISIBLE_FADE_WARPS
     spawn_sparkle_particles(1, 85, 50, 120);
 #endif

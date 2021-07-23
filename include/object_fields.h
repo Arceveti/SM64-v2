@@ -550,11 +550,11 @@
 #define /*0x10C*/ oGoombaRelativeSpeed       OBJECT_FIELD_F32(0x21)
 
 /* Haunted Chair */
-#define /*0x0F4*/ oHauntedChairUnkF4  OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oHauntedChairUnkF8  OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oHauntedChairUnkFC  OBJECT_FIELD_F32(0x1D)
-#define /*0x100*/ oHauntedChairUnk100 OBJECT_FIELD_S32P(0x1E)
-#define /*0x104*/ oHauntedChairUnk104 OBJECT_FIELD_S32(0x1F)
+#define /*0x0F4*/ oHauntedChairSpinTimer            OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oHauntedChairPitchVel             OBJECT_FIELD_F32(0x1C)
+#define /*0x0FC*/ oHauntedChairRollVel              OBJECT_FIELD_F32(0x1D)
+#define /*0x100*/ oHauntedChairFallFromPianoAngle   OBJECT_FIELD_S32P(0x1E)
+#define /*0x104*/ oHauntedChairFallTargetAngle      OBJECT_FIELD_S32(0x1F)
 
 /* Heave-Ho */
 #define /*0x088*/ oHeaveHoThrowState OBJECT_FIELD_S32(0x00)
@@ -740,11 +740,11 @@
 #define /*0x1B2*/ oRacingPenguinMarioCheated           OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Small Penguin */
-#define /*0x088*/ oSmallPenguinUnk88  OBJECT_FIELD_S32(0x00)
-#define /*0x100*/ oSmallPenguinUnk100 OBJECT_FIELD_S32(0x1E) // angle?
-#define /*0x104*/ oSmallPenguinUnk104 OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oSmallPenguinUnk108 OBJECT_FIELD_F32(0x20)
-#define /*0x110*/ oSmallPenguinUnk110 OBJECT_FIELD_S32(0x22)
+#define /*0x088*/ oSmallPenguinReturnedToMother     OBJECT_FIELD_S32(0x00)
+#define /*0x100*/ oSmallPenguinStoredAction         OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oSmallPenguinNextForwardVel       OBJECT_FIELD_F32(0x1F)
+#define /*0x108*/ oSmallPenguinRandomDistanceCheck  OBJECT_FIELD_F32(0x20)
+#define /*0x110*/ oSmallPenguinYawIncrement         OBJECT_FIELD_S32(0x22)
 
 /* SL Walking Penguin */
 #define /*0x100*/ oSLWalkingPenguinWindCollisionXPos OBJECT_FIELD_F32(0x1E)
@@ -919,10 +919,6 @@
 /* Hidden Star */
 // Secrets/Red Coins
 #define /*0x0F4*/ oHiddenStarTriggerCounter OBJECT_FIELD_S32(0x1B)
-
-// Overall very difficult to determine usage, mostly stubbed code.
-/* Sparkle Spawn Star */
-#define /*0x1B0*/ oSparkleSpawnUnk1B0 OBJECT_FIELD_S32(0x4A)
 
 /* Sealed Door Star */
 #define /*0x108*/ oUnlockDoorStarState  OBJECT_FIELD_U32(0x20)

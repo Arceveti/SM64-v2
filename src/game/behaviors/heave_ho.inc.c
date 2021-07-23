@@ -1,7 +1,7 @@
 // heave_ho.c.inc
 
 s16 sHeaveHoTimings[][2] = { { 30, 0 }, { 42, 1 }, {  52, 0 }, {  64, 1 }, { 74, 0 },
-                        { 86, 1 }, { 96, 0 }, { 108, 1 }, { 118, 0 }, { -1, 0 }, };
+                             { 86, 1 }, { 96, 0 }, { 108, 1 }, { 118, 0 }, { -1, 0 }, };
 
 void bhv_heave_ho_throw_mario_loop(void) {
     o->oParentRelativePosX = 200.0f;
