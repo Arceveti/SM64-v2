@@ -842,13 +842,13 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
                         }
 
 #ifdef VERSION_EU
-                        if (synthesisState->restart != FALSE) {
+                        if (synthesisState->restart) {
                             aSetLoop(cmd++, VIRTUAL_TO_PHYSICAL2(audioBookSample->loop->state));
                             flags = A_LOOP; // = 2
                             synthesisState->restart = FALSE;
                         }
 #else
-                        if (note->restart != FALSE) {
+                        if (note->restart) {
                             aSetLoop(cmd++, VIRTUAL_TO_PHYSICAL2(audioBookSample->loop->state));
                             flags = A_LOOP; // = 2
                             note->restart = FALSE;
@@ -954,9 +954,9 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
                                     resampledTempLen = samplesLenAdjusted + 4;
                                     noteSamplesDmemAddrBeforeResampling = DMEM_ADDR_RESAMPLED + 4;
 #ifdef VERSION_EU
-                                    if (noteSubEu->finished != FALSE) {
+                                    if (noteSubEu->finished) {
 #else
-                                    if (note->finished != FALSE) {
+                                    if (note->finished) {
 #endif
                                         aClearBuffer(cmd++, DMEM_ADDR_RESAMPLED + resampledTempLen, samplesLenAdjusted + 0x10);
                                     }
@@ -983,9 +983,9 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
                     }
 
 #ifdef VERSION_EU
-                    if (noteSubEu->finished != FALSE) {
+                    if (noteSubEu->finished) {
 #else
-                    if (note->finished != FALSE) {
+                    if (note->finished) {
 #endif
                         break;
                     }

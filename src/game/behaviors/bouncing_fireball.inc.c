@@ -31,8 +31,8 @@ void bhv_bouncing_fireball_flame_loop(void) {
 }
 
 void bhv_bouncing_fireball_loop(void) {
-    struct Object *sp2C;
-    f32 sp28;
+    struct Object *flameObj;
+    f32 scale;
     switch (o->oAction) {
         case 0:
             if (o->oDistanceToMario < 2000.0f) {
@@ -40,11 +40,11 @@ void bhv_bouncing_fireball_loop(void) {
             }
             break;
         case 1:
-            sp2C = spawn_object(o, MODEL_RED_FLAME, bhvBouncingFireballFlame);
-            sp28 = (10 - o->oTimer) * 0.5f;
-            obj_scale_xyz(sp2C, sp28, sp28, sp28);
+            flameObj = spawn_object(o, MODEL_RED_FLAME, bhvBouncingFireballFlame);
+            scale = (10 - o->oTimer) * 0.5f;
+            obj_scale(flameObj, scale);
             if (o->oTimer == 0) {
-                obj_become_tangible(sp2C);
+                obj_become_tangible(flameObj);
             }
             if (o->oTimer > 10) {
                 o->oAction++;

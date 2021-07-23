@@ -491,11 +491,23 @@
 
 /* BBH Tilting Trap Platform */
     /* oAction */
-    // Unused in original Japanese version
     #define BBH_TILTING_TRAP_PLATFORM_ACT_MARIO_ON  0
     #define BBH_TILTING_TRAP_PLATFORM_ACT_MARIO_OFF 1
 
 /* Boo */
+    /* oAction */
+    #define BOO_ACT_STOPPED                 0
+    #define BOO_ACT_CHASING_MARIO           1
+    #define BOO_ACT_BOUNCED_ON              2
+    #define BOO_ACT_ATTACKED                3
+    #define BOO_ACT_DEATH                   4
+    #define BOO_ACT_5                       5
+
+    /* oBehParams2ndByte */
+    #define BOO_BP_GHOST_HUNT           0
+    #define BOO_BP_NORMAL               1
+    #define BOO_BP_MERRY_GO_ROUND       2
+
     /* oBooDeathStatus */
     #define BOO_DEATH_STATUS_ALIVE 0
     #define BOO_DEATH_STATUS_DYING 1
@@ -506,11 +518,17 @@
     #define BOO_ATTACKED           1
     #define BOO_BOUNCED_ON        -1
 
+/* Big Boo */
+    /* oBehParams2ndByte */
+    #define BIG_BOO_BP_GHOST_HUNT       0
+    #define BIG_BOO_BP_MERRY_GO_ROUND   1
+    #define BIG_BOO_BP_BALCONY          2
+
 /* Beta Boo Key */
     /* oAction */
-    #define BETA_BOO_KEY_ACT_IN_BOO   0
-    #define BETA_BOO_KEY_ACT_DROPPING 1
-    #define BETA_BOO_KEY_ACT_DROPPED  2
+    #define BETA_BOO_KEY_ACT_IN_BOO     0
+    #define BETA_BOO_KEY_ACT_DROPPING   1
+    #define BETA_BOO_KEY_ACT_DROPPED    2
 
 /* Boo Cage */
     /* oAction */
@@ -519,6 +537,12 @@
     #define BOO_CAGE_ACT_ON_GROUND        2
     #define BOO_CAGE_ACT_MARIO_JUMPING_IN 3
     #define BOO_CAGE_ACT_USELESS          4
+
+/* BBH Staircase */
+    /* oBehParams2ndByte */
+    #define BOO_STAIRCASE_BP_0  0
+    #define BOO_STAIRCASE_BP_1  1
+    #define BOO_STAIRCASE_BP_2  2
 
 /* BBH Haunted Bookshelf */
     /* oAction */

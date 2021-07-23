@@ -40,7 +40,7 @@ void bhv_flamethrower_flame_loop(void) {
 void bhv_flamethrower_loop(void) {
     struct Object *flame;
     f32 flameVel;
-    s32 sp34;
+    s32 flameTimeRemaining;
     s32 model;
     if (o->oAction == 0) {
         if (gCurrLevelNum != LEVEL_BBH || gMarioOnMerryGoRound) {
@@ -57,15 +57,15 @@ void bhv_flamethrower_loop(void) {
         if (o->oBehParams2ndByte == 2) {
             flameVel = 50.0f;
         }
-        sp34 = 1;
+        flameTimeRemaining = 1;
         if (o->oTimer < 60) {
-            sp34 = 15;
+            flameTimeRemaining = 15;
         } else if (o->oTimer < 74) {
-            sp34 = 75 - o->oTimer; // Range: [15..2]
+            flameTimeRemaining = 75 - o->oTimer; // Range: [15..2]
         } else {
             o->oAction++;
         }
-        o->oFlameThowerTimeRemaining = sp34;
+        o->oFlameThowerTimeRemaining = flameTimeRemaining;
         flame = spawn_object_relative(o->oBehParams2ndByte, 0, 0, 0, o, model, bhvFlamethrowerFlame);
         flame->oForwardVel = flameVel;
         cur_obj_play_sound_1(SOUND_AIR_BLOW_FIRE);

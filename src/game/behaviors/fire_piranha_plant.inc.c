@@ -10,11 +10,6 @@ struct ObjectHitbox sFirePiranhaPlantHitbox = {
     /* hurtboxHeight:     */ 150,
 };
 
-f32 D_80331B5C[] = {
-    0.5f,
-    2.0f,
-};
-
 struct ObjectHitbox sPiranhaPlantFireHitbox = {
     /* interactType:      */ INTERACT_FLAME,
     /* downOffset:        */ 10,
@@ -31,18 +26,13 @@ s32 sNumActiveFirePiranhaPlants;
 s32 sNumKilledFirePiranhaPlants;
 
 void bhv_fire_piranha_plant_init(void) {
-    o->oFirePiranhaPlantNeutralScale = D_80331B5C[(u16)(o->oBehParams >> 16)];
+    o->oFirePiranhaPlantNeutralScale = (((u16)(o->oBehParams >> 16)) ? 2.0f : 0.5f);
     obj_set_hitbox(o, &sFirePiranhaPlantHitbox);
 
     if ((u16)(o->oBehParams >> 16) != 0) {
         o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
         o->oHealth = 1;
-
-        if (o->oBehParams & 0x0000FF00) {
-            o->oNumLootCoins = 0;
-        } else {
-            o->oNumLootCoins = 2;
-        }
+        o->oNumLootCoins = ((o->oBehParams & 0x0000FF00) ? 0 : 2);
     }
     sNumActiveFirePiranhaPlants = sNumKilledFirePiranhaPlants = 0;
 }
@@ -101,16 +91,12 @@ static void fire_piranha_plant_act_grow(void) {
             cur_obj_init_animation_with_sound(0);
         } else if (o->oTimer < 50) {
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
-        } else { // TODO: Check if we can put these conditionals on same line
-            if (obj_is_rendering_enabled()) {
-                if (cur_obj_check_anim_frame(56)) {
-                    cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
-                    obj_spit_fire(0, (s32)(30.0f * o->oFirePiranhaPlantNeutralScale),
-                                  (s32)(140.0f * o->oFirePiranhaPlantNeutralScale),
-                                  2.5f * o->oFirePiranhaPlantNeutralScale, MODEL_RED_FLAME_SHADOW,
-                                  20.0f, 15.0f, 0x1000);
-                }
-            }
+        } else if (obj_is_rendering_enabled() && cur_obj_check_anim_frame(56)) {
+            cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
+            obj_spit_fire(0, (s32)( 30.0f * o->oFirePiranhaPlantNeutralScale),
+                             (s32)(140.0f * o->oFirePiranhaPlantNeutralScale),
+                                     2.5f * o->oFirePiranhaPlantNeutralScale, MODEL_RED_FLAME_SHADOW,
+                                    20.0f, 15.0f, 0x1000);
         }
     } else if (o->oFirePiranhaPlantScale > o->oFirePiranhaPlantNeutralScale / 2) {
         cur_obj_become_tangible();

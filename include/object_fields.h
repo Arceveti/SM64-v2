@@ -293,9 +293,6 @@
 /* Bowser Shockwave */
 #define /*0x0F4*/ oBowserShockWaveScale OBJECT_FIELD_F32(0x1B)
 
-/* Black Smoke Bowser */
-#define /*0x0F4*/ oBlackSmokeBowserScaleX OBJECT_FIELD_F32(0x1B)
-
 /* Bowser Key Cutscene */
 #define /*0x0F4*/ oBowserKeyScale OBJECT_FIELD_F32(0x1B)
 

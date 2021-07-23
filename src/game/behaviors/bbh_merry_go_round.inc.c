@@ -24,7 +24,8 @@ static void handle_merry_go_round_music(void) {
         struct Surface *marioFloor;
         u16 marioFloorType;
 
-        find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &marioFloor);
+        // find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &marioFloor);
+        marioFloor = gMarioState->floor;
 
         if (marioFloor == NULL) {
             marioFloorType = 0;
@@ -70,19 +71,17 @@ void bhv_merry_go_round_loop(void) {
     // for playing the howling wind sound in BBH.
     if (!o->oMerryGoRoundMarioIsOutside) {
         if (gMarioCurrentRoom == BBH_OUTSIDE_ROOM) {
-            // Set to TRUE
-            o->oMerryGoRoundMarioIsOutside++;
+            o->oMerryGoRoundMarioIsOutside = TRUE;
         }
     } else {
         play_sound(SOUND_AIR_HOWLING_WIND, gGlobalSoundSource);
 
-        if (
             // There are objects outside BBH, such as corkboxes.
             // The howling wind should not stop when Mario stands on a cork box.
             //! @bug Interestingly, this means if Mario goes from outside
             // to a dynamic surface *inside* the mansion in a single frame,
             // the howling wind music will still play.
-            gMarioCurrentRoom != BBH_OUTSIDE_ROOM && gMarioCurrentRoom != BBH_DYNAMIC_SURFACE_ROOM) {
+        if (gMarioCurrentRoom != BBH_OUTSIDE_ROOM && gMarioCurrentRoom != BBH_DYNAMIC_SURFACE_ROOM) {
             o->oMerryGoRoundMarioIsOutside = FALSE;
         }
     }
@@ -95,6 +94,6 @@ void bhv_merry_go_round_loop(void) {
         handle_merry_go_round_music();
     } else {
         o->oAngleVelYaw = 0;
-        func_80321080(300); // Switch to BBH music? FIXME: Audio needs labelling
+        func_80321080(300); //! Switch to BBH music? FIXME: Audio needs labelling
     }
 }

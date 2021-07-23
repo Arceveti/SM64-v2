@@ -471,7 +471,7 @@ l13cc:
         init_synthetic_wave(layer->note, layer);
     }
 
-    if (cmdSemitone != FALSE) {
+    if (cmdSemitone) {
         (*layer).note = alloc_note(layer);
     }
 

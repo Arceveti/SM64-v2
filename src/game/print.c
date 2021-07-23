@@ -332,6 +332,10 @@ s8 char_to_glyph_index(char c) {
         return GLYPH_RED_COIN; // red coin
     }
 
+    if (c == '+') {
+        return GLYPH_SILVER_COIN;
+    }
+
     if (c == ',') {
         return GLYPH_MARIO_HEAD; // Imagine I drew Mario's head
     }

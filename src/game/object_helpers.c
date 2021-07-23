@@ -26,7 +26,7 @@
 #include "rendering_graph_node.h"
 #include "spawn_object.h"
 #include "spawn_sound.h"
-#ifdef PLATFORM_DISPLACEMENT_2
+#ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
 #include "platform_displacement.h"
 
 struct PlatformDisplacementInfo sObjectDisplacementInfo;
@@ -953,14 +953,14 @@ void cur_obj_change_action(s32 action) {
     cur_obj_reset_timer_and_subaction();
 }
 
-void cur_obj_set_vel_from_mario_vel(f32 f12, f32 f14) {
+void cur_obj_set_vel_from_mario_vel(f32 min, f32 mul) {
     f32 marioFwdVel = gMarioStates[0].forwardVel;
-    f32 minVel = f12 * f14;
+    f32 minVel = min * mul;
 
     if (marioFwdVel < minVel) {
         o->oForwardVel = minVel;
     } else {
-        o->oForwardVel = marioFwdVel * f14;
+        o->oForwardVel = marioFwdVel * mul;
     }
 }
 
@@ -1146,7 +1146,7 @@ void obj_become_tangible(struct Object *obj) {
 
 void cur_obj_update_floor_height(void) {
     struct Surface *floor;
-#ifdef PLATFORM_DISPLACEMENT_2
+#ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
     struct Object *platform;
     s16 nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
@@ -1166,7 +1166,7 @@ void cur_obj_update_floor_height(void) {
 
 struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
     struct Surface *floor;
-#ifdef PLATFORM_DISPLACEMENT_2
+#ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
     struct Object *platform;
     s16 nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
@@ -1989,7 +1989,7 @@ f32 random_f32_around_zero(f32 diameter) {
 
 void obj_scale_random(struct Object *obj, f32 rangeLength, f32 minScale) {
     f32 scale = random_float() * rangeLength + minScale;
-    obj_scale_xyz(obj, scale, scale, scale);
+    obj_scale(obj, scale);
 }
 
 void obj_translate_xyz_random(struct Object *obj, f32 rangeLength) {

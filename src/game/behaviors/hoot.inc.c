@@ -14,27 +14,27 @@ void bhv_hoot_init(void) {
 // sp28 = arg0
 // sp2c = arg1
 
-f32 hoot_find_next_floor(struct FloorGeometry **arg0, f32 arg1) {
-    f32 sp24 = arg1 * sins(o->oMoveAngleYaw) + o->oPosX;
-    f32 sp1c = arg1 * coss(o->oMoveAngleYaw) + o->oPosZ;
-    f32 floorY = find_floor_height_and_data(sp24, 10000.0f, sp1c, arg0);
+f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist) {
+    f32 nextX = dist * sins(o->oMoveAngleYaw) + o->oPosX;
+    f32 nextZ = dist * coss(o->oMoveAngleYaw) + o->oPosZ;
+    f32 floorY = find_floor_height_and_data(nextX, 10000.0f, nextZ, floorGeo);
 
     return floorY;
 }
 
 void hoot_floor_bounce(void) {
-    struct FloorGeometry *sp1c;
+    struct FloorGeometry *floorGeo;
     f32 floorY;
 
-    floorY = hoot_find_next_floor(&sp1c, 375.0f);
+    floorY = hoot_find_next_floor(&floorGeo, 375.0f);
     if (floorY + 75.0f > o->oPosY) {
         o->oMoveAnglePitch -= 3640.8888f;
     }
-    floorY = hoot_find_next_floor(&sp1c, 200.0f);
+    floorY = hoot_find_next_floor(&floorGeo, 200.0f);
     if (floorY + 125.0f > o->oPosY) {
         o->oMoveAnglePitch -= 7281.7776f;
     }
-    floorY = hoot_find_next_floor(&sp1c, 0);
+    floorY = hoot_find_next_floor(&floorGeo, 0);
     if (floorY + 125.0f > o->oPosY) {
         o->oPosY = floorY + 125.0f;
     }
@@ -47,10 +47,10 @@ void hoot_floor_bounce(void) {
 // sp34 = speed
 
 void hoot_free_step(s16 fastOscY, s32 speed) {
-    struct FloorGeometry *sp2c;
+    struct FloorGeometry *floorGeo;
     s16 yaw = o->oMoveAngleYaw;
     s16 pitch = o->oMoveAnglePitch;
-    s16 sp26 = o->header.gfx.animInfo.animFrame;
+    s16 animFrame = o->header.gfx.animInfo.animFrame;
     f32 xPrev = o->oPosX;
     f32 zPrev = o->oPosZ;
     f32 hSpeed;
@@ -61,16 +61,16 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
     o->oVelZ = coss(yaw) * hSpeed;
 
     o->oPosX += o->oVelX;
-    o->oPosY -= o->oVelY + coss((s32)(sp26 * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4;
+    o->oPosY -= o->oVelY + coss((s32)(animFrame * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4;
     o->oPosZ += o->oVelZ;
 
-    find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &sp2c);
-    if (sp2c == NULL) {
+    find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
+    if (floorGeo == NULL) {
         o->oPosX = xPrev;
         o->oPosZ = zPrev;
     }
 
-    if (sp26 == 0) {
+    if (animFrame == 0) {
         cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
     }
 }
@@ -91,10 +91,10 @@ void hoot_player_set_yaw(void) {
 // sp2c = xPrev
 // sp30 = zPrev
 
-void hoot_carry_step(s32 speed, UNUSED f32 xPrev, UNUSED f32 zPrev) {
+void hoot_carry_step(s32 speed) {
     s16 yaw = o->oMoveAngleYaw;
     s16 pitch = o->oMoveAnglePitch;
-    s16 sp22 = o->header.gfx.animInfo.animFrame;
+    s16 animFrame = o->header.gfx.animInfo.animFrame;
     f32 hSpeed;
 
     o->oVelY = sins(pitch) * speed;
@@ -103,10 +103,10 @@ void hoot_carry_step(s32 speed, UNUSED f32 xPrev, UNUSED f32 zPrev) {
     o->oVelZ = coss(yaw) * hSpeed;
 
     o->oPosX += o->oVelX;
-    o->oPosY -= o->oVelY + coss((s32)(sp22 * 6553.6f)) * 50.0f / 4;
+    o->oPosY -= o->oVelY + coss((s32)(animFrame * 6553.6f)) * 50.0f / 4;
     o->oPosZ += o->oVelZ;
 
-    if (sp22 == 0) {
+    if (animFrame == 0) {
         cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
     }
 }
@@ -115,8 +115,8 @@ void hoot_carry_step(s32 speed, UNUSED f32 xPrev, UNUSED f32 zPrev) {
 // sp4c = yPrev
 // sp50 = zPrev
 
-void hoot_surface_collision(f32 xPrev, UNUSED f32 yPrev, f32 zPrev) {
-    struct FloorGeometry *sp44;
+void hoot_surface_collision(f32 xPrev, f32 zPrev) {
+    struct FloorGeometry *floorGeo;
     struct WallCollisionData hitbox;
     f32 floorY;
 
@@ -133,8 +133,8 @@ void hoot_surface_collision(f32 xPrev, UNUSED f32 yPrev, f32 zPrev) {
         gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
     }
 
-    floorY = find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &sp44);
-    if (sp44 == NULL) {
+    floorY = find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
+    if (floorGeo == NULL) {
         o->oPosX = xPrev;
         o->oPosZ = zPrev;
         return;
@@ -154,7 +154,7 @@ void hoot_surface_collision(f32 xPrev, UNUSED f32 yPrev, f32 zPrev) {
 // sp28 = xPrev
 // sp2c = zPrev
 
-void hoot_act_ascent(f32 xPrev, f32 zPrev) {
+void hoot_act_ascent(void) {
     f32 negX = 0 - o->oPosX;
     f32 negZ = 0 - o->oPosZ;
     s16 angleToOrigin = atan2s(negZ, negX);
@@ -170,17 +170,17 @@ void hoot_act_ascent(f32 xPrev, f32 zPrev) {
     if (o->oPosY > 6500.0f) {
         o->oAction = HOOT_ACT_CARRY;
     }
-    hoot_carry_step(60, xPrev, zPrev);
+    hoot_carry_step(60);
 }
 
 void hoot_action_loop(void) {
     f32 xPrev = o->oPosX;
-    f32 yPrev = o->oPosY;
+    // f32 yPrev = o->oPosY;
     f32 zPrev = o->oPosZ;
 
     switch (o->oAction) {
         case HOOT_ACT_ASCENT:
-            hoot_act_ascent(xPrev, zPrev);
+            hoot_act_ascent();
             break;
 
         case HOOT_ACT_CARRY:
@@ -198,7 +198,7 @@ void hoot_action_loop(void) {
                 }
             }
 
-            hoot_carry_step(20, xPrev, zPrev);
+            hoot_carry_step(20);
             break;
 
         case HOOT_ACT_TIRED:
@@ -206,7 +206,7 @@ void hoot_action_loop(void) {
 
             o->oMoveAnglePitch = 0;
 
-            hoot_carry_step(20, xPrev, zPrev);
+            hoot_carry_step(20);
 
             if (o->oTimer >= 61) {
                 gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
@@ -214,7 +214,7 @@ void hoot_action_loop(void) {
             break;
     }
 
-    hoot_surface_collision(xPrev, yPrev, zPrev);
+    hoot_surface_collision(xPrev, zPrev);
 }
 
 void hoot_turn_to_home(void) {
@@ -247,12 +247,29 @@ void hoot_awake_loop(void) {
 }
 
 void bhv_hoot_loop(void) {
+#ifdef HOOT_TREE_PARTICLES
+    struct Object *obj;
+    f32 scale;
+#endif
     switch (o->oHootAvailability) {
         case HOOT_AVAIL_ASLEEP_IN_TREE:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 50)) {
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
                 o->oHootAvailability = HOOT_AVAIL_WANTS_TO_TALK;
             }
+#ifdef HOOT_TREE_PARTICLES
+            if (random_float() < 0.01f) {
+                obj = spawn_object(o, MODEL_LEAVES, bhvTreeLeaf);
+                scale = random_float() * 3.0f;
+                obj_scale(obj, scale);
+                obj->oMoveAngleYaw = random_u16();
+                obj->oForwardVel = random_float() * 5.0f + 5.0f;
+                obj->oVelY = random_float() * 15.0f;
+                obj->oFaceAnglePitch = random_u16();
+                obj->oFaceAngleRoll = random_u16();
+                obj->oFaceAngleYaw = random_u16();
+            }
+#endif
             break;
 
         case HOOT_AVAIL_WANTS_TO_TALK:

@@ -1,5 +1,5 @@
 // 0x0702B65C - 0x0702B6E0
-const Collision hmc_seg7_collision_0702B65C[] = {
+const Collision hmc_seg7_collision_grill_door[] = {
 #ifdef VERSION_JP
     COL_INIT(),
     COL_VERTEX_INIT(0x8),

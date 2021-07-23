@@ -29,10 +29,11 @@ void bhv_donut_platform_spawner_update(void) {
 
             // dist > 1000 and dist < 2000
             if (marioSqDist > 1000000.0f && marioSqDist < 4000000.0f) {
-                if (spawn_object_relative(i, sDonutPlatformPositions[i][0],
-                                          sDonutPlatformPositions[i][1], sDonutPlatformPositions[i][2],
-                                          o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform)
-                    != NULL) {
+                if (spawn_object_relative(i,
+                                          sDonutPlatformPositions[i][0],
+                                          sDonutPlatformPositions[i][1],
+                                          sDonutPlatformPositions[i][2],
+                                          o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform) != NULL) {
                     o->oDonutPlatformSpawnerSpawnedPlatforms |= platformFlag;
                 }
             }

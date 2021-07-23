@@ -64,12 +64,8 @@ static void camera_lakitu_intro_act_spawn_cloud(void) {
  * Circle down to mario, show the dialog, then fly away.
  */
 static void camera_lakitu_intro_act_show_dialog(void) {
-    s16 targetMovePitch;
-    s16 targetMoveYaw;
-#ifdef AVOID_UB
-    targetMovePitch = 0;
-    targetMoveYaw = 0;
-#endif
+    s16 targetMovePitch = 0;
+    s16 targetMoveYaw = 0;
 
     cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY);
 
@@ -105,13 +101,10 @@ static void camera_lakitu_intro_act_show_dialog(void) {
 
                 approach_f32_ptr(&o->oCameraLakituCircleRadius, 200.0f, 50.0f);
                 if (o->oDistanceToMario < 1000.0f) {
-#ifndef VERSION_JP
                     if (!o->oCameraLakituIntroMusicPlayed) {
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_LAKITU), 0);
                         o->oCameraLakituIntroMusicPlayed = TRUE;
                     }
-#endif
-
                     // Once within 1000 units, slow down
                     approach_f32_ptr(&o->oCameraLakituSpeed, 20.0f, 1.0f);
                     if (o->oDistanceToMario < 500.0f

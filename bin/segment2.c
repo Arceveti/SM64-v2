@@ -216,6 +216,10 @@ ALIGNED8 static const Texture texture_hud_char_red_coin[] = {
 #include "textures/segment2/segment2.red_coin.rgba16.inc.c"
 };
 
+ALIGNED8 static const Texture texture_hud_char_silver_coin[] = {
+#include "textures/segment2/segment2.silver_coin.rgba16.inc.c"
+};
+
 ALIGNED8 static const Texture texture_hud_char_mario_head[] = {
 #include "textures/segment2/segment2.05A00.rgba16.inc.c"
 };
@@ -1809,75 +1813,61 @@ ALIGNED8 static const Texture texture_hud_char_arrow_down[] = {
 #include "textures/segment2/segment2.081D0.rgba16.inc.c"
 };
 
+#if defined(VERSION_JP) || defined(VERSION_EU) || defined(VERSION_SH) || defined(COMPLETE_EN_US_SEGMENT2)
+#define HUD_V   texture_hud_char_V
+#define HUD_Z   texture_hud_char_Z
+#else
+#define HUD_V   0x0
+#define HUD_Z   0x0
+#endif
+
+#if defined(VERSION_JP) || defined(VERSION_SH) || defined(COMPLETE_EN_US_SEGMENT2)
+#define HUD_J                   texture_hud_char_J
+#define HUD_Q                   texture_hud_char_Q
+#define HUD_X                   texture_hud_char_X
+#define HUD_EXCLAMATION         texture_hud_char_exclamation
+#define HUD_DOUBLE_EXCLAMATION  texture_hud_char_double_exclamation
+#define HUD_QUESTION            texture_hud_char_question
+#define HUD_AMPERSAND           texture_hud_char_ampersand
+#define HUD_PERCENT             texture_hud_char_percent
+#define HUD_DECIMAL_POINT       texture_hud_char_decimal_point
+#define HUD_BETA_KEY            texture_hud_char_beta_key
+#else
+#define HUD_J                   0x0
+#define HUD_Q                   0x0
+#define HUD_X                   0x0
+#define HUD_EXCLAMATION         0x0
+#define HUD_DOUBLE_EXCLAMATION  0x0
+#define HUD_QUESTION            0x0
+#define HUD_AMPERSAND           0x0
+#define HUD_PERCENT             0x0
+#define HUD_DECIMAL_POINT       0x0
+#define HUD_BETA_KEY            0x0
+#endif
+
+#if defined(VERSION_EU) || defined(COMPLETE_EN_US_SEGMENT2)
+#define HUD_UMLAUT  texture_hud_char_umlaut
+#else
+#define HUD_UMLAUT  0x0
+#endif
+
 // Main HUD print table 0x02008250-0x02008337
 const Texture *const main_hud_lut[] = {
-#ifdef COMPLETE_EN_US_SEGMENT2
     texture_hud_char_0, texture_hud_char_1, texture_hud_char_2, texture_hud_char_3,
     texture_hud_char_4, texture_hud_char_5, texture_hud_char_6, texture_hud_char_7,
     texture_hud_char_8, texture_hud_char_9, texture_hud_char_A, texture_hud_char_B,
     texture_hud_char_C, texture_hud_char_D, texture_hud_char_E, texture_hud_char_F,
-    texture_hud_char_G, texture_hud_char_H, texture_hud_char_I, texture_hud_char_J,
+    texture_hud_char_G, texture_hud_char_H, texture_hud_char_I,              HUD_J,
     texture_hud_char_K, texture_hud_char_L, texture_hud_char_M, texture_hud_char_N,
-    texture_hud_char_O, texture_hud_char_P, texture_hud_char_Q, texture_hud_char_R,
-    texture_hud_char_S, texture_hud_char_T, texture_hud_char_U, texture_hud_char_V,
-    texture_hud_char_W, texture_hud_char_X, texture_hud_char_Y, texture_hud_char_Z,
-    texture_hud_char_exclamation, texture_hud_char_double_exclamation, texture_hud_char_question, texture_hud_char_ampersand,
-    texture_hud_char_percent,                0x0,                0x0,                0x0,
+    texture_hud_char_O, texture_hud_char_P,              HUD_Q, texture_hud_char_R,
+    texture_hud_char_S, texture_hud_char_T, texture_hud_char_U,              HUD_V,
+    texture_hud_char_W,              HUD_X, texture_hud_char_Y,              HUD_Z,
+       HUD_EXCLAMATION, HUD_DOUBLE_EXCLAMATION,   HUD_QUESTION,      HUD_AMPERSAND,
+           HUD_PERCENT,                0x0,                0x0,                0x0,
                    0x0,                0x0,                0x0, texture_hud_char_minus,
-    texture_hud_char_multiply,                0x0, texture_hud_char_coin, texture_hud_char_red_coin,
-    texture_hud_char_mario_head, texture_hud_char_star, texture_hud_char_decimal_point, texture_hud_char_beta_key,
-    texture_hud_char_apostrophe, texture_hud_char_double_quote, texture_hud_char_umlaut,
-#else
-#ifdef VERSION_EU
-    texture_hud_char_0, texture_hud_char_1, texture_hud_char_2, texture_hud_char_3,
-    texture_hud_char_4, texture_hud_char_5, texture_hud_char_6, texture_hud_char_7,
-    texture_hud_char_8, texture_hud_char_9, texture_hud_char_A, texture_hud_char_B,
-    texture_hud_char_C, texture_hud_char_D, texture_hud_char_E, texture_hud_char_F,
-    texture_hud_char_G, texture_hud_char_H, texture_hud_char_I,                0x0,
-    texture_hud_char_K, texture_hud_char_L, texture_hud_char_M, texture_hud_char_N,
-    texture_hud_char_O, texture_hud_char_P,                0x0, texture_hud_char_R,
-    texture_hud_char_S, texture_hud_char_T, texture_hud_char_U, texture_hud_char_V,
-    texture_hud_char_W,                0x0, texture_hud_char_Y, texture_hud_char_Z,
-                   0x0,                0x0,                0x0,                0x0,
-                   0x0,                0x0,                0x0,                0x0,
-                   0x0,                0x0,                0x0, texture_hud_char_minus,
-     texture_hud_char_multiply,                0x0, texture_hud_char_coin, texture_hud_char_red_coin,
-    texture_hud_char_mario_head, texture_hud_char_star,                0x0,                0x0,
-    texture_hud_char_apostrophe, texture_hud_char_double_quote, texture_hud_char_umlaut,
-#elif defined(VERSION_US)
-    texture_hud_char_0, texture_hud_char_1, texture_hud_char_2, texture_hud_char_3,
-    texture_hud_char_4, texture_hud_char_5, texture_hud_char_6, texture_hud_char_7,
-    texture_hud_char_8, texture_hud_char_9, texture_hud_char_A, texture_hud_char_B,
-    texture_hud_char_C, texture_hud_char_D, texture_hud_char_E, texture_hud_char_F,
-    texture_hud_char_G, texture_hud_char_H, texture_hud_char_I,                0x0,
-    texture_hud_char_K, texture_hud_char_L, texture_hud_char_M, texture_hud_char_N,
-    texture_hud_char_O, texture_hud_char_P,                0x0, texture_hud_char_R,
-    texture_hud_char_S, texture_hud_char_T, texture_hud_char_U,                0x0,
-    texture_hud_char_W,                0x0, texture_hud_char_Y,                0x0,
-                   0x0,                0x0,                0x0,                0x0,
-                   0x0,                0x0,                0x0,                0x0,
-                   0x0,                0x0,                0x0, texture_hud_char_minus,
-    texture_hud_char_multiply,               0x0, texture_hud_char_coin, texture_hud_char_red_coin,
-    texture_hud_char_mario_head, texture_hud_char_star,                0x0,                0x0,
-    texture_hud_char_apostrophe, texture_hud_char_double_quote,                0x0,
-#else
-    texture_hud_char_0, texture_hud_char_1, texture_hud_char_2, texture_hud_char_3,
-    texture_hud_char_4, texture_hud_char_5, texture_hud_char_6, texture_hud_char_7,
-    texture_hud_char_8, texture_hud_char_9, texture_hud_char_A, texture_hud_char_B,
-    texture_hud_char_C, texture_hud_char_D, texture_hud_char_E, texture_hud_char_F,
-    texture_hud_char_G, texture_hud_char_H, texture_hud_char_I, texture_hud_char_J,
-    texture_hud_char_K, texture_hud_char_L, texture_hud_char_M, texture_hud_char_N,
-    texture_hud_char_O, texture_hud_char_P, texture_hud_char_Q, texture_hud_char_R,
-    texture_hud_char_S, texture_hud_char_T, texture_hud_char_U, texture_hud_char_V,
-    texture_hud_char_W, texture_hud_char_X, texture_hud_char_Y, texture_hud_char_Z,
-    texture_hud_char_exclamation, texture_hud_char_double_exclamation, texture_hud_char_question, texture_hud_char_ampersand,
-    texture_hud_char_percent,          0x0,                0x0,                0x0,
-                    0x0,               0x0,                0x0, texture_hud_char_minus,
-    texture_hud_char_multiply,               0x0, texture_hud_char_coin, texture_hud_char_red_coin,
-    texture_hud_char_mario_head, texture_hud_char_star, texture_hud_char_decimal_point, texture_hud_char_beta_key,
-    texture_hud_char_apostrophe, texture_hud_char_double_quote,                0x0,
-#endif
-#endif
+    texture_hud_char_multiply, texture_hud_char_coin, texture_hud_char_red_coin ,texture_hud_char_silver_coin,
+    texture_hud_char_mario_head, texture_hud_char_star, HUD_DECIMAL_POINT, HUD_BETA_KEY,
+    texture_hud_char_apostrophe, texture_hud_char_double_quote, HUD_UMLAUT,
 };
 
 // Main small font print table 0x02008338-0x02008737

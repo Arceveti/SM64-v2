@@ -8,7 +8,7 @@ void bhv_checkerboard_elevator_group_init(void) {
     s32 relativePosZ;
     s32 type;
     s32 i;
-    struct Object *sp2C;
+    struct Object *platformObj;
     if (o->oBehParams2ndByte == 0) {
         o->oBehParams2ndByte = 65;
     }
@@ -20,10 +20,10 @@ void bhv_checkerboard_elevator_group_init(void) {
         } else {
             relativePosZ = sCheckerBoardPlatformInitPositions[type].relPosZ;
         }
-        sp2C = spawn_object_relative(i, 0, i * relativePosY, relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM,
+        platformObj = spawn_object_relative(i, 0, i * relativePosY, relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM,
                                      bhvCheckerboardPlatformSub);
-        sp2C->oCheckerBoardPlatformRadius = sCheckerBoardPlatformInitPositions[type].radius;
-        vec3f_copy_2(sp2C->header.gfx.scale, sCheckerBoardPlatformInitPositions[type].scaleVec);
+        platformObj->oCheckerBoardPlatformRadius = sCheckerBoardPlatformInitPositions[type].radius;
+        vec3f_copy_2(platformObj->header.gfx.scale, sCheckerBoardPlatformInitPositions[type].scaleVec);
     }
 }
 

@@ -30,7 +30,7 @@
 #define HUD_CAMERA_Y (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
 #define HUD_POWER_METER_Y 166
 
-#ifdef NEW_HUD
+#ifdef HUD_RED_COINS
 #define HUD_LIVES_X 8
 #define HUD_POWER_METER_X 142
 #define HUD_RED_COINS_X 70
@@ -199,21 +199,13 @@ void animate_power_meter_emphasized(void) {
 static void animate_power_meter_deemphasizing(void) {
     s16 speed = 5;
 
-    if (sPowerMeterHUD.y >= 181) {
-        speed = 3;
-    }
-
-    if (sPowerMeterHUD.y >= 191) {
-        speed = 2;
-    }
-
-    if (sPowerMeterHUD.y >= 196) {
-        speed = 1;
-    }
+    if (sPowerMeterHUD.y > 180) speed = 3;
+    if (sPowerMeterHUD.y > 190) speed = 2;
+    if (sPowerMeterHUD.y > 195) speed = 1;
 
     sPowerMeterHUD.y += speed;
 
-    if (sPowerMeterHUD.y >= 201) {
+    if (sPowerMeterHUD.y > 200) {
         sPowerMeterHUD.y = 200;
         sPowerMeterHUD.animation = POWER_METER_VISIBLE;
     }
@@ -329,7 +321,7 @@ void render_hud_coins(void) {
 #else
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%d", gHudDisplay.coins);
 #endif
-#ifdef NEW_HUD
+#ifdef HUD_RED_COINS
     if (gRedCoinsCollected > 0) {
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X), HUD_TOP_Y, "@"); // 'Red Coin' glyph
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_RED_COINS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
@@ -381,16 +373,22 @@ void render_hud_keys(void) {
     }
 }
 
+#ifdef HUD_SECRETS
 /**
  * Function that renders the amount of secrets collected.
  */
 void render_hud_secrets(void) {
     if (gSecretsCollected > 0) {
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), HUD_TOP_Y-24, "?"); // 'question mark' glyph
+#ifdef COMPLETE_EN_US_SEGMENT2
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), HUD_TOP_Y-24, "?"); // 'Question Mark' glyph
+#else
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), HUD_TOP_Y-24, "+"); // 'Silver Coin' glyph
+#endif
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X+18), HUD_TOP_Y-24, "*"); // 'X' glyph
         print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X+32), HUD_TOP_Y-24, "%d", gSecretsCollected);
     }
 }
+#endif
 
 /**
  * Renders the timer when Mario start sliding in PSS.
@@ -529,7 +527,7 @@ void render_hud(void) {
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) {
             render_hud_stars();
         }
-#ifdef NEW_HUD
+#ifdef HUD_SECRETS
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) {
             render_hud_secrets();
         }

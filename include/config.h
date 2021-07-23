@@ -205,7 +205,7 @@
 
 // Enable debug level select (doesn't work if Goddard is skipped)
 #define DEBUG_LEVEL_SELECT
-// Enable debug info
+// Enable debug info [COMPLETE_EN_US_SEGMENT2 is recommended] (Arceveti)
 #define DEBUG_INFO
 // Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti)
 #define EXTENDED_DEBUG_INFO
@@ -218,26 +218,37 @@
 // Terminal velovity for gravity (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
 
-// -- Gameplay QoL --
+// -- HUD/Gameplay QoL --
 
-// Koopa Shell boxes respawn (Arceveti)
-#define KOOPA_SHELL_BOXES_RESPAWN
-// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
-#define BLUE_COIN_SWITCH_RETRY
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER
 // Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
 #define DIALOG_INDICATOR
+// Display number of Red Coins collected on the HUD (Arceveti)
+#define HUD_RED_COINS
+// Display number of Secrets collected on the HUD [COMPLETE_EN_US_SEGMENT2 is recommended] (Arceveti)
+#define HUD_SECRETS
+// Adds leading zeroes to the counters on the HUD (Arceveti)
+#define HUD_LEADING_ZEROES
+
+// -- Object Behaviors --
+
 // Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
 #define MUSHROOMS_HEAL
+// Koopa Shell boxes respawn (Arceveti)
+#define KOOPA_SHELL_BOXES_RESPAWN
 // The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
 #define CONTROLLABLE_PLATFORM_SPEED
-// Rearranged HUD with Red Coin & Secrets counters (Arceveti)
-#define NEW_HUD
-// Adds leading zeroes to the counters on the HUD
-#define HUD_LEADING_ZEROES
-// Prevents falling when grabbing a star high enough above the floor (Arceveti)
-#define AIR_STAR_GRAB
+// Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
+#define BLUE_COIN_SWITCH_RETRY
+// Clams don't hurt mario unless they are moving (opening/closing) (Arceveti)
+#define CLAMS_ONLY_HURT_WHEN_MOVING
+// Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti)
+#define COIN_LAVA_FLICKER
+// Tiny Goombas (from THI) always drop their coin (Arceveti)
+#define TINY_GOOMBA_COIN
+// Leaf particles fall from trees which contain Hoot (Arceveti)
+#define HOOT_TREE_PARTICLES
 
 // -- Movement --
 
@@ -292,5 +303,10 @@
 
 // Goddard easter egg from Shindou (Nintendo, Arceveti)
 #define GODDARD_EASTER_EGG
+
+// -- Experimental --
+
+// Platform Displacement 2 for objects other than Mario & Bowser
+// #define PLATFORM_DISPLACEMENT_2_OBJECTS
 
 #endif // CONFIG_H

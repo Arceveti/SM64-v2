@@ -13,7 +13,7 @@ static struct ObjectHitbox sBobombHitbox = {
 };
 
 void bhv_bobomb_init(void) {
-    o->oGravity = 2.5f;
+    o->oGravity  = 2.5f;
     o->oFriction = 0.8f;
     o->oBuoyancy = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_KICKABLE;
@@ -55,7 +55,7 @@ void bobomb_check_interactions(void) {
             o->oAction = BOBOMB_ACT_LAUNCHED;
         }
 
-        if ((o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB) != 0) {
+        if (o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB) {
             o->oAction = BOBOMB_ACT_EXPLODE;
         }
         o->oInteractStatus = INT_STATUS_NONE;

@@ -23,9 +23,9 @@ static s32 arrow_lift_move_away(void) {
     o->oArrowLiftDisplacement += o->oForwardVel;
 
     // Stop the platform after moving 384 units.
-    if (o->oArrowLiftDisplacement > 384) {
+    if (o->oArrowLiftDisplacement > 384.0f) {
         o->oForwardVel = 0;
-        o->oArrowLiftDisplacement = 384;
+        o->oArrowLiftDisplacement = 384.0f;
         status = ARROW_LIFT_DONE_MOVING;
     }
 
@@ -45,9 +45,9 @@ static s8 arrow_lift_move_back(void) {
     o->oArrowLiftDisplacement -= o->oForwardVel;
 
     // Stop the platform after returning back to its original position.
-    if (o->oArrowLiftDisplacement < 0) {
+    if (o->oArrowLiftDisplacement < 0.0f) {
         o->oForwardVel = 0;
-        o->oArrowLiftDisplacement = 0;
+        o->oArrowLiftDisplacement = 0.0f;
         status = ARROW_LIFT_DONE_MOVING;
     }
 

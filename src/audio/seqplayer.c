@@ -938,7 +938,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
         init_synthetic_wave(layer->note, layer);
     }
 
-    if (cmd != FALSE) {
+    if (cmd) {
         layer->note = alloc_note(layer);
     }
 

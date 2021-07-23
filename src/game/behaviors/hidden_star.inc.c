@@ -15,7 +15,9 @@ void bhv_hidden_star_init(void) {
 }
 
 void bhv_hidden_star_loop(void) {
+#ifdef HUD_SECRETS
     gSecretsCollected = o->oHiddenStarTriggerCounter;
+#endif
     switch (o->oAction) {
         case 0:
             if (o->oHiddenStarTriggerCounter == 5) {

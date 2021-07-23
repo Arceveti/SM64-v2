@@ -1,9 +1,9 @@
 // end_birds_2.inc.c
 
 void bhv_end_birds_2_loop(void) {
-    Vec3f sp3C;
-    f32 sp34;
-    s16 sp32, sp30;
+    Vec3f pos;
+    f32 dist;
+    s16 pitch, yaw;
 
     gCurrentObject->oForwardVel = (random_float() * 10.0f) + 25.0f;
 
@@ -13,11 +13,10 @@ void bhv_end_birds_2_loop(void) {
             gCurrentObject->oAction++;
             break;
         case 1:
-            vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &sp34, &sp32,
-                                     &sp30);
-            sp30 += 0x1000;
-            vec3f_set_dist_and_angle(gCamera->pos, sp3C, 14000.0f, sp32, sp30);
-            obj_rotate_towards_point(gCurrentObject, sp3C, 0, 0, 8, 8);
+            vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &pitch, &yaw);
+            yaw += 0x1000;
+            vec3f_set_dist_and_angle(gCamera->pos, pos, 14000.0f, pitch, yaw);
+            obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 8, 8);
 
             if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);

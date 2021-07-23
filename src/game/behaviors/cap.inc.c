@@ -19,7 +19,6 @@ s32 cap_set_hitbox(void) {
         o->oInteractStatus = INT_STATUS_NONE;
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -248,7 +247,7 @@ void bhv_normal_cap_loop(void) {
     if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         normal_cap_set_save_flags();
     }
-    if (cap_set_hitbox() == 1) {
+    if (cap_set_hitbox()) {
         save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
     }
 }

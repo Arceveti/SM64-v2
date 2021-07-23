@@ -150,7 +150,7 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
         break;
 
     case 0x83:
-        if (gSequencePlayers[cmd->u.s.arg1].enabled != FALSE) {
+        if (gSequencePlayers[cmd->u.s.arg1].enabled) {
             if (cmd->u2.as_s32 == 0) {
                 sequence_player_disable(&gSequencePlayers[cmd->u.s.arg1]);
             }
@@ -282,7 +282,7 @@ void func_802ad7ec(u32 arg0) {
                     break;
                 }
             }
-            else if (seqPlayer->enabled != FALSE && cmd->u.s.arg2 < 0x10) {
+            else if (seqPlayer->enabled && cmd->u.s.arg2 < 0x10) {
                 chan = seqPlayer->channels[cmd->u.s.arg2];
                 if (IS_SEQUENCE_CHANNEL_VALID(chan))
                 {

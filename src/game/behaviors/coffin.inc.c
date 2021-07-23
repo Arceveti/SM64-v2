@@ -63,7 +63,7 @@ void bhv_coffin_spawner_loop(void) {
  */
 void coffin_act_idle(void) {
     f32 yawCos;
-    f32 yawSin;
+    // f32 yawSin;
     f32 dx;
     f32 dz;
     f32 distForwards;
@@ -91,13 +91,13 @@ void coffin_act_idle(void) {
         } else {
             // Yaw never changes and is aligned, so yawCos = 1 or -1, yawSin = 0
             yawCos = coss(o->oFaceAngleYaw);
-            yawSin = sins(o->oFaceAngleYaw);
+            // yawSin = sins(o->oFaceAngleYaw);
 
             dx = gMarioObject->oPosX - o->oPosX;
             dz = gMarioObject->oPosZ - o->oPosZ;
 
-            distForwards = dx * yawCos + dz * yawSin;
-            distSideways = dz * yawCos - dx * yawSin;
+            distForwards = dx * yawCos; // + dz * yawSin;
+            distSideways = dz * yawCos; // - dx * yawSin;
 
             // This checks a box around the coffin and if it has been a bit since it stood up.
             // It also checks in the case Mario is squished, so he doesn't get permanently squished.

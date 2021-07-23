@@ -12,13 +12,13 @@ void bhv_celebration_star_init(void) {
         o->oFaceAnglePitch = 0;
         o->oFaceAngleRoll = 49152;
         cur_obj_scale(0.1f);
-        o->oCelebStarIsBowserKey = 1;
+        o->oCelebStarIsBowserKey = TRUE;
     } else {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
         o->oFaceAnglePitch = 0;
         o->oFaceAngleRoll = 0;
         cur_obj_scale(0.4f);
-        o->oCelebStarIsBowserKey = 0;
+        o->oCelebStarIsBowserKey = FALSE;
     }
 #else
     o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];

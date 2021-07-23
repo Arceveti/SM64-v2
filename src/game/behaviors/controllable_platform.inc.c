@@ -52,13 +52,13 @@ void bhv_controllable_platform_sub_loop(void) {
 
 void bhv_controllable_platform_init(void) {
     struct Object *buttonObj;
-    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0, 51, 205, 0, 0, 0);
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub,    0, 51,  205, 0,       0, 0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_SOUTH;
-    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 0, 51, -205, 0, -0x8000, 0);
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub,    0, 51, -205, 0, -0x8000, 0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_NORTH;
-    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, 205, 51, 0, 0, 0x4000, 0);
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub,  205, 51,    0, 0,  0x4000, 0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_EAST;
-    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, -205, 51, 0, 0, -0x4000, 0);
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformSub, -205, 51,    0, 0, -0x4000, 0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_WEST;
 
     sControllablePlatformDirectionState = DIRECTION_STATE_STOPPED;

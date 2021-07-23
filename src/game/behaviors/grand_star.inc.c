@@ -1,8 +1,8 @@
 // grand_star.c.inc
 
-s32 arc_to_goal_pos(Vec3f a0, Vec3f a1, f32 yVel, f32 gravity) {
-    f32 dx = a0[0] - a1[0];
-    f32 dz = a0[2] - a1[2];
+s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
+    f32 dx = dest[0] - src[0];
+    f32 dz = dest[2] - src[2];
     f32 planarDist = sqrtf(dx * dx + dz * dz);
     s32 time;
     o->oMoveAngleYaw = atan2s(dz, dx);
@@ -20,8 +20,8 @@ void grand_star_zero_velocity(void) {
 }
 
 void bhv_grand_star_loop(void) {
-    Vec3f sp28;
-    sp28[0] = sp28[1] = sp28[2] = 0.0f;
+    Vec3f dest;
+    dest[0] = dest[1] = dest[2] = 0.0f;
     if (o->oAction == 0) {
         if (o->oTimer == 0) {
             obj_set_angle(o, 0, 0, 0);
@@ -36,7 +36,7 @@ void bhv_grand_star_loop(void) {
         if (o->oTimer == 0) {
             cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR);
             cutscene_object(CUTSCENE_STAR_SPAWN, o);
-            o->oGrandStarArcTime = arc_to_goal_pos(sp28, &o->oPosX, 80.0f, -2.0f);
+            o->oGrandStarArcTime = arc_to_goal_pos(dest, &o->oPosX, 80.0f, -2.0f);
         }
         cur_obj_move_using_fvel_and_gravity();
         if (o->oSubAction == 0) {

@@ -8,17 +8,17 @@ void bhv_floor_trap_in_castle_loop(void) {
 }
 
 void bhv_castle_floor_trap_init(void) {
-    struct Object *sp2C;
-    sp2C = spawn_object_relative(0, -358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
-    sp2C = spawn_object_relative(0,  358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
-    sp2C->oMoveAngleYaw += 0x8000;
+    struct Object *floorTrapObj;
+    floorTrapObj = spawn_object_relative(0, -358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
+    floorTrapObj = spawn_object_relative(0,  358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
+    floorTrapObj->oMoveAngleYaw += 0x8000;
 }
 
 void bhv_castle_floor_trap_open_detect(void) {
     if (gMarioStates[0].action == ACT_SPECIAL_EXIT_AIRBORNE
-        || gMarioStates[0].action == ACT_SPECIAL_DEATH_EXIT)
+     || gMarioStates[0].action == ACT_SPECIAL_DEATH_EXIT) {
         o->oAction = 4; // rotates trapdoor so it looks always open
-    else {
+    } else {
         o->oAngleVelRoll = 0x400;
         if (o->oInteractStatus & INT_STATUS_TRAP_TURN) {
             o->oAction = 1; // detects interact then opens the trapdoor

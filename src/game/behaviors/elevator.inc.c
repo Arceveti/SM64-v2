@@ -1,12 +1,14 @@
 // elevator.c.inc
 
+//! define names
+
 static s16 sElevatorHeights[] = {   -51,    0, 0, 
-                                    -461,    0, 0, 
-                                    -512,    0, 0, 
-                                   -2611,    0, 0, 
-                                   -2360,    0, 0, 
-                                     214,    0, 0, 
-                                     -50, 1945, 1 };
+                                   -461,    0, 0, 
+                                   -512,    0, 0, 
+                                  -2611,    0, 0, 
+                                  -2360,    0, 0, 
+                                    214,    0, 0, 
+                                    -50, 1945, 1 };
 
 void elevator_starting_shake(void) {
     cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1);
@@ -55,8 +57,7 @@ void elevator_act_1(void) {
     }
 }
 
-void elevator_act_2(void) // Pretty similar code to action 1
-{
+void elevator_act_2(void) { // Pretty similar code to action 1
     cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
     if (o->oTimer == 0 && cur_obj_is_mario_on_platform()) {
         elevator_starting_shake();
@@ -88,8 +89,7 @@ void elevator_act_4(void) {
     }
 }
 
-void elevator_act_3(void) // nearly identical to action 2
-{
+void elevator_act_3(void) { // nearly identical to action 2
     o->oVelY = 0;
     if (o->oTimer == 0) {
         cur_obj_shake_screen(SHAKE_POS_SMALL);

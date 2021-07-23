@@ -101,6 +101,7 @@ void bhv_coin_loop(void) {
         cur_obj_become_tangible();
     }
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
+#ifdef COIN_LAVA_FLICKER
         if (o->oMoveFlags & OBJ_MOVE_ABOVE_DEATH_BARRIER) {
             obj_mark_for_deletion(o);
         }
@@ -109,6 +110,11 @@ void bhv_coin_loop(void) {
                 obj_mark_for_deletion(o);
             }
         }
+#else
+        if (o->oMoveFlags & (OBJ_MOVE_ABOVE_DEATH_BARRIER | OBJ_MOVE_ABOVE_LAVA)) {
+            obj_mark_for_deletion(o);
+        }
+#endif
     }
     if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
         if (o->oCoinBounceTimer < 5) {

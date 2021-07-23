@@ -1,5 +1,5 @@
 // 0x0701B404 - 0x0701B59C
-const Collision bits_seg7_collision_0701B404[] = {
+const Collision bits_seg7_collision_staircase_frame_2[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x1C),
     COL_VERTEX(-409, 512, 307),

@@ -145,7 +145,7 @@ void chuckya_act_1(void) {
     }
 }
 
-void chuckya_act_3(void) {
+void chuckya_act_3(void) { // drop mario
     o->oForwardVel = 0;
     o->oVelY = 0;
     cur_obj_init_animation_with_sound(4);

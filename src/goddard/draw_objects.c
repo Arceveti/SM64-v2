@@ -883,7 +883,7 @@ void update_view(struct ObjView *view) {
 
     if (view->components != NULL) {
         if (gGdCtrl.dragging) {
-            if (gGdCtrl.startedDragging != FALSE) {
+            if (gGdCtrl.startedDragging) {
                 init_pick_buf(sPickBuffer, ARRAY_COUNT(sPickBuffer));
                 drawscene(FIND_PICKS, sUpdateViewState.view->components, NULL);
                 pickOffset = get_cur_pickbuf_offset();

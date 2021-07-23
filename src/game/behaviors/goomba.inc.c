@@ -35,7 +35,7 @@ struct GoombaProperties {
  */
 static struct GoombaProperties sGoombaProperties[] = {
     { 1.5f, SOUND_OBJ_ENEMY_DEATH_HIGH, 4000, 1 },
-    { 3.5f, SOUND_OBJ_ENEMY_DEATH_LOW, 4000, 2 },
+    { 3.5f, SOUND_OBJ_ENEMY_DEATH_LOW,  4000, 2 },
     { 0.5f, SOUND_OBJ_ENEMY_DEATH_HIGH, 1500, 0 },
 };
 
@@ -218,12 +218,14 @@ static void goomba_act_walk(void) {
 static void goomba_act_attacked_mario(void) {
     if (o->oGoombaSize == GOOMBA_SIZE_TINY) {
         mark_goomba_as_dead();
+#ifndef TINY_GOOMBA_COIN
         o->oNumLootCoins = 0;
+#endif
         obj_die_if_health_non_positive();
     } else {
-        //! This can happen even when the goomba is already in the air. It's
-        //  hard to chain these in practice
-        goomba_begin_jump();
+        if (o->oPosY <= o->oFloorHeight) {
+            goomba_begin_jump();   
+        }
         o->oGoombaTargetYaw = o->oAngleToMario;
         o->oGoombaTurningAwayFromWall = FALSE;
     }
@@ -268,8 +270,7 @@ void bhv_goomba_update(void) {
     f32 animSpeed;
 
     if (obj_update_standard_actions(o->oGoombaScale)) {
-        // If this goomba has a spawner and mario moved away from the spawner,
-        // unload
+        // If this goomba has a spawner and mario moved away from the spawner, unload
         if (o->parentObj != o) {
             if (o->parentObj->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED) {
                 obj_mark_for_deletion(o);
@@ -297,14 +298,9 @@ void bhv_goomba_update(void) {
                 break;
         }
 
-        //! @bug Weak attacks on huge goombas in a triplet mark them as dead even if they're not.
-        // obj_handle_attacks returns the type of the attack, which is non-zero
-        // even for Mario's weak attacks. Thus, if Mario weakly attacks a huge goomba
-        // without harming it (e.g. by punching it), the goomba will be marked as dead
-        // and will not respawn if Mario leaves and re-enters the spawner's radius
-        // even though the goomba isn't actually dead.
         if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO,
-                               sGoombaAttackHandlers[o->oGoombaSize & 1])) {
+                               sGoombaAttackHandlers[o->oGoombaSize & 1])
+         && o->oAction != GOOMBA_ACT_ATTACKED_MARIO) {
             mark_goomba_as_dead();
         }
 

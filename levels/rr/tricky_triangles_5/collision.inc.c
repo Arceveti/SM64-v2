@@ -1,5 +1,5 @@
 // 0x0702A6B4 - 0x0702A9A6
-const Collision rr_seg7_collision_0702A6B4[] = {
+const Collision rr_seg7_collision_tricky_triangles_frame_4[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x3F),
     COL_VERTEX(-511, 410, 205),

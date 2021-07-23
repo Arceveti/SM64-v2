@@ -1,30 +1,25 @@
 // floating_platform.c.inc
 
 f32 floating_platform_find_home_y(void) {
-    struct Surface *sp24;
-    f32 sp20;
-    f32 sp1C;
+    struct Surface *floor;
+    f32 waterLevel;
+    f32 floorHeight;
 
-    sp20 = find_water_level(o->oPosX, o->oPosZ);
-    sp1C = find_floor(o->oPosX, o->oPosY, o->oPosZ, &sp24);
-    if (sp20 > sp1C + o->oFloatingPlatformHeightOffset) {
-        o->oFloatingPlatformIsOnFloor = 0;
-        return sp20 + o->oFloatingPlatformHeightOffset;
-    } else {
-        o->oFloatingPlatformIsOnFloor = 1;
-        return sp1C + o->oFloatingPlatformHeightOffset;
-    }
+    waterLevel = find_water_level(o->oPosX, o->oPosZ);
+    floorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
+    o->oFloatingPlatformIsOnFloor = (waterLevel <= floorHeight + o->oFloatingPlatformHeightOffset);
+    return (o->oFloatingPlatformIsOnFloor ? floorHeight : waterLevel) + o->oFloatingPlatformHeightOffset;
 }
 
-void floating_platform_act_0(void) {
-    s16 sp6 = (gMarioObject->header.gfx.pos[0] - o->oPosX) * coss(-1*o->oMoveAngleYaw)
-              + (gMarioObject->header.gfx.pos[2] - o->oPosZ) * sins(-1*o->oMoveAngleYaw);
-    s16 sp4 = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-1*o->oMoveAngleYaw)
-              - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-1*o->oMoveAngleYaw);
+void floating_platform_act_move_to_home(void) {
+    f32 dx = gMarioObject->header.gfx.pos[0] - o->oPosX;
+    f32 dz = gMarioObject->header.gfx.pos[2] - o->oPosZ;
+    f32 cny = coss(-o->oMoveAngleYaw);
+    f32 sny = sins(-o->oMoveAngleYaw);
 
     if (gMarioObject->platform == o) {
-        o->oFaceAnglePitch = sp4 * 2;
-        o->oFaceAngleRoll = -sp6 * 2;
+        o->oFaceAnglePitch = (dz * cny - dx * sny) * 2;
+        o->oFaceAngleRoll = -(dx * cny + dz * sny) * 2;
         o->oVelY -= 1.0f;
         if (o->oVelY < 0.0f) {
             o->oVelY = 0.0f;
@@ -52,11 +47,10 @@ void floating_platform_act_0(void) {
 
 void bhv_floating_platform_loop(void) {
     o->oHomeY = floating_platform_find_home_y();
-    if (o->oFloatingPlatformIsOnFloor == 0) {
-        o->oAction = 0;
-        floating_platform_act_0();
-    } else {
-        o->oAction = 1;
+    o->oAction = o->oFloatingPlatformIsOnFloor;
+    if (o->oFloatingPlatformIsOnFloor) {
         o->oPosY = o->oHomeY;
+    } else {
+        floating_platform_act_move_to_home();
     }
 }

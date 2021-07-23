@@ -80,11 +80,11 @@ extern const Collision bits_seg7_collision_0701ACAC[];
 extern const Collision bits_seg7_collision_0701AD54[];
 extern const Collision bits_seg7_collision_0701ADD8[];
 extern const Collision bits_seg7_collision_0701AE5C[];
-extern const Collision bits_seg7_collision_0701B0D4[];
-extern const Collision bits_seg7_collision_0701B26C[];
-extern const Collision bits_seg7_collision_0701B404[];
-extern const Collision bits_seg7_collision_0701B59C[];
-extern const Collision bits_seg7_collision_0701B734[];
+extern const Collision bits_seg7_collision_staircase[];
+extern const Collision bits_seg7_collision_staircase_frame_1[];
+extern const Collision bits_seg7_collision_staircase_frame_2[];
+extern const Collision bits_seg7_collision_staircase_frame_3[];
+extern const Collision bits_seg7_collision_staircase_frame_4[];
 
 // script
 extern const LevelScript level_bits_entry[];

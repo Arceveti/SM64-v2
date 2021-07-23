@@ -193,11 +193,7 @@ void bhv_lll_bowser_puzzle_piece_update(void) {
 void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UNUSED s32 a3) {
     // For the first 20 frames, shake the puzzle piece up and down.
     if (o->oTimer < 20) {
-        if (o->oTimer % 2) {
-            o->oBowserPuzzlePieceOffsetY = 0.0f;
-        } else {
-            o->oBowserPuzzlePieceOffsetY = -6.0f;
-        }
+        o->oBowserPuzzlePieceOffsetY = (o->oTimer % 2) ? 0.0f : -6.0f;
     } else {
         // On frame 20, play the shifting sound.
         if (o->oTimer == 20) {

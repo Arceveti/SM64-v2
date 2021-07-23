@@ -29,32 +29,31 @@ void set_door_camera_event(void) {
 }
 
 void play_door_open_noise(void) {
-    s32 sp1C = cur_obj_has_model(MODEL_HMC_METAL_DOOR);
+    s32 isMetalDoor = cur_obj_has_model(MODEL_HMC_METAL_DOOR);
     if (o->oTimer == 0) {
-        cur_obj_play_sound_2(sDoorOpenSounds[sp1C]);
+        cur_obj_play_sound_2(sDoorOpenSounds[isMetalDoor]);
         gTimeStopState |= TIME_STOP_MARIO_OPENED_DOOR;
     }
     if (o->oTimer == 70) {
-        cur_obj_play_sound_2(sDoorCloseSounds[sp1C]);
+        cur_obj_play_sound_2(sDoorCloseSounds[isMetalDoor]);
     }
 }
 
 void play_warp_door_open_noise(void) {
-    s32 sp1C = cur_obj_has_model(MODEL_HMC_METAL_DOOR);
     if (o->oTimer == 30) {
-        cur_obj_play_sound_2(sDoorCloseSounds[sp1C]);
+        cur_obj_play_sound_2(sDoorCloseSounds[cur_obj_has_model(MODEL_HMC_METAL_DOOR)]);
     }
 }
 
 void bhv_door_loop(void) {
-    s32 sp1C = 0;
+    s32 index = 0;
     
-    while (sDoorActions[sp1C].flag != (u32)~0) {
-        if (cur_obj_clear_interact_status_flag(sDoorActions[sp1C].flag)) {
+    while (sDoorActions[index].flag != (u32)~0) {
+        if (cur_obj_clear_interact_status_flag(sDoorActions[index].flag)) {
             set_door_camera_event();
-            cur_obj_change_action(sDoorActions[sp1C].action);
+            cur_obj_change_action(sDoorActions[index].action);
         }
-        sp1C++;
+        index++;
     }
 
     switch (o->oAction) {
@@ -114,31 +113,18 @@ void bhv_door_init(void) {
 }
 
 void bhv_star_door_loop_2(void) {
-    s32 doorIsRendering = FALSE;
-    if (gMarioCurrentRoom != 0) {
-        if (o->oDoorSelfRoom == gMarioCurrentRoom) {
-            doorIsRendering = TRUE;
-        } else if (gMarioCurrentRoom == o->oDoorForwardRoom) {
-            doorIsRendering = TRUE;
-        } else if (gMarioCurrentRoom == o->oDoorBackwardRoom) {
-            doorIsRendering = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom) {
-            doorIsRendering = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom) {
-            doorIsRendering = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom) {
-            doorIsRendering = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom) {
-            doorIsRendering = TRUE;
-        }
-    } else {
-        doorIsRendering = TRUE;
-    }
+    s32 doorIsRendering = (gMarioCurrentRoom == 0
+     || o->oDoorSelfRoom == gMarioCurrentRoom
+     || gMarioCurrentRoom == o->oDoorForwardRoom
+     || gMarioCurrentRoom == o->oDoorBackwardRoom
+     || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom
+     || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom
+     || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom
+     || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom);
     if (doorIsRendering) {
         o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
         gDoorRenderingTimer++;
-    }
-    if (!doorIsRendering) {
+    } else {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }
     o->oDoorIsRendering = doorIsRendering;

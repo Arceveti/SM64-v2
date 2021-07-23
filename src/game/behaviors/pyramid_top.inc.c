@@ -89,7 +89,9 @@ void bhv_pyramid_top_explode(void) {
 }
 
 void bhv_pyramid_top_loop(void) {
+#ifdef HUD_SECRETS
     gSecretsCollected = o->oPyramidTopPillarsTouched;
+#endif
     switch (o->oAction) {
         case PYRAMID_TOP_ACT_CHECK_IF_SOLVED:
             if (o->oPyramidTopPillarsTouched == 4) {

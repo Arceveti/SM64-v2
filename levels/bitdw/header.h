@@ -65,11 +65,11 @@ extern const Collision bitdw_seg7_collision_0700F70C[];
 extern const Collision bitdw_seg7_collision_moving_pyramid[];
 extern const Collision bitdw_seg7_collision_0700F7F0[];
 extern const Collision bitdw_seg7_collision_0700F898[];
-extern const Collision bitdw_seg7_collision_0700F91C[];
-extern const Collision bitdw_seg7_collision_0700FA3C[];
-extern const Collision bitdw_seg7_collision_0700FB5C[];
-extern const Collision bitdw_seg7_collision_0700FC7C[];
-extern const Collision bitdw_seg7_collision_0700FD9C[];
+extern const Collision bitdw_seg7_collision_staircase_frame_4[];
+extern const Collision bitdw_seg7_collision_staircase_frame_3[];
+extern const Collision bitdw_seg7_collision_staircase_frame_2[];
+extern const Collision bitdw_seg7_collision_staircase_frame_1[];
+extern const Collision bitdw_seg7_collision_staircase[];
 
 // script
 extern const LevelScript level_bitdw_entry[];

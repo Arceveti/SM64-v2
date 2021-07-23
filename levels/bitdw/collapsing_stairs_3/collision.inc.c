@@ -1,5 +1,5 @@
 // 0x0700FB5C - 0x0700FC7C
-const Collision bitdw_seg7_collision_0700FB5C[] = {
+const Collision bitdw_seg7_collision_staircase_frame_2[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x14),
     COL_VERTEX(-409, 512, 307),

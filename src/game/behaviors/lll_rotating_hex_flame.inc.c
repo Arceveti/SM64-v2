@@ -1,10 +1,10 @@
 // lll_rotating_hex_flame.c.inc
 
 void bhv_lll_rotating_hex_flame_loop(void) {
-    f32 sp24 = o->oLllRotatingHexFlameRelativePosX;
-    f32 sp20 = o->oLllRotatingHexFlameRelativePosY;
-    f32 sp1C = o->oLllRotatingHexFlameRelativePosZ;
-    cur_obj_set_pos_relative(o->parentObj, sp24, sp20, sp1C);
+    f32 x = o->oLllRotatingHexFlameRelativePosX;
+    f32 y = o->oLllRotatingHexFlameRelativePosY;
+    f32 z = o->oLllRotatingHexFlameRelativePosZ;
+    cur_obj_set_pos_relative(o->parentObj, x, y, z);
     o->oPosY = o->parentObj->oPosY + 100.0f;
     if (o->parentObj->oAction == 3) {
         obj_mark_for_deletion(o);
@@ -12,20 +12,20 @@ void bhv_lll_rotating_hex_flame_loop(void) {
 }
 
 void fire_bar_spawn_flames(s16 a0) {
-    struct Object *sp2C;
+    struct Object *flameObj;
     s32 i;
-    s32 sp20;
-    f32 sp1C = sins(a0) * 200.0f;
-    f32 sp18 = coss(a0) * 200.0f;
-    sp20 = (o->oBehParams2ndByte == 0) ? 4 : 3;
-    for (i = 0; i < sp20; i++) {
-        sp2C = spawn_object(o, MODEL_RED_FLAME, bhvLllRotatingHexFlame);
-        sp2C->oLllRotatingHexFlameRelativePosX += sp1C;
-        sp2C->oLllRotatingHexFlameRelativePosY = o->oPosY - 200.0f;
-        sp2C->oLllRotatingHexFlameRelativePosZ += sp18;
-        obj_scale_xyz(sp2C, 6.0f, 6.0f, 6.0f);
-        sp1C += sins(a0) * 150.0f;
-        sp18 += coss(a0) * 150.0f;
+    s32 amt;
+    f32 xOffset = sins(a0) * 200.0f;
+    f32 zOffset = coss(a0) * 200.0f;
+    amt = (o->oBehParams2ndByte == 0) ? 4 : 3;
+    for (i = 0; i < amt; i++) {
+        flameObj = spawn_object(o, MODEL_RED_FLAME, bhvLllRotatingHexFlame);
+        flameObj->oLllRotatingHexFlameRelativePosX += xOffset;
+        flameObj->oLllRotatingHexFlameRelativePosY = o->oPosY - 200.0f;
+        flameObj->oLllRotatingHexFlameRelativePosZ += zOffset;
+        obj_scale(flameObj, 6.0f);
+        xOffset += sins(a0) * 150.0f;
+        zOffset += coss(a0) * 150.0f;
     }
 }
 

@@ -13,15 +13,15 @@
  * Hitbox for chain chomp.
  */
 static struct ObjectHitbox sChainChompHitbox = {
-    /* interactType: */ INTERACT_MR_BLIZZARD,
-    /* downOffset: */ 0,
+    /* interactType:      */ INTERACT_MR_BLIZZARD,
+    /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 3,
-    /* health: */ 1,
-    /* numLootCoins: */ 0,
-    /* radius: */ 80,
-    /* height: */ 160,
-    /* hurtboxRadius: */ 80,
-    /* hurtboxHeight: */ 160,
+    /* health:            */ 1,
+    /* numLootCoins:      */ 0,
+    /* radius:            */ 80,
+    /* height:            */ 160,
+    /* hurtboxRadius:     */ 80,
+    /* hurtboxHeight:     */ 160,
 };
 
 /**
@@ -65,9 +65,7 @@ static void chain_chomp_act_uninitialized(void) {
             cur_obj_set_pos_to_home();
 
             // Spawn the pivot and set to parent
-            if ((o->parentObj =
-                     spawn_object(o, CHAIN_CHOMP_CHAIN_PART_BP_PIVOT, bhvChainChompChainPart))
-                != NULL) {
+            if ((o->parentObj = spawn_object(o, CHAIN_CHOMP_CHAIN_PART_BP_PIVOT, bhvChainChompChainPart)) != NULL) {
                 // Spawn the non-pivot chain parts, starting from the chain
                 // chomp and moving toward the pivot
                 for (i = 1; i <= 4; i++) {

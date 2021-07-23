@@ -31,7 +31,9 @@ u16 gDialogTextAlpha;
 s16 gCutsceneMsgXOffset;
 s16 gCutsceneMsgYOffset;
 s8 gRedCoinsCollected;
+#ifdef HUD_SECRETS
 s8 gSecretsCollected;
+#endif
 #ifdef WIDE
 u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
 u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
@@ -1303,7 +1305,9 @@ void render_hud_cannon_reticle(void) {
 
 void reset_red_coins_collected(void) {
     gRedCoinsCollected = 0;
+#ifdef HUD_SECRETS
     gSecretsCollected  = 0;
+#endif
 }
 
 void change_dialog_camera_angle(void) {

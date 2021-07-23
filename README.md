@@ -34,7 +34,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Optimizations:**
 - Most doubles are now floats where the extra percision isn't needed
 - Improved slope fix and exposed ceilings fix (Arceveti)
-- Removed a few unecessary find_floor checks (Arceveti)
+- Removed many unecessary find_floor (collision) checks (Arceveti)
 - Removed almost all unused code/data from the Goddard folder (Arceveti)
 - Removed many stubbed/unused functions/variables
 - Many smaller optimizations (Arceveti)
@@ -47,16 +47,25 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
 - Defines for specific cos() values used through out the game, specifically for checking the Y normal of surfaces
+- Vertical quicksand support (Wiseguy) *
+- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
 
-**Gameplay QoL:**
-- Respawning Koopa shell boxes *
-- Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti) *
+**HUD/Gameplay QoL:**
 - Make signs and NPCs easier to talk to (Arceveti) *
 - Show an "A" when Mario is able to talk to a sign or NPC (Arceveti) *
+- Display number of Red Coins collected on the HUD (Arceveti) *
+- Display number of Secrets collected on the HUD (Arceveti) *
+- Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
+
+**Object Behaviors:**
 - Collecting a 1-Up Mushroom will fully heal Mario *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
-- New HUD arrangement with Red Coin & Secrets counters (Arceveti) *
-- Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
+- Respawning Koopa shell boxes (Arceveti) *
+- Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti) *
+- Clams don't hurt mario unless they are moving (opening/closing) (Arceveti) *
+- Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti) *
+- Tiny Goombas (from THI) always drop their coin (Arceveti) *
+- Leaf particles fall from trees which contain Hoot (Arceveti) *
 
 **Collision/Movement:**
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
@@ -72,9 +81,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 
 **Misc:**
-- Vertical quicksand support (Wiseguy) *
 - Goddard easter egg from Shindou *
-- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
+
+**Experimental:**
+- Platform Displacement 2 for objects other than Mario & Bowser
 
 # HackerSM64:
 

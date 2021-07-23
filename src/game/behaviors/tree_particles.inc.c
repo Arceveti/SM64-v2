@@ -36,7 +36,7 @@ void bhv_snow_leaf_particle_spawn_init(void) {
 #endif
     s32 isSnow;
     f32 scale;
-    gMarioObject->oActiveParticleFlags &= ~0x2000;
+    gMarioObject->oActiveParticleFlags &= ~ACTIVE_PARTICLE_LEAF;
 #ifdef TREE_PARTICLE_FIX
     nearestTree = cur_obj_nearest_object_with_behavior(bhvTree);
     isSnow = (nearestTree->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_CCM_SNOW_TREE] || nearestTree->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SL_SNOW_TREE]);
@@ -47,7 +47,7 @@ void bhv_snow_leaf_particle_spawn_init(void) {
         if (random_float() < 0.5f) {
             obj = spawn_object(o, MODEL_WHITE_PARTICLE_DL, bhvTreeSnow);
             scale = random_float();
-            obj_scale_xyz(obj, scale, scale, scale);
+            obj_scale(obj, scale);
             obj->oMoveAngleYaw = random_u16();
             obj->oForwardVel = random_float() * 5.0f;
             obj->oVelY = random_float() * 15.0f;
@@ -56,7 +56,7 @@ void bhv_snow_leaf_particle_spawn_init(void) {
         if (random_float() < 0.3f) {
             obj = spawn_object(o, MODEL_LEAVES, bhvTreeLeaf);
             scale = random_float() * 3.0f;
-            obj_scale_xyz(obj, scale, scale, scale);
+            obj_scale(obj, scale);
             obj->oMoveAngleYaw = random_u16();
             obj->oForwardVel = random_float() * 5.0f + 5.0f;
             obj->oVelY = random_float() * 15.0f;

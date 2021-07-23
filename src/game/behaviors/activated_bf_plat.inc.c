@@ -124,7 +124,7 @@ void bhv_activated_back_and_forth_platform_update(void) {
 
     // Update the object's position.
     // If the platform moves vertically...
-    if (o->oActivatedBackAndForthPlatformVertical != FALSE) {
+    if (o->oActivatedBackAndForthPlatformVertical) {
         // ...set its position to its original position + the offset.
         o->oPosY = o->oHomeY + o->oActivatedBackAndForthPlatformOffset;
     } else {

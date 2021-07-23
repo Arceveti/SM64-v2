@@ -20,7 +20,7 @@ void bhv_haunted_bookshelf_loop(void) {
             // This code never runs, since the action is set to 1 directly
             // by bhvHauntedBookshelfManager. Maybe this was
             // intended to be used to set the action instead?
-            if (o->oHauntedBookshelfShouldOpen != FALSE) {
+            if (o->oHauntedBookshelfShouldOpen) {
                 o->oAction++;
             }
 

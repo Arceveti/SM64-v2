@@ -576,7 +576,7 @@ u64 *synthesis_process_note(s32 noteIndex, struct NoteSubEu *noteSubEu, struct N
                     s0 = 0;
                     a3 = 0;
                 }
-                if (synthesisState->restart != FALSE) {
+                if (synthesisState->restart) {
                     aSetLoop(cmd++, VIRTUAL_TO_PHYSICAL2(audioBookSample->loop->state));
                     flags = A_LOOP; // = 2
                     synthesisState->restart = FALSE;
@@ -661,7 +661,7 @@ skip:
                             aDownsampleHalf(cmd++, ALIGN(samplesLenAdjusted / 2, 3), DMEM_ADDR_UNCOMPRESSED_NOTE + sp130, DMEM_ADDR_RESAMPLED);
                             resampledTempLen = samplesLenAdjusted;
                             noteSamplesDmemAddrBeforeResampling = DMEM_ADDR_RESAMPLED;
-                            if (noteSubEu->finished != FALSE) {
+                            if (noteSubEu->finished) {
                                 aClearBuffer(cmd++, noteSamplesDmemAddrBeforeResampling + resampledTempLen, samplesLenAdjusted + 0x10);
                             }
                             break;
@@ -670,7 +670,7 @@ skip:
                             break;
                     }
             }
-            if (noteSubEu->finished != FALSE) break;
+            if (noteSubEu->finished) break;
         }
     }
     flags = 0;

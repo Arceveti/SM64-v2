@@ -52,11 +52,9 @@ void bhv_big_bully_init(void) {
 }
 
 void bully_check_mario_collision(void) {
-    if (
-#ifdef VERSION_SH
-    o->oAction != OBJ_ACT_LAVA_DEATH && o->oAction != OBJ_ACT_DEATH_PLANE_DEATH &&
-#endif
-    o->oInteractStatus & INT_STATUS_INTERACTED) {
+    if (o->oAction != OBJ_ACT_LAVA_DEATH
+     && o->oAction != OBJ_ACT_DEATH_PLANE_DEATH
+     && o->oInteractStatus & INT_STATUS_INTERACTED) {
         if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
             cur_obj_play_sound_2(SOUND_OBJ2_BULLY_ATTACKED);
         } else {
@@ -136,8 +134,7 @@ void bully_act_back_up(void) {
 }
 
 void bully_backup_check(s16 collisionFlags) {
-    if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && o->oAction != BULLY_ACT_KNOCKBACK) /* bit 3 */
-    {
+    if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && o->oAction != BULLY_ACT_KNOCKBACK) {/* bit 3 */
         o->oPosX = o->oBullyPrevX;
         o->oPosZ = o->oBullyPrevZ;
         o->oAction = BULLY_ACT_BACK_UP;
@@ -171,8 +168,7 @@ void bully_play_stomping_sound(void) {
 }
 
 void bully_step(void) {
-    s16 collisionFlags = 0;
-    collisionFlags = object_step();
+    s16 collisionFlags = object_step();
     bully_backup_check(collisionFlags);
     bully_play_stomping_sound();
     obj_check_floor_death(collisionFlags, sObjFloor);
@@ -200,7 +196,7 @@ void bully_spawn_coin(void) {
 }
 
 void bully_act_level_death(void) {
-    if (obj_lava_death() == 1) {
+    if (obj_lava_death()) {
         if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
             if (o->oBullySubtype == BULLY_STYPE_MINION) {
                 o->parentObj->oBullyKBTimerAndMinionKOCounter++;
@@ -345,6 +341,7 @@ void bhv_big_bully_with_minions_loop(void) {
 
                 if (o->oTimer >= 91) {
                     o->oAction = BULLY_ACT_ACTIVATE_AND_FALL;
+                    o->oBullyKBTimerAndMinionKOCounter = 0;
                 }
             }
             break;

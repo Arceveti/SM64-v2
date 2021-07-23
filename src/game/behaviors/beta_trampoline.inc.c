@@ -39,6 +39,7 @@ void bhv_beta_trampoline_spring_loop(void) {
         // as with the above code.
         yDisplacement = -yDisplacement;
         yScale = 1.0f - yDisplacement / 500.0f;
+        o->oPosY += 75.0f * (1.0f - yScale);
     }
 
     // Scale the spring
@@ -72,16 +73,21 @@ void bhv_beta_trampoline_top_loop(void) {
     // Maybe they intended to decrease the trampoline's position
     // when Mario's on it in this if statement?
     if (gMarioObject->platform == o) {
+        stub_mario_step_2();
         o->oBetaTrampolineMarioOnTrampoline = TRUE;
+        o->oPosY =
+            (o->oPosY > (o->oHomeY - 150.0f + 75.0f)) ?
+            (o->oPosY - 10) :
+            (o->oHomeY - 150.0f + 65.0f);
+        o->oBetaTrampolineAdditiveYVel =
+            ((o->oBehParams2ndByte >> 4) / 2.0f) +
+            ((o->oHomeY - o->oPosY) / ((o->oBehParams2ndByte & 0x0F) / 2.0f));
     } else {
         o->oBetaTrampolineMarioOnTrampoline = FALSE;
-        o->oPosY = o->oHomeY;
+        o->oPosY =
+            (o->oPosY < (o->oHomeY - 10.0f)) ?
+            (o->oPosY + 10.0f) :
+            o->oHomeY;
+        o->oBetaTrampolineAdditiveYVel = 0;
     }
-
-    // This function is from mario_step.c, and is empty.
-    // It was probably intended to be used to "let the game know"
-    // that the trampoline is currently in use. This potential
-    // trampoline infrastructure is found in mario_step.c. See
-    // that file for more details.
-    stub_mario_step_2();
 }

@@ -1,11 +1,11 @@
 // grill_door.c.inc
 
 struct OpenableGrill gOpenableGrills[] = { { 320, MODEL_BOB_BARS_GRILLS, bob_seg7_collision_gate },
-                                           { 410, MODEL_HMC_RED_GRILLS,  hmc_seg7_collision_0702B65C } };
+                                           { 410, MODEL_HMC_RED_GRILLS,  hmc_seg7_collision_grill_door } };
 
 void bhv_openable_cage_door_loop(void) {
     if (gCurrentObject->oAction == 0) {
-        if (gCurrentObject->parentObj->oOpenableGrillIsOpen != 0) {
+        if (gCurrentObject->parentObj->oOpenableGrillIsOpen) {
             gCurrentObject->oAction++;
         }
     } else if (gCurrentObject->oAction == 1) {
@@ -21,7 +21,7 @@ void bhv_openable_grill_loop(void) {
     struct Object *grillObj;
     s32 grillIdx;
     switch (o->oAction) {
-        case 0:
+        case OEPNABLE_GRILL_SPAWN:
             grillIdx = o->oBehParams2ndByte;
             grillObj = spawn_object_relative(-1, gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID,
                                              bhvOpenableCageDoor);
@@ -30,17 +30,17 @@ void bhv_openable_grill_loop(void) {
             grillObj = spawn_object_relative(1, -gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID,
                                              bhvOpenableCageDoor);
             obj_set_collision_data(grillObj, gOpenableGrills[grillIdx].collision);
-            o->oAction++;
+            o->oAction = OEPNABLE_GRILL_IDLE_CLOSED;
             break;
-        case 1:
+        case OEPNABLE_GRILL_IDLE_CLOSED:
             if ((o->oOpenableGrillFloorSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchGrills)) != NULL) {
-                o->oAction++;
+                o->oAction = OEPNABLE_GRILL_OPENING;
             }
             break;
-        case 2:
+        case OEPNABLE_GRILL_OPENING:
             grillObj = o->oOpenableGrillFloorSwitchObj;
             if (grillObj->oAction == 2) {
-                o->oOpenableGrillIsOpen = 2;
+                o->oOpenableGrillIsOpen = TRUE;
                 cur_obj_play_sound_2(SOUND_GENERAL_CAGE_OPEN);
                 o->oAction++;
                 if (o->oBehParams2ndByte != 0) {
@@ -48,7 +48,7 @@ void bhv_openable_grill_loop(void) {
                 }
             }
             break;
-        case 3:
+        case OEPNABLE_GRILL_IDLE_OPEN:
             break;
     }
 }

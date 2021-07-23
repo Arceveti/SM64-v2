@@ -402,7 +402,7 @@ index 0000000..97cba2a
 +    if (o->parentObj->oAction == 4) {
 +#ifndef VERSION_JP
 +        if (o->parentObj->oSubAction == 11)
-+            o->oInteractType = 0;
++            o->oInteractType = INTERACT_NONE;
 +        else
 +            o->oInteractType = INTERACT_TEXT;
 +#else
