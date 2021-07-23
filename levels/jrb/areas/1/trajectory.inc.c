@@ -1,5 +1,5 @@
 // 0x0700D20C - 0x0700D23E
-const Trajectory jrb_seg7_trajectory_unagi_1[] = {
+const Trajectory jrb_seg7_trajectory_unagi_ship[] = {
     TRAJECTORY_POS(0, /*pos*/  5300, -3800,  1200),
     TRAJECTORY_POS(1, /*pos*/  3700, -3600,  1700),
     TRAJECTORY_POS(2, /*pos*/  3400, -3400,  3500),
@@ -10,7 +10,7 @@ const Trajectory jrb_seg7_trajectory_unagi_1[] = {
 };
 
 // 0x0700D240 - 0x0700D28A
-const Trajectory jrb_seg7_trajectory_unagi_2[] = {
+const Trajectory jrb_seg7_trajectory_unagi_cave[] = {
     TRAJECTORY_POS(0, /*pos*/  5381,     0,  2758),
     TRAJECTORY_POS(1, /*pos*/  5803, -3130,  3036),
     TRAJECTORY_POS(2, /*pos*/  4876, -3045,  2706),

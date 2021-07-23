@@ -1,15 +1,15 @@
 // scuttlebug.c.inc
 
 struct ObjectHitbox sScuttlebugHitbox = {
-    /* interactType: */ INTERACT_BOUNCE_TOP,
-    /* downOffset: */ 0,
+    /* interactType:      */ INTERACT_BOUNCE_TOP,
+    /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 1,
-    /* health: */ 1,
-    /* numLootCoins: */ 3,
-    /* radius: */ 130,
-    /* height: */ 70,
-    /* hurtboxRadius: */ 90,
-    /* hurtboxHeight: */ 60,
+    /* health:            */ 1,
+    /* numLootCoins:      */ 3,
+    /* radius:            */ 130,
+    /* height:            */ 70,
+    /* hurtboxRadius:     */ 90,
+    /* hurtboxHeight:     */ 60,
 };
 
 s32 update_angle_from_move_flags(s32 *angle) {
@@ -24,14 +24,14 @@ s32 update_angle_from_move_flags(s32 *angle) {
 }
 
 void bhv_scuttlebug_loop(void) {
-    f32 sp18;
+    f32 accel;
     cur_obj_update_floor_and_walls();
     if (o->oSubAction != 0
         && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) {
         o->oSubAction = 3;
     }
     if (o->oSubAction != 1) {
-        o->oScuttlebugIsAtttacking = 0;
+        o->oScuttlebugIsAtttacking = FALSE;
     }
     switch (o->oSubAction) {
         case 0:
@@ -54,15 +54,15 @@ void bhv_scuttlebug_loop(void) {
                     o->oScuttlebugTimer = 0;
                     o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
                     if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
-                        o->oScuttlebugIsAtttacking = 1;
+                        o->oScuttlebugIsAtttacking = TRUE;
                         o->oVelY = 20.0f;
                         cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
                     }
-                } else if (o->oScuttlebugIsAtttacking == 1) {
+                } else if (o->oScuttlebugIsAtttacking) {
                     o->oForwardVel = 15.0f;
                     o->oScuttlebugTimer++;
                     if (o->oScuttlebugTimer > 50) {
-                        o->oScuttlebugIsAtttacking = 0;
+                        o->oScuttlebugIsAtttacking = FALSE;
                     }
                 }
             }
@@ -106,12 +106,8 @@ void bhv_scuttlebug_loop(void) {
             }
             break;
     }
-    if (o->oForwardVel < 10.0f) {
-        sp18 = 1.0f;
-    } else {
-        sp18 = 3.0f;
-    }
-    cur_obj_init_animation_with_accel_and_sound(0, sp18);
+    accel = (o->oForwardVel < 10.0f) ? 1.0f : 3.0f;
+    cur_obj_init_animation_with_accel_and_sound(0, accel);
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         set_obj_anim_with_accel_and_sound(1, 23, SOUND_OBJ2_SCUTTLEBUG_WALK);
     }
@@ -120,7 +116,7 @@ void bhv_scuttlebug_loop(void) {
             obj_mark_for_deletion(o);
         }
         if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            o->parentObj->oScuttlebugSpawnerIsDeactivated = 1;
+            o->parentObj->oScuttlebugSpawnerIsDeactivated = TRUE;
         }
     }
     cur_obj_move_standard(-50);
@@ -136,10 +132,10 @@ void bhv_scuttlebug_spawn_loop(void) {
             scuttlebug->oForwardVel = 30.0f;
             scuttlebug->oVelY = 80.0f;
             o->oAction++;
-            o->oScuttlebugHasNoLootCoins = 1;
+            o->oScuttlebugHasNoLootCoins = TRUE;
         }
-    } else if (o->oScuttlebugSpawnerIsDeactivated != 0) {
-        o->oScuttlebugSpawnerIsDeactivated = 0;
+    } else if (o->oScuttlebugSpawnerIsDeactivated) {
+        o->oScuttlebugSpawnerIsDeactivated = FALSE;
         o->oAction = 0;
     }
 }

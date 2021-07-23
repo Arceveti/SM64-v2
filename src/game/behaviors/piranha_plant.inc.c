@@ -171,15 +171,13 @@ void piranha_plant_act_shrink_and_die(void) {
     if (o->oTimer == 0) {
         cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
         o->oPiranhaPlantScale = 1.0f;
-    }
-
     /**
      * Note that this if-statement occurs unconditionally after the above if-
      * statement. Since the Piranha Plant's scale is 1.0f by default, perhaps
      * this was intentional. However, it is equally plausible that the
      * programmers meant to type `else if`.
      */
-    if (o->oPiranhaPlantScale > 0.0f) {
+    } else if (o->oPiranhaPlantScale > 0.0f) {
         // Shrink by 0.04f per frame.
         o->oPiranhaPlantScale = o->oPiranhaPlantScale - 0.04f;
     } else {

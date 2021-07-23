@@ -1,15 +1,15 @@
 // switch_hidden_objects.c.inc
 
 struct ObjectHitbox sBreakableBoxHitbox = {
-    /* interactType: */ INTERACT_BREAKABLE,
-    /* downOffset: */ 20,
+    /* interactType:      */ INTERACT_BREAKABLE,
+    /* downOffset:        */ 20,
     /* damageOrCoinValue: */ 0,
-    /* health: */ 1,
-    /* numLootCoins: */ 0,
-    /* radius: */ 150,
-    /* height: */ 200,
-    /* hurtboxRadius: */ 150,
-    /* hurtboxHeight: */ 200,
+    /* health:            */ 1,
+    /* numLootCoins:      */ 0,
+    /* radius:            */ 150,
+    /* height:            */ 200,
+    /* hurtboxRadius:     */ 150,
+    /* hurtboxHeight:     */ 200,
 };
 
 void breakable_box_init(void) {
@@ -32,7 +32,7 @@ void breakable_box_init(void) {
 }
 
 void hidden_breakable_box_actions(void) {
-    struct Object *sp1C;
+    struct Object *switchObj;
     obj_set_hitbox(o, &sBreakableBoxHitbox);
     cur_obj_set_model(MODEL_BREAKABLE_BOX_SMALL);
     if (o->oAction == 0) {
@@ -44,8 +44,8 @@ void hidden_breakable_box_actions(void) {
         if (o->oHiddenObjectSwitchObj == NULL) {
             o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
         }
-        if ((sp1C = o->oHiddenObjectSwitchObj) != NULL) {
-            if (sp1C->oAction == 2) {
+        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
+            if (switchObj->oAction == 2) {
                 o->oAction++;
                 cur_obj_enable_rendering();
                 cur_obj_unhide();
@@ -67,8 +67,8 @@ void hidden_breakable_box_actions(void) {
         cur_obj_become_intangible();
         cur_obj_disable_rendering();
         o->oInteractStatus = INT_STATUS_NONE;
-        if ((sp1C = o->oHiddenObjectSwitchObj) != NULL) {
-            if (sp1C->oAction == 0) {
+        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
+            if (switchObj->oAction == 0) {
                 o->oAction = 0;
             }
         }
@@ -76,7 +76,7 @@ void hidden_breakable_box_actions(void) {
 }
 
 void hidden_unbreakable_box_actions(void) {
-    struct Object *sp1C;
+    struct Object *switchObj;
     obj_set_collision_data(o, wdw_seg7_collision_07018528);
     if (o->oAction == 0) {
         cur_obj_disable_rendering();
@@ -84,8 +84,8 @@ void hidden_unbreakable_box_actions(void) {
         if (o->oHiddenObjectSwitchObj == NULL) {
             o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
         }
-        if ((sp1C = o->oHiddenObjectSwitchObj) != NULL) {
-            if (sp1C->oAction == 2) {
+        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
+            if (switchObj->oAction == 2) {
                 o->oAction++;
                 cur_obj_enable_rendering();
                 cur_obj_unhide();

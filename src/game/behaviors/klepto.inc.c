@@ -11,9 +11,9 @@ static struct ObjectHitbox sKleptoHitbox = {
 };
 
 static Vec3f sKleptoTargetPositions[] = {
-    { 2200.0f, 1250.0f, -2820.0f },
+    {  2200.0f, 1250.0f, -2820.0f },
     { -6200.0f, 1250.0f, -2800.0f },
-    { -6200.0f, 1250.0f, 1150.0f },
+    { -6200.0f, 1250.0f,  1150.0f },
 };
 
 static u8 sKleptoAttackHandlers[] = { 2, 2, 5, 5, 2, 2 };
@@ -152,10 +152,7 @@ static void klepto_circle_target(f32 radius, f32 targetSpeed) {
         o->oKleptoYawToTarget += turnAmount;
         klepto_anim_dive();
 
-        //! The multiplied value is sometimes out of range for an s16 during the s32 -> s16 cast,
-        //  which might invert sign.
-        turnAmount =
-            (s16)(s32)(abs_angle_diff(o->oKleptoYawToTarget, o->oMoveAngleYaw) * (0.03f * o->oKleptoSpeed));
+        turnAmount = (abs_angle_diff(o->oKleptoYawToTarget, o->oMoveAngleYaw) * (0.03f * o->oKleptoSpeed));
         clamp_s16(&turnAmount, 400, 700);
         obj_rotate_yaw_and_bounce_off_walls(o->oKleptoYawToTarget, turnAmount);
 

@@ -8,15 +8,15 @@ void star_door_update_pos(void) {
 }
 
 void bhv_star_door_loop(void) {
-    struct Object *sp18;
-    sp18 = cur_obj_nearest_object_with_behavior(bhvStarDoor);
+    struct Object *doorObj;
+    doorObj = cur_obj_nearest_object_with_behavior(bhvStarDoor);
     switch (o->oAction) {
         case 0:
             cur_obj_become_tangible();
             if (o->oInteractStatus & (INT_STATUS_DOOR_PULLED | INT_STATUS_DOOR_PUSHED)) {
                 o->oAction = 1;
             }
-            if (sp18 != NULL && sp18->oAction != 0) {
+            if (doorObj != NULL && doorObj->oAction != 0) {
                 o->oAction = 1;
             }
             break;

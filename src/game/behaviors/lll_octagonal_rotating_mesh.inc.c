@@ -8,6 +8,8 @@ enum {
 };
 
 //! Note: useless zero at the reset instruction, there's no accesses beyond that anyway
+
+// Path for big bullies platforms
 s16 gLllOctagonalMeshAction0[] = { 
     // instruction            time moveAngle  forwardVel
 	LLL_OCTMESH_LINEAR_MOVE,    30,   0x4000,         0, 
@@ -18,6 +20,8 @@ s16 gLllOctagonalMeshAction0[] = {
 	LLL_OCTMESH_CHANGE_DIR,     30,        0,       -30, 
 	LLL_OCTMESH_RESET,           0 
 };
+
+// Path for rolling log
 s16 gLllOctagonalMeshAction1[] = { 
     // instruction              time moveAngle  forwardVel
 	LLL_OCTMESH_WAIT_FOR_MARIO,    0,        0,         0, 

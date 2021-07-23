@@ -31,7 +31,8 @@ s32 coin_step(s16 *collisionFlagsPtr) {
 
     obj_check_floor_death(*collisionFlagsPtr, sObjFloor);
 
-    if ((*collisionFlagsPtr & OBJ_COL_FLAG_GROUNDED) && !(*collisionFlagsPtr & OBJ_COL_FLAG_NO_Y_VEL)) {/* bit 0, bit 3 */
+    if ((*collisionFlagsPtr & OBJ_COL_FLAG_GROUNDED)
+    && !(*collisionFlagsPtr & OBJ_COL_FLAG_NO_Y_VEL)) {/* bit 0, bit 3 */
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
         return TRUE;
     }
@@ -80,7 +81,11 @@ void bhv_moving_yellow_coin_loop(void) {
             break;
 
         case OBJ_ACT_LAVA_DEATH:
+#ifdef COIN_LAVA_FLICKER
             moving_coin_flicker();
+#else
+            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+#endif
             break;
 
         case OBJ_ACT_DEATH_PLANE_DEATH:
@@ -88,9 +93,11 @@ void bhv_moving_yellow_coin_loop(void) {
             break;
     }
 
+#ifdef COIN_LAVA_FLICKER
     if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA) {
         moving_coin_flicker();
     }
+#endif
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
         coin_collected();
@@ -209,7 +216,11 @@ void bhv_blue_coin_sliding_loop(void) {
             break;
 
         case OBJ_ACT_LAVA_DEATH:
+#ifdef COIN_LAVA_FLICKER
             o->oAction = MOV_BCOIN_ACT_FLICKERING;
+#else
+            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+#endif
             break;
 
         case OBJ_ACT_DEATH_PLANE_DEATH:

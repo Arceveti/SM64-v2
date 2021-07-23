@@ -13,15 +13,15 @@ struct ObjectHitbox sUnagiHitbox = {
 };
 
 void bhv_unagi_init(void) {
-    if (o->oBehParams2ndByte != 1) {
-        o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_1);
-        if (o->oBehParams2ndByte == 0) {
+    if (o->oBehParams2ndByte != 1) { // not act 2
+        o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_ship);
+        if (o->oBehParams2ndByte == 0) { // act 1
             o->oFaceAnglePitch = -7600;
         } else {
-            o->oAction = UNAGI_ACT_1_PATH;
+            o->oAction = UNAGI_SHIP_PATH;
         }
     } else {
-        o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_2);
+        o->oPathedStartWaypoint = segmented_to_virtual(jrb_seg7_trajectory_unagi_cave);
         o->oAction = UNAGI_IN_CAVE;
 #ifdef HELD_TRANSPARENT_STAR
         if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB) & 2) {
@@ -36,9 +36,9 @@ void bhv_unagi_init(void) {
     o->oPathedPrevWaypoint = o->oPathedStartWaypoint;
 }
 
-void unagi_act_0(void) {
+void unagi_go_to_start_of_path(void) { // act 0
     if (o->oDistanceToMario > 4500.0f && o->oSubAction != 0) {
-        o->oAction = UNAGI_ACT_1_PATH;
+        o->oAction = UNAGI_SHIP_PATH;
         o->oPosX = o->oPathedStartWaypoint->pos[0];
         o->oPosY = o->oPathedStartWaypoint->pos[1];
         o->oPosZ = o->oPathedStartWaypoint->pos[2];
@@ -47,7 +47,7 @@ void unagi_act_0(void) {
     }
 }
 
-void unagi_act_1_4(s32 nextAction) {
+void unagi_follow_path(s32 nextAction) { // act 1 4
     if (o->oSoundStateID == 3) {
         if (cur_obj_check_anim_frame(30)) {
             o->oForwardVel = 40.0f;
@@ -80,7 +80,7 @@ void unagi_act_1_4(s32 nextAction) {
     cur_obj_set_pos_via_transform();
 }
 
-void unagi_act_2(void) {
+void unagi_return_to_cave(void) { // act 2
     o->oPathedPrevWaypoint = o->oPathedStartWaypoint;
     o->oPathedPrevWaypointFlags = 0;
 
@@ -97,7 +97,7 @@ void unagi_act_2(void) {
     o->oAction = UNAGI_IN_CAVE;
 }
 
-void unagi_act_3(void) {
+void unagi_in_cave(void) { // act 3
     if (o->oUnagiDistFromHome < 0.0f) {
         cur_obj_init_animation_with_sound(6);
 
@@ -122,7 +122,7 @@ void unagi_act_3(void) {
             cur_obj_init_animation_with_sound(0);
             if (cur_obj_check_if_at_animation_end()) {
                 if (o->oUnagiDistanceToMario < 1000.0f) {
-                    o->oAction = UNAGI_ACT_2_PATH;
+                    o->oAction = UNAGI_CAVE_PATH;
                     o->oForwardVel = o->oUnagiNextForwardVel;
                     cur_obj_init_animation_with_sound(1);
                 } else {
@@ -145,13 +145,13 @@ void unagi_act_3(void) {
 }
 
 void bhv_unagi_loop(void) {
-    s32 val04;
+    s32 i;
 
-    if (o->oUnagiHasStar == 0) {
+    if (!o->oUnagiHasStar) {
         o->oUnagiDistanceToMario = 99999.0f;
         if (o->oDistanceToMario < 3000.0f) {
-            for (val04 = -4; val04 < 4; val04++) {
-                spawn_object_relative(val04, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
+            for (i = -4; i < 4; i++) {
+                spawn_object_relative(i, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
             }
             o->oUnagiHasStar = TRUE;
         }
@@ -160,25 +160,25 @@ void bhv_unagi_loop(void) {
     }
 
     switch (o->oAction) {
-        case 0:
-            unagi_act_0();
+        case UNAGI_SHIP_RESET_PATH:
+            unagi_go_to_start_of_path();
             break;
-        case 1:
-            unagi_act_1_4(o->oAction);
+        case UNAGI_SHIP_PATH:
+            unagi_follow_path(o->oAction);
             break;
-        case 2:
-            unagi_act_2();
+        case UNAGI_RETURN_TO_CAVE:
+            unagi_return_to_cave();
             // fall through
-        case 3:
-            unagi_act_3();
+        case UNAGI_IN_CAVE:
+            unagi_in_cave();
             break;
-        case 4:
-            unagi_act_1_4(2);
+        case UNAGI_CAVE_PATH:
+            unagi_follow_path(2);
             break;
     }
 }
 
-void bhv_unagi_subobject_loop(void) {
+void bhv_unagi_subobject_loop(void) { // unagi star
     f32 val04;
 
     if (o->parentObj->oUnagiHasStar == 0) {

@@ -14,7 +14,7 @@ struct ObjectHitbox sMrBlizzardHitbox = {
 // Mr. Blizzard particle spawner.
 void mr_blizzard_spawn_white_particles(s8 count, s8 offsetY, s8 forwardVelBase, s8 velYBase,
                                        s8 sizeBase) {
-    static struct SpawnParticlesInfo D_80331A00 = {
+    static struct SpawnParticlesInfo sMrBlizzardParticlesInfo = {
         /* behParam:        */ 0,
         /* count:           */ 6,
         /* model:           */ MODEL_WHITE_PARTICLE,
@@ -29,12 +29,12 @@ void mr_blizzard_spawn_white_particles(s8 count, s8 offsetY, s8 forwardVelBase, 
         /* sizeRange:       */ 5.0f,
     };
 
-    D_80331A00.count = count;
-    D_80331A00.offsetY = offsetY;
-    D_80331A00.forwardVelBase = forwardVelBase;
-    D_80331A00.velYBase = velYBase;
-    D_80331A00.sizeBase = sizeBase;
-    cur_obj_spawn_particles(&D_80331A00);
+    sMrBlizzardParticlesInfo.count = count;
+    sMrBlizzardParticlesInfo.offsetY = offsetY;
+    sMrBlizzardParticlesInfo.forwardVelBase = forwardVelBase;
+    sMrBlizzardParticlesInfo.velYBase = velYBase;
+    sMrBlizzardParticlesInfo.sizeBase = sizeBase;
+    cur_obj_spawn_particles(&sMrBlizzardParticlesInfo);
 }
 
 /**
@@ -71,7 +71,7 @@ static void mr_blizzard_act_spawn_snowball(void) {
     // spawn the Mr. Blizzard snowball.
     if (o->oMrBlizzardHeldObj == NULL && cur_obj_init_anim_check_frame(0, 5)) {
         o->oMrBlizzardHeldObj =
-            spawn_object_relative(0, -70, (s32)(o->oMrBlizzardGraphYOffset + 153.0f), 0, o,
+            spawn_object_relative(0, -70, (s32)(o->oMrBlizzardGraphYOffset + 154.0f), 0, o,
                                   MODEL_WHITE_PARTICLE, bhvMrBlizzardSnowball);
     } else if (cur_obj_check_anim_frame(10)) {
         o->prevObj = o->oMrBlizzardHeldObj;
@@ -388,7 +388,6 @@ void bhv_mr_blizzard_update(void) {
     // Mr. Blizzard's graphical position changes by changing the Y offset.
     o->oGraphYOffset = o->oMrBlizzardGraphYOffset + absf(20.0f * sins(o->oFaceAngleRoll))
                        - 40.0f * (1.0f - o->oMrBlizzardScale);
-
     cur_obj_scale(o->oMrBlizzardScale);
     cur_obj_move_standard(78);
     obj_check_attacks(&sMrBlizzardHitbox, o->oAction);

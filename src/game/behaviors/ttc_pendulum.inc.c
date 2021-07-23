@@ -31,7 +31,6 @@ void bhv_ttc_pendulum_init(void) {
  */
 void bhv_ttc_pendulum_update(void) {
     if (gTTCSpeedSetting != TTC_SPEED_STOPPED) {
-        UNUSED f32 startVel = o->oTTCPendulumAngleVel;
 
         // Play sound
         if (o->oTTCPendulumSoundTimer != 0) {

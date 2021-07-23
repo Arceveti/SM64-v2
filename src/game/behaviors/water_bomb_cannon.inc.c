@@ -1,9 +1,9 @@
 // water_bomb_cannon.inc.c
 
 void bhv_bubble_cannon_barrel_loop(void) {
-    struct Object *val04;
+    struct Object *waterBombObj;
 
-    if (o->parentObj->oAction == 2) {
+    if (o->parentObj->oAction == WATER_BOMB_CANNON_ACT_HIDE) {
         obj_mark_for_deletion(o);
     } else {
         o->oMoveAngleYaw = o->parentObj->oFaceAngleYaw;
@@ -22,10 +22,10 @@ void bhv_bubble_cannon_barrel_loop(void) {
                 if (o->oForwardVel == 0.0f) {
                     o->oForwardVel = 35.0f;
 
-                    val04 = spawn_object(o, MODEL_WATER_BOMB, bhvWaterBomb);
-                    if (val04 != NULL) {
-                        val04->oForwardVel = -100.0f;
-                        val04->header.gfx.scale[1] = 1.7f;
+                    waterBombObj = spawn_object(o, MODEL_WATER_BOMB, bhvWaterBomb);
+                    if (waterBombObj != NULL) {
+                        waterBombObj->oForwardVel = -100.0f;
+                        waterBombObj->header.gfx.scale[1] = 1.7f;
                     }
 
                     set_camera_shake_from_point(SHAKE_POS_MEDIUM, o->oPosX, o->oPosY, o->oPosZ);
@@ -37,19 +37,19 @@ void bhv_bubble_cannon_barrel_loop(void) {
     }
 }
 
-void water_bomb_cannon_act_0(void) {
+void water_bomb_cannon_act_hidden_inactive(void) { // act 0
     if (o->oDistanceToMario < 2000.0f) {
         spawn_object(o, MODEL_CANNON_BARREL, bhvCannonBarrelBubbles);
         cur_obj_unhide();
 
-        o->oAction = 1;
+        o->oAction = WATER_BOMB_CANNON_ACT_ACTIVE;
         o->oMoveAnglePitch = o->oWaterCannonTargetMovePitch = 0x1C00;
     }
 }
 
-void water_bomb_cannon_act_1(void) {
+void water_bomb_cannon_act_active(void) { // act 1
     if (o->oDistanceToMario > 2500.0f) {
-        o->oAction = 2;
+        o->oAction = WATER_BOMB_CANNON_ACT_HIDE;
     } else if (o->oBehParams2ndByte == 0) {
         if (o->oWaterCannonIdleTimer != 0) {
             o->oWaterCannonIdleTimer--;
@@ -72,23 +72,23 @@ void water_bomb_cannon_act_1(void) {
     }
 }
 
-void water_bomb_cannon_act_2(void) {
+void water_bomb_cannon_act_hide(void) { // act 2
     cur_obj_hide();
-    o->oAction = 0;
+    o->oAction = WATER_BOMB_CANNON_ACT_HIDDEN;
 }
 
 void bhv_water_bomb_cannon_loop(void) {
     cur_obj_push_mario_away_from_cylinder(220.0f, 300.0f);
 
     switch (o->oAction) {
-        case 0:
-            water_bomb_cannon_act_0();
+        case WATER_BOMB_CANNON_ACT_HIDDEN:
+            water_bomb_cannon_act_hidden_inactive();
             break;
-        case 1:
-            water_bomb_cannon_act_1();
+        case WATER_BOMB_CANNON_ACT_ACTIVE:
+            water_bomb_cannon_act_active();
             break;
-        case 2:
-            water_bomb_cannon_act_2();
+        case WATER_BOMB_CANNON_ACT_HIDE:
+            water_bomb_cannon_act_hide();
             break;
     }
 }

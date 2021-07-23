@@ -91,7 +91,7 @@ void bhv_wiggler_body_part_update(void) {
         //  the floor
         o->oPosY -= 30.0f;
         cur_obj_update_floor_height();
-        if (o->oFloorHeight > o->oPosY) {// TODO: Check ineq swap
+        if (o->oFloorHeight > o->oPosY) { // TODO: Check ineq swap
             o->oPosY = o->oFloorHeight;
         }
     }
@@ -230,10 +230,10 @@ static void wiggler_act_walk(void) {
             o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
         }
     } else {
-        //! Every object's health is initially 2048, and wiggler's doesn't change
-        //  to 4 until after this runs the first time. It indexes out of bounds
-        //  and uses the value 113762.3 for one frame on US. This is fixed up
-        //  in wiggler_init_segments if AVOID_UB is defined.
+        // Every object's health is initially 2048, and wiggler's doesn't change
+        // to 4 until after this runs the first time. It indexes out of bounds
+        // and uses the value 113762.3 for one frame on US. This is fixed up
+        // in wiggler_init_segments if AVOID_UB is defined.
         obj_forward_vel_approach(sWigglerSpeeds[o->oHealth - 1], 1.0f);
 
         if (o->oWigglerWalkAwayFromWallTimer != 0) {

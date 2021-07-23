@@ -381,8 +381,9 @@ void bhv_monty_mole_update(void) {
             }
         }
 
-        //! No overflow check
-        sMontyMoleKillStreak++;
+        if (sMontyMoleKillStreak < (1 << 15)) {
+            sMontyMoleKillStreak++;
+        }
 
         sMontyMoleLastKilledPosX = o->oPosX;
         sMontyMoleLastKilledPosY = o->oPosY;

@@ -11,15 +11,13 @@ void sinking_rectangular_plat_actions(f32 a0, s32 a1) {
             break;
         case 2:
             break;
-            break; // Two breaks needed?
+            break; //! Two breaks needed?
     }
 }
 
 void bhv_lll_sinking_rectangular_platform_loop(void) {
-    f32 sp1C = 0.4f;
-    s32 sp18 = 0x100;
     if (o->oMoveAngleYaw != 0) {
-        sinking_rectangular_plat_actions(sp1C, sp18);
+        sinking_rectangular_plat_actions(0.4f, 0x100);
     } else {
         o->oFaceAnglePitch = sins(o->oLllWoodPieceOscillationTimer) * 512.0f;
         o->oLllWoodPieceOscillationTimer += 0x100;
@@ -27,7 +25,5 @@ void bhv_lll_sinking_rectangular_platform_loop(void) {
 }
 
 void bhv_lll_sinking_square_platforms_loop(void) {
-    f32 sp1C = 0.5f;
-    s32 sp18 = 0x100;
-    sinking_rectangular_plat_actions(sp1C, sp18);
+    sinking_rectangular_plat_actions(0.5f, 0x100);
 }

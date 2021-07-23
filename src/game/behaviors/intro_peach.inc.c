@@ -25,28 +25,28 @@ void bhv_intro_peach_loop(void) {
             gCurrentObject->oFaceAnglePitch = 0x400;
             gCurrentObject->oFaceAngleYaw = 0x7500;
             gCurrentObject->oFaceAngleRoll = -0x3700;
-            gCurrentObject->oIntroPeachDistToCamera = 186.f;
-            gCurrentObject->oIntroPeachPitchFromFocus = -9984.f;
-            gCurrentObject->oIntroPeachYawFromFocus = -768.f;
+            gCurrentObject->oIntroPeachDistToCamera = 186.0f;
+            gCurrentObject->oIntroPeachPitchFromFocus = -9984.0f;
+            gCurrentObject->oIntroPeachYawFromFocus = -768.0f;
             gCurrentObject->oOpacity = 255;
             gCurrentObject->header.gfx.animInfo.animFrame = 100;
             break;
         case 1:
-            intro_peach_set_pos_and_opacity(gCurrentObject, 0.f, 0.f);
+            intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 0.0f);
 
             if (gCurrentObject->oTimer > 20) {
                 gCurrentObject->oAction++;
             }
             break;
         case 2:
-            intro_peach_set_pos_and_opacity(gCurrentObject, 255.f, 3.f);
+            intro_peach_set_pos_and_opacity(gCurrentObject, 255.0f, 3.0f);
 
             if ((gCurrentObject->oTimer > 100) && (get_dialog_id() == DIALOG_NONE)) {
                 gCurrentObject->oAction++;
             }
             break;
         case 3:
-            intro_peach_set_pos_and_opacity(gCurrentObject, 0.f, 8.f);
+            intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 8.0f);
 
             if (gCurrentObject->oTimer > 60) {
                 obj_mark_for_deletion(gCurrentObject);

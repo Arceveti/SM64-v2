@@ -14,10 +14,9 @@ void bhv_lll_rotating_hex_flame_loop(void) {
 void fire_bar_spawn_flames(s16 a0) {
     struct Object *flameObj;
     s32 i;
-    s32 amt;
+    s32 amt = (o->oBehParams2ndByte == 0) ? 4 : 3;
     f32 xOffset = sins(a0) * 200.0f;
     f32 zOffset = coss(a0) * 200.0f;
-    amt = (o->oBehParams2ndByte == 0) ? 4 : 3;
     for (i = 0; i < amt; i++) {
         flameObj = spawn_object(o, MODEL_RED_FLAME, bhvLllRotatingHexFlame);
         flameObj->oLllRotatingHexFlameRelativePosX += xOffset;

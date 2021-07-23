@@ -48,9 +48,6 @@ void tweester_act_idle(void) {
         cur_obj_set_pos_to_home();
         cur_obj_scale(0);
 
-        // Hard to have any idea of this purpose, only set here.
-        o->oTweesterUnused = 0;
-
         // If Mario is within range, change to the growth sub-action.
         if (o->oDistanceToMario < 1500.0f) {
             o->oSubAction++;

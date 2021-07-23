@@ -51,7 +51,7 @@ void bhv_water_splash_spawn_droplets(void) {
     if (o->oTimer == 0) {
         o->oPosY = find_water_level(o->oPosX, o->oPosZ);
     }
-    if (o->oPosY > FLOOR_LOWER_LIMIT_MISC) {// Make sure it is not at the default water level
+    if (o->oPosY > FLOOR_LOWER_LIMIT_MISC) { // Make sure it is not at the default water level
         for (i = 0; i < 3; i++) {
             spawn_water_droplet(o, &sWaterSplashDropletParams);
         }
@@ -109,8 +109,7 @@ void bhv_bubble_splash_init(void) {
 void bhv_shallow_water_splash_init(void) {
     struct Object *fishObj;
     // Have a 1 in 256 chance to spawn the fish particle easter egg.
-    if ((random_u16() & 0xFF) <= 0) // Strange
-    {
+    if ((random_u16() & 0xFF) <= 0) {// Strange
         fishObj = spawn_water_droplet(o, &sWaterDropletFishParams);
         obj_init_animation_with_sound(fishObj, blue_fish_seg3_anims_0301C2B0, 0);
     }
@@ -118,7 +117,7 @@ void bhv_shallow_water_splash_init(void) {
 
 void bhv_wave_trail_shrink(void) {
     f32 waterLevel = find_water_level(o->oPosX, o->oPosZ);
-    // Destroy every other water wave to space them out (this is a terrible way of doing it)
+    //! Destroy every other water wave to space them out (this is a terrible way of doing it)
     if (o->oTimer == 0) {
         if (gGlobalTimer & 1) {
             obj_mark_for_deletion(o);

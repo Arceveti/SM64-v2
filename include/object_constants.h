@@ -164,6 +164,12 @@
     #define MOV_YCOIN_ACT_IDLE     0
     #define MOV_YCOIN_ACT_BLINKING 1
 
+/* 1-Up Mushroom */
+    /* oBehParams2ndByte */
+    #define MUSHROOM_BP_REQUIRES_BOWSER_1   1
+    #define MUSHROOM_BP_REQUIRES_BOWSER_2   2
+    /* oAction */
+
 /* Bob-omb Buddy */
     /* oBehParams2ndByte */
     #define BOBOMB_BUDDY_BP_STYPE_GENERIC        0
@@ -714,7 +720,7 @@
     #define SPINY_ACT_THROWN_BY_LAKITU 2
     #define SPINY_ACT_ATTACKED_MARIO   3
 
-/* Evil lakitu */
+/* Evil Lakitu */
     /* oAction */
     #define ENEMY_LAKITU_ACT_UNINITIALIZED   0
     #define ENEMY_LAKITU_ACT_MAIN            1
@@ -735,7 +741,18 @@
     #define CLOUD_BP_FWOOSH         0
     #define CLOUD_BP_LAKITU_CLOUD   1
 
-/* Camera lakitu */
+//! names
+/* Intro Lakitu */
+    /* oAction */
+    #define INTRO_LAKITU_ACT_0      0
+    #define INTRO_LAKITU_ACT_1      1
+    #define INTRO_LAKITU_ACT_2      2
+    #define INTRO_LAKITU_ACT_3      3
+    #define INTRO_LAKITU_ACT_100  100
+    #define INTRO_LAKITU_ACT_101  101
+    #define INTRO_LAKITU_ACT_102  102
+
+/* Camera Lakitu */
     /* oAction */
     #define CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE 0
     #define CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD      1
@@ -1013,11 +1030,11 @@
 
 /* Unagi */
     /* oAction */
-    #define UNAGI_ACT_1_RESET_PATH                  0
-    #define UNAGI_ACT_1_PATH                        1
+    #define UNAGI_SHIP_RESET_PATH                  0
+    #define UNAGI_SHIP_PATH                        1
     #define UNAGI_RETURN_TO_CAVE                    2
     #define UNAGI_IN_CAVE                           3
-    #define UNAGI_ACT_2_PATH                        4
+    #define UNAGI_CAVE_PATH                        4
 
     /* oAnimState */
     #define UNAGI_ANIM_STATE_NO_STAR                0

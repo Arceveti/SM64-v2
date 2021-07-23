@@ -411,7 +411,7 @@ static void koopa_unshelled_act_dive(void) {
 
             cur_obj_set_model(MODEL_KOOPA_WITH_SHELL);
             obj_mark_for_deletion(shell);
-            goto end;
+            goto end; //! goto?
         }
     }
 
@@ -448,9 +448,9 @@ static void koopa_unshelled_update(void) {
         case KOOPA_UNSHELLED_ACT_LYING:
             koopa_unshelled_act_dive();
             break;
-        case KOOPA_UNSHELLED_ACT_UNUSED3:
-            cur_obj_init_anim_extend(0);
-            break;
+        // case KOOPA_UNSHELLED_ACT_UNUSED3:
+        //     cur_obj_init_anim_extend(0);
+        //     break;
     }
 
     obj_handle_attacks(&sKoopaHitbox, o->oAction, sKoopaUnshelledAttackHandlers);

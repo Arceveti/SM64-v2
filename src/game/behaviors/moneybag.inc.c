@@ -35,16 +35,13 @@ void bhv_moneybag_init(void) {
 void moneybag_check_mario_collision(void) {
     obj_set_hitbox(o, &sMoneybagHitbox);
 
-    if (o->oInteractStatus & INT_STATUS_INTERACTED) /* bit 15 */
-    {
-        if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) /* bit 13 */
-        {
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
+        if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) {/* bit 13 */
             o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
             o->oVelY = 30.0f;
         }
 
-        if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) /* bit 14 */
-        {
+        if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) {/* bit 14 */
             o->oAction = MONEYBAG_ACT_DEATH;
         }
 
@@ -65,7 +62,7 @@ void moneybag_jump(s8 collisionFlags) {
                 o->oVelY = 40.0f;
             }
 
-            if (cur_obj_check_if_near_animation_end() == 1) {
+            if (cur_obj_check_if_near_animation_end()) {
                 o->oMoneybagJumpState = MONEYBAG_JUMP_JUMP;
                 cur_obj_play_sound_2(SOUND_GENERAL_BOING2_LOWPRIO);
             }
@@ -84,7 +81,7 @@ void moneybag_jump(s8 collisionFlags) {
         case MONEYBAG_JUMP_JUMP_AND_BOUNCE:
             cur_obj_init_animation(3);
 
-            if (cur_obj_check_if_near_animation_end() == 1) {
+            if (cur_obj_check_if_near_animation_end()) {
                 o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
             }
             break;
@@ -135,10 +132,10 @@ void moneybag_act_move_around(void) {
 
 void moneybag_act_return_home(void) {
     s16 collisionFlags;
-    f32 sp28 = o->oHomeX - o->oPosX;
-    f32 sp24 = o->oHomeZ - o->oPosZ;
-    s16 sp22 = atan2s(sp24, sp28);
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, sp22, 0x800);
+    f32 dx = o->oHomeX - o->oPosX;
+    f32 dz = o->oHomeZ - o->oPosZ;
+    s16 yawToHome = atan2s(dz, dx);
+    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
 
     collisionFlags = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)

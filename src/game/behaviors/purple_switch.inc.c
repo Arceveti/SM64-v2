@@ -41,19 +41,13 @@ void bhv_purple_switch_loop(void) {
          * up. When time is up, move to a waiting-while-pressed state.
          */
         case PURPLE_SWITCH_TICKING:
-            if (o->oBehParams2ndByte != 0) {
-                if (o->oBehParams2ndByte == 1 && gMarioObject->platform != o) {
-                    o->oAction++;
-                } else {
-                    if (o->oTimer < 360) {
-                        play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
-                    } else {
-                        play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
-                    }
-                    if (o->oTimer > 400) {
-                        o->oAction = PURPLE_SWITCH_WAIT_FOR_MARIO_TO_GET_OFF;
-                    }
-                }
+            if (o->oTimer < 360) {
+                play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
+            } else {
+                play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
+            }
+            if (o->oTimer > 400) {
+                o->oAction = PURPLE_SWITCH_WAIT_FOR_MARIO_TO_GET_OFF;
             }
             break;
         /**

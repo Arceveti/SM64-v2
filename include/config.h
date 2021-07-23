@@ -187,6 +187,10 @@
 #define DEEP_FREEZE_CRACKED_ICE
 // Adds a visual moving water current to the warp behind the Bowser's Sub door in DDD (Arceveti)
 #define DDD_WARP_CURRENT_TEXTURE
+// Disables the ambient waves in WDW and areas with a variable water level,
+// since those can cause subtle nausea
+// (Arceveti)
+#define WDW_DISABLE_AMBIENT_WAVES
 
 // -- Bugfixes --
 
@@ -230,6 +234,8 @@
 #define HUD_SECRETS
 // Adds leading zeroes to the counters on the HUD (Arceveti)
 #define HUD_LEADING_ZEROES
+// Fade warps have a particle effect to show where they are (Arceveti)
+#define VISIBLE_FADE_WARPS
 
 // -- Object Behaviors --
 

@@ -1,7 +1,7 @@
 // whomp.c.inc
 
 void whomp_play_sfx_from_pound_animation(void) {
-    s32 playSound = 0;
+    s32 playSound = FALSE;
     if (o->oForwardVel < 5.0f) {
         playSound = cur_obj_check_anim_frame(0);
         playSound |= cur_obj_check_anim_frame(23);
@@ -57,17 +57,10 @@ void whomp_turn(void) {
 }
 
 void whomp_patrol(void) {
-    s16 marioAngle;
-    f32 distWalked;
-    f32 patrolDist;
+    s16 marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
+    f32 distWalked = cur_obj_lateral_dist_to_home();
+    f32 patrolDist = (gCurrLevelNum == LEVEL_BITS) ? 200.0f : 700.0f; //! should be a param
 
-    marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-    distWalked = cur_obj_lateral_dist_to_home();
-    if (gCurrLevelNum == LEVEL_BITS) {
-        patrolDist = 200.0f;
-    } else {
-        patrolDist = 700.0f;
-    }
     cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
     o->oForwardVel = 3.0f;
 
@@ -269,11 +262,7 @@ void bhv_whomp_loop(void) {
     cur_obj_call_action_function(sWhompActions);
     cur_obj_move_standard(-20);
     if (o->oAction != 9) {
-        if (o->oBehParams2ndByte != 0) {
-            cur_obj_hide_if_mario_far_away_y(2000.0f);
-        } else {
-            cur_obj_hide_if_mario_far_away_y(1000.0f);
-        }
+        cur_obj_hide_if_mario_far_away_y((o->oBehParams2ndByte != 0) ? 2000.0f : 1000.0f);
         load_object_collision_model();
     }
 }

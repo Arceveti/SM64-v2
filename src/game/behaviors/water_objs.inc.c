@@ -9,7 +9,7 @@ void bhv_water_air_bubble_init(void) {
 
 void bhv_water_air_bubble_loop(void) {
     s32 i;
-    o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.5f + 4.0f;
+    o->header.gfx.scale[0] =  sins(o->oWaterObjUnkF4) * 0.5f + 4.0f;
     o->header.gfx.scale[1] = -sins(o->oWaterObjUnkF4) * 0.5f + 4.0f;
     o->oWaterObjUnkF4 += 0x400;
     if (o->oTimer < 30) {
@@ -57,12 +57,12 @@ void bhv_bubble_maybe_loop(void) {
 }
 
 void bhv_small_water_wave_loop(void) {
-    f32 sp1C = find_water_level(o->oPosX, o->oPosZ);
+    f32 waterLevel = find_water_level(o->oPosX, o->oPosZ);
     o->header.gfx.scale[0] = sins(o->oWaterObjUnkF4) * 0.2f + 1.0f;
     o->oWaterObjUnkF4 += o->oWaterObjUnkFC;
     o->header.gfx.scale[1] = sins(o->oWaterObjUnkF8) * 0.2f + 1.0f;
     o->oWaterObjUnkF8 += o->oWaterObjUnk100;
-    if (o->oPosY > sp1C) {
+    if (o->oPosY > waterLevel) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         o->oPosY += 5.0f;
         if (gFreeObjectList.next != NULL) {
@@ -89,11 +89,11 @@ void bhv_particle_init(void) {
 }
 
 void bhv_particle_loop() {
-    f32 sp24 = find_water_level(o->oPosX, o->oPosZ);
+    f32 waterLevel = find_water_level(o->oPosX, o->oPosZ);
     o->oPosY += 5.0f;
     obj_translate_xz_random(o, 4.0f);
     scale_bubble_sin();
-    if (o->oPosY > sp24 && o->oTimer) {
+    if (o->oPosY > waterLevel && o->oTimer) {
         obj_mark_for_deletion(o);
         try_to_spawn_object(5, 0, o, MODEL_SMALL_WATER_SPLASH, bhvObjectWaterSplash);
     }
@@ -114,7 +114,8 @@ void bhv_fish_group_loop(void) {
 }
 
 void bhv_water_waves_init(void) {
-    s32 sp1C;
-    for (sp1C = 0; sp1C < 3; sp1C++)
+    s32 i;
+    for (i = 0; i < 3; i++) {
         spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticle);
+    }
 }

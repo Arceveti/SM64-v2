@@ -489,6 +489,7 @@ void ukiki_free_loop(void) {
 }
 
 /**
+ * //! enable?
  * Unused function for timing ukiki's blinking.
  * Image still present in Ukiki's actor graphics.
  *
