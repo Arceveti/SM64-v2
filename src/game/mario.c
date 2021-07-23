@@ -2016,8 +2016,7 @@ void init_mario(void) {
         capObject->oPosY = capPos[1];
         capObject->oPosZ = capPos[2];
 
-        capObject->oForwardVelS32 = 0;
-
+        capObject->oForwardVel = 0.0f;
         capObject->oMoveAngleYaw = 0;
     }
 }

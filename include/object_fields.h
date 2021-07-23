@@ -53,7 +53,7 @@
 #define /*0x08C*/ oFlags                      OBJECT_FIELD_U32(0x01)
 #define /*0x090*/ oDialogResponse             OBJECT_FIELD_S16(0x02, 0)
 #define /*0x092*/ oDialogState                OBJECT_FIELD_S16(0x02, 1)
-#define /*0x094*/ oUnkPlayerID                OBJECT_FIELD_U32(0x03)
+#define /*0x094*/ oUnkPlayerID                OBJECT_FIELD_U32(0x03) // Only set to 1 for Mario
 // 0x98 unused/removed.
 #define /*0x09C*/ oIntangibleTimer            OBJECT_FIELD_S32(0x05)
 #define /*0x0A0*/ O_POS_INDEX                 0x06
@@ -64,7 +64,6 @@
 #define /*0x0B0*/ oVelY                       OBJECT_FIELD_F32(0x0A)
 #define /*0x0B4*/ oVelZ                       OBJECT_FIELD_F32(0x0B)
 #define /*0x0B8*/ oForwardVel                 OBJECT_FIELD_F32(0x0C)
-#define /*0x0B8*/ oForwardVelS32              OBJECT_FIELD_S32(0x0C)
 #define /*0x0BC*/ oLeftVel                    OBJECT_FIELD_F32(0x0D)
 #define /*0x0C0*/ oUpVel                      OBJECT_FIELD_F32(0x0E)
 #define /*0x0C4*/ O_MOVE_ANGLE_INDEX          0x0F
@@ -587,10 +586,10 @@
 
  /* King Bob-omb */
 #define /*0x088*/ oKingBobombHoldingMarioState        OBJECT_FIELD_S32(0x00)
-#define /*0x0F8*/ oKingBobombReturningHomeUnkF8       OBJECT_FIELD_S32(0x1C)
+#define /*0x0F8*/ oKingBobombIsJumping                OBJECT_FIELD_S32(0x1C)
 #define /*0x0FC*/ oKingBobombPlayerGrabEscapeActions  OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oKingBobombUnk100                   OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oKingBobombUnk104                   OBJECT_FIELD_S32(0x1F)
+#define /*0x100*/ oKingBobombShouldStomp              OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oKingBobombStationaryTimer          OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oKingBobombPlayerGrabEscapeCooldown OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oKingBobombBlinkTimer               OBJECT_FIELD_S32(0x21)
 

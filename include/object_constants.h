@@ -1134,7 +1134,25 @@
     #define KING_BOBOMB_ACT_STOP_MUSIC      8
 
     /* oSubAction */
-    #define KING_BOBOMB_SUB_ACT_0           0
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_0       0
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_1       1
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_2       2
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_3       3
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_DIALOG  4
+
+    /* Animations */
+    #define KING_BOBOMB_ANIM_GRAB_MARIO     0
+    #define KING_BOBOMB_ANIM_HOLDING_MARIO  1
+    #define KING_BOBOMB_ANIM_HIT_GROUND     2
+    #define KING_BOBOMB_ANIM_UNUSED_3       3
+    #define KING_BOBOMB_ANIM_STOMP          4
+    #define KING_BOBOMB_ANIM_IDLE           5
+    #define KING_BOBOMB_ANIM_UNUSED_6       6
+    #define KING_BOBOMB_ANIM_T_POSE         7
+    #define KING_BOBOMB_ANIM_JUMP           8
+    #define KING_BOBOMB_ANIM_THROW_MARIO    9
+    #define KING_BOBOMB_ANIM_STAND_UP       10
+    #define KING_BOBOMB_ANIM_WALKING        11
 
 /* Klepto */
     /* oAction */

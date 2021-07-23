@@ -45,9 +45,9 @@
 #define COS10   0.9848077f
 #define COS15   0.9659258f
 #define COS20   0.9396926f
-#define COS25   0.9063078f  // ledge grabs
+#define COS25   0.9063078f   // ledge grabs
 #define COS30   0.8660254f
-#define COS38   0.7880108f
+#define COS38   0.7880108f  // mario_floor_is_slippery default
 #define COS80   0.17364818f // braking action
 
 // Debug Info Flags
