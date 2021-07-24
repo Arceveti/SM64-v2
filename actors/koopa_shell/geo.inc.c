@@ -4,7 +4,7 @@ const GeoLayout koopa_shell_geo[] = {
    GEO_OPEN_NODE(),
       GEO_SCALE(LAYER_FORCE, 65536),
       GEO_OPEN_NODE(),
-         GEO_DISPLAY_LIST(LAYER_SILHOUETTE_OPAQUE, koopa_shell_seg8_dl_08028B78),
+         GEO_DISPLAY_LIST(LAYER_SILHOUETTE_OPAQUE, koopa_shell_seg8_dl_green_koopa_shell),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
    GEO_END(),

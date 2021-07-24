@@ -100,7 +100,7 @@ ALIGNED8 static const Texture warp_pipe_seg3_texture_03007E40[] = {
 };
 
 // 0x03008E40 - 0x03008F98
-const Gfx warp_pipe_seg3_dl_03008E40[] = {
+const Gfx warp_pipe_seg3_dl_sides_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_03007E40),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -133,7 +133,7 @@ const Gfx warp_pipe_seg3_dl_03008E40[] = {
 };
 
 // 0x03008F98 - 0x03008FF8
-const Gfx warp_pipe_seg3_dl_03008F98[] = {
+const Gfx warp_pipe_seg3_dl_sides[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -141,7 +141,7 @@ const Gfx warp_pipe_seg3_dl_03008F98[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(warp_pipe_seg3_dl_03008E40),
+    gsSPDisplayList(warp_pipe_seg3_dl_sides_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -194,7 +194,7 @@ ALIGNED8 static const Texture warp_pipe_seg3_texture_03009168[] = {
 };
 
 // 0x03009968 - 0x03009A20
-const Gfx warp_pipe_seg3_dl_03009968[] = {
+const Gfx warp_pipe_seg3_dl_top[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_03009168),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -213,7 +213,7 @@ const Gfx warp_pipe_seg3_dl_03009968[] = {
 };
 
 // 0x03009A20 - 0x03009A50
-const Gfx warp_pipe_seg3_dl_03009A20[] = {
+const Gfx warp_pipe_seg3_dl_inside[] = {
     gsSPLight(&warp_pipe_seg3_lights_03009010.l, 1),
     gsSPLight(&warp_pipe_seg3_lights_03009010.a, 2),
     gsSPVertex(warp_pipe_seg3_vertex_03009128, 4, 0),
@@ -222,7 +222,7 @@ const Gfx warp_pipe_seg3_dl_03009A20[] = {
 };
 
 // 0x03009A50 - 0x03009AC8
-const Gfx warp_pipe_seg3_dl_03009A50[] = {
+const Gfx warp_pipe_seg3_dl_top_inside[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -231,11 +231,11 @@ const Gfx warp_pipe_seg3_dl_03009A50[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(warp_pipe_seg3_dl_03009968),
+    gsSPDisplayList(warp_pipe_seg3_dl_top),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPDisplayList(warp_pipe_seg3_dl_03009A20),
+    gsSPDisplayList(warp_pipe_seg3_dl_inside),
     gsSPSetGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };

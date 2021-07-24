@@ -45,7 +45,7 @@ static const Vtx blue_coin_switch_seg8_vertex_08000D18[] = {
 };
 
 // 0x08000D58 - 0x08000DD0
-const Gfx blue_coin_switch_seg8_dl_08000D58[] = {
+const Gfx blue_coin_switch_seg8_dl_model_sides[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, blue_coin_switch_seg8_texture_08000018),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -60,7 +60,7 @@ const Gfx blue_coin_switch_seg8_dl_08000D58[] = {
 };
 
 // 0x08000DD0 - 0x08000E08
-const Gfx blue_coin_switch_seg8_dl_08000DD0[] = {
+const Gfx blue_coin_switch_seg8_dl_model_top[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, blue_coin_switch_seg8_texture_08000418),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -79,11 +79,11 @@ const Gfx blue_coin_switch_seg8_dl_08000E08[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 4, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (16 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(blue_coin_switch_seg8_dl_08000D58),
+    gsSPDisplayList(blue_coin_switch_seg8_dl_model_sides),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(blue_coin_switch_seg8_dl_08000DD0),
+    gsSPDisplayList(blue_coin_switch_seg8_dl_model_top),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

@@ -159,7 +159,7 @@ ALIGNED8 static const Texture exclamation_box_outline_seg8_texture_08025168[] = 
 };
 
 // 0x08025968 - 0x080259F8
-const Gfx exclamation_box_outline_seg8_dl_08025968[] = {
+const Gfx exclamation_box_outline_seg8_dl_outline_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_outline_seg8_texture_08025168),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -175,7 +175,7 @@ const Gfx exclamation_box_outline_seg8_dl_08025968[] = {
 };
 
 // 0x080259F8 - 0x08025A68
-const Gfx exclamation_box_outline_seg8_dl_080259F8[] = {
+const Gfx exclamation_box_outline_seg8_dl_outline[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -184,7 +184,7 @@ const Gfx exclamation_box_outline_seg8_dl_080259F8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(exclamation_box_outline_seg8_dl_08025968),
+    gsSPDisplayList(exclamation_box_outline_seg8_dl_outline_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -212,7 +212,7 @@ static const Vtx exclamation_box_outline_seg8_vertex_08025E80[] = {
 };
 
 // 0x08025EC0 - 0x08025F08
-const Gfx exclamation_box_outline_seg8_dl_08025EC0[] = {
+const Gfx exclamation_box_outline_seg8_dl_exclamation_point_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_outline_seg8_texture_08025A80),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
@@ -224,7 +224,7 @@ const Gfx exclamation_box_outline_seg8_dl_08025EC0[] = {
 };
 
 // 0x08025F08 - 0x08025F78
-const Gfx exclamation_box_outline_seg8_dl_08025F08[] = {
+const Gfx exclamation_box_outline_seg8_dl_exclamation_point[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_CULL_BACK | G_SHADING_SMOOTH),
@@ -233,7 +233,7 @@ const Gfx exclamation_box_outline_seg8_dl_08025F08[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 4, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (16 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(exclamation_box_outline_seg8_dl_08025EC0),
+    gsSPDisplayList(exclamation_box_outline_seg8_dl_exclamation_point_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

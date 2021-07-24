@@ -10,7 +10,7 @@ const GeoLayout wiggler_body_geo[] = {
           GEO_OPEN_NODE(),
             GEO_BILLBOARD(),
             GEO_OPEN_NODE(),
-              GEO_DISPLAY_LIST(LAYER_ALPHA, wiggler_seg5_dl_0500C278),
+              GEO_DISPLAY_LIST(LAYER_ALPHA, wiggler_seg5_dl_segment),
             GEO_CLOSE_NODE(),
           GEO_CLOSE_NODE(),
           GEO_OPEN_NODE(),

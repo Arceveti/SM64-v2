@@ -269,7 +269,7 @@ static const Vtx goomba_seg8_vertex_0801B618[] = {
 };
 
 // 0x0801B658 - 0x0801B690
-const Gfx goomba_seg8_dl_0801B658[] = {
+const Gfx goomba_seg8_dl_model_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_08019530),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -279,7 +279,7 @@ const Gfx goomba_seg8_dl_0801B658[] = {
 };
 
 // 0x0801B690 - 0x0801B700
-const Gfx goomba_seg8_dl_0801B690[] = {
+const Gfx goomba_seg8_dl_body[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -288,7 +288,7 @@ const Gfx goomba_seg8_dl_0801B690[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(goomba_seg8_dl_0801B658),
+    gsSPDisplayList(goomba_seg8_dl_model_body),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

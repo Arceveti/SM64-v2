@@ -107,17 +107,17 @@ extern const struct Animation *const piranha_plant_seg6_anims_0601C31C[];
 
 // poundable_pole
 extern const GeoLayout wooden_post_geo[];
-extern const Gfx poundable_pole_seg6_dl_060022F0[];
-extern const Gfx poundable_pole_seg6_dl_06002358[];
+extern const Gfx poundable_pole_seg6_dl_model_top[];
+extern const Gfx poundable_pole_seg6_dl_model_sides[];
 extern const Gfx poundable_pole_seg6_dl_06002410[];
 extern const Collision poundable_pole_collision_06002490[];
 
 // whomp
 extern const GeoLayout whomp_geo[];
-extern const Gfx whomp_seg6_dl_0601F4F8[];
-extern const Gfx whomp_seg6_dl_0601F570[];
-extern const Gfx whomp_seg6_dl_0601F5A8[];
-extern const Gfx whomp_seg6_dl_0601F5E0[];
+extern const Gfx whomp_seg6_dl_sides[];
+extern const Gfx whomp_seg6_dl_back[];
+extern const Gfx whomp_seg6_dl_face[];
+extern const Gfx whomp_seg6_dl_body[];
 extern const Gfx whomp_seg6_dl_0601F7F0[];
 extern const Gfx whomp_seg6_dl_0601F880[];
 extern const Gfx whomp_seg6_dl_0601FA58[];

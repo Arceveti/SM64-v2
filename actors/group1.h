@@ -5,9 +5,9 @@
 
 // bullet_bill
 extern const GeoLayout bullet_bill_geo[];
-extern const Gfx bullet_bill_seg5_dl_0500E5E8[];
-extern const Gfx bullet_bill_seg5_dl_0500E678[];
-extern const Gfx bullet_bill_seg5_dl_0500E730[];
+extern const Gfx bullet_bill_seg5_dl_eyes[];
+extern const Gfx bullet_bill_seg5_dl_mouth[];
+extern const Gfx bullet_bill_seg5_dl_body[];
 extern const Gfx bullet_bill_seg5_dl_0500E8A8[];
 
 // heave_ho
@@ -67,9 +67,9 @@ extern const struct Animation *const hoot_seg5_anims_05005768[];
 
 // thwomp
 extern const GeoLayout thwomp_geo[];
-extern const Gfx thwomp_seg5_dl_0500B570[];
-extern const Gfx thwomp_seg5_dl_0500B718[];
-extern const Gfx thwomp_seg5_dl_0500B750[];
+extern const Gfx thwomp_seg5_dl_body[];
+extern const Gfx thwomp_seg5_dl_face[];
+extern const Gfx thwomp_seg5_dl_thwomp[];
 extern const Collision thwomp_seg5_collision_0500B7D0[];
 
 // yellow_sphere_small
@@ -80,14 +80,14 @@ extern const Gfx yellow_sphere_seg5_dl_050008C8[];
 
 // yoshi_egg
 extern const GeoLayout yoshi_egg_geo[];
-extern const Gfx yoshi_egg_seg5_dl_050097B8[];
-extern const Gfx yoshi_egg_seg5_dl_05009820[];
-extern const Gfx yoshi_egg_seg5_dl_05009838[];
-extern const Gfx yoshi_egg_seg5_dl_05009850[];
-extern const Gfx yoshi_egg_seg5_dl_05009868[];
-extern const Gfx yoshi_egg_seg5_dl_05009880[];
-extern const Gfx yoshi_egg_seg5_dl_05009898[];
-extern const Gfx yoshi_egg_seg5_dl_050098B0[];
-extern const Gfx yoshi_egg_seg5_dl_050098C8[];
+extern const Gfx yoshi_egg_seg5_dl_material_model[];
+extern const Gfx yoshi_egg_seg5_dl_7[];
+extern const Gfx yoshi_egg_seg5_dl_6[];
+extern const Gfx yoshi_egg_seg5_dl_5[];
+extern const Gfx yoshi_egg_seg5_dl_4[];
+extern const Gfx yoshi_egg_seg5_dl_3[];
+extern const Gfx yoshi_egg_seg5_dl_2[];
+extern const Gfx yoshi_egg_seg5_dl_1[];
+extern const Gfx yoshi_egg_seg5_dl_0[];
 
 #endif

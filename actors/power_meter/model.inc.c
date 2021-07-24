@@ -1,7 +1,5 @@
 // Power Meter HUD
 
-UNUSED static const u64 power_meter_unused_1 = 0;
-
 // 0x030233E0
 ALIGNED8 static const Texture texture_power_meter_left_side[] = {
 #include "actors/power_meter/power_meter_left_side.rgba16.inc.c"
@@ -66,14 +64,14 @@ const Texture *const power_meter_health_segments_lut[] = {
 
 // 0x03029400
 static const Vtx vertex_power_meter_base[] = {
-    {{{   -32,    -32,      0}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -32,      0}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     32,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,    -32,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -32,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     32,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -32,     32,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -32,      0}, 0, {     1,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    32,    -32,      0}, 0, {  1024,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    32,     32,      0}, 0, {  1024,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     32,      0}, 0, {     1,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -32,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    32,    -32,      0}, 0, { 32<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    32,     32,      0}, 0, { 32<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     32,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x03029480 - 0x03029530
@@ -102,9 +100,9 @@ const Gfx dl_power_meter_base[] = {
 
 // 0x03029530
 static const Vtx vertex_power_meter_health_segments[] = {
-    {{{   -16,    -16,      0}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -16,      0}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,     16,      0}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -16,    -16,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    16,    -16,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    16,     16,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -16,     16,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 

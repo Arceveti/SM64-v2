@@ -23,10 +23,10 @@ extern const Gfx eyerok_seg5_dl_0500C5A0[];
 extern const Gfx eyerok_seg5_dl_0500C640[];
 extern const Gfx eyerok_seg5_dl_0500C868[];
 extern const Gfx eyerok_seg5_dl_0500C908[];
-extern const Gfx eyerok_seg5_dl_0500C9B8[];
-extern const Gfx eyerok_seg5_dl_0500CA50[];
-extern const Gfx eyerok_seg5_dl_0500CAE8[];
-extern const Gfx eyerok_seg5_dl_0500CB80[];
+extern const Gfx eyerok_seg5_dl_eye_open[];
+extern const Gfx eyerok_seg5_dl_eye_mostly_open[];
+extern const Gfx eyerok_seg5_dl_eye_mostly_closed[];
+extern const Gfx eyerok_seg5_dl_eye_closed[];
 extern const Gfx eyerok_seg5_dl_0500CC18[];
 extern const Gfx eyerok_seg5_dl_0500CC30[];
 extern const struct Animation *const eyerok_seg5_anims_050116E4[];
@@ -70,12 +70,12 @@ extern const struct Animation *const klepto_seg5_anims_05008CFC[];
 // pokey
 extern const GeoLayout pokey_head_geo[];
 extern const GeoLayout pokey_body_part_geo[];
-extern const Gfx pokey_seg5_dl_05012750[];
-extern const Gfx pokey_seg5_dl_05012798[];
-extern const Gfx pokey_seg5_dl_050127D8[];
-extern const Gfx pokey_seg5_dl_05012808[];
-extern const Gfx pokey_seg5_dl_05013078[];
-extern const Gfx pokey_seg5_dl_050130B0[];
+extern const Gfx pokey_seg5_dl_face_material[];
+extern const Gfx pokey_seg5_dl_model_head[];
+extern const Gfx pokey_seg5_dl_face[];
+extern const Gfx pokey_seg5_dl_face_blink[];
+extern const Gfx pokey_seg5_dl_model_body[];
+extern const Gfx pokey_seg5_dl_body[];
 
 // tweester
 extern const Gfx tornado_seg5_dl_05014450[];

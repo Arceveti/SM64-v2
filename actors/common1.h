@@ -20,8 +20,8 @@ extern const struct Animation *const bowser_key_seg3_anims_list[];
 
 // butterfly
 extern const GeoLayout butterfly_geo[];
-extern const Gfx butterfly_seg3_dl_03005408[];
-extern const Gfx butterfly_seg3_dl_030054A0[];
+extern const Gfx butterfly_seg3_dl_wing_1[];
+extern const Gfx butterfly_seg3_dl_wing_2[];
 extern const struct Animation *const butterfly_seg3_anims_030056B0[];
 
 // coin
@@ -177,37 +177,37 @@ extern const struct Animation *const door_seg3_anims_030156C0[];
 
 // explosion
 extern const GeoLayout explosion_geo[];
-extern const Gfx explosion_seg3_dl_03004208[];
-extern const Gfx explosion_seg3_dl_03004298[];
-extern const Gfx explosion_seg3_dl_030042B0[];
-extern const Gfx explosion_seg3_dl_030042C8[];
-extern const Gfx explosion_seg3_dl_030042E0[];
-extern const Gfx explosion_seg3_dl_030042F8[];
-extern const Gfx explosion_seg3_dl_03004310[];
-extern const Gfx explosion_seg3_dl_03004328[];
+extern const Gfx explosion_seg3_dl_material[];
+extern const Gfx explosion_seg3_dl_0[];
+extern const Gfx explosion_seg3_dl_1[];
+extern const Gfx explosion_seg3_dl_2[];
+extern const Gfx explosion_seg3_dl_3[];
+extern const Gfx explosion_seg3_dl_4[];
+extern const Gfx explosion_seg3_dl_5[];
+extern const Gfx explosion_seg3_dl_6[];
 
 // flame
 extern const GeoLayout red_flame_shadow_geo[];
 extern const GeoLayout red_flame_geo[];
 extern const GeoLayout blue_flame_geo[];
-extern const Gfx flame_seg3_dl_0301B320[];
-extern const Gfx flame_seg3_dl_0301B3B0[];
-extern const Gfx flame_seg3_dl_0301B3C8[];
-extern const Gfx flame_seg3_dl_0301B3E0[];
-extern const Gfx flame_seg3_dl_0301B3F8[];
-extern const Gfx flame_seg3_dl_0301B410[];
-extern const Gfx flame_seg3_dl_0301B428[];
-extern const Gfx flame_seg3_dl_0301B440[];
-extern const Gfx flame_seg3_dl_0301B458[];
-extern const Gfx flame_seg3_dl_0301B470[];
-extern const Gfx flame_seg3_dl_0301B500[];
-extern const Gfx flame_seg3_dl_0301B518[];
-extern const Gfx flame_seg3_dl_0301B530[];
-extern const Gfx flame_seg3_dl_0301B548[];
-extern const Gfx flame_seg3_dl_0301B560[];
-extern const Gfx flame_seg3_dl_0301B578[];
-extern const Gfx flame_seg3_dl_0301B590[];
-extern const Gfx flame_seg3_dl_0301B5A8[];
+extern const Gfx flame_seg3_dl_red_flame[];
+extern const Gfx flame_seg3_dl_red_0[];
+extern const Gfx flame_seg3_dl_red_1[];
+extern const Gfx flame_seg3_dl_red_2[];
+extern const Gfx flame_seg3_dl_red_3[];
+extern const Gfx flame_seg3_dl_red_4[];
+extern const Gfx flame_seg3_dl_red_5[];
+extern const Gfx flame_seg3_dl_red_6[];
+extern const Gfx flame_seg3_dl_red_7[];
+extern const Gfx flame_seg3_dl_blue_flame[];
+extern const Gfx flame_seg3_dl_blue_0[];
+extern const Gfx flame_seg3_dl_blue_1[];
+extern const Gfx flame_seg3_dl_blue_2[];
+extern const Gfx flame_seg3_dl_blue_3[];
+extern const Gfx flame_seg3_dl_blue_4[];
+extern const Gfx flame_seg3_dl_blue_5[];
+extern const Gfx flame_seg3_dl_blue_6[];
+extern const Gfx flame_seg3_dl_blue_7[];
 
 // leaves
 extern const GeoLayout leaves_geo[];
@@ -261,10 +261,10 @@ extern const Gfx sand_seg3_dl_0302BCD0[];
 
 // star
 extern const GeoLayout star_geo[];
-extern const Gfx star_seg3_dl_0302B7B0[];
-extern const Gfx star_seg3_dl_0302B870[];
-extern const Gfx star_seg3_dl_0302B9C0[];
-extern const Gfx star_seg3_dl_0302BA18[];
+extern const Gfx star_seg3_dl_body_model[];
+extern const Gfx star_seg3_dl_body[];
+extern const Gfx star_seg3_dl_eyes_model[];
+extern const Gfx star_seg3_dl_eyes[];
 #ifdef STAR_GLOW
 extern const Gfx star_seg3_dl_shine_model[];
 extern const Gfx star_seg3_dl_shine[];
@@ -272,22 +272,22 @@ extern const Gfx star_seg3_dl_shine[];
 
 // transparent_star
 extern const GeoLayout transparent_star_geo[];
-extern const Gfx transparent_star_seg3_dl_0302C560[];
+extern const Gfx transparent_star_seg3_dl_model[];
 extern const Gfx transparent_star_seg3_dl_0302C620[];
 
 // tree
 extern const GeoLayout bubbly_tree_geo[];
 extern const GeoLayout spiky_tree_geo[];
 extern const GeoLayout snow_tree_geo[];
-extern const GeoLayout spiky_tree1_geo[];
+extern const GeoLayout spiky_tree1_geo[];   // unused
 extern const GeoLayout palm_tree_geo[];
-extern const Gfx tree_seg3_dl_0302FE88[];
-extern const Gfx tree_seg3_dl_0302FEB8[];
-extern const Gfx tree_seg3_dl_0302FEE8[];
-extern const Gfx tree_seg3_dl_03030FA0[];
-extern const Gfx tree_seg3_dl_03032088[];
-extern const Gfx tree_seg3_dl_03032170[];
-extern const Gfx tree_seg3_dl_03033258[];
+extern const Gfx tree_seg3_dl_bubbly_left_side[];
+extern const Gfx tree_seg3_dl_bubbly_right_side[];
+extern const Gfx tree_seg3_dl_bubbly[];
+extern const Gfx tree_seg3_dl_spiky[];
+extern const Gfx tree_seg3_dl_snowy_pine[];
+extern const Gfx tree_seg3_dl_spiky1[];     // unused
+extern const Gfx tree_seg3_dl_palm[];
 
 // warp_collision
 extern const Collision door_seg3_collision_0301CE78[];
@@ -295,11 +295,11 @@ extern const Collision lll_hexagonal_mesh_seg3_collision_0301CECC[];
 
 // warp_pipe
 extern const GeoLayout warp_pipe_geo[];
-extern const Gfx warp_pipe_seg3_dl_03008E40[];
-extern const Gfx warp_pipe_seg3_dl_03008F98[];
-extern const Gfx warp_pipe_seg3_dl_03009968[];
-extern const Gfx warp_pipe_seg3_dl_03009A20[];
-extern const Gfx warp_pipe_seg3_dl_03009A50[];
+extern const Gfx warp_pipe_seg3_dl_sides_model[];
+extern const Gfx warp_pipe_seg3_dl_sides[];
+extern const Gfx warp_pipe_seg3_dl_top[];
+extern const Gfx warp_pipe_seg3_dl_inside[];
+extern const Gfx warp_pipe_seg3_dl_top_inside[];
 extern const Collision warp_pipe_seg3_collision_03009AC8[];
 
 // white_particle
@@ -308,11 +308,11 @@ extern const Gfx white_particle_dl[];
 
 // wooden_signpost
 extern const GeoLayout wooden_signpost_geo[];
-extern const Gfx wooden_signpost_seg3_dl_0302D9C8[];
-extern const Gfx wooden_signpost_seg3_dl_0302DA48[];
-extern const Gfx wooden_signpost_seg3_dl_0302DC40[];
-extern const Gfx wooden_signpost_seg3_dl_0302DCD0[];
-extern const Gfx wooden_signpost_seg3_dl_0302DD08[];
+extern const Gfx wooden_signpost_seg3_dl_post_model[];
+extern const Gfx wooden_signpost_seg3_dl_post[];
+extern const Gfx wooden_signpost_seg3_dl_back_sides[];
+extern const Gfx wooden_signpost_seg3_dl_front[];
+extern const Gfx wooden_signpost_seg3_dl_sign[];
 extern const Collision wooden_signpost_seg3_collision_0302DD80[];
 
 #endif

@@ -10,7 +10,7 @@ const GeoLayout goomba_geo[] = {
             GEO_OPEN_NODE(),
                GEO_BILLBOARD(),
                GEO_OPEN_NODE(),
-                  GEO_DISPLAY_LIST(LAYER_ALPHA, goomba_seg8_dl_0801B690),
+                  GEO_DISPLAY_LIST(LAYER_ALPHA, goomba_seg8_dl_body),
                GEO_CLOSE_NODE(),
             GEO_CLOSE_NODE(),
             GEO_OPEN_NODE(),

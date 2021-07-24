@@ -249,7 +249,7 @@ static const Vtx bullet_bill_seg5_vertex_0500E558[] = {
 };
 
 // 0x0500E5E8 - 0x0500E678
-const Gfx bullet_bill_seg5_dl_0500E5E8[] = {
+const Gfx bullet_bill_seg5_dl_eyes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_0500BAA8),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -268,7 +268,7 @@ const Gfx bullet_bill_seg5_dl_0500E5E8[] = {
 };
 
 // 0x0500E678 - 0x0500E730
-const Gfx bullet_bill_seg5_dl_0500E678[] = {
+const Gfx bullet_bill_seg5_dl_mouth[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_0500CAA8),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -289,7 +289,7 @@ const Gfx bullet_bill_seg5_dl_0500E678[] = {
 };
 
 // 0x0500E730 - 0x0500E8A8
-const Gfx bullet_bill_seg5_dl_0500E730[] = {
+const Gfx bullet_bill_seg5_dl_body[] = {
     gsSPVertex(bullet_bill_seg5_vertex_0500DEC8, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
@@ -333,11 +333,11 @@ const Gfx bullet_bill_seg5_dl_0500E8A8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bullet_bill_seg5_dl_0500E5E8),
-    gsSPDisplayList(bullet_bill_seg5_dl_0500E678),
+    gsSPDisplayList(bullet_bill_seg5_dl_eyes),
+    gsSPDisplayList(bullet_bill_seg5_dl_mouth),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPDisplayList(bullet_bill_seg5_dl_0500E730),
+    gsSPDisplayList(bullet_bill_seg5_dl_body),
     gsSPEndDisplayList(),
 };

@@ -2,7 +2,7 @@
 const GeoLayout bubbly_tree_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_0302FEE8),
+      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_bubbly),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
@@ -11,7 +11,7 @@ const GeoLayout bubbly_tree_geo[] = {
 const GeoLayout spiky_tree_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_03030FA0),
+      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_spiky),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
@@ -20,7 +20,7 @@ const GeoLayout spiky_tree_geo[] = {
 const GeoLayout snow_tree_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_03032088),
+      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_snowy_pine),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
@@ -29,7 +29,7 @@ const GeoLayout snow_tree_geo[] = {
 const GeoLayout spiky_tree1_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_03032170),
+      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_spiky1),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
@@ -38,7 +38,7 @@ const GeoLayout spiky_tree1_geo[] = {
 const GeoLayout palm_tree_geo[] = {
    GEO_CULLING_RADIUS(800),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_03033258),
+      GEO_DISPLAY_LIST(LAYER_ALPHA, tree_seg3_dl_palm),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };

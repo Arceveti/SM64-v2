@@ -618,7 +618,7 @@ static const Vtx eyerok_seg5_vertex_0500C978[] = {
 };
 
 // 0x0500C9B8 - 0x0500CA50
-const Gfx eyerok_seg5_dl_0500C9B8[] = {
+const Gfx eyerok_seg5_dl_eye_open[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -640,7 +640,7 @@ const Gfx eyerok_seg5_dl_0500C9B8[] = {
 };
 
 // 0x0500CA50 - 0x0500CAE8
-const Gfx eyerok_seg5_dl_0500CA50[] = {
+const Gfx eyerok_seg5_dl_eye_mostly_open[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -662,7 +662,7 @@ const Gfx eyerok_seg5_dl_0500CA50[] = {
 };
 
 // 0x0500CAE8 - 0x0500CB80
-const Gfx eyerok_seg5_dl_0500CAE8[] = {
+const Gfx eyerok_seg5_dl_eye_mostly_closed[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -684,7 +684,7 @@ const Gfx eyerok_seg5_dl_0500CAE8[] = {
 };
 
 // 0x0500CB80 - 0x0500CC18
-const Gfx eyerok_seg5_dl_0500CB80[] = {
+const Gfx eyerok_seg5_dl_eye_closed[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

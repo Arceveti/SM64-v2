@@ -100,7 +100,7 @@ static const Vtx spindrift_seg5_vertex_050026D0[] = {
 };
 
 // 0x05002710 - 0x05002748
-const Gfx spindrift_seg5_dl_05002710[] = {
+const Gfx spindrift_seg5_dl_head_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_05001ED0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -110,7 +110,7 @@ const Gfx spindrift_seg5_dl_05002710[] = {
 };
 
 // 0x05002748 - 0x050027B8
-const Gfx spindrift_seg5_dl_05002748[] = {
+const Gfx spindrift_seg5_dl_head[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -119,7 +119,7 @@ const Gfx spindrift_seg5_dl_05002748[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_05002710),
+    gsSPDisplayList(spindrift_seg5_dl_head_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -136,7 +136,7 @@ static const Vtx spindrift_seg5_vertex_050027B8[] = {
 };
 
 // 0x050027F8 - 0x05002830
-const Gfx spindrift_seg5_dl_050027F8[] = {
+const Gfx spindrift_seg5_dl_eyes_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_050006D0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -146,7 +146,7 @@ const Gfx spindrift_seg5_dl_050027F8[] = {
 };
 
 // 0x05002830 - 0x050028A0
-const Gfx spindrift_seg5_dl_05002830[] = {
+const Gfx spindrift_seg5_dl_eyes[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -155,7 +155,7 @@ const Gfx spindrift_seg5_dl_05002830[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_050027F8),
+    gsSPDisplayList(spindrift_seg5_dl_eyes_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -171,7 +171,7 @@ static const Vtx spindrift_seg5_vertex_050028A0[] = {
 };
 
 // 0x050028D0 - 0x05002900
-const Gfx spindrift_seg5_dl_050028D0[] = {
+const Gfx spindrift_seg5_dl_mouth_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_050006D0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -181,7 +181,7 @@ const Gfx spindrift_seg5_dl_050028D0[] = {
 };
 
 // 0x05002900 - 0x05002970
-const Gfx spindrift_seg5_dl_05002900[] = {
+const Gfx spindrift_seg5_dl_mouth[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -190,7 +190,7 @@ const Gfx spindrift_seg5_dl_05002900[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_050028D0),
+    gsSPDisplayList(spindrift_seg5_dl_mouth_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -213,7 +213,7 @@ static const Vtx spindrift_seg5_vertex_05002988[] = {
 };
 
 // 0x050029C8 - 0x05002A20
-const Gfx spindrift_seg5_dl_050029C8[] = {
+const Gfx spindrift_seg5_dl_sepal_leaf_1_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_050016D0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -227,7 +227,7 @@ const Gfx spindrift_seg5_dl_050029C8[] = {
 };
 
 // 0x05002A20 - 0x05002A80
-const Gfx spindrift_seg5_dl_05002A20[] = {
+const Gfx spindrift_seg5_dl_sepal_leaf_1[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -235,7 +235,7 @@ const Gfx spindrift_seg5_dl_05002A20[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_050029C8),
+    gsSPDisplayList(spindrift_seg5_dl_sepal_leaf_1_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -257,7 +257,7 @@ static const Vtx spindrift_seg5_vertex_05002A98[] = {
 };
 
 // 0x05002AD8 - 0x05002B30
-const Gfx spindrift_seg5_dl_05002AD8[] = {
+const Gfx spindrift_seg5_dl_sepal_leaf_2_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_050016D0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -271,7 +271,7 @@ const Gfx spindrift_seg5_dl_05002AD8[] = {
 };
 
 // 0x05002B30 - 0x05002B90
-const Gfx spindrift_seg5_dl_05002B30[] = {
+const Gfx spindrift_seg5_dl_sepal_leaf_2[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -279,7 +279,7 @@ const Gfx spindrift_seg5_dl_05002B30[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_05002AD8),
+    gsSPDisplayList(spindrift_seg5_dl_sepal_leaf_2_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -312,7 +312,7 @@ static const Vtx spindrift_seg5_vertex_05002BA8[] = {
 };
 
 // 0x05002C98 - 0x05002D08
-const Gfx spindrift_seg5_dl_05002C98[] = {
+const Gfx spindrift_seg5_dl_flower_petals_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spindrift_seg5_texture_05000ED0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -328,7 +328,7 @@ const Gfx spindrift_seg5_dl_05002C98[] = {
 };
 
 // 0x05002D08 - 0x05002D68
-const Gfx spindrift_seg5_dl_05002D08[] = {
+const Gfx spindrift_seg5_dl_flower_petals[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -336,7 +336,7 @@ const Gfx spindrift_seg5_dl_05002D08[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(spindrift_seg5_dl_05002C98),
+    gsSPDisplayList(spindrift_seg5_dl_flower_petals_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

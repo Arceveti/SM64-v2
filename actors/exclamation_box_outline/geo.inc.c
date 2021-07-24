@@ -11,7 +11,7 @@ const GeoLayout exclamation_box_outline_geo[] = {
             GEO_DISPLAY_LIST(LAYER_TRANSPARENT, exclamation_box_outline_seg8_dl_08024FC8),
             GEO_DISPLAY_LIST(LAYER_TRANSPARENT, exclamation_box_outline_seg8_dl_08024FE8),
          GEO_CLOSE_NODE(),
-         GEO_DISPLAY_LIST(LAYER_ALPHA, exclamation_box_outline_seg8_dl_080259F8),
+         GEO_DISPLAY_LIST(LAYER_ALPHA, exclamation_box_outline_seg8_dl_outline),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),
    GEO_END(),

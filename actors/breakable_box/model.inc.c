@@ -51,7 +51,7 @@ static const Vtx breakable_box_seg8_vertex_08012B80[] = {
 };
 
 // 0x08012C30 - 0x08012CD8
-const Gfx breakable_box_seg8_dl_08012C30[] = {
+const Gfx breakable_box_seg8_dl_end[] = {
     gsSPLight(&breakable_box_seg8_lights_08011A80.l, 1),
     gsSPLight(&breakable_box_seg8_lights_08011A80.a, 2),
     gsSPVertex(breakable_box_seg8_vertex_08012A90, 15, 0),
@@ -71,7 +71,7 @@ const Gfx breakable_box_seg8_dl_08012C30[] = {
 };
 
 // 0x08012CD8 - 0x08012D20
-const Gfx breakable_box_seg8_dl_08012CD8[] = {
+const Gfx breakable_box_seg8_dl_begin[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -84,19 +84,19 @@ const Gfx breakable_box_seg8_dl_08012CD8[] = {
 };
 
 // 0x08012D20 - 0x08012D48
-const Gfx breakable_box_seg8_dl_08012D20[] = {
-    gsSPDisplayList(breakable_box_seg8_dl_08012CD8),
+const Gfx breakable_box_seg8_dl_crazy_box[] = {
+    gsSPDisplayList(breakable_box_seg8_dl_begin),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_08011A90),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(breakable_box_seg8_dl_08012C30),
+    gsSPBranchList(breakable_box_seg8_dl_end),
 };
 
 // 0x08012D20 - 0x08012D70
-const Gfx breakable_box_seg8_dl_08012D48[] = {
-    gsSPDisplayList(breakable_box_seg8_dl_08012CD8),
+const Gfx breakable_box_seg8_dl_cork_box[] = {
+    gsSPDisplayList(breakable_box_seg8_dl_begin),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_08012290),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(breakable_box_seg8_dl_08012C30),
+    gsSPBranchList(breakable_box_seg8_dl_end),
 };

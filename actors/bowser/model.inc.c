@@ -2693,7 +2693,7 @@ const Gfx bowser_seg6_dl_0603FBA8[] = {
 };
 
 // 0x0603FC18 - 0x0603FD38
-const Gfx bowser_seg6_dl_0603FC18[] = {
+const Gfx bowser_seg6_dl_model_shell_edge[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06025C38),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -2855,7 +2855,7 @@ const Gfx bowser_seg6_dl_06040210[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bowser_seg6_dl_0603FBA8),
-    gsSPDisplayList(bowser_seg6_dl_0603FC18),
+    gsSPDisplayList(bowser_seg6_dl_model_shell_edge),
     gsSPDisplayList(bowser_seg6_dl_0603FD38),
     gsSPDisplayList(bowser_seg6_dl_0603FDD0),
     gsSPDisplayList(bowser_seg6_dl_0603FEA8),
@@ -2886,7 +2886,7 @@ const Gfx bowser_seg6_dl_06040358[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bowser_seg6_dl_0603FBA8),
-    gsSPDisplayList(bowser_seg6_dl_0603FC18),
+    gsSPDisplayList(bowser_seg6_dl_model_shell_edge),
     gsSPDisplayList(bowser_seg6_dl_0603FD38),
     gsSPDisplayList(bowser_seg6_dl_0603FDD0),
     gsSPDisplayList(bowser_seg6_dl_0603FEA8),

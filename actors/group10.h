@@ -69,13 +69,13 @@ extern const struct Animation *const peach_seg5_anims_0501C41C[];
 
 // yoshi
 extern const GeoLayout yoshi_geo[];
-extern const Gfx yoshi_seg5_dl_0501D440[];
+extern const Gfx yoshi_seg5_dl_nostrils_model[];
 extern const Gfx yoshi_seg5_dl_0501D488[];
 extern const Gfx yoshi_seg5_dl_0501D4E0[];
-extern const Gfx yoshi_seg5_dl_0501D8F8[];
-extern const Gfx yoshi_seg5_dl_0501D940[];
-extern const Gfx yoshi_seg5_dl_0501D970[];
-extern const Gfx yoshi_seg5_dl_0501D998[];
+extern const Gfx yoshi_seg5_dl_nostrils[];
+extern const Gfx yoshi_seg5_dl_eyes_end[];
+extern const Gfx yoshi_seg5_dl_eyes_open[];
+extern const Gfx yoshi_seg5_dl_eyes_closed[];
 extern const Gfx yoshi_seg5_dl_050212B0[];
 extern const Gfx yoshi_seg5_dl_05021490[];
 extern const Gfx yoshi_seg5_dl_050215D8[];

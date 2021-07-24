@@ -44,10 +44,10 @@ ALIGNED8 static const Texture penguin_seg5_texture_050045E0[] = {
 #include "actors/penguin/penguin_eye_angry.rgba16.inc.c"
 };
 
-// 0x05004DE0
-ALIGNED8 static const Texture penguin_seg5_texture_05004DE0[] = {
-#include "actors/penguin/penguin_eye_angry_unused.rgba16.inc.c"
-};
+// // 0x05004DE0
+// ALIGNED8 static const Texture penguin_seg5_texture_05004DE0[] = {
+// #include "actors/penguin/penguin_eye_angry_unused.rgba16.inc.c"
+// };
 
 // 0x050055E0
 ALIGNED8 static const Texture penguin_seg5_texture_050055E0[] = {
@@ -233,7 +233,7 @@ const Gfx penguin_seg5_dl_050063C8[] = {
 };
 
 // 0x05006428 - 0x05006458
-const Gfx penguin_seg5_dl_05006428[] = {
+const Gfx penguin_seg5_dl_eye_open[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05002DE0),
     gsDPLoadSync(),
@@ -243,7 +243,7 @@ const Gfx penguin_seg5_dl_05006428[] = {
 };
 
 // 0x05006458 - 0x05006488
-const Gfx penguin_seg5_dl_05006458[] = {
+const Gfx penguin_seg5_dl_eye_half_closed[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_050035E0),
     gsDPLoadSync(),
@@ -253,7 +253,7 @@ const Gfx penguin_seg5_dl_05006458[] = {
 };
 
 // 0x05006488 - 0x050064B8
-const Gfx penguin_seg5_dl_05006488[] = {
+const Gfx penguin_seg5_dl_eye_closed[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05003DE0),
     gsDPLoadSync(),
@@ -263,7 +263,7 @@ const Gfx penguin_seg5_dl_05006488[] = {
 };
 
 // 0x050064B8 - 0x050064E8
-const Gfx penguin_seg5_dl_050064B8[] = {
+const Gfx penguin_seg5_dl_eye_angry[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_050045E0),
     gsDPLoadSync(),
@@ -272,15 +272,15 @@ const Gfx penguin_seg5_dl_050064B8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x050064E8 - 0x05006518
-const Gfx penguin_seg5_dl_050064E8[] = {
-    gsSPDisplayList(penguin_seg5_dl_05006380),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05004DE0),
-    gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(penguin_seg5_dl_050063C8),
-    gsSPEndDisplayList(),
-};
+// // 0x050064E8 - 0x05006518
+// const Gfx penguin_seg5_dl_eye_angry_unused[] = {
+//     gsSPDisplayList(penguin_seg5_dl_05006380),
+//     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05004DE0),
+//     gsDPLoadSync(),
+//     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+//     gsSPDisplayList(penguin_seg5_dl_050063C8),
+//     gsSPEndDisplayList(),
+// };
 
 // 0x05006518
 static const Vtx penguin_seg5_vertex_05006518[] = {

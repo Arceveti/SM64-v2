@@ -44,7 +44,7 @@ ALIGNED8 static const Texture explosion_seg3_texture_03003A08[] = {
 };
 
 // 0x03004208 - 0x03004298
-const Gfx explosion_seg3_dl_03004208[] = {
+const Gfx explosion_seg3_dl_material[] = {
     gsDPSetCombineMode(G_CC_DECALFADEA, G_CC_DECALFADEA),
     gsDPSetEnvColor(255, 255, 255, 150),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -65,50 +65,50 @@ const Gfx explosion_seg3_dl_03004208[] = {
 };
 
 // 0x03004298 - 0x030042B0
-const Gfx explosion_seg3_dl_03004298[] = {
+const Gfx explosion_seg3_dl_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03000A08),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x030042B0 - 0x030042C8
-const Gfx explosion_seg3_dl_030042B0[] = {
+const Gfx explosion_seg3_dl_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03001208),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x030042C8 - 0x030042E0
-const Gfx explosion_seg3_dl_030042C8[] = {
+const Gfx explosion_seg3_dl_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03001A08),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x030042E0 - 0x030042F8
-const Gfx explosion_seg3_dl_030042E0[] = {
+const Gfx explosion_seg3_dl_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03002208),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x030042F8 - 0x03004310
-const Gfx explosion_seg3_dl_030042F8[] = {
+const Gfx explosion_seg3_dl_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03002A08),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x03004310 - 0x03004328
-const Gfx explosion_seg3_dl_03004310[] = {
+const Gfx explosion_seg3_dl_5[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03003208),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };
 
 // 0x03004328 - 0x03004340
-const Gfx explosion_seg3_dl_03004328[] = {
+const Gfx explosion_seg3_dl_6[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, explosion_seg3_texture_03003A08),
-    gsSPBranchList(explosion_seg3_dl_03004208),
+    gsSPBranchList(explosion_seg3_dl_material),
 };

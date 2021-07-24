@@ -95,7 +95,7 @@ static const Vtx spindrift_seg5_vertex_05000210[] = {
 };
 
 // 0x050002A0 - 0x05000328
-const Gfx spindrift_seg5_dl_050002A0[] = {
+const Gfx spindrift_seg5_dl_flower_stem[] = {
     gsSPLight(&spindrift_seg5_lights_05000048.l, 1),
     gsSPLight(&spindrift_seg5_lights_05000048.a, 2),
     gsSPVertex(spindrift_seg5_vertex_050000C0, 6, 0),
@@ -112,7 +112,7 @@ const Gfx spindrift_seg5_dl_050002A0[] = {
 };
 
 // 0x05000328 - 0x050003D8
-const Gfx spindrift_seg5_dl_05000328[] = {
+const Gfx spindrift_seg5_dl_base[] = {
     gsSPClearGeometryMode(G_CULL_BACK),
     gsSPLight(&spindrift_seg5_lights_05000090.l, 1),
     gsSPLight(&spindrift_seg5_lights_05000090.a, 2),

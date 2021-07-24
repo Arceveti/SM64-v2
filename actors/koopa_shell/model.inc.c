@@ -510,7 +510,7 @@ static const Vtx koopa_shell_seg8_vertex_08028850[] = {
 };
 
 // 0x080288E0 - 0x08028978
-const Gfx koopa_shell_seg8_dl_080288E0[] = {
+const Gfx koopa_shell_seg8_dl_top[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_08027CA0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -527,7 +527,7 @@ const Gfx koopa_shell_seg8_dl_080288E0[] = {
 };
 
 // 0x08028978 - 0x08028A20
-const Gfx koopa_shell_seg8_dl_08028978[] = {
+const Gfx koopa_shell_seg8_dl_bottom[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_080274A0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -544,7 +544,7 @@ const Gfx koopa_shell_seg8_dl_08028978[] = {
 };
 
 // 0x08028A20 - 0x08028B78
-const Gfx koopa_shell_seg8_dl_08028A20[] = {
+const Gfx koopa_shell_seg8_dl_edge[] = {
     gsSPLight(&koopa_shell_seg8_lights_08027488.l, 1),
     gsSPLight(&koopa_shell_seg8_lights_08027488.a, 2),
     gsSPVertex(koopa_shell_seg8_vertex_08028620, 5, 0),
@@ -575,7 +575,7 @@ const Gfx koopa_shell_seg8_dl_08028A20[] = {
 };
 
 // 0x08028B78 - 0x08028BE8
-const Gfx koopa_shell_seg8_dl_08028B78[] = {
+const Gfx koopa_shell_seg8_dl_green_koopa_shell[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -583,11 +583,11 @@ const Gfx koopa_shell_seg8_dl_08028B78[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(koopa_shell_seg8_dl_080288E0),
-    gsSPDisplayList(koopa_shell_seg8_dl_08028978),
+    gsSPDisplayList(koopa_shell_seg8_dl_top),
+    gsSPDisplayList(koopa_shell_seg8_dl_bottom),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPDisplayList(koopa_shell_seg8_dl_08028A20),
+    gsSPDisplayList(koopa_shell_seg8_dl_edge),
     gsSPEndDisplayList(),
 };

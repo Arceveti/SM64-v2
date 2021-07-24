@@ -185,7 +185,7 @@ const Gfx exclamation_box_seg8_dl_080192D0[] = {
 };
 
 // 0x08019318 - 0x08019378
-const Gfx exclamation_box_seg8_dl_08019318[] = {
+const Gfx exclamation_box_seg8_dl_red[] = {
     gsSPDisplayList(exclamation_box_seg8_dl_08019058),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_seg8_texture_08015E28),
     gsDPLoadSync(),
@@ -201,7 +201,7 @@ const Gfx exclamation_box_seg8_dl_08019318[] = {
 };
 
 // 0x08019378 - 0x080193D8
-const Gfx exclamation_box_seg8_dl_08019378[] = {
+const Gfx exclamation_box_seg8_dl_green[] = {
     gsSPDisplayList(exclamation_box_seg8_dl_080192D0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_seg8_texture_08014628),
     gsDPLoadSync(),
@@ -217,7 +217,7 @@ const Gfx exclamation_box_seg8_dl_08019378[] = {
 };
 
 // 0x080193D8 - 0x08019438
-const Gfx exclamation_box_seg8_dl_080193D8[] = {
+const Gfx exclamation_box_seg8_dl_blue[] = {
     gsSPDisplayList(exclamation_box_seg8_dl_08019058),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_seg8_texture_08012E28),
     gsDPLoadSync(),
@@ -233,7 +233,7 @@ const Gfx exclamation_box_seg8_dl_080193D8[] = {
 };
 
 // 0x08019438 - 0x08019498
-const Gfx exclamation_box_seg8_dl_08019438[] = {
+const Gfx exclamation_box_seg8_dl_yellow[] = {
     gsSPDisplayList(exclamation_box_seg8_dl_080192D0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, exclamation_box_seg8_texture_08017628),
     gsDPLoadSync(),

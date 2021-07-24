@@ -29,7 +29,7 @@ ALIGNED8 static const Texture water_wave_seg4_texture_04026B58[] = {
 };
 
 // 0x04027358 - 0x040273A0
-const Gfx water_wave_seg4_dl_04027358[] = {
+const Gfx water_wave_seg4_dl_start[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -42,7 +42,7 @@ const Gfx water_wave_seg4_dl_04027358[] = {
 };
 
 // 0x040273A0 - 0x040273D8
-const Gfx water_wave_seg4_dl_040273A0[] = {
+const Gfx water_wave_seg4_dl_end[] = {
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsDPPipeSync(),
     gsSPTexture(0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF),
@@ -53,34 +53,34 @@ const Gfx water_wave_seg4_dl_040273A0[] = {
 
 // 0x040273D8 - 0x040273F0
 const Gfx water_wave_seg4_dl_040273D8[] = {
-    gsSPDisplayList(water_wave_seg4_dl_04027358),
+    gsSPDisplayList(water_wave_seg4_dl_start),
     gsSPVertex(water_wave_seg4_vertex_04025318, 4, 0),
-    gsSPBranchList(water_wave_seg4_dl_040273A0),
+    gsSPBranchList(water_wave_seg4_dl_end),
 };
 
 // 0x040273F0 - 0x04027408
-const Gfx water_wave_seg4_dl_040273F0[] = {
+const Gfx water_wave_seg4_dl_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04025358),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027408 - 0x04027420
-const Gfx water_wave_seg4_dl_04027408[] = {
+const Gfx water_wave_seg4_dl_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04025B58),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027420 - 0x04027438
-const Gfx water_wave_seg4_dl_04027420[] = {
+const Gfx water_wave_seg4_dl_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04026358),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027438 - 0x04027450
-const Gfx water_wave_seg4_dl_04027438[] = {
+const Gfx water_wave_seg4_dl_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04026B58),
     gsSPBranchList(water_wave_seg4_dl_040273D8),

@@ -255,7 +255,7 @@ static const Vtx boo_castle_seg6_vertex_06017950[] = {
 };
 
 // 0x06017A10 - 0x06017A78
-const Gfx boo_castle_seg6_dl_06017A10[] = {
+const Gfx boo_castle_seg6_dl_model_mouth[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, boo_castle_seg6_texture_06016670),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -270,7 +270,7 @@ const Gfx boo_castle_seg6_dl_06017A10[] = {
 };
 
 // 0x06017A78 - 0x06017AD0
-const Gfx boo_castle_seg6_dl_06017A78[] = {
+const Gfx boo_castle_seg6_dl_model_eyes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, boo_castle_seg6_texture_06015670),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -283,7 +283,7 @@ const Gfx boo_castle_seg6_dl_06017A78[] = {
 };
 
 // 0x06017AD0 - 0x06017CE0
-const Gfx boo_castle_seg6_dl_06017AD0[] = {
+const Gfx boo_castle_seg6_dl_model_body[] = {
     gsSPVertex(boo_castle_seg6_vertex_06016FF0, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
@@ -339,15 +339,15 @@ const Gfx boo_castle_seg6_dl_06017CE0[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(boo_castle_seg6_dl_06017A10),
+    gsSPDisplayList(boo_castle_seg6_dl_model_mouth),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(boo_castle_seg6_dl_06017A78),
+    gsSPDisplayList(boo_castle_seg6_dl_model_eyes),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),
-    gsSPDisplayList(boo_castle_seg6_dl_06017AD0),
+    gsSPDisplayList(boo_castle_seg6_dl_model_body),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsDPSetEnvColor(255, 255, 255, 255),

@@ -49,7 +49,7 @@ ALIGNED8 static const Texture flame_seg3_texture_0301AB20[] = {
 };
 
 // 0x0301B320 - 0x0301B3B0
-const Gfx flame_seg3_dl_0301B320[] = {
+const Gfx flame_seg3_dl_red_flame[] = {
     gsSPClearGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetEnvColor(255, 50, 0, 200),
     gsDPSetCombineMode(G_CC_FADEA, G_CC_FADEA),
@@ -70,63 +70,63 @@ const Gfx flame_seg3_dl_0301B320[] = {
 };
 
 // 0x0301B3B0 - 0x0301B3C8
-const Gfx flame_seg3_dl_0301B3B0[] = {
+const Gfx flame_seg3_dl_red_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03017320),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B3C8 - 0x0301B3E0
-const Gfx flame_seg3_dl_0301B3C8[] = {
+const Gfx flame_seg3_dl_red_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03017B20),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B3E0 - 0x0301B3F8
-const Gfx flame_seg3_dl_0301B3E0[] = {
+const Gfx flame_seg3_dl_red_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03018320),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B3F8 - 0x0301B410
-const Gfx flame_seg3_dl_0301B3F8[] = {
+const Gfx flame_seg3_dl_red_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03018B20),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B410 - 0x0301B428
-const Gfx flame_seg3_dl_0301B410[] = {
+const Gfx flame_seg3_dl_red_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03019320),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B428 - 0x0301B440
-const Gfx flame_seg3_dl_0301B428[] = {
+const Gfx flame_seg3_dl_red_5[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03019B20),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B440 - 0x0301B458
-const Gfx flame_seg3_dl_0301B440[] = {
+const Gfx flame_seg3_dl_red_6[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_0301A320),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B458 - 0x0301B470
-const Gfx flame_seg3_dl_0301B458[] = {
+const Gfx flame_seg3_dl_red_7[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_0301AB20),
-    gsSPBranchList(flame_seg3_dl_0301B320),
+    gsSPBranchList(flame_seg3_dl_red_flame),
 };
 
 // 0x0301B470 - 0x0301B500
-const Gfx flame_seg3_dl_0301B470[] = {
+const Gfx flame_seg3_dl_blue_flame[] = {
     gsSPClearGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetEnvColor(100, 100, 255, 255),
     gsDPSetCombineMode(G_CC_FADEA, G_CC_FADEA),
@@ -147,57 +147,57 @@ const Gfx flame_seg3_dl_0301B470[] = {
 };
 
 // 0x0301B500 - 0x0301B518
-const Gfx flame_seg3_dl_0301B500[] = {
+const Gfx flame_seg3_dl_blue_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03017320),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B518 - 0x0301B530
-const Gfx flame_seg3_dl_0301B518[] = {
+const Gfx flame_seg3_dl_blue_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03017B20),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B530 - 0x0301B548
-const Gfx flame_seg3_dl_0301B530[] = {
+const Gfx flame_seg3_dl_blue_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03018320),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B548 - 0x0301B560
-const Gfx flame_seg3_dl_0301B548[] = {
+const Gfx flame_seg3_dl_blue_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03018B20),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B560 - 0x0301B578
-const Gfx flame_seg3_dl_0301B560[] = {
+const Gfx flame_seg3_dl_blue_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03019320),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B578 - 0x0301B590
-const Gfx flame_seg3_dl_0301B578[] = {
+const Gfx flame_seg3_dl_blue_5[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_03019B20),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B590 - 0x0301B5A8
-const Gfx flame_seg3_dl_0301B590[] = {
+const Gfx flame_seg3_dl_blue_6[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_0301A320),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };
 
 // 0x0301B5A8 - 0x0301B5C0
-const Gfx flame_seg3_dl_0301B5A8[] = {
+const Gfx flame_seg3_dl_blue_7[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flame_seg3_texture_0301AB20),
-    gsSPBranchList(flame_seg3_dl_0301B470),
+    gsSPBranchList(flame_seg3_dl_blue_flame),
 };

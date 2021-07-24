@@ -12,18 +12,6 @@ static const Lights1 wiggler_seg5_lights_0500C890 = gdSPDefLights1(
     0xe7, 0x47, 0x00, 0x28, 0x28, 0x28
 );
 
-// Unreferenced light group
-UNUSED static const Lights1 wiggler_head_lights_unused1 = gdSPDefLights1(
-    0x1b, 0x06, 0x00,
-    0x6d, 0x1a, 0x00, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 wiggler_head_lights_unused2 = gdSPDefLights1(
-    0x3a, 0x22, 0x05,
-    0xea, 0x8b, 0x16, 0x28, 0x28, 0x28
-);
-
 // 0x0500C8D8
 static const Vtx wiggler_seg5_vertex_0500C8D8[] = {
     {{{    19,      5,    -31}, 0, {     0,      0}, {0x40, 0x2b, 0x9d, 0x00}}},
@@ -98,7 +86,7 @@ static const Vtx wiggler_seg5_vertex_0500CC18[] = {
     {{{    53,    -11,      0}, 0, {     0,      0}, {0x01, 0x81, 0x01, 0x00}}},
     {{{    -3,    -12,      0}, 0, {     0,      0}, {0x01, 0x81, 0x01, 0x00}}},
     {{{    -3,     -2,    -13}, 0, {     0,      0}, {0x00, 0xd8, 0x88, 0xff}}},
-    {{{    53,     -1,     13}, 0, {     0,      0}, {0x00, 0xda, 0x79, 0xff}}},
+    {{{    53,     -2,     13}, 0, {     0,      0}, {0x00, 0xda, 0x79, 0xff}}},
     {{{    53,     13,      8}, 0, {     0,      0}, {0xff, 0x67, 0x49, 0xff}}},
     {{{    -4,     13,      8}, 0, {     0,      0}, {0xff, 0x67, 0x49, 0xff}}},
     {{{    -3,     -2,     13}, 0, {     0,      0}, {0x00, 0xda, 0x79, 0xff}}},
@@ -207,7 +195,7 @@ static const Vtx wiggler_seg5_vertex_0500D138[] = {
     {{{    -3,     -2,    -13}, 0, {     0,      0}, {0x00, 0xda, 0x87, 0xff}}},
     {{{    -4,     13,     -8}, 0, {     0,      0}, {0xff, 0x67, 0xb7, 0xff}}},
     {{{    53,     13,     -8}, 0, {     0,      0}, {0xff, 0x67, 0xb7, 0xff}}},
-    {{{    53,     -1,    -13}, 0, {     0,      0}, {0x00, 0xda, 0x87, 0xff}}},
+    {{{    53,     -2,    -13}, 0, {     0,      0}, {0x00, 0xda, 0x87, 0xff}}},
     {{{    -4,     13,      8}, 0, {     0,      0}, {0xff, 0x66, 0x4b, 0xff}}},
     {{{    53,     13,      8}, 0, {     0,      0}, {0xff, 0x66, 0x4b, 0xff}}},
     {{{    -3,     -2,    -13}, 0, {     0,      0}, {0x81, 0xff, 0x00, 0xff}}},
@@ -355,43 +343,38 @@ const Gfx wiggler_seg5_dl_0500E060[] = {
 };
 
 // 0x0500E0E8
-static const Vtx wiggler_seg5_vertex_0500E0E8[] = {
-    {{{     0,     15,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,    -15,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -15,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_nose_left_side[] = {
+    {{{     0,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,    -15,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -15,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -15,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E128
-static const Vtx wiggler_seg5_vertex_0500E128[] = {
-    {{{    15,     15,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -15,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -15,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_nose_right_side[] = {
+    {{{    15,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -15,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,    -15,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E168 - 0x0500E1A0
-const Gfx wiggler_seg5_dl_0500E168[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05009230),
+const Gfx wiggler_seg5_dl_nose_model[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_nose_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E0E8, 4, 0),
+    gsSPVertex(wiggler_seg5_vertex_nose_left_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSPEndDisplayList(),
-};
-
-// 0x0500E1A0 - 0x0500E1D8
-const Gfx wiggler_seg5_dl_0500E1A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_0500A230),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_nose_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E128, 4, 0),
+    gsSPVertex(wiggler_seg5_vertex_nose_right_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0500E1D8 - 0x0500E250
-const Gfx wiggler_seg5_dl_0500E1D8[] = {
+const Gfx wiggler_seg5_dl_nose[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -400,8 +383,7 @@ const Gfx wiggler_seg5_dl_0500E1D8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_0500E168),
-    gsSPDisplayList(wiggler_seg5_dl_0500E1A0),
+    gsSPDisplayList(wiggler_seg5_dl_nose_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -410,28 +392,28 @@ const Gfx wiggler_seg5_dl_0500E1D8[] = {
 };
 
 // 0x0500E250
-static const Vtx wiggler_seg5_vertex_0500E250[] = {
-    {{{    58,     87,      0}, 0, {   478,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    84,     50,     23}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    88,     54,      0}, 0, {   478,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    54,     83,    -21}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_frown[] = {
+    {{{    58,     87,      0}, 0, { 15<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    84,     50,     23}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    88,     54,      0}, 0, { 15<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    54,     83,    -21}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    84,     50,    -21}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    54,     83,     23}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    54,     83,     23}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E2B0 - 0x0500E2F8
-const Gfx wiggler_seg5_dl_0500E2B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05008A30),
+const Gfx wiggler_seg5_dl_frown_model[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_frown),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E250, 6, 0),
+    gsSPVertex(wiggler_seg5_vertex_frown, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 2,  4,  3, 0x0,  0,  5,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0500E2F8 - 0x0500E368
-const Gfx wiggler_seg5_dl_0500E2F8[] = {
+const Gfx wiggler_seg5_dl_frown[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -440,7 +422,7 @@ const Gfx wiggler_seg5_dl_0500E2F8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_0500E2B0),
+    gsSPDisplayList(wiggler_seg5_dl_frown_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -449,30 +431,30 @@ const Gfx wiggler_seg5_dl_0500E2F8[] = {
 };
 
 // 0x0500E368
-static const Vtx wiggler_seg5_vertex_0500E368[] = {
-    {{{    58,    -82,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    88,    -35,    -43}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    94,    -40,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_eyes[] = {
+    {{{    58,    -82,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    88,    -35,    -43}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    94,    -40,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    51,    -77,    -43}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    94,    -40,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    51,    -77,     44}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    94,    -40,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    51,    -77,     44}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    58,    -82,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    88,    -35,     44}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    88,    -35,     44}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E3E8 - 0x0500E430
-const Gfx wiggler_seg5_dl_0500E3E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05007A30),
+const Gfx wiggler_seg5_dl_eyes_model[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E368, 8, 0),
+    gsSPVertex(wiggler_seg5_vertex_eyes, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0500E430 - 0x0500E4A0
-const Gfx wiggler_seg5_dl_0500E430[] = {
+const Gfx wiggler_seg5_dl_eyes[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -481,7 +463,7 @@ const Gfx wiggler_seg5_dl_0500E430[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_0500E3E8),
+    gsSPDisplayList(wiggler_seg5_dl_eyes_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -490,25 +472,25 @@ const Gfx wiggler_seg5_dl_0500E430[] = {
 };
 
 // 0x0500E4A0
-static const Vtx wiggler_seg5_vertex_0500E4A0[] = {
-    {{{   -77,    -98,      2}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_flower[] = {
+    {{{   -77,    -98,      2}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     8,    -83,     94}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -74,    -53,     79}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     6,   -128,     16}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -74,    -53,     79}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     6,   -128,     16}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E4E0 - 0x0500E518
-const Gfx wiggler_seg5_dl_0500E4E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05008230),
+const Gfx wiggler_seg5_dl_flower_model[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_flower),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E4A0, 4, 0),
+    gsSPVertex(wiggler_seg5_vertex_flower, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0500E518 - 0x0500E588
-const Gfx wiggler_seg5_dl_0500E518[] = {
+const Gfx wiggler_seg5_dl_flower[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -517,7 +499,7 @@ const Gfx wiggler_seg5_dl_0500E518[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_0500E4E0),
+    gsSPDisplayList(wiggler_seg5_dl_flower_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -526,43 +508,38 @@ const Gfx wiggler_seg5_dl_0500E518[] = {
 };
 
 // 0x0500E588
-static const Vtx wiggler_seg5_vertex_0500E588[] = {
-    {{{     0,     26,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -26,    -26,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -26,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_head_left_side[] = {
+    {{{     0,     26,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -26,    -26,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -26,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -26,     26,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E5C8
-static const Vtx wiggler_seg5_vertex_0500E5C8[] = {
-    {{{    26,     26,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -26,      0}, 0, {     0,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,    -26,      0}, 0, {   990,   2012}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_head_right_side[] = {
+    {{{    26,     26,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -26,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,    -26,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,     26,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500E608 - 0x0500E640
-const Gfx wiggler_seg5_dl_0500E608[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05005A30),
+const Gfx wiggler_seg5_dl_head_model[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E588, 4, 0),
+    gsSPVertex(wiggler_seg5_vertex_head_left_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
-    gsSPEndDisplayList(),
-};
-
-// 0x0500E640 - 0x0500E678
-const Gfx wiggler_seg5_dl_0500E640[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_05006A30),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_0500E5C8, 4, 0),
+    gsSPVertex(wiggler_seg5_vertex_head_right_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0500E678 - 0x0500E6F0
-const Gfx wiggler_seg5_dl_0500E678[] = {
+const Gfx wiggler_seg5_dl_head_sphere[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -571,8 +548,7 @@ const Gfx wiggler_seg5_dl_0500E678[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_0500E608),
-    gsSPDisplayList(wiggler_seg5_dl_0500E640),
+    gsSPDisplayList(wiggler_seg5_dl_head_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

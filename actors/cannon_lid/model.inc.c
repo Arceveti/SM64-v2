@@ -7,21 +7,21 @@ static const Lights1 cannon_lid_seg8_lights_08004040 = gdSPDefLights1(
 );
 
 // 0x08004058
-ALIGNED8 static const Texture cannon_lid_seg8_texture_08004058[] = {
+ALIGNED8 static const Texture cannon_lid_seg8_texture_lid[] = {
 #include "actors/cannon_lid/cannon_lid.rgba16.inc.c"
 };
 
 // 0x08004858
 static const Vtx cannon_lid_seg8_vertex_08004858[] = {
-    {{{   102,      0,   -101}, 0, {   990,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -101,      0,   -101}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -101,      0,    102}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   102,      0,    102}, 0, {   990,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,      0,   -102}, 0, { 31<<5,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,   -102}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,    102}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,      0,    102}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x08004898 - 0x080048E0
 const Gfx cannon_lid_seg8_dl_08004898[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cannon_lid_seg8_texture_08004058),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cannon_lid_seg8_texture_lid),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cannon_lid_seg8_lights_08004040.l, 1),

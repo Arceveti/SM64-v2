@@ -26,7 +26,7 @@ static const Vtx butterfly_seg3_vertex_030053A8[] = {
 };
 
 // 0x03005408 - 0x030054A0
-const Gfx butterfly_seg3_dl_03005408[] = {
+const Gfx butterfly_seg3_dl_wing_1[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -42,7 +42,7 @@ const Gfx butterfly_seg3_dl_03005408[] = {
 };
 
 // 0x030054A0 - 0x03005538
-const Gfx butterfly_seg3_dl_030054A0[] = {
+const Gfx butterfly_seg3_dl_wing_2[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

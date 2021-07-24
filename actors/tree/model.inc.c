@@ -31,7 +31,7 @@ static const Vtx tree_seg3_vertex_0302FE58[] = {
 };
 
 // 0x0302FE88 - 0x0302FEB8
-const Gfx tree_seg3_dl_0302FE88[] = {
+const Gfx tree_seg3_dl_bubbly_left_side[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tree_seg3_texture_0302DE28),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -41,7 +41,7 @@ const Gfx tree_seg3_dl_0302FE88[] = {
 };
 
 // 0x0302FEB8 - 0x0302FEE8
-const Gfx tree_seg3_dl_0302FEB8[] = {
+const Gfx tree_seg3_dl_bubbly_right_side[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, tree_seg3_texture_0302EE28),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -51,7 +51,7 @@ const Gfx tree_seg3_dl_0302FEB8[] = {
 };
 
 // 0x0302FEE8 - 0x0302FF60
-const Gfx tree_seg3_dl_0302FEE8[] = {
+const Gfx tree_seg3_dl_bubbly[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -60,8 +60,8 @@ const Gfx tree_seg3_dl_0302FEE8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(tree_seg3_dl_0302FE88),
-    gsSPDisplayList(tree_seg3_dl_0302FEB8),
+    gsSPDisplayList(tree_seg3_dl_bubbly_left_side),
+    gsSPDisplayList(tree_seg3_dl_bubbly_right_side),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -83,7 +83,7 @@ static const Vtx tree_seg3_vertex_03030F60[] = {
 };
 
 // 0x03030FA0 - 0x03031048
-const Gfx tree_seg3_dl_03030FA0[] = {
+const Gfx tree_seg3_dl_spiky[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -120,7 +120,7 @@ static const Vtx tree_seg3_vertex_03032048[] = {
 };
 
 // 0x03032088 - 0x03032130
-const Gfx tree_seg3_dl_03032088[] = {
+const Gfx tree_seg3_dl_snowy_pine[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -152,7 +152,7 @@ static const Vtx tree_seg3_vertex_03032130[] = {
 };
 
 // 0x03032170 - 0x03032218
-const Gfx tree_seg3_dl_03032170[] = {
+const Gfx tree_seg3_dl_spiky1[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -189,7 +189,7 @@ static const Vtx tree_seg3_vertex_03033218[] = {
 };
 
 // 0x03033258 - 0x03033300
-const Gfx tree_seg3_dl_03033258[] = {
+const Gfx tree_seg3_dl_palm[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
