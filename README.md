@@ -90,6 +90,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 This is a fork of the ultrasm64 repo by CrashOveride which includes the following commonly used patches (patches marked with `*` are toggleable in `config.h`): 
 
+**About Puppycam**
+- Puppycam is available **on a dedicated branch**. If you want puppycam in your hack, clone the `puppycamera2` branch instead of `master`.
+
 **Collision:**
 - Slope fix and exposed ceilings fix
 - No false ledgegrabs fix * 
@@ -102,6 +105,8 @@ This is a fork of the ultrasm64 repo by CrashOveride which includes the followin
 - Platform Displacement 2 by Arthurtilly *
 - Water Surface Type patch by thecozies
 - Rounded corners by FramePerfection, merged by Cheezepin
+- reonucam3: custom camera by me. This is included as a .patch file in the enhancements folder, you need to apply it if you want this camera.
+  This video shows a rundown of the features: https://youtu.be/TQNkznX9Z3k
 
 **Common Hack Changes:**
 - Better extended boundaries by anonymous_moose
