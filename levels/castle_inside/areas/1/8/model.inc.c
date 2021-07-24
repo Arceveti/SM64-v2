@@ -1,3 +1,5 @@
+// Hallway to Courtyard
+
 // 0x0702AB90 - 0x0702ABA8
 static const Lights1 inside_castle_seg7_lights_0702AB90 = gdSPDefLights1(
     0x46, 0x46, 0x46,

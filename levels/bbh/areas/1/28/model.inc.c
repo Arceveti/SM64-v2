@@ -474,7 +474,7 @@ static const Gfx bbh_seg7_dl_07016FE8[] = {
 
 // 0x07017050 - 0x070170B8
 static const Gfx bbh_seg7_dl_07017050[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bbh_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bbh_seg7_texture_wooden_panel_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_070163F8, 14, 0),
@@ -487,7 +487,7 @@ static const Gfx bbh_seg7_dl_07017050[] = {
 
 // 0x070170B8 - 0x07017100
 static const Gfx bbh_seg7_dl_070170B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bbh_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bbh_seg7_texture_boo_painting_blue),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_070164D8, 8, 0),

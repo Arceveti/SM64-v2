@@ -8,7 +8,7 @@ static void const *sSlidingPlatform2CollisionData[] = {
     rr_seg7_collision_070295F8,
     rr_seg7_collision_0702967C,
     NULL,
-    bitdw_seg7_collision_0700F688,
+    bitdw_seg7_collision_sliding_platform,
 };
 
 void bhv_sliding_plat_2_init(void) {

@@ -5,14 +5,14 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout geo_bbh_0005B0[];
-extern const GeoLayout geo_bbh_0005C8[];
-extern const GeoLayout geo_bbh_0005E0[];
-extern const GeoLayout geo_bbh_0005F8[];
-extern const GeoLayout geo_bbh_000610[];
-extern const GeoLayout geo_bbh_000628[];
-extern const GeoLayout geo_bbh_000640[];
-extern const GeoLayout geo_bbh_000658[];
+extern const GeoLayout geo_bbh_staircase_step[];
+extern const GeoLayout geo_bbh_tilting_trap_platform[];
+extern const GeoLayout geo_bbh_tumbling_platform_far[];
+extern const GeoLayout geo_bbh_tumbling_platform_near[];
+extern const GeoLayout geo_bbh_moving_bookshelf[];
+extern const GeoLayout geo_bbh_mesh_elevator[];
+extern const GeoLayout geo_bbh_merry_go_round[];
+extern const GeoLayout geo_bbh_coffin[];
 extern const GeoLayout geo_bbh_000670[];
 extern const GeoLayout geo_bbh_0006B0[];
 extern const GeoLayout geo_bbh_0006E8[];
@@ -87,14 +87,14 @@ extern const Gfx bbh_seg7_dl_0701E8D8[];
 extern const Gfx bbh_seg7_dl_0701ED18[];
 extern const Gfx bbh_seg7_dl_0701EEC8[];
 extern const Gfx bbh_seg7_dl_0701F070[];
-extern const Gfx bbh_seg7_dl_0701F2E8[];
-extern const Gfx bbh_seg7_dl_0701F5F8[];
-extern const Gfx bbh_seg7_dl_0701F7E8[];
-extern const Gfx bbh_seg7_dl_0701FAB0[];
-extern const Gfx bbh_seg7_dl_0701FD28[];
-extern const Gfx bbh_seg7_dl_0701FFE8[];
-extern const Gfx bbh_seg7_dl_070202F0[];
-extern const Gfx bbh_seg7_dl_070206F0[];
+extern const Gfx bbh_seg7_dl_staircase_step[];
+extern const Gfx bbh_seg7_dl_tilting_trap_platform[];
+extern const Gfx bbh_seg7_dl_tumbling_platform_far[];
+extern const Gfx bbh_seg7_dl_tumbling_platform_near[];
+extern const Gfx bbh_seg7_dl_moving_bookshelf[];
+extern const Gfx bbh_seg7_dl_mesh_elevator[];
+extern const Gfx bbh_seg7_dl_merry_go_round[];
+extern const Gfx bbh_seg7_dl_coffin[];
 extern const Collision bbh_seg7_collision_level[];
 extern const u8 bbh_seg7_rooms[];
 extern const MacroObject bbh_seg7_macro_objs[];

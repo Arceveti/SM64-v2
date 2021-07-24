@@ -89,14 +89,14 @@
 // Level model IDs
 
 // bbh
-#define MODEL_BBH_STAIRCASE_STEP               0x35        // geo_bbh_0005B0
-#define MODEL_BBH_TILTING_FLOOR_PLATFORM       0x36        // geo_bbh_0005C8
-#define MODEL_BBH_TUMBLING_PLATFORM            0x37        // geo_bbh_0005E0
-#define MODEL_BBH_TUMBLING_PLATFORM_PART       0x38        // geo_bbh_0005F8
-#define MODEL_BBH_MOVING_BOOKSHELF             0x39        // geo_bbh_000610
-#define MODEL_BBH_MESH_ELEVATOR                0x3A        // geo_bbh_000628
-#define MODEL_BBH_MERRY_GO_ROUND               0x3B        // geo_bbh_000640
-#define MODEL_BBH_WOODEN_TOMB                  0x3C        // geo_bbh_000658
+#define MODEL_BBH_STAIRCASE_STEP               0x35        // geo_bbh_staircase_step
+#define MODEL_BBH_TILTING_FLOOR_PLATFORM       0x36        // geo_bbh_tilting_trap_platform
+#define MODEL_BBH_TUMBLING_PLATFORM            0x37        // geo_bbh_tumbling_platform_far
+#define MODEL_BBH_TUMBLING_PLATFORM_PART       0x38        // geo_bbh_tumbling_platform_near
+#define MODEL_BBH_MOVING_BOOKSHELF             0x39        // geo_bbh_moving_bookshelf
+#define MODEL_BBH_MESH_ELEVATOR                0x3A        // geo_bbh_mesh_elevator
+#define MODEL_BBH_MERRY_GO_ROUND               0x3B        // geo_bbh_merry_go_round
+#define MODEL_BBH_WOODEN_TOMB                  0x3C        // geo_bbh_coffin
 
 // ccm
 #define MODEL_CCM_ROPEWAY_LIFT                 0x36        // ccm_geo_0003D0
@@ -199,16 +199,16 @@
 // castle grounds
 
 // bitdw
-#define MODEL_BITDW_SQUARE_PLATFORM               0x36        // geo_bitdw_000558
-#define MODEL_BITDW_SEESAW_PLATFORM               0x37        // geo_bitdw_000540
-#define MODEL_BITDW_SLIDING_PLATFORM              0x38        // geo_bitdw_000528
-#define MODEL_BITDW_FERRIS_WHEEL_AXLE             0x39        // geo_bitdw_000570
-#define MODEL_BITDW_BLUE_PLATFORM                 0x3A        // geo_bitdw_000588
-#define MODEL_BITDW_STAIRCASE_FRAME4              0x3B        // geo_bitdw_0005A0
-#define MODEL_BITDW_STAIRCASE_FRAME3              0x3C        // geo_bitdw_0005B8
-#define MODEL_BITDW_STAIRCASE_FRAME2              0x3D        // geo_bitdw_0005D0
-#define MODEL_BITDW_STAIRCASE_FRAME1              0x3E        // geo_bitdw_0005E8
-#define MODEL_BITDW_STAIRCASE                     0x3F        // geo_bitdw_000600
+#define MODEL_BITDW_SQUARE_PLATFORM               0x36        // geo_bitdw_moving_pyramid
+#define MODEL_BITDW_SEESAW_PLATFORM               0x37        // geo_bitdw_seesaw_platform
+#define MODEL_BITDW_SLIDING_PLATFORM              0x38        // geo_bitdw_sliding_platform
+#define MODEL_BITDW_FERRIS_WHEEL_AXLE             0x39        // geo_bitdw_ferris_wheel_axle
+#define MODEL_BITDW_BLUE_PLATFORM                 0x3A        // geo_bitdw_ferris_platform
+#define MODEL_BITDW_STAIRCASE_FRAME4              0x3B        // geo_bitdw_collapsing_stairs_1
+#define MODEL_BITDW_STAIRCASE_FRAME3              0x3C        // geo_bitdw_collapsing_stairs_2
+#define MODEL_BITDW_STAIRCASE_FRAME2              0x3D        // geo_bitdw_collapsing_stairs_3
+#define MODEL_BITDW_STAIRCASE_FRAME1              0x3E        // geo_bitdw_collapsing_stairs_4
+#define MODEL_BITDW_STAIRCASE                     0x3F        // geo_bitdw_collapsing_stairs_5
 
 // vcutm
 #define MODEL_VCUTM_SEESAW_PLATFORM               0x36        // vcutm_geo_0001F0

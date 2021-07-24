@@ -312,7 +312,7 @@ static const Vtx bitdw_seg7_vertex_07007530[] = {
 
 // 0x070075B0 - 0x07007810
 static const Gfx bitdw_seg7_dl_070075B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bitdw_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bitdw_seg7_texture_shaded_blue_square),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_07006670, 16, 0),

@@ -1,3 +1,5 @@
+// Bowser 1 Hallway
+
 // 0x0702E490 - 0x0702E4A8
 static const Lights1 inside_castle_seg7_lights_0702E490 = gdSPDefLights1(
     0x52, 0x52, 0x52,

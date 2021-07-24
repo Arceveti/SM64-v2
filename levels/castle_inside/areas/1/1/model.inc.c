@@ -1,20 +1,22 @@
+// Bowser 1 Painting
+
 // 0x07023CB0 - 0x07023DB0
-static const Vtx inside_castle_seg7_vertex_07023CB0[] = {
-    {{{ -7395,   1126,  -5772}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,   1126,  -5989}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,   1434,  -5989}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx inside_castle_seg7_vertex_bowser_1_painting[] = {
+    {{{ -7395,   1126,  -5772}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,   1126,  -5989}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,   1434,  -5989}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7395,   1434,  -5772}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,   1126,  -5989}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6961,   1126,  -6206}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6961,   1434,  -6206}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,   1126,  -5989}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6961,   1126,  -6206}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6961,   1434,  -6206}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7178,   1434,  -5989}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7395,    819,  -5772}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,    819,  -5989}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,   1126,  -5989}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7395,    819,  -5772}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,    819,  -5989}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,   1126,  -5989}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7395,   1126,  -5772}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -7178,    819,  -5989}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6961,    819,  -6206}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6961,   1126,  -6206}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -7178,    819,  -5989}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6961,    819,  -6206}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6961,   1126,  -6206}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -7178,   1126,  -5989}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
@@ -33,7 +35,7 @@ const Gfx inside_castle_seg7_dl_bowser_1_painting[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 256, G_TX_RENDERTILE + 1, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(1, 0, 0, 124, 124),
     gsSPTexture(0xFFFF, 0xFFFF, 1, G_TX_RENDERTILE, G_ON),
-    gsSPVertex(inside_castle_seg7_vertex_07023CB0, 16, 0),
+    gsSPVertex(inside_castle_seg7_vertex_bowser_1_painting, 16, 0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07008000),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
