@@ -392,7 +392,7 @@ static const Gfx inside_castle_seg7_dl_0703B988[] = {
 };
 
 // 0x0703BA08 - 0x0703BAB0
-const Gfx inside_castle_seg7_dl_0703BA08[] = {
+const Gfx inside_castle_seg7_dl_fake_spiral_stairs_room[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

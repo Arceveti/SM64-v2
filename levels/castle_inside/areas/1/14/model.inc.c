@@ -18,7 +18,7 @@ static const Vtx inside_castle_seg7_vertex_07033080[] = {
 
 // 0x07033100 - 0x07033158
 static const Gfx inside_castle_seg7_dl_07033100[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_wall_sign),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_07033068.l, 1),
@@ -30,7 +30,7 @@ static const Gfx inside_castle_seg7_dl_07033100[] = {
 };
 
 // 0x07033158 - 0x070331C8
-const Gfx inside_castle_seg7_dl_07033158[] = {
+const Gfx inside_castle_seg7_dl_bob_wall_signs[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

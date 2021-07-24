@@ -310,9 +310,11 @@
 // Goddard easter egg from Shindou (Nintendo, Arceveti)
 #define GODDARD_EASTER_EGG
 
-// -- Experimental --
+// -- Experimental/Unfinished --
 
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
+// Use painting data for the PSS painting instead of a static texture (Arceveti)
+#define PSS_PAINTING
 
 #endif // CONFIG_H

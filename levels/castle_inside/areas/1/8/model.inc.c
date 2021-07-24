@@ -1167,7 +1167,7 @@ static const Gfx inside_castle_seg7_dl_0702DF38[] = {
 };
 
 // 0x0702E408 - 0x0702E490
-const Gfx inside_castle_seg7_dl_0702E408[] = {
+const Gfx inside_castle_seg7_dl_area_1_back_hallway[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

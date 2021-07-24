@@ -1,78 +1,78 @@
 #include "game/paintings.h"
 
 // 0x07021800 - 0x07021818
-static const Lights1 inside_castle_seg7_lights_07021800 = gdSPDefLights1(
+static const Lights1 inside_castle_seg7_lights_textured = gdSPDefLights1(
     0x50, 0x50, 0x50,
     0xff, 0xff, 0xff, 0x32, 0x32, 0x32
 );
 
 // 0x07021818 - 0x07021898
-static const Vtx inside_castle_seg7_vertex_07021818[] = {
-    {{{     0,      0,      0}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,      0,      0}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+static const Vtx inside_castle_seg7_vertex_painting_textured[] = {
+    {{{     0,      0,      0}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,      0,      0}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{     0,    307,      0}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{     0,    307,      0}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    614,      0}, 0, {  2012,    -28}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{     0,    614,      0}, 0, {   -32,    -28}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{     0,    307,      0}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    614,      0}, 0, { 63<<5,    -32}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{     0,    614,      0}, 0, {   -32,    -32}, {0x00, 0x00, 0x7f, 0xff}}},
 };
 
 // 0x07021898 - 0x07021918
-static const Vtx inside_castle_seg7_vertex_07021898[] = {
-    {{{     0,      0,      0}, 0, {   -32,    992}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{   614,      0,      0}, 0, {  2012,    992}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,      0}, {0xdd, 0xdd, 0xdd, 0xff}}},
+static const Vtx inside_castle_seg7_vertex_painting_sl[] = {
+    {{{     0,      0,      0}, 0, {   -32,  31<<5}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{   614,      0,      0}, 0, { 63<<5,  31<<5}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,      0}, {0xdd, 0xdd, 0xdd, 0xff}}},
     {{{     0,    307,      0}, 0, {   -32,      0}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{     0,    307,      0}, 0, {   -32,    992}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,    992}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{   614,    614,      0}, 0, {  2012,    -28}, {0xdd, 0xdd, 0xdd, 0xff}}},
-    {{{     0,    614,      0}, 0, {   -32,    -28}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{     0,    307,      0}, 0, {   -32,  31<<5}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,  31<<5}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{   614,    614,      0}, 0, { 63<<5,    -32}, {0xdd, 0xdd, 0xdd, 0xff}}},
+    {{{     0,    614,      0}, 0, {   -32,    -32}, {0xdd, 0xdd, 0xdd, 0xff}}},
 };
 
 // 0x07021918 - 0x07021998
-static const Vtx inside_castle_seg7_vertex_07021918[] = {
-    {{{ -3046,   -307,  -3724}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -2742,   -307,  -4258}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -2742,      0,  -4258}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+static const Vtx inside_castle_seg7_vertex_painting_ccm_fake_1[] = {
+    {{{ -3046,   -307,  -3724}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -2742,   -307,  -4258}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -2742,      0,  -4258}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{ -3046,      0,  -3724}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -3046,      0,  -3724}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -2742,      0,  -4258}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -2742,    307,  -4258}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -3046,      0,  -3724}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -2742,      0,  -4258}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -2742,    307,  -4258}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{ -3046,    307,  -3724}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
 };
 
 // 0x07021998 - 0x07021A18
-static const Vtx inside_castle_seg7_vertex_07021998[] = {
-    {{{ -1866,   -307,  -4258}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -1562,   -307,  -3724}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -1562,      0,  -3724}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+static const Vtx inside_castle_seg7_vertex_painting_ccm_fake_2[] = {
+    {{{ -1866,   -307,  -4258}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -1562,   -307,  -3724}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -1562,      0,  -3724}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{ -1866,      0,  -4258}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -1866,      0,  -4258}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -1562,      0,  -3724}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{ -1562,    307,  -3724}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -1866,      0,  -4258}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -1562,      0,  -3724}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{ -1562,    307,  -3724}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{ -1866,    307,  -4258}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
 };
 
 // 0x07021A18 - 0x07021A30
-static const Gfx inside_castle_seg7_dl_07021A18[] = {
+static const Gfx inside_castle_seg7_dl_painting_bottom_model[] = {
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07021A30 - 0x07021A48
-static const Gfx inside_castle_seg7_dl_07021A30[] = {
+static const Gfx inside_castle_seg7_dl_painting_top_model[] = {
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07021A48 - 0x07021AA0
-static const Gfx inside_castle_seg7_dl_07021A48[] = {
+static const Gfx inside_castle_seg7_dl_painting_texture_begin[] = {
     gsDPPipeSync(),
     gsSPSetGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsSPLight(&inside_castle_seg7_lights_07021800.l, 1),
-    gsSPLight(&inside_castle_seg7_lights_07021800.a, 2),
+    gsSPLight(&inside_castle_seg7_lights_textured.l, 1),
+    gsSPLight(&inside_castle_seg7_lights_textured.a, 2),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
@@ -82,7 +82,7 @@ static const Gfx inside_castle_seg7_dl_07021A48[] = {
 };
 
 // 0x07021AA0 - 0x07021AC0
-static const Gfx inside_castle_seg7_dl_07021AA0[] = {
+static const Gfx inside_castle_seg7_dl_painting_texture_end[] = {
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -90,7 +90,7 @@ static const Gfx inside_castle_seg7_dl_07021AA0[] = {
 };
 
 // 0x07021AC0 - 0x07021AE0
-static const Gfx inside_castle_seg7_painting_dl_07021AC0[] = {
+static const Gfx inside_castle_seg7_painting_dl_image_ripple[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
@@ -561,63 +561,22 @@ static const PaintingData *const inside_castle_seg7_painting_texture_maps_070225
     inside_castle_seg7_painting_texture_map_top_07021FFC,
 };
 
-UNUSED static const u64 castle_inside_unused_0 = 0x0;
-
-
-// 0x07022528 - 0x07022540
-static const Lights1 inside_castle_seg7_lights_07022528 = gdSPDefLights1(
-    0x50, 0x50, 0x50,
-    0xff, 0xff, 0xff, 0x32, 0x32, 0x32
+// 0x07022540 - 0x07022558
+static const Lights1 inside_castle_seg7_lights_hmc = gdSPDefLights1(
+    0x40, 0x40, 0x80,
+    0x64, 0x64, 0xff, 0x28, 0x28, 0x28
 );
 
-// 0x07022540 - 0x07022558
-// No gdSPDefLights1 macro defined because of odd different light value (0xff and 0xfa)
-static const Lights1 inside_castle_seg7_lights_07022540 = {
-    {{  {0x40, 0x40, 0x80}, 0, {0x40, 0x40, 0x80}, 0} },
-    {{{ {0x64, 0x64, 0xff}, 0, {0x64, 0x64, 0xfa}, 0, {0x28, 0x28, 0x28},0} }} 
-};
-
-// 0x07022558 - 0x07022598
-static const Vtx inside_castle_seg7_vertex_07022558[] = {
-    {{{     0,      0,      0}, 0, {   -32,    990}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,      0,      0}, 0, {  6100,    990}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    614,      0}, 0, {  6100,  -5142}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{     0,    614,      0}, 0, {   -32,  -5142}, {0x00, 0x00, 0x7f, 0xff}}},
-};
-
 // 0x07022598 - 0x070225D8
-static const Vtx inside_castle_seg7_vertex_07022598[] = {
+static const Vtx inside_castle_seg7_vertex_hmc[] = {
     {{{     0,      0,      0}, 0, {     0,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{   614,      0,      0}, 0, {     0,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{   614,    614,      0}, 0, {     0,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{     0,    614,      0}, 0, {     0,      0}, {0x00, 0x00, 0x7f, 0xff}}},
 };
 
-// TODO: this is unused
-// 0x070225D8 - 0x07022610
-const Gfx inside_castle_seg7_dl_070225D8[] = {
-    gsDPPipeSync(),
-    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsSPLight(&inside_castle_seg7_lights_07022528.l, 1),
-    gsSPLight(&inside_castle_seg7_lights_07022528.a, 2),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsSPVertex(inside_castle_seg7_vertex_07022558, 4, 0),
-    gsSPEndDisplayList(),
-};
-
-// TODO: this is unused
-// 0x07022610 - 0x07022640
-const Gfx inside_castle_seg7_dl_07022610[] = {
-    gsSP1Triangle( 0,  1,  2, 0x0),
-    gsSP1Triangle( 0,  2,  3, 0x0),
-    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPPipeSync(),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPEndDisplayList(),
-};
-
 // 0x07022640 - 0x07022660
-static const Gfx inside_castle_seg7_painting_dl_07022640[] = {
+static const Gfx inside_castle_seg7_painting_dl_env_map_ripple[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
@@ -1063,171 +1022,185 @@ static const PaintingData *const inside_castle_seg7_painting_env_map_texture_map
     inside_castle_seg7_painting_env_map_texture_map_07022660,
 };
 
-UNUSED static const u64 castle_inside_unused_1 = 0x0;
-
-
 // 0x07023050 - 0x070230B0
-static const Gfx inside_castle_seg7_painting_dl_07023050[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700B800),
+static const Gfx inside_castle_seg7_painting_dl_bob[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_bob_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700A800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_bob_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x070230B0 - 0x07023110
-static const Gfx inside_castle_seg7_painting_dl_070230B0[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700D800),
+static const Gfx inside_castle_seg7_painting_dl_ccm[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700C800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023110 - 0x07023170
-static const Gfx inside_castle_seg7_painting_dl_07023110[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700F800),
+static const Gfx inside_castle_seg7_painting_dl_wf[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_wf_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700E800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_wf_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023170 - 0x070231D0
-static const Gfx inside_castle_seg7_painting_dl_07023170[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07011800),
+static const Gfx inside_castle_seg7_painting_dl_jrb[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_jrb_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07010800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_jrb_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
+#ifdef PSS_PAINTING
+static const Gfx inside_castle_seg7_painting_dl_pss[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_pss_bottom),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_pss_top),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
+    gsSPEndDisplayList(),
+};
+#endif
+
 // 0x070231D0 - 0x07023230
-static const Gfx inside_castle_seg7_painting_dl_070231D0[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07012800),
+static const Gfx inside_castle_seg7_painting_dl_lll[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_lll_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07013800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_lll_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023230 - 0x07023290
-static const Gfx inside_castle_seg7_painting_dl_07023230[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07015800),
+static const Gfx inside_castle_seg7_painting_dl_ssl[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ssl_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07014800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ssl_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023290 - 0x070232F0
-static const Gfx inside_castle_seg7_painting_dl_07023290[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07018800),
+static const Gfx inside_castle_seg7_painting_dl_wdw[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_wdw_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07017800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_wdw_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x070232F0 - 0x07023350
-static const Gfx inside_castle_seg7_painting_dl_070232F0[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701A800),
+static const Gfx inside_castle_seg7_painting_dl_thi[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_thi_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07019800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_thi_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023350 - 0x070233B0
-static const Gfx inside_castle_seg7_painting_dl_07023350[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701C800),
+static const Gfx inside_castle_seg7_painting_dl_ttm[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ttm_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701B800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ttm_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x070233B0 - 0x07023410
-static const Gfx inside_castle_seg7_painting_dl_070233B0[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021818, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701E800),
+static const Gfx inside_castle_seg7_painting_dl_ttc[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_textured, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ttc_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701D800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ttc_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023410 - 0x070234C0
-static const Gfx inside_castle_seg7_painting_dl_07023410[] = {
+static const Gfx inside_castle_seg7_painting_dl_sl[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -1236,15 +1209,15 @@ static const Gfx inside_castle_seg7_painting_dl_07023410[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
-    gsSPVertex(inside_castle_seg7_vertex_07021898, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07020800),
+    gsSPVertex(inside_castle_seg7_vertex_painting_sl, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_sl_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0701F800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_sl_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -1253,104 +1226,110 @@ static const Gfx inside_castle_seg7_painting_dl_07023410[] = {
 };
 
 // 0x070234C0 - 0x07023520
-const Gfx inside_castle_seg7_dl_070234C0[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021918, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700D800),
+const Gfx inside_castle_seg7_dl_ccm_fake_painting_1[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_ccm_fake_1, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700C800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023520 - 0x07023580
-const Gfx inside_castle_seg7_dl_07023520[] = {
-    gsSPDisplayList(inside_castle_seg7_dl_07021A48),
-    gsSPVertex(inside_castle_seg7_vertex_07021998, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700D800),
+const Gfx inside_castle_seg7_dl_ccm_fake_painting_2[] = {
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_begin),
+    gsSPVertex(inside_castle_seg7_vertex_painting_ccm_fake_2, 8, 0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A18),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_0700C800),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_bottom_model),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_ccm_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(inside_castle_seg7_dl_07021A30),
-    gsSPDisplayList(inside_castle_seg7_dl_07021AA0),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_top_model),
+    gsSPDisplayList(inside_castle_seg7_dl_painting_texture_end),
     gsSPEndDisplayList(),
 };
 
 // 0x07023580 - 0x070235B8
-static const Gfx inside_castle_seg7_painting_dl_07023580[] = {
+static const Gfx inside_castle_seg7_painting_dl_hmc[] = {
     gsDPPipeSync(),
-    gsSPLight(&inside_castle_seg7_lights_07022540.l, 1),
-    gsSPLight(&inside_castle_seg7_lights_07022540.a, 2),
-    gsSPVertex(inside_castle_seg7_vertex_07022598, 4, 0),
+    gsSPLight(&inside_castle_seg7_lights_hmc.l, 1),
+    gsSPLight(&inside_castle_seg7_lights_hmc.a, 2),
+    gsSPVertex(inside_castle_seg7_vertex_hmc, 4, 0),
     gsSP1Triangle( 0,  1,  2, 0x0),
     gsSP1Triangle( 0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x070235B8 - 0x070235C0
-static const Gfx inside_castle_seg7_painting_dl_070235B8[] = {
-    gsSPBranchList(inside_castle_seg7_painting_dl_07023580),
+static const Gfx inside_castle_seg7_painting_dl_ddd[] = {
+    gsSPBranchList(inside_castle_seg7_painting_dl_hmc),
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235C0[] = {
-    inside_castle_seg7_texture_0700B800, inside_castle_seg7_texture_0700A800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_bob[] = {
+    inside_castle_seg7_texture_bob_bottom, inside_castle_seg7_texture_bob_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235C8[] = {
-    inside_castle_seg7_texture_0700D800, inside_castle_seg7_texture_0700C800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_ccm[] = {
+    inside_castle_seg7_texture_ccm_bottom, inside_castle_seg7_texture_ccm_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235D0[] = {
-    inside_castle_seg7_texture_0700F800, inside_castle_seg7_texture_0700E800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_wf[] = {
+    inside_castle_seg7_texture_wf_bottom, inside_castle_seg7_texture_wf_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235D8[] = {
-    inside_castle_seg7_texture_07011800, inside_castle_seg7_texture_07010800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_jrb[] = {
+    inside_castle_seg7_texture_jrb_bottom, inside_castle_seg7_texture_jrb_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235E0[] = {
-    inside_castle_seg7_texture_07012800, inside_castle_seg7_texture_07013800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_lll[] = {
+    inside_castle_seg7_texture_lll_bottom, inside_castle_seg7_texture_lll_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235E8[] = {
-    inside_castle_seg7_texture_07015800, inside_castle_seg7_texture_07014800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_ssl[] = {
+    inside_castle_seg7_texture_ssl_bottom, inside_castle_seg7_texture_ssl_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235F0[] = {
-    inside_castle_seg7_texture_07016800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_hmc_env[] = {
+    inside_castle_seg7_texture_hmc_env,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235F4[] = {
-    inside_castle_seg7_texture_07017000,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_ddd_env[] = {
+    inside_castle_seg7_texture_ddd_env,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_070235F8[] = {
-    inside_castle_seg7_texture_07018800, inside_castle_seg7_texture_07017800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_wdw[] = {
+    inside_castle_seg7_texture_wdw_bottom, inside_castle_seg7_texture_wdw_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_07023600[] = {
-    inside_castle_seg7_texture_0701A800, inside_castle_seg7_texture_07019800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_thi[] = {
+    inside_castle_seg7_texture_thi_bottom, inside_castle_seg7_texture_thi_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_07023608[] = {
-    inside_castle_seg7_texture_0701C800, inside_castle_seg7_texture_0701B800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_ttm[] = {
+    inside_castle_seg7_texture_ttm_bottom, inside_castle_seg7_texture_ttm_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_07023610[] = {
-    inside_castle_seg7_texture_0701E800, inside_castle_seg7_texture_0701D800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_ttc[] = {
+    inside_castle_seg7_texture_ttc_bottom, inside_castle_seg7_texture_ttc_top,
 };
 
-ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_07023618[] = {
-    inside_castle_seg7_texture_07020800, inside_castle_seg7_texture_0701F800,
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_sl[] = {
+    inside_castle_seg7_texture_sl_bottom, inside_castle_seg7_texture_sl_top,
 };
+
+#ifdef PSS_PAINTING
+ALIGNED8 static const Texture *const inside_castle_seg7_painting_textures_pss[] = {
+    inside_castle_seg7_texture_pss_bottom, inside_castle_seg7_texture_pss_top,
+};
+#endif
 
 // 0x07023620 - 0x07023698
 struct Painting bob_painting = {
@@ -1368,11 +1347,11 @@ struct Painting bob_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,    0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023050,
+    /* Normal DList */ inside_castle_seg7_painting_dl_bob,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235C0,
+    /* Textures */     inside_castle_seg7_painting_textures_bob,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1395,11 +1374,11 @@ struct Painting ccm_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070230B0,
+    /* Normal DList */ inside_castle_seg7_painting_dl_ccm,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235C8,
+    /* Textures */     inside_castle_seg7_painting_textures_ccm,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1422,11 +1401,11 @@ struct Painting wf_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023110,
+    /* Normal DList */ inside_castle_seg7_painting_dl_wf,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235D0,
+    /* Textures */     inside_castle_seg7_painting_textures_wf,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1449,11 +1428,11 @@ struct Painting jrb_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023170,
+    /* Normal DList */ inside_castle_seg7_painting_dl_jrb,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235D8,
+    /* Textures */     inside_castle_seg7_painting_textures_jrb,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1476,11 +1455,11 @@ struct Painting lll_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070231D0,
+    /* Normal DList */ inside_castle_seg7_painting_dl_lll,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235E0,
+    /* Textures */     inside_castle_seg7_painting_textures_lll,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1503,11 +1482,11 @@ struct Painting ssl_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023230,
+    /* Normal DList */ inside_castle_seg7_painting_dl_ssl,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235E8,
+    /* Textures */     inside_castle_seg7_painting_textures_ssl,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1530,11 +1509,11 @@ struct Painting hmc_painting = {
     /* Ripple Dispersion */    0.0f,    15.0f,    15.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,   0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023580,
+    /* Normal DList */ inside_castle_seg7_painting_dl_hmc,
     /* Texture Maps */ inside_castle_seg7_painting_env_map_texture_maps_07023044,
-    /* Textures */     inside_castle_seg7_painting_textures_070235F0,
+    /* Textures */     inside_castle_seg7_painting_textures_hmc_env,
     /* Texture w, h */ 32, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07022640,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_env_map_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_CONTINUOUS,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1557,11 +1536,11 @@ struct Painting ddd_painting = {
     /* Ripple Dispersion */    0.0f,    15.0f,    15.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,   0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070235B8,
+    /* Normal DList */ inside_castle_seg7_painting_dl_ddd,
     /* Texture Maps */ inside_castle_seg7_painting_env_map_texture_maps_07023044,
-    /* Textures */     inside_castle_seg7_painting_textures_070235F4,
+    /* Textures */     inside_castle_seg7_painting_textures_ddd_env,
     /* Texture w, h */ 32, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07022640,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_env_map_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_CONTINUOUS,
     /* Alpha */ 0xB4,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1584,11 +1563,11 @@ struct Painting wdw_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023290,
+    /* Normal DList */ inside_castle_seg7_painting_dl_wdw,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_070235F8,
+    /* Textures */     inside_castle_seg7_painting_textures_wdw,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1611,11 +1590,11 @@ struct Painting thi_tiny_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070232F0,
+    /* Normal DList */ inside_castle_seg7_painting_dl_thi,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_07023600,
+    /* Textures */     inside_castle_seg7_painting_textures_thi,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1638,11 +1617,11 @@ struct Painting ttm_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023350,
+    /* Normal DList */ inside_castle_seg7_painting_dl_ttm,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_07023608,
+    /* Textures */     inside_castle_seg7_painting_textures_ttm,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1665,11 +1644,11 @@ struct Painting ttc_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070233B0,
+    /* Normal DList */ inside_castle_seg7_painting_dl_ttc,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_07023610,
+    /* Textures */     inside_castle_seg7_painting_textures_ttc,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1692,11 +1671,11 @@ struct Painting sl_painting = {
     /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,     0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_07023410,
+    /* Normal DList */ inside_castle_seg7_painting_dl_sl,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_07023618,
+    /* Textures */     inside_castle_seg7_painting_textures_sl,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
@@ -1719,13 +1698,41 @@ struct Painting thi_huge_painting = {
     /* Ripple Dispersion */    0.0f,    80.0f,    60.0f,
     /* Curr Ripple Timer */    0.0f,
     /* Curr Ripple x, y */     0.0f,    0.0f,
-    /* Normal DList */ inside_castle_seg7_painting_dl_070232F0,
+    /* Normal DList */ inside_castle_seg7_painting_dl_thi,
     /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
-    /* Textures */     inside_castle_seg7_painting_textures_07023600,
+    /* Textures */     inside_castle_seg7_painting_textures_thi,
     /* Texture w, h */ 64, 32,
-    /* Ripple DList */ inside_castle_seg7_painting_dl_07021AC0,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
     /* Alpha */ 0xFF,
     /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
     /* Size */  1638.4f,
 };
+
+#ifdef PSS_PAINTING
+struct Painting pss_painting = {
+    /* id */ 0x000E,
+    /* Image Count */ 0x02,
+    /* Texture Type */ PAINTING_IMAGE,
+    /* Floor Status */ 0x00, 0x00, 0x00 /* which of the painting's nearby special floors Mario's on */,
+    /* Ripple Status */ 0x00,
+    /* Rotation */      0.0f,   225.0f,
+    /* Position */   2041.6f,   716.8f,  -2222.4f,
+    /*                         curr   passive     entry */
+    /* Ripple Magnitude */     0.0f,    20.0f,    80.0f,
+    /* Ripple Decay */         1.0f,  0.9608f,  0.9524f,
+    /* Ripple Rate */          0.0f,    0.24f,    0.14f,
+    /* Ripple Dispersion */    0.0f,    40.0f,    30.0f,
+    /* Curr Ripple Timer */    0.0f,
+    /* Curr Ripple x, y */     0.0f,     0.0f,
+    /* Normal DList */ inside_castle_seg7_painting_dl_pss,
+    /* Texture Maps */ inside_castle_seg7_painting_texture_maps_07022518,
+    /* Textures */     inside_castle_seg7_painting_textures_pss,
+    /* Texture w, h */ 64, 32,
+    /* Ripple DList */ inside_castle_seg7_painting_dl_image_ripple,
+    /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,
+    /* Alpha */ 0xFF,
+    /* Mario Below */  0x00, 0x00, 0x00, /* Whether or not Mario is below the painting */
+    /* Size */  307.2f,
+};
+#endif

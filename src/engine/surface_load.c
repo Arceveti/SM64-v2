@@ -33,7 +33,7 @@ struct Surface *sSurfacePool;
  */
 s16 sSurfacePoolSize;
 
-u8 gSurfacePoolError = 0;
+u8 gSurfacePoolError = 0x0;
 
 /**
  * Allocate the part of the surface node pool to contain a surface node.
@@ -110,7 +110,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     s16 priority;
     s16 sortDir;
     s16 listIndex;
-    s16 isWater = surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM;
+    s16 isWater = (surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM);
 
     if (surface->normal.y > 0.01f) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
@@ -132,11 +132,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
 
     newNode->surface = surface;
 
-    if (dynamic) {
-        list = &gDynamicSurfacePartition[cellZ][cellX][listIndex];
-    } else {
-        list = &gStaticSurfacePartition[cellZ][cellX][listIndex];
-    }
+    list = &(dynamic ? gDynamicSurfacePartition : gStaticSurfacePartition)[cellZ][cellX][listIndex];
 
     // Loop until we find the appropriate place for the surface in the list.
     while (list->next != NULL) {
@@ -155,14 +151,8 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
  * Returns the lowest of three values.
  */
 static s16 min_3(s16 a0, s16 a1, s16 a2) {
-    if (a1 < a0) {
-        a0 = a1;
-    }
-
-    if (a2 < a0) {
-        a0 = a2;
-    }
-
+    if (a1 < a0) a0 = a1;
+    if (a2 < a0) a0 = a2;
     return a0;
 }
 
@@ -170,14 +160,8 @@ static s16 min_3(s16 a0, s16 a1, s16 a2) {
  * Returns the highest of three values.
  */
 static s16 max_3(s16 a0, s16 a1, s16 a2) {
-    if (a1 > a0) {
-        a0 = a1;
-    }
-
-    if (a2 > a0) {
-        a0 = a2;
-    }
-
+    if (a1 > a0) a0 = a1;
+    if (a2 > a0) a0 = a2;
     return a0;
 }
 
@@ -191,9 +175,7 @@ static s16 lower_cell_index(s32 coord) {
 
     // Move from range [-0x2000, 0x2000) to [0, 0x4000)
     coord += LEVEL_BOUNDARY_MAX;
-    if (coord < 0) {
-        coord = 0;
-    }
+    if (coord < 0) coord = 0;
 
     // [0, 16)
     index = coord / CELL_SIZE;
@@ -201,13 +183,9 @@ static s16 lower_cell_index(s32 coord) {
     // Include extra cell if close to boundary
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE < 50) {
-        index--;
-    }
+    if (coord % CELL_SIZE < 50) index--;
 
-    if (index < 0) {
-        index = 0;
-    }
+    if (index < 0) index = 0;
 
     // Potentially > 15, but since the upper index is <= 15, not exploitable
     return index;

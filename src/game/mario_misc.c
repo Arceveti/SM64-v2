@@ -612,9 +612,9 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 gMirrorMario.pos[0] = mirroredX + MIRROR_X;
                 gMirrorMario.angle[1] = -gMirrorMario.angle[1];
                 gMirrorMario.scale[0] *= -1.0f;
-                ((struct GraphNode *) &gMirrorMario)->flags |= 1;
+                ((struct GraphNode *) &gMirrorMario)->flags |= 0x1;
             } else {
-                ((struct GraphNode *) &gMirrorMario)->flags &= ~1;
+                ((struct GraphNode *) &gMirrorMario)->flags &= ~0x1;
             }
             break;
     }

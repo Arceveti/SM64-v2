@@ -916,7 +916,7 @@ const Gfx inside_castle_seg7_dl_07031168[] = {
 };
 
 // 0x07031588 - 0x07031608
-const Gfx inside_castle_seg7_dl_07031588[] = {
+const Gfx inside_castle_seg7_dl_pss_room[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

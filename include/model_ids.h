@@ -103,10 +103,10 @@
 #define MODEL_CCM_SNOWMAN_HEAD                 0x37        // ccm_geo_00040C
 
 // castle
-#define MODEL_CASTLE_BOWSER_TRAP               0x35        // castle_geo_000F18
-#define MODEL_CASTLE_WATER_LEVEL_PILLAR        0x36        // castle_geo_001940
-#define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x37        // castle_geo_001530
-#define MODEL_CASTLE_CLOCK_HOUR_HAND           0x38        // castle_geo_001548
+#define MODEL_CASTLE_BOWSER_TRAP               0x35        // castle_geo_bowser_trap_door
+#define MODEL_CASTLE_WATER_LEVEL_PILLAR        0x36        // castle_geo_water_level_pillar
+#define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x37        // castle_geo_clock_minute_hand
+#define MODEL_CASTLE_CLOCK_HOUR_HAND           0x38        // castle_geo_clock_hour_hand
 #define MODEL_CASTLE_CLOCK_PENDULUM            0x39        // castle_geo_001518
 
 // hmc
@@ -542,13 +542,13 @@
 #define MODEL_EXPLOSION                   0xCD        // explosion_geo
 #define MODEL_SNUFIT                      0xCE        // snufit_geo
 #define MODEL_PURPLE_SWITCH               0xCF        // purple_switch_geo
-#define MODEL_CASTLE_STAR_DOOR_30_STARS   0xD0        // castle_geo_000F00
-#define MODEL_CASTLE_STAR_DOOR_50_STARS   0xD1        // castle_geo_000F00
+#define MODEL_CASTLE_STAR_DOOR_30_STARS   0xD0        // castle_geo_star_door
+#define MODEL_CASTLE_STAR_DOOR_50_STARS   0xD1        // castle_geo_star_door
 #define MODEL_CCM_SNOWMAN_BASE            0xD2        // ccm_geo_0003F0
 // find me
 #define MODEL_1UP                         0xD4        // mushroom_1up_geo
-#define MODEL_CASTLE_STAR_DOOR_8_STARS    0xD5        // castle_geo_000F00
-#define MODEL_CASTLE_STAR_DOOR_70_STARS   0xD6        // castle_geo_000F00
+#define MODEL_CASTLE_STAR_DOOR_8_STARS    0xD5        // castle_geo_star_door
+#define MODEL_CASTLE_STAR_DOOR_70_STARS   0xD6        // castle_geo_star_door
 #define MODEL_RED_COIN                    0xD7        // red_coin_geo
 #define MODEL_RED_COIN_NO_SHADOW          0xD8        // red_coin_no_shadow_geo
 #define MODEL_METAL_BOX                   0xD9        // metal_box_geo

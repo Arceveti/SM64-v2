@@ -304,8 +304,7 @@ f32 find_ceil(f32 posX, f32 posY, f32 posZ, struct Surface **pceil) {
  */
 f32 unused_obj_find_floor_height(struct Object *obj) {
     struct Surface *floor;
-    f32 floorHeight = find_floor(obj->oPosX, obj->oPosY, obj->oPosZ, &floor);
-    return floorHeight;
+    return find_floor(obj->oPosX, obj->oPosY, obj->oPosZ, &floor);
 }
 
 /**

@@ -70,7 +70,7 @@ static const Gfx inside_castle_seg7_dl_070350B0[] = {
 };
 
 // 0x07035178 - 0x070351E8
-const Gfx inside_castle_seg7_dl_07035178[] = {
+const Gfx inside_castle_seg7_dl_wf_fence[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

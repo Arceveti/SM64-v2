@@ -104,7 +104,7 @@ static const Gfx inside_castle_seg7_dl_07029438[] = {
 };
 
 // 0x07029578 - 0x070295E8
-const Gfx inside_castle_seg7_dl_07029578[] = {
+const Gfx dl_castle_lobby_fence[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

@@ -153,7 +153,7 @@ void bhv_flame_floating_landing_loop(void) {
         if (o->oBehParams2ndByte == 0) {
             spawn_object(o, MODEL_RED_FLAME, bhvFlameLargeBurningOut);
         } else {
-            spawn_object(o, MODEL_NONE, bhvBlueFlamesGroup); //? wonder if they meant MODEL_BLUE_FLAME?
+            spawn_object(o, MODEL_BLUE_FLAME, bhvBlueFlamesGroup);
         }
         obj_mark_for_deletion(o);
     }

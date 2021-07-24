@@ -102,7 +102,6 @@ s16 intro_level_select(void) {
 
     if (((index ^ gLevelSelectHoldKeyIndex) & index) == 2) {
         if (gCurrLevelNum > LEVEL_MAX) {
-            //? Probably originally a >=, but later replaced with an == and an else statement.
             gCurrLevelNum = LEVEL_MIN;
         } else if (gPlayer3Controller->buttonDown & B_BUTTON) {
             play_sound(SOUND_GENERAL_LEVEL_SELECT_CHANGE, gGlobalSoundSource);

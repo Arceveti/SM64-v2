@@ -25,7 +25,7 @@ static const Gfx inside_castle_seg7_dl_0702AAD8[] = {
 };
 
 // 0x0702AB20 - 0x0702AB90
-const Gfx inside_castle_seg7_dl_0702AB20[] = {
+const Gfx dl_castle_lobby_peach_window[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
