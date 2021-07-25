@@ -1,3 +1,5 @@
+// Cannon Hole
+
 // 0x0700BCD8 - 0x0700BCE0
 static const Lights1 castle_grounds_seg7_lights_0700BCD8 = gdSPDefLights1(
     0x3d, 0x3d, 0x44,
@@ -30,18 +32,18 @@ static const Lights1 castle_grounds_seg7_lights_0700BD38 = gdSPDefLights1(
 
 // 0x0700BD50 - 0x0700BE10
 static const Vtx castle_grounds_seg7_vertex_0700BD50[] = {
-    {{{  2283,   -422,   2072}, 0, {     6,   1824}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2485,   -422,   2072}, 0, {   206,   2104}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2485,   -422,   1849}, 0, {   300,   1608}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2283,   -422,   1849}, 0, {   100,   1324}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2283,   -422,   2072}, 0, {     0,   1824}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2485,   -422,   2072}, 0, {   208,   2104}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2485,   -422,   1849}, 0, {   304,   1608}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2283,   -422,   1849}, 0, {    96,   1324}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  2485,     89,   2072}, 0, {     0,   1996}, {0x00, 0x00, 0x81, 0xff}}},
     {{{  2283,   -422,   2072}, 0, {   432,    648}, {0x00, 0x00, 0x81, 0xff}}},
     {{{  2283,     89,   2072}, 0, {     0,    648}, {0x00, 0x00, 0x81, 0xff}}},
     {{{  2485,   -422,   2072}, 0, {   432,   1996}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{  2485,     89,   1849}, 0, {     0,   2012}, {0x81, 0x00, 0x00, 0xff}}},
+    {{{  2485,     89,   1849}, 0, {     0,  63<<5}, {0x81, 0x00, 0x00, 0xff}}},
     {{{  2485,   -422,   2072}, 0, {   820,    536}, {0x81, 0x00, 0x00, 0xff}}},
     {{{  2485,     89,   2072}, 0, {     0,    536}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  2485,   -422,   1849}, 0, {   820,   2012}, {0x81, 0x00, 0x00, 0xff}}},
+    {{{  2485,   -422,   1849}, 0, {   820,  63<<5}, {0x81, 0x00, 0x00, 0xff}}},
 };
 
 // 0x0700BE10 - 0x0700BE90
@@ -50,43 +52,43 @@ static const Vtx castle_grounds_seg7_vertex_0700BE10[] = {
     {{{  2485,   -422,   1849}, 0, {   536,    648}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{  2485,     89,   1849}, 0, {     0,    648}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{  2283,   -422,   1849}, 0, {   536,   1996}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{  2283,     89,   2072}, 0, {     0,   2012}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  2283,   -422,   1849}, 0, {   332,   -232}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  2283,     89,   1849}, 0, {     0,   -204}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  2283,   -422,   2072}, 0, {   332,   1984}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  2283,     89,   2072}, 0, {     0,  63<<5}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  2283,   -422,   1849}, 0, {   336,   -232}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  2283,     89,   1849}, 0, {     0,   -208}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  2283,   -422,   2072}, 0, {   336,   1984}, {0x7f, 0x00, 0x00, 0xff}}},
 };
 
 // 0x0700BE90 - 0x0700BF50
 static const Vtx castle_grounds_seg7_vertex_0700BE90[] = {
-    {{{  2640,     89,   2223}, 0, {  2012,  -1054}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2640,     89,   2223}, 0, { 63<<5,  -1056}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  2485,     89,   2072}, 0, {  1404,   -440}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  2283,     89,   2072}, 0, {  1400,    368}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2485,     89,   1849}, 0, {   516,   -446}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2637,     89,   1711}, 0, {     0,  -1054}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2128,     89,   2226}, 0, {  2012,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2485,     89,   1849}, 0, {   512,   -448}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2637,     89,   1711}, 0, {     0,  -1056}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2128,     89,   2226}, 0, { 63<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  2283,     89,   1849}, 0, {   512,    360}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2125,     89,   1714}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  2708,    -10,   1639}, 0, {  4588,    582}, {0x66, 0x4a, 0x00, 0xff}}},
+    {{{  2125,     89,   1714}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  2708,    -10,   1638}, 0, {  4588,    582}, {0x66, 0x4a, 0x00, 0xff}}},
     {{{  2637,     89,   1711}, 0, {  4136,      0}, {0x66, 0x4a, 0x00, 0xff}}},
-    {{{  2757,    -72,   2338}, 0, {   108,    964}, {0x66, 0x4a, 0x00, 0xff}}},
+    {{{  2757,    -72,   2338}, 0, {   112,    960}, {0x66, 0x4a, 0x00, 0xff}}},
     {{{  2640,     89,   2223}, 0, {   856,      0}, {0x66, 0x4a, 0x00, 0xff}}},
 };
 
 // 0x0700BF50 - 0x0700BFB0
 static const Vtx castle_grounds_seg7_vertex_0700BF50[] = {
-    {{{  2102,     58,   1692}, 0, {  3524,    158}, {0x00, 0x49, 0x99, 0xff}}},
+    {{{  2102,     58,   1692}, 0, {  3524,    160}, {0x00, 0x49, 0x99, 0xff}}},
     {{{  2125,     89,   1714}, 0, {  3376,      0}, {0x00, 0x49, 0x99, 0xff}}},
     {{{  2637,     89,   1711}, 0, {     0,      0}, {0x00, 0x49, 0x99, 0xff}}},
-    {{{  2102,     58,   1692}, 0, {  3524,    158}, {0x00, 0x4a, 0x9a, 0xff}}},
+    {{{  2102,     58,   1692}, 0, {  3524,    160}, {0x00, 0x4a, 0x9a, 0xff}}},
     {{{  2637,     89,   1711}, 0, {     0,      0}, {0x00, 0x4a, 0x9a, 0xff}}},
-    {{{  2708,    -10,   1639}, 0, {  -504,    582}, {0x00, 0x4a, 0x9a, 0xff}}},
+    {{{  2708,    -10,   1638}, 0, {  -504,    582}, {0x00, 0x4a, 0x9a, 0xff}}},
 };
 
 // 0x0700BFB0 - 0x0700C010
 static const Vtx castle_grounds_seg7_vertex_0700BFB0[] = {
     {{{  2076,     15,   2280}, 0, {  3540,    424}, {0x9a, 0x4b, 0x00, 0xff}}},
     {{{  2125,     89,   1714}, 0, {   -88,      0}, {0x9a, 0x4b, 0x00, 0xff}}},
-    {{{  2102,     58,   1692}, 0, {  -232,    158}, {0x9a, 0x4b, 0x00, 0xff}}},
+    {{{  2102,     58,   1692}, 0, {  -232,    160}, {0x9a, 0x4b, 0x00, 0xff}}},
     {{{  2076,     15,   2280}, 0, {  3540,    424}, {0x99, 0x49, 0x00, 0xff}}},
     {{{  2128,     89,   2226}, 0, {  3200,      0}, {0x99, 0x49, 0x00, 0xff}}},
     {{{  2125,     89,   1714}, 0, {   -88,      0}, {0x99, 0x49, 0x00, 0xff}}},
@@ -95,7 +97,7 @@ static const Vtx castle_grounds_seg7_vertex_0700BFB0[] = {
 // 0x0700C010 - 0x0700C070
 static const Vtx castle_grounds_seg7_vertex_0700C010[] = {
     {{{  2757,    -72,   2338}, 0, {  2752,    964}, {0x00, 0x4a, 0x67, 0xff}}},
-    {{{  2640,     89,   2223}, 0, {  2012,      0}, {0x00, 0x4a, 0x67, 0xff}}},
+    {{{  2640,     89,   2223}, 0, { 63<<5,      0}, {0x00, 0x4a, 0x67, 0xff}}},
     {{{  2128,     89,   2226}, 0, { -1240,    -30}, {0x00, 0x4a, 0x67, 0xff}}},
     {{{  2757,    -72,   2338}, 0, {  2752,    964}, {0x00, 0x4a, 0x66, 0xff}}},
     {{{  2128,     89,   2226}, 0, { -1240,    -30}, {0x00, 0x4a, 0x66, 0xff}}},
@@ -103,7 +105,7 @@ static const Vtx castle_grounds_seg7_vertex_0700C010[] = {
 };
 
 // 0x0700C070 - 0x0700C110
-static const Gfx castle_grounds_seg7_dl_0700C070[] = {
+static const Gfx castle_grounds_seg7_dl_cannon_platform_hole[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -122,7 +124,7 @@ static const Gfx castle_grounds_seg7_dl_0700C070[] = {
 };
 
 // 0x0700C110 - 0x0700C210
-static const Gfx castle_grounds_seg7_dl_0700C110[] = {
+static const Gfx castle_grounds_seg7_dl_cannon_platform_bricks[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
@@ -150,7 +152,7 @@ static const Gfx castle_grounds_seg7_dl_0700C110[] = {
 };
 
 // 0x0700C210 - 0x0700C2A0
-const Gfx castle_grounds_seg7_dl_0700C210[] = {
+const Gfx castle_grounds_seg7_dl_cannon_platform[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -159,11 +161,11 @@ const Gfx castle_grounds_seg7_dl_0700C210[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(castle_grounds_seg7_dl_0700C070),
+    gsSPDisplayList(castle_grounds_seg7_dl_cannon_platform_hole),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(castle_grounds_seg7_dl_0700C110),
+    gsSPDisplayList(castle_grounds_seg7_dl_cannon_platform_bricks),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

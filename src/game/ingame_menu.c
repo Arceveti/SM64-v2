@@ -1243,7 +1243,7 @@ void print_peach_letter_message(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     gDPSetEnvColor(gDisplayListHead++, 200, 80, 120, gCutsceneMsgFade);
-    gSPDisplayList(gDisplayListHead++, castle_grounds_seg7_us_dl_0700F2E8);
+    gSPDisplayList(gDisplayListHead++, castle_grounds_seg7_us_dl_peach_signature);
 
     // at the start/end of message, reset the fade.
     if (gCutsceneMsgTimer == 0) {

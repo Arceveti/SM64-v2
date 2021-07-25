@@ -5,23 +5,23 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout castle_grounds_geo_000660[];
-extern const GeoLayout castle_grounds_geo_0006F4[];
+extern const GeoLayout castle_grounds_geo_flag[];
+extern const GeoLayout castle_grounds_geo_tower[];
 extern const GeoLayout castle_grounds_geo_00070C[];
 extern const GeoLayout castle_grounds_geo_000724[];
 extern const GeoLayout castle_grounds_geo_00073C[];
 
 // leveldata
-extern const Gfx castle_grounds_seg7_dl_07006D70[];
-extern const Gfx castle_grounds_seg7_dl_070095F0[];
-extern const Gfx castle_grounds_seg7_dl_0700A290[];
-extern const Gfx castle_grounds_seg7_dl_0700A860[];
-extern const Gfx castle_grounds_seg7_dl_0700B1D0[];
-extern const Gfx castle_grounds_seg7_dl_0700BA20[];
-extern const Gfx castle_grounds_seg7_dl_0700BB80[];
-extern const Gfx castle_grounds_seg7_dl_0700BC68[];
-extern const Gfx castle_grounds_seg7_dl_0700C210[];
-extern const Gfx castle_grounds_seg7_dl_0700C430[];
+extern const Gfx castle_grounds_seg7_dl_castle[];
+extern const Gfx castle_grounds_seg7_dl_grounds[];
+extern const Gfx castle_grounds_seg7_dl_tower[];
+extern const Gfx castle_grounds_seg7_dl_fence[];
+extern const Gfx castle_grounds_seg7_dl_tree_shadows[];
+extern const Gfx castle_grounds_seg7_dl_windows_and_peach_window[];
+extern const Gfx castle_grounds_seg7_dl_moat_grills[];
+extern const Gfx castle_grounds_seg7_dl_cannon_grill[];
+extern const Gfx castle_grounds_seg7_dl_cannon_platform[];
+extern const Gfx castle_grounds_seg7_dl_door_frame_and_carpet_outside[];
 extern const Gfx castle_grounds_seg7_dl_0700C670[];
 extern const Gfx castle_grounds_seg7_dl_0700C6A8[];
 extern const Gfx castle_grounds_seg7_dl_0700C6E8[];
@@ -29,7 +29,7 @@ extern const Gfx castle_grounds_seg7_dl_0700C728[];
 extern const Gfx castle_grounds_seg7_dl_0700C768[];
 extern const struct Animation *const castle_grounds_seg7_anims_flags[];
 extern const Gfx castle_grounds_seg7_dl_peach_letter[];
-extern const Gfx castle_grounds_seg7_us_dl_0700F2E8[];
+extern const Gfx castle_grounds_seg7_us_dl_peach_signature[];
 extern const Collision castle_grounds_seg7_collision_level[];
 extern const MacroObject castle_grounds_seg7_macro_objs[];
 extern const Collision castle_grounds_seg7_collision_moat_grills[];
