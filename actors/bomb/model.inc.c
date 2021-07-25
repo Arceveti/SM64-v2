@@ -130,7 +130,7 @@ static const Vtx bomb_seg6_vertex_spike_5[] = {
 };
 
 // 0x0605A7C0 - 0x0605A7F8
-const Gfx bomb_seg6_dl_model[] = {
+const Gfx bomb_seg6_sub_dl_sphere[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bomb_seg6_texture_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -145,7 +145,7 @@ const Gfx bomb_seg6_dl_model[] = {
 };
 
 // 0x0605A830 - 0x0605A8A8
-const Gfx bomb_seg6_dl_sphere_billboard[] = {
+const Gfx bomb_seg6_dl_sphere[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -154,7 +154,7 @@ const Gfx bomb_seg6_dl_sphere_billboard[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bomb_seg6_dl_model),
+    gsSPDisplayList(bomb_seg6_sub_dl_sphere),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -163,7 +163,7 @@ const Gfx bomb_seg6_dl_sphere_billboard[] = {
 };
 
 // 0x0605A8A8 - 0x0605A9C0
-const Gfx bomb_seg6_dl_model_spikes[] = {
+const Gfx bomb_seg6_sub_dl_spikes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bomb_seg6_texture_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -200,7 +200,7 @@ const Gfx bomb_seg6_dl_spikes[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bomb_seg6_dl_model_spikes),
+    gsSPDisplayList(bomb_seg6_sub_dl_spikes),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

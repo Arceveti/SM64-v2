@@ -7,12 +7,12 @@ static const Lights1 breakable_box_seg8_lights_08011A80 = gdSPDefLights1(
 );
 
 // 0x08011A90
-ALIGNED8 static const Texture breakable_box_seg8_texture_08011A90[] = {
+ALIGNED8 static const Texture breakable_box_seg8_texture_crazy_box_surface[] = {
 #include "actors/breakable_box/crazy_box_surface.rgba16.inc.c"
 };
 
 // 0x08012290
-ALIGNED8 static const Texture breakable_box_seg8_texture_08012290[] = {
+ALIGNED8 static const Texture breakable_box_seg8_texture_cork_box_surface[] = {
 #include "actors/breakable_box/cork_box_surface.rgba16.inc.c"
 };
 
@@ -86,7 +86,7 @@ const Gfx breakable_box_seg8_dl_begin[] = {
 // 0x08012D20 - 0x08012D48
 const Gfx breakable_box_seg8_dl_crazy_box[] = {
     gsSPDisplayList(breakable_box_seg8_dl_begin),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_08011A90),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_crazy_box_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(breakable_box_seg8_dl_end),
@@ -95,7 +95,7 @@ const Gfx breakable_box_seg8_dl_crazy_box[] = {
 // 0x08012D20 - 0x08012D70
 const Gfx breakable_box_seg8_dl_cork_box[] = {
     gsSPDisplayList(breakable_box_seg8_dl_begin),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_08012290),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, breakable_box_seg8_texture_cork_box_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(breakable_box_seg8_dl_end),

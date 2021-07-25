@@ -7,7 +7,7 @@ const GeoLayout bowser_bomb_geo[] = {
          GEO_DISPLAY_LIST(LAYER_OPAQUE, bomb_seg6_dl_spikes),
          GEO_BILLBOARD(),
          GEO_OPEN_NODE(),
-            GEO_DISPLAY_LIST(LAYER_ALPHA, bomb_seg6_dl_sphere_billboard),
+            GEO_DISPLAY_LIST(LAYER_ALPHA, bomb_seg6_dl_sphere),
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),
    GEO_CLOSE_NODE(),

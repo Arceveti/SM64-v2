@@ -1,5 +1,5 @@
 // 0x07029078 - 0x07029168
-static const Vtx inside_castle_seg7_vertex_07029078[] = {
+static const Vtx dl_castle_lobby_fence_vertex_group_1[] = {
     {{{   -13,    614,  -1037}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    717,  -1043}, 0, {   114,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -13,    717,  -1037}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -18,7 +18,7 @@ static const Vtx inside_castle_seg7_vertex_07029078[] = {
 };
 
 // 0x07029168 - 0x07029268
-static const Vtx inside_castle_seg7_vertex_07029168[] = {
+static const Vtx dl_castle_lobby_fence_vertex_group_2[] = {
     {{{   171,     26,    268}, 0, { -2584,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   171,    128,    268}, 0, { -2584,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   424,    307,     14}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -38,7 +38,7 @@ static const Vtx inside_castle_seg7_vertex_07029168[] = {
 };
 
 // 0x07029268 - 0x07029348
-static const Vtx inside_castle_seg7_vertex_07029268[] = {
+static const Vtx dl_castle_lobby_fence_vertex_group_3[] = {
     {{{   606,    614,  -1043}, 0, {  6100,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   805,    717,  -1242}, 0, {  8144,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   606,    717,  -1043}, 0, {  6100,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -56,7 +56,7 @@ static const Vtx inside_castle_seg7_vertex_07029268[] = {
 };
 
 // 0x07029348 - 0x07029438
-static const Vtx inside_castle_seg7_vertex_07029348[] = {
+static const Vtx dl_castle_lobby_fence_vertex_group_4[] = {
     {{{  -622,    614,   -429}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -818,    512,   -429}, 0, {  -966,    990}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -622,    512,   -429}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
@@ -75,26 +75,26 @@ static const Vtx inside_castle_seg7_vertex_07029348[] = {
 };
 
 // 0x07029438 - 0x07029578
-static const Gfx inside_castle_seg7_dl_07029438[] = {
+static const Gfx dl_castle_lobby_fence_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(inside_castle_seg7_vertex_07029078, 15, 0),
+    gsSPVertex(dl_castle_lobby_fence_vertex_group_1, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  3,  5, 0x0,  4,  1,  3, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  7,  9,  8, 0x0),
     gsSP2Triangles( 9, 10,  8, 0x0, 10, 11,  8, 0x0),
     gsSP1Triangle(12, 13, 14, 0x0),
-    gsSPVertex(inside_castle_seg7_vertex_07029168, 16, 0),
+    gsSPVertex(dl_castle_lobby_fence_vertex_group_2, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 10, 11, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0,  8, 11, 15, 0x0),
-    gsSPVertex(inside_castle_seg7_vertex_07029268, 14, 0),
+    gsSPVertex(dl_castle_lobby_fence_vertex_group_3, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSP2Triangles( 8,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSPVertex(inside_castle_seg7_vertex_07029348, 15, 0),
+    gsSPVertex(dl_castle_lobby_fence_vertex_group_4, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSP2Triangles( 5,  8,  6, 0x0,  5,  9,  8, 0x0),
@@ -113,7 +113,7 @@ const Gfx dl_castle_lobby_fence[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(inside_castle_seg7_dl_07029438),
+    gsSPDisplayList(dl_castle_lobby_fence_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

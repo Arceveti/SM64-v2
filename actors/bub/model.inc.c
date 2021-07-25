@@ -13,22 +13,22 @@ static const Lights1 bub_seg6_lights_0600E290 = gdSPDefLights1(
 );
 
 // 0x0600E2A8
-ALIGNED8 static const Texture bub_seg6_texture_0600E2A8[] = {
+ALIGNED8 static const Texture bub_seg6_texture_eye_border[] = {
 #include "actors/bub/bub_eye_border.rgba16.inc.c"
 };
 
 // 0x0600EAA8
-ALIGNED8 static const Texture bub_seg6_texture_0600EAA8[] = {
+ALIGNED8 static const Texture bub_seg6_texture_fins[] = {
 #include "actors/bub/bub_fins.rgba16.inc.c"
 };
 
 // 0x0600F2A8
-ALIGNED8 static const Texture bub_seg6_texture_0600F2A8[] = {
+ALIGNED8 static const Texture bub_seg6_texture_eyes[] = {
 #include "actors/bub/bub_eyes.rgba16.inc.c"
 };
 
 // 0x060102A8
-ALIGNED8 static const Texture bub_seg6_texture_060102A8[] = {
+ALIGNED8 static const Texture bub_seg6_texture_scales[] = {
 #include "actors/bub/bub_scales.rgba16.inc.c"
 };
 
@@ -160,7 +160,7 @@ static const Vtx bub_seg6_vertex_060117D8[] = {
 
 // 0x06011848 - 0x060118C0
 const Gfx bub_seg6_dl_06011848[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600E2A8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bub_seg6_lights_0600E280.l, 1),
@@ -176,7 +176,7 @@ const Gfx bub_seg6_dl_06011848[] = {
 
 // 0x060118C0 - 0x06011918
 const Gfx bub_seg6_dl_060118C0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600EAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bub_seg6_vertex_060113B8, 6, 0),
@@ -188,7 +188,7 @@ const Gfx bub_seg6_dl_060118C0[] = {
 
 // 0x06011918 - 0x06011968
 const Gfx bub_seg6_dl_06011918[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600F2A8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_eyes),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bub_seg6_vertex_06011418, 7, 0),
@@ -200,7 +200,7 @@ const Gfx bub_seg6_dl_06011918[] = {
 
 // 0x06011968 - 0x06011A50
 const Gfx bub_seg6_dl_06011968[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_060102A8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_scales),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bub_seg6_vertex_06011488, 15, 0),
@@ -281,7 +281,7 @@ static const Vtx bub_seg6_vertex_06011BD8[] = {
 
 // 0x06011C58 - 0x06011CF0
 const Gfx bub_seg6_dl_06011C58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600EAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bub_seg6_lights_0600E280.l, 1),
@@ -325,7 +325,7 @@ static const Vtx bub_seg6_vertex_06011D50[] = {
 
 // 0x06011DC0 - 0x06011E48
 const Gfx bub_seg6_dl_06011DC0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600EAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bub_seg6_lights_0600E280.l, 1),
@@ -368,7 +368,7 @@ static const Vtx bub_seg6_vertex_06011EA8[] = {
 
 // 0x06011F18 - 0x06011FA0
 const Gfx bub_seg6_dl_06011F18[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_0600EAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bub_seg6_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bub_seg6_lights_0600E280.l, 1),

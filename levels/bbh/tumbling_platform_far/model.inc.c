@@ -21,7 +21,7 @@ static const Vtx bbh_seg7_vertex_tumbling_platform_far[] = {
 };
 
 // 0x0701F780 - 0x0701F7E8
-static const Gfx bbh_seg7_dl_tumbling_platform_far_model[] = {
+static const Gfx bbh_seg7_sub_dl_tumbling_platform_far[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -44,7 +44,7 @@ const Gfx bbh_seg7_dl_tumbling_platform_far[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bbh_seg7_dl_tumbling_platform_far_model),
+    gsSPDisplayList(bbh_seg7_sub_dl_tumbling_platform_far),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

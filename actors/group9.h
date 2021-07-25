@@ -5,9 +5,9 @@
 
 // boo
 extern const GeoLayout boo_geo[];
-extern const Gfx boo_seg5_dl_model_mouth[];
-extern const Gfx boo_seg5_dl_model_eyes[];
-extern const Gfx boo_seg5_dl_model_body[];
+extern const Gfx boo_seg5_sub_dl_mouth[];
+extern const Gfx boo_seg5_sub_dl_eyes[];
+extern const Gfx boo_seg5_sub_dl_body[];
 extern const Gfx boo_seg5_dl_0500C1B0[];
 
 // book
@@ -50,14 +50,14 @@ extern const struct Animation *const chair_seg5_anims_05005784[];
 
 // haunted_cage
 extern const GeoLayout haunted_cage_geo[];
-extern const Gfx haunted_cage_seg5_dl_0500F4C8[];
-extern const Gfx haunted_cage_seg5_dl_0500F660[];
-extern const Gfx haunted_cage_seg5_dl_0500F760[];
+extern const Gfx haunted_cage_seg5_dl_ornament[];
+extern const Gfx haunted_cage_seg5_dl_double_ornament[];
+extern const Gfx haunted_cage_seg5_dl_floor[];
 extern const Gfx haunted_cage_seg5_dl_0500F7D8[];
-extern const Gfx haunted_cage_seg5_dl_0500FB40[];
-extern const Gfx haunted_cage_seg5_dl_0500FC28[];
-extern const Gfx haunted_cage_seg5_dl_0500FFF0[];
-extern const Gfx haunted_cage_seg5_dl_05010100[];
+extern const Gfx haunted_cage_seg5_sub_dl_wooden_base[];
+extern const Gfx haunted_cage_seg5_dl_wooden_base[];
+extern const Gfx haunted_cage_seg5_sub_dl_bars[];
+extern const Gfx haunted_cage_seg5_dl_bars[];
 
 // mad_piano
 extern const GeoLayout mad_piano_geo[];

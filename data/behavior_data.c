@@ -1804,12 +1804,6 @@ const BehaviorScript bhvBooCage[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvStub[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    DISABLE_RENDERING(),
-    BREAK(),
-};
-
 const BehaviorScript bhvIgloo[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
@@ -2190,11 +2184,6 @@ const BehaviorScript bhvMacroUkiki[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvStub1D0C[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    DEACTIVATE(),
-};
-
 const BehaviorScript bhvLllRotatingHexagonalPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
@@ -2217,11 +2206,6 @@ const BehaviorScript bhvLllSinkingRockBlock[] = {
         CALL_NATIVE(bhv_lll_sinking_rock_block_loop),
         CALL_NATIVE(load_object_collision_model),
     END_LOOP(),
-};
-
-const BehaviorScript bhvStub1D70[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BREAK(),
 };
 
 const BehaviorScript bhvLllMovingOctagonalMeshPlatform[] = {
@@ -3225,11 +3209,9 @@ const BehaviorScript bhvWaterDroplet[] = {
 const BehaviorScript bhvWaterDropletSplash[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-#ifndef VERSION_JP
     SET_INT(oFaceAnglePitch, 0),
     SET_INT(oFaceAngleYaw, 0),
     SET_INT(oFaceAngleRoll, 0),
-#endif
     CALL_NATIVE(bhv_water_droplet_splash_init),
     ADD_FLOAT(oPosY, 5),
     SET_INT(oAnimState, -1),
@@ -3278,16 +3260,9 @@ const BehaviorScript bhvIdleWaterWave[] = {
 const BehaviorScript bhvObjectWaterSplash[] = {
     BEGIN(OBJ_LIST_UNIMPORTANT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-#ifdef VERSION_JP
-    SET_FLOAT(oFaceAnglePitch, 0),
-    SET_FLOAT(oFaceAngleYaw, 0),
-    SET_FLOAT(oFaceAngleRoll, 0),
-#endif
-#ifndef VERSION_JP
     SET_INT(oFaceAnglePitch, 0),
     SET_INT(oFaceAngleYaw, 0),
     SET_INT(oFaceAngleRoll, 0),
-#endif
     SET_INT(oAnimState, -1),
     BEGIN_REPEAT(6),
         ADD_INT(oAnimState, 1),
@@ -3814,32 +3789,17 @@ const BehaviorScript bhvBetaHoldableObject[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvCarrySomething1[] = {
+const BehaviorScript bhvCarrySomethingHeld[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     BREAK(),
 };
 
-const BehaviorScript bhvCarrySomething2[] = {
+const BehaviorScript bhvCarrySomethingDropped[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     BREAK(),
 };
 
-const BehaviorScript bhvCarrySomething3[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BREAK(),
-};
-
-const BehaviorScript bhvCarrySomething4[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BREAK(),
-};
-
-const BehaviorScript bhvCarrySomething5[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    BREAK(),
-};
-
-const BehaviorScript bhvCarrySomething6[] = {
+const BehaviorScript bhvCarrySomethingThrown[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     BREAK(),
 };

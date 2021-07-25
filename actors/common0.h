@@ -13,8 +13,8 @@ extern const struct Animation *const dAmpAnimsList[];
 
 // blue_coin_switch
 extern const GeoLayout blue_coin_switch_geo[];
-extern const Gfx blue_coin_switch_seg8_dl_model_sides[];
-extern const Gfx blue_coin_switch_seg8_dl_model_top[];
+extern const Gfx blue_coin_switch_seg8_sub_dl_sides[];
+extern const Gfx blue_coin_switch_seg8_sub_dl_top[];
 extern const Gfx blue_coin_switch_seg8_dl_08000E08[];
 extern const Collision blue_coin_switch_seg8_collision_08000E98[];
 
@@ -23,12 +23,12 @@ extern const GeoLayout black_bobomb_geo[];
 extern const GeoLayout bobomb_buddy_geo[];
 extern const Gfx bobomb_seg8_dl_08022AC0[];
 extern const Gfx bobomb_seg8_dl_08022B08[];
-extern const Gfx bobomb_seg8_dl_08022B58[];
-extern const Gfx bobomb_seg8_dl_08022B88[];
-extern const Gfx bobomb_seg8_dl_08022C38[];
-extern const Gfx bobomb_seg8_dl_08022CA0[];
-extern const Gfx bobomb_seg8_dl_08022D08[];
-extern const Gfx bobomb_seg8_dl_08022D78[];
+extern const Gfx bobomb_seg8_dl_eyes[];
+extern const Gfx bobomb_seg8_dl_eyes_blink[];
+extern const Gfx bobomb_seg8_sub_dl_body_black[];
+extern const Gfx bobomb_seg8_sub_dl_body_pink[];
+extern const Gfx bobomb_seg8_dl_body_black[];
+extern const Gfx bobomb_seg8_dl_body_pink[];
 extern const Gfx bobomb_seg8_dl_08023270[];
 extern const Gfx bobomb_seg8_dl_08023378[];
 extern const Gfx bobomb_seg8_dl_08023480[];
@@ -66,21 +66,18 @@ extern const Collision cannon_lid_seg8_collision_08004950[];
 
 // checkerboard_platform
 extern const GeoLayout checkerboard_platform_geo[];
-extern const Gfx checkerboard_platform_seg8_dl_0800D5C0[];
-extern const Gfx checkerboard_platform_seg8_dl_0800D618[];
+extern const Gfx checkerboard_platform_seg8_dl_sides[];
+extern const Gfx checkerboard_platform_seg8_dl_surface[];
 extern const Gfx checkerboard_platform_seg8_dl_0800D680[];
 extern const Collision checkerboard_platform_seg8_collision_0800D710[];
 
 // chuckya
 extern const GeoLayout chuckya_geo[];
 extern const Gfx chuckya_seg8_dl_08009FF8[];
-extern const Gfx chuckya_seg8_dl_0800A030[];
 extern const Gfx chuckya_seg8_dl_0800A068[];
 extern const Gfx chuckya_seg8_dl_0800A160[];
-extern const Gfx chuckya_seg8_dl_0800A198[];
 extern const Gfx chuckya_seg8_dl_0800A1D0[];
 extern const Gfx chuckya_seg8_dl_0800A2C8[];
-extern const Gfx chuckya_seg8_dl_0800A300[];
 extern const Gfx chuckya_seg8_dl_0800A338[];
 extern const Gfx chuckya_seg8_dl_0800A3F0[];
 extern const Gfx chuckya_seg8_dl_0800A428[];
@@ -113,16 +110,16 @@ extern const Gfx exclamation_box_seg8_dl_yellow[];
 
 // exclamation_box_outline
 extern const GeoLayout exclamation_box_outline_geo[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024EB8[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024F30[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024F58[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024F88[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024FA8[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024FC8[];
-extern const Gfx exclamation_box_outline_seg8_dl_08024FE8[];
-extern const Gfx exclamation_box_outline_seg8_dl_outline_model[];
+extern const Gfx exclamation_box_outline_seg8_sub_dl_shade[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_begin[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_end[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_red[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_green[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_blue[];
+extern const Gfx exclamation_box_outline_seg8_dl_shade_yellow[];
+extern const Gfx exclamation_box_outline_seg8_sub_dl_outline[];
 extern const Gfx exclamation_box_outline_seg8_dl_outline[];
-extern const Gfx exclamation_box_outline_seg8_dl_exclamation_point_model[];
+extern const Gfx exclamation_box_outline_seg8_sub_dl_exclamation_point[];
 extern const Gfx exclamation_box_outline_seg8_dl_exclamation_point[];
 extern const Collision exclamation_box_outline_seg8_collision_08025F78[];
 
@@ -146,7 +143,7 @@ extern const Gfx goomba_seg8_dl_0801B560[];
 extern const Gfx goomba_seg8_dl_0801B5A0[];
 extern const Gfx goomba_seg8_dl_0801B5C8[];
 extern const Gfx goomba_seg8_dl_0801B5F0[];
-extern const Gfx goomba_seg8_dl_model_body[];
+extern const Gfx goomba_seg8_sub_dl_body[];
 extern const Gfx goomba_seg8_dl_body[];
 extern const Gfx goomba_seg8_dl_0801CE20[];
 extern const Gfx goomba_seg8_dl_0801CF78[];
@@ -157,7 +154,7 @@ extern const struct Animation *const goomba_seg8_anims_0801DA4C[];
 
 // heart
 extern const GeoLayout heart_geo[];
-extern const Gfx heart_seg8_dl_0800DFE0[];
+extern const Gfx heart_seg8_dl_heart[];
 
 // koopa_shell
 extern const GeoLayout koopa_shell_geo[];

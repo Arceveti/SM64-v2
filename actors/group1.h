@@ -80,7 +80,7 @@ extern const Gfx yellow_sphere_seg5_dl_050008C8[];
 
 // yoshi_egg
 extern const GeoLayout yoshi_egg_geo[];
-extern const Gfx yoshi_egg_seg5_dl_material_model[];
+extern const Gfx yoshi_egg_seg5_sub_dl_material_model[];
 extern const Gfx yoshi_egg_seg5_dl_7[];
 extern const Gfx yoshi_egg_seg5_dl_6[];
 extern const Gfx yoshi_egg_seg5_dl_5[];

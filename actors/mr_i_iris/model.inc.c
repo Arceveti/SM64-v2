@@ -29,7 +29,7 @@ ALIGNED8 static const Texture mr_i_iris_seg6_texture_06003970[] = {
 };
 
 // 0x06004170 - 0x060041D8
-const Gfx mr_i_iris_seg6_dl_material_model[] = {
+const Gfx mr_i_iris_seg6_sub_dl_material_model[] = {
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
@@ -48,26 +48,26 @@ const Gfx mr_i_iris_seg6_dl_material_model[] = {
 const Gfx mr_i_iris_seg6_dl_open[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06002170),
-    gsSPBranchList(mr_i_iris_seg6_dl_material_model),
+    gsSPBranchList(mr_i_iris_seg6_sub_dl_material_model),
 };
 
 // 0x060041F0 - 0x06004208
 const Gfx mr_i_iris_seg6_dl_mostly_open[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06002970),
-    gsSPBranchList(mr_i_iris_seg6_dl_material_model),
+    gsSPBranchList(mr_i_iris_seg6_sub_dl_material_model),
 };
 
 // 0x06004208 - 0x06004220
 const Gfx mr_i_iris_seg6_dl_mostly_closed[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06003170),
-    gsSPBranchList(mr_i_iris_seg6_dl_material_model),
+    gsSPBranchList(mr_i_iris_seg6_sub_dl_material_model),
 };
 
 // 0x06004220 - 0x06004238
 const Gfx mr_i_iris_seg6_dl_closed[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mr_i_iris_seg6_texture_06003970),
-    gsSPBranchList(mr_i_iris_seg6_dl_material_model),
+    gsSPBranchList(mr_i_iris_seg6_sub_dl_material_model),
 };

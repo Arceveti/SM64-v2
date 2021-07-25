@@ -7,12 +7,12 @@ static const Lights1 bullet_bill_seg5_lights_0500BA90 = gdSPDefLights1(
 );
 
 // 0x0500BAA8
-ALIGNED8 static const Texture bullet_bill_seg5_texture_0500BAA8[] = {
+ALIGNED8 static const Texture bullet_bill_seg5_texture_eye[] = {
 #include "actors/bullet_bill/bullet_bill_eye.rgba16.inc.c"
 };
 
 // 0x0500CAA8
-ALIGNED8 static const Texture bullet_bill_seg5_texture_0500CAA8[] = {
+ALIGNED8 static const Texture bullet_bill_seg5_texture_mouth[] = {
 #include "actors/bullet_bill/bullet_bill_mouth.rgba16.inc.c"
 };
 
@@ -250,7 +250,7 @@ static const Vtx bullet_bill_seg5_vertex_0500E558[] = {
 
 // 0x0500E5E8 - 0x0500E678
 const Gfx bullet_bill_seg5_dl_eyes[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_0500BAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_eye),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -269,7 +269,7 @@ const Gfx bullet_bill_seg5_dl_eyes[] = {
 
 // 0x0500E678 - 0x0500E730
 const Gfx bullet_bill_seg5_dl_mouth[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_0500CAA8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bullet_bill_seg5_texture_mouth),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),

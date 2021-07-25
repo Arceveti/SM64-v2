@@ -1,24 +1,12 @@
 // Clam Shell
 
-// Unreferenced light group
-UNUSED static const Lights1 clam_shell_lights_unused1 = gdSPDefLights1(
-    0x1b, 0x23, 0x30,
-    0x6d, 0x8f, 0xc3, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 clam_shell_lights_unused2 = gdSPDefLights1(
-    0x18, 0x28, 0x38,
-    0x60, 0xa2, 0xe2, 0x28, 0x28, 0x28
-);
-
 // 0x05000030
-ALIGNED8 static const Texture clam_shell_seg5_texture_05000030[] = {
+ALIGNED8 static const Texture clam_shell_seg5_texture_shell[] = {
 #include "actors/clam_shell/clam_shell.rgba16.inc.c"
 };
 
 // 0x05000830
-ALIGNED8 static const Texture clam_shell_seg5_texture_05000830[] = {
+ALIGNED8 static const Texture clam_shell_seg5_texture_mouth[] = {
 #include "actors/clam_shell/clam_shell_mouth.rgba16.inc.c"
 };
 
@@ -60,7 +48,7 @@ static const Vtx clam_shell_seg5_vertex_050010F8[] = {
 
 // 0x050011A8 - 0x05001238
 const Gfx clam_shell_seg5_dl_050011A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_05000030),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_shell),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&clam_shell_seg5_lights_05001030.l, 1),
@@ -77,7 +65,7 @@ const Gfx clam_shell_seg5_dl_050011A8[] = {
 
 // 0x05001238 - 0x050012B8
 const Gfx clam_shell_seg5_dl_05001238[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_05000830),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_mouth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(clam_shell_seg5_vertex_050010F8, 11, 0),
@@ -143,7 +131,7 @@ static const Vtx clam_shell_seg5_vertex_050013D8[] = {
 
 // 0x05001478 - 0x050014F8
 const Gfx clam_shell_seg5_dl_05001478[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_05000030),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_shell),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&clam_shell_seg5_lights_05001320.l, 1),
@@ -159,7 +147,7 @@ const Gfx clam_shell_seg5_dl_05001478[] = {
 
 // 0x050014F8 - 0x05001568
 const Gfx clam_shell_seg5_dl_050014F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_05000830),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_mouth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(clam_shell_seg5_vertex_050013D8, 10, 0),

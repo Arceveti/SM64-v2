@@ -34,7 +34,7 @@ ALIGNED8 static const Texture sparkles_animation_seg4_texture_04034A88[] = {
 };
 
 // 0x04035288 - 0x04035300
-const Gfx sparkles_animation_seg4_dl_material_model[] = {
+const Gfx sparkles_animation_seg4_sub_dl_material_model[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -55,33 +55,33 @@ const Gfx sparkles_animation_seg4_dl_material_model[] = {
 const Gfx sparkles_animation_seg4_dl_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, sparkles_animation_seg4_texture_04032A88),
-    gsSPBranchList(sparkles_animation_seg4_dl_material_model),
+    gsSPBranchList(sparkles_animation_seg4_sub_dl_material_model),
 };
 
 // 0x04035318 - 0x04035330
 const Gfx sparkles_animation_seg4_dl_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, sparkles_animation_seg4_texture_04033288),
-    gsSPBranchList(sparkles_animation_seg4_dl_material_model),
+    gsSPBranchList(sparkles_animation_seg4_sub_dl_material_model),
 };
 
 // 0x04035330 - 0x04035348
 const Gfx sparkles_animation_seg4_dl_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, sparkles_animation_seg4_texture_04033A88),
-    gsSPBranchList(sparkles_animation_seg4_dl_material_model),
+    gsSPBranchList(sparkles_animation_seg4_sub_dl_material_model),
 };
 
 // 0x04035348 - 0x04035360
 const Gfx sparkles_animation_seg4_dl_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, sparkles_animation_seg4_texture_04034288),
-    gsSPBranchList(sparkles_animation_seg4_dl_material_model),
+    gsSPBranchList(sparkles_animation_seg4_sub_dl_material_model),
 };
 
 // 0x04035360 - 0x04035378
 const Gfx sparkles_animation_seg4_dl_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, sparkles_animation_seg4_texture_04034A88),
-    gsSPBranchList(sparkles_animation_seg4_dl_material_model),
+    gsSPBranchList(sparkles_animation_seg4_sub_dl_material_model),
 };

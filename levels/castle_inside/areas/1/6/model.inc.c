@@ -7,7 +7,7 @@ static const Lights1 inside_castle_seg7_lights_sun_carpet = gdSPDefLights1(
 );
 
 // 0x0702A908 - 0x0702A998
-static const Vtx inside_castle_seg7_vertex_sun_carpet[] = {
+static const Vtx dl_castle_lobby_sun_carpet_vertex_group[] = {
     {{{  -757,    -51,    717}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{ -1024,    -51,    983}, 0, { 31<<5,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  -757,    -51,    983}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
@@ -20,13 +20,13 @@ static const Vtx inside_castle_seg7_vertex_sun_carpet[] = {
 };
 
 // 0x0702A998 - 0x0702AA10
-static const Gfx inside_castle_seg7_dl_sun_carpet_model[] = {
+static const Gfx dl_castle_lobby_sun_carpet_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07000800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_sun_carpet.l, 1),
     gsSPLight(&inside_castle_seg7_lights_sun_carpet.a, 2),
-    gsSPVertex(inside_castle_seg7_vertex_sun_carpet, 9, 0),
+    gsSPVertex(dl_castle_lobby_sun_carpet_vertex_group, 9, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  3,  6, 0x0),
     gsSP2Triangles( 7,  6,  0, 0x0,  6,  8,  1, 0x0),
@@ -44,7 +44,7 @@ const Gfx dl_castle_lobby_sun_carpet[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(inside_castle_seg7_dl_sun_carpet_model),
+    gsSPDisplayList(dl_castle_lobby_sun_carpet_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

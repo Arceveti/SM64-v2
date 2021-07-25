@@ -1,24 +1,24 @@
 // King Bobomb
 
-// 0x05000078
-UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05000078[] = {
-#include "actors/king_bobomb/bob-omb_buddy_left_side_unused.rgba16.inc.c"
-};
+// // 0x05000078
+// UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05000078[] = {
+// #include "actors/king_bobomb/bob-omb_buddy_left_side_unused.rgba16.inc.c"
+// };
 
-// 0x05001078
-UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05001078[] = {
-#include "actors/king_bobomb/bob-omb_buddy_right_side_unused.rgba16.inc.c"
-};
+// // 0x05001078
+// UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05001078[] = {
+// #include "actors/king_bobomb/bob-omb_buddy_right_side_unused.rgba16.inc.c"
+// };
 
 // 0x05002078
 ALIGNED8 static const Texture king_bobomb_seg5_texture_arm[] = {
 #include "actors/king_bobomb/king_bob-omb_arm.rgba16.inc.c"
 };
 
-// 0x05002878
-UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05002878[] = {
-#include "actors/king_bobomb/king_bob-omb_body_unused.rgba16.inc.c"
-};
+// // 0x05002878
+// UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05002878[] = {
+// #include "actors/king_bobomb/king_bob-omb_body_unused.rgba16.inc.c"
+// };
 
 // 0x05004878
 ALIGNED8 static const Texture king_bobomb_seg5_texture_eyes[] = {
@@ -40,10 +40,10 @@ ALIGNED8 static const Texture king_bobomb_seg5_texture_crown_rim[] = {
 #include "actors/king_bobomb/king_bob-omb_crown_rim.rgba16.inc.c"
 };
 
-// 0x05006478
-UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05006478[] = {
-#include "actors/king_bobomb/bob-omb_buddy_body_unused.rgba16.inc.c"
-};
+// // 0x05006478
+// UNUSED ALIGNED8 static const Texture king_bobomb_seg5_texture_05006478[] = {
+// #include "actors/king_bobomb/bob-omb_buddy_body_unused.rgba16.inc.c"
+// };
 
 // 0x05008478
 ALIGNED8 static const Texture king_bobomb_seg5_texture_left_side[] = {
@@ -615,12 +615,6 @@ const Gfx king_bobomb_seg5_dl_0500B418[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x0500B458
-static const Lights1 king_bobomb_seg5_lights_0500B458 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0500B470
 static const Vtx king_bobomb_seg5_vertex_0500B470[] = {
     {{{   729,    304,    176}, 0, {   394,   -458}, {0xef, 0x6c, 0x3e, 0xff}}},
@@ -658,8 +652,8 @@ const Gfx king_bobomb_seg5_dl_0500B5F0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, king_bobomb_seg5_texture_crown_rim),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&king_bobomb_seg5_lights_0500B458.l, 1),
-    gsSPLight(&king_bobomb_seg5_lights_0500B458.a, 2),
+    gsSPLight(&king_bobomb_seg5_lights_0500B330.l, 1),
+    gsSPLight(&king_bobomb_seg5_lights_0500B330.a, 2),
     gsSPVertex(king_bobomb_seg5_vertex_0500B470, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  0, 0x0),
     gsSP2Triangles( 0,  2,  3, 0x0,  5,  4,  3, 0x0),

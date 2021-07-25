@@ -177,7 +177,7 @@ extern const struct Animation *const door_seg3_anims_030156C0[];
 
 // explosion
 extern const GeoLayout explosion_geo[];
-extern const Gfx explosion_seg3_dl_material[];
+extern const Gfx explosion_seg3_sub_dl_material_model[];
 extern const Gfx explosion_seg3_dl_0[];
 extern const Gfx explosion_seg3_dl_1[];
 extern const Gfx explosion_seg3_dl_2[];
@@ -261,18 +261,18 @@ extern const Gfx sand_seg3_dl_0302BCD0[];
 
 // star
 extern const GeoLayout star_geo[];
-extern const Gfx star_seg3_dl_body_model[];
+extern const Gfx star_seg3_sub_dl_body[];
 extern const Gfx star_seg3_dl_body[];
-extern const Gfx star_seg3_dl_eyes_model[];
+extern const Gfx star_seg3_sub_dl_eyes[];
 extern const Gfx star_seg3_dl_eyes[];
 #ifdef STAR_GLOW
-extern const Gfx star_seg3_dl_shine_model[];
+extern const Gfx star_seg3_sub_dl_shine[];
 extern const Gfx star_seg3_dl_shine[];
 #endif
 
 // transparent_star
 extern const GeoLayout transparent_star_geo[];
-extern const Gfx transparent_star_seg3_dl_model[];
+extern const Gfx transparent_star_seg3_sub_dl_0302C560[];
 extern const Gfx transparent_star_seg3_dl_0302C620[];
 
 // tree
@@ -295,7 +295,7 @@ extern const Collision lll_hexagonal_mesh_seg3_collision_0301CECC[];
 
 // warp_pipe
 extern const GeoLayout warp_pipe_geo[];
-extern const Gfx warp_pipe_seg3_dl_sides_model[];
+extern const Gfx warp_pipe_seg3_sub_dl_sides[];
 extern const Gfx warp_pipe_seg3_dl_sides[];
 extern const Gfx warp_pipe_seg3_dl_top[];
 extern const Gfx warp_pipe_seg3_dl_inside[];
@@ -308,7 +308,7 @@ extern const Gfx white_particle_dl[];
 
 // wooden_signpost
 extern const GeoLayout wooden_signpost_geo[];
-extern const Gfx wooden_signpost_seg3_dl_post_model[];
+extern const Gfx wooden_signpost_seg3_sub_dl_post[];
 extern const Gfx wooden_signpost_seg3_dl_post[];
 extern const Gfx wooden_signpost_seg3_dl_back_sides[];
 extern const Gfx wooden_signpost_seg3_dl_front[];

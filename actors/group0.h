@@ -11,9 +11,9 @@ extern const Gfx bubble_seg4_dl_mr_i_bubble[];
 
 // burn_smoke
 extern const GeoLayout burn_smoke_geo[];
-extern const Gfx burn_smoke_seg4_dl_begin[];
-extern const Gfx burn_smoke_seg4_dl_model[];
-extern const Gfx burn_smoke_seg4_dl_end[];
+extern const Gfx burn_smoke_seg4_sub_dl_begin[];
+extern const Gfx burn_smoke_seg4_sub_dl_model[];
+extern const Gfx burn_smoke_seg4_sub_dl_end[];
 extern const Gfx burn_smoke_seg4_dl_burn_smoke[];
 
 // mario
@@ -265,7 +265,7 @@ extern const Gfx mario_metal_cap_wings_transparent[];
 
 // sparkle
 extern const GeoLayout sparkles_geo[];
-extern const Gfx sparkles_seg4_dl_material_model[];
+extern const Gfx sparkles_seg4_sub_dl_material_model[];
 extern const Gfx sparkles_seg4_dl_0[];
 extern const Gfx sparkles_seg4_dl_1[];
 extern const Gfx sparkles_seg4_dl_2[];
@@ -275,7 +275,7 @@ extern const Gfx sparkles_seg4_dl_5[];
 
 // sparkle_animation
 extern const GeoLayout sparkles_animation_geo[];
-extern const Gfx sparkles_animation_seg4_dl_material_model[];
+extern const Gfx sparkles_animation_seg4_sub_dl_material_model[];
 extern const Gfx sparkles_animation_seg4_dl_0[];
 extern const Gfx sparkles_animation_seg4_dl_1[];
 extern const Gfx sparkles_animation_seg4_dl_2[];
@@ -304,7 +304,7 @@ extern const Gfx stomp_smoke_seg4_dl_red_5[];
 
 // walk_smoke
 extern const GeoLayout smoke_geo[];
-extern const Gfx smoke_seg4_dl_material_model[];
+extern const Gfx smoke_seg4_sub_dl_material_model[];
 extern const Gfx smoke_seg4_dl_walk_smoke_0[];
 extern const Gfx smoke_seg4_dl_walk_smoke_1[];
 extern const Gfx smoke_seg4_dl_walk_smoke_2[];
@@ -315,7 +315,7 @@ extern const Gfx smoke_seg4_dl_walk_smoke_6[];
 
 // water_splash
 extern const GeoLayout water_splash_geo[];
-extern const Gfx water_splash_seg4_dl_material_model[];
+extern const Gfx water_splash_seg4_sub_dl_material_model[];
 extern const Gfx water_splash_seg4_dl_0[];
 extern const Gfx water_splash_seg4_dl_1[];
 extern const Gfx water_splash_seg4_dl_2[];

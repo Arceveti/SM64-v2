@@ -34,7 +34,6 @@ const GeoLayout penguin_geo[] = {
                       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, penguin_seg5_dl_eye_half_closed),
                       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, penguin_seg5_dl_eye_closed),
                       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, penguin_seg5_dl_eye_angry),
-                     //  GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, penguin_seg5_dl_eye_angry_unused), // unused, seen in Shoshinkai 1995 footage
                    GEO_CLOSE_NODE(),
                 GEO_CLOSE_NODE(),
              GEO_CLOSE_NODE(),

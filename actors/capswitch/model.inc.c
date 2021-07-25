@@ -37,12 +37,12 @@ static const Lights1 capswitch_seg5_lights_05001C30 = gdSPDefLights1(
 );
 
 // 0x05001C48
-ALIGNED8 static const Texture capswitch_seg5_texture_05001C48[] = {
+ALIGNED8 static const Texture capswitch_seg5_texture_head[] = {
 #include "actors/capswitch/cap_switch_head.ia16.inc.c"
 };
 
 // 0x05002C48
-ALIGNED8 static const Texture capswitch_seg5_texture_05002C48[] = {
+ALIGNED8 static const Texture capswitch_seg5_texture_base[] = {
 #include "actors/capswitch/cap_switch_base.rgba16.inc.c"
 };
 
@@ -64,7 +64,7 @@ static const Vtx capswitch_seg5_vertex_05002CC8[] = {
 
 // 0x05002D88 - 0x05002E00
 const Gfx capswitch_seg5_dl_05002D88[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, capswitch_seg5_texture_05001C48),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, capswitch_seg5_texture_head),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&capswitch_seg5_lights_05001BB8.l, 1),
@@ -131,7 +131,7 @@ static const Vtx capswitch_seg5_vertex_05002F60[] = {
 
 // 0x05003020 - 0x05003120
 const Gfx capswitch_seg5_dl_05003020[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, capswitch_seg5_texture_05002C48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, capswitch_seg5_texture_base),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 4 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&capswitch_seg5_lights_05001BD0.l, 1),

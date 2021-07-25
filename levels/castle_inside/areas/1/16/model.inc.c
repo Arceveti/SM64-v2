@@ -51,7 +51,7 @@ static const Vtx inside_castle_seg7_vertex_07035030[] = {
 };
 
 // 0x070350B0 - 0x07035178
-static const Gfx inside_castle_seg7_dl_wf_fence_model[] = {
+static const Gfx inside_castle_seg7_sub_dl_wf_fence[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -81,7 +81,7 @@ const Gfx inside_castle_seg7_dl_wf_fence[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(inside_castle_seg7_dl_wf_fence_model),
+    gsSPDisplayList(inside_castle_seg7_sub_dl_wf_fence),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

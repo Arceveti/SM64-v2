@@ -50,9 +50,7 @@ index dfcf16a..e56f8c0 100644
 +u8 stickReset = 1;
  struct PlayerCameraState *sMarioCamState = &gPlayerCameraState[0];
  struct PlayerCameraState *sLuigiCamState = &gPlayerCameraState[1];
- u32 unused8032D008 = 0;
 @@ -755,6 +759,7 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
-     UNUSED s16 action = sMarioCamState->action;
      f32 baseOff = 125.f;
      f32 camCeilHeight = find_ceil(c->pos[0], gLakituState.goalPos[1] - 50.f, c->pos[2], &surface);
 +    f32 approachRate = 20.0f;
@@ -70,9 +68,6 @@ index dfcf16a..e56f8c0 100644
              camCeilHeight -= baseOff;
              if ((c->pos[1] > camCeilHeight && sMarioGeometry.currFloorHeight + baseOff < camCeilHeight)
 @@ -934,9 +940,25 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
-     UNUSED f32 unused1;
-     UNUSED f32 unused2;
-     UNUSED f32 unused3;
 -    f32 yOff = 125.f;
 +    f32 yOff;
      f32 baseDist = 1000.f;
@@ -127,7 +122,6 @@ index dfcf16a..e56f8c0 100644
   */
 @@ -1177,42 +1221,59 @@ void mode_8_directions_camera(struct Camera *c) {
      Vec3f pos;
-     UNUSED u8 unused[8];
      s16 oldAreaYaw = sAreaYaw;
 +    // Get the camera speed based on the user's setting
 +    f32 cameraSpeed = set_camera_speed();
@@ -218,7 +212,6 @@ index dfcf16a..e56f8c0 100644
  
 @@ -3036,20 +3097,21 @@ void update_lakitu(struct Camera *c) {
  void update_camera(struct Camera *c) {
-     UNUSED u8 unused[24];
  
 +    extern s16 s8DirModeBaseYaw;
 +

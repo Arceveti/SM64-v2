@@ -1,31 +1,25 @@
 // Chair
 
-// Unreferenced light group
-UNUSED static const Lights1 chair_lights_unused = gdSPDefLights1(
-    0x19, 0x0d, 0x06,
-    0x64, 0x36, 0x1a, 0x28, 0x28, 0x28
-);
-
 // 0x05003060
-ALIGNED8 static const Texture chair_seg5_texture_05003060[] = {
+ALIGNED8 static const Texture chair_seg5_texture_front[] = {
 #include "actors/chair/chair_front.rgba16.inc.c"
 };
 
 // 0x05003860
-ALIGNED8 static const Texture chair_seg5_texture_05003860[] = {
+ALIGNED8 static const Texture chair_seg5_texture_leg[] = {
 #include "actors/chair/chair_leg.rgba16.inc.c"
 };
 
 // 0x05004060
-ALIGNED8 static const Texture chair_seg5_texture_05004060[] = {
+ALIGNED8 static const Texture chair_seg5_texture_bottom[] = {
 #include "actors/chair/chair_bottom.rgba16.inc.c"
 };
 
-// unreferenced
-// 0x05004460
-UNUSED ALIGNED8 static const Texture chair_seg5_texture_05004460[] = {
-#include "actors/chair/chair_surface_unused.rgba16.inc.c"
-};
+// // unreferenced
+// // 0x05004460
+// UNUSED ALIGNED8 static const Texture chair_seg5_texture_surface_unused[] = {
+// #include "actors/chair/chair_surface_unused.rgba16.inc.c"
+// };
 
 // 0x05004C60
 static const Lights1 chair_seg5_lights_05004C60 = gdSPDefLights1(
@@ -71,7 +65,7 @@ static const Vtx chair_seg5_vertex_05004D78[] = {
 
 // 0x05004E38 - 0x05004EE8
 const Gfx chair_seg5_dl_05004E38[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_05003060),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_front),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&chair_seg5_lights_05004C60.l, 1),
@@ -146,7 +140,7 @@ static const Vtx chair_seg5_vertex_05005070[] = {
 
 // 0x050050F0 - 0x05005190
 const Gfx chair_seg5_dl_050050F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_05004060),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&chair_seg5_lights_05004F58.l, 1),
@@ -218,7 +212,7 @@ static const Vtx chair_seg5_vertex_05005308[] = {
 
 // 0x05005378 - 0x05005408
 const Gfx chair_seg5_dl_05005378[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_05003860),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_leg),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&chair_seg5_lights_05005200.l, 1),
@@ -290,7 +284,7 @@ static const Vtx chair_seg5_vertex_05005580[] = {
 
 // 0x050055F0 - 0x05005680
 const Gfx chair_seg5_dl_050055F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_05003860),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chair_seg5_texture_leg),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&chair_seg5_lights_05005478.l, 1),

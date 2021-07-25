@@ -5,8 +5,8 @@
 
 // fwoosh
 extern const GeoLayout fwoosh_geo[];
-extern const Gfx fwoosh_seg5_dl_05016008[];
-extern const Gfx fwoosh_seg5_dl_05016040[];
+extern const Gfx fwoosh_seg5_sub_dl_face[];
+extern const Gfx fwoosh_seg5_dl_face[];
 
 // monty_mole
 extern const GeoLayout monty_mole_geo[];

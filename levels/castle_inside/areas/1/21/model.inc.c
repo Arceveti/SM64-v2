@@ -7,7 +7,7 @@ static const Lights1 inside_castle_seg7_lights_aquarium_glass = gdSPDefLights1(
 );
 
 // 0x07037C70 - 0x07037D70
-static const Vtx inside_castle_seg7_vertex_aquarium_glass[] = {
+static const Vtx dl_castle_aquarium_glass_vertex_group[] = {
     {{{  3422,    768,   1208}, 0, {   864,    578}, {0x37, 0x37, 0x37, 0xff}}},
     {{{  4146,    358,    484}, 0, {  1346,    778}, {0x37, 0x37, 0x37, 0xff}}},
     {{{  3422,    358,   1208}, 0, {   778,    704}, {0x37, 0x37, 0x37, 0xff}}},
@@ -27,13 +27,13 @@ static const Vtx inside_castle_seg7_vertex_aquarium_glass[] = {
 };
 
 // 0x07037D70 - 0x07037DE8
-static const Gfx inside_castle_seg7_dl_aquarium_glass_model[] = {
+static const Gfx dl_castle_aquarium_glass_model[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_0900B000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_aquarium_glass.l, 1),
     gsSPLight(&inside_castle_seg7_lights_aquarium_glass.a, 2),
-    gsSPVertex(inside_castle_seg7_vertex_aquarium_glass, 16, 0),
+    gsSPVertex(dl_castle_aquarium_glass_vertex_group, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  3,  5, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
@@ -47,7 +47,7 @@ const Gfx dl_castle_aquarium_glass[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetEnvColor(255, 255, 255, 100),
     gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),
-    gsSPDisplayList(inside_castle_seg7_dl_aquarium_glass_model),
+    gsSPDisplayList(dl_castle_aquarium_glass_model),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsDPSetEnvColor(255, 255, 255, 255),

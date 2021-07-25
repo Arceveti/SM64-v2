@@ -1,6 +1,6 @@
 // Book (Pushable Book)
 
-// This actor file requires including actor bookend because of bookend_seg5_texture_05000C60
+// This actor file requires including actor bookend because of bookend_seg5_texture_pages
 
 // 0x05002558
 static const Lights1 book_seg5_lights_05002558 = gdSPDefLights1(
@@ -9,7 +9,7 @@ static const Lights1 book_seg5_lights_05002558 = gdSPDefLights1(
 );
 
 // 0x05002570
-ALIGNED8 static const Texture book_seg5_texture_05002570[] = {
+ALIGNED8 static const Texture book_seg5_texture_cover[] = {
 #include "actors/book/book_cover.rgba16.inc.c"
 };
 
@@ -47,7 +47,7 @@ static const Vtx book_seg5_vertex_05002E30[] = {
 
 // 0x05002EF0 - 0x05002F58
 const Gfx book_seg5_dl_05002EF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bookend_seg5_texture_05000C60),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bookend_seg5_texture_pages),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&book_seg5_lights_05002558.l, 1),
@@ -61,7 +61,7 @@ const Gfx book_seg5_dl_05002EF0[] = {
 
 // 0x05002F58 - 0x05002FB0
 const Gfx book_seg5_dl_05002F58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, book_seg5_texture_05002570),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, book_seg5_texture_cover),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(book_seg5_vertex_05002E30, 12, 0),

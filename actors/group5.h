@@ -27,8 +27,8 @@ extern const Gfx eyerok_seg5_dl_eye_open[];
 extern const Gfx eyerok_seg5_dl_eye_mostly_open[];
 extern const Gfx eyerok_seg5_dl_eye_mostly_closed[];
 extern const Gfx eyerok_seg5_dl_eye_closed[];
-extern const Gfx eyerok_seg5_dl_0500CC18[];
-extern const Gfx eyerok_seg5_dl_0500CC30[];
+extern const Gfx eyerok_seg5_dl_cull_back_cull_front[];
+extern const Gfx eyerok_seg5_dl_cull_front_cull_back[];
 extern const struct Animation *const eyerok_seg5_anims_050116E4[];
 
 // klepto
@@ -71,10 +71,10 @@ extern const struct Animation *const klepto_seg5_anims_05008CFC[];
 extern const GeoLayout pokey_head_geo[];
 extern const GeoLayout pokey_body_part_geo[];
 extern const Gfx pokey_seg5_dl_face_material[];
-extern const Gfx pokey_seg5_dl_model_head[];
+extern const Gfx pokey_seg5_sub_dl_head[];
 extern const Gfx pokey_seg5_dl_face[];
 extern const Gfx pokey_seg5_dl_face_blink[];
-extern const Gfx pokey_seg5_dl_model_body[];
+extern const Gfx pokey_seg5_sub_dl_body[];
 extern const Gfx pokey_seg5_dl_body[];
 
 // tweester

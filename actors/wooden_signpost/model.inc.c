@@ -28,7 +28,7 @@ ALIGNED8 static const Texture wooden_signpost_seg3_texture_0302D1C8[] = {
 };
 
 // 0x0302D9C8 - 0x0302DA48
-const Gfx wooden_signpost_seg3_dl_post_model[] = {
+const Gfx wooden_signpost_seg3_sub_dl_post[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wooden_signpost_seg3_texture_0302C9C8),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -52,18 +52,12 @@ const Gfx wooden_signpost_seg3_dl_post[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wooden_signpost_seg3_dl_post_model),
+    gsSPDisplayList(wooden_signpost_seg3_sub_dl_post),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPEndDisplayList(),
 };
-
-// 0x0302DAA8
-static const Lights1 wooden_signpost_seg3_lights_0302DAA8 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x0302DAC0
 static const Vtx wooden_signpost_seg3_vertex_0302DAC0[] = {
@@ -106,8 +100,8 @@ const Gfx wooden_signpost_seg3_dl_back_sides[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wooden_signpost_seg3_texture_0302C9C8),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&wooden_signpost_seg3_lights_0302DAA8.l, 1),
-    gsSPLight(&wooden_signpost_seg3_lights_0302DAA8.a, 2),
+    gsSPLight(&wooden_signpost_seg3_lights_0302C940.l, 1),
+    gsSPLight(&wooden_signpost_seg3_lights_0302C940.a, 2),
     gsSPVertex(wooden_signpost_seg3_vertex_0302DAC0, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),

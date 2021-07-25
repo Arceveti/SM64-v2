@@ -1,32 +1,27 @@
-// Possible Removed Actor File
-
-// Bin ID? What is this?
-UNUSED static const u64 klepto_unused_1 = 0;
-
 // Klepto
 
 // 0x05000008
-ALIGNED8 static const Texture klepto_seg5_texture_05000008[] = {
+ALIGNED8 static const Texture klepto_seg5_texture_chest_tuft[] = {
 #include "actors/klepto/klepto_chest_tuft.rgba16.inc.c"
 };
 
 // 0x05000808
-ALIGNED8 static const Texture klepto_seg5_texture_05000808[] = {
+ALIGNED8 static const Texture klepto_seg5_texture_eye[] = {
 #include "actors/klepto/klepto_eye.rgba16.inc.c"
 };
 
 // 0x05001008
-ALIGNED8 static const Texture klepto_seg5_texture_05001008[] = {
+ALIGNED8 static const Texture klepto_seg5_texture_beak[] = {
 #include "actors/klepto/klepto_beak.rgba16.inc.c"
 };
 
 // 0x05002008
-ALIGNED8 static const Texture klepto_seg5_texture_05002008[] = {
+ALIGNED8 static const Texture klepto_seg5_texture_wing[] = {
 #include "actors/klepto/klepto_wing.rgba16.inc.c"
 };
 
 // 0x05003008
-ALIGNED8 static const Texture klepto_seg5_texture_05003008[] = {
+ALIGNED8 static const Texture klepto_seg5_texture_wing_flap[] = {
 #include "actors/klepto/klepto_wing_flap.rgba16.inc.c"
 };
 
@@ -95,7 +90,7 @@ static const Vtx klepto_seg5_vertex_050039B8[] = {
 
 // 0x05003A68 - 0x05003AC0
 const Gfx klepto_seg5_dl_05003A68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05000808),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05003808.l, 1),
@@ -108,7 +103,7 @@ const Gfx klepto_seg5_dl_05003A68[] = {
 
 // 0x05003AC0 - 0x05003B40
 const Gfx klepto_seg5_dl_05003AC0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05001008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_beak),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(klepto_seg5_vertex_05003898, 15, 0),
@@ -223,7 +218,7 @@ static const Vtx klepto_seg5_vertex_05003DC8[] = {
 
 // 0x05003E68 - 0x05003F20
 const Gfx klepto_seg5_dl_05003E68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05000008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_chest_tuft),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05003DB0.l, 1),
@@ -322,7 +317,7 @@ static const Vtx klepto_seg5_vertex_05004160[] = {
 
 // 0x050041A0 - 0x050041E8
 const Gfx klepto_seg5_dl_050041A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05003008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing_flap),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004148.l, 1),
@@ -630,7 +625,7 @@ static const Vtx klepto_seg5_vertex_05004BA0[] = {
 
 // 0x05004BE0 - 0x05004C28
 const Gfx klepto_seg5_dl_05004BE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004B88.l, 1),
@@ -674,7 +669,7 @@ static const Vtx klepto_seg5_vertex_05004CB0[] = {
 
 // 0x05004CF0 - 0x05004D38
 const Gfx klepto_seg5_dl_05004CF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004C98.l, 1),
@@ -718,7 +713,7 @@ static const Vtx klepto_seg5_vertex_05004DC0[] = {
 
 // 0x05004E00 - 0x05004E48
 const Gfx klepto_seg5_dl_05004E00[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004DA8.l, 1),
@@ -762,7 +757,7 @@ static const Vtx klepto_seg5_vertex_05004ED0[] = {
 
 // 0x05004F10 - 0x05004F58
 const Gfx klepto_seg5_dl_05004F10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004EB8.l, 1),
@@ -806,7 +801,7 @@ static const Vtx klepto_seg5_vertex_05004FE0[] = {
 
 // 0x05005020 - 0x05005068
 const Gfx klepto_seg5_dl_05005020[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_05004FC8.l, 1),
@@ -850,7 +845,7 @@ static const Vtx klepto_seg5_vertex_050050F0[] = {
 
 // 0x05005130 - 0x05005178
 const Gfx klepto_seg5_dl_05005130[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_05002008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, klepto_seg5_texture_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&klepto_seg5_lights_050050D8.l, 1),

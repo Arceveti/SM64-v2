@@ -41,7 +41,7 @@ extern const Gfx mr_i_eyeball_seg6_dl_06002080[];
 
 // mr_i_iris
 extern const GeoLayout mr_i_iris_geo[];
-extern const Gfx mr_i_iris_seg6_dl_material_model[];
+extern const Gfx mr_i_iris_seg6_sub_dl_material_model[];
 extern const Gfx mr_i_iris_seg6_dl_open[];
 extern const Gfx mr_i_iris_seg6_dl_mostly_open[];
 extern const Gfx mr_i_iris_seg6_dl_mostly_closed[];

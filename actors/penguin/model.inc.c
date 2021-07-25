@@ -272,16 +272,6 @@ const Gfx penguin_seg5_dl_eye_angry[] = {
     gsSPEndDisplayList(),
 };
 
-// // 0x050064E8 - 0x05006518
-// const Gfx penguin_seg5_dl_eye_angry_unused[] = {
-//     gsSPDisplayList(penguin_seg5_dl_05006380),
-//     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05004DE0),
-//     gsDPLoadSync(),
-//     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-//     gsSPDisplayList(penguin_seg5_dl_050063C8),
-//     gsSPEndDisplayList(),
-// };
-
 // 0x05006518
 static const Vtx penguin_seg5_vertex_05006518[] = {
     {{{   -13,     -3,     -4}, 0, {     0,      0}, {0x01, 0x00, 0x7f, 0x00}}},

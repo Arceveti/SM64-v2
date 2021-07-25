@@ -13,32 +13,32 @@ static const Lights1 heave_ho_seg5_lights_0500E980 = gdSPDefLights1(
 );
 
 // 0x0500E9C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_0500E9C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_face[] = {
 #include "actors/heave_ho/heave-ho_face.rgba16.inc.c"
 };
 
 // 0x0500F1C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_0500F1C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_platform[] = {
 #include "actors/heave_ho/heave-ho_platform.rgba16.inc.c"
 };
 
 // 0x0500F9C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_0500F9C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_logo[] = {
 #include "actors/heave_ho/heave-ho_logo.rgba16.inc.c"
 };
 
 // 0x050109C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_050109C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_ornament[] = {
 #include "actors/heave_ho/heave-ho_arm_ornament.rgba16.inc.c"
 };
 
 // 0x050111C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_050111C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_roller[] = {
 #include "actors/heave_ho/heave-ho_roller.rgba16.inc.c"
 };
 
 // 0x050113C8
-ALIGNED8 static const Texture heave_ho_seg5_texture_050113C8[] = {
+ALIGNED8 static const Texture heave_ho_seg5_texture_turnkey[] = {
 #include "actors/heave_ho/heave-ho_turnkey.rgba16.inc.c"
 };
 
@@ -98,7 +98,7 @@ static const Vtx heave_ho_seg5_vertex_05011D38[] = {
 
 // 0x05011D98 - 0x05011DE0
 const Gfx heave_ho_seg5_dl_05011D98[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_0500E9C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&heave_ho_seg5_lights_05011BC8.l, 1),
@@ -110,7 +110,7 @@ const Gfx heave_ho_seg5_dl_05011D98[] = {
 
 // 0x05011DE0 - 0x05011E28
 const Gfx heave_ho_seg5_dl_05011DE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_050109C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_ornament),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(heave_ho_seg5_vertex_05011C38, 6, 0),
@@ -121,7 +121,7 @@ const Gfx heave_ho_seg5_dl_05011DE0[] = {
 
 // 0x05011E28 - 0x05011E80
 const Gfx heave_ho_seg5_dl_05011E28[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_0500F9C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_logo),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(heave_ho_seg5_vertex_05011C98, 10, 0),
@@ -163,12 +163,6 @@ const Gfx heave_ho_seg5_dl_05011EC0[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05011F50
-static const Lights1 heave_ho_seg5_lights_05011F50 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05011F68
 static const Lights1 heave_ho_seg5_lights_05011F68 = gdSPDefLights1(
     0x4c, 0x00, 0x16,
@@ -203,11 +197,11 @@ static const Vtx heave_ho_seg5_vertex_05012030[] = {
 
 // 0x050120A0 - 0x05012100
 const Gfx heave_ho_seg5_dl_050120A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_050109C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_ornament),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&heave_ho_seg5_lights_05011F50.l, 1),
-    gsSPLight(&heave_ho_seg5_lights_05011F50.a, 2),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.l, 1),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.a, 2),
     gsSPVertex(heave_ho_seg5_vertex_05011F80, 11, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 5,  6,  3, 0x0,  7,  8,  9, 0x0),
@@ -243,12 +237,6 @@ const Gfx heave_ho_seg5_dl_05012148[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x050121B0
-static const Lights1 heave_ho_seg5_lights_050121B0 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x050121C8
 static const Lights1 heave_ho_seg5_lights_050121C8 = gdSPDefLights1(
     0x4c, 0x00, 0x16,
@@ -283,11 +271,11 @@ static const Vtx heave_ho_seg5_vertex_05012290[] = {
 
 // 0x05012300 - 0x05012360
 const Gfx heave_ho_seg5_dl_05012300[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_050109C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_ornament),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&heave_ho_seg5_lights_050121B0.l, 1),
-    gsSPLight(&heave_ho_seg5_lights_050121B0.a, 2),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.l, 1),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.a, 2),
     gsSPVertex(heave_ho_seg5_vertex_050121E0, 11, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 5,  6,  3, 0x0,  7,  8,  9, 0x0),
@@ -323,12 +311,6 @@ const Gfx heave_ho_seg5_dl_050123A8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05012410
-static const Lights1 heave_ho_seg5_lights_05012410 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05012428
 static const Lights1 heave_ho_seg5_lights_05012428 = gdSPDefLights1(
     0x5d, 0x6d, 0x65,
@@ -363,11 +345,11 @@ static const Vtx heave_ho_seg5_vertex_05012480[] = {
 
 // 0x05012560 - 0x050125A8
 const Gfx heave_ho_seg5_dl_05012560[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_0500F1C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_platform),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&heave_ho_seg5_lights_05012410.l, 1),
-    gsSPLight(&heave_ho_seg5_lights_05012410.a, 2),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.l, 1),
+    gsSPLight(&heave_ho_seg5_lights_05011BC8.a, 2),
     gsSPVertex(heave_ho_seg5_vertex_05012440, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
@@ -413,7 +395,7 @@ static const Vtx heave_ho_seg5_vertex_05012670[] = {
 
 // 0x050126B0 - 0x050126E8
 const Gfx heave_ho_seg5_dl_050126B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_050111C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_roller),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(heave_ho_seg5_vertex_05012670, 4, 0),
@@ -455,7 +437,7 @@ static const Vtx heave_ho_seg5_vertex_05012770[] = {
 
 // 0x050127B0 - 0x050127F8
 const Gfx heave_ho_seg5_dl_050127B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_050113C8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, heave_ho_seg5_texture_turnkey),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&heave_ho_seg5_lights_05012758.l, 1),

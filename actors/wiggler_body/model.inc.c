@@ -394,7 +394,7 @@ static const Vtx wiggler_seg5_vertex_segment_right_side[] = {
 };
 
 // 0x0500C208 - 0x0500C240
-const Gfx wiggler_seg5_dl_segment_model[] = {
+const Gfx wiggler_seg5_sub_dl_segment[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -418,7 +418,7 @@ const Gfx wiggler_seg5_dl_segment[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_segment_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_segment),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

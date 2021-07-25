@@ -49,7 +49,7 @@ ALIGNED8 static const Texture water_splash_seg4_texture_040315C8[] = {
 };
 
 // 0x040325C8 - 0x04032640
-const Gfx water_splash_seg4_dl_material_model[] = {
+const Gfx water_splash_seg4_sub_dl_material_model[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -70,54 +70,54 @@ const Gfx water_splash_seg4_dl_material_model[] = {
 const Gfx water_splash_seg4_dl_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402A5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x04032658 - 0x04032670
 const Gfx water_splash_seg4_dl_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402B5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x04032670 - 0x04032688
 const Gfx water_splash_seg4_dl_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402C5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x04032688 - 0x040326A0
 const Gfx water_splash_seg4_dl_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402D5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x040326A0 - 0x040326B8
 const Gfx water_splash_seg4_dl_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402E5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x040326B8 - 0x040326D0
 const Gfx water_splash_seg4_dl_5[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_0402F5C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x040326D0 - 0x040326E8
 const Gfx water_splash_seg4_dl_6[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_040305C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };
 
 // 0x040326E8 - 0x04032700
 const Gfx water_splash_seg4_dl_7[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_splash_seg4_texture_040315C8),
-    gsSPBranchList(water_splash_seg4_dl_material_model),
+    gsSPBranchList(water_splash_seg4_sub_dl_material_model),
 };

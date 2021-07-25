@@ -5,9 +5,9 @@
 
 // boo_castle
 extern const GeoLayout boo_castle_geo[];
-extern const Gfx boo_castle_seg6_dl_model_mouth[];
-extern const Gfx boo_castle_seg6_dl_model_eyes[];
-extern const Gfx boo_castle_seg6_dl_model_body[];
+extern const Gfx boo_castle_seg6_sub_dl_mouth[];
+extern const Gfx boo_castle_seg6_sub_dl_eyes[];
+extern const Gfx boo_castle_seg6_sub_dl_body[];
 extern const Gfx boo_castle_seg6_dl_06017CE0[];
 
 // lakitu_cameraman
@@ -15,13 +15,13 @@ extern const GeoLayout lakitu_geo[];
 extern const Gfx lakitu_seg6_dl_cameraman_shell[];
 extern const Gfx lakitu_seg6_dl_06003DB0[];
 extern const Gfx lakitu_seg6_dl_06003E30[];
-extern const Gfx lakitu_seg6_dl_cameraman_frown_model[];
+extern const Gfx lakitu_seg6_sub_dl_cameraman_frown[];
 extern const Gfx lakitu_seg6_dl_cameraman_frown[];
 extern const Gfx lakitu_seg6_dl_060047E8[];
 extern const Gfx lakitu_seg6_dl_060049E0[];
-extern const Gfx lakitu_seg6_dl_cameraman_eyes_model[];
-extern const Gfx lakitu_seg6_dl_cameraman_eyes_begin[];
-extern const Gfx lakitu_seg6_dl_cameraman_eyes_end[];
+extern const Gfx lakitu_seg6_sub_dl_cameraman_eyes[];
+extern const Gfx lakitu_seg6_sub_dl_cameraman_eyes_begin[];
+extern const Gfx lakitu_seg6_sub_dl_cameraman_eyes_end[];
 extern const Gfx lakitu_seg6_dl_cameraman_eyes_open[];
 extern const Gfx lakitu_seg6_dl_cameraman_eyes_closed[];
 extern const Gfx lakitu_seg6_dl_camera_lens[];

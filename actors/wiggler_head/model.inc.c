@@ -359,7 +359,7 @@ static const Vtx wiggler_seg5_vertex_nose_right_side[] = {
 };
 
 // 0x0500E168 - 0x0500E1A0
-const Gfx wiggler_seg5_dl_nose_model[] = {
+const Gfx wiggler_seg5_sub_dl_nose[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_nose_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -383,7 +383,7 @@ const Gfx wiggler_seg5_dl_nose[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_nose_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_nose),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -402,7 +402,7 @@ static const Vtx wiggler_seg5_vertex_frown[] = {
 };
 
 // 0x0500E2B0 - 0x0500E2F8
-const Gfx wiggler_seg5_dl_frown_model[] = {
+const Gfx wiggler_seg5_sub_dl_frown[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_frown),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -422,7 +422,7 @@ const Gfx wiggler_seg5_dl_frown[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_frown_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_frown),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -443,7 +443,7 @@ static const Vtx wiggler_seg5_vertex_eyes[] = {
 };
 
 // 0x0500E3E8 - 0x0500E430
-const Gfx wiggler_seg5_dl_eyes_model[] = {
+const Gfx wiggler_seg5_sub_dl_eyes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -463,7 +463,7 @@ const Gfx wiggler_seg5_dl_eyes[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_eyes_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_eyes),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -480,7 +480,7 @@ static const Vtx wiggler_seg5_vertex_flower[] = {
 };
 
 // 0x0500E4E0 - 0x0500E518
-const Gfx wiggler_seg5_dl_flower_model[] = {
+const Gfx wiggler_seg5_sub_dl_flower[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_flower),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -499,7 +499,7 @@ const Gfx wiggler_seg5_dl_flower[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_flower_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_flower),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -524,7 +524,7 @@ static const Vtx wiggler_seg5_vertex_head_right_side[] = {
 };
 
 // 0x0500E608 - 0x0500E640
-const Gfx wiggler_seg5_dl_head_model[] = {
+const Gfx wiggler_seg5_sub_dl_head[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -539,7 +539,7 @@ const Gfx wiggler_seg5_dl_head_model[] = {
 };
 
 // 0x0500E678 - 0x0500E6F0
-const Gfx wiggler_seg5_dl_head_sphere[] = {
+const Gfx wiggler_seg5_dl_head[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -548,7 +548,7 @@ const Gfx wiggler_seg5_dl_head_sphere[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(wiggler_seg5_dl_head_model),
+    gsSPDisplayList(wiggler_seg5_sub_dl_head),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

@@ -18,7 +18,7 @@ const GeoLayout wiggler_head_geo[] = {
                GEO_OPEN_NODE(),
                   GEO_BILLBOARD(),
                   GEO_OPEN_NODE(),
-                     GEO_DISPLAY_LIST(LAYER_ALPHA, wiggler_seg5_dl_head_sphere),
+                     GEO_DISPLAY_LIST(LAYER_ALPHA, wiggler_seg5_dl_head),
                   GEO_CLOSE_NODE(),
                GEO_CLOSE_NODE(),
                GEO_OPEN_NODE(),

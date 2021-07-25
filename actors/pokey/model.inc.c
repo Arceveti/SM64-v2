@@ -32,7 +32,7 @@ const Gfx pokey_seg5_dl_face_material[] = {
 };
 
 // 0x05012798 - 0x050127D8
-const Gfx pokey_seg5_dl_model_head[] = {
+const Gfx pokey_seg5_sub_dl_head[] = {
     gsSPVertex(pokey_seg5_vertex_05011710, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
@@ -48,7 +48,7 @@ const Gfx pokey_seg5_dl_face[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, pokey_seg5_texture_05011750),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(pokey_seg5_dl_model_head),
+    gsSPDisplayList(pokey_seg5_sub_dl_head),
     gsSPEndDisplayList(),
 };
 
@@ -58,7 +58,7 @@ const Gfx pokey_seg5_dl_face_blink[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, pokey_seg5_texture_05011F50),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPDisplayList(pokey_seg5_dl_model_head),
+    gsSPDisplayList(pokey_seg5_sub_dl_head),
     gsSPEndDisplayList(),
 };
 
@@ -76,7 +76,7 @@ ALIGNED8 static const Texture pokey_seg5_texture_05012878[] = {
 };
 
 // 0x05013078 - 0x050130B0
-const Gfx pokey_seg5_dl_model_body[] = {
+const Gfx pokey_seg5_sub_dl_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, pokey_seg5_texture_05012878),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -95,7 +95,7 @@ const Gfx pokey_seg5_dl_body[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(pokey_seg5_dl_model_body),
+    gsSPDisplayList(pokey_seg5_sub_dl_body),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

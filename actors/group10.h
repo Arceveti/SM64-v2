@@ -69,7 +69,7 @@ extern const struct Animation *const peach_seg5_anims_0501C41C[];
 
 // yoshi
 extern const GeoLayout yoshi_geo[];
-extern const Gfx yoshi_seg5_dl_nostrils_model[];
+extern const Gfx yoshi_seg5_sub_dl_nostrils[];
 extern const Gfx yoshi_seg5_dl_0501D488[];
 extern const Gfx yoshi_seg5_dl_0501D4E0[];
 extern const Gfx yoshi_seg5_dl_nostrils[];

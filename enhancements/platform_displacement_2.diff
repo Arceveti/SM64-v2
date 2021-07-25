@@ -19,7 +19,6 @@ index 0000000..6bf33a8
 +                                    bowser_act_spit_fire_into_sky,  bowser_act_spit_fire_onto_floor,  bowser_act_hit_edge, bowser_act_turn_from_edge,
 +@@ -1033,7 +1035,7 @@ void bowser_free_update(void) {
 +     struct Object *platform;
-+     UNUSED f32 floorHeight;
 +     if ((platform = o->platform) != NULL)
 +-        apply_platform_displacement(0, platform);
 ++        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosX, &o->oFaceAngleYaw, platform);
@@ -70,9 +69,6 @@ index 0000000..6bf33a8
 +-    Vec3f relativeOffset;
 +-    Vec3f newObjectOffset;
 +-    Vec3s rotation;
-+-    UNUSED s16 unused1;
-+-    UNUSED s16 unused2;
-+-    UNUSED s16 unused3;
 +-    f32 displaceMatrix[4][4];
 +-
 +-    rotation[0] = platform->oAngleVelPitch;
@@ -94,9 +90,6 @@ index 0000000..6bf33a8
 ++static Vec3f sMarioAmountDisplaced;
 + 
 +-    if (rotation[0] != 0 || rotation[1] != 0 || rotation[2] != 0) {
-+-        unused1 = rotation[0];
-+-        unused2 = rotation[2];
-+-        unused3 = platform->oFaceAngleYaw;
 ++extern s32 gGlobalTimer;
 + 
 +-        if (isMario) {
@@ -651,8 +644,7 @@ index 0000000..97cba2a
 +        o->oAction = 0;
 +}
 +
-+void bowser_act_walk_to_mario(void) // turn towards Mario
-+{
++void bowser_act_walk_to_mario(void) {// turn towards Mario
 +    UNUSED s32 facing; // is Bowser facing Mario?
 +    s16 turnSpeed;
 +    s16 angleFromMario = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);
@@ -803,7 +795,6 @@ index 0000000..97cba2a
 +}
 +
 +void bowser_act_jump(void) {
-+    UNUSED s32 unused;
 +    if (o->oSubAction == 0) {
 +        if (bowser_set_anim_in_air()) {
 +            if (BITS && o->oBowserUnkF4 & 0x10000)
@@ -967,9 +958,7 @@ index 0000000..97cba2a
 +    return 0;
 +}
 +
-+void bowser_act_thrown_dropped(void)
-+{
-+    UNUSED s32 unused;
++void bowser_act_thrown_dropped(void) {
 +    if (o->oTimer < 2)
 +        o->oBowserUnkF8 = 0;
 +    if (o->oSubAction == 0) {
@@ -1001,7 +990,6 @@ index 0000000..97cba2a
 +
 +void bowser_act_jump_onto_stage(void) {
 +    s32 sp2C;
-+    UNUSED s32 unused;
 +    struct Surface *sp24 = o->oFloor;
 +    if (sp24 != NULL && sp24->flags & 1)
 +        sp2C = 1;
@@ -1175,7 +1163,6 @@ index 0000000..97cba2a
 +}
 +
 +s32 bowser_dead_bits_end(void) {
-+    UNUSED s32 unused;
 +    s32 ret = 0;
 +    s32 dialogID;
 +    if (o->oBowserUnkF8 < 2) {
@@ -1246,9 +1233,7 @@ index 0000000..97cba2a
 +
 +void bowser_act_ride_tilting_platform(void) {
 +    struct Object *platform = cur_obj_nearest_object_with_behavior(bhvTiltingBowserLavaPlatform);
-+    UNUSED s16 sp2A = o->oBowserAngleToCentre + 0x8000;
 +    s16 sp28;
-+    UNUSED s32 unused;
 +    s32 i;
 +    s32 sp1C;
 +    if (platform == NULL)
@@ -1564,7 +1549,6 @@ index 0000000..97cba2a
 + */
 +Gfx *geo_switch_bowser_eyes(s32 run, struct GraphNode *node, UNUSED Mat4 *mtx) {
 +    UNUSED s16 sp36;
-+    UNUSED s32 unused;
 +    struct Object *obj = (struct Object *) gCurGraphNodeObject;
 +    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
 +    if (run == TRUE) {
@@ -1616,7 +1600,6 @@ index 0000000..97cba2a
 +}
 +
 +void falling_bowser_plat_act_1(void) {
-+    UNUSED s32 unused;
 +    struct Object *sp0 = o->oPlatformUnkF8;
 +    if (sp0->platform == o)
 +        if (sp0->oAction == 13 && sp0->oBowserUnkF4 & 0x10000)
@@ -1780,7 +1763,6 @@ index 0000000..97cba2a
 +}
 +
 +void bhv_flame_moving_forward_growing_loop(void) {
-+    UNUSED s32 unused;
 +    UNUSED struct Object *sp18;
 +    obj_set_hitbox(o, &sGrowingBowserFlameHitbox);
 +    o->oFlameScale = o->oFlameScale + 0.5f;
@@ -1811,7 +1793,6 @@ index 0000000..97cba2a
 +}
 +
 +void bhv_flame_floating_landing_loop(void) {
-+    UNUSED s32 unused;
 +    cur_obj_update_floor_and_walls();
 +    cur_obj_move_standard(0x4e);
 +    bowser_flame_move();
@@ -1919,7 +1900,6 @@ index 0000000..f47808d
 ++++ src/game/behaviors/bowser.inc.c
 +@@ -1035,7 +1037,7 @@ void bowser_free_update(void) {
 +     struct Object *platform;
-+     UNUSED f32 floorHeight;
 +     if ((platform = o->platform) != NULL)
 +-        apply_platform_displacement(0, platform);
 ++        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosX, &o->oFaceAngleYaw, platform);
@@ -1971,9 +1951,6 @@ index 9153bc4..1e8cd86 100644
 -    Vec3f relativeOffset;
 -    Vec3f newObjectOffset;
 -    Vec3s rotation;
--    UNUSED s16 unused1;
--    UNUSED s16 unused2;
--    UNUSED s16 unused3;
 -    f32 displaceMatrix[4][4];
 -
 -    rotation[0] = platform->oAngleVelPitch;
@@ -1993,9 +1970,6 @@ index 9153bc4..1e8cd86 100644
 -    z += platform->oVelZ;
 -
 -    if (rotation[0] != 0 || rotation[1] != 0 || rotation[2] != 0) {
--        unused1 = rotation[0];
--        unused2 = rotation[2];
--        unused3 = platform->oFaceAngleYaw;
 +static struct PlatformDisplacementInfo sMarioDisplacementInfo;
 +static Vec3f sMarioAmountDisplaced;
  
@@ -2194,8 +2168,6 @@ index 0000000..9153bc4
 +
 +u16 D_8032FEC0 = 0;
 +
-+u32 unused_8032FEC4[4] = { 0 };
-+
 +struct Object *gMarioPlatform = NULL;
 +
 +/**
@@ -2204,7 +2176,6 @@ index 0000000..9153bc4
 + */
 +void update_mario_platform(void) {
 +    struct Surface *floor;
-+    UNUSED u32 unused;
 +    f32 marioX;
 +    f32 marioY;
 +    f32 marioZ;
@@ -2282,9 +2253,6 @@ index 0000000..9153bc4
 +    Vec3f relativeOffset;
 +    Vec3f newObjectOffset;
 +    Vec3s rotation;
-+    UNUSED s16 unused1;
-+    UNUSED s16 unused2;
-+    UNUSED s16 unused3;
 +    f32 displaceMatrix[4][4];
 +
 +    rotation[0] = platform->oAngleVelPitch;
@@ -2304,9 +2272,6 @@ index 0000000..9153bc4
 +    z += platform->oVelZ;
 +
 +    if (rotation[0] != 0 || rotation[1] != 0 || rotation[2] != 0) {
-+        unused1 = rotation[0];
-+        unused2 = rotation[2];
-+        unused3 = platform->oFaceAngleYaw;
 +
 +        if (isMario) {
 +            gMarioStates[0].faceAngle[1] += rotation[1];
@@ -2394,9 +2359,6 @@ index 0000000..ff20eca
 +-    Vec3f relativeOffset;
 +-    Vec3f newObjectOffset;
 +-    Vec3s rotation;
-+-    UNUSED s16 unused1;
-+-    UNUSED s16 unused2;
-+-    UNUSED s16 unused3;
 +-    f32 displaceMatrix[4][4];
 +-
 +-    rotation[0] = platform->oAngleVelPitch;
@@ -2418,9 +2380,6 @@ index 0000000..ff20eca
 ++static Vec3f sMarioAmountDisplaced;
 + 
 +-    if (rotation[0] != 0 || rotation[1] != 0 || rotation[2] != 0) {
-+-        unused1 = rotation[0];
-+-        unused2 = rotation[2];
-+-        unused3 = platform->oFaceAngleYaw;
 ++extern s32 gGlobalTimer;
 + 
 +-        if (isMario) {

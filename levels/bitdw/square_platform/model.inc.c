@@ -31,7 +31,7 @@ static const Vtx bitdw_seg7_vertex_0700B380[] = {
 };
 
 // 0x0700B410 - 0x0700B480
-static const Gfx bitdw_seg7_dl_moving_pyramid_model[] = {
+static const Gfx bitdw_seg7_sub_dl_moving_pyramid[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09002000),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -55,7 +55,7 @@ const Gfx bitdw_seg7_dl_moving_pyramid[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bitdw_seg7_dl_moving_pyramid_model),
+    gsSPDisplayList(bitdw_seg7_sub_dl_moving_pyramid),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

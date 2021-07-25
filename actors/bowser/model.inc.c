@@ -1,149 +1,149 @@
 // Bowser (King Koopa)
 
 // 0x0601F438
-ALIGNED8 static const Texture bowser_seg6_texture_0601F438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_shell[] = {
 #include "actors/bowser/bowser_shell.rgba16.inc.c"
 };
 
 // 0x0601FC38
-ALIGNED8 static const Texture bowser_seg6_texture_0601FC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eyebrow[] = {
 #include "actors/bowser/bowser_eyebrow.rgba16.inc.c"
 };
 
 // 0x06020C38
-ALIGNED8 static const Texture bowser_seg6_texture_06020C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_muzzle[] = {
 #include "actors/bowser/bowser_muzzle.rgba16.inc.c"
 };
 
 // 0x06021438
-ALIGNED8 static const Texture bowser_seg6_texture_06021438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_nostrils[] = {
 #include "actors/bowser/bowser_nostrils.rgba16.inc.c"
 };
 
 // 0x06022438
-ALIGNED8 static const Texture bowser_seg6_texture_06022438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_body[] = {
 #include "actors/bowser/bowser_body.rgba16.inc.c"
 };
 
 // 0x06022C38
-ALIGNED8 static const Texture bowser_seg6_texture_06022C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_armband_spike[] = {
 #include "actors/bowser/bowser_armband_spike.rgba16.inc.c"
 };
 
 // 0x06023C38
-ALIGNED8 static const Texture bowser_seg6_texture_06023C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_armband[] = {
 #include "actors/bowser/bowser_armband.rgba16.inc.c"
 };
 
 // 0x06024438
-ALIGNED8 static const Texture bowser_seg6_texture_06024438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_tongue[] = {
 #include "actors/bowser/bowser_tongue.rgba16.inc.c"
 };
 
 // 0x06025438
-ALIGNED8 static const Texture bowser_seg6_texture_06025438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_chest[] = {
 #include "actors/bowser/bowser_chest.rgba16.inc.c"
 };
 
 // 0x06025C38
-ALIGNED8 static const Texture bowser_seg6_texture_06025C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_shell_edge[] = {
 #include "actors/bowser/bowser_shell_edge.rgba16.inc.c"
 };
 
-// unreferenced, seen in pre-Spaceworld 1995 B-roll footage build
-// 0x06026438
-UNUSED ALIGNED8 static const Texture bowser_seg6_texture_06026438[] = {
-#include "actors/bowser/bowser_blue_eye_unused.rgba16.inc.c"
-};
+// // unreferenced, seen in pre-Spaceworld 1995 B-roll footage build
+// // 0x06026438
+// UNUSED ALIGNED8 static const Texture bowser_seg6_texture_blue_eye_unused[] = {
+// #include "actors/bowser/bowser_blue_eye_unused.rgba16.inc.c"
+// };
 
-// unreferenced (stubbed texture? possibly original texture for mouth)
-// 0x06027438
-UNUSED ALIGNED8 static const Texture bowser_seg6_texture_06027438[] = {
-#include "actors/bowser/bowser_mouth_unused.rgba16.inc.c"
-};
+// // unreferenced (stubbed texture? possibly original texture for mouth)
+// // 0x06027438
+// UNUSED ALIGNED8 static const Texture bowser_seg6_texture_mouth_unused[] = {
+// #include "actors/bowser/bowser_mouth_unused.rgba16.inc.c"
+// };
 
 // 0x06028438
-ALIGNED8 static const Texture bowser_seg6_texture_06028438[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_upper_face[] = {
 #include "actors/bowser/bowser_upper_face.rgba16.inc.c"
 };
 
 // 0x06028C38
-ALIGNED8 static const Texture bowser_seg6_texture_06028C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_hair[] = {
 #include "actors/bowser/bowser_hair.rgba16.inc.c"
 };
 
 // 0x06029C38
-ALIGNED8 static const Texture bowser_seg6_texture_06029C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_claw_edge[] = {
 #include "actors/bowser/bowser_claw_edge.rgba16.inc.c"
 };
 
 // 0x0602AC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602AC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_claw_horn_tooth[] = {
 #include "actors/bowser/bowser_claw_horn_tooth.rgba16.inc.c"
 };
 
 // 0x0602BC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602BC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_claw_horn_angle[] = {
 #include "actors/bowser/bowser_claw_horn_angle.rgba16.inc.c"
 };
 
 // 0x0602CC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602CC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_left_0[] = {
 #include "actors/bowser/bowser_eye_left_0.rgba16.inc.c"
 };
 
 // 0x0602DC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602DC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_half_closed_0[] = {
 #include "actors/bowser/bowser_eye_half_closed_0.rgba16.inc.c"
 };
 
 // 0x0602EC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602EC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_closed_0[] = {
 #include "actors/bowser/bowser_eye_closed_0.rgba16.inc.c"
 };
 
 // 0x0602FC38
-ALIGNED8 static const Texture bowser_seg6_texture_0602FC38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_center_0[] = {
 #include "actors/bowser/bowser_eye_center_0.rgba16.inc.c"
 };
 
 // 0x06030C38
-ALIGNED8 static const Texture bowser_seg6_texture_06030C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_right_0[] = {
 #include "actors/bowser/bowser_eye_right_0.rgba16.inc.c"
 };
 
 // 0x06031C38
-ALIGNED8 static const Texture bowser_seg6_texture_06031C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_far_left_0[] = {
 #include "actors/bowser/bowser_eye_far_left_0.rgba16.inc.c"
 };
 
 // 0x06032C38
-ALIGNED8 static const Texture bowser_seg6_texture_06032C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_left_1[] = {
 #include "actors/bowser/bowser_eye_left_1.rgba16.inc.c"
 };
 
 // 0x06033C38
-ALIGNED8 static const Texture bowser_seg6_texture_06033C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_half_closed_1[] = {
 #include "actors/bowser/bowser_eye_half_closed_1.rgba16.inc.c"
 };
 
 // 0x06034C38
-ALIGNED8 static const Texture bowser_seg6_texture_06034C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_closed_1[] = {
 #include "actors/bowser/bowser_eye_closed_1.rgba16.inc.c"
 };
 
 // 0x06035C38
-ALIGNED8 static const Texture bowser_seg6_texture_06035C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_center_1[] = {
 #include "actors/bowser/bowser_eye_center_1.rgba16.inc.c"
 };
 
 // 0x06036C38
-ALIGNED8 static const Texture bowser_seg6_texture_06036C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_right_1[] = {
 #include "actors/bowser/bowser_eye_right_1.rgba16.inc.c"
 };
 
 // 0x06037C38
-ALIGNED8 static const Texture bowser_seg6_texture_06037C38[] = {
+ALIGNED8 static const Texture bowser_seg6_texture_eye_far_left_1[] = {
 #include "actors/bowser/bowser_eye_far_left_1.rgba16.inc.c"
 };
 
@@ -151,18 +151,6 @@ ALIGNED8 static const Texture bowser_seg6_texture_06037C38[] = {
 static const Lights1 bowser_seg6_lights_06038C38 = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 bowser_lights_unused1 = gdSPDefLights1(
-    0x33, 0x31, 0x00,
-    0xce, 0xc7, 0x00, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 bowser_lights_unused2 = gdSPDefLights1(
-    0x34, 0x34, 0x00,
-    0xd2, 0xd2, 0x00, 0x28, 0x28, 0x28
 );
 
 #ifdef RAINBOW_BOWSER
@@ -268,7 +256,7 @@ static const Vtx bowser_seg6_vertex_060390A0[] = {
 
 // 0x06039110 - 0x060391C8
 const Gfx bowser_seg6_dl_06039110[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -288,7 +276,7 @@ const Gfx bowser_seg6_dl_06039110[] = {
 
 // 0x060391C8 - 0x06039260
 const Gfx bowser_seg6_dl_060391C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06023C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06038E20, 16, 0),
@@ -305,7 +293,7 @@ const Gfx bowser_seg6_dl_060391C8[] = {
 
 // 0x06039260 - 0x060392E0
 const Gfx bowser_seg6_dl_06039260[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06038FB0, 15, 0),
@@ -440,7 +428,7 @@ static const Vtx bowser_seg6_vertex_060397C8[] = {
 
 // 0x06039808 - 0x060398B0
 const Gfx bowser_seg6_dl_06039808[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06023C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -459,7 +447,7 @@ const Gfx bowser_seg6_dl_06039808[] = {
 
 // 0x060398B0 - 0x06039958
 const Gfx bowser_seg6_dl_060398B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06039528, 16, 0),
@@ -477,7 +465,7 @@ const Gfx bowser_seg6_dl_060398B0[] = {
 
 // 0x06039958 - 0x060399D8
 const Gfx bowser_seg6_dl_06039958[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_060396C8, 16, 0),
@@ -672,7 +660,7 @@ static const Vtx bowser_seg6_vertex_0603A1C0[] = {
 
 // 0x0603A210 - 0x0603A380
 const Gfx bowser_seg6_dl_0603A210[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -705,7 +693,7 @@ const Gfx bowser_seg6_dl_0603A210[] = {
 
 // 0x0603A380 - 0x0603A4E8
 const Gfx bowser_seg6_dl_0603A380[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06029C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06039E10, 14, 0),
@@ -948,7 +936,7 @@ static const Vtx bowser_seg6_vertex_0603ADD8[] = {
 
 // 0x0603AED8 - 0x0603B038
 const Gfx bowser_seg6_dl_0603AED8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -980,7 +968,7 @@ const Gfx bowser_seg6_dl_0603AED8[] = {
 
 // 0x0603B038 - 0x0603B208
 const Gfx bowser_seg6_dl_0603B038[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06029C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603A928, 15, 0),
@@ -1133,7 +1121,7 @@ static const Vtx bowser_seg6_vertex_0603B678[] = {
 
 // 0x0603B718 - 0x0603B8D0
 const Gfx bowser_seg6_dl_0603B718[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -1311,7 +1299,7 @@ static const Vtx bowser_seg6_vertex_0603BD88[] = {
 
 // 0x0603BDF8 - 0x0603BEA0
 const Gfx bowser_seg6_dl_0603BDF8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06023C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -1330,7 +1318,7 @@ const Gfx bowser_seg6_dl_0603BDF8[] = {
 
 // 0x0603BEA0 - 0x0603BF48
 const Gfx bowser_seg6_dl_0603BEA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603BAF8, 16, 0),
@@ -1348,7 +1336,7 @@ const Gfx bowser_seg6_dl_0603BEA0[] = {
 
 // 0x0603BF48 - 0x0603BFC8
 const Gfx bowser_seg6_dl_0603BF48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603BC98, 15, 0),
@@ -1484,7 +1472,7 @@ static const Vtx bowser_seg6_vertex_0603C490[] = {
 
 // 0x0603C500 - 0x0603C5A8
 const Gfx bowser_seg6_dl_0603C500[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06023C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -1503,7 +1491,7 @@ const Gfx bowser_seg6_dl_0603C500[] = {
 
 // 0x0603C5A8 - 0x0603C650
 const Gfx bowser_seg6_dl_0603C5A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603C200, 16, 0),
@@ -1521,7 +1509,7 @@ const Gfx bowser_seg6_dl_0603C5A8[] = {
 
 // 0x0603C650 - 0x0603C6D0
 const Gfx bowser_seg6_dl_0603C650[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603C3A0, 15, 0),
@@ -1719,7 +1707,7 @@ static const Vtx bowser_seg6_vertex_0603CED8[] = {
 
 // 0x0603CF28 - 0x0603D098
 const Gfx bowser_seg6_dl_0603CF28[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -1751,7 +1739,7 @@ const Gfx bowser_seg6_dl_0603CF28[] = {
 
 // 0x0603D098 - 0x0603D200
 const Gfx bowser_seg6_dl_0603D098[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06029C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603CB28, 15, 0),
@@ -2010,7 +1998,7 @@ static const Vtx bowser_seg6_vertex_0603DC40[] = {
 
 // 0x0603DC70 - 0x0603DDD0
 const Gfx bowser_seg6_dl_0603DC70[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -2042,7 +2030,7 @@ const Gfx bowser_seg6_dl_0603DC70[] = {
 
 // 0x0603DDD0 - 0x0603DFB0
 const Gfx bowser_seg6_dl_0603DDD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06029C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603D680, 15, 0),
@@ -2200,7 +2188,7 @@ static const Vtx bowser_seg6_vertex_0603E420[] = {
 
 // 0x0603E500 - 0x0603E6B8
 const Gfx bowser_seg6_dl_0603E500[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -2679,7 +2667,7 @@ static const Vtx bowser_seg6_vertex_0603FB68[] = {
 
 // 0x0603FBA8 - 0x0603FC18
 const Gfx bowser_seg6_dl_0603FBA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06023C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -2693,8 +2681,8 @@ const Gfx bowser_seg6_dl_0603FBA8[] = {
 };
 
 // 0x0603FC18 - 0x0603FD38
-const Gfx bowser_seg6_dl_model_shell_edge[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06025C38),
+const Gfx bowser_seg6_sub_dl_shell_edge[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_shell_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603E7A8, 16, 0),
@@ -2720,7 +2708,7 @@ const Gfx bowser_seg6_dl_model_shell_edge[] = {
 
 // 0x0603FD38 - 0x0603FDD0
 const Gfx bowser_seg6_dl_0603FD38[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06025438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_chest),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603EB48, 13, 0),
@@ -2736,7 +2724,7 @@ const Gfx bowser_seg6_dl_0603FD38[] = {
 
 // 0x0603FDD0 - 0x0603FEA8
 const Gfx bowser_seg6_dl_0603FDD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603EC18, 16, 0),
@@ -2756,8 +2744,8 @@ const Gfx bowser_seg6_dl_0603FDD0[] = {
 };
 
 // 0x0603FEA8 - 0x0603FFA8
-const Gfx bowser_seg6_dl_0603FEA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0601F438),
+const Gfx bowser_seg6_dl_shell[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_shell),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603EE58, 16, 0),
@@ -2782,7 +2770,7 @@ const Gfx bowser_seg6_dl_0603FEA8[] = {
 
 // 0x0603FFA8 - 0x06040180
 const Gfx bowser_seg6_dl_0603FFA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602AC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_horn_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603F1F8, 15, 0),
@@ -2826,7 +2814,7 @@ const Gfx bowser_seg6_dl_0603FFA8[] = {
 
 // 0x06040180 - 0x060401F0
 const Gfx bowser_seg6_dl_06040180[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_armband_spike),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_0603FA78, 15, 0),
@@ -2855,10 +2843,10 @@ const Gfx bowser_seg6_dl_06040210[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bowser_seg6_dl_0603FBA8),
-    gsSPDisplayList(bowser_seg6_dl_model_shell_edge),
+    gsSPDisplayList(bowser_seg6_sub_dl_shell_edge),
     gsSPDisplayList(bowser_seg6_dl_0603FD38),
     gsSPDisplayList(bowser_seg6_dl_0603FDD0),
-    gsSPDisplayList(bowser_seg6_dl_0603FEA8),
+    gsSPDisplayList(bowser_seg6_dl_shell),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
@@ -2886,10 +2874,10 @@ const Gfx bowser_seg6_dl_06040358[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bowser_seg6_dl_0603FBA8),
-    gsSPDisplayList(bowser_seg6_dl_model_shell_edge),
+    gsSPDisplayList(bowser_seg6_sub_dl_shell_edge),
     gsSPDisplayList(bowser_seg6_dl_0603FD38),
     gsSPDisplayList(bowser_seg6_dl_0603FDD0),
-    gsSPDisplayList(bowser_seg6_dl_0603FEA8),
+    gsSPDisplayList(bowser_seg6_dl_shell),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
@@ -3392,8 +3380,8 @@ static const Vtx bowser_seg6_vertex_06041968[] = {
 };
 
 // 0x06041A28 - 0x06041BA0
-const Gfx bowser_seg6_dl_06041A28[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06028438),
+const Gfx bowser_seg6_dl_upper_face[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_upper_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -3428,7 +3416,7 @@ const Gfx bowser_seg6_dl_06041A28[] = {
 
 // 0x06041BA0 - 0x06041E48
 const Gfx bowser_seg6_dl_06041BA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06020C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_muzzle),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_060407D8, 14, 0),
@@ -3484,7 +3472,7 @@ const Gfx bowser_seg6_dl_06041BA0[] = {
 
 // 0x06041E48 - 0x06041EA8
 const Gfx bowser_seg6_dl_06041E48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06024438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_tongue),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06040FD8, 11, 0),
@@ -3496,8 +3484,8 @@ const Gfx bowser_seg6_dl_06041E48[] = {
 };
 
 // 0x06041EA8 - 0x06041F50
-const Gfx bowser_seg6_dl_06041EA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06028C38),
+const Gfx bowser_seg6_dl_hair[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_hair),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06041088, 16, 0),
@@ -3515,7 +3503,7 @@ const Gfx bowser_seg6_dl_06041EA8[] = {
 
 // 0x06041F50 - 0x06042098
 const Gfx bowser_seg6_dl_06041F50[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602AC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_horn_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06041218, 15, 0),
@@ -3544,8 +3532,8 @@ const Gfx bowser_seg6_dl_06041F50[] = {
 };
 
 // 0x06042098 - 0x060420F0
-const Gfx bowser_seg6_dl_06042098[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602BC38),
+const Gfx bowser_seg6_dl_claw_horn_angle[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_horn_angle),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06041698, 12, 0),
@@ -3566,8 +3554,8 @@ const Gfx bowser_seg6_dl_060420F0[] = {
 };
 
 // 0x06042140 - 0x060421D8
-const Gfx bowser_seg6_dl_06042140[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0601FC38),
+const Gfx bowser_seg6_dl_eyebrow[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eyebrow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06041808, 16, 0),
@@ -3582,8 +3570,8 @@ const Gfx bowser_seg6_dl_06042140[] = {
 };
 
 // 0x060421D8 - 0x06042220
-const Gfx bowser_seg6_dl_060421D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06021438),
+const Gfx bowser_seg6_dl_nostrils[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_nostrils),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06041908, 6, 0),
@@ -3612,20 +3600,20 @@ const Gfx bowser_seg6_dl_06042278[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bowser_seg6_dl_06041A28),
+    gsSPDisplayList(bowser_seg6_dl_upper_face),
     gsSPDisplayList(bowser_seg6_dl_06041BA0),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(bowser_seg6_dl_06041E48),
-    gsSPDisplayList(bowser_seg6_dl_06041EA8),
+    gsSPDisplayList(bowser_seg6_dl_hair),
     gsSPDisplayList(bowser_seg6_dl_06041F50),
-    gsSPDisplayList(bowser_seg6_dl_06042098),
+    gsSPDisplayList(bowser_seg6_dl_claw_horn_angle),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bowser_seg6_dl_06042140),
-    gsSPDisplayList(bowser_seg6_dl_060421D8),
+    gsSPDisplayList(bowser_seg6_dl_eyebrow),
+    gsSPDisplayList(bowser_seg6_dl_nostrils),
     gsSPEndDisplayList(),
 };
 
@@ -3638,13 +3626,13 @@ const Gfx bowser_seg6_dl_06042328[] = {
 };
 
 // 0x06042348 - 0x060423A0
-const Gfx bowser_seg6_dl_06042348[] = {
+const Gfx bowser_seg6_dl_eye_left[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602CC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_left_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06032C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_left_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3653,13 +3641,13 @@ const Gfx bowser_seg6_dl_06042348[] = {
 };
 
 // 0x060423A0 - 0x060423F8
-const Gfx bowser_seg6_dl_060423A0[] = {
+const Gfx bowser_seg6_dl_eye_half_closed[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602DC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_half_closed_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06033C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_half_closed_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3668,13 +3656,13 @@ const Gfx bowser_seg6_dl_060423A0[] = {
 };
 
 // 0x060423F8 - 0x06042450
-const Gfx bowser_seg6_dl_060423F8[] = {
+const Gfx bowser_seg6_dl_eye_closed[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602EC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_closed_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06034C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_closed_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3683,13 +3671,13 @@ const Gfx bowser_seg6_dl_060423F8[] = {
 };
 
 // 0x06042450 - 0x060424A8
-const Gfx bowser_seg6_dl_06042450[] = {
+const Gfx bowser_seg6_dl_eye_far_left_center[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06031C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06035C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_center_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3698,13 +3686,13 @@ const Gfx bowser_seg6_dl_06042450[] = {
 };
 
 // 0x060424A8 - 0x06042500
-const Gfx bowser_seg6_dl_060424A8[] = {
+const Gfx bowser_seg6_dl_eye_far_left_right[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06031C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06036C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_right_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3713,13 +3701,13 @@ const Gfx bowser_seg6_dl_060424A8[] = {
 };
 
 // 0x06042500 - 0x06042558
-const Gfx bowser_seg6_dl_06042500[] = {
+const Gfx bowser_seg6_dl_eye_center_far_left[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602FC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_center_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06037C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3728,13 +3716,13 @@ const Gfx bowser_seg6_dl_06042500[] = {
 };
 
 // 0x06042558 - 0x060425B0
-const Gfx bowser_seg6_dl_06042558[] = {
+const Gfx bowser_seg6_dl_eye_right_far_left[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06030C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_right_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06037C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3743,13 +3731,13 @@ const Gfx bowser_seg6_dl_06042558[] = {
 };
 
 // 0x060425B0 - 0x06042608
-const Gfx bowser_seg6_dl_060425B0[] = {
+const Gfx bowser_seg6_dl_eye_right[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06030C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_right_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06036C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_right_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3758,13 +3746,13 @@ const Gfx bowser_seg6_dl_060425B0[] = {
 };
 
 // 0x06042608 - 0x06042660
-const Gfx bowser_seg6_dl_06042608[] = {
+const Gfx bowser_seg6_dl_eye_far_left_0[] = {
     gsSPDisplayList(bowser_seg6_dl_06042278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06031C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_060420F0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06031C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_eye_far_left_0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(bowser_seg6_dl_06042220),
@@ -3950,7 +3938,7 @@ static const Vtx bowser_seg6_vertex_06042E30[] = {
 
 // 0x06042EE0 - 0x060430E8
 const Gfx bowser_seg6_dl_06042EE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06020C38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_muzzle),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -3994,7 +3982,7 @@ const Gfx bowser_seg6_dl_06042EE0[] = {
 
 // 0x060430E8 - 0x06043180
 const Gfx bowser_seg6_dl_060430E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_0602AC38),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_claw_horn_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06042BF0, 15, 0),
@@ -4012,7 +4000,7 @@ const Gfx bowser_seg6_dl_060430E8[] = {
 
 // 0x06043180 - 0x060431F0
 const Gfx bowser_seg6_dl_06043180[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06024438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_tongue),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_06042E30, 11, 0),
@@ -4108,7 +4096,7 @@ static const Vtx bowser_seg6_vertex_060434D8[] = {
 
 // 0x06043548 - 0x06043648
 const Gfx bowser_seg6_dl_06043548[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06022438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_seg6_lights_06038C38.l, 1),
@@ -4133,7 +4121,7 @@ const Gfx bowser_seg6_dl_06043548[] = {
 
 // 0x06043648 - 0x06043698
 const Gfx bowser_seg6_dl_06043648[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_06025438),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_seg6_texture_chest),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_seg6_vertex_060434D8, 7, 0),

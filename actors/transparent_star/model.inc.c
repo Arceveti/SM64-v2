@@ -23,7 +23,7 @@ static const Vtx transparent_star_seg3_vertex_0302C4A0[] = {
 };
 
 // 0x0302C560 - 0x0302C620
-const Gfx transparent_star_seg3_dl_model[] = {
+const Gfx transparent_star_seg3_sub_dl_0302C560[] = {
     gsSPLight(&transparent_star_seg3_lights_0302C488.l, 1),
     gsSPLight(&transparent_star_seg3_lights_0302C488.a, 2),
     gsSPVertex(transparent_star_seg3_vertex_0302C4A0, 12, 0),
@@ -45,7 +45,7 @@ const Gfx transparent_star_seg3_dl_0302C620[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADEFADEA, G_CC_SHADEFADEA),
     gsDPSetEnvColor(255, 255, 255, 120),
-    gsSPDisplayList(transparent_star_seg3_dl_model),
+    gsSPDisplayList(transparent_star_seg3_sub_dl_0302C560),
     gsDPSetEnvColor(255, 255, 255, 255),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPEndDisplayList(),

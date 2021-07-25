@@ -2101,8 +2101,6 @@ const Texture *const main_hud_camera_lut[] = {
 #include "text/us/define_text.inc.c"
 #endif
 
-UNUSED static const u64 segment2_unused_0 = 0;
-
 // 0x0200EC60 - 0x0200EC98
 const Gfx dl_hud_img_begin[] = {
     gsDPPipeSync(),
@@ -2566,12 +2564,6 @@ const Texture texture_waterbox_mist[] = {
 const Texture texture_waterbox_lava[] = {
 #include "textures/segment2/segment2.13C58.rgba16.inc.c"
 };
-
-// Unreferenced light group
-UNUSED static const Lights1 segment2_lights_unused = gdSPDefLights1(
-    0x40, 0x40, 0x40,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x02014470 - 0x020144B0
 static const Mtx matrix_identity = {

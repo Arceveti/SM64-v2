@@ -240,7 +240,7 @@ static const Vtx yoshi_seg5_vertex_0501D410[] = {
 };
 
 // 0x0501D440 - 0x0501D488
-const Gfx yoshi_seg5_dl_nostrils_model[] = {
+const Gfx yoshi_seg5_sub_dl_nostrils[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_0501C8A0),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
@@ -353,7 +353,7 @@ const Gfx yoshi_seg5_dl_nostrils[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 4, G_TX_NOLOD, G_TX_CLAMP, 4, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (16 - 1) << G_TEXTURE_IMAGE_FRAC, (16 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(yoshi_seg5_dl_nostrils_model),
+    gsSPDisplayList(yoshi_seg5_sub_dl_nostrils),
     gsSPEndDisplayList(),
 };
 
@@ -385,12 +385,6 @@ const Gfx yoshi_seg5_dl_eyes_closed[] = {
     gsSPBranchList(yoshi_seg5_dl_eyes_end),
 };
 
-// 0x0501D9C0
-static const Lights1 yoshi_seg5_lights_0501D9C0 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0501D9D8
 static const Lights1 yoshi_seg5_lights_0501D9D8 = gdSPDefLights1(
     0x00, 0x7b, 0x00,
@@ -399,18 +393,6 @@ static const Lights1 yoshi_seg5_lights_0501D9D8 = gdSPDefLights1(
 
 // 0x0501D9F0
 static const Lights1 yoshi_seg5_lights_0501D9F0 = gdSPDefLights1(
-    0x7f, 0x00, 0x00,
-    0xff, 0x00, 0x00, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 yoshi_lights_unused1 = gdSPDefLights1(
-    0x59, 0x59, 0x59,
-    0xb2, 0xb2, 0xb2, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 yoshi_lights_unused2 = gdSPDefLights1(
     0x7f, 0x00, 0x00,
     0xff, 0x00, 0x00, 0x28, 0x28, 0x28
 );
@@ -1585,8 +1567,8 @@ static const Vtx yoshi_seg5_vertex_050211D0[] = {
 
 // 0x050212B0 - 0x05021490
 const Gfx yoshi_seg5_dl_050212B0[] = {
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C470.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C470.a, 2),
     gsSPVertex(yoshi_seg5_vertex_0501DA50, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
@@ -1867,8 +1849,8 @@ const Gfx yoshi_seg5_dl_05021E38[] = {
     gsSP2Triangles(10,  8,  7, 0x0,  3,  9, 12, 0x0),
     gsSP2Triangles( 2,  1, 11, 0x0,  8, 11,  6, 0x0),
     gsSP1Triangle( 5,  0,  3, 0x0),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C470.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C470.a, 2),
     gsSPVertex(yoshi_seg5_vertex_0501FAF0, 11, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  4, 0x0),
     gsSP2Triangles( 5,  6,  7, 0x0,  7,  6,  8, 0x0),
@@ -2006,8 +1988,8 @@ const Gfx yoshi_seg5_dl_05022408[] = {
     gsSP1Triangle( 4, 14, 15, 0x0),
     gsSPVertex(yoshi_seg5_vertex_05020E60, 3, 0),
     gsSP1Triangle( 0,  1,  2, 0x0),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C470.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C470.a, 2),
     gsSPVertex(yoshi_seg5_vertex_05020E90, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  5,  9,  3, 0x0),
@@ -2049,8 +2031,8 @@ const Gfx yoshi_seg5_dl_05022608[] = {
     gsSP2Triangles( 4,  1,  6, 0x0,  2,  9, 10, 0x0),
     gsSP2Triangles( 5, 11,  3, 0x0,  2, 10,  0, 0x0),
     gsSP2Triangles(11,  8,  3, 0x0,  1,  4,  3, 0x0),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9C0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C470.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C470.a, 2),
     gsSPVertex(yoshi_seg5_vertex_050211D0, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9,  7,  6, 0x0),

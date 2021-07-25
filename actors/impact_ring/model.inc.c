@@ -2,17 +2,17 @@
 
 // 0x0601C9D0
 static const Vtx impact_ring_seg6_vertex_left_side[] = {
-    {{{     0,      0,     -5}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    -5,      0,      5}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     -5}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    -5,      0,      5}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    -5,      0,     -5}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601CA10
 static const Vtx impact_ring_seg6_vertex_right_side[] = {
-    {{{     5,      0,     -5}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, {     0,   2016}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     5,      0,      5}, 0, {   992,   2016}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,     -5}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,      5}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,     -5}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
@@ -27,7 +27,7 @@ ALIGNED8 static const Texture impact_ring_seg6_texture_right_side[] = {
 };
 
 // 0x0601EA50 - 0x0601EA88
-const Gfx impact_ring_seg6_dl_left_side[] = {
+const Gfx impact_ring_seg6_sub_dl_ring[] = {
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, impact_ring_seg6_texture_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -51,7 +51,7 @@ const Gfx impact_ring_seg6_dl_ring[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(impact_ring_seg6_dl_left_side),
+    gsSPDisplayList(impact_ring_seg6_sub_dl_ring),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

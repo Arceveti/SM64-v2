@@ -14,7 +14,7 @@ ALIGNED8 static const Texture burn_smoke_seg4_texture_04021800[] = {
 };
 
 // 0x04022000 - 0x04022028
-const Gfx burn_smoke_seg4_dl_begin[] = {
+const Gfx burn_smoke_seg4_sub_dl_begin[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -23,14 +23,14 @@ const Gfx burn_smoke_seg4_dl_begin[] = {
 };
 
 // 0x04022028 - 0x04022048
-const Gfx burn_smoke_seg4_dl_model[] = {
+const Gfx burn_smoke_seg4_sub_dl_model[] = {
     gsSPVertex(burn_smoke_seg4_vertex_040217C0, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x04022048 - 0x04022070
-const Gfx burn_smoke_seg4_dl_end[] = {
+const Gfx burn_smoke_seg4_sub_dl_end[] = {
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -40,9 +40,9 @@ const Gfx burn_smoke_seg4_dl_end[] = {
 
 // 0x04022070 - 0x040220C8
 const Gfx burn_smoke_seg4_dl_burn_smoke[] = {
-    gsSPDisplayList(burn_smoke_seg4_dl_begin),
+    gsSPDisplayList(burn_smoke_seg4_sub_dl_begin),
     gsDPLoadTextureBlock(burn_smoke_seg4_texture_04021800, G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0, G_TX_CLAMP, G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPDisplayList(burn_smoke_seg4_dl_model),
-    gsSPDisplayList(burn_smoke_seg4_dl_end),
+    gsSPDisplayList(burn_smoke_seg4_sub_dl_model),
+    gsSPDisplayList(burn_smoke_seg4_sub_dl_end),
     gsSPEndDisplayList(),
 };

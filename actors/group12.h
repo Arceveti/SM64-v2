@@ -5,9 +5,9 @@
 
 // bomb
 extern const GeoLayout bowser_bomb_geo[];
-extern const Gfx bomb_seg6_dl_model[];
-extern const Gfx bomb_seg6_dl_sphere_billboard[];
-extern const Gfx bomb_seg6_dl_model_spikes[];
+extern const Gfx bomb_seg6_sub_dl_sphere[];
+extern const Gfx bomb_seg6_dl_sphere[];
+extern const Gfx bomb_seg6_sub_dl_spikes[];
 extern const Gfx bomb_seg6_dl_spikes[];
 
 // bowser
@@ -51,36 +51,36 @@ extern const Gfx bowser_seg6_dl_0603DFB0[];
 extern const Gfx bowser_seg6_dl_0603E500[];
 extern const Gfx bowser_seg6_dl_0603E6B8[];
 extern const Gfx bowser_seg6_dl_0603FBA8[];
-extern const Gfx bowser_seg6_dl_model_shell_edge[];
+extern const Gfx bowser_seg6_sub_dl_shell_edge[];
 extern const Gfx bowser_seg6_dl_0603FD38[];
 extern const Gfx bowser_seg6_dl_0603FDD0[];
-extern const Gfx bowser_seg6_dl_0603FEA8[];
+extern const Gfx bowser_seg6_dl_shell[];
 extern const Gfx bowser_seg6_dl_0603FFA8[];
 extern const Gfx bowser_seg6_dl_06040180[];
 extern const Gfx bowser_seg6_dl_060401F0[];
 extern const Gfx bowser_seg6_dl_06040210[];
 extern const Gfx bowser_seg6_dl_06040358[];
-extern const Gfx bowser_seg6_dl_06041A28[];
+extern const Gfx bowser_seg6_dl_upper_face[];
 extern const Gfx bowser_seg6_dl_06041BA0[];
 extern const Gfx bowser_seg6_dl_06041E48[];
-extern const Gfx bowser_seg6_dl_06041EA8[];
+extern const Gfx bowser_seg6_dl_hair[];
 extern const Gfx bowser_seg6_dl_06041F50[];
-extern const Gfx bowser_seg6_dl_06042098[];
+extern const Gfx bowser_seg6_dl_claw_horn_angle[];
 extern const Gfx bowser_seg6_dl_060420F0[];
-extern const Gfx bowser_seg6_dl_06042140[];
-extern const Gfx bowser_seg6_dl_060421D8[];
+extern const Gfx bowser_seg6_dl_eyebrow[];
+extern const Gfx bowser_seg6_dl_nostrils[];
 extern const Gfx bowser_seg6_dl_06042220[];
 extern const Gfx bowser_seg6_dl_06042278[];
 extern const Gfx bowser_seg6_dl_06042328[];
-extern const Gfx bowser_seg6_dl_06042348[];
-extern const Gfx bowser_seg6_dl_060423A0[];
-extern const Gfx bowser_seg6_dl_060423F8[];
-extern const Gfx bowser_seg6_dl_06042450[];
-extern const Gfx bowser_seg6_dl_060424A8[];
-extern const Gfx bowser_seg6_dl_06042500[];
-extern const Gfx bowser_seg6_dl_06042558[];
-extern const Gfx bowser_seg6_dl_060425B0[];
-extern const Gfx bowser_seg6_dl_06042608[];
+extern const Gfx bowser_seg6_dl_eye_left[];
+extern const Gfx bowser_seg6_dl_eye_half_closed[];
+extern const Gfx bowser_seg6_dl_eye_closed[];
+extern const Gfx bowser_seg6_dl_eye_far_left_center[];
+extern const Gfx bowser_seg6_dl_eye_far_left_right[];
+extern const Gfx bowser_seg6_dl_eye_center_far_left[];
+extern const Gfx bowser_seg6_dl_eye_right_far_left[];
+extern const Gfx bowser_seg6_dl_eye_right[];
+extern const Gfx bowser_seg6_dl_eye_far_left_0[];
 extern const Gfx bowser_seg6_dl_06042EE0[];
 extern const Gfx bowser_seg6_dl_060430E8[];
 extern const Gfx bowser_seg6_dl_06043180[];
@@ -94,8 +94,8 @@ extern const s16 dBowserFlamesOrientationValues[];
 // bowser_flame
 extern const GeoLayout bowser_flames_geo[];
 extern const Gfx flame_seg6_dl_bowser_flame_start[];
-extern const Gfx flame_seg6_dl_model_bowser_flame_upper[];
-extern const Gfx flame_seg6_dl_model_bowser_flame_lower[];
+extern const Gfx flame_seg6_sub_dl_bowser_flame_upper[];
+extern const Gfx flame_seg6_sub_dl_bowser_flame_lower[];
 extern const Gfx flame_seg6_dl_bowser_flame_end[];
 extern const Gfx flame_seg6_dl_0[];
 extern const Gfx flame_seg6_dl_1[];
@@ -114,14 +114,14 @@ extern const Gfx flame_seg6_dl_13[];
 
 // impact_ring
 extern const GeoLayout invisible_bowser_accessory_geo[];
-extern const Gfx impact_ring_seg6_dl_left_side[];
+extern const Gfx impact_ring_seg6_sub_dl_ring[];
 extern const Gfx impact_ring_seg6_dl_ring[];
 
 // impact_smoke
 extern const GeoLayout bowser_impact_smoke_geo[];
 extern const Gfx impact_smoke_seg6_dl_start[];
-extern const Gfx impact_smoke_seg6_dl_model_upper[];
-extern const Gfx impact_smoke_seg6_dl_model_lower[];
+extern const Gfx impact_smoke_seg6_sub_dl_upper[];
+extern const Gfx impact_smoke_seg6_sub_dl_lower[];
 extern const Gfx impact_smoke_seg6_dl_end[];
 extern const Gfx impact_smoke_seg6_dl_0[];
 extern const Gfx impact_smoke_seg6_dl_1[];

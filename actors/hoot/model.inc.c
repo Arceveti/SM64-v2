@@ -6,12 +6,6 @@ static const Lights1 hoot_seg5_lights_05000900 = gdSPDefLights1(
     0xc0, 0x6e, 0x3d, 0x28, 0x28, 0x28
 );
 
-// Unreferenced light group
-UNUSED static const Lights1 hoot_lights_unused1 = gdSPDefLights1(
-    0x37, 0x27, 0x0b,
-    0xdd, 0x9d, 0x2d, 0x28, 0x28, 0x28
-);
-
 // 0x05000930
 static const Lights1 hoot_seg5_lights_05000930 = gdSPDefLights1(
     0x36, 0x26, 0x11,
@@ -36,24 +30,6 @@ static const Lights1 hoot_seg5_lights_05000978 = gdSPDefLights1(
     0x19, 0x19, 0x19, 0x28, 0x28, 0x28
 );
 
-// Unreferenced light group
-UNUSED static const Lights1 hoot_lights_unused2 = gdSPDefLights1(
-    0x39, 0x27, 0x0a,
-    0xe6, 0x9d, 0x29, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 hoot_lights_unused3 = gdSPDefLights1(
-    0x1d, 0x06, 0x3b,
-    0x75, 0x18, 0xef, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 hoot_lights_unused4 = gdSPDefLights1(
-    0x3a, 0x29, 0x09,
-    0xeb, 0xa6, 0x27, 0x28, 0x28, 0x28
-);
-
 // 0x050009D8
 static const Lights1 hoot_seg5_lights_050009D8 = gdSPDefLights1(
     0x18, 0x07, 0x03,
@@ -73,7 +49,7 @@ static const Lights1 hoot_seg5_lights_05000A08 = gdSPDefLights1(
 );
 
 // 0x05000A20
-ALIGNED8 static const Texture hoot_seg5_texture_05000A20[] = {
+ALIGNED8 static const Texture hoot_seg5_texture_eyes[] = {
 #include "actors/hoot/hoot_eyes.rgba16.inc.c"
 };
 
@@ -273,7 +249,7 @@ static const Vtx hoot_seg5_vertex_05001A90[] = {
 
 // 0x05001B80 - 0x05001C00
 const Gfx hoot_seg5_dl_05001B80[] = {
-    gsDPLoadTextureBlock(hoot_seg5_texture_05000A20, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsDPLoadTextureBlock(hoot_seg5_texture_eyes, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsSPLight(&hoot_seg5_lights_050009D8.l, 1),
     gsSPLight(&hoot_seg5_lights_050009D8.a, 2),
     gsSPVertex(hoot_seg5_vertex_05001220, 15, 0),
@@ -351,12 +327,12 @@ static const Lights1 hoot_seg5_lights_05001E38 = gdSPDefLights1(
 );
 
 // 0x05001E50
-ALIGNED8 static const Texture hoot_seg5_texture_05001E50[] = {
+ALIGNED8 static const Texture hoot_seg5_texture_wings[] = {
 #include "actors/hoot/hoot_wing.rgba16.inc.c"
 };
 
 // 0x05002650
-ALIGNED8 static const Texture hoot_seg5_texture_05002650[] = {
+ALIGNED8 static const Texture hoot_seg5_texture_wing_tip[] = {
 #include "actors/hoot/hoot_wing_tip.rgba16.inc.c"
 };
 
@@ -372,7 +348,7 @@ static const Vtx hoot_seg5_vertex_05002E50[] = {
 
 // 0x05002EB0 - 0x05002F10
 const Gfx hoot_seg5_dl_05002EB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05002650),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wing_tip),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -417,7 +393,7 @@ static const Vtx hoot_seg5_vertex_05002F78[] = {
 
 // 0x05002FD8 - 0x05003038
 const Gfx hoot_seg5_dl_05002FD8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -462,7 +438,7 @@ static const Vtx hoot_seg5_vertex_050030A0[] = {
 
 // 0x05003100 - 0x05003160
 const Gfx hoot_seg5_dl_05003100[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -507,7 +483,7 @@ static const Vtx hoot_seg5_vertex_050031C8[] = {
 
 // 0x05003228 - 0x05003288
 const Gfx hoot_seg5_dl_05003228[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -552,7 +528,7 @@ static const Vtx hoot_seg5_vertex_050032F0[] = {
 
 // 0x05003350 - 0x050033B0
 const Gfx hoot_seg5_dl_05003350[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05002650),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wing_tip),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -597,7 +573,7 @@ static const Vtx hoot_seg5_vertex_05003418[] = {
 
 // 0x05003478 - 0x050034D8
 const Gfx hoot_seg5_dl_05003478[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -642,7 +618,7 @@ static const Vtx hoot_seg5_vertex_05003540[] = {
 
 // 0x050035A0 - 0x05003600
 const Gfx hoot_seg5_dl_050035A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -687,7 +663,7 @@ static const Vtx hoot_seg5_vertex_05003668[] = {
 
 // 0x050036C8 - 0x05003728
 const Gfx hoot_seg5_dl_050036C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_05001E50),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hoot_seg5_texture_wings),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),

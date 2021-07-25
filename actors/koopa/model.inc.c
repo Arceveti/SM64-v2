@@ -30,57 +30,45 @@ static const Lights1 koopa_seg6_lights_06002618 = gdSPDefLights1(
     0xb2, 0xb2, 0xb2, 0x28, 0x28, 0x28
 );
 
-// 0x06002630
-static const Lights1 koopa_seg6_lights_06002630 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x06002648
-ALIGNED8 static const Texture koopa_seg6_texture_06002648[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_shell_front[] = {
 #include "actors/koopa/koopa_shell_front.rgba16.inc.c"
 };
 
 // 0x06002E48
-ALIGNED8 static const Texture koopa_seg6_texture_06002E48[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_shell_back[] = {
 #include "actors/koopa/koopa_shell_back.rgba16.inc.c"
 };
 
 // 0x06003648
-ALIGNED8 static const Texture koopa_seg6_texture_06003648[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_shoe[] = {
 #include "actors/koopa/koopa_shoe.rgba16.inc.c"
 };
 
 // 0x06003E48
-ALIGNED8 static const Texture koopa_seg6_texture_06003E48[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_shell_front_top[] = {
 #include "actors/koopa/koopa_shell_front_top.rgba16.inc.c"
 };
 
 // 0x06004648
-ALIGNED8 static const Texture koopa_seg6_texture_06004648[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_eyes_open[] = {
 #include "actors/koopa/koopa_eyes_open.rgba16.inc.c"
 };
 
 // 0x06004E48
-ALIGNED8 static const Texture koopa_seg6_texture_06004E48[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_eyes_closed[] = {
 #include "actors/koopa/koopa_eyes_closed.rgba16.inc.c"
 };
 
 // 0x06005648
-ALIGNED8 static const Texture koopa_seg6_texture_06005648[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_eye_border[] = {
 #include "actors/koopa/koopa_eye_border.rgba16.inc.c"
 };
 
 // 0x06005E48
-ALIGNED8 static const Texture koopa_seg6_texture_06005E48[] = {
+ALIGNED8 static const Texture koopa_seg6_texture_nostrils[] = {
 #include "actors/koopa/koopa_nostrils.rgba16.inc.c"
 };
-
-// 0x06006E48
-static const Lights1 koopa_seg6_lights_06006E48 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x06006E60
 static const Lights1 koopa_seg6_lights_06006E60 = gdSPDefLights1(
@@ -260,8 +248,8 @@ static const Vtx koopa_seg6_vertex_060075B8[] = {
 
 // 0x06007658 - 0x060076B0
 const Gfx koopa_seg6_dl_06007658[] = {
-    gsSPLight(&koopa_seg6_lights_06006E48.l, 1),
-    gsSPLight(&koopa_seg6_lights_06006E48.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_06006E78, 9, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  0, 0x0),
     gsSP2Triangles( 0,  5,  3, 0x0,  4,  6,  0, 0x0),
@@ -272,7 +260,7 @@ const Gfx koopa_seg6_dl_06007658[] = {
 
 // 0x060076B0 - 0x06007850
 const Gfx koopa_seg6_dl_060076B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06005648),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_seg6_vertex_06006F08, 15, 0),
@@ -307,7 +295,7 @@ const Gfx koopa_seg6_dl_060076B0[] = {
 
 // 0x06007850 - 0x06007970
 const Gfx koopa_seg6_dl_06007850[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06005E48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_nostrils),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_seg6_vertex_06007268, 15, 0),
@@ -338,8 +326,8 @@ const Gfx koopa_seg6_dl_06007970[] = {
     gsSPLight(&koopa_seg6_lights_06006E60.a, 2),
     gsSPVertex(koopa_seg6_vertex_06007488, 3, 0),
     gsSP1Triangle( 0,  1,  2, 0x0),
-    gsSPLight(&koopa_seg6_lights_06006E48.l, 1),
-    gsSPLight(&koopa_seg6_lights_06006E48.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_060074B8, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  4,  7, 0x0,  4,  6,  5, 0x0),
@@ -386,7 +374,7 @@ const Gfx koopa_seg6_dl_06007AA0[] = {
 // 0x06007AF8 - 0x06007B20
 const Gfx koopa_seg6_dl_06007AF8[] = {
     gsSPDisplayList(koopa_seg6_dl_06007A60),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06004648),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eyes_open),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(koopa_seg6_dl_06007AA0),
@@ -395,17 +383,11 @@ const Gfx koopa_seg6_dl_06007AF8[] = {
 // 0x06007B20 - 0x06007B48
 const Gfx koopa_seg6_dl_06007B20[] = {
     gsSPDisplayList(koopa_seg6_dl_06007A60),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06004E48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eyes_closed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(koopa_seg6_dl_06007AA0),
 };
-
-// 0x06007B48
-static const Lights1 koopa_seg6_lights_06007B48 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x06007B60
 static const Lights1 koopa_seg6_lights_06007B60 = gdSPDefLights1(
@@ -507,11 +489,11 @@ static const Vtx koopa_seg6_vertex_06007F28[] = {
 
 // 0x06007FB8 - 0x06008050
 const Gfx koopa_seg6_dl_06007FB8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06002E48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shell_back),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&koopa_seg6_lights_06007B48.l, 1),
-    gsSPLight(&koopa_seg6_lights_06007B48.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_06007B78, 10, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 0,  4,  1, 0x0,  0,  5,  4, 0x0),
@@ -524,7 +506,7 @@ const Gfx koopa_seg6_dl_06007FB8[] = {
 
 // 0x06008050 - 0x060080F8
 const Gfx koopa_seg6_dl_06008050[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06002648),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shell_front),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_seg6_vertex_06007C18, 14, 0),
@@ -546,8 +528,8 @@ const Gfx koopa_seg6_dl_060080F8[] = {
     gsSPVertex(koopa_seg6_vertex_06007CF8, 5, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
     gsSP1Triangle( 2,  4,  3, 0x0),
-    gsSPLight(&koopa_seg6_lights_06007B48.l, 1),
-    gsSPLight(&koopa_seg6_lights_06007B48.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_06007D48, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  1,  0, 0x0),
     gsSP2Triangles( 4,  1,  3, 0x0,  2,  1,  5, 0x0),
@@ -587,12 +569,6 @@ const Gfx koopa_seg6_dl_06008250[] = {
     gsSPDisplayList(koopa_seg6_dl_060080F8),
     gsSPEndDisplayList(),
 };
-
-// 0x060082C0
-static const Lights1 koopa_seg6_lights_060082C0 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x060082D8
 static const Lights1 koopa_seg6_lights_060082D8 = gdSPDefLights1(
@@ -650,11 +626,11 @@ static const Vtx koopa_seg6_vertex_06008470[] = {
 
 // 0x06008530 - 0x060085E8
 const Gfx koopa_seg6_dl_06008530[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06003648),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shoe),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&koopa_seg6_lights_060082C0.l, 1),
-    gsSPLight(&koopa_seg6_lights_060082C0.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_060082F0, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 1,  4,  3, 0x0,  4,  5,  3, 0x0),
@@ -669,7 +645,7 @@ const Gfx koopa_seg6_dl_06008530[] = {
 
 // 0x060085E8 - 0x06008640
 const Gfx koopa_seg6_dl_060085E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06003E48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shell_front_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_seg6_vertex_060083F0, 8, 0),
@@ -711,12 +687,6 @@ const Gfx koopa_seg6_dl_060086D0[] = {
     gsSPDisplayList(koopa_seg6_dl_06008640),
     gsSPEndDisplayList(),
 };
-
-// 0x06008740
-static const Lights1 koopa_seg6_lights_06008740 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x06008758
 static const Lights1 koopa_seg6_lights_06008758 = gdSPDefLights1(
@@ -774,11 +744,11 @@ static const Vtx koopa_seg6_vertex_060088F0[] = {
 
 // 0x060089B0 - 0x06008A68
 const Gfx koopa_seg6_dl_060089B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06003648),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shoe),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&koopa_seg6_lights_06008740.l, 1),
-    gsSPLight(&koopa_seg6_lights_06008740.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_06008770, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 1,  4,  3, 0x0,  4,  5,  3, 0x0),
@@ -793,7 +763,7 @@ const Gfx koopa_seg6_dl_060089B0[] = {
 
 // 0x06008A68 - 0x06008AC0
 const Gfx koopa_seg6_dl_06008A68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_06003E48),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_shell_front_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_seg6_vertex_06008870, 8, 0),
@@ -2033,8 +2003,8 @@ const Gfx koopa_seg6_dl_0600C240[] = {
 
 // 0x0600C498 - 0x0600C6A0
 const Gfx koopa_seg6_dl_0600C498[] = {
-    gsSPLight(&koopa_seg6_lights_06002630.l, 1),
-    gsSPLight(&koopa_seg6_lights_06002630.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
     gsSPVertex(koopa_seg6_vertex_0600B190, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  7,  8,  9, 0x0),

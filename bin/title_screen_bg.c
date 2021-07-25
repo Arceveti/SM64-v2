@@ -121,8 +121,6 @@ const Texture *const game_over_texture_table[] = {
     title_texture_0A0033C0, title_texture_0A004040, title_texture_0A004CC0, title_texture_0A005940,
 };
 
-UNUSED static const u64 title_screen_bg_unused_0 = 0;
-
 #ifdef GODDARD_EASTER_EGG
 const Gfx title_screen_bg_dl_face_easter_egg_begin[] = {
     gsDPPipeSync(),

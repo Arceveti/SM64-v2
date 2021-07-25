@@ -1,45 +1,27 @@
 // Chain Chomp
 
-// 0x06021388
-UNUSED static const Lights1 chain_chomp_lights_unused1 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
-// 0x060213A0
-UNUSED static const Lights1 chain_chomp_lights_unused2 = gdSPDefLights1(
-    0x03, 0x03, 0x05,
-    0x0d, 0x0f, 0x16, 0x28, 0x28, 0x28
-);
-
-// 0x060213B8
-UNUSED static const Lights1 chain_chomp_lights_unused3 = gdSPDefLights1(
-    0x25, 0x00, 0x00,
-    0x96, 0x00, 0x00, 0x28, 0x28, 0x28
-);
-
 // 0x060213D0
-ALIGNED8 static const Texture chain_chomp_seg6_texture_060213D0[] = {
+ALIGNED8 static const Texture chain_chomp_seg6_texture_bright_shine[] = {
 #include "actors/chain_chomp/chain_chomp_bright_shine.rgba16.inc.c"
 };
 
 // 0x06021BD0
-ALIGNED8 static const Texture chain_chomp_seg6_texture_06021BD0[] = {
+ALIGNED8 static const Texture chain_chomp_seg6_texture_dull_shine[] = {
 #include "actors/chain_chomp/chain_chomp_dull_shine.rgba16.inc.c"
 };
 
 // 0x060223D0
-ALIGNED8 static const Texture chain_chomp_seg6_texture_060223D0[] = {
+ALIGNED8 static const Texture chain_chomp_seg6_texture_tongue[] = {
 #include "actors/chain_chomp/chain_chomp_tongue.rgba16.inc.c"
 };
 
 // 0x06022BD0
-ALIGNED8 static const Texture chain_chomp_seg6_texture_06022BD0[] = {
+ALIGNED8 static const Texture chain_chomp_seg6_texture_tooth[] = {
 #include "actors/chain_chomp/chain_chomp_tooth.rgba16.inc.c"
 };
 
 // 0x060233D0
-ALIGNED8 static const Texture chain_chomp_seg6_texture_060233D0[] = {
+ALIGNED8 static const Texture chain_chomp_seg6_texture_eye[] = {
 #include "actors/chain_chomp/chain_chomp_eye.rgba16.inc.c"
 };
 
@@ -132,7 +114,7 @@ static const Vtx chain_chomp_seg6_vertex_06023F00[] = {
 
 // 0x06024000 - 0x06024040
 const Gfx chain_chomp_seg6_dl_06024000[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_060223D0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_tongue),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_06023BD0, 5, 0),
@@ -142,8 +124,8 @@ const Gfx chain_chomp_seg6_dl_06024000[] = {
 };
 
 // 0x06024040 - 0x06024240
-const Gfx chain_chomp_seg6_dl_06024040[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_060213D0),
+const Gfx chain_chomp_seg6_dl_bright_shine[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_bright_shine),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_06023C20, 16, 0),
@@ -196,7 +178,7 @@ const Gfx chain_chomp_seg6_dl_06024240[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(chain_chomp_seg6_dl_06024040),
+    gsSPDisplayList(chain_chomp_seg6_dl_bright_shine),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -292,8 +274,8 @@ static const Vtx chain_chomp_seg6_vertex_060246B0[] = {
 };
 
 // 0x06024700 - 0x06024900
-const Gfx chain_chomp_seg6_dl_06024700[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_06021BD0),
+const Gfx chain_chomp_seg6_dl_dull_shine[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_dull_shine),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_060242D0, 14, 0),
@@ -334,7 +316,7 @@ const Gfx chain_chomp_seg6_dl_06024700[] = {
 
 // 0x06024900 - 0x06024940
 const Gfx chain_chomp_seg6_dl_06024900[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_060223D0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_tongue),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_060246B0, 5, 0),
@@ -353,7 +335,7 @@ const Gfx chain_chomp_seg6_dl_06024940[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(chain_chomp_seg6_dl_06024700),
+    gsSPDisplayList(chain_chomp_seg6_dl_dull_shine),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
@@ -388,8 +370,8 @@ static const Vtx chain_chomp_seg6_vertex_060249E8[] = {
 };
 
 // 0x06024AA8 - 0x06024B00
-const Gfx chain_chomp_seg6_dl_06024AA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_060233D0),
+const Gfx chain_chomp_seg6_sub_dl_eye[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&chain_chomp_seg6_lights_060249D0.l, 1),
@@ -401,7 +383,7 @@ const Gfx chain_chomp_seg6_dl_06024AA8[] = {
 };
 
 // 0x06024B00 - 0x06024B70
-const Gfx chain_chomp_seg6_dl_06024B00[] = {
+const Gfx chain_chomp_seg6_dl_eye[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -410,7 +392,7 @@ const Gfx chain_chomp_seg6_dl_06024B00[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(chain_chomp_seg6_dl_06024AA8),
+    gsSPDisplayList(chain_chomp_seg6_sub_dl_eye),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -452,7 +434,7 @@ static const Vtx chain_chomp_seg6_vertex_06024C60[] = {
 
 // 0x06024CF0 - 0x06024D60
 const Gfx chain_chomp_seg6_dl_06024CF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_06022BD0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_06024B70, 15, 0),
@@ -517,7 +499,7 @@ static const Vtx chain_chomp_seg6_vertex_06024EC0[] = {
 
 // 0x06024F50 - 0x06024FC0
 const Gfx chain_chomp_seg6_dl_06024F50[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_06022BD0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chain_chomp_seg6_texture_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(chain_chomp_seg6_vertex_06024DD0, 15, 0),

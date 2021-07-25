@@ -2,34 +2,31 @@
 // It's possible that bubba and bub used to be 2 "actors" in
 // one actor file.
 
-// Bin ID? What is this?
-UNUSED static const u64 bubba_unused_1 = 0;
-
 // Bubba
 
 // 0x05000008
-ALIGNED8 static const Texture bubba_seg5_texture_05000008[] = {
+ALIGNED8 static const Texture bubba_seg5_texture_sunglasses[] = {
 #include "actors/bubba/bubba_sunglasses.rgba16.inc.c"
 };
 
-// unused eye texture, assumed leftover from when actor file was copied from bub
-// 0x05000408
-UNUSED ALIGNED8 static const Texture bubba_seg5_texture_05000408[] = {
-#include "actors/bubba/bubba_eyes_unused.rgba16.inc.c"
-};
+// // unused eye texture, assumed leftover from when actor file was copied from bub
+// // 0x05000408
+// UNUSED ALIGNED8 static const Texture bubba_seg5_texture_eyes_unused[] = {
+// #include "actors/bubba/bubba_eyes_unused.rgba16.inc.c"
+// };
 
 // 0x05001408
-ALIGNED8 static const Texture bubba_seg5_texture_05001408[] = {
+ALIGNED8 static const Texture bubba_seg5_texture_eye_border[] = {
 #include "actors/bubba/bubba_eye_border.rgba16.inc.c"
 };
 
 // 0x05001C08
-ALIGNED8 static const Texture bubba_seg5_texture_05001C08[] = {
+ALIGNED8 static const Texture bubba_seg5_texture_fins[] = {
 #include "actors/bubba/bubba_fins.rgba16.inc.c"
 };
 
 // 0x05002408
-ALIGNED8 static const Texture bubba_seg5_texture_05002408[] = {
+ALIGNED8 static const Texture bubba_seg5_texture_scales[] = {
 #include "actors/bubba/bubba_scales.rgba16.inc.c"
 };
 
@@ -184,7 +181,7 @@ static const Vtx bubba_seg5_vertex_050049D0[] = {
 
 // 0x05004A40 - 0x05004AA8
 const Gfx bubba_seg5_dl_05004A40[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05000008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_sunglasses),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bubba_seg5_lights_05004408.l, 1),
@@ -198,7 +195,7 @@ const Gfx bubba_seg5_dl_05004A40[] = {
 
 // 0x05004AA8 - 0x05004BE8
 const Gfx bubba_seg5_dl_05004AA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05001408),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bubba_seg5_lights_05004420.l, 1),
@@ -226,7 +223,7 @@ const Gfx bubba_seg5_dl_05004AA8[] = {
 
 // 0x05004BE8 - 0x05004C40
 const Gfx bubba_seg5_dl_05004BE8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05001C08),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bubba_seg5_vertex_05004620, 6, 0),
@@ -238,7 +235,7 @@ const Gfx bubba_seg5_dl_05004BE8[] = {
 
 // 0x05004C40 - 0x05004D48
 const Gfx bubba_seg5_dl_05004C40[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05002408),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_scales),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bubba_seg5_vertex_05004680, 16, 0),
@@ -463,7 +460,7 @@ static const Vtx bubba_seg5_vertex_050054C8[] = {
 
 // 0x05005538 - 0x050055A0
 const Gfx bubba_seg5_dl_05005538[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05000008),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_sunglasses),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bubba_seg5_lights_05004F30.l, 1),
@@ -477,7 +474,7 @@ const Gfx bubba_seg5_dl_05005538[] = {
 
 // 0x050055A0 - 0x050056E0
 const Gfx bubba_seg5_dl_050055A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05001408),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bubba_seg5_lights_05004F50.l, 1),
@@ -505,7 +502,7 @@ const Gfx bubba_seg5_dl_050055A0[] = {
 
 // 0x050056E0 - 0x05005738
 const Gfx bubba_seg5_dl_050056E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05001C08),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_fins),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bubba_seg5_vertex_05005148, 6, 0),
@@ -517,7 +514,7 @@ const Gfx bubba_seg5_dl_050056E0[] = {
 
 // 0x05005738 - 0x05005840
 const Gfx bubba_seg5_dl_05005738[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_05002408),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_scales),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bubba_seg5_vertex_050051A8, 16, 0),

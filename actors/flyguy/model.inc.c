@@ -1,28 +1,19 @@
 // Flyguy
 
-// ???
-UNUSED static const u64 flyguy_unused_1 = 0;
-
 // 0x0800E088
-ALIGNED8 static const Texture flyguy_seg8_texture_0800E088[] = {
+ALIGNED8 static const Texture flyguy_seg8_texture_cloth_wrinkle[] = {
 #include "actors/flyguy/flyguy_cloth_wrinkle.rgba16.inc.c"
 };
 
 // 0x0800F088
-ALIGNED8 static const Texture flyguy_seg8_texture_0800F088[] = {
+ALIGNED8 static const Texture flyguy_seg8_texture_face[] = {
 #include "actors/flyguy/flyguy_face.rgba16.inc.c"
 };
 
 // 0x0800F888
-ALIGNED8 static const Texture flyguy_seg8_texture_0800F888[] = {
+ALIGNED8 static const Texture flyguy_seg8_texture_propeller[] = {
 #include "actors/flyguy/flyguy_propeller.ia16.inc.c"
 };
-
-// Unreferenced light group
-UNUSED static const Lights1 flyguy_lights_unused1 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x080100A0
 static const Lights1 flyguy_seg8_lights_080100A0 = gdSPDefLights1(
@@ -34,24 +25,6 @@ static const Lights1 flyguy_seg8_lights_080100A0 = gdSPDefLights1(
 static const Lights1 flyguy_seg8_lights_080100B8 = gdSPDefLights1(
     0x3f, 0x32, 0x08,
     0xff, 0xc8, 0x23, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 flyguy_lights_unused2 = gdSPDefLights1(
-    0x3a, 0x2f, 0x04,
-    0xe8, 0xbd, 0x13, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 flyguy_lights_unused3 = gdSPDefLights1(
-    0x2c, 0x00, 0x00,
-    0xb2, 0x00, 0x00, 0x28, 0x28, 0x28
-);
-
-// Unreferenced light group
-UNUSED static const Lights1 flyguy_lights_unused5 = gdSPDefLights1(
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x28, 0x28, 0x28
 );
 
 // 0x08010130
@@ -284,7 +257,7 @@ static const Vtx flyguy_seg8_vertex_08010AF8[] = {
 
 // 0x08010B38 - 0x08010B80
 const Gfx flyguy_seg8_dl_08010B38[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_0800F888),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_propeller),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&flyguy_seg8_lights_08010AE0.l, 1),
@@ -311,12 +284,6 @@ const Gfx flyguy_seg8_dl_08010B80[] = {
     gsSPSetGeometryMode(G_CULL_BACK | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };
-
-// 0x08010BF0
-static const Lights1 flyguy_seg8_lights_08010BF0 = gdSPDefLights1(
-    0x7f, 0x7f, 0x7f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x08010C08
 static const Lights1 flyguy_seg8_lights_08010C08 = gdSPDefLights1(
@@ -491,11 +458,11 @@ static const Vtx flyguy_seg8_vertex_08011348[] = {
 
 // 0x080113A8 - 0x08011420
 const Gfx flyguy_seg8_dl_080113A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_0800F088),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&flyguy_seg8_lights_08010BF0.l, 1),
-    gsSPLight(&flyguy_seg8_lights_08010BF0.a, 2),
+    gsSPLight(&flyguy_seg8_lights_08010AE0.l, 1),
+    gsSPLight(&flyguy_seg8_lights_08010AE0.a, 2),
     gsSPVertex(flyguy_seg8_vertex_08010C38, 9, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 4,  1,  0, 0x0,  2,  5,  0, 0x0),
@@ -506,7 +473,7 @@ const Gfx flyguy_seg8_dl_080113A8[] = {
 
 // 0x08011420 - 0x080116D0
 const Gfx flyguy_seg8_dl_08011420[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_0800E088),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_cloth_wrinkle),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&flyguy_seg8_lights_08010C08.l, 1),

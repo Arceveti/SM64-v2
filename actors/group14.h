@@ -10,13 +10,13 @@ extern const Gfx chain_ball_seg6_dl_060212E8[];
 // chain_chomp
 extern const GeoLayout chain_chomp_geo[];
 extern const Gfx chain_chomp_seg6_dl_06024000[];
-extern const Gfx chain_chomp_seg6_dl_06024040[];
+extern const Gfx chain_chomp_seg6_dl_bright_shine[];
 extern const Gfx chain_chomp_seg6_dl_06024240[];
-extern const Gfx chain_chomp_seg6_dl_06024700[];
+extern const Gfx chain_chomp_seg6_dl_dull_shine[];
 extern const Gfx chain_chomp_seg6_dl_06024900[];
 extern const Gfx chain_chomp_seg6_dl_06024940[];
-extern const Gfx chain_chomp_seg6_dl_06024AA8[];
-extern const Gfx chain_chomp_seg6_dl_06024B00[];
+extern const Gfx chain_chomp_seg6_sub_dl_eye[];
+extern const Gfx chain_chomp_seg6_dl_eye[];
 extern const Gfx chain_chomp_seg6_dl_06024CF0[];
 extern const Gfx chain_chomp_seg6_dl_06024D60[];
 extern const Gfx chain_chomp_seg6_dl_06024F50[];
@@ -107,8 +107,8 @@ extern const struct Animation *const piranha_plant_seg6_anims_0601C31C[];
 
 // poundable_pole
 extern const GeoLayout wooden_post_geo[];
-extern const Gfx poundable_pole_seg6_dl_model_top[];
-extern const Gfx poundable_pole_seg6_dl_model_sides[];
+extern const Gfx poundable_pole_seg6_sub_dl_top[];
+extern const Gfx poundable_pole_seg6_sub_dl_sides[];
 extern const Gfx poundable_pole_seg6_dl_06002410[];
 extern const Collision poundable_pole_collision_06002490[];
 

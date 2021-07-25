@@ -39,7 +39,7 @@ ALIGNED8 static const Texture sparkles_seg4_texture_04029C90[] = {
 };
 
 // 0x0402A490 - 0x0402A4F8
-const Gfx sparkles_seg4_dl_material_model[] = {
+const Gfx sparkles_seg4_sub_dl_material_model[] = {
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -58,40 +58,40 @@ const Gfx sparkles_seg4_dl_material_model[] = {
 const Gfx sparkles_seg4_dl_0[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04027490),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
 
 // 0x0402A510 - 0x0402A528
 const Gfx sparkles_seg4_dl_1[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04027C90),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
 
 // 0x0402A528 - 0x0402A540
 const Gfx sparkles_seg4_dl_2[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04028490),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
 
 // 0x0402A540 - 0x0402A558
 const Gfx sparkles_seg4_dl_3[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04028C90),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
 
 // 0x0402A558 - 0x0402A570
 const Gfx sparkles_seg4_dl_4[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04029490),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
 
 // 0x0402A570 - 0x0402A588
 const Gfx sparkles_seg4_dl_5[] = {
     gsDPPipeSync(),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sparkles_seg4_texture_04029C90),
-    gsSPBranchList(sparkles_seg4_dl_material_model),
+    gsSPBranchList(sparkles_seg4_sub_dl_material_model),
 };
