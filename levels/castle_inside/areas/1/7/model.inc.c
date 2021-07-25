@@ -16,7 +16,7 @@ static const Vtx dl_castle_lobby_peach_window_vertex_group[] = {
 
 // 0x0702AAD8 - 0x0702AB20
 static const Gfx dl_castle_lobby_peach_window_model[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_castle_seg7_texture_peach_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_lobby_peach_window.l, 1),

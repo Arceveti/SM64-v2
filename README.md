@@ -20,6 +20,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Re-implementation of the unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - Re-implementation of the unused cracked ice in SL (SunlitSpace542, Arceveti) *
 - Bowser's puzzle in LLL is now seamless (Arceveti)
+- Fixed various models which had misaligned vertices/UVs (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
