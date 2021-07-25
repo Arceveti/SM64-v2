@@ -3,28 +3,28 @@
 // 0x04025318
 static const Vtx water_wave_seg4_vertex_04025318[] = {
     {{{   -64,      0,     64}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xc8}}},
-    {{{    64,      0,     64}, 0, {   992,      0}, {0xff, 0xff, 0xff, 0xc8}}},
-    {{{    64,      0,    -64}, 0, {   992,    992}, {0xff, 0xff, 0xff, 0xc8}}},
-    {{{   -64,      0,    -64}, 0, {     0,    992}, {0xff, 0xff, 0xff, 0xc8}}},
+    {{{    64,      0,     64}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xc8}}},
+    {{{    64,      0,    -64}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xc8}}},
+    {{{   -64,      0,    -64}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xc8}}},
 };
 
 // 0x04025358
-ALIGNED8 static const Texture water_wave_seg4_texture_04025358[] = {
+ALIGNED8 static const Texture water_wave_seg4_texture_0[] = {
 #include "actors/water_wave/water_wave_0.ia16.inc.c"
 };
 
 // 0x04025B58
-ALIGNED8 static const Texture water_wave_seg4_texture_04025B58[] = {
+ALIGNED8 static const Texture water_wave_seg4_texture_1[] = {
 #include "actors/water_wave/water_wave_1.ia16.inc.c"
 };
 
 // 0x04026358
-ALIGNED8 static const Texture water_wave_seg4_texture_04026358[] = {
+ALIGNED8 static const Texture water_wave_seg4_texture_2[] = {
 #include "actors/water_wave/water_wave_2.ia16.inc.c"
 };
 
 // 0x04026B58
-ALIGNED8 static const Texture water_wave_seg4_texture_04026B58[] = {
+ALIGNED8 static const Texture water_wave_seg4_texture_3[] = {
 #include "actors/water_wave/water_wave_3.ia16.inc.c"
 };
 
@@ -61,27 +61,27 @@ const Gfx water_wave_seg4_dl_040273D8[] = {
 // 0x040273F0 - 0x04027408
 const Gfx water_wave_seg4_dl_0[] = {
     gsDPPipeSync(),
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04025358),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_0),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027408 - 0x04027420
 const Gfx water_wave_seg4_dl_1[] = {
     gsDPPipeSync(),
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04025B58),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_1),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027420 - 0x04027438
 const Gfx water_wave_seg4_dl_2[] = {
     gsDPPipeSync(),
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04026358),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_2),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };
 
 // 0x04027438 - 0x04027450
 const Gfx water_wave_seg4_dl_3[] = {
     gsDPPipeSync(),
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_04026B58),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, water_wave_seg4_texture_3),
     gsSPBranchList(water_wave_seg4_dl_040273D8),
 };

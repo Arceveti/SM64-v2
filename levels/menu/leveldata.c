@@ -11,7 +11,7 @@
 #include "make_const_nonconst.h"
 
 // 0x07000000 - 0x07000018
-static const Lights1 lights_menu_save_button = gdSPDefLights1(
+static const Lights1 lights_menu_button = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
@@ -79,8 +79,8 @@ static const Gfx dl_tex_block_menu_save_button_base[] = {
 
 // 0x070031A0 - 0x07003218
 static const Gfx dl_vertex_menu_save_button_borders[] = {
-    gsSPLight(&lights_menu_save_button.l, 1),
-    gsSPLight(&lights_menu_save_button.a, 2),
+    gsSPLight(&lights_menu_button.l, 1),
+    gsSPLight(&lights_menu_button.a, 2),
     gsSPVertex(vertex_menu_save_button_borders, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  5,  7,  6, 0x0),
@@ -126,8 +126,8 @@ static const Gfx dl_tex_block_menu_save_button_back[] = {
 
 // 0x070032E0 - 0x07003330
 static const Gfx dl_vertex_menu_save_button_back[] = {
-    gsSPLight(&lights_menu_save_button.l, 1),
-    gsSPLight(&lights_menu_save_button.a, 2),
+    gsSPLight(&lights_menu_button.l, 1),
+    gsSPLight(&lights_menu_button.a, 2),
     gsSPVertex(vertex_menu_save_button_back, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
@@ -179,20 +179,14 @@ const Gfx dl_menu_save_button_back[] = {
 const Gfx dl_menu_save_button_fade_back[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
-    gsSPLight(&lights_menu_save_button.l, 1),
-    gsSPLight(&lights_menu_save_button.a, 2),
+    gsSPLight(&lights_menu_button.l, 1),
+    gsSPLight(&lights_menu_button.a, 2),
     gsSPVertex(vertex_menu_save_button_back, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsDPPipeSync(),
     gsSPSetGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };
-
-// 0x07003450 - 0x07003468
-static const Lights1 lights_menu_main_button = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x07003468 - 0x07003468
 ALIGNED8 static const Texture texture_menu_erase[] = {
@@ -298,8 +292,8 @@ static const Vtx vertex_menu_main_button_group4[] = {
 
 // 0x07006038 - 0x07006150
 static const Gfx dl_vertex_menu_main_button[] = {
-    gsSPLight(&lights_menu_main_button.l, 1),
-    gsSPLight(&lights_menu_main_button.a, 2),
+    gsSPLight(&lights_menu_button.l, 1),
+    gsSPLight(&lights_menu_button.a, 2),
     gsSPVertex(vertex_menu_main_button_group1, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),

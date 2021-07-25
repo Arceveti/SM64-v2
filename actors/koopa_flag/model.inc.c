@@ -1,7 +1,7 @@
 // Koopa Flag
 
 // 0x06000048
-ALIGNED8 static const Texture koopa_flag_seg6_texture_06000048[] = {
+ALIGNED8 static const Texture koopa_flag_seg6_texture_banner[] = {
 #include "actors/koopa_flag/koopa_flag_banner.rgba16.inc.c"
 };
 
@@ -86,7 +86,7 @@ static const Vtx koopa_flag_seg6_vertex_06000A68[] = {
 
 // 0x06000AB8 - 0x06000AE8
 const Gfx koopa_flag_seg6_dl_06000AB8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_06000048),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_banner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_flag_seg6_vertex_06000A38, 3, 0),
@@ -130,7 +130,7 @@ static const Vtx koopa_flag_seg6_vertex_06000B80[] = {
 
 // 0x06000BC0 - 0x06000BF8
 const Gfx koopa_flag_seg6_dl_06000BC0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_06000048),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_banner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_flag_seg6_vertex_06000B80, 4, 0),
@@ -166,7 +166,7 @@ static const Vtx koopa_flag_seg6_vertex_06000C68[] = {
 
 // 0x06000CA8 - 0x06000CE0
 const Gfx koopa_flag_seg6_dl_06000CA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_06000048),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_flag_seg6_texture_banner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_flag_seg6_vertex_06000C68, 4, 0),

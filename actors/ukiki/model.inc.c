@@ -7,22 +7,22 @@ static const Lights1 ukiki_seg5_lights_05007BA0 = gdSPDefLights1(
 );
 
 // 0x05007BC0
-ALIGNED8 static const Texture ukiki_seg5_texture_05007BC0[] = {
+ALIGNED8 static const Texture ukiki_seg5_texture_face[] = {
 #include "actors/ukiki/ukiki_face.rgba16.inc.c"
 };
 
 // 0x05008BC0
-ALIGNED8 static const Texture ukiki_seg5_texture_05008BC0[] = {
+ALIGNED8 static const Texture ukiki_seg5_texture_face_blink[] = {
 #include "actors/ukiki/ukiki_face_blink.rgba16.inc.c"
 };
 
 // 0x05009BC0
-ALIGNED8 static const Texture ukiki_seg5_texture_05009BC0[] = {
+ALIGNED8 static const Texture ukiki_seg5_texture_butt[] = {
 #include "actors/ukiki/ukiki_butt.rgba16.inc.c"
 };
 
 // 0x0500A3C0
-ALIGNED8 static const Texture ukiki_seg5_texture_0500A3C0[] = {
+ALIGNED8 static const Texture ukiki_seg5_texture_fur[] = {
 #include "actors/ukiki/ukiki_fur.rgba16.inc.c"
 };
 
@@ -202,7 +202,7 @@ const Gfx ukiki_seg5_dl_0500B2B8[] = {
 // 0x0500B2E8 - 0x0500B310
 const Gfx ukiki_seg5_dl_0500B2E8[] = {
     gsSPDisplayList(ukiki_seg5_dl_0500B278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_05007BC0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(ukiki_seg5_dl_0500B2B8),
@@ -211,7 +211,7 @@ const Gfx ukiki_seg5_dl_0500B2E8[] = {
 // 0x0500B310 - 0x0500B338
 const Gfx ukiki_seg5_dl_0500B310[] = {
     gsSPDisplayList(ukiki_seg5_dl_0500B278),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_05008BC0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_face_blink),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(ukiki_seg5_dl_0500B2B8),
@@ -284,7 +284,7 @@ static const Vtx ukiki_seg5_vertex_0500B620[] = {
 
 // 0x0500B660 - 0x0500B7E8
 const Gfx ukiki_seg5_dl_0500B660[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -318,7 +318,7 @@ const Gfx ukiki_seg5_dl_0500B660[] = {
 
 // 0x0500B7E8 - 0x0500B820
 const Gfx ukiki_seg5_dl_0500B7E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_05009BC0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_butt),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ukiki_seg5_vertex_0500B620, 4, 0),
@@ -357,7 +357,7 @@ static const Vtx ukiki_seg5_vertex_0500B8A0[] = {
 
 // 0x0500B920 - 0x0500B988
 const Gfx ukiki_seg5_dl_0500B920[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -400,7 +400,7 @@ static const Vtx ukiki_seg5_vertex_0500BA00[] = {
 
 // 0x0500BA90 - 0x0500BB28
 const Gfx ukiki_seg5_dl_0500BA90[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -444,7 +444,7 @@ static const Vtx ukiki_seg5_vertex_0500BBA0[] = {
 
 // 0x0500BC10 - 0x0500BC78
 const Gfx ukiki_seg5_dl_0500BC10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -489,7 +489,7 @@ static const Vtx ukiki_seg5_vertex_0500BCF0[] = {
 
 // 0x0500BDA0 - 0x0500BE38
 const Gfx ukiki_seg5_dl_0500BDA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -537,7 +537,7 @@ static const Vtx ukiki_seg5_vertex_0500BEB0[] = {
 
 // 0x0500BF60 - 0x0500BFF8
 const Gfx ukiki_seg5_dl_0500BF60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -585,7 +585,7 @@ static const Vtx ukiki_seg5_vertex_0500C070[] = {
 
 // 0x0500C120 - 0x0500C1B8
 const Gfx ukiki_seg5_dl_0500C120[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -632,7 +632,7 @@ static const Vtx ukiki_seg5_vertex_0500C230[] = {
 
 // 0x0500C2D0 - 0x0500C368
 const Gfx ukiki_seg5_dl_0500C2D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -680,7 +680,7 @@ static const Vtx ukiki_seg5_vertex_0500C3E0[] = {
 
 // 0x0500C490 - 0x0500C528
 const Gfx ukiki_seg5_dl_0500C490[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -728,7 +728,7 @@ static const Vtx ukiki_seg5_vertex_0500C5A0[] = {
 
 // 0x0500C650 - 0x0500C6E8
 const Gfx ukiki_seg5_dl_0500C650[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -775,7 +775,7 @@ static const Vtx ukiki_seg5_vertex_0500C760[] = {
 
 // 0x0500C800 - 0x0500C898
 const Gfx ukiki_seg5_dl_0500C800[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),
@@ -822,7 +822,7 @@ static const Vtx ukiki_seg5_vertex_0500C910[] = {
 
 // 0x0500C9B0 - 0x0500CA48
 const Gfx ukiki_seg5_dl_0500C9B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_0500A3C0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ukiki_seg5_texture_fur),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ukiki_seg5_lights_0500ABC0.l, 1),

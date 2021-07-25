@@ -16,12 +16,6 @@ static const Lights1 ttc_seg7_lights_07001030 = gdSPDefLights1(
     0x99, 0x99, 0x99, 0x28, 0x28, 0x28
 );
 
-// 0x07001048 - 0x07001060
-static const Lights1 ttc_seg7_lights_07001048 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x07001060 - 0x07001078
 static const Lights1 ttc_seg7_lights_07001060 = gdSPDefLights1(
     0x00, 0x00, 0x00,
@@ -3221,8 +3215,8 @@ static const Gfx ttc_seg7_dl_0700A700[] = {
     gsSPVertex(ttc_seg7_vertex_070082F8, 7, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP1Triangle( 0,  2,  6, 0x0),
-    gsSPLight(&ttc_seg7_lights_07001048.l, 1),
-    gsSPLight(&ttc_seg7_lights_07001048.a, 2),
+    gsSPLight(&ttc_seg7_lights_07001000.l, 1),
+    gsSPLight(&ttc_seg7_lights_07001000.a, 2),
     gsSPVertex(ttc_seg7_vertex_07008368, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),

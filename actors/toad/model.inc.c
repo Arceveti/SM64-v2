@@ -7,12 +7,12 @@ static const Lights1 toad_seg6_lights_06005908 = gdSPDefLights1(
 );
 
 // 0x06005920
-ALIGNED8 static const Texture toad_seg6_texture_06005920[] = {
+ALIGNED8 static const Texture toad_seg6_texture_face[] = {
 #include "actors/toad/toad_face.rgba16.inc.c"
 };
 
 // 0x06006120
-ALIGNED8 static const Texture toad_seg6_texture_06006120[] = {
+ALIGNED8 static const Texture toad_seg6_texture_head[] = {
 #include "actors/toad/toad_head.rgba16.inc.c"
 };
 
@@ -220,7 +220,7 @@ static const Vtx toad_seg6_vertex_06007200[] = {
 
 // 0x06007300 - 0x06007498
 const Gfx toad_seg6_dl_06007300[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, toad_seg6_texture_06005920),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, toad_seg6_texture_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&toad_seg6_lights_06005908.l, 1),
@@ -255,7 +255,7 @@ const Gfx toad_seg6_dl_06007300[] = {
 
 // 0x06007498 - 0x060076C0
 const Gfx toad_seg6_dl_06007498[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, toad_seg6_texture_06006120),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, toad_seg6_texture_head),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(toad_seg6_vertex_06006BD0, 15, 0),
@@ -327,7 +327,6 @@ const Gfx toad_seg6_dl_06007710[] = {
     gsSPEndDisplayList(),
 };
 
-#ifndef VERSION_JP
 // 0x06007788 - 0x06007808
 const Gfx toad_seg6_us_dl_06007788[] = {
     gsDPPipeSync(),
@@ -347,7 +346,6 @@ const Gfx toad_seg6_us_dl_06007788[] = {
     gsDPPipeSync(),
     gsSPEndDisplayList(),
 };
-#endif
 
 // 0x06007788
 static const Lights1 toad_seg6_lights_06007788 = gdSPDefLights1(
@@ -690,7 +688,6 @@ const Gfx toad_seg6_dl_06008520[] = {
 };
 
 // US: 8608
-#ifndef VERSION_JP
 // 0x06008608 - 0x06008650
 const Gfx toad_seg6_us_dl_06008608[] = {
     gsDPPipeSync(),
@@ -703,7 +700,6 @@ const Gfx toad_seg6_us_dl_06008608[] = {
     gsDPSetRenderMode(G_RM_AA_ZB_XLU_SURF, G_RM_NOOP2),
     gsSPEndDisplayList(),
 };
-#endif
 
 // 0x06008560
 static const Lights1 toad_seg6_lights_06008560 = gdSPDefLights1(

@@ -1,22 +1,22 @@
 // Snufit
 
 // 0x060070E0
-ALIGNED8 static const Texture snufit_seg6_texture_060070E0[] = {
+ALIGNED8 static const Texture snufit_seg6_texture_body[] = {
 #include "actors/snufit/snufit_body.rgba16.inc.c"
 };
 
 // 0x060078E0
-ALIGNED8 static const Texture snufit_seg6_texture_060078E0[] = {
+ALIGNED8 static const Texture snufit_seg6_texture_eye[] = {
 #include "actors/snufit/snufit_eye.rgba16.inc.c"
 };
 
 // 0x060080E0
-ALIGNED8 static const Texture snufit_seg6_texture_060080E0[] = {
+ALIGNED8 static const Texture snufit_seg6_texture_mask_strap[] = {
 #include "actors/snufit/snufit_mask_strap.rgba16.inc.c"
 };
 
 // 0x060084E0
-ALIGNED8 static const Texture snufit_seg6_texture_060084E0[] = {
+ALIGNED8 static const Texture snufit_seg6_texture_mouth[] = {
 #include "actors/snufit/snufit_mouth.rgba16.inc.c"
 };
 
@@ -135,7 +135,7 @@ static const Vtx snufit_seg6_vertex_06009170[] = {
 
 // 0x060091E0 - 0x06009278
 const Gfx snufit_seg6_dl_060091E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060080E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_mask_strap),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&snufit_seg6_lights_06008CE0.l, 1),
@@ -152,7 +152,7 @@ const Gfx snufit_seg6_dl_060091E0[] = {
 
 // 0x06009278 - 0x060092F0
 const Gfx snufit_seg6_dl_06009278[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060078E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&snufit_seg6_lights_06008CF8.l, 1),
@@ -222,12 +222,6 @@ const Gfx snufit_seg6_dl_06009498[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x06009530
-static const Lights1 snufit_seg6_lights_06009530 = gdSPDefLights1(
-    0x66, 0x66, 0x66,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x06009548
 static const Vtx snufit_seg6_vertex_06009548[] = {
     {{{   -33,     59,     -6}, 0, {   474,     68}, {0xae, 0x60, 0x00, 0xff}}},
@@ -256,11 +250,11 @@ static const Vtx snufit_seg6_vertex_06009608[] = {
 
 // 0x06009668 - 0x06009700
 const Gfx snufit_seg6_dl_06009668[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060080E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_mask_strap),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&snufit_seg6_lights_06009530.l, 1),
-    gsSPLight(&snufit_seg6_lights_06009530.a, 2),
+    gsSPLight(&snufit_seg6_lights_06008CF8.l, 1),
+    gsSPLight(&snufit_seg6_lights_06008CF8.a, 2),
     gsSPVertex(snufit_seg6_vertex_06009548, 12, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  0,  3, 0x0,  1,  5,  2, 0x0),
@@ -272,8 +266,8 @@ const Gfx snufit_seg6_dl_06009668[] = {
 };
 
 // 0x06009700 - 0x06009748
-const Gfx snufit_seg6_dl_06009700[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060084E0),
+const Gfx snufit_seg6_sub_dl_mouth[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_mouth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(snufit_seg6_vertex_06009608, 6, 0),
@@ -286,6 +280,7 @@ const Gfx snufit_seg6_dl_06009700[] = {
 const Gfx snufit_seg6_dl_06009748[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
+    gsSPClearGeometryMode(G_CULL_BACK), // because the back is visible
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
@@ -295,18 +290,13 @@ const Gfx snufit_seg6_dl_06009748[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(snufit_seg6_dl_06009700),
+    gsSPDisplayList(snufit_seg6_sub_dl_mouth),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPSetGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 };
-
-// 0x060097C8
-static const Lights1 snufit_seg6_lights_060097C8 = gdSPDefLights1(
-    0x66, 0x66, 0x66,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
 
 // 0x060097E0
 static const Vtx snufit_seg6_vertex_060097E0[] = {
@@ -326,11 +316,11 @@ static const Vtx snufit_seg6_vertex_060097E0[] = {
 
 // 0x060098A0 - 0x06009938
 const Gfx snufit_seg6_dl_060098A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060080E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_mask_strap),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&snufit_seg6_lights_060097C8.l, 1),
-    gsSPLight(&snufit_seg6_lights_060097C8.a, 2),
+    gsSPLight(&snufit_seg6_lights_06008CF8.l, 1),
+    gsSPLight(&snufit_seg6_lights_06008CF8.a, 2),
     gsSPVertex(snufit_seg6_vertex_060097E0, 12, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  4, 0x0),
     gsSP2Triangles( 1,  4,  2, 0x0,  3,  5,  6, 0x0),
@@ -367,7 +357,7 @@ static const Vtx snufit_seg6_vertex_06009998[] = {
 
 // 0x060099D8 - 0x06009A10
 const Gfx snufit_seg6_dl_060099D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_060070E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snufit_seg6_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(snufit_seg6_vertex_06009998, 4, 0),

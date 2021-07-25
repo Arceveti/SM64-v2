@@ -120,26 +120,20 @@ const Gfx whomp_seg6_dl_body[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x0601F678
-static const Lights1 whomp_seg6_lights_0601F678 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0601F690
 static const Vtx whomp_seg6_vertex_0601F690[] = {
-    {{{   290,      0,     85}, 0, {   952,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
+    {{{   290,      0,     85}, 0, { 30<<5,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
     {{{   -10,     35,     13}, 0, {   246,    976}, {0xed, 0x6a, 0x41, 0xff}}},
     {{{   -10,      0,     38}, 0, {   672,    976}, {0xed, 0xe3, 0x79, 0xff}}},
-    {{{   290,     80,     28}, 0, {   952,      0}, {0xed, 0x7d, 0x08, 0xff}}},
+    {{{   290,     80,     28}, 0, { 30<<5,      0}, {0xed, 0x7d, 0x08, 0xff}}},
     {{{   -10,     21,    -27}, 0, {   246,    976}, {0xed, 0x5e, 0xae, 0xff}}},
     {{{   -10,     35,     13}, 0, {   672,    976}, {0xed, 0x6a, 0x41, 0xff}}},
     {{{   290,     49,    -65}, 0, {     0,      0}, {0xed, 0x2f, 0x8c, 0xff}}},
-    {{{   290,     49,    -65}, 0, {   952,      0}, {0xed, 0x2f, 0x8c, 0xff}}},
+    {{{   290,     49,    -65}, 0, { 30<<5,      0}, {0xed, 0x2f, 0x8c, 0xff}}},
     {{{   -10,    -20,    -27}, 0, {   246,    976}, {0xed, 0xd1, 0x8c, 0xff}}},
     {{{   -10,     21,    -27}, 0, {   672,    976}, {0xed, 0x5e, 0xae, 0xff}}},
     {{{   290,    -48,    -65}, 0, {     0,      0}, {0xed, 0xa2, 0xae, 0xff}}},
-    {{{   290,    -79,     28}, 0, {   952,      0}, {0xed, 0x95, 0x41, 0xff}}},
+    {{{   290,    -79,     28}, 0, { 30<<5,      0}, {0xed, 0x95, 0x41, 0xff}}},
     {{{   290,      0,     85}, 0, {     0,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
     {{{   -10,      0,     38}, 0, {   246,    976}, {0xed, 0xe3, 0x79, 0xff}}},
     {{{   -10,    -34,     13}, 0, {   672,    976}, {0xed, 0x83, 0x08, 0xff}}},
@@ -147,10 +141,10 @@ static const Vtx whomp_seg6_vertex_0601F690[] = {
 
 // 0x0601F780
 static const Vtx whomp_seg6_vertex_0601F780[] = {
-    {{{   290,    -48,    -65}, 0, {   952,      0}, {0xed, 0xa2, 0xae, 0xff}}},
+    {{{   290,    -48,    -65}, 0, { 30<<5,      0}, {0xed, 0xa2, 0xae, 0xff}}},
     {{{   290,    -79,     28}, 0, {     0,      0}, {0xed, 0x95, 0x41, 0xff}}},
     {{{   -10,    -34,     13}, 0, {   246,    976}, {0xed, 0x83, 0x08, 0xff}}},
-    {{{   290,      0,     85}, 0, {   952,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
+    {{{   290,      0,     85}, 0, { 30<<5,      0}, {0xed, 0x1c, 0x7a, 0xff}}},
     {{{   290,     80,     28}, 0, {     0,      0}, {0xed, 0x7d, 0x08, 0xff}}},
     {{{   -10,     35,     13}, 0, {   246,    976}, {0xed, 0x6a, 0x41, 0xff}}},
     {{{   -10,    -20,    -27}, 0, {   672,    976}, {0xed, 0xd1, 0x8c, 0xff}}},
@@ -161,8 +155,8 @@ const Gfx whomp_seg6_dl_0601F7F0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&whomp_seg6_lights_0601F678.l, 1),
-    gsSPLight(&whomp_seg6_lights_0601F678.a, 2),
+    gsSPLight(&whomp_seg6_lights_0601F360.l, 1),
+    gsSPLight(&whomp_seg6_lights_0601F360.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601F690, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
@@ -190,28 +184,22 @@ const Gfx whomp_seg6_dl_0601F880[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x0601F8E0
-static const Lights1 whomp_seg6_lights_0601F8E0 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0601F8F8
 static const Vtx whomp_seg6_vertex_0601F8F8[] = {
     {{{   -10,      0,    -37}, 0, {   246,    976}, {0xed, 0x1c, 0x86, 0xff}}},
-    {{{   290,     80,    -26}, 0, {   952,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
+    {{{   290,     80,    -26}, 0, { 30<<5,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
     {{{   290,      0,    -84}, 0, {     0,      0}, {0xed, 0xe2, 0x87, 0xff}}},
     {{{   -10,     35,    -12}, 0, {   246,    976}, {0xed, 0x7d, 0xf8, 0xff}}},
-    {{{   290,     49,     66}, 0, {   952,      0}, {0xed, 0x5e, 0x52, 0xff}}},
+    {{{   290,     49,     66}, 0, { 30<<5,      0}, {0xed, 0x5e, 0x52, 0xff}}},
     {{{   290,     80,    -26}, 0, {     0,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
     {{{   -10,     21,     28}, 0, {   672,    976}, {0xed, 0x2f, 0x74, 0xff}}},
     {{{   -10,     21,     28}, 0, {   246,    976}, {0xed, 0x2f, 0x74, 0xff}}},
-    {{{   290,    -48,     66}, 0, {   952,      0}, {0xed, 0xd1, 0x74, 0xff}}},
+    {{{   290,    -48,     66}, 0, { 30<<5,      0}, {0xed, 0xd1, 0x74, 0xff}}},
     {{{   290,     49,     66}, 0, {     0,      0}, {0xed, 0x5e, 0x52, 0xff}}},
     {{{   -10,    -20,     28}, 0, {   672,    976}, {0xed, 0xa2, 0x52, 0xff}}},
     {{{   -10,    -34,    -12}, 0, {   246,    976}, {0xed, 0x95, 0xc0, 0xff}}},
     {{{   -10,      0,    -37}, 0, {   672,    976}, {0xed, 0x1c, 0x86, 0xff}}},
-    {{{   290,      0,    -84}, 0, {   952,      0}, {0xed, 0xe2, 0x87, 0xff}}},
+    {{{   290,      0,    -84}, 0, { 30<<5,      0}, {0xed, 0xe2, 0x87, 0xff}}},
     {{{   290,    -79,    -26}, 0, {     0,      0}, {0xed, 0x83, 0xf9, 0xff}}},
 };
 
@@ -219,10 +207,10 @@ static const Vtx whomp_seg6_vertex_0601F8F8[] = {
 static const Vtx whomp_seg6_vertex_0601F9E8[] = {
     {{{   -10,    -20,     28}, 0, {   246,    976}, {0xed, 0xa2, 0x52, 0xff}}},
     {{{   -10,    -34,    -12}, 0, {   672,    976}, {0xed, 0x95, 0xc0, 0xff}}},
-    {{{   290,    -79,    -26}, 0, {   952,      0}, {0xed, 0x83, 0xf9, 0xff}}},
+    {{{   290,    -79,    -26}, 0, { 30<<5,      0}, {0xed, 0x83, 0xf9, 0xff}}},
     {{{   -10,      0,    -37}, 0, {   246,    976}, {0xed, 0x1c, 0x86, 0xff}}},
     {{{   -10,     35,    -12}, 0, {   672,    976}, {0xed, 0x7d, 0xf8, 0xff}}},
-    {{{   290,     80,    -26}, 0, {   952,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
+    {{{   290,     80,    -26}, 0, { 30<<5,      0}, {0xed, 0x6a, 0xbf, 0xff}}},
     {{{   290,    -48,     66}, 0, {     0,      0}, {0xed, 0xd1, 0x74, 0xff}}},
 };
 
@@ -231,8 +219,8 @@ const Gfx whomp_seg6_dl_0601FA58[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&whomp_seg6_lights_0601F8E0.l, 1),
-    gsSPLight(&whomp_seg6_lights_0601F8E0.a, 2),
+    gsSPLight(&whomp_seg6_lights_0601F360.l, 1),
+    gsSPLight(&whomp_seg6_lights_0601F360.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601F8F8, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
@@ -262,10 +250,10 @@ const Gfx whomp_seg6_dl_0601FAE8[] = {
 
 // 0x0601FB48
 static const Vtx whomp_seg6_vertex_0601FB48[] = {
-    {{{   -37,    -37,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,    -37,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,     38,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -37,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,    -38,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,    -38,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,     38,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601FB88 - 0x0601FBC0
@@ -298,10 +286,10 @@ const Gfx whomp_seg6_dl_0601FBC0[] = {
 
 // 0x0601FC30
 static const Vtx whomp_seg6_vertex_0601FC30[] = {
-    {{{   -37,    -37,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,    -37,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,     38,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -37,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,    -38,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,    -38,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,     38,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601FC70 - 0x0601FCA8
@@ -332,28 +320,22 @@ const Gfx whomp_seg6_dl_0601FCA8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x0601FD18
-static const Lights1 whomp_seg6_lights_0601FD18 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0601FD30
 static const Vtx whomp_seg6_vertex_0601FD30[] = {
-    {{{   174,    183,    177}, 0, {  1364,    114}, {0x01, 0x3e, 0x6e, 0xff}}},
-    {{{   180,    257,      2}, 0, {   490,    -34}, {0x46, 0x69, 0x00, 0xff}}},
-    {{{    22,    158,      2}, 0, {   490,    162}, {0x9b, 0x4c, 0xff, 0xff}}},
-    {{{   -28,    -89,      2}, 0, {   490,    658}, {0x84, 0xe7, 0x00, 0xff}}},
-    {{{   177,    182,   -171}, 0, {  -376,    116}, {0xc9, 0x39, 0x9d, 0xff}}},
-    {{{   154,   -260,      3}, 0, {   492,    998}, {0xe9, 0x84, 0x01, 0xff}}},
-    {{{   158,   -143,    201}, 0, {  1482,    768}, {0x38, 0xc6, 0x61, 0xff}}},
+    {{{   174,    183,    177}, 0, {  1364,    112}, {0x01, 0x3e, 0x6e, 0xff}}},
+    {{{   180,    256,      2}, 0, {   496,    -32}, {0x46, 0x69, 0x00, 0xff}}},
+    {{{    22,    158,      2}, 0, {   496,    160}, {0x9b, 0x4c, 0xff, 0xff}}},
+    {{{   -28,    -89,      2}, 0, {   496,    658}, {0x84, 0xe7, 0x00, 0xff}}},
+    {{{   177,    182,   -171}, 0, {  -376,    112}, {0xc9, 0x39, 0x9d, 0xff}}},
+    {{{   154,   -260,      2}, 0, {   496,  31<<5}, {0xe9, 0x84, 0x01, 0xff}}},
+    {{{   158,   -144,    202}, 0, {  1482,    768}, {0x38, 0xc6, 0x61, 0xff}}},
     {{{   161,   -152,   -190}, 0, {  -470,    784}, {0x71, 0xdf, 0xd3, 0xff}}},
-    {{{   161,   -152,   -190}, 0, {    -2,    774}, {0x71, 0xdf, 0xd3, 0xff}}},
-    {{{   174,    183,    177}, 0, {   916,    104}, {0x01, 0x3e, 0x6e, 0xff}}},
-    {{{   158,   -143,    201}, 0, {   974,    756}, {0x38, 0xc6, 0x61, 0xff}}},
-    {{{   180,    257,      2}, 0, {   478,    -46}, {0x46, 0x69, 0x00, 0xff}}},
-    {{{   177,    182,   -171}, 0, {    44,    104}, {0xc9, 0x39, 0x9d, 0xff}}},
-    {{{   154,   -260,      3}, 0, {   480,    990}, {0xe9, 0x84, 0x01, 0xff}}},
+    {{{   161,   -152,   -190}, 0, {     0,    768}, {0x71, 0xdf, 0xd3, 0xff}}},
+    {{{   174,    183,    177}, 0, {   912,    104}, {0x01, 0x3e, 0x6e, 0xff}}},
+    {{{   158,   -144,    202}, 0, {   976,    756}, {0x38, 0xc6, 0x61, 0xff}}},
+    {{{   180,    256,      2}, 0, { 15<<5,    -48}, {0x46, 0x69, 0x00, 0xff}}},
+    {{{   177,    182,   -171}, 0, {    48,    104}, {0xc9, 0x39, 0x9d, 0xff}}},
+    {{{   154,   -260,      2}, 0, { 15<<5,  31<<5}, {0xe9, 0x84, 0x01, 0xff}}},
 };
 
 // 0x0601FE10 - 0x0601FEA8
@@ -361,8 +343,8 @@ const Gfx whomp_seg6_dl_0601FE10[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&whomp_seg6_lights_0601FD18.l, 1),
-    gsSPLight(&whomp_seg6_lights_0601FD18.a, 2),
+    gsSPLight(&whomp_seg6_lights_0601F360.l, 1),
+    gsSPLight(&whomp_seg6_lights_0601F360.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601FD30, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 2,  1,  4, 0x0,  4,  3,  2, 0x0),
@@ -389,22 +371,16 @@ const Gfx whomp_seg6_dl_0601FEA8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x0601FF08
-static const Lights1 whomp_seg6_lights_0601FF08 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x0601FF20
 static const Vtx whomp_seg6_vertex_0601FF20[] = {
-    {{{   154,   -260,     -2}, 0, {   470,    998}, {0x6e, 0xc3, 0xff, 0xff}}},
-    {{{   174,    183,   -176}, 0, {  -110,    114}, {0x01, 0x3e, 0x92, 0xff}}},
-    {{{   180,    257,     -1}, 0, {   472,    -34}, {0x46, 0x69, 0x00, 0xff}}},
-    {{{   158,   -143,   -200}, 0, {  -188,    768}, {0xdf, 0xc4, 0x96, 0xff}}},
-    {{{    22,    158,     -1}, 0, {   472,    162}, {0x9b, 0x4c, 0x01, 0xff}}},
-    {{{   -28,    -89,     -1}, 0, {   472,    658}, {0x84, 0xe7, 0x00, 0xff}}},
-    {{{   177,    182,    172}, 0, {  1050,    116}, {0x03, 0x3d, 0x6f, 0xff}}},
-    {{{   161,   -152,    191}, 0, {  1112,    784}, {0xe1, 0xc2, 0x6a, 0xff}}},
+    {{{   154,   -260,     -1}, 0, { 15<<5,  31<<5}, {0x6e, 0xc3, 0xff, 0xff}}},
+    {{{   174,    183,   -176}, 0, {  -112,    112}, {0x01, 0x3e, 0x92, 0xff}}},
+    {{{   180,    256,     -1}, 0, { 15<<5,    -32}, {0x46, 0x69, 0x00, 0xff}}},
+    {{{   158,   -144,   -200}, 0, {  -188,    768}, {0xdf, 0xc4, 0x96, 0xff}}},
+    {{{    22,    158,     -1}, 0, { 15<<5,    160}, {0x9b, 0x4c, 0x01, 0xff}}},
+    {{{   -28,    -89,     -1}, 0, { 15<<5,    656}, {0x84, 0xe7, 0x00, 0xff}}},
+    {{{   177,    182,    172}, 0, { 33<<5,    112}, {0x03, 0x3d, 0x6f, 0xff}}},
+    {{{   161,   -152,    192}, 0, {  1112,    784}, {0xe1, 0xc2, 0x6a, 0xff}}},
 };
 
 // 0x0601FFA0 - 0x06020038
@@ -412,8 +388,8 @@ const Gfx whomp_seg6_dl_0601FFA0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&whomp_seg6_lights_0601FF08.l, 1),
-    gsSPLight(&whomp_seg6_lights_0601FF08.a, 2),
+    gsSPLight(&whomp_seg6_lights_0601F360.l, 1),
+    gsSPLight(&whomp_seg6_lights_0601F360.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601FF20, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  2,  1, 0x0,  1,  5,  4, 0x0),

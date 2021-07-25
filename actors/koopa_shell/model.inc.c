@@ -408,12 +408,12 @@ static const Lights1 koopa_shell_seg8_lights_08027488 = gdSPDefLights1(
 );
 
 // 0x080274A0
-ALIGNED8 static const Texture koopa_shell_seg8_texture_080274A0[] = {
+ALIGNED8 static const Texture koopa_shell_seg8_texture_front[] = {
 #include "actors/koopa_shell/koopa_shell_front.rgba16.inc.c"
 };
 
 // 0x08027CA0
-ALIGNED8 static const Texture koopa_shell_seg8_texture_08027CA0[] = {
+ALIGNED8 static const Texture koopa_shell_seg8_texture_back[] = {
 #include "actors/koopa_shell/koopa_shell_back.rgba16.inc.c"
 };
 
@@ -511,7 +511,7 @@ static const Vtx koopa_shell_seg8_vertex_08028850[] = {
 
 // 0x080288E0 - 0x08028978
 const Gfx koopa_shell_seg8_dl_top[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_08027CA0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_back),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&koopa_shell_seg8_lights_08027470.l, 1),
@@ -528,7 +528,7 @@ const Gfx koopa_shell_seg8_dl_top[] = {
 
 // 0x08028978 - 0x08028A20
 const Gfx koopa_shell_seg8_dl_bottom[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_080274A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_shell_seg8_texture_front),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(koopa_shell_seg8_vertex_08028540, 14, 0),

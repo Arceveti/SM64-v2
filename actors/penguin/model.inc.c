@@ -25,32 +25,32 @@ static const Lights1 penguin_seg5_lights_05002DC8 = gdSPDefLights1(
 );
 
 // 0x05002DE0
-ALIGNED8 static const Texture penguin_seg5_texture_05002DE0[] = {
+ALIGNED8 static const Texture penguin_seg5_texture_eye_open[] = {
 #include "actors/penguin/penguin_eye_open.rgba16.inc.c"
 };
 
 // 0x050035E0
-ALIGNED8 static const Texture penguin_seg5_texture_050035E0[] = {
+ALIGNED8 static const Texture penguin_seg5_texture_eye_half_closed[] = {
 #include "actors/penguin/penguin_eye_half_closed.rgba16.inc.c"
 };
 
 // 0x05003DE0
-ALIGNED8 static const Texture penguin_seg5_texture_05003DE0[] = {
+ALIGNED8 static const Texture penguin_seg5_texture_eye_closed[] = {
 #include "actors/penguin/penguin_eye_closed.rgba16.inc.c"
 };
 
 // 0x050045E0
-ALIGNED8 static const Texture penguin_seg5_texture_050045E0[] = {
+ALIGNED8 static const Texture penguin_seg5_texture_eye_angry[] = {
 #include "actors/penguin/penguin_eye_angry.rgba16.inc.c"
 };
 
 // // 0x05004DE0
-// ALIGNED8 static const Texture penguin_seg5_texture_05004DE0[] = {
+// ALIGNED8 static const Texture penguin_seg5_texture_eye_angry_unused[] = {
 // #include "actors/penguin/penguin_eye_angry_unused.rgba16.inc.c"
 // };
 
 // 0x050055E0
-ALIGNED8 static const Texture penguin_seg5_texture_050055E0[] = {
+ALIGNED8 static const Texture penguin_seg5_texture_beak[] = {
 #include "actors/penguin/penguin_beak.rgba16.inc.c"
 };
 
@@ -221,7 +221,7 @@ const Gfx penguin_seg5_dl_050063C8[] = {
     gsSPDisplayList(penguin_seg5_dl_05006188),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_050055E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_beak),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(penguin_seg5_dl_050061C8),
@@ -235,7 +235,7 @@ const Gfx penguin_seg5_dl_050063C8[] = {
 // 0x05006428 - 0x05006458
 const Gfx penguin_seg5_dl_eye_open[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05002DE0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_eye_open),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(penguin_seg5_dl_050063C8),
@@ -245,7 +245,7 @@ const Gfx penguin_seg5_dl_eye_open[] = {
 // 0x05006458 - 0x05006488
 const Gfx penguin_seg5_dl_eye_half_closed[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_050035E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_eye_half_closed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(penguin_seg5_dl_050063C8),
@@ -255,7 +255,7 @@ const Gfx penguin_seg5_dl_eye_half_closed[] = {
 // 0x05006488 - 0x050064B8
 const Gfx penguin_seg5_dl_eye_closed[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_05003DE0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_eye_closed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(penguin_seg5_dl_050063C8),
@@ -265,7 +265,7 @@ const Gfx penguin_seg5_dl_eye_closed[] = {
 // 0x050064B8 - 0x050064E8
 const Gfx penguin_seg5_dl_eye_angry[] = {
     gsSPDisplayList(penguin_seg5_dl_05006380),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_050045E0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_eye_angry),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(penguin_seg5_dl_050063C8),

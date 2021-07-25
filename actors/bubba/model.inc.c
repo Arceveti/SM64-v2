@@ -318,12 +318,6 @@ static const Lights1 bubba_seg5_lights_05004F30 = gdSPDefLights1(
     0xf1, 0xa6, 0x8c, 0x28, 0x28, 0x28
 );
 
-// 0x05004F48
-static const Lights1 bubba_seg5_lights_05004F50 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05004F60
 static const Lights1 bubba_seg5_lights_05004F60 = gdSPDefLights1(
     0x0a, 0x07, 0x08,
@@ -477,8 +471,8 @@ const Gfx bubba_seg5_dl_050055A0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bubba_seg5_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&bubba_seg5_lights_05004F50.l, 1),
-    gsSPLight(&bubba_seg5_lights_05004F50.a, 2),
+    gsSPLight(&bubba_seg5_lights_05004420.l, 1),
+    gsSPLight(&bubba_seg5_lights_05004420.a, 2),
     gsSPVertex(bubba_seg5_vertex_05004FE8, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  4, 0x0),
     gsSP2Triangles( 0,  5,  3, 0x0,  6,  5,  0, 0x0),
@@ -556,8 +550,8 @@ const Gfx bubba_seg5_dl_05005840[] = {
     gsSP2Triangles( 3,  7,  6, 0x0,  3,  8,  7, 0x0),
     gsSP2Triangles( 7,  8,  0, 0x0,  8,  1,  0, 0x0),
     gsSP1Triangle( 8,  2,  1, 0x0),
-    gsSPLight(&bubba_seg5_lights_05004F50.l, 1),
-    gsSPLight(&bubba_seg5_lights_05004F50.a, 2),
+    gsSPLight(&bubba_seg5_lights_05004420.l, 1),
+    gsSPLight(&bubba_seg5_lights_05004420.a, 2),
     gsSPVertex(bubba_seg5_vertex_050054C8, 7, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 0,  4,  1, 0x0,  5,  6,  0, 0x0),

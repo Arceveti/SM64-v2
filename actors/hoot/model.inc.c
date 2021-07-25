@@ -375,12 +375,6 @@ const Gfx hoot_seg5_dl_05002F10[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05002F60
-static const Lights1 hoot_seg5_lights_05002F60 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05002F78
 static const Vtx hoot_seg5_vertex_05002F78[] = {
     {{{   119,      0,    -85}, 0, {  1972,     68}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -399,8 +393,8 @@ const Gfx hoot_seg5_dl_05002FD8[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_05002F60.l, 1),
-    gsSPLight(&hoot_seg5_lights_05002F60.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_05002F78, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -420,12 +414,6 @@ const Gfx hoot_seg5_dl_05003038[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05003088
-static const Lights1 hoot_seg5_lights_05003088 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x050030A0
 static const Vtx hoot_seg5_vertex_050030A0[] = {
     {{{    89,      1,    -46}, 0, {   928,    456}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -444,8 +432,8 @@ const Gfx hoot_seg5_dl_05003100[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_05003088.l, 1),
-    gsSPLight(&hoot_seg5_lights_05003088.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_050030A0, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -465,12 +453,6 @@ const Gfx hoot_seg5_dl_05003160[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x050031B0
-static const Lights1 hoot_seg5_lights_050031B0 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x050031C8
 static const Vtx hoot_seg5_vertex_050031C8[] = {
     {{{    37,      1,    -66}, 0, {   380,    184}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -489,8 +471,8 @@ const Gfx hoot_seg5_dl_05003228[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_050031B0.l, 1),
-    gsSPLight(&hoot_seg5_lights_050031B0.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_050031C8, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -510,12 +492,6 @@ const Gfx hoot_seg5_dl_05003288[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x050032D8
-static const Lights1 hoot_seg5_lights_050032D8 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x050032F0
 static const Vtx hoot_seg5_vertex_050032F0[] = {
     {{{   168,      0,   -124}, 0, {  2340,   2408}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -534,8 +510,8 @@ const Gfx hoot_seg5_dl_05003350[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_050032D8.l, 1),
-    gsSPLight(&hoot_seg5_lights_050032D8.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_050032F0, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -555,12 +531,6 @@ const Gfx hoot_seg5_dl_050033B0[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05003400
-static const Lights1 hoot_seg5_lights_05003400 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05003418
 static const Vtx hoot_seg5_vertex_05003418[] = {
     {{{   119,      0,    -76}, 0, {  1988,   1892}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -579,8 +549,8 @@ const Gfx hoot_seg5_dl_05003478[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_05003400.l, 1),
-    gsSPLight(&hoot_seg5_lights_05003400.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_05003418, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -600,12 +570,6 @@ const Gfx hoot_seg5_dl_050034D8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05003528
-static const Lights1 hoot_seg5_lights_05003528 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05003540
 static const Vtx hoot_seg5_vertex_05003540[] = {
     {{{    89,      1,    -94}, 0, {   984,   2096}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -624,8 +588,8 @@ const Gfx hoot_seg5_dl_050035A0[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_05003528.l, 1),
-    gsSPLight(&hoot_seg5_lights_05003528.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_05003540, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),
@@ -645,12 +609,6 @@ const Gfx hoot_seg5_dl_05003600[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05003650
-static const Lights1 hoot_seg5_lights_05003650 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05003668
 static const Vtx hoot_seg5_vertex_05003668[] = {
     {{{    37,      1,    -27}, 0, {   428,   1324}, {0x00, 0x7f, 0x00, 0x00}}},
@@ -669,8 +627,8 @@ const Gfx hoot_seg5_dl_050036C8[] = {
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPLight(&hoot_seg5_lights_05003650.l, 1),
-    gsSPLight(&hoot_seg5_lights_05003650.a, 2),
+    gsSPLight(&hoot_seg5_lights_05001E38.l, 1),
+    gsSPLight(&hoot_seg5_lights_05001E38.a, 2),
     gsSPVertex(hoot_seg5_vertex_05003668, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSPEndDisplayList(),

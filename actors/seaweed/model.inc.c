@@ -7,36 +7,36 @@ static const Lights1 seaweed_seg6_lights_06007DF8 = gdSPDefLights1(
 );
 
 // 0x06007E10
-ALIGNED8 static const Texture seaweed_seg6_texture_06007E10[] = {
+ALIGNED8 static const Texture seaweed_seg6_texture_tip[] = {
 #include "actors/seaweed/seaweed_tip.rgba16.inc.c"
 };
 
 // 0x06008610
-ALIGNED8 static const Texture seaweed_seg6_texture_06008610[] = {
+ALIGNED8 static const Texture seaweed_seg6_texture_upper_center[] = {
 #include "actors/seaweed/seaweed_upper_center.rgba16.inc.c"
 };
 
 // 0x06008E10
-ALIGNED8 static const Texture seaweed_seg6_texture_06008E10[] = {
+ALIGNED8 static const Texture seaweed_seg6_texture_lower_center[] = {
 #include "actors/seaweed/seaweed_lower_center.rgba16.inc.c"
 };
 
 // 0x06009610
-ALIGNED8 static const Texture seaweed_seg6_texture_06009610[] = {
+ALIGNED8 static const Texture seaweed_seg6_texture_base[] = {
 #include "actors/seaweed/seaweed_base.rgba16.inc.c"
 };
 
 // 0x06009E10
 static const Vtx seaweed_seg6_vertex_06009E10[] = {
-    {{{   232,      2,    -76}, 0, {   -30,    -12}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,     77}, 0, {   990,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   232,      2,     77}, 0, {   992,    -12}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,    -76}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   232,      2,    -77}, 0, {   -32,    -16}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,     77}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   232,      2,     77}, 0, { 31<<5,    -16}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,    -77}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x06009E50 - 0x06009E98
 const Gfx seaweed_seg6_dl_06009E50[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_06007E10),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_tip),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&seaweed_seg6_lights_06007DF8.l, 1),
@@ -66,15 +66,15 @@ const Gfx seaweed_seg6_dl_06009E98[] = {
 
 // 0x06009F08
 static const Vtx seaweed_seg6_vertex_06009F08[] = {
-    {{{   311,      2,    -76}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,    -76}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,     77}, 0, {   990,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   311,      2,     77}, 0, {   990,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   311,      2,    -77}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,    -77}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,     77}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   311,      2,     77}, 0, { 31<<5,      0}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x06009F48 - 0x06009F90
 const Gfx seaweed_seg6_dl_06009F48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_06008610),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_upper_center),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&seaweed_seg6_lights_06007DF8.l, 1),
@@ -104,15 +104,15 @@ const Gfx seaweed_seg6_dl_06009F90[] = {
 
 // 0x0600A000
 static const Vtx seaweed_seg6_vertex_0600A000[] = {
-    {{{   314,      2,    -76}, 0, {     0,    -20}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,     77}, 0, {   990,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   314,      2,     77}, 0, {   990,    -20}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    -1,      2,    -76}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   314,      2,    -77}, 0, {     0,    -16}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,     77}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   314,      2,     77}, 0, { 31<<5,    -16}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    -1,      2,    -77}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0600A040 - 0x0600A088
 const Gfx seaweed_seg6_dl_0600A040[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_06008E10),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_lower_center),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&seaweed_seg6_lights_06007DF8.l, 1),
@@ -142,15 +142,15 @@ const Gfx seaweed_seg6_dl_0600A088[] = {
 
 // 0x0600A0F8
 static const Vtx seaweed_seg6_vertex_0600A0F8[] = {
-    {{{   236,      2,    -76}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{     0,      2,     77}, 0, {   990,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   236,      2,     77}, 0, {   990,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{     0,      2,    -76}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   236,      2,    -77}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{     0,      2,     77}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   236,      2,     77}, 0, { 31<<5,      0}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{     0,      2,    -77}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0600A138 - 0x0600A180
 const Gfx seaweed_seg6_dl_0600A138[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_06009610),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, seaweed_seg6_texture_base),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&seaweed_seg6_lights_06007DF8.l, 1),

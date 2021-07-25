@@ -95,12 +95,6 @@ const Gfx clam_shell_seg5_dl_050012B8[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x05001320
-static const Lights1 clam_shell_seg5_lights_05001320 = gdSPDefLights1(
-    0x66, 0x66, 0x66,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x05001338
 static const Vtx clam_shell_seg5_vertex_05001338[] = {
     {{{   260,      0,      0}, 0, {   480,    600}, {0xf5, 0x7e, 0x07, 0xff}}},
@@ -134,8 +128,8 @@ const Gfx clam_shell_seg5_dl_05001478[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, clam_shell_seg5_texture_shell),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&clam_shell_seg5_lights_05001320.l, 1),
-    gsSPLight(&clam_shell_seg5_lights_05001320.a, 2),
+    gsSPLight(&clam_shell_seg5_lights_05001030.l, 1),
+    gsSPLight(&clam_shell_seg5_lights_05001030.a, 2),
     gsSPVertex(clam_shell_seg5_vertex_05001338, 10, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  0, 0x0),
     gsSP2Triangles( 4,  5,  0, 0x0,  0,  5,  6, 0x0),

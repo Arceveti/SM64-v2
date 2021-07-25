@@ -211,7 +211,7 @@ extern const Gfx flame_seg3_dl_blue_7[];
 
 // leaves
 extern const GeoLayout leaves_geo[];
-extern const Gfx leaves_seg3_dl_0301CDE0[];
+extern const Gfx leaves_seg3_dl_leaf[];
 
 // mario_cap
 extern const GeoLayout marios_cap_geo[];
@@ -241,14 +241,14 @@ extern const Gfx mist_seg3_dl_03000920[];
 
 // mushroom_1up
 extern const GeoLayout mushroom_1up_geo[];
-extern const Gfx mushroom_1up_seg3_dl_0302A628[];
+extern const Gfx mushroom_1up_seg3_sub_dl_0302A628[];
 extern const Gfx mushroom_1up_seg3_dl_0302A660[];
 
 // number
 extern const GeoLayout number_geo[];
 
 // pebble
-extern const Gfx pebble_seg3_dl_0301CB00[];
+extern const Gfx pebble_seg3_dl_pebble[];
 
 // power_meter
 extern const u8 *const power_meter_health_segments_lut[];
@@ -257,7 +257,7 @@ extern const Gfx dl_power_meter_health_segments_begin[];
 extern const Gfx dl_power_meter_health_segments_end[];
 
 // sand
-extern const Gfx sand_seg3_dl_0302BCD0[];
+extern const Gfx sand_seg3_dl_particle[];
 
 // star
 extern const GeoLayout star_geo[];
@@ -279,14 +279,11 @@ extern const Gfx transparent_star_seg3_dl_0302C620[];
 extern const GeoLayout bubbly_tree_geo[];
 extern const GeoLayout spiky_tree_geo[];
 extern const GeoLayout snow_tree_geo[];
-extern const GeoLayout spiky_tree1_geo[];   // unused
 extern const GeoLayout palm_tree_geo[];
-extern const Gfx tree_seg3_dl_bubbly_left_side[];
-extern const Gfx tree_seg3_dl_bubbly_right_side[];
+extern const Gfx tree_seg3_sub_dl_bubbly[];
 extern const Gfx tree_seg3_dl_bubbly[];
 extern const Gfx tree_seg3_dl_spiky[];
 extern const Gfx tree_seg3_dl_snowy_pine[];
-extern const Gfx tree_seg3_dl_spiky1[];     // unused
 extern const Gfx tree_seg3_dl_palm[];
 
 // warp_collision

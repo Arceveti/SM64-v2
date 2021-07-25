@@ -13,22 +13,22 @@ static const Lights1 manta_seg5_lights_05001770 = gdSPDefLights1(
 );
 
 // 0x050017A0
-ALIGNED8 static const Texture manta_seg5_texture_050017A0[] = {
+ALIGNED8 static const Texture manta_seg5_texture_fin_corner[] = {
 #include "actors/manta/manta_fin_corner.rgba16.inc.c"
 };
 
 // 0x05001FA0
-ALIGNED8 static const Texture manta_seg5_texture_05001FA0[] = {
+ALIGNED8 static const Texture manta_seg5_texture_gills[] = {
 #include "actors/manta/manta_gills.rgba16.inc.c"
 };
 
 // 0x05002FA0
-ALIGNED8 static const Texture manta_seg5_texture_05002FA0[] = {
+ALIGNED8 static const Texture manta_seg5_texture_eye[] = {
 #include "actors/manta/manta_eye.rgba16.inc.c"
 };
 
 // 0x050037A0
-ALIGNED8 static const Texture manta_seg5_texture_050037A0[] = {
+ALIGNED8 static const Texture manta_seg5_texture_fin_edge[] = {
 #include "actors/manta/manta_fin_edge.rgba16.inc.c"
 };
 
@@ -70,7 +70,7 @@ static const Vtx manta_seg5_vertex_050048A0[] = {
 
 // 0x05004960 - 0x050049C8
 const Gfx manta_seg5_dl_05004960[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_05002FA0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050047A0, 16, 0),
@@ -83,7 +83,7 @@ const Gfx manta_seg5_dl_05004960[] = {
 
 // 0x050049C8 - 0x05004A70
 const Gfx manta_seg5_dl_050049C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050048A0, 12, 0),
@@ -155,7 +155,7 @@ static const Vtx manta_seg5_vertex_05004BE8[] = {
 
 // 0x05004CA8 - 0x05004D10
 const Gfx manta_seg5_dl_05004CA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_05002FA0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05004AE8, 16, 0),
@@ -168,7 +168,7 @@ const Gfx manta_seg5_dl_05004CA8[] = {
 
 // 0x05004D10 - 0x05004DB8
 const Gfx manta_seg5_dl_05004D10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05004BE8, 12, 0),
@@ -211,7 +211,7 @@ static const Vtx manta_seg5_vertex_05004E30[] = {
 
 // 0x05004E60 - 0x05004E90
 const Gfx manta_seg5_dl_05004E60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05004E30, 3, 0),
@@ -253,7 +253,7 @@ static const Vtx manta_seg5_vertex_05004F00[] = {
 
 // 0x05004FA0 - 0x05005038
 const Gfx manta_seg5_dl_05004FA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05004F00, 10, 0),
@@ -325,7 +325,7 @@ static const Vtx manta_seg5_vertex_050051B8[] = {
 
 // 0x05005248 - 0x05005288
 const Gfx manta_seg5_dl_05005248[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050050A8, 7, 0),
@@ -336,7 +336,7 @@ const Gfx manta_seg5_dl_05005248[] = {
 
 // 0x05005288 - 0x05005308
 const Gfx manta_seg5_dl_05005288[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05005118, 10, 0),
@@ -408,7 +408,7 @@ static const Vtx manta_seg5_vertex_05005470[] = {
 
 // 0x050054F0 - 0x05005558
 const Gfx manta_seg5_dl_050054F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050053F0, 8, 0),
@@ -470,7 +470,7 @@ static const Vtx manta_seg5_vertex_05005680[] = {
 
 // 0x050056E0 - 0x05005730
 const Gfx manta_seg5_dl_050056E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05005620, 6, 0),
@@ -524,7 +524,7 @@ static const Vtx manta_seg5_vertex_050057E0[] = {
 
 // 0x05005880 - 0x05005918
 const Gfx manta_seg5_dl_05005880[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050057E0, 10, 0),
@@ -596,7 +596,7 @@ static const Vtx manta_seg5_vertex_05005A98[] = {
 
 // 0x05005B28 - 0x05005B68
 const Gfx manta_seg5_dl_05005B28[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05005988, 7, 0),
@@ -607,7 +607,7 @@ const Gfx manta_seg5_dl_05005B28[] = {
 
 // 0x05005B68 - 0x05005BE8
 const Gfx manta_seg5_dl_05005B68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050059F8, 10, 0),
@@ -679,7 +679,7 @@ static const Vtx manta_seg5_vertex_05005D50[] = {
 
 // 0x05005DD0 - 0x05005E38
 const Gfx manta_seg5_dl_05005DD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05005CD0, 8, 0),
@@ -741,7 +741,7 @@ static const Vtx manta_seg5_vertex_05005F60[] = {
 
 // 0x05005FC0 - 0x05006010
 const Gfx manta_seg5_dl_05005FC0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05005F00, 6, 0),
@@ -870,7 +870,7 @@ static const Vtx manta_seg5_vertex_05006420[] = {
 
 // 0x05006510 - 0x05006588
 const Gfx manta_seg5_dl_05006510[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050017A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050060C0, 14, 0),
@@ -884,7 +884,7 @@ const Gfx manta_seg5_dl_05006510[] = {
 
 // 0x05006588 - 0x050065F0
 const Gfx manta_seg5_dl_05006588[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_05001FA0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_gills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_050061A0, 15, 0),
@@ -897,7 +897,7 @@ const Gfx manta_seg5_dl_05006588[] = {
 
 // 0x050065F0 - 0x050066D0
 const Gfx manta_seg5_dl_050065F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_050037A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, manta_seg5_texture_fin_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(manta_seg5_vertex_05006290, 14, 0),

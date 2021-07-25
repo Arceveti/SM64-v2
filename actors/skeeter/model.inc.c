@@ -1,26 +1,26 @@
 // Skeeter
 
 // 0x06000090
-ALIGNED8 static const Texture skeeter_seg6_texture_06000090[] = {
+ALIGNED8 static const Texture skeeter_seg6_texture_eye[] = {
 #include "actors/skeeter/skeeter_eye.rgba16.inc.c"
 };
 
 // 0x06000890
-ALIGNED8 static const Texture skeeter_seg6_texture_06000890[] = {
+ALIGNED8 static const Texture skeeter_seg6_texture_iris[] = {
 #include "actors/skeeter/skeeter_iris.rgba16.inc.c"
 };
 
 // 0x06000990
 static const Vtx skeeter_seg6_vertex_06000990[] = {
-    {{{   -44,     45,      0}, 0, {     0,      0}, {0x00, 0xff, 0xd4, 0xff}}},
-    {{{   -44,    -44,      0}, 0, {     0,    990}, {0x00, 0xff, 0xd4, 0xff}}},
-    {{{    45,    -44,      0}, 0, {   990,    990}, {0x00, 0xff, 0xd4, 0xff}}},
-    {{{    45,     45,      0}, 0, {   990,      0}, {0x00, 0xff, 0xd4, 0xff}}},
+    {{{   -45,     45,      0}, 0, {     0,      0}, {0x00, 0xff, 0xd4, 0xff}}},
+    {{{   -45,    -45,      0}, 0, {     0,  31<<5}, {0x00, 0xff, 0xd4, 0xff}}},
+    {{{    45,    -45,      0}, 0, { 31<<5,  31<<5}, {0x00, 0xff, 0xd4, 0xff}}},
+    {{{    45,     45,      0}, 0, { 31<<5,      0}, {0x00, 0xff, 0xd4, 0xff}}},
 };
 
 // 0x060009D0 - 0x06000A08
 const Gfx skeeter_seg6_dl_060009D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000990, 4, 0),
@@ -48,15 +48,15 @@ const Gfx skeeter_seg6_dl_06000A08[] = {
 
 // 0x06000A78
 static const Vtx skeeter_seg6_vertex_06000A78[] = {
-    {{{   -14,     15,      0}, 0, {     0,      0}, {0xff, 0x55, 0x00, 0xff}}},
-    {{{   -14,    -14,      0}, 0, {     0,    990}, {0xff, 0x55, 0x00, 0xff}}},
-    {{{    15,    -14,      0}, 0, {   990,    990}, {0xff, 0x55, 0x00, 0xff}}},
-    {{{    15,     15,      0}, 0, {   990,      0}, {0xff, 0x55, 0x00, 0xff}}},
+    {{{   -16,     16,      0}, 0, {     0,      0}, {0xff, 0x55, 0x00, 0xff}}},
+    {{{   -16,    -16,      0}, 0, {     0,  31<<5}, {0xff, 0x55, 0x00, 0xff}}},
+    {{{    16,    -16,      0}, 0, { 31<<5,  31<<5}, {0xff, 0x55, 0x00, 0xff}}},
+    {{{    16,     16,      0}, 0, { 31<<5,      0}, {0xff, 0x55, 0x00, 0xff}}},
 };
 
 // 0x06000AB8 - 0x06000AF0
 const Gfx skeeter_seg6_dl_06000AB8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000A78, 4, 0),
@@ -84,15 +84,15 @@ const Gfx skeeter_seg6_dl_06000AF0[] = {
 
 // 0x06000B60
 static const Vtx skeeter_seg6_vertex_06000B60[] = {
-    {{{   -17,     18,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -17,    -17,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    18,    -17,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    18,     18,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -18,     18,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -18,    -18,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    18,    -18,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    18,     18,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06000BA0 - 0x06000BD8
 const Gfx skeeter_seg6_dl_06000BA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000090),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000B60, 4, 0),
@@ -120,14 +120,14 @@ const Gfx skeeter_seg6_dl_06000BD8[] = {
 
 // 0x06000C48
 static const Vtx skeeter_seg6_vertex_06000C48[] = {
-    {{{    66,      8,     69}, 0, {   536,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    85,    -24,    -35}, 0, {   -99,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    63,     75,    -10}, 0, {   218,    421}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,      8,     69}, 0, {   536,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    85,    -24,    -35}, 0, {   -96,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,     75,    -10}, 0, {   218,    421}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06000C78 - 0x06000CA8
 const Gfx skeeter_seg6_dl_06000C78[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000890),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_iris),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 8 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000C48, 3, 0),
@@ -155,14 +155,14 @@ const Gfx skeeter_seg6_dl_06000CA8[] = {
 
 // 0x06000D18
 static const Vtx skeeter_seg6_vertex_06000D18[] = {
-    {{{    63,     75,     11}, 0, {   218,    421}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,     75,     11}, 0, {   218,    421}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    85,    -24,     36}, 0, {   536,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    66,      8,    -68}, 0, {   -99,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,      8,    -68}, 0, {   -96,      0}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06000D48 - 0x06000D78
 const Gfx skeeter_seg6_dl_06000D48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_06000890),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, skeeter_seg6_texture_iris),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 8 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(skeeter_seg6_vertex_06000D18, 3, 0),
@@ -197,7 +197,7 @@ static const Lights1 skeeter_seg6_lights_06000DE8 = gdSPDefLights1(
 // 0x06000E00
 static const Vtx skeeter_seg6_vertex_06000E00[] = {
     {{{    45,    -24,   -122}, 0, {     0,      0}, {0x6a, 0xe9, 0xc0, 0xff}}},
-    {{{    45,    120,     76}, 0, {     0,      0}, {0x24, 0x60, 0x4a, 0xff}}},
+    {{{    45,    120,     77}, 0, {     0,      0}, {0x24, 0x60, 0x4a, 0xff}}},
     {{{    45,    -24,    123}, 0, {     0,      0}, {0x28, 0xd6, 0x70, 0xff}}},
     {{{    45,    120,    -75}, 0, {     0,      0}, {0xa5, 0x45, 0xcb, 0xff}}},
     {{{   -14,      0,      0}, 0, {     0,      0}, {0x82, 0xfd, 0x00, 0xff}}},

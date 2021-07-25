@@ -6,22 +6,22 @@ ALIGNED8 static const Texture monty_mole_seg5_texture_05000970[] = {
 };
 
 // 0x05001170
-ALIGNED8 static const Texture monty_mole_seg5_texture_05001170[] = {
+ALIGNED8 static const Texture monty_mole_seg5_texture_eye[] = {
 #include "actors/monty_mole/monty_mole_eye.rgba16.inc.c"
 };
 
 // 0x05001970
-ALIGNED8 static const Texture monty_mole_seg5_texture_05001970[] = {
+ALIGNED8 static const Texture monty_mole_seg5_texture_nose[] = {
 #include "actors/monty_mole/monty_mole_nose.rgba16.inc.c"
 };
 
 // 0x05002170
-ALIGNED8 static const Texture monty_mole_seg5_texture_05002170[] = {
+ALIGNED8 static const Texture monty_mole_seg5_texture_tooth[] = {
 #include "actors/monty_mole/monty_mole_tooth.rgba16.inc.c"
 };
 
 // 0x05002970
-ALIGNED8 static const Texture monty_mole_seg5_texture_05002970[] = {
+ALIGNED8 static const Texture monty_mole_seg5_texture_claw[] = {
 #include "actors/monty_mole/monty_mole_claw.rgba16.inc.c"
 };
 
@@ -45,7 +45,7 @@ static const Vtx monty_mole_seg5_vertex_05003188[] = {
 
 // 0x05003208 - 0x050032A0
 const Gfx monty_mole_seg5_dl_05003208[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -104,7 +104,7 @@ static const Vtx monty_mole_seg5_vertex_050033B8[] = {
 
 // 0x05003438 - 0x050034A0
 const Gfx monty_mole_seg5_dl_05003438[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05002970),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_claw),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -118,7 +118,7 @@ const Gfx monty_mole_seg5_dl_05003438[] = {
 
 // 0x050034A0 - 0x05003518
 const Gfx monty_mole_seg5_dl_050034A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_050033B8, 8, 0),
@@ -184,7 +184,7 @@ static const Vtx monty_mole_seg5_vertex_05003670[] = {
 
 // 0x05003730 - 0x050037A8
 const Gfx monty_mole_seg5_dl_05003730[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05002970),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_claw),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -199,7 +199,7 @@ const Gfx monty_mole_seg5_dl_05003730[] = {
 
 // 0x050037A8 - 0x05003820
 const Gfx monty_mole_seg5_dl_050037A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_05003670, 12, 0),
@@ -245,7 +245,7 @@ static const Vtx monty_mole_seg5_vertex_050038B8[] = {
 
 // 0x05003938 - 0x050039D0
 const Gfx monty_mole_seg5_dl_05003938[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -304,7 +304,7 @@ static const Vtx monty_mole_seg5_vertex_05003AE8[] = {
 
 // 0x05003B68 - 0x05003BD0
 const Gfx monty_mole_seg5_dl_05003B68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05002970),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_claw),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -318,7 +318,7 @@ const Gfx monty_mole_seg5_dl_05003B68[] = {
 
 // 0x05003BD0 - 0x05003C48
 const Gfx monty_mole_seg5_dl_05003BD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_05003AE8, 8, 0),
@@ -384,7 +384,7 @@ static const Vtx monty_mole_seg5_vertex_05003DA0[] = {
 
 // 0x05003E60 - 0x05003ED8
 const Gfx monty_mole_seg5_dl_05003E60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05002970),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_claw),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -399,7 +399,7 @@ const Gfx monty_mole_seg5_dl_05003E60[] = {
 
 // 0x05003ED8 - 0x05003F50
 const Gfx monty_mole_seg5_dl_05003ED8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_05003DA0, 12, 0),
@@ -509,7 +509,7 @@ const Gfx monty_mole_seg5_dl_050042B8[] = {
 
 // 0x05004368 - 0x050044B0
 const Gfx monty_mole_seg5_dl_05004368[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_050040B8, 16, 0),
@@ -654,7 +654,7 @@ static const Vtx monty_mole_seg5_vertex_05004970[] = {
 
 // 0x050049B0 - 0x05004A10
 const Gfx monty_mole_seg5_dl_050049B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001970),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_nose),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),
@@ -668,7 +668,7 @@ const Gfx monty_mole_seg5_dl_050049B0[] = {
 
 // 0x05004A10 - 0x05004B50
 const Gfx monty_mole_seg5_dl_05004A10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05001170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(monty_mole_seg5_vertex_05004590, 16, 0),
@@ -749,7 +749,7 @@ static const Vtx monty_mole_seg5_vertex_05004CA8[] = {
 
 // 0x05004CE8 - 0x05004D30
 const Gfx monty_mole_seg5_dl_05004CE8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_05002170),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, monty_mole_seg5_texture_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&monty_mole_seg5_lights_05003170.l, 1),

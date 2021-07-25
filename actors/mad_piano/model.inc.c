@@ -1,32 +1,32 @@
 // Mad Piano
 
 // 0x05006AF0
-ALIGNED8 static const Texture mad_piano_seg5_texture_05006AF0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_tooth[] = {
 #include "actors/mad_piano/mad_piano_tooth.rgba16.inc.c"
 };
 
 // 0x050072F0
-ALIGNED8 static const Texture mad_piano_seg5_texture_050072F0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_body[] = {
 #include "actors/mad_piano/mad_piano_body.rgba16.inc.c"
 };
 
 // 0x050076F0
-ALIGNED8 static const Texture mad_piano_seg5_texture_050076F0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_keys_corner[] = {
 #include "actors/mad_piano/mad_piano_keys_corner.rgba16.inc.c"
 };
 
 // 0x05007AF0
-ALIGNED8 static const Texture mad_piano_seg5_texture_05007AF0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_mouth[] = {
 #include "actors/mad_piano/mad_piano_mouth.rgba16.inc.c"
 };
 
 // 0x05007EF0
-ALIGNED8 static const Texture mad_piano_seg5_texture_05007EF0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_keys[] = {
 #include "actors/mad_piano/mad_piano_keys.rgba16.inc.c"
 };
 
 // 0x050082F0
-ALIGNED8 static const Texture mad_piano_seg5_texture_050082F0[] = {
+ALIGNED8 static const Texture mad_piano_seg5_texture_keys_edge[] = {
 #include "actors/mad_piano/mad_piano_keys_edge.rgba16.inc.c"
 };
 
@@ -128,7 +128,7 @@ static const Vtx mad_piano_seg5_vertex_05008A78[] = {
 
 // 0x05008B68 - 0x05008BD0
 const Gfx mad_piano_seg5_dl_05008B68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_050072F0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&mad_piano_seg5_lights_050086F0.l, 1),
@@ -142,7 +142,7 @@ const Gfx mad_piano_seg5_dl_05008B68[] = {
 
 // 0x05008BD0 - 0x05008CB0
 const Gfx mad_piano_seg5_dl_05008BD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_05006AF0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_tooth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(mad_piano_seg5_vertex_050087A8, 15, 0),
@@ -190,12 +190,6 @@ const Gfx mad_piano_seg5_dl_05008CB0[] = {
 static const Lights1 mad_piano_seg5_lights_05008D40 = gdSPDefLights1(
     0x3d, 0x3d, 0x3d,
     0xcc, 0xcc, 0xcc, 0x28, 0x28, 0x28
-);
-
-// 0x05008D58
-static const Lights1 mad_piano_seg5_lights_05008D58 = gdSPDefLights1(
-    0x4c, 0x4c, 0x4c,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
 
 // 0x05008D70
@@ -383,7 +377,7 @@ static const Vtx mad_piano_seg5_vertex_050094F0[] = {
 
 // 0x05009590 - 0x050096C8
 const Gfx mad_piano_seg5_dl_05009590[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_050072F0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&mad_piano_seg5_lights_05008D40.l, 1),
@@ -394,8 +388,8 @@ const Gfx mad_piano_seg5_dl_05009590[] = {
     gsSP2Triangles( 7, 10,  8, 0x0, 11,  7,  9, 0x0),
     gsSP2Triangles(11,  9,  1, 0x0,  0, 12, 11, 0x0),
     gsSP1Triangle( 0, 11,  1, 0x0),
-    gsSPLight(&mad_piano_seg5_lights_05008D58.l, 1),
-    gsSPLight(&mad_piano_seg5_lights_05008D58.a, 2),
+    gsSPLight(&mad_piano_seg5_lights_050086F0.l, 1),
+    gsSPLight(&mad_piano_seg5_lights_050086F0.a, 2),
     gsSPVertex(mad_piano_seg5_vertex_05008E70, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
@@ -414,7 +408,7 @@ const Gfx mad_piano_seg5_dl_05009590[] = {
 
 // 0x050096C8 - 0x050097B0
 const Gfx mad_piano_seg5_dl_050096C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_05007AF0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_mouth),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(mad_piano_seg5_vertex_05009150, 15, 0),
@@ -437,7 +431,7 @@ const Gfx mad_piano_seg5_dl_050096C8[] = {
 
 // 0x050097B0 - 0x050097F8
 const Gfx mad_piano_seg5_dl_050097B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_050082F0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_keys_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&mad_piano_seg5_lights_05008D70.l, 1),
@@ -449,7 +443,7 @@ const Gfx mad_piano_seg5_dl_050097B0[] = {
 
 // 0x050097F8 - 0x05009840
 const Gfx mad_piano_seg5_dl_050097F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_05007EF0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_keys),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&mad_piano_seg5_lights_05008D40.l, 1),
@@ -461,7 +455,7 @@ const Gfx mad_piano_seg5_dl_050097F8[] = {
 
 // 0x05009840 - 0x05009888
 const Gfx mad_piano_seg5_dl_05009840[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_050076F0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mad_piano_seg5_texture_keys_corner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(mad_piano_seg5_vertex_05009470, 8, 0),

@@ -7,46 +7,46 @@ static const Lights1 purple_switch_seg8_lights_0800C090 = gdSPDefLights1(
 );
 
 // 0x0800C0A8
-ALIGNED8 static const Texture purple_switch_seg8_texture_0800C0A8[] = {
+ALIGNED8 static const Texture purple_switch_seg8_texture_base[] = {
 #include "actors/purple_switch/purple_switch_base.rgba16.inc.c"
 };
 
 // 0x0800C128
-ALIGNED8 static const Texture purple_switch_seg8_texture_0800C128[] = {
+ALIGNED8 static const Texture purple_switch_seg8_texture_exclamation_point[] = {
 #include "actors/purple_switch/purple_switch_exclamation_point.rgba16.inc.c"
 };
 
 // 0x0800C528
 static const Vtx purple_switch_seg8_vertex_0800C528[] = {
-    {{{   102,      0,   -101}, 0, {     0,   -543}, {0x53, 0x5f, 0x00, 0xff}}},
-    {{{    61,     36,    -60}, 0, {  1326,   -287}, {0x53, 0x5f, 0x00, 0xff}}},
-    {{{    61,     36,     61}, 0, {  1326,    478}, {0x53, 0x5f, 0x00, 0xff}}},
-    {{{  -101,      0,   -101}, 0, {     0,    734}, {0x00, 0x5f, 0xad, 0xff}}},
-    {{{    61,     36,    -60}, 0, {  1326,   -287}, {0x00, 0x5f, 0xad, 0xff}}},
-    {{{   102,      0,   -101}, 0, {     0,   -543}, {0x00, 0x5f, 0xad, 0xff}}},
-    {{{   -60,     36,    -60}, 0, {  1326,    478}, {0x00, 0x5f, 0xad, 0xff}}},
-    {{{  -101,      0,    102}, 0, {     0,    734}, {0xad, 0x5f, 0x00, 0xff}}},
-    {{{   -60,     36,    -60}, 0, {  1326,   -287}, {0xad, 0x5f, 0x00, 0xff}}},
-    {{{  -101,      0,   -101}, 0, {     0,   -543}, {0xad, 0x5f, 0x00, 0xff}}},
-    {{{   -60,     36,     61}, 0, {  1326,    478}, {0xad, 0x5f, 0x00, 0xff}}},
-    {{{   102,      0,    102}, 0, {     0,   -543}, {0x00, 0x5f, 0x53, 0xff}}},
-    {{{    61,     36,     61}, 0, {  1326,   -287}, {0x00, 0x5f, 0x53, 0xff}}},
-    {{{   -60,     36,     61}, 0, {  1326,    478}, {0x00, 0x5f, 0x53, 0xff}}},
-    {{{  -101,      0,    102}, 0, {     0,    734}, {0x00, 0x5f, 0x53, 0xff}}},
-    {{{   102,      0,    102}, 0, {     0,    734}, {0x53, 0x5f, 0x00, 0xff}}},
+    {{{   102,      0,   -102}, 0, {     0,   -544}, {0x53, 0x5f, 0x00, 0xff}}},
+    {{{    64,     36,    -64}, 0, {  1328,   -288}, {0x53, 0x5f, 0x00, 0xff}}},
+    {{{    64,     36,     64}, 0, {  1328,  15<<5}, {0x53, 0x5f, 0x00, 0xff}}},
+    {{{  -102,      0,   -102}, 0, {     0,  23<<5}, {0x00, 0x5f, 0xad, 0xff}}},
+    {{{    64,     36,    -64}, 0, {  1328,   -288}, {0x00, 0x5f, 0xad, 0xff}}},
+    {{{   102,      0,   -102}, 0, {     0,   -544}, {0x00, 0x5f, 0xad, 0xff}}},
+    {{{   -64,     36,    -64}, 0, {  1328,  15<<5}, {0x00, 0x5f, 0xad, 0xff}}},
+    {{{  -102,      0,    102}, 0, {     0,  23<<5}, {0xad, 0x5f, 0x00, 0xff}}},
+    {{{   -64,     36,    -64}, 0, {  1328,   -288}, {0xad, 0x5f, 0x00, 0xff}}},
+    {{{  -102,      0,   -102}, 0, {     0,   -544}, {0xad, 0x5f, 0x00, 0xff}}},
+    {{{   -64,     36,     64}, 0, {  1328,  15<<5}, {0xad, 0x5f, 0x00, 0xff}}},
+    {{{   102,      0,    102}, 0, {     0,   -544}, {0x00, 0x5f, 0x53, 0xff}}},
+    {{{    64,     36,     64}, 0, {  1328,   -288}, {0x00, 0x5f, 0x53, 0xff}}},
+    {{{   -64,     36,     64}, 0, {  1328,  15<<5}, {0x00, 0x5f, 0x53, 0xff}}},
+    {{{  -102,      0,    102}, 0, {     0,  23<<5}, {0x00, 0x5f, 0x53, 0xff}}},
+    {{{   102,      0,    102}, 0, {     0,  23<<5}, {0x53, 0x5f, 0x00, 0xff}}},
 };
 
 // 0x0800C628
 static const Vtx purple_switch_seg8_vertex_0800C628[] = {
-    {{{    61,     36,    -60}, 0, {   607,   -134}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   -60,     36,     61}, 0, {  -159,   1090}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    61,     36,     61}, 0, {   607,   1090}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   -60,     36,    -60}, 0, {  -159,   -134}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    64,     36,    -64}, 0, {   608,   -128}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   -64,     36,     64}, 0, {  -160,   1088}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    64,     36,     64}, 0, {   608,   1088}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   -64,     36,    -64}, 0, {  -160,   -128}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0800C668 - 0x0800C6E0
 const Gfx purple_switch_seg8_dl_0800C668[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, purple_switch_seg8_texture_0800C0A8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, purple_switch_seg8_texture_base),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 4 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&purple_switch_seg8_lights_0800C090.l, 1),
@@ -61,7 +61,7 @@ const Gfx purple_switch_seg8_dl_0800C668[] = {
 
 // 0x0800C6E0 - 0x0800C718
 const Gfx purple_switch_seg8_dl_0800C6E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, purple_switch_seg8_texture_0800C128),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, purple_switch_seg8_texture_exclamation_point),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 32 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(purple_switch_seg8_vertex_0800C628, 4, 0),

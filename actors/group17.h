@@ -49,9 +49,8 @@ extern const Gfx mr_i_iris_seg6_dl_closed[];
 
 // scuttlebug
 extern const GeoLayout scuttlebug_geo[];
-extern const Gfx scuttlebug_seg6_dl_06013988[];
-extern const Gfx scuttlebug_seg6_dl_060139C0[];
-extern const Gfx scuttlebug_seg6_dl_060139F8[];
+extern const Gfx scuttlebug_seg6_sub_dl_body[];
+extern const Gfx scuttlebug_seg6_dl_body[];
 extern const Gfx scuttlebug_seg6_dl_06013AB0[];
 extern const Gfx scuttlebug_seg6_dl_06013AE8[];
 extern const Gfx scuttlebug_seg6_dl_06013B98[];
@@ -77,7 +76,7 @@ extern const Gfx snufit_seg6_dl_06009278[];
 extern const Gfx snufit_seg6_dl_060092F0[];
 extern const Gfx snufit_seg6_dl_06009498[];
 extern const Gfx snufit_seg6_dl_06009668[];
-extern const Gfx snufit_seg6_dl_06009700[];
+extern const Gfx snufit_seg6_sub_dl_mouth[];
 extern const Gfx snufit_seg6_dl_06009748[];
 extern const Gfx snufit_seg6_dl_060098A0[];
 extern const Gfx snufit_seg6_dl_06009938[];

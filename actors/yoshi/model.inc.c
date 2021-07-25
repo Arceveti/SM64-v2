@@ -19,17 +19,17 @@ static const Lights1 yoshi_seg5_lights_0501C488 = gdSPDefLights1(
 );
 
 // 0x0501C4A0
-ALIGNED8 static const Texture yoshi_seg5_texture_0501C4A0[] = {
+ALIGNED8 static const Texture yoshi_seg5_texture_eye[] = {
 #include "actors/yoshi/yoshi_eye.rgba16.inc.c"
 };
 
 // 0x0501C6A0
-ALIGNED8 static const Texture yoshi_seg5_texture_0501C6A0[] = {
+ALIGNED8 static const Texture yoshi_seg5_texture_eye_blink[] = {
 #include "actors/yoshi/yoshi_eye_blink.rgba16.inc.c"
 };
 
 // 0x0501C8A0
-ALIGNED8 static const Texture yoshi_seg5_texture_0501C8A0[] = {
+ALIGNED8 static const Texture yoshi_seg5_texture_nostril[] = {
 #include "actors/yoshi/yoshi_nostril.rgba16.inc.c"
 };
 
@@ -241,7 +241,7 @@ static const Vtx yoshi_seg5_vertex_0501D410[] = {
 
 // 0x0501D440 - 0x0501D488
 const Gfx yoshi_seg5_sub_dl_nostrils[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_0501C8A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_nostril),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&yoshi_seg5_lights_0501C458.l, 1),
@@ -370,7 +370,7 @@ const Gfx yoshi_seg5_dl_eyes_end[] = {
 // 0x0501D970 - 0x0501D998
 const Gfx yoshi_seg5_dl_eyes_open[] = {
     gsSPDisplayList(yoshi_seg5_dl_nostrils),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_0501C4A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(yoshi_seg5_dl_eyes_end),
@@ -379,7 +379,7 @@ const Gfx yoshi_seg5_dl_eyes_open[] = {
 // 0x0501D998 - 0x0501D9C0
 const Gfx yoshi_seg5_dl_eyes_closed[] = {
     gsSPDisplayList(yoshi_seg5_dl_nostrils),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_0501C6A0),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, yoshi_seg5_texture_eye_blink),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPBranchList(yoshi_seg5_dl_eyes_end),
@@ -389,12 +389,6 @@ const Gfx yoshi_seg5_dl_eyes_closed[] = {
 static const Lights1 yoshi_seg5_lights_0501D9D8 = gdSPDefLights1(
     0x00, 0x7b, 0x00,
     0x00, 0xf7, 0x00, 0x28, 0x28, 0x28
-);
-
-// 0x0501D9F0
-static const Lights1 yoshi_seg5_lights_0501D9F0 = gdSPDefLights1(
-    0x7f, 0x00, 0x00,
-    0xff, 0x00, 0x00, 0x28, 0x28, 0x28
 );
 
 // 0x0501DA38
@@ -1734,8 +1728,8 @@ const Gfx yoshi_seg5_dl_05021900[] = {
 
 // 0x050219A0 - 0x05021B90
 const Gfx yoshi_seg5_dl_050219A0[] = {
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C488.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C488.a, 2),
     gsSPVertex(yoshi_seg5_vertex_0501EB20, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  5,  7,  6, 0x0),
@@ -1864,8 +1858,8 @@ const Gfx yoshi_seg5_dl_05021E38[] = {
 
 // 0x05021F70 - 0x05022160
 const Gfx yoshi_seg5_dl_05021F70[] = {
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C488.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C488.a, 2),
     gsSPVertex(yoshi_seg5_vertex_0501FBA0, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
@@ -2000,8 +1994,8 @@ const Gfx yoshi_seg5_dl_05022408[] = {
     gsSP2Triangles(14, 15,  8, 0x0,  3, 10, 12, 0x0),
     gsSP2Triangles(12,  4,  3, 0x0, 12, 14,  7, 0x0),
     gsSP2Triangles( 8,  7, 14, 0x0,  7,  4, 12, 0x0),
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.l, 1),
-    gsSPLight(&yoshi_seg5_lights_0501D9F0.a, 2),
+    gsSPLight(&yoshi_seg5_lights_0501C488.l, 1),
+    gsSPLight(&yoshi_seg5_lights_0501C488.a, 2),
     gsSPVertex(yoshi_seg5_vertex_05020F90, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  3,  5, 0x0,  7,  6,  5, 0x0),

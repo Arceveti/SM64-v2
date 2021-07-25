@@ -208,12 +208,6 @@ const Gfx dSwoopBodyDl[] = {
     gsSPEndDisplayList(),
 };
 
-// 0x06006938
-static const Lights1 swoop_seg6_lights_06006938 = gdSPDefLights1(
-    0x79, 0x79, 0x79,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x06006950
 static const Vtx swoop_seg6_vertex_06006950[] = {
     {{{   187,     48,    -55}, 0, {   426,    722}, {0xc6, 0x6b, 0xdf, 0xff}}},
@@ -239,8 +233,8 @@ const Gfx swoop_seg6_dl_06006A10[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dSwoopNoseTexture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&swoop_seg6_lights_06006938.l, 1),
-    gsSPLight(&swoop_seg6_lights_06006938.a, 2),
+    gsSPLight(&swoop_seg6_lights_06006270.l, 1),
+    gsSPLight(&swoop_seg6_lights_06006270.a, 2),
     gsSPVertex(swoop_seg6_vertex_06006950, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
