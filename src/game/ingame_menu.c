@@ -672,7 +672,7 @@ void render_dialog_box_type(struct DialogEntry *dialog, s8 linesPerBox) {
     switch (gDialogBoxType) {
         case DIALOG_TYPE_ROTATE: // Renders a dialog black box with zoom and rotation
             if (gDialogBoxState == DIALOG_STATE_OPENING || gDialogBoxState == DIALOG_STATE_CLOSING) {
-                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0 / gDialogBoxScale, 1.0f / gDialogBoxScale, 1.0f);
+                create_dl_scale_matrix(MENU_MTX_NOPUSH, 1.0f / gDialogBoxScale, 1.0f / gDialogBoxScale, 1.0f);
                 // convert the speed into angle
                 create_dl_rotation_matrix(MENU_MTX_NOPUSH, gDialogBoxOpenTimer * 4.0f, 0, 0, 1.0f);
             }
@@ -1420,11 +1420,12 @@ void shade_screen(void) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
+#ifdef PAUSE_BOWSER_KEYS
 void print_bowser_key(s32 x, s32 y, s16 rotation) { // bowser key
-    create_dl_translation_matrix(MENU_MTX_PUSH,               x+4,    y+18,    0.0f);
-    create_dl_rotation_matrix(   MENU_MTX_PUSH,      -90,    0.0f,    0.0f,    1.0f);
-    create_dl_rotation_matrix(   MENU_MTX_PUSH, rotation,    1.0f,    0.0f,    0.0f);
-    create_dl_scale_matrix(    MENU_MTX_NOPUSH,           0.0625f, 0.0625f, 0.0625f);
+    create_dl_translation_matrix(MENU_MTX_PUSH,                 x+4,    y+18,    0.0f);
+    create_dl_rotation_matrix(   MENU_MTX_NOPUSH,      -90,    0.0f,    0.0f,    1.0f);
+    create_dl_rotation_matrix(   MENU_MTX_NOPUSH, rotation,    1.0f,    0.0f,    0.0f);
+    create_dl_scale_matrix(      MENU_MTX_NOPUSH,           0.0625f, 0.0625f, 0.0625f);
     gSPSetGeometryMode(  gDisplayListHead++, G_ZBUFFER);
     gSPDisplayList(      gDisplayListHead++, bowser_key_dl);
     gSPPopMatrix(        gDisplayListHead++, G_MTX_MODELVIEW);
@@ -1432,19 +1433,15 @@ void print_bowser_key(s32 x, s32 y, s16 rotation) { // bowser key
 }
 
 void render_pause_bowser_keys(void) {
-    // s8 x;
     s32 speed = 12;
     s16 rotation;
 
     if (gHudDisplay.keys > 0) {
-        rotation = (gGlobalTimer % (360 / speed)) * speed;
-        
-        print_bowser_key(GFX_DIMENSIONS_FROM_LEFT_EDGE(16), 16, -rotation);
-        // for (x = 0; x < gHudDisplay.keys; x++) {
-        //     print_bowser_key(GFX_DIMENSIONS_FROM_LEFT_EDGE((x * 16)+4), 16, -rotation);
-        // }
+        rotation = (gGlobalTimer % (360 / speed)) * -speed;
+        print_bowser_key(GFX_DIMENSIONS_FROM_RIGHT_EDGE(30), 16, rotation);
     }
 }
+#endif
 
 void print_animated_red_coin(s16 x, s16 y) {
     s32 timer = gGlobalTimer;
@@ -1506,23 +1503,23 @@ void render_pause_red_coins(void) {
         print_animated_red_coin(GFX_DIMENSIONS_FROM_RIGHT_EDGE(30) - x * 20, 16);
     }
 }
+
 #ifdef WIDE
 void render_widescreen_setting(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     if (!gWidescreen) {
-        print_generic_string(10, 20, textCurrRatio43);
-        print_generic_string(10, 7, textPressL);           
-    }
-    else {
-        print_generic_string(10, 20, textCurrRatio169);
-        print_generic_string(10, 7, textPressL);
+        print_generic_string(10,  20, textCurrRatio43);
+        print_generic_string(10,   7, textPressL);           
+    } else {
+        print_generic_string(10,  20, textCurrRatio169);
+        print_generic_string(10,   7, textPressL);
         print_generic_string(10, 220, textWideInfo);
         print_generic_string(10, 200, textWideInfo2);
     }
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     if (gPlayer1Controller->buttonPressed & L_TRIG){
-        gWidescreen ^= 1;
+        gWidescreen ^= TRUE;
         save_file_set_widescreen_mode(gWidescreen);
     }
 }
@@ -1559,8 +1556,8 @@ void render_pause_my_score_coins(void) {
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
     if (courseIndex < COURSE_STAGES_COUNT) {
-        print_hud_my_score_coins(1, gCurrSaveFileNum - 1, courseIndex, 178, 103);
-        print_hud_my_score_stars(gCurrSaveFileNum - 1, courseIndex, 118, 103);
+        print_hud_my_score_coins(TRUE, gCurrSaveFileNum - 1, courseIndex, 178, 103);
+        print_hud_my_score_stars(      gCurrSaveFileNum - 1, courseIndex, 118, 103);
     }
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
@@ -1600,19 +1597,19 @@ void render_pause_my_score_coins(void) {
 #define Y_VAL7 2
 
 void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
-    u8 textLakituMario[] = { TEXT_LAKITU_MARIO };
-    u8 textLakituStop[] = { TEXT_LAKITU_STOP };
+    u8 textLakituMario[]   = { TEXT_LAKITU_MARIO };
+    u8 textLakituStop[]    = { TEXT_LAKITU_STOP };
     u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
-    u8 textNormalFixed[] = { TEXT_NORMAL_FIXED };
+    u8 textNormalFixed[]   = { TEXT_NORMAL_FIXED };
 
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 14, y + 2, textLakituMario);
+    print_generic_string(x + 14,     y +  2, textLakituMario);
     print_generic_string(x + TXT1_X, y - 13, textNormalUpClose);
-    print_generic_string(x + 124, y + 2, textLakituStop);
+    print_generic_string(x + 124,    y +  2, textLakituStop);
     print_generic_string(x + TXT2_X, y - 13, textNormalFixed);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
@@ -1759,7 +1756,6 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
     u8 strVal[8];
     s16 starNum = gDialogLineNum;
 
-
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, &gDialogLineNum, -1, COURSE_STAGES_COUNT + 1);
 
     if (gDialogLineNum == COURSE_STAGES_COUNT + 1) {
@@ -1814,7 +1810,6 @@ s8 gHudFlash = 0;
 s16 render_pause_courses_and_castle(void) {
     s16 index;
 
-
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             gDialogLineNum = MENU_OPT_DEFAULT;
@@ -1840,12 +1835,11 @@ s16 render_pause_courses_and_castle(void) {
             s32 exitCheck = ((gMarioStates[0].pos[1] <= gMarioStates[0].floorHeight)
                 || (gMarioStates[0].action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT)));
 #endif
-            #ifndef DISABLE_EXIT_COURSE
+#ifndef DISABLE_EXIT_COURSE
             if (exitCheck) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
             }
-            #endif
-
+#endif
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_2, gGlobalSoundSource);
@@ -1865,9 +1859,10 @@ s16 render_pause_courses_and_castle(void) {
             shade_screen();
             print_hud_pause_colorful_str();
             render_pause_castle_menu_box(160, 143);
-            render_pause_castle_main_strings(104, 60);
+            render_pause_castle_main_strings(104, 60);      
+#ifdef PAUSE_BOWSER_KEYS
             render_pause_bowser_keys();
-
+#endif
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_2, gGlobalSoundSource);
@@ -1878,9 +1873,9 @@ s16 render_pause_courses_and_castle(void) {
             }
             break;
     }
-    #ifdef WIDE
+#ifdef WIDE
         render_widescreen_setting();
-    #endif
+#endif
     if (gDialogTextAlpha < 250) {
         gDialogTextAlpha += 25;
     }
@@ -2039,8 +2034,7 @@ void render_course_complete_lvl_info_and_hud_str(void) {
 #define TXT_CONTNOSAVE_Y 40
 
 #define X_VAL9 x
-void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e)
-{
+void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) {
     u8 textSaveAndContinue[] = { TEXT_SAVE_AND_CONTINUE };
     u8 textSaveAndQuit[] = { TEXT_SAVE_AND_QUIT };
     u8 textContinueWithoutSave[] = { TEXT_CONTINUE_WITHOUT_SAVING };

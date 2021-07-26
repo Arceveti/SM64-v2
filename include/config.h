@@ -242,6 +242,8 @@
 #define HUD_SECRETS
 // Adds leading zeroes to the counters on the HUD (Arceveti)
 #define HUD_LEADING_ZEROES
+// Show Bowser Key on the castle pause menu
+#define PAUSE_BOWSER_KEYS
 // Fade warps have a particle effect to show where they are (Arceveti)
 #define VISIBLE_FADE_WARPS
 
