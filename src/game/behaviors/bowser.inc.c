@@ -1231,7 +1231,6 @@ s16 sBowserDefeatedDialogText[3] = { DIALOG_119, DIALOG_120, DIALOG_121 };
  * Returns TRUE once done
  */
 s32 bowser_dead_default_stage_ending(void) {
-    s32 ret = FALSE;
     if (o->oBowserTimer < 2) {
         // Lower music volume
         if (o->oBowserTimer == 0) {
@@ -1254,9 +1253,9 @@ s32 bowser_dead_default_stage_ending(void) {
         spawn_triangle_break_particles(20, MODEL_YELLOW_COIN, 1.0f, 0);
         bowser_spawn_collectable();
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
-        ret = TRUE;
+        return TRUE;
     }
-    return ret;
+    return FALSE;
 }
 
 /**
@@ -1264,7 +1263,6 @@ s32 bowser_dead_default_stage_ending(void) {
  * Returns TRUE once done
  */
 s32 bowser_dead_final_stage_ending(void) {
-    s32 ret = FALSE;
     s32 dialogID;
     if (o->oBowserTimer < 2) {
         // Set dialog whenever you have 120 stars or not
@@ -1294,9 +1292,9 @@ s32 bowser_dead_final_stage_ending(void) {
     } else {
         // And at last, hide him
         bowser_dead_hide();
-        ret = TRUE;
+        return TRUE;
     }
-    return ret;
+    return FALSE;
 }
 
 /**

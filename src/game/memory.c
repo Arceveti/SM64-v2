@@ -602,7 +602,6 @@ void setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buff
 }
 
 s32 load_patchable_table(struct DmaHandlerList *list, s32 index) {
-    s32 ret = FALSE;
     struct DmaTable *table = list->dmaTable;
 
     if ((u32)index < table->count) {
@@ -612,8 +611,8 @@ s32 load_patchable_table(struct DmaHandlerList *list, s32 index) {
         if (list->currentAddr != addr) {
             dma_read(list->bufTarget, addr, addr + size);
             list->currentAddr = addr;
-            ret = TRUE;
+            return TRUE;
         }
     }
-    return ret;
+    return FALSE;
 }

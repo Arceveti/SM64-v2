@@ -149,8 +149,8 @@
 #define MODEL_JRB_SHIP_BACK_LEFT_PART             0x36        // jrb_geo_ship_back_left_part
 #define MODEL_JRB_SHIP_RIGHT_HALF_PART            0x37        // jrb_geo_ship_right_half_part
 #define MODEL_JRB_SHIP_BACK_RIGHT_PART            0x38        // jrb_geo_ship_back_right_part
-#define MODEL_JRB_SUNKEN_SHIP                     0x39        // jrb_geo_sunken_ship
-#define MODEL_JRB_SUNKEN_SHIP_BACK                0x3A        // jrb_geo_sunken_ship_back
+#define MODEL_JRB_SUNKEN_SHIP                     0x39        // jrb_geo_sunken_ship - unused
+#define MODEL_JRB_SUNKEN_SHIP_BACK                0x3A        // jrb_geo_sunken_ship_back - unused
 #define MODEL_JRB_ROCK                            0x3B        // jrb_geo_rock
 #define MODEL_JRB_SLIDING_BOX                     0x3C        // jrb_geo_sliding_box
 #define MODEL_JRB_FALLING_PILLAR                  0x3D        // jrb_geo_falling_pillar

@@ -2278,12 +2278,11 @@ void sound_banks_enable(UNUSED u8 player, u16 bankMask) {
 }
 
 u8 unused_803209D8(u8 player, u8 channelIndex, u8 arg2) {
-    u8 ret = 0;
     if (gSequencePlayers[player].channels[channelIndex] != &gSequenceChannelNone) {
         gSequencePlayers[player].channels[channelIndex]->stopSomething2 = arg2;
-        ret = arg2;
+        return arg2;
     }
-    return ret;
+    return 0;
 }
 
 /**

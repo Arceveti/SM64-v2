@@ -713,7 +713,7 @@ skip:
     }
     cmd = process_envelope(cmd, noteSubEu, synthesisState, bufLen, DMEM_ADDR_TEMP, leftRight, flags);
     if (noteSubEu->usesHeadsetPanEffects) {
-        if ((flags & 1) == 0) {
+        if (!(flags & 0x1)) {
             flags = 0;
         }
         cmd = note_apply_headset_pan_effects(cmd, noteSubEu, synthesisState, bufLen * 2, flags, leftRight);

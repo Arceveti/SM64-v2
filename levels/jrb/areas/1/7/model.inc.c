@@ -1,22 +1,22 @@
 // 0x07007628 - 0x07007668
 static const Vtx jrb_seg7_vertex_07007628[] = {
-    {{{  4569,  -5221,   2892}, 0, {  4056,   6098}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  5388,  -5221,   2892}, 0, {  4056,  -2076}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  5388,  -5221,   2073}, 0, { -4118,  -2076}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  4569,  -5221,   2073}, 0, { -4118,   6098}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  4569,  -5221,   2892}, 0, {127<<5,   6096}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  5388,  -5221,   2892}, 0, {127<<5,  -2080}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  5388,  -5221,   2073}, 0, { -4118,  -2080}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  4569,  -5221,   2073}, 0, { -4118,   6096}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07007668 - 0x070076A8
 static const Vtx jrb_seg7_vertex_07007668[] = {
     {{{  7521,  -2815,   2397}, 0, {  4736,   3544}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  7337,  -3532,   1704}, 0, { -2072,  -1566}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  7521,  -3532,   2397}, 0, { -2072,   3544}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  7337,  -3532,   1704}, 0, { -2080,  -1566}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  7521,  -3532,   2397}, 0, { -2080,   3544}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  7337,  -2815,   1704}, 0, {  4736,  -1566}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x070076A8 - 0x070076E0
 static const Gfx jrb_seg7_dl_070076A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, jrb_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, jrb_seg7_texture_red_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07007628, 4, 0),
@@ -26,7 +26,7 @@ static const Gfx jrb_seg7_dl_070076A8[] = {
 
 // 0x070076E0 - 0x07007718
 static const Gfx jrb_seg7_dl_070076E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, jrb_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, jrb_seg7_texture_unagi_cave_seaweed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07007668, 4, 0),

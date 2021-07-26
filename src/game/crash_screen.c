@@ -235,7 +235,7 @@ OSThread *get_crashed_thread(void) {
     thread = __osGetCurrFaultedThread();
     while (thread->priority != -1) {
         if (thread->priority > OS_PRIORITY_IDLE && thread->priority < OS_PRIORITY_APPMAX
-            && (thread->flags & 3) != 0) {
+            && (thread->flags & 0x3)) {
             return thread;
         }
         thread = thread->tlnext;

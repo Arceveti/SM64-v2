@@ -12,15 +12,6 @@ struct ObjectHitbox sSkullSlidingBoxHitbox = {
     /* hurtboxHeight:     */ 0,
 };
 
-void bhv_sunken_ship_part_loop(void) {
-    if (o->oDistanceToMario > 10000.0f) {
-        o->oOpacity = 140;
-    } else {
-        o->oOpacity = o->oDistanceToMario * 140.0f / 10000.0f;
-    }
-    cur_obj_disable_rendering();
-}
-
 void bhv_ship_part_3_loop(void) {
     s16 initialPitch = o->oFaceAnglePitch;
     s16 initialRoll = o->oFaceAngleRoll;
@@ -42,7 +33,7 @@ void bhv_jrb_sliding_box_loop(void) {
     Vec3s shipRotation;
     struct Object *shipObj;
     if (o->oJrbSlidingBoxShip == NULL) {
-        shipObj = cur_obj_nearest_object_with_behavior(bhvInSunkenShip3);
+        shipObj = cur_obj_nearest_object_with_behavior(bhvJrbFloatingShipCollision);
         if (shipObj != NULL) {// NULL check only for assignment, not for dereference?
             o->oJrbSlidingBoxShip = shipObj;
             o->oParentRelativePosX = o->oPosX - shipObj->oPosX;

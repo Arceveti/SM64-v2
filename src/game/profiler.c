@@ -4,7 +4,7 @@
 #include "profiler.h"
 #include "game_init.h"
 
-s16 gProfilerMode = 0;
+s16 gProfilerMode = FALSE;
 
 // the thread 3 info is logged on the opposite profiler from what is used by
 // the thread4 and 5 loggers. It's likely because the sound thread runs at a
@@ -292,12 +292,12 @@ void draw_profiler_mode_0(void) {
 // renderer is active.
 void draw_profiler(void) {
     if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        gProfilerMode ^= 1;
+        gProfilerMode ^= TRUE;
     }
 
-    if (gProfilerMode == 0) {
-        draw_profiler_mode_0();
-    } else {
+    if (gProfilerMode) {
         draw_profiler_mode_1();
+    } else {
+        draw_profiler_mode_0();
     }
 }

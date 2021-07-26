@@ -619,8 +619,9 @@ void update_objects(UNUSED s32 unused) {
     gCheckingSurfaceCollisionsForCamera = FALSE;
 
     reset_debug_objectinfo();
-    stub_debug_5();
-
+#ifdef DEBUG_INFO
+    show_debug_info();
+#endif
     gObjectLists = gObjectListArray;
 
     // If time stop is not active, unload object surfaces

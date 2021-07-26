@@ -210,7 +210,6 @@ void bhv_sushi_shark_loop(void);
 void bhv_sushi_shark_collision_loop(void);
 void bhv_jrb_sliding_box_loop(void);
 void bhv_ship_part_3_loop(void);
-void bhv_sunken_ship_part_loop(void);
 void bhv_white_puff_1_loop(void);
 void bhv_white_puff_2_loop(void);
 void bhv_blue_coin_switch_loop(void);

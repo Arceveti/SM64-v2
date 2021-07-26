@@ -2624,7 +2624,7 @@ const BehaviorScript bhvJrbSlidingBox[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvShipPart3[] = {
+const BehaviorScript bhvJrbFloatingShipVisual[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_HOME(),
@@ -2633,25 +2633,15 @@ const BehaviorScript bhvShipPart3[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvInSunkenShip3[] = {
+const BehaviorScript bhvJrbFloatingShipCollision[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_3),
+    LOAD_COLLISION_DATA(jrb_seg7_collision_floating_ship),
     SET_HOME(),
     SET_FLOAT(oCollisionDistance, 4000),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_ship_part_3_loop),
         CALL_NATIVE(load_object_collision_model),
-    END_LOOP(),
-};
-
-const BehaviorScript bhvSunkenShipPart[] = {
-    BEGIN(OBJ_LIST_DEFAULT),
-    OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    SCALE(/*Unused*/ 0, /*Field*/ 50),
-    SET_HOME(),
-    BEGIN_LOOP(),
-        CALL_NATIVE(bhv_sunken_ship_part_loop),
     END_LOOP(),
 };
 
@@ -2662,23 +2652,22 @@ const BehaviorScript bhvSunkenShipSetRotation[] = {
     RETURN(),
 };
 
-const BehaviorScript bhvSunkenShipPart2[] = {
+const BehaviorScript bhvSunkenShipPart[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    SCALE(/*Unused*/ 0, /*Field*/ 100),
-    SET_FLOAT(oDrawingDistance, 6000),
+    // SET_FLOAT(oDrawingDistance, 6000),
     SET_HOME(),
     CALL(bhvSunkenShipSetRotation),
     BREAK(),
 };
 
-const BehaviorScript bhvInSunkenShip[] = {
+const BehaviorScript bhvJrbSunkenShipCollision[] = {
     BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship),
-    GOTO(bhvInSunkenShip2 + 1 + 2),
+    GOTO(bhvJrbSunkenShipCollision2 + 1 + 2),
 };
 
-const BehaviorScript bhvInSunkenShip2[] = {
+const BehaviorScript bhvJrbSunkenShipCollision2[] = {
     BEGIN(OBJ_LIST_SURFACE),
     LOAD_COLLISION_DATA(jrb_seg7_collision_in_sunken_ship_2),
     // Sunken ship - common:
@@ -5925,7 +5914,7 @@ const BehaviorScript bhvBeginningLakitu[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_ANIMATIONS(oAnimations, lakitu_seg6_anims_060058F8),
     ANIMATE(0),
-    SET_FLOAT(oOpacity, 0),
+    SET_INT(oOpacity, 0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_intro_lakitu_loop),
     END_LOOP(),

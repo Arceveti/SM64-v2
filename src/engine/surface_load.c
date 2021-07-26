@@ -666,11 +666,7 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
             add_surface(surface, TRUE);
         }
 
-        if (hasForce) {
-            *data += 4;
-        } else {
-            *data += 3;
-        }
+        *data += (hasForce ? 4 : 3);
     }
 }
 
@@ -691,7 +687,7 @@ void load_object_collision_model(void) {
     }
 
     // If the object collision is supposed to be loaded more than the
-    // drawing distance of 4000, extend the drawing range.
+    // drawing distance, extend the drawing range.
     if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) {
         gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
     }

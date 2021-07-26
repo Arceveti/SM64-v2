@@ -40,14 +40,22 @@ const char *sDebugEnemyStringInfo[] = {
 
 s32 sDebugInfoDPadMask = 0;
 s32 sDebugInfoDPadUpdID = 0;
+#ifdef DEBUG_INFO
+s8 sDebugLvSelectCheckFlag = TRUE;
+#else
 s8 sDebugLvSelectCheckFlag = FALSE;
+#endif
 
 #define DEBUG_PAGE_MIN DEBUG_PAGE_OBJECTINFO
 #define DEBUG_PAGE_MAX DEBUG_PAGE_ENEMYINFO
 
 s8 sDebugPage = DEBUG_PAGE_MIN;
 s8 sNoExtraDebug = FALSE;
+#ifdef DEBUG_INFO
+s8 sDebugStringArrPrinted = TRUE;
+#else
 s8 sDebugStringArrPrinted = FALSE;
+#endif
 s8 sDebugSysCursor = 0;
 s8 sDebugInfoButtonSeqID = 0;
 s16 sDebugInfoButtonSeq[] = { U_CBUTTONS, L_CBUTTONS, D_CBUTTONS, R_CBUTTONS, -1 };
@@ -376,11 +384,12 @@ void try_modify_debug_controls(void) {
     }
 }
 
-// possibly a removed debug control (TODO: check DD)
-void stub_debug_5(void) {
+#ifdef DEBUG_INFO
+void show_debug_info(void) {
     try_modify_debug_controls();
     try_change_debug_page();
 }
+#endif
 
 /*
  * If Mario's object exists, this function tries to print available object debug

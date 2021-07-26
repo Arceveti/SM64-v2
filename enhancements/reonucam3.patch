@@ -402,7 +402,7 @@ index 9cd458a..ac2d18c 100644
          render_widescreen_setting();
 +        render_camera_speed_setting();
          if (gPlayer1Controller->buttonPressed & L_TRIG){
-             gWidescreen ^= 1;
+             gWidescreen ^= TRUE;
              save_file_set_widescreen_mode(gWidescreen);
 diff --git a/src/game/mario.c b/src/game/mario.c
 index b381afa..7cb9549 100644

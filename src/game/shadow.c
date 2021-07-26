@@ -433,8 +433,7 @@ s16 floor_local_tilt(struct Shadow s, f32 vtxX, f32 vtxY, f32 vtxZ) {
     f32 relY = vtxY - s.floorHeight;
     f32 relZ = vtxZ - s.parentZ;
 
-    f32 ret = (relX * s.floorNormalX) + (relY * s.floorNormalY) + (relZ * s.floorNormalZ);
-    return ret;
+    return (relX * s.floorNormalX) + (relY * s.floorNormalY) + (relZ * s.floorNormalZ);
 }
 
 /**
