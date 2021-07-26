@@ -365,6 +365,7 @@ s32 set_mario_npc_dialog(s32 actionArg) {
 s32 act_reading_npc_dialog(struct MarioState *m) {
     s32 headTurnAmount = 0;
     s16 angleToNPC = 0x0;
+    s16 turnSpeed = 0x800;
 
     if (m->actionArg == MARIO_DIALOG_LOOK_UP) {
         headTurnAmount = -1024;
@@ -375,13 +376,18 @@ s32 act_reading_npc_dialog(struct MarioState *m) {
 
     if (m->actionState < 8) {
         // turn to NPC
-        if (gCutsceneFocus != NULL) {
-            angleToNPC = atan2s(gCutsceneFocus->oPosZ - m->pos[2], gCutsceneFocus->oPosX - m->pos[0]);
+#ifdef SSL_PILLARS_CUTSCENE
+        if (gCutsceneFocus != NULL && gCutsceneFocus->behavior == segmented_to_virtual(bhvPyramidTop)) {
+            angleToNPC = mario_obj_angle_to_object(m, gCutsceneFocus);
         } else {
             angleToNPC = mario_obj_angle_to_object(m, m->usedObj);
         }
+        turnSpeed = angleToNPC / (8 - m->actionState);
+#else
+        angleToNPC = mario_obj_angle_to_object(m, m->usedObj);
+#endif
         m->faceAngle[1] =
-            angleToNPC - approach_s32((angleToNPC - m->faceAngle[1]) << 16 >> 16, 0, 0x1000, 0x1000);
+            angleToNPC - approach_s32((angleToNPC - m->faceAngle[1]) << 16 >> 16, 0, turnSpeed, turnSpeed);
         // m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], angleToNPC, 0x800);
         // turn head to npc
         m->actionTimer += headTurnAmount;

@@ -317,7 +317,7 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
     s32 i;
     s16 wdwWaterHeight;
 
-    // Why was this global variable needed when they could just check for GEO_CONTEXT_AREA_LOAD?
+    //! Why was this global variable needed when they could just check for GEO_CONTEXT_AREA_LOAD?
     if (callContext != GEO_CONTEXT_RENDER) {
         gWdwWaterLevelSet = FALSE;
     } else if (callContext == GEO_CONTEXT_RENDER && gEnvironmentRegions != NULL

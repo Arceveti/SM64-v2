@@ -410,10 +410,8 @@ extern OSMesgQueue *OSMesgQueues[];
 struct EuAudioCmd sAudioCmd[0x100];
 
 OSMesg OSMesg0;
-s32 pad1; // why is there 1 s32 here
 OSMesg OSMesg1;
-s32 pad2[2];    // it's not just that the struct is bigger than we think, because there are 2 here
-OSMesg OSMesg2; // and none here. wth nintendo
+OSMesg OSMesg2;
 OSMesg OSMesg3;
 #else // VERSION_SH
 extern OSMesgQueue *D_SH_80350F88;

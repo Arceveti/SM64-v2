@@ -42,7 +42,7 @@ static void beta_holdable_object_throw(void) {
 
     o->oHeldState = HELD_FREE;
 
-    // This flag is never set, why is it cleared?
+    //! This flag is never set, why is it cleared?
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
 
     // Set initial velocity

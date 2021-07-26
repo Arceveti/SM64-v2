@@ -7631,7 +7631,7 @@ void cutscene_bowser_arena_pan_left(UNUSED struct Camera *c) {
 }
 
 /**
- * Duplicate of cutscene_mario_dialog(), but nonstatic and doesn't set gCutsceneTimer.
+ * Similar to cutscene_mario_dialog(), but nonstatic and doesn't set gCutsceneTimer.
  */
 void cutscene_bowser_arena_mario_dialog(UNUSED struct Camera *c) {
     cutscene_common_set_dialog_state(MARIO_DIALOG_LOOK_FRONT);
@@ -8972,8 +8972,8 @@ s32 intro_peach_move_camera_start_to_pipe(struct Camera *c, struct CutsceneSplin
     posReturn = move_point_along_spline(c->pos, positionSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
     focusReturn = move_point_along_spline(c->focus, focusSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
 
-    // The two splines used by this function are reflected in the horizontal plane for some reason,
-    // so they are rotated every frame. Why do this, Nintendo?
+    //! The two splines used by this function are reflected in the horizontal plane for some reason,
+    //! so they are rotated every frame. Why do this, Nintendo?
     rotate_in_xz(c->focus, c->focus, DEGREES(-180));
     rotate_in_xz(c->pos, c->pos, DEGREES(-180));
 
@@ -10231,7 +10231,7 @@ struct Cutscene sCutsceneReadMessage[] = {
  */
 u8 sDanceCutsceneIndexTable[][4] = {
     #include "levels/course_defines.h"
-    { 0x44, 0x44, 0x44, 0x04 }, // (26) Why go to all this trouble to save bytes and do this?!
+    { 0x44, 0x44, 0x44, 0x04 }, //! (26) Why go to all this trouble to save bytes and do this?!
 };
 #undef DEFINE_COURSE
 #undef DEFINE_COURSES_END

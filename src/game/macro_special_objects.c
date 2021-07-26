@@ -94,18 +94,17 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
 
 struct LoadedPreset {
     /*0x00*/ const BehaviorScript *behavior;
-    /*0x04*/ s16 param; // huh? why does the below function swap these.. just use the struct..
+    /*0x04*/ s16 param; //! huh? why does the below function swap these.. just use the struct..
     /*0x06*/ ModelID model;
 };
 
-#define MACRO_OBJ_Y_ROT 0
-#define MACRO_OBJ_X 1
-#define MACRO_OBJ_Y 2
-#define MACRO_OBJ_Z 3
+#define MACRO_OBJ_Y_ROT  0
+#define MACRO_OBJ_X      1
+#define MACRO_OBJ_Y      2
+#define MACRO_OBJ_Z      3
 #define MACRO_OBJ_PARAMS 4
 
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
-    UNUSED u32 pad5C;
     s32 presetID;
 
     s16 macroObject[5]; // see the 5 #define statements above
@@ -168,8 +167,6 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
 }
 
 void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
-    UNUSED u8 pad[8];
-
     // This version of macroObjList has the preset and Y-Rotation separated,
     // and lacks behavior params. Might be an early version of the macro object list?
     s16 macroObjX;

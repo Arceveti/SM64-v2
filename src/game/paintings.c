@@ -123,17 +123,6 @@
  */
 #define MIDDLE_Y 80
 
-/**
- * Does nothing to the timer.
- * Why -56 instead of false? Who knows.
- */
-#define DONT_RESET -56
-
-/**
- * Reset the timer to 0.
- */
-#define RESET_TIMER 100
-
 /// A copy of the type of floor Mario is standing on.
 s16 gPaintingMarioFloorType;
 // A copy of Mario's position
@@ -353,8 +342,7 @@ void painting_state(s8 state, struct Painting *painting, struct Painting *painti
     painting->rippleY = painting_ripple_y(painting, ySource);
     gPaintingMarioYEntry = gPaintingMarioYPos;
 
-    // Because true or false would be too simple...
-    if (resetTimer == RESET_TIMER) {
+    if (resetTimer) {
         painting->rippleTimer = 0.0f;
     }
     gRipplingPainting = painting;
@@ -366,19 +354,19 @@ void painting_state(s8 state, struct Painting *painting, struct Painting *painti
 void wall_painting_proximity_idle(struct Painting *painting, struct Painting *paintingGroup[]) {
     // Check for Mario triggering a ripple
     if (painting->floorEntered & RIPPLE_LEFT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_MIDDLE) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_RIGHT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
 
     // Check for Mario entering
     } else if (painting->floorEntered & ENTER_LEFT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_MIDDLE) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_RIGHT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     }
 }
 
@@ -387,11 +375,11 @@ void wall_painting_proximity_idle(struct Painting *painting, struct Painting *pa
  */
 void wall_painting_proximity_rippling(struct Painting *painting, struct Painting *paintingGroup[]) {
     if (painting->floorEntered & ENTER_LEFT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_MIDDLE) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_RIGHT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     }
 }
 
@@ -401,19 +389,19 @@ void wall_painting_proximity_rippling(struct Painting *painting, struct Painting
 void wall_painting_continuous_idle(struct Painting *painting, struct Painting *paintingGroup[]) {
     // Check for Mario triggering a ripple
     if (painting->floorEntered & RIPPLE_LEFT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_MIDDLE) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_RIGHT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
 
     // Check for Mario entering
     } else if (painting->floorEntered & ENTER_LEFT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_MIDDLE) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     } else if (painting->floorEntered & ENTER_RIGHT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, TRUE);
     }
 }
 
@@ -422,11 +410,11 @@ void wall_painting_continuous_idle(struct Painting *painting, struct Painting *p
  */
 void wall_painting_continuous_rippling(struct Painting *painting, struct Painting *paintingGroup[]) {
     if (painting->floorEntered & ENTER_LEFT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, DONT_RESET);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, FALSE);
     } else if (painting->floorEntered & ENTER_MIDDLE) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, DONT_RESET);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, FALSE);
     } else if (painting->floorEntered & ENTER_RIGHT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, DONT_RESET);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, NEAREST_4TH, MARIO_Y, FALSE);
     }
 }
 
@@ -438,20 +426,20 @@ void wall_painting_continuous_rippling(struct Painting *painting, struct Paintin
 void floor_painting_proximity_idle(struct Painting *painting, struct Painting *paintingGroup[]) {
     // Check for Mario triggering a ripple
     if (painting->floorEntered & RIPPLE_LEFT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
     } else if (painting->floorEntered & RIPPLE_MIDDLE) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
     } else if (painting->floorEntered & RIPPLE_RIGHT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
 
     // Only check for Mario entering if he jumped below the surface
     } else if (painting->marioWentUnder) {
         if (painting->currFloor & ENTER_LEFT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         } else if (painting->currFloor & ENTER_MIDDLE) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         } else if (painting->currFloor & ENTER_RIGHT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         }
     }
 }
@@ -464,11 +452,11 @@ void floor_painting_proximity_idle(struct Painting *painting, struct Painting *p
 void floor_painting_proximity_rippling(struct Painting *painting, struct Painting *paintingGroup[]) {
     if (painting->marioWentUnder) {
         if (painting->currFloor & ENTER_LEFT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         } else if (painting->currFloor & ENTER_MIDDLE) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         } else if (painting->currFloor & ENTER_RIGHT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
         }
     }
 }
@@ -483,19 +471,19 @@ void floor_painting_proximity_rippling(struct Painting *painting, struct Paintin
 void floor_painting_continuous_idle(struct Painting *painting, struct Painting *paintingGroup[]) {
     // Check for Mario triggering a ripple
     if (painting->floorEntered & RIPPLE_LEFT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_MIDDLE) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
     } else if (painting->floorEntered & RIPPLE_RIGHT) {
-        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, RESET_TIMER);
+        painting_state(PAINTING_RIPPLE, painting, paintingGroup, MIDDLE_X, MIDDLE_Y, TRUE);
 
     // Check for Mario entering
     } else if (painting->currFloor & ENTER_LEFT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
     } else if (painting->currFloor & ENTER_MIDDLE) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
     } else if (painting->currFloor & ENTER_RIGHT) {
-        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, RESET_TIMER);
+        painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, TRUE);
     }
 }
 
@@ -505,11 +493,11 @@ void floor_painting_continuous_idle(struct Painting *painting, struct Painting *
 void floor_painting_continuous_rippling(struct Painting *painting, struct Painting *paintingGroup[]) {
     if (painting->marioWentUnder) {
         if (painting->currFloor & ENTER_LEFT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, DONT_RESET);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, FALSE);
         } else if (painting->currFloor & ENTER_MIDDLE) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, DONT_RESET);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, FALSE);
         } else if (painting->currFloor & ENTER_RIGHT) {
-            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, DONT_RESET);
+            painting_state(PAINTING_ENTERED, painting, paintingGroup, MARIO_X, MARIO_Z, FALSE);
         }
     }
 }

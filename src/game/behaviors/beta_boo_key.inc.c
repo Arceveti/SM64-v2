@@ -150,8 +150,7 @@ static void beta_boo_key_inside_boo_loop(void) {
     obj_copy_pos(o, parent);
 
     // Use a Y offset of 40 to make the key model aligned correctly.
-    // (Why didn't they use oGraphYOffset?)
-    o->oPosY += 40.0f;
+    o->oGraphYOffset += 40.0f;
 
     // If the boo is dying/dead, set the action to BETA_BOO_KEY_ACT_DROPPING.
     if (parent->oBooDeathStatus != BOO_DEATH_STATUS_ALIVE) {
