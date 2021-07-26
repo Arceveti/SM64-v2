@@ -48,28 +48,28 @@
 
 // Damaging interactions
 #define INT_SUBTYPE_DELAY_INVINCIBILITY 0x00000002
-#define INT_SUBTYPE_BIG_KNOCKBACK 0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
+#define INT_SUBTYPE_BIG_KNOCKBACK       0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
 
 // INTERACT_GRABBABLE
-#define INT_SUBTYPE_GRABS_MARIO 0x00000004 /* Also makes the object heavy */
-#define INT_SUBTYPE_HOLDABLE_NPC 0x00000010 /* Allows the object to be gently dropped, and sets vertical speed to 0 when dropped with no forwards velocity */
+#define INT_SUBTYPE_GRABS_MARIO      0x00000004 /* Also makes the object heavy */
+#define INT_SUBTYPE_HOLDABLE_NPC     0x00000010 /* Allows the object to be gently dropped, and sets vertical speed to 0 when dropped with no forwards velocity */
 #define INT_SUBTYPE_DROP_IMMEDIATELY 0x00000040 /* This gets set by grabbable NPCs that talk to Mario to make him drop them after the dialog is finished */
-#define INT_SUBTYPE_KICKABLE 0x00000100
-#define INT_SUBTYPE_NOT_GRABBABLE 0x00000200 /* Used by Heavy-Ho to allow it to throw Mario, without Mario being able to pick it up */
+#define INT_SUBTYPE_KICKABLE         0x00000100
+#define INT_SUBTYPE_NOT_GRABBABLE    0x00000200 /* Used by Heavy-Ho to allow it to throw Mario, without Mario being able to pick it up */
 
 // INTERACT_DOOR
 #define INT_SUBTYPE_STAR_DOOR 0x00000020
 
-//INTERACT_BOUNCE_TOP
+// INTERACT_BOUNCE_TOP
 #define INT_SUBTYPE_TWIRL_BOUNCE 0x00000080
 
 // INTERACT_STAR_OR_KEY
-#define INT_SUBTYPE_NO_EXIT 0x00000400
+#define INT_SUBTYPE_NO_EXIT    0x00000400
 #define INT_SUBTYPE_GRAND_STAR 0x00000800
 
 // INTERACT_TEXT
 #define INT_SUBTYPE_SIGN 0x00001000
-#define INT_SUBTYPE_NPC 0x00004000
+#define INT_SUBTYPE_NPC  0x00004000
 
 // INTERACT_CLAM_OR_BUBBA
 #define INT_SUBTYPE_EATS_MARIO 0x00002000
@@ -104,8 +104,8 @@
 #define INT_STATUS_INTERACTED            (1 << 15) /* 0x00008000 */
 #define INT_STATUS_DOOR_PULLED           (1 << 16) /* 0x00010000 */
 #define INT_STATUS_DOOR_PUSHED           (1 << 17) /* 0x00020000 */
-#define INT_STATUS_WARP_DOOR_ANIM_3      (1 << 18) /* 0x00040000 */
-#define INT_STATUS_WARP_DOOR_ANIM_4      (1 << 19) /* 0x00080000 */
+#define INT_STATUS_WARP_DOOR_PULLED      (1 << 18) /* 0x00040000 */
+#define INT_STATUS_WARP_DOOR_PUSHED      (1 << 19) /* 0x00080000 */
 #define INT_STATUS_TRAP_TURN             (1 << 20) /* 0x00100000 */
 #define INT_STATUS_HIT_MINE              (1 << 21) /* 0x00200000 */
 #define INT_STATUS_STOP_RIDING           (1 << 22) /* 0x00400000 */

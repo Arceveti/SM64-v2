@@ -58,7 +58,7 @@
 // Uncomment this define and set a test level in order to boot straight into said level.
 // This allows you to quickly test the level you're working on.
 // If you want the game to boot normally, just comment out the define again.
-//#define TEST_LEVEL LEVEL_BOB
+// #define TEST_LEVEL LEVEL_CASTLE
 
 // COMMON HACK CHANGES
 // Internal ROM name. NEEDS TO BE **EXACTLY** 20 CHARACTERS. Can't be 19 characters, can't be 21 characters. You can fill it with spaces.
@@ -150,6 +150,8 @@
 #define IA8_COINS
 
 // If you want to change the extended boundaries mode, go to engine/extended_bounds.h and change EXTENDED_BOUNDS_MODE
+
+// -- SM64v2 specific settings --
 
 // -- Graphics --
 

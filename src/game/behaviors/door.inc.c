@@ -6,16 +6,22 @@ struct DoorAction
     s32 action;
 };
 
-static struct DoorAction sDoorActions[] = { { INT_STATUS_WARP_DOOR_ANIM_3, 3 }, { INT_STATUS_WARP_DOOR_ANIM_4, 4 }, { INT_STATUS_DOOR_PULLED, 1 }, { INT_STATUS_DOOR_PUSHED, 2 }, { -1, 0 }, };
+static struct DoorAction sDoorActions[] = {
+                                            { INT_STATUS_WARP_DOOR_PULLED, DOOR_ACT_WARP_PULLED    },
+                                            { INT_STATUS_WARP_DOOR_PUSHED, DOOR_ACT_WARP_PUSHED    },
+                                            { INT_STATUS_DOOR_PULLED,      DOOR_ACT_PULLED         },
+                                            { INT_STATUS_DOOR_PUSHED,      DOOR_ACT_PUSHED         },
+                                            { -1,                          DOOR_ACT_CLOSED         },
+                                          };
 
 static s32 sDoorOpenSounds[] = { SOUND_GENERAL_OPEN_WOOD_DOOR, SOUND_GENERAL_OPEN_IRON_DOOR };
 
 static s32 sDoorCloseSounds[] = { SOUND_GENERAL_CLOSE_WOOD_DOOR, SOUND_GENERAL_CLOSE_IRON_DOOR };
 
-void door_animation_and_reset(s32 sp18) {
-    cur_obj_init_animation_with_sound(sp18);
+void door_animation_and_reset(s32 animIndex) {
+    cur_obj_init_animation_with_sound(animIndex);
     if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = 0;
+        o->oAction = DOOR_ACT_CLOSED;
     }
 }
 
@@ -57,30 +63,30 @@ void bhv_door_loop(void) {
     }
 
     switch (o->oAction) {
-        case 0:
+        case DOOR_ACT_CLOSED:
             cur_obj_init_animation_with_sound(0);
             break;
-        case 1: // INT_STATUS_DOOR_PULLED
-            door_animation_and_reset(1);
+        case DOOR_ACT_PULLED:
+            door_animation_and_reset(DOOR_ACT_PULLED);
             play_door_open_noise();
             break;
-        case 2: // INT_STATUS_DOOR_PUSHED
-            door_animation_and_reset(2);
+        case DOOR_ACT_PUSHED:
+            door_animation_and_reset(DOOR_ACT_PUSHED);
             play_door_open_noise();
             break;
-        case 3: // INT_STATUS_WARP_DOOR_ANIM_3
-            door_animation_and_reset(3);
+        case DOOR_ACT_WARP_PULLED:
+            door_animation_and_reset(DOOR_ACT_WARP_PULLED);
             play_warp_door_open_noise();
             break;
-        case 4: // INT_STATUS_WARP_DOOR_ANIM_4
-            door_animation_and_reset(4);
+        case DOOR_ACT_WARP_PUSHED:
+            door_animation_and_reset(DOOR_ACT_WARP_PUSHED);
             play_warp_door_open_noise();
             break;
     }
-    if (o->oAction == 0) {
+    if (o->oAction == DOOR_ACT_CLOSED) {
         load_object_collision_model();
     }
-    bhv_star_door_loop_2();
+    bhv_door_rendering_loop();
 }
 
 void bhv_door_init(void) {
@@ -112,8 +118,8 @@ void bhv_door_init(void) {
     }
 }
 
-void bhv_star_door_loop_2(void) {
-    s32 doorIsRendering = (gMarioCurrentRoom == 0
+void bhv_door_rendering_loop(void) {
+    o->oDoorIsRendering = (gMarioCurrentRoom == 0
      || o->oDoorSelfRoom == gMarioCurrentRoom
      || gMarioCurrentRoom == o->oDoorForwardRoom
      || gMarioCurrentRoom == o->oDoorBackwardRoom
@@ -121,11 +127,10 @@ void bhv_star_door_loop_2(void) {
      || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom
      || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom
      || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom);
-    if (doorIsRendering) {
+    if (o->oDoorIsRendering) {
         o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
         gDoorRenderingTimer++;
     } else {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }
-    o->oDoorIsRendering = doorIsRendering;
 }

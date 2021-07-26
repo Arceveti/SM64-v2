@@ -979,7 +979,7 @@ s32 act_going_through_door(struct MarioState *m) {
 s32 act_warp_door_spawn(struct MarioState *m) {
     if (m->actionState == 0) {
         m->actionState = 1;
-        m->usedObj->oInteractStatus = (m->actionArg & 1) ? INT_STATUS_WARP_DOOR_ANIM_3 : INT_STATUS_WARP_DOOR_ANIM_4; // sDelayedWarpArg
+        m->usedObj->oInteractStatus = (m->actionArg & 1) ? INT_STATUS_WARP_DOOR_PULLED : INT_STATUS_WARP_DOOR_PUSHED; // sDelayedWarpArg
     } else if (m->usedObj->oAction == 0) {
         if (gNeverEnteredCastle && gCurrLevelNum == LEVEL_CASTLE) {
             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, DIALOG_021);

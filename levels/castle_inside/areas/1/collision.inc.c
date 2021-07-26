@@ -190,13 +190,13 @@ const Collision inside_castle_seg7_area_1_collision[] = {
     COL_VERTEX(-870, 768, -1126),
     COL_VERTEX(-1177, 768, -1024),
     COL_VERTEX(-666, 512, -1126),
-    COL_VERTEX(-870, 512, -1126),
-    COL_VERTEX(-870, 512, -1075),
+    COL_VERTEX(-870, 512, -1126),// Upstairs Key Door Room 2
+    COL_VERTEX(-870, 512, -1075),// Upstairs Key Door Room 2
     COL_VERTEX(-666, 1024, -1126),
     COL_VERTEX(-1381, 1024, -1126),
     COL_VERTEX(-870, 512, -1024),
-    COL_VERTEX(-1177, 512, -1126),
-    COL_VERTEX(-1177, 512, -1075),
+    COL_VERTEX(-1177, 512, -1126),// Upstairs Key Door Room 2
+    COL_VERTEX(-1177, 512, -1075),// Upstairs Key Door Room 2
     COL_VERTEX(-1381, 512, -1126),
     COL_VERTEX(-666, 512, -1536),
     COL_VERTEX(-1280, 512, -1229),
@@ -902,10 +902,10 @@ const Collision inside_castle_seg7_area_1_collision[] = {
     COL_VERTEX(-2761, 768, -1355),
     COL_VERTEX(-2779, 973, -1264),
     COL_VERTEX(-2493, 973, -1550),
-    COL_VERTEX(-512, 512, -1024),
-    COL_VERTEX(-768, 512, -1024),
-    COL_VERTEX(-1280, 512, -922),
-    COL_VERTEX(-768, 512, -922),
+    COL_VERTEX(-512, 512, -1024), // Upstairs Key Door Room 1
+    COL_VERTEX(-768, 512, -1024), // Upstairs Key Door Room 1
+    COL_VERTEX(-1280, 512, -922), // Upstairs Key Door Room 1
+    COL_VERTEX(-768, 512, -922), // Upstairs Key Door Room 1
     COL_VERTEX(819, 614, -1229),
     COL_VERTEX(734, 614, -1313),
     COL_VERTEX(410, 614, -1494),
@@ -3741,16 +3741,16 @@ const Collision inside_castle_seg7_area_1_collision[] = {
     COL_TRI(77, 79, 80),
     COL_TRI_STOP(),
     COL_SPECIAL_INIT(11),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_null_start,        /*pos*/ -1024,    0,  1152, /*yaw*/ 128), // unused, probably an early way to set intial position
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_wooden_door,       /*pos*/  -271,    0,  -824, /*yaw*/  32),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_wooden_door,       /*pos*/ -1775,    0,  -824, /*yaw*/ 224),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_null_start,        /*pos*/ -1024,    0,  1152, /*yaw*/ 128), // unused, probably an early way to set intial position
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_wooden_door,       /*pos*/  -271,    0,  -824, /*yaw*/  32),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_wooden_door,       /*pos*/ -1775,    0,  -824, /*yaw*/ 224),
     SPECIAL_OBJECT_WITH_YAW_AND_PARAM(/*preset*/ special_castle_door_warp,  /*pos*/ -1100,    0,  2202, /*yaw*/   0, /*behParam2*/ 0),
     SPECIAL_OBJECT_WITH_YAW_AND_PARAM(/*preset*/ special_castle_door_warp,  /*pos*/ -946,     0,  2202, /*yaw*/ 128, /*behParam2*/ 1),
     SPECIAL_OBJECT_WITH_YAW_AND_PARAM(/*preset*/ special_wooden_door_warp,  /*pos*/ -1024, -102, -5170, /*yaw*/   0, /*behParam2*/ 2),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_0stars_door,       /*pos*/ -3122,  205,  -793, /*yaw*/  64),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_1star_door,        /*pos*/   256,    0, -1075, /*yaw*/   0),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_1star_door,        /*pos*/   644,  614, -1476, /*yaw*/ 224),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_3star_door,        /*pos*/  1075,  205,  -229, /*yaw*/ 192),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_3star_door,        /*pos*/ -2304,    0, -1075, /*yaw*/   0),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_0stars_door,       /*pos*/ -3122,  205,  -793, /*yaw*/  64),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_1star_door,        /*pos*/   256,    0, -1075, /*yaw*/   0),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_1star_door,        /*pos*/   644,  614, -1476, /*yaw*/ 224),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_3star_door,        /*pos*/  1075,  205,  -229, /*yaw*/ 192),
+    SPECIAL_OBJECT_WITH_YAW(          /*preset*/ special_3star_door,        /*pos*/ -2304,    0, -1075, /*yaw*/   0),
     COL_END(),
 };

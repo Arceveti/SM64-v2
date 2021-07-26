@@ -1287,6 +1287,8 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(210,  72, "FWD %d", m->forwardVel);
                 print_text_fmt_int(210,  56, "MY %d", (atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f);
                 // print_text_fmt_int(210,  56, "VEL", 0);
+                // STA short for "status," the official action name via SMS map.
+                print_text_fmt_int(210, 40, "STA %x", (m->action & ACT_ID_MASK));
                 break;
             case 1:
                 if (m->floor != NULL) {
@@ -1310,6 +1312,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                     print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
                     print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
                     print_text_fmt_int(226,  56, "0*%x", m->floor->force);
+                    print_text_fmt_int(210,  40, "RM %d", m->floor->room);
                 }
                 // print_text_fmt_int(210, 56, "FLOOR", 0);
                 break;
@@ -1381,8 +1384,6 @@ void debug_print_speed_action_normal(struct MarioState *m) {
         gNumCalls.ceil  = 0;
         gNumCalls.wall  = 0;
 
-        // STA short for "status," the official action name via SMS map.
-        print_text_fmt_int(210, 40, "STA %x", (m->action & ACT_ID_MASK));
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             sDebugMode++;
             if (sDebugMode > 4) {

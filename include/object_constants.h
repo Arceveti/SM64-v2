@@ -361,6 +361,22 @@
     #define CANNON_TRAP_DOOR_ACT_OPENING  2
     #define CANNON_TRAP_DOOR_ACT_OPEN     3
 
+/* Door */
+    /* oAction */
+    #define DOOR_ACT_CLOSED         0
+    #define DOOR_ACT_PULLED         1
+    #define DOOR_ACT_PUSHED         2
+    #define DOOR_ACT_WARP_PULLED    3
+    #define DOOR_ACT_WARP_PUSHED    4
+
+/* Star Door */
+    /* oAction */
+    #define STAR_DOOR_ACT_CLOSED    0
+    #define STAR_DOOR_ACT_OPENING   1
+    #define STAR_DOOR_ACT_OPEN      2
+    #define STAR_DOOR_ACT_CLOSING   3
+    #define STAR_DOOR_ACT_RESET     4
+
 /* Homing Amp */
     /* oAction */
     #define HOMING_AMP_ACT_INACTIVE        0
