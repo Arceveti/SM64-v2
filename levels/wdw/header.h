@@ -5,13 +5,13 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout wdw_geo_000580[];
-extern const GeoLayout wdw_geo_000598[];
-extern const GeoLayout wdw_geo_0005C0[];
-extern const GeoLayout wdw_geo_0005E8[];
-extern const GeoLayout wdw_geo_000610[];
-extern const GeoLayout wdw_geo_000628[];
-extern const GeoLayout wdw_geo_000640[];
+extern const GeoLayout wdw_geo_square_floating_platform[];
+extern const GeoLayout wdw_geo_arrow_lift[];
+extern const GeoLayout wdw_geo_water_level_diamond[];
+extern const GeoLayout wdw_geo_hidden_platform[];
+extern const GeoLayout wdw_geo_express_elevator[];
+extern const GeoLayout wdw_geo_rectangular_floating_platform[];
+extern const GeoLayout wdw_geo_rotating_platform[];
 extern const GeoLayout wdw_geo_000658[];
 extern const GeoLayout wdw_geo_000724[];
 

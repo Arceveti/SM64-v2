@@ -1,5 +1,5 @@
 // 0x0E000758
-const GeoLayout bitfs_geo_000758[] = {
+const GeoLayout bitfs_geo_platform_on_track[] = {
    GEO_CULLING_RADIUS(600),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_ALPHA, bitfs_seg7_dl_07011798),

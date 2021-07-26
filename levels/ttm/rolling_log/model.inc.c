@@ -72,7 +72,7 @@ static const Vtx ttm_seg7_vertex_070120E0[] = {
 
 // 0x07012120 - 0x070121B8
 static const Gfx ttm_seg7_dl_07012120[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_log_inside),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_07011DE8.l, 1),

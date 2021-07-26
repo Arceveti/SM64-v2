@@ -4,7 +4,7 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout bowser_2_geo_000170[];
+extern const GeoLayout bowser_2_geo_tilting_arena[];
 extern const GeoLayout bowser_2_geo_000188[];
 
 // leveldata

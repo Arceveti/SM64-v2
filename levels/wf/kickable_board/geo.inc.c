@@ -1,5 +1,5 @@
 // 0x0E000BA8
-const GeoLayout wf_geo_000BA8[] = {
+const GeoLayout wf_geo_kickable_board_standing[] = {
    GEO_CULLING_RADIUS(1300),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, wf_seg7_dl_0700F610),
@@ -9,7 +9,7 @@ const GeoLayout wf_geo_000BA8[] = {
 };
 
 // 0x0E000BC8
-const GeoLayout wf_geo_000BC8[] = {
+const GeoLayout wf_geo_kickable_board_fallen[] = {
    GEO_CULLING_RADIUS(1300),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, wf_seg7_dl_0700F610),

@@ -1,5 +1,5 @@
 // 0x0E000478
-const GeoLayout ddd_geo_000478[] = {
+const GeoLayout ddd_geo_sub_door[] = {
    GEO_CULLING_RADIUS(10000),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_TRANSPARENT, ddd_seg7_dl_07009030),

@@ -1,5 +1,5 @@
 // 0x0E000B20
-const GeoLayout lll_geo_000B20[] = {
+const GeoLayout lll_geo_drawbridge_part[] = {
    GEO_CULLING_RADIUS(850),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, lll_seg7_dl_07018680),

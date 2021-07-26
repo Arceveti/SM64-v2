@@ -541,7 +541,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 }
 
 /**
- * Finds the ceiling from a vec3f horizontally and a height (with 80 vertical buffer).
+ * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
  */
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     return find_ceil(pos[0], height + 3.0f, pos[2], ceil);

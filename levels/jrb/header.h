@@ -5,17 +5,17 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout jrb_geo_000900[];
-extern const GeoLayout jrb_geo_000918[];
-extern const GeoLayout jrb_geo_000930[];
-extern const GeoLayout jrb_geo_000948[];
-extern const GeoLayout jrb_geo_000960[];
-extern const GeoLayout jrb_geo_000978[];
-extern const GeoLayout jrb_geo_000990[];
-extern const GeoLayout jrb_geo_0009B0[];
-extern const GeoLayout jrb_geo_0009C8[];
-extern const GeoLayout jrb_geo_0009E8[];
-extern const GeoLayout jrb_geo_000A00[];
+extern const GeoLayout jrb_geo_falling_pillar[];
+extern const GeoLayout jrb_geo_falling_pillar_base[];
+extern const GeoLayout jrb_geo_rock[];
+extern const GeoLayout jrb_geo_floating_platform[];
+extern const GeoLayout jrb_geo_sliding_box[];
+extern const GeoLayout jrb_geo_ship_left_half_part[];
+extern const GeoLayout jrb_geo_sunken_ship[];
+extern const GeoLayout jrb_geo_ship_back_left_part[];
+extern const GeoLayout jrb_geo_sunken_ship_back[];
+extern const GeoLayout jrb_geo_ship_right_half_part[];
+extern const GeoLayout jrb_geo_ship_back_right_part[];
 extern const GeoLayout jrb_geo_000A18[];
 extern const GeoLayout jrb_geo_000AFC[];
 

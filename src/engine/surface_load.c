@@ -66,7 +66,7 @@ static struct Surface *alloc_surface(void) {
 
     surface->type = 0;
     surface->force = 0;
-    surface->flags = 0;
+    surface->flags = SURFACE_FLAG_NONE;
     surface->room = 0;
     surface->object = NULL;
 
@@ -201,9 +201,7 @@ static s16 upper_cell_index(s32 coord) {
 
     // Move from range [-0x2000, 0x2000) to [0, 0x4000)
     coord += LEVEL_BOUNDARY_MAX;
-    if (coord < 0) {
-        coord = 0;
-    }
+    if (coord < 0) coord = 0;
 
     // [0, 16)
     index = coord / CELL_SIZE;
@@ -356,7 +354,7 @@ static s32 surface_has_force(s16 surfaceType) {
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
 static s32 surf_has_no_cam_collision(s16 surfaceType) {
-    s32 flags = 0;
+    s32 flags = SURFACE_FLAG_NONE;
 
     switch (surfaceType) {
         case SURFACE_NO_CAM_COLLISION:

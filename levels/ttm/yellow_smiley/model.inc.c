@@ -17,7 +17,7 @@ static const Gfx ttm_seg7_dl_0702AA70[] = {
 };
 
 // 0x0702AAA8 - 0x0702AB18
-const Gfx ttm_seg7_dl_0702AAA8[] = {
+const Gfx ttm_seg7_dl_yellow_smiley[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),

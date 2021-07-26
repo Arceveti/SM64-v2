@@ -8,13 +8,13 @@ static const Lights1 ttm_seg7_lights_070122F0 = gdSPDefLights1(
 
 // 0x07012308 - 0x07012388
 static const Vtx ttm_seg7_vertex_07012308[] = {
-    {{{     0,      0,      0}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,      0,      0}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{     0,      0,      0}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,      0,      0}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{     0,    307,      0}, 0, {   -32,      0}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{     0,    307,      0}, 0, {   -32,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    307,      0}, 0, {  2012,    992}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   614,    614,      0}, 0, {  2012,    -28}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{     0,    307,      0}, 0, {   -32,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    307,      0}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   614,    614,      0}, 0, { 63<<5,    -28}, {0x00, 0x00, 0x7f, 0xff}}},
     {{{     0,    614,      0}, 0, {   -32,    -28}, {0x00, 0x00, 0x7f, 0xff}}},
 };
 
@@ -525,18 +525,15 @@ static const PaintingData *const ttm_seg7_painting_texture_maps_07012E88[] = {
     ttm_seg7_painting_top_0701296C,
 };
 
-UNUSED static const u64 ttm_unused_0 = 0x0;
-
-
 // 0x07012E98 - 0x07012EF8
 static const Gfx ttm_seg7_painting_dl_07012E98[] = {
     gsSPDisplayList(ttm_seg7_dl_070123B8),
     gsSPVertex(ttm_seg7_vertex_07012308, 8, 0),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_07004000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_slide_painting_bottom),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(ttm_seg7_dl_07012388),
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_07003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttm_seg7_texture_slide_painting_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPDisplayList(ttm_seg7_dl_070123A0),
@@ -545,8 +542,8 @@ static const Gfx ttm_seg7_painting_dl_07012E98[] = {
 };
 
 // 0x07012EF8 - 0x07012F78
-ALIGNED8 static const Texture *const ttm_seg7_painting_textures_07012EF8[] = {
-    ttm_seg7_texture_07004000, ttm_seg7_texture_07003000,
+ALIGNED8 static const Texture *const ttm_seg7_painting_textures_slide[] = {
+    ttm_seg7_texture_slide_painting_bottom, ttm_seg7_texture_slide_painting_top,
 };
 
 // 0x07012F00 (PaintingData)
@@ -567,7 +564,7 @@ struct Painting ttm_slide_painting = {
     /* Curr Ripple x, y */     0.0f,    0.0f,
     /* Normal DList */ ttm_seg7_painting_dl_07012E98,
     /* Texture Maps */ ttm_seg7_painting_texture_maps_07012E88,
-    /* Textures */     ttm_seg7_painting_textures_07012EF8,
+    /* Textures */     ttm_seg7_painting_textures_slide,
     /* Texture w, h */ 64, 32,
     /* Ripple DList */ ttm_seg7_painting_dl_07012430,
     /* Ripple Trigger */ RIPPLE_TRIGGER_PROXIMITY,

@@ -1,5 +1,5 @@
 // 0x05008D14
-const GeoLayout manta_seg5_geo_05008D14[] = {
+const GeoLayout manta_geo[] = {
     GEO_SCALE(LAYER_FORCE, 16384),
     GEO_OPEN_NODE(),
       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, NULL),

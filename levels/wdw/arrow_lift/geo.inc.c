@@ -1,5 +1,5 @@
 // 0x0E000598
-const GeoLayout wdw_geo_000598[] = {
+const GeoLayout wdw_geo_arrow_lift[] = {
    GEO_CULLING_RADIUS(350),
    GEO_OPEN_NODE(),
       GEO_SHADOW(SHADOW_SQUARE_TOGGLABLE, 0x96, 110),

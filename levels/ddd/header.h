@@ -5,9 +5,9 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout ddd_geo_000450[];
-extern const GeoLayout ddd_geo_000478[];
-extern const GeoLayout ddd_geo_0004A0[];
+extern const GeoLayout ddd_geo_pole[];
+extern const GeoLayout ddd_geo_sub_door[];
+extern const GeoLayout ddd_geo_submarine[];
 extern const GeoLayout ddd_geo_0004C0[];
 extern const GeoLayout ddd_geo_000570[];
 

@@ -1,5 +1,5 @@
 // 0x0E000728
-const GeoLayout bitfs_geo_000728[] = {
+const GeoLayout bitfs_geo_moving_square_platform[] = {
    GEO_CULLING_RADIUS(650),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, bitfs_seg7_dl_07011318),

@@ -54,7 +54,7 @@ extern const Gfx manta_seg5_dl_05006750[];
 extern const Gfx manta_seg5_dl_05006B08[];
 extern const Gfx manta_seg5_dl_05006B70[];
 extern const Gfx manta_seg5_dl_05006C08[];
-extern const GeoLayout manta_seg5_geo_05008D14[];
+extern const GeoLayout manta_geo[];
 extern const struct Animation *const manta_seg5_anims_05008EB4[];
 
 // sushi

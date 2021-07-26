@@ -4,9 +4,9 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout bob_geo_000440[];
-extern const GeoLayout bob_geo_000458[];
-extern const GeoLayout bob_geo_000470[];
+extern const GeoLayout bob_geo_chain_chomp_gate[];
+extern const GeoLayout bob_geo_seesaw_platform[];
+extern const GeoLayout bob_geo_grate_door[];
 extern const GeoLayout bob_geo_000488[];
 
 // leveldata

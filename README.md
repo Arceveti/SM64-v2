@@ -21,7 +21,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Re-implementation of the unused cracked ice in SL (SunlitSpace542, Arceveti) *
 - Bowser's puzzle in LLL is now seamless (Arceveti)
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
-- Optimized DDD Bowser's Submarine collision model (Arceveti)
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
 **Bugfixes:**
@@ -35,13 +34,15 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Optimizations:**
 - Most doubles are now floats where the extra percision isn't needed
 - Improved slope fix and exposed ceilings fix (Arceveti)
-- Removed many unecessary find_floor (collision) checks (Arceveti)
 - Removed almost all unused code/data from the Goddard folder (Arceveti)
-- Removed many stubbed/unused functions/variables
+- Removed many unecessary find_floor (collision) checks (Arceveti)
+- Optimized DDD Bowser's Submarine collision model (Arceveti)
+- Removed many stubbed/unused/duplicate functions/variables
 - Many smaller optimizations (Arceveti)
 
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)
+- Many unnamed display lists and geolayouts have been named (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
 - Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *

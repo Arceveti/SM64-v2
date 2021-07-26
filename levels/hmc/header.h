@@ -5,13 +5,13 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout hmc_geo_000530[];
-extern const GeoLayout hmc_geo_000548[];
-extern const GeoLayout hmc_geo_000570[];
-extern const GeoLayout hmc_geo_000588[];
-extern const GeoLayout hmc_geo_0005A0[];
-extern const GeoLayout hmc_geo_0005B8[];
-extern const GeoLayout hmc_geo_0005D0[];
+extern const GeoLayout hmc_geo_grill_door[];
+extern const GeoLayout hmc_geo_rolling_rock[];
+extern const GeoLayout hmc_geo_rolling_rock_fragment_large[];
+extern const GeoLayout hmc_geo_rolling_rock_fragment_small[];
+extern const GeoLayout hmc_geo_controllable_arrow_platform[];
+extern const GeoLayout hmc_geo_controllable_arrow_platform_button[];
+extern const GeoLayout hmc_geo_elevator_platform[];
 extern const GeoLayout hmc_geo_0005E8[];
 extern const GeoLayout hmc_geo_000618[];
 extern const GeoLayout hmc_geo_000658[];
@@ -72,9 +72,7 @@ extern const Gfx hmc_seg7_dl_07023090[];
 extern const Gfx hmc_seg7_dl_07023BC8[];
 extern const Gfx hmc_seg7_dl_07023E10[];
 extern const Gfx hmc_seg7_dl_07024110[];
-extern const Gfx hmc_seg7_dl_07024268[];
-extern const Gfx hmc_seg7_dl_070242A0[];
-extern const u8 *const hmc_seg7_painting_textures_07025518[];
+extern const u8 *const hmc_seg7_painting_textures_cotmc[];
 extern struct Painting cotmc_painting;
 extern const Collision hmc_seg7_collision_level[];
 extern const MacroObject hmc_seg7_macro_objs[];

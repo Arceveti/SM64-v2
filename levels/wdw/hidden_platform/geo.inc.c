@@ -1,5 +1,5 @@
 // 0x0E0005E8
-const GeoLayout wdw_geo_0005E8[] = {
+const GeoLayout wdw_geo_hidden_platform[] = {
    GEO_CULLING_RADIUS(420),
    GEO_OPEN_NODE(),
       GEO_SHADOW(SHADOW_SQUARE_TOGGLABLE, 0x96, 240),

@@ -30,7 +30,7 @@ static const Vtx ttm_seg7_vertex_0700A9C0[] = {
 
 // 0x0700AA40 - 0x0700AAB8
 static const Gfx ttm_seg7_dl_0700AA40[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, ttm_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, ttm_seg7_texture_mushroom_stem),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_0700A928.l, 1),

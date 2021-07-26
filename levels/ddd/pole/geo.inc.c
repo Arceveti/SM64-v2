@@ -1,5 +1,5 @@
 // 0x0E000450
-const GeoLayout ddd_geo_000450[] = {
+const GeoLayout ddd_geo_pole[] = {
    GEO_CULLING_RADIUS(700),
    GEO_OPEN_NODE(),
       GEO_SHADOW(SHADOW_SQUARE_PERMANENT, 0xB4, 120),

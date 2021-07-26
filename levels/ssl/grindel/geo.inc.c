@@ -1,5 +1,5 @@
 // 0x0E000734
-const GeoLayout ssl_geo_000734[] = {
+const GeoLayout ssl_geo_grindel[] = {
    GEO_CULLING_RADIUS(700),
    GEO_OPEN_NODE(),
       GEO_SHADOW(SHADOW_SQUARE_SCALABLE, 0xB4, 550),

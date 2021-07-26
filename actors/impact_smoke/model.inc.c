@@ -1,6 +1,6 @@
 // Impact Smoke
 
-// TODO: These 64x64 textures are referenced as two different texture addresses in the DLs
+//! TODO: These 64x64 textures are referenced as two different texture addresses in the DLs
 
 // 0x0605AA28
 ALIGNED8 static const u8 impact_smoke_seg6_texture_0[] = {

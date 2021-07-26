@@ -4,21 +4,21 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout ttc_geo_000240[];
-extern const GeoLayout ttc_geo_000258[];
-extern const GeoLayout ttc_geo_000270[];
-extern const GeoLayout ttc_geo_000288[];
-extern const GeoLayout ttc_geo_0002A8[];
-extern const GeoLayout ttc_geo_0002C8[];
-extern const GeoLayout ttc_geo_0002E0[];
-extern const GeoLayout ttc_geo_0002F8[];
-extern const GeoLayout ttc_geo_000310[];
-extern const GeoLayout ttc_geo_000328[];
-extern const GeoLayout ttc_geo_000340[];
-extern const GeoLayout ttc_geo_000358[];
-extern const GeoLayout ttc_geo_000370[];
-extern const GeoLayout ttc_geo_000388[];
-extern const GeoLayout ttc_geo_0003A0[];
+extern const GeoLayout ttc_geo_rotating_cube[];
+extern const GeoLayout ttc_geo_rotating_prism[];
+extern const GeoLayout ttc_geo_pendulum[];
+extern const GeoLayout ttc_geo_large_treadmill[];
+extern const GeoLayout ttc_geo_small_treadmill[];
+extern const GeoLayout ttc_geo_push_block[];
+extern const GeoLayout ttc_geo_rotating_hexagon[];
+extern const GeoLayout ttc_geo_rotating_triangle[];
+extern const GeoLayout ttc_geo_pit_block[];
+extern const GeoLayout ttc_geo_pit_block_2[];
+extern const GeoLayout ttc_geo_elevator_platform[];
+extern const GeoLayout ttc_geo_clock_hand[];
+extern const GeoLayout ttc_geo_spinner[];
+extern const GeoLayout ttc_geo_small_gear[];
+extern const GeoLayout ttc_geo_large_gear[];
 extern const GeoLayout ttc_geo_0003B8[];
 
 // leveldata

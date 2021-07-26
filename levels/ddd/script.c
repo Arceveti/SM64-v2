@@ -77,9 +77,9 @@ const LevelScript level_ddd_entry[] = {
     JUMP_LINK(script_func_global_1),
     JUMP_LINK(script_func_global_5),
     JUMP_LINK(script_func_global_14),
-    LOAD_MODEL_FROM_GEO(MODEL_DDD_BOWSER_SUB_DOOR, ddd_geo_000478),
-    LOAD_MODEL_FROM_GEO(MODEL_DDD_BOWSER_SUB,      ddd_geo_0004A0),
-    LOAD_MODEL_FROM_GEO(MODEL_DDD_POLE,            ddd_geo_000450),
+    LOAD_MODEL_FROM_GEO(MODEL_DDD_BOWSER_SUB_DOOR, ddd_geo_sub_door),
+    LOAD_MODEL_FROM_GEO(MODEL_DDD_BOWSER_SUB,      ddd_geo_submarine),
+    LOAD_MODEL_FROM_GEO(MODEL_DDD_POLE,            ddd_geo_pole),
 
     AREA(/*index*/ 1, ddd_geo_0004C0),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -3071, 3000, 0, /*angle*/ 0, 7, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),

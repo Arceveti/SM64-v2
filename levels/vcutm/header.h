@@ -4,7 +4,7 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout vcutm_geo_0001F0[];
+extern const GeoLayout vcutm_geo_seesaw[];
 extern const GeoLayout vcutm_geo_000208[];
 
 // leveldata

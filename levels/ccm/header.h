@@ -5,9 +5,9 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout ccm_geo_0003D0[];
-extern const GeoLayout ccm_geo_0003F0[];
-extern const GeoLayout ccm_geo_00040C[];
+extern const GeoLayout ccm_geo_ropeway_lift[];
+extern const GeoLayout ccm_geo_snowman_base[];
+extern const GeoLayout ccm_geo_snowman_head[];
 extern const GeoLayout ccm_geo_00042C[];
 extern const GeoLayout ccm_geo_00045C[];
 extern const GeoLayout ccm_geo_000494[];

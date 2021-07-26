@@ -70,9 +70,9 @@ const LevelScript level_bob_entry[] = {
     JUMP_LINK(script_func_global_4),
     JUMP_LINK(script_func_global_15),
     LOAD_MODEL_FROM_GEO(MODEL_BOB_BUBBLY_TREE,      bubbly_tree_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_BOB_CHAIN_CHOMP_GATE, bob_geo_000440),
-    LOAD_MODEL_FROM_GEO(MODEL_BOB_SEESAW_PLATFORM,  bob_geo_000458),
-    LOAD_MODEL_FROM_GEO(MODEL_BOB_BARS_GRILLS,      bob_geo_000470),
+    LOAD_MODEL_FROM_GEO(MODEL_BOB_CHAIN_CHOMP_GATE, bob_geo_chain_chomp_gate),
+    LOAD_MODEL_FROM_GEO(MODEL_BOB_SEESAW_PLATFORM,  bob_geo_seesaw_platform),
+    LOAD_MODEL_FROM_GEO(MODEL_BOB_BARS_GRILLS,      bob_geo_grate_door),
 
     AREA(/*index*/ 1, bob_geo_000488),
         JUMP_LINK(script_func_local_1),

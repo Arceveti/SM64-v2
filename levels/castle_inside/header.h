@@ -26,7 +26,7 @@ extern const GeoLayout castle_geo_area_1_door_room_lobby_jrb[];
 extern const GeoLayout castle_geo_area_1_door_room_lobby_ccm[];
 // extern const GeoLayout castle_geo_area_1_door_room_lobby_fake_spiral_stairs_2[];
 extern const GeoLayout castle_geo_area_1[];
-extern const GeoLayout castle_geo_001518[];
+extern const GeoLayout castle_geo_clock_pendulum[];
 extern const GeoLayout castle_geo_clock_minute_hand[];
 extern const GeoLayout castle_geo_clock_hour_hand[];
 extern const GeoLayout castle_geo_001560[];

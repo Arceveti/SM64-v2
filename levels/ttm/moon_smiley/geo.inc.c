@@ -1,5 +1,5 @@
 // 0x0E000DBC
-const GeoLayout ttm_geo_000DBC[] = {
+const GeoLayout ttm_geo_moon_smiley[] = {
    GEO_CULLING_RADIUS(1000),
    GEO_OPEN_NODE(),
       GEO_BILLBOARD(),

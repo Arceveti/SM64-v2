@@ -1,5 +1,5 @@
 // 0x0E000764
-const GeoLayout ssl_geo_000764[] = {
+const GeoLayout ssl_geo_spindel[] = {
    GEO_CULLING_RADIUS(550),
    GEO_OPEN_NODE(),
       GEO_SHADOW(0x00 + SHADOW_RECTANGLE_HARDCODED_OFFSET, 0xB4, 0),

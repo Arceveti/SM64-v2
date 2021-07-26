@@ -1,5 +1,5 @@
 // 0x0E000628
-const GeoLayout bits_geo_000628[] = {
+const GeoLayout bits_geo_blue_platform[] = {
    GEO_CULLING_RADIUS(600),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, bits_seg7_dl_07013820),

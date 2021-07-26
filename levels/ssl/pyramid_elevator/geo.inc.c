@@ -1,5 +1,5 @@
 // 0x0E0007AC
-const GeoLayout ssl_geo_0007AC[] = {
+const GeoLayout ssl_geo_pyramid_elevator[] = {
    GEO_CULLING_RADIUS(900),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, ssl_seg7_dl_070233A8),

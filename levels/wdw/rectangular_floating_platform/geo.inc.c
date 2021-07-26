@@ -1,5 +1,5 @@
 // 0x0E000628
-const GeoLayout wdw_geo_000628[] = {
+const GeoLayout wdw_geo_rectangular_floating_platform[] = {
    GEO_CULLING_RADIUS(900),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, wdw_seg7_dl_07013E40),

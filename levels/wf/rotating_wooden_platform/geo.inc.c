@@ -1,5 +1,5 @@
 // 0x0E000A58
-const GeoLayout wf_geo_000A58[] = {
+const GeoLayout wf_geo_rotating_wooden_platform[] = {
    GEO_CULLING_RADIUS(1500),
    GEO_OPEN_NODE(),
       GEO_RENDER_RANGE(-2048, 5000),

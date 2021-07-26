@@ -1,5 +1,5 @@
 // 0x0E000D84
-const GeoLayout ttm_geo_000D84[] = {
+const GeoLayout ttm_geo_star_smiley[] = {
    GEO_CULLING_RADIUS(1000),
    GEO_OPEN_NODE(),
       GEO_BILLBOARD(),

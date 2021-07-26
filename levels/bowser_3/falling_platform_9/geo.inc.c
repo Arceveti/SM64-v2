@@ -1,5 +1,5 @@
 // 0x0E000350
-const GeoLayout bowser_3_geo_000350[] = {
+const GeoLayout bowser_3_geo_falling_platform_9[] = {
    GEO_CULLING_RADIUS(5000),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, bowser_3_seg7_dl_07003C68),

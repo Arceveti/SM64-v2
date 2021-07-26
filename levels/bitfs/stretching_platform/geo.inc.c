@@ -1,5 +1,5 @@
 // 0x0E000708
-const GeoLayout bitfs_geo_000708[] = {
+const GeoLayout bitfs_geo_stretching_platforms[] = {
    GEO_CULLING_RADIUS(3000),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_ALPHA, bitfs_seg7_dl_07010340),

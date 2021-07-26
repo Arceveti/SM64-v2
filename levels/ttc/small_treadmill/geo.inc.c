@@ -1,5 +1,5 @@
 // 0x0E0002A8
-const GeoLayout ttc_geo_0002A8[] = {
+const GeoLayout ttc_geo_small_treadmill[] = {
    GEO_CULLING_RADIUS(520),
    GEO_OPEN_NODE(),
       GEO_DISPLAY_LIST(LAYER_OPAQUE, ttc_seg7_dl_0700FFE8),

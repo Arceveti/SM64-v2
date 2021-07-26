@@ -7,13 +7,13 @@
 // geo
 extern const GeoLayout ssl_geo_0005C0[];
 extern const GeoLayout ssl_geo_0005D8[];
-extern const GeoLayout ssl_geo_000618[];
-extern const GeoLayout ssl_geo_000630[];
+extern const GeoLayout ssl_geo_pyramid_top[];
+extern const GeoLayout ssl_geo_tox_box[];
 extern const GeoLayout ssl_geo_000648[];
-extern const GeoLayout ssl_geo_000734[];
-extern const GeoLayout ssl_geo_000764[];
-extern const GeoLayout ssl_geo_000794[];
-extern const GeoLayout ssl_geo_0007AC[];
+extern const GeoLayout ssl_geo_grindel[];
+extern const GeoLayout ssl_geo_spindel[];
+extern const GeoLayout ssl_geo_moving_pyramid_wall[];
+extern const GeoLayout ssl_geo_pyramid_elevator[];
 extern const GeoLayout ssl_geo_0007CC[];
 extern const GeoLayout ssl_geo_00088C[];
 

@@ -5,8 +5,8 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout ttm_geo_000710[];
-extern const GeoLayout ttm_geo_000730[];
+extern const GeoLayout ttm_geo_star_cage[];
+extern const GeoLayout ttm_geo_rolling_log[];
 extern const GeoLayout ttm_geo_000748[];
 extern const GeoLayout ttm_geo_000778[];
 extern const GeoLayout ttm_geo_0007A8[];
@@ -30,11 +30,11 @@ extern const GeoLayout ttm_geo_000A70[];
 extern const GeoLayout ttm_geo_000B5C[];
 extern const GeoLayout ttm_geo_000BEC[];
 extern const GeoLayout ttm_geo_000C84[];
-extern const GeoLayout ttm_geo_000D14[];
-extern const GeoLayout ttm_geo_000D4C[];
-extern const GeoLayout ttm_geo_000D84[];
-extern const GeoLayout ttm_geo_000DBC[];
-extern const GeoLayout ttm_geo_000DF4[];
+extern const GeoLayout ttm_geo_blue_smiley[];
+extern const GeoLayout ttm_geo_yellow_smiley[];
+extern const GeoLayout ttm_geo_star_smiley[];
+extern const GeoLayout ttm_geo_moon_smiley[];
+extern const GeoLayout ttm_geo_slide_exit_podium[];
 
 // leveldata
 extern const Gfx ttm_seg7_dl_0700A120[];
@@ -96,7 +96,7 @@ extern const Gfx ttm_seg7_dl_07025F48[];
 extern const Gfx ttm_seg7_dl_0702A1B8[];
 extern const Gfx ttm_seg7_dl_0702A8A0[];
 extern const Gfx ttm_seg7_dl_0702A9C0[];
-extern const Gfx ttm_seg7_dl_0702AAA8[];
+extern const Gfx ttm_seg7_dl_yellow_smiley[];
 extern const Gfx ttm_seg7_dl_0702AB90[];
 extern const Gfx ttm_seg7_dl_0702AC78[];
 extern const Gfx ttm_seg7_dl_0702BB60[];

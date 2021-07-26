@@ -4,16 +4,16 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout bowser_3_geo_000290[];
-extern const GeoLayout bowser_3_geo_0002A8[];
-extern const GeoLayout bowser_3_geo_0002C0[];
-extern const GeoLayout bowser_3_geo_0002D8[];
-extern const GeoLayout bowser_3_geo_0002F0[];
-extern const GeoLayout bowser_3_geo_000308[];
-extern const GeoLayout bowser_3_geo_000320[];
-extern const GeoLayout bowser_3_geo_000338[];
-extern const GeoLayout bowser_3_geo_000350[];
-extern const GeoLayout bowser_3_geo_000368[];
+extern const GeoLayout bowser_3_geo_falling_platform_1[];
+extern const GeoLayout bowser_3_geo_falling_platform_2[];
+extern const GeoLayout bowser_3_geo_falling_platform_3[];
+extern const GeoLayout bowser_3_geo_falling_platform_4[];
+extern const GeoLayout bowser_3_geo_falling_platform_5[];
+extern const GeoLayout bowser_3_geo_falling_platform_6[];
+extern const GeoLayout bowser_3_geo_falling_platform_7[];
+extern const GeoLayout bowser_3_geo_falling_platform_8[];
+extern const GeoLayout bowser_3_geo_falling_platform_9[];
+extern const GeoLayout bowser_3_geo_falling_platform_10[];
 extern const GeoLayout bowser_3_geo_000380[];
 extern const GeoLayout bowser_3_geo_000398[];
 
