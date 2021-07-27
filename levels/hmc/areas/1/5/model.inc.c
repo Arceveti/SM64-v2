@@ -1558,7 +1558,7 @@ static const Gfx hmc_seg7_dl_0700DD30[] = {
 
 // 0x0700DED8 - 0x0700DF10
 static const Gfx hmc_seg7_dl_0700DED8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_cave_map_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700BE78, 4, 0),
@@ -1568,7 +1568,7 @@ static const Gfx hmc_seg7_dl_0700DED8[] = {
 
 // 0x0700DF10 - 0x0700DF48
 static const Gfx hmc_seg7_dl_0700DF10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_07001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_cave_map_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700BEB8, 4, 0),

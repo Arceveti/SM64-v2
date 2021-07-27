@@ -87,14 +87,14 @@ extern const Gfx snufit_seg6_dl_06009B68[];
 
 // swoop
 extern const GeoLayout swoop_geo[];
-extern const Gfx dSwoopEyesDl[];
-extern const Gfx dSwoopNoseDl[];
-extern const Gfx swoop_seg6_dl_06006758[];
+extern const Gfx dSwoopEyesSubDl[];
+extern const Gfx dSwoopNoseSubDl1[];
+extern const Gfx dSwoopFaceUpperDl[];
 extern const Gfx dSwoopBodySubDl[];
 extern const Gfx dSwoopBodyDl[];
-extern const Gfx swoop_seg6_dl_06006A10[];
-extern const Gfx swoop_seg6_dl_06006A68[];
-extern const Gfx swoop_seg6_dl_06006A88[];
+extern const Gfx dSwoopNoseSubDl2[];
+extern const Gfx dSwoopToothSubDl[];
+extern const Gfx dSwoopFaceLowerDL[];
 extern const Gfx dSwoopWing1SubDl[];
 extern const Gfx dSwoopWing1Dl[];
 extern const Gfx dSwoopWing2SubDl[];

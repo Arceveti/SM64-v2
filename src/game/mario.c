@@ -1245,9 +1245,8 @@ void squish_mario_model(struct MarioState *m) {
         // If no longer squished, scale back to default.
         if (m->squishTimer == 0) {
             vec3f_set(m->marioObj->header.gfx.scale, 1.0f, 1.0f, 1.0f);
-        }
         // If timer is less than 16, rubber-band Mario's size scale up and down.
-        else if (m->squishTimer <= 16) {
+        } else if (m->squishTimer <= 16) {
             m->squishTimer--;
 
             m->marioObj->header.gfx.scale[1] =
@@ -1263,7 +1262,7 @@ void squish_mario_model(struct MarioState *m) {
         }
     }
 }
-
+#ifdef DEBUG_INFO
 /**
  * Debug function that prints floor normal, velocity, and action information.
  */
@@ -1271,7 +1270,6 @@ void debug_print_speed_action_normal(struct MarioState *m) {
     f32 steepness;
     f32 surf_nY;
     if (gShowDebugText) {
-#ifdef EXTENDED_DEBUG_INFO
         print_text_fmt_int(210, 184, "PX %d", m->pos[0]);
         print_text_fmt_int(210, 168, "PY %d", m->pos[1]);
         print_text_fmt_int(210, 152, "PZ %d", m->pos[2]);
@@ -1390,22 +1388,13 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 sDebugMode = 0;
             }
         }
-#else
-        steepness = sqrtf(((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
-        surf_nY = m->floor->normal.y;
-        print_text_fmt_int(210, 88, "ANG %d", (atan2s(floor_nY, steepness) * 180.0f) / 32768.0f);
-        print_text_fmt_int(210, 72, "SPD %d", m->forwardVel);
-        // STA short for "status," the official action name via SMS map.
-        print_text_fmt_int(210, 56, "STA %x", (m->action & ACT_ID_MASK));
-#endif
     }
-#ifdef DEBUG_INFO
     if (gPlayer1Controller->buttonDown & Z_TRIG && gPlayer1Controller->buttonPressed & L_JPAD) {
         gShowDebugText ^= TRUE;
         gDebugInfoFlags = gShowDebugText ? DEBUG_INFO_FLAG_ALL : DEBUG_INFO_NOFLAGS;
     }
-#endif
 }
+#endif
 
 /**
  * Update the button inputs for Mario.
@@ -1543,9 +1532,9 @@ void update_mario_inputs(struct MarioState *m) {
     update_mario_button_inputs(m);
     update_mario_joystick_inputs(m);
     update_mario_geometry_inputs(m);
-
+#ifdef DEBUG_INFO
     debug_print_speed_action_normal(m);
-
+#endif
     if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE) {
         if (m->action & ACT_FLAG_ALLOW_FIRST_PERSON ||
         (m->vel[0] < 8.0f && m->vel[1] < 8.0f && m->vel[2] < 8.0f && m->pos[1] <= m->floorHeight)) {

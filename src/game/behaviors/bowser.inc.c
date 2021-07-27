@@ -1003,15 +1003,10 @@ void bowser_set_goal_invisible(void) {
  * Makes Bowser jump back on stage after falling
  */
 void bowser_act_jump_onto_stage(void) {
-    s32 onDynamicFloor;
     struct Surface *floor = o->oFloor;
-
     // Set dynamic floor check (Object platforms)
-    if (floor != NULL && floor->flags & SURFACE_FLAG_DYNAMIC) {
-        onDynamicFloor = TRUE;
-    } else {
-        onDynamicFloor = FALSE;
-    }
+    s32 onDynamicFloor = (floor != NULL && floor->flags & SURFACE_FLAG_DYNAMIC);
+
     // Set status Jump
     o->oBowserStatus |= BOWSER_STATUS_BIG_JUMP;
 

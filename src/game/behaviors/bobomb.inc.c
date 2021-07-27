@@ -219,8 +219,6 @@ void bobomb_thrown_loop(void) {
     o->oAction = BOBOMB_ACT_LAUNCHED;
 }
 
-// sp18 = blinkTimer
-
 void curr_obj_random_blink(s32 *blinkTimer) {
     if (*blinkTimer == 0) {
         if ((s16)(random_float() * 100.0f) == 0) {

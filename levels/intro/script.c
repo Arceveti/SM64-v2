@@ -31,7 +31,7 @@ const LevelScript level_intro_splash_screen[] = {
 
     // Load "Super Mario 64" logo
     ALLOC_LEVEL_POOL(),
-    AREA(/*index*/ 1, intro_geo_0002D0),
+    AREA(/*index*/ 1, intro_geo_splash_screen),
     END_AREA(),
     FREE_LEVEL_POOL(),
 
@@ -113,7 +113,7 @@ const LevelScript level_intro_entry_4[] = {
     FIXED_LOAD(/*loadAddr*/ _goddardSegmentStart, /*romStart*/ _goddardSegmentRomStart, /*romEnd*/ _goddardSegmentRomEnd),
     ALLOC_LEVEL_POOL(),
 
-    AREA(/*index*/ 1, intro_geo_000414),
+    AREA(/*index*/ 1, intro_geo_debug_level_select),
     END_AREA(),
 
     FREE_LEVEL_POOL(),

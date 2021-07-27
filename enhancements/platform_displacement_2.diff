@@ -991,7 +991,7 @@ index 0000000..97cba2a
 +void bowser_act_jump_onto_stage(void) {
 +    s32 sp2C;
 +    struct Surface *sp24 = o->oFloor;
-+    if (sp24 != NULL && sp24->flags & 1)
++    if (sp24 != NULL && sp24->flags & SURFACE_FLAG_DYNAMIC)
 +        sp2C = 1;
 +    else
 +        sp2C = 0;

@@ -6,6 +6,8 @@ void bhv_spindel_init(void) {
     o->oSpindelMoveDirection = FALSE;
 }
 
+// TODO: name sp18
+
 void bhv_spindel_loop(void) {
     f32 homeYOffset;
     s32 sp18;

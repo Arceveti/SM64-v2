@@ -1164,7 +1164,7 @@ s32 init_level(void) {
             set_mario_action(gMarioState, ACT_IDLE, 0);
         } else if (gDebugLevelSelect == 0) {
             if (gMarioState->action != ACT_UNINITIALIZED) {
-                    set_mario_action(gMarioState, ACT_IDLE, 0);
+                set_mario_action(gMarioState, ACT_IDLE, 0);
             }
         }
     }

@@ -217,10 +217,10 @@
 
 // Enable debug level select (doesn't work if Goddard is skipped)
 #define DEBUG_LEVEL_SELECT
-// Enable debug info [COMPLETE_EN_US_SEGMENT2 is recommended] (Arceveti)
+// Enable debug info with info for velocity and info for floors/ceilings/walls
+// [COMPLETE_EN_US_SEGMENT2 is recommended]
+// (Arceveti)
 #define DEBUG_INFO
-// Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti)
-#define EXTENDED_DEBUG_INFO
 // Debug Free Move by pressind Dpad up (Arceveti)
 #define ENABLE_DEBUG_FREE_MOVE
 // Vertical quicksand support (Wiseguy)
@@ -233,7 +233,7 @@
 // -- HUD/Gameplay QoL --
 
 // Slightly modified version of Reonu Cam 3
-// #define REONU_CAM_3
+#define REONU_CAM_3
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER
 // Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)

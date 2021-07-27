@@ -38,7 +38,7 @@ static const Vtx hmc_seg7_vertex_07022C60[] = {
 
 // 0x07022CE0 - 0x07022D58
 static const Gfx hmc_seg7_dl_07022CE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_07004000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_arrow_platform_sides),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_07022B48.l, 1),
@@ -53,7 +53,7 @@ static const Gfx hmc_seg7_dl_07022CE0[] = {
 
 // 0x07022D58 - 0x07022DA0
 static const Gfx hmc_seg7_dl_07022D58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_07003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hmc_seg7_texture_arrow_platform_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_07022C60, 8, 0),

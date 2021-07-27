@@ -633,7 +633,7 @@ u64 *synthesis_process_note(s32 noteIndex, struct NoteSubEu *noteSubEu, struct N
                         }
                         break;
                 }
-                flags = 0;
+                flags = 0x0;
 skip:
                 if (noteFinished) {
                     aClearBuffer(cmd++, DMEM_ADDR_UNCOMPRESSED_NOTE + s5,
@@ -673,7 +673,7 @@ skip:
             if (noteSubEu->finished) break;
         }
     }
-    flags = 0;
+    flags = 0x0;
     if (noteSubEu->needsInit) {
         flags = A_INIT;
         noteSubEu->needsInit = FALSE;
@@ -681,8 +681,8 @@ skip:
     flags = flags | sp56;
     cmd = final_resample(cmd, synthesisState, bufLen * 2, resamplingRateFixedPoint,
             noteSamplesDmemAddrBeforeResampling, flags);
-    if ((flags & 1) != 0) {
-        flags = 1;
+    if (flags & 0x1) {
+        flags = 0x1;
     }
 
     if (noteSubEu->filter) {

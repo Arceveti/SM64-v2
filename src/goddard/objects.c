@@ -304,33 +304,33 @@ struct VtxLink *make_vtx_link(struct VtxLink *prevNode, Vtx *data) {
 
 /* @ 22B1DC for 0x430 */
 void reset_plane(struct ObjPlane *plane) {
-    struct ObjFace *sp4C;
+    struct ObjFace *face;
     f32 sp48;
     f32 sp44;
     s32 i;
     s32 sp30;
     register f32 sp28;
 
-    sp4C = plane->unk40;
-    calc_face_normal(sp4C);
-    plane->unk1C = gd_dot_vec3f(&sp4C->vertices[0]->pos, &sp4C->normal);
+    face = plane->unk40;
+    calc_face_normal(face);
+    plane->unk1C = gd_dot_vec3f(&face->vertices[0]->pos, &face->normal);
     sp48 = 0.0f;
 
-    sp28 = sp4C->normal.x < 0.0f ? -sp4C->normal.x : sp4C->normal.x;
+    sp28 = face->normal.x < 0.0f ? -face->normal.x : face->normal.x;
     sp44 = sp28;
     if (sp44 > sp48) {
         sp30 = 0;
         sp48 = sp44;
     }
 
-    sp28 = sp4C->normal.y < 0.0f ? -sp4C->normal.y : sp4C->normal.y;
+    sp28 = face->normal.y < 0.0f ? -face->normal.y : face->normal.y;
     sp44 = sp28;
     if (sp44 > sp48) {
         sp30 = 1;
         sp48 = sp44;
     }
 
-    sp28 = sp4C->normal.z < 0.0f ? -sp4C->normal.z : sp4C->normal.z;
+    sp28 = face->normal.z < 0.0f ? -face->normal.z : face->normal.z;
     sp44 = sp28;
     if (sp44 > sp48) {
         sp30 = 2;
@@ -353,8 +353,8 @@ void reset_plane(struct ObjPlane *plane) {
 
     reset_bounding_box();
 
-    for (i = 0; i < sp4C->vtxCount; i++) {
-        add_obj_pos_to_bounding_box(&sp4C->vertices[i]->header);
+    for (i = 0; i < face->vtxCount; i++) {
+        add_obj_pos_to_bounding_box(&face->vertices[i]->header);
     }
 
     plane->boundingBox.minX = gSomeBoundingBox.minX;
@@ -744,18 +744,18 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
 
 /* @ 22D1BC for 0xA8 */
 void func_8017E9EC(struct ObjNet *net) {
-    struct GdVec3f sp5C;
-    Mat4f sp1C;
-    f32 sp18;
+    struct GdVec3f torqueVec;
+    Mat4f mtx;
+    f32 torqueMag;
 
-    sp5C.x = net->torque.x;
-    sp5C.y = net->torque.y;
-    sp5C.z = net->torque.z;
+    torqueVec.x = net->torque.x;
+    torqueVec.y = net->torque.y;
+    torqueVec.z = net->torque.z;
 
-    gd_normalize_vec3f(&sp5C);
-    sp18 = gd_vec3f_magnitude(&net->torque);
-    gd_create_rot_mat_angular(&sp1C, &sp5C, -sp18);
-    gd_mult_mat4f(&D_801B9DC8, &sp1C, &D_801B9DC8);
+    gd_normalize_vec3f(&torqueVec);
+    torqueMag = gd_vec3f_magnitude(&net->torque);
+    gd_create_rot_mat_angular(&mtx, &torqueVec, -torqueMag);
+    gd_mult_mat4f(&D_801B9DC8, &mtx, &D_801B9DC8);
 }
 
 /* @ 22D824 for 0x1BC */

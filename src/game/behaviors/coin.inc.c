@@ -62,7 +62,7 @@ void bhv_temp_coin_loop(void) {
 }
 
 void bhv_coin_init(void) {
-    o->oVelY = random_float() * 10.0f + 30 + o->oCoinBaseYVel;
+    o->oVelY = random_float() * 10.0f + 30.0f + o->oCoinBaseYVel;
     o->oForwardVel = random_float() * 10.0f;
     o->oMoveAngleYaw = random_u16();
     cur_obj_set_behavior(bhvYellowCoin);
@@ -192,7 +192,7 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
             pos[2] = sCoinArrowPositions[index][1];
             break;
     }
-    if (shape & COIN_FORMATION_FLAG_RING) {
+    if (shape & 0x10) {
         snapToGround = FALSE;
     }
     if (spawnCoin) {

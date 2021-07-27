@@ -2119,9 +2119,9 @@ void spawn_mist_particles(void) {
     spawn_mist_particles_variable(0, 0, 46.0f);
 }
 
-void spawn_mist_particles_with_sound(u32 sp18) {
+void spawn_mist_particles_with_sound(u32 soundMagic) {
     spawn_mist_particles_variable(0, 0, 46.0f);
-    create_sound_spawner(sp18);
+    create_sound_spawner(soundMagic);
 }
 
 void cur_obj_push_mario_away(f32 radius) {
@@ -2184,20 +2184,20 @@ s32 cur_obj_progress_direction_table(void) {
     return action;
 }
 
-void cur_obj_scale_over_time(s32 axis, s32 times, f32 sp10, f32 sp14) {
-    f32 sp4 = sp14 - sp10;
+void cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end) {
+    f32 range = end - start;
     f32 step = (f32) o->oTimer / times;
 
     if (axis & 0x01) {
-        o->header.gfx.scale[0] = sp4 * step + sp10;
+        o->header.gfx.scale[0] = range * step + start;
     }
 
     if (axis & 0x02) {
-        o->header.gfx.scale[1] = sp4 * step + sp10;
+        o->header.gfx.scale[1] = range * step + start;
     }
 
     if (axis & 0x04) {
-        o->header.gfx.scale[2] = sp4 * step + sp10;
+        o->header.gfx.scale[2] = range * step + start;
     }
 }
 

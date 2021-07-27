@@ -803,8 +803,8 @@ s32 act_stop_crawling(struct MarioState *m) {
 }
 
 s32 act_shockwave_bounce(struct MarioState *m) {
-    s16 sp1E;
-    f32 sp18;
+    s16 bounceAngle;
+    f32 bounceAmt;
 
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_SHOCKWAVE) {
 #if ENABLE_RUMBLE
@@ -826,14 +826,14 @@ s32 act_shockwave_bounce(struct MarioState *m) {
         return set_mario_action(m, ACT_IDLE, 0);
     }
 
-    sp1E = (m->actionTimer % 16) << 12;
-    sp18 = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
+    bounceAngle = (m->actionTimer % 16) << 12;
+    bounceAmt = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
     mario_set_forward_vel(m, 0);
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
-    if (sins(sp1E) >= 0.0f) {
-        m->pos[1] = sins(sp1E) * sp18 + m->floorHeight;
+    if (sins(bounceAngle) >= 0.0f) {
+        m->pos[1] = sins(bounceAngle) * bounceAmt + m->floorHeight;
     } else {
-        m->pos[1] = m->floorHeight - sins(sp1E) * sp18;
+        m->pos[1] = m->floorHeight - sins(bounceAngle) * bounceAmt;
     }
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);

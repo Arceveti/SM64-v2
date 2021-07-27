@@ -104,12 +104,12 @@ void func_80181EB0(struct Connection *cxn) {
     sp0->unk38.x += sp34.x;
     sp0->unk38.y += sp34.y;
     sp0->unk38.z += sp34.z;
-    if (!(sp4->flags & 2)) {
+    if (!(sp4->flags & 0x2)) {
         sp4->pos.x -= sp34.x;
         sp4->pos.y -= sp34.y;
         sp4->pos.z -= sp34.z;
     }
-    if (!(sp0->flags & 2)) {
+    if (!(sp0->flags & 0x2)) {
         sp0->pos.x += sp34.x;
         sp0->pos.y += sp34.y;
         sp0->pos.z += sp34.z;
@@ -118,44 +118,44 @@ void func_80181EB0(struct Connection *cxn) {
 
 /* @ 230858 -> 230B70 */
 void func_80182088(struct Connection *cxn) {
-    struct GdVec3f sp4C;
-    f32 sp24;
-    f32 sp20;
-    struct ObjParticle *sp1C;
-    struct ObjParticle *sp18;
+    struct GdVec3f vec;
+    f32 mul;
+    f32 div;
+    struct ObjParticle *particle1;
+    struct ObjParticle *particle2;
 
     if (cxn->unk28 & 1) {
         func_80181EB0(cxn);
         return;
     }
-    sp1C = cxn->node1.ptc;
-    sp18 = cxn->node2.ptc;
-    sp4C.x = sp1C->pos.x - sp18->pos.x;
-    sp4C.y = sp1C->pos.y - sp18->pos.y;
-    sp4C.z = sp1C->pos.z - sp18->pos.z;
-    sp20 = gd_vec3f_magnitude(&sp4C);
-    sp24 = sp20 - cxn->unk24;
-    sp4C.x /= sp20;
-    sp4C.y /= sp20;
-    sp4C.z /= sp20;
-    sp4C.x *= sp24 * 0.1f;
-    sp4C.y *= sp24 * 0.1f;
-    sp4C.z *= sp24 * 0.1f;
-    sp1C->unk38.x -= sp4C.x;
-    sp1C->unk38.y -= sp4C.y;
-    sp1C->unk38.z -= sp4C.z;
-    sp18->unk38.x += sp4C.x;
-    sp18->unk38.y += sp4C.y;
-    sp18->unk38.z += sp4C.z;
-    if (!(sp1C->flags & 2)) {
-        sp1C->pos.x -= sp4C.x;
-        sp1C->pos.y -= sp4C.y;
-        sp1C->pos.z -= sp4C.z;
+    particle1 = cxn->node1.ptc;
+    particle2 = cxn->node2.ptc;
+    vec.x = particle1->pos.x - particle2->pos.x;
+    vec.y = particle1->pos.y - particle2->pos.y;
+    vec.z = particle1->pos.z - particle2->pos.z;
+    div = gd_vec3f_magnitude(&vec);
+    mul = div - cxn->unk24;
+    vec.x /= div;
+    vec.y /= div;
+    vec.z /= div;
+    vec.x *= mul * 0.1f;
+    vec.y *= mul * 0.1f;
+    vec.z *= mul * 0.1f;
+    particle1->unk38.x -= vec.x;
+    particle1->unk38.y -= vec.y;
+    particle1->unk38.z -= vec.z;
+    particle2->unk38.x += vec.x;
+    particle2->unk38.y += vec.y;
+    particle2->unk38.z += vec.z;
+    if (!(particle1->flags & 0x2)) {
+        particle1->pos.x -= vec.x;
+        particle1->pos.y -= vec.y;
+        particle1->pos.z -= vec.z;
     }
-    if (!(sp18->flags & 2)) {
-        sp18->pos.x += sp4C.x;
-        sp18->pos.y += sp4C.y;
-        sp18->pos.z += sp4C.z;
+    if (!(particle2->flags & 0x2)) {
+        particle2->pos.x += vec.x;
+        particle2->pos.y += vec.y;
+        particle2->pos.z += vec.z;
     }
 }
 
@@ -268,15 +268,15 @@ void func_80182A08(struct ObjParticle *ptc, struct GdVec3f *b) {
 void move_particle(struct ObjParticle *ptc) {
     f32 sp7C;
     struct GdVec3f sp64;
-    struct ObjParticle *sp60;
+    struct ObjParticle *particle;
     s32 i;
-    struct ObjCamera *sp4C;
+    struct ObjCamera *camera;
     struct GdVec3f sp40;
     struct GdVec3f sp34;
 
-    if (ptc->flags & 2) return;
+    if (ptc->flags & 0x2) return;
 
-    if (!(ptc->flags & 8)) return;
+    if (!(ptc->flags & 0x8)) return;
 
     if (ptc->unk60 == 3) {
         sp40.x = -gViewUpdateCamera->unkE8[2][0] *  50.0f;
@@ -290,10 +290,10 @@ void move_particle(struct ObjParticle *ptc) {
         set_cur_dynobj(ptc->attachedToObj);
         if (ptc->unk60 == 3) {
             if (ptc->unk64 == 3) {
-                sp4C = (struct ObjCamera *) ptc->attachedToObj;
+                camera = (struct ObjCamera *) ptc->attachedToObj;
                 // Camera->unk18C = ObjView here
-                if (sp4C->unk18C->pickedObj != NULL) {
-                    set_cur_dynobj(sp4C->unk18C->pickedObj);
+                if (camera->unk18C->pickedObj != NULL) {
+                    set_cur_dynobj(camera->unk18C->pickedObj);
                     ptc->flags |= 0x20;
                 } else {
                     ptc->flags &= ~0x10;
@@ -310,7 +310,7 @@ void move_particle(struct ObjParticle *ptc) {
     ptc->pos.x += ptc->unk38.x;
     ptc->pos.y += ptc->unk38.y;
     ptc->pos.z += ptc->unk38.z;
-    if (ptc->flags & 1) {
+    if (ptc->flags & 0x1) {
         ptc->unk38.y += sp7C;
     }
     switch (ptc->unkB0) {
@@ -321,20 +321,20 @@ void move_particle(struct ObjParticle *ptc) {
                     case 1:
                         ptc->subParticlesGrp = make_group(0);
                         for (i = 0; i < 50; i++) {
-                            sp60 = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
-                            sp60->shapePtr = ptc->shapePtr;
-                            addto_group(ptc->subParticlesGrp, &sp60->header);
-                            sp60->flags &= ~8;
+                            particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                            particle->shapePtr = ptc->shapePtr;
+                            addto_group(ptc->subParticlesGrp, &particle->header);
+                            particle->flags &= ~8;
                         }
                         break;
                     case 2:
                     case 3:
                         ptc->subParticlesGrp = make_group(0);
                         for (i = 0; i < 30; i++) {
-                            sp60 = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
-                            sp60->shapePtr = ptc->shapePtr;
-                            addto_group(ptc->subParticlesGrp, &sp60->header);
-                            sp60->flags &= ~8;
+                            particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                            particle->shapePtr = ptc->shapePtr;
+                            addto_group(ptc->subParticlesGrp, &particle->header);
+                            particle->flags &= ~8;
                         }
                         break;
                 }

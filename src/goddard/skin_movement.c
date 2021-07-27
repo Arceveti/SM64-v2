@@ -20,17 +20,17 @@ s32 sResetWeightVtxNum;
 /* called with ObjNext->unk1A8 (variable obj ptr?) ->unk20 or ->unk24 ptr*/
 // TODO: figure out the proper object type for a0
 void scale_verts(struct ObjGroup *a0) {
-    register f32 sp1C;
+    register f32 scaleFac;
     register struct ListNode *link;
     struct ObjVertex *vtx;
 
     for (link = a0->firstMember; link != NULL; link = link->next) {
         vtx = (struct ObjVertex *) link->obj;
 
-        if ((sp1C = vtx->scaleFactor) != 0.0f) {
-            vtx->pos.x = vtx->initPos.x * sp1C;
-            vtx->pos.y = vtx->initPos.y * sp1C;
-            vtx->pos.z = vtx->initPos.z * sp1C;
+        if ((scaleFac = vtx->scaleFactor) != 0.0f) {
+            vtx->pos.x = vtx->initPos.x * scaleFac;
+            vtx->pos.y = vtx->initPos.y * scaleFac;
+            vtx->pos.z = vtx->initPos.z * scaleFac;
         } else {
             vtx->pos.x = vtx->pos.y = vtx->pos.z = 0.0f;
         }

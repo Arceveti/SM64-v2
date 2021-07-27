@@ -4,10 +4,10 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout intro_geo_0002D0[];
+extern const GeoLayout intro_geo_splash_screen[];
 extern const GeoLayout intro_geo_mario_head_regular[];
 extern const GeoLayout intro_geo_mario_head_dizzy[];
-extern const GeoLayout intro_geo_000414[];
+extern const GeoLayout intro_geo_debug_level_select[];
 
 // leveldata
 extern const Gfx intro_seg7_dl_0700B3A0[];
