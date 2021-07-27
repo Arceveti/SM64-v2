@@ -34,13 +34,6 @@ s8 gRedCoinsCollected;
 #ifdef HUD_SECRETS
 s8 gSecretsCollected;
 #endif
-#ifdef WIDE
-u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-u8 textPressL[] = { TEXT_HUD_PRESS_L };
-u8 textWideInfo[] = { TEXT_HUD_WIDE_INFO };
-u8 textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
-#endif
 
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
@@ -1395,6 +1388,35 @@ void reset_red_coins_collected(void) {
 #endif
 }
 
+#ifdef REONU_CAM_3
+void render_camera_speed_setting(s16 x, s16 y) {
+    u8 textCamInfoSpeeds[][17] = { { TEXT_CAM_INFO_SPEED_0 },
+                                   { TEXT_CAM_INFO_SPEED_1 },
+                                   { TEXT_CAM_INFO_SPEED_2 },
+                                   { TEXT_CAM_INFO_SPEED_3 },
+                                   { TEXT_CAM_INFO_SPEED_4 } };
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
+    print_generic_string(x, y, textCamInfoSpeeds[gCameraSpeed]);
+    gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
+    if (gPlayer1Controller->rawStickX > 60 || gPlayer1Controller->buttonPressed & (R_JPAD | R_CBUTTONS)) {
+        if (gCameraSpeed < 4) {
+            gCameraSpeed++;
+        } else {
+            gCameraSpeed = 0;
+        }
+        save_file_set_camera_speed(gCameraSpeed);
+    } else if (gPlayer1Controller->rawStickX < -60 || gPlayer1Controller->buttonPressed & (L_JPAD | L_CBUTTONS)) {
+        if (gCameraSpeed > 0) {
+            gCameraSpeed--;
+        } else {
+            gCameraSpeed = 4;
+        }
+        save_file_set_camera_speed(gCameraSpeed);
+    }
+}
+#endif
+
 void change_dialog_camera_angle(void) {
     if (cam_select_alt_mode(0) == CAM_SELECTION_MARIO) {
         gDialogCameraAngleIndex = CAM_SELECTION_MARIO;
@@ -1506,6 +1528,11 @@ void render_pause_red_coins(void) {
 
 #ifdef WIDE
 void render_widescreen_setting(void) {
+    u8 textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43 };
+    u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
+    u8 textPressL[]       = { TEXT_HUD_PRESS_L };
+    u8 textWideInfo[]     = { TEXT_HUD_WIDE_INFO };
+    u8 textWideInfo2[]    = { TEXT_HUD_WIDE_INFO2 };
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     if (!gWidescreen) {
@@ -1632,20 +1659,30 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #define Y_VAL8 2
 
 void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
-    u8 textContinue[] = { TEXT_CONTINUE };
-    u8 textExitCourse[] = { TEXT_EXIT_COURSE };
+    u8 textContinue[]     = { TEXT_CONTINUE       };
+    u8 textExitCourse[]   = { TEXT_EXIT_COURSE    };
     u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+#ifdef REONU_CAM_3
+    u8 cameraMode = gCurrentArea->camera->mode;
+#endif
 
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
 
-    print_generic_string(x + 10, y - 2, textContinue);
+    print_generic_string(x + 10, y -  2, textContinue);
     print_generic_string(x + 10, y - 17, textExitCourse);
+#ifdef REONU_CAM_3
+    if (*index != MENU_OPT_CAMERA_ANGLE_R && cameraMode != CAMERA_MODE_8_DIRECTIONS) {
+        print_generic_string(x + 10, y - 33, textCameraAngleR);
+    }
 
+    if (*index != MENU_OPT_CAMERA_ANGLE_R || cameraMode == CAMERA_MODE_8_DIRECTIONS) {
+#else
     if (*index != MENU_OPT_CAMERA_ANGLE_R) {
         print_generic_string(x + 10, y - 33, textCameraAngleR);
+#endif
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 
         create_dl_translation_matrix(MENU_MTX_PUSH, x - X_VAL8, (y - ((*index - 1) * yIndex)) - Y_VAL8, 0);
@@ -1654,8 +1691,11 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
         gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
         gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     }
-
+#ifdef REONU_CAM_3
+    if (*index == MENU_OPT_CAMERA_ANGLE_R && cameraMode != CAMERA_MODE_8_DIRECTIONS) {
+#else
     if (*index == MENU_OPT_CAMERA_ANGLE_R) {
+#endif
         render_pause_camera_options(x - 42, y - 42, &gDialogCameraAngleIndex, 110);
     }
 }
@@ -1808,8 +1848,6 @@ s32 gCourseCompleteCoins = 0;
 s8 gHudFlash = 0;
 
 s16 render_pause_courses_and_castle(void) {
-    s16 index;
-
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             gDialogLineNum = MENU_OPT_DEFAULT;
@@ -1840,19 +1878,45 @@ s16 render_pause_courses_and_castle(void) {
                 render_pause_course_options(99, 93, &gDialogLineNum, 15);
             }
 #endif
+#ifdef REONU_CAM_3
+            if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) {
+                render_camera_speed_setting(109, 60);
+            }
+            if (gPlayer3Controller->buttonPressed & (START_BUTTON)
+                || (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON)
+                    && !(gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R
+                    && gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS))) {
+#else
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+#endif
                 level_set_transition(0, NULL);
                 play_sound(SOUND_MENU_PAUSE_2, gGlobalSoundSource);
                 gDialogBoxState = DIALOG_STATE_OPENING;
                 gMenuMode = MENU_MODE_NONE;
 
                 if (gDialogLineNum == MENU_OPT_EXIT_COURSE) {
-                    index = gDialogLineNum;
+                    return gDialogLineNum;
                 } else { // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
-                    index = MENU_OPT_DEFAULT;
+                    return MENU_OPT_DEFAULT;
                 }
-
-                return index;
+#ifdef REONU_CAM_3
+            } else if (gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R && gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) {
+                if (gPlayer3Controller->buttonPressed & A_BUTTON) {
+                    if (gCameraSpeed < 4) {
+                        gCameraSpeed++;
+                    } else {
+                        gCameraSpeed = 0;
+                    }
+                    save_file_set_camera_speed(gCameraSpeed);
+                } else if (gPlayer3Controller->buttonPressed & B_BUTTON) {
+                    if (gCameraSpeed > 0) {
+                        gCameraSpeed--;
+                    } else {
+                        gCameraSpeed = 4;
+                    }
+                    save_file_set_camera_speed(gCameraSpeed);
+                }
+#endif
             }
             break;
         case DIALOG_STATE_HORIZONTAL:
@@ -1862,6 +1926,11 @@ s16 render_pause_courses_and_castle(void) {
             render_pause_castle_main_strings(104, 60);      
 #ifdef PAUSE_BOWSER_KEYS
             render_pause_bowser_keys();
+#endif
+#ifdef REONU_CAM_3
+            if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) {
+                render_camera_speed_setting(190, 7);
+            }
 #endif
             if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
                 level_set_transition(0, NULL);
@@ -1874,7 +1943,7 @@ s16 render_pause_courses_and_castle(void) {
             break;
     }
 #ifdef WIDE
-        render_widescreen_setting();
+    render_widescreen_setting();
 #endif
     if (gDialogTextAlpha < 250) {
         gDialogTextAlpha += 25;

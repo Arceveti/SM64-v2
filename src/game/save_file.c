@@ -621,22 +621,34 @@ void save_file_set_sound_mode(u16 mode) {
     save_main_menu_data();
 }
 
-#ifdef WIDE
-u8 save_file_get_widescreen_mode(void) {
-    return gSaveBuffer.menuData[0].wideMode;
+u16 save_file_get_sound_mode(void) {
+    return gSaveBuffer.menuData[0].soundMode;
 }
 
+#ifdef REONU_CAM_3
+void save_file_set_camera_speed(u8 speed) {
+    gSaveBuffer.menuData[0].cameraSpeedSetting = speed;
+    gMainMenuDataModified = TRUE;
+    save_main_menu_data();
+}
+
+u8 save_file_get_camera_speed(void) {
+    return gSaveBuffer.menuData[0].cameraSpeedSetting;
+}
+#endif
+
+#ifdef WIDE
 void save_file_set_widescreen_mode(u8 mode) {
     gSaveBuffer.menuData[0].wideMode = mode;
 
     gMainMenuDataModified = TRUE;
     save_main_menu_data();
 }
-#endif
 
-u16 save_file_get_sound_mode(void) {
-    return gSaveBuffer.menuData[0].soundMode;
+u8 save_file_get_widescreen_mode(void) {
+    return gSaveBuffer.menuData[0].wideMode;
 }
+#endif
 
 void save_file_move_cap_to_default_location(void) {
     if (save_file_get_flags() & SAVE_FLAG_CAP_ON_GROUND) {

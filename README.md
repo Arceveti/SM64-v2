@@ -51,12 +51,14 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Defines for specific cos() values used through out the game, specifically for checking the Y normal of surfaces
 - Vertical quicksand support (Wiseguy) *
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
+- Extra segment2 characters/glyphs: Red Coin, Blue Coin, Silver Coin, Minus Symbol (Arceveti) *
 
 **HUD/Gameplay QoL:**
-- Make signs and NPCs easier to talk to (Arceveti) *
-- Show an "A" when Mario is able to talk to a sign or NPC (Arceveti) *
-- Display number of Red Coins collected on the HUD (Arceveti) *
-- Display number of Secrets collected on the HUD (Arceveti) *
+- Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
+- Signs and NPCs are easier to talk to (Arceveti) *
+- An "A" is shown when Mario is able to talk to a sign or NPC (Arceveti) *
+- Number of Red Coins collected displayed on the HUD (Arceveti) *
+- Number of Secrets collected displayed on the HUD (Arceveti) *
 - Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
 
 **Object Behaviors:**

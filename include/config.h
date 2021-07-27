@@ -232,6 +232,8 @@
 
 // -- HUD/Gameplay QoL --
 
+// Slightly modified version of Reonu Cam 3
+// #define REONU_CAM_3
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER
 // Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)

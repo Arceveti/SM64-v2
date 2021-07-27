@@ -59,10 +59,12 @@ struct MainMenuSaveData
     // on the high score screen.
     u32 coinScoreAges[NUM_SAVE_FILES];
     u8 soundMode: 2;
+#ifdef REONU_CAM_3
+    u8 cameraSpeedSetting: 3;
+#endif
 #ifdef WIDE
     u8 wideMode: 1;
 #endif
-
 #ifdef VERSION_EU
     u8 language: 2;
 #define SUBTRAHEND 8
@@ -163,9 +165,13 @@ void save_file_set_cap_pos(s16 x, s16 y, s16 z);
 s32 save_file_get_cap_pos(Vec3s capPos);
 void save_file_set_sound_mode(u16 mode);
 u16 save_file_get_sound_mode(void);
+#ifdef REONU_CAM_3
+u8 save_file_get_camera_speed(void);
+void save_file_set_camera_speed(u8 speed);
+#endif
 #ifdef WIDE
-u8 save_file_get_widescreen_mode(void);
 void save_file_set_widescreen_mode(u8 mode);
+u8 save_file_get_widescreen_mode(void);
 #endif
 void save_file_move_cap_to_default_location(void);
 

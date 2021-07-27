@@ -6,9 +6,9 @@ void bhv_end_birds_1_loop(void) {
     switch (gCurrentObject->oAction) {
         case 0:
             cur_obj_scale(0.7f);
-            gCurrentObject->oIntroLakituEndBirds1DestX =  -554.f;
-            gCurrentObject->oIntroLakituEndBirds1DestY =  3044.f;
-            gCurrentObject->oIntroLakituEndBirds1DestZ = -1314.f;
+            gCurrentObject->oIntroLakituEndBirds1DestX =  -554.0f;
+            gCurrentObject->oIntroLakituEndBirds1DestY =  3044.0f;
+            gCurrentObject->oIntroLakituEndBirds1DestZ = -1314.0f;
             gCurrentObject->oAction++;
             break;
         case 1:
@@ -19,7 +19,7 @@ void bhv_end_birds_1_loop(void) {
             if (gCurrentObject->oTimer < 100) {
                 obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 0x20, 0x20);
             }
-            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.f) && (gCurrentObject->oTimer == 0)) {
+            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
             }
             if (gCutsceneTimer == 0) {

@@ -2044,7 +2044,11 @@ s32 act_shot_from_cannon(struct MarioState *m) {
 
 s32 act_flying(struct MarioState *m) {
     s16 startPitch = m->faceAngle[0];
-
+#ifdef REONU_CAM_3
+    if (gPlayer1Controller->buttonPressed & R_TRIG) {
+        gFlyingCamOverride ^= TRUE;
+    }
+#endif
     if (m->input & INPUT_Z_PRESSED) {
         if (m->area->camera->mode == CAMERA_MODE_BEHIND_MARIO) {
             set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
@@ -2058,11 +2062,13 @@ s32 act_flying(struct MarioState *m) {
         }
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
-
+#ifdef REONU_CAM_3
+    set_camera_mode(m->area->camera, gFlyingCamOverride ? CAMERA_MODE_8_DIRECTIONS : CAMERA_MODE_BEHIND_MARIO, 1);
+#else
     if (m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO) {
         set_camera_mode(m->area->camera, CAMERA_MODE_BEHIND_MARIO, 1);
     }
-
+#endif
     if (m->actionState == 0) {
         if (m->actionArg == 0) {
             set_mario_animation(m, MARIO_ANIM_FLY_FROM_CANNON);
@@ -2232,7 +2238,11 @@ s32 act_flying_triple_jump(struct MarioState *m) {
     }
 
     if (m->vel[1] < 4.0f) {
-        if (m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO) {
+        if (m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO
+#ifdef REONU_CAM_3
+         && !gFlyingCamOverride
+#endif
+        ) {
             set_camera_mode(m->area->camera, CAMERA_MODE_BEHIND_MARIO, 1);
         }
 
@@ -2243,7 +2253,11 @@ s32 act_flying_triple_jump(struct MarioState *m) {
         set_mario_action(m, ACT_FLYING, 1);
     }
 
-    if (m->actionTimer++ == 10 && m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO) {
+    if (m->actionTimer++ == 10 && m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO
+#ifdef REONU_CAM_3
+         && !gFlyingCamOverride
+#endif
+    ) {
         set_camera_mode(m->area->camera, CAMERA_MODE_BEHIND_MARIO, 1);
     }
 

@@ -45,6 +45,12 @@ extern u8 gIsConsole;
 #ifdef WIDE
 extern u8 gWidescreen;
 #endif
+#ifdef REONU_CAM_3
+extern s8 gCameraSpeed;
+extern u8 gWaterCamOverride;
+extern u8 gFlyingCamOverride;
+extern u8 gKeepCliffCam;
+#endif
 extern u8 gBorderHeight;
 #ifdef EEP
 extern s8 gEepromProbe;
