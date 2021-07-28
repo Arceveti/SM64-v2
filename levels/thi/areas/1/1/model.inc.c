@@ -1041,7 +1041,7 @@ static const Vtx thi_seg7_vertex_070040F0[] = {
 
 // 0x07004130 - 0x07004440
 static const Gfx thi_seg7_dl_07004130[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09003800_small_pink_rocks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001000.l, 1),
@@ -1105,7 +1105,7 @@ static const Gfx thi_seg7_dl_07004130[] = {
 
 // 0x07004440 - 0x070044F0
 static const Gfx thi_seg7_dl_07004440[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09004800_dirt),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001000.l, 1),
@@ -1127,7 +1127,7 @@ static const Gfx thi_seg7_dl_07004440[] = {
 
 // 0x070044F0 - 0x07004788
 static const Gfx thi_seg7_dl_070044F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005000_dirt_with_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001000.l, 1),
@@ -1185,7 +1185,7 @@ static const Gfx thi_seg7_dl_070044F0[] = {
 
 // 0x07004788 - 0x07004BF0
 static const Gfx thi_seg7_dl_07004788[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005800_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001000.l, 1),
@@ -1275,7 +1275,7 @@ static const Gfx thi_seg7_dl_07004788[] = {
 
 // 0x07004BF0 - 0x070050C0
 static const Gfx thi_seg7_dl_07004BF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09003000_mountain_rocks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001000.l, 1),
@@ -1390,7 +1390,7 @@ static const Gfx thi_seg7_dl_070050C0[] = {
 
 // 0x07005178 - 0x070051E8
 static const Gfx thi_seg7_dl_07005178[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09008000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09008000_large_pink_rocks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(thi_seg7_vertex_07003FA0, 15, 0),
@@ -1404,7 +1404,7 @@ static const Gfx thi_seg7_dl_07005178[] = {
 
 // 0x070051E8 - 0x07005240
 static const Gfx thi_seg7_dl_070051E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_0900A800_cloud_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_07001048.l, 1),

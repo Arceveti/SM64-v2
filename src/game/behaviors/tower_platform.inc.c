@@ -41,16 +41,16 @@ void bhv_wf_elevator_tower_platform_loop(void) {
 }
 
 void bhv_wf_sliding_tower_platform_loop(void) {
-    s32 sp24 = o->oPlatformWFTowerMoveDistance / o->oPlatformWFTowerForwardVel;
+    s32 moveTimer = o->oPlatformWFTowerMoveDistance / o->oPlatformWFTowerForwardVel;
     switch (o->oAction) {
         case 0:
-            if (o->oTimer > sp24) {
+            if (o->oTimer > moveTimer) {
                 o->oAction++;
             }
             o->oForwardVel = -o->oPlatformWFTowerForwardVel;
             break;
         case 1:
-            if (o->oTimer > sp24) {
+            if (o->oTimer > moveTimer) {
                 o->oAction = 0;
             }
             o->oForwardVel = o->oPlatformWFTowerForwardVel;

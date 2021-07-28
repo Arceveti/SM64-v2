@@ -1,5 +1,5 @@
 // 0x0E000BF8
-const GeoLayout wf_geo_000BF8[] = {
+const GeoLayout wf_geo_area_1[] = {
    GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
@@ -15,14 +15,14 @@ const GeoLayout wf_geo_000BF8[] = {
          GEO_OPEN_NODE(),
             GEO_CAMERA(1, 0, 2000, 6000, 0, 2000, 0, geo_camera_main),
             GEO_OPEN_NODE(),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, wf_seg7_dl_070050C8),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL, wf_seg7_dl_070052B8),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, wf_seg7_dl_07005538),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wf_seg7_dl_07005690),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE, wf_seg7_dl_area_1),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL, wf_seg7_dl_piranha_plant_pots),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, wf_seg7_dl_floor_arrows),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wf_seg7_dl_wall_arrows),
                GEO_RENDER_OBJ(),
-               GEO_ASM(   0, geo_movtex_pause_control),
+               GEO_ASM(     0, geo_movtex_pause_control),
                GEO_ASM(0x2401, geo_movtex_draw_water_regions),
-               GEO_ASM(   0, geo_envfx_main),
+               GEO_ASM(     0, geo_envfx_main),
             GEO_CLOSE_NODE(),
          GEO_CLOSE_NODE(),
       GEO_CLOSE_NODE(),

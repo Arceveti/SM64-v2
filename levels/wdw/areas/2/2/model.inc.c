@@ -58,7 +58,7 @@ static const Vtx wdw_seg7_vertex_070120A0[] = {
 
 // 0x07012160 - 0x07012258
 static const Gfx wdw_seg7_dl_07012160[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09000000_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wdw_seg7_lights_07011F58.l, 1),

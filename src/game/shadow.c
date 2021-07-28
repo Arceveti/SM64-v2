@@ -777,7 +777,7 @@ Gfx *create_shadow_square(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     f32 distFromShadow;
     f32 shadowRadius;
 
-    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity) != 0) return NULL;
+    if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity)) return NULL;
 
     distFromShadow = yPos - shadowHeight;
     switch (shadowType) {

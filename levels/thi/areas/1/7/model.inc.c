@@ -45,7 +45,7 @@ static const Vtx thi_seg7_vertex_070077D8[] = {
 
 // 0x07007828 - 0x07007870
 static const Gfx thi_seg7_dl_07007828[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005800_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_070076A8.l, 1),
@@ -57,7 +57,7 @@ static const Gfx thi_seg7_dl_07007828[] = {
 
 // 0x07007870 - 0x070078D8
 static const Gfx thi_seg7_dl_07007870[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09005000_dirt_with_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(thi_seg7_vertex_07007718, 12, 0),
@@ -70,7 +70,7 @@ static const Gfx thi_seg7_dl_07007870[] = {
 
 // 0x070078D8 - 0x07007930
 static const Gfx thi_seg7_dl_070078D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09004800_dirt),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&thi_seg7_lights_070076C0.l, 1),

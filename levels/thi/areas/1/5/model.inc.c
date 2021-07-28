@@ -8,7 +8,7 @@ static const Vtx thi_seg7_vertex_07007348[] = {
 
 // 0x07007388 - 0x070073C0
 static const Gfx thi_seg7_dl_07007388[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, grass_0900B000),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, grass_0900B000_tree_shadow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(thi_seg7_vertex_07007348, 4, 0),

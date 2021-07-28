@@ -92,7 +92,7 @@ static const Vtx wdw_seg7_vertex_07009EB0[] = {
 
 // 0x07009FB0 - 0x0700A0D0
 static const Gfx wdw_seg7_dl_07009FB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09000000_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wdw_seg7_lights_07009B78.l, 1),
@@ -120,7 +120,7 @@ static const Gfx wdw_seg7_dl_07009FB0[] = {
 
 // 0x0700A0D0 - 0x0700A138
 static const Gfx wdw_seg7_dl_0700A0D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_0900A000_fence),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wdw_seg7_vertex_07009EB0, 16, 0),
