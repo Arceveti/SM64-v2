@@ -16,7 +16,6 @@ extern struct GdBoundingBox gSomeBoundingBox;
 extern struct ObjCamera *sCurrentMoveCamera;
 extern struct ObjView *sCurrentMoveView;
 extern Mat4f D_801B9DC8;
-extern struct GdVec3f D_801B9E08;
 extern struct ObjGroup* sCurrentMoveGrp;
 extern struct ObjCamera* gGdCameraList;
 extern struct ObjGroup* gGdGroupList;
@@ -31,16 +30,16 @@ extern struct ObjGroup* gGdViewsGroup;
 
 // functions
 void reset_bounding_box(void);
-void add_obj_pos_to_bounding_box(struct GdObj *a0);
+void add_obj_pos_to_bounding_box(struct GdObj *obbj);
 struct GdObj *make_object(enum ObjTypeFlag objFlag);
 struct ListNode *make_link_to_obj(struct ListNode *head, struct GdObj *a1);
 struct VtxLink *make_vtx_link(struct VtxLink *prevLink, Vtx *data);
 void reset_plane(struct ObjPlane *plane);
-struct ObjPlane *make_plane(struct ObjFace *a1);
+struct ObjPlane *make_plane(struct ObjFace *face);
 struct ObjCamera *make_camera(void);
 struct ObjMaterial *make_material(void);
 struct ObjLight *make_light(void);
-struct ObjView *make_view(const char *name, s32 flags, s32 a2, s32 ulx, s32 uly, s32 lrx, s32 lry,
+struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 ulx, s32 uly, s32 lrx, s32 lry,
                           struct ObjGroup *parts);
 struct ObjAnimator *make_animator(void);
 struct ObjWeight *make_weight(s32 id, struct ObjVertex *vtx, f32 weight);
@@ -51,11 +50,10 @@ void addto_groupfirst(struct ObjGroup *group, struct GdObj *obj);
 s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj);
 void menu_cb_reset_positions(void);
 s32 apply_to_obj_types_in_group(s32 types, applyproc_t fn, struct ObjGroup *group);
-void func_8017E9EC(struct ObjNet *a0);
-s32 gd_plane_point_within(struct GdBoundingBox *a0, struct GdBoundingBox *a1);
-s32 transform_child_objects_recursive(struct GdObj *a0, struct GdObj *a1);
-s32 func_8017F210(struct GdObj *a0, struct GdObj *a1);
-void interpolate_animation_transform(struct GdAnimTransform *a0, struct GdAnimTransform *a1, f32 a2);
+void func_8017E9EC(struct ObjNet *net);
+s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj);
+s32 func_8017F210(struct GdObj *obj1, struct GdObj *obj2);
+void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTransform *t2, f32 dt);
 void move_animator(struct ObjAnimator *animObj);
 void drag_picked_object(struct GdObj *inputObj);
 void move_animators(struct ObjGroup *group);

@@ -24,7 +24,7 @@
 struct GraphNodeMore {
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *todo;
-    /*0x18*/ u32 unk18;
+    /*0x18*/ u32 bgTableID; // background table id, unused
 };
 
 // intro geo bss
@@ -182,16 +182,12 @@ static s8 introBackgroundIndexTable[] = {
     INTRO_BACKGROUND_SUPER_MARIO, INTRO_BACKGROUND_SUPER_MARIO, INTRO_BACKGROUND_SUPER_MARIO,
 };
 
-// only one table of indexes listed
-static s8 *introBackgroundTables[] = { introBackgroundIndexTable };
-
 /**
  * Geo callback to render the intro background tiles
  */
 Gfx *geo_intro_regular_backdrop(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeMore *graphNode = (struct GraphNodeMore *) node;
-    s32 index = graphNode->unk18 & 0xff; // TODO: word at offset 0x18 of struct GraphNode (always ends up being 0)
-    s8 *backgroundTable = introBackgroundTables[index];
+    s8 *backgroundTable = introBackgroundIndexTable;
     Gfx *dl = NULL;
     Gfx *dlIter = NULL;
     s32 i;

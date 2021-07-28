@@ -74,7 +74,6 @@ OSIoMesg gAudioDmaIoMesg;
 struct SharedDma *sSampleDmas;
 u32 gSampleDmaNumListItems;
 u32 sSampleDmaListSize1;
-u32 sUnused80226B40; // set to 0, never read
 
 // Circular buffer of DMAs with ttl = 0. tail <= head, wrapping around mod 256.
 u8 sSampleDmaReuseQueue1[256];
@@ -159,8 +158,6 @@ void decrease_sample_dma_ttls() {
             }
         }
     }
-
-    sUnused80226B40 = 0;
 }
 
 extern char shindouDebugPrint62[]; // "SUPERDMA"
@@ -1378,7 +1375,7 @@ void patch_sound(struct AudioBankSound *sound, struct AudioBank *memBase, struct
 
     if ((uintptr_t) sound->sample <= 0x80000000) {
         sample = sound->sample = PATCH(sound->sample, memBase);
-        if (sample->size != 0 && sample->isPatched != TRUE) {
+        if (sample->size != 0 && !sample->isPatched) {
             sample->loop = PATCH(sample->loop, memBase);
             sample->book = PATCH(sample->book, memBase);
             switch (sample->medium) {
@@ -1417,8 +1414,6 @@ void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
     sp4C = 0;
     if (D_SH_8034F68C != 0) {
         sp4C = 1;
-    } else {
-        D_SH_80343CF0 = 0;
     }
     D_SH_8034F688 = 0;
     patch_audio_bank(bankId, mem, patchInfo);

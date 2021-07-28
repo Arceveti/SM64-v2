@@ -149,7 +149,7 @@ struct ObjShape *make_shape(const char *name) {
     if (name != NULL) {
         gd_strcpy(newShape->name, name);
     } else {
-        gd_strcpy(newShape->name, "NoName");
+        gd_strcpy(newShape->name, "x");
     }
 
     sGdShapeCount++;

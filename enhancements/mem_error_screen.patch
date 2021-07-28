@@ -96,7 +96,7 @@ index 99277e86..04797cd7 100644
  
 +extern const GeoLayout intro_geo_error_screen[];
 +extern const LevelScript level_intro_entry_error_screen[];
-+extern Gfx *geo18_display_error_message(u32 run, UNUSED struct GraphNode *sp44, UNUSED u32 sp48);
++extern Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node, UNUSED u32 context);
 +
  #endif
 diff --git a/levels/intro/script.c b/levels/intro/script.c
@@ -235,8 +235,8 @@ index 00000000..f432927c
 +// If you are using PJ64 2.X, go to: Options ► Settings ► Config: ► Memory Size, select 8 MB
 +u8 text_pj64_2[] = { TEXT_PJ64_2 };
 +
-+Gfx *geo18_display_error_message(u32 run, UNUSED struct GraphNode *sp44, UNUSED u32 sp48) {
-+    if (run) {
++Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node, UNUSED u32 context) {
++    if (callContext) {
 +        if (gDelayForErrorMessage > 0) {
 +            // Draw color text title.
 +            print_text(10, 210, "ERROR    Need more memory");

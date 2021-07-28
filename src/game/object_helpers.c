@@ -41,14 +41,14 @@ static s32 clear_move_flag(u32 *, s32);
 #define o gCurrentObject
 
 Gfx *geo_update_projectile_pos_from_parent(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
-    Mat4 sp20;
+    Mat4 mtx2;
     struct Object *projObj;
 
     if (callContext == GEO_CONTEXT_RENDER) {
         projObj = (struct Object *) gCurGraphNodeObject; // TODO: change global type to Object pointer
         if (projObj->prevObj) {
-            create_transformation_from_matrices(sp20, mtx, *gCurGraphNodeCamera->matrixPtr);
-            obj_update_pos_from_parent_transformation(sp20, projObj->prevObj);
+            create_transformation_from_matrices(mtx2, mtx, *gCurGraphNodeCamera->matrixPtr);
+            obj_update_pos_from_parent_transformation(mtx2, projObj->prevObj);
             obj_set_gfx_pos_from_pos(projObj->prevObj);
         }
     }
@@ -997,11 +997,11 @@ s32 cur_obj_check_anim_frame_in_range(s32 startFrame, s32 rangeLength) {
     return (animFrame >= startFrame && animFrame < startFrame + rangeLength);
 }
 
-s32 cur_obj_check_frame_prior_current_frame(s16 *a0) {
+s32 cur_obj_check_frame_prior_current_frame(s16 *frame) {
     s16 animFrame = o->header.gfx.animInfo.animFrame;
-    while (*a0 != -1) {
-        if (*a0 == animFrame) return TRUE;
-        a0++;
+    while (*frame != -1) {
+        if (*frame == animFrame) return TRUE;
+        frame++;
     }
     return FALSE;
 }
@@ -2242,7 +2242,6 @@ s32 cur_obj_mario_far_away(void) {
     f32 dy = o->oHomeY - gMarioObject->oPosY;
     f32 dz = o->oHomeZ - gMarioObject->oPosZ;
     f32 marioDistToHome = sqrtf(dx * dx + dy * dy + dz * dz);
-
     return (o->oDistanceToMario > 2000.0f && marioDistToHome > 2000.0f);
 }
 

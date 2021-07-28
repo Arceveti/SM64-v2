@@ -88,25 +88,25 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
                 f32 i, f32 j, f32 k, // translate shape
                 f32 l, f32 m, f32 n, // rotate x, y, z
                 s32 colorIdx, Mat4f *rotMtx) {
-    struct GdVec3f sp1C;
+    struct GdVec3f vec;
 
     sUpdateViewState.shapesDrawn++;
 
     if (shape == NULL) return;
 
-    sp1C.x = sp1C.y = sp1C.z = 0.0f;
+    vec.x = vec.y = vec.z = 0.0f;
     if (flag & 2) {
         gd_dl_load_trans_matrix(f, g, h);
-        sp1C.x += f;
-        sp1C.y += g;
-        sp1C.z += h;
+        vec.x += f;
+        vec.y += g;
+        vec.z += h;
     }
 
     if ((flag & 0x10) && rotMtx != NULL) {
         gd_dl_load_matrix(rotMtx);
-        sp1C.x += (*rotMtx)[3][0];
-        sp1C.y += (*rotMtx)[3][1];
-        sp1C.z += (*rotMtx)[3][2];
+        vec.x += (*rotMtx)[3][0];
+        vec.y += (*rotMtx)[3][1];
+        vec.z += (*rotMtx)[3][2];
     }
 
     if (flag & 8) {
@@ -127,8 +127,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         if (sSelectedColour != NULL) {
             gd_dl_material_lighting(-1, sSelectedColour, GD_MTL_LIGHTS);
         } else {
-            // fatal_print("Draw_shape(): Bad colour");
-            gd_exit();
+            gd_exit(); // Bad colour
         }
     } else {
         sUseSelectedColor = FALSE;
@@ -137,20 +136,20 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
 
     if (sNumActiveLights != 0 && shape->mtlGroup != NULL) {
         if (rotMtx != NULL) {
-            sp1C.x = (*rotMtx)[3][0];
-            sp1C.y = (*rotMtx)[3][1];
-            sp1C.z = (*rotMtx)[3][2];
+            vec.x = (*rotMtx)[3][0];
+            vec.y = (*rotMtx)[3][1];
+            vec.z = (*rotMtx)[3][2];
         } else {
-            sp1C.x = sp1C.y = sp1C.z = 0.0f;
+            vec.x = vec.y = vec.z = 0.0f;
         }
-        update_shaders(shape, &sp1C);
+        update_shaders(shape, &vec);
     }
 
-    if (flag & 4) {
+    if (flag & 0x4) {
         gd_dl_mul_trans_matrix(i, j, k);
     }
 
-    if (flag & 1) {
+    if (flag & 0x1) {
         gd_dl_scale(c, d, e);
     }
 
@@ -214,8 +213,7 @@ void draw_material(struct ObjMaterial *mtl) {
             if (gViewUpdateCamera != NULL) {
                 gd_dl_hilite(mtl->gddlNumber, gViewUpdateCamera, &sPhongLightPosition, &sPhongLight->colour);
             } else {
-                // fatal_printf("draw_material() no active camera for phong");
-                gd_exit();
+                gd_exit(); // no active camera for phong
             }
         } else {
             mtlType = GD_MTL_BREAK;
@@ -579,11 +577,7 @@ void draw_joint(struct GdObj *obj) {
  * @return void
  */
 void draw_group(struct ObjGroup *grp) {
-    if (grp == NULL) {
-        // fatal_print("Draw_Group: Bad group definition!");
-        gd_exit();
-    }
-
+    if (grp == NULL) gd_exit(); // Bad group definition!
     apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) apply_obj_draw_fn, grp);
 }
 
@@ -608,12 +602,8 @@ void draw_plane(struct GdObj *obj) {
  * @return void
  */
 void apply_obj_draw_fn(struct GdObj *obj) {
-    if (obj == NULL) {
-        // fatal_print("Bad object!");
-        gd_exit();
-    }
+    if (obj == NULL) gd_exit(); // Bad object!
     if (obj->drawFlags & OBJ_INVISIBLE) return;
-
     obj->objDrawFn(obj);
 }
 
@@ -623,9 +613,7 @@ void apply_obj_draw_fn(struct GdObj *obj) {
 void register_light(struct ObjLight *light) {
     set_light_id(light->id);
     gd_setproperty(GD_PROP_LIGHTING, 2.0f, 0.0f, 0.0f);
-    if (light->flags & LIGHT_NEW_UNCOUNTED) {
-        sNumActiveLights++;
-    }
+    if (light->flags & LIGHT_NEW_UNCOUNTED) sNumActiveLights++;
     light->flags &= ~LIGHT_NEW_UNCOUNTED;
 }
 
@@ -723,9 +711,7 @@ void create_shape_gddl(struct ObjShape *s) {
 
     setup_lights();
     sUseSelectedColor = FALSE;
-    if (shape->unk3C == 0) {
-        draw_shape_faces(shape);
-    }
+    if (shape->unk3C == 0) draw_shape_faces(shape);
     gd_enddlsplist_parent();
     shape->dlNums[0] = shapedl;
     shape->dlNums[1] = shapedl;
@@ -770,9 +756,7 @@ void map_face_materials(struct ObjGroup *faces, struct ObjGroup *mtls) {
             linkMtls = linkMtls->next;
         }
 
-        if (linkMtls != NULL) {
-            face->mtl = mtl;
-        }
+        if (linkMtls != NULL) face->mtl = mtl;
 
         linkFaces = linkFaces->next;
     }
@@ -846,13 +830,9 @@ void update_view(struct ObjView *view) {
         return;
     }
 
-    if (view->proc != NULL) {
-        view->proc(view);
-    }
+    if (view->proc != NULL) view->proc(view);
 
-    if (!(view->flags & VIEW_WAS_UPDATED)) {
-        view->flags |= VIEW_WAS_UPDATED;
-    }
+    if (!(view->flags & VIEW_WAS_UPDATED)) view->flags |= VIEW_WAS_UPDATED;
 
     gViewUpdateCamera = NULL;
     if (view->components != NULL) {
@@ -860,9 +840,7 @@ void update_view(struct ObjView *view) {
                                     view->components);
         view->activeCam = gViewUpdateCamera;
 
-        if (view->activeCam != NULL) {
-            gViewUpdateCamera->unk18C = view;
-        }
+        if (view->activeCam != NULL) gViewUpdateCamera->unk18C = view;
     }
 
     if (view->flags & VIEW_MOVEMENT) {
@@ -892,8 +870,7 @@ void update_view(struct ObjView *view) {
                 sPickObjDistance = 10000000.0f;
 
                 if (pickOffset < 0) {
-                    // fatal_printf("UpdateView(): Pick buffer too small");
-                    gd_exit();
+                    gd_exit(); // Pick buffer too small
                 } else if (pickOffset > 0) {
                     pickDataIdx = 0;
                     for (i = 0; i < pickOffset; i++) {
@@ -936,8 +913,7 @@ void update_view(struct ObjView *view) {
             }
 
             find_and_drag_picked_object(sUpdateViewState.view->components);
-        } else // check for any previously picked objects, and turn off?
-        {
+        } else { // check for any previously picked objects, and turn off?
             if (sUpdateViewState.view->pickedObj != NULL) {
                 sUpdateViewState.view->pickedObj->drawFlags &= ~OBJ_PICKED;
                 sUpdateViewState.view->pickedObj->drawFlags &= ~OBJ_HIGHLIGHTED;

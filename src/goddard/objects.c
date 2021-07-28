@@ -24,7 +24,6 @@ struct GdBoundingBox gSomeBoundingBox;
 struct ObjCamera *sCurrentMoveCamera; // @ 801B9DB8
 struct ObjView *sCurrentMoveView;     // @ 801B9DBC
 Mat4f D_801B9DC8;
-struct GdVec3f D_801B9E08;
 struct ObjGroup *sCurrentMoveGrp; // @ 801B9E14
 struct ObjCamera *gGdCameraList; // @ 801B9E4C
 struct ObjGroup *gGdGroupList;  // @ 801B9E54
@@ -54,29 +53,12 @@ void add_obj_pos_to_bounding_box(struct GdObj *obj) {
     set_cur_dynobj(obj);
     d_get_world_pos(&pos);
 
-    if (pos.x < gSomeBoundingBox.minX) {
-        gSomeBoundingBox.minX = pos.x;
-    }
-
-    if (pos.y < gSomeBoundingBox.minY) {
-        gSomeBoundingBox.minY = pos.y;
-    }
-
-    if (pos.z < gSomeBoundingBox.minZ) {
-        gSomeBoundingBox.minZ = pos.z;
-    }
-
-    if (pos.x > gSomeBoundingBox.maxX) {
-        gSomeBoundingBox.maxX = pos.x;
-    }
-
-    if (pos.y > gSomeBoundingBox.maxY) {
-        gSomeBoundingBox.maxY = pos.y;
-    }
-
-    if (pos.z > gSomeBoundingBox.maxZ) {
-        gSomeBoundingBox.maxZ = pos.z;
-    }
+    if (pos.x < gSomeBoundingBox.minX) gSomeBoundingBox.minX = pos.x;
+    if (pos.y < gSomeBoundingBox.minY) gSomeBoundingBox.minY = pos.y;
+    if (pos.z < gSomeBoundingBox.minZ) gSomeBoundingBox.minZ = pos.z;
+    if (pos.x > gSomeBoundingBox.maxX) gSomeBoundingBox.maxX = pos.x;
+    if (pos.y > gSomeBoundingBox.maxY) gSomeBoundingBox.maxY = pos.y;
+    if (pos.z > gSomeBoundingBox.maxZ) gSomeBoundingBox.maxZ = pos.z;
 }
 
 /**
@@ -207,8 +189,7 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
             objDrawFn = (drawmethod_t) draw_nothing;
             break;
         default:
-            // fatal_print("make_object() : Unkown object!");
-            gd_exit();
+            gd_exit(); // Unkown object!
     }
 
     typeName = get_obj_name_str(objType);
@@ -216,17 +197,12 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
     // Allocate memory for the object
     start_memtracker(typeName);
     newObj = gd_malloc(objSize, objPermanence);
-    if (newObj == NULL) {
-        // fatal_printf("Cant allocate object '%s' memory!", typeName);
-        gd_exit();
-    }
+    if (newObj == NULL) gd_exit(); // fatal_printf("Cant allocate object '%s' memory!", typeName);
     stop_memtracker(typeName);
 
     // Zero out the object
     newObjBytes = (u8 *) newObj;
-    for (i = 0; i < objSize; i++) {
-        newObjBytes[i] = 0;
-    }
+    for (i = 0; i < objSize; i++) newObjBytes[i] = 0;
 
     // Add the new object to the beginning of gGdObjectList
     gGdObjCount++;
@@ -255,15 +231,10 @@ struct ListNode *make_link_to_obj(struct ListNode *prevNode, struct GdObj *obj) 
 
     // Allocate link node
     newNode = gd_malloc_perm(sizeof(struct ListNode));
-    if (newNode == NULL) {
-        // fatal_print("Cant allocate link memory!");
-        gd_exit();
-    }
+    if (newNode == NULL) gd_exit(); // Cant allocate link memory!
 
     // Append to `prevNode` if not NULL
-    if (prevNode != NULL) {
-        prevNode->next = newNode;
-    }
+    if (prevNode != NULL) prevNode->next = newNode;
 
     newNode->prev = prevNode;
     newNode->next = NULL;
@@ -279,25 +250,17 @@ struct VtxLink *make_vtx_link(struct VtxLink *prevNode, Vtx *data) {
     struct VtxLink *newNode;
 
     newNode = gd_malloc_perm(sizeof(struct VtxLink));
-    if (newNode == NULL) {
-        // fatal_print("Cant allocate link memory!");
-        gd_exit();
-    }
+    if (newNode == NULL) gd_exit(); // Cant allocate link memory!
 
     // Append to `prevNode` if not NULL
-    if (prevNode != NULL) {
-        prevNode->next = newNode;
-    }
+    if (prevNode != NULL) prevNode->next = newNode;
 
     newNode->prev = prevNode;
     newNode->next = NULL;
     newNode->data = data;
 
-    // WTF? Not sure what this is supposed to check
-    if (((uintptr_t)(newNode)) == 0x3F800000) {
-        // fatal_printf("bad3\n");
-        gd_exit();
-    }
+    //! WTF? Not sure what this is supposed to check
+    if (((uintptr_t)(newNode)) == 0x3F800000) gd_exit(); // fatal_printf("bad3\n");
 
     return newNode;
 }
@@ -309,32 +272,30 @@ void reset_plane(struct ObjPlane *plane) {
     f32 sp44;
     s32 i;
     s32 sp30;
-    register f32 sp28;
+    register f32 normal;
 
     face = plane->unk40;
     calc_face_normal(face);
     plane->unk1C = gd_dot_vec3f(&face->vertices[0]->pos, &face->normal);
     sp48 = 0.0f;
 
-    sp28 = face->normal.x < 0.0f ? -face->normal.x : face->normal.x;
-    sp44 = sp28;
+    normal = face->normal.x < 0.0f ? -face->normal.x : face->normal.x;
+    sp44 = normal;
     if (sp44 > sp48) {
         sp30 = 0;
         sp48 = sp44;
     }
 
-    sp28 = face->normal.y < 0.0f ? -face->normal.y : face->normal.y;
-    sp44 = sp28;
+    normal = face->normal.y < 0.0f ? -face->normal.y : face->normal.y;
+    sp44 = normal;
     if (sp44 > sp48) {
         sp30 = 1;
         sp48 = sp44;
     }
 
-    sp28 = face->normal.z < 0.0f ? -face->normal.z : face->normal.z;
-    sp44 = sp28;
-    if (sp44 > sp48) {
-        sp30 = 2;
-    }
+    normal = face->normal.z < 0.0f ? -face->normal.z : face->normal.z;
+    sp44 = normal;
+    if (sp44 > sp48) sp30 = 2;
 
     switch (sp30) {
         case 0:
@@ -379,13 +340,13 @@ void reset_plane(struct ObjPlane *plane) {
 }
 
 /* @ 22B60C for 0x94; orig name: func_8017CE3C */
-struct ObjPlane *make_plane(struct ObjFace *a1) {
+struct ObjPlane *make_plane(struct ObjFace *face) {
     struct ObjPlane *newPlane = (struct ObjPlane *) make_object(OBJ_TYPE_PLANES);
 
     gGdPlaneCount++;
     newPlane->id = gGdPlaneCount;
     newPlane->inZone = FALSE;
-    newPlane->unk40 = a1;
+    newPlane->unk40 = face;
     reset_plane(newPlane);
 
     return newPlane;
@@ -442,7 +403,7 @@ struct ObjMaterial *make_material(void) {
 
     newMtl = (struct ObjMaterial *) make_object(OBJ_TYPE_MATERIALS);
 
-    gd_strcpy(newMtl->name, "NoName");
+    gd_strcpy(newMtl->name, "x");
 
     newMtl->id = 0;
     newMtl->gddlNumber = 0;
@@ -457,7 +418,7 @@ struct ObjLight *make_light(void) {
 
     newLight = (struct ObjLight *) make_object(OBJ_TYPE_LIGHTS);
 
-    gd_strcpy(newLight->name, "NoName");
+    gd_strcpy(newLight->name, "x");
 
     newLight->id = 0;
     newLight->unk30 = 1.0f;
@@ -476,18 +437,14 @@ struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 u
                           struct ObjGroup *parts) {
     struct ObjView *newView = (struct ObjView *) make_object(OBJ_TYPE_VIEWS);
 
-    if (gGdViewsGroup == NULL) {
-        gGdViewsGroup = make_group(0);
-    }
+    if (gGdViewsGroup == NULL) gGdViewsGroup = make_group(0);
 
     addto_group(gGdViewsGroup, &newView->header);
 
     newView->flags = flags | VIEW_UPDATE | VIEW_LIGHT;
     newView->id = sGdViewCount++;
 
-    if ((newView->components = parts) != NULL) {
-        reset_nets_and_gadgets(parts);
-    }
+    if ((newView->components = parts) != NULL) reset_nets_and_gadgets(parts);
 
     newView->unk78 = 0;
     newView->projectionType = projectionType;
@@ -512,9 +469,7 @@ struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 u
     newView->proc = NULL;
     newView->unk9C = 0;
 
-    if (name != NULL) {
-        newView->unk1C = setup_view_buffers(name, newView);
-    }
+    if (name != NULL) newView->unk1C = setup_view_buffers(name, newView);
 
     newView->namePtr = name;
     newView->lights = NULL;
@@ -557,12 +512,8 @@ struct ObjGroup *make_group_of_type(enum ObjTypeFlag type, struct GdObj *fromObj
     curObj = fromObj;
 
     while (curObj != NULL) {
-        if (curObj->type & type) {
-            addto_group(newGroup, curObj);
-        }
-
+        if (curObj->type & type) addto_group(newGroup, curObj);
         if (curObj == NULL) break;
-
         curObj = curObj->prev;
     }
 
@@ -591,9 +542,7 @@ struct ObjGroup *make_group(s32 count, ...) {
         oldGroupListHead->prev = newGroup;
     }
 
-    if (count == 0) {
-        return newGroup;
-    }
+    if (count == 0) return newGroup;
 
     va_start(args, count);
     curLink = NULL;
@@ -602,10 +551,8 @@ struct ObjGroup *make_group(s32 count, ...) {
         // get the next pointer in the struct.
         vargObj = va_arg(args, struct GdObj *);
 
-        if (vargObj == NULL) { // one of our pointers was NULL. raise an error.
-            // fatal_printf("make_group() NULL group ptr");
-            gd_exit();
-        }
+        // one of our pointers was NULL. raise an error.
+        if (vargObj == NULL) gd_exit(); // NULL group ptr
 
         curObj = vargObj;
         newGroup->memberTypes |= curObj->type;
@@ -708,17 +655,9 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
 
     fnAppliedCount = 0;
 
-    if (group == NULL) {
-        return fnAppliedCount;
-    }
-
-    if (group->linkType & 1) { // compressed data, not an Obj
-        return fnAppliedCount;
-    }
-
-    if (!((group->memberTypes & OBJ_TYPE_GROUPS) | (group->memberTypes & types))) {
-        return fnAppliedCount;
-    }
+    if (group == NULL) return fnAppliedCount;
+    if (group->linkType & 1) return fnAppliedCount; // compressed data, not an Obj
+    if (!((group->memberTypes & OBJ_TYPE_GROUPS) | (group->memberTypes & types))) return fnAppliedCount;
 
     objFn = func;
     curLink = group->firstMember;
@@ -811,45 +750,45 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
 }
 
 /* @ 22D9E0 for 0x1BC */
-s32 func_8017F210(struct GdObj *a0, struct GdObj *a1) {
+s32 func_8017F210(struct GdObj *obj1, struct GdObj *obj2) {
     struct ListNode *sp6C;
     struct ObjGroup *sp68;
     Mat4f *sp5C;
     Mat4f *sp54;
     Mat4f *sp50;
-    struct GdVec3f sp2C;
+    struct GdVec3f vec;
     s32 count = 0;
 
     count++;
 
-    if (a1 != NULL) {
-        set_cur_dynobj(a1);
+    if (obj2 != NULL) {
+        set_cur_dynobj(obj2);
         sp54 = (Mat4f *) d_get_rot_mtx_ptr();
 
-        set_cur_dynobj(a0);
+        set_cur_dynobj(obj1);
         sp5C = d_get_i_mtx_ptr();
         sp50 = (Mat4f *) d_get_rot_mtx_ptr();
 
-        d_get_scale(&sp2C);
+        d_get_scale(&vec);
         gd_mult_mat4f(sp5C, sp54, sp50);
-        gd_scale_mat4f_by_vec3f(sp50, &sp2C);
+        gd_scale_mat4f_by_vec3f(sp50, &vec);
     } else {
-        set_cur_dynobj(a0);
+        set_cur_dynobj(obj1);
         sp5C = d_get_i_mtx_ptr();
         sp54 = (Mat4f *) d_get_rot_mtx_ptr();
 
-        d_get_scale(&sp2C);
+        d_get_scale(&vec);
         gd_copy_mat4f(sp5C, sp54);
-        gd_scale_mat4f_by_vec3f(sp54, &sp2C);
+        gd_scale_mat4f_by_vec3f(sp54, &vec);
     }
 
-    set_cur_dynobj(a0);
+    set_cur_dynobj(obj1);
     sp68 = d_get_att_objgroup();
 
     if (sp68 != NULL) {
         sp6C = sp68->firstMember;
         while (sp6C != NULL) {
-            count += func_8017F210(sp6C->obj, a0);
+            count += func_8017F210(sp6C->obj, obj1);
             sp6C = sp6C->next;
         }
     }
@@ -898,14 +837,12 @@ void move_animator(struct ObjAnimator *animObj) {
     Mat4f *mtxArr;
     Mat4f localMtx;
     struct GdAnimTransform *triPtr;
-    struct GdAnimTransform currTransform;  // transformation for the current keyframe
-    struct GdAnimTransform nextTransform;  // transformation for the next keyframe
-    s16(*animData9s16)[9];              // GdTriangleH[]?
-    s16(*animData3s16)[3];             // MyVec3h[]?
-    s16(*animData6s16)[6];            // GdPlaneH[]?
-    s16(*animDataCam)[6];         // camera GdPlaneH[]?
-    struct GdObj *stubObj1 = NULL; // used only for call to stubbed function
-    struct GdObj *stubObj2 = NULL; // used only for call to stubbed function
+    struct GdAnimTransform currTransform; // transformation for the current keyframe
+    struct GdAnimTransform nextTransform; // transformation for the next keyframe
+    s16(*animData9s16)[9];                // GdTriangleH[]?
+    s16(*animData3s16)[3];                // MyVec3h[]?
+    s16(*animData6s16)[6];                // GdPlaneH[]?
+    s16(*animDataCam)[6];                 // camera GdPlaneH[]?
     s32 currKeyFrame;
     s32 nextKeyFrame;
     f32 dt;
@@ -914,9 +851,7 @@ void move_animator(struct ObjAnimator *animObj) {
     register struct ListNode *link;
     struct GdObj *linkedObj;
 
-    if (animObj->controlFunc != NULL) {
-        animObj->controlFunc(animObj);
-    }
+    if (animObj->controlFunc != NULL) animObj->controlFunc(animObj);
 
     if (animObj->animatedPartsGrp == NULL) return;  // nothing to animate
 
@@ -940,9 +875,7 @@ void move_animator(struct ObjAnimator *animObj) {
     dt = animObj->frame - (f32) currKeyFrame;
     nextKeyFrame = currKeyFrame + 1;
 
-    if (nextKeyFrame > animData->count) {
-        nextKeyFrame = 1;
-    }
+    if (nextKeyFrame > animData->count) nextKeyFrame = 1;
 
     // convert frame numbers to zero-indexed
     currKeyFrame--;
@@ -1109,20 +1042,9 @@ void move_animator(struct ObjAnimator *animObj) {
                 d_set_i_matrix(&localMtx);
                 break;
             case GD_ANIM_STUB: //!?
-                if (stubObj1 == NULL) {
-                    stubObj1 = linkedObj;
-                } else {
-                    if (stubObj2 == NULL) {
-                        stubObj2 = linkedObj;
-                    } else {
-                        // fatal_printf("Too many objects to morph");
-                        gd_exit();
-                    }
-                }
                 break;
             default:
-                // fatal_printf("move_animator(): Unkown animation data type");
-                gd_exit();
+                gd_exit(); // Unkown animation data type
         }
         link = link->next;
     }

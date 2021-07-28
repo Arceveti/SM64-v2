@@ -11,9 +11,6 @@ void bhv_hoot_init(void) {
     cur_obj_become_intangible();
 }
 
-// sp28 = arg0
-// sp2c = arg1
-
 f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist) {
     f32 nextX = dist * sins(o->oMoveAngleYaw) + o->oPosX;
     f32 nextZ = dist * coss(o->oMoveAngleYaw) + o->oPosZ;
@@ -87,10 +84,6 @@ void hoot_player_set_yaw(void) {
     o->oMoveAngleYaw -= 5 * stickX;
 }
 
-// sp28 = speed
-// sp2c = xPrev
-// sp30 = zPrev
-
 void hoot_carry_step(s32 speed) {
     s16 yaw = o->oMoveAngleYaw;
     s16 pitch = o->oMoveAnglePitch;
@@ -150,9 +143,6 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
         o->oPosY = floorY + 125.0f;
     }
 }
-
-// sp28 = xPrev
-// sp2c = zPrev
 
 void hoot_act_ascent(void) {
     f32 negX = 0 - o->oPosX;

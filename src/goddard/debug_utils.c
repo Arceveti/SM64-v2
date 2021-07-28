@@ -9,7 +9,7 @@
 
 // data
 static s32 sNumActiveMemTrackers = 0;   // @ 801A82A0
-static u32 sPrimarySeed = 0x12345678;   // @ 801A82A4
+static u32 sPrimarySeed   = 0x12345678; // @ 801A82A4
 static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
 
 // bss
@@ -45,10 +45,7 @@ struct MemTracker *new_memtracker(const char *name) {
         }
     }
 
-    if (tracker != NULL) {
-        tracker->total = 0.0f;
-    }
-
+    if (tracker != NULL) tracker->total = 0.0f;
     return tracker;
 }
 
@@ -79,17 +76,12 @@ struct MemTracker *start_memtracker(const char *name) {
     // Create one if it doesn't exist
     if (tracker == NULL) {
         tracker = new_memtracker(name);
-        if (tracker == NULL) {
-            // fatal_printf("Unable to make memtracker '%s'", name);
-            gd_exit();
-        }
+        if (tracker == NULL) gd_exit(); // fatal_printf("Unable to make memtracker '%s'", name);
     }
 
     tracker->begin = (f32) get_alloc_mem_amt();
-    if (sNumActiveMemTrackers >= ARRAY_COUNT(sActiveMemTrackers)) {
-        // fatal_printf("too many memtracker calls");
-        gd_exit();
-    }
+
+    if (sNumActiveMemTrackers >= ARRAY_COUNT(sActiveMemTrackers)) gd_exit(); // fatal_printf("too many memtracker calls");
 
     sActiveMemTrackers[sNumActiveMemTrackers++] = tracker;
 
@@ -101,18 +93,9 @@ struct MemTracker *start_memtracker(const char *name) {
  */
 u32 stop_memtracker(const char *name) {
     struct MemTracker *tracker;
-
-    if (sNumActiveMemTrackers-- < 0) {
-        // fatal_printf("bad mem tracker count");
-        gd_exit();
-    }
-
+    if (sNumActiveMemTrackers-- < 0) gd_exit(); // bad mem tracker count
     tracker = get_memtracker(name);
-    if (tracker == NULL) {
-        // fatal_printf("memtracker '%s' not found", name);
-        gd_exit();
-    }
-
+    if (tracker == NULL) gd_exit(); // fatal_printf("memtracker '%s' not found", name);
     tracker->end = get_alloc_mem_amt();
     tracker->total += (tracker->end - tracker->begin);
 
@@ -142,7 +125,6 @@ void remove_all_memtrackers(void) {
 f32 gd_rand_float(void) {
     u32 temp;
     u32 i;
-    f32 val;
 
     for (i = 0; i < 4; i++) {
         if (sPrimarySeed & 0x80000000) {
@@ -160,42 +142,28 @@ f32 gd_rand_float(void) {
         sSecondarySeed = temp;
     }
 
-    val = (sPrimarySeed & 0xFFFF) / 65535.0f;
-
-    return val;
+    return (sPrimarySeed & 0xFFFF) / 65535.0f;
 }
 
 /* 23C468 -> 23C4AC; orig name: func_8018DC98 */
 void gd_strcpy(char *dst, const char *src) {
-    while ((*dst++ = *src++)) {
-        ;
-    }
+    while ((*dst++ = *src++)) ;
 }
 
 /* 23C5A8 -> 23C5FC; orig name: func_8018DDD8 */
 u32 gd_strlen(const char *str) {
     u32 len = 0;
-
-    while (*str++) {
-        len++;
-    }
-
+    while (*str++) len++;
     return len;
 }
 
 /* 23C5FC -> 23C680; orig name: func_8018DE2C */
 char *gd_strcat(char *dst, const char *src) {
-    while (*dst++) {
-        ;
-    }
-
+    while (*dst++) ;
     if (*src) {
         dst--;
-        while ((*dst++ = *src++)) {
-            ;
-        }
+        gd_strcpy(dst, src);
     }
-
     return --dst;
 }
 

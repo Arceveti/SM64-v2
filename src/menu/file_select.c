@@ -1010,9 +1010,8 @@ void load_score_menu_from_submenu(s16 prevMenuButtonID, struct Object *sourceBut
     // If the previous button is in default state
     if (sMainMenuButtons[prevMenuButtonID]->oMenuButtonState == MENU_BUTTON_STATE_DEFAULT) {
         // Hide buttons of corresponding button menu groups
-        if (prevMenuButtonID == MENU_BUTTON_SCORE) //! Not possible, this is checking if the score menu
-                                                   //! was opened from the score menu!
-        {
+        if (prevMenuButtonID == MENU_BUTTON_SCORE) {//! Not possible, this is checking if the score menu
+                                                    //! was opened from the score menu!
             for (buttonID = MENU_BUTTON_SCORE_MIN; buttonID < MENU_BUTTON_SCORE_MAX; buttonID++) {
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }
@@ -1056,9 +1055,8 @@ void load_copy_menu_from_submenu(s16 prevMenuButtonID, struct Object *sourceButt
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }
         }
-        if (prevMenuButtonID == MENU_BUTTON_COPY) //! Not possible, this is checking if the copy menu
-                                                  //! was opened from the copy menu!
-        {
+        if (prevMenuButtonID == MENU_BUTTON_COPY) {//! Not possible, this is checking if the copy menu
+                                                   //! was opened from the copy menu!
             for (buttonID = MENU_BUTTON_COPY_MIN; buttonID < MENU_BUTTON_COPY_MAX; buttonID++) {
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }
@@ -1102,9 +1100,8 @@ void load_erase_menu_from_submenu(s16 prevMenuButtonID, struct Object *sourceBut
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }
         }
-        if (prevMenuButtonID == MENU_BUTTON_ERASE) //! Not possible, this is checking if the erase menu
-                                                   //! was opened from the erase menu!
-        {
+        if (prevMenuButtonID == MENU_BUTTON_ERASE) {//! Not possible, this is checking if the erase menu
+                                                    //! was opened from the erase menu!
             for (buttonID = MENU_BUTTON_ERASE_MIN; buttonID < MENU_BUTTON_ERASE_MAX; buttonID++) {
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }

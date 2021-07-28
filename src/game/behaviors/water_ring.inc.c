@@ -44,9 +44,6 @@ void bhv_jet_stream_water_ring_init(void) {
     o->oFaceAnglePitch = 0x8000;
 }
 
-// sp28 = arg0
-// sp2c = ringManager
-
 #ifdef WATER_RING_FIX
 void water_ring_check_collection(UNUSED f32 avgScale, struct Object *ringManager) {
     struct Object *ringSpawner;

@@ -32,7 +32,7 @@ s8 gSaveFileModified;
 
 u8 gLastCompletedCourseNum = COURSE_NONE;
 u8 gLastCompletedStarNum = 0;
-s8 sUnusedGotGlobalCoinHiScore = 0;
+s8 sUnusedGotGlobalCoinHiScore = FALSE;
 u8 gGotFileCoinHiScore = FALSE;
 u8 gCurrCourseStarFlags = 0;
 
@@ -417,7 +417,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
 
     gLastCompletedCourseNum = courseIndex + 1;
     gLastCompletedStarNum = starIndex + 1;
-    sUnusedGotGlobalCoinHiScore = 0;
+    sUnusedGotGlobalCoinHiScore = FALSE;
     gGotFileCoinHiScore = FALSE;
 
     if (courseIndex >= 0 && courseIndex < COURSE_STAGES_COUNT) {
@@ -425,7 +425,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
         // truncation. This can allow a high score to decrease.
 
         if (coinScore > ((u16) save_file_get_max_coin_score(courseIndex) & 0xFFFF)) {
-            sUnusedGotGlobalCoinHiScore = 1;
+            sUnusedGotGlobalCoinHiScore = TRUE;
         }
 
         if (coinScore > save_file_get_course_coin_score(fileIndex, courseIndex)) {

@@ -26,7 +26,7 @@ Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
                                             // casting to a local struct as necessary.
 
         if (GET_HIGH_U16_OF_32(*params) != gAreaUpdateCounter) {
-            UNUSED struct Camera *sp2C = gCurGraphNodeCamera->config.camera;
+            // UNUSED struct Camera *sp2C = gCurGraphNodeCamera->config.camera;
             s32 snowMode = GET_LOW_U16_OF_32(*params);
 
             vec3f_to_vec3s(camTo, gCurGraphNodeCamera->focus);

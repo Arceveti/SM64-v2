@@ -620,12 +620,7 @@ f32 get_time_scale(void) {
  * Increments the current display list's Gfx index list and returns a pointer to the next Gfx element
  */
 static Gfx *next_gfx(void) {
-    if (sCurrentGdDl->curGfxIdx >= sCurrentGdDl->totalGfx) {
-        // dump_disp_list();
-        // fatal_printf("Gfx list overflow");
-        gd_exit();
-    }
-
+    if (sCurrentGdDl->curGfxIdx >= sCurrentGdDl->totalGfx) gd_exit(); // Gfx list overflow
     return &sCurrentGdDl->gfx[sCurrentGdDl->curGfxIdx++];
 }
 
@@ -633,12 +628,7 @@ static Gfx *next_gfx(void) {
  * Increments the current display list's Light index list and returns a pointer to the next Light element
  */
 static Lights4 *next_light(void) {
-    if (sCurrentGdDl->curLightIdx >= sCurrentGdDl->totalLights) {
-        // dump_disp_list();
-        // fatal_printf("Light list overflow");
-        gd_exit();
-    }
-
+    if (sCurrentGdDl->curLightIdx >= sCurrentGdDl->totalLights) gd_exit(); // Light list overflow
     return &sCurrentGdDl->light[sCurrentGdDl->curLightIdx++];
 }
 
@@ -646,12 +636,7 @@ static Lights4 *next_light(void) {
  * Increments the current display list's matrix index list and returns a pointer to the next matrix element
  */
 static Mtx *next_mtx(void) {
-    if (sCurrentGdDl->curMtxIdx >= sCurrentGdDl->totalMtx) {
-        // dump_disp_list();
-        // fatal_printf("Mtx list overflow");
-        gd_exit();
-    }
-
+    if (sCurrentGdDl->curMtxIdx >= sCurrentGdDl->totalMtx) gd_exit(); // Mtx list overflow
     return &sCurrentGdDl->mtx[sCurrentGdDl->curMtxIdx++];
 }
 
@@ -659,12 +644,7 @@ static Mtx *next_mtx(void) {
  * Increments the current display list's vertex index list and returns a pointer to the next vertex element
  */
 static Vtx *next_vtx(void) {
-    if (sCurrentGdDl->curVtxIdx >= sCurrentGdDl->totalVtx) {
-        // dump_disp_list();
-        // fatal_printf("Vtx list overflow");
-        gd_exit();
-    }
-
+    if (sCurrentGdDl->curVtxIdx >= sCurrentGdDl->totalVtx) gd_exit(); // Vtx list overflow
     return &sCurrentGdDl->vtx[sCurrentGdDl->curVtxIdx++];
 }
 
@@ -672,12 +652,7 @@ static Vtx *next_vtx(void) {
  * Increments the current display list's viewport list and returns a pointer to the next viewport element
  */
 static Vp *next_vp(void) {
-    if (sCurrentGdDl->curVpIdx >= sCurrentGdDl->totalVp) {
-        // dump_disp_list();
-        // fatal_printf("Vp list overflow");
-        gd_exit();
-    }
-
+    if (sCurrentGdDl->curVpIdx >= sCurrentGdDl->totalVp) gd_exit(); // Vp list overflow
     return &sCurrentGdDl->vp[sCurrentGdDl->curVpIdx++];
 }
 
@@ -693,9 +668,7 @@ f64 gd_cos_d(f64 x) {
 
 /* 249B2C -> 249BA4 */
 f64 gd_sqrt_d(f64 x) {
-    if (x < 1.0e-7) {
-        return 0.0;
-    }
+    if (x < 1.0e-7) return 0.0;
     return sqrtf(x);
 }
 
@@ -706,9 +679,7 @@ f64 gd_sqrt_d(f64 x) {
 
 /* 24A19C -> 24A1D4 */
 void gd_exit(void) {
-    // gd_printf("exit\n");
-    while (TRUE) {
-    }
+    while (TRUE) {} // exit
 }
 
 /* 24A1D4 -> 24A220; orig name: func_8019BA04 */
@@ -721,9 +692,7 @@ void *gd_allocblock(u32 size) {
     void *block; // 1c
 
     size = ALIGN(size, 8);
-    if ((sMemBlockPoolUsed + size) > sMemBlockPoolSize) {
-        gd_exit();
-    }
+    if ((sMemBlockPoolUsed + size) > sMemBlockPoolSize) gd_exit();
 
     block = sMemBlockPoolBase + sMemBlockPoolUsed;
     sMemBlockPoolUsed += size;
@@ -919,17 +888,9 @@ Gfx *gdm_gettestdl(UNUSED s32 id) {
     gddl = sCurrentGdDl;
     sUpdateMarioScene = TRUE;
 
-    if (gddl == NULL) {
-        // fatal_printf("no display list");
-        gd_exit();
-    }
-    return (void *) osVirtualToPhysical(gddl->gfx);
-}
+    if (gddl == NULL) gd_exit(); // no display list
 
-/* 24B5A8 -> 24B5D4; orig name: func_8019CDD8 */
-void fatal_no_dl_mem(void) {
-    // fatal_printf("Out of DL mem\n");
-    gd_exit();
+    return (void *) osVirtualToPhysical(gddl->gfx);
 }
 
 /* 24B5D4 -> 24B6AC */
@@ -937,9 +898,7 @@ struct GdDisplayList *alloc_displaylist(u32 id) {
     struct GdDisplayList *gdDl;
 
     gdDl = gd_malloc_perm(sizeof(struct GdDisplayList));
-    if (gdDl == NULL) {
-        fatal_no_dl_mem();
-    }
+    if (gdDl == NULL) gd_exit(); // Out of DL mem
 
     gdDl->number = sGdDlCount++;
     if (sGdDlCount >= MAX_GD_DLS) {
@@ -988,50 +947,35 @@ struct GdDisplayList *new_gd_dl(s32 id, s32 gfxs, s32 verts, s32 mtxs, s32 light
 
     dl = alloc_displaylist(id);
     dl->parent = NULL;
-    if (verts == 0) {
-        verts = 1;
-    }
+    if (verts == 0) verts = 1;
+
     dl->curVtxIdx = 0;
     dl->totalVtx = verts;
-    if ((dl->vtx = gd_malloc_perm(verts * sizeof(Vtx))) == NULL) {
-        fatal_no_dl_mem();
-    }
+    if ((dl->vtx = gd_malloc_perm(verts * sizeof(Vtx))) == NULL) gd_exit(); // Out of DL mem
 
-    if (mtxs == 0) {
-        mtxs = 1;
-    }
+    if (mtxs == 0) mtxs = 1;
+
     dl->curMtxIdx = 0;
     dl->totalMtx = mtxs;
-    if ((dl->mtx = gd_malloc_perm(mtxs * sizeof(Mtx))) == NULL) {
-        fatal_no_dl_mem();
-    }
+    if ((dl->mtx = gd_malloc_perm(mtxs * sizeof(Mtx))) == NULL) gd_exit(); // Out of DL mem
 
-    if (lights == 0) {
-        lights = 1;
-    }
+    if (lights == 0) lights = 1;
+
     dl->curLightIdx = 0;
     dl->totalLights = lights;
-    if ((dl->light = gd_malloc_perm(lights * sizeof(Lights4))) == NULL) {
-        fatal_no_dl_mem();
-    }
+    if ((dl->light = gd_malloc_perm(lights * sizeof(Lights4))) == NULL) gd_exit(); // Out of DL mem
 
-    if (gfxs == 0) {
-        gfxs = 1;
-    }
+    if (gfxs == 0) gfxs = 1;
+
     dl->curGfxIdx = 0;
     dl->totalGfx = gfxs;
-    if ((dl->gfx = gd_malloc_perm(gfxs * sizeof(Gfx))) == NULL) {
-        fatal_no_dl_mem();
-    }
+    if ((dl->gfx = gd_malloc_perm(gfxs * sizeof(Gfx))) == NULL) gd_exit(); // Out of DL mem
 
-    if (vps == 0) {
-        vps = 1;
-    }
+    if (vps == 0) vps = 1;
+
     dl->curVpIdx = 0;
     dl->totalVp = vps;
-    if ((dl->vp = gd_malloc_perm(vps * sizeof(Vp))) == NULL) {
-        fatal_no_dl_mem();
-    }
+    if ((dl->vp = gd_malloc_perm(vps * sizeof(Vp))) == NULL) gd_exit(); // Out of DL mem
 
     dl->dlptr = NULL;
     return dl;
@@ -1075,17 +1019,12 @@ s32 gd_startdisplist(s32 memarea) {
             sCurrentGdDl = create_child_gdl(0, sStaticDl);
             break;
         case 8:  // Use the active view's display list
-            if (sActiveView->id > 2) {
-                // fatal_printf("gd_startdisplist(): Too many views to display");
-                gd_exit();
-            }
-
+            if (sActiveView->id > 2) gd_exit(); // Too many views to display
             sCurrentGdDl = sViewDls[sActiveView->id][gGdFrameBufNum];
             cpy_remaining_gddl(sCurrentGdDl, sCurrentGdDl->parent);
             break;
         default:
-            // fatal_printf("gd_startdisplist(): Unknown memory area");
-            gd_exit();
+            gd_exit(); // Unknown memory area
             break;
     }
     gDPPipeSync(next_gfx());
@@ -1217,33 +1156,32 @@ void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z) {
  */
 void gd_dl_scale(f32 x, f32 y, f32 z) {
     Mat4f mtx;
-    struct GdVec3f vec;
+    struct GdVec3f scaleVec;
 
-    vec.x = x;
-    vec.y = y;
-    vec.z = z;
+    scaleVec.x = x;
+    scaleVec.y = y;
+    scaleVec.z = z;
     gd_set_identity_mat4(&mtx);
-    gd_scale_mat4f_by_vec3f(&mtx, &vec);
+    gd_scale_mat4f_by_vec3f(&mtx, &scaleVec);
     gd_dl_mul_matrix(&mtx);
 }
 
 /* 24DA94 -> 24DAE8 */
-void func_8019F2C4(f32 arg0, s8 arg1) {
+void func_8019F2C4(f32 angle, s8 axis) {
     Mat4f mtx; // 18
 
     gd_set_identity_mat4(&mtx);
-    gd_absrot_mat4(&mtx, arg1 - 120, -arg0);
+    gd_absrot_mat4(&mtx, axis - 120, -angle);
     gd_dl_mul_matrix(&mtx);
 }
 
 /* 24DAE8 -> 24E1A8 */
-void gd_dl_lookat(struct ObjCamera *cam, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7) {
+void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 yTo, f32 zTo, f32 colXY) {
     LookAt *lookat;
 
-    arg7 *= RAD_PER_DEG;
+    colXY *= RAD_PER_DEG;
 
-    gd_mat4f_lookat(&cam->unkE8, arg1, arg2, arg3, arg4, arg5, arg6, gd_sin_d(arg7), gd_cos_d(arg7),
-                  0.0f);
+    gd_mat4f_lookat(&cam->unkE8, xFrom, yFrom, zFrom, xTo, yTo, zTo, gd_sin_d(colXY), gd_cos_d(colXY), 0.0f);
 
     mat4_to_mtx(&cam->unkE8, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),
@@ -1289,10 +1227,7 @@ void gd_dl_lookat(struct ObjCamera *cam, f32 arg1, f32 arg2, f32 arg3, f32 arg4,
 /* 24E1A8 -> 24E230; orig name: func_8019F9D8 */
 void check_tri_display(s32 vtxcount) {
     D_801BB0B4 = 0;
-    if (vtxcount != 3) {
-        // fatal_printf("cant display no tris\n");
-        gd_exit();
-    }
+    if (vtxcount != 3) gd_exit(); // cant display no tris
 }
 
 /**
@@ -1441,10 +1376,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
 
     sp38 = 32.0f; // x scale factor?
     sp34 = 32.0f; // y scale factor?
-    if (idx >= 0xc8) {
-        // fatal_printf("too many hilites");
-        gd_exit();
-    }
+    if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
 
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f),
@@ -1495,10 +1427,8 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
             break;
         case GD_MTL_SHINE_DL:
             gddl_is_loading_shine_dl(TRUE);
-            if (id >= 200) {
-                // fatal_printf("too many hilites");
-                gd_exit();
-            }
+            if (id >= 200) gd_exit(); // too many hilites
+
             gDPSetHilite1Tile(next_gfx(), G_TX_RENDERTILE, &sHilites[id], 32, 32);
             break;
         case GD_MTL_BREAK:
@@ -1840,8 +1770,7 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
             }
             break;
         default:
-            // fatal_printf("gd_setproperty(): Unkown property");
-            gd_exit();
+            gd_exit(); // Unkown property
     }
 }
 
@@ -1908,10 +1837,7 @@ s32 setup_view_buffers(const char *name, struct ObjView *view) {
             view->colourBufs[1] = (void *) ALIGN((uintptr_t) view->colourBufs[1], 64);
             stop_memtracker(memtrackerName);
 
-            if (view->colourBufs[0] == NULL || view->colourBufs[1] == NULL) {
-                // fatal_printf("Not enough DRAM for colour buffers\n");
-                gd_exit();
-            }
+            if (view->colourBufs[0] == NULL || view->colourBufs[1] == NULL) gd_exit(); // Not enough DRAM for colour buffers
             view->parent = view;
         } else {
             view->parent = sScreenView;
@@ -1923,10 +1849,7 @@ s32 setup_view_buffers(const char *name, struct ObjView *view) {
             if (view->flags & VIEW_ALLOC_ZBUF) {
                 view->zbuf =
                     gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x40);
-                if (view->zbuf == NULL) {
-                    // fatal_printf("Not enough DRAM for Z buffer\n");
-                    gd_exit();
-                }
+                if (view->zbuf == NULL) gd_exit(); // Not enough DRAM for Z buffer
                 view->zbuf = (void *) ALIGN((uintptr_t) view->zbuf, 64);
             }
             stop_memtracker(memtrackerName);
@@ -2234,10 +2157,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     segSize = dynlistSegEnd - dynlistSegStart;
     allocSegSpace = gd_malloc_temp(segSize + PAGE_SIZE);
 
-    if ((allocPtr = (void *) allocSegSpace) == NULL) {
-        // fatal_printf("Not enough DRAM for DATA segment \n");
-        gd_exit();
-    }
+    if ((allocPtr = (void *) allocSegSpace) == NULL) gd_exit(); // Not enough DRAM for DATA segment
 
     allocSegSpace = (u8 *) (((uintptr_t) allocSegSpace + PAGE_SIZE) & 0xFFFF0000);
 
@@ -2247,10 +2167,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     osUnmapTLBAll();
 
     tlbEntries = (segSize / PAGE_SIZE) / 2 + 1;
-    if (tlbEntries >= 31) {
-        // fatal_printf("load_dynlist() too many TLBs");
-        gd_exit();
-    }
+    if (tlbEntries >= 31) gd_exit(); // too many TLBs
 
     // Map virtual address 0x04000000 to `allocSegSpace`
     for (i = 0; i < tlbEntries; i++) {

@@ -193,11 +193,11 @@ void bhv_end_toad_loop(void) {
 }
 
 // Geo switch case function for controlling Peach's eye state.
-s32 geo_switch_peach_eyes(s32 run, struct GraphNode *node, UNUSED s32 a2) {
+s32 geo_switch_peach_eyes(s32 callContext, struct GraphNode *node, UNUSED s32 context) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     s16 timer;
 
-    if (run == TRUE) {
+    if (callContext == GEO_CONTEXT_RENDER) {
         if (D_8032CBE4 == 0) {
             timer = (gAreaUpdateCounter + 0x20) >> 1 & 0x1F;
             if (timer < 7) {

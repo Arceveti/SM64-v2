@@ -450,7 +450,7 @@ void alloc_surface_pools(void) {
     sSurfaceNodePool = main_pool_alloc(SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode), MEMORY_POOL_LEFT);
     sSurfacePool = main_pool_alloc(sSurfacePoolSize * sizeof(struct Surface), MEMORY_POOL_LEFT);
 
-    gCCMEnteredSlide = 0;
+    gCCMEnteredSlide = FALSE;
     reset_red_coins_collected();
 }
 

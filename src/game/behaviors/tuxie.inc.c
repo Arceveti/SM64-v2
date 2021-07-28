@@ -278,12 +278,12 @@ void bhv_small_penguin_loop(void) {
 /** Geo switch logic for Tuxie's mother's eyes. Cases 0-4. Interestingly, case
  * 4 is unused, and is the eye state seen in Shoshinkai 1995 footage.
  */
-Gfx *geo_switch_tuxie_mother_eyes(s32 run, struct GraphNode *node, UNUSED Mat4 *mtx) {
+Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct Object *obj;
     struct GraphNodeSwitchCase *switchCase;
     s32 timer;
 
-    if (run == TRUE) {
+    if (callContext == GEO_CONTEXT_RENDER) {
         obj = (struct Object *) gCurGraphNodeObject;
         switchCase = (struct GraphNodeSwitchCase *) node;
         switchCase->selectedCase = 0;

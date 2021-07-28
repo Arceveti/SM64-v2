@@ -296,8 +296,7 @@ void gd_absrot_mat4(Mat4f *mtx, s32 axisnum, f32 ang) {
             rot.z = 1.0f;
             break;
         default:
-            // fatal_printf("absrot_matrix4(): Bad axis num");
-            gd_exit();
+            gd_exit(); // Bad axis num
     }
 
     gd_create_rot_mat_angular(&rMat, &rot, ang / 2.0f);
@@ -367,8 +366,7 @@ void gd_inverse_mat4f(Mat4f *src, Mat4f *dst) {
     determinant = gd_mat4f_det(dst);
 
     if (ABS(determinant) < 1e-5f) {
-        // fatal_print("Non-singular matrix, no inverse!\n");
-        gd_exit();
+        gd_exit(); // Non-singular matrix, no inverse!
     }
 
     for (i = 0; i < 4; i++) {

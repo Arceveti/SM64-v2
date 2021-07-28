@@ -1471,90 +1471,90 @@ index 0000000..97cba2a
 +#undef BITFS
 +#undef BITS
 +
-+Gfx *geo_update_body_rot_from_parent(s32 run, UNUSED struct GraphNode *node, Mat4 mtx) {
-+    Mat4 sp20;
-+    struct Object *sp1C;
++Gfx *geo_update_body_rot_from_parent(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
++    Mat4 mtx2;
++    struct Object *obj;
 +
-+    if (run == TRUE) {
-+        sp1C = (struct Object *) gCurGraphNodeObject;
-+        if (sp1C->prevObj != NULL) {
-+            create_transformation_from_matrices(sp20, mtx, *gCurGraphNodeCamera->matrixPtr);
-+            obj_update_pos_from_parent_transformation(sp20, sp1C->prevObj);
-+            obj_set_gfx_pos_from_pos(sp1C->prevObj);
++    if (callContext == GEO_CONTEXT_RENDER) {
++        obj = (struct Object *) gCurGraphNodeObject;
++        if (obj->prevObj != NULL) {
++            create_transformation_from_matrices(mtx2, mtx, *gCurGraphNodeCamera->matrixPtr);
++            obj_update_pos_from_parent_transformation(mtx2, obj->prevObj);
++            obj_set_gfx_pos_from_pos(obj->prevObj);
 +        }
 +    }
 +    return NULL;
 +}
 +
-+void bowser_open_eye_switch(struct Object *a0, struct GraphNodeSwitchCase *switchCase) {
-+    s32 sp1C;
-+    s16 sp1A;
-+    sp1A = abs_angle_diff(a0->oMoveAngleYaw, a0->oAngleToMario);
-+    sp1C = switchCase->selectedCase;
-+    switch (sp1C) {
++void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *switchCase) {
++    s32 eyeCase;
++    s16 angleFromMario;
++    angleFromMario = abs_angle_diff(obj->oMoveAngleYaw, obj->oAngleToMario);
++    eyeCase = switchCase->selectedCase;
++    switch (eyeCase) {
 +        case 0:
-+            if (sp1A > 0x2000) {
-+                if (a0->oAngleVelYaw > 0)
++            if (angleFromMario > 0x2000) {
++                if (obj->oAngleVelYaw > 0)
 +                    switchCase->selectedCase = 5;
-+                if (a0->oAngleVelYaw < 0)
++                if (obj->oAngleVelYaw < 0)
 +                    switchCase->selectedCase = 3;
 +            }
-+            if (a0->oBowserUnk1AE > 50)
++            if (obj->oBowserUnk1AE > 50)
 +                switchCase->selectedCase = 1;
 +            break;
 +        case 1:
-+            if (a0->oBowserUnk1AE > 2)
++            if (obj->oBowserUnk1AE > 2)
 +                switchCase->selectedCase = 2;
 +            break;
 +        case 2:
-+            if (a0->oBowserUnk1AE > 2)
++            if (obj->oBowserUnk1AE > 2)
 +                switchCase->selectedCase = 9;
 +            break;
 +        case 9:
-+            if (a0->oBowserUnk1AE > 2)
++            if (obj->oBowserUnk1AE > 2)
 +                switchCase->selectedCase = 0;
 +            break;
 +        case 5:
-+            if (a0->oBowserUnk1AE > 2) {
++            if (obj->oBowserUnk1AE > 2) {
 +                switchCase->selectedCase = 6;
-+                if (a0->oAngleVelYaw <= 0)
++                if (obj->oAngleVelYaw <= 0)
 +                    switchCase->selectedCase = 0;
 +            }
 +            break;
 +        case 6:
-+            if (a0->oAngleVelYaw <= 0)
++            if (obj->oAngleVelYaw <= 0)
 +                switchCase->selectedCase = 5;
 +            break;
 +        case 3:
-+            if (a0->oBowserUnk1AE > 2) {
++            if (obj->oBowserUnk1AE > 2) {
 +                switchCase->selectedCase = 4;
-+                if (a0->oAngleVelYaw >= 0)
++                if (obj->oAngleVelYaw >= 0)
 +                    switchCase->selectedCase = 0;
 +            }
 +            break;
 +        case 4:
-+            if (a0->oAngleVelYaw >= 0)
++            if (obj->oAngleVelYaw >= 0)
 +                switchCase->selectedCase = 3;
 +            break;
 +        default:
 +            switchCase->selectedCase = 0;
 +    }
-+    if (switchCase->selectedCase != sp1C)
-+        a0->oBowserUnk1AE = -1;
++    if (switchCase->selectedCase != eyeCase) {
++        obj->oBowserUnk1AE = -1;
++    }
 +}
 +
 +/** Geo switch for controlling the state of bowser's eye direction and open/closed
 + * state. Checks whether oBowserEyesShut is TRUE and closes eyes if so and processes
 + * direction otherwise.
 + */
-+Gfx *geo_switch_bowser_eyes(s32 run, struct GraphNode *node, UNUSED Mat4 *mtx) {
-+    UNUSED s16 sp36;
++Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
 +    struct Object *obj = (struct Object *) gCurGraphNodeObject;
 +    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-+    if (run == TRUE) {
++    if (callContext == GEO_CONTEXT_RENDER) {
 +        if (gCurGraphNodeHeldObject != NULL)
 +            obj = gCurGraphNodeHeldObject->objNode;
-+        switch (sp36 = obj->oBowserEyesShut) {
++        switch (obj->oBowserEyesShut) {
 +            case 0: // eyes open, handle eye looking direction
 +                bowser_open_eye_switch(obj, switchCase);
 +                break;
@@ -1567,13 +1567,13 @@ index 0000000..97cba2a
 +    return NULL;
 +}
 +
-+Gfx *geo_bits_bowser_coloring(s32 run, struct GraphNode *node, UNUSED s32 a2) {
++Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s32 context) {
 +    Gfx *sp2C = NULL;
 +    Gfx *sp28;
 +    struct Object *sp24;
 +    struct GraphNodeGenerated *sp20;
 +
-+    if (run == 1) {
++    if (callContext == GEO_CONTEXT_RENDER) {
 +        sp24 = (struct Object *) gCurGraphNodeObject;
 +        sp20 = (struct GraphNodeGenerated *) node;
 +        if (gCurGraphNodeHeldObject != 0)

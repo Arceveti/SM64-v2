@@ -49,8 +49,6 @@ void moneybag_check_mario_collision(void) {
     }
 }
 
-// sp20 = collisionFlags
-
 void moneybag_jump(s8 collisionFlags) {
     s16 animFrame = o->header.gfx.animInfo.animFrame;
 

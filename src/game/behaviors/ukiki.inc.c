@@ -33,11 +33,11 @@ s32 is_cap_ukiki_and_mario_has_normal_cap_on_head(void) {
 /**
  * Unused copy of geo_update_projectile_pos_from_parent. Perhaps a copy paste mistake.
  */
-Gfx *geo_update_projectile_pos_from_parent_copy(s32 run,UNUSED struct GraphNode *node, Mat4 mtx) {
+Gfx *geo_update_projectile_pos_from_parent_copy(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
     Mat4 mtx2;
     struct Object* obj;
 
-    if (run == TRUE) {
+    if (callContext == GEO_CONTEXT_RENDER) {
         // TODO: change global type to Object pointer
         obj = (struct Object*)gCurGraphNodeObject;
 

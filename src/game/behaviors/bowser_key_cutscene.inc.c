@@ -1,12 +1,12 @@
 // bowser_key_cutscene.inc.c
 
-Gfx *geo_scale_bowser_key(s32 run, struct GraphNode *node, UNUSED f32 mtx[4][4]) {
+Gfx *geo_scale_bowser_key(s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]) {
     struct Object *keyObj;
-    if (run == TRUE) {
+    if (callContext == GEO_CONTEXT_RENDER) {
         keyObj = (struct Object *) gCurGraphNodeObject;
         ((struct GraphNodeScale *) node->next)->scale = keyObj->oBowserKeyScale;
     }
-    return 0;
+    return NULL;
 }
 
 void bhv_bowser_key_unlock_door_loop(void) {

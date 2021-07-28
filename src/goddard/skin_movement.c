@@ -19,12 +19,12 @@ s32 sResetWeightVtxNum;
 /* @ 22FF30 for 0xDC */
 /* called with ObjNext->unk1A8 (variable obj ptr?) ->unk20 or ->unk24 ptr*/
 // TODO: figure out the proper object type for a0
-void scale_verts(struct ObjGroup *a0) {
+void scale_verts(struct ObjGroup *group) {
     register f32 scaleFac;
     register struct ListNode *link;
     struct ObjVertex *vtx;
 
-    for (link = a0->firstMember; link != NULL; link = link->next) {
+    for (link = group->firstMember; link != NULL; link = link->next) {
         vtx = (struct ObjVertex *) link->obj;
 
         if ((scaleFac = vtx->scaleFactor) != 0.0f) {
@@ -104,14 +104,10 @@ void reset_weight(struct ObjWeight *weight) {
         // Go through every vertex in the skin group, and reset the weight if the vertex is managed by the weight
         apply_to_obj_types_in_group(OBJ_TYPE_VERTICES, (applyproc_t) reset_weight_vtx, skinGroup);
     } else {
-        // fatal_printf("reset_weight(): Skin net has no SkinGroup");
-        gd_exit();
+        gd_exit(); // Skin net has no SkinGroup
     }
 
-    if (weight->vtx == NULL) {
-        // fatal_printf("reset_weight(): Skin vertex ID %d not found", weight->vtxId);
-        gd_exit();
-    }
+    if (weight->vtx == NULL) gd_exit(); // fatal_printf("reset_weight(): Skin vertex ID %d not found", weight->vtxId);
 }
 
 void reset_joint_weights(struct ObjJoint *joint) {

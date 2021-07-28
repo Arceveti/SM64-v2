@@ -152,12 +152,6 @@ void bhv_act_selector_init(void) {
         sInitSelectedActNum = sVisibleStars;
     }
 
-    //! Useless, since sInitSelectedActNum has already been set in this
-    //! scenario by the code that shows the next uncollected star.
-    if (sObtainedStars == 0) {
-        sInitSelectedActNum = 1;
-    }
-
     // Render star selector objects
     #ifdef WIDE
     if (gWidescreen) {
