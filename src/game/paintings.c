@@ -549,11 +549,7 @@ void painting_update_floors(struct Painting *painting) {
 
     painting->marioWasUnder = painting->marioIsUnder;
     // Check if Mario has fallen below the painting (used for floor paintings)
-    if (gPaintingMarioYPos < painting->posY) {
-        painting->marioIsUnder = TRUE;
-    } else {
-        painting->marioIsUnder = FALSE;
-    }
+    painting->marioIsUnder = (gPaintingMarioYPos < painting->posY);
 
     // Mario "went under" if he was not under last frame, but is under now
     painting->marioWentUnder = (painting->marioWasUnder ^ painting->marioIsUnder) & painting->marioIsUnder;
@@ -643,12 +639,8 @@ s16 calculate_ripple_at_point(struct Painting *painting, f32 posX, f32 posY) {
  * else return 0
  */
 s16 ripple_if_movable(struct Painting *painting, s16 movable, s16 posX, s16 posY) {
-    s16 rippleZ = 0;
-
-    if (movable) {
-        rippleZ = calculate_ripple_at_point(painting, posX, posY);
-    }
-    return rippleZ;
+    if (movable) return calculate_ripple_at_point(painting, posX, posY);
+    return 0;
 }
 
 /**
@@ -931,9 +923,7 @@ Gfx *painting_ripple_image(struct Painting *painting) {
     Gfx *dlist = alloc_display_list((imageCount + 6) * sizeof(Gfx));
     Gfx *gfx = dlist;
 
-    if (dlist == NULL) {
-        return dlist;
-    }
+    if (dlist == NULL) return dlist;
 
     gSPDisplayList(gfx++, painting_model_view_transform(painting));
     gSPDisplayList(gfx++, dl_paintings_rippling_begin);
@@ -970,9 +960,7 @@ Gfx *painting_ripple_env_mapped(struct Painting *painting) {
     Gfx *dlist = alloc_display_list(7 * sizeof(Gfx));
     Gfx *gfx = dlist;
 
-    if (dlist == NULL) {
-        return dlist;
-    }
+    if (dlist == NULL) return dlist;
 
     gSPDisplayList(gfx++, painting_model_view_transform(painting));
     gSPDisplayList(gfx++, dl_paintings_env_mapped_begin);
@@ -1032,9 +1020,8 @@ Gfx *display_painting_not_rippling(struct Painting *painting) {
     Gfx *dlist = alloc_display_list(4 * sizeof(Gfx));
     Gfx *gfx = dlist;
 
-    if (dlist == NULL) {
-        return dlist;
-    }
+    if (dlist == NULL) return dlist;
+
     gSPDisplayList(gfx++, painting_model_view_transform(painting));
     gSPDisplayList(gfx++, painting->normalDisplayList);
     gSPPopMatrix(gfx++, G_MTX_MODELVIEW);
@@ -1125,27 +1112,17 @@ void move_ddd_painting(struct Painting *painting, f32 frontPos, f32 backPos, f32
  * Set the painting's node's layer based on its alpha
  */
 void set_painting_layer(struct GraphNodeGenerated *gen, struct Painting *painting) {
-    switch (painting->alpha) {
-        case 0xFF: // Opaque
-            gen->fnNode.node.flags = (gen->fnNode.node.flags & 0xFF) | (LAYER_NO_SILHOUETTE << 8);
-            break;
-        default:
-            gen->fnNode.node.flags = (gen->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
-            break;
-    }
+    gen->fnNode.node.flags = (gen->fnNode.node.flags & 0xFF) | (((painting->alpha == 0xFF) ? LAYER_NO_SILHOUETTE : LAYER_TRANSPARENT) << 8);
 }
 
 /**
  * Display either a normal painting or a rippling one depending on the painting's ripple status
  */
 Gfx *display_painting(struct Painting *painting) {
-    switch (painting->state) {
-        case PAINTING_IDLE:
-            return display_painting_not_rippling(painting);
-            break;
-        default:
-            return display_painting_rippling(painting);
-            break;
+    if (painting->state == PAINTING_IDLE) {
+        return display_painting_not_rippling(painting);
+    } else {
+        return display_painting_rippling(painting);
     }
 }
 
@@ -1232,14 +1209,12 @@ Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *con
 
         // Update the painting
         painting_update_floors(painting);
-        switch ((s16) painting->pitch) {
-            // only paintings with 0 pitch are treated as walls
-            case 0:
-                wall_painting_update(painting, paintingGroup);
-                break;
-            default:
-                floor_painting_update(painting, paintingGroup);
-                break;
+
+        // only paintings with 0 pitch are treated as walls
+        if ((s16)painting->pitch == 0) {
+            wall_painting_update(painting, paintingGroup);
+        } else {
+            floor_painting_update(painting, paintingGroup);
         }
     }
     return paintingDlist;
@@ -1254,10 +1229,10 @@ Gfx *geo_painting_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED 
     // Reset the update counter
     if (callContext != GEO_CONTEXT_RENDER) {
         gLastPaintingUpdateCounter = gAreaUpdateCounter - 1;
-        gPaintingUpdateCounter = gAreaUpdateCounter;
+        gPaintingUpdateCounter     = gAreaUpdateCounter;
     } else {
         gLastPaintingUpdateCounter = gPaintingUpdateCounter;
-        gPaintingUpdateCounter = gAreaUpdateCounter;
+        gPaintingUpdateCounter     = gAreaUpdateCounter;
 
         // Store Mario's floor and position
         find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &surface);

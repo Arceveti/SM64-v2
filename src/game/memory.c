@@ -100,10 +100,7 @@ void *virtual_to_segmented(u32 segment, const void *addr) {
 
 void move_segment_table_to_dmem(void) {
     s32 i;
-
-    for (i = 0; i < 16; i++) {
-        gSPSegment(gDisplayListHead++, i, sSegmentTable[i]);
-    }
+    for (i = 0; i < 16; i++) gSPSegment(gDisplayListHead++, i, sSegmentTable[i]);
 }
 #else
 void *segmented_to_virtual(const void *addr) {
@@ -178,16 +175,12 @@ u32 main_pool_free(void *addr) {
     struct MainPoolBlock *oldListHead = (struct MainPoolBlock *) ((u8 *) addr - 16);
 
     if (oldListHead < sPoolListHeadL) {
-        while (oldListHead->next != NULL) {
-            oldListHead = oldListHead->next;
-        }
+        while (oldListHead->next != NULL) oldListHead = oldListHead->next;
         sPoolListHeadL = block;
         sPoolListHeadL->next = NULL;
         sPoolFreeSpace += (uintptr_t) oldListHead - (uintptr_t) sPoolListHeadL;
     } else {
-        while (oldListHead->prev != NULL) {
-            oldListHead = oldListHead->prev;
-        }
+        while (oldListHead->prev != NULL) oldListHead = oldListHead->prev;
         sPoolListHeadR = block->next;
         sPoolListHeadR->prev = NULL;
         sPoolFreeSpace += (uintptr_t) sPoolListHeadR - (uintptr_t) oldListHead;
@@ -278,11 +271,8 @@ void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
 static void *dynamic_dma_read(u8 *srcStart, u8 *srcEnd, u32 side) {
     void *dest;
     u32 size = ALIGN16(srcEnd - srcStart);
-
     dest = main_pool_alloc(size, side);
-    if (dest != NULL) {
-        dma_read(dest, srcStart, srcEnd);
-    }
+    if (dest != NULL) dma_read(dest, srcStart, srcEnd);
     return dest;
 }
 
@@ -293,10 +283,7 @@ static void *dynamic_dma_read(u8 *srcStart, u8 *srcEnd, u32 side) {
  */
 void *load_segment(s32 segment, u8 *srcStart, u8 *srcEnd, u32 side) {
     void *addr = dynamic_dma_read(srcStart, srcEnd, side);
-
-    if (addr != NULL) {
-        set_segment_base_addr(segment, addr);
-    }
+    if (addr != NULL) set_segment_base_addr(segment, addr);
     return addr;
 }
 
@@ -413,7 +400,7 @@ void *load_segment_decompress_heap(u32 segment, u8 *srcStart, u8 *srcEnd) {
 void load_engine_code_segment(void) {
     void *startAddr = (void *) _engineSegmentStart;
     u32 totalSize = _engineSegmentEnd - _engineSegmentStart;
-    UNUSED u32 alignedSize = ALIGN16(_engineSegmentRomEnd - _engineSegmentRomStart);
+    // UNUSED u32 alignedSize = ALIGN16(_engineSegmentRomEnd - _engineSegmentRomStart);
 
     bzero(startAddr, totalSize);
     osWritebackDCacheAll();
@@ -471,9 +458,7 @@ struct AllocOnlyPool *alloc_only_pool_resize(struct AllocOnlyPool *pool, u32 siz
 
     size = ALIGN4(size);
     newPool = main_pool_realloc(pool, size + sizeof(struct AllocOnlyPool));
-    if (newPool != NULL) {
-        pool->totalSpace = size;
-    }
+    if (newPool != NULL) pool->totalSpace = size;
     return newPool;
 }
 
@@ -594,9 +579,7 @@ static struct DmaTable *load_dma_table_address(u8 *srcAddr) {
 }
 
 void setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buffer) {
-    if (srcAddr != NULL) {
-        list->dmaTable = load_dma_table_address(srcAddr);
-    }
+    if (srcAddr != NULL) list->dmaTable = load_dma_table_address(srcAddr);
     list->currentAddr = NULL;
     list->bufTarget = buffer;
 }

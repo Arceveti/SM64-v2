@@ -104,12 +104,9 @@ Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED
 #endif
 
 static void toad_message_faded(void) {
-    if (gCurrentObject->oDistanceToMario > 700.0f) {
-        gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-    }
-    if (!gCurrentObject->oToadMessageRecentlyTalked && gCurrentObject->oDistanceToMario < 600.0f) {
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
-    }
+    if (gCurrentObject->oDistanceToMario > 700.0f) gCurrentObject->oToadMessageRecentlyTalked = FALSE;
+    if (!gCurrentObject->oToadMessageRecentlyTalked
+     && gCurrentObject->oDistanceToMario < 600.0f) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
 }
 
 static void toad_message_opaque(void) {
@@ -148,15 +145,11 @@ static void toad_message_talking(void) {
 }
 
 static void toad_message_opacifying(void) {
-    if ((gCurrentObject->oOpacity += 6) == 255) {
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPAQUE;
-    }
+    if ((gCurrentObject->oOpacity += 6) == 255) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPAQUE;
 }
 
 static void toad_message_fading(void) {
-    if ((gCurrentObject->oOpacity -= 6) == 81) {
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
-    }
+    if ((gCurrentObject->oOpacity -= 6) == 81) gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
 }
 
 void bhv_toad_message_loop(void) {
@@ -244,9 +237,7 @@ void bhv_unlock_door_star_loop(void) {
     s16 prevYaw = gCurrentObject->oMoveAngleYaw;
 
     // Speed up the star every frame
-    if (gCurrentObject->oUnlockDoorStarYawVel < 0x2400) {
-        gCurrentObject->oUnlockDoorStarYawVel += 0x60;
-    }
+    if (gCurrentObject->oUnlockDoorStarYawVel < 0x2400) gCurrentObject->oUnlockDoorStarYawVel += 0x60;
     switch (gCurrentObject->oUnlockDoorStarState) {
         case UNLOCK_DOOR_STAR_RISING:
             gCurrentObject->oPosY += 3.4f; // Raise the star up in the air
@@ -282,9 +273,7 @@ void bhv_unlock_door_star_loop(void) {
             break;
         case UNLOCK_DOOR_STAR_DONE: // The object stays loaded for an additional 50 frames so that the
                                     // sound doesn't immediately stop.
-            if (gCurrentObject->oUnlockDoorStarTimer++ == 50) {
-                obj_mark_for_deletion(gCurrentObject);
-            }
+            if (gCurrentObject->oUnlockDoorStarTimer++ == 50) obj_mark_for_deletion(gCurrentObject);
             break;
     }
     // Checks if the angle has cycled back to 0.
@@ -345,7 +334,7 @@ Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED 
 
     if (callContext == GEO_CONTEXT_RENDER) {
         // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = ((bodyState->action & ACT_FLAG_STATIONARY) == 0);
+        switchCase->selectedCase = (!(bodyState->action & ACT_FLAG_STATIONARY));
     }
     return NULL;
 }
@@ -384,10 +373,10 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
 
-        if (action != ACT_BUTT_SLIDE && action != ACT_HOLD_BUTT_SLIDE && action != ACT_WALKING
-            && action != ACT_RIDING_SHELL_GROUND) {
-            vec3s_copy(bodyState->torsoAngle, gVec3sZero);
-        }
+        if (action != ACT_BUTT_SLIDE
+         && action != ACT_HOLD_BUTT_SLIDE
+         && action != ACT_WALKING
+         && action != ACT_RIDING_SHELL_GROUND) vec3s_copy(bodyState->torsoAngle, gVec3sZero);
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
         rotNode->rotation[2] = bodyState->torsoAngle[0];
@@ -568,7 +557,7 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *b, Mat4 *
             }
         }
     } else if (callContext == GEO_CONTEXT_HELD_OBJ) {
-        // ! The HOLP is set here, which is why it only updates when the held object is drawn.
+        //! The HOLP is set here, which is why it only updates when the held object is drawn.
         // This is why it won't update during a pause buffered hitstun or when the camera is very far
         // away.
         get_pos_from_transform_mtx(marioState->marioBodyState->heldObjLastPosition, *curTransform,

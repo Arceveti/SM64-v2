@@ -97,10 +97,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
         heldObject = (struct Object *) gCurGraphNodeObject;
         obj = (struct Object *) node;
 
-
-        if (gCurGraphNodeHeldObject != NULL) {
-            heldObject = gCurGraphNodeHeldObject->objNode;
-        }
+        if (gCurGraphNodeHeldObject != NULL) heldObject = gCurGraphNodeHeldObject->objNode;
 
         gfxHead = alloc_display_list(3 * sizeof(Gfx));
         gfx = gfxHead;
@@ -119,9 +116,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
  * An absolute value function.
  */
 f32 absf_2(f32 f) {
-    if (f < 0) {
-        f *= -1.0f;
-    }
+    if (f < 0) f *= -1.0f;
     return f;
 }
 
@@ -251,14 +246,10 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     f32 floor_nZ = objFloor->normal.z;
     f32 objFriction;
 
-    // Caps vertical speed with a "terminal velocity".
+    // Caps vertical speed with a terminal velocity.
     o->oVelY -= o->oGravity;
-    if (o->oVelY > TERMINAL_GRAVITY_VELOCITY) {
-        o->oVelY = TERMINAL_GRAVITY_VELOCITY;
-    }
-    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) {
-        o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
-    }
+    if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
+    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
 
     o->oPosY += o->oVelY;
 
@@ -286,16 +277,10 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
                    / (floor_nX * floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * o->oGravity
                    * 2;
 
-        if (objVelX < 0.000001f && objVelX > -0.000001f) {
-            objVelX = 0;
-        }
-        if (objVelZ < 0.000001f && objVelZ > -0.000001f) {
-            objVelZ = 0;
-        }
+        if (objVelX < 0.000001f && objVelX > -0.000001f) objVelX = 0;
+        if (objVelZ < 0.000001f && objVelZ > -0.000001f) objVelZ = 0;
 
-        if (objVelX != 0 || objVelZ != 0) {
-            o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
-        }
+        if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
 
         calc_obj_friction(&objFriction, floor_nY);
         o->oForwardVel = sqrtf(objVelX * objVelX + objVelZ * objVelZ) * objFriction;
@@ -311,13 +296,9 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     f32 netYAccel = (1.0f - o->oBuoyancy) * (-1.0f * o->oGravity);
     o->oVelY -= netYAccel;
 
-    // Caps vertical speed with a "terminal velocity".
-    if (o->oVelY > TERMINAL_GRAVITY_VELOCITY) {
-        o->oVelY = TERMINAL_GRAVITY_VELOCITY;
-    }
-    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) {
-        o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
-    }
+    // Caps vertical speed with a terminal velocity.
+    if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
+    if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
 
     o->oPosY += o->oVelY;
 
@@ -348,16 +329,9 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
                 / (floor_nX *  floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * netYAccel * 2;
     }
 
-    if (objVelX < 0.000001f && objVelX > -0.000001f) {
-        objVelX = 0;
-    }
-    if (objVelZ < 0.000001f && objVelZ > -0.000001f) {
-        objVelZ = 0;
-    }
-
-    if (o->oVelY < 0.000001f && o->oVelY > -0.000001f) {
-        o->oVelY = 0;
-    }
+    if ( objVelX < 0.000001f &&  objVelX > -0.000001f)  objVelX = 0;
+    if ( objVelZ < 0.000001f &&  objVelZ > -0.000001f)  objVelZ = 0;
+    if (o->oVelY < 0.000001f && o->oVelY > -0.000001f) o->oVelY = 0;
 
     if (objVelX != 0 || objVelZ != 0) {
         o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
@@ -373,11 +347,8 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
  * Updates an objects position from oForwardVel and oMoveAngleYaw.
  */
 void obj_update_pos_vel_xz(void) {
-    f32 xVel = o->oForwardVel * sins(o->oMoveAngleYaw);
-    f32 zVel = o->oForwardVel * coss(o->oMoveAngleYaw);
-
-    o->oPosX += xVel;
-    o->oPosZ += zVel;
+    o->oPosX += (o->oForwardVel * sins(o->oMoveAngleYaw));
+    o->oPosZ += (o->oForwardVel * coss(o->oMoveAngleYaw));
 }
 
 /**
@@ -390,10 +361,7 @@ void obj_splash(s32 waterY, s32 objY) {
     // Spawns waves if near surface of water and plays a noise if entering.
     if ((f32)(waterY + 30) > o->oPosY && o->oPosY > (f32)(waterY - 30)) {
         spawn_object(o, MODEL_IDLE_WATER_WAVE, bhvObjectWaterWave);
-
-        if (o->oVelY < -20.0f) {
-            cur_obj_play_sound_2(SOUND_OBJ_DIVING_INTO_WATER);
-        }
+        if (o->oVelY < -20.0f) cur_obj_play_sound_2(SOUND_OBJ_DIVING_INTO_WATER);
     }
 
     // Spawns bubbles if underwater.
@@ -439,13 +407,8 @@ s16 object_step(void) {
     }
 
     obj_update_pos_vel_xz();
-    if ((s32) o->oPosY == (s32) floorY) {
-        collisionFlags += OBJ_COL_FLAG_GROUNDED;
-    }
-
-    if ((s32) o->oVelY == 0) {
-        collisionFlags += OBJ_COL_FLAG_NO_Y_VEL;
-    }
+    if ((s32) o->oPosY == (s32) floorY) collisionFlags += OBJ_COL_FLAG_GROUNDED;
+    if ((s32) o->oVelY == 0) collisionFlags += OBJ_COL_FLAG_NO_Y_VEL;
 
     // Generate a splash if in water.
     obj_splash((s32) waterY, (s32) o->oPosY);

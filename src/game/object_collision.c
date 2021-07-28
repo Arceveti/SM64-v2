@@ -14,9 +14,7 @@ struct Object *debug_print_obj_collision(struct Object *a) {
     for (i = 0; i < a->numCollidedObjs; i++) {
         print_debug_top_down_objectinfo("ON", 0);
         currCollidedObj = a->collidedObjs[i];
-        if (currCollidedObj != gMarioObject) {
-            return currCollidedObj;
-        }
+        if (currCollidedObj != gMarioObject) return currCollidedObj;
     }
     return NULL;
 }
@@ -58,9 +56,7 @@ s32 detect_object_hurtbox_overlap(struct Object *a, struct Object *b) {
     f32 collisionRadius = a->hurtboxRadius + b->hurtboxRadius;
     f32 distance = sqrtf(dx * dx + dz * dz);
 
-    if (a == gMarioObject) {
-        b->oInteractionSubtype |= INT_SUBTYPE_DELAY_INVINCIBILITY;
-    }
+    if (a == gMarioObject) b->oInteractionSubtype |= INT_SUBTYPE_DELAY_INVINCIBILITY;
 
     if (collisionRadius > distance) {
         f32 dya_top = a->hitboxHeight + dya_bottom;
@@ -69,9 +65,8 @@ s32 detect_object_hurtbox_overlap(struct Object *a, struct Object *b) {
         if (dya_bottom > dyb_top) return FALSE;
         if (dya_top < dyb_bottom) return FALSE;
 
-        if (a == gMarioObject) {
-            b->oInteractionSubtype &= ~INT_SUBTYPE_DELAY_INVINCIBILITY;
-        }
+        if (a == gMarioObject) b->oInteractionSubtype &= ~INT_SUBTYPE_DELAY_INVINCIBILITY;
+
         return TRUE;
     }
 
@@ -84,9 +79,7 @@ void clear_object_collision(struct Object *a) {
     while (nextObj != a) {
         nextObj->numCollidedObjs = 0;
         nextObj->collidedObjInteractTypes = 0;
-        if (nextObj->oIntangibleTimer > 0) {
-            nextObj->oIntangibleTimer--;
-        }
+        if (nextObj->oIntangibleTimer > 0) nextObj->oIntangibleTimer--;
         nextObj = (struct Object *) nextObj->header.next;
     }
 }

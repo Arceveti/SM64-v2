@@ -20,11 +20,11 @@
 #endif
 
 // Message IDs
-#define MESG_SP_COMPLETE 100
-#define MESG_DP_COMPLETE 101
-#define MESG_VI_VBLANK 102
+#define MESG_SP_COMPLETE      100
+#define MESG_DP_COMPLETE      101
+#define MESG_VI_VBLANK        102
 #define MESG_START_GFX_SPTASK 103
-#define MESG_NMI_REQUEST 104
+#define MESG_NMI_REQUEST      104
 
 OSThread D_80339210; // unused?
 OSThread gIdleThread;
@@ -212,13 +212,9 @@ void handle_vblank(void) {
 
     gNumVblanks++;
 #ifdef VERSION_SH
-    if (gResetTimer > 0 && gResetTimer < 100) {
-        gResetTimer++;
-    }
+    if (gResetTimer > 0 && gResetTimer < 100) gResetTimer++;
 #else
-    if (gResetTimer > 0) {
-        gResetTimer++;
-    }
+    if (gResetTimer > 0) gResetTimer++;
 #endif
 
     receive_new_tasks();
@@ -251,16 +247,10 @@ void handle_vblank(void) {
 #endif
 
     // Notify the game loop about the vblank.
-    if (gVblankHandler1 != NULL) {
-        osSendMesg(gVblankHandler1->queue, gVblankHandler1->msg, OS_MESG_NOBLOCK);
-    }
-    if (gVblankHandler2 != NULL) {
-        osSendMesg(gVblankHandler2->queue, gVblankHandler2->msg, OS_MESG_NOBLOCK);
-    }
+    if (gVblankHandler1 != NULL) osSendMesg(gVblankHandler1->queue, gVblankHandler1->msg, OS_MESG_NOBLOCK);
+    if (gVblankHandler2 != NULL) osSendMesg(gVblankHandler2->queue, gVblankHandler2->msg, OS_MESG_NOBLOCK);
 #ifdef HVQM
-    if (gVblankHandler3 != NULL) {
-        osSendMesg(gVblankHandler3->queue, gVblankHandler3->msg, OS_MESG_NOBLOCK);
-    }
+    if (gVblankHandler3 != NULL) osSendMesg(gVblankHandler3->queue, gVblankHandler3->msg, OS_MESG_NOBLOCK);
 #endif
 }
 
@@ -294,15 +284,11 @@ void handle_sp_complete(void) {
             profiler_log_vblank_time();
             if (sCurrentDisplaySPTask != NULL
                 && sCurrentDisplaySPTask->state != SPTASK_STATE_FINISHED) {
-                if (sCurrentDisplaySPTask->state != SPTASK_STATE_INTERRUPTED) {
-                    profiler_log_gfx_time(TASKS_QUEUED);
-                }
+                if (sCurrentDisplaySPTask->state != SPTASK_STATE_INTERRUPTED) profiler_log_gfx_time(TASKS_QUEUED);
                 start_sptask(M_GFXTASK);
             }
             sCurrentAudioSPTask = NULL;
-            if (curSPTask->msgqueue != NULL) {
-                osSendMesg(curSPTask->msgqueue, curSPTask->msg, OS_MESG_NOBLOCK);
-            }
+            if (curSPTask->msgqueue != NULL) osSendMesg(curSPTask->msgqueue, curSPTask->msg, OS_MESG_NOBLOCK);
         } else {
             // The SP process is done, but there is still a Display Processor notification
             // that needs to arrive before we can consider the task completely finished and
@@ -314,9 +300,7 @@ void handle_sp_complete(void) {
 
 void handle_dp_complete(void) {
     // Gfx SP task is completely done.
-    if (sCurrentDisplaySPTask->msgqueue != NULL) {
-        osSendMesg(sCurrentDisplaySPTask->msgqueue, sCurrentDisplaySPTask->msg, OS_MESG_NOBLOCK);
-    }
+    if (sCurrentDisplaySPTask->msgqueue != NULL) osSendMesg(sCurrentDisplaySPTask->msgqueue, sCurrentDisplaySPTask->msg, OS_MESG_NOBLOCK);
     profiler_log_gfx_time(RDP_COMPLETE);
     sCurrentDisplaySPTask->state = SPTASK_STATE_FINISHED_DP;
     sCurrentDisplaySPTask = NULL;
@@ -420,9 +404,7 @@ void turn_on_audio(void) {
 
 void turn_off_audio(void) {
     sAudioEnabled = FALSE;
-    while (sCurrentAudioSPTask != NULL) {
-        ;
-    }
+    while (sCurrentAudioSPTask != NULL) { ; }
 }
 
 void change_vi(OSViMode *mode, int width, int height){
@@ -482,14 +464,11 @@ void thread1_idle(UNUSED void *arg) {
     osSetThreadPri(NULL, 0);
 
     // halt
-    while (TRUE) {
-        ;
-    }
+    while (TRUE) { ; }
 }
 
 #if CLEARRAM
-void ClearRAM(void)
-{
+void ClearRAM(void) {
     bzero(_mainSegmentEnd, (size_t)osMemSize - (size_t)OS_K0_TO_PHYSICAL(_mainSegmentEnd));
 }
 #endif

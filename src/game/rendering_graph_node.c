@@ -287,8 +287,8 @@ for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
                                                             SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA));
                     gSPSetGeometryMode( gDisplayListHead++, G_FOG); // enable fog for silhouette
                     gSPFogPosition(     gDisplayListHead++, 0, 1);
-                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA);   // silhouette color & alpha
-                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA/2); // silhouette env transparency
+                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA);      // silhouette color & alpha
+                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA >> 1); // silhouette env transparency
                 } else { // non-silhouette layers
                     gDPSetRenderMode(   gDisplayListHead++, mode1List->modes[i],
                                                             mode2List->modes[i]);
@@ -408,12 +408,12 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
 #ifdef WIDE
         if (gWidescreen && (gCurrLevelNum != 0x01)){
-            aspect = 1.775f;
+            aspect = (16.0f/9.0f); // 1.775f
         } else {
-            aspect = 1.33333f;
+            aspect = (4.0f/3.0f); // 1.33333f
         }
 #else
-        aspect = 1.33333f;
+        aspect = (4.0f/3.0f); // 1.33333f
 #endif
 
         guPerspective(mtx, &perspNorm, node->fov, aspect, node->near / WORLD_SCALE, node->far / WORLD_SCALE, 1.0f);

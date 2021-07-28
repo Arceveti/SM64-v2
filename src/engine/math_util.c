@@ -286,19 +286,19 @@ void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3s rotate) {
     register f32 sz = sins(rotate[2]);
     register f32 cz = coss(rotate[2]);
 
-    dest[0][0] = cy * cz + sx * sy * sz;
+    dest[0][0] =  cy * cz + sx * sy * sz;
     dest[1][0] = -cy * sz + sx * sy * cz;
-    dest[2][0] = cx * sy;
+    dest[2][0] =  cx * sy;
     dest[3][0] = translate[0];
 
-    dest[0][1] = cx * sz;
-    dest[1][1] = cx * cz;
+    dest[0][1] =  cx * sz;
+    dest[1][1] =  cx * cz;
     dest[2][1] = -sx;
     dest[3][1] = translate[1];
 
     dest[0][2] = -sy * cz + sx * cy * sz;
-    dest[1][2] = sy * sz + sx * cy * cz;
-    dest[2][2] = cx * cy;
+    dest[1][2] =  sy * sz + sx * cy * cz;
+    dest[2][2] =  cx * cy;
     dest[3][2] = translate[2];
 
     dest[0][3] = dest[1][3] = dest[2][3] = 0.0f;
@@ -353,7 +353,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
     dest[0][3] = 0;
 
     dest[1][0] = -dest[0][1];
-    dest[1][1] = dest[0][0];
+    dest[1][1] =  dest[0][0];
     dest[1][2] = 0;
     dest[1][3] = 0;
 
@@ -362,12 +362,9 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
     dest[2][2] = 1;
     dest[2][3] = 0;
 
-    dest[3][0] =
-        mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
-    dest[3][1] =
-        mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
-    dest[3][2] =
-        mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+    dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+    dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
     dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
 }
 
@@ -383,12 +380,9 @@ void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffse
     s16 yrot;
     f32 cx, cy, cz;
 
-    dest[3][0] =
-        mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
-    dest[3][1] =
-        mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
-    dest[3][2] =
-        mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+    dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+    dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
     dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
 
     // angle to camera pos
@@ -486,17 +480,9 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
     point1[1] = find_floor(point1[0], pos[1] + 150.0f, point1[2], &floor);
     point2[1] = find_floor(point2[0], pos[1] + 150.0f, point2[2], &floor);
 
-    if (point0[1] - pos[1] < minY) {
-        point0[1] = pos[1];
-    }
-
-    if (point1[1] - pos[1] < minY) {
-        point1[1] = pos[1];
-    }
-
-    if (point2[1] - pos[1] < minY) {
-        point2[1] = pos[1];
-    }
+    if (point0[1] - pos[1] < minY) point0[1] = pos[1];
+    if (point1[1] - pos[1] < minY) point1[1] = pos[1];
+    if (point2[1] - pos[1] < minY) point2[1] = pos[1];
 
     avgY = (point0[1] + point1[1] + point2[1]) / 3;
 
@@ -643,7 +629,7 @@ void mtxf_rotate_xy(Mtx *mtx, s16 angle) {
     temp[0][0] = coss(angle);
     temp[0][1] = sins(angle);
     temp[1][0] = -temp[0][1];
-    temp[1][1] = temp[0][0];
+    temp[1][1] =  temp[0][0];
     mtxf_to_mtx(mtx, temp);
 }
 
@@ -660,12 +646,9 @@ void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
     f32 camY = camMtx[3][0] * camMtx[1][0] + camMtx[3][1] * camMtx[1][1] + camMtx[3][2] * camMtx[1][2];
     f32 camZ = camMtx[3][0] * camMtx[2][0] + camMtx[3][1] * camMtx[2][1] + camMtx[3][2] * camMtx[2][2];
 
-    dest[0] =
-        objMtx[3][0] * camMtx[0][0] + objMtx[3][1] * camMtx[0][1] + objMtx[3][2] * camMtx[0][2] - camX;
-    dest[1] =
-        objMtx[3][0] * camMtx[1][0] + objMtx[3][1] * camMtx[1][1] + objMtx[3][2] * camMtx[1][2] - camY;
-    dest[2] =
-        objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
+    dest[0] = objMtx[3][0] * camMtx[0][0] + objMtx[3][1] * camMtx[0][1] + objMtx[3][2] * camMtx[0][2] - camX;
+    dest[1] = objMtx[3][0] * camMtx[1][0] + objMtx[3][1] * camMtx[1][1] + objMtx[3][2] * camMtx[1][2] - camY;
+    dest[2] = objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
 }
 
 /**
@@ -703,14 +686,10 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
 
     if (current < target) {
         current += inc;
-        if (current > target) {
-            current = target;
-        }
+        if (current > target) current = target;
     } else {
         current -= dec;
-        if (current < target) {
-            current = target;
-        }
+        if (current < target) current = target;
     }
     return current;
 }
@@ -722,14 +701,10 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
 f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
     if (current < target) {
         current += inc;
-        if (current > target) {
-            current = target;
-        }
+        if (current > target) current = target;
     } else {
         current -= dec;
-        if (current < target) {
-            current = target;
-        }
+        if (current < target) current = target;
     }
     return current;
 }
@@ -815,13 +790,13 @@ f32 atan2f(f32 y, f32 x) {
  * gSplineState ensures that the curve is clamped: the first two points
  * and last two points have different weight formulas. These are the weights
  * just before gSplineState transitions:
- * 1: [1, 0, 0, 0]
+ * 1:    [1,    0,    0,    0]
  * 1->2: [0, 3/12, 7/12, 2/12]
- * 2->3: [0, 1/6, 4/6, 1/6]
- * 3->3: [0, 1/6, 4/6, 1/6] (repeats)
- * 3->4: [0, 1/6, 4/6, 1/6]
+ * 2->3: [0,  1/6,  4/6,  1/6]
+ * 3->3: [0,  1/6,  4/6,  1/6] (repeats)
+ * 3->4: [0,  1/6,  4/6,  1/6]
  * 4->5: [0, 2/12, 7/12, 3/12]
- * 5: [0, 0, 0, 1]
+ * 5:    [0,    0,    0,    1]
  *
  * I suspect that the weight formulas will give a 3rd degree B-spline with the
  * common uniform clamped knot vector, e.g. for n points:
@@ -837,34 +812,34 @@ void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
 
     switch (gSplineState) {
         case CURVE_BEGIN_1:
-            result[0] = tinv3;
-            result[1] = t3 * 1.75f - t2 * 4.5f + t * 3.0f;
+            result[0] =  tinv3;
+            result[1] =  t3 * 1.75f - t2 * 4.5f + t * 3.0f;
             result[2] = -t3 * (11 / 12.0f) + t2 * 1.5f;
-            result[3] = t3 * (1 / 6.0f);
+            result[3] =  t3 * (1 / 6.0f);
             break;
         case CURVE_BEGIN_2:
-            result[0] = tinv3 * 0.25f;
-            result[1] = t3 * (7 / 12.0f) - t2 * 1.25f + t * 0.25f + (7 / 12.0f);
+            result[0] =  tinv3 * 0.25f;
+            result[1] =  t3 * (7 / 12.0f) - t2 * 1.25f + t * 0.25f + (7 / 12.0f);
             result[2] = -t3 * 0.5f + t2 * 0.5f + t * 0.5f + (1 / 6.0f);
-            result[3] = t3 * (1 / 6.0f);
+            result[3] =  t3 * (1 / 6.0f);
             break;
         case CURVE_MIDDLE:
-            result[0] = tinv3 * (1 / 6.0f);
-            result[1] = t3 * 0.5f - t2 + (4 / 6.0f);
+            result[0] =  tinv3 * (1 / 6.0f);
+            result[1] =  t3 * 0.5f - t2 + (4 / 6.0f);
             result[2] = -t3 * 0.5f + t2 * 0.5f + t * 0.5f + (1 / 6.0f);
-            result[3] = t3 * (1 / 6.0f);
+            result[3] =  t3 * (1 / 6.0f);
             break;
         case CURVE_END_1:
-            result[0] = tinv3 * (1 / 6.0f);
+            result[0] =  tinv3 * (1 / 6.0f);
             result[1] = -tinv3 * 0.5f + tinv2 * 0.5f + tinv * 0.5f + (1 / 6.0f);
-            result[2] = tinv3 * (7 / 12.0f) - tinv2 * 1.25f + tinv * 0.25f + (7 / 12.0f);
-            result[3] = t3 * 0.25f;
+            result[2] =  tinv3 * (7 / 12.0f) - tinv2 * 1.25f + tinv * 0.25f + (7 / 12.0f);
+            result[3] =  t3 * 0.25f;
             break;
         case CURVE_END_2:
-            result[0] = tinv3 * (1 / 6.0f);
+            result[0] =  tinv3 * (1 / 6.0f);
             result[1] = -tinv3 * (11 / 12.0f) + tinv2 * 1.5f;
-            result[2] = tinv3 * 1.75f - tinv2 * 4.5f + tinv * 3.0f;
-            result[3] = t3;
+            result[2] =  tinv3 * 1.75f - tinv2 * 4.5f + tinv * 3.0f;
+            result[3] =  t3;
             break;
     }
 }

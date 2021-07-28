@@ -329,9 +329,7 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
         } else {
             wdwWaterHeight = 1024;
         }
-        for (i = 0; i < *gEnvironmentRegions; i++) {
-            gEnvironmentRegions[i * 6 + 6] = wdwWaterHeight;
-        }
+        for (i = 0; i < *gEnvironmentRegions; i++) gEnvironmentRegions[i * 6 + 6] = wdwWaterHeight;
         gWdwWaterLevelSet = TRUE;
     }
     return NULL;
@@ -436,9 +434,8 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
     if (gfxHead == NULL || verts == NULL) return NULL;
 
     gfx = gfxHead;
-    if (gMovtexCounter != gMovtexCounterPrev) {
-        quad->rot += rotspeed;
-    }
+    if (gMovtexCounter != gMovtexCounterPrev) quad->rot += rotspeed;
+
     rot = quad->rot;
     if (rotDir == ROTATE_CLOCKWISE) {
         movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0, scale, alpha);
@@ -454,14 +451,7 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
 
     // Only add commands to change the texture when necessary
     if (textureId != gMovetexLastTextureId) {
-        switch (textureId) {
-            case TEXTURE_MIST: // an ia16 texture
-                gLoadBlockTexture(gfx++, 32, 32, G_IM_FMT_IA, gMovtexIdToTexture[textureId]);
-                break;
-            default: // any rgba16 texture
-                gLoadBlockTexture(gfx++, 32, 32, G_IM_FMT_RGBA, gMovtexIdToTexture[textureId]);
-                break;
-        }
+        gLoadBlockTexture(gfx++, 32, 32, ((textureId == TEXTURE_MIST) ? G_IM_FMT_IA : G_IM_FMT_RGBA), gMovtexIdToTexture[textureId]);
         gMovetexLastTextureId = textureId;
     }
     gSPVertex(gfx++, VIRTUAL_TO_PHYSICAL2(verts), 4, 0);
@@ -490,9 +480,7 @@ Gfx *movtex_gen_from_quad_array(s16 y, void *quadArrSegmented) {
         // quadArr is an array of s16, so sizeof(MovtexQuad) gets divided by 2
         subList = movtex_gen_from_quad(
             y, (struct MovtexQuad *) (&quadArr[i * (sizeof(struct MovtexQuad) / 2) + 1]));
-        if (subList != NULL) {
-            gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
-        }
+        if (subList != NULL) gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
     }
     gSPEndDisplayList(gfx);
     return gfxHead;
@@ -511,9 +499,7 @@ Gfx *movtex_gen_quads_id(s16 id, s16 y, void *movetexQuadsSegmented) {
     s32 i = 0;
 
     while (collection[i].id != -1) {
-        if (collection[i].id == id) {
-            return movtex_gen_from_quad_array(y, collection[i].quadArraySegmented);
-        }
+        if (collection[i].id == id) return movtex_gen_from_quad_array(y, collection[i].quadArraySegmented);
         i++;
     }
     return NULL;
@@ -670,9 +656,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
             waterId = gEnvironmentRegions[i * 6 + 1];
             waterY = gEnvironmentRegions[i * 6 + 6];
             subList = movtex_gen_quads_id(waterId, waterY, quadCollection);
-            if (subList != NULL) {
-                gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
-            }
+            if (subList != NULL) gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
         }
         gSPDisplayList(gfx++, dl_waterbox_end);
         gSPEndDisplayList(gfx);
@@ -693,12 +677,8 @@ void update_moving_texture_offset(s16 *movtexVerts, s32 attr) {
     if (gMovtexCounter != gMovtexCounterPrev) {
         *curOffset += movSpeed;
         // note that texture coordinates are 6.10 fixed point, so this does modulo 1
-        if (*curOffset >= 1024) {
-            *curOffset -= 1024;
-        }
-        if (*curOffset <= -1024) {
-            *curOffset += 1024;
-        }
+        if (*curOffset >=  1024) *curOffset -= 1024;
+        if (*curOffset <= -1024) *curOffset += 1024;
     }
 }
 

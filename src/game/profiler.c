@@ -62,24 +62,17 @@ void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16
     s32 rectX1, rectX2;
 
     // set the duration to start, and floor to 0 if the result is below 0.
-    if ((durationStart = clockStart - clockBase) < 0) {
-        durationStart = 0;
-    }
+    if ((durationStart = clockStart - clockBase) < 0) durationStart = 0;
+
     // like the above, but with end.
-    if ((durationEnd = clockEnd - clockBase) < 0) {
-        durationEnd = 0;
-    }
+    if ((durationEnd = clockEnd - clockBase) < 0) durationEnd = 0;
 
     // calculate the x coordinates of where start and end begins, respectively.
     rectX1 = ((((durationStart * 1000000) / osClockRate * 3) / 1000) + 30);
-    rectX2 = ((((durationEnd * 1000000) / osClockRate * 3) / 1000) + 30);
+    rectX2 = ((((  durationEnd * 1000000) / osClockRate * 3) / 1000) + 30);
 
-    if (rectX1 > 319) {
-        rectX1 = 319;
-    }
-    if (rectX2 > 319) {
-        rectX2 = 319;
-    }
+    if (rectX1 > 319) rectX1 = 319;
+    if (rectX2 > 319) rectX2 = 319;
 
     // perform the render if start is less than end. in most cases, it should be.
     if (rectX1 < rectX2) {
@@ -291,9 +284,7 @@ void draw_profiler_mode_0(void) {
 // Draw the Profiler per frame. Toggle the mode if the player presses L while this
 // renderer is active.
 void draw_profiler(void) {
-    if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        gProfilerMode ^= TRUE;
-    }
+    if (gPlayer1Controller->buttonPressed & L_TRIG) gProfilerMode ^= TRUE;
 
     if (gProfilerMode) {
         draw_profiler_mode_1();

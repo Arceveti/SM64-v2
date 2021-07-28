@@ -165,9 +165,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
 
             nextWaypoint++;
             if (nextWaypoint->flags == WAYPOINT_FLAGS_END) {
-                if (ballIndex == 0) {
-                    o->oPlatformOnTrackPrevWaypointFlags = WAYPOINT_FLAGS_END;
-                }
+                if (ballIndex == 0) o->oPlatformOnTrackPrevWaypointFlags = WAYPOINT_FLAGS_END;
 
                 if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_RETURN_TO_START)) {
                     nextWaypoint = o->oPlatformOnTrackStartWaypoint;
@@ -376,9 +374,7 @@ static s16 obj_turn_pitch_toward_mario(f32 targetOffsetY, s16 turnAmount) {
 }
 
 static s32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
-    if (*px > target) {
-        delta = -delta;
-    }
+    if (*px > target) delta = -delta;
 
     *px += delta;
 
@@ -426,8 +422,7 @@ static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targe
     s16 currentSpeed;
     s16 currentAngle = (s16)(*angle);
 
-    *angleVel =
-        approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
+    *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
 
     currentSpeed = absi(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
@@ -465,9 +460,8 @@ static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale)
     if (o->oTimer < 2) {
         o->header.gfx.scale[0] += *scaleVel;
 
-        if ((*scaleVel -= 0.01f) > -0.03f) {
-            o->oTimer = 0;
-        }
+        if ((*scaleVel -= 0.01f) > -0.03f) o->oTimer = 0;
+
     } else if (o->oTimer > 10) {
         if (approach_f32_ptr(&o->header.gfx.scale[0], endScale, 0.05f)) {
             return -1;
@@ -492,13 +486,8 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
         *vel = 0.0f;
         return TRUE;
     } else {
-        if (*value >= target) {
-            accel = -accel;
-        }
-        if (*vel * accel < 0.0f) {
-            accel *= slowdown;
-        }
-
+        if (*value >= target) accel = -accel;
+        if (*vel * accel < 0.0f) accel *= slowdown;
         *vel += accel;
     }
 
@@ -752,9 +741,7 @@ static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActi
 static void obj_act_knockback(UNUSED f32 baseScale) {
     cur_obj_update_floor_and_walls();
 
-    if (o->header.gfx.animInfo.curAnim != NULL) {
-        cur_obj_extend_animation_if_at_end();
-    }
+    if (o->header.gfx.animInfo.curAnim != NULL) cur_obj_extend_animation_if_at_end();
 
     //! Dies immediately if above lava
     if ((o->oMoveFlags
@@ -771,16 +758,11 @@ static void obj_act_squished(f32 baseScale) {
 
     cur_obj_update_floor_and_walls();
 
-    if (o->header.gfx.animInfo.curAnim != NULL) {
-        cur_obj_extend_animation_if_at_end();
-    }
+    if (o->header.gfx.animInfo.curAnim != NULL) cur_obj_extend_animation_if_at_end();
 
     if (approach_f32_ptr(&o->header.gfx.scale[1], targetScaleY, baseScale * 0.14f)) {
         o->header.gfx.scale[0] = o->header.gfx.scale[2] = baseScale * 2.0f - o->header.gfx.scale[1];
-
-        if (o->oTimer >= 16) {
-            obj_die_if_health_non_positive();
-        }
+        if (o->oTimer >= 16) obj_die_if_health_non_positive();
     }
 
     o->oForwardVel = 0.0f;
