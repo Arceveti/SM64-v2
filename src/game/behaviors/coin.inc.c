@@ -149,7 +149,7 @@ void bhv_coin_formation_spawn_loop(void) {
         }
     } else {
         if (bhv_coin_sparkles_init()) {
-            o->parentObj->oCoinRespawnBits |= bit_shift_left(o->oBehParams2ndByte);
+            o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
         }
         o->oAnimState++;
     }

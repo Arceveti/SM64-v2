@@ -33,7 +33,6 @@ struct PlatformDisplacementInfo sObjectDisplacementInfo;
 #endif
 
 static s8 sBbhStairJiggleOffsets[] = { -8, 8, -4, 4 };
-static s16 sPowersOfTwo[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 static s8 sLevelsWithRooms[] = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
 static s32 clear_move_flag(u32 *, s32);
@@ -2231,10 +2230,6 @@ s32 jiggle_bbh_stair(s32 timer) {
 void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
     void (*actionFunction)(void) = actionFunctions[o->oAction];
     actionFunction();
-}
-
-s32 bit_shift_left(s32 a0) {
-    return sPowersOfTwo[a0];
 }
 
 s32 cur_obj_mario_far_away(void) {
