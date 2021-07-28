@@ -1,5 +1,5 @@
 // 0x0E0003B8
-const GeoLayout ttc_geo_0003B8[] = {
+const GeoLayout ttc_geo_area_1[] = {
    GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
@@ -18,9 +18,9 @@ const GeoLayout ttc_geo_0003B8[] = {
                GEO_ASM(   0, geo_movtex_pause_control),
                GEO_ASM(0x1400, geo_movtex_update_horizontal),
                GEO_ASM(0x1401, geo_movtex_update_horizontal),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, ttc_seg7_dl_0700AD38),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, ttc_seg7_dl_0700B1D8),
-               GEO_DISPLAY_LIST(LAYER_ALPHA, ttc_seg7_dl_0700E878),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE, ttc_seg7_dl_area_1_opaque),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, ttc_seg7_dl_outer_walls),
+               GEO_DISPLAY_LIST(LAYER_ALPHA, ttc_seg7_dl_area_1_alpha),
                GEO_RENDER_OBJ(),
                GEO_ASM(   0, geo_envfx_main),
             GEO_CLOSE_NODE(),

@@ -31,8 +31,8 @@ s32 detect_object_hitbox_overlap(struct Object *a, struct Object *b) {
         f32 dya_top = a->hitboxHeight + dya_bottom;
         f32 dyb_top = b->hitboxHeight + dyb_bottom;
 
-        if (dya_bottom > dyb_top) return FALSE;
-        if (dya_top < dyb_bottom) return FALSE;
+        if (dya_bottom > dyb_top)    return FALSE;
+        if (dya_top < dyb_bottom)    return FALSE;
         if (a->numCollidedObjs >= 4) return FALSE;
         if (b->numCollidedObjs >= 4) return FALSE;
 

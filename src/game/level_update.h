@@ -29,6 +29,7 @@
 
 #define WARP_OP_TRIGGERS_LEVEL_SELECT 0x10
 
+#define MARIO_SPAWN_NONE                  0x00
 #define MARIO_SPAWN_DOOR_WARP             0x01
 #define MARIO_SPAWN_IDLE                  0x02
 #define MARIO_SPAWN_PIPE                  0x03
@@ -47,7 +48,7 @@
 #define MARIO_SPAWN_AIRBORNE_DEATH        0x23
 #define MARIO_SPAWN_LAUNCH_STAR_COLLECT   0x24
 #define MARIO_SPAWN_LAUNCH_DEATH          0x25
-#define MARIO_SPAWN_FADE_FROM_BLACK            0x27
+#define MARIO_SPAWN_FADE_FROM_BLACK       0x27
 
 // Screen top left - Bottom text
 #define CREDITS_POS_ONE 0

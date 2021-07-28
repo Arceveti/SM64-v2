@@ -703,8 +703,7 @@ void check_copy_menu_clicked_buttons(struct Object *copyButton) {
                         sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_IN_OUT;
                         sSelectedButtonID = buttonID;
                     }
-                }
-                else {
+                } else {
                     // Check if a file button is clicked to play a copy action
                     if (sMainMenuButtons[buttonID]->oMenuButtonState == MENU_BUTTON_STATE_DEFAULT
                         && sMainMenuTimer >= ACTION_TIMER) {
@@ -859,8 +858,7 @@ void check_erase_menu_clicked_buttons(struct Object *eraseButton) {
                         sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_IN_OUT;
                         sSelectedButtonID = buttonID;
                     }
-                }
-                else {
+                } else {
                     // Check if a file button is clicked to play an erase action
                     if (sMainMenuTimer >= ACTION_TIMER) {
                         erase_action_file_button(eraseButton, buttonID);
@@ -1468,7 +1466,7 @@ void handle_controller_cursor_input(void) {
  */
 void print_menu_cursor(void) {
     handle_controller_cursor_input();
-    create_dl_translation_matrix(MENU_MTX_PUSH, sCursorPos[0] + 155.0f, sCursorPos[1] + 95.0f, 0.0f);
+    create_dl_translation_matrix(G_MTX_PUSH, sCursorPos[0] + 155.0f, sCursorPos[1] + 95.0f, 0.0f);
     // Get the right graphic to use for the cursor.
     if (sCursorClickingTimer == 0) {
         // Idle
@@ -2076,9 +2074,7 @@ void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s1
         if (stars & (1 << 6)) {
             print_menu_generic_string(x + 70, y, textStar);
         }
-    }
-    // HISCORE
-    else {
+    } else { // HISCORE
         // Print "[coin] x"
         print_menu_generic_string(x + HISCORE_COIN_ICON_X, y, textCoinX);
         // Print coin highscore

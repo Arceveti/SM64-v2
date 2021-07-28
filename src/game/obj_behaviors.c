@@ -123,8 +123,7 @@ f32 absf_2(f32 f) {
 /**
  * Turns an object away from floors/walls that it runs into.
  */
-void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 nZ, f32 *objYawX,
-                            f32 *objYawZ) {
+void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 nZ, f32 *objYawX, f32 *objYawZ) {
     *objYawX = (nZ * nZ - nX * nX) * velX / (nX * nX + nZ * nZ)
                - 2 * velZ * (nX * nZ) / (nX * nX + nZ * nZ);
 
@@ -143,7 +142,7 @@ s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
     hitbox.y = objY;
     hitbox.z = objNewZ;
     hitbox.offsetY = o->hitboxHeight / 2;
-    hitbox.radius = o->hitboxRadius;
+    hitbox.radius  = o->hitboxRadius;
 
     if (find_wall_collisions(&hitbox) != 0) {
         o->oPosX = hitbox.x;

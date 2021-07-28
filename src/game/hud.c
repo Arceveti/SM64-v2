@@ -21,25 +21,25 @@
  * cannon reticle, and the unused keys.
  **/
 
-#define HUD_TOP_Y 209
-#define HUD_BOTTOM_Y 31
-#define HUD_TIMER_X 150 // from right edge
-#define HUD_COINS_X 152 // from right edge
-#define HUD_STARS_X 78
-#define HUD_CAMERA_X 54
-#define HUD_CAMERA_Y (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
-#define HUD_POWER_METER_Y 166
+#define HUD_TOP_Y           209
+#define HUD_BOTTOM_Y        31
+#define HUD_TIMER_X         150 // from right edge
+#define HUD_COINS_X         152 // from right edge
+#define HUD_STARS_X         78
+#define HUD_CAMERA_X        54
+#define HUD_CAMERA_Y        (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
+#define HUD_POWER_METER_Y   166
 
 #ifdef HUD_RED_COINS
-#define HUD_LIVES_X 8
-#define HUD_POWER_METER_X 142
-#define HUD_RED_COINS_X 70
-#define HUD_SECRETS_X 8
+#define HUD_LIVES_X         8
+#define HUD_POWER_METER_X   142
+#define HUD_RED_COINS_X     70
+#define HUD_SECRETS_X       8
 #else
-#define HUD_LIVES_X 22
-#define HUD_POWER_METER_X 140
-#define HUD_RED_COINS_X 8
-#define HUD_SECRETS_X 8
+#define HUD_LIVES_X         22
+#define HUD_POWER_METER_X   140
+#define HUD_RED_COINS_X     8
+#define HUD_SECRETS_X       8
 #endif
 
 // ------------- FPS COUNTER ---------------
@@ -58,9 +58,7 @@ f32 calculate_and_update_fps() {
     frameTimes[curFrameTimeIndex] = newTime;
 
     curFrameTimeIndex++;
-    if (curFrameTimeIndex >= FRAMETIME_COUNT) {
-        curFrameTimeIndex = 0;
-    }
+    if (curFrameTimeIndex >= FRAMETIME_COUNT) curFrameTimeIndex = 0;
 
     return ((f32)FRAMETIME_COUNT * 1000000.0f) / (s32)OS_CYCLES_TO_USEC(newTime - oldTime);
 }
@@ -82,10 +80,6 @@ struct PowerMeterHUD {
     s16 y;
 };
 
-struct CameraHUD {
-    s16 status;
-};
-
 // Stores health segmented value defined by numHealthWedges
 // When the HUD is rendered this value is 8, full health.
 static s16 sPowerMeterStoredHealth;
@@ -101,7 +95,7 @@ static struct PowerMeterHUD sPowerMeterHUD = {
 // when the power meter is hidden.
 s32 sPowerMeterVisibleTimer = 0;
 
-static struct CameraHUD sCameraHUD = { CAM_STATUS_NONE };
+static s32 sCameraHUDStatus = CAM_STATUS_NONE;
 
 /**
  * Renders a rgba16 16x16 glyph texture from a table list.
@@ -234,14 +228,10 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     }
 
     // Show power meter if health is full, has 8
-    if (numHealthWedges == 8 && sPowerMeterStoredHealth == 7) {
-        sPowerMeterVisibleTimer = 0;
-    }
+    if (numHealthWedges == 8 && sPowerMeterStoredHealth == 7) sPowerMeterVisibleTimer = 0;
 
     // After health is full, hide power meter
-    if (numHealthWedges == 8 && sPowerMeterVisibleTimer > 45) {
-        sPowerMeterHUD.animation = POWER_METER_HIDING;
-    }
+    if (numHealthWedges == 8 && sPowerMeterVisibleTimer > 45) sPowerMeterHUD.animation = POWER_METER_HIDING;
 
     // Update to match health value
     sPowerMeterStoredHealth = numHealthWedges;
@@ -345,14 +335,10 @@ void render_hud_stars(void) {
 
     if (gHudFlash == 1 && gGlobalTimer & 0x08) return;
 
-    if (gHudDisplay.stars < 100) {
-        showX = 1;
-    }
+    if (gHudDisplay.stars < 100) showX = 1;
 
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X), HUD_TOP_Y, "^"); // 'Star' glyph
-    if (showX == 1) {
-        print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
-    }
+    if (showX == 1) print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
     print_text_fmt_int((showX * 14) + GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16,
 #ifdef HUD_LEADING_ZEROES
                        HUD_TOP_Y, "%03d", gHudDisplay.stars);
@@ -367,10 +353,7 @@ void render_hud_stars(void) {
  */
 void render_hud_keys(void) {
     s16 i;
-
-    for (i = 0; i < gHudDisplay.keys; i++) {
-        print_text((i * 16) + 220, 142, "/"); // unused glyph - beta key
-    }
+    for (i = 0; i < gHudDisplay.keys; i++) print_text((i * 16) + 220, 142, "|"); // unused glyph - beta key
 }
 
 #ifdef HUD_SECRETS
@@ -436,7 +419,7 @@ void render_hud_timer(void) {
  * defined in update_camera_status.
  */
 void set_hud_camera_status(s16 status) {
-    sCameraHUD.status = status;
+    sCameraHUDStatus = status;
 }
 
 /**
@@ -452,12 +435,12 @@ void render_hud_camera_status(void) {
     x = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
     y = HUD_CAMERA_Y;
 
-    if (sCameraHUD.status == CAM_STATUS_NONE) return;
+    if (sCameraHUDStatus == CAM_STATUS_NONE) return;
 
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
     render_hud_tex_lut(x, y, (*cameraLUT)[GLYPH_CAM_CAMERA]);
 
-    switch (sCameraHUD.status & CAM_STATUS_MODE_GROUP) {
+    switch (sCameraHUDStatus & CAM_STATUS_MODE_GROUP) {
         case CAM_STATUS_MARIO:
             render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_MARIO_HEAD]);
             break;
@@ -469,7 +452,7 @@ void render_hud_camera_status(void) {
             break;
     }
 
-    switch (sCameraHUD.status & CAM_STATUS_C_MODE_GROUP) {
+    switch (sCameraHUDStatus & CAM_STATUS_C_MODE_GROUP) {
         case CAM_STATUS_C_DOWN:
             render_hud_small_tex_lut(x + 4, y + 16, (*cameraLUT)[GLYPH_CAM_ARROW_DOWN]);
             break;
@@ -512,40 +495,25 @@ void render_hud(void) {
         create_dl_ortho_matrix();
 #endif
 
-        if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
-            render_hud_cannon_reticle();
-        }
-#ifndef DISABLE_LIVES
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES) {
-            render_hud_mario_lives();
-        }
-#endif
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) {
-            render_hud_coins();
-        }
+        if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) render_hud_cannon_reticle();
 
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) {
-            render_hud_stars();
-        }
+#ifndef DISABLE_LIVES
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_LIVES) render_hud_mario_lives();
+#endif
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_COIN_COUNT) render_hud_coins();
+
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) render_hud_stars();
 #ifdef HUD_SECRETS
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) {
-            render_hud_secrets();
-        }
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) render_hud_secrets();
 #endif
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
             render_hud_power_meter();
             render_hud_camera_status();
         }
 
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) {
-            render_hud_timer();
-        }
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) render_hud_timer();
 
-        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES) {
-            print_text(10, 40, "SURFACE POOL FULL");
-        }
-        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES) {
-            print_text(10, 60, "SURFACE NODE POOL FULL");
-        }
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES) print_text(10, 40, "SURFACE POOL FULL");
+        if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES   ) print_text(10, 60, "SURFACE NODE POOL FULL");
     }
 }

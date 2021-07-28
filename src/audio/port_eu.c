@@ -153,8 +153,7 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
         if (gSequencePlayers[cmd->u.s.arg1].enabled) {
             if (cmd->u2.as_s32 == 0) {
                 sequence_player_disable(&gSequencePlayers[cmd->u.s.arg1]);
-            }
-            else {
+            } else {
                 seq_player_fade_to_zero_volume(cmd->u.s.arg1, cmd->u2.as_s32);
             }
         }
@@ -191,9 +190,7 @@ extern OSMesg OSMesg2;
 extern OSMesg OSMesg3;
 
 void seq_player_fade_to_zero_volume(s32 player, FadeT fadeOutTime) {
-    if (fadeOutTime == 0) {
-        fadeOutTime = 1;
-    }
+    if (fadeOutTime == 0) fadeOutTime = 1;
     gSequencePlayers[player].fadeVelocity = -(gSequencePlayers[player].fadeVolume / fadeOutTime);
     gSequencePlayers[player].state = 2;
     gSequencePlayers[player].fadeRemainingFrames = fadeOutTime;
@@ -261,8 +258,7 @@ void func_802ad7ec(u32 arg0) {
             seqPlayer = &gSequencePlayers[cmd->u.s.arg1];
             if ((cmd->u.s.op & 0x80) != 0) {
                 eu_process_audio_cmd(cmd);
-            }
-            else if ((cmd->u.s.op & 0x40) != 0) {
+            } else if ((cmd->u.s.op & 0x40) != 0) {
                 switch (cmd->u.s.op) {
                 case 0x41:
                     seqPlayer->fadeVolumeScale = cmd->u2.as_f32;
@@ -281,11 +277,9 @@ void func_802ad7ec(u32 arg0) {
                     seqPlayer->seqVariationEu[cmd->u.s.arg3] = cmd->u2.as_s8;
                     break;
                 }
-            }
-            else if (seqPlayer->enabled && cmd->u.s.arg2 < 0x10) {
+            } else if (seqPlayer->enabled && cmd->u.s.arg2 < 0x10) {
                 chan = seqPlayer->channels[cmd->u.s.arg2];
-                if (IS_SEQUENCE_CHANNEL_VALID(chan))
-                {
+                if (IS_SEQUENCE_CHANNEL_VALID(chan)) {
                     switch (cmd->u.s.op) {
                     case 1:
                         chan->volumeScale = cmd->u2.as_f32;

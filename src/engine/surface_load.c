@@ -44,9 +44,7 @@ static struct SurfaceNode *alloc_surface_node(void) {
 
     node->next = NULL;
 
-    if (gSurfaceNodesAllocated >= SURFACE_NODE_POOL_SIZE) {
-        gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_NODES;
-    }
+    if (gSurfaceNodesAllocated >= SURFACE_NODE_POOL_SIZE) gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_NODES;
 
     return node;
 }
@@ -550,9 +548,7 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
         // Generally an early spawning method, every object is in BBH (the first level).
         if (0 <= *macroObjects && *macroObjects < 30) {
             spawn_macro_objects_hardcoded(index, macroObjects);
-        }
-        // A more general version that can spawn more objects.
-        else {
+        } else { // A more general version that can spawn more objects.
             spawn_macro_objects(index, macroObjects);
         }
     }

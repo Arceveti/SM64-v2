@@ -65,8 +65,8 @@ struct GeoAnimState {
 // of separate global variables. It won't match EU otherwise.
 struct GeoAnimState gGeoTempState;
 
-u8 gCurAnimType;
-u8 gCurAnimEnabled;
+u8  gCurAnimType;
+u8  gCurAnimEnabled;
 s16 gCurrAnimFrame;
 f32 gCurAnimTranslationMultiplier;
 u16 *gCurrAnimAttribute;
@@ -368,9 +368,7 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
 
     if (gCurGraphNodeMasterList == NULL && node->node.children != NULL) {
         gCurGraphNodeMasterList = node;
-        for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
-            node->listHeads[i] = NULL;
-        }
+        for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) node->listHeads[i] = NULL;
         geo_process_node_and_siblings(node->node.children);
         geo_process_master_list_sub(node);
         gCurGraphNodeMasterList = NULL;
@@ -383,9 +381,9 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
 static void geo_process_ortho_projection(struct GraphNodeOrthoProjection *node) {
     if (node->node.children != NULL) {
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
-        f32 left = (gCurGraphNodeRoot->x - gCurGraphNodeRoot->width) / 2.0f * node->scale;
-        f32 right = (gCurGraphNodeRoot->x + gCurGraphNodeRoot->width) / 2.0f * node->scale;
-        f32 top = (gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f * node->scale;
+        f32 left   = (gCurGraphNodeRoot->x - gCurGraphNodeRoot->width ) / 2.0f * node->scale;
+        f32 right  = (gCurGraphNodeRoot->x + gCurGraphNodeRoot->width ) / 2.0f * node->scale;
+        f32 top    = (gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f * node->scale;
         f32 bottom = (gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f * node->scale;
 
         guOrtho(mtx, left, right, bottom, top, -2.0f, 2.0f, 1.0f);
@@ -529,12 +527,8 @@ static void geo_process_translation_rotation(struct GraphNodeTranslationRotation
     gMatStackIndex++;
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -554,12 +548,8 @@ static void geo_process_translation(struct GraphNodeTranslation *node) {
     gMatStackIndex++;
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -577,12 +567,8 @@ static void geo_process_rotation(struct GraphNodeRotation *node) {
     gMatStackIndex++;
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -600,12 +586,8 @@ static void geo_process_scale(struct GraphNodeScale *node) {
     gMatStackIndex++;
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -638,12 +620,8 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
 
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -653,12 +631,8 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
  * parent node. It processes its children if it has them.
  */
 static void geo_process_display_list(struct GraphNodeDisplayList *node) {
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
 }
 
 /**
@@ -670,13 +644,9 @@ static void geo_process_generated_list(struct GraphNodeGenerated *node) {
         Gfx *list = node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node,
                                      (struct AllocOnlyPool *) gMatStack[gMatStackIndex]);
 
-        if (list != NULL) {
-            geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(list), node->fnNode.node.flags >> 8);
-        }
+        if (list != NULL) geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(list), node->fnNode.node.flags >> 8);
     }
-    if (node->fnNode.node.children != NULL) {
-        geo_process_node_and_siblings(node->fnNode.node.children);
-    }
+    if (node->fnNode.node.children != NULL) geo_process_node_and_siblings(node->fnNode.node.children);
 }
 
 /**
@@ -712,9 +682,7 @@ static void geo_process_background(struct GraphNodeBackground *node) {
 
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(gfxStart), LAYER_FORCE);
     }
-    if (node->fnNode.node.children != NULL) {
-        geo_process_node_and_siblings(node->fnNode.node.children);
-    }
+    if (node->fnNode.node.children != NULL) geo_process_node_and_siblings(node->fnNode.node.children);
 }
 
 /**
@@ -772,12 +740,8 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     gMatStackIndex++;
     mtxf_to_mtx(matrixPtr, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = matrixPtr;
-    if (node->displayList != NULL) {
-        geo_append_display_list(node->displayList, node->node.flags >> 8);
-    }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->displayList != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
     gMatStackIndex--;
 }
 
@@ -1000,9 +964,7 @@ static void geo_process_object(struct Object *node) {
                 node->header.gfx.sharedChild->parent = NULL;
                 gCurGraphNodeObject = NULL;
             }
-            if (node->header.gfx.node.children != NULL) {
-                geo_process_node_and_siblings(node->header.gfx.node.children);
-            }
+            if (node->header.gfx.node.children != NULL) geo_process_node_and_siblings(node->header.gfx.node.children);
         }
 
         gMatStackIndex--;
@@ -1022,9 +984,7 @@ static void geo_process_object_parent(struct GraphNodeObjectParent *node) {
         geo_process_node_and_siblings(node->sharedChild);
         node->sharedChild->parent = NULL;
     }
-    if (node->node.children != NULL) {
-        geo_process_node_and_siblings(node->node.children);
-    }
+    if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
 }
 
 /**
@@ -1096,9 +1056,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
  * Processes the children of the given GraphNode if it has any
  */
 void geo_try_process_children(struct GraphNode *node) {
-    if (node->children != NULL) {
-        geo_process_node_and_siblings(node->children);
-    }
+    if (node->children != NULL) geo_process_node_and_siblings(node->children);
 }
 
 /**
@@ -1113,9 +1071,7 @@ void geo_process_node_and_siblings(struct GraphNode *firstNode) {
 
     // In the case of a switch node, exactly one of the children of the node is
     // processed instead of all children like usual
-    if (parent != NULL) {
-        iterateChildren = (parent->type != GRAPH_NODE_TYPE_SWITCH_CASE);
-    }
+    if (parent != NULL) iterateChildren = (parent->type != GRAPH_NODE_TYPE_SWITCH_CASE);
 
     do {
         if (curGraphNode->flags & GRAPH_RENDER_ACTIVE) {
@@ -1215,9 +1171,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
             clear_frame_buffer(clearColor);
             make_viewport_clip_rect(b);
             *viewport = *b;
-        }
-
-        else if (c != NULL) {
+        } else if (c != NULL) {
             clear_frame_buffer(clearColor);
             make_viewport_clip_rect(c);
         }
@@ -1229,9 +1183,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(gMatStackFixed[gMatStackIndex]),
                   G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
         gCurGraphNodeRoot = node;
-        if (node->node.children != NULL) {
-            geo_process_node_and_siblings(node->node.children);
-        }
+        if (node->node.children != NULL) geo_process_node_and_siblings(node->node.children);
         gCurGraphNodeRoot = NULL;
         if (gShowDebugText) {
 #ifdef HUD_LEADING_ZEROES

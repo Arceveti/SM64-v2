@@ -132,7 +132,9 @@ SECTIONS
       KEEP(BUILD_DIR/asm/entry.o(.text));
 
       BUILD_DIR/src/game*.o(.text);
+#ifdef HVQM
       BUILD_DIR/src/hvqm*.o(.text);
+#endif
       BUILD_DIR/src/gdb*.o(.text);
       BUILD_DIR/src/usb*.o(.text);
       BUILD_DIR/src/audio*.o(.text);

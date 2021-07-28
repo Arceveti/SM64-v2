@@ -286,9 +286,7 @@ static void cur_obj_spin_all_dimensions(f32 arg0, f32 arg1) {
 }
 
 static void obj_rotate_yaw_and_bounce_off_walls(s16 targetYaw, s16 turnAmount) {
-    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-        targetYaw = cur_obj_reflect_move_angle_off_wall();
-    }
+    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) targetYaw = cur_obj_reflect_move_angle_off_wall();
     cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
 }
 
@@ -325,37 +323,36 @@ static s32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
     return TRUE;
 }
 
-static void cur_obj_init_anim_extend(s32 arg0) {
-    cur_obj_init_animation_with_sound(arg0);
+static void cur_obj_init_anim_extend(s32 animIndex) {
+    cur_obj_init_animation_with_sound(animIndex);
     cur_obj_extend_animation_if_at_end();
 }
 
-static s32 cur_obj_init_anim_and_check_if_end(s32 arg0) {
-    cur_obj_init_animation_with_sound(arg0);
+static s32 cur_obj_init_anim_and_check_if_end(s32 animIndex) {
+    cur_obj_init_animation_with_sound(animIndex);
     return cur_obj_check_if_near_animation_end();
 }
 
-static s32 cur_obj_init_anim_check_frame(s32 arg0, s32 arg1) {
-    cur_obj_init_animation_with_sound(arg0);
-    return cur_obj_check_anim_frame(arg1);
+static s32 cur_obj_init_anim_check_frame(s32 animIndex, s32 frame) {
+    cur_obj_init_animation_with_sound(animIndex);
+    return cur_obj_check_anim_frame(frame);
 }
 
-static s32 cur_obj_set_anim_if_at_end(s32 arg0) {
+static s32 cur_obj_set_anim_if_at_end(s32 animIndex) {
     if (cur_obj_check_if_at_animation_end()) {
-        cur_obj_init_animation_with_sound(arg0);
+        cur_obj_init_animation_with_sound(animIndex);
         return TRUE;
     }
     return FALSE;
 }
 
-static s32 cur_obj_play_sound_at_anim_range(s8 arg0, s8 arg1, u32 sound) {
-    s32 val04;
+static s32 cur_obj_play_sound_at_anim_range(s8 startFrame1, s8 startFrame2, u32 sound) {
+    s32 rangeLength;
 
-    if ((val04 = o->header.gfx.animInfo.animAccel / 0x10000) <= 0) {
-        val04 = 1;
-    }
+    if ((rangeLength = o->header.gfx.animInfo.animAccel / 0x10000) <= 0) rangeLength = 1;
 
-    if (cur_obj_check_anim_frame_in_range(arg0, val04) || cur_obj_check_anim_frame_in_range(arg1, val04)) {
+    if (cur_obj_check_anim_frame_in_range(startFrame1, rangeLength)
+     || cur_obj_check_anim_frame_in_range(startFrame2, rangeLength)) {
         cur_obj_play_sound_2(sound);
         return TRUE;
     }
@@ -395,25 +392,21 @@ static s32 obj_y_vel_approach(f32 target, f32 delta) {
 
 static s32 obj_move_pitch_approach(s16 target, s16 delta) {
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, target, delta);
-
     return ((s16) o->oMoveAnglePitch == target);
 }
 
 static s32 obj_face_pitch_approach(s16 targetPitch, s16 deltaPitch) {
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, targetPitch, deltaPitch);
-
     return ((s16) o->oFaceAnglePitch == targetPitch);
 }
 
 static s32 obj_face_yaw_approach(s16 targetYaw, s16 deltaYaw) {
     o->oFaceAngleYaw = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, deltaYaw);
-
     return ((s16) o->oFaceAngleYaw == targetYaw);
 }
 
 static s32 obj_face_roll_approach(s16 targetRoll, s16 deltaRoll) {
     o->oFaceAngleRoll = approach_s16_symmetric(o->oFaceAngleRoll, targetRoll, deltaRoll);
-
     return ((s16) o->oFaceAngleRoll == targetRoll);
 }
 

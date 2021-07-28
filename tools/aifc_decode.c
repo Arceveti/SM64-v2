@@ -498,8 +498,7 @@ int main(int argc, char **argv)
                             fail_parse("Unknown codebook chunk version");
                         }
                         readaifccodebook(ifile, &coefTable, &order, &npredictors);
-                    }
-                    else if (strcmp("VADPCMLOOPS", ChunkName) == 0) {
+                    } else if (strcmp("VADPCMLOOPS", ChunkName) == 0) {
                         checked_fread(&version, sizeof(s16), 1, ifile);
                         BSWAP16(version);
                         if (version != 1) {
@@ -576,8 +575,7 @@ int main(int argc, char **argv)
                 my_encodeframe(encoded, guess, state, coefTable, order, npredictors);
                 if (memcmp(input, encoded, 9) == 0) {
                     failures = -1;
-                }
-                else {
+                } else {
                     guess[ind] = old;
                 }
             }

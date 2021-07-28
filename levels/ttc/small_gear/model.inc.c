@@ -1,23 +1,23 @@
 // 0x070120D0 - 0x07012110
-static const Vtx ttc_seg7_vertex_070120D0[] = {
-    {{{   102,      0,   -101}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -101,      0,   -101}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -101,      0,    102}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,      0,    102}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx ttc_seg7_vertex_small_gear[] = {
+    {{{   102,      0,   -102}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,      0,   -102}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,      0,    102}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,      0,    102}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07012110 - 0x07012148
-static const Gfx ttc_seg7_dl_07012110[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttc_seg7_texture_07000000),
+static const Gfx ttc_seg7_sub_dl_small_gear[] = {
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ttc_seg7_texture_gear),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(ttc_seg7_vertex_070120D0, 4, 0),
+    gsSPVertex(ttc_seg7_vertex_small_gear, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07012148 - 0x07012200
-const Gfx ttc_seg7_dl_07012148[] = {
+const Gfx ttc_seg7_dl_small_gear[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -32,7 +32,7 @@ const Gfx ttc_seg7_dl_07012148[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(ttc_seg7_dl_07012110),
+    gsSPDisplayList(ttc_seg7_sub_dl_small_gear),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

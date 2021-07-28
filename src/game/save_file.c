@@ -263,9 +263,7 @@ static void touch_coin_score_age(s32 fileIndex, s32 courseIndex) {
     if (currentAge != 0) {
         for (i = 0; i < NUM_SAVE_FILES; i++) {
             age = get_coin_score_age(i, courseIndex);
-            if (age < currentAge) {
-                set_coin_score_age(i, courseIndex, age + 1);
-            }
+            if (age < currentAge) set_coin_score_age(i, courseIndex, age + 1);
         }
 
         set_coin_score_age(fileIndex, courseIndex, 0);
@@ -278,10 +276,7 @@ static void touch_coin_score_age(s32 fileIndex, s32 courseIndex) {
  */
 static void touch_high_score_ages(s32 fileIndex) {
     s32 i;
-
-    for (i = 0; i < 15; i++) {
-        touch_coin_score_age(fileIndex, i);
-    }
+    for (i = 0; i < 15; i++) touch_coin_score_age(fileIndex, i);
 }
 
 /**
@@ -504,9 +499,7 @@ s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex) {
     u8 starFlags = save_file_get_star_flags(fileIndex, courseIndex);
 
     for (i = 0; i < 7; i++, flag <<= 1) {
-        if (starFlags & flag) {
-            count++;
-        }
+        if (starFlags & flag) count++;
     }
     return count;
 }
@@ -535,9 +528,7 @@ void save_file_clear_flags(u32 flags) {
 }
 
 u32 save_file_get_flags(void) {
-    if (gCurrCreditsEntry != NULL || gCurrDemoInput != NULL) {
-        return 0;
-    }
+    if (gCurrCreditsEntry != NULL || gCurrDemoInput != NULL) return 0;
     return gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags;
 }
 

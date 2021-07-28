@@ -179,9 +179,8 @@ static void expand_tiles(ImageType imageType) {
                     tiles[row * numCols + col].px[x + (tileHeight - 1) * tileWidth] = tiles[nextRow * numCols + col].px[x];
                 }
             }
-        }
         // For the last row of tiles, duplicate each one's second to last row
-        else {
+        } else {
             for (int col = 0; col < numCols; ++col) {
                 for (int x = 0; x < tileWidth; ++x) {
                     tiles[row * numCols + col].px[x + (tileHeight - 1) * tileWidth] = tiles[row * numCols + col].px[x + (tileHeight - 2) * tileWidth];
@@ -341,8 +340,7 @@ static void write_cake_c() {
 
     if (type == CakeEU) {
         strcat(buffer, "/cake_eu.inc.c");
-    }
-    else {
+    } else {
         strcat(buffer, "/cake.inc.c");
     }
 
@@ -469,8 +467,7 @@ void combine_cakeimg(const char *input, const char *output, bool eu) {
             fprintf(stderr, "Failed to write cake image.\n");
             exit(1);
         }
-    }
-    else {
+    } else {
         combined = malloc(SMALLH*H * SMALLW*W * sizeof(rgba));
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < W; j++) {
@@ -583,8 +580,7 @@ bool imageMatchesDimensions(int width, int height) {
                     IMAGE_PROPERTIES[type][false].imageWidth, IMAGE_PROPERTIES[type][false].imageHeight,
                     IMAGE_PROPERTIES[type][true].imageWidth, IMAGE_PROPERTIES[type][true].imageHeight,
                     width, height);
-        }
-        else {
+        } else {
             fprintf(stderr, "err: That type of image must be %d x %d. Yours is %d x %d.\n",
                     IMAGE_PROPERTIES[type][true].imageWidth, IMAGE_PROPERTIES[type][true].imageHeight,
                     width, height);

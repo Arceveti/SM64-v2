@@ -214,12 +214,10 @@ unsigned short FAR *work;
         if ((int)(work[sym]) < end) {
             this.op = (unsigned char)0;
             this.val = work[sym];
-        }
-        else if ((int)(work[sym]) > end) {
+        } else if ((int)(work[sym]) > end) {
             this.op = (unsigned char)(extra[work[sym]]);
             this.val = base[work[sym]];
-        }
-        else {
+        } else {
             this.op = (unsigned char)(32 + 64);         /* end of block */
             this.val = 0;
         }

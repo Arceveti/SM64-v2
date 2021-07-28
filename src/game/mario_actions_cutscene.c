@@ -442,9 +442,8 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
     u32 actionArg;
 
     m->actionState++;
-    if (m->actionState == 2) {
-        enable_time_stop();
-    }
+    if (m->actionState == 2) enable_time_stop();
+
     if (m->actionState < 9) {
         set_mario_animation(m, m->prevAction == ACT_STAR_DANCE_WATER ? MARIO_ANIM_WATER_IDLE
                                                                      : MARIO_ANIM_FIRST_PERSON);
@@ -459,23 +458,14 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
             } else {
                 create_dialog_box_with_var(GET_HIGH_U16_OF_32(actionArg), GET_LOW_U16_OF_32(actionArg));
             }
-        }
-        // wait until dialog is done
-        else if (m->actionState == 10) {
-            if (get_dialog_id() >= 0) {
-                m->actionState--;
-            }
-        }
-        // look back down
-        else if (m->actionState < 19) {
+        } else if (m->actionState == 10) { // wait until dialog is done
+            if (get_dialog_id() >= 0) m->actionState--;
+        } else if (m->actionState < 19) { // look back down
             m->actionTimer += 1024;
-        }
-        // finished action
-        else if (m->actionState == 25) {
+        } else if (m->actionState == 25) { // finished action
             disable_time_stop();
-            if (gNeverEnteredCastle) {
-                gNeverEnteredCastle = FALSE;
-            }
+            if (gNeverEnteredCastle) gNeverEnteredCastle = FALSE;
+
             play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
             if (m->prevAction == ACT_STAR_DANCE_WATER) {
                 set_mario_action(m, ACT_WATER_IDLE, 0); // 100c star?
@@ -920,10 +910,7 @@ s32 act_entering_star_door(struct MarioState *m) {
     // set Mario's animation
     if (m->actionTimer < 15) {
         set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);
-    }
-
-    // go through door? for 20 frames
-    else if (m->actionTimer < 35) {
+    } else if (m->actionTimer < 35) { // go through door? for 20 frames
         m->pos[0] += m->marioObj->oMarioReadingSignDPosX;
         m->pos[2] += m->marioObj->oMarioReadingSignDPosZ;
 
@@ -1042,10 +1029,7 @@ s32 act_spawn_spin_airborne(struct MarioState *m) {
         if (set_mario_animation(m, MARIO_ANIM_FORWARD_SPINNING) == 0) { // first anim frame
             play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
         }
-    }
-
-    // under 300 units above floor, enter freefall animation
-    else {
+    } else { // under 300 units above floor, enter freefall animation
         m->actionState = 1;
         set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     }

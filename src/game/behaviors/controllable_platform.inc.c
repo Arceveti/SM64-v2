@@ -80,8 +80,7 @@ void controllable_platform_hit_wall(s8 nextDirection) {
 void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3], Vec3f dist1, UNUSED Vec3f dist2, Vec3f dist3) {
     if (wallDisplacement[1] == 1 || (wallDisplacement[0] == 1 && wallDisplacement[2] == 1)) {
         controllable_platform_hit_wall(nextDirection);
-    }
-    else {
+    } else {
         if (wallDisplacement[0] == 1) {
             if (((nextDirection == MOVE_DIRECTION_SOUTH || nextDirection == MOVE_DIRECTION_NORTH) && (s32) dist1[2] != 0)
                 || ((nextDirection == MOVE_DIRECTION_WEST || nextDirection == MOVE_DIRECTION_EAST) && (s32) dist1[0] != 0)) {

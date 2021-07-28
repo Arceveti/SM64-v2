@@ -744,8 +744,7 @@ u64 *synthesis_process_notes(s16 *aiBuf, s32 bufLen, u64 *cmd) {
                         samplesLenAdjusted = samplesLenFixedPoint >> 0x10;
                     } else if ((samplesLenFixedPoint >> 0x10) & 1) {
                         samplesLenAdjusted = ((samplesLenFixedPoint >> 0x10) & ~1) + (curPart * 2);
-                    }
-                    else {
+                    } else {
                         samplesLenAdjusted = (samplesLenFixedPoint >> 0x10);
                     }
 

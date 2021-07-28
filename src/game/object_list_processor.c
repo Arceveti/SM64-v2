@@ -225,9 +225,7 @@ struct ParticleProperties sParticleTypes[] = {
 void copy_mario_state_to_object(void) {
     s32 i = 0;
     // L is real
-    if (gCurrentObject != gMarioObject) {
-        i++;
-    }
+    if (gCurrentObject != gMarioObject) i++;
 
     gCurrentObject->oVelX = gMarioStates[i].vel[0];
     gCurrentObject->oVelY = gMarioStates[i].vel[1];
@@ -283,7 +281,6 @@ void bhv_mario_update(void) {
                            sParticleTypes[i].model,
                            sParticleTypes[i].behavior);
         }
-
         i++;
     }
 }
@@ -328,19 +325,13 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
 
         // Selectively unfreeze certain objects
         if (!(gTimeStopState & TIME_STOP_ALL_OBJECTS)) {
-            if (gCurrentObject == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
-                unfrozen = TRUE;
-            }
+            if (gCurrentObject == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
 
             if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR))
-                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
-                unfrozen = TRUE;
-            }
+                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
 
             if (gCurrentObject->activeFlags
-                & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) {
-                unfrozen = TRUE;
-            }
+                & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
         }
 
         // Only update if unfrozen

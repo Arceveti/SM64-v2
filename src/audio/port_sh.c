@@ -162,8 +162,7 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
         if (gSequencePlayers[cmd->u.s.arg1].enabled) {
             if (cmd->u2.as_s32 == 0) {
                 sequence_player_disable(&gSequencePlayers[cmd->u.s.arg1]);
-            }
-            else {
+            } else {
                 seq_player_fade_to_zero_volume(cmd->u.s.arg1, cmd->u2.as_s32);
             }
         }
@@ -329,16 +328,13 @@ void func_802ad7ec(u32 arg0) {
         if (cmd->u.s.op == 0xf8) {
             D_SH_8031509C = 1;
             break;
-        }
-        else if ((cmd->u.s.op & 0xf0) == 0xf0) {
+        } else if ((cmd->u.s.op & 0xf0) == 0xf0) {
             eu_process_audio_cmd(cmd);
-        }
-        else if (cmd->u.s.arg1 < SEQUENCE_PLAYERS) {
+        } else if (cmd->u.s.arg1 < SEQUENCE_PLAYERS) {
             seqPlayer = &gSequencePlayers[cmd->u.s.arg1];
             if ((cmd->u.s.op & 0x80) != 0) {
                 eu_process_audio_cmd(cmd);
-            }
-            else if ((cmd->u.s.op & 0x40) != 0) {
+            } else if ((cmd->u.s.op & 0x40) != 0) {
                 switch (cmd->u.s.op) {
                 case 0x41:
                     if (seqPlayer->fadeVolumeScale != cmd->u2.as_f32) {
@@ -363,52 +359,50 @@ void func_802ad7ec(u32 arg0) {
                     seqPlayer->seqVariationEu[cmd->u.s.arg3] = cmd->u2.as_s8;
                     break;
                 }
-            }
-            else if (seqPlayer->enabled && cmd->u.s.arg2 < 0x10) {
+            } else if (seqPlayer->enabled && cmd->u.s.arg2 < 0x10) {
                 chan = seqPlayer->channels[cmd->u.s.arg2];
-                if (IS_SEQUENCE_CHANNEL_VALID(chan))
-                {
+                if (IS_SEQUENCE_CHANNEL_VALID(chan)) {
                     switch (cmd->u.s.op) {
-                    case 1:
-                        if (chan->volumeScale != cmd->u2.as_f32) {
-                            chan->volumeScale = cmd->u2.as_f32;
-                            chan->changes.as_bitfields.volume = TRUE;
-                        }
-                        break;
-                    case 2:
-                        if (chan->volume != cmd->u2.as_f32) {
-                            chan->volume = cmd->u2.as_f32;
-                            chan->changes.as_bitfields.volume = TRUE;
-                        }
-                        break;
-                    case 3:
-                        if (chan->newPan != cmd->u2.as_s8) {
-                            chan->newPan = cmd->u2.as_s8;
-                            chan->changes.as_bitfields.pan = TRUE;
-                        }
-                        break;
-                    case 4:
-                        if (chan->freqScale != cmd->u2.as_f32) {
-                            chan->freqScale = cmd->u2.as_f32;
-                            chan->changes.as_bitfields.freqScale = TRUE;
-                        }
-                        break;
-                    case 5:
-                        //! @bug u8 s8 comparison (but harmless)
-                        if (chan->reverbVol != cmd->u2.as_s8) {
-                            chan->reverbVol = cmd->u2.as_s8;
-                        }
-                        break;
-                    case 6:
-                        if (cmd->u.s.arg3 < 8) {
-                            chan->soundScriptIO[cmd->u.s.arg3] = cmd->u2.as_s8;
-                        }
-                        break;
-                    case 8:
-                        chan->stopSomething2 = cmd->u2.as_s8;
-                        break;
-                    case 9:
-                        chan->muteBehavior = cmd->u2.as_s8;
+                        case 1:
+                            if (chan->volumeScale != cmd->u2.as_f32) {
+                                chan->volumeScale = cmd->u2.as_f32;
+                                chan->changes.as_bitfields.volume = TRUE;
+                            }
+                            break;
+                        case 2:
+                            if (chan->volume != cmd->u2.as_f32) {
+                                chan->volume = cmd->u2.as_f32;
+                                chan->changes.as_bitfields.volume = TRUE;
+                            }
+                            break;
+                        case 3:
+                            if (chan->newPan != cmd->u2.as_s8) {
+                                chan->newPan = cmd->u2.as_s8;
+                                chan->changes.as_bitfields.pan = TRUE;
+                            }
+                            break;
+                        case 4:
+                            if (chan->freqScale != cmd->u2.as_f32) {
+                                chan->freqScale = cmd->u2.as_f32;
+                                chan->changes.as_bitfields.freqScale = TRUE;
+                            }
+                            break;
+                        case 5:
+                            //! @bug u8 s8 comparison (but harmless)
+                            if (chan->reverbVol != cmd->u2.as_s8) {
+                                chan->reverbVol = cmd->u2.as_s8;
+                            }
+                            break;
+                        case 6:
+                            if (cmd->u.s.arg3 < 8) {
+                                chan->soundScriptIO[cmd->u.s.arg3] = cmd->u2.as_s8;
+                            }
+                            break;
+                        case 8:
+                            chan->stopSomething2 = cmd->u2.as_s8;
+                            break;
+                        case 9:
+                            chan->muteBehavior = cmd->u2.as_s8;
                     }
                 }
             }

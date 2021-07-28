@@ -8,8 +8,8 @@
  * Collision models. The second one is unused.
  */
 static Collision const *sTTCPitBlockCollisionModels[] = {
-    ttc_seg7_collision_07015754,
-    ttc_seg7_collision_070157D8,
+    ttc_seg7_collision_pit_block,
+    ttc_seg7_collision_pit_block_2,
 };
 
 /**

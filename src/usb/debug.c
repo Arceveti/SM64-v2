@@ -651,14 +651,12 @@ https://github.com/buu342/N64-UNFLoader
                                 debug_command_totaltokens++;
                             }
                             
-                            if (debug_buffer[i] == '\0')
-                                dataleft = 0;
+                            if (debug_buffer[i] == '\0') dataleft = 0;
                             break;
                         }
                     case '@':
                         filestep++;
-                        if (filestep < 3)
-                            break;
+                        if (filestep < 3) break;
                     default:
                         // Decide what to do based on the file handle
                         if (filestep == 0 && debug_command_incoming_start[tok] == -1)

@@ -50,9 +50,7 @@ void bhv_ttc_2d_rotator_init(void) {
 void bhv_ttc_2d_rotator_update(void) {
     s32 startYaw = o->oFaceAngleYaw;
 
-    if (o->oTTC2DRotatorRandomDirTimer != 0) {
-        o->oTTC2DRotatorRandomDirTimer--;
-    }
+    if (o->oTTC2DRotatorRandomDirTimer != 0) o->oTTC2DRotatorRandomDirTimer--;
 
     // Wait until rotated to target yaw
     if (o->oTTC2DRotatorMinTimeUntilNextTurn != 0

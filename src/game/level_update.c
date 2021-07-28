@@ -928,10 +928,7 @@ void update_hud_values(void) {
 void basic_update(UNUSED s16 *arg) {
     area_update_objects();
     update_hud_values();
-
-    if (gCurrentArea != NULL) {
-        update_camera(gCurrentArea->camera);
-    }
+    if (gCurrentArea != NULL) update_camera(gCurrentArea->camera);
 }
 
 s32 play_mode_normal(void) {
@@ -949,16 +946,12 @@ s32 play_mode_normal(void) {
     warp_area();
     check_instant_warp();
 
-    if (sTimerRunning && gHudDisplay.timer < 17999) {
-        gHudDisplay.timer++;
-    }
+    if (sTimerRunning && gHudDisplay.timer < 17999) gHudDisplay.timer++;
 
     area_update_objects();
     update_hud_values();
 
-    if (gCurrentArea != NULL) {
-        update_camera(gCurrentArea->camera);
-    }
+    if (gCurrentArea != NULL) update_camera(gCurrentArea->camera);
 
     initiate_painting_warp();
     initiate_delayed_warp();

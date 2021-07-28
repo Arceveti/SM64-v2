@@ -396,8 +396,7 @@ void FAR *out_desc;
                     NEEDBITS(this.bits);
                     DROPBITS(this.bits);
                     state->lens[state->have++] = this.val;
-                }
-                else {
+                } else {
                     if (this.val == 16) {
                         NEEDBITS(this.bits + 2);
                         DROPBITS(this.bits);
@@ -409,15 +408,13 @@ void FAR *out_desc;
                         len = (unsigned)(state->lens[state->have - 1]);
                         copy = 3 + BITS(2);
                         DROPBITS(2);
-                    }
-                    else if (this.val == 17) {
+                    } else if (this.val == 17) {
                         NEEDBITS(this.bits + 3);
                         DROPBITS(this.bits);
                         len = 0;
                         copy = 3 + BITS(3);
                         DROPBITS(3);
-                    }
-                    else {
+                    } else {
                         NEEDBITS(this.bits + 7);
                         DROPBITS(this.bits);
                         len = 0;
@@ -568,8 +565,7 @@ void FAR *out_desc;
                 if (copy < left) {
                     from = put + copy;
                     copy = left - copy;
-                }
-                else {
+                } else {
                     from = put - state->offset;
                     copy = left;
                 }

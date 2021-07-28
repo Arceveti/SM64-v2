@@ -42,8 +42,7 @@ index 0000000..d7f27ad
 +         print_generic_string(CRS_NUM_X1, 157, strCourseNum);
 ++        if (widescreen == 0) {
 ++            print_generic_string(10, 20, textCurrRatio43);
-++        }
-++        else {
+++        } else {
 ++            print_generic_string(10, 20, textCurrRatio169);
 ++            print_generic_string(10, 200, textWideInfo);
 ++            print_generic_string(10, 180, textWideInfo2);
@@ -69,8 +68,7 @@ index 0000000..d7f27ad
 +-
 ++    if (widescreen == 0) {
 ++        print_generic_string(10, 20, textCurrRatio43);
-++    }
-++    else {
+++    } else {
 ++        print_generic_string(10, 20, textCurrRatio169);
 ++        print_generic_string(10, 200, textWideInfo);
 ++        print_generic_string(10, 180, textWideInfo2);
@@ -192,8 +190,7 @@ index 0000000..d7f27ad
 ++                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0, 0, 0);
 ++            sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
 ++        }
-++    }
-++    else {
+++    } else {
 ++        for (i = 0; i < sVisibleStars; i++) {
 ++            sStarSelectorModels[i] =
 ++                spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
@@ -271,8 +268,7 @@ index 0000000..667e6e2
 +         print_generic_string(CRS_NUM_X1, 157, strCourseNum);
 ++        if (widescreen == 0) {
 ++            print_generic_string(10, 20, textCurrRatio43);
-++        }
-++        else {
+++        } else {
 ++            print_generic_string(10, 20, textCurrRatio169);
 ++            print_generic_string(10, 200, textWideInfo);
 ++            print_generic_string(10, 180, textWideInfo2);
@@ -302,8 +298,7 @@ index 0000000..667e6e2
 + 
 ++        if (widescreen == 0) {
 ++            print_generic_string(10, 20, textCurrRatio43);
-++        }
-++        else {
+++        } else {
 ++            print_generic_string(10, 20, textCurrRatio169);
 ++            print_generic_string(10, 200, textWideInfo);
 ++            print_generic_string(10, 180, textWideInfo2);
@@ -425,8 +420,7 @@ index 0000000..667e6e2
 ++                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0, 0, 0);
 ++            sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
 ++        }
-++    }
-++    else {
+++    } else {
 ++        for (i = 0; i < sVisibleStars; i++) {
 ++            sStarSelectorModels[i] =
 ++                spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
@@ -506,8 +500,7 @@ index 8190f88..e4d0f32 100644
 +                print_generic_string(10, 20, textCurrRatio43);
 +            }
 +            
-+        }
-+        else {
++        } else {
 +            if (COURSE_IS_MAIN_COURSE(gCurrCourseNum)) {
 +                print_generic_string(10, 40, textCurrRatio169);
 +            } else {
@@ -538,8 +531,7 @@ index 8190f88..e4d0f32 100644
 -
 +    if (widescreen == 0) {
 +        print_generic_string(10, 20, textCurrRatio43);
-+    }
-+    else {
++    } else {
 +        print_generic_string(10, 20, textCurrRatio169);
 +        print_generic_string(10, 200, textWideInfo);
 +        print_generic_string(10, 180, textWideInfo2);
@@ -703,8 +695,7 @@ index 025dbf2..4840898 100644
 +                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0, 0, 0);
 +            sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
 +        }
-+    }
-+    else {
++    } else {
 +        for (i = 0; i < sVisibleStars; i++) {
 +            sStarSelectorModels[i] =
 +                spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,

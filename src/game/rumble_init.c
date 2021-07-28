@@ -159,13 +159,8 @@ u8 is_rumble_finished_and_queue_empty(void) {
 void reset_rumble_timers_slip(void) {
     if (gCurrDemoInput != NULL) return;
 
-    if (gCurrRumbleSettings.slip == 0) {
-        gCurrRumbleSettings.slip = 7;
-    }
-
-    if (gCurrRumbleSettings.slip < 4) {
-        gCurrRumbleSettings.slip = 4;
-    }
+    if (gCurrRumbleSettings.slip == 0) gCurrRumbleSettings.slip = 7;
+    if (gCurrRumbleSettings.slip <  4) gCurrRumbleSettings.slip = 4;
 
     gCurrRumbleSettings.vibrate = 7;
 }
@@ -173,33 +168,14 @@ void reset_rumble_timers_slip(void) {
 void reset_rumble_timers_vibrate(s32 a0) {
     if (gCurrDemoInput != NULL) return;
 
-    if (gCurrRumbleSettings.slip == 0) {
-        gCurrRumbleSettings.slip = 7;
-    }
+    if (gCurrRumbleSettings.slip == 0) gCurrRumbleSettings.slip = 7;
+    if (gCurrRumbleSettings.slip <  4) gCurrRumbleSettings.slip = 4;
 
-    if (gCurrRumbleSettings.slip < 4) {
-        gCurrRumbleSettings.slip = 4;
-    }
-
-    if (a0 == 4) {
-        gCurrRumbleSettings.vibrate = 1;
-    }
-
-    if (a0 == 3) {
-        gCurrRumbleSettings.vibrate = 2;
-    }
-
-    if (a0 == 2) {
-        gCurrRumbleSettings.vibrate = 3;
-    }
-
-    if (a0 == 1) {
-        gCurrRumbleSettings.vibrate = 4;
-    }
-
-    if (a0 == 0) {
-        gCurrRumbleSettings.vibrate = 5;
-    }
+    if (a0 == 4) gCurrRumbleSettings.vibrate = 1;
+    if (a0 == 3) gCurrRumbleSettings.vibrate = 2;
+    if (a0 == 2) gCurrRumbleSettings.vibrate = 3;
+    if (a0 == 1) gCurrRumbleSettings.vibrate = 4;
+    if (a0 == 0) gCurrRumbleSettings.vibrate = 5;
 }
 
 void queue_rumble_submerged(void) {
@@ -226,17 +202,13 @@ static void thread6_rumble_loop(UNUSED void *a0) {
         update_rumble_pak();
 
         if (sRumblePakActive) {
-            if (sRumblePakErrorCount >= 30) {
-                sRumblePakActive = FALSE;
-            }
+            if (sRumblePakErrorCount >= 30) sRumblePakActive = FALSE;
         } else if (gNumVblanks % 60 == 0) {
             sRumblePakActive = osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1;
             sRumblePakErrorCount = 0;
         }
 
-        if (gRumblePakTimer > 0) {
-            gRumblePakTimer--;
-        }
+        if (gRumblePakTimer > 0) gRumblePakTimer--;
     }
 }
 

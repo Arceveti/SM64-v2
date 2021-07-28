@@ -96,13 +96,9 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
 
 #ifdef VERSION_JP
             if (currentGraphNode->parameter == 10) {
-                if (gDebugInfo[DEBUG_PAGE_ENEMYINFO][3]) {
-                    gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
-                }
+                if (gDebugInfo[DEBUG_PAGE_ENEMYINFO][3]) gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
             } else {
-                if (objectGraphNode->activeFlags & ACTIVE_FLAG_DITHERED_ALPHA) {
-                    gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
-                }
+                if (objectGraphNode->activeFlags & ACTIVE_FLAG_DITHERED_ALPHA) gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
             }
 #else // gDebugInfo accesses were removed in all non-JP versions.
             if (objectOpacity == 0 && segmented_to_virtual(bhvBowser) == objectGraphNode->behavior) {
@@ -213,11 +209,11 @@ void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
 }
 
 void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
-    f32 spC, sp8, sp4;
+    f32 x, y, z;
 
-    spC = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
-    sp8 = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
-    sp4 = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
+    x         = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
+    y         = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
+    z         = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
 
     dst[0][0] = a1[0][0] * a2[0][0] + a1[0][1] * a2[0][1] + a1[0][2] * a2[0][2];
     dst[0][1] = a1[0][0] * a2[1][0] + a1[0][1] * a2[1][1] + a1[0][2] * a2[1][2];
@@ -231,9 +227,9 @@ void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
     dst[2][1] = a1[2][0] * a2[1][0] + a1[2][1] * a2[1][1] + a1[2][2] * a2[1][2];
     dst[2][2] = a1[2][0] * a2[2][0] + a1[2][1] * a2[2][1] + a1[2][2] * a2[2][2];
 
-    dst[3][0] = a1[3][0] * a2[0][0] + a1[3][1] * a2[0][1] + a1[3][2] * a2[0][2] - spC;
-    dst[3][1] = a1[3][0] * a2[1][0] + a1[3][1] * a2[1][1] + a1[3][2] * a2[1][2] - sp8;
-    dst[3][2] = a1[3][0] * a2[2][0] + a1[3][1] * a2[2][1] + a1[3][2] * a2[2][2] - sp4;
+    dst[3][0] = a1[3][0] * a2[0][0] + a1[3][1] * a2[0][1] + a1[3][2] * a2[0][2] - x;
+    dst[3][1] = a1[3][0] * a2[1][0] + a1[3][1] * a2[1][1] + a1[3][2] * a2[1][2] - y;
+    dst[3][2] = a1[3][0] * a2[2][0] + a1[3][1] * a2[2][1] + a1[3][2] * a2[2][2] - z;
 
     dst[0][3] = 0;
     dst[1][3] = 0;
@@ -350,7 +346,7 @@ s16 obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
     f32 z1, x1, z2, x2;
     s16 angle;
 
-    z1 = obj1->oPosZ; z2 = obj2->oPosZ; // ordering of instructions..
+    z1 = obj1->oPosZ; z2 = obj2->oPosZ; // ordering of instructions...
     x1 = obj1->oPosX; x2 = obj2->oPosX;
 
     angle = atan2s(z2 - z1, x2 - x1);
@@ -404,12 +400,12 @@ void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z) {
 
 void obj_set_angle(struct Object *obj, s16 pitch, s16 yaw, s16 roll) {
     obj->oFaceAnglePitch = pitch;
-    obj->oFaceAngleYaw = yaw;
-    obj->oFaceAngleRoll = roll;
+    obj->oFaceAngleYaw   = yaw;
+    obj->oFaceAngleRoll  = roll;
 
     obj->oMoveAnglePitch = pitch;
-    obj->oMoveAngleYaw = yaw;
-    obj->oMoveAngleRoll = roll;
+    obj->oMoveAngleYaw   = yaw;
+    obj->oMoveAngleRoll  = roll;
 }
 
 /*
@@ -451,31 +447,12 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     f32 randomScale;
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
 
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE) {
-        newObj->oMoveAngleYaw = random_u16();
-    }
-
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_PLUS_8000) {
-        newObj->oMoveAngleYaw = (s16)(newObj->oMoveAngleYaw + 0x8000)
-                                + (s16) random_f32_around_zero(params->moveAngleRange);
-    }
-
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR) {
-        newObj->oMoveAngleYaw =
-            (s16) newObj->oMoveAngleYaw + (s16) random_f32_around_zero(params->moveAngleRange);
-    }
-
-    if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL) {
-        newObj->oPosY = find_water_level(newObj->oPosX, newObj->oPosZ);
-    }
-
-    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ) {
-        obj_translate_xz_random(newObj, params->moveRange);
-    }
-
-    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ) {
-        obj_translate_xyz_random(newObj, params->moveRange);
-    }
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE               ) newObj->oMoveAngleYaw = random_u16();
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_PLUS_8000) newObj->oMoveAngleYaw = (s16)(newObj->oMoveAngleYaw + 0x8000) + (s16) random_f32_around_zero(params->moveAngleRange);
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR          ) newObj->oMoveAngleYaw = (s16) newObj->oMoveAngleYaw           + (s16) random_f32_around_zero(params->moveAngleRange);
+    if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL     ) newObj->oPosY = find_water_level(newObj->oPosX, newObj->oPosZ);
+    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ           ) obj_translate_xz_random(newObj, params->moveRange);
+    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ          ) obj_translate_xyz_random(newObj, params->moveRange);
 
     newObj->oForwardVel = random_float() * params->randForwardVelScale + params->randForwardVelOffset;
     newObj->oVelY = random_float() * params->randYVelScale + params->randYVelOffset;
@@ -783,12 +760,8 @@ struct Object *cur_obj_nearest_object_with_behavior(const BehaviorScript *behavi
 }
 
 f32 cur_obj_dist_to_nearest_object_with_behavior(const BehaviorScript *behavior) {
-    struct Object *obj;
     f32 dist;
-
-    obj = cur_obj_find_nearest_object_with_behavior(behavior, &dist);
-    if (obj == NULL) dist = 15000.0f;
-
+    if (cur_obj_find_nearest_object_with_behavior(behavior, &dist) == NULL) dist = 15000.0f;
     return dist;
 }
 
@@ -852,9 +825,7 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
 struct Object *find_unimportant_object(void) {
     struct ObjectNode *listHead = &gObjectLists[OBJ_LIST_UNIMPORTANT];
     struct ObjectNode *obj = listHead->next;
-
     if (listHead == obj) obj = NULL;
-
     return (struct Object *) obj;
 }
 
@@ -1348,9 +1319,7 @@ static s32 clear_move_flag(u32 *bitSet, s32 flag) {
 }
 
 void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
-    if (radius > 0.1L) {
-        f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius);
-    }
+    if (radius > 0.1L) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius);
 }
 
 s16 abs_angle_diff(s16 angle1, s16 angle2) {
@@ -1399,9 +1368,7 @@ f32 increment_velocity_toward_range(f32 value, f32 center, f32 zeroThreshold, f3
 
 s32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj2) {
     s32 i;
-    for (i = 0; i < obj1->numCollidedObjs; i++) {
-        if (obj1->collidedObjs[i] == obj2) return TRUE;
-    }
+    for (i = 0; i < obj1->numCollidedObjs; i++) if (obj1->collidedObjs[i] == obj2) return TRUE;
     return FALSE;
 }
 
@@ -1484,9 +1451,7 @@ void cur_obj_start_cam_event(UNUSED struct Object *obj, s32 cameraEvent) {
 
 // unused, self explanatory, maybe oInteractStatus originally had TRUE/FALSE statements
 void set_mario_interact_true_if_in_range(UNUSED s32 arg0, UNUSED s32 arg1, f32 range) {
-    if (o->oDistanceToMario < range) {
-        gMarioObject->oInteractStatus = TRUE;
-    }
+    if (o->oDistanceToMario < range) gMarioObject->oInteractStatus = TRUE;
 }
 
 void obj_set_billboard(struct Object *obj) {
@@ -1652,9 +1617,7 @@ static void cur_obj_update_floor_and_resolve_wall_collisions(s16 steepSlopeDegre
         cur_obj_update_floor();
         o->oMoveFlags &= ~(OBJ_MOVE_HIT_WALL | OBJ_MOVE_MASK_IN_WATER);
 
-        if (o->oPosY > o->oFloorHeight) {
-            o->oMoveFlags |= OBJ_MOVE_IN_AIR;
-        }
+        if (o->oPosY > o->oFloorHeight) o->oMoveFlags |= OBJ_MOVE_IN_AIR;
     } else {
         o->oMoveFlags &= ~OBJ_MOVE_HIT_WALL;
         if (cur_obj_resolve_wall_collisions()) o->oMoveFlags |= OBJ_MOVE_HIT_WALL;
@@ -1758,8 +1721,8 @@ void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
     obj1->header.gfx.pos[2] = obj2->oPosZ;
 
     obj1->header.gfx.angle[0] = obj2->oMoveAnglePitch & 0xFFFF;
-    obj1->header.gfx.angle[1] = obj2->oMoveAngleYaw & 0xFFFF;
-    obj1->header.gfx.angle[2] = obj2->oMoveAngleRoll & 0xFFFF;
+    obj1->header.gfx.angle[1] = obj2->oMoveAngleYaw   & 0xFFFF;
+    obj1->header.gfx.angle[2] = obj2->oMoveAngleRoll  & 0xFFFF;
 }
 
 /**
@@ -1771,12 +1734,9 @@ void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateInd
     f32 dy = obj->rawData.asF32[localTranslateIndex + 1];
     f32 dz = obj->rawData.asF32[localTranslateIndex + 2];
 
-    obj->rawData.asF32[posIndex + 0] +=
-        obj->transform[0][0] * dx + obj->transform[1][0] * dy + obj->transform[2][0] * dz;
-    obj->rawData.asF32[posIndex + 1] +=
-        obj->transform[0][1] * dx + obj->transform[1][1] * dy + obj->transform[2][1] * dz;
-    obj->rawData.asF32[posIndex + 2] +=
-        obj->transform[0][2] * dx + obj->transform[1][2] * dy + obj->transform[2][2] * dz;
+    obj->rawData.asF32[posIndex + 0] += obj->transform[0][0] * dx + obj->transform[1][0] * dy + obj->transform[2][0] * dz;
+    obj->rawData.asF32[posIndex + 1] += obj->transform[0][1] * dx + obj->transform[1][1] * dy + obj->transform[2][1] * dz;
+    obj->rawData.asF32[posIndex + 2] += obj->transform[0][2] * dx + obj->transform[1][2] * dy + obj->transform[2][2] * dz;
 }
 
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {
@@ -1904,8 +1864,8 @@ void chain_segment_init(struct ChainSegment *segment) {
     segment->posZ = 0.0f;
 
     segment->pitch = 0;
-    segment->yaw = 0;
-    segment->roll = 0;
+    segment->yaw   = 0;
+    segment->roll  = 0;
 }
 
 f32 random_f32_around_zero(f32 diameter) {
@@ -1929,8 +1889,8 @@ void obj_translate_xz_random(struct Object *obj, f32 rangeLength) {
 }
 
 static void obj_build_vel_from_transform(struct Object *obj) {
-    f32 up = obj->oUpVel;
-    f32 left = obj->oLeftVel;
+    f32 up      = obj->oUpVel;
+    f32 left    = obj->oLeftVel;
     f32 forward = obj->oForwardVel;
 
     obj->oVelX = obj->transform[0][0] * left + obj->transform[1][0] * up + obj->transform[2][0] * forward;
@@ -2177,20 +2137,10 @@ void bhv_init_room(void) {
 }
 
 void cur_obj_enable_rendering_if_mario_in_room(void) {
-    register s32 marioInRoom;
-
     if (o->oRoom != -1 && gMarioCurrentRoom != 0) {
-        if (gMarioCurrentRoom == o->oRoom) {
-            marioInRoom = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oRoom) {
-            marioInRoom = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oRoom) {
-            marioInRoom = TRUE;
-        } else {
-            marioInRoom = FALSE;
-        }
-
-        if (marioInRoom) {
+        if (gMarioCurrentRoom == o->oRoom
+         || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oRoom
+         || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oRoom) {
             cur_obj_enable_rendering();
             o->activeFlags &= ~ACTIVE_FLAG_IN_DIFFERENT_ROOM;
             gNumRoomedObjectsInMarioRoom++;
@@ -2398,9 +2348,7 @@ s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cuts
             if (dialogFlags & DIALOG_FLAG_TURN_TO_MARIO) {
                 doneTurning = cur_obj_rotate_yaw_toward(obj_angle_to_object(o, gMarioObject), 0x800);
                 // Failsafe just in case it takes more than 33 frames somehow
-                if (o->oDialogResponse >= 33) {
-                    doneTurning = TRUE;
-                }
+                if (o->oDialogResponse >= 33) doneTurning = TRUE;
             }
             // Interrupt status until Mario is actually speaking with the NPC and if the
             // object is done turning to Mario
@@ -2416,15 +2364,11 @@ s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cuts
             // Special check for Cap Switch cutscene since the cutscene itself
             // handles what dialog should use
             if (cutsceneTable == CUTSCENE_CAP_SWITCH_PRESS) {
-                if ((o->oDialogResponse = cutscene_object_without_dialog(cutsceneTable, o))) {
-                    o->oDialogState++;
-                }
+                if ((o->oDialogResponse = cutscene_object_without_dialog(cutsceneTable, o))) o->oDialogState++;
             } else {
                 // General dialog cutscene function, most of the time
                 // the "CUTSCENE_DIALOG" cutscene is called
-                if ((o->oDialogResponse = cutscene_object_with_dialog(cutsceneTable, o, dialogID))) {
-                    o->oDialogState++;
-                }
+                if ((o->oDialogResponse = cutscene_object_with_dialog(cutsceneTable, o, dialogID))) o->oDialogState++;
             }
             break;
 
@@ -2556,9 +2500,7 @@ s32 player_performed_grab_escape_action(void) {
 
 void cur_obj_unused_play_footstep_sound(s32 animFrame1, s32 animFrame2, s32 sound) {
     if (cur_obj_check_anim_frame(animFrame1)
-     || cur_obj_check_anim_frame(animFrame2)) {
-        cur_obj_play_sound_2(sound);
-    }
+     || cur_obj_check_anim_frame(animFrame2)) cur_obj_play_sound_2(sound);
 }
 
 void enable_time_stop_including_mario(void) {

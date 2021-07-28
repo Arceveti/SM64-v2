@@ -1174,14 +1174,11 @@ void mode_8_directions_camera(struct Camera *c) {
     else if (gPlayer1Controller->buttonPressed & U_JPAD) {
         s8DirModeYawOffset = 0;
         s8DirModeYawOffset = gMarioState->faceAngle[1]-0x8000;
-    }
-    else if (gPlayer1Controller->buttonDown & L_JPAD) {
+    }  else if (gPlayer1Controller->buttonDown & L_JPAD) {
         s8DirModeYawOffset -= DEGREES(2);
-    }
-    else if (gPlayer1Controller->buttonDown & R_JPAD) {
+    } else if (gPlayer1Controller->buttonDown & R_JPAD) {
         s8DirModeYawOffset += DEGREES(2);
-    }
-    else if (gPlayer1Controller->buttonPressed & D_JPAD) {
+    } else if (gPlayer1Controller->buttonPressed & D_JPAD) {
         s8DirModeYawOffset = s8DirModeYawOffset&0xE000;
     }   
 #endif

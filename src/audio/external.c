@@ -868,10 +868,9 @@ static void select_current_sounds(u8 bank) {
             if (sSoundBanks[bank][soundIndex].freshness-- == 0) {
                 sSoundBanks[bank][soundIndex].soundBits = NO_SOUND;
             }
-        }
         // If a continuous sound goes 2 frames without play_sound being called, then mark it for
         // deletion
-        else if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) == 0) {
+        } else if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) == 0) {
             if (sSoundBanks[bank][soundIndex].freshness-- == SOUND_MAX_FRESHNESS - 2) {
                 update_background_music_after_sound(bank, soundIndex);
                 sSoundBanks[bank][soundIndex].soundBits = NO_SOUND;
@@ -985,10 +984,9 @@ static void select_current_sounds(u8 bank) {
                     sSoundBanks[bank][sCurrentSound[bank][i]].soundBits = NO_SOUND;
                     sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus = SOUND_STATUS_STOPPED;
                     delete_sound_from_bank(bank, sCurrentSound[bank][i]);
-                }
                 // If the sound is continuous and is playing, then stop playing it but don't delete
                 // it. (A continuous sound shouldn't be deleted until it stops being requested)
-                else {
+                } else {
                     if (isDiscreteAndStatus == SOUND_STATUS_PLAYING
                         && sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus
                                != SOUND_STATUS_STOPPED) {

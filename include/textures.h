@@ -119,23 +119,23 @@ extern const u8 inside_0900B000[];
 extern const u8 inside_0900B800[];
 
 // machine
-extern const u8 machine_09000000[];
-extern const u8 machine_09000800[];
-extern const u8 machine_09001000[];
-extern const u8 machine_09001800[];
-extern const u8 machine_09002000[];
-extern const u8 machine_09002800[];
-extern const u8 machine_09003000[];
-extern const u8 machine_09003800[];
-extern const u8 machine_09004000[];
-extern const u8 machine_09005000[];
-extern const u8 machine_09005800[];
-extern const u8 machine_09006000[];
-extern const u8 machine_09006800[];
-extern const u8 machine_09007000[];
-extern const u8 machine_09007800[];
-extern const u8 machine_09008000[];
-extern const u8 machine_09008400[];
+extern const u8 machine_09000000_mesh[];
+extern const u8 machine_09000800_clock_hand[];
+extern const u8 machine_09001000_horizontal_rods[];
+extern const u8 machine_09001800_pendulum[];
+extern const u8 machine_09002000_slide[];
+extern const u8 machine_09002800_wall[];
+extern const u8 machine_09003000_block_side[];
+extern const u8 machine_09003800_vertical_rods[];
+extern const u8 machine_09004000_screw[];
+extern const u8 machine_09005000_yellow_block[];
+extern const u8 machine_09005800_treadmill_side[];
+extern const u8 machine_09006000_treadmill_corner[];
+extern const u8 machine_09006800_pole_top[];
+extern const u8 machine_09007000_metal_block[];
+extern const u8 machine_09007800_wood_upper[];
+extern const u8 machine_09008000_pathway[];
+extern const u8 machine_09008400_floor_with_circles[];
 
 // mountain
 extern const u8 mountain_09000000[];

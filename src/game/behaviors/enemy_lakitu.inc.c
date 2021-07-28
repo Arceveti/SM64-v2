@@ -121,9 +121,8 @@ static void enemy_lakitu_sub_act_hold_spiny(void) {
 
     if (o->oEnemyLakituSpinyCooldown != 0) {
         o->oEnemyLakituSpinyCooldown--;
-    }
     // TODO: Check if anything interesting happens if we bypass this with speed
-    else if (o->oDistanceToMario > o->oDrawingDistance - 100.0f
+    } else if (o->oDistanceToMario > o->oDrawingDistance - 100.0f
              || (o->oDistanceToMario < 500.0f
                  && abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x2000)) {
         o->oSubAction = ENEMY_LAKITU_SUB_ACT_THROW_SPINY;

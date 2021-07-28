@@ -1,6 +1,8 @@
 # SM64v2
 **AFTER CLONING THE REPO, CHECK OUT THE `include/config.h` FILE BEFORE ANYTHING ELSE! IT THERE'S A LOT OF STUFF IN THIS REPO THAT CAN BE TOGGLED THERE.**
 
+NOTE: HMC crashes when entering via debug level select unless there is input on the first frame (?). This seems to be caused by Swoops as the crash does not occur when they are removed. This crash is also present on the upstream repositories.
+
 This repo needs gcc in order to be able to build it. To install it, run `sudo apt install gcc-mips-linux-gnu`
 
 This is a fork of HackerSM64 by Reonu, with the following additional features, fixes, and optimizations (patches marked with `*` are toggleable in `config.h`):
@@ -15,12 +17,12 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - King Bob-omb blinks
 
 **Vanilla level changes:**
-- Fix for Lakitu cutscene detection bounds *
+- Fixed various models which had misaligned vertices/UVs (Arceveti)
 - Makes the Blast Away The Wall star spawn from the wall instead of existing in the world already *
 - Re-implementation of the unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - Re-implementation of the unused cracked ice in SL (SunlitSpace542, Arceveti) *
 - Bowser's puzzle in LLL is now seamless (Arceveti)
-- Fixed various models which had misaligned vertices/UVs (Arceveti)
+- Fix for Lakitu cutscene detection bounds *
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
 **Bugfixes:**

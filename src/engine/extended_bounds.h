@@ -27,53 +27,65 @@
     collision surfaces in your level.
 */
 
-//for the static assert macro
+// for the static assert macro
 #include "macros.h"
+#include "segments.h"
 
-//set this to the extended bounds mode you want, then do "make clean".
-#ifdef USE_EXT_RAM
-#define EXTENDED_BOUNDS_MODE 1
-#else
+// set this to the extended bounds mode you want, then do "make clean".
+#ifndef USE_EXT_RAM
 #define EXTENDED_BOUNDS_MODE 0
+#else
+#define EXTENDED_BOUNDS_MODE 1
 #endif
 
-//the maximum amount of collision surfaces (static and dynamic combined)
-//8200 should work fine for a 2x extended stage, the vanilla value is 2300
-#define SURFACE_POOL_SIZE 4000
+// CELL_SIZE
 
-//make this approximately (amount of collision cells) + (SURFACE_POOL_SIZE * 3)
-//22000 should work fine for a 2x extended stage, the vanilla value is 7000
-#define SURFACE_NODE_POOL_SIZE 12000
+// WORLD_SCALE
+// Coordinate overflow fix by falcobuster.
+// Your levels will render correctly on console and LLE emulators
+// even when using 2x or 4x bounds, while not hurting anything on HLE plugins.
 
+// SURFACE_POOL_SIZE
+// The maximum amount of collision surfaces (static and dynamic combined)
+// The vanilla value is 2300
 
+// SURFACE_NODE_POOL_SIZE
+// Make this approximately (amount of collision cells) + (SURFACE_POOL_SIZE * 3)
+// The vanilla value is 7000
 
+// Don't touch the stuff past this point unless you know what you're doing!
 
-
-//don't touch the stuff past this point unless you know what you're doing!
-
-//default value to check if the user set a proper extended bounds mode
+// default value to check if the user set a proper extended bounds mode
 #define LEVEL_BOUNDARY_MAX 0x0000
 
-#if EXTENDED_BOUNDS_MODE == 0
+#if EXTENDED_BOUNDS_MODE == 0 // Vanilla
     #undef LEVEL_BOUNDARY_MAX // Undefine the old value to avoid compiler warnings
-    #define LEVEL_BOUNDARY_MAX 0x2000L
-    #define CELL_SIZE          0x400
-    #define WORLD_SCALE        1.0f
-#elif EXTENDED_BOUNDS_MODE == 1
+    #define LEVEL_BOUNDARY_MAX      0x2000L
+    #define CELL_SIZE               0x400
+    #define WORLD_SCALE             1.0f
+    #define SURFACE_POOL_SIZE       4000
+    #define SURFACE_NODE_POOL_SIZE  12000
+#elif EXTENDED_BOUNDS_MODE == 1 // Vanilla size with performance but more RAM usage
     #undef LEVEL_BOUNDARY_MAX
-    #define LEVEL_BOUNDARY_MAX 0x2000L
-    #define CELL_SIZE          0x200
-    #define WORLD_SCALE        1.0f
-#elif EXTENDED_BOUNDS_MODE == 2
+    #define LEVEL_BOUNDARY_MAX      0x2000L
+    #define CELL_SIZE               0x200
+    #define WORLD_SCALE             2.0f
+    #define SURFACE_POOL_SIZE       4000
+    #define SURFACE_NODE_POOL_SIZE  16000
+#elif EXTENDED_BOUNDS_MODE == 2 // 2x bounds
     #undef LEVEL_BOUNDARY_MAX
-    #define LEVEL_BOUNDARY_MAX 0x4000L
-    #define CELL_SIZE          0x400
-    #define WORLD_SCALE        2.0f
-#elif EXTENDED_BOUNDS_MODE == 3
+    #define LEVEL_BOUNDARY_MAX      0x4000L
+    #define CELL_SIZE               0x400
+    #define WORLD_SCALE             2.0f
+    #define SURFACE_POOL_SIZE       8200
+    #define SURFACE_NODE_POOL_SIZE  22000
+#elif EXTENDED_BOUNDS_MODE == 3 // 4x bounds
     #undef LEVEL_BOUNDARY_MAX
-    #define LEVEL_BOUNDARY_MAX 0x8000L
-    #define CELL_SIZE          0x400
-    #define WORLD_SCALE        4.0f
+    #define LEVEL_BOUNDARY_MAX      0x8000L
+    #define CELL_SIZE               0x400
+    #define WORLD_SCALE             4.0f
+    #define SURFACE_POOL_SIZE       8200
+    #define SURFACE_NODE_POOL_SIZE  24600
 #endif
 
 STATIC_ASSERT(LEVEL_BOUNDARY_MAX != 0, "You must set a valid extended bounds mode!");

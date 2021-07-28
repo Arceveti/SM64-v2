@@ -179,8 +179,7 @@ rgba *png2rgba(const char *png_filename, int *width, int *height)
                 img[idx].blue = data[channels*idx + 2];
                 if (channels == 4) {
                     img[idx].alpha = data[channels*idx + 3];
-                }
-                else {
+                } else {
                     img[idx].alpha = 0xFF;
                 }
             }
@@ -399,8 +398,7 @@ static int parse_arguments(int argc, char *argv[], graphics_config *config)
                 return 0;
                 break;
             }
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -459,8 +457,7 @@ int main(int argc, char* argv[])
         printf("%s\n", config.bin_filename);
         if (config.truncate) {
             fp = fopen(config.bin_filename, "wb");
-        }
-        else {
+        } else {
             fp = fopen(config.bin_filename, "r+b");
         }
         if (!fp) {
@@ -480,8 +477,7 @@ int main(int argc, char* argv[])
             }
             if (config.depth == 4) {
                 pal_len = 16 * 2; // CI4
-            }
-            else {
+            } else {
                 pal_len = 256 * 2; // CI8
             }
             pal = malloc(pal_len);
@@ -545,8 +541,7 @@ int main(int argc, char* argv[])
             }
             if (config.depth == 4) {
                 pal_len = 16 * 2; // CI4
-            }
-            else {
+            } else {
                 pal_len = 256 * 2; // CI8
             }
 

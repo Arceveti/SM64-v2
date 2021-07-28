@@ -516,9 +516,7 @@ void bowser_act_walk_to_mario(void) {
     if (o->oSubAction == 0) {
         o->oBowserTimer = 0;
         // Start walking
-        if (bowser_set_anim_look_up_and_walk()) {
-            o->oSubAction++;
-        }
+        if (bowser_set_anim_look_up_and_walk()) o->oSubAction++;
     } else if (o->oSubAction == 1) {
         // Keep walking slowly
         if (bowser_set_anim_slow_gait()) {
@@ -563,8 +561,7 @@ void bowser_act_teleport(void) {
             // reduce timer and set velocity teleport while at it
             if (o->oBowserTimer--) {
                 o->oForwardVel = 100.0f;
-            }
-            else {
+            } else {
                 o->oSubAction = BOWSER_SUB_ACT_TELEPORT_STOP;
                 o->oMoveAngleYaw = o->oAngleToMario; // update angle
             }
@@ -582,9 +579,7 @@ void bowser_act_teleport(void) {
             o->oForwardVel = 0.0f; // reset velocity
             o->oBowserTargetOpacity = 0xFF;
             // Set to default action once visible
-            if (o->oOpacity == 0xFF) {
-                o->oAction = BOWSER_ACT_DEFAULT;
-            }
+            if (o->oOpacity == 0xFF) o->oAction = BOWSER_ACT_DEFAULT;
             cur_obj_become_tangible();
             break;
     }

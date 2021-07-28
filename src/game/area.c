@@ -134,11 +134,9 @@ u32 get_mario_spawn_type(struct Object *o) {
     const BehaviorScript *behavior = virtual_to_segmented(0x13, o->behavior);
 
     for (i = 0; i < 20; i++) {
-        if (sWarpBhvSpawnTable[i] == behavior) {
-            return sSpawnTypeFromWarpBhv[i];
-        }
+        if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
     }
-    return 0;
+    return MARIO_SPAWN_NONE;
 }
 
 struct ObjectWarpNode *area_get_warp_node(u8 id) {
@@ -164,9 +162,7 @@ void load_obj_warp_nodes(void) {
 
         if (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED && get_mario_spawn_type(obj) != 0) {
             warpNode = area_get_warp_node_from_params(obj);
-            if (warpNode != NULL) {
-                warpNode->object = obj;
-            }
+            if (warpNode != NULL) warpNode->object = obj;
         }
     } while ((children = (struct Object *) children->header.gfx.node.next)
              != (struct Object *) gObjParentGraphNode.children);
@@ -226,8 +222,9 @@ void load_area(s32 index) {
         gCurrAreaIndex = gCurrentArea->index;
 
         if (gCurrentArea->terrainData != NULL) {
-            load_area_terrain(index, gCurrentArea->terrainData, gCurrentArea->surfaceRooms,
-                              gCurrentArea->macroObjects);
+            load_area_terrain(index, gCurrentArea->terrainData,
+                                     gCurrentArea->surfaceRooms,
+                                     gCurrentArea->macroObjects);
         }
 
         if (gCurrentArea->objectSpawnInfos != NULL) {
@@ -265,9 +262,7 @@ void unload_mario_area(void) {
         unload_objects_from_area(gMarioSpawnInfo->activeAreaIndex);
 
         gCurrentArea->flags &= ~0x01;
-        if (gCurrentArea->flags == 0x0) {
-            unload_area();
-        }
+        if (gCurrentArea->flags == 0x0) unload_area();
     }
 }
 
@@ -329,16 +324,14 @@ void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue) {
 
         gWarpTransition.data.texTimer = 0;
 
-        if (transType & 1) // Is the image fading in?
-        {
+        if (transType & 1) { // Is the image fading in?
             gWarpTransition.data.startTexRadius = GFX_DIMENSIONS_FULL_RADIUS;
             if (transType >= 0x0F) {
                 gWarpTransition.data.endTexRadius = 16;
             } else {
                 gWarpTransition.data.endTexRadius = 0;
             }
-        } else // The image is fading out. (Reverses start & end circles)
-        {
+        } else { // The image is fading out. (Reverses start & end circles)
             if (transType >= 0x0E) {
                 gWarpTransition.data.startTexRadius = 16;
             } else {
@@ -380,16 +373,14 @@ const Gfx dl_draw_screen_shade_box[] = {
 };
 
 void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
-
-    // create_dl_ortho_matrix();
-    create_dl_translation_matrix(MENU_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
+    create_dl_translation_matrix(G_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
 
     // This is a bit weird. It reuses the dialog text box (width 130, height -80),
     // so scale to at least fit the screen.
 #ifndef WIDESCREEN
-    create_dl_scale_matrix(MENU_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
+    create_dl_scale_matrix(G_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
 #else
-    create_dl_scale_matrix(MENU_MTX_NOPUSH,
+    create_dl_scale_matrix(G_MTX_NOPUSH,
                            GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
 #endif
 
@@ -408,8 +399,8 @@ void render_screen_overlay(void) {
     u32 a          = 0;
 #ifdef ENVIRONMENT_SCREEN_TINT
     f32 surfaceHeight = -(gLakituState.oldPitch / 90.0f);
-    f32 waterLevel = find_water_level(     gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
-    f32 gasLevel   = find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2])+surfaceHeight+40.0f;
+    f32 waterLevel = find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f;
+    f32 gasLevel   = find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f;
 
     if (gLakituState.pos[1] < waterLevel) {
         aWater = (waterLevel - gLakituState.pos[1]);
@@ -418,9 +409,7 @@ void render_screen_overlay(void) {
         vec3s_set(rgbWater, 255, 255, 0);
     }
 
-    if (aWater > 63) {
-        aWater = 63;
-    }
+    if (aWater > 63) aWater = 63;
 #endif
 #ifdef DAMAGE_SCREEN_TINT
     if (m->health < 0x100 && m->hurtShadeAlpha > 0) {
@@ -434,9 +423,9 @@ void render_screen_overlay(void) {
     a = aWater + aHurt;
     if (a > 0) {
 #ifdef DAMAGE_SCREEN_TINT
-        if (m->action == ACT_SHOCKED || m->action == ACT_WATER_SHOCKED || m->action == ACT_SHOCKWAVE_BOUNCE) {
-            vec3s_set(rgbHurt, 255, 238, 0);
-        }
+        if (m->action == ACT_SHOCKED
+         || m->action == ACT_WATER_SHOCKED
+         || m->action == ACT_SHOCKWAVE_BOUNCE) vec3s_set(rgbHurt, 255, 238, 0);
 #endif
         rgb[0] = ((rgbWater[0] * aWater) + (rgbHurt[0] * aHurt))/a;
         rgb[1] = ((rgbWater[1] * aWater) + (rgbHurt[1] * aHurt))/a;
@@ -475,9 +464,7 @@ void render_game(void) {
                       SCREEN_HEIGHT - gBorderHeight);
         gMenuOptSelectIndex = render_menus_and_dialogs();
 
-        if (gMenuOptSelectIndex != 0) {
-            gSaveOptSelectIndex = gMenuOptSelectIndex;
-        }
+        if (gMenuOptSelectIndex != 0) gSaveOptSelectIndex = gMenuOptSelectIndex;
 
         if (gViewportClip != NULL) {
             make_viewport_clip_rect(gViewportClip);

@@ -19,6 +19,7 @@
 #define RAM_END          0x80400000
 #else
 #define RAM_END          0x80800000
+#define SEG_POOL_END_4MB 0x80400000
 #endif
 
 /*
