@@ -24,6 +24,10 @@
 #include "save_file.h"
 #include "skybox.h"
 #include "sound_init.h"
+#ifdef METAL_CAP_REFLECTION
+#include "buffers/framebuffers.h"
+#include "texture_edit.h"
+#endif
 
 #include "config.h"
 
@@ -80,6 +84,13 @@ struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mi
 // treated this like a "misc" file for vaguely Mario related things
 // (message NPC related things, the Mario head geo, and Mario geo
 // functions)
+
+#ifdef METAL_CAP_REFLECTION
+extern ALIGNED8 Texture mario_texture_metal_reflection_shine[];
+extern ALIGNED8 Texture mario_texture_metal_reflection_lakitu[];
+extern ALIGNED8 Texture mario_texture_metal[];
+extern ALIGNED8 Texture mario_cap_seg3_texture_metal[];
+#endif
 
 #ifdef KEEP_MARIO_HEAD
 /**
@@ -286,7 +297,7 @@ void bhv_unlock_door_star_loop(void) {
 }
 
 /**
- * Generate a display list that sets the correct blend mode and color for mirror Mario.
+ * Generate a display list that sets the correct blend mode and color for vanish Mario.
  */
 static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
     Gfx *gfx;
@@ -308,7 +319,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
 }
 
 /**
- * Sets the correct blend mode and color for mirror Mario.
+ * Sets the correct blend mode and color for vanish Mario.
  */
 Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
     Gfx *gfx = NULL;
@@ -471,9 +482,88 @@ Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED 
 Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
-
+#ifdef METAL_CAP_REFLECTION
+#ifdef METAL_CAP_REFLECTION_SHINE
+    u16 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
+#endif
+#ifdef METAL_CAP_REFLECTION_LAKITU
+    u16 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
+    s16 pitch;
+    s16 yaw;
+#endif
+    f32 dist;
+#ifdef METAL_CAP_REFLECTION_LAKITU
+    s32 lakituX;
+    s32 lakituY;
+    u32 lakituW;
+    u32 lakituH;
+    const u32 lakituMaxW = 56;
+    const u32 lakituMaxH = lakituMaxW/2;
+#endif
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = bodyState->modelState >> 8;
+        if (bodyState->modelState & MODEL_STATE_METAL && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
+            u16 *metalTexture = segmented_to_virtual(mario_texture_metal);
+#ifdef METAL_CAP_REFLECTION_LAKITU
+            vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
+            // c up is 250.0f
+            dist -= 250.0f;
+            dist /=  16.0f;
+            dist = max(min(dist, min(lakituMaxW,lakituMaxH)), 0.0f);
+            lakituW = (lakituMaxW-(dist*2.0f));//*sins(pitch);
+            lakituH = (lakituMaxH-dist);//*max(coss(yaw),0.5f);
+            lakituX = max(((64.0f/SCREEN_HEIGHT)*(SCREEN_HEIGHT-gMarioScreenY))-lakituW, 0);
+            lakituY = max(((32.0f/SCREEN_WIDTH)*(gMarioScreenX))-lakituH*0.5f, 0);
+#endif
+            generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
+#ifdef METAL_CAP_REFLECTION_LAKITU
+            copy_partial_image(metalTexture, lakituTexture,
+                                // 16, 0,
+                                lakituX, lakituY, // dst   xy
+                                lakituW, lakituH, // dst   wh
+                                // 64, 32,
+                                64, 32, // dst T wh
+                                G_IM_FMT_IA, G_IM_SIZ_8b,
+                                 0,  0, // src   xy
+                                64, 64, // src   wh
+                                64, 64, // src T wh
+                                G_IM_FMT_RGBA, G_IM_SIZ_16b);
+#endif
+#ifdef METAL_CAP_REFLECTION_SHINE
+            overlay_i8_on_rgba16_additive(metalTexture, shineTexture, 64, 32);
+#endif
+        }
+        if (find_closest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
+            u16 *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
+#ifdef METAL_CAP_REFLECTION_LAKITU
+            dist -= 250.0f;
+            dist /= 16.0f;
+            dist = max(min(dist, 32.0f), 0.0f);
+            lakituW = 64-dist*2.0f;
+            lakituH = (32-dist);
+            lakituX = 32-lakituW*0.5f;
+            lakituY = lakituX - 16;
+#endif
+            generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
+#ifdef METAL_CAP_REFLECTION_LAKITU
+            copy_partial_image(metalCapTexture, lakituTexture,
+                                lakituX, lakituY, // dst   xy
+                                lakituW, lakituH, // dst   wh
+                                64, 32, // dst T wh
+                                G_IM_FMT_IA, G_IM_SIZ_8b,
+                                 0,  0, // src   xy
+                                64, 64, // src   wh
+                                64, 64, // src T wh
+                                G_IM_FMT_RGBA, G_IM_SIZ_16b);
+#endif
+#ifdef METAL_CAP_REFLECTION_SHINE
+            overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, 64, 32);
+#endif
+        }
+#else
+    if (callContext == GEO_CONTEXT_RENDER) {
+        switchCase->selectedCase = bodyState->modelState >> 8;
+#endif
     }
     return NULL;
 }
@@ -543,16 +633,16 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *b, Mat4 *
             switch (marioState->marioBodyState->grabPos) {
                 case GRAB_POS_LIGHT_OBJ:
                     if (marioState->action & ACT_FLAG_THROWING) {
-                        vec3s_set(asHeldObj->translation, 50, 0, 0);
+                        vec3s_set(asHeldObj->translation, 50, 0,   0);
                     } else {
                         vec3s_set(asHeldObj->translation, 50, 0, 110);
                     }
                     break;
                 case GRAB_POS_HEAVY_OBJ:
-                    vec3s_set(asHeldObj->translation, 145, -173, 180);
+                    vec3s_set(asHeldObj->translation, 145, -173,  180);
                     break;
                 case GRAB_POS_BOWSER:
-                    vec3s_set(asHeldObj->translation, 80, -270, 1260);
+                    vec3s_set(asHeldObj->translation,  80, -270, 1260);
                     break;
             }
         }

@@ -451,9 +451,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 #ifdef IMPROVED_MOVEMENT
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &ledgeFloor);
     if (ledgeFloor == NULL || ledgeFloor->normal.y < COS25 || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
-    if (m->input & INPUT_NONZERO_ANALOG) {
-        if (intendedDYaw < -0x4000 || intendedDYaw > 0x4000) return FALSE;
-    }
+    if (m->input & INPUT_NONZERO_ANALOG && (intendedDYaw < -0x4000 || intendedDYaw > 0x4000)) return FALSE;
 #else
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], &ledgeFloor);
 #endif
@@ -591,12 +589,12 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             m->vel[1] = 0.0f;
 
             //! Uses referenced ceiling instead of ceil (ceiling hang upwarp)
-            #ifdef HANGING_FIX
+#ifdef HANGING_FIX
             if (m->ceil != NULL && m->ceil->type == SURFACE_HANGABLE) {
-            #else
+#else
             if ((stepArg & AIR_STEP_CHECK_HANG) && m->ceil != NULL
                 && m->ceil->type == SURFACE_HANGABLE) {
-            #endif
+#endif
                 return AIR_STEP_GRABBED_CEILING;
             }
 
@@ -661,9 +659,7 @@ void apply_twirl_gravity(struct MarioState *m) {
     f32 Zmodifier = (m->input & INPUT_Z_DOWN) ? 4.0f : 1.0f;
 #endif
 
-    if (m->angleVel[1] > 1024) {
-        heaviness = 1024.0f / m->angleVel[1];
-    }
+    if (m->angleVel[1] > 1024) heaviness = 1024.0f / m->angleVel[1];
 #ifdef Z_TWIRL
     terminalVelocity = -TERMINAL_GRAVITY_VELOCITY * heaviness * Zmodifier;
 #else
@@ -713,11 +709,8 @@ void apply_gravity(struct MarioState *m) {
         if (m->vel[1] < -16.0f) m->vel[1] = -16.0f;
     } else if ((m->flags & MARIO_WING_CAP) && m->vel[1] < 0.0f && (m->input & INPUT_A_DOWN)) {
         m->marioBodyState->wingFlutter = TRUE;
-
         m->vel[1] -= 2.0f;
-        if (m->vel[1] < -37.5f) {
-            if ((m->vel[1] += 4.0f) > -37.5f) m->vel[1] = -37.5f;
-        }
+        if (m->vel[1] < -37.5f && (m->vel[1] += 4.0f) > -37.5f) m->vel[1] = -37.5f;
     } else {
         m->vel[1] -= 4.0f;
         if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;

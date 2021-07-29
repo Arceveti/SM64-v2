@@ -36,8 +36,23 @@ static const Lights1 mario_brown2_lights_group = gdSPDefLights1(
     0x73, 0x06, 0x00, 0x28, 0x28, 0x28
 );
 
+#ifdef METAL_CAP_REFLECTION
+#ifdef METAL_CAP_REFLECTION_SHINE
+ALIGNED8 Texture mario_texture_metal_reflection_shine[] = {
+#include "actors/mario/mario_metal_reflection_shine.i8.inc.c"
+};
+#endif
+#ifdef METAL_CAP_REFLECTION_LAKITU
+ALIGNED8 Texture mario_texture_metal_reflection_lakitu[] = {
+#include "actors/mario/mario_metal_reflection_lakitu.ia8.inc.c"
+};
+#endif
+
 // 0x04000090
+ALIGNED8 Texture mario_texture_metal[] = {
+#else
 ALIGNED8 static const Texture mario_texture_metal[] = {
+#endif
 #include "actors/mario/mario_metal.rgba16.inc.c"
 };
 

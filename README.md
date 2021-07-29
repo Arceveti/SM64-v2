@@ -8,17 +8,18 @@ This repo needs gcc in order to be able to build it. To install it, run `sudo ap
 This is a fork of HackerSM64 by Reonu, with the following additional features, fixes, and optimizations (patches marked with `*` are toggleable in `config.h`):
 
 **Graphics:**
-- Power stars have a glowing effect. (Arceveti) *
+- Power stars now have a glowing effect. (Arceveti) *
 - 30 FPS ia8 (64x64) coins. (Arceveti) *
 - Screen tint effects based on damage & environment, which can be enabled separately (Arceveti) *
 - Mario's silhouette is shown when behind most surfaces (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
 - Bowser 3's rainbow effect is animated (Arceveti) *
 - Use 64x64 quarter shadow textures instead of 16x16 (Arceveti) *
 - King Bob-omb blinks
+- Reflective metal cap texture using the framebuffer (mks#2512, Rovert, Arceveti) *
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
-- Makes the Blast Away The Wall star spawn from the wall instead of existing in the world already *
+- The Blast Away The Wall star spawns from the wall instead of existing in the world already *
 - Re-implementation of the unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - Re-implementation of the unused cracked ice in SL (SunlitSpace542, Arceveti) *
 - Bowser's puzzle in LLL is now seamless (Arceveti)
@@ -26,7 +27,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
 **Bugfixes:**
-- `obj_resolve_object_collisions()` works consistently (Arceveti) *
+- `obj_resolve_object_collisions()` now works consistently (Arceveti) *
 - Fixed DDD water rings by using interaction checking (Arceveti) *
 - Bomb clip fix (Arceveti) *
 - Mario's collision with lava is detected regardless of his action *
@@ -36,10 +37,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Optimizations:**
 - Most doubles are now floats where the extra percision isn't needed
 - Improved slope fix and exposed ceilings fix (Arceveti)
-- Removed almost all unused code/data from the Goddard folder (Arceveti)
-- Removed many unecessary find_floor (collision) checks (Arceveti)
+- Almost all unused code/data from the Goddard folder is removed (Arceveti)
+- A few unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
-- Removed many stubbed/unused/duplicate functions/variables
+- Many stubbed/unused/duplicate functions/variables are removed
 - Many smaller optimizations (Arceveti)
 
 **Hacker QoL:**
@@ -79,7 +80,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
-- General movement improvements, including turn circle fix, midair turn, better ceiling collision handling, less softlocks, etc. (Arceveti) *
+- General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. (Arceveti) *
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Unique wall slide which takes horizontal momentum into account (Arceveti) *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
@@ -91,7 +92,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Goddard easter egg from Shindou *
 
 **Experimental:**
-- Platform Displacement 2 for objects other than Mario & Bowser
+- Platform Displacement 2 for objects other than Mario & Bowser *
+- PSS Painting uses painting data instead of being part of the level model *
 
 # HackerSM64:
 

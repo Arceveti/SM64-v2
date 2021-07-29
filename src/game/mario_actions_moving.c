@@ -1222,9 +1222,7 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
             mario_set_forward_vel(m, m->forwardVel + 8.0f);
 #endif
             set_mario_action(m, airAction, 0);
-            if (m->forwardVel < -50.0f || 50.0f < m->forwardVel) {
-                play_sound(SOUND_MARIO_HOOHOO, m->marioObj->header.gfx.cameraToObject);
-            }
+            if (m->forwardVel < -50.0f || 50.0f < m->forwardVel) play_sound(SOUND_MARIO_HOOHOO, m->marioObj->header.gfx.cameraToObject);
             break;
 
         case GROUND_STEP_NONE:
@@ -1679,18 +1677,13 @@ s32 act_backflip_land(struct MarioState *m) {
 #else
     if (!(m->input & INPUT_Z_DOWN)) m->input &= ~INPUT_A_PRESSED;
 #endif
-
     common_landing_action(m, MARIO_ANIM_TRIPLE_JUMP_LAND, ACT_FREEFALL);
-
     if (common_landing_cancels(m, &sBackflipLandAction, set_jumping_action)) return TRUE;
-
     if (!(m->input & INPUT_NONZERO_ANALOG)) play_sound_if_no_flag(m, SOUND_MARIO_HAHA, MARIO_MARIO_SOUND_PLAYED);
-
     return FALSE;
 }
 
-s32 quicksand_jump_land_action(struct MarioState *m, s32 animation1, s32 animation2, u32 endAction,
-                               u32 airAction) {
+s32 quicksand_jump_land_action(struct MarioState *m, s32 animation1, s32 animation2, u32 endAction, u32 airAction) {
     if (m->actionTimer++ < 6) {
         m->quicksandDepth -= (7 - m->actionTimer) * 0.8f;
         if (m->quicksandDepth < 1.0f) m->quicksandDepth = 1.1f;

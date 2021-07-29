@@ -12,6 +12,9 @@ extern struct GraphNodeCamera *gCurGraphNodeCamera;
 extern struct GraphNodeObject *gCurGraphNodeObject;
 extern struct GraphNodeHeldObject *gCurGraphNodeHeldObject;
 extern u16 gAreaUpdateCounter;
+#ifdef METAL_CAP_REFLECTION_LAKITU
+extern s16 gMarioScreenX, gMarioScreenY;
+#endif
 
 // after processing an object, the type is reset to this
 #define ANIM_TYPE_NONE                  0

@@ -155,6 +155,7 @@ static const Lights1 bowser_seg6_lights_06038C38 = gdSPDefLights1(
 
 #ifdef RAINBOW_BOWSER
 #define static
+#define const
 #endif
 
 // 0x06038C80

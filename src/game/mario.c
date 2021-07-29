@@ -1201,8 +1201,8 @@ void debug_print_speed_action_normal(struct MarioState *m) {
         print_text_fmt_int(210, 184, "PX %d", m->pos[0]);
         print_text_fmt_int(210, 168, "PY %d", m->pos[1]);
         print_text_fmt_int(210, 152, "PZ %d", m->pos[2]);
-        // print_text_fmt_int(210, 184, "SX %d", screenX);
-        // print_text_fmt_int(210, 168, "SY %d", screenY);
+        // print_text_fmt_int(210, 184, "SX %d", gMarioScreenX);
+        // print_text_fmt_int(210, 168, "SY %d", gMarioScreenY);
         switch (sDebugMode) {
             case 0:
                 print_text_fmt_int(210, 136, "VX %d", m->vel[0]);

@@ -270,11 +270,8 @@ static void stationary_slow_down(struct MarioState *m) {
 
 static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
     f32 buoyancy = get_buoyancy(m);
-#ifdef IMPROVED_MOVEMENT
-    f32 maxSpeed = 32.0f;
-#else
-    f32 maxSpeed = 28.0f;
-#endif
+    f32 maxSpeed = MAX_SWIMMING_SPEED;
+
     if (m->action & ACT_FLAG_STATIONARY) m->forwardVel -= 2.0f;
     if (m->forwardVel < 0.0f) m->forwardVel = 0.0f;
     if (m->forwardVel > maxSpeed) m->forwardVel = maxSpeed;
@@ -312,13 +309,7 @@ static void update_swimming_yaw(struct MarioState *m) {
 
 static void update_swimming_pitch(struct MarioState *m) {
     s16 targetPitch = -(s16)(252.0f * m->controller->stickY);
-
-    s16 pitchVel;
-    if (m->faceAngle[0] < 0) {
-        pitchVel = 0x100;
-    } else {
-        pitchVel = 0x200;
-    }
+    s16 pitchVel = (m->faceAngle[0] < 0 ? 0x100 : 0x200);
 
     if (m->faceAngle[0] < targetPitch) {
         if ((m->faceAngle[0] += pitchVel) > targetPitch) m->faceAngle[0] = targetPitch;
@@ -422,7 +413,6 @@ static void surface_swim_bob(struct MarioState *m) {
             return;
         }
     }
-
     sBobIncrement = 0;
 }
 
@@ -980,7 +970,7 @@ static s32 act_water_plunge(struct MarioState *m) {
     f32 endVSpeed = swimming_near_surface(m) ? 0.0f : -5.0f;
 
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
     if (m->input & INPUT_B_PRESSED) return set_mario_action(         m, ACT_WATER_PUNCH        , 0);
 #ifdef WATER_GROUND_POUND
     if (m->input & INPUT_Z_PRESSED) return drop_and_set_mario_action(m, ACT_WATER_GROUND_POUND , 0);

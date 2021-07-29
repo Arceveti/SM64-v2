@@ -1445,16 +1445,6 @@ struct SoundState sBowserSoundStates[] = {
 };
 
 /**
- * Set whenever Bowser should have rainbow light or not on each stage
- */
-s8 sBowserRainbowLight[] = { FALSE, FALSE, TRUE };
-
-/**
- * Set how much health Bowser has on each stage
- */
-// s8 sBowserHealth[] = { 1, 1, 3 };
-
-/**
  * Update Bowser's actions when he's hands free
  */
 void bowser_free_update(void) {
@@ -1633,8 +1623,8 @@ void bhv_bowser_init(void) {
     }
     o->oBehParams2ndByte = level;
     // Set health and rainbow light depending of the level
-    o->oBowserRainbowLight = sBowserRainbowLight[level];
-    o->oHealth = (level == 3 ? 3 : 1); // sBowserHealth[level];
+    o->oBowserRainbowLight = (level >= BOWSER_BP_BITS); // Set whenever Bowser should have rainbow light or not on each stage
+    o->oHealth = ((level >= BOWSER_BP_BITS) ? 3 : 1); // Set how much health Bowser has on each stage
     // Start camera event, this event is not defined so maybe
     // the "start arena" cutscene was originally called this way
     cur_obj_start_cam_event(o, CAM_EVENT_BOWSER_INIT);
@@ -1864,14 +1854,10 @@ Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s3
         graphNode = (struct GraphNodeGenerated *) node;
         if (gCurGraphNodeHeldObject != 0) obj = gCurGraphNodeHeldObject->objNode;
         // Set layers if object is transparent or not
-        if (obj->oOpacity == 0xFF) {
-            graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
-        } else {
-            graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
-        }
+        graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | ((obj->oOpacity == 0xFF ? LAYER_OPAQUE : LAYER_TRANSPARENT) << 8);
         gfx = gfxHead = alloc_display_list(2 * sizeof(Gfx));
         // If TRUE, clear lighting to give rainbow color
-        if (obj->oBowserRainbowLight != 0) {
+        if (obj->oBowserRainbowLight) {
 #ifdef RAINBOW_BOWSER
             if (obj->oHealth >= 3) {
                 gSPClearGeometryMode(gfx++, G_LIGHTING);

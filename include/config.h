@@ -182,6 +182,25 @@
 
 #endif
 
+// Read the framebuffer to the metal cap texture to make it look reflective (mks#2512, Rovert, Arceveti)
+#define METAL_CAP_REFLECTION
+
+// -- The following require METAL_CAP_REFLECTION --
+#ifdef METAL_CAP_REFLECTION
+
+// Overlay a shine texture over the metal cap texture (Arceveti)
+#define METAL_CAP_REFLECTION_SHINE
+// Make the metal cap reflection grayscale so it looks like metal instead of glass (Arceveti)
+#define METAL_CAP_REFLECTION_GRAYSCALE
+// Draw a lakitu sprite in the metal cap reflection when in first person mode to cover up the duplicate Mario
+// METAL_CAP_REFLECTION_GRAYSCALE is recommended because
+// the lakitu sprite is an ia8 for the cloud's transparency
+// (Arceveti)
+#define METAL_CAP_REFLECTION_LAKITU
+
+#endif
+
+
 // -- Vanilla Level Changes --
 
 // Fixes Lakitu cutscene detection bounds
@@ -285,6 +304,10 @@
 // General movement improvements, including turn circle fix,
 // midair turn, better ceiling handling, less softlocks, etc.
 // (Arceveti)
+
+// Vanilla is 28.0f
+#define MAX_SWIMMING_SPEED 32.0f
+
 #define IMPROVED_MOVEMENT
 
 // -- The following require IMPROVED_MOVEMENT --
@@ -305,7 +328,7 @@
 #define GROUND_POUND_JUMP
 // Underwater Ground pound similar to SMO (Unknown)
 #define WATER_GROUND_POUND
-// Number of frames before Mario falls off a ledge.
+// Number of quarter frames before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering
 // (Arceveti)

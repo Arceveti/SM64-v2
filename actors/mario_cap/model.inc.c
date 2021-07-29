@@ -19,7 +19,11 @@ static const Lights1 mario_cap_seg3_lights_0301CF38 = gdSPDefLights1(
 );
 
 // 0x0301CF50
+#ifdef METAL_CAP_REFLECTION
+ALIGNED8 Texture mario_cap_seg3_texture_metal[] = {
+#else
 ALIGNED8 static const Texture mario_cap_seg3_texture_metal[] = {
+#endif
 #include "actors/mario_cap/mario_cap_metal.rgba16.inc.c"
 };
 

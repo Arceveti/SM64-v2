@@ -4,6 +4,9 @@
 #include "engine/math_util.h"
 #include "game_init.h"
 #include "gfx_dimensions.h"
+#ifdef METAL_CAP_REFLECTION_LAKITU
+#include "level_update.h"
+#endif
 #include "main.h"
 #include "memory.h"
 #include "print.h"
@@ -246,6 +249,9 @@ struct GraphNodeCamera *gCurGraphNodeCamera = NULL;
 struct GraphNodeObject *gCurGraphNodeObject = NULL;
 struct GraphNodeHeldObject *gCurGraphNodeHeldObject = NULL;
 u16 gAreaUpdateCounter = 0;
+#ifdef METAL_CAP_REFLECTION_LAKITU
+s16 gMarioScreenX, gMarioScreenY;
+#endif
 
 // #ifdef F3DEX_GBI_2
 LookAt lookAt;
@@ -486,12 +492,13 @@ static void make_roll_matrix(Mtx *mtx, s16 angle) {
  */
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;
+#ifdef METAL_CAP_REFLECTION_LAKITU
+    Vec3s marioPos3s;
+#endif
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
-    if (node->fnNode.func != NULL) {
-        node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
-    }
+    if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     make_roll_matrix(rollMtx, node->rollScreen);
 
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(rollMtx), G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
@@ -507,6 +514,17 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
         geo_process_node_and_siblings(node->fnNode.node.children);
         gCurGraphNodeCamera = NULL;
     }
+#ifdef METAL_CAP_REFLECTION_LAKITU
+    // Convert Mario's coordinates into vec3s so they can be used in mtxf_mul_vec3s
+    vec3f_to_vec3s(marioPos3s, gMarioState->pos);
+
+    // Transform Mario's coordinates into view frustrum
+    mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos3s);
+
+    // Perspective divide
+    gMarioScreenX = max(2 * (0.5f - marioPos3s[0] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->width ), 0);
+    gMarioScreenY = max(2 * (0.5f - marioPos3s[1] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->height), 0);
+#endif
     gMatStackIndex--;
 }
 
