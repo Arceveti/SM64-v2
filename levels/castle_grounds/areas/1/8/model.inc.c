@@ -8,7 +8,7 @@ static const Vtx castle_grounds_seg7_vertex_cannon_grill[] = {
 
 // 0x0700BC30 - 0x0700BC68
 static const Gfx castle_grounds_seg7_sub_dl_cannon_grill[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09005800_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_cannon_grill, 4, 0),

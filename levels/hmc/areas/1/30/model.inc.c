@@ -102,7 +102,7 @@ static const Vtx hmc_seg7_vertex_070214C8[] = {
 
 // 0x070215B8 - 0x07021630
 static const Gfx hmc_seg7_dl_070215B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800_light_beige_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_070210E0.l, 1),
@@ -117,7 +117,7 @@ static const Gfx hmc_seg7_dl_070215B8[] = {
 
 // 0x07021630 - 0x07021760
 static const Gfx hmc_seg7_dl_07021630[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800_dark_brown_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_070211F8, 15, 0),

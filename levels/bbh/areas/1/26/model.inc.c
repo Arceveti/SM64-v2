@@ -46,7 +46,7 @@ static const Vtx bbh_seg7_vertex_070155E8[] = {
 
 // 0x07015628 - 0x070156E0
 static const Gfx bbh_seg7_dl_07015628[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, spooky_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, spooky_0900A800_light_radial),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_07015408, 16, 0),

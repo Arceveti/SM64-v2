@@ -67,7 +67,7 @@ static const Vtx rr_seg7_vertex_0701B370[] = {
 // 0x0701B430 - 0x0701B4C0
 static const Gfx rr_seg7_dl_0701B430[] = {
 #ifdef VERSION_JP
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_0701B290, 14, 0),
@@ -80,7 +80,7 @@ static const Gfx rr_seg7_dl_0701B430[] = {
     gsSP2Triangles( 8,  9, 10, 0x0,  8, 11,  9, 0x0),
     gsSPEndDisplayList(),
 #else
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_0701B290, 16, 0),

@@ -103,7 +103,7 @@ static const Vtx pss_seg7_vertex_0700AD48[] = {
 
 // 0x0700ADA8 - 0x0700AE00
 static const Gfx pss_seg7_dl_0700ADA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900C000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900C000_red_carpet),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_0700A8B8, 12, 0),
@@ -115,7 +115,7 @@ static const Gfx pss_seg7_dl_0700ADA8[] = {
 
 // 0x0700AE00 - 0x0700AF60
 static const Gfx pss_seg7_dl_0700AE00[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09000000_gray_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_0700A978, 16, 0),
@@ -146,7 +146,7 @@ static const Gfx pss_seg7_dl_0700AE00[] = {
 
 // 0x0700AF60 - 0x0700AFA8
 static const Gfx pss_seg7_dl_0700AF60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09007000_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_0700AD48, 6, 0),

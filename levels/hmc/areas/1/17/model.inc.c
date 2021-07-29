@@ -551,7 +551,7 @@ static const Vtx hmc_seg7_vertex_070168D8[] = {
 
 // 0x07016918 - 0x07016A90
 static const Gfx hmc_seg7_dl_07016918[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800_grass_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_07014EB8.l, 1),
@@ -584,7 +584,7 @@ static const Gfx hmc_seg7_dl_07016918[] = {
 
 // 0x07016A90 - 0x07016BA8
 static const Gfx hmc_seg7_dl_07016A90[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800_light_beige_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_070152D8, 16, 0),
@@ -611,7 +611,7 @@ static const Gfx hmc_seg7_dl_07016A90[] = {
 
 // 0x07016BA8 - 0x07016C60
 static const Gfx hmc_seg7_dl_07016BA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09008800_gray_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_07014EB8.l, 1),
@@ -630,7 +630,7 @@ static const Gfx hmc_seg7_dl_07016BA8[] = {
 
 // 0x07016C60 - 0x07016E40
 static const Gfx hmc_seg7_dl_07016C60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800_dark_brown_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_070156C8, 15, 0),
@@ -671,7 +671,7 @@ static const Gfx hmc_seg7_dl_07016C60[] = {
 
 // 0x07016E40 - 0x07017338
 static const Gfx hmc_seg7_dl_07016E40[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09005800_dirt_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_07015C28, 16, 0),

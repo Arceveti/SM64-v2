@@ -157,7 +157,7 @@ static const Vtx inside_castle_seg7_vertex_07058698[] = {
 
 // 0x07058718 - 0x07058950
 static const Gfx inside_castle_seg7_dl_07058718[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09004800_yellow_gradient_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_07057FD8.l, 1),

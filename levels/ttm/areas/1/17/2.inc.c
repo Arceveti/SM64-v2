@@ -129,7 +129,7 @@ static const Gfx ttm_seg7_dl_0700F858[] = {
 
 // 0x0700F8D0 - 0x0700FA18
 static const Gfx ttm_seg7_dl_0700F8D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09005000_wood_bark),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ttm_seg7_vertex_0700F418, 15, 0),

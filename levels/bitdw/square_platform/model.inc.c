@@ -32,7 +32,7 @@ static const Vtx bitdw_seg7_vertex_0700B380[] = {
 
 // 0x0700B410 - 0x0700B480
 static const Gfx bitdw_seg7_sub_dl_moving_pyramid[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09002000_layered_gradient_rows),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_0700B290, 15, 0),

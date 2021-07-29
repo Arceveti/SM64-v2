@@ -32,7 +32,7 @@ static const Vtx bits_seg7_vertex_07013DE8[] = {
 
 // 0x07013E68 - 0x07013EF8
 static const Gfx bits_seg7_dl_07013E68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bits_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bits_seg7_texture_arrow_platform),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bits_seg7_vertex_07013CE8, 16, 0),

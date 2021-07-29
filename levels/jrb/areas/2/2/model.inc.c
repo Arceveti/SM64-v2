@@ -242,7 +242,7 @@ static const Vtx jrb_seg7_vertex_0700FA90[] = {
 
 // 0x0700FB30 - 0x0700FE48
 static const Gfx jrb_seg7_dl_0700FB30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09006000_hanging_seaweed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_0700EF98.l, 1),

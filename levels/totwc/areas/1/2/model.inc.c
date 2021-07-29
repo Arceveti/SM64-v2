@@ -296,7 +296,7 @@ static const Vtx totwc_seg7_vertex_07006BD8[] = {
 
 // 0x07006C48 - 0x07007048
 static const Gfx totwc_seg7_dl_07006C48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09005800_rainbow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(totwc_seg7_vertex_07005DC8, 15, 0),

@@ -70,7 +70,7 @@ static const Vtx bits_seg7_vertex_07013B78[] = {
 
 // 0x07013BA8 - 0x07013C78
 static const Gfx bits_seg7_dl_07013BA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bits_seg7_lights_07013890.l, 1),

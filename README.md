@@ -45,6 +45,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)
 - Many unnamed display lists and geolayouts have been named (Arceveti)
+- Almost all textures have been named (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
 - Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *

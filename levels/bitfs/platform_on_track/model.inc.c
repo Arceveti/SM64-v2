@@ -28,7 +28,7 @@ static const Vtx bitfs_seg7_vertex_070116D8[] = {
 
 // 0x07011718 - 0x07011798
 static const Gfx bitfs_seg7_dl_07011718[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bitfs_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bitfs_seg7_texture_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitfs_seg7_vertex_070115D8, 16, 0),

@@ -40,7 +40,7 @@ static const Vtx bob_seg7_vertex_0700E628[] = {
 
 // 0x0700E6C8 - 0x0700E768
 static const Gfx bob_seg7_dl_0700E6C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09006000_wooden_board),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bob_seg7_lights_0700E510.l, 1),

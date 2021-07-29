@@ -143,7 +143,7 @@ static const Vtx ccm_seg7_vertex_07011600[] = {
 
 // 0x07011660 - 0x070117B8
 static const Gfx ccm_seg7_dl_07011660[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_rope_holder),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 4 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_07010FB8.l, 1),
@@ -176,7 +176,7 @@ static const Gfx ccm_seg7_dl_07011660[] = {
 
 // 0x070117B8 - 0x070118B0
 static const Gfx ccm_seg7_dl_070117B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07001100),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_rope_lift_hinge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_07011410, 15, 0),

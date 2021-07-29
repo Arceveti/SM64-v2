@@ -38,7 +38,7 @@ static const Vtx bowser_3_seg7_vertex_07004848[] = {
 
 // 0x070048D8 - 0x07004958
 static const Gfx bowser_3_seg7_dl_070048D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_bomb_stand),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_3_seg7_lights_07004740.l, 1),

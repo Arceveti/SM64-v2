@@ -24,7 +24,7 @@ static const Vtx castle_grounds_seg7_vertex_door_frame[] = {
 
 // 0x0700C3A0 - 0x0700C3D8
 static const Gfx castle_grounds_seg7_dl_red_carpet_outside[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000_red_carpet),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_red_carpet_outside, 4, 0),
@@ -34,7 +34,7 @@ static const Gfx castle_grounds_seg7_dl_red_carpet_outside[] = {
 
 // 0x0700C3D8 - 0x0700C430
 static const Gfx castle_grounds_seg7_dl_door_frame[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000_stars_pattern),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_door_frame, 12, 0),

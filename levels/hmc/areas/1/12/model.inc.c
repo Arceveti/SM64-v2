@@ -12,7 +12,7 @@ static const Vtx hmc_seg7_vertex_07013DB8[] = {
 
 // 0x07013E38 - 0x07013E80
 static const Gfx hmc_seg7_dl_07013E38[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003000_hanging_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_07013DB8, 8, 0),

@@ -80,6 +80,7 @@ build/*
 !/textures/segment2/segment2.blue_coin.rgba16.png
 !/textures/segment2/segment2.red_coin.rgba16.png
 !/textures/segment2/segment2.silver_coin.*.png
+!/textures/title_screen_bg/title_screen_bg_rumble.rgba16.png
 !/actors/coin/coin_*.ia8.png
 !/actors/star/light_quarter_circle.ia16.png
 !/levels/castle_inside/41.rgba16.png

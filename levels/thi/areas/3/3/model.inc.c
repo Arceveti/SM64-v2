@@ -116,7 +116,7 @@ static const Gfx thi_seg7_dl_07009B70[] = {
 
 // 0x07009C40 - 0x07009CF8
 static const Gfx thi_seg7_dl_07009C40[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, thi_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, thi_seg7_texture_cave_ceiling),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(thi_seg7_vertex_070098D0, 15, 0),

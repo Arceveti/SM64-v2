@@ -66,7 +66,7 @@ static const Vtx lll_seg7_vertex_07016850[] = {
 
 // 0x07016930 - 0x07016A30
 static const Gfx lll_seg7_dl_07016930[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09003000_volcano_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&lll_seg7_lights_07016658.l, 1),
@@ -90,7 +90,7 @@ static const Gfx lll_seg7_dl_07016930[] = {
 
 // 0x07016A30 - 0x07016A78
 static const Gfx lll_seg7_dl_07016A30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009000_lava),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(lll_seg7_vertex_070167F0, 6, 0),
@@ -101,7 +101,7 @@ static const Gfx lll_seg7_dl_07016A30[] = {
 
 // 0x07016A78 - 0x07016B00
 static const Gfx lll_seg7_dl_07016A78[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009800_volcano_wall_with_lava),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(lll_seg7_vertex_07016850, 14, 0),

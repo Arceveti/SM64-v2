@@ -173,7 +173,7 @@ static const Vtx rr_seg7_vertex_07008A58[] = {
 
 // 0x07008B58 - 0x07008D28
 static const Gfx rr_seg7_dl_07008B58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_070082C8, 16, 0),
@@ -212,7 +212,7 @@ static const Gfx rr_seg7_dl_07008B58[] = {
 
 // 0x07008D28 - 0x07008E20
 static const Gfx rr_seg7_dl_07008D28[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_07008858, 16, 0),

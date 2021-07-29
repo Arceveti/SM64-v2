@@ -70,7 +70,7 @@ static const Vtx bbh_seg7_vertex_0701EBD8[] = {
 
 // 0x0701EC18 - 0x0701ED18
 static const Gfx bbh_seg7_dl_0701EC18[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09006000_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_0701E948.l, 1),

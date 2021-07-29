@@ -62,7 +62,7 @@ static const Vtx ddd_seg7_vertex_0700D0C8[] = {
 
 // 0x0700D1B8 - 0x0700D2A0
 static const Gfx ddd_seg7_dl_0700D1B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ddd_seg7_texture_07003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ddd_seg7_texture_striped_pole),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ddd_seg7_lights_0700CEE0.l, 1),

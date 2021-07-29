@@ -2072,7 +2072,7 @@ static const Gfx wdw_seg7_dl_07010120[] = {
 
 // 0x07010578 - 0x07010748
 static const Gfx wdw_seg7_dl_07010578[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_wooden_beams),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wdw_seg7_lights_0700A1F8.l, 1),
@@ -2505,7 +2505,7 @@ static const Gfx wdw_seg7_dl_07011298[] = {
 
 // 0x07011920 - 0x07011B08
 static const Gfx wdw_seg7_dl_07011920[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_town_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wdw_seg7_vertex_0700F130, 15, 0),
@@ -2593,7 +2593,7 @@ static const Gfx wdw_seg7_dl_07011B08[] = {
 
 // 0x07011D08 - 0x07011D88
 static const Gfx wdw_seg7_dl_07011D08[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_town_door),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wdw_seg7_vertex_0700FE80, 15, 0),

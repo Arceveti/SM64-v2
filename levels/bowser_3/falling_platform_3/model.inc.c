@@ -50,7 +50,7 @@ static const Vtx bowser_3_seg7_vertex_07002740[] = {
 
 // 0x07002840 - 0x070028B0
 static const Gfx bowser_3_seg7_dl_07002840[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_arena_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bowser_3_seg7_lights_07002670.l, 1),
@@ -66,7 +66,7 @@ static const Gfx bowser_3_seg7_dl_07002840[] = {
 
 // 0x070028B0 - 0x07002918
 static const Gfx bowser_3_seg7_dl_070028B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_07001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, bowser_3_seg7_texture_arena_sides),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bowser_3_seg7_vertex_07002740, 16, 0),

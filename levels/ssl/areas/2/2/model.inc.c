@@ -152,7 +152,7 @@ static const Vtx ssl_seg7_vertex_0701F620[] = {
 
 // 0x0701F700 - 0x0701F920
 static const Gfx ssl_seg7_dl_0701F700[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000000_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ssl_seg7_vertex_0701EF80, 15, 0),

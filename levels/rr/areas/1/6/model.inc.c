@@ -527,7 +527,7 @@ static const Vtx rr_seg7_vertex_070075C0[] = {
 
 // 0x070076B0 - 0x07007868
 static const Gfx rr_seg7_dl_070076B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_07005D00, 15, 0),
@@ -565,7 +565,7 @@ static const Gfx rr_seg7_dl_070076B0[] = {
 
 // 0x07007868 - 0x070079B0
 static const Gfx rr_seg7_dl_07007868[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09008000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09008000_checker),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_070062D0, 14, 0),
@@ -595,7 +595,7 @@ static const Gfx rr_seg7_dl_07007868[] = {
 
 // 0x070079B0 - 0x07007CB0
 static const Gfx rr_seg7_dl_070079B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_070066D0, 15, 0),
@@ -659,7 +659,7 @@ static const Gfx rr_seg7_dl_070079B0[] = {
 
 // 0x07007CB0 - 0x07007D88
 static const Gfx rr_seg7_dl_07007CB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09004800_green_wood),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_07007150, 16, 0),
@@ -680,7 +680,7 @@ static const Gfx rr_seg7_dl_07007CB0[] = {
 
 // 0x07007D88 - 0x07007E60
 static const Gfx rr_seg7_dl_07007D88[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09000800_vertical_lines),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_070073D0, 16, 0),

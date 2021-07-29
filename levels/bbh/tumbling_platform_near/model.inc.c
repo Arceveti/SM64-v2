@@ -40,7 +40,7 @@ static const Vtx bbh_seg7_vertex_0701F960[] = {
 
 // 0x0701FA10 - 0x0701FAB0
 static const Gfx bbh_seg7_sub_dl_tumbling_platform_near[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800_pattern_block),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_tumbling_platform_near.l, 1),

@@ -589,7 +589,7 @@ static const Vtx cotmc_seg7_vertex_07009B20[] = {
 
 // 0x07009B50 - 0x0700A160
 static const Gfx cotmc_seg7_dl_07009B50[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_07001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_crystal_env),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07007E88.l, 1),

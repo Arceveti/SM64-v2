@@ -44,7 +44,7 @@ static const Vtx jrb_seg7_vertex_rock_2[] = {
 
 // 0x070079E8 - 0x07007AC8
 static const Gfx jrb_seg7_sub_dl_rock[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09001800_rock),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_rock.l, 1),

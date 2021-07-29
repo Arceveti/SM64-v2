@@ -826,7 +826,7 @@ static const Vtx totwc_seg7_vertex_07004FE0[] = {
 
 // 0x070050E0 - 0x07005220
 static const Gfx totwc_seg7_dl_070050E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_07001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_tower_white_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(totwc_seg7_vertex_07002800, 16, 0),
@@ -854,7 +854,7 @@ static const Gfx totwc_seg7_dl_070050E0[] = {
 
 // 0x07005220 - 0x07005448
 static const Gfx totwc_seg7_dl_07005220[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_07001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_tower_roof),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(totwc_seg7_vertex_07002C00, 14, 0),
@@ -901,7 +901,7 @@ static const Gfx totwc_seg7_dl_07005220[] = {
 
 // 0x07005448 - 0x07005BE8
 static const Gfx totwc_seg7_dl_07005448[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001000_light_gray_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(totwc_seg7_vertex_07003410, 14, 0),
@@ -1048,7 +1048,7 @@ static const Gfx totwc_seg7_dl_07005448[] = {
 
 // 0x07005BE8 - 0x07005D28
 static const Gfx totwc_seg7_dl_07005BE8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, totwc_seg7_texture_tower_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(totwc_seg7_vertex_07004CE0, 16, 0),

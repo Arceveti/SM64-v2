@@ -34,7 +34,7 @@ static const Vtx hmc_seg7_vertex_0701FEB8[] = {
 
 // 0x0701FF68 - 0x0701FFF8
 static const Gfx hmc_seg7_dl_0701FF68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0701FDC8, 15, 0),

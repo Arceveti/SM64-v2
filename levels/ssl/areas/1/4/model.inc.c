@@ -8,7 +8,7 @@ static const Vtx ssl_seg7_vertex_0700BC88[] = {
 
 // 0x0700BCC8 - 0x0700BD00
 static const Gfx ssl_seg7_dl_0700BCC8[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, ssl_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, ssl_seg7_texture_palm_tree_shadow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ssl_seg7_vertex_0700BC88, 4, 0),

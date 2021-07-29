@@ -118,7 +118,7 @@ static const Vtx jrb_seg7_vertex_07002D60[] = {
 
 // 0x07002DA0 - 0x07002E68
 static const Gfx jrb_seg7_sub_dl_hanging_seaweed[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09006000_hanging_seaweed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07002800, 15, 0),
@@ -139,7 +139,7 @@ static const Gfx jrb_seg7_sub_dl_hanging_seaweed[] = {
 
 // 0x07002E68 - 0x07002FD0
 static const Gfx jrb_seg7_sub_dl_hills[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900B800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900B800_hills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07002A60, 16, 0),

@@ -215,7 +215,7 @@ static const Vtx jrb_seg7_vertex_07008AC8[] = {
 
 // 0x07008B88 - 0x07008C90
 static const Gfx jrb_seg7_dl_07008B88[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
@@ -241,7 +241,7 @@ static const Gfx jrb_seg7_dl_07008B88[] = {
 
 // 0x07008C90 - 0x07008DD0
 static const Gfx jrb_seg7_dl_07008C90[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
@@ -270,7 +270,7 @@ static const Gfx jrb_seg7_dl_07008C90[] = {
 
 // 0x07008DD0 - 0x07008F70
 static const Gfx jrb_seg7_dl_07008DD0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800_large_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_070086C8, 15, 0),
@@ -306,7 +306,7 @@ static const Gfx jrb_seg7_dl_07008DD0[] = {
 
 // 0x07008F70 - 0x07008FD8
 static const Gfx jrb_seg7_dl_07008F70[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800_small_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07008AC8, 12, 0),
@@ -516,7 +516,7 @@ static const Vtx jrb_seg7_vertex_07009738[] = {
 
 // 0x07009798 - 0x07009808
 static const Gfx jrb_seg7_dl_07009798[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
@@ -532,7 +532,7 @@ static const Gfx jrb_seg7_dl_07009798[] = {
 
 // 0x07009808 - 0x070098C0
 static const Gfx jrb_seg7_dl_07009808[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
@@ -552,7 +552,7 @@ static const Gfx jrb_seg7_dl_07009808[] = {
 
 // 0x070098C0 - 0x07009A10
 static const Gfx jrb_seg7_dl_070098C0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800_large_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_070093A8, 14, 0),
@@ -582,7 +582,7 @@ static const Gfx jrb_seg7_dl_070098C0[] = {
 
 // 0x07009A10 - 0x07009A58
 static const Gfx jrb_seg7_dl_07009A10[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800_small_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07009738, 6, 0),
@@ -800,7 +800,7 @@ static const Vtx jrb_seg7_vertex_0700A228[] = {
 
 // 0x0700A2F8 - 0x0700A3A8
 static const Gfx jrb_seg7_dl_0700A2F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
@@ -820,7 +820,7 @@ static const Gfx jrb_seg7_dl_0700A2F8[] = {
 
 // 0x0700A3A8 - 0x0700A470
 static const Gfx jrb_seg7_dl_0700A3A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
@@ -841,7 +841,7 @@ static const Gfx jrb_seg7_dl_0700A3A8[] = {
 
 // 0x0700A470 - 0x0700A608
 static const Gfx jrb_seg7_dl_0700A470[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800_large_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_07009C40.l, 1),
@@ -984,7 +984,7 @@ static const Vtx jrb_seg7_vertex_0700AA18[] = {
 
 // 0x0700AA98 - 0x0700AAE0
 static const Gfx jrb_seg7_dl_0700AA98[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
@@ -996,7 +996,7 @@ static const Gfx jrb_seg7_dl_0700AA98[] = {
 
 // 0x0700AAE0 - 0x0700AB60
 static const Gfx jrb_seg7_dl_0700AAE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
@@ -1012,7 +1012,7 @@ static const Gfx jrb_seg7_dl_0700AAE0[] = {
 
 // 0x0700AB60 - 0x0700AC68
 static const Gfx jrb_seg7_dl_0700AB60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000800_large_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_0700A838, 16, 0),

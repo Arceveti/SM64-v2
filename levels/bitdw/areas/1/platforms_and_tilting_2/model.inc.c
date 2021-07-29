@@ -375,7 +375,7 @@ static const Gfx bitdw_seg7_dl_07008AF0[] = {
 
 // 0x07008D58 - 0x07008E88
 static const Gfx bitdw_seg7_dl_07008D58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09001800_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_07008380, 16, 0),
@@ -402,7 +402,7 @@ static const Gfx bitdw_seg7_dl_07008D58[] = {
 
 // 0x07008E88 - 0x07008F60
 static const Gfx bitdw_seg7_dl_07008E88[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_07008740, 15, 0),
@@ -424,7 +424,7 @@ static const Gfx bitdw_seg7_dl_07008E88[] = {
 
 // 0x07008F60 - 0x07008FF0
 static const Gfx bitdw_seg7_dl_07008F60[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007800_metal_with_rivets),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_07008970, 16, 0),

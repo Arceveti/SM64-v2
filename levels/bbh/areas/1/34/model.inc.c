@@ -226,7 +226,7 @@ static const Vtx bbh_seg7_vertex_0701B2A8[] = {
 
 // 0x0701B328 - 0x0701B380
 static const Gfx bbh_seg7_dl_0701B328[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800_pattern_block),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_0701A920.l, 1),
@@ -239,7 +239,7 @@ static const Gfx bbh_seg7_dl_0701B328[] = {
 
 // 0x0701B380 - 0x0701B558
 static const Gfx bbh_seg7_dl_0701B380[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09008800_house_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_0701A938.l, 1),
@@ -282,7 +282,7 @@ static const Gfx bbh_seg7_dl_0701B380[] = {
 
 // 0x0701B558 - 0x0701B620
 static const Gfx bbh_seg7_dl_0701B558[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09003800_house_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_0701AF48, 16, 0),
@@ -302,7 +302,7 @@ static const Gfx bbh_seg7_dl_0701B558[] = {
 
 // 0x0701B620 - 0x0701B678
 static const Gfx bbh_seg7_dl_0701B620[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000_bricks_with_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_0701B1E8, 12, 0),
@@ -314,7 +314,7 @@ static const Gfx bbh_seg7_dl_0701B620[] = {
 
 // 0x0701B678 - 0x0701B6D0
 static const Gfx bbh_seg7_dl_0701B678[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09009000_small_dark_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_0701B2A8, 8, 0),

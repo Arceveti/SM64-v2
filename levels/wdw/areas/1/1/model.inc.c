@@ -2093,7 +2093,7 @@ static const Gfx wdw_seg7_dl_07008C00[] = {
 
 // 0x07008CA0 - 0x07008E08
 static const Gfx wdw_seg7_dl_07008CA0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wdw_seg7_texture_wooden_beams),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wdw_seg7_vertex_07004D20, 14, 0),

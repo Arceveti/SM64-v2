@@ -46,7 +46,7 @@ static const Vtx ccm_seg7_vertex_07010848[] = {
 
 // 0x070108F8 - 0x07010940
 static const Gfx ccm_seg7_dl_070108F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09005800_fence),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_070106D8, 8, 0),
@@ -57,7 +57,7 @@ static const Gfx ccm_seg7_dl_070108F8[] = {
 
 // 0x07010940 - 0x070109D0
 static const Gfx ccm_seg7_dl_07010940[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09007000_icicles),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_07010758, 15, 0),

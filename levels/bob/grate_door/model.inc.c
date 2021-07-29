@@ -9,7 +9,7 @@ static const Vtx bob_seg7_vertex_0700E810[] = {
 
 // 0x0700E860 - 0x0700E8A0
 static const Gfx bob_seg7_dl_0700E860[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800_vertical_bars),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bob_seg7_vertex_0700E810, 5, 0),

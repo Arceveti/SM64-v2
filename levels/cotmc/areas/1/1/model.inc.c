@@ -1166,7 +1166,7 @@ static const Vtx cotmc_seg7_vertex_070066A8[] = {
 
 // 0x070066E8 - 0x07006C18
 static const Gfx cotmc_seg7_dl_070066E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800_grass_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003000.l, 1),
@@ -1267,7 +1267,7 @@ static const Gfx cotmc_seg7_dl_070066E8[] = {
 
 // 0x07006C18 - 0x07006F88
 static const Gfx cotmc_seg7_dl_07006C18[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003060.l, 1),
@@ -1338,7 +1338,7 @@ static const Gfx cotmc_seg7_dl_07006C18[] = {
 
 // 0x07006F88 - 0x07007248
 static const Gfx cotmc_seg7_dl_07006F88[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_07001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_platform_surface_with_lights),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003018.l, 1),
@@ -1395,7 +1395,7 @@ static const Gfx cotmc_seg7_dl_07006F88[] = {
 
 // 0x07007248 - 0x07007498
 static const Gfx cotmc_seg7_dl_07007248[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003800_hazy_maze_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003030.l, 1),
@@ -1448,7 +1448,7 @@ static const Gfx cotmc_seg7_dl_07007248[] = {
 
 // 0x07007498 - 0x070074F0
 static const Gfx cotmc_seg7_dl_07007498[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09005800_dirt_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(cotmc_seg7_vertex_07005118, 12, 0),
@@ -1460,7 +1460,7 @@ static const Gfx cotmc_seg7_dl_07007498[] = {
 
 // 0x070074F0 - 0x07007688
 static const Gfx cotmc_seg7_dl_070074F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800_dark_brown_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(cotmc_seg7_vertex_070051D8, 16, 0),
@@ -1495,7 +1495,7 @@ static const Gfx cotmc_seg7_dl_070074F0[] = {
 
 // 0x07007688 - 0x07007920
 static const Gfx cotmc_seg7_dl_07007688[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_07002800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_cobblestone_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 16 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003000.l, 1),
@@ -1553,7 +1553,7 @@ static const Gfx cotmc_seg7_dl_07007688[] = {
 
 // 0x07007920 - 0x07007B90
 static const Gfx cotmc_seg7_dl_07007920[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cotmc_seg7_texture_cave_walls),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cotmc_seg7_lights_07003090.l, 1),

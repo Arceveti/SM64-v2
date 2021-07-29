@@ -112,7 +112,7 @@ static const Vtx pss_seg7_vertex_0700D858[] = {
 
 // 0x0700D928 - 0x0700DAD8
 static const Gfx pss_seg7_dl_0700D928[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, pss_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, pss_seg7_texture_light_radial),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_0700D3A8, 15, 0),

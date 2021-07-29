@@ -422,7 +422,7 @@ static const Vtx ddd_seg7_vertex_0700A580[] = {
 
 // 0x0700A600 - 0x0700AEB8
 static const Gfx ddd_seg7_dl_0700A600[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ddd_seg7_texture_07001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ddd_seg7_texture_blue_metal_with_rivets),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ddd_seg7_lights_07009288.l, 1),
@@ -589,7 +589,7 @@ static const Gfx ddd_seg7_dl_0700A600[] = {
 
 // 0x0700AEB8 - 0x0700AF10
 static const Gfx ddd_seg7_dl_0700AEB8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A000_small_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ddd_seg7_vertex_0700A580, 8, 0),

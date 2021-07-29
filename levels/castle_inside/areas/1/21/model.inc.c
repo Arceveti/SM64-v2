@@ -28,7 +28,7 @@ static const Vtx dl_castle_aquarium_glass_vertex_group[] = {
 
 // 0x07037D70 - 0x07037DE8
 static const Gfx dl_castle_aquarium_glass_model[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_0900B000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_0900B000_tri_tile),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&inside_castle_seg7_lights_aquarium_glass.l, 1),

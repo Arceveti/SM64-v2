@@ -14,7 +14,7 @@ static const Vtx castle_grounds_seg7_vertex_moat_grills[] = {
 
 // 0x0700BB38 - 0x0700BB80
 static const Gfx castle_grounds_seg7_sub_dl_moat_grills[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09005800_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_moat_grills, 8, 0),

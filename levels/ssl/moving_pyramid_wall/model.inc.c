@@ -38,7 +38,7 @@ static const Vtx ssl_seg7_vertex_07022BB8[] = {
 
 // 0x07022C38 - 0x07022CB0
 static const Gfx ssl_seg7_dl_07022C38[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000800_pyramid_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ssl_seg7_lights_07022AA0.l, 1),
@@ -53,7 +53,7 @@ static const Gfx ssl_seg7_dl_07022C38[] = {
 
 // 0x07022CB0 - 0x07022CF8
 static const Gfx ssl_seg7_dl_07022CB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_0900A800_pyramid_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ssl_seg7_vertex_07022BB8, 8, 0),

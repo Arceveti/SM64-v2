@@ -391,7 +391,7 @@ static const Vtx bbh_seg7_vertex_07010A08[] = {
 
 // 0x07010A48 - 0x07010B58
 static const Gfx bbh_seg7_dl_07010A48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09008800_house_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_0700F8B8.l, 1),
@@ -420,7 +420,7 @@ static const Gfx bbh_seg7_dl_07010A48[] = {
 
 // 0x07010B58 - 0x07010C30
 static const Gfx bbh_seg7_dl_07010B58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09003800_house_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_0700F8B8.l, 1),
@@ -466,7 +466,7 @@ static const Gfx bbh_seg7_dl_07010C30[] = {
 
 // 0x07010D00 - 0x07010D90
 static const Gfx bbh_seg7_dl_07010D00[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000_bricks_with_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_0700FF28, 15, 0),
@@ -483,7 +483,7 @@ static const Gfx bbh_seg7_dl_07010D00[] = {
 
 // 0x07010D90 - 0x07011058
 static const Gfx bbh_seg7_dl_07010D90[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09000800_stucco_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_070100C8, 14, 0),
@@ -541,7 +541,7 @@ static const Gfx bbh_seg7_dl_07010D90[] = {
 
 // 0x07011058 - 0x070110A0
 static const Gfx bbh_seg7_dl_07011058[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09002800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09002800_bookshelf),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_07010908, 8, 0),
@@ -563,7 +563,7 @@ static const Gfx bbh_seg7_dl_070110A0[] = {
 
 // 0x070110E8 - 0x07011120
 static const Gfx bbh_seg7_dl_070110E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09009000_small_dark_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_07010A08, 4, 0),

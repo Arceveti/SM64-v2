@@ -121,7 +121,7 @@ static const Vtx ttm_seg7_vertex_0700C8C0[] = {
 
 // 0x0700C900 - 0x0700C9F8
 static const Gfx ttm_seg7_dl_0700C900[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09004000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09004000_mountain_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_0700C488.l, 1),
@@ -150,7 +150,7 @@ static const Gfx ttm_seg7_dl_0700C900[] = {
 
 // 0x0700C9F8 - 0x0700CA78
 static const Gfx ttm_seg7_dl_0700C9F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09003800_mountain_ground),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_0700C488.l, 1),

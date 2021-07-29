@@ -38,7 +38,7 @@ static const Vtx jrb_seg7_vertex_floating_platform_surface[] = {
 
 // 0x07007D08 - 0x07007D80
 static const Gfx jrb_seg7_sub_dl_floating_platform_sides[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A000_small_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_floating_platform.l, 1),
@@ -53,7 +53,7 @@ static const Gfx jrb_seg7_sub_dl_floating_platform_sides[] = {
 
 // 0x07007D80 - 0x07007DC8
 static const Gfx jrb_seg7_sub_dl_floating_platform_surface[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_0900A800_small_blue_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_floating_platform_surface, 8, 0),

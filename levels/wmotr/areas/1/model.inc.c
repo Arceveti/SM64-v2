@@ -2412,7 +2412,7 @@ static const Vtx wmotr_seg7_vertex_07008EB0[] = {
 
 // 0x07008EF0 - 0x07009148
 static const Gfx wmotr_seg7_dl_07008EF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07001600),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_green_pole),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 8 * 32 - 1, CALC_DXT(8, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wmotr_seg7_lights_07001800.l, 1),
@@ -2465,7 +2465,7 @@ static const Gfx wmotr_seg7_dl_07008EF0[] = {
 
 // 0x07009148 - 0x070092A0
 static const Gfx wmotr_seg7_dl_07009148[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_pink_surface_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 16 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wmotr_seg7_lights_07001818.l, 1),
@@ -2498,7 +2498,7 @@ static const Gfx wmotr_seg7_dl_07009148[] = {
 
 // 0x070092A0 - 0x07009458
 static const Gfx wmotr_seg7_dl_070092A0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_pink_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wmotr_seg7_vertex_07002450, 15, 0),
@@ -2536,7 +2536,7 @@ static const Gfx wmotr_seg7_dl_070092A0[] = {
 
 // 0x07009458 - 0x0700C1F8
 static const Gfx wmotr_seg7_dl_07009458[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07000C00),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_cloud_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wmotr_seg7_vertex_07002870, 16, 0),
@@ -4005,7 +4005,7 @@ static const Vtx wmotr_seg7_vertex_0700E118[] = {
 
 // 0x0700E188 - 0x0700EFD8
 static const Gfx wmotr_seg7_dl_0700E188[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07000C00),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_cloud_surface),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&wmotr_seg7_lights_0700C2A0.l, 1),
@@ -4628,7 +4628,7 @@ static const Vtx wmotr_seg7_vertex_07010118[] = {
 
 // 0x07010158 - 0x07010608
 static const Gfx wmotr_seg7_dl_07010158[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_07001400),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wmotr_seg7_texture_rainbow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 8 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wmotr_seg7_vertex_0700F048, 15, 0),

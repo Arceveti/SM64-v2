@@ -128,7 +128,7 @@ static const Vtx castle_grounds_seg7_vertex_peach_window_top[] = {
 
 // 0x0700B820 - 0x0700B9B0
 static const Gfx castle_grounds_seg7_dl_windows[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_0700B240, 16, 0),

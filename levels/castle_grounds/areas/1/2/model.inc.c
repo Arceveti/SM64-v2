@@ -622,7 +622,7 @@ static const Vtx castle_grounds_seg7_vertex_070089B8[] = {
 
 // 0x070089F8 - 0x07008A68
 static const Gfx castle_grounds_seg7_dl_070089F8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B000_wood_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 16 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006ED8.l, 1),
@@ -638,7 +638,7 @@ static const Gfx castle_grounds_seg7_dl_070089F8[] = {
 
 // 0x07008A68 - 0x07008BF0
 static const Gfx castle_grounds_seg7_dl_07008A68[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004000_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006ED8.l, 1),
@@ -672,7 +672,7 @@ static const Gfx castle_grounds_seg7_dl_07008A68[] = {
 
 // 0x07008BF0 - 0x07008D70
 static const Gfx castle_grounds_seg7_dl_07008BF0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09008000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09008000_pathway),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07007388, 16, 0),
@@ -706,7 +706,7 @@ static const Gfx castle_grounds_seg7_dl_07008BF0[] = {
 
 // 0x07008D70 - 0x07008DE8
 static const Gfx castle_grounds_seg7_dl_07008D70[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006F08.l, 1),
@@ -721,7 +721,7 @@ static const Gfx castle_grounds_seg7_dl_07008D70[] = {
 
 // 0x07008DE8 - 0x07008EE8
 static const Gfx castle_grounds_seg7_dl_07008DE8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009800_sand),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006ED8.l, 1),
@@ -748,7 +748,7 @@ static const Gfx castle_grounds_seg7_dl_07008DE8[] = {
 
 // 0x07008EE8 - 0x07008F48 -  wood bridge top & bottom
 static const Gfx castle_grounds_seg7_dl_07008EE8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B400),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B400_wood_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_wooden_bridge_top, 4, 0),
@@ -762,7 +762,7 @@ static const Gfx castle_grounds_seg7_dl_07008EE8[] = {
 
 // 0x07008F48 - 0x07009010 - steep grass
 static const Gfx castle_grounds_seg7_dl_07008F48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003800_steep_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006ED8.l, 1),
@@ -783,7 +783,7 @@ static const Gfx castle_grounds_seg7_dl_07008F48[] = {
 
 // 0x07009010 - 0x07009330 - sandstone wall
 static const Gfx castle_grounds_seg7_dl_07009010[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09002000_sandstone_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07007BC8, 13, 0),
@@ -854,7 +854,7 @@ static const Gfx castle_grounds_seg7_dl_07009010[] = {
 
 // 0x07009330 - 0x07009568 - hills
 static const Gfx castle_grounds_seg7_dl_07009330[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800_hills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006F80.l, 1),
@@ -901,7 +901,7 @@ static const Gfx castle_grounds_seg7_dl_07009330[] = {
 
 // 0x07009568 - 0x070095F0 - red bricks
 static const Gfx castle_grounds_seg7_dl_07009568[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800_red_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_07006F38.l, 1),

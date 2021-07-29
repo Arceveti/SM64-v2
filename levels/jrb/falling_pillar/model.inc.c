@@ -18,7 +18,7 @@ static const Vtx jrb_seg7_vertex_falling_pillar[] = {
 
 // 0x0700ADD0 - 0x0700AE48
 static const Gfx jrb_seg7_sub_dl_falling_pillar[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09001800_rock),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_falling_pillar.l, 1),

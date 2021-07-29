@@ -8,7 +8,7 @@ static const Vtx ttm_seg7_vertex_07011D00[] = {
 
 // 0x07011D40 - 0x07011D78
 static const Gfx ttm_seg7_dl_07011D40[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09008000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09008000_rope_fence),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ttm_seg7_vertex_07011D00, 4, 0),

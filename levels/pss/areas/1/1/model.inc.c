@@ -2196,7 +2196,7 @@ static const Vtx pss_seg7_vertex_07008300[] = {
 
 // 0x070083B0 - 0x07008E20
 static const Gfx pss_seg7_dl_070083B0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900C000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900C000_red_carpet),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&pss_seg7_lights_07001800.l, 1),
@@ -2389,7 +2389,7 @@ static const Gfx pss_seg7_dl_070083B0[] = {
 
 // 0x07008E20 - 0x07008EB0
 static const Gfx pss_seg7_dl_07008E20[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, pss_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, pss_seg7_texture_column_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_07002E90, 16, 0),
@@ -2405,7 +2405,7 @@ static const Gfx pss_seg7_dl_07008E20[] = {
 
 // 0x07008EB0 - 0x070095E8
 static const Gfx pss_seg7_dl_07008EB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09000000_gray_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_07002FD0, 15, 0),
@@ -2544,7 +2544,7 @@ static const Gfx pss_seg7_dl_07008EB0[] = {
 
 // 0x070095E8 - 0x07009750
 static const Gfx pss_seg7_dl_070095E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09005800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09005800_yellow_and_red_spiral_column),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_07004340, 15, 0),
@@ -2577,7 +2577,7 @@ static const Gfx pss_seg7_dl_070095E8[] = {
 
 // 0x07009750 - 0x0700A7C0
 static const Gfx pss_seg7_dl_07009750[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09001800_slide_railing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(pss_seg7_vertex_07004800, 14, 0),

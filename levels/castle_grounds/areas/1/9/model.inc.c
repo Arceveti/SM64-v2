@@ -106,7 +106,7 @@ static const Vtx castle_grounds_seg7_vertex_0700C010[] = {
 
 // 0x0700C070 - 0x0700C110
 static const Gfx castle_grounds_seg7_dl_cannon_platform_hole[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800_hills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_0700BCD8.l, 1),
@@ -125,7 +125,7 @@ static const Gfx castle_grounds_seg7_dl_cannon_platform_hole[] = {
 
 // 0x0700C110 - 0x0700C210
 static const Gfx castle_grounds_seg7_dl_cannon_platform_bricks[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000_white_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&castle_grounds_seg7_lights_0700BD08.l, 1),

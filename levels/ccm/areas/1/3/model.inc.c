@@ -294,7 +294,7 @@ static const Vtx ccm_seg7_vertex_0700BEC8[] = {
 
 // 0x0700BF88 - 0x0700C000
 static const Gfx ccm_seg7_dl_0700BF88[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_rope_holder),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 4 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_0700B248.l, 1),
@@ -309,7 +309,7 @@ static const Gfx ccm_seg7_dl_0700BF88[] = {
 
 // 0x0700C000 - 0x0700C220
 static const Gfx ccm_seg7_dl_0700C000[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09008000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09008000_wood_planks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_0700B3A8, 16, 0),
@@ -357,7 +357,7 @@ static const Gfx ccm_seg7_dl_0700C000[] = {
 
 // 0x0700C220 - 0x0700C330
 static const Gfx ccm_seg7_dl_0700C220[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09001000_ice_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_0700B248.l, 1),

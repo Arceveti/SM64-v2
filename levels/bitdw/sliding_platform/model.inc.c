@@ -32,7 +32,7 @@ static const Vtx bitdw_seg7_vertex_0700AE90[] = {
 
 // 0x0700AF10 - 0x0700AFA0
 static const Gfx bitdw_seg7_sub_dl_sliding_platform[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_0700AD90, 16, 0),

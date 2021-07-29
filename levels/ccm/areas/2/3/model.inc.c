@@ -14,7 +14,7 @@ static const Vtx ccm_seg7_vertex_0701E628[] = {
 
 // 0x0701E668 - 0x0701E6B0
 static const Gfx ccm_seg7_dl_0701E668[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07004B00),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_slide_race_checker),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_0701E610.l, 1),

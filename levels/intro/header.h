@@ -10,8 +10,8 @@ extern const GeoLayout intro_geo_mario_head_dizzy[];
 extern const GeoLayout intro_geo_debug_level_select[];
 
 // leveldata
-extern const Gfx intro_seg7_dl_0700B3A0[];
-extern const Gfx intro_seg7_dl_0700C6A0[];
+extern const Gfx intro_seg7_dl_main_logo[];
+extern const Gfx intro_seg7_dl_copyright_trademark[];
 extern const f32 intro_seg7_table_0700C790[];
 extern const f32 intro_seg7_table_0700C880[];
 

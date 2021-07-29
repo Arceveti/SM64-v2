@@ -32,7 +32,7 @@ static const Vtx bitdw_seg7_vertex_0700B110[] = {
 
 // 0x0700B190 - 0x0700B220
 static const Gfx bitdw_seg7_sub_dl_seesaw_platform[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09000800_vertical_lines),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bitdw_seg7_vertex_0700B010, 16, 0),

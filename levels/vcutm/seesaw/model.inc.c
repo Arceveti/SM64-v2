@@ -50,7 +50,7 @@ static const Vtx vcutm_seg7_vertex_070095E8[] = {
 
 // 0x07009628 - 0x070096E0
 static const Gfx vcutm_seg7_dl_07009628[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, vcutm_seg7_texture_07001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, vcutm_seg7_texture_wood),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&vcutm_seg7_lights_07009458.l, 1),

@@ -326,7 +326,7 @@ static const Vtx ddd_seg7_vertex_070046B0[] = {
 
 // 0x07004700 - 0x07004D48
 static const Gfx ddd_seg7_dl_07004700[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09003800_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ddd_seg7_lights_07003800.l, 1),

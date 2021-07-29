@@ -50,7 +50,7 @@ static const Vtx ccm_seg7_vertex_07010D30[] = {
 
 // 0x07010E30 - 0x07010EC0
 static const Gfx ccm_seg7_dl_07010E30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09000000_bridge_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_07010BD0, 15, 0),
@@ -67,7 +67,7 @@ static const Gfx ccm_seg7_dl_07010E30[] = {
 
 // 0x07010EC0 - 0x07010F28
 static const Gfx ccm_seg7_dl_07010EC0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07000900),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_broken_bridge_sides),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(ccm_seg7_vertex_07010D30, 16, 0),

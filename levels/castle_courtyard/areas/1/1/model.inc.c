@@ -1127,7 +1127,7 @@ static const Vtx castle_courtyard_seg7_vertex_castle_inside_void[] = {
 
 // 0x070036F0 - 0x070039D0
 static const Gfx castle_courtyard_seg7_dl_070036F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900B000_wood_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 16 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07000000, 15, 0),
@@ -1189,7 +1189,7 @@ static const Gfx castle_courtyard_seg7_dl_070036F0[] = {
 
 // 0x070039D0 - 0x07003AF8
 static const Gfx castle_courtyard_seg7_dl_070039D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07000A80, 16, 0),
@@ -1216,7 +1216,7 @@ static const Gfx castle_courtyard_seg7_dl_070039D0[] = {
 
 // 0x07003AF8 - 0x07003BA8
 static const Gfx castle_courtyard_seg7_dl_07003AF8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000_stars_pattern),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07000D70, 16, 0),
@@ -1234,7 +1234,7 @@ static const Gfx castle_courtyard_seg7_dl_07003AF8[] = {
 
 // 0x07003BA8 - 0x07003EC8
 static const Gfx castle_courtyard_seg7_dl_07003BA8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000800_gray_horizontal_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07000F70, 15, 0),
@@ -1298,7 +1298,7 @@ static const Gfx castle_courtyard_seg7_dl_07003BA8[] = {
 
 // 0x07003EC8 - 0x07003F30
 static const Gfx castle_courtyard_seg7_dl_grass[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004000_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_grass, 15, 0),
@@ -1311,7 +1311,7 @@ static const Gfx castle_courtyard_seg7_dl_grass[] = {
 
 // 0x07003F30 - 0x070040A8
 static const Gfx castle_courtyard_seg7_dl_07003F30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A000_tri_tile),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07001BA0, 16, 0),
@@ -1343,7 +1343,7 @@ static const Gfx castle_courtyard_seg7_dl_07003F30[] = {
 
 // 0x070040A8 - 0x07004168
 static const Gfx castle_courtyard_seg7_dl_inside_fountain[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000000_wet_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07001F90, 16, 0),
@@ -1362,7 +1362,7 @@ static const Gfx castle_courtyard_seg7_dl_inside_fountain[] = {
 
 // 0x07004168 - 0x070041A0
 static const Gfx castle_courtyard_seg7_dl_eternal_star_sign[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09008800_eternal_star_sign),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_eternal_star_sign, 4, 0),
@@ -1372,7 +1372,7 @@ static const Gfx castle_courtyard_seg7_dl_eternal_star_sign[] = {
 
 // 0x070041A0 - 0x070041D8
 static const Gfx castle_courtyard_seg7_dl_red_carpet[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000_red_carpet),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_red_carpet, 4, 0),
@@ -1382,7 +1382,7 @@ static const Gfx castle_courtyard_seg7_dl_red_carpet[] = {
 
 // 0x070041D8 - 0x07004370
 static const Gfx castle_courtyard_seg7_dl_070041D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800_hills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_070021C0, 14, 0),
@@ -1417,7 +1417,7 @@ static const Gfx castle_courtyard_seg7_dl_070041D8[] = {
 
 // 0x07004370 - 0x070045F0
 static const Gfx castle_courtyard_seg7_dl_07004370[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000_white_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07002650, 15, 0),
@@ -1470,7 +1470,7 @@ static const Gfx castle_courtyard_seg7_dl_07004370[] = {
 
 // 0x070045F0 - 0x07004868
 static const Gfx castle_courtyard_seg7_dl_070045F0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800_red_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_courtyard_seg7_vertex_07002E20, 16, 0),

@@ -63,7 +63,7 @@ static const Vtx ttm_seg7_vertex_0700AD78[] = {
 
 // 0x0700AE58 - 0x0700AF90
 static const Gfx ttm_seg7_dl_0700AE58[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09004800_mushroom_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_0700AB70.l, 1),

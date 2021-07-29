@@ -34,7 +34,7 @@ static const Vtx bbh_seg7_vertex_0701F138[] = {
 
 // 0x0701F238 - 0x0701F280
 static const Gfx bbh_seg7_dl_0701F238[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_0900A000_metal_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_staircase_step.l, 1),
@@ -46,7 +46,7 @@ static const Gfx bbh_seg7_dl_0701F238[] = {
 
 // 0x0701F280 - 0x0701F2E8
 static const Gfx bbh_seg7_dl_0701F280[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09005000_bricks_with_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_0701F138, 16, 0),

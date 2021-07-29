@@ -1087,7 +1087,7 @@ static const Vtx ttm_seg7_vertex_07029128[] = {
 
 // 0x070291B8 - 0x070299D0
 static const Gfx ttm_seg7_dl_070291B8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900B800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900B800_slide),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_07025FF0.l, 1),
@@ -1253,7 +1253,7 @@ static const Gfx ttm_seg7_dl_070291B8[] = {
 
 // 0x070299D0 - 0x07029A18
 static const Gfx ttm_seg7_dl_070299D0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900A800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_0900A800_striped_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_07026080.l, 1),
@@ -1265,7 +1265,7 @@ static const Gfx ttm_seg7_dl_070299D0[] = {
 
 // 0x07029A18 - 0x0702A0D8
 static const Gfx ttm_seg7_dl_07029A18[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mountain_09008800_metal_plates),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ttm_seg7_lights_070260E0.l, 1),

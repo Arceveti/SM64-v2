@@ -361,7 +361,7 @@ static const Vtx sl_seg7_vertex_07009E80[] = {
 
 // 0x07009F30 - 0x07009FE0
 static const Gfx sl_seg7_dl_07009F30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09003000_greenish_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&sl_seg7_lights_07008DE8.l, 1),
@@ -380,7 +380,7 @@ static const Gfx sl_seg7_dl_07009F30[] = {
 
 // 0x07009FE0 - 0x0700A058
 static const Gfx sl_seg7_dl_07009FE0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09006000_hard_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(sl_seg7_vertex_07008F40, 14, 0),
@@ -394,7 +394,7 @@ static const Gfx sl_seg7_dl_07009FE0[] = {
 
 // 0x0700A058 - 0x0700A418
 static const Gfx sl_seg7_dl_0700A058[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snow_09002000_blueish_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(sl_seg7_vertex_07009020, 16, 0),
@@ -468,7 +468,7 @@ static const Gfx sl_seg7_dl_0700A058[] = {
 
 // 0x0700A418 - 0x0700A450
 static const Gfx sl_seg7_dl_0700A418[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sl_seg7_texture_07000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sl_seg7_texture_snow_wave_spawner),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(sl_seg7_vertex_07009B60, 4, 0),
@@ -478,7 +478,7 @@ static const Gfx sl_seg7_dl_0700A418[] = {
 
 // 0x0700A450 - 0x0700A5A0
 static const Gfx sl_seg7_dl_0700A450[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sl_seg7_texture_07002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sl_seg7_texture_snowy_greenish_rock),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(sl_seg7_vertex_07009BA0, 16, 0),

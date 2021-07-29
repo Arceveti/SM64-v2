@@ -969,7 +969,7 @@ static const Vtx castle_grounds_seg7_vertex_warp_voids_2[] = {
 
 // 0x07005F60 - 0x07006090 - moat cobblestone
 static const Gfx castle_grounds_seg7_dl_moat_cobblestone[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09000000_wet_cobblestone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07003000, 15, 0),
@@ -997,7 +997,7 @@ static const Gfx castle_grounds_seg7_dl_moat_cobblestone[] = {
 
 // 0x07006090 - 0x070060C8 - red carpet inside
 static const Gfx castle_grounds_seg7_dl_red_carpet_inside[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006000_red_carpet),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_red_carpet_inside, 4, 0),
@@ -1007,7 +1007,7 @@ static const Gfx castle_grounds_seg7_dl_red_carpet_inside[] = {
 
 // 0x070060C8 - 0x07006148 - tri tile
 static const Gfx castle_grounds_seg7_dl_tri_tile[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_0900A000_tri_tile),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_tri_tile, 14, 0),
@@ -1022,7 +1022,7 @@ static const Gfx castle_grounds_seg7_dl_tri_tile[] = {
 
 // 0x07006148 - 0x07006378 - roof
 static const Gfx castle_grounds_seg7_dl_castle_roof[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09007800_roof),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_070034D0, 14, 0),
@@ -1070,7 +1070,7 @@ static const Gfx castle_grounds_seg7_dl_castle_roof[] = {
 
 // 0x07006378 - 0x070065E0 - stars wall
 static const Gfx castle_grounds_seg7_dl_07006378[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09003000_stars_pattern),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07003E00, 15, 0),
@@ -1122,7 +1122,7 @@ static const Gfx castle_grounds_seg7_dl_07006378[] = {
 
 // 0x070065E0 - 0x07006658 - stone
 static const Gfx castle_grounds_seg7_dl_castle_stone[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09009000_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_castle_stone, 12, 0),
@@ -1136,7 +1136,7 @@ static const Gfx castle_grounds_seg7_dl_castle_stone[] = {
 
 // 0x07006658 - 0x07006750 - hills & bridge
 static const Gfx castle_grounds_seg7_dl_07006658[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09004800_hills),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07004700, 15, 0),
@@ -1160,7 +1160,7 @@ static const Gfx castle_grounds_seg7_dl_07006658[] = {
 
 // 0x07006750 - 0x070067B8 - sandstone wall
 static const Gfx castle_grounds_seg7_dl_07006750[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09002000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09002000_sandstone_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_070049D0, 16, 0),
@@ -1173,7 +1173,7 @@ static const Gfx castle_grounds_seg7_dl_07006750[] = {
 
 // 0x070067B8 - 0x07006C38 - white bricks
 static const Gfx castle_grounds_seg7_dl_castle_white_brick_walls[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000_white_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07004AD0, 16, 0),
@@ -1264,7 +1264,7 @@ static const Gfx castle_grounds_seg7_dl_castle_white_brick_walls[] = {
 
 // 0x07006C38 - 0x07006CD8 - red bricks
 static const Gfx castle_grounds_seg7_dl_07006C38[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09006800_red_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07005BE0, 16, 0),

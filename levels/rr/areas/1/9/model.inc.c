@@ -702,7 +702,7 @@ static const Vtx rr_seg7_vertex_0700B0B8[] = {
 
 // 0x0700B138 - 0x0700BB48
 static const Gfx rr_seg7_dl_0700B138[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, sky_09007000_white_stone),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_07008E98, 16, 0),

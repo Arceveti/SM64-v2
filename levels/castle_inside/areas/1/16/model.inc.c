@@ -52,7 +52,7 @@ static const Vtx inside_castle_seg7_vertex_07035030[] = {
 
 // 0x070350B0 - 0x07035178
 static const Gfx inside_castle_seg7_sub_dl_wf_fence[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800_railing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(inside_castle_seg7_vertex_07034E50, 15, 0),

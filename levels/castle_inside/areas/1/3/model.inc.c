@@ -76,7 +76,7 @@ static const Vtx dl_castle_lobby_fence_vertex_group_4[] = {
 
 // 0x07029438 - 0x07029578
 static const Gfx dl_castle_lobby_fence_model[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, inside_09008800_railing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(dl_castle_lobby_fence_vertex_group_1, 15, 0),

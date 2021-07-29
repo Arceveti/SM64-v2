@@ -1235,7 +1235,7 @@ static const Vtx hmc_seg7_vertex_0700CF38[] = {
 
 // 0x0700CF78 - 0x0700D1C8
 static const Gfx hmc_seg7_dl_0700CF78[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800_grass_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_07009460.l, 1),
@@ -1285,7 +1285,7 @@ static const Gfx hmc_seg7_dl_0700CF78[] = {
 
 // 0x0700D1C8 - 0x0700D3D8
 static const Gfx hmc_seg7_dl_0700D1C8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800_light_beige_floor),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_07009C08, 16, 0),
@@ -1331,7 +1331,7 @@ static const Gfx hmc_seg7_dl_0700D1C8[] = {
 
 // 0x0700D3D8 - 0x0700D8D8
 static const Gfx hmc_seg7_dl_0700D3D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09000000_lake_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&hmc_seg7_lights_07009490.l, 1),
@@ -1429,7 +1429,7 @@ static const Gfx hmc_seg7_dl_0700D3D8[] = {
 
 // 0x0700D8D8 - 0x0700D9A8
 static const Gfx hmc_seg7_dl_0700D8D8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003800_hazy_maze_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700ADD8, 16, 0),
@@ -1450,7 +1450,7 @@ static const Gfx hmc_seg7_dl_0700D8D8[] = {
 
 // 0x0700D9A8 - 0x0700DD30
 static const Gfx hmc_seg7_dl_0700D9A8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09008800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09008800_gray_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700AF58, 16, 0),
@@ -1522,7 +1522,7 @@ static const Gfx hmc_seg7_dl_0700D9A8[] = {
 
 // 0x0700DD30 - 0x0700DED8
 static const Gfx hmc_seg7_dl_0700DD30[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09007800_dark_brown_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700BA38, 16, 0),
@@ -1578,7 +1578,7 @@ static const Gfx hmc_seg7_dl_0700DF10[] = {
 
 // 0x0700DF48 - 0x0700E330
 static const Gfx hmc_seg7_dl_0700DF48[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001800_dirt_wall_with_grass),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700BEF8, 15, 0),
@@ -1659,7 +1659,7 @@ static const Gfx hmc_seg7_dl_0700DF48[] = {
 
 // 0x0700E330 - 0x0700E428
 static const Gfx hmc_seg7_dl_0700E330[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09004800_green_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700CC78, 16, 0),

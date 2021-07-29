@@ -8,7 +8,7 @@ static const Vtx rr_seg7_vertex_0701A608[] = {
 
 // 0x0701A648 - 0x0701A680
 static const Gfx rr_seg7_dl_0701A648[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, rr_seg7_texture_07000800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, rr_seg7_texture_cruiser_wing),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_0701A608, 4, 0),

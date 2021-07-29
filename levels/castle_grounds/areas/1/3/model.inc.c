@@ -186,7 +186,7 @@ static const Vtx castle_grounds_seg7_vertex_tower_spire_top[] = {
 
 // 0x07009FD8 - 0x0700A140
 static const Gfx castle_grounds_seg7_dl_tower_roof[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09007800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09007800_roof),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_070096F8, 16, 0),
@@ -219,7 +219,7 @@ static const Gfx castle_grounds_seg7_dl_tower_roof[] = {
 
 // 0x0700A140 - 0x0700A260
 static const Gfx castle_grounds_seg7_dl_tower_walls[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09001000_white_bricks),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_07009BC8, 15, 0),

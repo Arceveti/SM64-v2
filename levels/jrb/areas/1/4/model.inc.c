@@ -175,7 +175,7 @@ static const Vtx jrb_seg7_vertex_070054E0[] = {
 
 // 0x07005560 - 0x07005660
 static const Gfx jrb_seg7_dl_07005560[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09004800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09004800_mossy_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_07004D40.l, 1),
@@ -200,7 +200,7 @@ static const Gfx jrb_seg7_dl_07005560[] = {
 
 // 0x07005660 - 0x070058C8
 static const Gfx jrb_seg7_dl_07005660[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09003800),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09003800_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(jrb_seg7_vertex_07004EF0, 16, 0),

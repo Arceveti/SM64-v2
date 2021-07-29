@@ -22,7 +22,7 @@ static const Vtx ssl_seg7_vertex_0700BAF0[] = {
 
 // 0x0700BBB0 - 0x0700BC18
 static const Gfx ssl_seg7_dl_0700BBB0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000000),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09000000_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ssl_seg7_lights_0700BAD8.l, 1),
