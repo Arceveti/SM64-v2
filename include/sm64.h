@@ -24,17 +24,17 @@
 // Pointer casting is technically UB, and avoiding it gets rid of endian issues
 // as well as a nice side effect.
 #ifdef AVOID_UB
-#define GET_HIGH_U16_OF_32(var) ((u16)((var) >> 16))
-#define GET_HIGH_S16_OF_32(var) ((s16)((var) >> 16))
-#define GET_LOW_U16_OF_32(var) ((u16)((var) & 0xFFFF))
-#define GET_LOW_S16_OF_32(var) ((s16)((var) & 0xFFFF))
+#define GET_HIGH_U16_OF_32(var)       ((u16)((var) >> 16))
+#define GET_HIGH_S16_OF_32(var)       ((s16)((var) >> 16))
+#define GET_LOW_U16_OF_32(var)        ((u16)((var) & 0xFFFF))
+#define GET_LOW_S16_OF_32(var)        ((s16)((var) & 0xFFFF))
 #define SET_HIGH_U16_OF_32(var, x) ((var) = ((var) & 0xFFFF) | ((x) << 16))
 #define SET_HIGH_S16_OF_32(var, x) ((var) = ((var) & 0xFFFF) | ((x) << 16))
 #else
-#define GET_HIGH_U16_OF_32(var) (((u16 *)&(var))[0])
-#define GET_HIGH_S16_OF_32(var) (((s16 *)&(var))[0])
-#define GET_LOW_U16_OF_32(var) (((u16 *)&(var))[1])
-#define GET_LOW_S16_OF_32(var) (((s16 *)&(var))[1])
+#define GET_HIGH_U16_OF_32(var)     (((u16 *)&(var))[0])
+#define GET_HIGH_S16_OF_32(var)     (((s16 *)&(var))[0])
+#define GET_LOW_U16_OF_32(var)      (((u16 *)&(var))[1])
+#define GET_LOW_S16_OF_32(var)      (((s16 *)&(var))[1])
 #define SET_HIGH_U16_OF_32(var, x) ((((u16 *)&(var))[0]) = (x))
 #define SET_HIGH_S16_OF_32(var, x) ((((s16 *)&(var))[0]) = (x))
 #endif
@@ -45,7 +45,7 @@
 #define COS10   0.9848077f
 #define COS15   0.9659258f
 #define COS20   0.9396926f
-#define COS25   0.9063078f   // ledge grabs
+#define COS25   0.9063078f  // ledge grabs
 #define COS30   0.8660254f
 #define COS38   0.7880108f  // mario_floor_is_slippery default
 #define COS73   0.29237169f // common_landing_cancels, check_common_idle_cancels, check_common_hold_idle_cancels
@@ -59,34 +59,34 @@
 
 // Layers
 #ifdef SILHOUETTE
-#define LAYER_FORCE                  0
-#define LAYER_OPAQUE                 1
-#define LAYER_OPAQUE_INTER           2
-#define LAYER_OPAQUE_DECAL           3
-#define LAYER_ALPHA                  4
-#define LAYER_ALPHA_DECAL            5
-#define LAYER_SILHOUETTE_OPAQUE      6
-#define LAYER_SILHOUETTE_ALPHA       7
-#define LAYER_NO_SILHOUETTE          8
-#define LAYER_NO_SILHOUETTE_ALPHA    9
-#define LAYER_TRANSPARENT_DECAL     10
-#define LAYER_TRANSPARENT           11
-#define LAYER_TRANSPARENT_INTER     12
+#define LAYER_FORCE                 0
+#define LAYER_OPAQUE                1
+#define LAYER_OPAQUE_INTER          2
+#define LAYER_OPAQUE_DECAL          3
+#define LAYER_ALPHA                 4
+#define LAYER_ALPHA_DECAL           5
+#define LAYER_SILHOUETTE_OPAQUE     6
+#define LAYER_SILHOUETTE_ALPHA      7
+#define LAYER_NO_SILHOUETTE         8
+#define LAYER_NO_SILHOUETTE_ALPHA   9
+#define LAYER_TRANSPARENT_DECAL    10
+#define LAYER_TRANSPARENT          11
+#define LAYER_TRANSPARENT_INTER    12
 #else
-#define LAYER_FORCE             0
-#define LAYER_OPAQUE            1
-#define LAYER_OPAQUE_DECAL      2
-#define LAYER_OPAQUE_INTER      3
-#define LAYER_ALPHA             4
-#define LAYER_TRANSPARENT       5
-#define LAYER_TRANSPARENT_DECAL 6
-#define LAYER_TRANSPARENT_INTER 7
+#define LAYER_FORCE                 0
+#define LAYER_OPAQUE                1
+#define LAYER_OPAQUE_DECAL          2
+#define LAYER_OPAQUE_INTER          3
+#define LAYER_ALPHA                 4
+#define LAYER_TRANSPARENT           5
+#define LAYER_TRANSPARENT_DECAL     6
+#define LAYER_TRANSPARENT_INTER     7
 
-#define LAYER_ALPHA_DECAL            4
-#define LAYER_SILHOUETTE_OPAQUE      1
-#define LAYER_SILHOUETTE_ALPHA       4
-#define LAYER_NO_SILHOUETTE          1
-#define LAYER_NO_SILHOUETTE_ALPHA    4
+#define LAYER_ALPHA_DECAL           4
+#define LAYER_SILHOUETTE_OPAQUE     1
+#define LAYER_SILHOUETTE_ALPHA      4
+#define LAYER_NO_SILHOUETTE         1
+#define LAYER_NO_SILHOUETTE_ALPHA   4
 #endif
 
 #define INPUT_NONZERO_ANALOG         0x0001
@@ -113,22 +113,22 @@
 #define GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS 3
 #define GROUND_STEP_DEATH                    4
 
-#define AIR_STEP_CHECK_LEDGE_GRAB 0x00000001
-#define AIR_STEP_CHECK_HANG       0x00000002
+#define AIR_STEP_CHECK_LEDGE_GRAB   0x00000001
+#define AIR_STEP_CHECK_HANG         0x00000002
 
-#define AIR_STEP_NONE            0
-#define AIR_STEP_LANDED          1
-#define AIR_STEP_HIT_WALL        2
-#define AIR_STEP_GRABBED_LEDGE   3
-#define AIR_STEP_GRABBED_CEILING 4
-#define AIR_STEP_HIT_LAVA_WALL   6
-#define AIR_STEP_DEATH           7
+#define AIR_STEP_NONE               0
+#define AIR_STEP_LANDED             1
+#define AIR_STEP_HIT_WALL           2
+#define AIR_STEP_GRABBED_LEDGE      3
+#define AIR_STEP_GRABBED_CEILING    4
+#define AIR_STEP_HIT_LAVA_WALL      6
+#define AIR_STEP_DEATH              7
 
-#define WATER_STEP_NONE        0
-#define WATER_STEP_HIT_FLOOR   1
-#define WATER_STEP_HIT_CEILING 2
-#define WATER_STEP_CANCELLED   3
-#define WATER_STEP_HIT_WALL    4
+#define WATER_STEP_NONE             0
+#define WATER_STEP_HIT_FLOOR        1
+#define WATER_STEP_HIT_CEILING      2
+#define WATER_STEP_CANCELLED        3
+#define WATER_STEP_HIT_WALL         4
 
 #define PARTICLE_DUST                 /* 0x00000001 */ (1 <<  0)
 #define PARTICLE_VERTICAL_STAR        /* 0x00000002 */ (1 <<  1)
@@ -151,9 +151,9 @@
 #define PARTICLE_TRIANGLE             /* 0x00040000 */ (1 << 18)
 #define PARTICLE_19                   /* 0x00080000 */ (1 << 19)
 
-#define MODEL_STATE_ALPHA       0x100
+#define MODEL_STATE_ALPHA        0x100
 #define MODEL_STATE_NOISE_ALPHA (0x080 | MODEL_STATE_ALPHA)
-#define MODEL_STATE_METAL       0x200
+#define MODEL_STATE_METAL        0x200
 
 #define MARIO_NORMAL_CAP                0x00000001
 #define MARIO_VANISH_CAP                0x00000002
@@ -178,9 +178,9 @@
 #define MARIO_SPECIAL_CAPS (MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_WING_CAP)
 #define MARIO_CAPS (MARIO_NORMAL_CAP | MARIO_SPECIAL_CAPS)
 
-#define ACT_ID_MASK 0x000001FF
+#define ACT_ID_MASK             0x000001FF
 
-#define ACT_GROUP_MASK       0x000001C0
+#define ACT_GROUP_MASK          0x000001C0
 #define ACT_GROUP_STATIONARY /* 0x00000000 */ (0 << 6)
 #define ACT_GROUP_MOVING     /* 0x00000040 */ (1 << 6)
 #define ACT_GROUP_AIRBORNE   /* 0x00000080 */ (2 << 6)
