@@ -62,11 +62,9 @@ static struct Object *monty_mole_select_available_hole(f32 minDistToMario) {
     s32 numAvailableHoles = 0;
 
     while (hole != NULL) {
-        if (hole->oMontyMoleHoleCooldown == 0) {
-            if (hole->oDistanceToMario < 1500.0f && hole->oDistanceToMario > minDistToMario) {
-                numAvailableHoles++;
-            }
-        }
+        if (hole->oMontyMoleHoleCooldown == 0
+         && hole->oDistanceToMario < 1500.0f
+         && hole->oDistanceToMario > minDistToMario) numAvailableHoles++;
 
         hole = hole->parentObj;
     }
@@ -78,16 +76,12 @@ static struct Object *monty_mole_select_available_hole(f32 minDistToMario) {
         numAvailableHoles = 0;
 
         while (hole != NULL) {
-            if (hole->oMontyMoleHoleCooldown == 0) {
-                if (hole->oDistanceToMario < 1500.0f && hole->oDistanceToMario > minDistToMario) {
-                    if (numAvailableHoles == selectedHole) {
-                        return hole;
-                    }
-
-                    numAvailableHoles++;
-                }
+            if (hole->oMontyMoleHoleCooldown == 0
+             && hole->oDistanceToMario < 1500.0f
+             && hole->oDistanceToMario > minDistToMario) {
+                if (numAvailableHoles == selectedHole) return hole;
+                numAvailableHoles++;
             }
-
             hole = hole->parentObj;
         }
     }
@@ -195,10 +189,7 @@ static void monty_mole_act_rise_from_hole(void) {
     if (o->oMontyMoleHeightRelativeToFloor >= 49.0f) {
         o->oPosY = o->oFloorHeight + 50.0f;
         o->oVelY = 0.0f;
-
-        if (cur_obj_check_if_near_animation_end()) {
-            o->oAction = MONTY_MOLE_ACT_SPAWN_ROCK;
-        }
+        if (cur_obj_check_if_near_animation_end()) o->oAction = MONTY_MOLE_ACT_SPAWN_ROCK;
     }
 }
 
@@ -242,9 +233,7 @@ static void monty_mole_act_throw_rock(void) {
         o->prevObj = NULL;
     }
 
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE;
 }
 
 /**
@@ -266,9 +255,7 @@ static void monty_mole_act_jump_into_hole(void) {
  * Become intangible and enter the select hole action.
  */
 static void monty_mole_hide_in_hole(void) {
-    if (o->oMontyMoleCurrentHole != NULL) {
-        o->oMontyMoleCurrentHole->oMontyMoleHoleCooldown = 30;
-    }
+    if (o->oMontyMoleCurrentHole != NULL) o->oMontyMoleCurrentHole->oMontyMoleHoleCooldown = 30;
     o->oAction = MONTY_MOLE_ACT_SELECT_HOLE;
     o->oVelY = 0.0f;
     cur_obj_become_intangible();
@@ -381,9 +368,7 @@ void bhv_monty_mole_update(void) {
             }
         }
 
-        if (sMontyMoleKillStreak < (1 << 15)) {
-            sMontyMoleKillStreak++;
-        }
+        if (sMontyMoleKillStreak < (1 << 15)) sMontyMoleKillStreak++;
 
         sMontyMoleLastKilledPosX = o->oPosX;
         sMontyMoleLastKilledPosY = o->oPosY;
@@ -403,16 +388,13 @@ void bhv_monty_mole_update(void) {
  */
 static void monty_mole_rock_act_held(void) {
     // The position is offset since the monty mole is throwing it with its hand
-    o->oParentRelativePosX = 80.0f;
+    o->oParentRelativePosX =  80.0f;
     o->oParentRelativePosY = -50.0f;
-    o->oParentRelativePosZ = 0.0f;
+    o->oParentRelativePosZ =   0.0f;
 
     if (o->parentObj->prevObj == NULL) {
         f32 distToMario = o->oDistanceToMario;
-        if (distToMario > 600.0f) {
-            distToMario = 600.0f;
-        }
-
+        if (distToMario > 600.0f) distToMario = 600.0f;
         o->oAction = MONTY_MOLE_ROCK_ACT_MOVE;
 
         // The angle is adjusted to compensate for the start position offset

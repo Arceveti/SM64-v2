@@ -50,10 +50,8 @@ void bhv_water_bomb_spawner_update(void) {
 
                 waterBomb->oAction = WATER_BOMB_ACT_INIT;
 
-                waterBomb->oPosX =
-                    gMarioObject->oPosX + waterBombDistToMario * sins(gMarioObject->oMoveAngleYaw);
-                waterBomb->oPosZ =
-                    gMarioObject->oPosZ + waterBombDistToMario * coss(gMarioObject->oMoveAngleYaw);
+                waterBomb->oPosX = gMarioObject->oPosX + waterBombDistToMario * sins(gMarioObject->oMoveAngleYaw);
+                waterBomb->oPosZ = gMarioObject->oPosZ + waterBombDistToMario * coss(gMarioObject->oMoveAngleYaw);
 
                 spawn_object(waterBomb, MODEL_WATER_BOMB_SHADOW, bhvWaterBombShadow);
 
@@ -151,11 +149,8 @@ static void water_bomb_act_drop(void) {
     }
 
     o->header.gfx.scale[1] = o->oWaterBombVerticalStretch + 1.0f;
-
     stretch = o->oWaterBombVerticalStretch;
-    if (o->oWaterBombNumBounces == 3.0f) {
-        stretch *= 4.0f;
-    }
+    if (o->oWaterBombNumBounces == 3.0f) stretch *= 4.0f;
     o->header.gfx.scale[0] = o->header.gfx.scale[2] = 1.0f - stretch;
 
     cur_obj_move_standard(78);
@@ -195,16 +190,10 @@ static void water_bomb_act_shot_from_cannon(void) {
         obj_mark_for_deletion(o);
     } else {
         if (o->oTimer < 7) {
-            if (o->oTimer == 1) {
-                water_bomb_spawn_explode_particles(-20, 10, 30);
-            }
+            if (o->oTimer == 1) water_bomb_spawn_explode_particles(-20, 10, 30);
             cur_obj_spawn_particles(&sWaterBombCannonParticle);
         }
-
-        if (o->header.gfx.scale[1] > 1.2f) {
-            o->header.gfx.scale[1] -= 0.1f;
-        }
-
+        if (o->header.gfx.scale[1] > 1.2f) o->header.gfx.scale[1] -= 0.1f;
         o->header.gfx.scale[0] = o->header.gfx.scale[2] = 2.0f - o->header.gfx.scale[1];
         cur_obj_set_pos_via_transform();
     }
@@ -244,9 +233,7 @@ void bhv_water_bomb_shadow_update(void) {
     } else {
         // TODO: What is happening here
         f32 bombHeight = o->parentObj->oPosY - o->parentObj->oFloorHeight;
-        if (bombHeight > 500.0f) {
-            bombHeight = 500.0f;
-        }
+        if (bombHeight > 500.0f) bombHeight = 500.0f;
 
         obj_copy_pos(o, o->parentObj);
         o->oPosY = o->parentObj->oFloorHeight + bombHeight;

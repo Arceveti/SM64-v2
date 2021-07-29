@@ -37,9 +37,7 @@ void dorrie_act_move(void) {
             targetSpeed = 10;
         } else {
             circularTurn = 0x4000 - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f);
-            if ((s16)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) {
-                circularTurn = -circularTurn;
-            }
+            if ((s16)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) circularTurn = -circularTurn;
 
             targetYaw = o->oDorrieAngleToHome + circularTurn;
             targetSpeed = 5;
@@ -85,9 +83,7 @@ void dorrie_act_raise_head(void) {
     } else if (o->oDorrieLiftingMario && o->header.gfx.animInfo.animFrame < 74) {
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK) {
             o->oDorrieHeadRaiseSpeed += 0x1CC;
-            if (cur_obj_check_anim_frame(73)) {
-                set_mario_npc_dialog(MARIO_DIALOG_STOP);
-            }
+            if (cur_obj_check_anim_frame(73)) set_mario_npc_dialog(MARIO_DIALOG_STOP);
             dorrie_raise_head();
         } else {
             cur_obj_reverse_animation();

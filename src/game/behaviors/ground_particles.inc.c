@@ -1,11 +1,8 @@
 // ground_particles.c.inc
 
-static struct SpawnParticlesInfo sGlobalMistParticles = { 3, 20, MODEL_MIST, 20, 10, 5, 0, 0, 0, 30, 30.0f, 1.5f };
-
-static struct SpawnParticlesInfo sSandParticles = { 0, 5, MODEL_SAND_DUST, 0, 0, 20, 20, 0, 252, 30, 5.0f, 2.0f };
-
-static struct SpawnParticlesInfo sSnowParticles = { 0,    5,   MODEL_WHITE_PARTICLE_DL, 0, 0, 20, 20, 0, 252, 30,
-                                         2.0f, 2.0f };
+static struct SpawnParticlesInfo sGlobalMistParticles = { 3, 20, MODEL_MIST             , 20, 10,  5,  0, 0,   0, 30, 30.0f, 1.5f };
+static struct SpawnParticlesInfo sSandParticles       = { 0,  5, MODEL_SAND_DUST        ,  0,  0, 20, 20, 0, 252, 30,  5.0f, 2.0f };
+static struct SpawnParticlesInfo sSnowParticles       = { 0,  5, MODEL_WHITE_PARTICLE_DL,  0,  0, 20, 20, 0, 252, 30,  2.0f, 2.0f };
 
 void bhv_pound_white_puffs_init(void) {
     clear_particle_flags(0x8000);

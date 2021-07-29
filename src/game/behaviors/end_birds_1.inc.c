@@ -16,15 +16,9 @@ void bhv_end_birds_1_loop(void) {
                            gCurrentObject->oIntroLakituEndBirds1DestY,
                            gCurrentObject->oIntroLakituEndBirds1DestZ);
 
-            if (gCurrentObject->oTimer < 100) {
-                obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 0x20, 0x20);
-            }
-            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) {
-                cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
-            }
-            if (gCutsceneTimer == 0) {
-                obj_mark_for_deletion(gCurrentObject);
-            }
+            if (gCurrentObject->oTimer < 100) obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 0x20, 0x20);
+            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
+            if (gCutsceneTimer == 0) obj_mark_for_deletion(gCurrentObject);
             break;
     }
 

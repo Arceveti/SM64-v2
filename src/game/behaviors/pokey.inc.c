@@ -95,11 +95,7 @@ void bhv_pokey_body_part_update(void) {
             }
 
             // Only the head has loot coins
-            if (o->oBehParams2ndByte == 0) {
-                o->oNumLootCoins = 1;
-            } else {
-                o->oNumLootCoins = 0;
-            }
+            o->oNumLootCoins = (o->oBehParams2ndByte == 0);
 
             // If the body part was attacked, then die. If the head was killed,
             // then die after a delay.
@@ -155,9 +151,7 @@ static void pokey_act_uninitialized(void) {
             // behavior param 0 = head, 4 = lowest body part
             bodyPart = spawn_object_relative(i, 0, -i * 120 + 480, 0, o, partModel, bhvPokeyBodyPart);
 
-            if (bodyPart != NULL) {
-                obj_scale(bodyPart, 3.0f);
-            }
+            if (bodyPart != NULL) obj_scale(bodyPart, 3.0f);
 
             partModel = MODEL_POKEY_BODY_PART;
         }
@@ -223,9 +217,7 @@ static void pokey_act_wander(void) {
                     obj_resolve_collisions_and_turn(o->oPokeyTargetYaw, 0x200);
             } else {
                 // If far from home, turn back toward home
-                if (o->oDistanceToMario >= 25000.0f) {
-                    o->oPokeyTargetYaw = o->oAngleToMario;
-                }
+                if (o->oDistanceToMario >= 25000.0f) o->oPokeyTargetYaw = o->oAngleToMario;
 
                 if (!(o->oPokeyTurningAwayFromWall =
                           obj_bounce_off_walls_edges_objects(&o->oPokeyTargetYaw))) {
@@ -250,9 +242,7 @@ static void pokey_act_wander(void) {
 
                         // If we need to rotate CCW to get to mario, then negate
                         // the target angle offset
-                        if ((s16)(o->oAngleToMario - o->oMoveAngleYaw) > 0) {
-                            targetAngleOffset = -targetAngleOffset;
-                        }
+                        if ((s16)(o->oAngleToMario - o->oMoveAngleYaw) > 0) targetAngleOffset = -targetAngleOffset;
 
                         // When mario is far, targetAngleOffset is 0, so he moves
                         // toward him directly. When mario is close,
@@ -261,11 +251,9 @@ static void pokey_act_wander(void) {
                         o->oPokeyTargetYaw = o->oAngleToMario + targetAngleOffset;
                     }
                 }
-
                 cur_obj_rotate_yaw_toward(o->oPokeyTargetYaw, 0x200);
             }
         }
-
         cur_obj_move_standard(-78);
     }
 }

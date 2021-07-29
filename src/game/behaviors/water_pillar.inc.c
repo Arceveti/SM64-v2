@@ -5,7 +5,7 @@ void water_level_pillar_undrained(void) {
     switch (o->oAction) {
         case 0:
             if (cur_obj_is_mario_ground_pounding_platform()) {
-                o->oAction++;
+                o->oAction = 1;
                 spawn_mist_particles();
             }
             break;
@@ -13,40 +13,32 @@ void water_level_pillar_undrained(void) {
             if (o->oTimer < 4) {
                 o->oPosY -= 20.0f;
             } else {
-                o->oAction++;
+                o->oAction = 2;
             }
             break;
         case 2:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL) {
-                if (otherWaterPillar->oAction < 2) {
-                    o->oAction++;
-                }
-            }
+            if (otherWaterPillar != NULL && otherWaterPillar->oAction < 2) o->oAction = 3;
             break;
         case 3:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL) {
-                if (otherWaterPillar->oAction > 1) {
-                    o->oAction++;
+            if (otherWaterPillar != NULL && otherWaterPillar->oAction > 1) {
+                o->oAction = 4;
 
-                    save_file_set_flags(SAVE_FLAG_MOAT_DRAINED);
-                    play_puzzle_jingle();
-                }
+                save_file_set_flags(SAVE_FLAG_MOAT_DRAINED);
+                play_puzzle_jingle();
             }
             break;
         case 4:
             cur_obj_play_sound_1(SOUND_ENV_WATER_DRAIN);
             if (o->oTimer < 300) {
-                gEnvironmentLevels[2] =
-                    (s32) approach_f32_symmetric(gEnvironmentLevels[2], -2450.0f, 5.0f);
-                gEnvironmentLevels[0] =
-                    (s32) approach_f32_symmetric(gEnvironmentLevels[0], -2450.0f, 5.0f);
+                gEnvironmentLevels[2] = (s32) approach_f32_symmetric(gEnvironmentLevels[2], -2450.0f, 5.0f);
+                gEnvironmentLevels[0] = (s32) approach_f32_symmetric(gEnvironmentLevels[0], -2450.0f, 5.0f);
 #if ENABLE_RUMBLE
                 reset_rumble_timers_vibrate(2);
 #endif
             } else {
-                o->oAction++;
+                o->oAction = 5;
             }
             break;
         case 5:
@@ -63,9 +55,7 @@ void water_level_pillar_drained(void) {
 }
 
 void bhv_water_level_pillar_init(void) {
-    if (save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED) {
-        o->oWaterLevelPillarDrained = 1;
-    }
+    if (save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED) o->oWaterLevelPillarDrained = 1;
 }
 
 void bhv_water_level_pillar_loop(void) {

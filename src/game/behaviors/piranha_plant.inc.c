@@ -22,9 +22,7 @@ void piranha_plant_act_idle(void) {
     cur_obj_scale(1);
 #endif
 
-    if (o->oDistanceToMario < 1200.0f) {
-        o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
-    }
+    if (o->oDistanceToMario < 1200.0f) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
 }
 
 /**
@@ -37,25 +35,22 @@ void piranha_plant_act_idle(void) {
  */
 s32 piranha_plant_check_interactions(void) {
     s32 i;
-    s32 interacted = 1;
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         func_80321080(50);
         if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) {
             cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_DYING);
 
             // Spawn 20 intangible purple particles that quickly dissipate.
-            for (i = 0; i < 20; i++) {
-                spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
-            }
+            for (i = 0; i < 20; i++) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
             o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
         } else {
             o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
         }
         o->oInteractStatus = INT_STATUS_NONE;
     } else {
-        interacted = 0;
+        return FALSE;
     }
-    return interacted;
+    return TRUE;
 }
 
 #define PIRANHA_PLANT_SLEEP_MUSIC_PLAYING 0
@@ -88,9 +83,7 @@ void piranha_plant_act_sleeping(void) {
 #endif
 
     if (o->oDistanceToMario < 400.0f) {
-        if (mario_moving_fast_enough_to_make_piranha_plant_bite()) {
-            o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
-        }
+        if (mario_moving_fast_enough_to_make_piranha_plant_bite()) o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
     } else if (o->oDistanceToMario < 1000.0f) {
         play_secondary_music(SEQ_EVENT_PIRANHA_PLANT, 0, 255, 1000);
         o->oPiranhaPlantSleepMusicState = PIRANHA_PLANT_SLEEP_MUSIC_PLAYING;
@@ -114,13 +107,9 @@ void piranha_plant_act_woken_up(void) {
      */
     o->oDamageOrCoinValue = 3;
 #endif
-    if (o->oTimer == 0) {
-        func_80321080(50);
-    }
-    if (piranha_plant_check_interactions() == 0) {
-        if (o->oTimer > 10) {
-            o->oAction = PIRANHA_PLANT_ACT_BITING;
-        }
+    if (o->oTimer == 0) func_80321080(50);
+    if (!piranha_plant_check_interactions() && o->oTimer > 10) {
+        o->oAction = PIRANHA_PLANT_ACT_BITING;
     }
 }
 
@@ -141,9 +130,7 @@ void piranha_plant_act_woken_up(void) {
  *     activation radius. One could then kill it again to receive its blue coin.
  */
 void piranha_plant_reset_when_far(void) {
-    if (o->activeFlags & ACTIVE_FLAG_FAR_AWAY) {
-        o->oAction = PIRANHA_PLANT_ACT_IDLE;
-    }
+    if (o->activeFlags & ACTIVE_FLAG_FAR_AWAY) o->oAction = PIRANHA_PLANT_ACT_IDLE;
 }
 #endif
 
@@ -155,9 +142,7 @@ void piranha_plant_attacked(void) {
     cur_obj_become_intangible();
     cur_obj_init_animation_with_sound(2);
     o->oInteractStatus = INT_STATUS_NONE;
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = PIRANHA_PLANT_ACT_SHRINK_AND_DIE;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_SHRINK_AND_DIE;
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
     piranha_plant_reset_when_far(); // see this function's comment
 #endif
@@ -197,9 +182,7 @@ void piranha_plant_act_shrink_and_die(void) {
  * Wait for Mario to move far away, then respawn the Piranha Plant.
  */
 void piranha_plant_act_wait_to_respawn(void) {
-    if (o->oDistanceToMario > 1200.0f) {
-        o->oAction = PIRANHA_PLANT_ACT_RESPAWN;
-    }
+    if (o->oDistanceToMario > 1200.0f) o->oAction = PIRANHA_PLANT_ACT_RESPAWN;
 }
 
 /**
@@ -208,9 +191,7 @@ void piranha_plant_act_wait_to_respawn(void) {
  */
 void piranha_plant_act_respawn(void) {
     cur_obj_init_animation_with_sound(8);
-    if (o->oTimer == 0) {
-        o->oPiranhaPlantScale = 0.3f;
-    }
+    if (o->oTimer == 0) o->oPiranhaPlantScale = 0.3f;
 
     /**
      * This state only occurs after PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN, which
@@ -253,23 +234,15 @@ void piranha_plant_act_biting(void) {
     cur_obj_set_hurtbox_radius_and_height(150.0f, 100.0f);
 
     // Play a bite sound effect on certain frames.
-    if (is_item_in_array(frame, sPiranhaPlantBiteSoundFrames)) {
-        cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_BITE);
-    }
+    if (is_item_in_array(frame, sPiranhaPlantBiteSoundFrames)) cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_BITE);
 
     // Move to face the player.
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x400);
 
-    if (o->oDistanceToMario > 500.0f) {
-        if (cur_obj_check_if_near_animation_end()) {
-            o->oAction = PIRANHA_PLANT_ACT_STOPPED_BITING;
-        }
-    }
+    if (o->oDistanceToMario > 500.0f && cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_STOPPED_BITING;
     // If the player is wearing the Metal Cap and interacts with the Piranha
     // Plant, the Piranha Plant will die.
-    if (o->oInteractStatus & INT_STATUS_INTERACTED && gMarioState->flags & MARIO_METAL_CAP) {
-        o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
-    }
+    if (o->oInteractStatus & INT_STATUS_INTERACTED && gMarioState->flags & MARIO_METAL_CAP) o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
 }
 
 /**
@@ -291,9 +264,7 @@ void piranha_plant_act_stopped_biting(void) {
     cur_obj_become_intangible();
     cur_obj_init_animation_with_sound(6);
 
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
     /**
      * Note that this state only occurs initially when the player goes further
      * than 500.0f units from the Piranha Plant while it is biting. This if-
@@ -301,11 +272,7 @@ void piranha_plant_act_stopped_biting(void) {
      * of the Piranha Plant during the short time the Piranha Plant's nod
      * animation plays.
      */
-    if (o->oDistanceToMario < 400.0f) {
-        if (mario_moving_fast_enough_to_make_piranha_plant_bite()) {
-            o->oAction = PIRANHA_PLANT_ACT_BITING;
-        }
-    }
+    if (o->oDistanceToMario < 400.0f && mario_moving_fast_enough_to_make_piranha_plant_bite()) o->oAction = PIRANHA_PLANT_ACT_BITING;
 }
 
 /**

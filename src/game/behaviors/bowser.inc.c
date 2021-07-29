@@ -34,9 +34,7 @@ void bowser_tail_anchor_act_default(void) {
  * return to the default tail action check
  */
 void bowser_tail_anchor_thrown(void) {
-    if (o->oTimer > 30) {
-        o->oAction = BOWSER_ACT_TAIL_DEFAULT;
-    }
+    if (o->oTimer > 30) o->oAction = BOWSER_ACT_TAIL_DEFAULT;
 }
 
 /**
@@ -67,9 +65,7 @@ void bhv_bowser_tail_anchor_loop(void) {
     o->oParentRelativePosX = 90.0f;
 
     // Make it intangible while Bowser is dead
-    if (o->parentObj->oAction == BOWSER_ACT_DEAD) {
-        o->parentObj->oIntangibleTimer = -1;
-    }
+    if (o->parentObj->oAction == BOWSER_ACT_DEAD) o->parentObj->oIntangibleTimer = -1;
 
     o->oInteractStatus = INT_STATUS_NONE;
 }
@@ -109,9 +105,7 @@ void bhv_bowser_flame_spawn_loop(void) {
             o->oMoveAnglePitch = data[5 * animFrame + 4] + 0xC00;
             o->oMoveAngleYaw = data[5 * animFrame + 3] + (s16) bowser->oMoveAngleYaw;
             // Spawns the flames on a non-odd animFrame value
-            if (!(animFrame & 1)) {
-                spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
-            }
+            if (!(animFrame & 1)) spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
         }
     }
 }
@@ -188,9 +182,7 @@ void bowser_bounce_effects(s32 *timer) {
  */
 s32 bowser_set_anim_look_up_and_walk(void) {
     cur_obj_init_animation_with_sound(BOWSER_ANIM_LOOK_UP_START_WALK);
-    if (cur_obj_check_anim_frame(21)) {
-        o->oForwardVel = 3.0f;
-    }
+    if (cur_obj_check_anim_frame(21)) o->oForwardVel = 3.0f;
     return cur_obj_check_if_near_animation_end();
 }
 
@@ -210,9 +202,7 @@ s32 bowser_set_anim_slow_gait(void) {
  */
 s32 bowser_set_anim_look_down_stop_walk(void) {
     cur_obj_init_animation_with_sound(BOWSER_ANIM_LOOK_DOWN_STOP_WALK);
-    if (cur_obj_check_anim_frame(20)) {
-        o->oForwardVel = 0.0f;
-    }
+    if (cur_obj_check_anim_frame(20)) o->oForwardVel = 0.0f;
     return cur_obj_check_if_near_animation_end();
 }
 
@@ -251,19 +241,13 @@ void bowser_act_wait(void) {
 void bowser_act_intro_walk(void) {
     // First look up and walk
     if (o->oSubAction == 0) {
-        if (bowser_set_anim_look_up_and_walk()) {
-            o->oSubAction++;
-        }
+        if (bowser_set_anim_look_up_and_walk()) o->oSubAction++;
     // Then slowly walk
     } else if (o->oSubAction == 1) {
-        if (bowser_set_anim_slow_gait()) {
-            o->oSubAction++;
-        }
+        if (bowser_set_anim_slow_gait()) o->oSubAction++;
     // And finally stop, and set to wait mode
     } else if (bowser_set_anim_look_down_stop_walk()) {
-        if (o->oBowserCamAct == BOWSER_CAM_ACT_WALK) {
-            o->oBowserCamAct = BOWSER_CAM_ACT_IDLE;
-        }
+        if (o->oBowserCamAct == BOWSER_CAM_ACT_WALK) o->oBowserCamAct = BOWSER_CAM_ACT_IDLE;
         bowser_init_camera_actions();
     }
 }
@@ -523,9 +507,7 @@ void bowser_act_walk_to_mario(void) {
             o->oBowserTimer++;
             // Reset fire sky status
             if (o->oBowserStatus & BOWSER_STATUS_FIRE_SKY) {
-                if (o->oBowserTimer > 4) {
-                    o->oBowserStatus &= ~BOWSER_STATUS_FIRE_SKY;
-                }
+                if (o->oBowserTimer > 4) o->oBowserStatus &= ~BOWSER_STATUS_FIRE_SKY;
             // Do subaction below if angles is less than 0x2000
             } else if (angleFromMario < 0x2000) {
                 o->oSubAction++;
@@ -548,9 +530,7 @@ void bowser_act_teleport(void) {
             o->oBowserTargetOpacity = 0;
             o->oBowserTimer = 30; // set timer value
             // Play sound effect
-            if (o->oTimer == 0) {
-                cur_obj_play_sound_2(SOUND_OBJ2_BOWSER_TELEPORT);
-            }
+            if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ2_BOWSER_TELEPORT);
             // Bowser is invisible, move angle to face Mario
             if (o->oOpacity == 0) {
                 o->oSubAction++;
@@ -604,9 +584,7 @@ void bowser_act_spit_fire_into_sky(void) {
         }
     }
     // Return to default act once the animation is over
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = BOWSER_ACT_DEFAULT;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = BOWSER_ACT_DEFAULT;
     // Set fire sky status
     o->oBowserStatus |= BOWSER_STATUS_FIRE_SKY;
 }
@@ -708,7 +686,8 @@ void bowser_act_big_jump(void) {
         // Set jump animation
         if (bowser_set_anim_jump()) {
             // Set vel depending of the stage and status
-            if (o->oBehParams2ndByte == BOWSER_BP_BITS && o->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
+            if (o->oBehParams2ndByte == BOWSER_BP_BITS
+             && o->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
                 o->oVelY = 70.0f;
             } else {
                 o->oVelY = 80.0f;
@@ -720,7 +699,8 @@ void bowser_act_big_jump(void) {
     } else if (o->oSubAction == 1) {
 #if BUGFIX_BOWSER_FALLEN_OFF_STAGE
         // Reset Bowser back on stage in BITS if he doesn't land properly
-        if (o->oBehParams2ndByte == BOWSER_BP_BITS && o->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
+        if (o->oBehParams2ndByte == BOWSER_BP_BITS
+         && o->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
             bowser_reset_fallen_off_stage();
         }
 #endif
@@ -732,9 +712,7 @@ void bowser_act_big_jump(void) {
             // Spawn shockwave (BITS only) if is not on a platform
             bowser_spawn_shockwave();
             // Tilt platform in BITFS
-            if (o->oBehParams2ndByte == BOWSER_BP_BITFS) {
-                o->oAction = BOWSER_ACT_TILT_LAVA_PLATFORM;
-            }
+            if (o->oBehParams2ndByte == BOWSER_BP_BITFS) o->oAction = BOWSER_ACT_TILT_LAVA_PLATFORM;
         }
     // Set to default action when the animation is over
     } else if (cur_obj_check_if_near_animation_end()) {
@@ -764,9 +742,7 @@ void bowser_act_quick_jump(void) {
         }
     // Lands then quickly returns to default action
     } else if (o->oSubAction == 1) {
-        if (bowser_land()) {
-            o->oSubAction++;
-        }
+        if (bowser_land()) o->oSubAction++;
     } else if (cur_obj_check_if_near_animation_end()) {
         o->oAction = BOWSER_ACT_DEFAULT;
     }
@@ -785,20 +761,14 @@ void bowser_act_hit_edge(void) {
         case 0:
             // Move on the edge
             cur_obj_init_animation_with_sound(BOWSER_ANIM_EDGE_MOVE);
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oBowserTimer++;
-            }
-            if (o->oBowserTimer > 0) {
-                o->oSubAction++;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oBowserTimer++;
+            if (o->oBowserTimer > 0) o->oSubAction++;
             break;
         case 1:
             // Stop moving on the edge
             cur_obj_init_animation_with_sound(BOWSER_ANIM_EDGE_STOP);
             // Turn around once the animation ends
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oAction = BOWSER_ACT_TURN_FROM_EDGE;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oAction = BOWSER_ACT_TURN_FROM_EDGE;
             break;
     }
 }
@@ -816,17 +786,11 @@ void bowser_act_spit_fire_onto_floor(void) {
 
     // Play animation and split fire at a specific frame
     cur_obj_init_animation_with_sound(BOWSER_ANIM_BREATH_QUICK);
-    if (cur_obj_check_anim_frame(5)) {
-        obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
-    }
+    if (cur_obj_check_anim_frame(5)) obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
     // Use subaction as a timer when the animation is over
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oSubAction++;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oSubAction++;
     // Return to default act once we get past rand value
-    if (o->oSubAction >= o->oBowserRandSplitFloor) {
-        o->oAction = BOWSER_ACT_DEFAULT;
-    }
+    if (o->oSubAction >= o->oBowserRandSplitFloor) o->oAction = BOWSER_ACT_DEFAULT;
 }
 
 /**
@@ -835,13 +799,9 @@ void bowser_act_spit_fire_onto_floor(void) {
  */
 s32 bowser_turn_on_timer(s32 time, s16 yaw) {
     if (o->oSubAction == 0) {
-        if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_UP_START_WALK)) {
-            o->oSubAction++;
-        }
+        if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_UP_START_WALK)) o->oSubAction++;
     } else if (o->oSubAction == 1) {
-        if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_DOWN_STOP_WALK)) {
-            o->oSubAction++;
-        }
+        if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_DOWN_STOP_WALK)) o->oSubAction++;
     } else {
         cur_obj_init_animation_with_sound(BOWSER_ANIM_IDLE);
     }
@@ -865,9 +825,7 @@ void bowser_act_turn_from_edge(void) {
 void bowser_act_charge_mario(void) {
     s32 time;
     // Reset Speed to prepare charge
-    if (o->oTimer == 0) {
-        o->oForwardVel = 0.0f;
-    }
+    if (o->oTimer == 0) o->oForwardVel = 0.0f;
 
     switch (o->oSubAction) {
         case BOWSER_SUB_ACT_CHARGE_START:
@@ -955,9 +913,7 @@ s32 bowser_check_hit_mine(void) {
  */
 void bowser_act_thrown(void) {
     // Keep Bowser's timer at 0 unless he lands
-    if (o->oTimer < 2) {
-        o->oBowserTimer = 0;
-    }
+    if (o->oTimer < 2) o->oBowserTimer = 0;
     if (o->oSubAction == 0) {
         // Play shake animations and do bounce effects
         cur_obj_init_animation_with_sound(BOWSER_ANIM_SHAKING);
@@ -1014,9 +970,7 @@ void bowser_act_jump_onto_stage(void) {
             } //? missing else
             o->oFaceAnglePitch += 0x800;
             o->oFaceAngleRoll += 0x800;
-            if (!(o->oFaceAnglePitch & 0xFFFF)) {
-                o->oSubAction++;
-            }
+            if (!(o->oFaceAnglePitch & 0xFFFF)) o->oSubAction++;
             bowser_set_goal_invisible();
             break;
         // Start jump animation and make him visible after an animation frame
@@ -1097,13 +1051,9 @@ s8 sBowserDanceStepNoises[] = { 24, 42, 60, -1 };
  */
 void bowser_act_dance(void) {
     // Play a stomp sound effect on certain frames
-    if (is_item_in_array(o->oTimer, sBowserDanceStepNoises)) {
-        cur_obj_play_sound_2(SOUND_OBJ_BOWSER_WALK);
-    }
+    if (is_item_in_array(o->oTimer, sBowserDanceStepNoises)) cur_obj_play_sound_2(SOUND_OBJ_BOWSER_WALK);
     // Play dance animation and after that return to default action
-    if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_DANCE)) {
-        o->oAction = BOWSER_ACT_DEFAULT;
-    }
+    if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_DANCE)) o->oAction = BOWSER_ACT_DEFAULT;
 }
 
 /**
@@ -1175,9 +1125,7 @@ s32 bowser_dead_wait_for_mario(void) {
 s32 bowser_dead_twirl_up(void) {
     s32 ret = FALSE;
     // Set angle rotation once he has low X scale value
-    if (o->header.gfx.scale[0] < 0.8f) {
-        o->oAngleVelYaw += 0x80;
-    }
+    if (o->header.gfx.scale[0] < 0.8f) o->oAngleVelYaw += 0x80;
     // Slowly scale down his X and Z value
     if (o->header.gfx.scale[0] > 0.2f) {
         o->header.gfx.scale[0] = o->header.gfx.scale[0] - 0.02f;
@@ -1195,9 +1143,7 @@ s32 bowser_dead_twirl_up(void) {
     // Copy angle rotation to moving rotation
     o->oMoveAngleYaw += o->oAngleVelYaw;
     // Slowly fade out
-    if (o->oOpacity >= 3) {
-        o->oOpacity -= 2;
-    }
+    if (o->oOpacity >= 3) o->oOpacity -= 2;
     return ret;
 }
 
@@ -1314,16 +1260,12 @@ void bowser_act_dead(void) {
             }
             break;
         case BOWSER_SUB_ACT_DEAD_DEFAULT_END:
-            if (bowser_dead_default_stage_ending()) {
-                o->oSubAction++; // BOWSER_SUB_ACT_DEAD_DEFAULT_END_OVER
-            }
+            if (bowser_dead_default_stage_ending()) o->oSubAction = BOWSER_SUB_ACT_DEAD_DEFAULT_END_OVER;
             break;
         case BOWSER_SUB_ACT_DEAD_DEFAULT_END_OVER:
             break;
         case BOWSER_SUB_ACT_DEAD_FINAL_END:
-            if (bowser_dead_final_stage_ending()) {
-                o->oSubAction++; // BOWSER_SUB_ACT_DEAD_FINAL_END_OVER
-            }
+            if (bowser_dead_final_stage_ending()) o->oSubAction = BOWSER_SUB_ACT_DEAD_FINAL_END_OVER;
             break;
         case BOWSER_SUB_ACT_DEAD_FINAL_END_OVER:
             break;
@@ -1403,9 +1345,7 @@ void bowser_act_tilt_lava_platform(void) {
                 // Set angle values to the platform
                 bowser_tilt_platform(platform, angSpeed);
                 // Play sound effect
-                if (angSpeed != 0) {
-                    play_sound(SOUND_ENV_MOVING_BIG_PLATFORM, platform->header.gfx.cameraToObject);
-                }
+                if (angSpeed != 0) play_sound(SOUND_ENV_MOVING_BIG_PLATFORM, platform->header.gfx.cameraToObject);
                 isNotTilting = FALSE;
                 break;
             }
@@ -1475,33 +1415,33 @@ void (*sBowserActions[])(void) = {
  * Set Bowser's sound animations
  */
 struct SoundState sBowserSoundStates[] = {
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 1, 0, -1, SOUND_OBJ_BOWSER_WALK },
-    { 1, 0, -1, SOUND_OBJ2_BOWSER_ROAR },
-    { 1, 0, -1, SOUND_OBJ2_BOWSER_ROAR },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 1, 20, 40, SOUND_OBJ_BOWSER_WALK },
-    { 1, 20, -1, SOUND_OBJ_BOWSER_WALK },
-    { 1, 20, 40, SOUND_OBJ_BOWSER_WALK },
-    { 1, 0, -1, SOUND_OBJ_BOWSER_TAIL_PICKUP },
-    { 1, 0, -1, SOUND_OBJ_BOWSER_DEFEATED },
-    { 1, 8, -1, SOUND_OBJ_BOWSER_WALK },
-    { 1, 8, 17, SOUND_OBJ_BOWSER_WALK },
-    { 1, 8, -10, SOUND_OBJ_BOWSER_WALK },
-    { 0, 0, 0, NO_SOUND },
-    { 1, 5, -1, SOUND_OBJ_FLAME_BLOWN },
-    { 0, 0, 0, NO_SOUND },
-    { 0, 0, 0, NO_SOUND },
-    { 1, 0, -1, SOUND_OBJ_BOWSER_TAIL_PICKUP },
-    { 1, 0, -1, SOUND_OBJ2_BOWSER_ROAR },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 1,  0,  -1, SOUND_OBJ_BOWSER_WALK        },
+    { 1,  0,  -1, SOUND_OBJ2_BOWSER_ROAR       },
+    { 1,  0,  -1, SOUND_OBJ2_BOWSER_ROAR       },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 1, 20,  40, SOUND_OBJ_BOWSER_WALK        },
+    { 1, 20,  -1, SOUND_OBJ_BOWSER_WALK        },
+    { 1, 20,  40, SOUND_OBJ_BOWSER_WALK        },
+    { 1,  0,  -1, SOUND_OBJ_BOWSER_TAIL_PICKUP },
+    { 1,  0,  -1, SOUND_OBJ_BOWSER_DEFEATED    },
+    { 1,  8,  -1, SOUND_OBJ_BOWSER_WALK        },
+    { 1,  8,  17, SOUND_OBJ_BOWSER_WALK        },
+    { 1,  8, -10, SOUND_OBJ_BOWSER_WALK        },
+    { 0,  0,   0, NO_SOUND                     },
+    { 1,  5,  -1, SOUND_OBJ_FLAME_BLOWN        },
+    { 0,  0,   0, NO_SOUND                     },
+    { 0,  0,   0, NO_SOUND                     },
+    { 1,  0,  -1, SOUND_OBJ_BOWSER_TAIL_PICKUP },
+    { 1,  0,  -1, SOUND_OBJ2_BOWSER_ROAR       },
 };
 
 /**
@@ -1512,7 +1452,7 @@ s8 sBowserRainbowLight[] = { FALSE, FALSE, TRUE };
 /**
  * Set how much health Bowser has on each stage
  */
-s8 sBowserHealth[] = { 1, 1, 3 };
+// s8 sBowserHealth[] = { 1, 1, 3 };
 
 /**
  * Update Bowser's actions when he's hands free
@@ -1529,9 +1469,7 @@ void bowser_free_update(void) {
         o->oFaceAngleYaw = tmpOFaceAngleYaw;
     }
 #else
-    if ((platform = o->platform) != NULL) {
-        apply_platform_displacement(FALSE, platform);
-    }
+    if ((platform = o->platform) != NULL) apply_platform_displacement(FALSE, platform);
 #endif
     // Reset grabbed status
     o->oBowserGrabbedStatus = BOWSER_GRAB_STATUS_NONE;
@@ -1599,13 +1537,9 @@ void bowser_thrown_dropped_update(void) {
     // Set swing speed based of angle
     swingSpd = o->oBowserHeldAngleVelYaw / 3000.0f * 70.0f;
     // If less than 0, reduce speed
-    if (swingSpd < 0.0f) {
-        swingSpd = -swingSpd;
-    }
+    if (swingSpd < 0.0f) swingSpd = -swingSpd;
     // If more than 90, increase speed
-    if (swingSpd > 90.0f) {
-        swingSpd *= 2.5f;
-    }
+    if (swingSpd > 90.0f) swingSpd *= 2.5f;
     // Set distance speed when throwing
     o->oForwardVel = coss(o->oBowserHeldAnglePitch) * swingSpd;
     o->oVelY = -sins(o->oBowserHeldAnglePitch) * swingSpd;
@@ -1638,18 +1572,10 @@ void bhv_bowser_loop(void) {
 
     // Set bitflag status for distance/angle values
     // Only the first one is used
-    if (angleToMario < 0x2000) {
-        o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;
-    }
-    if (angleToCentre < 0x3800) {
-        o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE; // unused
-    }
-    if (o->oBowserDistToCentre < 1000.0f) {
-        o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE; // unused
-    }
-    if (o->oDistanceToMario < 850.0f) {
-        o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO; // unused
-    }
+    if (angleToMario           <  0x2000) o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;
+    if (angleToCentre          <  0x3800) o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE; // unused
+    if (o->oBowserDistToCentre < 1000.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE; // unused
+    if (o->oDistanceToMario    <  850.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO; // unused
 
     // Update Held state actions
     switch (o->oHeldState) {
@@ -1676,15 +1602,11 @@ void bhv_bowser_loop(void) {
             // increase opacity when oBowserTargetOpacity is 0xFF
             if (o->oBowserTargetOpacity > o->oOpacity) {
                 o->oOpacity += 20;
-                if (o->oOpacity >= 0x100) {
-                    o->oOpacity = 0xFF;
-                }
+                if (o->oOpacity >= 0x100) o->oOpacity = 0xFF;
             // reduce opacity when oBowserTargetOpacity is 0
             } else {
                 o->oOpacity -= 20;
-                if (o->oOpacity < 0) {
-                    o->oOpacity = 0;
-                }
+                if (o->oOpacity < 0) o->oOpacity = 0;
             }
         }
     }
@@ -1712,7 +1634,7 @@ void bhv_bowser_init(void) {
     o->oBehParams2ndByte = level;
     // Set health and rainbow light depending of the level
     o->oBowserRainbowLight = sBowserRainbowLight[level];
-    o->oHealth = sBowserHealth[level];
+    o->oHealth = (level == 3 ? 3 : 1); // sBowserHealth[level];
     // Start camera event, this event is not defined so maybe
     // the "start arena" cutscene was originally called this way
     cur_obj_start_cam_event(o, CAM_EVENT_BOWSER_INIT);
@@ -1766,75 +1688,53 @@ void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *swit
         case BOWSER_EYES_OPEN:
             // Mario is in Bowser's field of view
             if (angleFromMario > 0x2000) {
-                if (obj->oAngleVelYaw > 0) {
-                    switchCase->selectedCase = BOWSER_EYES_RIGHT;
-                }
-                if (obj->oAngleVelYaw < 0) {
-                    switchCase->selectedCase = BOWSER_EYES_LEFT;
-                }
+                if (obj->oAngleVelYaw > 0) switchCase->selectedCase = BOWSER_EYES_RIGHT;
+                if (obj->oAngleVelYaw < 0) switchCase->selectedCase = BOWSER_EYES_LEFT;
             }
             // Half close, start blinking
-            if (obj->oBowserEyesTimer > 50) {
-                switchCase->selectedCase = BOWSER_EYES_HALF_CLOSED;
-            }
+            if (obj->oBowserEyesTimer > 50) switchCase->selectedCase = BOWSER_EYES_HALF_CLOSED;
             break;
         case BOWSER_EYES_HALF_CLOSED:
             // Close, blinking
-            if (obj->oBowserEyesTimer > 2) {
-                switchCase->selectedCase = BOWSER_EYES_CLOSED;
-            }
+            if (obj->oBowserEyesTimer > 2) switchCase->selectedCase = BOWSER_EYES_CLOSED;
             break;
         case BOWSER_EYES_CLOSED:
             // Reset blinking
-            if (obj->oBowserEyesTimer > 2) {
-                switchCase->selectedCase = BOWSER_EYES_RESET;
-            }
+            if (obj->oBowserEyesTimer > 2) switchCase->selectedCase = BOWSER_EYES_RESET;
             break;
         case BOWSER_EYES_RESET:
             // Open, no longer blinking
-            if (obj->oBowserEyesTimer > 2) {
-                switchCase->selectedCase = BOWSER_EYES_OPEN;
-            }
+            if (obj->oBowserEyesTimer > 2) switchCase->selectedCase = BOWSER_EYES_OPEN;
             break;
         case BOWSER_EYES_RIGHT:
             // Look more on the right if angle didn't change
             // Otherwise, look at the center (open)
             if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_FAR_RIGHT;
-                if (obj->oAngleVelYaw <= 0) {
-                    switchCase->selectedCase = BOWSER_EYES_OPEN;
-                }
+                if (obj->oAngleVelYaw <= 0) switchCase->selectedCase = BOWSER_EYES_OPEN;
             }
             break;
         case BOWSER_EYES_FAR_RIGHT:
             // Look close right if angle was drastically changed
-            if (obj->oAngleVelYaw <= 0) {
-                switchCase->selectedCase = BOWSER_EYES_RIGHT;
-            }
+            if (obj->oAngleVelYaw <= 0) switchCase->selectedCase = BOWSER_EYES_RIGHT;
             break;
         case BOWSER_EYES_LEFT:
             // Look more on the left if angle didn't change
             // Otherwise, look at the center (open)
             if (obj->oBowserEyesTimer > 2) {
                 switchCase->selectedCase = BOWSER_EYES_FAR_LEFT;
-                if (obj->oAngleVelYaw >= 0) {
-                    switchCase->selectedCase = BOWSER_EYES_OPEN;
-                }
+                if (obj->oAngleVelYaw >= 0) switchCase->selectedCase = BOWSER_EYES_OPEN;
             }
             break;
         case BOWSER_EYES_FAR_LEFT:
             // Look close left if angle was drastically changed
-            if (obj->oAngleVelYaw >= 0) {
-                switchCase->selectedCase = BOWSER_EYES_LEFT;
-            }
+            if (obj->oAngleVelYaw >= 0) switchCase->selectedCase = BOWSER_EYES_LEFT;
             break;
         default:
             switchCase->selectedCase = BOWSER_EYES_OPEN;
     }
     // Reset timer if eye case has changed
-    if (switchCase->selectedCase != eyeCase) {
-        obj->oBowserEyesTimer = -1;
-    }
+    if (switchCase->selectedCase != eyeCase) obj->oBowserEyesTimer = -1;
 }
 
 /**
@@ -1846,9 +1746,7 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
     struct Object *obj = (struct Object *) gCurGraphNodeObject;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (gCurGraphNodeHeldObject != NULL) {
-            obj = gCurGraphNodeHeldObject->objNode;
-        }
+        if (gCurGraphNodeHeldObject != NULL) obj = gCurGraphNodeHeldObject->objNode;
         if (obj->oBowserEyesShut) {
             switchCase->selectedCase = BOWSER_EYES_CLOSED; // eyes closed, blinking
         } else {
@@ -1867,9 +1765,7 @@ void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
     f32 min = min(min(color[0], color[1]), color[2]);
     f32 max = max(max(color[0], color[1]), color[2]);
 
-    if (min == max) {
-        return color;
-    }
+    if (min == max) return color;
 
     f32 hue = 0.0f;
     if (max == color[0]) {
@@ -1966,9 +1862,7 @@ Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s3
     if (callContext == GEO_CONTEXT_RENDER) {
         obj = (struct Object *) gCurGraphNodeObject;
         graphNode = (struct GraphNodeGenerated *) node;
-        if (gCurGraphNodeHeldObject != 0) {
-            obj = gCurGraphNodeHeldObject->objNode;
-        }
+        if (gCurGraphNodeHeldObject != 0) obj = gCurGraphNodeHeldObject->objNode;
         // Set layers if object is transparent or not
         if (obj->oOpacity == 0xFF) {
             graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);

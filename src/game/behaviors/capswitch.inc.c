@@ -43,9 +43,7 @@ void cap_switch_act_2(void) {
         //  On an extra note, there's a specific check for this cutscene and 
         //  there's no dialog defined since the cutscene itself calls the dialog.
         if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_FRONT, 
-            (DIALOG_FLAG_TEXT_RESPONSE | DIALOG_FLAG_UNK_CAPSWITCH), CUTSCENE_CAP_SWITCH_PRESS, 0)) {
-            o->oAction = 3;
-        }
+            (DIALOG_FLAG_TEXT_RESPONSE | DIALOG_FLAG_UNK_CAPSWITCH), CUTSCENE_CAP_SWITCH_PRESS, 0)) o->oAction = 3;
     }
 }
 

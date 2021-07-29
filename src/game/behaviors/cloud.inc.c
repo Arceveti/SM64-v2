@@ -25,9 +25,7 @@ static void cloud_act_spawn_parts(void) {
     for (i = 0; i < 5; i++) {
         cloudPart = spawn_object_relative(i, 0, 0, 0, o, MODEL_MIST, bhvCloudPart);
 
-        if (cloudPart != NULL) {
-            obj_set_billboard(cloudPart);
-        }
+        if (cloudPart != NULL) obj_set_billboard(cloudPart);
     }
 
     if (o->oBehParams2ndByte == CLOUD_BP_FWOOSH) {
@@ -188,9 +186,7 @@ void bhv_cloud_part_update(void) {
         cur_obj_scale(size);
 
         // Cap fwoosh's face size
-        if (o->oBehParams2ndByte == 5 && size > 2.0f) {
-            size = o->header.gfx.scale[1] = 2.0f;
-        }
+        if (o->oBehParams2ndByte == 5 && size > 2.0f) size = o->header.gfx.scale[1] = 2.0f;
 
         // Move back and forth along (1, 1, 1)
         localOffset = 2 * coss(localOffsetPhase) * size;
@@ -199,8 +195,7 @@ void bhv_cloud_part_update(void) {
 
         o->oPosX = o->parentObj->oCloudCenterX + cloudRadius * sins(angleFromCenter) + localOffset;
 
-        o->oPosY =
-            o->parentObj->oCloudCenterY + localOffset + size * sCloudPartHeights[o->oBehParams2ndByte];
+        o->oPosY = o->parentObj->oCloudCenterY + localOffset + size * sCloudPartHeights[o->oBehParams2ndByte];
 
         o->oPosZ = o->parentObj->oPosZ + cloudRadius * coss(angleFromCenter) + localOffset;
 

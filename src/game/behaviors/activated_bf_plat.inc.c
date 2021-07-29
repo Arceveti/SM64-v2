@@ -111,9 +111,7 @@ void bhv_activated_back_and_forth_platform_update(void) {
         }
     } else {
         // oVelY is only negative if Mario is on the platform
-        if (o->oVelY < 0.0f) {
-            o->oActivatedBackAndForthPlatformVel = 10.0f;
-        }
+        if (o->oVelY < 0.0f) o->oActivatedBackAndForthPlatformVel = 10.0f;
 
         // Set waiting countdown to 20 frames
         o->oActivatedBackAndForthPlatformCountdown = 20;

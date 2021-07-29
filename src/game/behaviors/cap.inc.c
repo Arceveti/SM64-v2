@@ -23,9 +23,7 @@ s32 cap_set_hitbox(void) {
 }
 
 void cap_despawn(void) {
-    if (o->oTimer > 300) {
-        obj_flicker_and_disappear(o, 300);
-    }
+    if (o->oTimer > 300) obj_flicker_and_disappear(o, 300);
 }
 
 void cap_check_quicksand(void) {
@@ -74,24 +72,18 @@ void cap_sink_quicksand(void) {
             break;
 
         case 11:
-            if (o->oTimer < 10) {
-                o->oGraphYOffset -= 3.0f;
-            }
+            if (o->oTimer < 10) o->oGraphYOffset -= 3.0f;
             o->oFaceAnglePitch = 0x2000;
             break;
 
         case 12:
             o->oGraphYOffset -= 1.0f;
-            if (o->oTimer >= 21) {
-                o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-            }
+            if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
 
         case 13:
             o->oGraphYOffset -= 6.0f;
-            if (o->oTimer >= 21) {
-                o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-            }
+            if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             o->oFaceAnglePitch = 0x2000;
             break;
     }
@@ -100,10 +92,10 @@ void cap_sink_quicksand(void) {
 }
 
 void bhv_wing_cap_init(void) {
-    o->oGravity = 1.2f;
+    o->oGravity  = 1.2f;
     o->oFriction = 0.999f;
     o->oBuoyancy = 0.9f;
-    o->oOpacity = 255;
+    o->oOpacity  = 255;
 }
 
 void cap_scale_vertically(void) {
@@ -123,14 +115,12 @@ void wing_vanish_cap_act_0(void) {
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
         if (o->oVelY != 0.0f) {
-            o->oCapDoScaleVertically = TRUE;
+            o->oCapDoScaleVertically = 1;
             o->oVelY = 0.0f;
         }
     }
 
-    if (o->oCapDoScaleVertically) {
-        cap_scale_vertically();
-    }
+    if (o->oCapDoScaleVertically) cap_scale_vertically();
 }
 
 void bhv_wing_vanish_cap_loop(void) {
@@ -141,18 +131,16 @@ void bhv_wing_vanish_cap_loop(void) {
         cap_sink_quicksand();
     }
 
-    if (o->oTimer > 20) {
-        cur_obj_become_tangible();
-    }
+    if (o->oTimer > 20) cur_obj_become_tangible();
     cap_despawn();
     cap_set_hitbox();
 }
 
 void bhv_metal_cap_init(void) {
-    o->oGravity = 2.4f;
+    o->oGravity  = 2.4f;
     o->oFriction = 0.999f;
     o->oBuoyancy = 1.5f;
-    o->oOpacity = 0xFF;
+    o->oOpacity  = 0xFF;
 }
 
 void metal_cap_act_0(void) {
@@ -160,9 +148,7 @@ void metal_cap_act_0(void) {
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
     collisionFlags = object_step();
-    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
-        cap_check_quicksand();
-    }
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) cap_check_quicksand();
 }
 
 void bhv_metal_cap_loop(void) {
@@ -174,18 +160,16 @@ void bhv_metal_cap_loop(void) {
         cap_sink_quicksand();
     }
 
-    if (o->oTimer > 20) {
-        cur_obj_become_tangible();
-    }
+    if (o->oTimer > 20) cur_obj_become_tangible();
     cap_set_hitbox();
     cap_despawn();
 }
 
 void bhv_normal_cap_init(void) {
-    o->oGravity = 0.7f;
+    o->oGravity  = 0.7f;
     o->oFriction = 0.89f;
     o->oBuoyancy = 0.9f;
-    o->oOpacity = 0xFF;
+    o->oOpacity  = 0xFF;
 
     save_file_set_cap_pos(o->oPosX, o->oPosY, o->oPosZ);
 }
@@ -228,9 +212,7 @@ void normal_cap_act_0(void) {
         }
     }
 
-    if (o->oCapDoScaleVertically == 1) {
-        cap_scale_vertically();
-    }
+    if (o->oCapDoScaleVertically == 1) cap_scale_vertically();
 }
 
 void bhv_normal_cap_loop(void) {
@@ -241,15 +223,9 @@ void bhv_normal_cap_loop(void) {
         cap_sink_quicksand();
     }
 
-    if ((s32) o->oForwardVel != 0) {
-        save_file_set_cap_pos(o->oPosX, o->oPosY, o->oPosZ);
-    }
-    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-        normal_cap_set_save_flags();
-    }
-    if (cap_set_hitbox()) {
-        save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
-    }
+    if ((s32) o->oForwardVel != 0) save_file_set_cap_pos(o->oPosX, o->oPosY, o->oPosZ);
+    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) normal_cap_set_save_flags();
+    if (cap_set_hitbox()) save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 
 void bhv_vanish_cap_init(void) {

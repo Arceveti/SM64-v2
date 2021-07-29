@@ -15,11 +15,9 @@ static void mad_piano_act_wait(void) {
     cur_obj_init_animation_with_sound(0);
 
     if (o->oDistanceToMario < 500.0f) {
-        if (o->oTimer > 20) {
-            if (gMarioStates[0].forwardVel > 10.0f) {
-                o->oAction = MAD_PIANO_ACT_ATTACK;
-                cur_obj_become_tangible();
-            }
+        if (o->oTimer > 20 && gMarioStates[0].forwardVel > 10.0f) {
+            o->oAction = MAD_PIANO_ACT_ATTACK;
+            cur_obj_become_tangible();
         }
     } else {
         o->oTimer = 0;
@@ -33,9 +31,7 @@ static void mad_piano_act_attack(void) {
     cur_obj_init_animation_with_sound(1);
     cur_obj_play_sound_at_anim_range(0, 0, SOUND_OBJ_MAD_PIANO_CHOMPING);
 
-    if (o->oDistanceToMario < 500.0f) {
-        o->oTimer = 0;
-    }
+    if (o->oDistanceToMario < 500.0f) o->oTimer = 0;
 
     if (o->oTimer > 80 && cur_obj_check_if_near_animation_end()) {
         o->oAction = MAD_PIANO_ACT_WAIT;

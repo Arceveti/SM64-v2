@@ -26,18 +26,11 @@ s32 update_angle_from_move_flags(s32 *angle) {
 void bhv_scuttlebug_loop(void) {
     f32 accel;
     cur_obj_update_floor_and_walls();
-    if (o->oSubAction != 0
-        && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) {
-        o->oSubAction = 3;
-    }
-    if (o->oSubAction != 1) {
-        o->oScuttlebugIsAtttacking = FALSE;
-    }
+    if (o->oSubAction != 0 && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) o->oSubAction = 3;
+    if (o->oSubAction != 1) o->oScuttlebugIsAtttacking = FALSE;
     switch (o->oSubAction) {
         case 0:
-            if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-                cur_obj_play_sound_2(SOUND_OBJ_GOOMBA_ALERT);
-            }
+            if (o->oMoveFlags & OBJ_MOVE_LANDED) cur_obj_play_sound_2(SOUND_OBJ_GOOMBA_ALERT);
             if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
                 o->oHomeX = o->oPosX;
                 o->oHomeY = o->oPosY;
@@ -61,24 +54,16 @@ void bhv_scuttlebug_loop(void) {
                 } else if (o->oScuttlebugIsAtttacking) {
                     o->oForwardVel = 15.0f;
                     o->oScuttlebugTimer++;
-                    if (o->oScuttlebugTimer > 50) {
-                        o->oScuttlebugIsAtttacking = FALSE;
-                    }
+                    if (o->oScuttlebugTimer > 50) o->oScuttlebugIsAtttacking = FALSE;
                 }
             }
-            if (update_angle_from_move_flags(&o->oAngleToMario)) {
-                o->oSubAction = 2;
-            }
+            if (update_angle_from_move_flags(&o->oAngleToMario)) o->oSubAction = 2;
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
             break;
         case 2:
             o->oForwardVel = 5.0f;
-            if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) {
-                o->oSubAction = 1;
-            }
-            if (o->oPosY - o->oHomeY < -200.0f) {
-                obj_mark_for_deletion(o);
-            }
+            if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) o->oSubAction = 1;
+            if (o->oPosY - o->oHomeY < -200.0f) obj_mark_for_deletion(o);
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
             break;
         case 3:
@@ -112,12 +97,8 @@ void bhv_scuttlebug_loop(void) {
         set_obj_anim_with_accel_and_sound(1, 23, SOUND_OBJ2_SCUTTLEBUG_WALK);
     }
     if (o->parentObj != o) {
-        if (obj_is_hidden(o)) {
-            obj_mark_for_deletion(o);
-        }
-        if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            o->parentObj->oScuttlebugSpawnerIsDeactivated = TRUE;
-        }
+        if (obj_is_hidden(o)) obj_mark_for_deletion(o);
+        if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) o->parentObj->oScuttlebugSpawnerIsDeactivated = TRUE;
     }
     cur_obj_move_standard(-50);
 }

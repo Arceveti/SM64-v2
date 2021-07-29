@@ -115,9 +115,7 @@ static void homing_amp_chase_loop(void) {
             o->oHomingAmpAvgY = gMarioObject->header.gfx.pos[1] + 150.0f;
         }
 
-        if (o->oTimer >= 31) {
-            o->oHomingAmpLockedOn = FALSE;
-        }
+        if (o->oTimer >= 31) o->oHomingAmpLockedOn = FALSE;
     } else {
         // If the amp is not locked on to Mario, move forward at 10 units/second
         // while curving towards him.
@@ -128,9 +126,7 @@ static void homing_amp_chase_loop(void) {
         // The amp's average Y will approach Mario's graphical Y position + 250
         // at a rate of 10 units per frame. Interestingly, this is different from
         // the + 150 used while chasing him. Could this be a typo?
-        if (o->oHomingAmpAvgY < gMarioObject->header.gfx.pos[1] + 250.0f) {
-            o->oHomingAmpAvgY += 10.0f;
-        }
+        if (o->oHomingAmpAvgY < gMarioObject->header.gfx.pos[1] + 250.0f) o->oHomingAmpAvgY += 10.0f;
     }
 
     // The amp's position will sinusoidally oscillate 40 units around its average Y.
@@ -175,9 +171,7 @@ static void amp_attack_cooldown_loop(void) {
 
     cur_obj_become_intangible();
 
-    if (o->oTimer >= 31) {
-        o->oAnimState = 0;
-    }
+    if (o->oTimer >= 31) o->oAnimState = 0;
 
     if (o->oTimer >= 91) {
         o->oAnimState = 1;

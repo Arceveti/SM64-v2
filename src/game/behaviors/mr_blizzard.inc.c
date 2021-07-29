@@ -48,12 +48,9 @@ void bhv_mr_blizzard_init(void) {
         o->oMrBlizzardGraphYOffset = 24.0f;
         o->oMrBlizzardTargetMoveYaw = o->oMoveAngleYaw;
     } else {
-        if (o->oBehParams2ndByte != MR_BLIZZARD_STYPE_NO_CAP) {
-            // Cap wearing Mr. Blizzard from SL.
-            if (save_file_get_flags() & SAVE_FLAG_CAP_ON_MR_BLIZZARD) {
-                o->oAnimState = 1;
-            }
-        }
+        // Cap wearing Mr. Blizzard from SL.
+        if (o->oBehParams2ndByte != MR_BLIZZARD_STYPE_NO_CAP
+         && save_file_get_flags() & SAVE_FLAG_CAP_ON_MR_BLIZZARD) o->oAnimState = 1;
 
         // Mr. Blizzard starts under the floor holding nothing.
         o->oMrBlizzardGraphYOffset = -200.0f;
@@ -416,9 +413,7 @@ static void mr_blizzard_snowball_act_1(void) {
     if (o->parentObj->prevObj == NULL) {
         if (o->parentObj->oAction == MR_BLIZZARD_ACT_THROW_SNOWBALL) {
             marioDist = o->oDistanceToMario;
-            if (marioDist > 800.0f) {
-                marioDist = 800.0f;
-            }
+            if (marioDist > 800.0f) marioDist = 800.0f;
 
             // Launch the snowball relative to Mario's distance from the snowball.
             o->oMoveAngleYaw = (s32)(o->parentObj->oMoveAngleYaw + 4000 - marioDist * 4.0f);

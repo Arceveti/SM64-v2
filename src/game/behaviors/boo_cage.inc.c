@@ -10,15 +10,15 @@
  * Mario has to enter to enter BBH.
  */
 static struct ObjectHitbox sBooCageHitbox = {
-    /* interactType: */ INTERACT_BBH_ENTRANCE,
-    /* downOffset: */ 0,
+    /* interactType:      */ INTERACT_BBH_ENTRANCE,
+    /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 0,
-    /* health: */ 0,
-    /* numLootCoins: */ 0,
-    /* radius: */ 120,
-    /* height: */ 300,
-    /* hurtboxRadius: */ 0,
-    /* hurtboxHeight: */ 0,
+    /* health:            */ 0,
+    /* numLootCoins:      */ 0,
+    /* radius:            */ 120,
+    /* height:            */ 300,
+    /* hurtboxRadius:     */ 0,
+    /* hurtboxHeight:     */ 0,
 };
 
 /**
@@ -54,9 +54,7 @@ void bhv_boo_cage_loop(void) {
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
 
             // When the cage lands/bounces, play a landing/bouncing sound.
-            if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-                cur_obj_play_sound_2(SOUND_GENERAL_SOFT_LANDING);
-            }
+            if (o->oMoveFlags & OBJ_MOVE_LANDED) cur_obj_play_sound_2(SOUND_GENERAL_SOFT_LANDING);
 
             // Once the cage stops bouncing and settles on the ground,
             // set the action to BOO_CAGE_ACT_ON_GROUND.

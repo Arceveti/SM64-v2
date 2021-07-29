@@ -24,9 +24,7 @@ void bubba_act_0(void) {
     approach_f32_ptr(&o->oBubbaMovePitch, 5.0f, 0.5f);
 
     if (o->oBubbaHitWall != 0) {
-        if (abs_angle_diff(o->oMoveAngleYaw, o->oBubbaTargetYaw) < 800) {
-            o->oBubbaHitWall = 0;
-        }
+        if (abs_angle_diff(o->oMoveAngleYaw, o->oBubbaTargetYaw) < 800) o->oBubbaHitWall = 0;
     } else {
         if (o->oDistanceToMario >= 25000.0f) {
             o->oBubbaTargetYaw = o->oAngleToMario;
@@ -101,10 +99,7 @@ void bhv_bubba_loop(void) {
 
     if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x1000
         && abs_angle_diff(o->oBubbaNextTargetPitchTowardMario + 0x800, o->oMoveAnglePitch) < 0x2000) {
-        if (o->oAnimState != 0 && o->oDistanceToMario < 250.0f) {
-            o->oInteractionSubtype |= INT_SUBTYPE_EATS_MARIO;
-        }
-
+        if (o->oAnimState != 0 && o->oDistanceToMario < 250.0f) o->oInteractionSubtype |= INT_SUBTYPE_EATS_MARIO;
         o->hurtboxRadius = 100.0f;
     } else {
         o->hurtboxRadius = 150.0f;
@@ -123,11 +118,8 @@ void bhv_bubba_loop(void) {
 
     if (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) {
         if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER) {
-            struct Object *sp38 = spawn_object(o, MODEL_WATER_SPLASH, bhvWaterSplash);
-            if (sp38 != NULL) {
-                obj_scale(sp38, 3.0f);
-            }
-
+            struct Object *splashObj = spawn_object(o, MODEL_WATER_SPLASH, bhvWaterSplash);
+            if (splashObj != NULL) obj_scale(splashObj, 3.0f);
             o->oBubbaAirVelY = o->oVelY;
             o->oBubbaJumpHeight = 0.0f;
         } else {
@@ -139,7 +131,6 @@ void bhv_bubba_loop(void) {
                                       MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
             }
         }
-
         obj_smooth_turn(&o->oBubbaPitchVel, &o->oMoveAnglePitch, o->oBubbaTargetPitch, 0.05f, 10, 50, 2000);
         obj_smooth_turn(&o->oBubbaYawVel, &o->oMoveAngleYaw, o->oBubbaTargetYaw, 0.05f, 10, 50, 2000);
         obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
@@ -156,7 +147,5 @@ void bhv_bubba_loop(void) {
     cur_obj_move_standard(78);
 
     o->oFloorHeight += 150.0f;
-    if (o->oPosY < o->oFloorHeight) {
-        o->oPosY = o->oFloorHeight;
-    }
+    if (o->oPosY < o->oFloorHeight) o->oPosY = o->oFloorHeight;
 }

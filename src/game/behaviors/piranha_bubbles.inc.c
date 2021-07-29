@@ -28,7 +28,7 @@ void bhv_piranha_plant_waking_bubbles_loop(void) {
  */
 void bhv_piranha_plant_bubble_loop(void) {
     struct Object *parent = o->parentObj; // the Piranha Plant
-    f32 scale = 0;
+    f32 scale = 0.0f;
     s32 i;
     s32 frame = parent->header.gfx.animInfo.animFrame;
     // TODO: rename lastFrame if it is inaccurate
@@ -41,11 +41,8 @@ void bhv_piranha_plant_bubble_loop(void) {
     switch (o->oAction) {
         case PIRANHA_PLANT_BUBBLE_ACT_IDLE:
             cur_obj_disable_rendering();
-            scale = 0;
-
-            if (parent->oAction == PIRANHA_PLANT_ACT_SLEEPING) {
-                o->oAction++; // move to PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP
-            }
+            scale = 0.0f;
+            if (parent->oAction == PIRANHA_PLANT_ACT_SLEEPING) o->oAction = PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP;
             break;
 
         case PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP:
@@ -89,12 +86,10 @@ void bhv_piranha_plant_bubble_loop(void) {
 
         case PIRANHA_PLANT_BUBBLE_ACT_BURST:
             cur_obj_disable_rendering();
-            scale = 0;
+            scale = 0.0f;
 
             // Spawn 15 small bubbles to make it look like this bubble burst.
-            for (i = 0; i < 15; i++) {
-                try_to_spawn_object(0, 1.0f, o, MODEL_BUBBLE, bhvPiranhaPlantWakingBubbles);
-            }
+            for (i = 0; i < 15; i++) try_to_spawn_object(0, 1.0f, o, MODEL_BUBBLE, bhvPiranhaPlantWakingBubbles);
 
             o->oAction = PIRANHA_PLANT_BUBBLE_ACT_IDLE;
             scale = 1.0f; // this has no effect; it is set to 0 in the idle state

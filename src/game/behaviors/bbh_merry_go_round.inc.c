@@ -70,9 +70,7 @@ void bhv_merry_go_round_loop(void) {
     // Surprisingly, the merry-go-round is what's responsible
     // for playing the howling wind sound in BBH.
     if (!o->oMerryGoRoundMarioIsOutside) {
-        if (gMarioCurrentRoom == BBH_OUTSIDE_ROOM) {
-            o->oMerryGoRoundMarioIsOutside = TRUE;
-        }
+        if (gMarioCurrentRoom == BBH_OUTSIDE_ROOM) o->oMerryGoRoundMarioIsOutside = TRUE;
     } else {
         play_sound(SOUND_AIR_HOWLING_WIND, gGlobalSoundSource);
 
@@ -81,9 +79,8 @@ void bhv_merry_go_round_loop(void) {
             //! @bug Interestingly, this means if Mario goes from outside
             // to a dynamic surface *inside* the mansion in a single frame,
             // the howling wind music will still play.
-        if (gMarioCurrentRoom != BBH_OUTSIDE_ROOM && gMarioCurrentRoom != BBH_DYNAMIC_SURFACE_ROOM) {
-            o->oMerryGoRoundMarioIsOutside = FALSE;
-        }
+        if (gMarioCurrentRoom != BBH_OUTSIDE_ROOM
+         && gMarioCurrentRoom != BBH_DYNAMIC_SURFACE_ROOM) o->oMerryGoRoundMarioIsOutside = FALSE;
     }
 
     // Rotate the merry-go-round and play appropriate music if it's not stopped.

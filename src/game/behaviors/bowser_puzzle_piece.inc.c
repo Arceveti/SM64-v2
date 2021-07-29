@@ -128,8 +128,7 @@ void bhv_lll_bowser_puzzle_loop(void) {
             // If both completion flags are set and Mario is within 1000 units...
             if (o->oBowserPuzzleCompletionFlags == 3 && o->oDistanceToMario < 1000.0f) {
                 // Spawn 5 coins.
-                for (i = 0; i < 5; i++)
-                    puzzlePieceObj = spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
+                for (i = 0; i < 5; i++) puzzlePieceObj = spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
 
                 // Reset completion flags (even though they never get checked again).
                 o->oBowserPuzzleCompletionFlags = 0;
@@ -228,7 +227,7 @@ void bhv_lll_bowser_puzzle_piece_move_left(void) {
 }
 
 void bhv_lll_bowser_puzzle_piece_move_right(void) {
-    bhv_lll_bowser_puzzle_piece_move(128.0f, 0.0f, 4, 5);
+    bhv_lll_bowser_puzzle_piece_move( 128.0f, 0.0f, 4, 5);
 }
 
 void bhv_lll_bowser_puzzle_piece_move_up(void) {
@@ -236,7 +235,7 @@ void bhv_lll_bowser_puzzle_piece_move_up(void) {
 }
 
 void bhv_lll_bowser_puzzle_piece_move_down(void) {
-    bhv_lll_bowser_puzzle_piece_move(0.0f, 128.0f, 4, 3);
+    bhv_lll_bowser_puzzle_piece_move(0.0f,  128.0f, 4, 3);
 }
 
 void (*sBowserPuzzlePieceActions[])(void) = {

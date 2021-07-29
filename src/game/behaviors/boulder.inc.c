@@ -5,7 +5,7 @@ void bhv_big_boulder_init(void) {
     o->oHomeY = o->oPosY;
     o->oHomeZ = o->oPosZ;
 
-    o->oGravity = 8.0f;
+    o->oGravity  = 8.0f;
     o->oFriction = 0.999f;
     o->oBuoyancy = 2.0f;
 }
@@ -19,12 +19,8 @@ void boulder_act_1(void) {
         spawn_mist_particles();
     }
 
-    if (o->oForwardVel > 70.0f) {
-        o->oForwardVel = 70.0f;
-    }
-    if (o->oPosY < -1000.0f) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
+    if (o->oPosY < -1000.0f) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void bhv_big_boulder_loop(void) {
@@ -48,9 +44,7 @@ void bhv_big_boulder_loop(void) {
 
 void bhv_big_boulder_generator_loop(void) {
     struct Object *boulderObj;
-    if (o->oTimer >= 256) {
-        o->oTimer = 0;
-    }
+    if (o->oTimer >= 256) o->oTimer = 0;
 
     if (!current_mario_room_check(4) || is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500)) return;
 

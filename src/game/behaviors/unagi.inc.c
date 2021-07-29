@@ -49,9 +49,7 @@ void unagi_go_to_start_of_path(void) { // act 0
 
 void unagi_follow_path(s32 nextAction) { // act 1 4
     if (o->oSoundStateID == 3) {
-        if (cur_obj_check_anim_frame(30)) {
-            o->oForwardVel = 40.0f;
-        }
+        if (cur_obj_check_anim_frame(30)) o->oForwardVel = 40.0f;
     } else {
         if (cur_obj_check_if_at_animation_end()) {
             if (o->oAction != nextAction && (o->oPathedPrevWaypointFlags & 0xFF) >= 7) {
@@ -62,13 +60,9 @@ void unagi_follow_path(s32 nextAction) { // act 1 4
         }
     }
 
-    if (cur_obj_check_anim_frame(6)) {
-        cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
-    }
+    if (cur_obj_check_anim_frame(6)) cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
 
-    if (cur_obj_follow_path(0) == -1) {
-        o->oAction = nextAction;
-    }
+    if (cur_obj_follow_path(0) == -1) o->oAction = nextAction;
 
     o->oMoveAnglePitch = o->oFaceAnglePitch =
         approach_s16_symmetric(o->oMoveAnglePitch, o->oPathedTargetPitch, 50);
@@ -100,14 +94,10 @@ void unagi_return_to_cave(void) { // act 2
 void unagi_in_cave(void) { // act 3
     if (o->oUnagiDistFromHome < 0.0f) {
         cur_obj_init_animation_with_sound(6);
-
-        if ((o->oUnagiDistFromHome += 10.0f) > 0.0f) {
-            o->oUnagiDistFromHome = 0.0f;
-        }
+        if ((o->oUnagiDistFromHome += 10.0f) > 0.0f) o->oUnagiDistFromHome = 0.0f;
     } else {
         if (o->oUnagiDistFromHome == 0.0f) {
             cur_obj_init_animation_with_sound(6);
-
             if (o->oTimer > 60 && o->oUnagiDistanceToMario < 1000.0f) {
                 cur_obj_play_sound_2(SOUND_OBJ_EEL_2);
                 o->oUnagiNextForwardVel = o->oUnagiTargetNextForwardVel = 30.0f;
@@ -115,9 +105,7 @@ void unagi_in_cave(void) { // act 3
                 o->oUnagiTargetNextForwardVel = 0.0f;
             }
         } else if (o->oUnagiTargetNextForwardVel > 0.0f) {
-            if (cur_obj_init_anim_and_check_if_end(5)) {
-                o->oUnagiTargetNextForwardVel = 0.0f;
-            }
+            if (cur_obj_init_anim_and_check_if_end(5)) o->oUnagiTargetNextForwardVel = 0.0f;
         } else if (o->oUnagiTargetNextForwardVel == 0.0f) {
             cur_obj_init_animation_with_sound(0);
             if (cur_obj_check_if_at_animation_end()) {
@@ -150,9 +138,7 @@ void bhv_unagi_loop(void) {
     if (!o->oUnagiHasStar) {
         o->oUnagiDistanceToMario = 99999.0f;
         if (o->oDistanceToMario < 3000.0f) {
-            for (i = -4; i < 4; i++) {
-                spawn_object_relative(i, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
-            }
+            for (i = -4; i < 4; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
             o->oUnagiHasStar = TRUE;
         }
     } else if (o->oDistanceToMario > 4000.0f) {
@@ -201,9 +187,7 @@ void bhv_unagi_subobject_loop(void) { // unagi star
             }
         } else {
             obj_check_attacks(&sUnagiHitbox, o->oAction);
-            if (o->oBehParams2ndByte == 3) {
-                o->parentObj->oUnagiDistanceToMario = o->oDistanceToMario;
-            }
+            if (o->oBehParams2ndByte == 3) o->parentObj->oUnagiDistanceToMario = o->oDistanceToMario;
         }
     }
 }

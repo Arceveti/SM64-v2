@@ -147,10 +147,7 @@ void bhv_mips_act_wait_for_animation_done(void) {
  * Handles MIPS falling down after being thrown.
  */
 void bhv_mips_act_fall_down(void) {
-
-    s16 collisionFlags = 0;
-
-    collisionFlags = object_step();
+    s16 collisionFlags = object_step();
     o->header.gfx.animInfo.animFrame = 0;
 
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
@@ -159,9 +156,7 @@ void bhv_mips_act_fall_down(void) {
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
 
-        if (collisionFlags & OBJ_COL_FLAG_UNDERWATER) {
-            spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
-        }
+        if (collisionFlags & OBJ_COL_FLAG_UNDERWATER) spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
     }
 }
 
@@ -171,7 +166,7 @@ void bhv_mips_act_fall_down(void) {
 void bhv_mips_act_idle(void) {
     UNUSED s16 collisionFlags = 0;
 
-    o->oForwardVel = 0;
+    o->oForwardVel = 0.0f;
     collisionFlags = object_step();
 
     // Spawn a star if he was just picked up for the first time.
@@ -222,11 +217,7 @@ void bhv_mips_held(void) {
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        if (o->oBehParams2ndByte == 0) {
-            dialogID = DIALOG_084;
-        } else {
-            dialogID = DIALOG_162;
-        }
+        dialogID = (o->oBehParams2ndByte == 0 ? DIALOG_084 : DIALOG_162);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID)) {

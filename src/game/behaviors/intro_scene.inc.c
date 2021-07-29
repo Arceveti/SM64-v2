@@ -10,9 +10,7 @@ void spawn_child_obj_relative(struct Object *parent, s16 xOffset, s16 yOffset, s
     sCutsceneVars[9].point[0] += 1.0f;
     obj->oPosX += xOffset;
     obj->oPosY += yOffset;
-    if (gCutsceneTimer > 700) {
-        obj->oPosY -= 150.0f;
-    }
+    if (gCutsceneTimer > 700) obj->oPosY -= 150.0f;
     obj->oPosZ += zOffset;
     obj->oMoveAnglePitch += pitchOffset;
     obj->oMoveAngleYaw += yawOffset;

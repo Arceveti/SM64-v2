@@ -17,10 +17,7 @@ void bhv_end_birds_2_loop(void) {
             yaw += 0x1000;
             vec3f_set_dist_and_angle(gCamera->pos, pos, 14000.0f, pitch, yaw);
             obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 8, 8);
-
-            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) {
-                cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
-            }
+            if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
             break;
     }
 

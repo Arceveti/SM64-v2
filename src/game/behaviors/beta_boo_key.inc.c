@@ -23,7 +23,7 @@
 void bhv_alpha_boo_key_loop(void) {
     // Rotate the key
     o->oFaceAngleRoll += 0x200;
-    o->oFaceAngleYaw += 0x200;
+    o->oFaceAngleYaw  += 0x200;
 
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         // This line makes the object inside the key's parent boo drop.
@@ -153,9 +153,7 @@ static void beta_boo_key_inside_boo_loop(void) {
     o->oGraphYOffset += 40.0f;
 
     // If the boo is dying/dead, set the action to BETA_BOO_KEY_ACT_DROPPING.
-    if (parent->oBooDeathStatus != BOO_DEATH_STATUS_ALIVE) {
-        o->oAction = BETA_BOO_KEY_ACT_DROPPING;
-    }
+    if (parent->oBooDeathStatus != BOO_DEATH_STATUS_ALIVE) o->oAction = BETA_BOO_KEY_ACT_DROPPING;
 
     // Rotate the key
     o->oFaceAngleRoll += 0x200;

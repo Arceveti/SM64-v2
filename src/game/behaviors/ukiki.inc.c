@@ -71,42 +71,24 @@ void idle_ukiki_taunt(void) {
     switch(o->oSubAction) {
         case UKIKI_SUB_ACT_TAUNT_ITCH:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_ITCH);
-
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
             break;
 
         case UKIKI_SUB_ACT_TAUNT_SCREECH:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_SCREECH);
-
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oUkikiTauntCounter++;
-            }
-
-            if (o->oUkikiTauntCounter >= o->oUkikiTauntsToBeDone * 2) {
-                o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oUkikiTauntCounter++;
+            if (o->oUkikiTauntCounter >= o->oUkikiTauntsToBeDone * 2) o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
             break;
 
         case UKIKI_SUB_ACT_TAUNT_JUMP_CLAP:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_JUMP_CLAP);
-
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oUkikiTauntCounter++;
-            }
-
-            if (o->oUkikiTauntCounter >= o->oUkikiTauntsToBeDone) {
-                o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oUkikiTauntCounter++;
+            if (o->oUkikiTauntCounter >= o->oUkikiTauntsToBeDone) o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
             break;
 
         case UKIKI_SUB_ACT_TAUNT_HANDSTAND:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_HANDSTAND);
-
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oSubAction = UKIKI_SUB_ACT_TAUNT_NONE;
             break;
     }
 }
@@ -122,17 +104,13 @@ void ukiki_act_idle(void) {
         if (o->oDistanceToMario > 700.0f && o->oDistanceToMario < 1000.0f) {
             o->oAction = UKIKI_ACT_RUN;
         } else if (o->oDistanceToMario <= 700.0f && 200.0f < o->oDistanceToMario) {
-            if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) > 0x1000)    {
-                o->oAction = UKIKI_ACT_TURN_TO_MARIO;
-            }
+            if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) > 0x1000) o->oAction = UKIKI_ACT_TURN_TO_MARIO;
         }
     } else if (o->oDistanceToMario < 300.0f) {
         o->oAction = UKIKI_ACT_RUN;
     }
 
-    if (o->oUkikiTextState == UKIKI_TEXT_GO_TO_CAGE) {
-        o->oAction = UKIKI_ACT_GO_TO_CAGE;
-    }
+    if (o->oUkikiTextState == UKIKI_TEXT_GO_TO_CAGE) o->oAction = UKIKI_ACT_GO_TO_CAGE;
 
     // Jump away from Mario after stealing his cap.
     if (o->oUkikiTextState == UKIKI_TEXT_STOLE_CAP) {
@@ -147,20 +125,13 @@ void ukiki_act_idle(void) {
                 o->oAction = UKIKI_ACT_JUMP;
             } else {
                 o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw - 0x4000;
-                if (check_if_moving_over_floor(50.0f, 150.0f)) {
-                    o->oAction = UKIKI_ACT_JUMP;
-                }
+                if (check_if_moving_over_floor(50.0f, 150.0f)) o->oAction = UKIKI_ACT_JUMP;
             }
         }
-
         o->oUkikiTextState = UKIKI_TEXT_HAS_CAP;
     }
 
-    if (o->oBehParams2ndByte == UKIKI_CAP) {
-        if (o->oPosY < -1550.0f) {
-            o->oAction = UKIKI_ACT_RETURN_HOME;
-        }
-    }
+    if (o->oBehParams2ndByte == UKIKI_CAP && o->oPosY < -1550.0f) o->oAction = UKIKI_ACT_RETURN_HOME;
 }
 
 /**
@@ -173,9 +144,7 @@ void ukiki_act_return_home(void) {
     o->oForwardVel = 10.0f;
 
     // If ukiki somehow walked home, go back to the idle action.
-    if (o->oPosY > -1550.0f) {
-        o->oAction = UKIKI_ACT_IDLE;
-    }
+    if (o->oPosY > -1550.0f) o->oAction = UKIKI_ACT_IDLE;
 }
 
 /**
@@ -199,10 +168,7 @@ void ukiki_act_wait_to_respawn(void) {
  */
 void ukiki_act_unused_turn(void) {
     idle_ukiki_taunt();
-
-    if (o->oSubAction == UKIKI_SUB_ACT_TAUNT_JUMP_CLAP) {
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
-    }
+    if (o->oSubAction == UKIKI_SUB_ACT_TAUNT_JUMP_CLAP) cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
 }
 
 /**
@@ -212,22 +178,16 @@ void ukiki_act_turn_to_mario(void) {
     s32 facingMario;
 
     // Initialize the action with a random fVel from 2-5.
-    if (o->oTimer == 0) {
-        o->oForwardVel = random_float() * 3.0f + 2.0f;
-    }
+    if (o->oTimer == 0) o->oForwardVel = random_float() * 3.0f + 2.0f;
 
     cur_obj_init_animation_with_sound(UKIKI_ANIM_TURN);
 
     facingMario = cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
 
-    if (facingMario) {
-        o->oAction = UKIKI_ACT_IDLE;
-    }
+    if (facingMario) o->oAction = UKIKI_ACT_IDLE;
 
     if (is_cap_ukiki_and_mario_has_normal_cap_on_head()){
-        if (o->oDistanceToMario > 500.0f) {
-            o->oAction = UKIKI_ACT_RUN;
-        }
+        if (o->oDistanceToMario > 500.0f) o->oAction = UKIKI_ACT_RUN;
     } else if (o->oDistanceToMario < 300.0f) {
         o->oAction = UKIKI_ACT_RUN;
     }
@@ -245,9 +205,7 @@ void ukiki_act_run(void) {
         goalYaw = o->oAngleToMario;
     }
 
-    if (o->oTimer == 0) {
-        o->oUkikiChaseFleeRange = random_float() * 100.0f + 350.0f;
-    }
+    if (o->oTimer == 0) o->oUkikiChaseFleeRange = random_float() * 100.0f + 350.0f;
 
     cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
     cur_obj_rotate_yaw_toward(goalYaw, 0x800);
@@ -257,9 +215,7 @@ void ukiki_act_run(void) {
     cur_obj_set_vel_from_mario_vel(20.0f, 0.9f);
 
     if (fleeMario) {
-        if (o->oDistanceToMario > o->oUkikiChaseFleeRange) {
-            o->oAction = UKIKI_ACT_TURN_TO_MARIO;
-        }
+        if (o->oDistanceToMario > o->oUkikiChaseFleeRange) o->oAction = UKIKI_ACT_TURN_TO_MARIO;
     } else if (o->oDistanceToMario < o->oUkikiChaseFleeRange) {
         o->oAction = UKIKI_ACT_TURN_TO_MARIO;
     }
@@ -291,8 +247,7 @@ void ukiki_act_jump(void) {
     if (o->oSubAction == 0) {
         if (o->oTimer == 0) {
             cur_obj_set_y_vel_and_animation(random_float() * 10.0f + 45.0f, UKIKI_ANIM_JUMP);
-        } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE
-                                   | OBJ_MOVE_UNDERWATER_ON_GROUND)) {
+        } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_UNDERWATER_ON_GROUND)) {
             o->oSubAction++;
             o->oVelY = 0.0f;
         }
@@ -300,10 +255,7 @@ void ukiki_act_jump(void) {
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(UKIKI_ANIM_LAND);
         cur_obj_become_tangible();
-
-        if (cur_obj_check_if_near_animation_end()) {
-            o->oAction = UKIKI_ACT_RUN;
-        }
+        if (cur_obj_check_if_near_animation_end()) o->oAction = UKIKI_ACT_RUN;
     }
 }
 
@@ -369,7 +321,7 @@ void ukiki_act_go_to_cage(void) {
             if (cur_obj_can_mario_activate_textbox(200.0f, 30.0f, 0x7FFF)) {
                 o->oSubAction++; // fallthrough
             } else {
-            break;
+                break;
             }
 
         case UKIKI_SUB_ACT_CAGE_TALK_TO_MARIO:
@@ -397,9 +349,7 @@ void ukiki_act_go_to_cage(void) {
             break;
 
         case UKIKI_SUB_ACT_CAGE_LAND_ON_CAGE:
-            if (latDistToCage < 50.0f) {
-                o->oForwardVel = 0.0f;
-            }
+            if (latDistToCage < 50.0f) o->oForwardVel = 0.0f;
 
             if (o->oMoveFlags & OBJ_MOVE_LANDED) {
                 play_puzzle_jingle();
@@ -422,9 +372,7 @@ void ukiki_act_go_to_cage(void) {
             break;
 
         case UKIKI_SUB_ACT_CAGE_DESPAWN:
-            if (o->oPosY < -1300.0f) {
-                obj_mark_for_deletion(o);
-            }
+            if (o->oPosY < -1300.0f) obj_mark_for_deletion(o);
             break;
     }
 }
@@ -434,19 +382,19 @@ void ukiki_act_go_to_cage(void) {
  * SoundState number.
  */
 struct SoundState sUkikiSoundStates[] = {
-    {1, 1, 10, SOUND_OBJ_UKIKI_STEP_DEFAULT},
-    {0, 0, 0,  NO_SOUND},
-    {0, 0, 0,  NO_SOUND},
-    {0, 0, 0,  NO_SOUND},
+    {1, 1, 10, SOUND_OBJ_UKIKI_STEP_DEFAULT },
+    {0, 0,  0, NO_SOUND                     },
+    {0, 0,  0, NO_SOUND                     },
+    {0, 0,  0, NO_SOUND                     },
     {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_SHORT},
-    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_LONG},
-    {0, 0, 0,  NO_SOUND},
-    {0, 0, 0,  NO_SOUND},
-    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_LONG},
-    {1, 0, -1, SOUND_OBJ_UKIKI_STEP_LEAVES},
-    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_IDLE},
-    {0, 0, 0,  NO_SOUND},
-    {0, 0, 0,  NO_SOUND},
+    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_LONG },
+    {0, 0,  0, NO_SOUND                     },
+    {0, 0,  0, NO_SOUND                     },
+    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_LONG },
+    {1, 0, -1, SOUND_OBJ_UKIKI_STEP_LEAVES  },
+    {1, 0, -1, SOUND_OBJ_UKIKI_CHATTER_IDLE },
+    {0, 0,  0, NO_SOUND                     },
+    {0, 0,  0, NO_SOUND                     },
 };
 
 /**
@@ -474,18 +422,12 @@ void ukiki_free_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sUkikiActions);
 
-    if (o->oAction == UKIKI_ACT_GO_TO_CAGE || o->oAction == UKIKI_ACT_RETURN_HOME) {
-        steepSlopeAngleDegrees = -88;
-    } else {
-        steepSlopeAngleDegrees = -20;
-    }
+    steepSlopeAngleDegrees = ((o->oAction == UKIKI_ACT_GO_TO_CAGE || o->oAction == UKIKI_ACT_RETURN_HOME) ? -88 : -20);
 
     cur_obj_move_standard(steepSlopeAngleDegrees);
     handle_cap_ukiki_reset();
 
-    if(!(o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER)) {
-        exec_anim_sound_state(sUkikiSoundStates);
-    }
+    if(!(o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER)) exec_anim_sound_state(sUkikiSoundStates);
 }
 
 /**
@@ -496,11 +438,7 @@ void ukiki_free_loop(void) {
  * Possibly unused so AnimState could be used for wearing a cap?
  */
 UNUSED static void ukiki_blink_timer(void) {
-    if (gGlobalTimer % 50 < 7) {
-        o->oAnimState = UKIKI_ANIM_STATE_EYE_CLOSED;
-    } else {
-        o->oAnimState = UKIKI_ANIM_STATE_DEFAULT;
-    }
+    o->oAnimState = ((gGlobalTimer % 50 < 7) ? UKIKI_ANIM_STATE_EYE_CLOSED : UKIKI_ANIM_STATE_DEFAULT);
 }
 
 /**
@@ -534,9 +472,7 @@ void cage_ukiki_held_loop(void) {
 
             // Pester Mario with textboxes to discourage walking far.
             case UKIKI_TEXT_DO_NOT_LET_GO:
-                if (o->oUkikiTextboxTimer-- < 0) {
-                    o->oUkikiTextState = UKIKI_TEXT_DEFAULT;
-                }
+                if (o->oUkikiTextboxTimer-- < 0) o->oUkikiTextState = UKIKI_TEXT_DEFAULT;
                 break;
         }
     } else {
@@ -557,7 +493,7 @@ void cap_ukiki_held_loop(void) {
             if (mario_lose_cap_to_enemy(2)) {
                 o->oUkikiTextState = UKIKI_TEXT_STEAL_CAP;
                 o->oUkikiHasCap |= UKIKI_CAP_ON;
-            } else {}
+            }
             break;
 
         case UKIKI_TEXT_STEAL_CAP:
@@ -591,11 +527,9 @@ void cap_ukiki_held_loop(void) {
  * Initializatation for ukiki, determines if it has Mario's cap.
  */
 void bhv_ukiki_init(void) {
-    if (o->oBehParams2ndByte == UKIKI_CAP) {
-        if (save_file_get_flags() & SAVE_FLAG_CAP_ON_UKIKI) {
-            o->oUkikiTextState = UKIKI_TEXT_HAS_CAP;
-            o->oUkikiHasCap |= UKIKI_CAP_ON;
-        }
+    if (o->oBehParams2ndByte == UKIKI_CAP && save_file_get_flags() & SAVE_FLAG_CAP_ON_UKIKI) {
+        o->oUkikiTextState = UKIKI_TEXT_HAS_CAP;
+        o->oUkikiHasCap |= UKIKI_CAP_ON;
     }
 }
 
@@ -628,11 +562,7 @@ void bhv_ukiki_loop(void) {
             break;
     }
 
-    if (o->oUkikiHasCap & UKIKI_CAP_ON) {
-        o->oAnimState = UKIKI_ANIM_STATE_CAP_ON;
-    } else {
-        o->oAnimState = UKIKI_ANIM_STATE_DEFAULT;
-    }
+    o->oAnimState = ((o->oUkikiHasCap & UKIKI_CAP_ON) ? UKIKI_ANIM_STATE_CAP_ON : UKIKI_ANIM_STATE_DEFAULT);
 
     o->oInteractStatus = INT_STATUS_NONE;
     print_debug_bottom_up("mode   %d\n", o->oAction);

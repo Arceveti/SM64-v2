@@ -38,12 +38,8 @@ void hidden_breakable_box_actions(void) {
     if (o->oAction == 0) {
         cur_obj_disable_rendering();
         cur_obj_become_intangible();
-        if (o->oTimer == 0) {
-            breakable_box_init();
-        }
-        if (o->oHiddenObjectSwitchObj == NULL) {
-            o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
-        }
+        if (o->oTimer == 0) breakable_box_init();
+        if (o->oHiddenObjectSwitchObj == NULL) o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
         if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
             if (switchObj->oAction == 2) {
                 o->oAction++;
@@ -53,9 +49,7 @@ void hidden_breakable_box_actions(void) {
         }
     } else if (o->oAction == 1) {
         cur_obj_become_tangible();
-        if (cur_obj_wait_then_blink(360, 20)) {
-            o->oAction = 0;
-        }
+        if (cur_obj_wait_then_blink(360, 20)) o->oAction = 0;
         if (cur_obj_was_attacked_or_ground_pounded()) {
             spawn_mist_particles();
             spawn_triangle_break_particles(30, MODEL_DIRT_ANIMATION, 3.0f, 4);
@@ -67,11 +61,7 @@ void hidden_breakable_box_actions(void) {
         cur_obj_become_intangible();
         cur_obj_disable_rendering();
         o->oInteractStatus = INT_STATUS_NONE;
-        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
-            if (switchObj->oAction == 0) {
-                o->oAction = 0;
-            }
-        }
+        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL && switchObj->oAction == 0) o->oAction = 0;
     }
 }
 
@@ -81,21 +71,15 @@ void hidden_unbreakable_box_actions(void) {
     if (o->oAction == 0) {
         cur_obj_disable_rendering();
         cur_obj_become_intangible();
-        if (o->oHiddenObjectSwitchObj == NULL) {
-            o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
-        }
-        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL) {
-            if (switchObj->oAction == 2) {
-                o->oAction++;
-                cur_obj_enable_rendering();
-                cur_obj_unhide();
-            }
+        if (o->oHiddenObjectSwitchObj == NULL) o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
+        if ((switchObj = o->oHiddenObjectSwitchObj) != NULL && switchObj->oAction == 2) {
+            o->oAction++;
+            cur_obj_enable_rendering();
+            cur_obj_unhide();
         }
     } else {
         cur_obj_become_tangible();
-        if (cur_obj_wait_then_blink(360, 20)) {
-            o->oAction = 0;
-        }
+        if (cur_obj_wait_then_blink(360, 20)) o->oAction = 0;
         load_object_collision_model();
     }
 }

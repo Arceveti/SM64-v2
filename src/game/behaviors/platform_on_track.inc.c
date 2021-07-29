@@ -66,9 +66,7 @@ void bhv_platform_on_track_init(void) {
 
         o->oBehParams2ndByte = o->oMoveAngleYaw; // TODO: Weird?
 
-        if (o->oPlatformOnTrackType == PLATFORM_ON_TRACK_TYPE_CHECKERED) {
-            o->header.gfx.scale[1] = 2.0f;
-        }
+        if (o->oPlatformOnTrackType == PLATFORM_ON_TRACK_TYPE_CHECKERED) o->header.gfx.scale[1] = 2.0f;
     }
 }
 
@@ -92,16 +90,10 @@ static void platform_on_track_act_init(void) {
 
     o->oPlatformOnTrackWasStoodOn = FALSE;
 
-    if (o->oPlatformOnTrackIsNotSkiLift) {
-        o->oFaceAngleRoll = 0;
-    }
+    if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0;
 
     // Spawn track balls
-    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        for (i = 1; i < 6; i++) {
-            platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
-        }
-    }
+    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for (i = 1; i < 6; i++) platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
 
     o->oAction = PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO;
 }
@@ -111,14 +103,9 @@ static void platform_on_track_act_init(void) {
  */
 static void platform_on_track_act_wait_for_mario(void) {
     if (gMarioObject->platform == o) {
-        if (o->oTimer > 20) {
-            o->oAction = PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK;
-        }
+        if (o->oTimer > 20) o->oAction = PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK;
     } else {
-        if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
-            platform_on_track_reset();
-        }
-
+        if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) platform_on_track_reset();
         o->oTimer = 0;
     }
 }
@@ -162,11 +149,7 @@ static void platform_on_track_act_move_along_track(void) {
                 obj_forward_vel_approach(10.0f, 0.1f);
             } else {
 #ifdef CONTROLLABLE_PLATFORM_SPEED
-                if (gMarioObject->platform == o) {
-                    targetVel = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) - 10.0f;
-                } else {
-                    targetVel = 10.0f;
-                }
+                targetVel = (gMarioObject->platform == o ? o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) - 10.0f : 10.0f);
                 if (targetVel < 10.0f) {
                     targetVel = 10.0f;
                 } else if (targetVel > 16.0f) {
@@ -236,9 +219,7 @@ static void platform_on_track_act_move_along_track(void) {
  * Wait 20 frames then continue moving.
  */
 static void platform_on_track_act_pause_briefly(void) {
-    if (o->oTimer > 20) {
-        o->oAction = PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK;
-    }
+    if (o->oTimer > 20) o->oAction = PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK;
 }
 
 /**
@@ -265,10 +246,7 @@ static void platform_on_track_rock_ski_lift(void) {
     o->oFaceAngleRoll += (s32) o->oPlatformOnTrackSkiLiftRollVel;
 
     // Tilt away from the moving direction and toward mario
-    if (gMarioObject->platform == o) {
-        targetRoll = o->oForwardVel * sins(o->oMoveAngleYaw) * -50.0f
-                     + (s32)(o->oDistanceToMario * sins(o->oAngleToMario - o->oFaceAngleYaw) * -4.0f);
-    }
+    if (gMarioObject->platform == o) targetRoll = o->oForwardVel * sins(o->oMoveAngleYaw) * -50.0f + (s32)(o->oDistanceToMario * sins(o->oAngleToMario - o->oFaceAngleYaw) * -4.0f);
 
     oscillate_toward(
         /* value          */ &o->oFaceAngleRoll,
@@ -336,9 +314,6 @@ void bhv_platform_on_track_update(void) {
  */
 void bhv_track_ball_update(void) {
     // Despawn after the elevator passes this ball
-    s16 relativeIndex =
-        (s16) o->oBehParams2ndByte - (s16) o->parentObj->oPlatformOnTrackBaseBallIndex - 1;
-    if (relativeIndex < 1 || relativeIndex > 5) {
-        obj_mark_for_deletion(o);
-    }
+    s16 relativeIndex = (s16) o->oBehParams2ndByte - (s16) o->parentObj->oPlatformOnTrackBaseBallIndex - 1;
+    if (relativeIndex < 1 || relativeIndex > 5) obj_mark_for_deletion(o);
 }

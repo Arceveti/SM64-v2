@@ -18,10 +18,9 @@ void bhv_racing_penguin_init(void) {
 }
 
 static void racing_penguin_act_wait_for_mario(void) {
-    if (o->oTimer > o->oRacingPenguinInitTextCooldown && o->oPosY - gMarioObject->oPosY <= 0.0f
-        && cur_obj_can_mario_activate_textbox_2(400.0f, 400.0f)) {
-        o->oAction = RACING_PENGUIN_ACT_SHOW_INIT_TEXT;
-    }
+    if (o->oTimer > o->oRacingPenguinInitTextCooldown
+        && o->oPosY - gMarioObject->oPosY <= 0.0f
+        && cur_obj_can_mario_activate_textbox_2(400.0f, 400.0f)) o->oAction = RACING_PENGUIN_ACT_SHOW_INIT_TEXT;
 }
 
 static void racing_penguin_act_show_init_text(void) {
@@ -71,13 +70,10 @@ static void racing_penguin_act_race(void) {
         cur_obj_play_sound_1(SOUND_AIR_ROUGH_SLIDE);
 
         if (targetSpeed < 100.0f || (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 35) {
-            if ((o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 35) {
-                minSpeed = 60.0f;
-            }
-
+            if ((o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 35) minSpeed = 60.0f;
             approach_f32_ptr(&o->oRacingPenguinWeightedNewTargetSpeed, -500.0f, 100.0f);
         } else {
-            approach_f32_ptr(&o->oRacingPenguinWeightedNewTargetSpeed, 1000.0f, 30.0f);
+            approach_f32_ptr(&o->oRacingPenguinWeightedNewTargetSpeed, 1000.0f,  30.0f);
         }
 
         targetSpeed = 0.1f * (o->oRacingPenguinWeightedNewTargetSpeed + targetSpeed);
@@ -93,9 +89,7 @@ static void racing_penguin_act_race(void) {
     }
 
     if (mario_is_in_air_action()) {
-        if (o->oTimer > 60) {
-            o->oRacingPenguinMarioCheated = TRUE;
-        }
+        if (o->oTimer > 60) o->oRacingPenguinMarioCheated = TRUE;
     } else {
         o->oTimer = 0;
     }
@@ -187,14 +181,10 @@ void bhv_racing_penguin_update(void) {
 void bhv_penguin_race_finish_line_update(void) {
     if (o->parentObj->oRacingPenguinReachedBottom
         || (o->oDistanceToMario < 1000.0f && gMarioObject->oPosZ - o->oPosZ < 0.0f)) {
-        if (!o->parentObj->oRacingPenguinReachedBottom) {
-            o->parentObj->oRacingPenguinMarioWon = TRUE;
-        }
+        if (!o->parentObj->oRacingPenguinReachedBottom) o->parentObj->oRacingPenguinMarioWon = TRUE;
     }
 }
 
 void bhv_penguin_race_shortcut_check_update(void) {
-    if (o->oDistanceToMario < 500.0f) {
-        o->parentObj->oRacingPenguinMarioCheated = TRUE;
-    }
+    if (o->oDistanceToMario < 500.0f) o->parentObj->oRacingPenguinMarioCheated = TRUE;
 }

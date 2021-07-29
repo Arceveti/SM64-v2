@@ -32,9 +32,7 @@ void small_breakable_box_act_move(void) {
     s16 collisionFlags = object_step();
 
     obj_attack_collided_from_other_object(o);
-    if (collisionFlags == OBJ_COL_FLAG_GROUNDED) {
-        cur_obj_play_sound_2(SOUND_GENERAL_BOX_LANDING_2);
-    }
+    if (collisionFlags == OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_BOX_LANDING_2);
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oForwardVel > 20.0f)) {
         cur_obj_play_sound_2(SOUND_ENV_SLIDING);
         small_breakable_box_spawn_dust();

@@ -45,9 +45,7 @@ void bhv_controllable_platform_sub_loop(void) {
     o->oVelX = o->parentObj->oVelX;
     o->oVelZ = o->parentObj->oVelZ;
 
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void bhv_controllable_platform_init(void) {
@@ -211,7 +209,8 @@ void bhv_controllable_platform_loop(void) {
     controllable_platform_tilt_from_mario();
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
-    if (sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) {
+    if (sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED
+     && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) {
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
     }
 }

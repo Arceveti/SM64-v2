@@ -57,14 +57,10 @@ static void manta_ray_move(void) {
     // This causes the ray to tilt as it turns.
     if ((s16) o->oMantaTargetYaw != (s16) o->oMoveAngleYaw) {
         o->oMoveAngleRoll -= 91;
-        if (o->oMoveAngleRoll < -5461.3332f) {
-            o->oMoveAngleRoll = -0x4000 / 3;
-        }
+        if (o->oMoveAngleRoll < -5461.3332f) o->oMoveAngleRoll = -0x4000 / 3;
     } else {
         o->oMoveAngleRoll += 91;
-        if (o->oMoveAngleRoll > 5461.3332f) {
-            o->oMoveAngleRoll = 0x4000 / 3;
-        }
+        if (o->oMoveAngleRoll >  5461.3332f) o->oMoveAngleRoll =  0x4000 / 3;
     }
 
     cur_obj_set_pos_via_transform();
@@ -77,11 +73,10 @@ static void manta_ray_act_spawn_ring(void) {
     struct Object *ringManager = o->parentObj;
     struct Object *ring;
 
-    if (o->oTimer == 300) {
-        o->oTimer = 0;
-    }
+    if (o->oTimer == 300) o->oTimer = 0;
 
-    if (o->oTimer == 0 || o->oTimer == 50 || o->oTimer == 150 || o->oTimer == 200 || o->oTimer == 250) {
+    // if (o->oTimer == 0 || o->oTimer == 50 || o->oTimer == 150 || o->oTimer == 200 || o->oTimer == 250) {
+    if (o->oTimer % 50 == 0) {
         ring = spawn_object(o, MODEL_WATER_RING, bhvMantaRayWaterRing);
 
         ring->oFaceAngleYaw = o->oMoveAngleYaw;
@@ -123,7 +118,5 @@ void bhv_manta_ray_loop(void) {
             break;
     }
 
-    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oInteractStatus = INT_STATUS_NONE;
-    }
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oInteractStatus = INT_STATUS_NONE;
 }

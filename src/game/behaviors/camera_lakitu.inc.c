@@ -13,9 +13,7 @@
 void bhv_camera_lakitu_init(void) {
     if (o->oBehParams2ndByte != CAMERA_LAKITU_BP_FOLLOW_CAMERA) {
         // Despawn unless this is the very beginning of the game
-        if (!gNeverEnteredCastle) {
-            obj_mark_for_deletion(o);
-        }
+        if (!gNeverEnteredCastle) obj_mark_for_deletion(o);
     } else {
         spawn_object_relative_with_scale(CLOUD_BP_LAKITU_CLOUD, 0, 0, 0, 2.0f, o, MODEL_MIST, bhvCloud);
     }
@@ -35,9 +33,7 @@ static void camera_lakitu_intro_act_trigger_cutscene(void) {
     if (gMarioObject->oPosX > -544.0f && gMarioObject->oPosX < 545.0f && gMarioObject->oPosY > 800.0f
         && gMarioObject->oPosZ > -2000.0f && gMarioObject->oPosZ < -177.0f) {
 #endif
-        if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_START) {
-            o->oAction = CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD;
-        }
+        if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_START) o->oAction = CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD;
     }
 }
 
@@ -76,10 +72,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     // After finishing dialog, fly away and despawn
     if (o->oCameraLakituFinishedDialog) {
         approach_f32_ptr(&o->oCameraLakituSpeed, 60.0f, 3.0f);
-        if (o->oDistanceToMario > 6000.0f) {
-            obj_mark_for_deletion(o);
-        }
-
+        if (o->oDistanceToMario > 6000.0f) obj_mark_for_deletion(o);
         targetMovePitch = -0x3000;
         targetMoveYaw = -0x6000;
     } else {

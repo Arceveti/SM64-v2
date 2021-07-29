@@ -20,9 +20,7 @@ void bhv_hidden_star_loop(void) {
 #endif
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 5) {
-                o->oAction = 1;
-            }
+            if (o->oHiddenStarTriggerCounter == 5) o->oAction = 1;
             break;
 
         case 1:
@@ -49,9 +47,7 @@ void bhv_hidden_star_trigger_loop(void) {
 #ifdef VERSION_JP
             play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #else
-            play_sound(SOUND_MENU_COLLECT_SECRET
-                           + (((u8) hiddenStar->oHiddenStarTriggerCounter - 1) << 16),
-                       gGlobalSoundSource);
+            play_sound(SOUND_MENU_COLLECT_SECRET + (((u8) hiddenStar->oHiddenStarTriggerCounter - 1) << 16), gGlobalSoundSource);
 #endif
         }
 
@@ -63,9 +59,7 @@ void bhv_bowser_course_red_coin_star_loop(void) {
     gRedCoinsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 8) {
-                o->oAction = 1;
-            }
+            if (o->oHiddenStarTriggerCounter == 8) o->oAction = 1;
             break;
 
         case 1:

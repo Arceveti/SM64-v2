@@ -57,9 +57,7 @@ void bhv_donut_platform_update(void) {
         if (o->oGravity == 0.0f) {
             if (gMarioObject->platform == o) {
                 cur_obj_shake_y(4.0f);
-                if (o->oTimer > 15) {
-                    o->oGravity = -0.1f;
-                }
+                if (o->oTimer > 15) o->oGravity = -0.1f;
             } else {
                 cur_obj_set_pos_to_home();
                 o->oTimer = 0;

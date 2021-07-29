@@ -33,9 +33,7 @@ void bhv_horizontal_grindel_update(void) {
         }
     } else {
         o->oHorizontalGrindelOnGround = FALSE;
-        if (o->oVelY < 0.0f) {
-            o->oGravity = -16.0f;
-        }
+        if (o->oVelY < 0.0f) o->oGravity = -16.0f;
     }
 
     o->oFaceAngleYaw = o->oMoveAngleYaw + 0x4000;

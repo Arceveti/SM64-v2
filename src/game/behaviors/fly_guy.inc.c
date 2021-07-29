@@ -34,9 +34,7 @@ static void fly_guy_act_idle(void) {
         if (o->oDistanceToMario >= 25000.0f || o->oDistanceToMario < 2000.0f) {
             // Turn toward home or Mario
             obj_face_yaw_approach(o->oAngleToMario, 0x300);
-            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x300)) {
-                o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
-            }
+            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x300)) o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
         } else {
             // Randomly enter the approach mario action - but this doesn't
             // really do anything since we come right back to idle
@@ -118,10 +116,7 @@ static void fly_guy_act_lunge(void) {
             obj_y_vel_approach(20.0f, 0.5f);
         } else if (obj_y_vel_approach(0.0f, 0.5f)) {
             // Wait until roll is zero
-            if (o->oFaceAngleRoll == 0) {
-                o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
-            }
-
+            if (o->oFaceAngleRoll == 0) o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
             o->oFlyGuyTargetRoll = 0;
         }
     }

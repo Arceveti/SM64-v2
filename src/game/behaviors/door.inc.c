@@ -20,9 +20,7 @@ static s32 sDoorCloseSounds[] = { SOUND_GENERAL_CLOSE_WOOD_DOOR, SOUND_GENERAL_C
 
 void door_animation_and_reset(s32 animIndex) {
     cur_obj_init_animation_with_sound(animIndex);
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = DOOR_ACT_CLOSED;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = DOOR_ACT_CLOSED;
 }
 
 void set_door_camera_event(void) {
@@ -40,15 +38,11 @@ void play_door_open_noise(void) {
         cur_obj_play_sound_2(sDoorOpenSounds[isMetalDoor]);
         gTimeStopState |= TIME_STOP_MARIO_OPENED_DOOR;
     }
-    if (o->oTimer == 70) {
-        cur_obj_play_sound_2(sDoorCloseSounds[isMetalDoor]);
-    }
+    if (o->oTimer == 70) cur_obj_play_sound_2(sDoorCloseSounds[isMetalDoor]);
 }
 
 void play_warp_door_open_noise(void) {
-    if (o->oTimer == 30) {
-        cur_obj_play_sound_2(sDoorCloseSounds[cur_obj_has_model(MODEL_HMC_METAL_DOOR)]);
-    }
+    if (o->oTimer == 30) cur_obj_play_sound_2(sDoorCloseSounds[cur_obj_has_model(MODEL_HMC_METAL_DOOR)]);
 }
 
 void bhv_door_loop(void) {
@@ -83,9 +77,7 @@ void bhv_door_loop(void) {
             play_warp_door_open_noise();
             break;
     }
-    if (o->oAction == DOOR_ACT_CLOSED) {
-        load_object_collision_model();
-    }
+    if (o->oAction == DOOR_ACT_CLOSED) load_object_collision_model();
     bhv_door_rendering_loop();
 }
 
@@ -94,23 +86,17 @@ void bhv_door_init(void) {
     f32 z = o->oPosZ;
     struct Surface *floor;
     find_floor(x, o->oPosY, z, &floor);
-    if (floor != NULL) {
-        o->oDoorSelfRoom = floor->room;
-    }
+    if (floor != NULL) o->oDoorSelfRoom = floor->room;
 
     x = o->oPosX + sins(o->oMoveAngleYaw) * 200.0f;
     z = o->oPosZ + coss(o->oMoveAngleYaw) * 200.0f;
     find_floor(x, o->oPosY, z, &floor);
-    if (floor != NULL) {
-        o->oDoorForwardRoom = floor->room;
-    }
+    if (floor != NULL) o->oDoorForwardRoom = floor->room;
 
     x = o->oPosX + sins(o->oMoveAngleYaw) * -200.0f;
     z = o->oPosZ + coss(o->oMoveAngleYaw) * -200.0f;
     find_floor(x, o->oPosY, z, &floor);
-    if (floor != NULL) {
-        o->oDoorBackwardRoom = floor->room;
-    }
+    if (floor != NULL) o->oDoorBackwardRoom = floor->room;
 
     if (o->oDoorSelfRoom > 0 && o->oDoorSelfRoom < 60) {
         gDoorAdjacentRooms[o->oDoorSelfRoom][0] = o->oDoorForwardRoom;

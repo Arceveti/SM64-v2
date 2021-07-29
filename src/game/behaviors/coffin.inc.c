@@ -43,9 +43,7 @@ void bhv_coffin_spawner_loop(void) {
                 // Possible a remnant of days this didn't happen.
                 if (coffin != NULL) {
                     // Rotate the coffin 180 degrees if its on the other side of the room.
-                    if (relativeZ > 0) {
-                        coffin->oFaceAngleYaw = 0x8000;
-                    }
+                    if (relativeZ > 0) coffin->oFaceAngleYaw = 0x8000;
                 }
             }
 
@@ -102,13 +100,13 @@ void coffin_act_idle(void) {
             // This checks a box around the coffin and if it has been a bit since it stood up.
             // It also checks in the case Mario is squished, so he doesn't get permanently squished.
             if (o->oTimer > 60
-                && (o->oDistanceToMario > 100.0f || gMarioState->action == ACT_SQUISHED)) {
-                if (gMarioObject->oPosY - o->oPosY < 200.0f && absf(distForwards) < 140.0f) {
-                    if (distSideways < 150.0f && distSideways > -450.0f) {
-                        cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2_LOWPRIO);
-                        o->oAction = COFFIN_ACT_STAND_UP;
-                    }
-                }
+             && (o->oDistanceToMario > 100.0f || gMarioState->action == ACT_SQUISHED)
+             && gMarioObject->oPosY - o->oPosY < 200.0f
+             && absf(distForwards) < 140.0f
+             && distSideways <  150.0f
+             && distSideways > -450.0f) {
+                cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2_LOWPRIO);
+                o->oAction = COFFIN_ACT_STAND_UP;
             }
 
             o->oAngleVelPitch = 0;
@@ -130,9 +128,7 @@ void coffin_act_stand_up(void) {
             o->oAction = COFFIN_ACT_IDLE;
             o->oFaceAngleRoll = 0;
         } else if (o->oTimer > 30) {
-            if (gGlobalTimer % 4 == 0) {
-                cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
-            }
+            if (gGlobalTimer % 4 == 0) cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
             // Shake the coffin while its standing
             o->oFaceAngleRoll = 400 * (gGlobalTimer % 2) - 200;
         }

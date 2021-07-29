@@ -56,9 +56,7 @@ void bhv_pyramid_top_spinning(void) {
     }
 
     // After enough time, transition to the exploding state.
-    if (o->oTimer == 150) {
-        o->oAction = PYRAMID_TOP_ACT_EXPLODE;
-    }
+    if (o->oTimer == 150) o->oAction = PYRAMID_TOP_ACT_EXPLODE;
 }
 
 /**
@@ -80,9 +78,7 @@ void bhv_pyramid_top_explode(void) {
         pyramidFragment->oGravity = random_float() * 2 + 5;
     }
 #ifdef SSL_PILLARS_CUTSCENE
-    if (gMarioState->action & ACT_FLAG_RIDING_SHELL) {
-        disable_time_stop_including_mario();
-    }
+    if (gMarioState->action & ACT_FLAG_RIDING_SHELL) disable_time_stop_including_mario();
 #endif
     // Deactivate the pyramid top.
     o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
@@ -113,15 +109,11 @@ void bhv_pyramid_top_loop(void) {
 #endif
                 cur_obj_play_sound_2(SOUND_GENERAL2_PYRAMID_TOP_SPIN);
             }
-
             bhv_pyramid_top_spinning();
             break;
 
         case PYRAMID_TOP_ACT_EXPLODE:
-            if (o->oTimer == 0) {
-                create_sound_spawner(SOUND_GENERAL2_PYRAMID_TOP_EXPLOSION);
-            }
-
+            if (o->oTimer == 0) create_sound_spawner(SOUND_GENERAL2_PYRAMID_TOP_EXPLOSION);
             bhv_pyramid_top_explode();
             break;
     }
@@ -145,10 +137,7 @@ void bhv_pyramid_top_fragment_loop(void) {
     object_step();
     o->oFaceAngleYaw += 0x1000;
     o->oFaceAnglePitch += 0x1000;
-
-    if (o->oTimer == 60) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oTimer == 60) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 /**

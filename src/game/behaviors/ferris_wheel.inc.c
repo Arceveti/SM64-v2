@@ -38,10 +38,7 @@ void bhv_ferris_wheel_axle_init(void) {
                                          sFerrisWheelProperties[o->oBehParams2ndByte].platformModel,
                                          bhvFerrisWheelPlatform);
 
-        if (platform != NULL) {
-            platform->collisionData =
-                segmented_to_virtual(sFerrisWheelProperties[o->oBehParams2ndByte].platformCollision);
-        }
+        if (platform != NULL) platform->collisionData = segmented_to_virtual(sFerrisWheelProperties[o->oBehParams2ndByte].platformCollision);
     }
 }
 

@@ -46,7 +46,5 @@ void bhv_ttc_elevator_update(void) {
     cur_obj_move_using_fvel_and_gravity();
 
     // Flip directions if the elevator tries to run away
-    if (clamp_f32(&o->oPosY, o->oHomeY, o->oTTCElevatorPeakY)) {
-        o->oTTCElevatorDir = -o->oTTCElevatorDir;
-    }
+    if (clamp_f32(&o->oPosY, o->oHomeY, o->oTTCElevatorPeakY)) o->oTTCElevatorDir = -o->oTTCElevatorDir;
 }

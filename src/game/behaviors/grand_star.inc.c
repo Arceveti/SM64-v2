@@ -14,8 +14,8 @@ s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
 }
 
 void grand_star_zero_velocity(void) {
-    o->oGravity = 0.0f;
-    o->oVelY = 0.0f;
+    o->oGravity    = 0.0f;
+    o->oVelY       = 0.0f;
     o->oForwardVel = 0.0f;
 }
 
@@ -28,9 +28,7 @@ void bhv_grand_star_loop(void) {
             o->oAngleVelYaw = 0x400;
             cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
         }
-        if (o->oTimer > 70) {
-            o->oAction++;
-        }
+        if (o->oTimer > 70) o->oAction++;
         spawn_sparkle_particles(3, 200, 80, -60);
     } else if (o->oAction == 1) {
         if (o->oTimer == 0) {
@@ -64,9 +62,7 @@ void bhv_grand_star_loop(void) {
             o->oInteractStatus = INT_STATUS_NONE;
         }
     }
-    if (o->oAngleVelYaw > 0x400) {
-        o->oAngleVelYaw -= 0x100;
-    }
+    if (o->oAngleVelYaw > 0x400) o->oAngleVelYaw -= 0x100;
     o->oFaceAngleYaw += o->oAngleVelYaw;
     cur_obj_scale(2.0f);
     o->oGraphYOffset = 110.0f;

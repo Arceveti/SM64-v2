@@ -78,10 +78,7 @@ void moneybag_jump(s8 collisionFlags) {
 
         case MONEYBAG_JUMP_JUMP_AND_BOUNCE:
             cur_obj_init_animation(3);
-
-            if (cur_obj_check_if_near_animation_end()) {
-                o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
-            }
+            if (cur_obj_check_if_near_animation_end()) o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
             break;
 
         case MONEYBAG_JUMP_WALK_AROUND:
@@ -123,9 +120,7 @@ void moneybag_act_move_around(void) {
     moneybag_check_mario_collision();
 
     if (!is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800)
-        && ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)) {
-        o->oAction = MONEYBAG_ACT_RETURN_HOME;
-    }
+     && ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)) o->oAction = MONEYBAG_ACT_RETURN_HOME;
 }
 
 void moneybag_act_return_home(void) {
@@ -191,9 +186,7 @@ void bhv_moneybag_loop(void) {
 
         case MONEYBAG_ACT_MOVE_AROUND:
             moneybag_act_move_around();
-            if (o->oTimer >= 31) {
-                cur_obj_become_tangible();
-            }
+            if (o->oTimer >= 31) cur_obj_become_tangible();
             break;
 
         case MONEYBAG_ACT_RETURN_HOME:

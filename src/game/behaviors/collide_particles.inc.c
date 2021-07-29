@@ -18,9 +18,7 @@ void bhv_punch_tiny_triangle_loop(void) {
     o->oAnimState = 5;
     cur_obj_scale(o->oCollisionParticleScale);
     o->oCollisionParticleScale -= 0.2f;
-    if (gDebugInfo[4][0] + 6 < o->oTimer) {
-        obj_mark_for_deletion(o);
-    }
+    if (gDebugInfo[4][0] + 6 < o->oTimer) obj_mark_for_deletion(o);
 }
 
 void bhv_punch_tiny_triangle_init(void) {

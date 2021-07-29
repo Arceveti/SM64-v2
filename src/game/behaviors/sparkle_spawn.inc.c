@@ -11,7 +11,5 @@ void bhv_sparkle_spawn_loop(void) {
         obj_translate_xyz_random(sparkle, 90.0f);
         obj_scale_random(sparkle, 1.0f, 0.0f);
     }
-    if (o->oTimer > 1) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > 1) obj_mark_for_deletion(o);
 }

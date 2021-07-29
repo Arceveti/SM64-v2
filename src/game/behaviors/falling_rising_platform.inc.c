@@ -17,9 +17,7 @@ void bhv_ddd_moving_pole_loop(void) {
 
 void bhv_bitfs_sinking_cage_platform_loop(void) {
     if (o->oBehParams2ndByte != 0) {
-        if (o->oTimer == 0) {
-            o->oPosY -= 300.0f;
-        }
+        if (o->oTimer == 0) o->oPosY -= 300.0f;
         o->oPosY += sins(o->oBitfsPlatformTimer) * 7.0f;
     } else {
         o->oPosY -= sins(o->oBitfsPlatformTimer) * 3.0f;

@@ -31,9 +31,8 @@ void bhv_strong_wind_particle_loop(void) {
     }
     
     cur_obj_move_using_fvel_and_gravity();
-    if (o->oTimer > 15) // Deactivate after 15 frames
-        obj_mark_for_deletion(o);
-    
+    if (o->oTimer > 15) obj_mark_for_deletion(o);// Deactivate after 15 frames
+
     // If collided with the SL walking penguin, deactivate.
     penguinObj = o->oStrongWindParticlePenguinObj;
     if (penguinObj != NULL) {
@@ -54,7 +53,7 @@ void cur_obj_spawn_strong_wind_particles(s32 windSpread, f32 scale, f32 relPosX,
     if ((gGlobalTimer & 1) != 0) {
         // Because the tiny particles are unimportant objects, invisible wind particles are spawned to provide collision.
         // There was absolutely no reason to make the smaller particles unimportant, though...
-        spawn_object_relative_with_scale(windSpread, relPosX, relPosY, relPosZ, 0.5f, o, MODEL_WHITE_PARTICLE_DL, bhvTinyStrongWindParticle);
+        spawn_object_relative_with_scale(windSpread, relPosX, relPosY, relPosZ,  0.5f, o, MODEL_WHITE_PARTICLE_DL, bhvTinyStrongWindParticle);
         spawn_object_relative_with_scale(windSpread, relPosX, relPosY, relPosZ, scale, o, MODEL_NONE, bhvStrongWindParticle);
     } else {
         spawn_object_relative_with_scale(windSpread, relPosX, relPosY, relPosZ, scale, o, MODEL_MIST, bhvStrongWindParticle);

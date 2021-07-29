@@ -26,9 +26,7 @@ void bhv_pyramid_elevator_loop(void) {
          * transition to the starting state.
          */
         case PYRAMID_ELEVATOR_IDLE:
-            if (gMarioObject->platform == o) {
-                o->oAction = PYRAMID_ELEVATOR_START_MOVING;
-            }
+            if (gMarioObject->platform == o) o->oAction = PYRAMID_ELEVATOR_START_MOVING;
             break;
 
         /**
@@ -37,9 +35,7 @@ void bhv_pyramid_elevator_loop(void) {
          */
         case PYRAMID_ELEVATOR_START_MOVING:
             o->oPosY = o->oHomeY - sins(o->oTimer * 0x1000) * 10.0f;
-            if (o->oTimer == 8) {
-                o->oAction = PYRAMID_ELEVATOR_CONSTANT_VELOCITY;
-            }
+            if (o->oTimer == 8) o->oAction = PYRAMID_ELEVATOR_CONSTANT_VELOCITY;
             break;
 
         /**
@@ -79,9 +75,5 @@ void bhv_pyramid_elevator_trajectory_marker_ball_loop(void) {
     cur_obj_scale(0.15f);
     elevator = cur_obj_nearest_object_with_behavior(bhvPyramidElevator);
 
-    if (elevator != NULL) {
-        if (elevator->oAction != PYRAMID_ELEVATOR_IDLE) {
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-        }
-    }
+    if (elevator != NULL && elevator->oAction != PYRAMID_ELEVATOR_IDLE) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }

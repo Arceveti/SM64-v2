@@ -106,9 +106,7 @@ void bhv_tilting_inverted_pyramid_loop(void) {
             dz = 0.0f;
         }
 
-        if (o->oTiltingPyramidMarioOnPlatform) {
-            marioOnPlatform = TRUE;
-        }
+        if (o->oTiltingPyramidMarioOnPlatform) marioOnPlatform = TRUE;
         o->oTiltingPyramidMarioOnPlatform = TRUE;
     } else {
         dx = 0.0f;
@@ -131,7 +129,6 @@ void bhv_tilting_inverted_pyramid_loop(void) {
         mx += posAfterRotation[0] - posBeforeRotation[0];
         my += posAfterRotation[1] - posBeforeRotation[1];
         mz += posAfterRotation[2] - posBeforeRotation[2];
-
         set_mario_pos(mx, my, mz);
 #endif
     }

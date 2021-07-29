@@ -43,9 +43,7 @@ void bhv_yellow_coin_init(void) {
 #endif
         }
     }
-    if (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) obj_mark_for_deletion(o);
 }
 
 void bhv_yellow_coin_loop(void) {
@@ -55,9 +53,7 @@ void bhv_yellow_coin_loop(void) {
 
 void bhv_temp_coin_loop(void) {
     o->oAnimState++;
-    if (cur_obj_wait_then_blink(200, 20)) {
-        obj_mark_for_deletion(o);
-    }
+    if (cur_obj_wait_then_blink(200, 20)) obj_mark_for_deletion(o);
     bhv_coin_sparkles_init();
 }
 
@@ -77,9 +73,7 @@ void bhv_coin_loop(void) {
     cur_obj_if_hit_wall_bounce_away();
     cur_obj_move_standard(-62);
     if ((floor = o->oFloor) != NULL) {
-        if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
-            o->oSubAction = 1;
-        }
+        if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) o->oSubAction = 1;
         if (o->oSubAction == 1) {
             o->oBounciness = 0;
             if (floor->normal.y < 0.9f) {
@@ -102,29 +96,18 @@ void bhv_coin_loop(void) {
     }
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
 #ifdef COIN_LAVA_FLICKER
-        if (o->oMoveFlags & OBJ_MOVE_ABOVE_DEATH_BARRIER) {
-            obj_mark_for_deletion(o);
-        }
-        if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA) {
-            if (cur_obj_wait_then_blink(0, 20)) {
-                obj_mark_for_deletion(o);
-            }
-        }
+        if (o->oMoveFlags & OBJ_MOVE_ABOVE_DEATH_BARRIER) obj_mark_for_deletion(o);
+        if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA && cur_obj_wait_then_blink(0, 20)) obj_mark_for_deletion(o);
 #else
-        if (o->oMoveFlags & (OBJ_MOVE_ABOVE_DEATH_BARRIER | OBJ_MOVE_ABOVE_LAVA)) {
-            obj_mark_for_deletion(o);
-        }
+        if (o->oMoveFlags & (OBJ_MOVE_ABOVE_DEATH_BARRIER | OBJ_MOVE_ABOVE_LAVA)) obj_mark_for_deletion(o);
 #endif
     }
     if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
-        if (o->oCoinBounceTimer < 5) {
-            cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
-        }
+        if (o->oCoinBounceTimer < 5) cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
         o->oCoinBounceTimer++;
     }
-    if (cur_obj_wait_then_blink(400, 20)) {
-        obj_mark_for_deletion(o);
-    }
+    if (cur_obj_wait_then_blink(400, 20))  obj_mark_for_deletion(o);
+
     bhv_coin_sparkles_init();
 }
 
@@ -143,19 +126,13 @@ void bhv_coin_formation_spawn_loop(void) {
             }
         } else {
             cur_obj_update_floor_height();
-            if (absf(o->oPosY - o->oFloorHeight) > 250.0f) {
-                cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
-            }
+            if (absf(o->oPosY - o->oFloorHeight) > 250.0f) cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
         }
     } else {
-        if (bhv_coin_sparkles_init()) {
-            o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
-        }
+        if (bhv_coin_sparkles_init())  o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
         o->oAnimState++;
     }
-    if (o->parentObj->oAction == 2) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->parentObj->oAction == 2) obj_mark_for_deletion(o);
 }
 
 void spawn_coin_in_formation(s32 index, s32 shape) {
@@ -167,16 +144,12 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
     switch (shape & 0x7) {
         case 0: // horizontal line
             pos[2] = 160 * (index - 2);
-            if (index > 4) {
-                spawnCoin = FALSE;
-            }
+            if (index > 4) spawnCoin = FALSE;
             break;
         case 1: // vertical line
             snapToGround = FALSE;
             pos[1] = 160 * index * 0.8f; // 128 * index
-            if (index > 4) {
-                spawnCoin = FALSE;
-            }
+            if (index > 4) spawnCoin = FALSE;
             break;
         case 2: // horizontal ring
             pos[0] = sins(index << 13) * 300.0f;
@@ -196,8 +169,7 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
         snapToGround = FALSE;
     }
     if (spawnCoin) {
-        newCoin = spawn_object_relative(index, pos[0], pos[1], pos[2], o, MODEL_YELLOW_COIN,
-                                        bhvCoinFormationSpawn);
+        newCoin = spawn_object_relative(index, pos[0], pos[1], pos[2], o, MODEL_YELLOW_COIN, bhvCoinFormationSpawn);
         newCoin->oCoinSnapToGround = snapToGround;
     }
 }
@@ -212,9 +184,7 @@ void bhv_coin_formation_loop(void) {
         case 0:
             if (o->oDistanceToMario < 4000.0f) { //! hardcoded draw distance
                 for (bitIndex = 0; bitIndex < 8; bitIndex++) {
-                    if (!(o->oCoinRespawnBits & (1 << bitIndex))) {
-                        spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
-                    }
+                    if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
                 }
                 o->oAction++;
             }
@@ -236,9 +206,7 @@ void bhv_coin_formation_loop(void) {
 void coin_inside_boo_act_1(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_if_hit_wall_bounce_away();
-    if (o->oMoveFlags & OBJ_MOVE_BOUNCE) {
-        cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
-    }
+    if (o->oMoveFlags & OBJ_MOVE_BOUNCE) cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
     if (o->oTimer > 90 || (o->oMoveFlags & OBJ_MOVE_LANDED)) {
         obj_set_hitbox(o, &sYellowCoinHitbox);
         cur_obj_become_tangible();
@@ -246,12 +214,8 @@ void coin_inside_boo_act_1(void) {
     }
     cur_obj_move_standard(-30);
     bhv_coin_sparkles_init();
-    if (cur_obj_has_model(MODEL_BLUE_COIN)) {
-        o->oDamageOrCoinValue = 5;
-    }
-    if (cur_obj_wait_then_blink(400, 20)) {
-        obj_mark_for_deletion(o);
-    }
+    if (cur_obj_has_model(MODEL_BLUE_COIN)) o->oDamageOrCoinValue = 5;
+    if (cur_obj_wait_then_blink(400, 20)) obj_mark_for_deletion(o);
 }
 
 void coin_inside_boo_act_0(void) {

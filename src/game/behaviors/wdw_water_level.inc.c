@@ -3,9 +3,7 @@
 // called when WDW is loaded.
 void bhv_init_changing_water_level_loop(void) {
     if (gCurrentObject->oAction == 0) {
-        if (gEnvironmentRegions != NULL) {
-            gCurrentObject->oAction++;
-        }
+        if (gEnvironmentRegions != NULL) gCurrentObject->oAction++;
     } else if (gCurrentObject->oTimer < 10) {
         *gEnvironmentLevels = gEnvironmentRegions[6];
     } else {
@@ -24,16 +22,12 @@ void bhv_water_level_diamond_loop(void) {
             case WATER_LEVEL_DIAMOND_ACT_INIT:
                 o->oFaceAngleYaw = 0;
                 o->oWaterLevelTriggerTargetWaterLevel = (s32) o->oPosY;
-                if (o->oTimer > 10) {
-                    o->oAction++; // Sets to WATER_LEVEL_DIAMOND_ACT_IDLE
-                }
+                if (o->oTimer > 10) o->oAction = WATER_LEVEL_DIAMOND_ACT_IDLE;
                 break;
             case WATER_LEVEL_DIAMOND_ACT_IDLE:
-                if (obj_check_if_collided_with_object(o, gMarioObject)) {
-                    if (gWDWWaterLevelChanging == 0) {
-                        o->oAction++; // Sets to WATER_LEVEL_DIAMOND_ACT_CHANGE_WATER_LEVEL
-                        gWDWWaterLevelChanging = 1;
-                    }
+                if (obj_check_if_collided_with_object(o, gMarioObject) && gWDWWaterLevelChanging == 0) {
+                    o->oAction = WATER_LEVEL_DIAMOND_ACT_CHANGE_WATER_LEVEL;
+                    gWDWWaterLevelChanging = 1;
                 }
                 break;
             case WATER_LEVEL_DIAMOND_ACT_CHANGE_WATER_LEVEL:
@@ -42,7 +36,7 @@ void bhv_water_level_diamond_loop(void) {
                     (f32) *gEnvironmentLevels, (f32) o->oWaterLevelTriggerTargetWaterLevel, 10.0f);
                 if (*gEnvironmentLevels == o->oWaterLevelTriggerTargetWaterLevel) {
                     if ((s16) o->oFaceAngleYaw == 0) {
-                        o->oAction++; // Sets to WATER_LEVEL_DIAMOND_ACT_IDLE_SPINNING
+                        o->oAction = WATER_LEVEL_DIAMOND_ACT_IDLE_SPINNING;
                     } else {
                         o->oAngleVelYaw = 0x800;
                     }

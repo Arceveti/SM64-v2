@@ -19,22 +19,18 @@ void bhv_ttm_rolling_log_init(void) {
 }
 
 void rolling_log_roll_log(void) {
-    f32 sp24;
+    f32 rollAmount;
 
     if (gMarioObject->platform == o) {
-        sp24 = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-1*o->oMoveAngleYaw)
-               - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-1*o->oMoveAngleYaw);
-        if (sp24 > 0) {
+        rollAmount = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-o->oMoveAngleYaw)
+                   - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-o->oMoveAngleYaw);
+        if (rollAmount > 0) {
             o->oAngleVelPitch += 0x10;
         } else {
             o->oAngleVelPitch -= 0x10;
         }
-        if (o->oAngleVelPitch > 0x200) {
-            o->oAngleVelPitch = 0x200;
-        }
-        if (o->oAngleVelPitch < -0x200) {
-            o->oAngleVelPitch = -0x200;
-        }
+        if (o->oAngleVelPitch >  0x200) o->oAngleVelPitch =  0x200;
+        if (o->oAngleVelPitch < -0x200) o->oAngleVelPitch = -0x200;
     } else {
         if (is_point_close_to_object(o, o->oHomeX, o->oHomeY, o->oHomeZ, 100)) {
             if (o->oAngleVelPitch != 0) {
@@ -43,9 +39,7 @@ void rolling_log_roll_log(void) {
                 } else {
                     o->oAngleVelPitch += 0x10;
                 }
-                if (o->oAngleVelPitch < 0x10 && o->oAngleVelPitch > -0x10) {
-                    o->oAngleVelPitch = 0;
-                }
+                if (o->oAngleVelPitch < 0x10 && o->oAngleVelPitch > -0x10) o->oAngleVelPitch = 0;
             }
         } else {
             if (o->oAngleVelPitch != 0x100) {
@@ -54,9 +48,7 @@ void rolling_log_roll_log(void) {
                 } else {
                     o->oAngleVelPitch += 0x10;
                 }
-                if (o->oAngleVelPitch < 0x110 && o->oAngleVelPitch > 0xF0) {
-                    o->oAngleVelPitch = 0x100;
-                }
+                if (o->oAngleVelPitch < 0x110 && o->oAngleVelPitch > 0xF0) o->oAngleVelPitch = 0x100;
             }
         }
     }
@@ -84,9 +76,7 @@ void bhv_rolling_log_loop(void) {
     }
 
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) {
-        cur_obj_play_sound_2(SOUND_GENERAL_UNKNOWN1_2);
-    }
+    if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) cur_obj_play_sound_2(SOUND_GENERAL_UNKNOWN1_2);
 }
 
 void volcano_act_1(void) {
@@ -107,12 +97,8 @@ void volcano_act_1(void) {
 void volcano_act_3(void) {
     o->oAngleVelPitch = 0x90;
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    if (o->oFaceAnglePitch > 0) {
-        o->oFaceAnglePitch = 0;
-    }
-    if (o->oTimer == 200) {
-        o->oAction = 0;
-    }
+    if (o->oFaceAnglePitch > 0) o->oFaceAnglePitch = 0;
+    if (o->oTimer == 200) o->oAction = 0;
 }
 
 void bhv_volcano_trap_loop(void) {
@@ -129,9 +115,7 @@ void bhv_volcano_trap_loop(void) {
             break;
 
         case 2:
-            if (o->oTimer < 8) {
-                o->oPosY = o->oHomeY + sins(o->oTimer * 0x1000) * 10.0f;
-            }
+            if (o->oTimer < 8) o->oPosY = o->oHomeY + sins(o->oTimer * 0x1000) * 10.0f;
             if (o->oTimer == 50) {
                 cur_obj_play_sound_2(SOUND_GENERAL_UNK45);
                 o->oAction = 3;
@@ -145,14 +129,14 @@ void bhv_volcano_trap_loop(void) {
 }
 
 void bhv_lll_rolling_log_init(void) {
-    o->oPitouneX = 5120.0f;
-    o->oPitouneZ = 6016.0f;
+    o->oPitouneX       = 5120.0f;
+    o->oPitouneZ       = 6016.0f;
     o->oPitouneMaxDist = 1048576.0f;
 
-    o->oMoveAngleYaw = 0x3FFF;
-    o->oForwardVel = 0;
-    o->oVelX = 0;
-    o->oVelZ = 0;
+    o->oMoveAngleYaw   = 0x3FFF;
+    o->oForwardVel     = 0;
+    o->oVelX           = 0;
+    o->oVelZ           = 0;
     o->oFaceAnglePitch = 0;
-    o->oAngleVelPitch = 0;
+    o->oAngleVelPitch  = 0;
 }

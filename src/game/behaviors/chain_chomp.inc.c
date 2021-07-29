@@ -58,9 +58,7 @@ static void chain_chomp_act_uninitialized(void) {
             // 1 connects the pivot to the chain part next to the chain chomp
             // (chain part 1), etc.
             o->oChainChompSegments = segments;
-            for (i = 0; i <= 4; i++) {
-                chain_segment_init(&segments[i]);
-            }
+            for (i = 0; i <= 4; i++) chain_segment_init(&segments[i]);
 
             cur_obj_set_pos_to_home();
 
@@ -68,9 +66,7 @@ static void chain_chomp_act_uninitialized(void) {
             if ((o->parentObj = spawn_object(o, CHAIN_CHOMP_CHAIN_PART_BP_PIVOT, bhvChainChompChainPart)) != NULL) {
                 // Spawn the non-pivot chain parts, starting from the chain
                 // chomp and moving toward the pivot
-                for (i = 1; i <= 4; i++) {
-                    spawn_object_relative(i, 0, 0, 0, o, MODEL_METALLIC_BALL, bhvChainChompChainPart);
-                }
+                for (i = 1; i <= 4; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_METALLIC_BALL, bhvChainChompChainPart);
 
                 o->oAction = CHAIN_CHOMP_ACT_MOVE;
                 cur_obj_unhide();
@@ -109,9 +105,7 @@ static void chain_chomp_update_chain_segments(void) {
 
         // Apply gravity
 
-        if ((segment->posY += segmentVelY) < 0.0f) {
-            segment->posY = 0.0f;
-        }
+        if ((segment->posY += segmentVelY) < 0.0f) segment->posY = 0.0f;
 
         // Cap distance to previous chain part (so that the tail follows the
         // chomp)
@@ -216,9 +210,7 @@ static void chain_chomp_sub_act_lunge(void) {
         }
 
         // TODO: What is this
-        if ((val04 = 900.0f - o->oChainChompDistToPivot) > 220.0f) {
-            val04 = 220.0f;
-        }
+        if ((val04 = 900.0f - o->oChainChompDistToPivot) > 220.0f) val04 = 220.0f;
 
         o->oChainChompMaxDistBetweenChainParts =
             val04 / 220.0f * o->oChainChompMaxDistFromPivotPerChainPart;
@@ -240,9 +232,7 @@ static void chain_chomp_sub_act_lunge(void) {
         }
     }
 
-    if (o->oTimer < 30) {
-        cur_obj_reverse_animation();
-    }
+    if (o->oTimer < 30) cur_obj_reverse_animation();
 }
 
 /**
@@ -450,12 +440,8 @@ static void chain_chomp_act_move(void) {
 static void chain_chomp_act_unload_chain(void) {
     cur_obj_hide();
     mem_pool_free(gObjectMemoryPool, o->oChainChompSegments);
-
     o->oAction = CHAIN_CHOMP_ACT_UNINITIALIZED;
-
-    if (o->oChainChompReleaseStatus != CHAIN_CHOMP_NOT_RELEASED) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oChainChompReleaseStatus != CHAIN_CHOMP_NOT_RELEASED) obj_mark_for_deletion(o);
 }
 
 /**

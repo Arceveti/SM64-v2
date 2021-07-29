@@ -28,10 +28,7 @@ static void triplet_butterfly_act_init(void) {
     butterflyNum = o->oBehParams2ndByte & TRIPLET_BUTTERFLY_BP_BUTTERFLY_NUM;
     if (butterflyNum != 0 || o->oDistanceToMario < 200.0f) {
         if (butterflyNum == 0) {
-            for (i = 1; i <= 2; i++) {
-                spawn_object_relative(i, 0, 0, 0, o, MODEL_BUTTERFLY, bhvTripletButterfly);
-            }
-
+            for (i = 1; i < 3; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_BUTTERFLY, bhvTripletButterfly);
             o->oTripletButterflySelectedButterfly = random_u16() % 3;
         }
 
@@ -70,9 +67,7 @@ static void triplet_butterfly_act_wander(void) {
             }
         }
 
-        if (o->oHomeY < o->oFloorHeight) {
-            o->oHomeY = o->oFloorHeight;
-        }
+        if (o->oHomeY < o->oFloorHeight) o->oHomeY = o->oFloorHeight;
 
         if (o->oPosY < o->oHomeY + random_linear_offset(50, 50)) {
             o->oTripletButterflyTargetPitch = -0x2000;

@@ -3,15 +3,13 @@
 void whomp_play_sfx_from_pound_animation(void) {
     s32 playSound = FALSE;
     if (o->oForwardVel < 5.0f) {
-        playSound = cur_obj_check_anim_frame(0);
+        playSound  = cur_obj_check_anim_frame( 0);
         playSound |= cur_obj_check_anim_frame(23);
     } else {
-        playSound = cur_obj_check_anim_frame_in_range(0, 3);
+        playSound  = cur_obj_check_anim_frame_in_range( 0, 3);
         playSound |= cur_obj_check_anim_frame_in_range(23, 3);
     }
-    if (playSound) {
-        cur_obj_play_sound_2(SOUND_OBJ_POUNDING1);
-    }
+    if (playSound) cur_obj_play_sound_2(SOUND_OBJ_POUNDING1);
 }
 
 void whomp_init(void) {
@@ -31,7 +29,7 @@ void whomp_init(void) {
         } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
             DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_114)) {
             o->oAction = 2;
-            }
+        }
     } else if (o->oDistanceToMario < 500.0f) {
         o->oAction = 1;
     }
@@ -49,9 +47,7 @@ void whomp_turn(void) {
         }
     } else {
         o->oForwardVel = 3.0f;
-        if (o->oTimer > 42) {
-            o->oAction = 1;
-        }
+        if (o->oTimer > 42) o->oAction = 1;
     }
     whomp_play_sfx_from_pound_animation();
 }
@@ -71,9 +67,7 @@ void whomp_patrol(void) {
             o->oForwardVel = 9.0f;
             cur_obj_init_animation_with_accel_and_sound(0, 3.0f);
         }
-        if (o->oDistanceToMario < 300.0f) {
-            o->oAction = 3;
-        }
+        if (o->oDistanceToMario < 300.0f) o->oAction = 3;
     }
     whomp_play_sfx_from_pound_animation();
 }
@@ -91,9 +85,7 @@ void king_whomp_chase(void) {
                 o->oForwardVel = 9.0f;
                 cur_obj_init_animation_with_accel_and_sound(0, 3.0f);
             }
-            if (o->oDistanceToMario < 300.0f) {
-                o->oAction = 3;
-            }
+            if (o->oDistanceToMario < 300.0f) o->oAction = 3;
         }
     }
 
@@ -107,15 +99,11 @@ void king_whomp_chase(void) {
 void whomp_prepare_jump(void) {
     o->oForwardVel = 0.0f;
     cur_obj_init_animation_with_accel_and_sound(1, 1.0f);
-    if (cur_obj_check_if_near_animation_end()) {
-        o->oAction = 4;
-    }
+    if (cur_obj_check_if_near_animation_end()) o->oAction = 4;
 }
 
 void whomp_jump(void) {
-    if (o->oTimer == 0) {
-        o->oVelY = 40.0f;
-    }
+    if (o->oTimer == 0) o->oVelY = 40.0f;
     if (o->oTimer >= 8) {
         o->oAngleVelPitch += 0x100;
         o->oFaceAnglePitch += o->oAngleVelPitch;
@@ -134,9 +122,7 @@ void whomp_land(void) {
         o->oVelY = 0.0f;
         o->oSubAction++;
     }
-    if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
-        o->oAction = 6;
-    }
+    if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) o->oAction = 6;
 }
 
 void king_whomp_on_ground(void) {
@@ -202,9 +188,7 @@ void whomp_on_ground_general(void) {
         } else {
             whomp_on_ground();
         }
-        if (o->oTimer > 100 || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) {
-            o->oSubAction = 10;
-        }
+        if (o->oTimer > 100 || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) o->oSubAction = 10;
     } else {
         if (o->oFaceAnglePitch > 0) {
             o->oAngleVelPitch = -0x200;
@@ -246,9 +230,7 @@ void whomp_die(void) {
 }
 
 void king_whomp_stop_music(void) {
-    if (o->oTimer == 60) {
-        stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
-    }
+    if (o->oTimer == 60) stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
 }
 
 void (*sWhompActions[])(void) = {

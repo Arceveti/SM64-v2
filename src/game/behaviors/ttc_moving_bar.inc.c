@@ -24,9 +24,7 @@ static s8 sTTCMovingBarRandomDelays[] = { 1, 12, 55, 100 };
  */
 void bhv_ttc_moving_bar_init(void) {
     // If on still setting, then stick out
-    if ((o->oTTCMovingBarDelay = sTTCMovingBarDelays[gTTCSpeedSetting]) == 0) {
-        o->oTTCMovingBarOffset = 250.0f;
-    }
+    if ((o->oTTCMovingBarDelay = sTTCMovingBarDelays[gTTCSpeedSetting]) == 0) o->oTTCMovingBarOffset = 250.0f;
 
     // This causes the first cycle to start at different times for different
     // bars
@@ -50,9 +48,7 @@ static void ttc_moving_bar_act_wait(void) {
                 o->oTTCMovingBarDelay = sTTCMovingBarRandomDelays[random_u16() & 0x3];
 
                 // With 50% probability, pause after pulling back
-                if (random_u16() % 2 == 0) {
-                    o->oTTCMovingBarStoppedTimer = random_linear_offset(20, 100);
-                }
+                if (random_u16() % 2 == 0) o->oTTCMovingBarStoppedTimer = random_linear_offset(20, 100);
             }
 
             // Begin pulling back
@@ -106,15 +102,13 @@ static void ttc_moving_bar_act_extend(void) {
 
         // Accelerate before reaching 250, and decelerate after reaching it
         if (o->oTTCMovingBarOffset < 250.0f) {
-            accel = 6.4f;
+            accel =  6.4f;
         } else {
             accel = -6.4f;
         }
 
         // Strengthen deceleration
-        if (o->oTTCMovingBarSpeed * accel < 0.0f) {
-            accel *= 2.35f;
-        }
+        if (o->oTTCMovingBarSpeed * accel < 0.0f) accel *= 2.35f;
 
         o->oTTCMovingBarSpeed += accel;
 
@@ -135,9 +129,7 @@ static void ttc_moving_bar_act_retract(void) {
     if (o->oTimer > 30) {
         // Retract
         o->oTTCMovingBarSpeed = -5.0f;
-        if (o->oTTCMovingBarOffset < 0.0f) {
-            ttc_moving_bar_reset();
-        }
+        if (o->oTTCMovingBarOffset < 0.0f) ttc_moving_bar_reset();
     }
 }
 

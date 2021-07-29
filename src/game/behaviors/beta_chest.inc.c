@@ -44,9 +44,7 @@ void bhv_beta_chest_bottom_loop(void) {
 void bhv_beta_chest_lid_loop(void) {
     switch (o->oAction) {
         case BETA_CHEST_ACT_IDLE_CLOSED:
-            if (dist_between_objects(o->parentObj, gMarioObject) < 300.0f) {
-                o->oAction = BETA_CHEST_ACT_OPENING;
-            }
+            if (dist_between_objects(o->parentObj, gMarioObject) < 300.0f) o->oAction = BETA_CHEST_ACT_OPENING;
 
             break;
         case BETA_CHEST_ACT_OPENING:
@@ -59,9 +57,7 @@ void bhv_beta_chest_lid_loop(void) {
             // Rotate the lid 0x400 (1024) angle units per frame backwards.
             // When the lid becomes vertical, stop rotating.
             o->oFaceAnglePitch -= 0x400;
-            if (o->oFaceAnglePitch < -0x4000) {
-                o->oAction = BETA_CHEST_ACT_IDLE_OPEN; 
-            }
+            if (o->oFaceAnglePitch < -0x4000) o->oAction = BETA_CHEST_ACT_IDLE_OPEN; 
 
             // Fall-through
         case BETA_CHEST_ACT_IDLE_OPEN:

@@ -35,9 +35,7 @@ void bhv_animates_on_floor_switch_press_init(void) {
 
 void bhv_animates_on_floor_switch_press_loop(void) {
     if (o->oFloorSwitchPressAnimationSwitchNotTicking) {
-        if (o->parentObj->oAction != PURPLE_SWITCH_TICKING) {
-            o->oFloorSwitchPressAnimationSwitchNotTicking = FALSE;
-        }
+        if (o->parentObj->oAction != PURPLE_SWITCH_TICKING) o->oFloorSwitchPressAnimationSwitchNotTicking = FALSE;
 
         if (o->oFloorSwitchPressAnimationDoResetTime != 0) {
             o->oFloorSwitchPressAnimationTickTimer = o->parentObj->oTimer;
@@ -56,13 +54,8 @@ void bhv_animates_on_floor_switch_press_loop(void) {
             cur_obj_play_sound_1(SOUND_GENERAL2_SWITCH_TICK_FAST);
         }
 
-        if (--o->oFloorSwitchPressAnimationTickTimer == 0) {
-            o->oFloorSwitchPressAnimationDoResetTime = FALSE;
-        }
-
-        if (o->oFloorSwitchPressAnimationDoubleFrame < 9) {
-            o->oFloorSwitchPressAnimationDoubleFrame++;
-        }
+        if (--o->oFloorSwitchPressAnimationTickTimer == 0) o->oFloorSwitchPressAnimationDoResetTime = FALSE;
+        if (o->oFloorSwitchPressAnimationDoubleFrame < 9) o->oFloorSwitchPressAnimationDoubleFrame++;
     } else if ((o->oFloorSwitchPressAnimationDoubleFrame -= 2) < 0) {
         o->oFloorSwitchPressAnimationDoubleFrame = 0;
         o->oFloorSwitchPressAnimationDoResetTime = TRUE;

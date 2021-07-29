@@ -18,9 +18,7 @@ void bhv_wf_breakable_wall_loop(void) {
         load_object_collision_model();
     }
 #else
-            if (cur_obj_has_behavior(bhvWfBreakableWallRight)) {
-                play_puzzle_jingle();
-            }
+            if (cur_obj_has_behavior(bhvWfBreakableWallRight)) play_puzzle_jingle();
             create_sound_spawner(SOUND_GENERAL_WALL_EXPLOSION);
             o->oInteractType = INTERACT_DAMAGE;
             o->oDamageOrCoinValue = 1;

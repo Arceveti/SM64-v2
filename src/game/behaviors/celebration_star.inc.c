@@ -63,9 +63,7 @@ void celeb_star_act_face_camera(void) {
         o->oFaceAngleYaw = gMarioObject->header.gfx.angle[1];
     }
 
-    if (o->oTimer == 59) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oTimer == 59) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void bhv_celebration_star_loop(void) {
@@ -82,10 +80,7 @@ void bhv_celebration_star_loop(void) {
 
 void bhv_celebration_star_sparkle_loop(void) {
     o->oPosY -= 15.0f;
-
-    if (o->oTimer == 12) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oTimer == 12) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void bhv_star_key_collection_puff_spawner_loop(void) {

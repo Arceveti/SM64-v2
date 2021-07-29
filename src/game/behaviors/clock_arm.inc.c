@@ -12,9 +12,7 @@ void bhv_rotating_clock_arm_loop(void) {
     // Probably a safety check for when you leave the level through the painting
     //   to make sure the setting isn't accidentally locked in as you fly out.
     if (o->oAction == 0) {
-        if (marioSurface->type == SURFACE_DEFAULT && o->oTimer >= 4) {
-            o->oAction++;
-        }
+        if (marioSurface->type == SURFACE_DEFAULT && o->oTimer >= 4) o->oAction++;
     } else if (o->oAction == 1) {
         // If Mario is touching the Tick Tock Clock painting...
         if (marioSurface != NULL
@@ -45,7 +43,5 @@ void bhv_rotating_clock_arm_loop(void) {
     }
 
     // Only rotate the hands until Mario enters the painting.
-    if (o->oAction < 2) {
-        cur_obj_rotate_face_angle_using_vel();
-    }
+    if (o->oAction < 2) cur_obj_rotate_face_angle_using_vel();
 }

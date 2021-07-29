@@ -133,45 +133,29 @@ void small_penguin_dive_with_mario(void) {
 
 void small_penguin_act_walking_away_from_mario(void) { // act 2
     s32 nearMother = FALSE;
-    if (o->oTimer == 0) {
-        nearMother = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
-    }
+    if (o->oTimer == 0) nearMother = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
     cur_obj_init_animation_with_sound(0);
     o->oForwardVel = o->oSmallPenguinNextForwardVel + 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario + 0x8000, o->oSmallPenguinYawIncrement + 0x600); // away from mario
-    if (o->oDistanceToMario > o->oSmallPenguinRandomDistanceCheck + 500.0f) {
-        o->oAction = SMALL_PENGUIN_ACT_WALKING;
-    }
+    if (o->oDistanceToMario > o->oSmallPenguinRandomDistanceCheck + 500.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
     small_penguin_dive_with_mario();
-    if (nearMother) {
-        o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
-    }
+    if (nearMother) o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
 }
 
 void small_penguin_act_walking_toward_mario(void) { // act 1
     cur_obj_init_animation_with_sound(0);
     o->oForwardVel = o->oSmallPenguinNextForwardVel + 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario, o->oSmallPenguinYawIncrement + 0x600); // toward mario
-    if (o->oDistanceToMario < o->oSmallPenguinRandomDistanceCheck + 300.0f) {
-        o->oAction = SMALL_PENGUIN_ACT_WALKING;
-    }
-    if (o->oDistanceToMario > 1100.0f) {
-        o->oAction = SMALL_PENGUIN_ACT_WALKING;
-    }
+    if (o->oDistanceToMario < o->oSmallPenguinRandomDistanceCheck + 300.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
+    if (o->oDistanceToMario > 1100.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
     small_penguin_dive_with_mario();
 }
 
 void small_penguin_act_dive_sliding(void) { // act 3
     if (o->oTimer > 5) {
-        if (o->oTimer == 6) {
-            cur_obj_play_sound_2(SOUND_OBJ_BABY_PENGUIN_DIVE);
-        }
+        if (o->oTimer == 6) cur_obj_play_sound_2(SOUND_OBJ_BABY_PENGUIN_DIVE);
         cur_obj_init_animation_with_sound(1);
-        if (o->oTimer > 25) {
-            if (!mario_is_dive_sliding()) {
-                o->oAction = SMALL_PENGUIN_ACT_DIVE_SLIDING_STOP;
-            }
-        }
+        if (o->oTimer > 25 && !mario_is_dive_sliding()) o->oAction = SMALL_PENGUIN_ACT_DIVE_SLIDING_STOP;
     }
 }
 
@@ -179,9 +163,7 @@ void small_penguin_act_dive_sliding_stop(void) { // act 4
     if (o->oTimer > 20) {
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(2);
-        if (o->oTimer > 40) {
-            o->oAction = o->oSmallPenguinStoredAction;
-        }
+        if (o->oTimer > 40) o->oAction = o->oSmallPenguinStoredAction;
     }
 }
 
@@ -201,12 +183,8 @@ void small_penguin_act_walking(void) { // act 0
     } else if (o->oDistanceToMario < o->oSmallPenguinRandomDistanceCheck + 300.0f) {
         o->oAction = SMALL_PENGUIN_ACT_WALKING_AWAY_FROM_MARIO;
     }
-    if (nearMother) {
-        o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
-    }
-    if (cur_obj_mario_far_away()) {
-        cur_obj_set_pos_to_home();
-    }
+    if (nearMother) o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
+    if (cur_obj_mario_far_away()) cur_obj_set_pos_to_home();
 }
 
 void small_penguin_act_near_mother(void) { // act 5
@@ -258,13 +236,9 @@ void bhv_small_penguin_loop(void) {
             break;
         case HELD_HELD:
             cur_obj_unrender_set_action_and_anim(0, 0);
-            if (cur_obj_has_behavior(bhvPenguinBaby)) {
-                obj_set_behavior(o, bhvSmallPenguin);
-            }
+            if (cur_obj_has_behavior(bhvPenguinBaby)) obj_set_behavior(o, bhvSmallPenguin);
             obj_copy_pos(o, gMarioObject);
-            if (gGlobalTimer % 30 == 0) {
-                play_sound(SOUND_OBJ2_BABY_PENGUIN_YELL, gMarioObject->header.gfx.cameraToObject);
-            }
+            if (gGlobalTimer % 30 == 0) play_sound(SOUND_OBJ2_BABY_PENGUIN_YELL, gMarioObject->header.gfx.cameraToObject);
             break;
         case HELD_THROWN:
             cur_obj_get_thrown_or_placed(0, 0, 0);
@@ -307,11 +281,7 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSE
          * after giving it back. The easiest way to check this is to see if she's
          * moving, since she only does when she's chasing Mario.
          */
-        if (segmented_to_virtual(bhvTuxiesMother) == obj->behavior) {
-            if (obj->oForwardVel > 5.0f) {
-                switchCase->selectedCase = 3;
-            }
-        }
+        if (segmented_to_virtual(bhvTuxiesMother) == obj->behavior && obj->oForwardVel > 5.0f) switchCase->selectedCase = 3;
     }
     return NULL;
 }

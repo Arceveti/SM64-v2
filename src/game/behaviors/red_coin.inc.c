@@ -31,7 +31,7 @@ void bhv_red_coin_init(void) {
         o->parentObj = hiddenRedCoinStar;
     } else {
         hiddenRedCoinStar = cur_obj_nearest_object_with_behavior(bhvBowserCourseRedCoinStar);
-        if (hiddenRedCoinStar != NULL) {
+        if (hiddenRedCoinStar != NULL) { //!?
             o->parentObj = hiddenRedCoinStar;
         } else {
             o->parentObj = NULL;
@@ -58,9 +58,7 @@ void bhv_red_coin_loop(void) {
             create_sound_spawner(SOUND_GENERAL_RED_COIN);
 #endif
             // Spawn the orange number counter, as long as it isn't the last coin.
-            if (o->parentObj->oHiddenStarTriggerCounter != 8) {
-                spawn_orange_number(o->parentObj->oHiddenStarTriggerCounter, 0, 0, 0);
-            }
+            if (o->parentObj->oHiddenStarTriggerCounter != 8) spawn_orange_number(o->parentObj->oHiddenStarTriggerCounter, 0, 0, 0);
 
             // On all versions but the JP version, each coin collected plays a higher noise.
 #ifndef VERSION_JP

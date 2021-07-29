@@ -38,18 +38,8 @@ static void enemy_lakitu_act_uninitialized(void) {
 static void enemy_lakitu_update_vel_y(f32 offsetY) {
     // In order to encourage oscillation, pass mario by a small margin before
     // accelerating the opposite direction
-    f32 margin;
-    if (o->oVelY < 0.0f) {
-        margin = -3.0f;
-    } else {
-        margin = 3.0f;
-    }
-
-    if (o->oPosY < gMarioObject->oPosY + offsetY + margin) {
-        obj_y_vel_approach(4.0f, 0.4f);
-    } else {
-        obj_y_vel_approach(-4.0f, 0.4f);
-    }
+    f32 margin = (o->oVelY < 0.0f) ? -3.0f : 3.0f;
+    obj_y_vel_approach((o->oPosY < gMarioObject->oPosY + offsetY + margin) ? 4.0f : -4.0f, 0.4f);
 }
 
 /**
@@ -61,14 +51,11 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     s16 turnSpeed;
 
     f32 distToMario = o->oDistanceToMario;
-    if (distToMario > 500.0f) {
-        distToMario = 500.0f;
-    }
+    if (distToMario > 500.0f) distToMario = 500.0f;
 
     // Move faster the farther away mario is and the faster mario is moving
-    if ((minSpeed = 1.2f * gMarioStates[0].forwardVel) < 8.0f) {
-        minSpeed = 8.0f;
-    }
+    if ((minSpeed = 1.2f * gMarioStates[0].forwardVel) < 8.0f) minSpeed = 8.0f;
+
     o->oForwardVel = distToMario * 0.04f;
     clamp_f32(&o->oForwardVel, minSpeed, 40.0f);
 
@@ -154,9 +141,7 @@ static void enemy_lakitu_act_main(void) {
     cur_obj_update_floor_and_walls();
 
     enemy_lakitu_update_speed_and_angle();
-    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-        o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
-    }
+    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
 
     obj_update_blinking(&o->oEnemyLakituBlinkTimer, 20, 40, 4);
 
@@ -175,10 +160,7 @@ static void enemy_lakitu_act_main(void) {
     cur_obj_move_standard(78);
 
     // Die and drop held spiny when attacked by mario
-    if (obj_check_attacks(&sEnemyLakituHitbox, o->oAction)) {
-        // The spiny uses this as a signal to get thrown
-        o->prevObj = NULL;
-    }
+    if (obj_check_attacks(&sEnemyLakituHitbox, o->oAction)) o->prevObj = NULL; // The spiny uses this as a signal to get thrown
 }
 
 /**

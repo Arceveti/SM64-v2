@@ -73,9 +73,7 @@ void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
 #ifdef VERSION_JP
                     play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #else
-                    play_sound(SOUND_MENU_COLLECT_SECRET
-                                   + (((u8) ringSpawner->oWaterRingSpawnerRingsCollected - 1) << 16),
-                               gGlobalSoundSource);
+                    play_sound(SOUND_MENU_COLLECT_SECRET + (((u8) ringSpawner->oWaterRingSpawnerRingsCollected - 1) << 16), gGlobalSoundSource);
 #endif
                 }
 
@@ -103,14 +101,9 @@ void water_ring_set_scale(f32 avgScale) {
 
 void water_ring_act_collected(void) {
     f32 avgScale = (f32) o->oTimer * 0.2f + o->oWaterRingAvgScale;
-
-    if (o->oTimer >= 21) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     o->oOpacity -= 10;
-    if (o->oOpacity < 0) {
-        o->oOpacity = 0;
-    }
+    if (o->oOpacity < 0) o->oOpacity = 0;
     water_ring_set_scale(avgScale);
 }
 
@@ -122,9 +115,7 @@ void water_ring_act_not_collected(void) { // jet stream
     if (o->oTimer >= 226) {
         o->oOpacity -= 2;
         if (o->oOpacity < 3) {
-            if (o->oWaterRingIndex == ringSpawner->oWaterRingMgrLastRingCollected + 1 && ringSpawner->oWaterRingSpawnerRingsCollected < 5) {
-                ringSpawner->oWaterRingSpawnerRingsCollected = 0;
-            }
+            if (o->oWaterRingIndex == ringSpawner->oWaterRingMgrLastRingCollected + 1 && ringSpawner->oWaterRingSpawnerRingsCollected < 5) ringSpawner->oWaterRingSpawnerRingsCollected = 0;
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         }
     }
@@ -136,9 +127,7 @@ void water_ring_act_not_collected(void) { // jet stream
     o->oFaceAngleYaw += 0x100;
     set_object_visibility(o, 5000);
 
-    if (ringSpawner->oWaterRingSpawnerRingsCollected == 4
-        && o->oWaterRingIndex == ringSpawner->oWaterRingMgrLastRingCollected + 1)
-        o->oOpacity = sins(o->oTimer * 0x1000) * 200.0f + 50.0f;
+    if (ringSpawner->oWaterRingSpawnerRingsCollected == 4 && o->oWaterRingIndex == ringSpawner->oWaterRingMgrLastRingCollected + 1) o->oOpacity = sins(o->oTimer * 0x1000) * 200.0f + 50.0f;
 
     o->oWaterRingAvgScale = avgScale;
 }
@@ -166,16 +155,12 @@ void water_ring_spawner_act_inactive(void) {
     //! Because the index counter overflows at 10000, it's possible to wait
     //  for about 4 hours and 38 minutes if you miss a ring, and the index will
     //  come around again.
-    if (o->oTimer == 300) {
-        o->oTimer = 0;
-    }
+    if (o->oTimer == 300) o->oTimer = 0;
     if ((o->oTimer == 0) || (o->oTimer == 50) || (o->oTimer == 150) || (o->oTimer == 200) || (o->oTimer == 250)) {
         waterRing = spawn_object(o, MODEL_WATER_RING, bhvJetStreamWaterRing);
         waterRing->oWaterRingIndex = o->oWaterRingMgrNextRingIndex;
         o->oWaterRingMgrNextRingIndex++;
-        if (o->oWaterRingMgrNextRingIndex >= 10001) {
-            o->oWaterRingMgrNextRingIndex = 0;
-        }
+        if (o->oWaterRingMgrNextRingIndex >= 10001) o->oWaterRingMgrNextRingIndex = 0;
     }
 }
 
@@ -210,13 +195,13 @@ void manta_water_ring_act_not_collected(void) { // for manta ray
     struct Object *ringSpawner = o->parentObj;
     struct Object *ringManager = ringSpawner->parentObj;
 
-    if (avgScale > 1.3f) {
-        avgScale = 1.3f;
-    }
+    if (avgScale > 1.3f) avgScale = 1.3f;
     if (o->oTimer >= 151) {
         o->oOpacity -= 2;
         if (o->oOpacity < 3) {
-            if (o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1 && ringSpawner->oWaterRingSpawnerRingsCollected < 5 && ringManager->oWaterRingSpawnerRingsCollected < 5) {
+            if (o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1
+            && ringSpawner->oWaterRingSpawnerRingsCollected < 5
+            && ringManager->oWaterRingSpawnerRingsCollected < 5) {
                 ringSpawner->oWaterRingSpawnerRingsCollected = 0;
                 ringManager->oWaterRingSpawnerRingsCollected = 0;
             }
@@ -229,9 +214,7 @@ void manta_water_ring_act_not_collected(void) { // for manta ray
     set_object_visibility(o, 5000);
 
     if (ringSpawner->oWaterRingSpawnerRingsCollected == 4
-        && o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1) {
-        o->oOpacity = sins(o->oTimer * 0x1000) * 200.0f + 50.0f;
-    }
+        && o->oWaterRingIndex == ringManager->oWaterRingMgrLastRingCollected + 1) o->oOpacity = sins(o->oTimer * 0x1000) * 200.0f + 50.0f;
     o->oWaterRingAvgScale = avgScale;
 }
 

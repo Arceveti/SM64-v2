@@ -33,13 +33,9 @@ void butterfly_step(s32 speed) {
     }
     floorY = find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
 
-    if (o->oPosY < floorY + 2.0f) {
-        o->oPosY = floorY + 2.0f;
-    }
+    if (o->oPosY < floorY + 2.0f) o->oPosY = floorY + 2.0f;
     o->oButterflyYPhase++;
-    if (o->oButterflyYPhase >= 101) {
-        o->oButterflyYPhase = 0;
-    }
+    if (o->oButterflyYPhase >= 101) o->oButterflyYPhase = 0;
 }
 
 void butterfly_calculate_angle(void) {
@@ -57,7 +53,6 @@ void butterfly_calculate_angle(void) {
 void butterfly_act_rest(void) {
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
         cur_obj_init_animation(0);
-
         o->oAction = BUTTERFLY_ACT_FOLLOW_MARIO;
         o->oMoveAngleYaw = gMarioObject->header.gfx.angle[1];
     }
@@ -65,12 +60,8 @@ void butterfly_act_rest(void) {
 
 void butterfly_act_follow_mario(void) {
     butterfly_calculate_angle();
-
     butterfly_step(7);
-
-    if (!is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 1200)) {
-        o->oAction = BUTTERFLY_ACT_RETURN_HOME;
-    }
+    if (!is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 1200)) o->oAction = BUTTERFLY_ACT_RETURN_HOME;
 }
 
 void butterfly_act_return_home(void) {

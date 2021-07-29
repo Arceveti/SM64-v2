@@ -24,13 +24,9 @@ void bhv_1up_common_init(void) {
 void bhv_1up_init(void) {
     bhv_1up_common_init();
     if (o->oBehParams2ndByte == MUSHROOM_BP_REQUIRES_BOWSER_1) {
-        if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) {
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-        }
+        if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     } else if (o->oBehParams2ndByte == MUSHROOM_BP_REQUIRES_BOWSER_2) {
-        if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-        }
+        if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }
 
@@ -62,12 +58,8 @@ void one_up_move_away_from_mario(s16 stepResult) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     bhv_1up_interact();
-    if (stepResult & OBJ_COL_FLAG_HIT_WALL) {
-        o->oAction = 2;
-    }
-    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) {
-        o->oAction = 2;
-    }
+    if (stepResult & OBJ_COL_FLAG_HIT_WALL) o->oAction = 2;
+    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) o->oAction = 2;
 }
 
 void bhv_1up_walking_loop(void) {
@@ -75,12 +67,8 @@ void bhv_1up_walking_loop(void) {
 
     switch (o->oAction) {
         case 0:
-            if (o->oTimer >= 18) {
-                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            }
-            if (o->oTimer == 0) {
-                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
-            }
+            if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+            if (o->oTimer ==  0) play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
@@ -91,9 +79,7 @@ void bhv_1up_walking_loop(void) {
             break;
 
         case 1:
-            if (o->oTimer > 300) {
-                o->oAction = 2;
-            }
+            if (o->oTimer > 300) o->oAction = 2;
             bhv_1up_interact();
             break;
 
@@ -107,17 +93,11 @@ void bhv_1up_walking_loop(void) {
 }
 
 void bhv_1up_running_away_loop(void) {
-    s16 stepResult;
-
-    stepResult = object_step();
+    s16 stepResult = object_step();
     switch (o->oAction) {
         case 0:
-            if (o->oTimer >= 18) {
-                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            }
-            if (o->oTimer == 0) {
-                play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
-            }
+            if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
+            if (o->oTimer ==  0) play_sound(SOUND_GENERAL2_1UP_APPEAR, gGlobalSoundSource);
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
@@ -142,9 +122,7 @@ void bhv_1up_running_away_loop(void) {
 }
 
 void sliding_1up_move(void) {
-    s16 stepResult;
-
-    stepResult = object_step();
+    s16 stepResult = object_step();
     if (stepResult & OBJ_COL_FLAG_GROUNDED) {
         o->oForwardVel += 25.0f;
         o->oVelY = 0;
@@ -152,21 +130,15 @@ void sliding_1up_move(void) {
         o->oForwardVel *= 0.98f;
     }
 
-    if (o->oForwardVel > 40.0f) {
-        o->oForwardVel = 40.0f;
-    }
-    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 5000)) {
-        o->oAction = 2;
-    }
+    if (o->oForwardVel > 40.0f) o->oForwardVel = 40.0f;
+    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 5000)) o->oAction = 2;
 }
 
 void bhv_1up_sliding_loop(void) {
     switch (o->oAction) {
         case 0:
             set_object_visibility(o, 3000);
-            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
-                o->oAction = 1;
-            }
+            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) o->oAction = 1;
             break;
 
         case 1:
@@ -242,9 +214,7 @@ void bhv_1up_hidden_loop(void) {
 
         case 3:
             stepResult = object_step();
-            if (o->oTimer >= 18) {
-                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            }
+            if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
@@ -260,9 +230,7 @@ void bhv_1up_hidden_trigger_loop(void) {
     struct Object *nearestHidden1up;
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         nearestHidden1up = cur_obj_nearest_object_with_behavior(bhvHidden1up);
-        if (nearestHidden1up != NULL) {
-            nearestHidden1up->o1UpHiddenTimesTriggered++;
-        }
+        if (nearestHidden1up != NULL) nearestHidden1up->o1UpHiddenTimesTriggered++;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }
@@ -287,9 +255,7 @@ void bhv_1up_hidden_in_pole_loop(void) {
 
         case 3:
             stepResult = object_step();
-            if (o->oTimer >= 18) {
-                spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            }
+            if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             one_up_loop_in_air();
 
             if (o->oTimer == 37) {
@@ -306,9 +272,7 @@ void bhv_1up_hidden_in_pole_trigger_loop(void) {
 
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
         nearestHidden1upInPole = cur_obj_nearest_object_with_behavior(bhvHidden1upInPole);
-        if (nearestHidden1upInPole != NULL) {
-            nearestHidden1upInPole->o1UpHiddenTimesTriggered++;
-        }
+        if (nearestHidden1upInPole != NULL) nearestHidden1upInPole->o1UpHiddenTimesTriggered++;
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
@@ -319,9 +283,7 @@ void bhv_1up_hidden_in_pole_spawner_loop(void) {
 
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 700)) {
         spawn_object_relative(2, 0, 50, 0, o, MODEL_1UP, bhvHidden1upInPole);
-        for (i = 0; i < 2; i++) {
-            spawn_object_relative(0, 0, i * -200, 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
-        }
+        for (i = 0; i < 2; i++) spawn_object_relative(0, 0, i * -200, 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }

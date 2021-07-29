@@ -47,10 +47,7 @@ void bhv_bowling_ball_init(void) {
 
 void bowling_ball_set_hitbox(void) {
     obj_set_hitbox(o, &sBowlingBallHitbox);
-
-    if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oInteractStatus = INT_STATUS_NONE;
-    }
+    if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oInteractStatus = INT_STATUS_NONE;
 }
 
 void bowling_ball_set_waypoints(void) {
@@ -88,9 +85,7 @@ void bhv_bowling_ball_roll_loop(void) {
 
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
-    if (o->oForwardVel > 70.0f) {
-        o->oForwardVel = 70.0f;
-    }
+    if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
 
     bowling_ball_set_hitbox();
 
@@ -152,9 +147,7 @@ void bhv_bowling_ball_loop(void) {
             break;
     }
 
-    if (o->oBehParams2ndByte != 4) {
-        set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
-    }
+    if (o->oBehParams2ndByte != 4) set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
     set_object_visibility(o, 4000);
 }
 
@@ -180,9 +173,7 @@ void bhv_generic_bowling_ball_spawner_init(void) {
 void bhv_generic_bowling_ball_spawner_loop(void) {
     struct Object *bowlingBall;
 
-    if (o->oTimer == 256) {
-        o->oTimer = 0;
-    }
+    if (o->oTimer == 256) o->oTimer = 0;
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)
         || (o->oPosY < gMarioObject->header.gfx.pos[1])) return;
 
@@ -199,9 +190,7 @@ void bhv_generic_bowling_ball_spawner_loop(void) {
 void bhv_thi_bowling_ball_spawner_loop(void) {
     struct Object *bowlingBall;
 
-    if (o->oTimer == 256) {
-        o->oTimer = 0;
-    }
+    if (o->oTimer == 256) o->oTimer = 0;
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 800)
         || (o->oPosY < gMarioObject->header.gfx.pos[1])) return;
 
@@ -224,11 +213,8 @@ void bhv_bob_pit_bowling_ball_init(void) {
 void bhv_bob_pit_bowling_ball_loop(void) {
     struct FloorGeometry *floorGeometry;
     UNUSED s32 collisionFlags = object_step();
-
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
-    if ((floorGeometry->normalX == 0) && (floorGeometry->normalZ == 0)) {
-        o->oForwardVel = 28.0f;
-    }
+    if ((floorGeometry->normalX == 0) && (floorGeometry->normalZ == 0)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();
     set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
     cur_obj_play_sound_1(SOUND_ENV_UNKNOWN2);
@@ -236,13 +222,13 @@ void bhv_bob_pit_bowling_ball_loop(void) {
 }
 
 void bhv_free_bowling_ball_init(void) {
-    o->oGravity = 5.5f;
-    o->oFriction = 1.0f;
-    o->oBuoyancy = 2.0f;
-    o->oHomeX = o->oPosX;
-    o->oHomeY = o->oPosY;
-    o->oHomeZ = o->oPosZ;
-    o->oForwardVel = 0;
+    o->oGravity      = 5.5f;
+    o->oFriction     = 1.0f;
+    o->oBuoyancy     = 2.0f;
+    o->oHomeX        = o->oPosX;
+    o->oHomeY        = o->oPosY;
+    o->oHomeZ        = o->oPosZ;
+    o->oForwardVel   = 0;
     o->oMoveAngleYaw = 0;
 }
 
@@ -255,9 +241,7 @@ void bhv_free_bowling_ball_roll_loop(void) {
         cur_obj_play_sound_1(SOUND_ENV_UNKNOWN2);
     }
 
-    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
-        cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1_LOWPRIO);
-    }
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1_LOWPRIO);
 
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 6000)) {
         o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
@@ -288,9 +272,7 @@ void bhv_free_bowling_ball_loop(void) {
             break;
 
         case FREE_BBALL_ACT_RESET:
-            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 5000)) {
-                o->oAction = FREE_BBALL_ACT_IDLE;
-            }
+            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 5000)) o->oAction = FREE_BBALL_ACT_IDLE;
             break;
     }
 }

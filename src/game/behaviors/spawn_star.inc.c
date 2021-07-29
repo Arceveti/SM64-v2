@@ -49,11 +49,7 @@ void bhv_star_spawn_init(void) {
     o->oVelY = (o->oHomeY - o->oPosY) / 30.0f;
     o->oForwardVel = o->oStarSpawnDisFromHome / 30.0f;
     o->oStarSpawnVelY = o->oPosY;
-    if (o->oBehParams2ndByte == 0 || gCurrCourseNum == COURSE_BBH) {
-        cutscene_object(CUTSCENE_STAR_SPAWN, o);
-    } else {
-        cutscene_object(CUTSCENE_RED_COIN_STAR_SPAWN, o);
-    }
+    cutscene_object((o->oBehParams2ndByte == 0 || gCurrCourseNum == COURSE_BBH) ? CUTSCENE_STAR_SPAWN : CUTSCENE_RED_COIN_STAR_SPAWN, o);
     set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
     o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
     cur_obj_become_intangible();
@@ -63,9 +59,7 @@ void bhv_star_spawn_loop(void) {
     switch (o->oAction) {
         case 0:
             o->oFaceAngleYaw += 0x1000;
-            if (o->oTimer > 20) {
-                o->oAction = 1;
-            }
+            if (o->oTimer > 20) o->oAction = 1;
             break;
 
         case 1:
@@ -163,21 +157,16 @@ void bhv_hidden_red_coin_star_init(void) {
         starObj->oBehParams = o->oBehParams;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
-
     o->oHiddenStarTriggerCounter = 8 - numRedCoinsRemaining;
 }
 
 void bhv_hidden_red_coin_star_loop(void) {
     struct Object *starMarker = cur_obj_nearest_object_with_behavior(bhvRedCoinStarMarker);
-    if (starMarker != NULL && (o->oPosY - starMarker->oPosY) > 2000.0f) {
-        obj_mark_for_deletion(starMarker);
-    }
+    if (starMarker != NULL && (o->oPosY - starMarker->oPosY) > 2000.0f) obj_mark_for_deletion(starMarker);
     gRedCoinsCollected = o->oHiddenStarTriggerCounter;
     switch (o->oAction) {
         case 0:
-            if (o->oHiddenStarTriggerCounter == 8) {
-                o->oAction = 1;
-            }
+            if (o->oHiddenStarTriggerCounter == 8) o->oAction = 1;
             break;
 
         case 1:

@@ -31,9 +31,7 @@ void bhv_bobomb_explosion_bubble_loop(void) {
         spawn_object(o, MODEL_SMALL_WATER_SPLASH, bhvObjectWaterSplash);
     }
 
-    if (o->oTimer >= 61) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->oTimer >= 61) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     o->oPosY += o->oVelY;
     o->oTimer++;
 }

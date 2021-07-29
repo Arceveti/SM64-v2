@@ -69,9 +69,7 @@ void bhv_moving_yellow_coin_loop(void) {
             } else {
                 cur_obj_become_tangible();
             }
-            if (o->oTimer >= 301) {
-                o->oAction = MOV_YCOIN_ACT_BLINKING;
-            }
+            if (o->oTimer >= 301) o->oAction = MOV_YCOIN_ACT_BLINKING;
             break;
 
         case MOV_YCOIN_ACT_BLINKING:
@@ -116,9 +114,7 @@ void bhv_moving_blue_coin_loop(void) {
 
     switch (o->oAction) {
         case MOV_BCOIN_ACT_STILL:
-            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500)) {
-                o->oAction = MOV_BCOIN_ACT_MOVING;
-            }
+            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500)) o->oAction = MOV_BCOIN_ACT_MOVING;
             break;
 
         case MOV_BCOIN_ACT_MOVING:
@@ -131,9 +127,7 @@ void bhv_moving_blue_coin_loop(void) {
             } else {
                 o->oForwardVel *= 0.98f;
             }
-            if (o->oForwardVel > TERMINAL_GRAVITY_VELOCITY) {
-                o->oForwardVel = TERMINAL_GRAVITY_VELOCITY;
-            }
+            if (o->oForwardVel > TERMINAL_GRAVITY_VELOCITY) o->oForwardVel = TERMINAL_GRAVITY_VELOCITY;
             obj_flicker_and_disappear(o, 600);
             break;
     }
@@ -158,28 +152,16 @@ void blue_coin_sliding_away_from_mario(void) {
     o->oForwardVel = 15.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
 
-    if (coin_step(&collisionFlags)) {
-        o->oVelY += 18.0f;
-    }
-    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
-        o->oAction = MOV_BCOIN_ACT_STOPPED; /* bit 1 */
-    }
-    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
-        o->oAction = MOV_BCOIN_ACT_SLOWING_DOWN;
-    }
+    if (coin_step(&collisionFlags)) o->oVelY += 18.0f;
+    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) o->oAction = MOV_BCOIN_ACT_STOPPED; /* bit 1 */
+    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) o->oAction = MOV_BCOIN_ACT_SLOWING_DOWN;
 }
 
 void blue_coin_sliding_slow_down(void) {
     s16 collisionFlags;
-
     coin_step(&collisionFlags);
-
-    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) {
-        o->oAction = MOV_BCOIN_ACT_MOVING;
-    }
-    if (o->oTimer >= 151) {
-        o->oAction = MOV_BCOIN_ACT_STOPPED;
-    }
+    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) o->oAction = MOV_BCOIN_ACT_MOVING;
+    if (o->oTimer >= 151) o->oAction = MOV_BCOIN_ACT_STOPPED;
 }
 
 void bhv_blue_coin_sliding_loop(void) {
@@ -187,9 +169,7 @@ void bhv_blue_coin_sliding_loop(void) {
 
     switch (o->oAction) {
         case MOV_BCOIN_ACT_STILL:
-            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) {
-                o->oAction = 1;
-            }
+            if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) o->oAction = 1;
             set_object_visibility(o, 3000);
             break;
 
@@ -204,9 +184,7 @@ void bhv_blue_coin_sliding_loop(void) {
 
         case MOV_BCOIN_ACT_STOPPED:
             coin_step(&collisionFlags);
-            if (o->oTimer >= 61) {
-                o->oAction = MOV_BCOIN_ACT_FLICKERING;
-            }
+            if (o->oTimer >= 61) o->oAction = MOV_BCOIN_ACT_FLICKERING;
             break;
 
         case MOV_BCOIN_ACT_FLICKERING:
@@ -261,9 +239,7 @@ void bhv_blue_coin_jumping_loop(void) {
 
         case MOV_BCOIN_ACT_STOPPED:
             coin_step(&collisionFlags);
-            if (o->oTimer >= 61) {
-                o->oAction = MOV_BCOIN_ACT_FLICKERING;
-            }
+            if (o->oTimer >= 61) o->oAction = MOV_BCOIN_ACT_FLICKERING;
             break;
 
         case MOV_BCOIN_ACT_FLICKERING:

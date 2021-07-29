@@ -20,9 +20,7 @@ void bhv_seesaw_platform_init(void) {
 
     // The S-shaped seesaw platform in BitS is large, so increase its collision
     // distance
-    if (o->oBehParams2ndByte == 2) {
-        o->oCollisionDistance = 2000.0f;
-    }
+    if (o->oBehParams2ndByte == 2) o->oCollisionDistance = 2000.0f;
 }
 
 /**
@@ -31,9 +29,7 @@ void bhv_seesaw_platform_init(void) {
 void bhv_seesaw_platform_update(void) {
     o->oFaceAnglePitch += (s32) o->oSeesawPlatformPitchVel;
 
-    if (absf(o->oSeesawPlatformPitchVel) > 10.0f) {
-        cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
-    }
+    if (absf(o->oSeesawPlatformPitchVel) > 10.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
 
     if (gMarioObject->platform == o) {
         // Rotate toward mario

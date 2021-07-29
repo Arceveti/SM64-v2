@@ -30,9 +30,7 @@ struct ExclamationBoxContents sExclamationBoxContents[] = { {  0, 0, 0, MODEL_MA
                                                             { 99, 0, 0, 0,                      NULL                     } };
 
 void bhv_rotating_exclamation_box_loop(void) {
-    if (o->parentObj->oAction != EXCLAMATION_BOX_ACT_OUTLINE) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->parentObj->oAction != EXCLAMATION_BOX_ACT_OUTLINE) obj_mark_for_deletion(o);
 }
 
 void exclamation_box_act_init(void) {
@@ -97,11 +95,9 @@ void exclamation_box_act_scaling(void) {
     o->oGraphYOffset                  = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f;
     o->oExclamationBoxScaleAngle += 0x1000;
     o->header.gfx.scale[0] = o->oExclamationBoxHorizontalScale * 2.0f;
-    o->header.gfx.scale[1] = o->oExclamationBoxVerticalScale * 2.0f;
+    o->header.gfx.scale[1] = o->oExclamationBoxVerticalScale   * 2.0f;
     o->header.gfx.scale[2] = o->oExclamationBoxHorizontalScale * 2.0f;
-    if (o->oTimer == 7) {
-        o->oAction = EXCLAMATION_BOX_ACT_EXPLODE;
-    }
+    if (o->oTimer == 7) o->oAction = EXCLAMATION_BOX_ACT_EXPLODE;
 }
 
 void exclamation_box_spawn_contents(struct ExclamationBoxContents *contentsList, u8 boxType) {
@@ -114,9 +110,7 @@ void exclamation_box_spawn_contents(struct ExclamationBoxContents *contentsList,
             contentsObj->oForwardVel = 3.0f;
             contentsObj->oMoveAngleYaw = gMarioObject->oMoveAngleYaw;
             o->oBehParams |= contentsList->behParams << 24;
-            if (contentsList->model == 122) {
-                o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
-            }
+            if (contentsList->model == 122) o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
             break;
         }
         contentsList++;
@@ -141,9 +135,7 @@ void exclamation_box_act_explode(void) {
 }
 
 void exclamation_box_act_wait_for_respawn(void) {
-    if (o->oTimer > 300) {
-        o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
-    }
+    if (o->oTimer > 300) o->oAction = EXCLAMATION_BOX_ACT_ACTIVE;
 }
 
 void (*sExclamationBoxActions[])(void) = { exclamation_box_act_init,    exclamation_box_act_outline,

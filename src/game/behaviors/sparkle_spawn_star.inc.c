@@ -13,14 +13,8 @@ struct ObjectHitbox sSparkleSpawnStarHitbox = {
 };
 
 void bhv_spawned_star_init(void) {
-    s32 params;
-    if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) {
-        o->oBehParams = o->parentObj->oBehParams;
-    }
-    params = (o->oBehParams >> 24) & 0xFF;
-    if (save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & (1 << params)) {
-        cur_obj_set_model(MODEL_TRANSPARENT_STAR);
-    }
+    if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) o->oBehParams = o->parentObj->oBehParams;
+    if (save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & (1 << ((o->oBehParams >> 24) & 0xFF))) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 }
 
@@ -51,9 +45,7 @@ void set_y_home_to_pos(void) {
 }
 
 void slow_star_rotation(void) {
-    if (o->oAngleVelYaw > 0x400) {
-        o->oAngleVelYaw -= 0x40;
-    }
+    if (o->oAngleVelYaw > 0x400) o->oAngleVelYaw -= 0x40;
 }
 
 void bhv_spawned_star_loop(void) {
@@ -91,9 +83,7 @@ void bhv_spawned_star_loop(void) {
             }
         }
     } else if (o->oAction == 1) {
-        if (o->oVelY < -4.0f) {
-            o->oVelY = -4.0f;
-        }
+        if (o->oVelY < -4.0f) o->oVelY = -4.0f;
         if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
             gObjCutsceneDone = TRUE;
             o->oVelY = 0;

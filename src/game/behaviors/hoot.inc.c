@@ -24,24 +24,13 @@ void hoot_floor_bounce(void) {
     f32 floorY;
 
     floorY = hoot_find_next_floor(&floorGeo, 375.0f);
-    if (floorY + 75.0f > o->oPosY) {
-        o->oMoveAnglePitch -= 3640.8888f;
-    }
+    if (floorY + 75.0f > o->oPosY) o->oMoveAnglePitch -= 3640.8888f;
     floorY = hoot_find_next_floor(&floorGeo, 200.0f);
-    if (floorY + 125.0f > o->oPosY) {
-        o->oMoveAnglePitch -= 7281.7776f;
-    }
+    if (floorY + 125.0f > o->oPosY) o->oMoveAnglePitch -= 7281.7776f;
     floorY = hoot_find_next_floor(&floorGeo, 0);
-    if (floorY + 125.0f > o->oPosY) {
-        o->oPosY = floorY + 125.0f;
-    }
-    if (o->oMoveAnglePitch < -21845.3328f) {
-        o->oMoveAnglePitch = -21845;
-    }
+    if (floorY + 125.0f > o->oPosY) o->oPosY = floorY + 125.0f;
+    if (o->oMoveAnglePitch < -21845.3328f) o->oMoveAnglePitch = -21845;
 }
-
-// sp30 = fastOscY
-// sp34 = speed
 
 void hoot_free_step(s16 fastOscY, s32 speed) {
     struct FloorGeometry *floorGeo;
@@ -67,20 +56,14 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
         o->oPosZ = zPrev;
     }
 
-    if (animFrame == 0) {
-        cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
-    }
+    if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
 }
 
 void hoot_player_set_yaw(void) {
     s16 stickX = gPlayer3Controller->rawStickX;
     s16 stickY = gPlayer3Controller->rawStickY;
-    if (stickX < 10 && stickX >= -9) {
-        stickX = 0;
-    }
-    if (stickY < 10 && stickY >= -9) {
-        stickY = 0;
-    }
+    if (stickX < 10 && stickX >= -9) stickX = 0;
+    if (stickY < 10 && stickY >= -9) stickY = 0;
     o->oMoveAngleYaw -= 5 * stickX;
 }
 
@@ -99,14 +82,8 @@ void hoot_carry_step(s32 speed) {
     o->oPosY -= o->oVelY + coss((s32)(animFrame * 6553.6f)) * 50.0f / 4;
     o->oPosZ += o->oVelZ;
 
-    if (animFrame == 0) {
-        cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
-    }
+    if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_SWISH_WATER);
 }
-
-// sp48 = xPrev
-// sp4c = yPrev
-// sp50 = zPrev
 
 void hoot_surface_collision(f32 xPrev, f32 zPrev) {
     struct FloorGeometry *floorGeo;
@@ -133,15 +110,9 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
         return;
     }
 
-    if (absf_2(o->oPosX) > 8000.0f) {
-        o->oPosX = xPrev;
-    }
-    if (absf_2(o->oPosZ) > 8000.0f) {
-        o->oPosZ = zPrev;
-    }
-    if (floorY + 125.0f > o->oPosY) {
-        o->oPosY = floorY + 125.0f;
-    }
+    if (absf_2(o->oPosX) > 8000.0f) o->oPosX = xPrev;
+    if (absf_2(o->oPosZ) > 8000.0f) o->oPosZ = zPrev;
+    if (floorY + 125.0f > o->oPosY) o->oPosY = floorY + 125.0f;
 }
 
 void hoot_act_ascent(void) {
@@ -157,9 +128,7 @@ void hoot_act_ascent(void) {
         o->header.gfx.animInfo.animFrame = 1;
     }
 
-    if (o->oPosY > 6500.0f) {
-        o->oAction = HOOT_ACT_CARRY;
-    }
+    if (o->oPosY > 6500.0f) o->oAction = HOOT_ACT_CARRY;
     hoot_carry_step(60);
 }
 
@@ -198,9 +167,7 @@ void hoot_action_loop(void) {
 
             hoot_carry_step(20);
 
-            if (o->oTimer >= 61) {
-                gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
-            }
+            if (o->oTimer >= 61) gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
             break;
     }
 
@@ -268,9 +235,7 @@ void bhv_hoot_loop(void) {
             if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK 
                 && cutscene_object_with_dialog(CUTSCENE_DIALOG, o, DIALOG_044)) {
                 set_mario_npc_dialog(MARIO_DIALOG_STOP);
-
                 cur_obj_become_tangible();
-
                 o->oHootAvailability = HOOT_AVAIL_READY_TO_FLY;
             }
             break;

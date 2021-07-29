@@ -24,21 +24,14 @@ struct SkeeterRelPos sSkeeterRelPos[] = {
 
 static void skeeter_spawn_waves(void) {
     s32 i;
-
-    for (i = 0; i < 4; i++) {
-        spawn_object_relative_with_scale(0, sSkeeterRelPos[i].relPosX, 0, sSkeeterRelPos[i].relPosZ, 0.8f, o,
-                                         MODEL_IDLE_WATER_WAVE, bhvSkeeterWave);
-    }
+    for (i = 0; i < 4; i++) spawn_object_relative_with_scale(0, sSkeeterRelPos[i].relPosX, 0, sSkeeterRelPos[i].relPosZ, 0.8f, o, MODEL_IDLE_WATER_WAVE, bhvSkeeterWave);
 }
 
 static void skeeter_act_idle(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         cur_obj_init_animation_with_sound(3);
         o->oForwardVel = 0.0f;
-
-        if (o->oTimer > o->oSkeeterWaitTime && cur_obj_check_if_near_animation_end()) {
-            o->oAction = SKEETER_ACT_WALK;
-        }
+        if (o->oTimer > o->oSkeeterWaitTime && cur_obj_check_if_near_animation_end()) o->oAction = SKEETER_ACT_WALK;
     } else {
         cur_obj_init_animation_with_sound(1);
 

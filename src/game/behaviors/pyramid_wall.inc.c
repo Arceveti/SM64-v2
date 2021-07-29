@@ -36,16 +36,12 @@ void bhv_ssl_moving_pyramid_wall_loop(void) {
     switch (o->oAction) {
         case PYRAMID_WALL_ACT_MOVING_DOWN:
             o->oVelY = -5.12f;
-            if (o->oTimer == 100) {
-                o->oAction = PYRAMID_WALL_ACT_MOVING_UP;
-            }
+            if (o->oTimer == 100) o->oAction = PYRAMID_WALL_ACT_MOVING_UP;
             break;
 
         case PYRAMID_WALL_ACT_MOVING_UP:
             o->oVelY = 5.12f;
-            if (o->oTimer == 100) {
-                o->oAction = PYRAMID_WALL_ACT_MOVING_DOWN;
-            }
+            if (o->oTimer == 100) o->oAction = PYRAMID_WALL_ACT_MOVING_DOWN;
             break;
     }
 

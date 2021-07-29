@@ -48,9 +48,7 @@ void bhv_kickable_board_loop(void) {
             }
             if (o->oTimer != 0) {
                 o->oKickableBoardRockingTimer -= 8;
-                if (o->oKickableBoardRockingTimer < 0) {
-                    o->oAction = KICKABLE_BOARD_ACT_IDLE_VERTICAL;
-                }
+                if (o->oKickableBoardRockingTimer < 0) o->oAction = KICKABLE_BOARD_ACT_IDLE_VERTICAL;
             } else {
                 init_kickable_board_rock();
             }

@@ -14,9 +14,7 @@ struct ObjectHitbox sKoopaShellHitbox = {
 
 #ifdef KOOPA_SHELL_BOXES_RESPAWN
 void shell_despawn(void) {
-    if (o->oTimer > 300) {
-        obj_flicker_and_disappear(o, 300);
-    }
+    if (o->oTimer > 300) obj_flicker_and_disappear(o, 300);
 }
 #endif
 
@@ -41,18 +39,14 @@ void bhv_koopa_shell_flame_loop(void) {
     }
     cur_obj_update_floor_height();
     cur_obj_move_using_fvel_and_gravity();
-    if (o->oFloorHeight > o->oPosY || o->oTimer > 10) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oFloorHeight > o->oPosY || o->oTimer > 10) obj_mark_for_deletion(o);
     o->oKoopaShellFlameScale -= 0.3f;
     cur_obj_scale(o->oKoopaShellFlameScale);
 }
 
 void bhv_koopa_shell_flame_spawn(void) {
     s32 i;
-    for (i = 0; i < 2; i++) {
-        spawn_object(o, MODEL_RED_FLAME, bhvKoopaShellFlame);
-    }
+    for (i = 0; i < 2; i++) spawn_object(o, MODEL_RED_FLAME, bhvKoopaShellFlame);
 }
 
 void koopa_shell_spawn_sparkles(f32 a) {
@@ -68,9 +62,7 @@ void bhv_koopa_shell_loop(void) {
         case 0:
             cur_obj_update_floor_and_walls();
             cur_obj_if_hit_wall_bounce_away();
-            if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-                o->oAction++;
-            }
+            if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oAction++;
             o->oFaceAngleYaw += 0x1000;
             cur_obj_move_standard(-20);
             koopa_shell_spawn_sparkles(10.0f);

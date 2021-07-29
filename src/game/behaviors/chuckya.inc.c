@@ -35,14 +35,10 @@ s32 approach_forward_vel(f32 *arr, f32 target, f32 amt) {
     s32 alreadyEqual = FALSE;
     if (arr[0] > target) {
         arr[0] -= amt;
-        if (arr[0] < target) {
-            arr[0] = target;
-        }
+        if (arr[0] < target) arr[0] = target;
     } else if (arr[0] < target) {
         arr[0] += amt;
-        if (arr[0] > target) {
-            arr[0] = target;
-        }
+        if (arr[0] > target) arr[0] = target;
     } else {
         alreadyEqual = TRUE;
     }
@@ -70,18 +66,12 @@ void chuckya_act_0(void) {
             break;
         case 1:
             approach_forward_vel(&o->oForwardVel, 30.0f, 4.0f);
-            if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > 0x4000) {
-                o->oSubAction = 2;
-            }
-            if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) {
-                o->oSubAction = 3;
-            }
+            if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > 0x4000) o->oSubAction = 2;
+            if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) o->oSubAction = 3;
             break;
         case 2:
             approach_forward_vel(&o->oForwardVel, 0, 4.0f);
-            if (o->oChuckyaSubActionTimer > 48) {
-                o->oSubAction = 0;
-            }
+            if (o->oChuckyaSubActionTimer > 48) o->oSubAction = 0;
             break;
         case 3:
             if (cur_obj_lateral_dist_to_home() < 500.0f) {
@@ -102,17 +92,13 @@ void chuckya_act_0(void) {
         o->oChuckyaSubActionTimer++;
     }
     cur_obj_init_animation_with_sound(4);
-    if (o->oForwardVel > 1.0f) {
-        cur_obj_play_sound_1(SOUND_AIR_CHUCKYA_MOVE);
-    }
+    if (o->oForwardVel > 1.0f) cur_obj_play_sound_1(SOUND_AIR_CHUCKYA_MOVE);
     print_debug_bottom_up("sp %d", o->oForwardVel);
 }
 
 void chuckya_act_1(void) {
     if (o->oSubAction == 0) {
-        if (cur_obj_init_animation_and_check_if_near_end(0)) {
-            o->oSubAction++;
-        }
+        if (cur_obj_init_animation_and_check_if_near_end(0)) o->oSubAction++;
         o->oChuckyaSubActionTimer = random_float() * 30.0f + 10.0f;
         o->oChuckyaNumPlayerEscapeActions = 0;
         o->oForwardVel = 0.0f;
@@ -128,9 +114,7 @@ void chuckya_act_1(void) {
                 cur_obj_init_animation_with_sound(1);
                 o->oMoveAngleYaw += INT_STATUS_GRABBED_MARIO;
                 if (o->oChuckyaSubActionTimer-- < 0) {
-                    if (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16) {
-                        o->oSubAction++;
-                    }
+                    if (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16) o->oSubAction++;
                 }
             }
         } else {
@@ -149,9 +133,7 @@ void chuckya_act_3(void) { // drop mario
     o->oForwardVel = 0;
     o->oVelY = 0;
     cur_obj_init_animation_with_sound(4);
-    if (o->oTimer > 100) {
-        o->oAction = 0;
-    }
+    if (o->oTimer > 100) o->oAction = 0;
 }
 
 void chuckya_act_2(void) {

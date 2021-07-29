@@ -58,9 +58,7 @@ void haunted_chair_act_0(void) {
                              4000.0f, 20.0f, 2.0f); // Fall over when the piano awakens
         }
     } else if (o->oHauntedChairSpinTimer != 0) {
-        if (o->oDistanceToMario < 500.0f) {
-            o->oHauntedChairSpinTimer--;
-        }
+        if (o->oDistanceToMario < 500.0f) o->oHauntedChairSpinTimer--;
         o->oTimer = 0.0f;
     } else {
         if ((o->oTimer & 0x8) != 0) {

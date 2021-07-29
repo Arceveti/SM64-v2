@@ -80,7 +80,5 @@ void bhv_ttc_2d_rotator_update(void) {
     }
 
     o->oAngleVelYaw = o->oFaceAngleYaw - startYaw;
-    if (o->oBehParams2ndByte == TTC_2D_ROTATOR_BP_HAND) {
-        load_object_collision_model();
-    }
+    if (o->oBehParams2ndByte == TTC_2D_ROTATOR_BP_HAND) load_object_collision_model();
 }

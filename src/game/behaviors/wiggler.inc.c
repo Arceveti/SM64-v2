@@ -76,7 +76,7 @@ void bhv_wiggler_body_part_update(void) {
 
     // TODO: What is this for?
     posOffset = -37.5f * o->header.gfx.scale[0];
-    dy = posOffset * coss(o->oFaceAnglePitch) - posOffset;
+    dy  = posOffset * coss(o->oFaceAnglePitch) - posOffset;
     dxz = posOffset * sins(o->oFaceAnglePitch);
     dx = dxz * sins(o->oFaceAngleYaw);
     dz = dxz * coss(o->oFaceAngleYaw);
@@ -91,18 +91,14 @@ void bhv_wiggler_body_part_update(void) {
         //  the floor
         o->oPosY -= 30.0f;
         cur_obj_update_floor_height();
-        if (o->oFloorHeight > o->oPosY) { // TODO: Check ineq swap
-            o->oPosY = o->oFloorHeight;
-        }
+        if (o->oFloorHeight > o->oPosY) o->oPosY = o->oFloorHeight; // TODO: Check ineq swap
     }
 
     segment->posY = o->oPosY;
 
     // Inherit walking animation speed from wiggler
     cur_obj_init_animation_with_accel_and_sound(0, o->parentObj->oWigglerWalkAnimSpeed);
-    if (o->parentObj->oWigglerWalkAnimSpeed == 0.0f) {
-        cur_obj_reverse_animation();
-    }
+    if (o->parentObj->oWigglerWalkAnimSpeed == 0.0f) cur_obj_reverse_animation();
 
     if (o->parentObj->oAction == WIGGLER_ACT_SHRINK) {
         cur_obj_become_intangible();
@@ -140,8 +136,7 @@ void wiggler_init_segments(void) {
 
         // Spawn each body part
         for (i = 1; i <= 3; i++) {
-            bodyPart =
-                spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGGLER_BODY, bhvWigglerBody);
+            bodyPart = spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGGLER_BODY, bhvWigglerBody);
             if (bodyPart != NULL) {
                 obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, 0);
                 bodyPart->header.gfx.animInfo.animFrame = (23 * i) % 26 - 1;
@@ -351,9 +346,7 @@ static void wiggler_act_knockback(void) {
  */
 static void wiggler_act_shrink(void) {
     if (o->oTimer >= 20) {
-        if (o->oTimer == 20) {
-            cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
-        }
+        if (o->oTimer == 20) cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
 
         // 4 is the default scale, so shrink to 1/4 of regular size
         if (approach_f32_ptr(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
@@ -411,8 +404,7 @@ void bhv_wiggler_update(void) {
             // Walking animation and sound
             cur_obj_init_animation_with_accel_and_sound(0, o->oWigglerWalkAnimSpeed);
             if (o->oWigglerWalkAnimSpeed != 0.0f) {
-                cur_obj_play_sound_at_anim_range(0, 13,
-                              o->oHealth >= 4 ? SOUND_OBJ_WIGGLER_LOW_PITCH : SOUND_OBJ_WIGGLER_HIGH_PITCH);
+                cur_obj_play_sound_at_anim_range(0, 13, o->oHealth >= 4 ? SOUND_OBJ_WIGGLER_LOW_PITCH : SOUND_OBJ_WIGGLER_HIGH_PITCH);
             } else {
                 cur_obj_reverse_animation();
             }
@@ -440,11 +432,11 @@ void bhv_wiggler_update(void) {
         }
 
         // Update segment 0 with data from the wiggler object
-        o->oWigglerSegments[0].posX = o->oPosX;
-        o->oWigglerSegments[0].posY = o->oPosY;
-        o->oWigglerSegments[0].posZ = o->oPosZ;
+        o->oWigglerSegments[0].posX  = o->oPosX;
+        o->oWigglerSegments[0].posY  = o->oPosY;
+        o->oWigglerSegments[0].posZ  = o->oPosZ;
         o->oWigglerSegments[0].pitch = o->oFaceAnglePitch;
-        o->oWigglerSegments[0].yaw = o->oFaceAngleYaw;
+        o->oWigglerSegments[0].yaw   = o->oFaceAngleYaw;
 
         // Update the rest of the segments to follow segment 0
         wiggler_update_segments();

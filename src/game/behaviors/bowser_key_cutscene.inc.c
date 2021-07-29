@@ -26,9 +26,7 @@ void bhv_bowser_key_unlock_door_loop(void) {
     } else {
         o->oBowserKeyScale = 1.0f;
     }
-    if (o->oTimer > 150) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > 150) obj_mark_for_deletion(o);
 }
 
 void bhv_bowser_key_course_exit_loop(void) {
@@ -45,7 +43,5 @@ void bhv_bowser_key_course_exit_loop(void) {
     } else {
         o->oBowserKeyScale = 0.2f;
     }
-    if (o->oTimer > 138) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > 138) obj_mark_for_deletion(o);
 }

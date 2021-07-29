@@ -62,19 +62,11 @@ void bhv_arrow_lift_loop(void) {
     switch (o->oAction) {
         case ARROW_LIFT_ACT_IDLE:
             // Wait 61 frames before moving.
-            if (o->oTimer > 60) {
-                if (gMarioObject->platform == o) {
-                    o->oAction = ARROW_LIFT_ACT_MOVING_AWAY;
-                }
-            }
-
+            if (o->oTimer > 60 && gMarioObject->platform == o) o->oAction = ARROW_LIFT_ACT_MOVING_AWAY;
             break;
 
         case ARROW_LIFT_ACT_MOVING_AWAY:
-            if (arrow_lift_move_away() == ARROW_LIFT_DONE_MOVING) {
-                o->oAction = ARROW_LIFT_ACT_MOVING_BACK;
-            }
-
+            if (arrow_lift_move_away() == ARROW_LIFT_DONE_MOVING) o->oAction = ARROW_LIFT_ACT_MOVING_BACK;
             break;
 
         case ARROW_LIFT_ACT_MOVING_BACK:

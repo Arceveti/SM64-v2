@@ -1,30 +1,24 @@
 // tower_platform.c.inc
 
 void bhv_wf_solid_tower_platform_loop(void) {
-    if (o->parentObj->oAction == 3) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->parentObj->oAction == 3) obj_mark_for_deletion(o);
 }
 
 void bhv_wf_elevator_tower_platform_loop(void) {
     switch (o->oAction) {
         case 0:
-            if (gMarioObject->platform == o) {
-                o->oAction++;
-            }
+            if (gMarioObject->platform == o) o->oAction = 1;
             break;
         case 1:
             cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
             if (o->oTimer > 140) {
-                o->oAction++;
+                o->oAction = 2;
             } else {
                 o->oPosY += 5.0f;
             }
             break;
         case 2:
-            if (o->oTimer > 60) {
-                o->oAction++;
-            }
+            if (o->oTimer > 60) o->oAction = 3;
             break;
         case 3:
             cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
@@ -44,15 +38,11 @@ void bhv_wf_sliding_tower_platform_loop(void) {
     s32 moveTimer = o->oPlatformWFTowerMoveDistance / o->oPlatformWFTowerForwardVel;
     switch (o->oAction) {
         case 0:
-            if (o->oTimer > moveTimer) {
-                o->oAction++;
-            }
+            if (o->oTimer > moveTimer) o->oAction = 1;
             o->oForwardVel = -o->oPlatformWFTowerForwardVel;
             break;
         case 1:
-            if (o->oTimer > moveTimer) {
-                o->oAction = 0;
-            }
+            if (o->oTimer > moveTimer) o->oAction = 0;
             o->oForwardVel = o->oPlatformWFTowerForwardVel;
             break;
     }
@@ -99,18 +89,14 @@ void bhv_tower_platform_group_loop(void) {
     o->oDistanceToMario = dist_between_objects(o, gMarioObject);
     switch (o->oAction) {
         case 0:
-            if (marioY > o->oHomeY - 1000.0f) {
-                o->oAction++;
-            }
+            if (marioY > o->oHomeY - 1000.0f) o->oAction = 1;
             break;
         case 1:
             spawn_wf_platform_group();
-            o->oAction++;
+            o->oAction = 2;
             break;
         case 2:
-            if (marioY < o->oHomeY - 1000.0f) {
-                o->oAction++;
-            }
+            if (marioY < o->oHomeY - 1000.0f) o->oAction = 3;
             break;
         case 3:
             o->oAction = 0;

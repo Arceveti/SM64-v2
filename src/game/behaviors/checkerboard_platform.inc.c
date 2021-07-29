@@ -9,9 +9,7 @@ void bhv_checkerboard_elevator_group_init(void) {
     s32 type;
     s32 i;
     struct Object *platformObj;
-    if (o->oBehParams2ndByte == 0) {
-        o->oBehParams2ndByte = 65;
-    }
+    if (o->oBehParams2ndByte == 0) o->oBehParams2ndByte = 65;
     relativePosY = o->oBehParams2ndByte * 10;
     type = (o->oBehParams >> 24) & 0XFF;
     for (i = 0; i < 2; i++) {
@@ -32,17 +30,13 @@ void checkerboard_plat_act_move_y(f32 vel, s32 time) {
     o->oAngleVelPitch = 0;
     o->oForwardVel = 0.0f;
     o->oVelY = vel;
-    if (o->oTimer > time) {
-        o->oAction++;
-    }
+    if (o->oTimer > time) o->oAction++;
 }
 
 void checkerboard_plat_act_rotate(s32 nextAction, s16 pitchAmt) {
     o->oVelY = 0.0f;
     o->oAngleVelPitch = pitchAmt;
-    if (o->oTimer + 1 == 0x8000 / absi(pitchAmt)) {
-        o->oAction = nextAction;
-    }
+    if (o->oTimer + 1 == 0x8000 / absi(pitchAmt)) o->oAction = nextAction;
     o->oCheckerBoardPlatformRotateAction = nextAction;
 }
 
@@ -53,16 +47,10 @@ void bhv_checkerboard_platform_init(void) {
 void bhv_checkerboard_platform_loop(void) {
     f32 radius = o->oCheckerBoardPlatformRadius;
     o->oCheckerBoardPlatformRotateAction = 0;
-    if (o->oDistanceToMario < 1000.0f) {
-        cur_obj_play_sound_1(SOUND_ENV_ELEVATOR4);
-    }
+    if (o->oDistanceToMario < 1000.0f) cur_obj_play_sound_1(SOUND_ENV_ELEVATOR4);
     switch (o->oAction) {
         case 0:
-            if (o->oBehParams2ndByte == 0) {
-                o->oAction = 1;
-            } else {
-                o->oAction = 3;
-            }
+            o->oAction = (o->oBehParams2ndByte == 0) ? 1 : 3;
             break;
         case 1:
             checkerboard_plat_act_move_y(10.0f, o->oCheckerBoardPlatformHeight);
@@ -87,9 +75,7 @@ void bhv_checkerboard_platform_loop(void) {
     if (o->oCheckerBoardPlatformRotateAction == 1) {
         o->oAngleVelPitch = 0;
         o->oFaceAnglePitch &= ~0x7FFF;
-        cur_obj_move_using_fvel_and_gravity();
-    } else {
-        cur_obj_move_using_fvel_and_gravity();
     }
+    cur_obj_move_using_fvel_and_gravity();
     load_object_collision_model();
 }

@@ -36,9 +36,7 @@ void opened_cannon_act_0(void) {
 }
 
 void opened_cannon_act_4(void) {
-    if (o->oTimer == 0) {
-        cur_obj_play_sound_2(SOUND_OBJ_CANNON1);
-    }
+    if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON1);
     o->oPosY += 5.0f;
     o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
     o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
@@ -59,8 +57,7 @@ void opened_cannon_act_6(void) {
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
-                o->oMoveAngleYaw =
-                    sins(o->oCannonAngle) * 0x4000 + ((s16)(o->oBehParams2ndByte << 8));
+                o->oMoveAngleYaw = sins(o->oCannonAngle) * 0x4000 + ((s16)(o->oBehParams2ndByte << 8));
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
                 o->oCannonAngle = 0;
@@ -105,9 +102,7 @@ void (*sOpenedCannonActions[])(void) = { opened_cannon_act_0, opened_cannon_act_
 
 void bhv_cannon_base_loop(void) {
     cur_obj_call_action_function(sOpenedCannonActions);
-    if (o->oCannonTimeSinceActivated) {
-        o->oCannonTimeSinceActivated++;
-    }
+    if (o->oCannonTimeSinceActivated) o->oCannonTimeSinceActivated++;
     o->oInteractStatus = INT_STATUS_NONE;
 }
 

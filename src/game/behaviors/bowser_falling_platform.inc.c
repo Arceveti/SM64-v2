@@ -22,17 +22,13 @@ struct BowserFallingPlatformData sBowserFallingPlatform[] = {
 void falling_bowser_plat_act_start(void) {
     o->oBitsPlatformBowser = cur_obj_nearest_object_with_behavior(bhvBowser);
     obj_set_collision_data(o, sBowserFallingPlatform[o->oBehParams2ndByte].collision);
-    if (o->oBitsPlatformBowser != 0) {
-        o->oAction = BOWSER_BITS_PLAT_ACT_CHECK;
-    }
+    if (o->oBitsPlatformBowser != 0) o->oAction = BOWSER_BITS_PLAT_ACT_CHECK;
 }
 
 void falling_bowser_plat_act_check(void) {
     struct Object *bowser = o->oBitsPlatformBowser;
-    if (bowser->platform == o) {
-        if (bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
-            o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
-        }
+    if (bowser->platform == o && bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
+        o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
     }
     if (bowser->oHealth == 1 && (bowser->oAction == BOWSER_ACT_DANCE || bowser->oHeldState != HELD_FREE)) {
         o->oSubAction = 1;
@@ -51,9 +47,7 @@ void falling_bowser_plat_act_fall(void) {
     Vec3f pos;
     s16 angle;
     f32 val;
-    if (o->oTimer == 0 || o->oTimer == 22) {
-        cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_2);
-    }
+    if (o->oTimer == 0 || o->oTimer == 22) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_2);
     if (o->oTimer < 22) {
         set_environmental_camera_shake(SHAKE_ENV_FALLING_BITS_PLAT);
         o->oVelY = 8.0f;
@@ -75,9 +69,7 @@ void falling_bowser_plat_act_fall(void) {
         vec3f_copy_2(&o->oPosX, pos);
     }
     cur_obj_move_using_fvel_and_gravity();
-    if (o->oTimer > 300) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > 300) obj_mark_for_deletion(o);
 }
 
 void (*sFallingBowserPlatformActions[])(void) = {

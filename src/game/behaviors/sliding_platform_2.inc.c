@@ -20,9 +20,7 @@ void bhv_sliding_plat_2_init(void) {
 
     if (collisionDataIndex < 5 || collisionDataIndex > 6) {
         o->oBackAndForthPlatformVel = 15.0f;
-        if ((u16)(o->oBehParams >> 16) & 0x0040) {
-            o->oMoveAngleYaw += 0x8000;
-        }
+        if ((u16)(o->oBehParams >> 16) & 0x0040) o->oMoveAngleYaw += 0x8000;
     } else {
         o->oBackAndForthPlatformVel = 10.0f;
         if ((u16)(o->oBehParams >> 16) & 0x0040) {

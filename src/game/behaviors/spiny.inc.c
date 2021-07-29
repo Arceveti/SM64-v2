@@ -39,9 +39,7 @@ static u8 sSpinyWalkAttackHandlers[] = {
 static s32 spiny_check_active(void) {
     if (o->parentObj != o) {
         if (o->oDistanceToMario > 2500.0f) {
-            if (obj_has_behavior(o->parentObj, bhvEnemyLakitu)) {
-                o->parentObj->oEnemyLakituNumSpinies--;
-            }
+            if (obj_has_behavior(o->parentObj, bhvEnemyLakitu)) o->parentObj->oEnemyLakituNumSpinies--;
             obj_mark_for_deletion(o);
             return FALSE;
         }
@@ -73,11 +71,9 @@ static void spiny_act_walk(void) {
             }
 
             if (o->oSpinyTurningAwayFromWall) {
-                o->oSpinyTurningAwayFromWall =
-                    obj_resolve_collisions_and_turn(o->oSpinyTargetYaw, 0x80);
+                o->oSpinyTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oSpinyTargetYaw, 0x80);
             } else {
-                if (!(o->oSpinyTurningAwayFromWall =
-                          obj_bounce_off_walls_edges_objects(&o->oSpinyTargetYaw))) {
+                if (!(o->oSpinyTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oSpinyTargetYaw))) {
                     // Walk and occasionally randomly change direction
                     if (o->oSpinyTimeUntilTurn != 0) {
                         o->oSpinyTimeUntilTurn--;
@@ -164,11 +160,7 @@ static void spiny_act_thrown_by_lakitu(void) {
 
         cur_obj_move_standard(-78);
 
-        if (obj_check_attacks(&sSpinyHitbox, o->oAction)) {
-            if (o->parentObj != o) {
-                o->parentObj->oEnemyLakituNumSpinies--;
-            }
-        }
+        if (obj_check_attacks(&sSpinyHitbox, o->oAction) && o->parentObj != o) o->parentObj->oEnemyLakituNumSpinies--;
     }
 }
 

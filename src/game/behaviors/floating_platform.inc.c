@@ -21,9 +21,7 @@ void floating_platform_act_move_to_home(void) {
         o->oFaceAnglePitch = (dz * cny - dx * sny) * 2;
         o->oFaceAngleRoll = -(dx * cny + dz * sny) * 2;
         o->oVelY -= 1.0f;
-        if (o->oVelY < 0.0f) {
-            o->oVelY = 0.0f;
-        }
+        if (o->oVelY < 0.0f) o->oVelY = 0.0f;
         o->oFloatingPlatformMarioWeightWobbleOffset += o->oVelY;
         if (o->oFloatingPlatformMarioWeightWobbleOffset > 90.0f) {
             o->oFloatingPlatformMarioWeightWobbleOffset = 90.0f;

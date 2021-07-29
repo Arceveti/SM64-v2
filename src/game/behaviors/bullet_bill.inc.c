@@ -68,9 +68,7 @@ void bullet_bill_act_4(void) {
     o->oFaceAnglePitch += 0x1000;
     o->oFaceAngleRoll += 0x1000;
     o->oPosY += 20.0f;
-    if (o->oTimer > 90) {
-        o->oAction = 0;
-    }
+    if (o->oTimer > 90) o->oAction = 0;
 }
 
 void (*sBulletBillActions[])(void) = { bullet_bill_act_0, bullet_bill_act_1, bullet_bill_act_2,
@@ -78,7 +76,5 @@ void (*sBulletBillActions[])(void) = { bullet_bill_act_0, bullet_bill_act_1, bul
 
 void bhv_bullet_bill_loop(void) {
     cur_obj_call_action_function(sBulletBillActions);
-    if (cur_obj_check_interacted()) {
-        o->oAction = 4;
-    }
+    if (cur_obj_check_interacted()) o->oAction = 4;
 }

@@ -31,9 +31,7 @@ void bhv_flamethrower_flame_loop(void) {
     } else {
         cur_obj_move_using_fvel_and_gravity();
     }
-    if (o->oTimer > remainingTime) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > remainingTime) obj_mark_for_deletion(o);
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
@@ -44,19 +42,13 @@ void bhv_flamethrower_loop(void) {
     s32 model;
     if (o->oAction == 0) {
         if (gCurrLevelNum != LEVEL_BBH || gMarioOnMerryGoRound) {
-            if (o->oDistanceToMario < 2000.0f) {
-                o->oAction++;
-            }
+            if (o->oDistanceToMario < 2000.0f) o->oAction++;
         }
     } else if (o->oAction == 1) {
         model = MODEL_RED_FLAME;
         flameVel = 95.0f;
-        if (o->oBehParams2ndByte == 1) {
-            model = MODEL_BLUE_FLAME;
-        }
-        if (o->oBehParams2ndByte == 2) {
-            flameVel = 50.0f;
-        }
+        if (o->oBehParams2ndByte == 1) model = MODEL_BLUE_FLAME;
+        if (o->oBehParams2ndByte == 2) flameVel = 50.0f;
         flameTimeRemaining = 1;
         if (o->oTimer < 60) {
             flameTimeRemaining = 15;

@@ -14,9 +14,7 @@ struct ObjectHitbox sJumpingBoxHitbox = {
 
 void jumping_box_act_0(void) {
     if (o->oSubAction == 0) {
-        if (o->oJumpingBoxRandomTimer-- < 0) {
-            o->oSubAction++;
-        }
+        if (o->oJumpingBoxRandomTimer-- < 0)  o->oSubAction++;
         if (o->oTimer > 0) {
             o->oVelY = random_float() * 5.0f + 15.0f;
             o->oSubAction++;

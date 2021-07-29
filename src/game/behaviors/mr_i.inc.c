@@ -26,9 +26,7 @@ void mr_i_piranha_particle_act_0(void) {
 void mr_i_piranha_particle_act_1(void) {
     s32 i;
     obj_mark_for_deletion(o);
-    for (i = 0; i < 10; i++) {
-        spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
-    }
+    for (i = 0; i < 10; i++) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
 }
 
 void (*sMrIParticleActions[])(void) = { mr_i_piranha_particle_act_0, mr_i_piranha_particle_act_1 };
@@ -61,9 +59,7 @@ void bhv_mr_i_body_loop(void) {
         o->oAnimState = -1;
     } else {
         o->oAnimState++;
-        if (o->oAnimState == 15) {
-            o->parentObj->oMrIBlinking = FALSE;
-        }
+        if (o->oAnimState == 15) o->parentObj->oMrIBlinking = FALSE;
     }
     if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
         obj_mark_for_deletion(o);
@@ -80,15 +76,11 @@ void mr_i_act_spin_death(void) {
     if (o->oTimer < 64) {
         startYaw = o->oMoveAngleYaw;
         o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
-        if (startYaw < 0 && o->oMoveAngleYaw >= 0) {
-            cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
-        }
+        if (startYaw < 0 && o->oMoveAngleYaw >= 0) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
         o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
         cur_obj_shake_y(4.0f);
     } else if (o->oTimer < 96) {
-        if (o->oTimer == 64) {
-            cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
-        }
+        if (o->oTimer == 64) cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
         shakeY = (f32)(o->oTimer - 63) / 32;
         o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
         o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
@@ -111,9 +103,7 @@ void mr_i_act_spin_death(void) {
             }
         }
         o->oMrISize -= 0.2f * BBHScaleModifier;
-        if (o->oMrISize < 0) {
-            o->oMrISize = 0;
-        }
+        if (o->oMrISize < 0) o->oMrISize = 0; // Prevent negative scale
         cur_obj_scale(o->oMrISize);
     } else {
         obj_mark_for_deletion(o);
@@ -150,21 +140,15 @@ void mr_i_act_looking_at_mario(void) {
         }
         o->oMrISpinDirection = -1;
     }
-    if (!o->oMrISpinAmount) {
-        o->oMrISpinAngle = 120;
-    }
-    if (o->oMrISpinAmount > (1 << 16)) {
-        o->oAction = MR_I_ACT_SPIN_DEATH;
-    }
+    if (!o->oMrISpinAmount) o->oMrISpinAngle = 120;
+    if (o->oMrISpinAmount > (1 << 16)) o->oAction = MR_I_ACT_SPIN_DEATH;
     o->oMrISpinAngle--;
     if (!o->oMrISpinAngle) {
         o->oMrISpinAngle = 120;
         o->oMrISpinAmount = 0;
     }
     if (o->oMrISpinAmount < 5000) {
-        if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget) {
-            o->oMrIBlinking = TRUE;
-        }
+        if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget) o->oMrIBlinking = TRUE;
         if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 20) {
             spawn_mr_i_particle();
             o->oMrIParticleTimer = 0;
@@ -175,9 +159,7 @@ void mr_i_act_looking_at_mario(void) {
         o->oMrIParticleTimer = 0;
         o->oMrIParticleTimerTarget = (s32)(random_float() * 50.0f + 50.0f);
     }
-    if (o->oDistanceToMario > 800.0f) {
-        o->oAction = MR_I_ACT_IDLE;
-    }
+    if (o->oDistanceToMario > 800.0f) o->oAction = MR_I_ACT_IDLE;
 }
 
 void mr_i_act_idle(void) {
@@ -205,9 +187,7 @@ void mr_i_act_idle(void) {
         o->oMoveAngleYaw += o->oAngleVelYaw;
         o->oMrIParticleTimer = 30;
     }
-    if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 60) {
-        o->oMrIBlinking = TRUE;
-    }
+    if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 60) o->oMrIBlinking = TRUE;
     if (o->oMrIParticleTimerTarget + 80 < o->oMrIParticleTimer) {
         o->oMrIParticleTimer = 0;
         o->oMrIParticleTimerTarget = random_float() * 80.0f;
@@ -218,12 +198,8 @@ void mr_i_act_idle(void) {
 void mr_i_act_far_away(void) {
     obj_set_angle(o, 0, 0, 0);
     cur_obj_scale(o->oBehParams2ndByte + 1);
-    if (o->oTimer == 0) {
-        cur_obj_set_pos_to_home();
-    }
-    if (o->oDistanceToMario < 1500.0f) {
-        o->oAction = MR_I_ACT_IDLE;
-    }
+    if (o->oTimer == 0) cur_obj_set_pos_to_home();
+    if (o->oDistanceToMario < 1500.0f) o->oAction = MR_I_ACT_IDLE;
 }
 
 void (*sMrIActions[])(void) = { mr_i_act_far_away, mr_i_act_idle, mr_i_act_looking_at_mario, mr_i_act_spin_death };
@@ -243,10 +219,6 @@ struct ObjectHitbox sMrIHitbox = {
 void bhv_mr_i_loop(void) {
     obj_set_hitbox(o, &sMrIHitbox);
     cur_obj_call_action_function(sMrIActions);
-    if (o->oAction != MR_I_ACT_SPIN_DEATH) {
-        if (o->oDistanceToMario > 3000.0f || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
-            o->oAction = MR_I_ACT_FAR_AWAY;
-        }
-    }
+    if (o->oAction != MR_I_ACT_SPIN_DEATH && (o->oDistanceToMario > 3000.0f || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) o->oAction = MR_I_ACT_FAR_AWAY;
     o->oInteractStatus = INT_STATUS_NONE;
 }

@@ -13,12 +13,8 @@ void bhv_star_door_loop(void) {
     switch (o->oAction) {
         case STAR_DOOR_ACT_CLOSED:
             cur_obj_become_tangible();
-            if (o->oInteractStatus & (INT_STATUS_DOOR_PULLED | INT_STATUS_DOOR_PUSHED)) {
-                o->oAction = STAR_DOOR_ACT_OPENING;
-            }
-            if (doorObj != NULL && doorObj->oAction != STAR_DOOR_ACT_CLOSED) {
-                o->oAction = STAR_DOOR_ACT_OPENING;
-            }
+            if (o->oInteractStatus & (INT_STATUS_DOOR_PULLED | INT_STATUS_DOOR_PUSHED)) o->oAction = STAR_DOOR_ACT_OPENING;
+            if (doorObj != NULL && doorObj->oAction != STAR_DOOR_ACT_CLOSED) o->oAction = STAR_DOOR_ACT_OPENING;
             break;
         case STAR_DOOR_ACT_OPENING:
             if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0) {
@@ -30,14 +26,10 @@ void bhv_star_door_loop(void) {
             cur_obj_become_intangible();
             o->oLeftVel = -8.0f;
             star_door_update_pos();
-            if (o->oTimer >= 16) {
-                o->oAction = STAR_DOOR_ACT_OPEN;
-            }
+            if (o->oTimer >= 16) o->oAction = STAR_DOOR_ACT_OPEN;
             break;
         case STAR_DOOR_ACT_OPEN:
-            if (o->oTimer >= 31) {
-                o->oAction = STAR_DOOR_ACT_CLOSING;
-            }
+            if (o->oTimer >= 31) o->oAction = STAR_DOOR_ACT_CLOSING;
             break;
         case STAR_DOOR_ACT_CLOSING:
             if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0) {
@@ -48,9 +40,7 @@ void bhv_star_door_loop(void) {
             }
             o->oLeftVel = 8.0f;
             star_door_update_pos();
-            if (o->oTimer >= 16) {
-                o->oAction = STAR_DOOR_ACT_RESET;
-            }
+            if (o->oTimer >= 16) o->oAction = STAR_DOOR_ACT_RESET;
             break;
         case STAR_DOOR_ACT_RESET:
             o->oInteractStatus = INT_STATUS_NONE;

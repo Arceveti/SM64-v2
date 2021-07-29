@@ -33,20 +33,14 @@ void bhv_ttc_pendulum_update(void) {
     if (gTTCSpeedSetting != TTC_SPEED_STOPPED) {
 
         // Play sound
-        if (o->oTTCPendulumSoundTimer != 0) {
-            if (--o->oTTCPendulumSoundTimer == 0) {
-                cur_obj_play_sound_2(SOUND_GENERAL_PENDULUM_SWING);
-            }
-        }
+        if (o->oTTCPendulumSoundTimer != 0 && --o->oTTCPendulumSoundTimer == 0) cur_obj_play_sound_2(SOUND_GENERAL_PENDULUM_SWING);
 
         // Stay still for a while
         if (o->oTTCPendulumDelay != 0) {
             o->oTTCPendulumDelay--;
         } else {
             // Accelerate in the direction that moves angle to zero
-            if (o->oTTCPendulumAngle * o->oTTCPendulumAccelDir > 0.0f) {
-                o->oTTCPendulumAccelDir = -o->oTTCPendulumAccelDir;
-            }
+            if (o->oTTCPendulumAngle * o->oTTCPendulumAccelDir > 0.0f) o->oTTCPendulumAccelDir = -o->oTTCPendulumAccelDir;
             o->oTTCPendulumAngleVel += o->oTTCPendulumAngleAccel * o->oTTCPendulumAccelDir;
 
             // Ignoring floating point imprecision, angle vel should always be
@@ -66,9 +60,7 @@ void bhv_ttc_pendulum_update(void) {
                     }
 
                     // Pick a random delay
-                    if (random_u16() % 2 == 0) {
-                        o->oTTCPendulumDelay = random_linear_offset(5, 30);
-                    }
+                    if (random_u16() % 2 == 0) o->oTTCPendulumDelay = random_linear_offset(5, 30);
                 }
 
                 // Play the sound 15 frames after beginning to move

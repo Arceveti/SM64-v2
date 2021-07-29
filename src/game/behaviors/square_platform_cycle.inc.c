@@ -12,24 +12,16 @@ void bhv_squarish_path_moving_loop(void) {
             o->oAction = (o->oBehParams2ndByte & 3) + 1;
             break;
         case 1:
-            if (square_plat_set_yaw_until_timer(0, 60)) {
-                o->oAction++;
-            }
+            if (square_plat_set_yaw_until_timer(     0, 60)) o->oAction = 2;
             break;
         case 2:
-            if (square_plat_set_yaw_until_timer(0x4000, 60)) {
-                o->oAction++;
-            }
+            if (square_plat_set_yaw_until_timer(0x4000, 60)) o->oAction = 3;
             break;
         case 3:
-            if (square_plat_set_yaw_until_timer(0x8000, 60)) {
-                o->oAction++;
-            }
+            if (square_plat_set_yaw_until_timer(0x8000, 60)) o->oAction = 4;
             break;
         case 4:
-            if (square_plat_set_yaw_until_timer(0xc000, 60)) {
-                o->oAction = 1;
-            }
+            if (square_plat_set_yaw_until_timer(0xc000, 60)) o->oAction = 1;
             break;
         default:
             break;

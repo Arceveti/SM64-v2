@@ -30,9 +30,7 @@ void bhv_wind_loop(void) {
         obj_set_billboard(o);
         cur_obj_scale(1.0f);
     }
-    if (o->oTimer > 8) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > 8) obj_mark_for_deletion(o);
     o->oFaceAnglePitch += 4000.0f + 2000.0f * random_float();
     o->oFaceAngleYaw += 4000.0f + 2000.0f * random_float();
     cur_obj_move_using_fvel_and_gravity();

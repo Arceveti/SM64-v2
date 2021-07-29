@@ -43,9 +43,7 @@ static void fire_piranha_plant_act_hide(void) {
         approach_f32_ptr(&o->oFirePiranhaPlantDeathSpinVel, 0.0f, 200.0f);
 
         if (cur_obj_check_if_near_animation_end()) {
-            if (--o->oFirePiranhaPlantDeathSpinTimer == 0) {
-                cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
-            }
+            if (--o->oFirePiranhaPlantDeathSpinTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
         }
     } else if (approach_f32_ptr(&o->oFirePiranhaPlantScale, 0.0f,
                                 0.04f * o->oFirePiranhaPlantNeutralScale)) {
@@ -55,9 +53,7 @@ static void fire_piranha_plant_act_hide(void) {
             o->oFirePiranhaPlantActive = FALSE;
 
             if ((u16)(o->oBehParams >> 16) != 0 && o->oHealth == 0) {
-                if (++sNumKilledFirePiranhaPlants == 5) {
-                    spawn_default_star(-6300.0f, -1850.0f, -6300.0f);
-                }
+                if (++sNumKilledFirePiranhaPlants == 5) spawn_default_star(-6300.0f, -1850.0f, -6300.0f);
 
                 obj_die_if_health_non_positive();
                 set_object_respawn_info_bits(o, 1);
@@ -117,9 +113,7 @@ void bhv_fire_piranha_plant_update(void) {
 
     if (obj_check_attacks(&sFirePiranhaPlantHitbox, o->oAction)) {
         if (--o->oHealth < 0) {
-            if (o->oFirePiranhaPlantActive) {
-                sNumActiveFirePiranhaPlants--;
-            }
+            if (o->oFirePiranhaPlantActive) sNumActiveFirePiranhaPlants--;
         } else {
             cur_obj_init_animation_with_sound(2);
         }

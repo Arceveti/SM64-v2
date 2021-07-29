@@ -14,9 +14,9 @@ static struct ObjectHitbox sWhirlpoolHitbox = {
 
 void bhv_whirlpool_init(void) {
     o->oWhirlpoolInitFacePitch = o->oFaceAnglePitch;
-    o->oWhirlpoolInitFaceRoll = o->oFaceAngleRoll;
+    o->oWhirlpoolInitFaceRoll  = o->oFaceAngleRoll;
     o->oFaceAnglePitch = 0;
-    o->oFaceAngleRoll = 0;
+    o->oFaceAngleRoll  = 0;
 }
 
 void whirlpool_set_hitbox(void) {
@@ -26,11 +26,11 @@ void whirlpool_set_hitbox(void) {
 void whirpool_orient_graph(void) {
     f32 cosPitch = coss(o->oFaceAnglePitch);
     f32 sinPitch = sins(o->oFaceAnglePitch);
-    f32 cosRoll = coss(o->oFaceAngleRoll);
-    f32 sinRoll = sins(o->oFaceAngleRoll);
-    f32 normalX = sinRoll * cosPitch;
-    f32 normalY = cosPitch * cosRoll;
-    f32 normalZ = sinPitch;
+    f32 cosRoll  = coss(o->oFaceAngleRoll);
+    f32 sinRoll  = sins(o->oFaceAngleRoll);
+    f32 normalX  = sinRoll * cosPitch;
+    f32 normalY  = cosPitch * cosRoll;
+    f32 normalZ  = sinPitch;
     obj_orient_graph(o, normalX, normalY, normalZ);
 }
 
@@ -40,14 +40,14 @@ void bhv_whirlpool_loop(void) {
 
         // not sure if actually an array
         gEnvFxBubbleConfig[ENVFX_STATE_PARTICLECOUNT] = 60;
-        gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] = o->oPosX;
-        gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] = o->oPosZ;
+        gEnvFxBubbleConfig[ENVFX_STATE_SRC_X ] = o->oPosX;
+        gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z ] = o->oPosZ;
         gEnvFxBubbleConfig[ENVFX_STATE_DEST_X] = o->oPosX;
         gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y] = o->oPosY;
         gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z] = o->oPosZ;
-        gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] = o->oPosY + 800.0f;
-        gEnvFxBubbleConfig[ENVFX_STATE_PITCH] = o->oWhirlpoolInitFacePitch;
-        gEnvFxBubbleConfig[ENVFX_STATE_YAW] = o->oWhirlpoolInitFaceRoll;
+        gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y ] = o->oPosY + 800.0f;
+        gEnvFxBubbleConfig[ENVFX_STATE_PITCH ] = o->oWhirlpoolInitFacePitch;
+        gEnvFxBubbleConfig[ENVFX_STATE_YAW   ] = o->oWhirlpoolInitFaceRoll;
 
         whirpool_orient_graph();
 

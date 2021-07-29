@@ -23,9 +23,7 @@ static void bird_act_inactive(void) {
 
             cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
 
-            for (i = 0; i < 6; i++) {
-                spawn_object(o, MODEL_BIRDS, bhvBird);
-            }
+            for (i = 0; i < 6; i++) spawn_object(o, MODEL_BIRDS, bhvBird);
 
             // The spawner bird's home acts as its target location.
             o->oHomeX = -20.0f;

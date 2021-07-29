@@ -48,18 +48,14 @@ void bhv_blue_fish_movement_loop(void) {
         case BLUE_FISH_ACT_TURN:
             cur_obj_init_animation_with_accel_and_sound(0, 2.0f);
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
-            if (o->oTimer == 15) {
-                o->oAction++;
-            }
+            if (o->oTimer == 15) o->oAction++;
             break;  
         // Animates and adjusts pitch to an upward direction.
         case BLUE_FISH_ACT_ASCEND:
             cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
             
             // Progresses oAction to BLUE_FISH_ACT_TURN_BACK after elapsed time. 
-            if (o->oTimer >= o->oBlueFishRandomTime + 60) {
-                o->oAction++;
-            }
+            if (o->oTimer >= o->oBlueFishRandomTime + 60) o->oAction++;
             
             // Adjusts pitch angle. Direction relies on time not passed.
             if (o->oTimer < (o->oBlueFishRandomTime + 60) / 2) {
@@ -74,9 +70,7 @@ void bhv_blue_fish_movement_loop(void) {
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
             
             // Sets the fish back to the BLUE_FISH_ACT_DIVE phase.
-            if (o->oTimer == 15) {
-                o->oAction = BLUE_FISH_ACT_DIVE;
-            }
+            if (o->oTimer == 15) o->oAction = BLUE_FISH_ACT_DIVE;
             break;
     }
     
@@ -114,9 +108,7 @@ void bhv_tank_fish_group_loop(void) {
             
         // Sets next oAction phase if Mario is not in rooms fifteen and seven.
         case BLUE_FISH_ACT_ROOM:
-            if (gMarioCurrentRoom != 15 && gMarioCurrentRoom != 7) {
-                o->oAction++;
-            }
+            if (gMarioCurrentRoom != 15 && gMarioCurrentRoom != 7) o->oAction++;
             break;
             
         // Sets oAction to the BLUE_FISH_ACT_SPAWN phase.

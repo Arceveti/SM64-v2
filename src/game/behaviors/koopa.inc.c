@@ -61,7 +61,7 @@ struct KoopaTheQuickProperties {
  * Properties for the BoB race and the THI race.
  */
 static struct KoopaTheQuickProperties sKoopaTheQuickProperties[] = {
-    { DIALOG_005, DIALOG_007, bob_seg7_trajectory_koopa, { 3030, 4500, -4600 } },
+    { DIALOG_005, DIALOG_007, bob_seg7_trajectory_koopa, { 3030,  4500, -4600 } },
     { DIALOG_009, DIALOG_031, thi_seg7_trajectory_koopa, { 7100, -1300, -6000 } }
 };
 
@@ -90,14 +90,7 @@ void bhv_koopa_init(void) {
  * Play the appropriate footstep sound on the two provided animation frames.
  */
 static void koopa_play_footstep_sound(s8 animFrame1, s8 animFrame2) {
-    s32 sound;
-    if (o->header.gfx.scale[0] > 1.5f) {
-        sound = SOUND_OBJ_KOOPA_THE_QUICK_WALK;
-    } else {
-        sound = SOUND_OBJ_KOOPA_WALK;
-    }
-
-    cur_obj_play_sound_at_anim_range(animFrame1, animFrame2, sound);
+    cur_obj_play_sound_at_anim_range(animFrame1, animFrame2, (o->header.gfx.scale[0] > 1.5f) ? SOUND_OBJ_KOOPA_THE_QUICK_WALK : SOUND_OBJ_KOOPA_WALK);
 }
 
 /**
@@ -157,9 +150,7 @@ static void koopa_walk(void) {
  */
 static void koopa_walk_stop(void) {
     obj_forward_vel_approach(0.0f, 1.0f * o->oKoopaAgility);
-    if (cur_obj_init_anim_and_check_if_end(10)) {
-        o->oAction = KOOPA_SHELLED_ACT_STOPPED;
-    }
+    if (cur_obj_init_anim_and_check_if_end(10)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
 }
 
 /**
@@ -171,9 +162,7 @@ static void koopa_shelled_act_walk(void) {
         o->oKoopaTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oKoopaTargetYaw, 0x200);
     } else {
         // If far from home, then begin turning toward home
-        if (o->oDistanceToMario >= 25000.0f) {
-            o->oKoopaTargetYaw = o->oAngleToMario;
-        }
+        if (o->oDistanceToMario >= 25000.0f) o->oKoopaTargetYaw = o->oAngleToMario;
 
         o->oKoopaTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oKoopaTargetYaw);
         cur_obj_rotate_yaw_toward(o->oKoopaTargetYaw, 0x200);
@@ -209,9 +198,7 @@ static void koopa_shelled_act_run_from_mario(void) {
     }
 
     if (o->oTimer > 30 && o->oDistanceToMario > 800.0f) {
-        if (obj_forward_vel_approach(0.0f, 1.0f)) {
-            o->oAction = KOOPA_SHELLED_ACT_STOPPED;
-        }
+        if (obj_forward_vel_approach(0.0f, 1.0f)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
     } else {
         cur_obj_rotate_yaw_toward(o->oAngleToMario + 0x8000, 0x400);
         obj_forward_vel_approach(17.0f, 1.0f);
@@ -224,10 +211,8 @@ static void koopa_shelled_act_run_from_mario(void) {
 static void koopa_dive_update_speed(f32 decel) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         obj_forward_vel_approach(0.0f, decel);
-        if (o->oForwardVel > 5.0f) {
-            if (!(o->oTimer % 4)) {
-                spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
-            }
+        if (o->oForwardVel > 5.0f && !(o->oTimer % 4)) {
+            spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
         }
     }
 }
@@ -237,9 +222,7 @@ static void koopa_dive_update_speed(f32 decel) {
  */
 static void koopa_shelled_act_lying(void) {
     if (o->oForwardVel != 0.0f) {
-        if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-            o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
-        }
+        if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
 
         cur_obj_init_anim_extend(5);
         koopa_dive_update_speed(0.3f);
@@ -264,7 +247,8 @@ void shelled_koopa_attack_handler(s32 attackType) {
         o->oForwardVel = 20.0f;
 
         // If attacked from the side, get knocked away from mario
-        if (attackType != ATTACK_FROM_ABOVE && attackType != ATTACK_GROUND_POUND_OR_TWIRL) {
+        if (attackType != ATTACK_FROM_ABOVE
+         && attackType != ATTACK_GROUND_POUND_OR_TWIRL) {
             o->oMoveAngleYaw = obj_angle_to_object(gMarioObject, o);
         }
 
@@ -312,9 +296,7 @@ static void koopa_shelled_update(void) {
     } else {
         // If tiny koopa, die after attacking mario.
         obj_handle_attacks(&sKoopaHitbox, KOOPA_SHELLED_ACT_DIE, sKoopaUnshelledAttackHandlers);
-        if (o->oAction == KOOPA_SHELLED_ACT_DIE) {
-            obj_die_if_health_non_positive();
-        }
+        if (o->oAction == KOOPA_SHELLED_ACT_DIE) obj_die_if_health_non_positive();
     }
 
     cur_obj_move_standard(-78);
@@ -337,9 +319,7 @@ static void koopa_unshelled_act_run(void) {
         o->oKoopaTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oKoopaTargetYaw, 0x600);
     } else {
         // If far from home, then turn toward home
-        if (o->oDistanceToMario >= 25000.0f) {
-            o->oKoopaTargetYaw = o->oAngleToMario;
-        }
+        if (o->oDistanceToMario >= 25000.0f) o->oKoopaTargetYaw = o->oAngleToMario;
 
         // If shell exists, then turn toward shell
         shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
@@ -388,9 +368,7 @@ static void koopa_unshelled_act_dive(void) {
     struct Object *shell;
     f32 distToShell;
 
-    if (o->oTimer > 10) {
-        cur_obj_become_tangible();
-    }
+    if (o->oTimer > 10) cur_obj_become_tangible();
 
     if (o->oTimer > 10) {
         shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
@@ -622,9 +600,7 @@ static void koopa_the_quick_act_race(void) {
                                              o->oKoopaAgility * 0.1f);
 
                     // Move upward if we hit a wall, to climb it
-                    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-                        o->oVelY = 20.0f;
-                    }
+                    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oVelY = 20.0f;
 
                     // If we're about to collide with a bowling ball or we hit an
                     // edge, jump
@@ -632,9 +608,7 @@ static void koopa_the_quick_act_race(void) {
                     if (bowlingBallStatus != 0 || (o->oMoveFlags & OBJ_MOVE_HIT_EDGE)) {
                         // If the ball is coming at us from behind, then set speed
                         // to zero to let it move under and past us
-                        if (bowlingBallStatus < 0) {
-                            o->oForwardVel = 0.0f;
-                        }
+                        if (bowlingBallStatus < 0) o->oForwardVel = 0.0f;
 
                         if (bowlingBallStatus != 0
                             || (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 8) {
@@ -655,9 +629,7 @@ static void koopa_the_quick_act_race(void) {
                     // We could perform a goomba double jump if we could deactivate
                     // ktq
                     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-                        if (cur_obj_init_anim_and_check_if_end(13)) {
-                            o->oSubAction--;
-                        }
+                        if (cur_obj_init_anim_and_check_if_end(13)) o->oSubAction--;
 
                         koopa_the_quick_detect_bowling_ball();
                     }
@@ -687,9 +659,7 @@ static void koopa_the_quick_act_stop(void) {
 
     // koopa_walk_stop() was written for shelled koopa, so it enters the
     // KOOPA_SHELLED_ACT_STOPPED at the end
-    if (o->oAction == KOOPA_SHELLED_ACT_STOPPED) {
-        o->oAction = KOOPA_THE_QUICK_ACT_AFTER_RACE;
-    }
+    if (o->oAction == KOOPA_SHELLED_ACT_STOPPED) o->oAction = KOOPA_THE_QUICK_ACT_AFTER_RACE;
 }
 
 /**
@@ -822,11 +792,7 @@ void bhv_koopa_race_endpoint_update(void) {
 
             if (!o->oKoopaRaceEndpointKoopaFinished) {
                 play_race_fanfare();
-                if (gMarioShotFromCannon) {
-                    o->oKoopaRaceEndpointRaceStatus = -1;
-                } else {
-                    o->oKoopaRaceEndpointRaceStatus = 1;
-                }
+                o->oKoopaRaceEndpointRaceStatus = gMarioShotFromCannon ? -1 : 1;
             }
         }
     }

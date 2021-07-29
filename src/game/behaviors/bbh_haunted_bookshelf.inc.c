@@ -20,9 +20,7 @@ void bhv_haunted_bookshelf_loop(void) {
             // This code never runs, since the action is set to 1 directly
             // by bhvHauntedBookshelfManager. Maybe this was
             // intended to be used to set the action instead?
-            if (o->oHauntedBookshelfShouldOpen) {
-                o->oAction++;
-            }
+            if (o->oHauntedBookshelfShouldOpen) o->oAction++;
 
             break;
         case HAUNTED_BOOKSHELF_ACT_RECEDE:
@@ -31,9 +29,7 @@ void bhv_haunted_bookshelf_loop(void) {
             cur_obj_play_sound_1(SOUND_ENV_ELEVATOR4_2);
 
             // Delete the object after 102 frames
-            if (o->oTimer > 101) {
-                obj_mark_for_deletion(o);
-            }
+            if (o->oTimer > 101) obj_mark_for_deletion(o);
 
             break;
         default:
