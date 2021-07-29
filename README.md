@@ -26,10 +26,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
 **Bugfixes:**
-- Make `obj_resolve_object_collisions()` work consistently (Arceveti) *
-- Fixed DDD water rings by using interaction checking instead (Arceveti) *
-- Fix for bomb clip (Arceveti) *
-- Detect Mario's collision with lava regardless of action *
+- `obj_resolve_object_collisions()` works consistently (Arceveti) *
+- Fixed DDD water rings by using interaction checking (Arceveti) *
+- Bomb clip fix (Arceveti) *
+- Mario's collision with lava is detected regardless of his action *
 - Unagi and Klepto's stars become transparent stars after they are collected (SunlitSpace542) *
 - Many smaller bugs patched
 

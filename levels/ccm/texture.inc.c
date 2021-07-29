@@ -57,8 +57,3 @@ ALIGNED8 static const Texture ccm_seg7_texture_window_skybox[] = {
 ALIGNED8 static const Texture ccm_seg7_texture_slide_race_checker[] = {
 #include "levels/ccm/11.rgba16.inc.c"
 };
-
-// // 0x07005300 - 0x07005B00
-// ALIGNED8 UNUSED static const Texture ccm_seg7_texture_unused_snow[] = {
-// #include "levels/ccm/12.rgba16.inc.c"
-// };

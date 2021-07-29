@@ -929,9 +929,7 @@ void radial_camera_move(struct Camera *c) {
         }
     }
 
-    if (gCameraMovementFlags & CAM_MOVE_ENTERED_ROTATE_SURFACE) {
-        rotateSpeed = 0x200;
-    }
+    if (gCameraMovementFlags & CAM_MOVE_ENTERED_ROTATE_SURFACE) rotateSpeed = 0x200;
 
     if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
         areaDistX = -areaDistX;
@@ -950,12 +948,8 @@ void radial_camera_move(struct Camera *c) {
         avoidYaw -= atan2s(areaDistZ, areaDistX);
 
         // Bound avoid yaw to radial mode constraints
-        if (avoidYaw > DEGREES(105)) {
-            avoidYaw = DEGREES(105);
-        }
-        if (avoidYaw < DEGREES(-105)) {
-            avoidYaw = DEGREES(-105);
-        }
+        if (avoidYaw > DEGREES( 105)) avoidYaw = DEGREES( 105);
+        if (avoidYaw < DEGREES(-105)) avoidYaw = DEGREES(-105);
     }
 
     if (gCameraMovementFlags & CAM_MOVE_RETURN_TO_MIDDLE) {
@@ -1014,12 +1008,8 @@ void radial_camera_move(struct Camera *c) {
     }
 
     // Bound sModeOffsetYaw within (-120, 120) degrees
-    if (sModeOffsetYaw > 0x5554) {
-        sModeOffsetYaw = 0x5554;
-    }
-    if (sModeOffsetYaw < -0x5554) {
-        sModeOffsetYaw = -0x5554;
-    }
+    if (sModeOffsetYaw >  0x5554) sModeOffsetYaw =  0x5554;
+    if (sModeOffsetYaw < -0x5554) sModeOffsetYaw = -0x5554;
 }
 
 /**
@@ -1091,16 +1081,12 @@ void mode_radial_camera(struct Camera *c) {
     radial_camera_input_default(c);
     radial_camera_move(c);
 
-    if (c->mode == CAMERA_MODE_RADIAL) {
-        lakitu_zoom(400.0f, 0x900);
-    }
+    if (c->mode == CAMERA_MODE_RADIAL) lakitu_zoom(400.0f, 0x900);
     c->nextYaw = update_radial_camera(c, c->focus, pos);
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
-    if (sMarioCamState->action == ACT_RIDING_HOOT) {
-        pos[1] += 500.0f;
-    }
+    if (sMarioCamState->action == ACT_RIDING_HOOT) pos[1] += 500.0f;
     set_camera_height(c, pos[1]);
     pan_ahead_of_player(c);
 }
@@ -1231,9 +1217,7 @@ void mode_outward_radial_camera(struct Camera *c) {
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
     sAreaYawChange = sAreaYaw - oldAreaYaw;
-    if (sMarioCamState->action == ACT_RIDING_HOOT) {
-        pos[1] += 500.0f;
-    }
+    if (sMarioCamState->action == ACT_RIDING_HOOT) pos[1] += 500.0f;
     set_camera_height(c, pos[1]);
     pan_ahead_of_player(c);
 }
@@ -1545,12 +1529,8 @@ s32 update_boss_fight_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     }
 
     focusDistance = calc_abs_dist(sMarioCamState->pos, secondFocus) * 1.6f;
-    if (focusDistance < 800.0f) {
-        focusDistance = 800.0f;
-    }
-    if (focusDistance > 5000.0f) {
-        focusDistance = 5000.0f;
-    }
+    if (focusDistance <  800.0f) focusDistance =  800.0f;
+    if (focusDistance > 5000.0f) focusDistance = 5000.0f;
 
     // If holding the boss, add a slight offset to secondFocus so that the spinning is more pronounced.
     if (heldState == 1) {
@@ -1589,15 +1569,11 @@ s32 update_boss_fight_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     // Rotate from C-Button input
     if (sCSideButtonYaw < 0) {
         sModeOffsetYaw += 0x200;
-        if ((sCSideButtonYaw += 0x100) > 0) {
-            sCSideButtonYaw = 0;
-        }
+        if ((sCSideButtonYaw += 0x100) > 0) sCSideButtonYaw = 0;
     }
     if (sCSideButtonYaw > 0) {
         sModeOffsetYaw -= 0x200;
-        if ((sCSideButtonYaw -= 0x100) < 0) {
-            sCSideButtonYaw = 0;
-        }
+        if ((sCSideButtonYaw -= 0x100) < 0) sCSideButtonYaw = 0;
     }
 
     focus[1] = (sMarioCamState->pos[1] + secondFocus[1]) / 2.0f + 100.0f;
@@ -1710,23 +1686,15 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     vec3f_copy(focus, sMarioCamState->pos);
     c->focus[1] += focYOff;
     vec3f_get_dist_and_angle(focus, pos, &dist, &pitch, &yaw);
-    if (dist > maxDist) {
-        dist = maxDist;
-    }
-    if ((absPitch = pitch) < 0) {
-        absPitch = -absPitch;
-    }
+    if (dist > maxDist) dist = maxDist;
+    if ((absPitch = pitch) < 0) absPitch = -absPitch;
 
     // Determine the yaw speed based on absPitch. A higher absPitch (further away from looking straight)
     // translates to a slower speed
     // Note: Pitch is always within +- 90 degrees or +-0x4000, and 0x4000 / 0x200 = 32
     yawSpeed = 32 - absPitch / 0x200;
-    if (yawSpeed < 1) {
-        yawSpeed = 1;
-    }
-    if (yawSpeed > 32) {
-        yawSpeed = 32;
-    }
+    if (yawSpeed <  1) yawSpeed =  1;
+    if (yawSpeed > 32) yawSpeed = 32;
 
     if (sCSideButtonYaw != 0) {
         camera_approach_s16_symmetric_bool(&sCSideButtonYaw, 0, 1);
@@ -1739,12 +1707,14 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     }
 
     if (sBehindMarioSoundTimer == 28) {
-        if (sCSideButtonYaw < 5 || sCSideButtonYaw > 28) {
+        if (sCSideButtonYaw < 5
+         || sCSideButtonYaw > 28) {
             play_sound_cbutton_up();
         }
     }
     if (sCSideButtonYaw == 28) {
-        if (sBehindMarioSoundTimer < 5 || sBehindMarioSoundTimer > 28) {
+        if (sBehindMarioSoundTimer < 5
+         || sBehindMarioSoundTimer > 28) {
             play_sound_cbutton_up();
         }
     }
@@ -1805,16 +1775,9 @@ s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
         dist = 300.0f;
     }
     vec3f_set_dist_and_angle(focus, pos, dist, pitch, yaw);
-    if (gCurrLevelArea == AREA_WDW_MAIN) {
-        yaw = clamp_positions_and_find_yaw(pos, focus, 4508.0f, -3739.0f, 4508.0f, -3739.0f);
-    }
-    if (gCurrLevelArea == AREA_THI_HUGE) {
-        yaw = clamp_positions_and_find_yaw(pos, focus, 8192.0f, -8192.0f, 8192.0f, -8192.0f);
-    }
-    if (gCurrLevelArea == AREA_THI_TINY) {
-        yaw = clamp_positions_and_find_yaw(pos, focus, 2458.0f, -2458.0f, 2458.0f, -2458.0f);
-    }
-
+    if (gCurrLevelArea == AREA_WDW_MAIN) yaw = clamp_positions_and_find_yaw(pos, focus, 4508.0f, -3739.0f, 4508.0f, -3739.0f);
+    if (gCurrLevelArea == AREA_THI_HUGE) yaw = clamp_positions_and_find_yaw(pos, focus, 8192.0f, -8192.0f, 8192.0f, -8192.0f);
+    if (gCurrLevelArea == AREA_THI_TINY) yaw = clamp_positions_and_find_yaw(pos, focus, 2458.0f, -2458.0f, 2458.0f, -2458.0f);
     return yaw;
 }
 
@@ -1919,9 +1882,7 @@ s16 update_slide_camera(struct Camera *c) {
         camera_approach_f32_symmetric_bool(&c->pos[1], c->focus[1], 30.0f);
         vec3f_get_dist_and_angle(c->pos, c->focus, &distCamToFocus, &camPitch, &camYaw);
         pitchScale = (distCamToFocus - maxCamDist + sLakituDist) / 10000.0f;
-        if (pitchScale > 1.0f) {
-            pitchScale = 1.0f;
-        }
+        if (pitchScale > 1.0f) pitchScale = 1.0f;
         camPitch += 0x1000 * pitchScale;
         vec3f_set_dist_and_angle(c->pos, c->focus, distCamToFocus, camPitch, camYaw);
 
@@ -1932,9 +1893,8 @@ s16 update_slide_camera(struct Camera *c) {
 
         // Stay above the slide floor
         floorHeight = find_floor(c->pos[0], c->pos[1] + 200.0f, c->pos[2], &floor) + 125.0f;
-        if (c->pos[1] < floorHeight) {
-            c->pos[1] = floorHeight;
-        }
+        if (c->pos[1] < floorHeight) c->pos[1] = floorHeight;
+
         // Stay closer than maxCamDist
         vec3f_get_dist_and_angle(c->focus, c->pos, &distCamToFocus, &camPitch, &camYaw);
         if (distCamToFocus > maxCamDist + sLakituDist) {
@@ -2035,23 +1995,17 @@ s16 update_default_camera(struct Camera *c) {
     // If not zooming out, only allow dist to decrease
     if (sZoomAmount == 0.0f) {
         if (dist > zoomDist) {
-            if ((dist -= 50.0f) < zoomDist) {
-                dist = zoomDist;
-            }
+            if ((dist -= 50.0f) < zoomDist) dist = zoomDist;
         }
     } else {
         if ((sZoomAmount -= 30.0f) < 0.0f) {
             sZoomAmount = 0.0f;
         }
         if (dist > zoomDist) {
-            if ((dist -= 30.0f) < zoomDist) {
-                dist = zoomDist;
-            }
+            if ((dist -= 30.0f) < zoomDist) dist = zoomDist;
         }
         if (dist < zoomDist) {
-            if ((dist += 30.0f) > zoomDist) {
-                dist = zoomDist;
-            }
+            if ((dist += 30.0f) > zoomDist) dist = zoomDist;
         }
     }
 
@@ -2066,12 +2020,8 @@ s16 update_default_camera(struct Camera *c) {
             nextYawVel = 0x20;
         }
     } else {
-        if (sCSideButtonYaw < 0) {
-            yaw += 0x200;
-        }
-        if (sCSideButtonYaw > 0) {
-            yaw -= 0x200;
-        }
+        if (sCSideButtonYaw < 0) yaw += 0x200;
+        if (sCSideButtonYaw > 0) yaw -= 0x200;
         camera_approach_s16_symmetric_bool(&sCSideButtonYaw, 0, 0x100);
         nextYawVel = 0;
     }
@@ -2100,9 +2050,7 @@ s16 update_default_camera(struct Camera *c) {
         closeToMario |= 1;
     }
 
-    if (-16 < gPlayer1Controller->stickY) {
-        c->yaw = yaw;
-    }
+    if (-16 < gPlayer1Controller->stickY) c->yaw = yaw;
 
     calc_y_to_curr_floor(&posHeight, 1, 200, &focHeight, 0.9f, 200);
     vec3f_copy(cPos, c->pos);
@@ -2129,20 +2077,17 @@ s16 update_default_camera(struct Camera *c) {
                 yawVel = nextYawVel;
             }
         } else {
-            if (nextYawVel == 0x1000) {
-                yawVel = nextYawVel;
-            }
+            if (nextYawVel == 0x1000) yawVel = nextYawVel;
+
             sStatusFlags &= ~CAM_FLAG_COLLIDED_WITH_WALL;
         }
 
         // If a wall is near the camera, turn twice as fast
-        if (avoidStatus != 0) {
-            yawVel += yawVel;
-        }
+        if (avoidStatus != 0) yawVel += yawVel;
+
         // ...Unless the camera already rotated from being close to Mario
-        if ((closeToMario & 1) && avoidStatus != 0) {
-            yawVel = 0;
-        }
+        if ((closeToMario & 1) && avoidStatus != 0) yawVel = 0;
+
         if (yawVel != 0 && get_dialog_id() == DIALOG_NONE) {
             camera_approach_s16_symmetric_bool(&yaw, yawGoal, yawVel);
         }
@@ -2236,16 +2181,12 @@ s16 update_default_camera(struct Camera *c) {
     // Make Lakitu fly above the gas
     gasHeight = find_poison_gas_level(cPos[0], cPos[2]);
     if (gasHeight != FLOOR_LOWER_LIMIT) {
-        if ((gasHeight += 130.0f) > c->pos[1]) {
-            c->pos[1] = gasHeight;
-        }
+        if ((gasHeight += 130.0f) > c->pos[1]) c->pos[1] = gasHeight;
     }
 
     if (sMarioCamState->action & ACT_FLAG_HANGING || sMarioCamState->action == ACT_RIDING_HOOT) {
         camFloorHeight = sMarioCamState->pos[1] + 400.0f;
-        if (c->mode == CAMERA_MODE_FREE_ROAM) {
-            camFloorHeight -= 100.0f;
-        }
+        if (c->mode == CAMERA_MODE_FREE_ROAM) camFloorHeight -= 100.0f;
         ceilHeight = CELL_HEIGHT_LIMIT;
         vec3f_copy(c->focus, sMarioCamState->pos);
     }
@@ -2357,12 +2298,8 @@ s32 update_spiral_stairs_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 
     sSpiralStairsYawOffset = posYaw - focYaw;
     // posYaw will change if Mario is more than 90 degrees around the stairs, relative to the camera
-    if (sSpiralStairsYawOffset < DEGREES(-90)) {
-        sSpiralStairsYawOffset = DEGREES(-90);
-    }
-    if (sSpiralStairsYawOffset > DEGREES(90)) {
-        sSpiralStairsYawOffset = DEGREES(90);
-    }
+    if (sSpiralStairsYawOffset < DEGREES(-90)) sSpiralStairsYawOffset = DEGREES(-90);
+    if (sSpiralStairsYawOffset > DEGREES( 90)) sSpiralStairsYawOffset = DEGREES( 90);
     focYaw += sSpiralStairsYawOffset;
     posYaw = focYaw;
 
@@ -2505,9 +2442,7 @@ s32 exit_c_up(struct Camera *c) {
                     }
 
                     // If there was no collision found all the way to the max distance, it's an opening
-                    if (d >= gCameraZoomDist) {
-                        searching = FALSE;
-                    }
+                    if (d >= gCameraZoomDist) searching = FALSE;
                 }
 
                 // Alternate left and right, checking each 1/16th (22.5 degrees) of the circle
@@ -2560,25 +2495,17 @@ void move_mario_head_c_up(UNUSED struct Camera *c) {
     sModeOffsetYaw -= (s16)(gPlayer1Controller->stickX * 10.0f);
 
     // Bound looking up to nearly 80 degrees.
-    if (sCUpCameraPitch > 0x38E3) {
-        sCUpCameraPitch = 0x38E3;
-    }
+    if (sCUpCameraPitch >  0x38E3) sCUpCameraPitch =  0x38E3;
     // Bound looking down to -45 degrees
-    if (sCUpCameraPitch < -0x2000) {
-        sCUpCameraPitch = -0x2000;
-    }
+    if (sCUpCameraPitch < -0x2000) sCUpCameraPitch = -0x2000;
 
     // Bound the camera yaw to +-120 degrees
-    if (sModeOffsetYaw > 0x5555) {
-        sModeOffsetYaw = 0x5555;
-    }
-    if (sModeOffsetYaw < -0x5555) {
-        sModeOffsetYaw = -0x5555;
-    }
+    if (sModeOffsetYaw >  0x5555) sModeOffsetYaw =  0x5555;
+    if (sModeOffsetYaw < -0x5555) sModeOffsetYaw = -0x5555;
 
     // Give Mario's neck natural-looking constraints
     sMarioCamState->headRotation[0] = sCUpCameraPitch * 3 / 4;
-    sMarioCamState->headRotation[1] = sModeOffsetYaw * 3 / 4;
+    sMarioCamState->headRotation[1] = sModeOffsetYaw  * 3 / 4;
 }
 
 /**
@@ -2749,9 +2676,8 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
         // Clear movement flags that would affect the transition
         gCameraMovementFlags &= (u16)~(CAM_MOVE_RESTRICT | CAM_MOVE_ROTATE);
         gCameraMovementFlags |= CAM_MOVING_INTO_MODE;
-        if (mode == CAMERA_MODE_NONE) {
-            mode = CAMERA_MODE_CLOSE;
-        }
+        if (mode == CAMERA_MODE_NONE) mode = CAMERA_MODE_CLOSE;
+
         sCUpCameraPitch = 0;
         sModeOffsetYaw = 0;
         sLakituDist = 0;
@@ -3425,9 +3351,7 @@ void unused_object_angle_to_vec3s(Vec3s dst, struct Object *o) {
 void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3) {
     f32 B[4];
 
-    if (u > 1.0f) {
-        u = 1.0f;
-    }
+    if (u > 1.0f) u = 1.0f;
 
     B[0] = (1.0f - u) * (1.0f - u) * (1.0f - u) / 6.0f;
     B[1] =  u * u * u / 2.0f - u * u                    + 0.6666667f;
@@ -3485,24 +3409,15 @@ s32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *s
     }
     evaluate_cubic_spline(u, p, controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
 
-    if (spline[*splineSegment + 1].speed != 0) {
-        firstSpeed = 1.0f / spline[*splineSegment + 1].speed;
-    }
-    if (spline[*splineSegment + 2].speed != 0) {
-        secondSpeed = 1.0f / spline[*splineSegment + 2].speed;
-    }
+    if (spline[*splineSegment + 1].speed != 0)  firstSpeed = 1.0f / spline[*splineSegment + 1].speed;
+    if (spline[*splineSegment + 2].speed != 0) secondSpeed = 1.0f / spline[*splineSegment + 2].speed;
+
     progressChange = (secondSpeed - firstSpeed) * *progress + firstSpeed;
 
 #ifdef VERSION_EU
-    if (gCamera->cutscene == CUTSCENE_INTRO_PEACH) {
-        progressChange += progressChange * 0.19f;
-    }
-    if (gCamera->cutscene == CUTSCENE_CREDITS) {
-        progressChange += progressChange * 0.15f;
-    }
-    if (gCamera->cutscene == CUTSCENE_ENDING) {
-        progressChange += progressChange * 0.1f;
-    }
+    if (gCamera->cutscene == CUTSCENE_INTRO_PEACH) progressChange += progressChange * 0.19f;
+    if (gCamera->cutscene == CUTSCENE_CREDITS    ) progressChange += progressChange * 0.15f;
+    if (gCamera->cutscene == CUTSCENE_ENDING     ) progressChange += progressChange * 0.1f;
 #endif
 
     if (1 <= (*progress += progressChange)) {
@@ -3541,9 +3456,8 @@ s32 cam_select_alt_mode(s32 selection) {
         sCameraSoundFlags |= CAM_SOUND_UNUSED_SELECT_FIXED;
     }
 
-    if (sSelectionFlags & CAM_MODE_MARIO_SELECTED) {
-        mode = CAM_SELECTION_MARIO;
-    }
+    if (sSelectionFlags & CAM_MODE_MARIO_SELECTED) mode = CAM_SELECTION_MARIO;
+
     return mode;
 }
 
@@ -3736,12 +3650,9 @@ s32 update_camera_hud_status(struct Camera *c) {
     } else {
         status |= CAM_STATUS_LAKITU;
     }
-    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
-        status |= CAM_STATUS_C_DOWN;
-    }
-    if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE) {
-        status |= CAM_STATUS_C_UP;
-    }
+    if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) status |= CAM_STATUS_C_DOWN;
+    if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE ) status |= CAM_STATUS_C_UP;
+
     set_hud_camera_status(status);
     return status;
 }
@@ -3794,12 +3705,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
  * Compare a vector to a position, return TRUE if they match.
  */
 s32 vec3f_compare(Vec3f pos, f32 posX, f32 posY, f32 posZ) {
-    s32 equal = FALSE;
-
-    if (pos[0] == posX && pos[1] == posY && pos[2] == posZ) {
-        equal = TRUE;
-    }
-    return equal;
+    return (pos[0] == posX && pos[1] == posY && pos[2] == posZ);
 }
 
 s32 clamp_pitch(Vec3f from, Vec3f to, s16 maxPitch, s16 minPitch) {
@@ -3842,9 +3748,7 @@ s32 set_or_approach_f32_asymptotic(f32 *dst, f32 goal, f32 scale) {
  * Edits the current value directly, returns TRUE if the target has been reached, FALSE otherwise.
  */
 s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
-    if (multiplier > 1.0f) {
-        multiplier = 1.0f;
-    }
+    if (multiplier > 1.0f) multiplier = 1.0f;
     *current = *current + (target - *current) * multiplier;
     return !(*current == target);
 }
@@ -3927,9 +3831,8 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
 s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) {
     s16 dist = target - *current;
 
-    if (increment < 0) {
-        increment = -1 * increment;
-    }
+    if (increment < 0) increment = -1 * increment;
+
     if (dist > 0) {
         dist -= increment;
         if (dist >= 0) {
@@ -3951,9 +3854,8 @@ s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) 
 s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
     s16 dist = target - current;
 
-    if (increment < 0) {
-        increment = -1 * increment;
-    }
+    if (increment < 0) increment = -1 * increment;
+
     if (dist > 0) {
         dist -= increment;
         if (dist >= 0) {
@@ -3989,9 +3891,8 @@ s32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
 s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) {
     f32 dist = target - *current;
 
-    if (increment < 0) {
-        increment = -1 * increment;
-    }
+    if (increment < 0) increment = -1 * increment;
+
     if (dist > 0) {
         dist -= increment;
         if (dist > 0) {
@@ -4016,9 +3917,8 @@ s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) 
 f32 camera_approach_f32_symmetric(f32 current, f32 target, f32 increment) {
     f32 dist = target - current;
 
-    if (increment < 0) {
-        increment = -1 * increment;
-    }
+    if (increment < 0) increment = -1 * increment;
+
     if (dist > 0) {
         dist -= increment;
         if (dist > 0) {
@@ -4090,13 +3990,9 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 p
             pitch -= goalPitch;
             yaw -= goalYaw;
             dist -= 2000.0f;
-            if (dist < 0.0f) {
-                dist = 0.0f;
-            }
+            if (dist < 0.0f) dist = 0.0f;
             maxDist -= 2000.0f;
-            if (maxDist < 2000.0f) {
-                maxDist = 2000.0f;
-            }
+            if (maxDist < 2000.0f) maxDist = 2000.0f;
             result = value * (1.0f - dist / maxDist);
             if (pitch < -0x1800 || pitch > 0x400 ||
                 yaw   < -0x1800 || yaw >   0x1800) {
@@ -4109,19 +4005,10 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 p
 
 s32 clamp_positions_and_find_yaw(Vec3f pos, Vec3f origin, f32 xMax, f32 xMin, f32 zMax, f32 zMin) {
     s16 yaw = gCamera->nextYaw;
-
-    if (pos[0] >= xMax) {
-        pos[0] = xMax;
-    }
-    if (pos[0] <= xMin) {
-        pos[0] = xMin;
-    }
-    if (pos[2] >= zMax) {
-        pos[2] = zMax;
-    }
-    if (pos[2] <= zMin) {
-        pos[2] = zMin;
-    }
+    if (pos[0] >= xMax) pos[0] = xMax;
+    if (pos[0] <= xMin) pos[0] = xMin;
+    if (pos[2] >= zMax) pos[2] = zMax;
+    if (pos[2] <= zMin) pos[2] = zMin;
     yaw = calculate_yaw(origin, pos);
     return yaw;
 }
@@ -4137,9 +4024,7 @@ s32 clamp_positions_and_find_yaw(Vec3f pos, Vec3f origin, f32 xMax, f32 xMin, f3
  *          developers just add 180 degrees to the result.
  */
 s32 calc_avoid_yaw(s16 yawFromMario, s16 wallYaw) {
-    s16 yawDiff;
-
-    yawDiff = wallYaw - yawFromMario + DEGREES(90);
+    s16 yawDiff = wallYaw - yawFromMario + DEGREES(90);
 
     if (yawDiff < 0) {
         // Deflect to the right
@@ -4190,31 +4075,19 @@ s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zM
 
     for (i = 0; i < 3; i++) {
         j = i + 1;
-        if (j >= 3) {
-            j = 0;
-        }
+        if (j >= 3) j = 0;
         dx = ABS(sx[i] - sx[j]);
-        if (dx > dxMax) {
-            dxMax = dx;
-        }
+        if (dx > dxMax) dxMax = dx;
         dy = ABS(sy[i] - sy[j]);
-        if (dy > dyMax) {
-            dyMax = dy;
-        }
+        if (dy > dyMax) dyMax = dy;
         dz = ABS(sz[i] - sz[j]);
-        if (dz > dzMax) {
-            dzMax = dz;
-        }
+        if (dz > dzMax) dzMax = dz;
     }
     if (yMax != -1.0f) {
-        if (dyMax < yMax) {
-            smaller = TRUE;
-        }
+        if (dyMax < yMax) smaller = TRUE;
     }
     if (xMax != -1.0f && zMax != -1.0f) {
-        if (dxMax < xMax && dzMax < zMax) {
-            smaller = TRUE;
-        }
+        if (dxMax < xMax && dzMax < zMax) smaller = TRUE;
     }
     return smaller;
 }
@@ -4273,9 +4146,7 @@ s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 rang
 }
 
 s32 is_mario_behind_surface(UNUSED struct Camera *c, struct Surface *surf) {
-    s32 behindSurface = is_behind_surface(sMarioCamState->pos, surf);
-
-    return behindSurface;
+    return is_behind_surface(sMarioCamState->pos, surf);
 }
 
 /**
@@ -4434,9 +4305,7 @@ void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 po
     pos[2] = posZ;
     vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &dummyPitch, &dummyYaw);
     mag = reduce_by_dist_from_camera(mag, maxDist, posX, posY, posZ);
-    if (mag != 0) {
-        set_camera_pitch_shake(mag, decay, inc);
-    }
+    if (mag != 0) set_camera_pitch_shake(mag, decay, inc);
 }
 
 /**
@@ -4453,9 +4322,7 @@ void set_yaw_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 posX
     pos[2] = posZ;
     vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &dummyPitch, &dummyYaw);
     mag = reduce_by_dist_from_camera(mag, maxDist, posX, posY, posZ);
-    if (mag != 0) {
-        set_camera_yaw_shake(mag, decay, inc);
-    }
+    if (mag != 0) set_camera_yaw_shake(mag, decay, inc);
 }
 
 /**
@@ -4539,18 +4406,14 @@ s32 offset_yaw_outward_radial(struct Camera *c, s16 areaYaw) {
             areaCenter[1] = sMarioCamState->pos[1];
             areaCenter[2] = c->areaCenZ;
             distFromAreaCenter = calc_abs_dist(areaCenter, sMarioCamState->pos);
-            if (800.0f > distFromAreaCenter) {
-                yawGoal = 0x3800;
-            }
+            if (800.0f > distFromAreaCenter) yawGoal = 0x3800;
             break;
         case AREA_SSL_PYRAMID:
             // This mask splits the 360 degrees of yaw into 4 corners. It adds 45 degrees so that the yaw
             // offset at the corner will be 0, but the yaw offset near the center will face more towards
             // the direction Mario is running in.
             yawGoal = (areaYaw & 0xC000) - areaYaw + DEGREES(45);
-            if (yawGoal < 0) {
-                yawGoal = -yawGoal;
-            }
+            if (yawGoal < 0) yawGoal = -yawGoal;
             yawGoal = yawGoal / 32 * 48;
             break;
         case AREA_LLL_OUTSIDE:
@@ -4593,22 +4456,16 @@ void cutscene_intro_peach_play_lakitu_flying_music(void) {
 }
 
 void play_camera_buzz_if_cdown(void) {
-    if (gPlayer1Controller->buttonPressed & D_CBUTTONS) {
-        play_sound_button_change_blocked();
-    }
+    if (gPlayer1Controller->buttonPressed & D_CBUTTONS) play_sound_button_change_blocked();
 }
 
 void play_camera_buzz_if_cbutton(void) {
-    if (gPlayer1Controller->buttonPressed & CBUTTON_MASK) {
-        play_sound_button_change_blocked();
-    }
+    if (gPlayer1Controller->buttonPressed & CBUTTON_MASK) play_sound_button_change_blocked();
 }
 
 void play_camera_buzz_if_c_sideways(void) {
     if ((gPlayer1Controller->buttonPressed & L_CBUTTONS)
-        || (gPlayer1Controller->buttonPressed & R_CBUTTONS)) {
-        play_sound_button_change_blocked();
-    }
+     || (gPlayer1Controller->buttonPressed & R_CBUTTONS)) play_sound_button_change_blocked();
 }
 
 #ifdef REONU_CAM_3
@@ -4638,12 +4495,8 @@ void play_sound_rbutton_changed(void) {
 }
 
 void play_sound_if_cam_switched_to_lakitu_or_mario(void) {
-    if (sCameraSoundFlags & CAM_SOUND_MARIO_ACTIVE) {
-        play_sound_rbutton_changed();
-    }
-    if (sCameraSoundFlags & CAM_SOUND_NORMAL_ACTIVE) {
-        play_sound_rbutton_changed();
-    }
+    if (sCameraSoundFlags & CAM_SOUND_MARIO_ACTIVE ) play_sound_rbutton_changed();
+    if (sCameraSoundFlags & CAM_SOUND_NORMAL_ACTIVE) play_sound_rbutton_changed();
     sCameraSoundFlags &= ~(CAM_SOUND_MARIO_ACTIVE | CAM_SOUND_NORMAL_ACTIVE);
 }
 
@@ -4796,9 +4649,7 @@ void handle_c_button_movement(struct Camera *c) {
                 gCameraMovementFlags &= ~CAM_MOVE_ROTATE_LEFT;
             } else {
                 gCameraMovementFlags |= CAM_MOVE_ROTATE_RIGHT;
-                if (sCSideButtonYaw == 0) {
-                    play_sound_cbutton_side();
-                }
+                if (sCSideButtonYaw == 0) play_sound_cbutton_side();
                 sCSideButtonYaw = -cSideYaw;
             }
         }
@@ -4807,9 +4658,7 @@ void handle_c_button_movement(struct Camera *c) {
                 gCameraMovementFlags &= ~CAM_MOVE_ROTATE_RIGHT;
             } else {
                 gCameraMovementFlags |= CAM_MOVE_ROTATE_LEFT;
-                if (sCSideButtonYaw == 0) {
-                    play_sound_cbutton_side();
-                }
+                if (sCSideButtonYaw == 0) play_sound_cbutton_side();
                 sCSideButtonYaw = cSideYaw;
             }
         }
@@ -4854,12 +4703,9 @@ s32 determine_dance_cutscene(UNUSED struct Camera *c) {
     u8 starIndex = (gLastCompletedStarNum - 1) / 2;
     u8 courseIndex = gCurrCourseNum;
 
-    if (starIndex > 3) {
-        starIndex = 0;
-    }
-    if (courseIndex > COURSE_MAX) {
-        courseIndex = COURSE_NONE;
-    }
+    if (starIndex > 3) starIndex = 0;
+    if (courseIndex > COURSE_MAX) courseIndex = COURSE_NONE;
+
     cutsceneIndex = sDanceCutsceneIndexTable[courseIndex][starIndex];
 
     if (gLastCompletedStarNum & 1) {
@@ -4919,15 +4765,9 @@ u8 get_cutscene_from_mario_status(struct Camera *c) {
                     break;
             }
         }
-        if (sMarioCamState->cameraEvent == CAM_EVENT_DOOR_WARP) {
-            cutscene = CUTSCENE_DOOR_WARP;
-        }
-        if (sMarioCamState->cameraEvent == CAM_EVENT_CANNON) {
-            cutscene = CUTSCENE_ENTER_CANNON;
-        }
-        if (SURFACE_IS_PAINTING_WARP(sMarioGeometry.currFloorType)) {
-            cutscene = CUTSCENE_ENTER_PAINTING;
-        }
+        if (sMarioCamState->cameraEvent == CAM_EVENT_DOOR_WARP)     cutscene = CUTSCENE_DOOR_WARP;
+        if (sMarioCamState->cameraEvent == CAM_EVENT_CANNON)        cutscene = CUTSCENE_ENTER_CANNON;
+        if (SURFACE_IS_PAINTING_WARP(sMarioGeometry.currFloorType)) cutscene = CUTSCENE_ENTER_PAINTING;
         switch (sMarioCamState->action) {
             case ACT_DEATH_EXIT:
                 cutscene = CUTSCENE_DEATH_EXIT;
@@ -5048,13 +4888,9 @@ void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ) {
 void approach_camera_height(struct Camera *c, f32 goal, f32 inc) {
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
         if (c->pos[1] < goal) {
-            if ((c->pos[1] += inc) > goal) {
-                c->pos[1] = goal;
-            }
+            if ((c->pos[1] += inc) > goal) c->pos[1] = goal;
         } else {
-            if ((c->pos[1] -= inc) < goal) {
-                c->pos[1] = goal;
-            }
+            if ((c->pos[1] -= inc) < goal) c->pos[1] = goal;
         }
     } else {
         c->pos[1] = goal;
@@ -5135,11 +4971,7 @@ void offset_rotated_coords(Vec3f dst, Vec3f from, Vec3s rotation, f32 xTo, f32 y
 }
 
 void determine_pushing_or_pulling_door(s16 *rotation) {
-    if (sMarioCamState->action == ACT_PULLING_DOOR) {
-        *rotation = 0;
-    } else {
-        *rotation = DEGREES(-180);
-    }
+    *rotation = (sMarioCamState->action == ACT_PULLING_DOOR) ? 0 : DEGREES(-180);
 }
 
 /**
@@ -5223,10 +5055,8 @@ s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc,
 
         if (gCamera->cutscene != 0 || !(gCameraMovementFlags & CAM_MOVE_C_UP_MODE)) {
             floorHeight = find_floor(newPos[0], newPos[1], newPos[2], &floor);
-            if (floorHeight != FLOOR_LOWER_LIMIT) {
-                if ((floorHeight += 125.0f) > newPos[1]) {
-                    newPos[1] = floorHeight;
-                }
+            if (floorHeight != FLOOR_LOWER_LIMIT && (floorHeight += 125.0f) > newPos[1]) {
+                newPos[1] = floorHeight;
             }
             f32_find_wall_collision(&newPos[0], &newPos[1], &newPos[2], 0.0f, 100.0f);
         }
@@ -5399,19 +5229,13 @@ void cam_rr_exit_building_top(struct Camera *c) {
 }
 
 void cam_rr_enter_building_window(struct Camera *c) {
-    if (c->mode != CAMERA_MODE_FIXED) {
-        set_camera_mode_fixed(c, -2974, 478, -3975);
-    }
+    if (c->mode != CAMERA_MODE_FIXED) set_camera_mode_fixed(c, -2974, 478, -3975);
 }
 
 void cam_rr_enter_building(struct Camera *c) {
-    if (c->mode != CAMERA_MODE_FIXED) {
-        set_camera_mode_fixed(c, -2953, 798, -3943);
-    }
+    if (c->mode != CAMERA_MODE_FIXED) set_camera_mode_fixed(c, -2953, 798, -3943);
     // Prevent the camera from being above the roof
-    if (c->pos[1] > 6043.0f) {
-        c->pos[1] = 6043.0f;
-    }
+    if (c->pos[1] > 6043.0f) c->pos[1] = 6043.0f;
 }
 
 void cam_rr_enter_building_side(struct Camera *c) {
@@ -5516,9 +5340,7 @@ void cam_ssl_boss_room(struct Camera *c) {
  * Moves the camera to through the tunnel by forcing sModeOffsetYaw
  */
 void cam_thi_move_cam_through_tunnel(UNUSED struct Camera *c) {
-    if (sModeOffsetYaw < DEGREES(60)) {
-        sModeOffsetYaw = DEGREES(60);
-    }
+    if (sModeOffsetYaw < DEGREES(60)) sModeOffsetYaw = DEGREES(60);
 }
 
 /**
@@ -5526,9 +5348,7 @@ void cam_thi_move_cam_through_tunnel(UNUSED struct Camera *c) {
  */
 void cam_thi_look_through_tunnel(UNUSED struct Camera *c) {
     // ~82.5 degrees
-    if (sModeOffsetYaw > 0x3AAA) {
-        sModeOffsetYaw = 0x3AAA;
-    }
+    if (sModeOffsetYaw > 0x3AAA) sModeOffsetYaw = 0x3AAA;
 }
 
 /**
@@ -5697,15 +5517,11 @@ void cam_bbh_room_5_library(struct Camera *c) {
  * if coming from the library.
  */
 void cam_bbh_room_5_library_to_hidden_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, -2172, 200, 675) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, -2172, 200, 675)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_5_hidden_to_library_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, -1542, 320, -307) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, -1542, 320, -307)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_5_hidden(struct Camera *c) {
@@ -5722,15 +5538,11 @@ void cam_bbh_room_7_mr_i(struct Camera *c) {
 }
 
 void cam_bbh_room_7_mr_i_to_coffins_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, 1371, 360, -1302) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, 1371, 360, -1302)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_7_coffins_to_mr_i_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, 2115, 260, -772) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, 2115, 260, -772)) transition_next_state(c, 20);
 }
 
 void cam_bbh_elevator_room_lower(struct Camera *c) {
@@ -5764,9 +5576,7 @@ void cam_bbh_room_2_library(struct Camera *c) {
 }
 
 void cam_bbh_room_2_library_to_trapdoor_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, 3493, 440, 617) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, 3493, 440, 617)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_2_trapdoor(struct Camera *c) {
@@ -5774,9 +5584,7 @@ void cam_bbh_room_2_trapdoor(struct Camera *c) {
 }
 
 void cam_bbh_room_2_trapdoor_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, 3502, 440, 1217) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, 3502, 440, 1217)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_9_attic(struct Camera *c) {
@@ -5784,15 +5592,11 @@ void cam_bbh_room_9_attic(struct Camera *c) {
 }
 
 void cam_bbh_room_9_attic_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, -670, 460, 372) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, -670, 460, 372)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_9_mr_i_transition(struct Camera *c) {
-    if (set_camera_mode_fixed(c, 131, 380, -263) == 1) {
-        transition_next_state(c, 20);
-    }
+    if (set_camera_mode_fixed(c, 131, 380, -263)) transition_next_state(c, 20);
 }
 
 void cam_bbh_room_13_balcony(struct Camera *c) {
@@ -5844,9 +5648,7 @@ u32 set_mode_if_not_set_by_surface(struct Camera *c, u8 mode) {
     u32 modeChanged = 0;
     modeChanged = surface_type_modes(c);
 
-    if ((modeChanged == 0) && (mode != 0)) {
-        transition_to_camera_mode(c, mode, 90);
-    }
+    if ((modeChanged == 0) && (mode != 0)) transition_to_camera_mode(c, mode, 90);
 
     return modeChanged;
 }
@@ -6237,13 +6039,9 @@ s16 camera_course_processing(struct Camera *c) {
     u32 insideBounds = FALSE;
     u8 oldMode = c->mode;
 
-    if (c->mode == CAMERA_MODE_C_UP) {
-        c->mode = sModeInfo.lastMode;
-    }
+    if (c->mode == CAMERA_MODE_C_UP) c->mode = sModeInfo.lastMode;
     check_blocking_area_processing(&c->mode);
-    if (level > LEVEL_COUNT + 1) {
-        level = LEVEL_COUNT + 1;
-    }
+    if (level > LEVEL_COUNT + 1) level = LEVEL_COUNT + 1;
 
     if (sCameraTriggers[level] != NULL) {
         b = 0;
@@ -6410,30 +6208,20 @@ void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
     ceilY = find_ceil(pos[0], pos[1] - 50.0f, pos[2], &surf);
 
     if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT == ceilY)) {
-        if (pos[1] < (floorY += 125.0f)) {
-            pos[1] = floorY;
-        }
+        if (pos[1] < (floorY += 125.0f)) pos[1] = floorY;
     }
 
     if ((FLOOR_LOWER_LIMIT == floorY) && (CELL_HEIGHT_LIMIT != ceilY)) {
-        if (pos[1] > (ceilY -= 125.0f)) {
-            pos[1] = ceilY;
-        }
+        if (pos[1] > (ceilY -= 125.0f)) pos[1] = ceilY;
     }
 
     if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT != ceilY)) {
         floorY += 125.0f;
         ceilY -= 125.0f;
 
-        if ((pos[1] <= floorY) && (pos[1] < ceilY)) {
-            pos[1] = floorY;
-        }
-        if ((pos[1] > floorY) && (pos[1] >= ceilY)) {
-            pos[1] = ceilY;
-        }
-        if ((pos[1] <= floorY) && (pos[1] >= ceilY)) {
-            pos[1] = (floorY + ceilY) * 0.5f;
-        }
+        if ((pos[1] <= floorY) && (pos[1] <  ceilY)) pos[1] = floorY;
+        if ((pos[1] >  floorY) && (pos[1] >= ceilY)) pos[1] = ceilY;
+        if ((pos[1] <= floorY) && (pos[1] >= ceilY)) pos[1] = (floorY + ceilY) * 0.5f;
     }
 }
 
@@ -6732,38 +6520,24 @@ void player2_rotate_cam(struct Camera *c, s16 minPitch, s16 maxPitch, s16 minYaw
     s16 pitch, yaw, pitchCap;
 
     // Change the camera rotation to match the 2nd player's stick
-    approach_s16_asymptotic_bool(&sCreditsPlayer2Yaw, -(s16)(gPlayer2Controller->stickX * 250.0f), 4);
+    approach_s16_asymptotic_bool(&sCreditsPlayer2Yaw,   -(s16)(gPlayer2Controller->stickX * 250.0f), 4);
     approach_s16_asymptotic_bool(&sCreditsPlayer2Pitch, -(s16)(gPlayer2Controller->stickY * 265.0f), 4);
     vec3f_get_dist_and_angle(c->pos, c->focus, &distCamToFocus, &pitch, &yaw);
 
-    pitchCap = 0x3800 - pitch; if (pitchCap < 0) {
-        pitchCap = 0;
-    }
-    if (maxPitch > pitchCap) {
-        maxPitch = pitchCap;
-    }
+    pitchCap = 0x3800 - pitch; if (pitchCap < 0) pitchCap = 0;
+
+    if (maxPitch > pitchCap) maxPitch = pitchCap;
 
     pitchCap = -0x3800 - pitch;
-    if (pitchCap > 0) {
-        pitchCap = 0;
-    }
-    if (minPitch < pitchCap) {
-        minPitch = pitchCap;
-    }
+    if (pitchCap > 0) pitchCap = 0;
 
-    if (sCreditsPlayer2Pitch > maxPitch) {
-        sCreditsPlayer2Pitch = maxPitch;
-    }
-    if (sCreditsPlayer2Pitch < minPitch) {
-        sCreditsPlayer2Pitch = minPitch;
-    }
+    if (minPitch < pitchCap) minPitch = pitchCap;
 
-    if (sCreditsPlayer2Yaw > maxYaw) {
-        sCreditsPlayer2Yaw = maxYaw;
-    }
-    if (sCreditsPlayer2Yaw < minYaw) {
-        sCreditsPlayer2Yaw = minYaw;
-    }
+    if (sCreditsPlayer2Pitch > maxPitch) sCreditsPlayer2Pitch = maxPitch;
+    if (sCreditsPlayer2Pitch < minPitch) sCreditsPlayer2Pitch = minPitch;
+
+    if (sCreditsPlayer2Yaw > maxYaw) sCreditsPlayer2Yaw = maxYaw;
+    if (sCreditsPlayer2Yaw < minYaw) sCreditsPlayer2Yaw = minYaw;
 
     pitch += sCreditsPlayer2Pitch;
     yaw += sCreditsPlayer2Yaw;
@@ -6867,8 +6641,8 @@ void cutscene_unused_loop(UNUSED struct Camera *c) {
  * Set the camera position and focus for when Mario falls from the sky.
  */
 void cutscene_ending_mario_fall_start(struct Camera *c) {
-    vec3f_set(c->focus, -26.0f, 0.0f, -137.0f);
-    vec3f_set(c->pos, 165.0f, 4725.0f, 324.0f);
+    vec3f_set(c->focus, -26.0f,    0.0f, -137.0f);
+    vec3f_set(c->pos,   165.0f, 4725.0f,  324.0f);
 }
 
 /**
@@ -6879,9 +6653,7 @@ void cutscene_ending_mario_fall_focus_mario(struct Camera *c) {
     vec3f_set(offset, 0.0f, 80.0f, 0.0f);
 
     offset[2] = ABS(sMarioCamState->pos[1] - c->pos[1]) * -0.1f;
-    if (offset[2] > -100.0f) {
-        offset[2] = -100.0f;
-    }
+    if (offset[2] > -100.0f) offset[2] = -100.0f;
 
     offset_rotated(c->focus, sMarioCamState->pos, offset, sMarioCamState->faceAngle);
 }
@@ -6890,7 +6662,7 @@ void cutscene_ending_mario_fall_focus_mario(struct Camera *c) {
  * Mario falls from the sky after the grand star cutscene.
  */
 void cutscene_ending_mario_fall(struct Camera *c) {
-    cutscene_event(cutscene_ending_mario_fall_start, c, 0, 0);
+    cutscene_event(cutscene_ending_mario_fall_start,       c, 0,  0);
     cutscene_event(cutscene_ending_mario_fall_focus_mario, c, 0, -1);
     player2_rotate_cam(c, -0x2000, 0x2000, -0x2000, 0x2000);
 }
@@ -6934,7 +6706,7 @@ void cutscene_ending_stars_free_peach(struct Camera *c) {
  */
 void cutscene_ending_mario_land(struct Camera *c) {
     vec3f_set(c->focus, sEndingFlyToWindowFocus[0].point[0], sEndingFlyToWindowFocus[0].point[1] + 80.0f, sEndingFlyToWindowFocus[0].point[2]);
-    vec3f_set(c->pos, sEndingFlyToWindowPos[0].point[0], sEndingFlyToWindowPos[0].point[1], sEndingFlyToWindowPos[0].point[2] + 150.0f);
+    vec3f_set(c->pos,     sEndingFlyToWindowPos[0].point[0],   sEndingFlyToWindowPos[0].point[1],           sEndingFlyToWindowPos[0].point[2] + 150.0f);
     player2_rotate_cam(c, -0x800, 0x2000, -0x2000, 0x2000);
 }
 
@@ -6952,7 +6724,7 @@ void cutscene_ending_peach_appear_closeup(struct Camera *c) {
  */
 void cutscene_ending_peach_appears(struct Camera *c) {
     cutscene_event(cutscene_ending_peach_appear_closeup, c, 0, 0);
-    approach_f32_asymptotic_bool(&c->pos[1], gCutsceneFocus->oPosY + 35.0f, 0.02f);
+    approach_f32_asymptotic_bool(&c->pos[1],   gCutsceneFocus->oPosY +  35.0f, 0.02f);
     approach_f32_asymptotic_bool(&c->focus[1], gCutsceneFocus->oPosY + 125.0f, 0.15f);
     player2_rotate_cam(c, -0x2000, 0x2000, -0x2000, 0x2000);
 }
@@ -6997,10 +6769,10 @@ void cutscene_ending_peach_descent_back_to_mario(struct Camera *c) {
  * she lands.
  */
 void cutscene_ending_peach_descends(struct Camera *c) {
-    cutscene_event(cutscene_ending_peach_descends_start, c, 0, 0);
-    cutscene_event(cutscene_ending_follow_peach_descent, c, 0, 299);
-    cutscene_event(cutscene_ending_peach_descent_back_to_mario, c, 300, -1);
-    cutscene_event(cutscene_ending_peach_descent_lower_focus, c, 300, -1);
+    cutscene_event(cutscene_ending_peach_descends_start,        c,   0,   0);
+    cutscene_event(cutscene_ending_follow_peach_descent,        c,   0, 299);
+    cutscene_event(cutscene_ending_peach_descent_back_to_mario, c, 300,  -1);
+    cutscene_event(cutscene_ending_peach_descent_lower_focus,   c, 300,  -1);
     vec3f_set(c->focus, gCutsceneFocus->oPosX, sCutsceneVars[2].point[1] + gCutsceneFocus->oPosY,
               gCutsceneFocus->oPosZ);
     player2_rotate_cam(c, -0x2000, 0x2000, -0x2000, 0x2000);
@@ -7028,7 +6800,7 @@ void cutscene_ending_look_up_at_castle(UNUSED struct Camera *c) {
  * Peach opens her eyes and the camera looks at the castle window again.
  */
 void cutscene_ending_peach_wakeup(struct Camera *c) {
-    cutscene_event(cutscene_ending_reset_spline, c, 0, 0);
+    cutscene_event(cutscene_ending_reset_spline,      c, 0, 0);
     cutscene_event(cutscene_ending_look_up_at_castle, c, 0, 0);
 #ifdef VERSION_EU
     cutscene_event(cutscene_ending_look_up_at_castle, c, 265, -1);
@@ -7058,7 +6830,7 @@ void cutscene_ending_dialog(struct Camera *c) {
 void cutscene_ending_kiss_closeup(struct Camera *c) {
     set_fov_function(CAM_FOV_SET_29);
     vec3f_set(c->focus, 350.0f, 1034.0f, -1216.0f);
-    vec3f_set(c->pos, -149.0f, 1021.0f, -1216.0f);
+    vec3f_set(c->pos,  -149.0f, 1021.0f, -1216.0f);
 }
 
 /**
@@ -7068,9 +6840,9 @@ void cutscene_ending_kiss_here_we_go(struct Camera *c) {
     Vec3f pos, foc;
 
     set_fov_function(CAM_FOV_DEFAULT);
-    vec3f_set(foc, 233.0f, 1068.0f, -1298.0f);
-    vec3f_set(pos, -250.0f, 966.0f, -1111.0f);
-    approach_vec3f_asymptotic(c->pos, pos, 0.2f, 0.1f, 0.2f);
+    vec3f_set(foc,  233.0f, 1068.0f, -1298.0f);
+    vec3f_set(pos, -250.0f,  966.0f, -1111.0f);
+    approach_vec3f_asymptotic(c->pos,   pos, 0.2f, 0.1f, 0.2f);
     approach_vec3f_asymptotic(c->focus, foc, 0.2f, 0.1f, 0.2f);
 }
 
@@ -7107,10 +6879,10 @@ void cutscene_ending_zoom_fov(UNUSED struct Camera *c) {
  * Peach suggests baking a cake for Mario. Mario looks back at the camera before going inside the castle.
  */
 void cutscene_ending_cake_for_mario(struct Camera *c) {
-    cutscene_event(cutscene_ending_reset_spline, c, 0, 0);
-    cutscene_event(cutscene_ending_look_at_sky, c, 0, 0);
-    cutscene_event(cutscene_ending_zoom_fov, c, 0, 499);
-    cutscene_event(cutscene_ending_look_at_sky, c, 500, -1);
+    cutscene_event(cutscene_ending_reset_spline, c,   0,   0);
+    cutscene_event(cutscene_ending_look_at_sky,  c,   0,   0);
+    cutscene_event(cutscene_ending_zoom_fov,     c,   0, 499);
+    cutscene_event(cutscene_ending_look_at_sky,  c, 500,  -1);
     cutscene_spawn_obj(8, 600);
     cutscene_spawn_obj(8, 608);
     cutscene_spawn_obj(8, 624);
@@ -7200,13 +6972,13 @@ void cutscene_grand_star_focus_mario(struct Camera *c) {
  */
 void cutscene_grand_star(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-    cutscene_event(cutscene_grand_star_start, c, 0, 0);
-    cutscene_event(cutscene_grand_star_front_of_mario, c, 0, 109);
-    cutscene_event(cutscene_grand_star_focus_mario, c, 0, -1);
-    cutscene_event(cutscene_grand_star_mario_jump, c, 110, 110);
-    cutscene_event(cutscene_grand_star_accel_cvar2, c, 110, 159);
-    cutscene_event(cutscene_grand_star_approach_mario, c, 160, -1);
-    cutscene_event(cutscene_grand_star_move_cvar2, c, 110, -1);
+    cutscene_event(cutscene_grand_star_start,          c,   0,   0);
+    cutscene_event(cutscene_grand_star_front_of_mario, c,   0, 109);
+    cutscene_event(cutscene_grand_star_focus_mario,    c,   0,  -1);
+    cutscene_event(cutscene_grand_star_mario_jump,     c, 110, 110);
+    cutscene_event(cutscene_grand_star_accel_cvar2,    c, 110, 159);
+    cutscene_event(cutscene_grand_star_approach_mario, c, 160,  -1);
+    cutscene_event(cutscene_grand_star_move_cvar2,     c, 110,  -1);
 }
 
 /**
@@ -7227,7 +6999,7 @@ void cutscene_grand_star_fly_move_to_mario(UNUSED struct Camera *c) {
 
     vec3f_set(posOff, -600.0f, 0.0f, -400.0f);
     approach_vec3f_asymptotic(sCutsceneVars[4].point, posOff, 0.05f, 0.05f, 0.05f);
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[1], 0.0f, 2.0f);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[1],    0.0f, 2.0f);
     camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[2], -200.0f, 6.0f);
 }
 
@@ -7242,12 +7014,12 @@ void cutscene_grand_star_fly_mario_offscreen(UNUSED struct Camera *c) {
     camera_approach_f32_symmetric_bool(&sCutsceneVars[8].point[0], 15.0f, 0.1f);
 
     camera_approach_f32_symmetric_bool(&sCutsceneVars[4].point[0], -2000.0f, sCutsceneVars[8].point[0]);
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[4].point[1], 1200.0f, sCutsceneVars[8].point[0] / 10.0f);
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[4].point[2], 1000.0f, sCutsceneVars[8].point[0] / 10.0f);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[4].point[1],  1200.0f, sCutsceneVars[8].point[0] / 10.0f);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[4].point[2],  1000.0f, sCutsceneVars[8].point[0] / 10.0f);
 
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[0], 0.0f, sCutsceneVars[8].point[0]);
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[1], 1200.0f, sCutsceneVars[8].point[0] / 2);
-    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[2], 1000.0f, sCutsceneVars[8].point[0] / 1.5f);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[0],     0.0f, sCutsceneVars[8].point[0]);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[1],  1200.0f, sCutsceneVars[8].point[0] / 2);
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[5].point[2],  1000.0f, sCutsceneVars[8].point[0] / 1.5f);
 }
 
 /**
@@ -7269,8 +7041,8 @@ void cutscene_grand_star_fly_app_cvars(struct Camera *c) {
     camera_approach_f32_symmetric_bool(&dist, 0, sCutsceneVars[8].point[2]);
     vec3f_set_dist_and_angle(goalPos, c->pos, dist, pitch, yaw);
 
-    approach_vec3f_asymptotic(c->pos, goalPos, 0.01f, 0.01f, 0.01f);
-    approach_vec3f_asymptotic(c->focus, goalFoc, 0.5f, 0.8f, 0.5f);
+    approach_vec3f_asymptotic(c->pos,   goalPos, 0.01f, 0.01f, 0.01f);
+    approach_vec3f_asymptotic(c->focus, goalFoc,  0.5f,  0.8f,  0.5f);
 }
 
 /**
@@ -7284,10 +7056,10 @@ void cutscene_grand_star_fly_app_cvars(struct Camera *c) {
  */
 void cutscene_grand_star_fly(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
-    cutscene_event(cutscene_grand_star_fly_start, c, 0, 0);
-    cutscene_event(cutscene_grand_star_fly_move_to_mario, c, 0, 140);
-    cutscene_event(cutscene_grand_star_fly_mario_offscreen, c, 141, -1);
-    cutscene_event(cutscene_grand_star_fly_app_cvars, c, 0, -1);
+    cutscene_event(cutscene_grand_star_fly_start,           c,   0,   0);
+    cutscene_event(cutscene_grand_star_fly_move_to_mario,   c,   0, 140);
+    cutscene_event(cutscene_grand_star_fly_mario_offscreen, c, 141,  -1);
+    cutscene_event(cutscene_grand_star_fly_app_cvars,       c,   0,  -1);
 }
 
 /**
@@ -7395,9 +7167,8 @@ void star_dance_bound_yaw(struct Camera *c, s16 absYaw, s16 yawMax) {
     yawFromAbs = yaw - absYaw;
 
     // Because angles are s16, this checks if yaw is negative
-    if ((yawFromAbs & 0x8000) != 0) {
-        yawFromAbs = -yawFromAbs;
-    }
+    if (yawFromAbs & 0x8000) yawFromAbs = -yawFromAbs;
+
     if (yawFromAbs > yawMax) {
         yaw = absYaw;
         c->nextYaw = yaw;
@@ -7410,16 +7181,9 @@ void star_dance_bound_yaw(struct Camera *c, s16 absYaw, s16 yawMax) {
  * Store the camera's focus in cvar9.
  */
 void cutscene_dance_closeup_start(struct Camera *c) {
-    if ((gLastCompletedStarNum == 4) && (gCurrCourseNum == COURSE_JRB)) {
-        star_dance_bound_yaw(c, 0x0, 0x4000);
-    }
-    if ((gLastCompletedStarNum == 1) && (gCurrCourseNum == COURSE_DDD)) {
-        star_dance_bound_yaw(c, 0x8000, 0x5000);
-    }
-    if ((gLastCompletedStarNum == 5) && (gCurrCourseNum == COURSE_WDW)) {
-        star_dance_bound_yaw(c, 0x8000, 0x800);
-    }
-
+    if ((gLastCompletedStarNum == 4) && (gCurrCourseNum == COURSE_JRB)) star_dance_bound_yaw(c,    0x0, 0x4000);
+    if ((gLastCompletedStarNum == 1) && (gCurrCourseNum == COURSE_DDD)) star_dance_bound_yaw(c, 0x8000, 0x5000);
+    if ((gLastCompletedStarNum == 5) && (gCurrCourseNum == COURSE_WDW)) star_dance_bound_yaw(c, 0x8000, 0x800);
     vec3f_copy(sCutsceneVars[9].point, c->focus);
 }
 
@@ -7542,9 +7306,9 @@ void cutscene_dance_fly_away_approach_mario(struct Camera *c) {
     f32 dist;
 
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
-    approach_f32_asymptotic_bool(&dist, 600.0f, 0.3f);
-    approach_s16_asymptotic_bool(&pitch, 0x1000, 16);
-    approach_s16_asymptotic_bool(&yaw, c->yaw, 8);
+    approach_f32_asymptotic_bool(&dist,  600.0f, 0.3f);
+    approach_s16_asymptotic_bool(&pitch, 0x1000,   16);
+    approach_s16_asymptotic_bool(&yaw,   c->yaw,    8);
     vec3f_set_dist_and_angle(sMarioCamState->pos, c->pos, dist, pitch, yaw);
 }
 
@@ -7719,7 +7483,7 @@ void cutscene_bowser_arena_set_focus(struct Camera *c) {
  * further in front of bowser.
  */
 void cutscene_bowser_arena_adjust_offsets(UNUSED struct Camera *c) {
-    approach_s16_asymptotic_bool(&sCutsceneVars[3].angle[0], 0x6C8, 30);
+    approach_s16_asymptotic_bool(&sCutsceneVars[3].angle[0],   0x6C8,    30);
     approach_f32_asymptotic_bool(&sCutsceneVars[0].point[2], -200.0f, 0.02f);
     approach_f32_asymptotic_bool(&sCutsceneVars[3].point[2],  550.0f, 0.02f);
 }
@@ -7857,7 +7621,7 @@ void cutscene_star_spawn_update_boss_fight(struct Camera *c) {
 
     update_boss_fight_camera(c, focus, pos);
     approach_vec3f_asymptotic(c->focus, focus, 0.2f, 0.2f, 0.2f);
-    approach_vec3f_asymptotic(c->pos, pos, 0.2f, 0.2f, 0.2f);
+    approach_vec3f_asymptotic(c->pos,   pos,   0.2f, 0.2f, 0.2f);
 }
 
 /**
@@ -7872,7 +7636,7 @@ void cutscene_star_spawn_fly_back(struct Camera *c) {
  * Plays when a star spawns (ie from a box).
  */
 void cutscene_star_spawn(struct Camera *c) {
-    cutscene_event(cutscene_star_spawn_store_info, c, 0, 0);
+    cutscene_event(cutscene_star_spawn_store_info, c, 0,  0);
     cutscene_event(cutscene_star_spawn_focus_star, c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 
@@ -7944,7 +7708,7 @@ void cutscene_exit_fall_to_castle_grounds_warp(struct Camera *c) {
  * Cutscene that plays when Mario falls from WMOTR.
  */
 void cutscene_exit_fall_to_castle_grounds(struct Camera *c) {
-    cutscene_event(cutscene_exit_fall_to_castle_grounds_warp, c, 0, 0);
+    cutscene_event(cutscene_exit_fall_to_castle_grounds_warp,   c, 0,  0);
     cutscene_event(cutscene_exit_to_castle_grounds_focus_mario, c, 0, -1);
     update_camera_yaw(c);
 }
@@ -7991,8 +7755,8 @@ void cutscene_red_coin_star_warp(struct Camera *c) {
 
     vec3f_set(sCutsceneVars[1].point, o->oHomeX, o->oHomeY, o->oHomeZ);
     vec3f_get_dist_and_angle(sCutsceneVars[1].point, c->pos, &dist, &pitch, &yaw);
-    posYaw = calculate_yaw(sCutsceneVars[1].point, c->pos);
-    yaw = calculate_yaw(sCutsceneVars[1].point, sMarioCamState->pos);
+    posYaw = calculate_yaw(  sCutsceneVars[1].point, c->pos);
+    yaw = calculate_yaw(     sCutsceneVars[1].point, sMarioCamState->pos);
 
     if (ABS(yaw - posYaw + DEGREES(90)) < ABS(yaw - posYaw - DEGREES(90))) {
         yaw += DEGREES(90);
@@ -8080,7 +7844,7 @@ void cutscene_goto_cvar_pos(struct Camera *c, f32 goalDist, s16 goalPitch, s16 r
         }
     }
 
-    approach_f32_asymptotic_bool(&nextDist, goalDist, 0.05f);
+    approach_f32_asymptotic_bool(&nextDist,  goalDist, 0.05f);
     approach_s16_asymptotic_bool(&nextPitch, goalPitch, 0x20);
 
     vec3f_set_dist_and_angle(sCutsceneVars[3].point, c->pos, nextDist, nextPitch, nextYaw);
@@ -8090,12 +7854,8 @@ void cutscene_goto_cvar_pos(struct Camera *c, f32 goalDist, s16 goalPitch, s16 r
     pan_camera(c, rotPitch, rotYaw);
     vec3f_get_dist_and_angle(c->pos, c->focus, &nextDist, &nextPitch, &nextYaw);
 
-    if (nextPitch < -0x3000) {
-        nextPitch = -0x3000;
-    }
-    if (nextPitch > 0x3000) {
-        nextPitch = 0x3000;
-    }
+    if (nextPitch < -0x3000) nextPitch = -0x3000;
+    if (nextPitch >  0x3000) nextPitch =  0x3000;
 
     vec3f_set_dist_and_angle(c->pos, c->focus, nextDist, nextPitch, nextYaw);
 }
@@ -8271,10 +8031,7 @@ void cutscene_quicksand_death_start(struct Camera *c) {
  */
 void cutscene_quicksand_death_goto_mario(struct Camera *c) {
     cutscene_goto_cvar_pos(c, 400.0f, 0x2800, 0x200, 0);
-
-    if (c->cutscene == CUTSCENE_WATER_DEATH) {
-        water_death_move_to_mario_side(c);
-    }
+    if (c->cutscene == CUTSCENE_WATER_DEATH) water_death_move_to_mario_side(c);
 }
 
 /**
@@ -8285,7 +8042,7 @@ void cutscene_quicksand_death(struct Camera *c) {
     sCutsceneVars[3].point[1] = sMarioCamState->pos[1] + 20.0f;
     sCutsceneVars[3].point[2] = sMarioCamState->pos[2];
 
-    cutscene_event(cutscene_quicksand_death_start, c, 0, 0);
+    cutscene_event(cutscene_quicksand_death_start,      c, 0,  0);
     cutscene_event(cutscene_quicksand_death_goto_mario, c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     set_handheld_shake(HAND_CAM_SHAKE_HIGH);
@@ -8345,12 +8102,8 @@ void cutscene_suffocation(struct Camera *c) {
 void cutscene_enter_pool_start(struct Camera *c) {
     vec3f_copy(sCutsceneVars[3].point, sMarioCamState->pos);
 
-    if (gCurrLevelNum == LEVEL_CASTLE) { // entering HMC
-        vec3f_set(sCutsceneVars[3].point, 2485.0f, -1589.0f, -2659.0f);
-    }
-    if (gCurrLevelNum == LEVEL_HMC) { // entering CotMC
-        vec3f_set(sCutsceneVars[3].point, 3350.0f, -4589.0f, 4800.0f);
-    }
+    if (gCurrLevelNum == LEVEL_CASTLE) vec3f_set(sCutsceneVars[3].point, 2485.0f, -1589.0f, -2659.0f); // entering HMC
+    if (gCurrLevelNum == LEVEL_HMC   ) vec3f_set(sCutsceneVars[3].point, 3350.0f, -4589.0f,  4800.0f); // entering CotMC
 
     vec3f_copy(sCutsceneVars[0].point, c->focus);
 }
@@ -8828,7 +8581,7 @@ void cutscene_exit_non_painting_succ(struct Camera *c) {
 void cutscene_non_painting_death_start(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[7].point, sMarioCamState->pos);
     vec3s_copy(sCutsceneVars[7].angle, sMarioCamState->faceAngle);
-    vec3f_set(sCutsceneVars[6].point, -42.0f, 350.0f, 727.0f);
+    vec3f_set(sCutsceneVars[6].point, -42.0f, 350.0f,  727.0f);
     // This is always overwritten, except in the unused cutscene_exit_bowser_death()
     vec3f_set(sCutsceneVars[5].point, 107.0f, 226.0f, 1187.0f);
 }
@@ -9014,7 +8767,7 @@ void cutscene_unlock_key_door_start(struct Camera *c) {
  * Gives a better view of the key.
  */
 void cutscene_unlock_key_door_approach_mario(struct Camera *c) {
-    approach_vec3f_asymptotic(c->pos, sCutsceneVars[2].point, 0.1f, 0.1f, 0.1f);
+    approach_vec3f_asymptotic(c->pos,   sCutsceneVars[2].point, 0.1f, 0.1f, 0.1f);
     approach_vec3f_asymptotic(c->focus, sCutsceneVars[3].point, 0.1f, 0.1f, 0.1f);
 }
 
@@ -9032,7 +8785,7 @@ void cutscene_unlock_key_door_stub(UNUSED struct Camera *c) {
  * Move back to the previous pos and focus, stored in cvar0 and cvar1.
  */
 void cutscene_unlock_key_door_fly_back(struct Camera *c) {
-    approach_vec3f_asymptotic(c->pos, sCutsceneVars[0].point, 0.1f, 0.1f, 0.1f);
+    approach_vec3f_asymptotic(c->pos,   sCutsceneVars[0].point, 0.1f, 0.1f, 0.1f);
     approach_vec3f_asymptotic(c->focus, sCutsceneVars[1].point, 0.1f, 0.1f, 0.1f);
 }
 
@@ -9076,11 +8829,11 @@ s32 intro_peach_move_camera_start_to_pipe(struct Camera *c, struct CutsceneSplin
     //! The two splines used by this function are reflected in the horizontal plane for some reason,
     //! so they are rotated every frame. Why do this, Nintendo?
     rotate_in_xz(c->focus, c->focus, DEGREES(-180));
-    rotate_in_xz(c->pos, c->pos, DEGREES(-180));
+    rotate_in_xz(c->pos,   c->pos,   DEGREES(-180));
 
     vec3f_set(offset, -1328.0f, 260.0f, 4664.0f);
     vec3f_add(c->focus, offset);
-    vec3f_add(c->pos, offset);
+    vec3f_add(c->pos,   offset);
 
     posReturn += focusReturn; // Unused
     return focusReturn;
@@ -9609,7 +9362,7 @@ void cutscene_exit_painting_start(struct Camera *c) {
     f32 floorHeight;
 
     vec3f_set(sCutsceneVars[2].point, 258.0f, -352.0f, 1189.0f);
-    vec3f_set(sCutsceneVars[1].point, 65.0f, -155.0f, 444.0f);
+    vec3f_set(sCutsceneVars[1].point,  65.0f, -155.0f,  444.0f);
 
     if (gPrevLevel == LEVEL_TTM) {
         sCutsceneVars[1].point[1] = 0.0f;
@@ -9772,9 +9525,7 @@ void cutscene_enter_cannon_raise(struct Camera *c) {
 
     floorHeight = find_floor(c->pos[0], c->pos[1] + 500.0f, c->pos[2], &floor) + 100.0f;
 
-    if (c->pos[1] < floorHeight) {
-        c->pos[1] = floorHeight;
-    }
+    if (c->pos[1] < floorHeight) c->pos[1] = floorHeight;
 }
 
 /**
@@ -9887,12 +9638,8 @@ void cutscene_door_mode(struct Camera *c) {
     reset_pan_distance(c);
     camera_course_processing(c);
 
-    if (c->mode == CAMERA_MODE_FIXED) {
-        c->nextYaw = update_fixed_camera(c, c->focus, c->pos);
-    }
-    if (c->mode == CAMERA_MODE_PARALLEL_TRACKING) {
-        c->nextYaw = update_parallel_tracking_camera(c, c->focus, c->pos);
-    }
+    if (c->mode == CAMERA_MODE_FIXED) c->nextYaw = update_fixed_camera(c, c->focus, c->pos);
+    if (c->mode == CAMERA_MODE_PARALLEL_TRACKING) c->nextYaw = update_parallel_tracking_camera(c, c->focus, c->pos);
 
     c->yaw = c->nextYaw;
 
@@ -10770,9 +10517,8 @@ void play_cutscene(struct Camera *c) {
 #undef CUTSCENE
 
     if ((cutsceneDuration != 0) && !(gCutsceneTimer & CUTSCENE_STOP)) {
-        if (gCutsceneTimer < CUTSCENE_LOOP) {
-            gCutsceneTimer++;
-        }
+        if (gCutsceneTimer < CUTSCENE_LOOP) gCutsceneTimer++;
+
         if (gCutsceneTimer >= cutsceneDuration) {
             sCutsceneShot++;
             gCutsceneTimer = 0;
@@ -10786,9 +10532,7 @@ void play_cutscene(struct Camera *c) {
     sAreaYawChange = 0;
 
     // The cutscene just ended
-    if ((c->cutscene == 0) && (oldCutscene != 0)) {
-        gRecentCutscene = oldCutscene;
-    }
+    if ((c->cutscene == 0) && (oldCutscene != 0)) gRecentCutscene = oldCutscene;
 }
 
 /**
@@ -10797,9 +10541,7 @@ void play_cutscene(struct Camera *c) {
  */
 void cutscene_event(CameraEvent event, struct Camera *c, s16 start, s16 end) {
     if (start <= gCutsceneTimer) {
-        if (end == -1 || end >= gCutsceneTimer) {
-            event(c);
-        }
+        if (end == -1 || end >= gCutsceneTimer) event(c);
     }
 }
 
@@ -10809,9 +10551,7 @@ void cutscene_event(CameraEvent event, struct Camera *c, s16 start, s16 end) {
  * @see intro_scene.inc.c for details on which objects are spawned.
  */
 void cutscene_spawn_obj(u32 obj, s16 frame) {
-    if (frame == gCutsceneTimer) {
-        gCutsceneObjSpawn = obj;
-    }
+    if (frame == gCutsceneTimer) gCutsceneObjSpawn = obj;
 }
 
 /**
@@ -11038,7 +10778,7 @@ void obj_rotate_towards_point(struct Object *o, Vec3f point, s16 pitchOff, s16 y
     object_pos_to_vec3f(oPos, o);
     vec3f_get_dist_and_angle(oPos, point, &dist, &pitch, &yaw);
     o->oMoveAnglePitch = approach_s16_asymptotic(o->oMoveAnglePitch, pitchOff - pitch, pitchDiv);
-    o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, yaw + yawOff, yawDiv);
+    o->oMoveAngleYaw   = approach_s16_asymptotic(o->oMoveAngleYaw, yaw + yawOff, yawDiv);
 }
 
 #include "behaviors/intro_peach.inc.c"

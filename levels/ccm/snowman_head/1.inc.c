@@ -159,7 +159,7 @@ static const Vtx ccm_seg7_vertex_07013350[] = {
 
 // 0x070133E0 - 0x070136D0
 static const Gfx ccm_seg7_dl_070133E0[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07011958),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_snowman_snow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_07012C38.l, 1),

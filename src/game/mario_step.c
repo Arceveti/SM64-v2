@@ -738,9 +738,7 @@ void apply_vertical_wind(struct MarioState *m) {
                 maxVelY = 50.0f;
             }
 
-            if (m->vel[1] < maxVelY) {
-                if ((m->vel[1] += maxVelY / 8.0f) > maxVelY) m->vel[1] = maxVelY;
-            }
+            if (m->vel[1] < maxVelY) if ((m->vel[1] += maxVelY / 8.0f) > maxVelY) m->vel[1] = maxVelY;
 
 #ifdef VERSION_JP
             play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);
@@ -768,9 +766,7 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
         // getting 0s until your last qf. Graze a wall on your last qf, and it will
         // return the stored 2 with a sharply angled reference wall. (some gwks)
 
-        if (quarterStepResult != AIR_STEP_NONE) {
-            stepResult = quarterStepResult;
-        }
+        if (quarterStepResult != AIR_STEP_NONE) stepResult = quarterStepResult;
 
         if (quarterStepResult == AIR_STEP_LANDED
          || quarterStepResult == AIR_STEP_GRABBED_LEDGE

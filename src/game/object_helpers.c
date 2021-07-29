@@ -2112,7 +2112,7 @@ s32 is_item_in_array(s8 item, s8 *array) {
 }
 
 void bhv_init_room(void) {
-    struct Surface *floor;
+    struct Surface *floor = NULL;
     f32 floorHeight;
 
     if (is_item_in_array(gCurrLevelNum, sLevelsWithRooms)) {

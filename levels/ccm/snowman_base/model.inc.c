@@ -5,7 +5,7 @@ static const Lights1 ccm_seg7_lights_07011940 = gdSPDefLights1(
 );
 
 // 0x07011958 - 0x07012158
-ALIGNED8 static const Texture ccm_seg7_texture_07011958[] = {
+ALIGNED8 static const Texture ccm_seg7_texture_snowman_snow[] = {
 #include "levels/ccm/12.rgba16.inc.c"
 };
 
@@ -164,7 +164,7 @@ static const Vtx ccm_seg7_vertex_07012858[] = {
 
 // 0x070128E8 - 0x07012BD8
 static const Gfx ccm_seg7_dl_070128E8[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_07011958),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_snowman_snow),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_07011940.l, 1),

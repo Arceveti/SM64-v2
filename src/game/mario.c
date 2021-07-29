@@ -1074,10 +1074,10 @@ s32 hurt_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg, s
  * actions. A common variant of the below function.
  */
 s32 check_common_action_exits(struct MarioState *m) {
-    if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_JUMP, 0);
-    if (m->input & INPUT_OFF_FLOOR) return set_mario_action(m, ACT_FREEFALL, 0);
-    if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_WALKING, 0);
-    if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
+    if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_JUMP         , 0);
+    if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_FREEFALL     , 0);
+    if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_WALKING      , 0);
+    if (m->input & INPUT_ABOVE_SLIDE   ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
     return FALSE;
 }
 
@@ -1086,10 +1086,10 @@ s32 check_common_action_exits(struct MarioState *m) {
  * object holding actions. A holding variant of the above function.
  */
 s32 check_common_hold_action_exits(struct MarioState *m) {
-    if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_HOLD_JUMP, 0);
-    if (m->input & INPUT_OFF_FLOOR) return set_mario_action(m, ACT_HOLD_FREEFALL, 0);
-    if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_HOLD_WALKING, 0);
-    if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(m, ACT_HOLD_BEGIN_SLIDING, 0);
+    if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_HOLD_JUMP         , 0);
+    if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_HOLD_FREEFALL     , 0);
+    if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_HOLD_WALKING      , 0);
+    if (m->input & INPUT_ABOVE_SLIDE   ) return set_mario_action(m, ACT_HOLD_BEGIN_SLIDING, 0);
     return FALSE;
 }
 
@@ -1101,11 +1101,7 @@ s32 transition_submerged_to_walking(struct MarioState *m) {
 
     vec3s_set(m->angleVel, 0, 0, 0);
 
-    if (m->heldObj == NULL) {
-        return set_mario_action(m, ACT_WALKING, 0);
-    } else {
-        return set_mario_action(m, ACT_HOLD_WALKING, 0);
-    }
+    return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
 }
 
 /**
@@ -1316,9 +1312,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
         if (gPlayer1Controller->buttonPressed & L_TRIG) {
             sDebugMode++;
-            if (sDebugMode > 4) {
-                sDebugMode = 0;
-            }
+            if (sDebugMode > 4) sDebugMode = 0;
         }
     }
     if (gPlayer1Controller->buttonDown & Z_TRIG && gPlayer1Controller->buttonPressed & L_JPAD) {
@@ -1417,7 +1411,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
 
         if (m->pos[1] > m->floorHeight + 100.0f) m->input |= INPUT_OFF_FLOOR;
         if (m->pos[1] < (m->waterLevel - 10.0f)) m->input |= INPUT_IN_WATER;
-        if (m->pos[1] < (gasLevel - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
+        if (m->pos[1] <     (gasLevel - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
 
     } else {
         level_trigger_warp(m, WARP_OP_DEATH);
@@ -1462,7 +1456,7 @@ void update_mario_inputs(struct MarioState *m) {
     // perhaps logically grouped here with the timers.
     stub_mario_step_1(m);
 
-    if (m->wallKickTimer > 0) m->wallKickTimer--;
+    if (m->wallKickTimer   > 0) m->wallKickTimer--;
     if (m->doubleJumpTimer > 0) m->doubleJumpTimer--;
 }
 
@@ -1647,9 +1641,7 @@ u32 update_and_return_cap_flags(struct MarioState *m) {
             if (!(m->flags & MARIO_CAPS)) m->flags &= ~MARIO_CAP_ON_HEAD;
         }
 
-        if (m->capTimer == 60) {
-            fadeout_cap_music();
-        }
+        if (m->capTimer == 60) fadeout_cap_music();
 
         // This code flickers the cap through a long binary string, increasing in how
         // common it flickers near the end.
