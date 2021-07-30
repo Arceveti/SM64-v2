@@ -44,45 +44,45 @@
 #define INTERACT_MASK_NO_OBJ_COLLISIONS 0x00053430
 
 // INTERACT_WARP
-#define INT_SUBTYPE_FADING_WARP 0x00000001
+#define INT_SUBTYPE_FADING_WARP         /* 0x00000001 */ (1 <<  0)
 
 // Damaging interactions
-#define INT_SUBTYPE_DELAY_INVINCIBILITY 0x00000002
-#define INT_SUBTYPE_BIG_KNOCKBACK       0x00000008 /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
+#define INT_SUBTYPE_DELAY_INVINCIBILITY /* 0x00000002 */ (1 <<  1)
+#define INT_SUBTYPE_BIG_KNOCKBACK       /* 0x00000008 */ (1 <<  3) /* Used by Bowser, sets Mario's forward velocity to 40 on hit */
 
 // INTERACT_GRABBABLE
-#define INT_SUBTYPE_GRABS_MARIO      0x00000004 /* Also makes the object heavy */
-#define INT_SUBTYPE_HOLDABLE_NPC     0x00000010 /* Allows the object to be gently dropped, and sets vertical speed to 0 when dropped with no forwards velocity */
-#define INT_SUBTYPE_DROP_IMMEDIATELY 0x00000040 /* This gets set by grabbable NPCs that talk to Mario to make him drop them after the dialog is finished */
-#define INT_SUBTYPE_KICKABLE         0x00000100
-#define INT_SUBTYPE_NOT_GRABBABLE    0x00000200 /* Used by Heavy-Ho to allow it to throw Mario, without Mario being able to pick it up */
+#define INT_SUBTYPE_GRABS_MARIO         /* 0x00000004 */ (1 <<  2) /* Also makes the object heavy */
+#define INT_SUBTYPE_HOLDABLE_NPC        /* 0x00000010 */ (1 <<  4) /* Allows the object to be gently dropped, and sets vertical speed to 0 when dropped with no forwards velocity */
+#define INT_SUBTYPE_DROP_IMMEDIATELY    /* 0x00000040 */ (1 <<  6) /* This gets set by grabbable NPCs that talk to Mario to make him drop them after the dialog is finished */
+#define INT_SUBTYPE_KICKABLE            /* 0x00000100 */ (1 <<  8)
+#define INT_SUBTYPE_NOT_GRABBABLE       /* 0x00000200 */ (1 <<  9) /* Used by Heavy-Ho to allow it to throw Mario, without Mario being able to pick it up */
 
 // INTERACT_DOOR
-#define INT_SUBTYPE_STAR_DOOR 0x00000020
+#define INT_SUBTYPE_STAR_DOOR           /* 0x00000020 */ (1 <<  5)
 
 // INTERACT_BOUNCE_TOP
-#define INT_SUBTYPE_TWIRL_BOUNCE 0x00000080
+#define INT_SUBTYPE_TWIRL_BOUNCE        /* 0x00000080 */ (1 <<  7)
 
 // INTERACT_STAR_OR_KEY
-#define INT_SUBTYPE_NO_EXIT    0x00000400
-#define INT_SUBTYPE_GRAND_STAR 0x00000800
+#define INT_SUBTYPE_NO_EXIT             /* 0x00000400 */ (1 << 10)
+#define INT_SUBTYPE_GRAND_STAR          /* 0x00000800 */ (1 << 11)
 
 // INTERACT_TEXT
-#define INT_SUBTYPE_SIGN 0x00001000
-#define INT_SUBTYPE_NPC  0x00004000
+#define INT_SUBTYPE_SIGN                /* 0x00001000 */ (1 << 12)
+#define INT_SUBTYPE_NPC                 /* 0x00004000 */ (1 << 14)
 
 // INTERACT_CLAM_OR_BUBBA
-#define INT_SUBTYPE_EATS_MARIO 0x00002000
+#define INT_SUBTYPE_EATS_MARIO          /* 0x00002000 */ (1 << 13)
 
 
-#define ATTACK_PUNCH                 1
-#define ATTACK_KICK_OR_TRIP          2
-#define ATTACK_FROM_ABOVE            3
-#define ATTACK_GROUND_POUND_OR_TWIRL 4
-#define ATTACK_FAST_ATTACK           5
-#define ATTACK_FROM_BELOW            6
+#define ATTACK_PUNCH                    1
+#define ATTACK_KICK_OR_TRIP             2
+#define ATTACK_FROM_ABOVE               3
+#define ATTACK_GROUND_POUND_OR_TWIRL    4
+#define ATTACK_FAST_ATTACK              5
+#define ATTACK_FROM_BELOW               6
 
-#define INT_STATUS_ATTACK_MASK 0x000000FF
+#define INT_STATUS_ATTACK_MASK          0x000000FF
 
 
 #define INT_STATUS_NONE                         0  /* 0x00000000 */
@@ -112,12 +112,12 @@
 #define INT_STATUS_TOUCHED_BOB_OMB       (1 << 23) /* 0x00800000 */
 
 
-s16 mario_obj_angle_to_object(struct MarioState *m, struct Object *o);
-void mario_stop_riding_object(struct MarioState *m);
-void mario_grab_used_object(struct MarioState *m);
-void mario_drop_held_object(struct MarioState *m);
-void mario_throw_held_object(struct MarioState *m);
-void mario_stop_riding_and_holding(struct MarioState *m);
+s16 mario_obj_angle_to_object(         struct MarioState *m, struct Object *o);
+void mario_stop_riding_object(         struct MarioState *m);
+void mario_grab_used_object(           struct MarioState *m);
+void mario_drop_held_object(           struct MarioState *m);
+void mario_throw_held_object(          struct MarioState *m);
+void mario_stop_riding_and_holding(    struct MarioState *m);
 u32 does_mario_have_normal_cap_on_head(struct MarioState *m);
 void mario_blow_off_cap(struct MarioState *m, f32 capSpeed);
 #ifdef DEBUG_LEVEL_SELECT
@@ -127,9 +127,9 @@ u32 mario_lose_cap_to_enemy(u32 arg);
 #endif
 void mario_retrieve_cap(void);
 struct Object *mario_get_collided_object(struct MarioState *m, u32 interactType);
-u32 mario_check_object_grab(struct MarioState *m);
-u32 get_door_save_file_flag(struct Object *door);
-void mario_process_interactions(struct MarioState *m);
-void mario_handle_special_floors(struct MarioState *m);
+u32 mario_check_object_grab(             struct MarioState *m);
+u32 get_door_save_file_flag(             struct Object *door);
+void mario_process_interactions(         struct MarioState *m);
+void mario_handle_special_floors(        struct MarioState *m);
 
 #endif // INTERACTION_H

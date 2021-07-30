@@ -30,16 +30,16 @@
     (*(void **) &gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
 extern struct AllocOnlyPool *gGraphNodePool;
-extern struct GraphNode *gCurRootGraphNode;
-extern struct GraphNode **gGeoViews;
-extern u16 gGeoNumViews;
-extern uintptr_t gGeoLayoutStack[];
-extern struct GraphNode *gCurGraphNodeList[];
-extern s16 gCurGraphNodeIndex;
-extern s16 gGeoLayoutStackIndex;
-extern s16 gGeoLayoutReturnIndex;
-extern u8 *gGeoLayoutCommand;
-extern struct GraphNode gObjParentGraphNode;
+extern struct GraphNode     *gCurRootGraphNode;
+extern struct GraphNode    **gGeoViews;
+extern u16                   gGeoNumViews;
+extern uintptr_t             gGeoLayoutStack[];
+extern struct GraphNode     *gCurGraphNodeList[];
+extern s16                   gCurGraphNodeIndex;
+extern s16                   gGeoLayoutStackIndex;
+extern s16                   gGeoLayoutReturnIndex;
+extern u8                   *gGeoLayoutCommand;
+extern struct GraphNode      gObjParentGraphNode;
 
 void geo_layout_cmd_branch_and_link(void);
 void geo_layout_cmd_end(void);

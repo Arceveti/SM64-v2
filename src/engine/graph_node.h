@@ -348,10 +348,10 @@ struct GraphNodeCullingRadius
     u8 pad1E[2];
 };
 
-extern struct GraphNodeMasterList *gCurGraphNodeMasterList;
+extern struct GraphNodeMasterList  *gCurGraphNodeMasterList;
 extern struct GraphNodePerspective *gCurGraphNodeCamFrustum;
-extern struct GraphNodeCamera *gCurGraphNodeCamera;
-extern struct GraphNodeHeldObject *gCurGraphNodeHeldObject;
+extern struct GraphNodeCamera      *gCurGraphNodeCamera;
+extern struct GraphNodeHeldObject  *gCurGraphNodeHeldObject;
 extern u16 gAreaUpdateCounter;
 
 extern struct GraphNode *gCurRootGraphNode;
@@ -366,71 +366,52 @@ extern Vec3s gVec3sOne;
 
 void init_scene_graph_node_links(struct GraphNode *graphNode, s32 type);
 
-struct GraphNodeRoot *init_graph_node_root(struct AllocOnlyPool *pool, struct GraphNodeRoot *graphNode,
-                                           s16 areaIndex, s16 x, s16 y, s16 width, s16 height);
-struct GraphNodeOrthoProjection *init_graph_node_ortho_projection(struct AllocOnlyPool *pool, struct GraphNodeOrthoProjection *graphNode, f32 scale);
-struct GraphNodePerspective *init_graph_node_perspective(struct AllocOnlyPool *pool, struct GraphNodePerspective *graphNode,
-                                                         f32 fov, s16 near, u16 far, GraphNodeFunc nodeFunc, s32 unused);
-struct GraphNodeStart *init_graph_node_start(struct AllocOnlyPool *pool, struct GraphNodeStart *graphNode);
-struct GraphNodeMasterList *init_graph_node_master_list(struct AllocOnlyPool *pool, struct GraphNodeMasterList *graphNode, s16 on);
-struct GraphNodeLevelOfDetail *init_graph_node_render_range(struct AllocOnlyPool *pool, struct GraphNodeLevelOfDetail *graphNode,
-                                                            s16 minDistance, s16 maxDistance);
-struct GraphNodeSwitchCase *init_graph_node_switch_case(struct AllocOnlyPool *pool, struct GraphNodeSwitchCase *graphNode,
-                                                        s16 numCases, s16 selectedCase, GraphNodeFunc nodeFunc, s32 unused);
-struct GraphNodeCamera *init_graph_node_camera(struct AllocOnlyPool *pool, struct GraphNodeCamera *graphNode,
-                                               f32 *pos, f32 *focus, GraphNodeFunc func, s32 mode);
-struct GraphNodeTranslationRotation *init_graph_node_translation_rotation(struct AllocOnlyPool *pool, struct GraphNodeTranslationRotation *graphNode,
-                                                                          s32 drawingLayer, void *displayList, Vec3s translation, Vec3s rotation);
-struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *pool, struct GraphNodeTranslation *graphNode,
-                                                         s32 drawingLayer, void *displayList, Vec3s translation);
-struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool, struct GraphNodeRotation *graphNode,
-                                                   s32 drawingLayer, void *displayList, Vec3s rotation);
-struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool, struct GraphNodeScale *graphNode,
-                                             s32 drawingLayer, void *displayList, f32 scale);
-struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool, struct GraphNodeObject *graphNode,
-                                               struct GraphNode *sharedChild, Vec3f pos, Vec3s angle, Vec3f scale);
-struct GraphNodeCullingRadius *init_graph_node_culling_radius(struct AllocOnlyPool *pool, struct GraphNodeCullingRadius *graphNode, s16 radius);
-struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool *pool, struct GraphNodeAnimatedPart *graphNode,
-                                                            s32 drawingLayer, void *displayList, Vec3s translation);
-struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool, struct GraphNodeBillboard *graphNode,
-                                                     s32 drawingLayer, void *displayList, Vec3s translation, s32 zOffset);
-struct GraphNodeDisplayList *init_graph_node_display_list(struct AllocOnlyPool *pool, struct GraphNodeDisplayList *graphNode,
-                                                          s32 drawingLayer, void *displayList);
-struct GraphNodeShadow *init_graph_node_shadow(struct AllocOnlyPool *pool, struct GraphNodeShadow *graphNode,
-                                               s16 shadowScale, u8 shadowSolidity, u8 shadowType);
-struct GraphNodeObjectParent *init_graph_node_object_parent(struct AllocOnlyPool *pool, struct GraphNodeObjectParent *graphNode,
-                                                            struct GraphNode *sharedChild);
-struct GraphNodeGenerated *init_graph_node_generated(struct AllocOnlyPool *pool, struct GraphNodeGenerated *graphNode,
-                                                     GraphNodeFunc gfxFunc, s32 parameter);
-struct GraphNodeBackground *init_graph_node_background(struct AllocOnlyPool *pool, struct GraphNodeBackground *graphNode,
-                                                       u16 background, GraphNodeFunc backgroundFunc, s32 zero);
-struct GraphNodeHeldObject *init_graph_node_held_object(struct AllocOnlyPool *pool, struct GraphNodeHeldObject *graphNode,
-                                                        struct Object *objNode, Vec3s translation,
-                                                        GraphNodeFunc nodeFunc, s32 playerIndex);
-struct GraphNode *geo_add_child(struct GraphNode *parent, struct GraphNode *childNode);
-struct GraphNode *geo_remove_child(struct GraphNode *graphNode);
+struct GraphNodeRoot                *init_graph_node_root(                struct AllocOnlyPool *pool, struct GraphNodeRoot                *graphNode, s16 areaIndex, s16 x, s16 y, s16 width, s16 height);
+struct GraphNodeOrthoProjection     *init_graph_node_ortho_projection(    struct AllocOnlyPool *pool, struct GraphNodeOrthoProjection     *graphNode, f32 scale);
+struct GraphNodePerspective         *init_graph_node_perspective(         struct AllocOnlyPool *pool, struct GraphNodePerspective         *graphNode, f32 fov, s16 near, u16 far, GraphNodeFunc nodeFunc, UNUSED s32 unused);
+struct GraphNodeStart               *init_graph_node_start(               struct AllocOnlyPool *pool, struct GraphNodeStart               *graphNode);
+struct GraphNodeMasterList          *init_graph_node_master_list(         struct AllocOnlyPool *pool, struct GraphNodeMasterList          *graphNode, s16 on);
+struct GraphNodeLevelOfDetail       *init_graph_node_render_range(        struct AllocOnlyPool *pool, struct GraphNodeLevelOfDetail       *graphNode, s16 minDistance, s16 maxDistance);
+struct GraphNodeSwitchCase          *init_graph_node_switch_case(         struct AllocOnlyPool *pool, struct GraphNodeSwitchCase          *graphNode, s16 numCases, s16 selectedCase, GraphNodeFunc nodeFunc, UNUSED s32 unused);
+struct GraphNodeCamera              *init_graph_node_camera(              struct AllocOnlyPool *pool, struct GraphNodeCamera              *graphNode, f32 *pos, f32 *focus, GraphNodeFunc func, s32 mode);
+struct GraphNodeTranslationRotation *init_graph_node_translation_rotation(struct AllocOnlyPool *pool, struct GraphNodeTranslationRotation *graphNode, s32 drawingLayer, void *displayList, Vec3s translation, Vec3s rotation);
+struct GraphNodeTranslation         *init_graph_node_translation(         struct AllocOnlyPool *pool, struct GraphNodeTranslation         *graphNode, s32 drawingLayer, void *displayList, Vec3s translation);
+struct GraphNodeRotation            *init_graph_node_rotation(            struct AllocOnlyPool *pool, struct GraphNodeRotation            *graphNode, s32 drawingLayer, void *displayList, Vec3s rotation);
+struct GraphNodeScale               *init_graph_node_scale(               struct AllocOnlyPool *pool, struct GraphNodeScale               *graphNode, s32 drawingLayer, void *displayList, f32 scale);
+struct GraphNodeObject              *init_graph_node_object(              struct AllocOnlyPool *pool, struct GraphNodeObject              *graphNode, struct GraphNode *sharedChild, Vec3f pos, Vec3s angle, Vec3f scale);
+struct GraphNodeCullingRadius       *init_graph_node_culling_radius(      struct AllocOnlyPool *pool, struct GraphNodeCullingRadius       *graphNode, s16 radius);
+struct GraphNodeAnimatedPart        *init_graph_node_animated_part(       struct AllocOnlyPool *pool, struct GraphNodeAnimatedPart        *graphNode, s32 drawingLayer, void *displayList, Vec3s translation);
+struct GraphNodeBillboard           *init_graph_node_billboard(           struct AllocOnlyPool *pool, struct GraphNodeBillboard           *graphNode, s32 drawingLayer, void *displayList, Vec3s translation, s32 zOffset);
+struct GraphNodeDisplayList         *init_graph_node_display_list(        struct AllocOnlyPool *pool, struct GraphNodeDisplayList         *graphNode, s32 drawingLayer, void *displayList);
+struct GraphNodeShadow              *init_graph_node_shadow(              struct AllocOnlyPool *pool, struct GraphNodeShadow              *graphNode, s16 shadowScale, u8 shadowSolidity, u8 shadowType);
+struct GraphNodeObjectParent        *init_graph_node_object_parent(       struct AllocOnlyPool *pool, struct GraphNodeObjectParent        *graphNode, struct GraphNode *sharedChild);
+struct GraphNodeGenerated           *init_graph_node_generated(           struct AllocOnlyPool *pool, struct GraphNodeGenerated           *graphNode, GraphNodeFunc gfxFunc, s32 parameter);
+struct GraphNodeBackground          *init_graph_node_background(          struct AllocOnlyPool *pool, struct GraphNodeBackground          *graphNode, u16 background, GraphNodeFunc backgroundFunc, UNUSED s32 zero);
+struct GraphNodeHeldObject          *init_graph_node_held_object(         struct AllocOnlyPool *pool, struct GraphNodeHeldObject          *graphNode, struct Object *objNode, Vec3s translation, GraphNodeFunc nodeFunc, s32 playerIndex);
+struct GraphNode *geo_add_child(       struct GraphNode *parent, struct GraphNode *childNode);
+struct GraphNode *geo_remove_child(    struct GraphNode *graphNode);
 struct GraphNode *geo_make_first_child(struct GraphNode *newFirstChild);
 
 void geo_call_global_function_nodes_helper(struct GraphNode *graphNode, s32 callContext);
-void geo_call_global_function_nodes(struct GraphNode *graphNode, s32 callContext);
+void geo_call_global_function_nodes(       struct GraphNode *graphNode, s32 callContext);
 
-void geo_reset_object_node(struct GraphNodeObject *graphNode);
-void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3s angle);
-void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo *spawn);
-void geo_obj_init_animation(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr);
+void geo_reset_object_node(       struct GraphNodeObject *graphNode);
+void geo_obj_init(                struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3s angle);
+void geo_obj_init_spawninfo(      struct GraphNodeObject *graphNode, struct SpawnInfo *spawn);
+void geo_obj_init_animation(      struct GraphNodeObject *graphNode, struct Animation **animPtrAddr);
 void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr, u32 animAccel);
 
-s32 retrieve_animation_index(s32 frame, u16 **attributes);
+s32  retrieve_animation_index(s32 frame, u16 **attributes);
 
-s16 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist);
+s16  geo_update_animation_frame(        struct AnimInfo        *obj, s32 *accelAssist);
 void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position);
 
 struct GraphNodeRoot *geo_find_root(struct GraphNode *graphNode);
 
 // graph_node_manager
-s16 *read_vec3s_to_vec3f(Vec3f, s16 *src);
-s16 *read_vec3s(Vec3s dst, s16 *src);
-s16 *read_vec3s_angle(Vec3s dst, s16 *src);
+s16 *read_vec3s_to_vec3f(Vec3f dst, s16 *src);
+s16 *read_vec3s(         Vec3s dst, s16 *src);
+s16 *read_vec3s_angle(   Vec3s dst, s16 *src);
 void register_scene_graph_node(struct GraphNode *graphNode);
 
 #endif // GRAPH_NODE_H

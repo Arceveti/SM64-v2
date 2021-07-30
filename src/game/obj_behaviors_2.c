@@ -295,8 +295,8 @@ static s16 obj_get_pitch_to_home(f32 latDistToHome) {
 }
 
 static void obj_compute_vel_from_move_pitch(f32 speed) {
-    o->oForwardVel = speed * coss(o->oMoveAnglePitch);
-    o->oVelY = speed * -sins(o->oMoveAnglePitch);
+    o->oForwardVel = speed *  coss(o->oMoveAnglePitch);
+    o->oVelY       = speed * -sins(o->oMoveAnglePitch);
 }
 
 static s32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
@@ -410,8 +410,7 @@ static s32 obj_face_roll_approach(s16 targetRoll, s16 deltaRoll) {
     return ((s16) o->oFaceAngleRoll == targetRoll);
 }
 
-static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targetSpeedProportion,
-                           s16 accel, s16 minSpeed, s16 maxSpeed) {
+static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targetSpeedProportion, s16 accel, s16 minSpeed, s16 maxSpeed) {
     s16 currentSpeed;
     s16 currentAngle = (s16)(*angle);
 
@@ -472,9 +471,7 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
     s32 startValue = *value;
     *value += (s32) *vel;
 
-    if (*value == target
-        || ((*value - target) * (startValue - target) < 0 && *vel > -velCloseToZero
-            && *vel < velCloseToZero)) {
+    if (*value == target || ((*value - target) * (startValue - target) < 0 && *vel > -velCloseToZero && *vel < velCloseToZero)) {
         *value = target;
         *vel = 0.0f;
         return TRUE;
@@ -534,9 +531,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
             o->oPosX = otherObject->oPosX + relativeRadius * sins(angle);
             o->oPosZ = otherObject->oPosZ + relativeRadius * coss(angle);
 
-            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
-                *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
-            }
+            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
             return TRUE;
         }
     }
@@ -909,9 +904,9 @@ void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 sca
 
     if (obj != NULL) {
         obj->oSmallPiranhaFlameStartSpeed = startSpeed;
-        obj->oSmallPiranhaFlameEndSpeed = endSpeed;
-        obj->oSmallPiranhaFlameModel = model;
-        obj->oMoveAnglePitch = movePitch;
+        obj->oSmallPiranhaFlameEndSpeed   = endSpeed;
+        obj->oSmallPiranhaFlameModel      = model;
+        obj->oMoveAnglePitch              = movePitch;
     }
 }
 

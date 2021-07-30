@@ -88,13 +88,11 @@ void *get_segment_base_addr(s32 segment) {
 void *segmented_to_virtual(const void *addr) {
     size_t segment = (uintptr_t) addr >> 24;
     size_t offset = (uintptr_t) addr & 0x00FFFFFF;
-
     return (void *) ((sSegmentTable[segment] + offset) | 0x80000000);
 }
 
 void *virtual_to_segmented(u32 segment, const void *addr) {
     size_t offset = ((uintptr_t) addr & 0x1FFFFFFF) - sSegmentTable[segment];
-
     return (void *) ((segment << 24) + offset);
 }
 
@@ -254,8 +252,7 @@ void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
     while (size != 0) {
         u32 copySize = (size >= 0x1000) ? 0x1000 : size;
 
-        osPiStartDma(&gDmaIoMesg, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t) srcStart, dest, copySize,
-                     &gDmaMesgQueue);
+        osPiStartDma(&gDmaIoMesg, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t) srcStart, dest, copySize, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 
         dest += copySize;
@@ -424,9 +421,9 @@ struct AllocOnlyPool *alloc_only_pool_init(u32 size, u32 side) {
     if (addr != NULL) {
         subPool = (struct AllocOnlyPool *) addr;
         subPool->totalSpace = size;
-        subPool->usedSpace = 0;
-        subPool->startPtr = (u8 *) addr + sizeof(struct AllocOnlyPool);
-        subPool->freePtr = (u8 *) addr + sizeof(struct AllocOnlyPool);
+        subPool->usedSpace  = 0;
+        subPool->startPtr   = (u8 *) addr + sizeof(struct AllocOnlyPool);
+        subPool->freePtr    = (u8 *) addr + sizeof(struct AllocOnlyPool);
     }
     return subPool;
 }

@@ -26,17 +26,15 @@ void *func_802f3f08(s32 poolIdx, s32 idx, s32 numChunks, s32 arg3, OSMesgQueue *
 
 struct Note *gNotes;
 
-UNUSED static u32 pad;
-
-struct SequencePlayer gSequencePlayers[SEQUENCE_PLAYERS];
-struct SequenceChannel gSequenceChannels[SEQUENCE_CHANNELS];
+struct SequencePlayer       gSequencePlayers[SEQUENCE_PLAYERS];
+struct SequenceChannel      gSequenceChannels[SEQUENCE_CHANNELS];
 struct SequenceChannelLayer gSequenceLayers[SEQUENCE_LAYERS];
 
 struct SequenceChannel gSequenceChannelNone;
-struct AudioListItem gLayerFreeList;
-struct NotePool gNoteFreeLists;
+struct AudioListItem   gLayerFreeList;
+struct NotePool        gNoteFreeLists;
 
-struct AudioBankSample *D_SH_8034EA88[0x80];
+struct AudioBankSample    *D_SH_8034EA88[0x80];
 struct UnkStructSH8034EC88 D_SH_8034EC88[0x80];
 s32 D_SH_8034F688; // index into D_SH_8034EA88
 s32 D_SH_8034F68C; // index or size for D_SH_8034EC88
@@ -59,17 +57,17 @@ struct PendingDmaAudioBank {
 struct PendingDmaAudioBank sPendingDmaAudioBanks[16];
 
 OSMesgQueue gUnkQueue1;
-OSMesg gUnkMesgBufs1[0x10];
+OSMesg      gUnkMesgBufs1[0x10];
 OSMesgQueue gUnkQueue2;
-OSMesg gUnkMesgBufs2[0x10];
+OSMesg      gUnkMesgBufs2[0x10];
 
 OSMesgQueue gCurrAudioFrameDmaQueue;
-OSMesg gCurrAudioFrameDmaMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
-OSIoMesg gCurrAudioFrameDmaIoMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
+OSMesg      gCurrAudioFrameDmaMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
+OSIoMesg    gCurrAudioFrameDmaIoMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
 
 OSMesgQueue gAudioDmaMesgQueue;
-OSMesg gAudioDmaMesg;
-OSIoMesg gAudioDmaIoMesg;
+OSMesg      gAudioDmaMesg;
+OSIoMesg    gAudioDmaIoMesg;
 
 struct SharedDma *sSampleDmas;
 u32 gSampleDmaNumListItems;
@@ -86,8 +84,8 @@ u8 sSampleDmaReuseQueueHead2;
 ALSeqFile *gSeqFileHeader;
 ALSeqFile *gAlCtlHeader;
 ALSeqFile *gAlTbl;
-u8 *gAlBankSets;
-u16 gSequenceCount;
+u8        *gAlBankSets;
+u16        gSequenceCount;
 
 struct CtlEntry *gCtlEntries;
 
@@ -250,8 +248,7 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
     sSampleDmas = sound_alloc_uninitialized(&gNotesAndBuffersPool,
             gMaxSimultaneousNotes * 4 * sizeof(struct SharedDma) * gAudioBufferParameters.presetUnk4);
 
-    for (i = 0; i < gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4; i++)
-    {
+    for (i = 0; i < gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4; i++) {
         if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) break;
         sSampleDmas[gSampleDmaNumListItems].bufSize = sDmaBufSize;
         sSampleDmas[gSampleDmaNumListItems].source = 0;
@@ -292,9 +289,7 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
 
     // This probably meant to touch the range size1..size2 as well... but it
     // doesn't matter, since these values are never read anyway.
-    for (i = gSampleDmaNumListItems; i < 0x100; i++) {
-        sSampleDmaReuseQueue2[i] = sSampleDmaListSize1;
-    }
+    for (i = gSampleDmaNumListItems; i < 0x100; i++) sSampleDmaReuseQueue2[i] = sSampleDmaListSize1;
 
     sSampleDmaReuseQueueTail2 = 0;
     sSampleDmaReuseQueueHead2 = gSampleDmaNumListItems - sSampleDmaListSize1;
@@ -329,16 +324,10 @@ struct AudioBank *load_banks_immediate(s32 seqId, s32 *outDefaultBank) {
 }
 
 void preload_sequence(u32 seqId, s32 preloadMask) {
-    UNUSED s32 pad;
     s32 temp;
-
     seqId = canonicalize_index(0, seqId);
-    if (preloadMask & PRELOAD_BANKS) {
-        load_banks_immediate(seqId, &temp);
-    }
-    if (preloadMask & PRELOAD_SEQUENCE) {
-        func_sh_802f3564(seqId);
-    }
+    if (preloadMask & PRELOAD_BANKS) load_banks_immediate(seqId, &temp);
+    if (preloadMask & PRELOAD_SEQUENCE) func_sh_802f3564(seqId);
 }
 
 s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
@@ -346,9 +335,7 @@ s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
 
     if (sample->isPatched && sample->medium != 0) {
         sp24 = func_sh_802f1d90(sample->size, bankId, sample->sampleAddr, sample->medium);
-        if (sp24 == NULL) {
-            return -1;
-        }
+        if (sp24 == NULL) return -1;
         if (sample->medium == 1) {
             func_sh_802f3d78((uintptr_t) sample->sampleAddr, sp24, sample->size, gAlTbl->unk2);
         } else {
@@ -357,9 +344,7 @@ s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
         sample->medium = 0;
         sample->sampleAddr = sp24;
     }
-#ifdef AVOID_UB
     return 0;
-#endif
 }
 
 s32 func_sh_802f3024(s32 bankId, s32 instId, s32 arg2) {
@@ -368,42 +353,27 @@ s32 func_sh_802f3024(s32 bankId, s32 instId, s32 arg2) {
 
     if (instId < 0x7F) {
         instr = get_instrument_inner(bankId, instId);
-        if (instr == NULL) {
-            return -1;
-        }
-        if (instr->normalRangeLo != 0) {
-            func_sh_802f2f38(instr->lowNotesSound.sample, bankId);
-        }
+        if (instr == NULL) return -1;
+        if (instr->normalRangeLo != 0) func_sh_802f2f38(instr->lowNotesSound.sample, bankId);
         func_sh_802f2f38(instr->normalNotesSound.sample, bankId);
-        if (instr->normalRangeHi != 0x7F) {
-            func_sh_802f2f38(instr->highNotesSound.sample, bankId);
-        }
-        //! @bug missing return
+        if (instr->normalRangeHi != 0x7F) func_sh_802f2f38(instr->highNotesSound.sample, bankId);
+        return 0;
     } else if (instId == 0x7F) {
         drum = get_drum(bankId, arg2);
-        if (drum == NULL) {
-            return -1;
-        }
+        if (drum == NULL) return -1;
         func_sh_802f2f38(drum->sound.sample, bankId);
         return 0;
     }
-#ifdef AVOID_UB
     return 0;
-#endif
 }
 
 void func_sh_802f30f4(s32 arg0, s32 arg1, s32 arg2, OSMesgQueue *arg3) {
-    if (func_802f3f08(2, canonicalize_index(2, arg0), arg1, arg2, arg3) == 0) {
-        osSendMesg(arg3, 0, 0);
-    }
+    if (func_802f3f08(2, canonicalize_index(2, arg0), arg1, arg2, arg3) == 0) osSendMesg(arg3, 0, 0);
 }
 
 void func_sh_802f3158(s32 seqId, s32 numChunks, s32 arg2, OSMesgQueue *retQueue) {
-    s32 val;
-    s32 v;
-
-    val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
-    v = gAlBankSets[val++];
+    s32 val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
+    s32 v = gAlBankSets[val++];
 
     while (v > 0) {
         func_802f3f08(1, canonicalize_index(1, gAlBankSets[val++]), numChunks, arg2, retQueue);
@@ -412,9 +382,7 @@ void func_sh_802f3158(s32 seqId, s32 numChunks, s32 arg2, OSMesgQueue *retQueue)
 }
 
 u8 *func_sh_802f3220(u32 seqId, u32 *a1) {
-    s32 val;
-
-    val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
+    s32 val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
     *a1 = gAlBankSets[val++];
     if (*a1 == 0) return NULL;
     return &gAlBankSets[val];
@@ -610,33 +578,24 @@ void *func_sh_802f3764(s32 poolIdx, s32 idx, s32 *arg2) {
         devAddr = f->seqArray[idx].offset;
 
 
-        switch (sp18)
-        {
+        switch (sp18) {
             case 0:
                 vAddr = unk_pool1_alloc(poolIdx, idx, size);
-                if (vAddr == NULL) {
-                    return vAddr;
-                }
+                if (vAddr == NULL) return vAddr;
                 break;
             case 1:
                 vAddr = alloc_bank_or_seq(poolIdx, size, 1, idx);
-                if (vAddr == NULL) {
-                    return vAddr;
-                }
+                if (vAddr == NULL) return vAddr;
                 break;
             case 2:
                 vAddr = alloc_bank_or_seq(poolIdx, size, 0, idx);
-                if (vAddr == NULL) {
-                    return vAddr;
-                }
+                if (vAddr == NULL) return vAddr;
                 break;
 
             case 3:
             case 4:
                 vAddr = alloc_bank_or_seq(poolIdx, size, 2, idx);
-                if (vAddr == NULL) {
-                    return vAddr;
-                }
+                if (vAddr == NULL) return vAddr;
                 break;
         }
 
@@ -660,21 +619,15 @@ void *func_sh_802f3764(s32 poolIdx, s32 idx, s32 *arg2) {
 
     switch (poolIdx) {
         case 0:
-            if (gSeqLoadStatus[idx] != SOUND_LOAD_STATUS_5) {
-                gSeqLoadStatus[idx] = loadStatus;
-            }
+            if (gSeqLoadStatus[idx] != SOUND_LOAD_STATUS_5) gSeqLoadStatus[idx] = loadStatus;
             break;
 
         case 1:
-            if (gBankLoadStatus[idx] != SOUND_LOAD_STATUS_5) {
-                gBankLoadStatus[idx] = loadStatus;
-            }
+            if (gBankLoadStatus[idx] != SOUND_LOAD_STATUS_5) gBankLoadStatus[idx] = loadStatus;
             break;
 
         case 2:
-            if (gUnkLoadStatus[idx] != SOUND_LOAD_STATUS_5) {
-                gUnkLoadStatus[idx] = loadStatus;
-            }
+            if (gUnkLoadStatus[idx] != SOUND_LOAD_STATUS_5) gUnkLoadStatus[idx] = loadStatus;
             break;
     }
 
@@ -685,9 +638,7 @@ s32 canonicalize_index(s32 poolIdx, s32 idx) {
     ALSeqFile *f;
 
     f = get_audio_file_header(poolIdx);
-    if (f->seqArray[idx].len == 0) {
-        idx = (s32) (uintptr_t) f->seqArray[idx].offset;
-    }
+    if (f->seqArray[idx].len == 0) idx = (s32) (uintptr_t) f->seqArray[idx].offset;
     return idx;
 }
 
@@ -695,13 +646,9 @@ void *get_bank_or_seq_wrapper(s32 poolIdx, s32 id) {
     void *ret;
 
     ret = unk_pool1_lookup(poolIdx, id);
-    if (ret != NULL) {
-        return ret;
-    }
+    if (ret != NULL) return ret;
     ret = get_bank_or_seq(poolIdx, 2, id);
-    if (ret != 0) {
-        return ret;
-    }
+    if (ret != 0) return ret;
     return NULL;
 }
 

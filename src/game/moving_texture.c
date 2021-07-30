@@ -104,13 +104,13 @@ struct MovtexObject {
 };
 
 /// Counters to make textures move iff the game is not paused.
-s16 gMovtexCounter = 1;
+s16 gMovtexCounter     = 1;
 s16 gMovtexCounterPrev = 0;
 
 // Vertex colors for rectangles. Used to give mist a tint
 #define MOVTEX_VTX_COLOR_DEFAULT 0 // no tint (white vertex colors)
-#define MOVTEX_VTX_COLOR_YELLOW 1  // used for Hazy Maze Cave toxic haze
-#define MOVTEX_VTX_COLOR_RED 2     // used for Shifting Sand Land around the Tox box maze
+#define MOVTEX_VTX_COLOR_YELLOW  1 // used for Hazy Maze Cave toxic haze
+#define MOVTEX_VTX_COLOR_RED     2 // used for Shifting Sand Land around the Tox box maze
 
 s8 gMovtexVtxColor = MOVTEX_VTX_COLOR_DEFAULT;
 
@@ -366,9 +366,9 @@ void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot
     s16 t = 32.0f * (32.0f * scale - 1.0f) * coss(rot + rotOffset);
 
     if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
-        make_vertex(verts, index, x, y, z, s, t, 255, 255, 0, alpha);
+        make_vertex(verts, index, x, y, z, s, t, 255, 255,   0, alpha);
     } else if (gMovtexVtxColor == MOVTEX_VTX_COLOR_RED) {
-        make_vertex(verts, index, x, y, z, s, t, 255, 0, 0, alpha);
+        make_vertex(verts, index, x, y, z, s, t, 255,   0,   0, alpha);
     } else {
         make_vertex(verts, index, x, y, z, s, t, 255, 255, 255, alpha);
     }
@@ -478,8 +478,7 @@ Gfx *movtex_gen_from_quad_array(s16 y, void *quadArrSegmented) {
 
     for (i = 0; i < numLists; i++) {
         // quadArr is an array of s16, so sizeof(MovtexQuad) gets divided by 2
-        subList = movtex_gen_from_quad(
-            y, (struct MovtexQuad *) (&quadArr[i * (sizeof(struct MovtexQuad) / 2) + 1]));
+        subList = movtex_gen_from_quad(y, (struct MovtexQuad *) (&quadArr[i * (sizeof(struct MovtexQuad) / 2) + 1]));
         if (subList != NULL) gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
     }
     gSPEndDisplayList(gfx);
@@ -497,7 +496,6 @@ Gfx *movtex_gen_from_quad_array(s16 y, void *quadArrSegmented) {
 Gfx *movtex_gen_quads_id(s16 id, s16 y, void *movetexQuadsSegmented) {
     struct MovtexQuadCollection *collection = segmented_to_virtual(movetexQuadsSegmented);
     s32 i = 0;
-
     while (collection[i].id != -1) {
         if (collection[i].id == id) return movtex_gen_from_quad_array(y, collection[i].quadArraySegmented);
         i++;
@@ -707,16 +705,16 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
             r1 = c->r;
             g1 = c->g;
             b1 = c->b;
-            s = movtexVerts[MOVTEX_ATTR_NOCOLOR_S];
-            t = movtexVerts[MOVTEX_ATTR_NOCOLOR_T];
+            s  = movtexVerts[MOVTEX_ATTR_NOCOLOR_S];
+            t  = movtexVerts[MOVTEX_ATTR_NOCOLOR_T];
             make_vertex(vtx, 0, x, y, z, s, t, r1, g1, b1, alpha);
             break;
         case MOVTEX_LAYOUT_COLORED:
             r2 = movtexVerts[MOVTEX_ATTR_COLORED_R];
             g2 = movtexVerts[MOVTEX_ATTR_COLORED_G];
             b2 = movtexVerts[MOVTEX_ATTR_COLORED_B];
-            s = movtexVerts[MOVTEX_ATTR_COLORED_S];
-            t = movtexVerts[MOVTEX_ATTR_COLORED_T];
+            s  = movtexVerts[MOVTEX_ATTR_COLORED_S];
+            t  = movtexVerts[MOVTEX_ATTR_COLORED_T];
             make_vertex(vtx, 0, x, y, z, s, t, r2, g2, b2, alpha);
             break;
     }
@@ -748,33 +746,33 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct M
 
     switch (attrLayout) {
         case MOVTEX_LAYOUT_NOCOLOR:
-            x = movtexVerts[index * 5 + MOVTEX_ATTR_X];
-            y = movtexVerts[index * 5 + MOVTEX_ATTR_Y];
-            z = movtexVerts[index * 5 + MOVTEX_ATTR_Z];
-            baseS = movtexVerts[MOVTEX_ATTR_NOCOLOR_S];
-            baseT = movtexVerts[MOVTEX_ATTR_NOCOLOR_T];
-            offS = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_S];
-            offT = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_T];
-            s = baseS + ((offS * 32) * 32U);
-            t = baseT + ((offT * 32) * 32U);
-            r1 = d->r;
-            g1 = d->g;
-            b1 = d->b;
+            x     = movtexVerts[index * 5 + MOVTEX_ATTR_X];
+            y     = movtexVerts[index * 5 + MOVTEX_ATTR_Y];
+            z     = movtexVerts[index * 5 + MOVTEX_ATTR_Z];
+            baseS = movtexVerts[            MOVTEX_ATTR_NOCOLOR_S];
+            baseT = movtexVerts[            MOVTEX_ATTR_NOCOLOR_T];
+            offS  = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_S];
+            offT  = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_T];
+            s     = baseS + ((offS * 32) * 32U);
+            t     = baseT + ((offT * 32) * 32U);
+            r1    = d->r;
+            g1    = d->g;
+            b1    = d->b;
             make_vertex(verts, index, x, y, z, s, t, r1, g1, b1, alpha);
             break;
         case MOVTEX_LAYOUT_COLORED:
-            x = movtexVerts[index * 8 + MOVTEX_ATTR_X];
-            y = movtexVerts[index * 8 + MOVTEX_ATTR_Y];
-            z = movtexVerts[index * 8 + MOVTEX_ATTR_Z];
+            x     = movtexVerts[index * 8 + MOVTEX_ATTR_X];
+            y     = movtexVerts[index * 8 + MOVTEX_ATTR_Y];
+            z     = movtexVerts[index * 8 + MOVTEX_ATTR_Z];
             baseS = movtexVerts[7];
             baseT = movtexVerts[8];
-            offS = movtexVerts[index * 8 + 7];
-            offT = movtexVerts[index * 8 + 8];
-            s = baseS + ((offS * 32) * 32U);
-            t = baseT + ((offT * 32) * 32U);
-            r2 = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_R];
-            g2 = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_G];
-            b2 = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_B];
+            offS  = movtexVerts[index * 8 + 7];
+            offT  = movtexVerts[index * 8 + 8];
+            s     = baseS + ((offS * 32) * 32U);
+            t     = baseT + ((offT * 32) * 32U);
+            r2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_R];
+            g2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_G];
+            b2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_B];
             make_vertex(verts, index, x, y, z, s, t, r2, g2, b2, alpha);
             break;
     }
@@ -793,9 +791,7 @@ Gfx *movtex_gen_list(s16 *movtexVerts, struct MovtexObject *movtexList, s8 attrL
     if (verts == NULL || gfxHead == NULL) return NULL;
 
     movtex_write_vertex_first(verts, movtexVerts, movtexList, attrLayout);
-    for (i = 1; i < movtexList->vtx_count; i++) {
-        movtex_write_vertex_index(verts, i, movtexVerts, movtexList, attrLayout);
-    }
+    for (i = 1; i < movtexList->vtx_count; i++) movtex_write_vertex_index(verts, i, movtexVerts, movtexList, attrLayout);
 
     gSPDisplayList(gfx++, movtexList->beginDl);
     gLoadBlockTexture(gfx++, 32, 32, G_IM_FMT_RGBA, gMovtexIdToTexture[movtexList->textureId]);

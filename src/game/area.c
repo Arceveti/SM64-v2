@@ -132,19 +132,13 @@ void print_intro_text(void) {
 u32 get_mario_spawn_type(struct Object *o) {
     s32 i;
     const BehaviorScript *behavior = virtual_to_segmented(0x13, o->behavior);
-
-    for (i = 0; i < 20; i++) {
-        if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
-    }
+    for (i = 0; i < 20; i++) if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
     return MARIO_SPAWN_NONE;
 }
 
 struct ObjectWarpNode *area_get_warp_node(u8 id) {
     struct ObjectWarpNode *node = NULL;
-
-    for (node = gCurrentArea->warpNodes; node != NULL; node = node->next) {
-        if (node->node.id == id) break;
-    }
+    for (node = gCurrentArea->warpNodes; node != NULL; node = node->next) if (node->node.id == id) break;
     return node;
 }
 
@@ -164,8 +158,7 @@ void load_obj_warp_nodes(void) {
             warpNode = area_get_warp_node_from_params(obj);
             if (warpNode != NULL) warpNode->object = obj;
         }
-    } while ((children = (struct Object *) children->header.gfx.node.next)
-             != (struct Object *) gObjParentGraphNode.children);
+    } while ((children = (struct Object *) children->header.gfx.node.next) != (struct Object *) gObjParentGraphNode.children);
 }
 
 void clear_areas(void) {
@@ -177,25 +170,25 @@ void clear_areas(void) {
     gMarioSpawnInfo->areaIndex = -1;
 
     for (i = 0; i < 8; i++) {
-        gAreaData[i].index = i;
-        gAreaData[i].flags = 0;
-        gAreaData[i].terrainType = 0;
-        gAreaData[i].graphNode = NULL;
-        gAreaData[i].terrainData = NULL;
-        gAreaData[i].surfaceRooms = NULL;
-        gAreaData[i].macroObjects = NULL;
-        gAreaData[i].warpNodes = NULL;
+        gAreaData[i].index             = i;
+        gAreaData[i].flags             = 0;
+        gAreaData[i].terrainType       = 0;
+        gAreaData[i].graphNode         = NULL;
+        gAreaData[i].terrainData       = NULL;
+        gAreaData[i].surfaceRooms      = NULL;
+        gAreaData[i].macroObjects      = NULL;
+        gAreaData[i].warpNodes         = NULL;
         gAreaData[i].paintingWarpNodes = NULL;
-        gAreaData[i].instantWarps = NULL;
-        gAreaData[i].objectSpawnInfos = NULL;
-        gAreaData[i].camera = NULL;
-        gAreaData[i].unused28 = NULL;
-        gAreaData[i].whirlpools[0] = NULL;
-        gAreaData[i].whirlpools[1] = NULL;
-        gAreaData[i].dialog[0] = DIALOG_NONE;
-        gAreaData[i].dialog[1] = DIALOG_NONE;
-        gAreaData[i].musicParam = 0;
-        gAreaData[i].musicParam2 = 0;
+        gAreaData[i].instantWarps      = NULL;
+        gAreaData[i].objectSpawnInfos  = NULL;
+        gAreaData[i].camera            = NULL;
+        gAreaData[i].unused28          = NULL;
+        gAreaData[i].whirlpools[0]     = NULL;
+        gAreaData[i].whirlpools[1]     = NULL;
+        gAreaData[i].dialog[0]         = DIALOG_NONE;
+        gAreaData[i].dialog[1]         = DIALOG_NONE;
+        gAreaData[i].musicParam        = 0;
+        gAreaData[i].musicParam2       = 0;
     }
 }
 
@@ -221,15 +214,11 @@ void load_area(s32 index) {
         gCurrentArea = &gAreaData[index];
         gCurrAreaIndex = gCurrentArea->index;
 
-        if (gCurrentArea->terrainData != NULL) {
-            load_area_terrain(index, gCurrentArea->terrainData,
-                                     gCurrentArea->surfaceRooms,
-                                     gCurrentArea->macroObjects);
-        }
+        if (gCurrentArea->terrainData != NULL) load_area_terrain(index, gCurrentArea->terrainData,
+                                                                        gCurrentArea->surfaceRooms,
+                                                                        gCurrentArea->macroObjects);
 
-        if (gCurrentArea->objectSpawnInfos != NULL) {
-            spawn_objects_from_info(gCurrentArea->objectSpawnInfos);
-        }
+        if (gCurrentArea->objectSpawnInfos != NULL) spawn_objects_from_info(gCurrentArea->objectSpawnInfos);
 
         load_obj_warp_nodes();
         geo_call_global_function_nodes(&gCurrentArea->graphNode->node, GEO_CONTEXT_AREA_LOAD);
@@ -305,39 +294,31 @@ void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue) {
     }
 
     if (transType < 8) { // if transition is RGB
-        gWarpTransition.data.red = red;
+        gWarpTransition.data.red   = red;
         gWarpTransition.data.green = green;
-        gWarpTransition.data.blue = blue;
+        gWarpTransition.data.blue  = blue;
     } else { // if transition is textured
-        gWarpTransition.data.red = red;
+        gWarpTransition.data.red   = red;
         gWarpTransition.data.green = green;
-        gWarpTransition.data.blue = blue;
+        gWarpTransition.data.blue  = blue;
 
         // Both the start and end textured transition are always located in the middle of the screen.
         // If you really wanted to, you could place the start at one corner and the end at
         // the opposite corner. This will make the transition image look like it is moving
         // across the screen.
-        gWarpTransition.data.startTexX = SCREEN_WIDTH / 2;
+        gWarpTransition.data.startTexX = SCREEN_WIDTH  / 2;
         gWarpTransition.data.startTexY = SCREEN_HEIGHT / 2;
-        gWarpTransition.data.endTexX = SCREEN_WIDTH / 2;
-        gWarpTransition.data.endTexY = SCREEN_HEIGHT / 2;
+        gWarpTransition.data.endTexX   = SCREEN_WIDTH  / 2;
+        gWarpTransition.data.endTexY   = SCREEN_HEIGHT / 2;
 
         gWarpTransition.data.texTimer = 0;
 
         if (transType & 1) { // Is the image fading in?
             gWarpTransition.data.startTexRadius = GFX_DIMENSIONS_FULL_RADIUS;
-            if (transType >= 0x0F) {
-                gWarpTransition.data.endTexRadius = 16;
-            } else {
-                gWarpTransition.data.endTexRadius = 0;
-            }
+            gWarpTransition.data.endTexRadius   = (transType >= 0x0F ? 16 : 0);
         } else { // The image is fading out. (Reverses start & end circles)
-            if (transType >= 0x0E) {
-                gWarpTransition.data.startTexRadius = 16;
-            } else {
-                gWarpTransition.data.startTexRadius = 0;
-            }
-            gWarpTransition.data.endTexRadius = GFX_DIMENSIONS_FULL_RADIUS;
+            gWarpTransition.data.startTexRadius = (transType >= 0x0E ? 16 : 0);
+            gWarpTransition.data.endTexRadius   = GFX_DIMENSIONS_FULL_RADIUS;
         }
     }
 }
@@ -380,8 +361,7 @@ void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
 #ifndef WIDESCREEN
     create_dl_scale_matrix(G_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
 #else
-    create_dl_scale_matrix(G_MTX_NOPUSH,
-                           GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
+    create_dl_scale_matrix(G_MTX_NOPUSH, GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
 #endif
 
     gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
@@ -497,5 +477,5 @@ void render_game(void) {
     }
 
     gViewportOverride = NULL;
-    gViewportClip = NULL;
+    gViewportClip     = NULL;
 }

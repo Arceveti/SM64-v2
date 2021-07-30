@@ -621,8 +621,8 @@ Gfx *geo_mario_rotate_wing_cap_wings(s32 callContext, struct GraphNode *node, UN
 /**
  * Geo node that updates the held object node and the HOLP.
  */
-Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *b, Mat4 *mtx) {
-    struct GraphNodeHeldObject *asHeldObj = (struct GraphNodeHeldObject *) b;
+Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *node, Mat4 *mtx) {
+    struct GraphNodeHeldObject *asHeldObj = (struct GraphNodeHeldObject *) node;
     Mat4 *curTransform = mtx;
     struct MarioState *marioState = &gMarioStates[asHeldObj->playerIndex];
 
@@ -632,11 +632,7 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *b, Mat4 *
             asHeldObj->objNode = marioState->heldObj;
             switch (marioState->marioBodyState->grabPos) {
                 case GRAB_POS_LIGHT_OBJ:
-                    if (marioState->action & ACT_FLAG_THROWING) {
-                        vec3s_set(asHeldObj->translation, 50, 0,   0);
-                    } else {
-                        vec3s_set(asHeldObj->translation, 50, 0, 110);
-                    }
+                    vec3s_set(asHeldObj->translation, 50, 0, (marioState->action & ACT_FLAG_THROWING) ? 0 : 100);
                     break;
                 case GRAB_POS_HEAVY_OBJ:
                     vec3s_set(asHeldObj->translation, 145, -173,  180);

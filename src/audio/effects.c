@@ -148,22 +148,17 @@ f32 get_portamento_freq_scale(struct Portamento *p) {
     u32 v0;
     f32 result;
 #if defined(VERSION_JP) || defined(VERSION_US)
-    if (p->mode == 0) {
-        return 1.0f;
-    }
+    if (p->mode == 0) return 1.0f;
 #endif
 
     p->cur += p->speed;
     v0 = (u32) p->cur;
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    if (v0 > 127)
+    if (v0 > 127) v0 = 127;
 #else
-    if (v0 >= 127)
+    if (v0 >= 127) v0 = 127;
 #endif
-    {
-        v0 = 127;
-    }
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
     result = US_FLOAT(1.0) + p->extent * (gPitchBendFrequencyScale[v0 + 128] - US_FLOAT(1.0));

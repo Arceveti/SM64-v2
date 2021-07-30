@@ -1450,7 +1450,7 @@ void cur_obj_start_cam_event(UNUSED struct Object *obj, s32 cameraEvent) {
 }
 
 // unused, self explanatory, maybe oInteractStatus originally had TRUE/FALSE statements
-void set_mario_interact_true_if_in_range(UNUSED s32 arg0, UNUSED s32 arg1, f32 range) {
+void set_mario_interact_true_if_in_range(f32 range) {
     if (o->oDistanceToMario < range) gMarioObject->oInteractStatus = TRUE;
 }
 

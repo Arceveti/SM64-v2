@@ -30,14 +30,14 @@ u8 get_instrument(struct SequenceChannel *seqChannel, u8 instId, struct Instrume
 void sequence_channel_init(struct SequenceChannel *seqChannel) {
     s32 i;
 
-    seqChannel->enabled = FALSE;
-    seqChannel->finished = FALSE;
-    seqChannel->stopScript = FALSE;
-    seqChannel->stopSomething2 = FALSE;
-    seqChannel->hasInstrument = FALSE;
+    seqChannel->enabled              = FALSE;
+    seqChannel->finished             = FALSE;
+    seqChannel->stopScript           = FALSE;
+    seqChannel->stopSomething2       = FALSE;
+    seqChannel->hasInstrument        = FALSE;
     seqChannel->stereoHeadsetEffects = FALSE;
-    seqChannel->transposition = 0;
-    seqChannel->largeNotes = FALSE;
+    seqChannel->transposition        = 0;
+    seqChannel->largeNotes           = FALSE;
 #if defined(VERSION_EU) || defined(VERSION_SH)
     seqChannel->bookOffset = 0;
     seqChannel->changes.as_u8 = 0xff;
@@ -86,9 +86,7 @@ void sequence_channel_init(struct SequenceChannel *seqChannel) {
     seqChannel->freqScale = 1.0f;
 #endif
 
-    for (i = 0; i < 8; i++) {
-        seqChannel->soundScriptIO[i] = -1;
-    }
+    for (i = 0; i < 8; i++) seqChannel->soundScriptIO[i] = -1;
 
     seqChannel->unused = FALSE;
     init_note_lists(&seqChannel->notePool);

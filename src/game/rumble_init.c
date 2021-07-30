@@ -12,20 +12,20 @@ OSThread gRumblePakThread;
 
 OSPfs gRumblePakPfs;
 
-s8 D_SH_8031D8F8[0x60];
+// s8 D_SH_8031D8F8[0x60];
 
-OSMesg gRumblePakSchedulerMesgBuf[1];
+OSMesg      gRumblePakSchedulerMesgBuf[1];
 OSMesgQueue gRumblePakSchedulerMesgQueue;
-OSMesg gRumbleThreadVIMesgBuf[1];
+OSMesg      gRumbleThreadVIMesgBuf[1];
 OSMesgQueue gRumbleThreadVIMesgQueue;
 
-struct RumbleData gRumbleDataQueue[3];
+struct RumbleData     gRumbleDataQueue[3];
 struct RumbleSettings gCurrRumbleSettings;
 
 s32 sRumblePakThreadActive = FALSE;
-s32 sRumblePakActive = FALSE;
-s32 sRumblePakErrorCount = 0;
-s32 gRumblePakTimer = 0;
+s32 sRumblePakActive       = FALSE;
+s32 sRumblePakErrorCount   = 0;
+s32 gRumblePakTimer        = 0;
 
 #define	RUMBLE_EVENT_NOMESG	    0
 #define	RUMBLE_EVENT_CONSTON    1
@@ -86,9 +86,7 @@ static void update_rumble_pak(void) {
         gCurrRumbleSettings.timer--;
 
         gCurrRumbleSettings.level -= gCurrRumbleSettings.decay;
-        if (gCurrRumbleSettings.level < 0) {
-            gCurrRumbleSettings.level = 0;
-        }
+        if (gCurrRumbleSettings.level < 0) gCurrRumbleSettings.level = 0;
 
         if (gCurrRumbleSettings.event == RUMBLE_EVENT_CONSTON) {
             start_rumble();
@@ -113,9 +111,7 @@ static void update_rumble_pak(void) {
         }
     }
 
-    if (gCurrRumbleSettings.slip > 0) {
-        gCurrRumbleSettings.slip--;
-    }
+    if (gCurrRumbleSettings.slip > 0) gCurrRumbleSettings.slip--;
 }
 
 static void update_rumble_data_queue(void) {
@@ -215,9 +211,7 @@ static void thread6_rumble_loop(UNUSED void *a0) {
 void cancel_rumble(void) {
     sRumblePakActive = osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1;
 
-    if (sRumblePakActive) {
-        osMotorStop(&gRumblePakPfs);
-    }
+    if (sRumblePakActive) osMotorStop(&gRumblePakPfs);
 
     gRumbleDataQueue[0].comm = RUMBLE_EVENT_NOMESG;
     gRumbleDataQueue[1].comm = RUMBLE_EVENT_NOMESG;

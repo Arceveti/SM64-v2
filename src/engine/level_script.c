@@ -47,12 +47,12 @@ static uintptr_t sStack[32];
 
 static struct AllocOnlyPool *sLevelPool = NULL;
 
-static u16 sDelayFrames = 0;
+static u16 sDelayFrames  = 0;
 static u16 sDelayFrames2 = 0;
 
 static s16 sCurrAreaIndex = -1;
 
-static uintptr_t *sStackTop = sStack;
+static uintptr_t *sStackTop  = sStack;
 static uintptr_t *sStackBase = NULL;
 
 static s16 sScriptStatus;
@@ -76,13 +76,13 @@ static s32 eval_script_op(s8 op, s32 arg) {
             result = sRegister != arg;
             break;
         case 4:
-            result = sRegister < arg;
+            result = sRegister <  arg;
             break;
         case 5:
             result = sRegister <= arg;
             break;
         case 6:
-            result = sRegister > arg;
+            result = sRegister >  arg;
             break;
         case 7:
             result = sRegister >= arg;
@@ -109,8 +109,7 @@ static void level_cmd_exit_and_execute(void) {
     main_pool_pop_state();
     main_pool_push_state();
 
-    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8),
-            MEMORY_POOL_LEFT);
+    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT);
 
     sStackTop = sStackBase;
     sCurrentCmd = segmented_to_virtual(targetAddr);
@@ -274,8 +273,7 @@ static void level_cmd_load_to_fixed_address(void) {
 }
 
 static void level_cmd_load_raw(void) {
-    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8),
-            MEMORY_POOL_LEFT);
+    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -309,7 +307,6 @@ static void level_cmd_init_level(void) {
     clear_objects();
     clear_areas();
     main_pool_push_state();
-
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -318,16 +315,11 @@ static void level_cmd_clear_level(void) {
     clear_area_graph_nodes();
     clear_areas();
     main_pool_pop_state();
-
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_alloc_level_pool(void) {
-    if (sLevelPool == NULL) {
-        sLevelPool = alloc_only_pool_init(main_pool_available() - sizeof(struct AllocOnlyPool),
-                                          MEMORY_POOL_LEFT);
-    }
-
+    if (sLevelPool == NULL) sLevelPool = alloc_only_pool_init(main_pool_available() - sizeof(struct AllocOnlyPool), MEMORY_POOL_LEFT);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -377,13 +369,10 @@ static void level_cmd_end_area(void) {
 
 static void level_cmd_load_model_from_dl(void) {
     ModelID model = CMD_GET(ModelID, 0xA);
-    s16 layer = CMD_GET(u16, 0x8);
-    void *dl_ptr = CMD_GET(void *, 4);
+    s16 layer     = CMD_GET(u16, 0x8);
+    void *dl_ptr  = CMD_GET(void *, 4);
 
-    if (model < MODEL_ID_COUNT) {
-        gLoadedGraphNodes[model] =
-            (struct GraphNode *) init_graph_node_display_list(sLevelPool, 0, layer, dl_ptr);
-    }
+    if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_display_list(sLevelPool, 0, layer, dl_ptr);
 
     sCurrentCmd = CMD_NEXT;
 }
@@ -392,9 +381,7 @@ static void level_cmd_load_model_from_geo(void) {
     ModelID model = CMD_GET(ModelID, 2);
     void *geo = CMD_GET(void *, 4);
 
-    if (model < MODEL_ID_COUNT) {
-        gLoadedGraphNodes[model] = process_geo_layout(sLevelPool, geo);
-    }
+    if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = process_geo_layout(sLevelPool, geo);
 
     sCurrentCmd = CMD_NEXT;
 }
@@ -411,26 +398,23 @@ static void level_cmd_23(void) {
     // load an f32, but using an integer load instruction for some reason (hence the union)
     arg2.i = CMD_GET(s32, 8);
 
-    if (model < MODEL_ID_COUNT) {
-        // GraphNodeScale has a GraphNode at the top. This
-        // is being stored to the array, so cast the pointer.
-        gLoadedGraphNodes[model] =
-            (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, arg0H, arg1, arg2.f);
-    }
+    // GraphNodeScale has a GraphNode at the top. This
+    // is being stored to the array, so cast the pointer.
+    if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, arg0H, arg1, arg2.f);
 
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_init_mario(void) {
-    vec3s_set(gMarioSpawnInfo->startPos, 0, 0, 0);
+    vec3s_set(gMarioSpawnInfo->startPos  , 0, 0, 0);
     vec3s_set(gMarioSpawnInfo->startAngle, 0, 0, 0);
 
     gMarioSpawnInfo->activeAreaIndex = -1;
-    gMarioSpawnInfo->areaIndex = 0;
-    gMarioSpawnInfo->behaviorArg = CMD_GET(u32, 4);
-    gMarioSpawnInfo->behaviorScript = CMD_GET(void *, 8);
-    gMarioSpawnInfo->unk18 = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
-    gMarioSpawnInfo->next = NULL;
+    gMarioSpawnInfo->areaIndex       = 0;
+    gMarioSpawnInfo->behaviorArg     = CMD_GET(u32, 4);
+    gMarioSpawnInfo->behaviorScript  = CMD_GET(void *, 8);
+    gMarioSpawnInfo->unk18           = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
+    gMarioSpawnInfo->next            = NULL;
 
     sCurrentCmd = CMD_NEXT;
 }
@@ -455,10 +439,10 @@ static void level_cmd_place_object(void) {
         spawnInfo->areaIndex = sCurrAreaIndex;
         spawnInfo->activeAreaIndex = sCurrAreaIndex;
 
-        spawnInfo->behaviorArg = CMD_GET(u32, 16);
+        spawnInfo->behaviorArg    = CMD_GET(u32, 16);
         spawnInfo->behaviorScript = CMD_GET(void *, 20);
         spawnInfo->unk18 = gLoadedGraphNodes[model];
-        spawnInfo->next = gAreas[sCurrAreaIndex].objectSpawnInfos;
+        spawnInfo->next  = gAreas[sCurrAreaIndex].objectSpawnInfos;
 
         gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
     }
@@ -471,10 +455,10 @@ static void level_cmd_create_warp_node(void) {
         struct ObjectWarpNode *warpNode =
             alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
 
-        warpNode->node.id = CMD_GET(u8, 2);
+        warpNode->node.id        = CMD_GET(u8, 2);
         warpNode->node.destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
-        warpNode->node.destArea = CMD_GET(u8, 4);
-        warpNode->node.destNode = CMD_GET(u8, 5);
+        warpNode->node.destArea  = CMD_GET(u8, 4);
+        warpNode->node.destNode  = CMD_GET(u8, 5);
 
         warpNode->object = NULL;
 
@@ -494,9 +478,7 @@ static void level_cmd_create_instant_warp(void) {
             gAreas[sCurrAreaIndex].instantWarps =
                 alloc_only_pool_alloc(sLevelPool, 4 * sizeof(struct InstantWarp));
 
-            for (i = INSTANT_WARP_INDEX_START; i < INSTANT_WARP_INDEX_STOP; i++) {
-                gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
-            }
+            for (i = INSTANT_WARP_INDEX_START; i < INSTANT_WARP_INDEX_STOP; i++) gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
         }
 
         warp = gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2);
@@ -513,10 +495,7 @@ static void level_cmd_create_instant_warp(void) {
 }
 
 static void level_cmd_set_terrain_type(void) {
-    if (sCurrAreaIndex != -1) {
-        gAreas[sCurrAreaIndex].terrainType |= CMD_GET(s16, 2);
-    }
-
+    if (sCurrAreaIndex != -1) gAreas[sCurrAreaIndex].terrainType |= CMD_GET(s16, 2);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -529,9 +508,7 @@ static void level_cmd_create_painting_warp_node(void) {
             gAreas[sCurrAreaIndex].paintingWarpNodes =
                 alloc_only_pool_alloc(sLevelPool, 45 * sizeof(struct WarpNode));
 
-            for (i = 0; i < 45; i++) {
-                gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
-            }
+            for (i = 0; i < 45; i++) gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
         }
 
         node = &gAreas[sCurrAreaIndex].paintingWarpNodes[CMD_GET(u8, 2)];
@@ -549,10 +526,7 @@ static void level_cmd_3A(void) {
     struct UnusedArea28 *val4;
 
     if (sCurrAreaIndex != -1) {
-        if ((val4 = gAreas[sCurrAreaIndex].unused28) == NULL) {
-            val4 = gAreas[sCurrAreaIndex].unused28 =
-                alloc_only_pool_alloc(sLevelPool, sizeof(struct UnusedArea28));
-        }
+        if ((val4 = gAreas[sCurrAreaIndex].unused28) == NULL) val4 = gAreas[sCurrAreaIndex].unused28 = alloc_only_pool_alloc(sLevelPool, sizeof(struct UnusedArea28));
 
         val4->unk00 = CMD_GET(s16, 2);
         val4->unk02 = CMD_GET(s16, 4);
@@ -567,8 +541,7 @@ static void level_cmd_3A(void) {
 static void level_cmd_create_whirlpool(void) {
     struct Whirlpool *whirlpool;
     s32 index = CMD_GET(u8, 2);
-    s32 beatBowser2 =
-        (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) != 0;
+    s32 beatBowser2 = (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) != 0;
 
     if (CMD_GET(u8, 3) == 0 || (CMD_GET(u8, 3) == 1 && !beatBowser2)
         || (CMD_GET(u8, 3) == 2 && beatBowser2) || (CMD_GET(u8, 3) == 3 && gCurrActNum >= 2)) {
@@ -615,9 +588,7 @@ static void level_cmd_set_terrain_data(void) {
 }
 
 static void level_cmd_set_rooms(void) {
-    if (sCurrAreaIndex != -1) {
-        gAreas[sCurrAreaIndex].surfaceRooms = segmented_to_virtual(CMD_GET(void *, 4));
-    }
+    if (sCurrAreaIndex != -1) gAreas[sCurrAreaIndex].surfaceRooms = segmented_to_virtual(CMD_GET(void *, 4));
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -630,9 +601,7 @@ static void level_cmd_set_macro_objects(void) {
         // so it must be reset when the level reloads.
         MacroObject *data = segmented_to_virtual(CMD_GET(void *, 4));
         s32 len = 0;
-        while (data[len++] != MACRO_OBJECT_END()) {
-            len += 4;
-        }
+        while (data[len++] != MACRO_OBJECT_END()) len += 4;
         gAreas[sCurrAreaIndex].macroObjects = alloc_only_pool_alloc(sLevelPool, len * sizeof(MacroObject));
         memcpy(gAreas[sCurrAreaIndex].macroObjects, data, len * sizeof(MacroObject));
 #endif
@@ -678,9 +647,7 @@ static void level_cmd_2D(void) {
 }
 
 static void level_cmd_set_transition(void) {
-    if (gCurrentArea != NULL) {
-        play_transition(CMD_GET(u8, 2), CMD_GET(u8, 3), CMD_GET(u8, 4), CMD_GET(u8, 5), CMD_GET(u8, 6));
-    }
+    if (gCurrentArea != NULL) play_transition(CMD_GET(u8, 2), CMD_GET(u8, 3), CMD_GET(u8, 4), CMD_GET(u8, 5), CMD_GET(u8, 6));
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -689,17 +656,13 @@ static void level_cmd_nop(void) {
 }
 
 static void level_cmd_show_dialog(void) {
-    if (sCurrAreaIndex != -1) {
-        if (CMD_GET(u8, 2) < 2) {
-            gAreas[sCurrAreaIndex].dialog[CMD_GET(u8, 2)] = CMD_GET(u8, 3);
-        }
-    }
+    if (sCurrAreaIndex != -1 && CMD_GET(u8, 2) < 2) gAreas[sCurrAreaIndex].dialog[CMD_GET(u8, 2)] = CMD_GET(u8, 3);
     sCurrentCmd = CMD_NEXT;
 }
 
 static void level_cmd_set_music(void) {
     if (sCurrAreaIndex != -1) {
-        gAreas[sCurrAreaIndex].musicParam = CMD_GET(s16, 2);
+        gAreas[sCurrAreaIndex].musicParam  = CMD_GET(s16, 2);
         gAreas[sCurrAreaIndex].musicParam2 = CMD_GET(s16, 4);
     }
     sCurrentCmd = CMD_NEXT;
@@ -825,9 +788,7 @@ struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {
     sScriptStatus = SCRIPT_RUNNING;
     sCurrentCmd = cmd;
 
-    while (sScriptStatus == SCRIPT_RUNNING) {
-        LevelScriptJumpTable[sCurrentCmd->type]();
-    }
+    while (sScriptStatus == SCRIPT_RUNNING) LevelScriptJumpTable[sCurrentCmd->type]();
 
     profiler_log_thread5_time(LEVEL_SCRIPT_EXECUTE);
     init_rcp();

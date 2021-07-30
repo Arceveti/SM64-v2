@@ -123,9 +123,7 @@ void fb_draw_char(int x, int y, u8 idx) {
         for (nrow = 0; nrow < 2; nrow++) {
             for (ncol = 0; ncol < 4; ncol++) {
                 u8 px = curbyte & (1 << (7 - (nrow * 4 + ncol)));
-                if (px != 0) {
-                    out[ncol] = fbFillColor;
-                }
+                if (px != 0) out[ncol] = fbFillColor;
             }
             out += 320;
         }

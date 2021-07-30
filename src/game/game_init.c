@@ -61,8 +61,8 @@ s8 gSramProbe;
 #endif
 OSMesgQueue gGameVblankQueue;
 OSMesgQueue gGfxVblankQueue;
-OSMesg gGameMesgBuf[1];
-OSMesg gGfxMesgBuf[1];
+OSMesg      gGameMesgBuf[1];
+OSMesg      gGfxMesgBuf[1];
 
 // Vblank Handler
 struct VblankHandler gGameVblankHandler;
@@ -139,8 +139,7 @@ void init_rdp(void) {
  * Sets the initial RSP (Reality Signal Processor) settings.
  */
 void init_rsp(void) {
-    gSPClearGeometryMode(gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG
-                        | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD);
+    gSPClearGeometryMode(gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD);
 
     gSPSetGeometryMode(gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING);
 
@@ -164,11 +163,9 @@ void init_z_buffer(void) {
     gDPSetDepthImage(gDisplayListHead++, gPhysicalZBuffer);
 
     gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalZBuffer);
-    gDPSetFillColor(gDisplayListHead++,
-                    GPACK_ZDZ(G_MAXFBZ, 0) << 16 | GPACK_ZDZ(G_MAXFBZ, 0));
+    gDPSetFillColor(gDisplayListHead++, GPACK_ZDZ(G_MAXFBZ, 0) << 16 | GPACK_ZDZ(G_MAXFBZ, 0));
 
-    gDPFillRectangle(gDisplayListHead++, 0, gBorderHeight, SCREEN_WIDTH - 1,
-                     SCREEN_HEIGHT - 1 - gBorderHeight);
+    gDPFillRectangle(gDisplayListHead++, 0, gBorderHeight, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 - gBorderHeight);
 }
 
 /**
@@ -178,10 +175,8 @@ void select_frame_buffer(void) {
     gDPPipeSync(gDisplayListHead++);
 
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
-    gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH,
-                     gPhysicalFrameBuffers[sRenderingFrameBuffer]);
-    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
-                  SCREEN_HEIGHT - gBorderHeight);
+    gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalFrameBuffers[sRenderingFrameBuffer]);
+    gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
 }
 
 /**
@@ -326,9 +321,7 @@ void init_rcp(void) {
  */
 void end_master_display_list(void) {
     draw_screen_borders();
-    if (gShowProfiler) {
-        draw_profiler();
-    }
+    if (gShowProfiler) draw_profiler();
 
     gDPFullSync(gDisplayListHead++);
     gSPEndDisplayList(gDisplayListHead++);
@@ -371,10 +364,10 @@ void draw_reset_bars(void) {
  */
 void render_init(void) {
     if (IO_READ(DPC_PIPEBUSY_REG) == 0) {
-        gIsConsole = 0;
+        gIsConsole = FALSE;
         gBorderHeight = BORDER_HEIGHT_EMULATOR;
     } else {
-        gIsConsole = 1;
+        gIsConsole = TRUE;
         gBorderHeight = BORDER_HEIGHT_CONSOLE;
     }
     gGfxPool = &gGfxPools[0];
@@ -443,13 +436,8 @@ UNUSED static void record_demo(void) {
 
     // If the stick is in deadzone, set its value to 0 to
     // nullify the effects. We do not record deadzone inputs.
-    if (rawStickX > -8 && rawStickX < 8) {
-        rawStickX = 0;
-    }
-
-    if (rawStickY > -8 && rawStickY < 8) {
-        rawStickY = 0;
-    }
+    if (rawStickX > -8 && rawStickX < 8) rawStickX = 0;
+    if (rawStickY > -8 && rawStickY < 8) rawStickY = 0;
 
     // Rrecord the distinct input and timer so long as they are unique.
     // If the timer hits 0xFF, reset the timer for the next demo input.
@@ -472,21 +460,10 @@ void adjust_analog_stick(struct Controller *controller) {
     controller->stickY = 0;
 
     // Modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
-    if (controller->rawStickX <= -8) {
-        controller->stickX = controller->rawStickX + 6;
-    }
-
-    if (controller->rawStickX >= 8) {
-        controller->stickX = controller->rawStickX - 6;
-    }
-
-    if (controller->rawStickY <= -8) {
-        controller->stickY = controller->rawStickY + 6;
-    }
-
-    if (controller->rawStickY >= 8) {
-        controller->stickY = controller->rawStickY - 6;
-    }
+    if (controller->rawStickX <= -8) controller->stickX = controller->rawStickX + 6;
+    if (controller->rawStickX >=  8) controller->stickX = controller->rawStickX - 6;
+    if (controller->rawStickY <= -8) controller->stickY = controller->rawStickY + 6;
+    if (controller->rawStickY >=  8) controller->stickY = controller->rawStickY - 6;
 
     // Calculate f32 magnitude from the center by vector length.
     controller->stickMag =
@@ -551,9 +528,7 @@ void run_demo_inputs(void) {
             gControllers[0].controllerData->button |= startPushed;
 
             // Run the current demo input's timer down. if it hits 0, advance the demo input list.
-            if (--gCurrDemoInput->timer == 0) {
-                gCurrDemoInput++;
-            }
+            if (--gCurrDemoInput->timer == 0) gCurrDemoInput++;
         }
     }
 }
@@ -586,28 +561,27 @@ void read_controller_inputs(void) {
             // 0.5x A presses are a good meme
             controller->buttonDown = controller->controllerData->button;
             adjust_analog_stick(controller);
-        } else // otherwise, if the controllerData is NULL, 0 out all of the inputs.
-        {
-            controller->rawStickX = 0;
-            controller->rawStickY = 0;
+        } else { // otherwise, if the controllerData is NULL, 0 out all of the inputs.
+            controller->rawStickX     = 0;
+            controller->rawStickY     = 0;
             controller->buttonPressed = 0;
-            controller->buttonDown = 0;
-            controller->stickX = 0;
-            controller->stickY = 0;
-            controller->stickMag = 0;
+            controller->buttonDown    = 0;
+            controller->stickX        = 0;
+            controller->stickY        = 0;
+            controller->stickMag      = 0;
         }
     }
 
     // For some reason, player 1's inputs are copied to player 3's port.
     // This potentially may have been a way the developers "recorded"
     // the inputs for demos, despite record_demo existing.
-    gPlayer3Controller->rawStickX = gPlayer1Controller->rawStickX;
-    gPlayer3Controller->rawStickY = gPlayer1Controller->rawStickY;
-    gPlayer3Controller->stickX = gPlayer1Controller->stickX;
-    gPlayer3Controller->stickY = gPlayer1Controller->stickY;
-    gPlayer3Controller->stickMag = gPlayer1Controller->stickMag;
+    gPlayer3Controller->rawStickX     = gPlayer1Controller->rawStickX;
+    gPlayer3Controller->rawStickY     = gPlayer1Controller->rawStickY;
+    gPlayer3Controller->stickX        = gPlayer1Controller->stickX;
+    gPlayer3Controller->stickY        = gPlayer1Controller->stickY;
+    gPlayer3Controller->stickMag      = gPlayer1Controller->stickMag;
     gPlayer3Controller->buttonPressed = gPlayer1Controller->buttonPressed;
-    gPlayer3Controller->buttonDown = gPlayer1Controller->buttonDown;
+    gPlayer3Controller->buttonDown    = gPlayer1Controller->buttonDown;
 }
 
 /**
@@ -618,7 +592,7 @@ void init_controllers(void) {
 
     // Set controller 1 to point to the set of status/pads for input 1 and
     // init the controllers.
-    gControllers[0].statusData = &gControllerStatuses[0];
+    gControllers[0].statusData     = &gControllerStatuses[0];
     gControllers[0].controllerData = &gControllerPads[0];
     osContInit(&gSIEventMesgQueue, &gControllerBits, &gControllerStatuses[0]);
 

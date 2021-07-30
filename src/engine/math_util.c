@@ -162,9 +162,7 @@ void mtxf_copy(Mat4 dest, Mat4 src) {
     register u32 *d = (u32 *) dest;
     register u32 *s = (u32 *) src;
 
-    for (i = 0; i < 16; i++) {
-        *d++ = *s++;
-    }
+    for (i = 0; i < 16; i++) *d++ = *s++;
 }
 
 /**
@@ -610,9 +608,7 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
 	register s32 i, j;
 	
 	for( i = 0; i < 4; i++ ) {
-		for( j = 0; j < 3; j++ ) {
-			temp[i][j] = src[i][j] / WORLD_SCALE;
-		}
+		for( j = 0; j < 3; j++ ) temp[i][j] = src[i][j] / WORLD_SCALE;
 		temp[i][3] = src[i][3];
 	}
 
@@ -661,9 +657,9 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *
     register f32 y = to[1] - from[1];
     register f32 z = to[2] - from[2];
 
-    *dist = sqrtf(x * x + y * y + z * z);
+    *dist  = sqrtf(x * x + y * y + z * z);
     *pitch = atan2s(sqrtf(x * x + z * z), y);
-    *yaw = atan2s(z, x);
+    *yaw   = atan2s(z, x);
 }
 
 /**
@@ -775,9 +771,9 @@ f32 atan2f(f32 y, f32 x) {
 
 #define CURVE_BEGIN_1 1
 #define CURVE_BEGIN_2 2
-#define CURVE_MIDDLE 3
-#define CURVE_END_1 4
-#define CURVE_END_2 5
+#define CURVE_MIDDLE  3
+#define CURVE_END_1   4
+#define CURVE_END_2   5
 
 /**
  * Set 'result' to a 4-vector with weights corresponding to interpolation

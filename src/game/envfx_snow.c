@@ -41,9 +41,9 @@ s16 gSnowParticleMaxCount;
 s8 gEnvFxMode = 0;
 
 /// Template for a snow particle triangle
-Vtx gSnowTempVtx[3] = { { { { -5,  5, 0 }, 0, {   0, 0   }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { { -5, -5, 0 }, 0, {   0, 960 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { {  5,  5, 0 }, 0, { 960,   0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
+Vtx gSnowTempVtx[3] = { { { { -5,  5, 0 }, 0, {     0,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { { -5, -5, 0 }, 0, {     0, 30<<5 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { {  5,  5, 0 }, 0, { 30<<5,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
 
 // Change these to make snowflakes smaller or bigger
 struct SnowFlakeVertex gSnowFlakeVertex1 = { -5,  5, 0 };
@@ -62,17 +62,14 @@ s32 envfx_init_snow(s32 mode) {
     switch (mode) {
         case ENVFX_MODE_NONE:
             return FALSE;
-
         case ENVFX_SNOW_NORMAL:
             gSnowParticleMaxCount = 140;
             gSnowParticleCount = 5;
             break;
-
         case ENVFX_SNOW_WATER:
             gSnowParticleMaxCount = 30;
             gSnowParticleCount = 30;
             break;
-
         case ENVFX_SNOW_BLIZZARD:
             gSnowParticleMaxCount = 140;
             gSnowParticleCount = 140;
@@ -99,27 +96,16 @@ void envfx_update_snowflake_count(s32 mode, Vec3s marioPos) {
     f32 waterLevel;
     switch (mode) {
         case ENVFX_SNOW_NORMAL:
-            if (gSnowParticleMaxCount > gSnowParticleCount) {
-                if (!(timer & 0x3F)) {
-                    gSnowParticleCount += 5;
-                }
-            }
+            if (gSnowParticleMaxCount > gSnowParticleCount && !(timer & 0x3F)) gSnowParticleCount += 5;
             break;
 
         case ENVFX_SNOW_WATER:
             waterLevel = find_water_level(marioPos[0], marioPos[2]);
 
-            gSnowParticleCount =
-                (((s32)((waterLevel - 400.0f - (f32) marioPos[1]) * 1.0e-3f) << 0x10) >> 0x10) * 5;
+            gSnowParticleCount = (((s32)((waterLevel - 400.0f - (f32) marioPos[1]) * 1.0e-3f) << 0x10) >> 0x10) * 5;
 
-            if (gSnowParticleCount < 0) {
-                gSnowParticleCount = 0;
-            }
-
-            if (gSnowParticleCount > gSnowParticleMaxCount) {
-                gSnowParticleCount = gSnowParticleMaxCount;
-            }
-
+            if (gSnowParticleCount < 0) gSnowParticleCount = 0;
+            if (gSnowParticleCount > gSnowParticleMaxCount) gSnowParticleCount = gSnowParticleMaxCount;
             break;
 
         case ENVFX_SNOW_BLIZZARD:
@@ -133,9 +119,7 @@ void envfx_update_snowflake_count(s32 mode, Vec3s marioPos) {
  */
 void envfx_cleanup_snow(void *snowParticleArray) {
     if (gEnvFxMode) {
-        if (snowParticleArray) {
-            mem_pool_free(gEffectsMemoryPool, snowParticleArray);
-        }
+        if (snowParticleArray) mem_pool_free(gEffectsMemoryPool, snowParticleArray);
         gEnvFxMode = ENVFX_MODE_NONE;
     }
 }
@@ -149,9 +133,9 @@ void orbit_from_positions(Vec3s from, Vec3s to, s16 *radius, s16 *pitch, s16 *ya
     f32 dy = to[1] - from[1];
     f32 dz = to[2] - from[2];
 
-    *radius = (s16) sqrtf(dx * dx + dy * dy + dz * dz);
-    *pitch = atan2s(sqrtf(dx * dx + dz * dz), dy);
-    *yaw = atan2s(dz, dx);
+    *radius =  (s16) sqrtf(dx * dx + dy * dy + dz * dz);
+    *pitch  = atan2s(sqrtf(dx * dx + dz * dz), dy);
+    *yaw    = atan2s(dz, dx);
 }
 
 /**
@@ -173,9 +157,7 @@ s32 envfx_is_snowflake_alive(s32 index, s32 snowCylinderX, s32 snowCylinderY, s3
     s32 x = (gEnvFxBuffer + index)->xPos;
     s32 y = (gEnvFxBuffer + index)->yPos;
     s32 z = (gEnvFxBuffer + index)->zPos;
-
     if (sqr(x - snowCylinderX) + sqr(z - snowCylinderZ) > sqr(300)) return FALSE;
-
     return !((y < snowCylinderY - 201) || (snowCylinderY + 201 < y));
 }
 
@@ -200,18 +182,15 @@ void envfx_update_snow_normal(s32 snowCylinderX, s32 snowCylinderY, s32 snowCyli
     s32 deltaZ = snowCylinderZ - gSnowCylinderLastPos[2];
 
     for (i = 0; i < gSnowParticleCount; i++) {
-        (gEnvFxBuffer + i)->isAlive =
-            envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
-        if ((gEnvFxBuffer + i)->isAlive == 0) {
-            (gEnvFxBuffer + i)->xPos =
-                400.0f * random_float() - 200.0f + snowCylinderX + (s16)(deltaX * 2);
-            (gEnvFxBuffer + i)->zPos =
-                400.0f * random_float() - 200.0f + snowCylinderZ + (s16)(deltaZ * 2);
-            (gEnvFxBuffer + i)->yPos = 200.0f * random_float() + snowCylinderY;
-            (gEnvFxBuffer + i)->isAlive = 1;
+        (gEnvFxBuffer + i)->isAlive = envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
+        if (!(gEnvFxBuffer + i)->isAlive) {
+            (gEnvFxBuffer + i)->xPos = 400.0f * random_float() - 200.0f + snowCylinderX + (s16)(deltaX * 2);
+            (gEnvFxBuffer + i)->zPos = 400.0f * random_float() - 200.0f + snowCylinderZ + (s16)(deltaZ * 2);
+            (gEnvFxBuffer + i)->yPos = 200.0f * random_float()          + snowCylinderY;
+            (gEnvFxBuffer + i)->isAlive = TRUE;
         } else {
             (gEnvFxBuffer + i)->xPos += random_float() * 2 - 1.0f + (s16)(deltaX / 1.2f);
-            (gEnvFxBuffer + i)->yPos -= 2 -(s16)(deltaY * 0.8f);
+            (gEnvFxBuffer + i)->yPos -=                          2 -(s16)(deltaY * 0.8f);
             (gEnvFxBuffer + i)->zPos += random_float() * 2 - 1.0f + (s16)(deltaZ / 1.2f);
         }
     }
@@ -234,18 +213,15 @@ void envfx_update_snow_blizzard(s32 snowCylinderX, s32 snowCylinderY, s32 snowCy
     s32 deltaZ = snowCylinderZ - gSnowCylinderLastPos[2];
 
     for (i = 0; i < gSnowParticleCount; i++) {
-        (gEnvFxBuffer + i)->isAlive =
-            envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
-        if ((gEnvFxBuffer + i)->isAlive == 0) {
-            (gEnvFxBuffer + i)->xPos =
-                400.0f * random_float() - 200.0f + snowCylinderX + (s16)(deltaX * 2);
-            (gEnvFxBuffer + i)->zPos =
-                400.0f * random_float() - 200.0f + snowCylinderZ + (s16)(deltaZ * 2);
-            (gEnvFxBuffer + i)->yPos = 400.0f * random_float() - 200.0f + snowCylinderY;
-            (gEnvFxBuffer + i)->isAlive = 1;
+        (gEnvFxBuffer + i)->isAlive = envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
+        if (!(gEnvFxBuffer + i)->isAlive) {
+            (gEnvFxBuffer + i)->xPos    = 400.0f * random_float() - 200.0f + snowCylinderX + (s16)(deltaX * 2);
+            (gEnvFxBuffer + i)->zPos    = 400.0f * random_float() - 200.0f + snowCylinderZ + (s16)(deltaZ * 2);
+            (gEnvFxBuffer + i)->yPos    = 400.0f * random_float() - 200.0f + snowCylinderY;
+            (gEnvFxBuffer + i)->isAlive = TRUE;
         } else {
             (gEnvFxBuffer + i)->xPos += random_float() * 2 - 1.0f + (s16)(deltaX / 1.2f) + 20.0f;
-            (gEnvFxBuffer + i)->yPos -= 5 -(s16)(deltaY * 0.8f);
+            (gEnvFxBuffer + i)->yPos -=                          5 -(s16)(deltaY * 0.8f);
             (gEnvFxBuffer + i)->zPos += random_float() * 2 - 1.0f + (s16)(deltaZ / 1.2f);
         }
     }
@@ -261,15 +237,13 @@ void envfx_update_snow_blizzard(s32 snowCylinderX, s32 snowCylinderY, s32 snowCy
  */
 void envfx_update_snow_water(s32 snowCylinderX, s32 snowCylinderY, s32 snowCylinderZ) {
     s32 i;
-
     for (i = 0; i < gSnowParticleCount; i++) {
-        (gEnvFxBuffer + i)->isAlive =
-            envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
-        if ((gEnvFxBuffer + i)->isAlive == 0) {
+        (gEnvFxBuffer + i)->isAlive = envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
+        if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->xPos = 400.0f * random_float() - 200.0f + snowCylinderX;
             (gEnvFxBuffer + i)->zPos = 400.0f * random_float() - 200.0f + snowCylinderZ;
             (gEnvFxBuffer + i)->yPos = 400.0f * random_float() - 200.0f + snowCylinderY;
-            (gEnvFxBuffer + i)->isAlive = 1;
+            (gEnvFxBuffer + i)->isAlive = TRUE;
         }
     }
 }
@@ -281,8 +255,8 @@ void envfx_update_snow_water(s32 snowCylinderX, s32 snowCylinderY, s32 snowCylin
 void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, s16 pitch, s16 yaw) {
     f32 cosPitch = coss(pitch);
     f32 sinPitch = sins(pitch);
-    f32 cosMYaw = coss(-yaw);
-    f32 sinMYaw = sins(-yaw);
+    f32 cosMYaw  = coss(-yaw);
+    f32 sinMYaw  = sins(-yaw);
 
     Vec3f v1, v2, v3;
 
@@ -298,17 +272,17 @@ void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, s16 p
     v3[1] = vertex3[1];
     v3[2] = vertex3[2];
 
-    vertex1[0] = v1[0] * cosMYaw + v1[1] * (sinPitch * sinMYaw) + v1[2] * (-sinMYaw * cosPitch);
-    vertex1[1] = v1[1] * cosPitch + v1[2] * sinPitch;
-    vertex1[2] = v1[0] * sinMYaw + v1[1] * (-sinPitch * cosMYaw) + v1[2] * (cosPitch * cosMYaw);
+    vertex1[0] = v1[0] * cosMYaw  + v1[1] * ( sinPitch * sinMYaw) + v1[2] * (-sinMYaw * cosPitch);
+    vertex1[1] = v1[1] * cosPitch + v1[2] *   sinPitch;
+    vertex1[2] = v1[0] * sinMYaw  + v1[1] * (-sinPitch * cosMYaw) + v1[2] * (cosPitch * cosMYaw);
 
-    vertex2[0] = v2[0] * cosMYaw + v2[1] * (sinPitch * sinMYaw) + v2[2] * (-sinMYaw * cosPitch);
-    vertex2[1] = v2[1] * cosPitch + v2[2] * sinPitch;
-    vertex2[2] = v2[0] * sinMYaw + v2[1] * (-sinPitch * cosMYaw) + v2[2] * (cosPitch * cosMYaw);
+    vertex2[0] = v2[0] * cosMYaw  + v2[1] * ( sinPitch * sinMYaw) + v2[2] * (-sinMYaw * cosPitch);
+    vertex2[1] = v2[1] * cosPitch + v2[2] *   sinPitch;
+    vertex2[2] = v2[0] * sinMYaw  + v2[1] * (-sinPitch * cosMYaw) + v2[2] * (cosPitch * cosMYaw);
 
-    vertex3[0] = v3[0] * cosMYaw + v3[1] * (sinPitch * sinMYaw) + v3[2] * (-sinMYaw * cosPitch);
-    vertex3[1] = v3[1] * cosPitch + v3[2] * sinPitch;
-    vertex3[2] = v3[0] * sinMYaw + v3[1] * (-sinPitch * cosMYaw) + v3[2] * (cosPitch * cosMYaw);
+    vertex3[0] = v3[0] * cosMYaw  + v3[1] * ( sinPitch * sinMYaw) + v3[2] * (-sinMYaw * cosPitch);
+    vertex3[1] = v3[1] * cosPitch + v3[2] *   sinPitch;
+    vertex3[2] = v3[0] * sinMYaw  + v3[1] * (-sinPitch * cosMYaw) + v3[2] * (cosPitch * cosMYaw);
 }
 
 /**

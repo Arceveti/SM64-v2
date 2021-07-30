@@ -149,9 +149,9 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
             row = n / 3;
             col = n % 3;
 
-            x = sp64[n * 4 + 0];
-            y = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
-            z = sp64[n * 4 + 1];
+            x  = sp64[n * 4 + 0];
+            y  = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
+            z  = sp64[n * 4 + 1];
             tx = sp64[n * 4 + 2];
             ty = sp64[n * 4 + 3];
 

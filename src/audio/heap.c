@@ -704,13 +704,12 @@ void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg
 #endif
     arg0->persistent.entries[arg0->persistent.numEntries].ptr = ret;
 
-    if (ret == NULL)
+    if (ret == NULL) {
 #else
     arg0->persistent.entries[arg0->persistent.numEntries].ptr = soundAlloc(&arg0->persistent.pool, arg1 * size);
 
-    if (arg0->persistent.entries[arg0->persistent.numEntries].ptr == NULL)
+    if (arg0->persistent.entries[arg0->persistent.numEntries].ptr == NULL) {
 #endif
-    {
         switch (arg3) {
             case 2:
 #if defined(VERSION_EU)

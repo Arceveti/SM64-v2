@@ -43,49 +43,49 @@
      (level1Area1) << 0)
 
 
-#define AREA_BBH                LEVEL_AREA_INDEX(LEVEL_BBH, 1)
-#define AREA_CCM_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_CCM, 1)
-#define AREA_CCM_SLIDE          LEVEL_AREA_INDEX(LEVEL_CCM, 2)
-#define AREA_CASTLE_LOBBY       LEVEL_AREA_INDEX(LEVEL_CASTLE, 1)
-#define AREA_CASTLE_TIPPY       LEVEL_AREA_INDEX(LEVEL_CASTLE, 2)
-#define AREA_CASTLE_BASEMENT    LEVEL_AREA_INDEX(LEVEL_CASTLE, 3)
-#define AREA_HMC                LEVEL_AREA_INDEX(LEVEL_HMC, 1)
-#define AREA_SSL_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_SSL, 1)
-#define AREA_SSL_PYRAMID        LEVEL_AREA_INDEX(LEVEL_SSL, 2)
-#define AREA_SSL_EYEROK         LEVEL_AREA_INDEX(LEVEL_SSL, 3)
-#define AREA_BOB                LEVEL_AREA_INDEX(LEVEL_BOB, 1)
-#define AREA_SL_OUTSIDE         LEVEL_AREA_INDEX(LEVEL_SL, 1)
-#define AREA_SL_IGLOO           LEVEL_AREA_INDEX(LEVEL_SL, 2)
-#define AREA_WDW_MAIN           LEVEL_AREA_INDEX(LEVEL_WDW, 1)
-#define AREA_WDW_TOWN           LEVEL_AREA_INDEX(LEVEL_WDW, 2)
-#define AREA_JRB_MAIN           LEVEL_AREA_INDEX(LEVEL_JRB, 1)
-#define AREA_JRB_SHIP           LEVEL_AREA_INDEX(LEVEL_JRB, 2)
-#define AREA_THI_HUGE           LEVEL_AREA_INDEX(LEVEL_THI, 1)
-#define AREA_THI_TINY           LEVEL_AREA_INDEX(LEVEL_THI, 2)
-#define AREA_THI_WIGGLER        LEVEL_AREA_INDEX(LEVEL_THI, 3)
-#define AREA_TTC                LEVEL_AREA_INDEX(LEVEL_TTC, 1)
-#define AREA_RR                 LEVEL_AREA_INDEX(LEVEL_RR, 1)
-#define AREA_CASTLE_GROUNDS     LEVEL_AREA_INDEX(LEVEL_CASTLE_GROUNDS, 1)
-#define AREA_BITDW              LEVEL_AREA_INDEX(LEVEL_BITDW, 1)
-#define AREA_VCUTM              LEVEL_AREA_INDEX(LEVEL_VCUTM, 1)
-#define AREA_BITFS              LEVEL_AREA_INDEX(LEVEL_BITFS, 1)
-#define AREA_SA                 LEVEL_AREA_INDEX(LEVEL_SA, 1)
-#define AREA_BITS               LEVEL_AREA_INDEX(LEVEL_BITS, 1)
-#define AREA_LLL_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_LLL, 1)
-#define AREA_LLL_VOLCANO        LEVEL_AREA_INDEX(LEVEL_LLL, 2)
-#define AREA_DDD_WHIRLPOOL      LEVEL_AREA_INDEX(LEVEL_DDD, 1)
-#define AREA_DDD_SUB            LEVEL_AREA_INDEX(LEVEL_DDD, 2)
-#define AREA_WF                 LEVEL_AREA_INDEX(LEVEL_WF, 1)
-#define AREA_ENDING             LEVEL_AREA_INDEX(LEVEL_ENDING, 1)
+#define AREA_BBH                LEVEL_AREA_INDEX(LEVEL_BBH,              1)
+#define AREA_CCM_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_CCM,              1)
+#define AREA_CCM_SLIDE          LEVEL_AREA_INDEX(LEVEL_CCM,              2)
+#define AREA_CASTLE_LOBBY       LEVEL_AREA_INDEX(LEVEL_CASTLE,           1)
+#define AREA_CASTLE_TIPPY       LEVEL_AREA_INDEX(LEVEL_CASTLE,           2)
+#define AREA_CASTLE_BASEMENT    LEVEL_AREA_INDEX(LEVEL_CASTLE,           3)
+#define AREA_HMC                LEVEL_AREA_INDEX(LEVEL_HMC,              1)
+#define AREA_SSL_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_SSL,              1)
+#define AREA_SSL_PYRAMID        LEVEL_AREA_INDEX(LEVEL_SSL,              2)
+#define AREA_SSL_EYEROK         LEVEL_AREA_INDEX(LEVEL_SSL,              3)
+#define AREA_BOB                LEVEL_AREA_INDEX(LEVEL_BOB,              1)
+#define AREA_SL_OUTSIDE         LEVEL_AREA_INDEX(LEVEL_SL,               1)
+#define AREA_SL_IGLOO           LEVEL_AREA_INDEX(LEVEL_SL,               2)
+#define AREA_WDW_MAIN           LEVEL_AREA_INDEX(LEVEL_WDW,              1)
+#define AREA_WDW_TOWN           LEVEL_AREA_INDEX(LEVEL_WDW,              2)
+#define AREA_JRB_MAIN           LEVEL_AREA_INDEX(LEVEL_JRB,              1)
+#define AREA_JRB_SHIP           LEVEL_AREA_INDEX(LEVEL_JRB,              2)
+#define AREA_THI_HUGE           LEVEL_AREA_INDEX(LEVEL_THI,              1)
+#define AREA_THI_TINY           LEVEL_AREA_INDEX(LEVEL_THI,              2)
+#define AREA_THI_WIGGLER        LEVEL_AREA_INDEX(LEVEL_THI,              3)
+#define AREA_TTC                LEVEL_AREA_INDEX(LEVEL_TTC,              1)
+#define AREA_RR                 LEVEL_AREA_INDEX(LEVEL_RR,               1)
+#define AREA_CASTLE_GROUNDS     LEVEL_AREA_INDEX(LEVEL_CASTLE_GROUNDS,   1)
+#define AREA_BITDW              LEVEL_AREA_INDEX(LEVEL_BITDW,            1)
+#define AREA_VCUTM              LEVEL_AREA_INDEX(LEVEL_VCUTM,            1)
+#define AREA_BITFS              LEVEL_AREA_INDEX(LEVEL_BITFS,            1)
+#define AREA_SA                 LEVEL_AREA_INDEX(LEVEL_SA,               1)
+#define AREA_BITS               LEVEL_AREA_INDEX(LEVEL_BITS,             1)
+#define AREA_LLL_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_LLL,              1)
+#define AREA_LLL_VOLCANO        LEVEL_AREA_INDEX(LEVEL_LLL,              2)
+#define AREA_DDD_WHIRLPOOL      LEVEL_AREA_INDEX(LEVEL_DDD,              1)
+#define AREA_DDD_SUB            LEVEL_AREA_INDEX(LEVEL_DDD,              2)
+#define AREA_WF                 LEVEL_AREA_INDEX(LEVEL_WF,               1)
+#define AREA_ENDING             LEVEL_AREA_INDEX(LEVEL_ENDING,           1)
 #define AREA_COURTYARD          LEVEL_AREA_INDEX(LEVEL_CASTLE_COURTYARD, 1)
-#define AREA_PSS                LEVEL_AREA_INDEX(LEVEL_PSS, 1)
-#define AREA_COTMC              LEVEL_AREA_INDEX(LEVEL_COTMC, 1)
-#define AREA_TOTWC              LEVEL_AREA_INDEX(LEVEL_TOTWC, 1)
-#define AREA_BOWSER_1           LEVEL_AREA_INDEX(LEVEL_BOWSER_1, 1)
-#define AREA_WMOTR              LEVEL_AREA_INDEX(LEVEL_WMOTR, 1)
-#define AREA_BOWSER_2           LEVEL_AREA_INDEX(LEVEL_BOWSER_2, 1)
-#define AREA_BOWSER_3           LEVEL_AREA_INDEX(LEVEL_BOWSER_3, 1)
-#define AREA_TTM_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_TTM, 1)
+#define AREA_PSS                LEVEL_AREA_INDEX(LEVEL_PSS,              1)
+#define AREA_COTMC              LEVEL_AREA_INDEX(LEVEL_COTMC,            1)
+#define AREA_TOTWC              LEVEL_AREA_INDEX(LEVEL_TOTWC,            1)
+#define AREA_BOWSER_1           LEVEL_AREA_INDEX(LEVEL_BOWSER_1,         1)
+#define AREA_WMOTR              LEVEL_AREA_INDEX(LEVEL_WMOTR,            1)
+#define AREA_BOWSER_2           LEVEL_AREA_INDEX(LEVEL_BOWSER_2,         1)
+#define AREA_BOWSER_3           LEVEL_AREA_INDEX(LEVEL_BOWSER_3,         1)
+#define AREA_TTM_OUTSIDE        LEVEL_AREA_INDEX(LEVEL_TTM,              1)
 
 #define CAM_MODE_MARIO_ACTIVE           0x01
 #define CAM_MODE_LAKITU_WAS_ZOOMED_OUT  0x02
@@ -94,24 +94,24 @@
 #define CAM_SELECTION_MARIO 1
 #define CAM_SELECTION_FIXED 2
 
-#define CAM_ANGLE_MARIO  1
-#define CAM_ANGLE_LAKITU 2
+#define CAM_ANGLE_MARIO     1
+#define CAM_ANGLE_LAKITU    2
 
-#define CAMERA_MODE_NONE              0x00
-#define CAMERA_MODE_RADIAL            0x01
-#define CAMERA_MODE_OUTWARD_RADIAL    0x02
-#define CAMERA_MODE_BEHIND_MARIO      0x03
-#define CAMERA_MODE_CLOSE             0x04 // Inside Castle / Big Boo's Haunt
-#define CAMERA_MODE_C_UP              0x06
-#define CAMERA_MODE_WATER_SURFACE     0x08
-#define CAMERA_MODE_SLIDE_HOOT        0x09
-#define CAMERA_MODE_INSIDE_CANNON     0x0A
-#define CAMERA_MODE_BOSS_FIGHT        0x0B
-#define CAMERA_MODE_PARALLEL_TRACKING 0x0C
-#define CAMERA_MODE_FIXED             0x0D
-#define CAMERA_MODE_8_DIRECTIONS      0x0E // AKA Parallel Camera, Bowser Courses & Rainbow Ride
-#define CAMERA_MODE_FREE_ROAM         0x10
-#define CAMERA_MODE_SPIRAL_STAIRS     0x11
+#define CAMERA_MODE_NONE                0x00
+#define CAMERA_MODE_RADIAL              0x01
+#define CAMERA_MODE_OUTWARD_RADIAL      0x02
+#define CAMERA_MODE_BEHIND_MARIO        0x03
+#define CAMERA_MODE_CLOSE               0x04 // Inside Castle / Big Boo's Haunt
+#define CAMERA_MODE_C_UP                0x06
+#define CAMERA_MODE_WATER_SURFACE       0x08
+#define CAMERA_MODE_SLIDE_HOOT          0x09
+#define CAMERA_MODE_INSIDE_CANNON       0x0A
+#define CAMERA_MODE_BOSS_FIGHT          0x0B
+#define CAMERA_MODE_PARALLEL_TRACKING   0x0C
+#define CAMERA_MODE_FIXED               0x0D
+#define CAMERA_MODE_8_DIRECTIONS        0x0E // AKA Parallel Camera, Bowser Courses & Rainbow Ride
+#define CAMERA_MODE_FREE_ROAM           0x10
+#define CAMERA_MODE_SPIRAL_STAIRS       0x11
 
 #define CAM_MOVE_RETURN_TO_MIDDLE       0x0001
 #define CAM_MOVE_ZOOMED_OUT             0x0002
@@ -168,34 +168,34 @@
 #define CAM_STATUS_MODE_GROUP   (CAM_STATUS_MARIO | CAM_STATUS_LAKITU | CAM_STATUS_FIXED)
 #define CAM_STATUS_C_MODE_GROUP (CAM_STATUS_C_DOWN | CAM_STATUS_C_UP)
 
-#define SHAKE_ATTACK         1
-#define SHAKE_GROUND_POUND   2
-#define SHAKE_SMALL_DAMAGE   3
-#define SHAKE_MED_DAMAGE     4
-#define SHAKE_LARGE_DAMAGE   5
-#define SHAKE_HIT_FROM_BELOW 8
-#define SHAKE_FALL_DAMAGE    9
-#define SHAKE_SHOCK          10
+#define SHAKE_ATTACK                    1
+#define SHAKE_GROUND_POUND              2
+#define SHAKE_SMALL_DAMAGE              3
+#define SHAKE_MED_DAMAGE                4
+#define SHAKE_LARGE_DAMAGE              5
+#define SHAKE_HIT_FROM_BELOW            8
+#define SHAKE_FALL_DAMAGE               9
+#define SHAKE_SHOCK                    10
 
-#define SHAKE_ENV_EXPLOSION           1
-#define SHAKE_ENV_BOWSER_THROW_BOUNCE 2
-#define SHAKE_ENV_BOWSER_JUMP         3
-#define SHAKE_ENV_UNUSED_5            5
-#define SHAKE_ENV_UNUSED_6            6
-#define SHAKE_ENV_UNUSED_7            7
-#define SHAKE_ENV_PYRAMID_EXPLODE     8
-#define SHAKE_ENV_JRB_SHIP_DRAIN      9
-#define SHAKE_ENV_FALLING_BITS_PLAT   10
+#define SHAKE_ENV_EXPLOSION             1
+#define SHAKE_ENV_BOWSER_THROW_BOUNCE   2
+#define SHAKE_ENV_BOWSER_JUMP           3
+#define SHAKE_ENV_UNUSED_5              5
+#define SHAKE_ENV_UNUSED_6              6
+#define SHAKE_ENV_UNUSED_7              7
+#define SHAKE_ENV_PYRAMID_EXPLODE       8
+#define SHAKE_ENV_JRB_SHIP_DRAIN        9
+#define SHAKE_ENV_FALLING_BITS_PLAT    10
 
-#define SHAKE_FOV_SMALL     1
-#define SHAKE_FOV_UNUSED    2
-#define SHAKE_FOV_MEDIUM    3
-#define SHAKE_FOV_LARGE     4
+#define SHAKE_FOV_SMALL                 1
+#define SHAKE_FOV_UNUSED                2
+#define SHAKE_FOV_MEDIUM                3
+#define SHAKE_FOV_LARGE                 4
 
-#define SHAKE_POS_SMALL         1
-#define SHAKE_POS_MEDIUM        2
-#define SHAKE_POS_LARGE         3
-#define SHAKE_POS_BOWLING_BALL  4
+#define SHAKE_POS_SMALL                 1
+#define SHAKE_POS_MEDIUM                2
+#define SHAKE_POS_LARGE                 3
+#define SHAKE_POS_BOWLING_BALL          4
 
 #define CUTSCENE_DOOR_PULL            130
 #define CUTSCENE_DOOR_PUSH            131
@@ -676,12 +676,12 @@ extern u8 gRecentCutscene;
 void set_camera_shake_from_hit(s16 shake);
 void set_environmental_camera_shake(s16 shake);
 void set_camera_shake_from_point(s16 shake, f32 posX, f32 posY, f32 posZ);
-void move_mario_head_c_up(UNUSED struct Camera *c);
+void move_mario_head_c_up( UNUSED struct Camera *c);
 void transition_next_state(UNUSED struct Camera *c, s16 frames);
 void set_camera_mode(struct Camera *c, s16 mode, s16 frames);
-void update_camera(struct Camera *c);
-void reset_camera(struct Camera *c);
-void init_camera(struct Camera *c);
+void update_camera(  struct Camera *c);
+void reset_camera(   struct Camera *c);
+void init_camera(    struct Camera *c);
 void select_mario_cam_mode(void);
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context);
 void vec3f_sub(Vec3f dst, Vec3f src);
@@ -699,13 +699,13 @@ s32 clamp_pitch(Vec3f from, Vec3f to, s16 maxPitch, s16 minPitch);
 s32 is_within_100_units_of_mario(f32 posX, f32 posY, f32 posZ);
 s32 set_or_approach_f32_asymptotic(f32 *dst, f32 goal, f32 scale);
 s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier);
-f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier);
+f32 approach_f32_asymptotic(      f32 current, f32 target, f32 multiplier);
 s32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor);
-s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor);
-void approach_vec3f_asymptotic(Vec3f current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
+s32 approach_s16_asymptotic(      s16 current, s16 target, s16 divisor);
+void approach_vec3f_asymptotic( Vec3f current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void set_or_approach_vec3f_asymptotic(Vec3f dst, Vec3f goal, f32 xMul, f32 yMul, f32 zMul);
 s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment);
-s32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment);
+s32 set_or_approach_s16_symmetric(     s16 *current, s16 target, s16 increment);
 s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment);
 f32 camera_approach_f32_symmetric(f32 value, f32 target, f32 increment);
 void random_vec3s(Vec3s dst, s16 xRange, s16 yRange, s16 zRange);
@@ -720,11 +720,11 @@ f32 calc_hor_dist(Vec3f a, Vec3f b);
 void rotate_in_xz(Vec3f dst, Vec3f src, s16 yaw);
 void rotate_in_yz(Vec3f dst, Vec3f src, s16 pitch);
 void set_camera_pitch_shake(s16 mag, s16 decay, s16 inc);
-void set_camera_yaw_shake(s16 mag, s16 decay, s16 inc);
-void set_camera_roll_shake(s16 mag, s16 decay, s16 inc);
+void set_camera_yaw_shake(  s16 mag, s16 decay, s16 inc);
+void set_camera_roll_shake( s16 mag, s16 decay, s16 inc);
 void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 posX, f32 posY, f32 posZ);
 void shake_camera_pitch(Vec3f pos, Vec3f focus);
-void shake_camera_yaw(Vec3f pos, Vec3f focus);
+void shake_camera_yaw(  Vec3f pos, Vec3f focus);
 void shake_camera_roll(s16 *roll);
 s32 offset_yaw_outward_radial(struct Camera *c, s16 areaYaw);
 void play_camera_buzz_if_cdown(void);

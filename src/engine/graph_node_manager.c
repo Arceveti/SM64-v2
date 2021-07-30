@@ -7,13 +7,9 @@
 #if IS_64_BIT
 static s16 next_s16_in_geo_script(s16 **src) {
     s16 ret;
-    if (((uintptr_t)(*src) & 7) == 4) {
-         *src += 2; // skip 32 bits
-    }
+    if (((uintptr_t)(*src) & 7) == 4) *src += 2; // skip 32 bits
     ret = *(*src)++;
-    if (((uintptr_t)(*src) & 7) == 4) {
-         *src += 2; // skip 32 bits
-    }
+    if (((uintptr_t)(*src) & 7) == 4) *src += 2; // skip 32 bits
     return ret;
 }
 #else
@@ -65,9 +61,7 @@ void register_scene_graph_node(struct GraphNode *graphNode) {
         gCurGraphNodeList[gCurGraphNodeIndex] = graphNode;
 
         if (gCurGraphNodeIndex == 0) {
-            if (gCurRootGraphNode == NULL) {
-                gCurRootGraphNode = graphNode;
-            }
+            if (gCurRootGraphNode == NULL) gCurRootGraphNode = graphNode;
         } else {
             if (gCurGraphNodeList[gCurGraphNodeIndex - 1]->type == GRAPH_NODE_TYPE_OBJECT_PARENT) {
                 ((struct GraphNodeObjectParent *) gCurGraphNodeList[gCurGraphNodeIndex - 1])->sharedChild = graphNode;

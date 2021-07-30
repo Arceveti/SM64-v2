@@ -6,58 +6,58 @@
 #include "types.h"
 
 
-#define TIMER_CONTROL_SHOW  0
-#define TIMER_CONTROL_START 1
-#define TIMER_CONTROL_STOP  2
-#define TIMER_CONTROL_HIDE  3
+#define TIMER_CONTROL_SHOW                  0
+#define TIMER_CONTROL_START                 1
+#define TIMER_CONTROL_STOP                  2
+#define TIMER_CONTROL_HIDE                  3
 
-#define WARP_OP_NONE          0x00
-#define WARP_OP_LOOK_UP       0x01
-#define WARP_OP_SPIN_SHRINK    0x02
-#define WARP_OP_WARP_DOOR     0x03
-#define WARP_OP_WARP_OBJECT   0x04
-#define WARP_OP_TELEPORT      0x05
-#define WARP_OP_STAR_EXIT     0x11
-#define WARP_OP_DEATH         0x12
-#define WARP_OP_WARP_FLOOR    0x13
-#define WARP_OP_GAME_OVER     0x14
-#define WARP_OP_CREDITS_END   0x15
-#define WARP_OP_DEMO_NEXT     0x16
-#define WARP_OP_CREDITS_START 0x17
-#define WARP_OP_CREDITS_NEXT  0x18
-#define WARP_OP_DEMO_END      0x19
+#define WARP_OP_NONE                        0x00
+#define WARP_OP_LOOK_UP                     0x01
+#define WARP_OP_SPIN_SHRINK                 0x02
+#define WARP_OP_WARP_DOOR                   0x03
+#define WARP_OP_WARP_OBJECT                 0x04
+#define WARP_OP_TELEPORT                    0x05
+#define WARP_OP_STAR_EXIT                   0x11
+#define WARP_OP_DEATH                       0x12
+#define WARP_OP_WARP_FLOOR                  0x13
+#define WARP_OP_GAME_OVER                   0x14
+#define WARP_OP_CREDITS_END                 0x15
+#define WARP_OP_DEMO_NEXT                   0x16
+#define WARP_OP_CREDITS_START               0x17
+#define WARP_OP_CREDITS_NEXT                0x18
+#define WARP_OP_DEMO_END                    0x19
 
-#define WARP_OP_TRIGGERS_LEVEL_SELECT 0x10
+#define WARP_OP_TRIGGERS_LEVEL_SELECT       0x10
 
-#define MARIO_SPAWN_NONE                  0x00
-#define MARIO_SPAWN_DOOR_WARP             0x01
-#define MARIO_SPAWN_IDLE                  0x02
-#define MARIO_SPAWN_PIPE                  0x03
-#define MARIO_SPAWN_TELEPORT              0x04
-#define MARIO_SPAWN_INSTANT_ACTIVE        0x10
-#define MARIO_SPAWN_SWIMMING              0x11
-#define MARIO_SPAWN_AIRBORNE              0x12
-#define MARIO_SPAWN_HARD_AIR_KNOCKBACK    0x13
-#define MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE  0x14
-#define MARIO_SPAWN_DEATH                 0x15
-#define MARIO_SPAWN_SPIN_AIRBORNE         0x16
-#define MARIO_SPAWN_FLYING                0x17
-#define MARIO_SPAWN_PAINTING_STAR_COLLECT 0x20
-#define MARIO_SPAWN_PAINTING_DEATH        0x21
-#define MARIO_SPAWN_AIRBORNE_STAR_COLLECT 0x22
-#define MARIO_SPAWN_AIRBORNE_DEATH        0x23
-#define MARIO_SPAWN_LAUNCH_STAR_COLLECT   0x24
-#define MARIO_SPAWN_LAUNCH_DEATH          0x25
-#define MARIO_SPAWN_FADE_FROM_BLACK       0x27
+#define MARIO_SPAWN_NONE                    0x00
+#define MARIO_SPAWN_DOOR_WARP               0x01
+#define MARIO_SPAWN_IDLE                    0x02
+#define MARIO_SPAWN_PIPE                    0x03
+#define MARIO_SPAWN_TELEPORT                0x04
+#define MARIO_SPAWN_INSTANT_ACTIVE          0x10
+#define MARIO_SPAWN_SWIMMING                0x11
+#define MARIO_SPAWN_AIRBORNE                0x12
+#define MARIO_SPAWN_HARD_AIR_KNOCKBACK      0x13
+#define MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE    0x14
+#define MARIO_SPAWN_DEATH                   0x15
+#define MARIO_SPAWN_SPIN_AIRBORNE           0x16
+#define MARIO_SPAWN_FLYING                  0x17
+#define MARIO_SPAWN_PAINTING_STAR_COLLECT   0x20
+#define MARIO_SPAWN_PAINTING_DEATH          0x21
+#define MARIO_SPAWN_AIRBORNE_STAR_COLLECT   0x22
+#define MARIO_SPAWN_AIRBORNE_DEATH          0x23
+#define MARIO_SPAWN_LAUNCH_STAR_COLLECT     0x24
+#define MARIO_SPAWN_LAUNCH_DEATH            0x25
+#define MARIO_SPAWN_FADE_FROM_BLACK         0x27
 
 // Screen top left - Bottom text
-#define CREDITS_POS_ONE 0
+#define CREDITS_POS_ONE     0x00
 // Screen top right - Bottom text
-#define CREDITS_POS_TWO 0x10
+#define CREDITS_POS_TWO     0x10
 // Screen bottom left - Top text
-#define CREDITS_POS_THREE 0x20
+#define CREDITS_POS_THREE   0x20
 // Screen bottom right - Top text
-#define CREDITS_POS_FOUR 0x30
+#define CREDITS_POS_FOUR    0x30
 
 struct CreditsEntry
 {
@@ -125,16 +125,16 @@ enum HUDDisplayFlag {
 };
 
 
-u16 level_control_timer(s32 timerOp);
+u16  level_control_timer(s32 timerOp);
 void fade_into_special_warp(u32 arg, u32 color);
-void load_level_init_text(u32 arg);
-s16 level_trigger_warp(struct MarioState *m, s32 warpOp);
+void load_level_init_text(  u32 arg);
+s16  level_trigger_warp(struct MarioState *m, s32 warpOp);
 void level_set_transition(s16 length, void (*updateFunction)(s16 *));
 
-s32 lvl_init_or_update(s16 initOrUpdate, UNUSED s32 unused);
-s32 lvl_init_from_save_file(UNUSED s16 arg0, s32 levelNum);
-s32 lvl_set_current_level(UNUSED s16 arg0, s32 levelNum);
-s32 lvl_play_the_end_screen_sound(UNUSED s16 arg0, UNUSED s32 arg1);
+s32  lvl_init_or_update(                  s16 initOrUpdate, UNUSED s32 levelNum);
+s32  lvl_init_from_save_file(      UNUSED s16 initOrUpdate,        s32 levelNum);
+s32  lvl_set_current_level(        UNUSED s16 initOrUpdate,        s32 levelNum);
+s32  lvl_play_the_end_screen_sound(UNUSED s16 initOrUpdate, UNUSED s32 levelNum);
 void basic_update(UNUSED s16 *arg);
 
 #endif // LEVEL_UPDATE_H

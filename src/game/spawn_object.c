@@ -196,8 +196,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
         // If no unimportant object exists, then the object pool is exhausted.
         if (unimportantObj == NULL) {
             // We've met with a terrible fate.
-            while (TRUE) {
-            }
+            while (TRUE) {}
         } else {
             // If an unimportant object does exist, unload it and take its slot.
             unload_object(unimportantObj);
@@ -229,33 +228,33 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     for (i = 0; i < 0x50; i++) obj->rawData.asS32[i] = 0;
 #endif
 
-    // obj->unused1 = 0;
+    // obj->unused1       = 0;
     obj->bhvStackIndex = 0;
     obj->bhvDelayTimer = 0;
 
-    obj->hitboxRadius = 50.0f;
-    obj->hitboxHeight = 100.0f;
-    obj->hurtboxRadius = 0.0f;
-    obj->hurtboxHeight = 0.0f;
+    obj->hitboxRadius     = 50.0f;
+    obj->hitboxHeight     = 100.0f;
+    obj->hurtboxRadius    = 0.0f;
+    obj->hurtboxHeight    = 0.0f;
     obj->hitboxDownOffset = 0.0f;
-    obj->unused2 = 0;
+    // obj->unused2          = 0;
 
-    obj->platform = NULL;
-    obj->collisionData = NULL;
-    obj->oIntangibleTimer = -1;
+    obj->platform           = NULL;
+    obj->collisionData      = NULL;
+    obj->oIntangibleTimer   = -1;
     obj->oDamageOrCoinValue = 0;
-    obj->oHealth = 2048;
+    obj->oHealth            = 2048;
 
     obj->oCollisionDistance = 1000.0f;
-    obj->oDrawingDistance = (gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f;
+    obj->oDrawingDistance   = (gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f;
 
     mtxf_identity(obj->transform);
 
-    obj->respawnInfoType = RESPAWN_INFO_TYPE_NULL;
-    obj->respawnInfo = NULL;
+    obj->respawnInfoType    = RESPAWN_INFO_TYPE_NULL;
+    obj->respawnInfo        = NULL;
 
-    obj->oDistanceToMario = 19000.0f;
-    obj->oRoom = -1;
+    obj->oDistanceToMario   = 19000.0f;
+    obj->oRoom              = -1;
 
     obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     obj->header.gfx.pos[0] = -10000.0f;
@@ -303,9 +302,7 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
     obj->curBhvCommand = bhvScript;
     obj->behavior = behavior;
 
-    if (objListIndex == OBJ_LIST_UNIMPORTANT) {
-        obj->activeFlags |= ACTIVE_FLAG_UNIMPORTANT;
-    }
+    if (objListIndex == OBJ_LIST_UNIMPORTANT) obj->activeFlags |= ACTIVE_FLAG_UNIMPORTANT;
 
     //! They intended to snap certain objects to the floor when they spawn.
     //  However, at this point the object's position is the origin. So this will

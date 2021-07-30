@@ -37,11 +37,11 @@ int nuPiInitSram()
     SramHandle.baseAddress = PHYS_TO_K1(SRAM_START_ADDR);
     
     /* Get Domain parameters */
-    SramHandle.latency = (u8)SRAM_LATENCY;
-    SramHandle.pulse = (u8)SRAM_PULSE;
-    SramHandle.pageSize = (u8)SRAM_PAGE_SIZE;
+    SramHandle.latency     = (u8)SRAM_LATENCY;
+    SramHandle.pulse       = (u8)SRAM_PULSE;
+    SramHandle.pageSize    = (u8)SRAM_PAGE_SIZE;
     SramHandle.relDuration = (u8)SRAM_REL_DURATION;
-    SramHandle.domain = PI_DOMAIN2;
+    SramHandle.domain      = PI_DOMAIN2;
     
     /* Fill speed and transferInfo to zero */
     SramHandle.speed = 0;

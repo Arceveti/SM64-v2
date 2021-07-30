@@ -18,23 +18,10 @@
 s16 convert_rotation(s16 inRotation) {
     u16 rotation = ((u16)(inRotation & 0xFF));
     rotation <<= 8;
-
-    if (rotation == 0x3F00) {
-        rotation = 0x4000;
-    }
-
-    if (rotation == 0x7F00) {
-        rotation = 0x8000;
-    }
-
-    if (rotation == 0xBF00) {
-        rotation = 0xC000;
-    }
-
-    if (rotation == 0xFF00) {
-        rotation = 0x0000;
-    }
-
+    if (rotation == 0x3F00) rotation = 0x4000;
+    if (rotation == 0x7F00) rotation = 0x8000;
+    if (rotation == 0xBF00) rotation = 0xC000;
+    if (rotation == 0xFF00) rotation = 0x0000;
     return (s16) rotation;
 }
 
@@ -80,16 +67,16 @@ void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s
 }
 
 UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 a1[]) {
-    struct Object *sp3C;
+    struct Object *obj;
     s16 model;
 
     model = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
 
-    sp3C = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior,
+    obj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior,
                                      a1[1], a1[2], a1[3], 0, convert_rotation(a1[0]), 0);
 
-    sp3C->oUnk1A8 = a1[4];
-    sp3C->oBehParams = (a1[4] & 0xFF) >> 16;
+    obj->oUnk1A8 = a1[4];
+    obj->oBehParams = (a1[4] & 0xFF) >> 16;
 }
 
 struct LoadedPreset {
@@ -122,21 +109,18 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
         if (presetID < 0) break;
 
         // Set macro object properties from the list
-        macroObject[MACRO_OBJ_Y_ROT] = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
-        macroObject[MACRO_OBJ_X] = *macroObjList++;                          // X position
-        macroObject[MACRO_OBJ_Y] = *macroObjList++;                          // Y position
-        macroObject[MACRO_OBJ_Z] = *macroObjList++;                          // Z position
-        macroObject[MACRO_OBJ_PARAMS] = *macroObjList++;                     // Behavior params
+        macroObject[MACRO_OBJ_Y_ROT]  = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
+        macroObject[MACRO_OBJ_X]      = *macroObjList++;                      // X position
+        macroObject[MACRO_OBJ_Y]      = *macroObjList++;                      // Y position
+        macroObject[MACRO_OBJ_Z]      = *macroObjList++;                      // Z position
+        macroObject[MACRO_OBJ_PARAMS] = *macroObjList++;                      // Behavior params
 
         // Get the preset values from the MacroObjectPresets list.
         preset.model = MacroObjectPresets[presetID].model;
         preset.behavior = MacroObjectPresets[presetID].behavior;
         preset.param = MacroObjectPresets[presetID].param;
 
-        if (preset.param != 0) {
-            macroObject[MACRO_OBJ_PARAMS] =
-                (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
-        }
+        if (preset.param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
 
         // If object has been killed, prevent it from respawning
         if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN)
@@ -155,13 +139,13 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                           0                                               // Z-rotation
                 );
 
-            newObj->oUnk1A8 = macroObject[MACRO_OBJ_PARAMS];
+            newObj->oUnk1A8    = macroObject[MACRO_OBJ_PARAMS];
             newObj->oBehParams = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16)
-                                 + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
+                                + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
             newObj->oBehParams2ndByte = macroObject[MACRO_OBJ_PARAMS] & 0x00FF;
-            newObj->respawnInfoType = RESPAWN_INFO_TYPE_16;
-            newObj->respawnInfo = macroObjList - 1;
-            newObj->parentObj = newObj;
+            newObj->respawnInfoType   = RESPAWN_INFO_TYPE_16;
+            newObj->respawnInfo       = macroObjList - 1;
+            newObj->parentObj         = newObj;
         }
     }
 }
@@ -174,8 +158,6 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
     s16 macroObjZ;
     s16 macroObjPreset;
     s16 macroObjRY; // Y Rotation
-
-    UNUSED u8 pad2[10];
 
     gMacroObjectDefaultParent.header.gfx.areaIndex = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
@@ -194,13 +176,12 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
         // However, BBH doesn't use this function so this might just be an early test?
         switch (macroObjPreset) {
             case 0:
-                spawn_macro_abs_yrot_2params(MODEL_NONE, bhvBooStaircase, macroObjX, macroObjY,
-                                             macroObjZ, macroObjRY, 0);
+                spawn_macro_abs_yrot_2params(MODEL_NONE, bhvBooStaircase,
+                                             macroObjX, macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             case 1:
-                spawn_macro_abs_yrot_2params(MODEL_BBH_TILTING_FLOOR_PLATFORM,
-                                             bhvBbhTiltingTrapPlatform, macroObjX, macroObjY, macroObjZ,
-                                             macroObjRY, 0);
+                spawn_macro_abs_yrot_2params(MODEL_BBH_TILTING_FLOOR_PLATFORM, bhvBbhTiltingTrapPlatform,
+                                             macroObjX, macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             case 2:
                 spawn_macro_abs_yrot_2params(MODEL_BBH_TUMBLING_PLATFORM, bhvBbhTumblingBridge,
@@ -211,16 +192,16 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
                                              macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             case 4:
-                spawn_macro_abs_yrot_2params(MODEL_BBH_MESH_ELEVATOR, bhvMeshElevator, macroObjX,
-                                             macroObjY, macroObjZ, macroObjRY, 0);
+                spawn_macro_abs_yrot_2params(MODEL_BBH_MESH_ELEVATOR, bhvMeshElevator,
+                                             macroObjX, macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             case 20:
-                spawn_macro_abs_yrot_2params(MODEL_YELLOW_COIN, bhvYellowCoin, macroObjX, macroObjY,
-                                             macroObjZ, macroObjRY, 0);
+                spawn_macro_abs_yrot_2params(MODEL_YELLOW_COIN, bhvYellowCoin,
+                                             macroObjX, macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             case 21:
-                spawn_macro_abs_yrot_2params(MODEL_YELLOW_COIN, bhvYellowCoin, macroObjX, macroObjY,
-                                             macroObjZ, macroObjRY, 0);
+                spawn_macro_abs_yrot_2params(MODEL_YELLOW_COIN, bhvYellowCoin,
+                                             macroObjX, macroObjY, macroObjZ, macroObjRY, 0);
                 break;
             default:
                 break;
@@ -286,14 +267,11 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
                 spawn_macro_abs_yrot_2params(model, behavior, x, y, z, extraParams[0], extraParams[1]);
                 break;
             case SPTYPE_UNKNOWN:
-                extraParams[0] =
-                    **specialObjList; // Unknown, gets put into obj->oMacroUnk108 as a float
+                extraParams[0] = **specialObjList; // Unknown, gets put into obj->oMacroUnk108 as a float
                 (*specialObjList)++;
-                extraParams[1] =
-                    **specialObjList; // Unknown, gets put into obj->oMacroUnk10C as a float
+                extraParams[1] = **specialObjList; // Unknown, gets put into obj->oMacroUnk10C as a float
                 (*specialObjList)++;
-                extraParams[2] =
-                    **specialObjList; // Unknown, gets put into obj->oMacroUnk110 as a float
+                extraParams[2] = **specialObjList; // Unknown, gets put into obj->oMacroUnk110 as a float
                 (*specialObjList)++;
                 spawn_macro_abs_special(model, behavior, x, y, z, extraParams[0], extraParams[1],
                                         extraParams[2]);

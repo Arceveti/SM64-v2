@@ -399,7 +399,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
     struct Surface *floor = NULL;
     struct SurfaceNode *topSurfaceNode = surfaceNode;
     struct SurfaceNode *bottomSurfaceNode = surfaceNode;
-    f32 height = FLOOR_LOWER_LIMIT;
+    f32 height       = FLOOR_LOWER_LIMIT;
     f32 bottomHeight = FLOOR_LOWER_LIMIT;
 
     // Iterate through the list of water floors until there are no more water floors.
@@ -482,7 +482,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct Surface *floor, *dynamicFloor;
     struct SurfaceNode *surfaceList;
 
-    f32 height = FLOOR_LOWER_LIMIT;
+    f32 height        = FLOOR_LOWER_LIMIT;
     f32 dynamicHeight = FLOOR_LOWER_LIMIT;
 
     //! (Parallel Universes) Because position is casted to an s16, reaching higher
@@ -541,7 +541,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 cellZ, cellX;
 
-    struct Surface *floor = NULL;
+    struct Surface     *floor = NULL;
     struct SurfaceNode *surfaceList;
 
     f32 height = FLOOR_LOWER_LIMIT;
@@ -629,11 +629,7 @@ f32 find_water_level(f32 x, f32 z) {
     s16 *p = gEnvironmentRegions;
     struct Surface *floor;
 
-    if (gCheckingSurfaceCollisionsForCamera) {
-        waterLevel = find_water_floor(x, gLakituState.pos[1], z, &floor);
-    } else {
-        waterLevel = find_water_floor(x, gMarioState->pos[1], z, &floor);
-    }
+    waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
 
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
         numRegions = *p++;
@@ -707,12 +703,10 @@ f32 find_poison_gas_level(f32 x, f32 z) {
  */
 static s32 surface_list_length(struct SurfaceNode *list) {
     s32 count = 0;
-
     while (list != NULL) {
         list = list->next;
         count++;
     }
-
     return count;
 }
 
@@ -723,8 +717,8 @@ static s32 surface_list_length(struct SurfaceNode *list) {
 void debug_surface_list_info(f32 xPos, f32 zPos) {
     struct SurfaceNode *list;
     s32 numFloors = 0;
-    s32 numWalls = 0;
-    s32 numCeils = 0;
+    s32 numWalls  = 0;
+    s32 numCeils  = 0;
 
     s32 cellX = (xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
     s32 cellZ = (zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
@@ -768,8 +762,8 @@ void debug_surface_list_info(f32 xPos, f32 zPos) {
     print_debug_top_down_mapinfo("movebg %d", gSurfacesAllocated - gNumStaticSurfaces);
 
     gNumCalls.floor = 0;
-    gNumCalls.ceil = 0;
-    gNumCalls.wall = 0;
+    gNumCalls.ceil  = 0;
+    gNumCalls.wall  = 0;
 }
 
 /**

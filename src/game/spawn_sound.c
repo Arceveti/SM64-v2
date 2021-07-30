@@ -29,17 +29,8 @@ void exec_anim_sound_state(struct SoundState *soundStates) {
 
             // in the sound state information, -1 (0xFF) is for empty
             // animFrame entries. These checks skips them.
-            if ((animFrame = soundStates[stateIdx].animFrame1) >= 0) {
-                if (cur_obj_check_anim_frame(animFrame)) {
-                    cur_obj_play_sound_2(soundStates[stateIdx].soundMagic);
-                }
-            }
-
-            if ((animFrame = soundStates[stateIdx].animFrame2) >= 0) {
-                if (cur_obj_check_anim_frame(animFrame)) {
-                    cur_obj_play_sound_2(soundStates[stateIdx].soundMagic);
-                }
-            }
+            if ((animFrame = soundStates[stateIdx].animFrame1) >= 0 && cur_obj_check_anim_frame(animFrame)) cur_obj_play_sound_2(soundStates[stateIdx].soundMagic);
+            if ((animFrame = soundStates[stateIdx].animFrame2) >= 0 && cur_obj_check_anim_frame(animFrame)) cur_obj_play_sound_2(soundStates[stateIdx].soundMagic);
         } break;
     }
 }
@@ -50,7 +41,6 @@ void exec_anim_sound_state(struct SoundState *soundStates) {
  */
 void create_sound_spawner(s32 soundMagic) {
     struct Object *obj = spawn_object(gCurrentObject, 0, bhvSoundSpawner);
-
     obj->oSoundEffectBits = soundMagic;
 }
 
@@ -60,24 +50,16 @@ void create_sound_spawner(s32 soundMagic) {
  * separate left/right leg functions that went unused.
  */
 void cur_obj_play_sound_1(s32 soundMagic) {
-    if (gCurrentObject->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) {
-        play_sound(soundMagic, gCurrentObject->header.gfx.cameraToObject);
-    }
+    if (gCurrentObject->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) play_sound(soundMagic, gCurrentObject->header.gfx.cameraToObject);
 }
 
 void cur_obj_play_sound_2(s32 soundMagic) {
     if (gCurrentObject->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) {
         play_sound(soundMagic, gCurrentObject->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
-        if (soundMagic == SOUND_OBJ_BOWSER_WALK) {
-            queue_rumble_data(3, 60);
-        }
-        if (soundMagic == SOUND_OBJ_POUNDING_LOUD) {
-            queue_rumble_data(3, 60);
-        }
-        if (soundMagic == SOUND_OBJ_WHOMP_LOWPRIO) {
-            queue_rumble_data(5, 80);
-        }
+        if (soundMagic == SOUND_OBJ_BOWSER_WALK  ) queue_rumble_data(3, 60);
+        if (soundMagic == SOUND_OBJ_POUNDING_LOUD) queue_rumble_data(3, 60);
+        if (soundMagic == SOUND_OBJ_WHOMP_LOWPRIO) queue_rumble_data(5, 80);
 #endif
     }
 }

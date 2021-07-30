@@ -62,10 +62,10 @@ static struct Surface *alloc_surface(void) {
         gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_SURFACES;
     }
 
-    surface->type = 0;
-    surface->force = 0;
-    surface->flags = SURFACE_FLAG_NONE;
-    surface->room = 0;
+    surface->type   = 0;
+    surface->force  = 0;
+    surface->flags  = SURFACE_FLAG_NONE;
+    surface->room   = 0;
     surface->object = NULL;
 
     return surface;
@@ -79,10 +79,9 @@ static void clear_spatial_partition(SpatialPartitionCell *cells) {
 
     while (i--) {
         (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
-        (*cells)[SPATIAL_PARTITION_CEILS].next = NULL;
-        (*cells)[SPATIAL_PARTITION_WALLS].next = NULL;
-        (*cells)[SPATIAL_PARTITION_WATER].next = NULL;
-
+        (*cells)[SPATIAL_PARTITION_CEILS ].next = NULL;
+        (*cells)[SPATIAL_PARTITION_WALLS ].next = NULL;
+        (*cells)[SPATIAL_PARTITION_WATER ].next = NULL;
         cells++;
     }
 }
@@ -121,9 +120,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         sortDir = 0; // insertion order
 
         // if (surface->normal.x < -0.70710678118654752440084436210485 || surface->normal.x > 0.70710678118654752440084436210485) {
-        if (surface->normal.x < -0.70710678118654752 || surface->normal.x > 0.70710678118654752) {
-            surface->flags |= SURFACE_FLAG_X_PROJECTION;
-        }
+        if (surface->normal.x < -0.70710678118654752 || surface->normal.x > 0.70710678118654752) surface->flags |= SURFACE_FLAG_X_PROJECTION;
     }
 
     surfacePriority = surface->upperY * sortDir;
@@ -135,9 +132,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     // Loop until we find the appropriate place for the surface in the list.
     while (list->next != NULL) {
         priority = list->next->surface->vertex1[1] * sortDir;
-
         if (surfacePriority > priority) break;
-
         list = list->next;
     }
 
@@ -207,13 +202,9 @@ static s16 upper_cell_index(s32 coord) {
     // Include extra cell if close to boundary
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE > CELL_SIZE - 50) {
-        index++;
-    }
+    if (coord % CELL_SIZE > CELL_SIZE - 50) index++;
 
-    if (index > NUM_CELLS_INDEX) {
-        index = NUM_CELLS_INDEX;
-    }
+    if (index > NUM_CELLS_INDEX) index = NUM_CELLS_INDEX;
 
     // Potentially < 0, but since lower index is >= 0, not exploitable
     return index;
@@ -385,9 +376,7 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
     (*data)++;
 
     for (i = 0; i < numSurfaces; i++) {
-        if (*surfaceRooms != NULL) {
-            room = *(*surfaceRooms)++;
-        }
+        if (*surfaceRooms != NULL) room = *(*surfaceRooms)++;
 
         surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
@@ -512,9 +501,9 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
     s16 *vertexData = NULL;
 
     // Initialize the data for this.
-    gEnvironmentRegions = NULL;
+    gEnvironmentRegions    = NULL;
     gSurfaceNodesAllocated = 0;
-    gSurfacesAllocated = 0;
+    gSurfacesAllocated     = 0;
 
     clear_static_surfaces();
 
@@ -554,7 +543,7 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
     }
 
     gNumStaticSurfaceNodes = gSurfaceNodesAllocated;
-    gNumStaticSurfaces = gSurfacesAllocated;
+    gNumStaticSurfaces     = gSurfacesAllocated;
 }
 
 /**
@@ -562,7 +551,7 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
  */
 void clear_dynamic_surfaces(void) {
     if (!(gTimeStopState & TIME_STOP_ACTIVE)) {
-        gSurfacesAllocated = gNumStaticSurfaces;
+        gSurfacesAllocated     = gNumStaticSurfaces;
         gSurfaceNodesAllocated = gNumStaticSurfaceNodes;
 
         clear_spatial_partition(&gDynamicSurfacePartition[0][0]);
@@ -638,11 +627,7 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
 
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
-    if (gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp)) {
-        room = 5;
-    } else {
-        room = 0;
-    }
+    room = (gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp) ? 5 : 0);
 
     for (i = 0; i < numSurfaces; i++) {
         struct Surface *surface = read_surface_data(vertexData, data);
@@ -678,15 +663,11 @@ void load_object_collision_model(void) {
 
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
-    if (gCurrentObject->oDistanceToMario == 19000.0f) {
-        marioDist = dist_between_objects(gCurrentObject, gMarioObject);
-    }
+    if (gCurrentObject->oDistanceToMario == 19000.0f) marioDist = dist_between_objects(gCurrentObject, gMarioObject);
 
     // If the object collision is supposed to be loaded more than the
     // drawing distance, extend the drawing range.
-    if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) {
-        gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
-    }
+    if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
 
     // Update if no Time Stop, in range, and in the current room.
     if (!(gTimeStopState & TIME_STOP_ACTIVE) && marioDist < tangibleDist
@@ -695,9 +676,7 @@ void load_object_collision_model(void) {
         transform_object_vertices(&collisionData, vertexData);
 
         // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
-        while (*collisionData != TERRAIN_LOAD_CONTINUE) {
-            load_object_surfaces(&collisionData, vertexData);
-        }
+        while (*collisionData != TERRAIN_LOAD_CONTINUE) load_object_surfaces(&collisionData, vertexData);
     }
 
     if (marioDist < gCurrentObject->oDrawingDistance) {
