@@ -12,19 +12,19 @@ enum DebugPage {
     DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo
 };
 
-s64 get_current_clock(void);
-s64 get_clock_difference(UNUSED s64 cycles);
+// s64 get_current_clock(void);
+// s64 get_clock_difference(UNUSED s64 cycles);
 void set_text_array_x_y(s32 xOffset, s32 yOffset);
 void print_debug_top_down_objectinfo(const char *str, s32 number);
 void print_debug_top_down_mapinfo(   const char *str, s32 number);
 void print_debug_bottom_up(          const char *str, s32 number);
-void debug_unknown_level_select_check(void);
-void reset_debug_objectinfo(void);
+void debug_unknown_level_select_check( void);
+void reset_debug_objectinfo(           void);
 #ifdef DEBUG_INFO
-void show_debug_info(void);
+void show_debug_info(                  void);
 #endif
 void try_print_debug_mario_object_info(void);
-void try_do_mario_debug_object_spawn(void);
-void try_print_debug_mario_level_info(void);
+void try_do_mario_debug_object_spawn(  void);
+void try_print_debug_mario_level_info( void);
 
 #endif // DEBUG_H

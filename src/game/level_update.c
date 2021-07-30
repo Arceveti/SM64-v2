@@ -31,16 +31,16 @@
 
 #include "config.h"
 
-#define PLAY_MODE_NORMAL        0
-#define PLAY_MODE_PAUSED        2
-#define PLAY_MODE_CHANGE_AREA   3
-#define PLAY_MODE_CHANGE_LEVEL  4
-#define PLAY_MODE_FRAME_ADVANCE 5
+#define PLAY_MODE_NORMAL        0x00
+#define PLAY_MODE_PAUSED        0x02
+#define PLAY_MODE_CHANGE_AREA   0x03
+#define PLAY_MODE_CHANGE_LEVEL  0x04
+#define PLAY_MODE_FRAME_ADVANCE 0x05
 
-#define WARP_TYPE_NOT_WARPING   0
-#define WARP_TYPE_CHANGE_LEVEL  1
-#define WARP_TYPE_CHANGE_AREA   2
-#define WARP_TYPE_SAME_AREA     3
+#define WARP_TYPE_NOT_WARPING   0x00
+#define WARP_TYPE_CHANGE_LEVEL  0x01
+#define WARP_TYPE_CHANGE_AREA   0x02
+#define WARP_TYPE_SAME_AREA     0x03
 
 #define WARP_NODE_F0            0xF0
 #define WARP_NODE_DEATH         0xF1
@@ -377,25 +377,25 @@ void init_mario_after_warp(void) {
 
     switch (marioSpawnType) {
         case MARIO_SPAWN_PIPE:
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00);
             break;
         case MARIO_SPAWN_DOOR_WARP:
             play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00);
             break;
         case MARIO_SPAWN_TELEPORT:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x14, 0xFF, 0xFF, 0xFF);
+            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x14, 0xFF, 0xFF, 0xFF);
             break;
         case MARIO_SPAWN_SPIN_AIRBORNE:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x1A, 0xFF, 0xFF, 0xFF);
+            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x1A, 0xFF, 0xFF, 0xFF);
             break;
         case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE:
             play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00);
             break;
         case MARIO_SPAWN_FADE_FROM_BLACK:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x10, 0x00, 0x00, 0x00);
             break;
         default:
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR, 0x10, 0x00, 0x00, 0x00);
+            play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00);
             break;
     }
 
@@ -468,8 +468,10 @@ void warp_credits(void) {
 
     load_area(sWarpDest.areaIdx);
 
-    vec3s_set(gPlayerSpawnInfos[0].startPos, gCurrCreditsEntry->marioPos[0],
-              gCurrCreditsEntry->marioPos[1], gCurrCreditsEntry->marioPos[2]);
+    vec3s_set(gPlayerSpawnInfos[0].startPos,
+              gCurrCreditsEntry->marioPos[0],
+              gCurrCreditsEntry->marioPos[1],
+              gCurrCreditsEntry->marioPos[2]);
 
     vec3s_set(gPlayerSpawnInfos[0].startAngle, 0, 0x100 * gCurrCreditsEntry->marioAngle, 0);
 
@@ -798,11 +800,7 @@ void initiate_delayed_warp(void) {
 
                     gCurrCreditsEntry++;
                     gCurrActNum = gCurrCreditsEntry->actNum & 0x07;
-                    if ((gCurrCreditsEntry + 1)->levelNum == LEVEL_NONE) {
-                        destWarpNode = WARP_NODE_CREDITS_END;
-                    } else {
-                        destWarpNode = WARP_NODE_CREDITS_NEXT;
-                    }
+                    destWarpNode = ((gCurrCreditsEntry + 1)->levelNum == LEVEL_NONE ? WARP_NODE_CREDITS_END : WARP_NODE_CREDITS_NEXT);
 
                     initiate_warp(gCurrCreditsEntry->levelNum, gCurrCreditsEntry->areaIndex, destWarpNode, 0);
                     break;
@@ -825,19 +823,14 @@ void update_hud_values(void) {
         s16 numHealthWedges = gMarioState->health > 0 ? gMarioState->health >> 8 : 0;
 
         if (gCurrCourseNum >= COURSE_MIN) {
-            gHudDisplay.flags |= HUD_DISPLAY_FLAG_COIN_COUNT;
+            gHudDisplay.flags |=  HUD_DISPLAY_FLAG_COIN_COUNT;
         } else {
             gHudDisplay.flags &= ~HUD_DISPLAY_FLAG_COIN_COUNT;
         }
 
         if (gHudDisplay.coins < gMarioState->numCoins) {
             if (gGlobalTimer & 0x00000001) {
-                u32 coinSound;
-                if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
-                    coinSound = SOUND_GENERAL_COIN_WATER;
-                } else {
-                    coinSound = SOUND_GENERAL_COIN;
-                }
+                u32 coinSound = (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) ? SOUND_GENERAL_COIN_WATER : SOUND_GENERAL_COIN;
                 gHudDisplay.coins++;
                 play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
             }
@@ -849,14 +842,14 @@ void update_hud_values(void) {
 
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
-        gHudDisplay.keys = gMarioState->numKeys;
+        gHudDisplay.keys  = gMarioState->numKeys;
 
         if (numHealthWedges > gHudDisplay.wedges) play_sound(SOUND_MENU_POWER_METER, gGlobalSoundSource);
 
         gHudDisplay.wedges = numHealthWedges;
 
         if (gMarioState->hurtCounter > 0) {
-            gHudDisplay.flags |= HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
+            gHudDisplay.flags |=  HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
         } else {
             gHudDisplay.flags &= ~HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
         }
@@ -879,9 +872,9 @@ s32 play_mode_normal(void) {
     if (gCurrDemoInput != NULL) {
         print_intro_text();
         if (gPlayer1Controller->buttonPressed & END_DEMO) {
-            level_trigger_warp(gMarioState,
-                               gCurrLevelNum == LEVEL_PSS ? WARP_OP_DEMO_END : WARP_OP_DEMO_NEXT);
-        } else if (!gWarpTransition.isActive && sDelayedWarpOp == WARP_OP_NONE
+            level_trigger_warp(gMarioState, gCurrLevelNum == LEVEL_PSS ? WARP_OP_DEMO_END : WARP_OP_DEMO_NEXT);
+        } else if (!gWarpTransition.isActive
+                   && sDelayedWarpOp == WARP_OP_NONE
                    && (gPlayer1Controller->buttonPressed & START_BUTTON)) {
             level_trigger_warp(gMarioState, WARP_OP_DEMO_NEXT);
         }
@@ -967,7 +960,7 @@ s32 play_mode_frame_advance(void) {
  * called each frame during the transition.
  */
 void level_set_transition(s16 length, void (*updateFunction)(s16 *)) {
-    sTransitionTimer = length;
+    sTransitionTimer  = length;
     sTransitionUpdate = updateFunction;
 }
 
@@ -975,6 +968,16 @@ void level_set_transition(s16 length, void (*updateFunction)(s16 *)) {
  * Play the transition and then return to normal play mode.
  */
 s32 play_mode_change_area(void) {
+    // sm64ex-axo
+    // // Change function to have similar change_level defines
+    // if (sTransitionUpdate != NULL) sTransitionUpdate(&sTransitionTimer);
+    // if (--sTransitionTimer == -1) {
+    //     update_camera(gCurrentArea->camera);
+    //     sTransitionTimer = 0;
+    //     sTransitionUpdate = NULL;
+    //     set_play_mode(PLAY_MODE_NORMAL);
+    // }
+
     if (sTransitionTimer == -1) {
         update_camera(gCurrentArea->camera);
     } else if (sTransitionUpdate != NULL) {

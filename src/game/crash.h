@@ -3,8 +3,8 @@
 #define _CRASH_H_
 #include <types.h>
 #define CRASH_SCREEN_INCLUDED 1
-extern u32 cop0_get_cause(void);
-extern u32 cop0_get_epc(void);
+extern u32 cop0_get_cause(   void);
+extern u32 cop0_get_epc(     void);
 extern u32 cop0_get_badvaddr(void);
 extern void _n64_assert(const char* pFile, int nLine, const char *pExpression, int nStopProgram);
 extern u8 __crash_handler_entry[];

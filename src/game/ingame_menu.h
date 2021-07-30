@@ -9,16 +9,16 @@
      ((asc) >= 'a' && (asc) <= 'z') ? ((asc) - 'a' + 0x24) : 0x00)
 
 
-#define MENU_MTX_PUSH   1
-#define MENU_MTX_NOPUSH 2
+#define MENU_MTX_PUSH           0x01
+#define MENU_MTX_NOPUSH         0x02
 
-#define MENU_SCROLL_VERTICAL   1
-#define MENU_SCROLL_HORIZONTAL 2
+#define MENU_SCROLL_VERTICAL    0x01
+#define MENU_SCROLL_HORIZONTAL  0x02
 
 // Japanese File Select uses an unique table
 // to print specific Japanese HUD chars
-#define HUD_LUT_JPMENU 1
-#define HUD_LUT_GLOBAL 2
+#define HUD_LUT_JPMENU          0x01
+#define HUD_LUT_GLOBAL          0x02
 
 // For file select JP HUD difference
 #if defined(VERSION_JP) || defined(VERSION_SH)

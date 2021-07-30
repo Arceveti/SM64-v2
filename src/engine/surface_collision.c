@@ -28,16 +28,16 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
     register f32 w1, w2, w3;
     register f32 y1, y2, y3;
     s32 numCols = 0;
+    s16 type;
 
     // Max collision radius = 200
-    if (radius > 200.0f) {
-        radius = 200.0f;
-    }
+    if (radius > 200.0f) radius = 200.0f;
 
     // Stay in this loop until out of walls.
     while (surfaceNode != NULL) {
-        surf = surfaceNode->surface;
+        surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+        type        = surf->type;
 
         // Exclude a large number of walls immediately to optimize.
         if (y < surf->lowerY || y > surf->upperY) continue;
@@ -46,16 +46,16 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
 
         if (offset < -radius || offset > radius)  continue;
 
-        if (surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) continue;
+        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
         } else {
             // Ignore camera only surfaces.
-            if (surf->type == SURFACE_CAMERA_BOUNDARY) continue;
+            if (type == SURFACE_CAMERA_BOUNDARY) continue;
 
             // If an object can pass through a vanish cap wall, pass through.
-            if (surf->type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
+            if (type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
                 // If an object can pass through a vanish cap wall, pass through.
                 if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
                 // If Mario has a vanish cap, pass through the vanish cap wall.
@@ -206,22 +206,24 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
     register struct Surface *surf;
     register s32 x1, z1, x2, z2, x3, z3;
     f32 height;
+    s16 type;
     struct Surface *ceil = NULL;
     // *pheight = CELL_HEIGHT_LIMIT;
     // Stay in this loop until out of ceilings.
     while (surfaceNode != NULL) {
-        surf = surfaceNode->surface;
+        surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+        type        = surf->type;
 
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
         // Ignore camera only surfaces.
-        } else if (surf->type == SURFACE_CAMERA_BOUNDARY) {
+        } else if (type == SURFACE_CAMERA_BOUNDARY) {
             continue;
         }
 
-        if (surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM) continue;
+        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
 
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
@@ -340,23 +342,25 @@ f32 find_floor_height_and_data(f32 xPos, f32 yPos, f32 zPos, struct FloorGeometr
 static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight) {
     register struct Surface *surf;
     f32 height;
+    s16 type = SURFACE_DEFAULT;
     struct Surface *floor = NULL;
     // *pheight = FLOOR_LOWER_LIMIT;
     // Iterate through the list of floors until there are no more floors.
     while (surfaceNode != NULL) {
         surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+        type        = surf->type;
 
         // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
         // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
         // Mario to pass through.
-        if (!gFindFloorIncludeSurfaceIntangible && surf->type == SURFACE_INTANGIBLE) continue;
+        if (!gFindFloorIncludeSurfaceIntangible && type == SURFACE_INTANGIBLE) continue;
 
         // Determine if we are checking for the camera or not.
-        if (gCheckingSurfaceCollisionsForCamera && (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || surf->type == SURFACE_NEW_WATER || surf->type == SURFACE_NEW_WATER_BOTTOM)) {
-            continue;
+        if (gCheckingSurfaceCollisionsForCamera) {
+            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // If we are not checking for the camera, ignore camera only floors.
-        } else if (surf->type == SURFACE_CAMERA_BOUNDARY) continue;
+        } else if (type == SURFACE_CAMERA_BOUNDARY) continue;
 
         if (!check_within_floor_triangle_bounds(x, z, surf)) continue;
 
@@ -378,15 +382,11 @@ static s16 check_within_triangle_bounds(s32 x, s32 z, struct Surface *surf) {
     z1 = surf->vertex1[2];
     x2 = surf->vertex2[0];
     z2 = surf->vertex2[2];
-
     if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0) return FALSE;
-
     x3 = surf->vertex3[0];
     z3 = surf->vertex3[2];
-
     if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0) return FALSE;
     if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0) return FALSE;
-
     return TRUE;
 }
 
@@ -405,21 +405,21 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
     // Iterate through the list of water floors until there are no more water floors.
     while (bottomSurfaceNode != NULL) {
         f32 curBottomHeight = FLOOR_LOWER_LIMIT;
-        surf = bottomSurfaceNode->surface;
-        bottomSurfaceNode = bottomSurfaceNode->next;
+        surf                = bottomSurfaceNode->surface;
+        bottomSurfaceNode   = bottomSurfaceNode->next;
 
         if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
 
         curBottomHeight = get_surface_height_at_location(x, z, surf);
 
-        if (curBottomHeight < y - 78.0f) continue;
+        if (curBottomHeight <  y - 78.0f) continue;
         if (curBottomHeight >= y - 78.0f) bottomHeight = curBottomHeight;
     }
 
     // Iterate through the list of water tops until there are no more water tops.
     while (topSurfaceNode != NULL) {
-        f32 curHeight = FLOOR_LOWER_LIMIT;
-        surf = topSurfaceNode->surface;
+        f32 curHeight  = FLOOR_LOWER_LIMIT;
+        surf           = topSurfaceNode->surface;
         topSurfaceNode = topSurfaceNode->next;
 
         if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
@@ -429,9 +429,9 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         if (bottomHeight != FLOOR_LOWER_LIMIT && curHeight > bottomHeight) continue;
 
         if (curHeight > height) {
-            height = curHeight;
+            height   = curHeight;
             *pheight = curHeight;
-            floor = surf;
+            floor    = surf;
         }
     }
 
@@ -443,7 +443,6 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
  */
 f32 find_floor_height(f32 x, f32 y, f32 z) {
     struct Surface *floor;
-
     return find_floor(x, y, z, &floor);
 }
 
@@ -451,7 +450,7 @@ f32 find_floor_height(f32 x, f32 y, f32 z) {
  * Find the highest dynamic floor under a given position. Perhaps originally static
  * and dynamic floors were checked separately.
  */
-f32 unused_find_dynamic_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
+UNUSED f32 unused_find_dynamic_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct SurfaceNode *surfaceList;
     struct Surface *floor;
     f32 floorHeight = FLOOR_LOWER_LIMIT;
@@ -504,12 +503,12 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
 
     // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    floor = find_floor_from_list(surfaceList, x, y, z, &height);
+    surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    floor         = find_floor_from_list(surfaceList, x, y, z, &height);
     dynamicHeight = height;
     // Check for surfaces belonging to objects.
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    dynamicFloor = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
+    surfaceList   = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    dynamicFloor  = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
 
     // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
     // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
@@ -518,12 +517,10 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     gFindFloorIncludeSurfaceIntangible = FALSE;
 
     // If a floor was missed, increment the debug counter.
-    if (floor == NULL) {
-        gNumFindFloorMisses++;
-    }
+    if (floor == NULL) gNumFindFloorMisses++;
 
     if (dynamicHeight > height) {
-        floor = dynamicFloor;
+        floor  = dynamicFloor;
         height = dynamicHeight;
     }
 

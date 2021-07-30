@@ -101,10 +101,10 @@ shadowRectangle rectangles[2] = {
 };
 
 // See shadow.h for documentation.
-s8 gShadowAboveWaterOrLava;
-s8 gShadowAboveCustomWater;
-s8 gMarioOnIceOrCarpet;
-s8 sMarioOnFlyingCarpet;
+s8  gShadowAboveWaterOrLava;
+s8  gShadowAboveCustomWater;
+s8  gMarioOnIceOrCarpet;
+s8  sMarioOnFlyingCarpet;
 s16 sSurfaceTypeBelowShadow;
 
 /**
@@ -351,7 +351,6 @@ void get_vertex_coords(s8 index, s8 shadowVertexType, s8 *xCoord, s8 *zCoord) {
     if (shadowVertexType == SHADOW_WITH_4_VERTS) {
         if (*xCoord == 0) *xCoord = 1;
         if (*zCoord == 0) *zCoord = 1;
-
     }
 }
 
@@ -367,7 +366,7 @@ void get_vertex_coords(s8 index, s8 shadowVertexType, s8 *xCoord, s8 *zCoord) {
  * behavior is overwritten.
  */
 void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx, f32 *zPosVtx, s8 shadowVertexType) {
-    f32 tiltedScale = cosf(s.floorTilt * M_PI / 180.0f) * s.shadowScale;
+    f32 tiltedScale   = cosf(s.floorTilt     * M_PI / 180.0f) * s.shadowScale;
     f32 downwardAngle = s.floorDownwardAngle * M_PI / 180.0f;
     f32 halfScale;
     f32 halfTiltedScale;
@@ -479,15 +478,15 @@ void add_shadow_to_display_list(Gfx *displayListHead, Vtx *verts, s8 shadowVerte
     }
     switch (shadowVertexType) {
         case SHADOW_WITH_9_VERTS:
-            gSPVertex(displayListHead++, verts, 9, 0);
+            gSPVertex(     displayListHead++, verts, 9, 0);
             gSPDisplayList(displayListHead++, dl_shadow_9_verts);
             break;
         case SHADOW_WITH_4_VERTS:
-            gSPVertex(displayListHead++, verts, 4, 0);
+            gSPVertex(     displayListHead++, verts, 4, 0);
             gSPDisplayList(displayListHead++, dl_shadow_4_verts);
             break;
     }
-    gSPDisplayList(displayListHead++, dl_shadow_end);
+    gSPDisplayList(   displayListHead++, dl_shadow_end);
     gSPEndDisplayList(displayListHead);
 }
 
@@ -565,8 +564,7 @@ void correct_lava_shadow_height(struct Shadow *s) {
             s->floorHeight = 3492.0f;
             gShadowAboveWaterOrLava = TRUE;
         }
-    } else if (gCurrLevelNum == LEVEL_LLL && gCurrAreaIndex == 1
-               && sSurfaceTypeBelowShadow == SURFACE_BURNING) {
+    } else if (gCurrLevelNum == LEVEL_LLL && gCurrAreaIndex == 1 && sSurfaceTypeBelowShadow == SURFACE_BURNING) {
         s->floorHeight = 5.0f;
         gShadowAboveWaterOrLava = TRUE;
     }
@@ -683,9 +681,9 @@ Gfx *create_shadow_circle_assuming_flat_ground(f32 xPos, f32 yPos, f32 zPos, s16
     if (verts == NULL || displayList == NULL) return 0;
 
     make_shadow_vertex_at_xyz(verts, 0, -radius, distBelowFloor, -radius, solidity, 1);
-    make_shadow_vertex_at_xyz(verts, 1, radius, distBelowFloor, -radius, solidity, 1);
-    make_shadow_vertex_at_xyz(verts, 2, -radius, distBelowFloor, radius, solidity, 1);
-    make_shadow_vertex_at_xyz(verts, 3, radius, distBelowFloor, radius, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 1,  radius, distBelowFloor, -radius, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 2, -radius, distBelowFloor,  radius, solidity, 1);
+    make_shadow_vertex_at_xyz(verts, 3,  radius, distBelowFloor,  radius, solidity, 1);
 
     add_shadow_to_display_list(displayList, verts, SHADOW_WITH_4_VERTS, SHADOW_SHAPE_CIRCLE);
     return displayList;
@@ -756,7 +754,7 @@ Gfx *create_shadow_square(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
             shadowRadius = shadowScale / 2;
             break;
         case SHADOW_SQUARE_SCALABLE:
-            shadowRadius = scale_shadow_with_distance(shadowScale, distFromShadow) / 2.0f;
+            shadowRadius = scale_shadow_with_distance(  shadowScale, distFromShadow) / 2.0f;
             break;
         case SHADOW_SQUARE_TOGGLABLE:
             shadowRadius = disable_shadow_with_distance(shadowScale, distFromShadow) / 2.0f;
@@ -810,8 +808,8 @@ Gfx *create_shadow_below_xyz(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 s
 
     gShadowAboveWaterOrLava = FALSE;
     gShadowAboveCustomWater = FALSE;
-    gMarioOnIceOrCarpet = FALSE;
-    sMarioOnFlyingCarpet = FALSE;
+    gMarioOnIceOrCarpet     = FALSE;
+    sMarioOnFlyingCarpet    = FALSE;
     if (pfloor != NULL) {
         if (pfloor->type == SURFACE_ICE) gMarioOnIceOrCarpet = TRUE;
         sSurfaceTypeBelowShadow = pfloor->type;

@@ -14,17 +14,17 @@ const MacroObject hmc_seg7_macro_objs[] = {
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/  2510,     0,  2800, /*behParam*/ DIALOG_140),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/  90, /*pos*/   510,     0,  5380, /*behParam*/ DIALOG_139),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 135, /*pos*/ -4370,  2860, -2243, /*behParam*/ DIALOG_043),
-    MACRO_OBJECT(/*preset*/ macro_swoop_2,                     /*yaw*/   0, /*pos*/  -439,   220, -2540),
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  -439,   220, -2540), // 2
     MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/    80,   140, -4660),
     MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/   800,    60, -7500),
-    MACRO_OBJECT(/*preset*/ macro_swoop_2,                     /*yaw*/   0, /*pos*/  1880,   100, -7620),
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  1880,   100, -7620), // 2
     MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  6080,  3060,  4660),
     MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5480,  3000,  7120),
-    MACRO_OBJECT(/*preset*/ macro_swoop_2,                     /*yaw*/   0, /*pos*/ -5440,  1720,  -320),
-    MACRO_OBJECT(/*preset*/ macro_swoop_2,                     /*yaw*/   0, /*pos*/  5632,  -563, -4454),
-    MACRO_OBJECT(/*preset*/ macro_swoop_2,                     /*yaw*/   0, /*pos*/  4915,  -665, -5274),
-    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5120,  -665, -4660),
-    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5427,  -665, -5070),
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/ -5440,  1720,  -320), // 2
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5632,  -563, -4454), // 2
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  4915,  -666, -5274), // 2
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5120,  -666, -4660),
+    MACRO_OBJECT(/*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  5427,  -666, -5070),
     MACRO_OBJECT(/*preset*/ macro_scuttlebug,                  /*yaw*/   0, /*pos*/ -6320,  2048,  6740),
     MACRO_OBJECT(/*preset*/ macro_scuttlebug,                  /*yaw*/   0, /*pos*/ -5455,  1536,   521),
     MACRO_OBJECT(/*preset*/ macro_scuttlebug,                  /*yaw*/   0, /*pos*/  4160,    28,  6308),

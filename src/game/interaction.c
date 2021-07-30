@@ -335,13 +335,13 @@ void mario_blow_off_cap(struct MarioState *m, f32 capSpeed) {
 }
 
 #ifdef DEBUG_LEVEL_SELECT
-u32 mario_lose_cap_to_enemy(UNUSED u32 arg) {
+u32 mario_lose_cap_to_enemy(UNUSED u32 enemyType) {
     return FALSE;
 }
 #else
-u32 mario_lose_cap_to_enemy(u32 arg) {
+u32 mario_lose_cap_to_enemy(u32 enemyType) {
     if (does_mario_have_normal_cap_on_head(gMarioState)) {
-        save_file_set_flags(arg == 1 ? SAVE_FLAG_CAP_ON_KLEPTO : SAVE_FLAG_CAP_ON_UKIKI);
+        save_file_set_flags(enemyType == 1 ? SAVE_FLAG_CAP_ON_KLEPTO : SAVE_FLAG_CAP_ON_UKIKI);
         gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
         return TRUE;
     }

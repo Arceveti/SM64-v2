@@ -80,10 +80,9 @@ s8 gShowDebugText = FALSE;
 #endif
 
 // unused
-void handle_debug_key_sequences(void) {
-    static u16 sProfilerKeySequence[] = {
-        U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD
-    };
+UNUSED void handle_debug_key_sequences(void) {
+    static u16 sProfilerKeySequence[]  = { U_JPAD, U_JPAD, D_JPAD, D_JPAD,
+                                           L_JPAD, R_JPAD, L_JPAD, R_JPAD };
     static u16 sDebugTextKeySequence[] = { D_JPAD, D_JPAD, U_JPAD, U_JPAD,
                                            L_JPAD, R_JPAD, L_JPAD, R_JPAD };
     static s16 sProfilerKey = 0;
@@ -108,16 +107,16 @@ void handle_debug_key_sequences(void) {
 }
 
 void setup_mesg_queues(void) {
-    osCreateMesgQueue(&gDmaMesgQueue, gDmaMesgBuf, ARRAY_COUNT(gDmaMesgBuf));
+    osCreateMesgQueue(&gDmaMesgQueue,         gDmaMesgBuf, ARRAY_COUNT(gDmaMesgBuf));
     osCreateMesgQueue(&gSIEventMesgQueue, gSIEventMesgBuf, ARRAY_COUNT(gSIEventMesgBuf));
     osSetEventMesg(OS_EVENT_SI, &gSIEventMesgQueue, NULL);
 
     osCreateMesgQueue(&gSPTaskMesgQueue, gUnknownMesgBuf, ARRAY_COUNT(gUnknownMesgBuf));
-    osCreateMesgQueue(&gIntrMesgQueue, gIntrMesgBuf, ARRAY_COUNT(gIntrMesgBuf));
-    osViSetEvent(&gIntrMesgQueue, (OSMesg) MESG_VI_VBLANK, 1);
+    osCreateMesgQueue(&gIntrMesgQueue,      gIntrMesgBuf, ARRAY_COUNT(gIntrMesgBuf));
+    osViSetEvent(     &gIntrMesgQueue, (OSMesg) MESG_VI_VBLANK, 1);
 
-    osSetEventMesg(OS_EVENT_SP, &gIntrMesgQueue, (OSMesg) MESG_SP_COMPLETE);
-    osSetEventMesg(OS_EVENT_DP, &gIntrMesgQueue, (OSMesg) MESG_DP_COMPLETE);
+    osSetEventMesg(OS_EVENT_SP    , &gIntrMesgQueue, (OSMesg) MESG_SP_COMPLETE);
+    osSetEventMesg(OS_EVENT_DP    , &gIntrMesgQueue, (OSMesg) MESG_DP_COMPLETE);
     osSetEventMesg(OS_EVENT_PRENMI, &gIntrMesgQueue, (OSMesg) MESG_NMI_REQUEST);
 }
 
@@ -135,7 +134,7 @@ void alloc_pool(void) {
 }
 
 void create_thread(OSThread *thread, OSId id, void (*entry)(void *), void *arg, void *sp, OSPri pri) {
-    thread->next = NULL;
+    thread->next  = NULL;
     thread->queue = NULL;
     osCreateThread(thread, id, entry, arg, sp, pri);
 }
@@ -182,14 +181,9 @@ void receive_new_tasks(void) {
 }
 
 void start_sptask(s32 taskType) {
-    UNUSED s32 pad; // needed to pad the stack
+    // UNUSED s32 pad; // needed to pad the stack
 
-    if (taskType == M_AUDTASK) {
-        gActiveSPTask = sCurrentAudioSPTask;
-    } else {
-        gActiveSPTask = sCurrentDisplaySPTask;
-    }
-
+    gActiveSPTask = (taskType == M_AUDTASK) ? sCurrentAudioSPTask : sCurrentDisplaySPTask;
     osSpTaskLoad(&gActiveSPTask->task);
     osSpTaskStartGo(&gActiveSPTask->task);
     gActiveSPTask->state = SPTASK_STATE_RUNNING;
@@ -219,6 +213,8 @@ void pretend_audio_sptask_done(void) {
 void handle_vblank(void) {
 
     gNumVblanks++;
+
+    //? What is the < 100 for?
 #ifdef VERSION_SH
     if (gResetTimer > 0 && gResetTimer < 100) gResetTimer++;
 #else
@@ -335,7 +331,7 @@ void thread3_main(UNUSED void *arg) {
     osStartThread(&gSoundThread);
 // #ifdef USE_EXT_RAM
     if (!gNotEnoughMemory) {
-        create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, gThread5Stack + 0x2000, 10);
+        create_thread(&gGameLoopThread, 5, thread5_game_loop             , NULL, gThread5Stack + 0x2000, 10);
     } else {
         create_thread(&gGameLoopThread, 5, thread5_mem_error_message_loop, NULL, gThread5Stack + 0x2000, 10);
     }
@@ -449,17 +445,14 @@ void thread1_idle(UNUSED void *arg) {
     osCreateViManager(OS_PRIORITY_VIMGR);
 	switch ( osTvType ) {
 	case OS_TV_NTSC:
-		// NTSC
         //osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
         VI = osViModeTable[OS_VI_NTSC_LAN1];
 		break;
 	case OS_TV_MPAL:
-		// MPAL
         //osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
         VI = osViModeTable[OS_VI_MPAL_LAN1];
 		break;
 	case OS_TV_PAL:
-		// PAL
 		//osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
         VI = osViModeTable[OS_VI_PAL_LAN1];
 		break;

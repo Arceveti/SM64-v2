@@ -835,7 +835,7 @@ const BehaviorScript bhvWhitePuffExplosion[] = {
 const BehaviorScript bhvSpawnedStar[] = {
     BEGIN(OBJ_LIST_LEVEL),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     GOTO(bhvSpawnedStarNoLevelExit + 1 + 1),
 };
 
@@ -902,7 +902,7 @@ const BehaviorScript bhvCoinFormation[] = {
 
 const BehaviorScript bhvOneCoin[] = {
     BEGIN(OBJ_LIST_LEVEL),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     GOTO(bhvYellowCoin + 1),
 };
 
@@ -1116,7 +1116,7 @@ const BehaviorScript bhvBbhTumblingBridge[] = {
     BEGIN(OBJ_LIST_SPAWNER),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_HOME(),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_tumbling_bridge_loop),
     END_LOOP(),
@@ -1126,7 +1126,7 @@ const BehaviorScript bhvLllTumblingBridge[] = {
     BEGIN(OBJ_LIST_SPAWNER),
     OR_INT(oFlags, (OBJ_FLAG_ACTIVE_FROM_AFAR | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_HOME(),
-    SET_INT(oBehParams2ndByte, 2), //! name
+    SET_INT(oBehParams2ndByte, 0x2), //! name
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_tumbling_bridge_loop),
     END_LOOP(),
@@ -1658,7 +1658,7 @@ const BehaviorScript bhvPiranhaPlantWakingBubbles[] = {
 
 const BehaviorScript bhvFloorSwitchAnimatesObject[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     GOTO(bhvFloorSwitchHardcodedModel + 1),
 };
 
@@ -1680,7 +1680,7 @@ const BehaviorScript bhvFloorSwitchHardcodedModel[] = {
 
 const BehaviorScript bhvFloorSwitchHiddenObjects[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    SET_INT(oBehParams2ndByte, 2), //! name
+    SET_INT(oBehParams2ndByte, 0x2), //! name
     GOTO(bhvFloorSwitchHardcodedModel + 1),
 };
 
@@ -2449,13 +2449,13 @@ const BehaviorScript bhvSmallPenguin[] = {
 
 const BehaviorScript bhvManyBlueFishSpawner[] = {
     BEGIN(OBJ_LIST_DEFAULT),
-    SET_INT(oBehParams2ndByte, 0), //! name
+    SET_INT(oBehParams2ndByte, 0x0), //! name
     GOTO(bhvFishSpawner + 1),
 };
 
 const BehaviorScript bhvFewBlueFishSpawner[] = {
     BEGIN(OBJ_LIST_DEFAULT),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     GOTO(bhvFishSpawner + 1),
 };
 
@@ -2726,7 +2726,7 @@ const BehaviorScript bhvWhitePuffSmoke2[] = {
 
 const BehaviorScript bhvPurpleSwitchHiddenBoxes[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    SET_INT(oBehParams2ndByte, 2), //! name
+    SET_INT(oBehParams2ndByte, 0x2), //! name
     GOTO(bhvFloorSwitchHardcodedModel + 1),
 };
 
@@ -2978,7 +2978,7 @@ const BehaviorScript bhvMeshElevator[] = {
     LOAD_COLLISION_DATA(bbh_seg7_collision_mesh_elevator),
     SET_HOME(),
     SET_INT(oRoom, 12),
-    SET_INT(oBehParams2ndByte, 4), //! name
+    SET_INT(oBehParams2ndByte, 0x4), //! name
     CALL_NATIVE(bhv_elevator_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_elevator_loop),
@@ -3144,7 +3144,7 @@ const BehaviorScript bhvScuttlebugSpawn[] = {
 
 const BehaviorScript bhvWhompKingBoss[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    SET_INT(oBehParams2ndByte, 1), //! name
+    SET_INT(oBehParams2ndByte, 0x1), //! name
     SET_INT(oHealth, 3),
     GOTO(bhvSmallWhomp + 1 + 1),
 };
@@ -4996,7 +4996,7 @@ const BehaviorScript bhvSwoop[] = {
     SET_HOME(),
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 50, /*Gravity*/ 0, /*Bounciness*/ -50, /*Drag strength*/ 0, /*Friction*/ 0, /*Buoyancy*/ 0, /*Unused*/ 0, 0),
     CALL_NATIVE(bhv_init_room),
-    SCALE(/*Unused*/ 0, /*Field*/ 0),
+    // SCALE(/*Unused*/ 0, /*Field*/ 0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_swoop_update),
     END_LOOP(),
