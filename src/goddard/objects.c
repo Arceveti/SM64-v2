@@ -22,25 +22,25 @@
 // bss
 struct GdBoundingBox gSomeBoundingBox;
 struct ObjCamera *sCurrentMoveCamera; // @ 801B9DB8
-struct ObjView *sCurrentMoveView;     // @ 801B9DBC
+struct ObjView   *sCurrentMoveView;   // @ 801B9DBC
 Mat4f D_801B9DC8;
-struct ObjGroup *sCurrentMoveGrp; // @ 801B9E14
-struct ObjCamera *gGdCameraList; // @ 801B9E4C
-struct ObjGroup *gGdGroupList;  // @ 801B9E54
-s32 gGdObjCount;                // @ 801B9E58
-s32 gGdGroupCount;              // @ 801B9E5C
-s32 gGdPlaneCount;              // @ 801B9E60
-s32 gGdCameraCount;             // @ 801B9E64
-s32 sGdViewCount; // @ 801B9E68
-struct ObjJoint *gGdJointList;  // @ 801B9E84
-struct GdObj *gGdObjectList;    // head of linked list containing every single GdObj that was created
-struct ObjGroup *gGdViewsGroup; // @ 801B9E90
+struct ObjGroup  *sCurrentMoveGrp;    // @ 801B9E14
+struct ObjCamera *gGdCameraList;      // @ 801B9E4C
+struct ObjGroup  *gGdGroupList;       // @ 801B9E54
+s32 gGdObjCount;                      // @ 801B9E58
+s32 gGdGroupCount;                    // @ 801B9E5C
+s32 gGdPlaneCount;                    // @ 801B9E60
+s32 gGdCameraCount;                   // @ 801B9E64
+s32 sGdViewCount;                     // @ 801B9E68
+struct ObjJoint *gGdJointList;        // @ 801B9E84
+struct GdObj    *gGdObjectList;       // head of linked list containing every single GdObj that was created
+struct ObjGroup *gGdViewsGroup;       // @ 801B9E90
 
 /* @ 22A480 for 0x70 */
 void reset_bounding_box(void) { /* Initialize Plane? */
-    gSomeBoundingBox.minX = 10000000.0f;
-    gSomeBoundingBox.minY = 10000000.0f;
-    gSomeBoundingBox.minZ = 10000000.0f;
+    gSomeBoundingBox.minX =  10000000.0f;
+    gSomeBoundingBox.minY =  10000000.0f;
+    gSomeBoundingBox.minZ =  10000000.0f;
 
     gSomeBoundingBox.maxX = -10000000.0f;
     gSomeBoundingBox.maxY = -10000000.0f;
@@ -1067,7 +1067,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     dispMag = gd_vec3f_magnitude(&gViewUpdateCamera->unk40);
     dispMag /= 1000.0f;
 
-    displacement.x = ((f32)(ctrl->csrX - ctrl->dragStartX)) * dispMag;
+    displacement.x = ((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag;
     displacement.y = ((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag;
     displacement.z = 0.0f;
 
@@ -1078,9 +1078,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     if ((inputObj->drawFlags & OBJ_PICKED) && gGdCtrl.dragging) {
         gd_play_sfx(GD_SFX_PINCH_FACE);
         // Note: this second sfx won't play, as it is "overwritten" by the first
-        if (ABS(ctrl->stickDeltaX) + ABS(ctrl->stickDeltaY) >= 11) {
-            gd_play_sfx(GD_SFX_PINCH_FACE_2);
-        }
+        if (ABS(ctrl->stickDeltaX) + ABS(ctrl->stickDeltaY) >= 11) gd_play_sfx(GD_SFX_PINCH_FACE_2);
 
         switch (inputObj->type) {
             case OBJ_TYPE_JOINTS:
@@ -1182,21 +1180,10 @@ void move_camera(struct ObjCamera *cam) {
             }
         }
 
-        if (ctrl->cleft) {
-            cam->unk128.y += cam->unk134.y;
-        }
-
-        if (ctrl->cright) {
-            cam->unk128.y -= cam->unk134.y;
-        }
-
-        if (ctrl->cup) {
-            cam->unk128.x += cam->unk134.x;
-        }
-
-        if (ctrl->cdown) {
-            cam->unk128.x -= cam->unk134.x;
-        }
+        if (ctrl->cleft ) cam->unk128.y += cam->unk134.y;
+        if (ctrl->cright) cam->unk128.y -= cam->unk134.y;
+        if (ctrl->cup   ) cam->unk128.x += cam->unk134.x;
+        if (ctrl->cdown ) cam->unk128.x -= cam->unk134.x;
 
         cam->unk128.x = gd_clamp_f32(cam->unk128.x, 80.0f);
 
@@ -1242,17 +1229,9 @@ void move_cameras_in_grp(struct ObjGroup *group) {
 /* @ 22F7DC for 0x36C*/
 void func_8018100C(struct ObjLight *light) {
     if (light->unk40 == 3) {
-        if (light->unk30 > 0.0f) {
-            light->unk30 -= 0.2f;
-        }
-
-        if (light->unk30 < 0.0f) {
-            light->unk30 = 0.0f;
-        }
-
-        if ((light->unk3C & 0x1) != 0) {
-            light->unk30 = 1.0f;
-        }
+        if (light->unk30 > 0.0f) light->unk30 -= 0.2f;
+        if (light->unk30 < 0.0f) light->unk30  = 0.0f;
+        if (light->unk3C & 0x1 ) light->unk30  = 1.0f;
 
         light->unk3C &= ~1;
     }
@@ -1272,9 +1251,7 @@ void move_group_members(void) {
     move_particles_in_grp(sCurrentMoveGrp);
     move_animators(sCurrentMoveGrp);
 
-    for (i = 0; i <= 0; i++) {
-        move_nets(sCurrentMoveGrp);
-    }
+    for (i = 0; i <= 0; i++) move_nets(sCurrentMoveGrp);
 
     move_cameras_in_grp(sCurrentMoveGrp);
 }
@@ -1283,12 +1260,8 @@ void move_group_members(void) {
 void proc_view_movement(struct ObjView *view) {
     sCurrentMoveCamera = view->activeCam;
     sCurrentMoveView = view;
-    if ((sCurrentMoveGrp = view->components) != NULL) {
-        move_group_members();
-    }
-    if ((sCurrentMoveGrp = view->lights) != NULL) {
-        move_group_members();
-    }
+    if ((sCurrentMoveGrp = view->components) != NULL) move_group_members();
+    if ((sCurrentMoveGrp = view->lights    ) != NULL) move_group_members();
 }
 
 /* @ 22FCC4 for 0x44; orig name: func_801814F4 */
@@ -1298,15 +1271,15 @@ void reset_nets_and_gadgets(struct ObjGroup *group) {
 
 /* @ 22FD08 for 0x9C; orig name: func_80181538*/
 void null_obj_lists(void) {
-    gGdObjCount = 0;
-    gGdGroupCount = 0;
-    gGdPlaneCount = 0;
+    gGdObjCount    = 0;
+    gGdGroupCount  = 0;
+    gGdPlaneCount  = 0;
     gGdCameraCount = 0;
-    sGdViewCount = 0;
+    sGdViewCount   = 0;
 
     gGdCameraList = NULL;
-    gGdJointList = NULL;
-    gGdGroupList = NULL;
+    gGdJointList  = NULL;
+    gGdGroupList  = NULL;
     gGdObjectList = NULL;
     gGdViewsGroup = NULL;
 

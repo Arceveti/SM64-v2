@@ -3384,15 +3384,15 @@ typedef union {
 
 /* These are also defined defined above for Sprite Microcode */
 
-#define	G_TX_LOADTILE	7
-#define	G_TX_RENDERTILE	0
+#define	G_TX_LOADTILE	0x7
+#define	G_TX_RENDERTILE	0x0
 
-#define	G_TX_NOMIRROR	0
-#define	G_TX_WRAP	0
-#define	G_TX_MIRROR	0x1
-#define	G_TX_CLAMP	0x2
-#define	G_TX_NOMASK	0
-#define	G_TX_NOLOD	0
+#define	G_TX_NOMIRROR	0x0
+#define	G_TX_WRAP		0x0
+#define	G_TX_MIRROR		0x1
+#define	G_TX_CLAMP		0x2
+#define	G_TX_NOMASK		0x0
+#define	G_TX_NOLOD		0x0
 
 
 #ifndef MAX

@@ -133,7 +133,7 @@ void func_80182088(struct Connection *cxn) {
     vec.x = particle1->pos.x - particle2->pos.x;
     vec.y = particle1->pos.y - particle2->pos.y;
     vec.z = particle1->pos.z - particle2->pos.z;
-    div = gd_vec3f_magnitude(&vec);
+    div = gd_vec3f_magnitude(&vec); //? gd_Q_rsqrt
     mul = div - cxn->unk24;
     vec.x /= div;
     vec.y /= div;

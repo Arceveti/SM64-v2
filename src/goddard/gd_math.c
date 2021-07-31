@@ -16,13 +16,34 @@ f32 gd_sqrt_f(f32 val) {
     return (f32) gd_sqrt_d(val);
 }
 
+/*
+ * lol
+ */
+float gd_Q_rsqrt( float number )
+{
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
+
+	x2 = number * 0.5F;
+	y  = number;
+	i  = * ( long * ) &y;
+	i  = 0x5f3759df - ( i >> 1 ); 
+	y  = * ( float * ) &i;
+	y  = y * ( threehalfs - ( x2 * y * y ) );
+
+	return y;
+}
+
 /**
  * Set mtx to a look-at matrix for the camera. The resulting transformation
  * transforms the world as if there exists a camera at position 'from' pointed
  * at the position 'to'.
  * An effective goddard copy of mtxf_lookat.
  */
-void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 yTo, f32 zTo,
+void gd_mat4f_lookat(Mat4f *mtx,
+                     f32 xFrom, f32 yFrom, f32 zFrom,
+                     f32 xTo,   f32 yTo,   f32 zTo,
                      f32 zColY, f32 yColY, f32 xColY) {
     f32 invLength;
 
@@ -55,7 +76,7 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 y
         d.x = norm.z;
     }
 
-    invLength = -1.0f / gd_sqrt_f(SQ(d.z) + SQ(d.y) + SQ(d.x));
+    invLength = -gd_Q_rsqrt(SQ(d.z) + SQ(d.y) + SQ(d.x));
     d.z *= invLength;
     d.y *= invLength;
     d.x *= invLength;
@@ -64,7 +85,7 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 y
     colX.y = xColY * d.z - zColY * d.x;
     colX.x = zColY * d.y - yColY * d.z;
 
-    invLength = 1.0f / gd_sqrt_f(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
+    invLength = gd_Q_rsqrt(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
 
     colX.z *= invLength;
     colX.y *= invLength;
@@ -74,7 +95,7 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 y
     yColY = d.x * colX.z - d.z * colX.x;
     xColY = d.z * colX.y - d.y * colX.z;
 
-    invLength = 1.0f / gd_sqrt_f(SQ(zColY) + SQ(yColY) + SQ(xColY));
+    invLength = gd_Q_rsqrt(SQ(zColY) + SQ(yColY) + SQ(xColY));
 
     zColY *= invLength;
     yColY *= invLength;
@@ -120,15 +141,9 @@ void gd_scale_mat4f_by_vec3f(Mat4f *mtx, struct GdVec3f *vec) {
  * Rotates the matrix 'mtx' about the vector given.
  */
 void gd_rot_mat_about_vec(Mat4f *mtx, struct GdVec3f *vec) {
-    if (vec->x != 0.0f) {
-        gd_absrot_mat4(mtx, GD_X_AXIS, vec->x);
-    }
-    if (vec->y != 0.0f) {
-        gd_absrot_mat4(mtx, GD_Y_AXIS, vec->y);
-    }
-    if (vec->z != 0.0f) {
-        gd_absrot_mat4(mtx, GD_Z_AXIS, vec->z);
-    }
+    if (vec->x != 0.0f) gd_absrot_mat4(mtx, GD_X_AXIS, vec->x);
+    if (vec->y != 0.0f) gd_absrot_mat4(mtx, GD_Y_AXIS, vec->y);
+    if (vec->z != 0.0f) gd_absrot_mat4(mtx, GD_Z_AXIS, vec->z);
 }
 
 /**
@@ -179,7 +194,7 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
     if (hMag != 0.0f) {
         invertedHMag = 1.0f / hMag;
         (*mtx)[0][0] = ((-unit.z * c) - (s * unit.y * unit.x)) * invertedHMag;
-        (*mtx)[1][0] = ((unit.z * s) - (c * unit.y * unit.x)) * invertedHMag;
+        (*mtx)[1][0] = (( unit.z * s) - (c * unit.y * unit.x)) * invertedHMag;
         (*mtx)[2][0] = -unit.x;
         (*mtx)[3][0] = 0.0f;
 
@@ -188,7 +203,7 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
         (*mtx)[2][1] = -unit.y;
         (*mtx)[3][1] = 0.0f;
 
-        (*mtx)[0][2] = ((c * unit.x) - (s * unit.y * unit.z)) * invertedHMag;
+        (*mtx)[0][2] = (( c * unit.x) - (s * unit.y * unit.z)) * invertedHMag;
         (*mtx)[1][2] = ((-s * unit.x) - (c * unit.y * unit.z)) * invertedHMag;
         (*mtx)[2][2] = -unit.z;
         (*mtx)[3][2] = 0.0f;
@@ -315,7 +330,7 @@ s32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
     if ((mag = SQ(vec->x) + SQ(vec->y) + SQ(vec->z)) == 0.0f) return FALSE;
 
-    mag = gd_sqrt_f(mag);
+    mag = gd_Q_rsqrt(mag);
     // gd_sqrt_f rounds near 0 numbers to 0, so verify again.
     if (mag == 0.0f) {
         vec->x = 0.0f;
@@ -324,9 +339,9 @@ s32 gd_normalize_vec3f(struct GdVec3f *vec) {
         return FALSE;
     }
 
-    vec->x /= mag;
-    vec->y /= mag;
-    vec->z /= mag;
+    vec->x *= mag;
+    vec->y *= mag;
+    vec->z *= mag;
 
     return TRUE;
 }
@@ -365,9 +380,7 @@ void gd_inverse_mat4f(Mat4f *src, Mat4f *dst) {
     gd_adjunct_mat4f(src, dst);
     determinant = gd_mat4f_det(dst);
 
-    if (ABS(determinant) < 1e-5f) {
-        gd_exit(); // Non-singular matrix, no inverse!
-    }
+    if (ABS(determinant) < 1e-5f) gd_exit(); // Non-singular matrix, no inverse!
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 4; j++) {
@@ -524,9 +537,7 @@ void gd_shift_mat_up(Mat4f *mtx) {
     (*mtx)[2][3] = 0.0f;
     (*mtx)[3][3] = 1.0f;
 
-    for (i = 0; i < 3; i++) {
-        (*mtx)[3][i] = temp[i];
-    }
+    for (i = 0; i < 3; i++) (*mtx)[3][i] = temp[i];
 }
 
 /**

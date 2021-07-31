@@ -730,9 +730,7 @@ void chk_shapegen(struct ObjShape *shape) {
                     gd_normalize_vec3f(&vtxbuf[i]->normal);
                 }
             } else {
-                for (i = 0; i < vtxdata->count; i++) {
-                    gd_normalize_vec3f(&vtxbuf[i]->normal);
-                }
+                for (i = 0; i < vtxdata->count; i++) gd_normalize_vec3f(&vtxbuf[i]->normal);
             }
 
             gd_free(vtxbuf);
