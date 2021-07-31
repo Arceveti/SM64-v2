@@ -89,11 +89,11 @@ void bhv_act_selector_star_type_loop(void) {
 void render_100_coin_star(u8 stars) {
     if (stars & (1 << 6)) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
-    #ifdef WIDE
+#ifdef WIDE
         sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370*4.0f)/3.0f) : 370, 24, -300, 0, 0, 0);
-    #else
+#else
         sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
-    #endif
+#endif
 
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
@@ -140,7 +140,7 @@ void bhv_act_selector_init(void) {
     if (sObtainedStars == 6) sInitSelectedActNum = sVisibleStars;
 
     // Render star selector objects
-    #ifdef WIDE
+#ifdef WIDE
     if (gWidescreen) {
         for (i = 0; i < sVisibleStars; i++) {
             sStarSelectorModels[i] =
@@ -156,14 +156,14 @@ void bhv_act_selector_init(void) {
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     }
-    #else
+#else
     for (i = 0; i < sVisibleStars; i++) {
         sStarSelectorModels[i] =
             spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
                                     75 + sVisibleStars * -75 + i * 152, 248, -300, 0, 0, 0);
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
     }
-    #endif
+#endif
 
     render_100_coin_star(stars);
 }
@@ -238,17 +238,13 @@ void print_course_number(void) {
     gSPDisplayList(gDisplayListHead++, dl_menu_rgba16_wood_course_end);
 #endif
 
-    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 
     int_to_str(gCurrCourseNum, courseNum);
 
-    if (gCurrCourseNum < 10) { // 1 digit number
-        print_hud_lut_string(HUD_LUT_GLOBAL, 152, 158, courseNum);
-    } else { // 2 digit number
-        print_hud_lut_string(HUD_LUT_GLOBAL, 143, 158, courseNum);
-    }
+    print_hud_lut_string(HUD_LUT_GLOBAL, (gCurrCourseNum < 10) ? 152 : 143, 158, courseNum); // 1 or 2 digit number
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
@@ -277,7 +273,7 @@ void print_act_selector_strings(void) {
 #else
     u8 **levelNameTbl = segmented_to_virtual(seg2_course_name_table);
     u8 *currLevelName = segmented_to_virtual(levelNameTbl[gCurrCourseNum - 1]);
-    u8 **actNameTbl = segmented_to_virtual(seg2_act_name_table);
+    u8 **actNameTbl   = segmented_to_virtual(seg2_act_name_table);
 #endif
     u8 *selectedActName;
 #ifndef VERSION_EU
@@ -370,13 +366,8 @@ void print_act_selector_strings(void) {
 
 /**
  * Geo function that Print act selector strings.
- *!@bug: This geo function is missing the third param. Harmless in practice due to o32 convention.
  */
-#ifdef AVOID_UB
 Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node, UNUSED void *context) {
-#else
-Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node) {
-#endif
     if (callContext == GEO_CONTEXT_RENDER) print_act_selector_strings();
     return NULL;
 }
@@ -388,19 +379,16 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node) {
 s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
     u8 stars = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
 
-    sLoadedActNum = 0;
-    sInitSelectedActNum = 0;
-    sVisibleStars = 0;
+    sLoadedActNum         = 0;
+    sInitSelectedActNum   = 0;
+    sVisibleStars         = 0;
     sActSelectorMenuTimer = 0;
     sObtainedStars = save_file_get_course_star_count(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
 
     // Don't count 100 coin star
     if (stars & (1 << 6)) sObtainedStars--;
 
-    //! no return value
-#ifdef AVOID_UB
     return 0;
-#endif
 }
 
 /**

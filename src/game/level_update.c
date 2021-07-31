@@ -769,11 +769,7 @@ void initiate_delayed_warp(void) {
         if (gDebugLevelSelect && (sDelayedWarpOp & WARP_OP_TRIGGERS_LEVEL_SELECT)) {
             warp_special(-9);
         } else if (gCurrDemoInput != NULL) {
-            if (sDelayedWarpOp == WARP_OP_DEMO_END) {
-                warp_special(-8);
-            } else {
-                warp_special(-2);
-            }
+            warp_special((sDelayedWarpOp == WARP_OP_DEMO_END) ? -8 : -2);
         } else {
             switch (sDelayedWarpOp) {
                 case WARP_OP_GAME_OVER:

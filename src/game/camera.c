@@ -8601,7 +8601,7 @@ void cutscene_unlock_key_door_start(struct Camera *c) {
     vec3f_copy(sCutsceneVars[1].point, c->focus);
     vec3f_set(posOff, -206.0f, 108.0f,  234.0f);
     vec3f_set(focusOff, 48.0f, 104.0f, -193.0f);
-    offset_rotated(sCutsceneVars[2].point, sMarioCamState->pos, posOff, sMarioCamState->faceAngle);
+    offset_rotated(sCutsceneVars[2].point, sMarioCamState->pos,   posOff, sMarioCamState->faceAngle);
     offset_rotated(sCutsceneVars[3].point, sMarioCamState->pos, focusOff, sMarioCamState->faceAngle);
 }
 
@@ -8658,7 +8658,7 @@ void cutscene_unlock_key_door(UNUSED struct Camera *c) {
 s32 intro_peach_move_camera_start_to_pipe(struct Camera *c, struct CutsceneSplinePoint positionSpline[],
                   struct CutsceneSplinePoint focusSpline[]) {
     Vec3f offset;
-    s32 posReturn = 0;
+    s32 posReturn   = 0;
     s32 focusReturn = 0;
 
     /**
@@ -8666,8 +8666,8 @@ s32 intro_peach_move_camera_start_to_pipe(struct Camera *c, struct CutsceneSplin
      * updated. Otherwise position would move two frames ahead, and c->focus would always be one frame
      * further along the spline than c->pos.
      */
-    posReturn = move_point_along_spline(c->pos, positionSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
-    focusReturn = move_point_along_spline(c->focus, focusSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
+    posReturn   = move_point_along_spline(c->pos, positionSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
+    focusReturn = move_point_along_spline(c->focus,  focusSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
 
     //! The two splines used by this function are reflected in the horizontal plane for some reason,
     //! so they are rotated every frame. Why do this, Nintendo?
@@ -9068,7 +9068,7 @@ void cutscene_sliding_doors_open_start(struct Camera *c) {
 void cutscene_sliding_doors_open_set_cvars(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[1].point, sMarioCamState->pos);
     vec3s_copy(sCutsceneVars[0].angle, sMarioCamState->faceAngle);
-    vec3f_set(sCutsceneVars[0].point, 80.0f, 325.0f, 200.0f);
+    vec3f_set( sCutsceneVars[0].point, 80.0f, 325.0f, 200.0f);
 }
 
 /**

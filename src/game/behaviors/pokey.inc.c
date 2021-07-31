@@ -213,14 +213,12 @@ static void pokey_act_wander(void) {
             }
 
             if (o->oPokeyTurningAwayFromWall) {
-                o->oPokeyTurningAwayFromWall =
-                    obj_resolve_collisions_and_turn(o->oPokeyTargetYaw, 0x200);
+                o->oPokeyTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oPokeyTargetYaw, 0x200);
             } else {
                 // If far from home, turn back toward home
                 if (o->oDistanceToMario >= 25000.0f) o->oPokeyTargetYaw = o->oAngleToMario;
 
-                if (!(o->oPokeyTurningAwayFromWall =
-                          obj_bounce_off_walls_edges_objects(&o->oPokeyTargetYaw))) {
+                if (!(o->oPokeyTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oPokeyTargetYaw))) {
                     if (o->oPokeyChangeTargetTimer != 0) {
                         o->oPokeyChangeTargetTimer--;
                     } else if (o->oDistanceToMario > 2000.0f) {
@@ -277,14 +275,8 @@ void bhv_pokey_update(void) {
     o->oDeathSound = SOUND_OBJ_POKEY_DEATH;
 
     switch (o->oAction) {
-        case POKEY_ACT_UNINITIALIZED:
-            pokey_act_uninitialized();
-            break;
-        case POKEY_ACT_WANDER:
-            pokey_act_wander();
-            break;
-        case POKEY_ACT_UNLOAD_PARTS:
-            pokey_act_unload_parts();
-            break;
+        case POKEY_ACT_UNINITIALIZED: pokey_act_uninitialized(); break;
+        case POKEY_ACT_WANDER:        pokey_act_wander();        break;
+        case POKEY_ACT_UNLOAD_PARTS:  pokey_act_unload_parts();  break;
     }
 }

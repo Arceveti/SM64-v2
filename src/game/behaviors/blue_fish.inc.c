@@ -30,9 +30,7 @@ void bhv_blue_fish_movement_loop(void) {
             
             // Set forward velocity and progress oAction to BLUE_FISH_ACT_TURN.
             o->oForwardVel = o->oBlueFishRandomVel + 3.0f;
-            if (o->oTimer >= o->oBlueFishRandomTime + 60) {
-                o->oAction++;
-            }
+            if (o->oTimer >= o->oBlueFishRandomTime + 60) o->oAction = BLUE_FISH_ACT_TURN;
             
             // Set pitch velocity
             if (o->oTimer < (o->oBlueFishRandomTime + 60) / 2) {
@@ -48,14 +46,14 @@ void bhv_blue_fish_movement_loop(void) {
         case BLUE_FISH_ACT_TURN:
             cur_obj_init_animation_with_accel_and_sound(0, 2.0f);
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
-            if (o->oTimer == 15) o->oAction++;
+            if (o->oTimer == 15) o->oAction = BLUE_FISH_ACT_ASCEND;
             break;  
         // Animates and adjusts pitch to an upward direction.
         case BLUE_FISH_ACT_ASCEND:
             cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
             
             // Progresses oAction to BLUE_FISH_ACT_TURN_BACK after elapsed time. 
-            if (o->oTimer >= o->oBlueFishRandomTime + 60) o->oAction++;
+            if (o->oTimer >= o->oBlueFishRandomTime + 60) o->oAction = BLUE_FISH_ACT_TURN_BACK;
             
             // Adjusts pitch angle. Direction relies on time not passed.
             if (o->oTimer < (o->oBlueFishRandomTime + 60) / 2) {
@@ -79,9 +77,7 @@ void bhv_blue_fish_movement_loop(void) {
     cur_obj_move_using_fvel_and_gravity();
     
     // Deletes object if the parent has oAction set to BLUE_FISH_ACT_DUPLICATE.
-    if (o->parentObj->oAction == BLUE_FISH_ACT_DUPLICATE) {
-        obj_mark_for_deletion(o);
-    }
+    if (o->parentObj->oAction == BLUE_FISH_ACT_DUPLICATE) obj_mark_for_deletion(o);
 }
 
 /**
@@ -93,22 +89,21 @@ void bhv_tank_fish_group_loop(void) {
     s32 i;
     switch (o->oAction) {
         case BLUE_FISH_ACT_SPAWN:
-            if (gMarioCurrentRoom == 15 || gMarioCurrentRoom == 7) {
-                
+            if (gMarioCurrentRoom == 15
+             || gMarioCurrentRoom ==  7) {
                 // spawns fifteen fish and moves them within 200.0f
                 for (i = 0; i < 15; i++) {
                     fish = spawn_object_relative(0, 300, 0, -200, o, MODEL_FISH, bhvBlueFish);
                     obj_translate_xyz_random(fish, 200.0f);
                 }
-                
                 // Proceed to BLUE_FISH_ACT_ROOM phase.
-                o->oAction++;
+                o->oAction = BLUE_FISH_ACT_ROOM;
             }
             break;
             
         // Sets next oAction phase if Mario is not in rooms fifteen and seven.
         case BLUE_FISH_ACT_ROOM:
-            if (gMarioCurrentRoom != 15 && gMarioCurrentRoom != 7) o->oAction++;
+            if (gMarioCurrentRoom != 15 && gMarioCurrentRoom != 7) o->oAction = BLUE_FISH_ACT_DUPLICATE;
             break;
             
         // Sets oAction to the BLUE_FISH_ACT_SPAWN phase.

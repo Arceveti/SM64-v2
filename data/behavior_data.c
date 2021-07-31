@@ -1447,16 +1447,16 @@ const BehaviorScript bhvFlamethrowerFlame[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvBouncingFireball[] = {
+const BehaviorScript bhvBouncingFireballSpawner[] = {
     BEGIN(OBJ_LIST_DEFAULT),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     DISABLE_RENDERING(),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_bouncing_fireball_loop),
+        CALL_NATIVE(bhv_bouncing_fireball_spawner_loop),
     END_LOOP(),
 };
 
-const BehaviorScript bhvBouncingFireballFlame[] = {
+const BehaviorScript bhvBouncingFireballSpawnerFlame[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     SET_INTERACT_TYPE(INTERACT_FLAME),

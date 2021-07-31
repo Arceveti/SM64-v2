@@ -19,7 +19,7 @@
 
 // background types
 #define INTRO_BACKGROUND_SUPER_MARIO 0
-#define INTRO_BACKGROUND_GAME_OVER 1
+#define INTRO_BACKGROUND_GAME_OVER   1
 
 struct GraphNodeMore {
     /*0x00*/ struct GraphNode node;
@@ -223,8 +223,7 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
     if (state != 1) {  // reset
         sGameOverFrameCounter = 0;
         sGameOverTableIndex = -2;
-        for (i = 0; i < ARRAY_COUNT(gameOverBackgroundTable); ++i)
-            gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
+        for (i = 0; i < ARRAY_COUNT(gameOverBackgroundTable); ++i) gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
     } else {  // draw
         dl = alloc_display_list(16 * sizeof(*dl));
         dlIter = dl;

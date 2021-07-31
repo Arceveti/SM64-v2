@@ -28,7 +28,7 @@ static void beta_holdable_object_drop(void) {
     o->oHeldState = HELD_FREE;
 
     o->oForwardVel = 0;
-    o->oVelY = 0;
+    o->oVelY       = 0;
 }
 
 /**
@@ -47,7 +47,7 @@ static void beta_holdable_object_throw(void) {
 
     // Set initial velocity
     o->oForwardVel = 40.0f;
-    o->oVelY = 20.0f;
+    o->oVelY       = 20.0f;
 }
 
 /**
@@ -57,22 +57,9 @@ static void beta_holdable_object_throw(void) {
  */
 void bhv_beta_holdable_object_loop(void) {
     switch (o->oHeldState) {
-        case HELD_FREE:
-            // Apply standard physics
-            object_step();
-            break;
-
-        case HELD_HELD:
-            // Disable rendering to hide the object while it's held
-            cur_obj_disable_rendering();
-            break;
-
-        case HELD_THROWN:
-            beta_holdable_object_throw();
-            break;
-
-        case HELD_DROPPED:
-            beta_holdable_object_drop();
-            break;
+        case HELD_FREE:    object_step();                break; // Apply standard physics
+        case HELD_HELD:    cur_obj_disable_rendering();  break; // Disable rendering to hide the object while it's held
+        case HELD_THROWN:  beta_holdable_object_throw(); break;
+        case HELD_DROPPED: beta_holdable_object_drop();  break;
     }
 }

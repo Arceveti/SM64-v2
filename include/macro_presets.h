@@ -38,7 +38,7 @@ struct MacroPreset MacroObjectPresets[] = {
     {bhvCannonClosed,                   MODEL_DL_CANNON_LID,                0}, // macro_cannon_closed
     {bhvBobombBuddyOpensCannon,         MODEL_BOBOMB_BUDDY,                 0}, // macro_bobomb_buddy_opens_cannon
     {bhvButterfly,                      MODEL_BUTTERFLY,                    0}, // macro_butterfly - unused
-    {bhvBouncingFireball,               MODEL_NONE,                         0}, // macro_bouncing_fireball_copy - unused
+    {bhvBouncingFireballSpawner,        MODEL_NONE,                         0}, // macro_bouncing_fireball_copy - unused
     {bhvFishSpawner,                    MODEL_NONE,                         0}, // macro_fish_group_3 - unused
     {bhvFishSpawner,                    MODEL_NONE,                         1}, // macro_fish_group
     {bhvBetaFishSplashSpawner,          MODEL_NONE,                         0}, // macro_beta_fish_splash_spawner
@@ -110,7 +110,7 @@ struct MacroPreset MacroObjectPresets[] = {
     {bhvSmallBully,                     MODEL_BULLY_BOSS,                   0}, // macro_bully_2 - unused
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_95
     {bhvYellowCoin,                     MODEL_UNKNOWN_58,                   0}, // macro_unknown_96 - unused (was bhvStub1D0C)
-    {bhvBouncingFireball,               MODEL_NONE,                         0}, // macro_bouncing_fireball
+    {bhvBouncingFireballSpawner,        MODEL_NONE,                         0}, // macro_bouncing_fireball
     {bhvFlamethrower,                   MODEL_NONE,                         4}, // macro_flamethrower
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_99
     {bhvYellowCoin,                     MODEL_YELLOW_COIN,                  0}, // macro_empty_100

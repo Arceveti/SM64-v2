@@ -36,7 +36,7 @@ void bhv_boo_cage_loop(void) {
             // give the cage an initial Y velocity of 60 units/frame, and play the puzzle jingle.
             // Otherwise, stay inside the boo.
             if (o->parentObj->oBooDeathStatus != BOO_DEATH_STATUS_ALIVE) {
-                o->oAction++;
+                o->oAction = BOO_CAGE_ACT_FALLING;
                 o->oVelY = 60.0f;
                 play_puzzle_jingle();
             } else {
@@ -60,10 +60,7 @@ void bhv_boo_cage_loop(void) {
             // set the action to BOO_CAGE_ACT_ON_GROUND.
             // This is the only use of the OBJ_MOVE_AT_WATER_SURFACE flag in the game.
             // It seems to serve no purpose here.
-            if (o->oMoveFlags
-                & (OBJ_MOVE_UNDERWATER_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_ON_GROUND)) {
-                o->oAction++;
-            }
+            if (o->oMoveFlags & (OBJ_MOVE_UNDERWATER_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_ON_GROUND)) o->oAction = BOO_CAGE_ACT_ON_GROUND;
 
             break;
         case BOO_CAGE_ACT_ON_GROUND:

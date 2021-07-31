@@ -100,8 +100,8 @@ struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
     vtx->initPos.z = z;
 
     vtx->scaleFactor = 1.0f;
-    vtx->gbiVerts = NULL;
-    vtx->alpha = 1.0f;
+    vtx->gbiVerts    = NULL;
+    vtx->alpha       = 1.0f;
 
     vtx->normal.x = 0.0f;
     vtx->normal.y = 1.0f;
@@ -121,8 +121,8 @@ struct ObjFace *make_face_with_colour(f32 r, f32 g, f32 b) {
     newFace->colour.b = b;
 
     newFace->vtxCount = 0;
-    newFace->mtlId = -1;
-    newFace->mtl = NULL;
+    newFace->mtlId    = -1;
+    newFace->mtl      = NULL;
 
     return newFace;
 }
@@ -133,7 +133,7 @@ void add_3_vtx_to_face(struct ObjFace *face, struct ObjVertex *vtx1, struct ObjV
     face->vertices[0] = vtx1;
     face->vertices[1] = vtx2;
     face->vertices[2] = vtx3;
-    face->vtxCount = 3;
+    face->vtxCount    = 3;
     calc_face_normal(face);
 }
 

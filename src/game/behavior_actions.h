@@ -104,7 +104,7 @@ void bhv_beta_moving_flames_loop(void);
 void bhv_rr_rotating_bridge_platform_loop(void);
 void bhv_flamethrower_loop(void);
 void bhv_flamethrower_flame_loop(void);
-void bhv_bouncing_fireball_loop(void);
+void bhv_bouncing_fireball_spawner_loop(void);
 void bhv_bouncing_fireball_flame_loop(void);
 void bhv_bowser_shock_wave_loop(void);
 void bhv_flame_mario_loop(void);

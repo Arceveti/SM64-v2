@@ -4,14 +4,14 @@ void bhv_bouncing_fireball_flame_loop(void) {
     o->activeFlags |= ACTIVE_FLAG_IGNORE_WATER_LEVEL;
     cur_obj_update_floor_and_walls();
     switch (o->oAction) {
-        case 0:
+        case BOUNCING_FLAME_ACT_SPAWNED:
             if (o->oTimer == 0) {
                 o->oAnimState = random_float() * 10.0f;
                 o->oVelY = 30.0f;
             }
-            if (o->oMoveFlags & OBJ_MOVE_LANDED) o->oAction++;
+            if (o->oMoveFlags & OBJ_MOVE_LANDED) o->oAction = BOUNCING_FLAME_ACT_LANDED;
             break;
-        case 1:
+        case BOUNCING_FLAME_ACT_LANDED:
             if (o->oTimer == 0) {
                 o->oVelY = 50.0f;
                 o->oForwardVel = 30.0f;
@@ -24,23 +24,23 @@ void bhv_bouncing_fireball_flame_loop(void) {
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
-void bhv_bouncing_fireball_loop(void) {
+void bhv_bouncing_fireball_spawner_loop(void) {
     struct Object *flameObj;
     f32 scale;
     switch (o->oAction) {
-        case 0:
-            if (o->oDistanceToMario < 2000.0f) o->oAction = 1;
+        case BOUNCING_FIREBALL_SPAWNER_ACT_IDLE:
+            if (o->oDistanceToMario < 2000.0f) o->oAction = BOUNCING_FIREBALL_SPAWNER_ACT_SPAWN_FLAME;
             break;
-        case 1:
-            flameObj = spawn_object(o, MODEL_RED_FLAME, bhvBouncingFireballFlame);
+        case BOUNCING_FIREBALL_SPAWNER_ACT_SPAWN_FLAME:
+            flameObj = spawn_object(o, MODEL_RED_FLAME, bhvBouncingFireballSpawnerFlame);
             scale = (10 - o->oTimer) * 0.5f;
             obj_scale(flameObj, scale);
             if (o->oTimer == 0) obj_become_tangible(flameObj);
-            if (o->oTimer > 10) o->oAction++;
+            if (o->oTimer > 10) o->oAction = BOUNCING_FIREBALL_SPAWNER_ACT_COOLDOWN;
             break;
-        case 2:
+        case BOUNCING_FIREBALL_SPAWNER_ACT_COOLDOWN:
             if (o->oTimer == 0) o->oBouncingFireBallSpawnerRandomCooldown = random_float() * 100.0f;
-            if (o->oBouncingFireBallSpawnerRandomCooldown + 100 < o->oTimer) o->oAction = 0;
+            if (o->oBouncingFireBallSpawnerRandomCooldown + 100 < o->oTimer) o->oAction = BOUNCING_FIREBALL_SPAWNER_ACT_IDLE;
             break;
     }
 }

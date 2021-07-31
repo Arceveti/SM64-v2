@@ -31,14 +31,9 @@ void bhv_activated_back_and_forth_platform_init(void) {
 
     // The BitS arrow platform should flip 180º (0x8000 angle units), but
     // there is no reason for the other platforms to flip.
-    if (platformType != ACTIVATED_BF_PLAT_TYPE_BITS_ARROW_PLAT) {
-        o->oActivatedBackAndForthPlatformFlipRotation = 0;
-    } else {
-        o->oActivatedBackAndForthPlatformFlipRotation = 0x8000;
-    }
+    o->oActivatedBackAndForthPlatformFlipRotation = (platformType != ACTIVATED_BF_PLAT_TYPE_BITS_ARROW_PLAT) ? 0 : 0x8000;
 
-    o->collisionData =
-        segmented_to_virtual(sActivatedBackAndForthPlatformCollisionModels[platformType]);
+    o->collisionData = segmented_to_virtual(sActivatedBackAndForthPlatformCollisionModels[platformType]);
 
     // Max distance the platform should move.
     // Equivalent to 50 * (oBehParams2ndByte & 0x7F), i.e. 50 * (oBehParams2ndByte % 128).
@@ -63,11 +58,7 @@ void bhv_activated_back_and_forth_platform_init(void) {
 void bhv_activated_back_and_forth_platform_update(void) {
     // oVelY is used for vertical platforms' movement and also for
     // horizontal platforms' dipping up/down when Mario gets on/off them
-    if (gMarioObject->platform == o) {
-        o->oVelY = -6.0f;
-    } else {
-        o->oVelY = 6.0f;
-    }
+    o->oVelY = (gMarioObject->platform == o) ? -6.0f : 6.0f;
 
     // If the platform's velocity is set...
     if (o->oActivatedBackAndForthPlatformVel != 0.0f) {

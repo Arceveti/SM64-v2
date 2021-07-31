@@ -81,61 +81,61 @@ struct LightDirVec {
 // bss
 static OSMesgQueue D_801BE830; // controller msg queue
 static OSMesg D_801BE848[10];
-static OSMesgQueue sGdDMAQueue; // @ 801BE8C8
-static OSMesg sGdMesgBuf[1]; // @ 801BE944
+static OSMesgQueue sGdDMAQueue;
+static OSMesg sGdMesgBuf[1];
 static OSMesg sGdDMACompleteMsg; // msg buf for D_801BE8B0 queue
 static OSIoMesg sGdDMAReqMesg;
 static OSContStatus D_801BAE60[4];
-static OSContPad sGdContPads[4];    // @ 801BAE70
-static OSContPad sPrevFrameCont[4]; // @ 801BAE88
-static u8 D_801BAEA0;
-static u32 D_801BAF28;                                 // RAM addr offset?
-static s16 sTriangleBuf[13][8];                          // [[s16; 8]; 13]? vert indices?
-static u8 *sMemBlockPoolBase; // @ 801BB00C
-static u32 sAllocMemory;      // @ 801BB010; malloc-ed bytes
-static s16 sVtxCvrtTCBuf[2];            // @ 801BB0A0
-static s32 sCarGdDlNum;                 // @ 801BB0A4
-static struct ObjGroup *sMarioSceneGrp; // @ 801BB0B0
+static OSContPad sGdContPads[4];
+static OSContPad sPrevFrameCont[4];
+static u8  D_801BAEA0;
+static u32 D_801BAF28; // RAM addr offset?
+static s16 sTriangleBuf[13][8]; // [[s16; 8]; 13]? vert indices?
+static u8 *sMemBlockPoolBase;
+static u32 sAllocMemory; // malloc-ed bytes
+static s16 sVtxCvrtTCBuf[2];
+static s32 sCarGdDlNum;
+static struct ObjGroup *sMarioSceneGrp;
 static s32 D_801BB0B4;                  // second offset into sTriangleBuf
-static s32 sVertexBufCount; // vtx's to load into RPD? Vtx len in GD Dl and in the lower bank (AF30)
-static s32 sTriangleBufCount;                  // number of triangles in sTriangleBuf
-static struct ObjView *sMSceneView;     // @ 801BB0C8; Mario scene view
-static s32 sVertexBufStartIndex;                  // Vtx start in GD Dl
-static s32 sUpdateMarioScene;           // @ 801BB0D8; update dl Vtx from ObjVertex?
-static Mtx sIdnMtx;           // @ 801BB100
-static Mat4f sInitIdnMat4;    // @ 801BB140
-static s8 sVtxCvrtNormBuf[3]; // @ 801BB180
+static s32 sVertexBufCount;             // vtx's to load into RPD? Vtx len in GD Dl and in the lower bank (AF30)
+static s32 sTriangleBufCount;           // number of triangles in sTriangleBuf
+static struct ObjView *sMSceneView;     // Mario scene view
+static s32 sVertexBufStartIndex;        // Vtx start in GD Dl
+static s32 sUpdateMarioScene;           // update dl Vtx from ObjVertex?
+static Mtx sIdnMtx;
+static Mat4f sInitIdnMat4;
+static s8 sVtxCvrtNormBuf[3];
 static s16 sAlpha;
 static s32 sNumLights;
-static struct GdColour sAmbScaleColour;       // @ 801BB190
-static struct GdColour sLightScaleColours[2]; // @ 801BB1A0
+static struct GdColour sAmbScaleColour;
+static struct GdColour sLightScaleColours[2];
 static struct LightDirVec sLightDirections[2];
 static s32 sLightId;
 static Hilite sHilites[600];
-static struct GdDisplayList *sStaticDl;     // @ 801BD7A8
-static struct GdDisplayList *sDynamicMainDls[2]; // @ 801BD7B0
-static struct GdDisplayList *sGdDlStash;    // @ 801BD7B8
-static struct GdDisplayList *sMHeadMainDls[2]; // @ 801BD7C0; two DLs, double buffered one per frame - seem to be basic dls that branch to actual lists?
-static struct GdDisplayList *sViewDls[3][2];       // I guess? 801BD7C8 -> 801BD7E0?
-static struct GdDisplayList *sGdDLArray[MAX_GD_DLS]; // @ 801BD7E0; indexed by dl number (gddl+0x44)
-static s32 sPickBufLen;                              // @ 801BE780
-static s32 sPickBufPosition;                         // @ 801BE784
-static s16 *sPickBuf;                                // @ 801BE788
+static struct GdDisplayList *sStaticDl;
+static struct GdDisplayList *sDynamicMainDls[2];
+static struct GdDisplayList *sGdDlStash;
+static struct GdDisplayList *sMHeadMainDls[2];       // two DLs, double buffered one per frame - seem to be basic dls that branch to actual lists?
+static struct GdDisplayList *sViewDls[3][2];         // I guess? 801BD7C8 -> 801BD7E0?
+static struct GdDisplayList *sGdDLArray[MAX_GD_DLS]; // indexed by dl number (gddl+0x44)
+static s32 sPickBufLen;
+static s32 sPickBufPosition;
+static s16 *sPickBuf;
 static LookAt D_801BE7D0[3];
-static f32 sTimeScaleFactor = 1.0f;   // @ D_801A8694
-static u32 sMemBlockPoolSize = 1;     // @ 801A8698
-static s32 sMemBlockPoolUsed = 0;     // @ 801A869C
-s32 gGdFrameBufNum = 0;                      // @ 801A86B0
-static struct ObjShape *sHandShape = NULL; // @ 801A86B8
+static f32 sTimeScaleFactor  = 1.0f;
+static u32 sMemBlockPoolSize = 1;
+static s32 sMemBlockPoolUsed = 0;
+s32 gGdFrameBufNum           = 0;
+static struct ObjShape      *sHandShape   = NULL;
 static s32 sMtxParamType = G_MTX_PROJECTION;
-static struct ObjView *sActiveView = NULL;  // @ 801A86D8 current view? used when drawing dl
-static struct ObjView *sScreenView = NULL; // @ 801A86DC
-static struct ObjView *sHandView = NULL; // @ 801A86E4
-static struct GdDisplayList *sCurrentGdDl = NULL; // @ 801A86FC
-static u32 sGdDlCount = 0;                        // @ 801A8700
+static struct ObjView       *sActiveView  = NULL; // current view? used when drawing dl
+static struct ObjView       *sScreenView  = NULL;
+static struct ObjView       *sHandView    = NULL;
+static struct GdDisplayList *sCurrentGdDl = NULL;
+static u32 sGdDlCount = 0;
 
 // textures and display list data
-UNUSED static Gfx gd_texture1_dummy_aligner1[] = { // @ 801A8728
+UNUSED static Gfx gd_texture1_dummy_aligner1[] = {
     gsSPEndDisplayList(),
 };
 
@@ -589,14 +589,14 @@ extern u8 _gd_dynlistsSegmentRomStart[];
 extern u8 _gd_dynlistsSegmentRomEnd[];
 
 // forward declarations
-u32  new_gddl_from(Gfx *);
-void gd_setup_cursor(struct ObjGroup *);
+u32  new_gddl_from(Gfx *dl);
+void gd_setup_cursor(struct ObjGroup *parentgrp);
 void parse_p1_controller(void);
 void update_cursor(void);
-void update_view_and_dl(struct ObjView *);
+void update_view_and_dl(struct ObjView *view);
 static void update_render_mode(void);
-void gddl_is_loading_shine_dl(s32);
-void gd_put_sprite(u16 *, s32, s32, s32, s32);
+void gddl_is_loading_shine_dl(s32 dlLoad);
+void gd_put_sprite(u16 *sprite, s32 x, s32 y, s32 wx, s32 wy);
 void reset_cur_dl_indices(void);
 
 // TODO: make a gddl_num_t?
@@ -936,35 +936,25 @@ struct GdDisplayList *new_gd_dl(s32 id, s32 gfxs, s32 verts, s32 mtxs, s32 light
     dl = alloc_displaylist(id);
     dl->parent = NULL;
     if (verts == 0) verts = 1;
-
     dl->curVtxIdx = 0;
-    dl->totalVtx = verts;
+    dl->totalVtx  = verts;
     if ((dl->vtx = gd_malloc_perm(verts * sizeof(Vtx))) == NULL) gd_exit(); // Out of DL mem
-
     if (mtxs == 0) mtxs = 1;
-
     dl->curMtxIdx = 0;
-    dl->totalMtx = mtxs;
+    dl->totalMtx  = mtxs;
     if ((dl->mtx = gd_malloc_perm(mtxs * sizeof(Mtx))) == NULL) gd_exit(); // Out of DL mem
-
     if (lights == 0) lights = 1;
-
     dl->curLightIdx = 0;
     dl->totalLights = lights;
     if ((dl->light = gd_malloc_perm(lights * sizeof(Lights4))) == NULL) gd_exit(); // Out of DL mem
-
     if (gfxs == 0) gfxs = 1;
-
     dl->curGfxIdx = 0;
-    dl->totalGfx = gfxs;
+    dl->totalGfx  = gfxs;
     if ((dl->gfx = gd_malloc_perm(gfxs * sizeof(Gfx))) == NULL) gd_exit(); // Out of DL mem
-
     if (vps == 0) vps = 1;
-
     dl->curVpIdx = 0;
-    dl->totalVp = vps;
+    dl->totalVp  = vps;
     if ((dl->vp = gd_malloc_perm(vps * sizeof(Vp))) == NULL) gd_exit(); // Out of DL mem
-
     dl->dlptr = NULL;
     return dl;
 }
@@ -1132,8 +1122,7 @@ void gd_dl_mul_trans_matrix(f32 x, f32 y, f32 z) {
  */
 void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z) {
     guTranslate(&DL_CURRENT_MTX(sCurrentGdDl), x, y, z);
-    gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),
-              sMtxParamType | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)), sMtxParamType | G_MTX_LOAD | G_MTX_NOPUSH);
     next_mtx();
 }
 
@@ -1154,11 +1143,10 @@ void gd_dl_scale(f32 x, f32 y, f32 z) {
 
 /* 24DA94 -> 24DAE8 */
 void func_8019F2C4(f32 angle, s8 axis) {
-    Mat4f mtx; // 18
-
+    Mat4f mtx;
     gd_set_identity_mat4(&mtx);
-    gd_absrot_mat4(&mtx, axis - 120, -angle);
-    gd_dl_mul_matrix(&mtx);
+    gd_absrot_mat4(      &mtx, axis - 120, -angle);
+    gd_dl_mul_matrix(    &mtx);
 }
 
 /* 24DAE8 -> 24E1A8 */
@@ -1188,22 +1176,22 @@ void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xT
     lookat->l[1].l.dir[1] = LOOKAT_PACK(cam->unkE8[1][1]);
     lookat->l[1].l.dir[2] = LOOKAT_PACK(cam->unkE8[2][1]);
 
-    lookat->l[0].l.col[0] = 0;
-    lookat->l[0].l.col[1] = 0;
-    lookat->l[0].l.col[2] = 0;
-    lookat->l[0].l.pad1 = 0;
+    lookat->l[0].l.col[0]  = 0;
+    lookat->l[0].l.col[1]  = 0;
+    lookat->l[0].l.col[2]  = 0;
+    lookat->l[0].l.pad1    = 0;
     lookat->l[0].l.colc[0] = 0;
     lookat->l[0].l.colc[1] = 0;
     lookat->l[0].l.colc[2] = 0;
-    lookat->l[0].l.pad2 = 0;
-    lookat->l[1].l.col[0] = 0;
-    lookat->l[1].l.col[1] = 0x80;
-    lookat->l[1].l.col[2] = 0;
-    lookat->l[1].l.pad1 = 0;
+    lookat->l[0].l.pad2    = 0;
+    lookat->l[1].l.col[0]  = 0;
+    lookat->l[1].l.col[1]  = 0x80;
+    lookat->l[1].l.col[2]  = 0;
+    lookat->l[1].l.pad1    = 0;
     lookat->l[1].l.colc[0] = 0;
     lookat->l[1].l.colc[1] = 0x80;
     lookat->l[1].l.colc[2] = 0;
-    lookat->l[1].l.pad2 = 0;
+    lookat->l[1].l.pad2    = 0;
 
     gSPLookAt(next_gfx(), osVirtualToPhysical(&D_801BE7D0[gGdFrameBufNum]));
     next_mtx();
@@ -1321,8 +1309,8 @@ void set_light_num(s32 n) {
 
 /* 24EB24 -> 24EC18 */
 s32 create_mtl_gddl(void) {
-    s32 dlnum;            // 24
-    struct GdColour blue; // 18
+    s32 dlnum;
+    struct GdColour blue;
 
     blue.r = 0.0f;
     blue.g = 0.0f;
@@ -1350,7 +1338,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct GdVec3f   *arg4,  // vector to light source?
                    struct GdColour  *colour // light color
 ) {
-    Hilite *hilite; // 4c
+    Hilite *hilite;
     struct GdVec3f vec;
     f32 mag; // magnitude of vec
     f32 sp38;
@@ -1590,9 +1578,7 @@ void start_view_dl(struct ObjView *view) {
     gDPSetScissor(next_gfx(), G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
     gSPClearGeometryMode(next_gfx(), 0xFFFFFFFF);
     gSPSetGeometryMode(next_gfx(), G_LIGHTING | G_CULL_BACK | G_SHADING_SMOOTH | G_SHADE);
-    if (view->flags & VIEW_ALLOC_ZBUF) {
-        gSPSetGeometryMode(next_gfx(), G_ZBUFFER);
-    }
+    if (view->flags & VIEW_ALLOC_ZBUF) gSPSetGeometryMode(next_gfx(), G_ZBUFFER);
     gd_dl_viewport();
     update_render_mode();
     gDPPipeSync(next_gfx());
@@ -1803,7 +1789,7 @@ s32 setup_view_buffers(const char *name, struct ObjView *view) {
     }
 
     view->gdDlNum = 0;
-    view->unk74 = 0;
+    view->unk74   = 0;
 
     if (view->flags & VIEW_DEFAULT_PARENT) view->parent = NULL;
 
@@ -1882,15 +1868,13 @@ void Proc801A5110(struct ObjView *view) {
 
 /* 253938 -> 2539DC; orig name: func_801A5168 */
 void update_view_and_dl(struct ObjView *view) {
-    s32 prevFlags; // 18
+    s32 prevFlags;
 
     prevFlags = view->flags;
     update_view(view);
     if (prevFlags & VIEW_UPDATE) {
         sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
-        if (view->gdDlNum != 0) {
-            func_801A4848(view->gdDlNum);
-        }
+        if (view->gdDlNum != 0) func_801A4848(view->gdDlNum);
     }
 }
 
@@ -1953,10 +1937,10 @@ void gd_init(void) {
     for (i = 0; (u32) i < sizeof(struct GdControl); i++) *data++ = 0;
 
     // 801A5868
-    gGdCtrl.newStartPress = FALSE;
-    gGdCtrl.prevFrame = &gGdCtrlPrev;
-    gGdCtrl.csrX = 160;
-    gGdCtrl.csrY = 120;
+    gGdCtrl.newStartPress  = FALSE;
+    gGdCtrl.prevFrame      = &gGdCtrlPrev;
+    gGdCtrl.csrX           = 160;
+    gGdCtrl.csrY           = 120;
     gGdCtrl.dragStartFrame = -1000;
 }
 
@@ -2005,10 +1989,10 @@ void gd_put_sprite(u16 *sprite, s32 x, s32 y, s32 wx, s32 wy) {
         }
     }
 
-    gDPPipeSync(next_gfx());
-    gDPSetCycleType(next_gfx(), G_CYC_1CYCLE);
+    gDPPipeSync(     next_gfx());
+    gDPSetCycleType( next_gfx(), G_CYC_1CYCLE);
     gDPSetRenderMode(next_gfx(), G_RM_AA_ZB_OPA_INTER, G_RM_NOOP2);
-    gSPTexture(next_gfx(), 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_OFF);
+    gSPTexture(      next_gfx(), 0x8000, 0x8000, 0, G_TX_RENDERTILE, G_OFF);
 }
 
 /* 254DFC -> 254F94; orig name: proc_dyn_list */
@@ -2038,9 +2022,7 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
                           2, 0, 0, 32, 32, mousegrp);
     mouseview->flags &= ~VIEW_UPDATE;
     sHandView = mouseview;
-    if (parentgrp != NULL) {
-        addto_group(parentgrp, &mousegrp->header);
-    }
+    if (parentgrp != NULL) addto_group(parentgrp, &mousegrp->header);
 }
 
 #ifndef NO_SEGMENTED_MEMORY

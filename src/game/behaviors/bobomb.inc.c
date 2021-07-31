@@ -199,7 +199,7 @@ void bobomb_thrown_loop(void) {
     o->oHeldState = HELD_FREE;
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
     o->oForwardVel = 25.0f;
-    o->oVelY = 20.0f;
+    o->oVelY       = 20.0f;
     o->oAction = BOBOMB_ACT_LAUNCHED;
 }
 
@@ -215,7 +215,7 @@ void curr_obj_random_blink(s32 *blinkTimer) {
         if (*blinkTimer >= 11) o->oAnimState = 1;
         if (*blinkTimer >= 16) {
             o->oAnimState = 0;
-            *blinkTimer = 0;
+            *blinkTimer   = 0;
         }
     }
 }
@@ -224,36 +224,18 @@ void bhv_bobomb_loop(void) {
     s8 dustPeriodMinus1;
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 4000) != 0) {
         switch (o->oHeldState) {
-            case HELD_FREE:
-                bobomb_free_loop();
-                break;
-
-            case HELD_HELD:
-                bobomb_held_loop();
-                break;
-
-            case HELD_THROWN:
-                bobomb_thrown_loop();
-                break;
-
-            case HELD_DROPPED:
-                bobomb_dropped_loop();
-                break;
+            case HELD_FREE:    bobomb_free_loop();    break;
+            case HELD_HELD:    bobomb_held_loop();    break;
+            case HELD_THROWN:  bobomb_thrown_loop();  break;
+            case HELD_DROPPED: bobomb_dropped_loop(); break;
         }
 
         curr_obj_random_blink(&o->oBobombBlinkTimer);
 
         if (o->oBobombFuseLit) {
-            if (o->oBobombFuseTimer >= 121) {
-                dustPeriodMinus1 = 1;
-            } else {
-                dustPeriodMinus1 = 7;
-            }
-            if (!(dustPeriodMinus1 & o->oBobombFuseTimer)) {/* oBobombFuseTimer % 2 or oBobombFuseTimer % 8 */
-                spawn_object(o, MODEL_SMOKE, bhvBobombFuseSmoke);
-            }
+            dustPeriodMinus1 = (o->oBobombFuseTimer >= 121) ? 1 : 7;
+            if (!(dustPeriodMinus1 & o->oBobombFuseTimer)) spawn_object(o, MODEL_SMOKE, bhvBobombFuseSmoke); /* oBobombFuseTimer % 2 or oBobombFuseTimer % 8 */
             cur_obj_play_sound_1(SOUND_AIR_BOBOMB_LIT_FUSE);
-
             o->oBobombFuseTimer++;
         }
     }
@@ -375,17 +357,9 @@ void bobomb_buddy_act_turn_to_talk(void) {
 
 void bobomb_buddy_actions(void) {
     switch (o->oAction) {
-        case BOBOMB_BUDDY_ACT_IDLE:
-            bobomb_buddy_act_idle();
-            break;
-
-        case BOBOMB_BUDDY_ACT_TURN_TO_TALK:
-            bobomb_buddy_act_turn_to_talk();
-            break;
-
-        case BOBOMB_BUDDY_ACT_TALK:
-            bobomb_buddy_act_talk();
-            break;
+        case BOBOMB_BUDDY_ACT_IDLE:         bobomb_buddy_act_idle();         break;
+        case BOBOMB_BUDDY_ACT_TURN_TO_TALK: bobomb_buddy_act_turn_to_talk(); break;
+        case BOBOMB_BUDDY_ACT_TALK:         bobomb_buddy_act_talk();         break;
     }
 
     set_object_visibility(o, 3000);

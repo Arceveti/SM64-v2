@@ -48,11 +48,7 @@ void bhv_animates_on_floor_switch_press_loop(void) {
     }
 
     if (o->oFloorSwitchPressAnimationTickTimer != 0) {
-        if (o->oFloorSwitchPressAnimationTickTimer < 60) {
-            cur_obj_play_sound_1(SOUND_GENERAL2_SWITCH_TICK_SLOW);
-        } else {
-            cur_obj_play_sound_1(SOUND_GENERAL2_SWITCH_TICK_FAST);
-        }
+        cur_obj_play_sound_1((o->oFloorSwitchPressAnimationTickTimer < 60) ? SOUND_GENERAL2_SWITCH_TICK_SLOW : SOUND_GENERAL2_SWITCH_TICK_FAST);
 
         if (--o->oFloorSwitchPressAnimationTickTimer == 0) o->oFloorSwitchPressAnimationDoResetTime = FALSE;
         if (o->oFloorSwitchPressAnimationDoubleFrame < 9) o->oFloorSwitchPressAnimationDoubleFrame++;
@@ -61,8 +57,7 @@ void bhv_animates_on_floor_switch_press_loop(void) {
         o->oFloorSwitchPressAnimationDoResetTime = TRUE;
     }
 
-    o->collisionData = segmented_to_virtual(
-        sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].collisionData);
+    o->collisionData = segmented_to_virtual(sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].collisionData);
 
     cur_obj_set_model(sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].model);
 }

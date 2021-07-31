@@ -98,7 +98,7 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     struct Object *newObj;
     struct LoadedPreset preset;
 
-    gMacroObjectDefaultParent.header.gfx.areaIndex = areaIndex;
+    gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
 
     while (TRUE) {
@@ -139,9 +139,9 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                           0                                               // Z-rotation
                 );
 
-            newObj->oUnk1A8    = macroObject[MACRO_OBJ_PARAMS];
-            newObj->oBehParams = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16)
-                                + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
+            newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];
+            newObj->oBehParams        = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16)
+                                       + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
             newObj->oBehParams2ndByte = macroObject[MACRO_OBJ_PARAMS] & 0x00FF;
             newObj->respawnInfoType   = RESPAWN_INFO_TYPE_16;
             newObj->respawnInfo       = macroObjList - 1;

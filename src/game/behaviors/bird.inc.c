@@ -26,7 +26,7 @@ static void bird_act_inactive(void) {
             for (i = 0; i < 6; i++) spawn_object(o, MODEL_BIRDS, bhvBird);
 
             // The spawner bird's home acts as its target location.
-            o->oHomeX = -20.0f;
+            o->oHomeX =   -20.0f;
             o->oHomeZ = -3990.0f;
         }
 
@@ -86,8 +86,8 @@ static void bird_act_fly(void) {
         }
 
         // Approach to match the bird's target yaw and pitch.
-        obj_move_pitch_approach(o->oBirdTargetPitch, 140);
-        cur_obj_rotate_yaw_toward(o->oBirdTargetYaw, 800);
+        obj_move_pitch_approach( o->oBirdTargetPitch, 140);
+        cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 800);
         obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 600);
     }
 
@@ -105,11 +105,7 @@ static void bird_act_fly(void) {
  */
 void bhv_bird_update(void) {
     switch (o->oAction) {
-        case BIRD_ACT_INACTIVE:
-            bird_act_inactive();
-            break;
-        case BIRD_ACT_FLY:
-            bird_act_fly();
-            break;
+        case BIRD_ACT_INACTIVE: bird_act_inactive(); break;
+        case BIRD_ACT_FLY:      bird_act_fly();      break;
     }
 }

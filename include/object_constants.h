@@ -1110,6 +1110,17 @@
     #define FIRE_SPITTER_ACT_IDLE      0
     #define FIRE_SPITTER_ACT_SPIT_FIRE 1
 
+/* Bouncing Fireball Flame */
+    /* oAction */
+    #define BOUNCING_FLAME_ACT_SPAWNED  0
+    #define BOUNCING_FLAME_ACT_LANDED   1
+
+/* Bouncing Fireball */
+    /* oAction */
+    #define BOUNCING_FIREBALL_SPAWNER_ACT_IDLE          0
+    #define BOUNCING_FIREBALL_SPAWNER_ACT_SPAWN_FLAME   1
+    #define BOUNCING_FIREBALL_SPAWNER_ACT_COOLDOWN      2
+
 /* Eyerok boss */
     /* oAction */
     #define EYEROK_BOSS_ACT_SLEEP           0
@@ -1269,6 +1280,14 @@
     #define BOWSER_PUZZLE_ACT_SPAWN_PIECES      0
     #define BOWSER_PUZZLE_ACT_WAIT_FOR_COMPLETE 1
     #define BOWSER_PUZZLE_ACT_DONE              2
+
+/* Bowser Puzzle Piece */
+    /* oAction */
+    #define BOWSER_PUZZLE_PIECE_ACT_IDLE  0
+    #define BOWSER_PUZZLE_PIECE_ACT_LEFT  1
+    #define BOWSER_PUZZLE_PIECE_ACT_RIGHT 2
+    #define BOWSER_PUZZLE_PIECE_ACT_UP    3
+    #define BOWSER_PUZZLE_PIECE_ACT_DOWN  4
 
 /* Mr Blizzard */
     /* oAction */

@@ -154,9 +154,9 @@ static void homing_amp_give_up_loop(void) {
         o->oPosY = o->oHomeY;
         o->oPosZ = o->oHomeZ;
         o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-        o->oAction = HOMING_AMP_ACT_INACTIVE;
-        o->oAnimState = 0;
-        o->oForwardVel = 0;
+        o->oAction        = HOMING_AMP_ACT_INACTIVE;
+        o->oAnimState     = 0;
+        o->oForwardVel    = 0;
         o->oHomingAmpAvgY = o->oHomeY;
     }
 }
@@ -228,20 +228,10 @@ void bhv_circling_amp_init(void) {
 
     // Determine the radius of the circling amp's circle
     switch (o->oBehParams2ndByte) {
-        case AMP_BP_ROT_RADIUS_200:
-            o->oAmpRadiusOfRotation = 200.0f;
-            break;
-
-        case AMP_BP_ROT_RADIUS_300:
-            o->oAmpRadiusOfRotation = 300.0f;
-            break;
-
-        case AMP_BP_ROT_RADIUS_400:
-            o->oAmpRadiusOfRotation = 400.0f;
-            break;
-
-        case AMP_BP_ROT_RADIUS_0:
-            break;
+        case AMP_BP_ROT_RADIUS_200: o->oAmpRadiusOfRotation = 200.0f; break;
+        case AMP_BP_ROT_RADIUS_300: o->oAmpRadiusOfRotation = 300.0f; break;
+        case AMP_BP_ROT_RADIUS_400: o->oAmpRadiusOfRotation = 400.0f; break;
+        case AMP_BP_ROT_RADIUS_0: break;
     }
 
     // Choose a random point along the amp's circle.
@@ -257,9 +247,9 @@ void bhv_circling_amp_init(void) {
  */
 static void fixed_circling_amp_idle_loop(void) {
     // Turn towards Mario, in both yaw and pitch.
-    f32 xToMario = gMarioObject->header.gfx.pos[0] - o->oPosX;
+    f32 xToMario = gMarioObject->header.gfx.pos[0]          - o->oPosX;
     f32 yToMario = gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY;
-    f32 zToMario = gMarioObject->header.gfx.pos[2] - o->oPosZ;
+    f32 zToMario = gMarioObject->header.gfx.pos[2]          - o->oPosZ;
     s16 vAngleToMario = atan2s(sqrtf(xToMario * xToMario + zToMario * zToMario), -yToMario);
 
     obj_turn_toward_object(o, gMarioObject, 19, 0x1000);

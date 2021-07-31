@@ -137,7 +137,7 @@ static void beta_boo_key_drop(void) {
     }
 
     // Rotate the key
-    o->oFaceAngleYaw += 0x200;
+    o->oFaceAngleYaw  += 0x200;
     o->oFaceAngleRoll += 0x200;
 }
 

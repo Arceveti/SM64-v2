@@ -26,9 +26,7 @@ void bhv_hidden_blue_coin_loop(void) {
             // Wait until the blue coin switch starts ticking to activate.
             blueCoinSwitch = o->oHiddenBlueCoinSwitch;
 
-            if (blueCoinSwitch->oAction == BLUE_COIN_SWITCH_ACT_TICKING) {
-                o->oAction = HIDDEN_BLUE_COIN_ACT_ACTIVE;
-            }
+            if (blueCoinSwitch->oAction == BLUE_COIN_SWITCH_ACT_TICKING) o->oAction = HIDDEN_BLUE_COIN_ACT_ACTIVE;
 
             break;
         case HIDDEN_BLUE_COIN_ACT_ACTIVE:
@@ -105,8 +103,9 @@ void bhv_blue_coin_switch_loop(void) {
 #endif
                 // Set to BLUE_COIN_SWITCH_ACT_TICKING
                 o->oAction++;
-                // ???
+
 #ifdef BLUE_COIN_SWITCH_RETRY
+                // ???
                 o->oVelY = 0.0f;
                 o->oGravity = 0.0f;
 #else
@@ -125,11 +124,7 @@ void bhv_blue_coin_switch_loop(void) {
             break;
         case BLUE_COIN_SWITCH_ACT_TICKING:
             // Tick faster when the blue coins start blinking
-            if (o->oTimer < 200) {
-                play_sound(SOUND_GENERAL2_SWITCH_TICK_FAST, gGlobalSoundSource);
-            } else {
-                play_sound(SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
-            }
+            play_sound((o->oTimer < 200) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
 #ifdef BLUE_COIN_SWITCH_RETRY
             if (cur_obj_nearest_object_with_behavior(bhvHiddenBlueCoin) == NULL) {
                 spawn_mist_particles_variable(0, 0, 46.0f);
@@ -137,8 +132,8 @@ void bhv_blue_coin_switch_loop(void) {
             // Set to BLUE_COIN_SWITCH_ACT_EXTENDING after the coins unload after the 240-frame timer expires.
             } else if (o->oTimer > 240) {
                 o->oAction++;
-                o->oVelY = 16.0f;
-                o->oGravity = 0.0f;
+                o->oVelY    = 16.0f;
+                o->oGravity =  0.0f;
             }
             load_object_collision_model();
             break;

@@ -1740,18 +1740,9 @@ static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
         if (animFrame >= 3) marioObj->rawData.asF32[0x22] -= 32.0f;
 
         switch (animFrame) {
-            case 3:
-                play_sound(SOUND_MARIO_YAH_WAH_HOO + (gAudioRandom % 3 << 16),
-                           m->marioObj->header.gfx.cameraToObject);
-                break;
-
-            case 28:
-                play_sound(SOUND_MARIO_HOOHOO, m->marioObj->header.gfx.cameraToObject);
-                break;
-
-            case 60:
-                play_sound(SOUND_MARIO_YAHOO, m->marioObj->header.gfx.cameraToObject);
-                break;
+            case  3: play_sound(SOUND_MARIO_YAH_WAH_HOO + (gAudioRandom % 3 << 16), m->marioObj->header.gfx.cameraToObject); break;
+            case 28: play_sound(SOUND_MARIO_HOOHOO                                , m->marioObj->header.gfx.cameraToObject); break;
+            case 60: play_sound(SOUND_MARIO_YAHOO                                 , m->marioObj->header.gfx.cameraToObject); break;
         }
         m->particleFlags |= PARTICLE_SPARKLES;
 

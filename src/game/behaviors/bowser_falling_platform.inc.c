@@ -27,18 +27,12 @@ void falling_bowser_plat_act_start(void) {
 
 void falling_bowser_plat_act_check(void) {
     struct Object *bowser = o->oBitsPlatformBowser;
-    if (bowser->platform == o && bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus & BOWSER_STATUS_BIG_JUMP) {
-        o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
-    }
-    if (bowser->oHealth == 1 && (bowser->oAction == BOWSER_ACT_DANCE || bowser->oHeldState != HELD_FREE)) {
-        o->oSubAction = 1;
-    }
+    if (bowser->platform == o && bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus & BOWSER_STATUS_BIG_JUMP) o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
+    if (bowser->oHealth == 1 && (bowser->oAction == BOWSER_ACT_DANCE    || bowser->oHeldState != HELD_FREE)) o->oSubAction = 1;
     if (o->oSubAction == 0) {
         o->oBitsPlatformTimer = 0;
     } else {
-        if ((gDebugInfo[4][6] + 20) * (o->oBehParams2ndByte - 1) < o->oBitsPlatformTimer) {
-            o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
-        }
+        if ((gDebugInfo[4][6] + 20) * (o->oBehParams2ndByte - 1) < o->oBitsPlatformTimer) o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
         o->oBitsPlatformTimer++;
     }
 }

@@ -34,24 +34,20 @@ s32 bowser_flame_should_despawn(s32 maxTime) {
 }
 
 void bhv_flame_bowser_init(void) {
-    o->oAnimState = (s32)(random_float() * 10.0f);
+    o->oAnimState    = (s32)(random_float() * 10.0f);
     o->oMoveAngleYaw = random_u16();
-    if (random_float() < 0.2f) {
-        o->oVelY = 80.0f;
-    } else {
-        o->oVelY = 20.0f;
-    }
-    o->oForwardVel = 10.0f;
-    o->oGravity = -1.0f;
-    o->oFlameScale = random_float() + 1.0f;
+    o->oVelY         = ((random_float() < 0.2f) ? 80.0f : 20.0f);
+    o->oForwardVel   = 10.0f;
+    o->oGravity      = -1.0f;
+    o->oFlameScale   = random_float() + 1.0f;
 }
 
 void bhv_flame_large_burning_out_init(void) {
-    o->oAnimState = (s32)(random_float() * 10.0f);
+    o->oAnimState    = (s32)(random_float() * 10.0f);
     o->oMoveAngleYaw = random_u16();
-    o->oVelY = 10.0f;
-    o->oForwardVel = 0.0f;
-    o->oFlameScale = 7.0f;
+    o->oVelY         = 10.0f;
+    o->oForwardVel   = 0.0f;
+    o->oFlameScale   = 7.0f;
 }
 
 void bowser_flame_move(void) {
@@ -74,9 +70,9 @@ void bhv_flame_bowser_loop(void) {
             } else {
                 o->oFlameScale = random_float() * 2 + 6.0f;
             }
-            o->oForwardVel = 0;
-            o->oVelY = 0;
-            o->oGravity = 0;
+            o->oForwardVel = 0.0f;
+            o->oVelY       = 0;
+            o->oGravity    = 0;
         }
     } else {
         cur_obj_become_tangible();
@@ -93,7 +89,7 @@ void bhv_flame_bowser_loop(void) {
 void bhv_flame_moving_forward_growing_init(void) {
     o->oForwardVel = 30.0f;
     obj_translate_xz_random(o, 80.0f);
-    o->oAnimState = (s32)(random_float() * 10.0f);
+    o->oAnimState  = (s32)(random_float() * 10.0f);
     o->oFlameScale = 3.0f;
 }
 
@@ -114,16 +110,12 @@ void bhv_flame_moving_forward_growing_loop(void) {
 }
 
 void bhv_flame_floating_landing_init(void) {
-    o->oAnimState = (s32)(random_float() * 10.0f);
-    o->oMoveAngleYaw = random_u16();
-    if (o->oBehParams2ndByte != 0) {
-        o->oForwardVel = random_float() * 5.0f;
-    } else {
-        o->oForwardVel = random_float() * 70.0f;
-    }
-    o->oVelY = random_float() * 20.0f;
-    o->oGravity = -1.0f;
-    o->oFlameSpeedTimerOffset = random_float() * 64.0f;
+    o->oAnimState             = (s32)(random_float() * 10.0f);
+    o->oMoveAngleYaw          =       random_u16();
+    o->oForwardVel            =       random_float() * (o->oBehParams2ndByte != 0 ? 5.0f : 70.0f);
+    o->oVelY                  =       random_float() * 20.0f;
+    o->oGravity               =                        -1.0f;
+    o->oFlameSpeedTimerOffset =       random_float() * 64.0f;
 }
 
 f32 sFlameFloatingYLimit[] = { -8.0f, -6.0f, -3.0f };
@@ -149,12 +141,12 @@ void bhv_flame_floating_landing_loop(void) {
 
 void bhv_blue_bowser_flame_init(void) {
     obj_translate_xz_random(o, 80.0f);
-    o->oAnimState = (s32)(random_float() * 10.0f);
-    o->oVelY = 7.0f;
-    o->oForwardVel = 35.0f;
-    o->oFlameScale = 3.0f;
-    o->oFlameUnusedRand = random_float() * 0.5f;
-    o->oGravity = 1.0f;
+    o->oAnimState             = (s32)(random_float() * 10.0f);
+    o->oVelY                  =  7.0f;
+    o->oForwardVel            = 35.0f;
+    o->oFlameScale            =  3.0f;
+    o->oFlameUnusedRand       = random_float() * 0.5f;
+    o->oGravity               =  1.0f;
     o->oFlameSpeedTimerOffset = (s32)(random_float() * 64.0f);
 }
 
@@ -177,8 +169,8 @@ void bhv_blue_bowser_flame_loop(void) {
 }
 
 void bhv_flame_bouncing_init(void) {
-    o->oAnimState = (s32)(random_float() * 10.0f);
-    o->oVelY = 30.0f;
+    o->oAnimState  = (s32)(random_float() * 10.0f);
+    o->oVelY       = 30.0f;
     o->oForwardVel = 20.0f;
     o->oFlameScale = o->header.gfx.scale[0];
     o->oFlameSpeedTimerOffset = (s32)(random_float() * 64.0f);

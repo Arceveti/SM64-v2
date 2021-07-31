@@ -10,7 +10,7 @@ void bhv_big_boulder_init(void) {
     o->oBuoyancy = 2.0f;
 }
 
-void boulder_act_1(void) {
+void boulder_act_roll_loop(void) {
     s16 collisionFlags;
 
     collisionFlags = object_step_without_floor_orient();
@@ -27,13 +27,13 @@ void bhv_big_boulder_loop(void) {
     cur_obj_scale(1.5f);
     o->oGraphYOffset = 270.0f;
     switch (o->oAction) {
-        case 0:
+        case BBALL_ACT_INITIALIZE:
             o->oForwardVel = 40.0f;
-            o->oAction = 1;
+            o->oAction     = BBALL_ACT_ROLL;
             break;
 
-        case 1:
-            boulder_act_1();
+        case BBALL_ACT_ROLL:
+            boulder_act_roll_loop();
             adjust_rolling_face_pitch(1.5f);
             cur_obj_play_sound_1(SOUND_ENV_UNKNOWN2);
             break;

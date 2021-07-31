@@ -178,9 +178,7 @@ void animate_power_meter_emphasized(void) {
     hudDisplayFlags = gHudDisplay.flags;
 
     if (!(hudDisplayFlags & HUD_DISPLAY_FLAG_EMPHASIZE_POWER)) {
-        if (sPowerMeterVisibleTimer == 45) {
-            sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
-        }
+        if (sPowerMeterVisibleTimer == 45) sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
     } else {
         sPowerMeterVisibleTimer = 0;
     }
@@ -239,7 +237,7 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     // If Mario is swimming, keep power meter visible
     if (gPlayerCameraState->action & ACT_FLAG_SWIMMING) {
         if (sPowerMeterHUD.animation == POWER_METER_HIDDEN
-            || sPowerMeterHUD.animation == POWER_METER_EMPHASIZED) {
+         || sPowerMeterHUD.animation == POWER_METER_EMPHASIZED) {
             sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
             sPowerMeterHUD.y = 166;
         }
@@ -255,11 +253,8 @@ void handle_power_meter_actions(s16 numHealthWedges) {
 void render_hud_power_meter(void) {
     s16 shownHealthWedges = gHudDisplay.wedges;
 
-    if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) {
-        return;
-    } else {
-        handle_power_meter_actions(shownHealthWedges);
-    }
+    if (sPowerMeterHUD.animation != POWER_METER_HIDING) handle_power_meter_actions(shownHealthWedges);
+    if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) return;
 
     switch (sPowerMeterHUD.animation) {
         case POWER_METER_EMPHASIZED:
