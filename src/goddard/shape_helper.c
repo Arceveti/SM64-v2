@@ -21,15 +21,15 @@
 #endif
 
 // data
-struct ObjGroup *gMarioFaceGrp = NULL;     // @ 801A82E0; returned by load_dynlist
-struct ObjShape *gSpotShape = NULL;        // Shape used for drawing lights?
+struct        ObjGroup *gMarioFaceGrp       = NULL; // @ 801A82E0; returned by load_dynlist
+struct        ObjShape *gSpotShape          = NULL;  // Shape used for drawing lights?
 static struct ObjShape *sGrabJointTestShape = NULL; // Test shape for showing grab joints. This isn't rendered due to make_grabber_joint setting the drawFlags to OBJ_INVISIBLE.
-struct ObjShape *gShapeRedSpark = NULL;    // @ 801A82EC
-struct ObjShape *gShapeSilverSpark = NULL;    // @ 801A82F0
-struct ObjShape *gShapeRedStar = NULL;     // @ 801A82F4
-struct ObjShape *gShapeSilverStar = NULL;  // @ 801A82F8
-static struct ObjShape *sGdShapeListHead; // @ 801BAC50
-static u32 sGdShapeCount;                 // @ 801BAC54
+struct        ObjShape *gShapeRedSpark      = NULL; // @ 801A82EC
+struct        ObjShape *gShapeSilverSpark   = NULL; // @ 801A82F0
+struct        ObjShape *gShapeRedStar       = NULL; // @ 801A82F4
+struct        ObjShape *gShapeSilverStar    = NULL; // @ 801A82F8
+static struct ObjShape *sGdShapeListHead;           // @ 801BAC50
+static             u32  sGdShapeCount;              // @ 801BAC54
 /// factor for scaling vertices in an `ObjShape` when calling `scale_verts_in_shape()`
 static struct GdVec3f sVertexScaleFactor;
 
@@ -146,11 +146,7 @@ struct ObjShape *make_shape(const char *name) {
 
     newShape = (struct ObjShape *) make_object(OBJ_TYPE_SHAPES);
 
-    if (name != NULL) {
-        gd_strcpy(newShape->name, name);
-    } else {
-        gd_strcpy(newShape->name, "x");
-    }
+    gd_strcpy(newShape->name, (name != NULL) ? name : "x");
 
     sGdShapeCount++;
 
@@ -165,20 +161,20 @@ struct ObjShape *make_shape(const char *name) {
     newShape->id = sGdShapeCount;
     newShape->flag = 0;
 
-    newShape->vtxCount = 0;
+    newShape->vtxCount  = 0;
     newShape->faceCount = 0;
     newShape->dlNums[0] = 0;
     newShape->dlNums[1] = 0;
-    newShape->unk3C = 0;
+    newShape->unk3C     = 0;
     newShape->faceGroup = NULL; /* whoops, NULL-ed twice */
 
-    newShape->alpha = 1.0f;
+    newShape->alpha     = 1.0f;
 
-    newShape->vtxGroup = NULL;
+    newShape->vtxGroup  = NULL;
     newShape->faceGroup = NULL;
-    newShape->mtlGroup = NULL;
-    newShape->unk30 = 0;
-    newShape->unk50 = 0;
+    newShape->mtlGroup  = NULL;
+    newShape->unk30     = 0;
+    newShape->unk50     = 0;
 
     return newShape;
 }
@@ -196,7 +192,7 @@ void scale_obj_position(struct GdObj *obj) {
     pos.y *= sVertexScaleFactor.y;
     pos.z *= sVertexScaleFactor.z;
 
-    d_set_rel_pos(pos.x, pos.y, pos.z);
+    d_set_rel_pos( pos.x, pos.y, pos.z);
     d_set_init_pos(pos.x, pos.y, pos.z);
 }
 
@@ -206,9 +202,7 @@ void scale_verts_in_shape(struct ObjShape *shape, f32 x, f32 y, f32 z) {
     sVertexScaleFactor.y = y;
     sVertexScaleFactor.z = z;
 
-    if (shape->vtxGroup != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) scale_obj_position, shape->vtxGroup);
-    }
+    if (shape->vtxGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) scale_obj_position, shape->vtxGroup);
 }
 
 /**
@@ -250,18 +244,14 @@ void animate_mario_head_normal(struct ObjAnimator *self) {
             self->nods = 5;
             break;
         case 2:
-            if (aBtnPressed) {
-                state = 5;
-            }
+            if (aBtnPressed) state = 5;
 
             self->frame += 1.0f;
 
             if (self->frame == 810.0f) {
                 self->frame = 750.0f;
                 self->nods--;
-                if (self->nods == 0) {
-                    state = 3;
-                }
+                if (self->nods == 0) state = 3;
             }
             break;
         case 3:
@@ -297,9 +287,7 @@ void animate_mario_head_normal(struct ObjAnimator *self) {
                 self->stillTimer = 300;
             } else {
                 self->stillTimer--;
-                if (self->stillTimer == 0) {
-                    state = 6;
-                }
+                if (self->stillTimer == 0) state = 6;
             }
             self->frame = 660.0f;
             break;
@@ -309,9 +297,7 @@ void animate_mario_head_normal(struct ObjAnimator *self) {
             break;
     }
 
-    if (state != 0) {
-        self->state = state;
-    }
+    if (state != 0) self->state = state;
 }
 
 /**
@@ -319,13 +305,13 @@ void animate_mario_head_normal(struct ObjAnimator *self) {
  * sparkle particles
  */
 s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
-    struct ObjNet *sp54; // net made with sp48 group
-    struct ObjGroup *sp48; // Joint group
-    struct ObjGroup *mainShapesGrp;
-    struct GdObj *sp38;       // object list head before making a bunch of joints
-    struct GdObj *faceJoint;        // joint on the face that `grabberJoint` pulls
-    struct ObjJoint *grabberJoint;  // joint that's dragged by the cursor
-    struct ObjCamera *camera;
+    struct ObjNet      *sp54; // net made with sp48 group
+    struct ObjGroup    *sp48; // Joint group
+    struct ObjGroup    *mainShapesGrp;
+    struct GdObj       *sp38;         // object list head before making a bunch of joints
+    struct GdObj       *faceJoint;    // joint on the face that `grabberJoint` pulls
+    struct ObjJoint    *grabberJoint; // joint that's dragged by the cursor
+    struct ObjCamera   *camera;
     struct ObjAnimator *animator;
     struct ObjParticle *particle;
 
@@ -343,12 +329,12 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     // Make camera
 
     camera = (struct ObjCamera *) d_makeobj(D_CAMERA, NULL);
-    d_set_rel_pos(0.0f, 200.0f, 2000.0f);
+    d_set_rel_pos(  0.0f, 200.0f, 2000.0f);
     d_set_world_pos(0.0f, 200.0f, 2000.0f);
     d_set_flags(4);
-    camera->lookAt.x = 0.0f;
+    camera->lookAt.x =   0.0f;
     camera->lookAt.y = 200.0f;
-    camera->lookAt.z = 0.0f;
+    camera->lookAt.z =   0.0f;
 
     addto_group(gMarioFaceGrp, &camera->header);
     addto_group(gMarioFaceGrp, &animator->header);

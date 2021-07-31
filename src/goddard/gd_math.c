@@ -249,7 +249,7 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
  */
 f32 gd_clamp_f32(f32 a, f32 b) {
     if (b < a) {
-        a = b;
+        a =  b;
     } else if (a < -b) {
         a = -b;
     }
@@ -430,38 +430,22 @@ void gd_adjunct_mat4f(Mat4f *src, Mat4f *dst) {
     inv.r1.c0 = (*src)[3][2];
     inv.r0.c0 = (*src)[3][3];
 
-    (*dst)[0][0] = gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0, inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                                 inv.r0.c2, inv.r0.c1, inv.r0.c0);
-    (*dst)[1][0] = -gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                                  inv.r0.c2, inv.r0.c1, inv.r0.c0);
-    (*dst)[2][0] = gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                                 inv.r0.c2, inv.r0.c1, inv.r0.c0);
-    (*dst)[3][0] = -gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                                  inv.r1.c2, inv.r1.c1, inv.r1.c0);
-    (*dst)[0][1] = -gd_3x3_det(inv.r2.c3, inv.r2.c1, inv.r2.c0, inv.r1.c3, inv.r1.c1, inv.r1.c0,
-                                  inv.r0.c3, inv.r0.c1, inv.r0.c0);
-    (*dst)[1][1] = gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r1.c3, inv.r1.c1, inv.r1.c0,
-                                 inv.r0.c3, inv.r0.c1, inv.r0.c0);
-    (*dst)[2][1] = -gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r2.c3, inv.r2.c1, inv.r2.c0,
-                                  inv.r0.c3, inv.r0.c1, inv.r0.c0);
-    (*dst)[3][1] = gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r2.c3, inv.r2.c1, inv.r2.c0,
-                                 inv.r1.c3, inv.r1.c1, inv.r1.c0);
-    (*dst)[0][2] = gd_3x3_det(inv.r2.c3, inv.r2.c2, inv.r2.c0, inv.r1.c3, inv.r1.c2, inv.r1.c0,
-                                 inv.r0.c3, inv.r0.c2, inv.r0.c0);
-    (*dst)[1][2] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r1.c3, inv.r1.c2, inv.r1.c0,
-                                  inv.r0.c3, inv.r0.c2, inv.r0.c0);
-    (*dst)[2][2] = gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r2.c3, inv.r2.c2, inv.r2.c0,
-                                 inv.r0.c3, inv.r0.c2, inv.r0.c0);
-    (*dst)[3][2] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r2.c3, inv.r2.c2, inv.r2.c0,
-                                  inv.r1.c3, inv.r1.c2, inv.r1.c0);
-    (*dst)[0][3] = -gd_3x3_det(inv.r2.c3, inv.r2.c2, inv.r2.c1, inv.r1.c3, inv.r1.c2, inv.r1.c1,
-                                  inv.r0.c3, inv.r0.c2, inv.r0.c1);
-    (*dst)[1][3] = gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r1.c3, inv.r1.c2, inv.r1.c1,
-                                 inv.r0.c3, inv.r0.c2, inv.r0.c1);
-    (*dst)[2][3] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r2.c3, inv.r2.c2, inv.r2.c1,
-                                  inv.r0.c3, inv.r0.c2, inv.r0.c1);
-    (*dst)[3][3] = gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r2.c3, inv.r2.c2, inv.r2.c1,
-                                 inv.r1.c3, inv.r1.c2, inv.r1.c1);
+    (*dst)[0][0] =  gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0, inv.r1.c2, inv.r1.c1, inv.r1.c0, inv.r0.c2, inv.r0.c1, inv.r0.c0);
+    (*dst)[1][0] = -gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r1.c2, inv.r1.c1, inv.r1.c0, inv.r0.c2, inv.r0.c1, inv.r0.c0);
+    (*dst)[2][0] =  gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r2.c2, inv.r2.c1, inv.r2.c0, inv.r0.c2, inv.r0.c1, inv.r0.c0);
+    (*dst)[3][0] = -gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0, inv.r2.c2, inv.r2.c1, inv.r2.c0, inv.r1.c2, inv.r1.c1, inv.r1.c0);
+    (*dst)[0][1] = -gd_3x3_det(inv.r2.c3, inv.r2.c1, inv.r2.c0, inv.r1.c3, inv.r1.c1, inv.r1.c0, inv.r0.c3, inv.r0.c1, inv.r0.c0);
+    (*dst)[1][1] =  gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r1.c3, inv.r1.c1, inv.r1.c0, inv.r0.c3, inv.r0.c1, inv.r0.c0);
+    (*dst)[2][1] = -gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r2.c3, inv.r2.c1, inv.r2.c0, inv.r0.c3, inv.r0.c1, inv.r0.c0);
+    (*dst)[3][1] =  gd_3x3_det(inv.r3.c3, inv.r3.c1, inv.r3.c0, inv.r2.c3, inv.r2.c1, inv.r2.c0, inv.r1.c3, inv.r1.c1, inv.r1.c0);
+    (*dst)[0][2] =  gd_3x3_det(inv.r2.c3, inv.r2.c2, inv.r2.c0, inv.r1.c3, inv.r1.c2, inv.r1.c0, inv.r0.c3, inv.r0.c2, inv.r0.c0);
+    (*dst)[1][2] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r1.c3, inv.r1.c2, inv.r1.c0, inv.r0.c3, inv.r0.c2, inv.r0.c0);
+    (*dst)[2][2] =  gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r2.c3, inv.r2.c2, inv.r2.c0, inv.r0.c3, inv.r0.c2, inv.r0.c0);
+    (*dst)[3][2] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c0, inv.r2.c3, inv.r2.c2, inv.r2.c0, inv.r1.c3, inv.r1.c2, inv.r1.c0);
+    (*dst)[0][3] = -gd_3x3_det(inv.r2.c3, inv.r2.c2, inv.r2.c1, inv.r1.c3, inv.r1.c2, inv.r1.c1, inv.r0.c3, inv.r0.c2, inv.r0.c1);
+    (*dst)[1][3] =  gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r1.c3, inv.r1.c2, inv.r1.c1, inv.r0.c3, inv.r0.c2, inv.r0.c1);
+    (*dst)[2][3] = -gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r2.c3, inv.r2.c2, inv.r2.c1, inv.r0.c3, inv.r0.c2, inv.r0.c1);
+    (*dst)[3][3] =  gd_3x3_det(inv.r3.c3, inv.r3.c2, inv.r3.c1, inv.r2.c3, inv.r2.c2, inv.r2.c1, inv.r1.c3, inv.r1.c2, inv.r1.c1);
 }
 
 /**
@@ -492,15 +476,15 @@ f32 gd_mat4f_det(Mat4f *mtx) {
                 * gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0,
                              inv.r1.c2, inv.r1.c1, inv.r1.c0,
                              inv.r0.c2, inv.r0.c1, inv.r0.c0)
-           - inv.r2.c3
+         - inv.r2.c3
                 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
                              inv.r1.c2, inv.r1.c1, inv.r1.c0,
                              inv.r0.c2, inv.r0.c1, inv.r0.c0))
-          + inv.r1.c3
+         + inv.r1.c3
                 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
                              inv.r2.c2, inv.r2.c1, inv.r2.c0,
                              inv.r0.c2, inv.r0.c1, inv.r0.c0)
-          - inv.r0.c3
+         - inv.r0.c3
                 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
                              inv.r2.c2, inv.r2.c1, inv.r2.c0,
                              inv.r1.c2, inv.r1.c1, inv.r1.c0);
@@ -515,12 +499,9 @@ f32 gd_mat4f_det(Mat4f *mtx) {
 f32 gd_3x3_det(f32 r0c0, f32 r0c1, f32 r0c2,
                f32 r1c0, f32 r1c1, f32 r1c2, 
                f32 r2c0, f32 r2c1, f32 r2c2) {
-    f32 det;
-
-    det = r0c0 * gd_2x2_det(r1c1, r1c2, r2c1, r2c2) - r1c0 * gd_2x2_det(r0c1, r0c2, r2c1, r2c2)
-          + r2c0 * gd_2x2_det(r0c1, r0c2, r1c1, r1c2);
-
-    return det;
+    return r0c0 * gd_2x2_det(r1c1, r1c2, r2c1, r2c2)
+         - r1c0 * gd_2x2_det(r0c1, r0c2, r2c1, r2c2)
+         + r2c0 * gd_2x2_det(r0c1, r0c2, r1c1, r1c2);
 }
 
 /**
@@ -528,9 +509,7 @@ f32 gd_3x3_det(f32 r0c0, f32 r0c1, f32 r0c2,
  * returns the determinant.
  */
 f32 gd_2x2_det(f32 a, f32 b, f32 c, f32 d) {
-    f32 det = a * d - b * c;
-
-    return det;
+    return (a * d - b * c);
 }
 
 /**
@@ -541,9 +520,8 @@ void gd_shift_mat_up(Mat4f *mtx) {
     s32 j;
     f32 temp[3];
 
-    for (i = 0; i < 3; i++) {
-        temp[i] = (*mtx)[0][i + 1];
-    }
+    for (i = 0; i < 3; i++) temp[i] = (*mtx)[0][i + 1];
+
     for (i = 1; i < 4; i++) {
         for (j = 1; j < 4; j++) {
             (*mtx)[i - 1][j - 1] = (*mtx)[i][j];
@@ -665,9 +643,9 @@ void gd_copy_mat4f(const Mat4f *src, Mat4f *dst) {
 void gd_rotate_and_translate_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
     struct GdVec3f out;
 
-    out.x = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
-    out.y = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
-    out.z = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
+    out.x  = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
+    out.y  = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
+    out.z  = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
     out.x += (*mtx)[3][0];
     out.y += (*mtx)[3][1];
     out.z += (*mtx)[3][2];
@@ -683,9 +661,9 @@ void gd_rotate_and_translate_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
 void gd_mat4f_mult_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
     struct GdVec3f out;
 
-    out.x = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
-    out.y = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
-    out.z = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
+    out.x  = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
+    out.y  = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
+    out.z  = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
 
     vec->x = out.x;
     vec->y = out.y;
@@ -694,7 +672,7 @@ void gd_mat4f_mult_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
 
 #define MAT4_DOT_PROD(A, B, R, row, col)                                                               \
     {                                                                                                  \
-        (R)[(row)][(col)] = (A)[(row)][0] * (B)[0][(col)];                                             \
+        (R)[(row)][(col)]  = (A)[(row)][0] * (B)[0][(col)];                                             \
         (R)[(row)][(col)] += (A)[(row)][1] * (B)[1][(col)];                                            \
         (R)[(row)][(col)] += (A)[(row)][2] * (B)[2][(col)];                                            \
         (R)[(row)][(col)] += (A)[(row)][3] * (B)[3][(col)];                                            \

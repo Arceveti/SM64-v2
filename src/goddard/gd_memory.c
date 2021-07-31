@@ -31,35 +31,20 @@ struct GMemBlock *make_mem_block(u32, u8);
  * to the empty block list.
  */
 void empty_mem_block(struct GMemBlock *block) {
-    if (block->next != NULL) {
-        block->next->prev = block->prev;
-    }
-
-    if (block->prev != NULL) {
-        block->prev->next = block->next;
-    }
+    if (block->next != NULL) block->next->prev = block->prev;
+    if (block->prev != NULL) block->prev->next = block->next;
 
     switch (block->blockType) {
-        case G_MEM_BLOCK_FREE:
-            if (block->prev == NULL) {
-                sFreeBlockListHead = block->next;
-            }
-            break;
-        case G_MEM_BLOCK_USED:
-            if (block->prev == NULL) {
-                sUsedBlockListHead = block->next;
-            }
-            break;
+        case G_MEM_BLOCK_FREE: if (block->prev == NULL) sFreeBlockListHead = block->next; break;
+        case G_MEM_BLOCK_USED: if (block->prev == NULL) sUsedBlockListHead = block->next; break;
     }
 
     block->next = sEmptyBlockListHead;
-    if (block->next != NULL) {
-        sEmptyBlockListHead->prev = block;
-    }
+    if (block->next != NULL) sEmptyBlockListHead->prev = block;
 
     sEmptyBlockListHead = block;
     block->prev = NULL;
-    block->ptr = NULL;
+    block->ptr  = NULL;
     block->size = 0;
 }
 
@@ -74,14 +59,14 @@ struct GMemBlock *into_free_memblock(struct GMemBlock *block) {
     u8 permanence;
     u32 space;
 
-    ptr = block->ptr;
-    space = block->size;
+    ptr        = block->ptr;
+    space      = block->size;
     permanence = block->permFlag;
 
     empty_mem_block(block);
-    freeBlock = make_mem_block(G_MEM_BLOCK_FREE, permanence);
-    freeBlock->ptr = ptr;
-    freeBlock->size = space;
+    freeBlock           = make_mem_block(G_MEM_BLOCK_FREE, permanence);
+    freeBlock->ptr      = ptr;
+    freeBlock->size     = space;
     freeBlock->permFlag = permanence;
 
     return freeBlock;
@@ -103,40 +88,32 @@ struct GMemBlock *make_mem_block(u32 blockType, u8 permFlag) {
     if (sEmptyBlockListHead == NULL) {
         sEmptyBlockListHead = (struct GMemBlock *) gd_allocblock(sizeof(struct GMemBlock));
 
-        if (sEmptyBlockListHead == NULL) {
-            gd_exit(); // unable to allocate
-        }
+        if (sEmptyBlockListHead == NULL) gd_exit(); // unable to allocate
 
         sEmptyBlockListHead->next = NULL;
         sEmptyBlockListHead->prev = NULL;
     }
 
     newMemBlock = sEmptyBlockListHead;
-    if ((sEmptyBlockListHead = newMemBlock->next) != NULL) {
-        newMemBlock->next->prev = NULL;
-    }
+    if ((sEmptyBlockListHead = newMemBlock->next) != NULL) newMemBlock->next->prev = NULL;
 
     switch (blockType) {
         case G_MEM_BLOCK_FREE:
             newMemBlock->next = sFreeBlockListHead;
-            if (newMemBlock->next != NULL) {
-                sFreeBlockListHead->prev = newMemBlock;
-            }
+            if (newMemBlock->next != NULL) sFreeBlockListHead->prev = newMemBlock;
             sFreeBlockListHead = newMemBlock;
             break;
         case G_MEM_BLOCK_USED:
             newMemBlock->next = sUsedBlockListHead;
-            if (newMemBlock->next != NULL) {
-                sUsedBlockListHead->prev = newMemBlock;
-            }
+            if (newMemBlock->next != NULL) sUsedBlockListHead->prev = newMemBlock;
             sUsedBlockListHead = newMemBlock;
             break;
         default:
             gd_exit(); // unkown memblock type
     }
-    newMemBlock->prev = NULL;
+    newMemBlock->prev      = NULL;
     newMemBlock->blockType = (u8) blockType;
-    newMemBlock->permFlag = permFlag;
+    newMemBlock->permFlag  = permFlag;
 
     return newMemBlock;
 }
@@ -188,9 +165,7 @@ void *gd_request_mem(u32 size, u8 permanence) {
             } else {
                 if (curBlock->size > size) {
                     if (foundBlock != NULL) { /* find closest sized block */
-                        if (curBlock->size < foundBlock->size) {
-                            foundBlock = curBlock;
-                        }
+                        if (curBlock->size < foundBlock->size) foundBlock = curBlock;
                     } else {
                         foundBlock = curBlock;
                     }
@@ -203,11 +178,11 @@ void *gd_request_mem(u32 size, u8 permanence) {
     if (foundBlock == NULL) return NULL;
 
     if (foundBlock->size > size) { /* split free block */
-        newBlock->ptr = foundBlock->ptr;
+        newBlock->ptr  = foundBlock->ptr;
         newBlock->size = size;
 
         foundBlock->size -= size;
-        foundBlock->ptr += size;
+        foundBlock->ptr  += size;
     } else if (foundBlock->size == size) { /* recycle whole free block */
         newBlock->ptr = foundBlock->ptr;
         newBlock->size = size;
@@ -239,7 +214,7 @@ struct GMemBlock *gd_add_mem_to_heap(u32 size, void *addr, u8 permanence) {
  * NULL the various `GMemBlock` list heads
  */
 void init_mem_block_lists(void) {
-    sFreeBlockListHead = NULL;
-    sUsedBlockListHead = NULL;
+    sFreeBlockListHead  = NULL;
+    sUsedBlockListHead  = NULL;
     sEmptyBlockListHead = NULL;
 }

@@ -20,9 +20,9 @@
  */
 
 // forward declarations
-void update_shaders(struct ObjShape *, struct GdVec3f *);
+void update_shaders(  struct ObjShape *, struct GdVec3f *);
 void draw_shape_faces(struct ObjShape *);
-void register_light(struct ObjLight *);
+void register_light(  struct ObjLight *);
 
 // types
 /**
@@ -30,7 +30,7 @@ void register_light(struct ObjLight *);
  */
 enum SceneType {
     RENDER_SCENE = 26, ///< render the primitives to screen
-    FIND_PICKS = 27    ///< only check position of primitives relative to cursor click
+    FIND_PICKS   = 27  ///< only check position of primitives relative to cursor click
 };
 
 // data
@@ -95,7 +95,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     if (shape == NULL) return;
 
     vec.x = vec.y = vec.z = 0.0f;
-    if (flag & 2) {
+    if (flag & 0x02) {
         gd_dl_load_trans_matrix(f, g, h);
         vec.x += f;
         vec.y += g;
@@ -109,16 +109,10 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         vec.z += (*rotMtx)[3][2];
     }
 
-    if (flag & 8) {
-        if (m != 0.0f) {
-            func_8019F2C4(m, 121);
-        }
-        if (l != 0.0f) {
-            func_8019F2C4(l, 120);
-        }
-        if (n != 0.0f) {
-            func_8019F2C4(n, 122);
-        }
+    if (flag & 0x08) {
+        if (m != 0.0f) func_8019F2C4(m, 121);
+        if (l != 0.0f) func_8019F2C4(l, 120);
+        if (n != 0.0f) func_8019F2C4(n, 122);
     }
 
     if (colorIdx != 0) {
@@ -145,13 +139,9 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         update_shaders(shape, &vec);
     }
 
-    if (flag & 0x4) {
-        gd_dl_mul_trans_matrix(i, j, k);
-    }
+    if (flag & 0x04) gd_dl_mul_trans_matrix(i, j, k);
 
-    if (flag & 0x1) {
-        gd_dl_scale(c, d, e);
-    }
+    if (flag & 0x01) gd_dl_scale(c, d, e);
 
     draw_shape_faces(shape);
     sUseSelectedColor = FALSE;
@@ -164,13 +154,11 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 pos
 
     if (shape == NULL) return;
 
-    if (flag & 2) {
+    if (flag & 0x02) {
         pos.x = posX;
         pos.y = posY;
         pos.z = posZ;
-        if (gViewUpdateCamera != NULL) {
-            gd_rotate_and_translate_vec3f(&pos, &gViewUpdateCamera->unkE8);
-        }
+        if (gViewUpdateCamera != NULL) gd_rotate_and_translate_vec3f(&pos, &gViewUpdateCamera->unkE8);
         gd_dl_load_trans_matrix(pos.x, pos.y, pos.z);
     }
     draw_shape_faces(shape);
@@ -196,9 +184,7 @@ void draw_light(struct ObjLight *light) {
         shape = gSpotShape;
     } else {
         shape = light->unk9C;
-        if (++sLightDlCounter >= 17) {
-            sLightDlCounter = 1;
-        }
+        if (++sLightDlCounter >= 17) sLightDlCounter = 1;
         shape->unk50 = sLightDlCounter;
     }
 
@@ -231,9 +217,7 @@ void draw_material(struct ObjMaterial *mtl) {
  * if this material doesn't have one
  */
 void create_mtl_gddl_if_empty(struct ObjMaterial *mtl) {
-    if (mtl->gddlNumber == 0) {
-        mtl->gddlNumber = create_mtl_gddl();
-    }
+    if (mtl->gddlNumber == 0) mtl->gddlNumber = create_mtl_gddl();
 }
 
 /**
@@ -327,9 +311,7 @@ void draw_face(struct ObjFace *face) {
 
         gbiVtx = gd_dl_make_vertex(x, y, z, vtx->alpha);
 
-        if (gbiVtx != NULL) {
-            vtx->gbiVerts = make_vtx_link(vtx->gbiVerts, gbiVtx);
-        }
+        if (gbiVtx != NULL) vtx->gbiVerts = make_vtx_link(vtx->gbiVerts, gbiVtx);
     }
     func_8019FEF0();
 }
@@ -341,20 +323,12 @@ void draw_net(struct ObjNet *self) {
 
     if (sSceneProcessType == FIND_PICKS) return;
 
-    if (net->header.drawFlags & OBJ_HIGHLIGHTED) {
-        netColor = COLOUR_YELLOW;
-    } else {
-        netColor = net->colourNum;
-    }
+    netColor = (net->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : net->colourNum;
 
-    if (net->shapePtr != NULL) {
-        draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                   0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->mat168);
-    }
+    if (net->shapePtr != NULL) draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                                          0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->mat168);
 
-    if (net->unk1C8 != NULL) {
-        draw_group(net->unk1C8);
-    }
+    if (net->unk1C8 != NULL) draw_group(net->unk1C8);
 }
 
 /* 22803C -> 22829C */
@@ -484,8 +458,7 @@ void drawscene(enum SceneType process, struct ObjGroup *interactables, struct Ob
     if (sSceneProcessType == FIND_PICKS) {
         apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) check_grabable_click, interactables);
     } else {
-        apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS | OBJ_TYPE_GADGETS | OBJ_TYPE_NETS
-                                        | OBJ_TYPE_PARTICLES,
+        apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS | OBJ_TYPE_GADGETS | OBJ_TYPE_NETS | OBJ_TYPE_PARTICLES,
                                     (applyproc_t) apply_obj_draw_fn, interactables);
     }
     gd_setproperty(GD_PROP_LIGHTING, 1.0f, 0.0f, 0.0f);
@@ -543,11 +516,7 @@ void draw_particle(struct GdObj *obj) {
         ptc->shapePtr->unk50 = ptc->timeout;
         draw_shape_2d(ptc->shapePtr, 2, ptc->pos.x, ptc->pos.y, ptc->pos.z);
     }
-    if (ptc->unk60 == 3) {
-        if (ptc->subParticlesGrp != NULL) {
-            draw_group(ptc->subParticlesGrp);
-        }
-    }
+    if (ptc->unk60 == 3 && ptc->subParticlesGrp != NULL) draw_group(ptc->subParticlesGrp);
 }
 
 /**
@@ -560,11 +529,7 @@ void draw_joint(struct GdObj *obj) {
 
     if ((boneShape = joint->shapePtr) == NULL) return;
 
-    if (joint->header.drawFlags & OBJ_HIGHLIGHTED) {
-        colour = COLOUR_YELLOW;
-    } else {
-        colour = joint->colourNum;
-    }
+    colour = (joint->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : joint->colourNum;
 
     draw_shape(boneShape, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
                colour, &joint->mat128);
@@ -667,13 +632,8 @@ void update_shaders(struct ObjShape *shape, struct GdVec3f *offset) {
     sLightPositionOffset.y = offset->y;
     sLightPositionOffset.z = offset->z;
     sPhongLight = NULL;
-    if (gGdLightGroup != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS, (applyproc_t) Proc8017A980, gGdLightGroup);
-    }
-    if (shape->mtlGroup != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn,
-                                    shape->mtlGroup);
-    }
+    if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) Proc8017A980     , gGdLightGroup );
+    if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);
     pop_gddl_stash();
 }
 
@@ -685,10 +645,7 @@ void update_shaders(struct ObjShape *shape, struct GdVec3f *offset) {
  * @return void
  */
 void create_shape_mtl_gddls(struct ObjShape *shape) {
-    if (shape->mtlGroup != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) create_mtl_gddl_if_empty,
-                                    shape->mtlGroup);
-    }
+    if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) create_mtl_gddl_if_empty, shape->mtlGroup);
 }
 
 /**
@@ -877,18 +834,10 @@ void update_view(struct ObjView *view) {
                         pickDataSize = sPickBuffer[pickDataIdx++];
                         if (pickDataSize != 0) {
                             switch ((pickedObjType = sPickBuffer[pickDataIdx++])) {
-                                case OBJ_TYPE_JOINTS:
-                                    gd_strcpy(objTypeAbbr, "J");
-                                    break;
-                                case OBJ_TYPE_NETS:
-                                    gd_strcpy(objTypeAbbr, "N");
-                                    break;
-                                case OBJ_TYPE_PARTICLES:
-                                    gd_strcpy(objTypeAbbr, "P");
-                                    break;
-                                default:
-                                    gd_strcpy(objTypeAbbr, "?");
-                                    break;
+                                case OBJ_TYPE_JOINTS:    gd_strcpy(objTypeAbbr, "J"); break;
+                                case OBJ_TYPE_NETS:      gd_strcpy(objTypeAbbr, "N"); break;
+                                case OBJ_TYPE_PARTICLES: gd_strcpy(objTypeAbbr, "P"); break;
+                                default:                 gd_strcpy(objTypeAbbr, "?"); break;
                             }
                         }
 

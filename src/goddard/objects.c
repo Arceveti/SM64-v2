@@ -67,51 +67,21 @@ void add_obj_pos_to_bounding_box(struct GdObj *obj) {
 static const char *get_obj_name_str(enum ObjTypeFlag objFlag) {
     const char *objName;
     switch (objFlag) {
-        case OBJ_TYPE_JOINTS:
-            objName = "joints";
-            break;
-        case OBJ_TYPE_GROUPS:
-            objName = "groups";
-            break;
-        case OBJ_TYPE_PARTICLES:
-            objName = "particles";
-            break;
-        case OBJ_TYPE_SHAPES:
-            objName = "shapes";
-            break;
-        case OBJ_TYPE_NETS:
-            objName = "nets";
-            break;
-        case OBJ_TYPE_PLANES:
-            objName = "planes";
-            break;
-        case OBJ_TYPE_VERTICES:
-            objName = "vertices";
-            break;
-        case OBJ_TYPE_CAMERAS:
-            objName = "cameras";
-            break;
-        case OBJ_TYPE_FACES:
-            objName = "faces";
-            break;
-        case OBJ_TYPE_MATERIALS:
-            objName = "materials";
-            break;
-        case OBJ_TYPE_LIGHTS:
-            objName = "lights";
-            break;
-        case OBJ_TYPE_WEIGHTS:
-            objName = "weights";
-            break;
-        case OBJ_TYPE_VIEWS:
-            objName = "views";
-            break;
-        case OBJ_TYPE_ANIMATORS:
-            objName = "animators";
-            break;
-        default:
-            objName = "unkown";
-            break;
+        case OBJ_TYPE_JOINTS:    objName = "joints"   ; break;
+        case OBJ_TYPE_GROUPS:    objName = "groups"   ; break;
+        case OBJ_TYPE_PARTICLES: objName = "particles"; break;
+        case OBJ_TYPE_SHAPES:    objName = "shapes"   ; break;
+        case OBJ_TYPE_NETS:      objName = "nets"     ; break;
+        case OBJ_TYPE_PLANES:    objName = "planes"   ; break;
+        case OBJ_TYPE_VERTICES:  objName = "vertices" ; break;
+        case OBJ_TYPE_CAMERAS:   objName = "cameras"  ; break;
+        case OBJ_TYPE_FACES:     objName = "faces"    ; break;
+        case OBJ_TYPE_MATERIALS: objName = "materials"; break;
+        case OBJ_TYPE_LIGHTS:    objName = "lights"   ; break;
+        case OBJ_TYPE_WEIGHTS:   objName = "weights"  ; break;
+        case OBJ_TYPE_VIEWS:     objName = "views"    ; break;
+        case OBJ_TYPE_ANIMATORS: objName = "animators"; break;
+        default:                 objName = "unkown"   ; break;
     }
     return objName;
 }
@@ -130,66 +100,21 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
     s32 objPermanence = 0x10;
 
     switch (objType) {
-        case OBJ_TYPE_JOINTS:
-            objSize = sizeof(struct ObjJoint);
-            objDrawFn = (drawmethod_t) draw_joint;
-            break;
-        case OBJ_TYPE_GROUPS:
-            objSize = sizeof(struct ObjGroup);
-            objDrawFn = (drawmethod_t) draw_group;
-            break;
-        case OBJ_TYPE_PARTICLES:
-            objSize = sizeof(struct ObjParticle);
-            objDrawFn = (drawmethod_t) draw_particle;
-            break;
-        case OBJ_TYPE_SHAPES:
-            objSize = sizeof(struct ObjShape);
-            // Shapes get drawn by their parent object instead of automatically.
-            objDrawFn = (drawmethod_t) draw_nothing;
-            break;
-        case OBJ_TYPE_NETS:
-            objSize = sizeof(struct ObjNet);
-            objDrawFn = (drawmethod_t) draw_net;
-            break;
-        case OBJ_TYPE_PLANES:
-            objSize = sizeof(struct ObjPlane);
-            objDrawFn = (drawmethod_t) draw_plane;
-            break;
-        case OBJ_TYPE_VERTICES:
-            objSize = sizeof(struct ObjVertex);
-            objDrawFn = (drawmethod_t) draw_nothing;
-            break;
-        case OBJ_TYPE_CAMERAS:
-            objSize = sizeof(struct ObjCamera);
-            objDrawFn = (drawmethod_t) draw_camera;
-            break;
-        case OBJ_TYPE_FACES:
-            objSize = sizeof(struct ObjFace);
-            objDrawFn = (drawmethod_t) draw_face;
-            objPermanence = 1;
-            break;
-        case OBJ_TYPE_MATERIALS:
-            objSize = sizeof(struct ObjMaterial);
-            objDrawFn = (drawmethod_t) draw_material;
-            break;
-        case OBJ_TYPE_LIGHTS:
-            objSize = sizeof(struct ObjLight);
-            objDrawFn = (drawmethod_t) draw_light;
-            break;
-        case OBJ_TYPE_WEIGHTS:
-            objSize = sizeof(struct ObjWeight);
-            objDrawFn = (drawmethod_t) draw_nothing;
-            break;
-        case OBJ_TYPE_VIEWS:
-            objSize = sizeof(struct ObjView);
-            objDrawFn = (drawmethod_t) draw_nothing;
-            break;
-        case OBJ_TYPE_ANIMATORS:
-            objSize = sizeof(struct ObjAnimator);
-            objDrawFn = (drawmethod_t) draw_nothing;
-            break;
-        default:
-            gd_exit(); // Unkown object!
+        case OBJ_TYPE_JOINTS:    objSize = sizeof(struct ObjJoint   ); objDrawFn = (drawmethod_t) draw_joint;                   break;
+        case OBJ_TYPE_GROUPS:    objSize = sizeof(struct ObjGroup   ); objDrawFn = (drawmethod_t) draw_group;                   break;
+        case OBJ_TYPE_PARTICLES: objSize = sizeof(struct ObjParticle); objDrawFn = (drawmethod_t) draw_particle;                break;
+        case OBJ_TYPE_SHAPES:    objSize = sizeof(struct ObjShape   ); objDrawFn = (drawmethod_t) draw_nothing;                 break; // Shapes get drawn by their parent object instead of automatically.
+        case OBJ_TYPE_NETS:      objSize = sizeof(struct ObjNet     ); objDrawFn = (drawmethod_t) draw_net;                     break;
+        case OBJ_TYPE_PLANES:    objSize = sizeof(struct ObjPlane   ); objDrawFn = (drawmethod_t) draw_plane;                   break;
+        case OBJ_TYPE_VERTICES:  objSize = sizeof(struct ObjVertex  ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
+        case OBJ_TYPE_CAMERAS:   objSize = sizeof(struct ObjCamera  ); objDrawFn = (drawmethod_t) draw_camera;                  break;
+        case OBJ_TYPE_FACES:     objSize = sizeof(struct ObjFace    ); objDrawFn = (drawmethod_t) draw_face; objPermanence = 1; break;
+        case OBJ_TYPE_MATERIALS: objSize = sizeof(struct ObjMaterial); objDrawFn = (drawmethod_t) draw_material;                break;
+        case OBJ_TYPE_LIGHTS:    objSize = sizeof(struct ObjLight   ); objDrawFn = (drawmethod_t) draw_light;                   break;
+        case OBJ_TYPE_WEIGHTS:   objSize = sizeof(struct ObjWeight  ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
+        case OBJ_TYPE_VIEWS:     objSize = sizeof(struct ObjView    ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
+        case OBJ_TYPE_ANIMATORS: objSize = sizeof(struct ObjAnimator); objDrawFn = (drawmethod_t) draw_nothing;                 break;
+        default: gd_exit(); // Unkown object!
     }
 
     typeName = get_obj_name_str(objType);
@@ -314,9 +239,7 @@ void reset_plane(struct ObjPlane *plane) {
 
     reset_bounding_box();
 
-    for (i = 0; i < face->vtxCount; i++) {
-        add_obj_pos_to_bounding_box(&face->vertices[i]->header);
-    }
+    for (i = 0; i < face->vtxCount; i++) add_obj_pos_to_bounding_box(&face->vertices[i]->header);
 
     plane->boundingBox.minX = gSomeBoundingBox.minX;
     plane->boundingBox.minY = gSomeBoundingBox.minY;
@@ -391,7 +314,7 @@ struct ObjCamera *make_camera(void) {
 
     newCam->unkA4 = 0.0f;
 
-    newCam->lookAt.x = newCam->lookAt.y = newCam->lookAt.z = 0.0f;
+    newCam->lookAt.x   = newCam->lookAt.y   = newCam->lookAt.z   = 0.0f;
     newCam->worldPos.x = newCam->worldPos.y = newCam->worldPos.z = 0.0f;
 
     return newCam;
@@ -433,8 +356,7 @@ struct ObjLight *make_light(void) {
 }
 
 /* @ 22BA78 for 0x294; orig name: func_8017D2A8*/
-struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 ulx, s32 uly, s32 lrx, s32 lry,
-                          struct ObjGroup *parts) {
+struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 ulx, s32 uly, s32 lrx, s32 lry, struct ObjGroup *parts) {
     struct ObjView *newView = (struct ObjView *) make_object(OBJ_TYPE_VIEWS);
 
     if (gGdViewsGroup == NULL) gGdViewsGroup = make_group(0);
@@ -622,12 +544,8 @@ static void reset_joint_or_net(struct GdObj *obj) {
     struct GdObj *localObjPtr = obj;
 
     switch (obj->type) {
-        case OBJ_TYPE_JOINTS:
-            reset_joint((struct ObjJoint *) localObjPtr);
-            break;
-        case OBJ_TYPE_NETS:
-            reset_net((struct ObjNet *) localObjPtr);
-            break;
+        case OBJ_TYPE_JOINTS: reset_joint((struct ObjJoint *) localObjPtr); break;
+        case OBJ_TYPE_NETS:   reset_net(  (struct ObjNet   *) localObjPtr); break;
         default:;
     }
 }
@@ -656,7 +574,7 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
     fnAppliedCount = 0;
 
     if (group == NULL) return fnAppliedCount;
-    if (group->linkType & 1) return fnAppliedCount; // compressed data, not an Obj
+    if (group->linkType & 0x1) return fnAppliedCount; // compressed data, not an Obj
     if (!((group->memberTypes & OBJ_TYPE_GROUPS) | (group->memberTypes & types))) return fnAppliedCount;
 
     objFn = func;
@@ -667,9 +585,7 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
         linkedObjType = linkedObj->type;
         nextLink = curLink->next;
 
-        if (linkedObjType == OBJ_TYPE_GROUPS) {
-            fnAppliedCount += apply_to_obj_types_in_group(types, func, (struct ObjGroup *) linkedObj);
-        }
+        if (linkedObjType == OBJ_TYPE_GROUPS) fnAppliedCount += apply_to_obj_types_in_group(types, func, (struct ObjGroup *) linkedObj);
 
         if (linkedObjType & types) {
             (*objFn)(linkedObj);
@@ -751,11 +667,11 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
 
 /* @ 22D9E0 for 0x1BC */
 s32 func_8017F210(struct GdObj *obj1, struct GdObj *obj2) {
-    struct ListNode *sp6C;
-    struct ObjGroup *sp68;
-    Mat4f *sp5C;
-    Mat4f *sp54;
-    Mat4f *sp50;
+    struct ListNode *node;
+    struct ObjGroup *group;
+    Mat4f *mtx1;
+    Mat4f *mtx2;
+    Mat4f *mtx3;
     struct GdVec3f vec;
     s32 count = 0;
 
@@ -763,33 +679,33 @@ s32 func_8017F210(struct GdObj *obj1, struct GdObj *obj2) {
 
     if (obj2 != NULL) {
         set_cur_dynobj(obj2);
-        sp54 = (Mat4f *) d_get_rot_mtx_ptr();
+        mtx2 = (Mat4f *) d_get_rot_mtx_ptr();
 
         set_cur_dynobj(obj1);
-        sp5C = d_get_i_mtx_ptr();
-        sp50 = (Mat4f *) d_get_rot_mtx_ptr();
+        mtx1 = d_get_i_mtx_ptr();
+        mtx3 = (Mat4f *) d_get_rot_mtx_ptr();
 
         d_get_scale(&vec);
-        gd_mult_mat4f(sp5C, sp54, sp50);
-        gd_scale_mat4f_by_vec3f(sp50, &vec);
+        gd_mult_mat4f(mtx1, mtx2, mtx3);
+        gd_scale_mat4f_by_vec3f(mtx3, &vec);
     } else {
         set_cur_dynobj(obj1);
-        sp5C = d_get_i_mtx_ptr();
-        sp54 = (Mat4f *) d_get_rot_mtx_ptr();
+        mtx1 = d_get_i_mtx_ptr();
+        mtx2 = (Mat4f *) d_get_rot_mtx_ptr();
 
         d_get_scale(&vec);
-        gd_copy_mat4f(sp5C, sp54);
-        gd_scale_mat4f_by_vec3f(sp54, &vec);
+        gd_copy_mat4f(mtx1, mtx2);
+        gd_scale_mat4f_by_vec3f(mtx2, &vec);
     }
 
     set_cur_dynobj(obj1);
-    sp68 = d_get_att_objgroup();
+    group = d_get_att_objgroup();
 
-    if (sp68 != NULL) {
-        sp6C = sp68->firstMember;
-        while (sp6C != NULL) {
-            count += func_8017F210(sp6C->obj, obj1);
-            sp6C = sp6C->next;
+    if (group != NULL) {
+        node = group->firstMember;
+        while (node != NULL) {
+            count += func_8017F210(node->obj, obj1);
+            node = node->next;
         }
     }
     return count;
@@ -820,12 +736,12 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
 
         // not going to interpolate scale?
 
-        gd_scale_mat4f_by_vec3f(&mtx, &t1->scale);
-        gd_rot_mat_about_vec(&mtx, &transform.rotate);
+        gd_scale_mat4f_by_vec3f(     &mtx, &t1->scale);
+        gd_rot_mat_about_vec(        &mtx, &transform.rotate);
         gd_add_vec3f_to_mat4f_offset(&mtx, &transform.pos);
     } else {
         d_set_scale(t1->scale.x, t1->scale.y, t1->scale.z);
-        gd_rot_mat_about_vec(&mtx, &t1->rotate);
+        gd_rot_mat_about_vec(        &mtx, &t1->rotate);
         gd_add_vec3f_to_mat4f_offset(&mtx, &t1->pos);
     }
     d_set_i_matrix(&mtx);
@@ -1098,7 +1014,6 @@ void drag_picked_object(struct GdObj *inputObj) {
                 ((struct ObjNet *) obj)->matE8[3][2] += displacement.z;
                 break;
             case OBJ_TYPE_PARTICLES:
-                break;
             default:
                 break;
         }
@@ -1155,7 +1070,7 @@ void move_camera(struct ObjCamera *cam) {
         cam->unkA8[1][1] = 1.0f;
         cam->unkA8[1][2] = 0.0f;
 
-        // setting the unkA8 matrix above is pointless, if we're just going to overwrite it with the identity matrix.
+        //! setting the unkA8 matrix above is pointless, if we're just going to overwrite it with the identity matrix.
         gd_set_identity_mat4(&cam->unkA8);
     } else {
         gd_set_identity_mat4(&cam->unkA8);
@@ -1165,9 +1080,7 @@ void move_camera(struct ObjCamera *cam) {
     if ((cam->flags & CAMERA_FLAG_CONTROLLABLE) != 0) {
         if (ctrl->btnB && !ctrl->prevFrame->btnB) {  // new B press
             cam->zoomLevel++;
-            if (cam->zoomLevel > cam->maxZoomLevel) {
-                cam->zoomLevel = 0;
-            }
+            if (cam->zoomLevel > cam->maxZoomLevel) cam->zoomLevel = 0;
 
             switch (cam->zoomLevel) {
                 case 0:

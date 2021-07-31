@@ -39,9 +39,7 @@ void scale_verts(struct ObjGroup *group) {
 
 /* @ 23000C for 0x58; orig name: func8018183C*/
 void move_skin(struct ObjNet *net) {
-    if (net->shapePtr != NULL) {
-        scale_verts(net->shapePtr->scaledVtxGroup);
-    }
+    if (net->shapePtr != NULL) scale_verts(net->shapePtr->scaledVtxGroup);
 }
 
 /* @ 230064 for 0x13C*/
@@ -114,7 +112,5 @@ void reset_joint_weights(struct ObjJoint *joint) {
     struct ObjGroup *group;
 
     gd_inverse_mat4f(&joint->matE8, &D_801B9EA8);
-    if ((group = joint->weightGrp) != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_WEIGHTS, (applyproc_t) reset_weight, group);
-    }
+    if ((group = joint->weightGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_WEIGHTS, (applyproc_t) reset_weight, group);
 }

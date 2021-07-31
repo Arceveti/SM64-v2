@@ -22,12 +22,8 @@ static s32 sNetCount; // @ 801BAAF8
 /* 2406E0 -> 240894 */
 void compute_net_bounding_box(struct ObjNet *net) {
     reset_bounding_box();
-    if (net->unk1D0 != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1D0);
-    }
-    if (net->unk1C8 != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1C8);
-    }
+    if (net->unk1D0 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1D0);
+    if (net->unk1C8 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1C8);
     gSomeBoundingBox.minX *= net->scale.x;
     gSomeBoundingBox.maxX *= net->scale.x;
     gSomeBoundingBox.minY *= net->scale.y;
@@ -63,29 +59,25 @@ void reset_net(struct ObjNet *net) {
     gd_copy_mat4f(&net->matE8, &net->mat128);
 
     if ((grp = net->unk1C8) != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint, grp);
+        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint  , grp);
         apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80191220, grp);
     }
 }
 
 /* 240A64 -> 240ACC */
 void func_80192294(struct ObjNet *net) {
-    if (net->attachedToObj == NULL) {
-        transform_child_objects_recursive(&net->header, NULL);
-    }
+    if (net->attachedToObj == NULL) transform_child_objects_recursive(&net->header, NULL);
 }
 
 /* 240ACC -> 240B84 */
 void func_801922FC(struct ObjNet *net) {
-    struct ObjGroup *group; // 24
+    struct ObjGroup *group;
 
     gGdSkinNet = net;
     // TODO: netype constants?
     if (net->netType == 4) {
         if (net->shapePtr != NULL) scale_verts(net->shapePtr->vtxGroup);
-        if ((group = net->unk1C8) != NULL) {
-            apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint_weights, group);
-        }
+        if ((group = net->unk1C8) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint_weights, group);
     }
 }
 
@@ -96,16 +88,16 @@ struct ObjNet *make_net(struct ObjGroup *group) {
     net = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
     gd_set_identity_mat4(&net->mat128);
     net->initPos.x = net->initPos.y = net->initPos.z = 0.0f;
-    net->id = ++sNetCount;
-    net->scale.x = net->scale.y = net->scale.z = 1.0f;
-    net->shapePtr = NULL;
-    net->unk1C8 = group;
-    net->unk1CC = NULL;
-    net->unk1D0 = NULL;
-    net->netType = 0;
-    net->unk3C = 1;
+    net->id        = ++sNetCount;
+    net->scale.x   = net->scale.y = net->scale.z = 1.0f;
+    net->shapePtr  = NULL;
+    net->unk1C8    = group;
+    net->unk1CC    = NULL;
+    net->unk1D0    = NULL;
+    net->netType   = 0;
+    net->unk3C     = 1;
     net->colourNum = 0;
-    net->skinGrp = NULL;
+    net->skinGrp   = NULL;
     reset_net(net);
 
     return net;
@@ -148,9 +140,7 @@ void collision_something_801926A4(struct ObjNet *net) {
 void move_bonesnet(struct ObjNet *net) {
     struct ObjGroup *group;
     gd_set_identity_mat4(&D_801B9DC8);
-    if ((group = net->unk1C8) != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
-    }
+    if ((group = net->unk1C8) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
 }
 
 /* 24149C -> 241768 */
@@ -191,9 +181,7 @@ void func_80192CCC(struct ObjNet *net) {
 
     collision_something_801926A4(net);
     gd_mult_mat4f(&net->mat128, &D_801B9DC8, &net->mat128);
-    if (group != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
-    }
+    if (group != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
 }
 
 /* 241768 -> 241AB4; orig name: func_80192F98 */
@@ -279,12 +267,8 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
 
 /* 241BCC -> 241CA0; orig name: Proc801933FC */
 void convert_net_verts(struct ObjNet *net) {
-    if (net->shapePtr != NULL && net->shapePtr->unk30) {
-        convert_gd_verts_to_Vn(net->shapePtr->vtxGroup);
-    }
-    if (net->netType == 2 && net->shapePtr != NULL) {
-        convert_gd_verts_to_Vtx(net->shapePtr->scaledVtxGroup);
-    }
+    if (net->shapePtr != NULL && net->shapePtr->unk30 ) convert_gd_verts_to_Vn(net->shapePtr->vtxGroup);
+    if (net->netType  ==    2 && net->shapePtr != NULL) convert_gd_verts_to_Vtx(net->shapePtr->scaledVtxGroup);
 }
 
 /* 241CA0 -> 241D6C */
@@ -296,9 +280,7 @@ static void move_joints_in_net(struct ObjNet *net) {
     if ((grp = net->unk1C8) != NULL) {
         for (link = grp->firstMember; link != NULL; link = link->next) {
             obj = link->obj;
-            if (obj->type == OBJ_TYPE_JOINTS && ((struct ObjJoint *) obj)->updateFunc != NULL) {
-                (*((struct ObjJoint *) obj)->updateFunc)((struct ObjJoint *) obj);
-            }
+            if (obj->type == OBJ_TYPE_JOINTS && ((struct ObjJoint *) obj)->updateFunc != NULL) (*((struct ObjJoint *) obj)->updateFunc)((struct ObjJoint *) obj);
         }
     }
 }
@@ -308,34 +290,21 @@ void move_net(struct ObjNet *net) {
     gGdSkinNet = net;
 
     switch (net->netType) {
-        case 1:
-            break;
-        case 7:
-            func_80192CCC(net);
-            break;
-        case 4:
-            move_bonesnet(net);
-            break;
-        case 2:
-            move_skin(net);
-            break;
-        case 3:
-            move_joints_in_net(net);
-            break;
-        case 5:
-            func_801823A0(net);
-            break;
-        case 6:
-            break;
-        default:
-            gd_exit(); // fatal_printf("move_net(%d(%d)): Undefined net type", net->id, net->netType);
+        case 1:                          break;
+        case 7: func_80192CCC(     net); break;
+        case 4: move_bonesnet(     net); break;
+        case 2: move_skin(         net); break;
+        case 3: move_joints_in_net(net); break;
+        case 5: func_801823A0(     net); break;
+        case 6:                          break;
+        default: gd_exit(); // fatal_printf("move_net(%d(%d)): Undefined net type", net->id, net->netType);
     }
 }
 
 /* 241E94 -> 241F0C; orig name: func_801936C4 */
 void move_nets(struct ObjGroup *group) {
     apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) func_80192294, group);
-    apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) move_net, group);
+    apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) move_net     , group);
 }
 
 /* 241F0C -> 242018 */
@@ -347,16 +316,14 @@ void func_8019373C(struct ObjNet *net) {
         net->shapePtr->scaledVtxGroup = make_group(0);
         for (link = net->shapePtr->vtxGroup->firstMember; link != NULL; link = link->next) {
             vtx = (struct ObjVertex *) link->obj;
-            if (vtx->scaleFactor != 1.0f) {
-                addto_group(net->shapePtr->scaledVtxGroup, &vtx->header);
-            }
+            if (vtx->scaleFactor != 1.0f) addto_group(net->shapePtr->scaledVtxGroup, &vtx->header);
         }
     }
 }
 
 /* 242018 -> 24208C */
 void func_80193848(struct ObjGroup *group) {
-    apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) reset_net, group);
+    apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) reset_net    , group);
     apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) func_80192294, group);
     apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) func_801922FC, group);
     apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) func_8019373C, group);

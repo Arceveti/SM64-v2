@@ -67,9 +67,7 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
                 }
             }
 
-            if (self->flags & 0x2000) {
-                gd_play_sfx(GD_SFX_LET_GO_FACE);
-            }
+            if (self->flags & 0x2000) gd_play_sfx(GD_SFX_LET_GO_FACE);
 
             self->flags &= ~0x2000;
         } else {
@@ -110,11 +108,7 @@ void eye_joint_update_func(struct ObjJoint *self) {
     register struct ListNode *att;
     struct GdObj *attobj;
 
-    if (sCurrentMoveCamera == NULL) return;
-
-    if (self->rootAnimator != NULL) {
-        if (self->rootAnimator->state != 7) return;
-    }
+    if (sCurrentMoveCamera == NULL || (self->rootAnimator != NULL && self->rootAnimator->state != 7)) return;
 
     set_cur_dynobj((struct GdObj *)self);
     sp5C = d_get_rot_mtx_ptr();
@@ -123,7 +117,7 @@ void eye_joint_update_func(struct ObjJoint *self) {
     sp44.z = (*sp5C)[3][2];
     world_pos_to_screen_coords(&sp44, sCurrentMoveCamera, sCurrentMoveView);
 
-    sp50.x = gGdCtrl.csrX - sp44.x;
+    sp50.x =   gGdCtrl.csrX - sp44.x;
     sp50.y = -(gGdCtrl.csrY - sp44.y);
     sp50.z = 0.0f;
 
@@ -185,21 +179,15 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
     gd_set_identity_mat4(&j->matE8);
     gd_set_identity_mat4(&j->mat128);
     set_joint_vecs(j, x, y, z);
-    j->type = 0;
-    j->id = sJointCount;
-    j->flags = flags;
-
-    if (j->flags & 0x1) {
-        j->colourNum = COLOUR_RED;
-    } else {
-        j->colourNum = COLOUR_PINK;
-    }
-
-    j->unk1C4 = NULL;
-    j->shapePtr = NULL;
-    j->scale.x = 1.0f;
-    j->scale.y = 1.0f;
-    j->scale.z = 1.0f;
+    j->type       = 0;
+    j->id         = sJointCount;
+    j->flags      = flags;
+    j->colourNum  = (j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK;
+    j->unk1C4     = NULL;
+    j->shapePtr   = NULL;
+    j->scale.x    = 1.0f;
+    j->scale.y    = 1.0f;
+    j->scale.z    = 1.0f;
     j->friction.x = 0.0f;
     j->friction.y = 0.0f;
     j->friction.z = 0.0f;
@@ -233,9 +221,8 @@ struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f3
 s32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* always NULL */, f32 weight) {
     struct ObjWeight *w;
 
-    if (j->weightGrp == NULL) {
-        j->weightGrp = make_group(0);
-    }
+    if (j->weightGrp == NULL) j->weightGrp = make_group(0);
+
     w = make_weight(id, vtx, weight);
     addto_group(j->weightGrp, &w->header);
 
@@ -304,17 +291,17 @@ void reset_joint(struct ObjJoint *j) {
     j->unk3C.z = j->initPos.z;
 
     j->velocity.x = j->velocity.y = j->velocity.z = 0.0f;
-    j->unk84.x = j->unk84.y = j->unk84.z = 0.0f;
-    j->unk90.x = j->unk90.y = j->unk90.z = 0.0f;
-    j->unk1A8.x = j->unk1A8.y = j->unk1A8.z = 0.0f;
+    j->unk84.x    = j->unk84.y    = j->unk84.z    = 0.0f;
+    j->unk90.x    = j->unk90.y    = j->unk90.z    = 0.0f;
+    j->unk1A8.x   = j->unk1A8.y   = j->unk1A8.z   = 0.0f;
 
-    gd_set_identity_mat4(&j->mat168);
-    gd_scale_mat4f_by_vec3f(&j->mat168, (struct GdVec3f *) &j->scale);
-    gd_rot_mat_about_vec(&j->mat168, (struct GdVec3f *) &j->unk6C);
+    gd_set_identity_mat4(        &j->mat168);
+    gd_scale_mat4f_by_vec3f(     &j->mat168, (struct GdVec3f *) &j->scale);
+    gd_rot_mat_about_vec(        &j->mat168, (struct GdVec3f *) &j->unk6C);
     gd_add_vec3f_to_mat4f_offset(&j->mat168, &j->attachOffset);
-    gd_copy_mat4f(&j->mat168, &j->matE8);
+    gd_copy_mat4f(               &j->mat168, &j->matE8);
 
-    gd_set_identity_mat4(&j->mat128);
+    gd_set_identity_mat4(        &j->mat128);
     gd_add_vec3f_to_mat4f_offset(&j->mat128, &j->initPos);
 }
 
@@ -325,9 +312,9 @@ void func_80191824(struct ObjJoint *j) {
         j->worldPos.y = gGdSkinNet->worldPos.y;
         j->worldPos.z = gGdSkinNet->worldPos.z;
 
-        j->unk3C.x = gGdSkinNet->worldPos.x;
-        j->unk3C.y = gGdSkinNet->worldPos.y;
-        j->unk3C.z = gGdSkinNet->worldPos.z;
+        j->unk3C.x    = gGdSkinNet->worldPos.x;
+        j->unk3C.y    = gGdSkinNet->worldPos.y;
+        j->unk3C.z    = gGdSkinNet->worldPos.z;
     }
 }
 

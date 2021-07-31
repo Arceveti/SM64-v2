@@ -511,9 +511,9 @@ struct AnimMtxVec {
 };
 
 enum GdLightFlags {
-    LIGHT_UNK02 = 0x02, // old type of light?
+    LIGHT_UNK02         = 0x02, // old type of light?
     LIGHT_NEW_UNCOUNTED = 0x10,
-    LIGHT_UNK20 = 0x20 // new, actually used type of light? used for phong shading?
+    LIGHT_UNK20         = 0x20 // new, actually used type of light? used for phong shading?
 };
 
 struct ObjLight {

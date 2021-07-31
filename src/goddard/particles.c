@@ -41,12 +41,12 @@ static s32 D_801A8238[5] = {
 static struct ObjFace *D_801B9EF0;
 
 // fn declarations
-void Unknown80181D14(struct ObjFace *);
-void func_80181EB0(struct Connection *);
-void func_80182088(struct Connection *);
-void move_particle(struct ObjParticle *);
-int func_80182778(struct ObjParticle *);
-void func_80182A08(struct ObjParticle *, struct GdVec3f *b);
+void Unknown80181D14(struct ObjFace     *);
+void func_80181EB0(  struct Connection  *);
+void func_80182088(  struct Connection  *);
+void move_particle(  struct ObjParticle *);
+int  func_80182778(  struct ObjParticle *);
+void func_80182A08(  struct ObjParticle *, struct GdVec3f *b);
 
 static void connect_vertices(struct ObjVertex *vtx1, struct ObjVertex *vtx2) {
     register struct ListNode *link;
@@ -124,7 +124,7 @@ void func_80182088(struct Connection *cxn) {
     struct ObjParticle *particle1;
     struct ObjParticle *particle2;
 
-    if (cxn->unk28 & 1) {
+    if (cxn->unk28 & 0x1) {
         func_80181EB0(cxn);
         return;
     }
@@ -184,7 +184,7 @@ void func_801823A0(struct ObjNet *net) {
                 link = link->next;
             }
             apply_to_obj_types_in_group(OBJ_TYPE_PARTICLES, (applyproc_t) move_particle, net->unk1C8);
-            apply_to_obj_types_in_group(OBJ_TYPE_PLANES, (applyproc_t) reset_plane, net->unk1CC);
+            apply_to_obj_types_in_group(OBJ_TYPE_PLANES   , (applyproc_t) reset_plane  , net->unk1CC);
             break;
     }
 }
@@ -310,9 +310,7 @@ void move_particle(struct ObjParticle *ptc) {
     ptc->pos.x += ptc->unk38.x;
     ptc->pos.y += ptc->unk38.y;
     ptc->pos.z += ptc->unk38.z;
-    if (ptc->flags & 0x1) {
-        ptc->unk38.y += sp7C;
-    }
+    if (ptc->flags & 0x1) ptc->unk38.y += sp7C;
     switch (ptc->unkB0) {
         case 1:
             ptc->unkB0 = 2;
@@ -393,7 +391,7 @@ void move_particle(struct ObjParticle *ptc) {
     if (ptc->timeout >= 0) {
         if (ptc->timeout-- <= 0) {
             ptc->header.drawFlags |= OBJ_INVISIBLE;
-            ptc->flags &= ~8;
+            ptc->flags &= ~0x8;
         }
     }
 }

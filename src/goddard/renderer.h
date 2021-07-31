@@ -29,10 +29,10 @@ extern s32 gGdFrameBufNum;
 
 // functions
 u32 get_alloc_mem_amt(void);
-s32 gd_get_ostime(void);
-f32 get_time_scale(void);
-f64 gd_sin_d(f64 x);
-f64 gd_cos_d(f64 x);
+s32 gd_get_ostime(    void);
+f32 get_time_scale(   void);
+f64 gd_sin_d( f64 x);
+f64 gd_cos_d( f64 x);
 f64 gd_sqrt_d(f64 x);
 
 #if defined(ISVPRINT) || defined(UNF)
@@ -46,7 +46,7 @@ void *gd_malloc_perm(u32 size);
 void *gd_malloc_temp(u32 size);
 void draw_indexed_dl(s32 dlNum, s32 gfxIdx);
 void gd_add_to_heap(void *addr, u32 size);
-void gdm_init(void *blockpool, u32 size);
+void gdm_init(void *blockpool,  u32 size);
 void gdm_setup(void);
 void gdm_maketestdl(s32 id);
 void gd_vblank(void);
@@ -60,7 +60,7 @@ s32 gd_enddlsplist_parent(void);
 void gd_dl_load_matrix(Mat4f *mtx);
 void gd_dl_push_matrix(void);
 void gd_dl_pop_matrix(void);
-void gd_dl_mul_trans_matrix(f32 x, f32 y, f32 z);
+void gd_dl_mul_trans_matrix( f32 x, f32 y, f32 z);
 void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z);
 void gd_dl_scale(f32 x, f32 y, f32 z);
 void func_8019F2C4(f32 angle, s8 axis);

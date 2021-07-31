@@ -55,15 +55,7 @@ struct MemTracker *new_memtracker(const char *name) {
  */
 struct MemTracker *get_memtracker(const char *name) {
     s32 i;
-
-    for (i = 0; i < ARRAY_COUNT(sMemTrackers); i++) {
-        if (sMemTrackers[i].name != NULL) {
-            if (!gd_str_not_equal(sMemTrackers[i].name, name)) {
-                return &sMemTrackers[i];
-            }
-        }
-    }
-
+    for (i = 0; i < ARRAY_COUNT(sMemTrackers); i++) if (sMemTrackers[i].name != NULL && !gd_str_not_equal(sMemTrackers[i].name, name)) return &sMemTrackers[i];
     return NULL;
 }
 
@@ -170,8 +162,6 @@ char *gd_strcat(char *dst, const char *src) {
 /* 23C67C -> 23C728; orig name: func_8018DEB0 */
 /* Returns a bool, not the position of the mismatch */
 s32 gd_str_not_equal(const char *str1, const char *str2) {
-    while (*str1 && *str2) {
-        if (*str1++ != *str2++) return TRUE;
-    }
+    while (*str1 && *str2) if (*str1++ != *str2++) return TRUE;
     return *str1 != '\0' || *str2 != '\0';
 }
