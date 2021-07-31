@@ -40,8 +40,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
 - A few unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
-- Many stubbed/unused/duplicate functions/variables are removed
+- Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - Many smaller optimizations (Arceveti)
+- Fast inverse square root for normalizing float vectors :)
 
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)
@@ -52,10 +53,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
-- Defines for specific cos() values used through out the game, specifically for checking the Y normal of surfaces
+- Defines for specific cos() values used through out the game, specifically for checking the Y normal of surfaces (Arceveti)
 - Vertical quicksand support (Wiseguy) *
-- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] *
-- Extra segment2 characters/glyphs: Red Coin, Blue Coin, Silver Coin, Minus Symbol (Arceveti) *
+- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
+- Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 
 **HUD/Gameplay QoL:**
 - Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
@@ -66,7 +67,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
 
 **Object Behaviors:**
-- Collecting a 1-Up Mushroom will fully heal Mario *
+- Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
 - Respawning Koopa shell boxes (Arceveti) *
 - Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti) *
@@ -92,8 +93,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Goddard easter egg from Shindou *
 
 **Experimental:**
-- Platform Displacement 2 for objects other than Mario & Bowser *
-- PSS Painting uses painting data instead of being part of the level model *
+- Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
+- PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 # HackerSM64:
 
