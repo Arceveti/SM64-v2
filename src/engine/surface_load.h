@@ -29,8 +29,8 @@ typedef struct SurfaceNode SpatialPartitionCell[4];
 
 extern SpatialPartitionCell gStaticSurfacePartition[NUM_CELLS][NUM_CELLS];
 extern SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
-extern struct SurfaceNode *sSurfaceNodePool;
-extern struct Surface     *sSurfacePool;
+extern struct SurfaceNode  *sSurfaceNodePool;
+extern struct Surface      *sSurfacePool;
 extern s16 sSurfacePoolSize;
 
 void alloc_surface_pools(void);

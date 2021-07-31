@@ -63,17 +63,13 @@ void bhv_act_selector_star_type_loop(void) {
         // If a star is not selected, don't rotate or change size
         case STAR_SELECTOR_NOT_SELECTED:
             gCurrentObject->oStarSelectorSize -= 0.1f;
-            if (gCurrentObject->oStarSelectorSize < 1.0f) {
-                gCurrentObject->oStarSelectorSize = 1.0f;
-            }
+            if (gCurrentObject->oStarSelectorSize < 1.0f) gCurrentObject->oStarSelectorSize = 1.0f;
             gCurrentObject->oFaceAngleYaw = 0;
             break;
         // If a star is selected, rotate and slightly increase size
         case STAR_SELECTOR_SELECTED:
             gCurrentObject->oStarSelectorSize += 0.1f;
-            if (gCurrentObject->oStarSelectorSize > 1.3f) {
-                gCurrentObject->oStarSelectorSize = 1.3f;
-            }
+            if (gCurrentObject->oStarSelectorSize > 1.3f) gCurrentObject->oStarSelectorSize = 1.3f;
             gCurrentObject->oFaceAngleYaw += 0x800;
             break;
         // If the 100 coin star is selected, rotate
@@ -94,16 +90,9 @@ void render_100_coin_star(u8 stars) {
     if (stars & (1 << 6)) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
     #ifdef WIDE
-        if (gWidescreen) {
-            sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR,
-                                                            bhvActSelectorStarType, ((370*4.0f)/3), 24, -300, 0, 0, 0);
-        } else {
-            sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR,
-                                                            bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
-        }
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370*4.0f)/3.0f) : 370, 24, -300, 0, 0, 0);
     #else
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR,
-                                                        bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
     #endif
 
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
@@ -148,9 +137,7 @@ void bhv_act_selector_init(void) {
     }
 
     // If all stars have been collected, set the default selection to the last star.
-    if (sObtainedStars == 6) {
-        sInitSelectedActNum = sVisibleStars;
-    }
+    if (sObtainedStars == 6) sInitSelectedActNum = sVisibleStars;
 
     // Render star selector objects
     #ifdef WIDE
@@ -216,13 +203,7 @@ void bhv_act_selector_loop(void) {
     }
 
     // Star selector type handler
-    for (i = 0; i < sVisibleStars; i++) {
-        if (sSelectedActIndex == i) {
-            sStarSelectorModels[i]->oStarSelectorType = STAR_SELECTOR_SELECTED;
-        } else {
-            sStarSelectorModels[i]->oStarSelectorType = STAR_SELECTOR_NOT_SELECTED;
-        }
-    }
+    for (i = 0; i < sVisibleStars; i++) sStarSelectorModels[i]->oStarSelectorType = (sSelectedActIndex == i ? STAR_SELECTOR_SELECTED : STAR_SELECTOR_NOT_SELECTED);
 }
 
 /**
@@ -313,15 +294,15 @@ void print_act_selector_strings(void) {
 #ifdef VERSION_EU
     switch (language) {
         case LANGUAGE_ENGLISH:
-            actNameTbl = segmented_to_virtual(act_name_table_eu_en);
+            actNameTbl   = segmented_to_virtual(act_name_table_eu_en);
             levelNameTbl = segmented_to_virtual(course_name_table_eu_en);
             break;
         case LANGUAGE_FRENCH:
-            actNameTbl = segmented_to_virtual(act_name_table_eu_fr);
+            actNameTbl   = segmented_to_virtual(act_name_table_eu_fr);
             levelNameTbl = segmented_to_virtual(course_name_table_eu_fr);
             break;
         case LANGUAGE_GERMAN:
-            actNameTbl = segmented_to_virtual(act_name_table_eu_de);
+            actNameTbl   = segmented_to_virtual(act_name_table_eu_de);
             levelNameTbl = segmented_to_virtual(course_name_table_eu_de);
             break;
     }
@@ -396,9 +377,7 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node, UN
 #else
 Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node) {
 #endif
-    if (callContext == GEO_CONTEXT_RENDER) {
-        print_act_selector_strings();
-    }
+    if (callContext == GEO_CONTEXT_RENDER) print_act_selector_strings();
     return NULL;
 }
 
@@ -416,9 +395,7 @@ s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
     sObtainedStars = save_file_get_course_star_count(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
 
     // Don't count 100 coin star
-    if (stars & (1 << 6)) {
-        sObtainedStars--;
-    }
+    if (stars & (1 << 6)) sObtainedStars--;
 
     //! no return value
 #ifdef AVOID_UB

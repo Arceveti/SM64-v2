@@ -38,11 +38,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             // fall through
         case 1:
             set_mario_animation(m, MARIO_ANIM_FIRST_PUNCH);
-            if (is_anim_past_end(m)) {
-                m->actionArg = 2;
-            } else {
-                m->actionArg = 1;
-            }
+            m->actionArg = is_anim_past_end(m) ? 2 : 1;
 
             if (m->marioObj->header.gfx.animInfo.animFrame >= 2) {
                 if (mario_check_object_grab(m)) return TRUE;
@@ -65,11 +61,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             // fall through
         case 4:
             set_mario_animation(m, MARIO_ANIM_SECOND_PUNCH);
-            if (is_anim_past_end(m)) {
-                m->actionArg = 5;
-            } else {
-                m->actionArg = 4;
-            }
+            m->actionArg = is_anim_past_end(m) ? 5 : 4;
 
             if (m->marioObj->header.gfx.animInfo.animFrame > 0) m->flags |= MARIO_PUNCHING;
             if (m->actionArg == 5) m->marioBodyState->punchState = (1 << 6) | 4;
@@ -119,12 +111,10 @@ s32 act_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
 
-    if (m->actionState == 0 && is_anim_at_end(m)) {
-        if (m->usedObj != NULL) {
-            mario_grab_used_object(m);
-            play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
-            m->actionState = 1;
-        }
+    if (m->actionState == 0 && is_anim_at_end(m) && m->usedObj != NULL) {
+        mario_grab_used_object(m);
+        play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
+        m->actionState = 1;
     }
 
     if (m->actionState == 1) {
@@ -296,7 +286,7 @@ s32 act_holding_bowser(struct MarioState *m) {
     }
 
     stationary_ground_step(m);
-    if (m->angleVel[1] >= 0) {
+    if (m->angleVel[1] > 0) {
         m->marioObj->header.gfx.angle[0] = -m->angleVel[1];
     } else {
         m->marioObj->header.gfx.angle[0] = m->angleVel[1];
@@ -336,7 +326,7 @@ s32 check_common_object_cancels(struct MarioState *m) {
 s32 mario_execute_object_action(struct MarioState *m) {
     s32 cancel = FALSE;
 
-    if (check_common_object_cancels(m)) return TRUE;
+    if (check_common_object_cancels(m))  return TRUE;
     if (mario_update_quicksand(m, 0.5f)) return TRUE;
 
     /* clang-format off */
@@ -355,9 +345,7 @@ s32 mario_execute_object_action(struct MarioState *m) {
     }
     /* clang-format on */
 
-    if (!cancel && (m->input & INPUT_IN_WATER)) {
-        m->particleFlags |= PARTICLE_IDLE_WATER_WAVE;
-    }
+    if (!cancel && (m->input & INPUT_IN_WATER)) m->particleFlags |= PARTICLE_IDLE_WATER_WAVE;
 
     return cancel;
 }

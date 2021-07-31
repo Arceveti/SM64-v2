@@ -73,11 +73,7 @@ s16 tilt_body_running(struct MarioState *m) {
 void play_step_sound(struct MarioState *m, s16 frame1, s16 frame2) {
     if (is_anim_past_frame(m, frame1) || is_anim_past_frame(m, frame2)) {
         if (m->flags & MARIO_METAL_CAP) {
-            if (m->marioObj->header.gfx.animInfo.animID == MARIO_ANIM_TIPTOE) {
-                play_sound_and_spawn_particles(m, SOUND_ACTION_METAL_STEP_TIPTOE, 0);
-            } else {
-                play_sound_and_spawn_particles(m, SOUND_ACTION_METAL_STEP, 0);
-            }
+            play_sound_and_spawn_particles(m, (m->marioObj->header.gfx.animInfo.animID == MARIO_ANIM_TIPTOE) ? SOUND_ACTION_METAL_STEP_TIPTOE : SOUND_ACTION_METAL_STEP, 0);
         } else if (m->quicksandDepth > 50.0f) {
             play_sound(SOUND_ACTION_QUICKSAND_STEP, m->marioObj->header.gfx.cameraToObject);
         } else if (m->marioObj->header.gfx.animInfo.animID == MARIO_ANIM_TIPTOE) {
@@ -123,10 +119,10 @@ void check_ledge_climb_down(struct MarioState *m) {
     s16 wallDYaw;
 
     if (m->forwardVel < 10.0f) {
-        wallCols.x = m->pos[0];
-        wallCols.y = m->pos[1];
-        wallCols.z = m->pos[2];
-        wallCols.radius = 10.0f;
+        wallCols.x       = m->pos[0];
+        wallCols.y       = m->pos[1];
+        wallCols.z       = m->pos[2];
+        wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
 
         if (find_wall_collisions(&wallCols) != 0) {
@@ -220,9 +216,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     }
 
     if (newFacingDYaw < -0x4000
-     || newFacingDYaw >  0x4000) {
-        m->forwardVel *= -1.0f;
-    }
+     || newFacingDYaw >  0x4000) m->forwardVel *= -1.0f;
 }
 
 s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
@@ -241,26 +235,21 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 slideVelZModifier;
 
     //! 10k glitch
-    if (forward < 0.0f && m->forwardVel >= 0.0f) {
-        forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
-    }
+    if (forward < 0.0f && m->forwardVel >= 0.0f) forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
 
     switch (mario_get_floor_class(m)) {
         case SURFACE_CLASS_VERY_SLIPPERY:
             accel = 10.0f;
             lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.98f;
             break;
-
         case SURFACE_CLASS_SLIPPERY:
             accel = 8.0f;
             lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.96f;
             break;
-
         default:
             accel = 7.0f;
             lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f;
             break;
-
         case SURFACE_CLASS_NOT_SLIPPERY:
             accel = 5.0f;
             lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f;
@@ -297,15 +286,13 @@ void apply_slope_accel(struct MarioState *m) {
     struct Surface *floor = m->floor;
     f32 steepness = sqrtf(floor->normal.x * floor->normal.x + floor->normal.z * floor->normal.z);
 
-    UNUSED f32 normalY = floor->normal.y;
+    // UNUSED f32 normalY = floor->normal.y;
     s16 floorDYaw = m->floorAngle - m->faceAngle[1];
 
     if (mario_floor_is_slope(m)) {
         s16 slopeClass = 0;
 
-        if (m->action != ACT_SOFT_BACKWARD_GROUND_KB && m->action != ACT_SOFT_FORWARD_GROUND_KB) {
-            slopeClass = mario_get_floor_class(m);
-        }
+        if (m->action != ACT_SOFT_BACKWARD_GROUND_KB && m->action != ACT_SOFT_FORWARD_GROUND_KB) slopeClass = mario_get_floor_class(m);
 
         switch (slopeClass) {
             case SURFACE_CLASS_VERY_SLIPPERY:
@@ -366,11 +353,7 @@ void update_shell_speed(struct MarioState *m) {
         m->floor->originOffset = -m->waterLevel;
     }
 
-    if (m->floor != NULL && m->floor->type == SURFACE_SLOW) {
-        maxTargetSpeed = 48.0f;
-    } else {
-        maxTargetSpeed = 64.0f;
-    }
+    maxTargetSpeed = (m->floor != NULL && m->floor->type == SURFACE_SLOW) ? 48.0f : 64.0f;
 
     targetSpeed = m->intendedMag * 2.0f;
     if (targetSpeed > maxTargetSpeed) targetSpeed = maxTargetSpeed;
@@ -437,11 +420,7 @@ void update_walking_speed(struct MarioState *m) {
     s16 turnRange;
 #endif
 
-    if (m->floor != NULL && m->floor->type == SURFACE_SLOW) {
-        maxTargetSpeed = 24.0f;
-    } else {
-        maxTargetSpeed = 32.0f;
-    }
+    maxTargetSpeed = (m->floor != NULL && m->floor->type == SURFACE_SLOW) ? 24.0f : 32.0f;
 
     targetSpeed = m->intendedMag < maxTargetSpeed ? m->intendedMag : maxTargetSpeed;
 
@@ -474,12 +453,10 @@ void update_walking_speed(struct MarioState *m) {
         } else if (turnRange > 0xFFF) {
             turnRange = 0xFFF;
         }
-        m->faceAngle[1] =
-            m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, turnRange, turnRange);
+        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, turnRange, turnRange);
     }
 #else
-    m->faceAngle[1] =
-        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+    m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
 #endif
     apply_slope_accel(m);
 }
@@ -488,10 +465,8 @@ s32 should_begin_sliding(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) {
         s32 slideLevel = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE;
         s32 movingBackward = m->forwardVel <= -1.0f;
-
         return (slideLevel || movingBackward || mario_facing_downhill(m, FALSE));
     }
-
     return FALSE;
 }
 
@@ -506,10 +481,8 @@ s32 check_ground_dive_or_punch(struct MarioState *m) {
             m->vel[1] = 20.0f;
             return set_mario_action(m, ACT_DIVE, 1);
         }
-
         return set_mario_action(m, ACT_MOVE_PUNCHING, 0);
     }
-
     return FALSE;
 }
 
@@ -553,14 +526,10 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         m->actionTimer = 2;
                     } else {
                         //! (Speed Crash) If Mario's speed is more than 2^17.
-                        if ((animSpeed = (s32)(intendedSpeed / 4.0f * 0x10000)) < 0x1000) {
-                            animSpeed = 0x1000;
-                        }
+                        if ((animSpeed = (s32)(intendedSpeed / 4.0f * 0x10000)) < 0x1000) animSpeed = 0x1000;
                         set_mario_anim_with_accel(m, MARIO_ANIM_START_TIPTOE, animSpeed);
                         play_step_sound(m, 7, 22);
-                        if (is_anim_past_frame(m, 23)) {
-                            m->actionTimer = 2;
-                        }
+                        if (is_anim_past_frame(m, 23)) m->actionTimer = 2;
                         loop = FALSE;
                     }
                     break;
@@ -570,9 +539,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         m->actionTimer = 2;
                     } else {
                         //! (Speed Crash) If Mario's speed is more than 2^17.
-                        if ((animSpeed = (s32)(intendedSpeed * 0x10000)) < 0x1000) {
-                            animSpeed = 0x1000;
-                        }
+                        if ((animSpeed = (s32)(intendedSpeed * 0x10000)) < 0x1000) animSpeed = 0x1000;
                         set_mario_anim_with_accel(m, MARIO_ANIM_TIPTOE, animSpeed);
                         play_step_sound(m, 14, 72);
                         loop = FALSE;
@@ -609,8 +576,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
         }
     }
 
-    marioObj->oMarioWalkingPitch =
-        (s16) approach_s32(marioObj->oMarioWalkingPitch, targetPitch, 0x800, 0x800);
+    marioObj->oMarioWalkingPitch = (s16) approach_s32(marioObj->oMarioWalkingPitch, targetPitch, 0x800, 0x800);
     marioObj->header.gfx.angle[0] = marioObj->oMarioWalkingPitch;
 }
 
@@ -723,7 +689,7 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
         if (nextBodyPitch >  0x1555) nextBodyPitch =  0x1555;
         if (nextBodyPitch <       0) nextBodyPitch =       0;
 
-        marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll, 0x400, 0x400);
+        marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll , 0x400, 0x400);
         marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x400, 0x400);
     } else {
         marioBodyState->torsoAngle[2] = 0;
@@ -746,9 +712,9 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
     if (nextBodyPitch >  0x1000) nextBodyPitch =  0x1000;
     if (nextBodyPitch <       0) nextBodyPitch =       0;
 
-    marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll, 0x200, 0x200);
+    marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll , 0x200, 0x200);
     marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x200, 0x200);
-    marioBodyState->headAngle[2] = -marioBodyState->torsoAngle[2];
+    marioBodyState->headAngle[2]  = -marioBodyState->torsoAngle[2];
 
     marioObj->header.gfx.angle[2] = marioBodyState->torsoAngle[2];
     marioObj->header.gfx.pos[1] += 45.0f;
@@ -1009,9 +975,7 @@ s32 act_decelerating(struct MarioState *m) {
         m->particleFlags |= PARTICLE_DUST;
     } else {
         // (Speed Crash) Crashes if speed exceeds 2^17.
-        if ((animSpeed = (s32)(m->forwardVel / 4.0f * 0x10000)) < 0x1000) {
-            animSpeed = 0x1000;
-        }
+        if ((animSpeed = (s32)(m->forwardVel / 4.0f * 0x10000)) < 0x1000) animSpeed = 0x1000;
 
         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, animSpeed);
         play_step_sound(m, 10, 49);

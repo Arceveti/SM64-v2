@@ -13,8 +13,8 @@
 #include "prevent_bss_reordering.h"
 
 // frame counts for the zoom in, hold, and zoom out of title model
-#define INTRO_STEPS_ZOOM_IN 20
-#define INTRO_STEPS_HOLD_1 75
+#define INTRO_STEPS_ZOOM_IN  20
+#define INTRO_STEPS_HOLD_1   75
 #define INTRO_STEPS_ZOOM_OUT 91
 
 // background types
@@ -58,7 +58,7 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
         // determine scale based on the frame counter
         if (sIntroFrameCounter >= 0 && sIntroFrameCounter < INTRO_STEPS_ZOOM_IN) {
             // zooming in
-            scaleX = scaleTable1[sIntroFrameCounter * 3];
+            scaleX = scaleTable1[sIntroFrameCounter * 3    ];
             scaleY = scaleTable1[sIntroFrameCounter * 3 + 1];
             scaleZ = scaleTable1[sIntroFrameCounter * 3 + 2];
         } else if (sIntroFrameCounter >= INTRO_STEPS_ZOOM_IN && sIntroFrameCounter < INTRO_STEPS_HOLD_1) {
@@ -68,7 +68,7 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
             scaleZ = 1.0f;
         } else if (sIntroFrameCounter >= INTRO_STEPS_HOLD_1 && sIntroFrameCounter < INTRO_STEPS_ZOOM_OUT) {
             // zooming out
-            scaleX = scaleTable2[(sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3];
+            scaleX = scaleTable2[(sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3    ];
             scaleY = scaleTable2[(sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3 + 1];
             scaleZ = scaleTable2[(sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3 + 2];
         } else {
@@ -79,9 +79,9 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
         }
         guScale(scaleMat, scaleX, scaleY, scaleZ);
 
-        gSPMatrix(dlIter++, scaleMat, G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-        gSPDisplayList(dlIter++, &intro_seg7_dl_main_logo);  // draw model
-        gSPPopMatrix(dlIter++, G_MTX_MODELVIEW);
+        gSPMatrix(        dlIter++, scaleMat, G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
+        gSPDisplayList(   dlIter++, &intro_seg7_dl_main_logo);  // draw model
+        gSPPopMatrix(     dlIter++, G_MTX_MODELVIEW);
         gSPEndDisplayList(dlIter);
 
         sIntroFrameCounter++;
@@ -120,9 +120,7 @@ Gfx *geo_intro_tm_copyright(s32 state, struct GraphNode *node, UNUSED void *cont
         // Once the "Super Mario 64" logo has just about zoomed fully, fade in the "TM" and copyright text
         if (sIntroFrameCounter >= 19) {
             sTmCopyrightAlpha += 26;
-            if (sTmCopyrightAlpha > 255) {
-                sTmCopyrightAlpha = 255;
-            }
+            if (sTmCopyrightAlpha > 255) sTmCopyrightAlpha = 255;
         }
     }
     return dl;
@@ -149,8 +147,8 @@ static Gfx *intro_backdrop_one_image(s32 index, s8 *backgroundTable) {
     // intro screen background texture Y offsets
     static float yCoords[] = {
         160, 160, 160, 160,
-        80,  80,  80,  80,
-        0,   0,   0,   0,
+         80,  80,  80,  80,
+          0,   0,   0,   0,
     };
 
     // table that points to either the "Super Mario 64" or "Game Over" tables
@@ -198,9 +196,7 @@ Gfx *geo_intro_regular_backdrop(s32 state, struct GraphNode *node, UNUSED void *
         graphNode->node.flags = (graphNode->node.flags & 0xFF) | (LAYER_OPAQUE << 8);
         gSPDisplayList(dlIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000100);
-        for (i = 0; i < 12; ++i) {
-            gSPDisplayList(dlIter++, intro_backdrop_one_image(i, backgroundTable));
-        }
+        for (i = 0; i < 12; ++i) gSPDisplayList(dlIter++, intro_backdrop_one_image(i, backgroundTable));
         gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000190);
         gSPEndDisplayList(dlIter);
     }
@@ -244,20 +240,16 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
                 static s8 flipOrder[] = { 0, 1, 2, 3, 7, 11, 10, 9, 8, 4, 5, 6 };
 
                 sGameOverTableIndex++;
-                gameOverBackgroundTable[flipOrder[sGameOverTableIndex]] =
-                    INTRO_BACKGROUND_SUPER_MARIO;
+                gameOverBackgroundTable[flipOrder[sGameOverTableIndex]] = INTRO_BACKGROUND_SUPER_MARIO;
             }
         }
-        if (sGameOverTableIndex != 11) {
-            sGameOverFrameCounter++;
-        }
+        if (sGameOverTableIndex != 11) sGameOverFrameCounter++;
         graphNode->flags = (graphNode->flags & 0xFF) | (LAYER_OPAQUE << 8);
 
         // draw all the tiles
         gSPDisplayList(dlIter++, &dl_proj_mtx_fullscreen);
         gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000100);
-        for (j = 0; j < ARRAY_COUNT(gameOverBackgroundTable); ++j)
-            gSPDisplayList(dlIter++, intro_backdrop_one_image(j, gameOverBackgroundTable));
+        for (j = 0; j < ARRAY_COUNT(gameOverBackgroundTable); ++j) gSPDisplayList(dlIter++, intro_backdrop_one_image(j, gameOverBackgroundTable));
         gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000190);
         gSPEndDisplayList(dlIter);
     }
@@ -301,10 +293,7 @@ void intro_gen_face_texrect(Gfx **dlIter, s32 imageW, s32 imageH) {
 
     for (y = 0; y < 6; y++) {
         for (x = 0; x < 8; x++) {
-            if (sFaceVisible[y*8 + x] != 0) {
-                gSPTextureRectangle((*dlIter)++, (x * imageW + x1) << 2, (y * imageH + y1) << 2, (x * imageW + x2) << 2, (y * imageH + y2) << 2, 0,
-                                    0, 0, (4 << 10), (1 << 10));
-            }
+            if (sFaceVisible[y*8 + x] != 0) gSPTextureRectangle((*dlIter)++, (x * imageW + x1) << 2, (y * imageH + y1) << 2, (x * imageW + x2) << 2, (y * imageH + y2) << 2, 0, 0, 0, (4 << 10), (1 << 10));
         }
     }
 }
@@ -383,9 +372,7 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
     s32 i;
 
     if (state != 1) {
-        for (i = 0; i < 48; i++) {
-            sFaceVisible[i] = FALSE;
-        }
+        for (i = 0; i < 48; i++) sFaceVisible[i] = FALSE;
 
     } else if (state == 1) {
         if (sFaceCounter == 0) {
@@ -396,9 +383,7 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
             }
         } else {
             sFaceVisible[sFaceToggleOrder[sFaceCounter++]] ^= TRUE;
-            if (sFaceCounter >= 40) {
-                sFaceCounter = 0;
-            }
+            if (sFaceCounter >= 40) sFaceCounter = 0;
         }
 
         // Draw while the first or last face is visible.

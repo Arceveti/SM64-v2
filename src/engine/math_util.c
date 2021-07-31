@@ -174,10 +174,10 @@ void mtxf_identity(Mat4 mtx) {
     // These loops must be one line to match on -O2
 
     // initialize everything except the first and last cells to 0
-    for (dest = (f32 *) mtx + 1, i = 0; i < 14; dest++, i++) *dest = 0;
+    for (dest = (f32 *) mtx + 1, i = 0; i < 14; dest++   , i++) *dest = 0;
 
     // initialize the diagonal cells to 1
-    for (dest = (f32 *) mtx, i = 0; i < 4; dest += 5, i++) *dest = 1;
+    for (dest = (f32 *) mtx    , i = 0; i <  4; dest += 5, i++) *dest = 1;
 }
 
 /**
@@ -217,8 +217,8 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     dx *= invLength;
     dz *= invLength;
 
-    yColY = coss(roll);
-    xColY = sins(roll) * dz;
+    yColY =  coss(roll);
+    xColY =  sins(roll) * dz;
     zColY = -sins(roll) * dx;
 
     xColZ = to[0] - from[0];
@@ -317,24 +317,24 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
     register f32 sz = sins(c[2]);
     register f32 cz = coss(c[2]);
 
-    dest[0][0] = cy * cz;
-    dest[0][1] = cy * sz;
+    dest[0][0] =  cy * cz;
+    dest[0][1] =  cy * sz;
     dest[0][2] = -sy;
     dest[0][3] = 0;
 
-    dest[1][0] = sx * sy * cz - cx * sz;
-    dest[1][1] = sx * sy * sz + cx * cz;
-    dest[1][2] = sx * cy;
+    dest[1][0] =  sx * sy * cz - cx * sz;
+    dest[1][1] =  sx * sy * sz + cx * cz;
+    dest[1][2] =  sx * cy;
     dest[1][3] = 0;
 
-    dest[2][0] = cx * sy * cz + sx * sz;
-    dest[2][1] = cx * sy * sz - sx * cz;
-    dest[2][2] = cx * cy;
+    dest[2][0] =  cx * sy * cz + sx * sz;
+    dest[2][1] =  cx * sy * sz - sx * cz;
+    dest[2][2] =  cx * cy;
     dest[2][3] = 0;
 
-    dest[3][0] = b[0];
-    dest[3][1] = b[1];
-    dest[3][2] = b[2];
+    dest[3][0] =  b[0];
+    dest[3][1] =  b[1];
+    dest[3][2] =  b[2];
     dest[3][3] = 1;
 }
 
@@ -360,9 +360,15 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
     dest[2][2] = 1;
     dest[2][3] = 0;
 
-    dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
-    dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
-    dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
+        dest[3][0] = mtx[3][0];
+        dest[3][1] = mtx[3][1];
+        dest[3][2] = mtx[3][2];
+    } else {
+        dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+        dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+        dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    }
     dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
 }
 
@@ -378,9 +384,15 @@ void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffse
     s16 yrot;
     f32 cx, cy, cz;
 
-    dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
-    dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
-    dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
+        dest[3][0] = mtx[3][0];
+        dest[3][1] = mtx[3][1];
+        dest[3][2] = mtx[3][2];
+    } else {
+        dest[3][0] = mtx[0][0] * position[0] + mtx[1][0] * position[1] + mtx[2][0] * position[2] + mtx[3][0];
+        dest[3][1] = mtx[0][1] * position[0] + mtx[1][1] * position[1] + mtx[2][1] * position[2] + mtx[3][1];
+        dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
+    }
     dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
 
     // angle to camera pos

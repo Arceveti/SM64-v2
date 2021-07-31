@@ -61,9 +61,7 @@ s32 run_level_id_or_demo(s32 level) {
 
                 // if the next demo sequence ID is the count limit, reset it back to
                 // the first sequence.
-                if (++gDemoInputListID == gDemoInputsBuf.dmaTable->count) {
-                    gDemoInputListID = 0;
-                }
+                if (++gDemoInputListID == gDemoInputsBuf.dmaTable->count) gDemoInputListID = 0;
 
                 // add 1 (+4) to the pointer to skip the first 4 bytes
                 // Use the first 4 bytes to store level ID,
@@ -71,7 +69,7 @@ s32 run_level_id_or_demo(s32 level) {
                 gCurrDemoInput = ((struct DemoInput *) gDemoInputsBuf.bufTarget) + 1;
                 level = (s8)((struct DemoInput *) gDemoInputsBuf.bufTarget)->timer;
                 gCurrSaveFileNum = 1;
-                gCurrActNum = 1;
+                gCurrActNum      = 1;
             }
         } else { // activity was detected, so reset the demo countdown.
             sDemoCountdown = 0;
@@ -133,17 +131,10 @@ s16 intro_level_select(void) {
         gLevelSelectHoldKeyIndex = index;
     }
 
-    if ((index & 3) == 0) {
-        gLevelSelectHoldKeyTimer = 0;
-    }
+    if ((index & 3) == 0) gLevelSelectHoldKeyTimer = 0;
 
-    if (gCurrLevelNum > LEVEL_MAX) {
-        gCurrLevelNum = LEVEL_MIN; // exceeded max. set to min.
-    }
-
-    if (gCurrLevelNum < LEVEL_MIN) {
-        gCurrLevelNum = LEVEL_MAX; // exceeded min. set to max.
-    }
+    if (gCurrLevelNum > LEVEL_MAX) gCurrLevelNum = LEVEL_MIN; // exceeded max. set to min.
+    if (gCurrLevelNum < LEVEL_MIN) gCurrLevelNum = LEVEL_MAX; // exceeded min. set to max.
 
     // Use file 4 and last act as a test
     gCurrSaveFileNum = 4;
@@ -180,11 +171,7 @@ s32 intro_regular(void) {
     // "press start to play" when it goes back to the title screen
     // (using SAVE AND QUIT)
     if (sPlayMarioGreeting) {
-        if (gGlobalTimer < 129) {
-            play_sound(SOUND_MARIO_HELLO, gGlobalSoundSource);
-        } else {
-            play_sound(SOUND_MARIO_PRESS_START_TO_PLAY, gGlobalSoundSource);
-        }
+        play_sound((gGlobalTimer < 129) ? SOUND_MARIO_HELLO : SOUND_MARIO_PRESS_START_TO_PLAY, gGlobalSoundSource);
         sPlayMarioGreeting = FALSE;
     }
 #endif

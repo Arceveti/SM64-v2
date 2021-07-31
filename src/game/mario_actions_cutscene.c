@@ -42,9 +42,9 @@ static Vp sEndCutsceneVp = { { { 640, 480, 511, 0 },
 static struct CreditsEntry *sDispCreditsEntry = NULL;
 
 // related to peach gfx?
-static s8 D_8032CBE4 = 0;
-static s8 D_8032CBE8 = 0;
-static s8 D_8032CBEC[7] = { 2, 3, 2, 1, 2, 3, 2 };
+static s8 sPeachManualBlinkTime = 0;
+static s8 sPeachIsBlinking = 0; // or isn't blinking?
+static s8 sPeachBlinkTimes[7] = { 2, 3, 2, 1, 2, 3, 2 };
 
 static u8 sStarsNeededForDialog[] = { 1, 3, 8, 30, 50, 70 };
 
@@ -80,11 +80,7 @@ static Vec4s sJumboStarKeyframes[27] = {
 s32 get_credits_str_width(char *str) {
     u32 c;
     s32 length = 0;
-
-    while ((c = *str++) != 0) {
-        length += (c == ' ' ? 4 : 7);
-    }
-
+    while ((c = *str++) != 0) length += (c == ' ' ? 4 : 7);
     return length;
 }
 
@@ -114,7 +110,6 @@ void print_displaying_credits_entry(void) {
 #ifndef VERSION_JP
     s16 lineHeight;
 #endif
-
     if (sDispCreditsEntry != NULL) {
         currStrPtr = (char **) sDispCreditsEntry->string;
         titleStr = *currStrPtr++;
@@ -124,7 +119,6 @@ void print_displaying_credits_entry(void) {
 #ifndef VERSION_JP
         lineHeight = 16;
 #endif
-
         dl_rgba16_begin_cutscene_msg_fade();
         print_credits_str_ascii(CREDIT_TEXT_X_LEFT, strY, titleStr);
 
@@ -152,7 +146,6 @@ void print_displaying_credits_entry(void) {
 #endif
         }
 #endif
-
         while (numLines-- > 0) {
             print_credits_str_ascii(CREDIT_TEXT_X_RIGHT - get_credits_str_width(*currStrPtr), strY, *currStrPtr);
 
@@ -161,7 +154,6 @@ void print_displaying_credits_entry(void) {
 #else
             strY += lineHeight;
 #endif
-
             currStrPtr++;
         }
 
@@ -172,12 +164,7 @@ void print_displaying_credits_entry(void) {
 
 void bhv_end_peach_loop(void) {
     cur_obj_init_animation_with_sound(sEndPeachAnimation);
-    if (cur_obj_check_if_near_animation_end()) {
-        // anims: 0-3, 4, 5, 6-8, 9, 10, 11
-        if (sEndPeachAnimation < 3 || sEndPeachAnimation == 6 || sEndPeachAnimation == 7) {
-            sEndPeachAnimation++;
-        }
-    }
+    if (cur_obj_check_if_near_animation_end() && (sEndPeachAnimation < 3 || sEndPeachAnimation == 6 || sEndPeachAnimation == 7)) sEndPeachAnimation++; // anims: 0-3, 4, 5, 6-8, 9, 10, 11
 }
 
 void bhv_end_toad_loop(void) {
@@ -199,15 +186,15 @@ s32 geo_switch_peach_eyes(s32 callContext, struct GraphNode *node, UNUSED s32 co
     s16 timer;
 
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (D_8032CBE4 == 0) {
+        if (sPeachManualBlinkTime == 0) {
             timer = (gAreaUpdateCounter + 0x20) >> 1 & 0x1F;
             if (timer < 7) {
-                switchCase->selectedCase = D_8032CBE8 * 4 + D_8032CBEC[timer];
+                switchCase->selectedCase = sPeachIsBlinking * 4 + sPeachBlinkTimes[timer];
             } else {
-                switchCase->selectedCase = D_8032CBE8 * 4 + 1;
+                switchCase->selectedCase = sPeachIsBlinking * 4 + 1;
             }
         } else {
-            switchCase->selectedCase = D_8032CBE8 * 4 + D_8032CBE4 - 1;
+            switchCase->selectedCase = sPeachIsBlinking * 4 + sPeachManualBlinkTime - 1;
         }
     }
 
@@ -362,8 +349,8 @@ s32 set_mario_npc_dialog(s32 actionArg) {
 // 23: end
 s32 act_reading_npc_dialog(struct MarioState *m) {
     s32 headTurnAmount = 0;
-    s16 angleToNPC = 0x0;
-    s16 turnSpeed = 0x800;
+    s16 angleToNPC     = 0x0;
+    s16 turnSpeed      = 0x800;
 
     if (m->actionArg == MARIO_DIALOG_LOOK_UP  ) headTurnAmount = -1024;
     if (m->actionArg == MARIO_DIALOG_LOOK_DOWN) headTurnAmount =   384;
@@ -1965,7 +1952,7 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
         sEndRightToadObj->oOpacity = 255;
         sEndLeftToadObj->oOpacity = 255;
 
-        D_8032CBE4 = 4;
+        sPeachManualBlinkTime = 4;
         sEndPeachAnimation = 4;
 
         sEndToadAnims[0] = 4;
@@ -2051,7 +2038,7 @@ static void end_peach_cutscene_dialog_1(struct MarioState *m) {
 #else
         case 81:
 #endif
-            D_8032CBE4 = 3;
+            sPeachManualBlinkTime = 3;
             break;
 
 #ifdef VERSION_SH
@@ -2059,7 +2046,7 @@ static void end_peach_cutscene_dialog_1(struct MarioState *m) {
 #else
         case 145:
 #endif
-            D_8032CBE4 = 2;
+            sPeachManualBlinkTime = 2;
             break;
 
 #ifdef VERSION_SH
@@ -2067,8 +2054,8 @@ static void end_peach_cutscene_dialog_1(struct MarioState *m) {
 #else
         case 228:
 #endif
-            D_8032CBE4 = 1;
-            D_8032CBE8 = 1;
+            sPeachManualBlinkTime = 1;
+            sPeachIsBlinking = 1;
             break;
 
 #ifdef VERSION_SH
@@ -2088,8 +2075,8 @@ static void end_peach_cutscene_dialog_1(struct MarioState *m) {
 #else
         case 275:
 #endif
-            D_8032CBE4 = 0;
-            D_8032CBE8 = 0;
+            sPeachManualBlinkTime = 0;
+            sPeachIsBlinking = 0;
             break;
 
 #ifdef VERSION_SH
@@ -2148,7 +2135,7 @@ static void end_peach_cutscene_dialog_2(struct MarioState *m) {
 #else        
         case 45:
 #endif
-            D_8032CBE8 = 1;
+            sPeachIsBlinking = 1;
             break;
 
 #ifdef VERSION_SH
@@ -2197,15 +2184,15 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
 
     switch (m->actionTimer) {
         case 8:
-            D_8032CBE8 = 0;
+            sPeachIsBlinking = 0;
             break;
 
         case 10:
-            D_8032CBE4 = 3;
+            sPeachManualBlinkTime = 3;
             break;
 
         case 50:
-            D_8032CBE4 = 4;
+            sPeachManualBlinkTime = 4;
             break;
 
         case 75:
@@ -2217,11 +2204,11 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
             break;
 
         case 100:
-            D_8032CBE4 = 3;
+            sPeachManualBlinkTime = 3;
             break;
 
         case 136:
-            D_8032CBE4 = 0;
+            sPeachManualBlinkTime = 0;
             break;
 
         case 140:
@@ -2240,19 +2227,19 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
 
     switch (m->actionTimer) {
         case 70:
-            D_8032CBE4 = 1;
+            sPeachManualBlinkTime = 1;
             break;
 
         case 86:
-            D_8032CBE4 = 2;
+            sPeachManualBlinkTime = 2;
             break;
 
         case 90:
-            D_8032CBE4 = 3;
+            sPeachManualBlinkTime = 3;
             break;
 
         case 120:
-            D_8032CBE4 = 0;
+            sPeachManualBlinkTime = 0;
             break;
 
         case 140:
@@ -2284,7 +2271,7 @@ static void end_peach_cutscene_dialog_3(struct MarioState *m) {
             sEndPeachAnimation = 0;
             sEndToadAnims[0] = 0;
             sEndToadAnims[1] = 2;
-            D_8032CBE8 = 1;
+            sPeachIsBlinking = 1;
             set_cutscene_message(160, 227, 5, 30);
 #ifndef VERSION_JP
             play_sound(SOUND_PEACH_BAKE_A_CAKE, sEndPeachObj->header.gfx.cameraToObject);

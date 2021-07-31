@@ -70,26 +70,26 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 
     wall = resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f);
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
+    ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil );
 
-    if (floor == NULL || ceilHeight - floorHeight < 160.0f) return WATER_STEP_CANCELLED;
-    if (ceilHeight - floorHeight < 160.0f) return WATER_STEP_CANCELLED;
+    if (floor == NULL) return WATER_STEP_CANCELLED;
 
-    if (nextPos[1] < floorHeight) {
-        vec3f_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
-        m->floor = floor;
-        m->floorHeight = floorHeight;
-        return WATER_STEP_HIT_FLOOR;
-    }
-    if (nextPos[1] + 160.0f > ceilHeight) {
+    if (ceil != NULL && (nextPos[1] + 160.0f >= ceilHeight || ceilHeight - floorHeight < 160.0f)) {
         ceilAmt = (nextPos[1] + 160.0f) - ceilHeight;
         nextPos[0] += ceil->normal.x * ceilAmt;
         nextPos[2] += ceil->normal.z * ceilAmt;
         nextPos[1] = ceilHeight - 160.0f;
         vec3f_copy(m->pos, nextPos);
-        m->floor = floor;
+        m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_CEILING;
+    }
+    if (nextPos[1] <= floorHeight) {
+        nextPos[1] = floorHeight;
+        vec3f_copy(m->pos, nextPos);
+        m->floor       = floor;
+        m->floorHeight = floorHeight;
+        return WATER_STEP_HIT_FLOOR;
     }
     
     vec3f_copy(m->pos, nextPos);
@@ -215,31 +215,29 @@ static u32 perform_water_step(struct MarioState *m) {
         nextPos[1] = m->pos[1] + step[1] / 4.0f;
         nextPos[2] = m->pos[2] + step[2] / 4.0f;
 
+        //? What does this do?
         if (nextPos[1] > m->waterLevel - 80) {
             nextPos[1] = m->waterLevel - 80;
             m->vel[1] = 0.0f;
         }
 
         stepResult = perform_water_quarter_step(m, nextPos);
-        if (stepResult == WATER_STEP_HIT_FLOOR
-        || stepResult == WATER_STEP_HIT_CEILING
-        || stepResult == WATER_STEP_HIT_WALL
-        || stepResult == WATER_STEP_CANCELLED) break;
+        if (stepResult == WATER_STEP_CANCELLED) break;
     }
 #else
     nextPos[0] = m->pos[0] + step[0];
     nextPos[1] = m->pos[1] + step[1];
     nextPos[2] = m->pos[2] + step[2];
 
-    if (nextPos[1] > m->waterLevel - 80) {
-        nextPos[1] = m->waterLevel - 80;
+    if (nextPos[1] > m->waterLevel - 80.0f) {
+        nextPos[1] = m->waterLevel - 80.0f;
         m->vel[1] = 0.0f;
     }
     stepResult = perform_water_full_step(m, nextPos);
 #endif
 
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set(marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
+    vec3s_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
 
     return stepResult;
 }
@@ -247,9 +245,9 @@ static u32 perform_water_step(struct MarioState *m) {
 static void update_water_pitch(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
 
-    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.pos[1] += 60.0f * sins(marioObj->header.gfx.angle[0]) * sins(marioObj->header.gfx.angle[0]);
-    if (marioObj->header.gfx.angle[0] < 0) marioObj->header.gfx.angle[0] = marioObj->header.gfx.angle[0] * 6 / 10;
-    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.angle[0] = marioObj->header.gfx.angle[0] * 10 / 8;
+    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.pos[1]  += 60.0f * sins(marioObj->header.gfx.angle[0]) * sins(marioObj->header.gfx.angle[0]);
+    if (marioObj->header.gfx.angle[0] < 0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 0.6f;  // 3 / 5; //  6 / 10;
+    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 1.25f; // 5 / 4; // 10 /  8;
 }
 
 static void stationary_slow_down(struct MarioState *m) {
@@ -273,9 +271,9 @@ static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
     f32 maxSpeed = MAX_SWIMMING_SPEED;
 
     if (m->action & ACT_FLAG_STATIONARY) m->forwardVel -= 2.0f;
-    if (m->forwardVel < 0.0f) m->forwardVel = 0.0f;
-    if (m->forwardVel > maxSpeed) m->forwardVel = maxSpeed;
-    if (m->forwardVel > decelThreshold) m->forwardVel -= 0.5f;
+    if (m->forwardVel < 0.0f           ) m->forwardVel  = 0.0f;
+    if (m->forwardVel > maxSpeed       ) m->forwardVel  = maxSpeed;
+    if (m->forwardVel > decelThreshold ) m->forwardVel -= 0.5f;
 
     m->vel[0] = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
     m->vel[1] = m->forwardVel * sins(m->faceAngle[0]) + buoyancy;
@@ -327,6 +325,7 @@ static void common_idle_step(struct MarioState *m, s32 animation, s32 animSpeed)
     perform_water_step(m);
     update_water_pitch(m);
 
+    //? What does this do?
     if (m->faceAngle[0] > 0) {
         *val = approach_s32(*val, m->faceAngle[0] / 2, 0x80, 0x200);
     } else {
@@ -426,7 +425,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
             floorPitch = -find_floor_slope(m, -0x8000);
-            if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
+            if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch; //! instant pitch change is a bit weird
             break;
 
         case WATER_STEP_HIT_CEILING:
@@ -437,7 +436,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
             if (m->controller->stickY == 0.0f) {
                 if (m->faceAngle[0] > 0.0f) {
                     m->faceAngle[0] += 0x200;
-                    if (m->faceAngle[0] > 0x3F00) m->faceAngle[0] = 0x3F00;
+                    if (m->faceAngle[0] >  0x3F00) m->faceAngle[0] =  0x3F00;
                 } else {
                     m->faceAngle[0] -= 0x200;
                     if (m->faceAngle[0] < -0x3F00) m->faceAngle[0] = -0x3F00;
@@ -471,11 +470,7 @@ static s32 check_water_jump(struct MarioState *m) {
 
             m->vel[1] = 62.0f;
 
-            if (m->heldObj == NULL) {
-                return set_mario_action(m, ACT_WATER_JUMP, 0);
-            } else {
-                return set_mario_action(m, ACT_HOLD_WATER_JUMP, 0);
-            }
+            return set_mario_action(m, (m->heldObj == NULL) ? ACT_WATER_JUMP : ACT_HOLD_WATER_JUMP, 0);
         }
     }
 
@@ -486,7 +481,7 @@ static s32 check_water_jump(struct MarioState *m) {
 static s32 act_water_ground_pound(struct MarioState *m) {
     u32 stepResult;
     f32 yOffset;
-    s32 stateFlags = m->heldObj != NULL;
+    s32 stateFlags = (m->heldObj != NULL);
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_WATER_ACTION_END   , 0);
 
@@ -633,15 +628,12 @@ static s32 act_breaststroke(struct MarioState *m) {
     }
 
     if (m->actionTimer == 1) {
-        play_sound(sSwimStrength == MIN_SWIM_STRENGTH ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST,
-                   m->marioObj->header.gfx.cameraToObject);
+        play_sound(sSwimStrength == MIN_SWIM_STRENGTH ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST, m->marioObj->header.gfx.cameraToObject);
         reset_bob_variables(m);
     }
 
 #if ENABLE_RUMBLE
-    if (m->actionTimer < 6) {
-        queue_rumble_submerged();
-    }
+    if (m->actionTimer < 6) queue_rumble_submerged();
 #endif
 
     set_mario_animation(m, MARIO_ANIM_SWIM_PART1);
@@ -1002,47 +994,23 @@ static s32 act_water_plunge(struct MarioState *m) {
 
     if (stepResult == WATER_STEP_HIT_FLOOR || m->vel[1] >= endVSpeed || m->actionTimer > 20) {
         switch (stateFlags) {
-            case 0:
-                set_mario_action(m, ACT_WATER_ACTION_END, 0);
-                break;
-            case 1:
-                set_mario_action(m, ACT_HOLD_WATER_ACTION_END, 0);
-                break;
-            case 2:
-                set_mario_action(m, ACT_FLUTTER_KICK, 0);
-                break;
-            case 3:
-                set_mario_action(m, ACT_HOLD_FLUTTER_KICK, 0);
-                break;
-            case 4:
-                set_mario_action(m, ACT_METAL_WATER_FALLING, 0);
-                break;
-            case 5:
-                set_mario_action(m, ACT_HOLD_METAL_WATER_FALLING, 0);
-                break;
+            case 0: set_mario_action(m, ACT_WATER_ACTION_END        , 0); break;
+            case 1: set_mario_action(m, ACT_HOLD_WATER_ACTION_END   , 0); break;
+            case 2: set_mario_action(m, ACT_FLUTTER_KICK            , 0); break;
+            case 3: set_mario_action(m, ACT_HOLD_FLUTTER_KICK       , 0); break;
+            case 4: set_mario_action(m, ACT_METAL_WATER_FALLING     , 0); break;
+            case 5: set_mario_action(m, ACT_HOLD_METAL_WATER_FALLING, 0); break;
         }
         sBobIncrement = 0;
     }
 
     switch (stateFlags) {
-        case 0:
-            set_mario_animation(m, MARIO_ANIM_WATER_ACTION_END);
-            break;
-        case 1:
-            set_mario_animation(m, MARIO_ANIM_WATER_ACTION_END_WITH_OBJ);
-            break;
-        case 2:
-            set_mario_animation(m, MARIO_ANIM_FLUTTERKICK);
-            break;
-        case 3:
-            set_mario_animation(m, MARIO_ANIM_FLUTTERKICK_WITH_OBJ);
-            break;
-        case 4:
-            set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
-            break;
-        case 5:
-            set_mario_animation(m, MARIO_ANIM_FALL_WITH_LIGHT_OBJ);
-            break;
+        case 0: set_mario_animation(m, MARIO_ANIM_WATER_ACTION_END         ); break;
+        case 1: set_mario_animation(m, MARIO_ANIM_WATER_ACTION_END_WITH_OBJ); break;
+        case 2: set_mario_animation(m, MARIO_ANIM_FLUTTERKICK              ); break;
+        case 3: set_mario_animation(m, MARIO_ANIM_FLUTTERKICK_WITH_OBJ     ); break;
+        case 4: set_mario_animation(m, MARIO_ANIM_GENERAL_FALL             ); break;
+        case 5: set_mario_animation(m, MARIO_ANIM_FALL_WITH_LIGHT_OBJ      ); break;
     }
 
     m->particleFlags |= PARTICLE_PLUNGE_BUBBLE;
@@ -1055,7 +1023,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
     f32 newDistance;
     s16 angleChange;
 
-    struct Object *marioObj = m->marioObj;
+    struct Object *marioObj  = m->marioObj;
     struct Object *whirlpool = m->usedObj;
 
     f32 dx = m->pos[0] - whirlpool->oPosX;
@@ -1109,8 +1077,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
 
 static void play_metal_water_jumping_sound(struct MarioState *m, u32 landing) {
     if (!(m->flags & MARIO_ACTION_SOUND_PLAYED)) m->particleFlags |= PARTICLE_MIST_CIRCLE;
-    play_sound_if_no_flag(m, landing ? SOUND_ACTION_METAL_LAND_WATER : SOUND_ACTION_METAL_JUMP_WATER,
-                          MARIO_ACTION_SOUND_PLAYED);
+    play_sound_if_no_flag(m, landing ? SOUND_ACTION_METAL_LAND_WATER : SOUND_ACTION_METAL_JUMP_WATER, MARIO_ACTION_SOUND_PLAYED);
 }
 
 static void play_metal_water_walking_sound(struct MarioState *m) {
@@ -1171,15 +1138,9 @@ static s32 act_metal_water_standing(struct MarioState *m) {
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
 
     switch (m->actionState) {
-        case 0:
-            set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
-            break;
-        case 1:
-            set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT);
-            break;
-        case 2:
-            set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER);
-            break;
+        case 0: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT  ); break;
+        case 1: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT ); break;
+        case 2: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER); break;
     }
 
     if (is_anim_at_end(m) && ++m->actionState == 3) m->actionState = 0;

@@ -157,12 +157,12 @@
                                      !(cmd >= 0x35 && cmd <= 0x37))
 #define SURFACE_IS_PAINTING_WARP(cmd) (cmd >= 0xD3 && cmd < 0xFD)
 
-#define SURFACE_CLASS_DEFAULT       0x0000
-#define SURFACE_CLASS_VERY_SLIPPERY 0x0013
-#define SURFACE_CLASS_SLIPPERY      0x0014
-#define SURFACE_CLASS_NOT_SLIPPERY  0x0015
+#define SURFACE_CLASS_DEFAULT           0x0000
+#define SURFACE_CLASS_VERY_SLIPPERY     0x0013
+#define SURFACE_CLASS_SLIPPERY          0x0014
+#define SURFACE_CLASS_NOT_SLIPPERY      0x0015
 
-#define SURFACE_FLAG_NONE             0
+#define SURFACE_FLAG_NONE               0x0000
 #define SURFACE_FLAG_DYNAMIC          (1 << 0)
 #define SURFACE_FLAG_NO_CAM_COLLISION (1 << 1)
 #define SURFACE_FLAG_X_PROJECTION     (1 << 3)
@@ -175,7 +175,7 @@
 #define TERRAIN_LOAD_OBJECTS     0x0043 // Loads in certain objects for level start
 #define TERRAIN_LOAD_ENVIRONMENT 0x0044 // Loads water/HMC gas
 
-#define TERRAIN_LOAD_IS_SURFACE_TYPE_LOW(cmd)  (cmd < 0x40)
+#define TERRAIN_LOAD_IS_SURFACE_TYPE_LOW(cmd)  (cmd <  0x40)
 #define TERRAIN_LOAD_IS_SURFACE_TYPE_HIGH(cmd) (cmd >= 0x65)
 
 // Terrain types defined by the level script command terrain_type (cmd_31)

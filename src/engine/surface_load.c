@@ -32,8 +32,7 @@ struct Surface *sSurfacePool;
  * The size of the surface pool (2300).
  */
 s16 sSurfacePoolSize;
-
-u8 gSurfacePoolError = 0x0;
+u8  gSurfacePoolError = 0x0;
 
 /**
  * Allocate the part of the surface node pool to contain a surface node.
@@ -41,11 +40,8 @@ u8 gSurfacePoolError = 0x0;
 static struct SurfaceNode *alloc_surface_node(void) {
     struct SurfaceNode *node = &sSurfaceNodePool[gSurfaceNodesAllocated];
     gSurfaceNodesAllocated++;
-
     node->next = NULL;
-
     if (gSurfaceNodesAllocated >= SURFACE_NODE_POOL_SIZE) gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_NODES;
-
     return node;
 }
 
@@ -76,7 +72,6 @@ static struct Surface *alloc_surface(void) {
  */
 static void clear_spatial_partition(SpatialPartitionCell *cells) {
     register s32 i = NUM_CELLS * NUM_CELLS;
-
     while (i--) {
         (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
         (*cells)[SPATIAL_PARTITION_CEILS ].next = NULL;
@@ -111,16 +106,15 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
 
     if (surface->normal.y > 0.01f) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
-        sortDir = 1; // highest to lowest, then insertion order
-    } else if (surface->normal.y < -0.01f) {
+        sortDir =  1; // highest to lowest, then insertion order
+    } else if (surface->normal.y < -0.2f) {
         listIndex = SPATIAL_PARTITION_CEILS;
         sortDir = -1; // lowest to highest, then insertion order
     } else {
         listIndex = SPATIAL_PARTITION_WALLS;
-        sortDir = 0; // insertion order
+        sortDir =  0; // insertion order
 
-        // if (surface->normal.x < -0.70710678118654752440084436210485 || surface->normal.x > 0.70710678118654752440084436210485) {
-        if (surface->normal.x < -0.70710678118654752 || surface->normal.x > 0.70710678118654752) surface->flags |= SURFACE_FLAG_X_PROJECTION;
+        if (surface->normal.x < -COS45 || surface->normal.x > COS45) surface->flags |= SURFACE_FLAG_X_PROJECTION;
     }
 
     surfacePriority = surface->upperY * sortDir;
@@ -302,9 +296,9 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     surface->vertex2[2] = z2;
     surface->vertex3[2] = z3;
 
-    surface->normal.x = nx;
-    surface->normal.y = ny;
-    surface->normal.z = nz;
+    surface->normal.x   = nx;
+    surface->normal.y   = ny;
+    surface->normal.z   = nz;
 
     surface->originOffset = -(nx * x1 + ny * y1 + nz * z1);
 
@@ -319,23 +313,13 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
  * based on the surface type.
  */
 static s32 surface_has_force(s16 surfaceType) {
-    s32 hasForce = FALSE;
-
-    switch (surfaceType) {
-        case SURFACE_0004: // Unused
-        case SURFACE_FLOWING_WATER:
-        case SURFACE_DEEP_MOVING_QUICKSAND:
-        case SURFACE_SHALLOW_MOVING_QUICKSAND:
-        case SURFACE_MOVING_QUICKSAND:
-        case SURFACE_HORIZONTAL_WIND:
-        case SURFACE_INSTANT_MOVING_QUICKSAND:
-            hasForce = TRUE;
-            break;
-
-        default:
-            break;
-    }
-    return hasForce;
+    return (surfaceType == SURFACE_0004
+         || surfaceType == SURFACE_FLOWING_WATER
+         || surfaceType == SURFACE_DEEP_MOVING_QUICKSAND
+         || surfaceType == SURFACE_SHALLOW_MOVING_QUICKSAND
+         || surfaceType == SURFACE_MOVING_QUICKSAND
+         || surfaceType == SURFACE_HORIZONTAL_WIND
+         || surfaceType == SURFACE_INSTANT_MOVING_QUICKSAND);
 }
 
 /**
@@ -343,21 +327,11 @@ static s32 surface_has_force(s16 surfaceType) {
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
 static s32 surf_has_no_cam_collision(s16 surfaceType) {
-    s32 flags = SURFACE_FLAG_NONE;
-
-    switch (surfaceType) {
-        case SURFACE_NO_CAM_COLLISION:
-        case SURFACE_NO_CAM_COLLISION_77: // Unused
-        case SURFACE_NO_CAM_COL_VERY_SLIPPERY:
-        case SURFACE_SWITCH:
-            flags = SURFACE_FLAG_NO_CAM_COLLISION;
-            break;
-
-        default:
-            break;
-    }
-
-    return flags;
+    if (surfaceType == SURFACE_NO_CAM_COLLISION
+     || surfaceType == SURFACE_NO_CAM_COLLISION_77
+     || surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY
+     || surfaceType == SURFACE_SWITCH) return SURFACE_FLAG_NO_CAM_COLLISION;
+    return SURFACE_FLAG_NONE;
 }
 
 /**
@@ -384,11 +358,7 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
             surface->type = surfaceType;
             surface->flags = (s8) flags;
 
-            if (hasForce) {
-                surface->force = *(*data + 3);
-            } else {
-                surface->force = 0;
-            }
+            surface->force = (hasForce ? *(*data + 3) : 0);
 
             add_surface(surface, FALSE);
         }
@@ -435,7 +405,7 @@ static void load_environmental_regions(s16 **data) {
 void alloc_surface_pools(void) {
     sSurfacePoolSize = SURFACE_POOL_SIZE;
     sSurfaceNodePool = main_pool_alloc(SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode), MEMORY_POOL_LEFT);
-    sSurfacePool = main_pool_alloc(sSurfacePoolSize * sizeof(struct Surface), MEMORY_POOL_LEFT);
+    sSurfacePool     = main_pool_alloc(      sSurfacePoolSize * sizeof(struct Surface    ), MEMORY_POOL_LEFT);
 
     gCCMEnteredSlide = FALSE;
     reset_red_coins_collected();
@@ -553,7 +523,6 @@ void clear_dynamic_surfaces(void) {
     if (!(gTimeStopState & TIME_STOP_ACTIVE)) {
         gSurfacesAllocated     = gNumStaticSurfaces;
         gSurfaceNodesAllocated = gNumStaticSurfaceNodes;
-
         clear_spatial_partition(&gDynamicSurfacePartition[0][0]);
     }
 }
@@ -634,16 +603,12 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
 
         if (surface != NULL) {
             surface->object = gCurrentObject;
-            surface->type = surfaceType;
+            surface->type   = surfaceType;
 
-            if (hasForce) {
-                surface->force = *(*data + 3);
-            } else {
-                surface->force = 0;
-            }
+            surface->force  = (hasForce ? *(*data + 3) : 0);
 
             surface->flags |= flags;
-            surface->room = (s8) room;
+            surface->room   = (s8) room;
             add_surface(surface, TRUE);
         }
 
@@ -658,8 +623,8 @@ void load_object_collision_model(void) {
     s16 vertexData[600];
 
     s16 *collisionData = gCurrentObject->collisionData;
-    f32 marioDist = gCurrentObject->oDistanceToMario;
-    f32 tangibleDist = gCurrentObject->oCollisionDistance;
+    f32 marioDist      = gCurrentObject->oDistanceToMario;
+    f32 tangibleDist   = gCurrentObject->oCollisionDistance;
 
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
@@ -680,7 +645,7 @@ void load_object_collision_model(void) {
     }
 
     if (marioDist < gCurrentObject->oDrawingDistance) {
-        gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+        gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE;
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }

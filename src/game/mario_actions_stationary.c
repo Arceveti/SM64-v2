@@ -40,8 +40,7 @@ s32 check_common_idle_cancels(struct MarioState *m) {
 s32 check_common_hold_idle_cancels(struct MarioState *m) {
     if (m->floor->normal.y < COS73) return mario_push_off_steep_floor(m, ACT_HOLD_FREEFALL, 0);
     if (m->heldObj->oInteractionSubtype & INT_SUBTYPE_DROP_IMMEDIATELY) {
-        m->heldObj->oInteractionSubtype =
-            (s32)(m->heldObj->oInteractionSubtype & ~INT_SUBTYPE_DROP_IMMEDIATELY);
+        m->heldObj->oInteractionSubtype = (s32)(m->heldObj->oInteractionSubtype & ~INT_SUBTYPE_DROP_IMMEDIATELY);
         return set_mario_action(m, ACT_PLACING_DOWN, 0);
     }
 
@@ -70,28 +69,16 @@ s32 act_idle(struct MarioState *m) {
     if (m->input & INPUT_IN_POISON_GAS          ) return set_mario_action(m, ACT_COUGHING    , 0);
     if (!(m->actionArg & 1) && m->health < 0x300) return set_mario_action(m, ACT_PANTING     , 0);
     if (check_common_idle_cancels(m)            ) return TRUE;
-    if (m->actionState == 3) {
-        if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW) {
-            return set_mario_action(m, ACT_SHIVERING, 0);
-        } else {
-            return set_mario_action(m, ACT_START_SLEEPING, 0);
-        }
-    }
+    if (m->actionState == 3) return set_mario_action(m, ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW) ? ACT_SHIVERING : ACT_START_SLEEPING, 0);
 
     if (m->actionArg & 1) {
         set_mario_animation(m, MARIO_ANIM_STAND_AGAINST_WALL);
     } else {
         // set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT + m->actionState);
         switch (m->actionState) {
-            case 0:
-                set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
-                break;
-            case 1:
-                set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT);
-                break;
-            case 2:
-                set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER);
-                break;
+            case 0: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT  ); break;
+            case 1: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT ); break;
+            case 2: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER); break;
         }
 
         if (is_anim_at_end(m)) {
@@ -121,9 +108,7 @@ s32 act_idle(struct MarioState *m) {
 }
 
 void play_anim_sound(struct MarioState *m, u32 actionState, s32 animFrame, u32 sound) {
-    if (m->actionState == actionState && m->marioObj->header.gfx.animInfo.animFrame == animFrame) {
-        play_sound(sound, m->marioObj->header.gfx.cameraToObject);
-    }
+    if (m->actionState == actionState && m->marioObj->header.gfx.animInfo.animFrame == animFrame) play_sound(sound, m->marioObj->header.gfx.cameraToObject);
 }
 
 s32 act_start_sleeping(struct MarioState *m) {
@@ -168,15 +153,19 @@ s32 act_start_sleeping(struct MarioState *m) {
 s32 act_sleeping(struct MarioState *m) {
     s32 animFrame;
     if (m->input
-        & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE
-           | INPUT_FIRST_PERSON | INPUT_STOMPED | INPUT_B_PRESSED | INPUT_Z_PRESSED)) {
+        & (INPUT_NONZERO_ANALOG
+         | INPUT_A_PRESSED
+         | INPUT_OFF_FLOOR
+         | INPUT_ABOVE_SLIDE
+         | INPUT_FIRST_PERSON
+         | INPUT_STOMPED
+         | INPUT_B_PRESSED
+         | INPUT_Z_PRESSED)) {
         return set_mario_action(m, ACT_WAKING_UP, m->actionState);
     }
 
     if (m->quicksandDepth > 30.0f) return set_mario_action(m, ACT_WAKING_UP, m->actionState);
-    if (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 60.0f) > 24.0f) {
-        return set_mario_action(m, ACT_WAKING_UP, m->actionState);
-    }
+    if (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 60.0f) > 24.0f) return set_mario_action(m, ACT_WAKING_UP, m->actionState);
 
     m->marioBodyState->eyeState = MARIO_EYES_CLOSED;
     stationary_ground_step(m);
@@ -262,18 +251,14 @@ s32 act_shivering(struct MarioState *m) {
             if (animFrame == 7 || animFrame == 81) {
                 play_sound(SOUND_ACTION_CLAP_HANDS_COLD, m->marioObj->header.gfx.cameraToObject);
             }
-            if (is_anim_past_end(m)) {
-                m->actionState = 1;
-            }
+            if (is_anim_past_end(m)) m->actionState = 1;
             break;
 
         case 1:
             animFrame = set_mario_animation(m, MARIO_ANIM_SHIVERING);
             if (animFrame == 9
              || animFrame == 25
-             || animFrame == 44) {
-                play_sound(SOUND_ACTION_CLAP_HANDS_COLD, m->marioObj->header.gfx.cameraToObject);
-            }
+             || animFrame == 44) play_sound(SOUND_ACTION_CLAP_HANDS_COLD, m->marioObj->header.gfx.cameraToObject);
             break;
 
         case 2:
@@ -291,18 +276,9 @@ s32 act_coughing(struct MarioState *m) {
 
     stationary_ground_step(m);
     animFrame = set_mario_animation(m, MARIO_ANIM_COUGHING);
-    if (animFrame == 25
-     || animFrame == 35) {
-        play_sound(SOUND_MARIO_COUGHING3, m->marioObj->header.gfx.cameraToObject);
-    }
-    if (animFrame == 50
-     || animFrame == 58) {
-        play_sound(SOUND_MARIO_COUGHING2, m->marioObj->header.gfx.cameraToObject);
-    }
-    if (animFrame == 71
-     || animFrame == 80) {
-        play_sound(SOUND_MARIO_COUGHING1, m->marioObj->header.gfx.cameraToObject);
-    }
+    if (animFrame == 25 || animFrame == 35) play_sound(SOUND_MARIO_COUGHING3, m->marioObj->header.gfx.cameraToObject);
+    if (animFrame == 50 || animFrame == 58) play_sound(SOUND_MARIO_COUGHING2, m->marioObj->header.gfx.cameraToObject);
+    if (animFrame == 71 || animFrame == 80) play_sound(SOUND_MARIO_COUGHING1, m->marioObj->header.gfx.cameraToObject);
 
     return FALSE;
 }
@@ -341,12 +317,7 @@ s32 act_standing_against_wall(struct MarioState *m) {
 s32 act_in_quicksand(struct MarioState *m) {
     if (m->quicksandDepth < 30.0f) return set_mario_action(m, ACT_IDLE, 0);
     if (check_common_idle_cancels(m)) return TRUE;
-    if (m->quicksandDepth > 70.0f) {
-        set_mario_animation(m, MARIO_ANIM_DYING_IN_QUICKSAND);
-    } else {
-        set_mario_animation(m, MARIO_ANIM_IDLE_IN_QUICKSAND);
-    }
-
+    set_mario_animation(m, (m->quicksandDepth > 70.0f) ? MARIO_ANIM_DYING_IN_QUICKSAND : MARIO_ANIM_IDLE_IN_QUICKSAND);
     stationary_ground_step(m);
     return FALSE;
 }
@@ -370,10 +341,7 @@ s32 act_panting(struct MarioState *m) {
     if (m->input & INPUT_STOMPED    ) return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->health >= 0x500          ) return set_mario_action(m, ACT_IDLE            , 0);
     if (check_common_idle_cancels(m)) return TRUE;
-    if (set_mario_animation(m, MARIO_ANIM_WALK_PANTING) == 1) {
-        play_sound(SOUND_MARIO_PANTING + ((gAudioRandom % 3U) << 0x10),
-                   m->marioObj->header.gfx.cameraToObject);
-    }
+    if (set_mario_animation(m, MARIO_ANIM_WALK_PANTING) == 1) play_sound(SOUND_MARIO_PANTING + ((gAudioRandom % 3U) << 0x10), m->marioObj->header.gfx.cameraToObject);
 
     stationary_ground_step(m);
     m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
@@ -406,8 +374,7 @@ s32 act_braking_stop(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_START_CROUCHING , 0);
 #endif
 
-    if (!(m->input & INPUT_FIRST_PERSON)
-        && m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
+    if (!(m->input & INPUT_FIRST_PERSON) && m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
 
     stopping_step(m, MARIO_ANIM_STOP_SKID, ACT_IDLE);
     return FALSE;
@@ -720,12 +687,11 @@ s32 check_common_stationary_cancels(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_SQUISHED, 0);
     }
 
-    if (m->action != ACT_NO_STANDING_DEATH) {
-        if (m->health < 0x100) {
-            update_mario_sound_and_camera(m);
-            return drop_and_set_mario_action(m, ACT_STANDING_DEATH, 0);
-        }
+    if (m->action != ACT_NO_STANDING_DEATH && m->health < 0x100) {
+        update_mario_sound_and_camera(m);
+        return drop_and_set_mario_action(m, ACT_STANDING_DEATH, 0);
     }
+
     return FALSE;
 }
 
@@ -733,7 +699,7 @@ s32 mario_execute_stationary_action(struct MarioState *m) {
     s32 cancel;
 
     if (check_common_stationary_cancels(m)) return TRUE;
-    if (mario_update_quicksand(m, 0.5f)) return TRUE;
+    if (mario_update_quicksand(m, 0.5f))    return TRUE;
 
     /* clang-format off */
     switch (m->action) {

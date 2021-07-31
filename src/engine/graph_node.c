@@ -10,13 +10,13 @@
 #include "geo_layout.h"
 
 // unused Mtx(s)
-s16 identityMtx[4][4] = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
-s16 zeroMtx[4][4]     = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+// UNUSED s16 identityMtx[4][4] = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+// UNUSED s16 zeroMtx[4][4]     = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
 
 Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
 Vec3s gVec3sZero = {    0,    0,    0 };
 Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
-UNUSED Vec3s gVec3sOne  = {    1,    1,    1 };
+// UNUSED Vec3s gVec3sOne  = {    1,    1,    1 };
 
 /**
  * Initialize a geo node with a given type. Sets all links such that there
@@ -773,7 +773,7 @@ s16 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
  * currently happens in-line in geo_process_shadow where it also accounts for
  * animations without lateral translation.
  */
-void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position) {
+UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position) {
     struct Animation *animation = obj->animInfo.curAnim;
 
     if (animation != NULL) {
