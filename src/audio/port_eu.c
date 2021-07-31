@@ -63,14 +63,10 @@ struct SPTask *create_next_audio_frame_task(void) {
     index = (gCurrAiBufferIndex - 2 + NUMAIBUFFERS) % NUMAIBUFFERS;
     samplesRemainingInAI = osAiGetLength() / 4;
 
-    if (gAiBufferLengths[index] != 0) {
-        osAiSetNextBuffer(gAiBuffers[index], gAiBufferLengths[index] * 4);
-    }
+    if (gAiBufferLengths[index] != 0) osAiSetNextBuffer(gAiBuffers[index], gAiBufferLengths[index] * 4);
 
     oldDmaCount = gCurrAudioFrameDmaCount;
-    if (oldDmaCount > AUDIO_FRAME_DMA_QUEUE_SIZE) {
-        stubbed_printf("DMA: Request queue over.( %d )\n", oldDmaCount);
-    }
+    if (oldDmaCount > AUDIO_FRAME_DMA_QUEUE_SIZE) stubbed_printf("DMA: Request queue over.( %d )\n", oldDmaCount);
     gCurrAudioFrameDmaCount = 0;
 
     decrease_sample_dma_ttls();
@@ -81,9 +77,7 @@ struct SPTask *create_next_audio_frame_task(void) {
 
     if (gAudioResetStatus != 0) {
         if (audio_shut_down_and_reset_step() == 0) {
-            if (gAudioResetStatus == 0) {
-                osSendMesg(OSMesgQueues[3], (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
-            }
+            if (gAudioResetStatus == 0) osSendMesg(OSMesgQueues[3], (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
             return NULL;
         }
     }
@@ -95,16 +89,10 @@ struct SPTask *create_next_audio_frame_task(void) {
 
     gAiBufferLengths[index] = ((gAudioBufferParameters.samplesPerFrameTarget - samplesRemainingInAI +
          EXTRA_BUFFERED_AI_SAMPLES_TARGET) & ~0xf) + SAMPLES_TO_OVERPRODUCE;
-    if (gAiBufferLengths[index] < gAudioBufferParameters.minAiBufferLength) {
-        gAiBufferLengths[index] = gAudioBufferParameters.minAiBufferLength;
-    }
-    if (gAiBufferLengths[index] > gAudioBufferParameters.maxAiBufferLength) {
-        gAiBufferLengths[index] = gAudioBufferParameters.maxAiBufferLength;
-    }
+    if (gAiBufferLengths[index] < gAudioBufferParameters.minAiBufferLength) gAiBufferLengths[index] = gAudioBufferParameters.minAiBufferLength;
+    if (gAiBufferLengths[index] > gAudioBufferParameters.maxAiBufferLength) gAiBufferLengths[index] = gAudioBufferParameters.maxAiBufferLength;
 
-    if (osRecvMesg(OSMesgQueues[1], &sp2C, OS_MESG_NOBLOCK) != -1) {
-        func_802ad7ec((u32) sp2C);
-    }
+    if (osRecvMesg(OSMesgQueues[1], &sp2C, OS_MESG_NOBLOCK) != -1) func_802ad7ec((u32) sp2C);
 
     flags = 0;
     gAudioCmd = synthesis_execute(gAudioCmd, &writtenCmds, currAiBuffer, gAiBufferLengths[index]);
@@ -113,7 +101,7 @@ struct SPTask *create_next_audio_frame_task(void) {
 
     index = gAudioTaskIndex;
     gAudioTask->msgqueue = NULL;
-    gAudioTask->msg = NULL;
+    gAudioTask->msg      = NULL;
 
     task = &gAudioTask->task.t;
     task->type = M_AUDTASK;
@@ -202,7 +190,7 @@ void func_8031D690(s32 player, FadeT fadeInTime) {
         gSequencePlayers[player].state = 1;
         gSequencePlayers[player].fadeTimerUnkEu = fadeInTime;
         gSequencePlayers[player].fadeRemainingFrames = fadeInTime;
-        gSequencePlayers[player].fadeVolume = 0.0f;
+        gSequencePlayers[player].fadeVolume   = 0.0f;
         gSequencePlayers[player].fadeVelocity = 0.0f;
     }
 }
@@ -311,7 +299,6 @@ void func_802ad7ec(u32 arg0) {
                 }
             }
         }
-
         cmd->u.s.op = 0;
     }
 }

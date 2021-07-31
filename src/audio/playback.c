@@ -91,7 +91,7 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverbV
         switch (reverbBits.stereoHeadsetEffects) {
             case 0:
                 sub->stereoStrongRight = reverbBits.strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft;
+                sub->stereoStrongLeft  = reverbBits.strongLeft;
                 break;
 
             case 1:
@@ -99,12 +99,12 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverbV
 
             case 2:
                 sub->stereoStrongRight = reverbBits.strongRight | strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft | strongLeft;
+                sub->stereoStrongLeft  = reverbBits.strongLeft  | strongLeft;
                 break;
 
             case 3:
                 sub->stereoStrongRight = reverbBits.strongRight ^ strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft ^ strongLeft;
+                sub->stereoStrongLeft  = reverbBits.strongLeft  ^ strongLeft;
                 break;
         }
 #endif
@@ -124,7 +124,7 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverbV
         velocity = 1.0f;
     }
 
-    sub->targetVolLeft =  ((s32) (velocity * volLeft * 4095.999f));
+    sub->targetVolLeft =  ((s32) (velocity * volLeft  * 4095.999f));
     sub->targetVolRight = ((s32) (velocity * volRight * 4095.999f));
     sub->synthesisVolume = reverbInfo->synthesisVolume;
     sub->filter = reverbInfo->filter;
@@ -153,11 +153,7 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverbV
         return;
     }
 
-    if (sub->needsInit) {
-        sub->envMixerNeedsInit = TRUE;
-    } else {
-        sub->envMixerNeedsInit = FALSE;
-    }
+    sub->envMixerNeedsInit =  sub->needsInit;
 }
 
 #ifdef VERSION_SH
@@ -597,9 +593,7 @@ void process_notes(void) {
             scale = note->adsrVolScale;
             frequency *= note->vibratoFreqScale * note->portamentoFreqScale;
             cap = 3.99992f;
-            if (gAiFrequency != 32006) {
-                frequency *= US_FLOAT(32000.0) / (f32) gAiFrequency;
-            }
+            if (gAiFrequency != 32006) frequency *= 32000.0f / (f32) gAiFrequency;
             frequency = (frequency < cap ? frequency : cap);
             scale *= 4.3498e-5f; // ~1 / 23000
             velocity = velocity * scale * scale;
@@ -689,14 +683,10 @@ void seq_channel_layer_decay_release_internal(struct SequenceChannelLayer *seqLa
     attributes = &note->attributes;
 
 #if defined(VERSION_JP) || defined(VERSION_US)
-    if (seqLayer->seqChannel != NULL && seqLayer->seqChannel->noteAllocPolicy == 0) {
-        seqLayer->note = NULL;
-    }
+    if (seqLayer->seqChannel != NULL && seqLayer->seqChannel->noteAllocPolicy == 0) seqLayer->note = NULL;
 #endif
 
-    if (note->wantedParentLayer == seqLayer) {
-        note->wantedParentLayer = NO_LAYER;
-    }
+    if (note->wantedParentLayer == seqLayer) note->wantedParentLayer = NO_LAYER;
 
     if (note->parentLayer != seqLayer) {
 
@@ -727,9 +717,7 @@ void seq_channel_layer_decay_release_internal(struct SequenceChannelLayer *seqLa
 #ifdef VERSION_SH
             attributes->synthesisVolume = seqLayer->seqChannel->synthesisVolume;
             attributes->filter = seqLayer->seqChannel->filter;
-            if (seqLayer->seqChannel->seqPlayer->muted && (seqLayer->seqChannel->muteBehavior & 8) != 0) {
-                note->noteSubEu.finished = TRUE;
-            }
+            if (seqLayer->seqChannel->seqPlayer->muted && (seqLayer->seqChannel->muteBehavior & 8)) note->noteSubEu.finished = TRUE;
             note->priority = seqLayer->seqChannel->unkSH06;
 #endif
         }
@@ -763,7 +751,7 @@ void seq_channel_layer_decay_release_internal(struct SequenceChannelLayer *seqLa
             } else {
                 note->adsr.fadeOutVel = seqLayer->adsr.releaseRate * gAudioBufferParameters.unkUpdatesPerFrameScaled;
             }
-            note->adsr.sustain = (FLOAT_CAST(seqLayer->seqChannel->adsr.sustain) * note->adsr.current) / 256.0f;
+            note->adsr.sustain = ((f32)(s32)(seqLayer->seqChannel->adsr.sustain) * note->adsr.current) / 256.0f;
 #else
             if (seqLayer->adsr.releaseRate == 0) {
                 note->adsr.fadeOutVel = seqLayer->seqChannel->adsr.releaseRate * 24;
@@ -838,21 +826,21 @@ void build_synthetic_wave(struct Note *note, struct SequenceChannelLayer *seqLay
     u8 lim;
     u8 origSampleCount = note->sampleCount;
 
-    if (seqLayer->freqScale < US_FLOAT(1.0)) {
+    if (seqLayer->freqScale < 1.0f) {
         note->sampleCount = 64;
-        seqLayer->freqScale *= US_FLOAT(1.0465);
+        seqLayer->freqScale *= 1.0465f;
         stepSize = 1;
-    } else if (seqLayer->freqScale < US_FLOAT(2.0)) {
+    } else if (seqLayer->freqScale < 2.0f) {
         note->sampleCount = 32;
-        seqLayer->freqScale *= US_FLOAT(0.52325);
+        seqLayer->freqScale *= 0.52325f;
         stepSize = 2;
-    } else if (seqLayer->freqScale < US_FLOAT(4.0)) {
+    } else if (seqLayer->freqScale < 4.0f) {
         note->sampleCount = 16;
-        seqLayer->freqScale *= US_FLOAT(0.26263);
+        seqLayer->freqScale *= 0.26263f;
         stepSize = 4;
     } else {
         note->sampleCount = 8;
-        seqLayer->freqScale *= US_FLOAT(0.13081);
+        seqLayer->freqScale *= 0.13081f;
         stepSize = 8;
     }
 
@@ -868,15 +856,11 @@ void build_synthetic_wave(struct Note *note, struct SequenceChannelLayer *seqLay
     // Repeat sample
     for (offset = note->sampleCount; offset < 0x40; offset += note->sampleCount) {
         lim = note->sampleCount;
-        if (offset < 0 || offset > 0) {
-            for (j = 0; j < lim; j++) {
-                note->synthesisBuffers->samples[offset + j] = note->synthesisBuffers->samples[j];
-            }
-        } else {
-            for (j = 0; j < lim; j++) {
-                note->synthesisBuffers->samples[offset + j] = note->synthesisBuffers->samples[j];
-            }
-        }
+        // if (offset < 0 || offset > 0) {
+            for (j = 0; j < lim; j++) note->synthesisBuffers->samples[offset + j] = note->synthesisBuffers->samples[j];
+        // } else {
+        //     for (j = 0; j < lim; j++) note->synthesisBuffers->samples[offset + j] = note->synthesisBuffers->samples[j];
+        // }
     }
 
     osWritebackDCache(note->synthesisBuffers->samples, sizeof(note->synthesisBuffers->samples));
@@ -888,9 +872,7 @@ void init_synthetic_wave(struct Note *note, struct SequenceChannelLayer *seqLaye
     s32 sampleCountIndex;
     s32 waveSampleCountIndex;
     s32 waveId = seqLayer->instOrWave;
-    if (waveId == 0xff) {
-        waveId = seqLayer->seqChannel->instOrWave;
-    }
+    if (waveId == 0xff) waveId = seqLayer->seqChannel->instOrWave;
     sampleCountIndex = note->sampleCountIndex;
     waveSampleCountIndex = build_synthetic_wave(note, seqLayer, waveId);
 #if defined(VERSION_EU) || defined(VERSION_SH)
@@ -1104,20 +1086,13 @@ void note_init_for_layer(struct Note *note, struct SequenceChannelLayer *seqLaye
     seqLayer->noteVelocity = 0.0f;
     note_init(note);
     instId = seqLayer->instOrWave;
-    if (instId == 0xff) {
-        instId = seqLayer->seqChannel->instOrWave;
-    }
+    if (instId == 0xff) instId = seqLayer->seqChannel->instOrWave;
+
     sub->sound.audioBankSound = seqLayer->sound;
 
-    if (instId >= 0x80) {
-        sub->isSyntheticWave = TRUE;
-    } else {
-        sub->isSyntheticWave = FALSE;
-    }
+    sub->isSyntheticWave = (instId >= 0x80);
 
-    if (sub->isSyntheticWave) {
-        build_synthetic_wave(note, seqLayer, instId);
-    }
+    if (sub->isSyntheticWave) build_synthetic_wave(note, seqLayer, instId);
 #ifdef VERSION_SH
     note->bankId = seqLayer->seqChannel->bankId;
 #else
@@ -1140,9 +1115,7 @@ s32 note_init_for_layer(struct Note *note, struct SequenceChannelLayer *seqLayer
     seqLayer->note = note;
     seqLayer->seqChannel->noteUnused = note;
     seqLayer->seqChannel->layerUnused = seqLayer;
-    if (note->sound == NULL) {
-        build_synthetic_wave(note, seqLayer);
-    }
+    if (note->sound == NULL) build_synthetic_wave(note, seqLayer);
     note_init(note);
     return FALSE;
 }
@@ -1205,9 +1178,7 @@ struct Note *alloc_note_from_active(struct NotePool *pool, struct SequenceChanne
 
     rNote = pop_node_with_lower_prio(&pool->releasing, seqLayer->seqChannel->notePriority);
 
-    if (rNote != NULL) {
-        rPriority = rNote->priority;
-    }
+    if (rNote != NULL) rPriority = rNote->priority;
 #endif
 
     aNote = pop_node_with_lower_prio(&pool->active, seqLayer->seqChannel->notePriority);
@@ -1411,10 +1382,10 @@ void note_init_all(void) {
 #endif
         note->attributes.velocity = 0.0f;
         note->adsrVolScale = 0;
-        note->adsr.state = ADSR_STATE_DISABLED;
-        note->adsr.action = 0;
+        note->adsr.state   = ADSR_STATE_DISABLED;
+        note->adsr.action  = 0;
         note->vibratoState.active = FALSE;
-        note->portamento.cur = 0.0f;
+        note->portamento.cur   = 0.0f;
         note->portamento.speed = 0.0f;
 #if defined(VERSION_SH)
         note->synthesisState.synthesisBuffers = sound_alloc_uninitialized(&gNotesAndBuffersPool, sizeof(struct NoteSynthesisBuffers));

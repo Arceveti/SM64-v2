@@ -34,12 +34,12 @@ struct AudioListItem gLayerFreeList;
 struct NotePool gNoteFreeLists;
 
 OSMesgQueue gCurrAudioFrameDmaQueue;
-OSMesg gCurrAudioFrameDmaMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
-OSIoMesg gCurrAudioFrameDmaIoMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
+OSMesg      gCurrAudioFrameDmaMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
+OSIoMesg    gCurrAudioFrameDmaIoMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
 
 OSMesgQueue gAudioDmaMesgQueue;
-OSMesg gAudioDmaMesg;
-OSIoMesg gAudioDmaIoMesg;
+OSMesg      gAudioDmaMesg;
+OSIoMesg    gAudioDmaIoMesg;
 
 struct SharedDma sSampleDmas[0x60];
 u32 gSampleDmaNumListItems; // sh: 0x803503D4
@@ -58,8 +58,8 @@ u8 sSampleDmaReuseQueueHead2; // sh: 0x803505E3
 ALSeqFile *gSeqFileHeader;
 ALSeqFile *gAlCtlHeader;
 ALSeqFile *gAlTbl;
-u8 *gAlBankSets;
-u16 gSequenceCount;
+u8        *gAlBankSets;
+u16        gSequenceCount;
 
 struct CtlEntry *gCtlEntries; // sh: 0x803505F8
 
@@ -340,9 +340,7 @@ out1:
         sSampleDmas[i].reuseIndex = (u8) i;
     }
 
-    for (j = gSampleDmaNumListItems; j < 0x100; j++) {
-        sSampleDmaReuseQueue1[j] = 0;
-    }
+    for (j = gSampleDmaNumListItems; j < 0x100; j++) sSampleDmaReuseQueue1[j] = 0;
 
     sSampleDmaReuseQueueTail1 = 0;
     sSampleDmaReuseQueueHead1 = (u8) gSampleDmaNumListItems;
@@ -378,9 +376,7 @@ out2:
 
     // This probably meant to touch the range size1..size2 as well... but it
     // doesn't matter, since these values are never read anyway.
-    for (j = gSampleDmaNumListItems; j < 0x100; j++) {
-        sSampleDmaReuseQueue2[j] = sSampleDmaListSize1;
-    }
+    for (j = gSampleDmaNumListItems; j < 0x100; j++) sSampleDmaReuseQueue2[j] = sSampleDmaListSize1;
 
     sSampleDmaReuseQueueTail2 = 0;
     sSampleDmaReuseQueueHead2 = gSampleDmaNumListItems - sSampleDmaListSize1;
@@ -509,7 +505,6 @@ void patch_audio_bank(struct AudioBank *mem, u8 *offset, u32 numInstruments, u32
                     drum->envelope = BASE_OFFSET(mem, patched);
                     drum->loaded = 1;
                 }
-
             }
         }
     }
@@ -756,9 +751,7 @@ struct AudioBank *load_banks_immediate(s32 seqId, u8 *outDefaultBank) {
             ret = NULL;
         }
 
-        if (ret == NULL) {
-            ret = bank_load_immediate(bankId, 2);
-        }
+        if (ret == NULL) ret = bank_load_immediate(bankId, 2);
     }
     *outDefaultBank = bankId;
     return ret;
@@ -771,9 +764,7 @@ void preload_sequence(u32 seqId, u8 preloadMask) {
     if (seqId >= gSequenceCount) return;
 
     gAudioLoadLock = AUDIO_LOCK_LOADING;
-    if (preloadMask & PRELOAD_BANKS) {
-        load_banks_immediate(seqId, &temp);
-    }
+    if (preloadMask & PRELOAD_BANKS) load_banks_immediate(seqId, &temp);
 
     if (preloadMask & PRELOAD_SEQUENCE) {
         if (IS_SEQ_LOAD_COMPLETE(seqId)) {
@@ -794,13 +785,9 @@ void preload_sequence(u32 seqId, u8 preloadMask) {
 void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync);
 
 void load_sequence(u32 player, u32 seqId, s32 loadAsync) {
-    if (!loadAsync) {
-        gAudioLoadLock = AUDIO_LOCK_LOADING;
-    }
+    if (!loadAsync) gAudioLoadLock = AUDIO_LOCK_LOADING;
     load_sequence_internal(player, seqId, loadAsync);
-    if (!loadAsync) {
-        gAudioLoadLock = AUDIO_LOCK_NOT_LOADING;
-    }
+    if (!loadAsync) gAudioLoadLock = AUDIO_LOCK_NOT_LOADING;
 }
 
 void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
@@ -902,9 +889,7 @@ void audio_init() {
     // It seems boot.s doesn't clear the .bss area for audio, so do it here.
     lim3 = ((uintptr_t) &gAudioGlobalsEndMarker - (uintptr_t) &gAudioGlobalsStartMarker) / 8;
     ptr64 = &gAudioGlobalsStartMarker;
-    for (k = lim3; k >= 0; k--) {
-        *ptr64++ = 0;
-    }
+    for (k = lim3; k >= 0; k--) *ptr64++ = 0;
 #endif
 
     D_EU_802298D0 = 20.03042f;
@@ -922,12 +907,10 @@ void audio_init() {
 
     eu_stubbed_printf_1("AudioHeap is %x\n", gAudioHeapSize);
 
-    for (i = 0; i < NUMAIBUFFERS; i++) {
-        gAiBufferLengths[i] = 0xa0;
-    }
+    for (i = 0; i < NUMAIBUFFERS; i++) gAiBufferLengths[i] = 0xa0;
 
-    gAudioFrameCount = 0;
-    gAudioTaskIndex = 0;
+    gAudioFrameCount   = 0;
+    gAudioTaskIndex    = 0;
     gCurrAiBufferIndex = 0;
     gSoundMode = 0;
     gAudioTask = NULL;
@@ -943,10 +926,7 @@ void audio_init() {
 
     for (i = 0; i < NUMAIBUFFERS; i++) {
         gAiBuffers[i] = soundAlloc(&gAudioInitPool, AIBUFFER_LEN);
-
-        for (j = 0; j < (s32) (AIBUFFER_LEN / sizeof(s16)); j++) {
-            gAiBuffers[i][j] = 0;
-        }
+        for (j = 0; j < (s32) (AIBUFFER_LEN / sizeof(s16)); j++) gAiBuffers[i][j] = 0;
     }
 
 #if defined(VERSION_EU)

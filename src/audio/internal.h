@@ -6,11 +6,11 @@
 #include "types.h"
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-#define SEQUENCE_PLAYERS 4
+#define SEQUENCE_PLAYERS   4
 #define SEQUENCE_CHANNELS 48
-#define SEQUENCE_LAYERS 64
+#define SEQUENCE_LAYERS   64
 #else
-#define SEQUENCE_PLAYERS 3
+#define SEQUENCE_PLAYERS   3
 #define SEQUENCE_CHANNELS 32
 #ifdef VERSION_JP
 #define SEQUENCE_LAYERS 48
@@ -19,45 +19,32 @@
 #endif
 #endif
 
-#define LAYERS_MAX       4
+#define LAYERS_MAX        4
 #define CHANNELS_MAX     16
 
 #define NO_LAYER ((struct SequenceChannelLayer *)(-1))
 
 #define MUTE_BEHAVIOR_STOP_SCRIPT 0x80 // stop processing sequence/channel scripts
-#define MUTE_BEHAVIOR_STOP_NOTES 0x40  // prevent further notes from playing
-#define MUTE_BEHAVIOR_SOFTEN 0x20      // lower volume, by default to half
+#define MUTE_BEHAVIOR_STOP_NOTES  0x40 // prevent further notes from playing
+#define MUTE_BEHAVIOR_SOFTEN      0x20 // lower volume, by default to half
 
-#define SEQUENCE_PLAYER_STATE_0 0
+#define SEQUENCE_PLAYER_STATE_0        0
 #define SEQUENCE_PLAYER_STATE_FADE_OUT 1
-#define SEQUENCE_PLAYER_STATE_2 2
-#define SEQUENCE_PLAYER_STATE_3 3
-#define SEQUENCE_PLAYER_STATE_4 4
+#define SEQUENCE_PLAYER_STATE_2        2
+#define SEQUENCE_PLAYER_STATE_3        3
+#define SEQUENCE_PLAYER_STATE_4        4
 
-#define NOTE_PRIORITY_DISABLED 0
-#define NOTE_PRIORITY_STOPPING 1
-#define NOTE_PRIORITY_MIN 2
-#define NOTE_PRIORITY_DEFAULT 3
+#define NOTE_PRIORITY_DISABLED  0
+#define NOTE_PRIORITY_STOPPING  1
+#define NOTE_PRIORITY_MIN       2
+#define NOTE_PRIORITY_DEFAULT   3
 
 #define TATUMS_PER_BEAT 48
 
 // abi.h contains more details about the ADPCM and S8 codecs, "skip" skips codec processing
 #define CODEC_ADPCM 0
-#define CODEC_S8 1
-#define CODEC_SKIP 2
-
-#ifdef VERSION_JP
-#define TEMPO_SCALE 1
-#else
-#define TEMPO_SCALE TATUMS_PER_BEAT
-#endif
-
-// TODO: US_FLOAT should probably be renamed to JP_DOUBLE since eu seems to use floats too
-#ifdef VERSION_JP
-#define US_FLOAT(x) x
-#else
-#define US_FLOAT(x) x ## f
-#endif
+#define CODEC_S8    1
+#define CODEC_SKIP  2
 
 // Convert u8 or u16 to f32. On JP, this uses a u32->f32 conversion,
 // resulting in more bloated codegen, while on US it goes through s32.
@@ -85,9 +72,9 @@
 #endif
 
 #ifdef VERSION_EU
-#define eu_stubbed_printf_0(msg) stubbed_printf(msg)
-#define eu_stubbed_printf_1(msg, a) stubbed_printf(msg, a)
-#define eu_stubbed_printf_2(msg, a, b) stubbed_printf(msg, a, b)
+#define eu_stubbed_printf_0(msg)          stubbed_printf(msg)
+#define eu_stubbed_printf_1(msg, a)       stubbed_printf(msg, a)
+#define eu_stubbed_printf_2(msg, a, b)    stubbed_printf(msg, a, b)
 #define eu_stubbed_printf_3(msg, a, b, c) stubbed_printf(msg, a, b, c)
 #else
 #define eu_stubbed_printf_0(msg)

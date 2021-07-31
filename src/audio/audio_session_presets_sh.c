@@ -31,8 +31,8 @@ struct AudioSessionSettingsEU gAudioSessionPresets[] = {
       0x00000000, 0x00004000, 0x00001b00, 0x00000000, 0x00000000, 0x00000000 }
 };
 
-s16 gTatumsPerBeat = TATUMS_PER_BEAT;
-s32 gAudioHeapSize = DOUBLE_SIZE_ON_64_BIT(AUDIO_HEAP_SIZE);
+s16 gTatumsPerBeat     = TATUMS_PER_BEAT;
+s32 gAudioHeapSize     = DOUBLE_SIZE_ON_64_BIT(AUDIO_HEAP_SIZE);
 s32 gAudioInitPoolSize = DOUBLE_SIZE_ON_64_BIT(AUDIO_INIT_POOL_SIZE);
 
 // Used in audio_init:

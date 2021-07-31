@@ -11,8 +11,8 @@
 #include "audio/external.h"
 #include "audio/effects.h"
 
-#define PORTAMENTO_IS_SPECIAL(x) ((x).mode & 0x80)
-#define PORTAMENTO_MODE(x) ((x).mode & ~0x80)
+#define PORTAMENTO_IS_SPECIAL(x) ((x).mode &  0x80)
+#define PORTAMENTO_MODE(x)       ((x).mode & ~0x80)
 #define PORTAMENTO_MODE_1 1
 #define PORTAMENTO_MODE_2 2
 #define PORTAMENTO_MODE_3 3
@@ -155,9 +155,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
         return;
     }
 
-    if (!layer->continuousNotes) {
-        seq_channel_layer_note_decay(layer);
-    }
+    if (!layer->continuousNotes) seq_channel_layer_note_decay(layer);
 
     if (PORTAMENTO_MODE(layer->portamento) == PORTAMENTO_MODE_1 ||
         PORTAMENTO_MODE(layer->portamento) == PORTAMENTO_MODE_2) {
@@ -218,7 +216,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
                 if (cmd == 0xc1) {
                     layer->velocitySquare = (f32)(temp_a0_5 * temp_a0_5);
                 } else {
-                    layer->pan = (f32) temp_a0_5 / US_FLOAT(128.0);
+                    layer->pan = (f32) temp_a0_5 / 128.0f;
                 }
                 break;
 
@@ -246,9 +244,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
             case 0xc6: // layer_setinstr
                 M64_READ_U8(state, cmdSemitone);
 
-                if (cmdSemitone < 127) {
-                    GET_INSTRUMENT(seqChannel, cmdSemitone, &(*layer).instrument, &(*layer).adsr, cmdSemitone, 1);
-                }
+                if (cmdSemitone < 127) GET_INSTRUMENT(seqChannel, cmdSemitone, &(*layer).instrument, &(*layer).adsr, cmdSemitone, 1);
                 break;
 
             case 0xc7: // layer_portamento
@@ -259,9 +255,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
                 cmdSemitone += (*layer).transposition;
                 cmdSemitone += (*seqPlayer).transposition;
 
-                if (cmdSemitone >= 0x80) {
-                    cmdSemitone = 0;
-                }
+                if (cmdSemitone >= 0x80) cmdSemitone = 0;
                 layer->portamentoTargetNote = cmdSemitone;
 
                 // If special, the next param is u8 instead of var
@@ -369,7 +363,7 @@ l1138:
                 } else {
                     layer->adsr.envelope = drum->envelope;
                     layer->adsr.releaseRate = drum->releaseRate;
-                    layer->pan = FLOAT_CAST(drum->pan) / US_FLOAT(128.0);
+                    layer->pan = (f32)(s32)(drum->pan) / 128.0f;
                     layer->sound = &drum->sound;
                     layer->freqScale = layer->sound->tuning;
                 }
@@ -381,9 +375,7 @@ l1138:
                     layer->stopSomething = TRUE;
                 } else {
                     instrument = layer->instrument;
-                    if (instrument == NULL) {
-                        instrument = seqChannel->instrument;
-                    }
+                    if (instrument == NULL) instrument = seqChannel->instrument;
 
                     if (layer->portamento.mode != 0) {
                         usedSemitone = (layer->portamentoTargetNote < cmdSemitone) ? cmdSemitone : layer->portamentoTargetNote;
@@ -421,13 +413,13 @@ l1138:
                                 goto l13cc;
                         }
 l13cc:
-                        portamento->extent = sp24 / freqScale - US_FLOAT(1.0);
+                        portamento->extent = sp24 / freqScale - 1.0f;
                         if (PORTAMENTO_IS_SPECIAL((*layer).portamento)) {
-                            portamento->speed = US_FLOAT(32512.0) * FLOAT_CAST((*seqPlayer).tempo)
+                            portamento->speed = 32512.0f * (f32)(s32)((*seqPlayer).tempo)
                                                 / ((f32)(*layer).delay * (f32) gTempoInternalToExternal
-                                                   * FLOAT_CAST((*layer).portamentoTime));
+                                                   * (f32)(s32)((*layer).portamentoTime));
                         } else {
-                            portamento->speed = US_FLOAT(127.0) / FLOAT_CAST((*layer).portamentoTime);
+                            portamento->speed = 127.0f / (f32)(s32)((*layer).portamentoTime);
                         }
                         portamento->cur = 0.0f;
                         layer->freqScale = freqScale;
@@ -471,11 +463,7 @@ l13cc:
         init_synthetic_wave(layer->note, layer);
     }
 
-    if (cmdSemitone) {
-        (*layer).note = alloc_note(layer);
-    }
+    if (cmdSemitone) (*layer).note = alloc_note(layer);
 
-    if (layer->note != NULL && layer->note->parentLayer == layer) {
-        note_vibrato_init(layer->note);
-    }
+    if (layer->note != NULL && layer->note->parentLayer == layer) note_vibrato_init(layer->note);
 }

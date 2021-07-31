@@ -37,9 +37,7 @@ struct SPTask *create_next_audio_frame_task(void) {
 
     gAudioFrameCount++;
     if (gAudioFrameCount % gAudioBufferParameters.presetUnk4 != 0) {
-        if ((gAudioFrameCount % gAudioBufferParameters.presetUnk4) + 1 == gAudioBufferParameters.presetUnk4) {
-            return D_SH_80314FCC;
-        }
+        if ((gAudioFrameCount % gAudioBufferParameters.presetUnk4) + 1 == gAudioBufferParameters.presetUnk4) return D_SH_80314FCC;
         return NULL;
     }
     osSendMesg(D_SH_80350F38, (OSMesg) gAudioFrameCount, OS_MESG_NOBLOCK);
@@ -50,11 +48,7 @@ struct SPTask *create_next_audio_frame_task(void) {
     index = (gCurrAiBufferIndex - 2 + NUMAIBUFFERS) % NUMAIBUFFERS;
     samplesRemainingInAI = osAiGetLength() / 4;
 
-    if (gAudioLoadLockSH < 0x10U) {
-        if (gAiBufferLengths[index] != 0) {
-            osAiSetNextBuffer(gAiBuffers[index], gAiBufferLengths[index] * 4);
-        }
-    }
+    if (gAudioLoadLockSH < 0x10U && gAiBufferLengths[index] != 0) osAiSetNextBuffer(gAiBuffers[index], gAiBufferLengths[index] * 4);
 
     oldDmaCount = gCurrAudioFrameDmaCount;
     gCurrAudioFrameDmaCount = 0;
@@ -62,17 +56,13 @@ struct SPTask *create_next_audio_frame_task(void) {
     decrease_sample_dma_ttls();
     func_sh_802f41e4(gAudioResetStatus);
     if (osRecvMesg(D_SH_80350F88, (OSMesg *) &sp38, OS_MESG_NOBLOCK) != -1) {
-        if (gAudioResetStatus == 0) {
-            gAudioResetStatus = 5;
-        }
+        if (gAudioResetStatus == 0) gAudioResetStatus = 5;
         gAudioResetPresetIdToLoad = (u8) sp38;
     }
 
     if (gAudioResetStatus != 0) {
         if (audio_shut_down_and_reset_step() == 0) {
-            if (gAudioResetStatus == 0) {
-                osSendMesg(D_SH_80350FA8, (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
-            }
+            if (gAudioResetStatus == 0) osSendMesg(D_SH_80350FA8, (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
             D_SH_80314FCC = 0;
             return NULL;
         }
@@ -130,9 +120,7 @@ struct SPTask *create_next_audio_frame_task(void) {
     task->yield_data_size = 0;
 
     writtenCmdsCopy = writtenCmds;
-    if (D_SH_80314FC8 < writtenCmdsCopy) {
-        D_SH_80314FC8 = writtenCmdsCopy;
-    }
+    if (D_SH_80314FC8 < writtenCmdsCopy) D_SH_80314FC8 = writtenCmdsCopy;
 
     if (gAudioBufferParameters.presetUnk4 == 1) {
         return gAudioTask;
@@ -221,9 +209,7 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
 void seq_player_fade_to_zero_volume(s32 arg0, s32 fadeOutTime) {
     struct SequencePlayer *player;
 
-    if (fadeOutTime == 0) {
-        fadeOutTime = 1;
-    }
+    if (fadeOutTime == 0) fadeOutTime = 1;
     player = &gSequencePlayers[arg0];
     player->state = 2;
     player->fadeRemainingFrames = fadeOutTime;
@@ -238,7 +224,7 @@ void func_8031D690(s32 playerIndex, s32 fadeInTime) {
         player->state = 1;
         player->fadeTimerUnkEu = fadeInTime;
         player->fadeRemainingFrames = fadeInTime;
-        player->fadeVolume = 0.0f;
+        player->fadeVolume   = 0.0f;
         player->fadeVelocity = 0.0f;
     }
 }
@@ -262,9 +248,7 @@ void func_802ad6f0(s32 arg0, s32 *arg1) {
     cmd->u.first = arg0;
     cmd->u2.as_u32 = *arg1;
     D_SH_80350F18++;
-    if (D_SH_80350F18 == D_SH_80350F19) {
-        D_SH_80350F18--;
-    }
+    if (D_SH_80350F18 == D_SH_80350F19) D_SH_80350F18--;
 }
 
 void func_802ad728(u32 arg0, f32 arg1) {
@@ -312,9 +296,7 @@ void func_802ad7ec(u32 arg0) {
     static u8 D_SH_80315098 = 0;
     static u8 D_SH_8031509C = 0;
 
-    if (D_SH_8031509C == 0) {
-        D_SH_80315098 = (arg0 >> 8) & 0xff;
-    }
+    if (D_SH_8031509C == 0) D_SH_80315098 = (arg0 >> 8) & 0xff;
 
     end = arg0 & 0xff;
 
@@ -348,7 +330,7 @@ void func_802ad7ec(u32 arg0) {
                     break;
 
                 case 0x49:
-                    seqPlayer->tempoAdd = cmd->u2.as_s32 * TEMPO_SCALE;
+                    seqPlayer->tempoAdd = cmd->u2.as_s32 * TATUMS_PER_BEAT;
                     break;
 
                 case 0x48:
@@ -433,9 +415,7 @@ s32 func_sh_802f6900(void) {
 
     ret = osRecvMesg(D_SH_80350FA8, (OSMesg *) &sp18, 0);
 
-    if (ret == -1) {
-        return 0;
-    }
+    if (ret == -1) return 0;
     if (sp18 != gAudioResetPresetIdToLoad) {
         return 0;
     } else {
