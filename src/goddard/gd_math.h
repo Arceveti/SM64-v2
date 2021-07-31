@@ -21,6 +21,9 @@ enum GdRotAxis {
 };
 
 // Needed for gd_math.c itself.
+#ifdef FAST_INVSQRT
+float gd_Q_rsqrt( float number );
+#endif
 void gd_adjunct_mat4f(Mat4f *src, Mat4f *dst);
 f32  gd_mat4f_det(Mat4f *mtx);
 f32  gd_3x3_det(f32 r0c0, f32 r0c1, f32 r0c2,

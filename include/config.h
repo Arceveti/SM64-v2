@@ -40,14 +40,14 @@
 #define CLEARRAM 1
 
 // Screen Size Defines
-#define SCREEN_WIDTH 320
+#define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
 // Border Height Define for NTSC Versions
 #ifdef TARGET_N64
 // Size of the black border at the top and bottom of the screen. You can set it to different values for console and emulator.
 // There is generally no reason to have a value other than 0 for emulator. As for console, it provides a (small) performance boost.
-#define BORDER_HEIGHT_CONSOLE 0
+#define BORDER_HEIGHT_CONSOLE  0
 #define BORDER_HEIGHT_EMULATOR 0
 
 #endif
@@ -231,6 +231,11 @@
 #define LAVA_FIX
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
+
+// -- Optimizations --
+
+// Use fast inverse square root from Quake III
+#define FAST_INVSQRT
 
 // -- Hacker QoL --
 

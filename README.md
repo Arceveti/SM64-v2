@@ -42,7 +42,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - Many smaller optimizations (Arceveti)
-- Fast inverse square root for normalizing float vectors :)
+- [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
 
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)

@@ -26,11 +26,11 @@
 
 #ifndef NO_SEGMENTED_MEMORY
 #define GD_VIRTUAL_TO_PHYSICAL(addr) ((uintptr_t)(addr) &0x0FFFFFFF)
-#define GD_LOWER_24(addr) ((uintptr_t)(addr) &0x00FFFFFF)
-#define GD_LOWER_29(addr) (((uintptr_t)(addr)) & 0x1FFFFFFF)
+#define GD_LOWER_24(addr)            ((uintptr_t)(addr) &0x00FFFFFF)
+#define GD_LOWER_29(addr)           (((uintptr_t)(addr)) & 0x1FFFFFFF)
 #else
-#define GD_VIRTUAL_TO_PHYSICAL(addr) (addr)
-#define GD_LOWER_24(addr) ((uintptr_t)(addr))
+#define GD_VIRTUAL_TO_PHYSICAL(addr)   (addr)
+#define GD_LOWER_24(addr)  ((uintptr_t)(addr))
 #define GD_LOWER_29(addr) (((uintptr_t)(addr)))
 #endif
 
@@ -399,9 +399,9 @@ ALIGNED8 static Texture gd_texture_sparkle_5[] = {
 };
 
 static Vtx_t gd_vertex_sparkle[] = {
-    {{   -32,      0,      0}, 0, {      0,   1984}, {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,      0,      0}, 0, {   1984,   1984}, {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,     64,      0}, 0, {   1984,      0}, {  0x00, 0x00, 0x7F, 0x00}},
+    {{   -32,      0,      0}, 0, {      0,  62<<5}, {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,      0,      0}, 0, {  62<<5,  62<<5}, {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,     64,      0}, 0, {  62<<5,      0}, {  0x00, 0x00, 0x7F, 0x00}},
     {{   -32,     64,      0}, 0, {      0,      0}, {  0x00, 0x00, 0x7F, 0x00}},
 };
 
@@ -589,7 +589,7 @@ extern u8 _gd_dynlistsSegmentRomStart[];
 extern u8 _gd_dynlistsSegmentRomEnd[];
 
 // forward declarations
-u32 new_gddl_from(Gfx *);
+u32  new_gddl_from(Gfx *);
 void gd_setup_cursor(struct ObjGroup *);
 void parse_p1_controller(void);
 void update_cursor(void);
@@ -1365,12 +1365,12 @@ void branch_to_gddl(s32 dlNum) {
 // phong shading function?
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
-                   struct GdVec3f *arg4,   // vector to light source?
-                   struct GdColour *colour // light color
+                   struct GdVec3f   *arg4,  // vector to light source?
+                   struct GdColour  *colour // light color
 ) {
     Hilite *hilite; // 4c
-    struct GdVec3f sp40;
-    f32 sp3C; // magnitude of sp40
+    struct GdVec3f vec;
+    f32 mag; // magnitude of vec
     f32 sp38;
     f32 sp34;
 
@@ -1379,26 +1379,24 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
 
-    gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f),
-                    (s32)(colour->b * 255.0f), 255);
-    sp40.z = cam->unkE8[0][2] + arg4->x;
-    sp40.y = cam->unkE8[1][2] + arg4->y;
-    sp40.x = cam->unkE8[2][2] + arg4->z;
-    sp3C = sqrtf(SQ(sp40.z) + SQ(sp40.y) + SQ(sp40.x));
-    if (sp3C > 0.1f) {
-        sp3C = 1.0f / sp3C;
-        sp40.z *= sp3C;
-        sp40.y *= sp3C;
-        sp40.x *= sp3C;
+    gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f), (s32)(colour->b * 255.0f), 255);
+    vec.z = cam->unkE8[0][2] + arg4->x;
+    vec.y = cam->unkE8[1][2] + arg4->y;
+    vec.x = cam->unkE8[2][2] + arg4->z;
+#ifdef FAST_INVSQRT
+    mag = gd_Q_rsqrt(SQ(vec.z) + SQ(vec.y) + SQ(vec.x));
+    if (mag > 0.1f) {
+#else
+    mag = sqrtf(SQ(vec.z) + SQ(vec.y) + SQ(vec.x));
+    if (mag > 0.1f) {
+        mag = 1.0f / mag;
+#endif
+        vec.z *= mag;
+        vec.y *= mag;
+        vec.x *= mag;
 
-        hilite->h.x1 =
-            (((sp40.z * cam->unkE8[0][0]) + (sp40.y * cam->unkE8[1][0]) + (sp40.x * cam->unkE8[2][0]))
-             * sp38 * 2.0f)
-            + (sp38 * 4.0f);
-        hilite->h.y1 =
-            (((sp40.z * cam->unkE8[0][1]) + (sp40.y * cam->unkE8[1][1]) + (sp40.x * cam->unkE8[2][1]))
-             * sp34 * 2.0f)
-            + (sp34 * 4.0f);
+        hilite->h.x1 = (((vec.z * cam->unkE8[0][0]) + (vec.y * cam->unkE8[1][0]) + (vec.x * cam->unkE8[2][0])) * sp38 * 2.0f) + (sp38 * 4.0f);
+        hilite->h.y1 = (((vec.z * cam->unkE8[0][1]) + (vec.y * cam->unkE8[1][1]) + (vec.x * cam->unkE8[2][1])) * sp34 * 2.0f) + (sp34 * 4.0f);
     } else {
         hilite->h.x1 = sp38 * 2.0f;
         hilite->h.y1 = sp34 * 2.0f;
@@ -1414,9 +1412,8 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
     s32 scaledColours[3];
     s32 lightDir[3];
 
-    if (id > 0) {
-        begin_gddl(id);
-    }
+    if (id > 0) begin_gddl(id);
+
     switch (material) {
         case GD_MTL_TEX_OFF:
             gddl_is_loading_shine_dl(FALSE);
@@ -1456,9 +1453,7 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
             gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l), LIGHT_1);
             gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).a), LIGHT_2);
             next_light();
-            if (id > 0) {
-                gd_enddlsplist();
-            }
+            if (id > 0) gd_enddlsplist();
             return 0;
             break;
     }
@@ -1613,12 +1608,8 @@ void start_view_dl(struct ObjView *view) {
         lry = view->upperLeft.y + view->lowerRight.y;
     }
 
-    if (ulx >= lrx) {
-        ulx = lrx - 1.0f;
-    }
-    if (uly >= lry) {
-        uly = lry - 1.0f;
-    }
+    if (ulx >= lrx) ulx = lrx - 1.0f;
+    if (uly >= lry) uly = lry - 1.0f;
 
     gDPSetScissor(next_gfx(), G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
     gSPClearGeometryMode(next_gfx(), 0xFFFFFFFF);
@@ -1659,10 +1650,10 @@ void parse_p1_controller(void) {
     gdctrl->stickDeltaX -= gdctrl->stickX;
     gdctrl->stickDeltaY -= gdctrl->stickY;
     // button values (as bools)
-    gdctrl->trgL   = (currInputs->button & L_TRIG) != 0;
-    gdctrl->trgR   = (currInputs->button & R_TRIG) != 0;
-    gdctrl->btnA   = (currInputs->button & A_BUTTON) != 0;
-    gdctrl->btnB   = (currInputs->button & B_BUTTON) != 0;
+    gdctrl->trgL   = (currInputs->button & L_TRIG    ) != 0;
+    gdctrl->trgR   = (currInputs->button & R_TRIG    ) != 0;
+    gdctrl->btnA   = (currInputs->button & A_BUTTON  ) != 0;
+    gdctrl->btnB   = (currInputs->button & B_BUTTON  ) != 0;
     gdctrl->cleft  = (currInputs->button & L_CBUTTONS) != 0;
     gdctrl->cright = (currInputs->button & R_CBUTTONS) != 0;
     gdctrl->cup    = (currInputs->button & U_CBUTTONS) != 0;
@@ -1686,27 +1677,17 @@ void parse_p1_controller(void) {
         gdctrl->dragStartX = gdctrl->csrX;
         gdctrl->dragStartY = gdctrl->csrY;
 
-        if (gdctrl->currFrame - gdctrl->dragStartFrame < 10) {
-            gdctrl->AbtnPressWait = TRUE;
-        }
+        if (gdctrl->currFrame - gdctrl->dragStartFrame < 10) gdctrl->AbtnPressWait = TRUE;
     }
 
-    if (gdctrl->dragging) {
-        gdctrl->dragStartFrame = gdctrl->currFrame;
-    }
+    if (gdctrl->dragging) gdctrl->dragStartFrame = gdctrl->currFrame;
     gdctrl->currFrame++;
 
-    if (currInputs->button & START_BUTTON && !(prevInputs->button & START_BUTTON)) {
-        gdctrl->newStartPress ^= 1;
-    }
+    if (currInputs->button & START_BUTTON && !(prevInputs->button & START_BUTTON)) gdctrl->newStartPress ^= 1;
 
     // deadzone checks
-    if (ABS(gdctrl->stickX) >= 6) {
-        gdctrl->csrX += gdctrl->stickX * 0.1f;
-    }
-    if (ABS(gdctrl->stickY) >= 6) {
-        gdctrl->csrY -= gdctrl->stickY * 0.1f;
-    }
+    if (ABS(gdctrl->stickX) >= 6) gdctrl->csrX += gdctrl->stickX * 0.1f;
+    if (ABS(gdctrl->stickY) >= 6) gdctrl->csrY -= gdctrl->stickY * 0.1f;
 
     // clamp cursor position within screen view bounds
     if (gdctrl->csrX < sScreenView->parent->upperLeft.x + 16.0f) {
@@ -1722,9 +1703,7 @@ void parse_p1_controller(void) {
         gdctrl->csrY = sScreenView->parent->upperLeft.y + sScreenView->parent->lowerRight.y - 32.0f;
     }
 
-    for (i = 0; i < sizeof(OSContPad); i++) {
-        ((u8 *) prevInputs)[i] = ((u8 *) currInputs)[i];
-    }
+    for (i = 0; i < sizeof(OSContPad); i++) ((u8 *) prevInputs)[i] = ((u8 *) currInputs)[i];
 }
 
 /* 251E18 -> 2522B0 */
@@ -1823,12 +1802,10 @@ s32 setup_view_buffers(const char *name, struct ObjView *view) {
         if (view->flags & VIEW_COLOUR_BUF) {
             sprintf(memtrackerName, "%s CBuf", name);
             start_memtracker(memtrackerName);
-            view->colourBufs[0] =
-                gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
+            view->colourBufs[0] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
 
             if (view->flags & VIEW_2_COL_BUF) {
-                view->colourBufs[1] =
-                    gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
+                view->colourBufs[1] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
             } else {
                 view->colourBufs[1] = view->colourBufs[0];
             }

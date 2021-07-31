@@ -26,6 +26,7 @@ int gSplineState;
 #endif
 #endif
 
+#ifdef FAST_INVSQRT
 /// lol
 float Q_rsqrtf( float number ) {
 	long i;
@@ -40,6 +41,7 @@ float Q_rsqrtf( float number ) {
 
 	return y;
 }
+#endif
 
 /// Copy vector 'src' to 'dest'
 void *vec3f_copy(Vec3f dest, Vec3f src) {
@@ -160,11 +162,14 @@ void *vec3f_normalize(Vec3f dest) {
         dest[1] = 0.0f;
         dest[2] = 0.0f;
     } else {
+#ifdef FAST_INVSQRT
         f32 mag = (dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
-        if (mag == 0.0f) return gVec3fZero;
-
+        if (mag == 0.0f) return vec3f_copy(dest, gVec3fZero);
         mag = Q_rsqrtf(mag);
-
+#else
+        f32 mag = 1.0f / sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
+        if (mag == 0.0f) return vec3f_copy(dest, gVec3fZero);
+#endif
         dest[0] *= mag;
         dest[1] *= mag;
         dest[2] *= mag;
@@ -231,7 +236,11 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     dx = to[0] - from[0];
     dz = to[2] - from[2];
 
-    invLength = -1.0f / sqrtf(dx * dx + dz * dz); //? Q_rsqrtf
+#ifdef FAST_INVSQRT
+    invLength = -Q_rsqrtf(dx * dx + dz * dz);
+#else
+    invLength = -1.0f / sqrtf(dx * dx + dz * dz);
+#endif
     dx *= invLength;
     dz *= invLength;
 
@@ -242,8 +251,11 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColZ = to[0] - from[0];
     yColZ = to[1] - from[1];
     zColZ = to[2] - from[2];
-
+#ifdef FAST_INVSQRT
     invLength = -Q_rsqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
+#else
+    invLength = -1.0f / sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
+#endif
     xColZ *= invLength;
     yColZ *= invLength;
     zColZ *= invLength;
@@ -251,9 +263,11 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColX = yColY * zColZ - zColY * yColZ;
     yColX = zColY * xColZ - xColY * zColZ;
     zColX = xColY * yColZ - yColY * xColZ;
-
+#ifdef FAST_INVSQRT
     invLength = Q_rsqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
-
+#else
+    invLength = 1.0f / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+#endif
     xColX *= invLength;
     yColX *= invLength;
     zColX *= invLength;
@@ -261,8 +275,11 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColY = yColZ * zColX - zColZ * yColX;
     yColY = zColZ * xColX - xColZ * zColX;
     zColY = xColZ * yColX - yColZ * xColX;
-
+#ifdef FAST_INVSQRT
     invLength = Q_rsqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
+#else
+    invLength = 1.0f / sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
+#endif
     xColY *= invLength;
     yColY *= invLength;
     zColY *= invLength;

@@ -16,6 +16,7 @@ f32 gd_sqrt_f(f32 val) {
     return (f32) gd_sqrt_d(val);
 }
 
+#ifdef FAST_INVSQRT
 /*
  * lol
  */
@@ -34,6 +35,7 @@ float gd_Q_rsqrt( float number )
 
 	return y;
 }
+#endif
 
 /**
  * Set mtx to a look-at matrix for the camera. The resulting transformation
@@ -75,8 +77,11 @@ void gd_mat4f_lookat(Mat4f *mtx,
         d.y = norm.y;
         d.x = norm.z;
     }
-
+#ifdef FAST_INVSQRT
     invLength = -gd_Q_rsqrt(SQ(d.z) + SQ(d.y) + SQ(d.x));
+#else
+    invLength = -1.0f / gd_sqrt_f(SQ(d.z) + SQ(d.y) + SQ(d.x));
+#endif
     d.z *= invLength;
     d.y *= invLength;
     d.x *= invLength;
@@ -84,9 +89,11 @@ void gd_mat4f_lookat(Mat4f *mtx,
     colX.z = yColY * d.x - xColY * d.y;
     colX.y = xColY * d.z - zColY * d.x;
     colX.x = zColY * d.y - yColY * d.z;
-
+#ifdef FAST_INVSQRT
     invLength = gd_Q_rsqrt(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
-
+#else
+    invLength = 1.0f / gd_sqrt_f(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
+#endif
     colX.z *= invLength;
     colX.y *= invLength;
     colX.x *= invLength;
@@ -94,9 +101,11 @@ void gd_mat4f_lookat(Mat4f *mtx,
     zColY = d.y * colX.x - d.x * colX.y;
     yColY = d.x * colX.z - d.z * colX.x;
     xColY = d.z * colX.y - d.y * colX.z;
-
+#ifdef FAST_INVSQRT
     invLength = gd_Q_rsqrt(SQ(zColY) + SQ(yColY) + SQ(xColY));
-
+#else
+    invLength = 1.0f / gd_sqrt_f(SQ(zColY) + SQ(yColY) + SQ(xColY));
+#endif
     zColY *= invLength;
     yColY *= invLength;
     xColY *= invLength;
@@ -330,7 +339,11 @@ s32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
     if ((mag = SQ(vec->x) + SQ(vec->y) + SQ(vec->z)) == 0.0f) return FALSE;
 
+#ifdef FAST_INVSQRT
     mag = gd_Q_rsqrt(mag);
+#else
+    mag = gd_sqrt_f(mag);
+#endif
     // gd_sqrt_f rounds near 0 numbers to 0, so verify again.
     if (mag == 0.0f) {
         vec->x = 0.0f;
@@ -338,10 +351,15 @@ s32 gd_normalize_vec3f(struct GdVec3f *vec) {
         vec->z = 0.0f;
         return FALSE;
     }
-
+#ifdef FAST_INVSQRT
     vec->x *= mag;
     vec->y *= mag;
     vec->z *= mag;
+#else
+    vec->x /= mag;
+    vec->y /= mag;
+    vec->z /= mag;
+#endif
 
     return TRUE;
 }
