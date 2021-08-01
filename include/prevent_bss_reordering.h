@@ -15,16 +15,16 @@
  * must come before any such header.
  */
 
-struct Dummy0 { int x; };
-struct Dummy1 { int x; };
-struct Dummy2 { int x; };
-struct Dummy3 { int x; };
-struct Dummy4 { int x; };
-struct Dummy5 { int x; };
-struct Dummy6 { int x; };
-struct Dummy7 { int x; };
-struct Dummy8 { int x; };
-struct Dummy9 { int x; };
+struct Dummy0  { int x; };
+struct Dummy1  { int x; };
+struct Dummy2  { int x; };
+struct Dummy3  { int x; };
+struct Dummy4  { int x; };
+struct Dummy5  { int x; };
+struct Dummy6  { int x; };
+struct Dummy7  { int x; };
+struct Dummy8  { int x; };
+struct Dummy9  { int x; };
 struct Dummy10 { int x; };
 struct Dummy11 { int x; };
 struct Dummy12 { int x; };

@@ -10,13 +10,13 @@ extern const Gfx bubba_seg5_dl_05004AA8[];
 extern const Gfx bubba_seg5_dl_05004BE8[];
 extern const Gfx bubba_seg5_dl_05004C40[];
 extern const Gfx bubba_seg5_dl_05004D48[];
-extern const Gfx bubba_seg5_dl_05004E80[];
+extern const Gfx bubba_seg5_dl_with_closed_mouth[];
 extern const Gfx bubba_seg5_dl_05005538[];
 extern const Gfx bubba_seg5_dl_050055A0[];
 extern const Gfx bubba_seg5_dl_050056E0[];
 extern const Gfx bubba_seg5_dl_05005738[];
 extern const Gfx bubba_seg5_dl_05005840[];
-extern const Gfx bubba_seg5_dl_05005978[];
+extern const Gfx bubba_seg5_dl_with_open_mouth[];
 
 // lakitu_enemy
 extern const GeoLayout enemy_lakitu_geo[];

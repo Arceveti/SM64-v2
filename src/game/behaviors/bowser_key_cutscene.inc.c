@@ -12,7 +12,7 @@ Gfx *geo_scale_bowser_key(s32 callContext, struct GraphNode *node, UNUSED f32 mt
 void bhv_bowser_key_unlock_door_loop(void) {
     s32 animTimer;
     animTimer = o->header.gfx.animInfo.animFrame;
-    cur_obj_init_animation_with_sound(0);
+    cur_obj_init_animation_with_sound(BOWSER_KEY_CUTSCENE_ANIM_UNLOCK_DOOR);
     if (animTimer < 38) {
         o->oBowserKeyScale = 0.0f;
     } else if (animTimer < 49) {
@@ -31,7 +31,7 @@ void bhv_bowser_key_unlock_door_loop(void) {
 
 void bhv_bowser_key_course_exit_loop(void) {
     s32 animTimer = o->header.gfx.animInfo.animFrame;
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(BOWSER_KEY_CUTSCENE_ANIM_COURSE_EXIT);
     if (animTimer < 38) {
         o->oBowserKeyScale = 0.2f;
     } else if (animTimer < 52) {

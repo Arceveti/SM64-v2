@@ -166,7 +166,7 @@ void bobomb_free_loop(void) {
 
 void bobomb_held_loop(void) {
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-    cur_obj_init_animation(1);
+    cur_obj_init_animation(BOBOMB_ANIM_HELD);
     cur_obj_set_pos_relative(gMarioObject, 0, 60.0f, 100.0f);
 
     o->oBobombFuseLit = TRUE;
@@ -186,7 +186,7 @@ void bobomb_dropped_loop(void) {
     cur_obj_get_dropped();
 
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(BOBOMB_ANIM_WALKING);
 
     o->oHeldState = HELD_FREE;
     o->oAction = BOBOMB_ACT_PATROL;
@@ -206,15 +206,15 @@ void bobomb_thrown_loop(void) {
 void curr_obj_random_blink(s32 *blinkTimer) {
     if (*blinkTimer == 0) {
         if ((s16)(random_float() * 100.0f) == 0) {
-            o->oAnimState = 1;
+            o->oAnimState = BOBOMB_ANIM_STATE_EYES_CLOSED;
             *blinkTimer = 1;
         }
     } else {
         (*blinkTimer)++;
-        if (*blinkTimer >=  6) o->oAnimState = 0;
-        if (*blinkTimer >= 11) o->oAnimState = 1;
+        if (*blinkTimer >=  6) o->oAnimState = BOBOMB_ANIM_STATE_EYES_OPEN;
+        if (*blinkTimer >= 11) o->oAnimState = BOBOMB_ANIM_STATE_EYES_CLOSED;
         if (*blinkTimer >= 16) {
-            o->oAnimState = 0;
+            o->oAnimState = BOBOMB_ANIM_STATE_EYES_OPEN;
             *blinkTimer   = 0;
         }
     }

@@ -11,13 +11,13 @@ void bhv_blue_fish_movement_loop(void) {
     switch (o->oAction) {
         // Initial dive phase after spawning
         case BLUE_FISH_ACT_DIVE:
-            cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
+            cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 1.0f);
             
             // Assigns random values to variables that help determine natural motion.
             if (o->oTimer == 0) {
-                o->oBlueFishRandomAngle = random_sign() << 11;
-                o->oBlueFishRandomVel = random_float() * 2;
-                o->oBlueFishRandomTime = (s32)(random_float() * 30) & 0xFE;
+                o->oBlueFishRandomAngle =       random_sign() << 11;
+                o->oBlueFishRandomVel   =       random_float() * 2;
+                o->oBlueFishRandomTime  = (s32)(random_float() * 30) & 0xFE;
                 
                 // Adjusts pitch velocity or sets to zero dependant on outcome of randomSwitch.
                 randomSwitch = random_float() * 5;
@@ -44,13 +44,13 @@ void bhv_blue_fish_movement_loop(void) {
             break;
         // Animates and adjusts fish yaw angle.
         case BLUE_FISH_ACT_TURN:
-            cur_obj_init_animation_with_accel_and_sound(0, 2.0f);
+            cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 2.0f);
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
             if (o->oTimer == 15) o->oAction = BLUE_FISH_ACT_ASCEND;
             break;  
         // Animates and adjusts pitch to an upward direction.
         case BLUE_FISH_ACT_ASCEND:
-            cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
+            cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 1.0f);
             
             // Progresses oAction to BLUE_FISH_ACT_TURN_BACK after elapsed time. 
             if (o->oTimer >= o->oBlueFishRandomTime + 60) o->oAction = BLUE_FISH_ACT_TURN_BACK;
@@ -64,7 +64,7 @@ void bhv_blue_fish_movement_loop(void) {
             break; 
         // Animates and turns fish around
         case BLUE_FISH_ACT_TURN_BACK:
-            cur_obj_init_animation_with_accel_and_sound(0, 2.0f);
+            cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 2.0f);
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
             
             // Sets the fish back to the BLUE_FISH_ACT_DIVE phase.

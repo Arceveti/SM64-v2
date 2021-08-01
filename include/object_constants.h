@@ -137,6 +137,12 @@
     #define BOBOMB_ACT_LAUNCHED                             0x1
     #define BOBOMB_ACT_CHASE_MARIO                          0x2
     #define BOBOMB_ACT_EXPLODE                              0x3
+    /* oAnimState */
+    #define BOBOMB_ANIM_STATE_EYES_OPEN                     0x0
+    #define BOBOMB_ANIM_STATE_EYES_CLOSED                   0x1
+    /* Animations */
+    #define BOBOMB_ANIM_WALKING                             0x0
+    #define BOBOMB_ANIM_HELD                                0x1
 
 /* Hidden Blue Coin */
     /* oAction */
@@ -298,6 +304,11 @@
     #define BOWSER_BITS_PLAT_ACT_CHECK                      0x1
     #define BOWSER_BITS_PLAT_ACT_FALL                       0x2
 
+/* Bowser Key Cutscene */
+    /* Animations */
+    #define BOWSER_KEY_CUTSCENE_ANIM_UNLOCK_DOOR            0x0
+    #define BOWSER_KEY_CUTSCENE_ANIM_COURSE_EXIT            0x1
+
 /* Fish Spawer */
     /* oAction */
     #define FISH_SPAWNER_ACT_SPAWN                          0x0
@@ -315,6 +326,12 @@
     #define FISH_ACT_ROAM                                   0x1
     #define FISH_ACT_FLEE                                   0x2
 
+/* Blue Fish Spawner */
+    /* oAction: bhv_blue_fish_spawn_loop */
+    #define BLUE_FISH_ACT_SPAWN                             0x0
+    #define BLUE_FISH_ACT_ROOM                              0x1
+    #define BLUE_FISH_ACT_DUPLICATE                         0x2
+
 /* Blue_Fish */
     /* oAction */
     #define BLUE_FISH_ACT_DIVE                              0x0
@@ -322,10 +339,8 @@
     #define BLUE_FISH_ACT_ASCEND                            0x2
     #define BLUE_FISH_ACT_TURN_BACK                         0x3
 
-    /* oAction: bhv_blue_fish_spawn_loop */
-    #define BLUE_FISH_ACT_SPAWN                             0x0
-    #define BLUE_FISH_ACT_ROOM                              0x1
-    #define BLUE_FISH_ACT_DUPLICATE                         0x2
+    /* Animations */
+    #define BLUE_FISH_ANIM_DEFAULT                          0x0
 
 /* Cheep Cheep Spawner */
     /* oAction */
@@ -339,6 +354,28 @@
     #define BUB_ACT_INIT                                    0x0
     #define BUB_ACT_SWIMMING_TOWARDS_MARIO                  0x1
     #define BUB_ACT_SWIMMING_AWAY_FROM_MARIO                0x2
+
+/* Bubba */
+    /* oAction */
+    #define BUBBA_ACT_IDLE                                  0x0
+    #define BUBBA_ACT_ATTACK                                0x1
+    /* oAnimState */
+    #define BUBBA_ANIM_STATE_CLOSED_MOUTH                   0x0
+    #define BUBBA_ANIM_STATE_OPEN_MOUTH                     0x1
+
+/* Clam */
+    /* oAction */
+    #define CLAM_ACT_CLOSING                                0x0
+    #define CLAM_ACT_OPENING                                0x1
+
+    /* Animations */
+    #define CLAM_ANIM_CLOSING                               0x0
+    #define CLAM_ANIM_OPENING                               0x1
+
+/* Breakable Box */
+    /* oAnimState */
+    #define BREAKABLE_BOX_ANIM_STATE_CRAZY_BOX              0x0
+    #define BREAKABLE_BOX_ANIM_STATE_CORK_BOX               0x1
 
 /* Small Breakable Box */
     /* oAction */
@@ -428,6 +465,10 @@
     #define AMP_ACT_IDLE                                    0x2
     #define AMP_ACT_ATTACK_COOLDOWN                         0x4
 
+    /* oAnimState */
+    #define AMP_ANIM_STATE_OFF                              0x0
+    #define AMP_ANIM_STATE_ON                               0x1
+
 /* Butterfly */
     /* oAction */
     #define BUTTERFLY_ACT_RESTING                           0x0
@@ -446,15 +487,15 @@
 
 /* Bully (all variants) */
     /* oBehParams2ndByte */
-    #define BULLY_BP_SIZE_SMALL                             0x00
-    #define BULLY_BP_SIZE_BIG                               0x01
+    #define BULLY_BP_SIZE_SMALL                             0x0
+    #define BULLY_BP_SIZE_BIG                               0x1
     /* oAction */
-    #define BULLY_ACT_PATROL                                0x00
-    #define BULLY_ACT_CHASE_MARIO                           0x01
-    #define BULLY_ACT_KNOCKBACK                             0x02
-    #define BULLY_ACT_BACK_UP                               0x03
-    #define BULLY_ACT_INACTIVE                              0x04
-    #define BULLY_ACT_ACTIVATE_AND_FALL                     0x05
+    #define BULLY_ACT_PATROL                                0x0
+    #define BULLY_ACT_CHASE_MARIO                           0x1
+    #define BULLY_ACT_KNOCKBACK                             0x2
+    #define BULLY_ACT_BACK_UP                               0x3
+    #define BULLY_ACT_INACTIVE                              0x4
+    #define BULLY_ACT_ACTIVATE_AND_FALL                     0x5
     /* oBullySubtype */
     #define BULLY_STYPE_GENERIC                             0x00
     #define BULLY_STYPE_MINION                              0x01
