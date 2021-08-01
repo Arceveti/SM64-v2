@@ -58,22 +58,22 @@ void bhv_door_loop(void) {
 
     switch (o->oAction) {
         case DOOR_ACT_CLOSED:
-            cur_obj_init_animation_with_sound(0);
+            cur_obj_init_animation_with_sound(DOOR_ANIM_CLOSED);
             break;
         case DOOR_ACT_PULLED:
-            door_animation_and_reset(DOOR_ACT_PULLED);
+            door_animation_and_reset(DOOR_ANIM_PULLED);
             play_door_open_noise();
             break;
         case DOOR_ACT_PUSHED:
-            door_animation_and_reset(DOOR_ACT_PUSHED);
+            door_animation_and_reset(DOOR_ANIM_PUSHED);
             play_door_open_noise();
             break;
         case DOOR_ACT_WARP_PULLED:
-            door_animation_and_reset(DOOR_ACT_WARP_PULLED);
+            door_animation_and_reset(DOOR_ANIM_WARP_PULLED);
             play_warp_door_open_noise();
             break;
         case DOOR_ACT_WARP_PUSHED:
-            door_animation_and_reset(DOOR_ACT_WARP_PUSHED);
+            door_animation_and_reset(DOOR_ANIM_WARP_PUSHED);
             play_warp_door_open_noise();
             break;
     }

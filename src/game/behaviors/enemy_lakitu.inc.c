@@ -80,7 +80,7 @@ static void enemy_lakitu_update_speed_and_angle(void) {
  * hold it, then enter the hold spiny sub-action.
  */
 static void enemy_lakitu_sub_act_no_spiny(void) {
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(ENEMY_LAKITU_ANIM_NO_SPINY);
 
     if (o->oEnemyLakituSpinyCooldown != 0) {
         o->oEnemyLakituSpinyCooldown--;
@@ -104,7 +104,7 @@ static void enemy_lakitu_sub_act_no_spiny(void) {
  * enter the throw spiny sub-action.
  */
 static void enemy_lakitu_sub_act_hold_spiny(void) {
-    cur_obj_init_anim_extend(3);
+    cur_obj_init_anim_extend(ENEMY_LAKITU_ANIM_HOLD_SPINY);
 
     if (o->oEnemyLakituSpinyCooldown != 0) {
         o->oEnemyLakituSpinyCooldown--;
@@ -121,7 +121,7 @@ static void enemy_lakitu_sub_act_hold_spiny(void) {
  * Throw the spiny, then enter the no spiny sub-action.
  */
 static void enemy_lakitu_sub_act_throw_spiny(void) {
-    if (cur_obj_init_anim_check_frame(2, 2)) {
+    if (cur_obj_init_anim_check_frame(ENEMY_LAKITU_ANIM_THROW_SPINY, 2)) {
         cur_obj_play_sound_2(SOUND_OBJ_EVIL_LAKITU_THROW);
         o->prevObj = NULL;
     }

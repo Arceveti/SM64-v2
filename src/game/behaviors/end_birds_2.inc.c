@@ -8,11 +8,11 @@ void bhv_end_birds_2_loop(void) {
     gCurrentObject->oForwardVel = (random_float() * 10.0f) + 25.0f;
 
     switch (gCurrentObject->oAction) {
-        case 0:
+        case END_BIRDS_ACT_INIT:
             cur_obj_scale(0.7f);
-            gCurrentObject->oAction++;
+            gCurrentObject->oAction = END_BIRDS_ACT_ACTIVE;
             break;
-        case 1:
+        case END_BIRDS_ACT_ACTIVE:
             vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &pitch, &yaw);
             yaw += 0x1000;
             vec3f_set_dist_and_angle(gCamera->pos, pos, 14000.0f, pitch, yaw);

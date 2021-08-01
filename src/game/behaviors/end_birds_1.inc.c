@@ -4,14 +4,14 @@ void bhv_end_birds_1_loop(void) {
     Vec3f pos;
 
     switch (gCurrentObject->oAction) {
-        case 0:
+        case END_BIRDS_ACT_INIT:
             cur_obj_scale(0.7f);
             gCurrentObject->oIntroLakituEndBirds1DestX =  -554.0f;
             gCurrentObject->oIntroLakituEndBirds1DestY =  3044.0f;
             gCurrentObject->oIntroLakituEndBirds1DestZ = -1314.0f;
-            gCurrentObject->oAction++;
+            gCurrentObject->oAction = END_BIRDS_ACT_ACTIVE;
             break;
-        case 1:
+        case END_BIRDS_ACT_ACTIVE:
             vec3f_set(pos, gCurrentObject->oIntroLakituEndBirds1DestX,
                            gCurrentObject->oIntroLakituEndBirds1DestY,
                            gCurrentObject->oIntroLakituEndBirds1DestZ);

@@ -20,13 +20,8 @@ void bhv_lll_drawbridge_loop(void) {
     s32 globalTimer = gGlobalTimer;
 
     switch (o->oAction) {
-        case LLL_DRAWBRIDGE_ACT_LOWER:
-            o->oFaceAngleRoll += 0x100;
-            break;
-
-        case LLL_DRAWBRIDGE_ACT_RAISE:
-            o->oFaceAngleRoll -= 0x100;
-            break;
+        case LLL_DRAWBRIDGE_ACT_LOWER: o->oFaceAngleRoll += 0x100; break;
+        case LLL_DRAWBRIDGE_ACT_RAISE: o->oFaceAngleRoll -= 0x100; break;
     }
 
     if ((s16) o->oFaceAngleRoll < -0x1FFD) {

@@ -55,7 +55,7 @@ static struct SpecialPreset SpecialObjectPresets[] =
     {0x1B, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_TREASURE_CHEST_BASE               , bhvBetaChestBottom                }, // special_jrb_chest
     {0x1C, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_WATER_RING                        , bhvJetStreamRingSpawner           }, // special_water_ring
     {0x1D, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_WATER_MINE                        , bhvBowserBomb                     }, // special_mine
-    {0x1E, SPTYPE_UNKNOWN           , 0x00, MODEL_NONE                              , bhvStaticObject                   }, // special_empty_30
+    {0x1E, SPTYPE_UNKNOWN           , 0x00, MODEL_NONE                              , bhvStaticObject                   }, // special_empty_30, SPTYPE_UNKNOWN
     {0x1F, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_NONE                              , bhvStaticObject                   }, // special_empty_31
     {0x20, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_BUTTERFLY                         , bhvButterfly                      }, // special_butterfly
     {0x21, SPTYPE_NO_YROT_OR_PARAMS , 0x00, MODEL_BOWSER                            , bhvBowser                         }, // special_bowser

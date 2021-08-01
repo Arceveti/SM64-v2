@@ -1,7 +1,7 @@
 // cruiser.c.inc
 
 void bhv_rr_cruiser_wing_init(void) {
-    o->oRRCruiserWingInitYaw = o->oFaceAngleYaw;
+    o->oRRCruiserWingInitYaw   = o->oFaceAngleYaw;
     o->oRRCruiserWingInitPitch = o->oFaceAnglePitch;
 }
 

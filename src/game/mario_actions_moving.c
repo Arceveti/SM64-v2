@@ -473,8 +473,12 @@ s32 should_begin_sliding(struct MarioState *m) {
 s32 check_ground_dive_or_punch(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
         //! Speed kick (shoutouts to SimpleFlips)
-#ifdef ACTION_CANCELS
-        if (!(m->input & INPUT_A_DOWN) && m->forwardVel >= 10.0f && m->intendedMag >= 29.0f && m->controller->stickMag > 48.0f) {
+#ifdef IMPROVED_MOVEMENT
+        if (!(m->input & INPUT_A_DOWN)
+         && m->forwardVel >= 10.0f
+         && m->intendedMag >= 29.0f
+         && m->controller->stickMag > 48.0f
+         && (m->wall == NULL || m->wall->object == NULL)) {
 #else
         if (m->forwardVel >= 29.0f && m->controller->stickMag > 48.0f) {
 #endif

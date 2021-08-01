@@ -202,7 +202,7 @@ void bhv_wdw_express_elevator_loop(void);
 void bhv_bub_spawner_loop(void);
 void bhv_bub_loop(void);
 void bhv_exclamation_box_loop(void);
-void bhv_rotating_exclamation_box_loop(void);
+void bhv_rotating_exclamation_mark_loop(void);
 void bhv_sound_spawner_init(void);
 void bhv_bowsers_sub_loop(void);
 void bhv_sushi_shark_loop(void);

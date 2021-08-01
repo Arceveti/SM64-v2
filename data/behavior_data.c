@@ -1148,17 +1148,17 @@ const BehaviorScript bhvFlame[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvAnotherElavator[] = {
-    BEGIN(OBJ_LIST_SURFACE),
-    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
-    LOAD_COLLISION_DATA(hmc_seg7_collision_elevator),
-    SET_HOME(),
-    CALL_NATIVE(bhv_elevator_init),
-    BEGIN_LOOP(),
-        CALL_NATIVE(bhv_elevator_loop),
-        CALL_NATIVE(load_object_collision_model),
-    END_LOOP(),
-};
+// const BehaviorScript bhvRoomlessElavator[] = {
+//     BEGIN(OBJ_LIST_SURFACE),
+//     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+//     LOAD_COLLISION_DATA(hmc_seg7_collision_elevator),
+//     SET_HOME(),
+//     CALL_NATIVE(bhv_elevator_init),
+//     BEGIN_LOOP(),
+//         CALL_NATIVE(bhv_elevator_loop),
+//         CALL_NATIVE(load_object_collision_model),
+//     END_LOOP(),
+// };
 
 const BehaviorScript bhvRrElevatorPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
@@ -2541,7 +2541,7 @@ const BehaviorScript bhvRotatingExclamationMark[] = {
     OR_INT(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SCALE(/*Unused*/ 0, /*Field*/ 200),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_rotating_exclamation_box_loop),
+        CALL_NATIVE(bhv_rotating_exclamation_mark_loop),
         ADD_INT(oMoveAngleYaw, 0x800),
     END_LOOP(),
 };
@@ -2972,13 +2972,13 @@ const BehaviorScript bhvHauntedBookshelf[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvMeshElevator[] = {
+const BehaviorScript bhvBbhMeshElevator[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(bbh_seg7_collision_mesh_elevator),
     SET_HOME(),
     SET_INT(oRoom, 12),
-    SET_INT(oBehParams2ndByte, 0x4), //! name
+    SET_INT(oBehParams2ndByte, ELEVATOR_BP_BBH_MESH),
     CALL_NATIVE(bhv_elevator_init),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_elevator_loop),
@@ -4689,7 +4689,7 @@ const BehaviorScript bhvControllablePlatform[] = {
     END_LOOP(),
 };
 
-const BehaviorScript bhvControllablePlatformSub[] = {
+const BehaviorScript bhvControllablePlatformButton[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(hmc_seg7_collision_controllable_platform_sub),

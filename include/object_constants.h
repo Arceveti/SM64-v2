@@ -67,6 +67,7 @@
 #define DIALOG_FLAG_TIME_STOP_ENABLED  (1 <<  4) // 0x10
 
 /* oMoveFlags */
+#define OBJ_MOVE_NONE                       0x0  // 0x0000
 #define OBJ_MOVE_LANDED                (1 <<  0) // 0x0001
 #define OBJ_MOVE_ON_GROUND             (1 <<  1) // 0x0002  // mutually exclusive to OBJ_MOVE_LANDED
 #define OBJ_MOVE_LEFT_GROUND           (1 <<  2) // 0x0004
@@ -379,7 +380,6 @@
     /* oAction */
     #define CLAM_ACT_CLOSING                                0x0
     #define CLAM_ACT_OPENING                                0x1
-
     /* Animations */
     #define CLAM_ANIM_CLOSING                               0x0
     #define CLAM_ANIM_OPENING                               0x1
@@ -401,6 +401,28 @@
     #define EXCLAMATION_BOX_ACT_SCALING                     0x3
     #define EXCLAMATION_BOX_ACT_EXPLODE                     0x4
     #define EXCLAMATION_BOX_ACT_WAIT_FOR_RESPAWN            0x5
+    /* oBehParams2ndByte, ExclamationBoxContents->id */
+    #define EXCLAMATION_BOX_BP_WING_CAP                     0x0
+    #define EXCLAMATION_BOX_BP_METAL_CAP                    0x1
+    #define EXCLAMATION_BOX_BP_VANISH_CAP                   0x2
+    #define EXCLAMATION_BOX_BP_KOOPA_SHELL                  0x3
+    #define EXCLAMATION_BOX_BP_COINS_1                      0x4
+    #define EXCLAMATION_BOX_BP_COINS_3                      0x5
+    #define EXCLAMATION_BOX_BP_COINS_10                     0x6
+    #define EXCLAMATION_BOX_BP_1UP_WALKING                  0x7
+    #define EXCLAMATION_BOX_BP_STAR_1                       0x8
+    #define EXCLAMATION_BOX_BP_1UP_RUNNING_AWAY             0x9
+    #define EXCLAMATION_BOX_BP_STAR_2                       0xA
+    #define EXCLAMATION_BOX_BP_STAR_3                       0xB
+    #define EXCLAMATION_BOX_BP_STAR_4                       0xC
+    #define EXCLAMATION_BOX_BP_STAR_5                       0xD
+    #define EXCLAMATION_BOX_BP_STAR_6                       0xE
+    #define EXCLAMATION_BOX_BP_NULL                         0x63
+    /* oAnimState */
+    #define EXCLAMATION_BOX_ANIM_STATE_RED                  0x0
+    #define EXCLAMATION_BOX_ANIM_STATE_GREEN                0x1
+    #define EXCLAMATION_BOX_ANIM_STATE_BLUE                 0x2
+    #define EXCLAMATION_BOX_ANIM_STATE_YELLOW               0x3
 
 /* Cap Switch */
     /* oAction */
@@ -441,6 +463,12 @@
     #define DOOR_ACT_PUSHED                                 0x2
     #define DOOR_ACT_WARP_PULLED                            0x3
     #define DOOR_ACT_WARP_PUSHED                            0x4
+    /* Animations */
+    #define DOOR_ANIM_CLOSED                                0x0
+    #define DOOR_ANIM_PULLED                                0x1
+    #define DOOR_ANIM_PUSHED                                0x2
+    #define DOOR_ANIM_WARP_PULLED                           0x3
+    #define DOOR_ANIM_WARP_PUSHED                           0x4
 
 /* Star Door */
     /* oAction */
@@ -787,11 +815,9 @@
     #define CHAIN_CHOMP_ACT_UNINITIALIZED                   0x0
     #define CHAIN_CHOMP_ACT_MOVE                            0x1
     #define CHAIN_CHOMP_ACT_UNLOAD_CHAIN                    0x2
-
     /* oSubAction */
     #define CHAIN_CHOMP_SUB_ACT_TURN                        0x0
     #define CHAIN_CHOMP_SUB_ACT_LUNGE                       0x1
-
     /* oChainChompReleaseStatus */
     #define CHAIN_CHOMP_NOT_RELEASED                        0x0
     #define CHAIN_CHOMP_RELEASED_TRIGGER_CUTSCENE           0x1
@@ -816,7 +842,6 @@
     #define WIGGLER_ACT_JUMPED_ON                           0x3
     #define WIGGLER_ACT_SHRINK                              0x4
     #define WIGGLER_ACT_FALL_THROUGH_FLOOR                  0x5
-
     /* oWigglerTextStatus */
     #define WIGGLER_TEXT_STATUS_AWAIT_DIALOG                0x0
     #define WIGGLER_TEXT_STATUS_SHOWING_DIALOG              0x1
@@ -829,15 +854,19 @@
     #define SPINY_ACT_THROWN_BY_LAKITU                      0x2
     #define SPINY_ACT_ATTACKED_MARIO                        0x3
 
-/* Evil Lakitu */
+/* Enemy Lakitu */
     /* oAction */
     #define ENEMY_LAKITU_ACT_UNINITIALIZED                  0x0
     #define ENEMY_LAKITU_ACT_MAIN                           0x1
-
     /* oSubAction */
     #define ENEMY_LAKITU_SUB_ACT_NO_SPINY                   0x0
     #define ENEMY_LAKITU_SUB_ACT_HOLD_SPINY                 0x1
     #define ENEMY_LAKITU_SUB_ACT_THROW_SPINY                0x2
+    /* Animations */
+    #define ENEMY_LAKITU_ANIM_UNUSED                        0x0
+    #define ENEMY_LAKITU_ANIM_NO_SPINY                      0x1
+    #define ENEMY_LAKITU_ANIM_THROW_SPINY                   0x2
+    #define ENEMY_LAKITU_ANIM_HOLD_SPINY                    0x3
 
 /* Cloud */
     /* oAction */
@@ -1019,8 +1048,6 @@
     #define PLATFORM_ON_TRACK_TYPE_GRATE                    0x3
 
 /* HMC Controllable Platform */
-    /* oAction */
-
     /* oBehParams2ndByte / sControllablePlatformDirectionState */
     #define DIRECTION_STATE_STOPPED                         0x0
     #define DIRECTION_STATE_SOUTH                           0x1
@@ -1029,11 +1056,17 @@
     #define DIRECTION_STATE_WEST                            0x4
     #define DIRECTION_STATE_HIT_WALL                        0x5
     #define DIRECTION_STATE_DISAPPEARING                    0x6
-
+    /* oControllablePlatformWallHitDirection */
     #define MOVE_DIRECTION_NORTH                            0x1
     #define MOVE_DIRECTION_SOUTH                            0x2
     #define MOVE_DIRECTION_WEST                             0x3
     #define MOVE_DIRECTION_EAST                             0x4
+
+/* HMC Controllable Platform Button */
+    /* oAction */
+    #define CONTROLLABLE_PLATFORM_ACT_UNPRESSED             0x0
+    #define CONTROLLABLE_PLATFORM_BUTTON_ACT_PRESSED        0x1
+    #define CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS  0x2
 
 /* Purple switch */
     #define PURPLE_SWITCH_IDLE                              0x0
@@ -1049,13 +1082,43 @@
     #define OEPNABLE_GRILL_OPENING                          0x2
     #define OEPNABLE_GRILL_IDLE_OPEN                        0x3
 
+/* Elevator */
+    /* oAction */
+    #define ELEVATOR_ACT_IDLE                               0x0
+    #define ELEVATOR_ACT_MOVING_UP                          0x1
+    #define ELEVATOR_ACT_MOVING_DOWN                        0x2
+    #define ELEVATOR_ACT_LANDED                             0x3
+    #define ELEVATOR_ACT_LANDED_RR                          0x4
+    /* oBehParams2ndByte */
+    #define ELEVATOR_BP_HMC_WORK                            0x0
+    #define ELEVATOR_BP_HMC_EMERGENCY_EXIT                  0x1
+    #define ELEVATOR_BP_HMC_NAVIGATING_THE_TOXIC_MAZE       0x2
+    #define ELEVATOR_BP_HMC_LAKE                            0x3
+    #define ELEVATOR_BP_BBH_MESH                            0x4
+    #define ELEVATOR_BP_RAINBOW_RIDE                        0x5
+    #define ELEVATOR_BP_UNUSED                              0x6
+    /* oElevatorType */
+    #define ELEVATOR_TYPE_DEFAULT                           0x0
+    #define ELEVATOR_TYPE_RR                                0x1
+    #define ELEVATOR_TYPE_ABOVE_HOME                        0x2 // roomless?
+
+/* WDW Express Elevator */
+    /* oAction */
+    #define EXPRESS_ELEVATOR_ACT_IDLE                       0x0
+    #define EXPRESS_ELEVATOR_ACT_MOVING_DOWN                0x1
+    #define EXPRESS_ELEVATOR_ACT_PAUSING_AT_BOTTOM          0x2
+    #define EXPRESS_ELEVATOR_ACT_MOVING_UP                  0x3
+    #define EXPRESS_ELEVATOR_ACT_DONE                       0x4
+
 /* Pyramid elevator */
+    /* oAction */
     #define PYRAMID_ELEVATOR_IDLE                           0x0
     #define PYRAMID_ELEVATOR_START_MOVING                   0x1
     #define PYRAMID_ELEVATOR_CONSTANT_VELOCITY              0x2
     #define PYRAMID_ELEVATOR_AT_BOTTOM                      0x3
 
 /* Pyramid top */
+    /* oAction */
     #define PYRAMID_TOP_ACT_CHECK_IF_SOLVED                 0x0
     #define PYRAMID_TOP_ACT_SPINNING                        0x1
     #define PYRAMID_TOP_ACT_EXPLODE                         0x2
@@ -1191,6 +1254,10 @@
     #define DORRIE_ACT_MOVE                                 0x0
     #define DORRIE_ACT_LOWER_HEAD                           0x1
     #define DORRIE_ACT_RAISE_HEAD                           0x2
+    /* Animations */
+    #define DORRIE_ANIM_UNUSED                              0x0
+    #define DORRIE_ANIM_RAISE_HEAD                          0x1
+    #define DORRIE_ANIM_LOWER_HEAD                          0x2
 
 /* Mad piano */
     /* oAction */
@@ -1230,6 +1297,7 @@
     #define EYEROK_BOSS_ACT_SHOW_INTRO_TEXT                 0x2
     #define EYEROK_BOSS_ACT_FIGHT                           0x3
     #define EYEROK_BOSS_ACT_DIE                             0x4
+    /* oBehParams2ndByte */
 
 /* Eyerok hand */
     /* oAction */
@@ -1249,6 +1317,30 @@
     #define EYEROK_HAND_ACT_RECOVER                         0xD
     #define EYEROK_HAND_ACT_BECOME_ACTIVE                   0xE
     #define EYEROK_HAND_ACT_DIE                             0xF
+    /* oAnimState */
+    #define EYEROK_HAND_ANIM_STATE_EYE_OPEN                 0x0
+    #define EYEROK_HAND_ANIM_STATE_EYE_MOSTLY_OPEN          0x1
+    #define EYEROK_HAND_ANIM_STATE_EYE_MOSTLY_CLOSED        0x2
+    #define EYEROK_HAND_ANIM_STATE_EYE_CLOSED               0x3
+    /* oEyerokHandAnimStateIndex */
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_OPEN_1         0x0
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_CLOSING        0x1 // mostly open
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_CLOSED         0x2
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_OPENING_1      0x3 // mostly closed
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_OPENING_2      0x4 // mostly open
+    #define EYEROK_HAND_ANIM_STATE_INDEX_EYE_OPEN_2         0x5
+    /* Animations */
+    #define EYEROK_HAND_ANIM_RECOVER                        0x0
+    #define EYEROK_HAND_ANIM_DEATH                          0x1
+    #define EYEROK_HAND_ANIM_IDLE                           0x2
+    #define EYEROK_HAND_ANIM_ATTACKED                       0x3
+    #define EYEROK_HAND_ANIM_OPEN                           0x4
+    #define EYEROK_HAND_ANIM_SHOW_EYE                       0x5
+    #define EYEROK_HAND_ANIM_UNUSED                         0x6
+    #define EYEROK_HAND_ANIM_CLOSE                          0x7
+    /* oBehParams2ndByte */
+    #define EYEROK_BP_LEFT_HAND                            -0x1
+    #define EYEROK_BP_RIGHT_HAND                            0x1
 
 /* King Bobomb */
     /* oAction */
@@ -1338,6 +1430,11 @@
     /* oBehParams2ndByte */
     #define BIRD_BP_SPAWNED                                 0x0
     #define BIRD_BP_SPAWNER                                 0x1
+
+/* End Birds */
+    /* oAction */
+    #define END_BIRDS_ACT_INIT                              0x0
+    #define END_BIRDS_ACT_ACTIVE                            0x1
 
 /* Skeeter */
     /* oAction */

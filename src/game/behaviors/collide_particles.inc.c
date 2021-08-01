@@ -1,5 +1,7 @@
 // collide_particles.c.inc
 
+//! oAnimState defines?
+
 static s16 sTinyTriMovementParams[] = { 0xD000, 0,      0x3000, 0,      0xDE67, 0x2199,
                                         0x2199, 0x2199, 0xDE67, 0xDE67, 0x2199, 0xDE67 };
 
