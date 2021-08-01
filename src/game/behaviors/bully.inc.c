@@ -25,7 +25,7 @@ static struct ObjectHitbox sBigBullyHitbox = {
 };
 
 void bhv_small_bully_init(void) {
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(BULLY_ANIM_WALKING);
 
     o->oHomeX            = o->oPosX;
     o->oHomeZ            = o->oPosZ;
@@ -38,7 +38,7 @@ void bhv_small_bully_init(void) {
 }
 
 void bhv_big_bully_init(void) {
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(BULLY_ANIM_WALKING);
 
     o->oHomeX            = o->oPosX;
     o->oHomeY            = o->oPosY;
@@ -55,15 +55,11 @@ void bully_check_mario_collision(void) {
     if (o->oAction != OBJ_ACT_LAVA_DEATH
      && o->oAction != OBJ_ACT_DEATH_PLANE_DEATH
      && o->oInteractStatus & INT_STATUS_INTERACTED) {
-        if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
-            cur_obj_play_sound_2(SOUND_OBJ2_BULLY_ATTACKED);
-        } else {
-            cur_obj_play_sound_2(SOUND_OBJ2_LARGE_BULLY_ATTACKED);
-        }
+        cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ2_SMALL_BULLY_ATTACKED : SOUND_OBJ2_LARGE_BULLY_ATTACKED);
         o->oInteractStatus &= ~INT_STATUS_INTERACTED;
         o->oAction = BULLY_ACT_KNOCKBACK;
         o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
-        cur_obj_init_animation(3);
+        cur_obj_init_animation(BULLY_ANIM_BOAST);
         o->oBullyMarioCollisionAngle = o->oMoveAngleYaw;
     }
 }
@@ -86,7 +82,7 @@ void bully_act_chase_mario(void) {
 
     if (!is_point_within_radius_of_mario(homeX, posY, homeZ, 1000)) {
         o->oAction = BULLY_ACT_PATROL;
-        cur_obj_init_animation(0);
+        cur_obj_init_animation(BULLY_ANIM_WALKING);
     }
 }
 
@@ -103,7 +99,7 @@ void bully_act_knockback(void) {
     if (o->oBullyKBTimerAndMinionKOCounter == 18) {
         o->oAction = BULLY_ACT_CHASE_MARIO;
         o->oBullyKBTimerAndMinionKOCounter = 0;
-        cur_obj_init_animation(1);
+        cur_obj_init_animation(BULLY_ANIM_RUNNING);
     }
 }
 
@@ -208,7 +204,7 @@ void bhv_bully_loop(void) {
 
             if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 800)) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
-                cur_obj_init_animation(1);
+                cur_obj_init_animation(BULLY_ANIM_RUNNING);
             }
 
             bully_step();
@@ -260,7 +256,7 @@ void bhv_big_bully_with_minions_init(void) {
 }
 
 void big_bully_spawn_star(void) {
-    if (obj_lava_death() == 1) {
+    if (obj_lava_death()) {
         spawn_mist_particles();
         spawn_default_star(3700.0f, 600.0f, -5500.0f);
     }
@@ -281,7 +277,7 @@ void bhv_big_bully_with_minions_loop(void) {
 
             if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 1000)) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
-                cur_obj_init_animation(1);
+                cur_obj_init_animation(BULLY_ANIM_RUNNING);
             }
 
             bully_step();

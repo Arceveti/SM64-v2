@@ -38,7 +38,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Most doubles are now floats where the extra percision isn't needed
 - Improved slope fix and exposed ceilings fix (Arceveti)
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
-- A few unecessary find_floor (collision) checks are removed (Arceveti)
+- Some unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - Many smaller optimizations (Arceveti)
@@ -49,6 +49,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Many unnamed display lists and geolayouts have been named (Arceveti)
 - Almost all textures have been named (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
+- Many object constants have been defined (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
 - Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
@@ -61,9 +62,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **HUD/Gameplay QoL:**
 - Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
 - Signs and NPCs are easier to talk to (Arceveti) *
-- An "A" is shown when Mario is able to talk to a sign or NPC (Arceveti) *
-- Number of Red Coins collected displayed on the HUD (Arceveti) *
-- Number of Secrets collected displayed on the HUD (Arceveti) *
+- An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
+- Number of Red Coins collected is displayed on the HUD (Arceveti) *
+- Number of Secrets collected is displayed on the HUD (Arceveti) *
 - Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
 
 **Object Behaviors:**

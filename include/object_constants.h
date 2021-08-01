@@ -169,6 +169,18 @@
     /* oAction */
     #define MOV_YCOIN_ACT_IDLE                              0x0
     #define MOV_YCOIN_ACT_BLINKING                          0x1
+    /* oSubAction */
+
+/* Coin Formation */
+    /* oAction */
+    #define COIN_FORMATION_ACT_INACTIVE                     0x0
+    #define COIN_FORMATION_ACT_ACTIVE                       0x1
+    #define COIN_FORMATION_ACT_DEACTIVATE                   0x2
+
+/* Coin Inside Boo */
+    /* oAction */
+    #define COIN_INSIDE_BOO_ACT_CARRIED                     0x0
+    #define COIN_INSIDE_BOO_ACT_DROPPED                     0x1
 
 /* 1-Up Mushroom */
     /* oBehParams2ndByte */
@@ -474,6 +486,9 @@
     #define BUTTERFLY_ACT_RESTING                           0x0
     #define BUTTERFLY_ACT_FOLLOW_MARIO                      0x1
     #define BUTTERFLY_ACT_RETURN_HOME                       0x2
+    /* Animations */
+    #define BUTTERFLY_ANIM_FLYING                           0x0
+    #define BUTTERFLY_ANIM_RESTING                          0x1
 
 /* Hoot */
     /* oHootAvailability */
@@ -500,6 +515,11 @@
     #define BULLY_STYPE_GENERIC                             0x00
     #define BULLY_STYPE_MINION                              0x01
     #define BULLY_STYPE_CHILL                               0x10
+    /* Animations */
+    #define BULLY_ANIM_WALKING                              0x0
+    #define BULLY_ANIM_RUNNING                              0x1
+    #define BULLY_ANIM_UNUSED                               0x2
+    #define BULLY_ANIM_BOAST                                0x3
 
 /* Water Ring (all variants) */
     /* oAction */

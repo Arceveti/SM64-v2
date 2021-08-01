@@ -66,7 +66,7 @@ void bhv_coin_init(void) {
     cur_obj_become_intangible();
 }
 
-void bhv_coin_loop(void) {
+void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
     struct Surface *floor;
     s16 targetYaw;
     cur_obj_update_floor_and_walls();
@@ -91,9 +91,8 @@ void bhv_coin_loop(void) {
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_JP);
 #endif
     }
-    if (o->oVelY < 0) {
-        cur_obj_become_tangible();
-    }
+    if (o->oVelY < 0) cur_obj_become_tangible();
+
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
 #ifdef COIN_LAVA_FLICKER
         if (o->oMoveFlags & OBJ_MOVE_ABOVE_DEATH_BARRIER) obj_mark_for_deletion(o);
@@ -132,13 +131,13 @@ void bhv_coin_formation_spawn_loop(void) {
         if (bhv_coin_sparkles_init())  o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
         o->oAnimState++;
     }
-    if (o->parentObj->oAction == 2) obj_mark_for_deletion(o);
+    if (o->parentObj->oAction == COIN_FORMATION_ACT_DEACTIVATE) obj_mark_for_deletion(o);
 }
 
 void spawn_coin_in_formation(s32 index, s32 shape) {
     struct Object *newCoin;
     Vec3i pos;
-    s32 spawnCoin = TRUE;
+    s32 spawnCoin    = TRUE;
     s32 snapToGround = TRUE;
     pos[0] = pos[1] = pos[2] = 0;
     switch (shape & 0x7) {
@@ -165,9 +164,7 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
             pos[2] = sCoinArrowPositions[index][1];
             break;
     }
-    if (shape & 0x10) {
-        snapToGround = FALSE;
-    }
+    if (shape & 0x10) snapToGround = FALSE;
     if (spawnCoin) {
         newCoin = spawn_object_relative(index, pos[0], pos[1], pos[2], o, MODEL_YELLOW_COIN, bhvCoinFormationSpawn);
         newCoin->oCoinSnapToGround = snapToGround;
@@ -181,21 +178,21 @@ void bhv_coin_formation_init(void) {
 void bhv_coin_formation_loop(void) {
     s32 bitIndex;
     switch (o->oAction) {
-        case 0:
+        case COIN_FORMATION_ACT_INACTIVE:
             if (o->oDistanceToMario < 4000.0f) { //! hardcoded draw distance
                 for (bitIndex = 0; bitIndex < 8; bitIndex++) {
                     if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
                 }
-                o->oAction++;
+                o->oAction = COIN_FORMATION_ACT_ACTIVE;
             }
             break;
-        case 1:
+        case COIN_FORMATION_ACT_ACTIVE:
             if (o->oDistanceToMario > 4100.0f) { //! hardcoded draw distance
-                o->oAction++;
+                o->oAction = COIN_FORMATION_ACT_DEACTIVATE;
             }
             break;
-        case 2:
-            o->oAction = 0;
+        case COIN_FORMATION_ACT_DEACTIVATE:
+            o->oAction = COIN_FORMATION_ACT_INACTIVE;
             break;
     }
 
@@ -203,7 +200,7 @@ void bhv_coin_formation_loop(void) {
     set_object_respawn_info_bits(o, o->oCoinRespawnBits & RESPAWN_INFO_DONT_RESPAWN);
 }
 
-void coin_inside_boo_act_1(void) {
+void coin_inside_boo_act_dropped(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_if_hit_wall_bounce_away();
     if (o->oMoveFlags & OBJ_MOVE_BOUNCE) cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
@@ -218,7 +215,7 @@ void coin_inside_boo_act_1(void) {
     if (cur_obj_wait_then_blink(400, 20)) obj_mark_for_deletion(o);
 }
 
-void coin_inside_boo_act_0(void) {
+void coin_inside_boo_act_carried(void) {
     s16 marioMoveYaw;
     struct Object *parent = o->parentObj;
     cur_obj_become_intangible();
@@ -228,7 +225,7 @@ void coin_inside_boo_act_0(void) {
     }
     obj_copy_pos(o, parent);
     if (parent->oBooDeathStatus == BOO_DEATH_STATUS_DYING) {
-        o->oAction = 1;
+        o->oAction = COIN_INSIDE_BOO_ACT_DROPPED;
         marioMoveYaw = gMarioObject->oMoveAngleYaw;
         o->oVelX = sins(marioMoveYaw) * 3.0f;
         o->oVelZ = coss(marioMoveYaw) * 3.0f;
@@ -236,7 +233,7 @@ void coin_inside_boo_act_0(void) {
     }
 }
 
-void (*sCoinInsideBooActions[])(void) = { coin_inside_boo_act_0, coin_inside_boo_act_1 };
+void (*sCoinInsideBooActions[])(void) = { coin_inside_boo_act_carried, coin_inside_boo_act_dropped };
 
 void bhv_coin_inside_boo_loop(void) {
     cur_obj_call_action_function(sCoinInsideBooActions);

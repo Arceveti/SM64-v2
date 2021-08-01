@@ -7,15 +7,15 @@
 // a rolling log of another variation.
 
 void bhv_ttm_rolling_log_init(void) {
-    o->oPitouneX = 3970.0f;
-    o->oPitouneZ = 3654.0f;
-    o->oPitouneMaxDist = 271037.0f;
-    o->oMoveAngleYaw = 8810;
-    o->oForwardVel = 0;
-    o->oVelX = 0;
-    o->oVelZ = 0;
-    o->oFaceAnglePitch = 0;
-    o->oAngleVelPitch = 0;
+    o->oRollingLogX       = 3970.0f;
+    o->oRollingLogZ       = 3654.0f;
+    o->oRollingLogMaxDist = 271037.0f;
+    o->oMoveAngleYaw      = 8810;
+    o->oForwardVel        = 0;
+    o->oVelX              = 0;
+    o->oVelZ              = 0;
+    o->oFaceAnglePitch    = 0;
+    o->oAngleVelPitch     = 0;
 }
 
 void rolling_log_roll_log(void) {
@@ -67,7 +67,7 @@ void bhv_rolling_log_loop(void) {
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
 
-    if (o->oPitouneMaxDist < sqr(o->oPosX - o->oPitouneX) + sqr(o->oPosZ - o->oPitouneZ)) {
+    if (o->oRollingLogMaxDist < sqr(o->oPosX - o->oRollingLogX) + sqr(o->oPosZ - o->oRollingLogZ)) {
         o->oForwardVel = 0;
         o->oPosX = prevX;
         o->oPosZ = prevZ;
@@ -79,22 +79,22 @@ void bhv_rolling_log_loop(void) {
     if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) cur_obj_play_sound_2(SOUND_GENERAL_ROLLING_LOG);
 }
 
-void volcano_act_1(void) {
-    o->oRollingLogPitchVel += 4.0f;
-    o->oAngleVelPitch += o->oRollingLogPitchVel;
+void volcano_trap_act_1(void) {
+    o->oVolcanoTrapPitchVel += 4.0f;
+    o->oAngleVelPitch += o->oVolcanoTrapPitchVel;
     o->oFaceAnglePitch -= o->oAngleVelPitch;
 
     if (o->oFaceAnglePitch < -0x4000) {
         o->oFaceAnglePitch = -0x4000;
         o->oAngleVelPitch = 0;
-        o->oRollingLogPitchVel = 0;
+        o->oVolcanoTrapPitchVel = 0;
         o->oAction = 2;
         cur_obj_play_sound_2(SOUND_GENERAL_BIG_POUND);
         set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
     }
 }
 
-void volcano_act_3(void) {
+void volcano_trap_act_3(void) {
     o->oAngleVelPitch = 0x90;
     o->oFaceAnglePitch += o->oAngleVelPitch;
     if (o->oFaceAnglePitch > 0) o->oFaceAnglePitch = 0;
@@ -111,7 +111,7 @@ void bhv_volcano_trap_loop(void) {
             break;
 
         case 1:
-            volcano_act_1();
+            volcano_trap_act_1();
             break;
 
         case 2:
@@ -123,15 +123,15 @@ void bhv_volcano_trap_loop(void) {
             break;
 
         case 3:
-            volcano_act_3();
+            volcano_trap_act_3();
             break;
     }
 }
 
 void bhv_lll_rolling_log_init(void) {
-    o->oPitouneX       = 5120.0f;
-    o->oPitouneZ       = 6016.0f;
-    o->oPitouneMaxDist = 1048576.0f;
+    o->oRollingLogX       = 5120.0f;
+    o->oRollingLogZ       = 6016.0f;
+    o->oRollingLogMaxDist = 1048576.0f;
 
     o->oMoveAngleYaw   = 0x3FFF;
     o->oForwardVel     = 0;

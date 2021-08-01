@@ -150,12 +150,8 @@ void bhv_coffin_loop(void) {
         o->header.gfx.scale[1] = 1.1f;
 
         switch (o->oAction) {
-            case COFFIN_ACT_IDLE:
-                coffin_act_idle();
-                break;
-            case COFFIN_ACT_STAND_UP:
-                coffin_act_stand_up();
-                break;
+            case COFFIN_ACT_IDLE:     coffin_act_idle();     break;
+            case COFFIN_ACT_STAND_UP: coffin_act_stand_up(); break;
         }
 
         load_object_collision_model();

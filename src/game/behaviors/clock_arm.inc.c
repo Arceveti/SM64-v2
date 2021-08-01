@@ -3,8 +3,8 @@
  */
 void bhv_rotating_clock_arm_loop(void) {
     struct Surface *marioSurface;
-    u16 rollAngle = o->oFaceAngleRoll;
-    marioSurface = gMarioState->floor;
+    u16 rollAngle   = o->oFaceAngleRoll;
+    marioSurface    = gMarioState->floor;
     o->oFloorHeight = gMarioState->floorHeight;
 
     // Seems to make sure Mario is on a default surface & 4 frames pass before

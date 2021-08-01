@@ -696,54 +696,54 @@
 #define /*0x0F4*/ oMontyMoleHoleCooldown OBJECT_FIELD_S32(0x1B)
 
 /* Mr. Blizzard */
-#define /*0x0F4*/ oMrBlizzardScale             OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oMrBlizzardHeldObj           OBJECT_FIELD_OBJ(0x1C)
-#define /*0x0FC*/ oMrBlizzardGraphYVel         OBJECT_FIELD_F32(0x1D)
-#define /*0x100*/ oMrBlizzardTimer             OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oMrBlizzardDizziness         OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oMrBlizzardChangeInDizziness OBJECT_FIELD_F32(0x20)
-#define /*0x10C*/ oMrBlizzardGraphYOffset      OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oMrBlizzardDistFromHome      OBJECT_FIELD_S32(0x22)
-#define /*0x1AC*/ oMrBlizzardTargetMoveYaw     OBJECT_FIELD_S32(0x49)
+#define /*0x0F4*/ oMrBlizzardScale              OBJECT_FIELD_F32(0x1B)
+#define /*0x0F8*/ oMrBlizzardHeldObj            OBJECT_FIELD_OBJ(0x1C)
+#define /*0x0FC*/ oMrBlizzardGraphYVel          OBJECT_FIELD_F32(0x1D)
+#define /*0x100*/ oMrBlizzardTimer              OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oMrBlizzardDizziness          OBJECT_FIELD_F32(0x1F)
+#define /*0x108*/ oMrBlizzardChangeInDizziness  OBJECT_FIELD_F32(0x20)
+#define /*0x10C*/ oMrBlizzardGraphYOffset       OBJECT_FIELD_F32(0x21)
+#define /*0x110*/ oMrBlizzardDistFromHome       OBJECT_FIELD_S32(0x22)
+#define /*0x1AC*/ oMrBlizzardTargetMoveYaw      OBJECT_FIELD_S32(0x49)
 
 /* Mr. I */
-#define /*0x0F4*/ oMrISpinAngle           OBJECT_FIELD_S32(0x1B)
-#define /*0x0FC*/ oMrISpinAmount          OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oMrISpinDirection       OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oMrIParticleTimer       OBJECT_FIELD_S32(0x1F)
-#define /*0x108*/ oMrIParticleTimerTarget OBJECT_FIELD_S32(0x20)
-#define /*0x10C*/ oMrISize                OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oMrIBlinking            OBJECT_FIELD_S32(0x22)
+#define /*0x0F4*/ oMrISpinAngle                 OBJECT_FIELD_S32(0x1B)
+#define /*0x0FC*/ oMrISpinAmount                OBJECT_FIELD_S32(0x1D)
+#define /*0x100*/ oMrISpinDirection             OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oMrIParticleTimer             OBJECT_FIELD_S32(0x1F)
+#define /*0x108*/ oMrIParticleTimerTarget       OBJECT_FIELD_S32(0x20)
+#define /*0x10C*/ oMrISize                      OBJECT_FIELD_F32(0x21)
+#define /*0x110*/ oMrIBlinking                  OBJECT_FIELD_S32(0x22)
 
 /* Object Respawner */
-#define /*0x0F4*/ oRespawnerModelToRespawn    OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oRespawnerMinSpawnDist      OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oRespawnerBehaviorToRespawn OBJECT_FIELD_CVPTR(0x1D)
+#define /*0x0F4*/ oRespawnerModelToRespawn      OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oRespawnerMinSpawnDist        OBJECT_FIELD_F32(0x1C)
+#define /*0x0FC*/ oRespawnerBehaviorToRespawn   OBJECT_FIELD_CVPTR(0x1D)
 
 /* Openable Grill */
-#define /*0x088*/ oOpenableGrillIsOpen         OBJECT_FIELD_S32(0x00)
-#define /*0x0F4*/ oOpenableGrillFloorSwitchObj OBJECT_FIELD_OBJ(0x1B)
+#define /*0x088*/ oOpenableGrillIsOpen          OBJECT_FIELD_S32(0x00)
+#define /*0x0F4*/ oOpenableGrillFloorSwitchObj  OBJECT_FIELD_OBJ(0x1B)
 
 /* Intro Cutscene Peach */
-#define /*0x108*/ oIntroPeachYawFromFocus OBJECT_FIELD_F32(0x20)
-#define /*0x10C*/ oIntroPeachPitchFromFocus OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oIntroPeachDistToCamera OBJECT_FIELD_F32(0x22)
+#define /*0x108*/ oIntroPeachYawFromFocus       OBJECT_FIELD_F32(0x20)
+#define /*0x10C*/ oIntroPeachPitchFromFocus     OBJECT_FIELD_F32(0x21)
+#define /*0x110*/ oIntroPeachDistToCamera       OBJECT_FIELD_F32(0x22)
 
 /* Racing Penguin */
-#define /*0x0F4*/ oRacingPenguinInitTextCooldown       OBJECT_FIELD_S32(0x1B)
+#define /*0x0F4*/ oRacingPenguinInitTextCooldown        OBJECT_FIELD_S32(0x1B)
 // 0x1D-0x21 reserved for pathing
-#define /*0x110*/ oRacingPenguinWeightedNewTargetSpeed OBJECT_FIELD_F32(0x22)
-#define /*0x1AC*/ oRacingPenguinFinalTextbox           OBJECT_FIELD_S16(0x49, 0)
-#define /*0x1AE*/ oRacingPenguinMarioWon               OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oRacingPenguinReachedBottom          OBJECT_FIELD_S16(0x4A, 0)
-#define /*0x1B2*/ oRacingPenguinMarioCheated           OBJECT_FIELD_S16(0x4A, + 1)
+#define /*0x110*/ oRacingPenguinWeightedNewTargetSpeed  OBJECT_FIELD_F32(0x22)
+#define /*0x1AC*/ oRacingPenguinFinalTextbox            OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AE*/ oRacingPenguinMarioWon                OBJECT_FIELD_S16(0x49, + 1)
+#define /*0x1B0*/ oRacingPenguinReachedBottom           OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B2*/ oRacingPenguinMarioCheated            OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Small Penguin */
-#define /*0x088*/ oSmallPenguinReturnedToMother     OBJECT_FIELD_S32(0x00)
-#define /*0x100*/ oSmallPenguinStoredAction         OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oSmallPenguinNextForwardVel       OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oSmallPenguinRandomDistanceCheck  OBJECT_FIELD_F32(0x20)
-#define /*0x110*/ oSmallPenguinYawIncrement         OBJECT_FIELD_S32(0x22)
+#define /*0x088*/ oSmallPenguinReturnedToMother         OBJECT_FIELD_S32(0x00)
+#define /*0x100*/ oSmallPenguinStoredAction             OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oSmallPenguinNextForwardVel           OBJECT_FIELD_F32(0x1F)
+#define /*0x108*/ oSmallPenguinRandomDistanceCheck      OBJECT_FIELD_F32(0x20)
+#define /*0x110*/ oSmallPenguinYawIncrement             OBJECT_FIELD_S32(0x22)
 
 /* SL Walking Penguin */
 #define /*0x100*/ oSLWalkingPenguinWindCollisionXPos OBJECT_FIELD_F32(0x1E)
@@ -752,31 +752,31 @@
 #define /*0x110*/ oSLWalkingPenguinCurStepTimer      OBJECT_FIELD_S32(0x22)
 
 /* Piranha Plant */
-#define /*0x0F4*/ oPiranhaPlantSleepMusicState OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oPiranhaPlantScale           OBJECT_FIELD_F32(0x1C)
+#define /*0x0F4*/ oPiranhaPlantSleepMusicState      OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oPiranhaPlantScale                OBJECT_FIELD_F32(0x1C)
 
 /* Fire Piranha Plant */
-#define /*0x0F4*/ oFirePiranhaPlantNeutralScale   OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oFirePiranhaPlantScale          OBJECT_FIELD_F32(0x1C) //Shared with above obj? Coincidence?
-#define /*0x0FC*/ oFirePiranhaPlantActive         OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oFirePiranhaPlantDeathSpinTimer OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oFirePiranhaPlantDeathSpinVel   OBJECT_FIELD_F32(0x1F)
+#define /*0x0F4*/ oFirePiranhaPlantNeutralScale     OBJECT_FIELD_F32(0x1B)
+#define /*0x0F8*/ oFirePiranhaPlantScale            OBJECT_FIELD_F32(0x1C) // Shared with above obj? Coincidence?
+#define /*0x0FC*/ oFirePiranhaPlantActive           OBJECT_FIELD_S32(0x1D)
+#define /*0x100*/ oFirePiranhaPlantDeathSpinTimer   OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oFirePiranhaPlantDeathSpinVel     OBJECT_FIELD_F32(0x1F)
 
-/* Pitoune */
-#define /*0x0F4*/ oPitouneMaxDist OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oPitouneX       OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oPitouneZ       OBJECT_FIELD_F32(0x1D)
+/* Rolling Log */
+#define /*0x0F4*/ oRollingLogMaxDist                OBJECT_FIELD_F32(0x1B)
+#define /*0x0F8*/ oRollingLogX                      OBJECT_FIELD_F32(0x1C)
+#define /*0x0FC*/ oRollingLogZ                      OBJECT_FIELD_F32(0x1D)
 
 /* Falling Rising Bitfs Platform */
-#define /*0x0F4*/ oBitfsPlatformTimer   OBJECT_FIELD_S32(0x1B)
+#define /*0x0F4*/ oBitfsPlatformTimer               OBJECT_FIELD_S32(0x1B)
 
 /* Falling Bowser Bits Platform */
-#define /*0x0F8*/ oBitsPlatformBowser   OBJECT_FIELD_OBJ(0x1C)
-#define /*0x0FC*/ oBitsPlatformTimer    OBJECT_FIELD_S32(0x1D)
+#define /*0x0F8*/ oBitsPlatformBowser               OBJECT_FIELD_OBJ(0x1C)
+#define /*0x0FC*/ oBitsPlatformTimer                OBJECT_FIELD_S32(0x1D)
 
 /* WF Platform */
-#define /*0x10C*/ oPlatformWFTowerForwardVel   OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oPlatformWFTowerMoveDistance OBJECT_FIELD_F32(0x22)
+#define /*0x10C*/ oPlatformWFTowerForwardVel        OBJECT_FIELD_F32(0x21)
+#define /*0x110*/ oPlatformWFTowerMoveDistance      OBJECT_FIELD_F32(0x22)
 
 /* Platform on Tracks */
 #define /*0x088*/ oPlatformOnTrackBaseBallIndex          OBJECT_FIELD_S32(0x00)
@@ -825,8 +825,8 @@
 /* Pyramid Top Explosion */
 #define /*0x0F4*/ oPyramidTopFragmentsScale OBJECT_FIELD_F32(0x1B)
 
-/* Rolling Log */
-#define /*0x0F4*/ oRollingLogPitchVel OBJECT_FIELD_F32(0x1B)
+/* Volcano Trap */
+#define /*0x0F4*/ oVolcanoTrapPitchVel       OBJECT_FIELD_F32(0x1B)
 
 /* Lll Rotating Hex Flame */
 #define /*0x0F4*/ oLllRotatingHexFlameRelativePosX OBJECT_FIELD_F32(0x1B)
