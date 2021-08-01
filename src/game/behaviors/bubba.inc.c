@@ -71,9 +71,7 @@ void bubba_act_1(void) {
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) {
             s16 val04 = 0x4000 - atan2s(800.0f, o->oDistanceToMario - 800.0f);
-            if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0) {
-                val04 = -val04;
-            }
+            if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0) val04 = -val04;
 
             o->oBubbaTargetYaw = o->oAngleToMario + val04;
         } else {
@@ -108,12 +106,8 @@ void bhv_bubba_loop(void) {
     cur_obj_update_floor_and_walls();
 
     switch (o->oAction) {
-        case 0:
-            bubba_act_0();
-            break;
-        case 1:
-            bubba_act_1();
-            break;
+        case 0: bubba_act_0(); break;
+        case 1: bubba_act_1(); break;
     }
 
     if (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) {

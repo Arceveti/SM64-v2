@@ -272,23 +272,23 @@ struct Object *spawn_obj_at_mario_rel_yaw(struct MarioState *m, s32 model, const
 /**
  * cutscene_take_cap_off: Put Mario's cap on.
  * Clears "cap on head" flag, sets "cap in hand" flag, plays sound
- * SOUND_ACTION_UNKNOWN43D.
+ * SOUND_ACTION_TAKE_OFF_CAP.
  */
 void cutscene_take_cap_off(struct MarioState *m) {
     m->flags &= ~MARIO_CAP_ON_HEAD;
     m->flags |= MARIO_CAP_IN_HAND;
-    play_sound(SOUND_ACTION_UNKNOWN43D, m->marioObj->header.gfx.cameraToObject);
+    play_sound(SOUND_ACTION_TAKE_OFF_CAP, m->marioObj->header.gfx.cameraToObject);
 }
 
 /**
  * cutscene_put_cap_on: Put Mario's cap on.
  * Clears "cap in hand" flag, sets "cap on head" flag, plays sound
- * SOUND_ACTION_UNKNOWN43E.
+ * SOUND_ACTION_PUT_ON_CAP.
  */
 void cutscene_put_cap_on(struct MarioState *m) {
     m->flags &= ~MARIO_CAP_IN_HAND;
     m->flags |= MARIO_CAP_ON_HEAD;
-    play_sound(SOUND_ACTION_UNKNOWN43E, m->marioObj->header.gfx.cameraToObject);
+    play_sound(SOUND_ACTION_PUT_ON_CAP, m->marioObj->header.gfx.cameraToObject);
 }
 
 /**
@@ -625,14 +625,13 @@ s32 act_star_dance_water(struct MarioState *m) {
 
 s32 act_fall_after_star_grab(struct MarioState *m) {
     if (m->pos[1] < m->waterLevel - 130) {
-        play_sound(SOUND_ACTION_UNKNOWN430, m->marioObj->header.gfx.cameraToObject);
+        play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
         m->particleFlags |= PARTICLE_WATER_SPLASH;
         return set_mario_action(m, ACT_STAR_DANCE_WATER, m->actionArg);
     }
     if (perform_air_step(m, 1) == AIR_STEP_LANDED) {
         play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
-        set_mario_action(m, m->actionArg & 1 ? ACT_STAR_DANCE_NO_EXIT : ACT_STAR_DANCE_EXIT,
-                         m->actionArg);
+        set_mario_action(m, m->actionArg & 1 ? ACT_STAR_DANCE_NO_EXIT : ACT_STAR_DANCE_EXIT, m->actionArg);
     }
     set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     return FALSE;
@@ -1040,7 +1039,7 @@ s32 act_exit_land_save_dialog(struct MarioState *m) {
                     play_sound(SOUND_ACTION_PAT_BACK, m->marioObj->header.gfx.cameraToObject);
                     //! fall through
                 case 111:
-                    play_sound(SOUND_ACTION_UNKNOWN45C, m->marioObj->header.gfx.cameraToObject);
+                    play_sound(SOUND_ACTION_KEY_UNKNOWN45C, m->marioObj->header.gfx.cameraToObject);
                     // no break
             }
             handle_save_menu(m);
@@ -1049,7 +1048,7 @@ s32 act_exit_land_save_dialog(struct MarioState *m) {
         case 2:
             animFrame = set_mario_animation(m, MARIO_ANIM_MISSING_CAP);
             if ((animFrame >= 18 && animFrame < 55)
-            || (animFrame >= 112 && animFrame < 134)) m->marioBodyState->handState = MARIO_HAND_OPEN;
+             || (animFrame >= 112 && animFrame < 134)) m->marioBodyState->handState = MARIO_HAND_OPEN;
             if (!(animFrame < 109) && animFrame < 154) m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
 
             handle_save_menu(m);
@@ -1606,7 +1605,6 @@ static void intro_cutscene_jump_out_of_pipe(struct MarioState *m) {
     if (m->actionTimer++ >= 118) {
         m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
 
-        // For some reason these calls were swapped.
         play_sound_if_no_flag(m, SOUND_ACTION_HIT_3, MARIO_ACTION_SOUND_PLAYED);
         play_sound_if_no_flag(m, SOUND_MARIO_YAHOO, MARIO_MARIO_SOUND_PLAYED);
 

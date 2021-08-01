@@ -44,8 +44,8 @@ static void camera_lakitu_intro_act_spawn_cloud(void) {
     if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK) {
         o->oAction = CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG;
 
-        o->oPosX = 1800.0f;
-        o->oPosY = 2400.0f;
+        o->oPosX =  1800.0f;
+        o->oPosY =  2400.0f;
         o->oPosZ = -2400.0f;
 
         o->oMoveAnglePitch = 0x4000;
@@ -74,12 +74,12 @@ static void camera_lakitu_intro_act_show_dialog(void) {
         approach_f32_ptr(&o->oCameraLakituSpeed, 60.0f, 3.0f);
         if (o->oDistanceToMario > 6000.0f) obj_mark_for_deletion(o);
         targetMovePitch = -0x3000;
-        targetMoveYaw = -0x6000;
+        targetMoveYaw   = -0x6000;
     } else {
         if (o->oCameraLakituSpeed != 0.0f) {
             if (o->oDistanceToMario > 5000.0f) {
                 targetMovePitch = o->oMoveAnglePitch;
-                targetMoveYaw = o->oAngleToMario;
+                targetMoveYaw   = o->oAngleToMario;
             } else {
                 // Stay moving in a circle around mario
                 s16 turnAmount = 0x4000
@@ -134,15 +134,9 @@ void bhv_camera_lakitu_update(void) {
 
         if (o->oBehParams2ndByte != CAMERA_LAKITU_BP_FOLLOW_CAMERA) {
             switch (o->oAction) {
-                case CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE:
-                    camera_lakitu_intro_act_trigger_cutscene();
-                    break;
-                case CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD:
-                    camera_lakitu_intro_act_spawn_cloud();
-                    break;
-                case CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG:
-                    camera_lakitu_intro_act_show_dialog();
-                    break;
+                case CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE: camera_lakitu_intro_act_trigger_cutscene(); break;
+                case CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD:      camera_lakitu_intro_act_spawn_cloud();      break;
+                case CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG:      camera_lakitu_intro_act_show_dialog();      break;
             }
         } else {
             f32 val0C = (f32) 0x875C3D / 0x800 - gLakituState.curPos[0];
@@ -158,9 +152,8 @@ void bhv_camera_lakitu_update(void) {
                 o->oHomeX = gLakituState.curFocus[0];
                 o->oHomeZ = gLakituState.curFocus[2];
 
-                o->oFaceAngleYaw = -cur_obj_angle_to_home();
-                o->oFaceAnglePitch = atan2s(cur_obj_lateral_dist_to_home(),
-                                            o->oPosY - gLakituState.curFocus[1]);
+                o->oFaceAngleYaw   = -cur_obj_angle_to_home();
+                o->oFaceAnglePitch = atan2s(cur_obj_lateral_dist_to_home(), o->oPosY - gLakituState.curFocus[1]);
 
                 o->oPosX = (f32) 0x875C3D / 0x800 + val0C;
             }

@@ -99,7 +99,7 @@ void unagi_in_cave(void) { // act 3
         if (o->oUnagiDistFromHome == 0.0f) {
             cur_obj_init_animation_with_sound(6);
             if (o->oTimer > 60 && o->oUnagiDistanceToMario < 1000.0f) {
-                cur_obj_play_sound_2(SOUND_OBJ_EEL_2);
+                cur_obj_play_sound_2(SOUND_OBJ_EEL_EXIT_CAVE);
                 o->oUnagiNextForwardVel = o->oUnagiTargetNextForwardVel = 30.0f;
             } else {
                 o->oUnagiTargetNextForwardVel = 0.0f;

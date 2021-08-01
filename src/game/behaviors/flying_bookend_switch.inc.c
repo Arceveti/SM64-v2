@@ -98,18 +98,10 @@ void bhv_flying_bookend_loop(void) {
         cur_obj_scale(o->header.gfx.scale[0]);
 
         switch (o->oAction) {
-            case 0:
-                flying_bookend_act_0();
-                break;
-            case 1:
-                flying_bookend_act_1();
-                break;
-            case 2:
-                flying_bookend_act_2();
-                break;
-            case 3:
-                flying_bookend_act_3();
-                break;
+            case 0: flying_bookend_act_0(); break;
+            case 1: flying_bookend_act_1(); break;
+            case 2: flying_bookend_act_2(); break;
+            case 3: flying_bookend_act_3(); break;
         }
 
         obj_check_attacks(&sFlyingBookendHitbox, -1);

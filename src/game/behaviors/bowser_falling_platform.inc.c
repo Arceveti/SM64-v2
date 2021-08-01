@@ -41,7 +41,7 @@ void falling_bowser_plat_act_fall(void) {
     Vec3f pos;
     s16 angle;
     f32 val;
-    if (o->oTimer == 0 || o->oTimer == 22) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_2);
+    if (o->oTimer == 0 || o->oTimer == 22) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_FALL);
     if (o->oTimer < 22) {
         set_environmental_camera_shake(SHAKE_ENV_FALLING_BITS_PLAT);
         o->oVelY = 8.0f;

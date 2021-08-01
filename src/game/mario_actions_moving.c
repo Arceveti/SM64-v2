@@ -1617,7 +1617,7 @@ s32 act_long_jump_land(struct MarioState *m) {
                           ACT_FREEFALL);
 
     if (common_landing_cancels(m, &sLongJumpLandAction, set_jumping_action)) return TRUE;
-    if (!(m->input & INPUT_NONZERO_ANALOG)) play_sound_if_no_flag(m, SOUND_MARIO_UH2_2, MARIO_MARIO_SOUND_PLAYED);
+    if (!(m->input & INPUT_NONZERO_ANALOG)) play_sound_if_no_flag(m, SOUND_MARIO_UH_LONG_JUMP_LAND, MARIO_MARIO_SOUND_PLAYED);
 
     return FALSE;
 }

@@ -378,7 +378,7 @@
 #define /*0x108*/ oCheepCheepRandomSwimAway OBJECT_FIELD_F32(0x20)
 
 /* Chuckya */
-#define /*0x088*/ oChuckyaAnchorAction           OBJECT_FIELD_S32(0x00)
+#define /*0x088*/ oCommonAnchorAction            OBJECT_FIELD_S32(0x00) // Used for both Chuckya and King Bobomb
 #define /*0x0F8*/ oChuckyaUnused                 OBJECT_FIELD_S32(0x1C)
 #define /*0x0FC*/ oChuckyaSubActionTimer         OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oChuckyaNumPlayerEscapeActions OBJECT_FIELD_S32(0x1E)

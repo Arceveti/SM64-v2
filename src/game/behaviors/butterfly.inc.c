@@ -14,14 +14,14 @@ void bhv_butterfly_init(void) {
 
 void butterfly_step(s32 speed) {
     struct FloorGeometry *floorGeometry;
-    s16 yaw = o->oMoveAngleYaw;
-    s16 pitch = o->oMoveAnglePitch;
+    s16 yaw    = o->oMoveAngleYaw;
+    s16 pitch  = o->oMoveAnglePitch;
     s16 yPhase = o->oButterflyYPhase;
     f32 floorY;
 
-    o->oVelX = sins(yaw) * (f32) speed;
+    o->oVelX = sins(yaw)   * (f32) speed;
     o->oVelY = sins(pitch) * (f32) speed;
-    o->oVelZ = coss(yaw) * (f32) speed;
+    o->oVelZ = coss(yaw)   * (f32) speed;
 
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
@@ -88,17 +88,9 @@ void butterfly_act_return_home(void) {
 
 void bhv_butterfly_loop(void) {
     switch (o->oAction) {
-        case BUTTERFLY_ACT_RESTING:
-            butterfly_act_rest();
-            break;
-
-        case BUTTERFLY_ACT_FOLLOW_MARIO:
-            butterfly_act_follow_mario();
-            break;
-
-        case BUTTERFLY_ACT_RETURN_HOME:
-            butterfly_act_return_home();
-            break;
+        case BUTTERFLY_ACT_RESTING:      butterfly_act_rest();         break;
+        case BUTTERFLY_ACT_FOLLOW_MARIO: butterfly_act_follow_mario(); break;
+        case BUTTERFLY_ACT_RETURN_HOME:  butterfly_act_return_home();  break;
     }
 
     set_object_visibility(o, 3000);

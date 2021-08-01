@@ -888,7 +888,7 @@ s32 act_water_jump(struct MarioState *m) {
     if (m->forwardVel < 15.0f) mario_set_forward_vel(m, 15.0f);
 #endif
 
-    play_mario_sound(m, SOUND_ACTION_UNKNOWN432, 0);
+    play_mario_sound(m, SOUND_ACTION_WATER_JUMP, 0);
     set_mario_animation(m, MARIO_ANIM_SINGLE_JUMP);
 #ifdef ACTION_CANCELS
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
@@ -931,7 +931,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
     if (m->forwardVel < 15.0f) mario_set_forward_vel(m, 15.0f);
 #endif
 
-    play_mario_sound(m, SOUND_ACTION_UNKNOWN432, 0);
+    play_mario_sound(m, SOUND_ACTION_WATER_JUMP, 0);
     set_mario_animation(m, MARIO_ANIM_JUMP_WITH_LIGHT_OBJ);
 
     switch (perform_air_step(m, 0)) {
@@ -1172,8 +1172,7 @@ s32 act_crazy_box_bounce(struct MarioState *m) {
                 break;
         }
 
-        play_sound(minSpeed < 40.0f ? SOUND_GENERAL_BOING1 : SOUND_GENERAL_BOING2,
-                   m->marioObj->header.gfx.cameraToObject);
+        play_sound(minSpeed < 40.0f ? SOUND_GENERAL_CRAZY_BOX_BOING_SLOW : SOUND_GENERAL_CRAZY_BOX_BOING_FAST, m->marioObj->header.gfx.cameraToObject);
 
         if (m->forwardVel < minSpeed) mario_set_forward_vel(m, minSpeed);
 

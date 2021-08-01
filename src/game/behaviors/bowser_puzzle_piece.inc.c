@@ -195,10 +195,9 @@ void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UN
     }
 }
 
-void bhv_lll_bowser_puzzle_piece_idle(void) {
-    // For the first 24 frames, do nothing then advance to the next action.
-    if (o->oTimer >= 24) o->oBowserPuzzlePieceContinuePerformingAction = FALSE;
-}
+
+// For the first 24 frames, do nothing then advance to the next action.
+void bhv_lll_bowser_puzzle_piece_idle(void) { if (o->oTimer >= 24) o->oBowserPuzzlePieceContinuePerformingAction = FALSE; }
 
 void bhv_lll_bowser_puzzle_piece_move_left(void)  { bhv_lll_bowser_puzzle_piece_move(-128.0f,    0.0f, 4, 4); }
 void bhv_lll_bowser_puzzle_piece_move_right(void) { bhv_lll_bowser_puzzle_piece_move( 128.0f,    0.0f, 4, 5); }

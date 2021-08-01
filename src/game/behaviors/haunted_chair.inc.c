@@ -62,27 +62,27 @@ void haunted_chair_act_0(void) {
         o->oTimer = 0.0f;
     } else {
         if ((o->oTimer & 0x8) != 0) {
-            f32 val08;
+            f32 offset;
 
             if (o->oFaceAnglePitch < 0) {
-                cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_MOVE);
-                val08 = 4.0f;
+                cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_FALL);
+                offset =  4.0f;
             } else {
-                val08 = -4.0f;
+                offset = -4.0f;
             }
 
-            o->oHomeX -= val08;
-            o->oHomeZ -= val08;
+            o->oHomeX -= offset;
+            o->oHomeZ -= offset;
 
-            o->oFaceAnglePitch = o->oFaceAngleRoll = (s32)(50.0f * val08);
+            o->oFaceAnglePitch = o->oFaceAngleRoll = (s32)(50.0f * offset);
         } else {
             o->oFaceAnglePitch = o->oFaceAngleRoll = 0;
         }
 
         if (o->oTimer > 30) {
             o->oAction = HAUNTED_CHAIR_ACT_1;
-            o->oHauntedChairPitchVel = 0.0f;
-            o->oHauntedChairRollVel = 200.0f;
+            o->oHauntedChairPitchVel  = 0.0f;
+            o->oHauntedChairRollVel   = 200.0f;
             o->oHauntedChairSpinTimer = 40;
         }
     }
@@ -106,13 +106,13 @@ void haunted_chair_act_1(void) {
     } else {
         if (o->oHauntedChairSpinTimer != 0) {
             if (--o->oHauntedChairSpinTimer == 0) {
-                cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR);
+                cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SPIN);
                 o->oMoveAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0);
                 o->oMoveAngleYaw = o->oAngleToMario;
                 obj_compute_vel_from_move_pitch(50.0f);
             } else if (o->oHauntedChairSpinTimer > 20) {
                 if (gGlobalTimer % 4 == 0) {
-                    cur_obj_play_sound_2(SOUND_GENERAL_SWISH_AIR_2);
+                    cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SWISH_AIR);
                 }
                 o->oFaceAngleYaw += 0x2710;
             }

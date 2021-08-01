@@ -1081,7 +1081,7 @@ s32 set_water_plunge_action(struct MarioState *m) {
 #ifdef WATER_GROUND_POUND
     m->particleFlags |= PARTICLE_WATER_SPLASH;
     if (m->action == ACT_GROUND_POUND) {
-        play_sound(SOUND_ACTION_UNKNOWN430, m->marioObj->header.gfx.cameraToObject);
+        play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
         return set_mario_action(m, ACT_WATER_GROUND_POUND, 1);
     } else {
         return set_mario_action(m, ACT_WATER_PLUNGE, 0);

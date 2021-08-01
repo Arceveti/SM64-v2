@@ -212,8 +212,7 @@ static void chain_chomp_sub_act_lunge(void) {
         // TODO: What is this
         if ((val04 = 900.0f - o->oChainChompDistToPivot) > 220.0f) val04 = 220.0f;
 
-        o->oChainChompMaxDistBetweenChainParts =
-            val04 / 220.0f * o->oChainChompMaxDistFromPivotPerChainPart;
+        o->oChainChompMaxDistBetweenChainParts = val04 / 220.0f * o->oChainChompMaxDistFromPivotPerChainPart;
         o->oTimer = 0;
     } else {
         // Turn toward pivot
@@ -239,8 +238,8 @@ static void chain_chomp_sub_act_lunge(void) {
  * Fall to the ground and interrupt mario into a cutscene action.
  */
 static void chain_chomp_released_trigger_cutscene(void) {
-    o->oForwardVel = 0.0f;
-    o->oGravity = -4.0f;
+    o->oForwardVel =  0.0f;
+    o->oGravity    = -4.0f;
 
     //! Can delay this if we get into a cutscene-unfriendly action after the
     //  last post ground pound and before this
@@ -275,15 +274,15 @@ static void chain_chomp_released_lunge_around(void) {
             if (++o->oChainChompNumLunges <= 5) {
                 cur_obj_play_sound_2(SOUND_GENERAL_CHAIN_CHOMP1);
                 o->oMoveAngleYaw = o->oAngleToMario + random_sign() * 0x2000;
-                o->oForwardVel = 30.0f;
-                o->oVelY = 50.0f;
+                o->oForwardVel   = 30.0f;
+                o->oVelY         = 50.0f;
             } else {
                 o->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_BREAK_GATE;
-                o->oHomeX = 1450.0f;
-                o->oHomeZ = 562.0f;
+                o->oHomeX        = 1450.0f;
+                o->oHomeZ        =  562.0f;
                 o->oMoveAngleYaw = cur_obj_angle_to_home();
-                o->oForwardVel = cur_obj_lateral_dist_to_home() / 8;
-                o->oVelY = 50.0f;
+                o->oForwardVel   = cur_obj_lateral_dist_to_home() / 8;
+                o->oVelY         =   50.0f;
             }
         }
     }
@@ -307,11 +306,11 @@ static void chain_chomp_released_break_gate(void) {
         }
     } else if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         o->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_JUMP_AWAY;
-        o->oHomeX = 3288.0f;
-        o->oHomeZ = -1770.0f;
+        o->oHomeX        =  3288.0f;
+        o->oHomeZ        = -1770.0f;
         o->oMoveAngleYaw = cur_obj_angle_to_home();
-        o->oForwardVel = cur_obj_lateral_dist_to_home() / 50.0f;
-        o->oVelY = 120.0f;
+        o->oForwardVel   = cur_obj_lateral_dist_to_home() / 50.0f;
+        o->oVelY         =   120.0f;
     }
 }
 
@@ -352,29 +351,15 @@ static void chain_chomp_act_move(void) {
         switch (o->oChainChompReleaseStatus) {
             case CHAIN_CHOMP_NOT_RELEASED:
                 switch (o->oSubAction) {
-                    case CHAIN_CHOMP_SUB_ACT_TURN:
-                        chain_chomp_sub_act_turn();
-                        break;
-                    case CHAIN_CHOMP_SUB_ACT_LUNGE:
-                        chain_chomp_sub_act_lunge();
-                        break;
+                    case CHAIN_CHOMP_SUB_ACT_TURN:  chain_chomp_sub_act_turn();  break;
+                    case CHAIN_CHOMP_SUB_ACT_LUNGE: chain_chomp_sub_act_lunge(); break;
                 }
                 break;
-            case CHAIN_CHOMP_RELEASED_TRIGGER_CUTSCENE:
-                chain_chomp_released_trigger_cutscene();
-                break;
-            case CHAIN_CHOMP_RELEASED_LUNGE_AROUND:
-                chain_chomp_released_lunge_around();
-                break;
-            case CHAIN_CHOMP_RELEASED_BREAK_GATE:
-                chain_chomp_released_break_gate();
-                break;
-            case CHAIN_CHOMP_RELEASED_JUMP_AWAY:
-                chain_chomp_released_jump_away();
-                break;
-            case CHAIN_CHOMP_RELEASED_END_CUTSCENE:
-                chain_chomp_released_end_cutscene();
-                break;
+            case CHAIN_CHOMP_RELEASED_TRIGGER_CUTSCENE: chain_chomp_released_trigger_cutscene(); break;
+            case CHAIN_CHOMP_RELEASED_LUNGE_AROUND:     chain_chomp_released_lunge_around();     break;
+            case CHAIN_CHOMP_RELEASED_BREAK_GATE:       chain_chomp_released_break_gate();       break;
+            case CHAIN_CHOMP_RELEASED_JUMP_AWAY:        chain_chomp_released_jump_away();        break;
+            case CHAIN_CHOMP_RELEASED_END_CUTSCENE:     chain_chomp_released_end_cutscene();     break;
         }
 
         cur_obj_move_standard(78);
@@ -386,8 +371,8 @@ static void chain_chomp_act_move(void) {
 
         o->oChainChompDistToPivot =
             sqrtf(o->oChainChompSegments[0].posX * o->oChainChompSegments[0].posX
-                  + o->oChainChompSegments[0].posY * o->oChainChompSegments[0].posY
-                  + o->oChainChompSegments[0].posZ * o->oChainChompSegments[0].posZ);
+                + o->oChainChompSegments[0].posY * o->oChainChompSegments[0].posY
+                + o->oChainChompSegments[0].posZ * o->oChainChompSegments[0].posZ);
 
         // If the chain is fully stretched
         maxDistToPivot = o->oChainChompMaxDistFromPivotPerChainPart * 5;
@@ -425,9 +410,9 @@ static void chain_chomp_act_move(void) {
         if (obj_check_attacks(&sChainChompHitbox, o->oAction)) {
             o->oSubAction = CHAIN_CHOMP_SUB_ACT_LUNGE;
             o->oChainChompMaxDistFromPivotPerChainPart = 900.0f / 5;
-            o->oForwardVel = 0.0f;
-            o->oVelY = 300.0f;
-            o->oGravity = -4.0f;
+            o->oForwardVel =   0.0f;
+            o->oVelY       = 300.0f;
+            o->oGravity    =  -4.0f;
             o->oChainChompTargetPitch = -0x3000;
         }
     }
@@ -449,15 +434,9 @@ static void chain_chomp_act_unload_chain(void) {
  */
 void bhv_chain_chomp_update(void) {
     switch (o->oAction) {
-        case CHAIN_CHOMP_ACT_UNINITIALIZED:
-            chain_chomp_act_uninitialized();
-            break;
-        case CHAIN_CHOMP_ACT_MOVE:
-            chain_chomp_act_move();
-            break;
-        case CHAIN_CHOMP_ACT_UNLOAD_CHAIN:
-            chain_chomp_act_unload_chain();
-            break;
+        case CHAIN_CHOMP_ACT_UNINITIALIZED: chain_chomp_act_uninitialized(); break;
+        case CHAIN_CHOMP_ACT_MOVE:          chain_chomp_act_move();          break;
+        case CHAIN_CHOMP_ACT_UNLOAD_CHAIN:  chain_chomp_act_unload_chain();  break;
     }
 }
 

@@ -43,7 +43,7 @@ static void swoop_act_idle(void) {
  */
 static void swoop_act_move(void) {
     cur_obj_init_animation_with_accel_and_sound(0, 2.0f);
-    if (cur_obj_check_if_near_animation_end()) cur_obj_play_sound_2(SOUND_OBJ_UNKNOWN6);
+    if (cur_obj_check_if_near_animation_end()) cur_obj_play_sound_2(SOUND_OBJ_SWOOP_FLAP);
 
     if (o->oForwardVel == 0.0f) {
         // If we haven't started moving yet, begin swooping

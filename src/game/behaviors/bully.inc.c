@@ -27,12 +27,12 @@ static struct ObjectHitbox sBigBullyHitbox = {
 void bhv_small_bully_init(void) {
     cur_obj_init_animation(0);
 
-    o->oHomeX = o->oPosX;
-    o->oHomeZ = o->oPosZ;
+    o->oHomeX            = o->oPosX;
+    o->oHomeZ            = o->oPosZ;
     o->oBehParams2ndByte = BULLY_BP_SIZE_SMALL;
-    o->oGravity  = 4.0f;
-    o->oFriction = 0.91f;
-    o->oBuoyancy = 1.3f;
+    o->oGravity          = 4.0f;
+    o->oFriction         = 0.91f;
+    o->oBuoyancy         = 1.3f;
 
     obj_set_hitbox(o, &sSmallBullyHitbox);
 }
@@ -40,13 +40,13 @@ void bhv_small_bully_init(void) {
 void bhv_big_bully_init(void) {
     cur_obj_init_animation(0);
 
-    o->oHomeX = o->oPosX;
-    o->oHomeY = o->oPosY;
-    o->oHomeZ = o->oPosZ;
+    o->oHomeX            = o->oPosX;
+    o->oHomeY            = o->oPosY;
+    o->oHomeZ            = o->oPosZ;
     o->oBehParams2ndByte = BULLY_BP_SIZE_BIG;
-    o->oGravity  = 5.0f;
-    o->oFriction = 0.93f;
-    o->oBuoyancy = 1.3f;
+    o->oGravity          = 5.0f;
+    o->oFriction         = 0.93f;
+    o->oBuoyancy         = 1.3f;
 
     obj_set_hitbox(o, &sBigBullyHitbox);
 }
@@ -70,7 +70,7 @@ void bully_check_mario_collision(void) {
 
 void bully_act_chase_mario(void) {
     f32 homeX = o->oHomeX;
-    f32 posY = o->oPosY;
+    f32 posY  = o->oPosY;
     f32 homeZ = o->oHomeZ;
 
     if (o->oTimer < 10) {
@@ -138,27 +138,14 @@ void bully_backup_check(s16 collisionFlags) {
 }
 
 void bully_play_stomping_sound(void) {
-    s16 sp26 = o->header.gfx.animInfo.animFrame;
+    s16 animFrame = o->header.gfx.animInfo.animFrame;
     switch (o->oAction) {
         case BULLY_ACT_PATROL:
-            if (sp26 == 0 || sp26 == 12) {
-                if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
-                    cur_obj_play_sound_2(SOUND_OBJ_BULLY_WALK);
-                } else {
-                    cur_obj_play_sound_2(SOUND_OBJ_BULLY_WALKING);
-                }
-            }
+            if (animFrame == 0 || animFrame == 12) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE);
             break;
-
         case BULLY_ACT_CHASE_MARIO:
         case BULLY_ACT_BACK_UP:
-            if (sp26 == 0 || sp26 == 5) {
-                if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
-                    cur_obj_play_sound_2(SOUND_OBJ_BULLY_WALK);
-                } else {
-                    cur_obj_play_sound_2(SOUND_OBJ_BULLY_WALKING);
-                }
-            }
+            if (animFrame == 0 || animFrame == 5) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE);
             break;
     }
 }
@@ -175,15 +162,15 @@ void bully_step(void) {
 void bully_spawn_coin(void) {
     struct Object *coin = spawn_object(o, MODEL_YELLOW_COIN, bhvMovingYellowCoin);
 #ifdef VERSION_JP // TODO: maybe move this ifdef logic to the header?
-    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT);
+    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_JP);
 #elif defined(VERSION_EU) || defined(VERSION_SH)
-    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_EU);
+    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_EU_SH);
 #else
-    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_2);
+    cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_US);
 #endif
-    coin->oForwardVel = 10.0f;
-    coin->oVelY = 100.0f;
-    coin->oPosY = o->oPosY + 310.0f;
+    coin->oForwardVel   = 10.0f;
+    coin->oVelY         = 100.0f;
+    coin->oPosY         = o->oPosY + 310.0f;
     coin->oMoveAngleYaw = (f32)(o->oBullyMarioCollisionAngle + 0x8000) + random_float() * 1024.0f;
 }
 
@@ -219,7 +206,7 @@ void bhv_bully_loop(void) {
         case BULLY_ACT_PATROL:
             o->oForwardVel = 5.0f;
 
-            if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 800) == 1) {
+            if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 800)) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
                 cur_obj_init_animation(1);
             }
@@ -292,7 +279,7 @@ void bhv_big_bully_with_minions_loop(void) {
         case BULLY_ACT_PATROL:
             o->oForwardVel = 5.0f;
 
-            if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 1000) == 1) {
+            if (obj_return_home_if_safe(o, o->oHomeX, o->oPosY, o->oHomeZ, 1000)) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
                 cur_obj_init_animation(1);
             }

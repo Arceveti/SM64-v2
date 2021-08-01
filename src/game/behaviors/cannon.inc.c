@@ -1,18 +1,14 @@
 // cannon.c.inc
 
-void bhv_cannon_base_unused_loop(void) {
-    o->oPosY += o->oVelY;
-}
-
-void opened_cannon_act_0(void) {
+void opened_cannon_act_idle(void) {
     if (o->oTimer == 0) {
         o->oInteractStatus = INT_STATUS_NONE;
-        o->oPosX = o->oHomeX;
-        o->oPosY = o->oHomeY;
-        o->oPosZ = o->oHomeZ;
+        o->oPosX           = o->oHomeX;
+        o->oPosY           = o->oHomeY;
+        o->oPosZ           = o->oHomeZ;
         o->oMoveAnglePitch = 0;
-        o->oMoveAngleYaw = (s16)(o->oBehParams2ndByte << 8);
-        o->oCannonAngle = 0;
+        o->oMoveAngleYaw   = (s16)(o->oBehParams2ndByte << 8);
+        o->oCannonAngle    = 0;
         o->oCannonIsActive = FALSE;
         cur_obj_enable_rendering();
         cur_obj_become_tangible();
@@ -20,9 +16,8 @@ void opened_cannon_act_0(void) {
     if (o->oDistanceToMario < 500.0f) {
         cur_obj_become_tangible();
         cur_obj_enable_rendering();
-        if (o->oInteractStatus & INT_STATUS_INTERACTED
-            && (!(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB))) {// bob-omb explodes when it gets into a cannon
-            o->oAction = 4;
+        if (o->oInteractStatus & INT_STATUS_INTERACTED && (!(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB))) { // bob-omb explodes when it gets into a cannon
+            o->oAction = OPENED_CANNON_ACT_RISING;
             o->oCannonIsActive = TRUE;
             o->oCannonTimeSinceActivated = 1;
         } else {
@@ -35,25 +30,23 @@ void opened_cannon_act_0(void) {
     }
 }
 
-void opened_cannon_act_4(void) {
-    if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON1);
+void opened_cannon_act_rising(void) {
+    if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON_RISE);
     o->oPosY += 5.0f;
-    o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
-    o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 2;
+    o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 2.0f;
+    o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 2.0f;
     if (o->oTimer > 67) {
-        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4;
-        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4;
-        o->oAction = 6;
+        o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
+        o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
+        o->oAction = OPENED_CANNON_ACT_TURNING_YAW;
     }
 }
 
-void opened_cannon_act_6(void) {
-    if (o->oTimer == 0) {
-        cur_obj_play_sound_2(SOUND_OBJ_CANNON2);
-    }
+void opened_cannon_act_turning_yaw(void) {
+    if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON_TURN);
     if (o->oTimer < 4) {
-        o->oPosX += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4.0f;
-        o->oPosZ += (f32)((o->oTimer / 2 & 1) - 0.5f) * 4.0f;
+        o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
+        o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
@@ -61,44 +54,46 @@ void opened_cannon_act_6(void) {
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
                 o->oCannonAngle = 0;
-                o->oAction = 5;
+                o->oAction = OPENED_CANNON_ACT_RAISE_BARREL;
             }
         }
     }
 }
 
-void opened_cannon_act_5(void) {
-    if (o->oTimer == 0) {
-        cur_obj_play_sound_2(SOUND_OBJ_CANNON3);
-    }
+void opened_cannon_act_raise_barrel(void) {
+    if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON_BARREL_PITCH);
     if (o->oTimer >= 4) {
         if (o->oTimer < 20) {
             o->oCannonAngle += 0x400;
             o->oMoveAnglePitch = sins(o->oCannonAngle) * 0x2000;
         } else if (o->oTimer >= 25) {
-            o->oAction = 1;
+            o->oAction = OPENED_CANNON_ACT_READY;
         }
     }
 }
 
-void opened_cannon_act_1(void) {
+void opened_cannon_act_ready(void) {
     cur_obj_become_intangible();
     cur_obj_disable_rendering();
     o->oCannonIsActive = FALSE;
-    gMarioShotFromCannon = 1;
+    gMarioShotFromCannon = TRUE;
 }
 
-void opened_cannon_act_2(void) {
-    o->oAction = 3;
+void opened_cannon_act_shoot(void) {
+    o->oAction = OPENED_CANNON_ACT_RESETTING;
 }
 
-void opened_cannon_act_3(void) {
-    if (o->oTimer > 3) o->oAction = 0;
+void opened_cannon_act_resetting(void) {
+    if (o->oTimer > 3) o->oAction = OPENED_CANNON_ACT_IDLE;
 }
 
-void (*sOpenedCannonActions[])(void) = { opened_cannon_act_0, opened_cannon_act_1, opened_cannon_act_2,
-                                         opened_cannon_act_3, opened_cannon_act_4, opened_cannon_act_5,
-                                         opened_cannon_act_6 };
+void (*sOpenedCannonActions[])(void) = { opened_cannon_act_idle,
+                                         opened_cannon_act_ready,
+                                         opened_cannon_act_shoot,
+                                         opened_cannon_act_resetting,
+                                         opened_cannon_act_rising,
+                                         opened_cannon_act_raise_barrel,
+                                         opened_cannon_act_turning_yaw };
 
 void bhv_cannon_base_loop(void) {
     cur_obj_call_action_function(sOpenedCannonActions);
@@ -111,7 +106,7 @@ void bhv_cannon_barrel_loop(void) {
     if (parent->header.gfx.node.flags & GRAPH_RENDER_ACTIVE) {
         cur_obj_enable_rendering();
         obj_copy_pos(o, o->parentObj);
-        o->oMoveAngleYaw = o->parentObj->oMoveAngleYaw;
+        o->oMoveAngleYaw   = o->parentObj->oMoveAngleYaw;
         o->oFaceAnglePitch = o->parentObj->oMoveAnglePitch;
     } else {
         cur_obj_disable_rendering();

@@ -37,25 +37,25 @@ void cap_check_quicksand(void) {
         case SURFACE_SHALLOW_QUICKSAND:
         case SURFACE_DEEP_QUICKSAND:
         case SURFACE_QUICKSAND:
-            o->oAction = 10;
+            o->oAction = CAP_ACT_QUICKSAND;
             o->oForwardVel = 0.0f;
             break;
 
         case SURFACE_DEEP_MOVING_QUICKSAND:
         case SURFACE_SHALLOW_MOVING_QUICKSAND:
         case SURFACE_MOVING_QUICKSAND:
-            o->oAction = 11;
+            o->oAction = CAP_ACT_MOVING_QUICKSAND;
             o->oMoveAngleYaw = (sObjFloor->force & 0xFF) << 8;
             o->oForwardVel = 8 + 2 * (0 - ((sObjFloor->force & 0xFF00) >> 8));
             break;
 
         case SURFACE_INSTANT_QUICKSAND:
-            o->oAction = 12;
+            o->oAction = CAP_ACT_INSTANT_QUICKSAND;
             o->oForwardVel = 0.0f;
             break;
 
         case SURFACE_INSTANT_MOVING_QUICKSAND:
-            o->oAction = 13;
+            o->oAction = CAP_ACT_INSTANT_MOVING_QUICKSAND;
             o->oMoveAngleYaw = (sObjFloor->force & 0xFF) << 8;
             o->oForwardVel = 8 + 2 * (0 - ((sObjFloor->force & 0xFF00) >> 8));
             break;
@@ -64,24 +64,24 @@ void cap_check_quicksand(void) {
 
 void cap_sink_quicksand(void) {
     switch (o->oAction) {
-        case 10:
+        case CAP_ACT_QUICKSAND:
             if (o->oTimer < 10) {
                 o->oGraphYOffset -= 1.0f;
                 o->oFaceAnglePitch = 0x2000;
             }
             break;
 
-        case 11:
+        case CAP_ACT_MOVING_QUICKSAND:
             if (o->oTimer < 10) o->oGraphYOffset -= 3.0f;
             o->oFaceAnglePitch = 0x2000;
             break;
 
-        case 12:
+        case CAP_ACT_INSTANT_QUICKSAND:
             o->oGraphYOffset -= 1.0f;
             if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
 
-        case 13:
+        case CAP_ACT_INSTANT_MOVING_QUICKSAND:
             o->oGraphYOffset -= 6.0f;
             if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             o->oFaceAnglePitch = 0x2000;
@@ -107,7 +107,7 @@ void cap_scale_vertically(void) {
     }
 }
 
-void wing_vanish_cap_act_0(void) {
+void wing_vanish_cap_act_move(void) {
     s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
@@ -124,8 +124,8 @@ void wing_vanish_cap_act_0(void) {
 }
 
 void bhv_wing_vanish_cap_loop(void) {
-    if (o->oAction == 0) {
-        wing_vanish_cap_act_0();
+    if (o->oAction == CAP_ACT_MOVE) {
+        wing_vanish_cap_act_move();
     } else {
         object_step();
         cap_sink_quicksand();
@@ -143,7 +143,7 @@ void bhv_metal_cap_init(void) {
     o->oOpacity  = 0xFF;
 }
 
-void metal_cap_act_0(void) {
+void metal_cap_act_move(void) {
     s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
@@ -153,8 +153,8 @@ void metal_cap_act_0(void) {
 
 void bhv_metal_cap_loop(void) {
     
-    if (o->oAction == 0) {
-        metal_cap_act_0();
+    if (o->oAction == CAP_ACT_MOVE) {
+        metal_cap_act_move();
     } else {
         object_step();
         cap_sink_quicksand();
@@ -178,25 +178,14 @@ void normal_cap_set_save_flags(void) {
     save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
 
     switch (gCurrCourseNum) {
-        case COURSE_SSL:
-            save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
-            break;
-
-        case COURSE_SL:
-            save_file_set_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD);
-            break;
-
-        case COURSE_TTM:
-            save_file_set_flags(SAVE_FLAG_CAP_ON_UKIKI);
-            break;
-
-        default:
-            save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO);
-            break;
+        case COURSE_SSL: save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO     ); break;
+        case COURSE_SL:  save_file_set_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD); break;
+        case COURSE_TTM: save_file_set_flags(SAVE_FLAG_CAP_ON_UKIKI      ); break;
+        default:         save_file_set_flags(SAVE_FLAG_CAP_ON_KLEPTO     ); break;
     }
 }
 
-void normal_cap_act_0(void) {
+void normal_cap_act_move(void) {
     s16 collisionFlags;
 
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
@@ -216,8 +205,8 @@ void normal_cap_act_0(void) {
 }
 
 void bhv_normal_cap_loop(void) {
-    if (o->oAction == 0) {
-        normal_cap_act_0();
+    if (o->oAction == CAP_ACT_MOVE) {
+        normal_cap_act_move();
     } else {
         object_step();
         cap_sink_quicksand();
@@ -229,8 +218,8 @@ void bhv_normal_cap_loop(void) {
 }
 
 void bhv_vanish_cap_init(void) {
-    o->oGravity = 1.2f;
+    o->oGravity  = 1.2f;
     o->oFriction = 0.999f;
     o->oBuoyancy = 0.9f;
-    o->oOpacity = 150;
+    o->oOpacity  = 150;
 }

@@ -25,11 +25,11 @@ static struct VblankHandler sSoundVblankHandler;
 // Only written to, never read.
 static u8 sMusicVolume = 0;
 
-static u8 sBgMusicDisabled = FALSE;
-static u16 sCurrentMusic = MUSIC_NONE;
-static u16 sCurrentShellMusic = MUSIC_NONE;
-static u16 sCurrentCapMusic = MUSIC_NONE;
-static u8 sPlayingInfiniteStairs = FALSE;
+static u8 sBgMusicDisabled             = FALSE;
+static u16 sCurrentMusic               = MUSIC_NONE;
+static u16 sCurrentShellMusic          = MUSIC_NONE;
+static u16 sCurrentCapMusic            = MUSIC_NONE;
+static u8 sPlayingInfiniteStairs       = FALSE;
 static s16 sSoundMenuModeToSoundMode[] = { SOUND_MODE_STEREO, SOUND_MODE_MONO, SOUND_MODE_HEADSET };
 // Only the 20th array element is used.
 static u32 sMenuSoundsExtra[] = {
@@ -48,7 +48,7 @@ static u32 sMenuSoundsExtra[] = {
     NO_SOUND,
     SOUND_ENV_BOAT_ROCKING1,
     SOUND_ENV_ELEVATOR3,
-    SOUND_ENV_UNKNOWN2,
+    SOUND_ENV_BOWLING_BALL_ROLL,
     SOUND_ENV_WATERFALL1,
     SOUND_ENV_WATERFALL2,
     SOUND_ENV_ELEVATOR1,
@@ -86,12 +86,8 @@ void reset_volume(void) {
  */
 void lower_background_noise(s32 a) {
     switch (a) {
-        case 1:
-            set_audio_muted(TRUE);
-            break;
-        case 2:
-            seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40);
-            break;
+        case 1: set_audio_muted(TRUE); break;
+        case 2: seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40); break;
     }
     sMusicVolume |= a;
 }
@@ -101,12 +97,8 @@ void lower_background_noise(s32 a) {
  */
 void raise_background_noise(s32 a) {
     switch (a) {
-        case 1:
-            set_audio_muted(FALSE);
-            break;
-        case 2:
-            seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
-            break;
+        case 1: set_audio_muted(FALSE); break;
+        case 2: seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60); break;
     }
     sMusicVolume &= ~a;
 }
@@ -137,9 +129,7 @@ void enable_background_sound(void) {
  * Called from threads: thread5_game_loop
  */
 void set_sound_mode(u16 soundMode) {
-    if (soundMode < 3) {
-        audio_set_sound_mode(sSoundMenuModeToSoundMode[soundMode]);
-    }
+    if (soundMode < 3) audio_set_sound_mode(sSoundMenuModeToSoundMode[soundMode]);
 }
 
 /**
@@ -152,8 +142,8 @@ void play_menu_sounds(s16 soundMenuFlags) {
         play_sound(SOUND_MENU_HAND_APPEAR, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_HANDISAPPEAR) {
         play_sound(SOUND_MENU_HAND_DISAPPEAR, gGlobalSoundSource);
-    } else if (soundMenuFlags & SOUND_MENU_FLAG_UNKNOWN1) {
-        play_sound(SOUND_MENU_UNK0C, gGlobalSoundSource);
+    // } else if (soundMenuFlags & SOUND_MENU_FLAG_UNKNOWN1) {
+    //     play_sound(SOUND_MENU_UNK0C_FLAG_UNKNOW1, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE) {
         play_sound(SOUND_MENU_PINCH_MARIO_FACE, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE2) {
@@ -166,13 +156,9 @@ void play_menu_sounds(s16 soundMenuFlags) {
         play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gGlobalSoundSource);
     }
 
-    if (soundMenuFlags & 0x100) {
-        play_menu_sounds_extra(20, NULL);
-    }
+    if (soundMenuFlags & 0x100) play_menu_sounds_extra(20, NULL);
 #if ENABLE_RUMBLE
-    if (soundMenuFlags & SOUND_MENU_FLAG_LETGOMARIOFACE) {
-        queue_rumble_data(10, 60);
-    }
+    if (soundMenuFlags & SOUND_MENU_FLAG_LETGOMARIOFACE) queue_rumble_data(10, 60);
 #endif
 }
 
@@ -184,10 +170,7 @@ void play_menu_sounds(s16 soundMenuFlags) {
 void play_painting_eject_sound(void) {
     if (gRipplingPainting != NULL && gRipplingPainting->state == PAINTING_ENTERED) {
         // ripple when Mario enters painting
-        if (!sPaintingEjectSoundPlayed) {
-            play_sound(SOUND_GENERAL_PAINTING_EJECT,
-                       gMarioStates[0].marioObj->header.gfx.cameraToObject);
-        }
+        if (!sPaintingEjectSoundPlayed) play_sound(SOUND_GENERAL_PAINTING_EJECT, gMarioStates[0].marioObj->header.gfx.cameraToObject);
         sPaintingEjectSoundPlayed = TRUE;
     } else {
         sPaintingEjectSoundPlayed = FALSE;
@@ -201,13 +184,12 @@ void play_infinite_stairs_music(void) {
     u8 shouldPlay = FALSE;
 
     /* Infinite stairs? */
-    if (gCurrLevelNum == LEVEL_CASTLE && gCurrAreaIndex == 2 && gMarioState->numStars < 70) {
-        if (gMarioState->floor != NULL && gMarioState->floor->room == 6) {
-            if (gMarioState->pos[2] < 2540.0f) {
-                shouldPlay = TRUE;
-            }
-        }
-    }
+    if (gCurrLevelNum == LEVEL_CASTLE
+     && gCurrAreaIndex == 2
+     && gMarioState->numStars < 70
+     && gMarioState->floor != NULL
+     && gMarioState->floor->room == 6
+     && gMarioState->pos[2] < 2540.0f) shouldPlay = TRUE;
 
     if (sPlayingInfiniteStairs ^ shouldPlay) {
         sPlayingInfiniteStairs = shouldPlay;
@@ -224,11 +206,7 @@ void play_infinite_stairs_music(void) {
  */
 void set_background_music(u16 a, u16 seqArgs, s16 fadeTimer) {
     if (gResetTimer == 0 && seqArgs != sCurrentMusic) {
-        if (gCurrCreditsEntry != NULL) {
-            sound_reset(7);
-        } else {
-            sound_reset(a);
-        }
+        sound_reset((gCurrCreditsEntry != NULL) ? 7 : a);
 
         if (!gNeverEnteredCastle || seqArgs != SEQ_LEVEL_INSIDE_CASTLE) {
             play_music(SEQ_PLAYER_LEVEL, seqArgs, fadeTimer);
@@ -242,9 +220,9 @@ void set_background_music(u16 a, u16 seqArgs, s16 fadeTimer) {
  */
 void fadeout_music(s16 fadeOutTime) {
     func_803210D4(fadeOutTime);
-    sCurrentMusic = MUSIC_NONE;
+    sCurrentMusic      = MUSIC_NONE;
     sCurrentShellMusic = MUSIC_NONE;
-    sCurrentCapMusic = MUSIC_NONE;
+    sCurrentCapMusic   = MUSIC_NONE;
 }
 
 /**
@@ -252,9 +230,9 @@ void fadeout_music(s16 fadeOutTime) {
  */
 void fadeout_level_music(s16 fadeTimer) {
     seq_player_fade_out(SEQ_PLAYER_LEVEL, fadeTimer);
-    sCurrentMusic = MUSIC_NONE;
+    sCurrentMusic      = MUSIC_NONE;
     sCurrentShellMusic = MUSIC_NONE;
-    sCurrentCapMusic = MUSIC_NONE;
+    sCurrentCapMusic   = MUSIC_NONE;
 }
 
 /**
@@ -288,9 +266,7 @@ void stop_shell_music(void) {
  */
 void play_cap_music(u16 seqArgs) {
     play_music(SEQ_PLAYER_LEVEL, seqArgs, 0);
-    if (sCurrentCapMusic != MUSIC_NONE && sCurrentCapMusic != seqArgs) {
-        stop_background_music(sCurrentCapMusic);
-    }
+    if (sCurrentCapMusic != MUSIC_NONE && sCurrentCapMusic != seqArgs) stop_background_music(sCurrentCapMusic);
     sCurrentCapMusic = seqArgs;
 }
 
@@ -298,9 +274,7 @@ void play_cap_music(u16 seqArgs) {
  * Called from threads: thread5_game_loop
  */
 void fadeout_cap_music(void) {
-    if (sCurrentCapMusic != MUSIC_NONE) {
-        fadeout_background_music(sCurrentCapMusic, 600);
-    }
+    if (sCurrentCapMusic != MUSIC_NONE) fadeout_background_music(sCurrentCapMusic, 600);
 }
 
 /**
@@ -346,9 +320,7 @@ void thread4_sound(UNUSED void *arg) {
             struct SPTask *spTask;
             profiler_log_thread4_time();
             spTask = create_next_audio_frame_task(); 
-            if (spTask != NULL) {
-                dispatch_audio_sptask(spTask);
-            }
+            if (spTask != NULL) dispatch_audio_sptask(spTask);
             profiler_log_thread4_time();
         }
     }

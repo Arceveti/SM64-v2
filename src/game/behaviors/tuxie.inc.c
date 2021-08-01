@@ -235,13 +235,13 @@ void bhv_small_penguin_loop(void) {
             small_penguin_free_actions();
             break;
         case HELD_HELD:
-            cur_obj_unrender_set_action_and_anim(0, 0);
+            cur_obj_unrender_set_action_and_anim(0, SMALL_PENGUIN_ACT_WALKING);
             if (cur_obj_has_behavior(bhvPenguinBaby)) obj_set_behavior(o, bhvSmallPenguin);
             obj_copy_pos(o, gMarioObject);
             if (gGlobalTimer % 30 == 0) play_sound(SOUND_OBJ2_BABY_PENGUIN_YELL, gMarioObject->header.gfx.cameraToObject);
             break;
         case HELD_THROWN:
-            cur_obj_get_thrown_or_placed(0, 0, 0);
+            cur_obj_get_thrown_or_placed(0.0f, 0.0f, SMALL_PENGUIN_ACT_WALKING);
             break;
         case HELD_DROPPED:
             cur_obj_get_dropped();

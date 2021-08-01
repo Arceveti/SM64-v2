@@ -2535,8 +2535,7 @@ s32 mode_c_up_camera(struct Camera *c) {
  * Used when Mario is in a cannon.
  */
 s32 update_in_cannon(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
-    focus_on_mario(pos, focus, 125.0f + sCannonYOffset, 125.0f, 800.0f,
-                                    sMarioCamState->faceAngle[0], sMarioCamState->faceAngle[1]);
+    focus_on_mario(pos, focus, 125.0f + sCannonYOffset, 125.0f, 800.0f, sMarioCamState->faceAngle[0], sMarioCamState->faceAngle[1]);
     return sMarioCamState->faceAngle[1];
 }
 

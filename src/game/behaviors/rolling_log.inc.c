@@ -76,7 +76,7 @@ void bhv_rolling_log_loop(void) {
     }
 
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) cur_obj_play_sound_2(SOUND_GENERAL_UNKNOWN1_2);
+    if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) cur_obj_play_sound_2(SOUND_GENERAL_ROLLING_LOG);
 }
 
 void volcano_act_1(void) {
@@ -106,7 +106,7 @@ void bhv_volcano_trap_loop(void) {
         case 0:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
                 o->oAction = 1;
-                cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND2);
+                cur_obj_play_sound_2(SOUND_GENERAL_VOLCANO_TRAP_FALL);
             }
             break;
 
@@ -117,7 +117,7 @@ void bhv_volcano_trap_loop(void) {
         case 2:
             if (o->oTimer < 8) o->oPosY = o->oHomeY + sins(o->oTimer * 0x1000) * 10.0f;
             if (o->oTimer == 50) {
-                cur_obj_play_sound_2(SOUND_GENERAL_UNK45);
+                cur_obj_play_sound_2(SOUND_GENERAL_VOLCANO_TRAP_RISE);
                 o->oAction = 3;
             }
             break;

@@ -15,10 +15,10 @@ void bhv_castle_floor_trap_init(void) {
 void bhv_castle_floor_trap_open_detect(void) {
     if (gMarioStates[0].action == ACT_SPECIAL_EXIT_AIRBORNE
      || gMarioStates[0].action == ACT_SPECIAL_DEATH_EXIT) {
-        o->oAction = 4; // rotates trapdoor so it looks always open
+        o->oAction = CASTLE_FLOOR_TRAP_ACT_ROTATE; // rotates trapdoor so it looks always open
     } else {
         o->oAngleVelRoll = 0x400;
-        if (o->oInteractStatus & INT_STATUS_TRAP_TURN) o->oAction = 1; // detects interact then opens the trapdoor
+        if (o->oInteractStatus & INT_STATUS_TRAP_TURN) o->oAction = CASTLE_FLOOR_TRAP_ACT_OPEN; // detects interact then opens the trapdoor
     }
 }
 
@@ -28,19 +28,19 @@ void bhv_castle_floor_trap_open(void) {
     o->oFaceAngleRoll += o->oAngleVelRoll;
     if (o->oFaceAngleRoll < -0x4000) {
         o->oFaceAngleRoll = -0x4000;
-        o->oAction = 2; // after opening is done, enable close detection
+        o->oAction = CASTLE_FLOOR_TRAP_ACT_CLOSE_DETECT; // after opening is done, enable close detection
     }
 }
 
 void bhv_castle_floor_trap_close_detect(void) {
-    if (o->oDistanceToMario > 1000.0f) o->oAction = 3; // close trapdoor
+    if (o->oDistanceToMario > 1000.0f) o->oAction = CASTLE_FLOOR_TRAP_ACT_CLOSE; // close trapdoor
 }
 
 void bhv_castle_floor_trap_close(void) {
     o->oFaceAngleRoll += 0x400;
     if (o->oFaceAngleRoll > 0) {
         o->oFaceAngleRoll = 0;
-        o->oAction = 0; // after closing, reloads open detection
+        o->oAction = CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT; // after closing, reloads open detection
         o->oInteractStatus &= ~INT_STATUS_TRAP_TURN;
     }
 }
@@ -51,20 +51,10 @@ void bhv_castle_floor_trap_rotate(void) {
 
 void bhv_castle_floor_trap_loop(void) {
     switch (o->oAction) {
-        case 0:
-            bhv_castle_floor_trap_open_detect();
-            break;
-        case 1:
-            bhv_castle_floor_trap_open();
-            break;
-        case 2:
-            bhv_castle_floor_trap_close_detect();
-            break;
-        case 3:
-            bhv_castle_floor_trap_close();
-            break;
-        case 4:
-            bhv_castle_floor_trap_rotate();
-            break;
+        case CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT:  bhv_castle_floor_trap_open_detect();  break;
+        case CASTLE_FLOOR_TRAP_ACT_OPEN:         bhv_castle_floor_trap_open();         break;
+        case CASTLE_FLOOR_TRAP_ACT_CLOSE_DETECT: bhv_castle_floor_trap_close_detect(); break;
+        case CASTLE_FLOOR_TRAP_ACT_CLOSE:        bhv_castle_floor_trap_close();        break;
+        case CASTLE_FLOOR_TRAP_ACT_ROTATE:       bhv_castle_floor_trap_rotate();       break;
     }
 }

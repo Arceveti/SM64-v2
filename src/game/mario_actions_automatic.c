@@ -558,7 +558,7 @@ s32 act_ledge_climb_down(struct MarioState *m) {
 s32 act_ledge_climb_fast(struct MarioState *m) {
     if (m->input & INPUT_OFF_FLOOR) return let_go_of_ledge(m);
 
-    play_sound_if_no_flag(m, SOUND_MARIO_UH2, MARIO_MARIO_SOUND_PLAYED);
+    play_sound_if_no_flag(m, SOUND_MARIO_UH_LEDGE_CLIMB_FAST, MARIO_MARIO_SOUND_PLAYED);
 
     update_ledge_climb(m, MARIO_ANIM_FAST_LEDGE_GRAB, ACT_IDLE);
 
@@ -591,7 +591,7 @@ s32 act_grabbed(struct MarioState *m) {
 s32 act_in_cannon(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     s16 startFacePitch = m->faceAngle[0];
-    s16 startFaceYaw = m->faceAngle[1];
+    s16 startFaceYaw   = m->faceAngle[1];
 
     switch (m->actionState) {
         case 0:
@@ -613,7 +613,7 @@ s32 act_in_cannon(struct MarioState *m) {
             break;
 
         case 1:
-            if (m->usedObj->oAction == 1) {
+            if (m->usedObj->oAction == OPENED_CANNON_ACT_READY) {
                 m->faceAngle[0] = m->usedObj->oMoveAnglePitch;
                 m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
 
@@ -653,7 +653,7 @@ s32 act_in_cannon(struct MarioState *m) {
 #if ENABLE_RUMBLE
                 queue_rumble_data(60, 70);
 #endif
-                m->usedObj->oAction = 2;
+                m->usedObj->oAction = OPENED_CANNON_ACT_SHOOT;
                 return FALSE;
             } else if (m->faceAngle[0] != startFacePitch || m->faceAngle[1] != startFaceYaw) {
                 play_sound(SOUND_MOVING_AIM_CANNON, m->marioObj->header.gfx.cameraToObject);

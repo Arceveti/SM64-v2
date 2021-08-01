@@ -188,7 +188,7 @@ static void klepto_act_turn_toward_mario(void) {
 
     if (klepto_set_and_check_if_anim_at_end() && cur_obj_check_if_at_animation_end() && o->oKleptoDistanceToTarget > 800.0f
         && abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x800 && o->oKleptoPitchToTarget < 0x400) {
-        cur_obj_play_sound_2(SOUND_OBJ_KLEPTO1);
+        cur_obj_play_sound_2(SOUND_OBJ_KLEPTO_TURN);
         o->oAction = KLEPTO_ACT_DIVE_AT_MARIO;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
@@ -320,31 +320,17 @@ void bhv_klepto_update(void) {
         obj_compute_vel_from_move_pitch(o->oKleptoSpeed);
 
         switch (o->oAction) {
-            case KLEPTO_ACT_CIRCLE_TARGET_HOLDING:
-                klepto_circle_target(300.0f, 40.0f);
-                break;
-            case KLEPTO_ACT_APPROACH_TARGET_HOLDING:
-                klepto_approach_target(50.0f);
-                break;
-            case KLEPTO_ACT_WAIT_FOR_MARIO:
-                klepto_act_wait_for_mario();
-                break;
-            case KLEPTO_ACT_TURN_TOWARD_MARIO:
-                klepto_act_turn_toward_mario();
-                break;
-            case KLEPTO_ACT_DIVE_AT_MARIO:
-                klepto_act_dive_at_mario();
-                break;
-            case KLEPTO_ACT_RESET_POSITION:
-                klepto_act_reset_position();
-                break;
-            case KLEPTO_ACT_RETREAT:
-                klepto_act_retreat();
-                break;
+            case KLEPTO_ACT_CIRCLE_TARGET_HOLDING:   klepto_circle_target(300.0f, 40.0f); break;
+            case KLEPTO_ACT_APPROACH_TARGET_HOLDING: klepto_approach_target(50.0f);       break;
+            case KLEPTO_ACT_WAIT_FOR_MARIO:          klepto_act_wait_for_mario();         break;
+            case KLEPTO_ACT_TURN_TOWARD_MARIO:       klepto_act_turn_toward_mario();      break;
+            case KLEPTO_ACT_DIVE_AT_MARIO:           klepto_act_dive_at_mario();          break;
+            case KLEPTO_ACT_RESET_POSITION:          klepto_act_reset_position();         break;
+            case KLEPTO_ACT_RETREAT:                 klepto_act_retreat();                break;
         }
 
         if (obj_handle_attacks(&sKleptoHitbox, o->oAction, sKleptoAttackHandlers)) {
-            cur_obj_play_sound_2(SOUND_OBJ_KLEPTO2);
+            cur_obj_play_sound_2(SOUND_OBJ_KLEPTO_ATTACKED);
 
             if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_CAP || o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR) {
                 save_file_clear_flags(SAVE_FLAG_CAP_ON_KLEPTO);

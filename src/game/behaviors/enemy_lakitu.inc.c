@@ -146,15 +146,9 @@ static void enemy_lakitu_act_main(void) {
     obj_update_blinking(&o->oEnemyLakituBlinkTimer, 20, 40, 4);
 
     switch (o->oSubAction) {
-        case ENEMY_LAKITU_SUB_ACT_NO_SPINY:
-            enemy_lakitu_sub_act_no_spiny();
-            break;
-        case ENEMY_LAKITU_SUB_ACT_HOLD_SPINY:
-            enemy_lakitu_sub_act_hold_spiny();
-            break;
-        case ENEMY_LAKITU_SUB_ACT_THROW_SPINY:
-            enemy_lakitu_sub_act_throw_spiny();
-            break;
+        case ENEMY_LAKITU_SUB_ACT_NO_SPINY:    enemy_lakitu_sub_act_no_spiny();    break;
+        case ENEMY_LAKITU_SUB_ACT_HOLD_SPINY:  enemy_lakitu_sub_act_hold_spiny();  break;
+        case ENEMY_LAKITU_SUB_ACT_THROW_SPINY: enemy_lakitu_sub_act_throw_spiny(); break;
     }
 
     cur_obj_move_standard(78);
@@ -172,11 +166,7 @@ void bhv_enemy_lakitu_update(void) {
     treat_far_home_as_mario(2000.0f);
 
     switch (o->oAction) {
-        case ENEMY_LAKITU_ACT_UNINITIALIZED:
-            enemy_lakitu_act_uninitialized();
-            break;
-        case ENEMY_LAKITU_ACT_MAIN:
-            enemy_lakitu_act_main();
-            break;
+        case ENEMY_LAKITU_ACT_UNINITIALIZED: enemy_lakitu_act_uninitialized(); break;
+        case ENEMY_LAKITU_ACT_MAIN:          enemy_lakitu_act_main();          break;
     }
 }

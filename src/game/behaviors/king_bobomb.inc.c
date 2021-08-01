@@ -22,7 +22,7 @@ void bhv_bobomb_anchor_mario_loop(void) {
 
 void king_bobomb_act_inactive(void) { // act 0
     o->oForwardVel = 0.0f;
-    o->oVelY = 0.0f;
+    o->oVelY       = 0.0f;
     if (o->oSubAction == 0) {
         cur_obj_become_intangible();
         gSecondCameraFocus = o;
@@ -80,7 +80,7 @@ void king_bobomb_act_grabbed_mario(void) { // act 3
         o->oForwardVel = 0;
         o->oKingBobombStationaryTimer = 0;
         o->oKingBobombPlayerGrabEscapeActions = 0;
-        if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_UNKNOWN3);
+        if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_GRAB_MARIO);
         if (cur_obj_init_animation_and_check_if_near_end(KING_BOBOMB_ANIM_GRAB_MARIO)) {
             o->oSubAction++;
             cur_obj_init_animation_and_anim_frame(KING_BOBOMB_ANIM_HOLDING_MARIO, 0);
@@ -107,7 +107,7 @@ void king_bobomb_act_grabbed_mario(void) { // act 3
             cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_THROW_MARIO);
             if (cur_obj_check_anim_frame(31)) {
                 o->oKingBobombHoldingMarioState = HELD_THROWN;
-                cur_obj_play_sound_2(SOUND_OBJ_UNKNOWN4);
+                cur_obj_play_sound_2(SOUND_OBJ_RELEASE_MARIO);
             } else if (cur_obj_check_if_near_animation_end()) {
                 o->oAction = KING_BOBOMB_ACT_ACTIVATE;
                 o->oInteractStatus &= ~(INT_STATUS_GRABBED_MARIO);
@@ -150,9 +150,7 @@ void king_bobomb_act_hit_ground(void) { // act 6
             }
         } else {
             cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_WALKING);
-            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800)) {
-                o->oAction = KING_BOBOMB_ACT_ACTIVE;
-            }
+            if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800)) o->oAction = KING_BOBOMB_ACT_ACTIVE;
         }
     }
 }
@@ -180,16 +178,16 @@ void king_bobomb_act_been_thrown(void) { // act 4
     if (o->oPosY - o->oHomeY > -100.0f) { // not thrown off hill
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             o->oHealth--;
-            o->oForwardVel = 0;
-            o->oVelY = 0;
+            o->oForwardVel = 0.0f;
+            o->oVelY       = 0.0f;
             cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB);
             o->oAction = (o->oHealth ? KING_BOBOMB_ACT_HIT_GROUND : KING_BOBOMB_ACT_DEATH);
         }
     } else { // thrown off hill
         if (o->oSubAction == 0) {
             if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
-                o->oForwardVel = 0;
-                o->oVelY = 0;
+                o->oForwardVel = 0.0f;
+                o->oVelY       = 0.0f;
                 o->oSubAction++;
             } else if (o->oMoveFlags & OBJ_MOVE_LANDED) {
                 cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB);
@@ -260,18 +258,18 @@ void (*sKingBobombActions[])(void) = {
     king_bobomb_act_stop_music,
 };
 struct SoundState sKingBobombSoundStates[] = {
-    { 0,  0,  0, NO_SOUND                     },
-    { 1,  1, 20, SOUND_OBJ_POUNDING1_HIGHPRIO },
-    { 0,  0,  0, NO_SOUND                     },
-    { 0,  0,  0, NO_SOUND                     },
-    { 1, 15, -1, SOUND_OBJ_POUNDING1_HIGHPRIO },
-    { 0,  0,  0, NO_SOUND                     },
-    { 0,  0,  0, NO_SOUND                     },
-    { 0,  0,  0, NO_SOUND                     },
-    { 0,  0,  0, NO_SOUND                     },
-    { 1, 33, -1, SOUND_OBJ_POUNDING1_HIGHPRIO },
-    { 0,  0,  0, NO_SOUND                     },
-    { 1,  1, 15, SOUND_OBJ_POUNDING1_HIGHPRIO },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 1,  1, 20, SOUND_OBJ_KING_BOBOMB_POUNDING1_HIGHPRIO },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 1, 15, -1, SOUND_OBJ_KING_BOBOMB_POUNDING1_HIGHPRIO },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 1, 33, -1, SOUND_OBJ_KING_BOBOMB_POUNDING1_HIGHPRIO },
+    { 0,  0,  0, NO_SOUND                                 },
+    { 1,  1, 15, SOUND_OBJ_KING_BOBOMB_POUNDING1_HIGHPRIO },
 };
 
 void king_bobomb_move(void) {
@@ -297,11 +295,11 @@ void bhv_king_bobomb_loop(void) {
             king_bobomb_move();
             break;
         case HELD_HELD:
-            cur_obj_unrender_set_action_and_anim(6, 1);
+            cur_obj_unrender_set_action_and_anim(KING_BOBOMB_ANIM_HELD, KING_BOBOMB_ACT_ACTIVATE);
             break;
         case HELD_THROWN:
         case HELD_DROPPED:
-            cur_obj_get_thrown_or_placed(20.0f, 50.0f, 4);
+            cur_obj_get_thrown_or_placed(20.0f, 50.0f, KING_BOBOMB_ACT_BEEN_THROWN);
             cur_obj_become_intangible();
             o->oPosY += 20.0f;
             break;

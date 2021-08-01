@@ -32,7 +32,7 @@ void small_breakable_box_act_move(void) {
     s16 collisionFlags = object_step();
 
     obj_attack_collided_from_other_object(o);
-    if (collisionFlags == OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_BOX_LANDING_2);
+    if (collisionFlags == OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_SMALL_BOX_LANDING);
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oForwardVel > 20.0f)) {
         cur_obj_play_sound_2(SOUND_ENV_SLIDING);
         small_breakable_box_spawn_dust();
@@ -78,7 +78,7 @@ void breakable_box_small_idle_loop(void) {
             obj_lava_death();
             break;
 
-        case BREAKABLE_BOX_SMALL_ACT_RESPAWN:
+        case OBJ_ACT_DEATH_PLANE_DEATH:
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             create_respawner(MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall, 3000);
             break;
@@ -107,7 +107,7 @@ void breakable_box_small_get_thrown(void) {
     o->oHeldState = HELD_FREE;
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
     o->oForwardVel = 40.0f;
-    o->oVelY = 20.0f;
+    o->oVelY       = 20.0f;
     o->oBreakableBoxSmallReleased = TRUE;
     o->oBreakableBoxSmallFramesSinceReleased = 0;
     o->activeFlags &= ~ACTIVE_FLAG_SMALL_BOX_NOT_THROWN;
