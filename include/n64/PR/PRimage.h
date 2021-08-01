@@ -36,17 +36,17 @@ extern "C" {
 					 * writepixels */
 #define CM_COLORMAP		3	/* a colormap file */
 
-#define TYPEMASK		0xff00
-#define BPPMASK			0x00ff
+#define TYPEMASK			0xff00
+#define BPPMASK				0x00ff
 #define ITYPE_VERBATIM		0x0000
-#define ITYPE_RLE		0x0100
-#define ISRLE(type)		(((type) & 0xff00) == ITYPE_RLE)
+#define ITYPE_RLE			0x0100
+#define ISRLE(type)			(((type) & 0xff00) == ITYPE_RLE)
 #define ISVERBATIM(type)	(((type) & 0xff00) == ITYPE_VERBATIM)
-#define BPP(type)		((type) & BPPMASK)
-#define RLE(bpp)		(ITYPE_RLE | (bpp))
+#define BPP(type)			((type) & BPPMASK)
+#define RLE(bpp)			(ITYPE_RLE | (bpp))
 #define VERBATIM(bpp)		(ITYPE_VERBATIM | (bpp))
 #define	IBUFSIZE(pixels)	(((pixels)+((pixels)>>6))<<2)
-#define	RLE_NOP			0x00
+#define	RLE_NOP				0x00
 
 #define	ierror(p)		(((p)->flags&_IOERR)!=0)
 #define	ifileno(p)		((p)->file)
@@ -65,23 +65,23 @@ typedef struct {
     unsigned long 	min;
     unsigned long 	max;
     unsigned long	wastebytes;	
-    char 		name[80];
+    char 			name[80];
     unsigned long	colormap;
 
-    long 		file;		/* stuff used in core only */
+    long 			file;		/* stuff used in core only */
     unsigned short 	flags;
-    short		dorev;
-    short		x;
-    short		y;
-    short		z;
-    short		cnt;
+    short			dorev;
+    short			x;
+    short			y;
+    short			z;
+    short			cnt;
     unsigned short	*ptr;
     unsigned short	*base;
     unsigned short	*tmpbuf;
     unsigned long	offset;
     unsigned long	rleend;		/* for rle images */
     unsigned long	*rowstart;	/* for rle images */
-    long		*rowsize;	/* for rle images */
+    long			*rowsize;	/* for rle images */
 } IMAGE;
 
 IMAGE *icreate();

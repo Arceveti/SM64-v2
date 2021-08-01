@@ -97,14 +97,14 @@ typedef struct OSThread_s {
 
 /* Recommended thread priorities for the system threads */
 
-#define OS_PRIORITY_MAX		255
-#define OS_PRIORITY_VIMGR	254
-#define OS_PRIORITY_RMON	250
+#define OS_PRIORITY_MAX			255
+#define OS_PRIORITY_VIMGR		254
+#define OS_PRIORITY_RMON		250
 #define OS_PRIORITY_RMONSPIN	200
-#define OS_PRIORITY_PIMGR	150
-#define OS_PRIORITY_SIMGR	140
-#define	OS_PRIORITY_APPMAX	127
-#define OS_PRIORITY_IDLE	  0	/* Must be 0 */
+#define OS_PRIORITY_PIMGR		150
+#define OS_PRIORITY_SIMGR		140
+#define	OS_PRIORITY_APPMAX		127
+#define OS_PRIORITY_IDLE		0	/* Must be 0 */
 
 /* for thread profiler */
 #define THPROF_IDMAX            64
@@ -142,7 +142,7 @@ extern void		osStartThread(OSThread *);
 extern void		osStopThread(OSThread *);
 extern OSId		osGetThreadId(OSThread *);
 extern void		osSetThreadPri(OSThread *, OSPri);
-extern OSPri		osGetThreadPri(OSThread *);
+extern OSPri	osGetThreadPri(OSThread *);
 
 
 #endif  /* defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS) */

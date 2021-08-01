@@ -61,10 +61,10 @@ typedef struct {
 #define OS_GBPAK_GBCART_PULL    0x40
 #define OS_GBPAK_GBCART_ON      0x80
 
-#define	OS_GBPAK_POWER_OFF	0x00 	/* power of 64GB-PAK */
-#define	OS_GBPAK_POWER_ON	0x01
+#define	OS_GBPAK_POWER_OFF			0x00 	/* power of 64GB-PAK */
+#define	OS_GBPAK_POWER_ON				0x01
 
-#define	OS_GBPAK_ROM_ID_SIZE	0x50	/* ID size of GB cartridge */
+#define	OS_GBPAK_ROM_ID_SIZE		0x50	/* ID size of GB cartridge */
 
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)

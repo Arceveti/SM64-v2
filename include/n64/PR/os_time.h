@@ -98,7 +98,7 @@ typedef struct OSTimer_s {
 
 /* Timer interface */
 
-extern OSTime		osGetTime(void);
+extern OSTime	osGetTime(void);
 extern void		osSetTime(OSTime);
 extern int		osSetTimer(OSTimer *, OSTime, OSTime,
 				   OSMesgQueue *, OSMesg);

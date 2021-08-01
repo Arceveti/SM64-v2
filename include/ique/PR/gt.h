@@ -70,9 +70,9 @@ extern "C" {
  * When each of these bits is '1', the comments below explain
  * the effect on the triangles.
  */
-#define GT_ZBUFFER		G_ZBUFFER
-#define GT_TEXTURE		G_TEXTURE_ENABLE	/* texture ON */
-#define GT_CULL_BACK		G_CULL_BACK		/* reject backfaces */
+#define GT_ZBUFFER			G_ZBUFFER
+#define GT_TEXTURE			G_TEXTURE_ENABLE	/* texture ON */
+#define GT_CULL_BACK		G_CULL_BACK			/* reject backfaces */
 #define GT_SHADING_SMOOTH	G_SHADING_SMOOTH	/* smooth shade ON */
 
 /*
@@ -338,9 +338,9 @@ extern void gtDumpTurbo(OSTask *tp,u8 flags);
  */
 typedef struct {
     gtGlobState	*gstatep;	/* global state, usually NULL */
-    gtState	*statep;	/* if this is NULL, end object processing */
-    Vtx		*vtxp;		/* if this is NULL, use points in buffer */
-    gtTriN	*trip;		/* if this is NULL, use tris in buffer */
+    gtState		*statep;	/* if this is NULL, end object processing */
+    Vtx			*vtxp;		/* if this is NULL, use points in buffer */
+    gtTriN		*trip;		/* if this is NULL, use tris in buffer */
 } gtGfx_t;
 
 typedef union {

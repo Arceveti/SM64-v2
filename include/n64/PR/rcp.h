@@ -110,9 +110,9 @@ The Indy development board use cartridge domain 1:
 #define RDRAM_0_DEVICE_ID	0
 #define RDRAM_1_DEVICE_ID	1
 
-#define RDRAM_RESET_MODE        0
-#define RDRAM_ACTIVE_MODE       1
-#define RDRAM_STANDBY_MODE      2
+#define RDRAM_RESET_MODE	0
+#define RDRAM_ACTIVE_MODE	1
+#define RDRAM_STANDBY_MODE	2
 
 #define RDRAM_LENGTH		(2*512*2048)
 #define RDRAM_0_BASE_ADDRESS	(RDRAM_0_DEVICE_ID*RDRAM_LENGTH)

@@ -1,13 +1,13 @@
 /**************************************************************************
- *									  *
- *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
- *									  *
+ *																		  *
+ *				 Copyright (C) 1994, Silicon Graphics, Inc.				  *
+ *																		  *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *																		  *
  **************************************************************************/
 
 /**************************************************************************
@@ -63,7 +63,7 @@ struct sprite {
 
 	s16	expx, expy;	/* Explosion spacing		*/
 
-	u16 	attr;		/* Attribute Flags		*/
+	u16	attr;		/* Attribute Flags		*/
 	s16	zdepth;		/* Z Depth 			*/
 
 	u8	red;		/* Red component		*/
@@ -78,7 +78,7 @@ struct sprite {
 
 	s16	istart;		/* Starting bitmap index	*/
 	s16	istep;		/* Bitmaps index step (see SP_INCY) */
-				/* if 0, then variable width bitmaps */
+					/* if 0, then variable width bitmaps */
 
 	s16	nbitmaps;	/* Total number of bitmaps	*/
 	s16	ndisplist;	/* Total number of display-list words */
@@ -143,17 +143,17 @@ typedef struct sprite Sprite;
  * For sprite->attr
  */
 
-#define SP_TRANSPARENT		0x00000001
-#define SP_CUTOUT		0x00000002
-#define SP_HIDDEN		0x00000004
-#define SP_Z			0x00000008
-#define SP_SCALE		0x00000010
-#define SP_FASTCOPY		0x00000020
-#define SP_OVERLAP		0x00000040
-#define SP_TEXSHIFT		0x00000080
-#define SP_FRACPOS		0x00000100
-#define SP_TEXSHUF		0x00000200
-#define SP_EXTERN		0x00000400
+#define	SP_TRANSPARENT	0x00000001
+#define	SP_CUTOUT		0x00000002
+#define	SP_HIDDEN		0x00000004
+#define	SP_Z			0x00000008
+#define	SP_SCALE		0x00000010
+#define	SP_FASTCOPY		0x00000020
+#define	SP_OVERLAP		0x00000040
+#define	SP_TEXSHIFT		0x00000080
+#define	SP_FRACPOS		0x00000100
+#define	SP_TEXSHUF		0x00000200
+#define	SP_EXTERN		0x00000400
 
 /*
  * Function wrapper

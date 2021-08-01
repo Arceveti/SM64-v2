@@ -40,66 +40,66 @@ extern "C" {
 
 /* Non scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* ¥Æ¥¯¥¹¥Á¥ã¤Îº¸¾å°ÌÃÖ X ºÂÉ¸ (u10.5)        */ 
-  u16	imageW;		/* ¥Æ¥¯¥¹¥Á¥ã¤ÎÉý              (u10.2)        */
-  s16	frameX;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Îº¸¾å°ÌÃÖ(s10.2)        */
-  u16	frameW;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤ÎÉý      (u10.2)        */
+  u16   imageX;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ X ï¿½ï¿½É¸ (u10.5)        */ 
+  u16	imageW;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½              (u10.2)        */
+  s16	frameX;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(s10.2)        */
+  u16	frameW;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½ï¿½ï¿½ï¿½      (u10.2)        */
 
-  u16   imageY; 	/* ¥Æ¥¯¥¹¥Á¥ã¤Îº¸¾å°ÌÃÖ Y ºÂÉ¸ (u10.5)        */ 
-  u16	imageH;		/* ¥Æ¥¯¥¹¥Á¥ã¤Î¹â¤µ            (u10.2)        */
-  s16	frameY;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Îº¸¾å°ÌÃÖ(s10.2)        */
-  u16	frameH;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Î¹â¤µ    (u10.2)        */
+  u16   imageY; 	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Y ï¿½ï¿½É¸ (u10.5)        */ 
+  u16	imageH;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¹â¤µ            (u10.2)        */
+  s16	frameY;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(s10.2)        */
+  u16	frameH;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Î¹â¤µ    (u10.2)        */
 
-  u64  *imagePtr;	/* DRAM ¾å¤Î¥Æ¥¯¥¹¥Á¥ã¥½¡¼¥¹¥¢¥É¥ì¥¹          */
-  u16	imageLoad;	/* LoadBlock, LoadTile ¤Î¤É¤Á¤é¤ò»ÈÍÑ¤¹¤ë¤«   */
-  u8	imageFmt;	/* ¥Æ¥¯¥»¥ë¤Î¥Õ¥©¡¼¥Þ¥Ã¥È G_IM_FMT_*          */
-  u8	imageSiz;	/* ¥Æ¥¯¥»¥ë¤Î¥µ¥¤¥º       G_IM_SIZ_*          */
-  u16   imagePal; 	/* ¥Ñ¥ì¥Ã¥ÈÈÖ¹æ                               */
-  u16	imageFlip;	/* ¥¤¥á¡¼¥¸¤Îº¸±¦È¿Å¾  G_BG_FLAG_FLIPS ¤ÇÈ¿Å¾ */
+  u64  *imagePtr;	/* DRAM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¥½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ì¥¹          */
+  u16	imageLoad;	/* LoadBlock, LoadTile ï¿½Î¤É¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¤ï¿½ï¿½ë¤«   */
+  u8	imageFmt;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥Õ¥ï¿½ï¿½ï¿½ï¿½Þ¥Ã¥ï¿½ G_IM_FMT_*          */
+  u8	imageSiz;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥ï¿½ï¿½ï¿½ï¿½ï¿½       G_IM_SIZ_*          */
+  u16   imagePal; 	/* ï¿½Ñ¥ï¿½Ã¥ï¿½ï¿½Ö¹ï¿½                               */
+  u16	imageFlip;	/* ï¿½ï¿½ï¿½á¡¼ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½È¿Å¾  G_BG_FLAG_FLIPS ï¿½ï¿½È¿Å¾ */
 
-  /* °Ê²¼¤Ï½é´ü²½¥ë¡¼¥Á¥ó guS2DInitBg() Æâ¤ÇÀßÄê¤µ¤ì¤ë¤Î¤Ç¥æ¡¼¥¶¤¬Àß
-     Äê¤¹¤ëÉ¬Í×¤Ï¤Ê¤¤ */
-  u16	tmemW;		/* frame 1 ¥é¥¤¥ó¤Î TMEM Éý Word ¥µ¥¤¥º
-                           LoadBlock ¤Î»þ GS_PIX2TMEM(imageW/4,imageSiz)
-                           LoadTile  ¤Î»þ GS_PIX2TMEM(frameW/4,imageSiz)+1 */
-  u16	tmemH;		/* °ìÅÙ¤Ë¥í¡¼¥É¤Ç¤­¤ë TMEM ¹â¤µ (s13.2) 4ÇÜÃÍ
-			   ÄÌ¾ï¥Æ¥¯¥¹¥Á¥ã¤Î»þ   512/tmemW*4
-			   CI  ¥Æ¥¯¥¹¥Á¥ã¤Î»þ   256/tmemW*4           */
-  u16	tmemLoadSH;	/* SH ÃÍ
-			   LoadBlock ¤Î»þ tmemSize/2-1
-			   LoadTile  ¤Î»þ tmemW*16-1                  */
-  u16	tmemLoadTH;	/* TH ÃÍ or Stride ÃÍ
-			   LoadBlock ¤Î»þ GS_CALC_DXT(tmemW)
-			   LoadTile  ¤Î»þ tmemH-1                     */
-  u16	tmemSizeW;	/* image 1 ¥é¥¤¥óÊ¬¤Î imagePtr ¤Î¥¹¥­¥Ã¥×ÃÍ 
-			   LoadBlock ¤Î»þ tmemW*2
-                           LoadTile  ¤Î»þ GS_PIX2TMEM(imageW/4,imageSiz)*2 */
-  u16	tmemSize;	/* ¥í¡¼¥É°ì²óÊ¬¤Î imagePtr ¤Î¥¹¥­¥Ã¥×ÃÍ 
+  /* ï¿½Ê²ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡¼ï¿½ï¿½ï¿½ï¿½ guS2DInitBg() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê¤µï¿½ï¿½ï¿½Î¤Ç¥æ¡¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     ï¿½ê¤¹ï¿½ï¿½É¬ï¿½×¤Ï¤Ê¤ï¿½ */
+  u16	tmemW;		/* frame 1 ï¿½é¥¤ï¿½ï¿½ï¿½ TMEM ï¿½ï¿½ Word ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                           LoadBlock ï¿½Î»ï¿½ GS_PIX2TMEM(imageW/4,imageSiz)
+                           LoadTile  ï¿½Î»ï¿½ GS_PIX2TMEM(frameW/4,imageSiz)+1 */
+  u16	tmemH;		/* ï¿½ï¿½ï¿½Ù¤Ë¥ï¿½ï¿½ï¿½ï¿½É¤Ç¤ï¿½ï¿½ï¿½ TMEM ï¿½â¤µ (s13.2) 4ï¿½ï¿½ï¿½ï¿½
+			   ï¿½Ì¾ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½   512/tmemW*4
+			   CI  ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½   256/tmemW*4           */
+  u16	tmemLoadSH;	/* SH ï¿½ï¿½
+			   LoadBlock ï¿½Î»ï¿½ tmemSize/2-1
+			   LoadTile  ï¿½Î»ï¿½ tmemW*16-1                  */
+  u16	tmemLoadTH;	/* TH ï¿½ï¿½ or Stride ï¿½ï¿½
+			   LoadBlock ï¿½Î»ï¿½ GS_CALC_DXT(tmemW)
+			   LoadTile  ï¿½Î»ï¿½ tmemH-1                     */
+  u16	tmemSizeW;	/* image 1 ï¿½é¥¤ï¿½ï¿½Ê¬ï¿½ï¿½ imagePtr ï¿½Î¥ï¿½ï¿½ï¿½ï¿½Ã¥ï¿½ï¿½ï¿½ 
+			   LoadBlock ï¿½Î»ï¿½ tmemW*2
+                           LoadTile  ï¿½Î»ï¿½ GS_PIX2TMEM(imageW/4,imageSiz)*2 */
+  u16	tmemSize;	/* ï¿½ï¿½ï¿½ï¿½ï¿½É°ï¿½ï¿½Ê¬ï¿½ï¿½ imagePtr ï¿½Î¥ï¿½ï¿½ï¿½ï¿½Ã¥ï¿½ï¿½ï¿½ 
 			   = tmemSizeW*tmemH                          */
 } uObjBg_t;		/* 40 bytes */
 
 /* Scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* ¥Æ¥¯¥¹¥Á¥ã¤Îº¸¾å°ÌÃÖ X ºÂÉ¸ (u10.5)        */ 
-  u16	imageW;		/* ¥Æ¥¯¥¹¥Á¥ã¤ÎÉý              (u10.2)        */
-  s16	frameX;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Îº¸¾å°ÌÃÖ(s10.2)        */
-  u16	frameW;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤ÎÉý      (u10.2)        */
+  u16   imageX;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ X ï¿½ï¿½É¸ (u10.5)        */ 
+  u16	imageW;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½              (u10.2)        */
+  s16	frameX;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(s10.2)        */
+  u16	frameW;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½ï¿½ï¿½ï¿½      (u10.2)        */
 
-  u16   imageY; 	/* ¥Æ¥¯¥¹¥Á¥ã¤Îº¸¾å°ÌÃÖ Y ºÂÉ¸ (u10.5)        */ 
-  u16	imageH;		/* ¥Æ¥¯¥¹¥Á¥ã¤Î¹â¤µ            (u10.2)        */
-  s16	frameY;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Îº¸¾å°ÌÃÖ(s10.2)        */
-  u16	frameH;		/* Å¾Á÷¤µ¤ì¤ë¥Õ¥ì¡¼¥à¤Î¹â¤µ    (u10.2)        */
+  u16   imageY; 	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Y ï¿½ï¿½É¸ (u10.5)        */ 
+  u16	imageH;		/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¹â¤µ            (u10.2)        */
+  s16	frameY;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(s10.2)        */
+  u16	frameH;		/* Å¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¥ì¡¼ï¿½ï¿½Î¹â¤µ    (u10.2)        */
 
-  u64  *imagePtr;	/* DRAM ¾å¤Î¥Æ¥¯¥¹¥Á¥ã¥½¡¼¥¹¥¢¥É¥ì¥¹          */
-  u16	imageLoad;	/* LoadBlock, LoadTile ¤Î¤É¤Á¤é¤ò»ÈÍÑ¤¹¤ë¤«   */
-  u8	imageFmt;	/* ¥Æ¥¯¥»¥ë¤Î¥Õ¥©¡¼¥Þ¥Ã¥È G_IM_FMT_*          */
-  u8	imageSiz;	/* ¥Æ¥¯¥»¥ë¤Î¥µ¥¤¥º       G_IM_SIZ_*          */
-  u16   imagePal; 	/* ¥Ñ¥ì¥Ã¥ÈÈÖ¹æ                               */
-  u16	imageFlip;	/* ¥¤¥á¡¼¥¸¤Îº¸±¦È¿Å¾  G_BG_FLAG_FLIPS ¤ÇÈ¿Å¾ */
+  u64  *imagePtr;	/* DRAM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¥½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ì¥¹          */
+  u16	imageLoad;	/* LoadBlock, LoadTile ï¿½Î¤É¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¤ï¿½ï¿½ë¤«   */
+  u8	imageFmt;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥Õ¥ï¿½ï¿½ï¿½ï¿½Þ¥Ã¥ï¿½ G_IM_FMT_*          */
+  u8	imageSiz;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥ï¿½ï¿½ï¿½ï¿½ï¿½       G_IM_SIZ_*          */
+  u16   imagePal; 	/* ï¿½Ñ¥ï¿½Ã¥ï¿½ï¿½Ö¹ï¿½                               */
+  u16	imageFlip;	/* ï¿½ï¿½ï¿½á¡¼ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½È¿Å¾  G_BG_FLAG_FLIPS ï¿½ï¿½È¿Å¾ */
 
-  u16	scaleW;		/* X Êý¸þ¥¹¥±¡¼¥ëÃÍ               (u5.10)     */
-  u16	scaleH;		/* Y Êý¸þ¥¹¥±¡¼¥ëÃÍ               (u5.10)     */
-  s32	imageYorig;	/* image ¤Ë¤ª¤±¤ëÉÁ²è»ÏÅÀ         (s20.5)     */
+  u16	scaleW;		/* X ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               (u5.10)     */
+  u16	scaleH;		/* Y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               (u5.10)     */
+  s32	imageYorig;	/* image ï¿½Ë¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         (s20.5)     */
   
   u8	padding[4];
   
@@ -114,24 +114,24 @@ typedef union {
 /*---------------------------------------------------------------------------*
  *	2D Objects
  *---------------------------------------------------------------------------*/
-#define	G_OBJ_FLAG_FLIPS	1<<0		/* S Êý¸þÈ¿Å¾ */
-#define	G_OBJ_FLAG_FLIPT	1<<4		/* T Êý¸þÈ¿Å¾ */
+#define	G_OBJ_FLAG_FLIPS	1<<0		/* S ï¿½ï¿½ï¿½ï¿½È¿Å¾ */
+#define	G_OBJ_FLAG_FLIPT	1<<4		/* T ï¿½ï¿½ï¿½ï¿½È¿Å¾ */
 
 typedef struct {
-  s16  objX;		/* s10.2 OBJ º¸¾åÃ¼ X ºÂÉ¸                 */
-  u16  scaleW;		/* u5.10 ÉýÊý¸þ¥¹¥±¡¼¥ê¥ó¥°                */
-  u16  imageW;		/* u10.5 ¥Æ¥¯¥¹¥Á¥ã¤ÎÉý   (S Êý¸þ¤ÎÄ¹¤µ)   */
-  u16  paddingX;	/* Ì¤»ÈÍÑ ¾ï¤Ë 0                           */
-  s16  objY;		/* s10.2 OBJ º¸¾åÃ¼ Y ºÂÉ¸                 */
-  u16  scaleH;		/* u5.10 ¹â¤µÊý¸þ¥¹¥±¡¼¥ê¥ó¥°              */
-  u16  imageH;		/* u10.5 ¥Æ¥¯¥¹¥Á¥ã¤Î¹â¤µ (T Êý¸þ¤ÎÄ¹¤µ)   */
-  u16  paddingY;	/* Ì¤»ÈÍÑ ¾ï¤Ë 0                           */
-  u16  imageStride;	/* ¥Æ¥¯¥»¥ë¤ÎÀÞ¤êÊÖ¤·Éý        (64bit word Ã±°Ì) */
-  u16  imageAdrs;	/* TMEM Æâ¤Î¥Æ¥¯¥¹¥Á¥ãÀèÆ¬°ÌÃÖ (64bit word Ã±°Ì) */  
-  u8   imageFmt;	/* ¥Æ¥¯¥»¥ë¤Î¥Õ¥©¡¼¥Þ¥Ã¥È G_IM_FMT_*       */
-  u8   imageSiz;	/* ¥Æ¥¯¥»¥ë¤Î¥µ¥¤¥º       G_IM_SIZ_*       */
-  u8   imagePal;	/* ¥Ñ¥ì¥Ã¥ÈÈÖ¹æ 0-7                        */
-  u8   imageFlags;	/* É½¼¨¥Õ¥é¥°  G_OBJ_FLAG_FLIP*            */
+  s16  objX;		/* s10.2 OBJ ï¿½ï¿½ï¿½ï¿½Ã¼ X ï¿½ï¿½É¸                 */
+  u16  scaleW;		/* u5.10 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½                */
+  u16  imageW;		/* u10.5 ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   (S ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½)   */
+  u16  paddingX;	/* Ì¤ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 0                           */
+  s16  objY;		/* s10.2 OBJ ï¿½ï¿½ï¿½ï¿½Ã¼ Y ï¿½ï¿½É¸                 */
+  u16  scaleH;		/* u5.10 ï¿½â¤µï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½              */
+  u16  imageH;		/* u10.5 ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¹â¤µ (T ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½)   */
+  u16  paddingY;	/* Ì¤ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 0                           */
+  u16  imageStride;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¤ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½        (64bit word Ã±ï¿½ï¿½) */
+  u16  imageAdrs;	/* TMEM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½ (64bit word Ã±ï¿½ï¿½) */  
+  u8   imageFmt;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥Õ¥ï¿½ï¿½ï¿½ï¿½Þ¥Ã¥ï¿½ G_IM_FMT_*       */
+  u8   imageSiz;	/* ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½Î¥ï¿½ï¿½ï¿½ï¿½ï¿½       G_IM_SIZ_*       */
+  u8   imagePal;	/* ï¿½Ñ¥ï¿½Ã¥ï¿½ï¿½Ö¹ï¿½ 0-7                        */
+  u8   imageFlags;	/* É½ï¿½ï¿½ï¿½Õ¥é¥°  G_OBJ_FLAG_FLIP*            */
 } uObjSprite_t;		/* 24 bytes */
 
 typedef union {
@@ -176,12 +176,12 @@ typedef union {
 #define	GS_TB_TLINE(pix,siz)	(GS_CALC_DXT(GS_PIX2TMEM((pix),(siz))))
 
 typedef	struct	{
-  u32	type;		/* Type ¼ïÊÌ G_OBJLT_TXTRBLOCK                    */
-  u64	*image;		/* DRAM ¾å¤Î¥Æ¥¯¥¹¥Á¥ã¥½¡¼¥¹¥¢¥É¥ì¥¹              */
-  u16	tmem;		/* ¥í¡¼¥ÉÀè¤Î TMEM ¥ï¡¼¥É¥¢¥É¥ì¥¹ (8byteWORD)     */
-  u16	tsize;		/* Texture ¥µ¥¤¥º     ¥Þ¥¯¥í GS_TB_TSIZE() ¤Ç»ØÄê */
-  u16	tline;		/* Texture 1 ¥é¥¤¥óÉý ¥Þ¥¯¥í GS_TB_TLINE() ¤Ç»ØÄê */
-  u16	sid;		/* STATE ID  4 ¤ÎÇÜ¿ô¤Ç 0,4,8,12 ¤Î¤É¤ì¤«         */
+  u32	type;		/* Type ï¿½ï¿½ï¿½ï¿½ G_OBJLT_TXTRBLOCK                    */
+  u64	*image;		/* DRAM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¥½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ì¥¹              */
+  u16	tmem;		/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TMEM ï¿½ï¡¼ï¿½É¥ï¿½ï¿½É¥ì¥¹ (8byteWORD)     */
+  u16	tsize;		/* Texture ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     ï¿½Þ¥ï¿½ï¿½ï¿½ GS_TB_TSIZE() ï¿½Ç»ï¿½ï¿½ï¿½ */
+  u16	tline;		/* Texture 1 ï¿½é¥¤ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¥ï¿½ï¿½ï¿½ GS_TB_TLINE() ï¿½Ç»ï¿½ï¿½ï¿½ */
+  u16	sid;		/* STATE ID  4 ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ 0,4,8,12 ï¿½Î¤É¤ì¤«         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrBlock_t;		/* 24 bytes */
@@ -190,12 +190,12 @@ typedef	struct	{
 #define	GS_TT_THEIGHT(pix,siz)	(((pix)<<2)-1)
 
 typedef	struct	{
-  u32	type;		/* Type ¼ïÊÌ G_OBJLT_TXTRTILE                     */
-  u64	*image;		/* DRAM ¾å¤Î¥Æ¥¯¥¹¥Á¥ã¥½¡¼¥¹¥¢¥É¥ì¥¹              */
-  u16	tmem;		/* ¥í¡¼¥ÉÀè¤Î TMEM ¥ï¡¼¥É¥¢¥É¥ì¥¹ (8byteWORD)     */
-  u16	twidth;		/* Texture Éý      ¥Þ¥¯¥í GS_TT_TWIDTH()  ¤Ç»ØÄê  */
-  u16	theight;	/* Texture ¹â¤µ    ¥Þ¥¯¥í GS_TT_THEIGHT() ¤Ç»ØÄê  */
-  u16	sid;		/* STATE ID  4 ¤ÎÇÜ¿ô¤Ç 0,4,8,12 ¤Î¤É¤ì¤«         */
+  u32	type;		/* Type ï¿½ï¿½ï¿½ï¿½ G_OBJLT_TXTRTILE                     */
+  u64	*image;		/* DRAM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¥½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ì¥¹              */
+  u16	tmem;		/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TMEM ï¿½ï¡¼ï¿½É¥ï¿½ï¿½É¥ì¥¹ (8byteWORD)     */
+  u16	twidth;		/* Texture ï¿½ï¿½      ï¿½Þ¥ï¿½ï¿½ï¿½ GS_TT_TWIDTH()  ï¿½Ç»ï¿½ï¿½ï¿½  */
+  u16	theight;	/* Texture ï¿½â¤µ    ï¿½Þ¥ï¿½ï¿½ï¿½ GS_TT_THEIGHT() ï¿½Ç»ï¿½ï¿½ï¿½  */
+  u16	sid;		/* STATE ID  4 ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ 0,4,8,12 ï¿½Î¤É¤ì¤«         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrTile_t;		/* 24 bytes */
@@ -204,12 +204,12 @@ typedef	struct	{
 #define	GS_PAL_NUM(num)		((num)-1)
 
 typedef	struct	{
-  u32	type;		/* Type ¼ïÊÌ G_OBJLT_TLUT                         */
-  u64	*image;		/* DRAM ¾å¤Î¥Æ¥¯¥¹¥Á¥ã¥½¡¼¥¹¥¢¥É¥ì¥¹              */
-  u16	phead;		/* ¥í¡¼¥ÉÀèÆ¬¤Î¥Ñ¥ì¥Ã¥ÈÈÖ¹æ 256 °Ê¾å 511 °Ê²¼     */
-  u16	pnum;		/* ¥í¡¼¥É¤¹¤ë¥Ñ¥ì¥Ã¥È¿ô - 1                       */
-  u16   zero;		/* ¾ï¤Ë 0 ¤òÂåÆþ¤¹¤ë                              */
-  u16	sid;		/* STATE ID  4 ¤ÎÇÜ¿ô¤Ç 0,4,8,12 ¤Î¤É¤ì¤«         */
+  u32	type;		/* Type ï¿½ï¿½ï¿½ï¿½ G_OBJLT_TLUT                         */
+  u64	*image;		/* DRAM ï¿½ï¿½Î¥Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã¥½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¥ì¥¹              */
+  u16	phead;		/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½Î¥Ñ¥ï¿½Ã¥ï¿½ï¿½Ö¹ï¿½ 256 ï¿½Ê¾ï¿½ 511 ï¿½Ê²ï¿½     */
+  u16	pnum;		/* ï¿½ï¿½ï¿½ï¿½ï¿½É¤ï¿½ï¿½ï¿½Ñ¥ï¿½Ã¥È¿ï¿½ - 1                       */
+  u16   zero;		/* ï¿½ï¿½ï¿½ 0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½                              */
+  u16	sid;		/* STATE ID  4 ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ 0,4,8,12 ï¿½Î¤É¤ì¤«         */
   u32	flag;		/* STATE flag  */
   u32	mask;		/* STATE mask  */
 } uObjTxtrTLUT_t;		/* 24 bytes */
@@ -235,32 +235,32 @@ typedef	struct	{
 /* GBI Header */
 #ifdef	F3DEX_GBI_2
 #define	G_OBJ_RECTANGLE_R	0xda
-#define	G_OBJ_MOVEMEM		0xdc
-#define	G_RDPHALF_0		0xe4
+#define	G_OBJ_MOVEMEM			0xdc
+#define	G_RDPHALF_0				0xe4
 #define	G_OBJ_RECTANGLE		0x01
-#define	G_OBJ_SPRITE		0x02
-#define	G_SELECT_DL		0x04
+#define	G_OBJ_SPRITE			0x02
+#define	G_SELECT_DL				0x04
 #define	G_OBJ_LOADTXTR		0x05
 #define	G_OBJ_LDTX_SPRITE	0x06
 #define	G_OBJ_LDTX_RECT		0x07
 #define	G_OBJ_LDTX_RECT_R	0x08
-#define	G_BG_1CYC		0x09
-#define	G_BG_COPY		0x0a
+#define	G_BG_1CYC					0x09
+#define	G_BG_COPY					0x0a
 #define	G_OBJ_RENDERMODE	0x0b
 #else
-#define	G_BG_1CYC		0x01
-#define	G_BG_COPY		0x02
+#define	G_BG_1CYC					0x01
+#define	G_BG_COPY					0x02
 #define	G_OBJ_RECTANGLE		0x03
-#define	G_OBJ_SPRITE		0x04
-#define	G_OBJ_MOVEMEM		0x05
-#define	G_SELECT_DL		0xb0
+#define	G_OBJ_SPRITE			0x04
+#define	G_OBJ_MOVEMEM			0x05
+#define	G_SELECT_DL				0xb0
 #define	G_OBJ_RENDERMODE	0xb1
 #define	G_OBJ_RECTANGLE_R	0xb2
 #define	G_OBJ_LOADTXTR		0xc1
 #define	G_OBJ_LDTX_SPRITE	0xc2
 #define	G_OBJ_LDTX_RECT		0xc3
 #define	G_OBJ_LDTX_RECT_R	0xc4
-#define	G_RDPHALF_0		0xe4
+#define	G_RDPHALF_0				0xe4
 #endif
 
 /*---------------------------------------------------------------------------*
@@ -322,7 +322,7 @@ typedef	struct	{
 /*---------------------------------------------------------------------------*
  *	Set general status
  *---------------------------------------------------------------------------*/
-#define	G_MW_GENSTAT	0x08	/* G_MW_FOG ¤ÈÆ±¤¸ÃÍ¤Ê¤Î¤ÇÃí°Õ */
+#define	G_MW_GENSTAT	0x08	/* G_MW_FOG ï¿½ï¿½Æ±ï¿½ï¿½ï¿½Í¤Ê¤Î¤ï¿½ï¿½ï¿½ï¿½ï¿½ */
 
 #define	gSPSetStatus(pkt, sid, val)	\
 	gMoveWd((pkt), G_MW_GENSTAT, (sid), (val))
@@ -332,13 +332,13 @@ typedef	struct	{
 /*---------------------------------------------------------------------------*
  *	Set Object Render Mode
  *---------------------------------------------------------------------------*/
-#define	G_OBJRM_NOTXCLAMP	0x01
-#define	G_OBJRM_XLU		0x02	/* Ignored */
-#define	G_OBJRM_ANTIALIAS	0x04	/* Ignored */
-#define	G_OBJRM_BILERP		0x08
+#define	G_OBJRM_NOTXCLAMP			0x01
+#define	G_OBJRM_XLU						0x02	/* Ignored */
+#define	G_OBJRM_ANTIALIAS			0x04	/* Ignored */
+#define	G_OBJRM_BILERP				0x08
 #define	G_OBJRM_SHRINKSIZE_1	0x10
 #define	G_OBJRM_SHRINKSIZE_2	0x20
-#define	G_OBJRM_WIDEN		0x40
+#define	G_OBJRM_WIDEN					0x40
 
 #define	gSPObjRenderMode(pkt, mode)   gImmp1((pkt),G_OBJ_RENDERMODE,(mode))
 #define	gsSPObjRenderMode(mode)	      gsImmp1(     G_OBJ_RENDERMODE,(mode))
@@ -351,14 +351,14 @@ typedef	struct	{
         CVG_X_ALPHA | ALPHA_CVG_SEL | ZMODE_OPA | TEX_EDGE |   \
         GBL_c##clk(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_1MA)
 
-#define G_RM_SPRITE		G_RM_OPA_SURF
-#define G_RM_SPRITE2		G_RM_OPA_SURF2
-#define G_RM_RA_SPRITE  	RM_RA_SPRITE(1)
-#define G_RM_RA_SPRITE2		RM_RA_SPRITE(2)
-#define G_RM_AA_SPRITE		G_RM_AA_TEX_TERR
-#define G_RM_AA_SPRITE2		G_RM_AA_TEX_TERR2
-#define G_RM_XLU_SPRITE		G_RM_XLU_SURF
-#define G_RM_XLU_SPRITE2	G_RM_XLU_SURF2
+#define G_RM_SPRITE					G_RM_OPA_SURF
+#define G_RM_SPRITE2				G_RM_OPA_SURF2
+#define G_RM_RA_SPRITE			RM_RA_SPRITE(1)
+#define G_RM_RA_SPRITE2			RM_RA_SPRITE(2)
+#define G_RM_AA_SPRITE			G_RM_AA_TEX_TERR
+#define G_RM_AA_SPRITE2			G_RM_AA_TEX_TERR2
+#define G_RM_XLU_SPRITE			G_RM_XLU_SURF
+#define G_RM_XLU_SPRITE2		G_RM_XLU_SURF2
 #define G_RM_AA_XLU_SPRITE	G_RM_AA_XLU_SURF
 #define G_RM_AA_XLU_SPRITE2	G_RM_AA_XLU_SURF2
 

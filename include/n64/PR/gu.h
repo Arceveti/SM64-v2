@@ -2,15 +2,15 @@
 #define _GU_H_
 
 /**************************************************************************
- *									  *
- *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
- *									  *
+ *																		  *
+ *				 Copyright (C) 1994, Silicon Graphics, Inc.				  *
+ *																		  *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *																		  *
  **************************************************************************/
 
 /**************************************************************************
@@ -203,9 +203,9 @@ extern float sqrtf(float value);
 #define GU_PARSERDP_VERBOSE		1
 #define GU_PARSERDP_PRAREA		2
 #define GU_PARSERDP_PRHISTO		4
-#define GU_PARSERDP_DUMPONLY           32  /* doesn't need to be same as */
-                                           /* GU_PARSEGBI_DUMPOLNY, but this */
-                                           /* allows app to use interchangeably */
+#define GU_PARSERDP_DUMPONLY	32	/* doesn't need to be same as */
+									/* GU_PARSEGBI_DUMPOLNY, but this */
+									/* allows app to use interchangeably */
 
 extern void guParseRdpDL(u64 *rdp_dl, u64 nbytes, u8 flags);
 extern void guParseString(char *StringPointer, u64 nbytes);
@@ -228,25 +228,25 @@ guBlinkRdpDL(u64 *rdp_dl_in, u64 nbytes_in,
              u8 flags);
  
 /* flag values for guParseGbiDL() */
-#define GU_PARSEGBI_ROWMAJOR	        1
-#define GU_PARSEGBI_NONEST		2
-#define GU_PARSEGBI_FLTMTX		4
-#define GU_PARSEGBI_SHOWDMA		8
-#define GU_PARSEGBI_ALLMTX		16
-#define GU_PARSEGBI_DUMPONLY		32
+#define	GU_PARSEGBI_ROWMAJOR	1
+#define	GU_PARSEGBI_NONEST		2
+#define	GU_PARSEGBI_FLTMTX		4
+#define	GU_PARSEGBI_SHOWDMA		8
+#define	GU_PARSEGBI_ALLMTX		16
+#define	GU_PARSEGBI_DUMPONLY	32
 /*
-#define GU_PARSEGBI_HANGAFTER		64
-#define GU_PARSEGBI_NOTEXTURES		128
+#define GU_PARSEGBI_HANGAFTER	64
+#define GU_PARSEGBI_NOTEXTURES	128
 */
 extern void guParseGbiDL(u64 *gbi_dl, u32 nbytes, u8 flags);
 extern void guDumpGbiDL(OSTask *tp,u8 flags);
 
-#define  GU_PARSE_GBI_TYPE    1
-#define  GU_PARSE_RDP_TYPE    2
-#define  GU_PARSE_READY       3
-#define  GU_PARSE_MEM_BLOCK   4
-#define  GU_PARSE_ABI_TYPE    5
-#define  GU_PARSE_STRING_TYPE 6
+#define	GU_PARSE_GBI_TYPE		1
+#define	GU_PARSE_RDP_TYPE		2
+#define	GU_PARSE_READY			3
+#define	GU_PARSE_MEM_BLOCK		4
+#define	GU_PARSE_ABI_TYPE		5
+#define	GU_PARSE_STRING_TYPE	6
 
 typedef struct {
     int    dataSize;

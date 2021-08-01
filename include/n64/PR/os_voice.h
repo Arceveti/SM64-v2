@@ -54,14 +54,14 @@ typedef struct {		/* Voice Recognition System */
 
 #define	VOICE_WARN_TOO_SMALL	0x0400
 #define	VOICE_WARN_TOO_LARGE	0x0800
-#define	VOICE_WARN_NOT_FIT	0x4000
+#define	VOICE_WARN_NOT_FIT		0x4000
 #define	VOICE_WARN_TOO_NOISY	0x8000
 
 #define	VOICE_STATUS_READY	0
 #define	VOICE_STATUS_START	1
 #define	VOICE_STATUS_CANCEL	3
-#define	VOICE_STATUS_BUSY	5
-#define	VOICE_STATUS_END	7
+#define	VOICE_STATUS_BUSY		5
+#define	VOICE_STATUS_END		7
 
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)

@@ -1,14 +1,14 @@
 
 /**************************************************************************
- *									  *
- *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
- *									  *
+ *																		  *
+ *				 Copyright (C) 1994, Silicon Graphics, Inc.				  *
+ *																		  *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *																		  *
  **************************************************************************/
 
 /**************************************************************************
@@ -107,7 +107,7 @@ typedef struct _Region_s {
  *
  */
 extern void	*osCreateRegion(void *, u32, u32, u32);
-extern void 	*osMalloc(void *); 
+extern void	*osMalloc(void *); 
 extern void	osFree(void *, void *); 
 extern s32	osGetRegionBufCount(void *); 
 extern s32	osGetRegionBufSize(void *); 
@@ -119,5 +119,3 @@ extern s32	osGetRegionBufSize(void *);
 
 
 #endif  /* _REGION_H_ */
-
-

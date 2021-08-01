@@ -17,19 +17,19 @@ extern "C" {
  *      GBI Commands for ZSort microcode
  *===========================================================================*/
 /* GBI Header */
-#define	G_ZS_ZOBJ		0x80
-#define	G_ZS_RDPCMD		0x81
-#define	G_ZS_MOVEMEM		0xdc
+#define	G_ZS_ZOBJ					0x80
+#define	G_ZS_RDPCMD				0x81
+#define	G_ZS_MOVEMEM			0xdc
 #define	G_ZS_SENDSIGNAL		0xda
 #define	G_ZS_WAITSIGNAL		0xd9
-#define	G_ZS_SETSUBDL		0xd8
+#define	G_ZS_SETSUBDL			0xd8
 #define	G_ZS_LINKSUBDL		0xd7
 #define	G_ZS_MULT_MPMTX		0xd6
-#define	G_ZS_MTXCAT		0xd5
-#define	G_ZS_MTXTRNSP		0xd4
+#define	G_ZS_MTXCAT				0xd5
+#define	G_ZS_MTXTRNSP			0xd4
 #define	G_ZS_LIGHTING_L		0xd3	/* Not use */
-#define	G_ZS_LIGHTING		0xd2
-#define	G_ZS_XFMLIGHT		0xd1
+#define	G_ZS_LIGHTING			0xd2
+#define	G_ZS_XFMLIGHT			0xd1
 #define	G_ZS_INTERPOLATE	0xd0
 
 /*------------------------------------------------------------------------*
@@ -74,15 +74,15 @@ extern "C" {
  *	+--------+--------+--------+--------+
  *	Read/Write DMEM
  */
-#define	GZM_USER0		0
-#define	GZM_USER1		2
-#define	GZM_MMTX		4
-#define	GZM_PMTX		6
-#define	GZM_MPMTX		8
-#define	GZM_OTHERMODE		10
-#define	GZM_VIEWPORT		12
-#define	GZF_LOAD		0
-#define	GZF_SAVE		1
+#define	GZM_USER0			0
+#define	GZM_USER1			2
+#define	GZM_MMTX			4
+#define	GZM_PMTX			6
+#define	GZM_MPMTX			8
+#define	GZM_OTHERMODE	10
+#define	GZM_VIEWPORT	12
+#define	GZF_LOAD			0
+#define	GZF_SAVE			1
 
 #define	gSPZMoveMem(pkt, id, ofs, len, buffer, flag)		\
 {								\
@@ -429,12 +429,12 @@ typedef	struct	{
   s16	wi;
 } zVtxDest;
 
-#define	GZ_CC_RIGHT	0x01
-#define	GZ_CC_TOP	0x02
-#define	GZ_CC_NEAR	0x04
-#define	GZ_CC_LEFT	0x10
+#define	GZ_CC_RIGHT		0x01
+#define	GZ_CC_TOP			0x02
+#define	GZ_CC_NEAR		0x04
+#define	GZ_CC_LEFT		0x10
 #define	GZ_CC_BOTTOM	0x20
-#define	GZ_CC_FAR	0x40
+#define	GZ_CC_FAR			0x40
 
 /*-----------------------------------------------------*/
 #define	ZSIZE_NSRC	 3
@@ -462,8 +462,8 @@ typedef union   {
 
 /*-----------------------------------------------------*/
 #define	ZSIZE_LIGHT		24
-#define	ZSIZE_DEFUSE		16
-#define	ZSIZE_AMBIENT		 8
+#define	ZSIZE_DEFUSE	16
+#define	ZSIZE_AMBIENT	 8
 
 /*------------------------------------------------------------------------*/
 /* ZObject: Common header */
@@ -617,8 +617,8 @@ typedef	union	{
 /*===========================================================================*
  *      External functions 
  *===========================================================================*/
-extern  u64     gspZSort_fifoTextStart[], gspZSort_fifoTextEnd[];
-extern  u64     gspZSort_fifoDataStart[], gspZSort_fifoDataEnd[];
+extern  u64     gspZSort_fifoTextStart[],		 gspZSort_fifoTextEnd[];
+extern  u64     gspZSort_fifoDataStart[],		 gspZSort_fifoDataEnd[];
 extern  u64     gspZSort_pl_fifoTextStart[], gspZSort_pl_fifoTextEnd[];
 extern  u64     gspZSort_pl_fifoDataStart[], gspZSort_pl_fifoDataEnd[];
 #endif

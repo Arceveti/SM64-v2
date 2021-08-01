@@ -204,7 +204,7 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
         invertedHMag = 1.0f / hMag;
         (*mtx)[0][0] = ((-unit.z * c) - (s * unit.y * unit.x)) * invertedHMag;
         (*mtx)[1][0] = (( unit.z * s) - (c * unit.y * unit.x)) * invertedHMag;
-        (*mtx)[2][0] = -unit.x;
+        (*mtx)[2][0] =                               -unit.x;
         (*mtx)[3][0] = 0.0f;
 
         (*mtx)[0][1] = s * hMag;
@@ -214,7 +214,7 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
 
         (*mtx)[0][2] = (( c * unit.x) - (s * unit.y * unit.z)) * invertedHMag;
         (*mtx)[1][2] = ((-s * unit.x) - (c * unit.y * unit.z)) * invertedHMag;
-        (*mtx)[2][2] = -unit.z;
+        (*mtx)[2][2] =                               -unit.z;
         (*mtx)[3][2] = 0.0f;
 
         (*mtx)[0][3] = 0.0f;
@@ -472,22 +472,18 @@ f32 gd_mat4f_det(Mat4f *mtx) {
     inv.r1.c0 = (*mtx)[3][2];
     inv.r0.c0 = (*mtx)[3][3];
 
-    det = (inv.r3.c3
-                * gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                             inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                             inv.r0.c2, inv.r0.c1, inv.r0.c0)
-         - inv.r2.c3
-                * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                             inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                             inv.r0.c2, inv.r0.c1, inv.r0.c0))
-         + inv.r1.c3
-                * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                             inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                             inv.r0.c2, inv.r0.c1, inv.r0.c0)
-         - inv.r0.c3
-                * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                             inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                             inv.r1.c2, inv.r1.c1, inv.r1.c0);
+    det = (inv.r3.c3 * gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                  inv.r1.c2, inv.r1.c1, inv.r1.c0,
+                                  inv.r0.c2, inv.r0.c1, inv.r0.c0)
+         - inv.r2.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                  inv.r1.c2, inv.r1.c1, inv.r1.c0,
+                                  inv.r0.c2, inv.r0.c1, inv.r0.c0))
+         + inv.r1.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                  inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                  inv.r0.c2, inv.r0.c1, inv.r0.c0)
+         - inv.r0.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                  inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                  inv.r1.c2, inv.r1.c1, inv.r1.c0);
 
     return det;
 }
@@ -583,12 +579,8 @@ void gd_create_rot_matrix(Mat4f *mtx, struct GdVec3f *vec, f32 s, f32 c) {
  * Creates a rotation matrix about vector 'vec' with ang in degrees.
  */
 void gd_create_rot_mat_angular(Mat4f *mtx, struct GdVec3f *vec, f32 ang) {
-    f32 s;
-    f32 c;
-
-    s = gd_sin_d(ang / (DEG_PER_RAD / 2.0f));
-    c = gd_cos_d(ang / (DEG_PER_RAD / 2.0f));
-
+    f32 s = gd_sin_d(ang / (DEG_PER_RAD / 2.0f));
+    f32 c = gd_cos_d(ang / (DEG_PER_RAD / 2.0f));
     gd_create_rot_matrix(mtx, vec, s, c);
 }
 
@@ -672,7 +664,7 @@ void gd_mat4f_mult_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
 
 #define MAT4_DOT_PROD(A, B, R, row, col)                                                               \
     {                                                                                                  \
-        (R)[(row)][(col)]  = (A)[(row)][0] * (B)[0][(col)];                                             \
+        (R)[(row)][(col)]  = (A)[(row)][0] * (B)[0][(col)];                                            \
         (R)[(row)][(col)] += (A)[(row)][1] * (B)[1][(col)];                                            \
         (R)[(row)][(col)] += (A)[(row)][2] * (B)[2][(col)];                                            \
         (R)[(row)][(col)] += (A)[(row)][3] * (B)[3][(col)];                                            \

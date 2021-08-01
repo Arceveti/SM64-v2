@@ -45,10 +45,10 @@ extern "C" {
 #define ENABLEPORTALS
 #endif
 
-#define UP_MAXPVERTS 	16		/* max number of portal verts	*/
-#define UP_MAXCELLS	50		/* max number of cells		*/
-#define UP_CELLNL	32		/* max length of cell names 	*/
-#define UP_OBNL		32		/* max length of obejct names 	*/
+#define UP_MAXPVERTS	16		/* max number of portal verts	*/
+#define UP_MAXCELLS		50		/* max number of cells		*/
+#define UP_CELLNL		32		/* max length of cell names 	*/
+#define UP_OBNL			32		/* max length of obejct names 	*/
     
 typedef struct
 {
@@ -71,21 +71,21 @@ typedef struct _upPortalData
 
 typedef struct _upCellData
 {
-    int 	numportals;		/* number of portals		*/
-    int 	numobjects;		/* number of objects		*/
-    int 	rendered;		/* last frame number rendered	*/
+    int		numportals;		/* number of portals		*/
+    int		numobjects;		/* number of objects		*/
+    int		rendered;		/* last frame number rendered	*/
     _portalptr	*portals;		/* array for the actual portals	*/
-    _objectptr  *objects;		/* array for 'detail' objects	*/
+    _objectptr	*objects;		/* array for 'detail' objects	*/
     upBox	bbox;			/* bounding box of the cell	*/
     Gfx		*dlist;			/* associated display list	*/
     char	name[UP_CELLNL];	/* name of the cell		*/
-    float 	eyeheight;		/* height to constrain eyept to */
+    float	eyeheight;		/* height to constrain eyept to */
     int		zone;			/* current zone number		*/
 } upCellData;
 
 typedef struct _upObjectData
 {
-    int 	rendered;		/* last frame number rendered   */
+    int		rendered;		/* last frame number rendered   */
     upBox	bbox;			/* bounding box for the object 	*/
     Gfx		*dlist;			/* associated display list	*/
     char	name[UP_OBNL];		/* name of the object		*/
@@ -93,14 +93,14 @@ typedef struct _upObjectData
 
 typedef struct
 {
-    int 	numcells;		/* how many cells are there?	*/
+    int		numcells;		/* how many cells are there?	*/
     upCellData	cells[UP_MAXCELLS];   	/* the actual cells		*/
     Gfx		*rootdlist;		/* display list for all cells	*/
     vec2	portalmin, portalmax;	/* XY bbox used by upCheckCells */
     float	near, far;		/* near, far clipping planes	*/
     FMatrix	viewmat;		/* viewing matrix (world->eye)	*/
     FMatrix	projmat;		/* proj matrix (eye->screen)	*/
-    FMatrix 	compmat;		/* view * proj (world->screen)	*/
+    FMatrix	compmat;		/* view * proj (world->screen)	*/
     int		portaldepth;		/* depth of the portal stack	*/
     int		framecount;		/* current frame number		*/
 } upLocateData;
@@ -116,7 +116,7 @@ extern void upToggleScissorBox();
 /*
  * Globals:
  */
-extern upLocateData 	upLocator;	/* also extern by test_portals.h */
+extern upLocateData		upLocator;	/* also extern by test_portals.h */
 
 /*
  * Macros:

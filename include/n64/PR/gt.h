@@ -70,9 +70,9 @@ extern "C" {
  * When each of these bits is '1', the comments below explain
  * the effect on the triangles.
  */
-#define GT_ZBUFFER		G_ZBUFFER
-#define GT_TEXTURE		G_TEXTURE_ENABLE	/* texture ON */
-#define GT_CULL_BACK		G_CULL_BACK		/* reject backfaces */
+#define GT_ZBUFFER			G_ZBUFFER
+#define GT_TEXTURE			G_TEXTURE_ENABLE	/* texture ON */
+#define GT_CULL_BACK		G_CULL_BACK			/* reject backfaces */
 #define GT_SHADING_SMOOTH	G_SHADING_SMOOTH	/* smooth shade ON */
 
 /*

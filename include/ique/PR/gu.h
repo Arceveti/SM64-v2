@@ -2,15 +2,15 @@
 #define _GU_H_
 
 /**************************************************************************
- *									  *
- *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
- *									  *
+ *																		  *
+ *				 Copyright (C) 1994, Silicon Graphics, Inc.				  *
+ *																		  *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *																		  *
  **************************************************************************/
 
 /**************************************************************************
@@ -233,10 +233,10 @@ guBlinkRdpDL(u64 *rdp_dl_in, u64 nbytes_in,
 #define GU_PARSEGBI_FLTMTX		4
 #define GU_PARSEGBI_SHOWDMA		8
 #define GU_PARSEGBI_ALLMTX		16
-#define GU_PARSEGBI_DUMPONLY		32
+#define GU_PARSEGBI_DUMPONLY	32
 /*
-#define GU_PARSEGBI_HANGAFTER		64
-#define GU_PARSEGBI_NOTEXTURES		128
+#define GU_PARSEGBI_HANGAFTER	64
+#define GU_PARSEGBI_NOTEXTURES	128
 */
 extern void guParseGbiDL(u64 *gbi_dl, u32 nbytes, u8 flags);
 extern void guDumpGbiDL(OSTask *tp,u8 flags);

@@ -41,12 +41,12 @@ typedef struct
      * _emAlign64b (64bit alignment checking code) will properly check for
      * alignment.
      */
-    unsigned long int	buff[1024];	/* could be IMEM or DMEM */
-    char		string[256];	/* pass command string */
-    rsp_shm_cmd_t	cmd;		/* what to do */
-    int			reg;		/* which register */
-    unsigned long int	addr;		/* RSP memory address for copy */
-    unsigned long int	length;		/* length of data to be copied */
+    unsigned long int	buff[1024];		/* could be IMEM or DMEM */
+    char				string[256];	/* pass command string */
+    rsp_shm_cmd_t		cmd;			/* what to do */
+    int					reg;			/* which register */
+    unsigned long int	addr;			/* RSP memory address for copy */
+    unsigned long int	length;			/* length of data to be copied */
 } rsp_shm_buf_t;
 
 
