@@ -519,14 +519,17 @@
     #define BUTTERFLY_ANIM_RESTING                          0x1
 
 /* Hoot */
-    /* oHootAvailability */
-    #define HOOT_AVAIL_ASLEEP_IN_TREE                       0x0
-    #define HOOT_AVAIL_WANTS_TO_TALK                        0x1
-    #define HOOT_AVAIL_READY_TO_FLY                         0x2
     /* oAction */
     #define HOOT_ACT_ASCENT                                 0x0
     #define HOOT_ACT_CARRY                                  0x1
     #define HOOT_ACT_TIRED                                  0x2
+    /* oHootAvailability */
+    #define HOOT_AVAIL_ASLEEP_IN_TREE                       0x0
+    #define HOOT_AVAIL_WANTS_TO_TALK                        0x1
+    #define HOOT_AVAIL_READY_TO_FLY                         0x2
+    /* Animations */
+    #define HOOT_ANIM_DEFAULT                               0x0
+    #define HOOT_ANIM_HOLDING_MARIO                         0x1
 
 /* Bully (all variants) */
     /* oBehParams2ndByte */
@@ -559,10 +562,24 @@
     #define JS_RING_SPAWNER_ACT_ACTIVE                      0x0
     #define JS_RING_SPAWNER_ACT_INACTIVE                    0x1
 
+/* Hidden Star */
+    /* oAction */
+    #define HIDDEN_STAR_ACT_INACTIVE                        0x0
+    #define HIDDEN_STAR_ACT_ACTIVE                          0x1
+
 /* Celebration Star */
     /* oAction */
     #define CELEB_STAR_ACT_SPIN_AROUND_MARIO                0x0
     #define CELEB_STAR_ACT_FACE_CAMERA                      0x1
+
+/* Grand Star */
+    /* oAction */
+    #define GRAND_STAR_ACT_APPEAR                           0x0
+    #define GRAND_STAR_ACT_JUMP                             0x1
+    #define GRAND_STAR_ACT_WAIT_FOR_INTERACTION             0x2
+    /* oSubAction */
+        /* GRAND_STAR_ACT_JUMP */
+    #define GRAND_STAR_SUB_ACT_START_JUMP                   0x0
 
 /* LLL Drawbridge */
     /* oAction */
@@ -753,9 +770,12 @@
     #define ARROW_LIFT_ACT_MOVING_AWAY                      0x1
     #define ARROW_LIFT_ACT_MOVING_BACK                      0x2
 
-    /* status */
-    #define ARROW_LIFT_NOT_DONE_MOVING                      0x0
-    #define ARROW_LIFT_DONE_MOVING                          0x1
+/* Intro Peach */
+    /* oAction */
+    #define PEACH_ACT_INIT                                  0x0
+    #define PEACH_ACT_FADE_1                                0x1
+    #define PEACH_ACT_UNFADE                                0x2
+    #define PEACH_ACT_FADE_2                                0x3
 
 /* Yoshi */
     /* oAction */
@@ -835,16 +855,18 @@
     #define GOOMBA_TRIPLET_SPAWNER_ACT_LOADED               0x1
 
 /* Goomba */
+    /* oAction */
+    #define GOOMBA_ACT_WALK                                 0x0
+    #define GOOMBA_ACT_ATTACKED_MARIO                       0x1
+    #define GOOMBA_ACT_JUMP                                 0x2
     /* oBehParams2ndByte */
     #define GOOMBA_BP_SIZE_MASK                             0x00000003
     #define GOOMBA_SIZE_REGULAR                             0x00000000
     #define GOOMBA_SIZE_HUGE                                0x00000001
     #define GOOMBA_SIZE_TINY                                0x00000002
     #define GOOMBA_BP_TRIPLET_FLAG_MASK                     0x000000FC
-    /* oAction */
-    #define GOOMBA_ACT_WALK                                 0x0
-    #define GOOMBA_ACT_ATTACKED_MARIO                       0x1
-    #define GOOMBA_ACT_JUMP                                 0x2
+    /* Animations */
+    #define GOOMBA_ANIM_DEFAULT                             0x0
 
 /* Chain chomp */
     /* oAction */
@@ -916,16 +938,15 @@
     #define CLOUD_BP_FWOOSH                                 0x0
     #define CLOUD_BP_LAKITU_CLOUD                           0x1
 
-//! TODO: name these
 /* Intro Lakitu */
     /* oAction */
-    #define INTRO_LAKITU_ACT_0                              0x00
-    #define INTRO_LAKITU_ACT_1                              0x01
-    #define INTRO_LAKITU_ACT_2                              0x02
-    #define INTRO_LAKITU_ACT_3                              0x03
-    #define INTRO_LAKITU_ACT_100                            0x64
-    #define INTRO_LAKITU_ACT_101                            0x65
-    #define INTRO_LAKITU_ACT_102                            0x66
+    #define INTRO_LAKITU_ACT_INIT                           0x0
+    #define INTRO_LAKITU_ACT_CUTSCENE_INTRO_1               0x1
+    #define INTRO_LAKITU_ACT_CUTSCENE_INTRO_2               0x2
+    #define INTRO_LAKITU_ACT_CUTSCENE_INTRO_3               0x3
+    #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_1         0x64
+    #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2         0x65
+    #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3         0x66
 
 /* Camera Lakitu */
     /* oAction */
@@ -1106,7 +1127,13 @@
 
 /* Openable Grill Door */
     /* oAction */
-    #define OEPNABLE_GRILL_SPAWN                            0x0
+    #define OPENABLE_GRILL_DOOR_ACT_CLOSED                  0x0
+    #define OPENABLE_GRILL_DOOR_ACT_OPENING                 0x1
+    #define OPENABLE_GRILL_DOOR_ACT_OPEN                    0x2
+
+/* Openable Grill */
+    /* oAction */
+    #define OEPNABLE_GRILL_ACT_SPAWN                        0x0
     #define OEPNABLE_GRILL_IDLE_CLOSED                      0x1
     #define OEPNABLE_GRILL_OPENING                          0x2
     #define OEPNABLE_GRILL_IDLE_OPEN                        0x3
@@ -1293,8 +1320,8 @@
 
 /* Haunted Chair */
     /* oAction */
-    #define HAUNTED_CHAIR_ACT_0                             0x0
-    #define HAUNTED_CHAIR_ACT_1                             0x1
+    #define HAUNTED_CHAIR_ACT_FALL_OR_SPIN                  0x0
+    #define HAUNTED_CHAIR_ACT_FLY                           0x1
 
 /* Fire piranha plant */
     /* oAction */
@@ -1445,6 +1472,17 @@
     #define CHUCKYA_ANIM_THROW_2                            0x3
     #define CHUCKYA_ANIM_IDLE                               0x4
 
+/* Heave Ho */
+    /* oAction */
+    #define HEAVE_HO_ACT_INACTIVE                           0x0
+    #define HEAVE_HO_ACT_WINDING_UP                         0x1
+    #define HEAVE_HO_ACT_MOVING                             0x2
+    #define HEAVE_HO_ACT_THROW_MARIO                        0x3
+    /* Animations */
+    #define HEAVE_HO_ANIM_MOVING                            0x0
+    #define HEAVE_HO_ANIM_THROW                             0x1
+    #define HEAVE_HO_ANIM_WINDING_UP                        0x2
+
 /* Klepto */
     /* oAction */
     #define KLEPTO_ACT_CIRCLE_TARGET_HOLDING                0x0
@@ -1591,5 +1629,14 @@
     #define WF_ATTACK_NONE                                  0x0
     #define WF_ATTACK_GROUND                                0x1
     #define WF_ATTACK_AIR                                   0x2
+
+/* Intro Scene */
+    /* gCutsceneObjSpawn */
+    #define CUTSCENE_OBJ_NONE                               0x0
+    #define CUTSCENE_OBJ_BEGINNING_PEACH                    0x5
+    #define CUTSCENE_OBJ_BEGINNING_LAKITU                   0x6
+    #define CUTSCENE_OBJ_7_END_BIRDS_1                      0x7
+    #define CUTSCENE_OBJ_5_END_BIRDS_2                      0x8
+    #define CUTSCENE_OBJ_2_END_BIRDS_1                      0x9
 
 #endif // OBJECT_CONSTANTS_H

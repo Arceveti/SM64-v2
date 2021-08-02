@@ -13,33 +13,33 @@ void intro_peach_set_pos_and_opacity(struct Object *o, f32 targetOpacity, f32 in
     vec3f_set_dist_and_angle(gLakituState.pos, newPos, o->oIntroPeachDistToCamera, o->oIntroPeachPitchFromFocus + focusPitch,
                              o->oIntroPeachYawFromFocus + focusYaw);
     vec3f_to_object_pos(o, newPos);
-    newOpacity = o->oOpacity;
+    newOpacity  = o->oOpacity;
     camera_approach_f32_symmetric_bool(&newOpacity, targetOpacity, increment);
     o->oOpacity = newOpacity;
 }
 
 void bhv_intro_peach_loop(void) {
     switch (gCurrentObject->oAction) {
-        case 0:
-            gCurrentObject->oAction = 1;
-            gCurrentObject->oFaceAnglePitch = 0x400;
-            gCurrentObject->oFaceAngleYaw = 0x7500;
-            gCurrentObject->oFaceAngleRoll = -0x3700;
-            gCurrentObject->oIntroPeachDistToCamera = 186.0f;
-            gCurrentObject->oIntroPeachPitchFromFocus = -9984.0f;
-            gCurrentObject->oIntroPeachYawFromFocus = -768.0f;
-            gCurrentObject->oOpacity = 255;
-            gCurrentObject->header.gfx.animInfo.animFrame = 100;
+        case PEACH_ACT_INIT:
+            gCurrentObject->oAction                       = PEACH_ACT_FADE_1;
+            gCurrentObject->oFaceAnglePitch               =    0x400;
+            gCurrentObject->oFaceAngleYaw                 =   0x7500;
+            gCurrentObject->oFaceAngleRoll                =  -0x3700;
+            gCurrentObject->oIntroPeachDistToCamera       =   186.0f;
+            gCurrentObject->oIntroPeachPitchFromFocus     = -9984.0f;
+            gCurrentObject->oIntroPeachYawFromFocus       =  -768.0f;
+            gCurrentObject->oOpacity                      =      255;
+            gCurrentObject->header.gfx.animInfo.animFrame =      100;
             break;
-        case 1:
+        case PEACH_ACT_FADE_1:
             intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 0.0f);
-            if (gCurrentObject->oTimer > 20) gCurrentObject->oAction = 2;
+            if (gCurrentObject->oTimer > 20) gCurrentObject->oAction = PEACH_ACT_UNFADE;
             break;
-        case 2:
+        case PEACH_ACT_UNFADE:
             intro_peach_set_pos_and_opacity(gCurrentObject, 255.0f, 3.0f);
-            if ((gCurrentObject->oTimer > 100) && (get_dialog_id() == DIALOG_NONE)) gCurrentObject->oAction = 3;
+            if ((gCurrentObject->oTimer > 100) && (get_dialog_id() == DIALOG_NONE)) gCurrentObject->oAction = PEACH_ACT_FADE_2;
             break;
-        case 3:
+        case PEACH_ACT_FADE_2:
             intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 8.0f);
             if (gCurrentObject->oTimer > 60) obj_mark_for_deletion(gCurrentObject);
             break;

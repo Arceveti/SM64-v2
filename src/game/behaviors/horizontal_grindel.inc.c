@@ -12,7 +12,7 @@ void bhv_horizontal_grindel_update(void) {
 
             o->oHorizontalGrindelDistToHome = cur_obj_lateral_dist_to_home();
             o->oForwardVel = 0.0f;
-            o->oTimer = 0;
+            o->oTimer      = 0;
         }
 
         if (cur_obj_rotate_yaw_toward(o->oHorizontalGrindelTargetYaw, 0x400)) {
@@ -23,9 +23,9 @@ void bhv_horizontal_grindel_update(void) {
                 } else {
                     cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB_JUMP);
                     o->oForwardVel = 11.0f;
-                    o->oVelY = 70.0f;
-                    o->oGravity = -4.0f;
-                    o->oMoveFlags = 0;
+                    o->oVelY       = 70.0f;
+                    o->oGravity    = -4.0f;
+                    o->oMoveFlags  = 0;
                 }
             }
         } else {

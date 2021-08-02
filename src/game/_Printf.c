@@ -42,18 +42,12 @@ s32 _Printf(char *(*prout)(char *, const char *, size_t), char *dst, const char 
     sp78.size = 0;
     while (TRUE) {
         fmt_ptr = (u8 *) fmt;
-        while ((c = *fmt_ptr) != 0 && c != '%') {
-            fmt_ptr++;
-        }
+        while ((c = *fmt_ptr) != 0 && c != '%') fmt_ptr++;
         _PROUT(dst, fmt, fmt_ptr - (u8 *) fmt);
-        if (c == 0) {
-            return sp78.size;
-        }
+        if (c == 0) return sp78.size;
         fmt = (char *) ++fmt_ptr;
         sp78.flags = 0;
-        for (; (flag_index = strchr(flags_str, *fmt_ptr)) != NULL; fmt_ptr++) {
-            sp78.flags |= flags_arr[flag_index - flags_str];
-        }
+        for (; (flag_index = strchr(flags_str, *fmt_ptr)) != NULL; fmt_ptr++) sp78.flags |= flags_arr[flag_index - flags_str];
         if (*fmt_ptr == '*') {
             sp78.width = va_arg(args, s32);
             if (sp78.width < 0) {
@@ -75,11 +69,7 @@ s32 _Printf(char *(*prout)(char *, const char *, size_t), char *dst, const char 
                 ATOI(sp78.precision, fmt_ptr);
             }
         }
-        if (strchr(length_str, *fmt_ptr) != NULL) {
-            sp78.length = *fmt_ptr++;
-        } else {
-            sp78.length = 0;
-        }
+        sp78.length = (strchr(length_str, *fmt_ptr) != NULL) ? *fmt_ptr++ : 0;
 
         if (sp78.length == 'l' && *fmt_ptr == 'l') {
             sp78.length = 'L';
@@ -120,9 +110,7 @@ static void _Putfld(printf_struct *a0, va_list *args, u8 type, u8 *buff) {
                 a0->value.s64 = va_arg(*args, s32);
             }
 
-            if (a0->length == 'h') {
-                a0->value.s64 = (s16) a0->value.s64;
-            }
+            if (a0->length == 'h') a0->value.s64 = (s16) a0->value.s64;
 
             if (a0->value.s64 < 0) {
                 buff[a0->part1_len++] = '-';
@@ -157,10 +145,7 @@ static void _Putfld(printf_struct *a0, va_list *args, u8 type, u8 *buff) {
 
             if (a0->flags & FLAGS_HASH) {
                 buff[a0->part1_len++] = '0';
-                if (type == 'x' || type == 'X') {
-
-                    buff[a0->part1_len++] = type;
-                }
+                if (type == 'x' || type == 'X') buff[a0->part1_len++] = type;
             }
             a0->buff = (char *) &buff[a0->part1_len];
             _Litob(a0, type);
@@ -209,9 +194,7 @@ static void _Putfld(printf_struct *a0, va_list *args, u8 type, u8 *buff) {
         case 's':
             a0->buff = va_arg(*args, char *);
             a0->part2_len = strlen(a0->buff);
-            if (a0->precision >= 0 && a0->part2_len > a0->precision) {
-                a0->part2_len = a0->precision;
-            }
+            if (a0->precision >= 0 && a0->part2_len > a0->precision) a0->part2_len = a0->precision;
             break;
 
         case '%':

@@ -494,7 +494,7 @@ static s32 act_water_ground_pound(struct MarioState *m) {
     if (m->actionArg == 1) m->actionState = 1;
     
     if (m->actionState == 0) {
-        play_sound(SOUND_GENERAL_SWISH_WATER, m->marioObj->header.gfx.cameraToObject);
+        play_sound(SOUND_GENERAL_WING_FLAP, m->marioObj->header.gfx.cameraToObject);
         if (m->actionTimer < 10) {
             yOffset = 20 - 2 * m->actionTimer;
             if (m->pos[1] + yOffset + 160.0f < m->ceilHeight && m->pos[1] + yOffset + 160.0f < m->waterLevel) {

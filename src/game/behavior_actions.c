@@ -190,9 +190,8 @@ void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
     s32 i;
     s16 separation = 0x10000 / n; // Evenly spread around a circle
     for (i = 0; i < n; i++) {
-        spawn_object_relative(0,
-                              sins(angle + i * separation) * radius, (i + 1) * height,
-                              coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
+        spawn_object_relative(0, sins(angle + i * separation) * radius, (i + 1) * height,
+                                 coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
     }
 
     angle += r * 0x100;
@@ -238,9 +237,7 @@ void vec3f_copy_2(Vec3f dest, Vec3f src) {
 
 s32 set_obj_anim_with_accel_and_sound(s16 frame1, s16 frame2, s32 sound) {
     f32 range;
-    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0) {
-        range = 1.0f;
-    }
+    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0) range = 1.0f;
     if (cur_obj_check_anim_frame_in_range(frame1, range)
      || cur_obj_check_anim_frame_in_range(frame2, range)) {
         cur_obj_play_sound_2(sound);

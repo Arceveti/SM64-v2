@@ -213,7 +213,7 @@ void bhv_white_puff_1_loop(void);
 void bhv_white_puff_2_loop(void);
 void bhv_blue_coin_switch_loop(void);
 void bhv_hidden_blue_coin_loop(void);
-void bhv_openable_cage_door_loop(void);
+void bhv_openable_grill_door_loop(void);
 void bhv_openable_grill_loop(void);
 void bhv_water_level_diamond_loop(void);
 void bhv_init_changing_water_level_loop(void);

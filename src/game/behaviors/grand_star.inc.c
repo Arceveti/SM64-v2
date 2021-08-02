@@ -22,25 +22,25 @@ void grand_star_zero_velocity(void) {
 void bhv_grand_star_loop(void) {
     Vec3f dest;
     dest[0] = dest[1] = dest[2] = 0.0f;
-    if (o->oAction == 0) {
+    if (o->oAction == GRAND_STAR_ACT_APPEAR) {
         if (o->oTimer == 0) {
             obj_set_angle(o, 0, 0, 0);
             o->oAngleVelYaw = 0x400;
             cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
         }
-        if (o->oTimer > 70) o->oAction++;
+        if (o->oTimer > 70) o->oAction = GRAND_STAR_ACT_JUMP;
         spawn_sparkle_particles(3, 200, 80, -60);
-    } else if (o->oAction == 1) {
+    } else if (o->oAction == GRAND_STAR_ACT_JUMP) {
         if (o->oTimer == 0) {
             cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR);
             cutscene_object(CUTSCENE_STAR_SPAWN, o);
             o->oGrandStarArcTime = arc_to_goal_pos(dest, &o->oPosX, 80.0f, -2.0f);
         }
         cur_obj_move_using_fvel_and_gravity();
-        if (o->oSubAction == 0) {
+        if (o->oSubAction == GRAND_STAR_SUB_ACT_START_JUMP) {
             if (o->oPosY < o->oHomeY) {
-                o->oPosY = o->oHomeY;
-                o->oVelY = 60.0f;
+                o->oPosY       = o->oHomeY;
+                o->oVelY       = 60.0f;
                 o->oForwardVel = 0.0f;
                 o->oSubAction++;
                 cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR_JUMP);
@@ -48,14 +48,14 @@ void bhv_grand_star_loop(void) {
         } else if (o->oVelY < 0.0f && o->oPosY < o->oHomeY + 200.0f) {
             o->oPosY = o->oHomeY + 200.0f;
             grand_star_zero_velocity();
-            gObjCutsceneDone = 1;
+            gObjCutsceneDone = TRUE;
             set_mario_npc_dialog(MARIO_DIALOG_STOP);
-            o->oAction++;
+            o->oAction         = GRAND_STAR_ACT_WAIT_FOR_INTERACTION;
             o->oInteractStatus = INT_STATUS_NONE;
             cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR_JUMP);
         }
         spawn_sparkle_particles(3, 200, 80, -60);
-    } else {
+    } else { // act 2
         cur_obj_become_tangible();
         if (o->oInteractStatus & INT_STATUS_INTERACTED) {
             obj_mark_for_deletion(o);

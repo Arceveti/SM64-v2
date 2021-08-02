@@ -229,7 +229,7 @@ extern const BehaviorScript bhvWhitePuffSmoke2[];
 extern const BehaviorScript bhvPurpleSwitchHiddenBoxes[];
 extern const BehaviorScript bhvBlueCoinSwitch[];
 extern const BehaviorScript bhvHiddenBlueCoin[];
-extern const BehaviorScript bhvOpenableCageDoor[];
+extern const BehaviorScript bhvOpenableGrillDoor[];
 extern const BehaviorScript bhvOpenableGrill[];
 extern const BehaviorScript bhvWaterLevelDiamond[];
 extern const BehaviorScript bhvInitializeChangingWaterLevel[];

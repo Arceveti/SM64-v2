@@ -27,7 +27,7 @@ struct GoombaProperties {
     f32 scale;
     u32 deathSound;
     s16 drawDistance;
-    s8 damage;
+    s8  damage;
 };
 
 /**
@@ -79,9 +79,7 @@ void bhv_goomba_triplet_spawner_update(void) {
         if (o->oDistanceToMario < 3000.0f) {
             // The spawner is capable of spawning more than 3 goombas, but this
             // is not used in the game
-            dAngle =
-                0x10000
-                / (((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_EXTRA_GOOMBAS_MASK) >> 2) + 3);
+            dAngle = 0x10000 / (((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_EXTRA_GOOMBAS_MASK) >> 2) + 3);
 
             for (angle = 0, goombaFlag = 1 << 8; angle < 0xFFFF; angle += dAngle, goombaFlag <<= 1) {
                 // Only spawn goombas which haven't been killed yet
@@ -89,8 +87,7 @@ void bhv_goomba_triplet_spawner_update(void) {
                     dx = 500.0f * coss(angle);
                     dz = 500.0f * sins(angle);
 
-                    spawn_object_relative((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK)
-                                              | (goombaFlag >> 6),
+                    spawn_object_relative((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK) | (goombaFlag >> 6),
                                           dx, 0, dz, o, MODEL_GOOMBA, bhvGoomba);
                 }
             }
@@ -111,11 +108,11 @@ void bhv_goomba_init(void) {
     o->oGoombaSize = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
 
     o->oGoombaScale = sGoombaProperties[o->oGoombaSize].scale;
-    o->oDeathSound = sGoombaProperties[o->oGoombaSize].deathSound;
+    o->oDeathSound  = sGoombaProperties[o->oGoombaSize].deathSound;
 
     obj_set_hitbox(o, &sGoombaHitbox);
 
-    o->oDrawingDistance = sGoombaProperties[o->oGoombaSize].drawDistance;
+    o->oDrawingDistance   = sGoombaProperties[o->oGoombaSize].drawDistance;
     o->oDamageOrCoinValue = sGoombaProperties[o->oGoombaSize].damage;
 
     o->oGravity = -8.0f / 3.0f * o->oGoombaScale;
@@ -139,7 +136,6 @@ static void goomba_begin_jump(void) {
 static void mark_goomba_as_dead(void) {
     if (o->parentObj != o) {
         set_object_respawn_info_bits(o->parentObj, (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) >> 2);
-
         o->parentObj->oBehParams = o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
     }
 }
@@ -185,7 +181,7 @@ static void goomba_act_walk(void) {
                 // If mario is far away, walk at a normal pace, turning randomly
                 // and occasionally jumping
 
-                o->oGoombaRelativeSpeed = 4.0f / 3.0f;
+                o->oGoombaRelativeSpeed = (4.0f / 3.0f);
                 if (o->oGoombaWalkTimer != 0) {
                     o->oGoombaWalkTimer--;
                 } else {
@@ -199,7 +195,6 @@ static void goomba_act_walk(void) {
                 }
             }
         }
-
         cur_obj_rotate_yaw_toward(o->oGoombaTargetYaw, 0x200);
     }
 }
@@ -270,22 +265,15 @@ void bhv_goomba_update(void) {
 
         if ((animSpeed = o->oForwardVel / o->oGoombaScale * 0.4f) < 1.0f) animSpeed = 1.0f;
 
-        cur_obj_init_animation_with_accel_and_sound(0, animSpeed);
+        cur_obj_init_animation_with_accel_and_sound(GOOMBA_ANIM_DEFAULT, animSpeed);
 
         switch (o->oAction) {
-            case GOOMBA_ACT_WALK:
-                goomba_act_walk();
-                break;
-            case GOOMBA_ACT_ATTACKED_MARIO:
-                goomba_act_attacked_mario();
-                break;
-            case GOOMBA_ACT_JUMP:
-                goomba_act_jump();
-                break;
+            case GOOMBA_ACT_WALK:           goomba_act_walk();           break;
+            case GOOMBA_ACT_ATTACKED_MARIO: goomba_act_attacked_mario(); break;
+            case GOOMBA_ACT_JUMP:           goomba_act_jump();           break;
         }
 
-        if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO,
-                               sGoombaAttackHandlers[o->oGoombaSize & 1])
+        if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO, sGoombaAttackHandlers[o->oGoombaSize & 1])
          && o->oAction != GOOMBA_ACT_ATTACKED_MARIO) mark_goomba_as_dead();
 
         cur_obj_move_standard(-78);
