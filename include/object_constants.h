@@ -285,6 +285,7 @@
     #define BOWSER_GRAB_STATUS_GRABBED                      0x1
     #define BOWSER_GRAB_STATUS_HOLDING                      0x2
     /* oSubAction */
+        /* BOWSER_ACT_DEAD */
     #define BOWSER_SUB_ACT_DEAD_FLY_BACK                    0x0
     #define BOWSER_SUB_ACT_DEAD_BOUNCE                      0x1
     #define BOWSER_SUB_ACT_DEAD_WAIT                        0x2
@@ -292,20 +293,20 @@
     #define BOWSER_SUB_ACT_DEAD_DEFAULT_END_OVER            0x4
     #define BOWSER_SUB_ACT_DEAD_FINAL_END                   0xA
     #define BOWSER_SUB_ACT_DEAD_FINAL_END_OVER              0xB
-
+        /* BOWSER_ACT_CHARGE_MARIO */
     #define BOWSER_SUB_ACT_CHARGE_START                     0x0
     #define BOWSER_SUB_ACT_CHARGE_RUN                       0x1
     #define BOWSER_SUB_ACT_CHARGE_END                       0x2
     #define BOWSER_SUB_ACT_CHARGE_SLIP                      0x3
-
+        /* BOWSER_ACT_TELEPORT */
     #define BOWSER_SUB_ACT_TELEPORT_START                   0x0
     #define BOWSER_SUB_ACT_TELEPORT_MOVE                    0x1
     #define BOWSER_SUB_ACT_TELEPORT_STOP                    0x2
-
+        /* BOWSER_ACT_HIT_MINE */
     #define BOWSER_SUB_ACT_HIT_MINE_START                   0x0
     #define BOWSER_SUB_ACT_HIT_MINE_FALL                    0x1
     #define BOWSER_SUB_ACT_HIT_MINE_STOP                    0x2
-    
+        /* BOWSER_ACT_JUMP_ONTO_STAGE */
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_IDLE               0x0
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_START              0x1
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_LAND               0x2
@@ -338,6 +339,8 @@
     #define FISH_ACT_INIT                                   0x0
     #define FISH_ACT_ROAM                                   0x1
     #define FISH_ACT_FLEE                                   0x2
+    /* Animations */
+    #define FISH_ANIM_DEFAULT                               0x0
 
 /* Blue Fish Spawner */
     /* oAction: bhv_blue_fish_spawn_loop */
@@ -351,7 +354,6 @@
     #define BLUE_FISH_ACT_TURN                              0x1
     #define BLUE_FISH_ACT_ASCEND                            0x2
     #define BLUE_FISH_ACT_TURN_BACK                         0x3
-
     /* Animations */
     #define BLUE_FISH_ANIM_DEFAULT                          0x0
 
@@ -500,11 +502,9 @@
     #define AMP_BP_ROT_RADIUS_300                           0x1
     #define AMP_BP_ROT_RADIUS_400                           0x2
     #define AMP_BP_ROT_RADIUS_0                             0x3
-
     /* oAction */
     #define AMP_ACT_IDLE                                    0x2
     #define AMP_ACT_ATTACK_COOLDOWN                         0x4
-
     /* oAnimState */
     #define AMP_ANIM_STATE_OFF                              0x0
     #define AMP_ANIM_STATE_ON                               0x1
@@ -645,17 +645,14 @@
     #define BOO_ACT_ATTACKED                                0x3
     #define BOO_ACT_DEATH                                   0x4
     #define BOO_ACT_5                                       0x5
-
     /* oBehParams2ndByte */
     #define BOO_BP_GHOST_HUNT                               0x0
     #define BOO_BP_NORMAL                                   0x1
     #define BOO_BP_MERRY_GO_ROUND                           0x2
-
     /* oBooDeathStatus */
     #define BOO_DEATH_STATUS_ALIVE                          0x0
     #define BOO_DEATH_STATUS_DYING                          0x1
     #define BOO_DEATH_STATUS_DEAD                           0x2
-
     /* attackStatus */
     #define BOO_NOT_ATTACKED                                0x0
     #define BOO_ATTACKED                                    0x1
@@ -666,6 +663,20 @@
     #define BIG_BOO_BP_GHOST_HUNT                           0x0
     #define BIG_BOO_BP_MERRY_GO_ROUND                       0x1
     #define BIG_BOO_BP_BALCONY                              0x2
+
+/* Fishing Boo */
+    /* oAction */
+    #define FISHING_BOO_ACT_0                               0x0
+    #define FISHING_BOO_ACT_1                               0x1
+    #define FISHING_BOO_ACT_2                               0x2
+    #define FISHING_BOO_ACT_3                               0x3
+    #define FISHING_BOO_ACT_4                               0x4
+    #define FISHING_BOO_ACT_5                               0x5
+    #define FISHING_BOO_ACT_6                               0x6
+    #define FISHING_BOO_ACT_SPAWN_FLAMES                    0x7
+    #define FISHING_BOO_ACT_8                               0x8
+    #define FISHING_BOO_ACT_9                               0x9
+    #define FISHING_BOO_ACT_10                              0xA
 
 /* Beta Boo Key */
     /* oAction */
@@ -692,21 +703,47 @@
     #define HAUNTED_BOOKSHELF_ACT_IDLE                      0x0
     #define HAUNTED_BOOKSHELF_ACT_RECEDE                    0x1
 
+/* BBH Bookshelf Manager */
+    /* oAction */
+    #define BOOKSHELF_MANAGER_ACT_SPAWN_SWITCHES            0x0
+    #define BOOKSHELF_MANAGER_ACT_CHECK_ACTIVATE            0x1
+    #define BOOKSHELF_MANAGER_ACT_ACTIVE                    0x2
+    #define BOOKSHELF_MANAGER_ACT_RECEDE                    0x3
+    #define BOOKSHELF_MANAGER_ACT_END                       0x4
+
+/* BBH Book Switch */
+    /* oAction */
+    #define BOOK_SWITCH_ACT_UNPRESSED                       0x0
+    #define BOOK_SWITCH_ACT_ACTIVE                          0x1
+    #define BOOK_SWITCH_ACT_PRESSED                         0x2
+
+/* Flying Bookend */
+    /* oAction */
+    #define FLYING_BOOKEND_ACT_ATTACKED_MARIO              -0x1
+    #define FLYING_BOOKEND_ACT_INIT                         0x0
+    #define FLYING_BOOKEND_ACT_GROW                         0x1
+    #define FLYING_BOOKEND_ACT_TURN_TOWARD_MARIO            0x2
+    #define FLYING_BOOKEND_ACT_FLY_FORWARD                  0x3
+    /* Animations */
+    #define FLYING_BOOKEND_ANIM_UNUSED                      0x0
+    #define FLYING_BOOKEND_ANIM_BITE                        0x1
+    #define FLYING_BOOKEND_ANIM_GROW                        0x2
+
 /* BBH Merry-Go-Round */
     /* gMarioCurrentRoom */
-    #define BBH_NEAR_MERRY_GO_ROUND_ROOM                    10
-    #define BBH_DYNAMIC_SURFACE_ROOM                        0
-    #define BBH_OUTSIDE_ROOM                                13
+    #define BBH_NEAR_MERRY_GO_ROUND_ROOM                    0xA
+    #define BBH_DYNAMIC_SURFACE_ROOM                        0x0
+    #define BBH_OUTSIDE_ROOM                                0xD
 
 /* Coffin Spawner */
     /* oAction */
     #define COFFIN_SPAWNER_ACT_COFFINS_UNLOADED             0x0
+    #define COFFIN_SPAWNER_ACT_COFFINS_LOADED               0x1
 
 /* Coffin */
     /* oAction */
     #define COFFIN_ACT_IDLE                                 0x0
     #define COFFIN_ACT_STAND_UP                             0x1
-
     /* oBehParams2ndByte */
     #define COFFIN_BP_STATIC                                0x0
 
@@ -752,18 +789,17 @@
     #define KOOPA_THE_QUICK_ACT_AFTER_RACE                  0x6
 
     /* oSubAction */
+        /* KOOPA_SHELLED_ACT_WALK */
     #define KOOPA_SHELLED_SUB_ACT_START_WALK                0x0
     #define KOOPA_SHELLED_SUB_ACT_WALK                      0x1
     #define KOOPA_SHELLED_SUB_ACT_STOP_WALK                 0x2
-
+        /* KOOPA_THE_QUICK_ACT_RACE */
     #define KOOPA_THE_QUICK_SUB_ACT_START_RUN               0x0
     #define KOOPA_THE_QUICK_SUB_ACT_RUN                     0x1
     #define KOOPA_THE_QUICK_SUB_ACT_JUMP                    0x2
-
     /* oKoopaTheQuickRaceIndex */
     #define KOOPA_THE_QUICK_BOB_INDEX                       0x0
     #define KOOPA_THE_QUICK_THI_INDEX                       0x1
-
     /* oBehParams2ndByte */
     #define KOOPA_BP_UNSHELLED                              0x0
     #define KOOPA_BP_NORMAL                                 0x1
@@ -816,6 +852,7 @@
     #define CHAIN_CHOMP_ACT_MOVE                            0x1
     #define CHAIN_CHOMP_ACT_UNLOAD_CHAIN                    0x2
     /* oSubAction */
+        /* CHAIN_CHOMP_ACT_MOVE */
     #define CHAIN_CHOMP_SUB_ACT_TURN                        0x0
     #define CHAIN_CHOMP_SUB_ACT_LUNGE                       0x1
     /* oChainChompReleaseStatus */
@@ -859,6 +896,7 @@
     #define ENEMY_LAKITU_ACT_UNINITIALIZED                  0x0
     #define ENEMY_LAKITU_ACT_MAIN                           0x1
     /* oSubAction */
+        /* ENEMY_LAKITU_ACT_MAIN */
     #define ENEMY_LAKITU_SUB_ACT_NO_SPINY                   0x0
     #define ENEMY_LAKITU_SUB_ACT_HOLD_SPINY                 0x1
     #define ENEMY_LAKITU_SUB_ACT_THROW_SPINY                0x2
@@ -874,12 +912,11 @@
     #define CLOUD_ACT_MAIN                                  0x1
     #define CLOUD_ACT_UNLOAD                                0x2
     #define CLOUD_ACT_FWOOSH_HIDDEN                         0x3
-
     /* oBehParams2ndByte */
     #define CLOUD_BP_FWOOSH                                 0x0
     #define CLOUD_BP_LAKITU_CLOUD                           0x1
 
-//! names
+//! TODO: name these
 /* Intro Lakitu */
     /* oAction */
     #define INTRO_LAKITU_ACT_0                              0x00
@@ -895,7 +932,6 @@
     #define CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE        0x0
     #define CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD             0x1
     #define CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG             0x2
-
     /* oBehParams2ndByte */
     #define CAMERA_LAKITU_BP_FOLLOW_CAMERA                  0x0
     #define CAMERA_LAKITU_BP_INTRO                          0x1
@@ -915,7 +951,6 @@
     #define MONTY_MOLE_ACT_JUMP_INTO_HOLE                   0x5
     #define MONTY_MOLE_ACT_HIDE                             0x6
     #define MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE                 0x7
-
     /* oBehParams2ndByte */
     #define MONTY_MOLE_BP_NO_ROCK                           0x0
 
@@ -934,14 +969,14 @@
     #define UKIKI_ACT_WAIT_TO_RESPAWN                       0x5
     #define UKIKI_ACT_UNUSED_TURN                           0x6
     #define UKIKI_ACT_RETURN_HOME                           0x7
-
     /* oSubAction */
+        /* UKIKI_ACT_IDLE, UKIKI_ACT_WAIT_TO_RESPAWN, UKIKI_ACT_UNUSED_TURN */
     #define UKIKI_SUB_ACT_TAUNT_NONE                        0x0
     #define UKIKI_SUB_ACT_TAUNT_ITCH                        0x1
     #define UKIKI_SUB_ACT_TAUNT_SCREECH                     0x2
     #define UKIKI_SUB_ACT_TAUNT_JUMP_CLAP                   0x3
     #define UKIKI_SUB_ACT_TAUNT_HANDSTAND                   0x4
-
+        /* UKIKI_ACT_GO_TO_CAGE */
     #define UKIKI_SUB_ACT_CAGE_RUN_TO_CAGE                  0x0
     #define UKIKI_SUB_ACT_CAGE_WAIT_FOR_MARIO               0x1
     #define UKIKI_SUB_ACT_CAGE_TALK_TO_MARIO                0x2
@@ -950,7 +985,6 @@
     #define UKIKI_SUB_ACT_CAGE_LAND_ON_CAGE                 0x5
     #define UKIKI_SUB_ACT_CAGE_SPIN_ON_CAGE                 0x6
     #define UKIKI_SUB_ACT_CAGE_DESPAWN                      0x7
-
     /* oUkikiTextState */
     #define UKIKI_TEXT_DEFAULT                              0x0
     #define UKIKI_TEXT_CAGE_TEXTBOX                         0x1
@@ -960,11 +994,9 @@
     #define UKIKI_TEXT_GAVE_CAP_BACK                        0x5
     #define UKIKI_TEXT_DO_NOT_LET_GO                        0x6
     #define UKIKI_TEXT_STEAL_CAP                            0x7
-
     /* oBehParams2ndByte */
     #define UKIKI_CAGE                                      0x0
     #define UKIKI_CAP                                       0x1
-
     /* Animations */
     #define UKIKI_ANIM_RUN                                  0x0
     #define UKIKI_ANIM_UNUSED_WALK                          0x1
@@ -979,12 +1011,10 @@
     #define UKIKI_ANIM_HANDSTAND                            0xA
     #define UKIKI_ANIM_TURN                                 0xB
     #define UKIKI_ANIM_HELD                                 0xC
-
     /* oAnimState */
     #define UKIKI_ANIM_STATE_DEFAULT                        0x0
     #define UKIKI_ANIM_STATE_EYE_CLOSED                     0x1
     #define UKIKI_ANIM_STATE_CAP_ON                         0x2
-
     /* oUkikiHasCap */
     #define UKIKI_CAP_ON                                    0x1
 
@@ -1012,7 +1042,7 @@
     #define PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN               0x7
     #define PIRANHA_PLANT_ACT_RESPAWN                       0x8
 
-/* Piranha Plant bubble */
+/* Piranha Plant Bubble */
     /* oAction */
     #define PIRANHA_PLANT_BUBBLE_ACT_IDLE                   0x0
     #define PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP       0x1
@@ -1033,7 +1063,6 @@
     #define PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK          0x2
     #define PLATFORM_ON_TRACK_ACT_PAUSE_BRIEFLY             0x3
     #define PLATFORM_ON_TRACK_ACT_FALL                      0x4
-
     /* oBehParams >> 16 */
     #define PLATFORM_ON_TRACK_BP_MASK_PATH                  0xF
     #define PLATFORM_ON_TRACK_BP_MASK_TYPE                  (0x7 << 4)
@@ -1041,7 +1070,7 @@
     #define PLATFORM_ON_TRACK_BP_DONT_DISAPPEAR             (1 <<  9)
     #define PLATFORM_ON_TRACK_BP_DONT_TURN_YAW              (1 << 10)
     #define PLATFORM_ON_TRACK_BP_DONT_TURN_ROLL             (1 << 11)
-
+    /* oPlatformOnTrackType */
     #define PLATFORM_ON_TRACK_TYPE_CARPET                   0x0
     #define PLATFORM_ON_TRACK_TYPE_SKI_LIFT                 0x1
     #define PLATFORM_ON_TRACK_TYPE_CHECKERED                0x2
@@ -1137,7 +1166,6 @@
     /* Walking sounds */
     #define PENGUIN_WALK_BABY                               0x0
     #define PENGUIN_WALK_BIG                                0x1
-
     /* Animations */
     #define PENGUIN_ANIM_WALK                               0x0
     #define PENGUIN_ANIM_IDLE                               0x3
@@ -1157,15 +1185,15 @@
     #define MOTHER_PENGUIN_ACT_RECEIVE_BABY                 0x1
     #define MOTHER_PENGUIN_ACT_RECEIVED_BABY                0x2
     /* oSubAction */
-    /* Act 0 */
+        /* MOTHER_PENGUIN_ACT_IDLE */
     #define MOTHER_PENGUIN_SUB_ACT_READY_TO_ASK             0x0
     #define MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY             0x1
     #define MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED            0x2
-    /* Act 1 */
+        /* MOTHER_PENGUIN_ACT_RECEIVE_BABY */
     #define MOTHER_PENGUIN_SUB_ACT_RECEIVE_BABY             0x0
     #define MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY             0x1
     #define MOTHER_PENGUIN_SUB_ACT_WRONG_BABY               0x2
-    /* Act 2 */
+        /* MOTHER_PENGUIN_ACT_RECEIVED_BABY */
     #define MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO              0x0
     #define MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO       0x1
 
@@ -1243,7 +1271,6 @@
     #define UNAGI_RETURN_TO_CAVE                            0x2
     #define UNAGI_IN_CAVE                                   0x3
     #define UNAGI_CAVE_PATH                                 0x4
-
     /* oAnimState */
     #define UNAGI_ANIM_STATE_NO_STAR                        0x0
     #define UNAGI_ANIM_STATE_HAS_STAR                       0x1
@@ -1273,11 +1300,27 @@
     /* oAction */
     #define FIRE_PIRANHA_PLANT_ACT_HIDE                     0x0
     #define FIRE_PIRANHA_PLANT_ACT_GROW                     0x1
+    /* Animations */
+    #define FIRE_PIRANHA_PLANT_ANIM_SHRINK                  0x0
+    #define FIRE_PIRANHA_PLANT_ANIM_UNUSED_1                0x1
+    #define FIRE_PIRANHA_PLANT_ANIM_ATTACKED                0x2
+    #define FIRE_PIRANHA_PLANT_ANIM_UNUSED_3                0x3
+    #define FIRE_PIRANHA_PLANT_ANIM_GROW                    0x4
 
 /* Fire spitter */
     /* oAction */
     #define FIRE_SPITTER_ACT_IDLE                           0x0
     #define FIRE_SPITTER_ACT_SPIT_FIRE                      0x1
+
+/* Flamethrower */
+    /* oAction */
+    #define FLAMETHROWER_ACT_IDLE                           0x0
+    #define FLAMETHROWER_ACT_BLOW_FIRE                      0x1
+    #define FLAMETHROWER_ACT_COOLDOWN                       0x2
+    /* oBehParams2ndByte */
+    #define FLAMETHROWER_BP_0                               0x0
+    #define FLAMETHROWER_BP_BLUE                            0x1
+    #define FLAMETHROWER_BP_SLOW                            0x2
 
 /* Bouncing Fireball Flame */
     /* oAction */
@@ -1353,14 +1396,13 @@
     #define KING_BOBOMB_ACT_HIT_GROUND                      0x6
     #define KING_BOBOMB_ACT_DEATH                           0x7
     #define KING_BOBOMB_ACT_STOP_MUSIC                      0x8
-
     /* oSubAction */
-    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_0               0x0
-    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_1               0x1
-    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_2               0x2
-    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_3               0x3
+        /* KING_BOBOMB_ACT_RETURN_HOME */
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_JUMP            0x0
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING         0x1
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING_END     0x2
+    #define KING_BOBOMB_SUB_ACT_RETURN_HOME_WAIT_FOR_DIALOG 0x3
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_DIALOG          0x4
-
     /* Animations */
     #define KING_BOBOMB_ANIM_GRAB_MARIO                     0x0
     #define KING_BOBOMB_ANIM_HOLDING_MARIO                  0x1
@@ -1381,23 +1423,21 @@
     #define CHUCKYA_ACT_GRABBED_MARIO                       0x1
     #define CHUCKYA_ACT_THROWN                              0x2
     #define CHUCKYA_ACT_RELEASE_MARIO                       0x3
-
     /* oSubAction */
+        /* CHUCKYA_ACT_MOVING */
     #define CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO               0x0
     #define CHUCKYA_SUB_ACT_ACCELERATE                      0x1
     #define CHUCKYA_SUB_ACT_STOP                            0x2
     #define CHUCKYA_SUB_ACT_TURN_TOWARD_HOME                0x3
-
+        /* CHUCKYA_ACT_GRABBED_MARIO */
     #define CHUCKYA_SUB_ACT_GRAB_MARIO                      0x0
     #define CHUCKYA_SUB_ACT_HOLD_MARIO                      0x1
     #define CHUCKYA_SUB_ACT_THROW_MARIO                     0x2
-
     /* oCommonAnchorAction */
     #define COMMON_ANCHOR_ACT_INACTIVE                      0x0
     #define COMMON_ANCHOR_ACT_SET_MARIO_GFX_TO_POS          0x1
     #define COMMON_ANCHOR_ACT_THROW_MARIO                   0x2
     #define COMMON_ANCHOR_ACT_DROP_MARIO                    0x3
-
     /* Animations */
     #define CHUCKYA_ANIM_GRAB_MARIO                         0x0
     #define CHUCKYA_ANIM_THROW_1                            0x1
@@ -1415,7 +1455,6 @@
     #define KLEPTO_ACT_RESET_POSITION                       0x5
     #define KLEPTO_ACT_STRUCK_BY_MARIO                      0x6
     #define KLEPTO_ACT_RETREAT                              0x7
-
     /* oAnimState */
     #define KLEPTO_ANIM_STATE_HOLDING_NOTHING               0x0
     #define KLEPTO_ANIM_STATE_HOLDING_CAP                   0x1
@@ -1426,7 +1465,6 @@
     /* oAction */
     #define BIRD_ACT_INACTIVE                               0x0
     #define BIRD_ACT_FLY                                    0x1
-
     /* oBehParams2ndByte */
     #define BIRD_BP_SPAWNED                                 0x0
     #define BIRD_BP_SPAWNER                                 0x1
@@ -1452,10 +1490,10 @@
     #define TWEESTER_ACT_IDLE                               0x0
     #define TWEESTER_ACT_CHASE                              0x1
     #define TWEESTER_ACT_HIDE                               0x2
-
     /* oSubAction */
+        /* TWEESTER_ACT_IDLE */
     #define TWEESTER_SUB_ACT_WAIT                           0x0
-
+        /* TWEESTER_ACT_CHASE */
     #define TWEESTER_SUB_ACT_CHASE                          0x0
 
 /* Triplet butterfly */
@@ -1464,11 +1502,9 @@
     #define TRIPLET_BUTTERFLY_ACT_WANDER                    0x1
     #define TRIPLET_BUTTERFLY_ACT_ACTIVATE                  0x2
     #define TRIPLET_BUTTERFLY_ACT_EXPLODE                   0x3
-
     /* oBehParams2ndByte */
     #define TRIPLET_BUTTERFLY_BP_BUTTERFLY_NUM              0x3
     #define TRIPLET_BUTTERFLY_BP_NO_BOMBS                   0x4
-
     /* oTripletButterflyType */
     #define TRIPLET_BUTTERFLY_TYPE_NORMAL                  -0x1
     #define TRIPLET_BUTTERFLY_TYPE_EXPLODES                 0x0
@@ -1492,7 +1528,6 @@
     #define MIPS_ACT_WAIT_FOR_ANIMATION_DONE                0x2
     #define MIPS_ACT_FALL_DOWN                              0x3
     #define MIPS_ACT_IDLE                                   0x4
-
     /* oMipsStarStatus */
     #define MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR            0x0
     #define MIPS_STAR_STATUS_SHOULD_SPAWN_STAR              0x1

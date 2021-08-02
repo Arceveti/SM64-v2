@@ -94,14 +94,12 @@ void set_print_state_info(s16 *printState, s16 xCursor, s16 yCursor, s16 minYCur
  */
 void print_text_array_info(s16 *printState, const char *str, s32 number) {
     if (!printState[DEBUG_PSTATE_DISABLED]) {
-        if ((printState[DEBUG_PSTATE_Y_CURSOR] < printState[DEBUG_PSTATE_MIN_Y_CURSOR])
-         || (printState[DEBUG_PSTATE_MAX_X_CURSOR] < printState[DEBUG_PSTATE_Y_CURSOR])) {
-            print_text(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR],
-                       "DPRINT OVER");
+        if ((printState[DEBUG_PSTATE_Y_CURSOR    ] < printState[DEBUG_PSTATE_MIN_Y_CURSOR])
+         || (printState[DEBUG_PSTATE_MAX_X_CURSOR] < printState[DEBUG_PSTATE_Y_CURSOR    ])) {
+            print_text(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR], "DPRINT OVER");
             printState[DEBUG_PSTATE_DISABLED] = TRUE;
         } else {
-            print_text_fmt_int(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR],
-                               str, number);
+            print_text_fmt_int(printState[DEBUG_PSTATE_X_CURSOR], printState[DEBUG_PSTATE_Y_CURSOR], str, number);
             printState[DEBUG_PSTATE_Y_CURSOR] += printState[DEBUG_PSTATE_LINE_Y_OFFSET];
         }
     }
@@ -119,9 +117,7 @@ void set_text_array_x_y(s32 xOffset, s32 yOffset) {
  * current debug mode as well as the printer array (down to up vs up to down).
  */
 void print_debug_bottom_up(const char *str, s32 number) {
-    if (gDebugInfoFlags & DEBUG_INFO_FLAG_DPRINT) {
-        print_text_array_info(gDebugPrintState2, str, number);
-    }
+    if (gDebugInfoFlags & DEBUG_INFO_FLAG_DPRINT) print_text_array_info(gDebugPrintState2, str, number);
 }
 
 void print_debug_top_down_objectinfo(const char *str, s32 number) {
@@ -148,8 +144,8 @@ void print_mapinfo(void) {
     area = ((s32) gCurrentObject->oPosX + 0x2000) / 1024
          + ((s32) gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
 
-    bgY = find_floor(gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
-    water = find_water_level(gCurrentObject->oPosX, gCurrentObject->oPosZ);
+    bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
+    water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
 
     print_debug_top_down_normal("mapinfo", 0);
     print_debug_top_down_mapinfo("area %x", area);
@@ -197,7 +193,7 @@ void print_string_array_info(const char **strArr) {
         // this is equivalent to (sDebugSysCursor - 8)
         set_text_array_x_y(0, -1 - (u32)(7 - sDebugSysCursor));
         print_debug_top_down_mapinfo(strArr[8], 0); // print the cursor
-        set_text_array_x_y(0,  7 - sDebugSysCursor);
+        set_text_array_x_y(0,            7 - sDebugSysCursor);
     }
 }
 
@@ -216,7 +212,7 @@ void update_debug_dpadmask(void) {
 
     if (!dPadMask) {
         sDebugInfoDPadUpdID = 0;
-        sDebugInfoDPadMask = 0;
+        sDebugInfoDPadMask  = 0;
     } else {
         // to prevent stuttering of mask updates, the first time is updated 6
         // frames from start, and then every 2 frames when held down.
@@ -273,13 +269,7 @@ UNUSED static void check_debug_button_seq(void) {
         if ((s16)(cButtonMask = (gPlayer1Controller->buttonPressed & C_BUTTONS))) {
             if (buttonArr[sDebugInfoButtonSeqID] == cButtonMask) {
                 sDebugInfoButtonSeqID++;
-                if (buttonArr[sDebugInfoButtonSeqID] == -1) {
-                    if (gDebugInfoFlags == DEBUG_INFO_FLAG_ALL) {
-                        gDebugInfoFlags = DEBUG_INFO_FLAG_LSELECT;
-                    } else {
-                        gDebugInfoFlags = DEBUG_INFO_FLAG_ALL;
-                    }
-                }
+                if (buttonArr[sDebugInfoButtonSeqID] == -1) gDebugInfoFlags = (gDebugInfoFlags == DEBUG_INFO_FLAG_ALL) ? DEBUG_INFO_FLAG_LSELECT : DEBUG_INFO_FLAG_ALL;
             } else {
                 sDebugInfoButtonSeqID = 0;
             }
@@ -312,9 +302,8 @@ UNUSED static
 void try_modify_debug_controls(void) {
     s32 modifier;
 
-    if (gPlayer1Controller->buttonPressed & Z_TRIG) {
-        sNoExtraDebug ^= TRUE;
-    }
+    if (gPlayer1Controller->buttonPressed & Z_TRIG) sNoExtraDebug ^= TRUE;
+
     if (!(gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG)) && !sNoExtraDebug) {
         modifier = 1;
         if (gPlayer1Controller->buttonDown & B_BUTTON) modifier = 100;
@@ -359,23 +348,16 @@ void show_debug_info(void) {
 void try_print_debug_mario_object_info(void) {
     if (gMarioObject != NULL) {
         switch (sDebugPage) {
-            case DEBUG_PAGE_CHECKSURFACEINFO:
-                print_surfaceinfo();
-                break;
-            case DEBUG_PAGE_EFFECTINFO:
-                print_effectinfo();
-                break;
-            case DEBUG_PAGE_ENEMYINFO:
-                print_enemyinfo();
-                break;
-            default:
-                break;
+            case DEBUG_PAGE_CHECKSURFACEINFO: print_surfaceinfo(); break;
+            case DEBUG_PAGE_EFFECTINFO:       print_effectinfo();  break;
+            case DEBUG_PAGE_ENEMYINFO:        print_enemyinfo();   break;
+            default: break;
         }
     }
     print_debug_top_down_mapinfo("obj  %d", gObjectCounter);
 
     if (gNumFindFloorMisses) print_debug_bottom_up("NULLBG %d", gNumFindFloorMisses);
-    if (gUnknownWallCount) print_debug_bottom_up("WALL   %d", gUnknownWallCount);
+    if (gUnknownWallCount  ) print_debug_bottom_up("WALL   %d", gUnknownWallCount  );
 }
 
 /*
@@ -384,19 +366,11 @@ void try_print_debug_mario_object_info(void) {
  */
 void try_print_debug_mario_level_info(void) {
     switch (sDebugPage) {
-        case DEBUG_PAGE_OBJECTINFO:
-            break; // no info list is printed for obj info.
-        case DEBUG_PAGE_CHECKSURFACEINFO:
-            print_checkinfo();
-            break;
-        case DEBUG_PAGE_MAPINFO:
-            print_mapinfo();
-            break;
-        case DEBUG_PAGE_STAGEINFO:
-            print_stageinfo();
-            break;
-        default:
-            break;
+        case DEBUG_PAGE_OBJECTINFO:                          break; // no info list is printed for obj info.
+        case DEBUG_PAGE_CHECKSURFACEINFO: print_checkinfo(); break;
+        case DEBUG_PAGE_MAPINFO:          print_mapinfo();   break;
+        case DEBUG_PAGE_STAGEINFO:        print_stageinfo(); break;
+        default:                                             break;
     }
 }
 

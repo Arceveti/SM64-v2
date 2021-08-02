@@ -51,6 +51,7 @@
 #define COS45   0.70710678f
 // #define COS45   0.70710678118654752 // 0.70710678118654752440084436210485
 #define COS73   0.29237169f // common_landing_cancels, check_common_idle_cancels, check_common_hold_idle_cancels
+#define COS78   0.20791169f
 #define COS80   0.17364818f // braking action
 
 // Debug Info Flags

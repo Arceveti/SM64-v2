@@ -1,5 +1,5 @@
 // 0x07028274 - 0x070282F8
-const Collision ssl_seg7_collision_07028274[] = {
+const Collision ssl_seg7_collision_eyerok_hand_closed[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-88,   3,  147),
@@ -28,7 +28,7 @@ const Collision ssl_seg7_collision_07028274[] = {
 };
 
 // 0x070282F8 - 0x07028370
-const Collision ssl_seg7_collision_070282F8[] = {
+const Collision ssl_seg7_collision_eyerok_hand_open[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-102,   0,  51),
@@ -55,7 +55,7 @@ const Collision ssl_seg7_collision_070282F8[] = {
 };
 
 // 0x07028370 - 0x070284AE
-const Collision ssl_seg7_collision_right_hand[] = {
+const Collision ssl_seg7_collision_eyerok_right_hand_sleeping[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x13),
     COL_VERTEX( 100,  75, -122),
@@ -116,7 +116,7 @@ const Collision ssl_seg7_collision_right_hand[] = {
 
 
 // 0x070284B0 - 0x070285EE
-const Collision ssl_seg7_collision_left_hand[] = {
+const Collision ssl_seg7_collision_eyerok_left_hand_sleeping[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x13),
     COL_VERTEX( 100,   0,  151),

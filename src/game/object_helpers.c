@@ -1635,13 +1635,13 @@ void cur_obj_update_floor_and_walls(void) {
 }
 
 void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
-    f32 gravity = o->oGravity;
-    f32 bounciness = o->oBounciness;
-    f32 buoyancy = o->oBuoyancy;
-    f32 dragStrength = o->oDragStrength;
+    f32 gravity                      = o->oGravity;
+    f32 bounciness                   = o->oBounciness;
+    f32 buoyancy                     = o->oBuoyancy;
+    f32 dragStrength                 = o->oDragStrength;
     f32 steepSlopeNormalY;
     s32 careAboutEdgesAndSteepSlopes = FALSE;
-    s32 negativeSpeed = FALSE;
+    s32 negativeSpeed                = FALSE;
 
     //! Because some objects allow these active flags to be set but don't
     //  avoid updating when they are, we end up with "partial" updates, where
@@ -1654,8 +1654,13 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
             careAboutEdgesAndSteepSlopes = TRUE;
             steepSlopeAngleDegrees = -steepSlopeAngleDegrees;
         }
-
-        steepSlopeNormalY = coss(steepSlopeAngleDegrees * (0x10000 / 360));
+        if (steepSlopeAngleDegrees == 78) {
+            steepSlopeNormalY = COS78;
+        } else if (steepSlopeAngleDegrees == -78) {
+            steepSlopeNormalY = -COS78;
+        } else {
+            steepSlopeNormalY = coss(steepSlopeAngleDegrees * (0x10000 / 360));
+        }
 
         cur_obj_compute_vel_xz();
         cur_obj_apply_drag_xz(dragStrength);

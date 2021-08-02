@@ -18,25 +18,11 @@ static void fish_spawner_act_spawn(void) {
     switch (o->oBehParams2ndByte) {
 
         // Cases need to be on one line to match with and without optimizations.
-        case FISH_SPAWNER_BP_MANY_BLUE:
-            model = MODEL_FISH;      schoolQuantity = 20; minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0;
-            break;
-
-        case FISH_SPAWNER_BP_FEW_BLUE:
-            model = MODEL_FISH;      schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0;
-            break;
-
-        case FISH_SPAWNER_BP_MANY_CYAN:
-            model = MODEL_CYAN_FISH; schoolQuantity = 20; minDistToMario = 1500.0f; fishAnimation = cyan_fish_seg6_anims_0600E264;
-            break;
-
-        case FISH_SPAWNER_BP_FEW_CYAN:
-            model = MODEL_CYAN_FISH; schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = cyan_fish_seg6_anims_0600E264;
-            break;
-
-        default:
-            model = MODEL_FISH;      schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0;
-            break;
+        case FISH_SPAWNER_BP_MANY_BLUE: model = MODEL_FISH;      schoolQuantity = 20; minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0; break;
+        case FISH_SPAWNER_BP_FEW_BLUE:  model = MODEL_FISH;      schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0; break;
+        case FISH_SPAWNER_BP_MANY_CYAN: model = MODEL_CYAN_FISH; schoolQuantity = 20; minDistToMario = 1500.0f; fishAnimation = cyan_fish_seg6_anims_0600E264; break;
+        case FISH_SPAWNER_BP_FEW_CYAN:  model = MODEL_CYAN_FISH; schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = cyan_fish_seg6_anims_0600E264; break;
+        default:                        model = MODEL_FISH;      schoolQuantity = 5;  minDistToMario = 1500.0f; fishAnimation = blue_fish_seg3_anims_0301C2B0; break;
     }
 
 
@@ -47,7 +33,7 @@ static void fish_spawner_act_spawn(void) {
         for (i = 0; i < schoolQuantity; i++) {
             fishObject = spawn_object(o, model, bhvFish);
             fishObject->oBehParams2ndByte = o->oBehParams2ndByte;
-            obj_init_animation_with_sound(fishObject, fishAnimation, 0);
+            obj_init_animation_with_sound(fishObject, fishAnimation, FISH_ANIM_DEFAULT);
             obj_translate_xyz_random(fishObject, 700.0f);
         }
         o->oAction = FISH_SPAWNER_ACT_IDLE;
@@ -104,13 +90,13 @@ static void fish_act_roam(void) {
     f32 fishY = o->oPosY - gMarioObject->oPosY;
 
     // Alters speed of animation for natural movement.
-    cur_obj_init_animation_with_accel_and_sound(0, (o->oTimer < 10) ? 2.0f : 1.0f);
+    cur_obj_init_animation_with_accel_and_sound(FISH_ANIM_DEFAULT, (o->oTimer < 10) ? 2.0f : 1.0f);
 
     // Initializes some variables when the fish first begins roaming.
     if (o->oTimer == 0) {
-        o->oForwardVel = random_float() * 2 + 3.0f;
+        o->oForwardVel       = random_float() * 2.0f + 3.0f;
         o->oFishHeightOffset = random_float() * ((gCurrLevelNum == LEVEL_SA) ? 700.0f : 100.0f);
-        o->oFishRoamDistance = random_float() * 500 + 200.0f;
+        o->oFishRoamDistance = random_float() * 500.0f + 200.0f;
     }
 
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
@@ -136,28 +122,23 @@ static void fish_act_roam(void) {
  * Interactively maneuver fish in relation to its distance from other fish and Mario.
  */
 static void fish_act_flee(void) {
-    f32 fishY = o->oPosY - gMarioObject->oPosY;
+    f32 fishY     = o->oPosY - gMarioObject->oPosY;
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
 
     // Initialize some variables when the flee action first starts.
     if (o->oTimer == 0) {
         o->oFishActiveDistance = random_float() * 300.0f;
-        o->oFishYawVel = random_float() * 1024.0f + 1024.0f;
-        o->oFishGoalVel = random_float() * 4.0f + 8.0f + 5.0f;
+        o->oFishYawVel         = random_float() * 1024.0f + 1024.0f;
+        o->oFishGoalVel        = random_float() * 4.0f + 8.0f + 5.0f;
         cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
     }
 
     // Speed the animation up over time.
-    if (o->oTimer < 20) {
-        cur_obj_init_animation_with_accel_and_sound(0, 4.0f);
-    } else {
-        cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
-    }
+    cur_obj_init_animation_with_accel_and_sound(FISH_ANIM_DEFAULT, (o->oTimer < 20) ? 4.0f : 1.0f);
 
     // Accelerate over time.
-    if (o->oForwardVel < o->oFishGoalVel) {
-        o->oForwardVel = o->oForwardVel + 0.5f;
-    }
+    if (o->oForwardVel < o->oFishGoalVel) o->oForwardVel = o->oForwardVel + 0.5f;
+
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
 
     // Rotate fish away from Mario.
@@ -181,7 +162,7 @@ static void fish_act_flee(void) {
  * Animate fish and alter scaling at random for a magnifying effect from the water.
  */
 static void fish_act_init(void) {
-    cur_obj_init_animation_with_accel_and_sound(0, 1.0f);
+    cur_obj_init_animation_with_accel_and_sound(FISH_ANIM_DEFAULT, 1.0f);
     o->header.gfx.animInfo.animFrame = (s16)(random_float() * 28.0f);
     o->oFishDepthDistance = random_float() * 300.0f;
     cur_obj_scale(random_float() * 0.4f + 0.8f);

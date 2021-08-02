@@ -36,18 +36,15 @@ void bhv_coffin_spawner_loop(void) {
                 relativeZ = coffinRelativePos[i].z;
 
                 // Behavior param of 0 for all even i, 1 for all odd
-                coffin = spawn_object_relative(i & 1, coffinRelativePos[i].x, 0, relativeZ, o,
-                                              MODEL_BBH_WOODEN_TOMB, bhvCoffin);
+                coffin = spawn_object_relative(i & 1, coffinRelativePos[i].x, 0, relativeZ, o, MODEL_BBH_WOODEN_TOMB, bhvCoffin);
 
                 // Never true, game would enter a while(1) before it could.
                 // Possible a remnant of days this didn't happen.
-                if (coffin != NULL) {
-                    // Rotate the coffin 180 degrees if its on the other side of the room.
-                    if (relativeZ > 0) coffin->oFaceAngleYaw = 0x8000;
-                }
+                // Rotate the coffin 180 degrees if its on the other side of the room.
+                if (coffin != NULL && relativeZ > 0) coffin->oFaceAngleYaw = 0x8000;
             }
 
-            o->oAction++;
+            o->oAction = COFFIN_SPAWNER_ACT_COFFINS_LOADED;
         }
     } else if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
         o->oAction = COFFIN_SPAWNER_ACT_COFFINS_UNLOADED;

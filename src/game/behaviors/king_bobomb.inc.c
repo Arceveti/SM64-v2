@@ -201,7 +201,7 @@ void king_bobomb_act_been_thrown(void) { // act 4
 
 void king_bobomb_act_return_home(void) { // act 5
     switch (o->oSubAction) {
-        case KING_BOBOMB_SUB_ACT_RETURN_HOME_0:
+        case KING_BOBOMB_SUB_ACT_RETURN_HOME_JUMP:
             if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB_JUMP);
             o->oKingBobombIsJumping = TRUE;
             cur_obj_init_animation_and_extend_if_at_end(KING_BOBOMB_ANIM_JUMP);
@@ -210,10 +210,10 @@ void king_bobomb_act_return_home(void) { // act 5
                 o->oVelY = 100.0f;
             } else {
                 arc_to_goal_pos(&o->oHomeX, &o->oPosX, 100.0f, -4.0f);
-                o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_1;
+                o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING;
             }
             break;
-        case KING_BOBOMB_SUB_ACT_RETURN_HOME_1:
+        case KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING:
             cur_obj_init_animation_and_extend_if_at_end(KING_BOBOMB_ANIM_JUMP);
             if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
                 o->oPosY = o->oHomeY;
@@ -224,13 +224,13 @@ void king_bobomb_act_return_home(void) { // act 5
                 cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_T_POSE);
                 cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB);
                 cur_obj_shake_screen(SHAKE_POS_SMALL);
-                o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_2;
+                o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING_END;
             }
             break;
-        case KING_BOBOMB_SUB_ACT_RETURN_HOME_2:
-            if (cur_obj_init_animation_and_check_if_near_end(KING_BOBOMB_ANIM_T_POSE)) o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_3;
+        case KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING_END:
+            if (cur_obj_init_animation_and_check_if_near_end(KING_BOBOMB_ANIM_T_POSE)) o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_WAIT_FOR_DIALOG;
             break;
-        case KING_BOBOMB_SUB_ACT_RETURN_HOME_3:
+        case KING_BOBOMB_SUB_ACT_RETURN_HOME_WAIT_FOR_DIALOG:
             if (mario_is_far_below_object(1200.0f)) {
                 o->oAction = KING_BOBOMB_ACT_INACTIVE;
                 stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));

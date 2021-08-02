@@ -11,21 +11,21 @@ void bhv_beta_moving_flames_spawn_loop(void) {
     o->oDistanceToMario = lateral_dist_between_objects(o, gMarioObject);
     o->oPosY -= 100.0f;
     switch (o->oAction) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
+        case FISHING_BOO_ACT_0:
+        case FISHING_BOO_ACT_1:
+        case FISHING_BOO_ACT_2:
+        case FISHING_BOO_ACT_3:
+        case FISHING_BOO_ACT_4:
+        case FISHING_BOO_ACT_5:
+        case FISHING_BOO_ACT_6:
+        case FISHING_BOO_ACT_SPAWN_FLAMES:
             spawn_object(o, MODEL_RED_FLAME, bhvBetaMovingFlames);
-            o->oAction++;
+            o->oAction = FISHING_BOO_ACT_8;
             break;
-        case 8:
+        case FISHING_BOO_ACT_8:
             break;
-        case 9:
-            o->oAction++;
+        case FISHING_BOO_ACT_9:
+            o->oAction = FISHING_BOO_ACT_10;
             break;
     }
 }

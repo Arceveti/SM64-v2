@@ -189,18 +189,10 @@ void bhv_fly_guy_update(void) {
         o->oPosY += coss(0x400 * o->oFlyGuyOscTimer) * 1.5f;
 
         switch (o->oAction) {
-            case FLY_GUY_ACT_IDLE:
-                fly_guy_act_idle();
-                break;
-            case FLY_GUY_ACT_APPROACH_MARIO:
-                fly_guy_act_approach_mario();
-                break;
-            case FLY_GUY_ACT_LUNGE:
-                fly_guy_act_lunge();
-                break;
-            case FLY_GUY_ACT_SHOOT_FIRE:
-                fly_guy_act_shoot_fire();
-                break;
+            case FLY_GUY_ACT_IDLE:           fly_guy_act_idle();           break;
+            case FLY_GUY_ACT_APPROACH_MARIO: fly_guy_act_approach_mario(); break;
+            case FLY_GUY_ACT_LUNGE:          fly_guy_act_lunge();          break;
+            case FLY_GUY_ACT_SHOOT_FIRE:     fly_guy_act_shoot_fire();     break;
         }
 
         cur_obj_move_standard(78);

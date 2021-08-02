@@ -451,16 +451,15 @@
 #define /*0x0F8*/ oExclamationBoxVerticalScale                  OBJECT_FIELD_F32(0x1C)
 #define /*0x0FC*/ oExclamationBoxScaleAngle                     OBJECT_FIELD_S32(0x1D)
 
-//! TODO: finish naming these
 /* Eyerok Boss */
-#define /*0x0F8*/ oEyerokBossNumHands                           OBJECT_FIELD_S32(0x1C)
+#define /*0x0F8*/ oEyerokBossNumAwakeHands                      OBJECT_FIELD_S32(0x1C)
 #define /*0x0FC*/ oEyerokBossAttackPhase                        OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oEyerokBossActiveHand                         OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oEyerokBossUnk104                             OBJECT_FIELD_S32(0x1F)
+#define /*0x104*/ oEyerokBossAttackCountdown                    OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oEyerokBossFightSideZ                         OBJECT_FIELD_F32(0x20)
 #define /*0x10C*/ oEyerokBossClampedMarioPosZ                   OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oEyerokBossUnk110                             OBJECT_FIELD_F32(0x22)
-#define /*0x1AC*/ oEyerokBossUnk1AC                             OBJECT_FIELD_S32(0x49)
+#define /*0x110*/ oEyerokBossOffsetFromHome                     OBJECT_FIELD_F32(0x22)
+#define /*0x1AC*/ oEyerokBossActiveHandId                       OBJECT_FIELD_S32(0x49)
 
 /* Eyerok Hand */
 #define /*0x0F4*/ oEyerokHandWakeUpTimer                        OBJECT_FIELD_S32(0x1B)
@@ -1088,12 +1087,11 @@
 #define /*0x0F4*/ oWaterLevelTriggerAmbientWaves                OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oWaterLevelTriggerTargetWaterLevel            OBJECT_FIELD_S32(0x1C)
 
-//! TODO: name these
 /* Water Objects */
-#define /*0x0F4*/ oWaterObjUnkF4                                OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oWaterObjUnkF8                                OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oWaterObjUnkFC                                OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oWaterObjUnk100                               OBJECT_FIELD_S32(0x1E)
+#define /*0x0F4*/ oWaterObjScaleXAngle                          OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oWaterObjScaleYAngle                          OBJECT_FIELD_S32(0x1C)
+#define /*0x0FC*/ oWaterObjScaleXAngleVel                       OBJECT_FIELD_S32(0x1D)
+#define /*0x100*/ oWaterObjScaleYAngleVel                       OBJECT_FIELD_S32(0x1E)
 
 /* Water Ring (both variants) */
 #define /*0x0F4*/ oWaterRingScalePhaseX                         OBJECT_FIELD_S32(0x1B)

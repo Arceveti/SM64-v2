@@ -119,16 +119,16 @@ void bhv_falling_pillar_loop(void) {
  */
 void bhv_falling_pillar_hitbox_loop(void) {
     // Get the state of the pillar.
-    s32 pitch = o->parentObj->oFaceAnglePitch;
-    s32 yaw = o->parentObj->oFaceAngleYaw;
-    f32 x = o->parentObj->oPosX;
-    f32 y = o->parentObj->oPosY;
-    f32 z = o->parentObj->oPosZ;
+    s32 pitch   = o->parentObj->oFaceAnglePitch;
+    s32 yaw     = o->parentObj->oFaceAngleYaw;
+    f32 x       = o->parentObj->oPosX;
+    f32 y       = o->parentObj->oPosY;
+    f32 z       = o->parentObj->oPosZ;
     f32 yOffset = o->oBehParams2ndByte * 400 + 300;
 
     // Update position of hitboxes so they fall with the pillar.
     o->oPosX = sins(pitch) * sins(yaw) * yOffset + x;
-    o->oPosY = coss(pitch) * yOffset + y;
+    o->oPosY = coss(pitch)             * yOffset + y;
     o->oPosZ = sins(pitch) * coss(yaw) * yOffset + z;
 
     // Give these a hitbox so they can collide with Mario.

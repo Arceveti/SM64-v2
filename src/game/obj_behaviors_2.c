@@ -790,7 +790,7 @@ static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActio
         if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) {
             if (o->oAction != attackedMarioAction) {
                 o->oAction = attackedMarioAction;
-                o->oTimer = 0;
+                o->oTimer  = 0;
             }
         } else {
             attackType = o->oInteractStatus & INT_STATUS_ATTACK_MASK;

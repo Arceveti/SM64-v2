@@ -40,9 +40,7 @@ UNUSED static void goto_behavior_unused(const BehaviorScript *bhvAddr) {
 u16 random_u16(void) {
     u16 temp1, temp2;
 
-    if (gRandomSeed16 == 22026) {
-        gRandomSeed16 = 0;
-    }
+    if (gRandomSeed16 == 22026) gRandomSeed16 = 0;
 
     temp1 = (gRandomSeed16 & 0x00FF) << 8;
     temp1 = temp1 ^ gRandomSeed16;
@@ -664,7 +662,7 @@ static s32 bhv_cmd_begin(void) {
 
     // Initiate the room if the object is a haunted chair or the mad piano.
     if (cur_obj_has_behavior(bhvHauntedChair)) bhv_init_room();
-    if (cur_obj_has_behavior(bhvMadPiano)) bhv_init_room();
+    if (cur_obj_has_behavior(bhvMadPiano    )) bhv_init_room();
     // Set collision distance if the object is a message panel.
     if (cur_obj_has_behavior(bhvMessagePanel)) gCurrentObject->oCollisionDistance = 150.0f;
     gCurBhvCommand++;
@@ -683,7 +681,7 @@ UNUSED static s32 bhv_cmd_set_int_random_from_table(void) {
 
     // Construct the table from the behavior command.
     for (i = 0; i <= tableSize; i += 2) {
-        table[i] = BHV_CMD_GET_1ST_S16((i / 2) + 1);
+        table[i    ] = BHV_CMD_GET_1ST_S16((i / 2) + 1);
         table[i + 1] = BHV_CMD_GET_2ND_S16((i / 2) + 1);
     }
 
@@ -901,9 +899,7 @@ void cur_obj_update(void) {
     gCurrentObject->curBhvCommand = gCurBhvCommand;
 
     // Increment the object's timer.
-    if (gCurrentObject->oTimer < 0x3FFFFFFF) {
-        gCurrentObject->oTimer++;
-    }
+    if (gCurrentObject->oTimer < 0x3FFFFFFF) gCurrentObject->oTimer++;
 
     // If the object's action has changed, reset the action timer.
     if (gCurrentObject->oAction != gCurrentObject->oPrevAction) {
@@ -914,10 +910,10 @@ void cur_obj_update(void) {
     // Execute various code based on object flags.
     objFlags = (s16) gCurrentObject->oFlags;
 
-    if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) obj_set_face_angle_to_move_angle(gCurrentObject);
-    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) gCurrentObject->oFaceAngleYaw = gCurrentObject->oMoveAngleYaw;
-    if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw();
-    if (objFlags & OBJ_FLAG_MOVE_Y_WITH_TERMINAL_VEL       ) cur_obj_move_y_with_terminal_vel();
+    if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) obj_set_face_angle_to_move_angle(      gCurrentObject);
+    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) gCurrentObject->oFaceAngleYaw =        gCurrentObject->oMoveAngleYaw;
+    if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw(                  );
+    if (objFlags & OBJ_FLAG_MOVE_Y_WITH_TERMINAL_VEL       ) cur_obj_move_y_with_terminal_vel(                    );
     if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(gCurrentObject);
     if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   gCurrentObject);
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          gCurrentObject);
@@ -926,18 +922,16 @@ void cur_obj_update(void) {
     if (gCurrentObject->oRoom != -1) {
         // If the object is in a room, only show it when Mario is in the room.
         cur_obj_enable_rendering_if_mario_in_room();
-    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL) {
-        if (!(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
-            // If the object has a render distance, check if it should be shown.
-            if (distanceFromMario > gCurrentObject->oDrawingDistance) {
-                // Out of render distance, hide the object.
-                gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
-            } else if (gCurrentObject->oHeldState == HELD_FREE) {
-                // In render distance (and not being held), show the object.
-                gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-                gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
-            }
+    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && gCurrentObject->collisionData == NULL && !(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
+        // If the object has a render distance, check if it should be shown.
+        if (distanceFromMario > gCurrentObject->oDrawingDistance) {
+            // Out of render distance, hide the object.
+            gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+            gCurrentObject->activeFlags |= ACTIVE_FLAG_FAR_AWAY;
+        } else if (gCurrentObject->oHeldState == HELD_FREE) {
+            // In render distance (and not being held), show the object.
+            gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
+            gCurrentObject->activeFlags &= ~ACTIVE_FLAG_FAR_AWAY;
         }
     }
 }

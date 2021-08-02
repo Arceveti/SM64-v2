@@ -32,12 +32,8 @@ void bhv_fire_spitter_update(void) {
     cur_obj_update_floor_and_walls();
 
     switch (o->oAction) {
-        case FIRE_SPITTER_ACT_IDLE:
-            fire_spitter_act_idle();
-            break;
-        case FIRE_SPITTER_ACT_SPIT_FIRE:
-            fire_spitter_act_spit_fire();
-            break;
+        case FIRE_SPITTER_ACT_IDLE:      fire_spitter_act_idle();      break;
+        case FIRE_SPITTER_ACT_SPIT_FIRE: fire_spitter_act_spit_fire(); break;
     }
 
     cur_obj_move_standard(78);

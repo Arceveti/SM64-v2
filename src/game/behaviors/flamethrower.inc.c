@@ -8,14 +8,14 @@ void bhv_flamethrower_flame_loop(void) {
         obj_translate_xyz_random(o, 10.0f);
     }
     if (o->oBehParams2ndByte == 2) {
-        size = o->oTimer * (o->oForwardVel - 6.0f) / 100.0f + 2.0f;
+        size = o->oTimer * (o->oForwardVel -  6.0f) / 100.0f + 2.0f;
     } else {
         size = o->oTimer * (o->oForwardVel - 20.0f) / 100.0f + 1.0f;
     }
     if (o->oBehParams2ndByte == 3) {
-        o->hitboxHeight = 200.0f;
+        o->hitboxHeight     = 200.0f;
         o->hitboxDownOffset = 150.0f;
-        o->oVelY = -28.0f;
+        o->oVelY            = -28.0f;
         cur_obj_update_floor_height();
         if (o->oPosY - 25.0f * size < o->oFloorHeight) {
             o->oVelY = 0;
@@ -40,34 +40,32 @@ void bhv_flamethrower_loop(void) {
     f32 flameVel;
     s32 flameTimeRemaining;
     s32 model;
-    if (o->oAction == 0) {
-        if (gCurrLevelNum != LEVEL_BBH || gMarioOnMerryGoRound) {
-            if (o->oDistanceToMario < 2000.0f) o->oAction++;
-        }
-    } else if (o->oAction == 1) {
+    if (o->oAction == FLAMETHROWER_ACT_IDLE) {
+        if ((gCurrLevelNum != LEVEL_BBH || gMarioOnMerryGoRound) && o->oDistanceToMario < 2000.0f) o->oAction = FLAMETHROWER_ACT_BLOW_FIRE;
+    } else if (o->oAction == FLAMETHROWER_ACT_BLOW_FIRE) {
         model = MODEL_RED_FLAME;
         flameVel = 95.0f;
-        if (o->oBehParams2ndByte == 1) model = MODEL_BLUE_FLAME;
-        if (o->oBehParams2ndByte == 2) flameVel = 50.0f;
+        if (o->oBehParams2ndByte == FLAMETHROWER_BP_BLUE) model = MODEL_BLUE_FLAME;
+        if (o->oBehParams2ndByte == FLAMETHROWER_BP_SLOW) flameVel = 50.0f;
         flameTimeRemaining = 1;
         if (o->oTimer < 60) {
             flameTimeRemaining = 15;
         } else if (o->oTimer < 74) {
             flameTimeRemaining = 75 - o->oTimer; // Range: [15..2]
         } else {
-            o->oAction++;
+            o->oAction = FLAMETHROWER_ACT_COOLDOWN;
         }
         o->oFlameThowerTimeRemaining = flameTimeRemaining;
         flame = spawn_object_relative(o->oBehParams2ndByte, 0, 0, 0, o, model, bhvFlamethrowerFlame);
         flame->oForwardVel = flameVel;
         cur_obj_play_sound_1(SOUND_AIR_BLOW_FIRE);
     } else if (o->oTimer > 60) {
-        o->oAction = 0;
+        o->oAction = FLAMETHROWER_ACT_IDLE;
     }
 }
 
 void bhv_rr_rotating_bridge_platform_loop(void) {
-    o->oMoveAngleYaw -= 0x80;
-    o->oAngleVelYaw = -0x80;
+    o->oMoveAngleYaw -=  0x80;
+    o->oAngleVelYaw   = -0x80;
     bhv_flamethrower_loop();
 }
