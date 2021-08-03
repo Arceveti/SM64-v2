@@ -45,6 +45,9 @@ OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
 u8 gControllerBits;
 u8 gIsConsole;
+#ifdef WIDE
+u8 gWidescreen;
+#endif
 u8 gBorderHeight;
 #ifdef REONU_CAM_3
 s8 gCameraSpeed = 2;
@@ -79,12 +82,6 @@ struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
 u32 gGlobalTimer = 0;
-
-u8 gIsConsole;
-#ifdef WIDE
-u8 gWidescreen;
-#endif
-u8 gBorderHeight;
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer = 0;
@@ -361,13 +358,8 @@ void draw_reset_bars(void) {
  * Initial settings for the first rendered frame.
  */
 void render_init(void) {
-    if (IO_READ(DPC_PIPEBUSY_REG) == 0) {
-        gIsConsole = FALSE;
-        gBorderHeight = BORDER_HEIGHT_EMULATOR;
-    } else {
-        gIsConsole = TRUE;
-        gBorderHeight = BORDER_HEIGHT_CONSOLE;
-    }
+    gIsConsole = (IO_READ(DPC_PIPEBUSY_REG));
+    gBorderHeight = gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR;
     gGfxPool = &gGfxPools[0];
     set_segment_base_addr(1,  gGfxPool->buffer);
     gGfxSPTask       =       &gGfxPool->spTask;
@@ -380,12 +372,10 @@ void render_init(void) {
 
     // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes
     // VC probably emulates osViSwapBuffer accurately so instant patch breaks VC compatibility
-#ifndef VC_HACKS
-    if (gIsConsole) { // Read RDP Clock Register, has a value of zero on emulators
-#endif
-        sRenderingFrameBuffer++;
-#ifndef VC_HACKS
-    }
+#ifdef VC_HACKS
+    sRenderingFrameBuffer++;
+#else
+    if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
 #endif
     gGlobalTimer++;
 }

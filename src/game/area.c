@@ -38,21 +38,21 @@ s16 gSavedCourseNum;
 s16 gMenuOptSelectIndex;
 s16 gSaveOptSelectIndex;
 
-struct SpawnInfo *gMarioSpawnInfo = &gPlayerSpawnInfos[0];
-struct GraphNode **gLoadedGraphNodes = gGraphNodePointers;
-struct Area *gAreas = gAreaData;
-struct Area *gCurrentArea = NULL;
+struct SpawnInfo    *gMarioSpawnInfo   = &gPlayerSpawnInfos[0];
+struct GraphNode   **gLoadedGraphNodes =  gGraphNodePointers;
+struct Area         *gAreas            =  gAreaData;
+struct Area         *gCurrentArea      = NULL;
 struct CreditsEntry *gCurrCreditsEntry = NULL;
-Vp *gViewportOverride = NULL;
-Vp *gViewportClip = NULL;
-s16 gWarpTransDelay = 0;
-u32 gFBSetColor = 0;
+Vp *gViewportOverride    = NULL;
+Vp *gViewportClip        = NULL;
+s16 gWarpTransDelay      = 0;
+u32 gFBSetColor          = 0;
 u32 gWarpTransFBSetColor = 0;
-u8  gWarpTransRed = 0;
-u8  gWarpTransGreen = 0;
-u8  gWarpTransBlue = 0;
-s16 gCurrSaveFileNum = 1;
-s16 gCurrLevelNum = LEVEL_MIN;
+u8  gWarpTransRed        = 0;
+u8  gWarpTransGreen      = 0;
+u8  gWarpTransBlue       = 0;
+s16 gCurrSaveFileNum     = 1;
+s16 gCurrLevelNum        = LEVEL_MIN;
 
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type
@@ -427,8 +427,7 @@ void render_game(void) {
 
         gSPViewport(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
 
-        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
-                      SCREEN_HEIGHT - gBorderHeight);
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
         render_hud();
 #ifdef ENABLE_SCREEN_TINT_EFFECTS
         render_screen_overlay();

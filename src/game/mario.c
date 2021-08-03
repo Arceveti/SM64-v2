@@ -486,7 +486,6 @@ u32 mario_get_terrain_sound_addend(struct MarioState *m) {
             ret = sTerrainSounds[terrainType][floorSoundType] << 16;
         }
     }
-
     return ret;
 }
 
@@ -526,13 +525,10 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
  */
 s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
     s16 faceAngleYaw = m->faceAngle[1];
-
     // This is never used in practice, as turnYaw is
     // always passed as zero.
     if (turnYaw && m->forwardVel < 0.0f) faceAngleYaw += 0x8000;
-
     faceAngleYaw = m->floorAngle - faceAngleYaw;
-
     return (-0x4000 < faceAngleYaw) && (faceAngleYaw < 0x4000);
 }
 
@@ -546,20 +542,11 @@ u32 mario_floor_is_slippery(struct MarioState *m) {
         && m->floor->normal.y < COS1) return TRUE;
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_VERY_SLIPPERY:
-            normY = COS10;
-            break;
-        case SURFACE_SLIPPERY:
-            normY = COS20;
-            break;
-        default:
-            normY = COS38;
-            break;
-        case SURFACE_NOT_SLIPPERY:
-            normY = 0.0f;
-            break;
+        case SURFACE_VERY_SLIPPERY: normY = COS10; break;
+        case SURFACE_SLIPPERY:      normY = COS20; break;
+        default:                    normY = COS38; break;
+        case SURFACE_NOT_SLIPPERY:  normY =  0.0f; break;
     }
-
     return m->floor->normal.y <= normY;
 }
 
@@ -573,20 +560,11 @@ s32 mario_floor_is_slope(struct MarioState *m) {
         && m->floor->normal.y < COS1) return TRUE;
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_VERY_SLIPPERY:
-            normY = COS5;
-            break;
-        case SURFACE_SLIPPERY:
-            normY = COS10;
-            break;
-        default:
-            normY = COS15;
-            break;
-        case SURFACE_NOT_SLIPPERY:
-            normY = COS20;
-            break;
+        case SURFACE_VERY_SLIPPERY: normY = COS5;  break;
+        case SURFACE_SLIPPERY:      normY = COS10; break;
+        default:                    normY = COS15; break;
+        case SURFACE_NOT_SLIPPERY:  normY = COS20; break;
     }
-
     return m->floor->normal.y <= normY;
 }
 
@@ -607,23 +585,13 @@ s32 mario_floor_is_steep(struct MarioState *m) {
     // This does not matter in vanilla game practice.
     if (!mario_facing_downhill(m, FALSE)) {
         switch (mario_get_floor_class(m)) {
-            case SURFACE_VERY_SLIPPERY:
-                normY = COS15;
-                break;
-            case SURFACE_SLIPPERY:
-                normY = COS20;
-                break;
-            default:
-                normY = COS30;
-                break;
-            case SURFACE_NOT_SLIPPERY:
-                normY = COS30;
-                break;
+            case SURFACE_VERY_SLIPPERY: normY = COS15; break;
+            case SURFACE_SLIPPERY:      normY = COS20; break;
+            default:                    normY = COS30; break;
+            case SURFACE_NOT_SLIPPERY:  normY = COS30; break;
         }
-
         result = m->floor->normal.y <= normY;
     }
-
     return result;
 }
 
@@ -660,7 +628,7 @@ s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
 
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
-    forwardYDelta = forwardFloorY - m->pos[1];
+    forwardYDelta  = forwardFloorY - m->pos[1];
     backwardYDelta = m->pos[1] - backwardFloorY;
 
     return atan2s(5.0f, (forwardYDelta * forwardYDelta < backwardYDelta * backwardYDelta) ? forwardYDelta : backwardYDelta);

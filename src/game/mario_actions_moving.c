@@ -25,41 +25,16 @@ struct LandingAction {
     u32 slideAction;
 };
 
-struct LandingAction sJumpLandAction = {
-    4, 5, ACT_FREEFALL, ACT_JUMP_LAND_STOP, ACT_DOUBLE_JUMP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sFreefallLandAction = {
-    4, 5, ACT_FREEFALL, ACT_FREEFALL_LAND_STOP, ACT_DOUBLE_JUMP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sSideFlipLandAction = {
-    4, 5, ACT_FREEFALL, ACT_SIDE_FLIP_LAND_STOP, ACT_DOUBLE_JUMP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sHoldJumpLandAction = {
-    4, 5, ACT_HOLD_FREEFALL, ACT_HOLD_JUMP_LAND_STOP, ACT_HOLD_JUMP, ACT_HOLD_FREEFALL, ACT_HOLD_BEGIN_SLIDING,
-};
-
-struct LandingAction sHoldFreefallLandAction = {
-    4, 5, ACT_HOLD_FREEFALL, ACT_HOLD_FREEFALL_LAND_STOP, ACT_HOLD_JUMP, ACT_HOLD_FREEFALL, ACT_HOLD_BEGIN_SLIDING,
-};
-
-struct LandingAction sLongJumpLandAction = {
-    6, 5, ACT_FREEFALL, ACT_LONG_JUMP_LAND_STOP, ACT_LONG_JUMP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sDoubleJumpLandAction = {
-    4, 5, ACT_FREEFALL, ACT_DOUBLE_JUMP_LAND_STOP, ACT_JUMP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sTripleJumpLandAction = {
-    4, 0, ACT_FREEFALL, ACT_TRIPLE_JUMP_LAND_STOP, ACT_UNINITIALIZED, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
-
-struct LandingAction sBackflipLandAction = {
-    4, 0, ACT_FREEFALL, ACT_BACKFLIP_LAND_STOP, ACT_BACKFLIP, ACT_FREEFALL, ACT_BEGIN_SLIDING,
-};
+/*                                               numFrames, unk02,   verySteepAction,                   endAction,    aPressedAction,    offFloorAction,            slideAction, */
+struct LandingAction sJumpLandAction         = {         4,     5,      ACT_FREEFALL,          ACT_JUMP_LAND_STOP,   ACT_DOUBLE_JUMP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sFreefallLandAction     = {         4,     5,      ACT_FREEFALL,      ACT_FREEFALL_LAND_STOP,   ACT_DOUBLE_JUMP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sSideFlipLandAction     = {         4,     5,      ACT_FREEFALL,     ACT_SIDE_FLIP_LAND_STOP,   ACT_DOUBLE_JUMP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sHoldJumpLandAction     = {         4,     5, ACT_HOLD_FREEFALL,     ACT_HOLD_JUMP_LAND_STOP,     ACT_HOLD_JUMP, ACT_HOLD_FREEFALL, ACT_HOLD_BEGIN_SLIDING, };
+struct LandingAction sHoldFreefallLandAction = {         4,     5, ACT_HOLD_FREEFALL, ACT_HOLD_FREEFALL_LAND_STOP,     ACT_HOLD_JUMP, ACT_HOLD_FREEFALL, ACT_HOLD_BEGIN_SLIDING, };
+struct LandingAction sLongJumpLandAction     = {         6,     5,      ACT_FREEFALL,     ACT_LONG_JUMP_LAND_STOP,     ACT_LONG_JUMP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sDoubleJumpLandAction   = {         4,     5,      ACT_FREEFALL,   ACT_DOUBLE_JUMP_LAND_STOP,          ACT_JUMP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sTripleJumpLandAction   = {         4,     0,      ACT_FREEFALL,   ACT_TRIPLE_JUMP_LAND_STOP, ACT_UNINITIALIZED,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
+struct LandingAction sBackflipLandAction     = {         4,     0,      ACT_FREEFALL,      ACT_BACKFLIP_LAND_STOP,      ACT_BACKFLIP,      ACT_FREEFALL,      ACT_BEGIN_SLIDING, };
 
 Mat4 sFloorAlignMatrix[2];
 
@@ -161,9 +136,9 @@ s32 set_triple_jump_action(struct MarioState *m, UNUSED u32 action, UNUSED u32 a
     if (m->flags & MARIO_WING_CAP) {
         return set_mario_action(m, ACT_FLYING_TRIPLE_JUMP, 0);
     } else if (m->forwardVel > 20.0f) {
-        return set_mario_action(m, ACT_TRIPLE_JUMP, 0);
+        return set_mario_action(m, ACT_TRIPLE_JUMP,        0);
     } else {
-        return set_mario_action(m, ACT_JUMP, 0);
+        return set_mario_action(m, ACT_JUMP,               0);
     }
 
     return FALSE;
@@ -175,7 +150,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
 
     struct Surface *floor = m->floor;
     s16 slopeAngle = atan2s(floor->normal.z, floor->normal.x);
-    f32 steepness = sqrtf(floor->normal.x * floor->normal.x + floor->normal.z * floor->normal.z);
+    f32 steepness  = sqrtf(floor->normal.x * floor->normal.x + floor->normal.z * floor->normal.z);
     // UNUSED f32 normalY = floor->normal.y;
 
     m->slideVelX += accel * steepness * sins(slopeAngle);
@@ -184,9 +159,9 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     m->slideVelX *= lossFactor;
     m->slideVelZ *= lossFactor;
 
-    m->slideYaw = atan2s(m->slideVelZ, m->slideVelX);
+    m->slideYaw   = atan2s(m->slideVelZ, m->slideVelX);
 
-    facingDYaw = m->faceAngle[1] - m->slideYaw;
+    facingDYaw    = m->faceAngle[1] - m->slideYaw;
     newFacingDYaw = facingDYaw;
 
     if (newFacingDYaw > 0 && newFacingDYaw <= 0x4000) {
@@ -238,22 +213,10 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     if (forward < 0.0f && m->forwardVel >= 0.0f) forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_CLASS_VERY_SLIPPERY:
-            accel = 10.0f;
-            lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.98f;
-            break;
-        case SURFACE_CLASS_SLIPPERY:
-            accel = 8.0f;
-            lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.96f;
-            break;
-        default:
-            accel = 7.0f;
-            lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f;
-            break;
-        case SURFACE_CLASS_NOT_SLIPPERY:
-            accel = 5.0f;
-            lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f;
-            break;
+        case SURFACE_CLASS_VERY_SLIPPERY: accel = 10.0f; lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.98f; break;
+        case SURFACE_CLASS_SLIPPERY:      accel =  8.0f; lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.96f; break;
+        default:                          accel =  7.0f; lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f; break;
+        case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f; break;
     }
 
     oldSpeed = sqrtf(m->slideVelX * m->slideVelX + m->slideVelZ * m->slideVelZ);
@@ -286,7 +249,7 @@ void apply_slope_accel(struct MarioState *m) {
     struct Surface *floor = m->floor;
     f32 steepness = sqrtf(floor->normal.x * floor->normal.x + floor->normal.z * floor->normal.z);
 
-    // UNUSED f32 normalY = floor->normal.y;
+    UNUSED f32 normalY = floor->normal.y;
     s16 floorDYaw = m->floorAngle - m->faceAngle[1];
 
     if (mario_floor_is_slope(m)) {
@@ -295,18 +258,10 @@ void apply_slope_accel(struct MarioState *m) {
         if (m->action != ACT_SOFT_BACKWARD_GROUND_KB && m->action != ACT_SOFT_FORWARD_GROUND_KB) slopeClass = mario_get_floor_class(m);
 
         switch (slopeClass) {
-            case SURFACE_CLASS_VERY_SLIPPERY:
-                slopeAccel = 5.3f;
-                break;
-            case SURFACE_CLASS_SLIPPERY:
-                slopeAccel = 2.7f;
-                break;
-            default:
-                slopeAccel = 1.7f;
-                break;
-            case SURFACE_CLASS_NOT_SLIPPERY:
-                slopeAccel = 0.0f;
-                break;
+            case SURFACE_CLASS_VERY_SLIPPERY: slopeAccel = 5.3f; break;
+            case SURFACE_CLASS_SLIPPERY:      slopeAccel = 2.7f; break;
+            default:                          slopeAccel = 1.7f; break;
+            case SURFACE_CLASS_NOT_SLIPPERY:  slopeAccel = 0.0f; break;
         }
 
         if (floorDYaw > -0x4000 && floorDYaw < 0x4000) {
@@ -381,18 +336,10 @@ s32 apply_slope_decel(struct MarioState *m, f32 decelCoef) {
     s32 stopped = FALSE;
 
     switch (mario_get_floor_class(m)) {
-        case SURFACE_CLASS_VERY_SLIPPERY:
-            decel = decelCoef * 0.2f;
-            break;
-        case SURFACE_CLASS_SLIPPERY:
-            decel = decelCoef * 0.7f;
-            break;
-        default:
-            decel = decelCoef * 2.0f;
-            break;
-        case SURFACE_CLASS_NOT_SLIPPERY:
-            decel = decelCoef * 3.0f;
-            break;
+        case SURFACE_CLASS_VERY_SLIPPERY: decel = decelCoef * 0.2f; break;
+        case SURFACE_CLASS_SLIPPERY:      decel = decelCoef * 0.7f; break;
+        default:                          decel = decelCoef * 2.0f; break;
+        case SURFACE_CLASS_NOT_SLIPPERY:  decel = decelCoef * 3.0f; break;
     }
 
     if ((m->forwardVel = approach_f32(m->forwardVel, 0.0f, decel, decel)) == 0.0f) stopped = TRUE;

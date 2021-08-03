@@ -136,10 +136,10 @@ enum MenuOption {
     MENU_OPT_CONTINUE_DONT_SAVE = MENU_OPT_3
 };
 
-extern struct GraphNode **gLoadedGraphNodes;
-extern struct SpawnInfo gPlayerSpawnInfos[];
-extern struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
-extern struct Area gAreaData[];
+extern struct GraphNode    **gLoadedGraphNodes;
+extern struct SpawnInfo      gPlayerSpawnInfos[];
+extern struct GraphNode     *gGraphNodePointers[MODEL_ID_COUNT];
+extern struct Area           gAreaData[];
 extern struct WarpTransition gWarpTransition;
 extern s16 gCurrCourseNum;
 extern s16 gCurrActNum;

@@ -221,7 +221,7 @@ void thread2_crash_screen(UNUSED void *arg) {
     OSThread *thread;
 
     osSetEventMesg(OS_EVENT_CPU_BREAK, &gCrashScreen.mesgQueue, (OSMesg) 1);
-    osSetEventMesg(OS_EVENT_FAULT, &gCrashScreen.mesgQueue, (OSMesg) 2);
+    osSetEventMesg(OS_EVENT_FAULT,     &gCrashScreen.mesgQueue, (OSMesg) 2);
     do {
         osRecvMesg(&gCrashScreen.mesgQueue, &mesg, 1);
         thread = get_crashed_thread();

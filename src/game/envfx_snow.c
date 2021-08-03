@@ -34,16 +34,16 @@ struct SnowFlakeVertex {
 
 struct EnvFxParticle *gEnvFxBuffer;
 Vec3i gSnowCylinderLastPos;
-s16 gSnowParticleCount;
-s16 gSnowParticleMaxCount;
+s16   gSnowParticleCount;
+s16   gSnowParticleMaxCount;
 
 /* DATA */
 s8 gEnvFxMode = 0;
 
 /// Template for a snow particle triangle
-Vtx gSnowTempVtx[3] = { { { { -5,  5, 0 }, 0, {     0,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { { -5, -5, 0 }, 0, {     0, 30<<5 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { {  5,  5, 0 }, 0, { 30<<5,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
+Vtx gSnowTempVtx[3] = { { { { -5,  5,  0 }, 0, {     0,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { { -5, -5,  0 }, 0, {     0, 30<<5 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { {  5,  5,  0 }, 0, { 30<<5,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
 
 // Change these to make snowflakes smaller or bigger
 struct SnowFlakeVertex gSnowFlakeVertex1 = { -5,  5, 0 };
@@ -64,15 +64,15 @@ s32 envfx_init_snow(s32 mode) {
             return FALSE;
         case ENVFX_SNOW_NORMAL:
             gSnowParticleMaxCount = 140;
-            gSnowParticleCount = 5;
+            gSnowParticleCount    = 5;
             break;
         case ENVFX_SNOW_WATER:
             gSnowParticleMaxCount = 30;
-            gSnowParticleCount = 30;
+            gSnowParticleCount    = 30;
             break;
         case ENVFX_SNOW_BLIZZARD:
             gSnowParticleMaxCount = 140;
-            gSnowParticleCount = 140;
+            gSnowParticleCount    = 140;
             break;
     }
 
@@ -421,24 +421,11 @@ Gfx *envfx_update_particles(s32 mode, Vec3s marioPos, Vec3s camTo, Vec3s camFrom
     if (gEnvFxMode == 0 && !envfx_init_snow(mode)) return NULL;
 
     switch (mode) {
-        case ENVFX_MODE_NONE:
-            envfx_cleanup_snow(gEnvFxBuffer);
-            return NULL;
-
-        case ENVFX_SNOW_NORMAL:
-            gfx = envfx_update_snow(1, marioPos, camFrom, camTo);
-            break;
-
-        case ENVFX_SNOW_WATER:
-            gfx = envfx_update_snow(2, marioPos, camFrom, camTo);
-            break;
-
-        case ENVFX_SNOW_BLIZZARD:
-            gfx = envfx_update_snow(3, marioPos, camFrom, camTo);
-            break;
-
-        default:
-            return NULL;
+        case ENVFX_MODE_NONE:           envfx_cleanup_snow(gEnvFxBuffer); return NULL;
+        case ENVFX_SNOW_NORMAL:   gfx = envfx_update_snow(1, marioPos, camFrom, camTo); break;
+        case ENVFX_SNOW_WATER:    gfx = envfx_update_snow(2, marioPos, camFrom, camTo); break;
+        case ENVFX_SNOW_BLIZZARD: gfx = envfx_update_snow(3, marioPos, camFrom, camTo); break;
+        default: return NULL;
     }
 
     return gfx;
