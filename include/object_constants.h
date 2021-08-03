@@ -1992,7 +1992,7 @@
 
 /* Thwomp & Grindel */
     /* oAction */
-    #define GRINDEL_THWOMP_ACT_RISE                         0x0
+    #define GRINDEL_THWOMP_ACT_RISING                       0x0
     #define GRINDEL_THWOMP_ACT_FLOATING                     0x1
     #define GRINDEL_THWOMP_ACT_FALLING                      0x2
     #define GRINDEL_THWOMP_ACT_LAND                         0x3
