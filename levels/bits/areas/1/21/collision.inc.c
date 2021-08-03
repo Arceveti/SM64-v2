@@ -1,5 +1,5 @@
 // 0x0701AA0C - 0x0701AA84
-const Collision bits_seg7_collision_0701AA0C[] = {
+const Collision bits_seg7_collision_twin_sliding_platforms[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-460, 205, 205),

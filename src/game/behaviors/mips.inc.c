@@ -27,11 +27,11 @@ void bhv_mips_init(void) {
 
     o->oInteractionSubtype = INT_SUBTYPE_HOLDABLE_NPC;
 
-    o->oGravity = 15.0f;
+    o->oGravity  = 15.0f;
     o->oFriction = 0.89f;
     o->oBuoyancy = 1.2f;
 
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(MIPS_ANIM_IDLE);
 }
 
 /**
@@ -90,7 +90,7 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
             o->oAction = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
         } else {
             // Resume path following.
-            cur_obj_init_animation(1);
+            cur_obj_init_animation(MIPS_ANIM_HOPPING);
             o->oAction = MIPS_ACT_FOLLOW_PATH;
         }
     }
@@ -120,15 +120,15 @@ void bhv_mips_act_follow_path(void) {
 
     // If we are at the end of the path, do idle animation and wait for Mario.
     if (followStatus == PATH_REACHED_END) {
-        cur_obj_init_animation(0);
+        cur_obj_init_animation(MIPS_ANIM_IDLE);
         o->oAction = MIPS_ACT_WAIT_FOR_NEARBY_MARIO;
     }
 
     // Play sounds during walk animation.
-    if (cur_obj_check_if_near_animation_end() == 1 && (collisionFlags & OBJ_COL_FLAG_UNDERWATER)) {
+    if (cur_obj_check_if_near_animation_end() && (collisionFlags & OBJ_COL_FLAG_UNDERWATER)) {
         cur_obj_play_sound_2(SOUND_OBJ_MIPS_RABBIT_WATER);
         spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
-    } else if (cur_obj_check_if_near_animation_end() == 1) {
+    } else if (cur_obj_check_if_near_animation_end()) {
         cur_obj_play_sound_2(SOUND_OBJ_MIPS_RABBIT);
     }
 }
@@ -137,8 +137,8 @@ void bhv_mips_act_follow_path(void) {
  * Seems to wait until the current animation is done, then go idle.
  */
 void bhv_mips_act_wait_for_animation_done(void) {
-    if (cur_obj_check_if_near_animation_end() == 1) {
-        cur_obj_init_animation(0);
+    if (cur_obj_check_if_near_animation_end()) {
+        cur_obj_init_animation(MIPS_ANIM_IDLE);
         o->oAction = MIPS_ACT_IDLE;
     }
 }
@@ -181,25 +181,11 @@ void bhv_mips_act_idle(void) {
  */
 void bhv_mips_free(void) {
     switch (o->oAction) {
-        case MIPS_ACT_WAIT_FOR_NEARBY_MARIO:
-            bhv_mips_act_wait_for_nearby_mario();
-            break;
-
-        case MIPS_ACT_FOLLOW_PATH:
-            bhv_mips_act_follow_path();
-            break;
-
-        case MIPS_ACT_WAIT_FOR_ANIMATION_DONE:
-            bhv_mips_act_wait_for_animation_done();
-            break;
-
-        case MIPS_ACT_FALL_DOWN:
-            bhv_mips_act_fall_down();
-            break;
-
-        case MIPS_ACT_IDLE:
-            bhv_mips_act_idle();
-            break;
+        case MIPS_ACT_WAIT_FOR_NEARBY_MARIO:   bhv_mips_act_wait_for_nearby_mario();   break;
+        case MIPS_ACT_FOLLOW_PATH:             bhv_mips_act_follow_path();             break;
+        case MIPS_ACT_WAIT_FOR_ANIMATION_DONE: bhv_mips_act_wait_for_animation_done(); break;
+        case MIPS_ACT_FALL_DOWN:               bhv_mips_act_fall_down();               break;
+        case MIPS_ACT_IDLE:                    bhv_mips_act_idle();                    break;
     }
 }
 
@@ -210,8 +196,8 @@ void bhv_mips_held(void) {
     s16 dialogID;
 
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-    cur_obj_init_animation(4); // Held animation.
-    cur_obj_set_pos_relative(gMarioObject, 0, 60.0f, 100.0f);
+    cur_obj_init_animation(MIPS_ANIM_HELD); // Held animation.
+    cur_obj_set_pos_relative(gMarioObject, 0.0f, 60.0f, 100.0f);
     cur_obj_become_intangible();
 
     // If MIPS hasn't spawned his star yet...
@@ -236,7 +222,7 @@ void bhv_mips_held(void) {
 void bhv_mips_dropped(void) {
     cur_obj_get_dropped();
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(MIPS_ANIM_IDLE);
     o->oHeldState = HELD_FREE;
     cur_obj_become_tangible();
     o->oForwardVel = 3.0f;
@@ -251,7 +237,7 @@ void bhv_mips_thrown(void) {
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     o->oHeldState = HELD_FREE;
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
-    cur_obj_init_animation(2);
+    cur_obj_init_animation(MIPS_ANIM_THROWN);
     cur_obj_become_tangible();
     o->oForwardVel = 25.0f;
     o->oVelY = 20.0f;
@@ -264,20 +250,9 @@ void bhv_mips_thrown(void) {
 void bhv_mips_loop(void) {
     // Determine what to do based on MIPS' held status.
     switch (o->oHeldState) {
-        case HELD_FREE:
-            bhv_mips_free();
-            break;
-
-        case HELD_HELD:
-            bhv_mips_held();
-            break;
-
-        case HELD_THROWN:
-            bhv_mips_thrown();
-            break;
-
-        case HELD_DROPPED:
-            bhv_mips_dropped();
-            break;
+        case HELD_FREE:    bhv_mips_free();    break;
+        case HELD_HELD:    bhv_mips_held();    break;
+        case HELD_THROWN:  bhv_mips_thrown();  break;
+        case HELD_DROPPED: bhv_mips_dropped(); break;
     }
 }

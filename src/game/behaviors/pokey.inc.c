@@ -128,7 +128,7 @@ void bhv_pokey_body_part_update(void) {
             cur_obj_move_standard(-78);
         }
     } else {
-        o->oAnimState = 1;
+        o->oAnimState = POKEY_ANIM_STATE_NONSTANDARD_ACTION;
     }
 
     o->oGraphYOffset = o->header.gfx.scale[1] * 22.0f;

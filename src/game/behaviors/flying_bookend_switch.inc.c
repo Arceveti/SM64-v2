@@ -104,8 +104,8 @@ void bhv_flying_bookend_loop(void) {
             case FLYING_BOOKEND_ACT_FLY_FORWARD:       flying_bookend_act_fly_forward();       break;
         }
 
-        obj_check_attacks(&sFlyingBookendHitbox, FLYING_BOOKEND_ACT_ATTACKED_MARIO);
-        if (o->oAction == FLYING_BOOKEND_ACT_ATTACKED_MARIO || (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL))) {
+        obj_check_attacks(&sFlyingBookendHitbox, OBJ_ACT_PROJECTILE_HIT_MARIO);
+        if (o->oAction == OBJ_ACT_PROJECTILE_HIT_MARIO || (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL))) {
             o->oNumLootCoins = 0;
             obj_die_if_health_non_positive();
         }

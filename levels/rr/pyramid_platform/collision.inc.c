@@ -1,5 +1,5 @@
 // 0x0702967C - 0x070296CA
-const Collision rr_seg7_collision_0702967C[] = {
+const Collision rr_seg7_collision_pyramid_platform[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x5),
     COL_VERTEX(307, 307, -306),

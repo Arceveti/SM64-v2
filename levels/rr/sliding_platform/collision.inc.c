@@ -1,5 +1,5 @@
 // 0x070295F8 - 0x0702967C
-const Collision rr_seg7_collision_070295F8[] = {
+const Collision rr_seg7_collision_sliding_platform[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-409, 0, -306),

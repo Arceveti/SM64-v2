@@ -15,7 +15,7 @@ struct SLWalkingPenguinStep sSLWalkingPenguinErraticSteps[] = {
     { 30, PENGUIN_ANIM_IDLE,  0.0f, 1.0f },   // Stop for 1 second
     { 30, PENGUIN_ANIM_WALK, -6.0f, 1.0f },   // Walk backwards for 1 second
     { 30, PENGUIN_ANIM_IDLE,  0.0f, 1.0f },   // Stop for 1 second
-    { -1,                 0,  0.0f, 0.0f } }; // Repeat
+    { -1, PENGUIN_ANIM_WALK,  0.0f, 0.0f } }; // Repeat
 
 
 static s32 sl_walking_penguin_turn(void) {
@@ -59,7 +59,7 @@ void bhv_sl_walking_penguin_loop(void) {
             }
             
             if (o->oPosX < 300.0f) {
-                o->oAction++; // If reached the end of the bridge, turn around and head back.
+                o->oAction = SL_WALKING_PENGUIN_ACT_TURNING_BACK; // If reached the end of the bridge, turn around and head back.
             } else {
                 // Move and animate the penguin
                 o->oForwardVel = sSLWalkingPenguinErraticSteps[o->oSLWalkingPenguinCurStep].speed;
@@ -73,7 +73,7 @@ void bhv_sl_walking_penguin_loop(void) {
             
         // At the end, turn around and prepare to head back across the bridge.
         case SL_WALKING_PENGUIN_ACT_TURNING_BACK:
-            if (sl_walking_penguin_turn()) o->oAction++; // Finished turning
+            if (sl_walking_penguin_turn()) o->oAction = SL_WALKING_PENGUIN_ACT_RETURNING; // Finished turning
             break;
             
         // Walk back across the bridge at a constant speed.
@@ -82,7 +82,7 @@ void bhv_sl_walking_penguin_loop(void) {
             o->oForwardVel = 12.0f;
             cur_obj_init_animation_with_accel_and_sound(PENGUIN_ANIM_WALK, 2.0f);
             
-            if (o->oPosX > 1700.0f) o->oAction++; // If reached the start of the bridge, turn around.
+            if (o->oPosX > 1700.0f) o->oAction = SL_WALKING_PENGUIN_ACT_TURNING_FORWARDS; // If reached the start of the bridge, turn around.
             break;
             
         // At the start, turn around and prepare to walk erratically across the bridge.
@@ -92,13 +92,13 @@ void bhv_sl_walking_penguin_loop(void) {
     }
     
     cur_obj_move_standard(-78);
-    if (!cur_obj_hide_if_mario_far_away_y(1000.0f)) play_penguin_walking_sound(PENGUIN_WALK_BIG);
+    if (!cur_obj_hide_if_mario_far_away_y(1000.0f)) play_penguin_walking_sound(PENGUIN_SOUND_WALK_BIG);
 
     // Adjust the position to get a point better lined up with the visual model, for stopping the wind.
     // The new point is 60 units behind the penguin and 100 units perpedicularly, away from the snowman.
     
-    adjustedXPos = o->oPosX + sins(0xDBB0) * 60.0f; // 0xDBB0 = -51 degrees, the angle the penguin is facing
-    adjustedZPos = o->oPosZ + coss(0xDBB0) * 60.0f;
+    adjustedXPos  = o->oPosX            + sins(0xDBB0) * 60.0f; // 0xDBB0 = -51 degrees, the angle the penguin is facing
+    adjustedZPos  = o->oPosZ            + coss(0xDBB0) * 60.0f;
     adjustedXPos += perpendicularOffset * sins(0x1BB0); // 0x1BB0 = 39 degrees, perpendicular to the penguin
     adjustedZPos += perpendicularOffset * coss(0x1BB0);
     o->oSLWalkingPenguinWindCollisionXPos = adjustedXPos;

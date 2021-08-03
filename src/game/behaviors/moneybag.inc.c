@@ -25,11 +25,11 @@ static struct ObjectHitbox sMoneybagHiddenHitbox = {
 };
 
 void bhv_moneybag_init(void) {
-    o->oGravity = 3.0f;
+    o->oGravity  = 3.0f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 2.0f;
-    cur_obj_init_animation(0);
-    o->oOpacity = 0;
+    cur_obj_init_animation(MONEYBAG_ANIM_IDLE);
+    o->oOpacity  = 0;
 }
 
 void moneybag_check_mario_collision(void) {
@@ -54,7 +54,7 @@ void moneybag_jump(s8 collisionFlags) {
 
     switch (o->oMoneybagJumpState) {
         case MONEYBAG_JUMP_PREPARE:
-            cur_obj_init_animation(1);
+            cur_obj_init_animation(MONEYBAG_ANIM_PREPARE_JUMP);
             if (animFrame == 5) {
                 o->oForwardVel = 20.0f;
                 o->oVelY = 40.0f;
@@ -67,7 +67,7 @@ void moneybag_jump(s8 collisionFlags) {
             break;
 
         case MONEYBAG_JUMP_JUMP:
-            cur_obj_init_animation(2);
+            cur_obj_init_animation(MONEYBAG_ANIM_JUMP);
 
             if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {/* bit 0 */
                 o->oForwardVel = 0;
@@ -77,12 +77,12 @@ void moneybag_jump(s8 collisionFlags) {
             break;
 
         case MONEYBAG_JUMP_JUMP_AND_BOUNCE:
-            cur_obj_init_animation(3);
+            cur_obj_init_animation(MONEYBAG_ANIM_LAND);
             if (cur_obj_check_if_near_animation_end()) o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
             break;
 
         case MONEYBAG_JUMP_WALK_AROUND:
-            cur_obj_init_animation(4);
+            cur_obj_init_animation(MONEYBAG_ANIM_WALK);
             o->oForwardVel = 10.0f;
 
             if (o->oTimer >= 61) {
@@ -93,7 +93,7 @@ void moneybag_jump(s8 collisionFlags) {
             break;
 
         case MONEYBAG_JUMP_WALK_HOME:
-            cur_obj_init_animation(4);
+            cur_obj_init_animation(MONEYBAG_ANIM_WALK);
             o->oForwardVel = 5.0f;
             break;
     }
@@ -144,7 +144,7 @@ void moneybag_act_return_home(void) {
 #ifndef VERSION_JP
         cur_obj_play_sound_2(SOUND_GENERAL_VANISH_SFX);
 #endif
-        cur_obj_init_animation(0);
+        cur_obj_init_animation(MONEYBAG_ANIM_IDLE);
         o->oAction = MONEYBAG_ACT_DISAPPEAR;
         o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
     }
@@ -157,8 +157,8 @@ void moneybag_act_return_home(void) {
 
 void moneybag_act_disappear(void) {
     o->oOpacity -= 6;
-    if (o->oOpacity < 0) {
-        o->oOpacity = 0;
+    if (o->oOpacity    < 0) {
+        o->oOpacity    = 0;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }
@@ -189,17 +189,9 @@ void bhv_moneybag_loop(void) {
             if (o->oTimer >= 31) cur_obj_become_tangible();
             break;
 
-        case MONEYBAG_ACT_RETURN_HOME:
-            moneybag_act_return_home();
-            break;
-
-        case MONEYBAG_ACT_DISAPPEAR:
-            moneybag_act_disappear();
-            break;
-
-        case MONEYBAG_ACT_DEATH:
-            moneybag_act_death();
-            break;
+        case MONEYBAG_ACT_RETURN_HOME: moneybag_act_return_home(); break;
+        case MONEYBAG_ACT_DISAPPEAR:   moneybag_act_disappear();   break;
+        case MONEYBAG_ACT_DEATH:       moneybag_act_death();       break;
     }
 }
 

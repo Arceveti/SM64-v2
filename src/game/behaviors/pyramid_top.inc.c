@@ -49,10 +49,10 @@ void bhv_pyramid_top_spinning(void) {
     // with a random velocity and angle.
     if (o->oTimer < 90) {
         pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
-        pyramidFragment->oForwardVel = random_float() * 10.0f + 20.0f;
-        pyramidFragment->oMoveAngleYaw = random_u16();
+        pyramidFragment->oForwardVel               = random_float() * 10.0f + 20.0f;
+        pyramidFragment->oMoveAngleYaw             = random_u16();
         pyramidFragment->oPyramidTopFragmentsScale = 0.8f;
-        pyramidFragment->oGravity = random_float() + 2.0f;
+        pyramidFragment->oGravity                  = random_float() + 2.0f;
     }
 
     // After enough time, transition to the exploding state.
@@ -71,11 +71,11 @@ void bhv_pyramid_top_explode(void) {
     // Generate 30 pyramid fragments with random properties.
     for (i = 0; i < 30; i++) {
         pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
-        pyramidFragment->oForwardVel = random_float() * 50 + 80;
-        pyramidFragment->oVelY = random_float() * 80 + 20;
-        pyramidFragment->oMoveAngleYaw = random_u16();
-        pyramidFragment->oPyramidTopFragmentsScale = 3;
-        pyramidFragment->oGravity = random_float() * 2 + 5;
+        pyramidFragment->oForwardVel               = random_float() * 50.0f + 80.0f;
+        pyramidFragment->oVelY                     = random_float() * 80.0f + 20.0f;
+        pyramidFragment->oMoveAngleYaw             = random_u16();
+        pyramidFragment->oPyramidTopFragmentsScale = 3.0f;
+        pyramidFragment->oGravity                  = random_float() * 2.0f + 5.0f;
     }
 #ifdef SSL_PILLARS_CUTSCENE
     if (gMarioState->action & ACT_FLAG_RIDING_SHELL) disable_time_stop_including_mario();
@@ -123,8 +123,8 @@ void bhv_pyramid_top_loop(void) {
  * Initialize the pyramid fragment.
  */
 void bhv_pyramid_top_fragment_init(void) {
-    o->oFriction = 0.999f;
-    o->oBuoyancy = 2.0f;
+    o->oFriction  = 0.999f;
+    o->oBuoyancy  = 2.0f;
     o->oAnimState = 3;
     cur_obj_scale(o->oPyramidTopFragmentsScale);
 }
@@ -135,7 +135,7 @@ void bhv_pyramid_top_fragment_init(void) {
  */
 void bhv_pyramid_top_fragment_loop(void) {
     object_step();
-    o->oFaceAngleYaw += 0x1000;
+    o->oFaceAngleYaw   += 0x1000;
     o->oFaceAnglePitch += 0x1000;
     if (o->oTimer == 60) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }

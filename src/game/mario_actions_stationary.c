@@ -284,9 +284,9 @@ s32 act_coughing(struct MarioState *m) {
 }
 
 s32 act_hold_idle(struct MarioState *m) {
-    if (segmented_to_virtual(&bhvJumpingBox) == m->heldObj->behavior) return set_mario_action(m, ACT_CRAZY_BOX_BOUNCE, 0);
-    if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_IDLE, 0);
-    if (m->quicksandDepth > 30.0f) return drop_and_set_mario_action(m, ACT_IN_QUICKSAND, 0);
+    if (segmented_to_virtual(&bhvJumpingBox) == m->heldObj->behavior) return set_mario_action(         m, ACT_CRAZY_BOX_BOUNCE, 0);
+    if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT ) return drop_and_set_mario_action(m, ACT_IDLE            , 0);
+    if (m->quicksandDepth > 30.0f                                   ) return drop_and_set_mario_action(m, ACT_IN_QUICKSAND    , 0);
     if (check_common_hold_idle_cancels(m)) return TRUE;
     stationary_ground_step(m);
     set_mario_animation(m, MARIO_ANIM_IDLE_WITH_LIGHT_OBJ);

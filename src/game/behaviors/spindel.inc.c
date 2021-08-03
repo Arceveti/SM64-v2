@@ -1,8 +1,8 @@
 // spindel.c.inc
 
 void bhv_spindel_init(void) {
-    o->oHomeY = o->oPosY;
-    o->oSpindelMoveTimer = 0;
+    o->oHomeY                = o->oPosY;
+    o->oSpindelMoveTimer     = 0;
     o->oSpindelMoveDirection = FALSE;
 }
 
@@ -45,8 +45,8 @@ void bhv_spindel_loop(void) {
 
     if (o->oTimer < shake * 8) {
         if (o->oSpindelMoveDirection == 0) {
-            o->oVelZ = 20 / shake;
-            o->oAngleVelPitch = 1024 / shake;
+            o->oVelZ =  20 / shake;
+            o->oAngleVelPitch =  1024 / shake;
         } else {
             o->oVelZ = -20 / shake;
             o->oAngleVelPitch = -1024 / shake;

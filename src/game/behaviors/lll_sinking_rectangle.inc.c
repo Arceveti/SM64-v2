@@ -1,18 +1,8 @@
 // lll_sinking_rectangle.c.inc
 
-void sinking_rectangular_plat_actions(f32 a0, s32 a1) {
-    switch (o->oAction) {
-        case 0:
-            o->oAction++;
-            break;
-        case 1:
-            o->oPosY -= sins(o->oLllWoodPieceOscillationTimer) * a0;
-            o->oLllWoodPieceOscillationTimer += a1;
-            break;
-        case 2:
-            break;
-            break; //! Two breaks needed?
-    }
+void sinking_rectangular_plat_actions(f32 dist, s32 speed) {
+    o->oPosY -= sins(o->oLllWoodPieceOscillationTimer) * dist;
+    o->oLllWoodPieceOscillationTimer += speed;
 }
 
 void bhv_lll_sinking_rectangular_platform_loop(void) {

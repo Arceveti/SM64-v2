@@ -14,5 +14,5 @@ void bhv_swing_platform_update(void) {
 
     o->oSwingPlatformAngle += o->oSwingPlatformSpeed;
     o->oFaceAngleRoll = o->oSwingPlatformAngle;
-    o->oAngleVelRoll = o->oFaceAngleRoll - startRoll;
+    o->oAngleVelRoll  = o->oFaceAngleRoll - startRoll;
 }

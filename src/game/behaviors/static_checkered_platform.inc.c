@@ -1,11 +1,11 @@
 // static_checkered_platform.c.inc
 
-void bhv_static_checkered_platform_loop(void) {
+void bhv_unused_static_checkered_platform_loop(void) {
     if (gDebugInfo[5][0] == 1) {
-        obj_set_angle(o, 0, 0, 0);
-        o->oAngleVelPitch = 0;
-        o->oAngleVelYaw   = 0;
-        o->oAngleVelRoll  = 0;
+        obj_set_angle(o, 0x0, 0x0, 0x0);
+        o->oAngleVelPitch = 0x0;
+        o->oAngleVelYaw   = 0x0;
+        o->oAngleVelRoll  = 0x0;
     }
     if (gDebugInfo[5][0] == 2) {
         o->oFaceAnglePitch = gDebugInfo[5][1] << 12;

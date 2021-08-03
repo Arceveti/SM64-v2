@@ -59,10 +59,10 @@ void bhv_koopa_shell_loop(void) {
     obj_set_hitbox(o, &sKoopaShellHitbox);
     cur_obj_scale(1.0f);
     switch (o->oAction) {
-        case 0:
+        case KOOPA_SHELL_ACT_MARIO_NOT_RIDING:
             cur_obj_update_floor_and_walls();
             cur_obj_if_hit_wall_bounce_away();
-            if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oAction++;
+            if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oAction = KOOPA_SHELL_ACT_MARIO_NOT_RIDING;
             o->oFaceAngleYaw += 0x1000;
             cur_obj_move_standard(-20);
             koopa_shell_spawn_sparkles(10.0f);
@@ -70,7 +70,7 @@ void bhv_koopa_shell_loop(void) {
             shell_despawn();
 #endif
             break;
-        case 1:
+        case KOOPA_SHELL_ACT_MARIO_RIDING:
             obj_copy_pos(o, gMarioObject);
             floor = cur_obj_update_floor_height_and_get_floor();
             if (absf(find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 10.0f) {
@@ -88,7 +88,7 @@ void bhv_koopa_shell_loop(void) {
             if (o->oInteractStatus & INT_STATUS_STOP_RIDING) {
                 obj_mark_for_deletion(o);
                 spawn_mist_particles();
-                o->oAction = 0;
+                o->oAction = KOOPA_SHELL_ACT_MARIO_NOT_RIDING;
             }
             break;
     }

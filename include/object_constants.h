@@ -67,7 +67,7 @@
 #define DIALOG_FLAG_TIME_STOP_ENABLED  (1 <<  4) // 0x10
 
 /* oMoveFlags */
-#define OBJ_MOVE_NONE                       0x0  // 0x0000
+#define OBJ_MOVE_NONE                   0x0000   // 0x0000
 #define OBJ_MOVE_LANDED                (1 <<  0) // 0x0001
 #define OBJ_MOVE_ON_GROUND             (1 <<  1) // 0x0002  // mutually exclusive to OBJ_MOVE_LANDED
 #define OBJ_MOVE_LEFT_GROUND           (1 <<  2) // 0x0004
@@ -116,12 +116,17 @@
 #define ACTIVE_PARTICLE_TRIANGLE             (1 << 19) // 0x00080000
 
 /* oAction */
+#define OBJ_ACT_PROJECTILE_HIT_MARIO                       -0x1 
+
 #define OBJ_ACT_LAVA_DEATH                                  100
 #define OBJ_ACT_DEATH_PLANE_DEATH                           101
 
 #define OBJ_ACT_HORIZONTAL_KNOCKBACK                        100
 #define OBJ_ACT_VERTICAL_KNOCKBACK                          101
 #define OBJ_ACT_SQUISHED                                    102
+
+/* Animations */
+#define OBJ_ANIM_NONE                                      -0x1
 
 /* gTTCSpeedSetting */
 #define TTC_SPEED_SLOW                                      0x0
@@ -188,6 +193,10 @@
     #define MUSHROOM_BP_REQUIRES_BOWSER_1                   0x1
     #define MUSHROOM_BP_REQUIRES_BOWSER_2                   0x2
     /* oAction */
+    #define MUSHROOM_ACT_INIT                               0x0
+    #define MUSHROOM_ACT_MOVING                             0x1
+    #define MUSHROOM_ACT_DISAPPEARING                       0x2
+    #define MUSHROOM_ACT_LOOP_IN_AIR                        0x3
 
 /* Bob-omb Buddy */
     /* oBehParams2ndByte */
@@ -212,6 +221,10 @@
     #define BOBOMB_BUDDY_HAS_TALKED                         0x2
 
 /* Bowser */
+    /* oBehParams2ndByte */
+    #define BOWSER_BP_BITDW                                 0x0
+    #define BOWSER_BP_BITFS                                 0x1
+    #define BOWSER_BP_BITS                                  0x2
     /* Tail oAction */
     #define BOWSER_ACT_TAIL_DEFAULT                         0x00
     #define BOWSER_ACT_TAIL_THROWN                          0x01
@@ -265,10 +278,6 @@
     #define BOWSER_ANIM_EDGE_STOP                           0x18
     #define BOWSER_ANIM_FLIP                                0x19
     #define BOWSER_ANIM_STAND_UP_FROM_FLIP                  0x1A
-    /* oBehParams2ndByte */
-    #define BOWSER_BP_BITDW                                 0x0
-    #define BOWSER_BP_BITFS                                 0x1
-    #define BOWSER_BP_BITS                                  0x2
     /* oBowserCamAct */
     #define BOWSER_CAM_ACT_IDLE                             0x0
     #define BOWSER_CAM_ACT_WALK                             0x1
@@ -312,7 +321,7 @@
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_LAND               0x2
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_STOP               0x3
 
-/* Bowser Bits Platform*/
+/* Bowser BITS Platform */
     /* oAction */
     #define BOWSER_BITS_PLAT_ACT_START                      0x0
     #define BOWSER_BITS_PLAT_ACT_CHECK                      0x1
@@ -324,15 +333,15 @@
     #define BOWSER_KEY_CUTSCENE_ANIM_COURSE_EXIT            0x1
 
 /* Fish Spawer */
-    /* oAction */
-    #define FISH_SPAWNER_ACT_SPAWN                          0x0
-    #define FISH_SPAWNER_ACT_IDLE                           0x1
-    #define FISH_SPAWNER_ACT_RESPAWN                        0x2
     /* oBehParams2ndByte */
     #define FISH_SPAWNER_BP_MANY_BLUE                       0x0
     #define FISH_SPAWNER_BP_FEW_BLUE                        0x1
     #define FISH_SPAWNER_BP_MANY_CYAN                       0x2
     #define FISH_SPAWNER_BP_FEW_CYAN                        0x3
+    /* oAction */
+    #define FISH_SPAWNER_ACT_SPAWN                          0x0
+    #define FISH_SPAWNER_ACT_IDLE                           0x1
+    #define FISH_SPAWNER_ACT_RESPAWN                        0x2
 
 /* Fish */
     /* oAction */
@@ -369,6 +378,8 @@
     #define BUB_ACT_INIT                                    0x0
     #define BUB_ACT_SWIMMING_TOWARDS_MARIO                  0x1
     #define BUB_ACT_SWIMMING_AWAY_FROM_MARIO                0x2
+    /* Animations */
+    #define BUB_ANIM_0                                      0x0 //! name
 
 /* Bubba */
     /* oAction */
@@ -378,6 +389,10 @@
     #define BUBBA_ANIM_STATE_CLOSED_MOUTH                   0x0
     #define BUBBA_ANIM_STATE_OPEN_MOUTH                     0x1
 
+/* Seaweed */
+    /* Animations */
+    #define SEAWEED_ANIM_WAVE                               0x0
+
 /* Clam */
     /* oAction */
     #define CLAM_ACT_CLOSING                                0x0
@@ -386,7 +401,36 @@
     #define CLAM_ANIM_CLOSING                               0x0
     #define CLAM_ANIM_OPENING                               0x1
 
+/* Purple switch */
+    #define PURPLE_SWITCH_IDLE                              0x0
+    #define PURPLE_SWITCH_PRESSED                           0x1
+    #define PURPLE_SWITCH_TICKING                           0x2
+    #define PURPLE_SWITCH_UNPRESSED                         0x3
+    #define PURPLE_SWITCH_WAIT_FOR_MARIO_TO_GET_OFF         0x4
+
+/* Openable Grill Door */
+    /* oAction */
+    #define OPENABLE_GRILL_DOOR_ACT_CLOSED                  0x0
+    #define OPENABLE_GRILL_DOOR_ACT_OPENING                 0x1
+    #define OPENABLE_GRILL_DOOR_ACT_OPEN                    0x2
+
+/* Openable Grill */
+    /* oAction */
+    #define OEPNABLE_GRILL_ACT_SPAWN                        0x0
+    #define OEPNABLE_GRILL_IDLE_CLOSED                      0x1
+    #define OEPNABLE_GRILL_OPENING                          0x2
+    #define OEPNABLE_GRILL_IDLE_OPEN                        0x3
+
 /* Breakable Box */
+    /* oBehParams2ndByte */
+    #define BREAKABLE_BOX_BP_NO_COINS                       0x0
+    #define BREAKABLE_BOX_BP_3_COINS                        0x1
+    #define BREAKABLE_BOX_BP_5_COINS                        0x2
+    #define BREAKABLE_BOX_BP_LARGE                          0x3
+    /* oAction */
+    #define BREAKABLE_BOX_ACT_HIDDEN                        0x0
+    #define BREAKABLE_BOX_ACT_ACTIVE                        0x1
+    #define BREAKABLE_BOX_ACT_BROKEN                        0x2
     /* oAnimState */
     #define BREAKABLE_BOX_ANIM_STATE_CRAZY_BOX              0x0
     #define BREAKABLE_BOX_ANIM_STATE_CORK_BOX               0x1
@@ -395,14 +439,16 @@
     /* oAction */
     #define BREAKABLE_BOX_SMALL_ACT_MOVE                    0x0
 
-/* Exclamation Box */
+/* Jumping Box */
     /* oAction */
-    #define EXCLAMATION_BOX_ACT_INIT                        0x0
-    #define EXCLAMATION_BOX_ACT_OUTLINE                     0x1
-    #define EXCLAMATION_BOX_ACT_ACTIVE                      0x2
-    #define EXCLAMATION_BOX_ACT_SCALING                     0x3
-    #define EXCLAMATION_BOX_ACT_EXPLODE                     0x4
-    #define EXCLAMATION_BOX_ACT_WAIT_FOR_RESPAWN            0x5
+    #define JUMPING_BOX_ACT_IDLE                            0x0
+    #define JUMPING_BOX_ACT_DROPPED                         0x1
+    /* oSubAction */
+        /* JUMPING_BOX_ACT_IDLE */
+    #define JUMPING_BOX_SUB_ACT_BOUNCING                    0x0
+    #define JUMPING_BOX_SUB_ACT_RESET_TIMER                 0x1
+
+/* Exclamation Box */
     /* oBehParams2ndByte, ExclamationBoxContents->id */
     #define EXCLAMATION_BOX_BP_WING_CAP                     0x0
     #define EXCLAMATION_BOX_BP_METAL_CAP                    0x1
@@ -420,6 +466,13 @@
     #define EXCLAMATION_BOX_BP_STAR_5                       0xD
     #define EXCLAMATION_BOX_BP_STAR_6                       0xE
     #define EXCLAMATION_BOX_BP_NULL                         0x63
+    /* oAction */
+    #define EXCLAMATION_BOX_ACT_INIT                        0x0
+    #define EXCLAMATION_BOX_ACT_OUTLINE                     0x1
+    #define EXCLAMATION_BOX_ACT_ACTIVE                      0x2
+    #define EXCLAMATION_BOX_ACT_SCALING                     0x3
+    #define EXCLAMATION_BOX_ACT_EXPLODE                     0x4
+    #define EXCLAMATION_BOX_ACT_WAIT_FOR_RESPAWN            0x5
     /* oAnimState */
     #define EXCLAMATION_BOX_ANIM_STATE_RED                  0x0
     #define EXCLAMATION_BOX_ANIM_STATE_GREEN                0x1
@@ -440,6 +493,15 @@
     #define CAP_ACT_MOVING_QUICKSAND                        0xB
     #define CAP_ACT_INSTANT_QUICKSAND                       0xC
     #define CAP_ACT_INSTANT_MOVING_QUICKSAND                0xD
+
+/* Koopa Shell */
+    /* oAction */
+    #define KOOPA_SHELL_ACT_MARIO_NOT_RIDING                0x0
+    #define KOOPA_SHELL_ACT_MARIO_RIDING                    0x1
+
+/* Koopa Shell Underwater */
+    /* oAction */
+    #define KOOPA_SHELL_UNDERWATER_ACT_DEFAULT              0x0
 
 /* Cannon Trap Door */
     /* oAction */
@@ -488,6 +550,10 @@
     #define CASTLE_FLOOR_TRAP_ACT_CLOSE                     0x3
     #define CASTLE_FLOOR_TRAP_ACT_ROTATE                    0x4
 
+/* Castle Flag */
+    /* Animations */
+    #define CASTLE_FLAG_ANIM_WAVE                           0x0
+
 /* Homing Amp */
     /* oAction */
     #define HOMING_AMP_ACT_INACTIVE                         0x0
@@ -508,6 +574,8 @@
     /* oAnimState */
     #define AMP_ANIM_STATE_OFF                              0x0
     #define AMP_ANIM_STATE_ON                               0x1
+    /* Animations */
+    #define AMP_ANIM_DEFAULT                                0x0
 
 /* Butterfly */
     /* oAction */
@@ -567,6 +635,26 @@
     #define HIDDEN_STAR_ACT_INACTIVE                        0x0
     #define HIDDEN_STAR_ACT_ACTIVE                          0x1
 
+/* Spawn Star stay at position cutscene */
+    /* oBehParams2ndByte */
+    #define SPAWN_STAR_POS_CUTSCENE_BP_SPAWN_AT_MARIO       0x0
+    #define SPAWN_STAR_POS_CUTSCENE_BP_SPAWN_AT_HOME        0x1
+    /* oAction */
+    #define SPAWN_STAR_POS_CUTSCENE_ACT_START               0x0
+    #define SPAWN_STAR_POS_CUTSCENE_ACT_BOUNCE              0x1
+    #define SPAWN_STAR_POS_CUTSCENE_ACT_END                 0x2
+    #define SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION  0x3
+
+/* Spawn Star arc to position cutscene */
+    /* oBehParams2ndByte */
+    #define SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR         0x0
+    #define SPAWN_STAR_ARC_CUTSCENE_BP_HIDDEN_STAR          0x1
+    /* oAction */
+    #define SPAWN_STAR_ARC_CUTSCENE_ACT_START               0x0
+    #define SPAWN_STAR_ARC_CUTSCENE_ACT_GO_TO_HOME          0x1
+    #define SPAWN_STAR_ARC_CUTSCENE_ACT_BOUNCE              0x2
+    #define SPAWN_STAR_ARC_CUTSCENE_ACT_END                 0x3
+
 /* Celebration Star */
     /* oAction */
     #define CELEB_STAR_ACT_SPIN_AROUND_MARIO                0x0
@@ -586,12 +674,64 @@
     #define LLL_DRAWBRIDGE_ACT_LOWER                        0x0
     #define LLL_DRAWBRIDGE_ACT_RAISE                        0x1
 
+/* LLL Volcano Trap */
+    /* oAction */
+    #define LLL_VOLCANO_TRAP_ACT_WAIT                       0x0
+    #define LLL_VOLCANO_TRAP_ACT_FALL                       0x1
+    #define LLL_VOLCANO_TRAP_ACT_LAND                       0x2
+    #define LLL_VOLCANO_TRAP_ACT_RISE                       0x3
+
+/* LLL Floating Wood Bridge */
+    /* oAction */
+    #define LLL_FLOATING_WOOD_ACT_INACTIVE                  0x0
+    #define LLL_FLOATING_WOOD_ACT_ACTIVE                    0x1
+    #define LLL_FLOATING_WOOD_ACT_REMOVE_PIECES             0x2
+
+/* LLL Hexagonal Ring */
+    /* oAction */
+    #define LLL_HEXAGONAL_RING_ACT_MARIO_OFF_PLATFORM       0x0
+    #define LLL_HEXAGONAL_RING_ACT_MARIO_ON_PLATFORM        0x1
+    #define LLL_HEXAGONAL_RING_ACT_SPAWN_FLAMES             0x2
+    #define LLL_HEXAGONAL_RING_ACT_MARIO_LEFT_PLATFORM      0x3
+    #define LLL_HEXAGONAL_RING_ACT_RESET                    0x4
+
+/* LLL Octagonal Rotating Mesh */
+    /* oAction */
+    #define LLL_OCTAGONAL_ROTATING_MESH_ACT_RESET           0x0
+    #define LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE            0x1
+
+/* LLL Fire Bar */
+    /* oAction */
+    #define LLL_FIRE_BAR_ACT_INACTIVE                       0x0
+    #define LLL_FIRE_BAR_ACT_SPAWN_FLAMES                   0x1
+    #define LLL_FIRE_BAR_ACT_ACTIVE                         0x2
+    #define LLL_FIRE_BAR_ACT_REMOVE_FLAMES                  0x3
+
 /* Bomp (both variants) */
     /* oAction */
     #define BOMP_ACT_WAIT                                   0x0
     #define BOMP_ACT_POKE_OUT                               0x1
     #define BOMP_ACT_EXTEND                                 0x2
     #define BOMP_ACT_RETRACT                                0x3
+
+/* WF Tower Platform Group */
+    /* oAction */
+    #define WF_TOWER_PLATFORM_GROUP_ACT_INACTIVE            0x0
+    #define WF_TOWER_PLATFORM_GROUP_ACT_SPAWN_PLATFORMS     0x1
+    #define WF_TOWER_PLATFORM_GROUP_ACT_ACTIVE              0x2
+    #define WF_TOWER_PLATFORM_GROUP_ACT_REMOVE_PLATFORMS    0x3
+
+/* WF Tower Sliding Platform */
+    /* oAction */
+    #define WF_TOWER_SLIDING_PLATFORM_ACT_BACKWARD          0x0
+    #define WF_TOWER_SLIDING_PLATFORM_ACT_FORWARD           0x1
+
+/* WF Tower Elevator Platform */
+    /* oAction */
+    #define WF_TOWER_ELEVATOR_PLATFORM_ACT_BOTTOM           0x0
+    #define WF_TOWER_ELEVATOR_PLATFORM_ACT_MOVING_UP        0x1
+    #define WF_TOWER_ELEVATOR_PLATFORM_ACT_TOP              0x2
+    #define WF_TOWER_ELEVATOR_PLATFORM_ACT_MOVING_DOWN      0x3
 
 /* WF Sliding Brick Platform */
     /* oBehParams2ndByte */
@@ -602,6 +742,44 @@
     #define WF_SLID_BRICK_PTFM_ACT_WAIT                     0x0
     #define WF_SLID_BRICK_PTFM_ACT_EXTEND                   0x1
     #define WF_SLID_BRICK_PTFM_ACT_RETRACT                  0x2
+
+/* Sliding Platform */
+    #define SLIDING_PLATFORM_TYPE_MASK                      0x0380
+    #define SLIDING_PLATFORM_LENGTH_MASK                    0x003F
+    #define SLIDING_PLATFORM_DIRECTION_MASK                 0x0040
+    /* collisionDataIndex */
+    #define SLIDING_PLATFORM_BP_BITS_SLIDING_PLATFORM       0x0
+    #define SLIDING_PLATFORM_BP_BITS_TWIN_SLIDING_PLATFORMS 0x1
+    #define SLIDING_PLATFORM_BP_BITFS_MOVING_SQUARE         0x2
+    #define SLIDING_PLATFORM_BP_BITFS_SLIDING_PLATFORM      0x3
+    #define SLIDING_PLATFORM_BP_RR_SLIDING_PLATFORM         0x4
+    #define SLIDING_PLATFORM_BP_RR_PYRAMID                  0x5
+    #define SLIDING_PLATFORM_BP_NULL                        0x6
+    #define SLIDING_PLATFORM_BP_BITDW_SLIDING_PLATFORM      0x7
+
+/* BITDW Pyramid Platforms */
+    /* oAction */
+    #define BITDW_PYRAMID_PLATFORM_ACT_INIT_DIRECTION       0x0
+    #define BITDW_PYRAMID_PLATFORM_ACT_MOVE_0               0x1
+    #define BITDW_PYRAMID_PLATFORM_ACT_MOVE_90              0x2
+    #define BITDW_PYRAMID_PLATFORM_ACT_MOVE_180             0x3
+    #define BITDW_PYRAMID_PLATFORM_ACT_MOVE_270             0x4
+
+/* Rotating Platform */
+    /* oAction */
+    #define ROTATING_PLATFORM_ACT_STOPPED                   0x0
+    #define ROTATING_PLATFORM_ACT_MOVING                    0x1
+
+/* Seesaw Platform */
+    /* oBehParams2ndByte */
+    #define SEESAW_PLATFORM_BP_BITDW                        0x0
+    #define SEESAW_PLATFORM_BP_BITS                         0x1
+    #define SEESAW_PLATFORM_BP_BITS_W_SHAPED                0x2
+    #define SEESAW_PLATFORM_BP_BOB_BRIDGE                   0x3
+    #define SEESAW_PLATFORM_BP_BITFS                        0x4
+    #define SEESAW_PLATFORM_BP_RR                           0x5
+    #define SEESAW_PLATFORM_BP_RR_L_SHAPED                  0x6
+    #define SEESAW_PLATFORM_BP_VCUTM                        0x7
 
 /* Fake Moneybag Coin */
     /* oAction */
@@ -623,6 +801,12 @@
     #define MONEYBAG_JUMP_JUMP_AND_BOUNCE                   0x3
     #define MONEYBAG_JUMP_WALK_AROUND                       0x4
     #define MONEYBAG_JUMP_WALK_HOME                         0x5
+    /* Animations */
+    #define MONEYBAG_ANIM_IDLE                              0x0
+    #define MONEYBAG_ANIM_PREPARE_JUMP                      0x1
+    #define MONEYBAG_ANIM_JUMP                              0x2
+    #define MONEYBAG_ANIM_LAND                              0x3
+    #define MONEYBAG_ANIM_WALK                              0x4
 
 /* Bowling Ball */
     /* oAction */
@@ -643,6 +827,11 @@
     #define FREE_BBALL_ACT_ROLL                             0x1
     #define FREE_BBALL_ACT_RESET                            0x2
 
+/* THI Top */
+    /* oAction */
+    #define THI_TOP_ACT_IDLE                                0x0
+    #define THI_TOP_ACT_DRAIN_WATER                         0x1
+
 /* Beta Chest Lid */
     /* oAction */
     #define BETA_CHEST_ACT_IDLE_CLOSED                      0x0
@@ -655,6 +844,10 @@
     #define BBH_TILTING_TRAP_PLATFORM_ACT_MARIO_OFF         0x1
 
 /* Boo */
+    /* oBehParams2ndByte */
+    #define BOO_BP_GHOST_HUNT                               0x0
+    #define BOO_BP_NORMAL                                   0x1
+    #define BOO_BP_MERRY_GO_ROUND                           0x2
     /* oAction */
     #define BOO_ACT_STOPPED                                 0x0
     #define BOO_ACT_CHASING_MARIO                           0x1
@@ -662,10 +855,6 @@
     #define BOO_ACT_ATTACKED                                0x3
     #define BOO_ACT_DEATH                                   0x4
     #define BOO_ACT_5                                       0x5
-    /* oBehParams2ndByte */
-    #define BOO_BP_GHOST_HUNT                               0x0
-    #define BOO_BP_NORMAL                                   0x1
-    #define BOO_BP_MERRY_GO_ROUND                           0x2
     /* oBooDeathStatus */
     #define BOO_DEATH_STATUS_ALIVE                          0x0
     #define BOO_DEATH_STATUS_DYING                          0x1
@@ -736,13 +925,12 @@
 
 /* Flying Bookend */
     /* oAction */
-    #define FLYING_BOOKEND_ACT_ATTACKED_MARIO              -0x1
     #define FLYING_BOOKEND_ACT_INIT                         0x0
     #define FLYING_BOOKEND_ACT_GROW                         0x1
     #define FLYING_BOOKEND_ACT_TURN_TOWARD_MARIO            0x2
     #define FLYING_BOOKEND_ACT_FLY_FORWARD                  0x3
     /* Animations */
-    #define FLYING_BOOKEND_ANIM_UNUSED                      0x0
+    #define FLYING_BOOKEND_ANIM_SPAWN                       0x0
     #define FLYING_BOOKEND_ANIM_BITE                        0x1
     #define FLYING_BOOKEND_ANIM_GROW                        0x2
 
@@ -758,11 +946,11 @@
     #define COFFIN_SPAWNER_ACT_COFFINS_LOADED               0x1
 
 /* Coffin */
+    /* oBehParams2ndByte */
+    #define COFFIN_BP_STATIC                                0x0
     /* oAction */
     #define COFFIN_ACT_IDLE                                 0x0
     #define COFFIN_ACT_STAND_UP                             0x1
-    /* oBehParams2ndByte */
-    #define COFFIN_BP_STATIC                                0x0
 
 /* WDW Arrow Lift */
     /* oAction */
@@ -776,6 +964,8 @@
     #define PEACH_ACT_FADE_1                                0x1
     #define PEACH_ACT_UNFADE                                0x2
     #define PEACH_ACT_FADE_2                                0x3
+    /* Animations */
+    #define PEACH_ANIM_0                                    0x0 //! anim name
 
 /* Yoshi */
     /* oAction */
@@ -786,40 +976,10 @@
     #define YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN            0x4
     #define YOSHI_ACT_GIVE_PRESENT                          0x5
     #define YOSHI_ACT_CREDITS                               0xA
+    /* Animations */
+    #define YOSHI_ANIM_0                                    0x0 //! anim name
 
-/* Koopa */
-    /* oAction */
-    #define KOOPA_UNSHELLED_ACT_RUN                         0x0
-    #define KOOPA_UNSHELLED_ACT_DIVE                        0x1
-    #define KOOPA_UNSHELLED_ACT_LYING                       0x2
-    #define KOOPA_UNSHELLED_ACT_UNUSED3                     0x3
-
-    #define KOOPA_SHELLED_ACT_STOPPED                       0x0
-    #define KOOPA_SHELLED_ACT_WALK                          0x1
-    #define KOOPA_SHELLED_ACT_RUN_FROM_MARIO                0x2
-    #define KOOPA_SHELLED_ACT_LYING                         0x3
-    #define KOOPA_SHELLED_ACT_DIE                           0x4
-
-    #define KOOPA_THE_QUICK_ACT_WAIT_BEFORE_RACE            0x0
-    #define KOOPA_THE_QUICK_ACT_UNUSED1                     0x1
-    #define KOOPA_THE_QUICK_ACT_SHOW_INIT_TEXT              0x2
-    #define KOOPA_THE_QUICK_ACT_RACE                        0x3
-    #define KOOPA_THE_QUICK_ACT_DECELERATE                  0x4
-    #define KOOPA_THE_QUICK_ACT_STOP                        0x5
-    #define KOOPA_THE_QUICK_ACT_AFTER_RACE                  0x6
-
-    /* oSubAction */
-        /* KOOPA_SHELLED_ACT_WALK */
-    #define KOOPA_SHELLED_SUB_ACT_START_WALK                0x0
-    #define KOOPA_SHELLED_SUB_ACT_WALK                      0x1
-    #define KOOPA_SHELLED_SUB_ACT_STOP_WALK                 0x2
-        /* KOOPA_THE_QUICK_ACT_RACE */
-    #define KOOPA_THE_QUICK_SUB_ACT_START_RUN               0x0
-    #define KOOPA_THE_QUICK_SUB_ACT_RUN                     0x1
-    #define KOOPA_THE_QUICK_SUB_ACT_JUMP                    0x2
-    /* oKoopaTheQuickRaceIndex */
-    #define KOOPA_THE_QUICK_BOB_INDEX                       0x0
-    #define KOOPA_THE_QUICK_THI_INDEX                       0x1
+/* Koopa General */
     /* oBehParams2ndByte */
     #define KOOPA_BP_UNSHELLED                              0x0
     #define KOOPA_BP_NORMAL                                 0x1
@@ -827,17 +987,83 @@
     #define KOOPA_BP_KOOPA_THE_QUICK_BOB                    (KOOPA_BP_KOOPA_THE_QUICK_BASE + KOOPA_THE_QUICK_BOB_INDEX)
     #define KOOPA_BP_KOOPA_THE_QUICK_THI                    (KOOPA_BP_KOOPA_THE_QUICK_BASE + KOOPA_THE_QUICK_THI_INDEX)
     #define KOOPA_BP_TINY                                   0x4
+    /* oAnimState */
+    #define KOOPA_ANIM_STATE_EYES_OPEN                      0x0
+    #define KOOPA_ANIM_STATE_EYES_CLOSED                    0x1
+    /* Animations */
+    #define KOOPA_ANIM_SHELLED_UNUSED3                      0x0
+    #define KOOPA_ANIM_SHELLED_RUN_AWAY                     0x1
+    #define KOOPA_ANIM_UNSHELLED_LYING                      0x2
+    #define KOOPA_ANIM_UNSHELLED_RUN                        0x3
+    #define KOOPA_ANIM_UNUSED_4                             0x4
+    #define KOOPA_ANIM_SHELLED_LYING                        0x5
+    #define KOOPA_ANIM_STAND_UP                             0x6
+    #define KOOPA_ANIM_STOPPED                              0x7
+    #define KOOPA_ANIM_UNUSED_8                             0x8
+    #define KOOPA_ANIM_WALK                                 0x9
+    #define KOOPA_ANIM_SHELLED_WALK_STOP                    0xA
+    #define KOOPA_ANIM_WALK_START                           0xB
+    #define KOOPA_ANIM_THE_QUICK_JUMP                       0xC
+    #define KOOPA_ANIM_THE_QUICK_LAND                       0xD
+
+/* Unshelled Koopa */
+    /* oAction */
+    #define KOOPA_UNSHELLED_ACT_RUN                         0x0
+    #define KOOPA_UNSHELLED_ACT_DIVE                        0x1
+    #define KOOPA_UNSHELLED_ACT_LYING                       0x2
+    // #define KOOPA_UNSHELLED_ACT_UNUSED3                     0x3
+    /* oSubAction */
+
+/* Shelled Koopa */
+    /* oAction */
+    #define KOOPA_SHELLED_ACT_STOPPED                       0x0
+    #define KOOPA_SHELLED_ACT_WALK                          0x1
+    #define KOOPA_SHELLED_ACT_RUN_FROM_MARIO                0x2
+    #define KOOPA_SHELLED_ACT_LYING                         0x3
+    #define KOOPA_SHELLED_ACT_DIE                           0x4
+    /* oSubAction */
+        /* KOOPA_SHELLED_ACT_WALK */
+    #define KOOPA_SHELLED_SUB_ACT_START_WALK                0x0
+    #define KOOPA_SHELLED_SUB_ACT_WALK                      0x1
+    #define KOOPA_SHELLED_SUB_ACT_STOP_WALK                 0x2
+
+/* Koopa The Quick */
+    /* oAction */
+    #define KOOPA_THE_QUICK_ACT_WAIT_BEFORE_RACE            0x0
+    #define KOOPA_THE_QUICK_ACT_UNUSED1                     0x1
+    #define KOOPA_THE_QUICK_ACT_SHOW_INIT_TEXT              0x2
+    #define KOOPA_THE_QUICK_ACT_RACE                        0x3
+    #define KOOPA_THE_QUICK_ACT_DECELERATE                  0x4
+    #define KOOPA_THE_QUICK_ACT_STOP                        0x5
+    #define KOOPA_THE_QUICK_ACT_AFTER_RACE                  0x6
+    /* oSubAction */
+        /* KOOPA_THE_QUICK_ACT_RACE */
+    #define KOOPA_THE_QUICK_SUB_ACT_START_RUN               0x0
+    #define KOOPA_THE_QUICK_SUB_ACT_RUN                     0x1
+    #define KOOPA_THE_QUICK_SUB_ACT_JUMP                    0x2
+    /* oKoopaTheQuickRaceIndex */
+    #define KOOPA_THE_QUICK_BOB_INDEX                       0x0
+    #define KOOPA_THE_QUICK_THI_INDEX                       0x1
+
+/* Koopa Flag */
+    /* Animations */
+    #define KOOPA_FLAG_ANIM_WAVE                            0x0
 
 /* Pokey */
     /* oAction */
     #define POKEY_ACT_UNINITIALIZED                         0x0
     #define POKEY_ACT_WANDER                                0x1
     #define POKEY_ACT_UNLOAD_PARTS                          0x2
+    /* oAnimState */
+    #define POKEY_ANIM_STATE_NONSTANDARD_ACTION             0x1
 
 /* Swoop */
     /* oAction */
     #define SWOOP_ACT_IDLE                                  0x0
     #define SWOOP_ACT_MOVE                                  0x1
+    /* Animations */
+    #define SWOOP_ANIM_FLY                                  0x0
+    #define SWOOP_ANIM_IDLE                                 0x1
 
 /* Fly guy */
     /* oAction */
@@ -845,6 +1071,8 @@
     #define FLY_GUY_ACT_APPROACH_MARIO                      0x1
     #define FLY_GUY_ACT_LUNGE                               0x2
     #define FLY_GUY_ACT_SHOOT_FIRE                          0x3
+    /* Animations */
+    #define FLY_GUY_ANIM_FLYING                             0x0
 
 /* Goomba triplet spawner */
     /* oBehParams2ndByte */
@@ -855,16 +1083,16 @@
     #define GOOMBA_TRIPLET_SPAWNER_ACT_LOADED               0x1
 
 /* Goomba */
-    /* oAction */
-    #define GOOMBA_ACT_WALK                                 0x0
-    #define GOOMBA_ACT_ATTACKED_MARIO                       0x1
-    #define GOOMBA_ACT_JUMP                                 0x2
     /* oBehParams2ndByte */
     #define GOOMBA_BP_SIZE_MASK                             0x00000003
     #define GOOMBA_SIZE_REGULAR                             0x00000000
     #define GOOMBA_SIZE_HUGE                                0x00000001
     #define GOOMBA_SIZE_TINY                                0x00000002
     #define GOOMBA_BP_TRIPLET_FLAG_MASK                     0x000000FC
+    /* oAction */
+    #define GOOMBA_ACT_WALK                                 0x0
+    #define GOOMBA_ACT_ATTACKED_MARIO                       0x1
+    #define GOOMBA_ACT_JUMP                                 0x2
     /* Animations */
     #define GOOMBA_ANIM_DEFAULT                             0x0
 
@@ -884,6 +1112,8 @@
     #define CHAIN_CHOMP_RELEASED_BREAK_GATE                 0x3
     #define CHAIN_CHOMP_RELEASED_JUMP_AWAY                  0x4
     #define CHAIN_CHOMP_RELEASED_END_CUTSCENE               0x5
+    /* Animations */
+    #define CHAIN_CHOMP_ANIM_CHOMPING                       0x0
 
 /* Chain chomp chain part */
     /* oBehParams2ndByte */
@@ -912,6 +1142,8 @@
     #define SPINY_ACT_HELD_BY_LAKITU                        0x1
     #define SPINY_ACT_THROWN_BY_LAKITU                      0x2
     #define SPINY_ACT_ATTACKED_MARIO                        0x3
+    /* Animations */
+    #define SPINY_ANIM_DEFAULT                              0x0
 
 /* Enemy Lakitu */
     /* oAction */
@@ -923,20 +1155,20 @@
     #define ENEMY_LAKITU_SUB_ACT_HOLD_SPINY                 0x1
     #define ENEMY_LAKITU_SUB_ACT_THROW_SPINY                0x2
     /* Animations */
-    #define ENEMY_LAKITU_ANIM_UNUSED                        0x0
+    #define ENEMY_LAKITU_ANIM_SPAWN                         0x0
     #define ENEMY_LAKITU_ANIM_NO_SPINY                      0x1
     #define ENEMY_LAKITU_ANIM_THROW_SPINY                   0x2
     #define ENEMY_LAKITU_ANIM_HOLD_SPINY                    0x3
 
 /* Cloud */
+    /* oBehParams2ndByte */
+    #define CLOUD_BP_FWOOSH                                 0x0
+    #define CLOUD_BP_LAKITU_CLOUD                           0x1
     /* oAction */
     #define CLOUD_ACT_SPAWN_PARTS                           0x0
     #define CLOUD_ACT_MAIN                                  0x1
     #define CLOUD_ACT_UNLOAD                                0x2
     #define CLOUD_ACT_FWOOSH_HIDDEN                         0x3
-    /* oBehParams2ndByte */
-    #define CLOUD_BP_FWOOSH                                 0x0
-    #define CLOUD_BP_LAKITU_CLOUD                           0x1
 
 /* Intro Lakitu */
     /* oAction */
@@ -947,22 +1179,34 @@
     #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_1         0x64
     #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2         0x65
     #define INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3         0x66
+    /* Animations */
+    #define INTRO_LAKITU_ACT_0                              0x0 //! anim name
 
 /* Camera Lakitu */
+    /* oBehParams2ndByte */
+    #define CAMERA_LAKITU_BP_FOLLOW_CAMERA                  0x0
+    #define CAMERA_LAKITU_BP_INTRO                          0x1
     /* oAction */
     #define CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE        0x0
     #define CAMERA_LAKITU_INTRO_ACT_SPAWN_CLOUD             0x1
     #define CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG             0x2
-    /* oBehParams2ndByte */
-    #define CAMERA_LAKITU_BP_FOLLOW_CAMERA                  0x0
-    #define CAMERA_LAKITU_BP_INTRO                          0x1
+    /* Animations */
+    #define CAMERA_LAKITU_ANIM_0                            0x0 //! anim name
 
 /* Manta Ray */
     /* oAction */
     #define MANTA_ACT_SPAWN_RINGS                           0x0
     #define MANTA_ACT_NO_RINGS                              0x1
+    /* Animations */
+    #define MANTA_ANIM_SWIM                                 0x0
+
+/* Sushi Shark */
+    /* Animations */
+    #define SUSHI_ANIM_SWIM                                 0x0
 
 /* Monty mole */
+    /* oBehParams2ndByte */
+    #define MONTY_MOLE_BP_NO_ROCK                           0x0
     /* oAction */
     #define MONTY_MOLE_ACT_SELECT_HOLE                      0x0
     #define MONTY_MOLE_ACT_RISE_FROM_HOLE                   0x1
@@ -972,8 +1216,17 @@
     #define MONTY_MOLE_ACT_JUMP_INTO_HOLE                   0x5
     #define MONTY_MOLE_ACT_HIDE                             0x6
     #define MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE                 0x7
-    /* oBehParams2ndByte */
-    #define MONTY_MOLE_BP_NO_ROCK                           0x0
+    /* Animations */
+    #define MONTY_MOLE_ANIM_JUMP_INTO_HOLE                  0x0
+    #define MONTY_MOLE_ANIM_RISE                            0x1
+    #define MONTY_MOLE_ANIM_GET_ROCK                        0x2
+    #define MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE            0x3
+    #define MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_DOWN           0x4
+    #define MONTY_MOLE_ANIM_UNUSED_5                        0x5
+    #define MONTY_MOLE_ANIM_UNUSED_6                        0x6
+    #define MONTY_MOLE_ANIM_UNUSED_7                        0x7
+    #define MONTY_MOLE_ANIM_THROW_ROCK                      0x8
+    #define MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_UP             0x9
 
 /* Monty mole rock */
     /* oAction */
@@ -981,6 +1234,9 @@
     #define MONTY_MOLE_ROCK_ACT_MOVE                        0x1
 
 /* Ukiki */
+    /* oBehParams2ndByte */
+    #define UKIKI_CAGE                                      0x0
+    #define UKIKI_CAP                                       0x1
     /* oAction */
     #define UKIKI_ACT_IDLE                                  0x0
     #define UKIKI_ACT_RUN                                   0x1
@@ -1015,9 +1271,6 @@
     #define UKIKI_TEXT_GAVE_CAP_BACK                        0x5
     #define UKIKI_TEXT_DO_NOT_LET_GO                        0x6
     #define UKIKI_TEXT_STEAL_CAP                            0x7
-    /* oBehParams2ndByte */
-    #define UKIKI_CAGE                                      0x0
-    #define UKIKI_CAP                                       0x1
     /* Animations */
     #define UKIKI_ANIM_RUN                                  0x0
     #define UKIKI_ANIM_UNUSED_WALK                          0x1
@@ -1062,6 +1315,16 @@
     #define PIRANHA_PLANT_ACT_SHRINK_AND_DIE                0x6
     #define PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN               0x7
     #define PIRANHA_PLANT_ACT_RESPAWN                       0x8
+    /* Animations */
+    #define PIRANHA_PLANT_ANIM_BITE                         0x0
+    #define PIRANHA_PLANT_ANIM_UNUSED_1                     0x1
+    #define PIRANHA_PLANT_ANIM_FALLING_OVER                 0x2
+    #define PIRANHA_PLANT_ANIM_UNUSED_3                     0x3
+    #define PIRANHA_PLANT_ANIM_UNUSED_4                     0x4
+    #define PIRANHA_PLANT_ANIM_UNUSED_5                     0x5
+    #define PIRANHA_PLANT_ANIM_STOP_BITING                  0x6
+    #define PIRANHA_PLANT_ANIM_UNUSED_7                     0x7
+    #define PIRANHA_PLANT_ANIM_SLEEPING                     0x8
 
 /* Piranha Plant Bubble */
     /* oAction */
@@ -1118,33 +1381,7 @@
     #define CONTROLLABLE_PLATFORM_BUTTON_ACT_PRESSED        0x1
     #define CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS  0x2
 
-/* Purple switch */
-    #define PURPLE_SWITCH_IDLE                              0x0
-    #define PURPLE_SWITCH_PRESSED                           0x1
-    #define PURPLE_SWITCH_TICKING                           0x2
-    #define PURPLE_SWITCH_UNPRESSED                         0x3
-    #define PURPLE_SWITCH_WAIT_FOR_MARIO_TO_GET_OFF         0x4
-
-/* Openable Grill Door */
-    /* oAction */
-    #define OPENABLE_GRILL_DOOR_ACT_CLOSED                  0x0
-    #define OPENABLE_GRILL_DOOR_ACT_OPENING                 0x1
-    #define OPENABLE_GRILL_DOOR_ACT_OPEN                    0x2
-
-/* Openable Grill */
-    /* oAction */
-    #define OEPNABLE_GRILL_ACT_SPAWN                        0x0
-    #define OEPNABLE_GRILL_IDLE_CLOSED                      0x1
-    #define OEPNABLE_GRILL_OPENING                          0x2
-    #define OEPNABLE_GRILL_IDLE_OPEN                        0x3
-
 /* Elevator */
-    /* oAction */
-    #define ELEVATOR_ACT_IDLE                               0x0
-    #define ELEVATOR_ACT_MOVING_UP                          0x1
-    #define ELEVATOR_ACT_MOVING_DOWN                        0x2
-    #define ELEVATOR_ACT_LANDED                             0x3
-    #define ELEVATOR_ACT_LANDED_RR                          0x4
     /* oBehParams2ndByte */
     #define ELEVATOR_BP_HMC_WORK                            0x0
     #define ELEVATOR_BP_HMC_EMERGENCY_EXIT                  0x1
@@ -1153,6 +1390,12 @@
     #define ELEVATOR_BP_BBH_MESH                            0x4
     #define ELEVATOR_BP_RAINBOW_RIDE                        0x5
     #define ELEVATOR_BP_UNUSED                              0x6
+    /* oAction */
+    #define ELEVATOR_ACT_IDLE                               0x0
+    #define ELEVATOR_ACT_MOVING_UP                          0x1
+    #define ELEVATOR_ACT_MOVING_DOWN                        0x2
+    #define ELEVATOR_ACT_LANDED                             0x3
+    #define ELEVATOR_ACT_LANDED_RR                          0x4
     /* oElevatorType */
     #define ELEVATOR_TYPE_DEFAULT                           0x0
     #define ELEVATOR_TYPE_RR                                0x1
@@ -1180,24 +1423,28 @@
     #define PYRAMID_TOP_ACT_EXPLODE                         0x2
 
 /* Pyramid wall */
-    /* oAction */
-    #define PYRAMID_WALL_ACT_MOVING_DOWN                    0x0
-    #define PYRAMID_WALL_ACT_MOVING_UP                      0x1
-
     /* oBehParams2ndByte */
     #define PYRAMID_WALL_BP_POSITION_HIGH                   0x0
     #define PYRAMID_WALL_BP_POSITION_MIDDLE                 0x1
     #define PYRAMID_WALL_BP_POSITION_LOW                    0x2
+    /* oAction */
+    #define PYRAMID_WALL_ACT_MOVING_DOWN                    0x0
+    #define PYRAMID_WALL_ACT_MOVING_UP                      0x1
 
 /* Penguins (general) */
     /* Walking sounds */
-    #define PENGUIN_WALK_BABY                               0x0
-    #define PENGUIN_WALK_BIG                                0x1
+    #define PENGUIN_SOUND_WALK_BABY                         0x0
+    #define PENGUIN_SOUND_WALK_BIG                          0x1
     /* Animations */
     #define PENGUIN_ANIM_WALK                               0x0
+    #define PENGUIN_ANIM_RACE                               0x1
+    #define PENGUIN_ANIM_RACE_END                           0x2
     #define PENGUIN_ANIM_IDLE                               0x3
 
 /* Racing Penguin */
+    /* oBehParams2ndByte */
+    #define RACING_PENGUIN_BP_NORMAL                        0x0
+    #define RACING_PENGUIN_BP_120_STARS                     0x1
     /* oAction */
     #define RACING_PENGUIN_ACT_WAIT_FOR_MARIO               0x0
     #define RACING_PENGUIN_ACT_SHOW_INIT_TEXT               0x1
@@ -1245,6 +1492,27 @@
     #define SL_SNOWMAN_WIND_ACT_IDLE                        0x0
     #define SL_SNOWMAN_WIND_ACT_TALKING                     0x1
     #define SL_SNOWMAN_WIND_ACT_BLOWING                     0x2
+
+/* Snow Mound */
+    /* oAction */
+    #define SNOW_MOUND_ACT_MOVE                             0x0
+    #define SNOW_MOUND_ACT_SINK                             0x1
+
+/* Snowman Head */
+    /* oAction */
+    #define SNOWMANS_HEAD_ACT_ASK                           0x0
+    #define SNOWMANS_HEAD_ACT_NONE                          0x1
+    #define SNOWMANS_HEAD_ACT_JUMPING                       0x2
+    #define SNOWMANS_HEAD_ACT_LAND                          0x3
+    #define SNOWMANS_HEAD_ACT_THANK                         0x4
+
+/* Snowman Bottom */
+    /* oAction */
+    #define SNOWMANS_BOTTOM_ACT_WAITING                     0x0
+    #define SNOWMANS_BOTTOM_ACT_FOLLOW_PATH                 0x1
+    #define SNOWMANS_BOTTOM_ACT_FINAL_STRETCH               0x2
+    #define SNOWMANS_BOTTOM_ACT_REACH_END                   0x3
+    #define SNOWMANS_BOTTOM_ACT_COLLISION                   0x4
 
 /* Water Bomb Cannon */
     /* oAction */
@@ -1302,6 +1570,14 @@
     #define UNAGI_ANIM_STATE_NO_STAR                        0x0
     #define UNAGI_ANIM_STATE_HAS_STAR                       0x1
     #define UNAGI_ANIM_STATE_HAS_TRANSPARENT_STAR           0x2
+    /* Animations */
+    #define UNAGI_ANIM_0                                    0x0 //! anim name
+    #define UNAGI_ANIM_1                                    0x1 //! anim name
+    #define UNAGI_ANIM_2                                    0x2 //! anim name
+    #define UNAGI_ANIM_3                                    0x3 //! anim name
+    #define UNAGI_ANIM_4                                    0x4 //! anim name
+    #define UNAGI_ANIM_5                                    0x5 //! anim name
+    #define UNAGI_ANIM_6                                    0x6 //! anim name
 
 /* Dorrie */
     /* oAction */
@@ -1317,11 +1593,16 @@
     /* oAction */
     #define MAD_PIANO_ACT_WAIT                              0x0
     #define MAD_PIANO_ACT_ATTACK                            0x1
+    /* Animations */
+    #define MAD_PIANO_ANIM_SLEEPING                         0x0
+    #define MAD_PIANO_ANIM_CHOMPING                         0x1
 
 /* Haunted Chair */
     /* oAction */
     #define HAUNTED_CHAIR_ACT_FALL_OR_SPIN                  0x0
     #define HAUNTED_CHAIR_ACT_FLY                           0x1
+    /* Animations */
+    #define HAUNTED_CHAIR_ANIM_DEFAULT                      0x0
 
 /* Fire piranha plant */
     /* oAction */
@@ -1340,14 +1621,14 @@
     #define FIRE_SPITTER_ACT_SPIT_FIRE                      0x1
 
 /* Flamethrower */
-    /* oAction */
-    #define FLAMETHROWER_ACT_IDLE                           0x0
-    #define FLAMETHROWER_ACT_BLOW_FIRE                      0x1
-    #define FLAMETHROWER_ACT_COOLDOWN                       0x2
     /* oBehParams2ndByte */
     #define FLAMETHROWER_BP_0                               0x0
     #define FLAMETHROWER_BP_BLUE                            0x1
     #define FLAMETHROWER_BP_SLOW                            0x2
+    /* oAction */
+    #define FLAMETHROWER_ACT_IDLE                           0x0
+    #define FLAMETHROWER_ACT_BLOW_FIRE                      0x1
+    #define FLAMETHROWER_ACT_COOLDOWN                       0x2
 
 /* Bouncing Fireball Flame */
     /* oAction */
@@ -1367,9 +1648,11 @@
     #define EYEROK_BOSS_ACT_SHOW_INTRO_TEXT                 0x2
     #define EYEROK_BOSS_ACT_FIGHT                           0x3
     #define EYEROK_BOSS_ACT_DIE                             0x4
-    /* oBehParams2ndByte */
 
 /* Eyerok hand */
+    /* oBehParams2ndByte */
+    #define EYEROK_BP_LEFT_HAND                            -0x1
+    #define EYEROK_BP_RIGHT_HAND                            0x1
     /* oAction */
     #define EYEROK_HAND_ACT_SLEEP                           0x0
     #define EYEROK_HAND_ACT_IDLE                            0x1
@@ -1406,11 +1689,8 @@
     #define EYEROK_HAND_ANIM_ATTACKED                       0x3
     #define EYEROK_HAND_ANIM_OPEN                           0x4
     #define EYEROK_HAND_ANIM_SHOW_EYE                       0x5
-    #define EYEROK_HAND_ANIM_UNUSED                         0x6
+    #define EYEROK_HAND_ANIM_SLEEPING                       0x6
     #define EYEROK_HAND_ANIM_CLOSE                          0x7
-    /* oBehParams2ndByte */
-    #define EYEROK_BP_LEFT_HAND                            -0x1
-    #define EYEROK_BP_RIGHT_HAND                            0x1
 
 /* King Bobomb */
     /* oAction */
@@ -1424,12 +1704,27 @@
     #define KING_BOBOMB_ACT_DEATH                           0x7
     #define KING_BOBOMB_ACT_STOP_MUSIC                      0x8
     /* oSubAction */
+        /* KING_BOBOMB_ACT_INACTIVE */
+    #define KING_BOBOMB_SUB_ACT_INACTIVE_INIT               0x0
+    #define KING_BOBOMB_SUB_ACT_INACTIVE_DIALOG             0x1
+        /* KING_BOBOMB_ACT_GRABBED_MARIO */
+    #define KING_BOBOMB_SUB_ACT_GRABBED_MARIO_GRAB          0x0
+    #define KING_BOBOMB_SUB_ACT_GRABBED_MARIO_HOLDING       0x1
+    #define KING_BOBOMB_SUB_ACT_GRABBED_MARIO_THROW         0x2
+        /* KING_BOBOMB_ACT_BEEN_THROWN */
+    #define KING_BOBOMB_SUB_ACT_THROWN_FALL                 0x0
+    #define KING_BOBOMB_SUB_ACT_THROWN_STAND_UP             0x1
+    #define KING_BOBOMB_SUB_ACT_THROWN_END                  0x2
         /* KING_BOBOMB_ACT_RETURN_HOME */
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_JUMP            0x0
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING         0x1
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING_END     0x2
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_WAIT_FOR_DIALOG 0x3
     #define KING_BOBOMB_SUB_ACT_RETURN_HOME_DIALOG          0x4
+        /* KING_BOBOMB_ACT_HIT_GROUND */
+    #define KING_BOBOMB_SUB_ACT_HIT_GROUND_HIT              0x0
+    #define KING_BOBOMB_SUB_ACT_HIT_GROUND_STAND_UP         0x1
+    #define KING_BOBOMB_SUB_ACT_HIT_GROUND_START_WALKING    0x2
     /* Animations */
     #define KING_BOBOMB_ANIM_GRAB_MARIO                     0x0
     #define KING_BOBOMB_ANIM_HOLDING_MARIO                  0x1
@@ -1471,6 +1766,7 @@
     #define CHUCKYA_ANIM_HELD                               0x2
     #define CHUCKYA_ANIM_THROW_2                            0x3
     #define CHUCKYA_ANIM_IDLE                               0x4
+    #define CHUCKYA_ANIM_SPAWN                              0x5
 
 /* Heave Ho */
     /* oAction */
@@ -1498,30 +1794,75 @@
     #define KLEPTO_ANIM_STATE_HOLDING_CAP                   0x1
     #define KLEPTO_ANIM_STATE_HOLDING_STAR                  0x2
     #define KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR      0x3
+    /* Animations */
+    #define KLEPTO_ANIM_DIVE_0                              0x0
+    #define KLEPTO_ANIM_STRUCK_BY_MARIO                     0x1
+    #define KLEPTO_ANIM_DIVE_AT_MARIO_2                     0x2
+    #define KLEPTO_ANIM_DIVE_AT_MARIO_3                     0x3
+    #define KLEPTO_ANIM_DIVE_AT_MARIO_4                     0x4
+    #define KLEPTO_ANIM_DIVE_FLAP_5                         0x5
+    #define KLEPTO_ANIM_DIVE_FLAP_6                         0x6
 
 /* Bird */
-    /* oAction */
-    #define BIRD_ACT_INACTIVE                               0x0
-    #define BIRD_ACT_FLY                                    0x1
     /* oBehParams2ndByte */
     #define BIRD_BP_SPAWNED                                 0x0
     #define BIRD_BP_SPAWNER                                 0x1
+    /* oAction */
+    #define BIRD_ACT_INACTIVE                               0x0
+    #define BIRD_ACT_FLY                                    0x1
+    /* Animation */
+    #define BIRD_ANIM_FLY                                   0x0
 
 /* End Birds */
     /* oAction */
     #define END_BIRDS_ACT_INIT                              0x0
     #define END_BIRDS_ACT_ACTIVE                            0x1
+    /* Animations */
+    #define END_BIRDS_ANIM_FLY                              0x0
+
+/* Birds Sound */
+    /* oAction */
+    #define SOUND_BIRDS_BP_OBJ2_BIRD_CHIRP1                 0x0
+    #define SOUND_BIRDS_BP_GENERAL2_BIRD_CHIRP2             0x1
+    #define SOUND_BIRDS_BP_OBJ_BIRD_CHIRP3                  0x2
+
+/* Scuttlebug Spawner */
+    /* oAction */
+    #define SCUTTLEBUG_SPAWNER_ACT_ACTIVE                   0x0
+    #define SCUTTLEBUG_SPAWNER_ACT_INACTIVE                 0x1
+
+/* Scuttlebug */
+    /* oSubAction */
+    #define SCUTTLEBUG_SUB_ACT_RESET                        0x0
+    #define SCUTTLEBUG_SUB_ACT_MOVING                       0x1
+    #define SCUTTLEBUG_SUB_ACT_HIT_WALL                     0x2
+    #define SCUTTLEBUG_SUB_ACT_ALERT                        0x3
+    #define SCUTTLEBUG_SUB_ACT_JUMP                         0x4
+    #define SCUTTLEBUG_SUB_ACT_LAND                         0x5
+    /* Animations */
+    #define SCUTTLEBUG_ANIM_JUMP                            0x0
+    #define SCUTTLEBUG_ANIM_WALK                            0x1
 
 /* Skeeter */
     /* oAction */
     #define SKEETER_ACT_IDLE                                0x0
     #define SKEETER_ACT_LUNGE                               0x1
     #define SKEETER_ACT_WALK                                0x2
+    /* Animations */
+    #define SKEETER_ANIM_WATER_LUNGE                        0x0
+    #define SKEETER_ANIM_WATER_IDLE                         0x1
+    #define SKEETER_ANIM_WALK                               0x2
+    #define SKEETER_ANIM_IDLE                               0x3
 
 /* Snufit */
     /* oAction */
     #define SNUFIT_ACT_IDLE                                 0x0
     #define SNUFIT_ACT_SHOOT                                0x1
+
+/* Snufit Balls (gottem) */
+    /* oAction */
+    #define SNUFIT_BALL_ACT_MOVE                            0x0
+    #define SNUFIT_BALL_ACT_HIT_MARIO                       0x1
 
 /* Tweester */
     /* oAction */
@@ -1535,14 +1876,14 @@
     #define TWEESTER_SUB_ACT_CHASE                          0x0
 
 /* Triplet butterfly */
+    /* oBehParams2ndByte */
+    #define TRIPLET_BUTTERFLY_BP_BUTTERFLY_NUM              0x3
+    #define TRIPLET_BUTTERFLY_BP_NO_BOMBS                   0x4
     /* oAction */
     #define TRIPLET_BUTTERFLY_ACT_INIT                      0x0
     #define TRIPLET_BUTTERFLY_ACT_WANDER                    0x1
     #define TRIPLET_BUTTERFLY_ACT_ACTIVATE                  0x2
     #define TRIPLET_BUTTERFLY_ACT_EXPLODE                   0x3
-    /* oBehParams2ndByte */
-    #define TRIPLET_BUTTERFLY_BP_BUTTERFLY_NUM              0x3
-    #define TRIPLET_BUTTERFLY_BP_NO_BOMBS                   0x4
     /* oTripletButterflyType */
     #define TRIPLET_BUTTERFLY_TYPE_NORMAL                  -0x1
     #define TRIPLET_BUTTERFLY_TYPE_EXPLODES                 0x0
@@ -1570,6 +1911,12 @@
     #define MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR            0x0
     #define MIPS_STAR_STATUS_SHOULD_SPAWN_STAR              0x1
     #define MIPS_STAR_STATUS_ALREADY_SPAWNED_STAR           0x2
+    /* Animations */
+    #define MIPS_ANIM_IDLE                                  0x0
+    #define MIPS_ANIM_HOPPING                               0x1
+    #define MIPS_ANIM_THROWN                                0x2
+    #define MIPS_ANIM_UNUSED                                0x3
+    #define MIPS_ANIM_HELD                                  0x4
 
 /* Falling Pillar */
     /* oAction */
@@ -1591,7 +1938,17 @@
     #define BOWSER_PUZZLE_PIECE_ACT_UP                      0x3
     #define BOWSER_PUZZLE_PIECE_ACT_DOWN                    0x4
 
+/* Spindrift */
+    /* oAction */
+    #define SPINDRIFT_ACT_ACTIVE                            0x0
+    #define SPINDRIFT_ACT_HIT_MARIO                         0x1
+    /* oAction */
+    #define SPINDRIFT_ANIM_DEFAULT                          0x0
+
 /* Mr Blizzard */
+    /* oBehParams2ndByte */
+    #define MR_BLIZZARD_STYPE_NO_CAP                        0x0
+    #define MR_BLIZZARD_STYPE_JUMPING                       0x1
     /* oAction */
     #define MR_BLIZZARD_ACT_SPAWN_SNOWBALL                  0x0
     #define MR_BLIZZARD_ACT_HIDE_UNHIDE                     0x1
@@ -1601,9 +1958,18 @@
     #define MR_BLIZZARD_ACT_BURROW                          0x5
     #define MR_BLIZZARD_ACT_DEATH                           0x6
     #define MR_BLIZZARD_ACT_JUMP                            0x7
-    /* oBehParams2ndByte */
-    #define MR_BLIZZARD_STYPE_NO_CAP                        0x0
-    #define MR_BLIZZARD_STYPE_JUMPING                       0x1
+    /* oAnimState */
+    #define MR_BLIZZARD_ANIM_STATE_NO_CAP                   0x0
+    #define MR_BLIZZARD_ANIM_STATE_HAS_CAP                  0x1
+    /* Animations */
+    #define MR_BLIZZARD_ANIM_SPAWN_SNOWBALL                 0x0
+    #define MR_BLIZZARD_ANIM_THROW_SNOWBALL                 0x1
+
+/* Mr Blizzard Snowball */
+    /* oAction */
+    #define MR_BLIZZARD_SNOWBALL_ACT_INIT                   0x0
+    #define MR_BLIZZARD_SNOWBALL_ACT_LAUNCH                 0x1
+    #define MR_BLIZZARD_SNOWBALL_ACT_COLLISION              0x2
 
 /* Mr I */
     /* oAction */
@@ -1612,12 +1978,25 @@
     #define MR_I_ACT_LOOKING_AT_MARIO                       0x2
     #define MR_I_ACT_SPIN_DEATH                             0x3
 
+/* Mr I & Piranha Plant Particle */
+    /* oAction */
+    #define MR_I_PIRANHA_PARTICLE_ACT_MOVE                  0x0
+    #define MR_I_PIRANHA_PARTICLE_ACT_INTERACTED            0x1
+
 /* Bullet Bill */
     /* oAction */
     #define BULLET_BILL_ACT_RESET                           0x0
     #define BULLET_BILL_ACT_IDLE                            0x1
     #define BULLET_BILL_ACT_CHASING_MARIO                   0x2
     #define BULLET_BILL_ACT_HIT                             0x3
+
+/* Thwomp & Grindel */
+    /* oAction */
+    #define GRINDEL_THWOMP_ACT_RISE                         0x0
+    #define GRINDEL_THWOMP_ACT_FLOATING                     0x1
+    #define GRINDEL_THWOMP_ACT_FALLING                      0x2
+    #define GRINDEL_THWOMP_ACT_LAND                         0x3
+    #define GRINDEL_THWOMP_ACT_ON_GROUND                    0x4
 
 /* WF Kickable Board */
     /* oAction */
@@ -1629,6 +2008,11 @@
     #define WF_ATTACK_NONE                                  0x0
     #define WF_ATTACK_GROUND                                0x1
     #define WF_ATTACK_AIR                                   0x2
+
+/* Music Touch */
+    /* oAction */
+    #define MUSIC_TOUCH_ACT_PLAY_SOUND                      0x0
+    #define MUSIC_TOUCH_ACT_DONE                            0x1
 
 /* Intro Scene */
     /* gCutsceneObjSpawn */

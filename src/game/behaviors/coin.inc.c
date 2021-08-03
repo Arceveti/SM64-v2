@@ -180,9 +180,7 @@ void bhv_coin_formation_loop(void) {
     switch (o->oAction) {
         case COIN_FORMATION_ACT_INACTIVE:
             if (o->oDistanceToMario < 4000.0f) { //! hardcoded draw distance
-                for (bitIndex = 0; bitIndex < 8; bitIndex++) {
-                    if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
-                }
+                for (bitIndex = 0; bitIndex < 8; bitIndex++) if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
                 o->oAction = COIN_FORMATION_ACT_ACTIVE;
             }
             break;

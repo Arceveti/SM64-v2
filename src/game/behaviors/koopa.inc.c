@@ -113,7 +113,7 @@ static s32 koopa_check_run_from_mario(void) {
  */
 static void koopa_shelled_act_stopped(void) {
     o->oForwardVel = 0.0f;
-    if (cur_obj_init_anim_and_check_if_end(7)) {
+    if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_STOPPED)) {
         o->oAction = KOOPA_SHELLED_ACT_WALK;
         o->oKoopaTargetYaw = o->oMoveAngleYaw + 0x2000 * (s16) random_sign();
     }
@@ -125,8 +125,8 @@ static void koopa_shelled_act_stopped(void) {
 static void koopa_walk_start(void) {
     obj_forward_vel_approach(3.0f * o->oKoopaAgility, 0.3f * o->oKoopaAgility);
 
-    if (cur_obj_init_anim_and_check_if_end(11)) {
-        o->oSubAction++;
+    if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_WALK_START)) {
+        o->oSubAction = 1; //! KOOPA_SHELLED_SUB_ACT_WALK if shelled, KOOPA_THE_QUICK_SUB_ACT_RUN if KtQ
         o->oKoopaCountdown = random_linear_offset(30, 100);
     }
 }
@@ -135,13 +135,13 @@ static void koopa_walk_start(void) {
  * Walk until oKoopaCountdown hits zero, then increment sub-action.
  */
 static void koopa_walk(void) {
-    cur_obj_init_animation_with_sound(9);
+    cur_obj_init_animation_with_sound(KOOPA_ANIM_WALK);
     koopa_play_footstep_sound(2, 17);
 
     if (o->oKoopaCountdown != 0) {
         o->oKoopaCountdown--;
     } else if (cur_obj_check_if_near_animation_end()) {
-        o->oSubAction++;
+        o->oSubAction = KOOPA_SHELLED_SUB_ACT_STOP_WALK;
     }
 }
 
@@ -150,7 +150,7 @@ static void koopa_walk(void) {
  */
 static void koopa_walk_stop(void) {
     obj_forward_vel_approach(0.0f, 1.0f * o->oKoopaAgility);
-    if (cur_obj_init_anim_and_check_if_end(10)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
+    if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_SHELLED_WALK_STOP)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
 }
 
 /**
@@ -169,15 +169,9 @@ static void koopa_shelled_act_walk(void) {
     }
 
     switch (o->oSubAction) {
-        case KOOPA_SHELLED_SUB_ACT_START_WALK:
-            koopa_walk_start();
-            break;
-        case KOOPA_SHELLED_SUB_ACT_WALK:
-            koopa_walk();
-            break;
-        case KOOPA_SHELLED_SUB_ACT_STOP_WALK:
-            koopa_walk_stop();
-            break;
+        case KOOPA_SHELLED_SUB_ACT_START_WALK: koopa_walk_start(); break;
+        case KOOPA_SHELLED_SUB_ACT_WALK:       koopa_walk();       break;
+        case KOOPA_SHELLED_SUB_ACT_STOP_WALK:  koopa_walk_stop();  break;
     }
 
     koopa_check_run_from_mario();
@@ -188,13 +182,13 @@ static void koopa_shelled_act_walk(void) {
  * away.
  */
 static void koopa_shelled_act_run_from_mario(void) {
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(KOOPA_ANIM_SHELLED_RUN_AWAY);
     koopa_play_footstep_sound(0, 11);
 
     // If far from home, run toward it
     if (o->oDistanceToMario >= 25000.0f) {
-        o->oAngleToMario += 0x8000;
-        o->oDistanceToMario = 0.0f;
+        o->oAngleToMario    += 0x8000;
+        o->oDistanceToMario  = 0.0f;
     }
 
     if (o->oTimer > 30 && o->oDistanceToMario > 800.0f) {
@@ -211,9 +205,7 @@ static void koopa_shelled_act_run_from_mario(void) {
 static void koopa_dive_update_speed(f32 decel) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         obj_forward_vel_approach(0.0f, decel);
-        if (o->oForwardVel > 5.0f && !(o->oTimer % 4)) {
-            spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
-        }
+        if (o->oForwardVel > 5.0f && !(o->oTimer % 4)) spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
     }
 }
 
@@ -224,12 +216,12 @@ static void koopa_shelled_act_lying(void) {
     if (o->oForwardVel != 0.0f) {
         if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
 
-        cur_obj_init_anim_extend(5);
+        cur_obj_init_anim_extend(KOOPA_ANIM_SHELLED_LYING);
         koopa_dive_update_speed(0.3f);
     } else if (o->oKoopaCountdown != 0) {
         o->oKoopaCountdown--;
         cur_obj_extend_animation_if_at_end();
-    } else if (cur_obj_init_anim_and_check_if_end(6)) {
+    } else if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_STAND_UP)) {
         o->oAction = KOOPA_SHELLED_ACT_STOPPED;
     }
 }
@@ -243,8 +235,8 @@ void shelled_koopa_attack_handler(s32 attackType) {
         cur_obj_play_sound_2(SOUND_OBJ_KOOPA_DAMAGE);
 
         o->oKoopaMovementType = KOOPA_BP_UNSHELLED;
-        o->oAction = KOOPA_UNSHELLED_ACT_LYING;
-        o->oForwardVel = 20.0f;
+        o->oAction            = KOOPA_UNSHELLED_ACT_LYING;
+        o->oForwardVel        = 20.0f;
 
         // If attacked from the side, get knocked away from mario
         if (attackType != ATTACK_FROM_ABOVE
@@ -277,18 +269,9 @@ static void koopa_shelled_update(void) {
             koopa_shelled_act_stopped();
             koopa_check_run_from_mario();
             break;
-
-        case KOOPA_SHELLED_ACT_WALK:
-            koopa_shelled_act_walk();
-            break;
-
-        case KOOPA_SHELLED_ACT_RUN_FROM_MARIO:
-            koopa_shelled_act_run_from_mario();
-            break;
-
-        case KOOPA_SHELLED_ACT_LYING:
-            koopa_shelled_act_lying();
-            break;
+        case KOOPA_SHELLED_ACT_WALK:           koopa_shelled_act_walk();           break;
+        case KOOPA_SHELLED_ACT_RUN_FROM_MARIO: koopa_shelled_act_run_from_mario(); break;
+        case KOOPA_SHELLED_ACT_LYING:          koopa_shelled_act_lying();          break;
     }
 
     if (o->header.gfx.scale[0] > 0.8f) {
@@ -312,7 +295,7 @@ static void koopa_unshelled_act_run(void) {
     f32 distToShell = 99999.0f;
     struct Object *shell;
 
-    cur_obj_init_animation_with_sound(3);
+    cur_obj_init_animation_with_sound(KOOPA_ANIM_UNSHELLED_RUN);
     koopa_play_footstep_sound(0, 6);
 
     if (o->oKoopaTurningAwayFromWall) {
@@ -326,8 +309,7 @@ static void koopa_unshelled_act_run(void) {
         if (shell != NULL) {
             //! This overrides turning toward home
             o->oKoopaTargetYaw = obj_angle_to_object(o, shell);
-        } else if (!(o->oKoopaTurningAwayFromWall =
-                         obj_bounce_off_walls_edges_objects(&o->oKoopaTargetYaw))) {
+        } else if (!(o->oKoopaTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oKoopaTargetYaw))) {
             // Otherwise run around randomly
             if (o->oKoopaUnshelledTimeUntilTurn != 0) {
                 o->oKoopaUnshelledTimeUntilTurn--;
@@ -352,10 +334,10 @@ static void koopa_unshelled_act_run(void) {
     // If we think we have a shot, dive for the shell
     if (obj_forward_vel_approach(20.0f, 1.0f) && distToShell < 600.0f
         && abs_angle_diff(o->oKoopaTargetYaw, o->oMoveAngleYaw) < 0xC00) {
-        o->oMoveAngleYaw = o->oKoopaTargetYaw;
-        o->oAction = KOOPA_UNSHELLED_ACT_DIVE;
-        o->oForwardVel *= 1.2f;
-        o->oVelY = distToShell / 20.0f;
+        o->oMoveAngleYaw   = o->oKoopaTargetYaw;
+        o->oAction         = KOOPA_UNSHELLED_ACT_DIVE;
+        o->oForwardVel    *= 1.2f;
+        o->oVelY           = distToShell / 20.0f;
         o->oKoopaCountdown = 20;
     }
 }
@@ -374,41 +356,41 @@ static void koopa_unshelled_act_dive(void) {
         shell = cur_obj_find_nearest_object_with_behavior(bhvKoopaShell, &distToShell);
 
         // If we got the shell and mario didn't, put on the shell
-        //! The shell comes after koopa in processing order, and the shell is
+        //+ The shell comes after koopa in processing order, and the shell is
         //  responsible for positioning itself under mario.
         //  If mario has more than 200 speed and is riding the shell, then
         //  from the perspective of the koopa, the shell is always lagging 200
         //  units behind mario.
         //  Using this, we can get the koopa to pick up and despawn its shell
         //  while mario is riding it.
-        if (shell != NULL && dist_between_objects(shell, gMarioObject) > 200.0f
-            && distToShell < 50.0f) {
+        if (!(gMarioState->action & ACT_FLAG_RIDING_SHELL)
+         && shell != NULL
+         && dist_between_objects(shell, gMarioObject) > 200.0f
+         && distToShell < 50.0f) {
             o->oKoopaMovementType = KOOPA_BP_NORMAL;
             o->oAction = KOOPA_SHELLED_ACT_LYING;
             o->oForwardVel *= 0.5f;
 
             cur_obj_set_model(MODEL_KOOPA_WITH_SHELL);
             obj_mark_for_deletion(shell);
-            goto end; //! goto?
+            return;
         }
     }
 
     if (o->oForwardVel != 0.0f) {
         if (o->oAction == KOOPA_UNSHELLED_ACT_LYING) {
-            o->oAnimState = 1;
-            cur_obj_init_anim_extend(2);
+            o->oAnimState = KOOPA_ANIM_STATE_EYES_CLOSED;
+            cur_obj_init_anim_extend(KOOPA_ANIM_UNSHELLED_LYING);
         } else {
-            cur_obj_init_anim_extend(5);
+            cur_obj_init_anim_extend(KOOPA_ANIM_SHELLED_LYING);
         }
         koopa_dive_update_speed(0.5f);
     } else if (o->oKoopaCountdown != 0) {
         o->oKoopaCountdown--;
         cur_obj_extend_animation_if_at_end();
-    } else if (cur_obj_init_anim_and_check_if_end(6)) {
+    } else if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_STAND_UP)) {
         o->oAction = KOOPA_UNSHELLED_ACT_RUN;
     }
-
-end:;
 }
 
 /**
@@ -427,7 +409,7 @@ static void koopa_unshelled_update(void) {
             koopa_unshelled_act_dive();
             break;
         // case KOOPA_UNSHELLED_ACT_UNUSED3:
-        //     cur_obj_init_anim_extend(0);
+        //     cur_obj_init_anim_extend(KOOPA_ANIM_SHELLED_UNUSED3);
         //     break;
     }
 
@@ -477,7 +459,7 @@ static void koopa_the_quick_act_wait_before_race(void) {
         //  cur_obj_update_dialog_with_cutscene for that glitch)
         o->oAction = KOOPA_THE_QUICK_ACT_SHOW_INIT_TEXT;
         o->oForwardVel = 0.0f;
-        cur_obj_init_animation_with_sound(7);
+        cur_obj_init_animation_with_sound(KOOPA_ANIM_STOPPED);
     }
 }
 
@@ -555,7 +537,7 @@ static s32 koopa_the_quick_detect_bowling_ball(void) {
 static void koopa_the_quick_animate_footsteps(void) {
     //! With high negative speed (using the bowling ball deceleration), we can
     //  index out of the animation's bounds
-    cur_obj_init_animation_with_accel_and_sound(9, o->oForwardVel * 0.09f);
+    cur_obj_init_animation_with_accel_and_sound(KOOPA_ANIM_WALK, o->oForwardVel * 0.09f);
     koopa_play_footstep_sound(2, 17);
 }
 
@@ -610,18 +592,16 @@ static void koopa_the_quick_act_race(void) {
                         // to zero to let it move under and past us
                         if (bowlingBallStatus < 0) o->oForwardVel = 0.0f;
 
-                        if (bowlingBallStatus != 0
-                            || (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 8) {
+                        if (bowlingBallStatus != 0 || (o->oPathedPrevWaypointFlags & WAYPOINT_MASK_00FF) >= 8) {
                             o->oVelY = 80.0f;
                         } else {
                             o->oVelY = 40.0f;
                         }
 
                         o->oGravity = -6.0f;
-                        o->oSubAction = 2;
-                        o->oMoveFlags = 0;
-
-                        cur_obj_init_animation_with_sound(12);
+                        o->oSubAction = KOOPA_THE_QUICK_SUB_ACT_JUMP;
+                        o->oMoveFlags = OBJ_MOVE_NONE;
+                        cur_obj_init_animation_with_sound(KOOPA_ANIM_THE_QUICK_JUMP);
                     }
                     break;
 
@@ -629,8 +609,7 @@ static void koopa_the_quick_act_race(void) {
                     // We could perform a goomba double jump if we could deactivate
                     // ktq
                     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-                        if (cur_obj_init_anim_and_check_if_end(13)) o->oSubAction--;
-
+                        if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_THE_QUICK_LAND)) o->oSubAction = KOOPA_THE_QUICK_SUB_ACT_RUN;
                         koopa_the_quick_detect_bowling_ball();
                     }
             }
@@ -643,7 +622,7 @@ static void koopa_the_quick_act_race(void) {
  */
 static void koopa_the_quick_act_decelerate(void) {
     obj_forward_vel_approach(3.0f, 1.0f);
-    cur_obj_init_animation_with_accel_and_sound(9, 0.99f);
+    cur_obj_init_animation_with_accel_and_sound(KOOPA_ANIM_WALK, 0.99f);
 
     if (cur_obj_check_if_near_animation_end()) {
         o->oAction = KOOPA_THE_QUICK_ACT_STOP;
@@ -668,7 +647,7 @@ static void koopa_the_quick_act_stop(void) {
  * the star.
  */
 static void koopa_the_quick_act_after_race(void) {
-    cur_obj_init_animation_with_sound(7);
+    cur_obj_init_animation_with_sound(KOOPA_ANIM_STOPPED);
 
     if (o->parentObj->oKoopaRaceEndpointDialog == 0) {
         if (cur_obj_can_mario_activate_textbox_2(400.0f, 400.0f)) {
@@ -683,8 +662,7 @@ static void koopa_the_quick_act_after_race(void) {
                     o->parentObj->oKoopaRaceEndpointDialog = DIALOG_006;
                 } else {
                     // Mario won
-                    o->parentObj->oKoopaRaceEndpointDialog =
-                        sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].winText;
+                    o->parentObj->oKoopaRaceEndpointDialog = sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].winText;
                 }
             } else {
                 // KtQ won
@@ -702,8 +680,8 @@ static void koopa_the_quick_act_after_race(void) {
         }
     } else if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0) {
         spawn_default_star(sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[0],
-                   sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[1],
-                   sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[2]);
+                           sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[1],
+                           sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].starPos[2]);
 
         o->parentObj->oKoopaRaceEndpointRaceStatus = 0;
     }
@@ -775,7 +753,7 @@ void bhv_koopa_update(void) {
                 break;
         }
     } else {
-        o->oAnimState = 1;
+        o->oAnimState = KOOPA_ANIM_STATE_EYES_CLOSED;
     }
 
     obj_face_yaw_approach(o->oMoveAngleYaw, 0x600);

@@ -51,7 +51,7 @@ void coin_collected(void) {
 }
 
 void bhv_moving_yellow_coin_init(void) {
-    o->oGravity = 3.0f;
+    o->oGravity  = 3.0f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 1.5f;
 
@@ -90,9 +90,7 @@ void bhv_moving_yellow_coin_loop(void) {
     }
 
 #ifdef COIN_LAVA_FLICKER
-    if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA) {
-        moving_coin_flicker();
-    }
+    if (o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA) moving_coin_flicker();
 #endif
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
@@ -121,9 +119,7 @@ void bhv_moving_blue_coin_loop(void) {
             collisionFlags = object_step();
             if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {/* bit 0 */
                 o->oForwardVel += 25.0f;
-                if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL)) {
-                    cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP); /* bit 3 */
-                }
+                if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL)) cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP); /* bit 3 */
             } else {
                 o->oForwardVel *= 0.98f;
             }

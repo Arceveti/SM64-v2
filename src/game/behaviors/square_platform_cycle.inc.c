@@ -1,30 +1,19 @@
 // square_platform_cycle.c.inc
 
-s32 square_plat_set_yaw_until_timer(u16 yaw, s32 a) {
+s32 square_plat_set_yaw_until_timer(u16 yaw, s32 time) {
     o->oMoveAngleYaw = yaw;
-    return (a < o->oTimer);
+    return (time < o->oTimer);
 }
 
 void bhv_squarish_path_moving_loop(void) {
     o->oForwardVel = 10.0f;
     switch (o->oAction) {
-        case 0:
-            o->oAction = (o->oBehParams2ndByte & 3) + 1;
-            break;
-        case 1:
-            if (square_plat_set_yaw_until_timer(     0, 60)) o->oAction = 2;
-            break;
-        case 2:
-            if (square_plat_set_yaw_until_timer(0x4000, 60)) o->oAction = 3;
-            break;
-        case 3:
-            if (square_plat_set_yaw_until_timer(0x8000, 60)) o->oAction = 4;
-            break;
-        case 4:
-            if (square_plat_set_yaw_until_timer(0xc000, 60)) o->oAction = 1;
-            break;
-        default:
-            break;
+        case BITDW_PYRAMID_PLATFORM_ACT_INIT_DIRECTION: o->oAction = (o->oBehParams2ndByte & 3) + 1;                                                 break;
+        case BITDW_PYRAMID_PLATFORM_ACT_MOVE_0:   if (square_plat_set_yaw_until_timer(     0, 60)) o->oAction = BITDW_PYRAMID_PLATFORM_ACT_MOVE_90;  break;
+        case BITDW_PYRAMID_PLATFORM_ACT_MOVE_90:  if (square_plat_set_yaw_until_timer(0x4000, 60)) o->oAction = BITDW_PYRAMID_PLATFORM_ACT_MOVE_180; break;
+        case BITDW_PYRAMID_PLATFORM_ACT_MOVE_180: if (square_plat_set_yaw_until_timer(0x8000, 60)) o->oAction = BITDW_PYRAMID_PLATFORM_ACT_MOVE_270; break;
+        case BITDW_PYRAMID_PLATFORM_ACT_MOVE_270: if (square_plat_set_yaw_until_timer(0xc000, 60)) o->oAction = BITDW_PYRAMID_PLATFORM_ACT_MOVE_0;   break;
+        default:                                                                                                                                     break;
     }
     cur_obj_move_using_fvel_and_gravity();
     load_object_collision_model();

@@ -46,10 +46,8 @@ static struct Object *link_objects_with_behavior(const BehaviorScript *behavior)
             obj->parentObj = lastObject;
             lastObject = obj;
         }
-
         obj = (struct Object *) obj->header.next;
     }
-
     return lastObject;
 }
 
@@ -184,7 +182,7 @@ static void monty_mole_act_select_hole(void) {
  * Move upward until high enough, then enter the spawn rock action.
  */
 static void monty_mole_act_rise_from_hole(void) {
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(MONTY_MOLE_ANIM_RISE);
 
     if (o->oMontyMoleHeightRelativeToFloor >= 49.0f) {
         o->oPosY = o->oFloorHeight + 50.0f;
@@ -200,7 +198,7 @@ static void monty_mole_act_rise_from_hole(void) {
 static void monty_mole_act_spawn_rock(void) {
     struct Object *rock;
 
-    if (cur_obj_init_anim_and_check_if_end(2)) {
+    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_GET_ROCK)) {
         if (o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK
             && abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x4000
             && (rock = spawn_object(o, MODEL_PEBBLE, bhvMontyMoleRock)) != NULL) {
@@ -217,7 +215,7 @@ static void monty_mole_act_spawn_rock(void) {
  * into hole action.
  */
 static void monty_mole_act_begin_jump_into_hole(void) {
-    if (cur_obj_init_anim_and_check_if_end(3) || obj_is_near_to_and_facing_mario(1000.0f, 0x4000)) {
+    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || obj_is_near_to_and_facing_mario(1000.0f, 0x4000)) {
         o->oAction = MONTY_MOLE_ACT_JUMP_INTO_HOLE;
         o->oVelY = 40.0f;
         o->oGravity = -6.0f;
@@ -228,7 +226,7 @@ static void monty_mole_act_begin_jump_into_hole(void) {
  * Throw the held rock, then enter the begin jump into hole action.
  */
 static void monty_mole_act_throw_rock(void) {
-    if (cur_obj_init_anim_check_frame(8, 10)) {
+    if (cur_obj_init_anim_check_frame(MONTY_MOLE_ANIM_THROW_ROCK, 10)) {
         cur_obj_play_sound_2(SOUND_OBJ_MONTY_MOLE_ATTACK);
         o->prevObj = NULL;
     }
@@ -240,7 +238,7 @@ static void monty_mole_act_throw_rock(void) {
  * Tilt downward and wait until close to landing, then enter the hide action.
  */
 static void monty_mole_act_jump_into_hole(void) {
-    cur_obj_init_anim_extend(0);
+    cur_obj_init_anim_extend(MONTY_MOLE_ANIM_JUMP_INTO_HOLE);
 
     o->oFaceAnglePitch = -atan2s(o->oVelY, -4.0f);
 
@@ -265,7 +263,7 @@ static void monty_mole_hide_in_hole(void) {
  * Wait to land on the floor, then hide.
  */
 static void monty_mole_act_hide(void) {
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(MONTY_MOLE_ANIM_RISE);
 
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         cur_obj_hide();
@@ -281,9 +279,9 @@ static void monty_mole_act_hide(void) {
  */
 static void monty_mole_act_jump_out_of_hole(void) {
     if (o->oVelY > 0.0f) {
-        cur_obj_init_animation_with_sound(9);
+        cur_obj_init_animation_with_sound(MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_UP);
     } else {
-        cur_obj_init_anim_extend(4);
+        cur_obj_init_anim_extend(MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_DOWN);
 
         if (o->oMontyMoleHeightRelativeToFloor < 50.0f) {
             o->oPosY = o->oFloorHeight + 50.0f;
@@ -320,30 +318,14 @@ void bhv_monty_mole_update(void) {
     o->oMontyMoleHeightRelativeToFloor = o->oPosY - o->oFloorHeight;
 
     switch (o->oAction) {
-        case MONTY_MOLE_ACT_SELECT_HOLE:
-            monty_mole_act_select_hole();
-            break;
-        case MONTY_MOLE_ACT_RISE_FROM_HOLE:
-            monty_mole_act_rise_from_hole();
-            break;
-        case MONTY_MOLE_ACT_SPAWN_ROCK:
-            monty_mole_act_spawn_rock();
-            break;
-        case MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE:
-            monty_mole_act_begin_jump_into_hole();
-            break;
-        case MONTY_MOLE_ACT_THROW_ROCK:
-            monty_mole_act_throw_rock();
-            break;
-        case MONTY_MOLE_ACT_JUMP_INTO_HOLE:
-            monty_mole_act_jump_into_hole();
-            break;
-        case MONTY_MOLE_ACT_HIDE:
-            monty_mole_act_hide();
-            break;
-        case MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE:
-            monty_mole_act_jump_out_of_hole();
-            break;
+        case MONTY_MOLE_ACT_SELECT_HOLE:          monty_mole_act_select_hole();          break;
+        case MONTY_MOLE_ACT_RISE_FROM_HOLE:       monty_mole_act_rise_from_hole();       break;
+        case MONTY_MOLE_ACT_SPAWN_ROCK:           monty_mole_act_spawn_rock();           break;
+        case MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE: monty_mole_act_begin_jump_into_hole(); break;
+        case MONTY_MOLE_ACT_THROW_ROCK:           monty_mole_act_throw_rock();           break;
+        case MONTY_MOLE_ACT_JUMP_INTO_HOLE:       monty_mole_act_jump_into_hole();       break;
+        case MONTY_MOLE_ACT_HIDE:                 monty_mole_act_hide();                 break;
+        case MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE:     monty_mole_act_jump_out_of_hole();     break;
     }
 
     // Spawn a 1-up if you kill 8 monty moles
@@ -403,7 +385,7 @@ static void monty_mole_rock_act_held(void) {
         o->oForwardVel = 40.0f;
         o->oVelY = distToMario * 0.08f + 8.0f;
 
-        o->oMoveFlags = 0;
+        o->oMoveFlags = OBJ_MOVE_NONE;
     }
 }
 
@@ -465,11 +447,7 @@ void bhv_monty_mole_rock_update(void) {
     obj_check_attacks(&sMontyMoleRockHitbox, o->oAction);
 
     switch (o->oAction) {
-        case MONTY_MOLE_ROCK_ACT_HELD:
-            monty_mole_rock_act_held();
-            break;
-        case MONTY_MOLE_ROCK_ACT_MOVE:
-            monty_mole_rock_act_move();
-            break;
+        case MONTY_MOLE_ROCK_ACT_HELD: monty_mole_rock_act_held(); break;
+        case MONTY_MOLE_ROCK_ACT_MOVE: monty_mole_rock_act_move(); break;
     }
 }

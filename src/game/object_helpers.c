@@ -729,7 +729,7 @@ void cur_obj_unused_init_on_floor(void) {
 
     o->oPosY = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
     if (o->oPosY < FLOOR_LOWER_LIMIT_MISC) {
-        cur_obj_set_pos_relative_to_parent(0, 0, -70);
+        cur_obj_set_pos_relative_to_parent(0.0f, 0.0f, -70.0f);
         o->oPosY = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
     }
 }
@@ -972,7 +972,7 @@ void cur_obj_unrender_set_action_and_anim(s32 animIndex, s32 action) {
 }
 
 static void cur_obj_move_after_thrown_or_dropped(f32 forwardVel, f32 velY) {
-    o->oMoveFlags = 0;
+    o->oMoveFlags = OBJ_MOVE_NONE;
     o->oFloorHeight = find_floor_height(o->oPosX, o->oPosY + 160.0f, o->oPosZ);
 
     if (o->oFloorHeight > o->oPosY) {
@@ -986,9 +986,7 @@ static void cur_obj_move_after_thrown_or_dropped(f32 forwardVel, f32 velY) {
     o->oForwardVel = forwardVel;
     o->oVelY = velY;
 
-    if (o->oForwardVel != 0) {
-        cur_obj_move_y(/*gravity*/ -4.0f, /*bounciness*/ -0.1f, /*buoyancy*/ 2.0f);
-    }
+    if (o->oForwardVel != 0) cur_obj_move_y(/*gravity*/ -4.0f, /*bounciness*/ -0.1f, /*buoyancy*/ 2.0f);
 }
 
 void cur_obj_get_thrown_or_placed(f32 forwardVel, f32 velY, s32 thrownAction) {

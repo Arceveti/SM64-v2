@@ -49,8 +49,8 @@ s32 lll_octagonal_mesh_move(s16 *actionTable, s32 actionOffset) {
             break;
         case LLL_OCTMESH_LINEAR_MOVE:
             o->oMoveAngleYaw = actionTable[actionOffset + 2];
-            o->oForwardVel = actionTable[actionOffset + 3] / 100.0f;
-            if (o->oTimer > actionTable[actionOffset + 1]) {
+            o->oForwardVel   = actionTable[actionOffset + 3] / 100.0f;
+            if (o->oTimer    > actionTable[actionOffset + 1]) {
                 actionOffset += 4;
                 o->oTimer = 0;
             }
@@ -64,7 +64,7 @@ s32 lll_octagonal_mesh_move(s16 *actionTable, s32 actionOffset) {
             break;
         case LLL_OCTMESH_RESET:
             o->oForwardVel = 0.0f;
-            actionOffset = 0;
+            actionOffset   = 0;
             break;
     }
     return actionOffset;
@@ -89,13 +89,12 @@ s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, UNUSED f32 *posOffset, s32
 }
 
 void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
-    if (o->oAction == 0) {
+    if (o->oAction == LLL_OCTAGONAL_ROTATING_MESH_ACT_RESET) {
         // reset the platform (when initting?)
         o->oLllOctmeshActionOffset = 0;
-        o->oAction++;
+        o->oAction = LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE;
     } else {
-        o->oLllOctmeshActionOffset =
-            lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctmeshActionOffset);
+        o->oLllOctmeshActionOffset = lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctmeshActionOffset);
     }
 	// prints the current actionOffset to the screen
     print_debug_top_down_objectinfo("number %d\n", o->oLllOctmeshActionOffset);
@@ -103,9 +102,8 @@ void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     // are we transitioning between Mario standing and not standing?
     if (lll_octagonal_mesh_find_y_offset(&o->oLllOctmeshStandTimer, &o->oLllOctmeshWaveOffset2, 0x400, -80)) {
 		// nope, wave as usual
-        o->oLllOctmeshWaveTimer += 0x800;
+        o->oLllOctmeshWaveTimer   += 0x800;
         o->oLllOctmeshWaveOffset1 -= sins(o->oLllOctmeshWaveTimer) * 2;
     }
-    //! oHomeY is not initialized, it's always 0. Moving the object upwards in the script has no effect.
-    o->oPosY = o->oLllOctmeshWaveOffset1 + o->oHomeY + o->oLllOctmeshWaveOffset2;
+    o->oPosY = o->oLllOctmeshWaveOffset1 + o->oLllOctmeshWaveOffset2;
 }

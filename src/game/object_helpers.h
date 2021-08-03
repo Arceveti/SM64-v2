@@ -17,12 +17,13 @@ struct ChainSegment
     s16 roll;
 };
 
-#define WATER_DROPLET_FLAG_RAND_ANGLE                0x02
-#define WATER_DROPLET_FLAG_RAND_OFFSET_XZ            0x04 // Unused
-#define WATER_DROPLET_FLAG_RAND_OFFSET_XYZ           0x08 // Unused
-#define WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL      0x20
-#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_PLUS_8000 0x40
-#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR           0x80 // Unused
+#define WATER_DROPLET_FLAG_RAND_ANGLE                   (1 << 1) // 0x02
+#define WATER_DROPLET_FLAG_RAND_OFFSET_XZ               (1 << 2) // 0x04 // Unused
+#define WATER_DROPLET_FLAG_RAND_OFFSET_XYZ              (1 << 3) // 0x08 // Unused
+#define WATER_DROPLET_FLAG_UNUSED                       (1 << 4) // 0x10
+#define WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL         (1 << 5) // 0x20
+#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_PLUS_8000    (1 << 6) // 0x40
+#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR              (1 << 7) // 0x80 // Unused
 
 // Call spawn_water_droplet with this struct to spawn an object.
 struct WaterDropletParams
@@ -38,16 +39,6 @@ struct WaterDropletParams
     f32 randYVelScale;
     f32 randSizeOffset;
     f32 randSizeScale;
-};
-
-struct struct802A1230 {
-    /*0x00*/ s16 unk00;
-    /*0x02*/ s16 unk02;
-};
-
-struct Struct802A272C {
-    Vec3f vecF;
-    Vec3s vecS;
 };
 
 // TODO: Field names

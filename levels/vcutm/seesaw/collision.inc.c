@@ -1,5 +1,5 @@
 // 0x0700AC44 - 0x0700ACC8
-const Collision vcutm_seg7_collision_0700AC44[] = {
+const Collision vcutm_seg7_collision_seesaw_platform[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(307, 0, 768),

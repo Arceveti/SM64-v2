@@ -1,5 +1,5 @@
 // 0x07029858 - 0x07029924
-const Collision rr_seg7_collision_07029858[] = {
+const Collision rr_seg7_collision_L_shaped_seesaw_platform[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0xC),
     COL_VERTEX(26, 154, 0),

@@ -21,7 +21,7 @@
  * Partitions for course and object surfaces. The arrays represent
  * the 16x16 cells that each level is split into.
  */
-SpatialPartitionCell gStaticSurfacePartition[NUM_CELLS][NUM_CELLS];
+SpatialPartitionCell gStaticSurfacePartition[ NUM_CELLS][NUM_CELLS];
 SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
 
 /**
@@ -106,10 +106,10 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     s16 listIndex;
     s16 isWater = (surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM);
 
-    if (surface->normal.y > 0.01f) {
+    if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
         sortDir =  1; // highest to lowest, then insertion order
-    } else if (surface->normal.y < -0.2f) {
+    } else if (surface->normal.y < MAX_CEIL_NORMAL_Y) {
         listIndex = SPATIAL_PARTITION_CEILS;
         sortDir = -1; // lowest to highest, then insertion order
     } else {
@@ -634,7 +634,6 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
             surface->room   = (s8) room;
             add_surface(surface, TRUE);
         }
-
 #ifdef ALL_SURFACES_HAVE_FORCE
         *data += 4;
 #else

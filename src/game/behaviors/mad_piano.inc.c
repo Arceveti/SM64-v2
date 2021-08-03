@@ -12,7 +12,7 @@ static struct ObjectHitbox sMadPianoHitbox = {
 };
 
 static void mad_piano_act_wait(void) {
-    cur_obj_init_animation_with_sound(0);
+    cur_obj_init_animation_with_sound(MAD_PIANO_ANIM_SLEEPING);
 
     if (o->oDistanceToMario < 500.0f) {
         if (o->oTimer > 20 && gMarioStates[0].forwardVel > 10.0f) {
@@ -28,7 +28,7 @@ static void mad_piano_act_wait(void) {
 
 static void mad_piano_act_attack(void) {
     cur_obj_update_floor_and_walls();
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(MAD_PIANO_ANIM_CHOMPING);
     cur_obj_play_sound_at_anim_range(0, 0, SOUND_OBJ_MAD_PIANO_CHOMPING);
 
     if (o->oDistanceToMario < 500.0f) o->oTimer = 0;
@@ -61,12 +61,8 @@ void bhv_mad_piano_update(void) {
         o->oFaceAngleYaw = o->oMoveAngleYaw - 0x4000;
 
         switch (o->oAction) {
-            case MAD_PIANO_ACT_WAIT:
-                mad_piano_act_wait();
-                break;
-            case MAD_PIANO_ACT_ATTACK:
-                mad_piano_act_attack();
-                break;
+            case MAD_PIANO_ACT_WAIT:   mad_piano_act_wait();   break;
+            case MAD_PIANO_ACT_ATTACK: mad_piano_act_attack(); break;
         }
     }
 }

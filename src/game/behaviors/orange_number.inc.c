@@ -2,13 +2,13 @@
 
 void bhv_orange_number_init(void) {
     o->oAnimState = o->oBehParams2ndByte;
-    o->oVelY = 26.0f;
+    o->oVelY      = 26.0f;
 }
 
 void bhv_orange_number_loop(void) {
     struct Object *sparkleObj;
 #ifdef DIALOG_INDICATOR
-    if (o->oAnimState <= 0x09) {
+    if (o->oAnimState <= 0x9) {
 #endif
         o->oPosY += o->oVelY;
         o->oVelY -= 2.0f;

@@ -98,7 +98,7 @@ void bhv_dorrie_update(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         o->oDorrieForwardDistToMario = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);
 
-        obj_perform_position_op(0);
+        obj_perform_position_op(POS_OP_SAVE_POSITION);
         cur_obj_move_using_fvel_and_gravity();
 
         o->oDorrieAngleToHome = cur_obj_angle_to_home();
@@ -139,6 +139,6 @@ void bhv_dorrie_update(void) {
             case DORRIE_ACT_RAISE_HEAD: dorrie_act_raise_head(); break;
         }
 
-        obj_perform_position_op(1);
+        obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
     }
 }

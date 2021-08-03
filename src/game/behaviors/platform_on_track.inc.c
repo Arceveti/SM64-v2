@@ -263,24 +263,14 @@ static void platform_on_track_rock_ski_lift(void) {
  */
 void bhv_platform_on_track_update(void) {
 #ifdef CONTROLLABLE_PLATFORM_SPEED
-    s16 targetRoll; // visually pitch, since these platforms are technically sideways
+    s16 targetRoll; // visually pitch, since these platforms technically move sideways
 #endif
     switch (o->oAction) {
-        case PLATFORM_ON_TRACK_ACT_INIT:
-            platform_on_track_act_init();
-            break;
-        case PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO:
-            platform_on_track_act_wait_for_mario();
-            break;
-        case PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK:
-            platform_on_track_act_move_along_track();
-            break;
-        case PLATFORM_ON_TRACK_ACT_PAUSE_BRIEFLY:
-            platform_on_track_act_pause_briefly();
-            break;
-        case PLATFORM_ON_TRACK_ACT_FALL:
-            platform_on_track_act_fall();
-            break;
+        case PLATFORM_ON_TRACK_ACT_INIT:             platform_on_track_act_init();             break;
+        case PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO:   platform_on_track_act_wait_for_mario();   break;
+        case PLATFORM_ON_TRACK_ACT_MOVE_ALONG_TRACK: platform_on_track_act_move_along_track(); break;
+        case PLATFORM_ON_TRACK_ACT_PAUSE_BRIEFLY:    platform_on_track_act_pause_briefly();    break;
+        case PLATFORM_ON_TRACK_ACT_FALL:             platform_on_track_act_fall();             break;
     }
 
     if (!o->oPlatformOnTrackIsNotSkiLift) {

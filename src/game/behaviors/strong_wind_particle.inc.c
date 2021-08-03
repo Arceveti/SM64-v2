@@ -23,8 +23,8 @@ void bhv_strong_wind_particle_loop(void) {
         o->oStrongWindParticlePenguinObj = cur_obj_nearest_object_with_behavior(bhvSLWalkingPenguin);
         obj_translate_xyz_random(o, 100.0f);
         
-        o->oForwardVel = coss(o->oMoveAnglePitch) * 100.0f;
-        o->oVelY = sins(o->oMoveAnglePitch) * -100.0f;
+        o->oForwardVel = coss(o->oMoveAnglePitch) *  100.0f;
+        o->oVelY       = sins(o->oMoveAnglePitch) * -100.0f;
         
         o->oMoveAngleYaw += random_f32_around_zero(o->oBehParams2ndByte * 500); // Wind spread
         o->oOpacity = 100;

@@ -56,7 +56,7 @@ static void spiny_act_walk(void) {
         cur_obj_update_floor_and_walls();
 
         o->oGraphYOffset = -17.0f;
-        cur_obj_init_animation_with_sound(0);
+        cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
 
         if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
             // After touching the ground for the first time, stop. From now on,
@@ -97,9 +97,9 @@ static void spiny_act_walk(void) {
             // When attacked by mario, lessen the knockback
             o->oAction = SPINY_ACT_WALK;
             o->oForwardVel *= 0.1f;
-            o->oVelY *= 0.7f;
+            o->oVelY       *= 0.7f;
 
-            o->oMoveFlags = 0; // weird flex but okay
+            o->oMoveFlags = OBJ_MOVE_NONE; // weird flex but okay
 
             // Don't allow mario to punch the spiny two frames in a row?
             o->oInteractType = INTERACT_MR_BLIZZARD;
@@ -115,10 +115,10 @@ static void spiny_act_walk(void) {
  */
 static void spiny_act_held_by_lakitu(void) {
     o->oGraphYOffset = 15.0f;
-    cur_obj_init_animation_with_sound(0);
+    cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
 
-    o->oParentRelativePosX = -50.0f;
-    o->oParentRelativePosY = 35.0f;
+    o->oParentRelativePosX =  -50.0f;
+    o->oParentRelativePosY =   35.0f;
     o->oParentRelativePosZ = -100.0f;
 
     if (o->parentObj->prevObj == NULL) {
@@ -126,11 +126,10 @@ static void spiny_act_held_by_lakitu(void) {
         o->oMoveAngleYaw = o->parentObj->oFaceAngleYaw;
 
         // Move more quickly if the lakitu is moving forward
-        o->oForwardVel =
-            o->parentObj->oForwardVel * coss(o->oMoveAngleYaw - o->parentObj->oMoveAngleYaw) + 10.0f;
+        o->oForwardVel = o->parentObj->oForwardVel * coss(o->oMoveAngleYaw - o->parentObj->oMoveAngleYaw) + 10.0f;
         o->oVelY = 30.0f;
 
-        o->oMoveFlags = 0; // you do you, spiny
+        o->oMoveFlags = OBJ_MOVE_NONE; // you do you, spiny
     }
 }
 
@@ -144,12 +143,12 @@ static void spiny_act_thrown_by_lakitu(void) {
         o->oGraphYOffset = 15.0f;
         o->oFaceAnglePitch -= 0x2000;
 
-        cur_obj_init_animation_with_sound(0);
+        cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
 
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             cur_obj_play_sound_2(SOUND_OBJ_SPINY_LAND);
             cur_obj_set_model(MODEL_SPINY);
-            obj_init_animation_with_sound(o, spiny_seg5_anims_05016EAC, 0);
+            obj_init_animation_with_sound(o, spiny_seg5_anims_05016EAC, SPINY_ANIM_DEFAULT);
             o->oGraphYOffset = -17.0f;
 
             o->oFaceAnglePitch = 0;
@@ -171,17 +170,9 @@ void bhv_spiny_update(void) {
     // PARTIAL_UPDATE
 
     switch (o->oAction) {
-        case SPINY_ACT_WALK:
-            spiny_act_walk();
-            break;
-        case SPINY_ACT_HELD_BY_LAKITU:
-            spiny_act_held_by_lakitu();
-            break;
-        case SPINY_ACT_THROWN_BY_LAKITU:
-            spiny_act_thrown_by_lakitu();
-            break;
-        case SPINY_ACT_ATTACKED_MARIO:
-            obj_move_for_one_second(SPINY_ACT_WALK);
-            break;
+        case SPINY_ACT_WALK:             spiny_act_walk();                        break;
+        case SPINY_ACT_HELD_BY_LAKITU:   spiny_act_held_by_lakitu();              break;
+        case SPINY_ACT_THROWN_BY_LAKITU: spiny_act_thrown_by_lakitu();            break;
+        case SPINY_ACT_ATTACKED_MARIO:   obj_move_for_one_second(SPINY_ACT_WALK); break;
     }
 }

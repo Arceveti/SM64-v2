@@ -77,39 +77,39 @@ static const Lights1 koopa_seg6_lights_06006E60 = gdSPDefLights1(
 );
 
 // 0x06006E78
-static const Vtx koopa_seg6_vertex_06006E78[] = {
+static const Vtx koopa_seg6_vertex_eyes[] = {
     {{{   139,     -4,      0}, 0, {   486,    684}, {0x76, 0x2d, 0x00, 0xff}}},
     {{{   133,    -11,    -56}, 0, {     8,    694}, {0x38, 0x4e, 0xae, 0xff}}},
     {{{   111,      2,    -51}, 0, {    40,    976}, {0x39, 0x0d, 0x90, 0xff}}},
-    {{{   155,    -27,     49}, 0, {   908,    324}, {0x57, 0x36, 0x49, 0xff}}},
+    {{{   155,    -27,     49}, 0, {   908,  10<<5}, {0x57, 0x36, 0x49, 0xff}}},
     {{{   184,    -56,     23}, 0, {   700,    -64}, {0x75, 0x18, 0x29, 0xff}}},
-    {{{   133,    -11,     56}, 0, {   962,    696}, {0x39, 0x41, 0x5c, 0xff}}},
-    {{{   184,    -56,    -23}, 0, {   302,    -66}, {0x6f, 0x23, 0xcf, 0xff}}},
+    {{{   133,    -11,     56}, 0, { 30<<5,    696}, {0x39, 0x41, 0x5c, 0xff}}},
+    {{{   184,    -56,    -23}, 0, {   302,    -64}, {0x6f, 0x23, 0xcf, 0xff}}},
     {{{   111,      2,     52}, 0, {   918,    980}, {0x39, 0x0e, 0x70, 0xff}}},
-    {{{   155,    -27,    -48}, 0, {    78,    322}, {0x51, 0x2e, 0xab, 0xff}}},
+    {{{   155,    -27,    -48}, 0, {    80,  10<<5}, {0x51, 0x2e, 0xab, 0xff}}},
 };
 
 // 0x06006F08
-static const Vtx koopa_seg6_vertex_06006F08[] = {
+static const Vtx koopa_seg6_vertex_eye_border_1[] = {
     {{{    10,     50,    -36}, 0, {   796,   3890}, {0xad, 0x48, 0xc2, 0xff}}},
     {{{    15,     22,    -64}, 0, {  1060,   3604}, {0xae, 0x1d, 0xa5, 0xff}}},
     {{{   -12,     -4,      0}, 0, {   458,   4320}, {0x82, 0xf8, 0x00, 0xff}}},
     {{{    16,    -63,      0}, 0, {   458,   3226}, {0xbd, 0x95, 0x00, 0xff}}},
     {{{    43,    -44,    -54}, 0, {   964,   2536}, {0xe5, 0xa4, 0xae, 0xff}}},
     {{{    69,    -65,    -18}, 0, {   626,   1742}, {0xe6, 0x8b, 0xd7, 0xff}}},
-    {{{    99,    -87,      0}, 0, {   458,    814}, {0xdc, 0x87, 0x00, 0xff}}},
-    {{{   102,    -44,    -54}, 0, {   960,    882}, {0xf5, 0xaf, 0x9f, 0xff}}},
+    {{{    99,    -87,      0}, 0, {   458,    816}, {0xdc, 0x87, 0x00, 0xff}}},
+    {{{   102,    -44,    -54}, 0, { 30<<5,    882}, {0xf5, 0xaf, 0x9f, 0xff}}},
     {{{    69,    -65,     18}, 0, {   288,   1766}, {0xe6, 0x8b, 0x29, 0xff}}},
     {{{   102,    -44,     54}, 0, {   -42,    956}, {0xf4, 0xae, 0x60, 0xff}}},
     {{{   147,    -93,      0}, 0, {   458,   -570}, {0xf9, 0x82, 0x00, 0xff}}},
-    {{{    43,    -44,     54}, 0, {   -46,   2612}, {0xe6, 0xa4, 0x52, 0xff}}},
+    {{{    43,    -44,     54}, 0, {   -48,   2612}, {0xe6, 0xa4, 0x52, 0xff}}},
     {{{    23,    -24,     60}, 0, {   -92,   3240}, {0xad, 0xcb, 0x4f, 0xff}}},
     {{{    23,    -24,    -59}, 0, {  1012,   3160}, {0xac, 0xcc, 0xb2, 0xff}}},
     {{{     0,     52,      0}, 0, {   460,   4212}, {0x99, 0x49, 0x09, 0xff}}},
 };
 
 // 0x06006FF8
-static const Vtx koopa_seg6_vertex_06006FF8[] = {
+static const Vtx koopa_seg6_vertex_eye_border_2[] = {
     {{{     0,     52,      0}, 0, {   460,   4212}, {0x99, 0x49, 0x09, 0xff}}},
     {{{    45,     75,     32}, 0, {   164,   3076}, {0xe3, 0x6a, 0x3e, 0xff}}},
     {{{    36,     84,      0}, 0, {   462,   3348}, {0xd1, 0x75, 0xfa, 0xff}}},
@@ -129,7 +129,7 @@ static const Vtx koopa_seg6_vertex_06006FF8[] = {
 };
 
 // 0x060070F8
-static const Vtx koopa_seg6_vertex_060070F8[] = {
+static const Vtx koopa_seg6_vertex_eye_border_3[] = {
     {{{    54,      2,    -87}, 0, {  1264,   2416}, {0xf1, 0x01, 0x82, 0xff}}},
     {{{    23,    -24,    -59}, 0, {  1012,   3160}, {0xac, 0xcc, 0xb2, 0xff}}},
     {{{    15,     22,    -64}, 0, {  1060,   3604}, {0xae, 0x1d, 0xa5, 0xff}}},
@@ -144,11 +144,11 @@ static const Vtx koopa_seg6_vertex_060070F8[] = {
     {{{    43,    -44,    -54}, 0, {   964,   2536}, {0xe5, 0xa4, 0xae, 0xff}}},
     {{{    77,    -16,    -82}, 0, {  1220,   1700}, {0x2d, 0xe3, 0x8e, 0xff}}},
     {{{   102,    -44,    -54}, 0, {   960,    882}, {0xf5, 0xaf, 0x9f, 0xff}}},
-    {{{    36,     84,      0}, 0, {   462,   3348}, {0xd1, 0x75, 0xfa, 0xff}}},
+    {{{    36,     84,      0}, 0, {   464,   3348}, {0xd1, 0x75, 0xfa, 0xff}}},
 };
 
 // 0x060071E8
-static const Vtx koopa_seg6_vertex_060071E8[] = {
+static const Vtx koopa_seg6_vertex_eye_border_4[] = {
     {{{    43,    -44,     54}, 0, {   -46,   2612}, {0xe6, 0xa4, 0x52, 0xff}}},
     {{{    77,    -16,     82}, 0, {  -300,   1812}, {0x2c, 0xe3, 0x73, 0xff}}},
     {{{    54,      2,     87}, 0, {  -344,   2534}, {0xf3, 0x01, 0x7e, 0xff}}},
@@ -160,7 +160,7 @@ static const Vtx koopa_seg6_vertex_060071E8[] = {
 };
 
 // 0x06007268
-static const Vtx koopa_seg6_vertex_06007268[] = {
+static const Vtx koopa_seg6_vertex_nostrils_1[] = {
     {{{    92,     84,    -51}, 0, {    48,   1042}, {0xb8, 0x43, 0xb1, 0xff}}},
     {{{   140,     72,    -49}, 0, {    80,    596}, {0x45, 0x33, 0xa3, 0xff}}},
     {{{    99,     22,    -60}, 0, {  -128,    110}, {0x30, 0x0e, 0x8c, 0xff}}},
@@ -179,7 +179,7 @@ static const Vtx koopa_seg6_vertex_06007268[] = {
 };
 
 // 0x06007358
-static const Vtx koopa_seg6_vertex_06007358[] = {
+static const Vtx koopa_seg6_vertex_nostrils_2[] = {
     {{{   111,      2,     52}, 0, {  1908,   -278}, {0x39, 0x0e, 0x70, 0xff}}},
     {{{    77,    -16,     82}, 0, {  2464,   -370}, {0x2c, 0xe3, 0x73, 0xff}}},
     {{{   102,    -44,     54}, 0, {  1944,   -924}, {0xf4, 0xae, 0x60, 0xff}}},
@@ -199,7 +199,7 @@ static const Vtx koopa_seg6_vertex_06007358[] = {
 };
 
 // 0x06007458
-static const Vtx koopa_seg6_vertex_06007458[] = {
+static const Vtx koopa_seg6_vertex_nostrils_3[] = {
     {{{    15,     22,    -64}, 0, {  -200,    590}, {0xae, 0x1d, 0xa5, 0xff}}},
     {{{    64,     41,    -62}, 0, {  -148,    586}, {0x03, 0x47, 0x98, 0xff}}},
     {{{    54,      2,    -87}, 0, {  -616,     80}, {0xf1, 0x01, 0x82, 0xff}}},
@@ -247,23 +247,23 @@ static const Vtx koopa_seg6_vertex_060075B8[] = {
 };
 
 // 0x06007658 - 0x060076B0
-const Gfx koopa_seg6_dl_06007658[] = {
+const Gfx koopa_seg6_sub_dl_eyes[] = {
     gsSPLight(&koopa_seg6_lights_060025D0.l, 1),
     gsSPLight(&koopa_seg6_lights_060025D0.a, 2),
-    gsSPVertex(koopa_seg6_vertex_06006E78, 9, 0),
+    gsSPVertex(koopa_seg6_vertex_eyes, 9, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  0, 0x0),
     gsSP2Triangles( 0,  5,  3, 0x0,  4,  6,  0, 0x0),
     gsSP2Triangles( 7,  5,  0, 0x0,  8,  1,  0, 0x0),
-    gsSP1Triangle( 0,  6,  8, 0x0),
+    gsSP1Triangle(  0,  6,  8, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x060076B0 - 0x06007850
-const Gfx koopa_seg6_dl_060076B0[] = {
+const Gfx koopa_seg6_sub_dl_eye_border[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eye_border),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(koopa_seg6_vertex_06006F08, 15, 0),
+    gsSPVertex(koopa_seg6_vertex_eye_border_1, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  5,  7, 0x0,  5,  6,  8, 0x0),
     gsSP2Triangles( 3,  5,  8, 0x0,  7,  5,  4, 0x0),
@@ -273,7 +273,7 @@ const Gfx koopa_seg6_dl_060076B0[] = {
     gsSP2Triangles( 2,  3, 12, 0x0,  3, 13,  4, 0x0),
     gsSP2Triangles(13,  3,  2, 0x0,  2,  1, 13, 0x0),
     gsSP1Triangle(14,  0,  2, 0x0),
-    gsSPVertex(koopa_seg6_vertex_06006FF8, 16, 0),
+    gsSPVertex(koopa_seg6_vertex_eye_border_2, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  4, 0x0),
     gsSP2Triangles( 3,  5,  4, 0x0,  5,  6,  7, 0x0),
     gsSP2Triangles( 7,  8,  5, 0x0,  4,  5,  8, 0x0),
@@ -281,24 +281,24 @@ const Gfx koopa_seg6_dl_060076B0[] = {
     gsSP2Triangles( 8,  1,  4, 0x0,  2,  9,  0, 0x0),
     gsSP2Triangles( 2, 10,  9, 0x0,  9, 11, 12, 0x0),
     gsSP2Triangles( 9, 10, 11, 0x0, 13, 14, 15, 0x0),
-    gsSPVertex(koopa_seg6_vertex_060070F8, 15, 0),
+    gsSPVertex(koopa_seg6_vertex_eye_border_3, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  3,  7,  6, 0x0),
     gsSP2Triangles( 6,  8,  9, 0x0, 10,  8,  7, 0x0),
     gsSP2Triangles(11, 12, 13, 0x0,  0, 11,  1, 0x0),
     gsSP1Triangle(14,  8, 10, 0x0),
-    gsSPVertex(koopa_seg6_vertex_060071E8, 8, 0),
+    gsSPVertex(koopa_seg6_vertex_eye_border_4, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 1,  0,  4, 0x0,  5,  6,  7, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x06007850 - 0x06007970
-const Gfx koopa_seg6_dl_06007850[] = {
+const Gfx koopa_seg6_sub_dl_nostrils[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_nostrils),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(koopa_seg6_vertex_06007268, 15, 0),
+    gsSPVertex(koopa_seg6_vertex_nostrils_1, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  2,  1, 0x0),
     gsSP2Triangles( 1,  4,  5, 0x0,  1,  0,  6, 0x0),
     gsSP2Triangles( 6,  4,  1, 0x0,  5,  3,  1, 0x0),
@@ -308,14 +308,14 @@ const Gfx koopa_seg6_dl_06007850[] = {
     gsSP2Triangles(11,  7, 10, 0x0,  8,  7, 11, 0x0),
     gsSP2Triangles(12,  9,  8, 0x0,  8, 11, 12, 0x0),
     gsSP1Triangle(13,  2, 14, 0x0),
-    gsSPVertex(koopa_seg6_vertex_06007358, 16, 0),
+    gsSPVertex(koopa_seg6_vertex_nostrils_2, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  7,  8,  3, 0x0),
     gsSP2Triangles( 9,  1,  3, 0x0,  9,  3,  8, 0x0),
     gsSP2Triangles( 4, 10, 11, 0x0,  4, 12,  5, 0x0),
     gsSP2Triangles(13, 14, 12, 0x0, 14, 15, 12, 0x0),
     gsSP1Triangle(12, 11, 13, 0x0),
-    gsSPVertex(koopa_seg6_vertex_06007458, 3, 0),
+    gsSPVertex(koopa_seg6_vertex_nostrils_3, 3, 0),
     gsSP1Triangle( 0,  1,  2, 0x0),
     gsSPEndDisplayList(),
 };
@@ -345,7 +345,7 @@ const Gfx koopa_seg6_dl_06007970[] = {
 };
 
 // 0x06007A60 - 0x06007AA0
-const Gfx koopa_seg6_dl_06007A60[] = {
+const Gfx koopa_seg6_sub_dl_eyes_start[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -357,13 +357,13 @@ const Gfx koopa_seg6_dl_06007A60[] = {
 };
 
 // 0x06007AA0 - 0x06007AF8
-const Gfx koopa_seg6_dl_06007AA0[] = {
-    gsSPDisplayList(koopa_seg6_dl_06007658),
-    gsSPDisplayList(koopa_seg6_dl_060076B0),
+const Gfx koopa_seg6_sub_dl_eyes_end[] = {
+    gsSPDisplayList(koopa_seg6_sub_dl_eyes),
+    gsSPDisplayList(koopa_seg6_sub_dl_eye_border),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 6, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (64 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(koopa_seg6_dl_06007850),
+    gsSPDisplayList(koopa_seg6_sub_dl_nostrils),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -372,28 +372,22 @@ const Gfx koopa_seg6_dl_06007AA0[] = {
 };
 
 // 0x06007AF8 - 0x06007B20
-const Gfx koopa_seg6_dl_06007AF8[] = {
-    gsSPDisplayList(koopa_seg6_dl_06007A60),
+const Gfx koopa_seg6_dl_eyes_open[] = {
+    gsSPDisplayList(koopa_seg6_sub_dl_eyes_start),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eyes_open),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(koopa_seg6_dl_06007AA0),
+    gsSPBranchList(koopa_seg6_sub_dl_eyes_end),
 };
 
 // 0x06007B20 - 0x06007B48
-const Gfx koopa_seg6_dl_06007B20[] = {
-    gsSPDisplayList(koopa_seg6_dl_06007A60),
+const Gfx koopa_seg6_dl_eyes_closed[] = {
+    gsSPDisplayList(koopa_seg6_sub_dl_eyes_start),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, koopa_seg6_texture_eyes_closed),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(koopa_seg6_dl_06007AA0),
+    gsSPBranchList(koopa_seg6_sub_dl_eyes_end),
 };
-
-// 0x06007B60
-static const Lights1 koopa_seg6_lights_06007B60 = gdSPDefLights1(
-    0x70, 0x57, 0x00,
-    0xe0, 0xae, 0x00, 0x28, 0x28, 0x28
-);
 
 // 0x06007B78
 static const Vtx koopa_seg6_vertex_06007B78[] = {
@@ -523,8 +517,8 @@ const Gfx koopa_seg6_dl_06008050[] = {
 
 // 0x060080F8 - 0x06008250
 const Gfx koopa_seg6_dl_060080F8[] = {
-    gsSPLight(&koopa_seg6_lights_06007B60.l, 1),
-    gsSPLight(&koopa_seg6_lights_06007B60.a, 2),
+    gsSPLight(&koopa_seg6_lights_060025B8.l, 1),
+    gsSPLight(&koopa_seg6_lights_060025B8.a, 2),
     gsSPVertex(koopa_seg6_vertex_06007CF8, 5, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
     gsSP1Triangle( 2,  4,  3, 0x0),

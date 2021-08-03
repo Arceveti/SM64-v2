@@ -94,7 +94,7 @@ static void water_bomb_act_init(void) {
     cur_obj_play_sound_2(SOUND_OBJ_WATER_BOMB_LANDING);
 
     o->oAction = WATER_BOMB_ACT_DROP;
-    o->oMoveFlags = 0;
+    o->oMoveFlags = OBJ_MOVE_NONE;
     o->oVelY = -40.0f;
 }
 

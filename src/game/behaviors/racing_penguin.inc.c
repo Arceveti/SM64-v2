@@ -13,7 +13,7 @@ void bhv_racing_penguin_init(void) {
     if (gMarioState->numStars == 120) {
         cur_obj_scale(8.0f);
         o->header.gfx.scale[1] = 5.0f;
-        o->oBehParams2ndByte = 1;
+        o->oBehParams2ndByte = RACING_PENGUIN_BP_120_STARS;
     }
 }
 
@@ -80,7 +80,7 @@ static void racing_penguin_act_race(void) {
         clamp_f32(&targetSpeed, minSpeed, 150.0f);
         obj_forward_vel_approach(targetSpeed, 0.4f);
 
-        cur_obj_init_animation_with_sound(1);
+        cur_obj_init_animation_with_sound(PENGUIN_ANIM_RACE);
         cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, (s32)(15.0f * o->oForwardVel));
 
         if (cur_obj_check_if_at_animation_end() && (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND)) {
@@ -102,7 +102,7 @@ static void racing_penguin_act_finish_race(void) {
             set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
             o->oForwardVel = 0.0f;
         }
-    } else if (cur_obj_init_anim_and_check_if_end(2) != 0) {
+    } else if (cur_obj_init_anim_and_check_if_end(PENGUIN_ANIM_RACE_END)) {
         o->oAction = RACING_PENGUIN_ACT_SHOW_FINAL_TEXT;
     }
 }
@@ -112,7 +112,7 @@ static void racing_penguin_act_show_final_text(void) {
 
     if (o->oRacingPenguinFinalTextbox == 0) {
         if (cur_obj_rotate_yaw_toward(0, 200)) {
-            cur_obj_init_animation_with_sound(3);
+            cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
             o->oForwardVel = 0.0f;
 
             if (cur_obj_can_mario_activate_textbox_2(400.0f, 400.0f)) {
@@ -128,10 +128,10 @@ static void racing_penguin_act_show_final_text(void) {
                 }
             }
         } else {
-            cur_obj_init_animation_with_sound(0);
+            cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
 
 #ifndef VERSION_JP
-            play_penguin_walking_sound(1);
+            play_penguin_walking_sound(PENGUIN_SOUND_WALK_BIG);
 #endif
 
             o->oForwardVel = 4.0f;
@@ -152,30 +152,18 @@ void bhv_racing_penguin_update(void) {
     cur_obj_update_floor_and_walls();
 
     switch (o->oAction) {
-        case RACING_PENGUIN_ACT_WAIT_FOR_MARIO:
-            racing_penguin_act_wait_for_mario();
-            break;
-        case RACING_PENGUIN_ACT_SHOW_INIT_TEXT:
-            racing_penguin_act_show_init_text();
-            break;
-        case RACING_PENGUIN_ACT_PREPARE_FOR_RACE:
-            racing_penguin_act_prepare_for_race();
-            break;
-        case RACING_PENGUIN_ACT_RACE:
-            racing_penguin_act_race();
-            break;
-        case RACING_PENGUIN_ACT_FINISH_RACE:
-            racing_penguin_act_finish_race();
-            break;
-        case RACING_PENGUIN_ACT_SHOW_FINAL_TEXT:
-            racing_penguin_act_show_final_text();
-            break;
+        case RACING_PENGUIN_ACT_WAIT_FOR_MARIO:   racing_penguin_act_wait_for_mario();   break;
+        case RACING_PENGUIN_ACT_SHOW_INIT_TEXT:   racing_penguin_act_show_init_text();   break;
+        case RACING_PENGUIN_ACT_PREPARE_FOR_RACE: racing_penguin_act_prepare_for_race(); break;
+        case RACING_PENGUIN_ACT_RACE:             racing_penguin_act_race();             break;
+        case RACING_PENGUIN_ACT_FINISH_RACE:      racing_penguin_act_finish_race();      break;
+        case RACING_PENGUIN_ACT_SHOW_FINAL_TEXT:  racing_penguin_act_show_final_text();  break;
     }
 
     cur_obj_move_standard(78);
     cur_obj_align_gfx_with_floor();
     cur_obj_push_mario_away_from_cylinder(sRacingPenguinData[o->oBehParams2ndByte].radius,
-                                      sRacingPenguinData[o->oBehParams2ndByte].height);
+                                          sRacingPenguinData[o->oBehParams2ndByte].height);
 }
 
 void bhv_penguin_race_finish_line_update(void) {

@@ -29,17 +29,16 @@ static void skeeter_spawn_waves(void) {
 
 static void skeeter_act_idle(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-        cur_obj_init_animation_with_sound(3);
+        cur_obj_init_animation_with_sound(SKEETER_ANIM_IDLE);
         o->oForwardVel = 0.0f;
         if (o->oTimer > o->oSkeeterWaitTime && cur_obj_check_if_near_animation_end()) o->oAction = SKEETER_ACT_WALK;
     } else {
-        cur_obj_init_animation_with_sound(1);
+        cur_obj_init_animation_with_sound(SKEETER_ANIM_WATER_IDLE);
 
         if (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE) {
             skeeter_spawn_waves();
             if (o->oTimer > 60
-                && obj_smooth_turn(&o->oSkeeterAngleVel, &o->oMoveAngleYaw, o->oSkeeterTargetAngle, 0.02f,
-                                   5, 50, 200)) {
+                && obj_smooth_turn(&o->oSkeeterAngleVel, &o->oMoveAngleYaw, o->oSkeeterTargetAngle, 0.02f, 5, 50, 200)) {
                 if (o->oSkeeterWaitTime != 0) {
                     o->oSkeeterWaitTime--;
                 } else if (cur_obj_check_if_near_animation_end()) {
@@ -58,7 +57,7 @@ static void skeeter_act_lunge(void) {
         o->oAction = SKEETER_ACT_IDLE;
     } else {
         skeeter_spawn_waves();
-        cur_obj_init_animation_with_sound(0);
+        cur_obj_init_animation_with_sound(SKEETER_ANIM_WATER_LUNGE);
 
         if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
             o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
@@ -91,7 +90,7 @@ static void skeeter_act_walk(void) {
         obj_forward_vel_approach(o->oSkeeterTargetForwardVel, 0.4f);
         accel = 0.12f * o->oForwardVel;
 
-        cur_obj_init_animation_with_accel_and_sound(2, accel);
+        cur_obj_init_animation_with_accel_and_sound(SKEETER_ANIM_WALK, accel);
         cur_obj_play_sound_at_anim_range(3, 13, SOUND_OBJ_SKEETER_WALK);
 
         if (o->oSkeeterTurningAwayFromWall) {
@@ -110,7 +109,7 @@ static void skeeter_act_walk(void) {
                     o->oSkeeterTargetForwardVel = 10.0f;
                     if (o->oSkeeterWaitTime != 0) {
                         o->oSkeeterWaitTime--;
-                    } else if (cur_obj_check_if_near_animation_end() != 0) {
+                    } else if (cur_obj_check_if_near_animation_end()) {
                         if (random_u16() & 0x0003) {
                             o->oSkeeterTargetAngle = obj_random_fixed_turn(0x2000);
                             o->oSkeeterWaitTime = random_linear_offset(100, 100);
@@ -134,15 +133,9 @@ void bhv_skeeter_update(void) {
     cur_obj_update_floor_and_walls();
 
     switch (o->oAction) {
-        case SKEETER_ACT_IDLE:
-            skeeter_act_idle();
-            break;
-        case SKEETER_ACT_LUNGE:
-            skeeter_act_lunge();
-            break;
-        case SKEETER_ACT_WALK:
-            skeeter_act_walk();
-            break;
+        case SKEETER_ACT_IDLE:  skeeter_act_idle();  break;
+        case SKEETER_ACT_LUNGE: skeeter_act_lunge(); break;
+        case SKEETER_ACT_WALK:  skeeter_act_walk();  break;
     }
 
     obj_check_attacks(&sSkeeterHitbox, o->oAction);
@@ -150,10 +143,7 @@ void bhv_skeeter_update(void) {
 }
 
 void bhv_skeeter_wave_update(void) {
-    if (approach_f32_ptr(&o->header.gfx.scale[0], 0.0f, 0.3f)) {
-        obj_mark_for_deletion(o);
-    }
-
+    if (approach_f32_ptr(&o->header.gfx.scale[0], 0.0f, 0.3f)) obj_mark_for_deletion(o);
     cur_obj_scale(o->header.gfx.scale[0]);
     o->oAnimState = gGlobalTimer / 6;
 }

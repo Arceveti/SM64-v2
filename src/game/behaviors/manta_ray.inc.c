@@ -46,13 +46,13 @@ static void manta_ray_move(void) {
 
     animFrame = o->header.gfx.animInfo.animFrame;
     gCurrentObject->oPathedStartWaypoint = (struct Waypoint *) sMantaRayTraj;
-    pathStatus = cur_obj_follow_path(pathStatus);
+    pathStatus           = cur_obj_follow_path(pathStatus);
     o->oMantaTargetYaw   = o->oPathedTargetYaw;
     o->oMantaTargetPitch = o->oPathedTargetPitch;
-    o->oForwardVel = 10.0f;
+    o->oForwardVel       = 10.0f;
 
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oMantaTargetYaw, 0x80);
-    o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, o->oMantaTargetPitch, 0x80);
+    o->oMoveAngleYaw     = approach_s16_symmetric(o->oMoveAngleYaw,   o->oMantaTargetYaw,   0x80);
+    o->oMoveAnglePitch   = approach_s16_symmetric(o->oMoveAnglePitch, o->oMantaTargetPitch, 0x80);
 
     // This causes the ray to tilt as it turns.
     if ((s16) o->oMantaTargetYaw != (s16) o->oMoveAngleYaw) {
@@ -64,9 +64,7 @@ static void manta_ray_move(void) {
     }
 
     cur_obj_set_pos_via_transform();
-    if (animFrame == 0) {
-        cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
-    }
+    if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
 }
 
 static void manta_ray_act_spawn_ring(void) {

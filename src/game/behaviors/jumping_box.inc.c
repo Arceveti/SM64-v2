@@ -12,27 +12,27 @@ struct ObjectHitbox sJumpingBoxHitbox = {
     /* hurtboxHeight:     */ 250,
 };
 
-void jumping_box_act_0(void) {
+void jumping_box_act_idle(void) {
     if (o->oSubAction == 0) {
-        if (o->oJumpingBoxRandomTimer-- < 0)  o->oSubAction++;
+        if (o->oJumpingBoxRandomTimer-- < 0) o->oSubAction = JUMPING_BOX_SUB_ACT_RESET_TIMER;
         if (o->oTimer > 0) {
             o->oVelY = random_float() * 5.0f + 15.0f;
             o->oSubAction++;
         }
     } else if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
-        o->oSubAction = 0;
+        o->oSubAction = JUMPING_BOX_SUB_ACT_BOUNCING;
         o->oJumpingBoxRandomTimer = random_float() * 60.0f + 30.0f;
     }
 }
 
-void jumping_box_act_1(void) {
+void jumping_box_act_dropped(void) {
     if (o->oMoveFlags & (OBJ_MOVE_HIT_WALL | OBJ_MOVE_MASK_IN_WATER | OBJ_MOVE_LANDED)) {
         obj_mark_for_deletion(o);
         spawn_mist_particles();
     }
 }
 
-void (*sJumpingBoxActions[])(void) = { jumping_box_act_0, jumping_box_act_1 };
+void (*sJumpingBoxActions[])(void) = { jumping_box_act_idle, jumping_box_act_dropped };
 
 void jumping_box_free_update(void) {
     cur_obj_set_model(MODEL_BREAKABLE_BOX);
@@ -51,14 +51,14 @@ void bhv_jumping_box_loop(void) {
         case HELD_HELD:
             obj_copy_pos(o, gMarioObject);
             cur_obj_set_model(MODEL_BREAKABLE_BOX_SMALL);
-            cur_obj_unrender_set_action_and_anim(-1, 0);
+            cur_obj_unrender_set_action_and_anim(OBJ_ANIM_NONE, JUMPING_BOX_ACT_IDLE);
             break;
         case HELD_THROWN:
-            cur_obj_get_thrown_or_placed(40.0f, 20.0f, 1);
+            cur_obj_get_thrown_or_placed(40.0f, 20.0f, JUMPING_BOX_ACT_DROPPED);
             break;
         case HELD_DROPPED:
             cur_obj_get_dropped();
-            o->oAction = 1;
+            o->oAction = JUMPING_BOX_ACT_DROPPED;
             break;
     }
     if (o->oInteractStatus & INT_STATUS_STOP_RIDING) {

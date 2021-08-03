@@ -28,7 +28,7 @@ void small_breakable_box_spawn_dust(void) {
     smokeObj->oPosZ += (s32)(random_float() * 80.0f) - 40;
 }
 
-void small_breakable_box_act_move(void) {
+void breakable_box_small_act_move(void) {
     s16 collisionFlags = object_step();
 
     obj_attack_collided_from_other_object(o);
@@ -71,7 +71,7 @@ void breakable_box_small_released_loop(void) {
 void breakable_box_small_idle_loop(void) {
     switch (o->oAction) {
         case BREAKABLE_BOX_SMALL_ACT_MOVE:
-            small_breakable_box_act_move();
+            breakable_box_small_act_move();
             break;
 
         case OBJ_ACT_LAVA_DEATH:

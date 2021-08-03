@@ -255,6 +255,10 @@
 #define COMPLETE_EN_US_SEGMENT2
 // Terminal velovity for gravity (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
+// Minimum Y normal for floors (vanilla is 0.01f)
+#define MIN_FLOOR_NORMAL_Y  0.01f
+// Minimum Y normal for ceilings (vanilla is 0.01f)
+#define MAX_CEIL_NORMAL_Y   -0.2f
 
 // -- HUD/Gameplay QoL --
 

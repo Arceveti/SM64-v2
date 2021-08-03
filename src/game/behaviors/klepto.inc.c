@@ -26,10 +26,10 @@ static void klepto_target_mario(void) {
 }
 
 static s32 klepto_set_and_check_if_anim_at_end(void) {
-    if (o->oSoundStateID == 6) {
-        cur_obj_set_anim_if_at_end(5);
-    } else if (o->oSoundStateID == 5) {
-        if (cur_obj_set_anim_if_at_end(0)) {
+    if (o->oSoundStateID == KLEPTO_ANIM_DIVE_FLAP_6) {
+        cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_FLAP_5);
+    } else if (o->oSoundStateID == KLEPTO_ANIM_DIVE_FLAP_5) {
+        if (cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_0)) {
             cur_obj_play_sound_2(SOUND_GENERAL_WING_FLAP);
             o->header.gfx.animInfo.animFrame = 9;
         }
@@ -45,10 +45,10 @@ static void klepto_anim_dive(void) {
         if (o->oKleptoPitchToTarget < -400) {
             o->oKleptoDiveTimer = 0;
         } else {
-            if (o->oSoundStateID == 0) {
+            if (o->oSoundStateID == KLEPTO_ANIM_DIVE_0) {
                 if (cur_obj_check_anim_frame(9)) {
                     cur_obj_play_sound_2(SOUND_GENERAL_WING_FLAP);
-                    cur_obj_init_animation_with_sound(6);
+                    cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_FLAP_6);
                 }
             } else if (--o->oKleptoDiveTimer == 0) {
                 o->oKleptoDiveTimer = -random_linear_offset(60, 60);
@@ -58,7 +58,7 @@ static void klepto_anim_dive(void) {
         }
     } else {
         obj_move_pitch_approach(o->oKleptoPitchToTarget, 600);
-        if (klepto_set_and_check_if_anim_at_end() != 0) {
+        if (klepto_set_and_check_if_anim_at_end()) {
             if (o->oKleptoDiveTimer != 0) {
                 o->oKleptoDiveTimer++;
             } else if (o->oKleptoPitchToTarget > -100) {
@@ -193,7 +193,7 @@ static void klepto_act_turn_toward_mario(void) {
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
 
-        cur_obj_init_animation_with_sound(3);
+        cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_AT_MARIO_3);
     }
 
     klepto_circle_target(1000.0f, 40.0f);
@@ -202,10 +202,10 @@ static void klepto_act_turn_toward_mario(void) {
 
 static void klepto_act_dive_at_mario(void) {
     approach_f32_ptr(&o->oKleptoSpeed, 60.0f, 10.0f);
-    if (o->oSoundStateID == 2) {
+    if (o->oSoundStateID == KLEPTO_ANIM_DIVE_AT_MARIO_2) {
         if (cur_obj_check_anim_frame(11)) cur_obj_play_sound_2(SOUND_GENERAL_WING_FLAP);
 
-        if (cur_obj_set_anim_if_at_end(0)) {
+        if (cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_0)) {
             if (o->oAnimState != KLEPTO_ANIM_STATE_HOLDING_NOTHING) {
                 o->oAction = KLEPTO_ACT_CIRCLE_TARGET_HOLDING;
                 o->oKleptoTimeUntilTargetChange = 0;
@@ -215,10 +215,10 @@ static void klepto_act_dive_at_mario(void) {
         }
     } else {
         f32 dy = o->oPosY - gMarioObject->oPosY;
-        if (o->oSoundStateID == 3) {
-            cur_obj_set_anim_if_at_end(4);
+        if (o->oSoundStateID == KLEPTO_ANIM_DIVE_AT_MARIO_3) {
+            cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_AT_MARIO_4);
         } else if (o->oVelY > 0.0f && dy > 200.0f) {
-            cur_obj_init_animation_with_sound(2);
+            cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_AT_MARIO_2);
         }
 
         o->oKleptoPitchToTarget = -0x3000;
@@ -237,13 +237,13 @@ static void klepto_act_dive_at_mario(void) {
         }
     }
 
-    obj_move_pitch_approach(o->oKleptoPitchToTarget, 600);
-    obj_face_pitch_approach(o->oMoveAnglePitch, 600);
-    obj_rotate_yaw_and_bounce_off_walls(o->oKleptoYawToTarget, 600);
+    obj_move_pitch_approach(            o->oKleptoPitchToTarget, 600);
+    obj_face_pitch_approach(            o->oMoveAnglePitch     , 600);
+    obj_rotate_yaw_and_bounce_off_walls(o->oKleptoYawToTarget  , 600);
 }
 
 static void klepto_act_struck_by_mario(void) {
-    cur_obj_init_animation_with_sound(1);
+    cur_obj_init_animation_with_sound(KLEPTO_ANIM_STRUCK_BY_MARIO);
 
     obj_face_pitch_approach(0, 800);
     obj_face_yaw_approach(o->oMoveAngleYaw + 0x8000, 800);
@@ -263,7 +263,7 @@ static void klepto_act_struck_by_mario(void) {
 }
 
 static void klepto_act_retreat(void) {
-    cur_obj_init_animation_with_sound(0);
+    cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_0);
     approach_f32_ptr(&o->oKleptoSpeed, 40.0f, 10.0f);
 
     obj_move_pitch_approach(o->oKleptoPitchToTarget, 1000);
@@ -346,8 +346,7 @@ void bhv_klepto_update(void) {
             o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             cur_obj_become_intangible();
-        } else if (gMarioStates[0].action == ACT_SLEEPING
-                   || (gMarioStates[0].action & (ACT_FLAG_SHORT_HITBOX | ACT_FLAG_BUTT_OR_STOMACH_SLIDE))) {
+        } else if (gMarioStates[0].action == ACT_SLEEPING || (gMarioStates[0].action & (ACT_FLAG_SHORT_HITBOX | ACT_FLAG_BUTT_OR_STOMACH_SLIDE))) {
             cur_obj_become_intangible();
         } else {
             cur_obj_become_tangible();

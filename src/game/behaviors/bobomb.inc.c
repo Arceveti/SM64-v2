@@ -167,7 +167,7 @@ void bobomb_free_loop(void) {
 void bobomb_held_loop(void) {
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
     cur_obj_init_animation(BOBOMB_ANIM_HELD);
-    cur_obj_set_pos_relative(gMarioObject, 0, 60.0f, 100.0f);
+    cur_obj_set_pos_relative(gMarioObject, 0.0f, 60.0f, 100.0f);
 
     o->oBobombFuseLit = TRUE;
     if (o->oBobombFuseTimer >= 151) {

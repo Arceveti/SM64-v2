@@ -14,10 +14,10 @@ struct ObjectHitbox sSpindriftHitbox = {
 
 void bhv_spindrift_loop(void) {
     o->activeFlags |= ACTIVE_FLAG_IGNORE_WATER_LEVEL;
-    if (cur_obj_set_hitbox_and_die_if_attacked(&sSpindriftHitbox, SOUND_OBJ_DYING_ENEMY1, 0)) cur_obj_change_action(1);
+    if (cur_obj_set_hitbox_and_die_if_attacked(&sSpindriftHitbox, SOUND_OBJ_DYING_ENEMY1, FALSE)) cur_obj_change_action(SPINDRIFT_ACT_HIT_MARIO);
     cur_obj_update_floor_and_walls();
     switch (o->oAction) {
-        case 0:
+        case SPINDRIFT_ACT_ACTIVE:
             approach_forward_vel(&o->oForwardVel, 4.0f, 1.0f);
             if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f) {
                 o->oAngleToMario = cur_obj_angle_to_home();
@@ -26,11 +26,11 @@ void bhv_spindrift_loop(void) {
             }
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
             break;
-        case 1:
+        case SPINDRIFT_ACT_HIT_MARIO:
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             o->oForwardVel = -10.0f;
             if (o->oTimer > 20) {
-                o->oAction = 0;
+                o->oAction = SPINDRIFT_ACT_ACTIVE;
                 o->oInteractStatus = INT_STATUS_NONE;
                 o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             }

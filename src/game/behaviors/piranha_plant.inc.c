@@ -11,7 +11,7 @@
  */
 void piranha_plant_act_idle(void) {
     cur_obj_become_intangible();
-    cur_obj_init_animation_with_sound(8);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
 
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
     /**
@@ -19,7 +19,7 @@ void piranha_plant_act_idle(void) {
      * with a scale below 1, which would cause it to appear shrunken. See
      * documentation for, and calls to, piranha_plant_reset_when_far().
      */
-    cur_obj_scale(1);
+    cur_obj_scale(1.0f);
 #endif
 
     if (o->oDistanceToMario < 1200.0f) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
@@ -65,9 +65,9 @@ void piranha_plant_act_sleeping(void) {
     cur_obj_become_tangible();
     o->oInteractType = INTERACT_BOUNCE_TOP;
 
-    cur_obj_init_animation_with_sound(8);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
 
-    cur_obj_set_hitbox_radius_and_height(250.0f, 200.0f);
+    cur_obj_set_hitbox_radius_and_height( 250.0f, 200.0f);
     cur_obj_set_hurtbox_radius_and_height(150.0f, 100.0f);
 
 #if BUGFIX_PIRANHA_PLANT_SLEEP_DAMAGE
@@ -140,7 +140,7 @@ void piranha_plant_reset_when_far(void) {
  */
 void piranha_plant_attacked(void) {
     cur_obj_become_intangible();
-    cur_obj_init_animation_with_sound(2);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_FALLING_OVER);
     o->oInteractStatus = INT_STATUS_NONE;
     if (cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_SHRINK_AND_DIE;
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
@@ -190,7 +190,7 @@ void piranha_plant_act_wait_to_respawn(void) {
  * grown, set it to the idle state.
  */
 void piranha_plant_act_respawn(void) {
-    cur_obj_init_animation_with_sound(8);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
     if (o->oTimer == 0) o->oPiranhaPlantScale = 0.3f;
 
     /**
@@ -228,9 +228,9 @@ void piranha_plant_act_biting(void) {
 
     o->oInteractType = INTERACT_DAMAGE;
 
-    cur_obj_init_animation_with_sound(0);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_BITE);
 
-    cur_obj_set_hitbox_radius_and_height(150.0f, 100.0f);
+    cur_obj_set_hitbox_radius_and_height( 150.0f, 100.0f);
     cur_obj_set_hurtbox_radius_and_height(150.0f, 100.0f);
 
     // Play a bite sound effect on certain frames.
@@ -262,7 +262,7 @@ s32 mario_moving_fast_enough_to_make_piranha_plant_bite(void) {
  */
 void piranha_plant_act_stopped_biting(void) {
     cur_obj_become_intangible();
-    cur_obj_init_animation_with_sound(6);
+    cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_STOP_BITING);
 
     if (cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
     /**

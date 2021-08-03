@@ -1,33 +1,30 @@
 // sliding_platform_2.inc.c
 
 static void const *sSlidingPlatform2CollisionData[] = {
-    bits_seg7_collision_0701A9A0,
-    bits_seg7_collision_0701AA0C,
-    bitfs_seg7_collision_07015714,
-    bitfs_seg7_collision_07015768,
-    rr_seg7_collision_070295F8,
-    rr_seg7_collision_0702967C,
+    bits_seg7_collision_sliding_platform,
+    bits_seg7_collision_twin_sliding_platforms,
+    bitfs_seg7_collision_moving_square_platform,
+    bitfs_seg7_collision_sliding_platform,
+    rr_seg7_collision_sliding_platform,
+    rr_seg7_collision_pyramid_platform,
     NULL,
     bitdw_seg7_collision_sliding_platform,
 };
 
 void bhv_sliding_plat_2_init(void) {
+    u16 params = (u16)(o->oBehParams >> 16);
     s32 collisionDataIndex;
 
-    collisionDataIndex = ((u16)(o->oBehParams >> 16) & 0x0380) >> 7;
+    collisionDataIndex = (params & SLIDING_PLATFORM_TYPE_MASK) >> 7;
     o->collisionData = segmented_to_virtual(sSlidingPlatform2CollisionData[collisionDataIndex]);
-    o->oBackAndForthPlatformPathLength = 50.0f * ((u16)(o->oBehParams >> 16) & 0x003F);
+    o->oBackAndForthPlatformPathLength = 50.0f * (params & SLIDING_PLATFORM_LENGTH_MASK);
 
-    if (collisionDataIndex < 5 || collisionDataIndex > 6) {
+    if (collisionDataIndex < SLIDING_PLATFORM_BP_RR_PYRAMID || collisionDataIndex > SLIDING_PLATFORM_BP_NULL) {
         o->oBackAndForthPlatformVel = 15.0f;
-        if ((u16)(o->oBehParams >> 16) & 0x0040) o->oMoveAngleYaw += 0x8000;
+        if (params & SLIDING_PLATFORM_DIRECTION_MASK) o->oMoveAngleYaw += 0x8000;
     } else {
         o->oBackAndForthPlatformVel = 10.0f;
-        if ((u16)(o->oBehParams >> 16) & 0x0040) {
-            o->oBackAndForthPlatformDirection = -1.0f;
-        } else {
-            o->oBackAndForthPlatformDirection = 1.0f;
-        }
+        o->oBackAndForthPlatformDirection = (params & SLIDING_PLATFORM_DIRECTION_MASK) ? -1.0f : 1.0f;
     }
 }
 
@@ -40,7 +37,7 @@ void bhv_sliding_plat_2_loop(void) {
         }
     }
 
-    obj_perform_position_op(0);
+    obj_perform_position_op(POS_OP_SAVE_POSITION);
 
     if (o->oBackAndForthPlatformDirection != 0.0f) {
         o->oPosY = o->oHomeY + o->oBackAndForthPlatformDistance * o->oBackAndForthPlatformDirection;
@@ -48,5 +45,5 @@ void bhv_sliding_plat_2_loop(void) {
         obj_set_dist_from_home(o->oBackAndForthPlatformDistance);
     }
 
-    obj_perform_position_op(1);
+    obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 }

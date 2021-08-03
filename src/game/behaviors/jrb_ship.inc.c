@@ -18,9 +18,9 @@ void bhv_ship_part_3_loop(void) {
     cur_obj_set_pos_to_home_with_debug();
     o->oShipPart3LoopPitch += 0x100;
     o->oFaceAnglePitch = sins(o->oShipPart3LoopPitch) * 1024.0f;
-    o->oFaceAngleRoll = 0; // sins(o->oShipPart3LoopRoll) * 1024.0f;
-    o->oAngleVelPitch = o->oFaceAnglePitch - initialPitch;
-    o->oAngleVelRoll = o->oFaceAngleRoll - initialRoll;
+    o->oFaceAngleRoll  = 0; // sins(o->oShipPart3LoopRoll) * 1024.0f;
+    o->oAngleVelPitch  = o->oFaceAnglePitch - initialPitch;
+    o->oAngleVelRoll   = o->oFaceAngleRoll  - initialRoll;
     if (gMarioObject->oPosY > 1000.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
 }
 
@@ -32,7 +32,7 @@ void bhv_jrb_sliding_box_loop(void) {
     struct Object *shipObj;
     if (o->oJrbSlidingBoxShip == NULL) {
         shipObj = cur_obj_nearest_object_with_behavior(bhvJrbFloatingShipCollision);
-        if (shipObj != NULL) {// NULL check only for assignment, not for dereference?
+        if (shipObj != NULL) {
             o->oJrbSlidingBoxShip = shipObj;
             o->oParentRelativePosX = o->oPosX - shipObj->oPosX;
             o->oParentRelativePosY = o->oPosY - shipObj->oPosY;
@@ -40,9 +40,9 @@ void bhv_jrb_sliding_box_loop(void) {
         }
     } else {
         shipObj = o->oJrbSlidingBoxShip;
-        shipRotation[0] = shipObj->oFaceAnglePitch;
-        shipRotation[1] = shipObj->oFaceAngleYaw;
-        shipRotation[2] = shipObj->oFaceAngleRoll;
+        shipRotation[0]  = shipObj->oFaceAnglePitch;
+        shipRotation[1]  = shipObj->oFaceAngleYaw;
+        shipRotation[2]  = shipObj->oFaceAngleRoll;
         shipToBoxPos1[0] = o->oParentRelativePosX;
         shipToBoxPos1[1] = o->oParentRelativePosY;
         shipToBoxPos1[2] = o->oParentRelativePosZ;

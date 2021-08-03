@@ -12,8 +12,8 @@
  */
 void bhv_piranha_plant_waking_bubbles_loop(void) {
     if (o->oTimer == 0) {
-        o->oVelY = random_float() * 10.0f + 5.0f;
-        o->oForwardVel = random_float() * 10.0f + 5.0f;
+        o->oVelY         = random_float() * 10.0f + 5.0f;
+        o->oForwardVel   = random_float() * 10.0f + 5.0f;
         o->oMoveAngleYaw = random_u16();
     }
     cur_obj_move_using_fvel_and_gravity();
@@ -36,7 +36,7 @@ void bhv_piranha_plant_bubble_loop(void) {
     f32 doneShrinkingFrame; // the first frame after shrinking is done
     f32 beginGrowingFrame;  // the frame just before growing begins
 
-    cur_obj_set_pos_relative(parent, 0, 72.0f, 180.0f);
+    cur_obj_set_pos_relative(parent, 0.0f, 72.0f, 180.0f);
 
     switch (o->oAction) {
         case PIRANHA_PLANT_BUBBLE_ACT_IDLE:
@@ -57,7 +57,7 @@ void bhv_piranha_plant_bubble_loop(void) {
                      * which the bubble is at its smallest, where its scale is 1.0f.
                      */
                     doneShrinkingFrame = lastFrame / 2.0f - 4.0f;
-                    beginGrowingFrame = lastFrame / 2.0f + 4.0f;
+                    beginGrowingFrame  = lastFrame / 2.0f + 4.0f;
 
                     // Note that the bubble always starts this loop at its largest.
                     if (frame < doneShrinkingFrame) {
@@ -77,7 +77,7 @@ void bhv_piranha_plant_bubble_loop(void) {
                     }
                 } else {
                     // Piranha Plant is no longer sleeping.
-                    o->oAction++; // move to PIRANHA_PLANT_BUBBLE_ACT_BURST
+                    o->oAction = PIRANHA_PLANT_BUBBLE_ACT_BURST;
                 }
             } else {
                 cur_obj_disable_rendering();

@@ -4,32 +4,32 @@
 // plant code later on reuses this function.
 void bhv_piranha_particle_loop(void) {
     if (o->oTimer == 0) {
-        o->oVelY = 20.0f + 20.0f * random_float();
+        o->oVelY       = 20.0f + 20.0f * random_float();
         o->oForwardVel = 20.0f + 20.0f * random_float();
         o->oMoveAngleYaw = random_u16();
     }
     cur_obj_move_using_fvel_and_gravity();
 }
 
-void mr_i_piranha_particle_act_0(void) {
+void mr_i_piranha_particle_act_move(void) {
     cur_obj_scale(3.0f);
     o->oForwardVel = 20.0f;
     cur_obj_update_floor_and_walls();
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->oAction = 1;
+        o->oAction = MR_I_PIRANHA_PARTICLE_ACT_INTERACTED;
     } else if ((o->oTimer >= 101) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
         obj_mark_for_deletion(o);
         spawn_mist_particles();
     }
 }
 
-void mr_i_piranha_particle_act_1(void) {
+void mr_i_piranha_particle_act_interacted(void) {
     s32 i;
     obj_mark_for_deletion(o);
     for (i = 0; i < 10; i++) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
 }
 
-void (*sMrIParticleActions[])(void) = { mr_i_piranha_particle_act_0, mr_i_piranha_particle_act_1 };
+void (*sMrIParticleActions[])(void) = { mr_i_piranha_particle_act_move, mr_i_piranha_particle_act_interacted };
 
 void bhv_mr_i_particle_loop(void) {
     cur_obj_call_action_function(sMrIParticleActions);
@@ -114,8 +114,8 @@ void mr_i_act_looking_at_mario(void) {
     s16 dYaw;
     s16 startYaw = o->oMoveAngleYaw;
     if (o->oTimer == 0) {
-        o->oMrISpinAngle = (o->oBehParams2ndByte) ? 200 : 120;
-        o->oMrISpinAmount = 0;
+        o->oMrISpinAngle     = (o->oBehParams2ndByte) ? 200 : 120;
+        o->oMrISpinAmount    = 0;
         o->oMrISpinDirection = 0;
         o->oMrIParticleTimer = 0;
     }
@@ -168,14 +168,10 @@ void mr_i_act_idle(void) {
     s16 angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     if (o->oTimer == 0) {
         cur_obj_become_tangible();
-        o->oMoveAnglePitch = 0;
-        o->oMrIParticleTimer = 30;
+        o->oMoveAnglePitch         = 0;
+        o->oMrIParticleTimer       = 30;
         o->oMrIParticleTimerTarget = random_float() * 20.0f;
-        if (o->oMrIParticleTimerTarget & 1) {
-            o->oAngleVelYaw = -256;
-        } else {
-            o->oAngleVelYaw = 256;
-        }
+        o->oAngleVelYaw            = (o->oMrIParticleTimerTarget & 1) ? -256 : 256;
     }
     if (angleDiffMoveYawToMario < 1024 && angleDiffMoveYawToMarioFaceYaw > 0x4000) {
         if (o->oDistanceToMario < 700.0f) {
@@ -189,7 +185,7 @@ void mr_i_act_idle(void) {
     }
     if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 60) o->oMrIBlinking = TRUE;
     if (o->oMrIParticleTimerTarget + 80 < o->oMrIParticleTimer) {
-        o->oMrIParticleTimer = 0;
+        o->oMrIParticleTimer       = 0;
         o->oMrIParticleTimerTarget = random_float() * 80.0f;
         spawn_mr_i_particle();
     }

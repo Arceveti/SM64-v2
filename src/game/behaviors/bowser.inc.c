@@ -1425,7 +1425,7 @@ void bowser_held_update(void) {
             break;
     }
     // Reset move flags
-    o->oMoveFlags = 0;
+    o->oMoveFlags = OBJ_MOVE_NONE;
     // Copy angle values from Mario
     o->oBowserHeldAnglePitch  = gMarioObject->oMoveAnglePitch;
     o->oBowserHeldAngleVelYaw = gMarioObject->oAngleVelYaw;
