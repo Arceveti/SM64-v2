@@ -347,7 +347,6 @@ s32 set_mario_npc_dialog(s32 actionArg) {
 // 8: in dialog
 // 9 - 22: looking away from npc
 // 23: end
-//! broken?
 s32 act_reading_npc_dialog(struct MarioState *m) {
     s32 headTurnAmount = 0;
     s16 angleToNPC     = 0x0;
@@ -361,15 +360,14 @@ s32 act_reading_npc_dialog(struct MarioState *m) {
 #ifdef SSL_PILLARS_CUTSCENE
         if (gCutsceneFocus != NULL && gCutsceneFocus->behavior == segmented_to_virtual(bhvPyramidTop)) {
             angleToNPC = mario_obj_angle_to_object(m, gCutsceneFocus);
+            turnSpeed = 0x1000;
         } else {
             angleToNPC = mario_obj_angle_to_object(m, m->usedObj);
         }
-        turnSpeed = angleToNPC / (8 - m->actionState);
 #else
         angleToNPC = mario_obj_angle_to_object(m, m->usedObj);
 #endif
-        m->faceAngle[1] =
-            angleToNPC - approach_s32((angleToNPC - m->faceAngle[1]) << 16 >> 16, 0, turnSpeed, turnSpeed);
+        m->faceAngle[1] = angleToNPC - approach_s32((angleToNPC - m->faceAngle[1]) << 16 >> 16, 0x0, turnSpeed, turnSpeed);
         // m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], angleToNPC, 0x800);
         // turn head to npc
         m->actionTimer += headTurnAmount;
