@@ -13,7 +13,7 @@ void bhv_haunted_bookshelf_loop(void) {
     // but in the final game this is done by bhvHauntedBookshelfManager.
     o->oDistanceToMario = dist_between_objects(o, gMarioObject);
 
-    o->oFaceAngleYaw = 0;
+    o->oFaceAngleYaw = 0x0;
 
     switch (o->oAction) {
         case HAUNTED_BOOKSHELF_ACT_IDLE:

@@ -14,6 +14,7 @@ extern const Gfx penguin_seg5_dl_eye_open[];
 extern const Gfx penguin_seg5_dl_eye_half_closed[];
 extern const Gfx penguin_seg5_dl_eye_closed[];
 extern const Gfx penguin_seg5_dl_eye_angry[];
+extern const Gfx penguin_seg5_dl_eye_sad[];
 extern const Gfx penguin_seg5_dl_05007198[];
 extern const Gfx penguin_seg5_dl_050071E8[];
 extern const Gfx penguin_seg5_dl_05007238[];
@@ -21,7 +22,7 @@ extern const Gfx penguin_seg5_dl_050072C8[];
 extern const Gfx penguin_seg5_dl_05007358[];
 extern const Gfx penguin_seg5_dl_05007540[];
 extern const struct Animation *const penguin_seg5_anims_05008B74[];
-extern const Collision penguin_seg5_collision_05008B88[];
+extern const Collision penguin_seg5_collision_sl_walking[];
 
 // snowman
 extern const GeoLayout mr_blizzard_hidden_geo[];

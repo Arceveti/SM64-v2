@@ -7,14 +7,14 @@
 
 #include "config.h"
 #ifdef PLATFORM_DISPLACEMENT_2
-	struct PlatformDisplacementInfo {
-		Vec3f prevPos;
-		Vec3f prevTransformedPos;
-		Vec3f prevTransformedYawVec;
-		s16 prevYaw;
-		struct Object *prevPlatform;
-		s32 prevTimer;
-	};
+    struct PlatformDisplacementInfo {
+        Vec3f prevPos;
+        Vec3f prevTransformedPos;
+        Vec3f prevTransformedYawVec;
+        s16 prevYaw;
+        struct Object *prevPlatform;
+        s32 prevTimer;
+    };
 #endif
 void update_mario_platform(void);
 void get_mario_pos(f32 *x, f32 *y, f32 *z);

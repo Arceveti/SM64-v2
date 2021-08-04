@@ -551,9 +551,9 @@ void bowser_act_spit_fire_into_sky(void) {
     if (frame > 24 && frame < 36) {
         cur_obj_play_sound_1(SOUND_AIR_BOWSER_SPIT_FIRE);
         if (frame == 35) { // Spawns Blue flames at this frame
-            spawn_object_relative(1, 0, 0x190, 0x64, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
+            spawn_object_relative(BOWSER_FLAME_BLUE_BP_SPAWN_BLUE_FLAMES, 0, 0x190, 0x64, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
         } else { // Spawns Red flames
-            spawn_object_relative(0, 0, 0x190, 0x64, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
+            spawn_object_relative(BOWSER_FLAME_BLUE_BP_SPAWN_RED_FLAMES , 0, 0x190, 0x64, o, MODEL_RED_FLAME, bhvBlueBowserFlame);
         }
     }
     // Return to default act once the animation is over
@@ -810,8 +810,8 @@ void bowser_act_charge_mario(void) {
             // Spawn smoke puff while slipping
             o->oBowserTimer = 0;
             cur_obj_init_animation_with_sound(BOWSER_ANIM_RUN_SLIP);
-            spawn_object_relative_with_scale(0,  100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
-            spawn_object_relative_with_scale(0, -100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
+            spawn_object_relative_with_scale(OBJ_BP_NONE,  100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
+            spawn_object_relative_with_scale(OBJ_BP_NONE, -100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
             // End Charge once Bowser stops running
             if (approach_f32_signed(&o->oForwardVel, 0, -1.0f)) o->oSubAction = BOWSER_SUB_ACT_CHARGE_END;
             cur_obj_extend_animation_if_at_end();
@@ -882,8 +882,8 @@ void bowser_set_goal_invisible(void) {
     o->oBowserTargetOpacity = 0;
     if (o->oOpacity == 0) {
         o->oForwardVel = 0.0f;
-        o->oVelY = 0.0f;
-        o->oPosY = o->oHomeY - 1000.0f;
+        o->oVelY       = 0.0f;
+        o->oPosY       = o->oHomeY - 1000.0f;
     }
 }
 
@@ -902,11 +902,11 @@ void bowser_act_jump_onto_stage(void) {
         // Stops Bowser and makes him invisible
         case BOWSER_SUB_ACT_JUMP_ON_STAGE_IDLE:
             if (o->oTimer == 0) {
-                o->oFaceAnglePitch = 0;
-                o->oFaceAngleRoll = 0;
+                o->oFaceAnglePitch = 0x0;
+                o->oFaceAngleRoll  = 0x0;
             } //? missing else
             o->oFaceAnglePitch += 0x800;
-            o->oFaceAngleRoll += 0x800;
+            o->oFaceAngleRoll  += 0x800;
             if (!(o->oFaceAnglePitch & 0xFFFF)) o->oSubAction++;
             bowser_set_goal_invisible();
             break;
@@ -1060,8 +1060,8 @@ s32 bowser_dead_twirl_up(void) {
     } else {
         // Now scale down his Y value (and send Bowser up)
         o->header.gfx.scale[1] = o->header.gfx.scale[1] - 0.01f;
-        o->oVelY = 20.0f;
-        o->oGravity = 0.0f;
+        o->oVelY    = 20.0f;
+        o->oGravity =  0.0f;
     }
     // At half Y scale value, he is high enough, so we are done
     if (o->header.gfx.scale[1] < 0.5f) ret = TRUE;
@@ -1076,10 +1076,10 @@ s32 bowser_dead_twirl_up(void) {
  * Hides Bowser after his death sequence is done
  */
 void bowser_dead_hide(void) {
-    cur_obj_scale(0);
-    o->oForwardVel = 0;
-    o->oVelY       = 0;
-    o->oGravity    = 0;
+    cur_obj_scale(0.0f);
+    o->oForwardVel = 0x0;
+    o->oVelY       = 0x0;
+    o->oGravity    = 0x0;
 }
 
 /**
@@ -1374,7 +1374,7 @@ void bowser_free_update(void) {
     s16 tmpOFaceAngleYaw = (s16) o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
         // NOTE: This function was at one point using '&o->oFaceAngleYaw', which is a s32 address. Should tmpOFaceAngleYaw be using the first 16 bits instead, or was that a bug?
-        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosX, &tmpOFaceAngleYaw, platform);
+        apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosVec, &tmpOFaceAngleYaw, platform);
         o->oFaceAngleYaw = tmpOFaceAngleYaw;
     }
 #else

@@ -8,7 +8,7 @@ void bhv_object_bubble_init(void) {
 
 void bhv_object_bubble_loop(void) {
     struct Object *bubbleSplash;
-    f32 waterY = find_water_level(o->oPosX, o->oPosZ);
+    f32 waterY  = find_water_level(o->oPosX, o->oPosZ);
     f32 bubbleY = o->oPosY;
 
     if (bubbleY > waterY) {
@@ -18,7 +18,6 @@ void bhv_object_bubble_loop(void) {
             bubbleSplash->oPosY = bubbleY + 5.0f;
             bubbleSplash->oPosZ = o->oPosZ;
         }
-
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

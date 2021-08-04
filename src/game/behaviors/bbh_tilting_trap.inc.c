@@ -24,22 +24,22 @@ void bhv_bbh_tilting_trap_platform_loop(void) {
         // the platform more dangerous. This code will not work correctly
         // without the oAction changes above, since oTimer will not ever
         // reset to 0 without them.
-    } else if ((absi(o->oFaceAnglePitch) < 3000) || (o->oTimer >= 16)) {
+    } else if ((absi(o->oFaceAnglePitch) < 0xBB8) || (o->oTimer >= 16)) {
         // Make the platform return to the horizontal at a speed of
         // 200 angle units/frame, and clamp it to 0 if it's within 200 units of 0.
-        o->oAngleVelPitch = 0;
+        o->oAngleVelPitch = 0x0;
 
-        if ((s16) o->oFaceAnglePitch > 0) {
-            if (o->oFaceAnglePitch < 200) {
-                o->oFaceAnglePitch =   0;
+        if ((s16) o->oFaceAnglePitch > 0x0) {
+            if (o->oFaceAnglePitch < 0xC8) {
+                o->oFaceAnglePitch = 0x0;
             } else {
-                o->oAngleVelPitch = -200;
+                o->oAngleVelPitch = -0xC8;
             }
         } else {
-            if (o->oFaceAnglePitch > -200) {
-                o->oFaceAnglePitch =   0;
+            if (o->oFaceAnglePitch > -0xC8) {
+                o->oFaceAnglePitch = 0x0;
             } else {
-                o->oAngleVelPitch =  200;
+                o->oAngleVelPitch =  0xC8;
             }
         }
     }

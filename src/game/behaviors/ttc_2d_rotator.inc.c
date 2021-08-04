@@ -37,8 +37,7 @@ static s16 sTTC2DRotatorTimeBetweenTurns[][4] = {
  * Init function for bhvTTC2DRotator.
  */
 void bhv_ttc_2d_rotator_init(void) {
-    o->oTTC2DRotatorMinTimeUntilNextTurn =
-        sTTC2DRotatorTimeBetweenTurns[o->oBehParams2ndByte][gTTCSpeedSetting];
+    o->oTTC2DRotatorMinTimeUntilNextTurn = sTTC2DRotatorTimeBetweenTurns[o->oBehParams2ndByte][gTTCSpeedSetting];
     o->oTTC2DRotatorIncrement = o->oTTC2DRotatorSpeed = sTTC2DRotatorSpeeds[o->oBehParams2ndByte];
 }
 

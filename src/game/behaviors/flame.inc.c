@@ -1,7 +1,7 @@
 // flame.inc.c
 
 void bhv_small_piranha_flame_loop(void) {
-    if ((u16)(o->oBehParams >> 16) == 0) {
+    if ((u16)(o->oBehParams >> 16) == SMALL_PIRANHA_FLAME_BP_1FRAME) {
         if (o->oTimer > 0) {
             obj_mark_for_deletion(o);
         } else {
@@ -20,7 +20,7 @@ void bhv_small_piranha_flame_loop(void) {
         spawn_object_with_scale(o, o->oSmallPiranhaFlameModel, bhvSmallPiranhaFlame, 0.4f * o->header.gfx.scale[0]);
 
         if (o->oTimer > o->oSmallPiranhaFlameNextFlameTimer) {
-            spawn_object_relative_with_scale(1, 0, o->oGraphYOffset, 0, o->header.gfx.scale[0], o, o->oSmallPiranhaFlameModel, bhvFlyguyFlame);
+            spawn_object_relative_with_scale(FLY_GUY_FLAME_BP_UNK1, 0, o->oGraphYOffset, 0, o->header.gfx.scale[0], o, o->oSmallPiranhaFlameModel, bhvFlyguyFlame);
             o->oSmallPiranhaFlameNextFlameTimer = random_linear_offset(8, 15);
             o->oTimer = 0;
         }

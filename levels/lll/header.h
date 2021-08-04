@@ -99,7 +99,7 @@ extern const Collision lll_seg7_collision_octagonal_moving_platform[];
 extern const Collision lll_seg7_collision_drawbridge[];
 extern const Collision lll_seg7_collision_rotating_fire_bars[];
 extern const Collision lll_seg7_collision_wood_piece[];
-extern const Collision lll_seg7_collision_0701D21C[];
+extern const Collision lll_seg7_collision_tumbling_bridge[];
 extern const Collision lll_seg7_collision_rotating_platform[];
 extern const Collision lll_seg7_collision_slow_tilting_platform[];
 extern const Collision lll_seg7_collision_sinking_pyramids[];

@@ -48,7 +48,7 @@ static void mad_piano_act_attack(void) {
             o->oPosZ = o->oHomeZ + dz * distToHome;
         }
 
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 400);
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x190);
         o->oForwardVel = 5.0f;
     }
 

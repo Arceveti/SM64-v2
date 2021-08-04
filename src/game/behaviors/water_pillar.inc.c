@@ -3,33 +3,33 @@
 void water_level_pillar_undrained(void) {
     struct Object *otherWaterPillar;
     switch (o->oAction) {
-        case 0:
+        case WATER_PILLAR_ACT_UNPOUNDED_IDLE:
             if (cur_obj_is_mario_ground_pounding_platform()) {
-                o->oAction = 1;
+                o->oAction = WATER_PILLAR_ACT_LOWER_SELF;
                 spawn_mist_particles();
             }
             break;
-        case 1:
+        case WATER_PILLAR_ACT_LOWER_SELF:
             if (o->oTimer < 4) {
                 o->oPosY -= 20.0f;
             } else {
-                o->oAction = 2;
+                o->oAction = WATER_PILLAR_ACT_POUNDED_1;
             }
             break;
-        case 2:
+        case WATER_PILLAR_ACT_POUNDED_1:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL && otherWaterPillar->oAction < 2) o->oAction = 3;
+            if (otherWaterPillar != NULL && otherWaterPillar->oAction < WATER_PILLAR_ACT_POUNDED_1) o->oAction = WATER_PILLAR_ACT_POUNDED_2;
             break;
-        case 3:
+        case WATER_PILLAR_ACT_POUNDED_2:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL && otherWaterPillar->oAction > 1) {
-                o->oAction = 4;
+            if (otherWaterPillar != NULL && otherWaterPillar->oAction > WATER_PILLAR_ACT_LOWER_SELF) {
+                o->oAction = WATER_PILLAR_ACT_DRAIN_WATER;
 
                 save_file_set_flags(SAVE_FLAG_MOAT_DRAINED);
                 play_puzzle_jingle();
             }
             break;
-        case 4:
+        case WATER_PILLAR_ACT_DRAIN_WATER:
             cur_obj_play_sound_1(SOUND_ENV_WATER_DRAIN);
             if (o->oTimer < 300) {
                 gEnvironmentLevels[2] = (s32) approach_f32_symmetric(gEnvironmentLevels[2], -2450.0f, 5.0f);
@@ -38,10 +38,10 @@ void water_level_pillar_undrained(void) {
                 reset_rumble_timers_vibrate(2);
 #endif
             } else {
-                o->oAction = 5;
+                o->oAction = WATER_PILLAR_ACT_END;
             }
             break;
-        case 5:
+        case WATER_PILLAR_ACT_END:
             break;
     }
 }
@@ -65,5 +65,5 @@ void bhv_water_level_pillar_loop(void) {
         water_level_pillar_undrained();
     }
     gEnvironmentRegions[18] = gEnvironmentLevels[2];
-    gEnvironmentRegions[6] = gEnvironmentLevels[0];
+    gEnvironmentRegions[ 6] = gEnvironmentLevels[0];
 }

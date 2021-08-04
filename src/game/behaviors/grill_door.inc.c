@@ -1,5 +1,11 @@
 // grill_door.c.inc
 
+struct OpenableGrill {
+    s16 halfWidth;
+    ModelID modelID;
+    const Collision *collision;
+};
+
 struct OpenableGrill gOpenableGrills[] = { { 320, MODEL_BOB_BARS_GRILLS, bob_seg7_collision_gate       },
                                            { 410, MODEL_HMC_RED_GRILLS,  hmc_seg7_collision_grill_door } };
 
@@ -21,10 +27,10 @@ void bhv_openable_grill_loop(void) {
     switch (o->oAction) {
         case OEPNABLE_GRILL_ACT_SPAWN:
             grillIdx = o->oBehParams2ndByte;
-            grillObj = spawn_object_relative(-1, gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
+            grillObj = spawn_object_relative(OPENABLE_GRILL_DOOR_BP_SIDE_FLIPPED,    gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
             grillObj->oMoveAngleYaw += 0x8000;
             obj_set_collision_data(grillObj, gOpenableGrills[grillIdx].collision);
-            grillObj = spawn_object_relative(1, -gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
+            grillObj = spawn_object_relative(OPENABLE_GRILL_DOOR_BP_SIDE_UNFLIPPED, -gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
             obj_set_collision_data(grillObj, gOpenableGrills[grillIdx].collision);
             o->oAction = OEPNABLE_GRILL_IDLE_CLOSED;
             break;

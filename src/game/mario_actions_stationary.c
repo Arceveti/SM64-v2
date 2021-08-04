@@ -499,8 +499,8 @@ s32 act_shockwave_bounce(struct MarioState *m) {
     if (++m->actionTimer == 48) return set_mario_action(m, ACT_IDLE, 0);
 
     bounceAngle = (m->actionTimer % 16) << 12;
-    bounceAmt = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
-    mario_set_forward_vel(m, 0);
+    bounceAmt   = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
+    mario_set_forward_vel(m, 0.0f);
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
     if (sins(bounceAngle) >= 0.0f) {
         m->pos[1] = sins(bounceAngle) * bounceAmt + m->floorHeight;
@@ -509,7 +509,7 @@ s32 act_shockwave_bounce(struct MarioState *m) {
     }
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     return FALSE;
 }
@@ -586,8 +586,7 @@ s32 act_long_jump_land_stop(struct MarioState *m) {
     m->input &= ~INPUT_B_PRESSED;
     if (check_common_landing_cancels(m, ACT_JUMP)) return TRUE;
     landing_step(m, !m->marioObj->oMarioLongJumpIsSlow ? MARIO_ANIM_CROUCH_FROM_FAST_LONGJUMP
-                                                       : MARIO_ANIM_CROUCH_FROM_SLOW_LONGJUMP,
-                 ACT_CROUCHING);
+                                                       : MARIO_ANIM_CROUCH_FROM_SLOW_LONGJUMP, ACT_CROUCHING);
     return FALSE;
 }
 
@@ -624,14 +623,14 @@ s32 act_twirl_land(struct MarioState *m) {
 
     stationary_ground_step(m);
     set_mario_animation(m, MARIO_ANIM_TWIRL_LAND);
-    if (m->angleVel[1] > 0) {
+    if (m->angleVel[1] > 0x0) {
         m->angleVel[1] -= 0x400;
-        if (m->angleVel[1] < 0) m->angleVel[1] = 0;
+        if (m->angleVel[1] < 0x0) m->angleVel[1] = 0x0;
         m->twirlYaw += m->angleVel[1];
     }
 
     m->marioObj->header.gfx.angle[1] += m->twirlYaw;
-    if (is_anim_at_end(m) && m->angleVel[1] == 0) {
+    if (is_anim_at_end(m) && m->angleVel[1] == 0x0) {
         m->faceAngle[1] += m->twirlYaw;
         set_mario_action(m, ACT_IDLE, 0);
     }
@@ -665,7 +664,7 @@ s32 act_first_person(struct MarioState *m) {
 
     if (m->floor->type == SURFACE_LOOK_UP_WARP
         && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 10) {
-        s16 headRX = m->statusForCamera->headRotation[0];
+        s16 headRX  =   m->statusForCamera->headRotation[0];
         s16 totalRY = ((m->statusForCamera->headRotation[1] * 4) / 3) + m->faceAngle[1];
         if (headRX == -0x1800 && (totalRY < -0x6FFF || totalRY >= 0x7000)) level_trigger_warp(m, WARP_OP_LOOK_UP);
     }

@@ -235,7 +235,7 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
     }
 
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set(marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
 s32 stationary_ground_step(struct MarioState *m) {
@@ -245,7 +245,7 @@ s32 stationary_ground_step(struct MarioState *m) {
 
     mario_set_forward_vel(m, 0.0f);
 
-    takeStep = mario_update_moving_sand(m);
+    takeStep  = mario_update_moving_sand(m);
     takeStep |= mario_update_windy_ground(m);
     if (takeStep) {
         stepResult = perform_ground_step(m);
@@ -254,7 +254,7 @@ s32 stationary_ground_step(struct MarioState *m) {
         if (m->pos[1] < m->floorHeight + 80.0f) m->pos[1] = m->floorHeight;
 
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
-        vec3s_set(marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+        vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     }
 
     return stepResult;
@@ -409,7 +409,7 @@ s32 perform_ground_step(struct MarioState *m) {
 
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) stepResult = GROUND_STEP_HIT_WALL;
 #ifdef WALL_QUICKSAND
@@ -462,7 +462,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 
     m->floorAngle = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
 
-    m->faceAngle[0] = 0;
+    m->faceAngle[0] = 0x0;
     m->faceAngle[1] = atan2s(wall->normal.z, wall->normal.x) + 0x8000;
     return TRUE;
 }
@@ -783,7 +783,7 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     apply_vertical_wind(m);
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 
     return stepResult;
 }

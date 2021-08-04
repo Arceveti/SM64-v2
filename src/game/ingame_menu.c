@@ -1422,20 +1422,17 @@ void render_pause_red_coins(void) {
 
 #ifdef WIDE
 void render_widescreen_setting(void) {
-    u8 textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43 };
+    u8 textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43  };
     u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-    u8 textPressL[]       = { TEXT_HUD_PRESS_L };
-    u8 textWideInfo[]     = { TEXT_HUD_WIDE_INFO };
+    u8 textPressL[]       = { TEXT_HUD_PRESS_L           };
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    if (!gWidescreen) {
-        print_generic_string(10,  20, textCurrRatio43);
-        print_generic_string(10,   7, textPressL);           
+    if (gWidescreen) {
+        print_generic_string(10, 20, textCurrRatio169);      
     } else {
-        print_generic_string(10,  20, textCurrRatio169);
-        print_generic_string(10,   7, textPressL);
-        print_generic_string(10, 220, textWideInfo);
+        print_generic_string(10, 20, textCurrRatio43);
     }
+    print_generic_string(10, 7, textPressL);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     if (gPlayer1Controller->buttonPressed & L_TRIG){
         gWidescreen ^= TRUE;

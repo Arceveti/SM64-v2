@@ -279,8 +279,10 @@ void bhv_1up_hidden_in_pole_trigger_loop(void) {
 void bhv_1up_hidden_in_pole_spawner_loop(void) {
     s8 i;
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 700)) {
-        spawn_object_relative(2, 0, 50, 0, o, MODEL_1UP, bhvHidden1upInPole);
-        for (i = 0; i < 2; i++) spawn_object_relative(0, 0, i * -200, 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
+        // For bhvHidden1upInPole, oBehParams2ndByte is used for how many frames is
+        // required for Mario to activate it, instead of the Bowser requirement.
+        spawn_object_relative(0x2, 0, 50, 0, o, MODEL_1UP, bhvHidden1upInPole);
+        for (i = 0; i < 2; i++) spawn_object_relative(0x0, 0, i * -200, 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

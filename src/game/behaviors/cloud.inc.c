@@ -30,7 +30,7 @@ static void cloud_act_spawn_parts(void) {
 
     if (o->oBehParams2ndByte == CLOUD_BP_FWOOSH) {
         // Spawn fwoosh's face
-        spawn_object_relative(5, 0, 0, 0, o, MODEL_FWOOSH, bhvCloudPart);
+        spawn_object_relative(CLOUD_BP_FWOOSH_FACE, 0, 0, 0, o, MODEL_FWOOSH, bhvCloudPart);
 
         cur_obj_scale(3.0f);
 
@@ -152,18 +152,10 @@ static void cloud_act_unload(void) {
  */
 void bhv_cloud_update(void) {
     switch (o->oAction) {
-        case CLOUD_ACT_SPAWN_PARTS:
-            cloud_act_spawn_parts();
-            break;
-        case CLOUD_ACT_MAIN:
-            cloud_act_main();
-            break;
-        case CLOUD_ACT_UNLOAD:
-            cloud_act_unload();
-            break;
-        case CLOUD_ACT_FWOOSH_HIDDEN:
-            cloud_act_fwoosh_hidden();
-            break;
+        case CLOUD_ACT_SPAWN_PARTS:   cloud_act_spawn_parts();   break;
+        case CLOUD_ACT_MAIN:          cloud_act_main();          break;
+        case CLOUD_ACT_UNLOAD:        cloud_act_unload();        break;
+        case CLOUD_ACT_FWOOSH_HIDDEN: cloud_act_fwoosh_hidden(); break;
     }
 }
 
@@ -186,7 +178,7 @@ void bhv_cloud_part_update(void) {
         cur_obj_scale(size);
 
         // Cap fwoosh's face size
-        if (o->oBehParams2ndByte == 5 && size > 2.0f) size = o->header.gfx.scale[1] = 2.0f;
+        if (o->oBehParams2ndByte == CLOUD_BP_FWOOSH_FACE && size > 2.0f) size = o->header.gfx.scale[1] = 2.0f;
 
         // Move back and forth along (1, 1, 1)
         localOffset = 2 * coss(localOffsetPhase) * size;

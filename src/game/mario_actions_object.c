@@ -225,18 +225,14 @@ s32 act_holding_bowser(struct MarioState *m) {
 
     if (m->input & INPUT_B_PRESSED) {
 #ifndef VERSION_JP
-        if (m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) {
-            play_sound(SOUND_MARIO_SO_LONGA_BOWSER, m->marioObj->header.gfx.cameraToObject);
-        } else {
-            play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
-        }
+        play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
 #else
         play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
 #endif
         return set_mario_action(m, ACT_RELEASING_BOWSER, 0);
     }
 
-    if (m->angleVel[1] == 0) {
+    if (m->angleVel[1] == 0x0) {
         if (m->actionTimer++ > 120) return set_mario_action(m, ACT_RELEASING_BOWSER, 1);
 
         set_mario_animation(m, MARIO_ANIM_HOLDING_BOWSER);
@@ -286,10 +282,10 @@ s32 act_holding_bowser(struct MarioState *m) {
     }
 
     stationary_ground_step(m);
-    if (m->angleVel[1] > 0) {
+    if (m->angleVel[1] > 0x0) {
         m->marioObj->header.gfx.angle[0] = -m->angleVel[1];
     } else {
-        m->marioObj->header.gfx.angle[0] = m->angleVel[1];
+        m->marioObj->header.gfx.angle[0] =  m->angleVel[1];
     }
 
     return FALSE;
@@ -310,7 +306,7 @@ s32 act_releasing_bowser(struct MarioState *m) {
         }
     }
 
-    m->angleVel[1] = 0;
+    m->angleVel[1] = 0x0;
     animated_stationary_ground_step(m, MARIO_ANIM_RELEASE_BOWSER, ACT_IDLE);
     return FALSE;
 }

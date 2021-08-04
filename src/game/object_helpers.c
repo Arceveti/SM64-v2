@@ -541,12 +541,14 @@ struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativeP
     return obj;
 }
 
+// Unused
 void cur_obj_move_using_vel(void) {
     o->oPosX += o->oVelX;
     o->oPosY += o->oVelY;
     o->oPosZ += o->oVelZ;
 }
 
+// Used for beta trampoline
 void obj_copy_graph_y_offset(struct Object *dst, struct Object *src) {
     dst->oGraphYOffset = src->oGraphYOffset;
 }
@@ -1088,7 +1090,7 @@ void cur_obj_update_floor_height(void) {
     struct Object *platform;
     s16 nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
-        apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosX, &nextYaw, platform);
+        apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
@@ -1108,7 +1110,7 @@ struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
     struct Object *platform;
     s16 nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
-        apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosX, &nextYaw, platform);
+        apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
@@ -1299,8 +1301,7 @@ void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {
         }
     }
 
-    if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE
-        | OBJ_MOVE_UNDERWATER_OFF_GROUND)) {
+    if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_UNDERWATER_OFF_GROUND)) {
         o->oMoveFlags &= ~OBJ_MOVE_IN_AIR;
     } else {
         o->oMoveFlags |= OBJ_MOVE_IN_AIR;
@@ -1653,9 +1654,11 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
             steepSlopeAngleDegrees = -steepSlopeAngleDegrees;
         }
         if (steepSlopeAngleDegrees == 78) {
-            steepSlopeNormalY = COS78;
+            steepSlopeNormalY =  COS78;
         } else if (steepSlopeAngleDegrees == -78) {
             steepSlopeNormalY = -COS78;
+        } else if (steepSlopeAngleDegrees == -30) {
+            steepSlopeNormalY = -COS30;
         } else {
             steepSlopeNormalY = coss(steepSlopeAngleDegrees * (0x10000 / 360));
         }
@@ -1753,9 +1756,7 @@ void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s1
     rotation[0] = obj->rawData.asS32[angleIndex + 0];
     rotation[1] = obj->rawData.asS32[angleIndex + 1];
     rotation[2] = obj->rawData.asS32[angleIndex + 2];
-    if (translate != gVec3fZero || rotation != gVec3sZero) {
-        mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
-    }
+    if (translate != gVec3fZero || rotation != gVec3sZero) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
 }
 
 void obj_set_throw_matrix_from_transform(struct Object *obj) {
@@ -1892,13 +1893,13 @@ void obj_translate_xz_random(struct Object *obj, f32 rangeLength) {
 }
 
 static void obj_build_vel_from_transform(struct Object *obj) {
-    f32 up      = obj->oUpVel;
-    f32 left    = obj->oLeftVel;
-    f32 forward = obj->oForwardVel;
-
-    obj->oVelX = obj->transform[0][0] * left + obj->transform[1][0] * up + obj->transform[2][0] * forward;
-    obj->oVelY = obj->transform[0][1] * left + obj->transform[1][1] * up + obj->transform[2][1] * forward;
-    obj->oVelZ = obj->transform[0][2] * left + obj->transform[1][2] * up + obj->transform[2][2] * forward;
+    f32 localY = obj->oUpVel;
+    f32 localX = obj->oLeftVel;
+    f32 localZ = obj->oForwardVel;
+    // localX and localY were swapped originally, fixed now
+    obj->oVelX = (obj->transform[0][0] * localX) + (obj->transform[1][0] * localY) + (obj->transform[2][0] * localZ);
+    obj->oVelY = (obj->transform[0][1] * localX) + (obj->transform[1][1] * localY) + (obj->transform[2][1] * localZ);
+    obj->oVelZ = (obj->transform[0][2] * localX) + (obj->transform[1][2] * localY) + (obj->transform[2][2] * localZ);
 }
 
 void cur_obj_set_pos_via_transform(void) {
@@ -2039,10 +2040,10 @@ s32 cur_obj_set_direction_table(s8 *pattern) {
 
 s32 cur_obj_progress_direction_table(void) {
     s8 action;
-    s8 *pattern = o->oToxBoxMovementPattern;
+    s8 *pattern  = o->oToxBoxMovementPattern;
     s32 nextStep = o->oToxBoxMovementStep + 1;
 
-    if (pattern[nextStep] != -1) {
+    if (pattern[nextStep] != TOX_BOX_ACT_END) {
         action = pattern[nextStep];
         o->oToxBoxMovementStep++;
     } else {
@@ -2183,9 +2184,9 @@ void obj_explode_and_spawn_coins(f32 mistSize, s32 coinType) {
     spawn_triangle_break_particles(30, MODEL_DIRT_ANIMATION, 3.0f, 4);
     obj_mark_for_deletion(o);
 
-    if (coinType == 1) {
+    if (coinType == COIN_TYPE_YELLOW) {
         obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);
-    } else if (coinType == 2) {
+    } else if (coinType == COIN_TYPE_BLUE) {
         obj_spawn_loot_blue_coins(o, o->oNumLootCoins, 20.0f, 150);
     }
 }

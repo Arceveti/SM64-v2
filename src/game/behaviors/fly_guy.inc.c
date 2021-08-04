@@ -72,10 +72,10 @@ static void fly_guy_act_approach_mario(void) {
                     o->oFlyGuyScaleVel = 0.06f;
                 } else {
                     o->oAction = FLY_GUY_ACT_LUNGE;
-                    o->oFlyGuyLungeTargetPitch = obj_turn_pitch_toward_mario(-200.0f, 0);
+                    o->oFlyGuyLungeTargetPitch = obj_turn_pitch_toward_mario(-200.0f, 0x0);
 
-                    o->oForwardVel = 25.0f * coss(o->oFlyGuyLungeTargetPitch);
-                    o->oVelY = 25.0f * -sins(o->oFlyGuyLungeTargetPitch);
+                    o->oForwardVel = 25.0f *  coss(o->oFlyGuyLungeTargetPitch);
+                    o->oVelY       = 25.0f * -sins(o->oFlyGuyLungeTargetPitch);
                     o->oFlyGuyLungeYDecel = -o->oVelY / 30.0f;
                 }
             }
@@ -143,7 +143,7 @@ static void fly_guy_act_shoot_fire(void) {
                 o->oAction = FLY_GUY_ACT_IDLE;
             } else {
                 // We have reached below scale 1.2 in the shrinking portion
-                s16 fireMovePitch = obj_turn_pitch_toward_mario(0.0f, 0);
+                s16 fireMovePitch = obj_turn_pitch_toward_mario(0.0f, 0x0);
                 cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
                 clamp_s16(&fireMovePitch, 0x800, 0x3000);
 

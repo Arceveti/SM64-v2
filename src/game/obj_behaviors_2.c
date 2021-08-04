@@ -248,16 +248,16 @@ static void cur_obj_spin_all_dimensions(f32 arg0, f32 arg1) {
         if (o->oMoveFlags & OBJ_MOVE_IN_AIR) {
             val20 = 50.0f;
         } else {
-            if (o->oFaceAnglePitch < 0) {
+            if (o->oFaceAnglePitch < 0x0) {
                 val1C = -arg0;
-            } else if (o->oFaceAnglePitch > 0) {
-                val1C = arg0;
+            } else if (o->oFaceAnglePitch > 0x0) {
+                val1C =  arg0;
             }
 
-            if (o->oFaceAngleRoll < 0) {
+            if (o->oFaceAngleRoll < 0x0) {
                 val24 = -arg1;
-            } else if (o->oFaceAngleRoll > 0) {
-                val24 = arg1;
+            } else if (o->oFaceAngleRoll > 0x0) {
+                val24 =  arg1;
             }
         }
 
@@ -484,19 +484,13 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
     return FALSE;
 }
 
-static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLengthRange,
-                                s16 blinkLength) {
+static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLengthRange, s16 blinkLength) {
     if (*blinkTimer != 0) {
         (*blinkTimer)--;
     } else {
         *blinkTimer = random_linear_offset(baseCycleLength, cycleLengthRange);
     }
-
-    if (*blinkTimer > blinkLength) {
-        o->oAnimState = 0;
-    } else {
-        o->oAnimState = 1;
-    }
+    o->oAnimState = !(*blinkTimer > blinkLength);
 }
 
 static s32 obj_resolve_object_collisions(s32 *targetYaw) {
@@ -897,10 +891,8 @@ static void treat_far_home_as_mario(f32 threshold) {
 /**
  * Used by bowser, fly guy, piranha plant, and fire spitters.
  */
-void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, s32 model,
-                   f32 startSpeed, f32 endSpeed, s16 movePitch) {
-    struct Object *obj = spawn_object_relative_with_scale(1, relativePosX, relativePosY, relativePosZ,
-                                                           scale, o, model, bhvSmallPiranhaFlame);
+void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, s32 model, f32 startSpeed, f32 endSpeed, s16 movePitch) {
+    struct Object *obj = spawn_object_relative_with_scale(SMALL_PIRANHA_FLAME_BP_MOVE, relativePosX, relativePosY, relativePosZ, scale, o, model, bhvSmallPiranhaFlame);
 
     if (obj != NULL) {
         obj->oSmallPiranhaFlameStartSpeed = startSpeed;

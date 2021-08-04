@@ -66,7 +66,7 @@ extern const MacroObject ssl_seg7_area_2_macro_objs[];
 extern const MacroObject ssl_seg7_area_3_macro_objs[];
 extern const Collision ssl_seg7_collision_grindel[];
 extern const Collision ssl_seg7_collision_spindel[];
-extern const Collision ssl_seg7_collision_0702808C[];
+extern const Collision ssl_seg7_collision_moving_pyramid_wall[];
 extern const Collision ssl_seg7_collision_pyramid_elevator[];
 extern const Collision ssl_seg7_collision_eyerok_hand_closed[];
 extern const Collision ssl_seg7_collision_eyerok_hand_open[];

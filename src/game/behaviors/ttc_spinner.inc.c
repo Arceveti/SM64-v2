@@ -28,7 +28,7 @@ void bhv_ttc_spinner_update(void) {
             o->oAngleVelPitch *= o->oTTCSpinnerDir;
         } else {
             // Stop for 5 frames after changing direction
-            o->oAngleVelPitch = 0;
+            o->oAngleVelPitch = 0x0;
         }
     }
 

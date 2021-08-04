@@ -1,5 +1,5 @@
 // 0x07026B1C - 0x07026B4C
-const Collision bbh_seg7_collision_07026B1C[] = {
+const Collision bbh_seg7_collision_tumbling_bridge[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x4),
     COL_VERTEX( 102, 0, -51),

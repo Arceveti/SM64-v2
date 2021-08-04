@@ -1,7 +1,7 @@
 // Thwomp
 
 // 0x0500B7D0 - 0x0500B92C
-const Collision thwomp_seg5_collision_0500B7D0[] = {
+const Collision thwomp_seg5_collision_thwomp[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x14),
     COL_VERTEX(-154,   3,   77),

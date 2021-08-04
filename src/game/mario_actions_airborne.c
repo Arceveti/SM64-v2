@@ -286,47 +286,47 @@ void update_lava_boost_or_twirling(struct MarioState *m) {
 void update_flying_yaw(struct MarioState *m) {
     s16 targetYawVel = -(s16)(m->controller->stickX * (m->forwardVel / 4.0f));
 
-    if (targetYawVel > 0) {
-        if (m->angleVel[1] < 0) {
+    if (targetYawVel > 0x0) {
+        if (m->angleVel[1] < 0x0) {
             m->angleVel[1] += 0x40;
             if (m->angleVel[1] > 0x10) m->angleVel[1] = 0x10;
         } else {
             m->angleVel[1] = approach_s32(m->angleVel[1], targetYawVel, 0x10, 0x20);
         }
-    } else if (targetYawVel < 0) {
-        if (m->angleVel[1] > 0) {
+    } else if (targetYawVel < 0x0) {
+        if (m->angleVel[1] > 0x0) {
             m->angleVel[1] -= 0x40;
             if (m->angleVel[1] < -0x10) m->angleVel[1] = -0x10;
         } else {
             m->angleVel[1] = approach_s32(m->angleVel[1], targetYawVel, 0x20, 0x10);
         }
     } else {
-        m->angleVel[1] = approach_s32(m->angleVel[1], 0, 0x40, 0x40);
+        m->angleVel[1] = approach_s32(m->angleVel[1], 0x0, 0x40, 0x40);
     }
 
-    m->faceAngle[1] +=      m->angleVel[1];
-    m->faceAngle[2] = 20 * -m->angleVel[1];
+    m->faceAngle[1] +=        m->angleVel[1];
+    m->faceAngle[2] = 0x14 * -m->angleVel[1];
 }
 
 void update_flying_pitch(struct MarioState *m) {
     s16 targetPitchVel = -(s16)(m->controller->stickY * (m->forwardVel / 5.0f));
 
-    if (targetPitchVel > 0) {
-        if (m->angleVel[0] < 0) {
+    if (targetPitchVel > 0x0) {
+        if (m->angleVel[0] < 0x0) {
             m->angleVel[0] += 0x40;
             if (m->angleVel[0] > 0x20) m->angleVel[0] = 0x20;
         } else {
             m->angleVel[0] = approach_s32(m->angleVel[0], targetPitchVel, 0x20, 0x40);
         }
-    } else if (targetPitchVel < 0) {
-        if (m->angleVel[0] > 0) {
+    } else if (targetPitchVel < 0x0) {
+        if (m->angleVel[0] > 0x0) {
             m->angleVel[0] -= 0x40;
             if (m->angleVel[0] < -0x20) m->angleVel[0] = -0x20;
         } else {
             m->angleVel[0] = approach_s32(m->angleVel[0], targetPitchVel, 0x40, 0x20);
         }
     } else {
-        m->angleVel[0] = approach_s32(m->angleVel[0], 0, 0x40, 0x40);
+        m->angleVel[0] = approach_s32(m->angleVel[0], 0x0, 0x40, 0x40);
     }
 }
 
@@ -786,12 +786,12 @@ s32 act_dive(struct MarioState *m) {
             } else if (!check_fall_damage(m, ACT_HARD_FORWARD_GROUND_KB)) {
                 set_mario_action(m, ((m->heldObj == NULL) ? ACT_DIVE_SLIDE : ACT_DIVE_PICKING_UP), 0);
             }
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
             break;
 
         case AIR_STEP_HIT_WALL:
             mario_bonk_reflection(m, TRUE);
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
 
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
 
@@ -920,7 +920,7 @@ s32 act_steep_jump(struct MarioState *m) {
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:
             if (!check_fall_damage_or_get_stuck(m, ACT_HARD_BACKWARD_GROUND_KB)) {
-                m->faceAngle[0] = 0;
+                m->faceAngle[0] = 0x0;
                 set_mario_action(m, m->forwardVel < 0.0f ? ACT_BEGIN_SLIDING : ACT_JUMP_LAND, 0);
             }
             break;
@@ -1668,7 +1668,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
 
         case AIR_STEP_LANDED:
             set_mario_action(m, ACT_DIVE_SLIDE, 0);
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
             set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
 #if ENABLE_RUMBLE
             queue_rumble_data(5, 80);
@@ -1678,7 +1678,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
         case AIR_STEP_HIT_WALL:
             mario_set_forward_vel(m, -16.0f);
 
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
 
             m->particleFlags |= PARTICLE_VERTICAL_STAR;
@@ -1755,7 +1755,7 @@ s32 act_flying(struct MarioState *m) {
             set_mario_animation(m, MARIO_ANIM_DIVE);
             set_anim_to_frame(m, 7);
 
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
             set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
 #if ENABLE_RUMBLE
             queue_rumble_data(5, 60);
@@ -1765,7 +1765,7 @@ s32 act_flying(struct MarioState *m) {
         case AIR_STEP_HIT_WALL:
             if (m->wall != NULL) {
                 mario_set_forward_vel(m, -16.0f);
-                m->faceAngle[0] = 0;
+                m->faceAngle[0] = 0x0;
 
                 if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
 
@@ -1840,7 +1840,7 @@ s32 act_riding_hoot(struct MarioState *m) {
 
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
     vec3f_set(m->marioObj->header.gfx.pos, m->pos[0], m->pos[1], m->pos[2]);
-    vec3s_set(m->marioObj->header.gfx.angle, 0, 0x4000 - m->faceAngle[1], 0);
+    vec3s_set(m->marioObj->header.gfx.angle, 0x0, 0x4000 - m->faceAngle[1], 0x0);
     return FALSE;
 }
 

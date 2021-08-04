@@ -44,10 +44,12 @@ ALIGNED8 static const Texture penguin_seg5_texture_eye_angry[] = {
 #include "actors/penguin/penguin_eye_angry.rgba16.inc.c"
 };
 
-// // 0x05004DE0
-// ALIGNED8 static const Texture penguin_seg5_texture_eye_angry_unused[] = {
-// #include "actors/penguin/penguin_eye_angry_unused.rgba16.inc.c"
-// };
+#ifdef PENGUIN_MOTHER_SAD_EYES
+// 0x05004DE0
+ALIGNED8 static const Texture penguin_seg5_texture_eye_sad[] = {
+#include "actors/penguin/penguin_eye_angry_unused.rgba16.inc.c"
+};
+#endif
 
 // 0x050055E0
 ALIGNED8 static const Texture penguin_seg5_texture_beak[] = {
@@ -271,6 +273,17 @@ const Gfx penguin_seg5_dl_eye_angry[] = {
     gsSPDisplayList(penguin_seg5_dl_050063C8),
     gsSPEndDisplayList(),
 };
+
+#ifdef PENGUIN_MOTHER_SAD_EYES
+const Gfx penguin_seg5_dl_eye_sad[] = {
+    gsSPDisplayList(penguin_seg5_dl_05006380),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, penguin_seg5_texture_eye_sad),
+    gsDPLoadSync(),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPDisplayList(penguin_seg5_dl_050063C8),
+    gsSPEndDisplayList(),
+};
+#endif
 
 // 0x05006518
 static const Vtx penguin_seg5_vertex_05006518[] = {

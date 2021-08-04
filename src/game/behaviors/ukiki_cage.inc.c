@@ -79,8 +79,10 @@ void ukiki_cage_act_hide(void) {
  * An array of the cage's actions.
  */
 void (*sUkikiCageActions[])(void) = {
-    ukiki_cage_act_wait_for_ukiki, ukiki_cage_act_spin,
-    ukiki_cage_act_fall,           ukiki_cage_act_hide,
+    ukiki_cage_act_wait_for_ukiki,
+    ukiki_cage_act_spin,
+    ukiki_cage_act_fall,
+    ukiki_cage_act_hide,
 };
 
 /**

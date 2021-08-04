@@ -661,7 +661,7 @@ u32 take_damage_and_knock_back(struct MarioState *m, struct Object *o) {
 void reset_mario_pitch(struct MarioState *m) {
     if (m->action == ACT_WATER_JUMP || m->action == ACT_SHOT_FROM_CANNON || m->action == ACT_FLYING) {
         set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-        m->faceAngle[0] = 0;
+        m->faceAngle[0] = 0x0;
     }
 }
 
@@ -790,7 +790,7 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
             m->usedObj = o;
 
 #if ENABLE_RUMBLE
-            if (o->collisionData == segmented_to_virtual(warp_pipe_seg3_collision_03009AC8)) {
+            if (o->collisionData == segmented_to_virtual(warp_pipe_seg3_collision_warp_pipe)) {
                 play_sound(SOUND_MENU_ENTER_PIPE, m->marioObj->header.gfx.cameraToObject);
                 queue_rumble_data(15, 80);
             } else {
@@ -798,7 +798,7 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
                 queue_rumble_data(12, 80);
             }
 #else
-            play_sound(o->collisionData == segmented_to_virtual(warp_pipe_seg3_collision_03009AC8)
+            play_sound(o->collisionData == segmented_to_virtual(warp_pipe_seg3_collision_warp_pipe)
                            ? SOUND_MENU_ENTER_PIPE
                            : SOUND_MENU_ENTER_HOLE,
                        m->marioObj->header.gfx.cameraToObject);
@@ -1571,9 +1571,9 @@ u32 check_read_sign(struct MarioState *m, struct Object *o) {
         && dAngleToSign >= -SIGN_RANGE && dAngleToSign <= SIGN_RANGE) {
 #ifdef DIALOG_INDICATOR
         if (o->behavior == segmented_to_virtual(bhvSignOnWall)) {
-            spawn_object_relative(10, 0, 180, 32, o, MODEL_NUMBER, bhvOrangeNumber);
+            spawn_object_relative(ORANGE_NUMBER_A, 0, 180, 32, o, MODEL_NUMBER, bhvOrangeNumber);
         } else {
-            spawn_object_relative(10, 0, 160,  8, o, MODEL_NUMBER, bhvOrangeNumber);
+            spawn_object_relative(ORANGE_NUMBER_A, 0, 160,  8, o, MODEL_NUMBER, bhvOrangeNumber);
         }
 #endif
         if (m->input & READ_MASK) {
@@ -1604,9 +1604,9 @@ u32 check_npc_talk(struct MarioState *m, struct Object *o) {
     if (mario_can_talk(m, TRUE) && facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
 #ifdef DIALOG_INDICATOR
         if (o->behavior == segmented_to_virtual(bhvYoshi)) {
-            spawn_object_relative(10, 0, 256, 64, o, MODEL_NUMBER, bhvOrangeNumber);
+            spawn_object_relative(ORANGE_NUMBER_A, 0, 256, 64, o, MODEL_NUMBER, bhvOrangeNumber);
         } else {
-            spawn_object_relative(10, 0, 160,  0, o, MODEL_NUMBER, bhvOrangeNumber);
+            spawn_object_relative(ORANGE_NUMBER_A, 0, 160,  0, o, MODEL_NUMBER, bhvOrangeNumber);
         }
 #endif
         if (m->input & READ_MASK) {

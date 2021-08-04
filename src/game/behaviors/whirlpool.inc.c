@@ -15,8 +15,8 @@ static struct ObjectHitbox sWhirlpoolHitbox = {
 void bhv_whirlpool_init(void) {
     o->oWhirlpoolInitFacePitch = o->oFaceAnglePitch;
     o->oWhirlpoolInitFaceRoll  = o->oFaceAngleRoll;
-    o->oFaceAnglePitch = 0;
-    o->oFaceAngleRoll  = 0;
+    o->oFaceAnglePitch         = 0x0;
+    o->oFaceAngleRoll          = 0x0;
 }
 
 void whirlpool_set_hitbox(void) {

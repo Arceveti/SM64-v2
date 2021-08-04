@@ -11,7 +11,7 @@
 static void const *sPlatformOnTrackCollisionModels[] = {
     /* PLATFORM_ON_TRACK_TYPE_CARPET    */ rr_seg7_collision_07029038,
     /* PLATFORM_ON_TRACK_TYPE_SKI_LIFT  */ ccm_seg7_collision_ropeway_lift,
-    /* PLATFORM_ON_TRACK_TYPE_CHECKERED */ checkerboard_platform_seg8_collision_0800D710,
+    /* PLATFORM_ON_TRACK_TYPE_CHECKERED */ checkerboard_platform_seg8_collision_platform,
     /* PLATFORM_ON_TRACK_TYPE_GRATE     */ bitfs_seg7_collision_070157E0,
 };
 

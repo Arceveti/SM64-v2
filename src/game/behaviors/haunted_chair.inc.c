@@ -88,7 +88,7 @@ void haunted_chair_act_fly(void) {
         if (o->oHauntedChairSpinTimer != 0) {
             if (--o->oHauntedChairSpinTimer == 0) {
                 cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SPIN);
-                o->oMoveAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0);
+                o->oMoveAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0x0);
                 o->oMoveAngleYaw = o->oAngleToMario;
                 obj_compute_vel_from_move_pitch(50.0f);
             } else if (o->oHauntedChairSpinTimer > 20) {

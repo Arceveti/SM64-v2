@@ -66,7 +66,7 @@ static void mr_blizzard_act_spawn_snowball(void) {
     // If Mr. Blizzard is not holding a snowball, and the animation reaches 5 frames
     // spawn the Mr. Blizzard snowball.
     if (o->oMrBlizzardHeldObj == NULL && cur_obj_init_anim_check_frame(MR_BLIZZARD_ANIM_SPAWN_SNOWBALL, 5)) {
-        o->oMrBlizzardHeldObj = spawn_object_relative(0, -70, (s32)(o->oMrBlizzardGraphYOffset + 154.0f), 0, o, MODEL_WHITE_PARTICLE, bhvMrBlizzardSnowball);
+        o->oMrBlizzardHeldObj = spawn_object_relative(OBJ_BP_NONE, -70, (s32)(o->oMrBlizzardGraphYOffset + 154.0f), 0, o, MODEL_WHITE_PARTICLE, bhvMrBlizzardSnowball);
     } else if (cur_obj_check_anim_frame(10)) {
         o->prevObj = o->oMrBlizzardHeldObj;
     } else if (cur_obj_check_if_near_animation_end()) {
@@ -205,8 +205,7 @@ static void mr_blizzard_act_death(void) {
             // the save flag and spawn Mario's cap.
             if (o->oAnimState) {
                 save_file_clear_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD);
-
-                cap = spawn_object_relative(0, 5, 105, 0, o, MODEL_MARIOS_CAP, bhvNormalCap);
+                cap = spawn_object_relative(OBJ_BP_NONE, 5, 105, 0, o, MODEL_MARIOS_CAP, bhvNormalCap);
                 if (cap != NULL) {
                     cap->oMoveAngleYaw = o->oFaceAngleYaw + (o->oFaceAngleRoll < 0 ? 0x4000 : -0x4000);
                     cap->oForwardVel = 10.0f;

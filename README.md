@@ -76,18 +76,21 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti) *
 - Tiny Goombas (from THI) always drop their coin (Arceveti) *
 - Leaf particles fall from trees which contain Hoot (Arceveti) *
+- Reimplemented the unused "sad" eye texture for the mother penguin in CCM *
+- Configurable amount of segments for Chain Chomp, Pokey & Wiggler (Arceveti) *
 
 **Collision/Movement:**
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
+- Ground pound jump similar to SMO *
+- Underwater Ground pound similar to SMO *
+- Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. (Arceveti) *
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Unique wall slide which takes horizontal momentum into account (Arceveti) *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
-- Ground pound jump similar to SMO *
-- Underwater Ground pound similar to SMO *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 
 **Misc:**

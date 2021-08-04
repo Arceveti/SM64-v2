@@ -53,11 +53,7 @@ void bhv_ttc_pendulum_update(void) {
                     // Select a new acceleration
                     //! By manipulating this, we can cause the pendulum to reach
                     //  extreme angles and speeds
-                    if (random_u16() % 3 != 0) {
-                        o->oTTCPendulumAngleAccel = 13.0f;
-                    } else {
-                        o->oTTCPendulumAngleAccel = 42.0f;
-                    }
+                    o->oTTCPendulumAngleAccel = (random_u16() % 3 != 0) ? 13.0f : 42.0f;
 
                     // Pick a random delay
                     if (random_u16() % 2 == 0) o->oTTCPendulumDelay = random_linear_offset(5, 30);
@@ -66,11 +62,9 @@ void bhv_ttc_pendulum_update(void) {
                 // Play the sound 15 frames after beginning to move
                 o->oTTCPendulumSoundTimer = o->oTTCPendulumDelay + 15;
             }
-
             o->oTTCPendulumAngle += o->oTTCPendulumAngleVel;
         }
     }
-
     o->oFaceAngleRoll = (s32) o->oTTCPendulumAngle;
     // Note: no platform displacement
 }

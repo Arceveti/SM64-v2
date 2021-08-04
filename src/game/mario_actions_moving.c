@@ -111,7 +111,7 @@ void check_ledge_climb_down(struct MarioState *m) {
                     m->pos[0] = wallCols.x - 20.0f * wall->normal.x;
                     m->pos[2] = wallCols.z - 20.0f * wall->normal.z;
 
-                    m->faceAngle[0] = 0;
+                    m->faceAngle[0] = 0x0;
                     m->faceAngle[1] = wallAngle + 0x8000;
 
                     set_mario_action(m, ACT_LEDGE_CLIMB_DOWN, 0);
@@ -325,8 +325,7 @@ void update_shell_speed(struct MarioState *m) {
     if (m->forwardVel >  64.0f) m->forwardVel =  64.0f;
     if (m->forwardVel < -64.0f) m->forwardVel = -64.0f;
 
-    m->faceAngle[1] =
-        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+    m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800);
 
     apply_slope_accel(m);
 }
@@ -384,7 +383,7 @@ void update_walking_speed(struct MarioState *m) {
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
 
 #ifdef GROUND_TURN_FIX
-    if (m->forwardVel < 0 && m->heldObj == NULL) {
+    if (m->forwardVel < 0.0f && m->heldObj == NULL) {
         m->faceAngle[1] += 0x8000;
         m->forwardVel *= -1.0f;
     }
@@ -400,10 +399,10 @@ void update_walking_speed(struct MarioState *m) {
         } else if (turnRange > 0xFFF) {
             turnRange = 0xFFF;
         }
-        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, turnRange, turnRange);
+        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, turnRange, turnRange);
     }
 #else
-    m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+    m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800);
 #endif
     apply_slope_accel(m);
 }
@@ -661,7 +660,7 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
     if (nextBodyRoll  >  0x1800) nextBodyRoll  =  0x1800;
     if (nextBodyRoll  < -0x1800) nextBodyRoll  = -0x1800;
     if (nextBodyPitch >  0x1000) nextBodyPitch =  0x1000;
-    if (nextBodyPitch <       0) nextBodyPitch =       0;
+    if (nextBodyPitch <  0x0000) nextBodyPitch =  0x0000;
 
     marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll , 0x200, 0x200);
     marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x200, 0x200);
@@ -1086,8 +1085,7 @@ s32 act_burning_ground(struct MarioState *m) {
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
 
     if (m->input & INPUT_NONZERO_ANALOG) {
-        m->faceAngle[1] =
-            m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x600, 0x600);
+        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x600, 0x600);
     }
 
     apply_slope_accel(m);

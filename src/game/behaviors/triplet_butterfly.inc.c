@@ -83,7 +83,7 @@ static void triplet_butterfly_act_wander(void) {
 static void triplet_butterfly_act_activate(void) {
     if (o->oTimer > 20) {
         if (o->oTripletButterflyModel == 0) {
-            spawn_object_relative_with_scale(0, 0, -40, 0, 1.5f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
+            spawn_object_relative_with_scale(OBJ_BP_NONE, 0, -40, 0, 1.5f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
             o->oTripletButterflyModel = sTripletButterflyActivationData[o->oTripletButterflyType].model;
             cur_obj_set_model(o->oTripletButterflyModel);
             obj_set_billboard(o);
@@ -133,8 +133,8 @@ static void triplet_butterfly_act_explode(void) {
         }
 
         approach_f32_ptr(&o->oTripletButterflySpeed, 20.0f, 1.0f);
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 800);
-        obj_turn_pitch_toward_mario(-100.0f, 800);
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x320);
+        obj_turn_pitch_toward_mario(-100.0f, 0x320);
     }
 }
 
@@ -142,18 +142,10 @@ void bhv_triplet_butterfly_update(void) {
     cur_obj_update_floor_and_walls();
 
     switch (o->oAction) {
-        case TRIPLET_BUTTERFLY_ACT_INIT:
-            triplet_butterfly_act_init();
-            break;
-        case TRIPLET_BUTTERFLY_ACT_WANDER:
-            triplet_butterfly_act_wander();
-            break;
-        case TRIPLET_BUTTERFLY_ACT_ACTIVATE:
-            triplet_butterfly_act_activate();
-            break;
-        case TRIPLET_BUTTERFLY_ACT_EXPLODE:
-            triplet_butterfly_act_explode();
-            break;
+        case TRIPLET_BUTTERFLY_ACT_INIT:     triplet_butterfly_act_init();     break;
+        case TRIPLET_BUTTERFLY_ACT_WANDER:   triplet_butterfly_act_wander();   break;
+        case TRIPLET_BUTTERFLY_ACT_ACTIVATE: triplet_butterfly_act_activate(); break;
+        case TRIPLET_BUTTERFLY_ACT_EXPLODE:  triplet_butterfly_act_explode();  break;
     }
 
     cur_obj_scale(o->oTripletButterflyScale);

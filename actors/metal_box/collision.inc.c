@@ -1,7 +1,7 @@
 // Metal Box
 
 // 0x08024C28 - 0x08024CAC
-const Collision metal_box_seg8_collision_08024C28[] = {
+const Collision metal_box_seg8_collision_pushable_box[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX( 154, 307, -154),

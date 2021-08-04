@@ -244,11 +244,11 @@ void ukiki_act_jump(void) {
     o->oForwardVel = 10.0f;
     cur_obj_become_intangible();
 
-    if (o->oSubAction == 0) {
+    if (o->oSubAction == UKIKI_SUB_ACT_JUMP_JUMP) {
         if (o->oTimer == 0) {
             cur_obj_set_y_vel_and_animation(random_float() * 10.0f + 45.0f, UKIKI_ANIM_JUMP);
         } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_UNDERWATER_ON_GROUND)) {
-            o->oSubAction++;
+            o->oSubAction = UKIKI_SUB_ACT_JUMP_LAND;
             o->oVelY = 0.0f;
         }
     } else {
@@ -310,7 +310,7 @@ void ukiki_act_go_to_cage(void) {
                 o->oPosY = o->oFloorHeight;
             } else {
                 o->oForwardVel = 0.0f;
-                o->oSubAction++;
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_WAIT_FOR_MARIO;
             }
             break;
 
@@ -319,7 +319,7 @@ void ukiki_act_go_to_cage(void) {
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
 
             if (cur_obj_can_mario_activate_textbox(200.0f, 30.0f, 0x7FFF)) {
-                o->oSubAction++; // fallthrough
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_TALK_TO_MARIO; // fallthrough
             } else {
                 break;
             }
@@ -329,7 +329,7 @@ void ukiki_act_go_to_cage(void) {
 
             if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_DOWN, 
                 DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_080)) {
-                o->oSubAction++;
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_TURN_TO_CAGE;
             }
             break;
 
@@ -338,14 +338,14 @@ void ukiki_act_go_to_cage(void) {
 
             if (cur_obj_rotate_yaw_toward(yawToCage, 0x400)) {
                 o->oForwardVel = 10.0f;
-                o->oSubAction++;
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_JUMP_TO_CAGE;
             }
             break;
 
         case UKIKI_SUB_ACT_CAGE_JUMP_TO_CAGE:
             cur_obj_set_y_vel_and_animation(55.0f, UKIKI_ANIM_JUMP);
             o->oForwardVel = 36.0f;
-            o->oSubAction++;
+            o->oSubAction = UKIKI_SUB_ACT_CAGE_LAND_ON_CAGE;
             break;
 
         case UKIKI_SUB_ACT_CAGE_LAND_ON_CAGE:
@@ -354,7 +354,7 @@ void ukiki_act_go_to_cage(void) {
             if (o->oMoveFlags & OBJ_MOVE_LANDED) {
                 play_puzzle_jingle();
                 cur_obj_init_animation_with_sound(UKIKI_ANIM_JUMP_CLAP);
-                o->oSubAction++;
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_SPIN_ON_CAGE;
                 o->oUkikiCageSpinTimer = 32;
                 obj->parentObj->oUkikiCageNextAction = UKIKI_CAGE_ACT_SPIN;
                 o->oForwardVel = 0.0f;
@@ -366,7 +366,7 @@ void ukiki_act_go_to_cage(void) {
             o->oUkikiCageSpinTimer--;
 
             if (o->oUkikiCageSpinTimer < 0) {
-                o->oSubAction++;
+                o->oSubAction = UKIKI_SUB_ACT_CAGE_DESPAWN;
                 obj->parentObj->oUkikiCageNextAction = UKIKI_CAGE_ACT_FALL;
             }
             break;

@@ -197,7 +197,7 @@ void normal_cap_act_move(void) {
         if (o->oVelY != 0.0f) {
             o->oCapDoScaleVertically = 1;
             o->oVelY = 0.0f;
-            o->oFaceAnglePitch = 0;
+            o->oFaceAnglePitch = 0x0;
         }
     }
 

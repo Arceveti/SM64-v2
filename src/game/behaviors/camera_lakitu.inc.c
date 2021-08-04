@@ -25,8 +25,8 @@ void bhv_camera_lakitu_init(void) {
  */
 static void camera_lakitu_intro_act_trigger_cutscene(void) {
 #ifdef FIX_LAKITU_SKIP
-    if (gMarioObject->oPosX > -544.0f && gMarioObject->oPosX < 544.0f && gMarioObject->oPosY > 800.0f
-        && gMarioObject->oPosZ > -2000.0f && gMarioObject->oPosZ < -177.0f) {
+    if (gMarioObject->oPosX >  -544.0f && gMarioObject->oPosX <  544.0f && gMarioObject->oPosY > 800.0f
+     && gMarioObject->oPosZ > -2000.0f && gMarioObject->oPosZ < -177.0f) {
 #else
     // These bounds are slightly smaller than the actual bridge bounds, allowing
     // the RTA speedrunning method of lakitu skip
@@ -48,8 +48,8 @@ static void camera_lakitu_intro_act_spawn_cloud(void) {
         o->oPosY =  2400.0f;
         o->oPosZ = -2400.0f;
 
-        o->oMoveAnglePitch = 0x4000;
-        o->oCameraLakituSpeed = 60.0f;
+        o->oMoveAnglePitch           =  0x4000;
+        o->oCameraLakituSpeed        =   60.0f;
         o->oCameraLakituCircleRadius = 1000.0f;
 
         spawn_object_relative_with_scale(CLOUD_BP_LAKITU_CLOUD, 0, 0, 0, 2.0f, o, MODEL_MIST, bhvCloud);
@@ -66,7 +66,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY);
 
     // Face toward mario
-    o->oFaceAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0);
+    o->oFaceAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0x0);
     o->oFaceAngleYaw = o->oAngleToMario;
 
     // After finishing dialog, fly away and despawn
@@ -82,12 +82,8 @@ static void camera_lakitu_intro_act_show_dialog(void) {
                 targetMoveYaw   = o->oAngleToMario;
             } else {
                 // Stay moving in a circle around mario
-                s16 turnAmount = 0x4000
-                                 - atan2s(o->oCameraLakituCircleRadius,
-                                          o->oDistanceToMario - o->oCameraLakituCircleRadius);
-                if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0) {
-                    turnAmount = -turnAmount;
-                }
+                s16 turnAmount = 0x4000 - atan2s(o->oCameraLakituCircleRadius, o->oDistanceToMario - o->oCameraLakituCircleRadius);
+                if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) turnAmount = -turnAmount;
 
                 targetMoveYaw = o->oAngleToMario + turnAmount;
                 targetMovePitch = o->oFaceAnglePitch;
@@ -145,9 +141,9 @@ void bhv_camera_lakitu_update(void) {
             } else {
                 cur_obj_unhide();
 
-                o->oPosX = gLakituState.curPos[0];
-                o->oPosY = gLakituState.curPos[1];
-                o->oPosZ = gLakituState.curPos[2];
+                o->oPosX  = gLakituState.curPos[0];
+                o->oPosY  = gLakituState.curPos[1];
+                o->oPosZ  = gLakituState.curPos[2];
 
                 o->oHomeX = gLakituState.curFocus[0];
                 o->oHomeZ = gLakituState.curFocus[2];

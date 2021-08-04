@@ -678,13 +678,11 @@ s8 obj_lava_death(void) {
  */
 void spawn_orange_number(s8 behParam, s16 relX, s16 relY, s16 relZ) {
     struct Object *orangeNumber;
-
 #ifdef DIALOG_INDICATOR
-    if (behParam >= 16) return;
+    if (behParam > ORANGE_NUMBER_F) return;
 #else
-    if (behParam >= 10) return;
+    if (behParam > ORANGE_NUMBER_9) return;
 #endif
-
     orangeNumber = spawn_object_relative(behParam, relX, relY, relZ, o, MODEL_NUMBER, bhvOrangeNumber);
     orangeNumber->oPosY += 25.0f;
 }
@@ -693,7 +691,7 @@ void spawn_orange_number(s8 behParam, s16 relX, s16 relY, s16 relZ) {
  * Unused variables for debug_sequence_tracker.
  */
 s8 sDebugSequenceTracker = 0;
-s8 sDebugTimer = 0;
+s8 sDebugTimer           = 0;
 
 /**
  * Unused presumably debug function that tracks for a sequence of inputs.

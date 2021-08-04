@@ -35,15 +35,14 @@ void bhv_coffin_spawner_loop(void) {
             for (i = 0; i < 6; i++) {
                 relativeZ = coffinRelativePos[i].z;
 
-                // Behavior param of 0 for all even i, 1 for all odd
-                coffin = spawn_object_relative(i & 1, coffinRelativePos[i].x, 0, relativeZ, o, MODEL_BBH_WOODEN_TOMB, bhvCoffin);
+                // Behavior param of COFFIN_BP_STATIONARY for all even i, COFFIN_BP_MOVING for all odd
+                coffin = spawn_object_relative(i & 0x1, coffinRelativePos[i].x, 0, relativeZ, o, MODEL_BBH_WOODEN_TOMB, bhvCoffin);
 
                 // Never true, game would enter a while(1) before it could.
                 // Possible a remnant of days this didn't happen.
                 // Rotate the coffin 180 degrees if its on the other side of the room.
                 if (coffin != NULL && relativeZ > 0) coffin->oFaceAngleYaw = 0x8000;
             }
-
             o->oAction = COFFIN_SPAWNER_ACT_COFFINS_LOADED;
         }
     } else if (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
@@ -52,7 +51,7 @@ void bhv_coffin_spawner_loop(void) {
 }
 
 /**
- * The main action for the coffins. Coffins with COFFIN_BP_STATIC skip the behavior, while
+ * The main action for the coffins. Coffins with COFFIN_BP_STATIONARY skip the behavior, while
  * the other coffins will enter a standing action when Mario is near.
  * Also controls laying the coffin down after it has stood up.
  */
@@ -64,9 +63,9 @@ void coffin_act_idle(void) {
     f32 distForwards;
     f32 distSideways;
 
-    if (o->oBehParams2ndByte != COFFIN_BP_STATIC) {
+    if (o->oBehParams2ndByte != COFFIN_BP_STATIONARY) {
         // Lay down if standing
-        if (o->oFaceAnglePitch != 0) {
+        if (o->oFaceAnglePitch != 0x0) {
             o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, -2000, 200);
 
             // If the coffin landed...

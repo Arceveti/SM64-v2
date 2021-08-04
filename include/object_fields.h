@@ -57,19 +57,22 @@
 // 0x98 unused/removed.
 #define /*0x09C*/ oIntangibleTimer                              OBJECT_FIELD_S32(0x05)
 #define /*0x0A0*/ O_POS_INDEX                                   0x06
+#define /*0x0A0*/ oPosVec                                       OBJECT_FIELD_F32(O_POS_INDEX)
 #define /*0x0A0*/ oPosX                                         OBJECT_FIELD_F32(O_POS_INDEX + 0)
 #define /*0x0A4*/ oPosY                                         OBJECT_FIELD_F32(O_POS_INDEX + 1)
 #define /*0x0A8*/ oPosZ                                         OBJECT_FIELD_F32(O_POS_INDEX + 2)
+#define /*0x0AC*/ oVelVec                                       OBJECT_FIELD_F32(0x09)
 #define /*0x0AC*/ oVelX                                         OBJECT_FIELD_F32(0x09)
 #define /*0x0B0*/ oVelY                                         OBJECT_FIELD_F32(0x0A)
 #define /*0x0B4*/ oVelZ                                         OBJECT_FIELD_F32(0x0B)
-#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(0x0C)
-#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(0x0D)
-#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(0x0E)
+#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(0x0C) // local Z
+#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(0x0D) // local X
+#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(0x0E) // local Y
 #define /*0x0C4*/ O_MOVE_ANGLE_INDEX                            0x0F
 #define /*0x0C4*/ O_MOVE_ANGLE_PITCH_INDEX                      (O_MOVE_ANGLE_INDEX + 0)
 #define /*0x0C4*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1)
 #define /*0x0C4*/ O_MOVE_ANGLE_ROLL_INDEX                       (O_MOVE_ANGLE_INDEX + 2)
+#define /*0x0C4*/ oMoveAngleVec                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_INDEX)
 #define /*0x0C4*/ oMoveAnglePitch                               OBJECT_FIELD_S32(O_MOVE_ANGLE_PITCH_INDEX)
 #define /*0x0C8*/ oMoveAngleYaw                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_YAW_INDEX)
 #define /*0x0CC*/ oMoveAngleRoll                                OBJECT_FIELD_S32(O_MOVE_ANGLE_ROLL_INDEX)
@@ -77,6 +80,7 @@
 #define /*0x0D0*/ O_FACE_ANGLE_PITCH_INDEX                      (O_FACE_ANGLE_INDEX + 0)
 #define /*0x0D0*/ O_FACE_ANGLE_YAW_INDEX                        (O_FACE_ANGLE_INDEX + 1)
 #define /*0x0D0*/ O_FACE_ANGLE_ROLL_INDEX                       (O_FACE_ANGLE_INDEX + 2)
+#define /*0x0D0*/ oFaceAngleVec                                 OBJECT_FIELD_S32(O_FACE_ANGLE_INDEX)
 #define /*0x0D0*/ oFaceAnglePitch                               OBJECT_FIELD_S32(O_FACE_ANGLE_PITCH_INDEX)
 #define /*0x0D4*/ oFaceAngleYaw                                 OBJECT_FIELD_S32(O_FACE_ANGLE_YAW_INDEX)
 #define /*0x0D8*/ oFaceAngleRoll                                OBJECT_FIELD_S32(O_FACE_ANGLE_ROLL_INDEX)
@@ -87,9 +91,11 @@
 #define /*0x0EC*/ oMoveFlags                                    OBJECT_FIELD_U32(0x19)
 #define /*0x0F0*/ oAnimState                                    OBJECT_FIELD_S32(0x1A)
 // 0x0F4-0x110 (0x1B-0x22) are object specific and defined below the common fields.
-#define /*0x114*/ oAngleVelPitch                                OBJECT_FIELD_S32(0x23)
-#define /*0x118*/ oAngleVelYaw                                  OBJECT_FIELD_S32(0x24)
-#define /*0x11C*/ oAngleVelRoll                                 OBJECT_FIELD_S32(0x25)
+#define /*0x138*/ O_ANGLE_VEL_INDEX                             0x23
+#define /*0x114*/ oAngleVelVec                                  OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX)
+#define /*0x114*/ oAngleVelPitch                                OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 0)
+#define /*0x118*/ oAngleVelYaw                                  OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 1)
+#define /*0x11C*/ oAngleVelRoll                                 OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 2)
 #define /*0x120*/ oAnimations                                   OBJECT_FIELD_ANIMS(0x26)
 #define /*0x124*/ oHeldState                                    OBJECT_FIELD_U32(0x27)
 #define /*0x128*/ oWallHitboxRadius                             OBJECT_FIELD_F32(0x28)
@@ -97,6 +103,7 @@
 #define /*0x130*/ oInteractType                                 OBJECT_FIELD_U32(0x2A)
 #define /*0x134*/ oInteractStatus                               OBJECT_FIELD_S32(0x2B)
 #define /*0x138*/ O_PARENT_RELATIVE_POS_INDEX                   0x2C
+#define /*0x138*/ oParentRelativePosVec                         OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX)
 #define /*0x138*/ oParentRelativePosX                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 0)
 #define /*0x13C*/ oParentRelativePosY                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 1)
 #define /*0x140*/ oParentRelativePosZ                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 2)

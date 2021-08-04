@@ -6,7 +6,7 @@ void bhv_bubble_cannon_barrel_loop(void) {
     if (o->parentObj->oAction == WATER_BOMB_CANNON_ACT_HIDE) {
         obj_mark_for_deletion(o);
     } else {
-        o->oMoveAngleYaw = o->parentObj->oFaceAngleYaw;
+        o->oMoveAngleYaw   = o->parentObj->oFaceAngleYaw;
         o->oMoveAnglePitch = o->parentObj->oMoveAnglePitch + 0x4000;
         o->oFaceAnglePitch = o->parentObj->oMoveAnglePitch;
 
@@ -55,7 +55,7 @@ void water_bomb_cannon_act_active(void) { // act 1
             o->oWaterCannonIdleTimer--;
         } else {
             obj_move_pitch_approach(o->oWaterCannonTargetMovePitch, 0x80);
-            obj_face_yaw_approach(o->oWaterCannonTargetFaceYaw, 0x100);
+            obj_face_yaw_approach(  o->oWaterCannonTargetFaceYaw,  0x100);
 
             if ((s16) o->oFaceAngleYaw == (s16) o->oWaterCannonTargetFaceYaw) {
                 if (o->oWaterCannonRotationTimer != 0) {
@@ -63,9 +63,9 @@ void water_bomb_cannon_act_active(void) { // act 1
                 } else {
                     cur_obj_play_sound_2(SOUND_OBJ_WATER_BOMB_CANNON);
                     o->oWaterCannonIdleTimer = 70;
-                    o->oWaterCannonTargetMovePitch = 0x1000 + 0x400 * (random_u16() & 0x3);
-                    o->oWaterCannonTargetFaceYaw = -0x2000 + o->oMoveAngleYaw + 0x1000 * (random_u16() % 5);
-                    o->oWaterCannonRotationTimer = 60;
+                    o->oWaterCannonTargetMovePitch =  0x1000 + 0x400 * (random_u16() & 0x3);
+                    o->oWaterCannonTargetFaceYaw   = -0x2000 + o->oMoveAngleYaw + 0x1000 * (random_u16() % 5);
+                    o->oWaterCannonRotationTimer   = 60;
                 }
             }
         }
@@ -81,14 +81,8 @@ void bhv_water_bomb_cannon_loop(void) {
     cur_obj_push_mario_away_from_cylinder(220.0f, 300.0f);
 
     switch (o->oAction) {
-        case WATER_BOMB_CANNON_ACT_HIDDEN:
-            water_bomb_cannon_act_hidden_inactive();
-            break;
-        case WATER_BOMB_CANNON_ACT_ACTIVE:
-            water_bomb_cannon_act_active();
-            break;
-        case WATER_BOMB_CANNON_ACT_HIDE:
-            water_bomb_cannon_act_hide();
-            break;
+        case WATER_BOMB_CANNON_ACT_HIDDEN: water_bomb_cannon_act_hidden_inactive(); break;
+        case WATER_BOMB_CANNON_ACT_ACTIVE: water_bomb_cannon_act_active();          break;
+        case WATER_BOMB_CANNON_ACT_HIDE:   water_bomb_cannon_act_hide();            break;
     }
 }

@@ -77,7 +77,7 @@ extern const MacroObject bitfs_seg7_macro_objs[];
 extern const Collision bitfs_seg7_collision_07015124[];
 extern const Collision bitfs_seg7_collision_sinking_cage_platform[];
 extern const Collision bitfs_seg7_collision_inverted_pyramid[];
-extern const Collision bitfs_seg7_collision_07015288[];
+extern const Collision bitfs_seg7_collision_tumbling_bridge[];
 extern const Collision bitfs_seg7_collision_squishable_platform[];
 extern const Collision bitfs_seg7_collision_moving_square_platform[];
 extern const Collision bitfs_seg7_collision_sliding_platform[];

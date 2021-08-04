@@ -43,7 +43,7 @@ void scale_bubble_random(void) {
 }
 
 void bhv_bubble_maybe_loop(void) {
-    o->oPosY += random_float() * 3.0f + 6.0f;
+    o->oPosY += random_float() *  3.0f + 6.0f;
     o->oPosX += random_float() * 10.0f - 5.0f;
     o->oPosZ += random_float() * 10.0f - 5.0f;
     o->header.gfx.scale[0] = sins(o->oWaterObjScaleXAngle) * 0.2f + 1.0f;
@@ -75,7 +75,7 @@ void scale_bubble_sin(void) {
 
 void bhv_particle_init(void) {
     obj_scale_xyz(o, 2.0f, 2.0f, 1.0f);
-    o->oWaterObjScaleXAngleVel  = 0x800 + (s32)(random_float() * 2048.0f);
+    o->oWaterObjScaleXAngleVel = 0x800 + (s32)(random_float() * 2048.0f);
     o->oWaterObjScaleYAngleVel = 0x800 + (s32)(random_float() * 2048.0f);
     obj_translate_xyz_random(o, 100.0f);
 }

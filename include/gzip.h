@@ -22,8 +22,8 @@
 #endif
 */
 
-#define INBUFSIZ	8192	// input buffer size
-#define OUTBUFSIZ	8192	// output buffer size
+#define INBUFSIZ	0x2000	// input buffer size
+#define OUTBUFSIZ	0x2000	// output buffer size
 #define WSIZE		0x8000
 
 typedef struct {
@@ -36,7 +36,7 @@ typedef struct {
 
 /* Macros for getting two-byte and four-byte header values */
 #define SH(p) ((u16)(u8)((p)[0]) | ((u16)(u8)((p)[1]) << 8))
-#define LG(p) ((u32)(SH(p)) | ((u32)(SH((p)+2)) << 16))
+#define LG(p) ((u32)(SH(p))      | ((u32)(SH((p)+2)) << 16))
 
 extern unsigned int insize;	// valid bytes in inbuf
 extern unsigned int inptr;	// index of next byte to be processed in inbuf

@@ -1352,7 +1352,7 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
     vec3f_copy(focus, sMarioCamState->pos);
     focus[1] += focusFloorOff + 125.0f;
     vec3f_get_dist_and_angle(focus, c->pos, &distCamToFocus, &faceAngle[0], &faceAngle[1]);
-    faceAngle[2] = 0;
+    faceAngle[2] = 0x0;
 
     vec3f_copy(basePos, sFixedModeBasePosition);
     vec3f_add(basePos, sCastleEntranceOffset);
@@ -2980,7 +2980,7 @@ void zoom_out_if_paused_and_outside(struct GraphNodeCamera *camera) {
 
     if (areaMaskIndex >= LEVEL_MAX / 2) {
         areaMaskIndex = 0;
-        areaBit = 0;
+        areaBit       = 0;
     }
     if (gCameraMovementFlags & CAM_MOVE_PAUSE_SCREEN) {
         if (sFramesPaused >= 2) {
@@ -3036,14 +3036,9 @@ void update_graph_node_camera(struct GraphNodeCamera *gc) {
 
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context) {
     struct GraphNodeCamera *gc = (struct GraphNodeCamera *) g;
-
     switch (callContext) {
-        case GEO_CONTEXT_CREATE:
-            create_camera(gc, context);
-            break;
-        case GEO_CONTEXT_RENDER:
-            update_graph_node_camera(gc);
-            break;
+        case GEO_CONTEXT_CREATE: create_camera(gc, context);   break;
+        case GEO_CONTEXT_RENDER: update_graph_node_camera(gc); break;
     }
     return NULL;
 }
@@ -6515,7 +6510,7 @@ void cutscene_grand_star_front_of_mario(struct Camera *c) {
  * Started shortly after Mario starts the triple jump. Stores Mario's face angle and zeros cvar2.
  */
 void cutscene_grand_star_mario_jump(UNUSED struct Camera *c) {
-    vec3s_set(sCutsceneVars[0].angle, 0, sMarioCamState->faceAngle[1], 0);
+    vec3s_set(sCutsceneVars[0].angle, 0x0, sMarioCamState->faceAngle[1], 0x0);
     vec3f_set(sCutsceneVars[2].point, 0.0f, 0.0f, 0.0f);
 }
 
@@ -8963,7 +8958,7 @@ void cutscene_unused_exit_start(struct Camera *c) {
     Vec3s marioAngle;
 
     vec3f_set(offset, 200.0f, 300.0f, 200.0f);
-    vec3s_set(marioAngle, 0, sMarioCamState->faceAngle[1], 0);
+    vec3s_set(marioAngle, 0x0, sMarioCamState->faceAngle[1], 0x0);
     offset_rotated(c->pos, sMarioCamState->pos, offset, marioAngle);
     set_focus_rel_mario(c, 0.0f, 125.0f, 0.0f, 0);
 }
@@ -9108,7 +9103,7 @@ void cutscene_door_move_behind_mario(struct Camera *c) {
     reset_pan_distance(c);
     determine_pushing_or_pulling_door(&doorRotation);
     set_focus_rel_mario(c, 0.0f, 125.0f, 0.0f, 0);
-    vec3s_set(sCutsceneVars[0].angle, 0, sMarioCamState->faceAngle[1] + doorRotation, 0);
+    vec3s_set(sCutsceneVars[0].angle, 0x0, sMarioCamState->faceAngle[1] + doorRotation, 0x0);
     vec3f_set(camOffset, 0.0f, 125.0f, 250.0f);
 
     camOffset[0] = 0.0f;

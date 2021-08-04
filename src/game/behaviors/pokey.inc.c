@@ -36,8 +36,8 @@ static u8 sPokeyBodyPartAttackHandlers[] = {
 
 /**
  * Update function for pokey body part.
- * The behavior parameter is the body part's index from 0 to 4, with 0 at the
- * top.
+ * The behavior parameter is the body part's index from POKEY_PART_BP_HEAD
+ * to POKEY_PART_BP_LOWEST, with POKEY_PART_BP_HEAD at the top.
  */
 void bhv_pokey_body_part_update(void) {
     // PARTIAL_UPDATE
@@ -59,9 +59,9 @@ void bhv_pokey_body_part_update(void) {
             //  spawns, but one of the body parts shifts upward immediately,
             //  so not very interesting
             if (o->oBehParams2ndByte > 1
-                && !(o->parentObj->oPokeyAliveBodyPartFlags & (1 << (o->oBehParams2ndByte - 1)))) {
-                o->parentObj->oPokeyAliveBodyPartFlags |= 1 << (o->oBehParams2ndByte - 1);
-                o->parentObj->oPokeyAliveBodyPartFlags &= ((1 << o->oBehParams2ndByte) ^ ~0);
+             && !(o->parentObj->oPokeyAliveBodyPartFlags & (1 << (o->oBehParams2ndByte  -  1)))) {
+                o->parentObj->oPokeyAliveBodyPartFlags |=   1 << (o->oBehParams2ndByte  -  1);
+                o->parentObj->oPokeyAliveBodyPartFlags &= ((1 <<  o->oBehParams2ndByte) ^ ~0);
 
                 o->oBehParams2ndByte--;
             
@@ -72,15 +72,15 @@ void bhv_pokey_body_part_update(void) {
             //  was above it will instantly shrink and begin expanding in its
             //  place.
             } else if (o->parentObj->oPokeyBottomBodyPartSize < 1.0f
-                     && o->oBehParams2ndByte + 1 == o->parentObj->oPokeyNumAliveBodyParts) {
+             && o->oBehParams2ndByte + 1 == o->parentObj->oPokeyNumAliveBodyParts) {
                 approach_f32_ptr(&o->parentObj->oPokeyBottomBodyPartSize, 1.0f, 0.1f);
-                cur_obj_scale(o->parentObj->oPokeyBottomBodyPartSize * 3.0f);
+                cur_obj_scale(    o->parentObj->oPokeyBottomBodyPartSize * 3.0f);
             }
 
             //! Pausing causes jumps in offset angle
             offsetAngle = o->oBehParams2ndByte * 0x4000 + gGlobalTimer * 0x800;
-            o->oPosX = o->parentObj->oPosX + coss(offsetAngle) * 6.0f;
-            o->oPosZ = o->parentObj->oPosZ + sins(offsetAngle) * 6.0f;
+            o->oPosX    = o->parentObj->oPosX + coss(offsetAngle) * 6.0f;
+            o->oPosZ    = o->parentObj->oPosZ + sins(offsetAngle) * 6.0f;
 
             // This is the height of the tower beneath the body part
             baseHeight = o->parentObj->oPosY
@@ -95,22 +95,21 @@ void bhv_pokey_body_part_update(void) {
             }
 
             // Only the head has loot coins
-            o->oNumLootCoins = (o->oBehParams2ndByte == 0);
+            o->oNumLootCoins = (o->oBehParams2ndByte == POKEY_PART_BP_HEAD);
 
             // If the body part was attacked, then die. If the head was killed,
             // then die after a delay.
 
             if (obj_handle_attacks(&sPokeyBodyPartHitbox, o->oAction, sPokeyBodyPartAttackHandlers)) {
                 o->parentObj->oPokeyNumAliveBodyParts--;
-                if (o->oBehParams2ndByte == 0) {
+                if (o->oBehParams2ndByte == POKEY_PART_BP_HEAD) {
                     o->parentObj->oPokeyHeadWasKilled = TRUE;
                     //! Last minute change to blue coins - not sure why they didn't
                     // just set it to -1 above
                     o->oNumLootCoins = -1;
                 }
 
-                o->parentObj->oPokeyAliveBodyPartFlags =
-                    o->parentObj->oPokeyAliveBodyPartFlags & ((1 << o->oBehParams2ndByte) ^ ~0);
+                o->parentObj->oPokeyAliveBodyPartFlags = o->parentObj->oPokeyAliveBodyPartFlags & ((1 << o->oBehParams2ndByte) ^ ~0);
             } else if (o->parentObj->oPokeyHeadWasKilled) {
                 cur_obj_become_intangible();
 
@@ -124,18 +123,16 @@ void bhv_pokey_body_part_update(void) {
                 // death delay will be 0
                 o->oPokeyBodyPartDeathDelayAfterHeadKilled = (o->oBehParams2ndByte << 2) + 20;
             }
-
             cur_obj_move_standard(-78);
         }
     } else {
         o->oAnimState = POKEY_ANIM_STATE_NONSTANDARD_ACTION;
     }
-
     o->oGraphYOffset = o->header.gfx.scale[1] * 22.0f;
 }
 
 /**
- * When mario gets within range, spawn the 5 body parts and enter the wander
+ * When mario gets within range, spawn the POKEY_NUM_PARTS body parts and enter the wander
  * action.
  */
 static void pokey_act_uninitialized(void) {
@@ -143,12 +140,12 @@ static void pokey_act_uninitialized(void) {
     s32 i;
     s16 partModel;
 
-    if (o->oDistanceToMario < 2000.0f) {
+    if (o->oDistanceToMario < 4000.0f) { // vanilla was 2000.0f
         partModel = MODEL_POKEY_HEAD;
 
-        for (i = 0; i < 5; i++) {
+        for (i = 0; i < POKEY_NUM_PARTS; i++) {
             // Spawn body parts at y offsets 480, 360, 240, 120, 0
-            // behavior param 0 = head, 4 = lowest body part
+            // behavior param POKEY_PART_BP_HEAD = head, POKEY_PART_BP_LOWEST = lowest body part
             bodyPart = spawn_object_relative(i, 0, -i * 120 + 480, 0, o, partModel, bhvPokeyBodyPart);
 
             if (bodyPart != NULL) obj_scale(bodyPart, 3.0f);
@@ -156,10 +153,10 @@ static void pokey_act_uninitialized(void) {
             partModel = MODEL_POKEY_BODY_PART;
         }
 
-        o->oPokeyAliveBodyPartFlags = 0x1F;
-        o->oPokeyNumAliveBodyParts = 5;
+        o->oPokeyAliveBodyPartFlags = (1 << POKEY_NUM_PARTS)-1;
+        o->oPokeyNumAliveBodyParts  = POKEY_NUM_PARTS;
         o->oPokeyBottomBodyPartSize = 1.0f;
-        o->oAction = POKEY_ACT_WANDER;
+        o->oAction                  = POKEY_ACT_WANDER;
     }
 }
 
@@ -173,10 +170,10 @@ static void pokey_act_wander(void) {
     s32 targetAngleOffset;
     struct Object *bodyPart;
 
-    if (o->oPokeyNumAliveBodyParts == 0) {
+    if (o->oPokeyNumAliveBodyParts == POKEY_PART_BP_HEAD) {
         obj_mark_for_deletion(o);
-    } else if (o->oDistanceToMario > 2500.0f) {
-        o->oAction = POKEY_ACT_UNLOAD_PARTS;
+    } else if (o->oDistanceToMario > 4500.0f) { // vanilla was 2500.0f
+        o->oAction     = POKEY_ACT_UNLOAD_PARTS;
         o->oForwardVel = 0.0f;
     } else {
         treat_far_home_as_mario(1000.0f);
@@ -188,24 +185,19 @@ static void pokey_act_wander(void) {
             o->oForwardVel = 5.0f;
 
             // If a body part is missing, replenish it after 100 frames
-            if (o->oPokeyNumAliveBodyParts < 5) {
+            if (o->oPokeyNumAliveBodyParts < POKEY_NUM_PARTS) {
                 if (o->oTimer > 100) {
                     // Because the body parts shift index whenever a body part
                     // is killed, the new part's index is equal to the number
                     // of living body parts
-
-                    bodyPart = spawn_object_relative(o->oPokeyNumAliveBodyParts, 0, 0, 0, o,
-                                                     MODEL_POKEY_BODY_PART, bhvPokeyBodyPart);
-
+                    bodyPart = spawn_object_relative(o->oPokeyNumAliveBodyParts, 0, 0, 0, o, MODEL_POKEY_BODY_PART, bhvPokeyBodyPart);
                     if (bodyPart != NULL) {
-                        o->oPokeyAliveBodyPartFlags =
-                            o->oPokeyAliveBodyPartFlags | (1 << o->oPokeyNumAliveBodyParts);
+                        o->oPokeyAliveBodyPartFlags = o->oPokeyAliveBodyPartFlags | (1 << o->oPokeyNumAliveBodyParts);
                         o->oPokeyNumAliveBodyParts++;
                         o->oPokeyBottomBodyPartSize = 0.0f;
 
                         obj_scale(bodyPart, 0.0f);
                     }
-
                     o->oTimer = 0;
                 }
             } else {
@@ -222,7 +214,7 @@ static void pokey_act_wander(void) {
                     if (o->oPokeyChangeTargetTimer != 0) {
                         o->oPokeyChangeTargetTimer--;
                     } else if (o->oDistanceToMario > 2000.0f) {
-                        o->oPokeyTargetYaw = obj_random_fixed_turn(0x2000);
+                        o->oPokeyTargetYaw         = obj_random_fixed_turn(0x2000);
                         o->oPokeyChangeTargetTimer = random_linear_offset(30, 50);
                     } else {
                         // The goal of this computation is to make pokey approach

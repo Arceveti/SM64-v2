@@ -63,13 +63,13 @@ void bubba_act_attack(void) {
             o->oBubbaTargetYaw = o->oAngleToMario;
             o->oBubbaTargetPitch = o->oBubbaNextTargetPitchTowardMario;
 
-            cur_obj_rotate_yaw_toward(o->oBubbaTargetYaw, 400);
-            obj_move_pitch_approach(o->oBubbaTargetPitch, 400);
+            cur_obj_rotate_yaw_toward(o->oBubbaTargetYaw, 0x190);
+            obj_move_pitch_approach(o->oBubbaTargetPitch, 0x190);
         }
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) {
             s16 val04 = 0x4000 - atan2s(800.0f, o->oDistanceToMario - 800.0f);
-            if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0) val04 = -val04;
+            if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) val04 = -val04;
 
             o->oBubbaTargetYaw = o->oAngleToMario + val04;
         } else {
@@ -81,7 +81,7 @@ void bubba_act_attack(void) {
         if (obj_is_near_to_and_facing_mario(500.0f, 3000)
             && abs_angle_diff(o->oBubbaTargetPitch, o->oMoveAnglePitch) < 3000) {
             o->oBubbaLungeTimer = 30;
-            o->oBubbaMovePitch  =  0;
+            o->oBubbaMovePitch  = 0x0;
             o->oAnimState = BUBBA_ANIM_STATE_OPEN_MOUTH;
         } else {
             approach_f32_ptr(&o->oBubbaMovePitch, 20.0f, 0.5f);
@@ -119,7 +119,7 @@ void bhv_bubba_loop(void) {
             if ((o->oBubbaJumpHeight -= o->oBubbaAirVelY) > 1.0f) {
                 s16 sp36 = random_u16();
                 o->oBubbaJumpHeight -= 1.0f;
-                spawn_object_relative(0, 150.0f * coss(sp36), 0x64, 150.0f * sins(sp36), o,
+                spawn_object_relative(OBJ_BP_NONE, 150.0f * coss(sp36), 0x64, 150.0f * sins(sp36), o,
                                       MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
             }
         }

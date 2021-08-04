@@ -1,7 +1,7 @@
 // Whomp
 
 // 0x06020A0C - 0x06020A90
-const Collision whomp_seg6_collision_06020A0C[] = {
+const Collision whomp_seg6_collision_whomp[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-150,  50, -100),

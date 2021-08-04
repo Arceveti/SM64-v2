@@ -128,7 +128,7 @@ void bhv_coin_formation_spawn_loop(void) {
             if (absf(o->oPosY - o->oFloorHeight) > 250.0f) cur_obj_set_model(MODEL_YELLOW_COIN_NO_SHADOW);
         }
     } else {
-        if (bhv_coin_sparkles_init())  o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
+        if (bhv_coin_sparkles_init()) o->parentObj->oCoinRespawnBits |= (1 << o->oBehParams2ndByte);
         o->oAnimState++;
     }
     if (o->parentObj->oAction == COIN_FORMATION_ACT_DEACTIVATE) obj_mark_for_deletion(o);
@@ -141,31 +141,32 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
     s32 snapToGround = TRUE;
     pos[0] = pos[1] = pos[2] = 0;
     switch (shape & 0x7) {
-        case 0: // horizontal line
+        case COIN_FORMATION_BP_HORIZONTAL_LINE:
             pos[2] = 160 * (index - 2);
             if (index > 4) spawnCoin = FALSE;
             break;
-        case 1: // vertical line
+        case COIN_FORMATION_BP_VERTICAL_LINE:
             snapToGround = FALSE;
             pos[1] = 160 * index * 0.8f; // 128 * index
             if (index > 4) spawnCoin = FALSE;
             break;
-        case 2: // horizontal ring
+        case COIN_FORMATION_BP_HORIZONTAL_RING:
             pos[0] = sins(index << 13) * 300.0f;
             pos[2] = coss(index << 13) * 300.0f;
             break;
-        case 3: // vertical ring
+        case COIN_FORMATION_BP_VERTICAL_RING:
             snapToGround = FALSE;
             pos[0] = coss(index << 13) * 200.0f;
             pos[1] = sins(index << 13) * 200.0f + 200.0f;
             break;
-        case 4: // arrow
+        case COIN_FORMATION_BP_ARROW:
             pos[0] = sCoinArrowPositions[index][0];
             pos[2] = sCoinArrowPositions[index][1];
             break;
     }
     if (shape & 0x10) snapToGround = FALSE;
     if (spawnCoin) {
+        // Spawn the coin at the index's location
         newCoin = spawn_object_relative(index, pos[0], pos[1], pos[2], o, MODEL_YELLOW_COIN, bhvCoinFormationSpawn);
         newCoin->oCoinSnapToGround = snapToGround;
     }

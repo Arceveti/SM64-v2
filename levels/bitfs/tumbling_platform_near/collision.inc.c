@@ -1,5 +1,5 @@
 // 0x07015288 - 0x0701530C
-const Collision bitfs_seg7_collision_07015288[] = {
+const Collision bitfs_seg7_collision_tumbling_bridge[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(64, 0, -306),

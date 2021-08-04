@@ -26,8 +26,8 @@
 u8 gNotEnoughMemory = FALSE;
 u8 gDelayForErrorMessage = 0;
 u8 does_pool_end_lie_out_of_bounds(void *end) {
-    u32 endPhy = ((u32) end) & 0x1FFFFFFF;
-    u32 memSize = *((u32 *) 0x80000318);
+    u32 endPhy  =  ((u32) end) & 0x1FFFFFFF;
+    u32 memSize = *((u32 *   )   0x80000318);
     if (endPhy > memSize) {
         gNotEnoughMemory = TRUE;
         return TRUE;
@@ -50,16 +50,14 @@ Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node,
             print_text(10, 210, "ERROR    Need more memory");
             // Init generic text rendering
             create_dl_ortho_matrix();
-            gSPDisplayList(gDisplayListHead++,
-                           dl_ia_text_begin); // Init rendering stuff for generic text
+            gSPDisplayList(gDisplayListHead++, dl_ia_text_begin); // Init rendering stuff for generic text
             // Set text color to white
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
             print_generic_string(8, 170, text_console_8mb);
             print_generic_string(8, 120, text_pj64);
             print_generic_string(8, 54, text_pj64_2);
             // Cleanup
-            gSPDisplayList(gDisplayListHead++,
-                           dl_ia_text_end); // Reset back to default render settings.
+            gSPDisplayList(gDisplayListHead++, dl_ia_text_end); // Reset back to default render settings.
             gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
         } else {
             gDelayForErrorMessage++;

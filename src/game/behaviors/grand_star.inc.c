@@ -24,7 +24,7 @@ void bhv_grand_star_loop(void) {
     dest[0] = dest[1] = dest[2] = 0.0f;
     if (o->oAction == GRAND_STAR_ACT_APPEAR) {
         if (o->oTimer == 0) {
-            obj_set_angle(o, 0, 0, 0);
+            obj_set_angle(o, 0x0, 0x0, 0x0);
             o->oAngleVelYaw = 0x400;
             cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
         }
@@ -34,7 +34,7 @@ void bhv_grand_star_loop(void) {
         if (o->oTimer == 0) {
             cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR);
             cutscene_object(CUTSCENE_STAR_SPAWN, o);
-            o->oGrandStarArcTime = arc_to_goal_pos(dest, &o->oPosX, 80.0f, -2.0f);
+            o->oGrandStarArcTime = arc_to_goal_pos(dest, &o->oPosVec, 80.0f, -2.0f);
         }
         cur_obj_move_using_fvel_and_gravity();
         if (o->oSubAction == GRAND_STAR_SUB_ACT_START_JUMP) {

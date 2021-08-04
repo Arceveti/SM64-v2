@@ -5,7 +5,7 @@ void bhv_tree_snow_or_leaf_loop(void) {
     cur_obj_update_floor_height();
     if (o->oTimer == 0) {
         o->oAngleVelPitch = (random_float() - 0.5f) * 0x1000;
-        o->oAngleVelRoll = (random_float() - 0.5f) * 0x1000;
+        o->oAngleVelRoll  = (random_float() - 0.5f) * 0x1000;
         o->oTreeSnowOrLeafSidewardVel = 4;
         o->oTreeSnowOrLeafSidewardAngleVel = random_float() * 0x400 + 0x600;
     }

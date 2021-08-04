@@ -8,7 +8,7 @@ void bhv_orange_number_init(void) {
 void bhv_orange_number_loop(void) {
     struct Object *sparkleObj;
 #ifdef DIALOG_INDICATOR
-    if (o->oAnimState <= 0x9) {
+    if (o->oAnimState <= ORANGE_NUMBER_9) {
 #endif
         o->oPosY += o->oVelY;
         o->oVelY -= 2.0f;

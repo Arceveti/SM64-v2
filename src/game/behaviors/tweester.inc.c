@@ -43,7 +43,7 @@ void tweester_act_idle(void) {
     if (o->oSubAction == TWEESTER_SUB_ACT_WAIT) {
         cur_obj_become_tangible();
         cur_obj_set_pos_to_home();
-        cur_obj_scale(0);
+        cur_obj_scale(0.0f);
 
         // If Mario is within range, change to the growth sub-action.
         if (o->oDistanceToMario < 1500.0f) o->oSubAction++;
@@ -65,16 +65,13 @@ void tweester_act_chase(void) {
     o->oAngleToHome = cur_obj_angle_to_home();
     cur_obj_play_sound_1(SOUND_ENV_WIND1);
 
-    if (cur_obj_lateral_dist_from_mario_to_home() < activationRadius
-        && o->oSubAction == TWEESTER_SUB_ACT_CHASE) {
-
-        o->oForwardVel = 20.0f;
+    o->oForwardVel = 20.0f;
+    if ((cur_obj_lateral_dist_from_mario_to_home() < activationRadius) && (o->oSubAction == TWEESTER_SUB_ACT_CHASE)) {
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
         print_debug_top_down_objectinfo("off ", 0);
 
         if (gMarioStates[0].action == ACT_TWIRLING) o->oSubAction++;
     } else {
-        o->oForwardVel = 20.0f;
         cur_obj_rotate_yaw_toward(o->oAngleToHome, 0x200);
 
         if (cur_obj_lateral_dist_to_home() < 200.0f) o->oAction = TWEESTER_ACT_HIDE;
@@ -131,7 +128,7 @@ void bhv_tweester_sand_particle_loop(void) {
     if (o->oTimer == 0) {
         obj_translate_xz_random(o, 100.0f);
         o->oFaceAnglePitch = random_u16();
-        o->oFaceAngleYaw = random_u16();
+        o->oFaceAngleYaw   = random_u16();
     }
 
     if (o->oTimer > 15) obj_mark_for_deletion(o);

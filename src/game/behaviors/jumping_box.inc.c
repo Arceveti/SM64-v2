@@ -63,7 +63,7 @@ void bhv_jumping_box_loop(void) {
     }
     if (o->oInteractStatus & INT_STATUS_STOP_RIDING) {
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
-        obj_explode_and_spawn_coins(46.0f, 1);
+        obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
     }
     o->oInteractStatus = INT_STATUS_NONE;
 }

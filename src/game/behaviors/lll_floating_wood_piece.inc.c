@@ -14,7 +14,7 @@ void bhv_lll_floating_wood_bridge_loop(void) {
         case LLL_FLOATING_WOOD_ACT_INACTIVE:
             if (o->oDistanceToMario < 2500.0f) {
                 for (i = 1; i < 4; i++) {
-                    woodPieceObj = spawn_object_relative(0, (i - 2) * 300, 0, 0, o, MODEL_LLL_WOOD_BRIDGE, bhvLllWoodPiece);
+                    woodPieceObj = spawn_object_relative(OBJ_BP_NONE, (i - 2) * 300, 0, 0, o, MODEL_LLL_WOOD_BRIDGE, bhvLllWoodPiece);
                     woodPieceObj->oLllWoodPieceOscillationTimer = i * 4096;
                 }
                 o->oAction = LLL_FLOATING_WOOD_ACT_ACTIVE;

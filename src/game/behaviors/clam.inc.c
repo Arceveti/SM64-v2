@@ -49,8 +49,7 @@ void clam_act_opening(void) {
             // Opening and spawning bubbles
             bubblesX = (s16)(100.0f * sins(i));
             bubblesZ = (s16)(100.0f * coss(i));
-
-            spawn_object_relative(0, bubblesX, 30, bubblesZ, o, MODEL_BUBBLE, bhvBubbleMaybe);
+            spawn_object_relative(OBJ_BP_NONE, bubblesX, 30, bubblesZ, o, MODEL_BUBBLE, bhvBubbleMaybe);
         }
     } else if (cur_obj_check_anim_frame(30)) {
         cur_obj_become_intangible();

@@ -6,12 +6,12 @@ void bhv_white_puff_exploding_loop(void) {
         cur_obj_compute_vel_xz();
         o->oWhitePuffScaleX = o->header.gfx.scale[0];
         switch (o->oBehParams2ndByte) {
-            case 2:
+            case WHITE_PUFF_EXPLODE_BP_FAST_FADE:
                 o->oOpacity = 254;
                 o->oWhitePuffOpacityDiff = -21;
                 o->oWhitePuffSlowFade = FALSE;
                 break;
-            case 3:
+            case WHITE_PUFF_EXPLODE_BP_SLOW_FADE:
                 o->oOpacity = 254;
                 o->oWhitePuffOpacityDiff = -13;
                 o->oWhitePuffSlowFade = TRUE;

@@ -294,7 +294,7 @@ static void eyerok_hand_act_become_active(void) {
 static void eyerok_hand_act_die(void) {
     if (cur_obj_init_anim_and_check_if_end(EYEROK_HAND_ANIM_DEATH)) {
         o->parentObj->oEyerokBossActiveHandId = 0;
-        obj_explode_and_spawn_coins(150.0f, 1);
+        obj_explode_and_spawn_coins(150.0f, COIN_TYPE_YELLOW);
         create_sound_spawner(SOUND_OBJ2_EYEROK_SOUND_LONG);
     }
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
@@ -334,7 +334,7 @@ static void eyerok_hand_act_target_mario(void) {
     } else {
         obj_forward_vel_approach(50.0f, 5.0f);
         approach_f32_ptr(&o->oPosY, o->oHomeY + 300.0f, 20.0f);
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 4000);
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0xFA0);
     }
 }
 

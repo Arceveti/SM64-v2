@@ -192,7 +192,7 @@ void mr_i_act_idle(void) {
 }
 
 void mr_i_act_far_away(void) {
-    obj_set_angle(o, 0, 0, 0);
+    obj_set_angle(o, 0x0, 0x0, 0x0);
     cur_obj_scale(o->oBehParams2ndByte + 1);
     if (o->oTimer == 0) cur_obj_set_pos_to_home();
     if (o->oDistanceToMario < 1500.0f) o->oAction = MR_I_ACT_IDLE;

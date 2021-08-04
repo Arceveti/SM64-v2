@@ -132,6 +132,5 @@ void bhv_tilting_inverted_pyramid_loop(void) {
         set_mario_pos(mx, my, mz);
 #endif
     }
-
     o->header.gfx.throwMatrix = transform;
 }

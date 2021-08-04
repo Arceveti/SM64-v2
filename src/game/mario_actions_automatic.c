@@ -323,7 +323,7 @@ s32 update_hang_moving(struct MarioState *m) {
 #ifdef TIGHTER_HANGING_CONTROLS
         m->intendedYaw;
 #else
-        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800);
 #endif
 
     m->slideYaw = m->faceAngle[1];
@@ -341,7 +341,7 @@ s32 update_hang_moving(struct MarioState *m) {
     stepResult = perform_hanging_step(m, nextPos);
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return stepResult;
 }
 
@@ -354,7 +354,7 @@ void update_hang_stationary(struct MarioState *m) {
     vec3f_copy(m->vel, gVec3fZero);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
 #ifdef EASIER_HANGING
-    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #endif
 }
 
@@ -618,7 +618,7 @@ s32 act_in_cannon(struct MarioState *m) {
                 m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
 
                 marioObj->oMarioCannonObjectYaw = m->usedObj->oMoveAngleYaw;
-                marioObj->oMarioCannonInputYaw = 0;
+                marioObj->oMarioCannonInputYaw  = 0x0;
 
                 m->actionState = 2;
             }
@@ -629,7 +629,7 @@ s32 act_in_cannon(struct MarioState *m) {
             marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 10.0f);
 
             if (m->faceAngle[0] > 0x38E3) m->faceAngle[0] = 0x38E3;
-            if (m->faceAngle[0] < 0) m->faceAngle[0] = 0;
+            if (m->faceAngle[0] <    0x0) m->faceAngle[0] =    0x0;
 
             if (marioObj->oMarioCannonInputYaw >  0x4000) marioObj->oMarioCannonInputYaw =  0x4000;
             if (marioObj->oMarioCannonInputYaw < -0x4000) marioObj->oMarioCannonInputYaw = -0x4000;
@@ -637,12 +637,10 @@ s32 act_in_cannon(struct MarioState *m) {
             m->faceAngle[1] = marioObj->oMarioCannonObjectYaw + marioObj->oMarioCannonInputYaw;
             if (m->input & INPUT_A_PRESSED) {
                 m->forwardVel = 100.0f * coss(m->faceAngle[0]);
-
-                m->vel[1] = 100.0f * sins(m->faceAngle[0]);
-
-                m->pos[0] += 120.0f * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
-                m->pos[1] += 120.0f * sins(m->faceAngle[0]);
-                m->pos[2] += 120.0f * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
+                m->vel[1]     = 100.0f * sins(m->faceAngle[0]);
+                m->pos[0]    += 120.0f * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
+                m->pos[1]    += 120.0f * sins(m->faceAngle[0]);
+                m->pos[2]    += 120.0f * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
 
                 play_sound(SOUND_ACTION_FLYING_FAST, m->marioObj->header.gfx.cameraToObject);
                 play_sound(SOUND_OBJ_POUNDING_CANNON, m->marioObj->header.gfx.cameraToObject);
@@ -664,7 +662,7 @@ s32 act_in_cannon(struct MarioState *m) {
     }
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_DIVE);
 
     return FALSE;
@@ -730,7 +728,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
     if (prevTwirlYaw > m->twirlYaw) play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
 
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1] + m->twirlYaw, 0);
+    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1] + m->twirlYaw, 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

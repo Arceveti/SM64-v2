@@ -6,9 +6,9 @@ struct WaterDropletParams sWaterSplashDropletParams = {
     /* Model */ MODEL_WHITE_PARTICLE_SMALL,
     /* Behavior */ bhvWaterDroplet,
     /* Unused (flag-specific) */ 0, 0,
-    /* Random fvel offset, scale */ 5.0f, 3.0f,
+    /* Random fvel offset, scale */  5.0f,  3.0f,
     /* Random yvel offset, scale */ 30.0f, 20.0f,
-    /* Random size offset, scale */ 0.5f, 1.0f
+    /* Random size offset, scale */  0.5f,  1.0f
 };
 
 // Water droplets from Mario jumping in shallow water.
@@ -17,9 +17,9 @@ struct WaterDropletParams gShallowWaterSplashDropletParams = {
     /* Model */ MODEL_WHITE_PARTICLE_SMALL,
     /* Behavior */ bhvWaterDroplet,
     /* Unused (flag-specific) */ 0, 0,
-    /* Random fvel offset, scale */ 2.0f, 3.0f,
+    /* Random fvel offset, scale */  2.0f,  3.0f,
     /* Random yvel offset, scale */ 20.0f, 20.0f,
-    /* Random size offset, scale */ 0.5f, 1.0f
+    /* Random size offset, scale */  0.5f,  1.0f
 };
 
 // The fish particle easter egg from Mario jumping in shallow water.
@@ -28,9 +28,9 @@ struct WaterDropletParams sWaterDropletFishParams = {
     /* Model */ MODEL_FISH,
     /* Behavior */ bhvWaterDroplet,
     /* Unused (flag-specific) */ 0, 0,
-    /* Random fvel offset, scale */ 2.0f, 3.0f,
+    /* Random fvel offset, scale */  2.0f,  3.0f,
     /* Random yvel offset, scale */ 20.0f, 20.0f,
-    /* Random size offset, scale */ 1.0f, 0.0f
+    /* Random size offset, scale */  1.0f,  0.0f
 };
 
 // Water droplets from Mario running in shallow water.
@@ -40,9 +40,9 @@ struct WaterDropletParams gShallowWaterWaveDropletParams = {
     /* Behavior */ bhvWaterDroplet,
     /* Move angle range */ 0x6000,
     /* Unused (flag-specific) */ 0,
-    /* Random fvel offset, scale */ 2.0f, 8.0f,
+    /* Random fvel offset, scale */  2.0f,  8.0f,
     /* Random yvel offset, scale */ 10.0f, 10.0f,
-    /* Random size offset, scale */ 0.5f, 1.0f
+    /* Random size offset, scale */  0.5f,  1.0f
 };
 
 
@@ -61,7 +61,7 @@ void bhv_water_droplet_loop(void) {
         if (cur_obj_has_model(MODEL_FISH)) {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_BILLBOARD;
         } else {
-            o->header.gfx.node.flags |= GRAPH_RENDER_BILLBOARD;
+            o->header.gfx.node.flags |=  GRAPH_RENDER_BILLBOARD;
         }
         o->oFaceAngleYaw = random_u16();
     }

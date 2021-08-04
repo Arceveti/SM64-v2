@@ -103,9 +103,9 @@ void snufit_act_shoot(void) {
     } else if (o->oSnufitBullets < 3 && o->oTimer >= 3) {
         o->oSnufitBullets++;
         cur_obj_play_sound_2(SOUND_OBJ_SNUFIT_SHOOT);
-        spawn_object_relative(0, 0, -20, 40, o, MODEL_BOWLING_BALL, bhvSnufitBalls);
+        spawn_object_relative(OBJ_BP_NONE, 0, -20, 40, o, MODEL_BOWLING_BALL, bhvSnufitBalls);
         o->oSnufitRecoil = -30;
-        o->oTimer = 0;
+        o->oTimer        =   0;
     }
 }
 
@@ -120,7 +120,7 @@ void bhv_snufit_loop(void) {
         
         // Face Mario if he is within range.
         if (o->oDistanceToMario < 800.0f) {
-            obj_turn_pitch_toward_mario(120.0f, 2000);
+            obj_turn_pitch_toward_mario(120.0f, 0x7D0);
 
             if ((s16) o->oMoveAnglePitch > 0x2000) {
                 o->oMoveAnglePitch =  0x2000;
@@ -128,7 +128,7 @@ void bhv_snufit_loop(void) {
                 o->oMoveAnglePitch = -0x2000;
             }
 
-            cur_obj_rotate_yaw_toward(o->oAngleToMario, 2000);
+            cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x7D0);
         } else {
             obj_move_pitch_approach(0, 0x200);
             o->oMoveAngleYaw += 200;

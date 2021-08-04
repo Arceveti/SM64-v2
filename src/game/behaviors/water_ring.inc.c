@@ -2,9 +2,9 @@
 
 #ifndef WATER_RING_FIX
 f32 water_ring_calc_mario_dist(void) {
-    f32 marioDistX = o->oPosX - gMarioObject->header.gfx.pos[0];
+    f32 marioDistX = o->oPosX -  gMarioObject->header.gfx.pos[0];
     f32 marioDistY = o->oPosY - (gMarioObject->header.gfx.pos[1] + 80.0f);
-    f32 marioDistZ = o->oPosZ - gMarioObject->header.gfx.pos[2];
+    f32 marioDistZ = o->oPosZ -  gMarioObject->header.gfx.pos[2];
     f32 marioDistInFront = marioDistX * o->oWaterRingNormalX
                          + marioDistY * o->oWaterRingNormalY
                          + marioDistZ * o->oWaterRingNormalZ;
@@ -13,7 +13,7 @@ f32 water_ring_calc_mario_dist(void) {
 #endif
 
 void water_ring_init(void) {
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(WATER_RING_ANIM_WOBBLE);
     o->oWaterRingScalePhaseX = (s32)(random_float() * 4096.0f) + 0x1000;
     o->oWaterRingScalePhaseY = (s32)(random_float() * 4096.0f) + 0x1000;
     o->oWaterRingScalePhaseZ = (s32)(random_float() * 4096.0f) + 0x1000;
@@ -40,7 +40,7 @@ void water_ring_init(void) {
 void bhv_jet_stream_water_ring_init(void) {
     water_ring_init();
     o->oOpacity = 70;
-    cur_obj_init_animation(0);
+    cur_obj_init_animation(WATER_RING_ANIM_WOBBLE);
     o->oFaceAnglePitch = 0x8000;
 }
 
@@ -134,13 +134,8 @@ void water_ring_act_not_collected(void) { // jet stream
 
 void bhv_jet_stream_water_ring_loop(void) {
     switch (o->oAction) {
-        case WATER_RING_ACT_NOT_COLLECTED:
-            water_ring_act_not_collected();
-            break;
-
-        case WATER_RING_ACT_COLLECTED:
-            water_ring_act_collected();
-            break;
+        case WATER_RING_ACT_NOT_COLLECTED: water_ring_act_not_collected(); break;
+        case WATER_RING_ACT_COLLECTED:     water_ring_act_collected();     break;
     }
 }
 
@@ -220,12 +215,7 @@ void manta_water_ring_act_not_collected(void) { // for manta ray
 
 void bhv_manta_ray_water_ring_loop(void) {
     switch (o->oAction) {
-        case WATER_RING_ACT_NOT_COLLECTED:
-            manta_water_ring_act_not_collected();
-            break;
-
-        case WATER_RING_ACT_COLLECTED:
-            water_ring_act_collected();
-            break;
+        case WATER_RING_ACT_NOT_COLLECTED: manta_water_ring_act_not_collected(); break;
+        case WATER_RING_ACT_COLLECTED:     water_ring_act_collected();           break;
     }
 }

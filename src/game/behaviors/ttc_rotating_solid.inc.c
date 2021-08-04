@@ -45,8 +45,7 @@ void bhv_ttc_rotating_solid_update(void) {
             if (--o->oTTCRotatingSolidSoundTimer == 0) cur_obj_play_sound_2(SOUND_GENERAL2_ROTATING_BLOCK_ALERT);
         } else if (o->oTTCRotatingSolidVelY > 0.0f && o->oPosY >= o->oHomeY) {
             // 4. Rotate
-            s32 targetRoll =
-                (s32)((f32) o->oTTCRotatingSolidNumTurns / o->oTTCRotatingSolidNumSides * 0x10000);
+            s32 targetRoll = (s32)((f32) o->oTTCRotatingSolidNumTurns / o->oTTCRotatingSolidNumSides * 0x10000);
             s32 startRoll = o->oFaceAngleRoll;
 
             obj_face_roll_approach(targetRoll, 0x4B0);
@@ -55,8 +54,7 @@ void bhv_ttc_rotating_solid_update(void) {
             if (o->oAngleVelRoll == 0) {
                 cur_obj_play_sound_2(SOUND_GENERAL2_ROTATING_BLOCK_CLICK);
 
-                o->oTTCRotatingSolidNumTurns =
-                    (o->oTTCRotatingSolidNumTurns + 1) % o->oTTCRotatingSolidNumSides;
+                o->oTTCRotatingSolidNumTurns = (o->oTTCRotatingSolidNumTurns + 1) % o->oTTCRotatingSolidNumSides;
 
                 o->oTimer = 0;
                 if (gTTCSpeedSetting == TTC_SPEED_RANDOM) o->oTTCRotatingSolidRotationDelay = random_mod_offset(5, 20, 7);

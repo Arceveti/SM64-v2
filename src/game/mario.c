@@ -1010,7 +1010,7 @@ s32 check_common_hold_action_exits(struct MarioState *m) {
  */
 s32 transition_submerged_to_walking(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-    vec3s_set(m->angleVel, 0, 0, 0);
+    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
 }
 
@@ -1021,7 +1021,7 @@ s32 transition_submerged_to_walking(struct MarioState *m) {
 s32 transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
 
-    vec3s_set(m->angleVel, 0, 0, 0);
+    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
 
     if (m->heldObj == NULL) {
         return set_mario_action(m, (m->input & INPUT_A_DOWN) ? ACT_DIVE : ACT_FREEFALL, 0);
@@ -1038,11 +1038,11 @@ s32 set_water_plunge_action(struct MarioState *m) {
     m->forwardVel = m->forwardVel / 4.0f;
     m->vel[1] = m->vel[1] / 2.0f;
 
-    m->faceAngle[2] = 0;
+    m->faceAngle[2] = 0x0;
 
-    vec3s_set(m->angleVel, 0, 0, 0);
+    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
 
-    if (!(m->action & ACT_FLAG_DIVING)) m->faceAngle[0] = 0;
+    if (!(m->action & ACT_FLAG_DIVING)) m->faceAngle[0] = 0x0;
 
     if (m->area->camera->mode != CAMERA_MODE_WATER_SURFACE) set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
 
@@ -1103,90 +1103,87 @@ void debug_print_speed_action_normal(struct MarioState *m) {
         // print_text_fmt_int(210, 168, "SY %d", gMarioScreenY);
         switch (sDebugMode) {
             case 0:
-                print_text_fmt_int(210, 136, "VX %d", m->vel[0]);
-                print_text_fmt_int(210, 120, "VY %d", m->vel[1]);
-                print_text_fmt_int(210, 104, "VZ %d", m->vel[2]);
+                print_text_fmt_int(210, 136,  "VX %d", m->vel[0]);
+                print_text_fmt_int(210, 120,  "VY %d", m->vel[1]);
+                print_text_fmt_int(210, 104,  "VZ %d", m->vel[2]);
 
-                print_text_fmt_int(210,  88, "RY %d", (m->faceAngle[1] * 45.0f) / 8192.0f);
-                print_text_fmt_int(210,  72, "FWD %d", m->forwardVel);
-                print_text_fmt_int(210,  56, "MY %d", (atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f);
+                print_text_fmt_int(210,  88,  "RY %d", (m->faceAngle[1] * 45.0f) / 8192.0f);
+                print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
+                print_text_fmt_int(210,  56,  "MY %d", (atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f);
                 // print_text_fmt_int(210,  56, "VEL", 0);
                 // STA short for "status," the official action name via SMS map.
                 print_text_fmt_int(210,  40, "STA %x", (m->action & ACT_ID_MASK));
                 break;
             case 1:
                 if (m->floor != NULL) {
-                    steepness = sqrtf(
-                        ((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
+                    steepness = sqrtf(((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
                     surf_nY = m->floor->normal.y;
-                    print_text_fmt_int( 80, 136, "F1 %d", m->floor->vertex1[0]);
-                    print_text_fmt_int(184, 136,    "%d", m->floor->vertex1[1]);
-                    print_text_fmt_int(248, 136,    "%d", m->floor->vertex1[2]);
+                    print_text_fmt_int( 80, 136,   "F1 %d", m->floor->vertex1[0]);
+                    print_text_fmt_int(184, 136,      "%d", m->floor->vertex1[1]);
+                    print_text_fmt_int(248, 136,      "%d", m->floor->vertex1[2]);
 
-                    print_text_fmt_int( 80, 120, "F2 %d", m->floor->vertex2[0]);
-                    print_text_fmt_int(184, 120,    "%d", m->floor->vertex2[1]);
-                    print_text_fmt_int(248, 120,    "%d", m->floor->vertex2[2]);
+                    print_text_fmt_int( 80, 120,   "F2 %d", m->floor->vertex2[0]);
+                    print_text_fmt_int(184, 120,      "%d", m->floor->vertex2[1]);
+                    print_text_fmt_int(248, 120,      "%d", m->floor->vertex2[2]);
 
-                    print_text_fmt_int( 80, 104, "F3 %d", m->floor->vertex3[0]);
-                    print_text_fmt_int(184, 104,    "%d", m->floor->vertex3[1]);
-                    print_text_fmt_int(248, 104,    "%d", m->floor->vertex3[2]);
+                    print_text_fmt_int( 80, 104,   "F3 %d", m->floor->vertex3[0]);
+                    print_text_fmt_int(184, 104,      "%d", m->floor->vertex3[1]);
+                    print_text_fmt_int(248, 104,      "%d", m->floor->vertex3[2]);
 
-                    print_text_fmt_int(210,  88, "FH %d", m->floorHeight);
+                    print_text_fmt_int(210,  88,   "FH %d", m->floorHeight);
 
-                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
                     print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
-                    print_text_fmt_int(226,  56, "0*%x", m->floor->force);
-                    print_text_fmt_int(210,  40, "RM %d", m->floor->room);
+                    print_text_fmt_int(226,  56,    "0*%x", m->floor->force);
+                    print_text_fmt_int(210,  40,   "RM %d", m->floor->room);
                 }
                 // print_text_fmt_int(210, 56, "FLOOR", 0);
                 break;
             case 2:
                 if (m->ceil != NULL) {
-                    steepness = sqrtf(
-                        ((m->ceil->normal.x * m->ceil->normal.x) + (m->ceil->normal.z * m->ceil->normal.z)));
+                    steepness = sqrtf(((m->ceil->normal.x * m->ceil->normal.x) + (m->ceil->normal.z * m->ceil->normal.z)));
                     surf_nY = m->ceil->normal.y;
-                    print_text_fmt_int( 80, 136, "C1 %d", m->ceil->vertex1[0]);
-                    print_text_fmt_int(184, 136,    "%d", m->ceil->vertex1[1]);
-                    print_text_fmt_int(248, 136,    "%d", m->ceil->vertex1[2]);
+                    print_text_fmt_int( 80, 136,   "C1 %d", m->ceil->vertex1[0]);
+                    print_text_fmt_int(184, 136,      "%d", m->ceil->vertex1[1]);
+                    print_text_fmt_int(248, 136,      "%d", m->ceil->vertex1[2]);
 
-                    print_text_fmt_int( 80, 120, "C2 %d", m->ceil->vertex2[0]);
-                    print_text_fmt_int(184, 120,    "%d", m->ceil->vertex2[1]);
-                    print_text_fmt_int(248, 120,    "%d", m->ceil->vertex2[2]);
+                    print_text_fmt_int( 80, 120,   "C2 %d", m->ceil->vertex2[0]);
+                    print_text_fmt_int(184, 120,      "%d", m->ceil->vertex2[1]);
+                    print_text_fmt_int(248, 120,      "%d", m->ceil->vertex2[2]);
 
-                    print_text_fmt_int( 80, 104, "C3 %d", m->ceil->vertex3[0]);
-                    print_text_fmt_int(184, 104,    "%d", m->ceil->vertex3[1]);
-                    print_text_fmt_int(248, 104,    "%d", m->ceil->vertex3[2]);
+                    print_text_fmt_int( 80, 104,   "C3 %d", m->ceil->vertex3[0]);
+                    print_text_fmt_int(184, 104,      "%d", m->ceil->vertex3[1]);
+                    print_text_fmt_int(248, 104,      "%d", m->ceil->vertex3[2]);
 
-                    print_text_fmt_int(210,  88, "CH %d", m->ceilHeight);
+                    print_text_fmt_int(210,  88,   "CH %d", m->ceilHeight);
 
-                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
                     print_text_fmt_int(128,  56, "SURF %x", m->ceil->type);
-                    print_text_fmt_int(226,  56, "0*%x", m->ceil->force);
+                    print_text_fmt_int(226,  56,    "0*%x", m->ceil->force);
                 }
                 // print_text_fmt_int(210, 56, "CEIL", 0);
                 break;
             case 3:
                 if (m->wall != NULL) {
-                    steepness = sqrtf(
-                        ((m->wall->normal.x * m->wall->normal.x) + (m->wall->normal.z * m->wall->normal.z)));
+                    steepness = sqrtf(((m->wall->normal.x * m->wall->normal.x) + (m->wall->normal.z * m->wall->normal.z)));
                     surf_nY = m->wall->normal.y;
-                    print_text_fmt_int( 80, 136, "W1 %d", m->wall->vertex1[0]);
-                    print_text_fmt_int(184, 136,    "%d", m->wall->vertex1[1]);
-                    print_text_fmt_int(248, 136,    "%d", m->wall->vertex1[2]);
+                    print_text_fmt_int( 80, 136,  "W1 %d", m->wall->vertex1[0]);
+                    print_text_fmt_int(184, 136,     "%d", m->wall->vertex1[1]);
+                    print_text_fmt_int(248, 136,     "%d", m->wall->vertex1[2]);
 
-                    print_text_fmt_int( 80, 120, "W2 %d", m->wall->vertex2[0]);
-                    print_text_fmt_int(184, 120,    "%d", m->wall->vertex2[1]);
-                    print_text_fmt_int(248, 120,    "%d", m->wall->vertex2[2]);
+                    print_text_fmt_int( 80, 120,  "W2 %d", m->wall->vertex2[0]);
+                    print_text_fmt_int(184, 120,     "%d", m->wall->vertex2[1]);
+                    print_text_fmt_int(248, 120,     "%d", m->wall->vertex2[2]);
 
-                    print_text_fmt_int( 80, 104, "W3 %d", m->wall->vertex3[0]);
-                    print_text_fmt_int(184, 104,    "%d", m->wall->vertex3[1]);
-                    print_text_fmt_int(248, 104,    "%d", m->wall->vertex3[2]);
+                    print_text_fmt_int( 80, 104,  "W3 %d", m->wall->vertex3[0]);
+                    print_text_fmt_int(184, 104,     "%d", m->wall->vertex3[1]);
+                    print_text_fmt_int(248, 104,     "%d", m->wall->vertex3[2]);
                     
-                    print_text_fmt_int(210,  88, "WRY %d", (atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  88,  "WRY %d", (atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f);
 
-                    print_text_fmt_int(210,  72, "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
                     print_text_fmt_int(128,  56, "SURF %x", m->wall->type);
-                    print_text_fmt_int(226,  56, "0*%x",    m->wall->force);
+                    print_text_fmt_int(226,  56,    "0*%x", m->wall->force);
                 }
                 // print_text_fmt_int(210, 56, "WALL", 0);
                 break;
@@ -1202,8 +1199,8 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
 
         print_text_fmt_int(16, 48, "F %d", gNumCalls.floor);
-        print_text_fmt_int(16, 32, "C %d", gNumCalls.ceil);
-        print_text_fmt_int(16, 16, "W %d", gNumCalls.wall);
+        print_text_fmt_int(16, 32, "C %d", gNumCalls.ceil );
+        print_text_fmt_int(16, 16, "W %d", gNumCalls.wall );
         gNumCalls.floor = 0;
         gNumCalls.ceil  = 0;
         gNumCalls.wall  = 0;
@@ -1730,8 +1727,8 @@ void init_mario(void) {
     gMarioState->marioObj->oMoveAngleYaw   = gMarioState->faceAngle[1];
     gMarioState->marioObj->oMoveAngleRoll  = gMarioState->faceAngle[2];
 
-    vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-    vec3s_set( gMarioState->marioObj->header.gfx.angle, 0, gMarioState->faceAngle[1], 0);
+    vec3f_copy(gMarioState->marioObj->header.gfx.pos,        gMarioState->pos);
+    vec3s_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
 
     if (save_file_get_cap_pos(capPos) && (count_objects_with_behavior(bhvNormalCap) > 1)) {
         capObject = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
@@ -1741,7 +1738,7 @@ void init_mario(void) {
         capObject->oPosZ = capPos[2];
 
         capObject->oForwardVel   = 0.0f;
-        capObject->oMoveAngleYaw = 0;
+        capObject->oMoveAngleYaw = 0x0;
     }
 }
 

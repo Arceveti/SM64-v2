@@ -70,7 +70,7 @@ extern const GeoLayout thwomp_geo[];
 extern const Gfx thwomp_seg5_dl_body[];
 extern const Gfx thwomp_seg5_dl_face[];
 extern const Gfx thwomp_seg5_dl_thwomp[];
-extern const Collision thwomp_seg5_collision_0500B7D0[];
+extern const Collision thwomp_seg5_collision_thwomp[];
 
 // yellow_sphere_small
 extern const GeoLayout yellow_sphere_geo[];

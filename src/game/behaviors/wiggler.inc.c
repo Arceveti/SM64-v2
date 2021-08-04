@@ -97,7 +97,7 @@ void bhv_wiggler_body_part_update(void) {
     segment->posY = o->oPosY;
 
     // Inherit walking animation speed from wiggler
-    cur_obj_init_animation_with_accel_and_sound(0, o->parentObj->oWigglerWalkAnimSpeed);
+    cur_obj_init_animation_with_accel_and_sound(WIGGLER_ANIM_WALK, o->parentObj->oWigglerWalkAnimSpeed);
     if (o->parentObj->oWigglerWalkAnimSpeed == 0.0f) cur_obj_reverse_animation();
 
     if (o->parentObj->oAction == WIGGLER_ACT_SHRINK) {
@@ -115,13 +115,13 @@ void wiggler_init_segments(void) {
     struct ChainSegment *segments;
     struct Object *bodyPart;
 
-    segments = mem_pool_alloc(gObjectMemoryPool, 4 * sizeof(struct ChainSegment));
+    segments = mem_pool_alloc(gObjectMemoryPool, WIGGLER_NUM_SEGMENTS * sizeof(struct ChainSegment));
     if (segments != NULL) {
         // Each segment represents the global position and orientation of each
         // object. Segment 0 represents the wiggler's head, and segment i>0
         // represents body part i.
         o->oWigglerSegments = segments;
-        for (i = 0; i <= 3; i++) {
+        for (i = 0; i < WIGGLER_NUM_SEGMENTS; i++) {
             chain_segment_init(segments + i);
 
             (segments + i)->posX = o->oPosX;
@@ -129,16 +129,16 @@ void wiggler_init_segments(void) {
             (segments + i)->posZ = o->oPosZ;
 
             (segments + i)->pitch = o->oFaceAnglePitch;
-            (segments + i)->yaw = o->oFaceAngleYaw;
+            (segments + i)->yaw   = o->oFaceAngleYaw;
         }
 
         o->header.gfx.animInfo.animFrame = -1;
 
         // Spawn each body part
-        for (i = 1; i <= 3; i++) {
+        for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
             bodyPart = spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGGLER_BODY, bhvWigglerBody);
             if (bodyPart != NULL) {
-                obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, 0);
+                obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, WIGGLER_ANIM_WALK);
                 bodyPart->header.gfx.animInfo.animFrame = (23 * i) % 26 - 1;
             }
         }
@@ -171,9 +171,9 @@ void wiggler_init_segments(void) {
 
     segmentLength = 35.0f * o->header.gfx.scale[0];
 
-    for (i = 1; i <= 3; i++) {
+    for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
         prevBodyPart = &o->oWigglerSegments[i - 1];
-        bodyPart = &o->oWigglerSegments[i];
+        bodyPart     = &o->oWigglerSegments[i    ];
 
         dx = bodyPart->posX - prevBodyPart->posX;
         dy = bodyPart->posY - prevBodyPart->posY;
@@ -195,7 +195,7 @@ void wiggler_init_segments(void) {
         // position, using the current body part's angles. This means that the
         // head can rotate up to 45 degrees without the body moving
         bodyPart->posY = segmentLength * sins(bodyPart->pitch) + prevBodyPart->posY;
-        dxz = segmentLength * coss(bodyPart->pitch);
+        dxz            = segmentLength * coss(bodyPart->pitch);
         bodyPart->posX = prevBodyPart->posX - dxz * sins(bodyPart->yaw);
         bodyPart->posZ = prevBodyPart->posZ - dxz * coss(bodyPart->yaw);
     }
@@ -382,9 +382,9 @@ static void wiggler_act_fall_through_floor(void) {
  */
 void wiggler_jumped_on_attack_handler(void) {
     cur_obj_play_sound_2(SOUND_OBJ_WIGGLER_ATTACKED);
-    o->oAction = WIGGLER_ACT_JUMPED_ON;
+    o->oAction     = WIGGLER_ACT_JUMPED_ON;
     o->oForwardVel = o->oVelY = 0.0f;
-    o->oWigglerSquishSpeed = 0.4f;
+    o->oWigglerSquishSpeed    = 0.4f;
 }
 
 /**
@@ -402,7 +402,7 @@ void bhv_wiggler_update(void) {
             treat_far_home_as_mario(1200.0f);
 
             // Walking animation and sound
-            cur_obj_init_animation_with_accel_and_sound(0, o->oWigglerWalkAnimSpeed);
+            cur_obj_init_animation_with_accel_and_sound(WIGGLER_ANIM_WALK, o->oWigglerWalkAnimSpeed);
             if (o->oWigglerWalkAnimSpeed != 0.0f) {
                 cur_obj_play_sound_at_anim_range(0, 13, o->oHealth >= 4 ? SOUND_OBJ_WIGGLER_LOW_PITCH : SOUND_OBJ_WIGGLER_HIGH_PITCH);
             } else {
@@ -411,21 +411,11 @@ void bhv_wiggler_update(void) {
 
             cur_obj_update_floor_and_walls();
             switch (o->oAction) {
-                case WIGGLER_ACT_WALK:
-                    wiggler_act_walk();
-                    break;
-                case WIGGLER_ACT_KNOCKBACK:
-                    wiggler_act_knockback();
-                    break;
-                case WIGGLER_ACT_JUMPED_ON:
-                    wiggler_act_jumped_on();
-                    break;
-                case WIGGLER_ACT_SHRINK:
-                    wiggler_act_shrink();
-                    break;
-                case WIGGLER_ACT_FALL_THROUGH_FLOOR:
-                    wiggler_act_fall_through_floor();
-                    break;
+                case WIGGLER_ACT_WALK:               wiggler_act_walk();               break;
+                case WIGGLER_ACT_KNOCKBACK:          wiggler_act_knockback();          break;
+                case WIGGLER_ACT_JUMPED_ON:          wiggler_act_jumped_on();          break;
+                case WIGGLER_ACT_SHRINK:             wiggler_act_shrink();             break;
+                case WIGGLER_ACT_FALL_THROUGH_FLOOR: wiggler_act_fall_through_floor(); break;
             }
 
             cur_obj_move_standard(-78);

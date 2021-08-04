@@ -257,7 +257,7 @@
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
 // Minimum Y normal for floors (vanilla is 0.01f)
 #define MIN_FLOOR_NORMAL_Y  0.01f
-// Minimum Y normal for ceilings (vanilla is 0.01f)
+// Minimum Y normal for ceilings (vanilla is -0.01f)
 #define MAX_CEIL_NORMAL_Y   -0.2f
 
 // -- HUD/Gameplay QoL --
@@ -295,8 +295,24 @@
 #define COIN_LAVA_FLICKER
 // Tiny Goombas (from THI) always drop their coin (Arceveti)
 #define TINY_GOOMBA_COIN
-// Leaf particles fall from trees which contain Hoot (Arceveti)
+// Leaf particles occasionally fall from trees which contain Hoot (Arceveti)
 #define HOOT_TREE_PARTICLES
+// Reimplement the unused sad eye texture for the mother penguin
+#define PENGUIN_MOTHER_SAD_EYES
+
+// The number of chain balls the Chain Chomp has
+// Vanilla is 5
+// Arceveti
+#define CHAIN_CHOMP_NUM_PARTS 5
+// The number of parts Pokey has, including the head
+// Vanilla is 5, max is 30
+// (Arceveti)
+#define POKEY_NUM_PARTS 5
+// The number of segments Wiggler has, not including the head
+// Vanilla is 4. Visual bugs start appearing in the pause menu at about 20ish,
+// in-game at about 24ish, and crashes at about 28ish or higher.
+// (Arceveti)
+#define WIGGLER_NUM_SEGMENTS 4
 
 // -- Movement --
 

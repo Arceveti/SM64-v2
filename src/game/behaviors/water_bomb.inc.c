@@ -41,8 +41,7 @@ void bhv_water_bomb_spawner_update(void) {
         if (o->oWaterBombSpawnerTimeToSpawn != 0) {
             o->oWaterBombSpawnerTimeToSpawn--;
         } else {
-            struct Object *waterBomb =
-                spawn_object_relative(0, 0, 2000, 0, o, MODEL_WATER_BOMB, bhvWaterBomb);
+            struct Object *waterBomb = spawn_object_relative(OBJ_BP_NONE, 0, 2000, 0, o, MODEL_WATER_BOMB, bhvWaterBomb);
 
             if (waterBomb != NULL) {
                 // Drop farther ahead of mario when he is moving faster
@@ -210,15 +209,9 @@ void bhv_water_bomb_update(void) {
         cur_obj_update_floor_and_walls();
 
         switch (o->oAction) {
-            case WATER_BOMB_ACT_INIT:
-                water_bomb_act_init();
-                break;
-            case WATER_BOMB_ACT_DROP:
-                water_bomb_act_drop();
-                break;
-            case WATER_BOMB_ACT_EXPLODE:
-                water_bomb_act_explode();
-                break;
+            case WATER_BOMB_ACT_INIT:    water_bomb_act_init();    break;
+            case WATER_BOMB_ACT_DROP:    water_bomb_act_drop();    break;
+            case WATER_BOMB_ACT_EXPLODE: water_bomb_act_explode(); break;
         }
     }
 }

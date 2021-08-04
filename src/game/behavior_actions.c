@@ -47,41 +47,6 @@
 
 #define o gCurrentObject
 
-struct WFRotatingPlatformData {
-    s16 pad;
-    s16 scale;
-    const Collision *collisionData;
-    s16 collisionDistance;
-};
-
-struct TumblingBridgeType {
-    s16 numBridgeSections;
-    s16 bridgeRelativeStartingXorZ;
-    s16 platformWidth;
-    ModelID model;
-    const void *segAddr;
-};
-
-struct ExclamationBoxContents {
-    u8 id;
-    u8 unk1;
-    u8 behParams;
-    ModelID model;
-    const BehaviorScript *behavior;
-};
-
-struct CheckerBoardPlatformInitPosition {
-    s32 relPosZ;
-    Vec3f scaleVec;
-    f32 radius;
-};
-
-struct OpenableGrill {
-    s16 halfWidth;
-    ModelID modelID;
-    const Collision *collision;
-};
-
 struct ModifiableVertexGroup {
     const Vtx *vertexData;
     const s16 vertexCount;
@@ -190,8 +155,8 @@ void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
     s32 i;
     s16 separation = 0x10000 / n; // Evenly spread around a circle
     for (i = 0; i < n; i++) {
-        spawn_object_relative(0, sins(angle + i * separation) * radius, (i + 1) * height,
-                                 coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
+        spawn_object_relative(OBJ_BP_NONE, sins(angle + i * separation) * radius, (i + 1) * height,
+                                           coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
     }
 
     angle += r * 0x100;
@@ -206,15 +171,6 @@ void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
 #include "behaviors/bowser_falling_platform.inc.c"
 #include "behaviors/bowser_flame.inc.c"
 #include "behaviors/blue_fish.inc.c"
-
-// Not in behavior file, duplicate of vec3f_copy except without bad return.
-// Used in a few behavior files.
-void vec3f_copy_2(Vec3f dest, Vec3f src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
-}
-
 #include "behaviors/checkerboard_platform.inc.c"
 #include "behaviors/ddd_warp.inc.c"
 #include "behaviors/water_pillar.inc.c"

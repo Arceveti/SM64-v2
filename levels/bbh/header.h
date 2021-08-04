@@ -100,7 +100,7 @@ extern const u8 bbh_seg7_rooms[];
 extern const MacroObject bbh_seg7_macro_objs[];
 extern const Collision bbh_seg7_collision_staircase_step[];
 extern const Collision bbh_seg7_collision_tilt_floor_platform[];
-extern const Collision bbh_seg7_collision_07026B1C[];
+extern const Collision bbh_seg7_collision_tumbling_bridge[];
 extern const Collision bbh_seg7_collision_haunted_bookshelf[];
 extern const Collision bbh_seg7_collision_mesh_elevator[];
 extern const Collision bbh_seg7_collision_merry_go_round[];

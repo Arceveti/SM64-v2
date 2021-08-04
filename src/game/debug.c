@@ -384,10 +384,10 @@ void try_print_debug_mario_level_info(void) {
  */
 void try_do_mario_debug_object_spawn(void) {
     if (sDebugPage == DEBUG_PAGE_STAGEINFO && gDebugInfo[DEBUG_PAGE_ENEMYINFO][7] == 1) {
-        if (gPlayer1Controller->buttonPressed & R_JPAD) spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL        , bhvKoopaShell          );
-        if (gPlayer1Controller->buttonPressed & L_JPAD) spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL, bhvJumpingBox          );
-        if (gPlayer1Controller->buttonPressed & D_JPAD) spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL        , bhvKoopaShellUnderwater);
-        if (gPlayer1Controller->buttonPressed & U_JPAD) spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall   );
+        if (gPlayer1Controller->buttonPressed & R_JPAD) spawn_object_relative(OBJ_BP_NONE, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL        , bhvKoopaShell          );
+        if (gPlayer1Controller->buttonPressed & L_JPAD) spawn_object_relative(OBJ_BP_NONE, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL, bhvJumpingBox          );
+        if (gPlayer1Controller->buttonPressed & D_JPAD) spawn_object_relative(OBJ_BP_NONE, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL        , bhvKoopaShellUnderwater);
+        if (gPlayer1Controller->buttonPressed & U_JPAD) spawn_object_relative(OBJ_BP_NONE, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall   );
     }
 }
 

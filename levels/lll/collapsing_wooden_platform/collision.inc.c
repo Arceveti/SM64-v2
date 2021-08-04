@@ -1,5 +1,5 @@
 // 0x0701D21C - 0x0701D294
-const Collision lll_seg7_collision_0701D21C[] = {
+const Collision lll_seg7_collision_tumbling_bridge[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX(-255, 0, 64),

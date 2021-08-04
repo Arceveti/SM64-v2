@@ -8,7 +8,7 @@ void bhv_wf_breakable_wall_loop(void) {
             create_sound_spawner(SOUND_GENERAL_WALL_EXPLOSION);
             o->oInteractType = INTERACT_DAMAGE;
             // o->oDamageOrCoinValue = 1;
-            obj_explode_and_spawn_coins(80.0f, 0);
+            obj_explode_and_spawn_coins(80.0f, COIN_TYPE_NONE);
             if (cur_obj_has_behavior(bhvWfBreakableWallRight)) {
                 play_puzzle_jingle();
                 spawn_default_star(590.0f, 2560.0f, 2650.0f);
@@ -22,7 +22,7 @@ void bhv_wf_breakable_wall_loop(void) {
             create_sound_spawner(SOUND_GENERAL_WALL_EXPLOSION);
             o->oInteractType = INTERACT_DAMAGE;
             o->oDamageOrCoinValue = 1;
-            obj_explode_and_spawn_coins(80.0f, 0);
+            obj_explode_and_spawn_coins(80.0f, COIN_TYPE_NONE);
         }
     } else {
         cur_obj_become_intangible();

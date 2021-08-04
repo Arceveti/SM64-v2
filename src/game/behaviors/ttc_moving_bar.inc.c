@@ -11,7 +11,7 @@ static s16 sTTCMovingBarDelays[] = {
     /* TTC_SPEED_SLOW    */ 55,
     /* TTC_SPEED_FAST    */ 30,
     /* TTC_SPEED_RANDOM  */ 55,
-    /* TTC_SPEED_STOPPED */ 0,
+    /* TTC_SPEED_STOPPED */  0,
 };
 
 /**
@@ -98,14 +98,8 @@ static void ttc_moving_bar_act_extend(void) {
         o->oAction = TTC_MOVING_BAR_ACT_RETRACT;
         o->oTTCMovingBarSpeed = 0.0f;
     } else {
-        f32 accel;
-
         // Accelerate before reaching 250, and decelerate after reaching it
-        if (o->oTTCMovingBarOffset < 250.0f) {
-            accel =  6.4f;
-        } else {
-            accel = -6.4f;
-        }
+        f32 accel = (o->oTTCMovingBarOffset < 250.0f) ? 6.4f : -6.4f;
 
         // Strengthen deceleration
         if (o->oTTCMovingBarSpeed * accel < 0.0f) accel *= 2.35f;
@@ -115,9 +109,8 @@ static void ttc_moving_bar_act_extend(void) {
         // When we pass neutral on random setting, then stop immediately with
         // 25% probability (fake out)
         if (gTTCSpeedSetting == TTC_SPEED_RANDOM
-            && o->oTTCMovingBarOffset * o->oTTCMovingBarStartOffset < 0.0f && random_u16() % 4 == 0) {
-            ttc_moving_bar_reset();
-        }
+         && o->oTTCMovingBarOffset * o->oTTCMovingBarStartOffset < 0.0f
+         && random_u16() % 4 == 0) ttc_moving_bar_reset();
     }
 }
 
@@ -143,18 +136,10 @@ void bhv_ttc_moving_bar_update(void) {
     o->oTTCMovingBarOffset += o->oTTCMovingBarSpeed;
 
     switch (o->oAction) {
-        case TTC_MOVING_BAR_ACT_WAIT:
-            ttc_moving_bar_act_wait();
-            break;
-        case TTC_MOVING_BAR_ACT_PULL_BACK:
-            ttc_moving_bar_act_pull_back();
-            break;
-        case TTC_MOVING_BAR_ACT_EXTEND:
-            ttc_moving_bar_act_extend();
-            break;
-        case TTC_MOVING_BAR_ACT_RETRACT:
-            ttc_moving_bar_act_retract();
-            break;
+        case TTC_MOVING_BAR_ACT_WAIT:      ttc_moving_bar_act_wait();      break;
+        case TTC_MOVING_BAR_ACT_PULL_BACK: ttc_moving_bar_act_pull_back(); break;
+        case TTC_MOVING_BAR_ACT_EXTEND:    ttc_moving_bar_act_extend();    break;
+        case TTC_MOVING_BAR_ACT_RETRACT:   ttc_moving_bar_act_retract();   break;
     }
 
     obj_set_dist_from_home(o->oTTCMovingBarOffset);

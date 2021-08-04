@@ -112,7 +112,7 @@ void bhv_flame_moving_forward_growing_loop(void) {
 void bhv_flame_floating_landing_init(void) {
     o->oAnimState             = (s32)(random_float() * 10.0f);
     o->oMoveAngleYaw          =       random_u16();
-    o->oForwardVel            =       random_float() * (o->oBehParams2ndByte != 0 ? 5.0f : 70.0f);
+    o->oForwardVel            =       random_float() * (o->oBehParams2ndByte != BOWSER_FLOATING_FLAME_SPAWN_RED_FLAME ? 5.0f : 70.0f);
     o->oVelY                  =       random_float() * 20.0f;
     o->oGravity               =                        -1.0f;
     o->oFlameSpeedTimerOffset =       random_float() * 64.0f;
@@ -129,7 +129,7 @@ void bhv_flame_floating_landing_loop(void) {
         o->oVelY = sFlameFloatingYLimit[o->oBehParams2ndByte];
     }
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-        if (o->oBehParams2ndByte == 0) {
+        if (o->oBehParams2ndByte == BOWSER_FLOATING_FLAME_SPAWN_RED_FLAME) {
             spawn_object(o, MODEL_RED_FLAME, bhvFlameLargeBurningOut);
         } else {
             spawn_object(o, MODEL_BLUE_FLAME, bhvBlueFlamesGroup);
@@ -158,11 +158,11 @@ void bhv_blue_bowser_flame_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_move_standard(78);
     if (o->oTimer > 0x14) {
-        if (o->oBehParams2ndByte == 0) {
-            for (i = 0; i < 3; i++) spawn_object_relative_with_scale(0, 0, 0, 0, 5.0f, o, MODEL_RED_FLAME, bhvFlameFloatingLanding);
+        if (o->oBehParams2ndByte == BOWSER_FLAME_BLUE_BP_SPAWN_RED_FLAMES) {
+            for (i = 0; i < 3; i++) spawn_object_relative_with_scale(BOWSER_FLOATING_FLAME_SPAWN_RED_FLAME, 0, 0, 0, 5.0f, o, MODEL_RED_FLAME, bhvFlameFloatingLanding);
         } else {
-            spawn_object_relative_with_scale(1, 0, 0, 0, 8.0f, o, MODEL_BLUE_FLAME, bhvFlameFloatingLanding);
-            spawn_object_relative_with_scale(2, 0, 0, 0, 8.0f, o, MODEL_BLUE_FLAME, bhvFlameFloatingLanding);
+            spawn_object_relative_with_scale(BOWSER_FLOATING_FLAME_SPAWN_BLUE_FLAME_1, 0, 0, 0, 8.0f, o, MODEL_BLUE_FLAME, bhvFlameFloatingLanding);
+            spawn_object_relative_with_scale(BOWSER_FLOATING_FLAME_SPAWN_BLUE_FLAME_2, 0, 0, 0, 8.0f, o, MODEL_BLUE_FLAME, bhvFlameFloatingLanding);
         }
         obj_mark_for_deletion(o);
     }

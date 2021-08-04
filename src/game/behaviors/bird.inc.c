@@ -86,9 +86,9 @@ static void bird_act_fly(void) {
         }
 
         // Approach to match the bird's target yaw and pitch.
-        obj_move_pitch_approach( o->oBirdTargetPitch, 140);
-        cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 800);
-        obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 600);
+        obj_move_pitch_approach( o->oBirdTargetPitch, 0x8C);
+        cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 0x320);
+        obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 0x258);
     }
 
     // The bird has no gravity, so this function only

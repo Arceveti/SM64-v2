@@ -53,9 +53,9 @@ void flying_bookend_act_grow(void) { // act 1
         } else {
             o->oForwardVel = 3.0f;
             if (o->oTimer > 5) {
-                obj_face_pitch_approach(o->oBookendTargetPitch, 2000);
+                obj_face_pitch_approach(o->oBookendTargetPitch, 0x7D0);
                 if (o->oTimer >= 10) {
-                    obj_face_roll_approach(o->oBookendTargetRoll, 2000);
+                    obj_face_roll_approach(o->oBookendTargetRoll, 0x7D0);
                     if (o->oTimer >= 20) approach_f32_ptr(&o->header.gfx.scale[0], 3.0f, 0.2f);
                 }
             }
@@ -70,9 +70,9 @@ void flying_bookend_act_turn_toward_mario(void) { // act 2
     cur_obj_update_floor_and_walls();
 
     if (o->oForwardVel == 0.0f) {
-        obj_turn_pitch_toward_mario(120.0f, 1000);
+        obj_turn_pitch_toward_mario(120.0f, 0x3E8);
         o->oFaceAnglePitch = o->oMoveAnglePitch + 0x7FFF;
-        cur_obj_rotate_yaw_toward(o->oAngleToMario, 1000);
+        cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x3E8);
         if (o->oTimer > 30) obj_compute_vel_from_move_pitch(50.0f);
     }
 

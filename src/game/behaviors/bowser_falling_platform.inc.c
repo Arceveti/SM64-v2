@@ -52,7 +52,7 @@ void falling_bowser_plat_act_fall(void) {
     if (!(o->oTimer & 1) && o->oTimer < 14) {
         angle = sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8);
         val = -(o->oTimer / 2) * 290 + 1740;
-        vec3f_copy_2(pos, &o->oPosX);
+        vec3f_copy(pos, &o->oPosVec);
         o->oPosX = sBowserFallingPlatform[o->oBehParams2ndByte].posX + sins(angle + 0x14B0) * val;
         o->oPosZ = sBowserFallingPlatform[o->oBehParams2ndByte].posZ + coss(angle + 0x14B0) * val;
         o->oPosY = 307.0f;
@@ -60,7 +60,7 @@ void falling_bowser_plat_act_fall(void) {
         o->oPosX = sBowserFallingPlatform[o->oBehParams2ndByte].posX + sins(angle - 0x14B0) * val;
         o->oPosZ = sBowserFallingPlatform[o->oBehParams2ndByte].posZ + coss(angle - 0x14B0) * val;
         spawn_mist_particles_variable(4, 0, 100);
-        vec3f_copy_2(&o->oPosX, pos);
+        vec3f_copy(&o->oPosVec, pos);
     }
     cur_obj_move_using_fvel_and_gravity();
     if (o->oTimer > 300) obj_mark_for_deletion(o);

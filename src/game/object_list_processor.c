@@ -264,7 +264,7 @@ void spawn_particle(u32 activeParticleFlag, s16 model, const BehaviorScript *beh
  * Mario's primary behavior update function.
  */
 void bhv_mario_update(void) {
-    u32 particleFlags = 0;
+    u32 particleFlags = 0x0;
     s32 i;
 
     particleFlags = execute_mario_action(gCurrentObject);
@@ -275,7 +275,7 @@ void bhv_mario_update(void) {
     copy_mario_state_to_object();
 
     i = 0;
-    while (sParticleTypes[i].particleFlag != 0) {
+    while (sParticleTypes[i].particleFlag != 0x0) {
         if (particleFlags & sParticleTypes[i].particleFlag) {
             spawn_particle(sParticleTypes[i].activeParticleFlag,
                            sParticleTypes[i].model,
@@ -326,12 +326,8 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
         // Selectively unfreeze certain objects
         if (!(gTimeStopState & TIME_STOP_ALL_OBJECTS)) {
             if (gCurrentObject == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
-
-            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR))
-                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
-
-            if (gCurrentObject->activeFlags
-                & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
+            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
+            if (gCurrentObject->activeFlags & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
         }
 
         // Only update if unfrozen
@@ -380,9 +376,7 @@ void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
         if ((gCurrentObject->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
             // Prevent object from respawning after exiting and re-entering the
             // area
-            if (!(gCurrentObject->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) {
-                set_object_respawn_info_bits(gCurrentObject, RESPAWN_INFO_DONT_RESPAWN);
-            }
+            if (!(gCurrentObject->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) set_object_respawn_info_bits(gCurrentObject, RESPAWN_INFO_DONT_RESPAWN);
 
             unload_object(gCurrentObject);
         }
@@ -401,15 +395,8 @@ void set_object_respawn_info_bits(struct Object *obj, u8 bits) {
     u16 *info16;
 
     switch (obj->respawnInfoType) {
-        case RESPAWN_INFO_TYPE_32:
-            info32 = (u32 *) obj->respawnInfo;
-            *info32 |= bits << 8;
-            break;
-
-        case RESPAWN_INFO_TYPE_16:
-            info16 = (u16 *) obj->respawnInfo;
-            *info16 |= bits << 8;
-            break;
+        case RESPAWN_INFO_TYPE_32: info32 = (u32 *) obj->respawnInfo; *info32 |= bits << 8; break;
+        case RESPAWN_INFO_TYPE_16: info16 = (u16 *) obj->respawnInfo; *info16 |= bits << 8; break;
     }
 }
 
@@ -431,9 +418,7 @@ void unload_objects_from_area(s32 areaIndex) {
             obj = (struct Object *) node;
             node = node->next;
 
-            if (obj->header.gfx.activeAreaIndex == areaIndex) {
-                unload_object(obj);
-            }
+            if (obj->header.gfx.activeAreaIndex == areaIndex) unload_object(obj);
         }
     }
 }
@@ -446,7 +431,7 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
     gTimeStopState = 0;
 
     gWDWWaterLevelChanging = FALSE;
-    gMarioOnMerryGoRound = FALSE;
+    gMarioOnMerryGoRound   = FALSE;
 
     clear_mario_platform();
 
@@ -491,12 +476,12 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
             object->oPosZ = spawnInfo->startPos[2];
 
             object->oFaceAnglePitch = spawnInfo->startAngle[0];
-            object->oFaceAngleYaw = spawnInfo->startAngle[1];
-            object->oFaceAngleRoll = spawnInfo->startAngle[2];
+            object->oFaceAngleYaw   = spawnInfo->startAngle[1];
+            object->oFaceAngleRoll  = spawnInfo->startAngle[2];
 
             object->oMoveAnglePitch = spawnInfo->startAngle[0];
-            object->oMoveAngleYaw = spawnInfo->startAngle[1];
-            object->oMoveAngleRoll = spawnInfo->startAngle[2];
+            object->oMoveAngleYaw   = spawnInfo->startAngle[1];
+            object->oMoveAngleRoll  = spawnInfo->startAngle[2];
         }
 
         spawnInfo = spawnInfo->next;
@@ -509,9 +494,9 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
 void clear_objects(void) {
     s32 i;
 
-    gTHIWaterDrained = 0;
-    gTimeStopState = 0;
-    gMarioObject = NULL;
+    gTHIWaterDrained  = 0;
+    gTimeStopState    = 0;
+    gMarioObject      = NULL;
     gMarioCurrentRoom = 0;
 
     for (i = 0; i < 60; i++) {
@@ -539,7 +524,7 @@ void clear_objects(void) {
  * Update spawner and surface objects.
  */
 void update_terrain_objects(void) {
-    gObjectCounter = update_objects_in_list(&gObjectLists[OBJ_LIST_SPAWNER]);
+    gObjectCounter  = update_objects_in_list(&gObjectLists[OBJ_LIST_SPAWNER]);
     gObjectCounter += update_objects_in_list(&gObjectLists[OBJ_LIST_SURFACE]);
 }
 
@@ -653,7 +638,7 @@ void update_objects(void) {
     // If time stop was enabled this frame, activate it now so that it will
     // take effect next frame
     if (gTimeStopState & TIME_STOP_ENABLED) {
-        gTimeStopState |= TIME_STOP_ACTIVE;
+        gTimeStopState |=  TIME_STOP_ACTIVE;
     } else {
         gTimeStopState &= ~TIME_STOP_ACTIVE;
     }
