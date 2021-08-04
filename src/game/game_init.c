@@ -44,10 +44,7 @@ struct GfxPool *gGfxPool;
 OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
 u8 gControllerBits;
-u8 gIsConsole;
-#ifdef WIDE
-u8 gWidescreen;
-#endif
+u8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
 u8 gBorderHeight;
 #ifdef REONU_CAM_3
 s8 gCameraSpeed = 2;
@@ -82,6 +79,9 @@ struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
 u32 gGlobalTimer = 0;
+#ifdef WIDE
+u8 gWidescreen;
+#endif
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer = 0;
