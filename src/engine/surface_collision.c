@@ -74,7 +74,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         y1 = surf->vertex1[1]; y2 = surf->vertex2[1]; y3 = surf->vertex3[1];
         if (surf->flags & SURFACE_FLAG_X_PROJECTION) {
             w1 = -surf->vertex1[2]; w2 = -surf->vertex2[2]; w3 = -surf->vertex3[2];
-
             if (surf->normal.x > 0.0f) {
                 if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) > 0) continue;
                 if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) > 0) continue;
@@ -86,7 +85,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             }
         } else {
             w1 =  surf->vertex1[0]; w2 =  surf->vertex2[0]; w3 =  surf->vertex3[0];
-
             if (surf->normal.z > 0.0f) {
                 if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) > 0) continue;
                 if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) > 0) continue;

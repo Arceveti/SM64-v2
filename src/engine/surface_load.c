@@ -119,6 +119,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir =  0; // insertion order
 
+        // Vanilla was 0.707 ~cos(50)
         if (surface->normal.x < -COS45 || surface->normal.x > COS45) surface->flags |= SURFACE_FLAG_X_PROJECTION;
     }
 

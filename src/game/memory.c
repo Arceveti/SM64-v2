@@ -24,8 +24,8 @@
 
 
 // round up to the next multiple
-#define ALIGN4(val) (((val) + 0x3) & ~0x3)
-#define ALIGN8(val) (((val) + 0x7) & ~0x7)
+#define ALIGN4(val)  (((val) + 0x3) & ~0x3)
+#define ALIGN8(val)  (((val) + 0x7) & ~0x7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
 struct MainPoolState {
@@ -174,12 +174,12 @@ u32 main_pool_free(void *addr) {
 
     if (oldListHead < sPoolListHeadL) {
         while (oldListHead->next != NULL) oldListHead = oldListHead->next;
-        sPoolListHeadL = block;
+        sPoolListHeadL       = block;
         sPoolListHeadL->next = NULL;
         sPoolFreeSpace += (uintptr_t) oldListHead - (uintptr_t) sPoolListHeadL;
     } else {
         while (oldListHead->prev != NULL) oldListHead = oldListHead->prev;
-        sPoolListHeadR = block->next;
+        sPoolListHeadR       = block->next;
         sPoolListHeadR->prev = NULL;
         sPoolFreeSpace += (uintptr_t) sPoolListHeadR - (uintptr_t) oldListHead;
     }
@@ -217,15 +217,14 @@ u32 main_pool_available(void) {
  */
 u32 main_pool_push_state(void) {
     struct MainPoolState *prevState = gMainPoolState;
-    u32 freeSpace = sPoolFreeSpace;
-    struct MainPoolBlock *lhead = sPoolListHeadL;
-    struct MainPoolBlock *rhead = sPoolListHeadR;
-
-    gMainPoolState = main_pool_alloc(sizeof(*gMainPoolState), MEMORY_POOL_LEFT);
-    gMainPoolState->freeSpace = freeSpace;
-    gMainPoolState->listHeadL = lhead;
-    gMainPoolState->listHeadR = rhead;
-    gMainPoolState->prev = prevState;
+    u32 freeSpace                   = sPoolFreeSpace;
+    struct MainPoolBlock *lhead     = sPoolListHeadL;
+    struct MainPoolBlock *rhead     = sPoolListHeadR;
+    gMainPoolState                  = main_pool_alloc(sizeof(*gMainPoolState), MEMORY_POOL_LEFT);
+    gMainPoolState->freeSpace       = freeSpace;
+    gMainPoolState->listHeadL       = lhead;
+    gMainPoolState->listHeadR       = rhead;
+    gMainPoolState->prev            = prevState;
     return sPoolFreeSpace;
 }
 
@@ -247,17 +246,14 @@ u32 main_pool_pop_state(void) {
  */
 void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
     u32 size = ALIGN16(srcEnd - srcStart);
-
     osInvalDCache(dest, size);
     while (size != 0) {
         u32 copySize = (size >= 0x1000) ? 0x1000 : size;
-
         osPiStartDma(&gDmaIoMesg, OS_MESG_PRI_NORMAL, OS_READ, (uintptr_t) srcStart, dest, copySize, &gDmaMesgQueue);
         osRecvMesg(&gDmaMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-
-        dest += copySize;
+        dest     += copySize;
         srcStart += copySize;
-        size -= copySize;
+        size     -= copySize;
     }
 }
 
@@ -474,13 +470,12 @@ struct MemoryPool *mem_pool_init(u32 size, u32 side) {
     if (addr != NULL) {
         pool = (struct MemoryPool *) addr;
 
-        pool->totalSpace = size;
-        pool->firstBlock = (struct MemoryBlock *) ((u8 *) addr + sizeof(struct MemoryPool));
+        pool->totalSpace    = size;
+        pool->firstBlock    = (struct MemoryBlock *) ((u8 *) addr + sizeof(struct MemoryPool));
         pool->freeList.next = (struct MemoryBlock *) ((u8 *) addr + sizeof(struct MemoryPool));
-
-        block = pool->firstBlock;
-        block->next = NULL;
-        block->size = pool->totalSpace;
+        block               = pool->firstBlock;
+        block->next         = NULL;
+        block->size         = pool->totalSpace;
     }
     return pool;
 }
@@ -497,13 +492,13 @@ void *mem_pool_alloc(struct MemoryPool *pool, u32 size) {
         if (freeBlock->next->size >= size) {
             addr = (u8 *) freeBlock->next + sizeof(struct MemoryBlock);
             if (freeBlock->next->size - size <= sizeof(struct MemoryBlock)) {
-                freeBlock->next = freeBlock->next->next;
+                freeBlock->next              = freeBlock->next->next;
             } else {
                 struct MemoryBlock *newBlock = (struct MemoryBlock *) ((u8 *) freeBlock->next + size);
-                newBlock->size = freeBlock->next->size - size;
-                newBlock->next = freeBlock->next->next;
-                freeBlock->next->size = size;
-                freeBlock->next = newBlock;
+                newBlock->size               = freeBlock->next->size - size;
+                newBlock->next               = freeBlock->next->next;
+                freeBlock->next->size        = size;
+                freeBlock->next              = newBlock;
             }
             break;
         }
@@ -525,28 +520,28 @@ void mem_pool_free(struct MemoryPool *pool, void *addr) {
     } else {
         if (block < pool->freeList.next) {
             if ((u8 *) pool->freeList.next == (u8 *) block + block->size) {
-                block->size += freeList->size;
-                block->next = freeList->next;
+                block->size        += freeList->size;
+                block->next         = freeList->next;
                 pool->freeList.next = block;
             } else {
-                block->next = pool->freeList.next;
+                block->next         = pool->freeList.next;
                 pool->freeList.next = block;
             }
         } else {
             while (freeList->next != NULL) {
                 if (freeList < block && block < freeList->next) break;
-                freeList = freeList->next;
+                freeList            = freeList->next;
             }
             if ((u8 *) freeList + freeList->size == (u8 *) block) {
-                freeList->size += block->size;
-                block = freeList;
+                freeList->size     += block->size;
+                block               = freeList;
             } else {
-                block->next = freeList->next;
-                freeList->next = block;
+                block->next         = freeList->next;
+                freeList->next      = block;
             }
             if (block->next != NULL && (u8 *) block->next == (u8 *) block + block->size) {
-                block->size = block->size + block->next->size;
-                block->next = block->next->next;
+                block->size         = block->size + block->next->size;
+                block->next         = block->next->next;
             }
         }
     }
@@ -554,7 +549,6 @@ void mem_pool_free(struct MemoryPool *pool, void *addr) {
 
 void *alloc_display_list(u32 size) {
     void *ptr = NULL;
-
     size = ALIGN8(size);
     if (gGfxPoolEnd - size >= (u8 *) gDisplayListHead) {
         gGfxPoolEnd -= size;
@@ -564,8 +558,7 @@ void *alloc_display_list(u32 size) {
 }
 
 static struct DmaTable *load_dma_table_address(u8 *srcAddr) {
-    struct DmaTable *table = dynamic_dma_read(srcAddr, srcAddr + sizeof(u32),
-                                                             MEMORY_POOL_LEFT);
+    struct DmaTable *table = dynamic_dma_read(srcAddr, srcAddr + sizeof(u32), MEMORY_POOL_LEFT);
     u32 size = table->count * sizeof(struct OffsetSizePair) + 
         sizeof(struct DmaTable) - sizeof(struct OffsetSizePair);
     main_pool_free(table);
