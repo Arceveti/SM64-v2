@@ -101,8 +101,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
 
         gfxHead = alloc_display_list(3 * sizeof(Gfx));
         gfx = gfxHead;
-        obj->header.gfx.node.flags =
-            (obj->header.gfx.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
+        obj->header.gfx.node.flags = (obj->header.gfx.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
 
         gDPSetEnvColor(gfx++, 255, 255, 255, heldObject->oOpacity);
 
@@ -124,11 +123,8 @@ f32 absf_2(f32 f) {
  * Turns an object away from floors/walls that it runs into.
  */
 void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 nZ, f32 *objYawX, f32 *objYawZ) {
-    *objYawX = (nZ * nZ - nX * nX) * velX / (nX * nX + nZ * nZ)
-               - 2 * velZ * (nX * nZ) / (nX * nX + nZ * nZ);
-
-    *objYawZ = (nX * nX - nZ * nZ) * velZ / (nX * nX + nZ * nZ)
-               - 2 * velX * (nX * nZ) / (nX * nX + nZ * nZ);
+    *objYawX = (nZ * nZ - nX * nX) * velX / (nX * nX + nZ * nZ) - 2 * velZ * (nX * nZ) / (nX * nX + nZ * nZ);
+    *objYawZ = (nX * nX - nZ * nZ) * velZ / (nX * nX + nZ * nZ) - 2 * velX * (nX * nZ) / (nX * nX + nZ * nZ);
 }
 
 /**
@@ -186,8 +182,7 @@ s8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objV
     if (floor_nY < 0.5f && floorY > o->oPosY) {
         objVelXCopy = objVelX;
         objVelZCopy = objVelZ;
-        turn_obj_away_from_surface(objVelXCopy, objVelZCopy, floor_nX, floor_nY, floor_nZ, &objYawX,
-                               &objYawZ);
+        turn_obj_away_from_surface(objVelXCopy, objVelZCopy, floor_nX, floor_nY, floor_nZ, &objYawX, &objYawZ);
         o->oMoveAngleYaw = atan2s(objYawZ, objYawX);
         return FALSE;
     }
@@ -229,11 +224,7 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
  * Determines an object's forward speed multiplier.
  */
 void calc_obj_friction(f32 *objFriction, f32 floor_nY) {
-    if (floor_nY < 0.2f && o->oFriction < 0.9999f) {
-        *objFriction = 0;
-    } else {
-        *objFriction = o->oFriction;
-    }
+    *objFriction = (floor_nY < 0.2f && o->oFriction < 0.9999f) ? 0 : o->oFriction;
 }
 
 /**
@@ -243,6 +234,7 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     f32 floor_nX = objFloor->normal.x;
     f32 floor_nY = objFloor->normal.y;
     f32 floor_nZ = objFloor->normal.z;
+    f32 floor_nXZ;
     f32 objFriction;
 
     // Caps vertical speed with a terminal velocity.
@@ -257,24 +249,17 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
         o->oPosY = objFloorY;
 
         // Bounces an object if the ground is hit fast enough.
-        if (o->oVelY < -17.5f) {
-            o->oVelY = -(o->oVelY / 2);
-        } else {
-            o->oVelY = 0;
-        }
+        o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2) : 0;
     }
 
     //! (Obj Position Crash) If you got an object with height past 2^31, the game would crash.
     if ((s32) o->oPosY >= (s32) objFloorY && (s32) o->oPosY < (s32) objFloorY + 37) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
 
+        floor_nXZ = (floor_nX * floor_nX + floor_nZ * floor_nZ) / (floor_nX * floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * o->oGravity * 2;
         // Adds horizontal component of gravity for horizontal speed.
-        objVelX += floor_nX * (floor_nX * floor_nX + floor_nZ * floor_nZ)
-                   / (floor_nX * floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * o->oGravity
-                   * 2;
-        objVelZ += floor_nZ * (floor_nX * floor_nX + floor_nZ * floor_nZ)
-                   / (floor_nX * floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * o->oGravity
-                   * 2;
+        objVelX += floor_nX * floor_nXZ;
+        objVelZ += floor_nZ * floor_nXZ;
 
         if (objVelX < 0.000001f && objVelX > -0.000001f) objVelX = 0;
         if (objVelZ < 0.000001f && objVelZ > -0.000001f) objVelZ = 0;
@@ -286,12 +271,11 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     }
 }
 
-void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ,
-                                    f32 waterY) {
+void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ, f32 waterY) {
     f32 floor_nX = objFloor->normal.x;
     f32 floor_nY = objFloor->normal.y;
     f32 floor_nZ = objFloor->normal.z;
-
+    f32 floor_nXZ;
     f32 netYAccel = (1.0f - o->oBuoyancy) * (-1.0f * o->oGravity);
     o->oVelY -= netYAccel;
 
@@ -314,27 +298,22 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     }
 
     // If moving fast near the surface of the water, flip vertical speed? To emulate skipping?
-    if (o->oForwardVel > 12.5f && (waterY + 30.0f) > o->oPosY && (waterY - 30.0f) < o->oPosY) {
-        o->oVelY = -o->oVelY;
-    }
+    if (o->oForwardVel > 12.5f && (waterY + 30.0f) > o->oPosY && (waterY - 30.0f) < o->oPosY) o->oVelY = -o->oVelY;
 
     if ((s32) o->oPosY >= (s32) floorY && (s32) o->oPosY < (s32) floorY + 37) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
 
+        floor_nXZ = (floor_nX * floor_nX + floor_nZ * floor_nZ) / (floor_nX *  floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * netYAccel * 2;
         // Adds horizontal component of gravity for horizontal speed.
-        objVelX += floor_nX * (floor_nX * floor_nX + floor_nZ * floor_nZ)
-                / (floor_nX *  floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * netYAccel * 2;
-        objVelZ += floor_nZ * (floor_nX * floor_nX + floor_nZ * floor_nZ)
-                / (floor_nX *  floor_nX + floor_nY * floor_nY + floor_nZ * floor_nZ) * netYAccel * 2;
+        objVelX += floor_nX * floor_nXZ;
+        objVelZ += floor_nZ * floor_nXZ;
     }
 
     if ( objVelX < 0.000001f &&  objVelX > -0.000001f)  objVelX = 0;
     if ( objVelZ < 0.000001f &&  objVelZ > -0.000001f)  objVelZ = 0;
     if (o->oVelY < 0.000001f && o->oVelY > -0.000001f) o->oVelY = 0;
 
-    if (objVelX != 0 || objVelZ != 0) {
-        o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
-    }
+    if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
 
     // Decreases both vertical velocity and forward velocity. Likely so that skips above
     // don't loop infinitely.
@@ -364,9 +343,7 @@ void obj_splash(s32 waterY, s32 objY) {
     }
 
     // Spawns bubbles if underwater.
-    if ((objY + 50) < waterY && (globalTimer & 0x1F) == 0) {
-        spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
-    }
+    if ((objY + 50) < waterY && !(globalTimer & 0x1F)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
 }
 
 /**
@@ -387,9 +364,7 @@ s16 object_step(void) {
     s16 collisionFlags = 0;
 
     // Find any wall collisions, receive the push, and set the flag.
-    if (obj_find_wall(objX + objVelX, objY, objZ + objVelZ, objVelX, objVelZ) == 0) {
-        collisionFlags += OBJ_COL_FLAG_HIT_WALL;
-    }
+    if (obj_find_wall(objX + objVelX, objY, objZ + objVelZ, objVelX, objVelZ) == 0) collisionFlags += OBJ_COL_FLAG_HIT_WALL;
 
     floorY = find_floor(objX + objVelX, objY, objZ + objVelZ, &sObjFloor);
     if (turn_obj_away_from_steep_floor(sObjFloor, floorY, objVelX, objVelZ) == 1) {
@@ -407,7 +382,7 @@ s16 object_step(void) {
 
     obj_update_pos_vel_xz();
     if ((s32) o->oPosY == (s32) floorY) collisionFlags += OBJ_COL_FLAG_GROUNDED;
-    if ((s32) o->oVelY == 0) collisionFlags += OBJ_COL_FLAG_NO_Y_VEL;
+    if ((s32) o->oVelY == 0           ) collisionFlags += OBJ_COL_FLAG_NO_Y_VEL;
 
     // Generate a splash if in water.
     obj_splash((s32) waterY, (s32) o->oPosY);
@@ -438,9 +413,9 @@ void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
     o->oVelX = obj->oForwardVel * sins(obj->oMoveAngleYaw);
     o->oVelZ = obj->oForwardVel * coss(obj->oMoveAngleYaw);
 
-    obj->oPosX += o->oVelX;
+    obj->oPosX +=   o->oVelX;
     obj->oPosY += obj->oVelY;
-    obj->oPosZ += o->oVelZ;
+    obj->oPosZ +=   o->oVelZ;
 }
 
 /**
@@ -476,7 +451,7 @@ void set_object_visibility(struct Object *obj, s32 dist) {
     if (is_point_within_radius_of_mario(objX, objY, objZ, dist)) {
         obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     } else {
-        obj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+        obj->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
     }
 }
 
@@ -503,10 +478,12 @@ s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 
 void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 homeY, f32 homeZ, s32 baseDisp) {
     s16 angleToNewHome;
     f32 homeDistX, homeDistZ;
+    f32 disp;
 
     if ((s32)(random_float() * 50.0f) == 0) {
-        obj->oHomeX = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp + homeX;
-        obj->oHomeZ = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp + homeZ;
+        disp = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp;
+        obj->oHomeX = disp + homeX;
+        obj->oHomeZ = disp + homeZ;
     }
 
     homeDistX = obj->oHomeX - obj->oPosX;

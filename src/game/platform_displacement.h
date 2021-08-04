@@ -25,8 +25,6 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
 void apply_platform_displacement(u32 isMario, struct Object *platform);
 #endif
 void apply_mario_platform_displacement(void);
-#ifndef VERSION_JP
 void clear_mario_platform(void);
-#endif
 
 #endif // PLATFORM_DISPLACEMENT_H

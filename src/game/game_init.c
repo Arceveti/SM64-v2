@@ -467,8 +467,7 @@ void adjust_analog_stick(struct Controller *controller) {
     if (controller->rawStickY >=  8) controller->stickY = controller->rawStickY - 6;
 
     // Calculate f32 magnitude from the center by vector length.
-    controller->stickMag =
-        sqrtf(controller->stickX * controller->stickX + controller->stickY * controller->stickY);
+    controller->stickMag = sqrtf(controller->stickX * controller->stickX + controller->stickY * controller->stickY);
 
     // Magnitude cannot exceed 64.0f: if it does, modify the values
     // appropriately to flatten the values down to the allowed maximum value.

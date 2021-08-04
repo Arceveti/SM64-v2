@@ -3,7 +3,7 @@
 s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
     f32 dx = dest[0] - src[0];
     f32 dz = dest[2] - src[2];
-    f32 planarDist = sqrtf(dx * dx + dz * dz);
+    f32 planarDist = sqrtf(dx * dx + dz * dz); //! fast invsqrt?
     s32 time;
     o->oMoveAngleYaw = atan2s(dz, dx);
     o->oVelY = yVel;

@@ -80,21 +80,21 @@ s32 render_fade_transition_into_color(s8 fadeTimer, u8 transTime, struct WarpTra
 }
 
 s16 calc_tex_transition_radius(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData) {
-    f32 texRadius = transData->endTexRadius - transData->startTexRadius;
+    f32 texRadius  = transData->endTexRadius - transData->startTexRadius;
     f32 radiusTime = sTransitionColorFadeCount[fadeTimer] * texRadius / (f32)(transTime - 1);
-    f32 result = transData->startTexRadius + radiusTime;
+    f32 result     = transData->startTexRadius + radiusTime;
 
     return (s16)(result + 0.5f);
 }
 
 f32 calc_tex_transition_time(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData) {
-    f32 startX = transData->startTexX;
-    f32 startY = transData->startTexY;
-    f32 endX = transData->endTexX;
-    f32 endY = transData->endTexY;
+    f32 startX  = transData->startTexX;
+    f32 startY  = transData->startTexY;
+    f32 endX    = transData->endTexX;
+    f32 endY    = transData->endTexY;
     f32 sqrtfXY = sqrtf((startX - endX) * (startX - endX) + (startY - endY) * (startY - endY));
-    f32 result = (f32) sTransitionColorFadeCount[fadeTimer] * sqrtfXY / (f32)(transTime - 1);
-
+    f32 result  = (f32) sTransitionColorFadeCount[fadeTimer] * sqrtfXY / (f32)(transTime - 1);
+    //! fast invsqrt?
     return result;
 }
 

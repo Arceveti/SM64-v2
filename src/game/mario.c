@@ -1298,7 +1298,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
             if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= gMarioObject->hitboxHeight-10.0f)) m->input |= INPUT_SQUISHED;
         }
 
-        if (m->pos[1] > m->floorHeight + 100.0f) m->input |= INPUT_OFF_FLOOR;
+        if (m->pos[1] > m->floorHeight + 80.0f) m->input |= INPUT_OFF_FLOOR;
         if (m->pos[1] < (m->waterLevel - 10.0f)) m->input |= INPUT_IN_WATER;
         if (m->pos[1] <     (gasLevel - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
 

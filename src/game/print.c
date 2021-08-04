@@ -144,16 +144,15 @@ void parse_width_field(const char *str, s32 *srcIndex, u8 *width, s8 *zeroPad) {
  * related to overflow. For romhacks, prefer sprintf + print_text.
  */
 void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n) {
-    char c = 0;
-    s8 zeroPad = FALSE;
-    u8 width = 0;
-    s32 base = 0;
-    s32 len = 0;
+    char c       = 0;
+    s8 zeroPad   = FALSE;
+    u8 width     = 0;
+    s32 base     = 0;
+    s32 len      = 0;
     s32 srcIndex = 0;
 
     // Don't continue if there is no memory to do so.
-    if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
-                                                        sizeof(struct TextLabel))) == NULL) return;
+    if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool, sizeof(struct TextLabel))) == NULL) return;
 
     sTextLabels[sTextLabelsCount]->x = x;
     sTextLabels[sTextLabelsCount]->y = y;
@@ -202,8 +201,8 @@ void print_text_fmt_int(s32 x, s32 y, const char *str, s32 n) {
  * Prints text in the colorful lettering at given X, Y coordinates.
  */
 void print_text(s32 x, s32 y, const char *str) {
-    char c = 0;
-    s32 length = 0;
+    char c       = 0;
+    s32 length   = 0;
     s32 srcIndex = 0;
 
     // Don't continue if there is no memory to do so.
@@ -230,13 +229,12 @@ void print_text(s32 x, s32 y, const char *str) {
  * Prints text in the colorful lettering centered at given X, Y coordinates.
  */
 void print_text_centered(s32 x, s32 y, const char *str) {
-    char c = 0;
-    s32 length = 0;
+    char c       = 0;
+    s32 length   = 0;
     s32 srcIndex = 0;
 
     // Don't continue if there is no memory to do so.
-    if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool,
-                                                        sizeof(struct TextLabel))) == NULL) return;
+    if ((sTextLabels[sTextLabelsCount] = mem_pool_alloc(gEffectsMemoryPool, sizeof(struct TextLabel))) == NULL) return;
 
     c = str[srcIndex];
 

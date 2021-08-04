@@ -7,6 +7,9 @@
 #include "graph_node.h"
 #include "behavior_script.h"
 #include "behavior_data.h"
+#ifdef FAST_INVSQRT
+#include "math_util.h"
+#endif
 #include "game/memory.h"
 #include "game/object_helpers.h"
 #include "game/macro_special_objects.h"
@@ -247,7 +250,6 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     register s32 x1, y1, z1;
     register s32 x2, y2, z2;
     register s32 x3, y3, z3;
-    s32 maxY, minY;
     f32 nx, ny, nz;
     f32 mag;
     s16 offset1, offset2, offset3;
@@ -272,14 +274,16 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     nx = (y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2);
     ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
     nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
-    mag = sqrtf(nx * nx + ny * ny + nz * nz);
 
-    minY = min_3(y1, y2, y3);
-    maxY = max_3(y1, y2, y3);
+#ifdef FAST_INVSQRT
+    mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
+#else
+    mag = sqrtf(nx * nx + ny * ny + nz * nz);
 
     // Checking to make sure no DIV/0
     if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);
+#endif
     nx *= mag;
     ny *= mag;
     nz *= mag;
@@ -304,8 +308,8 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
 
     surface->originOffset = -(nx * x1 + ny * y1 + nz * z1);
 
-    surface->lowerY = minY - 5;
-    surface->upperY = maxY + 5;
+    surface->lowerY = min_3(y1, y2, y3) - 5;
+    surface->upperY = max_3(y1, y2, y3) + 5;
 
     return surface;
 }

@@ -872,7 +872,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
         return drop_and_set_mario_action(m, ACT_FREEFALL, 0);
     }
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_WATER_JUMP
     if (m->forwardVel < 16.0f) mario_set_forward_vel(m, 16.0f);
 #else
     if (m->forwardVel < 15.0f) mario_set_forward_vel(m, 15.0f);
@@ -890,7 +890,7 @@ s32 act_hold_water_jump(struct MarioState *m) {
         case AIR_STEP_HIT_WALL:
             mario_set_forward_vel(m, 15.0f);
             break;
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_WATER_JUMP
         case AIR_STEP_GRABBED_LEDGE:
             set_mario_animation(m, MARIO_ANIM_IDLE_ON_LEDGE);
             drop_and_set_mario_action(m, ACT_LEDGE_GRAB, 0);
@@ -951,7 +951,7 @@ s32 act_ground_pound(struct MarioState *m) {
             }
         }
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef GROUND_POUND_WALL_FIX
         mario_set_forward_vel(m, -0.1f);
 #else
         m->vel[1] = -50.0f;
@@ -977,7 +977,7 @@ s32 act_ground_pound(struct MarioState *m) {
 #endif
         m->actionTimer++;
         if (m->actionTimer >= m->marioObj->header.gfx.animInfo.curAnim->loopEnd + 4) {
-#ifdef IMPROVED_MOVEMENT
+#ifdef GROUND_POUND_WALL_FIX
             m->vel[1] = -50.0f;
 #endif
             play_sound(SOUND_MARIO_GROUND_POUND_WAH, m->marioObj->header.gfx.cameraToObject);
@@ -1377,7 +1377,7 @@ s32 act_forward_rollout(struct MarioState *m) {
             if (m->actionState == 1) {
                 if (set_mario_animation(m, MARIO_ANIM_FORWARD_SPINNING) == 4) play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
             } else {
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
                 return set_mario_action(m, ACT_FREEFALL, 0);
 #else
                 set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
@@ -1421,7 +1421,7 @@ s32 act_backward_rollout(struct MarioState *m) {
             if (m->actionState == 1) {
                 if (set_mario_animation(m, MARIO_ANIM_BACKWARD_SPINNING) == 4) play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
             } else {
-#ifdef IMPROVED_MOVEMENT
+#ifdef ACTION_CANCELS
                 return set_mario_action(m, ACT_FREEFALL, 0);
 #else
                 set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);

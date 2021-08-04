@@ -439,14 +439,14 @@ u32 bully_knock_back_mario(struct MarioState *m) {
     // bullyDYaw = newBullyYaw - bully->oMoveAngleYaw;
 
     m->faceAngle[1] = newMarioYaw;
-    m->forwardVel = sqrtf(marioData.velX * marioData.velX + marioData.velZ * marioData.velZ);
-    m->pos[0] = marioData.posX;
-    m->pos[2] = marioData.posZ;
+    m->forwardVel   = sqrtf(marioData.velX * marioData.velX + marioData.velZ * marioData.velZ);
+    m->pos[0]       = marioData.posX;
+    m->pos[2]       = marioData.posZ;
 
     bully->oMoveAngleYaw = newBullyYaw;
-    bully->oForwardVel = sqrtf(bullyData.velX * bullyData.velX + bullyData.velZ * bullyData.velZ);
-    bully->oPosX = bullyData.posX;
-    bully->oPosZ = bullyData.posZ;
+    bully->oForwardVel   = sqrtf(bullyData.velX * bullyData.velX + bullyData.velZ * bullyData.velZ);
+    bully->oPosX         = bullyData.posX;
+    bully->oPosZ         = bullyData.posZ;
 
     if (marioDYaw < -0x4000 || marioDYaw > 0x4000) {
         m->faceAngle[1] += 0x8000;
@@ -575,11 +575,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
         f32 newMarioX;
         f32 newMarioZ;
 
-        if (distance == 0.0f) {
-            pushAngle = m->faceAngle[1];
-        } else {
-            pushAngle = atan2s(offsetZ, offsetX);
-        }
+        pushAngle = (distance == 0.0f) ? m->faceAngle[1] : atan2s(offsetZ, offsetX);
 
         newMarioX = o->oPosX + minDistance * sins(pushAngle);
         newMarioZ = o->oPosZ + minDistance * coss(pushAngle);
@@ -588,9 +584,9 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
 
         floorHeight = find_floor(newMarioX, m->pos[1], newMarioZ, &floor);
         if (floor != NULL) {
-            m->pos[0] = newMarioX;
-            m->pos[2] = newMarioZ;
-            m->floor = floor;
+            m->pos[0]      = newMarioX;
+            m->pos[2]      = newMarioZ;
+            m->floor       = floor;
             m->floorHeight = floorHeight;
         }
     }

@@ -95,7 +95,7 @@
 // Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad
 #define PARALLEL_LAKITU_CAM
 // Allows Mario to ledgegrab sloped floors
-#define NO_FALSE_LEDGEGRABS
+// #define NO_FALSE_LEDGEGRABS
 
 // HACKER QOL 
 // Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value)
@@ -238,6 +238,8 @@
 
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
+// Use the floor's normal instead of a triangle if the floor isn't steep (Arceveti)
+#define FAST_FLOOR_ALIGN
 
 // -- Hacker QoL --
 
@@ -316,56 +318,69 @@
 
 // -- Movement --
 
-// Hold A when bouncing on an enemy to go higher (Arceveti)
-#define BOUNCE_BOOST
-// Hold Z while twirling to descend faster (Arceveti)
-#define Z_TWIRL
-// Enables the shindou pole fix and allows Mario to swing around poles when grabbing them (Arceveti)
-#define POLE_SWING
-// Don't fall after star grab if the floor is too far below (Arceveti)
-#define AIR_STAR_DANCE
-// Number of null floors to check ahead through during a qstep.
-// Fixes many instances of invisible walls but may cause minor issues on actual level boundaries
-// (Arceveti)
-#define NULL_FLOOR_STEPS 3
-// General movement improvements, including turn circle fix,
-// midair turn, better ceiling handling, less softlocks, etc.
-// (Arceveti)
-
-// Vanilla is 28.0f
-#define MAX_SWIMMING_SPEED 32.0f
-
-#define IMPROVED_MOVEMENT
-
-// -- The following require IMPROVED_MOVEMENT --
-#ifdef IMPROVED_MOVEMENT
-
-// Lets Mario transition to more other actions (Arceveti)
+// Lets Mario transition from more actions to more other actions (Arceveti)
 #define ACTION_CANCELS
 // Fixes turning around on the ground (Arceveti)
 #define GROUND_TURN_FIX
 // Allows for turning in midair (Arceveti)
 #define AIR_TURN
+// Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
+#define HOOT_YAW_FIX
 // Unique wall slide which takes horizontal momentum into account (Arceveti)
 #define WALL_SLIDE
+// Hold A when bouncing on an enemy to go higher (Arceveti)
+#define BOUNCE_BOOST
+// Hold Z while twirling to descend faster (Arceveti)
+#define Z_TWIRL
+// Enables the shindou pole fix and allows Mario to
+// swing around poles when grabbing them (Arceveti)
+#define POLE_SWING
+// Faster Crouching animation (Arceveti)
+#define FAST_CROUCHING
+// Underwater Ground pound similar to SMO (Unknown)
+#define AIR_STAR_DANCE
+// Fixes false ledge grabs (Arceveti)
+#define LEDGE_GRAB_FIX
+// Prevents bonks when ground pounding next to a wall (Arceveti)
+#define GROUND_POUND_WALL_FIX
+// Don't fall after star grab if the floor is too far below (Arceveti)
+#define GROUND_POUND_JUMP
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)
 #define GROUND_POUND_DIVE
 // Ground pound jump similar to SMO (Unknown)
-#define GROUND_POUND_JUMP
-// Underwater Ground pound similar to SMO (Unknown)
 #define WATER_GROUND_POUND
+// Split water steps into quarter frames just like ground and air steps (Arceveti)
+#define WATER_QSTEPS
+// Makes jumping out of water easier (Arceveti)
+#define BETTER_WATER_JUMP
+// Makes the underwater koopa shell action last forever until the player cancels it (Arceveti)
+#define INFINITE_WATER_SHELL
+// Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
+#define SMOOTH_WATER_FLOOR_PITCH
+// The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
+#define SKIP_GROUND_LOWER_WALL
+// Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
+#define BETTER_CEILING_HANDLING
+// Improved hanging which doesn't require holding down the A button (Arceveti)
+#define EASIER_HANGING
+// Use Mario's hitbox instead of a hardcoded height in some cases (Arceveti)
+#define USE_VARIABLE_HITBOX
+// Makes it slightly easier to stay on narrow platforms (Arceveti)
+#define LEDGE_PROTECTION
 // Number of quarter frames before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME 8
-// Split water steps into quarter frames just like ground and air steps (Arceveti)
-#define WATER_QSTEPS
-// Improved hanging which doesn't require holding down the A button (Arceveti)
-#define EASIER_HANGING
+// Number of null floors to check ahead through during a qstep.
+// Fixes many instances of invisible walls but may cause minor
+// issues on actual level boundaries, such as extra knockback
+// (Arceveti)
+#define NULL_FLOOR_STEPS 4
 
-#endif
+// Vanilla is 28.0f
+#define MAX_SWIMMING_SPEED 32.0f
 
 // -- Misc --
 

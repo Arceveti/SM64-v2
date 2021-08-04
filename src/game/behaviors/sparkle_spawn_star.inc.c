@@ -36,7 +36,7 @@ void set_home_to_mario(void) {
     o->oPosY       = o->oHomeY;
     dx = o->oHomeX - o->oPosX;
     dz = o->oHomeZ - o->oPosZ;
-    o->oForwardVel = sqrtf(dx * dx + dz * dz) / 23.0f;
+    o->oForwardVel = sqrtf(dx * dx + dz * dz) / 23.0f; //! fast invsqrt?
 }
 
 void bhv_spawned_star_no_level_exit_loop(void) {

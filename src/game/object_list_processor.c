@@ -243,9 +243,9 @@ void copy_mario_state_to_object(void) {
     gCurrentObject->oFaceAngleYaw   = gCurrentObject->header.gfx.angle[1];
     gCurrentObject->oFaceAngleRoll  = gCurrentObject->header.gfx.angle[2];
 
-    gCurrentObject->oAngleVelPitch = gMarioStates[i].angleVel[0];
-    gCurrentObject->oAngleVelYaw   = gMarioStates[i].angleVel[1];
-    gCurrentObject->oAngleVelRoll  = gMarioStates[i].angleVel[2];
+    gCurrentObject->oAngleVelPitch  = gMarioStates[i].angleVel[0];
+    gCurrentObject->oAngleVelYaw    = gMarioStates[i].angleVel[1];
+    gCurrentObject->oAngleVelRoll   = gMarioStates[i].angleVel[2];
 }
 
 /**
@@ -332,7 +332,7 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
 
         // Only update if unfrozen
         if (unfrozen) {
-            gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
+            gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_HAS_ANIMATION;
             cur_obj_update();
         } else {
             gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_HAS_ANIMATION;
@@ -353,10 +353,10 @@ s32 update_objects_in_list(struct ObjectNode *objList) {
     s32 count;
     struct ObjectNode *firstObj = objList->next;
 
-    if (!(gTimeStopState & TIME_STOP_ACTIVE)) {
-        count = update_objects_starting_at(objList, firstObj);
-    } else {
+    if (gTimeStopState & TIME_STOP_ACTIVE) {
         count = update_objects_during_time_stop(objList, firstObj);
+    } else {
+        count = update_objects_starting_at(objList, firstObj);
     }
 
     return count;
@@ -427,7 +427,7 @@ void unload_objects_from_area(s32 areaIndex) {
  * Spawn objects given a list of SpawnInfos. Called when loading an area.
  */
 void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
-    gObjectLists = gObjectListArray;
+    gObjectLists   = gObjectListArray;
     gTimeStopState = 0;
 
     gWDWWaterLevelChanging = FALSE;
@@ -435,9 +435,7 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
 
     clear_mario_platform();
 
-    if (gCurrAreaIndex == 2) {
-        gCCMEnteredSlide = TRUE;
-    }
+    if (gCurrAreaIndex == 2) gCCMEnteredSlide = TRUE;
 
     while (spawnInfo != NULL) {
         struct Object *object;
@@ -590,8 +588,8 @@ void update_objects(void) {
 
     gTimeStopState &= ~TIME_STOP_MARIO_OPENED_DOOR;
 
-    gNumRoomedObjectsInMarioRoom = 0;
-    gNumRoomedObjectsNotInMarioRoom = 0;
+    gNumRoomedObjectsInMarioRoom        = 0;
+    gNumRoomedObjectsNotInMarioRoom     = 0;
     gCheckingSurfaceCollisionsForCamera = FALSE;
 
     reset_debug_objectinfo();

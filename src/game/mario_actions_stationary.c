@@ -416,7 +416,7 @@ s32 act_start_crouching(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED  ) return set_jumping_action(m, ACT_BACKFLIP        , 0);
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(  m, ACT_BEGIN_SLIDING   , 0);
     stationary_ground_step(m);
-#ifdef ACTION_CANCELS
+#ifdef FAST_CROUCHING
     set_mario_anim_with_accel(m, MARIO_ANIM_START_CROUCHING, 0x30000);
 #else
     set_mario_animation(m, MARIO_ANIM_START_CROUCHING);
@@ -431,7 +431,7 @@ s32 act_stop_crouching(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED  ) return set_jumping_action(m, ACT_BACKFLIP        , 0);
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(  m, ACT_BEGIN_SLIDING   , 0);
     stationary_ground_step(m);
-#ifdef ACTION_CANCELS
+#ifdef FAST_CROUCHING
     set_mario_anim_with_accel(m, MARIO_ANIM_STOP_CROUCHING, 0x30000);
 #else
     set_mario_animation(m, MARIO_ANIM_STOP_CROUCHING);
@@ -450,7 +450,7 @@ s32 act_start_crawling(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE ) return set_mario_action(  m, ACT_BEGIN_SLIDING   , 0);
 
     stationary_ground_step(m);
-#ifdef ACTION_CANCELS
+#ifdef FAST_CROUCHING
     set_mario_anim_with_accel(m, MARIO_ANIM_START_CRAWLING, 0x30000);
 #else
     set_mario_animation(m, MARIO_ANIM_START_CRAWLING);
@@ -469,7 +469,7 @@ s32 act_stop_crawling(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(  m, ACT_BEGIN_SLIDING   , 0);
 
     stationary_ground_step(m);
-#ifdef ACTION_CANCELS
+#ifdef FAST_CROUCHING
     set_mario_anim_with_accel(m, MARIO_ANIM_STOP_CRAWLING, 0x30000);
 #else
     set_mario_animation(m, MARIO_ANIM_STOP_CRAWLING);
@@ -640,11 +640,11 @@ s32 act_twirl_land(struct MarioState *m) {
 
 s32 act_ground_pound_land(struct MarioState *m) {
     m->actionState = 1;
-    if (m->input & INPUT_STOMPED    ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
-    if (m->input & INPUT_OFF_FLOOR  ) return set_mario_action(         m, ACT_FREEFALL        , 0);
-    if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(         m, ACT_BUTT_SLIDE      , 0);
+    if (m->input & INPUT_STOMPED    ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE , 0);
+    if (m->input & INPUT_OFF_FLOOR  ) return set_mario_action(         m, ACT_FREEFALL         , 0);
+    if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(         m, ACT_BUTT_SLIDE       , 0);
 #ifdef GROUND_POUND_JUMP
-    if (m->input & INPUT_A_DOWN) return set_mario_action(m, ACT_GROUND_POUND_JUMP, 0);
+    if (m->input & INPUT_A_DOWN     ) return set_mario_action(         m, ACT_GROUND_POUND_JUMP, 0);
 #endif
     landing_step(m, MARIO_ANIM_GROUND_POUND_LANDING, ACT_BUTT_SLIDE_STOP);
     return FALSE;

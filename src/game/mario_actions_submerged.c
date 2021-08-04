@@ -170,7 +170,7 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
             f32 dz = whirlpool->pos[2] - m->pos[2];
 
             f32 lateralDist = sqrtf(dx * dx + dz * dz);
-            f32 distance = sqrtf(lateralDist * lateralDist + dy * dy);
+            f32 distance    = sqrtf(lateralDist * lateralDist + dy * dy);
 
             s16 pitchToWhirlpool = atan2s(lateralDist, dy);
             s16 yawToWhirlpool = atan2s(dz, dx);
@@ -425,7 +425,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
             floorPitch = -find_floor_slope(m, -0x8000);
-#ifdef IMPROVED_MOVEMENT
+#ifdef SMOOTH_WATER_FLOOR_PITCH
             if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = approach_s32(m->faceAngle[0], floorPitch, 0x800, 0x800);
 #else
             if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
@@ -465,7 +465,7 @@ static s32 check_water_jump(struct MarioState *m) {
     s32 probe = (s32)(m->pos[1] + 1.5f);
 
     if (m->input & INPUT_A_PRESSED) {
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_WATER_JUMP
         if (probe >= m->waterLevel - 80 && ((m->faceAngle[0] >= 0 && m->controller->stickY < -32.0f) || m->wall != NULL)) {
 #else
         if (probe >= m->waterLevel - 80 && m->faceAngle[0] >= 0 && m->controller->stickY < -60.0f) {
@@ -766,18 +766,16 @@ static s32 act_water_shell_swimming(struct MarioState *m) {
 #ifdef WATER_GROUND_POUND
     if (m->input & INPUT_Z_PRESSED                                 ) return drop_and_set_mario_action(m, ACT_WATER_GROUND_POUND, 0);
 #endif
-#ifdef IMPROVED_MOVEMENT
-    m->forwardVel = approach_f32(m->forwardVel, 32.0f, 2.0f, 1.0f);
-#else
+#ifndef INFINITE_WATER_SHELL
     if (m->actionTimer++ == 240) {
         m->heldObj->oInteractStatus = INT_STATUS_STOP_RIDING;
         m->heldObj = NULL;
         stop_shell_music();
         set_mario_action(m, ACT_FLUTTER_KICK, 0);
     }
-
-    m->forwardVel = approach_f32(m->forwardVel, 30.0f, 2.0f, 1.0f);
 #endif
+
+    m->forwardVel = approach_f32(m->forwardVel, MAX(MAX_SWIMMING_SPEED, 30.0f), 2.0f, 1.0f);
     play_swimming_noise(m);
     set_mario_animation(m, MARIO_ANIM_FLUTTERKICK_WITH_OBJ);
     common_swimming_step(m, 0x012C);

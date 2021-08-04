@@ -114,7 +114,7 @@ static void chain_chomp_update_chain_segments(void) {
         offsetY = segment->posY - prevSegment->posY;
         offsetZ = segment->posZ - prevSegment->posZ;
         offset = sqrtf(offsetX * offsetX + offsetY * offsetY + offsetZ * offsetZ);
-//! fast invsqrt
+//! fast invsqrt?
         if (offset > o->oChainChompMaxDistBetweenChainParts) {
             offset = o->oChainChompMaxDistBetweenChainParts / offset;
             offsetX *= offset;
@@ -129,7 +129,7 @@ static void chain_chomp_update_chain_segments(void) {
         offsetY += prevSegment->posY;
         offsetZ += prevSegment->posZ;
         offset = sqrtf(offsetX * offsetX + offsetY * offsetY + offsetZ * offsetZ);
-//! fast invsqrt
+//! fast invsqrt?
         maxTotalOffset = o->oChainChompMaxDistFromPivotPerChainPart * (CHAIN_CHOMP_NUM_PARTS - i);
         if (offset > maxTotalOffset) {
             offset = maxTotalOffset / offset;

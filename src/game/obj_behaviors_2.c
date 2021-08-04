@@ -178,7 +178,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
             dy = nextWaypoint->pos[1] - y;
             dz = nextWaypoint->pos[2] - z;
 
-            distToNextWaypoint = sqrtf(dx * dx + dy * dy + dz * dz);
+            distToNextWaypoint = sqrtf(dx * dx + dy * dy + dz * dz); //! fast invsqrt?
 
             // Move directly to the next waypoint, even if it's farther away
             // than amountToMove
@@ -195,7 +195,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
         // waypoints, which should never be that small). But this implies that
         // amountToMove - distToNextWaypoint <= 0, and amountToMove is at least
         // 0.1 (from platform on track behavior).
-        distToNextWaypoint = amountToMove / distToNextWaypoint;
+        distToNextWaypoint = amountToMove / distToNextWaypoint;  //! fast invsqrt?
         x += dx * distToNextWaypoint;
         y += dy * distToNextWaypoint;
         z += dz * distToNextWaypoint;
@@ -223,9 +223,8 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
 
             obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 
-            o->oPlatformOnTrackPitch =
-                atan2s(sqrtf(o->oVelX * o->oVelX + o->oVelZ * o->oVelZ), -o->oVelY);
-            o->oPlatformOnTrackYaw = atan2s(o->oVelZ, o->oVelX);
+            o->oPlatformOnTrackPitch = atan2s(sqrtf(o->oVelX * o->oVelX + o->oVelZ * o->oVelZ), -o->oVelY);
+            o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
         }
     }
 }
@@ -844,9 +843,7 @@ static void treat_far_home_as_mario(f32 threshold) {
         dz = o->oHomeZ - gMarioObject->oPosZ;
         distance = sqrtf(dx * dx + dy * dy + dz * dz);
 
-        if (distance > threshold) {
-            o->oDistanceToMario = 20000.0f;
-        }
+        if (distance > threshold) o->oDistanceToMario = 20000.0f;
     }
 }
 

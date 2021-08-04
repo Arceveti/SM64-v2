@@ -4653,15 +4653,14 @@ void determine_pushing_or_pulling_door(s16 *rotation) {
  *
  * @return Lakitu's next yaw, which is the same as the yaw passed in if no transition happened
  */
-s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc,
-                      Vec3f oldPos, Vec3f oldFoc, s16 yaw) {
+s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, s16 yaw) {
     s16 yawVelocity;
     s16 pitchVelocity;
     f32 distVelocity;
     f32 goalDist;
     s16 goalPitch;
     s16 goalYaw;
-    f32 distTimer = sModeTransition.framesLeft;
+    f32 distTimer  = sModeTransition.framesLeft;
     s16 angleTimer = sModeTransition.framesLeft;
     Vec3f nextPos;
     Vec3f nextFoc;
@@ -4683,10 +4682,8 @@ s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc,
             startFoc[i] = oldFoc[i] + sMarioCamState->pos[i] - sModeTransition.marioPos[i];
         }
 
-        vec3f_get_dist_and_angle(curFoc, startFoc, &sModeTransition.focDist, &sModeTransition.focPitch,
-                                 &sModeTransition.focYaw);
-        vec3f_get_dist_and_angle(curFoc, startPos, &sModeTransition.posDist, &sModeTransition.posPitch,
-                                 &sModeTransition.posYaw);
+        vec3f_get_dist_and_angle(curFoc, startFoc, &sModeTransition.focDist, &sModeTransition.focPitch, &sModeTransition.focYaw);
+        vec3f_get_dist_and_angle(curFoc, startPos, &sModeTransition.posDist, &sModeTransition.posPitch, &sModeTransition.posYaw);
         sStatusFlags &= ~CAM_FLAG_START_TRANSITION;
     }
 
@@ -4700,19 +4697,18 @@ s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc,
         camera_approach_f32_symmetric_bool(&sModeTransition.posDist,  goalDist,  distVelocity);
         camera_approach_s16_symmetric_bool(&sModeTransition.posYaw,   goalYaw,   yawVelocity);
         camera_approach_s16_symmetric_bool(&sModeTransition.posPitch, goalPitch, pitchVelocity);
-        vec3f_set_dist_and_angle(curFoc, nextPos,
-                                 sModeTransition.posDist,
-                                 sModeTransition.posPitch,
-                                 sModeTransition.posYaw);
+        vec3f_set_dist_and_angle(curFoc, nextPos, sModeTransition.posDist,
+                                                  sModeTransition.posPitch,
+                                                  sModeTransition.posYaw);
 
         vec3f_get_dist_and_angle(curPos, curFoc, &goalDist, &goalPitch, &goalYaw);
         pitchVelocity = sModeTransition.focPitch / (s16) sModeTransition.framesLeft;
         yawVelocity   = sModeTransition.focYaw   / (s16) sModeTransition.framesLeft;
-        distVelocity  = sModeTransition.focDist  / sModeTransition.framesLeft;
+        distVelocity  = sModeTransition.focDist  /       sModeTransition.framesLeft;
 
         camera_approach_s16_symmetric_bool(&sModeTransition.focPitch, goalPitch, pitchVelocity);
-        camera_approach_s16_symmetric_bool(&sModeTransition.focYaw,   goalYaw,   yawVelocity);
-        camera_approach_f32_symmetric_bool(&sModeTransition.focDist,  0,         distVelocity);
+        camera_approach_s16_symmetric_bool(&sModeTransition.focYaw,   goalYaw,   yawVelocity  );
+        camera_approach_f32_symmetric_bool(&sModeTransition.focDist,  0,         distVelocity );
         vec3f_set_dist_and_angle(curFoc, nextFoc, sModeTransition.focDist, sModeTransition.focPitch,
                                  sModeTransition.focYaw);
 

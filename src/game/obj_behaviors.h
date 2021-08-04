@@ -8,7 +8,7 @@
 #include "types.h"
 
 void set_yoshi_as_not_dead(void);
-s32 coin_step(s16 *collisionFlagsPtr);
+s32  coin_step(s16 *collisionFlagsPtr);
 void moving_coin_flicker(void);
 void coin_collected(void);
 void bhv_moving_yellow_coin_init(void);
@@ -64,7 +64,7 @@ void butterfly_act_follow_mario(void);
 void butterfly_act_return_home(void);
 void bhv_butterfly_loop(void);
 void bhv_hoot_init(void);
-f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist);
+f32  hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist);
 void hoot_floor_bounce(void);
 void hoot_free_step(s16 fastOscY, s32 speed);
 void hoot_player_set_yaw(void);
@@ -104,7 +104,7 @@ void big_bully_spawn_minion(s32 x, s32 y, s32 z, s16 ry);
 void bhv_big_bully_with_minions_init(void);
 void big_bully_spawn_star(void);
 void bhv_big_bully_with_minions_loop(void);
-f32 water_ring_calc_mario_dist(void);
+f32  water_ring_calc_mario_dist(void);
 void water_ring_init(void);
 void bhv_jet_stream_water_ring_init(void);
 void water_ring_check_collection(f32 avgScale, struct Object* ringManager);

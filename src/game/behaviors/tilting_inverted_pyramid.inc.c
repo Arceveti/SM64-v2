@@ -92,7 +92,7 @@ void bhv_tilting_inverted_pyramid_loop(void) {
         dx = gMarioObject->oPosX - o->oPosX;
         dy = gMarioObject->oPosY - o->oPosY;
         dz = gMarioObject->oPosZ - o->oPosZ;
-        d = sqrtf(dx * dx + dy * dy + dz * dz);
+        d = sqrtf(dx * dx + dy * dy + dz * dz); //! fast invsqrt?
     
         if (d != 0.0f) {
             // Normalizing

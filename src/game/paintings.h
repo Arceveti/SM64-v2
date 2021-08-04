@@ -20,15 +20,15 @@
 #define BOWSERS_SUB_BEATEN 0x2
 #define DDD_BACK 0x1
 
-#define PAINTING_IDLE 0
-#define PAINTING_RIPPLE 1
+#define PAINTING_IDLE    0
+#define PAINTING_RIPPLE  1
 #define PAINTING_ENTERED 2
 
-#define RIPPLE_TRIGGER_PROXIMITY 10
+#define RIPPLE_TRIGGER_PROXIMITY  10
 #define RIPPLE_TRIGGER_CONTINUOUS 20
 
 /// Painting that uses 1 or more images as a texture
-#define PAINTING_IMAGE 0
+#define PAINTING_IMAGE   0
 /// Painting that has one texture used for an environment map effect
 #define PAINTING_ENV_MAP 1
 

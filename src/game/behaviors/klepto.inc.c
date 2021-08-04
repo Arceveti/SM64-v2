@@ -112,7 +112,7 @@ static void klepto_change_target(void) {
             targetDist = sqrtf(dx * dx + dz * dz);
             if (targetDist < minTargetDist) {
                 minTargetDist = targetDist;
-                newTarget = i;
+                newTarget     = i;
             }
         }
     } else {

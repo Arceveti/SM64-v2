@@ -261,7 +261,7 @@ s32 stationary_ground_step(struct MarioState *m) {
 }
 
 static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
-#ifndef IMPROVED_MOVEMENT
+#ifndef SKIP_GROUND_LOWER_WALL
     UNUSED struct Surface *lowerWall;
 #endif
     struct Surface *upperWall;
@@ -273,9 +273,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #if NULL_FLOOR_STEPS > 0
     u32 missedFloors = 0;
 #endif
-#ifdef IMPROVED_MOVEMENT
-    s16 intendedDYaw;
-#else
+#ifndef SKIP_GROUND_LOWER_WALL
     lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 24.0f);
 #endif
     upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
@@ -285,7 +283,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     while (floor == NULL && missedFloors < NULL_FLOOR_STEPS) {
         nextPos[0] += m->floor->normal.y * (m->vel[0] / 4.0f);
         nextPos[2] += m->floor->normal.y * (m->vel[2] / 4.0f);
-#ifndef IMPROVED_MOVEMENT
+#ifndef SKIP_GROUND_LOWER_WALL
         lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 24.0f);
 #endif
         upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
@@ -309,18 +307,18 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     }
 
     if (nextPos[1] > floorHeight + 100.0f) {
-#ifdef IMPROVED_MOVEMENT
-        if (m->input & INPUT_NONZERO_ANALOG) {
-            intendedDYaw = m->intendedYaw - m->faceAngle[1];
-
-            if (m->forwardVel <= 32.0f 
-                && !(m->action & ACT_FLAG_SHORT_HITBOX)
-                && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
-                && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
-                && (intendedDYaw < -0x471C || intendedDYaw > 0x471C)) {
-                return GROUND_STEP_NONE;
-            }
+#ifdef LEDGE_PROTECTION
+        if (m->input & INPUT_NONZERO_ANALOG
+            && m->forwardVel <= 32.0f 
+            && !(m->action & ACT_FLAG_SHORT_HITBOX)
+            && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
+            && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
+            && analog_stick_held_back(m, 0x471C)) {
+            return GROUND_STEP_NONE;
         }
+#endif
+
+#ifdef USE_VARIABLE_HITBOX
         if (nextPos[1] + m->marioObj->hitboxHeight >= ceilHeight) {
 #else
         if (nextPos[1] + 160.0f >= ceilHeight) {
@@ -329,7 +327,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
         }
     
         vec3f_copy(m->pos, nextPos);
-        m->floor = floor;
+        m->floor       = floor;
         m->floorHeight = floorHeight;
 #if COYOTE_TIME > 0
         if (m->coyoteTimer++ < COYOTE_TIME) {
@@ -345,7 +343,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     }
 #endif
 
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_CEILING_HANDLING
     if (nextPos[1] + m->marioObj->hitboxHeight > ceilHeight && floorHeight < ceilHeight) {
     // softlock fix
         s16 surfAngle;
@@ -430,7 +428,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     Vec3f ledgePos;
     f32 displacementX;
     f32 displacementZ;
-#ifdef IMPROVED_MOVEMENT
+#ifdef LEDGE_GRAB_FIX
     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
 #endif
     if (m->vel[1] > 0) return FALSE;
@@ -446,7 +444,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     // a higher ledge than expected (glitchy ledge grab)
     ledgePos[0] = nextPos[0] - wall->normal.x * 60.0f;
     ledgePos[2] = nextPos[2] - wall->normal.z * 60.0f;
-#ifdef IMPROVED_MOVEMENT
+#ifdef LEDGE_GRAB_FIX
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &ledgeFloor);
     if (ledgeFloor == NULL || ledgeFloor->normal.y < COS25 || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
     if (m->input & INPUT_NONZERO_ANALOG && (intendedDYaw < -0x4000 || intendedDYaw > 0x4000)) return FALSE;
@@ -469,7 +467,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 
 s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepArg) {
     s16 wallDYaw;
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_CEILING_HANDLING
     s16 ceilAngle;
     s16 ceilDYaw;
 #endif
@@ -481,7 +479,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     f32 ceilHeight;
     f32 floorHeight;
     f32 waterLevel;
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_CEILING_HANDLING
     f32 ceilSteepness;
 #endif
 #if NULL_FLOOR_STEPS > 0
@@ -548,7 +546,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         m->floorHeight = floorHeight;
         return AIR_STEP_LANDED;
     }
-#ifdef IMPROVED_MOVEMENT
+#ifdef BETTER_CEILING_HANDLING
     if (ceil != NULL && ((nextPos[1] + m->marioObj->hitboxHeight) > ceilHeight)) {
         if (floorHeight > nextPos[1]) {
             return AIR_STEP_HIT_WALL;

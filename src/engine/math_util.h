@@ -29,7 +29,9 @@ extern f32 gSineTable[];
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 #define sqr(x) ((x) * (x))
-
+#ifdef FAST_INVSQRT
+float Q_rsqrtf( float number );
+#endif
 void *vec3f_copy(                        Vec3f dest, Vec3f src);
 void *vec3f_set(                         Vec3f dest, f32 x, f32 y, f32 z);
 void *vec3f_add(                         Vec3f dest, Vec3f a);
@@ -62,12 +64,12 @@ void mtxf_rotate_xy(                      Mtx  *mtx, s16 angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, s16  pitch, s16  yaw);
-s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec);
-f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec);
-s16 atan2s(f32 y, f32 x);
-f32 atan2f(f32 a, f32 b);
+s32  approach_s32(s32 current, s32 target, s32 inc, s32 dec);
+f32  approach_f32(f32 current, f32 target, f32 inc, f32 dec);
+s16  atan2s(f32 y, f32 x);
+f32  atan2f(f32 a, f32 b);
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);
 void anim_spline_init(Vec4s *keyFrames);
-s32 anim_spline_poll( Vec3f result);
+s32  anim_spline_poll( Vec3f result);
 
 #endif // MATH_UTIL_H

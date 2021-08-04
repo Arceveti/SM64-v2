@@ -1273,7 +1273,7 @@ s32 act_bbh_enter_jump(struct MarioState *m) {
     if (m->actionState == 0) {
         cageDX   = m->usedObj->oPosX - m->pos[0];
         cageDZ   = m->usedObj->oPosZ - m->pos[2];
-        cageDist = sqrtf(cageDX * cageDX + cageDZ * cageDZ);
+        cageDist = sqrtf(cageDX * cageDX + cageDZ * cageDZ); //! fast invsqrt?
 
         m->vel[1] = 60.0f;
         m->faceAngle[1] = atan2s(cageDZ, cageDX);

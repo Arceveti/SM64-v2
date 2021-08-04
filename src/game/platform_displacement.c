@@ -265,19 +265,13 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
 */
 void apply_mario_platform_displacement(void) {
     struct Object *platform = gMarioPlatform;
-
-    if (!(gTimeStopState & TIME_STOP_ACTIVE) && gMarioObject != NULL && platform != NULL) {
-        apply_platform_displacement(TRUE, platform);
-    }
+    if (!(gTimeStopState & TIME_STOP_ACTIVE) && gMarioObject != NULL && platform != NULL) apply_platform_displacement(TRUE, platform);
 }
 #endif
 
-
-#ifndef VERSION_JP
 /**
  * Set Mario's platform to NULL.
  */
 void clear_mario_platform(void) {
     gMarioPlatform = NULL;
 }
-#endif
