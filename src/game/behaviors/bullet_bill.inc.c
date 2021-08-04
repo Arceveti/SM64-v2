@@ -13,9 +13,9 @@ void bullet_bill_act_reset(void) {
     cur_obj_become_tangible();
     o->oForwardVel     = 0.0f;
     o->oMoveAngleYaw   = o->oBulletBillInitialMoveYaw;
-    o->oFaceAnglePitch = 0;
-    o->oFaceAngleRoll  = 0;
-    o->oMoveFlags      = 0;
+    o->oFaceAnglePitch = 0x0;
+    o->oFaceAngleRoll  = 0x0;
+    o->oMoveFlags      = 0x0;
     cur_obj_set_pos_to_home();
     o->oAction = BULLET_BILL_ACT_IDLE;
 }

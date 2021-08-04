@@ -81,7 +81,7 @@ extern const Collision bitfs_seg7_collision_tumbling_bridge[];
 extern const Collision bitfs_seg7_collision_squishable_platform[];
 extern const Collision bitfs_seg7_collision_moving_square_platform[];
 extern const Collision bitfs_seg7_collision_sliding_platform[];
-extern const Collision bitfs_seg7_collision_070157E0[];
+extern const Collision bitfs_seg7_collision_platform_on_track[];
 extern const Collision bitfs_seg7_collision_sinking_platform[];
 extern const Collision bitfs_seg7_collision_seesaw_platform[];
 extern const Trajectory bitfs_seg7_trajectory_070159AC[];

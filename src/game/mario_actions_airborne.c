@@ -239,10 +239,10 @@ void update_air_without_turn(struct MarioState *m) {
 
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw = m->intendedYaw - m->faceAngle[1];
-            intendedMag = m->intendedMag / 32.0f;
+            intendedMag  = m->intendedMag / 32.0f;
 
-            m->forwardVel += intendedMag * coss(intendedDYaw) * 1.5f;
-            sidewaysSpeed = intendedMag * sins(intendedDYaw) * 10.0f;
+            m->forwardVel += intendedMag * coss(intendedDYaw) *  1.5f;
+            sidewaysSpeed  = intendedMag * sins(intendedDYaw) * 10.0f;
         }
 
         //! Uncapped air speed. Net positive when moving forward.
@@ -268,12 +268,12 @@ void update_lava_boost_or_twirling(struct MarioState *m) {
         intendedDYaw = m->intendedYaw - m->faceAngle[1];
         intendedMag = m->intendedMag / 32.0f;
 
-        m->forwardVel += coss(intendedDYaw) * intendedMag;
+        m->forwardVel   += coss(intendedDYaw) * intendedMag;
         m->faceAngle[1] += sins(intendedDYaw) * intendedMag * 1024.0f;
 
         if (m->forwardVel < 0.0f) {
             m->faceAngle[1] += 0x8000;
-            m->forwardVel *= -1.0f;
+            m->forwardVel   *= -1.0f;
         }
 
         if (m->forwardVel > 32.0f) m->forwardVel -= 2.0f;
@@ -1796,7 +1796,7 @@ s32 act_flying(struct MarioState *m) {
 
     if (m->faceAngle[0] > 0x800 && m->forwardVel >= 48.0f) m->particleFlags |= PARTICLE_DUST;
 
-    if (startPitch <= 0 && m->faceAngle[0] > 0 && m->forwardVel >= 48.0f) {
+    if (startPitch <= 0x0 && m->faceAngle[0] > 0x0 && m->forwardVel >= 48.0f) {
         play_sound(SOUND_ACTION_FLYING_FAST, m->marioObj->header.gfx.cameraToObject);
 #ifndef VERSION_JP
         play_sound(SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16),

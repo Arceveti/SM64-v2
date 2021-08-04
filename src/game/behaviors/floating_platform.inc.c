@@ -28,7 +28,7 @@ void floating_platform_act_move_to_home(void) {
         }
     } else {
         o->oFaceAnglePitch /= 2;
-        o->oFaceAngleRoll /= 2;
+        o->oFaceAngleRoll  /= 2;
         o->oFloatingPlatformMarioWeightWobbleOffset -= 5.0f;
         o->oVelY = 10.0f;
         if (o->oFloatingPlatformMarioWeightWobbleOffset < 0.0f) {

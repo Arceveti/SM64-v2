@@ -116,7 +116,7 @@ static void fly_guy_act_lunge(void) {
             obj_y_vel_approach(20.0f, 0.5f);
         } else if (obj_y_vel_approach(0.0f, 0.5f)) {
             // Wait until roll is zero
-            if (o->oFaceAngleRoll == 0) o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
+            if (o->oFaceAngleRoll == 0x0) o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
             o->oFlyGuyTargetRoll = 0;
         }
     }

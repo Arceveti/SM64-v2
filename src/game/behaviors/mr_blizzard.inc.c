@@ -45,7 +45,7 @@ void bhv_mr_blizzard_init(void) {
     if (o->oBehParams2ndByte == MR_BLIZZARD_STYPE_JUMPING) {
         // Jumping Mr. Blizzard.
         o->oAction = MR_BLIZZARD_ACT_JUMP;
-        o->oMrBlizzardGraphYOffset = 24.0f;
+        o->oMrBlizzardGraphYOffset  = 24.0f;
         o->oMrBlizzardTargetMoveYaw = o->oMoveAngleYaw;
     } else {
         // Cap wearing Mr. Blizzard from SL.
@@ -54,7 +54,7 @@ void bhv_mr_blizzard_init(void) {
 
         // Mr. Blizzard starts under the floor holding nothing.
         o->oMrBlizzardGraphYOffset = -200.0f;
-        o->oMrBlizzardHeldObj = NULL;
+        o->oMrBlizzardHeldObj      = NULL;
     }
 }
 
@@ -214,7 +214,6 @@ static void mr_blizzard_act_death(void) {
                 // Mr. Blizzard no longer spawns with Mario's cap on.
                 o->oAnimState = MR_BLIZZARD_ANIM_STATE_NO_CAP;
             }
-
             o->oMrBlizzardChangeInDizziness = 0.0f;
         }
     } else {
@@ -223,7 +222,6 @@ static void mr_blizzard_act_death(void) {
         } else {
             o->oMrBlizzardChangeInDizziness += 40.0f;
         }
-
         o->oMrBlizzardDizziness += o->oMrBlizzardChangeInDizziness;
     }
 
@@ -244,11 +242,11 @@ static void mr_blizzard_act_death(void) {
         } else if (o->oDistanceToMario > 1000.0f) {
             cur_obj_init_animation_with_sound(MR_BLIZZARD_ANIM_THROW_SNOWBALL);
 
-            o->oAction = MR_BLIZZARD_ACT_SPAWN_SNOWBALL;
-            o->oMrBlizzardScale = 1.0f;
+            o->oAction                 = MR_BLIZZARD_ACT_SPAWN_SNOWBALL;
+            o->oMrBlizzardScale        = 1.0f;
             o->oMrBlizzardGraphYOffset = -200.0f;
-            o->oFaceAngleRoll = 0;
-            o->oMrBlizzardDizziness = o->oMrBlizzardChangeInDizziness = 0.0f;
+            o->oFaceAngleRoll          = 0x0;
+            o->oMrBlizzardDizziness    = o->oMrBlizzardChangeInDizziness = 0.0f;
         }
     }
 }
@@ -307,14 +305,14 @@ static void mr_blizzard_act_jump(void) {
             // by 180 degrees, jump in the air, set distance from home to 0.
             if (o->oMrBlizzardDistFromHome > 700) {
                 o->oMrBlizzardTargetMoveYaw += 0x8000;
-                o->oVelY = 25.0f;
-                o->oMrBlizzardTimer = 30;
-                o->oMrBlizzardDistFromHome = 0;
+                o->oVelY                     = 25.0f;
+                o->oMrBlizzardTimer          = 30;
+                o->oMrBlizzardDistFromHome   =  0;
                 // Jump forward.
             } else {
                 o->oForwardVel = 10.0f;
-                o->oVelY = 50.0f;
-                o->oMoveFlags = OBJ_MOVE_NONE;
+                o->oVelY       = 50.0f;
+                o->oMoveFlags  = OBJ_MOVE_NONE;
             }
         }
     } else if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {

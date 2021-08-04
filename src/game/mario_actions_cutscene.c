@@ -1561,7 +1561,7 @@ static void intro_cutscene_peach_lakitu_scene(struct MarioState *m) {
         if (m->actionTimer++ == TIMER_SPAWN_PIPE) {
             sIntroWarpPipeObj =
                 spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_CASTLE_GROUNDS_WARP_PIPE,
-                                          bhvStaticObject, -1328, 60, 4664, 0, 180, 0);
+                                          bhvStaticObject, -1328, 60, 4664, 0x0, 0xB4, 0x0);
             advance_cutscene_step(m);
         }
     }
@@ -1798,17 +1798,18 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
     s16 offsetZ = radius * coss(sSparkleGenTheta) * coss(sSparkleGenPhi);
 
     spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, x + offsetX, y + offsetY,
-                              z + offsetZ, 0, 0, 0);
+                              z + offsetZ, 0x0, 0x0, 0x0);
 
+    //! can be optimized?
     offsetX = offsetX * 4 / 3;
     offsetY = offsetY * 4 / 3;
     offsetZ = offsetZ * 4 / 3;
 
     spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, x - offsetX, y - offsetY,
-                              z - offsetZ, 0, 0, 0);
+                              z - offsetZ, 0x0, 0x0, 0x0);
 
     sSparkleGenTheta += 0x3800;
-    sSparkleGenPhi += 0x6000;
+    sSparkleGenPhi   += 0x6000;
 }
 
 // not sure what this does, returns the height of the floor.
@@ -1854,7 +1855,7 @@ static void end_peach_cutscene_mario_landing(struct MarioState *m) {
         // make wing cap run out
         m->capTimer = 60;
 
-        sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0, 2528, -1800, 0, 0, 0);
+        sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0, 2528, -1800, 0x0, 0x0, 0x0);
         obj_scale(sEndJumboStarObj, 3.0f);
         advance_cutscene_step(m);
     }
@@ -1893,14 +1894,14 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
     if (m->actionTimer == 40) {
         obj_mark_for_deletion(sEndJumboStarObj);
 
-        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,   0, 2428, -1300, 0, 0, 0);
+        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,   0, 2428, -1300, 0x0, 0x0, 0x0);
         gCutsceneFocus   = sEndPeachObj;
-        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  200,  906, -1290, 0, 0, 0);
-        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -200,  906, -1290, 0, 0, 0);
+        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  200,  906, -1290, 0x0, 0x0, 0x0);
+        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -200,  906, -1290, 0x0, 0x0, 0x0);
 
-        sEndPeachObj->oOpacity = 127;
+        sEndPeachObj->oOpacity     = 127;
         sEndRightToadObj->oOpacity = 255;
-        sEndLeftToadObj->oOpacity = 255;
+        sEndLeftToadObj->oOpacity  = 255;
 
         sPeachManualBlinkTime = 4;
         sEndPeachAnimation    = 4;
@@ -2402,9 +2403,9 @@ static s32 act_end_waving_cutscene(struct MarioState *m) {
     if (m->actionState == 0) {
         m->statusForCamera->cameraEvent = CAM_EVENT_START_END_WAVING;
 
-        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,  60, 906, -1180, 0, 0, 0);
-        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  180, 906, -1170, 0, 0, 0);
-        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -180, 906, -1170, 0, 0, 0);
+        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,  60, 906, -1180, 0x0, 0x0, 0x0);
+        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  180, 906, -1170, 0x0, 0x0, 0x0);
+        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -180, 906, -1170, 0x0, 0x0, 0x0);
 
         sEndPeachObj->oOpacity     = 255;
         sEndRightToadObj->oOpacity = 255;

@@ -17,7 +17,7 @@ void bhv_star_door_loop(void) {
             if (doorObj != NULL && doorObj->oAction != STAR_DOOR_ACT_CLOSED) o->oAction = STAR_DOOR_ACT_OPENING;
             break;
         case STAR_DOOR_ACT_OPENING:
-            if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0) {
+            if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0x0) {
                 cur_obj_play_sound_2(SOUND_GENERAL_STAR_DOOR_OPEN);
 #if ENABLE_RUMBLE
                 queue_rumble_data(35, 30);
@@ -32,7 +32,7 @@ void bhv_star_door_loop(void) {
             if (o->oTimer >= 31) o->oAction = STAR_DOOR_ACT_CLOSING;
             break;
         case STAR_DOOR_ACT_CLOSING:
-            if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0) {
+            if (o->oTimer == 0 && (s16)(o->oMoveAngleYaw) >= 0x0) {
                 cur_obj_play_sound_2(SOUND_GENERAL_STAR_DOOR_CLOSE);
 #if ENABLE_RUMBLE
                 queue_rumble_data(35, 30);

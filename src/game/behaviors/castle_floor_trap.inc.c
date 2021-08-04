@@ -38,8 +38,8 @@ void bhv_castle_floor_trap_close_detect(void) {
 
 void bhv_castle_floor_trap_close(void) {
     o->oFaceAngleRoll += 0x400;
-    if (o->oFaceAngleRoll > 0) {
-        o->oFaceAngleRoll = 0;
+    if (o->oFaceAngleRoll > 0x0) {
+        o->oFaceAngleRoll = 0x0;
         o->oAction = CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT; // after closing, reloads open detection
         o->oInteractStatus &= ~INT_STATUS_TRAP_TURN;
     }

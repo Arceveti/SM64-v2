@@ -1237,8 +1237,8 @@ s32 update_parallel_tracking_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 
     // If zoom != 0.0, the camera will move zoom% closer to Mario
     marioOffset[0] = -marioOffset[0] * zoom;
-    marioOffset[1] = marioOffset[1] * zoom;
-    marioOffset[2] = camOffset[2];
+    marioOffset[1] =  marioOffset[1] * zoom;
+    marioOffset[2] =    camOffset[2];
 
     pathAngle[0] = pathPitch;
 
@@ -1246,7 +1246,7 @@ s32 update_parallel_tracking_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     marioOffset[2] = pathLength / 2 - marioOffset[2];
 
     pathAngle[1] = pathYaw + DEGREES(180);
-    pathAngle[2] = 0;
+    pathAngle[2] = 0x0;
 
     // Rotate the offset in the direction of the path again
     offset_rotated(pos, path[0], marioOffset, pathAngle);
@@ -6893,8 +6893,8 @@ void cutscene_dance_fly_away_focus_mario(struct Camera *c) {
  */
 void cutscene_pan_cvar9(struct Camera *c) {
     vec3f_copy(c->focus, sCutsceneVars[9].point);
-    sCutsceneVars[9].angle[0] -= 29;
-    sCutsceneVars[9].angle[1] += 29;
+    sCutsceneVars[9].angle[0] -= 0x1D;
+    sCutsceneVars[9].angle[1] += 0x1D;
     pan_camera(c, sCutsceneVars[9].angle[0], sCutsceneVars[9].angle[1]);
 }
 
@@ -7487,7 +7487,7 @@ void cutscene_prepare_cannon(struct Camera *c) {
  */
 void cutscene_prepare_cannon_end(struct Camera *c) {
     gCutsceneTimer = CUTSCENE_STOP;
-    c->cutscene = 0;
+    c->cutscene    = 0;
     retrieve_info_cannon(c);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 }
@@ -7502,7 +7502,7 @@ void water_death_move_to_mario_side(struct Camera *c) {
     s16 pitch, yaw;
 
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
-    approach_s16_asymptotic_bool(&yaw, (sMarioCamState->faceAngle[1] - 0x3000), 8);
+    approach_s16_asymptotic_bool(&yaw, (sMarioCamState->faceAngle[1] - 0x3000), 0x8);
     vec3f_set_dist_and_angle(sMarioCamState->pos, c->pos,  dist,  pitch,  yaw);
 }
 
@@ -7510,7 +7510,7 @@ void water_death_move_to_mario_side(struct Camera *c) {
  * Unnecessary, only used in cutscene_death_standing_goto_mario()
  */
 void death_goto_mario(struct Camera *c) {
-    cutscene_goto_cvar_pos(c, 400.0f, 0x1000, 0x300, 0);
+    cutscene_goto_cvar_pos(c, 400.0f, 0x1000, 0x300, 0x0);
 }
 
 void cutscene_death_standing_start(struct Camera *c) {
@@ -7938,7 +7938,7 @@ void cutscene_read_message_start(struct Camera *c) {
     sCutsceneVars[1].angle[1] = sModeOffsetYaw;
     sCUpCameraPitch = -0x830;
     sModeOffsetYaw  = 0;
-    sCutsceneVars[0].angle[0] = 0;
+    sCutsceneVars[0].angle[0] = 0x0;
 }
 
 /**
@@ -8189,7 +8189,7 @@ void cutscene_cap_switch_press_rotate_around_mario(struct Camera *c) {
     if (sCutsceneVars[3].angle[1] != 0x1000) sCutsceneVars[3].angle[1] += 0x100;
 
     // cvar1 wraps until 0
-    if (sCutsceneVars[1].angle[1] != 0) sCutsceneVars[1].angle[1] += 0x100;
+    if (sCutsceneVars[1].angle[1] !=    0x0) sCutsceneVars[1].angle[1] += 0x100;
 
     yaw = sMarioCamState->faceAngle[1] + sCutsceneVars[3].angle[1] + sCutsceneVars[1].angle[1];
     vec3f_set_dist_and_angle(sMarioCamState->pos, c->pos, dist, pitch, yaw);
@@ -8827,9 +8827,9 @@ void cutscene_enter_painting(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 
     if (gRipplingPainting != NULL) {
-        paintingAngle[0] = 0;
+        paintingAngle[0] = 0x0;
         paintingAngle[1] = (s32)((gRipplingPainting->yaw / 360.0f) * 65536.0f); // convert degrees to IAU
-        paintingAngle[2] = 0;
+        paintingAngle[2] = 0x0;
 
         focusOffset[0] = gRipplingPainting->size / 2;
         focusOffset[1] = focusOffset[0];
@@ -8885,9 +8885,9 @@ void cutscene_exit_painting_start(struct Camera *c) {
         sCutsceneVars[1].point[2] = 0.0f;
     }
     vec3f_copy(sCutsceneVars[0].point, sMarioCamState->pos);
-    sCutsceneVars[0].angle[0] = 0;
+    sCutsceneVars[0].angle[0] = 0x0;
     sCutsceneVars[0].angle[1] = sMarioCamState->faceAngle[1];
-    sCutsceneVars[0].angle[2] = 0;
+    sCutsceneVars[0].angle[2] = 0x0;
     offset_rotated(c->focus, sCutsceneVars[0].point, sCutsceneVars[1].point, sCutsceneVars[0].angle);
     offset_rotated(c->pos, sCutsceneVars[0].point, sCutsceneVars[2].point, sCutsceneVars[0].angle);
     floorHeight = find_floor(c->pos[0], c->pos[1] + 10.0f, c->pos[2], &floor);

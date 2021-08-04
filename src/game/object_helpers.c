@@ -484,29 +484,25 @@ struct Object *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *parent
 
 struct Object *spawn_object_with_scale(struct Object *parent, s32 model, const BehaviorScript *behavior, f32 scale) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
-
     obj_copy_pos_and_angle(obj, parent);
     obj_scale(obj, scale);
-
     return obj;
 }
 
 static void obj_build_relative_transform(struct Object *obj) {
-    obj_build_transform_from_pos_and_angle(obj, O_PARENT_RELATIVE_POS_INDEX, O_FACE_ANGLE_INDEX);
-    obj_translate_local(obj, O_POS_INDEX, O_PARENT_RELATIVE_POS_INDEX);
+    obj_build_transform_from_pos_and_angle(obj, O_PARENT_RELATIVE_POS_INDEX,          O_FACE_ANGLE_INDEX);
+    obj_translate_local(                   obj,                 O_POS_INDEX, O_PARENT_RELATIVE_POS_INDEX);
 }
 
 struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
                                      struct Object *parent, s32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
 
-    obj_copy_pos_and_angle(obj, parent);
-    obj_set_parent_relative_pos(obj, relativePosX, relativePosY, relativePosZ);
+    obj_copy_pos_and_angle(      obj, parent);
+    obj_set_parent_relative_pos( obj, relativePosX, relativePosY, relativePosZ);
     obj_build_relative_transform(obj);
-
-    obj->oBehParams2ndByte = behaviorParam;
-    obj->oBehParams = (behaviorParam & 0xFF) << 16;
-
+    obj->oBehParams2ndByte =  behaviorParam;
+    obj->oBehParams        = (behaviorParam & 0xFF) << 16;
     return obj;
 }
 
@@ -1212,19 +1208,11 @@ static void cur_obj_move_update_ground_air_flags(UNUSED f32 gravity, f32 bouncin
 }
 
 static f32 cur_obj_move_y_and_get_water_level(f32 gravity, f32 buoyancy) {
-    f32 waterLevel;
-
     o->oVelY += gravity + buoyancy;
     if (o->oVelY < -78.0f) o->oVelY = -78.0f;
 
     o->oPosY += o->oVelY;
-    if (o->activeFlags & ACTIVE_FLAG_IGNORE_WATER_LEVEL) {
-        waterLevel = FLOOR_LOWER_LIMIT;
-    } else {
-        waterLevel = find_water_level(o->oPosX, o->oPosZ);
-    }
-
-    return waterLevel;
+    return (o->activeFlags & ACTIVE_FLAG_IGNORE_WATER_LEVEL) ? FLOOR_LOWER_LIMIT : find_water_level(o->oPosX, o->oPosZ);
 }
 
 void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {

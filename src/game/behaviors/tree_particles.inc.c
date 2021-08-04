@@ -11,7 +11,7 @@ void bhv_tree_snow_or_leaf_loop(void) {
     }
     if (o->oPosY < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT || o->oTimer > 100 || gPrevFrameObjectCount > (OBJECT_POOL_CAPACITY - 28)) obj_mark_for_deletion(o);
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    o->oFaceAngleRoll += o->oAngleVelRoll;
+    o->oFaceAngleRoll  += o->oAngleVelRoll;
     o->oVelY -= 3.0f;
     if (o->oVelY < -8.0f) o->oVelY = -8.0f;
     if (o->oForwardVel > 0) {

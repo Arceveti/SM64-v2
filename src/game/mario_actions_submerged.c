@@ -245,9 +245,9 @@ static u32 perform_water_step(struct MarioState *m) {
 static void update_water_pitch(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
 
-    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.pos[1]  += 60.0f * sins(marioObj->header.gfx.angle[0]) * sins(marioObj->header.gfx.angle[0]);
-    if (marioObj->header.gfx.angle[0] < 0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 0.6f;  // 3 / 5; //  6 / 10;
-    if (marioObj->header.gfx.angle[0] > 0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 1.25f; // 5 / 4; // 10 /  8;
+    if (marioObj->header.gfx.angle[0] > 0x0) marioObj->header.gfx.pos[1]  += 60.0f * sins(marioObj->header.gfx.angle[0]) * sins(marioObj->header.gfx.angle[0]);
+    if (marioObj->header.gfx.angle[0] < 0x0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 0.6f;  // 3 / 5; //  6 / 10;
+    if (marioObj->header.gfx.angle[0] > 0x0) marioObj->header.gfx.angle[0] =              marioObj->header.gfx.angle[0] * 1.25f; // 5 / 4; // 10 /  8;
 }
 
 static void stationary_slow_down(struct MarioState *m) {
@@ -397,22 +397,22 @@ static s32 act_hold_water_action_end(struct MarioState *m) {
 }
 
 static void reset_bob_variables(struct MarioState *m) {
-    sBobTimer = 0;
+    sBobTimer     = 0;
     sBobIncrement = 0x800;
-    sBobHeight = m->faceAngle[0] / 256.0f + 20.0f;
+    sBobHeight    = m->faceAngle[0] / 256.0f + 20.0f;
 }
 
 /**
  * Controls the bobbing that happens when you swim near the surface.
  */
 static void surface_swim_bob(struct MarioState *m) {
-    if (sBobIncrement != 0 && m->pos[1] > m->waterLevel - 85 && m->faceAngle[0] >= 0) {
-        if ((sBobTimer += sBobIncrement) >= 0) {
+    if (sBobIncrement != 0 && m->pos[1] > m->waterLevel - 85 && m->faceAngle[0] >= 0x0) {
+        if ((sBobTimer += sBobIncrement) >= 0x0) {
             m->marioObj->header.gfx.pos[1] += sBobHeight * sins(sBobTimer);
             return;
         }
     }
-    sBobIncrement = 0;
+    sBobIncrement = 0x0;
 }
 
 static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
@@ -884,7 +884,7 @@ static void common_water_knockback_step(struct MarioState *m, s32 animation, u32
     perform_water_step(m);
     set_mario_animation(m, animation);
 
-    m->marioBodyState->headAngle[0] = 0;
+    m->marioBodyState->headAngle[0] = 0x0;
 
     if (is_anim_at_end(m)) {
         if (arg3 > 0) m->invincTimer = 30;
@@ -919,7 +919,7 @@ static s32 act_water_shocked(struct MarioState *m) {
 
     stationary_slow_down(m);
     perform_water_step(m);
-    m->marioBodyState->headAngle[0] = 0;
+    m->marioBodyState->headAngle[0] = 0x0;
     return FALSE;
 }
 
@@ -1377,8 +1377,8 @@ s32 mario_execute_submerged_action(struct MarioState *m) {
 
     m->quicksandDepth = 0.0f;
 
-    m->marioBodyState->headAngle[1] = 0;
-    m->marioBodyState->headAngle[2] = 0;
+    m->marioBodyState->headAngle[1] = 0x0;
+    m->marioBodyState->headAngle[2] = 0x0;
 
     /* clang-format off */
     switch (m->action) {

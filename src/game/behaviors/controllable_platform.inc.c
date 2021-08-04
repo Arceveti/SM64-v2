@@ -112,14 +112,14 @@ void controllable_platform_shake_on_wall_hit(void) {
         o->oFaceAnglePitch = sins(o->oTimer * 0x1000) * 182.04444f * 10.0f;
         o->oPosY = o->oControllablePlatformInitPosY + sins(o->oTimer * 0x2000) * 20.0f;
     } else {
-        o->oFaceAngleRoll = sins(o->oTimer * 0x1000) * 182.04444f * 10.0f;
+        o->oFaceAngleRoll  = sins(o->oTimer * 0x1000) * 182.04444f * 10.0f;
         o->oPosY = o->oControllablePlatformInitPosY + sins(o->oTimer * 0x2000) * 20.0f;
     }
 
     if (o->oTimer == 32) {
         sControllablePlatformDirectionState = o->oControllablePlatformWallHitDirection;
-        o->oFaceAnglePitch = 0;
-        o->oFaceAngleRoll = 0;
+        o->oFaceAnglePitch = 0x0;
+        o->oFaceAngleRoll  = 0x0;
         o->oPosY = o->oControllablePlatformInitPosY;
     }
 }
@@ -145,10 +145,10 @@ void bhv_controllable_platform_loop(void) {
     Vec3f dist2;
     Vec3f dist3;
 
-    o->oAngleVelRoll  = 0;
-    o->oAngleVelPitch = 0;
-    o->oVelX          = 0;
-    o->oVelZ          = 0;
+    o->oAngleVelRoll  = 0x0;
+    o->oAngleVelPitch = 0x0;
+    o->oVelX          = 0.0f;
+    o->oVelZ          = 0.0f;
 
     switch (sControllablePlatformDirectionState) {
         case DIRECTION_STATE_STOPPED:
@@ -198,7 +198,7 @@ void bhv_controllable_platform_loop(void) {
             break;
 
         case DIRECTION_STATE_DISAPPEARING:
-            if (obj_flicker_and_disappear(o, 150)) spawn_object_abs_with_rot(o, 0, MODEL_HMC_METAL_PLATFORM, bhvControllablePlatform, o->oHomeX, o->oHomeY, o->oHomeZ, 0, 0, 0);
+            if (obj_flicker_and_disappear(o, 150)) spawn_object_abs_with_rot(o, 0, MODEL_HMC_METAL_PLATFORM, bhvControllablePlatform, o->oHomeX, o->oHomeY, o->oHomeZ, 0x0, 0x0, 0x0);
             break;
     }
 
@@ -206,7 +206,5 @@ void bhv_controllable_platform_loop(void) {
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
     if (sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED
-     && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) {
-        cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
-    }
+     && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
 }

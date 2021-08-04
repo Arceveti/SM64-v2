@@ -285,62 +285,25 @@ void set_mario_initial_cap_powerup(struct MarioState *m) {
 
 void set_mario_initial_action(struct MarioState *m, u32 spawnType, u32 actionArg) {
     switch (spawnType) {
-        case MARIO_SPAWN_DOOR_WARP:
-            set_mario_action(m, ACT_WARP_DOOR_SPAWN, actionArg);
-            break;
-        case MARIO_SPAWN_IDLE:
-            set_mario_action(m, ACT_IDLE, 0);
-            break;
-        case MARIO_SPAWN_PIPE:
-            set_mario_action(m, ACT_EMERGE_FROM_PIPE, 0);
-            break;
-        case MARIO_SPAWN_TELEPORT:
-            set_mario_action(m, ACT_TELEPORT_FADE_IN, 0);
-            break;
-        case MARIO_SPAWN_INSTANT_ACTIVE:
-            set_mario_action(m, ACT_IDLE, 0);
-            break;
-        case MARIO_SPAWN_AIRBORNE:
-            set_mario_action(m, ACT_SPAWN_NO_SPIN_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_HARD_AIR_KNOCKBACK:
-            set_mario_action(m, ACT_HARD_BACKWARD_AIR_KB, 0);
-            break;
-        case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE:
-            set_mario_action(m, ACT_SPAWN_SPIN_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_DEATH:
-            set_mario_action(m, ACT_FALLING_DEATH_EXIT, 0);
-            break;
-        case MARIO_SPAWN_SPIN_AIRBORNE:
-            set_mario_action(m, ACT_SPAWN_SPIN_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_FLYING:
-            set_mario_action(m, ACT_FLYING, 2);
-            break;
-        case MARIO_SPAWN_SWIMMING:
-            set_mario_action(m, ACT_WATER_IDLE, 1);
-            break;
-        case MARIO_SPAWN_PAINTING_STAR_COLLECT:
-            set_mario_action(m, ACT_EXIT_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_PAINTING_DEATH:
-            set_mario_action(m, ACT_DEATH_EXIT, 0);
-            break;
-        case MARIO_SPAWN_AIRBORNE_STAR_COLLECT:
-            set_mario_action(m, ACT_FALLING_EXIT_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_AIRBORNE_DEATH:
-            set_mario_action(m, ACT_UNUSED_DEATH_EXIT, 0);
-            break;
-        case MARIO_SPAWN_LAUNCH_STAR_COLLECT:
-            set_mario_action(m, ACT_SPECIAL_EXIT_AIRBORNE, 0);
-            break;
-        case MARIO_SPAWN_LAUNCH_DEATH:
-            set_mario_action(m, ACT_SPECIAL_DEATH_EXIT, 0);
-            break;
+        case MARIO_SPAWN_DOOR_WARP:             set_mario_action(m, ACT_WARP_DOOR_SPAWN, actionArg); break;
+        case MARIO_SPAWN_IDLE:                  set_mario_action(m, ACT_IDLE                   , 0); break;
+        case MARIO_SPAWN_PIPE:                  set_mario_action(m, ACT_EMERGE_FROM_PIPE       , 0); break;
+        case MARIO_SPAWN_TELEPORT:              set_mario_action(m, ACT_TELEPORT_FADE_IN       , 0); break;
+        case MARIO_SPAWN_INSTANT_ACTIVE:        set_mario_action(m, ACT_IDLE                   , 0); break;
+        case MARIO_SPAWN_AIRBORNE:              set_mario_action(m, ACT_SPAWN_NO_SPIN_AIRBORNE , 0); break;
+        case MARIO_SPAWN_HARD_AIR_KNOCKBACK:    set_mario_action(m, ACT_HARD_BACKWARD_AIR_KB   , 0); break;
+        case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE:  set_mario_action(m, ACT_SPAWN_SPIN_AIRBORNE    , 0); break;
+        case MARIO_SPAWN_DEATH:                 set_mario_action(m, ACT_FALLING_DEATH_EXIT     , 0); break;
+        case MARIO_SPAWN_SPIN_AIRBORNE:         set_mario_action(m, ACT_SPAWN_SPIN_AIRBORNE    , 0); break;
+        case MARIO_SPAWN_FLYING:                set_mario_action(m, ACT_FLYING                 , 2); break;
+        case MARIO_SPAWN_SWIMMING:              set_mario_action(m, ACT_WATER_IDLE             , 1); break;
+        case MARIO_SPAWN_PAINTING_STAR_COLLECT: set_mario_action(m, ACT_EXIT_AIRBORNE          , 0); break;
+        case MARIO_SPAWN_PAINTING_DEATH:        set_mario_action(m, ACT_DEATH_EXIT             , 0); break;
+        case MARIO_SPAWN_AIRBORNE_STAR_COLLECT: set_mario_action(m, ACT_FALLING_EXIT_AIRBORNE  , 0); break;
+        case MARIO_SPAWN_AIRBORNE_DEATH:        set_mario_action(m, ACT_UNUSED_DEATH_EXIT      , 0); break;
+        case MARIO_SPAWN_LAUNCH_STAR_COLLECT:   set_mario_action(m, ACT_SPECIAL_EXIT_AIRBORNE  , 0); break;
+        case MARIO_SPAWN_LAUNCH_DEATH:          set_mario_action(m, ACT_SPECIAL_DEATH_EXIT     , 0); break;
     }
-
     set_mario_initial_cap_powerup(m);
 }
 
@@ -353,9 +316,9 @@ void init_mario_after_warp(void) {
         gPlayerSpawnInfos[0].startPos[1] = (s16) spawnNode->object->oPosY;
         gPlayerSpawnInfos[0].startPos[2] = (s16) spawnNode->object->oPosZ;
 
-        gPlayerSpawnInfos[0].startAngle[0] = 0;
+        gPlayerSpawnInfos[0].startAngle[0] = 0x0;
         gPlayerSpawnInfos[0].startAngle[1] = spawnNode->object->oMoveAngleYaw;
-        gPlayerSpawnInfos[0].startAngle[2] = 0;
+        gPlayerSpawnInfos[0].startAngle[2] = 0x0;
 
         if (marioSpawnType == MARIO_SPAWN_DOOR_WARP) init_door_warp(&gPlayerSpawnInfos[0], sWarpDest.arg);
 

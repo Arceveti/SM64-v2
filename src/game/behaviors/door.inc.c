@@ -88,8 +88,8 @@ void bhv_door_init(void) {
     find_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorSelfRoom = floor->room;
 
-    x = o->oPosX + sins(o->oMoveAngleYaw) * 200.0f;
-    z = o->oPosZ + coss(o->oMoveAngleYaw) * 200.0f;
+    x = o->oPosX + sins(o->oMoveAngleYaw) *  200.0f;
+    z = o->oPosZ + coss(o->oMoveAngleYaw) *  200.0f;
     find_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorForwardRoom = floor->room;
 

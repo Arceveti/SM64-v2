@@ -30,7 +30,7 @@ void bhv_snowmans_bottom_init(void) {
     headObj = cur_obj_nearest_object_with_behavior(bhvSnowmansHead);
     if (headObj != NULL) o->parentObj = headObj;
 
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSnowmansBodyCheckpoint, -402, 461, -2898, 0, 0, 0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSnowmansBodyCheckpoint, -402, 461, -2898, 0x0, 0x0, 0x0);
 }
 
 void set_rolling_sphere_hitbox(void) {
@@ -150,7 +150,7 @@ void bhv_snowmans_head_init(void) {
     o->oBuoyancy = 2.0f;
 
     if ((starFlags & (1 << behParams)) && gCurrActNum != behParams + 1) {
-        spawn_object_abs_with_rot(o, 0, MODEL_CCM_SNOWMAN_BASE, bhvBigSnowmanWhole, -4230, -1344, 1813, 0, 0, 0);
+        spawn_object_abs_with_rot(o, 0, MODEL_CCM_SNOWMAN_BASE, bhvBigSnowmanWhole, -4230, -1344, 1813, 0x0, 0x0, 0x0);
         o->oPosX = -4230.0f;
         o->oPosY =  -992.0f;
         o->oPosZ =  1813.0f;

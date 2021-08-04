@@ -10,22 +10,22 @@ void bhv_celebration_star_init(void) {
     if (gCurrLevelNum == LEVEL_BOWSER_1
      || gCurrLevelNum == LEVEL_BOWSER_2) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_BOWSER_KEY];
-        o->oFaceAnglePitch = 0;
-        o->oFaceAngleRoll  = 49152;
+        o->oFaceAnglePitch = 0x0;
+        o->oFaceAngleRoll  = 0xC000;
         cur_obj_scale(0.1f);
         o->oCelebStarIsBowserKey = TRUE;
     } else {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
-        o->oFaceAnglePitch = 0;
-        o->oFaceAngleRoll  = 0;
+        o->oFaceAnglePitch = 0x0;
+        o->oFaceAngleRoll  = 0x0;
         cur_obj_scale(0.4f);
         o->oCelebStarIsBowserKey = FALSE;
     }
 #else
     o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
     cur_obj_scale(0.4f);
-    o->oFaceAnglePitch = 0;
-    o->oFaceAngleRoll  = 0;
+    o->oFaceAnglePitch = 0x0;
+    o->oFaceAngleRoll  = 0x0;
 #endif
 }
 

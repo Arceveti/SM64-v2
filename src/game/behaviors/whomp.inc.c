@@ -190,7 +190,7 @@ void whomp_on_ground_general(void) {
         }
         if (o->oTimer > 100 || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) o->oSubAction = WHOMP_SUB_ACT_GROUND_STAND_UP;
     } else {
-        if (o->oFaceAnglePitch > 0) {
+        if (o->oFaceAnglePitch > 0x0) {
             o->oAngleVelPitch = -0x200;
             o->oFaceAnglePitch += o->oAngleVelPitch;
         } else {

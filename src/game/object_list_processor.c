@@ -227,13 +227,13 @@ void copy_mario_state_to_object(void) {
     // L is real
     if (gCurrentObject != gMarioObject) i++;
 
-    gCurrentObject->oVelX = gMarioStates[i].vel[0];
-    gCurrentObject->oVelY = gMarioStates[i].vel[1];
-    gCurrentObject->oVelZ = gMarioStates[i].vel[2];
+    gCurrentObject->oVelX           = gMarioStates[i].vel[0];
+    gCurrentObject->oVelY           = gMarioStates[i].vel[1];
+    gCurrentObject->oVelZ           = gMarioStates[i].vel[2];
 
-    gCurrentObject->oPosX = gMarioStates[i].pos[0];
-    gCurrentObject->oPosY = gMarioStates[i].pos[1];
-    gCurrentObject->oPosZ = gMarioStates[i].pos[2];
+    gCurrentObject->oPosX           = gMarioStates[i].pos[0];
+    gCurrentObject->oPosY           = gMarioStates[i].pos[1];
+    gCurrentObject->oPosZ           = gMarioStates[i].pos[2];
 
     gCurrentObject->oMoveAnglePitch = gCurrentObject->header.gfx.angle[0];
     gCurrentObject->oMoveAngleYaw   = gCurrentObject->header.gfx.angle[1];
@@ -370,14 +370,12 @@ void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
 
     while (objList != obj) {
         gCurrentObject = (struct Object *) obj;
-
-        obj = obj->next;
+        obj            = obj->next;
 
         if ((gCurrentObject->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
             // Prevent object from respawning after exiting and re-entering the
             // area
             if (!(gCurrentObject->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) set_object_respawn_info_bits(gCurrentObject, RESPAWN_INFO_DONT_RESPAWN);
-
             unload_object(gCurrentObject);
         }
     }
@@ -393,7 +391,6 @@ void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
 void set_object_respawn_info_bits(struct Object *obj, u8 bits) {
     u32 *info32;
     u16 *info16;
-
     switch (obj->respawnInfoType) {
         case RESPAWN_INFO_TYPE_32: info32 = (u32 *) obj->respawnInfo; *info32 |= bits << 8; break;
         case RESPAWN_INFO_TYPE_16: info16 = (u16 *) obj->respawnInfo; *info16 |= bits << 8; break;
@@ -417,7 +414,6 @@ void unload_objects_from_area(s32 areaIndex) {
         while (node != list) {
             obj = (struct Object *) node;
             node = node->next;
-
             if (obj->header.gfx.activeAreaIndex == areaIndex) unload_object(obj);
         }
     }
@@ -460,7 +456,7 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
 
             // Record death/collection in the SpawnInfo
             object->respawnInfoType = RESPAWN_INFO_TYPE_32;
-            object->respawnInfo = &spawnInfo->behaviorArg;
+            object->respawnInfo     = &spawnInfo->behaviorArg;
 
             if (object->behavior == segmented_to_virtual(bhvMario)) {
                 gMarioObject = object;
@@ -491,17 +487,14 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
  */
 void clear_objects(void) {
     s32 i;
-
     gTHIWaterDrained  = 0;
     gTimeStopState    = 0;
     gMarioObject      = NULL;
     gMarioCurrentRoom = 0;
-
     for (i = 0; i < 60; i++) {
         gDoorAdjacentRooms[i][0] = 0;
         gDoorAdjacentRooms[i][1] = 0;
     }
-
     debug_unknown_level_select_check();
 
     init_free_object_list();
@@ -532,7 +525,6 @@ void update_terrain_objects(void) {
  */
 void update_non_terrain_objects(void) {
     s32 listIndex;
-
     s32 i = 2;
     while ((listIndex = sObjectListUpdateOrder[i]) != -1) {
         gObjectCounter += update_objects_in_list(&gObjectLists[listIndex]);

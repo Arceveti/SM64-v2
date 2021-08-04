@@ -25,11 +25,11 @@ static struct VblankHandler sSoundVblankHandler;
 // Only written to, never read.
 static u8 sMusicVolume = 0;
 
-static u8 sBgMusicDisabled             = FALSE;
+static u8  sBgMusicDisabled            = FALSE;
 static u16 sCurrentMusic               = MUSIC_NONE;
 static u16 sCurrentShellMusic          = MUSIC_NONE;
 static u16 sCurrentCapMusic            = MUSIC_NONE;
-static u8 sPlayingInfiniteStairs       = FALSE;
+static u8  sPlayingInfiniteStairs      = FALSE;
 static s16 sSoundMenuModeToSoundMode[] = { SOUND_MODE_STEREO, SOUND_MODE_MONO, SOUND_MODE_HEADSET };
 // Only the 20th array element is used.
 static u32 sMenuSoundsExtra[] = {
@@ -139,21 +139,21 @@ void set_sound_mode(u16 soundMode) {
  */
 void play_menu_sounds(s16 soundMenuFlags) {
     if (soundMenuFlags & SOUND_MENU_FLAG_HANDAPPEAR) {
-        play_sound(SOUND_MENU_HAND_APPEAR, gGlobalSoundSource);
+        play_sound(SOUND_MENU_HAND_APPEAR,       gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_HANDISAPPEAR) {
-        play_sound(SOUND_MENU_HAND_DISAPPEAR, gGlobalSoundSource);
+        play_sound(SOUND_MENU_HAND_DISAPPEAR,    gGlobalSoundSource);
     // } else if (soundMenuFlags & SOUND_MENU_FLAG_UNKNOWN1) {
     //     play_sound(SOUND_MENU_UNK0C_FLAG_UNKNOW1, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE) {
-        play_sound(SOUND_MENU_PINCH_MARIO_FACE, gGlobalSoundSource);
+        play_sound(SOUND_MENU_PINCH_MARIO_FACE,  gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE2) {
-        play_sound(SOUND_MENU_PINCH_MARIO_FACE, gGlobalSoundSource);
+        play_sound(SOUND_MENU_PINCH_MARIO_FACE,  gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_LETGOMARIOFACE) {
         play_sound(SOUND_MENU_LET_GO_MARIO_FACE, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_CAMERAZOOMIN) {
-        play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gGlobalSoundSource);
+        play_sound(SOUND_MENU_CAMERA_ZOOM_IN,    gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_CAMERAZOOMOUT) {
-        play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gGlobalSoundSource);
+        play_sound(SOUND_MENU_CAMERA_ZOOM_OUT,   gGlobalSoundSource);
     }
 
     if (soundMenuFlags & 0x100) play_menu_sounds_extra(20, NULL);
@@ -207,7 +207,6 @@ void play_infinite_stairs_music(void) {
 void set_background_music(u16 a, u16 seqArgs, s16 fadeTimer) {
     if (gResetTimer == 0 && seqArgs != sCurrentMusic) {
         sound_reset((gCurrCreditsEntry != NULL) ? 7 : a);
-
         if (!gNeverEnteredCastle || seqArgs != SEQ_LEVEL_INSIDE_CASTLE) {
             play_music(SEQ_PLAYER_LEVEL, seqArgs, fadeTimer);
             sCurrentMusic = seqArgs;
@@ -314,7 +313,6 @@ void thread4_sound(UNUSED void *arg) {
 
     while (TRUE) {
         OSMesg msg;
-
         osRecvMesg(&sSoundMesgQueue, &msg, OS_MESG_BLOCK);
         if (gResetTimer < 25) {
             struct SPTask *spTask;

@@ -1,5 +1,5 @@
 // treasure_chest.c.inc
-//! act/param names
+
 /**
  * Hitbox for treasure chest bottom.
  */

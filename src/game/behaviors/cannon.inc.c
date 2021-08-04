@@ -6,9 +6,9 @@ void opened_cannon_act_idle(void) {
         o->oPosX           = o->oHomeX;
         o->oPosY           = o->oHomeY;
         o->oPosZ           = o->oHomeZ;
-        o->oMoveAnglePitch = 0;
+        o->oMoveAnglePitch = 0x0;
         o->oMoveAngleYaw   = (s16)(o->oBehParams2ndByte << 8);
-        o->oCannonAngle    = 0;
+        o->oCannonAngle    = 0x0;
         o->oCannonIsActive = FALSE;
         cur_obj_enable_rendering();
         cur_obj_become_tangible();
@@ -17,8 +17,8 @@ void opened_cannon_act_idle(void) {
         cur_obj_become_tangible();
         cur_obj_enable_rendering();
         if (o->oInteractStatus & INT_STATUS_INTERACTED && (!(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB))) { // bob-omb explodes when it gets into a cannon
-            o->oAction = OPENED_CANNON_ACT_RISING;
-            o->oCannonIsActive = TRUE;
+            o->oAction                   = OPENED_CANNON_ACT_RISING;
+            o->oCannonIsActive           = TRUE;
             o->oCannonTimeSinceActivated = 1;
         } else {
             o->oInteractStatus = INT_STATUS_NONE;

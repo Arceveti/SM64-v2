@@ -71,34 +71,34 @@
 
 // Layers
 #ifdef SILHOUETTE
-#define LAYER_FORCE                 0x00
-#define LAYER_OPAQUE                0x01
-#define LAYER_OPAQUE_INTER          0x02
-#define LAYER_OPAQUE_DECAL          0x03
-#define LAYER_ALPHA                 0x04
-#define LAYER_ALPHA_DECAL           0x05
-#define LAYER_SILHOUETTE_OPAQUE     0x06
-#define LAYER_SILHOUETTE_ALPHA      0x07
-#define LAYER_NO_SILHOUETTE         0x08
-#define LAYER_NO_SILHOUETTE_ALPHA   0x09
-#define LAYER_TRANSPARENT_DECAL     0x0A
-#define LAYER_TRANSPARENT           0x0B
-#define LAYER_TRANSPARENT_INTER     0x0C
+#define LAYER_FORCE                     0x0
+#define LAYER_OPAQUE                    0x1
+#define LAYER_OPAQUE_INTER              0x2
+#define LAYER_OPAQUE_DECAL              0x3
+#define LAYER_ALPHA                     0x4
+#define LAYER_ALPHA_DECAL               0x5
+#define LAYER_SILHOUETTE_OPAQUE         0x6
+#define LAYER_SILHOUETTE_ALPHA          0x7
+#define LAYER_OCCLUDE_SILHOUETTE_OPAQUE 0x8
+#define LAYER_OCCLUDE_SILHOUETTE_ALPHA  0x9
+#define LAYER_TRANSPARENT_DECAL         0xA
+#define LAYER_TRANSPARENT               0xB
+#define LAYER_TRANSPARENT_INTER         0xC
 #else
-#define LAYER_FORCE                 0x00
-#define LAYER_OPAQUE                0x01
-#define LAYER_OPAQUE_DECAL          0x02
-#define LAYER_OPAQUE_INTER          0x03
-#define LAYER_ALPHA                 0x04
-#define LAYER_TRANSPARENT           0x05
-#define LAYER_TRANSPARENT_DECAL     0x06
-#define LAYER_TRANSPARENT_INTER     0x07
+#define LAYER_FORCE                     0x0
+#define LAYER_OPAQUE                    0x1
+#define LAYER_OPAQUE_DECAL              0x2
+#define LAYER_OPAQUE_INTER              0x3
+#define LAYER_ALPHA                     0x4
+#define LAYER_TRANSPARENT               0x5
+#define LAYER_TRANSPARENT_DECAL         0x6
+#define LAYER_TRANSPARENT_INTER         0x7
 
-#define LAYER_ALPHA_DECAL           0x04
-#define LAYER_SILHOUETTE_OPAQUE     0x01
-#define LAYER_SILHOUETTE_ALPHA      0x04
-#define LAYER_NO_SILHOUETTE         0x01
-#define LAYER_NO_SILHOUETTE_ALPHA   0x04
+#define LAYER_ALPHA_DECAL               0x4
+#define LAYER_SILHOUETTE_OPAQUE         0x1
+#define LAYER_SILHOUETTE_ALPHA          0x4
+#define LAYER_OCCLUDE_SILHOUETTE_OPAQUE 0x1
+#define LAYER_OCCLUDE_SILHOUETTE_ALPHA  0x4
 #endif
 
 #define INPUT_NONZERO_ANALOG         /* 0x0001 */ (1 <<  0)

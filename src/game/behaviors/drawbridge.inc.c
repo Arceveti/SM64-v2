@@ -35,8 +35,8 @@ void bhv_lll_drawbridge_loop(void) {
         }
     }
 
-    if ((s16) o->oFaceAngleRoll >= 0) {
-        o->oFaceAngleRoll = 0;
+    if ((s16) o->oFaceAngleRoll >= 0x0) {
+        o->oFaceAngleRoll = 0x0;
 
         //! Because the global timer increments when the game is paused, pausing and unpausing
         //  the game at regular intervals can leave the drawbridge lowered indefinitely.

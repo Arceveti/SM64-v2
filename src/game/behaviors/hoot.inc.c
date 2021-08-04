@@ -161,7 +161,7 @@ void hoot_action_loop(void) {
 
         case HOOT_ACT_TIRED:
             hoot_player_set_yaw();
-            o->oMoveAnglePitch = 0;
+            o->oMoveAnglePitch = 0x0;
             hoot_carry_step(20);
 
             if (o->oTimer >= 61) gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */

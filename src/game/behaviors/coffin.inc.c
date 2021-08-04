@@ -122,11 +122,11 @@ void coffin_act_stand_up(void) {
         // Stay standing
         if (o->oTimer > 60) {
             o->oAction = COFFIN_ACT_IDLE;
-            o->oFaceAngleRoll = 0;
+            o->oFaceAngleRoll = 0x0;
         } else if (o->oTimer > 30) {
             if (gGlobalTimer % 4 == 0) cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
             // Shake the coffin while its standing
-            o->oFaceAngleRoll = 400 * (gGlobalTimer % 2) - 200;
+            o->oFaceAngleRoll = 0x190 * (gGlobalTimer % 2) - 0xC8;
         }
 
         o->oAngleVelPitch = 0;

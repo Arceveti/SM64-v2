@@ -232,7 +232,7 @@ static void pokey_act_wander(void) {
 
                         // If we need to rotate CCW to get to mario, then negate
                         // the target angle offset
-                        if ((s16)(o->oAngleToMario - o->oMoveAngleYaw) > 0) targetAngleOffset = -targetAngleOffset;
+                        if ((s16)(o->oAngleToMario - o->oMoveAngleYaw) > 0x0) targetAngleOffset = -targetAngleOffset;
 
                         // When mario is far, targetAngleOffset is 0, so he moves
                         // toward him directly. When mario is close,

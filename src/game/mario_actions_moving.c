@@ -623,8 +623,8 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
             m->particleFlags |= PARTICLE_DUST;
         }
 
-        m->actionState = 1;
-        m->actionArg = wallAngle + 0x8000;
+        m->actionState                   = 1;
+        m->actionArg                     = wallAngle + 0x8000;
         m->marioObj->header.gfx.angle[1] = wallAngle + 0x8000;
         m->marioObj->header.gfx.angle[2] = find_floor_slope(m, 0x4000);
     }
@@ -644,13 +644,13 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
         if (nextBodyRoll  >  0x1555) nextBodyRoll  =  0x1555;
         if (nextBodyRoll  < -0x1555) nextBodyRoll  = -0x1555;
         if (nextBodyPitch >  0x1555) nextBodyPitch =  0x1555;
-        if (nextBodyPitch <       0) nextBodyPitch =       0;
+        if (nextBodyPitch <     0x0) nextBodyPitch =     0x0;
 
         marioBodyState->torsoAngle[2] = approach_s32(marioBodyState->torsoAngle[2], nextBodyRoll , 0x400, 0x400);
         marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x400, 0x400);
     } else {
-        marioBodyState->torsoAngle[2] = 0;
-        marioBodyState->torsoAngle[0] = 0;
+        marioBodyState->torsoAngle[2] = 0x0;
+        marioBodyState->torsoAngle[0] = 0x0;
     }
 }
 

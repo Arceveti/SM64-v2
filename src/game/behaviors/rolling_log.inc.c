@@ -10,12 +10,12 @@ void bhv_ttm_rolling_log_init(void) {
     o->oRollingLogX       =   3970.0f;
     o->oRollingLogZ       =   3654.0f;
     o->oRollingLogMaxDist = 271037.0f;
-    o->oMoveAngleYaw      =      8810;
-    o->oForwardVel        =         0;
-    o->oVelX              =         0;
-    o->oVelZ              =         0;
-    o->oFaceAnglePitch    =         0;
-    o->oAngleVelPitch     =         0;
+    o->oMoveAngleYaw      =    0x226A;
+    o->oForwardVel        =      0.0f;
+    o->oVelX              =      0.0f;
+    o->oVelZ              =      0.0f;
+    o->oFaceAnglePitch    =       0x0;
+    o->oAngleVelPitch     =       0x0;
 }
 
 void rolling_log_roll_log(void) {
@@ -81,13 +81,13 @@ void bhv_rolling_log_loop(void) {
 
 void volcano_trap_act_fall(void) {
     o->oVolcanoTrapPitchVel += 4.0f;
-    o->oAngleVelPitch += o->oVolcanoTrapPitchVel;
+    o->oAngleVelPitch  += o->oVolcanoTrapPitchVel;
     o->oFaceAnglePitch -= o->oAngleVelPitch;
 
     if (o->oFaceAnglePitch      < -0x4000) {
         o->oFaceAnglePitch      = -0x4000;
-        o->oAngleVelPitch       = 0;
-        o->oVolcanoTrapPitchVel = 0;
+        o->oAngleVelPitch       =  0x0;
+        o->oVolcanoTrapPitchVel =  0x0;
         o->oAction = LLL_VOLCANO_TRAP_ACT_LAND;
         cur_obj_play_sound_2(SOUND_GENERAL_BIG_POUND);
         set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
@@ -97,7 +97,7 @@ void volcano_trap_act_fall(void) {
 void volcano_trap_act_rise(void) {
     o->oAngleVelPitch = 0x90;
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    if (o->oFaceAnglePitch > 0) o->oFaceAnglePitch = 0;
+    if (o->oFaceAnglePitch > 0x0) o->oFaceAnglePitch = 0x0;
     if (o->oTimer == 200) o->oAction = LLL_VOLCANO_TRAP_ACT_WAIT;
 }
 
@@ -134,9 +134,9 @@ void bhv_lll_rolling_log_init(void) {
     o->oRollingLogMaxDist = 1048576.0f;
 
     o->oMoveAngleYaw   = 0x3FFF;
-    o->oForwardVel     = 0;
-    o->oVelX           = 0;
-    o->oVelZ           = 0;
-    o->oFaceAnglePitch = 0;
-    o->oAngleVelPitch  = 0;
+    o->oForwardVel     =   0.0f;
+    o->oVelX           =   0.0f;
+    o->oVelZ           =   0.0f;
+    o->oFaceAnglePitch =    0x0;
+    o->oAngleVelPitch  =    0x0;
 }

@@ -70,7 +70,7 @@ void tox_box_move(f32 forwardVel, f32 leftVel, s16 deltaPitch, s16 deltaRoll) {
     o->oForwardVel      = forwardVel;
     o->oLeftVel         = leftVel;
     o->oFaceAnglePitch += deltaPitch;
-    if ((s16) o->oFaceAnglePitch < 0) deltaRoll = -deltaRoll;
+    if ((s16) o->oFaceAnglePitch < 0x0) deltaRoll = -deltaRoll;
     o->oFaceAngleRoll += deltaRoll;
     cur_obj_set_pos_via_transform();
     if (o->oTimer == 7) {

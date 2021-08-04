@@ -62,10 +62,10 @@ struct LinkedList *unused_try_allocate(struct LinkedList *destList,
         freeList->next = node->next;
 
         // Insert at the end of destination list
-        node->prev = destList->prev;
-        node->next = destList;
+        node->prev           = destList->prev;
+        node->next           = destList;
         destList->prev->next = node;
-        destList->prev = node;
+        destList->prev       = node;
     }
 
     return node;
@@ -84,15 +84,15 @@ struct Object *try_allocate_object(struct ObjectNode *destList, struct ObjectNod
         freeList->next = nextObj->next;
 
         // Insert at end of destination list
-        nextObj->prev = destList->prev;
-        nextObj->next = destList;
+        nextObj->prev        = destList->prev;
+        nextObj->next        = destList;
         destList->prev->next = nextObj;
-        destList->prev = nextObj;
+        destList->prev       = nextObj;
     } else {
         return NULL;
     }
 
-    geo_remove_child(&nextObj->gfx.node);
+    geo_remove_child(                   &nextObj->gfx.node);
     geo_add_child(&gObjParentGraphNode, &nextObj->gfx.node);
 
     return (struct Object *) nextObj;
@@ -109,7 +109,7 @@ void unused_deallocate(struct LinkedList *freeList, struct LinkedList *node) {
     node->prev->next = node->next;
 
     // Insert at beginning of singly linked list
-    node->next = freeList->next;
+    node->next     = freeList->next;
     freeList->next = node;
 }
 /**
@@ -122,7 +122,7 @@ static void deallocate_object(struct ObjectNode *freeList, struct ObjectNode *ob
     obj->prev->next = obj->next;
 
     // Insert at beginning of free list
-    obj->next = freeList->next;
+    obj->next      = freeList->next;
     freeList->next = obj;
 }
 
@@ -164,7 +164,7 @@ void clear_object_lists(struct ObjectNode *objLists) {
  */
 void unload_object(struct Object *obj) {
     obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    obj->prevObj = NULL;
+    obj->prevObj     = NULL;
 
     obj->header.gfx.throwMatrix = NULL;
     stop_sounds_from_source(obj->header.gfx.cameraToObject);
@@ -212,11 +212,11 @@ struct Object *allocate_object(struct ObjectNode *objList) {
 
     // Initialize object fields
 
-    obj->activeFlags = ACTIVE_FLAG_ACTIVE | ACTIVE_FLAG_ALLOCATED;
-    obj->parentObj = obj;
-    obj->prevObj = NULL;
+    obj->activeFlags              = ACTIVE_FLAG_ACTIVE | ACTIVE_FLAG_ALLOCATED;
+    obj->parentObj                = obj;
+    obj->prevObj                  = NULL;
     obj->collidedObjInteractTypes = 0;
-    obj->numCollidedObjs = 0;
+    obj->numCollidedObjs          = 0;
 
 #if IS_64_BIT
     for (i = 0; i < 0x50; i++) {
@@ -228,16 +228,16 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     for (i = 0; i < 0x50; i++) obj->rawData.asS32[i] = 0;
 #endif
 
-    // obj->unused1       = 0;
-    obj->bhvStackIndex = 0;
-    obj->bhvDelayTimer = 0;
+    // obj->unused1            = 0;
+    obj->bhvStackIndex      = 0;
+    obj->bhvDelayTimer      = 0;
 
-    obj->hitboxRadius     = 50.0f;
-    obj->hitboxHeight     = 100.0f;
-    obj->hurtboxRadius    = 0.0f;
-    obj->hurtboxHeight    = 0.0f;
-    obj->hitboxDownOffset = 0.0f;
-    // obj->unused2          = 0;
+    obj->hitboxRadius       = 50.0f;
+    obj->hitboxHeight       = 100.0f;
+    obj->hurtboxRadius      = 0.0f;
+    obj->hurtboxHeight      = 0.0f;
+    obj->hitboxDownOffset   = 0.0f;
+    // obj->unused2            = 0;
 
     obj->platform           = NULL;
     obj->collisionData      = NULL;

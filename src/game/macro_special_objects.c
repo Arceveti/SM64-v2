@@ -32,7 +32,7 @@ s16 convert_rotation(s16 inRotation) {
  */
 void spawn_macro_abs_yrot_2params(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 ry, s16 params) {
     if (behavior != NULL) {
-        struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0, convert_rotation(ry), 0);
+        struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, convert_rotation(ry), 0x0);
         newObj->oBehParams = ((u32) params) << 16;
     }
 }
@@ -44,7 +44,7 @@ void spawn_macro_abs_yrot_2params(s32 model, const BehaviorScript *behavior, s16
  */
 void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 ry, s16 param) {
     if (behavior != NULL) {
-        struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0, convert_rotation(ry), 0);
+        struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, convert_rotation(ry), 0x0);
         newObj->oBehParams = ((u32) param) << 24;
     }
 }
@@ -55,7 +55,7 @@ void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 
  */
 void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 unkA, s16 unkB, s16 unkC) {
     struct Object *newObj =
-        spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0, 0, 0);
+        spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, 0x0, 0x0);
 
     // Are all three of these values unused?
     newObj->oMacroUnk108 = (f32) unkA;
@@ -70,7 +70,7 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
     model = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
 
     obj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior,
-                                     a1[1], a1[2], a1[3], 0, convert_rotation(a1[0]), 0);
+                                     a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
 
     obj->oUnk1A8 = a1[4];
     obj->oBehParams = (a1[4] & 0xFF) >> 16;
@@ -106,16 +106,16 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
         if (presetID < 0) break;
 
         // Set macro object properties from the list
-        macroObject[MACRO_OBJ_Y_ROT]  = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
-        macroObject[MACRO_OBJ_X]      =   *macroObjList++;                    // X position
-        macroObject[MACRO_OBJ_Y]      =   *macroObjList++;                    // Y position
-        macroObject[MACRO_OBJ_Z]      =   *macroObjList++;                    // Z position
+        macroObject[MACRO_OBJ_Y_ROT ] = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
+        macroObject[MACRO_OBJ_X     ] =   *macroObjList++;                    // X position
+        macroObject[MACRO_OBJ_Y     ] =   *macroObjList++;                    // Y position
+        macroObject[MACRO_OBJ_Z     ] =   *macroObjList++;                    // Z position
         macroObject[MACRO_OBJ_PARAMS] =   *macroObjList++;                    // Behavior params
 
         // Get the preset values from the MacroObjectPresets list.
-        preset.model = MacroObjectPresets[presetID].model;
+        preset.model    = MacroObjectPresets[presetID].model;
         preset.behavior = MacroObjectPresets[presetID].behavior;
-        preset.param = MacroObjectPresets[presetID].param;
+        preset.param    = MacroObjectPresets[presetID].param;
 
         if (preset.param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
 
@@ -131,9 +131,9 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                           macroObject[MACRO_OBJ_X],   // X-position
                                           macroObject[MACRO_OBJ_Y],   // Y-position
                                           macroObject[MACRO_OBJ_Z],   // Z-position
-                                          0,                          // X-rotation
+                                          0x0,                        // X-rotation
                                           convert_rotation(macroObject[MACRO_OBJ_Y_ROT]), // Y-rotation
-                                          0                                               // Z-rotation
+                                          0x0                         // Z-rotation
                 );
 
             newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];

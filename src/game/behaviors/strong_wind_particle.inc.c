@@ -46,7 +46,6 @@ void bhv_strong_wind_particle_loop(void) {
     }
 }
 
-//! windSpread param names?
 // Spawn particles that blow Mario away and knock his cap off from the current object.
 // Used for the Snowman in SL and Fwoosh.
 void cur_obj_spawn_strong_wind_particles(s32 windSpread, f32 scale, f32 relPosX, f32 relPosY, f32 relPosZ) {

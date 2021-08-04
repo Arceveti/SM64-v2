@@ -164,7 +164,7 @@ static void eyerok_hand_act_sleep(void) {
         } else {
             approach_f32_ptr(&o->oPosX, o->oHomeX, 15.0f);
             o->oPosY = o->oHomeY + (200 * o->oBehParams2ndByte + 400) * sins((s16)(absf(o->oPosX - o->oHomeX) / 724.0f * 0x8000));
-            obj_face_yaw_approach(o->oMoveAngleYaw, 400);
+            obj_face_yaw_approach(o->oMoveAngleYaw, 400); // 0x190
         }
     } else {
         o->collisionData = segmented_to_virtual((o->oBehParams2ndByte < 0) ? &ssl_seg7_collision_eyerok_left_hand_sleeping : &ssl_seg7_collision_eyerok_right_hand_sleeping);
@@ -316,7 +316,7 @@ static void eyerok_hand_act_retreat(void) {
 
     if (approach_f32_ptr(&o->oPosY, o->oHomeY, 20.0f)
      && distToHome == 0.0f
-     && o->oFaceAngleYaw == 0) {
+     && o->oFaceAngleYaw == 0x0) {
         o->oAction = EYEROK_HAND_ACT_IDLE;
         o->parentObj->oEyerokBossActiveHand -= o->oBehParams2ndByte;
         if (o->parentObj->oEyerokBossActiveHandId == o->oBehParams2ndByte) o->parentObj->oEyerokBossActiveHandId = 0;

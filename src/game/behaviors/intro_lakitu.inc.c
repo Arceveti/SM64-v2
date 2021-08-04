@@ -163,7 +163,7 @@ void bhv_intro_lakitu_loop(void) {
                 gCurrentObject->oAction         = INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3;
                 gCurrentObject->oMoveAnglePitch = 0xE00;
             }
-            gCurrentObject->oFaceAnglePitch = 0;
+            gCurrentObject->oFaceAnglePitch = 0x0;
             cur_obj_set_pos_via_transform();
             break;
 
@@ -173,7 +173,7 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oFaceAngleYaw   = camera_approach_s16_symmetric(gCurrentObject->oFaceAngleYaw, (s16) calculate_yaw(toPoint, gCamera->pos), 0x200);
             if (gCurrentObject->oTimer < 62) gCurrentObject->oMoveAngleYaw = approach_s16_asymptotic(gCurrentObject->oMoveAngleYaw, 0x1800, 0x1E);
             gCurrentObject->oMoveAnglePitch = camera_approach_s16_symmetric(gCurrentObject->oMoveAnglePitch, -0x2000, 0x5A);
-            gCurrentObject->oFaceAnglePitch = 0;
+            gCurrentObject->oFaceAnglePitch = 0x0;
             cur_obj_set_pos_via_transform();
             break;
     }

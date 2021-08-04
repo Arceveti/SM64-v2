@@ -14,10 +14,10 @@
  * Spawn the four pillars' touch detectors.
  */
 void bhv_pyramid_top_init(void) {
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789, 1024,   764, 0, 0, 0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789,  896, -2580, 0, 0, 0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024, -2580, 0, 0, 0);
-    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024,   764, 0, 0, 0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789, 1024,   764, 0x0, 0x0, 0x0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector,  1789,  896, -2580, 0x0, 0x0, 0x0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024, -2580, 0x0, 0x0, 0x0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvPyramidPillarTouchDetector, -5883, 1024,   764, 0x0, 0x0, 0x0);
 }
 
 /**

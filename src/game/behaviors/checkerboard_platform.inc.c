@@ -16,7 +16,7 @@ void bhv_checkerboard_elevator_group_init(void) {
     s32 i;
     struct Object *platformObj;
     // oBehParams2ndByte determines the relative height of the platforms
-    if (o->oBehParams2ndByte == 0) o->oBehParams2ndByte = 65;
+    if (o->oBehParams2ndByte == 0x0) o->oBehParams2ndByte = 65; //! param names?
     relativePosY = o->oBehParams2ndByte * 10;
     type = (o->oBehParams >> 24) & 0xFF;
     for (i = 0; i < 2; i++) {
@@ -60,13 +60,13 @@ void bhv_checkerboard_platform_loop(void) {
     o->oMoveAnglePitch += absi(o->oAngleVelPitch);
     o->oFaceAnglePitch += absi(o->oAngleVelPitch);
     o->oFaceAngleYaw = o->oMoveAngleYaw;
-    if (o->oMoveAnglePitch != 0) {
+    if (o->oMoveAnglePitch != 0x0) {
         o->oForwardVel = signum_positive(o->oAngleVelPitch) * sins(o->oMoveAnglePitch) * radius;
         o->oVelY       = signum_positive(o->oAngleVelPitch) * coss(o->oMoveAnglePitch) * radius;
     }
     // Prevent the lower platform from flipping
     if (o->oCheckerBoardPlatformRotateAction == CHECKERBOARD_PLATFORM_ACT_MOVE_UP) {
-        o->oAngleVelPitch = 0;
+        o->oAngleVelPitch = 0x0;
         o->oFaceAnglePitch &= ~0x7FFF;
     }
     cur_obj_move_using_fvel_and_gravity();

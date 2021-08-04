@@ -214,7 +214,7 @@ void bhv_bob_pit_bowling_ball_loop(void) {
     struct FloorGeometry *floorGeometry;
     UNUSED s32 collisionFlags = object_step();
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
-    if ((floorGeometry->normalX == 0) && (floorGeometry->normalZ == 0)) o->oForwardVel = 28.0f;
+    if ((floorGeometry->normalX == 0.0f) && (floorGeometry->normalZ == 0.0f)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();
     set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
     cur_obj_play_sound_1(SOUND_ENV_BOWLING_BALL_ROLL);
@@ -228,8 +228,8 @@ void bhv_free_bowling_ball_init(void) {
     o->oHomeX        = o->oPosX;
     o->oHomeY        = o->oPosY;
     o->oHomeZ        = o->oPosZ;
-    o->oForwardVel   = 0;
-    o->oMoveAngleYaw = 0;
+    o->oForwardVel   = 0.0f;
+    o->oMoveAngleYaw = 0x0;
 }
 
 void bhv_free_bowling_ball_roll_loop(void) {

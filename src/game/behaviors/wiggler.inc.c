@@ -333,7 +333,7 @@ static void wiggler_act_knockback(void) {
         obj_face_pitch_approach(0, 0x190);
     }
 
-    if (obj_forward_vel_approach(0.0f, 1.0f) && o->oFaceAnglePitch == 0) {
+    if (obj_forward_vel_approach(0.0f, 1.0f) && o->oFaceAnglePitch == 0x0) {
         o->oAction = WIGGLER_ACT_WALK;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
     }

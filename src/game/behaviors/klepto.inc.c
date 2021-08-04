@@ -272,7 +272,7 @@ static void klepto_act_retreat(void) {
     obj_rotate_yaw_and_bounce_off_walls(o->oKleptoYawToTarget, 600);
 
     if (obj_face_yaw_approach(o->oMoveAngleYaw, 1000)) {
-        if (abs_angle_diff(o->oFaceAnglePitch, o->oMoveAnglePitch) == 0) {
+        if (abs_angle_diff(o->oFaceAnglePitch, o->oMoveAnglePitch) == 0x0) {
             o->oAction = KLEPTO_ACT_RESET_POSITION;
             o->oHomeY = 1500.0f;
             o->oKleptoDiveTimer = -100;
@@ -285,7 +285,7 @@ static void klepto_act_retreat(void) {
 static void klepto_act_reset_position(void) {
     if (o->oTimer < 300) {
         klepto_circle_target(300.0f, 20.0f);
-    } else if (o->oBehParams2ndByte != 0) {
+    } else if (o->oBehParams2ndByte != 0x0) { //! param name
         o->oHomeX = -2000.0f;
         o->oHomeZ = -1000.0f;
         o->oHomeY = o->oKleptoDistanceToTarget = 9999.0f;

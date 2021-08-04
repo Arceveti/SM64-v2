@@ -131,7 +131,7 @@ void bhv_snufit_loop(void) {
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x7D0);
         } else {
             obj_move_pitch_approach(0, 0x200);
-            o->oMoveAngleYaw += 200;
+            o->oMoveAngleYaw += 0xC8; // 200
         }
 
         o->oFaceAnglePitch = o->oMoveAnglePitch;

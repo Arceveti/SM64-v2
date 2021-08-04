@@ -158,17 +158,17 @@ static void monty_mole_act_select_hole(void) {
         o->oPosY = o->oFloorHeight = o->oMontyMoleCurrentHole->oPosY;
         o->oPosZ = o->oMontyMoleCurrentHole->oPosZ;
 
-        o->oFaceAnglePitch = 0;
+        o->oFaceAnglePitch = 0x0;
         o->oMoveAngleYaw = o->oMontyMoleCurrentHole->oAngleToMario;
 
         if (o->oDistanceToMario > 500.0f || minDistToMario > 100.0f || random_sign() < 0) {
-            o->oAction = MONTY_MOLE_ACT_RISE_FROM_HOLE;
-            o->oVelY = 3.0f;
+            o->oAction  = MONTY_MOLE_ACT_RISE_FROM_HOLE;
+            o->oVelY    = 3.0f;
             o->oGravity = 0.0f;
             monty_mole_spawn_dirt_particles(0, 10);
         } else {
-            o->oAction = MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE;
-            o->oVelY = 50.0f;
+            o->oAction  = MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE;
+            o->oVelY    = 50.0f;
             o->oGravity = -4.0f;
             monty_mole_spawn_dirt_particles(0, 20);
         }

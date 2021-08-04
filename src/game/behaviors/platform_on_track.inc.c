@@ -9,10 +9,10 @@
  * Collision models for the different types of platforms.
  */
 static void const *sPlatformOnTrackCollisionModels[] = {
-    /* PLATFORM_ON_TRACK_TYPE_CARPET    */ rr_seg7_collision_07029038,
+    /* PLATFORM_ON_TRACK_TYPE_CARPET    */ rr_seg7_collision_flying_carpet,
     /* PLATFORM_ON_TRACK_TYPE_SKI_LIFT  */ ccm_seg7_collision_ropeway_lift,
     /* PLATFORM_ON_TRACK_TYPE_CHECKERED */ checkerboard_platform_seg8_collision_platform,
-    /* PLATFORM_ON_TRACK_TYPE_GRATE     */ bitfs_seg7_collision_070157E0,
+    /* PLATFORM_ON_TRACK_TYPE_GRATE     */ bitfs_seg7_collision_platform_on_track,
 };
 
 /**
@@ -52,20 +52,13 @@ static void platform_on_track_mario_not_on_platform(void) {
  */
 void bhv_platform_on_track_init(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        s16 pathIndex = (u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_PATH;
-        o->oPlatformOnTrackType = ((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_TYPE) >> 4;
-
-        o->oPlatformOnTrackIsNotSkiLift = o->oPlatformOnTrackType - PLATFORM_ON_TRACK_TYPE_SKI_LIFT;
-
-        o->collisionData =
-            segmented_to_virtual(sPlatformOnTrackCollisionModels[o->oPlatformOnTrackType]);
-
+        s16 pathIndex                    =  (u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_PATH;
+        o->oPlatformOnTrackType          = ((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_TYPE) >> 4;
+        o->oPlatformOnTrackIsNotSkiLift  = o->oPlatformOnTrackType - PLATFORM_ON_TRACK_TYPE_SKI_LIFT;
+        o->collisionData                 = segmented_to_virtual(sPlatformOnTrackCollisionModels[o->oPlatformOnTrackType]);
         o->oPlatformOnTrackStartWaypoint = segmented_to_virtual(sPlatformOnTrackPaths[pathIndex]);
-
-        o->oPlatformOnTrackIsNotHMC = pathIndex - 4;
-
-        o->oBehParams2ndByte = o->oMoveAngleYaw; // TODO: Weird?
-
+        o->oPlatformOnTrackIsNotHMC      = pathIndex - 4;
+        o->oBehParams2ndByte             = o->oMoveAngleYaw; // TODO: Weird?
         if (o->oPlatformOnTrackType == PLATFORM_ON_TRACK_TYPE_CHECKERED) o->header.gfx.scale[1] = 2.0f;
     }
 }
@@ -77,20 +70,20 @@ void bhv_platform_on_track_init(void) {
 static void platform_on_track_act_init(void) {
     s32 i;
 
-    o->oPlatformOnTrackPrevWaypoint = o->oPlatformOnTrackStartWaypoint;
+    o->oPlatformOnTrackPrevWaypoint      = o->oPlatformOnTrackStartWaypoint;
     o->oPlatformOnTrackPrevWaypointFlags = 0;
-    o->oPlatformOnTrackBaseBallIndex = 0;
+    o->oPlatformOnTrackBaseBallIndex     = 0;
 
     o->oPosX = o->oHomeX = o->oPlatformOnTrackStartWaypoint->pos[0];
     o->oPosY = o->oHomeY = o->oPlatformOnTrackStartWaypoint->pos[1];
     o->oPosZ = o->oHomeZ = o->oPlatformOnTrackStartWaypoint->pos[2];
 
     o->oFaceAngleYaw = o->oBehParams2ndByte;
-    o->oForwardVel = o->oVelX = o->oVelY = o->oVelZ = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
+    o->oForwardVel   = o->oVelX = o->oVelY = o->oVelZ = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
 
     o->oPlatformOnTrackWasStoodOn = FALSE;
 
-    if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0;
+    if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0x0;
 
     // Spawn track balls
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for (i = 1; i < 6; i++) platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
@@ -241,7 +234,7 @@ static void platform_on_track_act_fall(void) {
  * Control the rocking of the ski lift.
  */
 static void platform_on_track_rock_ski_lift(void) {
-    s32 targetRoll = 0;
+    s32 targetRoll = 0x0;
 
     o->oFaceAngleRoll += (s32) o->oPlatformOnTrackSkiLiftRollVel;
 

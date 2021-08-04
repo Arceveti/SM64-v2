@@ -94,8 +94,7 @@ static void update_rumble_pak(void) {
             gCurrRumbleSettings.count -= 0x100;
             start_rumble();
         } else {
-            gCurrRumbleSettings.count +=
-                ((gCurrRumbleSettings.level * gCurrRumbleSettings.level * gCurrRumbleSettings.level) / (1 << 9)) + 4;
+            gCurrRumbleSettings.count += ((gCurrRumbleSettings.level * gCurrRumbleSettings.level * gCurrRumbleSettings.level) / (1 << 9)) + 4;
 
             stop_rumble();
         }
@@ -136,7 +135,7 @@ void queue_rumble_data(s16 time, s16 level) {
     gRumbleDataQueue[2].comm = (level > 70) ? RUMBLE_EVENT_CONSTON : RUMBLE_EVENT_LEVELON;
 
     gRumbleDataQueue[2].level = level;
-    gRumbleDataQueue[2].time = time;
+    gRumbleDataQueue[2].time  = time;
     gRumbleDataQueue[2].decay = 0;
 }
 
@@ -218,7 +217,7 @@ void cancel_rumble(void) {
     gRumbleDataQueue[2].comm = RUMBLE_EVENT_NOMESG;
 
     gCurrRumbleSettings.timer = 0;
-    gCurrRumbleSettings.slip = 0;
+    gCurrRumbleSettings.slip  = 0;
 
     gRumblePakTimer = 0;
 }

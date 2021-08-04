@@ -64,7 +64,7 @@ void bhv_act_selector_star_type_loop(void) {
         case STAR_SELECTOR_NOT_SELECTED:
             gCurrentObject->oStarSelectorSize -= 0.1f;
             if (gCurrentObject->oStarSelectorSize < 1.0f) gCurrentObject->oStarSelectorSize = 1.0f;
-            gCurrentObject->oFaceAngleYaw = 0;
+            gCurrentObject->oFaceAngleYaw  =   0x0;
             break;
         // If a star is selected, rotate and slightly increase size
         case STAR_SELECTOR_SELECTED:
@@ -90,9 +90,9 @@ void render_100_coin_star(u8 stars) {
     if (stars & (1 << 6)) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 #ifdef WIDE
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370*4.0f)/3.0f) : 370, 24, -300, 0, 0, 0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370*4.0f)/3.0f) : 370, 24, -300, 0x0, 0x0, 0x0);
 #else
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, 370, 24, -300, 0, 0, 0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType,                                   370, 24, -300, 0x0, 0x0, 0x0);
 #endif
 
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
@@ -121,7 +121,7 @@ void bhv_act_selector_init(void) {
             // If this is the first star that has not been collected, set
             // the default selection to this star.
             if (sInitSelectedActNum == 0) {
-                sInitSelectedActNum = sVisibleStars + 1;
+                sInitSelectedActNum  = sVisibleStars + 1;
                 sSelectableStarIndex = sVisibleStars;
             }
         }
@@ -131,8 +131,8 @@ void bhv_act_selector_init(void) {
     // If the stars have been collected in order so far, show the next star.
     if (sVisibleStars == sObtainedStars && sVisibleStars != 6) {
         selectorModelIDs[sVisibleStars] = MODEL_TRANSPARENT_STAR;
-        sInitSelectedActNum = sVisibleStars + 1;
-        sSelectableStarIndex = sVisibleStars;
+        sInitSelectedActNum             = sVisibleStars + 1;
+        sSelectableStarIndex            = sVisibleStars;
         sVisibleStars++;
     }
 
@@ -145,14 +145,14 @@ void bhv_act_selector_init(void) {
         for (i = 0; i < sVisibleStars; i++) {
             sStarSelectorModels[i] =
                 spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0, 0, 0);
+                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     } else {
         for (i = 0; i < sVisibleStars; i++) {
             sStarSelectorModels[i] =
                 spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                        75 + sVisibleStars * -75 + i * 152, 248, -300, 0, 0, 0);
+                                        75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     }
@@ -160,7 +160,7 @@ void bhv_act_selector_init(void) {
     for (i = 0; i < sVisibleStars; i++) {
         sStarSelectorModels[i] =
             spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                    75 + sVisibleStars * -75 + i * 152, 248, -300, 0, 0, 0);
+                                    75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
     }
 #endif
@@ -224,15 +224,9 @@ void print_course_number(void) {
 #ifdef VERSION_EU
     // Change upper part of the wood texture depending of the language defined
     switch (language) {
-        case LANGUAGE_ENGLISH:
-            gSPDisplayList(gDisplayListHead++, dl_menu_texture_course_upper);
-            break;
-        case LANGUAGE_FRENCH:
-            gSPDisplayList(gDisplayListHead++, dl_menu_texture_niveau_upper);
-            break;
-        case LANGUAGE_GERMAN:
-            gSPDisplayList(gDisplayListHead++, dl_menu_texture_kurs_upper);
-            break;
+        case LANGUAGE_ENGLISH: gSPDisplayList(gDisplayListHead++, dl_menu_texture_course_upper); break;
+        case LANGUAGE_FRENCH:  gSPDisplayList(gDisplayListHead++, dl_menu_texture_niveau_upper); break;
+        case LANGUAGE_GERMAN:  gSPDisplayList(gDisplayListHead++, dl_menu_texture_kurs_upper  ); break;
     }
 
     gSPDisplayList(gDisplayListHead++, dl_menu_rgba16_wood_course_end);
@@ -414,11 +408,7 @@ s32 lvl_update_obj_and_load_act_button_actions(UNUSED s32 arg, UNUSED s32 unused
             queue_rumble_data(60, 70);
             queue_rumble_decay(1);
 #endif
-            if (sInitSelectedActNum >= sSelectedActIndex + 1) {
-                sLoadedActNum = sSelectedActIndex + 1;
-            } else {
-                sLoadedActNum = sInitSelectedActNum;
-            }
+            sLoadedActNum       = (sInitSelectedActNum >= sSelectedActIndex + 1) ? (sSelectedActIndex + 1) : sInitSelectedActNum;
             gDialogCourseActNum = sSelectedActIndex + 1;
         }
     }

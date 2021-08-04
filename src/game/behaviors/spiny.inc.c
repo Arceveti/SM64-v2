@@ -151,7 +151,7 @@ static void spiny_act_thrown_by_lakitu(void) {
             obj_init_animation_with_sound(o, spiny_seg5_anims_05016EAC, SPINY_ANIM_DEFAULT);
             o->oGraphYOffset = -17.0f;
 
-            o->oFaceAnglePitch = 0;
+            o->oFaceAnglePitch = 0x0;
             o->oAction = SPINY_ACT_WALK;
         } else if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
             o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();

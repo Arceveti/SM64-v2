@@ -76,7 +76,7 @@ void mr_i_act_spin_death(void) {
     if (o->oTimer < 64) {
         startYaw = o->oMoveAngleYaw;
         o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
-        if (startYaw < 0 && o->oMoveAngleYaw >= 0) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
+        if (startYaw < 0x0 && o->oMoveAngleYaw >= 0x0) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
         o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
         cur_obj_shake_y(4.0f);
     } else if (o->oTimer < 96) {
@@ -123,7 +123,7 @@ void mr_i_act_looking_at_mario(void) {
     obj_turn_toward_object(o, gMarioObject, 0x0F, 0x400);
     dYaw = startYaw - (s16)(o->oMoveAngleYaw);
     if (!dYaw) {
-        o->oMrISpinAmount = 0;
+        o->oMrISpinAmount    = 0;
         o->oMrISpinDirection = 0;
     } else if (dYaw > 0) {
         if (o->oMrISpinDirection > 0) {
@@ -144,7 +144,7 @@ void mr_i_act_looking_at_mario(void) {
     if (o->oMrISpinAmount > (1 << 16)) o->oAction = MR_I_ACT_SPIN_DEATH;
     o->oMrISpinAngle--;
     if (!o->oMrISpinAngle) {
-        o->oMrISpinAngle = 120;
+        o->oMrISpinAngle  = 120;
         o->oMrISpinAmount = 0;
     }
     if (o->oMrISpinAmount < 5000) {
@@ -168,7 +168,7 @@ void mr_i_act_idle(void) {
     s16 angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     if (o->oTimer == 0) {
         cur_obj_become_tangible();
-        o->oMoveAnglePitch         = 0;
+        o->oMoveAnglePitch         = 0x0;
         o->oMrIParticleTimer       = 30;
         o->oMrIParticleTimerTarget = random_float() * 20.0f;
         o->oAngleVelYaw            = (o->oMrIParticleTimerTarget & 1) ? -256 : 256;

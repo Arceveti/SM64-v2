@@ -26,8 +26,8 @@ void bhv_intro_scene_loop(void) {
         gCurrentObject->oPosX           = gCamera->pos[0];
         gCurrentObject->oPosY           = gCamera->pos[1];
         gCurrentObject->oPosZ           = gCamera->pos[2];
-        gCurrentObject->oMoveAnglePitch = 0;
-        gCurrentObject->oMoveAngleYaw   = 0;
+        gCurrentObject->oMoveAnglePitch = 0x0;
+        gCurrentObject->oMoveAngleYaw   = 0x0;
 
         switch (gCutsceneObjSpawn) {
             case CUTSCENE_OBJ_BEGINNING_LAKITU:

@@ -122,7 +122,7 @@ u8 sSkyboxColors[][3] = {
 /**
  * The vertical length of the skybox tilemap in tiles.
  */
-#define SKYBOX_ROWS (8 * SKYBOX_SIZE)
+#define SKYBOX_ROWS ( 8 * SKYBOX_SIZE)
 
 
 /**

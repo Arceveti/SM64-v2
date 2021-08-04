@@ -1276,10 +1276,10 @@ void bowser_act_tilt_lava_platform(void) {
         // and set Bowser to default action
         if (isNotTilting) {
             o->oAction = BOWSER_ACT_DEFAULT;
-            platform->oAngleVelPitch  = 0;
-            platform->oAngleVelRoll   = 0;
-            platform->oFaceAnglePitch = 0;
-            platform->oFaceAngleRoll  = 0;
+            platform->oAngleVelPitch  = 0x0;
+            platform->oAngleVelRoll   = 0x0;
+            platform->oFaceAnglePitch = 0x0;
+            platform->oFaceAngleRoll  = 0x0;
         }
     }
     // Extend "idle" animation

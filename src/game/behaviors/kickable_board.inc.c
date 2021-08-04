@@ -19,7 +19,7 @@ s32 check_mario_attacking(void) {
 }
 
 void init_kickable_board_rock(void) {
-    o->oKickableBoardRockingTimer = 1600;
+    o->oKickableBoardRockingTimer       = 1600;
     o->oKickableBoardRockingAngleAmount = 0;
 }
 
@@ -27,7 +27,7 @@ void bhv_kickable_board_loop(void) {
     s32 attackValue;
     switch (o->oAction) {
         case KICKABLE_BOARD_ACT_IDLE_VERTICAL:
-            o->oFaceAnglePitch = 0;
+            o->oFaceAnglePitch = 0x0;
             if (check_mario_attacking()) {
                 init_kickable_board_rock();
                 o->oAction = KICKABLE_BOARD_ACT_ROCKING;
@@ -35,7 +35,7 @@ void bhv_kickable_board_loop(void) {
             load_object_collision_model();
             break;
         case KICKABLE_BOARD_ACT_ROCKING:
-            o->oFaceAnglePitch = 0;
+            o->oFaceAnglePitch = 0x0;
             load_object_collision_model();
             o->oFaceAnglePitch = -sins(o->oKickableBoardRockingAngleAmount) * o->oKickableBoardRockingTimer;
             if (o->oTimer > 30 && (attackValue = check_mario_attacking())) {
@@ -52,9 +52,7 @@ void bhv_kickable_board_loop(void) {
             } else {
                 init_kickable_board_rock();
             }
-            if (!(o->oKickableBoardRockingAngleAmount & 0x7FFF)) {
-                cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
-            }
+            if (!(o->oKickableBoardRockingAngleAmount & 0x7FFF)) cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
             o->oKickableBoardRockingAngleAmount += 0x400;
             break;
         case KICKABLE_BOARD_ACT_FALLING:
@@ -64,7 +62,7 @@ void bhv_kickable_board_loop(void) {
             o->oFaceAnglePitch += o->oAngleVelPitch;
             if (o->oFaceAnglePitch < -0x4000) {
                 o->oFaceAnglePitch = -0x4000;
-                o->oAngleVelPitch = 0;
+                o->oAngleVelPitch  = 0x0;
                 o->oAction = KICKABLE_BOARD_ACT_IDLE_HORIZONTAL;
                 cur_obj_shake_screen(SHAKE_POS_SMALL);
                 cur_obj_play_sound_2(SOUND_GENERAL_KICKABLE_BOARD_FALL);

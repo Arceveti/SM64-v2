@@ -4,8 +4,8 @@ const GeoLayout star_geo[] = {
    GEO_OPEN_NODE(),
       GEO_SCALE(LAYER_FORCE, 16384),
       GEO_OPEN_NODE(),
-         GEO_DISPLAY_LIST(LAYER_NO_SILHOUETTE, star_seg3_dl_body),
-         GEO_DISPLAY_LIST(LAYER_NO_SILHOUETTE_ALPHA, star_seg3_dl_eyes),
+         GEO_DISPLAY_LIST(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, star_seg3_dl_body),
+         GEO_DISPLAY_LIST(LAYER_OCCLUDE_SILHOUETTE_ALPHA, star_seg3_dl_eyes),
 #ifdef STAR_GLOW
          GEO_BILLBOARD_WITH_ZOFFSET(-48),
          GEO_OPEN_NODE(),

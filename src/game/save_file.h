@@ -150,7 +150,7 @@ void save_file_load_all(void);
 void save_file_reload(  void);
 void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
 s32  save_file_exists(s32 fileIndex);
-u32  save_file_get_max_coin_score(s32 courseIndex);
+u32  save_file_get_max_coin_score(                  s32 courseIndex);
 s32  save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);
 s32  save_file_get_total_star_count( s32 fileIndex, s32 minCourse, s32 maxCourse);
 void save_file_set_flags(  u32 flags);
@@ -187,7 +187,7 @@ enum EuLanguages {
 };
 
 void eu_set_language(u16 language);
-u16 eu_get_language(void);
+u16  eu_get_language(void);
 #endif
 
 #endif // SAVE_FILE_H

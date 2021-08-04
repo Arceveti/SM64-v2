@@ -75,10 +75,8 @@ void cur_obj_play_sound_2(s32 soundMagic) {
  * Technically, these functions are only educated guesses. Trust these
  * interpretations at your own discretion.
  */
-s32 calc_dist_to_volume_range_1(f32 distance) // range from 60-124
-{
+s32 calc_dist_to_volume_range_1(f32 distance) {// range from 60-124
     s32 volume;
-
     if (distance < 500.0f) {
         volume = 127;
     } else if (1500.0f < distance) {
@@ -86,14 +84,11 @@ s32 calc_dist_to_volume_range_1(f32 distance) // range from 60-124
     } else {
         volume = (((distance - 500.0f) / 1000.0f) * 64.0f) + 60.0f;
     }
-
     return volume;
 }
 
-s32 calc_dist_to_volume_range_2(f32 distance) // range from 79.2-143.2
-{
+s32 calc_dist_to_volume_range_2(f32 distance) {// range from 79.2-143.2
     s32 volume;
-
     if (distance < 1300.0f) {
         volume = 127;
     } else if (2300.0f < distance) {
@@ -101,6 +96,5 @@ s32 calc_dist_to_volume_range_2(f32 distance) // range from 79.2-143.2
     } else {
         volume = (((distance - 1000.0f) / 1000.0f) * 64.0f) + 60.0f;
     }
-
     return volume;
 }
