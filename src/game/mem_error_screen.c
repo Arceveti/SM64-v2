@@ -55,7 +55,7 @@ Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node,
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
             print_generic_string(8, 170, text_console_8mb);
             print_generic_string(8, 120, text_pj64);
-            print_generic_string(8, 54, text_pj64_2);
+            print_generic_string(8,  54, text_pj64_2);
             // Cleanup
             gSPDisplayList(gDisplayListHead++, dl_ia_text_end); // Reset back to default render settings.
             gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);

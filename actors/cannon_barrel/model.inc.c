@@ -13,7 +13,7 @@ static const Lights1 cannon_barrel_seg8_lights_08005890 = gdSPDefLights1(
 );
 
 // 0x080058A8
-ALIGNED8 static const Texture cannon_barrel_seg8_texture_080058A8[] = {
+ALIGNED8 static const Texture dCannonBarrelTexture[] = {
 #include "actors/cannon_barrel/cannon_barrel.rgba16.inc.c"
 };
 
@@ -89,7 +89,7 @@ static const Vtx cannon_barrel_seg8_vertex_080063A8[] = {
 
 // 0x08006408 - 0x080064C0
 const Gfx cannon_barrel_seg8_dl_08006408[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cannon_barrel_seg8_texture_080058A8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dCannonBarrelTexture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cannon_barrel_seg8_lights_08005878.l, 1),

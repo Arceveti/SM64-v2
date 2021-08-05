@@ -13,7 +13,7 @@ static const Lights1 cannon_base_seg8_lights_080049A0 = gdSPDefLights1(
 );
 
 // 0x080049B8
-ALIGNED8 static const Texture cannon_base_seg8_texture_080049B8[] = {
+ALIGNED8 static const Texture dCannonBaseTexture[] = {
 #include "actors/cannon_base/cannon_base.rgba16.inc.c"
 };
 
@@ -113,7 +113,7 @@ static const Vtx cannon_base_seg8_vertex_08005558[] = {
 
 // 0x08005658 - 0x080056D0
 const Gfx cannon_base_seg8_dl_08005658[] = {
-    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cannon_base_seg8_texture_080049B8),
+    gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dCannonBaseTexture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&cannon_base_seg8_lights_08004988.l, 1),
