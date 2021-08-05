@@ -131,7 +131,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     s32 vel = 0;                        // sp30, t3
     s32 usedSemitone;                   // a1
     f32 freqScale = 0.0f;               // sp28, f0
-    f32 sp24 = 0.0f;
+    f32 sp24      = 0.0f;
     f32 temp_f12;
     f32 temp_f2;
 

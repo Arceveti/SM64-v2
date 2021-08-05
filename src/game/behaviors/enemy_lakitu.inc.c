@@ -26,7 +26,6 @@ static struct ObjectHitbox sEnemyLakituHitbox = {
 static void enemy_lakitu_act_uninitialized(void) {
     if (o->oDistanceToMario < 2000.0f) {
         spawn_object_relative_with_scale(CLOUD_BP_LAKITU_CLOUD, 0, 0, 0, 2.0f, o, MODEL_MIST, bhvCloud);
-
         cur_obj_unhide();
         o->oAction = ENEMY_LAKITU_ACT_MAIN;
     }
@@ -93,7 +92,7 @@ static void enemy_lakitu_sub_act_no_spiny(void) {
             obj_init_animation_with_sound(spiny, spiny_egg_seg5_anims_050157E4, 0);
 
             o->oEnemyLakituNumSpinies++;
-            o->oSubAction = ENEMY_LAKITU_SUB_ACT_HOLD_SPINY;
+            o->oSubAction                = ENEMY_LAKITU_SUB_ACT_HOLD_SPINY;
             o->oEnemyLakituSpinyCooldown = 30;
         }
     }
@@ -110,8 +109,7 @@ static void enemy_lakitu_sub_act_hold_spiny(void) {
         o->oEnemyLakituSpinyCooldown--;
     // TODO: Check if anything interesting happens if we bypass this with speed
     } else if (o->oDistanceToMario > o->oDrawingDistance - 100.0f
-             || (o->oDistanceToMario < 500.0f
-                 && abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x2000)) {
+             || (o->oDistanceToMario < 500.0f && abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x2000)) {
         o->oSubAction = ENEMY_LAKITU_SUB_ACT_THROW_SPINY;
         o->oEnemyLakituFaceForwardCountdown = 20;
     }
@@ -150,7 +148,6 @@ static void enemy_lakitu_act_main(void) {
         case ENEMY_LAKITU_SUB_ACT_HOLD_SPINY:  enemy_lakitu_sub_act_hold_spiny();  break;
         case ENEMY_LAKITU_SUB_ACT_THROW_SPINY: enemy_lakitu_sub_act_throw_spiny(); break;
     }
-
     cur_obj_move_standard(78);
 
     // Die and drop held spiny when attacked by mario
@@ -162,9 +159,7 @@ static void enemy_lakitu_act_main(void) {
  */
 void bhv_enemy_lakitu_update(void) {
     // PARTIAL_UPDATE
-
     treat_far_home_as_mario(2000.0f);
-
     switch (o->oAction) {
         case ENEMY_LAKITU_ACT_UNINITIALIZED: enemy_lakitu_act_uninitialized(); break;
         case ENEMY_LAKITU_ACT_MAIN:          enemy_lakitu_act_main();          break;

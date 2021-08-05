@@ -215,7 +215,7 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION);
 
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
         graphNode->displayList = displayList;
     }
 
@@ -234,7 +234,7 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
         vec3s_copy(graphNode->rotation, rotation);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
         graphNode->displayList = displayList;
     }
 
@@ -251,8 +251,8 @@ struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool,
 
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_SCALE);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
-        graphNode->scale = scale;
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->scale       = scale;
         graphNode->displayList = displayList;
     }
 
@@ -315,7 +315,7 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ANIMATED_PART);
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
         graphNode->displayList = displayList;
     }
 
@@ -334,9 +334,9 @@ struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BILLBOARD);
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
         graphNode->displayList = displayList;
-        graphNode->zOffset = zOffset;
+        graphNode->zOffset     = zOffset;
     }
 
     return graphNode;
@@ -352,7 +352,7 @@ struct GraphNodeDisplayList *init_graph_node_display_list(struct AllocOnlyPool *
 
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_DISPLAY_LIST);
-        graphNode->node.flags = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
+        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & 0xFF);
         graphNode->displayList = displayList;
     }
 

@@ -58,8 +58,8 @@ void bhv_temp_coin_loop(void) {
 }
 
 void bhv_coin_init(void) {
-    o->oVelY = random_float() * 10.0f + 30.0f + o->oCoinBaseYVel;
-    o->oForwardVel = random_float() * 10.0f;
+    o->oVelY         = random_float() * 10.0f + 30.0f + o->oCoinBaseYVel;
+    o->oForwardVel   = random_float() * 10.0f;
     o->oMoveAngleYaw = random_u16();
     cur_obj_set_behavior(bhvYellowCoin);
     obj_set_hitbox(o, &sYellowCoinHitbox);
@@ -186,9 +186,7 @@ void bhv_coin_formation_loop(void) {
             }
             break;
         case COIN_FORMATION_ACT_ACTIVE:
-            if (o->oDistanceToMario > 4100.0f) { //! hardcoded draw distance
-                o->oAction = COIN_FORMATION_ACT_DEACTIVATE;
-            }
+            if (o->oDistanceToMario > 4100.0f) o->oAction = COIN_FORMATION_ACT_DEACTIVATE; //! hardcoded draw distance
             break;
         case COIN_FORMATION_ACT_DEACTIVATE:
             o->oAction = COIN_FORMATION_ACT_INACTIVE;
@@ -224,11 +222,11 @@ void coin_inside_boo_act_carried(void) {
     }
     obj_copy_pos(o, parent);
     if (parent->oBooDeathStatus == BOO_DEATH_STATUS_DYING) {
-        o->oAction = COIN_INSIDE_BOO_ACT_DROPPED;
+        o->oAction   = COIN_INSIDE_BOO_ACT_DROPPED;
         marioMoveYaw = gMarioObject->oMoveAngleYaw;
-        o->oVelX = sins(marioMoveYaw) * 3.0f;
-        o->oVelZ = coss(marioMoveYaw) * 3.0f;
-        o->oVelY = 35.0f;
+        o->oVelX     = sins(marioMoveYaw) * 3.0f;
+        o->oVelZ     = coss(marioMoveYaw) * 3.0f;
+        o->oVelY     = 35.0f;
     }
 }
 

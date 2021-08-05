@@ -372,7 +372,6 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
 
     if (state != 1) {
         for (i = 0; i < 48; i++) sFaceVisible[i] = FALSE;
-
     } else if (state == 1) {
         if (sFaceCounter == 0) {
             if (gPlayer1Controller->buttonPressed & Z_TRIG) {
@@ -384,7 +383,6 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
             sFaceVisible[sFaceToggleOrder[sFaceCounter++]] ^= TRUE;
             if (sFaceCounter >= 40) sFaceCounter = 0;
         }
-
         // Draw while the first or last face is visible.
         if (sFaceVisible[0] || sFaceVisible[17]) {
             image = intro_sample_frame_buffer(40, 40, 2, 2, 120, 80);
@@ -394,7 +392,6 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
             }
         }
     }
-
     return dl;
 }
 #endif

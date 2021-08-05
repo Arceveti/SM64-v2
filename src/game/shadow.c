@@ -613,8 +613,7 @@ Gfx *create_shadow_circle_4_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
  * Create a circular shadow composed of 4 vertices and assume that the ground
  * underneath it is totally flat.
  */
-Gfx *create_shadow_circle_assuming_flat_ground(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
-                                               u8 solidity) {
+Gfx *create_shadow_circle_assuming_flat_ground(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 solidity) {
     Vtx *verts;
     Gfx *displayList;
     struct FloorGeometry *dummy; // only for calling find_floor_height_and_data
@@ -697,7 +696,7 @@ Gfx *create_shadow_square(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     f32 shadowHeight;
     f32 distFromShadow;
     f32 shadowRadius;
-
+//! held object's shadow scale should change with object scale
     if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity)) return NULL;
 
     distFromShadow = yPos - shadowHeight;

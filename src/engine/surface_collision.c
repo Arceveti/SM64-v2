@@ -16,12 +16,11 @@
  * Iterate through the list of walls until all walls are checked and
  * have given their wall push.
  */
-static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
-                                          struct WallCollisionData *data) {
+static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struct WallCollisionData *data) {
     register struct Surface *surf;
     register f32 offset;
     register f32 radius = data->radius;
-    // these were f32
+    // these are f32 in vanilla
     register s32 x = data->x;
     register s32 y = data->y + data->offsetY;
     register s32 z = data->z;
@@ -63,10 +62,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             }
         }
 
-        //? (Quantum Tunneling) Due to issues with the vertices walls choose and
-        //  the fact they are floating point, certain floating point positions
+        //  Fixed? (Quantum Tunneling) Due to issues with the vertices walls choose
+        //  and the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
-        // Fixed?
+
         y1 = surf->vertex1[1]; y2 = surf->vertex2[1]; y3 = surf->vertex3[1];
         if (surf->flags & SURFACE_FLAG_X_PROJECTION) {
             w1 = -surf->vertex1[2]; w2 = -surf->vertex2[2]; w3 = -surf->vertex3[2];
@@ -113,7 +112,7 @@ s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 ra
     s32 numCollisions = 0;
 
     collision.offsetY = offsetY;
-    collision.radius = radius;
+    collision.radius  = radius;
 
     collision.x = *xPtr;
     collision.y = *yPtr;

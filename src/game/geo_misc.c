@@ -109,12 +109,12 @@ Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, UNUSED struct GraphNod
                                          UNUSED f32 mtx[4][4]) {
     if (callContext != GEO_CONTEXT_RENDER) {
         sFlyingCarpetRippleTimer = 0;
-        sPrevAreaTimer = gAreaUpdateCounter - 1;
-        sCurAreaTimer = gAreaUpdateCounter;
-        gFlyingCarpetState = FLYING_CARPET_IDLE;
+        sPrevAreaTimer           = gAreaUpdateCounter - 1;
+        sCurAreaTimer            = gAreaUpdateCounter;
+        gFlyingCarpetState       = FLYING_CARPET_IDLE;
     } else {
-        sPrevAreaTimer = sCurAreaTimer;
-        sCurAreaTimer = gAreaUpdateCounter;
+        sPrevAreaTimer      = sCurAreaTimer;
+        sCurAreaTimer       = gAreaUpdateCounter;
         if (sPrevAreaTimer != sCurAreaTimer) {
             sFlyingCarpetRippleTimer += 0x400;
         }
@@ -131,8 +131,8 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
     Vtx *verts;
     struct GraphNodeGenerated *generatedNode = (struct GraphNodeGenerated *) node;
 
-    s16 *sp64 = segmented_to_virtual(&flying_carpet_static_vertex_data);
-    Gfx *displayList = NULL;
+    s16 *sp64            = segmented_to_virtual(&flying_carpet_static_vertex_data);
+    Gfx *displayList     = NULL;
     Gfx *displayListHead = NULL;
     struct Object *curGraphNodeObject;
 
