@@ -135,6 +135,7 @@
 #define AIR_STEP_GRABBED_CEILING                0x04
 #define AIR_STEP_HIT_LAVA_WALL                  0x06
 #define AIR_STEP_DEATH                          0x07
+#define AIR_STEP_HIT_CEILING                    0x08
 
 #define WATER_STEP_NONE                         0x00
 #define WATER_STEP_HIT_FLOOR                    0x01

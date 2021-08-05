@@ -241,20 +241,27 @@ s32 act_top_of_pole(struct MarioState *m) {
 }
 
 s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
+#ifdef BETTER_WALL_COLLISION
+    struct WallCollisionData wallData;
+#endif
     struct Surface *ceil;
     struct Surface *floor;
     f32 ceilHeight;
     f32 floorHeight;
     f32 ceilOffset;
-
+#ifdef BETTER_WALL_COLLISION
+    resolve_and_return_wall_collisions(nextPos, 50.0f, 50.0f, &wallData);
+    m->wall     = wallData.walls[0];
+#else
     m->wall     = resolve_and_return_wall_collisions(nextPos, 50.0f, 50.0f);
+#endif
     floorHeight = find_floor(  nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
 
-    if (floor == NULL) return HANG_HIT_CEIL_OR_OOB;
-    if (ceil  == NULL) return HANG_LEFT_CEIL;
+    if (floor == NULL)                      return HANG_HIT_CEIL_OR_OOB;
+    if (ceil  == NULL)                      return HANG_LEFT_CEIL;
     if (ceilHeight - floorHeight <= 144.0f) return HANG_HIT_CEIL_OR_OOB;
-    if (ceil->type != SURFACE_HANGABLE) return HANG_LEFT_CEIL;
+    if (ceil->type != SURFACE_HANGABLE)     return HANG_LEFT_CEIL;
 
     ceilOffset = ceilHeight - (nextPos[1] + 144.0f);
     if (ceilOffset < -30.0f) return HANG_HIT_CEIL_OR_OOB;

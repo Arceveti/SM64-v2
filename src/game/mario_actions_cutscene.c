@@ -457,6 +457,9 @@ s32 act_reading_sign(struct MarioState *m) {
 }
 
 s32 act_debug_free_move(struct MarioState *m) {
+#ifdef BETTER_WALL_COLLISION
+    struct WallCollisionData wallData;
+#endif
     struct Surface *ceil;
     struct Surface *floor;
     f32 ceilHeight;
@@ -488,7 +491,12 @@ s32 act_debug_free_move(struct MarioState *m) {
         pos[0] += 2.0f * speed * sins(m->intendedYaw) * m->intendedMag;
         pos[2] += 2.0f * speed * coss(m->intendedYaw) * m->intendedMag;
     }
+#ifdef BETTER_WALL_COLLISION
+    resolve_and_return_wall_collisions(pos, 60.0f, 50.0f, &wallData);
+    m->wall = wallData.walls[0];
+#else
     m->wall = resolve_and_return_wall_collisions(pos, 60.0f, 50.0f);
+#endif
     floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], pos[1], pos[2], &ceil);
     if (floor == NULL) return FALSE;

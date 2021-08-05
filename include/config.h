@@ -363,6 +363,8 @@
 #define INFINITE_WATER_SHELL
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
+// Improved wall collision detection (frameperfection/Frame#5375)
+#define BETTER_WALL_COLLISION
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
 #define SKIP_GROUND_LOWER_WALL
 // Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
@@ -383,6 +385,9 @@
 // issues on actual level boundaries, such as extra knockback
 // (Arceveti)
 #define NULL_FLOOR_STEPS 4
+// Maximum number of walls to check
+// Vanilla is 4
+#define MAX_REFEREMCED_WALLS 16
 
 // Vanilla is 28.0f
 #define MAX_SWIMMING_SPEED 32.0f
