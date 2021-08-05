@@ -7,12 +7,12 @@ void bhv_flamethrower_flame_loop(void) {
         o->oAnimState = (s32)(random_float() * 10.0f);
         obj_translate_xyz_random(o, 10.0f);
     }
-    if (o->oBehParams2ndByte == 0x2) { //! param name
+    if (o->oBehParams2ndByte == FLAMETHROWER_BP_SLOW) {
         size = o->oTimer * (o->oForwardVel -  6.0f) / 100.0f + 2.0f;
     } else {
         size = o->oTimer * (o->oForwardVel - 20.0f) / 100.0f + 1.0f;
     }
-    if (o->oBehParams2ndByte == 0x3) { //! param name
+    if (o->oBehParams2ndByte == FLAMETHROWER_BP_TALL_HITBOX) {
         o->hitboxHeight     = 200.0f;
         o->hitboxDownOffset = 150.0f;
         o->oVelY            = -28.0f;
@@ -26,7 +26,7 @@ void bhv_flamethrower_flame_loop(void) {
         remainingTime = o->parentObj->oFlameThowerTimeRemaining;
     }
     cur_obj_scale(size);
-    if (o->oBehParams2ndByte == 0x4) { //! param name
+    if (o->oBehParams2ndByte == FLAMETHROWER_BP_UPWARDS) {
         o->oPosY += o->oForwardVel; // weird?
     } else {
         cur_obj_move_using_fvel_and_gravity();
@@ -45,7 +45,7 @@ void bhv_flamethrower_loop(void) {
     } else if (o->oAction == FLAMETHROWER_ACT_BLOW_FIRE) {
         model = MODEL_RED_FLAME;
         flameVel = 95.0f;
-        if (o->oBehParams2ndByte == FLAMETHROWER_BP_BLUE) model = MODEL_BLUE_FLAME;
+        if (o->oBehParams2ndByte == FLAMETHROWER_BP_BLUE) model    = MODEL_BLUE_FLAME;
         if (o->oBehParams2ndByte == FLAMETHROWER_BP_SLOW) flameVel = 50.0f;
         flameTimeRemaining = 1;
         if (o->oTimer < 60) {

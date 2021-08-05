@@ -50,7 +50,7 @@ void water_bomb_cannon_act_hidden_inactive(void) { // act 0
 void water_bomb_cannon_act_active(void) { // act 1
     if (o->oDistanceToMario > 2500.0f) {
         o->oAction = WATER_BOMB_CANNON_ACT_HIDE;
-    } else if (o->oBehParams2ndByte == 0x0) { //! param name
+    } else if (o->oBehParams2ndByte == WATER_BOMB_CANNON_BP_ACTIVE) {
         if (o->oWaterCannonIdleTimer != 0) {
             o->oWaterCannonIdleTimer--;
         } else {

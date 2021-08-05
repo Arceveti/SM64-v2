@@ -6,7 +6,7 @@ void bhv_rr_cruiser_wing_init(void) {
 }
 
 void bhv_rr_cruiser_wing_loop(void) {
-    if (o->oBehParams2ndByte == 0x0) { //! param name
+    if (o->oBehParams2ndByte == CRUISER_WING_BP_CLOCKWISE) {
         o->oFaceAngleYaw   = o->oRRCruiserWingInitYaw   + sins(o->oTimer * 0x400) * 8192.0f;
         o->oFaceAnglePitch = o->oRRCruiserWingInitPitch + coss(o->oTimer * 0x400) * 2048.0f;
     } else {

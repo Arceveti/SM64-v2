@@ -1,9 +1,9 @@
 // checkerboard_platform.c.inc
 
 struct CheckerBoardPlatformInitPosition {
-    s32 relPosZ;
+    s32   relPosZ;
     Vec3f scaleVec;
-    f32 radius;
+    f32   radius;
 };
 
 struct CheckerBoardPlatformInitPosition sCheckerBoardPlatformInitPositions[] = { { 145, { 0.7f, 1.5f, 0.7f },  7.0f },
@@ -16,7 +16,7 @@ void bhv_checkerboard_elevator_group_init(void) {
     s32 i;
     struct Object *platformObj;
     // oBehParams2ndByte determines the relative height of the platforms
-    if (o->oBehParams2ndByte == 0x0) o->oBehParams2ndByte = 65; //! param names?
+    if (o->oBehParams2ndByte == CHECKERBOARD_PLATFORM_GROUP_BP_SET_DEFAULT) o->oBehParams2ndByte = CHECKERBOARD_PLATFORM_GROUP_BP_DEFAULT_MAX;
     relativePosY = o->oBehParams2ndByte * 10;
     type = (o->oBehParams >> 24) & 0xFF;
     for (i = 0; i < 2; i++) {

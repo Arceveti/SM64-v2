@@ -12,7 +12,7 @@ void bhv_lll_rotating_hex_flame_loop(void) {
 void fire_bar_spawn_flames(s16 yaw) {
     struct Object *flameObj;
     s32 i;
-    s32 amt = (o->oBehParams2ndByte == 0x0) ? 4 : 3; //! param name
+    s32 amt = o->oBehParams2ndByte; // Amount of flames to spawn
     f32 xOffset = sins(yaw) * 200.0f;
     f32 zOffset = coss(yaw) * 200.0f;
     for (i = 0; i < amt; i++) {
@@ -35,7 +35,7 @@ void fire_bar_act_spawn_flames(void) {
     fire_bar_spawn_flames(-0x8000);
     o->oAngleVelYaw  = 0x0;
     o->oMoveAngleYaw = 0x0;
-    o->oAction = LLL_FIRE_BAR_ACT_ACTIVE;
+    o->oAction       = LLL_FIRE_BAR_ACT_ACTIVE;
 }
 
 void fire_bar_act_active(void) {
@@ -55,5 +55,5 @@ void (*sRotatingCwFireBarsActions[])(void) = { fire_bar_act_inactive,
 
 void bhv_lll_rotating_block_fire_bars_loop(void) {
     cur_obj_call_action_function(sRotatingCwFireBarsActions);
-    if (o->oBehParams2ndByte == 0x0) load_object_collision_model(); //! param name
+    load_object_collision_model();
 }

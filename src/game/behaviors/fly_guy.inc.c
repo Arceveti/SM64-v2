@@ -67,16 +67,15 @@ static void fly_guy_act_approach_mario(void) {
         if (abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x2000) {
             if (o->oPosY - gMarioObject->oPosY > 400.0f || o->oDistanceToMario < 400.0f) {
                 // Either shoot fire or lunge
-                if ((o->oBehParams2ndByte != 0x0) && (random_u16() & 0x1)) { //! param name
-                    o->oAction = FLY_GUY_ACT_SHOOT_FIRE;
+                if ((o->oBehParams2ndByte != FLY_GUY_BP_LUNGES) && (random_u16() & 0x1)) {
+                    o->oAction         = FLY_GUY_ACT_SHOOT_FIRE;
                     o->oFlyGuyScaleVel = 0.06f;
                 } else {
                     o->oAction = FLY_GUY_ACT_LUNGE;
                     o->oFlyGuyLungeTargetPitch = obj_turn_pitch_toward_mario(-200.0f, 0x0);
-
-                    o->oForwardVel = 25.0f *  coss(o->oFlyGuyLungeTargetPitch);
-                    o->oVelY       = 25.0f * -sins(o->oFlyGuyLungeTargetPitch);
-                    o->oFlyGuyLungeYDecel = -o->oVelY / 30.0f;
+                    o->oForwardVel             = 25.0f *  coss(o->oFlyGuyLungeTargetPitch);
+                    o->oVelY                   = 25.0f * -sins(o->oFlyGuyLungeTargetPitch);
+                    o->oFlyGuyLungeYDecel      = -o->oVelY / 30.0f;
                 }
             }
         }

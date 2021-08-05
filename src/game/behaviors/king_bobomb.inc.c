@@ -156,7 +156,7 @@ void king_bobomb_act_hit_ground(void) { // act 6
 }
 
 void king_bobomb_act_death(void) { // act 7
-    cur_obj_init_animation_with_sound(2);
+    cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_HIT_GROUND);
     if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
         DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_116)) {
         create_sound_spawner(SOUND_OBJ_KING_WHOMP_DEATH);

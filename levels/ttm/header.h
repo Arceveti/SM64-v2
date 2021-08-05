@@ -78,7 +78,7 @@ extern const Collision ttm_seg7_collision_pitoune_2[];
 extern const Collision ttm_seg7_collision_ukiki_cage[];
 extern const Collision ttm_seg7_area_1_collision[];
 extern const MacroObject ttm_seg7_area_1_macro_objs[];
-extern const Trajectory ttm_seg7_trajectory_070170A0[];
+extern const Trajectory ttm_seg7_trajectory_metal_ball_path[];
 extern const struct MovtexQuadCollection ttm_movtex_puddle[];
 extern Movtex ttm_movtex_tris_begin_waterfall[];
 extern Movtex ttm_movtex_tris_begin_puddle_waterfall[];

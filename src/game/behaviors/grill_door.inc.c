@@ -43,7 +43,7 @@ void bhv_openable_grill_loop(void) {
                 o->oOpenableGrillIsOpen = TRUE;
                 cur_obj_play_sound_2(SOUND_GENERAL_CAGE_OPEN);
                 o->oAction = OEPNABLE_GRILL_IDLE_OPEN;
-                if (o->oBehParams2ndByte != 0) play_puzzle_jingle();
+                if (o->oBehParams2ndByte != OPENABLE_GRILL_BP_BOB) play_puzzle_jingle();
             }
             break;
         case OEPNABLE_GRILL_IDLE_OPEN:

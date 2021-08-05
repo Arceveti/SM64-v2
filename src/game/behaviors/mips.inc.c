@@ -13,12 +13,12 @@ void bhv_mips_init(void) {
     // If the player has >= 15 stars and hasn't collected first MIPS star...
     if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 15
         && !(starFlags & SAVE_FLAG_TO_STAR_FLAG(SAVE_FLAG_COLLECTED_MIPS_STAR_1))) {
-        o->oBehParams2ndByte    = 0x0; //! param name
+        o->oBehParams2ndByte    = MIPS_BP_STAR_1;
         o->oMipsForwardVelocity = 40.0f;
     // If the player has >= 50 stars and hasn't collected second MIPS star...
     } else if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 50
              && !(starFlags & SAVE_FLAG_TO_STAR_FLAG(SAVE_FLAG_COLLECTED_MIPS_STAR_2))) {
-        o->oBehParams2ndByte    = 0x1; //! param name
+        o->oBehParams2ndByte    = MIPS_BP_STAR_2;
         o->oMipsForwardVelocity = 45.0f;
     } else {
         // No MIPS stars are available, hide MIPS.
@@ -199,7 +199,7 @@ void bhv_mips_held(void) {
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        dialogID = (o->oBehParams2ndByte == 0x0 ? DIALOG_084 : DIALOG_162); //! param name
+        dialogID = (o->oBehParams2ndByte == MIPS_BP_STAR_1 ? DIALOG_084 : DIALOG_162);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID)) {

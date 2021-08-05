@@ -71,7 +71,7 @@ static void klepto_anim_dive(void) {
 }
 
 void bhv_klepto_init(void) {
-    if (o->oBehParams2ndByte != 0) {
+    if (o->oBehParams2ndByte != KLEPTO_BP_HAS_STAR) {
 #ifdef HELD_TRANSPARENT_STAR
         if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_SSL) & 1) {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR;
@@ -285,7 +285,7 @@ static void klepto_act_retreat(void) {
 static void klepto_act_reset_position(void) {
     if (o->oTimer < 300) {
         klepto_circle_target(300.0f, 20.0f);
-    } else if (o->oBehParams2ndByte != 0x0) { //! param name
+    } else if (o->oBehParams2ndByte != KLEPTO_BP_HAS_STAR) {
         o->oHomeX = -2000.0f;
         o->oHomeZ = -1000.0f;
         o->oHomeY = o->oKleptoDistanceToTarget = 9999.0f;
@@ -297,9 +297,9 @@ static void klepto_act_reset_position(void) {
         }
     } else {
         o->oAction = KLEPTO_ACT_WAIT_FOR_MARIO;
-        o->oHomeX = o->oKleptoStartPosX;
-        o->oHomeY = o->oKleptoStartPosY;
-        o->oHomeZ = o->oKleptoStartPosZ;
+        o->oHomeX  = o->oKleptoStartPosX;
+        o->oHomeY  = o->oKleptoStartPosY;
+        o->oHomeZ  = o->oKleptoStartPosZ;
     }
 }
 
@@ -311,8 +311,8 @@ void bhv_klepto_update(void) {
     cur_obj_update_floor_and_walls();
 
     o->oKleptoDistanceToTarget = cur_obj_lateral_dist_to_home();
-    o->oKleptoPitchToTarget = obj_get_pitch_to_home(o->oKleptoDistanceToTarget);
-    o->oKleptoYawToTarget = cur_obj_angle_to_home();
+    o->oKleptoPitchToTarget    = obj_get_pitch_to_home(o->oKleptoDistanceToTarget);
+    o->oKleptoYawToTarget      = cur_obj_angle_to_home();
 
     if (o->oAction == KLEPTO_ACT_STRUCK_BY_MARIO) {
         klepto_act_struck_by_mario();

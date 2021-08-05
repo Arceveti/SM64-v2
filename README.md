@@ -58,6 +58,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Vertical quicksand support (Wiseguy) *
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
+- Configurable amount of segments for Chain Chomp, Pokey & Wiggler (Arceveti) *
+- LLL Fire Bars use oBehParams2ndByte to determine their length (Arceveti)
 
 **HUD/Gameplay QoL:**
 - Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
@@ -77,7 +79,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Tiny Goombas (from THI) always drop their coin (Arceveti) *
 - Leaf particles fall from trees which contain Hoot (Arceveti) *
 - Reimplemented the unused "sad" eye texture for the mother penguin in CCM *
-- Configurable amount of segments for Chain Chomp, Pokey & Wiggler (Arceveti) *
 
 **Collision/Movement:**
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *

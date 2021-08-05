@@ -126,8 +126,7 @@ void bhv_unagi_loop(void) {
     if (!o->oUnagiHasStar) {
         o->oUnagiDistanceToMario = 99999.0f;
         if (o->oDistanceToMario  < 3000.0f) {
-            // behParams from -4 to 4?
-            for (i = -4; i < 4; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
+            for (i = UNAGI_PART_BP_BACK; i < UNAGI_PART_BP_FRONT; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_NONE, bhvUnagiSubobject);
             o->oUnagiHasStar = TRUE;
         }
     } else if (o->oDistanceToMario > 4000.0f) {
@@ -143,7 +142,7 @@ void bhv_unagi_loop(void) {
     }
 }
 
-void bhv_unagi_subobject_loop(void) { // unagi star
+void bhv_unagi_subobject_loop(void) { // unagi collision segments & star
     f32 offset;
 
     if (!o->parentObj->oUnagiHasStar) {
@@ -158,7 +157,7 @@ void bhv_unagi_subobject_loop(void) { // unagi star
         o->oPosX = o->parentObj->oPosX + offset * sins(o->parentObj->oFaceAngleYaw);
         o->oPosZ = o->parentObj->oPosZ + offset * coss(o->parentObj->oFaceAngleYaw);
 
-        if (o->oBehParams2ndByte == -0x4) { //! param name
+        if (o->oBehParams2ndByte == UNAGI_PART_BP_BACK) {
             if (o->parentObj->oAnimState != UNAGI_ANIM_STATE_NO_STAR && o->oDistanceToMario < 150.0f) {
                 o->oBehParams = o->parentObj->oBehParams;
                 spawn_default_star(6833.0f, -3654.0f, 2230.0f);
@@ -166,7 +165,7 @@ void bhv_unagi_subobject_loop(void) { // unagi star
             }
         } else {
             obj_check_attacks(&sUnagiHitbox, o->oAction);
-            if (o->oBehParams2ndByte == 0x3) o->parentObj->oUnagiDistanceToMario = o->oDistanceToMario; //! param name
+            if (o->oBehParams2ndByte == UNAGI_PART_BP_CONTROL_DISTANCE) o->parentObj->oUnagiDistanceToMario = o->oDistanceToMario;
         }
     }
 }

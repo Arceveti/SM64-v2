@@ -763,13 +763,20 @@
     #define LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE            0x1
 
 /* LLL Fire Bar */
+    /* oBehParams2ndByte */
+    #define LLL_FIRE_BAR_BP_DEFAULT                         0x4
     /* oAction */
     #define LLL_FIRE_BAR_ACT_INACTIVE                       0x0
     #define LLL_FIRE_BAR_ACT_SPAWN_FLAMES                   0x1
     #define LLL_FIRE_BAR_ACT_ACTIVE                         0x2
     #define LLL_FIRE_BAR_ACT_REMOVE_FLAMES                  0x3
 
-/* Tumbling Bridge Platform*/
+/* BITFS Sinking Cage Platform with pole */
+    /* oBehParams2ndByte */
+    #define SINKING_POLE_PLATFORM_BP_LOW                    0x0
+    #define SINKING_POLE_PLATFORM_BP_HIGH                   0x1
+
+/* Tumbling Bridge Platform */
     /* oAction */
     #define TUMBLING_BRIDGE_PLATFORM_ACT_IDLE               0x0
     #define TUMBLING_BRIDGE_PLATFORM_ACT_UNSTABLE           0x1
@@ -1188,6 +1195,9 @@
     #define SWOOP_ANIM_IDLE                                 0x1
 
 /* Fly Guy */
+    /* oBehParams2ndByte */
+    #define FLY_GUY_BP_LUNGES                               0x0
+    #define FLY_GUY_BP_SHOOTS_FIRE                          0x1
     /* oAction */
     #define FLY_GUY_ACT_IDLE                                0x0
     #define FLY_GUY_ACT_APPROACH_MARIO                      0x1
@@ -1321,6 +1331,11 @@
     #define CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG             0x2
     /* Animations */
     #define CAMERA_LAKITU_ANIM_DEFAULT                      0x0
+
+/* RR Cruiser Wing */
+    /* oBehParams2ndByte */
+    #define CRUISER_WING_BP_CLOCKWISE                       0x0
+    #define CRUISER_WING_BP_COUNTERCLOCKWISE                0x1
 
 /* Manta Ray */
     /* oAction */
@@ -1463,6 +1478,11 @@
     #define PIRANHA_PLANT_BUBBLE_ACT_IDLE                   0x0
     #define PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP       0x1
     #define PIRANHA_PLANT_BUBBLE_ACT_BURST                  0x2
+
+/* Checkerboard Platform Group */
+    /* oBehParams2ndByte */
+    #define CHECKERBOARD_PLATFORM_GROUP_BP_SET_DEFAULT      0x00
+    #define CHECKERBOARD_PLATFORM_GROUP_BP_DEFAULT_MAX      0x41
 
 /* Checkerboard Platform */
     /* oBehParams2ndByte */
@@ -1671,6 +1691,8 @@
     #define SNOWMANS_BOTTOM_ACT_COLLISION                   0x4
 
 /* Water Bomb Cannon */
+    /* oBehParams2ndByte */
+    #define WATER_BOMB_CANNON_BP_ACTIVE                     0x0
     /* oAction */
     #define WATER_BOMB_CANNON_ACT_HIDDEN                    0x0
     #define WATER_BOMB_CANNON_ACT_ACTIVE                    0x1
@@ -1709,6 +1731,12 @@
     #define TTC_2D_ROTATOR_BP_HAND                          0x0
     #define TTC_2D_ROTATOR_BP_2D_COG                        0x1
 
+/* TTC Treadmill */
+    /* oBehParams2ndByte */
+    #define TREADMILL_BP_LARGE                              0x0
+    #define TREADMILL_BP_SMALL                              0x1
+    #define TREADMILL_BP_SIZE_MASK                          0x1
+
 /* Activated Back-and-Forth Platform */
     /* ((u16)(o->oBehParams >> 16) &         0x0300) >> 8 aka platform type */
     #define ACTIVATED_BF_PLAT_TYPE_BITS_ARROW_PLAT          0x0
@@ -1742,6 +1770,12 @@
     #define UNAGI_ANIM_IDLE_2_1                             0x4
     #define UNAGI_ANIM_OPEN_MOUTH                           0x5
     #define UNAGI_ANIM_IDLE_2                               0x6
+
+/* Unagi Sub Object */
+    /* oBehParams2ndByte */
+    #define UNAGI_PART_BP_BACK                             -0x4
+    #define UNAGI_PART_BP_CONTROL_DISTANCE                  0x3
+    #define UNAGI_PART_BP_FRONT                             0x4
 
 /* Dorrie */
     /* oAction */
@@ -1794,6 +1828,8 @@
     #define FLAMETHROWER_BP_0                               0x0
     #define FLAMETHROWER_BP_BLUE                            0x1
     #define FLAMETHROWER_BP_SLOW                            0x2
+    #define FLAMETHROWER_BP_TALL_HITBOX                     0x3
+    #define FLAMETHROWER_BP_UPWARDS                         0x4
     /* oAction */
     #define FLAMETHROWER_ACT_IDLE                           0x0
     #define FLAMETHROWER_ACT_BLOW_FIRE                      0x1
@@ -1949,6 +1985,9 @@
     #define HEAVE_HO_ANIM_WINDING_UP                        0x2
 
 /* Klepto */
+    /* oBehParams2ndByte */
+    #define KLEPTO_BP_HAS_STAR                              0x0
+    #define KLEPTO_BP_NO_STAR                               0x0
     /* oAction */
     #define KLEPTO_ACT_CIRCLE_TARGET_HOLDING                0x0
     #define KLEPTO_ACT_APPROACH_TARGET_HOLDING              0x1
@@ -2079,6 +2118,9 @@
     #define WATER_PILLAR_ACT_END                            0x5
 
 /* Mips */
+    /* oBehParams2ndByte */
+    #define MIPS_BP_STAR_1                                  0x0
+    #define MIPS_BP_STAR_2                                  0x1
     /* oAction */
     #define MIPS_ACT_WAIT_FOR_NEARBY_MARIO                  0x0
     #define MIPS_ACT_FOLLOW_PATH                            0x1
@@ -2150,6 +2192,9 @@
     #define MR_BLIZZARD_SNOWBALL_ACT_COLLISION              0x2
 
 /* Mr I */
+    /* oBehParams2ndByte */
+    #define MR_I_BP_NORMAL                                  0x0
+    #define MR_I_BP_LARGE_WITH_STAR                         0x1
     /* oAction */
     #define MR_I_ACT_FAR_AWAY                               0x0
     #define MR_I_ACT_IDLE                                   0x1

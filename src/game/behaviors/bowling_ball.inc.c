@@ -40,7 +40,7 @@ static Trajectory sThiTinyMetalBallTraj[] = {
 };
 
 void bhv_bowling_ball_init(void) {
-    o->oGravity = 5.5f;
+    o->oGravity  = 5.5f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 2.0f;
 }
@@ -55,19 +55,15 @@ void bowling_ball_set_waypoints(void) {
         case BBALL_BP_STYPE_BOB_UPPER:
             o->oPathedStartWaypoint = segmented_to_virtual(bob_seg7_metal_ball_path0);
             break;
-
         case BBALL_BP_STYPE_TTM:
-            o->oPathedStartWaypoint = segmented_to_virtual(ttm_seg7_trajectory_070170A0);
+            o->oPathedStartWaypoint = segmented_to_virtual(ttm_seg7_trajectory_metal_ball_path);
             break;
-
         case BBALL_BP_STYPE_BOB_LOWER:
             o->oPathedStartWaypoint = segmented_to_virtual(bob_seg7_metal_ball_path1);
             break;
-
         case BBALL_BP_STYPE_THI_LARGE:
             o->oPathedStartWaypoint = (struct Waypoint *) sThiHugeMetalBallTraj;
             break;
-
         case BBALL_BP_STYPE_THI_SMALL:
             o->oPathedStartWaypoint = (struct Waypoint *) sThiTinyMetalBallTraj;
             break;
@@ -114,19 +110,15 @@ void bhv_bowling_ball_initializeLoop(void) {
         case BBALL_BP_STYPE_BOB_UPPER:
             o->oForwardVel = 20.0f;
             break;
-
         case BBALL_BP_STYPE_TTM:
             o->oForwardVel = 10.0f;
             break;
-
         case BBALL_BP_STYPE_BOB_LOWER:
             o->oForwardVel = 20.0f;
             break;
-
         case BBALL_BP_STYPE_THI_LARGE:
             o->oForwardVel = 25.0f;
             break;
-
         case BBALL_BP_STYPE_THI_SMALL:
             o->oForwardVel = 10.0f;
             cur_obj_scale(0.3f);
@@ -141,32 +133,20 @@ void bhv_bowling_ball_loop(void) {
             o->oAction = BBALL_ACT_ROLL;
             bhv_bowling_ball_initializeLoop();
             break;
-
         case BBALL_ACT_ROLL:
             bhv_bowling_ball_roll_loop();
             break;
     }
 
-    if (o->oBehParams2ndByte != 4) set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
+    if (o->oBehParams2ndByte != BBALL_BP_STYPE_THI_SMALL) set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
     set_object_visibility(o, 4000);
 }
 
 void bhv_generic_bowling_ball_spawner_init(void) {
     switch (o->oBehParams2ndByte) {
-        case BBALL_BP_STYPE_BOB_UPPER:
-            o->oBBallSpawnerMaxSpawnDist = 7000.0f;
-            o->oBBallSpawnerSpawnOdds = 2.0f;
-            break;
-
-        case BBALL_BP_STYPE_TTM:
-            o->oBBallSpawnerMaxSpawnDist = 8000.0f;
-            o->oBBallSpawnerSpawnOdds = 1.0f;
-            break;
-
-        case BBALL_BP_STYPE_BOB_LOWER:
-            o->oBBallSpawnerMaxSpawnDist = 6000.0f;
-            o->oBBallSpawnerSpawnOdds = 2.0f;
-            break;
+        case BBALL_BP_STYPE_BOB_UPPER: o->oBBallSpawnerMaxSpawnDist = 7000.0f; o->oBBallSpawnerSpawnOdds = 2.0f; break;
+        case BBALL_BP_STYPE_TTM:       o->oBBallSpawnerMaxSpawnDist = 8000.0f; o->oBBallSpawnerSpawnOdds = 1.0f; break;
+        case BBALL_BP_STYPE_BOB_LOWER: o->oBBallSpawnerMaxSpawnDist = 6000.0f; o->oBBallSpawnerSpawnOdds = 2.0f; break;
     }
 }
 
