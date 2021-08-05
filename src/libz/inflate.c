@@ -646,8 +646,7 @@ int flush;
                 copy = state->length;
                 if (copy > have) copy = have;
                 if (copy) {
-                    if (state->flags & 0x0200)
-                        state->check = crc32(state->check, next, copy);
+                    if (state->flags & 0x0200) state->check = crc32(state->check, next, copy);
                     have -= copy;
                     next += copy;
                     state->length -= copy;
@@ -662,8 +661,7 @@ int flush;
                 do {
                     len = (unsigned)(next[copy++]);
                 } while (len && copy < have);
-                if (state->flags & 0x02000)
-                    state->check = crc32(state->check, next, copy);
+                if (state->flags & 0x02000) state->check = crc32(state->check, next, copy);
                 have -= copy;
                 next += copy;
                 if (len) goto inf_leave;
@@ -676,8 +674,7 @@ int flush;
                 do {
                     len = (unsigned)(next[copy++]);
                 } while (len && copy < have);
-                if (state->flags & 0x02000)
-                    state->check = crc32(state->check, next, copy);
+                if (state->flags & 0x02000) state->check = crc32(state->check, next, copy);
                 have -= copy;
                 next += copy;
                 if (len) goto inf_leave;
@@ -752,8 +749,7 @@ int flush;
                 break;
             }
             state->length = (unsigned)hold & 0xffff;
-            Tracev((stderr, "inflate:       stored length %u\n",
-                    state->length));
+            Tracev((stderr, "inflate:       stored length %u\n", state->length));
             INITBITS();
             state->mode = COPY;
         case COPY:
@@ -797,9 +793,8 @@ int flush;
                 state->lens[order[state->have++]] = (unsigned short)BITS(3);
                 DROPBITS(3);
             }
-            while (state->have < 19)
-                state->lens[order[state->have++]] = 0;
-            state->next = state->codes;
+            while (state->have < 19) state->lens[order[state->have++]] = 0;
+            state->next    = state->codes;
             state->lencode = (code const FAR *)(state->next);
             state->lenbits = 7;
             ret = inflate_table(CODES, state->lens, 19, &(state->next),
@@ -823,8 +818,7 @@ int flush;
                     NEEDBITS(this.bits);
                     DROPBITS(this.bits);
                     state->lens[state->have++] = this.val;
-                }
-                else {
+                } else {
                     if (this.val == 16) {
                         NEEDBITS(this.bits + 2);
                         DROPBITS(this.bits);
@@ -836,15 +830,13 @@ int flush;
                         len = state->lens[state->have - 1];
                         copy = 3 + BITS(2);
                         DROPBITS(2);
-                    }
-                    else if (this.val == 17) {
+                    } else if (this.val == 17) {
                         NEEDBITS(this.bits + 3);
                         DROPBITS(this.bits);
                         len = 0;
                         copy = 3 + BITS(3);
                         DROPBITS(3);
-                    }
-                    else {
+                    } else {
                         NEEDBITS(this.bits + 7);
                         DROPBITS(this.bits);
                         len = 0;
@@ -856,8 +848,7 @@ int flush;
                         state->mode = BAD;
                         break;
                     }
-                    while (copy--)
-                        state->lens[state->have++] = (unsigned short)len;
+                    while (copy--) state->lens[state->have++] = (unsigned short)len;
                 }
             }
 
@@ -898,8 +889,7 @@ int flush;
             if (this.op && (this.op & 0xf0) == 0) {
                 last = this;
                 for (;;) {
-                    this = state->lencode[last.val +
-                            (BITS(last.bits + last.op) >> last.bits)];
+                    this = state->lencode[last.val + (BITS(last.bits + last.op) >> last.bits)];
                     if ((unsigned)(last.bits + this.bits) <= bits) break;
                     PULLBYTE();
                 }
@@ -943,8 +933,7 @@ int flush;
             if ((this.op & 0xf0) == 0) {
                 last = this;
                 for (;;) {
-                    this = state->distcode[last.val +
-                            (BITS(last.bits + last.op) >> last.bits)];
+                    this = state->distcode[last.val + (BITS(last.bits + last.op) >> last.bits)];
                     if ((unsigned)(last.bits + this.bits) <= bits) break;
                     PULLBYTE();
                 }
@@ -990,7 +979,7 @@ int flush;
                 copy = state->length;
             }
             if (copy > left) copy = left;
-            left -= copy;
+            left          -= copy;
             state->length -= copy;
             do {
                 *put++ = *from++;
@@ -1008,10 +997,9 @@ int flush;
                 NEEDBITS(32);
                 out -= left;
                 strm->total_out += out;
-                state->total += out;
+                state->total    += out;
                 if (out)
-                    strm->adler = state->check =
-                        UPDATE(state->check, put - out, out);
+                    strm->adler = state->check = UPDATE(state->check, put - out, out);
                 out = left;
                 if ((
 #ifdef GUNZIP
@@ -1072,8 +1060,7 @@ int flush;
     strm->total_out += out;
     state->total += out;
     if (state->wrap && out)
-        strm->adler = state->check =
-            UPDATE(state->check, strm->next_out - out, out);
+        strm->adler = state->check = UPDATE(state->check, strm->next_out - out, out);
     strm->data_type = state->bits + (state->last ? 64 : 0) +
                       (state->mode == TYPE ? 128 : 0);
     if (((in == 0 && out == 0) || flush == Z_FINISH) && ret == Z_OK)

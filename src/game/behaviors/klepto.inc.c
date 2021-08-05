@@ -119,7 +119,7 @@ static void klepto_change_target(void) {
         newTarget = random_u16() % 3;
     }
 
-    o->oKleptoHomeYOffset = 400 * absi(newTarget - o->oKleptoTargetNumber);
+    o->oKleptoHomeYOffset  = 400 * absi(newTarget - o->oKleptoTargetNumber);
     o->oKleptoTargetNumber = newTarget;
 
     o->oHomeX = sKleptoTargetPositions[o->oKleptoTargetNumber][0];

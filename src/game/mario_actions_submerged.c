@@ -894,7 +894,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
         dx = newDistance * sins(m->faceAngle[1]);
         dz = newDistance * coss(m->faceAngle[1]);
     } else {
-        dx *= newDistance / distance; //! fast invsqrt?
+        dx *= newDistance / distance;
         dz *= newDistance / distance;
     }
     m->pos[0] = whirlpool->oPosX + dx * cosAngleChange + dz * sinAngleChange;

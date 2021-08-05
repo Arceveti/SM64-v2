@@ -344,8 +344,7 @@ static void level_cmd_begin_area(void) {
     void *geoLayoutAddr = CMD_GET(void *, 4);
 
     if (areaIndex < 8) {
-        struct GraphNodeRoot *screenArea =
-            (struct GraphNodeRoot *) process_geo_layout(sLevelPool, geoLayoutAddr);
+        struct GraphNodeRoot *screenArea = (struct GraphNodeRoot *) process_geo_layout(sLevelPool, geoLayoutAddr);
         struct GraphNodeCamera *node = (struct GraphNodeCamera *) screenArea->views[0];
 
         sCurrAreaIndex = areaIndex;
@@ -452,8 +451,7 @@ static void level_cmd_place_object(void) {
 
 static void level_cmd_create_warp_node(void) {
     if (sCurrAreaIndex != -1) {
-        struct ObjectWarpNode *warpNode =
-            alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
+        struct ObjectWarpNode *warpNode = alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
 
         warpNode->node.id        = CMD_GET(u8, 2);
         warpNode->node.destLevel = CMD_GET(u8, 3) + CMD_GET(u8, 6);
@@ -475,8 +473,7 @@ static void level_cmd_create_instant_warp(void) {
 
     if (sCurrAreaIndex != -1) {
         if (gAreas[sCurrAreaIndex].instantWarps == NULL) {
-            gAreas[sCurrAreaIndex].instantWarps =
-                alloc_only_pool_alloc(sLevelPool, 4 * sizeof(struct InstantWarp));
+            gAreas[sCurrAreaIndex].instantWarps = alloc_only_pool_alloc(sLevelPool, 4 * sizeof(struct InstantWarp));
 
             for (i = INSTANT_WARP_INDEX_START; i < INSTANT_WARP_INDEX_STOP; i++) gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
         }
@@ -505,8 +502,7 @@ static void level_cmd_create_painting_warp_node(void) {
 
     if (sCurrAreaIndex != -1) {
         if (gAreas[sCurrAreaIndex].paintingWarpNodes == NULL) {
-            gAreas[sCurrAreaIndex].paintingWarpNodes =
-                alloc_only_pool_alloc(sLevelPool, 45 * sizeof(struct WarpNode));
+            gAreas[sCurrAreaIndex].paintingWarpNodes = alloc_only_pool_alloc(sLevelPool, 45 * sizeof(struct WarpNode));
 
             for (i = 0; i < 45; i++) gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
         }

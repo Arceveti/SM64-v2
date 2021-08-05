@@ -354,10 +354,8 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex) {
 
             for (srcPos = 0, dstPos = 0; dstPos < item->lengthA / 2;
                  srcPos += gReverbDownsampleRate, dstPos++) {
-                gSynthesisReverb.ringBuffer.left[dstPos + item->startPos] =
-                    item->toDownsampleLeft[srcPos];
-                gSynthesisReverb.ringBuffer.right[dstPos + item->startPos] =
-                    item->toDownsampleRight[srcPos];
+                gSynthesisReverb.ringBuffer.left[ dstPos + item->startPos] = item->toDownsampleLeft[srcPos];
+                gSynthesisReverb.ringBuffer.right[dstPos + item->startPos] = item->toDownsampleRight[srcPos];
             }
             for (dstPos = 0; dstPos < item->lengthB / 2; srcPos += gReverbDownsampleRate, dstPos++) {
                 gSynthesisReverb.ringBuffer.left[dstPos] = item->toDownsampleLeft[srcPos];
@@ -438,8 +436,7 @@ void prepare_reverb_ring_buffer(s32 chunkLen, u32 updateIndex) {
         gSynthesisReverb.nextRingBufferPos += numSamplesAfterDownsampling;
     } else {
         // Ring buffer wrapped around
-        excessiveSamples =
-            (numSamplesAfterDownsampling + gSynthesisReverb.nextRingBufferPos) - gSynthesisReverb.bufSizePerChannel;
+        excessiveSamples = (numSamplesAfterDownsampling + gSynthesisReverb.nextRingBufferPos) - gSynthesisReverb.bufSizePerChannel;
         nSamples = numSamplesAfterDownsampling - excessiveSamples;
         item->lengthA = nSamples * 2;
         item->lengthB = excessiveSamples * 2;

@@ -119,8 +119,7 @@ void bhv_bubba_loop(void) {
             if ((o->oBubbaJumpHeight -= o->oBubbaAirVelY) > 1.0f) {
                 s16 sp36 = random_u16();
                 o->oBubbaJumpHeight -= 1.0f;
-                spawn_object_relative(OBJ_BP_NONE, 150.0f * coss(sp36), 0x64, 150.0f * sins(sp36), o,
-                                      MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
+                spawn_object_relative(OBJ_BP_NONE, 150.0f * coss(sp36), 0x64, 150.0f * sins(sp36), o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
             }
         }
         obj_smooth_turn(&o->oBubbaPitchVel, &o->oMoveAnglePitch, o->oBubbaTargetPitch, 0.05f, 10, 50, 2000);

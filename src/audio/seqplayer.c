@@ -1367,11 +1367,9 @@ void set_instrument(struct SequenceChannel *seqChannel, u8 instId) {
         seqChannel->instrument = (struct Instrument *) 1;
     } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-        if ((seqChannel->instOrWave =
-            get_instrument(seqChannel, instId, &seqChannel->instrument, &seqChannel->adsr)) == 0) {
+        if ((seqChannel->instOrWave = get_instrument(seqChannel, instId, &seqChannel->instrument, &seqChannel->adsr)) == 0) {
 #else
-        seqChannel->instOrWave =
-            get_instrument(seqChannel, instId, &seqChannel->instrument, &seqChannel->adsr);
+        seqChannel->instOrWave = get_instrument(seqChannel, instId, &seqChannel->instrument, &seqChannel->adsr);
         if (seqChannel->instOrWave == 0) {
 #endif
             seqChannel->hasInstrument = FALSE;
@@ -1669,8 +1667,7 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
                         break;
 
                     case 0xd7: // chan_setvibratorate
-                        seqChannel->vibratoRateStart = seqChannel->vibratoRateTarget =
-                            m64_read_u8(state) * 32;
+                        seqChannel->vibratoRateStart = seqChannel->vibratoRateTarget = m64_read_u8(state) * 32;
                         seqChannel->vibratoRateChangeDelay = 0;
                         break;
 
@@ -2109,8 +2106,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                 gAlTbl->seqArray[seqPlayer->loadingBankId].offset,
                 gCtlEntries[seqPlayer->loadingBankId].numInstruments,
                 gCtlEntries[seqPlayer->loadingBankId].numDrums);
-            gCtlEntries[seqPlayer->loadingBankId].drums =
-                ((struct AudioBank *) (gCtlEntries[seqPlayer->loadingBankId].instruments - 1))->drums;
+            gCtlEntries[seqPlayer->loadingBankId].drums = ((struct AudioBank *) (gCtlEntries[seqPlayer->loadingBankId].instruments - 1))->drums;
             gBankLoadStatus[seqPlayer->loadingBankId] = SOUND_LOAD_STATUS_COMPLETE;
         } else {
             audio_dma_partial_copy_async(&seqPlayer->bankDmaCurrDevAddr, &seqPlayer->bankDmaCurrMemAddr,
@@ -2124,10 +2120,10 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
             patch_audio_bank(seqPlayer->loadingBank, gAlTbl->seqArray[seqPlayer->loadingBankId].offset,
                              seqPlayer->loadingBankNumInstruments, seqPlayer->loadingBankNumDrums);
             gCtlEntries[seqPlayer->loadingBankId].numInstruments = seqPlayer->loadingBankNumInstruments;
-            gCtlEntries[seqPlayer->loadingBankId].numDrums = seqPlayer->loadingBankNumDrums;
-            gCtlEntries[seqPlayer->loadingBankId].instruments = seqPlayer->loadingBank->instruments;
-            gCtlEntries[seqPlayer->loadingBankId].drums = seqPlayer->loadingBank->drums;
-            gBankLoadStatus[seqPlayer->loadingBankId] = SOUND_LOAD_STATUS_COMPLETE;
+            gCtlEntries[seqPlayer->loadingBankId].numDrums       = seqPlayer->loadingBankNumDrums;
+            gCtlEntries[seqPlayer->loadingBankId].instruments    = seqPlayer->loadingBank->instruments;
+            gCtlEntries[seqPlayer->loadingBankId].drums          = seqPlayer->loadingBank->drums;
+            gBankLoadStatus[seqPlayer->loadingBankId]            = SOUND_LOAD_STATUS_COMPLETE;
         } else {
             osCreateMesgQueue(&seqPlayer->bankDmaMesgQueue, &seqPlayer->bankDmaMesg, 1);
             seqPlayer->bankDmaMesg = NULL;
@@ -2387,8 +2383,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 
                     case 0xda: // seq_changevol
                         temp = m64_read_u8(state);
-                        seqPlayer->fadeVolume =
-                            seqPlayer->fadeVolume + (f32)(s8) temp / 127.0f;
+                        seqPlayer->fadeVolume = seqPlayer->fadeVolume + (f32)(s8) temp / 127.0f;
                         break;
 #endif
 

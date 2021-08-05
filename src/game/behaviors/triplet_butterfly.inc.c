@@ -101,8 +101,7 @@ static void triplet_butterfly_act_activate(void) {
             }
         }
 
-        o->oTripletButterflyScale +=
-            sTripletButterflyActivationData[o->oTripletButterflyType].scale / 30.0f;
+        o->oTripletButterflyScale += sTripletButterflyActivationData[o->oTripletButterflyType].scale / 30.0f;
         if (o->oTripletButterflyType == TRIPLET_BUTTERFLY_TYPE_EXPLODES) {
             o->oGraphYOffset = 250.0f * o->oTripletButterflyScale;
             o->oPosY = o->oHomeY - o->oGraphYOffset;

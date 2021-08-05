@@ -370,15 +370,14 @@ static void chain_chomp_act_move(void) {
         o->oChainChompSegments[0].posY = o->oPosY - o->parentObj->oPosY;
         o->oChainChompSegments[0].posZ = o->oPosZ - o->parentObj->oPosZ;
 
-        o->oChainChompDistToPivot =
-            sqrtf(o->oChainChompSegments[0].posX * o->oChainChompSegments[0].posX
-                + o->oChainChompSegments[0].posY * o->oChainChompSegments[0].posY
-                + o->oChainChompSegments[0].posZ * o->oChainChompSegments[0].posZ);
+        o->oChainChompDistToPivot = sqrtf(o->oChainChompSegments[0].posX * o->oChainChompSegments[0].posX
+                                        + o->oChainChompSegments[0].posY * o->oChainChompSegments[0].posY
+                                        + o->oChainChompSegments[0].posZ * o->oChainChompSegments[0].posZ);
 
         // If the chain is fully stretched
         maxDistToPivot = o->oChainChompMaxDistFromPivotPerChainPart * CHAIN_CHOMP_NUM_PARTS;
         if (o->oChainChompDistToPivot > maxDistToPivot) {
-            f32 ratio = maxDistToPivot / o->oChainChompDistToPivot;
+            f32 ratio = maxDistToPivot / o->oChainChompDistToPivot; //! fast invsqrt
             o->oChainChompDistToPivot = maxDistToPivot;
 
             o->oChainChompSegments[0].posX *= ratio;

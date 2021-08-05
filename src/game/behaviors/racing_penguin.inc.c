@@ -35,12 +35,10 @@ static void racing_penguin_act_show_init_text(void) {
         child = cur_obj_nearest_object_with_behavior(bhvPenguinRaceShortcutCheck);
         child->parentObj = o;
 
-        o->oPathedStartWaypoint = o->oPathedPrevWaypoint =
-            segmented_to_virtual(ccm_seg7_trajectory_penguin_race);
+        o->oPathedStartWaypoint     = o->oPathedPrevWaypoint = segmented_to_virtual(ccm_seg7_trajectory_penguin_race);
         o->oPathedPrevWaypointFlags = 0;
-
-        o->oAction = RACING_PENGUIN_ACT_PREPARE_FOR_RACE;
-        o->oVelY = 60.0f;
+        o->oAction                  = RACING_PENGUIN_ACT_PREPARE_FOR_RACE;
+        o->oVelY                    = 60.0f;
     } else if (response == DIALOG_RESPONSE_NO) {
         o->oAction = RACING_PENGUIN_ACT_WAIT_FOR_MARIO;
         o->oRacingPenguinInitTextCooldown = 60;

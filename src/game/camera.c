@@ -3111,18 +3111,18 @@ void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a
  * the 4th CutsceneSplinePoint in the current segment away from spline[splineSegment] has an index of -1.
  */
 s32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *splineSegment, f32 *progress) {
-    s32 finished = FALSE;
+    s32 finished    = FALSE;
     Vec3f controlPoints[4];
-    s32 i = 0;
-    f32 u = *progress;
+    s32 i           = 0;
+    f32 u           = *progress;
     f32 progressChange;
-    f32 firstSpeed = 0;
+    f32 firstSpeed  = 0;
     f32 secondSpeed = 0;
-    s32 segment = *splineSegment;
+    s32 segment     = *splineSegment;
 
     if (*splineSegment < 0) {
         segment = 0;
-        u = 0;
+        u       = 0;
     }
     if (spline[segment    ].index == -1
      || spline[segment + 1].index == -1
@@ -4690,7 +4690,7 @@ s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Ve
     // Transition from the last mode to the current one
     if (sModeTransition.framesLeft > 0) {
         vec3f_get_dist_and_angle(curFoc, curPos, &goalDist, &goalPitch, &goalYaw);
-        distVelocity  = ABS(goalDist  - sModeTransition.posDist)  / distTimer;
+        distVelocity  = ABS(goalDist  - sModeTransition.posDist)  /  distTimer;
         pitchVelocity = ABS(goalPitch - sModeTransition.posPitch) / angleTimer;
         yawVelocity   = ABS(goalYaw   - sModeTransition.posYaw)   / angleTimer;
 
@@ -8904,7 +8904,7 @@ void cutscene_exit_painting_move_to_mario(struct Camera *c) {
     //! Tricky math: Since offset_rotated() flips Z offsets, you'd expect a positive Z offset to move
     //! the camera into the wall. However, Mario's faceAngle always points into the painting, so a
     //! positive Z offset moves the camera "behind" Mario, away from the painting.
-    //!
+
     //! In the success cutscene, when Mario jumps out face-first, only his gfx angle is updated. His
     //! actual face angle isn't updated until after the cutscene.
     approach_f32_asymptotic_bool(&sCutsceneVars[2].point[0], 178.0f, 0.05f);

@@ -323,16 +323,12 @@ void geo_layout_cmd_node_level_of_detail(void) {
 */
 void geo_layout_cmd_node_switch_case(void) {
     struct GraphNodeSwitchCase *graphNode;
-
-    graphNode =
-        init_graph_node_switch_case(gGraphNodePool, NULL,
-                                    cur_geo_cmd_s16(0x02), // case which is initially selected
-                                    0,
-                                    (GraphNodeFunc) cur_geo_cmd_ptr(0x04), // case update function
-                                    0);
-
+    graphNode = init_graph_node_switch_case(gGraphNodePool, NULL,
+                                            cur_geo_cmd_s16(0x02), // case which is initially selected
+                                            0,
+                                            (GraphNodeFunc) cur_geo_cmd_ptr(0x04), // case update function
+                                            0);
     register_scene_graph_node(&graphNode->fnNode.node);
-
     gGeoLayoutCommand += 0x08 << CMD_SIZE_SHIFT;
 }
 

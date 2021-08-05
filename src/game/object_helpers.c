@@ -1945,7 +1945,7 @@ void spawn_mist_particles_with_sound(u32 soundMagic) {
 void cur_obj_push_mario_away(f32 radius) {
     f32 marioRelX = gMarioObject->oPosX - o->oPosX;
     f32 marioRelZ = gMarioObject->oPosZ - o->oPosZ;
-    f32 marioDist = sqrtf(sqr(marioRelX) + sqr(marioRelZ));
+    f32 marioDist = sqrtf(sqr(marioRelX) + sqr(marioRelZ)); //! fast invsqrt?
 
     if (marioDist < radius) {
         //! If this function pushes Mario out of bounds, it will trigger Mario's

@@ -1471,8 +1471,8 @@ void bhv_bowser_loop(void) {
     // Set distance/angle values
     o->oBowserDistToCentre  = sqrtf(o->oPosX * o->oPosX + o->oPosZ * o->oPosZ);
     o->oBowserAngleToCentre = atan2s(0.0f - o->oPosZ, 0.0f - o->oPosX);
-    angleToMario  = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);
-    angleToCentre = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre);
+    angleToMario            = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);
+    angleToCentre           = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre);
 
     // Reset Status
     o->oBowserStatus &= ~0xFF;

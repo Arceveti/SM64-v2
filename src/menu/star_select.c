@@ -143,24 +143,18 @@ void bhv_act_selector_init(void) {
 #ifdef WIDE
     if (gWidescreen) {
         for (i = 0; i < sVisibleStars; i++) {
-            sStarSelectorModels[i] =
-                spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                        (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0x0, 0x0, 0x0);
+            sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     } else {
         for (i = 0; i < sVisibleStars; i++) {
-            sStarSelectorModels[i] =
-                spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                        75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
+            sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, 75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     }
 #else
     for (i = 0; i < sVisibleStars; i++) {
-        sStarSelectorModels[i] =
-            spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType,
-                                    75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
+        sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, 75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
     }
 #endif

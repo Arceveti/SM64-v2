@@ -683,11 +683,10 @@ void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Anim
     struct Animation *anim = segmented_to_virtual(*animSegmented);
 
     if (graphNode->animInfo.curAnim != anim) {
-        graphNode->animInfo.curAnim = anim;
-        graphNode->animInfo.animYTrans = 0;
-        graphNode->animInfo.animFrameAccelAssist =
-            (anim->startFrame << 16) + ((anim->flags & ANIM_FLAG_FORWARD) ? animAccel : -animAccel);
-        graphNode->animInfo.animFrame = graphNode->animInfo.animFrameAccelAssist >> 16;
+        graphNode->animInfo.curAnim              = anim;
+        graphNode->animInfo.animYTrans           = 0;
+        graphNode->animInfo.animFrameAccelAssist = (anim->startFrame << 16) + ((anim->flags & ANIM_FLAG_FORWARD) ? animAccel : -animAccel);
+        graphNode->animInfo.animFrame            = graphNode->animInfo.animFrameAccelAssist >> 16;
     }
 
     graphNode->animInfo.animAccel = animAccel;

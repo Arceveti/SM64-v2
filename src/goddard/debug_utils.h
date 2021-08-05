@@ -17,13 +17,13 @@ struct MemTracker {
 };
 
 // functions
-extern struct MemTracker *start_memtracker(const char *);
-extern u32 stop_memtracker(const char *);
-extern void remove_all_memtrackers(void);
-extern f32 gd_rand_float(void);
-extern void gd_strcpy(char *, const char *);
-extern u32 gd_strlen(const char *);
-extern char *gd_strcat(char *, const char *);
-extern s32 gd_str_not_equal(const char *, const char *);
+extern struct MemTracker *start_memtracker( const char *);
+extern u32                 stop_memtracker( const char *);
+extern void  remove_all_memtrackers(                void);
+extern f32   gd_rand_float(                         void);
+extern void  gd_strcpy(             char *, const char *);
+extern u32   gd_strlen(                     const char *);
+extern char *gd_strcat(             char *, const char *);
+extern s32   gd_str_not_equal(const char *, const char *);
 
 #endif // GD_DEBUGGING_UTILS_H

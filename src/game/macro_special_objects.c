@@ -54,9 +54,7 @@ void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 
  * floats. Oddly enough, this function doesn't care if 'behavior' is NULL or not.
  */
 void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 unkA, s16 unkB, s16 unkC) {
-    struct Object *newObj =
-        spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, 0x0, 0x0);
-
+    struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, 0x0, 0x0);
     // Are all three of these values unused?
     newObj->oMacroUnk108 = (f32) unkA;
     newObj->oMacroUnk10C = (f32) unkB;
@@ -69,10 +67,9 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
 
     model = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
 
-    obj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior,
-                                     a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
+    obj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
 
-    obj->oUnk1A8 = a1[4];
+    obj->oUnk1A8    =  a1[4];
     obj->oBehParams = (a1[4] & 0xFF) >> 16;
 }
 
@@ -123,17 +120,16 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
         if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN)
             != RESPAWN_INFO_DONT_RESPAWN) {
             // Spawn the new macro object.
-            newObj =
-                spawn_object_abs_with_rot(&gMacroObjectDefaultParent, // Parent object
-                                          0,                          // Unused
-                                          preset.model,               // Model ID
-                                          preset.behavior,            // Behavior address
-                                          macroObject[MACRO_OBJ_X],   // X-position
-                                          macroObject[MACRO_OBJ_Y],   // Y-position
-                                          macroObject[MACRO_OBJ_Z],   // Z-position
-                                          0x0,                        // X-rotation
-                                          convert_rotation(macroObject[MACRO_OBJ_Y_ROT]), // Y-rotation
-                                          0x0                         // Z-rotation
+            newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, // Parent object
+                                               0,                          // Unused
+                                               preset.model,               // Model ID
+                                               preset.behavior,            // Behavior address
+                                               macroObject[MACRO_OBJ_X],   // X-position
+                                               macroObject[MACRO_OBJ_Y],   // Y-position
+                                               macroObject[MACRO_OBJ_Z],   // Z-position
+                                               0x0,                        // X-rotation
+                                               convert_rotation(macroObject[MACRO_OBJ_Y_ROT]), // Y-rotation
+                                               0x0                         // Z-rotation
                 );
 
             newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];

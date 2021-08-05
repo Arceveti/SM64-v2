@@ -18,7 +18,7 @@
 #define MAX_BACKGROUND_MUSIC_QUEUE_SIZE 6
 #define MAX_CHANNELS_PER_SOUND_BANK     1
 
-#define SEQUENCE_NONE 0xFF
+#define SEQUENCE_NONE                    0xFF
 
 #define SAMPLES_TO_OVERPRODUCE           0x10
 #define EXTRA_BUFFERED_AI_SAMPLES_TARGET 0x40
@@ -61,9 +61,9 @@ struct SequenceQueueItem {
 // moved to bss in data.c
 s32 gAudioErrorFlags2 = 0;
 #else
-s32 gAudioErrorFlags = 0;
+s32 gAudioErrorFlags  = 0;
 #endif
-s32 sGameLoopTicked = 0;
+s32 sGameLoopTicked   = 0;
 
 // Dialog sounds
 // The US difference is the sound for DIALOG_037 ("I win! You lose! Ha ha ha ha!
@@ -81,7 +81,7 @@ s32 sGameLoopTicked = 0;
 #define GRUNT 8
 #define WIGLR 9
 #define YOSHI 10
-#define _ 0xFF
+#define _     0xFF
 
 u8 sDialogSpeaker[] = {
     //       0      1      2      3      4      5      6      7      8      9
@@ -148,11 +148,9 @@ u8 sSoundRequestCount = 0;
 #define MARIO_IS_IN_AREA 6
 #define MARIO_IS_IN_ROOM 7
 
-#define DYN1(cond1, val1, res) (s16)(1 << (15 - cond1) | res), val1
-#define DYN2(cond1, val1, cond2, val2, res)                                                            \
-    (s16)(1 << (15 - cond1) | 1 << (15 - cond2) | res), val1, val2
-#define DYN3(cond1, val1, cond2, val2, cond3, val3, res)                                               \
-    (s16)(1 << (15 - cond1) | 1 << (15 - cond2) | 1 << (15 - cond3) | res), val1, val2, val3
+#define DYN1(cond1, val1, res)                           (s16)(1 << (15 - cond1) |                                         res), val1
+#define DYN2(cond1, val1, cond2, val2, res)              (s16)(1 << (15 - cond1) | 1 << (15 - cond2) |                     res), val1, val2
+#define DYN3(cond1, val1, cond2, val2, cond3, val3, res) (s16)(1 << (15 - cond1) | 1 << (15 - cond2) | 1 << (15 - cond3) | res), val1, val2, val3
 
 s16 sDynBbh[] = {
     SEQ_LEVEL_SPOOKY, DYN1(MARIO_IS_IN_ROOM, BBH_OUTSIDE_ROOM, 6),
@@ -194,8 +192,8 @@ s16 sDynNone[] = { SEQ_SOUND_PLAYER, 0 };
 u8 sCurrentMusicDynamic = 0xff;
 u8 sBackgroundMusicForDynamics = SEQUENCE_NONE;
 
-#define STUB_LEVEL(_0, _1, _2, _3, _4, _5, _6, leveldyn, _8) leveldyn,
-#define DEFINE_LEVEL(_0, _1, _2, _3, _4, _5, _6, _7, _8, leveldyn, _10) leveldyn,
+#define STUB_LEVEL(  _0, _1, _2, _3, _4, _5, _6, leveldyn, _8               ) leveldyn,
+#define DEFINE_LEVEL(_0, _1, _2, _3, _4, _5, _6, _7,       _8, leveldyn, _10) leveldyn,
 
 #define _ sDynNone
 s16 *sLevelDynamics[LEVEL_COUNT] = {
@@ -226,7 +224,7 @@ struct MusicDynamic sMusicDynamics[8] = {
     { 0xffff, 127, 100, 0x0000, 0, 100 }, // any (unused)
 };
 
-#define STUB_LEVEL(_0, _1, _2, _3, echo1, echo2, echo3, _7, _8) { echo1, echo2, echo3 },
+#define STUB_LEVEL(  _0, _1, _2, _3, echo1, echo2, echo3, _7, _8         ) { echo1, echo2, echo3 },
 #define DEFINE_LEVEL(_0, _1, _2, _3, _4, _5, echo1, echo2, echo3, _9, _10) { echo1, echo2, echo3 },
 
 u8 sLevelAreaReverbs[LEVEL_COUNT][3] = {
@@ -236,7 +234,7 @@ u8 sLevelAreaReverbs[LEVEL_COUNT][3] = {
 #undef STUB_LEVEL
 #undef DEFINE_LEVEL
 
-#define STUB_LEVEL(_0, _1, _2, volume, _4, _5, _6, _7, _8) volume,
+#define STUB_LEVEL(  _0, _1, _2, volume, _4, _5, _6, _7, _8         ) volume,
 #define DEFINE_LEVEL(_0, _1, _2, _3, _4, volume, _6, _7, _8, _9, _10) volume,
 
 u16 sLevelAcousticReaches[LEVEL_COUNT] = {
@@ -305,11 +303,11 @@ u8 sBackgroundMusicDefaultVolume[] = {
 STATIC_ASSERT(ARRAY_COUNT(sBackgroundMusicDefaultVolume) == SEQ_COUNT,
               "change this array if you are adding sequences");
 
-u8 sCurrentBackgroundMusicSeqId = SEQUENCE_NONE;
-u8 sMusicDynamicDelay = 0;
-u8 sSoundBankUsedListBack[SOUND_BANK_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-u8 sSoundBankFreeListFront[SOUND_BANK_COUNT] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-u8 sNumSoundsInBank[SOUND_BANK_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // only used for debugging
+u8 sCurrentBackgroundMusicSeqId               = SEQUENCE_NONE;
+u8 sMusicDynamicDelay                         = 0;
+u8 sSoundBankUsedListBack[  SOUND_BANK_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+u8 sSoundBankFreeListFront[ SOUND_BANK_COUNT] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+u8 sNumSoundsInBank[        SOUND_BANK_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // only used for debugging
 u8 sMaxChannelsForSoundBank[SOUND_BANK_COUNT] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
 // Banks 2 and 7 both grew from 0x30 sounds to 0x40 in size in US.
@@ -326,23 +324,23 @@ u8 sNumSoundsPerBank[SOUND_BANK_COUNT] = {
 // sBackgroundMusicMaxTargetVolume and sBackgroundMusicTargetVolume use the 0x80
 // bit to indicate that they are set, and the rest of the bits for the actual value
 #define TARGET_VOLUME_IS_PRESENT_FLAG 0x80
-#define TARGET_VOLUME_VALUE_MASK 0x7f
-#define TARGET_VOLUME_UNSET 0x00
+#define TARGET_VOLUME_VALUE_MASK      0x7f
+#define TARGET_VOLUME_UNSET           0x00
 
-f32 gGlobalSoundSource[3] = { 0.0f, 0.0f, 0.0f };
-u8 sSoundBankDisabled[16] = { 0 };
-u8 D_80332108 = 0;
-u8 sHasStartedFadeOut = FALSE;
+f32 gGlobalSoundSource[3]               = { 0.0f, 0.0f, 0.0f };
+u8 sSoundBankDisabled[16]               = { 0 };
+u8 D_80332108                           = 0;
+u8 sHasStartedFadeOut                   = FALSE;
 u16 sSoundBanksThatLowerBackgroundMusic = 0;
-u8 sBackgroundMusicMaxTargetVolume = TARGET_VOLUME_UNSET;
-u8 D_80332120 = 0;
-u8 D_80332124 = 0;
+u8 sBackgroundMusicMaxTargetVolume      = TARGET_VOLUME_UNSET;
+u8 D_80332120                           = 0;
+u8 D_80332124                           = 0;
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
-u8 D_EU_80300558 = 0;
+u8 D_EU_80300558                        = 0;
 #endif
 
-u8 sBackgroundMusicQueueSize = 0;
+u8 sBackgroundMusicQueueSize            = 0;
 
 // bss
 #if defined(VERSION_JP) || defined(VERSION_US)
@@ -402,7 +400,7 @@ typedef s32 FadeT;
 // some sort of main thread -> sound thread dispatchers
 extern void func_802ad728(u32 bits, f32 arg);
 extern void func_802ad74c(u32 bits, u32 arg);
-extern void func_802ad770(u32 bits, s8 arg);
+extern void func_802ad770(u32 bits, s8  arg);
 
 static void update_background_music_after_sound(u8 bank, u8 soundIndex);
 static void update_game_sound(void);
@@ -422,17 +420,12 @@ void audio_reset_session_eu(s32 presetId) {
     osRecvMesg(D_SH_80350FA8, &mesg, OS_MESG_NOBLOCK);
     osSendMesg(D_SH_80350F88, (OSMesg) presetId, OS_MESG_NOBLOCK);
     osRecvMesg(D_SH_80350FA8, &mesg, OS_MESG_BLOCK);
-    if ((s32) mesg != presetId) {
-        osRecvMesg(D_SH_80350FA8, &mesg, OS_MESG_BLOCK);
-    }
-
+    if ((s32) mesg != presetId) osRecvMesg(D_SH_80350FA8, &mesg, OS_MESG_BLOCK);
 #else
     osRecvMesg(OSMesgQueues[3], &mesg, OS_MESG_NOBLOCK);
     osSendMesg(OSMesgQueues[2], (OSMesg) presetId, OS_MESG_NOBLOCK);
     osRecvMesg(OSMesgQueues[3], &mesg, OS_MESG_BLOCK);
-    if ((s32) mesg != presetId) {
-        osRecvMesg(OSMesgQueues[3], &mesg, OS_MESG_BLOCK);
-    }
+    if ((s32) mesg != presetId) osRecvMesg(OSMesgQueues[3], &mesg, OS_MESG_BLOCK);
 #endif
 }
 #endif
@@ -446,13 +439,11 @@ static void seq_player_fade_to_zero_volume(s32 player, FadeT fadeDuration) {
 
 #ifndef VERSION_JP
     // fadeDuration is never 0 in practice
-    if (fadeDuration == 0) {
-        fadeDuration++;
-    }
+    if (fadeDuration == 0) fadeDuration++;
 #endif
 
-    seqPlayer->fadeVelocity = -(seqPlayer->fadeVolume / fadeDuration);
-    seqPlayer->state = SEQUENCE_PLAYER_STATE_FADE_OUT;
+    seqPlayer->fadeVelocity        = -(seqPlayer->fadeVolume / fadeDuration);
+    seqPlayer->state               = SEQUENCE_PLAYER_STATE_FADE_OUT;
     seqPlayer->fadeRemainingFrames = fadeDuration;
 }
 
@@ -466,8 +457,8 @@ static void func_8031D690(s32 player, FadeT fadeInTime) {
 
     seqPlayer->state = SEQUENCE_PLAYER_STATE_2;
     seqPlayer->fadeRemainingFrames = fadeInTime;
-    seqPlayer->fadeVolume = 0.0f;
-    seqPlayer->fadeVelocity = 0.0f;
+    seqPlayer->fadeVolume          = 0.0f;
+    seqPlayer->fadeVelocity        = 0.0f;
 }
 #endif
 
@@ -545,9 +536,7 @@ static void seq_player_fade_to_target_volume(s32 player, FadeT fadeDuration, u8 
         return;
     }
 
-    seqPlayer->fadeVelocity =
-        (((f32)((f32)(s32)(targetVolume) / 127.0f) - seqPlayer->fadeVolume)
-         / (f32) fadeDuration);
+    seqPlayer->fadeVelocity = (((f32)((f32)(s32)(targetVolume) / 127.0f) - seqPlayer->fadeVolume) / (f32) fadeDuration);
 #if defined(VERSION_EU) || defined(VERSION_SH)
     seqPlayer->state = 0;
 #else
@@ -631,20 +620,13 @@ struct SPTask *create_next_audio_frame_task(void) {
         stubbed_printf("DMA: Request queue over.( %d )\n", oldDmaCount);
     }
     gCurrAudioFrameDmaCount = 0;
-
-    gAudioTask = &gAudioTasks[gAudioTaskIndex];
-    gAudioCmd = gAudioCmdBuffers[gAudioTaskIndex];
-
-    index = gCurrAiBufferIndex;
-    gCurrAiBuffer = gAiBuffers[index];
-    gAiBufferLengths[index] =
-        ((gSamplesPerFrameTarget - samplesRemainingInAI + EXTRA_BUFFERED_AI_SAMPLES_TARGET) & ~0xf) + SAMPLES_TO_OVERPRODUCE;
-    if (gAiBufferLengths[index] < gMinAiBufferLength) {
-        gAiBufferLengths[index] = gMinAiBufferLength;
-    }
-    if (gAiBufferLengths[index] > gSamplesPerFrameTarget + SAMPLES_TO_OVERPRODUCE) {
-        gAiBufferLengths[index] = gSamplesPerFrameTarget + SAMPLES_TO_OVERPRODUCE;
-    }
+    gAudioTask              = &gAudioTasks[gAudioTaskIndex];
+    gAudioCmd               =  gAudioCmdBuffers[gAudioTaskIndex];
+    index                   = gCurrAiBufferIndex;
+    gCurrAiBuffer           = gAiBuffers[index];
+    gAiBufferLengths[index] = ((gSamplesPerFrameTarget - samplesRemainingInAI + EXTRA_BUFFERED_AI_SAMPLES_TARGET) & ~0xf) + SAMPLES_TO_OVERPRODUCE;
+    if (gAiBufferLengths[index] < gMinAiBufferLength) gAiBufferLengths[index] = gMinAiBufferLength;
+    if (gAiBufferLengths[index] > gSamplesPerFrameTarget + SAMPLES_TO_OVERPRODUCE) gAiBufferLengths[index] = gSamplesPerFrameTarget + SAMPLES_TO_OVERPRODUCE;
 
     if (sGameLoopTicked != 0) {
         update_game_sound();
@@ -657,27 +639,27 @@ struct SPTask *create_next_audio_frame_task(void) {
     gAudioCmd = synthesis_execute(gAudioCmd, &writtenCmds, gCurrAiBuffer, gAiBufferLengths[index]);
     gAudioRandom = ((gAudioRandom + gAudioFrameCount) * gAudioFrameCount);
 
-    index = gAudioTaskIndex;
-    gAudioTask->msgqueue = NULL;
-    gAudioTask->msg = NULL;
+    index                  = gAudioTaskIndex;
+    gAudioTask->msgqueue   = NULL;
+    gAudioTask->msg        = NULL;
 
     task = &gAudioTask->task.t;
-    task->type = M_AUDTASK;
-    task->flags = flags;
-    task->ucode_boot = rspbootTextStart;
-    task->ucode_boot_size = (u8 *) rspbootTextEnd  - (u8 *) rspbootTextStart;
-    task->ucode = aspMainTextStart;
-    task->ucode_size = 0x800; // (this size is ignored)
-    task->ucode_data = aspMainDataStart;
-    task->ucode_data_size = (aspMainDataEnd  - aspMainDataStart) * sizeof(u64);
-    task->dram_stack = NULL;
-    task->dram_stack_size = 0;
-    task->output_buff = NULL;
+    task->type             = M_AUDTASK;
+    task->flags            = flags;
+    task->ucode_boot       = rspbootTextStart;
+    task->ucode_boot_size  = (u8 *) rspbootTextEnd  - (u8 *) rspbootTextStart;
+    task->ucode            = aspMainTextStart;
+    task->ucode_size       = 0x800; // (this size is ignored)
+    task->ucode_data       = aspMainDataStart;
+    task->ucode_data_size  = (aspMainDataEnd  - aspMainDataStart) * sizeof(u64);
+    task->dram_stack       = NULL;
+    task->dram_stack_size  = 0;
+    task->output_buff      = NULL;
     task->output_buff_size = NULL;
-    task->data_ptr = gAudioCmdBuffers[index];
-    task->data_size = writtenCmds * sizeof(u64);
-    task->yield_data_ptr = NULL;
-    task->yield_data_size = 0;
+    task->data_ptr         = gAudioCmdBuffers[index];
+    task->data_size        = writtenCmds * sizeof(u64);
+    task->yield_data_ptr   = NULL;
+    task->yield_data_size  = 0;
 
     decrease_sample_dma_ttls();
     return gAudioTask;
@@ -704,7 +686,7 @@ static void process_sound_request(u32 bits, f32 *pos) {
     f32 dist;
     const f32 one = 1.0f;
 
-    bank = (bits & SOUNDARGS_MASK_BANK) >> SOUNDARGS_SHIFT_BANK;
+    bank    = (bits & SOUNDARGS_MASK_BANK   ) >> SOUNDARGS_SHIFT_BANK;
     soundId = (bits & SOUNDARGS_MASK_SOUNDID) >> SOUNDARGS_SHIFT_SOUNDID;
 
     if (soundId >= sNumSoundsPerBank[bank] || sSoundBankDisabled[bank]) return;
@@ -716,16 +698,13 @@ static void process_sound_request(u32 bits, f32 *pos) {
         if (sSoundBanks[bank][soundIndex].x == pos) {
             // If the existing sound has lower or equal priority, then we should replace it.
             // Otherwise the new sound will be dropped.
-            if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_PRIORITY)
-                <= (bits & SOUNDARGS_MASK_PRIORITY)) {
+            if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_PRIORITY) <= (bits & SOUNDARGS_MASK_PRIORITY)) {
 
                 // If the existing sound is discrete or is a different continuous sound, then
                 // interrupt it and play the new sound instead.
                 // Otherwise the new sound is continuous and equals the existing sound, so we just
                 // need to update the sound's freshness.
-                if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) != 0
-                    || (bits & SOUNDARGS_MASK_SOUNDID)
-                           != (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID)) {
+                if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) != 0 || (bits & SOUNDARGS_MASK_SOUNDID) != (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID)) {
                     update_background_music_after_sound(bank, soundIndex);
                     sSoundBanks[bank][soundIndex].soundBits = bits;
                     // In practice, the starting status is always WAITING
@@ -739,7 +718,6 @@ static void process_sound_request(u32 bits, f32 *pos) {
                 //   be called again to keep it playing
                 sSoundBanks[bank][soundIndex].freshness = SOUND_MAX_FRESHNESS;
             }
-
             // Prevent allocating a new node - if the existing sound had higher piority, then the
             // new sound will be dropped
             soundIndex = 0;
@@ -757,22 +735,22 @@ static void process_sound_request(u32 bits, f32 *pos) {
         soundIndex = sSoundBankFreeListFront[bank];
 
         dist = sqrtf(pos[0] * pos[0] + pos[1] * pos[1] + pos[2] * pos[2]) * one;
-        sSoundBanks[bank][soundIndex].x = &pos[0];
-        sSoundBanks[bank][soundIndex].y = &pos[1];
-        sSoundBanks[bank][soundIndex].z = &pos[2];
-        sSoundBanks[bank][soundIndex].distance = dist;
-        sSoundBanks[bank][soundIndex].soundBits = bits;
+        sSoundBanks[bank][soundIndex].x                       = &pos[0];
+        sSoundBanks[bank][soundIndex].y                       = &pos[1];
+        sSoundBanks[bank][soundIndex].z                       = &pos[2];
+        sSoundBanks[bank][soundIndex].distance                = dist;
+        sSoundBanks[bank][soundIndex].soundBits               = bits;
         // In practice, the starting status is always WAITING
-        sSoundBanks[bank][soundIndex].soundStatus = bits & SOUNDARGS_MASK_STATUS;
-        sSoundBanks[bank][soundIndex].freshness = SOUND_MAX_FRESHNESS;
+        sSoundBanks[bank][soundIndex].soundStatus             = bits & SOUNDARGS_MASK_STATUS;
+        sSoundBanks[bank][soundIndex].freshness               = SOUND_MAX_FRESHNESS;
 
         // Append to end of used list and pop from front of free list
-        sSoundBanks[bank][soundIndex].prev = sSoundBankUsedListBack[bank];
-        sSoundBanks[bank][sSoundBankUsedListBack[bank]].next = sSoundBankFreeListFront[bank];
-        sSoundBankUsedListBack[bank] = sSoundBankFreeListFront[bank];
-        sSoundBankFreeListFront[bank] = sSoundBanks[bank][sSoundBankFreeListFront[bank]].next;
+        sSoundBanks[bank][soundIndex].prev                    = sSoundBankUsedListBack[bank];
+        sSoundBanks[bank][sSoundBankUsedListBack[bank]].next  = sSoundBankFreeListFront[bank];
+        sSoundBankUsedListBack[bank]                          = sSoundBankFreeListFront[bank];
+        sSoundBankFreeListFront[bank]                         = sSoundBanks[bank][sSoundBankFreeListFront[bank]].next;
         sSoundBanks[bank][sSoundBankFreeListFront[bank]].prev = 0xff;
-        sSoundBanks[bank][soundIndex].next = 0xff;
+        sSoundBanks[bank][soundIndex].next                    = 0xff;
     }
 }
 
@@ -783,7 +761,6 @@ static void process_sound_request(u32 bits, f32 *pos) {
  */
 static void process_all_sound_requests(void) {
     struct Sound *sound;
-
     while (sSoundRequestCount != sNumProcessedSoundRequests) {
         sound = &sSoundRequests[sNumProcessedSoundRequests];
         process_sound_request(sound->soundBits, sound->position);
@@ -807,10 +784,10 @@ static void delete_sound_from_bank(u8 bank, u8 soundIndex) {
     sSoundBanks[bank][sSoundBanks[bank][soundIndex].prev].next = sSoundBanks[bank][soundIndex].next;
 
     // Push to front of free list
-    sSoundBanks[bank][soundIndex].next = sSoundBankFreeListFront[bank];
-    sSoundBanks[bank][soundIndex].prev = 0xff;
+    sSoundBanks[bank][soundIndex].next                    = sSoundBankFreeListFront[bank];
+    sSoundBanks[bank][soundIndex].prev                    = 0xff;
     sSoundBanks[bank][sSoundBankFreeListFront[bank]].prev = soundIndex;
-    sSoundBankFreeListFront[bank] = soundIndex;
+    sSoundBankFreeListFront[bank]                         = soundIndex;
 }
 
 /**
@@ -836,10 +813,10 @@ static void select_current_sounds(u8 bank) {
                                     0x10000000, 0x10000000, 0x10000000, 0x10000000,
                                     0x10000000, 0x10000000, 0x10000000, 0x10000000,
                                     0x10000000, 0x10000000, 0x10000000, 0x10000000 };
-    u8 liveSoundIndices[16]  = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
-    u8 liveSoundStatuses[16] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+    u8 liveSoundIndices[16]     = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+    u8 liveSoundStatuses[16]    = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+                                    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
     u8 numSoundsInBank = 0;
     u8 requestedPriority;
 
@@ -868,7 +845,7 @@ static void select_current_sounds(u8 bank) {
 
         // If a sound was marked for deletion and hasn't started playing yet, delete it now
         if (sSoundBanks[bank][soundIndex].soundBits == NO_SOUND
-            && sSoundBanks[bank][soundIndex].soundStatus == SOUND_STATUS_WAITING) {
+         && sSoundBanks[bank][soundIndex].soundStatus == SOUND_STATUS_WAITING) {
             // Since the current sound will be deleted, the next iteration should process
             // sound.prev.next
             latestSoundIndex = sSoundBanks[bank][soundIndex].prev;
@@ -882,13 +859,11 @@ static void select_current_sounds(u8 bank) {
             && soundIndex == latestSoundIndex) {
 
             // Recompute distance each frame since the sound's position may have changed
-            sSoundBanks[bank][soundIndex].distance =
-                sqrtf((*sSoundBanks[bank][soundIndex].x * *sSoundBanks[bank][soundIndex].x)
-                      + (*sSoundBanks[bank][soundIndex].y * *sSoundBanks[bank][soundIndex].y)
-                      + (*sSoundBanks[bank][soundIndex].z * *sSoundBanks[bank][soundIndex].z));
+            sSoundBanks[bank][soundIndex].distance = sqrtf((*sSoundBanks[bank][soundIndex].x * *sSoundBanks[bank][soundIndex].x)
+                                                         + (*sSoundBanks[bank][soundIndex].y * *sSoundBanks[bank][soundIndex].y)
+                                                         + (*sSoundBanks[bank][soundIndex].z * *sSoundBanks[bank][soundIndex].z));
 
-            requestedPriority = (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_PRIORITY)
-                                >> SOUNDARGS_SHIFT_PRIORITY;
+            requestedPriority = (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_PRIORITY) >> SOUNDARGS_SHIFT_PRIORITY;
 
             // Recompute priority, possibly based on the sound's source position relative to the
             // camera.
@@ -897,13 +872,9 @@ static void select_current_sounds(u8 bank) {
             if (sSoundBanks[bank][soundIndex].soundBits & SOUND_NO_PRIORITY_LOSS) {
                 sSoundBanks[bank][soundIndex].priority = 0x4c * (0xff - requestedPriority);
             } else if (*sSoundBanks[bank][soundIndex].z > 0.0f) {
-                sSoundBanks[bank][soundIndex].priority =
-                    (u32) sSoundBanks[bank][soundIndex].distance
-                    + (u32)(*sSoundBanks[bank][soundIndex].z / 6.0f)
-                    + 0x4c * (0xff - requestedPriority);
+                sSoundBanks[bank][soundIndex].priority = (u32) sSoundBanks[bank][soundIndex].distance + (u32)(*sSoundBanks[bank][soundIndex].z / 6.0f) + 0x4c * (0xff - requestedPriority);
             } else {
-                sSoundBanks[bank][soundIndex].priority =
-                    (u32) sSoundBanks[bank][soundIndex].distance + 0x4c * (0xff - requestedPriority);
+                sSoundBanks[bank][soundIndex].priority = (u32) sSoundBanks[bank][soundIndex].distance + 0x4c * (0xff - requestedPriority);
             }
 
             // Insert the sound into the liveSound arrays, keeping the arrays sorted by priority.
@@ -916,13 +887,13 @@ static void select_current_sounds(u8 bank) {
                     // Shift remaining sounds to the right
                     for (j = sMaxChannelsForSoundBank[bank] - 1; j > i; j--) {
                         liveSoundPriorities[j] = liveSoundPriorities[j - 1];
-                        liveSoundIndices[j] = liveSoundIndices[j - 1];
-                        liveSoundStatuses[j] = liveSoundStatuses[j - 1];
+                        liveSoundIndices[j]    = liveSoundIndices[   j - 1];
+                        liveSoundStatuses[j]   = liveSoundStatuses[  j - 1];
                     }
                     // Insert the sound at index i
                     liveSoundPriorities[i] = sSoundBanks[bank][soundIndex].priority;
-                    liveSoundIndices[i] = soundIndex;
-                    liveSoundStatuses[i] = sSoundBanks[bank][soundIndex].soundStatus; // unused
+                    liveSoundIndices[i]    = soundIndex;
+                    liveSoundStatuses[i]   = sSoundBanks[bank][soundIndex].soundStatus; // unused
                     // Break
                     i = sMaxChannelsForSoundBank[bank];
                 }
@@ -963,8 +934,7 @@ static void select_current_sounds(u8 bank) {
                 }
 
                 // If the sound is discrete and is playing, then delete it
-                isDiscreteAndStatus = sSoundBanks[bank][sCurrentSound[bank][i]].soundBits
-                                      & (SOUND_DISCRETE | SOUNDARGS_MASK_STATUS);
+                isDiscreteAndStatus = sSoundBanks[bank][sCurrentSound[bank][i]].soundBits & (SOUND_DISCRETE | SOUNDARGS_MASK_STATUS);
                 if (isDiscreteAndStatus >= (SOUND_DISCRETE | SOUND_STATUS_PLAYING)
                     && sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus != SOUND_STATUS_STOPPED) {
                     update_background_music_after_sound(bank, sCurrentSound[bank][i]);
@@ -974,8 +944,7 @@ static void select_current_sounds(u8 bank) {
                 // If the sound is continuous and is playing, then stop playing it but don't delete
                 // it. (A continuous sound shouldn't be deleted until it stops being requested)
                 } else {
-                    if (isDiscreteAndStatus == SOUND_STATUS_PLAYING
-                        && sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus != SOUND_STATUS_STOPPED) {
+                    if (isDiscreteAndStatus == SOUND_STATUS_PLAYING && sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus != SOUND_STATUS_STOPPED) {
                         sSoundBanks[bank][sCurrentSound[bank][i]].soundStatus = SOUND_STATUS_WAITING;
                     }
                 }
@@ -995,10 +964,7 @@ static void select_current_sounds(u8 bank) {
 
                     // Set (soundBits & status) to WAITING (soundStatus will be updated
                     // shortly after in update_game_sound)
-                    sSoundBanks[bank][liveSoundIndices[soundIndex]].soundBits =
-                        (sSoundBanks[bank][liveSoundIndices[soundIndex]].soundBits
-                         & ~SOUNDARGS_MASK_STATUS)
-                        + SOUND_STATUS_WAITING;
+                    sSoundBanks[bank][liveSoundIndices[soundIndex]].soundBits = (sSoundBanks[bank][liveSoundIndices[soundIndex]].soundBits & ~SOUNDARGS_MASK_STATUS) + SOUND_STATUS_WAITING;
 
                     liveSoundIndices[i] = 0xff; // doesn't do anything
                     i = 0xfe;                   // break
@@ -1083,9 +1049,7 @@ static f32 get_sound_volume(u8 bank, u8 soundIndex, f32 volumeRange) {
         } else {
             maxSoundDistance = sLevelAcousticReaches[gCurrLevelNum] / div;
             if (maxSoundDistance < sSoundBanks[bank][soundIndex].distance) {
-                intensity = ((AUDIO_MAX_DISTANCE - sSoundBanks[bank][soundIndex].distance)
-                             / (AUDIO_MAX_DISTANCE - maxSoundDistance))
-                            * (1.0f - volumeRange);
+                intensity = ((AUDIO_MAX_DISTANCE - sSoundBanks[bank][soundIndex].distance) / (AUDIO_MAX_DISTANCE - maxSoundDistance)) * (1.0f - volumeRange);
             } else {
                 intensity = 1.0f - sSoundBanks[bank][soundIndex].distance / maxSoundDistance * volumeRange;
             }
@@ -1215,76 +1179,52 @@ static void update_game_sound(void) {
                             if (!(sSoundBanks[bank][soundIndex].soundBits & SOUND_CONSTANT_FREQUENCY)) {
                                 if (sSoundMovingSpeed[bank] > 8) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x02020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
+                                    func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
 #else
                                     value = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                        value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume = value;
 #endif
                                 } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                                  get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1)
-                                                      * ((sSoundMovingSpeed[bank] + 8.0f) / 16));
+                                    func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1) * ((sSoundMovingSpeed[bank] + 8.0f) / 16));
 #else
                                     value = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                        (sSoundMovingSpeed[bank] + 8.0f) / 16 * value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume = (sSoundMovingSpeed[bank] + 8.0f) / 16 * value;
 #endif
                                 }
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                              get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                            *sSoundBanks[bank][soundIndex].z));
+                                func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z));
 #else
-                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                    get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                  *sSoundBanks[bank][soundIndex].z);
+                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
 #endif
-
-                                if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID)
-                                    == (SOUND_MOVING_FLYING & SOUNDARGS_MASK_SOUNDID)) {
+                                if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID) == (SOUND_MOVING_FLYING & SOUNDARGS_MASK_SOUNDID)) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x04020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_freq_scale(bank, soundIndex)
-                                            + ((f32) sSoundMovingSpeed[bank] / 80.0f));
+                                    func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex) + ((f32) sSoundMovingSpeed[bank] / 80.0f));
 #else
                                     value = get_sound_freq_scale(bank, soundIndex);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                        ((f32) sSoundMovingSpeed[bank] / 80.0f) + value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = ((f32) sSoundMovingSpeed[bank] / 80.0f) + value;
 #endif
                                 } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x04020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_freq_scale(bank, soundIndex)
-                                            + ((f32) sSoundMovingSpeed[bank] / 400.0f));
+                                    func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex) + ((f32) sSoundMovingSpeed[bank] / 400.0f));
 #else
                                     value = get_sound_freq_scale(bank, soundIndex);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                        ((f32) sSoundMovingSpeed[bank] / 400.0f) + value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = ((f32) sSoundMovingSpeed[bank] / 400.0f) + value;
 #endif
                                 }
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                              get_sound_reverb(bank, soundIndex, channelIndex));
+                                func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
 #else
-                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                    get_sound_reverb(bank, soundIndex, channelIndex);
+                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
 #endif
-
                                 break;
                             }
                         // fallthrough
                         case SOUND_BANK_MENU:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), 1);
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),  1);
                             func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), 64);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
                             gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = 1.0f;
                             gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = 0.5f;
@@ -1294,27 +1234,15 @@ static void update_game_sound(void) {
                         case SOUND_BANK_ACTION:
                         case SOUND_BANK_VOICE:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_reverb(bank, soundIndex, channelIndex));
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
-                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                        *sSoundBanks[bank][soundIndex].z)
-                                                  * 127.0f
-                                              + 0.5f);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
+                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z) * 127.0f + 0.5f);
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                              *sSoundBanks[bank][soundIndex].z);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                get_sound_freq_scale(bank, soundIndex);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                get_sound_reverb(bank, soundIndex, channelIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = get_sound_freq_scale(bank, soundIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
 #endif
                             break;
                         case SOUND_BANK_GENERAL:
@@ -1324,27 +1252,15 @@ static void update_game_sound(void) {
                         case SOUND_BANK_GENERAL2:
                         case SOUND_BANK_OBJ2:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_reverb(bank, soundIndex, channelIndex));
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2));
-                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                        *sSoundBanks[bank][soundIndex].z)
-                                                  * 127.0f
-                                              + 0.5f);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2));
+                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z) * 127.0f + 0.5f);
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                get_sound_reverb(bank, soundIndex, channelIndex);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                              *sSoundBanks[bank][soundIndex].z);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                get_sound_freq_scale(bank, soundIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = get_sound_freq_scale(bank, soundIndex);
 #endif
                             break;
                     }
@@ -1369,9 +1285,7 @@ static void update_game_sound(void) {
                     update_background_music_after_sound(bank, soundIndex);
                     sSoundBanks[bank][soundIndex].soundStatus = SOUND_STATUS_STOPPED;
                     delete_sound_from_bank(bank, soundIndex);
-                } else if (soundStatus == SOUND_STATUS_STOPPED
-                           && !gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]
-                                      ->layers[0]->finished) {
+                } else if (soundStatus == SOUND_STATUS_STOPPED && !gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->layers[0]->finished) {
                     update_background_music_after_sound(bank, soundIndex);
                     gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[0] = 0;
                     delete_sound_from_bank(bank, soundIndex);
@@ -1398,106 +1312,70 @@ static void update_game_sound(void) {
                             if (!(sSoundBanks[bank][soundIndex].soundBits & SOUND_CONSTANT_FREQUENCY)) {
                                 if (sSoundMovingSpeed[bank] > 8) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x02020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
+                                    func_802ad728( 0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
 #else
                                     value = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                        value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume = value;
 #endif
                                 } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                                  get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1)
-                                                      * ((sSoundMovingSpeed[bank] + 8.0f) / 16));
+                                    func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1) * ((sSoundMovingSpeed[bank] + 8.0f) / 16));
 #else
                                     value = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                        (sSoundMovingSpeed[bank] + 8.0f) / 16 * value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume = (sSoundMovingSpeed[bank] + 8.0f) / 16 * value;
 #endif
                                 }
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                              get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                            *sSoundBanks[bank][soundIndex].z));
+                                func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z));
 #else
-                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                    get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                  *sSoundBanks[bank][soundIndex].z);
+                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
 #endif
-
-                                if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID)
-                                    == (SOUND_MOVING_FLYING & SOUNDARGS_MASK_SOUNDID)) {
+                                if ((sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID) == (SOUND_MOVING_FLYING & SOUNDARGS_MASK_SOUNDID)) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x04020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_freq_scale(bank, soundIndex)
-                                            + ((f32) sSoundMovingSpeed[bank] / 80.0f));
+                                    func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex) + ((f32) sSoundMovingSpeed[bank] / 80.0f));
 #else
                                     value = get_sound_freq_scale(bank, soundIndex);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                        ((f32) sSoundMovingSpeed[bank] / 80.0f) + value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = ((f32) sSoundMovingSpeed[bank] / 80.0f) + value;
 #endif
                                 } else {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                    func_802ad728(
-                                        0x04020000 | ((channelIndex & 0xff) << 8),
-                                        get_sound_freq_scale(bank, soundIndex)
-                                            + ((f32) sSoundMovingSpeed[bank] / 400.0f));
+                                    func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex) + ((f32) sSoundMovingSpeed[bank] / 400.0f));
 #else
                                     value = get_sound_freq_scale(bank, soundIndex);
-                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                        ((f32) sSoundMovingSpeed[bank] / 400.0f) + value;
+                                    gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = ((f32) sSoundMovingSpeed[bank] / 400.0f) + value;
 #endif
                                 }
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                                func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                              get_sound_reverb(bank, soundIndex, channelIndex));
+                                func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
 #else
-                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                    get_sound_reverb(bank, soundIndex, channelIndex);
+                                gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
 #endif
-
                                 break;
                             }
                         // fallthrough
                         case SOUND_BANK_MENU:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), 1);
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),  1);
                             func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), 64);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume = 1.0f;
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan = 0.5f;
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = 1.0f;
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = 0.5f;
                             gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = 1.0f;
 #endif
                             break;
                         case SOUND_BANK_ACTION:
                         case SOUND_BANK_VOICE:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_reverb(bank, soundIndex, channelIndex));
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
-                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                        *sSoundBanks[bank][soundIndex].z)
-                                                  * 127.0f
-                                              + 0.5f);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1));
+                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x,  *sSoundBanks[bank][soundIndex].z) * 127.0f + 0.5f);
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                              *sSoundBanks[bank][soundIndex].z);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                get_sound_freq_scale(bank, soundIndex);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                get_sound_reverb(bank, soundIndex, channelIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK1);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = get_sound_freq_scale(bank, soundIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
 #endif
                             break;
                         case SOUND_BANK_GENERAL:
@@ -1507,27 +1385,15 @@ static void update_game_sound(void) {
                         case SOUND_BANK_GENERAL2:
                         case SOUND_BANK_OBJ2:
 #if defined(VERSION_EU) || defined(VERSION_SH)
-                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_reverb(bank, soundIndex, channelIndex));
-                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2));
-                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                                        *sSoundBanks[bank][soundIndex].z)
-                                                  * 127.0f
-                                              + 0.5f);
-                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8),
-                                          get_sound_freq_scale(bank, soundIndex));
+                            func_802ad770(0x05020000 | ((channelIndex & 0xff) << 8), get_sound_reverb(bank, soundIndex, channelIndex));
+                            func_802ad728(0x02020000 | ((channelIndex & 0xff) << 8), get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2));
+                            func_802ad770(0x03020000 | ((channelIndex & 0xff) << 8), get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z) * 127.0f + 0.5f);
+                            func_802ad728(0x04020000 | ((channelIndex & 0xff) << 8), get_sound_freq_scale(bank, soundIndex));
 #else
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol =
-                                get_sound_reverb(bank, soundIndex, channelIndex);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume =
-                                get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan =
-                                get_sound_pan(*sSoundBanks[bank][soundIndex].x,
-                                              *sSoundBanks[bank][soundIndex].z);
-                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale =
-                                get_sound_freq_scale(bank, soundIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->reverbVol = get_sound_reverb(bank, soundIndex, channelIndex);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume    = get_sound_volume(bank, soundIndex, VOLUME_RANGE_UNK2);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->pan       = get_sound_pan(*sSoundBanks[bank][soundIndex].x, *sSoundBanks[bank][soundIndex].z);
+                            gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->freqScale = get_sound_freq_scale(bank, soundIndex);
 #endif
                             break;
                     }
@@ -1554,7 +1420,7 @@ static void seq_player_play_sequence(u8 player, u8 seqId, u16 arg2) {
 
     if (player == SEQ_PLAYER_LEVEL) {
         sCurrentBackgroundMusicSeqId = seqId & SEQ_BASE_ID;
-        sBackgroundMusicForDynamics = SEQUENCE_NONE;
+        sBackgroundMusicForDynamics  = SEQUENCE_NONE;
         sCurrentMusicDynamic = 0xff;
         sMusicDynamicDelay = 2;
     }
@@ -1643,22 +1509,18 @@ static void func_8031F96C(u8 player) {
             && D_80360928[player][i].remainingFrames != 0) {
             D_80360928[player][i].current += D_80360928[player][i].velocity;
 #if defined(VERSION_EU) || defined(VERSION_SH)
-            func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8,
-                          D_80360928[player][i].current);
+            func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8, D_80360928[player][i].current);
 #else
             gSequencePlayers[player].channels[i]->volumeScale = D_80360928[player][i].current;
 #endif
             D_80360928[player][i].remainingFrames--;
             if (D_80360928[player][i].remainingFrames == 0) {
 #if defined(VERSION_EU)
-                func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8,
-                              (f32)(s32)(D_80360928[player][i].target) / 127.0);
+                func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8, (f32)(s32)(D_80360928[player][i].target) / 127.0);
 #elif defined(VERSION_SH)
-                func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8,
-                              (f32)(s32)(D_80360928[player][i].target) / 127.0f);
+                func_802ad728(0x01000000 | (player & 0xff) << 16 | (i & 0xff) << 8, (f32)(s32)(D_80360928[player][i].target) / 127.0f);
 #else
-                gSequencePlayers[player].channels[i]->volumeScale =
-                    D_80360928[player][i].target / 127.0f;
+                gSequencePlayers[player].channels[i]->volumeScale = D_80360928[player][i].target / 127.0f;
 #endif
             }
         }
@@ -1705,45 +1567,20 @@ void process_level_music_dynamics(void) {
                 conditionTypes[condIndex] = j;
                 condIndex++;
             }
-
             j++;
             bit = bit >> 1;
         }
 
         for (j = 0; j < condIndex; j++) {
             switch (conditionTypes[j]) {
-                case MARIO_X_GE: {
-                    if (((s16) gMarioStates[0].pos[0]) < conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_Y_GE: {
-                    if (((s16) gMarioStates[0].pos[1]) < conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_Z_GE: {
-                    if (((s16) gMarioStates[0].pos[2]) < conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_X_LT: {
-                    if (((s16) gMarioStates[0].pos[0]) >= conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_Y_LT: {
-                    if (((s16) gMarioStates[0].pos[1]) >= conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_Z_LT: {
-                    if (((s16) gMarioStates[0].pos[2]) >= conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_IS_IN_AREA: {
-                    if (gCurrAreaIndex != conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
-                case MARIO_IS_IN_ROOM: {
-                    if (gMarioCurrentRoom != conditionValues[j]) j = condIndex + 1;
-                    break;
-                }
+                case MARIO_X_GE:       { if (((s16) gMarioStates[0].pos[0]) <  conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_Y_GE:       { if (((s16) gMarioStates[0].pos[1]) <  conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_Z_GE:       { if (((s16) gMarioStates[0].pos[2]) <  conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_X_LT:       { if (((s16) gMarioStates[0].pos[0]) >= conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_Y_LT:       { if (((s16) gMarioStates[0].pos[1]) >= conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_Z_LT:       { if (((s16) gMarioStates[0].pos[2]) >= conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_IS_IN_AREA: { if (gCurrAreaIndex                 != conditionValues[j]) j = condIndex + 1; break; }
+                case MARIO_IS_IN_ROOM: { if (gMarioCurrentRoom              != conditionValues[j]) j = condIndex + 1; break; }
             }
         }
 
@@ -1755,7 +1592,6 @@ void process_level_music_dynamics(void) {
             musicDynIndex = sLevelDynamics[gCurrLevelNum][i] & 0xff;
             i++;
         }
-
         conditionBits = tempBits;
     }
 
@@ -1776,7 +1612,6 @@ void process_level_music_dynamics(void) {
             if (sMusicDynamics[musicDynIndex].bits2 & conditionBits) fade_channel_volume_scale(SEQ_PLAYER_LEVEL, i, sMusicDynamics[musicDynIndex].volScale2, dur2);
             tempBits = conditionBits << 1;
         }
-
         sCurrentMusicDynamic = musicDynIndex;
     }
 }
@@ -1828,13 +1663,9 @@ static u8 begin_background_music_fade(u16 fadeDuration) {
 
     if (sCurrentBackgroundMusicSeqId == SEQUENCE_NONE || sCurrentBackgroundMusicSeqId == SEQ_EVENT_CUTSCENE_CREDITS) return 0xff;
 
-    if (gSequencePlayers[SEQ_PLAYER_LEVEL].volume == 0.0f && fadeDuration) {
-        gSequencePlayers[SEQ_PLAYER_LEVEL].volume = gSequencePlayers[SEQ_PLAYER_LEVEL].fadeVolume;
-    }
+    if (gSequencePlayers[SEQ_PLAYER_LEVEL].volume == 0.0f && fadeDuration) gSequencePlayers[SEQ_PLAYER_LEVEL].volume = gSequencePlayers[SEQ_PLAYER_LEVEL].fadeVolume;
 
-    if (sBackgroundMusicTargetVolume != TARGET_VOLUME_UNSET) {
-        targetVolume = (sBackgroundMusicTargetVolume & TARGET_VOLUME_VALUE_MASK);
-    }
+    if (sBackgroundMusicTargetVolume != TARGET_VOLUME_UNSET) targetVolume = (sBackgroundMusicTargetVolume & TARGET_VOLUME_VALUE_MASK);
 
     if (sBackgroundMusicMaxTargetVolume != TARGET_VOLUME_UNSET) {
         u8 maxTargetVolume = (sBackgroundMusicMaxTargetVolume & TARGET_VOLUME_VALUE_MASK);
@@ -1850,8 +1681,7 @@ static u8 begin_background_music_fade(u16 fadeDuration) {
             seq_player_fade_to_target_volume(SEQ_PLAYER_LEVEL, fadeDuration, targetVolume);
         } else {
 #if defined(VERSION_JP) || defined(VERSION_US)
-            gSequencePlayers[SEQ_PLAYER_LEVEL].volume =
-                sBackgroundMusicDefaultVolume[sCurrentBackgroundMusicSeqId] / 127.0f;
+            gSequencePlayers[SEQ_PLAYER_LEVEL].volume = sBackgroundMusicDefaultVolume[sCurrentBackgroundMusicSeqId] / 127.0f;
 #endif
             seq_player_fade_to_normal_volume(SEQ_PLAYER_LEVEL, fadeDuration);
         }
@@ -1865,7 +1695,6 @@ static u8 begin_background_music_fade(u16 fadeDuration) {
  */
 void set_audio_muted(u8 muted) {
     u8 i;
-
     for (i = 0; i < SEQUENCE_PLAYERS; i++) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
         func_802ad74c(muted ? 0xf1000000 : 0xf2000000, 0);
@@ -1918,17 +1747,17 @@ void sound_init(void) {
 
     sound_banks_enable(SEQ_PLAYER_SFX, SOUND_BANKS_ALL_BITS);
 
-    sBackgroundMusicTargetVolume = TARGET_VOLUME_UNSET;
-    sLowerBackgroundMusicVolume = FALSE;
+    sBackgroundMusicTargetVolume        = TARGET_VOLUME_UNSET;
+    sLowerBackgroundMusicVolume         = FALSE;
     sSoundBanksThatLowerBackgroundMusic = 0;
-    sCurrentBackgroundMusicSeqId = 0xff;
-    gSoundMode = SOUND_MODE_STEREO;
-    sBackgroundMusicQueueSize = 0;
-    sBackgroundMusicMaxTargetVolume = TARGET_VOLUME_UNSET;
-    D_80332120 = 0;
-    D_80332124 = 0;
-    sNumProcessedSoundRequests = 0;
-    sSoundRequestCount = 0;
+    sCurrentBackgroundMusicSeqId        = 0xff;
+    gSoundMode                          = SOUND_MODE_STEREO;
+    sBackgroundMusicQueueSize           = 0;
+    sBackgroundMusicMaxTargetVolume     = TARGET_VOLUME_UNSET;
+    D_80332120                          = 0;
+    D_80332124                          = 0;
+    sNumProcessedSoundRequests          = 0;
+    sSoundRequestCount                  = 0;
 }
 
 // (unused)
@@ -1936,9 +1765,8 @@ UNUSED void get_currently_playing_sound(u8 bank, u8 *numPlayingSounds, u8 *numSo
     u8 i;
     u8 count = 0;
 
-    for (i = 0; i < sMaxChannelsForSoundBank[bank]; i++) {
-        if (sCurrentSound[bank][i] != 0xff) count++;
-    }
+    for (i = 0; i < sMaxChannelsForSoundBank[bank]; i++) if (sCurrentSound[bank][i] != 0xff) count++;
+
     *numPlayingSounds = count;
 
     *numSoundsInBank = sNumSoundsInBank[bank];
@@ -1997,7 +1825,6 @@ void stop_sounds_from_source(f32 *pos) {
  */
 static void stop_sounds_in_bank(u8 bank) {
     u8 soundIndex = sSoundBanks[bank][0].next;
-
     while (soundIndex != 0xff) {
         update_background_music_after_sound(bank, soundIndex);
         sSoundBanks[bank][soundIndex].soundBits = NO_SOUND;
@@ -2014,8 +1841,8 @@ static void stop_sounds_in_bank(u8 bank) {
  */
 void stop_sounds_in_continuous_banks(void) {
     stop_sounds_in_bank(SOUND_BANK_MOVING);
-    stop_sounds_in_bank(SOUND_BANK_ENV);
-    stop_sounds_in_bank(SOUND_BANK_AIR);
+    stop_sounds_in_bank(SOUND_BANK_ENV   );
+    stop_sounds_in_bank(SOUND_BANK_AIR   );
 }
 
 /**
@@ -2023,11 +1850,8 @@ void stop_sounds_in_continuous_banks(void) {
  */
 void sound_banks_disable(UNUSED u8 player, u16 bankMask) {
     u8 i;
-
     for (i = 0; i < SOUND_BANK_COUNT; i++) {
-        if (bankMask & 1) {
-            sSoundBankDisabled[i] = TRUE;
-        }
+        if (bankMask & 1) sSoundBankDisabled[i] = TRUE;
         bankMask = bankMask >> 1;
     }
 }
@@ -2037,10 +1861,7 @@ void sound_banks_disable(UNUSED u8 player, u16 bankMask) {
  */
 static void disable_all_sequence_players(void) {
     u8 i;
-
-    for (i = 0; i < SEQUENCE_PLAYERS; i++) {
-        sequence_player_disable(&gSequencePlayers[i]);
-    }
+    for (i = 0; i < SEQUENCE_PLAYERS; i++) sequence_player_disable(&gSequencePlayers[i]);
 }
 
 /**
@@ -2048,11 +1869,8 @@ static void disable_all_sequence_players(void) {
  */
 void sound_banks_enable(UNUSED u8 player, u16 bankMask) {
     u8 i;
-
     for (i = 0; i < SOUND_BANK_COUNT; i++) {
-        if (bankMask & 1) {
-            sSoundBankDisabled[i] = FALSE;
-        }
+        if (bankMask & 1) sSoundBankDisabled[i] = FALSE;
         bankMask = bankMask >> 1;
     }
 }
@@ -2073,26 +1891,19 @@ void set_sound_moving_speed(u8 bank, u8 speed) {
 void play_dialog_sound(u8 dialogID) {
     u8 speaker;
 
-    if (dialogID >= DIALOG_COUNT) {
-        dialogID = 0;
-    }
-
+    if (dialogID >= DIALOG_COUNT) dialogID = 0;
     speaker = sDialogSpeaker[dialogID];
     if (speaker != 0xff) {
         play_sound(sDialogSpeakerVoice[speaker], gGlobalSoundSource);
 
         // Play music during bowser message that appears when first entering the
         // castle or when trying to enter a door without enough stars
-        if (speaker == BOWS1) {
-            seq_player_play_sequence(SEQ_PLAYER_ENV, SEQ_EVENT_KOOPA_MESSAGE, 0);
-        }
+        if (speaker == BOWS1) seq_player_play_sequence(SEQ_PLAYER_ENV, SEQ_EVENT_KOOPA_MESSAGE, 0);
     }
 
 #ifndef VERSION_JP
     // "You've stepped on the (Wing|Metal|Vanish) Cap Switch"
-    if (dialogID == DIALOG_010 || dialogID == DIALOG_011 || dialogID == DIALOG_012) {
-        play_puzzle_jingle();
-    }
+    if (dialogID == DIALOG_010 || dialogID == DIALOG_011 || dialogID == DIALOG_012) play_puzzle_jingle();
 #endif
 }
 
@@ -2100,7 +1911,7 @@ void play_dialog_sound(u8 dialogID) {
  * Called from threads: thread5_game_loop
  */
 void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
-    u8 seqId = seqArgs & 0xff;
+    u8 seqId    = seqArgs & 0xff;
     u8 priority = seqArgs >> 8;
     u8 i;
     u8 foundIndex = 0;
@@ -2148,12 +1959,12 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer) {
     // the new sequence first.
     for (i = sBackgroundMusicQueueSize - 1; i > foundIndex; i--) {
         sBackgroundMusicQueue[i].priority = sBackgroundMusicQueue[i - 1].priority;
-        sBackgroundMusicQueue[i].seqId = sBackgroundMusicQueue[i - 1].seqId;
+        sBackgroundMusicQueue[i].seqId    = sBackgroundMusicQueue[i - 1].seqId;
     }
 
     // Insert item into queue.
     sBackgroundMusicQueue[foundIndex].priority = priority;
-    sBackgroundMusicQueue[foundIndex].seqId = seqId;
+    sBackgroundMusicQueue[foundIndex].seqId    = seqId;
 }
 
 /**
@@ -2225,9 +2036,7 @@ u16 get_current_background_music(void) {
  */
 void func_80320ED8(void) {
 #if defined(VERSION_EU) || defined(VERSION_SH)
-    if (D_EU_80300558 != 0) {
-        D_EU_80300558--;
-    }
+    if (D_EU_80300558 != 0) D_EU_80300558--;
 
     if (gSequencePlayers[SEQ_PLAYER_ENV].enabled
         || sBackgroundMusicMaxTargetVolume == TARGET_VOLUME_UNSET || D_EU_80300558 != 0) {
@@ -2241,8 +2050,7 @@ void func_80320ED8(void) {
     sBackgroundMusicMaxTargetVolume = TARGET_VOLUME_UNSET;
     begin_background_music_fade(50);
 
-    if (sBackgroundMusicTargetVolume != TARGET_VOLUME_UNSET
-        && (D_80332120 == SEQ_EVENT_MERRY_GO_ROUND || D_80332120 == SEQ_EVENT_PIRANHA_PLANT)) {
+    if (sBackgroundMusicTargetVolume != TARGET_VOLUME_UNSET && (D_80332120 == SEQ_EVENT_MERRY_GO_ROUND || D_80332120 == SEQ_EVENT_PIRANHA_PLANT)) {
         seq_player_play_sequence(SEQ_PLAYER_ENV, D_80332120, 1);
         if (D_80332124 != 0xff) seq_player_fade_to_target_volume(SEQ_PLAYER_ENV, 1, D_80332124);
     }
@@ -2306,7 +2114,6 @@ void func_803210D4(u16 fadeDuration) {
         seq_player_fade_to_zero_volume(SEQ_PLAYER_ENV, fadeDuration);
 #endif
     }
-
     for (i = 0; i < SOUND_BANK_COUNT; i++) if (i != SOUND_BANK_MENU) fade_channel_volume_scale(SEQ_PLAYER_SFX, i, 0, fadeDuration / 16);
 
     sHasStartedFadeOut = TRUE;
@@ -2406,9 +2213,7 @@ void play_toads_jingle(void) {
  */
 void sound_reset(u8 presetId) {
 #ifndef VERSION_JP
-    if (presetId >= 8) {
-        presetId = 0;
-    }
+    if (presetId >= 8) presetId = 0;
 #endif
     sGameLoopTicked = 0;
     disable_all_sequence_players();
@@ -2423,13 +2228,13 @@ void sound_reset(u8 presetId) {
 #endif
     osWritebackDCacheAll();
     if (presetId != 7) {
-        preload_sequence(SEQ_EVENT_SOLVE_PUZZLE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
-        preload_sequence(SEQ_EVENT_PEACH_MESSAGE, PRELOAD_BANKS | PRELOAD_SEQUENCE);
+        preload_sequence(SEQ_EVENT_SOLVE_PUZZLE,        PRELOAD_BANKS | PRELOAD_SEQUENCE);
+        preload_sequence(SEQ_EVENT_PEACH_MESSAGE,       PRELOAD_BANKS | PRELOAD_SEQUENCE);
         preload_sequence(SEQ_EVENT_CUTSCENE_STAR_SPAWN, PRELOAD_BANKS | PRELOAD_SEQUENCE);
     }
     seq_player_play_sequence(SEQ_PLAYER_SFX, SEQ_SOUND_PLAYER, 0);
-    D_80332108 = (D_80332108 & 0xf0) + presetId;
-    gSoundMode = D_80332108 >> 4;
+    D_80332108         = (D_80332108 & 0xf0) + presetId;
+    gSoundMode         = D_80332108 >> 4;
     sHasStartedFadeOut = FALSE;
 }
 

@@ -50,14 +50,11 @@ void func_80182A08(  struct ObjParticle *, struct GdVec3f *b);
 
 static void connect_vertices(struct ObjVertex *vtx1, struct ObjVertex *vtx2) {
     register struct ListNode *link;
-
     if (vtx1 == vtx2) return;
-
     link = gGdSkinNet->unk1C0->firstMember;
     while (link != NULL) {
         // FIXME: types
         struct Connection *conn = (struct Connection *) link->obj;
-
         if ((conn->node1.vtx == vtx1 || conn->node1.vtx == vtx2)
          && (conn->node2.vtx == vtx1 || conn->node2.vtx == vtx2)) break;
         link = link->next;
@@ -70,7 +67,6 @@ void Unknown80181D14(struct ObjFace *face) {
     s32 j;
     struct ObjVertex *vtx1;
     struct ObjVertex *vtx2;
-
     for (i = 0; i < face->vtxCount - 1; i++) {
         vtx1 = face->vertices[i];
         vtx2 = face->vertices[i + 1];
@@ -93,11 +89,10 @@ void func_80181EB0(struct Connection *cxn) {
     struct GdVec3f sp34;
     struct ObjParticle *sp4 = cxn->node1.ptc;
     struct ObjParticle *sp0 = cxn->node2.ptc;
-
-    sp34.x = 0.0f;
-    sp34.y = sp4->pos.y - sp0->pos.y;
-    sp34.z = 0.0f;
-    sp34.y *= 0.01f;
+    sp34.x        = 0.0f;
+    sp34.y        = sp4->pos.y - sp0->pos.y;
+    sp34.z        = 0.0f;
+    sp34.y       *= 0.01f;
     sp4->unk38.x -= sp34.x;
     sp4->unk38.y -= sp34.y;
     sp4->unk38.z -= sp34.z;
@@ -123,7 +118,6 @@ void func_80182088(struct Connection *cxn) {
     f32 div;
     struct ObjParticle *particle1;
     struct ObjParticle *particle2;
-
     if (cxn->unk28 & 0x1) {
         func_80181EB0(cxn);
         return;
@@ -133,7 +127,7 @@ void func_80182088(struct Connection *cxn) {
     vec.x = particle1->pos.x - particle2->pos.x;
     vec.y = particle1->pos.y - particle2->pos.y;
     vec.z = particle1->pos.z - particle2->pos.z;
-    div = gd_vec3f_magnitude(&vec); //? gd_Q_rsqrt
+    div = gd_vec3f_magnitude(&vec); //? fast invsqrt
     mul = div - cxn->unk24;
     vec.x /= div;
     vec.y /= div;
@@ -163,16 +157,13 @@ void func_80182088(struct Connection *cxn) {
 void func_801823A0(struct ObjNet *net) {
     register struct ListNode *link;
     struct Connection *cxn;
-
     gGdSkinNet = net;
     switch (net->unk3C) {
         case 1: // Shape; Are these flags the same as net->netType (+0x1EC)?
             net->unk1C8 = net->shapePtr->vtxGroup;
             net->unk1C0 = make_group(0);
             D_801B9EF0 = NULL;
-
-            apply_to_obj_types_in_group(OBJ_TYPE_FACES, (applyproc_t) Unknown80181D14,
-                                        net->shapePtr->faceGroup);
+            apply_to_obj_types_in_group(OBJ_TYPE_FACES, (applyproc_t) Unknown80181D14, net->shapePtr->faceGroup);
             net->unk3C = 2;
             break;
         case 2:
@@ -192,22 +183,21 @@ void func_801823A0(struct ObjNet *net) {
 /* 230CC0 -> 230DCC */
 struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z) {
     struct ObjParticle *particle = (struct ObjParticle *) make_object(OBJ_TYPE_PARTICLES);
-    particle->pos.x = x;
-    particle->pos.y = y;
-    particle->pos.z = z;
-    particle->unk38.x = particle->unk38.y = particle->unk38.z = 0.0f;
+    particle->pos.x     = x;
+    particle->pos.y     = y;
+    particle->pos.z     = z;
+    particle->unk38.x   = particle->unk38.y = particle->unk38.z = 0.0f;
     particle->colourNum = colourNum;
-    particle->flags = flags | 8;
-    particle->timeout = -1;
-    particle->shapePtr = NULL;
-    particle->unkB0 = 1;
+    particle->flags     = flags | 8;
+    particle->timeout   = -1;
+    particle->shapePtr  = NULL;
+    particle->unkB0     =  1;
     return particle;
 }
 
 /* 230F48 -> 2311D8 */
 int func_80182778(struct ObjParticle *ptc) {
     s32 sp4 = 0;
-
     if (ptc->unk7C->animSeqNum == 2 && ptc->unk74 == 1) {
         while (D_801A81D4[sp4] != 0) {
             if (D_801A81D4[sp4] == ptc->unk7C->frame) {
@@ -237,7 +227,6 @@ int func_80182778(struct ObjParticle *ptc) {
 void func_80182A08(struct ObjParticle *ptc, struct GdVec3f *b) {
     register struct ListNode *link;
     struct ObjParticle *sp20;
-
     if (ptc->subParticlesGrp != NULL) {
         link = ptc->subParticlesGrp->firstMember;
         while (link != NULL) {
@@ -273,11 +262,8 @@ void move_particle(struct ObjParticle *ptc) {
     struct ObjCamera *camera;
     struct GdVec3f sp40;
     struct GdVec3f sp34;
-
-    if (ptc->flags & 0x2) return;
-
+    if (  ptc->flags & 0x2)  return;
     if (!(ptc->flags & 0x8)) return;
-
     if (ptc->unk60 == 3) {
         sp40.x = -gViewUpdateCamera->unkE8[2][0] *  50.0f;
         sp40.y = -gViewUpdateCamera->unkE8[2][1] *  50.0f;
@@ -288,17 +274,15 @@ void move_particle(struct ObjParticle *ptc) {
     }
     if (ptc->attachedToObj != NULL) {
         set_cur_dynobj(ptc->attachedToObj);
-        if (ptc->unk60 == 3) {
-            if (ptc->unk64 == 3) {
-                camera = (struct ObjCamera *) ptc->attachedToObj;
-                // Camera->unk18C = ObjView here
-                if (camera->unk18C->pickedObj != NULL) {
-                    set_cur_dynobj(camera->unk18C->pickedObj);
-                    ptc->flags |= 0x20;
-                } else {
-                    ptc->flags &= ~0x10;
-                    ptc->flags &= ~0x20;
-                }
+        if (ptc->unk60 == 3 && ptc->unk64 == 3) {
+            camera = (struct ObjCamera *) ptc->attachedToObj;
+            // Camera->unk18C = ObjView here
+            if (camera->unk18C->pickedObj != NULL) {
+                set_cur_dynobj(camera->unk18C->pickedObj);
+                ptc->flags |= 0x20;
+            } else {
+                ptc->flags &= ~0x10;
+                ptc->flags &= ~0x20;
             }
         }
         d_get_world_pos(&sp64);
@@ -311,35 +295,31 @@ void move_particle(struct ObjParticle *ptc) {
     ptc->pos.y += ptc->unk38.y;
     ptc->pos.z += ptc->unk38.z;
     if (ptc->flags & 0x1) ptc->unk38.y += sp7C;
-    switch (ptc->unkB0) {
-        case 1:
-            ptc->unkB0 = 2;
-            if (ptc->unk60 == 3) {
-                switch (ptc->unk64) {
-                    case 1:
-                        ptc->subParticlesGrp = make_group(0);
-                        for (i = 0; i < 50; i++) {
-                            particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
-                            particle->shapePtr = ptc->shapePtr;
-                            addto_group(ptc->subParticlesGrp, &particle->header);
-                            particle->flags &= ~8;
-                        }
-                        break;
-                    case 2:
-                    case 3:
-                        ptc->subParticlesGrp = make_group(0);
-                        for (i = 0; i < 30; i++) {
-                            particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
-                            particle->shapePtr = ptc->shapePtr;
-                            addto_group(ptc->subParticlesGrp, &particle->header);
-                            particle->flags &= ~8;
-                        }
-                        break;
-                }
+    if (ptc->unkB0 == 1) {
+        ptc->unkB0 = 2;
+        if (ptc->unk60 == 3) {
+            switch (ptc->unk64) {
+                case 1:
+                    ptc->subParticlesGrp = make_group(0);
+                    for (i = 0; i < 50; i++) {
+                        particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                        particle->shapePtr = ptc->shapePtr;
+                        addto_group(ptc->subParticlesGrp, &particle->header);
+                        particle->flags &= ~8;
+                    }
+                    break;
+                case 2:
+                case 3:
+                    ptc->subParticlesGrp = make_group(0);
+                    for (i = 0; i < 30; i++) {
+                        particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                        particle->shapePtr = ptc->shapePtr;
+                        addto_group(ptc->subParticlesGrp, &particle->header);
+                        particle->flags &= ~8;
+                    }
+                    break;
             }
-            break;
-        default:
-            break;
+        }
     }
     ptc->unk38.x *= 0.9f;
     ptc->unk38.y *= 0.9f;
@@ -349,7 +329,6 @@ void move_particle(struct ObjParticle *ptc) {
             case 1:
                 if (func_80182778(ptc) && ptc->subParticlesGrp != NULL) {
                     register struct ListNode *link;
-
                     if (ptc->unk80 != NULL) {
                         ptc->unk80->unk3C |= 1;
                         ptc->unk80->position.x = ptc->pos.x;
@@ -359,7 +338,6 @@ void move_particle(struct ObjParticle *ptc) {
                     link = ptc->subParticlesGrp->firstMember;
                     while (link != NULL) {
                         struct ObjParticle *sp2C = (struct ObjParticle *) link->obj;
-
                         sp2C->pos.x = ptc->pos.x;
                         sp2C->pos.y = ptc->pos.y;
                         sp2C->pos.z = ptc->pos.z;
@@ -382,9 +360,7 @@ void move_particle(struct ObjParticle *ptc) {
                     ptc->flags |= 0x10;
                 }
                 break;
-            case 2:
-                func_80182A08(ptc, &sp34);
-                break;
+            case 2: func_80182A08(ptc, &sp34); break;
         }
         apply_to_obj_types_in_group(OBJ_TYPE_PARTICLES, (applyproc_t) move_particle, ptc->subParticlesGrp);
     }

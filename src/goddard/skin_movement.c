@@ -23,10 +23,8 @@ void scale_verts(struct ObjGroup *group) {
     register f32 scaleFac;
     register struct ListNode *link;
     struct ObjVertex *vtx;
-
     for (link = group->firstMember; link != NULL; link = link->next) {
         vtx = (struct ObjVertex *) link->obj;
-
         if ((scaleFac = vtx->scaleFactor) != 0.0f) {
             vtx->pos.x = vtx->initPos.x * scaleFac;
             vtx->pos.y = vtx->initPos.y * scaleFac;
@@ -51,22 +49,18 @@ void func_80181894(struct ObjJoint *joint) {
     register struct ListNode *link;
     register f32 scaleFactor;
     struct GdObj *linkedObj;
-
     weightGroup = joint->weightGrp;
     if (weightGroup != NULL) {
         for (link = weightGroup->firstMember; link != NULL; link = link->next) {
-            linkedObj = link->obj;
-            curWeight = (struct ObjWeight *) linkedObj;
-
+            linkedObj                = link->obj;
+            curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {
-                stackVec.x = curWeight->vec20.x;
-                stackVec.y = curWeight->vec20.y;
-                stackVec.z = curWeight->vec20.z;
+                stackVec.x           = curWeight->vec20.x;
+                stackVec.y           = curWeight->vec20.y;
+                stackVec.z           = curWeight->vec20.z;
                 gd_rotate_and_translate_vec3f(&stackVec, &joint->matE8);
-
-                connectedVtx = curWeight->vtx;
-                scaleFactor = curWeight->weightVal;
-
+                connectedVtx         = curWeight->vtx;
+                scaleFactor          = curWeight->weightVal;
                 connectedVtx->pos.x += stackVec.x * scaleFactor;
                 connectedVtx->pos.y += stackVec.y * scaleFactor;
                 connectedVtx->pos.z += stackVec.z * scaleFactor;
@@ -79,23 +73,20 @@ void func_80181894(struct ObjJoint *joint) {
 void reset_weight_vtx(struct ObjVertex *vtx) {
     struct GdVec3f localVec;
     if (sResetWeightVtxNum++ == sResetCurWeight->vtxId) {  // found matching vertex
-        sResetCurWeight->vtx = vtx;
-        localVec.x = vtx->pos.x;
-        localVec.y = vtx->pos.y;
-        localVec.z = vtx->pos.z;
-
+        sResetCurWeight->vtx     = vtx;
+        localVec.x               = vtx->pos.x;
+        localVec.y               = vtx->pos.y;
+        localVec.z               = vtx->pos.z;
         gd_rotate_and_translate_vec3f(&localVec, &D_801B9EA8);
         sResetCurWeight->vec20.x = localVec.x;
         sResetCurWeight->vec20.y = localVec.y;
         sResetCurWeight->vec20.z = localVec.z;
-
-        vtx->scaleFactor -= sResetCurWeight->weightVal;
+        vtx->scaleFactor        -= sResetCurWeight->weightVal;
     }
 }
 
 void reset_weight(struct ObjWeight *weight) {
     struct ObjGroup *skinGroup;
-
     sResetCurWeight = weight;
     sResetWeightVtxNum = 0;
     if ((skinGroup = gGdSkinNet->skinGrp) != NULL) {
@@ -104,13 +95,11 @@ void reset_weight(struct ObjWeight *weight) {
     } else {
         gd_exit(); // Skin net has no SkinGroup
     }
-
     if (weight->vtx == NULL) gd_exit(); // fatal_printf("reset_weight(): Skin vertex ID %d not found", weight->vtxId);
 }
 
 void reset_joint_weights(struct ObjJoint *joint) {
     struct ObjGroup *group;
-
     gd_inverse_mat4f(&joint->matE8, &D_801B9EA8);
     if ((group = joint->weightGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_WEIGHTS, (applyproc_t) reset_weight, group);
 }

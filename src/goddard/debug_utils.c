@@ -36,7 +36,6 @@ static struct MemTracker *sActiveMemTrackers[16];           // @ 801BA920
 struct MemTracker *new_memtracker(const char *name) {
     s32 i;
     struct MemTracker *tracker = NULL;
-
     for (i = 0; i < ARRAY_COUNT(sMemTrackers); i++) {
         if (sMemTrackers[i].name == NULL) {
             sMemTrackers[i].name = name;
@@ -44,7 +43,6 @@ struct MemTracker *new_memtracker(const char *name) {
             break;
         }
     }
-
     if (tracker != NULL) tracker->total = 0.0f;
     return tracker;
 }
@@ -64,19 +62,14 @@ struct MemTracker *get_memtracker(const char *name) {
  */
 struct MemTracker *start_memtracker(const char *name) {
     struct MemTracker *tracker = get_memtracker(name);
-
     // Create one if it doesn't exist
     if (tracker == NULL) {
         tracker = new_memtracker(name);
         if (tracker == NULL) gd_exit(); // fatal_printf("Unable to make memtracker '%s'", name);
     }
-
     tracker->begin = (f32) get_alloc_mem_amt();
-
     if (sNumActiveMemTrackers >= ARRAY_COUNT(sActiveMemTrackers)) gd_exit(); // fatal_printf("too many memtracker calls");
-
     sActiveMemTrackers[sNumActiveMemTrackers++] = tracker;
-
     return tracker;
 }
 
@@ -90,7 +83,6 @@ u32 stop_memtracker(const char *name) {
     if (tracker == NULL) gd_exit(); // fatal_printf("memtracker '%s' not found", name);
     tracker->end = get_alloc_mem_amt();
     tracker->total += (tracker->end - tracker->begin);
-
     return (u32) tracker->total;
 }
 
@@ -99,14 +91,12 @@ u32 stop_memtracker(const char *name) {
  */
 void remove_all_memtrackers(void) {
     s32 i;
-
     for (i = 0; i < ARRAY_COUNT(sMemTrackers); i++) {
         sMemTrackers[i].name = NULL;
         sMemTrackers[i].begin = 0.0f;
         sMemTrackers[i].end = 0.0f;
         sMemTrackers[i].total = 0.0f;
     }
-
     sNumActiveMemTrackers = 0;
 }
 
@@ -117,7 +107,6 @@ void remove_all_memtrackers(void) {
 f32 gd_rand_float(void) {
     u32 temp;
     u32 i;
-
     for (i = 0; i < 4; i++) {
         if (sPrimarySeed & 0x80000000) {
             sPrimarySeed = sPrimarySeed << 1 | 1;
@@ -126,14 +115,12 @@ f32 gd_rand_float(void) {
         }
     }
     sPrimarySeed += 4;
-
     /* Seed Switch */
     if ((sPrimarySeed ^= gd_get_ostime()) & 1) {
         temp = sPrimarySeed;
         sPrimarySeed = sSecondarySeed;
         sSecondarySeed = temp;
     }
-
     return (sPrimarySeed & 0xFFFF) / 65535.0f;
 }
 

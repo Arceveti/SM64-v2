@@ -94,8 +94,7 @@ static s16 obj_get_pitch_from_vel(void) {
  * move again.
  */
 static s32 obj_update_race_proposition_dialog(s16 dialogID) {
-    s32 dialogResponse =
-        cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
+    s32 dialogResponse = cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
         (DIALOG_FLAG_TURN_TO_MARIO | DIALOG_FLAG_TIME_STOP_ENABLED), CUTSCENE_RACE_DIALOG, dialogID);
 
     if (dialogResponse == DIALOG_RESPONSE_NO) {
@@ -201,8 +200,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
         z += dz * distToNextWaypoint;
 
         if (ballIndex != 0) {
-            trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o,
-                                              MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
+            trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o, MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
 
             if (trackBall != NULL) {
                 trackBall->oPosX = x;
@@ -211,9 +209,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
             }
         } else {
             if (prevWaypoint != initialPrevWaypoint) {
-                if (o->oPlatformOnTrackPrevWaypointFlags == 0) {
-                    o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
-                }
+                if (o->oPlatformOnTrackPrevWaypointFlags == 0x0) o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
                 o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
             }
 
@@ -229,6 +225,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
     }
 }
 
+//! TODO: name vals
 static void cur_obj_spin_all_dimensions(f32 arg0, f32 arg1) {
     f32 val24;
     f32 val20;

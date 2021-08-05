@@ -91,8 +91,7 @@ s32 _Printf(char *(*prout)(char *, const char *, size_t), char *dst, const char 
 }
 
 static void _Putfld(printf_struct *a0, va_list *args, u8 type, u8 *buff) {
-    a0->part1_len = a0->num_leading_zeros = a0->part2_len = a0->num_mid_zeros = a0->part3_len =
-        a0->num_trailing_zeros = 0;
+    a0->part1_len = a0->num_leading_zeros = a0->part2_len = a0->num_mid_zeros = a0->part3_len = a0->num_trailing_zeros = 0;
 
     switch (type) {
 

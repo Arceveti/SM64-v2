@@ -44,8 +44,7 @@ void dorrie_act_move(void) {
         }
 
         obj_forward_vel_approach(targetSpeed, 0.5f);
-        o->oDorrieYawVel =
-            approach_s16_symmetric(o->oDorrieYawVel, (s16)(targetYaw - o->oMoveAngleYaw) / 50, 5);
+        o->oDorrieYawVel = approach_s16_symmetric(o->oDorrieYawVel, (s16)(targetYaw - o->oMoveAngleYaw) / 50, 0x5);
         o->oMoveAngleYaw += o->oDorrieYawVel;
     }
 

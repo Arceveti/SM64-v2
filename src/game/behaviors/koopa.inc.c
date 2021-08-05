@@ -472,14 +472,11 @@ static void koopa_the_quick_act_show_init_text(void) {
         sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].initText);
 
     if (response == DIALOG_RESPONSE_YES) {
-        gMarioShotFromCannon = FALSE;
-        o->oAction = KOOPA_THE_QUICK_ACT_RACE;
-        o->oForwardVel = 0.0f;
-
-        o->parentObj = cur_obj_nearest_object_with_behavior(bhvKoopaRaceEndpoint);
-        o->oPathedStartWaypoint = o->oPathedPrevWaypoint =
-            segmented_to_virtual(sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].path);
-
+        gMarioShotFromCannon         = FALSE;
+        o->oAction                   = KOOPA_THE_QUICK_ACT_RACE;
+        o->oForwardVel               = 0.0f;
+        o->parentObj                 = cur_obj_nearest_object_with_behavior(bhvKoopaRaceEndpoint);
+        o->oPathedStartWaypoint      = o->oPathedPrevWaypoint = segmented_to_virtual(sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].path);
         o->oKoopaTurningAwayFromWall = FALSE;
         o->oFlags |= OBJ_FLAG_ACTIVE_FROM_AFAR;
     } else if (response == DIALOG_RESPONSE_NO) {

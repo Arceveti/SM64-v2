@@ -51,7 +51,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
                     set_home_to_mario();
                 } else {
                     o->oForwardVel = 0.0f;
-                    o->oHomeY = o->oPosY;
+                    o->oHomeY      = o->oPosY;
                 }
                 o->oMoveAngleYaw = cur_obj_angle_to_home();
                 o->oVelY         = 50.0f;

@@ -9,7 +9,7 @@ s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
     o->oVelY = yVel;
     o->oGravity = gravity;
     time = -2.0f / o->oGravity * yVel - 1.0f;
-    o->oForwardVel = planarDist / time;
+    o->oForwardVel = planarDist / time; //! fast invsqrt?
     return time;
 }
 
