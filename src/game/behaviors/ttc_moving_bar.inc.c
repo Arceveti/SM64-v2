@@ -48,7 +48,7 @@ static void ttc_moving_bar_act_wait(void) {
                 o->oTTCMovingBarDelay = sTTCMovingBarRandomDelays[random_u16() & 0x3];
 
                 // With 50% probability, pause after pulling back
-                if (random_u16() % 2 == 0) o->oTTCMovingBarStoppedTimer = random_linear_offset(20, 100);
+                if (random_u16() & 0x1) o->oTTCMovingBarStoppedTimer = random_linear_offset(20, 100);
             }
 
             // Begin pulling back

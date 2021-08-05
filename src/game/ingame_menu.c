@@ -254,7 +254,7 @@ void print_generic_string(s16 x, s16 y, const u8 *str) {
                         if (diffTmp == 8) strPos += diffTmp;
                         break;
                     }
-                    if ((8 - (colorLoop - strPos)) % 2 == 0) {
+                    if (!((8 - (colorLoop - strPos)) & 0x1)) {
                         rgbaColors[(8 - (colorLoop - strPos)) / 2]  = ((str[strPos] - diffTmp) & 0x0F) << 4;
                     } else {
                         rgbaColors[(8 - (colorLoop - strPos)) / 2] += ((str[strPos] - diffTmp) & 0x0F);
@@ -779,7 +779,7 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                         if (diffTmp == 8) strIdx += diffTmp;
                         break;
                     }
-                    if ((8 - (colorLoop - strIdx)) % 2 == 0) {
+                    if (!((8 - (colorLoop - strIdx)) & 0x1)) {
                         rgbaColors[(8 - (colorLoop - strIdx)) / 2]  = ((str[strIdx] - diffTmp) & 0x0F) << 4;
                     } else {
                         rgbaColors[(8 - (colorLoop - strIdx)) / 2] += ((str[strIdx] - diffTmp) & 0x0F);

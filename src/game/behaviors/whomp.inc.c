@@ -147,7 +147,7 @@ void king_whomp_on_ground(void) {
         o->oWhompShakeVal = 0;
     } else {
         if (o->oWhompShakeVal < 10) {
-            if (o->oWhompShakeVal % 2) {
+            if (o->oWhompShakeVal & 0x1) {
                 o->oPosY += 8.0f;
             } else {
                 o->oPosY -= 8.0f;

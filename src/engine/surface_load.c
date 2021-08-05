@@ -119,14 +119,13 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir =  0; // insertion order
 
-        // Vanilla was 0.707 ~cos(50)
-        if (surface->normal.x < -COS45 || surface->normal.x > COS45) surface->flags |= SURFACE_FLAG_X_PROJECTION;
+        // Vanilla is 0.707 ~cos(50)
+        // Why are these cos(50) instead of cos(45)?
+        if (surface->normal.x < -COS50 || surface->normal.x > COS50) surface->flags |= SURFACE_FLAG_X_PROJECTION;
     }
 
-    surfacePriority = surface->upperY * sortDir;
-
+    surfacePriority  = surface->upperY * sortDir;
     newNode->surface = surface;
-
     list = &(dynamic ? gDynamicSurfacePartition : gStaticSurfacePartition)[cellZ][cellX][listIndex];
 
     // Loop until we find the appropriate place for the surface in the list.
@@ -135,9 +134,8 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
         if (surfacePriority > priority) break;
         list = list->next;
     }
-
     newNode->next = list->next;
-    list->next = newNode;
+    list->next    = newNode;
 }
 
 /**
@@ -210,6 +208,70 @@ static s16 upper_cell_index(s32 coord) {
     return index;
 }
 
+#ifdef GENERAL_CELLS
+// Arthurtilly
+u32 gCellGridX = 5;
+u32 gCellSizeX = 450;
+u32 gCellGridY = 5;
+u32 gCellSizeY = 450;
+u32 gCellGridZ = 5;
+u32 gCellSizeZ = 450;
+
+s16 cell_index_to_array(s16 x, s16 y, s16 z) {
+    return x + gCellGridX * (z + gCellGridZ * y);
+}
+
+s16 get_cell_index(s16 pos, u16 numCells, u32 cellSize, u32 offset) {
+    s16 index;
+    
+    if (numCells == 1) return 0;
+    
+    if (offset == 1) {// Lower
+        pos -= 20;
+    } else if (offset == 2) {// Upper
+        pos += 20;
+    }
+
+    if (numCells & 0x1) pos += (cellSize / 2);
+    
+    index = ((f32)pos / cellSize) + (numCells/2);
+
+    if (index < 0) {
+        index = 0;
+    } else if (index >= numCells) {
+        index = numCells - 1;
+    }
+    return index;
+}
+
+static void add_surface(struct Surface *surface, s32 dynamic) {
+    s16 minX, minY, minZ, maxX, maxY, maxZ;
+    u16 minCellX, minCellY, minCellZ, maxCellX, maxCellY, maxCellZ;
+    u16 cellZ, cellY, cellX;
+    
+    minX = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    minY = min_3(surface->vertex1[1], surface->vertex2[1], surface->vertex3[1]);
+    minZ = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    maxX = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    maxY = max_3(surface->vertex1[1], surface->vertex2[1], surface->vertex3[1]);
+    maxZ = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    
+    minCellX = get_cell_index(minX, gCellGridX, gCellSizeX, 1);
+    maxCellX = get_cell_index(maxX, gCellGridX, gCellSizeX, 2);
+    minCellY = get_cell_index(minY, gCellGridY, gCellSizeY, 1);
+    maxCellY = get_cell_index(maxY, gCellGridY, gCellSizeY, 2);
+    minCellZ = get_cell_index(minZ, gCellGridZ, gCellSizeZ, 1);
+    maxCellZ = get_cell_index(maxZ, gCellGridZ, gCellSizeZ, 2);
+
+    for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
+        for (cellY = minCellY; cellY <= maxCellY; cellY++) {
+            for (cellX = minCellX; cellX <= maxCellX; cellX++) {
+                add_surface_to_cell(cellX, cellY, cellZ, surface);
+            }
+        }
+    }
+}
+#else
 /**
  * Every level is split into 16x16 cells, this takes a surface, finds
  * the appropriate cells (with a buffer), and adds the surface to those
@@ -219,9 +281,7 @@ static s16 upper_cell_index(s32 coord) {
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
     s16 minX, minZ, maxX, maxZ;
-
     s16 minCellX, minCellZ, maxCellX, maxCellZ;
-
     s16 cellZ, cellX;
 
     minX = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
@@ -240,6 +300,7 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
         }
     }
 }
+#endif
 
 /**
  * Initializes a Surface struct using the given vertex data

@@ -275,11 +275,11 @@ void get_texture_coords_9_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
  */
 void get_texture_coords_4_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
 #ifdef HD_SHADOW
-    *textureX = (vertexNum % 2) * 2 * 63 - 63;
-    *textureY = (vertexNum / 2) * 2 * 63 - 63;
+    *textureX = (vertexNum & 0x1) * 2 * 63 - 63;
+    *textureY = (vertexNum /   2) * 2 * 63 - 63;
 #else
-    *textureX = (vertexNum % 2) * 2 * 15 - 15;
-    *textureY = (vertexNum / 2) * 2 * 15 - 15;
+    *textureX = (vertexNum & 0x1) * 2 * 15 - 15;
+    *textureY = (vertexNum /   2) * 2 * 15 - 15;
 #endif
 }
 

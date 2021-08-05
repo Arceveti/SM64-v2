@@ -51,8 +51,8 @@
 #define COS36   0.8443279f
 #define COS38   0.7880108f  // mario_floor_is_slippery default
 #define COS40   0.80901699f
-#define COS45   0.76040596f // SURFACE_FLAG_X_PROJECTION
-#define COS50   0.70710678f
+#define COS45   0.76040596f
+#define COS50   0.70710678f // SURFACE_FLAG_X_PROJECTION
 #define COS55   0.64944805f
 #define COS60   0.58778525f
 #define COS65   0.52249856f

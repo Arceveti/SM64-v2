@@ -1380,10 +1380,10 @@ void cur_obj_set_pos_to_home_and_stop(void) {
 
 void cur_obj_shake_y(f32 amount) {
     //! Technically could cause a bit of drift, but not much
-    if (o->oTimer % 2 == 0) {
-        o->oPosY += amount;
-    } else {
+    if (o->oTimer & 0x1) {
         o->oPosY -= amount;
+    } else {
+        o->oPosY += amount;
     }
 }
 
@@ -1917,7 +1917,7 @@ s32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
     s32 timeBlinking;
 
     if (o->oTimer >= timeUntilBlinking) {
-        if ((timeBlinking = o->oTimer - timeUntilBlinking) % 2 != 0) {
+        if ((timeBlinking = o->oTimer - timeUntilBlinking) & 0x1) {
             o->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
             if (timeBlinking / 2 > numBlinks) return TRUE;
         } else {
@@ -2012,7 +2012,7 @@ s32 cur_obj_is_mario_on_platform(void) {
 }
 
 s32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
-    if (o->oTimer % 2 != 0) {
+    if (o->oTimer & 0x1) {
         o->oPosY -= amount;
     } else {
         o->oPosY += amount;

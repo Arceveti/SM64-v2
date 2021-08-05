@@ -521,8 +521,8 @@ void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
 s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
     if (obj->oTimer < lifeSpan) return FALSE;
     if (obj->oTimer < lifeSpan + 40) {
-        if (obj->oTimer % 2 != 0) {
-            obj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+        if (obj->oTimer & 0x1) {
+            obj->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
         } else {
             obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         }

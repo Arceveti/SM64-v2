@@ -56,7 +56,7 @@ void bhv_ttc_pendulum_update(void) {
                     o->oTTCPendulumAngleAccel = (random_u16() % 3 != 0) ? 13.0f : 42.0f;
 
                     // Pick a random delay
-                    if (random_u16() % 2 == 0) o->oTTCPendulumDelay = random_linear_offset(5, 30);
+                    if (random_u16() & 0x1) o->oTTCPendulumDelay = random_linear_offset(5, 30);
                 }
 
                 // Play the sound 15 frames after beginning to move

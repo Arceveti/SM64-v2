@@ -227,9 +227,7 @@ static void chain_chomp_sub_act_lunge(void) {
         }
 
         o->oChainChompMaxDistBetweenChainParts = o->oChainChompSignedMaxDistBetweenChainParts;
-        if (gGlobalTimer % 2 != 0) {
-            o->oChainChompMaxDistBetweenChainParts = -o->oChainChompSignedMaxDistBetweenChainParts;
-        }
+        if (gGlobalTimer & 0x1) o->oChainChompMaxDistBetweenChainParts = -o->oChainChompSignedMaxDistBetweenChainParts;
     }
 
     if (o->oTimer < 30) cur_obj_reverse_animation();

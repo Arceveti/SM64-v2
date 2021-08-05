@@ -25,7 +25,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
     register s32 x = data->x;
     register s32 y = data->y + data->offsetY;
     register s32 z = data->z;
-    register s32 px, pz;
     register s32 w1, w2, w3;
     register s32 y1, y2, y3;
     s32 numCols = 0;
@@ -43,7 +42,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         // Exclude a large number of walls immediately to optimize.
         if (y < surf->lowerY || y > surf->upperY) continue;
 
-        offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
+        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
 
         if (offset < -radius || offset > radius)  continue;
 
@@ -64,9 +63,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
             }
         }
 
-        px = x;
-        pz = z;
-
         //? (Quantum Tunneling) Due to issues with the vertices walls choose and
         //  the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
@@ -75,24 +71,24 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
         if (surf->flags & SURFACE_FLAG_X_PROJECTION) {
             w1 = -surf->vertex1[2]; w2 = -surf->vertex2[2]; w3 = -surf->vertex3[2];
             if (surf->normal.x > 0.0f) {
-                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) > 0) continue;
-                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) > 0) continue;
-                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) > 0) continue;
+                if (((y1 - y) * (w2 - w1)) - ((w1 - -z) * (y2 - y1)) > 0) continue;
+                if (((y2 - y) * (w3 - w2)) - ((w2 - -z) * (y3 - y2)) > 0) continue;
+                if (((y3 - y) * (w1 - w3)) - ((w3 - -z) * (y1 - y3)) > 0) continue;
             } else {
-                if ((y1 - y) * (w2 - w1) - (w1 - -pz) * (y2 - y1) < 0) continue;
-                if ((y2 - y) * (w3 - w2) - (w2 - -pz) * (y3 - y2) < 0) continue;
-                if ((y3 - y) * (w1 - w3) - (w3 - -pz) * (y1 - y3) < 0) continue;
+                if (((y1 - y) * (w2 - w1)) - ((w1 - -z) * (y2 - y1)) < 0) continue;
+                if (((y2 - y) * (w3 - w2)) - ((w2 - -z) * (y3 - y2)) < 0) continue;
+                if (((y3 - y) * (w1 - w3)) - ((w3 - -z) * (y1 - y3)) < 0) continue;
             }
         } else {
             w1 =  surf->vertex1[0]; w2 =  surf->vertex2[0]; w3 =  surf->vertex3[0];
             if (surf->normal.z > 0.0f) {
-                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) > 0) continue;
-                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) > 0) continue;
-                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) > 0) continue;
+                if (((y1 - y) * (w2 - w1)) - ((w1 -  x) * (y2 - y1)) > 0) continue;
+                if (((y2 - y) * (w3 - w2)) - ((w2 -  x) * (y3 - y2)) > 0) continue;
+                if (((y3 - y) * (w1 - w3)) - ((w3 -  x) * (y1 - y3)) > 0) continue;
             } else {
-                if ((y1 - y) * (w2 - w1) - (w1 - px) * (y2 - y1) < 0) continue;
-                if ((y2 - y) * (w3 - w2) - (w2 - px) * (y3 - y2) < 0) continue;
-                if ((y3 - y) * (w1 - w3) - (w3 - px) * (y1 - y3) < 0) continue;
+                if (((y1 - y) * (w2 - w1)) - ((w1 -  x) * (y2 - y1)) < 0) continue;
+                if (((y2 - y) * (w3 - w2)) - ((w2 -  x) * (y3 - y2)) < 0) continue;
+                if (((y3 - y) * (w1 - w3)) - ((w3 -  x) * (y1 - y3)) < 0) continue;
             }
         }
 

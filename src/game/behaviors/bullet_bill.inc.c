@@ -29,7 +29,7 @@ void bullet_bill_act_chasing_mario(void) {
     if (o->oTimer < 40) {
         o->oForwardVel = 3.0f;
     } else if (o->oTimer < 50) {
-        o->oForwardVel = (o->oTimer % 2) ? 3.0f : -3.0f;
+        o->oForwardVel = (o->oTimer & 0x1) ? 3.0f : -3.0f;
     } else {
         if (o->oTimer > 70) cur_obj_update_floor_and_walls();
 

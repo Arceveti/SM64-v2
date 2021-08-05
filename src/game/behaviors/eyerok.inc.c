@@ -185,7 +185,7 @@ static void eyerok_hand_act_idle(void) {
             }
         } else if ((o->parentObj->oEyerokBossActiveHandId == 0) && (o->parentObj->oEyerokBossActiveHand != 0)) {
             if (o->parentObj->oEyerokBossActiveHand == o->oBehParams2ndByte) {
-                if (eyerok_check_mario_relative_z(400) || random_u16() % 2 != 0) {
+                if (eyerok_check_mario_relative_z(400) || (random_u16() & 0x1)) {
                     o->oAction = EYEROK_HAND_ACT_TARGET_MARIO;
                     o->oMoveAngleYaw = o->oAngleToMario;
                     o->oGravity =  0.0f;
