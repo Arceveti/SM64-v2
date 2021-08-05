@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-// #ifdef USE_EXT_RAM
+#ifdef USE_EXT_RAM
 const LevelScript level_intro_entry_error_screen[] = {
     INIT_LEVEL(),
     FIXED_LOAD(/*loadAddr*/ _goddardSegmentStart, /*romStart*/ _goddardSegmentRomStart, /*romEnd*/ _goddardSegmentRomEnd),
@@ -33,7 +33,7 @@ const LevelScript level_intro_entry_error_screen[] = {
     SLEEP(/*frames*/ 32767),
     EXIT_AND_EXECUTE(/*seg*/ 0x14, _introSegmentRomStart, _introSegmentRomEnd, level_intro_entry_error_screen),
 };
-// #endif
+#endif
 
 const LevelScript level_intro_splash_screen[] = {
     INIT_LEVEL(),

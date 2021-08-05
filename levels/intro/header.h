@@ -2,6 +2,7 @@
 #define INTRO_HEADER_H
 
 #include "types.h"
+#include "segments.h"
 
 // geo
 extern const GeoLayout intro_geo_splash_screen[];
@@ -26,10 +27,10 @@ extern const LevelScript script_intro_L3[];
 extern const LevelScript script_intro_L4[];
 extern const LevelScript script_intro_L5[];
 
-// #ifdef USE_EXT_RAM
+#ifdef USE_EXT_RAM
 extern const GeoLayout intro_geo_error_screen[];
 extern const LevelScript level_intro_entry_error_screen[];
 extern Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node, UNUSED u32 context);
-// #endif
+#endif
 
 #endif

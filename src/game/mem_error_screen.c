@@ -8,6 +8,7 @@
 /* clang-format on */
 #include <types.h>
 #include "segments.h"
+#ifdef USE_EXT_RAM
 #include "text_strings.h"
 #include "game_init.h"
 #include "main.h"
@@ -16,9 +17,9 @@
 #include "segment2.h"
 #include "../engine/level_script.h"
 // Ensure that USE_EXT_RAM is defined.
-#ifndef USE_EXT_RAM
-#error You have to define USE_EXT_RAM in 'include/segments.h'
-#endif
+// #ifndef USE_EXT_RAM
+// #error You have to define USE_EXT_RAM in 'include/segments.h'
+// #endif
 // Require 8 MB of RAM, even if the pool doesn't go into extended memory.
 // Change the '8' to whatever MB limit you want.
 // Note: only special emulators allow for RAM sizes above 8 MB.
@@ -78,3 +79,4 @@ void thread5_mem_error_message_loop(UNUSED void *arg) {
         display_and_vsync();
     }
 }
+#endif // USE_EXT_RAM

@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-// #ifdef USE_EXT_RAM
+#ifdef USE_EXT_RAM
 const GeoLayout intro_geo_error_screen[] = {
     GEO_NODE_SCREEN_AREA(0, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
     GEO_OPEN_NODE(),
@@ -35,7 +35,7 @@ const GeoLayout intro_geo_error_screen[] = {
     GEO_CLOSE_NODE(),
     GEO_END(),
 };
-// #endif
+#endif
 
 // 0x0E0002D0
 const GeoLayout intro_geo_splash_screen[] = {
