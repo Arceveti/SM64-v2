@@ -18,7 +18,7 @@ ALIGNED8 static const Texture dAmpMouthTexture[] = {
 
 static const Vtx dAmpElectricityVertices[] = {
     {{{   224,      0,    -90}, 0, {     0,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   187,    149,      0}, 0, {  7<<5,   1078}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   187,    149,      0}, 0, {  7<<5,   1072}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   224,      0,     90}, 0, { 15<<5,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   187,   -149,      0}, 0, {  7<<5,   -128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   224,      0,    -90}, 0, {     0,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},

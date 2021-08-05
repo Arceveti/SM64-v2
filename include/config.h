@@ -160,6 +160,8 @@
 
 // -- Graphics --
 
+// Fixes the game reading the ia8 burn smoke texture as an rgba16
+#define BURN_SMOKE_FIX
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
 // Higher resolution coins rotating at 30 FPS (Arceveti)

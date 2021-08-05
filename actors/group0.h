@@ -11,10 +11,10 @@ extern const Gfx bubble_seg4_dl_mr_i_bubble[];
 
 // burn_smoke
 extern const GeoLayout burn_smoke_geo[];
-extern const Gfx burn_smoke_seg4_sub_dl_begin[];
-extern const Gfx burn_smoke_seg4_sub_dl_model[];
-extern const Gfx burn_smoke_seg4_sub_dl_end[];
-extern const Gfx burn_smoke_seg4_dl_burn_smoke[];
+extern const Gfx dBurnSmokeSubDlBegin[];
+extern const Gfx dBurnSmokeSubDlModel[];
+extern const Gfx dBurnSmokeSubDlEnd[];
+extern const Gfx dBurnSmokeDl[];
 
 // mario
 extern const GeoLayout mario_geo_face_and_wings[];
