@@ -285,7 +285,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 #ifdef SILHOUETTE
-for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
+    for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
                 if ((i == LAYER_SILHOUETTE_OPAQUE || i == LAYER_SILHOUETTE_ALPHA)) { // silhouette layers

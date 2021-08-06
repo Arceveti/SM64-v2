@@ -39,8 +39,8 @@ struct LandingAction sBackflipLandAction     = {         4,     0,      ACT_FREE
 Mat4 sFloorAlignMatrix[2];
 
 s16 tilt_body_running(struct MarioState *m) {
-    s16 pitch = 0;
-    if (m->pos[1] <= m->floorHeight && m->floor->normal.y < COS1) pitch = find_floor_slope(m, 0);
+    s16 pitch = 0x0;
+    if (m->pos[1] <= m->floorHeight && m->floor->normal.y < COS1) pitch = find_floor_slope(m, 0x0);
     pitch = pitch * m->forwardVel / 40.0f;
     return -pitch;
 }
