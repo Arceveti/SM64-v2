@@ -333,6 +333,9 @@
     #define BOWSER_GRAB_STATUS_GRABBED                      0x1
     #define BOWSER_GRAB_STATUS_HOLDING                      0x2
     /* oSubAction */
+        /* BOWSER_ACT_THROWN */
+    #define BOWSER_SUB_ACT_THROWN_BOUNCE                    0x0
+    #define BOWSER_SUB_ACT_THROWN_STOP                      0x1
         /* BOWSER_ACT_DEAD */
     #define BOWSER_SUB_ACT_DEAD_FLY_BACK                    0x0
     #define BOWSER_SUB_ACT_DEAD_BOUNCE                      0x1
@@ -350,6 +353,16 @@
     #define BOWSER_SUB_ACT_TELEPORT_START                   0x0
     #define BOWSER_SUB_ACT_TELEPORT_MOVE                    0x1
     #define BOWSER_SUB_ACT_TELEPORT_STOP                    0x2
+        /* BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR */
+    #define BOWSER_SUB_ACT_SPIT_FIRE_FLOOR_START            0x0
+    #define BOWSER_SUB_ACT_SPIT_FIRE_FLOOR_STOP             0x1
+        /* BOWSER_ACT_HIT_EDGE */
+    #define BOWSER_SUB_ACT_HIT_EDGE_START                   0x0
+    #define BOWSER_SUB_ACT_HIT_EDGE_STOP                    0x1
+        /* BOWSER_ACT_TURN_FROM_EDGE */
+    #define BOWSER_SUB_ACT_TURN_FROM_EDGE_START             0x0
+    #define BOWSER_SUB_ACT_TURN_FROM_EDGE_STOP              0x1
+    #define BOWSER_SUB_ACT_TURN_FROM_EDGE_END               0x2
         /* BOWSER_ACT_HIT_MINE */
     #define BOWSER_SUB_ACT_HIT_MINE_START                   0x0
     #define BOWSER_SUB_ACT_HIT_MINE_FALL                    0x1
@@ -359,12 +372,28 @@
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_START              0x1
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_LAND               0x2
     #define BOWSER_SUB_ACT_JUMP_ON_STAGE_STOP               0x3
+        /* BOWSER_ACT_BIG_JUMP */
+    #define BOWSER_SUB_ACT_BIG_JUMP_START                   0x0
+    #define BOWSER_SUB_ACT_BIG_JUMP_LAND                    0x1
+    #define BOWSER_SUB_ACT_BIG_JUMP_STOP                    0x2
+        /* BOWSER_ACT_WALK_TO_MARIO */
+    #define BOWSER_SUB_ACT_WALK_TO_MARIO_START              0x0
+    #define BOWSER_SUB_ACT_WALK_TO_MARIO_WALKING            0x1
+    #define BOWSER_SUB_ACT_WALK_TO_MARIO_STOP               0x2
+        /* BOWSER_ACT_QUICK_JUMP */
+    #define BOWSER_SUB_ACT_QUICK_JUMP_START                 0x0
+    #define BOWSER_SUB_ACT_QUICK_JUMP_LAND                  0x1
+    #define BOWSER_SUB_ACT_QUICK_JUMP_STOP                  0x2
 
 /* Bowser BITS Platform */
     /* oAction */
     #define BOWSER_BITS_PLAT_ACT_START                      0x0
     #define BOWSER_BITS_PLAT_ACT_CHECK                      0x1
     #define BOWSER_BITS_PLAT_ACT_FALL                       0x2
+    /* oSubAction */
+        /* BOWSER_BITS_PLAT_ACT_CHECK */
+    #define BOWSER_BITS_PLAT_SUB_ACT_CHECK_RESET_TIMER      0x0
+    #define BOWSER_BITS_PLAT_SUB_ACT_CHECK_DEBUG_FALL       0x1
 
 /* Blue Bowser Flame */
     /* oBehParams2ndByte */
@@ -505,8 +534,8 @@
     #define JUMPING_BOX_ACT_DROPPED                         0x1
     /* oSubAction */
         /* JUMPING_BOX_ACT_IDLE */
-    #define JUMPING_BOX_SUB_ACT_BOUNCING                    0x0
-    #define JUMPING_BOX_SUB_ACT_RESET_TIMER                 0x1
+    #define JUMPING_BOX_SUB_ACT_IDLE_BOUNCING               0x0
+    #define JUMPING_BOX_SUB_ACT_IDLE_RESET_TIMER            0x1
 
 /* Exclamation Box */
     /* oBehParams2ndByte, ExclamationBoxContents->id */
@@ -730,6 +759,7 @@
     /* oSubAction */
         /* GRAND_STAR_ACT_JUMP */
     #define GRAND_STAR_SUB_ACT_START_JUMP                   0x0
+    #define GRAND_STAR_SUB_ACT_CONTINUE_JUMP                0x1
 
 /* LLL Drawbridge */
     /* oAction */
@@ -1136,7 +1166,6 @@
     #define KOOPA_UNSHELLED_ACT_DIVE                        0x1
     #define KOOPA_UNSHELLED_ACT_LYING                       0x2
     // #define KOOPA_UNSHELLED_ACT_UNUSED3                     0x3
-    /* oSubAction */
 
 /* Shelled Koopa */
     /* oAction */
@@ -1220,10 +1249,10 @@
 
 /* Goomba */
     /* oBehParams2ndByte */
-    #define GOOMBA_BP_SIZE_MASK                             0x00000003
-    #define GOOMBA_SIZE_REGULAR                             0x00000000
-    #define GOOMBA_SIZE_HUGE                                0x00000001
-    #define GOOMBA_SIZE_TINY                                0x00000002
+    #define GOOMBA_SIZE_REGULAR                             0x0
+    #define GOOMBA_SIZE_HUGE                                0x1
+    #define GOOMBA_SIZE_TINY                                0x2
+    #define GOOMBA_BP_SIZE_MASK                             0x3
     #define GOOMBA_BP_TRIPLET_FLAG_MASK                     0x000000FC
     /* oAction */
     #define GOOMBA_ACT_WALK                                 0x0
@@ -1853,6 +1882,10 @@
     #define EYEROK_BOSS_ACT_SHOW_INTRO_TEXT                 0x2
     #define EYEROK_BOSS_ACT_FIGHT                           0x3
     #define EYEROK_BOSS_ACT_DIE                             0x4
+    /* oSubAction */
+        /* EYEROK_BOSS_ACT_WAKE_UP */
+    #define EYEROK_BOSS_SUB_ACT_WAKE_LOWER_VOLUME           0x0
+    #define EYEROK_BOSS_SUB_ACT_WAKE_WAIT_FOR_DIALOG        0x1
 
 /* Eyerok hand */
     /* oBehParams2ndByte */
@@ -1997,6 +2030,10 @@
     #define KLEPTO_ACT_RESET_POSITION                       0x5
     #define KLEPTO_ACT_STRUCK_BY_MARIO                      0x6
     #define KLEPTO_ACT_RETREAT                              0x7
+    /* oSubAction */
+        /* KLEPTO_ACT_DIVE_AT_MARIO */
+    #define KLEPTO_SUB_ACT_DIVE_TURN_PITCH                  0x0
+    #define KLEPTO_SUB_ACT_DIVE_STOP                        0x1
     /* oAnimState */
     #define KLEPTO_ANIM_STATE_HOLDING_NOTHING               0x0
     #define KLEPTO_ANIM_STATE_HOLDING_CAP                   0x1
@@ -2080,8 +2117,10 @@
     /* oSubAction */
         /* TWEESTER_ACT_IDLE */
     #define TWEESTER_SUB_ACT_WAIT                           0x0
+    #define TWEESTER_SUB_ACT_GROW                           0x1
         /* TWEESTER_ACT_CHASE */
-    #define TWEESTER_SUB_ACT_CHASE                          0x0
+    #define TWEESTER_SUB_ACT_CHASE_MARIO                    0x0
+    #define TWEESTER_SUB_ACT_CHASE_HOME                     0x1
 
 /* Triplet butterfly */
     /* oBehParams2ndByte */

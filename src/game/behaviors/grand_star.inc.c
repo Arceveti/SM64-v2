@@ -42,7 +42,7 @@ void bhv_grand_star_loop(void) {
                 o->oPosY       = o->oHomeY;
                 o->oVelY       = 60.0f;
                 o->oForwardVel = 0.0f;
-                o->oSubAction++;
+                o->oSubAction = GRAND_STAR_SUB_ACT_CONTINUE_JUMP;
                 cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR_JUMP);
             }
         } else if (o->oVelY < 0.0f && o->oPosY < o->oHomeY + 200.0f) {

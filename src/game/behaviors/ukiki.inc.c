@@ -243,13 +243,12 @@ void ukiki_act_run(void) {
 void ukiki_act_jump(void) {
     o->oForwardVel = 10.0f;
     cur_obj_become_intangible();
-
     if (o->oSubAction == UKIKI_SUB_ACT_JUMP_JUMP) {
         if (o->oTimer == 0) {
             cur_obj_set_y_vel_and_animation(random_float() * 10.0f + 45.0f, UKIKI_ANIM_JUMP);
         } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_AT_WATER_SURFACE | OBJ_MOVE_UNDERWATER_ON_GROUND)) {
             o->oSubAction = UKIKI_SUB_ACT_JUMP_LAND;
-            o->oVelY = 0.0f;
+            o->oVelY      = 0.0f;
         }
     } else {
         o->oForwardVel = 0.0f;

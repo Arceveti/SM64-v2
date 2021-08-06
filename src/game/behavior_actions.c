@@ -54,11 +54,6 @@ struct ModifiableVertexGroup {
 
 static s32 sCapSaveFlags[] = { SAVE_FLAG_HAVE_WING_CAP, SAVE_FLAG_HAVE_METAL_CAP, SAVE_FLAG_HAVE_VANISH_CAP };
 
-// Boo Roll
-static s16 sBooHitRotations[] = { 6047, 5664, 5292, 4934, 4587, 4254, 3933, 3624, 3329, 3046, 2775,
-                                  2517, 2271, 2039, 1818, 1611, 1416, 1233, 1063, 906,  761,  629,
-                                  509,  402,  308,  226,  157,  100,  56,   25,   4,    0 };
-
 #include "behaviors/star_door.inc.c"
 #include "behaviors/mr_i.inc.c"
 #include "behaviors/pole.inc.c"
@@ -125,22 +120,6 @@ void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
 #include "behaviors/switch_hidden_objects.inc.c"
 #include "behaviors/breakable_box.inc.c"
 
-// not sure what this is doing here. not in a behavior file.
-Gfx *geo_move_mario_part_from_parent(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
-    Mat4 mtx2;
-    struct Object *obj;
-
-    if (callContext == GEO_CONTEXT_RENDER) {
-        obj = (struct Object *) gCurGraphNodeObject;
-        if (obj == gMarioObject && obj->prevObj != NULL) {
-            create_transformation_from_matrices(mtx2, mtx, *gCurGraphNodeCamera->matrixPtr);
-            obj_update_pos_from_parent_transformation(mtx2, obj->prevObj);
-            obj_set_gfx_pos_from_pos(obj->prevObj);
-        }
-    }
-    return NULL;
-}
-
 #include "behaviors/heave_ho.inc.c"
 #include "behaviors/spawn_star_exit.inc.c"
 #include "behaviors/sl_cracked_ice.inc.c"
@@ -158,7 +137,6 @@ void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
         spawn_object_relative(OBJ_BP_NONE, sins(angle + i * separation) * radius, (i + 1) * height,
                                            coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
     }
-
     angle += r * 0x100;
 }
 

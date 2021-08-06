@@ -40,9 +40,9 @@ static void eyerok_boss_act_sleep(void) {
 static void eyerok_boss_act_wake_up(void) {
     if (o->oEyerokBossNumAwakeHands == 2) {
         if (o->oTimer > 5) {
-            if (o->oSubAction == 0) { //! sub action name
+            if (o->oSubAction == EYEROK_BOSS_SUB_ACT_WAKE_LOWER_VOLUME) {
                 seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40);
-                o->oSubAction++;
+                o->oSubAction = EYEROK_BOSS_SUB_ACT_WAKE_WAIT_FOR_DIALOG;
             }
             if (o->oEyerokBossOffsetFromHome == 0.0f && mario_ready_to_speak()) {
                 o->oAction = EYEROK_BOSS_ACT_SHOW_INTRO_TEXT;

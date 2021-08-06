@@ -220,15 +220,13 @@ static void klepto_act_dive_at_mario(void) {
         } else if (o->oVelY > 0.0f && dy > 200.0f) {
             cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_AT_MARIO_2);
         }
-
         o->oKleptoPitchToTarget = -0x3000;
         if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_NOTHING) {
-            if (o->oSubAction == 0) {
+            if (o->oSubAction == KLEPTO_SUB_ACT_DIVE_TURN_PITCH) {
                 o->oKleptoPitchToTarget = obj_turn_pitch_toward_mario(0.0f, 0x0);
                 o->oKleptoYawToTarget = o->oAngleToMario;
-                if (dy < 160.0f) o->oSubAction++;
+                if (dy < 160.0f) o->oSubAction = KLEPTO_SUB_ACT_DIVE_STOP;
             }
-
             if (gMarioStates[0].action != ACT_SLEEPING
                 && !(gMarioStates[0].action & (ACT_FLAG_SHORT_HITBOX | ACT_FLAG_BUTT_OR_STOMACH_SLIDE))
                 && o->oDistanceToMario < 200.0f && dy > 50.0f && dy < 90.0f) {

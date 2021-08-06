@@ -45,7 +45,6 @@ s32 approach_forward_vel(f32 *arr, f32 target, f32 amt) {
 void chuckya_act_moving(void) { // act 0
     s32 initialSubAction;
     if (o->oTimer == 0) o->oChuckyaSubActionTimer = 0;
-
     o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
     switch (initialSubAction = o->oSubAction) {
         case CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO:
@@ -105,7 +104,7 @@ void chuckya_act_grabbed_mario(void) { // act 1
             } else {
                 cur_obj_init_animation_with_sound(CHUCKYA_ANIM_THROW_1);
                 o->oMoveAngleYaw += INT_STATUS_GRABBED_MARIO;
-                if (o->oChuckyaSubActionTimer-- < 0 && (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16)) o->oSubAction++;
+                if (o->oChuckyaSubActionTimer-- < 0 && (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16)) o->oSubAction = CHUCKYA_SUB_ACT_THROW_MARIO;
             }
             break;
         case CHUCKYA_SUB_ACT_THROW_MARIO:

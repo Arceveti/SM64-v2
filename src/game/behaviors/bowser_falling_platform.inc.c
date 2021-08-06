@@ -6,7 +6,7 @@ struct BowserFallingPlatformData {
 };
 
 struct BowserFallingPlatformData sBowserFallingPlatform[] = {
-    { NULL, 0, 0, 0 },
+    {                             NULL,     0,     0,      0 },
     { bowser_3_seg7_collision_07004B94,  -800, -1000, -20992 },
     { bowser_3_seg7_collision_07004C18, -1158,   390, -18432 },
     { bowser_3_seg7_collision_07004C9C, -1158,   390,  -7680 },
@@ -27,9 +27,9 @@ void falling_bowser_plat_act_start(void) {
 
 void falling_bowser_plat_act_check(void) {
     struct Object *bowser = o->oBitsPlatformBowser;
-    if (bowser->platform == o && bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus & BOWSER_STATUS_BIG_JUMP) o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
-    if (bowser->oHealth == 1 && (bowser->oAction == BOWSER_ACT_DANCE    || bowser->oHeldState != HELD_FREE)) o->oSubAction = 1;
-    if (o->oSubAction == 0) {
+    if (bowser->platform == o &&  bowser->oAction == BOWSER_ACT_BIG_JUMP && bowser->oBowserStatus &  BOWSER_STATUS_BIG_JUMP) o->oAction    = BOWSER_BITS_PLAT_ACT_FALL;
+    if (bowser->oHealth  == 1 && (bowser->oAction == BOWSER_ACT_DANCE    || bowser->oHeldState    != HELD_FREE)            ) o->oSubAction = BOWSER_BITS_PLAT_SUB_ACT_CHECK_DEBUG_FALL;
+    if (o->oSubAction    == BOWSER_BITS_PLAT_SUB_ACT_CHECK_RESET_TIMER) {
         o->oBitsPlatformTimer = 0;
     } else {
         if ((gDebugInfo[4][6] + 20) * (o->oBehParams2ndByte - 1) < o->oBitsPlatformTimer) o->oAction = BOWSER_BITS_PLAT_ACT_FALL;
@@ -44,12 +44,12 @@ void falling_bowser_plat_act_fall(void) {
     if (o->oTimer == 0 || o->oTimer == 22) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_FALL);
     if (o->oTimer < 22) {
         set_environmental_camera_shake(SHAKE_ENV_FALLING_BITS_PLAT);
-        o->oVelY = 8.0f;
-        o->oGravity = 0.0f;
+        o->oVelY    =  8.0f;
+        o->oGravity =  0.0f;
     } else {
         o->oGravity = -4.0f;
     }
-    if (!(o->oTimer & 1) && o->oTimer < 14) {
+    if (!(o->oTimer & 0x1) && o->oTimer < 14) {
         angle = sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8);
         val = -(o->oTimer / 2) * 290 + 1740;
         vec3f_copy(pos, &o->oPosVec);

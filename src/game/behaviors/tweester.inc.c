@@ -44,9 +44,8 @@ void tweester_act_idle(void) {
         cur_obj_become_tangible();
         cur_obj_set_pos_to_home();
         cur_obj_scale(0.0f);
-
         // If Mario is within range, change to the growth sub-action.
-        if (o->oDistanceToMario < 1500.0f) o->oSubAction++;
+        if (o->oDistanceToMario < 1500.0f) o->oSubAction = TWEESTER_SUB_ACT_GROW;
         o->oTimer = 0;
     } else {
         cur_obj_play_sound_1(SOUND_ENV_WIND1);
@@ -61,22 +60,17 @@ void tweester_act_idle(void) {
  */
 void tweester_act_chase(void) {
     f32 activationRadius = o->oBehParams2ndByte * 100;
-
     o->oAngleToHome = cur_obj_angle_to_home();
     cur_obj_play_sound_1(SOUND_ENV_WIND1);
-
     o->oForwardVel = 20.0f;
-    if ((cur_obj_lateral_dist_from_mario_to_home() < activationRadius) && (o->oSubAction == TWEESTER_SUB_ACT_CHASE)) {
+    if ((cur_obj_lateral_dist_from_mario_to_home() < activationRadius) && (o->oSubAction == TWEESTER_SUB_ACT_CHASE_MARIO)) {
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
         print_debug_top_down_objectinfo("off ", 0);
-
-        if (gMarioStates[0].action == ACT_TWIRLING) o->oSubAction++;
+        if (gMarioStates[0].action == ACT_TWIRLING) o->oSubAction = TWEESTER_SUB_ACT_CHASE_HOME;
     } else {
         cur_obj_rotate_yaw_toward(o->oAngleToHome, 0x200);
-
         if (cur_obj_lateral_dist_to_home() < 200.0f) o->oAction = TWEESTER_ACT_HIDE;
     }
-
     if (o->oDistanceToMario > 3000.0f) o->oAction = TWEESTER_ACT_HIDE;
     cur_obj_update_floor_and_walls();
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = o->oWallAngle;
