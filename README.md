@@ -8,21 +8,21 @@ This repo needs gcc in order to be able to build it. To install it, run `sudo ap
 This is a fork of HackerSM64 by Reonu, with the following additional features, fixes, and optimizations (patches marked with `*` are toggleable in `config.h`):
 
 **Graphics:**
-- Power stars now have a glowing effect. (Arceveti) *
+- [Power stars have a glowing effect](https://i.imgur.com/u5lEj4c.png) (Arceveti) *
 - 30 FPS ia8 (64x64) coins. (Arceveti) *
 - Screen tint effects based on damage & environment, which can be enabled separately (Arceveti) *
-- Mario's silhouette is shown when behind most surfaces (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
+- [Mario's silhouette is shown when behind most surfaces](https://i.imgur.com/Yf1YcUQ.png) (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
 - Bowser 3's rainbow effect is animated (Arceveti) *
-- Use 64x64 quarter shadow textures instead of 16x16 (Arceveti) *
+- [64x64 quarter shadow textures](https://i.imgur.com/JwWg5VF.png) (Arceveti) *
 - King Bob-omb blinks
-- Reflective metal cap texture using the framebuffer (mks#2512, Rovert, Arceveti) *
+- [Reflective metal cap texture using the framebuffer](https://i.imgur.com/IixJWBy.png) (mks#2512, Rovert, Arceveti) *
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
 - The Blast Away The Wall star spawns from the wall instead of existing in the world already *
 - Re-implementation of the unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
-- Re-implementation of the unused cracked ice in SL (SunlitSpace542, Arceveti) *
-- Bowser's puzzle in LLL is now seamless (Arceveti)
+- [Re-implementation of the unused cracked ice in SL](https://i.imgur.com/d71vYsV.png) (SunlitSpace542, Arceveti) *
+- [Seamless Bowser's puzzle in LLL](https://i.imgur.com/4IIdKbz.png) (Arceveti)
 - Fix for Lakitu cutscene detection bounds *
 - A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
 
@@ -36,7 +36,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Optimizations:**
 - Most doubles are now floats where the extra percision isn't needed
-- Improved slope fix and exposed ceilings fix (Arceveti)
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
 - Some unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
@@ -55,11 +54,11 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
-- Defines for specific cos() values used through out the game, specifically for checking the Y normal of surfaces (Arceveti)
+- Defines for specific cos() values used through out the game, usually for checking the Y normal of surfaces (Arceveti)
 - Vertical quicksand support (Wiseguy) *
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
-- Configurable amount of segments for Chain Chomp, Pokey & Wiggler (Arceveti) *
+- Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - LLL Fire Bars use oBehParams2ndByte to determine their length (Arceveti)
 
 **HUD/Gameplay QoL:**
@@ -68,8 +67,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
 - Number of Secrets collected is displayed on the HUD (Arceveti) *
-- Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
-- Breath meter is separated from health when underwater (Arceveti) *
+- [Leading zeroes on HUD counters like in modern Mario games](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
+- [Air/Breath meter is separate from health meter when underwater](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 
 **Object Behaviors:**
 - Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
@@ -89,6 +88,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Ground pound jump similar to SMO *
 - Underwater Ground pound similar to SMO *
 - Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
+- Improved slope fix and exposed ceilings fix (Arceveti)
 - Improved wall collision detection (frameperfection/Frame#5375)
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. See config for more details (Arceveti) *

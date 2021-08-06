@@ -33,7 +33,7 @@
 #define HUD_POWER_METER_Y   166
 
 #ifdef AIR_METER
-#define HUD_AIR_METER_X     142
+#define HUD_AIR_METER_X      40
 #define HUD_AIR_METER_Y     -20
 #define HUD_AIR_METER_MAX_Y  32
 #endif

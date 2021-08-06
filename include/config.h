@@ -223,7 +223,7 @@
 // Adds a visual moving water current to the warp behind the Bowser's Sub door in DDD (Arceveti)
 #define DDD_WARP_CURRENT_TEXTURE
 // Disables the ambient waves in WDW and areas with a variable water level,
-// since those can cause subtle nausea
+// since those can cause subtle nausea.
 // (Arceveti)
 #define WDW_DISABLE_AMBIENT_WAVES
 
@@ -245,7 +245,7 @@
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
 // Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
-// TODO: check implementation
+// TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
@@ -289,7 +289,7 @@
 #define PAUSE_BOWSER_KEYS
 // Fade warps have a particle effect to show where they are (Arceveti)
 #define VISIBLE_FADE_WARPS
-// Breath meter is separated from health when underwater (Arceveti)
+// Air/Breath meter is separate from health meter when underwater (Arceveti)
 #define AIR_METER
 
 // -- Object Behaviors --
