@@ -707,7 +707,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     }
     *pfloor = floor;
     // Increment the debug tracker.
-    gNumCalls.floor++
+    gNumCalls.floor++;
     return height;
 }
 #endif

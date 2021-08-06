@@ -267,9 +267,9 @@
 // Terminal velovity for gravity (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
 // Minimum Y normal for floors (vanilla is 0.01f)
-#define MIN_FLOOR_NORMAL_Y   0.01f
+#define MIN_FLOOR_NORMAL_Y 0.01f
 // Minimum Y normal for ceilings (vanilla is -0.01f)
-#define MAX_CEIL_NORMAL_Y   -0.2f
+#define MAX_CEIL_NORMAL_Y -0.2f
 
 // -- HUD/Gameplay QoL --
 
@@ -370,7 +370,7 @@
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
 // Improved wall collision detection (frameperfection/Frame#5375)
-#define BETTER_WALL_COLLISION
+// #define BETTER_WALL_COLLISION
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
 #define SKIP_GROUND_LOWER_WALL
 // Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
