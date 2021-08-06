@@ -74,7 +74,7 @@ void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
     cur_obj_move_standard(-62);
     if ((floor = o->oFloor) != NULL) {
         if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) o->oSubAction = 1;
-        if (o->oSubAction == 1) {
+        if (o->oSubAction == 1) { //! sub action name
             o->oBounciness = 0;
             if (floor->normal.y < 0.9f) {
                 targetYaw = atan2s(floor->normal.z, floor->normal.x);

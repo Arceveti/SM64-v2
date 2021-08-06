@@ -645,7 +645,7 @@ void bowser_short_second_hop(void) {
  * Makes Bowser do a big jump
  */
 void bowser_act_big_jump(void) {
-    if (o->oSubAction == 0) {
+    if (o->oSubAction == 0) { //! sub action name
         // Set jump animation
         if (bowser_set_anim_jump()) {
             // Set vel depending of the stage and status
@@ -658,7 +658,7 @@ void bowser_act_big_jump(void) {
             bowser_short_second_hop();
             o->oSubAction++;
         }
-    } else if (o->oSubAction == 1) {
+    } else if (o->oSubAction == 1) { //! sub action name
 #if BUGFIX_BOWSER_FALLEN_OFF_STAGE
         // Reset Bowser back on stage in BITS if he doesn't land properly
         if (o->oBehParams2ndByte == BOWSER_BP_BITS
@@ -694,7 +694,7 @@ s16 sBowserFVelAir[] = { 50 };
 void bowser_act_quick_jump(void) {
     f32 velY = sBowserVelYAir[0];
     f32 fVel = sBowserFVelAir[0];
-    if (o->oSubAction == 0) {
+    if (o->oSubAction == 0) { //! sub action name
         // Set fixed val positions while jumping
         if (bowser_set_anim_jump()) {
             o->oVelY = velY;
@@ -703,7 +703,7 @@ void bowser_act_quick_jump(void) {
             o->oSubAction++;
         }
     // Lands then quickly returns to default action
-    } else if (o->oSubAction == 1) {
+    } else if (o->oSubAction == 1) { //! sub action name
         if (bowser_land()) o->oSubAction++;
     } else if (cur_obj_check_if_near_animation_end()) {
         o->oAction = BOWSER_ACT_DEFAULT;
@@ -719,7 +719,7 @@ void bowser_act_hit_edge(void) {
     if (o->oTimer == 0) {
         o->oBowserTimer = 0;
     }
-    switch (o->oSubAction) {
+    switch (o->oSubAction) { //! sub action names
         case 0:
             // Move on the edge
             cur_obj_init_animation_with_sound(BOWSER_ANIM_EDGE_MOVE);
@@ -839,13 +839,11 @@ void bowser_act_charge_mario(void) {
 s32 bowser_check_hit_mine(void) {
     struct Object *mine;
     f32 dist;
-
     mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
     if (mine != NULL && dist < 800.0f) {
         mine->oInteractStatus |= INT_STATUS_HIT_MINE;
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -855,7 +853,7 @@ s32 bowser_check_hit_mine(void) {
 void bowser_act_thrown(void) {
     // Keep Bowser's timer at 0 unless he lands
     if (o->oTimer < 2) o->oBowserTimer = 0;
-    if (o->oSubAction == 0) {
+    if (o->oSubAction == 0) { //! sub action name
         // Play shake animations and do bounce effects
         cur_obj_init_animation_with_sound(BOWSER_ANIM_SHAKING);
         bowser_bounce_effects(&o->oBowserTimer);
@@ -1455,10 +1453,10 @@ void bowser_thrown_dropped_update(void) {
     // Reset timer and subactions
     o->prevObj->oAction    = BOWSER_ACT_TAIL_THROWN; // prevObj is Bowser's Tail
     o->prevObj->oTimer     = 0;
-    o->prevObj->oSubAction = 0; //! Tail doesn't have sub actions
+    o->prevObj->oSubAction = 0; //! Tail doesn't have sub actions //! sub action name?
 
     o->oTimer     = 0;
-    o->oSubAction = 0;
+    o->oSubAction = 0; //! sub action name
 }
 
 /**

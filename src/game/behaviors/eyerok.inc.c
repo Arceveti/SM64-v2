@@ -40,7 +40,7 @@ static void eyerok_boss_act_sleep(void) {
 static void eyerok_boss_act_wake_up(void) {
     if (o->oEyerokBossNumAwakeHands == 2) {
         if (o->oTimer > 5) {
-            if (o->oSubAction == 0) {
+            if (o->oSubAction == 0) { //! sub action name
                 seq_player_lower_volume(SEQ_PLAYER_LEVEL, 60, 40);
                 o->oSubAction++;
             }
