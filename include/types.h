@@ -199,10 +199,10 @@ struct Object
 struct ObjectHitbox
 {
     /*0x00*/ u32 interactType;
-    /*0x04*/ u8 downOffset;
-    /*0x05*/ s8 damageOrCoinValue;
-    /*0x06*/ s8 health;
-    /*0x07*/ s8 numLootCoins;
+    /*0x04*/ u8  downOffset;
+    /*0x05*/ s8  damageOrCoinValue;
+    /*0x06*/ s8  health;
+    /*0x07*/ s8  numLootCoins;
     /*0x08*/ s16 radius;
     /*0x0A*/ s16 height;
     /*0x0C*/ s16 hurtboxRadius;
@@ -217,12 +217,12 @@ struct Waypoint
 
 struct Surface
 {
-    /*0x00*/ s16 type;
-    /*0x02*/ s16 force;
-    /*0x04*/ s8 flags;
-    /*0x05*/ s8 room;
-    /*0x06*/ s16 lowerY;
-    /*0x08*/ s16 upperY;
+    /*0x00*/ s16   type;
+    /*0x02*/ s16   force;
+    /*0x04*/ s8    flags;
+    /*0x05*/ s8    room;
+    /*0x06*/ s16   lowerY;
+    /*0x08*/ s16   upperY;
     /*0x0A*/ Vec3s vertex1;
     /*0x10*/ Vec3s vertex2;
     /*0x16*/ Vec3s vertex3;
@@ -237,14 +237,14 @@ struct Surface
 
 struct MarioBodyState
 {
-    /*0x00*/ u32 action;
-    /*0x04*/ s8 capState; /// see MarioCapGSCId
-    /*0x05*/ s8 eyeState;
-    /*0x06*/ s8 handState;
-    /*0x07*/ s8 wingFlutter; /// whether Mario's wing cap wings are fluttering
-    /*0x08*/ s16 modelState;
-    /*0x0A*/ s8 grabPos;
-    /*0x0B*/ u8 punchState; /// 2 bits for type of punch, 6 bits for punch animation timer
+    /*0x00*/ u32   action;
+    /*0x04*/ s8    capState; /// see MarioCapGSCId
+    /*0x05*/ s8    eyeState;
+    /*0x06*/ s8    handState;
+    /*0x07*/ s8    wingFlutter; /// whether Mario's wing cap wings are fluttering
+    /*0x08*/ s16   modelState;
+    /*0x0A*/ s8    grabPos;
+    /*0x0B*/ u8    punchState; /// 2 bits for type of punch, 6 bits for punch animation timer
     /*0x0C*/ Vec3s torsoAngle;
     /*0x12*/ Vec3s headAngle;
     /*0x18*/ Vec3f heldObjLastPosition; /// also known as HOLP
@@ -253,68 +253,76 @@ struct MarioBodyState
 
 struct MarioState
 {
-    /*0x00*/ u16 unk00;
-    /*0x02*/ u16 input;
-    /*0x04*/ u32 flags;
-    /*0x08*/ u32 particleFlags;
-    /*0x0C*/ u32 action;
-    /*0x10*/ u32 prevAction;
-    /*0x14*/ u32 terrainSoundAddend;
-    /*0x18*/ u16 actionState;
-    /*0x1A*/ u16 actionTimer;
-    /*0x1C*/ u32 actionArg;
-    /*0x20*/ f32 intendedMag;
-    /*0x24*/ s16 intendedYaw;
-    /*0x26*/ s16 invincTimer;
-    /*0x28*/ u8 framesSinceA;
-    /*0x29*/ u8 framesSinceB;
-    /*0x2A*/ u8 wallKickTimer;
-    /*0x2B*/ u8 doubleJumpTimer;
-    /*0x2C*/ Vec3s faceAngle;
-    /*0x32*/ Vec3s angleVel;
-    /*0x38*/ s16 slideYaw;
-    /*0x3A*/ s16 twirlYaw;
-    /*0x3C*/ Vec3f pos;
-    /*0x48*/ Vec3f vel;
-    /*0x54*/ f32 forwardVel;
-    /*0x58*/ f32 slideVelX;
-    /*0x5C*/ f32 slideVelZ;
-    /*0x60*/ struct Surface *wall;
-    /*0x64*/ struct Surface *ceil;
-    /*0x68*/ struct Surface *floor;
-    /*0x6C*/ f32 ceilHeight;
-    /*0x70*/ f32 floorHeight;
-    /*0x74*/ s16 floorAngle;
-    /*0x76*/ s16 waterLevel;
-    /*0x78*/ struct Object *interactObj;
-    /*0x7C*/ struct Object *heldObj;
-    /*0x80*/ struct Object *usedObj;
-    /*0x84*/ struct Object *riddenObj;
-    /*0x88*/ struct Object *marioObj;
-    /*0x8C*/ struct SpawnInfo *spawnInfo;
-    /*0x90*/ struct Area *area;
+    /*0x00*/ u16    floorAlignMatrixIndex;
+    /*0x02*/ u16    input;
+    /*0x04*/ u32    flags;
+    /*0x08*/ u32    particleFlags;
+    /*0x0C*/ u32    action;
+    /*0x10*/ u32    prevAction;
+    /*0x14*/ u32    terrainSoundAddend;
+    /*0x18*/ u16    actionState;
+    /*0x1A*/ u16    actionTimer;
+    /*0x1C*/ u32    actionArg;
+    /*0x20*/ f32    intendedMag;
+    /*0x24*/ s16    intendedYaw;
+    /*0x26*/ s16    invincTimer;
+    /*0x28*/ u8     framesSinceA;
+    /*0x29*/ u8     framesSinceB;
+    /*0x2A*/ u8     wallKickTimer;
+    /*0x2B*/ u8     doubleJumpTimer;
+    /*0x2C*/ Vec3s  faceAngle;
+    /*0x32*/ Vec3s  angleVel;
+    /*0x38*/ s16    slideYaw;
+    /*0x3A*/ s16    twirlYaw;
+    /*0x3C*/ Vec3f  pos;
+    /*0x48*/ Vec3f  vel;
+    /*0x54*/ f32    forwardVel;
+    /*0x58*/ f32    slideVelX;
+    /*0x5C*/ f32    slideVelZ;
+    /*0x60*/ struct Surface           *wall;
+    /*0x64*/ struct Surface           *ceil;
+    /*0x68*/ struct Surface           *floor;
+    /*0x6C*/ f32    ceilHeight;
+    /*0x70*/ f32    floorHeight;
+    /*0x74*/ s16    floorAngle;
+    /*0x76*/ s16    waterLevel;
+    /*0x78*/ struct Object            *interactObj;
+    /*0x7C*/ struct Object            *heldObj;
+    /*0x80*/ struct Object            *usedObj;
+    /*0x84*/ struct Object            *riddenObj;
+    /*0x88*/ struct Object            *marioObj;
+    /*0x8C*/ struct SpawnInfo         *spawnInfo;
+    /*0x90*/ struct Area              *area;
     /*0x94*/ struct PlayerCameraState *statusForCamera;
-    /*0x98*/ struct MarioBodyState *marioBodyState;
-    /*0x9C*/ struct Controller *controller;
-    /*0xA0*/ struct DmaHandlerList *animList;
-    /*0xA4*/ u32 collidedObjInteractTypes;
-    /*0xA8*/ s16 numCoins;
-    /*0xAA*/ s16 numStars;
-    /*0xAC*/ s8 numKeys; // Unused key mechanic
-    /*0xAD*/ s8 numLives;
-    /*0xAE*/ s16 health;
-    /*0xB0*/ s16 unkB0;
-    /*0xB2*/ u8 hurtCounter;
-    /*0xB3*/ u8 healCounter;
-    /*0xB4*/ u8 squishTimer;
-    /*0xB5*/ u8 fadeWarpOpacity;
-    /*0xB6*/ u16 capTimer;
-    /*0xB8*/ s16 prevNumStarsForDialog;
-    /*0xBC*/ f32 peakHeight;
-    /*0xC0*/ f32 quicksandDepth;
-    /*0xC4*/ f32 unkC4;
-    /*0xC8*/ u8 hurtShadeAlpha;
-    /*0xC9*/ u8 coyoteTimer;
+    /*0x98*/ struct MarioBodyState    *marioBodyState;
+    /*0x9C*/ struct Controller        *controller;
+    /*0xA0*/ struct DmaHandlerList    *animList;
+    /*0xA4*/ u32    collidedObjInteractTypes;
+    /*0xA8*/ s16    numCoins;
+    /*0xAA*/ s16    numStars;
+    /*0xAC*/ s8     numKeys; // Number of bowser keys
+    /*0xAD*/ s8     numLives;
+    /*0xAE*/ s16    health;
+    /*0xB0*/ s16    animYTrans;
+    /*0xB2*/ u8     hurtCounter;
+    /*0xB3*/ u8     healCounter;
+    /*0xB4*/ u8     squishTimer;
+    /*0xB5*/ u8     fadeWarpOpacity;
+    /*0xB6*/ u16    capTimer;
+    /*0xB8*/ s16    prevNumStarsForDialog;
+    /*0xBC*/ f32    peakHeight;
+    /*0xC0*/ f32    quicksandDepth;
+    /*0xC4*/ f32    windGravity;
+#if COYOTE_TIME > 0
+             u8     coyoteTimer;
+#endif
+#ifdef AIR_METER
+             s16    air;
+             u8     breathCounter;
+#endif
+#ifdef DAMAGE_SCREEN_TINT
+    /*0xC8*/ u8     hurtShadeAlpha;
+#endif
 };
 
 #endif // TYPES_H

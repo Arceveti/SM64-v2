@@ -160,8 +160,8 @@ struct CreditsEntry sCreditsSequence[] = {
     { LEVEL_DDD,            2, -111,  -64, {  3948,  1185,  -104 }, CREDITS_POS_TWO,   credits19 },
     { LEVEL_CCM,            1,   33,   31, {  3169, -4607,  5240 }, CREDITS_POS_THREE, credits20 },
     // End Level Credits Sequence
-    { LEVEL_CASTLE_GROUNDS, 1,    1, -128, {     0,   906, -1200 }, CREDITS_POS_ONE,   NULL },
-    { LEVEL_NONE,           0,    1,    0, {     0,     0,     0 }, CREDITS_POS_ONE,   NULL },
+    { LEVEL_CASTLE_GROUNDS, 1,    1, -128, {     0,   906, -1200 }, CREDITS_POS_ONE,   NULL      },
+    { LEVEL_NONE,           0,    1,    0, {     0,     0,     0 }, CREDITS_POS_ONE,   NULL      },
 };
 
 struct MarioState gMarioStates[1];
@@ -270,12 +270,10 @@ void set_mario_initial_cap_powerup(struct MarioState *m) {
             m->flags |= MARIO_METAL_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 600;
             break;
-
         case COURSE_TOTWC - COURSE_CAP_COURSES:
             m->flags |= MARIO_WING_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 1200;
             break;
-
         case COURSE_VCUTM - COURSE_CAP_COURSES:
             m->flags |= MARIO_VANISH_CAP | MARIO_CAP_ON_HEAD;
             m->capTimer = 600;
@@ -339,27 +337,13 @@ void init_mario_after_warp(void) {
     sDelayedWarpOp = WARP_OP_NONE;
 
     switch (marioSpawnType) {
-        case MARIO_SPAWN_PIPE:
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00);
-            break;
-        case MARIO_SPAWN_DOOR_WARP:
-            play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00);
-            break;
-        case MARIO_SPAWN_TELEPORT:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x14, 0xFF, 0xFF, 0xFF);
-            break;
-        case MARIO_SPAWN_SPIN_AIRBORNE:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x1A, 0xFF, 0xFF, 0xFF);
-            break;
-        case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE:
-            play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00);
-            break;
-        case MARIO_SPAWN_FADE_FROM_BLACK:
-            play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x10, 0x00, 0x00, 0x00);
-            break;
-        default:
-            play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00);
-            break;
+        case MARIO_SPAWN_PIPE:                 play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00); break;
+        case MARIO_SPAWN_DOOR_WARP:            play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00); break;
+        case MARIO_SPAWN_TELEPORT:             play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x14, 0xFF, 0xFF, 0xFF); break;
+        case MARIO_SPAWN_SPIN_AIRBORNE:        play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x1A, 0xFF, 0xFF, 0xFF); break;
+        case MARIO_SPAWN_SPIN_AIRBORNE_CIRCLE: play_transition(WARP_TRANSITION_FADE_FROM_CIRCLE, 0x10, 0x00, 0x00, 0x00); break;
+        case MARIO_SPAWN_FADE_FROM_BLACK:      play_transition(WARP_TRANSITION_FADE_FROM_COLOR , 0x10, 0x00, 0x00, 0x00); break;
+        default:                               play_transition(WARP_TRANSITION_FADE_FROM_STAR  , 0x10, 0x00, 0x00, 0x00); break;
     }
 
     if (gCurrDemoInput == NULL) {
@@ -413,18 +397,10 @@ void warp_credits(void) {
     s32 marioAction = 0;
 
     switch (sWarpDest.nodeId) {
-        case WARP_NODE_CREDITS_START:
-            marioAction = ACT_END_PEACH_CUTSCENE;
-            break;
-        case WARP_NODE_CREDITS_NEXT:
-            marioAction = ACT_CREDITS_CUTSCENE;
-            break;
-        case WARP_NODE_CREDITS_END:
-            marioAction = ACT_END_WAVING_CUTSCENE;
-            break;
-        default:
-            marioAction = ACT_CREDITS_CUTSCENE;
-            break;
+        case WARP_NODE_CREDITS_START: marioAction = ACT_END_PEACH_CUTSCENE ; break;
+        case WARP_NODE_CREDITS_NEXT:  marioAction = ACT_CREDITS_CUTSCENE   ; break;
+        case WARP_NODE_CREDITS_END:   marioAction = ACT_END_WAVING_CUTSCENE; break;
+        default:                      marioAction = ACT_CREDITS_CUTSCENE   ; break;
     }
 
     gCurrLevelNum = sWarpDest.levelNum;
@@ -780,6 +756,9 @@ void initiate_delayed_warp(void) {
 void update_hud_values(void) {
     if (gCurrCreditsEntry == NULL) {
         s16 numHealthWedges = gMarioState->health > 0 ? gMarioState->health >> 8 : 0;
+#ifdef AIR_METER
+        s16 numAirWedges    = gMarioState->air    > 0 ? gMarioState->air    >> 8 : 0;
+#endif
 
         if (gCurrCourseNum >= COURSE_MIN) {
             gHudDisplay.flags |=  HUD_DISPLAY_FLAG_COIN_COUNT;
@@ -788,7 +767,7 @@ void update_hud_values(void) {
         }
 
         if (gHudDisplay.coins < gMarioState->numCoins) {
-            if (gGlobalTimer & 0x00000001) {
+            if (gGlobalTimer & 0x1) {
                 u32 coinSound = (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) ? SOUND_GENERAL_COIN_WATER : SOUND_GENERAL_COIN;
                 gHudDisplay.coins++;
                 play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
@@ -806,12 +785,19 @@ void update_hud_values(void) {
         if (numHealthWedges > gHudDisplay.wedges) play_sound(SOUND_MENU_POWER_METER, gGlobalSoundSource);
 
         gHudDisplay.wedges = numHealthWedges;
-
         if (gMarioState->hurtCounter > 0) {
             gHudDisplay.flags |=  HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
         } else {
             gHudDisplay.flags &= ~HUD_DISPLAY_FLAG_EMPHASIZE_POWER;
         }
+#ifdef AIR_METER
+        gHudDisplay.air = numAirWedges;
+        if (gMarioState->air > 0) {
+            gHudDisplay.flags |=  HUD_DISPLAY_FLAG_AIR_METER;
+        } else {
+            gHudDisplay.flags &= ~HUD_DISPLAY_FLAG_AIR_METER;
+        }
+#endif
     }
 }
 
@@ -995,24 +981,12 @@ s32 update_level(void) {
     s32 changeLevel = FALSE;
 
     switch (sCurrPlayMode) {
-        case PLAY_MODE_NORMAL:
-            changeLevel = play_mode_normal();
-            break;
-        case PLAY_MODE_PAUSED:
-            changeLevel = play_mode_paused();
-            break;
-        case PLAY_MODE_CHANGE_AREA:
-            changeLevel = play_mode_change_area();
-            break;
-        case PLAY_MODE_CHANGE_LEVEL:
-            changeLevel = play_mode_change_level();
-            break;
-        case PLAY_MODE_FRAME_ADVANCE:
-            changeLevel = play_mode_frame_advance();
-            break;
-        default:
-            changeLevel = play_mode_unused();
-            break;
+        case PLAY_MODE_NORMAL:        changeLevel = play_mode_normal();        break;
+        case PLAY_MODE_PAUSED:        changeLevel = play_mode_paused();        break;
+        case PLAY_MODE_CHANGE_AREA:   changeLevel = play_mode_change_area();   break;
+        case PLAY_MODE_CHANGE_LEVEL:  changeLevel = play_mode_change_level();  break;
+        case PLAY_MODE_FRAME_ADVANCE: changeLevel = play_mode_frame_advance(); break;
+        default:                      changeLevel = play_mode_unused();        break;
     }
 
     if (changeLevel) {
@@ -1053,14 +1027,14 @@ s32 init_level(void) {
 #ifdef PEACH_SKIP
             if (gCurrDemoInput != NULL) {
                 set_mario_action(gMarioState, ACT_IDLE, 0);
-            } else if (gDebugLevelSelect == 0) {
+            } else if (!gDebugLevelSelect) {
                 if (gMarioState->action != ACT_UNINITIALIZED) set_mario_action(gMarioState, ACT_IDLE, 0);
             }
         }
 #else
         if (gCurrDemoInput != NULL) {
             set_mario_action(gMarioState, ACT_IDLE, 0);
-        } else if (gDebugLevelSelect == 0) {
+        } else if (!gDebugLevelSelect) {
             if (gMarioState->action != ACT_UNINITIALIZED) {
                 if (save_file_exists(gCurrSaveFileNum - 1)) {
                     set_mario_action(gMarioState, ACT_IDLE, 0);
@@ -1100,18 +1074,9 @@ s32 lvl_init_from_save_file(UNUSED s16 initOrUpdate, s32 levelNum) {
 #ifdef VERSION_EU
     s16 var = eu_get_language();
     switch (var) {
-        case LANGUAGE_ENGLISH:
-            load_segment_decompress(0x19, _translation_en_yay0SegmentRomStart,
-                                          _translation_en_yay0SegmentRomEnd);
-            break;
-        case LANGUAGE_FRENCH:
-            load_segment_decompress(0x19, _translation_fr_yay0SegmentRomStart,
-                                          _translation_fr_yay0SegmentRomEnd);
-            break;
-        case LANGUAGE_GERMAN:
-            load_segment_decompress(0x19, _translation_de_yay0SegmentRomStart,
-                                          _translation_de_yay0SegmentRomEnd);
-            break;
+        case LANGUAGE_ENGLISH: load_segment_decompress(0x19, _translation_en_yay0SegmentRomStart, _translation_en_yay0SegmentRomEnd); break;
+        case LANGUAGE_FRENCH:  load_segment_decompress(0x19, _translation_fr_yay0SegmentRomStart, _translation_fr_yay0SegmentRomEnd); break;
+        case LANGUAGE_GERMAN:  load_segment_decompress(0x19, _translation_de_yay0SegmentRomStart, _translation_de_yay0SegmentRomEnd); break;
     }
 #endif
     sWarpDest.type = WARP_TYPE_NOT_WARPING;

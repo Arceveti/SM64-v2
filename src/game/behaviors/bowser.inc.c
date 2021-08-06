@@ -760,15 +760,15 @@ void bowser_act_spit_fire_onto_floor(void) {
  * Returns TRUE once the timer is bigger than the time set
  */
 s32 bowser_turn_on_timer(s32 time, s16 yaw) {
-    if (o->oSubAction == 0) {
+    if (o->oSubAction == 0) { //! sub action names
         if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_UP_START_WALK)) o->oSubAction++;
     } else if (o->oSubAction == 1) {
         if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_DOWN_STOP_WALK)) o->oSubAction++;
     } else {
         cur_obj_init_animation_with_sound(BOWSER_ANIM_IDLE);
     }
-    o->oForwardVel = 0.0f;
-    o->oMoveAngleYaw += yaw;
+    o->oForwardVel     = 0.0f;
+    o->oMoveAngleYaw  += yaw;
     return (o->oTimer >= time);
 }
 

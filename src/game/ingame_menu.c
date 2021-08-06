@@ -1596,17 +1596,14 @@ void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) 
         } else {
             str[nextStar * 2] = DIALOG_CHAR_STAR_OPEN;
         }
-
         str[nextStar * 2 + 1] = DIALOG_CHAR_SPACE;
         nextStar++;
     }
-
     if (starCount == nextStar && starCount != 6) {
         str[nextStar * 2    ] = DIALOG_CHAR_STAR_OPEN;
         str[nextStar * 2 + 1] = DIALOG_CHAR_SPACE;
         nextStar++;
     }
-
     str[nextStar * 2] = DIALOG_CHAR_TERMINATOR;
 
     print_generic_string(x + 14, y + 13, str);
@@ -1634,7 +1631,6 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
             } else {
                 gDialogLineNum--;
             }
-
             if (gDialogLineNum == COURSE_STAGES_COUNT || gDialogLineNum == -1) {
                 gDialogLineNum =  COURSE_STAGES_COUNT;
                 break;
@@ -1794,8 +1790,8 @@ void print_hud_course_complete_string(s8 str) {
 
 void print_hud_course_complete_coins(s16 x, s16 y) {
     u8 courseCompleteCoinsStr[4];
-    u8 hudTextSymCoin[] = { GLYPH_COIN, GLYPH_SPACE };
-    u8 hudTextSymX[] = { GLYPH_MULTIPLY, GLYPH_SPACE };
+    u8 hudTextSymCoin[] = { GLYPH_COIN,     GLYPH_SPACE };
+    u8 hudTextSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
@@ -1823,10 +1819,7 @@ void print_hud_course_complete_coins(s16 x, s16 y) {
                 gMarioState->numLives++;
             }
         }
-
-        if (gHudDisplay.coins == gCourseCompleteCoins && gGotFileCoinHiScore) {
-            play_sound(SOUND_MENU_HIGH_SCORE, gGlobalSoundSource);
-        }
+        if (gHudDisplay.coins == gCourseCompleteCoins && gGotFileCoinHiScore) play_sound(SOUND_MENU_HIGH_SCORE, gGlobalSoundSource);
     }
 }
 
@@ -1907,9 +1900,9 @@ void render_course_complete_lvl_info_and_hud_str(void) {
 }
 
 #define TXT_SAVEOPTIONS_X x + 12
-#define TXT_SAVECONT_Y 0
-#define TXT_SAVEQUIT_Y 20
-#define TXT_CONTNOSAVE_Y 40
+#define TXT_SAVECONT_Y         0
+#define TXT_SAVEQUIT_Y        20
+#define TXT_CONTNOSAVE_Y      40
 
 #define X_VAL9 x
 void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) {
@@ -1992,20 +1985,11 @@ s16 render_menus_and_dialogs(void) {
 
     if (gMenuMode != MENU_MODE_NONE) {
         switch (gMenuMode) {
-            case MENU_MODE_UNUSED_0:
-                index = render_pause_courses_and_castle();
-                break;
-            case MENU_MODE_RENDER_PAUSE_SCREEN:
-                index = render_pause_courses_and_castle();
-                break;
-            case MENU_MODE_RENDER_COURSE_COMPLETE_SCREEN:
-                index = render_course_complete_screen();
-                break;
-            case MENU_MODE_UNUSED_3:
-                index = render_course_complete_screen();
-                break;
+            case MENU_MODE_UNUSED_0:                      index = render_pause_courses_and_castle(); break;
+            case MENU_MODE_RENDER_PAUSE_SCREEN:           index = render_pause_courses_and_castle(); break;
+            case MENU_MODE_RENDER_COURSE_COMPLETE_SCREEN: index = render_course_complete_screen();   break;
+            case MENU_MODE_UNUSED_3:                      index = render_course_complete_screen();   break;
         }
-
         gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
     } else if (gDialogID != DIALOG_NONE) {
         // The Peach "Dear Mario" message needs to be repositioned separately

@@ -1097,7 +1097,7 @@ s32 act_getting_blown(struct MarioState *m) { // :flushed:
         }
     } else {
         if (m->forwardVel < -16.0f) m->forwardVel += 0.8f;
-        if (m->vel[1] < 0.0f && m->unkC4 < 4.0f) m->unkC4 += 0.05f;
+        if (m->vel[1] < 0.0f && m->windGravity < 4.0f) m->windGravity += 0.05f;
     }
     if (++(m->actionTimer) == 20) mario_blow_off_cap(m, 50.0f);
     mario_set_forward_vel(m, m->forwardVel);

@@ -69,6 +69,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
 - Number of Secrets collected is displayed on the HUD (Arceveti) *
 - Leading zeroes on HUD counters like in modern Mario games (Arceveti) *
+- Breath meter is separated from health when underwater (Arceveti) *
 
 **Object Behaviors:**
 - Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *

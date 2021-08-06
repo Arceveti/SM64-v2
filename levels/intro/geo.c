@@ -90,10 +90,10 @@ const GeoLayout intro_geo_mario_head_regular[] = {
 #endif
       GEO_CLOSE_NODE(),
 #ifdef ENABLE_RUMBLE
-   GEO_ZBUFFER(0),
-   GEO_OPEN_NODE(),
-      GEO_ASM(0, geo_intro_rumble_pak_graphic),
-   GEO_CLOSE_NODE(),
+      GEO_ZBUFFER(0),
+      GEO_OPEN_NODE(),
+         GEO_ASM(0, geo_intro_rumble_pak_graphic),
+      GEO_CLOSE_NODE(),
 #endif
    GEO_CLOSE_NODE(),
    GEO_END(),
@@ -122,7 +122,7 @@ const GeoLayout intro_geo_mario_head_dizzy[] = {
          GEO_CLOSE_NODE(),
 #endif
       GEO_CLOSE_NODE(),
-#ifdef VERSION_SH
+#ifdef ENABLE_RUMBLE
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
          GEO_ASM(1, geo_intro_rumble_pak_graphic),

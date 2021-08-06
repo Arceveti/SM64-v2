@@ -32,6 +32,12 @@
 #define HUD_CAMERA_Y        (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
 #define HUD_POWER_METER_Y   166
 
+#ifdef AIR_METER
+#define HUD_AIR_METER_X     142
+#define HUD_AIR_METER_Y     -20
+#define HUD_AIR_METER_MAX_Y  32
+#endif
+
 #ifdef HUD_RED_COINS
 #define HUD_LIVES_X         8
 #define HUD_POWER_METER_X   142
@@ -68,9 +74,7 @@ f32 calculate_and_update_fps() {
 void print_fps(s32 x, s32 y) {
     f32 fps = calculate_and_update_fps();
     char text[14];
-
     sprintf(text, "FPS %2.2f", fps);
-
     print_text(x, y, text);
 }
 
@@ -97,15 +101,25 @@ static struct PowerMeterHUD sPowerMeterHUD = {
 // when the power meter is hidden.
 s32 sPowerMeterVisibleTimer = 0;
 
+#ifdef AIR_METER
+static s16 sAirMeterStoredValue;
+static struct PowerMeterHUD sAirMeterHUD = {
+    AIR_METER_HIDDEN,
+    HUD_AIR_METER_X,
+    HUD_AIR_METER_Y,
+};
+s32 sAirMeterVisibleTimer = 0;
+#endif
+
 static s32 sCameraHUDStatus = CAM_STATUS_NONE;
 
 /**
  * Renders a rgba16 16x16 glyph texture from a table list.
  */
 void render_hud_tex_lut(s32 x, s32 y, u8 *texture) {
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
-    gSPDisplayList(gDisplayListHead++, &dl_hud_img_load_tex_block);
+    gDPPipeSync(        gDisplayListHead++);
+    gDPSetTextureImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
+    gSPDisplayList(     gDisplayListHead++, &dl_hud_img_load_tex_block);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 15) << 2, (y + 15) << 2,
                         G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10);
 }
@@ -114,16 +128,16 @@ void render_hud_tex_lut(s32 x, s32 y, u8 *texture) {
  * Renders a rgba16 8x8 glyph texture from a table list.
  */
 void render_hud_small_tex_lut(s32 x, s32 y, u8 *texture) {
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
-                G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD);
-    gDPTileSync(gDisplayListHead++);
-    gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 2, 0, G_TX_RENDERTILE, 0,
-                G_TX_CLAMP, 3, G_TX_NOLOD, G_TX_CLAMP, 3, G_TX_NOLOD);
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (8 - 1) << G_TEXTURE_IMAGE_FRAC, (8 - 1) << G_TEXTURE_IMAGE_FRAC);
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
-    gDPLoadSync(gDisplayListHead++);
-    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, 8 * 8 - 1, CALC_DXT(8, G_IM_SIZ_16b_BYTES));
+    gDPSetTile(         gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
+                        G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD);
+    gDPTileSync(        gDisplayListHead++);
+    gDPSetTile(         gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 2, 0, G_TX_RENDERTILE, 0,
+                        G_TX_CLAMP, 3, G_TX_NOLOD, G_TX_CLAMP, 3, G_TX_NOLOD);
+    gDPSetTileSize(     gDisplayListHead++, G_TX_RENDERTILE, 0, 0, (8 - 1) << G_TEXTURE_IMAGE_FRAC, (8 - 1) << G_TEXTURE_IMAGE_FRAC);
+    gDPPipeSync(        gDisplayListHead++);
+    gDPSetTextureImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
+    gDPLoadSync(        gDisplayListHead++);
+    gDPLoadBlock(       gDisplayListHead++, G_TX_LOADTILE, 0, 0, 8 * 8 - 1, CALC_DXT(8, G_IM_SIZ_16b_BYTES));
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 7) << 2, (y + 7) << 2, G_TX_RENDERTILE,
                         0, 0, 4 << 10, 1 << 10);
 }
@@ -133,16 +147,13 @@ void render_hud_small_tex_lut(s32 x, s32 y, u8 *texture) {
  */
 void render_power_meter_health_segment(s16 numHealthWedges) {
     u8 *(*healthLUT)[];
-
     healthLUT = segmented_to_virtual(&power_meter_health_segments_lut);
-
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1,
-                       (*healthLUT)[numHealthWedges - 1]);
-    gDPLoadSync(gDisplayListHead++);
-    gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES));
-    gSP1Triangle(gDisplayListHead++, 0, 1, 2, 0);
-    gSP1Triangle(gDisplayListHead++, 0, 2, 3, 0);
+    gDPPipeSync(       gDisplayListHead++);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*healthLUT)[numHealthWedges - 1]);
+    gDPLoadSync(       gDisplayListHead++);
+    gDPLoadBlock(      gDisplayListHead++, G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES));
+    gSP1Triangle(      gDisplayListHead++, 0, 1, 2, 0);
+    gSP1Triangle(      gDisplayListHead++, 0, 2, 3, 0);
 }
 
 /**
@@ -151,23 +162,17 @@ void render_power_meter_health_segment(s16 numHealthWedges) {
  */
 void render_dl_power_meter(s16 numHealthWedges) {
     Mtx *mtx;
-
     mtx = alloc_display_list(sizeof(Mtx));
-
     if (mtx == NULL) return;
-
     guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
-
-    gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
-              G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-    gSPDisplayList(gDisplayListHead++, &dl_power_meter_base);
-
+    gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
+                    G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
+    gSPDisplayList( gDisplayListHead++, &dl_power_meter_base);
     if (numHealthWedges != 0) {
         gSPDisplayList(gDisplayListHead++, &dl_power_meter_health_segments_begin);
         render_power_meter_health_segment(numHealthWedges);
         gSPDisplayList(gDisplayListHead++, &dl_power_meter_health_segments_end);
     }
-
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
@@ -178,7 +183,6 @@ void render_dl_power_meter(s16 numHealthWedges) {
 void animate_power_meter_emphasized(void) {
     s16 hudDisplayFlags;
     hudDisplayFlags = gHudDisplay.flags;
-
     if (!(hudDisplayFlags & HUD_DISPLAY_FLAG_EMPHASIZE_POWER)) {
         if (sPowerMeterVisibleTimer == 45) sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
     } else {
@@ -192,13 +196,10 @@ void animate_power_meter_emphasized(void) {
  */
 static void animate_power_meter_deemphasizing(void) {
     s16 speed = 5;
-
     if (sPowerMeterHUD.y > 180) speed = 3;
     if (sPowerMeterHUD.y > 190) speed = 2;
     if (sPowerMeterHUD.y > 195) speed = 1;
-
     sPowerMeterHUD.y += speed;
-
     if (sPowerMeterHUD.y > 200) {
         sPowerMeterHUD.y = 200;
         sPowerMeterHUD.animation = POWER_METER_VISIBLE;
@@ -224,27 +225,25 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     // Show power meter if health is not full, less than 8
     if (numHealthWedges < 8 && sPowerMeterStoredHealth == 8 && sPowerMeterHUD.animation == POWER_METER_HIDDEN) {
         sPowerMeterHUD.animation = POWER_METER_EMPHASIZED;
-        sPowerMeterHUD.y = 166;
+        sPowerMeterHUD.y = HUD_POWER_METER_Y;
     }
-
     // Show power meter if health is full, has 8
     if (numHealthWedges == 8 && sPowerMeterStoredHealth == 7) sPowerMeterVisibleTimer = 0;
-
     // After health is full, hide power meter
     if (numHealthWedges == 8 && sPowerMeterVisibleTimer > 45) sPowerMeterHUD.animation = POWER_METER_HIDING;
-
     // Update to match health value
     sPowerMeterStoredHealth = numHealthWedges;
-
     // If Mario is swimming, keep power meter visible
+#ifndef AIR_METER
     if (gPlayerCameraState->action & ACT_FLAG_SWIMMING) {
         if (sPowerMeterHUD.animation == POWER_METER_HIDDEN
          || sPowerMeterHUD.animation == POWER_METER_EMPHASIZED) {
             sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
-            sPowerMeterHUD.y = 166;
+            sPowerMeterHUD.y = HUD_POWER_METER_Y;
         }
         sPowerMeterVisibleTimer = 0;
     }
+#endif
 }
 
 /**
@@ -254,28 +253,139 @@ void handle_power_meter_actions(s16 numHealthWedges) {
  */
 void render_hud_power_meter(void) {
     s16 shownHealthWedges = gHudDisplay.wedges;
-
     if (sPowerMeterHUD.animation != POWER_METER_HIDING) handle_power_meter_actions(shownHealthWedges);
     if (sPowerMeterHUD.animation == POWER_METER_HIDDEN) return;
-
     switch (sPowerMeterHUD.animation) {
-        case POWER_METER_EMPHASIZED:
-            animate_power_meter_emphasized();
-            break;
-        case POWER_METER_DEEMPHASIZING:
-            animate_power_meter_deemphasizing();
-            break;
-        case POWER_METER_HIDING:
-            animate_power_meter_hiding();
-            break;
-        default:
-            break;
+        case POWER_METER_EMPHASIZED:    animate_power_meter_emphasized();    break;
+        case POWER_METER_DEEMPHASIZING: animate_power_meter_deemphasizing(); break;
+        case POWER_METER_HIDING:        animate_power_meter_hiding();        break;
+        default:                                                             break;
     }
-
     render_dl_power_meter(shownHealthWedges);
-
     sPowerMeterVisibleTimer++;
 }
+
+#ifdef AIR_METER
+/**
+ * Renders air meter health segment texture using a table list.
+ */
+void render_air_meter_segment(s16 numAirWedges) {
+    u8 *(*airLUT)[];
+    airLUT = segmented_to_virtual(&air_meter_health_segments_lut);
+    gDPPipeSync(       gDisplayListHead++);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*airLUT)[numAirWedges - 1]);
+    gDPLoadSync(       gDisplayListHead++);
+    gDPLoadBlock(      gDisplayListHead++, G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES));
+    gSP1Triangle(      gDisplayListHead++, 0, 1, 2, 0);
+    gSP1Triangle(      gDisplayListHead++, 0, 2, 3, 0);
+}
+
+/**
+ * Renders air meter display lists.
+ * That includes the "AIR" base and the colored health segment textures.
+ */
+void render_dl_air_meter(s16 numAirWedges) {
+    Mtx *mtx;
+    mtx = alloc_display_list(sizeof(Mtx));
+    if (mtx == NULL) return;
+    guTranslate(mtx, (f32) sAirMeterHUD.x, (f32) sAirMeterHUD.y, 0);
+    gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
+                    G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
+    gSPDisplayList( gDisplayListHead++, &dl_air_meter_base);
+    if (numAirWedges != 0) {
+        gSPDisplayList(gDisplayListHead++, &dl_air_meter_health_segments_begin);
+        render_air_meter_segment(numAirWedges);
+        gSPDisplayList(gDisplayListHead++, &dl_air_meter_health_segments_end);
+    }
+    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+}
+
+/**
+ * Air meter animation called when there's less than 8 health segments
+ * Checks its timer to later change into deemphasizing mode.
+ */
+void animate_air_meter_emphasized(void) {
+    s16 hudDisplayFlags;
+    hudDisplayFlags = gHudDisplay.flags;
+
+    if (!(hudDisplayFlags & HUD_DISPLAY_FLAG_AIR_METER)) {
+        if (sAirMeterVisibleTimer == 45) sAirMeterHUD.animation = AIR_METER_DEEMPHASIZING;
+    } else {
+        sAirMeterVisibleTimer = 0;
+    }
+}
+
+/**
+ * Air meter animation called after emphasized mode.
+ * Moves air meter y pos speed until it's at 200 to be visible.
+ */
+static void animate_air_meter_deemphasizing(void) {
+    s16 speed = 5;
+    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y - 20) speed = 3;
+    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y - 10) speed = 2;
+    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y -  5) speed = 1;
+    sAirMeterHUD.y += speed;
+    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y) {
+        sAirMeterHUD.y = HUD_AIR_METER_MAX_Y;
+        sAirMeterHUD.animation = AIR_METER_VISIBLE;
+    }
+}
+
+/**
+ * Air meter animation called when there's 8 health segments.
+ * Moves air meter y pos quickly until it's at 301 to be hidden.
+ */
+static void animate_air_meter_hiding(void) {
+    sAirMeterHUD.y -= 20;
+    if (sAirMeterHUD.y < HUD_AIR_METER_Y) {
+        sAirMeterHUD.animation = AIR_METER_HIDDEN;
+        sAirMeterVisibleTimer = 0;
+    }
+}
+
+/**
+ * Handles air meter actions depending of the health segments values.
+ */
+void handle_air_meter_actions(s16 numAirWedges) {
+    // Show air meter if health is not full, less than 8
+    if (numAirWedges < 8 && sAirMeterStoredValue == 8 && sAirMeterHUD.animation == AIR_METER_HIDDEN) {
+        sAirMeterHUD.animation = AIR_METER_EMPHASIZED;
+        sAirMeterHUD.y = HUD_AIR_METER_Y;
+    }
+    // Show air meter if health is full, has 8
+    if (numAirWedges == 8 && sAirMeterStoredValue == 7) sAirMeterVisibleTimer = 0;
+    // After health is full, hide air meter
+    if (numAirWedges == 8 && sAirMeterVisibleTimer > 45) sAirMeterHUD.animation = AIR_METER_HIDING;
+    // Update to match health value
+    sAirMeterStoredValue = numAirWedges;
+    // If Mario is swimming, keep air meter visible
+    if (gPlayerCameraState->action & ACT_FLAG_SWIMMING) {
+        if (sAirMeterHUD.animation == AIR_METER_HIDDEN
+         || sAirMeterHUD.animation == AIR_METER_EMPHASIZED) {
+            sAirMeterHUD.animation =  AIR_METER_DEEMPHASIZING;
+            sAirMeterHUD.y = HUD_AIR_METER_Y;
+        }
+        sAirMeterVisibleTimer = 0;
+    }
+}
+
+void render_hud_air_meter(void) {
+    s16 shownAirAmount = gHudDisplay.air;
+
+    if (sAirMeterHUD.animation != AIR_METER_HIDING) handle_air_meter_actions(shownAirAmount);
+    if (sAirMeterHUD.animation == AIR_METER_HIDDEN) return;
+
+    switch (sAirMeterHUD.animation) {
+        case AIR_METER_EMPHASIZED:    animate_air_meter_emphasized();    break;
+        case AIR_METER_DEEMPHASIZING: animate_air_meter_deemphasizing(); break;
+        case AIR_METER_HIDING:        animate_air_meter_hiding();        break;
+        default:                                                         break;
+    }
+
+    render_dl_air_meter(shownAirAmount);
+    sAirMeterVisibleTimer++;
+}
+#endif
 
 #ifdef VERSION_JP
 #define HUD_TOP_Y 210
@@ -298,12 +408,12 @@ void render_hud_mario_lives(void) {
 
 #ifdef CUSTOM_DEBUG
 void render_debug_mode(void) {
-    print_text(180, 40, "DEBUG MODE");
-    print_text_fmt_int(5, 20, "Z %d", gMarioState->pos[2]);
-    print_text_fmt_int(5, 40, "Y %d", gMarioState->pos[1]);
-    print_text_fmt_int(5, 60, "X %d", gMarioState->pos[0]);
-    print_text_fmt_int(10, 100, "SPD %d", (s32) gMarioState->forwardVel);
-    print_text_fmt_int(10, 120, "ANG 0*%04x", (u16) gMarioState->faceAngle[1]);
+    print_text(        180,  40, "DEBUG MODE");
+    print_text_fmt_int(  5,  20, "Z %d",             gMarioState->pos[2]);
+    print_text_fmt_int(  5,  40, "Y %d",             gMarioState->pos[1]);
+    print_text_fmt_int(  5,  60, "X %d",             gMarioState->pos[0]);
+    print_text_fmt_int( 10, 100, "SPD %d",     (s32) gMarioState->forwardVel);
+    print_text_fmt_int( 10, 120, "ANG 0*%04x", (u16) gMarioState->faceAngle[1]);
     print_fps(10,80);
 }
 #endif
@@ -396,20 +506,13 @@ void render_hud_timer(void) {
     timerValFrames = gHudDisplay.timer;
 #ifdef VERSION_EU
     switch (eu_get_language()) {
-        case LANGUAGE_ENGLISH:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TIME");
-            break;
-        case LANGUAGE_FRENCH:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TEMPS");
-            break;
-        case LANGUAGE_GERMAN:
-            print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "ZEIT");
-            break;
+        case LANGUAGE_ENGLISH: print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TIME" ); break;
+        case LANGUAGE_FRENCH:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TEMPS"); break;
+        case LANGUAGE_GERMAN:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "ZEIT" ); break;
     }
 #endif
-    timerMins = timerValFrames / (30 * 60);
-    timerSecs = (timerValFrames - (timerMins * 1800)) / 30;
-
+    timerMins     =   timerValFrames / (30 * 60);
+    timerSecs     =  (timerValFrames - (timerMins * 1800)) / 30;
     timerFracSecs = ((timerValFrames - (timerMins * 1800) - (timerSecs * 30)) & 0xFFFF) / 3;
 #ifndef VERSION_EU
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), HUD_TOP_Y-24, "TIME");
@@ -450,26 +553,15 @@ void render_hud_camera_status(void) {
     render_hud_tex_lut(x, y, (*cameraLUT)[GLYPH_CAM_CAMERA]);
 
     switch (sCameraHUDStatus & CAM_STATUS_MODE_GROUP) {
-        case CAM_STATUS_MARIO:
-            render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_MARIO_HEAD]);
-            break;
-        case CAM_STATUS_LAKITU:
-            render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_LAKITU_HEAD]);
-            break;
-        case CAM_STATUS_FIXED:
-            render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_FIXED]);
-            break;
+        case CAM_STATUS_MARIO:  render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_MARIO_HEAD ]); break;
+        case CAM_STATUS_LAKITU: render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_LAKITU_HEAD]); break;
+        case CAM_STATUS_FIXED:  render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_FIXED      ]); break;
     }
 
     switch (sCameraHUDStatus & CAM_STATUS_C_MODE_GROUP) {
-        case CAM_STATUS_C_DOWN:
-            render_hud_small_tex_lut(x + 4, y + 16, (*cameraLUT)[GLYPH_CAM_ARROW_DOWN]);
-            break;
-        case CAM_STATUS_C_UP:
-            render_hud_small_tex_lut(x + 4, y - 8, (*cameraLUT)[GLYPH_CAM_ARROW_UP]);
-            break;
+        case CAM_STATUS_C_DOWN: render_hud_small_tex_lut(x + 4, y + 16, (*cameraLUT)[GLYPH_CAM_ARROW_DOWN]); break;
+        case CAM_STATUS_C_UP:   render_hud_small_tex_lut(x + 4, y -  8, (*cameraLUT)[GLYPH_CAM_ARROW_UP  ]); break;
     }
-
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 
@@ -487,8 +579,13 @@ void render_hud(void) {
 
     if (hudDisplayFlags == HUD_DISPLAY_NONE) {
         sPowerMeterHUD.animation = POWER_METER_HIDDEN;
-        sPowerMeterStoredHealth = 8;
-        sPowerMeterVisibleTimer = 0;
+        sPowerMeterStoredHealth  = 8;
+        sPowerMeterVisibleTimer  = 0;
+#ifdef AIR_METER
+        sAirMeterHUD.animation   = AIR_METER_HIDDEN;
+        sAirMeterStoredValue    = 8;
+        sAirMeterVisibleTimer    = 0;
+#endif
     } else {
 #ifdef VERSION_EU
         // basically create_dl_ortho_matrix but guOrtho screen width is different
@@ -514,6 +611,9 @@ void render_hud(void) {
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_STAR_COUNT) render_hud_stars();
 #ifdef HUD_SECRETS
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) render_hud_secrets();
+#endif
+#ifdef AIR_METER
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_AIR_METER) render_hud_air_meter();
 #endif
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
             render_hud_power_meter();

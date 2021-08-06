@@ -256,6 +256,14 @@ extern const Gfx dl_power_meter_base[];
 extern const Gfx dl_power_meter_health_segments_begin[];
 extern const Gfx dl_power_meter_health_segments_end[];
 
+#ifdef AIR_METER
+// air_meter
+extern const u8 *const air_meter_health_segments_lut[];
+extern const Gfx dl_air_meter_base[];
+extern const Gfx dl_air_meter_health_segments_begin[];
+extern const Gfx dl_air_meter_health_segments_end[];
+#endif
+
 // sand
 extern const Gfx sand_seg3_dl_particle[];
 

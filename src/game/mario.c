@@ -69,7 +69,7 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
         o->header.gfx.animInfo.curAnim    = targetAnim;
         o->header.gfx.animInfo.animAccel  = 0;
-        o->header.gfx.animInfo.animYTrans = m->unkB0;
+        o->header.gfx.animInfo.animYTrans = m->animYTrans;
         if (targetAnim->flags & ANIM_FLAG_2) {
             o->header.gfx.animInfo.animFrame = targetAnim->startFrame;
         } else {
@@ -95,9 +95,9 @@ s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel)
         targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
     }
     if (o->header.gfx.animInfo.animID != targetAnimID) {
-        o->header.gfx.animInfo.animID  = targetAnimID;
-        o->header.gfx.animInfo.curAnim = targetAnim;
-        o->header.gfx.animInfo.animYTrans = m->unkB0;
+        o->header.gfx.animInfo.animID     = targetAnimID;
+        o->header.gfx.animInfo.curAnim    = targetAnim;
+        o->header.gfx.animInfo.animYTrans = m->animYTrans;
         if (targetAnim->flags & ANIM_FLAG_2) {
             o->header.gfx.animInfo.animFrameAccelAssist = (targetAnim->startFrame << 0x10);
         } else {
@@ -1263,6 +1263,10 @@ void update_mario_health(struct MarioState *m) {
             } else {
                 if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE)) {
                     terrainIsSnow = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW;
+#ifdef AIR_METER
+                    // when in snow terrains lose 3 health.
+                    if ((m->pos[1] < (m->waterLevel - 140)) && terrainIsSnow) m->health -= 3;
+#else
                     // When Mario is near the water surface, recover health (unless in snow),
                     // when in snow terrains lose 3 health.
                     // If using the debug level select, do not lose any HP to water.
@@ -1271,6 +1275,7 @@ void update_mario_health(struct MarioState *m) {
                     } else if (!gDebugLevelSelect) {
                         m->health -= (terrainIsSnow ? 3 : 1);
                     }
+#endif
                 }
             }
         }
@@ -1285,6 +1290,7 @@ void update_mario_health(struct MarioState *m) {
         }
         if (m->health > 0x880) m->health = 0x880;
         if (m->health < 0x100) m->health = 0xFF;
+#ifndef AIR_METER
         // Play a noise to alert the player when Mario is close to drowning.
         if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && !((m->flags & MARIO_METAL_CAP) > 0)) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
@@ -1297,8 +1303,42 @@ void update_mario_health(struct MarioState *m) {
             gRumblePakTimer = 0;
 #endif
         }
+#endif
     }
 }
+
+#ifdef AIR_METER
+void update_mario_breath(struct MarioState *m) {
+    if (m->air >= 0x100 && m->health >= 0x100) {
+        if (m->pos[1] < (m->waterLevel - 140.0f) && !(m->flags & MARIO_METAL_CAP)) {
+            m->air--;
+            if (m->air < 0x300) {
+                // Play a noise to alert the player when Mario is close to drowning.
+                play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
+#if ENABLE_RUMBLE
+                if (gRumblePakTimer == 0) {
+                    gRumblePakTimer = 36;
+                    if (is_rumble_finished_and_queue_empty()) queue_rumble_data(3, 30);
+                }
+            } else {
+                gRumblePakTimer = 0;
+#endif
+            }
+        } else if (!(m->input & INPUT_IN_POISON_GAS)) {
+            m->air += 0x1A;
+        }
+        if (m->breathCounter > 0) {
+            m->air += 0x40;
+            m->breathCounter--;
+        }
+        if (m->air    > 0x880) m->air = 0x880;
+        if (m->air    < 0x100) {
+            m->air    =  0xFF;
+            m->health =  0xFF;
+        }
+    }
+}
+#endif
 
 /**
  * Updates some basic info for camera usage.
@@ -1449,6 +1489,9 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         squish_mario_model(                        gMarioState);
         set_submerged_cam_preset_and_spawn_bubbles(gMarioState);
         update_mario_health(                       gMarioState);
+#ifdef AIR_METER
+        update_mario_breath(                       gMarioState);
+#endif
         update_mario_info_for_cam(                 gMarioState);
         mario_update_hitbox_and_cap_model(         gMarioState);
         // Both of the wind handling portions play wind audio only in
@@ -1532,7 +1575,7 @@ void init_mario(void) {
 }
 
 void init_mario_from_save_file(void) {
-    gMarioState->unk00                 = 0;
+    gMarioState->floorAlignMatrixIndex = 0;
     gMarioState->flags                 = 0;
     gMarioState->action                = 0;
     gMarioState->spawnInfo             = &gPlayerSpawnInfos[0];
@@ -1548,7 +1591,11 @@ void init_mario_from_save_file(void) {
     gMarioState->numLives              = 4;
     gMarioState->health                = 0x880;
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;
-    gMarioState->unkB0                 = 0xBD;
+    gMarioState->animYTrans            = 0xBD;
+#ifdef AIR_METER
+    gMarioState->air                   = 0x880;
+    gHudDisplay.air                    = 8;
+#endif
     gHudDisplay.coins                  = 0;
     gHudDisplay.wedges                 = 8;
 }

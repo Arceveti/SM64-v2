@@ -65,17 +65,17 @@ void align_with_floor(struct MarioState *m) {
     Vec3f floorNormal;
     if (floor != NULL && m->pos[1] < m->floorHeight + 80.0f) {
         if (floor->normal.y > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
-            mtxf_align_terrain_triangle(sFloorAlignMatrix[m->unk00], m->pos, m->faceAngle[1], 40.0f);
+            mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
             vec3f_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
-            mtxf_align_terrain_normal(sFloorAlignMatrix[m->unk00], floorNormal, m->pos, m->faceAngle[1]);
+            mtxf_align_terrain_normal(sFloorAlignMatrix[m->floorAlignMatrixIndex], floorNormal, m->pos, m->faceAngle[1]);
         }
-        m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->unk00];
+        m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
     }
 #else
     m->pos[1] = m->floorHeight;
-    mtxf_align_terrain_triangle(sFloorAlignMatrix[m->unk00], m->pos, m->faceAngle[1], 40.0f);
-    m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->unk00];
+    mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
+    m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
 #endif
 }
 

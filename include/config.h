@@ -289,6 +289,8 @@
 #define PAUSE_BOWSER_KEYS
 // Fade warps have a particle effect to show where they are (Arceveti)
 #define VISIBLE_FADE_WARPS
+// Breath meter is separated from health when underwater (Arceveti)
+#define AIR_METER
 
 // -- Object Behaviors --
 

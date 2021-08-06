@@ -51,13 +51,13 @@
 #define MARIO_SPAWN_FADE_FROM_BLACK         0x27
 
 // Screen top left - Bottom text
-#define CREDITS_POS_ONE     0x00
+#define CREDITS_POS_ONE                     0x00
 // Screen top right - Bottom text
-#define CREDITS_POS_TWO     0x10
+#define CREDITS_POS_TWO                     0x10
 // Screen bottom left - Top text
-#define CREDITS_POS_THREE   0x20
+#define CREDITS_POS_THREE                   0x20
 // Screen bottom right - Top text
-#define CREDITS_POS_FOUR    0x30
+#define CREDITS_POS_FOUR                    0x30
 
 struct CreditsEntry
 {
@@ -104,6 +104,9 @@ struct HudDisplay {
     /*0x08*/ s16 keys;
     /*0x0A*/ s16 flags;
     /*0x0C*/ u16 timer;
+#ifdef AIR_METER
+             u16 air;
+#endif
 };
 
 extern struct HudDisplay gHudDisplay;
@@ -115,13 +118,17 @@ enum HUDDisplayFlag {
     HUD_DISPLAY_FLAG_STAR_COUNT       = 0x0004,
     HUD_DISPLAY_FLAG_CAMERA_AND_POWER = 0x0008,
     HUD_DISPLAY_FLAG_KEYS             = 0x0010,
+#ifdef HUD_SECRETS
     HUD_DISPLAY_FLAG_SECRETS          = 0x0020,
+#endif
     HUD_DISPLAY_FLAG_TIMER            = 0x0040,
-
+#ifdef AIR_METER
+    HUD_DISPLAY_FLAG_AIR_METER        = 0x4000,
+#endif
     HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = 0x8000,
 
-    HUD_DISPLAY_NONE = 0x0000,
-    HUD_DISPLAY_DEFAULT = HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS
+    HUD_DISPLAY_NONE                  = 0x0000,
+    HUD_DISPLAY_DEFAULT               = HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS
 };
 
 

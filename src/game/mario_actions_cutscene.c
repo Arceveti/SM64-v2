@@ -657,6 +657,9 @@ s32 act_eaten_by_bubba(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_DYING, MARIO_ACTION_SOUND_PLAYED);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+#ifdef AIR_METER
+    m->air    = 0xFF;
+#endif
     m->health = 0xFF;
     if (m->actionTimer++ == 60) level_trigger_warp(m, WARP_OP_DEATH);
     return FALSE;
@@ -881,6 +884,9 @@ s32 act_spawn_spin_landing(struct MarioState *m) {
  * particle flag that generates sparkles.
  */
 s32 act_exit_airborne(struct MarioState *m) {
+#ifdef AIR_METER
+    m->air = 0x880;
+#endif
     if (15 < m->actionTimer++ && launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, -32.0f)) m->healCounter = 31; // heal Mario
     // rotate him to face away from the entrance
     m->marioObj->header.gfx.angle[1] += 0x8000;
@@ -889,6 +895,9 @@ s32 act_exit_airborne(struct MarioState *m) {
 }
 
 s32 act_falling_exit_airborne(struct MarioState *m) {
+#ifdef AIR_METER
+    m->air = 0x880;
+#endif
     if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, 0.0f)) m->healCounter = 31; // heal Mario
     // rotate Mario to face away from the entrance
     m->marioObj->header.gfx.angle[1] += 0x8000;
@@ -983,7 +992,7 @@ s32 act_unused_death_exit(struct MarioState *m) {
         m->healCounter = 31;
     }
     // one unit of health
-    m->health = 0x0100;
+    m->health = 0x100;
     return FALSE;
 }
 
@@ -1002,7 +1011,7 @@ s32 act_falling_death_exit(struct MarioState *m) {
         m->healCounter = 31;
     }
     // one unit of health
-    m->health = 0x0100;
+    m->health = 0x100;
     return FALSE;
 }
 
@@ -1043,7 +1052,7 @@ s32 act_special_death_exit(struct MarioState *m) {
     // show Mario
     marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     // one unit of health
-    m->health = 0x0100;
+    m->health = 0x100;
     return FALSE;
 }
 
@@ -1290,7 +1299,7 @@ s32 act_squished(struct MarioState *m) {
     // squished for more than 10 seconds, so kill Mario
     if (m->actionArg > 300) {
         // 0 units of health
-        m->health = 0x00FF;
+        m->health = 0xFF;
         m->hurtCounter = 0;
         level_trigger_warp(m, WARP_OP_DEATH);
     }

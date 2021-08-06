@@ -928,7 +928,7 @@ void apply_gravity(struct MarioState *m) {
         m->vel[1] -= 3.2f;
         if (m->vel[1] < -65.0f) m->vel[1] = -65.0f;
     } else if (m->action == ACT_GETTING_BLOWN) {
-        m->vel[1] -= m->unkC4;
+        m->vel[1] -= m->windGravity;
         if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY) m->vel[1] = -TERMINAL_GRAVITY_VELOCITY;
     } else if (should_strengthen_gravity_for_jump_ascent(m)) {
         m->vel[1] /= 4.0f;

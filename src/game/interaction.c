@@ -662,9 +662,11 @@ void reset_mario_pitch(struct MarioState *m) {
 }
 
 u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    m->numCoins += o->oDamageOrCoinValue;
-    m->healCounter += 4 * o->oDamageOrCoinValue;
-
+    m->numCoins      +=     o->oDamageOrCoinValue;
+    m->healCounter   += 4 * o->oDamageOrCoinValue;
+#ifdef AIR_METER
+    m->breathCounter += 4 * o->oDamageOrCoinValue;
+#endif
     o->oInteractStatus = INT_STATUS_INTERACTED;
 #ifdef X_COIN_STAR
     if (COURSE_IS_MAIN_COURSE(gCurrCourseNum)
@@ -680,7 +682,11 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
 }
 
 u32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+#ifdef AIR_METER
+    m->breathCounter += 4 * o->oDamageOrCoinValue;
+#else
     m->healCounter += 4 * o->oDamageOrCoinValue;
+#endif
     o->oInteractStatus = INT_STATUS_INTERACTED;
     return FALSE;
 }
@@ -702,8 +708,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 #endif
 
         if (!noExit) {
-            m->hurtCounter = 0;
-            m->healCounter = 0;
+            m->hurtCounter   = 0;
+            m->healCounter   = 0;
+#ifdef AIR_METER
+            m->breathCounter = 0;
+#endif
             if (m->capTimer > 1) m->capTimer = 1;
         }
 
@@ -1023,9 +1032,9 @@ u32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struct O
         m->usedObj     = o;
 
         m->faceAngle[1] = o->oMoveAngleYaw + 0x8000;
-        m->unkC4      =   0.4f;
-        m->forwardVel = -24.0f;
-        m->vel[1]     =  12.0f;
+        m->windGravity  =   0.4f;
+        m->forwardVel   = -24.0f;
+        m->vel[1]       =  12.0f;
 
         play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
         update_mario_sound_and_camera(m);
