@@ -52,6 +52,9 @@ extern u8                   gFlyingCamOverride;
 extern u8                   gKeepCliffCam;
 #endif
 extern u8                   gBorderHeight;
+#ifdef CUSTOM_DEBUG
+extern u8                   gCustomDebugMode;
+#endif
 #ifdef EEP
 extern s8                   gEepromProbe;
 #endif

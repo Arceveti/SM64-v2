@@ -53,6 +53,9 @@ u8 gFlyingCamOverride;
 u8 gKeepCliffCam;
 s32 gCliffTimer;
 #endif
+#ifdef CUSTOM_DEBUG
+u8 gCustomDebugMode;
+#endif
 #ifdef EEP
 s8 gEepromProbe;
 #endif

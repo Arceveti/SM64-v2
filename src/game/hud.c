@@ -15,6 +15,8 @@
 #include "print.h"
 #include "engine/surface_load.h"
 
+#include "config.h"
+
 /* @file hud.c
  * This file implements HUD rendering and power meter animations.
  * That includes stars, lives, coins, camera status, power meter, timer
@@ -65,9 +67,9 @@ f32 calculate_and_update_fps() {
 
 void print_fps(s32 x, s32 y) {
     f32 fps = calculate_and_update_fps();
-    char text[10];
+    char text[14];
 
-    sprintf(text, "%2.2f", fps);
+    sprintf(text, "FPS %2.2f", fps);
 
     print_text(x, y, text);
 }
@@ -294,6 +296,18 @@ void render_hud_mario_lives(void) {
 #endif
 }
 
+#ifdef CUSTOM_DEBUG
+void render_debug_mode(void) {
+    print_text(180, 40, "DEBUG MODE");
+    print_text_fmt_int(5, 20, "Z %d", gMarioState->pos[2]);
+    print_text_fmt_int(5, 40, "Y %d", gMarioState->pos[1]);
+    print_text_fmt_int(5, 60, "X %d", gMarioState->pos[0]);
+    print_text_fmt_int(10, 100, "SPD %d", (s32) gMarioState->forwardVel);
+    print_text_fmt_int(10, 120, "ANG 0*%04x", (u16) gMarioState->faceAngle[1]);
+    print_fps(10,80);
+}
+#endif
+
 /**
  * Renders the amount of coins collected.
  */
@@ -510,5 +524,8 @@ void render_hud(void) {
 
         if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES) print_text(10, 40, "SURFACE POOL FULL");
         if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES   ) print_text(10, 60, "SURFACE NODE POOL FULL");
+#ifdef CUSTOM_DEBUG
+        if (gCustomDebugMode) render_debug_mode();
+#endif
     }
 }
