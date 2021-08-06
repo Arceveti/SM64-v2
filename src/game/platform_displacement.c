@@ -108,16 +108,11 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
     }
 
     // Apply displacement for TTC Treadmills & other static objects that move Mario
-    if (platformPos[0] == platform->oPosX
-     && platformPos[1] == platform->oPosY
-     && platformPos[2] == platform->oPosZ) {
+    if (platform->behavior == segmented_to_virtual(bhvTTCTreadmill)) {
         pos[0] += platform->oVelX;
         pos[1] += platform->oVelY;
         pos[2] += platform->oVelZ;
     }
-    // if (platformPos[0] == platform->oPosX) pos[0] += platform->oVelX;
-    // if (platformPos[1] == platform->oPosY) pos[1] += platform->oVelY;
-    // if (platformPos[2] == platform->oPosZ) pos[2] += platform->oVelZ;
 
     // Transform from world positions to relative positions for use next frame
     linear_mtxf_transpose_mul_vec3f(*platform->header.gfx.throwMatrix, scaledPos, pos);
@@ -145,7 +140,7 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
 
     // Update platform and timer
     displaceInfo->prevPlatform = platform;
-    displaceInfo->prevTimer = gGlobalTimer;
+    displaceInfo->prevTimer    = gGlobalTimer;
 }
 
 // Doesn't change in the code, set this to FALSE if you don't want inertia
@@ -170,8 +165,7 @@ static void apply_mario_inertia(void) {
     sMarioAmountDisplaced[2] *= 0.97f;
 
     // Stop applying inertia once Mario has landed, or when ground pounding
-    if (!(gMarioState->action & ACT_FLAG_AIR)
-     || (gMarioState->action == ACT_GROUND_POUND)) sShouldApplyInertia = FALSE;
+    if (!(gMarioState->action & ACT_FLAG_AIR) || (gMarioState->action == ACT_GROUND_POUND)) sShouldApplyInertia = FALSE;
 }
 
 /**
