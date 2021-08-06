@@ -5,6 +5,7 @@
 
 #include "macros.h"
 #include "types.h"
+#include "engine/surface_collision.h"
 
 s32  is_anim_at_end(                       struct MarioState *m);
 s32  is_anim_past_end(                     struct MarioState *m);
