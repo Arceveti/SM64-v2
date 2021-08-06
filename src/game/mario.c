@@ -446,7 +446,6 @@ u32 mario_get_terrain_sound_addend(struct MarioState *m) {
  * Collides with walls and returns the most recent wall.
  */
 #ifdef BETTER_WALL_COLLISION
-//! 'struct WallCollisionData' declared inside parameter list will not be visible outside of this definition or declaration
 void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
     collisionData->x       = pos[0];
     collisionData->y       = pos[1];

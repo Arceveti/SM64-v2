@@ -477,7 +477,7 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWa
     f32 displacementZ;
     if (m->vel[1] > 0) return FALSE;
     //Return the already grabbed wall if Mario is moving into it more than the newly tested wall
-    if (grabbedWall != NULL && grabbedWall->normal.x * m->vel[0] + grabbedWall->normal.z * m->vel[2] < wall->normal.x * m->vel[0] + wall->normal.z * m->vel[2]) return grabbedWall;
+    if ((grabbedWall != NULL) && ((grabbedWall->normal.x * m->vel[0]) + (grabbedWall->normal.z * m->vel[2]) < (wall->normal.x * m->vel[0]) + (wall->normal.z * m->vel[2]))) return grabbedWall;
     displacementX = nextPos[0] - intendedPos[0];
     displacementZ = nextPos[2] - intendedPos[2];
     // Only ledge grab if the wall displaced Mario in the opposite direction of
@@ -488,11 +488,11 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWa
     ledgePos[0] = nextPos[0] - wall->normal.x * 60.0f;
     ledgePos[2] = nextPos[2] - wall->normal.z * 60.0f;
 #ifdef LEDGE_GRAB_FIX
-    ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &floor);
+    ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], ledgeFloor);
     if (floor == NULL || floor->normal.y < COS25 || floor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(floor->type)) return FALSE;
     if (m->input & INPUT_NONZERO_ANALOG && analog_stick_held_back(m, 0x4000)) return FALSE;
 #else
-    ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], &floor);
+    ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 160.0f, ledgePos[2], ledgeFloor);
 #endif
     if (ledgePos[1] - nextPos[1] <= 100.0f) return grabbedWall;
     return wall;
@@ -711,12 +711,12 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             m->floor        = ledgeFloor;
             m->floorHeight  = ledgePos[1];
             m->floorAngle   = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
-            m->faceAngle[0] = 0;
+            m->faceAngle[0] = 0x0;
             m->faceAngle[1] = atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + 0x8000;
         } else {
             vec3f_copy(m->pos, nextPos);
-            m->floor = floor;
-            m->floorHeight = floorHeight;
+            m->floor        = floor;
+            m->floorHeight  = floorHeight;
         }
         return stepResult;
     }

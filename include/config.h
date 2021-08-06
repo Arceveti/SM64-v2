@@ -370,9 +370,9 @@
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
 // Improved wall collision detection (frameperfection/Frame#5375)
-// #define BETTER_WALL_COLLISION
+#define BETTER_WALL_COLLISION
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
-#define SKIP_GROUND_LOWER_WALL
+// #define SKIP_GROUND_LOWER_WALL
 // Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
 #define BETTER_CEILING_HANDLING
 // Improved hanging which doesn't require holding down the A button (Arceveti)
