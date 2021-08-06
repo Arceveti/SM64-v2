@@ -41,8 +41,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Some unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
-- Many smaller optimizations (Arceveti)
 - [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
+- Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
+- Many smaller optimizations (Arceveti)
 
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)

@@ -31,7 +31,7 @@ SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
  * Pools of data to contain either surface nodes or surfaces.
  */
 struct SurfaceNode *sSurfaceNodePool;
-struct Surface *sSurfacePool;
+struct Surface     *sSurfacePool;
 
 /**
  * The size of the surface pool (2300).

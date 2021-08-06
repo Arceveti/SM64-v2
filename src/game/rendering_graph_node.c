@@ -467,7 +467,7 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     Vec3s marioPos3s;
 #endif
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
-    Mtx *mtx = alloc_display_list(sizeof(*mtx));
+    Mtx *mtx     = alloc_display_list(sizeof(*mtx));
 
     if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     make_roll_matrix(rollMtx, node->rollScreen);
@@ -589,7 +589,7 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     gMatStackIndex++;
     vec3s_to_vec3f(translation, node->translation);\
     if (node->zOffset < 0) {
-        mtxf_align_camera(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation,  gCurGraphNodeCamera->roll, node->zOffset);
+        mtxf_align_camera(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     } else {
         mtxf_billboard(   gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     }
@@ -640,11 +640,11 @@ static void geo_process_background(struct GraphNodeBackground *node) {
     if (list != NULL) {
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(list), node->fnNode.node.flags >> 8);
     } else if (gCurGraphNodeMasterList != NULL) {
-#ifndef F3DEX_GBI_2E
-        Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 7);
-#else
+// #ifndef F3DEX_GBI_2E
+//         Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 7);
+// #else
         Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 8);
-#endif
+// #endif
         Gfx *gfx = gfxStart;
 
         gDPPipeSync(      gfx++);
