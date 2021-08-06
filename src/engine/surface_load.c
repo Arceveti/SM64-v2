@@ -7,7 +7,7 @@
 #include "graph_node.h"
 #include "behavior_script.h"
 #include "behavior_data.h"
-#ifdef FAST_INVSQRT
+#if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
 #include "math_util.h"
 #endif
 #include "game/memory.h"
@@ -55,20 +55,14 @@ static struct SurfaceNode *alloc_surface_node(void) {
  * initialize the surface.
  */
 static struct Surface *alloc_surface(void) {
-
     struct Surface *surface = &sSurfacePool[gSurfacesAllocated];
     gSurfacesAllocated++;
-
-    if (gSurfacesAllocated >= sSurfacePoolSize) {
-        gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_SURFACES;
-    }
-
+    if (gSurfacesAllocated >= sSurfacePoolSize) gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_SURFACES;
     surface->type   = 0;
     surface->force  = 0;
     surface->flags  = SURFACE_FLAG_NONE;
     surface->room   = 0;
     surface->object = NULL;
-
     return surface;
 }
 
@@ -118,10 +112,11 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     } else {
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir =  0; // insertion order
-
+#ifndef BETTER_WALL_COLLISION
         // Vanilla is 0.707 ~cos(50)
         // Why are these cos(50) instead of cos(45)?
         if (surface->normal.x < -COS50 || surface->normal.x > COS50) surface->flags |= SURFACE_FLAG_X_PROJECTION;
+#endif
     }
 
     surfacePriority  = surface->upperY * sortDir;
@@ -132,7 +127,7 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     while (list->next != NULL) {
         priority = list->next->surface->vertex1[1] * sortDir;
         if (surfacePriority > priority) break;
-        list = list->next;
+        list     = list->next;
     }
     newNode->next = list->next;
     list->next    = newNode;
@@ -337,7 +332,7 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
     nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
 
-#ifdef FAST_INVSQRT
+#if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
     mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
 #else
     mag = sqrtf(nx * nx + ny * ny + nz * nz);
@@ -426,8 +421,8 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
 
         surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
-            surface->room = room;
-            surface->type = surfaceType;
+            surface->room  = room;
+            surface->type  = surfaceType;
             surface->flags = (s8) flags;
 #ifdef ALL_SURFACES_HAVE_FORCE
             surface->force = *(*data + 3);

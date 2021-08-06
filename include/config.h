@@ -209,7 +209,6 @@
 
 #endif
 
-
 // -- Vanilla Level Changes --
 
 // Fixes Lakitu cutscene detection bounds
@@ -245,7 +244,10 @@
 
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
-// Use the floor's normal instead of a triangle if the floor isn't steep (Arceveti)
+// Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
+// TODO: check implementation
+// #define FAST_INVSQRT_SURFACES
+// Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
 
 // -- Hacker QoL --
@@ -265,7 +267,7 @@
 // Terminal velovity for gravity (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
 // Minimum Y normal for floors (vanilla is 0.01f)
-#define MIN_FLOOR_NORMAL_Y  0.01f
+#define MIN_FLOOR_NORMAL_Y   0.01f
 // Minimum Y normal for ceilings (vanilla is -0.01f)
 #define MAX_CEIL_NORMAL_Y   -0.2f
 
