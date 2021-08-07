@@ -8,6 +8,9 @@
 #include "game_init.h"
 #include "save_file.h"
 #include "sound_init.h"
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+#include "object_list_processor.h"
+#endif
 #include "engine/surface_collision.h"
 #include "interaction.h"
 #include "mario.h"
@@ -66,7 +69,11 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     f32 ceilHeight;
     f32 floorHeight;
     f32 ceilAmt;
+    // f32 floorAmt;
 #ifdef BETTER_WALL_COLLISION
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+    gIncludeSteepFloorsInWallCollisionCheck = TRUE;
+#endif
     resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f, &wallData);
     wall = wallData.walls[0];
 #else
@@ -74,7 +81,10 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #endif
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil );
-    if (floor == NULL) return WATER_STEP_CANCELLED;
+    if (floor == NULL) {
+        m->faceAngle[1] += 0x8000;
+        return WATER_STEP_CANCELLED;
+    }
     if (ceil != NULL && (nextPos[1] + 160.0f >= ceilHeight || ceilHeight - floorHeight < 160.0f)) {
         ceilAmt = (nextPos[1] + 160.0f) - ceilHeight;
         nextPos[0] += ceil->normal.x * ceilAmt;
@@ -86,6 +96,11 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         return WATER_STEP_HIT_CEILING;
     }
     if (nextPos[1] <= floorHeight) {
+        // if (floor->normal.y < COS73) {
+        //     floorAmt = (floorHeight - nextPos[1]);
+        //     nextPos[0] += floor->normal.x * floorAmt;
+        //     nextPos[2] += floor->normal.z * floorAmt;
+        // }
         nextPos[1] = floorHeight;
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
@@ -182,6 +197,8 @@ static u32 perform_water_step(struct MarioState *m) {
     u32 stepResult;
     Vec3f nextPos;
     Vec3f step;
+    // s16 floorYaw;
+    // s16 floorTurn;
     struct Object *marioObj = m->marioObj;
     vec3f_copy(step, m->vel);
     if (m->action & ACT_FLAG_SWIMMING) apply_water_current(m, step);
@@ -198,6 +215,11 @@ static u32 perform_water_step(struct MarioState *m) {
         stepResult = perform_water_quarter_step(m, nextPos);
         if (stepResult == WATER_STEP_CANCELLED) break;
     }
+    // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1-m->floor->normal.y)) {
+    //     floorYaw = atan2s(m->floor->normal.z, m->floor->normal.x);
+    //     floorTurn = (1-m->floor->normal.y)*0x800;
+    //     m->faceAngle[1] = floorYaw - approach_s32(floorYaw - m->faceAngle[1], 0x0, floorTurn, floorTurn);
+    // }
 #else
     nextPos[0] = m->pos[0] + step[0];
     nextPos[1] = m->pos[1] + step[1];

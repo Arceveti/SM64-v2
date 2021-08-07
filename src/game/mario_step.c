@@ -285,7 +285,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
         if (floor != NULL && ceil != NULL) {
             // steep floor
             if (floor->normal.y < COS25) {
-                surfAngle = atan2s(m->floor->normal.z, floor->normal.x);
+                surfAngle = atan2s(floor->normal.z, floor->normal.x);
                 underSteepSurf = TRUE;
             }
             // steep ceiling

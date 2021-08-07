@@ -312,10 +312,10 @@ s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleI
             break;
         case O_MOVE_ANGLE_YAW_INDEX:
         case O_FACE_ANGLE_YAW_INDEX:
-            a =    obj->oPosZ;
-            c = target->oPosZ;
-            b =    obj->oPosX;
-            d = target->oPosX;
+            a =     obj->oPosZ;
+            c =  target->oPosZ;
+            b =     obj->oPosX;
+            d =  target->oPosX;
             targetAngle = atan2s(c - a, d - b);
             break;
     }

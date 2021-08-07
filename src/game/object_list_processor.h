@@ -99,6 +99,9 @@ extern struct MemoryPool *gObjectMemoryPool;
 
 extern s16  gCheckingSurfaceCollisionsForCamera;
 extern s16  gFindFloorIncludeSurfaceIntangible;
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+extern s16  gIncludeSteepFloorsInWallCollisionCheck;
+#endif
 extern s16 *gEnvironmentRegions;
 extern s32  gEnvironmentLevels[20];
 extern s8   gDoorAdjacentRooms[60][2];

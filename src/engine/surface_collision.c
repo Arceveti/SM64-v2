@@ -53,6 +53,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
         if (y < surf->lowerY || y > surf->upperY) continue;
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+        if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
+#endif
         offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
         if (offset < 0 || offset > radius) continue;
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
@@ -298,6 +301,16 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
     // Check for surfaces that are a part of level geometry.
     node = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
     numCollisions += find_wall_collisions_from_list(node, colData);
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+    if (gIncludeSteepFloorsInWallCollisionCheck) {
+        // Check for surfaces belonging to objects.
+        node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+        numCollisions += find_wall_collisions_from_list(node, colData);
+        // Check for surfaces that are a part of level geometry.
+        node = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+        numCollisions += find_wall_collisions_from_list(node, colData);
+    }
+#endif
     // Increment the debug tracker.
     gNumCalls.wall++;
     return numCollisions;

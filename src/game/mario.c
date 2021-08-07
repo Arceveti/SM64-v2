@@ -1040,6 +1040,9 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 if (m->wall != NULL) {
                     steepness = sqrtf(((m->wall->normal.x * m->wall->normal.x) + (m->wall->normal.z * m->wall->normal.z)));
                     surf_nY = m->wall->normal.y;
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+                    if (surf_nY > MIN_FLOOR_NORMAL_Y || surf_nY < MAX_CEIL_NORMAL_Y) break;
+#endif
                     print_text_fmt_int( 80, 136,  "W1 %d", m->wall->vertex1[0]);
                     print_text_fmt_int(184, 136,     "%d", m->wall->vertex1[1]);
                     print_text_fmt_int(248, 136,     "%d", m->wall->vertex1[2]);

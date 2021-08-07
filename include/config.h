@@ -405,9 +405,17 @@
 
 // -- Experimental/Unfinished --
 
+// Include steep floors when checking for walls when underwater
+// This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
+// May cause performance issues due to checking the floors partition in addition to the walls partition.
+// (Arceveti)
+#define UNDERWATER_STEEP_FLOORS_AS_WALLS
+#define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
+
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
 // Use painting data for the PSS painting instead of a static texture (Arceveti)
-#define PSS_PAINTING // TODO: Painting Wobble
+// TODO: Painting Wobble
+#define PSS_PAINTING
 
 #endif // CONFIG_H
