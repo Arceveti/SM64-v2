@@ -96,12 +96,10 @@ static s16 obj_get_pitch_from_vel(void) {
 static s32 obj_update_race_proposition_dialog(s16 dialogID) {
     s32 dialogResponse = cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
         (DIALOG_FLAG_TURN_TO_MARIO | DIALOG_FLAG_TIME_STOP_ENABLED), CUTSCENE_RACE_DIALOG, dialogID);
-
     if (dialogResponse == DIALOG_RESPONSE_NO) {
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
         disable_time_stop_including_mario();
     }
-
     return dialogResponse;
 }
 
@@ -121,13 +119,11 @@ static void obj_perform_position_op(s32 op) {
             sObjSavedPosY = o->oPosY;
             sObjSavedPosZ = o->oPosZ;
             break;
-
         case POS_OP_COMPUTE_VELOCITY:
             o->oVelX = o->oPosX - sObjSavedPosX;
             o->oVelY = o->oPosY - sObjSavedPosY;
             o->oVelZ = o->oPosZ - sObjSavedPosZ;
             break;
-
         case POS_OP_RESTORE_POSITION:
             o->oPosX = sObjSavedPosX;
             o->oPosY = sObjSavedPosY;
@@ -137,7 +133,7 @@ static void obj_perform_position_op(s32 op) {
 }
 
 static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32 y, f32 z) {
-    struct Object *trackBall;
+    struct Object   *trackBall;
     struct Waypoint *initialPrevWaypoint;
     struct Waypoint *nextWaypoint;
     struct Waypoint *prevWaypoint;
@@ -146,11 +142,9 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
     f32 dy;
     f32 dz;
     f32 distToNextWaypoint;
-
     if (ballIndex == 0 || ((u16)(o->oBehParams >> 16) & 0x0080)) {
         initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
         nextWaypoint = initialPrevWaypoint;
-
         if (ballIndex != 0) {
             amountToMove = 300.0f * ballIndex;
         } else {
@@ -158,27 +152,21 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
             o->oPlatformOnTrackPrevWaypointFlags = 0;
             amountToMove = o->oForwardVel;
         }
-
         do {
             prevWaypoint = nextWaypoint;
-
             nextWaypoint++;
             if (nextWaypoint->flags == WAYPOINT_FLAGS_END) {
                 if (ballIndex == 0) o->oPlatformOnTrackPrevWaypointFlags = WAYPOINT_FLAGS_END;
-
                 if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_RETURN_TO_START)) {
                     nextWaypoint = o->oPlatformOnTrackStartWaypoint;
                 } else {
                     return;
                 }
             }
-
-            dx = nextWaypoint->pos[0] - x;
-            dy = nextWaypoint->pos[1] - y;
-            dz = nextWaypoint->pos[2] - z;
-
-            distToNextWaypoint = sqrtf(dx * dx + dy * dy + dz * dz); //! fast invsqrt?
-
+            dx                 = nextWaypoint->pos[0] - x;
+            dy                 = nextWaypoint->pos[1] - y;
+            dz                 = nextWaypoint->pos[2] - z;
+            distToNextWaypoint = sqrtf(dx * dx + dy * dy + dz * dz);
             // Move directly to the next waypoint, even if it's farther away
             // than amountToMove
             amountToMove -= distToNextWaypoint;
@@ -186,7 +174,6 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
             y += dy;
             z += dz;
         } while (amountToMove > 0.0f);
-
         // If we moved farther than amountToMove, move in the opposite direction
         // No risk of near-zero division: If distToNextWaypoint is close to
         // zero, then that means we didn't cross a waypoint this frame (since
@@ -198,10 +185,8 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
         x += dx * distToNextWaypoint;
         y += dy * distToNextWaypoint;
         z += dz * distToNextWaypoint;
-
         if (ballIndex != 0) {
             trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o, MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
-
             if (trackBall != NULL) {
                 trackBall->oPosX = x;
                 trackBall->oPosY = y;
@@ -212,72 +197,54 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
                 if (o->oPlatformOnTrackPrevWaypointFlags == 0x0) o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
                 o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
             }
-
             o->oPosX = x;
             o->oPosY = y;
             o->oPosZ = z;
-
             obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
-
             o->oPlatformOnTrackPitch = atan2s(sqrtf(o->oVelX * o->oVelX + o->oVelZ * o->oVelZ), -o->oVelY);
             o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
         }
     }
 }
 
-//! TODO: name vals
-static void cur_obj_spin_all_dimensions(f32 arg0, f32 arg1) {
-    f32 val24;
-    f32 val20;
-    f32 val1C;
-    f32 c;
-    f32 s;
-    f32 val10;
-    f32 val0C;
-    f32 val08;
-    f32 val04;
-    f32 val00;
-
+// Used for Haunted Chair
+static void cur_obj_spin_all_dimensions(f32 pitchSpeed, f32 rollSpeed) {
+    f32 roll, yaw, pitch;
+    f32 c, s;
+    f32 px, ny, nz, nx, pz;
     if (o->oForwardVel == 0.0f) {
-        val24 = val20 = val1C = 0.0f;
-
+        roll = yaw = pitch = 0.0f;
         if (o->oMoveFlags & OBJ_MOVE_IN_AIR) {
-            val20 = 50.0f;
+            yaw = 50.0f;
         } else {
             if (o->oFaceAnglePitch < 0x0) {
-                val1C = -arg0;
+                pitch = -pitchSpeed;
             } else if (o->oFaceAnglePitch > 0x0) {
-                val1C =  arg0;
+                pitch =  pitchSpeed;
             }
-
             if (o->oFaceAngleRoll < 0x0) {
-                val24 = -arg1;
+                roll = -rollSpeed;
             } else if (o->oFaceAngleRoll > 0x0) {
-                val24 =  arg1;
+                roll =  rollSpeed;
             }
         }
-
         c = coss(o->oFaceAnglePitch);
         s = sins(o->oFaceAnglePitch);
-        val08 = val1C * c + val20 * s;
-        val0C = val20 * c - val1C * s;
-
+        nz = pitch * c + yaw   * s;
+        ny = yaw   * c - pitch * s;
         c = coss(o->oFaceAngleRoll);
         s = sins(o->oFaceAngleRoll);
-        val04 = val24 * c + val0C * s;
-        val0C = val0C * c - val24 * s;
-
+        nx = roll  * c + ny   * s;
+        ny = ny    * c - roll * s;
         c = coss(o->oFaceAngleYaw);
         s = sins(o->oFaceAngleYaw);
-        val10 = val04 * c - val08 * s;
-        val08 = val08 * c + val04 * s;
-
-        val04 = val24 * c - val1C * s;
-        val00 = val1C * c + val24 * s;
-
-        o->oPosX = o->oHomeX - val04 + val10;
-        o->oGraphYOffset = val20 - val0C;
-        o->oPosZ = o->oHomeZ + val00 - val08;
+        px = nx * c - nz * s;
+        nz = nz * c + nx * s;
+        nx = roll  * c - pitch * s;
+        pz = pitch * c + roll  * s;
+        o->oPosX = o->oHomeX - nx + px;
+        o->oGraphYOffset = yaw - ny;
+        o->oPosZ = o->oHomeZ + pz - nz;
     }
 }
 
@@ -303,7 +270,6 @@ static s32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
     } else {
         return FALSE;
     }
-
     return TRUE;
 }
 
@@ -315,7 +281,6 @@ static s32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
     } else {
         return FALSE;
     }
-
     return TRUE;
 }
 
@@ -344,33 +309,26 @@ static s32 cur_obj_set_anim_if_at_end(s32 animIndex) {
 
 static s32 cur_obj_play_sound_at_anim_range(s8 startFrame1, s8 startFrame2, u32 sound) {
     s32 rangeLength;
-
     if ((rangeLength = o->header.gfx.animInfo.animAccel / 0x10000) <= 0) rangeLength = 1;
-
     if (cur_obj_check_anim_frame_in_range(startFrame1, rangeLength)
      || cur_obj_check_anim_frame_in_range(startFrame2, rangeLength)) {
         cur_obj_play_sound_2(sound);
         return TRUE;
     }
-
     return FALSE;
 }
 
 static s16 obj_turn_pitch_toward_mario(f32 targetOffsetY, s16 turnAmount) {
     s16 targetPitch;
-
     o->oPosY -= targetOffsetY;
     targetPitch = obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, turnAmount);
     o->oPosY += targetOffsetY;
-
     return targetPitch;
 }
 
 static s32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
     if (*px > target) delta = -delta;
-
     *px += delta;
-
     if ((*px - target) * delta >= 0) {
         *px = target;
         return TRUE;
@@ -409,12 +367,9 @@ static s32 obj_face_roll_approach(s16 targetRoll, s16 deltaRoll) {
 static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targetSpeedProportion, s16 accel, s16 minSpeed, s16 maxSpeed) {
     s16 currentSpeed;
     s16 currentAngle = (s16)(*angle);
-
     *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
-
     currentSpeed = absi(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
-
     *angle = approach_s16_symmetric(*angle, targetAngle, currentSpeed);
     return (s16)(*angle) == targetAngle;
 }
@@ -447,9 +402,7 @@ static s16 obj_random_fixed_turn(s16 delta) {
 static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale) {
     if (o->oTimer < 2) {
         o->header.gfx.scale[0] += *scaleVel;
-
         if ((*scaleVel -= 0.01f) > -0.03f) o->oTimer = 0;
-
     } else if (o->oTimer > 10) {
         if (approach_f32_ptr(&o->header.gfx.scale[0], endScale, 0.05f)) {
             return -1;
@@ -458,14 +411,12 @@ static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale)
             return 1;
         }
     }
-
     return 0;
 }
 
 static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
     s32 startValue = *value;
     *value += (s32) *vel;
-
     if (*value == target || ((*value - target) * (startValue - target) < 0 && *vel > -velCloseToZero && *vel < velCloseToZero)) {
         *value = target;
         *vel = 0.0f;
@@ -475,7 +426,6 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
         if (*vel * accel < 0.0f) accel *= slowdown;
         *vel += accel;
     }
-
     return FALSE;
 }
 
@@ -502,24 +452,18 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     if (o->numCollidedObjs != 0) {
         for (i = 0; i < o->numCollidedObjs; i++) {
             otherObject = o->collidedObjs[i];
-
             if (otherObject == gMarioObject) continue;
             if (otherObject->oInteractType & INTERACT_MASK_NO_OBJ_COLLISIONS) continue; // 0x00053430
-
-            dx = o->oPosX - otherObject->oPosX;
-            dz = o->oPosZ - otherObject->oPosZ;
-            distance = sqrtf(dx*dx + dz*dz);
-
-            radius = (o->hurtboxRadius > 0) ? o->hurtboxRadius : o->hitboxRadius;
-            otherRadius = (otherObject->hurtboxRadius > 0) ? otherObject->hurtboxRadius : otherObject->hitboxRadius;
+            dx             = o->oPosX - otherObject->oPosX;
+            dz             = o->oPosZ - otherObject->oPosZ;
+            distance       = sqrtf(dx*dx + dz*dz);
+            radius         = (          o->hurtboxRadius > 0) ?           o->hurtboxRadius :           o->hitboxRadius;
+            otherRadius    = (otherObject->hurtboxRadius > 0) ? otherObject->hurtboxRadius : otherObject->hitboxRadius;
             relativeRadius = radius + otherRadius;
-
             if (distance > relativeRadius) continue;
-
-            angle = atan2s(dz, dx);
+            angle    = atan2s(dz, dx);
             o->oPosX = otherObject->oPosX + relativeRadius * sins(angle);
             o->oPosZ = otherObject->oPosZ + relativeRadius * coss(angle);
-
             if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
             return TRUE;
         }
@@ -532,24 +476,18 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
         if (otherObject != gMarioObject) {
             // If one object moves after collisions are detected and this code
             // runs, the objects can move toward each other (transport cloning)
-
-            dx = otherObject->oPosX - o->oPosX;
-            dz = otherObject->oPosZ - o->oPosZ;
-            angle = atan2s(dx, dz); // This should be atan2s(dz, dx)
-
-            radius = o->hitboxRadius;
-            otherRadius = otherObject->hitboxRadius;
-            relativeRadius = radius / (radius + otherRadius);
-
-            newCenterX = o->oPosX + dx * relativeRadius;
-            newCenterZ = o->oPosZ + dz * relativeRadius;
-
-            o->oPosX = newCenterX - radius * coss(angle);
-            o->oPosZ = newCenterZ - radius * sins(angle);
-
+            dx                 = otherObject->oPosX - o->oPosX;
+            dz                 = otherObject->oPosZ - o->oPosZ;
+            angle              = atan2s(dx, dz); // This should be atan2s(dz, dx)
+            radius             = o->hitboxRadius;
+            otherRadius        = otherObject->hitboxRadius;
+            relativeRadius     = radius / (radius + otherRadius);
+            newCenterX         = o->oPosX   + dx          * relativeRadius;
+            newCenterZ         = o->oPosZ   + dz          * relativeRadius;
+            o->oPosX           = newCenterX - radius      * coss(angle);
+            o->oPosZ           = newCenterZ - radius      * sins(angle);
             otherObject->oPosX = newCenterX + otherRadius * coss(angle);
             otherObject->oPosZ = newCenterZ + otherRadius * sins(angle);
-
             if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
                 // Bounce off object (or it would, if the above atan2s bug
                 // were fixed)
@@ -588,15 +526,13 @@ static void obj_die_if_health_non_positive(void) {
         } else {
             spawn_mist_particles();
         }
-
         if ((s32)o->oNumLootCoins < 0) {
             spawn_object(o, MODEL_BLUE_COIN, bhvMrIBlueCoin);
         } else {
             obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);
         }
-        // This doesn't do anything
+        //! This doesn't do anything
         obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);
-
         if (o->oHealth < 0) {
             cur_obj_hide();
             cur_obj_become_intangible();
@@ -614,14 +550,12 @@ static void obj_set_knockback_action(s32 attackType) {
             o->oForwardVel = 20.0f;
             o->oVelY = 50.0f;
             break;
-
         default:
             o->oAction = OBJ_ACT_HORIZONTAL_KNOCKBACK;
             o->oForwardVel = 50.0f;
             o->oVelY = 30.0f;
             break;
     }
-
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
     o->oMoveAngleYaw = obj_angle_to_object(gMarioObject, o);
 }
@@ -645,17 +579,13 @@ static s32 obj_die_if_above_lava_and_health_non_positive(void) {
         }
         return FALSE;
     }
-
     obj_die_if_health_non_positive();
     return TRUE;
 }
 
-static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioAction,
-                              u8 *attackHandlers) {
+static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioAction, u8 *attackHandlers) {
     s32 attackType;
-
     obj_set_hitbox(o, hitbox);
-
     //! Die immediately if above lava
     if (obj_die_if_above_lava_and_health_non_positive()) {
         return 1;
@@ -671,77 +601,59 @@ static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActi
             switch (attackHandlers[attackType - 1]) {
                 case ATTACK_HANDLER_NOP:
                     break;
-
                 case ATTACK_HANDLER_DIE_IF_HEALTH_NON_POSITIVE:
                     obj_die_if_health_non_positive();
                     break;
-
                 case ATTACK_HANDLER_KNOCKBACK:
                     obj_set_knockback_action(attackType);
                     break;
-
                 case ATTACK_HANDLER_SQUISHED:
                     obj_set_squished_action();
                     break;
-
                 case ATTACK_HANDLER_SPECIAL_KOOPA_LOSE_SHELL:
                     shelled_koopa_attack_handler(attackType);
                     break;
-
                 case ATTACK_HANDLER_SET_SPEED_TO_ZERO:
                     obj_set_speed_to_zero();
                     break;
-
                 case ATTACK_HANDLER_SPECIAL_WIGGLER_JUMPED_ON:
                     wiggler_jumped_on_attack_handler();
                     break;
-
                 case ATTACK_HANDLER_SPECIAL_HUGE_GOOMBA_WEAKLY_ATTACKED:
                     huge_goomba_weakly_attacked();
                     break;
-
                 case ATTACK_HANDLER_SQUISHED_WITH_BLUE_COIN:
                     o->oNumLootCoins = -1;
                     obj_set_squished_action();
                     break;
             }
-
             o->oInteractStatus = INT_STATUS_NONE;
             return attackType;
         }
     }
-
     o->oInteractStatus = INT_STATUS_NONE;
     return 0;
 }
 
 static void obj_act_knockback(UNUSED f32 baseScale) {
     cur_obj_update_floor_and_walls();
-
     if (o->header.gfx.animInfo.curAnim != NULL) cur_obj_extend_animation_if_at_end();
-
     //! Dies immediately if above lava
-    if ((o->oMoveFlags
-         & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_MASK_IN_WATER | OBJ_MOVE_HIT_WALL | OBJ_MOVE_ABOVE_LAVA))
-        || (o->oAction == OBJ_ACT_VERTICAL_KNOCKBACK && o->oTimer >= 9)) {
+    if ((o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_MASK_IN_WATER | OBJ_MOVE_HIT_WALL | OBJ_MOVE_ABOVE_LAVA))
+     || (o->oAction == OBJ_ACT_VERTICAL_KNOCKBACK && o->oTimer >= 9)) {
         obj_die_if_health_non_positive();
     }
-
     cur_obj_move_standard(-78);
 }
 
 static void obj_act_squished(f32 baseScale) {
     f32 targetScaleY = baseScale * 0.3f;
-
     cur_obj_update_floor_and_walls();
-
     if (o->header.gfx.animInfo.curAnim != NULL) cur_obj_extend_animation_if_at_end();
-
     if (approach_f32_ptr(&o->header.gfx.scale[1], targetScaleY, baseScale * 0.14f)) {
         o->header.gfx.scale[0] = o->header.gfx.scale[2] = baseScale * 2.0f - o->header.gfx.scale[1];
         if (o->oTimer >= 16) obj_die_if_health_non_positive();
     }
-
     o->oForwardVel = 0.0f;
     cur_obj_move_standard(-78);
 }
@@ -751,27 +663,22 @@ static s32 obj_update_standard_actions(f32 scale) {
         return TRUE;
     } else {
         cur_obj_become_intangible();
-
         switch (o->oAction) {
             case OBJ_ACT_HORIZONTAL_KNOCKBACK:
             case OBJ_ACT_VERTICAL_KNOCKBACK:
                 obj_act_knockback(scale);
                 break;
-
             case OBJ_ACT_SQUISHED:
                 obj_act_squished(scale);
                 break;
         }
-
         return FALSE;
     }
 }
 
 static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioAction) {
     s32 attackType;
-
     obj_set_hitbox(o, hitbox);
-
     //! Dies immediately if above lava
     if (obj_die_if_above_lava_and_health_non_positive()) {
         return 1;
@@ -788,7 +695,6 @@ static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActio
             return attackType;
         }
     }
-
     o->oInteractStatus = INT_STATUS_NONE;
     return 0;
 }
@@ -796,12 +702,10 @@ static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActio
 static s32 obj_move_for_one_second(s32 endAction) {
     cur_obj_update_floor_and_walls();
     cur_obj_extend_animation_if_at_end();
-
     if (o->oTimer > 30) {
         o->oAction = endAction;
         return TRUE;
     }
-
     cur_obj_move_standard(-78);
     return FALSE;
 }
@@ -829,14 +733,13 @@ static void treat_far_home_as_mario(f32 threshold) {
     f32 dy = o->oHomeY - o->oPosY;
     f32 dz = o->oHomeZ - o->oPosZ;
     f32 distance = sqrtf(dx * dx + dy * dy + dz * dz);
-
     if (distance > threshold) {
         o->oAngleToMario = atan2s(dz, dx);
         o->oDistanceToMario = 25000.0f;
     } else {
-        dx = o->oHomeX - gMarioObject->oPosX;
-        dy = o->oHomeY - gMarioObject->oPosY;
-        dz = o->oHomeZ - gMarioObject->oPosZ;
+        dx       = o->oHomeX - gMarioObject->oPosX;
+        dy       = o->oHomeY - gMarioObject->oPosY;
+        dz       = o->oHomeZ - gMarioObject->oPosZ;
         distance = sqrtf(dx * dx + dy * dy + dz * dz);
 
         if (distance > threshold) o->oDistanceToMario = 20000.0f;
@@ -886,7 +789,6 @@ static void treat_far_home_as_mario(f32 threshold) {
  */
 void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, s32 model, f32 startSpeed, f32 endSpeed, s16 movePitch) {
     struct Object *obj = spawn_object_relative_with_scale(SMALL_PIRANHA_FLAME_BP_MOVE, relativePosX, relativePosY, relativePosZ, scale, o, model, bhvSmallPiranhaFlame);
-
     if (obj != NULL) {
         obj->oSmallPiranhaFlameStartSpeed = startSpeed;
         obj->oSmallPiranhaFlameEndSpeed   = endSpeed;

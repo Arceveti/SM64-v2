@@ -90,9 +90,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
     Gfx *gfx;
     struct Object *heldObject;
     struct Object *obj;
-
     gfxHead = NULL;
-
     if (callContext == GEO_CONTEXT_RENDER) {
         heldObject = (struct Object *) gCurGraphNodeObject;
         obj = (struct Object *) node;
@@ -131,13 +129,11 @@ void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 n
 s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
     struct WallCollisionData hitbox;
     f32 wall_nX, wall_nY, wall_nZ, objVelXCopy, objVelZCopy, objYawX, objYawZ;
-
     hitbox.x       = objNewX;
     hitbox.y       = objY;
     hitbox.z       = objNewZ;
     hitbox.offsetY = o->hitboxHeight / 2;
     hitbox.radius  = o->hitboxRadius;
-
     if (find_wall_collisions(&hitbox) != 0) {
         o->oPosX    = hitbox.x;
         o->oPosY    = hitbox.y;
@@ -147,10 +143,8 @@ s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
         wall_nZ     = hitbox.walls[0]->normal.z;
         objVelXCopy = objVelX;
         objVelZCopy = objVelZ;
-
         // Turns away from the first wall only.
         turn_obj_away_from_surface(objVelXCopy, objVelZCopy, wall_nX, wall_nY, wall_nZ, &objYawX, &objYawZ);
-
         o->oMoveAngleYaw = atan2s(objYawZ, objYawX);
         return FALSE;
     }
@@ -162,7 +156,6 @@ s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
  */
 s8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ) {
     f32 floor_nY, objVelXCopy, objVelZCopy, objYawX, objYawZ;
-
     if (objFloor == NULL) {
         //! (OOB Object Crash) TRUNC overflow exception after 36 minutes
         o->oMoveAngleYaw += 0x8000; // vanilla was 32767.999200000002; /* ¯\_(ツ)_/¯ */
@@ -186,26 +179,20 @@ s8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objV
  */
 void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ) {
     Vec3f objVisualPosition, surfaceNormals;
-
     Mat4 *throwMatrix;
-
     // Passes on orienting certain objects that shouldn't be oriented, like boulders.
     if (!sOrientObjWithFloor) return;
-
     // Passes on orienting billboard objects, i.e. coins, trees, etc.
     if (obj->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) return;
-
     throwMatrix = alloc_display_list(sizeof(*throwMatrix));
     // If out of memory, fail to try orienting the object.
     if (throwMatrix == NULL) return;
-
     objVisualPosition[0] = obj->oPosX;
     objVisualPosition[1] = obj->oPosY + obj->oGraphYOffset;
     objVisualPosition[2] = obj->oPosZ;
     surfaceNormals[0]    = normalX;
     surfaceNormals[1]    = normalY;
     surfaceNormals[2]    = normalZ;
-
     mtxf_align_terrain_normal(*throwMatrix, surfaceNormals, objVisualPosition, obj->oFaceAngleYaw);
     obj->header.gfx.throwMatrix = throwMatrix;
 }
@@ -226,22 +213,17 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     f32 floor_nY = objFloor->normal.y;
     f32 floor_nZ = objFloor->normal.z;
     f32 objFriction;
-
     // Caps vertical speed with a terminal velocity.
     o->oVelY -= o->oGravity;
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
     if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
-
     o->oPosY += o->oVelY;
-
     //Snap the object up to the floor.
     if (o->oPosY < objFloorY) {
         o->oPosY = objFloorY;
-
         // Bounces an object if the ground is hit fast enough.
         o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f;
     }
-
     //! (Obj Position Crash) If you got an object with height past 2^31, the game would crash.
     if ((s32) o->oPosY >= (s32) objFloorY && (s32) o->oPosY < (s32) objFloorY + 37) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
@@ -251,12 +233,9 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
         // Adds horizontal component of gravity for horizontal speed.
         objVelX += floor_nX * floor_nXZ;
         objVelZ += floor_nZ * floor_nXZ;
-
         if (objVelX < 0.000001f && objVelX > -0.000001f) objVelX = 0;
         if (objVelZ < 0.000001f && objVelZ > -0.000001f) objVelZ = 0;
-
         if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
-
         calc_obj_friction(&objFriction, floor_nY);
         o->oForwardVel = sqrtf(objVelX * objVelX + objVelZ * objVelZ) * objFriction;
     }
@@ -269,23 +248,18 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     f32 floor_nZ  = objFloor->normal.z;
     f32 netYAccel = (1.0f - o->oBuoyancy) * (-1.0f * o->oGravity);
     o->oVelY -= netYAccel;
-
     // Caps vertical speed with a terminal velocity.
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
     if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
-
     o->oPosY += o->oVelY;
-
     //Snap the object up to the floor.
     if (o->oPosY < floorY) {
         o->oPosY = floorY;
         // Bounces an object if the ground is hit fast enough.
         o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f;
     }
-
     // If moving fast near the surface of the water, flip vertical speed? To emulate skipping?
     if (o->oForwardVel > 12.5f && (waterY + 30.0f) > o->oPosY && (waterY - 30.0f) < o->oPosY) o->oVelY = -o->oVelY;
-
     if ((s32) o->oPosY >= (s32) floorY && (s32) o->oPosY < (s32) floorY + 37) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
         floor_nX2 = sqr(floor_nX);
@@ -295,13 +269,10 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
         objVelX += floor_nX * floor_nXZ;
         objVelZ += floor_nZ * floor_nXZ;
     }
-
     if ( objVelX < 0.000001f &&  objVelX > -0.000001f)  objVelX = 0;
     if ( objVelZ < 0.000001f &&  objVelZ > -0.000001f)  objVelZ = 0;
     if (o->oVelY < 0.000001f && o->oVelY > -0.000001f) o->oVelY = 0;
-
     if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
-
     // Decreases both vertical velocity and forward velocity. Likely so that skips above
     // don't loop infinitely.
     o->oForwardVel = sqrtf(objVelX * objVelX + objVelZ * objVelZ) * 0.8f;
@@ -344,10 +315,8 @@ s16 object_step(void) {
     f32 waterY  = FLOOR_LOWER_LIMIT_MISC;
     f32 floorY;
     s16 collisionFlags = 0x0;
-
     // Find any wall collisions, receive the push, and set the flag.
     if (!obj_find_wall(nextX, nextY, nextZ, objVelX, objVelZ)) collisionFlags |= OBJ_COL_FLAG_HIT_WALL;
-
     floorY = find_floor(nextX, nextY, nextZ, &sObjFloor);
     if (turn_obj_away_from_steep_floor(sObjFloor, floorY, objVelX, objVelZ)) {
         waterY = find_water_level(nextX, nextZ);
@@ -361,11 +330,9 @@ s16 object_step(void) {
         // Treat any awkward floors similar to a wall.
         collisionFlags |= ((collisionFlags & OBJ_COL_FLAG_HIT_WALL) ^ OBJ_COL_FLAG_HIT_WALL);
     }
-
     obj_update_pos_vel_xz();
     if ((s32) o->oPosY == (s32) floorY) collisionFlags |= OBJ_COL_FLAG_GROUNDED;
     if ((s32) o->oVelY == 0           ) collisionFlags |= OBJ_COL_FLAG_NO_Y_VEL;
-
     // Generate a splash if in water.
     obj_splash((s32) waterY, (s32) o->oPosY);
     return collisionFlags;
@@ -439,13 +406,11 @@ s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 
     f32 homeDistX = homeX - obj->oPosX;
     f32 homeDistZ = homeZ - obj->oPosZ;
     s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
-
     if (is_point_within_radius_of_mario(homeX, y, homeZ, dist)) {
         return TRUE;
     } else {
         obj->oMoveAngleYaw = approach_s16_symmetric(obj->oMoveAngleYaw, angleTowardsHome, 320);
     }
-
     return FALSE;
 }
 
@@ -456,13 +421,11 @@ void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 home
     s16 angleToNewHome;
     f32 homeDistX, homeDistZ;
     f32 disp;
-
     if ((s32)(random_float() * 50.0f) == 0) {
-        disp = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp;
+        disp        = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp;
         obj->oHomeX = disp + homeX;
         obj->oHomeZ = disp + homeZ;
     }
-
     homeDistX = obj->oHomeX - obj->oPosX;
     homeDistZ = obj->oHomeZ - obj->oPosZ;
     angleToNewHome = atan2s(homeDistZ, homeDistX);
@@ -483,13 +446,11 @@ s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, s16 range) {
  */
 s8 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
-
-    hitbox.x = x;
-    hitbox.y = y;
-    hitbox.z = z;
+    hitbox.x       = x;
+    hitbox.y       = y;
+    hitbox.z       = z;
     hitbox.offsetY = 10.0f;
-    hitbox.radius = radius;
-
+    hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
         dist[0] = hitbox.x - x;
         dist[1] = hitbox.y - y;
@@ -530,7 +491,6 @@ s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
         obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -539,7 +499,6 @@ s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
  */
 s8 current_mario_room_check(s16 room) {
     s16 result;
-
     // Since object surfaces have room 0, this tests if the surface is an
     // object first and uses the last room if so.
     if (gMarioCurrentRoom == 0) {
@@ -548,7 +507,6 @@ s8 current_mario_room_check(s16 room) {
         result              = (room == gMarioCurrentRoom);
         sPrevCheckMarioRoom =          gMarioCurrentRoom;
     }
-
     return result;
 }
 
@@ -557,13 +515,10 @@ s8 current_mario_room_check(s16 room) {
  */
 s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 actionArg) {
     s16 dialogueResponse;
-
     if ((is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, (s32) dist)
       && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x1000)
-      && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x1000))
-     || (*inDialog)) {
+      && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x1000)) || (*inDialog)) {
         *inDialog = TRUE;
-
         if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) { //If Mario is speaking.
             dialogueResponse = cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID);
             if (dialogueResponse) {
@@ -571,7 +526,6 @@ s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 ac
                 *inDialog = FALSE;
                 return dialogueResponse;
             }
-            // return 0;
         }
     }
     return 0;
@@ -582,18 +536,12 @@ s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 ac
  */
 void obj_check_floor_death(s16 collisionFlags, struct Surface *floor) {
     if (floor == NULL) return;
-
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == OBJ_COL_FLAG_GROUNDED) {
         switch (floor->type) {
-            case SURFACE_BURNING:
-                o->oAction = OBJ_ACT_LAVA_DEATH;
-                break;
-            case SURFACE_VERTICAL_WIND:
-            case SURFACE_DEATH_PLANE:
-                o->oAction = OBJ_ACT_DEATH_PLANE_DEATH;
-                break;
-            default:
-                break;
+            case SURFACE_BURNING:       o->oAction = OBJ_ACT_LAVA_DEATH;        break;
+            case SURFACE_VERTICAL_WIND: // fall through
+            case SURFACE_DEATH_PLANE:   o->oAction = OBJ_ACT_DEATH_PLANE_DEATH; break;
+            default: break;
         }
     }
 }
@@ -604,7 +552,6 @@ void obj_check_floor_death(s16 collisionFlags, struct Surface *floor) {
  */
 s8 obj_lava_death(void) {
     struct Object *deathSmoke;
-
     if (o->oTimer >= 31) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         return TRUE;
@@ -612,7 +559,6 @@ s8 obj_lava_death(void) {
         // Sinking effect
         o->oPosY -= 10.0f;
     }
-
     if ((o->oTimer % 8) == 0) {
         cur_obj_play_sound_2(SOUND_OBJ_BULLY_EXPLODE_LAVA);
         deathSmoke = spawn_object(o, MODEL_SMOKE, bhvBobombBullyDeathSmoke);
@@ -621,7 +567,6 @@ s8 obj_lava_death(void) {
         deathSmoke->oPosZ      += random_float() * 20.0f;
         deathSmoke->oForwardVel = random_float() * 10.0f;
     }
-
     return FALSE;
 }
 
@@ -654,7 +599,6 @@ s8 UNUSED debug_sequence_tracker(s16 debugInputSequence[]) {
         sDebugSequenceTracker = 0;
         return TRUE;
     }
-
     // If the third controller button pressed is next in sequence, reset timer and progress to next value.
     if (debugInputSequence[sDebugSequenceTracker] & gPlayer3Controller->buttonPressed) {
         sDebugSequenceTracker++;
@@ -666,7 +610,6 @@ s8 UNUSED debug_sequence_tracker(s16 debugInputSequence[]) {
         return FALSE;
     }
     sDebugTimer++;
-
     return FALSE;
 }
 
