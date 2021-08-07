@@ -34,6 +34,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 invDenom;
     register f32 v, w;
     register f32 margin_radius = radius - 1.0f;
+    register s16 type;
     s32 numCols = 0;
 #if EXTENDED_BOUNDS_MODE > 1
     const float down_scale = 1.0f / WORLD_SCALE;
@@ -49,22 +50,24 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     while (surfaceNode != NULL) {
         surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
+        type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
         if (y < surf->lowerY || y > surf->upperY) continue;
         offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
         if (offset < 0 || offset > radius) continue;
+        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
         } else {
             // Ignore camera only surfaces.
-            if (surf->type == SURFACE_CAMERA_BOUNDARY) continue;
+            if (type == SURFACE_CAMERA_BOUNDARY) continue;
             // If an object can pass through a vanish cap wall, pass through.
-            if (surf->type == SURFACE_VANISH_CAP_WALLS) {
+            if (type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
                 // If an object can pass through a vanish cap wall, pass through.
-                if (gCurrentObject != NULL && (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE)) continue;
+                if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
                 // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject != NULL && gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
+                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
         v0x = (f32)(surf->vertex2[0] - surf->vertex1[0]);
@@ -163,9 +166,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         //! (Unreferenced Walls) Since this only returns the first four walls,
         //  this can lead to wall interaction being missed. Typically unreferenced walls
         //  come from only using one wall, however.
-        if (data->numWalls < MAX_REFEREMCED_WALLS) {
-            data->walls[data->numWalls++] = surf;
-        }
+        if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
 #if EXTENDED_BOUNDS_MODE > 1
@@ -216,7 +217,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
                 if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
-        //  Fixed? (Quantum Tunneling) Due to issues with the vertices walls choose
+        //  (Quantum Tunneling) Due to issues with the vertices walls choose
         //  and the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
         y1 = surf->vertex1[1]; y2 = surf->vertex2[1]; y3 = surf->vertex3[1];
@@ -247,7 +248,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         data->z += surf->normal.z * (radius - offset);
         x = data->x;
         z = data->z;
-        data->walls[data->numWalls++] = surf;
+        if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
     return numCols;
@@ -315,11 +316,11 @@ static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
 #ifdef BETTER_WALL_COLLISION
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x, diff_z, invDenom;
-    diff_x = target1[0] - *x + target2[0] - *x;
-    diff_z = target1[2] - *z + target2[2] - *z;
+    diff_x   = target1[0] - *x + target2[0] - *x;
+    diff_z   = target1[2] - *z + target2[2] - *z;
     invDenom = margin / sqrtf(diff_x * diff_x + diff_z * diff_z);
-    *x += diff_x * invDenom;
-    *z += diff_z * invDenom;
+    *x      += diff_x * invDenom;
+    *z      += diff_z * invDenom;
 }
 #endif
 
@@ -434,9 +435,9 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
     s16 x, y, z;
-    //! (Parallel Universes) Because position is casted to an s16, reaching higher
+    // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return ceilings despite them not existing there.
-    //(Dynamic ceilings will unload due to the range.)
+    // (Dynamic ceilings will unload due to the range.)
     x = (s16) xPos;
     y = (s16) yPos;
     z = (s16) zPos;
@@ -670,9 +671,9 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct SurfaceNode *surfaceList;
     f32 height        = FLOOR_LOWER_LIMIT;
     f32 dynamicHeight = FLOOR_LOWER_LIMIT;
-    //! (Parallel Universes) Because position is casted to an s16, reaching higher
+    // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
-    //(Dynamic floors will unload due to the range.)
+    // (Dynamic floors will unload due to the range.)
     s16 x = (s16) xPos;
     s16 y = (s16) yPos;
     s16 z = (s16) zPos;
@@ -748,9 +749,9 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct SurfaceNode *surfaceList;
     f32 height       = FLOOR_LOWER_LIMIT;
     f32 bottomheight = FLOOR_LOWER_LIMIT;
-    //! (Parallel Universes) Because position is casted to an s16, reaching higher
+    // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
-    //(Dynamic floors will unload due to the range.)
+    // (Dynamic floors will unload due to the range.)
     s16 x = (s16) xPos;
     s16 y = (s16) yPos;
     s16 z = (s16) zPos;

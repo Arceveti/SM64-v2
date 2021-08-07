@@ -9392,8 +9392,8 @@ void set_fov_bbh(struct MarioState *m) {
  */
 Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) {
     struct GraphNodePerspective *perspective = (struct GraphNodePerspective *) g;
-    struct MarioState *marioState = &gMarioStates[0];
-    u8 fovFunc = sFOVState.fovFunc;
+    struct MarioState           *marioState  = &gMarioStates[0];
+    u8 fovFunc                               = sFOVState.fovFunc;
     if (callContext == GEO_CONTEXT_RENDER) {
         switch (fovFunc) {
             case CAM_FOV_SET_45:  set_fov_45(     marioState); break;

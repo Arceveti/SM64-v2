@@ -266,14 +266,11 @@ void spawn_particle(u32 activeParticleFlag, s16 model, const BehaviorScript *beh
 void bhv_mario_update(void) {
     u32 particleFlags = 0x0;
     s32 i;
-
     particleFlags = execute_mario_action(gCurrentObject);
     gCurrentObject->oMarioParticleFlags = particleFlags;
-
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object
     copy_mario_state_to_object();
-
     i = 0;
     while (sParticleTypes[i].particleFlag != 0x0) {
         if (particleFlags & sParticleTypes[i].particleFlag) {
@@ -291,17 +288,13 @@ void bhv_mario_update(void) {
  */
 s32 update_objects_starting_at(struct ObjectNode *objList, struct ObjectNode *firstObj) {
     s32 count = 0;
-
     while (objList != firstObj) {
         gCurrentObject = (struct Object *) firstObj;
-
         gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
         cur_obj_update();
-
         firstObj = firstObj->next;
         count++;
     }
-
     return count;
 }
 
@@ -317,19 +310,15 @@ s32 update_objects_starting_at(struct ObjectNode *objList, struct ObjectNode *fi
 s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNode *firstObj) {
     s32 count = 0;
     s32 unfrozen;
-
     while (objList != firstObj) {
         gCurrentObject = (struct Object *) firstObj;
-
         unfrozen = FALSE;
-
         // Selectively unfreeze certain objects
         if (!(gTimeStopState & TIME_STOP_ALL_OBJECTS)) {
             if (gCurrentObject == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
             if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
             if (gCurrentObject->activeFlags & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
         }
-
         // Only update if unfrozen
         if (unfrozen) {
             gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_HAS_ANIMATION;
@@ -337,11 +326,9 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
         } else {
             gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_HAS_ANIMATION;
         }
-
         firstObj = firstObj->next;
         count++;
     }
-
     return count;
 }
 
@@ -350,16 +337,12 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
  * the list.
  */
 s32 update_objects_in_list(struct ObjectNode *objList) {
-    s32 count;
     struct ObjectNode *firstObj = objList->next;
-
     if (gTimeStopState & TIME_STOP_ACTIVE) {
-        count = update_objects_during_time_stop(objList, firstObj);
+        return update_objects_during_time_stop(objList, firstObj);
     } else {
-        count = update_objects_starting_at(objList, firstObj);
+        return update_objects_starting_at(objList, firstObj);
     }
-
-    return count;
 }
 
 /**
@@ -367,11 +350,9 @@ s32 update_objects_in_list(struct ObjectNode *objList) {
  */
 void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
     struct ObjectNode *obj = objList->next;
-
     while (objList != obj) {
         gCurrentObject = (struct Object *) obj;
         obj            = obj->next;
-
         if ((gCurrentObject->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
             // Prevent object from respawning after exiting and re-entering the
             // area
@@ -406,11 +387,9 @@ void unload_objects_from_area(s32 areaIndex) {
     struct ObjectNode *list;
     s32 i;
     gObjectLists = gObjectListArray;
-
     for (i = 0; i < NUM_OBJ_LISTS; i++) {
         list = gObjectLists + i;
         node = list->next;
-
         while (node != list) {
             obj = (struct Object *) node;
             node = node->next;
@@ -423,61 +402,45 @@ void unload_objects_from_area(s32 areaIndex) {
  * Spawn objects given a list of SpawnInfos. Called when loading an area.
  */
 void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
-    gObjectLists   = gObjectListArray;
-    gTimeStopState = 0;
-
+    gObjectLists           = gObjectListArray;
+    gTimeStopState         = 0;
     gWDWWaterLevelChanging = FALSE;
     gMarioOnMerryGoRound   = FALSE;
-
     clear_mario_platform();
-
     if (gCurrAreaIndex == 2) gCCMEnteredSlide = TRUE;
-
     while (spawnInfo != NULL) {
         struct Object *object;
         const BehaviorScript *script;
-
         script = segmented_to_virtual(spawnInfo->behaviorScript);
-
         // If the object was previously killed/collected, don't respawn it
-        if ((spawnInfo->behaviorArg & (RESPAWN_INFO_DONT_RESPAWN << 8))
-            != (RESPAWN_INFO_DONT_RESPAWN << 8)) {
+        if ((spawnInfo->behaviorArg & (RESPAWN_INFO_DONT_RESPAWN << 8)) != (RESPAWN_INFO_DONT_RESPAWN << 8)) {
             object = create_object(script);
-
             // Behavior parameters are often treated as four separate bytes, but
             // are stored as an s32.
             object->oBehParams = spawnInfo->behaviorArg;
             // The second byte of the behavior parameters is copied over to a special field
             // as it is the most frequently used by objects.
             object->oBehParams2ndByte = ((spawnInfo->behaviorArg) >> 16) & 0xFF;
-
-            object->behavior = script;
-            // object->unused1 = 0;
-
+            object->behavior          = script;
+            // object->unused1           = 0;
             // Record death/collection in the SpawnInfo
-            object->respawnInfoType = RESPAWN_INFO_TYPE_32;
-            object->respawnInfo     = &spawnInfo->behaviorArg;
-
+            object->respawnInfoType   = RESPAWN_INFO_TYPE_32;
+            object->respawnInfo       = &spawnInfo->behaviorArg;
             if (object->behavior == segmented_to_virtual(bhvMario)) {
-                gMarioObject = object;
+                gMarioObject          = object;
                 geo_make_first_child(&object->header.gfx.node);
             }
-
             geo_obj_init_spawninfo(&object->header.gfx, spawnInfo);
-
-            object->oPosX = spawnInfo->startPos[0];
-            object->oPosY = spawnInfo->startPos[1];
-            object->oPosZ = spawnInfo->startPos[2];
-
-            object->oFaceAnglePitch = spawnInfo->startAngle[0];
-            object->oFaceAngleYaw   = spawnInfo->startAngle[1];
-            object->oFaceAngleRoll  = spawnInfo->startAngle[2];
-
-            object->oMoveAnglePitch = spawnInfo->startAngle[0];
-            object->oMoveAngleYaw   = spawnInfo->startAngle[1];
-            object->oMoveAngleRoll  = spawnInfo->startAngle[2];
+            object->oPosX             = spawnInfo->startPos[0];
+            object->oPosY             = spawnInfo->startPos[1];
+            object->oPosZ             = spawnInfo->startPos[2];
+            object->oFaceAnglePitch   = spawnInfo->startAngle[0];
+            object->oFaceAngleYaw     = spawnInfo->startAngle[1];
+            object->oFaceAngleRoll    = spawnInfo->startAngle[2];
+            object->oMoveAnglePitch   = spawnInfo->startAngle[0];
+            object->oMoveAngleYaw     = spawnInfo->startAngle[1];
+            object->oMoveAngleRoll    = spawnInfo->startAngle[2];
         }
-
         spawnInfo = spawnInfo->next;
     }
 }
@@ -496,18 +459,14 @@ void clear_objects(void) {
         gDoorAdjacentRooms[i][1] = 0;
     }
     debug_unknown_level_select_check();
-
     init_free_object_list();
     clear_object_lists(gObjectListArray);
-
     for (i = 0; i < OBJECT_POOL_CAPACITY; i++) {
         gObjectPool[i].activeFlags = ACTIVE_FLAG_DEACTIVATED;
         geo_reset_object_node(&gObjectPool[i].header.gfx);
     }
-
     gObjectMemoryPool = mem_pool_init(0x800, MEMORY_POOL_LEFT);
-    gObjectLists = gObjectListArray;
-
+    gObjectLists      = gObjectListArray;
     clear_dynamic_surfaces();
 }
 
@@ -537,13 +496,11 @@ void update_non_terrain_objects(void) {
  */
 void unload_deactivated_objects(void) {
     s32 listIndex;
-
     s32 i = 0;
     while ((listIndex = sObjectListUpdateOrder[i]) != -1) {
         unload_deactivated_objects_in_list(&gObjectLists[listIndex]);
         i++;
     }
-
     // TIME_STOP_UNKNOWN_0 was most likely intended to be used to track whether
     // any objects had been deactivated
     gTimeStopState &= ~TIME_STOP_UNKNOWN_0;
@@ -575,56 +532,42 @@ void unload_deactivated_objects(void) {
  */
 void update_objects(void) {
     // s64 cycleCounts[30];
-
     // cycleCounts[0] = get_current_clock();
-
     gTimeStopState &= ~TIME_STOP_MARIO_OPENED_DOOR;
-
     gNumRoomedObjectsInMarioRoom        = 0;
     gNumRoomedObjectsNotInMarioRoom     = 0;
     gCheckingSurfaceCollisionsForCamera = FALSE;
-
     reset_debug_objectinfo();
 #ifdef DEBUG_INFO
     show_debug_info();
 #endif
     gObjectLists = gObjectListArray;
-
     // If time stop is not active, unload object surfaces
     // cycleCounts[1] = get_clock_difference(cycleCounts[0]);
     clear_dynamic_surfaces();
-
     // Update spawners and objects with surfaces
     // cycleCounts[2] = get_clock_difference(cycleCounts[0]);
     update_terrain_objects();
-
     // If Mario was touching a moving platform at the end of last frame, apply
     // displacement now
     //! If the platform object unloaded and a different object took its place,
     //  displacement could be applied incorrectly
     apply_mario_platform_displacement();
-
     // Detect which objects are intersecting
     // cycleCounts[3] = get_clock_difference(cycleCounts[0]);
     detect_object_collisions();
-
     // Update all other objects that haven't been updated yet
     // cycleCounts[4] = get_clock_difference(cycleCounts[0]);
     update_non_terrain_objects();
-
     // Unload any objects that have been deactivated
     // cycleCounts[5] = get_clock_difference(cycleCounts[0]);
     unload_deactivated_objects();
-
     // Check if Mario is on a platform object and save this object
     // cycleCounts[6] = get_clock_difference(cycleCounts[0]);
     update_mario_platform();
-
     // cycleCounts[7] = get_clock_difference(cycleCounts[0]);
-
     // cycleCounts[0] = 0;
     try_print_debug_mario_object_info();
-
     // If time stop was enabled this frame, activate it now so that it will
     // take effect next frame
     if (gTimeStopState & TIME_STOP_ENABLED) {
@@ -632,6 +575,5 @@ void update_objects(void) {
     } else {
         gTimeStopState &= ~TIME_STOP_ACTIVE;
     }
-
     gPrevFrameObjectCount = gObjectCounter;
 }

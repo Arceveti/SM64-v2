@@ -19,7 +19,6 @@ struct ProfilerFrameData gProfilerFrameData[2];
 // log the current osTime to the appropriate idx for current thread5 processes.
 void profiler_log_thread5_time(enum ProfilerGameEvent eventID) {
     gProfilerFrameData[gCurrentFrameIndex1].gameTimes[eventID] = osGetTime();
-
     // event ID 4 is the last profiler event for after swapping
     // buffers: switch the Info after updating.
     if (eventID == THREAD5_END) {

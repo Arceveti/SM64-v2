@@ -101,9 +101,7 @@ Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED
     s16 sfx = 0;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (gPlayer1Controller->controllerData != NULL && !gWarpTransition.isActive) {
-            gd_copy_p1_contpad(gPlayer1Controller->controllerData);
-        }
+        if (gPlayer1Controller->controllerData != NULL && !gWarpTransition.isActive) gd_copy_p1_contpad(gPlayer1Controller->controllerData);
         gfx = (Gfx *) PHYSICAL_TO_VIRTUAL(gdm_gettestdl(asGenerated->parameter));
         gGoddardVblankCallback = gd_vblank;
         sfx = gd_sfx_to_play();
@@ -488,10 +486,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #ifdef METAL_CAP_REFLECTION_LAKITU
             dist -= 250.0f;
             dist /= 16.0f;
-            dist = max(min(dist, 32.0f), 0.0f);
-            lakituW = (64 - (dist    * 2.0f));
-            lakituH = (32 - (dist          ));
-            lakituX = (32 - (lakituW * 0.5f));
+            dist = max(min(  dist, 32.0f), 0.0f);
+            lakituW = (64 - (dist       * 2.0f));
+            lakituH = (32 - (dist             ));
+            lakituX = (32 - (lakituW    * 0.5f));
             lakituY = lakituX - 16;
 #endif
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);

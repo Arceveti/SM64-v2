@@ -63,12 +63,8 @@ void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s
 
 UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 a1[]) {
     struct Object *obj;
-    s16 model;
-
-    model = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
-
-    obj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
-
+    s16 model       = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
+    obj             = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
     obj->oUnk1A8    =  a1[4];
     obj->oBehParams = (a1[4] & 0xFF) >> 16;
 }
@@ -87,35 +83,26 @@ struct LoadedPreset {
 
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     s32 presetID;
-
     s16 macroObject[5]; // see the 5 #define statements above
     struct Object *newObj;
     struct LoadedPreset preset;
-
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
-
     while (TRUE) {
         if (*macroObjList == -1) break; // An encountered value of -1 means the list has ended.
-
         presetID = (*macroObjList & 0x1FF) - 31; // Preset identifier for MacroObjectPresets array
-
         if (presetID < 0) break;
-
         // Set macro object properties from the list
         macroObject[MACRO_OBJ_Y_ROT ] = ((*macroObjList++ >> 9) & 0x7F) << 1; // Y-Rotation
         macroObject[MACRO_OBJ_X     ] =   *macroObjList++;                    // X position
         macroObject[MACRO_OBJ_Y     ] =   *macroObjList++;                    // Y position
         macroObject[MACRO_OBJ_Z     ] =   *macroObjList++;                    // Z position
         macroObject[MACRO_OBJ_PARAMS] =   *macroObjList++;                    // Behavior params
-
         // Get the preset values from the MacroObjectPresets list.
         preset.model    = MacroObjectPresets[presetID].model;
         preset.behavior = MacroObjectPresets[presetID].behavior;
         preset.param    = MacroObjectPresets[presetID].param;
-
         if (preset.param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
-
         // If object has been killed, prevent it from respawning
         if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN)
             != RESPAWN_INFO_DONT_RESPAWN) {
@@ -131,10 +118,9 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                                convert_rotation(macroObject[MACRO_OBJ_Y_ROT]), // Y-rotation
                                                0x0                         // Z-rotation
                 );
-
             newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];
             newObj->oBehParams        = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16)
-                                       + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
+                                      +  (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
             newObj->oBehParams2ndByte = macroObject[MACRO_OBJ_PARAMS] & 0x00FF;
             newObj->respawnInfoType   = RESPAWN_INFO_TYPE_16;
             newObj->respawnInfo       = macroObjList - 1;
@@ -151,20 +137,15 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
     s16 macroObjZ;
     s16 macroObjPreset;
     s16 macroObjRY; // Y Rotation
-
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
-
     while (TRUE) {
         macroObjPreset = *macroObjList++;
-
         if (macroObjPreset < 0) break;
-
         macroObjX  = *macroObjList++;
         macroObjY  = *macroObjList++;
         macroObjZ  = *macroObjList++;
         macroObjRY = *macroObjList++;
-
         // Spawn objects based on hardcoded presets, and most seem to be for Big Boo's Haunt.
         // However, BBH doesn't use this function so this might just be an early test?
         switch (macroObjPreset) {
@@ -193,13 +174,10 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
     u8 presetID;
     u8 defaultParam;
     const BehaviorScript *behavior;
-
     numOfSpecialObjects = **specialObjList;
     (*specialObjList)++;
-
-    gMacroObjectDefaultParent.header.gfx.areaIndex = areaIndex;
+    gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
-
     for (i = 0; i < numOfSpecialObjects; i++) {
         presetID = (u8) **specialObjList;
         (*specialObjList)++;
@@ -209,18 +187,15 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
         (*specialObjList)++;
         z = **specialObjList;
         (*specialObjList)++;
-
         offset = 0;
         while (TRUE) {
             if (SpecialObjectPresets[offset].preset_id == presetID) break;
             offset++;
         }
-
-        model = SpecialObjectPresets[offset].model;
-        behavior = SpecialObjectPresets[offset].behavior;
-        type = SpecialObjectPresets[offset].type;
+        model        = SpecialObjectPresets[offset].model;
+        behavior     = SpecialObjectPresets[offset].behavior;
+        type         = SpecialObjectPresets[offset].type;
         defaultParam = SpecialObjectPresets[offset].defParam;
-
         switch (type) {
             case SPTYPE_NO_YROT_OR_PARAMS:
                 spawn_macro_abs_yrot_2params(model, behavior, x, y, z, 0, 0);
@@ -244,8 +219,7 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
                 (*specialObjList)++;
                 extraParams[2] = **specialObjList; // Unknown, gets put into obj->oMacroUnk110 as a float
                 (*specialObjList)++;
-                spawn_macro_abs_special(model, behavior, x, y, z, extraParams[0], extraParams[1],
-                                        extraParams[2]);
+                spawn_macro_abs_special(model, behavior, x, y, z, extraParams[0], extraParams[1], extraParams[2]);
                 break;
             case SPTYPE_DEF_PARAM_AND_YROT:
                 extraParams[0] = **specialObjList; // Y-rotation
@@ -265,19 +239,15 @@ u32 get_special_objects_size(s16 *data) {
     s32 i;
     u8 presetID;
     s32 offset;
-
     numOfSpecialObjects = *data++;
-
     for (i = 0; i < numOfSpecialObjects; i++) {
         presetID = (u8) *data++;
-        data += 3;
+        data  += 3;
         offset = 0;
-
         while (TRUE) {
             if (SpecialObjectPresets[offset].preset_id == presetID) break;
             offset++;
         }
-
         switch (SpecialObjectPresets[offset].type) {
             case SPTYPE_NO_YROT_OR_PARAMS:             break;
             case SPTYPE_YROT_NO_PARAMS:     data++;    break;
@@ -287,7 +257,6 @@ u32 get_special_objects_size(s16 *data) {
             default:                                   break;
         }
     }
-
     return data - startPos;
 }
 #endif
