@@ -26,6 +26,39 @@ int gSplineState;
 #endif
 #endif
 
+// Kaze functions
+static float const E = 2.718281828459f;
+static float slow_logf(float x) {
+    float p = 0.0f;
+    float r = 0.0f, c = -1.0f;
+    int i;
+    if (x == 0.0f) return -9999999999999999999999999999999999999999999999999999999.f;
+    while (x < 0.5f) {
+        x *= E;
+        ++p;
+    }
+    x -= 1.0f;
+    for (i = 1; i < 8; ++i) {
+        c *= -x;
+        r += c / i;
+    }
+    return r - p;
+}
+static float slow_expf(float x) {
+    float r = 1.0f, c = 1.0f;
+    int i;
+    x = -x;
+    for (i = 1; i < 8; ++i) {
+        c *= x / i;
+        r += c;
+    }
+    return 1.0f / r;
+}
+float slow_powf(float base, float exponent) {
+    if (base <= 0.0f) return 0.0f;
+    return slow_expf(exponent * slow_logf(base));
+}
+
 #ifdef FAST_INVSQRT
 /// lol
 float Q_rsqrtf( float number ) {

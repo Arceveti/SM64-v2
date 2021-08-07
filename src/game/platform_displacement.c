@@ -107,7 +107,7 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
         vec3f_sub(pos, platformPos);
     }
 
-    // Apply displacement for TTC Treadmills & other static objects that move Mario
+    // Apply displacement specifically for TTC Treadmills
     if (platform->behavior == segmented_to_virtual(bhvTTCTreadmill)) {
         pos[0] += platform->oVelX;
         pos[1] += platform->oVelY;

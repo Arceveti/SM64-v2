@@ -31,7 +31,7 @@ s16 sTextLabelsCount = 0;
 s32 int_pow(s32 n, s32 exponent) {
     s32 result = 1;
     s32 i;
-    for (i = 0; i < exponent; i++) result = n * result;
+    for (i = 0; i < exponent; i++) result *= n;
     return result;
 }
 

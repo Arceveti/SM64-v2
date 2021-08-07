@@ -86,8 +86,12 @@ struct GraphNodeObject gMirrorMario;  // copy of Mario's geo node for drawing mi
 // functions)
 
 #ifdef METAL_CAP_REFLECTION
+#ifdef METAL_CAP_REFLECTION_SHINE
 extern ALIGNED8 Texture mario_texture_metal_reflection_shine[];
+#endif
+#ifdef METAL_CAP_REFLECTION_LAKITU
 extern ALIGNED8 Texture mario_texture_metal_reflection_lakitu[];
+#endif
 extern ALIGNED8 Texture mario_texture_metal[];
 extern ALIGNED8 Texture mario_cap_seg3_texture_metal[];
 #endif
@@ -98,7 +102,7 @@ extern ALIGNED8 Texture mario_cap_seg3_texture_metal[];
  */
 Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     Gfx *gfx = NULL;
-    s16 sfx = 0;
+    s16  sfx = 0;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (gPlayer1Controller->controllerData != NULL && !gWarpTransition.isActive) gd_copy_p1_contpad(gPlayer1Controller->controllerData);
@@ -147,7 +151,7 @@ static void toad_message_opacifying(void) {
 }
 
 static void toad_message_fading(void) {
-    if ((gCurrentObject->oOpacity -= 6) == 81) gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
+    if ((gCurrentObject->oOpacity -= 6) ==  81) gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADED;
 }
 
 void bhv_toad_message_loop(void) {
