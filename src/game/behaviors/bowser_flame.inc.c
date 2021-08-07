@@ -71,8 +71,8 @@ void bhv_flame_bowser_loop(void) {
                 o->oFlameScale = random_float() * 2 + 6.0f;
             }
             o->oForwardVel = 0.0f;
-            o->oVelY       = 0;
-            o->oGravity    = 0;
+            o->oVelY       = 0.0f;
+            o->oGravity    = 0.0f;
         }
     } else {
         cur_obj_become_tangible();

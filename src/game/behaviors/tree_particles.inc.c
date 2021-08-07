@@ -14,10 +14,10 @@ void bhv_tree_snow_or_leaf_loop(void) {
     o->oFaceAngleRoll  += o->oAngleVelRoll;
     o->oVelY -= 3.0f;
     if (o->oVelY < -8.0f) o->oVelY = -8.0f;
-    if (o->oForwardVel > 0) {
+    if (o->oForwardVel >  0.0f) {
         o->oForwardVel -= 0.3f;
     } else {
-        o->oForwardVel = 0;
+        o->oForwardVel  = 0.0f;
     }
     o->oPosX += sins(o->oMoveAngleYaw) * sins(o->oTreeSnowOrLeafSidewardAngle) * o->oTreeSnowOrLeafSidewardVel;
     o->oPosZ += coss(o->oMoveAngleYaw) * sins(o->oTreeSnowOrLeafSidewardAngle) * o->oTreeSnowOrLeafSidewardVel;

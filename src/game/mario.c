@@ -1312,7 +1312,7 @@ void update_mario_health(struct MarioState *m) {
 #ifdef AIR_METER
 void update_mario_breath(struct MarioState *m) {
     if (m->air >= 0x100 && m->health >= 0x100) {
-        if (m->pos[1] < (m->waterLevel - 140.0f) && !(m->flags & MARIO_METAL_CAP)) {
+        if (m->pos[1] < (m->waterLevel - 140.0f) && !(m->flags & MARIO_METAL_CAP) && !(m->action & ACT_FLAG_INTANGIBLE)) {
             m->air--;
             if (m->air < 0x300) {
                 // Play a noise to alert the player when Mario is close to drowning.

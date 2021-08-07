@@ -128,7 +128,7 @@ void sliding_1up_move(void) {
     s16 stepResult = object_step();
     if (stepResult & OBJ_COL_FLAG_GROUNDED) {
         o->oForwardVel += 25.0f;
-        o->oVelY = 0;
+        o->oVelY        = 0.0f;
     } else {
         o->oForwardVel *= 0.98f;
     }

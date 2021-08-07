@@ -282,7 +282,7 @@ extern const Gfx star_seg3_dl_shine[];
 // transparent_star
 extern const GeoLayout transparent_star_geo[];
 extern const Gfx transparent_star_seg3_sub_dl_0302C560[];
-extern const Gfx transparent_star_seg3_dl_0302C620[];
+extern const Gfx transparent_star_seg3_dl[];
 
 // tree
 extern const GeoLayout bubbly_tree_geo[];

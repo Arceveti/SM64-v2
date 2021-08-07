@@ -449,7 +449,6 @@ s32 obj_begin_race(s32 noTimer) {
  */
 static void koopa_the_quick_act_wait_before_race(void) {
     koopa_shelled_act_stopped();
-
     if (o->oKoopaTheQuickInitTextboxCooldown != 0) {
         o->oKoopaTheQuickInitTextboxCooldown--;
     } else if (cur_obj_can_mario_activate_textbox_2(400.0f, 400.0f)) {
@@ -457,7 +456,7 @@ static void koopa_the_quick_act_wait_before_race(void) {
         //  frame where he can jump, and thus no longer be ready to speak.
         //  (On J, he has two frames and doing this enables time stop - see
         //  cur_obj_update_dialog_with_cutscene for that glitch)
-        o->oAction = KOOPA_THE_QUICK_ACT_SHOW_INIT_TEXT;
+        o->oAction     = KOOPA_THE_QUICK_ACT_SHOW_INIT_TEXT;
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(KOOPA_ANIM_STOPPED);
     }
@@ -468,9 +467,7 @@ static void koopa_the_quick_act_wait_before_race(void) {
  * return to the waiting action.
  */
 static void koopa_the_quick_act_show_init_text(void) {
-    s32 response = obj_update_race_proposition_dialog(
-        sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].initText);
-
+    s32 response = obj_update_race_proposition_dialog(sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].initText);
     if (response == DIALOG_RESPONSE_YES) {
         gMarioShotFromCannon         = FALSE;
         o->oAction                   = KOOPA_THE_QUICK_ACT_RACE;
@@ -497,7 +494,7 @@ static s32 koopa_the_quick_detect_bowling_ball(void) {
 
     ball = cur_obj_find_nearest_object_with_behavior(bhvBowlingBall, &distToBall);
     if (ball != NULL) {
-        angleToBall = obj_turn_toward_object(o, ball, O_MOVE_ANGLE_YAW_INDEX, 0);
+        angleToBall            = obj_turn_toward_object(o, ball, O_MOVE_ANGLE_YAW_INDEX, 0x0);
         ballSpeedInKoopaRunDir = ball->oForwardVel * coss(ball->oMoveAngleYaw - o->oMoveAngleYaw);
 
         if (abs_angle_diff(o->oMoveAngleYaw, angleToBall) < 0x4000) {
@@ -523,7 +520,6 @@ static s32 koopa_the_quick_detect_bowling_ball(void) {
             return -1;
         }
     }
-
     return 0;
 }
 

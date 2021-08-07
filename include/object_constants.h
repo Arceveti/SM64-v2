@@ -2019,8 +2019,8 @@
 
 /* Klepto */
     /* oBehParams2ndByte */
-    #define KLEPTO_BP_HAS_STAR                              0x0
     #define KLEPTO_BP_NO_STAR                               0x0
+    #define KLEPTO_BP_HAS_STAR                              0x1
     /* oAction */
     #define KLEPTO_ACT_CIRCLE_TARGET_HOLDING                0x0
     #define KLEPTO_ACT_APPROACH_TARGET_HOLDING              0x1

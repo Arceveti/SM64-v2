@@ -147,7 +147,6 @@ static void homing_amp_chase_loop(void) {
 static void homing_amp_give_up_loop(void) {
     // Move forward for 152 frames
     o->oForwardVel = 15.0f;
-
     if (o->oTimer >= 151) {
         // Hide the amp and reset it back to its inactive state
         o->oPosX = o->oHomeX;
@@ -167,12 +166,9 @@ static void homing_amp_give_up_loop(void) {
 static void amp_attack_cooldown_loop(void) {
     // Turn intangible and wait for 90 frames before chasing Mario again after hitting him.
     o->header.gfx.animInfo.animFrame += 2;
-    o->oForwardVel = 0;
-
+    o->oForwardVel = 0.0f;
     cur_obj_become_intangible();
-
     if (o->oTimer >= 31) o->oAnimState = AMP_ANIM_STATE_OFF;
-
     if (o->oTimer >= 91) {
         o->oAnimState = AMP_ANIM_STATE_ON;
         cur_obj_become_tangible();
@@ -192,27 +188,21 @@ void bhv_homing_amp_loop(void) {
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
             }
             break;
-
         case HOMING_AMP_ACT_APPEAR:
             homing_amp_appear_loop();
             break;
-
         case HOMING_AMP_ACT_CHASE:
             homing_amp_chase_loop();
             cur_obj_play_sound_1(SOUND_AIR_AMP_BUZZ);
             break;
-
         case HOMING_AMP_ACT_GIVE_UP:
             homing_amp_give_up_loop();
             break;
-
         case HOMING_AMP_ACT_ATTACK_COOLDOWN:
             amp_attack_cooldown_loop();
             break;
     }
-
     object_step();
-
     // Oscillate
     o->oAmpYPhase++;
 }
@@ -221,11 +211,10 @@ void bhv_homing_amp_loop(void) {
  * Circling amp initialization function.
  */
 void bhv_circling_amp_init(void) {
-    o->oHomeX = o->oPosX;
-    o->oHomeY = o->oPosY;
-    o->oHomeZ = o->oPosZ;
+    o->oHomeX     = o->oPosX;
+    o->oHomeY     = o->oPosY;
+    o->oHomeZ     = o->oPosZ;
     o->oAnimState = AMP_ANIM_STATE_ON;
-
     // Determine the radius of the circling amp's circle
     switch (o->oBehParams2ndByte) {
         case AMP_BP_ROT_RADIUS_200: o->oAmpRadiusOfRotation = 200.0f; break;
@@ -233,12 +222,10 @@ void bhv_circling_amp_init(void) {
         case AMP_BP_ROT_RADIUS_400: o->oAmpRadiusOfRotation = 400.0f; break;
         case AMP_BP_ROT_RADIUS_0: break;
     }
-
     // Choose a random point along the amp's circle.
     // The amp's move angle represents its angle along the circle.
     o->oMoveAngleYaw = random_u16();
-
-    o->oAction = AMP_ACT_IDLE;
+    o->oAction       = AMP_ACT_IDLE;
 }
 
 /**
@@ -247,27 +234,22 @@ void bhv_circling_amp_init(void) {
  */
 static void fixed_circling_amp_idle_loop(void) {
     // Turn towards Mario, in both yaw and pitch.
-    f32 xToMario = gMarioObject->header.gfx.pos[0]          - o->oPosX;
-    f32 yToMario = gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY;
-    f32 zToMario = gMarioObject->header.gfx.pos[2]          - o->oPosZ;
-    s16 vAngleToMario = atan2s(sqrtf(xToMario * xToMario + zToMario * zToMario), -yToMario);
-
+    f32 xToMario       = gMarioObject->header.gfx.pos[0]          - o->oPosX;
+    f32 yToMario       = gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY;
+    f32 zToMario       = gMarioObject->header.gfx.pos[2]          - o->oPosZ;
+    s16 vAngleToMario  = atan2s(sqrtf(xToMario * xToMario + zToMario * zToMario), -yToMario);
     obj_turn_toward_object(o, gMarioObject, 19, 0x1000);
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, vAngleToMario, 0x1000);
-
     // Oscillate 40 units up and down.
     // Interestingly, 0x458 (1112 in decimal) is a magic number with no apparent significance.
     // It is slightly larger than the 0x400 figure used for homing amps, which makes
     // fixed amps oscillate slightly quicker.
     // Also, this uses the cosine, which starts at 1 instead of 0.
     o->oPosY = o->oHomeY + coss(o->oAmpYPhase * 0x458) * 20.0f;
-
     // Handle attacks
     check_amp_attack();
-
     // Oscillate
     o->oAmpYPhase++;
-
     // Where there is a cur_obj_play_sound_1 call in the main circling amp update function,
     // there is nothing here. Fixed amps are the only amps that never play
     // the "amp buzzing" sound.
@@ -282,18 +264,15 @@ static void circling_amp_idle_loop(void) {
     // twice that of the fixed amp. In other words, circling amps will
     // oscillate twice as fast. Also, unlike all other amps, circling
     // amps oscillate 60 units around their average Y instead of 40.
-    o->oPosX = o->oHomeX + sins(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
-    o->oPosZ = o->oHomeZ + coss(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
-    o->oPosY = o->oHomeY + coss(o->oAmpYPhase * 0x8B0) * 30.0f;
+    o->oPosX          = o->oHomeX + sins(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
+    o->oPosZ          = o->oHomeZ + coss(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
+    o->oPosY          = o->oHomeY + coss(o->oAmpYPhase * 0x8B0) * 30.0f;
     o->oMoveAngleYaw += 0x400;
-    o->oFaceAngleYaw = o->oMoveAngleYaw + 0x4000;
-
+    o->oFaceAngleYaw  = o->oMoveAngleYaw + 0x4000;
     // Handle attacks
     check_amp_attack();
-
     // Oscillate
     o->oAmpYPhase++;
-
     cur_obj_play_sound_1(SOUND_AIR_AMP_BUZZ);
 }
 
@@ -310,9 +289,7 @@ void bhv_circling_amp_loop(void) {
             } else {
                 circling_amp_idle_loop();
             }
-
             break;
-
         case AMP_ACT_ATTACK_COOLDOWN:
             amp_attack_cooldown_loop();
             break;

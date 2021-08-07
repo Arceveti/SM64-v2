@@ -974,6 +974,9 @@ s32 act_death_exit(struct MarioState *m) {
         m->numLives--;
         // restore 7.75 units of health
         m->healCounter = 31;
+#ifdef AIR_METER
+        m->breathCounter = 31;
+#endif
     }
     // one unit of health
     m->health = 0x0100;
@@ -990,6 +993,9 @@ s32 act_unused_death_exit(struct MarioState *m) {
         m->numLives--;
         // restore 7.75 units of health
         m->healCounter = 31;
+#ifdef AIR_METER
+        m->breathCounter = 31;
+#endif
     }
     // one unit of health
     m->health = 0x100;
@@ -1009,6 +1015,9 @@ s32 act_falling_death_exit(struct MarioState *m) {
         m->numLives--;
         // restore 7.75 units of health
         m->healCounter = 31;
+#ifdef AIR_METER
+        m->breathCounter = 31;
+#endif
     }
     // one unit of health
     m->health = 0x100;
@@ -1026,6 +1035,9 @@ s32 act_special_exit_airborne(struct MarioState *m) {
     if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_SINGLE_JUMP, -24.0f)) {
         // heal Mario
         m->healCounter = 31;
+#ifdef AIR_METER
+        m->breathCounter = 31;
+#endif
         m->actionArg   =  1;
     }
     m->particleFlags |= PARTICLE_SPARKLES;
@@ -1048,6 +1060,9 @@ s32 act_special_death_exit(struct MarioState *m) {
 #endif
         m->numLives--;
         m->healCounter = 31;
+#ifdef AIR_METER
+        m->breathCounter = 31;
+#endif
     }
     // show Mario
     marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;

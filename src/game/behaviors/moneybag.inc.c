@@ -38,13 +38,9 @@ void moneybag_check_mario_collision(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
         if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) {/* bit 13 */
             o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
-            o->oVelY = 30.0f;
+            o->oVelY         = 30.0f;
         }
-
-        if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) {/* bit 14 */
-            o->oAction = MONEYBAG_ACT_DEATH;
-        }
-
+        if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) o->oAction = MONEYBAG_ACT_DEATH; /* bit 14 */
         o->oInteractStatus = INT_STATUS_NONE;
     }
 }
@@ -57,41 +53,34 @@ void moneybag_jump(s8 collisionFlags) {
             cur_obj_init_animation(MONEYBAG_ANIM_PREPARE_JUMP);
             if (animFrame == 5) {
                 o->oForwardVel = 20.0f;
-                o->oVelY = 40.0f;
+                o->oVelY       = 40.0f;
             }
-
             if (cur_obj_check_if_near_animation_end()) {
                 o->oMoneybagJumpState = MONEYBAG_JUMP_JUMP;
                 cur_obj_play_sound_2(SOUND_GENERAL_MONEYBAG_BOING_LOWPRIO);
             }
             break;
-
         case MONEYBAG_JUMP_JUMP:
             cur_obj_init_animation(MONEYBAG_ANIM_JUMP);
-
             if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {/* bit 0 */
-                o->oForwardVel = 0;
-                o->oVelY = 0;
+                o->oForwardVel        = 0.0f;
+                o->oVelY              = 0.0f;
                 o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
             }
             break;
-
         case MONEYBAG_JUMP_JUMP_AND_BOUNCE:
             cur_obj_init_animation(MONEYBAG_ANIM_LAND);
             if (cur_obj_check_if_near_animation_end()) o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
             break;
-
         case MONEYBAG_JUMP_WALK_AROUND:
             cur_obj_init_animation(MONEYBAG_ANIM_WALK);
             o->oForwardVel = 10.0f;
-
             if (o->oTimer >= 61) {
                 o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
-                o->oForwardVel = 0;
+                o->oForwardVel                   = 0.0f;
                 o->header.gfx.animInfo.animFrame = 0;
             }
             break;
-
         case MONEYBAG_JUMP_WALK_HOME:
             cur_obj_init_animation(MONEYBAG_ANIM_WALK);
             o->oForwardVel = 5.0f;
@@ -101,11 +90,8 @@ void moneybag_jump(s8 collisionFlags) {
 
 void moneybag_act_move_around(void) {
     s16 collisionFlags;
-
     obj_return_and_displace_home(o, o->oHomeX, o->oHomeY, o->oHomeZ, 200);
-
     collisionFlags = object_step();
-
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)
         && (o->oMoneybagJumpState == MONEYBAG_JUMP_LANDING)) {
         if ((s32)(random_float() * 6.0f) == 1) {
@@ -115,30 +101,25 @@ void moneybag_act_move_around(void) {
             o->oMoneybagJumpState = MONEYBAG_JUMP_PREPARE;
         }
     }
-
     moneybag_jump(collisionFlags);
     moneybag_check_mario_collision();
-
     if (!is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800)
      && ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)) o->oAction = MONEYBAG_ACT_RETURN_HOME;
 }
 
 void moneybag_act_return_home(void) {
     s16 collisionFlags;
-    f32 dx = o->oHomeX - o->oPosX;
-    f32 dz = o->oHomeZ - o->oPosZ;
-    s16 yawToHome = atan2s(dz, dx);
+    f32 dx           = o->oHomeX - o->oPosX;
+    f32 dz           = o->oHomeZ - o->oPosZ;
+    s16 yawToHome    = atan2s(dz, dx);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
-
-    collisionFlags = object_step();
+    collisionFlags   = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)
         && (o->oMoneybagJumpState == MONEYBAG_JUMP_LANDING)) {
         o->oMoneybagJumpState = MONEYBAG_JUMP_WALK_HOME;
     }
-
     moneybag_jump(collisionFlags);
     moneybag_check_mario_collision();
-
     if (is_point_close_to_object(o, o->oHomeX, o->oHomeY, o->oHomeZ, 100)) {
         spawn_object(o, MODEL_YELLOW_COIN, bhvMoneybagHidden);
 #ifndef VERSION_JP
@@ -148,7 +129,6 @@ void moneybag_act_return_home(void) {
         o->oAction = MONEYBAG_ACT_DISAPPEAR;
         o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
     }
-
     if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800) == 1) {
         o->oAction = MONEYBAG_ACT_MOVE_AROUND;
         o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
@@ -183,12 +163,10 @@ void bhv_moneybag_loop(void) {
                 o->oAction = MONEYBAG_ACT_MOVE_AROUND;
             }
             break;
-
         case MONEYBAG_ACT_MOVE_AROUND:
             moneybag_act_move_around();
             if (o->oTimer >= 31) cur_obj_become_tangible();
             break;
-
         case MONEYBAG_ACT_RETURN_HOME: moneybag_act_return_home(); break;
         case MONEYBAG_ACT_DISAPPEAR:   moneybag_act_disappear();   break;
         case MONEYBAG_ACT_DEATH:       moneybag_act_death();       break;
@@ -197,7 +175,6 @@ void bhv_moneybag_loop(void) {
 
 void bhv_moneybag_hidden_loop(void) {
     obj_set_hitbox(o, &sMoneybagHiddenHitbox);
-
     switch (o->oAction) {
         case FAKE_MONEYBAG_COIN_ACT_IDLE:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 400)) {
@@ -208,10 +185,7 @@ void bhv_moneybag_hidden_loop(void) {
                 o->oAction = FAKE_MONEYBAG_COIN_ACT_TRANSFORM;
             }
             break;
-
-        case FAKE_MONEYBAG_COIN_ACT_TRANSFORM:
-            break;
+        case FAKE_MONEYBAG_COIN_ACT_TRANSFORM: break;
     }
-
     o->oInteractStatus = INT_STATUS_NONE;
 }

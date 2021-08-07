@@ -332,7 +332,7 @@ s16 object_step(void) {
     }
     obj_update_pos_vel_xz();
     if ((s32) o->oPosY == (s32) floorY) collisionFlags |= OBJ_COL_FLAG_GROUNDED;
-    if ((s32) o->oVelY == 0           ) collisionFlags |= OBJ_COL_FLAG_NO_Y_VEL;
+    if ((s32) o->oVelY ==         0.0f) collisionFlags |= OBJ_COL_FLAG_NO_Y_VEL;
     // Generate a splash if in water.
     obj_splash((s32) waterY, (s32) o->oPosY);
     return collisionFlags;

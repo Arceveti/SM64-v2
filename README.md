@@ -9,22 +9,22 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Graphics:**
 - [Power stars have a glowing effect](https://i.imgur.com/u5lEj4c.png) (Arceveti) *
-- 30 FPS ia8 (64x64) coins. (Arceveti) *
-- Screen tint effects based on damage & environment, which can be enabled separately (Arceveti) *
+- [30 FPS ia8 (64x64) coins](https://i.imgur.com/yBVk7YO.png) (Arceveti) *
+- Screen tint effects caused by [damage](https://i.imgur.com/1kKrCi2.png), [electric damage](https://i.imgur.com/tiVEjYn.png), and the camera being [underwater](https://i.imgur.com/e1Qazom.png) or in [poison gas](https://i.imgur.com/2ISmCnN.png). Damage and environment effects can be enabled separately (Arceveti) *
 - [Mario's silhouette is shown when behind most surfaces](https://i.imgur.com/Yf1YcUQ.png) (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti) *
 - Bowser 3's rainbow effect is animated (Arceveti) *
 - [64x64 quarter shadow textures](https://i.imgur.com/JwWg5VF.png) (Arceveti) *
-- King Bob-omb blinks
+- [King Bob-omb blinks](https://i.imgur.com/Gnhu2CV.png)
 - [Reflective metal cap texture using the framebuffer](https://i.imgur.com/IixJWBy.png) (mks#2512, Rovert, Arceveti) *
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
 - The Blast Away The Wall star spawns from the wall instead of existing in the world already *
-- Re-implementation of the unused SSL pillars cutscene (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
+- Fix for Lakitu cutscene detection bounds *
+- [Re-implementation of the unused SSL pillars cutscene](https://i.imgur.com/3yRH5Eu.png) (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - [Re-implementation of the unused cracked ice in SL](https://i.imgur.com/d71vYsV.png) (SunlitSpace542, Arceveti) *
 - [Seamless Bowser's puzzle in LLL](https://i.imgur.com/4IIdKbz.png) (Arceveti)
-- Fix for Lakitu cutscene detection bounds *
-- A visual moving water current to the warp behind the Bowser door in DDD (Arceveti) *
+- [A visual moving water current to the warp behind the Bowser door in DDD](https://i.imgur.com/5XwYaHm.png) (Arceveti) *
 
 **Bugfixes:**
 - `obj_resolve_object_collisions()` now works consistently (Arceveti) *
@@ -41,7 +41,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
-- Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
+- Use the floor's normal for alignment instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
 - Many smaller optimizations (Arceveti)
 
 **Hacker QoL:**
@@ -52,7 +52,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - Many object constants have been defined (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
-- Extended debug info, with more info for velocity and info for floors/ceilings/walls (Arceveti) *
+- Extended debug info, with more info for [movement](https://i.imgur.com/ltr0cgZ.png), [input](https://i.imgur.com/ziv3lIz.png), and info for [floors](https://i.imgur.com/qYYqIau.png)/[ceilings](https://i.imgur.com/VZ9MaOC.png)/[walls](https://i.imgur.com/hKC4ibh.png) (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
 - Defines for specific cos() values used through out the game, usually for checking the Y normal of surfaces (Arceveti)
@@ -60,7 +60,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
-- LLL Fire Bars use oBehParams2ndByte to determine their length (Arceveti)
+- [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
 
 **HUD/Gameplay QoL:**
 - Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
@@ -68,6 +68,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
 - Number of Secrets collected is displayed on the HUD (Arceveti) *
+- [A bowser key is shown on the Castle pause menu if Mario has a key but its door isn't unlocked yet](https://i.imgur.com/gqYIDmn.png) (Arceveti) *
 - [Leading zeroes on HUD counters like in modern Mario games](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 - [Air/Breath meter is separate from health meter when underwater](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 
@@ -75,12 +76,12 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
 - Respawning Koopa shell boxes (Arceveti) *
-- Allow for retries on collecting the remaining blue coins from a blue coin switch (Arceveti) *
-- Clams don't hurt mario unless they are moving (opening/closing) (Arceveti) *
+- [Allow for retries on collecting the remaining blue coins from a blue coin switch](https://i.imgur.com/YbEgPEt.png) (Arceveti) *
+- Clams don't damage mario unless they are moving (opening/closing) (Arceveti) *
 - Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti) *
 - Tiny Goombas (from THI) always drop their coin (Arceveti) *
-- Leaf particles fall from trees which contain Hoot (Arceveti) *
-- Reimplemented the unused "sad" eye texture for the mother penguin in CCM *
+- [Leaf particles fall from trees which contain Hoot](https://i.imgur.com/uTe87EF.png) (Arceveti) *
+- [Reimplemented the unused "sad" eye texture for the mother penguin in CCM](https://i.imgur.com/Uk8MNAe.png) *
 
 **Collision/Movement:**
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
@@ -94,7 +95,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. See config for more details (Arceveti) *
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
-- Unique wall slide which takes horizontal momentum into account (Arceveti) *
+- [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 

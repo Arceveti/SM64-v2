@@ -86,7 +86,7 @@ void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
 #else
     if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_JP);
 #endif
-    if (o->oVelY < 0) cur_obj_become_tangible();
+    if (o->oVelY < 0.0f) cur_obj_become_tangible();
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
 #ifdef COIN_LAVA_FLICKER
         if (o->oMoveFlags & OBJ_MOVE_ABOVE_DEATH_BARRIER) obj_mark_for_deletion(o);

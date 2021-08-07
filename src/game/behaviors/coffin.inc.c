@@ -66,7 +66,7 @@ void coffin_act_idle(void) {
     if (o->oBehParams2ndByte != COFFIN_BP_STATIONARY) {
         // Lay down if standing
         if (o->oFaceAnglePitch != 0x0) {
-            o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, -2000, 200);
+            o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, -0x7D0, 0xC8);
 
             // If the coffin landed...
             if (obj_face_pitch_approach(0, -o->oAngleVelPitch)) {
@@ -104,8 +104,7 @@ void coffin_act_idle(void) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2_LOWPRIO);
                 o->oAction = COFFIN_ACT_STAND_UP;
             }
-
-            o->oAngleVelPitch = 0;
+            o->oAngleVelPitch = 0x0;
         }
     }
 }
@@ -116,7 +115,7 @@ void coffin_act_idle(void) {
 void coffin_act_stand_up(void) {
     // Stand up
     if (o->oFaceAnglePitch != 0x4000) {
-        o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, 1000, 200);
+        o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, 0x3E8, 0xC8);
         obj_face_pitch_approach(0x4000, o->oAngleVelPitch);
     } else {
         // Stay standing

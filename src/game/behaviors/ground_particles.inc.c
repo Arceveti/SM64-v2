@@ -20,10 +20,10 @@ void bhv_ground_sand_init(void) {
 
 void spawn_smoke_with_velocity(void) {
     struct Object *smoke = spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
-    smoke->oForwardVel =  2;
-    smoke->oVelY       = -8;
-    smoke->oGravity    =  1;
-    obj_translate_xyz_random(smoke, 4);
+    smoke->oForwardVel =  2.0f;
+    smoke->oVelY       = -8.0f;
+    smoke->oGravity    =  1.0f;
+    obj_translate_xyz_random(smoke, 4.0f);
 }
 
 // TODO Fix name

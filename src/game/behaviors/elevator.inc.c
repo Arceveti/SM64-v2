@@ -14,7 +14,7 @@ void elevator_starting_shake(void) {
 }
 
 void elevator_act_idle(void) {
-    o->oVelY = 0;
+    o->oVelY = 0.0f;
     if (o->oElevatorType == ELEVATOR_TYPE_ABOVE_HOME) {
         if (gMarioObject->platform == o) o->oAction = (o->oPosY > o->oElevatorMidY) ? ELEVATOR_ACT_MOVING_DOWN : ELEVATOR_ACT_MOVING_UP;
     } else if (gMarioObject->oPosY > o->oElevatorMidY || o->oElevatorType == ELEVATOR_TYPE_RR) {
@@ -63,7 +63,7 @@ void elevator_act_moving_down(void) { // Pretty similar code to action 1
 }
 
 void elevator_act_landed_rr(void) {
-    o->oVelY = 0;
+    o->oVelY = 0.0f;
     if (o->oTimer == 0) {
         cur_obj_shake_screen(SHAKE_POS_SMALL);
         cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_LAND);
@@ -72,7 +72,7 @@ void elevator_act_landed_rr(void) {
 }
 
 void elevator_act_landed(void) { // nearly identical to action 2
-    o->oVelY = 0;
+    o->oVelY = 0.0f;
     if (o->oTimer == 0) {
         cur_obj_shake_screen(SHAKE_POS_SMALL);
         cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_LAND);

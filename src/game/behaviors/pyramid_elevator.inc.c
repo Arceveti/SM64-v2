@@ -58,7 +58,7 @@ void bhv_pyramid_elevator_loop(void) {
         case PYRAMID_ELEVATOR_AT_BOTTOM:
             o->oPosY = sins(o->oTimer * 0x1000) * 10.0f + 128.0f;
             if (o->oTimer >= 8) {
-                o->oVelY = 0;
+                o->oVelY =   0.0f;
                 o->oPosY = 128.0f;
             }
             break;

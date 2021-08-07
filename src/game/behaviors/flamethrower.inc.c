@@ -18,7 +18,7 @@ void bhv_flamethrower_flame_loop(void) {
         o->oVelY            = -28.0f;
         cur_obj_update_floor_height();
         if (o->oPosY - 25.0f * size < o->oFloorHeight) {
-            o->oVelY = 0;
+            o->oVelY = 0.0f;
             o->oPosY = o->oFloorHeight + 25.0f * size;
         }
         remainingTime = o->parentObj->oFlameThowerTimeRemaining / 1.2f;

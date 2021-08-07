@@ -31,7 +31,7 @@ void bhv_bobomb_explosion_bubble_init(void) {
     o->oBobombExpBubGfxExpRateX = (s32)(random_float() * 2048.0f) + 0x800;
     o->oBobombExpBubGfxExpRateY = (s32)(random_float() * 2048.0f) + 0x800;
     o->oTimer =       random_float() * 10.0f;
-    o->oVelY  = (s32)(random_float() *  4.0f) + 4;
+    o->oVelY  = (s32)(random_float() *  4.0f) + 4.0f;
 }
 
 void bhv_bobomb_explosion_bubble_loop(void) {

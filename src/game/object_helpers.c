@@ -591,7 +591,7 @@ void obj_init_animation_with_sound(struct Object *obj, const struct Animation * 
 
 void cur_obj_enable_rendering_and_become_tangible(struct Object *obj) {
     obj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-    obj->oIntangibleTimer = 0;
+    obj->oIntangibleTimer       = 0;
 }
 
 void cur_obj_enable_rendering(void) {
@@ -600,7 +600,7 @@ void cur_obj_enable_rendering(void) {
 
 void cur_obj_disable_rendering_and_become_intangible(struct Object *obj) {
     obj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-    obj->oIntangibleTimer = -1;
+    obj->oIntangibleTimer       = -1;
 }
 
 void cur_obj_disable_rendering(void) {
@@ -651,7 +651,7 @@ void obj_set_face_angle_to_move_angle(struct Object *obj) {
 
 u32 get_object_list_from_behavior(const BehaviorScript *behavior) {
     // If the first behavior command is "begin", then get the object list header from there
-    if ((behavior[0] >> 24) == 0) return (behavior[0] >> 16) & 0xFFFF;
+    if ((behavior[0] >> 24) == 0x0) return (behavior[0] >> 16) & 0xFFFF;
     return OBJ_LIST_DEFAULT;
 }
 
@@ -978,13 +978,13 @@ static void apply_drag_to_value(f32 *value, f32 dragStrength) {
     f32 decel;
     if (*value != 0) {
         //! Can overshoot if |*value| > 1/(dragStrength * 0.0001)
-        decel = (*value) * (*value) * (dragStrength * 0.0001L);
+        decel = (*value) * (*value) * (dragStrength * 0.0001f); // was 0.0001L
         if (*value > 0) {
             *value -= decel;
-            if (*value <  0.001L) *value = 0;
+            if (*value <  0.001f) *value = 0; // was 0.001L
         } else {
             *value += decel;
-            if (*value > -0.001L) *value = 0;
+            if (*value > -0.001f) *value = 0; // was -0.001L
         }
     }
 }
@@ -1000,7 +1000,7 @@ static s32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepSlop
     f32 intendedZ           = o->oPosZ + o->oVelZ;
     f32 intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor);
     f32 deltaFloorHeight    = intendedFloorHeight - o->oFloorHeight;
-    o->oMoveFlags &= ~OBJ_MOVE_HIT_EDGE;
+    o->oMoveFlags           &= ~OBJ_MOVE_HIT_EDGE;
     if (o->oRoom            != -1
      && intendedFloor       != NULL
      && intendedFloor->room != 0
@@ -1043,8 +1043,8 @@ static s32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepSlop
 }
 
 static void cur_obj_move_update_underwater_flags(void) {
-    f32 decelY = (f32)(sqrtf(o->oVelY * o->oVelY) * (o->oDragStrength * 7.0f)) / 100.0L;
-    if (o->oVelY > 0) {
+    f32 decelY = (f32)(sqrtf(o->oVelY * o->oVelY) * (o->oDragStrength * 7.0f)) / 100.0f; // was 100.0l
+    if (o->oVelY > 0.0f) {
         o->oVelY -= decelY;
     } else {
         o->oVelY += decelY;
@@ -1138,7 +1138,7 @@ static s32 clear_move_flag(u32 *bitSet, s32 flag) {
 }
 
 void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
-    if (radius > 0.1L) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius);
+    if (radius > 0.1f) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius); // was 0.1l
 }
 
 s16 abs_angle_diff(s16 angle1, s16 angle2) {
@@ -1348,7 +1348,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
     struct WallCollisionData collisionData;
     f32 offsetY = 10.0f;
     f32 radius = o->oWallHitboxRadius;
-    if (radius > 0.1L) {
+    if (radius > 0.1f) { // was 0.1l
         collisionData.offsetY = offsetY;
         collisionData.radius  = radius;
         collisionData.x       = (s16) o->oPosX;
@@ -1788,7 +1788,7 @@ void cur_obj_set_pos_to_home_with_debug(void) {
     o->oPosX = o->oHomeX + gDebugInfo[5][0];
     o->oPosY = o->oHomeY + gDebugInfo[5][1];
     o->oPosZ = o->oHomeZ + gDebugInfo[5][2];
-    cur_obj_scale(gDebugInfo[5][3] / 100.0f + 1.0l);
+    cur_obj_scale(gDebugInfo[5][3] / 100.0f + 1.0f); // was 1.0l
 }
 
 s32 cur_obj_is_mario_on_platform(void) {

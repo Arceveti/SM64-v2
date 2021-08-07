@@ -388,10 +388,10 @@ void bowser_bits_actions(void) {
 #if BUGFIX_BOWSER_FALLEN_OFF_STAGE
 void bowser_reset_fallen_off_stage(void) {
     if (o->oVelY < 0 && o->oPosY < (o->oHomeY - 300.0f)) {
-        o->oPosX       = o->oPosZ = 0;
+        o->oPosX       = o->oPosZ = 0.0f;
         o->oPosY       = o->oHomeY + 2000.0f;
-        o->oVelY       = 0;
-        o->oForwardVel = 0;
+        o->oVelY       = 0.0f;
+        o->oForwardVel = 0.0f;
     }
 }
 #endif

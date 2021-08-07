@@ -121,8 +121,8 @@ void chuckya_act_grabbed_mario(void) { // act 1
 }
 
 void chuckya_act_release_mario(void) { // act 3
-    o->oForwardVel = 0;
-    o->oVelY       = 0;
+    o->oForwardVel = 0.0f;
+    o->oVelY       = 0.0f;
     cur_obj_init_animation_with_sound(CHUCKYA_ANIM_IDLE);
     if (o->oTimer > 100) o->oAction = CHUCKYA_ACT_MOVING;
 }

@@ -125,7 +125,7 @@ extern s8 gLevelToCourseNumTable[];
 #define SAVE_FLAG_COLLECTED_MIPS_STAR_2  /* 0x10000000 */ (1 << 28)
 
 #define SAVE_FLAG_TO_STAR_FLAG(cmd) (((cmd) >> 24) & 0x7F)
-#define STAR_FLAG_TO_SAVE_FLAG(cmd) ((cmd) << 24)
+#define STAR_FLAG_TO_SAVE_FLAG(cmd)  ((cmd) << 24)
 
 // Variable for setting a warp checkpoint.
 

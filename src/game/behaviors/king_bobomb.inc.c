@@ -77,8 +77,8 @@ void king_bobomb_act_active(void) { // act 2
 
 void king_bobomb_act_grabbed_mario(void) { // act 3
     if (o->oSubAction == KING_BOBOMB_SUB_ACT_GRABBED_MARIO_GRAB) {
-        o->oForwardVel = 0;
-        o->oKingBobombStationaryTimer = 0;
+        o->oForwardVel                        = 0.0f;
+        o->oKingBobombStationaryTimer         = 0;
         o->oKingBobombPlayerGrabEscapeActions = 0;
         if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_GRAB_MARIO);
         if (cur_obj_init_animation_and_check_if_near_end(KING_BOBOMB_ANIM_GRAB_MARIO)) {
@@ -117,8 +117,8 @@ void king_bobomb_act_grabbed_mario(void) { // act 3
 }
 
 void king_bobomb_act_activate(void) { // act 1
-    o->oForwardVel = 0;
-    o->oVelY = 0;
+    o->oForwardVel = 0.0f;
+    o->oVelY       = 0.0f;
     cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_WALKING);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 512);
     if (o->oDistanceToMario < 2500.0f) o->oAction = KING_BOBOMB_ACT_ACTIVE;
@@ -216,10 +216,10 @@ void king_bobomb_act_return_home(void) { // act 5
         case KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING:
             cur_obj_init_animation_and_extend_if_at_end(KING_BOBOMB_ANIM_JUMP);
             if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
-                o->oPosY = o->oHomeY;
-                o->oVelY = 0;
-                o->oForwardVel = 0;
-                o->oGravity = -4.0f;
+                o->oPosY                = o->oHomeY;
+                o->oVelY                =  0.0f;
+                o->oForwardVel          =  0.0f;
+                o->oGravity             = -4.0f;
                 o->oKingBobombIsJumping = FALSE;
                 cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_T_POSE);
                 cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB);

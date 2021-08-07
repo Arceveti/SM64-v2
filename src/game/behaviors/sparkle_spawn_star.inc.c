@@ -73,8 +73,8 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             if (o->oVelY < -4.0f) o->oVelY = -4.0f;
             if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
                 gObjCutsceneDone = TRUE;
-                o->oVelY    = 0;
-                o->oGravity = 0;
+                o->oVelY    = 0.0f;
+                o->oGravity = 0.0f;
                 o->oAction  = SPAWN_STAR_POS_CUTSCENE_ACT_END;
             }
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
