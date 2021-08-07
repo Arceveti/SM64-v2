@@ -75,12 +75,9 @@ s32 envfx_init_snow(s32 mode) {
             gSnowParticleCount    = 140;
             break;
     }
-
     gEnvFxBuffer = mem_pool_alloc(gEffectsMemoryPool, gSnowParticleMaxCount * sizeof(struct EnvFxParticle));
     if (!gEnvFxBuffer) return FALSE;
-
     bzero(gEnvFxBuffer, gSnowParticleMaxCount * sizeof(struct EnvFxParticle));
-
     gEnvFxMode = mode;
     return TRUE;
 }
@@ -98,18 +95,13 @@ void envfx_update_snowflake_count(s32 mode, Vec3s marioPos) {
         case ENVFX_SNOW_NORMAL:
             if (gSnowParticleMaxCount > gSnowParticleCount && !(timer & 0x3F)) gSnowParticleCount += 5;
             break;
-
         case ENVFX_SNOW_WATER:
-            waterLevel = find_water_level(marioPos[0], marioPos[2]);
-
+            waterLevel         = find_water_level(marioPos[0], marioPos[2]);
             gSnowParticleCount = (((s32)((waterLevel - 400.0f - (f32) marioPos[1]) * 1.0e-3f) << 0x10) >> 0x10) * 5;
-
             if (gSnowParticleCount < 0) gSnowParticleCount = 0;
             if (gSnowParticleCount > gSnowParticleMaxCount) gSnowParticleCount = gSnowParticleMaxCount;
             break;
-
-        case ENVFX_SNOW_BLIZZARD:
-            break;
+        case ENVFX_SNOW_BLIZZARD: break;
     }
 }
 
@@ -129,10 +121,9 @@ void envfx_cleanup_snow(void *snowParticleArray) {
  * as Euler angles and a length
  */
 void orbit_from_positions(Vec3s from, Vec3s to, s16 *radius, s16 *pitch, s16 *yaw) {
-    f32 dx = to[0] - from[0];
-    f32 dy = to[1] - from[1];
-    f32 dz = to[2] - from[2];
-
+    f32 dx  = to[0] - from[0];
+    f32 dy  = to[1] - from[1];
+    f32 dz  = to[2] - from[2];
     *radius =  (s16) sqrtf(dx * dx + dy * dy + dz * dz);
     *pitch  = atan2s(sqrtf(dx * dx + dz * dz), dy);
     *yaw    = atan2s(dz, dx);
@@ -180,7 +171,6 @@ void envfx_update_snow_normal(s32 snowCylinderX, s32 snowCylinderY, s32 snowCyli
     s32 deltaX = snowCylinderX - gSnowCylinderLastPos[0];
     s32 deltaY = snowCylinderY - gSnowCylinderLastPos[1];
     s32 deltaZ = snowCylinderZ - gSnowCylinderLastPos[2];
-
     for (i = 0; i < gSnowParticleCount; i++) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
         if (!(gEnvFxBuffer + i)->isAlive) {
@@ -194,7 +184,6 @@ void envfx_update_snow_normal(s32 snowCylinderX, s32 snowCylinderY, s32 snowCyli
             (gEnvFxBuffer + i)->zPos += random_float() * 2 - 1.0f + (s16)(deltaZ / 1.2f);
         }
     }
-
     gSnowCylinderLastPos[0] = snowCylinderX;
     gSnowCylinderLastPos[1] = snowCylinderY;
     gSnowCylinderLastPos[2] = snowCylinderZ;
@@ -211,7 +200,6 @@ void envfx_update_snow_blizzard(s32 snowCylinderX, s32 snowCylinderY, s32 snowCy
     s32 deltaX = snowCylinderX - gSnowCylinderLastPos[0];
     s32 deltaY = snowCylinderY - gSnowCylinderLastPos[1];
     s32 deltaZ = snowCylinderZ - gSnowCylinderLastPos[2];
-
     for (i = 0; i < gSnowParticleCount; i++) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_snowflake_alive(i, snowCylinderX, snowCylinderY, snowCylinderZ);
         if (!(gEnvFxBuffer + i)->isAlive) {
@@ -225,7 +213,6 @@ void envfx_update_snow_blizzard(s32 snowCylinderX, s32 snowCylinderY, s32 snowCy
             (gEnvFxBuffer + i)->zPos += random_float() * 2 - 1.0f + (s16)(deltaZ / 1.2f);
         }
     }
-
     gSnowCylinderLastPos[0] = snowCylinderX;
     gSnowCylinderLastPos[1] = snowCylinderY;
     gSnowCylinderLastPos[2] = snowCylinderZ;
@@ -294,9 +281,7 @@ void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, s16 p
 void append_snowflake_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s vertex2, Vec3s vertex3) {
     s32 i = 0;
     Vtx *vertBuf = (Vtx *) alloc_display_list(15 * sizeof(Vtx));
-
     if (vertBuf == NULL) return;
-
     for (i = 0; i < 15; i += 3) {
         vertBuf[i] = gSnowTempVtx[0];
         (vertBuf + i)->v.ob[0] = (gEnvFxBuffer + (index + i / 3))->xPos + vertex1[0];
@@ -313,7 +298,6 @@ void append_snowflake_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s ve
         (vertBuf + i + 2)->v.ob[1] = (gEnvFxBuffer + (index + i / 3))->yPos + vertex3[1];
         (vertBuf + i + 2)->v.ob[2] = (gEnvFxBuffer + (index + i / 3))->zPos + vertex3[2];
     }
-
     gSPVertex(gfx, VIRTUAL_TO_PHYSICAL(vertBuf), 15, 0);
 }
 
@@ -328,18 +312,13 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
     struct SnowFlakeVertex vertex1, vertex2, vertex3;
     Gfx *gfxStart;
     Gfx *gfx;
-
-    vertex1 = gSnowFlakeVertex1;
-    vertex2 = gSnowFlakeVertex2;
-    vertex3 = gSnowFlakeVertex3;
-
+    vertex1  = gSnowFlakeVertex1;
+    vertex2  = gSnowFlakeVertex2;
+    vertex3  = gSnowFlakeVertex3;
     gfxStart = (Gfx *) alloc_display_list((gSnowParticleCount * 6 + 3) * sizeof(Gfx));
-    gfx = gfxStart;
-
+    gfx      = gfxStart;
     if (gfxStart == NULL) return NULL;
-
     envfx_update_snowflake_count(snowMode, marioPos);
-
     // Note: to and from are inverted here, so the resulting vector goes towards the camera
     orbit_from_positions(camTo, camFrom, &radius, &pitch, &yaw);
 
@@ -352,18 +331,15 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
             } else {
                 radius = 1;
             }
-
             pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
             envfx_update_snow_normal(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
             break;
-
         case ENVFX_SNOW_WATER:
             if (radius > 500) {
                 radius -= 500;
             } else {
                 radius = 1;
             }
-
             pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
             envfx_update_snow_water(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
             break;
@@ -373,32 +349,21 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
             } else {
                 radius = 1;
             }
-
             pos_from_orbit(camTo, snowCylinderPos, radius, pitch, yaw);
             envfx_update_snow_blizzard(snowCylinderPos[0], snowCylinderPos[1], snowCylinderPos[2]);
             break;
     }
-
     rotate_triangle_vertices((s16 *) &vertex1, (s16 *) &vertex2, (s16 *) &vertex3, pitch, yaw);
-
-    if (snowMode == ENVFX_SNOW_NORMAL || snowMode == ENVFX_SNOW_BLIZZARD) {
-        gSPDisplayList(gfx++, &tiny_bubble_dl_gray); // snowflake with gray edge
-    } else if (snowMode == ENVFX_SNOW_WATER) {
-        gSPDisplayList(gfx++, &tiny_bubble_dl_blue); // snowflake with blue edge
-    }
-
+    gSPDisplayList(gfx++, (snowMode == ENVFX_SNOW_NORMAL || snowMode == ENVFX_SNOW_BLIZZARD) ? &tiny_bubble_dl_gray : &tiny_bubble_dl_blue); 
     for (i = 0; i < gSnowParticleCount; i += 5) {
         append_snowflake_vertex_buffer(gfx++, i, (s16 *) &vertex1, (s16 *) &vertex2, (s16 *) &vertex3);
-
         gSP1Triangle(gfx++,  0,  1,  2, 0);
         gSP1Triangle(gfx++,  3,  4,  5, 0);
         gSP1Triangle(gfx++,  6,  7,  8, 0);
         gSP1Triangle(gfx++,  9, 10, 11, 0);
         gSP1Triangle(gfx++, 12, 13, 14, 0);
     }
-
     gSPDisplayList(gfx++, &tiny_bubble_dl_0B006AB0) gSPEndDisplayList(gfx++);
-
     return gfxStart;
 }
 
@@ -408,18 +373,13 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
  */
 Gfx *envfx_update_particles(s32 mode, Vec3s marioPos, Vec3s camTo, Vec3s camFrom) {
     Gfx *gfx;
-
     if (get_dialog_id() != DIALOG_NONE) return NULL;
-
     if (gEnvFxMode != 0 && mode != gEnvFxMode) mode = 0;
-
     if (mode >= ENVFX_BUBBLE_START) {
         gfx = envfx_update_bubbles(mode, marioPos, camTo, camFrom);
         return gfx;
     }
-
     if (gEnvFxMode == 0 && !envfx_init_snow(mode)) return NULL;
-
     switch (mode) {
         case ENVFX_MODE_NONE:           envfx_cleanup_snow(gEnvFxBuffer); return NULL;
         case ENVFX_SNOW_NORMAL:   gfx = envfx_update_snow(1, marioPos, camFrom, camTo); break;
@@ -427,6 +387,5 @@ Gfx *envfx_update_particles(s32 mode, Vec3s marioPos, Vec3s camTo, Vec3s camFrom
         case ENVFX_SNOW_BLIZZARD: gfx = envfx_update_snow(3, marioPos, camFrom, camTo); break;
         default: return NULL;
     }
-
     return gfx;
 }

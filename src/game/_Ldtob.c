@@ -98,9 +98,7 @@ void _Ldtob(printf_struct *args, u8 type) {
         *ptr++ = '0';
         while (gen > 0 && 0 < val) {
             lo = val;
-            if ((gen -= 8) > 0) {
-                val = (val - lo) * 1.0e8;
-            }
+            if ((gen -= 8) > 0) val = (val - lo) * 1.0e8;
             ptr = ptr + 8;
             for (j = 8; lo > 0 && --j >= 0;) {
                 qr = ldiv(lo, 10);
@@ -130,7 +128,6 @@ void _Ldtob(printf_struct *args, u8 type) {
 }
 
 static s16 _Ldunscale(s16 *pex, printf_struct *px) {
-
     unsigned short *ps = (unsigned short *) px;
     short xchar = (ps[_D0] & _DMASK) >> _DOFF;
     if (xchar == _DMAX) { /* NaN or INF */
@@ -153,7 +150,6 @@ static void _Genld(printf_struct *px, u8 code, u8 *p, s16 nsig, s16 xexp) {
     u8 point = '.';
     if (nsig <= 0) {
         nsig = 1,
-
         p = (u8 *) "0";
     }
     if (code == 'f'
@@ -220,7 +216,6 @@ static void _Genld(printf_struct *px, u8 code, u8 *p, s16 nsig, s16 xexp) {
     }
     if ((px->flags & (FLAGS_ZERO | FLAGS_MINUS)) == FLAGS_ZERO) { /* pad with leading zeros */
         int n = px->part1_len + px->part2_len + px->num_mid_zeros + px->part3_len + px->num_trailing_zeros;
-
         if (n < px->width) px->num_leading_zeros = px->width - n;
     }
 }

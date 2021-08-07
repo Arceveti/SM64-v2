@@ -48,6 +48,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)
 - Many unnamed display lists and geolayouts have been named (Arceveti)
 - Almost all textures have been named (Arceveti)
+- Some actor and behavior files have been moved around for consistency (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - Many object constants have been defined (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *

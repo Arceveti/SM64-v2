@@ -51,12 +51,12 @@
 
 // Passed as first argument to a GraphNodeFunc to give information about in
 // which context it was called and what it is expected to do.
-#define GEO_CONTEXT_CREATE        0 // called when node is created from a geo command
-#define GEO_CONTEXT_RENDER        1 // called from rendering_graph_node.c
-#define GEO_CONTEXT_AREA_UNLOAD   2 // called when unloading an area
-#define GEO_CONTEXT_AREA_LOAD     3 // called when loading an area
-#define GEO_CONTEXT_AREA_INIT     4 // called when initializing the 8 areas
-#define GEO_CONTEXT_HELD_OBJ      5 // called when processing a GraphNodeHeldObj
+#define GEO_CONTEXT_CREATE      0x0 // called when node is created from a geo command
+#define GEO_CONTEXT_RENDER      0x1 // called from rendering_graph_node.c
+#define GEO_CONTEXT_AREA_UNLOAD 0x2 // called when unloading an area
+#define GEO_CONTEXT_AREA_LOAD   0x3 // called when loading an area
+#define GEO_CONTEXT_AREA_INIT   0x4 // called when initializing the 8 areas
+#define GEO_CONTEXT_HELD_OBJ    0x5 // called when processing a GraphNodeHeldObj
 
 // The signature for a function stored in a geo node
 // The context argument depends on the callContext:

@@ -135,18 +135,11 @@ void print_debug_top_down_normal(const char *str, s32 number) {
 
 void print_mapinfo(void) {
     struct Surface *pfloor;
-    f32 bgY;
-    f32 water;
-    s32 area;
-    s32 angY;
-
-    angY = gCurrentObject->oMoveAngleYaw / 182.044000f;
-    area = ((s32) gCurrentObject->oPosX + 0x2000) / 1024
-         + ((s32) gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
-
-    bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
-    water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
-
+    s32 area  = ((s32) gCurrentObject->oPosX + 0x2000) / 1024
+              + ((s32) gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
+    s32 angY  = gCurrentObject->oMoveAngleYaw / 182.044000f;
+    f32 bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
+    f32 water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
     print_debug_top_down_normal("mapinfo", 0);
     print_debug_top_down_mapinfo("area %x", area);
     print_debug_top_down_mapinfo("wx   %d", gCurrentObject->oPosX);
@@ -154,13 +147,11 @@ void print_mapinfo(void) {
     print_debug_top_down_mapinfo("wz   %d", gCurrentObject->oPosZ);
     print_debug_top_down_mapinfo("bgY  %d", bgY);
     print_debug_top_down_mapinfo("angY %d", angY);
-
     if (pfloor) {// not null
         print_debug_top_down_mapinfo("bgcode   %d", pfloor->type);
         print_debug_top_down_mapinfo("bgstatus %d", pfloor->flags);
         print_debug_top_down_mapinfo("bgarea   %d", pfloor->room);
     }
-
     if (gCurrentObject->oPosY < water) print_debug_top_down_mapinfo("water %d", water);
 }
 
@@ -209,7 +200,6 @@ void print_enemyinfo(void) {
 
 void update_debug_dpadmask(void) {
     s32 dPadMask = gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD | L_JPAD | R_JPAD);
-
     if (!dPadMask) {
         sDebugInfoDPadUpdID = 0;
         sDebugInfoDPadMask  = 0;
@@ -231,12 +221,10 @@ void update_debug_dpadmask(void) {
 void debug_unknown_level_select_check(void) {
     if (!sDebugLvSelectCheckFlag) {
         sDebugLvSelectCheckFlag = TRUE;
-
-        gDebugInfoFlags = gDebugLevelSelect ? DEBUG_INFO_FLAG_LSELECT : DEBUG_INFO_NOFLAGS;
-
-        gNumCalls.floor = 0;
-        gNumCalls.ceil  = 0;
-        gNumCalls.wall  = 0;
+        gDebugInfoFlags         = gDebugLevelSelect ? DEBUG_INFO_FLAG_LSELECT : DEBUG_INFO_NOFLAGS;
+        gNumCalls.floor         = 0;
+        gNumCalls.ceil          = 0;
+        gNumCalls.wall          = 0;
     }
 }
 
@@ -246,7 +234,6 @@ void reset_debug_objectinfo(void) {
     gObjectCounter         = 0;
     sDebugStringArrPrinted = FALSE;
     gDoorRenderingTimer    = 0;
-
     set_print_state_info(gDebugPrintState1,  20, 185, 40, 200, -15);
     set_print_state_info(gDebugPrintState2, 180,  30,  0, 150,  15);
     update_debug_dpadmask();
@@ -260,9 +247,7 @@ void reset_debug_objectinfo(void) {
 UNUSED static void check_debug_button_seq(void) {
     s16 *buttonArr;
     s16 cButtonMask;
-
     buttonArr = sDebugInfoButtonSeq;
-
     if (!(gPlayer1Controller->buttonDown & L_TRIG)) {
         sDebugInfoButtonSeqID = 0;
     } else {
@@ -301,23 +286,18 @@ UNUSED static
 #endif
 void try_modify_debug_controls(void) {
     s32 modifier;
-
     if (gPlayer1Controller->buttonPressed & Z_TRIG) sNoExtraDebug ^= TRUE;
-
     if (!(gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG)) && !sNoExtraDebug) {
         modifier = 1;
         if (gPlayer1Controller->buttonDown & B_BUTTON) modifier = 100;
-
         if (sDebugInfoDPadMask & U_JPAD) {
             sDebugSysCursor--;
             if (sDebugSysCursor < 0) sDebugSysCursor = 0;
         }
-
         if (sDebugInfoDPadMask & D_JPAD) {
             sDebugSysCursor++;
             if (sDebugSysCursor >= 8) sDebugSysCursor = 7;
         }
-
         if (sDebugInfoDPadMask & L_JPAD) {
             // we allow the player while in this mode to modify the debug controls. This is
             // so the playtester can adjust enemy behavior and parameters on the fly, since
@@ -328,7 +308,6 @@ void try_modify_debug_controls(void) {
                 gDebugInfo[sDebugPage][sDebugSysCursor] = gDebugInfo[sDebugPage][sDebugSysCursor] - modifier;
             }
         }
-
         if (sDebugInfoDPadMask & R_JPAD) gDebugInfo[sDebugPage][sDebugSysCursor] = gDebugInfo[sDebugPage][sDebugSysCursor] + modifier;
     }
 }
@@ -355,7 +334,6 @@ void try_print_debug_mario_object_info(void) {
         }
     }
     print_debug_top_down_mapinfo("obj  %d", gObjectCounter);
-
     if (gNumFindFloorMisses) print_debug_bottom_up("NULLBG %d", gNumFindFloorMisses);
     if (gUnknownWallCount  ) print_debug_bottom_up("WALL   %d", gUnknownWallCount  );
 }

@@ -53,7 +53,7 @@ void opened_cannon_act_turning_yaw(void) {
                 o->oMoveAngleYaw = sins(o->oCannonAngle) * 0x4000 + ((s16)(o->oBehParams2ndByte << 8));
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
-                o->oCannonAngle = 0;
+                o->oCannonAngle = 0x0;
                 o->oAction = OPENED_CANNON_ACT_RAISE_BARREL;
             }
         }

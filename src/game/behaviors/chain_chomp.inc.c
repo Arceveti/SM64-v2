@@ -468,7 +468,7 @@ void bhv_wooden_post_update(void) {
     } else if (!(o->oBehParams & WOODEN_POST_BP_NO_COINS_MASK)) {
         // Reset the timer once mario is far enough
         if (o->oDistanceToMario > 400.0f) {
-            o->oTimer = o->oWoodenPostTotalMarioAngle = 0;
+            o->oTimer = o->oWoodenPostTotalMarioAngle = 0x0;
         } else {
             // When mario runs around the post 3 times within 200 frames, spawn
             // coins

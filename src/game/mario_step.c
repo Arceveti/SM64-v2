@@ -84,12 +84,12 @@ void init_bully_collision_data(struct BullyCollisionData *data, f32 posX, f32 po
         forwardVel *= -1.0f;
         yaw += 0x8000;
     }
-    data->radius = radius;
+    data->radius          = radius;
     data->conversionRatio = conversionRatio;
-    data->posX = posX;
-    data->posZ = posZ;
-    data->velX = forwardVel * sins(yaw);
-    data->velZ = forwardVel * coss(yaw);
+    data->posX            = posX;
+    data->posZ            = posZ;
+    data->velX            = forwardVel * sins(yaw);
+    data->velZ            = forwardVel * coss(yaw);
 }
 
 void mario_bonk_reflection(struct MarioState *m, u32 negateSpeed) {
@@ -115,9 +115,9 @@ u32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
         switch (m->floor->type) {
             case SURFACE_SHALLOW_QUICKSAND:         if ((m->quicksandDepth += sinkingSpeed) >= 10.0f) m->quicksandDepth = 10.0f; break;
             case SURFACE_SHALLOW_MOVING_QUICKSAND:  if ((m->quicksandDepth += sinkingSpeed) >= 25.0f) m->quicksandDepth = 25.0f; break;
-            case SURFACE_QUICKSAND: // fall through
+            case SURFACE_QUICKSAND:                 // fall through
             case SURFACE_MOVING_QUICKSAND:          if ((m->quicksandDepth += sinkingSpeed) >= 60.0f) m->quicksandDepth = 60.0f; break;
-            case SURFACE_DEEP_QUICKSAND: // fall through
+            case SURFACE_DEEP_QUICKSAND:            // fall through
             case SURFACE_DEEP_MOVING_QUICKSAND:
                 if ((m->quicksandDepth += sinkingSpeed) >= 160.0f) {
                     update_mario_sound_and_camera(m);
@@ -137,11 +137,12 @@ u32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
 
 u32 mario_push_off_steep_floor(struct MarioState *m, u32 action, u32 actionArg) {
     s16 floorDYaw = m->floorAngle - m->faceAngle[1];
+    // m->forwardVel = 16.0f * coss(floorDYaw);
     if (floorDYaw > -0x4000 && floorDYaw < 0x4000) {
-        m->forwardVel = 16.0f;
+        m->forwardVel =  16.0f;// * (1.0f-m->floor->normal.y);;
         m->faceAngle[1] = m->floorAngle;
     } else {
-        m->forwardVel = -16.0f;
+        m->forwardVel = -16.0f;// * (1.0f-m->floor->normal.y);
         m->faceAngle[1] = m->floorAngle + 0x8000;
     }
     return set_mario_action(m, action, actionArg);
@@ -150,8 +151,10 @@ u32 mario_push_off_steep_floor(struct MarioState *m, u32 action, u32 actionArg) 
 u32 mario_update_moving_sand(struct MarioState *m) {
     struct Surface *floor = m->floor;
     s32 floorType = floor->type;
-    if (floorType == SURFACE_DEEP_MOVING_QUICKSAND || floorType == SURFACE_SHALLOW_MOVING_QUICKSAND
-     || floorType == SURFACE_MOVING_QUICKSAND      || floorType == SURFACE_INSTANT_MOVING_QUICKSAND) {
+    if (floorType == SURFACE_DEEP_MOVING_QUICKSAND
+     || floorType == SURFACE_SHALLOW_MOVING_QUICKSAND
+     || floorType == SURFACE_MOVING_QUICKSAND
+     || floorType == SURFACE_INSTANT_MOVING_QUICKSAND) {
         s16 pushAngle = floor->force << 8;
         f32 pushSpeed = sMovingSandSpeeds[floor->force >> 8];
         m->vel[0] += pushSpeed * sins(pushAngle);
@@ -355,7 +358,6 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
         lowerWall = resolve_and_return_wall_collisions(nextPos, 30.0f, 24.0f);
 #endif
         upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
-
         floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
         missedFloors++;
     }

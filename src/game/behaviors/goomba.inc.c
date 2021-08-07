@@ -81,7 +81,7 @@ void bhv_goomba_triplet_spawner_update(void) {
             // is not used in the game
             dAngle = 0x10000 / (((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_EXTRA_GOOMBAS_MASK) >> 2) + 3);
 
-            for (angle = 0, goombaFlag = 1 << 8; angle < 0xFFFF; angle += dAngle, goombaFlag <<= 1) {
+            for (angle = 0x0, goombaFlag = 1 << 8; angle < 0xFFFF; angle += dAngle, goombaFlag <<= 1) {
                 // Only spawn goombas which haven't been killed yet
                 if (!(o->oBehParams & goombaFlag)) {
                     dx = 500.0f * coss(angle);
@@ -105,7 +105,7 @@ void bhv_goomba_triplet_spawner_update(void) {
  * Initialization function for goomba.
  */
 void bhv_goomba_init(void) {
-    o->oGoombaSize = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
+    o->oGoombaSize  = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
 
     o->oGoombaScale = sGoombaProperties[o->oGoombaSize].scale;
     o->oDeathSound  = sGoombaProperties[o->oGoombaSize].deathSound;

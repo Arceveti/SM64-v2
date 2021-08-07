@@ -221,9 +221,9 @@ u32 attack_object(struct Object *o, s32 interaction) {
     switch (interaction) {
         case INT_GROUND_POUND_OR_TWIRL: attackType = ATTACK_GROUND_POUND_OR_TWIRL; break;
         case INT_PUNCH:                 attackType = ATTACK_PUNCH;                 break;
-        case INT_KICK:       // fall through
+        case INT_KICK:                  // fall through
         case INT_TRIP:                  attackType = ATTACK_KICK_OR_TRIP;          break;
-        case INT_SLIDE_KICK: // fall through
+        case INT_SLIDE_KICK:            // fall through
         case INT_FAST_ATTACK_OR_SHELL:  attackType = ATTACK_FAST_ATTACK;           break;
         case INT_HIT_FROM_ABOVE:        attackType = ATTACK_FROM_ABOVE;            break;
         case INT_HIT_FROM_BELOW:        attackType = ATTACK_FROM_BELOW;            break;

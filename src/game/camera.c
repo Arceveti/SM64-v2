@@ -2285,7 +2285,6 @@ void update_lakitu(struct Camera *c) {
         gLakituState.nextYaw             = c->nextYaw;
         vec3f_copy(gLakituState.goalPos,   c->pos  );
         vec3f_copy(gLakituState.goalFocus, c->focus);
-
         // Simulate Lakitu flying to the new position and turning towards the new focus
         set_or_approach_vec3f_asymptotic(gLakituState.curPos, newPos,
                                          gLakituState.posHSpeed, gLakituState.posVSpeed,
@@ -3959,7 +3958,7 @@ void clear_cutscene_vars(UNUSED struct Camera *c) {
     for (i = 0; i < 10; i++) {
         vec3f_set(sCutsceneVars[i].point, 0.0f, 0.0f, 0.0f);
         // vec3f_set(sCutsceneVars[i].unusedPoint, 0.0f, 0.0f, 0.0f);
-        vec3s_set(sCutsceneVars[i].angle, 0, 0, 0);
+        vec3s_set(sCutsceneVars[i].angle, 0x0, 0x0, 0x0);
     }
 }
 
@@ -4458,8 +4457,7 @@ void cam_sl_free_roam(struct Camera *c) {
  * Warps the camera underneath the floor, used in HMC to move under the elevator platforms
  */
 void move_camera_through_floor_while_descending(struct Camera *c, f32 height) {
-    if ((sMarioGeometry.currFloorHeight < height - 100.0f)
-        && (sMarioGeometry.prevFloorHeight > sMarioGeometry.currFloorHeight)) {
+    if ((sMarioGeometry.currFloorHeight < height - 100.0f) && (sMarioGeometry.prevFloorHeight > sMarioGeometry.currFloorHeight)) {
         c->pos[1]               = height - 400.0f;
         gLakituState.curPos[1]  = height - 400.0f;
         gLakituState.goalPos[1] = height - 400.0f;
@@ -5570,7 +5568,6 @@ void reset_pan_distance(UNUSED struct Camera *c) {
 void player2_rotate_cam(struct Camera *c, s16 minPitch, s16 maxPitch, s16 minYaw, s16 maxYaw) {
     f32 distCamToFocus;
     s16 pitch, yaw, pitchCap;
-
     // Change the camera rotation to match the 2nd player's stick
     approach_s16_asymptotic_bool(&sCreditsPlayer2Yaw,   -(s16)(gPlayer2Controller->stickX * 250.0f), 0x4);
     approach_s16_asymptotic_bool(&sCreditsPlayer2Pitch, -(s16)(gPlayer2Controller->stickY * 265.0f), 0x4);
@@ -5799,7 +5796,6 @@ void cutscene_ending_peach_descent_lower_focus(UNUSED struct Camera *c) {
  */
 void cutscene_ending_peach_descent_back_to_mario(struct Camera *c) {
     Vec3f pos;
-
     move_point_along_spline(pos, sEndingPeachDescentCamPos, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
@@ -6836,7 +6832,7 @@ void cutscene_prepare_cannon_start(struct Camera *c) {
     sCutsceneVars[2].point[0] = 30.0f;
     // Store the cannon door's position in sCutsceneVars[3]'s point
     object_pos_to_vec3f(sCutsceneVars[3].point, gCutsceneFocus);
-    vec3s_set(sCutsceneVars[5].angle, 0, 0, 0);
+    vec3s_set(sCutsceneVars[5].angle, 0x0, 0x0, 0x0);
 }
 
 /**
@@ -7612,7 +7608,7 @@ void cutscene_cap_switch_press(struct Camera *c) {
     cutscene_event(cutscene_cap_switch_press_create_dialog,       c, 10, 10);
     vec3f_get_dist_and_angle(sMarioCamState->pos, c->pos, &dist, &pitch, &yaw);
     if (gDialogResponse != DIALOG_RESPONSE_NONE) sCutsceneVars[4].angle[0] = gDialogResponse;
-    if ((get_dialog_id() == DIALOG_NONE) && (sCutsceneVars[4].angle[0] != 0)) {
+    if ((get_dialog_id() == DIALOG_NONE) && (sCutsceneVars[4].angle[0] != 0x0)) {
         sCutsceneDialogResponse = sCutsceneVars[4].angle[0];
         if (sCutsceneVars[4].angle[0] == 1) cap_switch_save();
         stop_cutscene_and_retrieve_stored_info(c);

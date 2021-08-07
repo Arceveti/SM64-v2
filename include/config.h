@@ -72,7 +72,7 @@
 #define CASTLE_MUSIC_FIX
 // Remove course specific camera processing
 #define CAMERA_FIX
-// Change the movement speed when hanging from a ceiling (the vanilla value is 4.f)
+// Change the movement speed when hanging from a ceiling (the vanilla value is 4.0f)
 #define HANGING_SPEED 12.0f
 // Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
 // #define TIGHTER_HANGING_CONTROLS
@@ -407,7 +407,8 @@
 
 // Include steep floors when checking for walls when underwater
 // This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
-// May cause performance issues due to checking the floors partition in addition to the walls partition.
+// May cause performance issues when underwater due to also iterating through the floors partition
+// in addition to the regular walls partition when checking wall collisions.
 // (Arceveti)
 #define UNDERWATER_STEEP_FLOORS_AS_WALLS
 #define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f

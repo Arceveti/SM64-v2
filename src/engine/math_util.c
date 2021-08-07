@@ -26,13 +26,15 @@ int gSplineState;
 #endif
 #endif
 
+#define FLOAT_MIN -3.40282e+38f
+
 // Kaze functions
 static float const E = 2.718281828459f;
 static float slow_logf(float x) {
     float p = 0.0f;
     float r = 0.0f, c = -1.0f;
     int i;
-    if (x == 0.0f) return -9999999999999999999999999999999999999999999999999999999.f;
+    if (x == 0.0f) return FLOAT_MIN;
     while (x < 0.5f) {
         x *= E;
         ++p;
@@ -227,11 +229,8 @@ void mtxf_copy(Mat4 dest, Mat4 src) {
 void mtxf_identity(Mat4 mtx) {
     register s32 i;
     register f32 *dest;
-    // These loops must be one line to match on -O2
-
     // initialize everything except the first and last cells to 0
     for (dest = (f32 *) mtx + 1, i = 0; i < 14; dest++   , i++) *dest = 0;
-
     // initialize the diagonal cells to 1
     for (dest = (f32 *) mtx    , i = 0; i <  4; dest += 5, i++) *dest = 1;
 }
@@ -562,7 +561,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
     if (point1[1] - pos[1] < minY) point1[1] = pos[1];
     if (point2[1] - pos[1] < minY) point2[1] = pos[1];
 
-    avgY = (point0[1] + point1[1] + point2[1]) / 3;
+    avgY = (point0[1] + point1[1] + point2[1]) / 3.0f;
 
     vec3f_set(forward, sins(yaw), 0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
@@ -608,33 +607,33 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     register f32 entry2;
 
     // column 0
-    entry0 = a[0][0];
-    entry1 = a[0][1];
-    entry2 = a[0][2];
+    entry0     = a[0][0];
+    entry1     = a[0][1];
+    entry2     = a[0][2];
     temp[0][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[0][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[0][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
     // column 1
-    entry0 = a[1][0];
-    entry1 = a[1][1];
-    entry2 = a[1][2];
+    entry0     = a[1][0];
+    entry1     = a[1][1];
+    entry2     = a[1][2];
     temp[1][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[1][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[1][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
     // column 2
-    entry0 = a[2][0];
-    entry1 = a[2][1];
-    entry2 = a[2][2];
+    entry0     = a[2][0];
+    entry1     = a[2][1];
+    entry2     = a[2][2];
     temp[2][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[2][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[2][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
 
     // column 3
-    entry0 = a[3][0];
-    entry1 = a[3][1];
-    entry2 = a[3][2];
+    entry0     = a[3][0];
+    entry1     = a[3][1];
+    entry2     = a[3][2];
     temp[3][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0] + b[3][0];
     temp[3][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1] + b[3][1];
     temp[3][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2] + b[3][2];
@@ -650,7 +649,6 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
  */
 void mtxf_scale_vec3f(Mat4 dest, Mat4 mtx, Vec3f s) {
     register s32 i;
-
     for (i = 0; i < 4; i++) {
         dest[0][i] = mtx[0][i] * s[0];
         dest[1][i] = mtx[1][i] * s[1];
@@ -668,7 +666,6 @@ void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
     register f32 x = b[0];
     register f32 y = b[1];
     register f32 z = b[2];
-
     b[0] = x * mtx[0][0] + y * mtx[1][0] + z * mtx[2][0] + mtx[3][0];
     b[1] = x * mtx[0][1] + y * mtx[1][1] + z * mtx[2][1] + mtx[3][1];
     b[2] = x * mtx[0][2] + y * mtx[1][2] + z * mtx[2][2] + mtx[3][2];
@@ -686,12 +683,10 @@ void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
 void mtxf_to_mtx(Mtx *dest, Mat4 src) {
 	Mat4 temp;
 	register s32 i, j;
-	
 	for( i = 0; i < 4; i++ ) {
 		for( j = 0; j < 3; j++ ) temp[i][j] = src[i][j] / WORLD_SCALE;
 		temp[i][3] = src[i][3];
 	}
-
 	guMtxF2L( temp, dest );
 }
 
@@ -700,7 +695,6 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
  */
 void mtxf_rotate_xy(Mtx *mtx, s16 angle) {
     Mat4 temp;
-
     mtxf_identity(temp);
     temp[0][0] = coss(angle);
     temp[0][1] = sins(angle);
@@ -721,10 +715,9 @@ void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
     f32 camX = camMtx[3][0] * camMtx[0][0] + camMtx[3][1] * camMtx[0][1] + camMtx[3][2] * camMtx[0][2];
     f32 camY = camMtx[3][0] * camMtx[1][0] + camMtx[3][1] * camMtx[1][1] + camMtx[3][2] * camMtx[1][2];
     f32 camZ = camMtx[3][0] * camMtx[2][0] + camMtx[3][1] * camMtx[2][1] + camMtx[3][2] * camMtx[2][2];
-
-    dest[0] = objMtx[3][0] * camMtx[0][0] + objMtx[3][1] * camMtx[0][1] + objMtx[3][2] * camMtx[0][2] - camX;
-    dest[1] = objMtx[3][0] * camMtx[1][0] + objMtx[3][1] * camMtx[1][1] + objMtx[3][2] * camMtx[1][2] - camY;
-    dest[2] = objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
+    dest[0]  = objMtx[3][0] * camMtx[0][0] + objMtx[3][1] * camMtx[0][1] + objMtx[3][2] * camMtx[0][2] - camX;
+    dest[1]  = objMtx[3][0] * camMtx[1][0] + objMtx[3][1] * camMtx[1][1] + objMtx[3][2] * camMtx[1][2] - camY;
+    dest[2]  = objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
 }
 
 /**
@@ -736,7 +729,6 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *
     register f32 x = to[0] - from[0];
     register f32 y = to[1] - from[1];
     register f32 z = to[2] - from[2];
-
     *dist  = sqrtf(x * x + y * y + z * z);
     *pitch = atan2s(sqrtf(x * x + z * z), y);
     *yaw   = atan2s(z, x);
@@ -759,7 +751,6 @@ void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, s16 pitch, s16 yaw
 s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
     //! If target is close to the max or min s32, then it's possible to overflow
     // past it without stopping.
-
     if (current < target) {
         current += inc;
         if (current > target) current = target;
@@ -791,7 +782,6 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
  */
 static u16 atan2_lookup(f32 y, f32 x) {
     u16 ret;
-
     if (x == 0) {
         ret = gArctanTable[0];
     } else {
@@ -806,7 +796,6 @@ static u16 atan2_lookup(f32 y, f32 x) {
  */
 s16 atan2s(f32 y, f32 x) {
     u16 ret;
-
     if (x >= 0) {
         if (y >= 0) {
             if (y >= x) {
@@ -881,11 +870,10 @@ f32 atan2f(f32 y, f32 x) {
  */
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
     f32 tinv = 1 - t;
-    f32 tinv2 = tinv * tinv;
+    f32 tinv2 = tinv  * tinv;
     f32 tinv3 = tinv2 * tinv;
-    f32 t2 = t * t;
+    f32 t2 = t  * t;
     f32 t3 = t2 * t;
-
     switch (gSplineState) {
         case CURVE_BEGIN_1:
             result[0] =  tinv3;
@@ -929,9 +917,9 @@ void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
  * That's because the spline has a 3rd degree polynomial, so it looks 3 points ahead.
  */
 void anim_spline_init(Vec4s *keyFrames) {
-    gSplineKeyframe = keyFrames;
+    gSplineKeyframe         = keyFrames;
     gSplineKeyframeFraction = 0;
-    gSplineState = 1;
+    gSplineState            = 1;
 }
 
 /**
@@ -943,7 +931,6 @@ s32 anim_spline_poll(Vec3f result) {
     Vec4f weights;
     s32 i;
     s32 hasEnded = FALSE;
-
     vec3f_copy(result, gVec3fZero);
     spline_get_weights(weights, gSplineKeyframeFraction, gSplineState);
     for (i = 0; i < 4; i++) {
@@ -951,7 +938,6 @@ s32 anim_spline_poll(Vec3f result) {
         result[1] += weights[i] * gSplineKeyframe[i][2];
         result[2] += weights[i] * gSplineKeyframe[i][3];
     }
-
     if ((gSplineKeyframeFraction += gSplineKeyframe[0][0] / 1000.0f) >= 1) {
         gSplineKeyframe++;
         gSplineKeyframeFraction--;
@@ -960,15 +946,12 @@ s32 anim_spline_poll(Vec3f result) {
                 hasEnded = TRUE;
                 break;
             case CURVE_MIDDLE:
-                if (gSplineKeyframe[2][0] == 0) {
-                    gSplineState = CURVE_END_1;
-                }
+                if (gSplineKeyframe[2][0] == 0) gSplineState = CURVE_END_1;
                 break;
             default:
                 gSplineState++;
                 break;
         }
     }
-
     return hasEnded;
 }

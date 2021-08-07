@@ -289,11 +289,9 @@ s32 cur_obj_rotate_yaw_toward(s16 target, s16 increment) {
 }
 
 s16 obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
-    s16 angle;
     f32 z1 = obj1->oPosZ; f32 z2 = obj2->oPosZ; // ordering of instructions...
     f32 x1 = obj1->oPosX; f32 x2 = obj2->oPosX;
-    angle = atan2s(z2 - z1, x2 - x1);
-    return angle;
+    return atan2s(z2 - z1, x2 - x1);
 }
 
 s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleIndex, s16 turnAmount) {

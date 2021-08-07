@@ -59,7 +59,6 @@ s16 *read_vec3s_angle(Vec3s dst, s16 *src) {
 void register_scene_graph_node(struct GraphNode *graphNode) {
     if (graphNode != NULL) {
         gCurGraphNodeList[gCurGraphNodeIndex] = graphNode;
-
         if (gCurGraphNodeIndex == 0) {
             if (gCurRootGraphNode == NULL) gCurRootGraphNode = graphNode;
         } else {
