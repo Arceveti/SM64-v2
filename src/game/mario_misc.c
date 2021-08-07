@@ -115,8 +115,7 @@ Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED
 
 static void toad_message_faded(void) {
     if (gCurrentObject->oDistanceToMario > 700.0f) gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-    if (!gCurrentObject->oToadMessageRecentlyTalked
-     && gCurrentObject->oDistanceToMario < 600.0f) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
+    if (!gCurrentObject->oToadMessageRecentlyTalked && gCurrentObject->oDistanceToMario < 600.0f) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
 }
 
 static void toad_message_opaque(void) {
@@ -125,7 +124,7 @@ static void toad_message_opaque(void) {
     } else if (!gCurrentObject->oToadMessageRecentlyTalked) {
         gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
         if (gCurrentObject->oInteractStatus & INT_STATUS_INTERACTED) {
-            gCurrentObject->oInteractStatus = INT_STATUS_NONE;
+            gCurrentObject->oInteractStatus   = INT_STATUS_NONE;
             gCurrentObject->oToadMessageState = TOAD_MESSAGE_TALKING;
             play_toads_jingle();
         }
@@ -237,8 +236,7 @@ void bhv_unlock_door_star_loop(void) {
                 gCurrentObject->oUnlockDoorStarState++; // Sets state to UNLOCK_DOOR_STAR_DONE
             }
             break;
-        case UNLOCK_DOOR_STAR_DONE: // The object stays loaded for an additional 50 frames so that the
-                                    // sound doesn't immediately stop.
+        case UNLOCK_DOOR_STAR_DONE: // The object stays loaded for an additional 50 frames so that the sound doesn't immediately stop.
             if (gCurrentObject->oUnlockDoorStarTimer++ == 50) obj_mark_for_deletion(gCurrentObject);
             break;
     }
@@ -459,12 +457,13 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
             // c up is 250.0f
             dist -= 250.0f;
-            dist /=  16.0f;
-            dist = max(min(dist, min(lakituMaxW,lakituMaxH)), 0.0f);
-            lakituW = (lakituMaxW-(dist*2.0f));//*sins(pitch);
-            lakituH = (lakituMaxH-dist);//*max(coss(yaw),0.5f);
-            lakituX = max(((64.0f/SCREEN_HEIGHT)*(SCREEN_HEIGHT-gMarioScreenY))-lakituW, 0);
-            lakituY = max(((32.0f/SCREEN_WIDTH)*(gMarioScreenX))-lakituH*0.5f, 0);
+            // dist /=  16.0f;
+            dist *= 0.0625;
+            dist    = max(min(dist, min(lakituMaxW, lakituMaxH)), 0.0f);
+            lakituW = (lakituMaxW - (dist * 2.0f));//*sins(pitch);
+            lakituH = (lakituMaxH - (dist       ));//*max(coss(yaw), 0.5f);
+            lakituX = max(((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY))-lakituW       ), 0);
+            lakituY = max(((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX))-lakituH * 0.5f), 0);
 #endif
             generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -490,9 +489,9 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             dist -= 250.0f;
             dist /= 16.0f;
             dist = max(min(dist, 32.0f), 0.0f);
-            lakituW =  64-dist*2.0f;
-            lakituH = (32-dist);
-            lakituX = 32-lakituW*0.5f;
+            lakituW = (64 - (dist    * 2.0f));
+            lakituH = (32 - (dist          ));
+            lakituX = (32 - (lakituW * 0.5f));
             lakituY = lakituX - 16;
 #endif
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
@@ -511,11 +510,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, 64, 32);
 #endif
         }
-#else
-    if (callContext == GEO_CONTEXT_RENDER) {
-        switchCase->selectedCase = bodyState->modelState >> 8;
-#endif
     }
+#else
+    if (callContext == GEO_CONTEXT_RENDER) switchCase->selectedCase = bodyState->modelState >> 8;
+#endif
     return NULL;
 }
 
@@ -616,11 +614,11 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 vec3s_copy(gMirrorMario.angle, mario->header.gfx.angle);
                 vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos);
                 vec3f_copy(gMirrorMario.scale, mario->header.gfx.scale);
-                gMirrorMario.animInfo = mario->header.gfx.animInfo;
-                mirroredX             = MIRROR_X - gMirrorMario.pos[0];
-                gMirrorMario.pos[0]   = mirroredX + MIRROR_X;
-                gMirrorMario.angle[1] = -gMirrorMario.angle[1];
-                gMirrorMario.scale[0] *= -1.0f;
+                gMirrorMario.animInfo        = mario->header.gfx.animInfo;
+                mirroredX                    = MIRROR_X - gMirrorMario.pos[0];
+                gMirrorMario.pos[0]          = mirroredX + MIRROR_X;
+                gMirrorMario.angle[1]        = -gMirrorMario.angle[1];
+                gMirrorMario.scale[0]       *= -1.0f;
                 ((struct GraphNode *) &gMirrorMario)->flags |=  0x1;
             } else {
                 ((struct GraphNode *) &gMirrorMario)->flags &= ~0x1;
