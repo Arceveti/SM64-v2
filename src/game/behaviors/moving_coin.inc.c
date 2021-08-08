@@ -40,7 +40,6 @@ s32 coin_step(s16 *collisionFlagsPtr) {
 
 void moving_coin_flicker(void) {
     s16 collisionFlags;
-
     coin_step(&collisionFlags);
     obj_flicker_and_disappear(o, 0);
 }

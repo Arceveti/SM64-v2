@@ -36,7 +36,7 @@
 #define OBJ_FLAG_UPDATE_TRANSFORM_FOR_THROW_MATRIX  (1 <<  5) // 0x00000020
 #define OBJ_FLAG_COMPUTE_DIST_TO_MARIO              (1 <<  6) // 0x00000040
 #define OBJ_FLAG_ACTIVE_FROM_AFAR                   (1 <<  7) // 0x00000080
-#define OBJ_FLAG_IS_MARIO                           (1 <<  8) // 0x00000100
+#define OBJ_FLAG_PLAYER                             (1 <<  8) // 0x00000100
 #define OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT       (1 <<  9) // 0x00000200
 #define OBJ_FLAG_HOLDABLE                           (1 << 10) // 0x00000400
 #define OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM    (1 << 11) // 0x00000800

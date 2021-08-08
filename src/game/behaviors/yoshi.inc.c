@@ -6,20 +6,17 @@
 static s16 sYoshiHomeLocations[] = { 0, -5625, -1364, -5912, -1403, -4609, -1004, -5308 };
 
 void bhv_yoshi_init(void) {
-    o->oGravity  = 2.0f;
-    o->oFriction = 0.9f;
-    o->oBuoyancy = 1.3f;
+    o->oGravity            = 2.0f;
+    o->oFriction           = 0.9f;
+    o->oBuoyancy           = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_NPC;
-
     if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) < 120 || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void yoshi_walk_loop(void) {
-    UNUSED s16 stepResult;
     s16 animFrame = o->header.gfx.animInfo.animFrame;
-
     o->oForwardVel = 10.0f;
-    stepResult = object_step();
+    object_step();
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oYoshiTargetYaw, 0x500);
     if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) o->oAction = YOSHI_ACT_IDLE;
     cur_obj_init_animation(YOSHI_ANIM_WALK);
@@ -43,10 +40,10 @@ void yoshi_idle_loop(void) {
             o->oYoshiChosenHome = chosenHome;
         }
 
-        o->oHomeX = sYoshiHomeLocations[o->oYoshiChosenHome * 2    ];
-        o->oHomeZ = sYoshiHomeLocations[o->oYoshiChosenHome * 2 + 1];
+        o->oHomeX          = sYoshiHomeLocations[o->oYoshiChosenHome * 2    ];
+        o->oHomeZ          = sYoshiHomeLocations[o->oYoshiChosenHome * 2 + 1];
         o->oYoshiTargetYaw = atan2s(o->oHomeZ - o->oPosZ, o->oHomeX - o->oPosX);
-        o->oAction = YOSHI_ACT_WALK;
+        o->oAction         = YOSHI_ACT_WALK;
     }
 
     cur_obj_init_animation(YOSHI_ANIM_IDLE);
@@ -55,9 +52,9 @@ void yoshi_idle_loop(void) {
     if (gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING ||
         gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING) {
         o->oAction = YOSHI_ACT_CREDITS;
-        o->oPosX = -1798.0f;
-        o->oPosY =  3174.0f;
-        o->oPosZ = -3644.0f;
+        o->oPosX   = -1798.0f;
+        o->oPosY   =  3174.0f;
+        o->oPosZ   = -3644.0f;
     }
 }
 

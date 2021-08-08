@@ -41,6 +41,7 @@
 
 #define o gCurrentObject
 
+#define OBJ_COL_FLAGS_NONE          0x0
 #define OBJ_COL_FLAG_GROUNDED   (1 << 0)
 #define OBJ_COL_FLAG_HIT_WALL   (1 << 1)
 #define OBJ_COL_FLAG_UNDERWATER (1 << 2)
@@ -343,9 +344,8 @@ s16 object_step(void) {
  * Used for boulders, falling pillars, and the rolling snowman body.
  */
 s16 object_step_without_floor_orient(void) {
-    s16 collisionFlags  = 0;
     sOrientObjWithFloor = FALSE;
-    collisionFlags      = object_step();
+    s16 collisionFlags      = object_step();
     sOrientObjWithFloor = TRUE;
     return collisionFlags;
 }
@@ -536,7 +536,7 @@ s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 ac
  */
 void obj_check_floor_death(s16 collisionFlags, struct Surface *floor) {
     if (floor == NULL) return;
-    if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == OBJ_COL_FLAG_GROUNDED) {
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         switch (floor->type) {
             case SURFACE_BURNING:       o->oAction = OBJ_ACT_LAVA_DEATH;        break;
             case SURFACE_VERTICAL_WIND: // fall through

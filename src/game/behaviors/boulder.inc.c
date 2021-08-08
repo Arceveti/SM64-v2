@@ -11,9 +11,7 @@ void bhv_big_boulder_init(void) {
 }
 
 void boulder_act_roll_loop(void) {
-    s16 collisionFlags;
-
-    collisionFlags = object_step_without_floor_orient();
+    s16 collisionFlags = object_step_without_floor_orient();
     if ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAG_GROUNDED && o->oVelY > 10.0f) {
         cur_obj_play_sound_2(SOUND_GENERAL_GRINDEL_ROLL);
         spawn_mist_particles();

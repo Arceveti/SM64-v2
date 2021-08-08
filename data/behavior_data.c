@@ -3361,7 +3361,7 @@ const BehaviorScript bhvYellowBall[] = {
 const BehaviorScript bhvMario[] = {
     BEGIN(OBJ_LIST_PLAYER),
     SET_INT(oIntangibleTimer, 0),
-    OR_INT(oFlags, OBJ_FLAG_IS_MARIO),
+    OR_INT(oFlags, OBJ_FLAG_PLAYER),
     OR_INT(oUnkPlayerID, 0x0001),
     SET_HITBOX(/*Radius*/ 37, /*Height*/ 160),
     BEGIN_LOOP(),

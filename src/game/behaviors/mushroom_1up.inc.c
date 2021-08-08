@@ -57,11 +57,11 @@ void pole_1up_move_towards_mario(void) {
     bhv_1up_interact();
 }
 
-void one_up_move_away_from_mario(s16 stepResult) {
+void one_up_move_away_from_mario(s16 collisionFlags) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     bhv_1up_interact();
-    if (stepResult & OBJ_COL_FLAG_HIT_WALL) o->oAction = MUSHROOM_ACT_DISAPPEARING;
+    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) o->oAction = MUSHROOM_ACT_DISAPPEARING;
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) o->oAction = MUSHROOM_ACT_DISAPPEARING;
 }
 
@@ -96,7 +96,7 @@ void bhv_1up_walking_loop(void) {
 }
 
 void bhv_1up_running_away_loop(void) {
-    s16 stepResult = object_step();
+    s16 collisionFlags = object_step();
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
@@ -112,7 +112,7 @@ void bhv_1up_running_away_loop(void) {
 
         case MUSHROOM_ACT_MOVING:
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            one_up_move_away_from_mario(stepResult);
+            one_up_move_away_from_mario(collisionFlags);
             break;
 
         case MUSHROOM_ACT_DISAPPEARING:
@@ -125,8 +125,8 @@ void bhv_1up_running_away_loop(void) {
 }
 
 void sliding_1up_move(void) {
-    s16 stepResult = object_step();
-    if (stepResult & OBJ_COL_FLAG_GROUNDED) {
+    s16 collisionFlags = object_step();
+    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         o->oForwardVel += 25.0f;
         o->oVelY        = 0.0f;
     } else {
@@ -164,7 +164,7 @@ void bhv_1up_loop(void) {
 }
 
 void bhv_1up_jump_on_approach_loop(void) {
-    s16 stepResult;
+    s16 collisionFlags;
 
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
@@ -175,13 +175,13 @@ void bhv_1up_jump_on_approach_loop(void) {
             break;
 
         case MUSHROOM_ACT_MOVING:
-            stepResult = object_step();
-            one_up_move_away_from_mario(stepResult);
+            collisionFlags = object_step();
+            one_up_move_away_from_mario(collisionFlags);
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             break;
 
         case MUSHROOM_ACT_DISAPPEARING:
-            stepResult = object_step();
+            collisionFlags = object_step();
             bhv_1up_interact();
             obj_flicker_and_disappear(o, 30);
             break;
@@ -191,7 +191,7 @@ void bhv_1up_jump_on_approach_loop(void) {
 }
 
 void bhv_1up_hidden_loop(void) {
-    s16 stepResult;
+    s16 collisionFlags;
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
@@ -204,19 +204,19 @@ void bhv_1up_hidden_loop(void) {
             break;
 
         case MUSHROOM_ACT_MOVING:
-            stepResult = object_step();
-            one_up_move_away_from_mario(stepResult);
+            collisionFlags = object_step();
+            one_up_move_away_from_mario(collisionFlags);
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             break;
 
         case MUSHROOM_ACT_DISAPPEARING:
-            stepResult = object_step();
+            collisionFlags = object_step();
             bhv_1up_interact();
             obj_flicker_and_disappear(o, 30);
             break;
 
         case MUSHROOM_ACT_LOOP_IN_AIR:
-            stepResult = object_step();
+            collisionFlags = object_step();
             if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             one_up_loop_in_air();
 
@@ -239,7 +239,6 @@ void bhv_1up_hidden_trigger_loop(void) {
 }
 
 void bhv_1up_hidden_in_pole_loop(void) {
-    UNUSED s16 stepResult;
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
@@ -253,11 +252,11 @@ void bhv_1up_hidden_in_pole_loop(void) {
 
         case MUSHROOM_ACT_MOVING:
             pole_1up_move_towards_mario();
-            stepResult = object_step();
+            object_step();
             break;
 
         case MUSHROOM_ACT_LOOP_IN_AIR:
-            stepResult = object_step();
+            object_step();
             if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             one_up_loop_in_air();
 

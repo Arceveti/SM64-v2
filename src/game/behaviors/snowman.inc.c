@@ -45,11 +45,9 @@ void adjust_rolling_face_pitch(f32 f12) {
 }
 
 void snowmans_bottom_act_follow_path(void) { // act 1
-    UNUSED s16 collisionFlags;
     s32 pathResult = 0;
-
     o->oPathedStartWaypoint     = segmented_to_virtual(&ccm_seg7_trajectory_snowman);
-    collisionFlags              = object_step_without_floor_orient();
+    object_step_without_floor_orient();
     pathResult                  = cur_obj_follow_path(pathResult);
     o->oSnowmansBottomTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
@@ -62,7 +60,7 @@ void snowmans_bottom_act_follow_path(void) { // act 1
 }
 
 void snowmans_bottom_act_final_stretch(void) { // act 2
-    UNUSED s16 collisionFlags = object_step_without_floor_orient();
+    object_step_without_floor_orient();
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
     if (is_point_close_to_object(o, -4230.0f, -1344.0f, 1813.0f, 300)) {
@@ -83,7 +81,7 @@ void snowmans_bottom_act_final_stretch(void) { // act 2
 }
 
 void snowmans_bottom_act_reach_end(void) { // act 3
-    UNUSED s16 collisionFlags = object_step_without_floor_orient();
+    s16 collisionFlags = object_step_without_floor_orient();
     if ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED) {
         o->oAction = SNOWMANS_BOTTOM_ACT_COLLISION;
         cur_obj_become_intangible();

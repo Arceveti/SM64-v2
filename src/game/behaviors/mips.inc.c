@@ -76,11 +76,8 @@ s16 bhv_mips_find_furthest_waypoint_to_mario(void) {
  * Wait until Mario comes close, then resume following our path.
  */
 void bhv_mips_act_wait_for_nearby_mario(void) {
-    UNUSED s16 collisionFlags = 0x0;
-
     o->oForwardVel = 0.0f;
-    collisionFlags = object_step();
-
+    object_step();
     // If Mario is within 500 units...
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) {
         // If we fail to find a suitable waypoint...
@@ -99,7 +96,7 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
  * Continue to follow our path around the basement area.
  */
 void bhv_mips_act_follow_path(void) {
-    s16 collisionFlags = 0x0;
+    s16 collisionFlags = OBJ_COL_FLAGS_NONE;
     s32 followStatus   = 0x0;
     struct Waypoint **pathBase;
     struct Waypoint *waypoint;
@@ -113,9 +110,9 @@ void bhv_mips_act_follow_path(void) {
     followStatus = cur_obj_follow_path(followStatus);
 
     // Update velocity and angle and do movement.
-    o->oForwardVel = o->oMipsForwardVelocity;
+    o->oForwardVel   = o->oMipsForwardVelocity;
     o->oMoveAngleYaw = o->oPathedTargetYaw;
-    collisionFlags = object_step();
+    collisionFlags   = object_step();
 
     // If we are at the end of the path, do idle animation and wait for Mario.
     if (followStatus == PATH_REACHED_END) {
@@ -146,15 +143,12 @@ void bhv_mips_act_wait_for_animation_done(void) {
  * Handles MIPS falling down after being thrown.
  */
 void bhv_mips_act_fall_down(void) {
-    s16 collisionFlags = object_step();
+    s16 collisionFlags               = object_step();
     o->header.gfx.animInfo.animFrame = 0;
-
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
-        o->oAction = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
-
-        o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
+        o->oAction       = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
+        o->oFlags       |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
-
         if (collisionFlags & OBJ_COL_FLAG_UNDERWATER) spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
     }
 }
@@ -164,7 +158,7 @@ void bhv_mips_act_fall_down(void) {
  */
 void bhv_mips_act_idle(void) {
     o->oForwardVel = 0.0f;
-    UNUSED s16 collisionFlags = object_step();
+    object_step();
     // Spawn a star if he was just picked up for the first time.
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_SHOULD_SPAWN_STAR) {
         bhv_spawn_star_no_level_exit(o->oBehParams2ndByte + 3);

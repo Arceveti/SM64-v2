@@ -71,16 +71,11 @@ void bowling_ball_set_waypoints(void) {
 }
 
 void bhv_bowling_ball_roll_loop(void) {
-    s16 collisionFlags;
-    s32 pathResult = 0;
-
     bowling_ball_set_waypoints();
-    collisionFlags = object_step();
-
-    pathResult = cur_obj_follow_path(pathResult);
-
+    s16 collisionFlags       = object_step();
+    s32 pathResult           = cur_obj_follow_path(pathResult);
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
+    o->oMoveAngleYaw         = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
 
     bowling_ball_set_hitbox();
@@ -192,7 +187,7 @@ void bhv_bob_pit_bowling_ball_init(void) {
 
 void bhv_bob_pit_bowling_ball_loop(void) {
     struct FloorGeometry *floorGeometry;
-    UNUSED s32 collisionFlags = object_step();
+    object_step();
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
     if ((floorGeometry->normalX == 0.0f) && (floorGeometry->normalZ == 0.0f)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();

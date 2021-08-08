@@ -32,7 +32,7 @@ void bhv_fire_piranha_plant_init(void) {
     if ((u16)(o->oBehParams >> 16) != 0) {
         o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
         o->oHealth = 1;
-        o->oNumLootCoins = ((o->oBehParams & 0x0000FF00) ? 0 : 2);
+        o->oNumLootCoins = ((o->oBehParams & 0x0000FF00) ? 0 : 2); //! param mask name
     }
     sNumActiveFirePiranhaPlants = sNumKilledFirePiranhaPlants = 0;
 }
