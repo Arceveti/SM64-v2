@@ -1,9 +1,6 @@
 #ifndef GD_RENDERER_H
 #define GD_RENDERER_H
 
-#include <PR/ultratypes.h>
-#include <PR/os_cont.h>
-
 #include "gd_types.h"
 #include "macros.h"
 
@@ -29,11 +26,6 @@ extern s32 gGdFrameBufNum;
 
 // functions
 u32 get_alloc_mem_amt(void);
-s32 gd_get_ostime(    void);
-f32 get_time_scale(   void);
-f64 gd_sin_d( f64 x);
-f64 gd_cos_d( f64 x);
-f64 gd_sqrt_d(f64 x);
 
 #if defined(ISVPRINT) || defined(UNF)
 #define gd_printf osSyncPrintf
@@ -85,7 +77,7 @@ void  start_view_dl(struct ObjView *view);
 void  gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3);
 void  gd_create_ortho_matrix(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f);
 void  gd_create_perspective_matrix(f32 fovy, f32 aspect, f32 near, f32 far);
-s32   setup_view_buffers(const char *name, struct ObjView *view);
+s32   setup_view_buffers(UNUSED const char *name, struct ObjView *view);
 void  gd_init_controllers(void);
 void  set_active_view(struct ObjView *v);
 void  gd_init(void);

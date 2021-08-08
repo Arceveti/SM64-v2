@@ -360,10 +360,10 @@ static void level_cmd_init_mario(void) {
     vec3s_set(gMarioSpawnInfo->startPos  , 0, 0, 0);
     vec3s_set(gMarioSpawnInfo->startAngle, 0, 0, 0);
     gMarioSpawnInfo->activeAreaIndex = -1;
-    gMarioSpawnInfo->areaIndex       = 0;
+    gMarioSpawnInfo->areaIndex       =  0;
     gMarioSpawnInfo->behaviorArg     = CMD_GET(u32, 4);
     gMarioSpawnInfo->behaviorScript  = CMD_GET(void *, 8);
-    gMarioSpawnInfo->unk18           = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
+    gMarioSpawnInfo->modelNode       = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
     gMarioSpawnInfo->next            = NULL;
     sCurrentCmd                      = CMD_NEXT;
 }
@@ -386,7 +386,7 @@ static void level_cmd_place_object(void) {
         spawnInfo->activeAreaIndex              = sCurrAreaIndex;
         spawnInfo->behaviorArg                  = CMD_GET(u32, 16);
         spawnInfo->behaviorScript               = CMD_GET(void *, 20);
-        spawnInfo->unk18                        = gLoadedGraphNodes[model];
+        spawnInfo->modelNode                    = gLoadedGraphNodes[model];
         spawnInfo->next                         = gAreas[sCurrAreaIndex].objectSpawnInfos;
         gAreas[sCurrAreaIndex].objectSpawnInfos = spawnInfo;
     }
@@ -417,7 +417,7 @@ static void level_cmd_create_instant_warp(void) {
         }
         warp                    = gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2);
         warp[0].id              = 1;
-        warp[0].area            = CMD_GET(u8, 3);
+        warp[0].area            = CMD_GET(u8,  3);
         warp[0].displacement[0] = CMD_GET(s16, 4);
         warp[0].displacement[1] = CMD_GET(s16, 6);
         warp[0].displacement[2] = CMD_GET(s16, 8);
@@ -444,7 +444,6 @@ static void level_cmd_create_painting_warp_node(void) {
         node->destArea  = CMD_GET(u8, 4);
         node->destNode  = CMD_GET(u8, 5);
     }
-
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -452,10 +451,10 @@ static void level_cmd_3A(void) {
     struct UnusedArea28 *val4;
     if (sCurrAreaIndex != -1) {
         if ((val4 = gAreas[sCurrAreaIndex].unused28) == NULL) val4 = gAreas[sCurrAreaIndex].unused28 = alloc_only_pool_alloc(sLevelPool, sizeof(struct UnusedArea28));
-        val4->unk00 = CMD_GET(s16, 2);
-        val4->unk02 = CMD_GET(s16, 4);
-        val4->unk04 = CMD_GET(s16, 6);
-        val4->unk06 = CMD_GET(s16, 8);
+        val4->unk00 = CMD_GET(s16,  2);
+        val4->unk02 = CMD_GET(s16,  4);
+        val4->unk04 = CMD_GET(s16,  6);
+        val4->unk06 = CMD_GET(s16,  8);
         val4->unk08 = CMD_GET(s16, 10);
     }
     sCurrentCmd = CMD_NEXT;

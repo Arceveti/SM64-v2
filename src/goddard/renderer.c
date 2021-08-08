@@ -1,19 +1,11 @@
 #include <ultra64.h>
-#include <stdarg.h>
-#include <stdio.h>
 
-#include "prevent_bss_reordering.h"
-
-#include "debug_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "dynlists/dynlists.h"
 #include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
 #include "gd_memory.h"
-#include "gd_types.h"
-#include "macros.h"
 #include "objects.h"
 #include "renderer.h"
 #include "sfx.h"
@@ -121,7 +113,6 @@ static s32 sPickBufLen;
 static s32 sPickBufPosition;
 static s16 *sPickBuf;
 static LookAt D_801BE7D0[3];
-static f32 sTimeScaleFactor  = 1.0f;
 static u32 sMemBlockPoolSize = 1;
 static s32 sMemBlockPoolUsed = 0;
 s32 gGdFrameBufNum           = 0;
@@ -605,17 +596,6 @@ u32 get_alloc_mem_amt(void) {
 }
 
 /**
- * Returns the current time
- */
-s32 gd_get_ostime(void) {
-    return osGetTime();
-}
-
-f32 get_time_scale(void) {
-    return sTimeScaleFactor;
-}
-
-/**
  * Increments the current display list's Gfx index list and returns a pointer to the next Gfx element
  */
 static Gfx *next_gfx(void) {
@@ -654,23 +634,6 @@ static Vp *next_vp(void) {
     if (sCurrentGdDl->curVpIdx >= sCurrentGdDl->totalVp) gd_exit(); // Vp list overflow
     return &sCurrentGdDl->vp[sCurrentGdDl->curVpIdx++];
 }
-
-/* 249AAC -> 249AEC */
-f64 gd_sin_d(f64 x) {
-    return sinf(x);
-}
-
-/* 249AEC -> 249B2C */
-f64 gd_cos_d(f64 x) {
-    return cosf(x);
-}
-
-/* 249B2C -> 249BA4 */
-f64 gd_sqrt_d(f64 x) {
-    if (x < 1.0e-7) return 0.0;
-    return sqrtf(x);
-}
-
 
 #if defined(ISVPRINT) || defined(UNF)
 #define stubbed_printf osSyncPrintf
@@ -1638,12 +1601,12 @@ void gd_create_perspective_matrix(f32 fovy, f32 aspect, f32 near, f32 far) {
 }
 
 /* 25262C -> 252AF8 */
-s32 setup_view_buffers(const char *name, struct ObjView *view) {
-    char memtrackerName[0x100];
+s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
+    // char memtrackerName[0x100];
     if (view->flags & (VIEW_Z_BUF | VIEW_COLOUR_BUF) && !(view->flags & VIEW_UNK_1000)) {
         if (view->flags & VIEW_COLOUR_BUF) {
-            sprintf(memtrackerName, "%s CBuf", name);
-            start_memtracker(memtrackerName);
+            // sprintf(memtrackerName, "%s CBuf", name);
+            // start_memtracker(memtrackerName);
             view->colourBufs[0] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
             if (view->flags & VIEW_2_COL_BUF) {
                 view->colourBufs[1] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
@@ -1652,21 +1615,21 @@ s32 setup_view_buffers(const char *name, struct ObjView *view) {
             }
             view->colourBufs[0] = (void *) ALIGN((uintptr_t) view->colourBufs[0], 64);
             view->colourBufs[1] = (void *) ALIGN((uintptr_t) view->colourBufs[1], 64);
-            stop_memtracker(memtrackerName);
+            // stop_memtracker(memtrackerName);
             if (view->colourBufs[0] == NULL || view->colourBufs[1] == NULL) gd_exit(); // Not enough DRAM for colour buffers
             view->parent = view;
         } else {
             view->parent = sScreenView;
         }
         if (view->flags & VIEW_Z_BUF) {
-            sprintf(memtrackerName, "%s ZBuf", name);
-            start_memtracker(memtrackerName);
+            // sprintf(memtrackerName, "%s ZBuf", name);
+            // start_memtracker(memtrackerName);
             if (view->flags & VIEW_ALLOC_ZBUF) {
                 view->zbuf = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x40);
                 if (view->zbuf == NULL) gd_exit(); // Not enough DRAM for Z buffer
                 view->zbuf = (void *) ALIGN((uintptr_t) view->zbuf, 64);
             }
-            stop_memtracker(memtrackerName);
+            // stop_memtracker(memtrackerName);
         } else {
             view->zbuf = sScreenView->zbuf;
         }
@@ -1769,9 +1732,9 @@ void gd_init(void) {
     sNumLights = NUMLIGHTS_2;
     gd_set_identity_mat4(&sInitIdnMat4);
     mat4_to_mtx(&sInitIdnMat4, &sIdnMtx);
-    remove_all_memtrackers();
+    // remove_all_memtrackers();
     null_obj_lists();
-    start_memtracker("total"); //!
+    // start_memtracker("total");
     sStaticDl          = new_gd_dl(0, 1900, 4000,   1, 300, 8);
     sDynamicMainDls[0] = new_gd_dl(1,  600,   10, 200,  10, 3);
     sDynamicMainDls[1] = new_gd_dl(1,  600,   10, 200,  10, 3);
@@ -1919,7 +1882,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     for (i = 0; i < tlbEntries; i++) {
         osMapTLB(i, OS_PM_64K,
             (void *) (uintptr_t) (0x04000000 + (i * 2 * PAGE_SIZE)),  // virtual address to map
-            GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) + 0),  // even page address
+            GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) +         0),  // even page address
             GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) + PAGE_SIZE),  // odd page address
             -1);
     }

@@ -1,10 +1,6 @@
 #include <PR/ultratypes.h>
 
-#include "debug_utils.h"
 #include "gd_math.h"
-#include "gd_types.h"
-#include "joints.h"
-#include "macros.h"
 #include "objects.h"
 #include "renderer.h"
 #include "skin.h"

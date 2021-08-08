@@ -41,7 +41,7 @@ struct SpawnInfo
     /*0x0D*/ s8 activeAreaIndex;
     /*0x10*/ u32 behaviorArg;
     /*0x14*/ void *behaviorScript;
-    /*0x18*/ struct GraphNode *unk18;
+    /*0x18*/ struct GraphNode *modelNode;
     /*0x1C*/ struct SpawnInfo *next;
 };
 

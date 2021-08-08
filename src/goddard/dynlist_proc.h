@@ -1,8 +1,6 @@
 #ifndef GD_DYNLIST_PROCESSOR_H
 #define GD_DYNLIST_PROCESSOR_H
 
-#include <PR/ultratypes.h>
-
 #include "gd_types.h"
 
 // types
@@ -19,22 +17,21 @@ typedef void *DynObjName;
 /// @}
 /// @}
 
-
 /// `d_makeobj()` object types
 enum DObjTypes {
-    D_CAR_DYNAMICS  = 0,
+    // D_CAR_DYNAMICS  = 0,
     D_NET           = 1,
     D_JOINT         = 2,
-    D_ANOTHER_JOINT = 3,
+    // D_ANOTHER_JOINT = 3,
     D_CAMERA        = 4,
-    D_VERTEX        = 5,
-    D_FACE          = 6,
-    D_PLANE         = 7,
-    D_BONE          = 8,
+    // D_VERTEX        = 5,
+    // D_FACE          = 6,
+    // D_PLANE         = 7,
+    // D_BONE          = 8,
     D_MATERIAL      = 9,
     D_SHAPE         = 10,
-    D_GADGET        = 11,
-    D_LABEL         = 12,
+    // D_GADGET        = 11,
+    // D_LABEL         = 12,
     D_VIEW          = 13,
     D_ANIMATOR      = 14,
     D_DATA_GRP      = 15, ///< An `ObjGroup` that links to raw vertex or face data

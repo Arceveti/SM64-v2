@@ -1,16 +1,11 @@
 #include <PR/ultratypes.h>
-#include <stdio.h>
 
-#include "debug_utils.h"
+#include "string_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
 #include "joints.h"
-#include "macros.h"
 #include "objects.h"
-#include "particles.h"
 #include "renderer.h"
 #include "shape_helper.h"
 #include "skin.h"
@@ -322,15 +317,12 @@ static char *integer_name_to_string(DynObjName name) {
  */
 struct GdObj *d_makeobj(enum DObjTypes type, DynObjName name) {
     struct GdObj *dobj;
-
     switch (type) {
         case D_JOINT:    dobj = &make_joint(        0, 0.0f, 0.0f, 0.0f)->header;        break;
         case D_NET:      dobj = &make_net(NULL)->header;                                 break;
         case D_GROUP:    dobj = &make_group(0)->header;                                  break;
         case D_DATA_GRP: d_makeobj(D_GROUP, name); ((struct ObjGroup *) sDynListCurObj)->linkType = 1; return NULL;
         case D_CAMERA:   dobj = &make_camera()->header;                                  break;
-        case D_VERTEX:   dobj = &gd_make_vertex(       0.0f, 0.0f, 0.0f)->header;        break;
-        case D_FACE:     dobj = &make_face_with_colour(1.0f, 1.0f, 1.0f)->header;        break;
         case D_MATERIAL: dobj = &make_material()->header;                                break;
         case D_SHAPE:    dobj = &make_shape(integer_name_to_string(name))->header;       break;
         case D_ANIMATOR: dobj = &make_animator()->header;                                break;
@@ -522,7 +514,7 @@ void chk_shapegen(struct ObjShape *shape) {
             vtxdata = (struct GdVtxData *) shapeVtx->firstMember->obj;
             facedata = (struct GdFaceData *) shapeFaces->firstMember->obj;
             if (facedata->type != 1) gd_exit(); // unsupported poly type
-            if (vtxdata->type != 1) gd_exit(); // unsupported vertex type
+            if (vtxdata->type  != 1) gd_exit(); // unsupported vertex type
             if (vtxdata->count >= VTX_BUF_SIZE) gd_exit(); // too many vertices
             vtxbuf     = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *));
             oldObjHead = gGdObjectList;
@@ -1153,18 +1145,6 @@ void d_get_world_pos(struct GdVec3f *dst) {
             dst->z = ((struct ObjCamera *) sDynListCurObj)->worldPos.z;
             break;
         case OBJ_TYPE_SHAPES: dst->x = dst->y = dst->z = 0.0f; break;
-
-        case OBJ_TYPE_PLANES:
-            dst->x  = ((struct ObjPlane *) sDynListCurObj)->boundingBox.minX;
-            dst->y  = ((struct ObjPlane *) sDynListCurObj)->boundingBox.minY;
-            dst->z  = ((struct ObjPlane *) sDynListCurObj)->boundingBox.minZ;
-            dst->x += ((struct ObjPlane *) sDynListCurObj)->boundingBox.maxX;
-            dst->y += ((struct ObjPlane *) sDynListCurObj)->boundingBox.maxY;
-            dst->z += ((struct ObjPlane *) sDynListCurObj)->boundingBox.maxZ;
-            dst->x *= 0.5f;
-            dst->y *= 0.5f;
-            dst->z *= 0.5f;
-            break;
         case OBJ_TYPE_LIGHTS:
             dst->x = ((struct ObjLight *) sDynListCurObj)->position.x;
             dst->y = ((struct ObjLight *) sDynListCurObj)->position.y;
@@ -1316,11 +1296,11 @@ void d_set_type(s32 type) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_NETS:      ((struct ObjNet      *) dynobj)->netType    = type; break;
-        case OBJ_TYPE_GROUPS:    ((struct ObjGroup    *) dynobj)->debugPrint = type; break;
-        case OBJ_TYPE_JOINTS:    ((struct ObjJoint    *) dynobj)->type       = type; break;
-        case OBJ_TYPE_PARTICLES: ((struct ObjParticle *) dynobj)->unk60      = type; break;
-        case OBJ_TYPE_MATERIALS: ((struct ObjMaterial *) dynobj)->type       = type; break;
+        case OBJ_TYPE_NETS:      ((struct ObjNet      *) dynobj)->netType      = type; break;
+        case OBJ_TYPE_GROUPS:    ((struct ObjGroup    *) dynobj)->debugPrint   = type; break;
+        case OBJ_TYPE_JOINTS:    ((struct ObjJoint    *) dynobj)->type         = type; break;
+        case OBJ_TYPE_PARTICLES: ((struct ObjParticle *) dynobj)->particleType = type; break;
+        case OBJ_TYPE_MATERIALS: ((struct ObjMaterial *) dynobj)->type         = type; break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetType()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }

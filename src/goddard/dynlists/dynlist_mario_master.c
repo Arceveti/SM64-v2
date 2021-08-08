@@ -33,7 +33,7 @@ struct DynList dynlist_mario_master[] = {
     StartGroup(0x1),
 
         MakeDynObj(D_NET, DYNOBJ_MARIO_MAIN_NET),
-            SetType(2),
+            SetType(NET_TYPE_SCALED_VERTICES),
             SetFlag(0x2),
             SetShapePtr(DYNOBJ_MARIO_FACE_SHAPE),
             SetScale(       1.0, 1.0, 1.0),
@@ -600,7 +600,7 @@ struct DynList dynlist_mario_master[] = {
                     SetAttachOffset(329.8, 0.0, 0.0),
         EndNetWithSubGroup(DYNOBJ_MARIO_RIGHT_EYE_SKIN_NET),
         MakeDynObj(D_NET, DYNOBJ_MARIO_RIGHT_EYE_UNKNOWN_NET),
-            SetType(3),
+            SetType(NET_TYPE_JOINTS),
             SetShapePtr(DYNOBJ_MARIO_RIGHT_EYE_SHAPE),
             AttachTo(0xd, DYNOBJ_MARIO_RIGHT_EYE_JOINT_1),
             SetScale(       1.0, 1.0, 1.0),
@@ -625,7 +625,7 @@ struct DynList dynlist_mario_master[] = {
                     SetAttachOffset(329.8, 0.0, 0.0),
         EndNetWithSubGroup(DYNOBJ_MARIO_LEFT_EYE_SKIN_NET),
         MakeDynObj(D_NET, DYNOBJ_MARIO_LEFT_EYE_UNKNOWN_NET),
-            SetType(3),
+            SetType(NET_TYPE_JOINTS),
             SetShapePtr(DYNOBJ_MARIO_LEFT_EYE_SHAPE),
             AttachTo(0xd, DYNOBJ_MARIO_LEFT_EYE_JOINT_1),
             SetScale(       1.0, 1.0, 1.0),
@@ -634,7 +634,7 @@ struct DynList dynlist_mario_master[] = {
 
         // right eyebrow net (attaches to head)
         MakeDynObj(D_NET, DYNOBJ_MARIO_RIGHT_EYEBROW_NET),
-            SetType(2),
+            SetType(NET_TYPE_SCALED_VERTICES),
             SetShapePtr(DYNOBJ_MARIO_RIGHT_EYEBROW_SHAPE),
             // attach right eyebrow to head
             AttachTo(0xd, DYNOBJ_MARIO_MAIN_NET),
@@ -732,7 +732,7 @@ struct DynList dynlist_mario_master[] = {
 
         // left eyebrow net (attaches to head)
         MakeDynObj(D_NET, DYNOBJ_MARIO_LEFT_EYEBROW_NET),
-            SetType(2),
+            SetType(NET_TYPE_SCALED_VERTICES),
             SetShapePtr(DYNOBJ_MARIO_LEFT_EYEBROW_SHAPE),
             // attach left eyebrow to head
             AttachTo(0xd, DYNOBJ_MARIO_MAIN_NET),
@@ -830,7 +830,7 @@ struct DynList dynlist_mario_master[] = {
 
         // mustache net (attaches to head)
         MakeDynObj(D_NET, DYNOBJ_MARIO_MUSTACHE_NET),
-            SetType(2),
+            SetType(NET_TYPE_SCALED_VERTICES),
             SetShapePtr(DYNOBJ_MARIO_MUSTACHE_SHAPE),
             // attach mustache to head
             AttachTo(0xd, DYNOBJ_MARIO_MAIN_NET),

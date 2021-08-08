@@ -1,11 +1,7 @@
 #include <PR/ultratypes.h>
 
-#include "debug_utils.h"
-#include "gd_macros.h"
-#include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
-#include "macros.h"
+#include "gd_macros.h"
 #include "renderer.h"
 
 /**
@@ -36,6 +32,50 @@ float gd_Q_rsqrt( float number )
 	return y;
 }
 #endif
+
+// data
+static u32 sPrimarySeed   = 0x12345678; // @ 801A82A4
+static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
+
+/**
+ * Returns a random floating point number between 0 and 1 (inclusive)
+ * TODO: figure out type of rng generator?
+ */
+f32 gd_rand_float(void) {
+    u32 temp;
+    u32 i;
+    for (i = 0; i < 4; i++) {
+        if (sPrimarySeed & 0x80000000) {
+            sPrimarySeed = sPrimarySeed << 1 | 1;
+        } else {
+            sPrimarySeed <<= 1;
+        }
+    }
+    sPrimarySeed += 4;
+    /* Seed Switch */
+    if ((sPrimarySeed ^= osGetTime()) & 1) {
+        temp = sPrimarySeed;
+        sPrimarySeed = sSecondarySeed;
+        sSecondarySeed = temp;
+    }
+    return (sPrimarySeed & 0xFFFF) / 65535.0f;
+}
+
+/* 249AAC -> 249AEC */
+f64 gd_sin_d(f64 x) {
+    return sinf(x);
+}
+
+/* 249AEC -> 249B2C */
+f64 gd_cos_d(f64 x) {
+    return cosf(x);
+}
+
+/* 249B2C -> 249BA4 */
+f64 gd_sqrt_d(f64 x) {
+    if (x < 1.0e-7) return 0.0;
+    return sqrtf(x);
+}
 
 /**
  * Set mtx to a look-at matrix for the camera. The resulting transformation

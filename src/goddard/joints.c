@@ -1,21 +1,14 @@
 #include <PR/ultratypes.h>
 
-#include "prevent_bss_reordering.h"
-
-#include "debug_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
 #include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
 #include "joints.h"
-#include "macros.h"
 #include "objects.h"
-#include "renderer.h"
 #include "sfx.h"
 #include "skin.h"
-#include "skin_movement.h"
 
 static s32 sJointCount;                   // @ 801BA974
 
@@ -200,14 +193,6 @@ s32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* always 
     return TRUE;
 }
 
-/* 23F978 -> 23F9F0 */
-void func_801911A8(struct ObjJoint *j) {
-    j->unkCC.x = j->shapeOffset.x;
-    j->unkCC.y = j->shapeOffset.y;
-    j->unkCC.z = j->shapeOffset.z;
-    gd_rotate_and_translate_vec3f(&j->unkCC, &gGdSkinNet->mat128);
-}
-
 /* 23F9F0 -> 23FB90 */
 void func_80191220(struct ObjJoint *j) {
     j->unk48.x    = j->initPos.x; // storing "attached offset"?
@@ -224,24 +209,6 @@ void func_80191220(struct ObjJoint *j) {
     j->worldPos.y += j->unk3C.y;
     j->worldPos.z += j->unk3C.z;
     j->unk1A8.x = j->unk1A8.y = j->unk1A8.z = 0.0f;
-}
-
-/* 23FBC0 -> 23FCC8 */
-void func_801913F0(struct ObjJoint *j) {
-    // hmm...
-    j->velocity.x  = j->worldPos.x;
-    j->velocity.y  = j->worldPos.y;
-    j->velocity.z  = j->worldPos.z;
-
-    j->velocity.x -= j->unk30.x;
-    j->velocity.y -= j->unk30.y;
-    j->velocity.z -= j->unk30.z;
-
-    j->unk30.x     = j->worldPos.x;
-    j->unk30.y     = j->worldPos.y;
-    j->unk30.z     = j->worldPos.z;
-
-    gd_copy_mat4f(&gGdSkinNet->mat128, &j->matE8);
 }
 
 /* 23FDD4 -> 23FFF4 */
@@ -271,18 +238,6 @@ void reset_joint(struct ObjJoint *j) {
 
     gd_set_identity_mat4(        &j->mat128);
     gd_add_vec3f_to_mat4f_offset(&j->mat128, &j->initPos);
-}
-
-/* 23FFF4 -> 2400C4 */
-void func_80191824(struct ObjJoint *j) {
-    if (j->flags & 0x1) {
-        j->worldPos.x = gGdSkinNet->worldPos.x;
-        j->worldPos.y = gGdSkinNet->worldPos.y;
-        j->worldPos.z = gGdSkinNet->worldPos.z;
-        j->unk3C.x    = gGdSkinNet->worldPos.x;
-        j->unk3C.y    = gGdSkinNet->worldPos.y;
-        j->unk3C.z    = gGdSkinNet->worldPos.z;
-    }
 }
 
 /* 2406B8 -> 2406E0; orig name: func_80191EE8 */

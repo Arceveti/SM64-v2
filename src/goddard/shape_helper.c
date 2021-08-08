@@ -1,24 +1,16 @@
 #include <PR/ultratypes.h>
 
-#include "debug_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "dynlists/dynlist_macros.h"
 #include "dynlists/dynlists.h"
 #include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
 #include "joints.h"
-#include "macros.h"
 #include "objects.h"
 #include "particles.h"
 #include "renderer.h"
 #include "shape_helper.h"
 #include "skin.h"
-
-#ifndef VERSION_EU
-#include <prevent_bss_reordering.h>
-#endif
 
 // data
 struct        ObjGroup *gMarioFaceGrp       = NULL; // @ 801A82E0; returned by load_dynlist
@@ -32,14 +24,6 @@ static struct ObjShape *sGdShapeListHead;           // @ 801BAC50
 static             u32  sGdShapeCount;              // @ 801BAC54
 /// factor for scaling vertices in an `ObjShape` when calling `scale_verts_in_shape()`
 static struct GdVec3f sVertexScaleFactor;
-
-/* @ 245A50 for 0x40 */
-/* Something to do with shape list/group initialization? */
-void func_80197280(void) {
-    sGdShapeCount = 0;
-    sGdShapeListHead = NULL;
-    gGdLightGroup = make_group(0);
-}
 
 /**
  * Computes the normal vector for a face based on three of its vertices.
@@ -123,11 +107,11 @@ void add_3_vtx_to_face(struct ObjFace *face, struct ObjVertex *vtx1, struct ObjV
 /**
  * Creates an `ObjShape` object
  */
-struct ObjShape *make_shape(const char *name) {
+struct ObjShape *make_shape(UNUSED const char *name) {
     struct ObjShape *newShape;
     struct ObjShape *curShapeHead;
     newShape = (struct ObjShape *) make_object(OBJ_TYPE_SHAPES);
-    gd_strcpy(newShape->name, (name != NULL) ? name : "x");
+    // gd_strcpy(newShape->name, (name != NULL) ? name : "x");
     sGdShapeCount++;
     curShapeHead     = sGdShapeListHead;
     sGdShapeListHead = newShape;
@@ -296,19 +280,19 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     d_set_name_suffix(NULL);  // stop adding "l" to generated dynobj names
     // Make sparkle particles
     particle = make_particle(0, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
-    particle->unk60                 = 3;
+    particle->particleType          = 3;
     particle->unk64                 = 3;
     particle->attachedToObj         = &camera->header;
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
     particle = make_particle(0, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
-    particle->unk60                 = 3;
+    particle->particleType          = 3;
     particle->unk64                 = 2;
     particle->attachedToObj         = d_use_obj("N228l"); // DYNOBJ_SILVER_STAR_LIGHT
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
     particle = make_particle(0, COLOUR_RED, 0.0f, 0.0f, 0.0f);
-    particle->unk60                 = 3;
+    particle->particleType          = 3;
     particle->unk64                 = 2;
     particle->attachedToObj         = d_use_obj("N231l"); // DYNOBJ_RED_STAR_LIGHT
     particle->shapePtr              = gShapeRedSpark;
@@ -367,7 +351,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     grabberJoint->header.drawFlags &= ~OBJ_IS_GRABBALE;
     sp48                            = make_group_of_type(OBJ_TYPE_JOINTS, sp38);
     sp54                            = make_net(sp48);
-    sp54->netType                   = 3;
+    sp54->netType                   = NET_TYPE_JOINTS;
     addto_group(gMarioFaceGrp, &sp48->header);
     addto_groupfirst(gMarioFaceGrp, &sp54->header);
     return 0;
@@ -375,5 +359,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
 
 /* @ 249288 for 0xe0 */
 void load_shapes2(void) {
-    func_80197280();
+    sGdShapeCount = 0;
+    sGdShapeListHead = NULL;
+    gGdLightGroup = make_group(0);
 }

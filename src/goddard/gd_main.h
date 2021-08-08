@@ -1,8 +1,6 @@
 #ifndef GD_MAIN_H
 #define GD_MAIN_H
 
-#include <PR/ultratypes.h>
-
 // In various files of the Goddard subsystem, there are miscellaneous
 // unused rodata strings. These are likely byproducts of a printf macro
 // that was stubbed out as "#define printf", letting printf calls expand

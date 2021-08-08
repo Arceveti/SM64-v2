@@ -1,13 +1,10 @@
 #include <PR/ultratypes.h>
-#include <stdio.h>
 
-#include "debug_utils.h"
+#include "string_utils.h"
 #include "dynlist_proc.h"
 #include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
-#include "macros.h"
 #include "objects.h"
 #include "renderer.h"
 #include "shape_helper.h"
@@ -387,7 +384,7 @@ void drawscene(enum SceneType process, struct ObjGroup *interactables, struct Ob
     if (sSceneProcessType == FIND_PICKS) {
         apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) check_grabable_click, interactables);
     } else {
-        apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS | OBJ_TYPE_GADGETS | OBJ_TYPE_NETS | OBJ_TYPE_PARTICLES, (applyproc_t) apply_obj_draw_fn, interactables);
+        apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS | OBJ_TYPE_NETS | OBJ_TYPE_PARTICLES, (applyproc_t) apply_obj_draw_fn, interactables);
     }
     gd_setproperty(GD_PROP_LIGHTING, 1.0f, 0.0f, 0.0f);
     gd_dl_pop_matrix();
@@ -442,19 +439,7 @@ void draw_particle(struct GdObj *obj) {
         ptc->shapePtr->unk50 = ptc->timeout;
         draw_shape_2d(ptc->shapePtr, 2, ptc->pos.x, ptc->pos.y, ptc->pos.z);
     }
-    if (ptc->unk60 == 3 && ptc->subParticlesGrp != NULL) draw_group(ptc->subParticlesGrp);
-}
-
-/**
- * Rendering function for `ObjJoint`.
- */
-void draw_joint(struct GdObj *obj) {
-    struct ObjJoint *joint = (struct ObjJoint *) obj;
-    s32 colour;
-    struct ObjShape *boneShape;
-    if ((boneShape = joint->shapePtr) == NULL) return;
-    colour = (joint->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : joint->colourNum;
-    draw_shape(boneShape, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, colour, &joint->mat128);
+    if (ptc->particleType == 3 && ptc->subParticlesGrp != NULL) draw_group(ptc->subParticlesGrp);
 }
 
 /**
@@ -466,19 +451,6 @@ void draw_joint(struct GdObj *obj) {
 void draw_group(struct ObjGroup *grp) {
     if (grp == NULL) gd_exit(); // Bad group definition!
     apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) apply_obj_draw_fn, grp);
-}
-
-/**
- * Rendering function for `ObjPlane`.
- */
-void draw_plane(struct GdObj *obj) {
-    struct ObjPlane *plane = (struct ObjPlane *) obj;
-    if (obj->drawFlags & OBJ_HIGHLIGHTED) {
-        obj->drawFlags &= ~OBJ_HIGHLIGHTED;
-    } else {
-        sUseSelectedColor = FALSE;
-    }
-    draw_face(plane->unk40);
 }
 
 /**
@@ -504,7 +476,7 @@ void register_light(struct ObjLight *light) {
 }
 
 /* 229180 -> 229564 */
-void Proc8017A980(struct ObjLight *light) {
+void update_lighting(struct ObjLight *light) {
     f32 sp24; // diffuse factor?
     f32 sp20;
     f32 sp1C;
@@ -550,7 +522,7 @@ void update_shaders(struct ObjShape *shape, struct GdVec3f *offset) {
     sLightPositionOffset.y = offset->y;
     sLightPositionOffset.z = offset->z;
     sPhongLight = NULL;
-    if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) Proc8017A980     , gGdLightGroup );
+    if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) update_lighting     , gGdLightGroup );
     if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);
     pop_gddl_stash();
 }

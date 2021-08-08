@@ -316,7 +316,8 @@ SECTIONS
       BUILD_DIR/libgoddard.a:objects.o(.data*);
       BUILD_DIR/libgoddard.a:particles.o(.data*);
       BUILD_DIR/libgoddard.a:dynlist_proc.o(.data*);
-      BUILD_DIR/libgoddard.a:debug_utils.o(.data*);
+      BUILD_DIR/libgoddard.a:string_utils.o(.data*);
+      BUILD_DIR/libgoddard.a:gd_math.o(.data*);
       BUILD_DIR/libgoddard.a:joints.o(.data*);
       BUILD_DIR/libgoddard.a:shape_helper.o(.data*);
       BUILD_DIR/libgoddard.a:renderer.o(.data*);
@@ -328,7 +329,7 @@ SECTIONS
       BUILD_DIR/libgoddard.a:skin_movement.o(.rodata*);
       BUILD_DIR/libgoddard.a:particles.o(.rodata*);
       BUILD_DIR/libgoddard.a:dynlist_proc.o(.rodata*);
-      BUILD_DIR/libgoddard.a:debug_utils.o(.rodata*);
+      BUILD_DIR/libgoddard.a:string_utils.o(.rodata*);
       BUILD_DIR/libgoddard.a:joints.o(.rodata*);
       BUILD_DIR/libgoddard.a:skin.o(.rodata*);
       BUILD_DIR/libgoddard.a:gd_math.o(.rodata*);

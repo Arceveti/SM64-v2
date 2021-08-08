@@ -1,6 +1,7 @@
 #ifndef GD_TYPES_H
 #define GD_TYPES_H
 
+// #include <PR/ultratypes.h>
 #include <ultra64.h>
 
 /* Vector Types */
@@ -48,27 +49,27 @@ struct DynList {
 /* Object Type Flags */
 enum ObjTypeFlag {
     OBJ_TYPE_GROUPS    = 0x00000001,
-    OBJ_TYPE_BONES     = 0x00000002,
+    // OBJ_TYPE_BONES     = 0x00000002,
     OBJ_TYPE_JOINTS    = 0x00000004,
     OBJ_TYPE_PARTICLES = 0x00000008,
     OBJ_TYPE_SHAPES    = 0x00000010,
     OBJ_TYPE_NETS      = 0x00000020,
-    OBJ_TYPE_PLANES    = 0x00000040,
+    // OBJ_TYPE_PLANES    = 0x00000040,
     OBJ_TYPE_FACES     = 0x00000080,
     OBJ_TYPE_VERTICES  = 0x00000100,
     OBJ_TYPE_CAMERAS   = 0x00000200,
     // 0x400 was not used
     OBJ_TYPE_MATERIALS = 0x00000800,
     OBJ_TYPE_WEIGHTS   = 0x00001000,
-    OBJ_TYPE_GADGETS   = 0x00002000,
+    // OBJ_TYPE_GADGETS   = 0x00002000,
     OBJ_TYPE_VIEWS     = 0x00004000,
     OBJ_TYPE_LABELS    = 0x00008000,
     OBJ_TYPE_ANIMATORS = 0x00010000,
     OBJ_TYPE_VALPTRS   = 0x00020000,
     // 0x40000 was not used
-    OBJ_TYPE_LIGHTS    = 0x00080000,
-    OBJ_TYPE_ZONES     = 0x00100000,
-    OBJ_TYPE_UNK200000 = 0x00200000
+    OBJ_TYPE_LIGHTS    = 0x00080000
+    // OBJ_TYPE_ZONES     = 0x00100000,
+    // OBJ_TYPE_UNK200000 = 0x00200000
 };
 /* This constant seems to be used to indicate the type of any or all objects */
 #define OBJ_TYPE_ALL 0x00FFFFFF
@@ -214,7 +215,7 @@ struct ObjParticle {
     /* 0x54 */ u32 flags;   // "dflags"?
     /* 0x58 */ s32 colourNum;
     /* 0x5C */ s32 timeout;  // when this reaches zero, the particle disappears
-    /* 0x60 */ s32 unk60;   //type?
+    /* 0x60 */ s32 particleType;
     /* 0x64 */ s32 unk64;   //type? (1 = has 50 sub-particles, 2,3 = has 30 sub-particles
     /* 0x68 */ u8 pad68[0x6C-0x68];
     /* 0x6C */ struct ObjGroup *subParticlesGrp;   // group of other Particles ?
@@ -270,6 +271,12 @@ struct ObjShape {
  * 6 - stub
  * 7 -
  */
+#define NET_TYPE_DEFAULT            0
+#define NET_TYPE_SHAPE              1
+#define NET_TYPE_SCALED_VERTICES    2
+#define NET_TYPE_JOINTS             3
+#define NET_TYPE_DYNAMIC_BONES      4
+#define NET_TYPE_PARTICLES          5
 
 struct ObjNet {
     /* 0x000 */ struct GdObj header;
@@ -318,17 +325,6 @@ struct ObjNet {
     /* 0x210 */ s32 ctrlType;     // has no purpose
 }; /* sizeof = 0x220 */
 
-struct ObjPlane {
-    /* 0x00 */ struct GdObj header;
-    /* 0x14 */ u32 id;
-    /* 0x18 */ s32 inZone; //bool;  contained within zone? (from its parent Net?)
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ s32 unk20;
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ struct GdBoundingBox boundingBox;
-    /* 0x40 */ struct ObjFace* unk40;
-}; /* sizeof = 0x44*/
-
 struct ObjVertex {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ struct GdVec3f initPos;
@@ -355,6 +351,7 @@ struct ObjFace {
 }; /* sizeof = 0x4C */
 
 #define CAMERA_FLAG_CONTROLLABLE 0x4
+#define CAMERA_FLAG_16  0x10
 
 struct ObjCamera {
     /* 0x000 */ struct GdObj header;
@@ -386,11 +383,11 @@ struct ObjCamera {
 }; /* sizeof = 0x190 */
 
 enum GdMtlTypes {
-    GD_MTL_STUB_DL = 0x01,
-    GD_MTL_BREAK = 0x04,
+    GD_MTL_STUB_DL  = 0x01,
+    GD_MTL_BREAK    = 0x04,
     GD_MTL_SHINE_DL = 0x10,
-    GD_MTL_TEX_OFF = 0x20,
-    GD_MTL_LIGHTS = 0x40 // uses default case
+    GD_MTL_TEX_OFF  = 0x20,
+    GD_MTL_LIGHTS   = 0x40 // uses default case
 };
 
 struct ObjMaterial {

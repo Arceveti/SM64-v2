@@ -40,7 +40,7 @@ struct GraphNodeRoot *init_graph_node_root(struct AllocOnlyPool *pool, struct Gr
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROOT);
         graphNode->areaIndex = areaIndex;
-        graphNode->unk15     = 0;
+        graphNode->unk15     = 0; //! name?
         graphNode->x         = x;
         graphNode->y         = y;
         graphNode->width     = width;
@@ -556,7 +556,7 @@ void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo 
     graphNode->pos[2]           = (f32) spawn->startPos[2];
     graphNode->areaIndex        = spawn->areaIndex;
     graphNode->activeAreaIndex  = spawn->activeAreaIndex;
-    graphNode->sharedChild      = spawn->unk18;
+    graphNode->sharedChild      = spawn->modelNode;
     graphNode->unk4C            = spawn;
     graphNode->throwMatrix      = NULL;
     graphNode->animInfo.curAnim = 0;

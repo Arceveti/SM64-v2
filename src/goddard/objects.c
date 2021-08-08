@@ -1,22 +1,17 @@
 #include <ultra64.h>
 #include <stdarg.h>
-#include <stdio.h>
 
 #include "objects.h"
 
-#include "debug_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
 #include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
-#include "gd_types.h"
 #include "joints.h"
-#include "macros.h"
 #include "particles.h"
 #include "renderer.h"
 #include "sfx.h"
-#include "shape_helper.h"
 #include "skin.h"
 
 // bss
@@ -29,7 +24,6 @@ struct ObjCamera *gGdCameraList;      // @ 801B9E4C
 struct ObjGroup  *gGdGroupList;       // @ 801B9E54
 s32 gGdObjCount;                      // @ 801B9E58
 s32 gGdGroupCount;                    // @ 801B9E5C
-s32 gGdPlaneCount;                    // @ 801B9E60
 s32 gGdCameraCount;                   // @ 801B9E64
 s32 sGdViewCount;                     // @ 801B9E68
 struct ObjJoint *gGdJointList;        // @ 801B9E84
@@ -60,31 +54,6 @@ void add_obj_pos_to_bounding_box(struct GdObj *obj) {
 }
 
 /**
- * Returns a string containing the name of the the object type
- */
-static const char *get_obj_name_str(enum ObjTypeFlag objFlag) {
-    const char *objName;
-    switch (objFlag) {
-        case OBJ_TYPE_JOINTS:    objName = "joints"   ; break;
-        case OBJ_TYPE_GROUPS:    objName = "groups"   ; break;
-        case OBJ_TYPE_PARTICLES: objName = "particles"; break;
-        case OBJ_TYPE_SHAPES:    objName = "shapes"   ; break;
-        case OBJ_TYPE_NETS:      objName = "nets"     ; break;
-        case OBJ_TYPE_PLANES:    objName = "planes"   ; break;
-        case OBJ_TYPE_VERTICES:  objName = "vertices" ; break;
-        case OBJ_TYPE_CAMERAS:   objName = "cameras"  ; break;
-        case OBJ_TYPE_FACES:     objName = "faces"    ; break;
-        case OBJ_TYPE_MATERIALS: objName = "materials"; break;
-        case OBJ_TYPE_LIGHTS:    objName = "lights"   ; break;
-        case OBJ_TYPE_WEIGHTS:   objName = "weights"  ; break;
-        case OBJ_TYPE_VIEWS:     objName = "views"    ; break;
-        case OBJ_TYPE_ANIMATORS: objName = "animators"; break;
-        default:                 objName = "unkown"   ; break;
-    }
-    return objName;
-}
-
-/**
  * Creates an object of the specified type
  */
 struct GdObj *make_object(enum ObjTypeFlag objType) {
@@ -93,18 +62,17 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
     s32 objSize;
     s32 i;
     drawmethod_t objDrawFn;
-    const char *typeName;
+    // const char *typeName;
     u8 *newObjBytes;
     s32 objPermanence = 0x10;
     switch (objType) {
-        case OBJ_TYPE_JOINTS:    objSize = sizeof(struct ObjJoint   ); objDrawFn = (drawmethod_t) draw_joint;                   break;
-        case OBJ_TYPE_GROUPS:    objSize = sizeof(struct ObjGroup   ); objDrawFn = (drawmethod_t) draw_group;                   break;
+        case OBJ_TYPE_JOINTS:    objSize = sizeof(struct ObjJoint   ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
+        case OBJ_TYPE_GROUPS:    objSize = sizeof(struct ObjGroup   ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
         case OBJ_TYPE_PARTICLES: objSize = sizeof(struct ObjParticle); objDrawFn = (drawmethod_t) draw_particle;                break;
         case OBJ_TYPE_SHAPES:    objSize = sizeof(struct ObjShape   ); objDrawFn = (drawmethod_t) draw_nothing;                 break; // Shapes get drawn by their parent object instead of automatically.
         case OBJ_TYPE_NETS:      objSize = sizeof(struct ObjNet     ); objDrawFn = (drawmethod_t) draw_net;                     break;
-        case OBJ_TYPE_PLANES:    objSize = sizeof(struct ObjPlane   ); objDrawFn = (drawmethod_t) draw_plane;                   break;
         case OBJ_TYPE_VERTICES:  objSize = sizeof(struct ObjVertex  ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
-        case OBJ_TYPE_CAMERAS:   objSize = sizeof(struct ObjCamera  ); objDrawFn = (drawmethod_t) draw_camera;                  break;
+        case OBJ_TYPE_CAMERAS:   objSize = sizeof(struct ObjCamera  ); objDrawFn = (drawmethod_t) draw_nothing;                 break;
         case OBJ_TYPE_FACES:     objSize = sizeof(struct ObjFace    ); objDrawFn = (drawmethod_t) draw_face; objPermanence = 1; break;
         case OBJ_TYPE_MATERIALS: objSize = sizeof(struct ObjMaterial); objDrawFn = (drawmethod_t) draw_material;                break;
         case OBJ_TYPE_LIGHTS:    objSize = sizeof(struct ObjLight   ); objDrawFn = (drawmethod_t) draw_light;                   break;
@@ -113,12 +81,12 @@ struct GdObj *make_object(enum ObjTypeFlag objType) {
         case OBJ_TYPE_ANIMATORS: objSize = sizeof(struct ObjAnimator); objDrawFn = (drawmethod_t) draw_nothing;                 break;
         default: gd_exit(); // Unkown object!
     }
-    typeName = get_obj_name_str(objType);
+    // typeName = get_obj_name_str(objType);
     // Allocate memory for the object
-    start_memtracker(typeName);
+    // start_memtracker(typeName);
     newObj = gd_malloc(objSize, objPermanence);
-    if (newObj == NULL) gd_exit(); // fatal_printf("Cant allocate object '%s' memory!", typeName);
-    stop_memtracker(typeName);
+    if (newObj == NULL) gd_exit(); // Cant allocate object [typeName] memory!
+    // stop_memtracker(typeName);
     // Zero out the object
     newObjBytes = (u8 *) newObj;
     for (i = 0; i < objSize; i++) newObjBytes[i] = 0;
@@ -172,69 +140,6 @@ struct VtxLink *make_vtx_link(struct VtxLink *prevNode, Vtx *data) {
     return newNode;
 }
 
-/* @ 22B1DC for 0x430 */
-void reset_plane(struct ObjPlane *plane) {
-    struct ObjFace *face;
-    f32 sp48;
-    f32 sp44;
-    s32 i;
-    s32 sp30;
-    register f32 normal;
-    face = plane->unk40;
-    calc_face_normal(face);
-    plane->unk1C = gd_dot_vec3f(&face->vertices[0]->pos, &face->normal);
-    sp48 = 0.0f;
-    normal = face->normal.x < 0.0f ? -face->normal.x : face->normal.x;
-    sp44 = normal;
-    if (sp44 > sp48) {
-        sp30 = 0;
-        sp48 = sp44;
-    }
-    normal = face->normal.y < 0.0f ? -face->normal.y : face->normal.y;
-    sp44 = normal;
-    if (sp44 > sp48) {
-        sp30 = 1;
-        sp48 = sp44;
-    }
-    normal = face->normal.z < 0.0f ? -face->normal.z : face->normal.z;
-    sp44 = normal;
-    if (sp44 > sp48) sp30 = 2;
-    switch (sp30) {
-        case 0: plane->unk20 = 1; plane->unk24 = 2; break;
-        case 1: plane->unk20 = 0; plane->unk24 = 2; break;
-        case 2: plane->unk20 = 0; plane->unk24 = 1; break;
-    }
-    reset_bounding_box();
-    for (i = 0; i < face->vtxCount; i++) add_obj_pos_to_bounding_box(&face->vertices[i]->header);
-    plane->boundingBox.minX = gSomeBoundingBox.minX;
-    plane->boundingBox.minY = gSomeBoundingBox.minY;
-    plane->boundingBox.minZ = gSomeBoundingBox.minZ;
-    plane->boundingBox.maxX = gSomeBoundingBox.maxX;
-    plane->boundingBox.maxY = gSomeBoundingBox.maxY;
-    plane->boundingBox.maxZ = gSomeBoundingBox.maxZ;
-    if (plane->boundingBox.maxX - plane->boundingBox.minX < 100.0f) {
-        plane->boundingBox.maxX += 50.0f;
-        plane->boundingBox.minX -= 50.0f;
-    }
-    plane->boundingBox.maxY += 200.0f;
-    plane->boundingBox.minY -= 200.0f;
-    if (plane->boundingBox.maxZ - plane->boundingBox.minZ < 100.0f) {
-        plane->boundingBox.maxZ += 50.0f;
-        plane->boundingBox.minZ -= 50.0f;
-    }
-}
-
-/* @ 22B60C for 0x94; orig name: func_8017CE3C */
-struct ObjPlane *make_plane(struct ObjFace *face) {
-    struct ObjPlane *newPlane = (struct ObjPlane *) make_object(OBJ_TYPE_PLANES);
-    gGdPlaneCount++;
-    newPlane->id = gGdPlaneCount;
-    newPlane->inZone = FALSE;
-    newPlane->unk40 = face;
-    reset_plane(newPlane);
-    return newPlane;
-}
-
 /* @ 22B6A0 for 0x21C; orig name: func_8017CED0 */
 struct ObjCamera *make_camera(void) {
     struct ObjCamera *newCam;
@@ -248,7 +153,7 @@ struct ObjCamera *make_camera(void) {
         newCam->next        = oldCameraHead;
         oldCameraHead->prev = newCam;
     }
-    newCam->flags = 0x10;
+    newCam->flags = CAMERA_FLAG_16;
     newCam->unk30 = NULL;
     gd_set_identity_mat4(&newCam->unk64);
     gd_set_identity_mat4(&newCam->unkA8);
@@ -273,7 +178,7 @@ struct ObjCamera *make_camera(void) {
 struct ObjMaterial *make_material(void) {
     struct ObjMaterial *newMtl;
     newMtl = (struct ObjMaterial *) make_object(OBJ_TYPE_MATERIALS);
-    gd_strcpy(newMtl->name, "x");
+    // gd_strcpy(newMtl->name, "x");
     newMtl->id         = 0;
     newMtl->gddlNumber = 0;
     newMtl->type       = 16;
@@ -284,13 +189,13 @@ struct ObjMaterial *make_material(void) {
 struct ObjLight *make_light(void) {
     struct ObjLight *newLight;
     newLight = (struct ObjLight *) make_object(OBJ_TYPE_LIGHTS);
-    gd_strcpy(newLight->name, "x");
-    newLight->id    = 0;
-    newLight->unk30 = 1.0f;
-    newLight->unk4C = 0;
-    newLight->flags = LIGHT_NEW_UNCOUNTED;
-    newLight->unk98 = 0;
-    newLight->unk40 = 0;
+    // gd_strcpy(newLight->name, "x");
+    newLight->id      = 0;
+    newLight->unk30   = 1.0f;
+    newLight->unk4C   = 0;
+    newLight->flags   = LIGHT_NEW_UNCOUNTED;
+    newLight->unk98   = 0;
+    newLight->unk40   = 0;
     newLight->unk68.x = newLight->unk68.y = newLight->unk68.z = 0;
     return newLight;
 }
@@ -446,24 +351,6 @@ s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) {
     return FALSE;
 }
 
-/* @ 22CA00 for 0x88 */
-static void reset_joint_or_net(struct GdObj *obj) {
-    struct GdObj *localObjPtr = obj;
-    switch (obj->type) {
-        case OBJ_TYPE_JOINTS: reset_joint((struct ObjJoint *) localObjPtr); break;
-        case OBJ_TYPE_NETS:   reset_net(  (struct ObjNet   *) localObjPtr); break;
-        default:;
-    }
-}
-
-/**
- * called when the user clicks the "Reset Positions" item from the
- * "Dynamics" menu.
- */
-void menu_cb_reset_positions(void) {
-    apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) reset_joint_or_net, sCurrentMoveGrp);
-}
-
 /**
  * Recursively calls `func` on all members of `group` whose type is in the
  * `types` bitmask.
@@ -494,20 +381,6 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
         curLink = nextLink;
     }
     return fnAppliedCount;
-}
-
-/* @ 22D1BC for 0xA8 */
-void func_8017E9EC(struct ObjNet *net) {
-    struct GdVec3f torqueVec;
-    Mat4f mtx;
-    f32 torqueMag;
-    torqueVec.x = net->torque.x;
-    torqueVec.y = net->torque.y;
-    torqueVec.z = net->torque.z;
-    gd_normalize_vec3f(&torqueVec);
-    torqueMag = gd_vec3f_magnitude(&net->torque);
-    gd_create_rot_mat_angular(&mtx, &torqueVec, -torqueMag);
-    gd_mult_mat4f(&D_801B9DC8, &mtx, &D_801B9DC8);
 }
 
 /* @ 22D824 for 0x1BC */
@@ -553,44 +426,6 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         }
     }
     return 0;
-}
-
-/* @ 22D9E0 for 0x1BC */
-s32 func_8017F210(struct GdObj *obj1, struct GdObj *obj2) {
-    struct ListNode *node;
-    struct ObjGroup *group;
-    Mat4f *mtx1;
-    Mat4f *mtx2;
-    Mat4f *mtx3;
-    struct GdVec3f vec;
-    s32 count = 1;
-    if (obj2 != NULL) {
-        set_cur_dynobj(obj2);
-        mtx2 = (Mat4f *) d_get_rot_mtx_ptr();
-        set_cur_dynobj(obj1);
-        mtx1 = d_get_i_mtx_ptr();
-        mtx3 = (Mat4f *) d_get_rot_mtx_ptr();
-        d_get_scale(&vec);
-        gd_mult_mat4f(mtx1, mtx2, mtx3);
-        gd_scale_mat4f_by_vec3f(mtx3, &vec);
-    } else {
-        set_cur_dynobj(obj1);
-        mtx1 = d_get_i_mtx_ptr();
-        mtx2 = (Mat4f *) d_get_rot_mtx_ptr();
-        d_get_scale(&vec);
-        gd_copy_mat4f(mtx1, mtx2);
-        gd_scale_mat4f_by_vec3f(mtx2, &vec);
-    }
-    set_cur_dynobj(obj1);
-    group = d_get_att_objgroup();
-    if (group != NULL) {
-        node = group->firstMember;
-        while (node != NULL) {
-            count += func_8017F210(node->obj, obj1);
-            node = node->next;
-        }
-    }
-    return count;
 }
 
 /**
@@ -871,7 +706,7 @@ void move_camera(struct ObjCamera *cam) {
     Mat4f *sp2C;
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
-    if (!(cam->flags & 0x10)) return;
+    if (!(cam->flags & CAMERA_FLAG_16)) return;
     spE0.x = spE0.y = spE0.z = 0.0f;
     spB0.x = spB0.y = spB0.z = 0.0f;
     if ((spEC = cam->unk30) != NULL) {
@@ -944,26 +779,10 @@ void move_cameras_in_grp(struct ObjGroup *group) {
     apply_to_obj_types_in_group(OBJ_TYPE_CAMERAS, (applyproc_t) move_camera, group);
 }
 
-/* @ 22F7DC for 0x36C*/
-void func_8018100C(struct ObjLight *light) {
-    if (light->unk40 == 3) {
-        if (light->unk30 > 0.0f) light->unk30 -= 0.2f;
-        if (light->unk30 < 0.0f) light->unk30  = 0.0f;
-        if (light->unk3C & 0x1 ) light->unk30  = 1.0f;
-        light->unk3C &= ~1;
-    }
-    return;
-}
-
-/* @ 22FB48 for 0x38; orig name: func_80181378 */
-void move_lights_in_grp(struct ObjGroup *group) {
-    apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS, (applyproc_t) func_8018100C, group);
-}
-
 /* @ 22FB80 for 0xAC; orig name: func_801813B0 */
 void move_group_members(void) {
     s32 i;
-    move_lights_in_grp(sCurrentMoveGrp);
+    // move_lights_in_grp(sCurrentMoveGrp);
     move_particles_in_grp(sCurrentMoveGrp);
     move_animators(sCurrentMoveGrp);
     for (i = 0; i <= 0; i++) move_nets(sCurrentMoveGrp);
@@ -972,8 +791,8 @@ void move_group_members(void) {
 
 /* @ 22FC2C for 0x98; orig name: func_8018145C */
 void proc_view_movement(struct ObjView *view) {
-    sCurrentMoveCamera = view->activeCam;
-    sCurrentMoveView = view;
+    sCurrentMoveCamera   = view->activeCam;
+    sCurrentMoveView     = view;
     if ((sCurrentMoveGrp = view->components) != NULL) move_group_members();
     if ((sCurrentMoveGrp = view->lights    ) != NULL) move_group_members();
 }
@@ -987,7 +806,6 @@ void reset_nets_and_gadgets(struct ObjGroup *group) {
 void null_obj_lists(void) {
     gGdObjCount    = 0;
     gGdGroupCount  = 0;
-    gGdPlaneCount  = 0;
     gGdCameraCount = 0;
     sGdViewCount   = 0;
     gGdCameraList  = NULL;
