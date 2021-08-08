@@ -243,9 +243,9 @@ const Gfx dSwoopFaceEarsToothDl[] = {
     gsSPDisplayList(dSwoopEarsSubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE), //!
-    // gsSPDisplayList(dSwoopToothSubDl),
-    // gsDPPipeSync(),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(dSwoopToothSubDl),
+    gsDPPipeSync(),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 };
