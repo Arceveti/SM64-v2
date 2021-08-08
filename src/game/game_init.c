@@ -130,9 +130,9 @@ void init_rdp(void) {
     gDPSetCycleType(     gDisplayListHead++, G_CYC_FILL);
 
 #ifdef VERSION_SH
-    gDPSetAlphaDither(gDisplayListHead++, G_AD_PATTERN);
+    gDPSetAlphaDither(   gDisplayListHead++, G_AD_PATTERN);
 #endif
-    gDPPipeSync(gDisplayListHead++);
+    gDPPipeSync(         gDisplayListHead++);
 }
 
 /**
@@ -148,9 +148,9 @@ void init_rsp(void) {
 
     // @bug Failing to set the clip ratio will result in warped triangles in F3DEX2
     // without this change: https://jrra.zone/n64/doc/n64man/gsp/gSPClipRatio.htm
-// #ifdef F3DEX_GBI_2
+#ifdef F3DEX_GBI_2
     gSPClipRatio(gDisplayListHead++, FRUSTRATIO_1);
-// #endif
+#endif
 }
 
 /**

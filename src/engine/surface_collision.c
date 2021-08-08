@@ -655,26 +655,35 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
-    // In the next check, only check for floors higher than the previous check
-    dynamicHeight = height;
-    // Check for surfaces belonging to objects.
-    surfaceList  = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    dynamicFloor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
+#ifdef FIX_BHV_INIT_ROOM
+    if (!gFindFloorExcludeDynamic) {
+#endif
+        // In the next check, only check for floors higher than the previous check
+        dynamicHeight = height;
+        // Check for surfaces belonging to objects.
+        surfaceList  = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+        dynamicFloor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
+        // Use the dynamic floor if it's higher
+        if (dynamicHeight > height) {
+            floor  = dynamicFloor;
+            height = dynamicHeight;
+        }
+#ifdef FIX_BHV_INIT_ROOM
+    }
+#endif
+    // If a floor was missed, increment the debug counter.
+    if (floor == NULL) gNumFindFloorMisses++;
+    *pfloor = floor;
+    // Increment the debug tracker.
+    gNumCalls.floor++;
     // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
     // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
     // Mario to pass through.
     // To prevent accidentally leaving the floor tangible, stop checking for it.
     gFindFloorIncludeSurfaceIntangible = FALSE;
-    // If a floor was missed, increment the debug counter.
-    if (floor == NULL) gNumFindFloorMisses++;
-    // Use the dynamic floor if it's higher
-    if (dynamicHeight > height) {
-        floor  = dynamicFloor;
-        height = dynamicHeight;
-    }
-    *pfloor = floor;
-    // Increment the debug tracker.
-    gNumCalls.floor++;
+#ifdef FIX_BHV_INIT_ROOM
+    gFindFloorExcludeDynamic = FALSE;
+#endif
     return height;
 }
 #else
@@ -702,26 +711,35 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor         = find_floor_from_list(surfaceList, x, y, z, &height);
-    // In the next check, only check for floors higher than the previous check
-    dynamicHeight = height;
-    // Check for surfaces belonging to objects.
-    surfaceList   = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    dynamicFloor  = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
+#ifdef FIX_BHV_INIT_ROOM
+    if (!gFindFloorExcludeDynamic) {
+#endif
+        // In the next check, only check for floors higher than the previous check
+        dynamicHeight = height;
+        // Check for surfaces belonging to objects.
+        surfaceList   = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+        dynamicFloor  = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
+        // Use the dynamic floor if it's higher
+        if (dynamicHeight > height) {
+            floor  = dynamicFloor;
+            height = dynamicHeight;
+        }
+#ifdef FIX_BHV_INIT_ROOM
+    }
+#endif
+    // If a floor was missed, increment the debug counter.
+    if (floor == NULL) gNumFindFloorMisses++;
+    *pfloor = floor;
+    // Increment the debug tracker.
+    gNumCalls.floor++;
     // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
     // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
     // Mario to pass through.
     // To prevent accidentally leaving the floor tangible, stop checking for it.
     gFindFloorIncludeSurfaceIntangible = FALSE;
-    // If a floor was missed, increment the debug counter.
-    if (floor == NULL) gNumFindFloorMisses++;
-    // Use the dynamic floor if it's higher
-    if (dynamicHeight > height) {
-        floor  = dynamicFloor;
-        height = dynamicHeight;
-    }
-    *pfloor = floor;
-    // Increment the debug tracker.
-    gNumCalls.floor++;
+#ifdef FIX_BHV_INIT_ROOM
+    gFindFloorExcludeDynamic = FALSE;
+#endif
     return height;
 }
 #endif

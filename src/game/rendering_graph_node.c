@@ -253,9 +253,9 @@ u16 gAreaUpdateCounter = 0;
 s16 gMarioScreenX, gMarioScreenY;
 #endif
 
-// #ifdef F3DEX_GBI_2
+#ifdef F3DEX_GBI_2
 LookAt lookAt;
-// #endif
+#endif
 
 #ifdef SILHOUETTE
 #define SIL_ALPHA            127
@@ -276,10 +276,10 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     s32 enableZBuffer = (node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0;
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
-
+#ifdef F3DEX_GBI_2
     Mtx lMtx;
     guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
-
+#endif
     if (enableZBuffer) {
         gDPPipeSync(gDisplayListHead++);
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
@@ -346,9 +346,9 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
  * render modes of layers.
  */
 static void geo_append_display_list(void *displayList, s16 layer) {
-// #ifdef F3DEX_GBI_2
+#ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
-// #endif
+#endif
     if (gCurGraphNodeMasterList != 0) {
         struct DisplayListNode *listNode = alloc_only_pool_alloc(gDisplayListHeap, sizeof(struct DisplayListNode));
         listNode->transform   = gMatStackFixed[gMatStackIndex];
@@ -635,7 +635,6 @@ static void geo_process_generated_list(struct GraphNodeGenerated *node) {
  */
 static void geo_process_background(struct GraphNodeBackground *node) {
     Gfx *list = NULL;
-
     if (node->fnNode.func != NULL) list = node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, (struct AllocOnlyPool *) gMatStack[gMatStackIndex]);
     if (list != NULL) {
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(list), node->fnNode.node.flags >> 8);
@@ -646,7 +645,6 @@ static void geo_process_background(struct GraphNodeBackground *node) {
         Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 8);
 #endif
         Gfx *gfx = gfxStart;
-
         gDPPipeSync(      gfx++);
         gDPSetCycleType(  gfx++, G_CYC_FILL);
         gDPSetFillColor(  gfx++, node->background);
@@ -655,7 +653,6 @@ static void geo_process_background(struct GraphNodeBackground *node) {
         gDPPipeSync(      gfx++);
         gDPSetCycleType(  gfx++, G_CYC_1CYCLE);
         gSPEndDisplayList(gfx++);
-
         geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(gfxStart), LAYER_FORCE);
     }
     if (node->fnNode.node.children != NULL) geo_process_node_and_siblings(node->fnNode.node.children);
@@ -943,9 +940,9 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
 
-// #ifdef F3DEX_GBI_2
+#ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
-// #endif
+#endif
 
     if (node->fnNode.func != NULL)   node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     if (node->objNode     != NULL && node->objNode->header.gfx.sharedChild != NULL) {

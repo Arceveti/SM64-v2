@@ -181,10 +181,7 @@ void update_air_with_turn(struct MarioState *m) {
             intendedMag  = m->intendedMag / 32.0f;
             m->forwardVel += 1.5f * coss(intendedDYaw) * intendedMag;
 #ifdef AIR_TURN
-            if (m->forwardVel >=   4.0f
-             || m->forwardVel <=  -4.0f
-             || m->vel[1]     >=  32.0f
-             || m->vel[1]     <= -32.0f) {
+            if (m->forwardVel >= 4.0f || (m->forwardVel < 4.0f && ABS(m->vel[1]) > 32.0f)) {
                 turnRange = min((m->intendedMag - m->forwardVel) * ABS(m->vel[1]), 0x4000);
                 if (turnRange < 0x100) turnRange = 0x100;
                 m->faceAngle[1] = m->intendedYaw - approach_s32(intendedDYaw, 0x0, turnRange, turnRange);
@@ -198,14 +195,19 @@ void update_air_with_turn(struct MarioState *m) {
         if (m->forwardVel > dragThreshold) m->forwardVel -= 1.0f;
         if (m->forwardVel <        -16.0f) m->forwardVel += 2.0f;
 #ifdef AIR_TURN
-        m->slideVelX = m->forwardVel * sins(m->faceAngle[1]) + sidewaysSpeed * sins(m->faceAngle[1] + 0x4000);
-        m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]) + sidewaysSpeed * coss(m->faceAngle[1] + 0x4000);
-
+        m->slideVelX = (m->forwardVel * sins(m->faceAngle[1])) + (sidewaysSpeed * sins(m->faceAngle[1] + 0x4000));
+        m->slideVelZ = (m->forwardVel * coss(m->faceAngle[1])) + (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
+#ifdef GRAVITY_DRAG
+        if (m->vel[1] < 0.0f) {
+            m->slideVelX /= (((-m->vel[1])/TERMINAL_GRAVITY_VELOCITY)+1.0f);
+            m->slideVelZ /= (((-m->vel[1])/TERMINAL_GRAVITY_VELOCITY)+1.0f);
+        }
+#endif
         m->vel[0] = m->slideVelX;
         m->vel[2] = m->slideVelZ;
 #else
-        m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
-        m->vel[2] = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
+        m->vel[0]    = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
+        m->vel[2]    = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
 #endif
     }
 }

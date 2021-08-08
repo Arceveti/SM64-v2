@@ -171,7 +171,7 @@ void receive_new_tasks(void) {
 
 void start_sptask(s32 taskType) {
     gActiveSPTask = (taskType == M_AUDTASK) ? sCurrentAudioSPTask : sCurrentDisplaySPTask;
-    osSpTaskLoad(&gActiveSPTask->task);
+    osSpTaskLoad(   &gActiveSPTask->task);
     osSpTaskStartGo(&gActiveSPTask->task);
     gActiveSPTask->state = SPTASK_STATE_RUNNING;
 }
@@ -192,19 +192,18 @@ void start_gfx_sptask(void) {
 }
 
 void pretend_audio_sptask_done(void) {
-    gActiveSPTask = sCurrentAudioSPTask;
+    gActiveSPTask        = sCurrentAudioSPTask;
     gActiveSPTask->state = SPTASK_STATE_RUNNING;
     osSendMesg(&gIntrMesgQueue, (OSMesg) MESG_SP_COMPLETE, OS_MESG_NOBLOCK);
 }
 
 void handle_vblank(void) {
     gNumVblanks++;
-    //? What is the < 100 for?
-#ifdef VERSION_SH
+// #ifdef VERSION_SH
     if (gResetTimer > 0 && gResetTimer < 100) gResetTimer++;
-#else
-    if (gResetTimer > 0) gResetTimer++;
-#endif
+// #else
+//     if (gResetTimer > 0) gResetTimer++;
+// #endif
     receive_new_tasks();
     // First try to kick off an audio task. If the gfx task is currently
     // running, we need to asynchronously interrupt it -- handle_sp_complete
@@ -378,8 +377,7 @@ void turn_off_audio(void) {
 }
 
 void change_vi(OSViMode *mode, int width, int height){
-
-    mode->comRegs.width = width;
+    mode->comRegs.width  =  width;
     mode->comRegs.xScale = (width*512)/320;
     if (height > 240) {
         mode->comRegs.ctrl |= 0x40;

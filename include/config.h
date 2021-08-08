@@ -229,13 +229,15 @@
 // -- Bugfixes --
 
 // Makes obj_resolve_object_collisions work consistently (Arceveti)
-#define OBJ_COLLISIONS_FIX
+#define FIX_OBJ_COLLISIONS
+// Makes bhv_init_room only check static surfaces, since dynamic surfaces aren't assigned a room (Arceveti)
+#define FIX_BHV_INIT_ROOM
 // Fix DDD water rings (Arceveti)
-#define WATER_RING_FIX
+#define FIX_WATER_RINGS
 // Fix bomb clip
 #define FIX_BOMB_CLIP
 // Detect Mario's collision with lava regardless of action (Arceveti)
-#define LAVA_FIX
+#define FIX_LAVA_INTERACTION
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
 
@@ -263,12 +265,6 @@
 #define WALL_QUICKSAND
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 #define COMPLETE_EN_US_SEGMENT2
-// Terminal velovity for gravity (Arceveti)
-#define TERMINAL_GRAVITY_VELOCITY 75.0f
-// Minimum Y normal for floors (vanilla is 0.01f)
-#define MIN_FLOOR_NORMAL_Y 0.01f
-// Minimum Y normal for ceilings (vanilla is -0.01f)
-#define MAX_CEIL_NORMAL_Y -0.2f
 
 // -- HUD/Gameplay QoL --
 
@@ -334,6 +330,12 @@
 #define GROUND_TURN_FIX
 // Allows for turning in midair (Arceveti)
 #define AIR_TURN
+// Mario's falling speed affects his horizontal movement speed.
+// This makes Mario's falling feel more realistic, but might 
+// occasionally feel restrictive.
+// This only has an effect if AIR_TURN is enabled.
+// (Arceveti)
+// #define GRAVITY_DRAG
 // Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
 #define HOOT_YAW_FIX
 // Unique wall slide which takes horizontal momentum into account (Arceveti)
@@ -383,8 +385,6 @@
 #define BETTER_CEILING_HANDLING
 // Improved hanging which doesn't require holding down the A button (Arceveti)
 #define EASIER_HANGING
-// Use Mario's hitbox instead of a hardcoded height in some cases (Arceveti)
-#define USE_VARIABLE_HITBOX
 // Makes it slightly easier to stay on narrow platforms (Arceveti)
 #define LEDGE_PROTECTION
 // Number of quarter frames before Mario falls off a ledge.
@@ -397,12 +397,16 @@
 // issues on actual level boundaries, such as extra knockback
 // (Arceveti)
 #define NULL_FLOOR_STEPS 4
-// Maximum number of walls to check
-// Vanilla is 4
+// Maximum number of walls to check (vanilla is 4)
 #define MAX_REFEREMCED_WALLS 16
-
-// Vanilla is 28.0f
+// Maximum swimming speed (vanilla is 28.0f)
 #define MAX_SWIMMING_SPEED 32.0f
+// Terminal velovity for gravity (Arceveti)
+#define TERMINAL_GRAVITY_VELOCITY 75.0f
+// Minimum Y normal for floors (vanilla is 0.01f)
+#define MIN_FLOOR_NORMAL_Y 0.01f
+// Minimum Y normal for ceilings (vanilla is -0.01f)
+#define MAX_CEIL_NORMAL_Y -0.2f
 
 // -- Misc --
 

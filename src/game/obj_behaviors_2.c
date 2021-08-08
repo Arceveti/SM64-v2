@@ -446,7 +446,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     f32 radius;
     f32 otherRadius;
     f32 relativeRadius;
-#ifdef OBJ_COLLISIONS_FIX
+#ifdef FIX_OBJ_COLLISIONS
     s32 i;
     f32 distance;
     if (o->numCollidedObjs != 0) {

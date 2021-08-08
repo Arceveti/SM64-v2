@@ -75,11 +75,11 @@ struct LoadedPreset {
     /*0x06*/ ModelID model;
 };
 
-#define MACRO_OBJ_Y_ROT  0
-#define MACRO_OBJ_X      1
-#define MACRO_OBJ_Y      2
-#define MACRO_OBJ_Z      3
-#define MACRO_OBJ_PARAMS 4
+#define MACRO_OBJ_Y_ROT  0x0
+#define MACRO_OBJ_X      0x1
+#define MACRO_OBJ_Y      0x2
+#define MACRO_OBJ_Z      0x3
+#define MACRO_OBJ_PARAMS 0x4
 
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     s32 presetID;
@@ -104,8 +104,7 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
         preset.param    = MacroObjectPresets[presetID].param;
         if (preset.param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
         // If object has been killed, prevent it from respawning
-        if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN)
-            != RESPAWN_INFO_DONT_RESPAWN) {
+        if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN) != RESPAWN_INFO_DONT_RESPAWN) {
             // Spawn the new macro object.
             newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, // Parent object
                                                0,                          // Unused
