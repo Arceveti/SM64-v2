@@ -181,14 +181,12 @@
 
 // -- The following require ENABLE_SCREEN_TINT_EFFECTS -- 
 #ifdef ENABLE_SCREEN_TINT_EFFECTS
-
 // - Red flash when damaged
 // - Yellow flashed when shocked
 #define DAMAGE_SCREEN_TINT
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
 #define ENVIRONMENT_SCREEN_TINT
-
 #endif
 
 // Read the framebuffer to the metal cap texture to make it look reflective (mks#2512, Rovert, Arceveti)
@@ -196,7 +194,6 @@
 
 // -- The following require METAL_CAP_REFLECTION --
 #ifdef METAL_CAP_REFLECTION
-
 // Overlay a shine texture over the metal cap texture (Arceveti)
 #define METAL_CAP_REFLECTION_SHINE
 // Make the metal cap reflection grayscale so it looks like metal instead of glass (Arceveti)
@@ -206,13 +203,15 @@
 // the lakitu sprite is an ia8 for the cloud's transparency
 // (Arceveti)
 #define METAL_CAP_REFLECTION_LAKITU
-
 #endif
 
 // -- Vanilla Level Changes --
 
 // Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
+// Use painting data for the PSS painting instead of a static texture (Arceveti)
+// TODO: Painting Wobble
+#define PSS_PAINTING
 // Makes the WF star spawn from the wall instead of existing already (Unknown)
 #define FIX_CANNONLESS
 // Re-implements and fixes unused SSL pillars cutscene
@@ -327,7 +326,7 @@
 // (Arceveti)
 #define WIGGLER_NUM_SEGMENTS 4
 
-// -- Movement --
+// -- Movement/Collision --
 
 // Lets Mario transition from more actions to more other actions (Arceveti)
 #define ACTION_CANCELS
@@ -371,6 +370,13 @@
 #define SMOOTH_WATER_FLOOR_PITCH
 // Improved wall collision detection (frameperfection/Frame#5375)
 #define BETTER_WALL_COLLISION
+// Include steep floors when checking for walls when underwater
+// This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
+// May cause performance issues when underwater due to also iterating through the floors partition
+// in addition to the regular walls partition when checking wall collisions.
+// (Arceveti)
+#define UNDERWATER_STEEP_FLOORS_AS_WALLS
+#define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
 // #define SKIP_GROUND_LOWER_WALL
 // Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
@@ -405,18 +411,7 @@
 
 // -- Experimental/Unfinished --
 
-// Include steep floors when checking for walls when underwater
-// This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
-// May cause performance issues when underwater due to also iterating through the floors partition
-// in addition to the regular walls partition when checking wall collisions.
-// (Arceveti)
-#define UNDERWATER_STEEP_FLOORS_AS_WALLS
-#define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
-
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
-// Use painting data for the PSS painting instead of a static texture (Arceveti)
-// TODO: Painting Wobble
-#define PSS_PAINTING
 
 #endif // CONFIG_H

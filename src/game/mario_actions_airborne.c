@@ -923,7 +923,9 @@ s32 act_burning_jump(struct MarioState *m) {
     play_sound(SOUND_MOVING_LAVA_BURN, m->marioObj->header.gfx.cameraToObject);
     m->marioObj->oMarioBurnTimer += 3;
     m->health -= 10;
+#ifdef DAMAGE_SCREEN_TINT
     m->hurtShadeAlpha = 0x40;
+#endif
     if (m->health < 0x100) m->health = 0xFF;
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
@@ -941,7 +943,9 @@ s32 act_burning_fall(struct MarioState *m) {
     m->particleFlags |= PARTICLE_FIRE;
     m->marioObj->oMarioBurnTimer += 3;
     m->health -= 10;
+#ifdef DAMAGE_SCREEN_TINT
     m->hurtShadeAlpha = 0x40;
+#endif
     if (m->health < 0x100) m->health = 0xFF;
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();

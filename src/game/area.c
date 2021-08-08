@@ -348,7 +348,9 @@ void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
 }
 
 void render_screen_overlay(void) {
+#ifdef DAMAGE_SCREEN_TINT
     struct MarioState *m = gMarioState;
+#endif
     Vec3s rgbWater       = {   5,  80, 150};
     Vec3s rgbHurt        = { 255,   0,   0};
     Vec3s rgb            = {   0,   0,   0};

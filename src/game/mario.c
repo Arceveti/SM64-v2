@@ -1288,7 +1288,9 @@ void update_mario_health(struct MarioState *m) {
         if (m->hurtCounter > 0) {
             m->health -= 0x40;
             m->hurtCounter--;
+#ifdef DAMAGE_SCREEN_TINT
             m->hurtShadeAlpha = 0x40;
+#endif
         }
         if (m->health > 0x880) m->health = 0x880;
         if (m->health < 0x100) m->health = 0xFF;
@@ -1537,7 +1539,9 @@ void init_mario(void) {
     gMarioState->squishTimer                          = 0;
     gMarioState->hurtCounter                          = 0;
     gMarioState->healCounter                          = 0;
+#ifdef DAMAGE_SCREEN_TINT
     gMarioState->hurtShadeAlpha                       = 0;
+#endif
     gMarioState->capTimer                             = 0;
     gMarioState->quicksandDepth                       = 0.0f;
     gMarioState->heldObj                              = NULL;

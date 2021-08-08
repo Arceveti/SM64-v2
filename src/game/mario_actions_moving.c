@@ -906,7 +906,9 @@ s32 act_burning_ground(struct MarioState *m) {
     m->particleFlags |= PARTICLE_FIRE;
     play_sound(SOUND_MOVING_LAVA_BURN, m->marioObj->header.gfx.cameraToObject);
     m->health -= 10;
+#ifdef DAMAGE_SCREEN_TINT
     m->hurtShadeAlpha = 0x40;
+#endif
     if (m->health < 0x100) set_mario_action(m, ACT_STANDING_DEATH, 0);
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
 #if ENABLE_RUMBLE
