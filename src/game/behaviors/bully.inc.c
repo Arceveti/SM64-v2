@@ -57,8 +57,8 @@ void bully_check_mario_collision(void) {
      && o->oInteractStatus & INT_STATUS_INTERACTED) {
         cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ2_SMALL_BULLY_ATTACKED : SOUND_OBJ2_LARGE_BULLY_ATTACKED);
         o->oInteractStatus &= ~INT_STATUS_INTERACTED;
-        o->oAction = BULLY_ACT_KNOCKBACK;
-        o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
+        o->oAction          = BULLY_ACT_KNOCKBACK;
+        o->oFlags          &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
         cur_obj_init_animation(BULLY_ANIM_BOAST);
         o->oBullyMarioCollisionAngle = o->oMoveAngleYaw;
     }
@@ -108,16 +108,13 @@ void bully_act_back_up(void) {
         o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
         o->oMoveAngleYaw += 0x8000;
     }
-
     o->oForwardVel = 5.0f;
-
     //! bully_backup_check() happens after this function, and has the potential to reset
     //  the bully's action to BULLY_ACT_BACK_UP. Because the back up action is only
     //  set to end when the timer EQUALS 15, if this happens on that frame, the bully
     //  will be stuck in BULLY_ACT_BACK_UP forever until Mario hits it or its death
     //  conditions are activated. However because its angle is set to its facing angle,
     //  it will walk forward instead of backing up.
-
     if (o->oTimer == 15) {
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
@@ -127,8 +124,8 @@ void bully_act_back_up(void) {
 
 void bully_backup_check(s16 collisionFlags) {
     if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && o->oAction != BULLY_ACT_KNOCKBACK) {/* bit 3 */
-        o->oPosX = o->oBullyPrevX;
-        o->oPosZ = o->oBullyPrevZ;
+        o->oPosX   = o->oBullyPrevX;
+        o->oPosZ   = o->oBullyPrevZ;
         o->oAction = BULLY_ACT_BACK_UP;
     }
 }

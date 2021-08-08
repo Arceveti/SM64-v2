@@ -26,15 +26,12 @@ static struct ObjectHitbox sMovingBlueCoinHitbox = {
 
 s32 coin_step(s16 *collisionFlagsPtr) {
     *collisionFlagsPtr = object_step();
-
     obj_check_floor_death(*collisionFlagsPtr, sObjFloor);
-
     if ((*collisionFlagsPtr & OBJ_COL_FLAG_GROUNDED)
     && !(*collisionFlagsPtr & OBJ_COL_FLAG_NO_Y_VEL)) {/* bit 0, bit 3 */
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -62,7 +59,6 @@ void bhv_moving_yellow_coin_loop(void) {
     switch (o->oAction) {
         case MOV_YCOIN_ACT_IDLE:
             coin_step(&collisionFlags);
-
             if (o->oTimer < 10) {
                 cur_obj_become_intangible();
             } else {
@@ -134,19 +130,16 @@ void bhv_moving_blue_coin_loop(void) {
 }
 
 void bhv_blue_coin_sliding_jumping_init(void) {
-    o->oGravity = 3.0f;
+    o->oGravity  = 3.0f;
     o->oFriction = 0.98f;
     o->oBuoyancy = 1.5f;
-
     obj_set_hitbox(o, &sMovingBlueCoinHitbox);
 }
 
 void blue_coin_sliding_away_from_mario(void) {
     s16 collisionFlags;
-
-    o->oForwardVel = 15.0f;
+    o->oForwardVel   = 15.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
-
     if (coin_step(&collisionFlags)) o->oVelY += 18.0f;
     if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) o->oAction = MOV_BCOIN_ACT_STOPPED; /* bit 1 */
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) o->oAction = MOV_BCOIN_ACT_SLOWING_DOWN;

@@ -73,20 +73,15 @@ void breakable_box_small_idle_loop(void) {
         case BREAKABLE_BOX_SMALL_ACT_MOVE:
             breakable_box_small_act_move();
             break;
-
         case OBJ_ACT_LAVA_DEATH:
             obj_lava_death();
             break;
-
         case OBJ_ACT_DEATH_PLANE_DEATH:
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             create_respawner(MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall, 3000);
             break;
     }
-
-    if (o->oBreakableBoxSmallReleased) {
-        breakable_box_small_released_loop();
-    }
+    if (o->oBreakableBoxSmallReleased) breakable_box_small_released_loop();
 }
 
 void breakable_box_small_get_dropped(void) {
@@ -103,14 +98,14 @@ void breakable_box_small_get_thrown(void) {
     cur_obj_become_tangible();
     cur_obj_enable_rendering_2();
     cur_obj_enable_rendering();
-    o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-    o->oHeldState = HELD_FREE;
-    o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
-    o->oForwardVel = 40.0f;
-    o->oVelY       = 20.0f;
-    o->oBreakableBoxSmallReleased = TRUE;
+    o->header.gfx.node.flags                &= ~GRAPH_RENDER_INVISIBLE;
+    o->oHeldState                            = HELD_FREE;
+    o->oFlags                               &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
+    o->oForwardVel                           = 40.0f;
+    o->oVelY                                 = 20.0f;
+    o->oBreakableBoxSmallReleased            = TRUE;
     o->oBreakableBoxSmallFramesSinceReleased = 0;
-    o->activeFlags &= ~ACTIVE_FLAG_SMALL_BOX_NOT_THROWN;
+    o->activeFlags                          &= ~ACTIVE_FLAG_SMALL_BOX_NOT_THROWN;
 }
 
 void bhv_breakable_box_small_loop(void) {
@@ -118,16 +113,13 @@ void bhv_breakable_box_small_loop(void) {
         case HELD_FREE:
             breakable_box_small_idle_loop();
             break;
-
         case HELD_HELD:
             cur_obj_disable_rendering();
             cur_obj_become_intangible();
             break;
-
         case HELD_THROWN:
             breakable_box_small_get_thrown();
             break;
-
         case HELD_DROPPED:
             breakable_box_small_get_dropped();
             break;

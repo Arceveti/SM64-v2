@@ -74,11 +74,11 @@ void bhv_scuttlebug_loop(void) {
         case SCUTTLEBUG_SUB_ACT_JUMP:
             o->oForwardVel = -10.0f;
             if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-                o->oSubAction = SCUTTLEBUG_SUB_ACT_LAND;
-                o->oVelY = 0.0f;
+                o->oSubAction       = SCUTTLEBUG_SUB_ACT_LAND;
+                o->oVelY            = 0.0f;
                 o->oScuttlebugTimer = 0;
-                o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
-                o->oInteractStatus = INT_STATUS_NONE;
+                o->oFlags          |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
+                o->oInteractStatus  = INT_STATUS_NONE;
             }
             break;
         case SCUTTLEBUG_SUB_ACT_LAND:

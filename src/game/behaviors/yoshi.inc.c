@@ -30,22 +30,18 @@ void yoshi_walk_loop(void) {
 
 void yoshi_idle_loop(void) {
     s16 chosenHome;
-
     if (o->oTimer > 90) {
         chosenHome = random_float() * 3.99f;
-
         if (o->oYoshiChosenHome == chosenHome) {
             return;
         } else {
             o->oYoshiChosenHome = chosenHome;
         }
-
         o->oHomeX          = sYoshiHomeLocations[o->oYoshiChosenHome * 2    ];
         o->oHomeZ          = sYoshiHomeLocations[o->oYoshiChosenHome * 2 + 1];
         o->oYoshiTargetYaw = atan2s(o->oHomeZ - o->oPosZ, o->oHomeX - o->oPosX);
         o->oAction         = YOSHI_ACT_WALK;
     }
-
     cur_obj_init_animation(YOSHI_ANIM_IDLE);
     if (o->oInteractStatus == INT_STATUS_INTERACTED) o->oAction = YOSHI_ACT_TALK;
     // Credits; Yoshi appears at this position overlooking the castle near the end of the credits

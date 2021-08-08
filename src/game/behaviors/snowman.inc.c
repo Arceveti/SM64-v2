@@ -45,13 +45,11 @@ void adjust_rolling_face_pitch(f32 f12) {
 }
 
 void snowmans_bottom_act_follow_path(void) { // act 1
-    s32 pathResult = 0;
     o->oPathedStartWaypoint     = segmented_to_virtual(&ccm_seg7_trajectory_snowman);
     object_step_without_floor_orient();
-    pathResult                  = cur_obj_follow_path(pathResult);
+    s32 pathResult              = cur_obj_follow_path(pathResult);
     o->oSnowmansBottomTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
-
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     if (pathResult == -1) {
         o->oSnowmansBottomTargetYaw = (obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000) && o->oSnowmansBottomHitCheckpointNearMario) ? o->oAngleToMario : o->oMoveAngleYaw;
@@ -86,7 +84,6 @@ void snowmans_bottom_act_reach_end(void) { // act 3
         o->oAction = SNOWMANS_BOTTOM_ACT_COLLISION;
         cur_obj_become_intangible();
     }
-
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         spawn_mist_particles_variable(0, 0, 70.0f);
         o->oPosX       = -4230.0f;
@@ -158,7 +155,6 @@ void bhv_snowmans_head_init(void) {
 
 void bhv_snowmans_head_loop(void) {
     s16 collisionFlags;
-
     switch (o->oAction) {
         case SNOWMANS_HEAD_ACT_ASK:
             if (trigger_obj_dialog_when_facing(&o->oSnowmansHeadDialogActive, DIALOG_109, 400.0f, MARIO_DIALOG_LOOK_FRONT)) o->oAction = SNOWMANS_HEAD_ACT_NONE;
@@ -190,7 +186,6 @@ void bhv_snowmans_head_loop(void) {
             }
             break;
     }
-
     cur_obj_push_mario_away_from_cylinder(180.0f, 150.0f);
 }
 
@@ -199,8 +194,5 @@ void bhv_snowmans_body_checkpoint_loop(void) {
         o->parentObj->oSnowmansBottomHitCheckpointNearMario = TRUE;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
-
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-    }
+    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }

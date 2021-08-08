@@ -108,12 +108,11 @@ void exclamation_box_act_scaling(void) {
 
 void exclamation_box_spawn_contents(struct ExclamationBoxContents *contentsList, u8 boxType) {
     struct Object *contentsObj = NULL;
-
     while (contentsList->id != 99) {
         if (boxType == contentsList->id) {
             contentsObj = spawn_object(o, contentsList->model, contentsList->behavior);
-            contentsObj->oVelY       = 20.0f;
-            contentsObj->oForwardVel =  3.0f;
+            contentsObj->oVelY         = 20.0f;
+            contentsObj->oForwardVel   =  3.0f;
             contentsObj->oMoveAngleYaw = gMarioObject->oMoveAngleYaw;
             o->oBehParams |= contentsList->behParams << 24;
             if (contentsList->model == MODEL_STAR) o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
