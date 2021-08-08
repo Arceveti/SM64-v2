@@ -61,7 +61,7 @@ extern const Gfx hmc_seg7_dl_0701F1B0[];
 extern const Gfx hmc_seg7_dl_0701F690[];
 extern const Gfx hmc_seg7_dl_0701F818[];
 extern const Gfx hmc_seg7_dl_0701FD58[];
-extern const Gfx hmc_seg7_dl_0701FFF8[];
+extern const Gfx hmc_seg7_dl_grill_door[];
 extern const Gfx hmc_seg7_dl_07020FD0[];
 extern const Gfx hmc_seg7_dl_07021760[];
 extern const Gfx hmc_seg7_dl_07021BA0[];

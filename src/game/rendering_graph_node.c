@@ -645,6 +645,7 @@ static void geo_process_background(struct GraphNodeBackground *node) {
 // #else
         Gfx *gfxStart = alloc_display_list(sizeof(Gfx) * 8);
 // #endif
+        // Gfx *gfxStart = alloc_display_list(sizeof(list));
         Gfx *gfx = gfxStart;
 
         gDPPipeSync(      gfx++);
@@ -772,10 +773,10 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
              || gCurAnimType == ANIM_TYPE_LATERAL_TRANSLATION) {
                 geo = node->node.children;
                 if (geo != NULL && geo->type == GRAPH_NODE_TYPE_SCALE) objScale = ((struct GraphNodeScale *) geo)->scale;
-                animOffset[0] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
-                animOffset[1] = 0.0f;
+                animOffset[0]       = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
+                animOffset[1]       = 0.0f;
                 gCurrAnimAttribute += 2;
-                animOffset[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
+                animOffset[2]       = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
                 gCurrAnimAttribute -= 6;
 
                 // simple matrix rotation so the shadow offset rotates along with the object

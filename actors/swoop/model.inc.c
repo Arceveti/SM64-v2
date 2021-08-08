@@ -31,11 +31,11 @@ static const Vtx dSwoopEyeVertices1[] = {
     {{{    80,     38,    -45}, 0, {    40,     80}, {0x3f, 0x30, 0x9e, 0xff}}},
     {{{    65,     77,    -25}, 0, {  1104,  25<<5}, {0x44, 0x59, 0xc6, 0xff}}},
     {{{   112,     54,      0}, 0, { 24<<5,   -456}, {0x69, 0x46, 0x00, 0xff}}},
-    {{{   -14,     57,     28}, 0, {   624,   8<<5}, {0x96, 0x31, 0x30, 0xff}}},
+    {{{   -14,     56,     28}, 0, {   624,   8<<5}, {0x96, 0x31, 0x30, 0xff}}},
     {{{   -11,    -13,      0}, 0, {   536,    232}, {0x8d, 0xcc, 0x00, 0xff}}},
     {{{    17,    -18,     89}, 0, { 25<<5,     80}, {0xcc, 0xed, 0x72, 0xff}}},
     {{{    29,     71,     45}, 0, { 21<<5,      0}, {0x05, 0x44, 0x6a, 0xff}}},
-    {{{   -14,     57,    -28}, 0, { 14<<5,    246}, {0x96, 0x31, 0xd0, 0xff}}},
+    {{{   -14,     56,    -28}, 0, { 14<<5,    246}, {0x96, 0x31, 0xd0, 0xff}}},
     {{{    17,    -18,    -89}, 0, {  8<<5,     56}, {0xe5, 0xdf, 0x89, 0xff}}},
     {{{    29,     71,    -45}, 0, {   386,    -16}, {0x05, 0x44, 0x95, 0xff}}},
     {{{    82,      4,    -53}, 0, {  -728,   -328}, {0x3f, 0xfe, 0x93, 0xff}}},
@@ -80,7 +80,7 @@ static const Vtx dSwoopEyeVertices3[] = {
 };
 
 // 0x06006518
-static const Vtx dSwoopNoseVertices1[] = {
+static const Vtx dSwoopNoseVertices[] = {
     {{{   112,     54,      0}, 0, { 22<<5,      0}, {0x69, 0x46, 0x00, 0xff}}},
     {{{    65,     77,    -25}, 0, {   382,    266}, {0x44, 0x59, 0xc6, 0xff}}},
     {{{    65,     77,     25}, 0, {   880,    288}, {0x44, 0x59, 0x3a, 0xff}}},
@@ -89,8 +89,8 @@ static const Vtx dSwoopNoseVertices1[] = {
     {{{    65,     77,    -25}, 0, {   232,   7<<5}, {0x44, 0x59, 0xc6, 0xff}}},
     {{{    29,     71,     45}, 0, { 29<<5,    586}, {0x05, 0x44, 0x6a, 0xff}}},
     {{{    29,     71,    -45}, 0, {    24,    586}, {0x05, 0x44, 0x95, 0xff}}},
-    {{{   -14,     57,     28}, 0, {   752,  32<<5}, {0x96, 0x31, 0x30, 0xff}}},
-    {{{   -14,     57,    -28}, 0, {   200,  32<<5}, {0x96, 0x31, 0xd0, 0xff}}},
+    {{{   -14,     56,     28}, 0, {   752,  32<<5}, {0x96, 0x31, 0x30, 0xff}}},
+    {{{   -14,     56,    -28}, 0, {   200,  32<<5}, {0x96, 0x31, 0xd0, 0xff}}},
 };
 
 // 0x060065B8 - 0x060066F8
@@ -123,11 +123,11 @@ const Gfx dSwoopEyesSubDl[] = {
 };
 
 // 0x060066F8 - 0x06006758
-const Gfx dSwoopNoseSubDl1[] = {
+const Gfx dSwoopNoseSubDl[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dSwoopNoseTexture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(dSwoopNoseVertices1, 10, 0),
+    gsSPVertex(dSwoopNoseVertices, 10, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 4,  3,  6, 0x0,  7,  3,  5, 0x0),
     gsSP2Triangles( 6,  3,  8, 0x0,  3,  9,  8, 0x0),
@@ -136,27 +136,18 @@ const Gfx dSwoopNoseSubDl1[] = {
 };
 
 // 0x06006758 - 0x06006808
-const Gfx dSwoopFaceUpperDl[] = {
+const Gfx dSwoopHeadDl[] = {
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_2CYCLE),
-    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
-    gsDPSetDepthSource(G_ZS_PIXEL),
-    gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
-    gsSPSetGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
+    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
     gsSPDisplayList(dSwoopEyesSubDl),
-    gsSPDisplayList(dSwoopNoseSubDl1),
+    gsSPDisplayList(dSwoopNoseSubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_1CYCLE),
-    gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_NOOP2),
-    gsSPClearGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPEndDisplayList(),
 };
@@ -184,13 +175,7 @@ const Gfx dSwoopBodySubDl[] = {
 // 0x06006880 - 0x06006938
 const Gfx dSwoopBodyDl[] = {
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_2CYCLE),
-    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
-    gsDPSetDepthSource(G_ZS_PIXEL),
-    gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
-    gsSPSetGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -200,16 +185,13 @@ const Gfx dSwoopBodyDl[] = {
     gsSPDisplayList(dSwoopBodySubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_1CYCLE),
-    gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2),
-    gsSPClearGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPSetGeometryMode(G_LIGHTING),
     gsSPEndDisplayList(),
 };
 
 // 0x06006950
-static const Vtx dSwoopNoseVertices2[] = {
+static const Vtx dSwoopEarsVertices[] = {
     {{{   187,     48,    -56}, 0, {   424,    720}, {0xc6, 0x6b, 0xdf, 0xff}}},
     {{{   194,     32,   -120}, 0, {   336,  22<<5}, {0xdf, 0x7a, 0x05, 0xff}}},
     {{{    80,     -3,    -33}, 0, {   456,  31<<5}, {0xdf, 0x7a, 0x05, 0xff}}},
@@ -229,13 +211,13 @@ static const Vtx dSwoopToothVertices[] = {
 };
 
 // 0x06006A10 - 0x06006A68
-const Gfx dSwoopNoseSubDl2[] = {
+const Gfx dSwoopEarsSubDl[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, dSwoopNoseTexture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&dSwoopLights.l, 1),
     gsSPLight(&dSwoopLights.a, 2),
-    gsSPVertex(dSwoopNoseVertices2, 8, 0),
+    gsSPVertex(dSwoopEarsVertices, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
@@ -249,31 +231,21 @@ const Gfx dSwoopToothSubDl[] = {
 };
 
 // 0x06006A88 - 0x06006B58
-const Gfx dSwoopFaceLowerDL[] = {
+const Gfx dSwoopFaceEarsToothDl[] = {
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_2CYCLE),
-    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
-    gsDPSetDepthSource(G_ZS_PIXEL),
-    gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
-    gsSPSetGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
+    gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_CULL_BACK),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(dSwoopNoseSubDl2),
+    gsSPDisplayList(dSwoopEarsSubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_PASS2),
-    gsSPDisplayList(dSwoopToothSubDl),
-    gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_1CYCLE),
-    gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_NOOP2),
-    gsSPClearGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE), //!
+    // gsSPDisplayList(dSwoopToothSubDl),
+    // gsDPPipeSync(),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSPEndDisplayList(),
 };
@@ -301,13 +273,7 @@ const Gfx dSwoopWing1SubDl[] = {
 // 0x06006BD0 - 0x06006C88
 const Gfx dSwoopWing1Dl[] = {
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_2CYCLE),
-    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
-    gsDPSetDepthSource(G_ZS_PIXEL),
-    gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
-    gsSPSetGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -317,9 +283,6 @@ const Gfx dSwoopWing1Dl[] = {
     gsSPDisplayList(dSwoopWing1SubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_1CYCLE),
-    gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2),
-    gsSPClearGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
     gsSPEndDisplayList(),
@@ -346,13 +309,7 @@ const Gfx dSwoopWing2SubDl[] = {
 // 0x06006D00 - 0x06006DB8
 const Gfx dSwoopWing2Dl[] = {
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_2CYCLE),
-    gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
-    gsDPSetDepthSource(G_ZS_PIXEL),
-    gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
-    gsSPSetGeometryMode(G_FOG),
-    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
+    gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
@@ -362,9 +319,6 @@ const Gfx dSwoopWing2Dl[] = {
     gsSPDisplayList(dSwoopWing2SubDl),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
-    gsDPSetCycleType(G_CYC_1CYCLE),
-    gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2),
-    gsSPClearGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
     gsSPEndDisplayList(),

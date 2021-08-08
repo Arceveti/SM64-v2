@@ -160,7 +160,7 @@ static const Vtx goomba_seg8_vertex_0801B238[] = {
 };
 
 // 0x0801B2E8 - 0x0801B560
-const Gfx goomba_seg8_dl_0801B2E8[] = {
+const Gfx goomba_seg8_sub_dl_face_model[] = {
     gsSPLight(&goomba_seg8_lights_0801AD30.l, 1),
     gsSPLight(&goomba_seg8_lights_0801AD30.a, 2),
     gsSPVertex(goomba_seg8_vertex_0801AD48, 15, 0),
@@ -210,7 +210,7 @@ const Gfx goomba_seg8_dl_0801B2E8[] = {
 };
 
 // 0x0801B560 - 0x0801B5A0
-const Gfx goomba_seg8_dl_0801B560[] = {
+const Gfx goomba_seg8_sub_dl_face_begin[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -222,8 +222,8 @@ const Gfx goomba_seg8_dl_0801B560[] = {
 };
 
 // 0x0801B5A0 - 0x0801B5C8
-const Gfx goomba_seg8_dl_0801B5A0[] = {
-    gsSPDisplayList(goomba_seg8_dl_0801B2E8),
+const Gfx goomba_seg8_sub_dl_face_end[] = {
+    gsSPDisplayList(goomba_seg8_sub_dl_face_model),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -231,29 +231,29 @@ const Gfx goomba_seg8_dl_0801B5A0[] = {
 };
 
 // 0x0801B5C8 - 0x0801B5F0
-const Gfx goomba_seg8_dl_0801B5C8[] = {
-    gsSPDisplayList(goomba_seg8_dl_0801B560),
+const Gfx goomba_seg8_dl_face[] = {
+    gsSPDisplayList(goomba_seg8_sub_dl_face_begin),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_face),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(goomba_seg8_dl_0801B5A0),
+    gsSPBranchList(goomba_seg8_sub_dl_face_end),
 };
 
 // 0x0801B5F0 - 0x0801B618
-const Gfx goomba_seg8_dl_0801B5F0[] = {
-    gsSPDisplayList(goomba_seg8_dl_0801B560),
+const Gfx goomba_seg8_dl_face_blink[] = {
+    gsSPDisplayList(goomba_seg8_sub_dl_face_begin),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_face_blink),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPBranchList(goomba_seg8_dl_0801B5A0),
+    gsSPBranchList(goomba_seg8_sub_dl_face_end),
 };
 
 // 0x0801B618
-static const Vtx goomba_seg8_vertex_0801B618[] = {
-    {{{    18,     18,      0}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx goomba_seg8_vertex_body[] = {
+    {{{    18,     18,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   -18,     18,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -18,    -18,      0}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    18,    -18,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -18,    -18,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    18,    -18,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0801B658 - 0x0801B690
@@ -261,7 +261,7 @@ const Gfx goomba_seg8_sub_dl_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, goomba_seg8_texture_body),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(goomba_seg8_vertex_0801B618, 4, 0),
+    gsSPVertex(goomba_seg8_vertex_body, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };

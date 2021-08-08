@@ -81,7 +81,7 @@ struct GraphNodeRoot
 {
     /*0x00*/ struct GraphNode node;
     /*0x14*/ u8 areaIndex;
-    /*0x15*/ s8 unk15; // ?
+    /*0x15*/ s8 unk15; //? unused, always 0
     /*0x16*/ s16 x;
     /*0x18*/ s16 y;
     /*0x1A*/ s16 width; // half width, 160

@@ -138,11 +138,11 @@ extern const struct Animation *const flyguy_seg8_anims_08011A64[];
 
 // goomba
 extern const GeoLayout goomba_geo[];
-extern const Gfx goomba_seg8_dl_0801B2E8[];
-extern const Gfx goomba_seg8_dl_0801B560[];
-extern const Gfx goomba_seg8_dl_0801B5A0[];
-extern const Gfx goomba_seg8_dl_0801B5C8[];
-extern const Gfx goomba_seg8_dl_0801B5F0[];
+extern const Gfx goomba_seg8_sub_dl_face_model[];
+extern const Gfx goomba_seg8_sub_dl_face_begin[];
+extern const Gfx goomba_seg8_sub_dl_face_end[];
+extern const Gfx goomba_seg8_dl_face[];
+extern const Gfx goomba_seg8_dl_face_blink[];
 extern const Gfx goomba_seg8_sub_dl_body[];
 extern const Gfx goomba_seg8_dl_body[];
 extern const Gfx goomba_seg8_dl_0801CE20[];

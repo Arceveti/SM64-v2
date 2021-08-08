@@ -40,7 +40,7 @@ struct GraphNodeRoot *init_graph_node_root(struct AllocOnlyPool *pool, struct Gr
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROOT);
         graphNode->areaIndex = areaIndex;
-        graphNode->unk15     = 0; //! name?
+        // graphNode->unk15     = 0;
         graphNode->x         = x;
         graphNode->y         = y;
         graphNode->width     = width;
@@ -672,9 +672,9 @@ UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3
         s16 *values          = segmented_to_virtual((void *) animation->values);
         s16 frame            = obj->animInfo.animFrame;
         if (frame < 0) frame = 0;
-        position[0] = (f32) values[retrieve_animation_index(frame, &attribute)];
-        position[1] = (f32) values[retrieve_animation_index(frame, &attribute)];
-        position[2] = (f32) values[retrieve_animation_index(frame, &attribute)];
+        position[0]          = (f32) values[retrieve_animation_index(frame, &attribute)];
+        position[1]          = (f32) values[retrieve_animation_index(frame, &attribute)];
+        position[2]          = (f32) values[retrieve_animation_index(frame, &attribute)];
     } else {
         vec3f_set(position, 0, 0, 0);
     }

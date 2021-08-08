@@ -45,9 +45,10 @@ void adjust_rolling_face_pitch(f32 f12) {
 }
 
 void snowmans_bottom_act_follow_path(void) { // act 1
+    s32 pathResult = 0;
     o->oPathedStartWaypoint     = segmented_to_virtual(&ccm_seg7_trajectory_snowman);
     object_step_without_floor_orient();
-    s32 pathResult              = cur_obj_follow_path(pathResult);
+    pathResult                  = cur_obj_follow_path(pathResult);
     o->oSnowmansBottomTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
