@@ -23,45 +23,45 @@
 #define LEN_TABLE       (POS_TABLE+16*8)
 #define BUFSIZE         (16*8*3)
 
-#define ra		$31	/* ra */
+#define ra				$31	/* ra */
 #define d0             	$8	/* t0 */
 #define d1             	$9	/* t1 */
-#define d2		$10	/* t2 */
-#define d3		$11	/* t3 */
-#define d4		$12	/* t4 */
-#define d5		$13	/* t5 */
-#define d6		$14	/* t6 */
-#define d7		$15	/* t7 */
+#define d2				$10	/* t2 */
+#define d3				$11	/* t3 */
+#define d4				$12	/* t4 */
+#define d5				$13	/* t5 */
+#define d6				$14	/* t6 */
+#define d7				$15	/* t7 */
 
-#define xa0		$16	/* s0 */
-#define xa1		$17	/* s1 */
-#define xa2		$18	/* s2 */
-#define xa3		$19	/* s3 */
-#define xa4		$20	/* s4 */
-#define xa5		$21	/* s5 */
-#define xa6		$22	/* s6 */
-#define xa7		$23	/* s7 */
+#define xa0				$16	/* s0 */
+#define xa1				$17	/* s1 */
+#define xa2				$18	/* s2 */
+#define xa3				$19	/* s3 */
+#define xa4				$20	/* s4 */
+#define xa5				$21	/* s5 */
+#define xa6				$22	/* s6 */
+#define xa7				$23	/* s7 */
 
 #define TEMP            $2	/* v1 */
 #define input           xa3	/* s3 */
 #define output          xa4	/* s4 */
-#define output_hi	xa5	/* s5 */
+#define output_hi		xa5	/* s5 */
 
 #define counts          d4	/* t4 */
 #define bit_buffer      d6	/* t6 */
 #define bit_count       d7	/* t7 */
 
 
-#define zero		$0	/* zero */
-#define tmp		$1	/* at */
-#define tmp2		$2	/* v0 */
-#define const_ff	$3	/* v1 */
+#define zero			$0	/* zero */
+#define tmp				$1	/* at */
+#define tmp2			$2	/* v0 */
+#define const_ff		$3	/* v1 */
 #define const_ff000000 	$4	/* a0 */
 #define const_80000000	$5	/* a1 */
 #define const_ffffff00	$6	/* a2 */
-#define const_8000	$7	/* a3 */
-#define a0 		$4
-#define a1		$5
+#define const_8000		$7	/* a3 */
+#define a0 				$4
+#define a1				$5
 /*------------------------------------------------------------------------------
 * Macros
 *------------------------------------------------------------------------------

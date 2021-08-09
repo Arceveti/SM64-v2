@@ -1,11 +1,5 @@
-// 0x07016658 - 0x07016670
-static const Lights1 lll_seg7_lights_07016658 = gdSPDefLights1(
-    0x3f, 0x3f, 0x3f,
-    0xff, 0xff, 0xff, 0x28, 0x28, 0x28
-);
-
 // 0x07016670 - 0x07016770
-static const Vtx lll_seg7_vertex_07016670[] = {
+static const Vtx lll_seg7_vertex_volcano_outside_sides_1[] = {
     {{{   325,    282,   -210}, 0, {   176,    496}, {0x43, 0x58, 0xc4, 0xff}}},
     {{{   186,    512,   -108}, 0, {   528,    236}, {0xe3, 0x7b, 0x09, 0xff}}},
     {{{   336,    282,    192}, 0, {   160,   -512}, {0x51, 0x5a, 0x23, 0xff}}},
@@ -25,7 +19,7 @@ static const Vtx lll_seg7_vertex_07016670[] = {
 };
 
 // 0x07016770 - 0x070167F0
-static const Vtx lll_seg7_vertex_07016770[] = {
+static const Vtx lll_seg7_vertex_volcano_outside_sides_2[] = {
     {{{  -325,    282,   -210}, 0, {  1800,    496}, {0xbd, 0x58, 0xc5, 0xff}}},
     {{{  -186,    512,   -108}, 0, {  1454,    236}, {0xfa, 0x6c, 0x42, 0xff}}},
     {{{     0,    512,   -215}, 0, { 31<<5,    504}, {0xe5, 0x7a, 0xf0, 0xff}}},
@@ -37,7 +31,7 @@ static const Vtx lll_seg7_vertex_07016770[] = {
 };
 
 // 0x070167F0 - 0x07016850
-static const Vtx lll_seg7_vertex_070167F0[] = {
+static const Vtx lll_seg7_vertex_volcano_outside_lava[] = {
     {{{     0,    102,   -215}, 0, { 31<<5,  15<<5}, {0x0d, 0x69, 0x44, 0xff}}},
     {{{   186,    102,    108}, 0, {   224,    922}, {0xa1, 0x4c, 0xdf, 0xff}}},
     {{{   186,    102,   -108}, 0, { 23<<5,    922}, {0xa7, 0x2c, 0x4d, 0xff}}},
@@ -47,7 +41,7 @@ static const Vtx lll_seg7_vertex_070167F0[] = {
 };
 
 // 0x07016850 - 0x07016930
-static const Vtx lll_seg7_vertex_07016850[] = {
+static const Vtx lll_seg7_verteex_volcano_outside_hole[] = {
     {{{   186,    512,   -108}, 0, {  3546,      0}, {0xe3, 0x7b, 0x09, 0xff}}},
     {{{   186,    102,   -108}, 0, {  3546,    944}, {0xa7, 0x2c, 0x4d, 0xff}}},
     {{{   186,    102,    108}, 0, {  2524,    944}, {0xa1, 0x4c, 0xdf, 0xff}}},
@@ -65,13 +59,13 @@ static const Vtx lll_seg7_vertex_07016850[] = {
 };
 
 // 0x07016930 - 0x07016A30
-static const Gfx lll_seg7_dl_07016930[] = {
+static const Gfx lll_seg7_sub_dl_volcano_outside_sides[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09003000_volcano_wall),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&lll_seg7_lights_07016658.l, 1),
-    gsSPLight(&lll_seg7_lights_07016658.a, 2),
-    gsSPVertex(lll_seg7_vertex_07016670, 16, 0),
+    gsSPLight(&lll_seg7_lights_gray_0x3f_0xff_0x28.l, 1),
+    gsSPLight(&lll_seg7_lights_gray_0x3f_0xff_0x28.a, 2),
+    gsSPVertex(lll_seg7_vertex_volcano_outside_sides_1, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  2, 0x0),
     gsSP2Triangles( 5,  0,  2, 0x0,  5,  2,  6, 0x0),
     gsSP2Triangles( 1,  3,  2, 0x0,  2,  4,  7, 0x0),
@@ -81,7 +75,7 @@ static const Gfx lll_seg7_dl_07016930[] = {
     gsSP2Triangles(12, 13,  0, 0x0, 12,  0,  5, 0x0),
     gsSP2Triangles( 0, 14,  1, 0x0,  0, 13, 14, 0x0),
     gsSP2Triangles(13, 15, 14, 0x0, 15, 13, 12, 0x0),
-    gsSPVertex(lll_seg7_vertex_07016770, 8, 0),
+    gsSPVertex(lll_seg7_vertex_volcano_outside_sides_2, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  1,  0, 0x0),
     gsSP2Triangles( 4,  0,  5, 0x0,  3,  0,  4, 0x0),
     gsSP2Triangles( 3,  6,  1, 0x0,  7,  3,  4, 0x0),
@@ -89,22 +83,22 @@ static const Gfx lll_seg7_dl_07016930[] = {
 };
 
 // 0x07016A30 - 0x07016A78
-static const Gfx lll_seg7_dl_07016A30[] = {
+static const Gfx lll_seg7_sub_dl_volcano_outside_lava[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009000_lava),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(lll_seg7_vertex_070167F0, 6, 0),
+    gsSPVertex(lll_seg7_vertex_volcano_outside_lava, 6, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 0,  4,  5, 0x0,  0,  5,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07016A78 - 0x07016B00
-static const Gfx lll_seg7_dl_07016A78[] = {
+static const Gfx lll_seg7_sub_dl_volcano_outside_hole[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09009800_volcano_wall_with_lava),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(lll_seg7_vertex_07016850, 14, 0),
+    gsSPVertex(lll_seg7_verteex_volcano_outside_hole, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  1,  0, 0x0,  4,  5,  1, 0x0),
     gsSP2Triangles( 3,  2,  6, 0x0,  3,  6,  7, 0x0),
@@ -115,7 +109,7 @@ static const Gfx lll_seg7_dl_07016A78[] = {
 };
 
 // 0x07016B00 - 0x07016B70
-const Gfx lll_seg7_dl_07016B00[] = {
+const Gfx lll_seg7_dl_volcano_outside[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
@@ -123,9 +117,9 @@ const Gfx lll_seg7_dl_07016B00[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(lll_seg7_dl_07016930),
-    gsSPDisplayList(lll_seg7_dl_07016A30),
-    gsSPDisplayList(lll_seg7_dl_07016A78),
+    gsSPDisplayList(lll_seg7_sub_dl_volcano_outside_sides),
+    gsSPDisplayList(lll_seg7_sub_dl_volcano_outside_lava),
+    gsSPDisplayList(lll_seg7_sub_dl_volcano_outside_hole),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

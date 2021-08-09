@@ -1,6 +1,8 @@
 #ifndef GD_MEMORY_H
 #define GD_MEMORY_H
 
+#include <PR/ultratypes.h>
+
 /// A structure that holds information about memory allocation on goddard's heap.
 struct GMemBlock {
     /* 0x00 */ u8 *ptr;

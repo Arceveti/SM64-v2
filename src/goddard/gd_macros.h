@@ -1,6 +1,8 @@
 #ifndef GD_MACROS_H
 #define GD_MACROS_H
 
+#include <PR/ultratypes.h>
+
 /**
  * @file gd_macros.h
  * 

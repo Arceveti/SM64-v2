@@ -219,8 +219,12 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
     if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
     o->oPosY += o->oVelY;
-    //Snap the object up to the floor.
+    // Snap the object up to the floor.
+#ifdef OBJ_STEP_HEIGHT
+    if (ABS(o->oPosY - objFloorY) < OBJ_STEP_HEIGHT) {
+#else
     if (o->oPosY < objFloorY) {
+#endif
         o->oPosY = objFloorY;
         // Bounces an object if the ground is hit fast enough.
         o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f;
@@ -253,7 +257,7 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
     if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
     o->oPosY += o->oVelY;
-    //Snap the object up to the floor.
+    // Snap the object up to the floor.
     if (o->oPosY < floorY) {
         o->oPosY = floorY;
         // Bounces an object if the ground is hit fast enough.
@@ -345,7 +349,7 @@ s16 object_step(void) {
  */
 s16 object_step_without_floor_orient(void) {
     sOrientObjWithFloor = FALSE;
-    s16 collisionFlags      = object_step();
+    s16 collisionFlags  = object_step();
     sOrientObjWithFloor = TRUE;
     return collisionFlags;
 }
@@ -559,7 +563,7 @@ s8 obj_lava_death(void) {
         // Sinking effect
         o->oPosY -= 10.0f;
     }
-    if ((o->oTimer % 8) == 0) {
+    if (!(o->oTimer & 0x7)) {
         cur_obj_play_sound_2(SOUND_OBJ_BULLY_EXPLODE_LAVA);
         deathSmoke = spawn_object(o, MODEL_SMOKE, bhvBobombBullyDeathSmoke);
         deathSmoke->oPosX      += random_float() * 20.0f;

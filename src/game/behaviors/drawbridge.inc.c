@@ -29,7 +29,7 @@ void bhv_lll_drawbridge_loop(void) {
 
         //! Because the global timer increments when the game is paused, pausing and unpausing
         //  the game at regular intervals can leave the drawbridge raised indefinitely.
-        if (o->oTimer >= 51 && (globalTimer % 8) == 0) {
+        if (o->oTimer >= 51 && !(globalTimer & 0x7)) {
             o->oAction = LLL_DRAWBRIDGE_ACT_LOWER;
             cur_obj_play_sound_2(SOUND_GENERAL_DRAWBRIDGE_LOWER);
         }
@@ -40,7 +40,7 @@ void bhv_lll_drawbridge_loop(void) {
 
         //! Because the global timer increments when the game is paused, pausing and unpausing
         //  the game at regular intervals can leave the drawbridge lowered indefinitely.
-        if (o->oTimer >= 51 && (globalTimer % 8) == 0) {
+        if (o->oTimer >= 51 && !(globalTimer & 0x7)) {
             o->oAction = LLL_DRAWBRIDGE_ACT_RAISE;
             cur_obj_play_sound_2(SOUND_GENERAL_DRAWBRIDGE_RAISE);
         }

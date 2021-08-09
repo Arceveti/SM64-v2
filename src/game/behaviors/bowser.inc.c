@@ -1632,7 +1632,8 @@ void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
     // h = (((hue * (128.0f/3.0f))+hueAdd) * 3) / 4; // 0..191 // needs to u8 cycle h before multiplying
     // u32 i =  h / 32; // We want a value of 0 thru 5
     u32 i = (h * 0.03125f); // We want a value of 0 thru 5
-    u32 f = (h % 32) * 8; // 'fractional' part of 'i' 0..248 in jumps
+    // u32 f = (h % 32) * 8; // 'fractional' part of 'i' 0..248 in jumps
+    u32 f = (h & 0x1F) * 8; // 'fractional' part of 'i' 0..248 in jumps
     u8 pv = (255 - s); // pv will be in range 0 - 255
     // u8 qv = (256 - s *        f  / 256);
     // u8 tv = (256 - s * (255 - f) / 256);

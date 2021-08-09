@@ -165,23 +165,16 @@ void bhv_generic_bowling_ball_spawner_loop(void) {
 
 void bhv_thi_bowling_ball_spawner_loop(void) {
     struct Object *bowlingBall;
-
     if (o->oTimer == 256) o->oTimer = 0;
-    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 800)
-        || (o->oPosY < gMarioObject->header.gfx.pos[1])) return;
-
-    if ((o->oTimer % 64) == 0) {
-        if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 12000)) {
-            if ((s32)(random_float() * 1.5f) == 0) {
-                bowlingBall = spawn_object(o, MODEL_BOWLING_BALL, bhvBowlingBall);
-                bowlingBall->oBehParams2ndByte = o->oBehParams2ndByte;
-            }
-        }
+    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 800) || (o->oPosY < gMarioObject->header.gfx.pos[1])) return;
+    if (!(o->oTimer & 0x3F) && is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 12000) && (s32)(random_float() * 1.5f) == 0) {
+        bowlingBall = spawn_object(o, MODEL_BOWLING_BALL, bhvBowlingBall);
+        bowlingBall->oBehParams2ndByte = o->oBehParams2ndByte;
     }
 }
 
 void bhv_bob_pit_bowling_ball_init(void) {
-    o->oGravity = 12.0f;
+    o->oGravity  = 12.0f;
     o->oFriction = 1.0f;
     o->oBuoyancy = 2.0f;
 }

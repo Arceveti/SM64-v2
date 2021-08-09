@@ -123,12 +123,11 @@ void coffin_act_stand_up(void) {
             o->oAction = COFFIN_ACT_IDLE;
             o->oFaceAngleRoll = 0x0;
         } else if (o->oTimer > 30) {
-            if (gGlobalTimer % 4 == 0) cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
+            if (!(gGlobalTimer & 0x3)) cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
             // Shake the coffin while its standing
             o->oFaceAngleRoll = 0x190 * (gGlobalTimer & 0x1) - 0xC8;
         }
-
-        o->oAngleVelPitch = 0;
+        o->oAngleVelPitch = 0x0;
     }
 }
 
@@ -143,12 +142,10 @@ void bhv_coffin_loop(void) {
     } else {
         // Scale the coffin vertically? Must have thought it was too short?
         o->header.gfx.scale[1] = 1.1f;
-
         switch (o->oAction) {
             case COFFIN_ACT_IDLE:     coffin_act_idle();     break;
             case COFFIN_ACT_STAND_UP: coffin_act_stand_up(); break;
         }
-
         load_object_collision_model();
     }
 }

@@ -1,6 +1,8 @@
 #ifndef GD_JOINTS_H
 #define GD_JOINTS_H
 
+#include <PR/ultratypes.h>
+
 // functions
 void eye_joint_update_func(struct ObjJoint *self);
 struct ObjJoint *make_joint(                                s32 flags, f32 x, f32 y, f32 z);

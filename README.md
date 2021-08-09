@@ -25,6 +25,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [Re-implementation of the unused cracked ice in SL](https://i.imgur.com/d71vYsV.png) (SunlitSpace542, Arceveti) *
 - [Seamless Bowser's puzzle in LLL](https://i.imgur.com/4IIdKbz.png) (Arceveti)
 - [A visual moving water current to the warp behind the Bowser door in DDD](https://i.imgur.com/5XwYaHm.png) (Arceveti) *
+- PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 **Bugfixes:**
 - `obj_resolve_object_collisions()` now works consistently (Arceveti) *
@@ -104,7 +105,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Experimental:**
 - Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
-- PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 # HackerSM64:
 

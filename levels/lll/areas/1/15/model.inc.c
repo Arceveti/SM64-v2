@@ -1,79 +1,79 @@
 // 0x07017BE8 - 0x07017CD8
-static const Vtx lll_seg7_vertex_07017BE8[] = {
+static const Vtx lll_seg7_vertex_hexagonal_mesh_1[] = {
     {{{  -102,      0,    177}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,    177}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,    177}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   102,      0,    177}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   102,      0,   -177}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,   -177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,   -177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,   -177}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,   -177}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,   -177}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,   -177}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -205,    -19,      0}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -205,    -20,      0}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -205,      0,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,   -177}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,   -177}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -205,      0,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -205,    -19,      0}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,    177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -205,    -20,      0}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,    177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,    177}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07017CD8 - 0x07017DD8
-static const Vtx lll_seg7_vertex_07017CD8[] = {
+static const Vtx lll_seg7_vertex_hexagonal_mesh_2[] = {
     {{{   205,      0,      0}, 0, {   786,   -236}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,   -177}, 0, {   268,  -2170}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,    177}, 0, { -1146,   -754}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,    177}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,    177}, 0, {     0,     64}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,    177}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,    177}, 0, {     0,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,    177}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   102,      0,    177}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   205,    -19,      0}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   205,    -20,      0}, 0, { 31<<5,     64}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   205,      0,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,    177}, 0, {     0,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,    177}, 0, {     0,     64}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   205,      0,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,   -177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,   -177}, 0, { 31<<5,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   102,      0,   -177}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   205,    -19,      0}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   205,    -20,      0}, 0, {     0,   1088}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   102,      0,   -177}, 0, {  1084,  -1354}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,      0,    177}, 0, {  -330,     64}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,      0,    177}, 0, {  -336,     64}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07017DD8 - 0x07017E68
-static const Vtx lll_seg7_vertex_07017DD8[] = {
+static const Vtx lll_seg7_vertex_hexagonal_mesh_3[] = {
     {{{  -102,      0,   -177}, 0, {   268,  -2170}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -205,      0,      0}, 0, {  -848,  -1872}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -102,      0,    177}, 0, { -1146,   -754}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,    177}, 0, {   160,    292}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,    177}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -205,    -19,      0}, 0, { 15<<5,  47<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   102,    -19,   -177}, 0, {  1364,    616}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   205,    -19,      0}, 0, {   854,    104}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -102,    -19,   -177}, 0, {  1178,   1312}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,    177}, 0, {   160,    292}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,    177}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -205,    -20,      0}, 0, { 15<<5,  47<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   102,    -20,   -177}, 0, {  1364,    616}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   205,    -20,      0}, 0, {   854,    104}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -102,    -20,   -177}, 0, {  1178,   1312}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07017E68 - 0x07017F40
-static const Gfx lll_seg7_dl_07017E68[] = {
+static const Gfx lll_seg7_sub_dl_hexagonal_mesh[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, fire_09000800_mesh),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(lll_seg7_vertex_07017BE8, 15, 0),
+    gsSPVertex(lll_seg7_vertex_hexagonal_mesh_1, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
-    gsSPVertex(lll_seg7_vertex_07017CD8, 16, 0),
+    gsSP1Triangle( 11, 13, 14, 0x0),
+    gsSPVertex(lll_seg7_vertex_hexagonal_mesh_2, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
     gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
     gsSP2Triangles( 0, 14,  1, 0x0,  0,  2, 15, 0x0),
-    gsSPVertex(lll_seg7_vertex_07017DD8, 9, 0),
+    gsSPVertex(lll_seg7_vertex_hexagonal_mesh_3,  9, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  3,  6,  7, 0x0),
-    gsSP1Triangle( 5,  8,  6, 0x0),
+    gsSP1Triangle(  5,  8,  6, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07017F40 - 0x07017FB0
-const Gfx lll_seg7_dl_07017F40[] = {
+const Gfx lll_seg7_dl_hexagonal_mesh[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -82,7 +82,7 @@ const Gfx lll_seg7_dl_07017F40[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(lll_seg7_dl_07017E68),
+    gsSPDisplayList(lll_seg7_sub_dl_hexagonal_mesh),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

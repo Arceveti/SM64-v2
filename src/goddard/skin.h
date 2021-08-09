@@ -1,6 +1,8 @@
 #ifndef GD_SKIN_H
 #define GD_SKIN_H
 
+#include <PR/ultratypes.h>
+
 // bss
 extern struct ObjNet* gGdSkinNet;   // @ 801BAAF0
 

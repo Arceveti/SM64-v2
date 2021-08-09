@@ -1,7 +1,7 @@
 #ifndef GD_TYPES_H
 #define GD_TYPES_H
 
-// #include <PR/ultratypes.h>
+#include <PR/ultratypes.h>
 #include <ultra64.h>
 
 /* Vector Types */

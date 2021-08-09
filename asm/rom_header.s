@@ -14,11 +14,7 @@
 .word  0x00000000               /* Checksum 2 */
 .word  0x00000000               /* Unknown */
 .word  0x00000000               /* Unknown */
-.if VERSION_SH == 1
-.ascii INTERNAL_ROM_NAME   /* Internal ROM name */
-.else
-.ascii INTERNAL_ROM_NAME   /* Internal ROM name */
-.endif
+.ascii INTERNAL_ROM_NAME        /* Internal ROM name */
 .word  0x00000000               /* Unknown */
 .word  0x0000004E               /* Cartridge */
 .ascii "SM"                     /* Cartridge ID */

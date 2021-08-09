@@ -1,15 +1,15 @@
 // Unused collision mapping for the water level diamond.
 
 // 0x070184C8 - 0x07018528
-const Collision wdw_seg7_collision_070184C8[] = {
+UNUSED const Collision wdw_seg7_collision_water_level_diamond[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x6),
-    COL_VERTEX(51, 50, -50),
-    COL_VERTEX(-50, 50, -50),
-    COL_VERTEX(0, 101, 0),
-    COL_VERTEX(-50, 50, 51),
-    COL_VERTEX(0, 0, 0),
-    COL_VERTEX(51, 50, 51),
+    COL_VERTEX( 51,  51, -51),
+    COL_VERTEX(-51,  51, -51),
+    COL_VERTEX(  0, 102,   0),
+    COL_VERTEX(-51,  51,  51),
+    COL_VERTEX(  0,   0,   0),
+    COL_VERTEX( 51,  51,  51),
     COL_TRI_INIT(SURFACE_DEFAULT, 8),
     COL_TRI(0, 1, 2),
     COL_TRI(3, 1, 4),

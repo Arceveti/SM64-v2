@@ -271,7 +271,7 @@
 #define MODEL_LLL_ROLLING_LOG                     0x39        // lll_geo_rolling_log
 #define MODEL_LLL_WOOD_BRIDGE                     0x35        // lll_geo_wooden_float_small
 #define MODEL_LLL_LARGE_WOOD_BRIDGE               0x3B        // lll_geo_wooden_float_large
-#define MODEL_LLL_FALLING_PLATFORM                0x3C        // lll_geo_collapsing_wooden_platform
+#define MODEL_LLL_FALLING_PLATFORM                0x3C        // lll_geo_tumbling_bridge
 #define MODEL_LLL_LARGE_FALLING_PLATFORM          0x3D        // lll_geo_long_wooden_bridge
 #define MODEL_LLL_VOLCANO_FALLING_TRAP            0x53        // lll_geo_volcano_falling_trap
 

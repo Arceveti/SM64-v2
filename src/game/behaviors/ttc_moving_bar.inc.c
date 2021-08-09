@@ -110,7 +110,7 @@ static void ttc_moving_bar_act_extend(void) {
         // 25% probability (fake out)
         if (gTTCSpeedSetting == TTC_SPEED_RANDOM
          && o->oTTCMovingBarOffset * o->oTTCMovingBarStartOffset < 0.0f
-         && random_u16() % 4 == 0) ttc_moving_bar_reset();
+         && !(random_u16() & 0x3)) ttc_moving_bar_reset();
     }
 }
 

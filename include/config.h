@@ -243,6 +243,8 @@
 
 // -- Optimizations --
 
+// Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
+#define UNIMPORTANT_OBJECTS
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
 // Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
@@ -289,6 +291,8 @@
 
 // -- Object Behaviors --
 
+// Step height for objects. Comment out the define to use vanilla behavior. (Arceveti)
+#define OBJ_STEP_HEIGHT 32.0f
 // Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
 #define MUSHROOMS_HEAL
 // Koopa Shell boxes respawn (Arceveti)
@@ -397,15 +401,15 @@
 // issues on actual level boundaries, such as extra knockback
 // (Arceveti)
 #define NULL_FLOOR_STEPS 4
-// Maximum number of walls to check (vanilla is 4)
+// Maximum number of walls to check (vanilla is 4, higher is recommended)
 #define MAX_REFEREMCED_WALLS 16
-// Maximum swimming speed (vanilla is 28.0f)
+// Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
 #define MAX_SWIMMING_SPEED 32.0f
-// Terminal velovity for gravity (Arceveti)
+// Terminal velovity for gravity (75.0f is default) (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
 // Minimum Y normal for floors (vanilla is 0.01f)
 #define MIN_FLOOR_NORMAL_Y 0.01f
-// Minimum Y normal for ceilings (vanilla is -0.01f)
+// Minimum Y normal for ceilings (vanilla is -0.01f, -0.2f is recommended)
 #define MAX_CEIL_NORMAL_Y -0.2f
 
 // -- Misc --

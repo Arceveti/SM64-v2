@@ -1,6 +1,8 @@
 #ifndef GD_SFX_H
 #define GD_SFX_H
 
+#include <PR/ultratypes.h>
+
 // Sfx for Mario Head Screen
 enum GdSfx {
     GD_SFX_NONE           = 0x00,

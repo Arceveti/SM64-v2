@@ -15,7 +15,6 @@ struct ObjectHitbox sHauntedChairHitbox = {
 void bhv_haunted_chair_init(void) {
     struct Object *pianoObj;
     f32 dist;
-
     pianoObj = cur_obj_find_nearest_object_with_behavior(bhvMadPiano, &dist);
     if (pianoObj != NULL && dist < 300.0f) {
         o->parentObj = pianoObj;
@@ -49,7 +48,6 @@ void haunted_chair_act_fall_or_spin(void) {
     } else {
         if ((o->oTimer & 0x8) != 0) {
             f32 offset;
-
             if (o->oFaceAnglePitch < 0x0) {
                 cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_FALL);
                 offset =  4.0f;
@@ -58,12 +56,10 @@ void haunted_chair_act_fall_or_spin(void) {
             }
             o->oHomeX -= offset;
             o->oHomeZ -= offset;
-
             o->oFaceAnglePitch = o->oFaceAngleRoll = (s32)(50.0f * offset);
         } else {
             o->oFaceAnglePitch = o->oFaceAngleRoll = 0x0;
         }
-
         if (o->oTimer > 30) {
             o->oAction = HAUNTED_CHAIR_ACT_FLY;
             o->oHauntedChairPitchVel  = 0.0f;
@@ -91,9 +87,7 @@ void haunted_chair_act_fly(void) {
                 o->oMoveAngleYaw = o->oAngleToMario;
                 obj_compute_vel_from_move_pitch(50.0f);
             } else if (o->oHauntedChairSpinTimer > 20) {
-                if (gGlobalTimer % 4 == 0) {
-                    cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SWISH_AIR);
-                }
+                if (!(gGlobalTimer & 0x3)) cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SWISH_AIR);
                 o->oFaceAngleYaw += 0x2710;
             }
         } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL)) {

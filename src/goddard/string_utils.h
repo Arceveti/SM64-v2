@@ -1,6 +1,8 @@
 #ifndef GD_STRING_UTILS_H
 #define GD_STRING_UTILS_H
 
+#include <PR/ultratypes.h>
+
 // functions
 extern void  gd_strcpy(             char *, const char *);
 extern u32   gd_strlen(                     const char *);

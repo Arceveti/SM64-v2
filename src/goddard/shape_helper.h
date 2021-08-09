@@ -1,6 +1,8 @@
 #ifndef GD_SHAPE_HELPER_H
 #define GD_SHAPE_HELPER_H
 
+#include <PR/ultratypes.h>
+
 // data
 extern struct ObjGroup *gMarioFaceGrp;
 extern struct ObjShape *gSpotShape;

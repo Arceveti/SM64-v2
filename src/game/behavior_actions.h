@@ -71,7 +71,7 @@ void bhv_coin_formation_spawn_loop(void);
 void bhv_coin_formation_loop(void);
 void bhv_temp_coin_loop(void);
 void bhv_coin_sparkles_loop(void);
-void bhv_golden_coin_sparkles_loop(void);
+void bhv_coin_sparkles_spawner_loop(void);
 void bhv_wall_tiny_star_particle_loop(void);
 void bhv_pound_tiny_star_particle_loop(void);
 void bhv_pound_tiny_star_particle_init(void);

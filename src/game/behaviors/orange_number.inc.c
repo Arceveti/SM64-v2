@@ -14,7 +14,7 @@ void bhv_orange_number_loop(void) {
         o->oVelY -= 2.0f;
         if (o->oVelY < -21.0f) o->oVelY = 14.0f;
         if (o->oTimer == 35) {
-            sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvGoldenCoinSparkles);
+            sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
             sparkleObj->oPosY -= 30.0f;
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         }

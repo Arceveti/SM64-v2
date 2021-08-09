@@ -205,7 +205,7 @@ static void koopa_shelled_act_run_from_mario(void) {
 static void koopa_dive_update_speed(f32 decel) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         obj_forward_vel_approach(0.0f, decel);
-        if (o->oForwardVel > 5.0f && !(o->oTimer % 4)) spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
+        if ((o->oForwardVel > 5.0f) && (o->oTimer & 0x3)) spawn_object_with_scale(o, MODEL_SMOKE, bhvWhitePuffSmoke2, 1.0f);
     }
 }
 

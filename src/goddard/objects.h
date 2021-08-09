@@ -1,6 +1,8 @@
 #ifndef GD_OBJECTS_H
 #define GD_OBJECTS_H
 
+#include <PR/ultratypes.h>
+
 #include "gd_types.h"
 
 // types

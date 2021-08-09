@@ -17,7 +17,7 @@ s16 sCoinArrowPositions[][2] = { { 0, -150 }, {    0, -50 }, {  0,  50 }, {   0,
 
 s32 bhv_coin_sparkles_init(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED && !(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB)) {
-        spawn_object(o, MODEL_SPARKLES, bhvGoldenCoinSparkles);
+        spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
         obj_mark_for_deletion(o);
         return TRUE;
     }
@@ -234,7 +234,7 @@ void bhv_coin_sparkles_loop(void) {
     cur_obj_scale(0.6f);
 }
 
-void bhv_golden_coin_sparkles_loop(void) {
+void bhv_coin_sparkles_spawner_loop(void) {
     struct Object *sparkleObj;
     sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvCoinSparkles);
     sparkleObj->oPosX += random_float() * 30.0f - 15.0f;

@@ -55,7 +55,6 @@
 #include "levels/lll/sinking_rock_block/collision.inc.c"
 #include "levels/lll/rolling_log/collision.inc.c"
 #include "levels/lll/areas/1/10/collision.inc.c"
-#include "levels/lll/areas/1/15/collision.inc.c"
 #include "levels/lll/areas/2/1/model.inc.c"
 #include "levels/lll/areas/2/2/model.inc.c"
 #include "levels/lll/areas/2/3/model.inc.c"

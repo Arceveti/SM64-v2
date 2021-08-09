@@ -44,7 +44,7 @@ s32 lll_octagonal_mesh_move(s16 *actionTable, s32 actionOffset) {
             o->oForwardVel   = actionTable[actionOffset + 3] / 100.0f;
             if (cur_obj_is_mario_on_platform()) {
                 actionOffset += 4;
-                o->oTimer = 0;
+                o->oTimer     = 0;
             }
             break;
         case LLL_OCTMESH_LINEAR_MOVE:
@@ -52,14 +52,14 @@ s32 lll_octagonal_mesh_move(s16 *actionTable, s32 actionOffset) {
             o->oForwardVel   = actionTable[actionOffset + 3] / 100.0f;
             if (o->oTimer    > actionTable[actionOffset + 1]) {
                 actionOffset += 4;
-                o->oTimer = 0;
+                o->oTimer     = 0;
             }
             break;
         case LLL_OCTMESH_CHANGE_DIR:
             approach_f32_signed(&o->oForwardVel, actionTable[actionOffset + 2] / 100.0f, actionTable[actionOffset + 3] / 100.0f);
             if (o->oTimer > actionTable[actionOffset + 1]) {
                 actionOffset += 4;
-                o->oTimer = 0;
+                o->oTimer     = 0;
             }
             break;
         case LLL_OCTMESH_RESET:
@@ -70,7 +70,7 @@ s32 lll_octagonal_mesh_move(s16 *actionTable, s32 actionOffset) {
     return actionOffset;
 }
 
-s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, UNUSED f32 *posOffset, s32 standTimerInc, UNUSED s32 moveDownAmount) {
+s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, f32 *posOffset, s32 standTimerInc, s32 moveDownAmount) {
 	// if Mario is on the platform...
     if (cur_obj_is_mario_on_platform()) {
         if (standTimer[0] < 0x4000) {
@@ -85,6 +85,7 @@ s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, UNUSED f32 *posOffset, s32
             standTimer[0] = 0;
         }
     }
+    posOffset[0] = sins(standTimer[0]) * moveDownAmount;
     return (standTimer[0] == 0 || standTimer[0] == 0x4000);
 }
 

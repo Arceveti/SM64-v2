@@ -436,7 +436,7 @@ s32 act_shockwave_bounce(struct MarioState *m) {
         if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_KNOCKBACK_DMG) return hurt_and_set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0, 0xc);
     }
     if (++m->actionTimer == 48) return set_mario_action(m, ACT_IDLE, 0);
-    bounceAngle = (m->actionTimer % 16) << 12;
+    bounceAngle = (m->actionTimer & 0xF) << 12;
     bounceAmt   = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
     mario_set_forward_vel(m, 0.0f);
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);

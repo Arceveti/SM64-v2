@@ -2,7 +2,7 @@
 const GeoLayout lll_geo_rotating_hexagonal_platform[] = {
    GEO_CULLING_RADIUS(1300),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE, lll_seg7_dl_070165C8),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE, lll_seg7_dl_rotating_hexagonal_platform),
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
