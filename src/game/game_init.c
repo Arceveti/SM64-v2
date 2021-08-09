@@ -87,7 +87,7 @@ u8 gWidescreen;
 #endif
 
 // Framebuffer rendering values (max 3)
-u16 sRenderedFramebuffer = 0;
+u16 sRenderedFramebuffer  = 0;
 u16 sRenderingFrameBuffer = 0;
 
 // Goddard Vblank Function Caller
@@ -99,9 +99,9 @@ struct Controller *gPlayer2Controller = &gControllers[1];
 struct Controller *gPlayer3Controller = &gControllers[2]; // Probably debug only, see note below
 
 // Title Screen Demo Handler
-struct DemoInput *gCurrDemoInput = NULL;
-u16 gDemoInputListID = 0;
-struct DemoInput gRecordedDemoInput = { 0 };
+struct DemoInput *gCurrDemoInput     = NULL;
+u16               gDemoInputListID   =   0;
+struct DemoInput  gRecordedDemoInput = { 0 };
 
 // Display
 // ----------------------------------------------------------------------------------------------------
@@ -140,12 +140,9 @@ void init_rdp(void) {
  */
 void init_rsp(void) {
     gSPClearGeometryMode(gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD);
-
     gSPSetGeometryMode(  gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING);
-
     gSPNumLights(        gDisplayListHead++, NUMLIGHTS_1);
     gSPTexture(          gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
-
     // @bug Failing to set the clip ratio will result in warped triangles in F3DEX2
     // without this change: https://jrra.zone/n64/doc/n64man/gsp/gSPClipRatio.htm
 #ifdef F3DEX_GBI_2
@@ -158,13 +155,10 @@ void init_rsp(void) {
  */
 void init_z_buffer(void) {
     gDPPipeSync(      gDisplayListHead++);
-
     gDPSetDepthSource(gDisplayListHead++, G_ZS_PIXEL);
     gDPSetDepthImage( gDisplayListHead++, gPhysicalZBuffer);
-
     gDPSetColorImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalZBuffer);
     gDPSetFillColor(  gDisplayListHead++, GPACK_ZDZ(G_MAXFBZ, 0) << 16 | GPACK_ZDZ(G_MAXFBZ, 0));
-
     gDPFillRectangle( gDisplayListHead++, 0, gBorderHeight, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 - gBorderHeight);
 }
 
@@ -173,7 +167,6 @@ void init_z_buffer(void) {
  */
 void select_frame_buffer(void) {
     gDPPipeSync(     gDisplayListHead++);
-
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalFrameBuffers[sRenderingFrameBuffer]);
     gDPSetScissor(   gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
@@ -184,18 +177,14 @@ void select_frame_buffer(void) {
  * Information about the color argument: https://jrra.zone/n64/doc/n64man/gdp/gDPSetFillColor.htm
  */
 void clear_frame_buffer(s32 color) {
-    gDPPipeSync(gDisplayListHead++);
-
+    gDPPipeSync(     gDisplayListHead++);
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
-
     gDPSetFillColor( gDisplayListHead++, color);
     gDPFillRectangle(gDisplayListHead++,
                      GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
                      GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
-
     gDPPipeSync(     gDisplayListHead++);
-
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
 
@@ -207,22 +196,16 @@ void clear_viewport(Vp *viewport, s32 color) {
     s16 vpUly = (viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4 + 1;
     s16 vpLrx = (viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4 - 2;
     s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 2;
-
 #ifdef WIDESCREEN
     vpUlx = GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(vpUlx);
     vpLrx = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(SCREEN_WIDTH - vpLrx);
 #endif
-
-    gDPPipeSync(gDisplayListHead++);
-
+    gDPPipeSync(     gDisplayListHead++);
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
-
     gDPSetFillColor( gDisplayListHead++, color);
     gDPFillRectangle(gDisplayListHead++, vpUlx, vpUly, vpLrx, vpLry);
-
     gDPPipeSync(     gDisplayListHead++);
-
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
 
@@ -231,13 +214,10 @@ void clear_viewport(Vp *viewport, s32 color) {
  */
 void draw_screen_borders(void) {
     gDPPipeSync(     gDisplayListHead++);
-
     gDPSetScissor(   gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
-
     gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551(0, 0, 0, 0) << 16 | GPACK_RGBA5551(0, 0, 0, 0));
-
     if (gBorderHeight) {
         gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0,
                         GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, gBorderHeight - 1);
@@ -256,7 +236,6 @@ void make_viewport_clip_rect(Vp *viewport) {
     s16 vpPly = (viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4 + 1;
     s16 vpLrx = (viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4 - 1;
     s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 1;
-
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, vpUlx, vpPly, vpLrx, vpLry);
 }
 
@@ -265,14 +244,13 @@ void make_viewport_clip_rect(Vp *viewport) {
  * If you plan on using gSPLoadUcode, make sure to add OS_TASK_LOADABLE to the flags member.
  */
 void create_gfx_task_structure(void) {
-    s32 entries = gDisplayListHead - gGfxPool->buffer;
-
-    gGfxSPTask->msgqueue = &gGfxVblankQueue;
-    gGfxSPTask->msg = (OSMesg) 2;
-    gGfxSPTask->task.t.type = M_GFXTASK;
+    s32 entries                        = gDisplayListHead - gGfxPool->buffer;
+    gGfxSPTask->msgqueue               = &gGfxVblankQueue;
+    gGfxSPTask->msg                    = (OSMesg) 2;
+    gGfxSPTask->task.t.type            = M_GFXTASK;
     gGfxSPTask->task.t.ucode_boot      =                                 rspbootTextStart;
     gGfxSPTask->task.t.ucode_boot_size = ((u8 *) rspbootTextEnd - (u8 *) rspbootTextStart);
-    gGfxSPTask->task.t.flags = 0;
+    gGfxSPTask->task.t.flags           = 0;
 #ifdef  F3DZEX_GBI_2
     gGfxSPTask->task.t.ucode      = gspF3DZEX2_PosLight_fifoTextStart;
     gGfxSPTask->task.t.ucode_data = gspF3DZEX2_PosLight_fifoDataStart;
@@ -292,16 +270,16 @@ void create_gfx_task_structure(void) {
     gGfxSPTask->task.t.ucode      = gspFast3D_fifoTextStart;
     gGfxSPTask->task.t.ucode_data = gspFast3D_fifoDataStart;
 #endif
-    gGfxSPTask->task.t.ucode_size = SP_UCODE_SIZE; // (this size is ignored)
-    gGfxSPTask->task.t.ucode_data_size = SP_UCODE_DATA_SIZE;
-    gGfxSPTask->task.t.dram_stack = (u64 *) gGfxSPTaskStack;
-    gGfxSPTask->task.t.dram_stack_size = SP_DRAM_STACK_SIZE8;
-    gGfxSPTask->task.t.output_buff = gGfxSPTaskOutputBuffer;
+    gGfxSPTask->task.t.ucode_size       = SP_UCODE_SIZE; // (this size is ignored)
+    gGfxSPTask->task.t.ucode_data_size  = SP_UCODE_DATA_SIZE;
+    gGfxSPTask->task.t.dram_stack       = (u64 *) gGfxSPTaskStack;
+    gGfxSPTask->task.t.dram_stack_size  = SP_DRAM_STACK_SIZE8;
+    gGfxSPTask->task.t.output_buff      = gGfxSPTaskOutputBuffer;
     gGfxSPTask->task.t.output_buff_size = (u64 *)((u8 *) gGfxSPTaskOutputBuffer + sizeof(gGfxSPTaskOutputBuffer));
-    gGfxSPTask->task.t.data_ptr = (u64 *) &gGfxPool->buffer;
-    gGfxSPTask->task.t.data_size = entries * sizeof(Gfx);
-    gGfxSPTask->task.t.yield_data_ptr = (u64 *) gGfxSPTaskYieldBuffer;
-    gGfxSPTask->task.t.yield_data_size = OS_YIELD_DATA_SIZE;
+    gGfxSPTask->task.t.data_ptr         = (u64 *) &gGfxPool->buffer;
+    gGfxSPTask->task.t.data_size        = entries * sizeof(Gfx);
+    gGfxSPTask->task.t.yield_data_ptr   = (u64 *) gGfxSPTaskYieldBuffer;
+    gGfxSPTask->task.t.yield_data_size  = OS_YIELD_DATA_SIZE;
 }
 
 /**
@@ -333,24 +311,20 @@ void draw_reset_bars(void) {
     s32 width, height;
     s32 fbNum;
     u64 *fbPtr;
-
     if (gResetTimer != 0 && gNmiResetBarsTimer < 15) {
         if (sRenderedFramebuffer == 0) {
             fbNum = 2;
         } else {
             fbNum = sRenderedFramebuffer - 1;
         }
-
-        fbPtr = (u64 *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[fbNum]);
+        fbPtr  = (u64 *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[fbNum]);
         fbPtr += gNmiResetBarsTimer++ * (SCREEN_WIDTH / 4);
-
         for (width = 0; width < ((SCREEN_HEIGHT / 16) + 1); width++) {
             // Loop must be one line to match on -O2
             for (height = 0; height < (SCREEN_WIDTH / 4); height++) *fbPtr++ = 0;
             fbPtr += ((SCREEN_WIDTH / 4) * 14);
         }
     }
-
     osWritebackDCacheAll();
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
@@ -371,7 +345,6 @@ void render_init(void) {
     clear_frame_buffer(0);
     end_master_display_list();
     exec_display_list(&gGfxPool->spTask);
-
     // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes
     // VC probably emulates osViSwapBuffer accurately so instant patch breaks VC compatibility
 #ifdef VC_HACKS
@@ -430,15 +403,13 @@ void display_and_vsync(void) {
 UNUSED static void record_demo(void) {
     // record the player's button mask and current rawStickX and rawStickY.
     u8 buttonMask = ((gPlayer1Controller->buttonDown & (A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON)) >> 8)
-                  | (gPlayer1Controller->buttonDown & (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS));
+                  |  (gPlayer1Controller->buttonDown & (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS));
     s8 rawStickX = gPlayer1Controller->rawStickX;
     s8 rawStickY = gPlayer1Controller->rawStickY;
-
     // If the stick is in deadzone, set its value to 0 to
     // nullify the effects. We do not record deadzone inputs.
     if (rawStickX > -8 && rawStickX < 8) rawStickX = 0;
     if (rawStickY > -8 && rawStickY < 8) rawStickY = 0;
-
     // Rrecord the distinct input and timer so long as they are unique.
     // If the timer hits 0xFF, reset the timer for the next demo input.
     if (gRecordedDemoInput.timer == 0xFF
@@ -460,16 +431,13 @@ void adjust_analog_stick(struct Controller *controller) {
     // Reset the controller's x and y floats.
     controller->stickX = 0;
     controller->stickY = 0;
-
     // Modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
     if (controller->rawStickX <= -8) controller->stickX = controller->rawStickX + 6;
     if (controller->rawStickX >=  8) controller->stickX = controller->rawStickX - 6;
     if (controller->rawStickY <= -8) controller->stickY = controller->rawStickY + 6;
     if (controller->rawStickY >=  8) controller->stickY = controller->rawStickY - 6;
-
     // Calculate f32 magnitude from the center by vector length.
     controller->stickMag = sqrtf(controller->stickX * controller->stickX + controller->stickY * controller->stickY);
-
     // Magnitude cannot exceed 64.0f: if it does, modify the values
     // appropriately to flatten the values down to the allowed maximum value.
     if (controller->stickMag > 64) {
@@ -485,7 +453,6 @@ void adjust_analog_stick(struct Controller *controller) {
 void run_demo_inputs(void) {
     // Eliminate the unused bits.
     gControllers[0].controllerData->button &= VALID_BUTTONS;
-
     // Check if a demo inputs list exists and if so,
     // run the active demo input list.
     if (gCurrDemoInput != NULL) {
@@ -499,7 +466,6 @@ void run_demo_inputs(void) {
             gControllers[1].controllerData->stick_y = 0;
             gControllers[1].controllerData->button  = 0;
         }
-
         // The timer variable being 0 at the current input means the demo is over.
         // Set the button to the END_DEMO mask to end the demo.
         if (gCurrDemoInput->timer == 0) {
@@ -510,11 +476,9 @@ void run_demo_inputs(void) {
             // Backup the start button if it is pressed, since we don't want the
             // demo input to override the mask where start may have been pressed.
             u16 startPushed = gControllers[0].controllerData->button & START_BUTTON;
-
             // Perform the demo inputs by assigning the current button mask and the stick inputs.
             gControllers[0].controllerData->stick_x = gCurrDemoInput->rawStickX;
             gControllers[0].controllerData->stick_y = gCurrDemoInput->rawStickY;
-
             // To assign the demo input, the button information is stored in
             // an 8-bit mask rather than a 16-bit mask. this is because only
             // A, B, Z, Start, and the C-Buttons are used in a demo, as bits
@@ -523,10 +487,8 @@ void run_demo_inputs(void) {
             // match the correct input mask. We then add this to the masked
             // lower 4 bits to get the correct button mask.
             gControllers[0].controllerData->button = ((gCurrDemoInput->buttonMask & 0xF0) << 8) + ((gCurrDemoInput->buttonMask & 0xF));
-
             // If start was pushed, put it into the demo sequence being input to end the demo.
             gControllers[0].controllerData->button |= startPushed;
-
             // Run the current demo input's timer down. if it hits 0, advance the demo input list.
             if (--gCurrDemoInput->timer == 0) gCurrDemoInput++;
         }
@@ -538,7 +500,6 @@ void run_demo_inputs(void) {
  */
 void read_controller_inputs(void) {
     s32 i;
-
     // If any controllers are plugged in, update the controller information.
     if (gControllerBits) {
         osRecvMesg(&gSIEventMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
@@ -548,10 +509,8 @@ void read_controller_inputs(void) {
 #endif
     }
     run_demo_inputs();
-
     for (i = 0; i < 2; i++) {
         struct Controller *controller = &gControllers[i];
-
         // if we're receiving inputs, update the controller struct with the new button info.
         if (controller->controllerData != NULL) {
             controller->rawStickX     = controller->controllerData->stick_x;
@@ -571,7 +530,6 @@ void read_controller_inputs(void) {
             controller->stickMag      = 0;
         }
     }
-
     // For some reason, player 1's inputs are copied to player 3's port.
     // This potentially may have been a way the developers "recorded"
     // the inputs for demos, despite record_demo existing.
@@ -589,13 +547,11 @@ void read_controller_inputs(void) {
  */
 void init_controllers(void) {
     s16 port, cont;
-
     // Set controller 1 to point to the set of status/pads for input 1 and
     // init the controllers.
     gControllers[0].statusData     = &gControllerStatuses[0];
     gControllers[0].controllerData = &gControllerPads[0];
     osContInit(&gSIEventMesgQueue,   &gControllerBits, &gControllerStatuses[0]);
-
 #ifdef EEP
     // strangely enough, the EEPROM probe for save data is done in this function.
     // save pak detection?
@@ -604,7 +560,6 @@ void init_controllers(void) {
 #ifdef SRAM
     gSramProbe = nuPiInitSram();
 #endif
-
     // Loop over the 4 ports and link the controller structs to the appropriate
     // status and pad. Interestingly, although there are pointers to 3 controllers,
     // only 2 are connected here. The third seems to have been reserved for debug
@@ -662,7 +617,6 @@ void setup_game_memory(void) {
  */
 void thread5_game_loop(UNUSED void *arg) {
     struct LevelCommand *addr;
-
     setup_game_memory();
 #if ENABLE_RUMBLE
     init_rumble_pak_scheduler_queue();
@@ -675,12 +629,9 @@ void thread5_game_loop(UNUSED void *arg) {
     createHvqmThread();
 #endif
     save_file_load_all();
-
     set_vblank_handler(2, &gGameVblankHandler, &gGameVblankQueue, (OSMesg) 1);
-
     // Point address to the entry point into the level script data.
     addr = segmented_to_virtual(level_script_entry);
-
     play_music(SEQ_PLAYER_SFX, SEQUENCE_ARGS(0, SEQ_SOUND_PLAYER), 0);
     set_sound_mode(save_file_get_sound_mode());
 #ifdef REONU_CAM_3
@@ -690,7 +641,6 @@ void thread5_game_loop(UNUSED void *arg) {
     gWidescreen = save_file_get_widescreen_mode();
 #endif
     render_init();
-
     while (TRUE) {
         // If the reset timer is active, run the process to reset the game.
         if (gResetTimer) {
@@ -698,7 +648,6 @@ void thread5_game_loop(UNUSED void *arg) {
             continue;
         }
         profiler_log_thread5_time(THREAD5_START);
-
         // If any controllers are plugged in, start read the data for when
         // read_controller_inputs is called later.
         if (gControllerBits) {
@@ -707,14 +656,11 @@ void thread5_game_loop(UNUSED void *arg) {
 #endif
             osContStartReadData(&gSIEventMesgQueue);
         }
-
         audio_game_loop_tick();
         select_gfx_pool();
         read_controller_inputs();
         addr = level_script_execute(addr);
-
         display_and_vsync();
-
         // when debug info is enabled, print the "BUF %07d" information.
         if (gShowDebugText) {
             // subtract the end of the gfx pool with the display list to obtain the

@@ -448,4 +448,6 @@ void render_game(void) {
     }
     gViewportOverride = NULL;
     gViewportClip     = NULL;
+    // print_text_fmt_int(16, 136, "sp %d", ((u32) &gGfxPool->spTask - (u32) gDisplayListHead)/8);
+    // render_text_labels();
 }

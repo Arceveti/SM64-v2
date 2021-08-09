@@ -4,17 +4,17 @@
 #include <PR/ultratypes.h>
 #include "types.h"
 
-#define ENVFX_MODE_NONE         0  // no effects
-#define ENVFX_SNOW_NORMAL       1  // CCM, SL
-#define ENVFX_SNOW_WATER        2  // Secret Aquarium, Sunken Ship
-#define ENVFX_SNOW_BLIZZARD     3  // unused
+#define ENVFX_MODE_NONE         0x0  // no effects
+#define ENVFX_SNOW_NORMAL       0x1  // CCM, SL
+#define ENVFX_SNOW_WATER        0x2  // Secret Aquarium, Sunken Ship
+#define ENVFX_SNOW_BLIZZARD     0x3  // unused
 
-#define ENVFX_BUBBLE_START      10 // Separates snow effects and flower/bubble effects
+#define ENVFX_BUBBLE_START      0xA // Separates snow effects and flower/bubble effects
 
-#define ENVFX_FLOWERS           11 // unused
-#define ENVFX_LAVA_BUBBLES      12 // LLL, BitFS, Bowser 2
-#define ENVFX_WHIRLPOOL_BUBBLES 13 // DDD
-#define ENVFX_JETSTREAM_BUBBLES 14 // JRB, DDD (submarine area)
+#define ENVFX_FLOWERS           0xB // unused
+#define ENVFX_LAVA_BUBBLES      0xC // LLL, BitFS, Bowser 2
+#define ENVFX_WHIRLPOOL_BUBBLES 0xD // DDD
+#define ENVFX_JETSTREAM_BUBBLES 0xE // JRB, DDD (submarine area)
 
 struct EnvFxParticle {
     s8 isAlive;

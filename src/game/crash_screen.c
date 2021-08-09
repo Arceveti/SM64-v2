@@ -5,6 +5,8 @@
 
 #include "sm64.h"
 
+// #include "game_init.h"
+
 #include "printf.h"
 
 u8 gCrashScreenCharToGlyph[128] = {
@@ -148,7 +150,7 @@ void crash_screen_print_fpcsr(u32 fpcsr) {
 void draw_crash_screen(OSThread *thread) {
     s16 cause;
     __OSThreadContext *tc = &thread->context;
-
+    // u32 gfx = (((u32) &gGfxPool->spTask - (u32) gDisplayListHead)/8);
     cause = (tc->cause >> 2) & 0x1f;
     if (cause == 23) cause = 16;// EXC_WATCH
     if (cause == 31) cause = 17;// EXC_VCED
@@ -231,4 +233,3 @@ void crash_screen_init(void) {
                    OS_PRIORITY_APPMAX);
     osStartThread(&gCrashScreen.thread);
 }
-

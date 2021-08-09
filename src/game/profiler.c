@@ -80,12 +80,12 @@ void draw_reference_profiler_bars(void) {
     // Blue
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551( 40,  80, 255, 1) << 16 | GPACK_RGBA5551( 40,  80, 255, 1));
-    gDPFillRectangle(gDisplayListHead++, 30, 220, 79, 222);
+    gDPFillRectangle(gDisplayListHead++,  30, 220, 79, 222);
 
     // Yellow
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor (gDisplayListHead++, GPACK_RGBA5551(255, 255,  40, 1) << 16 | GPACK_RGBA5551(255, 255,  40, 1));
-    gDPFillRectangle(gDisplayListHead++, 79, 220, 128, 222);
+    gDPFillRectangle(gDisplayListHead++,  79, 220, 128, 222);
 
     // Orange
     gDPPipeSync(     gDisplayListHead++);
