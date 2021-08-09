@@ -1,0 +1,61 @@
+**TODO:**
+- Crashes:
+    - Properly fix HMC crash
+    - Enable rumble support and properly fix "heavy object" crash
+- Optimizations:
+    - Save space by similar textures/models using the same file/model/displaylist
+        - Billboard Spheres:
+            - Bobomb body
+            - King Bobomb body
+            - King Bobomb hand
+            - Bobomb Buddy body
+            - Bully body
+            - Big Bully body
+            - Chuckya body
+            - Chuckya hand/antenna
+            - Fire Spitter
+            - Bowser bombs
+            - Amp
+            - Swoop body
+            - Goomba body
+            - Scuttlebug eyes
+            - Spindrift head
+            - Mr. I body
+            - Snufit body
+            - Snufit Bullets
+            - Wiggler segment
+            - Wiggler head
+            - Wiggler nose
+            - WF giant pole top
+        - Billboard Textured Spheres:
+            - Chill Bully body
+            - Scuttlebug body
+            - Snowman part
+            - Whwomp hand
+        - Light gray checker in various Levels
+        - Various water & lava textures
+        - Circular gradient:
+            - Star glow
+            - BBH lanterns' glow
+            - HMC lanterns' glow
+            - PSS lanterns' glow
+            - Castle basement lanterns' glow?
+        - Rainbow
+            - RR
+            - WMOTR
+            - TOTWC
+- Physics:
+    - Object step height being a field
+    - Gravity direction support
+- Silhouette:
+    - Silhouette for Mario's held/riding object
+    - Mirror Mario should not have silhouette
+- Metal cap effect:
+    - Use vanilla metal cap texture if framebuffer is not enabled
+    - Make metal cap effect work on console
+- HUD:
+    - Rearrange hud
+    - FPS counter
+- Vanilla Levels:
+    - Make the back of castle roof not eternal void
+    - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area

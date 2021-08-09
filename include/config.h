@@ -207,6 +207,14 @@
 
 // -- Vanilla Level Changes --
 
+// Adds a few extra objects to some levels
+// Mainly recovery hearts, 1-ups, & cap boxes
+// (Arceveti)
+#define BONUS_OBJECTS
+// Fixes various "impossible" coin locations throughout the gane (Arceveti)
+#define FIX_IMPOSSIBLE_COINS
+// Fixes the 1ups in the CCM slide shortcut (Arceveti)
+#define FIX_CCM_SLIDE_1UPS
 // Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
 // Use painting data for the PSS painting instead of a static texture (Arceveti)
@@ -238,8 +246,6 @@
 #define FIX_BOMB_CLIP
 // Detect Mario's collision with lava regardless of action (Arceveti)
 #define FIX_LAVA_INTERACTION
-// Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
-#define HELD_TRANSPARENT_STAR
 
 // -- Optimizations --
 
@@ -301,6 +307,8 @@
 #define CONTROLLABLE_PLATFORM_SPEED
 // Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
 #define BLUE_COIN_SWITCH_RETRY
+// Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
+#define HELD_TRANSPARENT_STAR
 // Clams don't hurt mario unless they are moving (opening/closing) (Arceveti)
 #define CLAMS_ONLY_HURT_WHEN_MOVING
 // Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti)

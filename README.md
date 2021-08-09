@@ -19,20 +19,24 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
+- Added a few bonus objects in some levels () (Arceveti) *
+- Fixed the "Impossible" coins' locations (Arceveti) *
+- Both 1-Ups in the CCM slide shortcut are actually collectible (Arceveti) *
 - The Blast Away The Wall star spawns from the wall instead of existing in the world already *
 - Fix for Lakitu cutscene detection bounds *
 - [Re-implementation of the unused SSL pillars cutscene](https://i.imgur.com/3yRH5Eu.png) (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - [Re-implementation of the unused cracked ice in SL](https://i.imgur.com/d71vYsV.png) (SunlitSpace542, Arceveti) *
 - [Seamless Bowser's puzzle in LLL](https://i.imgur.com/4IIdKbz.png) (Arceveti)
 - [A visual moving water current to the warp behind the Bowser door in DDD](https://i.imgur.com/5XwYaHm.png) (Arceveti) *
+- Removed the ambient slow water level increasing and decreasing in WDW due to potential nausea (Arceveti) *
 - PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 **Bugfixes:**
-- `obj_resolve_object_collisions()` now works consistently (Arceveti) *
+- Fixed `obj_resolve_object_collisions()` not working consistently (Arceveti) *
+- Fixed `bhv_init_room()` checking dynamic surfaces for rooms (Arceveti) *
 - Fixed DDD water rings by using interaction checking (Arceveti) *
-- Bomb clip fix (Arceveti) *
+- Fixed bomb clip (Arceveti) *
 - Mario's collision with lava is detected regardless of his action *
-- Unagi and Klepto's stars become transparent stars after they are collected (SunlitSpace542) *
 - Many smaller bugs patched
 
 **Optimizations:**
@@ -41,6 +45,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Some unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
+- More particles use OBJ_LIST_UNIMPORTANT so they can be unloaded when needed (Arceveti) *
 - [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
 - Use the floor's normal for alignment instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
 - Many smaller optimizations (Arceveti)
@@ -74,6 +79,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [Air/Breath meter is separate from health meter when underwater](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 
 **Object Behaviors:**
+- `object_step()` allows moving objects to step up and down floors like Mario, with a configurable step height (Arceveti) *
 - Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
 - Respawning Koopa shell boxes (Arceveti) *
@@ -81,6 +87,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Clams don't damage mario unless they are moving (opening/closing) (Arceveti) *
 - Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti) *
 - Tiny Goombas (from THI) always drop their coin (Arceveti) *
+- Unagi and Klepto's stars become transparent stars after they are collected (SunlitSpace542) *
 - [Leaf particles fall from trees which contain Hoot](https://i.imgur.com/uTe87EF.png) (Arceveti) *
 - [Reimplemented the unused "sad" eye texture for the mother penguin in CCM](https://i.imgur.com/Uk8MNAe.png) *
 
