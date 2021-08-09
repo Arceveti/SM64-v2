@@ -263,8 +263,7 @@ void handle_sp_complete(void) {
         if (curSPTask->task.t.type == M_AUDTASK) {
             // After audio tasks come gfx tasks.
             profiler_log_vblank_time();
-            if (sCurrentDisplaySPTask != NULL
-                && sCurrentDisplaySPTask->state != SPTASK_STATE_FINISHED) {
+            if (sCurrentDisplaySPTask != NULL && sCurrentDisplaySPTask->state != SPTASK_STATE_FINISHED) {
                 if (sCurrentDisplaySPTask->state != SPTASK_STATE_INTERRUPTED) profiler_log_gfx_time(TASKS_QUEUED);
                 start_sptask(M_GFXTASK);
             }
@@ -281,10 +280,11 @@ void handle_sp_complete(void) {
 
 void handle_dp_complete(void) {
     // Gfx SP task is completely done.
+    // if (sCurrentDisplaySPTask == NULL) return;
     if (sCurrentDisplaySPTask->msgqueue != NULL) osSendMesg(sCurrentDisplaySPTask->msgqueue, sCurrentDisplaySPTask->msg, OS_MESG_NOBLOCK);
     profiler_log_gfx_time(RDP_COMPLETE);
     sCurrentDisplaySPTask->state = SPTASK_STATE_FINISHED_DP;
-    sCurrentDisplaySPTask = NULL;
+    sCurrentDisplaySPTask        = NULL;
 }
 extern void crash_screen_init(void);
 
@@ -295,7 +295,6 @@ void thread3_main(UNUSED void *arg) {
 #ifndef UNF
     crash_screen_init();
 #endif
-
 #ifdef DEBUG
     osSyncPrintf("Super Mario 64\n");
     osSyncPrintf("Built by: %s\n", __username__);
@@ -315,7 +314,6 @@ void thread3_main(UNUSED void *arg) {
     create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, gThread5Stack + 0x2000, 10);
 #endif
     osStartThread(&gGameLoopThread);
-
     while (TRUE) {
         OSMesg msg;
         osRecvMesg(&gIntrMesgQueue, &msg, OS_MESG_BLOCK);

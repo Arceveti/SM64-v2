@@ -34,7 +34,7 @@ struct ObjectHitbox sSnufitBulletHitbox = {
  * since the parts move independently.
  */
 Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
-    struct Object *obj;
+    struct Object                       *obj;
     struct GraphNodeTranslationRotation *transNode;
     if (callContext == GEO_CONTEXT_RENDER) {
         obj                       = (struct Object *) gCurGraphNodeObject;
@@ -50,7 +50,7 @@ Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
  * This function scales the body of snufit, which needs done seperately from its mask.
  */
 Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
-    struct Object *obj;
+    struct Object         *obj;
     struct GraphNodeScale *scaleNode;
     if (callContext == GEO_CONTEXT_RENDER) {
         obj              = (struct Object *) gCurGraphNodeObject;
@@ -65,15 +65,13 @@ Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 
  * then prepares to shoot after a period.
  */
 void snufit_act_idle(void) {
-    s32 marioDist;
-    // This line would could cause a crash in certain PU situations,
+    //! This line would could cause a crash in certain PU situations,
     // if the game would not have already crashed.
-    marioDist = (s32)(o->oDistanceToMario / 10.0f);
-    if (o->oTimer > marioDist && o->oDistanceToMario < 800.0f) {
+    if (o->oTimer > (s32)(o->oDistanceToMario / 10.0f) && o->oDistanceToMario < 800.0f) {
+    // if (o->oDistanceToMario < 800.0f) {
         // Controls an alternating scaling factor in a cos.
         o->oSnufitBodyScalePeriod = approach_s16_symmetric(o->oSnufitBodyScalePeriod, 0x0, 0x5DC);
         o->oSnufitBodyBaseScale   = approach_s16_symmetric(o->oSnufitBodyBaseScale, 0x258,   0xF);
-
         if ((s16) o->oSnufitBodyScalePeriod == 0 && o->oSnufitBodyBaseScale == 0x258) {
             o->oAction = SNUFIT_ACT_SHOOT;
             o->oSnufitBullets = 0;
@@ -136,7 +134,7 @@ void bhv_snufit_loop(void) {
         o->oSnufitZOffset   = o->oSnufitRecoil + 180;
         o->oSnufitBodyScale = (s16)(o->oSnufitBodyBaseScale + 666 + o->oSnufitBodyBaseScale * coss(o->oSnufitBodyScalePeriod));
         if (o->oSnufitBodyScale > 1000) {
-            o->oSnufitScale = (o->oSnufitBodyScale - 1000) / 1000.0f + 1.0f;
+            o->oSnufitScale     = (o->oSnufitBodyScale - 1000) / 1000.0f + 1.0f;
             o->oSnufitBodyScale = 1000;
         } else {
             o->oSnufitScale = 1.0f;

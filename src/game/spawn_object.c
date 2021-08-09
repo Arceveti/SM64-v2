@@ -297,7 +297,7 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
     }
 
     objList = &gObjectLists[objListIndex];
-    obj = allocate_object(objList);
+    obj     = allocate_object(objList);
 
     obj->curBhvCommand = bhvScript;
     obj->behavior = behavior;
@@ -318,7 +318,6 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
         default:
             break;
     }
-
     return obj;
 }
 

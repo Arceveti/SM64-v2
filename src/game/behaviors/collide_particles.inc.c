@@ -27,10 +27,10 @@ void bhv_punch_tiny_triangle_init(void) {
     s32 i;
     struct Object *triangle;
     for (i = 0; i < 6; i++) {
-        triangle = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPunchTinyTriangle);
+        triangle                = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPunchTinyTriangle);
         triangle->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + sTinyTriMovementParams[2 * i] + 0x8000;
-        triangle->oVelY = sins(sTinyTriMovementParams[2 * i + 1]) * 25.0f;
-        triangle->oForwardVel = coss(sTinyTriMovementParams[2 * i + 1]) * 25.0f;
+        triangle->oVelY         = sins(sTinyTriMovementParams[2 * i + 1]) * 25.0f;
+        triangle->oForwardVel   = coss(sTinyTriMovementParams[2 * i + 1]) * 25.0f;
     }
 }
 

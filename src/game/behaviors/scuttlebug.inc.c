@@ -44,7 +44,7 @@ void bhv_scuttlebug_loop(void) {
                 o->oAngleToMario = cur_obj_angle_to_home();
             } else if (!o->oScuttlebugIsAtttacking) {
                 o->oScuttlebugTimer = 0;
-                o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
+                o->oAngleToMario    = obj_angle_to_object(o, gMarioObject);
                 if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
                     o->oScuttlebugIsAtttacking = TRUE;
                     o->oVelY = 20.0f;
@@ -67,7 +67,7 @@ void bhv_scuttlebug_loop(void) {
         case SCUTTLEBUG_SUB_ACT_ALERT:
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             o->oForwardVel = -10.0f;
-            o->oVelY = 30.0f;
+            o->oVelY       =  30.0f;
             cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
             o->oSubAction = SCUTTLEBUG_SUB_ACT_JUMP;
             break;
@@ -102,15 +102,15 @@ void bhv_scuttlebug_spawn_loop(void) {
     if (o->oAction == SCUTTLEBUG_SPAWNER_ACT_ACTIVE) {
         if (o->oTimer > 30 && 500.0f < o->oDistanceToMario && o->oDistanceToMario < 1500.0f) {
             cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
-            scuttlebug = spawn_object(o, MODEL_SCUTTLEBUG, bhvScuttlebug);
+            scuttlebug                            = spawn_object(o, MODEL_SCUTTLEBUG, bhvScuttlebug);
             scuttlebug->oScuttlebugHasNoLootCoins = o->oScuttlebugSpawnerSpawnWithNoLootCoins;
-            scuttlebug->oForwardVel = 30.0f;
-            scuttlebug->oVelY = 80.0f;
-            o->oAction = SCUTTLEBUG_SPAWNER_ACT_INACTIVE;
-            o->oScuttlebugHasNoLootCoins = TRUE;
+            scuttlebug->oForwardVel               = 30.0f;
+            scuttlebug->oVelY                     = 80.0f;
+            o->oAction                            = SCUTTLEBUG_SPAWNER_ACT_INACTIVE;
+            o->oScuttlebugHasNoLootCoins          = TRUE;
         }
     } else if (o->oScuttlebugSpawnerIsDeactivated) {
         o->oScuttlebugSpawnerIsDeactivated = FALSE;
-        o->oAction = SCUTTLEBUG_SPAWNER_ACT_ACTIVE;
+        o->oAction                         = SCUTTLEBUG_SPAWNER_ACT_ACTIVE;
     }
 }

@@ -16,8 +16,7 @@
  * that can be used by in-game objects.
  */
 s16 convert_rotation(s16 inRotation) {
-    u16 rotation = ((u16)(inRotation & 0xFF));
-    rotation <<= 8;
+    u16 rotation = ((u16)(inRotation & 0xFF)) << 8;
     if (rotation == 0x3F00) rotation = 0x4000;
     if (rotation == 0x7F00) rotation = 0x8000;
     if (rotation == 0xBF00) rotation = 0xC000;
@@ -69,11 +68,11 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
     obj->oBehParams = (a1[4] & 0xFF) >> 16;
 }
 
-struct LoadedPreset {
-    /*0x00*/ const BehaviorScript *behavior;
-    /*0x04*/ s16 param; //! huh? why does the below function swap these.. just use the struct..
-    /*0x06*/ ModelID model;
-};
+// struct LoadedPreset {
+//     /*0x00*/ const BehaviorScript *behavior;
+//     /*0x04*/ s16 param; //! huh? why does the below function swap these.. just use the struct..
+//     /*0x06*/ ModelID model;
+// };
 
 #define MACRO_OBJ_Y_ROT  0x0
 #define MACRO_OBJ_X      0x1
@@ -83,9 +82,10 @@ struct LoadedPreset {
 
 void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     s32 presetID;
-    s16 macroObject[5]; // see the 5 #define statements above
+    s16 macroObject[5]; // See the 5 #define statements above. Should this be a struct?
     struct Object *newObj;
-    struct LoadedPreset preset;
+    // struct LoadedPreset preset;
+    s16 param;
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
     while (TRUE) {
@@ -99,17 +99,15 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
         macroObject[MACRO_OBJ_Z     ] =   *macroObjList++;                    // Z position
         macroObject[MACRO_OBJ_PARAMS] =   *macroObjList++;                    // Behavior params
         // Get the preset values from the MacroObjectPresets list.
-        preset.model    = MacroObjectPresets[presetID].model;
-        preset.behavior = MacroObjectPresets[presetID].behavior;
-        preset.param    = MacroObjectPresets[presetID].param;
-        if (preset.param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (preset.param & 0x00FF);
+        param = MacroObjectPresets[presetID].param;
+        if (param != 0) macroObject[MACRO_OBJ_PARAMS] = (macroObject[MACRO_OBJ_PARAMS] & 0xFF00) + (param & 0x00FF);
         // If object has been killed, prevent it from respawning
         if (((macroObject[MACRO_OBJ_PARAMS] >> 8) & RESPAWN_INFO_DONT_RESPAWN) != RESPAWN_INFO_DONT_RESPAWN) {
             // Spawn the new macro object.
             newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, // Parent object
                                                0,                          // Unused
-                                               preset.model,               // Model ID
-                                               preset.behavior,            // Behavior address
+                                               MacroObjectPresets[presetID].model,               // Model ID
+                                               MacroObjectPresets[presetID].behavior,            // Behavior address
                                                macroObject[MACRO_OBJ_X],   // X-position
                                                macroObject[MACRO_OBJ_Y],   // Y-position
                                                macroObject[MACRO_OBJ_Z],   // Z-position
@@ -118,8 +116,7 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                                0x0                         // Z-rotation
                 );
             newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];
-            newObj->oBehParams        = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16)
-                                      +  (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
+            newObj->oBehParams        = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16) + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
             newObj->oBehParams2ndByte = macroObject[MACRO_OBJ_PARAMS] & 0x00FF;
             newObj->respawnInfoType   = RESPAWN_INFO_TYPE_16;
             newObj->respawnInfo       = macroObjList - 1;

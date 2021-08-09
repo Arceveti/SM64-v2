@@ -81,10 +81,7 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #endif
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil );
-    if (floor == NULL) {
-        m->faceAngle[1] += 0x8000;
-        return WATER_STEP_CANCELLED;
-    }
+    if (floor == NULL) return WATER_STEP_CANCELLED;
     if (ceil != NULL && (nextPos[1] + 160.0f >= ceilHeight || ceilHeight - floorHeight < 160.0f)) {
         ceilAmt = (nextPos[1] + 160.0f) - ceilHeight;
         nextPos[0] += ceil->normal.x * ceilAmt;

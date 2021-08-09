@@ -19,7 +19,7 @@ void bhv_bowser_bomb_explosion_loop(void) {
     struct Object *mineSmoke;
     cur_obj_scale((f32) o->oTimer / 14.0f * 9.0f + 1.0f);
     if (!(o->oTimer & 0x3) && (o->oTimer < 20)) {
-        mineSmoke = spawn_object(o, MODEL_BOWSER_SMOKE, bhvBowserBombSmoke);
+        mineSmoke         = spawn_object(o, MODEL_BOWSER_SMOKE, bhvBowserBombSmoke);
         mineSmoke->oPosX += random_float() * 600.0f - 400.0f;
         mineSmoke->oPosZ += random_float() * 600.0f - 400.0f;
         mineSmoke->oVelY += random_float() * 10.0f;
