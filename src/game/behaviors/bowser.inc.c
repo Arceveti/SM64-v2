@@ -97,7 +97,7 @@ void bhv_bowser_flame_spawn_loop(void) {
             o->oMoveAnglePitch = data[5 * animFrame + 4] + 0xC00;
             o->oMoveAngleYaw   = data[5 * animFrame + 3] + (s16) bowser->oMoveAngleYaw;
             // Spawns the flames on a non-odd animFrame value
-            if (!(animFrame & 1)) spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
+            if (!(animFrame & 0x1)) spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
         }
     }
 }
@@ -277,8 +277,6 @@ UNUSED static void bowser_debug_actions(void) {
  * Set actions (and attacks) for Bowser in "Bowser in the Dark World"
  */
 void bowser_bitdw_actions(void) {
-    // Generate random float
-    f32 rand = random_float();
     // Set attacks when Bowser Reacts
     if (!o->oBowserIsReacting) {
         if (o->oBowserStatus & BOWSER_STATUS_ANGLE_MARIO) {
@@ -296,10 +294,10 @@ void bowser_bitdw_actions(void) {
         if (gCurrDemoInput) { // demo check because entry exits post JP
             o->oAction = BOWSER_ACT_WALK_TO_MARIO;
         } else {
-            o->oAction = (rand < 0.1f) ? BOWSER_ACT_DANCE : BOWSER_ACT_WALK_TO_MARIO; // 10% chance for dance
+            o->oAction = (random_float() < 0.1f) ? BOWSER_ACT_DANCE : BOWSER_ACT_WALK_TO_MARIO; // 10% chance for dance
         }
 #else
-        o->oAction = (rand < 0.1f) ? BOWSER_ACT_DANCE : BOWSER_ACT_WALK_TO_MARIO; // 10% chance for dance
+        o->oAction = (random_float() < 0.1f) ? BOWSER_ACT_DANCE : BOWSER_ACT_WALK_TO_MARIO; // 10% chance for dance
 #endif
     }
 }
@@ -813,9 +811,8 @@ void bowser_act_charge_mario(void) {
  * Checks if Bowser hits a mine from a distance, returns TRUE if so
  */
 s32 bowser_check_hit_mine(void) {
-    struct Object *mine;
     f32 dist;
-    mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
+    struct Object *mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
     if (mine != NULL && dist < 800.0f) {
         mine->oInteractStatus |= INT_STATUS_HIT_MINE;
         return TRUE;
@@ -1611,12 +1608,11 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
 #include "actors/bowser/vtx.h"
 
 void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
-    u8 h;
     f32 min = min(min(color[0], color[1]), color[2]);
     f32 max = max(max(color[0], color[1]), color[2]);
     if (min == max) return color;
     f32 hue = 0.0f;
-    if (max == color[0]) {
+    if (       max == color[0]) {
         hue =        (color[1] - color[2]) / (max - min);
     } else if (max == color[1]) {
         hue = 2.0f + (color[2] - color[0]) / (max - min);
@@ -1624,21 +1620,13 @@ void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
         hue = 4.0f + (color[0] - color[1]) / (max - min);
     }
     if (hue < 0) hue += 6;
-    // h = (hue * (128.0f/3.0f))+hueAdd;
-    h = (hue * (42.6666666f))+hueAdd;
     // this is the algorithm to convert from RGB to HSV
-    // h = (h * 3) / 4; // 0..191
-    h *= 0.75f; // 0..191
-    // h = (((hue * (128.0f/3.0f))+hueAdd) * 3) / 4; // 0..191 // needs to u8 cycle h before multiplying
-    // u32 i =  h / 32; // We want a value of 0 thru 5
-    u32 i = (h * 0.03125f); // We want a value of 0 thru 5
-    // u32 f = (h % 32) * 8; // 'fractional' part of 'i' 0..248 in jumps
-    u32 f = (h & 0x1F) * 8; // 'fractional' part of 'i' 0..248 in jumps
-    u8 pv = (255 - s); // pv will be in range 0 - 255
-    // u8 qv = (256 - s *        f  / 256);
-    // u8 tv = (256 - s * (255 - f) / 256);
-    u8 qv = (256 - s *        f  * 0.00390625f);
-    u8 tv = (256 - s * (255 - f) * 0.00390625f);
+    u8 h = (u8)((hue * (128.0f/3.0f)) + hueAdd) * 0.75f; // needs to u8 cycle h before multiplying. 0..191
+    u32 i = (h >> 5); // We want a value of 0 thru 5
+    u32 f = (h & 0x1F) << 3; // 'fractional' part of 'i' 0..248 in jumps
+    u8 pv = (255 -   s                   ); // pv will be in range 0 - 255
+    u8 qv = (256 - ((s *        f ) >> 8));
+    u8 tv = (256 - ((s * (255 - f)) >> 8));
     switch (i) {
         case 0: color[0] = 255; color[1] =  tv; color[2] =  pv; break;
         case 1: color[0] =  qv; color[1] = 255; color[2] =  pv; break;
@@ -1652,11 +1640,11 @@ void *add_hue(Vec3s color, s32 hueAdd, s32 s) {
 
 
 void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
-    s32 i = 0;
-    s32 j = 0;
+    Vtx *verts;
+    s32 i, j;
     Vec3s color;
     for (i = 0; i < 140; i++) {
-        Vtx *verts = segmented_to_virtual(sBowserVertexGroups[i].vertexData);
+        verts = segmented_to_virtual(sBowserVertexGroups[i].vertexData);
         for (j = 0; j < sBowserVertexGroups[i].vertexCount; j++) {
             color[0] = verts[j].v.cn[0];
             color[1] = verts[j].v.cn[1];
@@ -1675,14 +1663,14 @@ void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
 Gfx *geo_bits_bowser_coloring(s32 callContext, struct GraphNode *node, UNUSED s32 context) {
     Gfx *gfxHead = NULL;
     Gfx *gfx;
-    struct Object *obj;
+    struct Object             *obj;
     struct GraphNodeGenerated *graphNode;
     if (callContext == GEO_CONTEXT_RENDER) {
-        obj = (struct Object *) gCurGraphNodeObject;
+        obj       = (struct Object             *) gCurGraphNodeObject;
         graphNode = (struct GraphNodeGenerated *) node;
         if (gCurGraphNodeHeldObject != 0) obj = gCurGraphNodeHeldObject->objNode;
         // Set layers if object is transparent or not
-        graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | ((obj->oOpacity == 0xFF ? LAYER_OPAQUE : LAYER_TRANSPARENT) << 8);
+        graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | ((obj->oOpacity == 0xFF ? LAYER_OPAQUE : LAYER_TRANSPARENT) << 8);
         gfx = gfxHead = alloc_display_list(2 * sizeof(Gfx));
         // If TRUE, clear lighting to give rainbow color
         if (obj->oBowserRainbowLight) {

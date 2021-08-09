@@ -246,8 +246,7 @@ u32 rgba16_get_average_color(u32 rgba) {
 
 // rgba value
 u32 rgba16_set_average_color(u32 rgba) {
-    const u32 avg = rgba16_get_average_color(rgba);
-    return rgba16_set_grayscale(avg, rgba16_get_alpha(rgba));
+    return rgba16_set_grayscale(rgba16_get_average_color(rgba), rgba16_get_alpha(rgba));
 }
 
 u32 i4_to_rgba16_color(u32 i) {
@@ -294,7 +293,7 @@ u32 ia8_to_rgba16(u32 ia) {
 // rgba16 value
 u32 ia16_to_rgba16(u32 ia) {
     const u32 color = (ia >> 11) & 0x1F;
-    const u32 alpha = (ia >> 7) & 0x1; //!?
+    const u32 alpha = (ia >>  7) & 0x1; //!?
     return rgba16_set_grayscale(color, alpha);
 }
 
@@ -320,11 +319,9 @@ u32 rgba16_to_ia16(u32 rgba) {
 
 #ifdef METAL_CAP_REFLECTION_GRAYSCALE
 void generate_metal_texture(u16 *dst, u16 *src) {
-    u32 srcIndex = 0;
-    u32 dstIndex = 0;
-    u32 y;
+    u32 srcIndex = 0, dstIndex = 0;
+    u32 y, x;
     for (y = METALTEX_Y_MIN; y < METALTEX_Y_MAX; y += METALTEX_DY) {
-        u32 x;
         for (x = METALTEX_X_MIN; x < METALTEX_X_MAX; x += METALTEX_DX) {
             dst[dstIndex] = rgba16_set_grayscale(rgba16_get_average_color(src[srcIndex]), 1);
             dstIndex++;
@@ -334,11 +331,9 @@ void generate_metal_texture(u16 *dst, u16 *src) {
 }
 #else
 void generate_metal_texture(u16 *dst, u16 *src) {
-    u32 srcIndex = 0;
-    u32 dstIndex = 0;
-    u32 y;
+    u32 srcIndex = 0, dstIndex = 0;
+    u32 y, x;
     for (y = METALTEX_Y_MIN; y < METALTEX_Y_MAX; y += METALTEX_DY) {
-        u32 x;
         for (x = METALTEX_X_MIN; x < METALTEX_X_MAX; x += METALTEX_DX) {
             dst[dstIndex] = src[srcIndex];
             dstIndex++;
@@ -371,54 +366,40 @@ void copy_partial_image(u16 *dst,  u16 *src,
     if (srcY > (s32)srcTH) return;
     if (dst == NULL || src == NULL) return;
     u32 x, y;
-    f32 srcIndex = 0;
-    f32 dstIndex = 0;
+    f32 srcIndex = 0, dstIndex = 0;
     const u32 srcStartIndex = (srcY*srcTW)+srcX;
     const u32 dstStartIndex = (dstY*dstTW)+dstX;
     const f32 dx = ((f32)srcW)/((f32)dstW*2.0f);
     const f32 dy = ((f32)srcH)/((f32)dstH*2.0f);
-    u32 xdx;
-    u32 ydy;
-    u32 dstIndexY;
-    u32 srcIndexY;
-    u32 srcV;
-    u32 dstV;
-    u32 dstColor;
-    u32 dstAlpha;
-    u32 srcColor;
-    u32 srcAlpha;
+    u32 xdx, ydy;
+    u32 dstIndexY, srcIndexY;
+    u32 srcV, dstV;
+    u32 dstColor, dstAlpha;
+    u32 srcColor, srcAlpha;
     u32 resultColor;
-
     for (y = 0; y < dstH; y++) {                // loop rows
         if (dstY + y > dstTH) break;            // bounds check
         ydy = (y*dy);
         if (srcY + ydy > srcTH) break;          // bounds check
         srcIndexY = srcStartIndex + (ydy*srcTW);
         dstIndexY = dstStartIndex + (y*dstTW);
-
         for (x = 0; x < dstW; x++) {            // loop columns
             if (dstX + x > dstTW) break;        // bounds check
             xdx = (x*dx);
             if (srcX + xdx > srcTW) break;      // bounds check
-
             srcIndex = srcIndexY + xdx;
-
             dstIndex = dstIndexY + x;
-
             dstV = dst[(s32)dstIndex];
             srcV = src[(s32)srcIndex];
-
             // 0001 11111
-
             dstAlpha = ((dstV & 0x1) ? 0x1F : 0x0);
             if (dstAlpha == 0x0) continue;
             srcAlpha = ia8_get_alpha(srcV) << 0x1;
             if (srcAlpha == 0x0) continue;
-
             dstColor = rgba16_get_average_color(dstV);
             srcColor = ia8_get_color(srcV) << 0x1;
             if (srcColor == dstColor) continue;
-            resultColor = (srcColor * srcAlpha / 0x1F) + (dstColor * dstAlpha * (0x1F - srcAlpha) / (0x3C1));
+            resultColor        = (srcColor * srcAlpha / 0x1F) + (dstColor * dstAlpha * (0x1F - srcAlpha) / (0x3C1));
             dst[(s32)dstIndex] = rgba16_set_grayscale(resultColor, 1);
         }
     }
@@ -428,19 +409,15 @@ void overlay_i8_on_rgba16_additive(u16 *dst, u16 *src, u32 width, u32 height) {
     const u32 size = width*height;
     u32 i;
     u32 srcI;
-    u32 srcVal;
-    u32 dstVal;
+    u32 srcVal, dstVal;
     for (i = 0; i < size; i++) {
-        srcVal = src[i/2];
-        dstVal = dst[i];
+        srcVal = src[i >> 1];
+        dstVal = dst[i     ];
         srcI = i8_to_rgba16_color(srcVal);
         if (srcI > 0x0) {
-            dst[i] = rgba16_set(
-                                (rgba16_get_red(  dstVal)+srcI),
+            dst[i] = rgba16_set((rgba16_get_red(  dstVal)+srcI),
                                 (rgba16_get_blue( dstVal)+srcI),
-                                (rgba16_get_green(dstVal)+srcI),
-                                1
-                                );
+                                (rgba16_get_green(dstVal)+srcI), 1);
         }
     }
 }

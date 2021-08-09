@@ -6,18 +6,19 @@
 #include "gd_types.h"
 #include "macros.h"
 
-// TODO: make this an enum without causing bss reordering
-#define COLOUR_BLACK     0
-#define COLOUR_WHITE     1
-#define COLOUR_RED       2
-#define COLOUR_GREEN     3
-#define COLOUR_BLUE      4
-#define COLOUR_GRAY      5
-#define COLOUR_DARK_GRAY 6
-#define COLOUR_DARK_BLUE 7
-#define COLOUR_YELLOW    8
-#define COLOUR_PINK      9
-#define COLOUR_BLACK2   10  // same as COLOUR_BLACK
+enum ColourNum {
+    COLOUR_BLACK     =  0,
+    COLOUR_WHITE     =  1,
+    COLOUR_RED       =  2,
+    COLOUR_GREEN     =  3,
+    COLOUR_BLUE      =  4,
+    COLOUR_GRAY      =  5,
+    COLOUR_DARK_GRAY =  6,
+    COLOUR_DARK_BLUE =  7,
+    COLOUR_YELLOW    =  8,
+    COLOUR_PINK      =  9,
+    COLOUR_BLACK2    = 10
+};
 
 // data
 extern struct ObjCamera *gViewUpdateCamera;

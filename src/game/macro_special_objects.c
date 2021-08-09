@@ -161,9 +161,7 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
     s32 numOfSpecialObjects;
     s32 i;
     s32 offset;
-    s16 x;
-    s16 y;
-    s16 z;
+    s16 x, y, z;
     s16 extraParams[4];
     ModelID model;
     u8 type;

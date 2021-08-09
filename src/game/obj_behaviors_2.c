@@ -46,9 +46,9 @@
 #include "seq_ids.h"
 #include "spawn_sound.h"
 
-#define POS_OP_SAVE_POSITION    0
-#define POS_OP_COMPUTE_VELOCITY 1
-#define POS_OP_RESTORE_POSITION 2
+#define POS_OP_SAVE_POSITION    0x0
+#define POS_OP_COMPUTE_VELOCITY 0x1
+#define POS_OP_RESTORE_POSITION 0x2
 
 #define o gCurrentObject
 
@@ -69,7 +69,6 @@ extern struct Object *sMasterTreadmill;
  * The treadmill that plays sounds and controls the others on random setting.
  */
 struct Object *sMasterTreadmill;
-
 
 f32 sObjSavedPosX;
 f32 sObjSavedPosY;
@@ -138,9 +137,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, f32 x, f32
     struct Waypoint *nextWaypoint;
     struct Waypoint *prevWaypoint;
     f32 amountToMove;
-    f32 dx;
-    f32 dy;
-    f32 dz;
+    f32 dx, dy, dz;
     f32 distToNextWaypoint;
     if (ballIndex == 0 || ((u16)(o->oBehParams >> 16) & 0x0080)) {
         initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
@@ -228,23 +225,23 @@ static void cur_obj_spin_all_dimensions(f32 pitchSpeed, f32 rollSpeed) {
                 roll =  rollSpeed;
             }
         }
-        c = coss(o->oFaceAnglePitch);
-        s = sins(o->oFaceAnglePitch);
+        c  = coss(o->oFaceAnglePitch);
+        s  = sins(o->oFaceAnglePitch);
         nz = pitch * c + yaw   * s;
         ny = yaw   * c - pitch * s;
-        c = coss(o->oFaceAngleRoll);
-        s = sins(o->oFaceAngleRoll);
+        c  = coss(o->oFaceAngleRoll);
+        s  = sins(o->oFaceAngleRoll);
         nx = roll  * c + ny   * s;
         ny = ny    * c - roll * s;
-        c = coss(o->oFaceAngleYaw);
-        s = sins(o->oFaceAngleYaw);
+        c  = coss(o->oFaceAngleYaw);
+        s  = sins(o->oFaceAngleYaw);
         px = nx * c - nz * s;
         nz = nz * c + nx * s;
         nx = roll  * c - pitch * s;
         pz = pitch * c + roll  * s;
-        o->oPosX = o->oHomeX - nx + px;
+        o->oPosX         = o->oHomeX - nx + px;
         o->oGraphYOffset = yaw - ny;
-        o->oPosZ = o->oHomeZ + pz - nz;
+        o->oPosZ         = o->oHomeZ + pz - nz;
     }
 }
 

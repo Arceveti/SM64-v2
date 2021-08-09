@@ -1254,10 +1254,10 @@ void render_widescreen_setting(void) {
 #endif
 
 #define CRS_NUM_X1 100
-#define TXT_STAR_X 98
+#define TXT_STAR_X  98
 #define ACT_NAME_X 116
 #define LVL_NAME_X 117
-#define MYSCORE_X  62
+#define MYSCORE_X   62
 
 void render_pause_my_score_coins(void) {
     u8 textCourse[]       = { TEXT_COURSE        };

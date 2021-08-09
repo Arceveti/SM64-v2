@@ -172,15 +172,15 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
  */
 struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f32 y, f32 z) {
     struct ObjJoint *j;
-    j = make_joint(0, x, y, z);
-    j->shapePtr = shape;
-    j->type = 5;
-    j->flags |= flags;
-    j->colourNum = COLOUR_PINK;
+    j                    = make_joint(0, x, y, z);
+    j->shapePtr          = shape;
+    j->type              = 5;
+    j->flags            |= flags;
+    j->colourNum         = COLOUR_PINK;
     j->header.drawFlags |= OBJ_IS_GRABBALE;
     j->header.drawFlags |= OBJ_INVISIBLE;
-    j->updateFunc = grabbable_joint_update_func;
-    j->rootAnimator = NULL;
+    j->updateFunc        = grabbable_joint_update_func;
+    j->rootAnimator      = NULL;
     return j;
 }
 

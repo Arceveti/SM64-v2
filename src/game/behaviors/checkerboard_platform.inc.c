@@ -66,7 +66,7 @@ void bhv_checkerboard_platform_loop(void) {
     }
     // Prevent the lower platform from flipping
     if (o->oCheckerBoardPlatformRotateAction == CHECKERBOARD_PLATFORM_ACT_MOVE_UP) {
-        o->oAngleVelPitch = 0x0;
+        o->oAngleVelPitch   = 0x0;
         o->oFaceAnglePitch &= ~0x7FFF;
     }
     cur_obj_move_using_fvel_and_gravity();

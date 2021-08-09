@@ -237,9 +237,7 @@ struct GdColour *gd_get_colour(s32 idx) {
  */
 void draw_face(struct ObjFace *face) {
     struct ObjVertex *vtx;
-    f32 z;
-    f32 y;
-    f32 x;
+    f32 z, y, x;
     s32 i; // also used to store mtl's gddl number
     Vtx *gbiVtx;
     if (!sUseSelectedColor

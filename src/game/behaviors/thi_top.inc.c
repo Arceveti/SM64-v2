@@ -5,7 +5,7 @@ struct SpawnParticlesInfo sThiTopPuffs = {
 };
 
 void bhv_thi_huge_island_top_loop(void) {
-    if (gTHIWaterDrained & 0x1) {
+    if (gTHIWaterDrained) {
         if (o->oTimer == 0) gEnvironmentRegions[18] = 3000;
         cur_obj_hide();
     } else {
@@ -14,7 +14,7 @@ void bhv_thi_huge_island_top_loop(void) {
 }
 
 void bhv_thi_tiny_island_top_loop(void) {
-    if (!(gTHIWaterDrained & 1)) {
+    if (!gTHIWaterDrained) {
         if (o->oAction == THI_TOP_ACT_IDLE) {
             if (o->oDistanceToMario < 500.0f && (gMarioStates[0].action == ACT_GROUND_POUND_LAND || gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)) {
                 o->oAction = THI_TOP_ACT_DRAIN_WATER;
@@ -28,7 +28,7 @@ void bhv_thi_tiny_island_top_loop(void) {
                 gEnvironmentRegions[18]--;
                 cur_obj_play_sound_1(SOUND_ENV_WATER_DRAIN);
             } else {
-                gTHIWaterDrained |= 1;
+                gTHIWaterDrained = TRUE;
                 play_puzzle_jingle();
             }
         }

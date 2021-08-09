@@ -540,24 +540,17 @@ void set_hud_camera_status(s16 status) {
  */
 void render_hud_camera_status(void) {
     u8 *(*cameraLUT)[6];
-    s32 x;
-    s32 y;
-
     cameraLUT = segmented_to_virtual(&main_hud_camera_lut);
-    x = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
-    y = HUD_CAMERA_Y;
-
+    s32 x     = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
+    s32 y     = HUD_CAMERA_Y;
     if (sCameraHUDStatus == CAM_STATUS_NONE) return;
-
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
     render_hud_tex_lut(x, y, (*cameraLUT)[GLYPH_CAM_CAMERA]);
-
     switch (sCameraHUDStatus & CAM_STATUS_MODE_GROUP) {
         case CAM_STATUS_MARIO:  render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_MARIO_HEAD ]); break;
         case CAM_STATUS_LAKITU: render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_LAKITU_HEAD]); break;
         case CAM_STATUS_FIXED:  render_hud_tex_lut(x + 16, y, (*cameraLUT)[GLYPH_CAM_FIXED      ]); break;
     }
-
     switch (sCameraHUDStatus & CAM_STATUS_C_MODE_GROUP) {
         case CAM_STATUS_C_DOWN: render_hud_small_tex_lut(x + 4, y + 16, (*cameraLUT)[GLYPH_CAM_ARROW_DOWN]); break;
         case CAM_STATUS_C_UP:   render_hud_small_tex_lut(x + 4, y -  8, (*cameraLUT)[GLYPH_CAM_ARROW_UP  ]); break;

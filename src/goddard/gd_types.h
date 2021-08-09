@@ -199,6 +199,14 @@ struct ObjJoint {
    3 = Has groups of other particles in 6C?
 */
 
+#define GD_PARTICLE_FLAGS_NONE  0x0
+#define GD_PARTICLE_FLAG_1  (1 << 0)
+#define GD_PARTICLE_FLAG_2  (1 << 1)
+#define GD_PARTICLE_FLAG_4  (1 << 2)
+#define GD_PARTICLE_FLAG_8  (1 << 3)
+#define GD_PARTICLE_FLAG_A  (1 << 4)
+#define GD_PARTICLE_FLAG_B  (1 << 5)
+
 struct ObjParticle {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ u8 pad14[0x1C-0x14];

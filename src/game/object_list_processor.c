@@ -232,23 +232,18 @@ void copy_mario_state_to_object(void) {
     s32 i = 0;
     // L is real
     if (gCurrentObject != gMarioObject) i++;
-
     gCurrentObject->oVelX           = gMarioStates[i].vel[0];
     gCurrentObject->oVelY           = gMarioStates[i].vel[1];
     gCurrentObject->oVelZ           = gMarioStates[i].vel[2];
-
     gCurrentObject->oPosX           = gMarioStates[i].pos[0];
     gCurrentObject->oPosY           = gMarioStates[i].pos[1];
     gCurrentObject->oPosZ           = gMarioStates[i].pos[2];
-
     gCurrentObject->oMoveAnglePitch = gCurrentObject->header.gfx.angle[0];
     gCurrentObject->oMoveAngleYaw   = gCurrentObject->header.gfx.angle[1];
     gCurrentObject->oMoveAngleRoll  = gCurrentObject->header.gfx.angle[2];
-
     gCurrentObject->oFaceAnglePitch = gCurrentObject->header.gfx.angle[0];
     gCurrentObject->oFaceAngleYaw   = gCurrentObject->header.gfx.angle[1];
     gCurrentObject->oFaceAngleRoll  = gCurrentObject->header.gfx.angle[2];
-
     gCurrentObject->oAngleVelPitch  = gMarioStates[i].angleVel[0];
     gCurrentObject->oAngleVelYaw    = gMarioStates[i].angleVel[1];
     gCurrentObject->oAngleVelRoll   = gMarioStates[i].angleVel[2];
@@ -456,7 +451,7 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
  */
 void clear_objects(void) {
     s32 i;
-    gTHIWaterDrained  = 0;
+    gTHIWaterDrained  = FALSE;
     gTimeStopState    = 0;
     gMarioObject      = NULL;
     gMarioCurrentRoom = 0;

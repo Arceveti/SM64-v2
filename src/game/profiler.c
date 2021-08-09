@@ -52,20 +52,15 @@ void profiler_log_vblank_time(void) {
 void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16 posY, u16 color) {
     s64 durationStart, durationEnd;
     s32 rectX1, rectX2;
-
     // set the duration to start, and floor to 0 if the result is below 0.
     if ((durationStart = clockStart - clockBase) < 0) durationStart = 0;
-
     // like the above, but with end.
     if ((durationEnd   = clockEnd   - clockBase) < 0) durationEnd   = 0;
-
     // calculate the x coordinates of where start and end begins, respectively.
     rectX1 = ((((durationStart * 1000000) / osClockRate * 3) / 1000) + 30);
     rectX2 = ((((  durationEnd * 1000000) / osClockRate * 3) / 1000) + 30);
-
     if (rectX1 > 319) rectX1 = 319;
     if (rectX2 > 319) rectX2 = 319;
-
     // perform the render if start is less than end. in most cases, it should be.
     if (rectX1 < rectX2) {
         gDPPipeSync(     gDisplayListHead++);
@@ -76,22 +71,18 @@ void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16
 
 void draw_reference_profiler_bars(void) {
     // Draws the reference "max" bars underneath the real thing.
-
     // Blue
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551( 40,  80, 255, 1) << 16 | GPACK_RGBA5551( 40,  80, 255, 1));
     gDPFillRectangle(gDisplayListHead++,  30, 220, 79, 222);
-
     // Yellow
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor (gDisplayListHead++, GPACK_RGBA5551(255, 255,  40, 1) << 16 | GPACK_RGBA5551(255, 255,  40, 1));
     gDPFillRectangle(gDisplayListHead++,  79, 220, 128, 222);
-
     // Orange
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551(255, 120,  40, 1) << 16 | GPACK_RGBA5551(255, 120,  40, 1));
     gDPFillRectangle(gDisplayListHead++, 128, 220, 177, 222);
-
     // Red
     gDPPipeSync(     gDisplayListHead++);
     gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551(255,  40,  40, 1) << 16 | GPACK_RGBA5551(255,  40,  40, 1));
@@ -116,32 +107,24 @@ void draw_profiler_mode_1(void) {
     s32 i;
     struct ProfilerFrameData *profiler;
     OSTime clockBase;
-
     // the profiler logs 2 frames of data: last frame and current frame. Indexes are used
     // to keep track of the current frame, so the index is xor'd to retrieve the last frame's
     // data.
     profiler = &gProfilerFrameData[gCurrentFrameIndex1 ^ 1];
-
     // calculate the clockBase.
     clockBase = profiler->soundTimes[0] - (16433 * osClockRate / 1000000);
-
     // draw the profiler for the time it takes for level scripts to execute. (yellow)
     draw_profiler_bar(clockBase, profiler->gameTimes[0], profiler->gameTimes[1], 212, GPACK_RGBA5551(255, 255,  40, 1));
-
     // draw the profiler for the time it takes for the game to render (between level scripts and
     // pre-display lists). (orange)
     draw_profiler_bar(clockBase, profiler->gameTimes[1], profiler->gameTimes[2], 212, GPACK_RGBA5551(255, 120,  40, 1));
-
     // draw the profiler for the time it takes for the display lists to send. (blue)
     draw_profiler_bar(clockBase, profiler->gameTimes[2], profiler->gameTimes[3], 212, GPACK_RGBA5551( 40, 192, 230, 1));
-
     // we need to get the amount of finished numSoundTimes pairs, so get rid of the odd bit to get the
     // limit of finished pairs.
     profiler->numSoundTimes &= 0xFFFE;
-
     // draw the sound update times. (red)
     for (i = 0; i < profiler->numSoundTimes; i += 2) draw_profiler_bar(clockBase, profiler->soundTimes[i], profiler->soundTimes[i + 1], 212, GPACK_RGBA5551(255, 40, 40, 1));
-
     //! RSP and RDP run in parallel, so while they are not absolutely guaranteed to return in order,
     //  it is theoretically possible they might not. In all cases, the RDP should finish later than RSP.
     //  Thus, this is not really a bug in practice, but should still be noted that the C doesn't check
@@ -149,15 +132,11 @@ void draw_profiler_mode_1(void) {
     draw_profiler_bar(clockBase, profiler->gfxTimes[0], profiler->gfxTimes[1], 216, GPACK_RGBA5551(255, 255, 40, 1));
     // (orange)
     draw_profiler_bar(clockBase, profiler->gfxTimes[1], profiler->gfxTimes[2], 216, GPACK_RGBA5551(255, 120, 40, 1));
-
     // like earlier, toss the odd bit.
     profiler->numVblankTimes &= 0xFFFE;
 
     // render the vblank time pairs. (red)
-    for (i = 0; i < profiler->numVblankTimes; i += 2) {
-        draw_profiler_bar(clockBase, profiler->vblankTimes[i], profiler->vblankTimes[i + 1], 216, GPACK_RGBA5551(255, 40, 40, 1));
-    }
-
+    for (i = 0; i < profiler->numVblankTimes; i += 2) draw_profiler_bar(clockBase, profiler->vblankTimes[i], profiler->vblankTimes[i + 1], 216, GPACK_RGBA5551(255, 40, 40, 1));
     draw_reference_profiler_bars();
 }
 
@@ -177,7 +156,6 @@ void draw_profiler_mode_1(void) {
 void draw_profiler_mode_0(void) {
     s32 i;
     struct ProfilerFrameData *profiler;
-
     u64 clockStart;
     u64 levelScriptDuration;
     u64 renderDuration;
@@ -186,15 +164,12 @@ void draw_profiler_mode_0(void) {
     u64 rdpDuration;
     u64 vblank;
     u64 soundDuration;
-
     // get the last frame profiler. gCurrentFrameIndex1 has the current frame being processed, so
     // xor it to get the last frame profiler.
     profiler = &gProfilerFrameData[gCurrentFrameIndex1 ^ 1];
-
     // was thread 5 ran before thread 4? set the lower one to be the clockStart.
     clockStart = profiler->gameTimes[0] <= profiler->soundTimes[0] ? profiler->gameTimes[0]
                                                                    : profiler->soundTimes[0];
-
     // set variables for duration of tasks.
     levelScriptDuration = profiler->gameTimes[1] - clockStart;
     renderDuration      = profiler->gameTimes[2] - profiler->gameTimes[1];
@@ -202,10 +177,8 @@ void draw_profiler_mode_0(void) {
     rspDuration         = profiler->gfxTimes[1] - profiler->gfxTimes[0];
     rdpDuration         = profiler->gfxTimes[2] - profiler->gfxTimes[0];
     vblank              = 0;
-
     // like above functions, toss the odd bit.
     profiler->numSoundTimes &= 0xFFFE;
-
     // sound duration seems to be rendered with empty space and not actually drawn.
     for (i = 0; i < profiler->numSoundTimes; i += 2) {
         // calculate sound duration of max - min
@@ -220,39 +193,30 @@ void draw_profiler_mode_0(void) {
             renderDuration -= soundDuration;
         }
     }
-
     // same as above. toss the odd bit.
     profiler->numSoundTimes &= 0xFFFE;
-
     //! wrong index used to retrieve vblankTimes, thus empty pairs can
     //  potentially be passed to draw_profiler_bar, because it could be sending
     //  pairs that are beyond the numVblankTimes enforced non-odd limit, due to
     //  using the wrong num value.
     for (i = 0; i < profiler->numSoundTimes; i += 2) vblank += (profiler->vblankTimes[i + 1] - profiler->vblankTimes[i]);
-
     // Draw top profilers.
-
     // draw sound duration as the first bar. (red)
     clockStart = 0;
-    draw_profiler_bar(0, clockStart, clockStart + taskStart, 212, GPACK_RGBA5551(255, 40, 40, 1));
-
+    draw_profiler_bar(0, clockStart, clockStart +           taskStart, 212, GPACK_RGBA5551(255,  40, 40, 1));
     // draw level script execution duration. (yellow)
     clockStart += taskStart;
     draw_profiler_bar(0, clockStart, clockStart + levelScriptDuration, 212, GPACK_RGBA5551(255, 255, 40, 1));
-
     // draw render duration. (orange)
     clockStart += levelScriptDuration;
-    draw_profiler_bar(0, clockStart, clockStart + renderDuration, 212, GPACK_RGBA5551(255, 120, 40, 1));
-
+    draw_profiler_bar(0, clockStart, clockStart +      renderDuration, 212, GPACK_RGBA5551(255, 120, 40, 1));
     // Draw bottom profilers.
-
     // rdp duration (orange)
-    draw_profiler_bar(0, 0, rdpDuration, 216, GPACK_RGBA5551(255, 120, 40, 1));
+    draw_profiler_bar(0,          0,                      rdpDuration, 216, GPACK_RGBA5551(255, 120, 40, 1));
     // rsp duration (yellow)
-    draw_profiler_bar(0, 0, rspDuration, 216, GPACK_RGBA5551(255, 255, 40, 1));
+    draw_profiler_bar(0,          0,                      rspDuration, 216, GPACK_RGBA5551(255, 255, 40, 1));
     // vblank duration (red)
-    draw_profiler_bar(0, 0,      vblank, 216, GPACK_RGBA5551(255,  40, 40, 1));
-
+    draw_profiler_bar(0,          0,                           vblank, 216, GPACK_RGBA5551(255,  40, 40, 1));
     draw_reference_profiler_bars();
 }
 

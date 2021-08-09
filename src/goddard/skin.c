@@ -1,5 +1,6 @@
 #include <PR/ultratypes.h>
 
+#include "draw_objects.h"
 #include "gd_math.h"
 #include "joints.h"
 #include "objects.h"
@@ -81,7 +82,7 @@ struct ObjNet *make_net(struct ObjGroup *group) {
     net->unk1D0    = NULL;
     net->netType   = NET_TYPE_DEFAULT;
     net->unk3C     = 1;
-    net->colourNum = 0;
+    net->colourNum = COLOUR_BLACK;
     net->skinGrp   = NULL;
     reset_net(net);
     return net;
@@ -102,9 +103,7 @@ void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
 #ifndef GBI_FLOATS
     register s16 *vnPos;
 #endif
-    register s16 x;
-    register s16 y;
-    register s16 z;
+    register s16 x, y, z;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;
@@ -143,9 +142,7 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
 #ifndef GBI_FLOATS
     register s16 *vtxcoords;
 #endif
-    register s16 x;
-    register s16 y;
-    register s16 z;
+    register s16 x, y, z;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;

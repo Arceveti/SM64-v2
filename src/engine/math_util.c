@@ -62,18 +62,15 @@ float slow_powf(float base, float exponent) {
 }
 
 #ifdef FAST_INVSQRT
-/// lol
 float Q_rsqrtf( float number ) {
 	long i;
 	float x2, y;
-
 	x2 = number * 0.5F;
 	y  = number;
 	i  = * ( long * ) &y;
 	i  = 0x5f3759df - ( i >> 1 );
 	y  = * ( float * ) &i;
 	y  = y * ( 1.5F - ( x2 * y * y ) );
-
 	return y;
 }
 #endif

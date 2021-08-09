@@ -849,8 +849,8 @@ static s32 act_water_death(struct MarioState *m) {
 
 static s32 act_water_plunge(struct MarioState *m) {
     u32 stepResult;
-    s32 stateFlags = m->heldObj != NULL;
-    f32 endVSpeed = swimming_near_surface(m) ? 0.0f : -5.0f;
+    s32 stateFlags = (m->heldObj != NULL);
+    f32 endVSpeed  = swimming_near_surface(m) ? 0.0f : -5.0f;
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
 #ifdef ACTION_CANCELS
     if (m->input & INPUT_B_PRESSED) return set_mario_action(         m, ACT_WATER_PUNCH        , 0);
@@ -870,7 +870,7 @@ static s32 act_water_plunge(struct MarioState *m) {
         play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
         if (m->peakHeight - m->pos[1] > 1150.0f) play_sound(SOUND_MARIO_HAHA_WATER, m->marioObj->header.gfx.cameraToObject);
         m->particleFlags |= PARTICLE_WATER_SPLASH;
-        m->actionState = 1;
+        m->actionState    = 1;
 #if ENABLE_RUMBLE
         if (m->prevAction & ACT_FLAG_AIR) queue_rumble_data(5, 80);
 #endif

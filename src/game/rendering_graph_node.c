@@ -585,7 +585,6 @@ static void geo_process_scale(struct GraphNodeScale *node) {
 static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-
     gMatStackIndex++;
     vec3s_to_vec3f(translation, node->translation);\
     if (node->zOffset < 0) {
@@ -598,7 +597,6 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     } else if (gCurGraphNodeObject != NULL) {
         mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], gCurGraphNodeObject->scale);
     }
-
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
     if (node->displayList   != NULL) geo_append_display_list(node->displayList, node->node.flags >> 8);
@@ -852,22 +850,18 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     // but the issue will be more apparent on widescreen.
     // HackerSM64: This multiplication is done regardless of aspect ratio to fix object pop-in on the edges of the screen (which happens at 4:3 too)
     hScreenEdge *= GFX_DIMENSIONS_ASPECT_RATIO;
-
     if (geo != NULL && geo->type == GRAPH_NODE_TYPE_CULLING_RADIUS) {
         cullingRadius = ((struct GraphNodeCullingRadius *) geo)->cullingRadius;
     } else {
         cullingRadius = 300;
     }
-
     // Don't render if the object is close to or behind the camera
     if (matrix[3][2] > -100.0f + cullingRadius) return FALSE;
-
     //! This makes the HOLP not update when the camera is far away, and it
     //  makes PU travel safe when the camera is locked on the main map.
     //  If Mario were rendered with a depth over 65536 it would cause overflow
     //  when converting the transformation matrix to a fixed point matrix.
     if (matrix[3][2] < -20000.0f - cullingRadius) return FALSE;
-
     // Check whether the object is horizontally in view
     return !((matrix[3][0] > hScreenEdge + cullingRadius) || (matrix[3][0] < -hScreenEdge - cullingRadius));
 }
@@ -878,7 +872,6 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
 static void geo_process_object(struct Object *node) {
     Mat4 mtxf;
     s32 hasAnimation = (node->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
-
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         if (node->header.gfx.throwMatrix != NULL) {
             mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix, gMatStack[gMatStackIndex]);
@@ -888,18 +881,15 @@ static void geo_process_object(struct Object *node) {
             mtxf_rotate_zxy_and_translate(mtxf, node->header.gfx.pos, node->header.gfx.angle);
             mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
         }
-
         mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex + 1], node->header.gfx.scale);
-        node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
-        node->header.gfx.cameraToObject[0] = gMatStack[gMatStackIndex][3][0];
-        node->header.gfx.cameraToObject[1] = gMatStack[gMatStackIndex][3][1];
-        node->header.gfx.cameraToObject[2] = gMatStack[gMatStackIndex][3][2];
-
+        node->header.gfx.throwMatrix       = &gMatStack[++gMatStackIndex];
+        node->header.gfx.cameraToObject[0] =  gMatStack[  gMatStackIndex][3][0];
+        node->header.gfx.cameraToObject[1] =  gMatStack[  gMatStackIndex][3][1];
+        node->header.gfx.cameraToObject[2] =  gMatStack[  gMatStackIndex][3][2];
         // FIXME: correct types
         if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo, hasAnimation);
         if (obj_is_in_view(&node->header.gfx, gMatStack[gMatStackIndex])) {
             Mtx *mtx = alloc_display_list(sizeof(*mtx));
-
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
             if (node->header.gfx.sharedChild != NULL) {
@@ -911,7 +901,6 @@ static void geo_process_object(struct Object *node) {
             }
             if (node->header.gfx.node.children != NULL) geo_process_node_and_siblings(node->header.gfx.node.children);
         }
-
         gMatStackIndex--;
         gCurAnimType                 = ANIM_TYPE_NONE;
         node->header.gfx.throwMatrix = NULL;
@@ -939,19 +928,15 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
     Mat4 mat;
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-
 #ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
 #endif
-
     if (node->fnNode.func != NULL)   node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     if (node->objNode     != NULL && node->objNode->header.gfx.sharedChild != NULL) {
         s32 hasAnimation = (node->objNode->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
-
         translation[0] = node->translation[0] / 4.0f;
         translation[1] = node->translation[1] / 4.0f;
         translation[2] = node->translation[2] / 4.0f;
-
         mtxf_translate(mat, translation);
         mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
         gMatStack[                 gMatStackIndex + 1][3][0] = gMatStack[gMatStackIndex][3][0];
@@ -982,7 +967,6 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         gCurAnimData                        = gGeoTempState.data;
         gMatStackIndex--;
     }
-
     if (node->fnNode.node.children != NULL) geo_process_node_and_siblings(node->fnNode.node.children);
 }
 
@@ -999,14 +983,12 @@ void geo_try_process_children(struct GraphNode *node) {
  * be iterated over.
  */
 void geo_process_node_and_siblings(struct GraphNode *firstNode) {
-    s16 iterateChildren = TRUE;
+    s16 iterateChildren            = TRUE;
     struct GraphNode *curGraphNode = firstNode;
-    struct GraphNode *parent = curGraphNode->parent;
-
+    struct GraphNode *parent       = curGraphNode->parent;
     // In the case of a switch node, exactly one of the children of the node is
     // processed instead of all children like usual
     if (parent != NULL) iterateChildren = (parent->type != GRAPH_NODE_TYPE_SWITCH_CASE);
-
     do {
         if (curGraphNode->flags & GRAPH_RENDER_ACTIVE) {
             if (curGraphNode->flags & GRAPH_RENDER_CHILDREN_FIRST) {

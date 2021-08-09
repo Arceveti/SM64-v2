@@ -1626,13 +1626,10 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
 static f32 end_obj_set_visual_pos(struct Object *o) {
     struct Surface *surf;
     Vec3s translation;
-    f32 x;
-    f32 y;
-    f32 z;
     find_mario_anim_flags_and_translation(o, o->header.gfx.angle[1], translation);
-    x = o->header.gfx.pos[0] + translation[0];
-    y = o->header.gfx.pos[1] + 10.0f;
-    z = o->header.gfx.pos[2] + translation[2];
+    f32 x = o->header.gfx.pos[0] + translation[0];
+    f32 y = o->header.gfx.pos[1] + 10.0f;
+    f32 z = o->header.gfx.pos[2] + translation[2];
     return find_floor(x, y, z, &surf);
 }
 

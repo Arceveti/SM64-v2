@@ -13,7 +13,7 @@
 #include "segment2.h"
 #include "sm64.h"
 
-u8 sTransitionColorFadeCount[4]    = { 0 };
+u8  sTransitionColorFadeCount[4]   = { 0 };
 u16 sTransitionTextureFadeCount[2] = { 0 };
 
 s32 set_and_reset_transition_fade_timer(s8 fadeTimer, u8 transTime) {
@@ -27,20 +27,18 @@ s32 set_and_reset_transition_fade_timer(s8 fadeTimer, u8 transTime) {
 }
 
 u8 set_transition_color_fade_alpha(s8 fadeOut, s8 fadeTimer, u8 transTime) {
-    u8 time = 0;
     if (fadeOut) {
-        time = (1.0f - sTransitionColorFadeCount[fadeTimer] / (f32)(transTime - 1)) * 255.0f + 0.5f; // fade out
+        return (1.0f - sTransitionColorFadeCount[fadeTimer] / (f32)(transTime - 1)) * 255.0f + 0.5f; // fade out
     } else {
-        time = (f32) sTransitionColorFadeCount[fadeTimer] * 255.0f / (f32)(transTime - 1) + 0.5f; // fade in
+        return (f32) sTransitionColorFadeCount[fadeTimer] * 255.0f / (f32)(transTime - 1) + 0.5f; // fade in
     }
-    return time;
 }
 
 Vtx *vertex_transition_color(struct WarpTransitionData *transData, u8 alpha) {
     Vtx *verts = alloc_display_list(4 * sizeof(*verts));
-    u8 r = transData->red;
-    u8 g = transData->green;
-    u8 b = transData->blue;
+    u8 r       = transData->red;
+    u8 g       = transData->green;
+    u8 b       = transData->blue;
     if (verts != NULL) {
         make_vertex(verts, 0, GFX_DIMENSIONS_FROM_LEFT_EDGE(0),              0, -1, 0, 0, r, g, b, alpha);
         make_vertex(verts, 1, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0),             0, -1, 0, 0, r, g, b, alpha);
@@ -150,13 +148,12 @@ void *sTextureTransitionID[] = {
 };
 
 s32 render_textured_transition(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData, s8 texID, s8 transTexType) {
-    f32 texTransTime = calc_tex_transition_time(fadeTimer, transTime, transData);
-    u16 texTransPos = convert_tex_transition_angle_to_pos(transData);
-    s16 centerTransX = center_tex_transition_x(transData, texTransTime, texTransPos);
-    s16 centerTransY = center_tex_transition_y(transData, texTransTime, texTransPos);
+    f32 texTransTime   = calc_tex_transition_time(fadeTimer, transTime, transData);
+    u16 texTransPos    = convert_tex_transition_angle_to_pos(transData);
+    s16 centerTransX   = center_tex_transition_x(transData, texTransTime, texTransPos);
+    s16 centerTransY   = center_tex_transition_y(transData, texTransTime, texTransPos);
     s16 texTransRadius = calc_tex_transition_radius(fadeTimer, transTime, transData);
-    Vtx *verts = alloc_display_list(8 * sizeof(*verts));
-
+    Vtx *verts         = alloc_display_list(8 * sizeof(*verts));
     if (verts != NULL) {
         load_tex_transition_vertex(verts, fadeTimer, transData, centerTransX, centerTransY, texTransRadius, transTexType);
         gSPDisplayList(     gDisplayListHead++, dl_proj_mtx_fullscreen)
@@ -169,14 +166,14 @@ s32 render_textured_transition(s8 fadeTimer, s8 transTime, struct WarpTransition
         gDPSetRenderMode(   gDisplayListHead++, G_RM_AA_XLU_SURF, G_RM_AA_XLU_SURF2);
         gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
         switch (transTexType) {
-        case TRANS_TYPE_MIRROR: gDPLoadTextureBlock(gDisplayListHead++, sTextureTransitionID[texID], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 5, 6, G_TX_NOLOD, G_TX_NOLOD); break;
-        case TRANS_TYPE_CLAMP:  gDPLoadTextureBlock(gDisplayListHead++, sTextureTransitionID[texID], G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0,              G_TX_CLAMP,              G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD); break;
+            case TRANS_TYPE_MIRROR: gDPLoadTextureBlock(gDisplayListHead++, sTextureTransitionID[texID], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0, G_TX_WRAP | G_TX_MIRROR, G_TX_WRAP | G_TX_MIRROR, 5, 6, G_TX_NOLOD, G_TX_NOLOD); break;
+            case TRANS_TYPE_CLAMP:  gDPLoadTextureBlock(gDisplayListHead++, sTextureTransitionID[texID], G_IM_FMT_IA, G_IM_SIZ_8b, 64, 64, 0,              G_TX_CLAMP,              G_TX_CLAMP, 6, 6, G_TX_NOLOD, G_TX_NOLOD); break;
         }
-        gSPTexture(    gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
-        gSPVertex(     gDisplayListHead++, VIRTUAL_TO_PHYSICAL(verts), 4, 0);
-        gSPDisplayList(gDisplayListHead++, dl_draw_quad_verts_0123);
-        gSPTexture(    gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
-        gSPDisplayList(gDisplayListHead++, dl_screen_transition_end);
+        gSPTexture(         gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+        gSPVertex(          gDisplayListHead++, VIRTUAL_TO_PHYSICAL(verts), 4, 0);
+        gSPDisplayList(     gDisplayListHead++, dl_draw_quad_verts_0123);
+        gSPTexture(         gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
+        gSPDisplayList(     gDisplayListHead++, dl_screen_transition_end);
         sTransitionTextureFadeCount[fadeTimer] += transData->texTimer;
     }
     return set_and_reset_transition_fade_timer(fadeTimer, transTime);
@@ -208,13 +205,11 @@ Gfx *render_cannon_circle_base(void) {
     Gfx *dlist = alloc_display_list(16 * sizeof(*dlist));
 #endif
     Gfx *g = dlist;
-
     if (verts != NULL && dlist != NULL) {
         make_vertex(verts, 0,            0,             0, -1, -1152, 1824, 0, 0, 0, 255);
         make_vertex(verts, 1, SCREEN_WIDTH,             0, -1,  1152, 1824, 0, 0, 0, 255);
         make_vertex(verts, 2, SCREEN_WIDTH, SCREEN_HEIGHT, -1,  1152,  192, 0, 0, 0, 255);
         make_vertex(verts, 3,            0, SCREEN_HEIGHT, -1, -1152,  192, 0, 0, 0, 255);
-
 #ifdef WIDESCREEN
         // Render black rectangles outside the 4:3 area.
         make_vertex(verts, 4, GFX_DIMENSIONS_FROM_LEFT_EDGE( 0),             0, -1, 0, 0, 0, 0, 0, 255);
@@ -222,7 +217,6 @@ Gfx *render_cannon_circle_base(void) {
         make_vertex(verts, 6, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT, -1, 0, 0, 0, 0, 0, 255);
         make_vertex(verts, 7, GFX_DIMENSIONS_FROM_LEFT_EDGE( 0), SCREEN_HEIGHT, -1, 0, 0, 0, 0, 0, 255);
 #endif
-
         gSPDisplayList(     g++, dl_proj_mtx_fullscreen);
         gDPSetCombineMode(  g++, G_CC_MODULATEIDECALA, G_CC_MODULATEIDECALA);
         gDPSetTextureFilter(g++, G_TF_BILERP);
@@ -248,12 +242,11 @@ Gfx *render_cannon_circle_base(void) {
 
 Gfx *geo_cannon_circle_base(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     struct GraphNodeGenerated *graphNode = (struct GraphNodeGenerated *) node;
-    Gfx *dlist = NULL;
-
+    Gfx                       *dlist     = NULL;
     if (callContext == GEO_CONTEXT_RENDER
      && gCurrentArea != NULL
      && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
-        graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
+        graphNode->fnNode.node.flags = (graphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
         dlist = render_cannon_circle_base();
     }
     return dlist;

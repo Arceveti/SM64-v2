@@ -98,7 +98,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
         if (gCurGraphNodeHeldObject != NULL) heldObject = gCurGraphNodeHeldObject->objNode;
         gfxHead                    = alloc_display_list(3 * sizeof(Gfx));
         gfx                        = gfxHead;
-        obj->header.gfx.node.flags = (obj->header.gfx.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
+        obj->header.gfx.node.flags = (obj->header.gfx.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
         gDPSetEnvColor(   gfx++, 255, 255, 255, heldObject->oOpacity);
         gSPEndDisplayList(gfx);
     }
@@ -251,7 +251,7 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     f32 floor_nX  = objFloor->normal.x;
     f32 floor_nY  = objFloor->normal.y;
     f32 floor_nZ  = objFloor->normal.z;
-    f32 netYAccel = (1.0f - o->oBuoyancy) * (-1.0f * o->oGravity);
+    f32 netYAccel = (1.0f - o->oBuoyancy) * (-o->oGravity);
     o->oVelY -= netYAccel;
     // Caps vertical speed with a terminal velocity.
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
@@ -271,8 +271,8 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
         floor_nZ2 = sqr(floor_nZ);
         floor_nXZ = (floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * netYAccel * 2;
         // Adds horizontal component of gravity for horizontal speed.
-        objVelX += floor_nX * floor_nXZ;
-        objVelZ += floor_nZ * floor_nXZ;
+        objVelX  += floor_nX * floor_nXZ;
+        objVelZ  += floor_nZ * floor_nXZ;
     }
     if ( objVelX < 0.000001f &&  objVelX > -0.000001f)  objVelX = 0;
     if ( objVelZ < 0.000001f &&  objVelZ > -0.000001f)  objVelZ = 0;
@@ -297,14 +297,13 @@ void obj_update_pos_vel_xz(void) {
  * if underwater.
  */
 void obj_splash(s32 waterY, s32 objY) {
-    u32 globalTimer = gGlobalTimer;
     // Spawns waves if near surface of water and plays a noise if entering.
     if ((f32)(waterY + 30) > o->oPosY && o->oPosY > (f32)(waterY - 30)) {
         spawn_object(o, MODEL_IDLE_WATER_WAVE, bhvObjectWaterWave);
         if (o->oVelY < -20.0f) cur_obj_play_sound_2(SOUND_OBJ_DIVING_INTO_WATER);
     }
     // Spawns bubbles if underwater.
-    if ((objY + 50) < waterY && !(globalTimer & 0x1F)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
+    if ((objY + 50) < waterY && !(gGlobalTimer & 0x1F)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
 }
 
 /**
@@ -362,8 +361,8 @@ s16 object_step_without_floor_orient(void) {
  * position.
  */
 void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
-    o->oVelX = obj->oForwardVel * sins(obj->oMoveAngleYaw);
-    o->oVelZ = obj->oForwardVel * coss(obj->oMoveAngleYaw);
+    o->oVelX    = obj->oForwardVel * sins(obj->oMoveAngleYaw);
+    o->oVelZ    = obj->oForwardVel * coss(obj->oMoveAngleYaw);
     obj->oPosX +=   o->oVelX;
     obj->oPosY += obj->oVelY;
     obj->oPosZ +=   o->oVelZ;

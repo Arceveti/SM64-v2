@@ -254,11 +254,11 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
     Gfx *gfx;
     Gfx *gfxHead = NULL;
     if (alpha == 255) {
-        node->fnNode.node.flags = (node->fnNode.node.flags & 0xFF) | (LAYER_SILHOUETTE_OPAQUE << 8);
+        node->fnNode.node.flags = (node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8);
         gfxHead = alloc_display_list(2 * sizeof(*gfxHead));
         gfx = gfxHead;
     } else {
-        node->fnNode.node.flags = (node->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
+        node->fnNode.node.flags = (node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
         gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
         gfx = gfxHead;
         gDPSetAlphaCompare(gfx++, G_AC_DITHER);
@@ -290,7 +290,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
  */
 Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
+    struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
     if (callContext == GEO_CONTEXT_RENDER) {
         // assign result. 0 if moving, 1 if stationary.
         switchCase->selectedCase = (!(bodyState->action & ACT_FLAG_STATIONARY));
@@ -303,7 +303,7 @@ Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED 
  */
 Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
+    struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
     s16 blinkFrame;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->eyeState == 0) {
@@ -384,7 +384,7 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
  */
 Gfx *geo_switch_mario_hand(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[0];
+    struct MarioBodyState      *bodyState  = &gBodyStates[0];
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->handState == MARIO_HAND_FISTS) {
             // switch between fists (0) and open (1)
@@ -409,10 +409,10 @@ Gfx *geo_switch_mario_hand(s32 callContext, struct GraphNode *node, UNUSED Mat4 
  * (such as in the mirror room) results in a faster and desynced punch / kick animation.
  */
 Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    static s16 sMarioAttackAnimCounter = 0;
+    static s16 sMarioAttackAnimCounter     = 0;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
-    struct GraphNodeScale *scaleNode = (struct GraphNodeScale *) node->next;
-    struct MarioBodyState *bodyState = &gBodyStates[0];
+    struct GraphNodeScale     *scaleNode   = (struct GraphNodeScale *) node->next;
+    struct MarioBodyState     *bodyState   = &gBodyStates[0];
     if (callContext == GEO_CONTEXT_RENDER) {
         scaleNode->scale = 1.0f;
         if (asGenerated->parameter == bodyState->punchState >> 6) {
@@ -431,7 +431,7 @@ Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED 
  */
 Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
+    struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
 #ifdef METAL_CAP_REFLECTION
 #ifdef METAL_CAP_REFLECTION_SHINE
     u16 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
@@ -448,7 +448,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     u32 lakituW;
     u32 lakituH;
     const u32 lakituMaxW = 56;
-    const u32 lakituMaxH = lakituMaxW/2;
+    const u32 lakituMaxH = lakituMaxW >> 1;
 #endif
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = bodyState->modelState >> 8;
@@ -646,7 +646,7 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
             gSPSetGeometryMode(  &gfx[1], G_CULL_BACK );
         }
         gSPEndDisplayList(&gfx[2]);
-        asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & 0xFF) | (LAYER_SILHOUETTE_OPAQUE << 8);
+        asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8);
     }
     return gfx;
 }

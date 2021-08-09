@@ -37,7 +37,7 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z)
     particle->pos.z     = z;
     particle->unk38.x   = particle->unk38.y = particle->unk38.z = 0.0f;
     particle->colourNum = colourNum;
-    particle->flags     = flags | 8;
+    particle->flags     = flags | GD_PARTICLE_FLAG_8;
     particle->timeout   = -1;
     particle->shapePtr  = NULL;
     particle->unkB0     =  1;
@@ -75,27 +75,27 @@ int func_80182778(struct ObjParticle *ptc) {
 /* 2311D8 -> 231454 */
 void func_80182A08(struct ObjParticle *ptc, struct GdVec3f *b) {
     register struct ListNode *link;
-    struct ObjParticle *sp20;
+    struct ObjParticle *linkedPtc;
     if (ptc->subParticlesGrp != NULL) {
         link = ptc->subParticlesGrp->firstMember;
         while (link != NULL) {
             // FIXME: types
-            sp20 = (struct ObjParticle *) link->obj;
-            if (sp20->timeout <= 0) {
-                sp20->pos.x = ptc->pos.x;
-                sp20->pos.y = ptc->pos.y;
-                sp20->pos.z = ptc->pos.z;
-                sp20->timeout = 12.0f - gd_rand_float() * 5.0f;
+            linkedPtc = (struct ObjParticle *) link->obj;
+            if (linkedPtc->timeout <= 0) {
+                linkedPtc->pos.x = ptc->pos.x;
+                linkedPtc->pos.y = ptc->pos.y;
+                linkedPtc->pos.z = ptc->pos.z;
+                linkedPtc->timeout = 12.0f - gd_rand_float() * 5.0f;
                 do {
-                    sp20->unk38.x = gd_rand_float() * 50.0f - 25.0f;
-                    sp20->unk38.y = gd_rand_float() * 50.0f - 25.0f;
-                    sp20->unk38.z = gd_rand_float() * 50.0f - 25.0f;
-                } while (gd_vec3f_magnitude(&sp20->unk38) > 30.0f);
-                sp20->unk38.x += b->x;
-                sp20->unk38.y += b->y;
-                sp20->unk38.z += b->z;
-                sp20->header.drawFlags &= ~OBJ_INVISIBLE;
-                sp20->flags |= 8;
+                    linkedPtc->unk38.x = gd_rand_float() * 50.0f - 25.0f;
+                    linkedPtc->unk38.y = gd_rand_float() * 50.0f - 25.0f;
+                    linkedPtc->unk38.z = gd_rand_float() * 50.0f - 25.0f;
+                } while (gd_vec3f_magnitude(&linkedPtc->unk38) > 30.0f);
+                linkedPtc->unk38.x += b->x;
+                linkedPtc->unk38.y += b->y;
+                linkedPtc->unk38.z += b->z;
+                linkedPtc->header.drawFlags &= ~OBJ_INVISIBLE;
+                linkedPtc->flags |= GD_PARTICLE_FLAG_8;
             }
             link = link->next;
         }
@@ -111,8 +111,8 @@ void move_particle(struct ObjParticle *ptc) {
     struct ObjCamera *camera;
     struct GdVec3f sp40;
     struct GdVec3f sp34;
-    if (  ptc->flags & 0x2)  return;
-    if (!(ptc->flags & 0x8)) return;
+    if (  ptc->flags & GD_PARTICLE_FLAG_2)  return;
+    if (!(ptc->flags & GD_PARTICLE_FLAG_8)) return;
     if (ptc->particleType == 3) {
         sp40.x = -gViewUpdateCamera->unkE8[2][0] *  50.0f;
         sp40.y = -gViewUpdateCamera->unkE8[2][1] *  50.0f;
@@ -128,10 +128,10 @@ void move_particle(struct ObjParticle *ptc) {
             // Camera->unk18C = ObjView here
             if (camera->unk18C->pickedObj != NULL) {
                 set_cur_dynobj(camera->unk18C->pickedObj);
-                ptc->flags |= 0x20;
+                ptc->flags |=  GD_PARTICLE_FLAG_B;
             } else {
-                ptc->flags &= ~0x10;
-                ptc->flags &= ~0x20;
+                ptc->flags &= ~GD_PARTICLE_FLAG_A;
+                ptc->flags &= ~GD_PARTICLE_FLAG_B;
             }
         }
         d_get_world_pos(&sp64);
@@ -143,7 +143,7 @@ void move_particle(struct ObjParticle *ptc) {
     ptc->pos.x += ptc->unk38.x;
     ptc->pos.y += ptc->unk38.y;
     ptc->pos.z += ptc->unk38.z;
-    if (ptc->flags & 0x1) ptc->unk38.y += sp7C;
+    if (ptc->flags & GD_PARTICLE_FLAG_1) ptc->unk38.y += sp7C;
     if (ptc->unkB0 == 1) {
         ptc->unkB0 = 2;
         if (ptc->particleType == 3) {
@@ -151,20 +151,20 @@ void move_particle(struct ObjParticle *ptc) {
                 case 1:
                     ptc->subParticlesGrp = make_group(0);
                     for (i = 0; i < 50; i++) {
-                        particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
-                        particle->flags &= ~8;
+                        particle->flags &= ~GD_PARTICLE_FLAG_8;
                     }
                     break;
                 case 2:
                 case 3:
                     ptc->subParticlesGrp = make_group(0);
                     for (i = 0; i < 30; i++) {
-                        particle = make_particle(1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
+                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
-                        particle->flags &= ~8;
+                        particle->flags &= ~GD_PARTICLE_FLAG_8;
                     }
                     break;
             }
@@ -179,34 +179,34 @@ void move_particle(struct ObjParticle *ptc) {
                 if (func_80182778(ptc) && ptc->subParticlesGrp != NULL) {
                     register struct ListNode *link;
                     if (ptc->unk80 != NULL) {
-                        ptc->unk80->unk3C |= 1;
+                        ptc->unk80->unk3C     |= 1;
                         ptc->unk80->position.x = ptc->pos.x;
                         ptc->unk80->position.y = ptc->pos.y;
                         ptc->unk80->position.z = ptc->pos.z;
                     }
                     link = ptc->subParticlesGrp->firstMember;
                     while (link != NULL) {
-                        struct ObjParticle *sp2C = (struct ObjParticle *) link->obj;
-                        sp2C->pos.x = ptc->pos.x;
-                        sp2C->pos.y = ptc->pos.y;
-                        sp2C->pos.z = ptc->pos.z;
-                        sp2C->timeout = 20;
+                        struct ObjParticle *linkedPtc = (struct ObjParticle *) link->obj;
+                        linkedPtc->pos.x   = ptc->pos.x;
+                        linkedPtc->pos.y   = ptc->pos.y;
+                        linkedPtc->pos.z   = ptc->pos.z;
+                        linkedPtc->timeout = 20;
                         do {
-                            sp2C->unk38.x = gd_rand_float() * 64.0f - 32.0f;
-                            sp2C->unk38.y = gd_rand_float() * 64.0f - 32.0f;
-                            sp2C->unk38.z = gd_rand_float() * 64.0f - 32.0f;
-                        } while (gd_vec3f_magnitude(&sp2C->unk38) > 32.0f);
-                        sp2C->unk30 = gd_rand_float() * 180.0f;
-                        sp2C->header.drawFlags &= ~OBJ_INVISIBLE;
-                        sp2C->flags |= 8;
+                            linkedPtc->unk38.x = gd_rand_float() * 64.0f - 32.0f;
+                            linkedPtc->unk38.y = gd_rand_float() * 64.0f - 32.0f;
+                            linkedPtc->unk38.z = gd_rand_float() * 64.0f - 32.0f;
+                        } while (gd_vec3f_magnitude(&linkedPtc->unk38) > 32.0f);
+                        linkedPtc->unk30             = gd_rand_float() * 180.0f;
+                        linkedPtc->header.drawFlags &= ~OBJ_INVISIBLE;
+                        linkedPtc->flags            |= GD_PARTICLE_FLAG_8;
                         link = link->next;
                     }
                 }
                 break;
             case 3:
-                if ((ptc->flags & 0x20) && !(ptc->flags & 0x10)) {
+                if ((ptc->flags & GD_PARTICLE_FLAG_B) && !(ptc->flags & GD_PARTICLE_FLAG_A)) {
                     func_80182A08(ptc, &sp40);
-                    ptc->flags |= 0x10;
+                    ptc->flags |= GD_PARTICLE_FLAG_A;
                 }
                 break;
             case 2: func_80182A08(ptc, &sp34); break;
@@ -216,7 +216,7 @@ void move_particle(struct ObjParticle *ptc) {
     if (ptc->timeout >= 0) {
         if (ptc->timeout-- <= 0) {
             ptc->header.drawFlags |= OBJ_INVISIBLE;
-            ptc->flags &= ~0x8;
+            ptc->flags            &= ~GD_PARTICLE_FLAG_8;
         }
     }
 }

@@ -279,19 +279,19 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     addto_group(gMarioFaceGrp, &animator->header);
     d_set_name_suffix(NULL);  // stop adding "l" to generated dynobj names
     // Make sparkle particles
-    particle = make_particle(0, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
+    particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
     particle->unk64                 = 3;
     particle->attachedToObj         = &camera->header;
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
-    particle = make_particle(0, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
+    particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
     particle->unk64                 = 2;
     particle->attachedToObj         = d_use_obj("N228l"); // DYNOBJ_SILVER_STAR_LIGHT
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
-    particle = make_particle(0, COLOUR_RED, 0.0f, 0.0f, 0.0f);
+    particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_RED, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
     particle->unk64                 = 2;
     particle->attachedToObj         = d_use_obj("N231l"); // DYNOBJ_RED_STAR_LIGHT

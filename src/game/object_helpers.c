@@ -64,13 +64,13 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
         currentGraphNode = (struct GraphNodeGenerated *) node;
         if (gCurGraphNodeHeldObject) objectGraphNode = gCurGraphNodeHeldObject->objNode;
         objectOpacity = objectGraphNode->oOpacity;
-        dlStart = alloc_display_list(sizeof(Gfx) * 3);
-        dlHead = dlStart;
+        dlStart       = alloc_display_list(sizeof(Gfx) * 3);
+        dlHead        = dlStart;
         if (objectOpacity == 0xFF) {
-            currentGraphNode->fnNode.node.flags = (((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ) << 8) | (currentGraphNode->fnNode.node.flags & 0xFF);
+            currentGraphNode->fnNode.node.flags = (((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK);
             objectGraphNode->oAnimState = 0;
         } else {
-            currentGraphNode->fnNode.node.flags = (((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT) << 8) | (currentGraphNode->fnNode.node.flags & 0xFF);
+            currentGraphNode->fnNode.node.flags = (((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK);
             objectGraphNode->oAnimState = 1;
 #ifdef VERSION_JP
             if (currentGraphNode->parameter == 10) {
@@ -108,7 +108,6 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
         // assign the case number for execution.
         switchCase->selectedCase = obj->oAnimState;
     }
-
     return NULL;
 }
 
@@ -168,11 +167,9 @@ void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
 }
 
 void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
-    f32 x, y, z;
-
-    x         = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
-    y         = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
-    z         = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
+    f32 x     = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
+    f32 y     = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
+    f32 z     = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
 
     dst[0][0] = a1[0][0] * a2[0][0] + a1[0][1] * a2[0][1] + a1[0][2] * a2[0][2];
     dst[0][1] = a1[0][0] * a2[1][0] + a1[0][1] * a2[1][1] + a1[0][2] * a2[1][2];

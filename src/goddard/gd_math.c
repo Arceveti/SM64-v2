@@ -208,8 +208,7 @@ void gd_add_vec3f_to_mat4f_offset(Mat4f *mtx, struct GdVec3f *vec) {
 void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
     f32 invertedHMag;
     f32 hMag;
-    f32 c;
-    f32 s;
+    f32 c, s;
     f32 radPerDeg = RAD_PER_DEG;
     struct GdVec3f unit;
     unit.x = vec->x;

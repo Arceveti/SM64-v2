@@ -88,7 +88,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         d11 = v1x * v1x + v1y * v1y + v1z * v1z;
         d20 = v2x * v0x + v2y * v0y + v2z * v0z;
         d21 = v2x * v1x + v2y * v1y + v2z * v1z;
-        invDenom = 1.0f / (d00 * d11 - d01 * d01);
+        invDenom = 1.0f / (d00 * d11 - d01 * d01); // no sqrtf?
         v = (d11 * d20 - d01 * d21) * invDenom;
         if (v < 0.0f || v > 1.0f) goto edge_1_2;
         w = (d00 * d21 - d01 * d20) * invDenom;
@@ -107,7 +107,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(d00 * d00 + d01 * d01);
             offset = invDenom - margin_radius;
             if (offset > 0.0f) goto edge_1_3;
-            invDenom = offset / invDenom;
+            invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -127,7 +127,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(d00 * d00 + d01 * d01);
             offset = invDenom - margin_radius;
             if (offset > 0.0f) goto edge_2_3;
-            invDenom = offset / invDenom;
+            invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -153,7 +153,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(d00 * d00 + d01 * d01);
             offset = invDenom - margin_radius;
             if (offset > 0.0f) continue;
-            invDenom = offset / invDenom;
+            invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;

@@ -662,8 +662,8 @@ void d_set_shapeptrptr(struct ObjShape **shpPtrptr) {
     if (shpPtrptr == NULL) shpPtrptr = &defaultptr;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            ((struct ObjJoint *) sDynListCurObj)->shapePtr = *shpPtrptr;
-            ((struct ObjJoint *) sDynListCurObj)->colourNum = 0;
+            ((struct ObjJoint *) sDynListCurObj)->shapePtr  = *shpPtrptr;
+            ((struct ObjJoint *) sDynListCurObj)->colourNum = COLOUR_BLACK;
             break;
         case OBJ_TYPE_NETS:      ((struct ObjNet      *) sDynListCurObj)->shapePtr = *shpPtrptr; break;
         case OBJ_TYPE_PARTICLES: ((struct ObjParticle *) sDynListCurObj)->shapePtr = *shpPtrptr; break;
@@ -683,8 +683,8 @@ void d_set_shapeptr(DynObjName name) {
     if (info == NULL) gd_exit(); // fatal_printf("dSetShapePtr(\"%s\"): Undefined object", DynNameAsStr(name));
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            ((struct ObjJoint *) sDynListCurObj)->shapePtr = (struct ObjShape *) info->obj;
-            ((struct ObjJoint *) sDynListCurObj)->colourNum = 0;
+            ((struct ObjJoint *) sDynListCurObj)->shapePtr  = (struct ObjShape *) info->obj;
+            ((struct ObjJoint *) sDynListCurObj)->colourNum = COLOUR_BLACK;
             break;
         case OBJ_TYPE_NETS:      ((struct ObjNet      *) sDynListCurObj)->shapePtr = (struct ObjShape *) info->obj; break;
         case OBJ_TYPE_PARTICLES: ((struct ObjParticle *) sDynListCurObj)->shapePtr = (struct ObjShape *) info->obj; break;

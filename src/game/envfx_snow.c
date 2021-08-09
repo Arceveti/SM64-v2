@@ -60,20 +60,10 @@ extern void *tiny_bubble_dl_blue;
  */
 s32 envfx_init_snow(s32 mode) {
     switch (mode) {
-        case ENVFX_MODE_NONE:
-            return FALSE;
-        case ENVFX_SNOW_NORMAL:
-            gSnowParticleMaxCount = 140;
-            gSnowParticleCount    = 5;
-            break;
-        case ENVFX_SNOW_WATER:
-            gSnowParticleMaxCount = 30;
-            gSnowParticleCount    = 30;
-            break;
-        case ENVFX_SNOW_BLIZZARD:
-            gSnowParticleMaxCount = 140;
-            gSnowParticleCount    = 140;
-            break;
+        case ENVFX_MODE_NONE:     return FALSE;
+        case ENVFX_SNOW_NORMAL:   gSnowParticleMaxCount = 140; gSnowParticleCount    =   5; break;
+        case ENVFX_SNOW_WATER:    gSnowParticleMaxCount =  30; gSnowParticleCount    =  30; break;
+        case ENVFX_SNOW_BLIZZARD: gSnowParticleMaxCount = 140; gSnowParticleCount    = 140; break;
     }
     gEnvFxBuffer = mem_pool_alloc(gEffectsMemoryPool, gSnowParticleMaxCount * sizeof(struct EnvFxParticle));
     if (!gEnvFxBuffer) return FALSE;

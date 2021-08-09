@@ -90,23 +90,19 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
             } else {
                 displayListHead = displayList;
             }
-
             generatedNode = (struct GraphNodeGenerated *) node;
-            generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & 0xFF) | (LAYER_TRANSPARENT << 8);
-
-            gSPDisplayList(displayListHead++, dl_castle_lobby_wing_cap_light);
+            generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
+            gSPDisplayList(   displayListHead++, dl_castle_lobby_wing_cap_light);
             gSPEndDisplayList(displayListHead);
         }
     }
-
     return displayList;
 }
 
 /**
  * Update static timer variables that control the flying carpets' ripple effect.
  */
-Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, UNUSED struct GraphNode *node,
-                                         UNUSED f32 mtx[4][4]) {
+Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED f32 mtx[4][4]) {
     if (callContext != GEO_CONTEXT_RENDER) {
         sFlyingCarpetRippleTimer = 0;
         sPrevAreaTimer           = gAreaUpdateCounter - 1;
@@ -119,7 +115,6 @@ Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, UNUSED struct GraphNod
             sFlyingCarpetRippleTimer += 0x400;
         }
     }
-
     return NULL;
 }
 
@@ -130,47 +125,35 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
     s16 n, row, col, x, y, z, tx, ty;
     Vtx *verts;
     struct GraphNodeGenerated *generatedNode = (struct GraphNodeGenerated *) node;
-
-    s16 *sp64            = segmented_to_virtual(&flying_carpet_static_vertex_data);
+    s16 *vertexData      = segmented_to_virtual(&flying_carpet_static_vertex_data);
     Gfx *displayList     = NULL;
     Gfx *displayListHead = NULL;
     struct Object *curGraphNodeObject;
-
     if (callContext == GEO_CONTEXT_RENDER) {
-        verts = alloc_display_list(NUM_FLYING_CARPET_VERTICES * sizeof(*verts));
-        displayList = alloc_display_list(7 * sizeof(*displayList));
-        displayListHead = displayList;
-
+        verts            = alloc_display_list(NUM_FLYING_CARPET_VERTICES * sizeof(*verts));
+        displayList      = alloc_display_list(7 * sizeof(*displayList));
+        displayListHead  = displayList;
         if (verts == NULL || displayList == NULL) return NULL;
-
-        generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
-
+        generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8);
         for (n = 0; n <= 20; n++) {
             row = n / 3;
             col = n % 3;
-
-            x  = sp64[n * 4 + 0];
-            y  = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
-            z  = sp64[n * 4 + 1];
-            tx = sp64[n * 4 + 2];
-            ty = sp64[n * 4 + 3];
-
+            x   = vertexData[n * 4 + 0];
+            y   = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
+            z   = vertexData[n * 4 + 1];
+            tx  = vertexData[n * 4 + 2];
+            ty  = vertexData[n * 4 + 3];
             make_vertex(verts, n, x, y, z, tx, ty, 0, 127, 0, 255);
         }
-
-        gSPDisplayList(displayListHead++, dl_flying_carpet_begin);
-
+        gSPDisplayList(   displayListHead++, dl_flying_carpet_begin);
         // The forward half.
-        gSPVertex(displayListHead++, verts, 12, 0);
-        gSPDisplayList(displayListHead++, dl_flying_carpet_model_half);
-
+        gSPVertex(        displayListHead++, verts, 12, 0);
+        gSPDisplayList(   displayListHead++, dl_flying_carpet_model_half);
         // The back half.
-        gSPVertex(displayListHead++, verts + 9, 12, 0);
-        gSPDisplayList(displayListHead++, dl_flying_carpet_model_half);
-
-        gSPDisplayList(displayListHead++, dl_flying_carpet_end);
+        gSPVertex(        displayListHead++, verts + 9, 12, 0);
+        gSPDisplayList(   displayListHead++, dl_flying_carpet_model_half);
+        gSPDisplayList(   displayListHead++, dl_flying_carpet_end);
         gSPEndDisplayList(displayListHead);
-
         curGraphNodeObject = (struct Object *) gCurGraphNodeObject;
         if (gMarioObject->platform == curGraphNodeObject) {
             gFlyingCarpetState = FLYING_CARPET_MOVING_WITH_MARIO;
@@ -180,7 +163,6 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
             gFlyingCarpetState = FLYING_CARPET_IDLE;
         }
     }
-
     return displayList;
 }
 
@@ -189,14 +171,12 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
  */
 Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]) {
     struct GraphNodeGenerated *generatedNode = (struct GraphNodeGenerated *) node;
-    Gfx *displayList = NULL;
-    Gfx *displayListHead = NULL;
-
+    Gfx *displayList                         = NULL;
+    Gfx *displayListHead                     = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
-        displayList = alloc_display_list(3 * sizeof(*displayList));
-        displayListHead = displayList;
-
-        generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & 0xFF) | (LAYER_OPAQUE << 8);
+        displayList                      = alloc_display_list(3 * sizeof(*displayList));
+        displayListHead                  = displayList;
+        generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8);
 #ifdef VERSION_EU
         gSPDisplayList(displayListHead++, dl_cake_end_screen);
 #else
@@ -207,15 +187,9 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED f3
     gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_fix);
 #else
     switch (eu_get_language()) {
-            case LANGUAGE_ENGLISH:
-                gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_070296F8);
-                break;
-            case LANGUAGE_FRENCH:
-                gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_07029768);
-                break;
-            case LANGUAGE_GERMAN:
-                gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_070297D8);
-                break;
+            case LANGUAGE_ENGLISH: gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_070296F8); break;
+            case LANGUAGE_FRENCH:  gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_07029768); break;
+            case LANGUAGE_GERMAN:  gSPDisplayList(displayListHead++, dl_cake_end_screen_eu_070297D8); break;
         }
 #endif
 #else
@@ -223,6 +197,5 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED f3
 #endif
         gSPEndDisplayList(displayListHead);
     }
-
     return displayList;
 }
