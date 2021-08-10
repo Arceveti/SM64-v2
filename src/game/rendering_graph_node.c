@@ -259,8 +259,8 @@ LookAt lookAt;
 
 #ifdef SILHOUETTE
 #define SIL_ALPHA            127
-#define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA
-#define NUM_EXTRA_SIL_LAYERS 1
+#define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA // Last silhouette layer
+#define NUM_EXTRA_SIL_LAYERS 1                      // Number of silhouette layers - 1
 #define SCHWA AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL
 #endif
 
@@ -281,40 +281,48 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
 #endif
     if (enableZBuffer) {
-        gDPPipeSync(gDisplayListHead++);
+        gDPPipeSync(       gDisplayListHead++);
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 #ifdef SILHOUETTE
     for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
-                if ((i == LAYER_SILHOUETTE_OPAQUE || i == LAYER_SILHOUETTE_ALPHA)) { // silhouette layers
+                // check if the current layer is a silhouette layer
+                if ((i == LAYER_SILHOUETTE_OPAQUE || i == LAYER_SILHOUETTE_ALPHA)) {
+                    // Set render modes for the silhouette
                     gDPSetRenderMode(   gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA),
                                                             SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA));
-                    gSPSetGeometryMode( gDisplayListHead++, G_FOG); // enable fog for silhouette
-                    gSPFogPosition(     gDisplayListHead++, 0, 1);
-                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA);      // silhouette color & alpha
+                    // Enable fog for silhouette models
+                    gSPSetGeometryMode( gDisplayListHead++, G_FOG);
+                    gSPFogPosition(     gDisplayListHead++, 0, 1 );
+                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA     ); // silhouette color & alpha
                     gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA >> 1); // silhouette env transparency
-                } else { // non-silhouette layers
+                } else {
+                    // use only the normal mode list for non-silhouette layers
                     gDPSetRenderMode(   gDisplayListHead++, mode1List->modes[i],
                                                             mode2List->modes[i]);
                 }
                 gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                    G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD | G_MTX_NOPUSH);
+                                                    G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
                 gSPDisplayList( gDisplayListHead++, currList->displayList);
                 currList = currList->next;
             }
         }
-        if (i == LAST_SIL_LAYER) { // "normal" modes for silhouette layers:
+         // When reaching the last silhouette layer, render the "normal" versions of the silhouette layers:
+        if (i == LAST_SIL_LAYER) {
             for (j = i-NUM_EXTRA_SIL_LAYERS; j <= LAST_SIL_LAYER; j++) {
-                gSPClearGeometryMode(   gDisplayListHead++, G_FOG); // disable fog for silhouette
-                gDPSetEnvColor(         gDisplayListHead++, 255, 255, 255, 255); // reset silhouette env color
+                // Disable fog for the non-silhouette versions
+                gSPClearGeometryMode(   gDisplayListHead++, G_FOG);
+                // reset the env color & alpha
+                gDPSetEnvColor(         gDisplayListHead++, 255, 255, 255, 255);
+                // use the normal mode list, but without anti-aliasing
                 gDPSetRenderMode(       gDisplayListHead++, mode1List->modes[j] & ~IM_RD,
                                                             mode2List->modes[j] & ~IM_RD);
                 currList = node->listHeads[j];
                 while (currList != NULL) {
                     gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                        G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_LOAD | G_MTX_NOPUSH);
+                                                        G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
                     gSPDisplayList( gDisplayListHead++, currList->displayList);
                     currList = currList->next;
                 }

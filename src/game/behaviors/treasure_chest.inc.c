@@ -17,12 +17,10 @@ static struct ObjectHitbox sTreasureChestBottomHitbox = {
 
 void bhv_treasure_chest_top_loop(void) {
     struct Object *parent = o->parentObj->parentObj;
-
     switch (o->oAction) {
         case TREASURE_CHEST_TOP_ACT_CLOSED:
             if (o->parentObj->oAction == TREASURE_CHEST_BOTTOM_ACT_OPENING) o->oAction = TREASURE_CHEST_TOP_ACT_OPENING;
             break;
-
         case TREASURE_CHEST_TOP_ACT_OPENING:
             if (o->oTimer == 0) {
                 if (!parent->oTreasureChestAboveWater) {
@@ -32,24 +30,21 @@ void bhv_treasure_chest_top_loop(void) {
                     play_sound(SOUND_GENERAL_OPEN_CHEST, o->header.gfx.cameraToObject);
                 }
             }
-
             o->oFaceAnglePitch -= 0x200;
             if (o->oFaceAnglePitch < -0x4000) {
                 o->oFaceAnglePitch = -0x4000;
-                o->oAction = TREASURE_CHEST_TOP_ACT_OPENED;
+                o->oAction         = TREASURE_CHEST_TOP_ACT_OPENED;
                 if (o->parentObj->oBehParams2ndByte != TREASURE_CHEST_BP_4) spawn_orange_number(o->parentObj->oBehParams2ndByte, 0, -40, 0);
             }
             break;
-
         case TREASURE_CHEST_TOP_ACT_OPENED:
             if (o->parentObj->oAction == TREASURE_CHEST_BOTTOM_ACT_CLOSE) o->oAction = TREASURE_CHEST_TOP_ACT_CLOSING;
             break;
-
         case TREASURE_CHEST_TOP_ACT_CLOSING:
             o->oFaceAnglePitch += 0x800;
             if (o->oFaceAnglePitch > 0x0) {
                 o->oFaceAnglePitch = 0x0;
-                o->oAction = TREASURE_CHEST_TOP_ACT_CLOSED;
+                o->oAction         = TREASURE_CHEST_TOP_ACT_CLOSED;
             }
     }
 }
@@ -78,11 +73,9 @@ void bhv_treasure_chest_bottom_loop(void) {
                 }
             }
             break;
-
         case TREASURE_CHEST_BOTTOM_ACT_OPENING:
             if (o->parentObj->oTreasureChestDoCloseChests) o->oAction = TREASURE_CHEST_BOTTOM_ACT_CLOSE;
             break;
-
         case TREASURE_CHEST_BOTTOM_ACT_OPENED:
             cur_obj_become_intangible();
             if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) {
@@ -90,7 +83,6 @@ void bhv_treasure_chest_bottom_loop(void) {
                 o->oAction = TREASURE_CHEST_BOTTOM_ACT_CLOSE;
             }
     }
-
     cur_obj_push_mario_away_from_cylinder(150.0f, 150.0f);
     o->oInteractStatus = INT_STATUS_NONE;
 }
@@ -107,7 +99,7 @@ void bhv_treasure_chest_ship_init(void) {
     spawn_treasure_chest(TREASURE_CHEST_BP_3, -550, -350,  -770,  0x5FFF);
     spawn_treasure_chest(TREASURE_CHEST_BP_4,  100, -350, -1700,  0x0000);
     o->oTreasureChestNumOpenedChests = 1;
-    o->oTreasureChestAboveWater = FALSE;
+    o->oTreasureChestAboveWater      = FALSE;
 }
 
 void bhv_treasure_chest_ship_loop(void) {
@@ -119,7 +111,6 @@ void bhv_treasure_chest_ship_loop(void) {
                 o->oAction = TREASURE_CHEST_ACT_REWARD;
             }
             break;
-
         case TREASURE_CHEST_ACT_REWARD:
             if (gEnvironmentRegions != NULL) {
                 gEnvironmentRegions[6] -= 5;
@@ -154,7 +145,6 @@ void bhv_treasure_chest_jrb_loop(void) {
                 o->oAction = TREASURE_CHEST_ACT_REWARD;
             }
             break;
-
         case TREASURE_CHEST_ACT_REWARD:
             if (o->oTimer == 60) {
                 spawn_mist_particles();
@@ -162,9 +152,7 @@ void bhv_treasure_chest_jrb_loop(void) {
                 o->oAction = TREASURE_CHEST_ACT_END;
             }
             break;
-
-        case TREASURE_CHEST_ACT_END:
-            break;
+        case TREASURE_CHEST_ACT_END: break;
     }
 }
 
@@ -173,9 +161,8 @@ void bhv_treasure_chest_init(void) {
     spawn_treasure_chest(2, -1800, -5119,  1050,  0x1FFF);
     spawn_treasure_chest(3, -4500, -5119, -1100,  0x238E);
     spawn_treasure_chest(4, -2400, -4607,   125,  0x3E93);
-
     o->oTreasureChestNumOpenedChests = 1;
-    o->oTreasureChestAboveWater = FALSE;
+    o->oTreasureChestAboveWater      = FALSE;
 }
 
 void bhv_treasure_chest_loop(void) {
@@ -186,7 +173,6 @@ void bhv_treasure_chest_loop(void) {
                 o->oAction = TREASURE_CHEST_ACT_REWARD;
             }
             break;
-
         case TREASURE_CHEST_ACT_REWARD:
             if (o->oTimer == 60) {
                 spawn_mist_particles();
@@ -194,8 +180,6 @@ void bhv_treasure_chest_loop(void) {
                 o->oAction = TREASURE_CHEST_ACT_END;
             }
             break;
-
-        case TREASURE_CHEST_ACT_END:
-            break;
+        case TREASURE_CHEST_ACT_END: break;
     }
 }

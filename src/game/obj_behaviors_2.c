@@ -809,6 +809,5 @@ void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 sca
 #include "behaviors/swing_platform.inc.c"
 #include "behaviors/donut_platform.inc.c"
 #include "behaviors/ddd_pole.inc.c"
-#include "behaviors/reds_star_marker.inc.c"
 #include "behaviors/triplet_butterfly.inc.c"
 #include "behaviors/bubba.inc.c"
