@@ -9,6 +9,9 @@
 #include "interaction.h"
 #include "engine/math_util.h"
 #include "rumble_init.h"
+#ifdef GRAVITY_FLIPPING
+#include "engine/surface_collision.h"
+#endif
 
 /**
  * Used by act_punching() to determine Mario's forward velocity during each
@@ -271,8 +274,17 @@ s32 act_releasing_bowser(struct MarioState *m) {
 }
 
 s32 check_common_object_cancels(struct MarioState *m) {
+#ifdef GRAVITY_FLIPPING
+    if ((m->pos[1] < m->waterLevel - 100) && !(gGravityMode)) return set_water_plunge_action(m);
+    if (((9000.f - m->pos[1]) < m->waterLevel + 50.f) && (gGravityMode)) {
+        m->vel[1] = -m->vel[1];
+        gGravityMode = FALSE;
+        return set_water_plunge_action(m);
+    }
+#else
     f32 waterSurface = m->waterLevel - 100;
     if (m->pos[1] < waterSurface ) return set_water_plunge_action(  m);
+#endif
     if (m->input & INPUT_SQUISHED) return drop_and_set_mario_action(m, ACT_SQUISHED      , 0);
     if (m->health < 0x100        ) return drop_and_set_mario_action(m, ACT_STANDING_DEATH, 0);
     return FALSE;

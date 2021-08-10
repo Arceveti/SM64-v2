@@ -427,6 +427,10 @@
 
 // -- Experimental/Unfinished --
 
+// Arthurtilly's gravity flipping stuff
+// Note: the underside of seesaw platforms are broken if platform displacement 2 is enabled
+// #define GRAVITY_FLIPPING
+
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
 

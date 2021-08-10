@@ -22,7 +22,6 @@ static void const *sSeesawPlatformCollisionModels[] = {
  */
 void bhv_seesaw_platform_init(void) {
     o->collisionData = segmented_to_virtual(sSeesawPlatformCollisionModels[o->oBehParams2ndByte]);
-
     // The S-shaped seesaw platform in BitS is large, so increase its collision
     // distance
     if (o->oBehParams2ndByte == SEESAW_PLATFORM_BP_BITS_W_SHAPED) o->oCollisionDistance = 2000.0f;
@@ -33,16 +32,15 @@ void bhv_seesaw_platform_init(void) {
  */
 void bhv_seesaw_platform_update(void) {
     o->oFaceAnglePitch += (s32) o->oSeesawPlatformPitchVel;
-
     if (absf(o->oSeesawPlatformPitchVel) > 10.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
-
     if (gMarioObject->platform == o) {
         // Rotate toward mario
         f32 rotation = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);
-
+#ifdef GRAVITY_FLIPPING
+        if (gIsGravityFlipped) rotation = -rotation; // Rotate in correct direction if Mario is underneath
+#endif
         // Deceleration is faster than acceleration
         rotation *= ((o->oSeesawPlatformPitchVel * rotation) < 0) ? 0.04f : 0.02f;
-
         o->oSeesawPlatformPitchVel += rotation;
         clamp_f32(&o->oSeesawPlatformPitchVel, -50.0f, 50.0f);
     } else {

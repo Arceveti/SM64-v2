@@ -597,7 +597,11 @@ void focus_on_mario(Vec3f focus, Vec3f pos, f32 posYOff, f32 focYOff, f32 dist, 
     marioPos[0] = sMarioCamState->pos[0];
     marioPos[1] = sMarioCamState->pos[1] + posYOff;
     marioPos[2] = sMarioCamState->pos[2];
+#ifdef GRAVITY_FLIPPING
+    vec3f_set_dist_and_angle(marioPos, pos, dist, (gGravityMode ? -pitch-sLakituPitch : pitch + sLakituPitch), yaw);
+#else
     vec3f_set_dist_and_angle(marioPos, pos, dist, pitch + sLakituPitch, yaw);
+#endif
     focus[0]    = sMarioCamState->pos[0];
     focus[1]    = sMarioCamState->pos[1] + focYOff;
     focus[2]    = sMarioCamState->pos[2];
@@ -5209,6 +5213,29 @@ s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, s16 *avoidYaw, s16 
  * Note: Also finds the water level, but waterHeight is unused
  */
 void find_mario_floor_and_ceil(struct PlayerGeometry *pg) {
+#ifdef GRAVITY_FLIPPING
+    struct Surface *surf;
+    s16 tempCheckingSurfaceCollisionsForCamera = gCheckingSurfaceCollisionsForCamera;
+    gCheckingSurfaceCollisionsForCamera        = TRUE;
+    gGravityMode                               = gIsGravityFlipped; // Enable gravity for checks
+    if (find_floor(sMarioCamState->pos[0], sMarioCamState->pos[1] + 10.f, sMarioCamState->pos[2], &surf) != -11000.f) {
+        pg->currFloorType = surf->type;
+    } else {
+        pg->currFloorType = 0;
+    }
+    if (find_ceil(sMarioCamState->pos[0], sMarioCamState->pos[1] - 10.f, sMarioCamState->pos[2], &surf) != 20000.f) {
+        pg->currCeilType = surf->type;
+    } else {
+        pg->currCeilType = 0;
+    }
+    gCheckingSurfaceCollisionsForCamera = FALSE;
+    pg->currFloorHeight = find_floor(sMarioCamState->pos[0], sMarioCamState->pos[1] + 10.f, sMarioCamState->pos[2], &pg->currFloor);
+    pg->currCeilHeight  = find_ceil(sMarioCamState->pos[0], sMarioCamState->pos[1] - 10.f, sMarioCamState->pos[2], &pg->currCeil);
+    pg->waterHeight     = find_water_level(sMarioCamState->pos[0], sMarioCamState->pos[2]);
+    gCheckingSurfaceCollisionsForCamera = tempCheckingSurfaceCollisionsForCamera;
+    
+    gGravityMode = 0;
+#else
     pg->currCeil            = gMarioState->ceil;
     pg->currCeilHeight      = gMarioState->ceilHeight;
     pg->currFloor           = gMarioState->floor;
@@ -5219,6 +5246,8 @@ void find_mario_floor_and_ceil(struct PlayerGeometry *pg) {
     } else {
         pg->currCeilType    = 0;
     }
+
+#endif
 }
 
 /**

@@ -10,6 +10,9 @@
 #include "types.h"
 #include "sm64.h"
 #include "behavior_data.h"
+#ifdef GRAVITY_FLIPPING
+#include "mario.h"
+#endif
 
 #include "config.h"
 
@@ -21,15 +24,21 @@ struct Object *gMarioPlatform = NULL;
  */
 void update_mario_platform(void) {
     struct Surface *floor;
+#ifdef GRAVITY_FLIPPING
+    gGravityMode = gIsGravityFlipped; // This does not take place during Mario's update function, so flip gravity again
+#endif
     if (gMarioObject == NULL) return;
-    floor 	    = gMarioState->floor;
-    if (absf(gMarioObject->oPosY - gMarioState->floorHeight) < 4.0f && floor != NULL && floor->object != NULL) {
+    floor = gMarioState->floor;
+    if (absf(gMarioState->pos[1] - gMarioState->floorHeight) < 4.0f && floor != NULL && floor->object != NULL) {
         gMarioPlatform 		   = floor->object;
         gMarioObject->platform = floor->object;
     } else {
         gMarioPlatform 		   = NULL;
         gMarioObject->platform = NULL;
     }
+#ifdef GRAVITY_FLIPPING
+    gGravityMode = 0; // Reset gravity
+#endif
 }
 
 /**
@@ -124,14 +133,14 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
     // Set yaw info
     vec3f_set(yawVec, sins(*yaw), 0, coss(*yaw));
     linear_mtxf_transpose_mul_vec3f(*platform->header.gfx.throwMatrix, displaceInfo->prevTransformedYawVec, yawVec);
-    displaceInfo->prevYaw = *yaw;
+    displaceInfo->prevYaw      = *yaw;
     // Update platform and timer
     displaceInfo->prevPlatform = platform;
     displaceInfo->prevTimer    = gGlobalTimer;
 }
 
 // Doesn't change in the code, set this to FALSE if you don't want inertia
-const u8 gDoInertia = TRUE;
+const u8 gDoInertia           = TRUE;
 
 static u8 sShouldApplyInertia = FALSE;
 static u8 sInertiaFirstFrame  = FALSE;
@@ -157,7 +166,6 @@ static void apply_mario_inertia(void) {
  */
 void apply_mario_platform_displacement(void) {
     struct Object *platform;
-
     platform = gMarioPlatform;
     if (!(gTimeStopState & TIME_STOP_ACTIVE) && gMarioObject != NULL) {
         if (platform != NULL) {

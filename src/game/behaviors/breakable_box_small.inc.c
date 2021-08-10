@@ -88,9 +88,9 @@ void breakable_box_small_get_dropped(void) {
     cur_obj_become_tangible();
     cur_obj_enable_rendering();
     cur_obj_get_dropped();
-    o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-    o->oHeldState = HELD_FREE;
-    o->oBreakableBoxSmallReleased = TRUE;
+    o->header.gfx.node.flags                &= ~GRAPH_RENDER_INVISIBLE;
+    o->oHeldState                            = HELD_FREE;
+    o->oBreakableBoxSmallReleased            = TRUE;
     o->oBreakableBoxSmallFramesSinceReleased = 0;
 }
 
@@ -102,7 +102,11 @@ void breakable_box_small_get_thrown(void) {
     o->oHeldState                            = HELD_FREE;
     o->oFlags                               &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
     o->oForwardVel                           = 40.0f;
+#ifdef GRAVITY_FLIPPING
+    o->oVelY = (gIsGravityFlipped ? -20.f : 20.f);
+#else
     o->oVelY                                 = 20.0f;
+#endif
     o->oBreakableBoxSmallReleased            = TRUE;
     o->oBreakableBoxSmallFramesSinceReleased = 0;
     o->activeFlags                          &= ~ACTIVE_FLAG_SMALL_BOX_NOT_THROWN;

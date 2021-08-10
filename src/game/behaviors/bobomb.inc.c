@@ -160,22 +160,23 @@ void bobomb_held_loop(void) {
 
 void bobomb_dropped_loop(void) {
     cur_obj_get_dropped();
-
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     cur_obj_init_animation(BOBOMB_ANIM_WALKING);
-
     o->oHeldState = HELD_FREE;
     o->oAction    = BOBOMB_ACT_PATROL;
 }
 
 void bobomb_thrown_loop(void) {
     cur_obj_enable_rendering_2();
-
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     o->oHeldState  = HELD_FREE;
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
     o->oForwardVel = 25.0f;
+#ifdef GRAVITY_FLIPPING
+    o->oVelY = (gIsGravityFlipped ? -20.f : 20.f);
+#else
     o->oVelY       = 20.0f;
+#endif
     o->oAction     = BOBOMB_ACT_LAUNCHED;
 }
 
