@@ -23,7 +23,7 @@ extern const Gfx wdw_seg7_dl_07012258[];
 extern const Gfx wdw_seg7_dl_07012798[];
 extern const Gfx wdw_seg7_dl_07012908[];
 extern const Gfx wdw_seg7_dl_square_floating_platform[];
-extern const Gfx wdw_seg7_dl_07012E88[];
+extern const Gfx wdw_seg7_dl_arrow_lift[];
 extern const Gfx wdw_seg7_dl_water_level_diamond[];
 extern const Gfx wdw_seg7_dl_07013490[];
 extern const Gfx wdw_seg7_dl_07013B70[];
