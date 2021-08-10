@@ -293,7 +293,7 @@
 // Fade warps have a particle effect to show where they are (Arceveti)
 #define VISIBLE_FADE_WARPS
 // Air/Breath meter is separate from health meter when underwater (Arceveti)
-#define AIR_METER
+#define BREATH_METER
 
 // -- Object Behaviors --
 

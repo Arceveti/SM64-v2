@@ -657,8 +657,8 @@ s32 act_eaten_by_bubba(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_DYING, MARIO_ACTION_SOUND_PLAYED);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-#ifdef AIR_METER
-    m->air    = 0xFF;
+#ifdef BREATH_METER
+    m->breath = 0xFF;
 #endif
     m->health = 0xFF;
     if (m->actionTimer++ == 60) level_trigger_warp(m, WARP_OP_DEATH);
@@ -884,8 +884,8 @@ s32 act_spawn_spin_landing(struct MarioState *m) {
  * particle flag that generates sparkles.
  */
 s32 act_exit_airborne(struct MarioState *m) {
-#ifdef AIR_METER
-    m->air = 0x880;
+#ifdef BREATH_METER
+    m->breath = 0x880;
 #endif
     if (15 < m->actionTimer++ && launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, -32.0f)) m->healCounter = 31; // heal Mario
     // rotate him to face away from the entrance
@@ -895,8 +895,8 @@ s32 act_exit_airborne(struct MarioState *m) {
 }
 
 s32 act_falling_exit_airborne(struct MarioState *m) {
-#ifdef AIR_METER
-    m->air = 0x880;
+#ifdef BREATH_METER
+    m->breath = 0x880;
 #endif
     if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, 0.0f)) m->healCounter = 31; // heal Mario
     // rotate Mario to face away from the entrance
@@ -973,8 +973,8 @@ s32 act_death_exit(struct MarioState *m) {
 #endif
         m->numLives--;
         // restore 7.75 units of health
-        m->healCounter = 31;
-#ifdef AIR_METER
+        m->healCounter   = 31;
+#ifdef BREATH_METER
         m->breathCounter = 31;
 #endif
     }
@@ -992,8 +992,8 @@ s32 act_unused_death_exit(struct MarioState *m) {
 #endif
         m->numLives--;
         // restore 7.75 units of health
-        m->healCounter = 31;
-#ifdef AIR_METER
+        m->healCounter   = 31;
+#ifdef BREATH_METER
         m->breathCounter = 31;
 #endif
     }
@@ -1014,8 +1014,8 @@ s32 act_falling_death_exit(struct MarioState *m) {
 #endif
         m->numLives--;
         // restore 7.75 units of health
-        m->healCounter = 31;
-#ifdef AIR_METER
+        m->healCounter   = 31;
+#ifdef BREATH_METER
         m->breathCounter = 31;
 #endif
     }
@@ -1034,11 +1034,11 @@ s32 act_special_exit_airborne(struct MarioState *m) {
     }
     if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_SINGLE_JUMP, -24.0f)) {
         // heal Mario
-        m->healCounter = 31;
-#ifdef AIR_METER
+        m->healCounter   = 31;
+#ifdef BREATH_METER
         m->breathCounter = 31;
 #endif
-        m->actionArg   =  1;
+        m->actionArg     =  1;
     }
     m->particleFlags |= PARTICLE_SPARKLES;
     // rotate Mario to face away from the entrance
@@ -1059,8 +1059,8 @@ s32 act_special_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         m->numLives--;
-        m->healCounter = 31;
-#ifdef AIR_METER
+        m->healCounter   = 31;
+#ifdef BREATH_METER
         m->breathCounter = 31;
 #endif
     }

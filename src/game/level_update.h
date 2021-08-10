@@ -104,8 +104,8 @@ struct HudDisplay {
     /*0x08*/ s16 keys;
     /*0x0A*/ s16 flags;
     /*0x0C*/ u16 timer;
-#ifdef AIR_METER
-             u16 air;
+#ifdef BREATH_METER
+             u16 breath;
 #endif
 };
 
@@ -122,8 +122,8 @@ enum HUDDisplayFlag {
     HUD_DISPLAY_FLAG_SECRETS          = 0x0020,
 #endif
     HUD_DISPLAY_FLAG_TIMER            = 0x0040,
-#ifdef AIR_METER
-    HUD_DISPLAY_FLAG_AIR_METER        = 0x4000,
+#ifdef BREATH_METER
+    HUD_DISPLAY_FLAG_BREATH_METER     = 0x4000,
 #endif
     HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = 0x8000,
 

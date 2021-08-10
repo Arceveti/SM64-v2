@@ -53,8 +53,8 @@ UNUSED static const u64 binid_10 = 10;
 UNUSED static const u64 binid_12 = 12;
 
 #include "power_meter/model.inc.c"
-#ifdef AIR_METER
-#include "air_meter/model.inc.c"
+#ifdef BREATH_METER
+#include "breath_meter/model.inc.c"
 #endif
 UNUSED static const u64 binid_13 = 13;
 

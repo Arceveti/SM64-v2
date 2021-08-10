@@ -4,7 +4,7 @@ void bhv_1up_interact(void) {
     if (obj_check_if_collided_with_object(o, gMarioObject)) {
 #ifdef MUSHROOMS_HEAL
         gMarioState->healCounter   = 31;
-#ifdef AIR_METER
+#ifdef BREATH_METER
         gMarioState->breathCounter = 31;
 #endif
 #endif

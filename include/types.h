@@ -316,8 +316,8 @@ struct MarioState
 #if COYOTE_TIME > 0
              u8     coyoteTimer;
 #endif
-#ifdef AIR_METER
-             s16    air;
+#ifdef BREATH_METER
+             s16    breath;
              u8     breathCounter;
 #endif
 #ifdef DAMAGE_SCREEN_TINT

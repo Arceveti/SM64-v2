@@ -1265,7 +1265,7 @@ void update_mario_health(struct MarioState *m) {
             } else {
                 if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE)) {
                     terrainIsSnow = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW;
-#ifdef AIR_METER
+#ifdef BREATH_METER
                     // when in snow terrains lose 3 health.
                     if ((m->pos[1] < (m->waterLevel - 140)) && terrainIsSnow) m->health -= 3;
 #else
@@ -1294,7 +1294,7 @@ void update_mario_health(struct MarioState *m) {
         }
         if (m->health > 0x880) m->health = 0x880;
         if (m->health < 0x100) m->health = 0xFF;
-#ifndef AIR_METER
+#ifndef BREATH_METER
         // Play a noise to alert the player when Mario is close to drowning.
         if (((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) && (m->health < 0x300) && !((m->flags & MARIO_METAL_CAP) > 0)) {
             play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
@@ -1311,12 +1311,12 @@ void update_mario_health(struct MarioState *m) {
     }
 }
 
-#ifdef AIR_METER
+#ifdef BREATH_METER
 void update_mario_breath(struct MarioState *m) {
-    if (m->air >= 0x100 && m->health >= 0x100) {
+    if (m->breath >= 0x100 && m->health >= 0x100) {
         if (m->pos[1] < (m->waterLevel - 140.0f) && !(m->flags & MARIO_METAL_CAP) && !(m->action & ACT_FLAG_INTANGIBLE)) {
-            m->air--;
-            if (m->air < 0x300) {
+            m->breath--;
+            if (m->breath < 0x300) {
                 // Play a noise to alert the player when Mario is close to drowning.
                 play_sound(SOUND_MOVING_ALMOST_DROWNING, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -1329,15 +1329,15 @@ void update_mario_breath(struct MarioState *m) {
 #endif
             }
         } else if (!(m->input & INPUT_IN_POISON_GAS)) {
-            m->air += 0x1A;
+            m->breath += 0x1A;
         }
         if (m->breathCounter > 0) {
-            m->air += 0x40;
+            m->breath += 0x40;
             m->breathCounter--;
         }
-        if (m->air    > 0x880) m->air = 0x880;
-        if (m->air    < 0x100) {
-            m->air    =  0xFF;
+        if (m->breath > 0x880) m->breath = 0x880;
+        if (m->breath < 0x100) {
+            m->breath =  0xFF;
             m->health =  0xFF;
         }
     }
@@ -1493,7 +1493,7 @@ s32 execute_mario_action(UNUSED struct Object *o) {
         squish_mario_model(                        gMarioState);
         set_submerged_cam_preset_and_spawn_bubbles(gMarioState);
         update_mario_health(                       gMarioState);
-#ifdef AIR_METER
+#ifdef BREATH_METER
         update_mario_breath(                       gMarioState);
 #endif
         update_mario_info_for_cam(                 gMarioState);
@@ -1598,9 +1598,9 @@ void init_mario_from_save_file(void) {
     gMarioState->health                = 0x880;
     gMarioState->prevNumStarsForDialog = gMarioState->numStars;
     gMarioState->animYTrans            = 0xBD;
-#ifdef AIR_METER
-    gMarioState->air                   = 0x880;
-    gHudDisplay.air                    = 8;
+#ifdef BREATH_METER
+    gMarioState->breath                = 0x880;
+    gHudDisplay.breath                 = 8;
 #endif
     gHudDisplay.coins                  = 0;
     gHudDisplay.wedges                 = 8;

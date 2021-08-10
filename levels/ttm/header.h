@@ -99,7 +99,7 @@ extern const Gfx ttm_seg7_dl_blue_smiley[];
 extern const Gfx ttm_seg7_dl_yellow_smiley[];
 extern const Gfx ttm_seg7_dl_star_smiley[];
 extern const Gfx ttm_seg7_dl_moon_smiley[];
-extern const Gfx ttm_seg7_dl_exit_podium[];
+extern const Gfx ttm_seg7_dl_slide_exit_podium[];
 extern const Collision ttm_seg7_area_2_collision[];
 extern const Collision ttm_seg7_area_3_collision[];
 extern const Collision ttm_seg7_area_4_collision[];

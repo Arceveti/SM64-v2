@@ -32,10 +32,10 @@
 #define HUD_CAMERA_Y        (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
 #define HUD_POWER_METER_Y   166
 
-#ifdef AIR_METER
-#define HUD_AIR_METER_X      40
-#define HUD_AIR_METER_Y     -20
-#define HUD_AIR_METER_MAX_Y  32
+#ifdef BREATH_METER
+#define HUD_BREATH_METER_X      40
+#define HUD_BREATH_METER_Y     -20
+#define HUD_BREATH_METER_MAX_Y  32
 #endif
 
 #ifdef HUD_RED_COINS
@@ -61,13 +61,11 @@ u8 curFrameTimeIndex = 0;
 
 // Call once per frame
 f32 calculate_and_update_fps() {
-    OSTime newTime = osGetTime();
-    OSTime oldTime = frameTimes[curFrameTimeIndex];
+    OSTime newTime                = osGetTime();
+    OSTime oldTime                = frameTimes[curFrameTimeIndex];
     frameTimes[curFrameTimeIndex] = newTime;
-
     curFrameTimeIndex++;
     if (curFrameTimeIndex >= FRAMETIME_COUNT) curFrameTimeIndex = 0;
-
     return ((f32)FRAMETIME_COUNT * 1000000.0f) / (s32)OS_CYCLES_TO_USEC(newTime - oldTime);
 }
 
@@ -101,14 +99,14 @@ static struct PowerMeterHUD sPowerMeterHUD = {
 // when the power meter is hidden.
 s32 sPowerMeterVisibleTimer = 0;
 
-#ifdef AIR_METER
-static s16 sAirMeterStoredValue;
-static struct PowerMeterHUD sAirMeterHUD = {
-    AIR_METER_HIDDEN,
-    HUD_AIR_METER_X,
-    HUD_AIR_METER_Y,
+#ifdef BREATH_METER
+static s16 sBreathMeterStoredValue;
+static struct PowerMeterHUD sBreathMeterHUD = {
+    BREATH_METER_HIDDEN,
+    HUD_BREATH_METER_X,
+    HUD_BREATH_METER_Y,
 };
-s32 sAirMeterVisibleTimer = 0;
+s32 sBreathMeterVisibleTimer = 0;
 #endif
 
 static s32 sCameraHUDStatus = CAM_STATUS_NONE;
@@ -161,8 +159,7 @@ void render_power_meter_health_segment(s16 numHealthWedges) {
  * That includes the "POWER" base and the colored health segment textures.
  */
 void render_dl_power_meter(s16 numHealthWedges) {
-    Mtx *mtx;
-    mtx = alloc_display_list(sizeof(Mtx));
+    Mtx *mtx = alloc_display_list(sizeof(Mtx));
     if (mtx == NULL) return;
     guTranslate(mtx, (f32) sPowerMeterHUD.x, (f32) sPowerMeterHUD.y, 0);
     gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
@@ -181,12 +178,10 @@ void render_dl_power_meter(s16 numHealthWedges) {
  * Checks its timer to later change into deemphasizing mode.
  */
 void animate_power_meter_emphasized(void) {
-    s16 hudDisplayFlags;
-    hudDisplayFlags = gHudDisplay.flags;
-    if (!(hudDisplayFlags & HUD_DISPLAY_FLAG_EMPHASIZE_POWER)) {
-        if (sPowerMeterVisibleTimer == 45) sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
-    } else {
+    if (gHudDisplay.flags & HUD_DISPLAY_FLAG_EMPHASIZE_POWER) {
         sPowerMeterVisibleTimer = 0;
+    } else if (sPowerMeterVisibleTimer == 45) {
+        sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
     }
 }
 
@@ -234,12 +229,12 @@ void handle_power_meter_actions(s16 numHealthWedges) {
     // Update to match health value
     sPowerMeterStoredHealth = numHealthWedges;
     // If Mario is swimming, keep power meter visible
-#ifndef AIR_METER
+#ifndef BREATH_METER
     if (gPlayerCameraState->action & ACT_FLAG_SWIMMING) {
         if (sPowerMeterHUD.animation == POWER_METER_HIDDEN
          || sPowerMeterHUD.animation == POWER_METER_EMPHASIZED) {
             sPowerMeterHUD.animation = POWER_METER_DEEMPHASIZING;
-            sPowerMeterHUD.y = HUD_POWER_METER_Y;
+            sPowerMeterHUD.y         = HUD_POWER_METER_Y;
         }
         sPowerMeterVisibleTimer = 0;
     }
@@ -265,15 +260,15 @@ void render_hud_power_meter(void) {
     sPowerMeterVisibleTimer++;
 }
 
-#ifdef AIR_METER
+#ifdef BREATH_METER
 /**
- * Renders air meter health segment texture using a table list.
+ * Renders breath meter health segment texture using a table list.
  */
-void render_air_meter_segment(s16 numAirWedges) {
-    u8 *(*airLUT)[];
-    airLUT = segmented_to_virtual(&air_meter_health_segments_lut);
+void render_breath_meter_segment(s16 numBreathWedges) {
+    u8 *(*breathLUT)[];
+    breathLUT = segmented_to_virtual(&breath_meter_segments_lut);
     gDPPipeSync(       gDisplayListHead++);
-    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*airLUT)[numAirWedges - 1]);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*breathLUT)[numBreathWedges - 1]);
     gDPLoadSync(       gDisplayListHead++);
     gDPLoadBlock(      gDisplayListHead++, G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES));
     gSP1Triangle(      gDisplayListHead++, 0, 1, 2, 0);
@@ -281,109 +276,102 @@ void render_air_meter_segment(s16 numAirWedges) {
 }
 
 /**
- * Renders air meter display lists.
- * That includes the "AIR" base and the colored health segment textures.
+ * Renders breath meter display lists.
+ * That includes the base and the colored segment textures.
  */
-void render_dl_air_meter(s16 numAirWedges) {
-    Mtx *mtx;
-    mtx = alloc_display_list(sizeof(Mtx));
+void render_dl_breath_meter(s16 numBreathWedges) {
+    Mtx *mtx = alloc_display_list(sizeof(Mtx));
     if (mtx == NULL) return;
-    guTranslate(mtx, (f32) sAirMeterHUD.x, (f32) sAirMeterHUD.y, 0);
+    guTranslate(mtx, (f32) sBreathMeterHUD.x, (f32) sBreathMeterHUD.y, 0);
     gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx++),
                     G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
-    gSPDisplayList( gDisplayListHead++, &dl_air_meter_base);
-    if (numAirWedges != 0) {
-        gSPDisplayList(gDisplayListHead++, &dl_air_meter_health_segments_begin);
-        render_air_meter_segment(numAirWedges);
-        gSPDisplayList(gDisplayListHead++, &dl_air_meter_health_segments_end);
+    gSPDisplayList( gDisplayListHead++, &dl_breath_meter_base);
+    if (numBreathWedges != 0) {
+        gSPDisplayList(gDisplayListHead++, &dl_breath_meter_health_segments_begin);
+        render_breath_meter_segment(numBreathWedges);
+        gSPDisplayList(gDisplayListHead++, &dl_breath_meter_health_segments_end);
     }
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
 /**
- * Air meter animation called when there's less than 8 health segments
+ * Breath meter animation called when there's less than 8 segments
  * Checks its timer to later change into deemphasizing mode.
  */
-void animate_air_meter_emphasized(void) {
-    s16 hudDisplayFlags;
-    hudDisplayFlags = gHudDisplay.flags;
-
-    if (!(hudDisplayFlags & HUD_DISPLAY_FLAG_AIR_METER)) {
-        if (sAirMeterVisibleTimer == 45) sAirMeterHUD.animation = AIR_METER_DEEMPHASIZING;
-    } else {
-        sAirMeterVisibleTimer = 0;
+void animate_breath_meter_emphasized(void) {
+    if (gHudDisplay.flags & HUD_DISPLAY_FLAG_BREATH_METER) {
+        sBreathMeterVisibleTimer = 0;
+    } else if (sBreathMeterVisibleTimer == 45) {
+        sBreathMeterHUD.animation = BREATH_METER_DEEMPHASIZING;
     }
 }
 
 /**
- * Air meter animation called after emphasized mode.
- * Moves air meter y pos speed until it's at 200 to be visible.
+ * Breath meter animation called after emphasized mode.
+ * Moves breath meter y pos speed until it's visible.
  */
-static void animate_air_meter_deemphasizing(void) {
+static void animate_breath_meter_deemphasizing(void) {
     s16 speed = 5;
-    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y - 20) speed = 3;
-    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y - 10) speed = 2;
-    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y -  5) speed = 1;
-    sAirMeterHUD.y += speed;
-    if (sAirMeterHUD.y > HUD_AIR_METER_MAX_Y) {
-        sAirMeterHUD.y = HUD_AIR_METER_MAX_Y;
-        sAirMeterHUD.animation = AIR_METER_VISIBLE;
+    if (sBreathMeterHUD.y > HUD_BREATH_METER_MAX_Y - 20) speed = 3;
+    if (sBreathMeterHUD.y > HUD_BREATH_METER_MAX_Y - 10) speed = 2;
+    if (sBreathMeterHUD.y > HUD_BREATH_METER_MAX_Y -  5) speed = 1;
+    sBreathMeterHUD.y += speed;
+    if (sBreathMeterHUD.y > HUD_BREATH_METER_MAX_Y) {
+        sBreathMeterHUD.y = HUD_BREATH_METER_MAX_Y;
+        sBreathMeterHUD.animation = BREATH_METER_VISIBLE;
     }
 }
 
 /**
- * Air meter animation called when there's 8 health segments.
- * Moves air meter y pos quickly until it's at 301 to be hidden.
+ * Breath meter animation called when there's 8 health segments.
+ * Moves breath meter y pos quickly until it's hidden.
  */
-static void animate_air_meter_hiding(void) {
-    sAirMeterHUD.y -= 20;
-    if (sAirMeterHUD.y < HUD_AIR_METER_Y) {
-        sAirMeterHUD.animation = AIR_METER_HIDDEN;
-        sAirMeterVisibleTimer = 0;
+static void animate_breath_meter_hiding(void) {
+    sBreathMeterHUD.y -= 20;
+    if (sBreathMeterHUD.y < HUD_BREATH_METER_Y) {
+        sBreathMeterHUD.animation = BREATH_METER_HIDDEN;
+        sBreathMeterVisibleTimer = 0;
     }
 }
 
 /**
- * Handles air meter actions depending of the health segments values.
+ * Handles breath meter actions depending of the health segments values.
  */
-void handle_air_meter_actions(s16 numAirWedges) {
-    // Show air meter if health is not full, less than 8
-    if (numAirWedges < 8 && sAirMeterStoredValue == 8 && sAirMeterHUD.animation == AIR_METER_HIDDEN) {
-        sAirMeterHUD.animation = AIR_METER_EMPHASIZED;
-        sAirMeterHUD.y = HUD_AIR_METER_Y;
+void handle_breath_meter_actions(s16 numBreathWedges) {
+    // Show breath meter if health is not full, less than 8
+    if (numBreathWedges < 8 && sBreathMeterStoredValue == 8 && sBreathMeterHUD.animation == BREATH_METER_HIDDEN) {
+        sBreathMeterHUD.animation = BREATH_METER_EMPHASIZED;
+        sBreathMeterHUD.y         = HUD_BREATH_METER_Y;
     }
-    // Show air meter if health is full, has 8
-    if (numAirWedges == 8 && sAirMeterStoredValue == 7) sAirMeterVisibleTimer = 0;
-    // After health is full, hide air meter
-    if (numAirWedges == 8 && sAirMeterVisibleTimer > 45) sAirMeterHUD.animation = AIR_METER_HIDING;
-    // Update to match health value
-    sAirMeterStoredValue = numAirWedges;
-    // If Mario is swimming, keep air meter visible
+    // Show breath meter if breath is full, has 8
+    if (numBreathWedges == 8 && sBreathMeterStoredValue == 7) sBreathMeterVisibleTimer = 0;
+    // After breath is full, hide breath meter
+    if (numBreathWedges == 8 && sBreathMeterVisibleTimer > 45) sBreathMeterHUD.animation = BREATH_METER_HIDING;
+    // Update to match breath value
+    sBreathMeterStoredValue = numBreathWedges;
+    // If Mario is swimming, keep breath meter visible
     if (gPlayerCameraState->action & ACT_FLAG_SWIMMING) {
-        if (sAirMeterHUD.animation == AIR_METER_HIDDEN
-         || sAirMeterHUD.animation == AIR_METER_EMPHASIZED) {
-            sAirMeterHUD.animation =  AIR_METER_DEEMPHASIZING;
-            sAirMeterHUD.y = HUD_AIR_METER_Y;
+        if (sBreathMeterHUD.animation == BREATH_METER_HIDDEN
+         || sBreathMeterHUD.animation == BREATH_METER_EMPHASIZED) {
+            sBreathMeterHUD.animation =  BREATH_METER_DEEMPHASIZING;
+            sBreathMeterHUD.y         =  HUD_BREATH_METER_Y;
         }
-        sAirMeterVisibleTimer = 0;
+        sBreathMeterVisibleTimer = 0;
     }
 }
 
-void render_hud_air_meter(void) {
-    s16 shownAirAmount = gHudDisplay.air;
-
-    if (sAirMeterHUD.animation != AIR_METER_HIDING) handle_air_meter_actions(shownAirAmount);
-    if (sAirMeterHUD.animation == AIR_METER_HIDDEN) return;
-
-    switch (sAirMeterHUD.animation) {
-        case AIR_METER_EMPHASIZED:    animate_air_meter_emphasized();    break;
-        case AIR_METER_DEEMPHASIZING: animate_air_meter_deemphasizing(); break;
-        case AIR_METER_HIDING:        animate_air_meter_hiding();        break;
-        default:                                                         break;
+void render_hud_breath_meter(void) {
+    s16 shownBreathAmount = gHudDisplay.breath;
+    if (sBreathMeterHUD.animation != BREATH_METER_HIDING) handle_breath_meter_actions(shownBreathAmount);
+    if (sBreathMeterHUD.animation == BREATH_METER_HIDDEN) return;
+    switch (sBreathMeterHUD.animation) {
+        case BREATH_METER_EMPHASIZED:    animate_breath_meter_emphasized();    break;
+        case BREATH_METER_DEEMPHASIZING: animate_breath_meter_deemphasizing(); break;
+        case BREATH_METER_HIDING:        animate_breath_meter_hiding();        break;
+        default:                                                               break;
     }
-
-    render_dl_air_meter(shownAirAmount);
-    sAirMeterVisibleTimer++;
+    render_dl_breath_meter(shownBreathAmount);
+    sBreathMeterVisibleTimer++;
 }
 #endif
 
@@ -450,14 +438,11 @@ void render_hud_coins(void) {
  * Disables "X" glyph when Mario has 100 stars or more.
  */
 void render_hud_stars(void) {
-    s8 showX = 0;
-
-    if (gHudFlash == 1 && gGlobalTimer & 0x08) return;
-
-    if (gHudDisplay.stars < 100) showX = 1;
-
+    s8 showX = FALSE;
+    if (gHudFlash && gGlobalTimer & 0x08) return;
+    if (gHudDisplay.stars < 100) showX = TRUE;
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X), HUD_TOP_Y, "^"); // 'Star' glyph
-    if (showX == 1) print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
+    if (showX) print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16, HUD_TOP_Y, "*"); // 'X' glyph
     print_text_fmt_int((showX * 14) + GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_STARS_X) + 16,
 #ifdef HUD_LEADING_ZEROES
                        HUD_TOP_Y, "%03d", gHudDisplay.stars);
@@ -574,10 +559,10 @@ void render_hud(void) {
         sPowerMeterHUD.animation = POWER_METER_HIDDEN;
         sPowerMeterStoredHealth  = 8;
         sPowerMeterVisibleTimer  = 0;
-#ifdef AIR_METER
-        sAirMeterHUD.animation   = AIR_METER_HIDDEN;
-        sAirMeterStoredValue    = 8;
-        sAirMeterVisibleTimer    = 0;
+#ifdef BREATH_METER
+        sBreathMeterHUD.animation   = BREATH_METER_HIDDEN;
+        sBreathMeterStoredValue    = 8;
+        sBreathMeterVisibleTimer    = 0;
 #endif
     } else {
 #ifdef VERSION_EU
@@ -605,8 +590,8 @@ void render_hud(void) {
 #ifdef HUD_SECRETS
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_SECRETS) render_hud_secrets();
 #endif
-#ifdef AIR_METER
-        if (hudDisplayFlags & HUD_DISPLAY_FLAG_AIR_METER) render_hud_air_meter();
+#ifdef BREATH_METER
+        if (hudDisplayFlags & HUD_DISPLAY_FLAG_BREATH_METER) render_hud_breath_meter();
 #endif
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
             render_hud_power_meter();
