@@ -7,9 +7,7 @@
 #include "graph_node.h"
 #include "behavior_script.h"
 #include "behavior_data.h"
-#if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
 #include "math_util.h"
-#endif
 #include "game/memory.h"
 #include "game/object_helpers.h"
 #include "game/macro_special_objects.h"
@@ -34,7 +32,7 @@ struct SurfaceNode *sSurfaceNodePool;
 struct Surface     *sSurfacePool;
 
 /**
- * The size of the surface pool (2300).
+ * The size of the surface pool (2300 in vanilla).
  */
 s16 sSurfacePoolSize;
 u8  gSurfacePoolError = 0x0;
@@ -58,7 +56,7 @@ static struct Surface *alloc_surface(void) {
     struct Surface *surface = &sSurfacePool[gSurfacesAllocated];
     gSurfacesAllocated++;
     if (gSurfacesAllocated >= sSurfacePoolSize) gSurfacePoolError |= NOT_ENOUGH_ROOM_FOR_SURFACES;
-    surface->type   = 0;
+    surface->type   = SURFACE_DEFAULT;
     surface->force  = 0;
     surface->flags  = SURFACE_FLAG_NONE;
     surface->room   = 0;
@@ -130,23 +128,6 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     list->next    = newNode;
 }
 
-/**
- * Returns the lowest of three values.
- */
-static s16 min_3(s16 a0, s16 a1, s16 a2) {
-    if (a1 < a0) a0 = a1;
-    if (a2 < a0) a0 = a2;
-    return a0;
-}
-
-/**
- * Returns the highest of three values.
- */
-static s16 max_3(s16 a0, s16 a1, s16 a2) {
-    if (a1 > a0) a0 = a1;
-    if (a2 > a0) a0 = a2;
-    return a0;
-}
 
 /**
  * Every level is split into 16 * 16 cells of surfaces (to limit computing
@@ -190,62 +171,6 @@ static s16 upper_cell_index(s32 coord) {
     return index;
 }
 
-#ifdef GENERAL_CELLS
-// Arthurtilly
-u32 gCellGridX =   5;
-u32 gCellSizeX = 450;
-u32 gCellGridY =   5;
-u32 gCellSizeY = 450;
-u32 gCellGridZ =   5;
-u32 gCellSizeZ = 450;
-
-s16 cell_index_to_array(s16 x, s16 y, s16 z) {
-    return x + gCellGridX * (z + gCellGridZ * y);
-}
-
-s16 get_cell_index(s16 pos, u16 numCells, u32 cellSize, u32 offset) {
-    s16 index;
-    if (numCells == 1) return 0;
-    if (offset == 1) {// Lower
-        pos -= 20;
-    } else if (offset == 2) {// Upper
-        pos += 20;
-    }
-    if (numCells & 0x1) pos += (cellSize / 2);
-    index = ((f32)pos / cellSize) + (numCells/2);
-    if (index < 0) {
-        index = 0;
-    } else if (index >= numCells) {
-        index = numCells - 1;
-    }
-    return index;
-}
-
-static void add_surface(struct Surface *surface, s32 dynamic) {
-    s16 minX, minY, minZ, maxX, maxY, maxZ;
-    u16 minCellX, minCellY, minCellZ, maxCellX, maxCellY, maxCellZ;
-    u16 cellZ, cellY, cellX;
-    minX     = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    minY     = min_3(surface->vertex1[1], surface->vertex2[1], surface->vertex3[1]);
-    minZ     = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    maxX     = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    maxY     = max_3(surface->vertex1[1], surface->vertex2[1], surface->vertex3[1]);
-    maxZ     = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    minCellX = get_cell_index(minX, gCellGridX, gCellSizeX, 1);
-    maxCellX = get_cell_index(maxX, gCellGridX, gCellSizeX, 2);
-    minCellY = get_cell_index(minY, gCellGridY, gCellSizeY, 1);
-    maxCellY = get_cell_index(maxY, gCellGridY, gCellSizeY, 2);
-    minCellZ = get_cell_index(minZ, gCellGridZ, gCellSizeZ, 1);
-    maxCellZ = get_cell_index(maxZ, gCellGridZ, gCellSizeZ, 2);
-    for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
-        for (cellY = minCellY; cellY <= maxCellY; cellY++) {
-            for (cellX = minCellX; cellX <= maxCellX; cellX++) {
-                add_surface_to_cell(cellX, cellY, cellZ, surface);
-            }
-        }
-    }
-}
-#else
 /**
  * Every level is split into 16x16 cells, this takes a surface, finds
  * the appropriate cells (with a buffer), and adds the surface to those
@@ -271,7 +196,6 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
         }
     }
 }
-#endif
 
 /**
  * Initializes a Surface struct using the given vertex data
@@ -312,7 +236,6 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
 #else
     mag = sqrtf(nx * nx + ny * ny + nz * nz);
-
     // Checking to make sure no DIV/0
     if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);

@@ -290,20 +290,20 @@ void bhv_mario_update(void) {
             play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gMarioObject->header.gfx.pos);
         }
         if (!(gMarioState->action & ACT_FLAG_SWIMMING)) {
-            gMarioState->pos[1] = 8835.f - gMarioState->pos[1]; // Transform position. The extra 165 is due to Mario's visual model.
+            gMarioState->pos[1] = 8835.0f - gMarioState->pos[1]; // Transform position. The extra 165 is due to Mario's visual model.
             if ((gMarioState->action == ACT_CRAZY_BOX_BOUNCE) || (gMarioState->action == ACT_SHOT_FROM_CANNON)) {
-                gMarioState->pos[1] += 165.f;
+                gMarioState->pos[1] += 165.0f;
             } else if ((gMarioState->action == ACT_DIVE) || (gMarioState->action == ACT_FLYING)) {
-                gMarioState->pos[1] += 65.f;
+                gMarioState->pos[1] += 65.0f;
             }
             // Either increase or decrease tornado y pos by 165 depending on flip
-            if (gMarioState->action == ACT_TORNADO_TWIRLING) gMarioState->marioObj->oMarioTornadoPosY += (gIsGravityFlipped * 330.f) - 165.f;
+            if (gMarioState->action == ACT_TORNADO_TWIRLING) gMarioState->marioObj->oMarioTornadoPosY += (gIsGravityFlipped * 330.0f) - 165.0f;
             gMarioState->vel[1] = -gMarioState->vel[1]; // Flip velocity
-            gMarioState->peakHeight = 9000.f - gMarioState->peakHeight; // For fall damage
+            gMarioState->peakHeight = 9000.0f - gMarioState->peakHeight; // For fall damage
         }
         if (gMarioState->action & ACT_FLAG_ON_POLE) {
             if (gIsGravityFlipped) {
-                gMarioState->marioObj->oMarioPolePos = gMarioState->usedObj->oPosY - (9000.f - gMarioState->pos[1]) + gMarioState->usedObj->hitboxHeight + 100.f;
+                gMarioState->marioObj->oMarioPolePos = gMarioState->usedObj->oPosY - (9000.0f - gMarioState->pos[1]) + gMarioState->usedObj->hitboxHeight + 100.f;
             } else {
                 gMarioState->marioObj->oMarioPolePos = gMarioState->pos[1] - gMarioState->usedObj->oPosY;
             }

@@ -1770,7 +1770,7 @@ static void end_peach_cutscene_run_to_peach(struct MarioState *m) {
         advance_cutscene_step(m);
     }
     m->pos[1] = find_floor(m->pos[0], m->pos[1], m->pos[2], &surf);
-    set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, 0x00080000);
+    set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, 0x80000);
     play_step_sound(m, 9, 45);
 #ifdef GRAVITY_FLIPPING
     vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
@@ -1952,7 +1952,7 @@ static void end_peach_cutscene_dialog_3(struct MarioState *m) {
 // "Mario!"
 static void end_peach_cutscene_run_to_castle(struct MarioState *m) {
     set_mario_animation(m, m->actionState == 0 ? MARIO_ANIM_CREDITS_START_WALK_LOOK_UP : MARIO_ANIM_CREDITS_LOOK_BACK_THEN_RUN);
-    m->marioObj->header.gfx.pos[1] = end_obj_set_visual_pos(m->marioObj); // GRAVITY
+    m->marioObj->header.gfx.pos[1] = end_obj_set_visual_pos(m->marioObj);
     if (m->actionState == 0 && is_anim_past_end(m)) m->actionState = 1;
     if (m->actionTimer == 95) {
         set_cutscene_message(160, 227, 0, 40);
@@ -2086,8 +2086,7 @@ static s32 act_end_waving_cutscene(struct MarioState *m) {
 }
 
 static s32 check_for_instant_quicksand(struct MarioState *m) {
-    if (m->floor->type == SURFACE_INSTANT_QUICKSAND && m->action & ACT_FLAG_INVULNERABLE
-        && m->action != ACT_QUICKSAND_DEATH) {
+    if (m->floor->type == SURFACE_INSTANT_QUICKSAND && m->action & ACT_FLAG_INVULNERABLE && m->action != ACT_QUICKSAND_DEATH) {
         update_mario_sound_and_camera(m);
         return drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 0);
     }

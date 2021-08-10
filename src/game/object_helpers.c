@@ -113,14 +113,20 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
 
 Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *context) {
     s16 areaCase;
+#ifdef SWITCH_AREA_USES_MARIO_FLOOR
+    struct Surface *floor = gMarioState->floor;  // Use floor of Mario object that is already transformed instead of finding floor again. Makes BBH intangible floor not work properly.
+#else
     struct Surface *floor;
+#endif
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (gMarioObject == NULL) {
             switchCase->selectedCase = 0;
         } else {
             gFindFloorIncludeSurfaceIntangible = TRUE;
+#ifndef SWITCH_AREA_USES_MARIO_FLOOR
             find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &floor);
+#endif
             if (floor) {
                 gMarioCurrentRoom = floor->room;
                 areaCase = floor->room - 1;
@@ -491,32 +497,6 @@ void obj_set_gfx_pos_from_pos(struct Object *obj) {
 void obj_init_animation(struct Object *obj, s32 animIndex) {
     struct Animation **anims = obj->oAnimations;
     geo_obj_init_animation(&obj->header.gfx, &anims[animIndex]);
-}
-
-/**
- * Multiply a vector by a matrix of the form
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | 0 0 0 1 |
- * i.e. a matrix representing a linear transformation over 3 space.
- */
-void linear_mtxf_mul_vec3f(Mat4 m, Vec3f dst, Vec3f v) {
-    s32 i;
-    for (i = 0; i < 3; i++) dst[i] = m[0][i] * v[0] + m[1][i] * v[1] + m[2][i] * v[2];
-}
-
-/**
- * Multiply a vector by the transpose of a matrix of the form
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | 0 0 0 1 |
- * i.e. a matrix representing a linear transformation over 3 space.
- */
-void linear_mtxf_transpose_mul_vec3f(Mat4 m, Vec3f dst, Vec3f v) {
-    s32 i;
-    for (i = 0; i < 3; i++) dst[i] = m[i][0] * v[0] + m[i][1] * v[1] + m[i][2] * v[2];
 }
 
 void obj_apply_scale_to_transform(struct Object *obj) {

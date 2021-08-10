@@ -61,13 +61,16 @@
 #define /*0x0A0*/ oPosX                                         OBJECT_FIELD_F32(O_POS_INDEX + 0)
 #define /*0x0A4*/ oPosY                                         OBJECT_FIELD_F32(O_POS_INDEX + 1)
 #define /*0x0A8*/ oPosZ                                         OBJECT_FIELD_F32(O_POS_INDEX + 2)
-#define /*0x0AC*/ oVelVec                                       OBJECT_FIELD_F32(0x09)
-#define /*0x0AC*/ oVelX                                         OBJECT_FIELD_F32(0x09)
-#define /*0x0B0*/ oVelY                                         OBJECT_FIELD_F32(0x0A)
-#define /*0x0B4*/ oVelZ                                         OBJECT_FIELD_F32(0x0B)
-#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(0x0C) // local Z
-#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(0x0D) // local X
-#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(0x0E) // local Y
+#define /*0x0AC*/ O_VEL_INDEX                                   0x09
+#define /*0x0AC*/ oVelVec                                       OBJECT_FIELD_F32(O_VEL_INDEX)
+#define /*0x0AC*/ oVelX                                         OBJECT_FIELD_F32(O_VEL_INDEX + 0)
+#define /*0x0B0*/ oVelY                                         OBJECT_FIELD_F32(O_VEL_INDEX + 1)
+#define /*0x0B4*/ oVelZ                                         OBJECT_FIELD_F32(O_VEL_INDEX + 2)
+#define /*0x0B8*/ O_LOCAL_VEL_INDEX                             0x0C
+#define /*0x0B8*/ oLocalVelVec                                  OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX)
+#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 0) // local Z
+#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 1) // local X
+#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 2) // local Y
 #define /*0x0C4*/ O_MOVE_ANGLE_INDEX                            0x0F
 #define /*0x0C4*/ O_MOVE_ANGLE_PITCH_INDEX                      (O_MOVE_ANGLE_INDEX + 0)
 #define /*0x0C4*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1)
@@ -115,9 +118,11 @@
 #define /*0x158*/ oBounciness                                   OBJECT_FIELD_F32(0x34)
 #define /*0x15C*/ oDistanceToMario                              OBJECT_FIELD_F32(0x35)
 #define /*0x160*/ oAngleToMario                                 OBJECT_FIELD_S32(0x36)
-#define /*0x164*/ oHomeX                                        OBJECT_FIELD_F32(0x37)
-#define /*0x168*/ oHomeY                                        OBJECT_FIELD_F32(0x38)
-#define /*0x16C*/ oHomeZ                                        OBJECT_FIELD_F32(0x39)
+#define /*0x164*/ O_HOME_INDEX                                  0x37
+#define /*0x164*/ oHomeVec                                      OBJECT_FIELD_F32(O_HOME_INDEX)
+#define /*0x164*/ oHomeX                                        OBJECT_FIELD_F32(O_HOME_INDEX + 0)
+#define /*0x168*/ oHomeY                                        OBJECT_FIELD_F32(O_HOME_INDEX + 1)
+#define /*0x16C*/ oHomeZ                                        OBJECT_FIELD_F32(O_HOME_INDEX + 2)
 #define /*0x170*/ oFriction                                     OBJECT_FIELD_F32(0x3A)
 #define /*0x174*/ oBuoyancy                                     OBJECT_FIELD_F32(0x3B)
 #define /*0x178*/ oSoundStateID                                 OBJECT_FIELD_S32(0x3C)

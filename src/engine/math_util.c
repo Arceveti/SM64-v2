@@ -46,6 +46,7 @@ static float slow_logf(float x) {
     }
     return r - p;
 }
+
 static float slow_expf(float x) {
     float r = 1.0f, c = 1.0f;
     int i;
@@ -56,6 +57,7 @@ static float slow_expf(float x) {
     }
     return 1.0f / r;
 }
+
 float slow_powf(float base, float exponent) {
     if (base <= 0.0f) return 0.0f;
     return slow_expf(exponent * slow_logf(base));
@@ -74,6 +76,20 @@ float Q_rsqrtf( float number ) {
 	return y;
 }
 #endif
+
+/// Returns the lowest of three values.
+s16 min_3(s16 a0, s16 a1, s16 a2) {
+    if (a1 < a0) a0 = a1;
+    if (a2 < a0) a0 = a2;
+    return a0;
+}
+
+/// Returns the highest of three values.
+s16 max_3(s16 a0, s16 a1, s16 a2) {
+    if (a1 > a0) a0 = a1;
+    if (a2 > a0) a0 = a2;
+    return a0;
+}
 
 /// Copy vector 'src' to 'dest'
 void *vec3f_copy(Vec3f dest, Vec3f src) {
@@ -187,6 +203,11 @@ void *vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
     return dest;
 }
 
+/// Get the magnitude of vector 'v'
+f32 vec3f_mag(Vec3f v) {
+	return sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+}
+
 /// Scale vector 'dest' so it has length 1
 void *vec3f_normalize(Vec3f dest) {
      if (dest == gVec3fZero) {
@@ -216,7 +237,6 @@ void mtxf_copy(Mat4 dest, Mat4 src) {
     register s32 i;
     register u32 *d = (u32 *) dest;
     register u32 *s = (u32 *) src;
-
     for (i = 0; i < 16; i++) *d++ = *s++;
 }
 
@@ -265,7 +285,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     dx = to[0] - from[0];
     dz = to[2] - from[2];
 
-#ifdef FAST_INVSQRT
+#ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(dx * dx + dz * dz);
 #else
     invLength = -1.0f / sqrtf(dx * dx + dz * dz);
@@ -280,7 +300,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColZ = to[0] - from[0];
     yColZ = to[1] - from[1];
     zColZ = to[2] - from[2];
-#ifdef FAST_INVSQRT
+#ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
 #else
     invLength = -1.0f / sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
@@ -292,7 +312,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColX = yColY * zColZ - zColY * yColZ;
     yColX = zColY * xColZ - xColY * zColZ;
     zColX = xColY * yColZ - yColY * xColZ;
-#ifdef FAST_INVSQRT
+#ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = Q_rsqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
 #else
     invLength = 1.0f / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
@@ -304,7 +324,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColY = yColZ * zColX - zColZ * yColX;
     yColY = zColZ * xColX - xColZ * zColX;
     zColY = xColZ * yColX - yColZ * xColX;
-#ifdef FAST_INVSQRT
+#ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = Q_rsqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
 #else
     invLength = 1.0f / sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
@@ -682,6 +702,44 @@ void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
     b[0] = x * mtx[0][0] + y * mtx[1][0] + z * mtx[2][0] + mtx[3][0];
     b[1] = x * mtx[0][1] + y * mtx[1][1] + z * mtx[2][1] + mtx[3][1];
     b[2] = x * mtx[0][2] + y * mtx[1][2] + z * mtx[2][2] + mtx[3][2];
+}
+
+/**
+ * Need to be able to multiply a vec3f by a matrix for transformation, mostly the same as the above function.
+ */
+void mtxf_mul_vec3f(Mat4 mtx, Vec3f b) {
+    register f32 x = b[0];
+    register f32 y = b[1];
+    register f32 z = b[2];
+    b[0] = x * mtx[0][0] + y * mtx[1][0] + z * mtx[2][0] + mtx[3][0];
+    b[1] = x * mtx[0][1] + y * mtx[1][1] + z * mtx[2][1] + mtx[3][1];
+    b[2] = x * mtx[0][2] + y * mtx[1][2] + z * mtx[2][2] + mtx[3][2];
+}
+
+/**
+ * Multiply a vector by a matrix of the form
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | 0 0 0 1 |
+ * i.e. a matrix representing a linear transformation over 3 space.
+ */
+void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
+    s32 i;
+    for (i = 0; i < 3; i++) dst[i] = mtx[0][i] * v[0] + mtx[1][i] * v[1] + mtx[2][i] * v[2];
+}
+
+/**
+ * Multiply a vector by the transpose of a matrix of the form
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | 0 0 0 1 |
+ * i.e. a matrix representing a linear transformation over 3 space.
+ */
+void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
+    s32 i;
+    for (i = 0; i < 3; i++) dst[i] = mtx[i][0] * v[0] + mtx[i][1] * v[1] + mtx[i][2] * v[2];
 }
 
 /**

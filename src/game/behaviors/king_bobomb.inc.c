@@ -209,7 +209,7 @@ void king_bobomb_act_return_home(void) { // act 5
             if (o->oPosY < o->oHomeY) {
                 o->oVelY = 100.0f;
             } else {
-                arc_to_goal_pos(&o->oHomeX, &o->oPosX, 100.0f, -4.0f);
+                arc_to_goal_pos(&o->oHomeVec, &o->oPosVec, 100.0f, -4.0f);
                 o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING;
             }
             break;

@@ -78,12 +78,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surfaceNode = surfaceNode->next;
         type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
-        if (y < surf->lowerY || y > surf->upperY) continue;
-#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
-        if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
-#endif
-        offset = surf->normal.x * x + surf->normal.y * y + surf->normal.z * z + surf->originOffset;
-        if (offset < 0 || offset > radius) continue;
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
@@ -99,6 +93,12 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
                 if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
+        if (y < surf->lowerY || y > surf->upperY) continue;
+#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+        if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
+#endif
+        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
+        if (offset < 0 || offset > radius) continue;
         v0x = (f32)(surf->vertex2[0] - surf->vertex1[0]);
         v0y = (f32)(surf->vertex2[1] - surf->vertex1[1]);
         v0z = (f32)(surf->vertex2[2] - surf->vertex1[2]);
@@ -131,7 +131,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             d00 = v0x * v - v2x;
             d01 = v0z * v - v2z;
             invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset = invDenom - margin_radius;
+            offset   = invDenom - margin_radius;
             if (offset > 0.0f) goto edge_1_3;
             invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
@@ -151,7 +151,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             d00 = v1x * v - v2x;
             d01 = v1z * v - v2z;
             invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset = invDenom - margin_radius;
+            offset   = invDenom - margin_radius;
             if (offset > 0.0f) goto edge_2_3;
             invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
@@ -177,7 +177,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             d00 = v1x * v - v2x;
             d01 = v1z * v - v2z;
             invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset = invDenom - margin_radius;
+            offset   = invDenom - margin_radius;
             if (offset > 0.0f) continue;
             invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
@@ -192,9 +192,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             continue;
         }
     hasCollision:
-        //! (Unreferenced Walls) Since this only returns the first four walls,
-        //  this can lead to wall interaction being missed. Typically unreferenced walls
-        //  come from only using one wall, however.
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
@@ -227,10 +224,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
         type        = surf->type;
-        // Exclude a large number of walls immediately to optimize.
-        if (y < surf->lowerY || y > surf->upperY) continue;
-        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
-        if (offset < -radius || offset > radius)  continue;
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
@@ -246,6 +239,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
                 if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
+        if (y < surf->lowerY || y > surf->upperY) continue;
+        // Exclude a large number of walls immediately to optimize.
+        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
+        if (offset < -radius || offset > radius)  continue;
         //  (Quantum Tunneling) Due to issues with the vertices walls choose
         //  and the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
@@ -274,9 +271,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             }
         }
         data->x += surf->normal.x * (radius - offset);
+        x       += surf->normal.x * (radius - offset);
         data->z += surf->normal.z * (radius - offset);
-        x = data->x;
-        z = data->z;
+        z       += surf->normal.z * (radius - offset);
+        // x = data->x;
+        // z = data->z;
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
@@ -400,13 +399,15 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
 #ifdef BETTER_WALL_COLLISION
-        if (surf->type != SURFACE_HANGABLE) add_ceil_margin(&x1, &z1, surf->vertex2, surf->vertex3, margin);
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&x1, &z1, surf->vertex2, surf->vertex3, margin);
+#endif
         z2 = surf->vertex2[2];
         x2 = surf->vertex2[0];
-        if (surf->type != SURFACE_HANGABLE) add_ceil_margin(&x2, &z2, surf->vertex3, surf->vertex1, margin);
+#ifdef BETTER_WALL_COLLISION
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&x2, &z2, surf->vertex3, surf->vertex1, margin);
+#endif
 #ifdef GRAVITY_FLIPPING
-        temp = (z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0;
-        if (!gGravityMode != !temp) continue;
+        if (!gGravityMode != !((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0)) continue;
 #else
         // Checking if point is in bounds of the triangle laterally.
         if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) continue;
@@ -414,26 +415,12 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         // Slight optimization by checking these later.
         x3 = surf->vertex3[0];
         z3 = surf->vertex3[2];
-        if (surf->type != SURFACE_HANGABLE) add_ceil_margin(&x3, &z3, surf->vertex1, surf->vertex2, margin);
-#else
-        z2 = surf->vertex2[2];
-        x2 = surf->vertex2[0];
-#ifdef GRAVITY_FLIPPING
-        temp = (z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0;
-        if (!gGravityMode != !temp) continue;
-#else
-        // Checking if point is in bounds of the triangle laterally.
-        if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) continue;
-#endif
-        // Slight optimization by checking these later.
-        x3 = surf->vertex3[0];
-        z3 = surf->vertex3[2];
+#ifdef BETTER_WALL_COLLISION
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&x3, &z3, surf->vertex1, surf->vertex2, margin);
 #endif
 #ifdef GRAVITY_FLIPPING
-        temp = (z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0;
-        if (!gGravityMode != !temp) continue; // Equivalent to logical XOR
-        temp = (z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0;
-        if (!gGravityMode != !temp) continue;
+        if (!gGravityMode != !((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0)) continue; // Equivalent to logical XOR
+        if (!gGravityMode != !((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0)) continue;
 #else
         if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) continue;
         if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0) continue;
@@ -494,6 +481,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     dynamicCeil = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
 #endif
+    // Use the dynamic ceiling if it is lower
     if (dynamicHeight < height) {
         ceil   = dynamicCeil;
         height = dynamicHeight;
@@ -504,6 +492,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     return height;
 }
 #else
+
 f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     s16 cellZ, cellX;
     struct Surface *ceil, *dynamicCeil;
@@ -607,9 +596,9 @@ f32 find_floor_height_and_data(f32 xPos, f32 yPos, f32 zPos, struct FloorGeometr
  * Iterate through the list of floors and find the highest floor above pheight and below y.
  */
 #ifdef BETTER_WALL_COLLISION
-static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, f32 x, f32 maxY, f32 z, f32 *pheight) {
+static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, f32 x, f32 y, f32 z, f32 *pheight) {
 #else
-static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 maxY, s32 z, f32 *pheight) {
+static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight) {
 #endif
     register struct Surface *surf;
     f32 height;
@@ -661,12 +650,12 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         // Ignore if the height is below or the same as the current surface height, without the buffer
         if (height <= *pheight) continue;
         // Check if the original location is more than 78 units above the floor height
-        if (maxY < (height - 78.0f)) continue;
+        if (y < (height - 78.0f)) continue;
         // Set current surface and height for next iteration
         *pheight = height;
         floor    = surf;
         // Exit the loop if it's not possible for another floor to be closer to the original point
-        if (maxY == (height - 78.0f)) break;
+        if (y == (height - 78.0f)) break;
     }
     return floor;
 }

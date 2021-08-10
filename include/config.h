@@ -229,8 +229,8 @@
 #define DEEP_FREEZE_CRACKED_ICE
 // Adds a visual moving water current to the warp behind the Bowser's Sub door in DDD (Arceveti)
 #define DDD_WARP_CURRENT_TEXTURE
-// Disables the ambient waves in WDW and areas with a variable water level,
-// since those can cause subtle nausea.
+// Disables the ambient rising/lowering water level in WDW and areas with a variable water level,
+// since it can cause subtle nausea.
 // (Arceveti)
 #define WDW_DISABLE_AMBIENT_WAVES
 
@@ -251,11 +251,15 @@
 
 // Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
 #define UNIMPORTANT_OBJECTS
+// geo_switch_area uses Mario's floor instead of finding a new one. This breaks intangible surfaces
+#define SWITCH_AREA_USES_MARIO_FLOOR
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
 // Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
+// Use fast inverse square root for mtxf_lookat
+// #define FAST_INVSQRT_MTXF_LOOKAT
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
 
@@ -273,6 +277,8 @@
 #define WALL_QUICKSAND
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 #define COMPLETE_EN_US_SEGMENT2
+// Enables sSegmentROMTable (Arthurtilly?)
+#define SEGMENT_ROM_TABLE
 
 // -- HUD/Gameplay QoL --
 
@@ -374,6 +380,10 @@
 #define GROUND_POUND_DIVE
 // Ground pound jump similar to SMO (Unknown)
 #define WATER_GROUND_POUND
+// Split ground steps into quarter frames, like in vanilla
+#define GROUND_QSTEPS
+// Split air steps into quarter frames, like in vanilla
+#define AIR_QSTEPS
 // Split water steps into quarter frames just like ground and air steps (Arceveti)
 #define WATER_QSTEPS
 // Makes jumping out of water easier (Arceveti)
@@ -427,11 +437,11 @@
 
 // -- Experimental/Unfinished --
 
+// Platform Displacement 2 for objects other than Mario & Bowser
+// #define PLATFORM_DISPLACEMENT_2_OBJECTS
+
 // Arthurtilly's gravity flipping stuff
 // Note: the underside of seesaw platforms are broken if platform displacement 2 is enabled
 // #define GRAVITY_FLIPPING
-
-// Platform Displacement 2 for objects other than Mario & Bowser
-// #define PLATFORM_DISPLACEMENT_2_OBJECTS
 
 #endif // CONFIG_H

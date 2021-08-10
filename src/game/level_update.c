@@ -1,5 +1,6 @@
 #include <ultra64.h>
 
+#include "texscroll.h"
 #include "sm64.h"
 #include "seq_ids.h"
 #include "dialog_ids.h"
@@ -896,12 +897,12 @@ static s32 play_mode_unused(void) {
 s32 update_level(void) {
     s32 changeLevel = FALSE;
     switch (sCurrPlayMode) {
-        case PLAY_MODE_NORMAL:        changeLevel = play_mode_normal();        break;
-        case PLAY_MODE_PAUSED:        changeLevel = play_mode_paused();        break;
-        case PLAY_MODE_CHANGE_AREA:   changeLevel = play_mode_change_area();   break;
-        case PLAY_MODE_CHANGE_LEVEL:  changeLevel = play_mode_change_level();  break;
-        case PLAY_MODE_FRAME_ADVANCE: changeLevel = play_mode_frame_advance(); break;
-        default:                      changeLevel = play_mode_unused();        break;
+        case PLAY_MODE_NORMAL:        changeLevel = play_mode_normal(); scroll_textures(); break;
+        case PLAY_MODE_PAUSED:        changeLevel = play_mode_paused();                    break;
+        case PLAY_MODE_CHANGE_AREA:   changeLevel = play_mode_change_area();               break;
+        case PLAY_MODE_CHANGE_LEVEL:  changeLevel = play_mode_change_level();              break;
+        case PLAY_MODE_FRAME_ADVANCE: changeLevel = play_mode_frame_advance();             break;
+        default:                      changeLevel = play_mode_unused();                    break;
     }
     if (changeLevel) {
         reset_volume();

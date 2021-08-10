@@ -191,7 +191,7 @@ const LevelScript script_func_global_1[] = {
     LOAD_MODEL_FROM_GEO(MODEL_HEART,                   heart_geo),
     LOAD_MODEL_FROM_GEO(MODEL_FLYGUY,                  flyguy_geo),
     LOAD_MODEL_FROM_GEO(MODEL_CHUCKYA,                 chuckya_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_TRAJECTORY_MARKER_BALL,      bowling_ball_track_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_TRAJECTORY_MARKER_BALL,  bowling_ball_track_geo),
     RETURN(),
 };
 
@@ -223,7 +223,7 @@ const LevelScript script_func_global_5[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MANTA_RAY,               manta_geo),
     LOAD_MODEL_FROM_GEO(MODEL_UNAGI,                   unagi_geo),
     LOAD_MODEL_FROM_GEO(MODEL_SUSHI,                   sushi_geo),
-    LOAD_MODEL_FROM_DL( MODEL_DL_WHIRLPOOL,            whirlpool_seg5_dl_05013CB8, LAYER_TRANSPARENT),
+    LOAD_MODEL_FROM_DL( MODEL_DL_WHIRLPOOL,            whirlpool_seg5_dl_05013CB8,          LAYER_TRANSPARENT),
     LOAD_MODEL_FROM_GEO(MODEL_CLAM_SHELL,              clam_shell_geo),
     RETURN(),
 };

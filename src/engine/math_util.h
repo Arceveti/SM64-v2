@@ -29,9 +29,12 @@ extern f32 gSineTable[];
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 #define sqr(x) ((x) * (x))
+
 #ifdef FAST_INVSQRT
 float Q_rsqrtf( float number );
 #endif
+s16  min_3(s16 a0, s16 a1, s16 a2);
+s16  max_3(s16 a0, s16 a1, s16 a2);
 void *vec3f_copy(                        Vec3f dest, Vec3f src);
 void *vec3f_set(                         Vec3f dest, f32 x, f32 y, f32 z);
 void *vec3f_add(                         Vec3f dest, Vec3f a);
@@ -45,6 +48,7 @@ void *vec3s_to_vec3f(                    Vec3f dest, Vec3s a);
 void *vec3f_to_vec3s(                    Vec3s dest, Vec3f a);
 void *find_vector_perpendicular_to_plane(Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void *vec3f_cross(                       Vec3f dest, Vec3f a, Vec3f b);
+f32  vec3f_mag(                          Vec3f v);
 void *vec3f_normalize(                   Vec3f dest);
 void mtxf_copy(                           Mat4 dest, Mat4 src);
 void mtxf_identity(                       Mat4  mtx);
@@ -59,6 +63,9 @@ void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, s16 yaw, f32 rad
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_mul_vec3s(                      Mat4  mtx, Vec3s b);
+void mtxf_mul_vec3f(                      Mat4  mtx, Vec3f b);
+void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);
+void linear_mtxf_transpose_mul_vec3f(     Mat4  mtx, Vec3f dst, Vec3f v);
 void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
 void mtxf_rotate_xy(                      Mtx  *mtx, s16 angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);

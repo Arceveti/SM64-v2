@@ -5,8 +5,8 @@
 
 #include "types.h"
 
-#define MEMORY_POOL_LEFT  0
-#define MEMORY_POOL_RIGHT 1
+#define MEMORY_POOL_LEFT  0x0
+#define MEMORY_POOL_RIGHT 0x1
 
 struct AllocOnlyPool
 {
@@ -84,5 +84,9 @@ void  mem_pool_free( struct MemoryPool *pool, void *addr);
 void *alloc_display_list(u32 size);
 void setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buffer);
 s32  load_patchable_table(struct DmaHandlerList *list, s32 index);
+
+#ifdef SEGMENT_ROM_TABLE
+extern uintptr_t sSegmentROMTable[32];
+#endif
 
 #endif // MEMORY_H
