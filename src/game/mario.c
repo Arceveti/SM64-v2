@@ -68,7 +68,7 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
     if (o->header.gfx.animInfo.animID != targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
         o->header.gfx.animInfo.curAnim    = targetAnim;
-        o->header.gfx.animInfo.animAccel  = 0;
+        o->header.gfx.animInfo.animAccel  = 0x0;
         o->header.gfx.animInfo.animYTrans = m->animYTrans;
         if (targetAnim->flags & ANIM_FLAG_2) {
             o->header.gfx.animInfo.animFrame = targetAnim->startFrame;

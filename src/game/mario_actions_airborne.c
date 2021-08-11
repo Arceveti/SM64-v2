@@ -200,15 +200,16 @@ void update_air_with_turn(struct MarioState *m) {
         m->slideVelZ = (m->forwardVel * coss(m->faceAngle[1])) + (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
 #ifdef GRAVITY_DRAG
         if (m->vel[1] < 0.0f) {
-            m->slideVelX /= (((-m->vel[1])/TERMINAL_GRAVITY_VELOCITY)+1.0f);
-            m->slideVelZ /= (((-m->vel[1])/TERMINAL_GRAVITY_VELOCITY)+1.0f);
+            dragThreshold = (((-m->vel[1]) / (dragThreshold * 2.0f)) + 1.0f);
+            m->slideVelX /= dragThreshold;
+            m->slideVelZ /= dragThreshold;
         }
 #endif
         m->vel[0] = m->slideVelX;
         m->vel[2] = m->slideVelZ;
 #else
-        m->vel[0]    = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
-        m->vel[2]    = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
+        m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
+        m->vel[2] = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
 #endif
     }
 }

@@ -99,7 +99,15 @@ s32 act_holding_pole(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
+#ifdef ACTION_CANCELS
+        if (analog_stick_held_back(m, 0x4000)) {
+            m->faceAngle[1]  = m->intendedYaw;
+        } else {
+            m->faceAngle[1] += 0x8000;
+        }
+#else
         m->faceAngle[1] += 0x8000;
+#endif
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
     if (m->controller->stickY > 16.0f) {
@@ -141,7 +149,11 @@ s32 act_climbing_pole(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
-        m->faceAngle[1] += 0x8000;
+        if (analog_stick_held_back(m, 0x4000)) {
+            m->faceAngle[1]  = m->intendedYaw;
+        } else {
+            m->faceAngle[1] += 0x8000;
+        }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
@@ -167,7 +179,11 @@ s32 act_grab_pole_slow(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
-        m->faceAngle[1] += 0x8000;
+        if (analog_stick_held_back(m, 0x4000)) {
+            m->faceAngle[1]  = m->intendedYaw;
+        } else {
+            m->faceAngle[1] += 0x8000;
+        }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
 #endif
@@ -192,7 +208,11 @@ s32 act_grab_pole_fast(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
-        m->faceAngle[1] += 0x8000;
+        if (m->input & INPUT_NONZERO_ANALOG) {
+            m->faceAngle[1]  = m->intendedYaw;
+        } else {
+            m->faceAngle[1] += 0x8000;
+        }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
 #endif

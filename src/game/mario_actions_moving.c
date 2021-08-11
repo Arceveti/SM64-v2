@@ -266,8 +266,8 @@ void update_shell_speed(struct MarioState *m) {
     f32 maxTargetSpeed;
     f32 targetSpeed;
     if (m->floorHeight < m->waterLevel) {
-        m->floorHeight = m->waterLevel;
-        m->floor = &gWaterSurfacePseudoFloor;
+        m->floorHeight         = m->waterLevel;
+        m->floor               = &gWaterSurfacePseudoFloor;
         m->floor->originOffset = -m->waterLevel;
     }
     maxTargetSpeed  = (m->floor != NULL && m->floor->type == SURFACE_SLOW) ? 48.0f : 64.0f;
@@ -1035,12 +1035,21 @@ s32 act_crouch_slide(struct MarioState *m) {
 }
 
 s32 act_slide_kick_slide(struct MarioState *m) {
+#ifdef ACTION_CANCELS
+    if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
+#if ENABLE_RUMBLE
+        queue_rumble_data(5, 80);
+#endif
+        return set_jumping_action(m, analog_stick_held_back(m, 0x4000) ? ACT_BACKWARD_ROLLOUT : (m->forwardVel >= 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT), 0);
+    }
+#else
     if (m->input & INPUT_A_PRESSED) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
         return set_jumping_action(m, ACT_FORWARD_ROLLOUT, 0);
     }
+#endif
     set_mario_animation(m, MARIO_ANIM_SLIDE_KICK);
 #ifdef ACTION_CANCELS
     if ((is_anim_at_end(m) && m->forwardVel < 1.0f) || !(m->input & INPUT_NONZERO_ANALOG)) return set_mario_action(m, ACT_SLIDE_KICK_SLIDE_STOP, 0);
