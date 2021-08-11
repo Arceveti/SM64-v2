@@ -58,7 +58,7 @@ static f32 get_buoyancy(struct MarioState *m) {
     return buoyancy;
 }
 
-#ifdef WATER_QSTEPS
+#if WATER_NUM_STEPS > 1
 static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #ifdef BETTER_WALL_COLLISION
     struct WallCollisionData wallData;
@@ -188,9 +188,6 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
 }
 
 static u32 perform_water_step(struct MarioState *m) {
-#ifdef WATER_QSTEPS
-    u32 i;
-#endif
     u32 stepResult;
     Vec3f nextPos;
     Vec3f step;
@@ -199,11 +196,13 @@ static u32 perform_water_step(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     vec3f_copy(step, m->vel);
     if (m->action & ACT_FLAG_SWIMMING) apply_water_current(m, step);
-#ifdef WATER_QSTEPS
-    for (i = 0; i < 4; i++) {
-        nextPos[0] = m->pos[0] + step[0] / 4.0f;
-        nextPos[1] = m->pos[1] + step[1] / 4.0f;
-        nextPos[2] = m->pos[2] + step[2] / 4.0f;
+#if WATER_NUM_STEPS > 1
+    const f32 numSteps = WATER_NUM_STEPS;
+    u32 i;
+    for (i = 0; i < numSteps; i++) {
+        nextPos[0] = m->pos[0] + step[0] / numSteps;
+        nextPos[1] = m->pos[1] + step[1] / numSteps;
+        nextPos[2] = m->pos[2] + step[2] / numSteps;
         // If mario is at the surface, keep him there?
         if (nextPos[1] > m->waterLevel - 80) {
             nextPos[1] = m->waterLevel - 80;
@@ -212,6 +211,7 @@ static u32 perform_water_step(struct MarioState *m) {
         stepResult = perform_water_quarter_step(m, nextPos);
         if (stepResult == WATER_STEP_CANCELLED) break;
     }
+    // // Turn away from floors
     // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1-m->floor->normal.y)) {
     //     floorYaw = atan2s(m->floor->normal.z, m->floor->normal.x);
     //     floorTurn = (1-m->floor->normal.y)*0x800;

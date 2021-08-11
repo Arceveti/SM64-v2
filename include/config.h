@@ -381,11 +381,11 @@
 // Ground pound jump similar to SMO (Unknown)
 #define WATER_GROUND_POUND
 // Split ground steps into quarter frames, like in vanilla
-#define GROUND_QSTEPS
+#define GROUND_NUM_STEPS 4
 // Split air steps into quarter frames, like in vanilla
-#define AIR_QSTEPS
+#define AIR_NUM_STEPS    4
 // Split water steps into quarter frames just like ground and air steps (Arceveti)
-#define WATER_QSTEPS
+#define WATER_NUM_STEPS  4
 // Makes jumping out of water easier (Arceveti)
 #define BETTER_WATER_JUMP
 // Makes the underwater koopa shell action last forever until the player cancels it (Arceveti)

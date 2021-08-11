@@ -63,6 +63,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Z Offset for billboards, used for the star glow effect (Arceveti)
 - Defines for specific cos() values used through out the game, usually for checking the Y normal of surfaces (Arceveti)
 - Vertical quicksand support (Wiseguy) *
+- The number of air/ground/water steps per frame are individually configurable
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *

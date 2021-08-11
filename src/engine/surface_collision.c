@@ -347,7 +347,11 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 
 
 // Find the height of the surface at a given location
+#ifdef BETTER_WALL_COLLISION
+static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
+#else
 static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
+#endif
     return -(x * surf->normal.x + surf->normal.z * z + surf->originOffset) / surf->normal.y;
 }
 
@@ -368,6 +372,7 @@ void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
 
 #ifdef BETTER_WALL_COLLISION
 static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 x, f32 y, f32 z, f32 *pheight) {
+    const f32 margin = 1.5f;
 #else
 static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight) {
 #endif
@@ -378,9 +383,6 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
     struct Surface *ceil = NULL;
 #ifdef GRAVITY_FLIPPING
     s32 temp;
-#endif
-#ifdef BETTER_WALL_COLLISION
-    const f32 margin = 1.5f;
 #endif
     // *pheight = CELL_HEIGHT_LIMIT;
     // Stay in this loop until out of ceilings.
@@ -558,6 +560,22 @@ struct FloorGeometry sFloorGeo;
 #ifdef GRAVITY_FLIPPING
 UNUSED
 #endif
+#ifdef BETTER_WALL_COLLISION
+static s32 check_within_floor_triangle_bounds(f32 x, f32 z, struct Surface *surf) {
+    register f32 x1 = surf->vertex1[0];
+    register f32 z1 = surf->vertex1[2];
+    register f32 x2 = surf->vertex2[0];
+    register f32 z2 = surf->vertex2[2];
+    // Checking if point is in bounds of the triangle laterally.
+    if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0.0f) return FALSE; // 12
+    // Slight optimization by checking these later.
+    register f32 x3 = surf->vertex3[0];
+    register f32 z3 = surf->vertex3[2];
+    if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0.0f) return FALSE; // 23
+    if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0.0f) return FALSE; // 31
+    return TRUE;
+}
+#else
 static s32 check_within_floor_triangle_bounds(s32 x, s32 z, struct Surface *surf) {
     register s32 x1 = surf->vertex1[0];
     register s32 z1 = surf->vertex1[2];
@@ -572,6 +590,7 @@ static s32 check_within_floor_triangle_bounds(s32 x, s32 z, struct Surface *surf
     if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0) return FALSE; // 31
     return TRUE;
 }
+#endif
 
 /**
  * Return the floor height underneath (xPos, yPos, zPos) and populate `floorGeo`
@@ -729,13 +748,13 @@ f32 find_floor_height(f32 x, f32 y, f32 z) {
 /**
  * Find the highest floor under a given position and return the height.
  */
-#ifdef BETTER_WALL_COLLISION
 f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 cellZ, cellX;
     struct Surface *floor, *dynamicFloor;
     struct SurfaceNode *surfaceList;
     f32 height        = FLOOR_LOWER_LIMIT;
     f32 dynamicHeight = FLOOR_LOWER_LIMIT;
+#ifdef BETTER_WALL_COLLISION
     *pfloor = NULL;
 #ifdef GRAVITY_FLIPPING
     s32 floorPartition = (gGravityMode ? SPATIAL_PARTITION_CEILS : SPATIAL_PARTITION_FLOORS);
@@ -767,36 +786,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
         surfaceList  = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
 #endif
         dynamicFloor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
-        // Use the dynamic floor if it's higher
-        if (dynamicHeight > height) {
-            floor  = dynamicFloor;
-            height = dynamicHeight;
-        }
-#ifdef FIX_BHV_INIT_ROOM
-    }
-#endif
-    // If a floor was missed, increment the debug counter.
-    if (floor == NULL) gNumFindFloorMisses++;
-    *pfloor = floor;
-    // Increment the debug tracker.
-    gNumCalls.floor++;
-    // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
-    // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
-    // Mario to pass through.
-    // To prevent accidentally leaving the floor tangible, stop checking for it.
-    gFindFloorIncludeSurfaceIntangible = FALSE;
-#ifdef FIX_BHV_INIT_ROOM
-    gFindFloorExcludeDynamic = FALSE;
-#endif
-    return height;
-}
 #else
-f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
-    s16 cellZ, cellX;
-    struct Surface *floor, *dynamicFloor;
-    struct SurfaceNode *surfaceList;
-    f32 height        = FLOOR_LOWER_LIMIT;
-    f32 dynamicHeight = FLOOR_LOWER_LIMIT;
     // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
     // (Dynamic floors will unload due to the range.)
@@ -823,6 +813,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
         // Check for surfaces belonging to objects.
         surfaceList   = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
         dynamicFloor  = find_floor_from_list(surfaceList, x, y, z, &dynamicHeight);
+#endif
         // Use the dynamic floor if it's higher
         if (dynamicHeight > height) {
             floor  = dynamicFloor;
@@ -846,18 +837,17 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 #endif
     return height;
 }
-#endif
 
 /**
  * Find the highest water floor under a given position and return the height.
  */
-#ifdef BETTER_WALL_COLLISION
 f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 cellZ, cellX;
     struct Surface     *floor = NULL;
     struct SurfaceNode *surfaceList;
     f32 height       = FLOOR_LOWER_LIMIT;
     f32 bottomheight = FLOOR_LOWER_LIMIT;
+#ifdef BETTER_WALL_COLLISION
     // Check if position is within level bounds
     if (xPos <= -LEVEL_BOUNDARY_MAX
      || xPos >=  LEVEL_BOUNDARY_MAX
@@ -869,21 +859,7 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, xPos, yPos, zPos, &height, &bottomheight);
-    if (floor == NULL) {
-        height       = FLOOR_LOWER_LIMIT;
-        bottomheight = FLOOR_LOWER_LIMIT;
-    } else {
-        *pfloor = floor;
-    }
-    return height;
-}
 #else
-f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
-    s16 cellZ, cellX;
-    struct Surface     *floor = NULL;
-    struct SurfaceNode *surfaceList;
-    f32 height       = FLOOR_LOWER_LIMIT;
-    f32 bottomheight = FLOOR_LOWER_LIMIT;
     // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
     // (Dynamic floors will unload due to the range.)
@@ -901,6 +877,7 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, x, y, z, &height, &bottomheight);
+#endif
     if (floor == NULL) {
         height       = FLOOR_LOWER_LIMIT;
         bottomheight = FLOOR_LOWER_LIMIT;
@@ -909,7 +886,6 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     }
     return height;
 }
-#endif
 
 /**************************************************
  *               ENVIRONMENTAL BOXES              *

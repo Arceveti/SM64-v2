@@ -461,22 +461,21 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #endif
 
 s32 perform_ground_step(struct MarioState *m) {
-#ifdef GROUND_QSTEPS
-    s32 i;
-#endif
-    u32 stepResult;
     Vec3f intendedPos;
+    u32 stepResult;
 #ifdef BETTER_WALL_COLLISION
     m->wall = NULL;
 #endif
-#ifdef GROUND_QSTEPS
-    for (i = 0; i < 4; i++) {
+#if GROUND_NUM_STEPS > 1
+    const f32 numSteps = GROUND_NUM_STEPS;
+    s32 i;
+    for (i = 0; i < numSteps; i++) {
 #ifdef GRAVITY_FLIPPING
-        intendedPos[0] = m->pos[0] + ABS(m->floor->normal.y) * (m->vel[0] / 4.0f);
-        intendedPos[2] = m->pos[2] + ABS(m->floor->normal.y) * (m->vel[2] / 4.0f);
+        intendedPos[0] = m->pos[0] + ABS(m->floor->normal.y) * (m->vel[0] / numSteps);
+        intendedPos[2] = m->pos[2] + ABS(m->floor->normal.y) * (m->vel[2] / numSteps);
 #else
-        intendedPos[0] = m->pos[0] + m->floor->normal.y * (m->vel[0] / 4.0f);
-        intendedPos[2] = m->pos[2] + m->floor->normal.y * (m->vel[2] / 4.0f);
+        intendedPos[0] = m->pos[0] + m->floor->normal.y * (m->vel[0] / numSteps);
+        intendedPos[2] = m->pos[2] + m->floor->normal.y * (m->vel[2] / numSteps);
 #endif
         intendedPos[1] = m->pos[1];
         stepResult = perform_ground_quarter_step(m, intendedPos);
@@ -1016,15 +1015,13 @@ void apply_vertical_wind(struct MarioState *m) {
 s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     //s16 wallDYaw;
     Vec3f intendedPos;
-#ifdef AIR_QSTEPS
-    const f32 numSteps = 4.0f; /* max(4.0f, (s32)(sqrtf(m->vel[0] * m->vel[0] + m->vel[1] * m->vel[1] + m->vel[2] * m->vel[2]) / 50.0f));*/
-    s32 i;
-    s32 quarterStepResult;
-#endif
     s32 stepResult = AIR_STEP_NONE;
     m->wall = NULL;
-#ifdef AIR_QSTEPS
-    for (i = 0; i < 4; i++) {
+#if AIR_NUM_STEPS > 1
+    const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(m->vel[0] * m->vel[0] + m->vel[1] * m->vel[1] + m->vel[2] * m->vel[2]) / 50.0f));*/
+    s32 i;
+    s32 quarterStepResult;
+    for (i = 0; i < numSteps; i++) {
         intendedPos[0] = m->pos[0] + m->vel[0] / numSteps;
         intendedPos[1] = m->pos[1] + m->vel[1] / numSteps;
         intendedPos[2] = m->pos[2] + m->vel[2] / numSteps;
@@ -1047,14 +1044,24 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
             return stepResult;
         }
 #endif
+    }
 #else
     // Step once
     intendedPos[0] = m->pos[0] + m->vel[0];
     intendedPos[1] = m->pos[1] + m->vel[1];
     intendedPos[2] = m->pos[2] + m->vel[2];
     stepResult = perform_air_quarter_step(m, intendedPos, stepArg);
-#endif
+#ifdef WALL_QUICKSAND
+    if (quarterStepResult == AIR_STEP_HIT_WALL && m->wall && m->wall->type == SURFACE_INSTANT_QUICKSAND) {
+        stepResult = AIR_STEP_DEATH;
+        m->vel[0] = -2 * m->wall->normal.x;
+        m->vel[1] = -2 * m->wall->normal.y;
+        m->vel[2] = -2 * m->wall->normal.z;
+        drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 1);
+        return stepResult;
     }
+#endif
+#endif
     if (m->vel[1] >= 0.0f) m->peakHeight = m->pos[1];
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     if (m->action != ACT_FLYING) apply_gravity(m);
