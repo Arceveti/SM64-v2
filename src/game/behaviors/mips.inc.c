@@ -230,11 +230,7 @@ void bhv_mips_thrown(void) {
     cur_obj_init_animation(MIPS_ANIM_THROWN);
     cur_obj_become_tangible();
     o->oForwardVel = 25.0f;
-#ifdef GRAVITY_FLIPPING
-    o->oVelY = (gIsGravityFlipped ? -20.f : 20.f);
-#else
     o->oVelY       = 20.0f;
-#endif
     o->oAction     = MIPS_ACT_FALL_DOWN;
 }
 

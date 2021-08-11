@@ -24,9 +24,6 @@
 #include "save_file.h"
 #include "skybox.h"
 #include "sound_init.h"
-#ifdef GRAVITY_FLIPPING
-#include "engine/surface_collision.h"
-#endif
 #ifdef METAL_CAP_REFLECTION
 #include "buffers/framebuffers.h"
 #include "texture_edit.h"

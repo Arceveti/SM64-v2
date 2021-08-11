@@ -52,59 +52,27 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     f32 ceilHeight;
     s32 collided;
     s32 result              = POLE_NONE;
-#ifdef GRAVITY_FLIPPING
-    f32 poleBottom = (gGravityMode ? 0 : -m->usedObj->hitboxDownOffset);
-    f32 poleTop = m->usedObj->hitboxHeight - 100.0f;
-    if (gGravityMode) poleTop += m->usedObj->hitboxDownOffset;
-#else
     f32 poleTop             =  m->usedObj->hitboxHeight     - 100.0f;
     f32 poleBottom          = -m->usedObj->hitboxDownOffset - 100.0f;
-#endif
     struct Object *marioObj =  m->marioObj;
     if (marioObj->oMarioPolePos > poleTop) marioObj->oMarioPolePos = poleTop;
     m->pos[0]  = m->usedObj->oPosX;
     m->pos[2]  = m->usedObj->oPosZ;
-#ifdef GRAVITY_FLIPPING
-    if (gGravityMode) {
-        m->pos[1] = 9000.f - (m->usedObj->oPosY + m->usedObj->hitboxHeight + 100.f - marioObj->oMarioPolePos - offsetY);
-    } else {
-        m->pos[1] = m->usedObj->oPosY + marioObj->oMarioPolePos + offsetY;
-    }
-#else
     m->pos[1]  = m->usedObj->oPosY + marioObj->oMarioPolePos + offsetY;
-#endif
     collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
     ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &ceil);
     if (m->pos[1] > ceilHeight - 160.0f) {
         m->pos[1] = ceilHeight - 160.0f;
-#ifdef GRAVITY_FLIPPING
-        if (gGravityMode) {
-            marioObj->oMarioPolePos = m->usedObj->oPosY - (9000.f - m->pos[1]) + m->usedObj->hitboxHeight + 100.f;
-        } else {
-            marioObj->oMarioPolePos = m->pos[1] - m->usedObj->oPosY;
-        }
-    }
-    if ((virtual_to_segmented(0x13, m->usedObj->behavior) == bhvGiantPole) && gGravityMode && (marioObj->oMarioPolePos < 100)) marioObj->oMarioPolePos = 100;
-#else
         marioObj->oMarioPolePos = m->pos[1] - m->usedObj->oPosY;
     }
-#endif
     floorHeight = find_floor(m->pos[0], m->pos[1]+100.0f, m->pos[2], &floor);
     if (m->pos[1] < floorHeight) {
         m->pos[1] = floorHeight;
         set_mario_action(m, ACT_IDLE, 0);
         result = POLE_TOUCHED_FLOOR;
     } else if (marioObj->oMarioPolePos < poleBottom) {
-#ifdef GRAVITY_FLIPPING
-        if (gGravityMode) {
-            m->pos[1] = 9000.f - (m->usedObj->oPosY + m->usedObj->hitboxHeight + 100.f);
-        } else {
-            m->pos[1] = m->usedObj->oPosY - m->usedObj->hitboxDownOffset;
-        }
-#else
         m->pos[1] = m->usedObj->oPosY + poleBottom;
-#endif
         set_mario_action(m, ACT_FREEFALL, 0);
         result = POLE_FELL_OFF;
     } else if (collided) {
@@ -117,11 +85,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
             result = POLE_TOUCHED_FLOOR;
         }
     }
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set(m->marioObj->header.gfx.angle, m->usedObj->oMoveAnglePitch, m->faceAngle[1], m->usedObj->oMoveAngleRoll);
     return result;
 }
@@ -138,26 +102,14 @@ s32 act_holding_pole(struct MarioState *m) {
         m->faceAngle[1] += 0x8000;
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
-#ifdef GRAVITY_FLIPPING
-    if (((m->controller->stickY > 16.0f) && !(gGravityMode)) || ((m->controller->stickY < -16.0f) && gGravityMode)) {
-#else
     if (m->controller->stickY > 16.0f) {
-#endif
         f32 poleTop = m->usedObj->hitboxHeight - 100.0f;
         const BehaviorScript *poleBehavior = virtual_to_segmented(0x13, m->usedObj->behavior);
-#ifdef GRAVITY_FLIPPING
-        if (gGravityMode) poleTop += m->usedObj->hitboxDownOffset;
-#endif
         if (marioObj->oMarioPolePos < poleTop - 0.4f                     ) return set_mario_action(m, ACT_CLIMBING_POLE         , 0);
         if (poleBehavior != bhvGiantPole && m->controller->stickY > 50.0f) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 0);
     }
-#ifdef GRAVITY_FLIPPING
-    if (((m->controller->stickY < -16.0f) && !(gGravityMode)) || ((m->controller->stickY > 16.0f) && gGravityMode)) {
-        marioObj->oMarioPoleYawVel -= m->controller->stickY * (gGravityMode ? -2 : 2);
-#else
     if (m->controller->stickY < -16.0f) {
         marioObj->oMarioPoleYawVel -= m->controller->stickY * 2;
-#endif
         if (marioObj->oMarioPoleYawVel > 0x1000) marioObj->oMarioPoleYawVel = 0x1000;
         m->faceAngle[1] += marioObj->oMarioPoleYawVel;
         marioObj->oMarioPolePos -= marioObj->oMarioPoleYawVel / 0x100;
@@ -192,22 +144,13 @@ s32 act_climbing_pole(struct MarioState *m) {
         m->faceAngle[1] += 0x8000;
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
-#ifdef GRAVITY_FLIPPING
-    if (((m->controller->stickY < 8.0f) && !(gGravityMode)) || ((m->controller->stickY > -8.0f) && gGravityMode)) if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
-    marioObj->oMarioPolePos += (gGravityMode ? -m->controller->stickY : m->controller->stickY) / 8.0f;
-#else
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
     marioObj->oMarioPolePos += m->controller->stickY / 8.0f;
-#endif
     marioObj->oMarioPoleYawVel = 0x0;
     m->faceAngle[1] = cameraAngle - approach_s32((s16)(cameraAngle - m->faceAngle[1]), 0x0, 0x400, 0x400);
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         animSpeed = m->controller->stickY / 4.0f * 0x10000;
-#ifdef GRAVITY_FLIPPING
-        set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, (gGravityMode ? -animSpeed: animSpeed));
-#else
         set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, animSpeed);
-#endif
         add_tree_leaf_particles(m);
         play_climbing_sounds(m, 1);
     }
@@ -284,11 +227,7 @@ s32 act_top_of_pole_transition(struct MarioState *m) {
 
 s32 act_top_of_pole(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED    ) return set_mario_action(m, ACT_TOP_OF_POLE_JUMP      , 0);
-#ifdef GRAVITY_FLIPPING
-    if (((m->controller->stickY < -16.0f) && !(gGravityMode)) || ((m->controller->stickY > 16.0f) && gGravityMode)) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 1);
-#else
     if (m->controller->stickY < -16.0f) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 1);
-#endif
     m->faceAngle[1] -= m->controller->stickX * 16.0f;
     set_mario_animation(m, MARIO_ANIM_HANDSTAND_IDLE);
     set_pole_position(m, return_mario_anim_y_translation(m));
@@ -358,11 +297,7 @@ s32 update_hang_moving(struct MarioState *m) {
     nextPos[2]   = m->pos[2] - m->ceil->normal.y * m->vel[2];
     nextPos[1]   = m->pos[1];
     stepResult   = perform_hanging_step(m, nextPos);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return stepResult;
 }
@@ -373,11 +308,7 @@ void update_hang_stationary(struct MarioState *m) {
     m->slideVelZ  = 0.0f;
     m->pos[1] = m->ceilHeight - 144.0f;
     vec3f_copy(m->vel, gVec3fZero);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
 #ifdef EASIER_HANGING
     vec3s_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #endif
@@ -468,11 +399,7 @@ void climb_up_ledge(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
     m->pos[0] += 14.0f * sins(m->faceAngle[1]);
     m->pos[2] += 14.0f * coss(m->faceAngle[1]);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
 }
 
 void update_ledge_climb_camera(struct MarioState *m) {
@@ -480,9 +407,6 @@ void update_ledge_climb_camera(struct MarioState *m) {
     m->statusForCamera->pos[0] = m->pos[0] + dist * sins(m->faceAngle[1]);
     m->statusForCamera->pos[2] = m->pos[2] + dist * coss(m->faceAngle[1]);
     m->statusForCamera->pos[1] = m->pos[1];
-#ifdef GRAVITY_FLIPPING
-    if (gGravityMode) m->statusForCamera->pos[1] = 9000.0f - m->pos[1]; // Update camera correctly when upside down
-#endif
     m->actionTimer++;
     m->flags |= MARIO_LEDGE_CLIMB_CAMERA;
 }
@@ -507,11 +431,7 @@ s32 act_ledge_grab(struct MarioState *m) {
     if (m->actionTimer < 10) m->actionTimer++;
 #endif
 #ifndef NO_FALSE_LEDGEGRABS
-#ifdef GRAVITY_FLIPPING
-    if (ABS(m->floor->normal.y) < COS25) return let_go_of_ledge(m);
-#else
     if (m->floor->normal.y < COS25) return let_go_of_ledge(m);
-#endif
 #endif
 #ifdef ACTION_CANCELS
     if (m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) return let_go_of_ledge(m);
@@ -577,11 +497,7 @@ s32 act_grabbed(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK2) {
         s32 thrown = (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK6) == 0;
         m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-#ifdef GRAVITY_FLIPPING
-        vec3f_copy_with_gravity_switch(m->pos, m->marioObj->header.gfx.pos);
-#else
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
-#endif
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 60);
 #endif
@@ -627,15 +543,9 @@ s32 act_in_cannon(struct MarioState *m) {
             m->faceAngle[1] = marioObj->oMarioCannonObjectYaw + marioObj->oMarioCannonInputYaw;
             if (m->input & INPUT_A_PRESSED) {
                 m->forwardVel = 100.0f * coss(m->faceAngle[0]);
-#ifdef GRAVITY_FLIPPING
-                m->vel[1]     = (gGravityMode ? -100.0f : 100.f) * sins(m->faceAngle[0]);
-                m->pos[0]    += 120.0f * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
-                m->pos[1]    += (gGravityMode ? -120.0f : 120.f) * sins(m->faceAngle[0]);
-#else
                 m->vel[1]     = 100.0f * sins(m->faceAngle[0]);
                 m->pos[0]    += 120.0f * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
                 m->pos[1]    += 120.0f * sins(m->faceAngle[0]);
-#endif
                 m->pos[2]    += 120.0f * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
                 play_sound(SOUND_ACTION_FLYING_FAST,  m->marioObj->header.gfx.cameraToObject);
                 play_sound(SOUND_OBJ_POUNDING_CANNON, m->marioObj->header.gfx.cameraToObject);
@@ -653,11 +563,7 @@ s32 act_in_cannon(struct MarioState *m) {
 #endif
             }
     }
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_DIVE);
     return FALSE;
@@ -673,26 +579,10 @@ s32 act_tornado_twirling(struct MarioState *m) {
     s16 prevTwirlYaw        = m->twirlYaw;
     f32 dx = (m->pos[0] - usedObj->oPosX) * 0.95f;
     f32 dz = (m->pos[2] - usedObj->oPosZ) * 0.95f;
-#ifdef GRAVITY_FLIPPING
-    if (gGravityMode) {
-        if (m->vel[1] > -60.0f) m->vel[1] -= 1.0f;
-        if ((marioObj->oMarioTornadoPosY -= m->vel[1]) < 0.0f) marioObj->oMarioTornadoPosY = 0.0f;
-    } else {
-        if (m->vel[1] < 60.0f) m->vel[1] += 1.0f;
-        if ((marioObj->oMarioTornadoPosY += m->vel[1]) < 0.0f) marioObj->oMarioTornadoPosY = 0.0f;
-    }
-    if (marioObj->oMarioTornadoPosY > usedObj->hitboxHeight) {
-        if (gGravityMode) {
-            if (m->vel[1] > -20.0f) m->vel[1] = -20.0f;
-        } else {
-            if (m->vel[1] <  20.0f) m->vel[1] =  20.0f;
-        }
-#else
     if (m->vel[1] < 60.0f) m->vel[1] += 1.0f;
     if ((marioObj->oMarioTornadoPosY += m->vel[1]) < 0.0f) marioObj->oMarioTornadoPosY = 0.0f;
     if (marioObj->oMarioTornadoPosY > usedObj->hitboxHeight) {
         if (m->vel[1] < 20.0f) m->vel[1] = 20.0f;
-#endif
         return set_mario_action(m, ACT_TWIRLING, 1);
     }
     if (m->angleVel[1] < 0x3000) m->angleVel[1] += 0x100;
@@ -702,15 +592,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
     cosAngleVel  = coss(marioObj->oMarioTornadoYawVel);
     nextPos[0]   = usedObj->oPosX + dx * cosAngleVel + dz * sinAngleVel;
     nextPos[2]   = usedObj->oPosZ - dx * sinAngleVel + dz * cosAngleVel;
-#ifdef GRAVITY_FLIPPING
-    if (gGravityMode) {
-        nextPos[1] = 9000.f - usedObj->oPosY - marioObj->oMarioTornadoPosY;
-    } else {
-        nextPos[1] = usedObj->oPosY + marioObj->oMarioTornadoPosY;
-    }
-#else
     nextPos[1]   = usedObj->oPosY + marioObj->oMarioTornadoPosY;
-#endif
     f32_find_wall_collision(&nextPos[0], &nextPos[1], &nextPos[2], 60.0f, 50.0f);
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
     if (floor != NULL) {
@@ -729,11 +611,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
     if (is_anim_past_end(m)) m->actionArg = 1;
     // Play sound on angle overflow
     if (prevTwirlYaw > m->twirlYaw) play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1] + m->twirlYaw, 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
@@ -742,16 +620,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
 }
 
 s32 check_common_automatic_cancels(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    if ((m->pos[1] < m->waterLevel - 100) && !(gGravityMode)) return set_water_plunge_action(m);
-    if (((9000.f - m->pos[1]) < m->waterLevel + 50.f) && (gGravityMode)) {
-        m->vel[1] = -m->vel[1];
-        gGravityMode = FALSE;
-        return set_water_plunge_action(m);
-    }
-#else
     if (m->pos[1] < m->waterLevel - 100) return set_water_plunge_action(m);
-#endif
     return FALSE;
 }
 

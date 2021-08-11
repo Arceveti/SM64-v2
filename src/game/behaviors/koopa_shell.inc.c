@@ -72,13 +72,6 @@ void bhv_koopa_shell_loop(void) {
             break;
         case KOOPA_SHELL_ACT_MARIO_RIDING:
             obj_copy_pos(o, gMarioObject);
-#ifdef GRAVITY_FLIPPING
-            if (gIsGravityFlipped) {
-                o->oFaceAngleRoll = 0x8000;
-            } else {
-                o->oFaceAngleRoll = 0;
-            }
-#endif
             floor = cur_obj_update_floor_height_and_get_floor();
             if (absf(find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 10.0f) {
                 koopa_shell_spawn_water_drop();

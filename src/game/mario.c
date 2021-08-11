@@ -113,18 +113,6 @@ s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel)
     return o->header.gfx.animInfo.animFrame;
 }
 
-#ifdef GRAVITY_FLIPPING
-// Copy a vec3f, but transform the Y if gravity is flipped.
-// Mario's object's GFX position is updated with vec3f_copy, so
-// use this instead to undo the transform for GFX pos.
-void vec3f_copy_with_gravity_switch(Vec3f dst, Vec3f src) {
-    dst[0] = src[0];
-    dst[1] = src[1];
-    if (gGravityMode) dst[1] = 9000.0f - dst[1];
-    dst[2] = src[2];
-}
-#endif
-
 /**
  * Sets the animation to a specific "next" frame from the frame given.
  */
@@ -374,11 +362,7 @@ s32 mario_get_floor_class(struct MarioState *m) {
         }
     }
     // Crawling allows Mario to not slide on certain steeper surfaces.
-#ifdef GRAVITY_FLIPPING
-    if (m->action == ACT_CRAWLING && ABS(m->floor->normal.y) > 0.5f && floorClass == SURFACE_CLASS_DEFAULT) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
-#else
     if (m->action == ACT_CRAWLING && m->floor->normal.y > 0.5f && floorClass == SURFACE_CLASS_DEFAULT) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
-#endif
     return floorClass;
 }
 
@@ -516,22 +500,14 @@ s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
  */
 u32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
-#ifdef GRAVITY_FLIPPING
-    if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && ABS(m->floor->normal.y) < COS1) return TRUE;
-#else
     if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && m->floor->normal.y < COS1) return TRUE;
-#endif
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS10; break;
         case SURFACE_SLIPPERY:      normY = COS20; break;
         default:                    normY = COS38; break;
         case SURFACE_NOT_SLIPPERY:  normY =  0.0f; break;
     }
-#ifdef GRAVITY_FLIPPING
-    return ABS(m->floor->normal.y) <= normY;
-#else
     return m->floor->normal.y <= normY;
-#endif
 }
 
 /**
@@ -539,22 +515,14 @@ u32 mario_floor_is_slippery(struct MarioState *m) {
  */
 s32 mario_floor_is_slope(struct MarioState *m) {
     f32 normY;
-#ifdef GRAVITY_FLIPPING
-    if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && ABS(m->floor->normal.y) < COS1) return TRUE;
-#else
     if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && m->floor->normal.y < COS1) return TRUE;
-#endif
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS5;  break;
         case SURFACE_SLIPPERY:      normY = COS10; break;
         default:                    normY = COS15; break;
         case SURFACE_NOT_SLIPPERY:  normY = COS20; break;
     }
-#ifdef GRAVITY_FLIPPING
-    return ABS(m->floor->normal.y) <= normY;
-#else
     return m->floor->normal.y <= normY;
-#endif
 }
 
 /**
@@ -577,11 +545,7 @@ s32 mario_floor_is_steep(struct MarioState *m) {
             default:                    normY = COS30; break;
             case SURFACE_NOT_SLIPPERY:  normY = COS30; break;
         }
-#ifdef GRAVITY_FLIPPING
-        result = ABS(m->floor->normal.y) <= normY;
-#else
         result = m->floor->normal.y <= normY;
-#endif
     }
     return result;
 }
@@ -1188,11 +1152,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     // This can cause errant behavior when combined with astral projection,
     // since the graphical position was not Mario's previous location.
     if (m->floor == NULL) {
-#ifdef GRAVITY_FLIPPING
-        vec3f_copy_with_gravity_switch(m->pos, m->marioObj->header.gfx.pos);
-#else
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
-#endif
         m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     }
     m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
@@ -1391,12 +1351,7 @@ void update_mario_info_for_cam(struct MarioState *m) {
     m->marioBodyState->action  = m->action;
     m->statusForCamera->action = m->action;
     vec3s_copy(m->statusForCamera->faceAngle, m->faceAngle);
-#ifdef GRAVITY_FLIPPING
-    if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) vec3f_copy_with_gravity_switch(m->statusForCamera->pos, m->pos);
-    if (gGravityMode) m->statusForCamera->pos[1] -= 165.f;
-#else
     if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) vec3f_copy(m->statusForCamera->pos, m->pos);
-#endif
 }
 
 /**
@@ -1476,13 +1431,6 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     if (flags & MARIO_CAP_ON_HEAD) bodyState->capState  = (flags & MARIO_WING_CAP) ? MARIO_HAS_WING_CAP_ON       : MARIO_HAS_DEFAULT_CAP_ON;
     // Short hitbox for crouching/crawling/etc.
     m->marioObj->hitboxHeight = (m->action & ACT_FLAG_SHORT_HITBOX) ? 100.0f : 160.0f;
-#ifdef GRAVITY_FLIPPING
-    if (gIsGravityFlipped && !(gMarioState->action & ACT_FLAG_SWIMMING)) {
-        gMarioObject->hitboxDownOffset = (gMarioState->action & ACT_FLAG_SHORT_HITBOX ? 100.f : 160.f); // Adjust hitbox when upside down
-    } else {
-        gMarioObject->hitboxDownOffset = 0;
-    }
-#endif
     if ((m->flags & MARIO_TELEPORTING) && (m->fadeWarpOpacity != 0xFF)) {
         bodyState->modelState &= ~MODEL_STATE_MASK;
         bodyState->modelState |= (MODEL_STATE_ALPHA | m->fadeWarpOpacity);
@@ -1620,11 +1568,7 @@ void init_mario(void) {
     gMarioState->marioObj->oMoveAnglePitch            = gMarioState->faceAngle[0];
     gMarioState->marioObj->oMoveAngleYaw              = gMarioState->faceAngle[1];
     gMarioState->marioObj->oMoveAngleRoll             = gMarioState->faceAngle[2];
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-#else
     vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-#endif
     vec3s_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
     if (save_file_get_cap_pos(capPos) && (count_objects_with_behavior(bhvNormalCap) > 1)) {
         capObject                                     = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);

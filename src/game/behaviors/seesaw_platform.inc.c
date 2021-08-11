@@ -36,9 +36,6 @@ void bhv_seesaw_platform_update(void) {
     if (gMarioObject->platform == o) {
         // Rotate toward mario
         f32 rotation = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);
-#ifdef GRAVITY_FLIPPING
-        if (gIsGravityFlipped) rotation = -rotation; // Rotate in correct direction if Mario is underneath
-#endif
         // Deceleration is faster than acceleration
         rotation *= ((o->oSeesawPlatformPitchVel * rotation) < 0) ? 0.04f : 0.02f;
         o->oSeesawPlatformPitchVel += rotation;

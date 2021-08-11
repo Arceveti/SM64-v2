@@ -8,9 +8,6 @@
 #include "game_init.h"
 #include "interaction.h"
 #include "mario_step.h"
-#ifdef GRAVITY_FLIPPING
-#include "camera.h"
-#endif
 
 #include "config.h"
 
@@ -196,11 +193,7 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
     m->vel[1] = 0.0f;
     //? This is responsible for some downwarps.
     if (m->pos[1] < m->floorHeight + 80.0f) m->pos[1] = m->floorHeight;
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
@@ -216,11 +209,7 @@ s32 stationary_ground_step(struct MarioState *m) {
     } else {
         //? This is responsible for several stationary downwarps.
         if (m->pos[1] < m->floorHeight + 80.0f) m->pos[1] = m->floorHeight;
-#ifdef GRAVITY_FLIPPING
-        vec3f_copy_with_gravity_switch(marioObj->header.gfx.pos, m->pos);
-#else
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
-#endif
         vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     }
     return stepResult;
@@ -258,11 +247,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     waterLevel  = find_water_level(nextPos[0], nextPos[2]);
     if (floor == NULL) return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
-#ifdef GRAVITY_FLIPPING
-    if ((m->action & ACT_FLAG_RIDING_SHELL) && (floorHeight < waterLevel) && !gGravityMode) {
-#else
     if ((m->action & ACT_FLAG_RIDING_SHELL) && floorHeight < waterLevel) {
-#endif
         floorHeight = waterLevel;
         floor = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
@@ -381,11 +366,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     waterLevel = find_water_level(nextPos[0], nextPos[2]);
     m->wall = upperWall;
     if (floor == NULL)  return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
-#ifdef GRAVITY_FLIPPING
-    if ((m->action & ACT_FLAG_RIDING_SHELL) && (floorHeight < waterLevel) && !gGravityMode) {
-#else
     if ((m->action & ACT_FLAG_RIDING_SHELL) && floorHeight < waterLevel) {
-#endif
         floorHeight = waterLevel;
         floor = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
@@ -470,13 +451,8 @@ s32 perform_ground_step(struct MarioState *m) {
     const f32 numSteps = GROUND_NUM_STEPS;
     s32 i;
     for (i = 0; i < numSteps; i++) {
-#ifdef GRAVITY_FLIPPING
-        intendedPos[0] = m->pos[0] + ABS(m->floor->normal.y) * (m->vel[0] / numSteps);
-        intendedPos[2] = m->pos[2] + ABS(m->floor->normal.y) * (m->vel[2] / numSteps);
-#else
         intendedPos[0] = m->pos[0] + m->floor->normal.y * (m->vel[0] / numSteps);
         intendedPos[2] = m->pos[2] + m->floor->normal.y * (m->vel[2] / numSteps);
-#endif
         intendedPos[1] = m->pos[1];
         stepResult = perform_ground_quarter_step(m, intendedPos);
         if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) break;
@@ -489,11 +465,7 @@ s32 perform_ground_step(struct MarioState *m) {
     stepResult = perform_ground_quarter_step(m, intendedPos);
 #endif
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) stepResult = GROUND_STEP_HIT_WALL;
 #ifdef WALL_QUICKSAND
@@ -667,11 +639,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         m->pos[1] = nextPos[1];
         return AIR_STEP_HIT_WALL;
     }
-#ifdef GRAVITY_FLIPPING
-    if ((m->action & ACT_FLAG_RIDING_SHELL) && (floorHeight < waterLevel) & !gGravityMode) {
-#else
     if ((m->action & ACT_FLAG_RIDING_SHELL) && floorHeight < waterLevel) {
-#endif
         floorHeight = waterLevel;
         floor = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
@@ -817,11 +785,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         m->pos[1] = nextPos[1];
         return AIR_STEP_HIT_WALL;
     }
-#ifdef GRAVITY_FLIPPING
-    if ((m->action & ACT_FLAG_RIDING_SHELL) && (floorHeight < waterLevel) & !gGravityMode) {
-#else
     if ((m->action & ACT_FLAG_RIDING_SHELL) && floorHeight < waterLevel) {
-#endif
         floorHeight = waterLevel;
         floor = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
@@ -1066,11 +1030,7 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     if (m->action != ACT_FLYING) apply_gravity(m);
     apply_vertical_wind(m);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     /*if (stepResult == AIR_STEP_HIT_WALL && m->wall != NULL) {
             wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];

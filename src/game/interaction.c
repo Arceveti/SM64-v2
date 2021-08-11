@@ -202,21 +202,6 @@ u32 determine_interaction(struct MarioState *m, struct Object *o) {
     // Prior to this, the interaction type could be overwritten. This requires, however,
     // that the interaction not be set prior. This specifically overrides turning a ground
     // pound into just a bounce.
-#ifdef GRAVITY_FLIPPING
-    if (gGravityMode) {
-        if ((m->vel[1] > 0.0f) && ((9000.f-m->pos[1]) > o->oPosY)) {
-            interaction = INT_HIT_FROM_ABOVE;
-        } else if ((m->vel[1] < 0.0f) && ((9000.f-m->pos[1]) < o->oPosY)) {
-            interaction = INT_HIT_FROM_BELOW;
-        }
-    } else {
-        if ((m->vel[1] < 0.0f) && (m->pos[1] > o->oPosY)) {
-            interaction = INT_HIT_FROM_ABOVE;
-        } else if ((m->vel[1] > 0.0f) && (m->pos[1] < o->oPosY)) {
-            interaction = INT_HIT_FROM_BELOW;
-        }
-    }
-#else
     if (interaction == 0 && (action & ACT_FLAG_AIR)) {
         if (m->vel[1] < 0.0f) {
             if (m->pos[1] > o->oPosY) interaction = INT_HIT_FROM_ABOVE;
@@ -224,7 +209,6 @@ u32 determine_interaction(struct MarioState *m, struct Object *o) {
             if (m->pos[1] < o->oPosY) interaction = INT_HIT_FROM_BELOW;
         }
     }
-#endif
     return interaction;
 }
 
@@ -267,11 +251,7 @@ void mario_drop_held_object(struct MarioState *m) {
         if (m->heldObj->behavior == segmented_to_virtual(bhvKoopaShellUnderwater)) stop_shell_music();
         obj_set_held_state(m->heldObj, bhvCarrySomethingDropped);
         m->heldObj->oPosX         = m->marioBodyState->heldObjLastPosition[0];
-// #ifdef GRAVITY_FLIPPING
-//         m->heldObj->oPosY         = (gGravityMode ? 8750.f - m->pos[1] : m->pos[1]);
-// #else
         m->heldObj->oPosY         = m->marioBodyState->heldObjLastPosition[1];
-// #endif
         m->heldObj->oPosZ         = m->marioBodyState->heldObjLastPosition[2];
         m->heldObj->oMoveAngleYaw = m->faceAngle[1];
         m->heldObj                = NULL;
@@ -427,12 +407,7 @@ u32 bully_knock_back_mario(struct MarioState *m) {
 
 void bounce_off_object(struct MarioState *m, struct Object *o, f32 velY) {
     m->pos[1] = o->oPosY + o->hitboxHeight;
-#ifdef GRAVITY_FLIPPING
-    m->vel[1] = (gGravityMode ? -velY : velY);
-    if (gGravityMode) m->pos[1] = 9000.f - m->pos[1];
-#else
     m->vel[1] = velY;
-#endif
     m->flags &= ~MARIO_JUMPING;
     play_sound(SOUND_ACTION_BOUNCE_OFF_OBJECT, m->marioObj->header.gfx.cameraToObject);
 }
@@ -488,11 +463,7 @@ u32 determine_knockback_action(struct MarioState *m, UNUSED s32 arg) {
     m->faceAngle[1] = angleToObject;
     if (terrainIndex == 2) {
         if (m->forwardVel < 28.0f) mario_set_forward_vel(m, 28.0f);
-#ifdef GRAVITY_FLIPPING
-        if ((gGravityMode ? 9000.f-m->pos[1] : m->pos[1]) >= m->interactObj->oPosY) {
-#else
         if (m->pos[1] >= m->interactObj->oPosY) {
-#endif
             if (m->vel[1] < 20.0f) m->vel[1] = 20.0f;
         } else {
             if (m->vel[1] >  0.0f) m->vel[1] =  0.0f;
@@ -858,11 +829,7 @@ u32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Objec
         m->interactObj                = o;
         m->usedObj                    = o;
         marioObj->oMarioTornadoYawVel = 0x400;
-#ifdef GRAVITY_FLIPPING
-        marioObj->oMarioTornadoPosY = (gGravityMode ? 9000.f - m->pos[1] : m->pos[1]) - o->oPosY;
-#else
         marioObj->oMarioTornadoPosY   = m->pos[1] - o->oPosY;
-#endif
         play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
         queue_rumble_data(30, 60);
@@ -1036,11 +1003,7 @@ u32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struc
 #endif
         attack_object(o, interaction);
         bounce_back_from_attack(m, interaction);
-#ifdef GRAVITY_FLIPPING
-        if ((interaction & INT_HIT_FROM_BELOW) && (!gGravityMode)) hit_object_from_below(m, o);
-#else
         if (interaction & INT_HIT_FROM_BELOW) hit_object_from_below(m, o);
-#endif
         if (interaction & INT_HIT_FROM_ABOVE) {
             if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE || m->action == ACT_TWIRLING) {
                 bounce_off_object(m, o, 80.0f);
@@ -1200,12 +1163,7 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
             poleBottom                 = -m->usedObj->hitboxDownOffset - 100.0f;
             marioObj->oMarioPoleUnused = 0;
             marioObj->oMarioPoleYawVel = 0;
-#ifdef GRAVITY_FLIPPING
-            if (gGravityMode) marioObj->oMarioPolePos = o->oPosY - (9000.f - m->pos[1]) + o->hitboxHeight + 100.f;
-            else marioObj->oMarioPolePos = max(m->pos[1] - o->oPosY, poleBottom);
-#else
             marioObj->oMarioPolePos    = max(m->pos[1] - o->oPosY, poleBottom);
-#endif
             if (lowSpeed) return set_mario_action(m, ACT_GRAB_POLE_SLOW, 0);
             //! @bug Using m->forwardVel here is assumed to be 0.0f due to the set from earlier.
             //       This is fixed in the Shindou version.

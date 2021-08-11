@@ -7,29 +7,6 @@
 #include "game/object_list_processor.h"
 #include "surface_collision.h"
 #include "surface_load.h"
-// #include "config.h"
-
-#ifdef GRAVITY_FLIPPING
-/**
- == UP / DOWN TOGGLEABLE GRAVITY ==
-How it works is that "transformed" positions are used for collision when gravity is flipped.
-These transforms only apply to Mario. The transform is "y = 9000 - y", mirroring across the range
-of values between 20000 and -11000.
-* gMarioState->pos: Transformed (for collision)
-* gMarioObject->oPos: Not transformed (various other things)
-* gMarioObject->header.gfx.pos: Not transformed (graphical position)
-* Collision triangles (when Mario is updated): Transformed
-**/
-
-u32 gGravityMode = FALSE; // Is flipped gravity currently being applied (only when Mario is updated)
-u32 gIsGravityFlipped = FALSE; // Is gravity flipped
-
-// Fake ceiling death plane for when Mario falls upwards
-struct Surface gCeilingDeathPlane = {
-    SURFACE_DEATH_PLANE, 0,    0,    0, 0, 0, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 },
-    { 0.0f, -1.0f, 0.0f },  0.0f, NULL,
-};
-#endif
 
 /**************************************************
  *                      WALLS                     *
@@ -68,10 +45,6 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
 #endif
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
-#ifdef GRAVITY_FLIPPING
-    // Unlike floors/ceils, walls use regular co-ordinates for collision, so undo the transform.
-    if (gGravityMode) y = 9000.f - y;
-#endif
     // Stay in this loop until out of walls.
     while (surfaceNode != NULL) {
         surf        = surfaceNode->surface;
@@ -381,9 +354,6 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
     f32 height;
     s16 type = SURFACE_DEFAULT;
     struct Surface *ceil = NULL;
-#ifdef GRAVITY_FLIPPING
-    s32 temp;
-#endif
     // *pheight = CELL_HEIGHT_LIMIT;
     // Stay in this loop until out of ceilings.
     while (surfaceNode != NULL) {
@@ -408,31 +378,18 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
 #ifdef BETTER_WALL_COLLISION
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x2, &z2, surf->vertex3, surf->vertex1, margin);
 #endif
-#ifdef GRAVITY_FLIPPING
-        if (!gGravityMode != !((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0)) continue;
-#else
         // Checking if point is in bounds of the triangle laterally.
         if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) continue;
-#endif
         // Slight optimization by checking these later.
         x3 = surf->vertex3[0];
         z3 = surf->vertex3[2];
 #ifdef BETTER_WALL_COLLISION
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x3, &z3, surf->vertex1, surf->vertex2, margin);
 #endif
-#ifdef GRAVITY_FLIPPING
-        if (!gGravityMode != !((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0)) continue; // Equivalent to logical XOR
-        if (!gGravityMode != !((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0)) continue;
-#else
         if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) continue;
         if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0) continue;
-#endif
         // Find the ceil height at the specific point.
         height = get_surface_height_at_location(x, z, surf);
-#ifdef GRAVITY_FLIPPING
-        // Transform ceiling height
-        if (gGravityMode) height = 9000.0f - height;
-#endif
         if (height >= *pheight) continue;
         // if (y > (height + 78.0f)) continue;
         // Checks for ceiling interaction
@@ -448,17 +405,14 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
 /**
  * Find the lowest ceiling above a given position and return the height.
  */
-#ifdef BETTER_WALL_COLLISION
 f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     s16 cellZ, cellX;
     struct Surface *ceil, *dynamicCeil;
     struct SurfaceNode *surfaceList;
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
-#ifdef GRAVITY_FLIPPING
-    s32 ceilPartition = (gGravityMode ? SPATIAL_PARTITION_FLOORS : SPATIAL_PARTITION_CEILS);
-#endif
     *pceil = NULL;
+#ifdef BETTER_WALL_COLLISION
     if (xPos <= -LEVEL_BOUNDARY_MAX
      || xPos >=  LEVEL_BOUNDARY_MAX
      || zPos <= -LEVEL_BOUNDARY_MAX
@@ -466,15 +420,6 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     // Each level is split into cells to limit load, find the appropriate cell.
     cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-#ifdef GRAVITY_FLIPPING
-    // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][ceilPartition].next;
-    ceil        = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &height);
-    dynamicHeight = height;
-    // Check for surfaces belonging to objects.
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][ceilPartition].next;
-    dynamicCeil = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
-#else
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil        = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &height);
@@ -482,6 +427,28 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     // Check for surfaces belonging to objects.
     surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     dynamicCeil = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
+#else
+    // (Parallel Universes) Because position is casted to an s16, reaching higher
+    // float locations  can return ceilings despite them not existing there.
+    // (Dynamic ceilings will unload due to the range.)
+    s16 x = (s16) xPos;
+    s16 y = (s16) yPos;
+    s16 z = (s16) zPos;
+    // Check if position is within level bounds
+    if (x <= -LEVEL_BOUNDARY_MAX
+     || x >=  LEVEL_BOUNDARY_MAX
+     || z <= -LEVEL_BOUNDARY_MAX
+     || z >=  LEVEL_BOUNDARY_MAX) return height;
+    // Each level is split into cells to limit load, find the appropriate cell.
+    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    // Check for surfaces that are a part of level geometry.
+    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
+    ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
+    dynamicHeight = height;
+    // Check for surfaces belonging to objects.
+    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
+    dynamicCeil = find_ceil_from_list(surfaceList, x, y, z, &dynamicHeight);
 #endif
     // Use the dynamic ceiling if it is lower
     if (dynamicHeight < height) {
@@ -493,60 +460,6 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     gNumCalls.ceil++;
     return height;
 }
-#else
-
-f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
-    s16 cellZ, cellX;
-    struct Surface *ceil, *dynamicCeil;
-    struct SurfaceNode *surfaceList;
-    f32 height        = CELL_HEIGHT_LIMIT;
-    f32 dynamicHeight = CELL_HEIGHT_LIMIT;
-#ifdef GRAVITY_FLIPPING
-    s32 ceilPartition = (gGravityMode ? SPATIAL_PARTITION_FLOORS : SPATIAL_PARTITION_CEILS);
-#endif
-    s16 x, y, z;
-    // (Parallel Universes) Because position is casted to an s16, reaching higher
-    // float locations  can return ceilings despite them not existing there.
-    // (Dynamic ceilings will unload due to the range.)
-    x = (s16) xPos;
-    y = (s16) yPos;
-    z = (s16) zPos;
-    *pceil = NULL;
-    // Check if position is within level bounds
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return height;
-    // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-#ifdef GRAVITY_FLIPPING
-    // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][ceilPartition].next;
-    ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
-    dynamicHeight = height;
-    // Check for surfaces belonging to objects.
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][ceilPartition].next;
-    dynamicCeil = find_ceil_from_list(surfaceList, x, y, z, &dynamicHeight);
-#else
-    // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
-    ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
-    dynamicHeight = height;
-    // Check for surfaces belonging to objects.
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
-    dynamicCeil = find_ceil_from_list(surfaceList, x, y, z, &dynamicHeight);
-#endif
-    if (dynamicHeight < height) {
-        ceil = dynamicCeil;
-        height = dynamicHeight;
-    }
-    *pceil = ceil;
-    // Increment the debug tracker.
-    gNumCalls.ceil++;
-    return height;
-}
-#endif
 
 /**************************************************
  *                     FLOORS                     *
@@ -557,9 +470,6 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  */
 struct FloorGeometry sFloorGeo;
 
-#ifdef GRAVITY_FLIPPING
-UNUSED
-#endif
 #ifdef BETTER_WALL_COLLISION
 static s32 check_within_floor_triangle_bounds(f32 x, f32 z, struct Surface *surf) {
     register f32 x1 = surf->vertex1[0];
@@ -623,11 +533,6 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
     f32 height;
     s16 type = SURFACE_DEFAULT;
     struct Surface *floor = NULL;
-#ifdef GRAVITY_FLIPPING
-    register s32 x1, z1, x2, z2, x3, z3;
-    s32 temp;
-    if (gGravityMode) floor = &gCeilingDeathPlane;
-#endif
     // Iterate through the list of floors until there are no more floors.
     while (surfaceNode != NULL) {
         surf        = surfaceNode->surface;
@@ -642,30 +547,10 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
         // If we are not checking for the camera, ignore camera only floors.
         } else if (type == SURFACE_CAMERA_BOUNDARY) continue;
-#ifdef GRAVITY_FLIPPING
-        x1 = surf->vertex1[0];
-        z1 = surf->vertex1[2];
-        x2 = surf->vertex2[0];
-        z2 = surf->vertex2[2];
-        temp = (z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0;
-        if (!gGravityMode != !temp) continue;
-        // To slightly save on computation time, set this later.
-        x3 = surf->vertex3[0];
-        z3 = surf->vertex3[2];
-        temp = (z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0;
-        if (!gGravityMode != !temp) continue;
-        temp = (z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0;
-        if (!gGravityMode != !temp) continue;
-        // Get the height of the point on the tri
-        height = get_surface_height_at_location(x, z, surf);
-        // Transform floor height
-        if (gGravityMode) height = 9000.0f - height;
-#else
         // Check if point is within tri laterally
         if (!check_within_floor_triangle_bounds(x, z, surf)) continue;
         // Get the height of the point on the tri
         height = get_surface_height_at_location(x, z, surf);
-#endif
         // Ignore if the height is below or the same as the current surface height, without the buffer
         if (height <= *pheight) continue;
         // Check if the original location is more than 78 units above the floor height
@@ -677,20 +562,6 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         if (y == (height - 78.0f)) break;
     }
     return floor;
-}
-
-s16 check_within_triangle_bounds(s32 x, s32 z, struct Surface *surf) {
-    register s32 x1, z1, x2, z2, x3, z3;
-    x1 = surf->vertex1[0];
-    z1 = surf->vertex1[2];
-    x2 = surf->vertex2[0];
-    z2 = surf->vertex2[2];
-    if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0) return FALSE;
-    x3 = surf->vertex3[0];
-    z3 = surf->vertex3[2];
-    if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0) return FALSE;
-    if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0) return FALSE;
-    return TRUE;
 }
 
 /**
@@ -709,7 +580,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         f32 curBottomHeight = FLOOR_LOWER_LIMIT;
         surf                = bottomSurfaceNode->surface;
         bottomSurfaceNode   = bottomSurfaceNode->next;
-        if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
+        if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curBottomHeight = get_surface_height_at_location(x, z, surf);
         // if (curBottomHeight <  (y - 78.0f)) continue;
         // if (curBottomHeight >= (y - 78.0f)) bottomHeight = curBottomHeight;
@@ -724,7 +595,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         f32 curHeight  = FLOOR_LOWER_LIMIT;
         surf           = topSurfaceNode->surface;
         topSurfaceNode = topSurfaceNode->next;
-        if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_triangle_bounds(x, z, surf)) continue;
+        if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curHeight = get_surface_height_at_location(x, z, surf);
         if (bottomHeight != FLOOR_LOWER_LIMIT && curHeight > bottomHeight) continue;
         if (curHeight > height) {
@@ -756,9 +627,6 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     f32 dynamicHeight = FLOOR_LOWER_LIMIT;
 #ifdef BETTER_WALL_COLLISION
     *pfloor = NULL;
-#ifdef GRAVITY_FLIPPING
-    s32 floorPartition = (gGravityMode ? SPATIAL_PARTITION_CEILS : SPATIAL_PARTITION_FLOORS);
-#endif
     // Exclude floors outside of level boundaries
     if (xPos <= -LEVEL_BOUNDARY_MAX
      || xPos >=  LEVEL_BOUNDARY_MAX
@@ -768,11 +636,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     // Check for surfaces that are a part of level geometry.
-#ifdef GRAVITY_FLIPPING
-    surfaceList  = gStaticSurfacePartition[cellZ][cellX][floorPartition].next;
-#else
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-#endif
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
 #ifdef FIX_BHV_INIT_ROOM
     if (!gFindFloorExcludeDynamic) {
@@ -780,11 +644,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
         // In the next check, only check for floors higher than the previous check
         dynamicHeight = height;
         // Check for surfaces belonging to objects.
-#ifdef GRAVITY_FLIPPING
-        surfaceList  = gDynamicSurfacePartition[cellZ][cellX][floorPartition].next;
-#else
         surfaceList  = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-#endif
         dynamicFloor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
 #else
     // (Parallel Universes) Because position is casted to an s16, reaching higher

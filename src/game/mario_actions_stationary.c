@@ -19,17 +19,10 @@
 #include "sound_init.h"
 #include "surface_terrains.h"
 #include "rumble_init.h"
-#ifdef GRAVITY_FLIPPING
-#include "engine/surface_collision.h"
-#endif
 
 s32 check_common_idle_cancels(struct MarioState *m) {
     mario_drop_held_object(m);
-#ifdef GRAVITY_FLIPPING
-    if (ABS(m->floor->normal.y) < COS73) return mario_push_off_steep_floor(m, ACT_FREEFALL      , 0);
-#else
     if (m->floor->normal.y < COS73   ) return mario_push_off_steep_floor(m, ACT_FREEFALL        , 0);
-#endif
     if (m->input & INPUT_STOMPED     ) return set_mario_action(          m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_A_PRESSED   ) return set_jumping_action(        m, ACT_JUMP            , 0);
     if (m->input & INPUT_OFF_FLOOR   ) return set_mario_action(          m, ACT_FREEFALL        , 0);
@@ -45,11 +38,7 @@ s32 check_common_idle_cancels(struct MarioState *m) {
 }
 
 s32 check_common_hold_idle_cancels(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    if (ABS(m->floor->normal.y) < COS73) return mario_push_off_steep_floor(m, ACT_HOLD_FREEFALL, 0);
-#else
     if (m->floor->normal.y < COS73) return mario_push_off_steep_floor(m, ACT_HOLD_FREEFALL, 0);
-#endif
     if (m->heldObj->oInteractionSubtype & INT_SUBTYPE_DROP_IMMEDIATELY) {
         m->heldObj->oInteractionSubtype = (s32)(m->heldObj->oInteractionSubtype & ~INT_SUBTYPE_DROP_IMMEDIATELY);
         return set_mario_action(m, ACT_PLACING_DOWN, 0);
@@ -456,11 +445,7 @@ s32 act_shockwave_bounce(struct MarioState *m) {
     } else {
         m->pos[1] = m->floorHeight - sins(bounceAngle) * bounceAmt;
     }
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     return FALSE;
@@ -620,22 +605,11 @@ s32 act_first_person(struct MarioState *m) {
 }
 
 s32 check_common_stationary_cancels(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    if ((m->pos[1] < m->waterLevel - 100) && !(gGravityMode)) {
-#else
     if (m->pos[1] < m->waterLevel - 100) {
-#endif
         if (m->action == ACT_SPAWN_SPIN_LANDING) load_level_init_text(0);
         update_mario_sound_and_camera(m);
         return set_water_plunge_action(m);
     }
-#ifdef GRAVITY_FLIPPING
-    if (((9000.f - m->pos[1]) < m->waterLevel + 50.f) && (gGravityMode)) {
-        m->vel[1] = -m->vel[1];
-        gGravityMode = FALSE;
-        return set_water_plunge_action(m);
-    }
-#endif
     if (m->input & INPUT_SQUISHED) {
         update_mario_sound_and_camera(m);
         return drop_and_set_mario_action(m, ACT_SQUISHED, 0);

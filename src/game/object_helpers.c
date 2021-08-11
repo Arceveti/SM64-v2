@@ -828,11 +828,7 @@ static void cur_obj_move_after_thrown_or_dropped(f32 forwardVel, f32 velY) {
         o->oFloorHeight = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
     }
     o->oForwardVel = forwardVel;
-#ifdef GRAVITY_FLIPPING
-    o->oVelY       = (gIsGravityFlipped ? -velY : velY);
-#else
     o->oVelY       = velY;
-#endif
     if (o->oForwardVel != 0.0f) cur_obj_move_y(/*gravity*/ -4.0f, /*bounciness*/ -0.1f, /*buoyancy*/ 2.0f);
 }
 

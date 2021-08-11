@@ -10,9 +10,6 @@
 #include "types.h"
 #include "sm64.h"
 #include "behavior_data.h"
-#ifdef GRAVITY_FLIPPING
-#include "mario.h"
-#endif
 
 #include "config.h"
 
@@ -24,9 +21,6 @@ struct Object *gMarioPlatform = NULL;
  */
 void update_mario_platform(void) {
     struct Surface *floor;
-#ifdef GRAVITY_FLIPPING
-    gGravityMode = gIsGravityFlipped; // This does not take place during Mario's update function, so flip gravity again
-#endif
     if (gMarioObject == NULL) return;
     floor = gMarioState->floor;
     if (absf(gMarioState->pos[1] - gMarioState->floorHeight) < 4.0f && floor != NULL && floor->object != NULL) {
@@ -36,9 +30,6 @@ void update_mario_platform(void) {
         gMarioPlatform 		   = NULL;
         gMarioObject->platform = NULL;
     }
-#ifdef GRAVITY_FLIPPING
-    gGravityMode = 0; // Reset gravity
-#endif
 }
 
 /**

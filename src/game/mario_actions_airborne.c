@@ -13,9 +13,6 @@
 #include "mario_step.h"
 #include "save_file.h"
 #include "rumble_init.h"
-#ifdef GRAVITY_FLIPPING
-#include "engine/surface_collision.h"
-#endif
 
 #include "config.h"
 
@@ -288,11 +285,7 @@ void update_flying_yaw(struct MarioState *m) {
 }
 
 void update_flying_pitch(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    s16 targetPitchVel = -(s16)((gGravityMode ? -m->controller->stickY : m->controller->stickY) * (m->forwardVel / 5.0f));
-#else
     s16 targetPitchVel = -(s16)(m->controller->stickY * (m->forwardVel / 5.0f));
-#endif
     if (targetPitchVel > 0x0) {
         if (m->angleVel[0] < 0x0) {
             m->angleVel[0] += 0x40;
@@ -313,33 +306,11 @@ void update_flying_pitch(struct MarioState *m) {
 }
 
 void update_flying(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    s16 pitch = (gGravityMode ? -m->faceAngle[0] : m->faceAngle[0]);
-#endif
     update_flying_pitch(m);
     update_flying_yaw(m);
-#ifdef GRAVITY_FLIPPING
-    m->forwardVel -= 2.0f * ((f32) pitch / 0x4000) + 0.1f;
-#else
     m->forwardVel -= 2.0f * ((f32) m->faceAngle[0] / 0x4000) + 0.1f;
-#endif
     m->forwardVel -= 0.5f * (1.0f - coss(m->angleVel[1]));
     if (m->forwardVel <  0.0f) m->forwardVel = 0.0f;
-#ifdef GRAVITY_FLIPPING
-    if (m->forwardVel > 16.0f) {
-        pitch += (m->forwardVel - 32.0f) * 6.0f;
-    } else if (m->forwardVel > 4.0f) {
-        pitch += (m->forwardVel - 32.0f) * 10.0f;
-    } else {
-        pitch -= 0x400;
-    }
-    pitch += m->angleVel[0];
-    if (pitch >  0x2AAA) pitch =  0x2AAA;
-    if (pitch < -0x2AAA) pitch = -0x2AAA;
-    m->vel[0]    = m->forwardVel * coss(pitch) * sins(m->faceAngle[1]);
-    m->vel[1]    = m->forwardVel * sins(pitch);
-    m->vel[2]    = m->forwardVel * coss(pitch) * coss(m->faceAngle[1]);
-#else
     if (m->forwardVel > 16.0f) {
         m->faceAngle[0] += (m->forwardVel - 32.0f) * 6.0f;
     } else if (m->forwardVel > 4.0f) {
@@ -353,7 +324,6 @@ void update_flying(struct MarioState *m) {
     m->vel[0]    = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
     m->vel[1]    = m->forwardVel * sins(m->faceAngle[0]);
     m->vel[2]    = m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
-#endif
     m->slideVelX = m->vel[0];
     m->slideVelZ = m->vel[2];
 }
@@ -647,11 +617,7 @@ s32 act_riding_shell_air(struct MarioState *m) {
         case AIR_STEP_HIT_WALL:      mario_set_forward_vel(m, 0.0f);                  break;
         case AIR_STEP_HIT_LAVA_WALL: lava_boost_on_wall(m);                           break;
     }
-#ifdef GRAVITY_FLIPPING
-    m->marioObj->header.gfx.pos[1] += (gGravityMode ? -42.0f : 42.0f);
-#else
     m->marioObj->header.gfx.pos[1] += 42.0f;
-#endif
     return FALSE;
 }
 
@@ -705,20 +671,9 @@ s32 act_dive(struct MarioState *m) {
 #endif
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_NONE:
-#ifdef GRAVITY_FLIPPING
-            if (m->vel[1] < 0.0f) {
-                if (gGravityMode) {
-                    m->faceAngle[0] += 0x200;
-                    if (m->faceAngle[0] > 0x2AAA) m->faceAngle[0] = 0x2AAA;
-                } else {
-                    m->faceAngle[0] -= 0x200;
-                    if (m->faceAngle[0] < -0x2AAA) m->faceAngle[0] = -0x2AAA;
-                }
-#else
             if (m->vel[1] < 0.0f && m->faceAngle[0] > -0x2AAA) {
                 m->faceAngle[0] -= 0x200;
                 if (m->faceAngle[0] < -0x2AAA) m->faceAngle[0] = -0x2AAA;
-#endif
             }
             m->marioObj->header.gfx.angle[0] = -m->faceAngle[0];
             break;
@@ -868,15 +823,8 @@ s32 act_ground_pound(struct MarioState *m) {
                 m->pos[1] += yOffset;
                 m->peakHeight = m->pos[1];
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#ifdef GRAVITY_FLIPPING
-                // Ground pound explicitly sets GFX position, so undo the transform
-                if (gGravityMode) m->marioObj->header.gfx.pos[1] = 9000.f - m->marioObj->header.gfx.pos[1];
-#endif
             }
         }
-#ifdef GRAVITY_FLIPPING
-        m->marioObj->header.gfx.angle[2] = 0; // GP doesn't do air steps while in mid-air, so reset roll manually each frame
-#endif
 #ifdef GROUND_POUND_WALL_FIX
         mario_set_forward_vel(m, -0.1f);
 #else
@@ -1041,11 +989,7 @@ s32 act_crazy_box_bounce(struct MarioState *m) {
         case AIR_STEP_HIT_WALL:      mario_bonk_reflection(m, FALSE); break;
         case AIR_STEP_HIT_LAVA_WALL: lava_boost_on_wall(m);           break;
     }
-#ifdef GRAVITY_FLIPPING
-    m->marioObj->header.gfx.angle[0] = atan2s(m->forwardVel, (gGravityMode ? m->vel[1] : -m->vel[1]));
-#else
     m->marioObj->header.gfx.angle[0] = atan2s(m->forwardVel, -m->vel[1]);
-#endif
     return FALSE;
 }
 
@@ -1318,11 +1262,7 @@ s32 act_butt_slide_air(struct MarioState *m) {
     update_air_with_turn(m);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:
-#ifdef GRAVITY_FLIPPING
-            if (m->actionState == 0 && m->vel[1] < 0.0f && ABS(m->floor->normal.y) >= COS10) {
-#else
             if (m->actionState == 0 && m->vel[1] < 0.0f && m->floor->normal.y >= COS10) {
-#endif
                 m->vel[1] = -m->vel[1] / 2.0f;
                 m->actionState = 1;
             } else {
@@ -1348,11 +1288,7 @@ s32 act_hold_butt_slide_air(struct MarioState *m) {
     update_air_with_turn(m);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:
-#ifdef GRAVITY_FLIPPING
-            if (m->actionState == 0 && m->vel[1] < 0.0f && ABS(m->floor->normal.y) >= COS10) {
-#else
             if (m->actionState == 0 && m->vel[1] < 0.0f && m->floor->normal.y >= COS10) {
-#endif
                 m->vel[1] = -m->vel[1] / 2.0f;
                 m->actionState = 1;
             } else {
@@ -1500,11 +1436,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_NONE:
             set_mario_animation(m, MARIO_ANIM_AIRBORNE_ON_STOMACH);
-#ifdef GRAVITY_FLIPPING
-            m->faceAngle[0] = atan2s(m->forwardVel, (gGravityMode ? -m->vel[1] : m->vel[1]));
-#else
             m->faceAngle[0] = atan2s(m->forwardVel, m->vel[1]);
-#endif
             m->marioObj->header.gfx.angle[0] = -m->faceAngle[0];
             break;
         case AIR_STEP_LANDED:
@@ -1527,11 +1459,7 @@ s32 act_shot_from_cannon(struct MarioState *m) {
     }
     if ((m->flags & MARIO_WING_CAP) && m->vel[1] < 0.0f) set_mario_action(m, ACT_FLYING, 0);
     if ((m->forwardVel -= 0.05f) < 10.0f) mario_set_forward_vel(m, 10.0f);
-#ifdef GRAVITY_FLIPPING
-    if (((m->vel[1] > 0.0f) && !gGravityMode) || ((m->vel[1] < 0.0f) && gGravityMode)) m->particleFlags |= PARTICLE_DUST;
-#else
     if (m->vel[1] > 0.0f) m->particleFlags |= PARTICLE_DUST;
-#endif
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif
@@ -1648,11 +1576,7 @@ s32 act_riding_hoot(struct MarioState *m) {
         }
     }
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set(m->marioObj->header.gfx.angle, 0x0, 0x4000 - m->faceAngle[1], 0x0);
     return FALSE;
 }
@@ -1808,16 +1732,7 @@ s32 act_special_triple_jump(struct MarioState *m) {
 }
 
 s32 check_common_airborne_cancels(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    if ((m->pos[1] < m->waterLevel - 100) && !(gGravityMode)) return set_water_plunge_action(m);
-    if (((9000.f - m->pos[1]) < m->waterLevel + 50.f) && (gGravityMode)) {
-        m->vel[1] = -m->vel[1];
-        gGravityMode = FALSE;
-        return set_water_plunge_action(m);
-    }
-#else
     if (m->pos[1] < m->waterLevel - 100) return set_water_plunge_action(m);
-#endif
     if (m->input & INPUT_SQUISHED) return drop_and_set_mario_action(m, ACT_SQUISHED, 0);
     if (m->floor->type == SURFACE_VERTICAL_WIND && (m->action & ACT_FLAG_ALLOW_VERTICAL_WIND_ACTION)) return drop_and_set_mario_action(m, ACT_VERTICAL_WIND, 0);
     m->quicksandDepth = 0.0f;

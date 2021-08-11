@@ -172,11 +172,7 @@ void bobomb_thrown_loop(void) {
     o->oHeldState  = HELD_FREE;
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
     o->oForwardVel = 25.0f;
-#ifdef GRAVITY_FLIPPING
-    o->oVelY = (gIsGravityFlipped ? -20.f : 20.f);
-#else
     o->oVelY       = 20.0f;
-#endif
     o->oAction     = BOBOMB_ACT_LAUNCHED;
 }
 

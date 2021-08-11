@@ -221,27 +221,13 @@ static u32 perform_water_step(struct MarioState *m) {
     nextPos[0] = m->pos[0] + step[0];
     nextPos[1] = m->pos[1] + step[1];
     nextPos[2] = m->pos[2] + step[2];
-#ifdef GRAVITY_FLIPPING
-    if ((gIsGravityFlipped) && (nextPos[1] > m->waterLevel - 80.f)) {
-        set_mario_action(m, ACT_FREEFALL, 0);
-        m->vel[1] = 0.0f;
-        m->pos[1] = 8835.f - m->pos[1];
-        gGravityMode = TRUE;
-        set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-        return WATER_STEP_CANCELLED;
-#else
     if (nextPos[1] > m->waterLevel - 80.0f) {
         nextPos[1] = m->waterLevel - 80.0f;
         m->vel[1]  = 0.0f;
-#endif
     }
     stepResult = perform_water_full_step(m, nextPos);
 #endif
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
     return stepResult;
 }
@@ -951,11 +937,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
     m->pos[1] = whirlpool->oPosY + marioObj->oMarioWhirlpoolPosY;
     m->faceAngle[1] = atan2s(dz, dx) + 0x8000;
     set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
-#ifdef GRAVITY_FLIPPING
-    vec3f_copy_with_gravity_switch(m->marioObj->header.gfx.pos, m->pos);
-#else
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-#endif
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
@@ -981,11 +963,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
         m->forwardVel += 1.1f;
     } else if (m->forwardVel <= targetSpeed) {
         m->forwardVel += 1.1f - m->forwardVel / 43.0f;
-#ifdef GRAVITY_FLIPPING
-    } else if (ABS(m->floor->normal.y) >= 0.95f) {
-#else
     } else if (m->floor->normal.y >= 0.95f) {
-#endif
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 32.0f) m->forwardVel = 32.0f;

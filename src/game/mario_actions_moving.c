@@ -12,9 +12,6 @@
 #include "memory.h"
 #include "behavior_data.h"
 #include "rumble_init.h"
-#ifdef GRAVITY_FLIPPING
-#include "camera.h"
-#endif
 
 #include "config.h"
 
@@ -63,13 +60,6 @@ void play_step_sound(struct MarioState *m, s16 frame1, s16 frame2) {
 }
 
 void align_with_floor(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    // Use a temp position so m->pos is not passed to the function
-    Vec3f tempPos;
-    vec3f_copy(tempPos,m->pos);
-    tempPos[1] = m->floorHeight;
-    mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], tempPos, m->faceAngle[1], 40.0f); //! FAST_FLOOR_ALIGN?
-#else
 #ifdef FAST_FLOOR_ALIGN
     struct Surface *floor = m->floor;
     Vec3f floorNormal;
@@ -86,7 +76,6 @@ void align_with_floor(struct MarioState *m) {
     m->pos[1] = m->floorHeight;
     mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
     m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
-#endif
 #endif
 }
 
@@ -289,11 +278,7 @@ void update_shell_speed(struct MarioState *m) {
         m->forwardVel += 1.1f;
     } else if (m->forwardVel <= targetSpeed) {
         m->forwardVel += 1.1f - m->forwardVel / 58.0f;
-#ifdef GRAVITY_FLIPPING
-    } else if (ABS(m->floor->normal.y) >= 0.95f) {
-#else
     } else if (m->floor->normal.y >= 0.95f) {
-#endif
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel >  64.0f) m->forwardVel =  64.0f;
@@ -338,11 +323,7 @@ void update_walking_speed(struct MarioState *m) {
         m->forwardVel += 1.1f;
     } else if (m->forwardVel <= targetSpeed) {
         m->forwardVel += 1.1f - m->forwardVel / 43.0f;
-#ifdef GRAVITY_FLIPPING
-    } else if (ABS(m->floor->normal.y) >= 0.95f) {
-#else
     } else if (m->floor->normal.y >= 0.95f) {
-#endif
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
@@ -407,18 +388,10 @@ s32 begin_braking_action(struct MarioState *m) {
         m->faceAngle[1] = m->actionArg;
         return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
     }
-#ifdef GRAVITY_FLIPPING
-#ifdef GROUND_TURN_FIX
-    if (m->forwardVel >= 10.0f && ABS(m->floor->normal.y) >= COS80) return set_mario_action(m, ACT_BRAKING, 0);
-#else
-    if (m->forwardVel >= 16.0f && ABS(m->floor->normal.y) >= COS80) return set_mario_action(m, ACT_BRAKING, 0);
-#endif
-#else
 #ifdef GROUND_TURN_FIX
     if (m->forwardVel >= 10.0f && m->floor->normal.y >= COS80) return set_mario_action(m, ACT_BRAKING, 0);
 #else
     if (m->forwardVel >= 16.0f && m->floor->normal.y >= COS80) return set_mario_action(m, ACT_BRAKING, 0);
-#endif
 #endif
     return set_mario_action(m, ACT_DECELERATING, 0);
 }
@@ -615,11 +588,7 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
     marioBodyState->torsoAngle[0] = approach_s32(marioBodyState->torsoAngle[0], nextBodyPitch, 0x200, 0x200);
     marioBodyState->headAngle[2]  =             -marioBodyState->torsoAngle[2];
     marioObj->header.gfx.angle[2] =              marioBodyState->torsoAngle[2];
-#ifdef GRAVITY_FLIPPING
-    marioObj->header.gfx.pos[1] += (gGravityMode ? -45.0f : 45.0f);
-#else
     marioObj->header.gfx.pos[1]  += 45.0f;
-#endif
 }
 
 s32 act_walking(struct MarioState *m) {
@@ -1244,9 +1213,6 @@ s32 act_death_exit_land(struct MarioState *m) {
     if (animFrame == 54) play_sound(SOUND_MARIO_MAMA_MIA, m->marioObj->header.gfx.cameraToObject);
     if (animFrame == 68) play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
     if (is_anim_at_end(m)) set_mario_action(m, ACT_IDLE, 0);
-#ifdef GRAVITY_FLIPPING
-    m->marioObj->header.gfx.angle[2] = 0x0;
-#endif
     return FALSE;
 }
 
@@ -1284,11 +1250,7 @@ s32 common_landing_cancels(struct MarioState *m, struct LandingAction *landingAc
     if (m->input & INPUT_Z_PRESSED                  ) return set_mario_action(          m, ACT_CROUCH_SLIDE              , 0);
 #endif
     if (m->input & INPUT_OFF_FLOOR                  ) return set_mario_action(          m, landingAction->offFloorAction , 0);
-#ifdef GRAVITY_FLIPPING
-    if (ABS(m->floor->normal.y) < COS73             ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
-#else
     if (m->floor->normal.y < COS73                  ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
-#endif
     m->doubleJumpTimer = landingAction->doubleJumpTimer;
     if (should_begin_sliding(m)                     ) return set_mario_action(          m, landingAction->slideAction    , 0);
     if (m->input & INPUT_FIRST_PERSON               ) return set_mario_action(          m, landingAction->endAction      , 0);
@@ -1389,16 +1351,7 @@ s32 act_hold_quicksand_jump_land(struct MarioState *m) {
 }
 
 s32 check_common_moving_cancels(struct MarioState *m) {
-#ifdef GRAVITY_FLIPPING
-    if ((m->pos[1] < m->waterLevel - 100) && !(gGravityMode)) return set_water_plunge_action(m);
-    if (((9000.f - m->pos[1]) < m->waterLevel + 50.f) && (gGravityMode)) {
-        m->vel[1] = -m->vel[1];
-        gGravityMode = FALSE;
-        return set_water_plunge_action(m);
-    }
-#else
-    if (m->pos[1] < m->waterLevel - 100                                   ) return set_water_plunge_action(m);
-#endif
+    if (m->pos[1] < m->waterLevel - 100                                   ) return set_water_plunge_action(  m);
     if (!(m->action & ACT_FLAG_INVULNERABLE) && (m->input & INPUT_STOMPED)) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_SQUISHED                                         ) return drop_and_set_mario_action(m, ACT_SQUISHED        , 0);
     if (!(m->action & ACT_FLAG_INVULNERABLE) && m->health < 0x100         ) return drop_and_set_mario_action(m, ACT_STANDING_DEATH  , 0);

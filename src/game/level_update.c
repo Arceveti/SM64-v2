@@ -300,9 +300,6 @@ void init_mario_after_warp(void) {
         gPlayerSpawnInfos[0].startAngle[0] = 0x0;
         gPlayerSpawnInfos[0].startAngle[1] = spawnNode->object->oMoveAngleYaw;
         gPlayerSpawnInfos[0].startAngle[2] = 0x0;
-#ifdef GRAVITY_FLIPPING
-        if (gIsGravityFlipped) gPlayerSpawnInfos[0].startPos[1] = 9000.f - gPlayerSpawnInfos[0].startPos[1]; // If gravity is flipped when warping
-#endif
         if (marioSpawnType == MARIO_SPAWN_DOOR_WARP) init_door_warp(&gPlayerSpawnInfos[0], sWarpDest.arg);
         if (sWarpDest.type == WARP_TYPE_CHANGE_LEVEL || sWarpDest.type == WARP_TYPE_CHANGE_AREA) {
             gPlayerSpawnInfos[0].areaIndex = sWarpDest.areaIdx;
@@ -390,21 +387,9 @@ void warp_credits(void) {
 void check_instant_warp(void) {
     s16 cameraAngle;
     struct Surface *floor;
-#ifdef GRAVITY_FLIPPING
-    struct Surface *ceil;
-#endif
     if (gCurrLevelNum == LEVEL_CASTLE && save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 70) return;
-#ifdef GRAVITY_FLIPPING
-    // Make sure instant warps work both sides up
-    floor = gMarioState->floor;
-    ceil = gMarioState->ceil;
-
-    if ((!(gIsGravityFlipped) && (floor != NULL)) || ((gIsGravityFlipped) && (ceil != NULL))) {
-        s32 index = (gIsGravityFlipped ? ceil->type : floor->type) - SURFACE_INSTANT_WARP_1B;
-#else
     if ((floor = gMarioState->floor) != NULL) {
         s32 index = floor->type - SURFACE_INSTANT_WARP_1B;
-#endif
         if (index >= INSTANT_WARP_INDEX_START && index < INSTANT_WARP_INDEX_STOP
             && gCurrentArea->instantWarps != NULL) {
             struct InstantWarp *warp = &gCurrentArea->instantWarps[index];
@@ -481,19 +466,7 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3) {
  */
 struct WarpNode *get_painting_warp_node(void) {
     struct WarpNode *warpNode = NULL;
-#ifdef GRAVITY_FLIPPING
-    s32 paintingIndex = -1;
-    // Use ceiling if entering painting upside down
-    if (gIsGravityFlipped) {
-        if (gMarioState->ceil != NULL) {
-            paintingIndex = gMarioState->ceil->type - SURFACE_PAINTING_WARP_D3;
-        }
-    } else {
-        paintingIndex = gMarioState->floor->type - SURFACE_PAINTING_WARP_D3;
-    }
-#else
     s32 paintingIndex = gMarioState->floor->type - SURFACE_PAINTING_WARP_D3;
-#endif
     if (paintingIndex >= PAINTING_WARP_INDEX_START
      &&  paintingIndex < PAINTING_WARP_INDEX_END
      && (paintingIndex < PAINTING_WARP_INDEX_FA || gMarioState->pos[1] - gMarioState->floorHeight < 80.0f)) warpNode = &gCurrentArea->paintingWarpNodes[paintingIndex];
@@ -514,9 +487,6 @@ void initiate_painting_warp(void) {
                 warpNode = *pWarpNode;
                 if (!(warpNode.destLevel & 0x80)) sWarpCheckpointActive = check_warp_checkpoint(&warpNode);
                 initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0);
-#ifdef GRAVITY_FLIPPING
-                gIsGravityFlipped = FALSE;
-#endif
                 check_if_should_set_warp_checkpoint(&warpNode);
                 play_transition_after_delay(WARP_TRANSITION_FADE_INTO_COLOR, 30, 255, 255, 255, 45);
                 level_set_transition(74, basic_update);
@@ -532,10 +502,6 @@ void initiate_painting_warp(void) {
         }
     }
 }
-
-#ifdef GRAVITY_FLIPPING
-extern struct Surface gCeilingDeathPlane;
-#endif
 
 /**
  * If there is not already a delayed warp, schedule one. The source node is
@@ -580,11 +546,7 @@ s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
             case WARP_OP_WARP_FLOOR:
                 sSourceWarpNodeId = WARP_NODE_WARP_FLOOR;
-#ifdef GRAVITY_FLIPPING
-                if ((area_get_warp_node(sSourceWarpNodeId) == NULL) || (gMarioState->floor = &gCeilingDeathPlane)) {
-#else
                 if (area_get_warp_node(sSourceWarpNodeId) == NULL) {
-#endif
 #ifndef DISABLE_LIVES
                     if (m->numLives == 0) {
                         sDelayedWarpOp = WARP_OP_GAME_OVER;
