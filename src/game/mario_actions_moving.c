@@ -1238,6 +1238,9 @@ u32 common_landing_action(struct MarioState *m, s16 animation, u32 airAction) {
     } else {
         m->vel[1] = 0.0f;
     }
+#ifdef AIR_TURN
+    if (m->forwardVel < 0.0f) m->forwardVel = 0.0f;
+#endif
     stepResult = perform_ground_step(m);
     switch (stepResult) {
         case GROUND_STEP_LEFT_GROUND: set_mario_action(   m, airAction, 0);       break;

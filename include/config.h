@@ -322,7 +322,7 @@
 // Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti)
 #define COIN_LAVA_FLICKER
 // Tiny Goombas (from THI) always drop their coin (Arceveti)
-#define TINY_GOOMBA_COIN
+#define TINY_GOOMBA_ALWAYS_DROPS_COIN
 // Leaf particles occasionally fall from trees which contain Hoot (Arceveti)
 #define HOOT_TREE_PARTICLES
 // Reimplement the unused sad eye texture for the mother penguin
@@ -371,30 +371,28 @@
 #define FAST_CROUCHING
 // Underwater Ground pound similar to SMO (Unknown)
 #define AIR_STAR_DANCE
+// Makes it slightly easier to stay on narrow platforms (Arceveti)
+#define LEDGE_PROTECTION
 // Fixes false ledge grabs (Arceveti)
 #define LEDGE_GRAB_FIX
+// Ground pound dive similar to SMO, can also be used to cancel
+// a ground pound if the analog stick is held back (Arceveti)
+#define GROUND_POUND_DIVE
 // Prevents bonks when ground pounding next to a wall (Arceveti)
 #define GROUND_POUND_WALL_FIX
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define GROUND_POUND_JUMP
-// Ground pound dive similar to SMO, can also be used to cancel
-// a ground pound if the analog stick is held back (Arceveti)
-#define GROUND_POUND_DIVE
 // Ground pound jump similar to SMO (Unknown)
 #define WATER_GROUND_POUND
-// Split ground steps into quarter frames, like in vanilla
-#define GROUND_NUM_STEPS 4
-// Split air steps into quarter frames, like in vanilla
-#define AIR_NUM_STEPS    4
-// Split water steps into quarter frames just like ground and air steps (Arceveti)
-#define WATER_NUM_STEPS  4
 // Makes jumping out of water easier (Arceveti)
 #define BETTER_WATER_JUMP
 // Makes the underwater koopa shell action last forever until the player cancels it (Arceveti)
 #define INFINITE_WATER_SHELL
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
-// Improved wall collision detection (frameperfection/Frame#5375)
+// Improved wall collision detection, with rounded corners
+// Fixes Mario jittering when walking into multiple walls at once
+// (frameperfection/Frame#5375)
 #define BETTER_WALL_COLLISION
 // Include steep floors when checking for walls when underwater
 // This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
@@ -409,8 +407,13 @@
 #define BETTER_CEILING_HANDLING
 // Improved hanging which doesn't require holding down the A button (Arceveti)
 #define EASIER_HANGING
-// Makes it slightly easier to stay on narrow platforms (Arceveti)
-#define LEDGE_PROTECTION
+
+// Number of ground steps per frame (Vanilla is 4)
+#define GROUND_NUM_STEPS 4
+// Number of air steps per frame (Vanilla is 4)
+#define AIR_NUM_STEPS    4
+// Number of swimming steps per frame (Vanilla is 1)
+#define WATER_NUM_STEPS  4
 // Number of quarter frames before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering

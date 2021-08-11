@@ -44,9 +44,12 @@
             - RR
             - WMOTR
             - TOTWC
+    - Cubic/3D collision cels
 - Physics:
     - Object step height being a field
     - Gravity direction support
+    - "Squished" death from any direction
+    - Walking across a non-slippery steep slope doesn't slow down Mario
 - Silhouette:
     - Silhouette for Mario's held/riding object
     - Mirror Mario should not have silhouette
@@ -57,5 +60,8 @@
     - Rearrange hud
     - FPS counter
 - Vanilla Levels:
-    - Make the back of castle roof not eternal void
+    - Make the back of castle roof not an eternal void
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
+    - Replace SSL pyramid secrets with a puzzle to control the flow of sand
+- Camera:
+    - Better camera controls in general lol

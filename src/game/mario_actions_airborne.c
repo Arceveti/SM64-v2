@@ -182,7 +182,7 @@ void update_air_with_turn(struct MarioState *m) {
             intendedMag  = m->intendedMag / 32.0f;
             m->forwardVel += 1.5f * coss(intendedDYaw) * intendedMag;
 #ifdef AIR_TURN
-            if (m->forwardVel >= 4.0f || (m->forwardVel < 4.0f && absYVel > 32.0f) || (absYVel > 64.0f)) {
+            if (m->forwardVel >= 4.0f || (absYVel >= 36.0f)) {
                 turnRange = min(((m->intendedMag - m->forwardVel) * absYVel), 0x4000);
                 if (turnRange < 0x100) turnRange = 0x100;
                 m->faceAngle[1] = m->intendedYaw - approach_s32(intendedDYaw, 0x0, turnRange, turnRange);

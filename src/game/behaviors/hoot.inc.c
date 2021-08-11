@@ -211,7 +211,7 @@ void bhv_hoot_loop(void) {
                 o->oHootAvailability = HOOT_AVAIL_WANTS_TO_TALK;
             }
 #ifdef HOOT_TREE_PARTICLES
-            if (random_float() < 0.01f) {
+            if (random_float() < 0.05f) {
                 obj                  = spawn_object(o, MODEL_LEAVES, bhvTreeLeaf);
                 scale                = random_float() * 3.0f;
                 obj_scale(obj, scale);
