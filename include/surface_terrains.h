@@ -6,8 +6,10 @@
 // Surface Types
 #define SURFACE_DEFAULT                      0x0000 // Environment default
 #define SURFACE_BURNING                      0x0001 // Lava / Frostbite (in SL), but is used mostly for Lava
+#ifdef NEW_WATER_SURFACES
 #define SURFACE_NEW_WATER                    0x0002 // Custom water surface
 #define SURFACE_NEW_WATER_BOTTOM             0x0003 // Custom water surface bottom marker
+#endif
 #define SURFACE_0004                         0x0004 // Unused, has no function and has parameters
 #define SURFACE_HANGABLE                     0x0005 // Ceiling that Mario can climb on
 #define SURFACE_SLOW                         0x0009 // Slow down Mario, unused

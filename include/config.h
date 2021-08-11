@@ -275,6 +275,8 @@
 #define ENABLE_DEBUG_FREE_MOVE
 // Vertical quicksand support (Wiseguy)
 #define WALL_QUICKSAND
+// Water surfaces (Thecozies)
+// #define NEW_WATER_SURFACES
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 #define COMPLETE_EN_US_SEGMENT2
 // Enables sSegmentROMTable (Arthurtilly?)

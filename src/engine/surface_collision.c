@@ -51,7 +51,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surfaceNode = surfaceNode->next;
         type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
+#ifdef NEW_WATER_SURFACES
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+#endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
@@ -197,7 +199,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
         type        = surf->type;
+#ifdef NEW_WATER_SURFACES
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+#endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
@@ -367,7 +371,9 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         } else if (type == SURFACE_CAMERA_BOUNDARY) {
             continue;
         }
+#ifdef NEW_WATER_SURFACES
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+#endif
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
 #ifdef BETTER_WALL_COLLISION
@@ -565,7 +571,11 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         if (!gFindFloorIncludeSurfaceIntangible && type == SURFACE_INTANGIBLE) continue;
         // Determine if we are checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
+#ifdef NEW_WATER_SURFACES
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION || type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+#else
+            if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
+#endif
         // If we are not checking for the camera, ignore camera only floors.
         } else if (type == SURFACE_CAMERA_BOUNDARY) continue;
         // Check if point is within tri laterally
@@ -585,6 +595,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
     return floor;
 }
 
+#ifdef NEW_WATER_SURFACES
 /**
  * Iterate through the list of water floors and find the first water floor under a given point.
  */
@@ -628,6 +639,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
     *pBottomHeight = topBottomHeight;
     return floor;
 }
+#endif
 
 /**
  * Find the height of the highest floor below a point.
@@ -719,6 +731,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     return height;
 }
 
+#ifdef NEW_WATER_SURFACES
 /**
  * Find the highest water floor under a given position and return the height.
  */
@@ -767,6 +780,7 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     }
     return height;
 }
+#endif
 
 /**************************************************
  *               ENVIRONMENTAL BOXES              *
@@ -782,9 +796,13 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
     f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
+#ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
     waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
+#else
+    if (p != NULL) {
+#endif
         numRegions = *p++;
         for (i = 0; i < numRegions; i++) {
             // Read the data
@@ -803,7 +821,11 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
             p++;
         }
     } else {
+#ifdef NEW_WATER_SURFACES
         *pfloor = floor;
+#else
+        *pfloor = NULL;
+#endif
     }
     return waterLevel;
 }
@@ -818,9 +840,13 @@ f32 find_water_level(f32 x, f32 z) {
     f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
-    struct Surface *floor;
+#ifdef NEW_WATER_SURFACES
+    struct Surface *floor = NULL;
     waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
+#else
+    if (p != NULL) {
+#endif
         numRegions = *p++;
         for (i = 0; i < numRegions; i++) {
             // Read the data

@@ -73,7 +73,9 @@ static void clear_spatial_partition(SpatialPartitionCell *cells) {
         (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
         (*cells)[SPATIAL_PARTITION_CEILS ].next = NULL;
         (*cells)[SPATIAL_PARTITION_WALLS ].next = NULL;
+#ifdef NEW_WATER_SURFACES
         (*cells)[SPATIAL_PARTITION_WATER ].next = NULL;
+#endif
         cells++;
     }
 }
@@ -99,9 +101,14 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
     s16 priority;
     s16 sortDir;
     s16 listIndex;
+#ifdef NEW_WATER_SURFACES
     s16 isWater = (surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM);
     if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
+#else
+    if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
+        listIndex = SPATIAL_PARTITION_FLOORS;
+#endif
         sortDir =  1; // highest to lowest, then insertion order
     } else if (surface->normal.y < MAX_CEIL_NORMAL_Y) {
         listIndex = SPATIAL_PARTITION_CEILS;

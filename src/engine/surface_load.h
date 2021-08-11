@@ -25,7 +25,11 @@ enum
     SPATIAL_PARTITION_WATER
 };
 
+#ifdef NEW_WATER_SURFACES
 typedef struct SurfaceNode SpatialPartitionCell[4];
+#else
+typedef struct SurfaceNode SpatialPartitionCell[3];
+#endif
 
 extern SpatialPartitionCell gStaticSurfacePartition[NUM_CELLS][NUM_CELLS];
 extern SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
