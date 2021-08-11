@@ -465,6 +465,27 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  *                     FLOORS                     *
  **************************************************/
 
+s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, s16 type, s32 dynamic) {
+    s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    struct SurfaceNode *surfaceNode;
+    surfaceNode = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    // Check for surfaces that are a part of level geometry.
+    while (surfaceNode != NULL) {
+        if (surfaceNode->surface->type == type) return TRUE;
+        surfaceNode = surfaceNode->next;
+    }
+    if (dynamic) {
+        // Check for surfaces belonging to objects.
+        surfaceNode = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+        while (surfaceNode != NULL) {
+            if (surfaceNode->surface->type == type) return TRUE;
+            surfaceNode = surfaceNode->next;
+        }
+    }
+    return FALSE;
+}
+
 /**
  * Basically a local variable that passes through floor geo info.
  */

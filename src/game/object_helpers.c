@@ -113,25 +113,29 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
 
 Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *context) {
     s16 areaCase;
-#ifdef SWITCH_AREA_USES_MARIO_FLOOR
-    struct Surface *floor = gMarioState->floor;  // Use floor of Mario object that is already transformed instead of finding floor again. Makes BBH intangible floor not work properly.
-#else
     struct Surface *floor;
-#endif
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (gMarioObject == NULL) {
             switchCase->selectedCase = 0;
         } else {
-            gFindFloorIncludeSurfaceIntangible = TRUE;
-#ifndef SWITCH_AREA_USES_MARIO_FLOOR
-            find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &floor);
+#ifdef SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
+            floor = gMarioState->floor; // Use Mario's floor instead of finding a new one. This skips intangible floors
+#else
+            // Check if there is an intangible floor in the current cell
+            if (floor_type_exists_in_current_cell(gMarioObject->oPosX, gMarioObject->oPosZ, SURFACE_INTANGIBLE, FALSE)) {
+                // there is an intangible floor in the current cell, so look for it.
+                gFindFloorIncludeSurfaceIntangible = TRUE;
+                find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &floor);
+            } else {
+                // Since no intangible floors are nearby, use Mario's floor instead.
+                floor = gMarioState->floor;
+            }
 #endif
             if (floor) {
                 gMarioCurrentRoom = floor->room;
-                areaCase = floor->room - 1;
+                areaCase          = floor->room - 1;
                 print_debug_top_down_objectinfo("areainfo %d", floor->room);
-
                 if (areaCase >= 0) switchCase->selectedCase = areaCase;
             }
         }
