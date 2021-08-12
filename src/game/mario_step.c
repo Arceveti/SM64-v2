@@ -516,6 +516,10 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     f32 displacementX;
     f32 displacementZ;
     if (m->vel[1] > 0) return FALSE;
+#ifdef LEDGE_GRAB_FIX
+    if (m->action == ACT_WALL_SLIDE || m->action == ACT_FORWARD_ROLLOUT || m->action == ACT_BACKWARD_ROLLOUT) return FALSE;
+    if (m->input & INPUT_NONZERO_ANALOG && analog_stick_held_back(m, 0x4000)) return FALSE;
+#endif
     displacementX = nextPos[0] - intendedPos[0];
     displacementZ = nextPos[2] - intendedPos[2];
     // Only ledge grab if the wall displaced Mario in the opposite direction of
@@ -526,7 +530,6 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 #ifdef LEDGE_GRAB_FIX
     ledgePos[1] = find_floor(ledgePos[0], nextPos[1] + 80.0f, ledgePos[2], &ledgeFloor);
     if (ledgeFloor == NULL || ledgeFloor->normal.y < COS25 || ledgeFloor->type == SURFACE_BURNING || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
-    if (m->input & INPUT_NONZERO_ANALOG && analog_stick_held_back(m, 0x4000)) return FALSE;
 #else
     //! Since the search for floors starts at y + 160, we will sometimes grab
     // a higher ledge than expected (glitchy ledge grab)
@@ -1001,9 +1004,9 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
 #ifdef WALL_QUICKSAND
         if (quarterStepResult == AIR_STEP_HIT_WALL && m->wall && m->wall->type == SURFACE_INSTANT_QUICKSAND) {
             stepResult = AIR_STEP_DEATH;
-            m->vel[0] = -2 * m->wall->normal.x;
-            m->vel[1] = -2 * m->wall->normal.y;
-            m->vel[2] = -2 * m->wall->normal.z;
+            m->vel[0] = -2.0f * m->wall->normal.x;
+            m->vel[1] = -2.0f * m->wall->normal.y;
+            m->vel[2] = -2.0f * m->wall->normal.z;
             drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 1);
             return stepResult;
         }
@@ -1018,9 +1021,9 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
 #ifdef WALL_QUICKSAND
     if (quarterStepResult == AIR_STEP_HIT_WALL && m->wall && m->wall->type == SURFACE_INSTANT_QUICKSAND) {
         stepResult = AIR_STEP_DEATH;
-        m->vel[0] = -2 * m->wall->normal.x;
-        m->vel[1] = -2 * m->wall->normal.y;
-        m->vel[2] = -2 * m->wall->normal.z;
+        m->vel[0] = -2.0f * m->wall->normal.x;
+        m->vel[1] = -2.0f * m->wall->normal.y;
+        m->vel[2] = -2.0f * m->wall->normal.z;
         drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 1);
         return stepResult;
     }
@@ -1033,12 +1036,10 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     /*if (stepResult == AIR_STEP_HIT_WALL && m->wall != NULL) {
-            wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
-            if ((stepArg & AIR_STEP_CHECK_BONK) && (wallDYaw < -0x6000 || wallDYaw > 0x6000))
-            {
-                if (m->forwardVel > 16.0f)
-                    mario_bonk_reflection(m, (stepArg & AIR_STEP_BONK_NEGATE_SPEED), m->wall);
-            }
+        wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
+        if ((stepArg & AIR_STEP_CHECK_BONK) && (wallDYaw < -0x6000 || wallDYaw > 0x6000)) {
+            if (m->forwardVel > 16.0f) mario_bonk_reflection(m, (stepArg & AIR_STEP_BONK_NEGATE_SPEED), m->wall);
+        }
     }*/
     return stepResult;
 }

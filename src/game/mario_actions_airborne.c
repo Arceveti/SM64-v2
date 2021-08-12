@@ -521,20 +521,18 @@ s32 act_side_flip(struct MarioState *m) {
     return FALSE;
 }
 #ifdef WALL_SLIDE
-    s32 act_wall_slide(struct MarioState *m) {
+s32 act_wall_slide(struct MarioState *m) {
     struct Surface *wall = m->wall;
     s16 wallAngle;
     s16 wallDintendedYaw;
-    s16 slideDYaw;
-    f32 slideVelXModifier;
-    f32 slideVelZModifier;
+    f32 slideVelXModifier, slideVelZModifier;
     f32 sideward;
     if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_JUMP_KICK    , 0);
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND , 0);
     if (m->wall == NULL) {
-        if (!analog_stick_held_back(m, 0x471C)) m->faceAngle[1] = m->intendedYaw;
-        m->forwardVel /= 2.0f;
+        m->faceAngle[1] = m->intendedYaw;
+        m->forwardVel *= 0.5f;
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
     if (m->input & INPUT_NONZERO_ANALOG) {
@@ -545,12 +543,10 @@ s32 act_side_flip(struct MarioState *m) {
             m->forwardVel *= ABS(sins(wallDintendedYaw));
             return set_mario_action(m, ACT_FREEFALL, 0);
         } else {
-            m->slideYaw = atan2s(m->slideVelZ, m->slideVelX);
-            slideDYaw = m->intendedYaw - m->slideYaw;
-            sideward = sins(slideDYaw);
+            sideward = (m->intendedMag / 32.0f) * sins(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX)) * 0.05f;
             move_towards_wall(m, m->vel[1] + m->forwardVel);
-            slideVelXModifier = m->slideVelZ * (m->intendedMag / 32.0f) * sideward * 0.05f;
-            slideVelZModifier = m->slideVelX * (m->intendedMag / 32.0f) * sideward * 0.05f;
+            slideVelXModifier = m->slideVelZ * sideward;
+            slideVelZModifier = m->slideVelX * sideward;
             m->slideVelX += slideVelXModifier;
             m->slideVelZ -= slideVelZModifier;
         }
@@ -571,11 +567,16 @@ s32 act_side_flip(struct MarioState *m) {
     reset_rumble_timers_slip();
 #endif
     return FALSE;
-    m->actionTimer++;
 }
 #endif
 
 s32 act_wall_kick_air(struct MarioState *m) {
+    s16 wallAngle;
+    if (m->wall != NULL) {
+        wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
+        // Snap Mario's rotation to be perpendicular ot the wall
+        if (ABS(m->faceAngle[1] - wallAngle) <= 0x1) m->faceAngle[1] = wallAngle;
+    }
 #ifdef ACTION_CANCELS
     if (check_kick_or_dive_in_air(m)) return TRUE;
 #else
@@ -1127,12 +1128,26 @@ s32 act_getting_blown(struct MarioState *m) { // :flushed:
 s32 act_air_hit_wall(struct MarioState *m) {
 #ifdef WALL_SLIDE
     s16 wallDIntendedYaw;
+    s16 wallAngle;
 #endif
     s32 ret = FALSE;
     if (m->heldObj != NULL) mario_drop_held_object(m);
 #ifdef WALL_SLIDE
     if (m->wall != NULL) {
-        m->faceAngle[1] = (2.0f * atan2s(m->wall->normal.z, m->wall->normal.x)) - m->faceAngle[1] + 0x8000;
+        wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
+        //! Very hacky fix which causes Mario to start falling at a slight angle instead
+        // of falling straight down when hitting a wall at a perfect perpendicular angle
+        // because for some reason, hitting a wall at a perfect perpendicular angle
+        // doesn't trigger the wall slide.
+        if (m->faceAngle[1] - wallAngle == 0x0) {
+            if (m->faceAngle[1] < 0x0) {
+                m->faceAngle[1] -= 0x7FFF;
+            } else {
+                m->faceAngle[1] += 0x7FFF;
+            }
+        } else {
+            m->faceAngle[1] = (2.0f * wallAngle) - m->faceAngle[1] + 0x8000;
+        }
         if (++(m->actionTimer) <= 2) {
             if (m->input & INPUT_A_PRESSED) {
                 m->vel[1] = 52.0f;
@@ -1143,7 +1158,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
                 wallDIntendedYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->intendedYaw;
                 if (wallDIntendedYaw >= -0x2000 && wallDIntendedYaw <= 0x2000) {
                     m->faceAngle[1] = m->intendedYaw + 0x8000;
-                    m->forwardVel = 0.0f;
+                    m->forwardVel   = 0.0f;
                     return set_mario_action(m, ACT_FREEFALL, 0);
                 }
             }
@@ -1156,7 +1171,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
 #else
     if (++(m->actionTimer) <= FIRSTY_LAST_FRAME) {
         if (m->input & INPUT_A_PRESSED) {
-            m->vel[1] = 52.0f;
+            m->vel[1]        = 52.0f;
             m->faceAngle[1] += 0x8000;
             return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
         }
@@ -1222,7 +1237,7 @@ s32 act_forward_rollout(struct MarioState *m) {
 
 s32 act_backward_rollout(struct MarioState *m) {
     if (m->actionState == 0) {
-        m->vel[1] = 30.0f;
+        m->vel[1]      = 30.0f;
         m->actionState = 1;
     }
     if (!(m->prevAction & ACT_FLAG_AIR)) {

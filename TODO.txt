@@ -45,6 +45,7 @@
             - WMOTR
             - TOTWC
     - Cubic/3D collision cels
+    - Only load collision for the current room
 - Physics:
     - Object step height being a field
     - Gravity direction support

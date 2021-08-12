@@ -196,7 +196,6 @@ s32 act_picking_up_bowser(struct MarioState *m) {
 
 s32 act_holding_bowser(struct MarioState *m) {
     s16 spin;
-
     if (m->input & INPUT_B_PRESSED) {
 #ifndef VERSION_JP
         play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);

@@ -178,14 +178,12 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
 s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 lossFactor;
     f32 accel;
-    f32 oldSpeed;
-    f32 newSpeed;
+    f32 oldSpeed, newSpeed;
     s32 stopped = FALSE;
     s16 intendedDYaw = m->intendedYaw - m->slideYaw;
     f32 forward = coss(intendedDYaw);
     f32 sideward = sins(intendedDYaw);
-    f32 slideVelXModifier;
-    f32 slideVelZModifier;
+    f32 slideVelXModifier, slideVelZModifier;
     //! 10k glitch
     if (forward < 0.0f && m->forwardVel >= 0.0f) forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
     switch (mario_get_floor_class(m)) {
@@ -195,8 +193,9 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
         case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = m->intendedMag / 32.0f * forward * 0.02f + 0.92f; break;
     }
     oldSpeed          = sqrtf(m->slideVelX * m->slideVelX + m->slideVelZ * m->slideVelZ); //! fast invsqrt?
-    slideVelXModifier = m->slideVelZ * (m->intendedMag / 32.0f) * sideward * 0.05f;
-    slideVelZModifier = m->slideVelX * (m->intendedMag / 32.0f) * sideward * 0.05f;
+    sideward          = (m->intendedMag / 32.0f) * sideward * 0.05f;
+    slideVelXModifier = m->slideVelZ * sideward;
+    slideVelZModifier = m->slideVelX * sideward;
     m->slideVelX     += slideVelXModifier;
     m->slideVelZ     -= slideVelZModifier;
 #ifdef FAST_INVSQRT

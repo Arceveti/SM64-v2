@@ -249,9 +249,13 @@
 
 // -- Optimizations --
 
+// Skips the wall checks in update_mario_geometry_inputs, since they don't return a wall that's used for anything.
+#define SKIP_GEOMETRY_INPUT_WALLS
 // Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
 #define UNIMPORTANT_OBJECTS
 // geo_switch_area always uses Mario's floor instead of looking for intangible floors.
+// when this is disabled, the game will still only try to find a new floor if there is
+// an intangible floor in the current cell
 // #define SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
