@@ -633,7 +633,7 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
             sMarioCamState->action == ACT_FEET_STUCK_IN_GROUND) {
             if (ABS(c->pos[1] - goalHeight) > 1000.0f) c->pos[1] = goalHeight;
         }
-#ifdef REONU_CAM_3
+#ifdef FAST_VERTICAL_CAMERA_MOVEMENT
         approachRate += ABS(c->pos[1] - goalHeight) / 20;
 #endif
         approach_camera_height(c, goalHeight, approachRate);
@@ -650,13 +650,12 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
  */
 s16 look_down_slopes(s16 camYaw) {
     struct Surface *floor;
-    f32 floorDY;
     // Default pitch
     s16 pitch = 0x05B0;
     // x and z offsets towards the camera
     f32 xOff = sMarioCamState->pos[0] + sins(camYaw) * 40.0f;
     f32 zOff = sMarioCamState->pos[2] + coss(camYaw) * 40.0f;
-    floorDY = find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1];
+    f32 floorDY = find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1];
     if (floor != NULL && floor->type != SURFACE_WALL_MISC && floorDY > 0) {
         if (floor->normal.z == 0.0f && floorDY < 100.0f) {
             pitch = 0x05B0;
@@ -2939,7 +2938,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             normZ          = wall->normal.z;
             originOffset   = wall->originOffset;
             offset         = normX * newPos[i][0] + normY * newPos[i][1] + normZ * newPos[i][2] + originOffset;
-            offsetAbsolute = ABS2(offset);
+            offsetAbsolute = ABS(offset);
             if (offsetAbsolute < radius) {
                 newPos[i][0] += normX * (radius - offset);
                 newPos[i][2] += normZ * (radius - offset);
@@ -4063,9 +4062,9 @@ s16 next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Ve
     // Transition from the last mode to the current one
     if (sModeTransition.framesLeft > 0) {
         vec3f_get_dist_and_angle(curFoc, curPos, &goalDist, &goalPitch, &goalYaw);
-        distVelocity  = ABS(goalDist  - sModeTransition.posDist)  /  distTimer;
-        pitchVelocity = ABS(goalPitch - sModeTransition.posPitch) / angleTimer;
-        yawVelocity   = ABS(goalYaw   - sModeTransition.posYaw)   / angleTimer;
+        distVelocity  = ABS((s16)(goalDist  - sModeTransition.posDist )) /  distTimer;
+        pitchVelocity = ABS((s16)(goalPitch - sModeTransition.posPitch)) / angleTimer;
+        yawVelocity   = ABS((s16)(goalYaw   - sModeTransition.posYaw  )) / angleTimer;
         camera_approach_f32_symmetric_bool(&sModeTransition.posDist,  goalDist,  distVelocity);
         camera_approach_s16_symmetric_bool(&sModeTransition.posYaw,   goalYaw,   yawVelocity);
         camera_approach_s16_symmetric_bool(&sModeTransition.posPitch, goalPitch, pitchVelocity);

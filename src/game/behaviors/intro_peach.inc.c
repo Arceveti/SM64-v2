@@ -32,7 +32,7 @@ void bhv_intro_peach_loop(void) {
             gCurrentObject->header.gfx.animInfo.animFrame =      100;
             break;
         case PEACH_ACT_FADE_1:
-            intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 0.0f);
+            intro_peach_set_pos_and_opacity(gCurrentObject,   0.0f, 0.0f);
             if (gCurrentObject->oTimer > 20) gCurrentObject->oAction = PEACH_ACT_UNFADE;
             break;
         case PEACH_ACT_UNFADE:
@@ -40,7 +40,7 @@ void bhv_intro_peach_loop(void) {
             if ((gCurrentObject->oTimer > 100) && (get_dialog_id() == DIALOG_NONE)) gCurrentObject->oAction = PEACH_ACT_FADE_2;
             break;
         case PEACH_ACT_FADE_2:
-            intro_peach_set_pos_and_opacity(gCurrentObject, 0.0f, 8.0f);
+            intro_peach_set_pos_and_opacity(gCurrentObject,   0.0f, 8.0f);
             if (gCurrentObject->oTimer > 60) obj_mark_for_deletion(gCurrentObject);
             break;
     }

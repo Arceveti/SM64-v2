@@ -2,6 +2,7 @@
 - Crashes:
     - Properly fix HMC crash
     - Enable rumble support and properly fix "heavy object" crash
+    - Fix ending cutscene crash
 - Optimizations:
     - Save space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
@@ -51,6 +52,7 @@
     - Gravity direction support
     - "Squished" death from any direction
     - Walking across a non-slippery steep slope doesn't slow down Mario
+    - Properly fix perpendicular wall slide
 - Silhouette:
     - Silhouette for Mario's held/riding object
     - Mirror Mario should not have silhouette

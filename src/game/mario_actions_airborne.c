@@ -543,7 +543,7 @@ s32 act_wall_slide(struct MarioState *m) {
             m->forwardVel *= ABS(sins(wallDintendedYaw));
             return set_mario_action(m, ACT_FREEFALL, 0);
         } else {
-            sideward = (m->intendedMag / 32.0f) * sins(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX)) * 0.05f;
+            sideward = (m->intendedMag / 32.0f) * sins((s16)(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX))) * 0.05f;
             move_towards_wall(m, m->vel[1] + m->forwardVel);
             slideVelXModifier = m->slideVelZ * sideward;
             slideVelZModifier = m->slideVelX * sideward;
@@ -575,7 +575,7 @@ s32 act_wall_kick_air(struct MarioState *m) {
     if (m->wall != NULL) {
         wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
         // Snap Mario's rotation to be perpendicular ot the wall
-        if (ABS(m->faceAngle[1] - wallAngle) <= 0x1) m->faceAngle[1] = wallAngle;
+        if (ABS((s16)(m->faceAngle[1] - wallAngle)) <= 0x1) m->faceAngle[1] = wallAngle;
     }
 #ifdef ACTION_CANCELS
     if (check_kick_or_dive_in_air(m)) return TRUE;

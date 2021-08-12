@@ -9,7 +9,7 @@
 #include "interaction.h"
 #include "engine/math_util.h"
 #include "rumble_init.h"
-#ifdef DEBUG_LEVEL_SELECT
+#ifdef LENIENT_BOWSER_THROWS
 #include "object_helpers.h"
 #include "behavior_data.h"
 #endif
@@ -32,7 +32,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
     if (m->action & ACT_FLAG_MOVING) {
         endAction = ACT_WALKING, crouchEndAction = ACT_CROUCH_SLIDE;
     } else {
-        endAction = ACT_IDLE, crouchEndAction = ACT_CROUCHING;
+        endAction = ACT_IDLE,    crouchEndAction = ACT_CROUCHING;
     }
     switch (m->actionArg) {
         case 0: play_sound(SOUND_MARIO_PUNCH_YAH, m->marioObj->header.gfx.cameraToObject); // fall through
@@ -201,9 +201,9 @@ s32 act_picking_up_bowser(struct MarioState *m) {
 s32 act_holding_bowser(struct MarioState *m) {
     s16 spin;
     if (m->input & INPUT_B_PRESSED) {
-#ifdef DEBUG_LEVEL_SELECT
-        f32 dist;
-        m->faceAngle[1] = mario_obj_angle_to_object(m, find_closest_obj_with_behavior_from_point(bhvBowserBomb, m->pos, &dist));
+#ifdef LENIENT_BOWSER_THROWS
+        s16 angleToBomb;
+        if (find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, m->faceAngle[1], m->angleVel[1], &angleToBomb) != NULL) m->faceAngle[1] = angleToBomb;
 #endif
 #ifndef VERSION_JP
         play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);

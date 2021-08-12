@@ -16,8 +16,7 @@
  * @see camera.c
  */
 
-#define ABS(x)  ((x) >  0.0f ? (x) : -(x))
-#define ABS2(x) ((x) >= 0.0f ? (x) : -(x))
+#define ABS(x) ((x) > 0.0f ? (x) : -(x))
 
 /**
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000

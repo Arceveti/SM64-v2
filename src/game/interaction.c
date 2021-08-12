@@ -1285,24 +1285,15 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
     return FALSE;
 }
 
-#ifdef VERSION_JP
-#define READ_MASK (INPUT_B_PRESSED)
-#else
 #define READ_MASK (INPUT_B_PRESSED | INPUT_A_PRESSED)
-#endif
-
-#ifdef VERSION_JP
-#define SIGN_RANGE 0x38E3
-#else
 #define SIGN_RANGE 0x4000
-#endif
 
 u32 check_read_sign(struct MarioState *m, struct Object *o) {
 #ifdef EASIER_DIALOG_TRIGGER
     s16 facingDYaw   = (s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1];
     s16 dAngleToSign = mario_obj_angle_to_object(m, o) - m->faceAngle[1];
     if (mario_can_talk(m, TRUE) && object_facing_mario(m, o, SIGN_RANGE)
-        && facingDYaw   >= -SIGN_RANGE && facingDYaw <= SIGN_RANGE
+        && facingDYaw   >= -SIGN_RANGE && facingDYaw   <= SIGN_RANGE
         && dAngleToSign >= -SIGN_RANGE && dAngleToSign <= SIGN_RANGE) {
 #ifdef DIALOG_INDICATOR
         if (o->behavior == segmented_to_virtual(bhvSignOnWall)) {

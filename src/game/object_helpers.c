@@ -648,9 +648,9 @@ f32 cur_obj_dist_to_nearest_object_with_behavior(const BehaviorScript *behavior)
 }
 
 struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *behavior, f32 *dist) {
-    uintptr_t *behaviorAddr   = segmented_to_virtual(behavior);
-    struct Object *closestObj = NULL;
-    struct Object *obj;
+    uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
+    struct Object     *closestObj   = NULL;
+    struct Object     *obj;
     struct ObjectNode *listHead;
     f32 minDist = 0x20000;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
@@ -670,9 +670,9 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
 }
 
 struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *behavior, Vec3f pos, f32 *dist) {
-    uintptr_t *behaviorAddr = segmented_to_virtual(behavior);
-    struct Object *closestObj = NULL;
-    struct Object *obj;
+    uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
+    struct Object     *closestObj   = NULL;
+    struct Object     *obj;
     struct ObjectNode *listHead;
     f32 minDist = 0x20000;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
@@ -691,6 +691,31 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
         obj = (struct Object *) obj->header.next;
     }
     *dist = minDist;
+    return closestObj;
+}
+
+struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, s16 lookingYaw, s16 yawRange, s16 *yaw) {
+    uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
+    struct Object     *closestObj   = NULL;
+    struct Object     *obj;
+    struct ObjectNode *listHead;
+    s16 minYaw  = yawRange;
+    listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
+    obj         = (struct Object *) listHead->next;
+    while (obj != (struct Object *) listHead) {
+        if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
+            f32 dx = obj->oPosX - pos[0];
+            f32 dz = obj->oPosZ - pos[2];
+            s16 objYaw = atan2s(dz, dx);
+            s16 objDYaw = ABS((s16)(lookingYaw - objYaw));
+            if (objDYaw < yawRange && objDYaw < ABS((s16)(lookingYaw - minYaw))) {
+                closestObj = obj;
+                minYaw     = objYaw;
+            }
+        }
+        obj = (struct Object *) obj->header.next;
+    }
+    *yaw = minYaw;
     return closestObj;
 }
 

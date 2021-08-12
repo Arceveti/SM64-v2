@@ -286,8 +286,10 @@
 
 // -- HUD/Gameplay QoL --
 
-// Slightly modified version of Reonu Cam 3
+// Slightly modified version of Reonu Cam 3 (Reonu)
 #define REONU_CAM_3
+// Camera approaches Mario's height much more quickly (Reonu)
+#define FAST_VERTICAL_CAMERA_MOVEMENT
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER
 // Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
@@ -329,6 +331,8 @@
 #define HOOT_TREE_PARTICLES
 // Reimplement the unused sad eye texture for the mother penguin
 #define PENGUIN_MOTHER_SAD_EYES
+// Makes bowser throws more lenient (Arceveti)
+#define LENIENT_BOWSER_THROWS
 
 // The number of chain balls the Chain Chomp has
 // Vanilla is 5
