@@ -249,8 +249,6 @@
 
 // -- Optimizations --
 
-// Skips the wall checks in update_mario_geometry_inputs, since they don't return a wall that's used for anything.
-#define SKIP_GEOMETRY_INPUT_WALLS
 // Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
 #define UNIMPORTANT_OBJECTS
 // geo_switch_area always uses Mario's floor instead of looking for intangible floors.

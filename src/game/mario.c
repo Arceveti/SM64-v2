@@ -1144,10 +1144,8 @@ void update_mario_joystick_inputs(struct MarioState *m) {
 void update_mario_geometry_inputs(struct MarioState *m) {
     f32 gasLevel;
     f32 ceilToFloorDist;
-#ifndef SKIP_GEOMETRY_INPUT_WALLS
     f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
-#endif
     m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
     // If Mario is OOB, move his position to his graphical position (which was not updated)
     // and check for the floor there.

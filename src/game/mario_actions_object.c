@@ -9,6 +9,10 @@
 #include "interaction.h"
 #include "engine/math_util.h"
 #include "rumble_init.h"
+#ifdef DEBUG_LEVEL_SELECT
+#include "object_helpers.h"
+#include "behavior_data.h"
+#endif
 
 /**
  * Used by act_punching() to determine Mario's forward velocity during each
@@ -197,6 +201,10 @@ s32 act_picking_up_bowser(struct MarioState *m) {
 s32 act_holding_bowser(struct MarioState *m) {
     s16 spin;
     if (m->input & INPUT_B_PRESSED) {
+#ifdef DEBUG_LEVEL_SELECT
+        f32 dist;
+        m->faceAngle[1] = mario_obj_angle_to_object(m, find_closest_obj_with_behavior_from_point(bhvBowserBomb, m->pos, &dist));
+#endif
 #ifndef VERSION_JP
         play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
 #else

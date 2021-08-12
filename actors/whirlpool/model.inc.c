@@ -1,78 +1,78 @@
 // Whirlpool
 
 // 0x05012848
-ALIGNED8 static const Texture whirlpool_seg5_texture_05012848[] = {
+ALIGNED8 static const Texture whirlpool_seg5_texture[] = {
 #include "actors/whirlpool/whirlpool.ia16.inc.c"
 };
 
 // 0x05013848
 static const Vtx whirlpool_seg5_vertex_05013848[] = {
-    {{{    93,    129,    161}, 0, {   650,   1708}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    129,    185}, 0, {   480,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    93,    128,    160}, 0, {   650,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    128,    185}, 0, {   480,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {   564,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   161,    129,     93}, 0, {   820,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   160,    128,     93}, 0, {   820,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {   734,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   189,    802,    328}, 0, {   650,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    802,    379}, 0, {   480,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   328,    802,    189}, 0, {   820,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -92,    129,    161}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -92,    128,    160}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -188,    802,    328}, 0, {   308,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {   394,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   185,    129,      0}, 0, {   990,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   185,    128,      0}, 0, {   990,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {   904,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   379,    802,      0}, 0, {   990,    128}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05013928
 static const Vtx whirlpool_seg5_vertex_05013928[] = {
-    {{{   -92,    129,   -160}, 0, {  1672,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -92,    128,   -160}, 0, {  1672,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -188,    802,   -327}, 0, {  1672,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    802,   -378}, 0, {  1502,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   161,    129,    -92}, 0, {  1160,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   160,    128,    -92}, 0, {  1160,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   379,    802,      0}, 0, {   990,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   185,    129,      0}, 0, {   990,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   185,    128,      0}, 0, {   990,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   328,    802,   -188}, 0, {  1160,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1076,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    93,    129,   -160}, 0, {  1330,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    93,    128,   -160}, 0, {  1330,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1246,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{   189,    802,   -327}, 0, {  1330,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    129,   -184}, 0, {  1502,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    128,   -184}, 0, {  1502,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1416,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -92,    129,    161}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -160,    129,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -92,    128,    160}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -160,    128,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {   224,   2012}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05013A28
 static const Vtx whirlpool_seg5_vertex_05013A28[] = {
-    {{{   -92,    129,   -160}, 0, {  1672,   1708}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    129,   -184}, 0, {  1502,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -92,    128,   -160}, 0, {  1672,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    128,   -184}, 0, {  1502,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1586,   2012}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -160,    129,    -92}, 0, {  1842,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -160,    128,    -92}, 0, {  1842,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1756,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -188,    802,   -327}, 0, {  1672,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -327,    802,   -188}, 0, {  1842,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -184,    129,      0}, 0, {  2012,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -184,    128,      0}, 0, {  2012,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {  1926,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -378,    802,      0}, 0, {  2012,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -160,    129,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -184,    129,      0}, 0, {     0,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -160,    128,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -184,    128,      0}, 0, {     0,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,      0}, 0, {    54,   2012}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -378,    802,      0}, 0, {     0,    128}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05013B08
 static const Vtx whirlpool_seg5_vertex_05013B08[] = {
-    {{{   -92,    129,    161}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -92,    128,    160}, 0, {   308,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -188,    802,    328}, 0, {   308,    128}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -327,    802,    189}, 0, {   138,    128}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -160,    129,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -160,    128,     93}, 0, {   138,   1708}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -378,    802,      0}, 0, {     0,    128}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05013B58 - 0x05013CB8
 const Gfx whirlpool_seg5_dl_05013B58[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, whirlpool_seg5_texture_05012848),
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, whirlpool_seg5_texture),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(whirlpool_seg5_vertex_05013848, 14, 0),
@@ -97,7 +97,7 @@ const Gfx whirlpool_seg5_dl_05013B58[] = {
     gsSP1Triangle(10, 13, 11, 0x0),
     gsSPVertex(whirlpool_seg5_vertex_05013B08, 5, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
-    gsSP1Triangle( 3,  2,  4, 0x0),
+    gsSP1Triangle(  3,  2,  4, 0x0),
     gsSPEndDisplayList(),
 };
 

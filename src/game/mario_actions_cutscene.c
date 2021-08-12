@@ -1727,13 +1727,14 @@ static void end_peach_cutscene_descend_peach(struct MarioState *m) {
 
 // Mario runs to peach
 static void end_peach_cutscene_run_to_peach(struct MarioState *m) {
-    struct Surface *surf;
+    // struct Surface *surf;
     if (m->actionTimer == 22) sEndPeachAnimation = 5;
     if ((m->pos[2] -= 20.0f) <= -1181.0f) {
         m->pos[2] = -1180.0f;
         advance_cutscene_step(m);
     }
-    m->pos[1] = find_floor(m->pos[0], m->pos[1], m->pos[2], &surf);
+    // m->pos[1] = find_floor(m->pos[0], m->pos[1], m->pos[2], &surf);
+    m->pos[1] = m->floorHeight;
     set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, 0x80000);
     play_step_sound(m, 9, 45);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
