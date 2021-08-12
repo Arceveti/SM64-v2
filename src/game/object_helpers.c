@@ -236,59 +236,6 @@ void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
     }
 }
 
-s32 approach_f32_signed(f32 *value, f32 target, f32 increment) {
-    s32 reachedTarget = FALSE;
-    *value += increment;
-    if (increment >= 0.0f) {
-        if (*value > target) {
-            *value = target;
-            reachedTarget = TRUE;
-        }
-    } else {
-        if (*value < target) {
-            *value = target;
-            reachedTarget = TRUE;
-        }
-    }
-    return reachedTarget;
-}
-
-f32 approach_f32_symmetric(f32 value, f32 target, f32 increment) {
-    f32 dist;
-    if ((dist = target - value) >= 0.0f) {
-        if (dist > increment) {
-            value += increment;
-        } else {
-            value = target;
-        }
-    } else {
-        if (dist < -increment) {
-            value -= increment;
-        } else {
-            value = target;
-        }
-    }
-    return value;
-}
-
-s16 approach_s16_symmetric(s16 value, s16 target, s16 increment) {
-    s16 dist = target - value;
-    if (dist >= 0) {
-        if (dist > increment) {
-            value += increment;
-        } else {
-            value = target;
-        }
-    } else {
-        if (dist < -increment) {
-            value -= increment;
-        } else {
-            value = target;
-        }
-    }
-    return value;
-}
-
 s32 cur_obj_rotate_yaw_toward(s16 target, s16 increment) {
     s16 startYaw = (s16) o->oMoveAngleYaw;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, target, increment);
@@ -707,8 +654,8 @@ struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *beh
             f32 dx = obj->oPosX - pos[0];
             f32 dz = obj->oPosZ - pos[2];
             s16 objYaw = atan2s(dz, dx);
-            s16 objDYaw = ABS((s16)(lookingYaw - objYaw));
-            if (objDYaw < yawRange && objDYaw < ABS((s16)(lookingYaw - minYaw))) {
+            s16 objDYaw = abs_angle_diff(lookingYaw, objYaw);
+            if (objDYaw < yawRange && objDYaw < abs_angle_diff(lookingYaw, minYaw)) {
                 closestObj = obj;
                 minYaw     = objYaw;
             }
@@ -1696,18 +1643,6 @@ void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox) {
     obj->hurtboxRadius    = obj->header.gfx.scale[0] * hitbox->hurtboxRadius;
     obj->hurtboxHeight    = obj->header.gfx.scale[1] * hitbox->hurtboxHeight;
     obj->hitboxDownOffset = obj->header.gfx.scale[1] * hitbox->downOffset;
-}
-
-s32 signum_positive(s32 x) {
-    return (x >= 0) ? 1 : -1;
-}
-
-f32 absf(f32 x) {
-    return (x >= 0.0f) ? x : -x;
-}
-
-s32 absi(s32 x) {
-    return (x >= 0) ? x : -x;
 }
 
 s32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {

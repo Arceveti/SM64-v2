@@ -69,9 +69,6 @@ void obj_set_held_state(          struct Object *obj,  const BehaviorScript *hel
 f32  lateral_dist_between_objects(struct Object *obj1, struct Object *obj2);
 f32  dist_between_objects(        struct Object *obj1, struct Object *obj2);
 void cur_obj_forward_vel_approach_upward(f32 target, f32 increment);
-s32  approach_f32_signed(    f32 *value, f32 target, f32 increment);
-f32  approach_f32_symmetric( f32  value, f32 target, f32 increment);
-s16  approach_s16_symmetric( s16  value, s16 target, s16 increment);
 s32  cur_obj_rotate_yaw_toward(          s16 target, s16 increment);
 s16  obj_angle_to_object(         struct Object *obj1, struct Object *obj2);
 s16  obj_turn_toward_object(      struct Object *obj, struct Object *target, s16 angleIndex, s16 turnAmount);
@@ -210,9 +207,6 @@ s16 cur_obj_reflect_move_angle_off_wall(void);
 #define PATH_REACHED_WAYPOINT  1
 
 void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox);
-s32  signum_positive(s32 x);
-f32  absf(f32 x);
-s32  absi(s32 x);
 s32  cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks);
 s32  cur_obj_is_mario_ground_pounding_platform(void);
 void spawn_mist_particles(void);

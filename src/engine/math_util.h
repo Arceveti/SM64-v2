@@ -30,16 +30,23 @@ extern f32 gSineTable[];
  */
 #define DEGREES(x) (s16)((x) * 0x10000 / 360)
 
-#define sins(x) gSineTable[(u16) (x) >> 4]
+#define sins(x) gSineTable[  (u16) (x) >> 4]
 #define coss(x) gCosineTable[(u16) (x) >> 4]
 
 #define min(a, b) ((a) <= (b) ? (a) : (b))
-#define max(a, b) ((a) > (b) ? (a) : (b))
+#define max(a, b) ((a) >  (b) ? (a) : (b))
 
 #define sqr(x) ((x) * (x))
 
+s32  signum_positive(s32 x);
+f64  absd(f64 x);
+f32  absf(f32 x);
+s32  absi(s32 x);
+s16  abss(s16 x);
+s8   absc(s8  x);
 #ifdef FAST_INVSQRT
-float Q_rsqrtf( float number );
+float  Q_rsqrtf( float  number );
+double Q_rsqrtd( double number );
 #endif
 s16  min_3(s16 a0, s16 a1, s16 a2);
 s16  max_3(s16 a0, s16 a1, s16 a2);
@@ -79,8 +86,11 @@ void mtxf_rotate_xy(                      Mtx  *mtx, s16 angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, s16  pitch, s16  yaw);
-s32  approach_s32(s32 current, s32 target, s32 inc, s32 dec);
-f32  approach_f32(f32 current, f32 target, f32 inc, f32 dec);
+s32  approach_s32(           s32 current, s32 target, s32 inc, s32 dec);
+f32  approach_f32(           f32 current, f32 target, f32 inc, f32 dec);
+s32  approach_f32_signed(    f32  *value, f32 target, f32 inc);
+f32  approach_f32_symmetric( f32   value, f32 target, f32 inc);
+s16  approach_s16_symmetric( s16   value, s16 target, s16 inc);
 s16  atan2s(f32 y, f32 x);
 f32  atan2f(f32 a, f32 b);
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);

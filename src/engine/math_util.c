@@ -14,18 +14,6 @@ Vec4s *gSplineKeyframe;
 float gSplineKeyframeFraction;
 int gSplineState;
 
-// These functions have bogus return values.
-// Disable the compiler warning.
-#pragma GCC diagnostic push
-
-#ifdef __GNUC__
-#if defined(__clang__)
-  #pragma GCC diagnostic ignored "-Wreturn-stack-address"
-#else
-  #pragma GCC diagnostic ignored "-Wreturn-local-addr"
-#endif
-#endif
-
 #define FLOAT_MIN -3.40282e+38f
 
 // Kaze functions
@@ -67,15 +55,54 @@ float slow_powf(float base, float exponent) {
 float Q_rsqrtf( float number ) {
 	long i;
 	float x2, y;
-	x2 = number * 0.5F;
+	x2 = number * 0.5f;
 	y  = number;
-	i  = * ( long * ) &y;
-	i  = 0x5f3759df - ( i >> 1 );
-	y  = * ( float * ) &i;
-	y  = y * ( 1.5F - ( x2 * y * y ) );
+	i  = *(long *) &y;
+	i  = 0x5f3759df - (i >> 1);
+	y  = *(float *) &i;
+	y  = y * (1.5f - (x2 * y * y)); // 1st iteration
+	// y  = y * (1.5f - (x2 * y * y)); // 2nd iteration, this can be removed
+	return y;
+}
+
+double Q_rsqrtd( double number ) {
+	long i;
+	double x2, y;
+	x2 = number * 0.5;
+	y  = number;
+	i  = *(long *) &y;
+    // The magic number is for doubles is from https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
+	i  = 0x5fe6eb50c7b537a9 - (i >> 1);
+	y  = *(double *) &i;
+	y  = y * (1.5 - (x2 * y * y)); // 1st iteration
+    // y  = y * (1.5 - (x2 * y * y)); // 2nd iteration, this can be removed
 	return y;
 }
 #endif
+
+s32 signum_positive(s32 x) {
+    return (x >= 0) ? 1 : -1;
+}
+
+f64 absd(f64 x) {
+    return (x >= 0.0) ? x : -x;
+}
+
+f32 absf(f32 x) {
+    return (x >= 0.0f) ? x : -x;
+}
+
+s32 absi(s32 x) {
+    return (x >= 0) ? x : -x;
+}
+
+s16 abss(s16 x) {
+    return (x >= 0) ? x : -x;
+}
+
+s8 absc(s8 x) {
+    return (x >= 0) ? x : -x;
+}
 
 /// Returns the lowest of three values.
 s16 min_3(s16 a0, s16 a1, s16 a2) {
@@ -90,6 +117,18 @@ s16 max_3(s16 a0, s16 a1, s16 a2) {
     if (a2 > a0) a0 = a2;
     return a0;
 }
+
+// These functions have bogus return values.
+// Disable the compiler warning.
+#pragma GCC diagnostic push
+
+#ifdef __GNUC__
+#if defined(__clang__)
+  #pragma GCC diagnostic ignored "-Wreturn-stack-address"
+#else
+  #pragma GCC diagnostic ignored "-Wreturn-local-addr"
+#endif
+#endif
 
 /// Copy vector 'src' to 'dest'
 void *vec3f_copy(Vec3f dest, Vec3f src) {
@@ -830,6 +869,59 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
         if (current < target) current = target;
     }
     return current;
+}
+
+s32 approach_f32_signed(f32 *value, f32 target, f32 inc) {
+    s32 reachedTarget = FALSE;
+    *value += inc;
+    if (inc >= 0.0f) {
+        if (*value > target) {
+            *value = target;
+            reachedTarget = TRUE;
+        }
+    } else {
+        if (*value < target) {
+            *value = target;
+            reachedTarget = TRUE;
+        }
+    }
+    return reachedTarget;
+}
+
+f32 approach_f32_symmetric(f32 value, f32 target, f32 inc) {
+    f32 dist;
+    if ((dist = target - value) >= 0.0f) {
+        if (dist > inc) {
+            value += inc;
+        } else {
+            value = target;
+        }
+    } else {
+        if (dist < -inc) {
+            value -= inc;
+        } else {
+            value = target;
+        }
+    }
+    return value;
+}
+
+s16 approach_s16_symmetric(s16 value, s16 target, s16 inc) {
+    s16 dist = target - value;
+    if (dist >= 0) {
+        if (dist > inc) {
+            value += inc;
+        } else {
+            value = target;
+        }
+    } else {
+        if (dist < -inc) {
+            value -= inc;
+        } else {
+            value = target;
+        }
+    }
+    return value;
 }
 
 /**
