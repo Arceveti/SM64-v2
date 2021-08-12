@@ -36,6 +36,7 @@ struct FloorGeometry
 s32  floor_type_exists_in_current_cell(f32 xPos, f32 zPos, s16 type, s32 dynamic);
 s32  f32_find_wall_collision(   f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 radius);
 s32  find_wall_collisions(struct WallCollisionData *colData);
+s32  collide_with_walls(        Vec3f pos, f32 offsetY, f32 radius);
 f32  find_ceil(                 f32  xPos, f32  yPos, f32  zPos, struct Surface **pceil);
 f32  find_floor_height_and_data(f32  xPos, f32  yPos, f32  zPos, struct FloorGeometry **floorGeo);
 f32  find_floor_height(         f32  x,    f32  y,    f32  z);

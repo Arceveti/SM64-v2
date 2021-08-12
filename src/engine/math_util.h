@@ -22,6 +22,14 @@
 extern f32 gSineTable[];
 #define gCosineTable (gSineTable + 0x400)
 
+#define ABS(x) ((x) > 0.0f ? (x) : -(x))
+
+/**
+ * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000
+ * This should be used mainly to make camera code clearer at first glance.
+ */
+#define DEGREES(x) (s16)((x) * 0x10000 / 360)
+
 #define sins(x) gSineTable[(u16) (x) >> 4]
 #define coss(x) gCosineTable[(u16) (x) >> 4]
 

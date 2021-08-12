@@ -45,7 +45,7 @@
             - RR
             - WMOTR
             - TOTWC
-    - Cubic/3D collision cels
+    - Cubic/3D collision cells
     - Only load collision for the current room
 - Physics:
     - Object step height being a field
@@ -67,4 +67,5 @@
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
 - Camera:
+    - Split camera file into camera and cutscene files
     - Better camera controls in general lol

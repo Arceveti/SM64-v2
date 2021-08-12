@@ -3,6 +3,7 @@
 #include "prevent_bss_reordering.h"
 #include "sm64.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "seq_ids.h"
 #include "dialog_ids.h"
 #include "audio/external.h"
@@ -1819,16 +1820,12 @@ void mode_mario_camera(struct Camera *c) {
  * Rotates the camera around the spiral staircase.
  */
 s32 update_spiral_stairs_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
-    /// The returned yaw
-    s16 camYaw;
+    /// The returned yaw,
+    /// The focus (Mario)'s yaw around the stairs,
+    /// The camera's yaw around the stairs.
+    s16 camYaw, focYaw, posYaw;
     // unused
-    UNUSED s16 focPitch;
-    /// The focus (Mario)'s yaw around the stairs
-    s16 focYaw;
-    // unused
-    UNUSED s16 posPitch;
-    /// The camera's yaw around the stairs
-    s16 posYaw;
+    UNUSED s16 focPitch, posPitch;
     Vec3f cPos, checkPos;
     struct Surface *floor;
     // unused
@@ -2909,53 +2906,7 @@ s32 update_camera_hud_status(struct Camera *c) {
     return status;
 }
 
-/**
- * Check `pos` for collisions within `radius`, and update `pos`
- *
- * @return the number of collisions found
- */
-s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
-    struct WallCollisionData collisionData;
-    struct Surface *wall = NULL;
-    f32 normX, normY, normZ;
-    f32 originOffset;
-    f32 offset, offsetAbsolute;
-    Vec3f newPos[4];
-    s32 i;
-    s32 numCollisions     = 0;
-    collisionData.x       = pos[0];
-    collisionData.y       = pos[1];
-    collisionData.z       = pos[2];
-    collisionData.radius  = radius;
-    collisionData.offsetY = offsetY;
-    numCollisions         = find_wall_collisions(&collisionData);
-    if (numCollisions != 0) {
-        for (i = 0; i < collisionData.numWalls; i++) {
-            wall = collisionData.walls[collisionData.numWalls - 1];
-            vec3f_copy(newPos[i], pos);
-            normX          = wall->normal.x;
-            normY          = wall->normal.y;
-            normZ          = wall->normal.z;
-            originOffset   = wall->originOffset;
-            offset         = normX * newPos[i][0] + normY * newPos[i][1] + normZ * newPos[i][2] + originOffset;
-            offsetAbsolute = ABS(offset);
-            if (offsetAbsolute < radius) {
-                newPos[i][0] += normX * (radius - offset);
-                newPos[i][2] += normZ * (radius - offset);
-                vec3f_copy(pos, newPos[i]);
-            }
-        }
-    }
-    return numCollisions;
-}
-
-/**
- * Compare a vector to a position, return TRUE if they match.
- */
-s32 vec3f_compare(Vec3f pos, f32 posX, f32 posY, f32 posZ) {
-    return (pos[0] == posX && pos[1] == posY && pos[2] == posZ);
-}
-
+//! move to math_util?
 s32 clamp_pitch(Vec3f from, Vec3f to, s16 maxPitch, s16 minPitch) {
     s32 outOfRange = 0;
     s16 pitch, yaw;
@@ -2963,7 +2914,7 @@ s32 clamp_pitch(Vec3f from, Vec3f to, s16 maxPitch, s16 minPitch) {
     vec3f_get_dist_and_angle(from, to, &dist, &pitch, &yaw);
     if (pitch > maxPitch) { pitch = maxPitch; outOfRange++; }
     if (pitch < minPitch) { pitch = minPitch; outOfRange++; }
-    vec3f_set_dist_and_angle(from, to, dist, pitch, yaw);
+    vec3f_set_dist_and_angle(from, to,  dist,  pitch,  yaw);
     return outOfRange;
 }
 
@@ -2973,6 +2924,7 @@ s32 is_within_100_units_of_mario(f32 posX, f32 posY, f32 posZ) {
     return (calc_abs_dist(sMarioCamState->pos, pos) < 100.0f);
 }
 
+//! move to math_util
 s32 set_or_approach_f32_asymptotic(f32 *dst, f32 goal, f32 scale) {
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
         approach_f32_asymptotic_bool(dst, goal, scale);
@@ -2982,6 +2934,7 @@ s32 set_or_approach_f32_asymptotic(f32 *dst, f32 goal, f32 scale) {
     return !(*dst == goal);
 }
 
+//! move to math_util
 /**
  * Approaches an f32 value by taking the difference between the target and current value
  * and adding a fraction of that to the current value.
@@ -2993,6 +2946,7 @@ s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
     return !(*current == target);
 }
 
+//! move to math_util
 /**
  * Nearly the same as the above function, returns new value instead.
  */
@@ -3001,6 +2955,7 @@ f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
     return current;
 }
 
+//! move to math_util
 /**
  * Approaches an s16 value in the same fashion as approach_f32_asymptotic_bool, returns TRUE if target
  * is reached. Note: Since this function takes integers as parameters, the last argument is the
@@ -3019,6 +2974,7 @@ s32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
     return !(*current == target);
 }
 
+//! move to math_util
 /**
  * Approaches an s16 value in the same fashion as approach_f32_asymptotic, returns the new value.
  * Note: last parameter is the reciprocal of what it would be in the f32 functions
@@ -3036,6 +2992,7 @@ s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor) {
     return current;
 }
 
+//! move to math_util
 /**
  * Applies the approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the given
  * vector.
@@ -3046,6 +3003,7 @@ void approach_vec3f_asymptotic(Vec3f current, Vec3f target, f32 xMul, f32 yMul, 
     approach_f32_asymptotic_bool(&current[2], target[2], zMul);
 }
 
+//! move to math_util
 /**
  * Applies the set_or_approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the
  * given vector.
@@ -3056,6 +3014,7 @@ void set_or_approach_vec3f_asymptotic(Vec3f dst, Vec3f goal, f32 xMul, f32 yMul,
     set_or_approach_f32_asymptotic(&dst[2], goal[2], zMul);
 }
 
+//! move to math_util
 /**
  * Applies the approach_s32_asymptotic function to each of the X, Y, & Z components of the given
  * vector.
@@ -3066,6 +3025,7 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
     approach_s16_asymptotic_bool(&current[2], target[2], zMul);
 }
 
+//! move to math_util?
 s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) {
     s16 dist = target - *current;
     if (increment < 0) increment = -increment;
@@ -3087,6 +3047,7 @@ s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) 
     return !(*current == target);
 }
 
+//! move to math_util?
 s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
     s16 dist = target - current;
     if (increment < 0) increment = -increment;
@@ -3108,6 +3069,7 @@ s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
     return current;
 }
 
+//! move to math_util
 s32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
         camera_approach_s16_symmetric_bool(current, target, increment);
@@ -3117,6 +3079,7 @@ s32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
     return !(*current == target);
 }
 
+//! move to math_util?
 /**
  * Approaches a value by a given increment, returns FALSE if the target is reached.
  * Appears to be a strange way of implementing approach_f32_symmetric from object_helpers.c.
@@ -3143,6 +3106,7 @@ s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) 
     return !(*current == target);
 }
 
+//! move to math_util?
 /**
  * Nearly the same as the above function, this one returns the new value in place of a bool.
  */
@@ -3167,6 +3131,7 @@ f32 camera_approach_f32_symmetric(f32 current, f32 target, f32 increment) {
     return current;
 }
 
+//! move to math_util
 /**
  * Generate a vector with all three values about zero. The
  * three ranges determine how wide the range about zero.
@@ -3246,6 +3211,7 @@ s32 calc_avoid_yaw(s16 yawFromMario, s16 wallYaw) {
     return yawFromMario;
 }
 
+//! move to surface_collision
 /**
  * Checks if `surf` is within the rect prism defined by xMax, yMax, and zMax
  *
@@ -3284,6 +3250,7 @@ s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zM
     return ((yMax != -1.0f && dyMax < yMax) || (xMax != -1.0f && zMax != -1.0f && dxMax < xMax && dzMax < zMax));
 }
 
+//! move to surface_collision
 /**
  * Checks if `pos` is behind the surface, using the dot product.
  *
@@ -3305,6 +3272,7 @@ s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
     return behindSurface;
 }
 
+//! move to surface_collision
 /**
  * Checks if the whole circular sector is behind the surface.
  */
@@ -3336,6 +3304,7 @@ s32 is_mario_behind_surface(UNUSED struct Camera *c, struct Surface *surf) {
     return is_behind_surface(sMarioCamState->pos, surf);
 }
 
+//! move to math_util
 /**
  * Calculates the distance between two points and sets a vector to a point
  * scaled along a line between them. Typically, somewhere in the middle.
@@ -3345,6 +3314,8 @@ void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
     dst[1] = (to[1] - from[1]) * scale + from[1];
     dst[2] = (to[2] - from[2]) * scale + from[2];
 }
+
+//! move to math_util
 /**
  * Effectively created a rectangular prism defined by a vector starting at the center
  * and extending to the corners. If the position is in this box, the function returns true.
@@ -3360,6 +3331,7 @@ s32 is_pos_in_bounds(Vec3f pos, Vec3f center, Vec3f bounds, s16 boundsYaw) {
             -bounds[2] < rel[2] && rel[2] < bounds[2]);
 }
 
+//! move to math_util
 s16 calculate_pitch(Vec3f from, Vec3f to) {
     f32 dx    = to[0] - from[0];
     f32 dy    = to[1] - from[1];
@@ -3367,12 +3339,14 @@ s16 calculate_pitch(Vec3f from, Vec3f to) {
     return atan2s(sqrtf(dx * dx + dz * dz), dy);
 }
 
+//! move to math_util
 s16 calculate_yaw(Vec3f from, Vec3f to) {
     f32 dx  = to[0] - from[0];
     f32 dz  = to[2] - from[2];
     return atan2s(dz, dx);
 }
 
+//! move to math_util
 /**
  * Calculates the pitch and yaw between two vectors.
  */
@@ -3384,6 +3358,7 @@ void calculate_angles(Vec3f from, Vec3f to, s16 *pitch, s16 *yaw) {
     *yaw   = atan2s(dz, dx);
 }
 
+//! move to math_util
 /**
  * Finds the distance between two vectors.
  */
@@ -3394,6 +3369,7 @@ f32 calc_abs_dist(Vec3f a, Vec3f b) {
     return sqrtf(distX * distX + distY * distY + distZ * distZ);
 }
 
+//! move to math_util
 /**
  * Finds the horizontal distance between two vectors.
  */
@@ -3403,6 +3379,7 @@ f32 calc_hor_dist(Vec3f a, Vec3f b) {
     return sqrtf(distX * distX + distZ * distZ);;
 }
 
+//! move to math_util
 /**
  * Rotates a vector in the horizontal plane and copies it to a new vector.
  */
@@ -3412,6 +3389,7 @@ void rotate_in_xz(Vec3f dst, Vec3f src, s16 yaw) {
     dst[2] = src[2] * coss(yaw) - src[0] * sins(yaw);
 }
 
+//! move to math_util
 /**
  * Rotates a vector in the YZ plane and copies it to a new vector.
  *
@@ -3608,7 +3586,7 @@ void play_camera_buzz_if_c_sideways(void) {
 }
 
 #ifdef REONU_CAM_3
-void play_sound_cbutton_up(void) {}
+void play_sound_cbutton_up(  void) {}
 void play_sound_cbutton_down(void) {}
 void play_sound_cbutton_side(void) {}
 #else
@@ -5054,7 +5032,10 @@ s16 camera_course_processing(struct Camera *c) {
                 break;
             case AREA_BBH:
                 // if camera is fixed at bbh_room_13_balcony_camera (but as floats)
-                if (vec3f_compare(sFixedModeBasePosition, 210.0f, 420.0f, 3109.0f) && sMarioCamState->pos[1] < 1800.0f) transition_to_camera_mode(c, CAMERA_MODE_CLOSE, 30);
+                if (sFixedModeBasePosition[0] ==  210.0f
+                 && sFixedModeBasePosition[1] ==  420.0f
+                 && sFixedModeBasePosition[2] == 3109.0f
+                 && sMarioCamState->pos[1] < 1800.0f) transition_to_camera_mode(c, CAMERA_MODE_CLOSE, 30);
                 break;
             case AREA_SSL_PYRAMID: set_mode_if_not_set_by_surface(c, CAMERA_MODE_OUTWARD_RADIAL); break;
             case AREA_SSL_OUTSIDE: set_mode_if_not_set_by_surface(c, CAMERA_MODE_RADIAL        ); break;

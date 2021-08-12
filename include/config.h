@@ -261,7 +261,7 @@
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
 // Use fast inverse square root for mtxf_lookat
-// #define FAST_INVSQRT_MTXF_LOOKAT
+#define FAST_INVSQRT_MTXF_LOOKAT
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
 

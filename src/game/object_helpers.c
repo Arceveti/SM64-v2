@@ -1331,7 +1331,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) {
     struct Surface *intendedFloor;
     f32 intendedX, intendedFloorHeight, intendedZ;
     f32 deltaFloorHeight;
-    f32 steepNormalY = coss((s16)(steepAngleDegrees * (0x10000 / 360)));
+    f32 steepNormalY = coss(DEGREES(steepAngleDegrees));
     if (o->oForwardVel != 0.0f) {
         intendedX           = o->oPosX + o->oVelX;
         intendedZ           = o->oPosZ + o->oVelZ;
@@ -1436,7 +1436,7 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
         } else if (steepSlopeAngleDegrees == -30) {
             steepSlopeNormalY = -COS30;
         } else {
-            steepSlopeNormalY = coss(steepSlopeAngleDegrees * (0x10000 / 360));
+            steepSlopeNormalY = coss(DEGREES(steepSlopeAngleDegrees));
         }
         cur_obj_compute_vel_xz();
         cur_obj_apply_drag_xz(dragStrength);
