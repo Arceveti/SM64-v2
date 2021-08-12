@@ -4772,7 +4772,7 @@ const BehaviorScript bhvArrowLift[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     LOAD_COLLISION_DATA(wdw_seg7_collision_arrow_lift),
-    SET_INT_RAND_RSHIFT(oArrowLiftUnusedRandom, /*Minimum*/ 1, /*Right shift*/ 32),
+    // SET_INT_RAND_RSHIFT(oArrowLiftUnusedRandom, /*Minimum*/ 1, /*Right shift*/ 32),
     SET_HOME(),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_arrow_lift_loop),

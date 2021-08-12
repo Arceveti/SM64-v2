@@ -6,6 +6,7 @@
 #include "audio/external.h"
 #include "behavior_data.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "dialog_ids.h"
 #include "engine/behavior_script.h"
 #include "engine/graph_node.h"
@@ -445,7 +446,7 @@ s32 act_reading_sign(struct MarioState *m) {
             }
             break;
         case 2: // in dialog
-            if (gCamera->cutscene == 0) { // dialog finished
+            if (gCamera->cutscene == CUTSCENE_NONE) { // dialog finished
                 disable_time_stop();
                 set_mario_action(m, ACT_IDLE, 0);
             }
@@ -1464,7 +1465,7 @@ static void intro_cutscene_lower_pipe(struct MarioState *m) {
 }
 
 static void intro_cutscene_set_mario_to_idle(struct MarioState *m) {
-    if (gCamera->cutscene == 0) {
+    if (gCamera->cutscene == CUTSCENE_NONE) {
         gCameraMovementFlags &= ~CAM_MOVE_C_UP_MODE;
         set_mario_action(m, ACT_IDLE, 0);
     }
@@ -1519,12 +1520,12 @@ static void jumbo_star_cutscene_falling(struct MarioState *m) {
 }
 
 // jumbo star cutscene: Mario takes off
-static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
+static void jumbo_star_cutscene_taking_off(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     s32 animFrame;
     if (m->actionState == 0) {
         set_mario_animation(m, MARIO_ANIM_FINAL_BOWSER_RAISE_HAND_SPIN);
-        marioObj->rawData.asF32[0x22] = 0.0f;
+        marioObj->oMarioJumboStarCutscenePosZ = 0.0f;
         if (is_anim_past_end(m)) {
             play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
             m->actionState++;
@@ -1534,7 +1535,7 @@ static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
         if (animFrame ==  3
          || animFrame == 28
          || animFrame == 60) play_sound_and_spawn_particles(m, SOUND_ACTION_TERRAIN_JUMP, 1);
-        if (animFrame >=  3) marioObj->rawData.asF32[0x22] -= 32.0f;
+        if (animFrame >=  3) marioObj->oMarioJumboStarCutscenePosZ -= 32.0f;
         switch (animFrame) {
             case  3: play_sound(SOUND_MARIO_YAH_WAH_HOO + (gAudioRandom % 3 << 16), m->marioObj->header.gfx.cameraToObject); break;
             case 28: play_sound(SOUND_MARIO_HOOHOO                                , m->marioObj->header.gfx.cameraToObject); break;
@@ -1543,20 +1544,16 @@ static s32 jumbo_star_cutscene_taking_off(struct MarioState *m) {
         m->particleFlags |= PARTICLE_SPARKLES;
         if (is_anim_past_end(m)) advance_cutscene_step(m);
     }
-    vec3f_set(m->pos, 0.0f, 307.0f, marioObj->rawData.asF32[0x22]);
+    vec3f_set(m->pos, 0.0f, 307.0f, marioObj->oMarioJumboStarCutscenePosZ);
     update_mario_pos_for_anim(m);
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
     vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
-    // not sure why they did this, probably was from being used to action
-    // functions
-    return FALSE;
 }
 
 // jumbo star cutscene: Mario flying
-static s32 jumbo_star_cutscene_flying(struct MarioState *m) {
+static void jumbo_star_cutscene_flying(struct MarioState *m) {
     Vec3f targetPos;
-    f32 targetDX, targetDY, targetDZ;
-    f32 targetHyp;
+    f32 targetDX, targetDY, targetDZ, targetHyp;
     s16 targetAngle;
     switch (m->actionState) {
         case 0:
@@ -1588,16 +1585,15 @@ static s32 jumbo_star_cutscene_flying(struct MarioState *m) {
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
     m->particleFlags |= PARTICLE_SPARKLES;
     if (m->actionTimer++ == 500) level_trigger_warp(m, WARP_OP_CREDITS_START);
-    return FALSE;
 }
 
 enum { JUMBO_STAR_CUTSCENE_FALLING, JUMBO_STAR_CUTSCENE_TAKING_OFF, JUMBO_STAR_CUTSCENE_FLYING };
 
 static s32 act_jumbo_star_cutscene(struct MarioState *m) {
     switch (m->actionArg) {
-        case JUMBO_STAR_CUTSCENE_FALLING:    jumbo_star_cutscene_falling(m);    break;
+        case JUMBO_STAR_CUTSCENE_FALLING:    jumbo_star_cutscene_falling(   m); break;
         case JUMBO_STAR_CUTSCENE_TAKING_OFF: jumbo_star_cutscene_taking_off(m); break;
-        case JUMBO_STAR_CUTSCENE_FLYING:     jumbo_star_cutscene_flying(m);     break;
+        case JUMBO_STAR_CUTSCENE_FLYING:     jumbo_star_cutscene_flying(    m); break;
     }
     return FALSE;
 }

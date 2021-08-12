@@ -62,10 +62,10 @@ void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s
 
 UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 a1[]) {
     struct Object *obj;
-    s16 model       = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
-    obj             = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
-    obj->oUnk1A8    =  a1[4];
-    obj->oBehParams = (a1[4] & 0xFF) >> 16;
+    s16 model              = bhvYellowCoin == behavior ? MODEL_YELLOW_COIN : MODEL_NONE;
+    obj                    = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
+    obj->oUnusedCoinParams =  a1[4];
+    obj->oBehParams        = (a1[4] & 0xFF) >> 16;
 }
 
 // struct LoadedPreset {
@@ -115,7 +115,7 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
                                                convert_rotation(macroObject[MACRO_OBJ_Y_ROT]), // Y-rotation
                                                0x0                         // Z-rotation
                 );
-            newObj->oUnk1A8           = macroObject[MACRO_OBJ_PARAMS];
+            newObj->oUnusedCoinParams = macroObject[MACRO_OBJ_PARAMS];
             newObj->oBehParams        = ((macroObject[MACRO_OBJ_PARAMS] & 0x00FF) << 16) + (macroObject[MACRO_OBJ_PARAMS] & 0xFF00);
             newObj->oBehParams2ndByte = macroObject[MACRO_OBJ_PARAMS] & 0x00FF;
             newObj->respawnInfoType   = RESPAWN_INFO_TYPE_16;
@@ -128,11 +128,8 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
 void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
     // This version of macroObjList has the preset and Y-Rotation separated,
     // and lacks behavior params. Might be an early version of the macro object list?
-    s16 macroObjX;
-    s16 macroObjY;
-    s16 macroObjZ;
+    s16 macroObjX, macroObjY, macroObjZ,  macroObjRY;
     s16 macroObjPreset;
-    s16 macroObjRY; // Y Rotation
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
     while (TRUE) {

@@ -27,16 +27,14 @@ void set_sparkle_spawn_star_hitbox(void) {
 }
 
 void set_home_to_mario(void) {
-    f32 dx;
-    f32 dz;
-    o->oHomeX      = gMarioObject->oPosX;
-    o->oHomeZ      = gMarioObject->oPosZ;
-    o->oHomeY      = gMarioObject->oPosY;
-    o->oHomeY     += 250.0f;
-    o->oPosY       = o->oHomeY;
-    dx = o->oHomeX - o->oPosX;
-    dz = o->oHomeZ - o->oPosZ;
-    o->oForwardVel = sqrtf(dx * dx + dz * dz) / 23.0f; //! fast invsqrt?
+    o->oHomeX          = gMarioObject->oPosX;
+    o->oHomeZ          = gMarioObject->oPosZ;
+    o->oHomeY          = gMarioObject->oPosY;
+    o->oHomeY         += 250.0f;
+    o->oPosY           = o->oHomeY;
+    f32 dx = o->oHomeX - o->oPosX;
+    f32 dz = o->oHomeZ - o->oPosZ;
+    o->oForwardVel     = sqrtf(dx * dx + dz * dz) / 23.0f; //! fast invsqrt?
 }
 
 void bhv_spawned_star_no_level_exit_loop(void) {
@@ -68,10 +66,9 @@ void bhv_spawned_star_no_level_exit_loop(void) {
                 play_power_star_jingle(TRUE);
             }
             break;
-
         case SPAWN_STAR_POS_CUTSCENE_ACT_BOUNCE:
             if (o->oVelY < -4.0f) o->oVelY = -4.0f;
-            if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
+            if (o->oVelY <  0.0f && o->oPosY < o->oHomeY) {
                 gObjCutsceneDone = TRUE;
                 o->oVelY    = 0.0f;
                 o->oGravity = 0.0f;
@@ -79,22 +76,20 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             }
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             break;
-
         case SPAWN_STAR_POS_CUTSCENE_ACT_END:
-            if (gCamera->cutscene == 0 && gRecentCutscene == 0) {
+            if (gCamera->cutscene == CUTSCENE_NONE && gRecentCutscene == CUTSCENE_NONE) {
                 clear_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
                 o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
                 o->oAction = SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION;
             }
             break;
-
         case SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION:
             set_sparkle_spawn_star_hitbox();
             if (o->oAngleVelYaw > 0x400) o->oAngleVelYaw -= 0x40; // Slow star rotation
             break;
     }
     cur_obj_move_using_fvel_and_gravity();
-    o->oFaceAngleYaw += o->oAngleVelYaw;
+    o->oFaceAngleYaw  += o->oAngleVelYaw;
     o->oInteractStatus = INT_STATUS_NONE;
 }
 

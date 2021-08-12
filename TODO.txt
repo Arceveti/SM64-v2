@@ -1,9 +1,12 @@
 **TODO:**
+- Known Bugs:
+    - TTC push blocks don't push Mario
 - Crashes:
     - Properly fix HMC crash
     - Enable rumble support and properly fix "heavy object" crash
     - Fix ending cutscene crash
 - Optimizations:
+    - Separate find_room function for geo_switch_area, and only check collision in current room
     - Save space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
             - Bobomb body
@@ -67,5 +70,7 @@
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
 - Camera:
-    - Split camera file into camera and cutscene files
     - Better camera controls in general lol
+- Files/Hacking QOL
+    - Split camera file into camera and cutscene files
+    - Finish moving general-use math functions into math_util.c

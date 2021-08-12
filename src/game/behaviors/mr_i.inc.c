@@ -39,7 +39,7 @@ void spawn_mr_i_particle(void) {
     struct Object *particle;
     f32 scaleY = o->header.gfx.scale[1];
     particle = spawn_object(o, MODEL_PURPLE_MARBLE, bhvMrIParticle);
-    particle->oPosY += 50.0f * scaleY;
+    particle->oPosY +=                          50.0f * scaleY;
     particle->oPosX += sins(o->oMoveAngleYaw) * 90.0f * scaleY;
     particle->oPosZ += coss(o->oMoveAngleYaw) * 90.0f * scaleY;
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
@@ -50,8 +50,8 @@ void bhv_mr_i_body_loop(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         obj_copy_scale(o, o->parentObj);
         obj_set_parent_relative_pos(o, 0, 0, o->header.gfx.scale[1] * 100.0f);
-        obj_build_transform_from_pos_and_angle(o, 44, 15);
-        obj_translate_local(o, 6, 44);
+        obj_build_transform_from_pos_and_angle(o, O_PARENT_RELATIVE_POS_INDEX, O_MOVE_ANGLE_INDEX);
+        obj_translate_local(o, O_POS_INDEX, O_PARENT_RELATIVE_POS_INDEX);
         o->oFaceAnglePitch = o->oMoveAnglePitch;
         o->oGraphYOffset = o->header.gfx.scale[1] * 100.0f;
     }
@@ -71,10 +71,10 @@ void mr_i_act_spin_death(void) {
     f32 shakeY;
     f32 baseScale;
     f32 BBHScaleModifier = o->oBehParams2ndByte ? 2.0f : 1.0f;
-    s16 direction = (o->oMrISpinDirection < 0) ? 0x1000 : -0x1000;
-    f32 spinAmount = (o->oTimer + 1) / 96.0f;
+    s16 direction        = (o->oMrISpinDirection < 0) ? 0x1000 : -0x1000;
+    f32 spinAmount       = (o->oTimer + 1) / 96.0f;
     if (o->oTimer < 64) {
-        startYaw = o->oMoveAngleYaw;
+        startYaw          = o->oMoveAngleYaw;
         o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
         if (startYaw < 0x0 && o->oMoveAngleYaw >= 0x0) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
         o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
@@ -82,8 +82,8 @@ void mr_i_act_spin_death(void) {
     } else if (o->oTimer < 96) {
         if (o->oTimer == 64) cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
         shakeY = (f32)(o->oTimer - 63) / 32;
-        o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
-        o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
+        o->oMoveAngleYaw  += direction * coss(0x4000 * spinAmount);
+        o->oMoveAnglePitch =     (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
         cur_obj_shake_y((s32)((1.0f - shakeY) * 4)); // trucating the f32?
         baseScale = coss(0x4000 * shakeY) * 0.4f + 0.6f;
         cur_obj_scale(baseScale * BBHScaleModifier);
@@ -119,8 +119,8 @@ void mr_i_act_looking_at_mario(void) {
         o->oMrISpinDirection = 0;
         o->oMrIParticleTimer = 0;
     }
-    obj_turn_toward_object(o, gMarioObject, 0x10, 0x800);
-    obj_turn_toward_object(o, gMarioObject, 0x0F, 0x400);
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX,   0x800);
+    obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, 0x400);
     dYaw = startYaw - (s16)(o->oMoveAngleYaw);
     if (!dYaw) {
         o->oMrISpinAmount    = 0;
@@ -163,15 +163,15 @@ void mr_i_act_looking_at_mario(void) {
 }
 
 void mr_i_act_idle(void) {
-    s16 angleToMario = obj_angle_to_object(o, gMarioObject);
-    s16 angleDiffMoveYawToMario = abs_angle_diff(o->oMoveAngleYaw, angleToMario);
+    s16 angleToMario                   = obj_angle_to_object(o, gMarioObject);
+    s16 angleDiffMoveYawToMario        = abs_angle_diff(o->oMoveAngleYaw, angleToMario);
     s16 angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     if (o->oTimer == 0) {
         cur_obj_become_tangible();
         o->oMoveAnglePitch         = 0x0;
         o->oMrIParticleTimer       = 30;
         o->oMrIParticleTimerTarget = random_float() * 20.0f;
-        o->oAngleVelYaw            = (o->oMrIParticleTimerTarget & 1) ? -256 : 256;
+        o->oAngleVelYaw            = (o->oMrIParticleTimerTarget & 0x1) ? -256 : 256;
     }
     if (angleDiffMoveYawToMario < 1024 && angleDiffMoveYawToMarioFaceYaw > 0x4000) {
         if (o->oDistanceToMario < 700.0f) {

@@ -4,6 +4,7 @@
 #include "area.h"
 #include "audio/external.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
 #include "game_init.h"
@@ -553,8 +554,8 @@ s32 act_wall_slide(struct MarioState *m) {
     }
     m->slideVelX *= 0.98f;
     m->slideVelZ *= 0.98f;
-    m->vel[0] = m->slideVelX;
-    m->vel[2] = m->slideVelZ;
+    m->vel[0]     = m->slideVelX;
+    m->vel[2]     = m->slideVelZ;
     if (m->forwardVel > 0.0f) m->forwardVel *= 0.98f;
     m->particleFlags |= PARTICLE_DUST;
     play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
@@ -574,8 +575,8 @@ s32 act_wall_kick_air(struct MarioState *m) {
     s16 wallAngle;
     if (m->wall != NULL) {
         wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        // Snap Mario's rotation to be perpendicular ot the wall
-        if (ABS((s16)(m->faceAngle[1] - wallAngle)) <= 0x1) m->faceAngle[1] = wallAngle;
+        // Snap Mario's rotation to be perpendicular ot the wall if it's close
+        if (abs_angle_diff(m->faceAngle[1], wallAngle) <= 0x1) m->faceAngle[1] = wallAngle;
     }
 #ifdef ACTION_CANCELS
     if (check_kick_or_dive_in_air(m)) return TRUE;

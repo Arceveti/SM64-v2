@@ -72,17 +72,17 @@
 #define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 1) // local X
 #define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 2) // local Y
 #define /*0x0C4*/ O_MOVE_ANGLE_INDEX                            0x0F
-#define /*0x0C4*/ O_MOVE_ANGLE_PITCH_INDEX                      (O_MOVE_ANGLE_INDEX + 0)
-#define /*0x0C4*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1)
-#define /*0x0C4*/ O_MOVE_ANGLE_ROLL_INDEX                       (O_MOVE_ANGLE_INDEX + 2)
+#define /*0x0C4*/ O_MOVE_ANGLE_PITCH_INDEX                      (O_MOVE_ANGLE_INDEX + 0) // 0x0F
+#define /*0x0C4*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1) // 0x10
+#define /*0x0C4*/ O_MOVE_ANGLE_ROLL_INDEX                       (O_MOVE_ANGLE_INDEX + 2) // 0x11
 #define /*0x0C4*/ oMoveAngleVec                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_INDEX)
 #define /*0x0C4*/ oMoveAnglePitch                               OBJECT_FIELD_S32(O_MOVE_ANGLE_PITCH_INDEX)
 #define /*0x0C8*/ oMoveAngleYaw                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_YAW_INDEX)
 #define /*0x0CC*/ oMoveAngleRoll                                OBJECT_FIELD_S32(O_MOVE_ANGLE_ROLL_INDEX)
 #define /*0x0D0*/ O_FACE_ANGLE_INDEX                            0x12
-#define /*0x0D0*/ O_FACE_ANGLE_PITCH_INDEX                      (O_FACE_ANGLE_INDEX + 0)
-#define /*0x0D0*/ O_FACE_ANGLE_YAW_INDEX                        (O_FACE_ANGLE_INDEX + 1)
-#define /*0x0D0*/ O_FACE_ANGLE_ROLL_INDEX                       (O_FACE_ANGLE_INDEX + 2)
+#define /*0x0D0*/ O_FACE_ANGLE_PITCH_INDEX                      (O_FACE_ANGLE_INDEX + 0) // 0x12
+#define /*0x0D0*/ O_FACE_ANGLE_YAW_INDEX                        (O_FACE_ANGLE_INDEX + 1) // 0x13
+#define /*0x0D0*/ O_FACE_ANGLE_ROLL_INDEX                       (O_FACE_ANGLE_INDEX + 2) // 0x14
 #define /*0x0D0*/ oFaceAngleVec                                 OBJECT_FIELD_S32(O_FACE_ANGLE_INDEX)
 #define /*0x0D0*/ oFaceAnglePitch                               OBJECT_FIELD_S32(O_FACE_ANGLE_PITCH_INDEX)
 #define /*0x0D4*/ oFaceAngleYaw                                 OBJECT_FIELD_S32(O_FACE_ANGLE_YAW_INDEX)
@@ -137,7 +137,7 @@
 #define /*0x19C*/ oDrawingDistance                              OBJECT_FIELD_F32(0x45)
 #define /*0x1A0*/ oRoom                                         OBJECT_FIELD_S32(0x46)
 // 0x1A4 is unused, possibly related to 0x1A8 in removed macro purposes.
-#define /*0x1A8*/ oUnk1A8                                       OBJECT_FIELD_U32(0x48)
+#define /*0x1A8*/ oUnusedCoinParams                             OBJECT_FIELD_U32(0x48)
 // 0x1AC-0x1B2 (0x48-0x4A) are object specific and defined below the common fields.
 #define /*0x1B4*/ oWallAngle                                    OBJECT_FIELD_S32(0x4B)
 #define /*0x1B8*/ oFloorType                                    OBJECT_FIELD_S16(0x4C, 0)
@@ -160,7 +160,7 @@
 
 /* Mario */
 #define /*0x0F4*/ oMarioParticleFlags                           OBJECT_FIELD_S32(0x1B)
-#define /*0x108*/ oMarioPoleUnused                              OBJECT_FIELD_S32(0x20)
+#define /*0x108*/ oMarioPoleUnused                              OBJECT_FIELD_S32(0x20) // unused
 #define /*0x108*/ oMarioReadingSignDYaw                         OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oMarioPoleYawVel                              OBJECT_FIELD_S32(0x21)
 #define /*0x10C*/ oMarioCannonObjectYaw                         OBJECT_FIELD_S32(0x21)
@@ -171,6 +171,7 @@
 #define /*0x110*/ oMarioTornadoPosY                             OBJECT_FIELD_F32(0x22)
 #define /*0x110*/ oMarioReadingSignDPosZ                        OBJECT_FIELD_F32(0x22)
 #define /*0x110*/ oMarioWhirlpoolPosY                           OBJECT_FIELD_F32(0x22)
+#define /*0x110*/ oMarioJumboStarCutscenePosZ                   OBJECT_FIELD_F32(0x22)
 #define /*0x110*/ oMarioBurnTimer                               OBJECT_FIELD_S32(0x22)
 #define /*0x110*/ oMarioLongJumpIsSlow                          OBJECT_FIELD_S32(0x22)
 #define /*0x110*/ oMarioSteepJumpYaw                            OBJECT_FIELD_S32(0x22)
@@ -198,7 +199,7 @@
 
 /* Arrow Lift */
 #define /*0x0F4*/ oArrowLiftDisplacement                        OBJECT_FIELD_F32(0x1B)
-#define /*0x100*/ oArrowLiftUnusedRandom                        OBJECT_FIELD_S32(0x1E)
+#define /*0x100*/ oArrowLiftUnusedRandom                        OBJECT_FIELD_S32(0x1E) // unused
 
 /* Back-and-Forth Platform */
 #define /*0x0F4*/ oBackAndForthPlatformDirection                OBJECT_FIELD_F32(0x1B)
@@ -391,7 +392,7 @@
 
 /* Chuckya */
 #define /*0x088*/ oCommonAnchorAction                           OBJECT_FIELD_S32(0x00) // Used for both Chuckya and King Bobomb
-#define /*0x0F8*/ oChuckyaUnused                                OBJECT_FIELD_S32(0x1C)
+#define /*0x0F8*/ oChuckyaUnused                                OBJECT_FIELD_S32(0x1C) // unused
 #define /*0x0FC*/ oChuckyaSubActionTimer                        OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oChuckyaNumPlayerEscapeActions                OBJECT_FIELD_S32(0x1E)
 
@@ -424,7 +425,7 @@
 #define /*0x0FC*/ oBreakableBoxSmallFramesSinceReleased         OBJECT_FIELD_S32(0x1D)
 
 /* Jumping Box (Crazy Box) */
-#define /*0x0F4*/ oJumpingBoxUnusedTimerMin                     OBJECT_FIELD_S32(0x1B)
+#define /*0x0F4*/ oJumpingBoxUnusedTimerMin                     OBJECT_FIELD_S32(0x1B) // unused
 #define /*0x0F8*/ oJumpingBoxRandomTimer                        OBJECT_FIELD_S32(0x1C)
 
 /* RR Cruiser Wing */
@@ -503,7 +504,7 @@
 /* Flame */
 #define /*0x0F4*/ oFlameScale                                   OBJECT_FIELD_F32(0x1B)
 #define /*0x0F8*/ oFlameSpeedTimerOffset                        OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oFlameUnusedRand                              OBJECT_FIELD_F32(0x1D)
+#define /*0x0FC*/ oFlameUnusedRand                              OBJECT_FIELD_F32(0x1D) // unused
 #define /*0x100*/ oFlameBowser                                  OBJECT_FIELD_OBJ(0x1E)
 
 /* Blue Flame */
@@ -537,7 +538,7 @@
 /* Fly Guy */
 #define /*0x0F4*/ oFlyGuyIdleTimer                              OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oFlyGuyOscTimer                               OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oFlyGuyUnusedJitter                           OBJECT_FIELD_S32(0x1D)
+#define /*0x0FC*/ oFlyGuyUnusedJitter                           OBJECT_FIELD_S32(0x1D) // unused
 #define /*0x100*/ oFlyGuyLungeYDecel                            OBJECT_FIELD_F32(0x1E)
 #define /*0x104*/ oFlyGuyLungeTargetPitch                       OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oFlyGuyTargetRoll                             OBJECT_FIELD_S32(0x20)
@@ -641,7 +642,7 @@
 #define /*0x104*/ oKoopaRaceEndpointRaceEnded                   OBJECT_FIELD_S32(0x1F)
 
 /* Koopa Shell Flame */
-#define /*0x0F4*/ oKoopaShellFlameUnused                        OBJECT_FIELD_F32(0x1B)
+#define /*0x0F4*/ oKoopaShellFlameUnused                        OBJECT_FIELD_F32(0x1B) // unused
 #define /*0x0F8*/ oKoopaShellFlameScale                         OBJECT_FIELD_F32(0x1C)
 
 /* Camera Lakitu */
@@ -1049,7 +1050,7 @@
 
 /* Tweester */
 #define /*0x0F4*/ oTweesterScaleTimer                           OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oTweesterUnused                               OBJECT_FIELD_S32(0x1C)
+#define /*0x0F8*/ oTweesterUnused                               OBJECT_FIELD_S32(0x1C) // unused
 
 /* Ukiki */
 #define /*0x0F4*/ oUkikiTauntCounter                            OBJECT_FIELD_S16(0x1B, 0)
@@ -1149,7 +1150,7 @@
 #define /*0x108*/ oWigglerTimeUntilRandomTurn                   OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oWigglerTargetYaw                             OBJECT_FIELD_S32(0x21)
 #define /*0x110*/ oWigglerWalkAwayFromWallTimer                 OBJECT_FIELD_S32(0x22)
-#define /*0x1AC*/ oWigglerUnused                                OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oWigglerUnused                                OBJECT_FIELD_S16(0x49,   0) // unused
 #define /*0x1AE*/ oWigglerTextStatus                            OBJECT_FIELD_S16(0x49, + 1)
 
 /* Lll Wood Piece */

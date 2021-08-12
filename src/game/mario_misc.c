@@ -6,6 +6,7 @@
 #include "behavior_actions.h"
 #include "behavior_data.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "dialog_ids.h"
 #include "engine/behavior_script.h"
 #include "engine/graph_node.h"
@@ -523,9 +524,9 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
  * Also sets the visibility of the wing cap wings on or off.
  */
 Gfx *geo_switch_mario_cap_on_off(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    struct GraphNode *next = node->next;
+    struct GraphNode           *next       = node->next;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
-    struct MarioBodyState *bodyState = &gBodyStates[switchCase->numCases];
+    struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = bodyState->capState & 1;
         while (next != node) {

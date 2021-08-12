@@ -1161,8 +1161,8 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
             m->vel[1]                  = 0.0f;
             m->forwardVel              = 0.0f;
             poleBottom                 = -m->usedObj->hitboxDownOffset - 100.0f;
-            marioObj->oMarioPoleUnused = 0;
-            marioObj->oMarioPoleYawVel = 0;
+            // marioObj->oMarioPoleUnused = 0x0;
+            marioObj->oMarioPoleYawVel = 0x0;
             marioObj->oMarioPolePos    = max(m->pos[1] - o->oPosY, poleBottom);
             if (lowSpeed) return set_mario_action(m, ACT_GRAB_POLE_SLOW, 0);
             //! @bug Using m->forwardVel here is assumed to be 0.0f due to the set from earlier.

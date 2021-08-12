@@ -66,7 +66,7 @@ void bully_act_chase_mario(void) {
     f32 homeZ = o->oHomeZ;
     if (o->oTimer < 10) {
         o->oForwardVel = 3.0f;
-        obj_turn_toward_object(o, gMarioObject, 16, 0x1000);
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x1000);
     } else if (o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) {
         o->oForwardVel = 20.0f;
         if (o->oTimer >= 31) o->oTimer = 0;
@@ -86,7 +86,7 @@ void bully_act_knockback(void) {
         o->oBullyKBTimerAndMinionKOCounter++;
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
         o->oMoveAngleYaw = o->oFaceAngleYaw;
-        obj_turn_toward_object(o, gMarioObject, 16, 0x500);
+        obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x500);
     } else {
         o->header.gfx.animInfo.animFrame = 0;
     }
@@ -189,28 +189,13 @@ void bhv_bully_loop(void) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
                 cur_obj_init_animation(BULLY_ANIM_RUNNING);
             }
-            bully_step();
-            break;
-        case BULLY_ACT_CHASE_MARIO:
-            bully_act_chase_mario();
-            bully_step();
-            break;
-        case BULLY_ACT_KNOCKBACK:
-            bully_act_knockback();
-            bully_step();
-            break;
-        case BULLY_ACT_BACK_UP:
-            bully_act_back_up();
-            bully_step();
-            break;
-        case OBJ_ACT_LAVA_DEATH:
-            bully_act_level_death();
-            break;
-        case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-            break;
+                                                                    bully_step(); break;
+        case BULLY_ACT_CHASE_MARIO:     bully_act_chase_mario();    bully_step(); break;
+        case BULLY_ACT_KNOCKBACK:       bully_act_knockback();      bully_step(); break;
+        case BULLY_ACT_BACK_UP:         bully_act_back_up();        bully_step(); break;
+        case OBJ_ACT_LAVA_DEATH:        bully_act_level_death();                  break;
+        case OBJ_ACT_DEATH_PLANE_DEATH: o->activeFlags = ACTIVE_FLAG_DEACTIVATED; break;
     }
-
     set_object_visibility(o, 3000);
 }
 
@@ -249,20 +234,10 @@ void bhv_big_bully_with_minions_loop(void) {
                 o->oAction = BULLY_ACT_CHASE_MARIO;
                 cur_obj_init_animation(BULLY_ANIM_RUNNING);
             }
-            bully_step();
-            break;
-        case BULLY_ACT_CHASE_MARIO:
-            bully_act_chase_mario();
-            bully_step();
-            break;
-        case BULLY_ACT_KNOCKBACK:
-            bully_act_knockback();
-            bully_step();
-            break;
-        case BULLY_ACT_BACK_UP:
-            bully_act_back_up();
-            bully_step();
-            break;
+                                                             bully_step(); break;
+        case BULLY_ACT_CHASE_MARIO: bully_act_chase_mario(); bully_step(); break;
+        case BULLY_ACT_KNOCKBACK:   bully_act_knockback();   bully_step(); break;
+        case BULLY_ACT_BACK_UP:     bully_act_back_up();     bully_step(); break;
         case BULLY_ACT_INACTIVE:
             //! The Big Bully that spawns from killing its 3 minions uses the knockback timer
             //  for counting the number of dead minions. This means that when it activates,
@@ -288,11 +263,7 @@ void bhv_big_bully_with_minions_loop(void) {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
             cur_obj_become_tangible();
             break;
-        case OBJ_ACT_LAVA_DEATH:
-            big_bully_spawn_star();
-            break;
-        case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-            break;
+        case OBJ_ACT_LAVA_DEATH:        big_bully_spawn_star();                   break;
+        case OBJ_ACT_DEATH_PLANE_DEATH: o->activeFlags = ACTIVE_FLAG_DEACTIVATED; break;
     }
 }

@@ -5,6 +5,7 @@
 #include "behavior_actions.h"
 #include "behavior_data.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "debug.h"
 #include "dialog_ids.h"
 #include "engine/behavior_script.h"
@@ -33,7 +34,7 @@ struct PlatformDisplacementInfo sObjectDisplacementInfo;
 #endif
 
 static s8 sBbhStairJiggleOffsets[] = { -8, 8, -4, 4 };
-static s8 sLevelsWithRooms[] = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
+static s8 sLevelsWithRooms[]       = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
 static s32 clear_move_flag(u32 *, s32);
 
@@ -146,14 +147,15 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
 }
 
 void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
-    f32 relX   = obj->oParentRelativePosX;
-    f32 relY   = obj->oParentRelativePosY;
-    f32 relZ   = obj->oParentRelativePosZ;
+    register f32 relX   = obj->oParentRelativePosX;
+    register f32 relY   = obj->oParentRelativePosY;
+    register f32 relZ   = obj->oParentRelativePosZ;
     obj->oPosX = relX * mtx[0][0] + relY * mtx[1][0] + relZ * mtx[2][0] + mtx[3][0];
     obj->oPosY = relX * mtx[0][1] + relY * mtx[1][1] + relZ * mtx[2][1] + mtx[3][1];
     obj->oPosZ = relX * mtx[0][2] + relY * mtx[1][2] + relZ * mtx[2][2] + mtx[3][2];
 }
 
+//! move to math_util
 void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
     dst[0][0] = src[0][0] * obj->header.gfx.scale[0];
     dst[1][0] = src[1][0] * obj->header.gfx.scale[1];
@@ -176,10 +178,11 @@ void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
     dst[3][3] = src[3][3];
 }
 
+//! move to math_util
 void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
-    f32 x     = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
-    f32 y     = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
-    f32 z     = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
+    register f32 x     = a2[3][0] * a2[0][0] + a2[3][1] * a2[0][1] + a2[3][2] * a2[0][2];
+    register f32 y     = a2[3][0] * a2[1][0] + a2[3][1] * a2[1][1] + a2[3][2] * a2[1][2];
+    register f32 z     = a2[3][0] * a2[2][0] + a2[3][1] * a2[2][1] + a2[3][2] * a2[2][2];
 
     dst[0][0] = a1[0][0] * a2[0][0] + a1[0][1] * a2[0][1] + a1[0][2] * a2[0][2];
     dst[0][1] = a1[0][0] * a2[1][0] + a1[0][1] * a2[1][1] + a1[0][2] * a2[1][2];
@@ -304,8 +307,8 @@ struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, 
                                          s16 x, s16 y, s16 z, s16 rx, s16 ry, s16 rz) {
     // 'uselessArg' is unused in the function spawn_object_at_origin()
     struct Object *newObj = spawn_object_at_origin(parent, uselessArg, model, behavior);
-    obj_set_pos(  newObj,  x,  y,  z);
-    obj_set_angle(newObj, rx, ry, rz);
+    obj_set_pos(   newObj,  x,  y,  z);
+    obj_set_angle( newObj, rx, ry, rz);
     return newObj;
 }
 
@@ -641,6 +644,7 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
     return closestObj;
 }
 
+// Finds the object closest to the line from [pos] toward [lookingYaw] within [yawRange]
 struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, s16 lookingYaw, s16 yawRange, s16 *yaw) {
     uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
     struct Object     *closestObj   = NULL;
@@ -928,10 +932,9 @@ struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
 }
 
 static void apply_drag_to_value(f32 *value, f32 dragStrength) {
-    f32 decel;
     if (*value != 0) {
         //! Can overshoot if |*value| > 1/(dragStrength * 0.0001)
-        decel = (*value) * (*value) * (dragStrength * 0.0001f); // was 0.0001L
+        f32 decel = (*value) * (*value) * (dragStrength * 0.0001f); // was 0.0001L
         if (*value > 0) {
             *value -= decel;
             if (*value <  0.001f) *value = 0; // was 0.001L
@@ -1092,12 +1095,6 @@ static s32 clear_move_flag(u32 *bitSet, s32 flag) {
 
 void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
     if (radius > 0.1f) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius); // was 0.1l
-}
-
-s16 abs_angle_diff(s16 angle1, s16 angle2) {
-    s16 diff = angle2 - angle1;
-    if (diff == -0x8000) diff = -0x7FFF;
-    return absi(diff);
 }
 
 void cur_obj_move_xz_using_fvel_and_yaw(void) {
@@ -1563,10 +1560,6 @@ void chain_segment_init(struct ChainSegment *segment) {
     segment->roll  = 0x0;
 }
 
-f32 random_f32_around_zero(f32 diameter) {
-    return random_float() * diameter - diameter / 2;
-}
-
 void obj_scale_random(struct Object *obj, f32 rangeLength, f32 minScale) {
     f32 scale = random_float() * rangeLength + minScale;
     obj_scale(obj, scale);
@@ -1720,9 +1713,9 @@ s32 cur_obj_progress_direction_table(void) {
 void cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end) {
     f32 range = end - start;
     f32 step  = (f32) o->oTimer / times;
-    if (axis & 0x01) o->header.gfx.scale[0] = range * step + start;
-    if (axis & 0x02) o->header.gfx.scale[1] = range * step + start;
-    if (axis & 0x04) o->header.gfx.scale[2] = range * step + start;
+    if (axis & 0x01) o->header.gfx.scale[0] = (range * step) + start;
+    if (axis & 0x02) o->header.gfx.scale[1] = (range * step) + start;
+    if (axis & 0x04) o->header.gfx.scale[2] = (range * step) + start;
 }
 
 void cur_obj_set_pos_to_home_with_debug(void) {

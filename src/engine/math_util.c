@@ -9,16 +9,33 @@
 
 #include "config.h"
 
-// Variables for a spline curve animation (used for the flight path in the grand star cutscene)
-Vec4s *gSplineKeyframe;
-float gSplineKeyframeFraction;
-int gSplineState;
+/******************************
+ * Inline functions (Wiseguy) *
+ ******************************/
+
+static __inline__ s32 roundf(f32 in) {
+    f32 tmp;
+    s32 out;
+    __asm__("round.w.s %0,%1" : "=f" (tmp) : "f" (in));
+    __asm__("mfc1 %0,%1" : "=r" (out) : "f" (tmp));
+    return out;
+}
+
+// http://www.terathon.com/code/oblique.html
+inline float sgn(float a) {
+    if (a > 0.0f) return ( 1.0f);
+    if (a < 0.0f) return (-1.0f);
+    return (0.0f);
+}
+
+/**************************
+ * Float functions (Kaze) *
+ **************************/
 
 #define FLOAT_MIN -3.40282e+38f
 
-// Kaze functions
 static float const E = 2.718281828459f;
-static float slow_logf(float x) {
+float slow_logf(float x) {
     float p = 0.0f;
     float r = 0.0f, c = -1.0f;
     int i;
@@ -35,7 +52,7 @@ static float slow_logf(float x) {
     return r - p;
 }
 
-static float slow_expf(float x) {
+float slow_expf(float x) {
     float r = 1.0f, c = 1.0f;
     int i;
     x = -x;
@@ -52,6 +69,11 @@ float slow_powf(float base, float exponent) {
 }
 
 #ifdef FAST_INVSQRT
+
+/****************************
+ * Fast Inverse Square Root *
+ ****************************/
+
 float Q_rsqrtf( float number ) {
 	long i;
 	float x2, y;
@@ -80,29 +102,42 @@ double Q_rsqrtd( double number ) {
 }
 #endif
 
+/***********************************
+ * Absolute value & sign functions *
+ ***********************************/
+
 s32 signum_positive(s32 x) {
     return (x >= 0) ? 1 : -1;
 }
 
+/// double
 f64 absd(f64 x) {
     return (x >= 0.0) ? x : -x;
 }
 
+/// float
 f32 absf(f32 x) {
     return (x >= 0.0f) ? x : -x;
 }
 
+/// int
 s32 absi(s32 x) {
     return (x >= 0) ? x : -x;
 }
 
+/// short
 s16 abss(s16 x) {
     return (x >= 0) ? x : -x;
 }
 
+/// char
 s8 absc(s8 x) {
     return (x >= 0) ? x : -x;
 }
+
+/************************
+ * Comparison functions *
+ ************************/
 
 /// Returns the lowest of three values.
 s16 min_3(s16 a0, s16 a1, s16 a2) {
@@ -118,108 +153,154 @@ s16 max_3(s16 a0, s16 a1, s16 a2) {
     return a0;
 }
 
-// These functions have bogus return values.
-// Disable the compiler warning.
-#pragma GCC diagnostic push
+/**********
+ * Angles *
+ **********/
+s16 abs_angle_diff(s16 angle1, s16 angle2) {
+    s16 diff = angle2 - angle1;
+    if (diff == -0x8000) diff = -0x7FFF;
+    return absi(diff);
+}
 
-#ifdef __GNUC__
-#if defined(__clang__)
-  #pragma GCC diagnostic ignored "-Wreturn-stack-address"
-#else
-  #pragma GCC diagnostic ignored "-Wreturn-local-addr"
-#endif
-#endif
+/*************************
+ *          RNG          *
+ *************************/
+
+static u16 gRandomSeed16;
+
+// Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
+u16 random_u16(void) {
+    u16 temp1, temp2;
+    if (gRandomSeed16 == 22026) gRandomSeed16 = 0;
+    temp1         = (gRandomSeed16 & 0x00FF) << 8;
+    temp1         = temp1 ^ gRandomSeed16;
+    gRandomSeed16 = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
+    temp1         = ((temp1 & 0x00FF) << 1) ^ gRandomSeed16;
+    temp2         =  (temp1 >> 1) ^ 0xFF80;
+    if (temp1 & 0x1) {
+        gRandomSeed16 =   temp2 ^ 0x8180;
+    } else {
+        gRandomSeed16 = ((temp2 == 43605) ? 0 : (temp2 ^ 0x1FF4));
+    }
+    return gRandomSeed16;
+}
+
+// Return either -1 or 1 with a 50:50 chance.
+s32 random_sign(void) {
+    return (random_u16() >= 0x7FFF) ? 1 : -1;
+}
+
+// Generate a pseudorandom float in the range [0, 1).
+f32 random_float(void) {
+    return (f32)(random_u16()) / (double) 0x10000;
+}
+
+f32 random_f32_around_zero(f32 diameter) {
+    return random_float() * diameter - diameter / 2;
+}
+
+/**
+ * Generate a vector with all three values about zero. The
+ * three ranges determine how wide the range about zero.
+ */
+void random_vec3s(Vec3s dest, s16 xRange, s16 yRange, s16 zRange) {
+    dest[0] = random_float() * xRange - xRange / 2;
+    dest[1] = random_float() * yRange - yRange / 2;
+    dest[2] = random_float() * zRange - zRange / 2;
+}
+
+/*********************
+ * Vector Operations *
+ *********************/
 
 /// Copy vector 'src' to 'dest'
-void *vec3f_copy(Vec3f dest, Vec3f src) {
+void vec3f_copy(Vec3f dest, Vec3f src) {
     dest[0] = src[0];
     dest[1] = src[1];
     dest[2] = src[2];
-    return dest;
 }
 
 /// Set vector 'dest' to (x, y, z)
-void *vec3f_set(Vec3f dest, f32 x, f32 y, f32 z) {
+void vec3f_set(Vec3f dest, f32 x, f32 y, f32 z) {
     dest[0] = x;
     dest[1] = y;
     dest[2] = z;
-    return dest;
 }
 
 /// Add vector 'a' to 'dest'
-void *vec3f_add(Vec3f dest, Vec3f a) {
+void vec3f_add(Vec3f dest, Vec3f a) {
     dest[0] += a[0];
     dest[1] += a[1];
     dest[2] += a[2];
-    return dest;
 }
 
 /// Make 'dest' the sum of vectors a and b.
-void *vec3f_sum(Vec3f dest, Vec3f a, Vec3f b) {
+void vec3f_sum(Vec3f dest, Vec3f a, Vec3f b) {
     dest[0] = a[0] + b[0];
     dest[1] = a[1] + b[1];
     dest[2] = a[2] + b[2];
-    return dest;
 }
 
 /// Copy vector src to dest
-void *vec3s_copy(Vec3s dest, Vec3s src) {
+void vec3s_copy(Vec3s dest, Vec3s src) {
     dest[0] = src[0];
     dest[1] = src[1];
     dest[2] = src[2];
-    return dest;
 }
 
 /// Set vector 'dest' to (x, y, z)
-void *vec3s_set(Vec3s dest, s16 x, s16 y, s16 z) {
+void vec3s_set(Vec3s dest, s16 x, s16 y, s16 z) {
     dest[0] = x;
     dest[1] = y;
     dest[2] = z;
-    return dest;
 }
 
 /// Add vector a to 'dest'
-void *vec3s_add(Vec3s dest, Vec3s a) {
+void vec3s_add(Vec3s dest, Vec3s a) {
     dest[0] += a[0];
     dest[1] += a[1];
     dest[2] += a[2];
-    return dest;
 }
 
 /// Make 'dest' the sum of vectors a and b.
-void *vec3s_sum(Vec3s dest, Vec3s a, Vec3s b) {
+void vec3s_sum(Vec3s dest, Vec3s a, Vec3s b) {
     dest[0] = a[0] + b[0];
     dest[1] = a[1] + b[1];
     dest[2] = a[2] + b[2];
-    return dest;
 }
 
 /// Subtract vector a from 'dest'
-void *vec3s_sub(Vec3s dest, Vec3s a) {
+void vec3s_sub(Vec3s dest, Vec3s a) {
     dest[0] -= a[0];
     dest[1] -= a[1];
     dest[2] -= a[2];
-    return dest;
 }
 
 /// Convert short vector a to float vector 'dest'
-void *vec3s_to_vec3f(Vec3f dest, Vec3s a) {
+void vec3s_to_vec3f(Vec3f dest, Vec3s a) {
     dest[0] = a[0];
     dest[1] = a[1];
     dest[2] = a[2];
-    return dest;
 }
 
 /**
  * Convert float vector a to a short vector 'dest' by rounding the components
  * to the nearest integer.
  */
-void *vec3f_to_vec3s(Vec3s dest, Vec3f a) {
-    // add/subtract 0.5 in order to round to the nearest s32 instead of truncating
-    dest[0] = a[0] + ((a[0] > 0) ? 0.5f : -0.5f);
-    dest[1] = a[1] + ((a[1] > 0) ? 0.5f : -0.5f);
-    dest[2] = a[2] + ((a[2] > 0) ? 0.5f : -0.5f);
-    return dest;
+void vec3f_to_vec3s(Vec3s dest, Vec3f a) {
+    dest[0] = roundf(a[0]);
+    dest[1] = roundf(a[1]);
+    dest[2] = roundf(a[2]);
+}
+
+/**
+ * Convert float vector a to a short vector 'dest' by rounding the components
+ * to the nearest integer.
+ */
+void vec3f_to_vec3i(s32 dest[3], Vec3f a) {
+    dest[0] = roundf(a[0]);
+    dest[1] = roundf(a[1]);
+    dest[2] = roundf(a[2]);
 }
 
 /**
@@ -227,19 +308,17 @@ void *vec3f_to_vec3s(Vec3s dest, Vec3f a) {
  * It is similar to vec3f_cross, but it calculates the vectors (c-b) and (b-a)
  * at the same time.
  */
-void *find_vector_perpendicular_to_plane(Vec3f dest, Vec3f a, Vec3f b, Vec3f c) {
+void find_vector_perpendicular_to_plane(Vec3f dest, Vec3f a, Vec3f b, Vec3f c) {
     dest[0] = (b[1] - a[1]) * (c[2] - b[2]) - (c[1] - b[1]) * (b[2] - a[2]);
     dest[1] = (b[2] - a[2]) * (c[0] - b[0]) - (c[2] - b[2]) * (b[0] - a[0]);
     dest[2] = (b[0] - a[0]) * (c[1] - b[1]) - (c[0] - b[0]) * (b[1] - a[1]);
-    return dest;
 }
 
 /// Make vector 'dest' the cross product of vectors a and b.
-void *vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
+void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
     dest[0] = a[1] * b[2] - b[1] * a[2];
     dest[1] = a[2] * b[0] - b[2] * a[0];
     dest[2] = a[0] * b[1] - b[0] * a[1];
-    return dest;
 }
 
 /// Get the magnitude of vector 'v'
@@ -248,28 +327,135 @@ f32 vec3f_mag(Vec3f v) {
 }
 
 /// Scale vector 'dest' so it has length 1
-void *vec3f_normalize(Vec3f dest) {
+void vec3f_normalize(Vec3f dest) {
      if (dest == gVec3fZero) {
         dest[0] = 0.0f;
         dest[1] = 0.0f;
         dest[2] = 0.0f;
     } else {
 #ifdef FAST_INVSQRT
-        f32 mag = (dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
-        if (mag == 0.0f) return vec3f_copy(dest, gVec3fZero);
-        mag = Q_rsqrtf(mag);
+        f32 mag = Q_rsqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
 #else
         f32 mag = 1.0f / sqrtf(dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2]);
-        if (mag == 0.0f) return vec3f_copy(dest, gVec3fZero);
 #endif
+        if (mag == 0.0f) {
+            vec3f_copy(dest, gVec3fZero);
+            return;
+        }
         dest[0] *= mag;
         dest[1] *= mag;
         dest[2] *= mag;
     }
-    return dest;
 }
 
-#pragma GCC diagnostic pop
+/**
+ * Take the vector starting at 'from' pointed at 'to' an retrieve the length
+ * of that vector, as well as the yaw and pitch angles.
+ * Basically it converts the direction to spherical coordinates.
+ */
+void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw) {
+    register f32 x = to[0] - from[0];
+    register f32 y = to[1] - from[1];
+    register f32 z = to[2] - from[2];
+    *dist  = sqrtf(x * x + y * y + z * z);
+    *pitch = atan2s(sqrtf(x * x + z * z), y);
+    *yaw   = atan2s(z, x);
+}
+
+/**
+ * Construct the 'to' point which is distance 'dist' away from the 'from' position,
+ * and has the angles pitch and yaw.
+ */
+void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, s16 pitch, s16 yaw) {
+    to[0] = from[0] + dist * coss(pitch) * sins(yaw);
+    to[1] = from[1] + dist * sins(pitch);
+    to[2] = from[2] + dist * coss(pitch) * coss(yaw);
+}
+
+
+/**
+ * Upscale or downscale a vector by another vector.
+ */
+void vec3f_scale_vec3f(Vec3f dest, Vec3f src, Vec3f scale, u32 doInverted) {
+    if (doInverted) {
+        dest[0] = src[0] / scale[0];
+        dest[1] = src[1] / scale[1];
+        dest[2] = src[2] / scale[2];
+    } else {
+        dest[0] = src[0] * scale[0];
+        dest[1] = src[1] * scale[1];
+        dest[2] = src[2] * scale[2];
+    }
+}
+
+// Thank you rocket robot
+void vec3f_rotate(Mat4 mat, Vec3f in, Vec3f out) {
+    out[0] = mat[0][0] * in[0] + mat[1][0] * in[1] + mat[2][0] * in[2];
+    out[1] = mat[0][1] * in[0] + mat[1][1] * in[1] + mat[2][1] * in[2];
+    out[2] = mat[0][2] * in[0] + mat[1][2] * in[1] + mat[2][2] * in[2];
+}
+
+void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
+    s32 i, j;
+    for (i = 0; i < 3; i++) {
+        out[i] = mat[3][i] * w;
+        for (j = 0; j < 3; j++) {
+            out[i] += mat[j][i] * in[j];
+        }
+    }
+}
+
+void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
+    Vec3f temp;
+    s32 i, j;
+    for (i = 0; i < 3; i++) {
+        temp[i] = mat[3][i] * w;
+        for (j = 0; j < 3; j++) {
+            temp[i] += mat[j][i] * in[j];
+        }
+    }
+    out->v.ob[0] = temp[0];
+    out->v.ob[1] = temp[1];
+    out->v.ob[2] = temp[2];
+}
+
+f32 vec3f_dot(Vec3f a, Vec3f b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
+f32 vec4f_dot(Vec4f a, Vec4f b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
+}
+
+void vec4f_scale(Vec4f dest, Vec4f src, f32 scale) {
+    dest[0] = src[0] * scale;
+    dest[1] = src[1] * scale;
+    dest[2] = src[2] * scale;
+    dest[3] = src[3] * scale;
+}
+
+void make_oblique(Mat4 toModify, Vec4f clipPlane) {
+    Vec4f q, c;
+    // Calculate the clip-space corner point opposite the clipping plane
+    // as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
+    // transform it into camera space by multiplying it
+    // by the inverse of the projection matrix
+    q[0] = sgn(clipPlane[0]) / toModify[0][0];
+    q[1] = sgn(clipPlane[1]) / toModify[1][1];
+    q[2] = -1.0f;
+    q[3] = (1.0f + toModify[2][2]) / toModify[3][2];
+    // Calculate the scaled plane vector
+    vec4f_scale(c, clipPlane, (2.0f / vec4f_dot(clipPlane, q)));
+    // Replace the third row of the projection matrix
+    toModify[0][2] = c[0];
+    toModify[1][2] = c[1];
+    toModify[2][2] = c[2] + 1.0f;
+    toModify[3][2] = c[3];
+}
+
+/*********************
+ * Matrix Operations *
+ *********************/
 
 /// Copy matrix 'src' to 'dest'
 void mtxf_copy(Mat4 dest, Mat4 src) {
@@ -815,29 +1001,43 @@ void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
     dest[2]  = objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
 }
 
-/**
- * Take the vector starting at 'from' pointed at 'to' an retrieve the length
- * of that vector, as well as the yaw and pitch angles.
- * Basically it converts the direction to spherical coordinates.
- */
-void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw) {
-    register f32 x = to[0] - from[0];
-    register f32 y = to[1] - from[1];
-    register f32 z = to[2] - from[2];
-    *dist  = sqrtf(x * x + y * y + z * z);
-    *pitch = atan2s(sqrtf(x * x + z * z), y);
-    *yaw   = atan2s(z, x);
+// Rotation/translation matrix inverse
+void mtxf_inverse_rotate_translate(Mat4 in, Mat4 out) {
+    Mat4 invRot;
+    Vec3f negTranslate;
+    Mat4 invTranslate;
+
+    invRot[0][0] = in[0][0];
+    invRot[0][1] = in[1][0];
+    invRot[0][2] = in[2][0];
+    invRot[0][3] = 0.0f;
+
+    invRot[1][0] = in[0][1];
+    invRot[1][1] = in[1][1];
+    invRot[1][2] = in[2][1];
+    invRot[1][3] = 0.0f;
+
+    invRot[2][0] = in[0][2];
+    invRot[2][1] = in[1][2];
+    invRot[2][2] = in[2][2];
+    invRot[2][3] = 0.0f;
+
+    invRot[3][0] = 0.0f;
+    invRot[3][1] = 0.0f;
+    invRot[3][2] = 0.0f;
+    invRot[3][3] = 1.0f;
+
+    negTranslate[0] = -in[3][0];
+    negTranslate[1] = -in[3][1];
+    negTranslate[2] = -in[3][2];
+
+    mtxf_translate(invTranslate, negTranslate);
+    mtxf_mul(out, invTranslate, invRot);
 }
 
-/**
- * Construct the 'to' point which is distance 'dist' away from the 'from' position,
- * and has the angles pitch and yaw.
- */
-void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, s16 pitch, s16 yaw) {
-    to[0] = from[0] + dist * coss(pitch) * sins(yaw);
-    to[1] = from[1] + dist * sins(pitch);
-    to[2] = from[2] + dist * coss(pitch) * coss(yaw);
-}
+/**********************
+ * Approach functions *
+ **********************/
 
 /**
  * Return the value 'current' after it tries to approach target, going up at
@@ -925,6 +1125,84 @@ s16 approach_s16_symmetric(s16 value, s16 target, s16 inc) {
 }
 
 /**
+ * Approaches an f32 value by taking the difference between the target and current value
+ * and adding a fraction of that to the current value.
+ * Edits the current value directly, returns TRUE if the target has been reached, FALSE otherwise.
+ */
+s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
+    if (multiplier > 1.0f) multiplier = 1.0f;
+    *current = *current + (target - *current) * multiplier;
+    return !(*current == target);
+}
+
+/**
+ * Nearly the same as the above function, returns new value instead.
+ */
+f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
+    current = current + (target - current) * multiplier;
+    return current;
+}
+
+/**
+ * Approaches an s16 value in the same fashion as approach_f32_asymptotic_bool, returns TRUE if target
+ * is reached. Note: Since this function takes integers as parameters, the last argument is the
+ * reciprocal of what it would be in the previous two functions.
+ */
+s32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
+    s16 temp = *current;
+    if (divisor == 0) {
+        *current = target;
+    } else {
+        temp    -= target;
+        temp    -= temp / divisor;
+        temp    += target;
+        *current = temp;
+    }
+    return !(*current == target);
+}
+
+/**
+ * Approaches an s16 value in the same fashion as approach_f32_asymptotic, returns the new value.
+ * Note: last parameter is the reciprocal of what it would be in the f32 functions
+ */
+s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor) {
+    s16 temp = current;
+    if (divisor == 0) {
+        current = target;
+    } else {
+        temp -= target;
+        temp -= temp / divisor;
+        temp += target;
+        current = temp;
+    }
+    return current;
+}
+
+/**
+ * Applies the approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the given
+ * vector.
+ */
+void approach_vec3f_asymptotic(Vec3f current, Vec3f target, f32 xMul, f32 yMul, f32 zMul) {
+    approach_f32_asymptotic_bool(&current[0], target[0], xMul);
+    approach_f32_asymptotic_bool(&current[1], target[1], yMul);
+    approach_f32_asymptotic_bool(&current[2], target[2], zMul);
+}
+
+/**
+ * Applies the approach_s32_asymptotic function to each of the X, Y, & Z components of the given
+ * vector.
+ */
+void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul) {
+    approach_s16_asymptotic_bool(&current[0], target[0], xMul);
+    approach_s16_asymptotic_bool(&current[1], target[1], yMul);
+    approach_s16_asymptotic_bool(&current[2], target[2], zMul);
+}
+
+/*********
+ * atans *
+ *********/
+
+/**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming
  * the resulting angle is in range [0, 0x2000] (1/8 of a circle).
  */
@@ -985,6 +1263,15 @@ s16 atan2s(f32 y, f32 x) {
 f32 atan2f(f32 y, f32 x) {
     return (f32) atan2s(y, x) * M_PI / 0x8000;
 }
+
+/**********
+ * Curves *
+ **********/
+
+// Variables for a spline curve animation (used for the flight path in the grand star cutscene)
+Vec4s *gSplineKeyframe;
+float gSplineKeyframeFraction;
+int gSplineState;
 
 #define CURVE_BEGIN_1 1
 #define CURVE_BEGIN_2 2

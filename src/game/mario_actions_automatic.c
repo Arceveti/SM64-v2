@@ -14,6 +14,7 @@
 #include "engine/surface_collision.h"
 #include "interaction.h"
 #include "camera.h"
+#include "cutscene.h"
 #include "level_table.h"
 #include "rumble_init.h"
 
