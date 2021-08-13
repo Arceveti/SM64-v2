@@ -38,10 +38,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     s32 numCols = 0;
  #if EXTENDED_BOUNDS_MODE > 1
     const float down_scale = 1.0f / WORLD_SCALE;
-    radius *= down_scale;
-    x *= down_scale;
-    y *= down_scale;
-    z *= down_scale;
+    radius        *= down_scale;
+    x             *= down_scale;
+    y             *= down_scale;
+    z             *= down_scale;
     margin_radius *= down_scale;
  #endif
     // Max collision radius = 200
@@ -62,19 +62,19 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             // Ignore camera only surfaces.
             if (type == SURFACE_CAMERA_BOUNDARY) continue;
             // If an object can pass through a vanish cap wall, pass through.
-            if (type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
+            if ((type == SURFACE_VANISH_CAP_WALLS) && (gCurrentObject != NULL)) {
                 // If an object can pass through a vanish cap wall, pass through.
                 if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
                 // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
+                if ((gCurrentObject == gMarioObject) && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
-        if (y < surf->lowerY || y > surf->upperY) continue;
+        if ((y < surf->lowerY) || (y > surf->upperY)) continue;
  #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
         if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
  #endif
-        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
-        if (offset < 0 || offset > radius) continue;
+        offset = ((surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset);
+        if ((offset < 0) || (offset > radius)) continue;
         v0x = (f32)(surf->vertex2[0] -      surf->vertex1[0]);
         v0y = (f32)(surf->vertex2[1] -      surf->vertex1[1]);
         v0z = (f32)(surf->vertex2[2] -      surf->vertex1[2]);
@@ -85,18 +85,18 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         v2y =                      y - (f32)surf->vertex1[1];
         v2z =                      z - (f32)surf->vertex1[2];
         // Face
-        d00 = v0x * v0x + v0y * v0y + v0z * v0z;
-        d01 = v0x * v1x + v0y * v1y + v0z * v1z;
-        d11 = v1x * v1x + v1y * v1y + v1z * v1z;
-        d20 = v2x * v0x + v2y * v0y + v2z * v0z;
-        d21 = v2x * v1x + v2y * v1y + v2z * v1z;
-        invDenom = 1.0f / (d00 * d11 - d01 * d01); // no sqrtf?
-        v = (d11 * d20 - d01 * d21) * invDenom;
-        if (v < 0.0f || v > 1.0f) goto edge_1_2;
-        w = (d00 * d21 - d01 * d20) * invDenom;
-        if (w < 0.0f || w > 1.0f || v + w > 1.0f) goto edge_1_2;
-        x += surf->normal.x * (radius - offset);
-        z += surf->normal.z * (radius - offset);
+        d00 = (v0x * v0x) + (v0y * v0y) + (v0z * v0z);
+        d01 = (v0x * v1x) + (v0y * v1y) + (v0z * v1z);
+        d11 = (v1x * v1x) + (v1y * v1y) + (v1z * v1z);
+        d20 = (v2x * v0x) + (v2y * v0y) + (v2z * v0z);
+        d21 = (v2x * v1x) + (v2y * v1y) + (v2z * v1z);
+        invDenom = (1.0f / ((d00 * d11) - (d01 * d01))); // no sqrtf?
+        v = (((d11 * d20) - (d01 * d21)) * invDenom);
+        if ((v < 0.0f) || (v > 1.0f)) goto edge_1_2;
+        w = (((d00 * d21) - (d01 * d20)) * invDenom);
+        if ((w < 0.0f) || (w > 1.0f) || ((v + w) > 1.0f)) goto edge_1_2;
+        x += (surf->normal.x * (radius - offset));
+        z += (surf->normal.z * (radius - offset));
         goto hasCollision;
     edge_1_2:
         if (offset < 0) continue;
@@ -104,16 +104,16 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (v0y != 0.0f) {
             v = (v2y / v0y);
             if (v < 0.0f || v > 1.0f) goto edge_1_3;
-            d00 = v0x * v - v2x;
-            d01 = v0z * v - v2z;
-            invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset   = invDenom - margin_radius;
+            d00 = ((v0x * v) - v2x);
+            d01 = ((v0z * v) - v2z);
+            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_1_3;
             invDenom = offset / invDenom; // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
-            if (d00 * surf->normal.x + d01 * surf->normal.z < corner_threshold * offset) {
+            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
             } else {
                 goto hasCollision;
@@ -124,16 +124,16 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (v1y != 0.0f) {
             v = (v2y / v1y);
             if (v < 0.0f || v > 1.0f) goto edge_2_3;
-            d00 = v1x * v - v2x;
-            d01 = v1z * v - v2z;
-            invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset   = invDenom - margin_radius;
+            d00 = ((v1x * v) - v2x);
+            d01 = ((v1z * v) - v2z);
+            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_2_3;
-            invDenom = offset / invDenom; // fast invsqrt?
+            invDenom = (offset / invDenom); // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
-            if (d00 * surf->normal.x + d01 * surf->normal.z < corner_threshold * offset) {
+            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
             } else {
                 goto hasCollision;
@@ -149,17 +149,17 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         v2z =                      z - (f32)surf->vertex2[2];
         if (v1y != 0.0f) {
             v = (v2y / v1y);
-            if (v < 0.0f || v > 1.0f) continue;
-            d00 = v1x * v - v2x;
-            d01 = v1z * v - v2z;
-            invDenom = sqrtf(d00 * d00 + d01 * d01);
-            offset   = invDenom - margin_radius;
+            if ((v < 0.0f) || (v > 1.0f)) continue;
+            d00 = ((v1x * v) - v2x);
+            d01 = ((v1z * v) - v2z);
+            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            offset   = (invDenom - margin_radius);
             if (offset > 0.0f) continue;
-            invDenom = offset / invDenom; // fast invsqrt?
+            invDenom = (offset / invDenom); // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
-            if (d00 * surf->normal.x + d01 * surf->normal.z < corner_threshold * offset) {
+            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
             } else {
                 goto hasCollision;
@@ -210,17 +210,17 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             // Ignore camera only surfaces.
             if (type == SURFACE_CAMERA_BOUNDARY) continue;
             // If an object can pass through a vanish cap wall, pass through.
-            if (type == SURFACE_VANISH_CAP_WALLS && gCurrentObject != NULL) {
+            if ((type == SURFACE_VANISH_CAP_WALLS) && (gCurrentObject != NULL)) {
                 // If an object can pass through a vanish cap wall, pass through.
                 if (gCurrentObject->activeFlags & ACTIVE_FLAG_MOVE_THROUGH_GRATE) continue;
                 // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject == gMarioObject && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
+                if ((gCurrentObject == gMarioObject) && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
-        if (y < surf->lowerY || y > surf->upperY) continue;
+        if ((y < surf->lowerY) || (y > surf->upperY)) continue;
         // Exclude a large number of walls immediately to optimize.
-        offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
-        if (offset < -radius || offset > radius)  continue;
+        offset = ((surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset);
+        if ((offset < -radius) || (offset > radius))  continue;
         //  (Quantum Tunneling) Due to issues with the vertices walls choose
         //  and the fact they are floating point, certain floating point positions
         //  along the seam of two walls may collide with neither wall or both walls.
@@ -248,10 +248,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
                 if (((y3 - y) * (w1 - w3)) - ((w3 -  x) * (y1 - y3)) < 0) continue;
             }
         }
-        data->x += surf->normal.x * (radius - offset);
-        x       += surf->normal.x * (radius - offset);
-        data->z += surf->normal.z * (radius - offset);
-        z       += surf->normal.z * (radius - offset);
+        data->x += (surf->normal.x * (radius - offset));
+        x       += (surf->normal.x * (radius - offset));
+        data->z += (surf->normal.z * (radius - offset));
+        z       += (surf->normal.z * (radius - offset));
         // x = data->x;
         // z = data->z;
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
@@ -285,19 +285,18 @@ s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 ra
  */
 s32 find_wall_collisions(struct WallCollisionData *colData) {
     struct SurfaceNode *node;
-    s16 cellX, cellZ;
     s32 numCollisions = 0;
     s16 x             = colData->x;
     s16 z             = colData->z;
     colData->numWalls = 0;
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return numCollisions;
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return numCollisions;
     // World (level) consists of a 16x16 grid. Find where the collision is on
     // the grid (round toward -inf)
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces belonging to objects.
     node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
     numCollisions += find_wall_collisions_from_list(node, colData);
@@ -347,11 +346,11 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             normY          = wall->normal.y;
             normZ          = wall->normal.z;
             originOffset   = wall->originOffset;
-            offset         = normX * newPos[i][0] + normY * newPos[i][1] + normZ * newPos[i][2] + originOffset;
+            offset         = ((normX * newPos[i][0]) + (normY * newPos[i][1]) + (normZ * newPos[i][2]) + originOffset);
             offsetAbsolute = ABS(offset);
             if (offsetAbsolute < radius) {
-                newPos[i][0] += normX * (radius - offset);
-                newPos[i][2] += normZ * (radius - offset);
+                newPos[i][0] += (normX * (radius - offset));
+                newPos[i][2] += (normZ * (radius - offset));
                 vec3f_copy(pos, newPos[i]);
             }
         }
@@ -370,7 +369,7 @@ static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
 #else
 static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
 #endif
-    return -(x * surf->normal.x + surf->normal.z * z + surf->originOffset) / surf->normal.y;
+    return -((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y;
 }
 
 #ifdef BETTER_WALL_COLLISION
@@ -441,7 +440,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         // if (y > (height + 78.0f)) continue;
         // Checks for ceiling interaction
         if (y > height) continue;
-        if (y >= surf->upperY) continue;
+        if (y > surf->upperY) continue;
         *pheight = height;
         ceil     = surf;
         if (height == y) break;
@@ -453,20 +452,19 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
  * Find the lowest ceiling above a given position and return the height.
  */
 f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
-    register s16 cellZ, cellX;
     struct Surface *ceil, *dynamicCeil;
     struct SurfaceNode *surfaceList;
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
     *pceil            = NULL;
 #ifdef BETTER_WALL_COLLISION
-    if (xPos <= -LEVEL_BOUNDARY_MAX
-     || xPos >=  LEVEL_BOUNDARY_MAX
-     || zPos <= -LEVEL_BOUNDARY_MAX
-     || zPos >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((xPos <= -LEVEL_BOUNDARY_MAX)
+     || (xPos >=  LEVEL_BOUNDARY_MAX)
+     || (zPos <= -LEVEL_BOUNDARY_MAX)
+     || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil        = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &height);
@@ -482,13 +480,13 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     s16 y = (s16) yPos;
     s16 z = (s16) zPos;
     // Check if position is within level bounds
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
@@ -513,8 +511,8 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  **************************************************/
 
 s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, s16 type, s32 dynamic) {
-    register s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    register s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     struct SurfaceNode *surfaceNode;
     surfaceNode = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     // Check for surfaces that are a part of level geometry.
@@ -580,11 +578,11 @@ f32 find_floor_height_and_data(f32 xPos, f32 yPos, f32 zPos, struct FloorGeometr
     f32 floorHeight = find_floor(xPos, yPos, zPos, &floor);
     *floorGeo = NULL;
     if (floor != NULL) {
-        sFloorGeo.normalX = floor->normal.x;
-        sFloorGeo.normalY = floor->normal.y;
-        sFloorGeo.normalZ = floor->normal.z;
+        sFloorGeo.normalX      = floor->normal.x;
+        sFloorGeo.normalY      = floor->normal.y;
+        sFloorGeo.normalZ      = floor->normal.z;
         sFloorGeo.originOffset = floor->originOffset;
-        *floorGeo = &sFloorGeo;
+        *floorGeo              = &sFloorGeo;
     }
     return floorHeight;
 }
@@ -661,7 +659,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
             if (curBottomHeight > topBottomHeight) topBottomHeight = curBottomHeight;
             continue;
         }
-        if (curBottomHeight >= y + 78.0f) bottomHeight = curBottomHeight;
+        if (curBottomHeight >= (y + 78.0f)) bottomHeight = curBottomHeight;
     }
     // Iterate through the list of water tops until there are no more water tops.
     while (topSurfaceNode != NULL) {
@@ -670,7 +668,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         topSurfaceNode = topSurfaceNode->next;
         if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curHeight = get_surface_height_at_location(x, z, surf);
-        if (bottomHeight != FLOOR_LOWER_LIMIT && curHeight > bottomHeight) continue;
+        if ((bottomHeight != FLOOR_LOWER_LIMIT) && (curHeight > bottomHeight)) continue;
         if (curHeight > height) {
             height   = curHeight;
             *pheight = curHeight;
@@ -694,7 +692,6 @@ f32 find_floor_height(f32 x, f32 y, f32 z) {
  * Find the highest floor under a given position and return the height.
  */
 f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
-    s16 cellZ, cellX;
     struct Surface *floor, *dynamicFloor;
     struct SurfaceNode *surfaceList;
     f32 height        = FLOOR_LOWER_LIMIT;
@@ -702,13 +699,13 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 #ifdef BETTER_WALL_COLLISION
     *pfloor = NULL;
     // Exclude floors outside of level boundaries
-    if (xPos <= -LEVEL_BOUNDARY_MAX
-     || xPos >=  LEVEL_BOUNDARY_MAX
-     || zPos <= -LEVEL_BOUNDARY_MAX
-     || zPos >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((xPos <= -LEVEL_BOUNDARY_MAX)
+     || (xPos >=  LEVEL_BOUNDARY_MAX)
+     || (zPos <= -LEVEL_BOUNDARY_MAX)
+     || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
@@ -729,13 +726,13 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 z = (s16) zPos;
     *pfloor = NULL;
     // Check if position is within level bounds
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor         = find_floor_from_list(surfaceList, x, y, z, &height);
@@ -783,20 +780,19 @@ f32 find_room_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
  * Find the highest water floor under a given position and return the height.
  */
 f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
-    s16 cellZ, cellX;
     struct Surface     *floor = NULL;
     struct SurfaceNode *surfaceList;
     f32 height       = FLOOR_LOWER_LIMIT;
     f32 bottomheight = FLOOR_LOWER_LIMIT;
 #ifdef BETTER_WALL_COLLISION
     // Check if position is within level bounds
-    if (xPos <= -LEVEL_BOUNDARY_MAX
-     || xPos >=  LEVEL_BOUNDARY_MAX
-     || zPos <= -LEVEL_BOUNDARY_MAX
-     || zPos >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((xPos <= -LEVEL_BOUNDARY_MAX)
+     || (xPos >=  LEVEL_BOUNDARY_MAX)
+     || (zPos <= -LEVEL_BOUNDARY_MAX)
+     || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, xPos, yPos, zPos, &height, &bottomheight);
@@ -808,13 +804,13 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     s16 y = (s16) yPos;
     s16 z = (s16) zPos;
     // Check if position is within level bounds
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return height;
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s16 cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, x, y, z, &height, &bottomheight);
@@ -837,10 +833,9 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
  * Finds the height of water at a given location.
  */
 f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
-    s32 i;
-    s32 numRegions;
+    s32 i, numRegions;
     s16 val;
-    f32 loX, hiX, loZ, hiZ;
+    register f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
@@ -881,10 +876,9 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
  * Finds the height of water at a given location.
  */
 f32 find_water_level(f32 x, f32 z) {
-    s32 i;
-    s32 numRegions;
+    s32 i, numRegions;
     s16 val;
-    f32 loX, hiX, loZ, hiZ;
+    register f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
@@ -919,10 +913,9 @@ f32 find_water_level(f32 x, f32 z) {
  * Finds the height of the poison gas (used only in HMC) at a given location.
  */
 f32 find_poison_gas_level(f32 x, f32 z) {
-    s32 i;
-    s32 numRegions;
+    s32 i, numRegions;
     s16 val;
-    f32 loX, hiX, loZ, hiZ;
+    register f32 loX, hiX, loZ, hiZ;
     f32 gasLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
     if (p != NULL) {
@@ -973,8 +966,8 @@ void debug_surface_list_info(f32 xPos, f32 zPos) {
     s32 numFloors = 0;
     s32 numWalls  = 0;
     s32 numCeils  = 0;
-    s32 cellX = (xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
-    s32 cellZ = (zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    register const s32 cellX = (xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    register const s32 cellZ = (zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
     // Check static floors
     list = gStaticSurfacePartition[cellZ & NUM_CELLS_INDEX][cellX & NUM_CELLS_INDEX][SPATIAL_PARTITION_FLOORS].next;
     numFloors += surface_list_length(list);

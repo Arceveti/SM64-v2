@@ -249,8 +249,8 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #if NULL_FLOOR_STEPS > 0
     vec3f_copy(startPos, nextPos);
     while (floor == NULL && missedFloors < NULL_FLOOR_STEPS) {
-        nextPos[0] += m->floor->normal.y * (m->vel[0] / 4.0f);
-        nextPos[2] += m->floor->normal.y * (m->vel[2] / 4.0f);
+        nextPos[0] += (m->floor->normal.y * (m->vel[0] / AIR_NUM_STEPS));
+        nextPos[2] += (m->floor->normal.y * (m->vel[2] / AIR_NUM_STEPS));
  #ifdef BETTER_WALL_COLLISION
         resolve_and_return_wall_collisions(nextPos, 30.0f, 24.0f, &lowerWall);
         resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f, &upperWall);
@@ -518,6 +518,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 #endif
 #if NULL_FLOOR_STEPS > 0
     u32 missedFloors = 0;
+    // Vec3f startPos;
 #endif
     Vec3f nextPos;
     struct Surface *ceil, *floor;
@@ -540,9 +541,10 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
 #endif
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
 #if NULL_FLOOR_STEPS > 0
+    // vec3f_copy(startPos, nextPos); // why does this crash the game when ledge grabbing?
     while (floor == NULL && missedFloors < NULL_FLOOR_STEPS) {
-        nextPos[0] += m->vel[0] / 4.0f;
-        nextPos[2] += m->vel[2] / 4.0f;
+        nextPos[0] += (m->vel[0] / GROUND_NUM_STEPS);
+        nextPos[2] += (m->vel[2] / GROUND_NUM_STEPS);
  #ifdef BETTER_WALL_COLLISION
         resolve_and_return_wall_collisions(nextPos, 150.0f, 50.0f, &upperWall);
         resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);

@@ -97,8 +97,7 @@ static void clear_static_surfaces(void) {
 static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surface *surface) {
     struct SurfaceNode *newNode = alloc_surface_node();
     struct SurfaceNode *list;
-    s16 surfacePriority;
-    s16 priority;
+    s16 surfacePriority, priority;
     s16 sortDir;
     s16 listIndex;
 #ifdef NEW_WATER_SURFACES
@@ -186,17 +185,15 @@ static s16 upper_cell_index(s32 coord) {
  * @param dynamic Boolean determining whether the surface is static or dynamic
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
-    s16 minX, minZ, maxX, maxZ;
-    s16 minCellX, minCellZ, maxCellX, maxCellZ;
-    s16 cellZ, cellX;
-    minX     = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    minZ     = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    maxX     = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    maxZ     = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    minCellX = lower_cell_index(minX);
-    maxCellX = upper_cell_index(maxX);
-    minCellZ = lower_cell_index(minZ);
-    maxCellZ = upper_cell_index(maxZ);
+    register s16 cellZ, cellX;
+    register const s16 minX     = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s16 minZ     = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s16 maxX     = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s16 maxZ     = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s16 minCellX = lower_cell_index(minX);
+    register const s16 maxCellX = upper_cell_index(maxX);
+    register const s16 minCellZ = lower_cell_index(minZ);
+    register const s16 maxCellZ = upper_cell_index(maxZ);
     for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
         for (cellX = minCellX; cellX <= maxCellX; cellX++) {
             add_surface_to_cell(dynamic, cellX, cellZ, surface);
@@ -211,38 +208,32 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
  */
 static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     struct Surface *surface;
-    register s32 x1, y1, z1;
-    register s32 x2, y2, z2;
-    register s32 x3, y3, z3;
-    f32 nx, ny, nz;
-    f32 mag;
-    s16 offset1, offset2, offset3;
 
-    offset1 = 3 * (*vertexIndices)[0];
-    offset2 = 3 * (*vertexIndices)[1];
-    offset3 = 3 * (*vertexIndices)[2];
+    register s16 offset1 = 3 * (*vertexIndices)[0];
+    register s16 offset2 = 3 * (*vertexIndices)[1];
+    register s16 offset3 = 3 * (*vertexIndices)[2];
 
-    x1 = *(vertexData + offset1 + 0);
-    y1 = *(vertexData + offset1 + 1);
-    z1 = *(vertexData + offset1 + 2);
+    register s32 x1 = *(vertexData + offset1 + 0);
+    register s32 y1 = *(vertexData + offset1 + 1);
+    register s32 z1 = *(vertexData + offset1 + 2);
 
-    x2 = *(vertexData + offset2 + 0);
-    y2 = *(vertexData + offset2 + 1);
-    z2 = *(vertexData + offset2 + 2);
+    register s32 x2 = *(vertexData + offset2 + 0);
+    register s32 y2 = *(vertexData + offset2 + 1);
+    register s32 z2 = *(vertexData + offset2 + 2);
 
-    x3 = *(vertexData + offset3 + 0);
-    y3 = *(vertexData + offset3 + 1);
-    z3 = *(vertexData + offset3 + 2);
+    register s32 x3 = *(vertexData + offset3 + 0);
+    register s32 y3 = *(vertexData + offset3 + 1);
+    register s32 z3 = *(vertexData + offset3 + 2);
 
     // (v2 - v1) x (v3 - v2)
-    nx = (y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2);
-    ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
-    nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
+    register f32 nx = (y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2);
+    register f32 ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
+    register f32 nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
 
 #if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
-    mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
+    register f32 mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
 #else
-    mag = sqrtf(nx * nx + ny * ny + nz * nz);
+    register f32 mag = sqrtf(nx * nx + ny * ny + nz * nz);
     // Checking to make sure no DIV/0
     if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);
@@ -310,8 +301,7 @@ static s32 surf_has_no_cam_collision(s16 surfaceType) {
  * exertion, and room.
  */
 static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s8 **surfaceRooms) {
-    s32 i;
-    s32 numSurfaces;
+    s32 i, numSurfaces;
     struct Surface *surface;
     s8 room = 0;
 #ifndef ALL_SURFACES_HAVE_FORCE
@@ -359,8 +349,7 @@ static s16 *read_vertex_data(s16 **data) {
  * Loads in special environmental regions, such as water, poison gas, and JRB fog.
  */
 static void load_environmental_regions(s16 **data) {
-    s32 numRegions;
-    s32 i;
+    s32 numRegions, i;
     gEnvironmentRegions =   *data;
     numRegions          = *(*data)++;
     for (i = 0; i < numRegions; i++) {
@@ -388,9 +377,7 @@ u32 get_area_terrain_size(s16 *data) {
     s16 *startPos = data;
     s32 end = FALSE;
     s16 terrainLoadType;
-    s32 numVertices;
-    s32 numRegions;
-    s32 numSurfaces;
+    s32 numVertices, numRegions, numSurfaces;
 #ifndef ALL_SURFACES_HAVE_FORCE
     s16 hasForce;
 #endif
@@ -529,26 +516,18 @@ void transform_object_vertices(s16 **data, s16 *vertexData) {
  * Load in the surfaces for the gCurrentObject. This includes setting the flags, exertion, and room.
  */
 void load_object_surfaces(s16 **data, s16 *vertexData) {
-    s32 surfaceType;
     s32 i;
-    s32 numSurfaces;
-#ifndef ALL_SURFACES_HAVE_FORCE
-    s16 hasForce;
-#endif
-    s16 flags;
-    s16 room;
-    surfaceType = *(*data);
+    s32 surfaceType = *(*data);
     (*data)++;
-    numSurfaces = *(*data);
+    s32 numSurfaces = *(*data);
     (*data)++;
 #ifndef ALL_SURFACES_HAVE_FORCE
-    hasForce = surface_has_force(surfaceType);
+    s16 hasForce = surface_has_force(surfaceType);
 #endif
-    flags  = surf_has_no_cam_collision(surfaceType);
-    flags |= SURFACE_FLAG_DYNAMIC;
+    s16 flags = surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC;
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
-    room = (gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp) ? 5 : 0);
+    s16 room = (gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp) ? 5 : 0);
     for (i = 0; i < numSurfaces; i++) {
         struct Surface *surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
@@ -586,7 +565,7 @@ void load_object_collision_model(void) {
     // drawing distance, extend the drawing range.
     if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
     // Update if no Time Stop, in range, and in the current room.
-    if (!(gTimeStopState & TIME_STOP_ACTIVE) && marioDist < tangibleDist
+    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDist < tangibleDist)
         && !(gCurrentObject->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         collisionData++;
         transform_object_vertices(&collisionData, vertexData);

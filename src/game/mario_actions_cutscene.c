@@ -1242,7 +1242,9 @@ s32 act_squished(struct MarioState *m) {
     f32 spaceUnderCeil;
     s16 surfAngle;
     s32 underSteepSurf = FALSE; // seems to be responsible for setting velocity?
+#ifdef SMOOTH_SQUISH
     Vec3f nextScale;
+#endif
     if ((spaceUnderCeil = m->ceilHeight - m->floorHeight) < 0) spaceUnderCeil = 0;
     switch (m->actionState) {
         case 0:
@@ -1254,9 +1256,12 @@ s32 act_squished(struct MarioState *m) {
             if (spaceUnderCeil >= 10.1f) {
                 // Mario becomes a pancake
                 squishAmount = spaceUnderCeil / 160.0f;
-                vec3f_set(nextScale, 2.0f - squishAmount, squishAmount,
-                          2.0f - squishAmount);
+#ifdef SMOOTH_SQUISH
+                vec3f_set(nextScale, 2.0f - squishAmount, squishAmount, 2.0f - squishAmount);
                 approach_vec3f_asymptotic(m->marioObj->header.gfx.scale, nextScale, 0.5f, 0.5f, 0.5f);
+#else
+                vec3f_set(m->marioObj->header.gfx.scale, 2.0f - squishAmount, squishAmount, 2.0f - squishAmount);
+#endif
             } else {
                 if (!(m->flags & MARIO_METAL_CAP) && m->invincTimer == 0) {
                     // cap on: 3 units; cap off: 4.5 units
@@ -1287,15 +1292,24 @@ s32 act_squished(struct MarioState *m) {
             }
             break;
     }
+#ifdef BETTER_CEILING_HANDLING
     m->actionArg++;
     if ((m->floor != NULL && m->ceil != NULL) && (m->actionArg > 8 || m->floor->type == SURFACE_BURNING || m->ceil->type == SURFACE_BURNING)) { //! ceiling handling define?
         // steep floor
         if (m->floor->normal.y < COS25) {
+#else
+        // steep floor
+        if (m->floor != NULL && m->floor->normal.y < 0.5f) {
+#endif
             surfAngle = atan2s(m->floor->normal.z, m->floor->normal.x);
             underSteepSurf = TRUE;
         }
         // steep ceiling
+#ifdef BETTER_CEILING_HANDLING
         if (-COS25 < m->ceil->normal.y) {
+#else
+        if (m->ceil != NULL && -0.5f < m->ceil->normal.y) {
+#endif
             surfAngle = atan2s(m->ceil->normal.z, m->ceil->normal.x);
             underSteepSurf = TRUE;
         }
@@ -1311,11 +1325,13 @@ s32 act_squished(struct MarioState *m) {
                 return FALSE;
             }
         }
+#ifdef BETTER_CEILING_HANDLING
     }
+#endif
     // squished for more than 10 seconds, so kill Mario
     if (m->actionArg > 300) {
         // 0 units of health
-        m->health = 0xFF;
+        m->health      = 0xFF;
         m->hurtCounter = 0;
         level_trigger_warp(m, WARP_OP_DEATH);
     }

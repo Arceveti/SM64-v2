@@ -70,25 +70,17 @@ static void manta_ray_move(void) {
 static void manta_ray_act_spawn_ring(void) {
     struct Object *ringManager = o->parentObj;
     struct Object *ring;
-
-    if (o->oTimer == 300) o->oTimer = 0;
-
-    // if (o->oTimer == 0 || o->oTimer == 50 || o->oTimer == 150 || o->oTimer == 200 || o->oTimer == 250) {
-    if (o->oTimer % 50 == 0) {
-        ring = spawn_object(o, MODEL_WATER_RING, bhvMantaRayWaterRing);
-
-        ring->oFaceAngleYaw = o->oMoveAngleYaw;
+    if (o->oTimer == 100) {
+        o->oTimer             = 0;
+        ring                  = spawn_object(o, MODEL_WATER_RING, bhvMantaRayWaterRing);
+        ring->oFaceAngleYaw   = o->oMoveAngleYaw;
         ring->oFaceAnglePitch = o->oMoveAnglePitch + 0x4000;
-
-        ring->oPosX = o->oPosX + 200.0f * sins(o->oMoveAngleYaw + 0x8000);
-        ring->oPosY = o->oPosY + 10.0f + 200.0f * sins(o->oMoveAnglePitch);
-        ring->oPosZ = o->oPosZ + 200.0f * coss(o->oMoveAngleYaw + 0x8000);
+        ring->oPosX           = o->oPosX + 200.0f * sins(o->oMoveAngleYaw + 0x8000);
+        ring->oPosY           = o->oPosY + 10.0f + 200.0f * sins(o->oMoveAnglePitch);
+        ring->oPosZ           = o->oPosZ + 200.0f * coss(o->oMoveAngleYaw + 0x8000);
         ring->oWaterRingIndex = ringManager->oWaterRingMgrNextRingIndex;
-
         ringManager->oWaterRingMgrNextRingIndex++;
-        if (ringManager->oWaterRingMgrNextRingIndex > 10000) {
-            ringManager->oWaterRingMgrNextRingIndex = 0;
-        }
+        if (ringManager->oWaterRingMgrNextRingIndex > 10000) ringManager->oWaterRingMgrNextRingIndex = 0;
     }
 }
 

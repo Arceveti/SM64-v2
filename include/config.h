@@ -396,6 +396,8 @@
 #define INFINITE_WATER_SHELL
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
+// Mario's squish scale is smooth rather than being instantly set (Arceveti)
+#define SMOOTH_SQUISH
 // Improved wall collision detection, with rounded corners
 // Fixes Mario jittering when walking into multiple walls at once
 // (frameperfection/Frame#5375)

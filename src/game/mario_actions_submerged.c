@@ -93,11 +93,6 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         return WATER_STEP_HIT_CEILING;
     }
     if (nextPos[1] <= floorHeight) {
-        // if (floor->normal.y < COS73) {
-        //     floorAmt = (floorHeight - nextPos[1]);
-        //     nextPos[0] += floor->normal.x * floorAmt;
-        //     nextPos[2] += floor->normal.z * floorAmt;
-        // }
         nextPos[1] = floorHeight;
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
