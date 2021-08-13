@@ -206,9 +206,7 @@ s32 act_holding_bowser(struct MarioState *m) {
         s16 camAngleToBomb;
         s16 camYaw = m->area->camera->yaw + 0x8000;
         struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, 0x4000, &camAngleToBomb);
-        if (bowserBomb != NULL && (m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) && abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000) {
-            m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
-        }
+        if (bowserBomb != NULL && (m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) && abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
 #endif
 #ifndef VERSION_JP
         play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);

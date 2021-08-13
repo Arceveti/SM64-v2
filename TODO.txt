@@ -43,15 +43,18 @@
             - BBH lanterns' glow
             - HMC lanterns' glow
             - PSS lanterns' glow
-            - Castle basement lanterns' glow?
+            - Castle basement fire glow?
         - Rainbow
             - RR
             - WMOTR
             - TOTWC
     - Cubic/3D collision cells
     - Only load collision for the current room
-- Physics:
+        - Separate function for finding current room
+- Objects:
+    - Non-exit power stars replenish health
     - Object step height being a field
+- Physics:
     - Gravity direction support
     - "Squished" death from any direction
     - Walking sideways across a non-slippery steep slope shouldn't slow down Mario
@@ -62,13 +65,27 @@
     - Use vanilla metal cap texture if framebuffer is not enabled
     - Make metal cap effect work on console
 - HUD:
-    - Rearrange hud
+    - Rearrange HUD
+        - Top Left:
+            - Lives
+            - Stars
+        - Top Right:
+            - Coins
+            - Red Coins
+            - Secrets
+            - Timer?
+        - Top Center:
+            - Health meter
+            - Breath meter
+                - Moves health meter to the side when active to keep balance, similar to SM63
     - FPS counter
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
+    - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
 - Camera:
+    - Focus on bomb when spinning Bowser
     - Better camera controls in general lol
 - Files/Hacking QOL
     - Split camera file into camera and cutscene files
