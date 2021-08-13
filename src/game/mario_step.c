@@ -221,7 +221,8 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #ifdef BETTER_WALL_COLLISION
     struct WallCollisionData lowerWall, upperWall;
     s16 i;
-    s16 wallDYaw, oldWallDYaw, absWallDYaw;
+    s16 wallDYaw
+    // s16 oldWallDYaw, absWallDYaw;
 #else
  #ifndef SKIP_GROUND_LOWER_WALL
     UNUSED struct Surface *lowerWall;
@@ -340,16 +341,16 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     m->floor       = floor;
     m->floorHeight = floorHeight;
 #ifdef BETTER_WALL_COLLISION
-    if (m->wall != NULL) {
-        oldWallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
-        oldWallDYaw = oldWallDYaw < 0 ? -oldWallDYaw : oldWallDYaw;
-    } else {
-        oldWallDYaw = 0;
-    }
+    // if (m->wall != NULL) {
+    //     oldWallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
+    //     oldWallDYaw = oldWallDYaw < 0 ? -oldWallDYaw : oldWallDYaw;
+    // } else {
+    //     oldWallDYaw = 0;
+    // }
     for (i = 0; i < upperWall.numWalls; i++) {
         wallDYaw = atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x) - m->faceAngle[1];
-        absWallDYaw = wallDYaw < 0 ? -wallDYaw : wallDYaw;
-        if (absWallDYaw > oldWallDYaw) oldWallDYaw = absWallDYaw;
+        // absWallDYaw = wallDYaw < 0 ? -wallDYaw : wallDYaw;
+        // if (absWallDYaw > oldWallDYaw) oldWallDYaw = absWallDYaw;
         m->wall = upperWall.walls[i];
         if (wallDYaw >=  0x2AAA && wallDYaw <=  0x5555) continue;
         if (wallDYaw <= -0x2AAA && wallDYaw >= -0x5555) continue;
