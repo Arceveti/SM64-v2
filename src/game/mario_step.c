@@ -221,7 +221,7 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #ifdef BETTER_WALL_COLLISION
     struct WallCollisionData lowerWall, upperWall;
     s16 i;
-    s16 wallDYaw
+    s16 wallDYaw;
     // s16 oldWallDYaw, absWallDYaw;
 #else
  #ifndef SKIP_GROUND_LOWER_WALL
