@@ -56,37 +56,52 @@
 #define /*0x094*/ oUnkPlayerID                                  OBJECT_FIELD_U32(0x03) // Only set to 1 for Mario
 // 0x98 unused/removed.
 #define /*0x09C*/ oIntangibleTimer                              OBJECT_FIELD_S32(0x05)
+/* Position vector */
 #define /*0x0A0*/ O_POS_INDEX                                   0x06
+#define /*0x0A0*/ O_POS_X_INDEX                                 (O_POS_INDEX + 0) // 0x06
+#define /*0x0A4*/ O_POS_Y_INDEX                                 (O_POS_INDEX + 1) // 0x07
+#define /*0x0A8*/ O_POS_Z_INDEX                                 (O_POS_INDEX + 2) // 0x08
 #define /*0x0A0*/ oPosVec                                       OBJECT_FIELD_F32(O_POS_INDEX)
-#define /*0x0A0*/ oPosX                                         OBJECT_FIELD_F32(O_POS_INDEX + 0)
-#define /*0x0A4*/ oPosY                                         OBJECT_FIELD_F32(O_POS_INDEX + 1)
-#define /*0x0A8*/ oPosZ                                         OBJECT_FIELD_F32(O_POS_INDEX + 2)
+#define /*0x0A0*/ oPosX                                         OBJECT_FIELD_F32(O_POS_X_INDEX)
+#define /*0x0A4*/ oPosY                                         OBJECT_FIELD_F32(O_POS_Y_INDEX)
+#define /*0x0A8*/ oPosZ                                         OBJECT_FIELD_F32(O_POS_Z_INDEX)
+/* Velocity vector */
 #define /*0x0AC*/ O_VEL_INDEX                                   0x09
+#define /*0x0AC*/ O_VEL_X_INDEX                                 (O_VEL_INDEX + 0) // 0x09
+#define /*0x0B0*/ O_VEL_Y_INDEX                                 (O_VEL_INDEX + 1) // 0x0A
+#define /*0x0B4*/ O_VEL_Z_INDEX                                 (O_VEL_INDEX + 2) // 0x0B
 #define /*0x0AC*/ oVelVec                                       OBJECT_FIELD_F32(O_VEL_INDEX)
-#define /*0x0AC*/ oVelX                                         OBJECT_FIELD_F32(O_VEL_INDEX + 0)
-#define /*0x0B0*/ oVelY                                         OBJECT_FIELD_F32(O_VEL_INDEX + 1)
-#define /*0x0B4*/ oVelZ                                         OBJECT_FIELD_F32(O_VEL_INDEX + 2)
+#define /*0x0AC*/ oVelX                                         OBJECT_FIELD_F32(O_VEL_X_INDEX)
+#define /*0x0B0*/ oVelY                                         OBJECT_FIELD_F32(O_VEL_Y_INDEX)
+#define /*0x0B4*/ oVelZ                                         OBJECT_FIELD_F32(O_VEL_Z_INDEX)
+/* Local Position vector */
 #define /*0x0B8*/ O_LOCAL_VEL_INDEX                             0x0C
+#define /*0x0B8*/ O_LOCAL_VEL_Z_INDEX                           (O_LOCAL_VEL_INDEX + 0) // 0x0C
+#define /*0x0BC*/ O_LOCAL_VEL_X_INDEX                           (O_LOCAL_VEL_INDEX + 1) // 0x0D
+#define /*0x0C0*/ O_LOCAL_VEL_Y_INDEX                           (O_LOCAL_VEL_INDEX + 2) // 0x0E
 #define /*0x0B8*/ oLocalVelVec                                  OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX)
-#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 0) // local Z
-#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 1) // local X
-#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(O_LOCAL_VEL_INDEX + 2) // local Y
+#define /*0x0B8*/ oForwardVel                                   OBJECT_FIELD_F32(O_LOCAL_VEL_Z_INDEX)
+#define /*0x0BC*/ oLeftVel                                      OBJECT_FIELD_F32(O_LOCAL_VEL_X_INDEX)
+#define /*0x0C0*/ oUpVel                                        OBJECT_FIELD_F32(O_LOCAL_VEL_Y_INDEX)
+/* Move Angle vector */
 #define /*0x0C4*/ O_MOVE_ANGLE_INDEX                            0x0F
 #define /*0x0C4*/ O_MOVE_ANGLE_PITCH_INDEX                      (O_MOVE_ANGLE_INDEX + 0) // 0x0F
-#define /*0x0C4*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1) // 0x10
-#define /*0x0C4*/ O_MOVE_ANGLE_ROLL_INDEX                       (O_MOVE_ANGLE_INDEX + 2) // 0x11
+#define /*0x0C8*/ O_MOVE_ANGLE_YAW_INDEX                        (O_MOVE_ANGLE_INDEX + 1) // 0x10
+#define /*0x0CC*/ O_MOVE_ANGLE_ROLL_INDEX                       (O_MOVE_ANGLE_INDEX + 2) // 0x11
 #define /*0x0C4*/ oMoveAngleVec                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_INDEX)
 #define /*0x0C4*/ oMoveAnglePitch                               OBJECT_FIELD_S32(O_MOVE_ANGLE_PITCH_INDEX)
 #define /*0x0C8*/ oMoveAngleYaw                                 OBJECT_FIELD_S32(O_MOVE_ANGLE_YAW_INDEX)
 #define /*0x0CC*/ oMoveAngleRoll                                OBJECT_FIELD_S32(O_MOVE_ANGLE_ROLL_INDEX)
+/* Face Angle vector */
 #define /*0x0D0*/ O_FACE_ANGLE_INDEX                            0x12
 #define /*0x0D0*/ O_FACE_ANGLE_PITCH_INDEX                      (O_FACE_ANGLE_INDEX + 0) // 0x12
-#define /*0x0D0*/ O_FACE_ANGLE_YAW_INDEX                        (O_FACE_ANGLE_INDEX + 1) // 0x13
-#define /*0x0D0*/ O_FACE_ANGLE_ROLL_INDEX                       (O_FACE_ANGLE_INDEX + 2) // 0x14
+#define /*0x0D4*/ O_FACE_ANGLE_YAW_INDEX                        (O_FACE_ANGLE_INDEX + 1) // 0x13
+#define /*0x0D8*/ O_FACE_ANGLE_ROLL_INDEX                       (O_FACE_ANGLE_INDEX + 2) // 0x14
 #define /*0x0D0*/ oFaceAngleVec                                 OBJECT_FIELD_S32(O_FACE_ANGLE_INDEX)
 #define /*0x0D0*/ oFaceAnglePitch                               OBJECT_FIELD_S32(O_FACE_ANGLE_PITCH_INDEX)
 #define /*0x0D4*/ oFaceAngleYaw                                 OBJECT_FIELD_S32(O_FACE_ANGLE_YAW_INDEX)
 #define /*0x0D8*/ oFaceAngleRoll                                OBJECT_FIELD_S32(O_FACE_ANGLE_ROLL_INDEX)
+/* Common fields */
 #define /*0x0DC*/ oGraphYOffset                                 OBJECT_FIELD_F32(0x15)
 #define /*0x0E0*/ oActiveParticleFlags                          OBJECT_FIELD_U32(0x16)
 #define /*0x0E4*/ oGravity                                      OBJECT_FIELD_F32(0x17)
@@ -94,22 +109,32 @@
 #define /*0x0EC*/ oMoveFlags                                    OBJECT_FIELD_U32(0x19)
 #define /*0x0F0*/ oAnimState                                    OBJECT_FIELD_S32(0x1A)
 // 0x0F4-0x110 (0x1B-0x22) are object specific and defined below the common fields.
-#define /*0x138*/ O_ANGLE_VEL_INDEX                             0x23
+/* Angle Velocity vector */
+#define /*0x114*/ O_ANGLE_VEL_INDEX                             0x23
+#define /*0x114*/ O_ANGLE_VEL_PITCH_INDEX                       (O_ANGLE_VEL_INDEX + 0) // 0x23
+#define /*0x118*/ O_ANGLE_VEL_YAW_INDEX                         (O_ANGLE_VEL_INDEX + 1) // 0x24
+#define /*0x11C*/ O_ANGLE_VEL_ROLL_INDEX                        (O_ANGLE_VEL_INDEX + 2) // 0x25
 #define /*0x114*/ oAngleVelVec                                  OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX)
-#define /*0x114*/ oAngleVelPitch                                OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 0)
-#define /*0x118*/ oAngleVelYaw                                  OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 1)
-#define /*0x11C*/ oAngleVelRoll                                 OBJECT_FIELD_S32(O_ANGLE_VEL_INDEX + 2)
+#define /*0x114*/ oAngleVelPitch                                OBJECT_FIELD_S32(O_ANGLE_VEL_PITCH_INDEX)
+#define /*0x118*/ oAngleVelYaw                                  OBJECT_FIELD_S32(O_ANGLE_VEL_YAW_INDEX)
+#define /*0x11C*/ oAngleVelRoll                                 OBJECT_FIELD_S32(O_ANGLE_VEL_ROLL_INDEX)
+/* Common fields */
 #define /*0x120*/ oAnimations                                   OBJECT_FIELD_ANIMS(0x26)
 #define /*0x124*/ oHeldState                                    OBJECT_FIELD_U32(0x27)
 #define /*0x128*/ oWallHitboxRadius                             OBJECT_FIELD_F32(0x28)
 #define /*0x12C*/ oDragStrength                                 OBJECT_FIELD_F32(0x29)
 #define /*0x130*/ oInteractType                                 OBJECT_FIELD_U32(0x2A)
 #define /*0x134*/ oInteractStatus                               OBJECT_FIELD_S32(0x2B)
+/* Parent Relative Position vector */
 #define /*0x138*/ O_PARENT_RELATIVE_POS_INDEX                   0x2C
+#define /*0x138*/ O_PARENT_RELATIVE_POS_X_INDEX                 (O_PARENT_RELATIVE_POS_INDEX + 0) // 0x2C
+#define /*0x13C*/ O_PARENT_RELATIVE_POS_Y_INDEX                 (O_PARENT_RELATIVE_POS_INDEX + 1) // 0x2D
+#define /*0x140*/ O_PARENT_RELATIVE_POS_Z_INDEX                 (O_PARENT_RELATIVE_POS_INDEX + 2) // 0x2E
 #define /*0x138*/ oParentRelativePosVec                         OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX)
-#define /*0x138*/ oParentRelativePosX                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 0)
-#define /*0x13C*/ oParentRelativePosY                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 1)
-#define /*0x140*/ oParentRelativePosZ                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_INDEX + 2)
+#define /*0x138*/ oParentRelativePosX                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_X_INDEX)
+#define /*0x13C*/ oParentRelativePosY                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_Y_INDEX)
+#define /*0x140*/ oParentRelativePosZ                           OBJECT_FIELD_F32(O_PARENT_RELATIVE_POS_Z_INDEX)
+/* Common fields */
 #define /*0x144*/ oBehParams2ndByte                             OBJECT_FIELD_S32(0x2F)
 // 0x148 unused, possibly a third param byte.
 #define /*0x14C*/ oAction                                       OBJECT_FIELD_S32(0x31)
@@ -118,11 +143,16 @@
 #define /*0x158*/ oBounciness                                   OBJECT_FIELD_F32(0x34)
 #define /*0x15C*/ oDistanceToMario                              OBJECT_FIELD_F32(0x35)
 #define /*0x160*/ oAngleToMario                                 OBJECT_FIELD_S32(0x36)
+/* Home Position vector */
 #define /*0x164*/ O_HOME_INDEX                                  0x37
+#define /*0x164*/ O_HOME_X_INDEX                                (O_HOME_INDEX + 0) // 0x37
+#define /*0x168*/ O_HOME_Y_INDEX                                (O_HOME_INDEX + 1) // 0x38
+#define /*0x16C*/ O_HOME_Z_INDEX                                (O_HOME_INDEX + 2) // 0x39
 #define /*0x164*/ oHomeVec                                      OBJECT_FIELD_F32(O_HOME_INDEX)
-#define /*0x164*/ oHomeX                                        OBJECT_FIELD_F32(O_HOME_INDEX + 0)
-#define /*0x168*/ oHomeY                                        OBJECT_FIELD_F32(O_HOME_INDEX + 1)
-#define /*0x16C*/ oHomeZ                                        OBJECT_FIELD_F32(O_HOME_INDEX + 2)
+#define /*0x164*/ oHomeX                                        OBJECT_FIELD_F32(O_HOME_X_INDEX)
+#define /*0x168*/ oHomeY                                        OBJECT_FIELD_F32(O_HOME_Y_INDEX)
+#define /*0x16C*/ oHomeZ                                        OBJECT_FIELD_F32(O_HOME_Z_INDEX)
+/* Common fields */
 #define /*0x170*/ oFriction                                     OBJECT_FIELD_F32(0x3A)
 #define /*0x174*/ oBuoyancy                                     OBJECT_FIELD_F32(0x3B)
 #define /*0x178*/ oSoundStateID                                 OBJECT_FIELD_S32(0x3C)
@@ -209,8 +239,14 @@
 
 /* Bird */
 #define /*0x0F4*/ oBirdSpeed                                    OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oBirdTargetPitch                              OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oBirdTargetYaw                                OBJECT_FIELD_S32(0x1D)
+#define /*0x0F8*/ O_BIRD_TARGET_ANGLE_INDEX                     0x1C
+#define /*0x0F8*/ O_BIRD_TARGET_PITCH_INDEX                     (O_BIRD_TARGET_ANGLE_INDEX + 0) // 0x1C
+#define /*0x0FC*/ O_BIRD_TARGET_YAW_INDEX                       (O_BIRD_TARGET_ANGLE_INDEX + 1) // 0x1D
+#define /*0x100*/ O_BIRD_TARGET_ROLL_INDEX                      (O_BIRD_TARGET_ANGLE_INDEX + 2) // 0x1E
+#define /*0x0F8*/ oBirdTargetAngleVec                           OBJECT_FIELD_S32(O_BIRD_TARGET_ANGLE_INDEX)
+#define /*0x0F8*/ oBirdTargetPitch                              OBJECT_FIELD_S32(O_BIRD_TARGET_PITCH_INDEX)
+#define /*0x0FC*/ oBirdTargetYaw                                OBJECT_FIELD_S32(O_BIRD_TARGET_YAW_INDEX)
+#define /*0x100*/ oBirdTargetRoll                               OBJECT_FIELD_S32(O_BIRD_TARGET_ROLL_INDEX) // unused
 
 /* Cheep Cheep Spawner */
 #define /*0x0F4*/ oCheepCheepSpawnerSpawnAmount                 OBJECT_FIELD_S32(0x1B)
@@ -231,9 +267,14 @@
 #define /*0x0F8*/ oBobombBuddyHasTalkedToMario                  OBJECT_FIELD_S32(0x1C)
 #define /*0x0FC*/ oBobombBuddyRole                              OBJECT_FIELD_S32(0x1D)
 #define /*0x100*/ oBobombBuddyCannonStatus                      OBJECT_FIELD_S32(0x1E)
-#define /*0x108*/ oBobombBuddyPosXCopy                          OBJECT_FIELD_F32(0x20)
-#define /*0x10C*/ oBobombBuddyPosYCopy                          OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oBobombBuddyPosZCopy                          OBJECT_FIELD_F32(0x22)
+#define /*0x108*/ O_BOBOMB_BUDDY_POS_COPY_INDEX                 0x20
+#define /*0x108*/ O_BOBOMB_BUDDY_POS_X_COPY_INDEX               (O_BOBOMB_BUDDY_POS_COPY_INDEX + 0) // 0x20
+#define /*0x10C*/ O_BOBOMB_BUDDY_POS_Y_COPY_INDEX               (O_BOBOMB_BUDDY_POS_COPY_INDEX + 1) // 0x21
+#define /*0x110*/ O_BOBOMB_BUDDY_POS_Z_COPY_INDEX               (O_BOBOMB_BUDDY_POS_COPY_INDEX + 2) // 0x22
+#define /*0x108*/ oBobombBuddyPosCopyVec                        OBJECT_FIELD_F32(O_BOBOMB_BUDDY_POS_COPY_INDEX)
+#define /*0x108*/ oBobombBuddyPosXCopy                          OBJECT_FIELD_F32(O_BOBOMB_BUDDY_POS_X_COPY_INDEX)
+#define /*0x10C*/ oBobombBuddyPosYCopy                          OBJECT_FIELD_F32(O_BOBOMB_BUDDY_POS_Y_COPY_INDEX)
+#define /*0x110*/ oBobombBuddyPosZCopy                          OBJECT_FIELD_F32(O_BOBOMB_BUDDY_POS_Z_COPY_INDEX)
 
 /* Bob-omb Explosion Bubble */
 #define /*0x0FC*/ oBobombExpBubGfxScaleFacX                     OBJECT_FIELD_S32(0x1D)
@@ -312,9 +353,14 @@
 #define /*0x0F4*/ oBowserPuzzleCompletionFlags                  OBJECT_FIELD_S32(0x1B)
 
 /* Bowser Puzzle Piece */
-#define /*0x0FC*/ oBowserPuzzlePieceOffsetX                     OBJECT_FIELD_F32(0x1D)
-#define /*0x100*/ oBowserPuzzlePieceOffsetY                     OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oBowserPuzzlePieceOffsetZ                     OBJECT_FIELD_F32(0x1F)
+#define /*0x0FC*/ O_BOWSER_PUZZLE_PIECE_OFFSET_INDEX            0x1D
+#define /*0x0FC*/ O_BOWSER_PUZZLE_PIECE_OFFSET_X_INDEX          (O_BOWSER_PUZZLE_PIECE_OFFSET_INDEX + 0) // 0x1D
+#define /*0x100*/ O_BOWSER_PUZZLE_PIECE_OFFSET_Y_INDEX          (O_BOWSER_PUZZLE_PIECE_OFFSET_INDEX + 1) // 0x1E
+#define /*0x104*/ O_BOWSER_PUZZLE_PIECE_OFFSET_Z_INDEX          (O_BOWSER_PUZZLE_PIECE_OFFSET_INDEX + 2) // 0x1F
+#define /*0x0FC*/ oBowserPuzzlePieceOffsetVec                   OBJECT_FIELD_F32(O_BOWSER_PUZZLE_PIECE_OFFSET_INDEX)
+#define /*0x0FC*/ oBowserPuzzlePieceOffsetX                     OBJECT_FIELD_F32(O_BOWSER_PUZZLE_PIECE_OFFSET_X_INDEX)
+#define /*0x100*/ oBowserPuzzlePieceOffsetY                     OBJECT_FIELD_F32(O_BOWSER_PUZZLE_PIECE_OFFSET_Y_INDEX)
+#define /*0x104*/ oBowserPuzzlePieceOffsetZ                     OBJECT_FIELD_F32(O_BOWSER_PUZZLE_PIECE_OFFSET_Z_INDEX)
 #define /*0x108*/ oBowserPuzzlePieceContinuePerformingAction    OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oBowserPuzzlePieceActionList                  OBJECT_FIELD_VPTR(0x21)
 #define /*0x110*/ oBowserPuzzlePieceNextAction                  OBJECT_FIELD_VPTR(0x22)
@@ -327,9 +373,9 @@
 #define /*0x104*/ oBubbaNextTargetPitchTowardMario              OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oBubbaAirVelY                                 OBJECT_FIELD_F32(0x20)
 #define /*0x10C*/ oBubbaJumpHeight                              OBJECT_FIELD_F32(0x21)
-#define /*0x1AC*/ oBubbaTargetPitch                             OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oBubbaTargetPitch                             OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oBubbaTargetYaw                               OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oBubbaPitchVel                                OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oBubbaPitchVel                                OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oBubbaYawVel                                  OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Bullet Bill */
@@ -337,9 +383,14 @@
 
 /* Bully (all variants) */
 #define /*0x0F4*/ oBullySubtype                                 OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oBullyPrevX                                   OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oBullyPrevY                                   OBJECT_FIELD_F32(0x1D)
-#define /*0x100*/ oBullyPrevZ                                   OBJECT_FIELD_F32(0x1E)
+#define /*0x0F8*/ O_BULLY_PREV_INDEX                            0x1C
+#define /*0x0F8*/ O_BULLY_PREV_X_INDEX                          (O_BULLY_PREV_INDEX + 0) // 0x1C
+#define /*0x0FC*/ O_BULLY_PREV_Y_INDEX                          (O_BULLY_PREV_INDEX + 1) // 0x1D
+#define /*0x100*/ O_BULLY_PREV_Z_INDEX                          (O_BULLY_PREV_INDEX + 2) // 0x1E
+#define /*0x0F8*/ oBullyPrevVec                                 OBJECT_FIELD_F32(O_BULLY_PREV_INDEX)
+#define /*0x0F8*/ oBullyPrevX                                   OBJECT_FIELD_F32(O_BULLY_PREV_X_INDEX)
+#define /*0x0FC*/ oBullyPrevY                                   OBJECT_FIELD_F32(O_BULLY_PREV_Y_INDEX)
+#define /*0x100*/ oBullyPrevZ                                   OBJECT_FIELD_F32(O_BULLY_PREV_Z_INDEX)
 #define /*0x104*/ oBullyKBTimerAndMinionKOCounter               OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oBullyMarioCollisionAngle                     OBJECT_FIELD_S32(0x20)
 
@@ -448,9 +499,9 @@
 #define /*0x100*/ oDorrieForwardDistToMario                     OBJECT_FIELD_F32(0x1E)
 #define /*0x104*/ oDorrieYawVel                                 OBJECT_FIELD_S32(0x1F)
 #define /*0x10C*/ oDorrieLiftingMario                           OBJECT_FIELD_S32(0x21)
-#define /*0x1AC*/ oDorrieGroundPounded                          OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oDorrieGroundPounded                          OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oDorrieAngleToHome                            OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oDorrieNeckAngle                              OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oDorrieNeckAngle                              OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oDorrieHeadRaiseSpeed                         OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Elevator */
@@ -665,23 +716,39 @@
 #define /*0x0FC*/ oIntroLakituSplineSegment                     OBJECT_FIELD_F32(0x1D)
 #define /*0x100*/ oIntroLakituDistToBirdsX                      OBJECT_FIELD_F32(0x1E)
 #define /*0x104*/ oIntroLakituDistToBirdsZ                      OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oIntroLakituEndBirds1DestZ                    OBJECT_FIELD_F32(0x20)
-#define /*0x10C*/ oIntroLakituEndBirds1DestY                    OBJECT_FIELD_F32(0x21)
-#define /*0x110*/ oIntroLakituEndBirds1DestX                    OBJECT_FIELD_F32(0x22)
+#define /*0x108*/ O_INTRO_LAKITU_END_BIRDS_DEST_INDEX           0x20
+#define /*0x108*/ O_INTRO_LAKITU_END_BIRDS_DEST_Z_INDEX         (O_INTRO_LAKITU_END_BIRDS_DEST_INDEX + 0) // 0x20
+#define /*0x10C*/ O_INTRO_LAKITU_END_BIRDS_DEST_Y_INDEX         (O_INTRO_LAKITU_END_BIRDS_DEST_INDEX + 1) // 0x21
+#define /*0x110*/ O_INTRO_LAKITU_END_BIRDS_DEST_X_INDEX         (O_INTRO_LAKITU_END_BIRDS_DEST_INDEX + 2) // 0x22
+#define /*0x108*/ oIntroLakituEndBirds1DestVec                  OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_INDEX)
+#define /*0x108*/ oIntroLakituEndBirds1DestZ                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Z_INDEX)
+#define /*0x10C*/ oIntroLakituEndBirds1DestY                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Y_INDEX)
+#define /*0x110*/ oIntroLakituEndBirds1DestX                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_X_INDEX)
 #define /*0x1AC*/ oIntroLakituCloud                             OBJECT_FIELD_OBJ(0x49)
 
 /* Main Menu Button */
 #define /*0x0F4*/ oMenuButtonState                              OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oMenuButtonTimer                              OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oMenuButtonOrigPosX                           OBJECT_FIELD_F32(0x1D)
-#define /*0x100*/ oMenuButtonOrigPosY                           OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oMenuButtonOrigPosZ                           OBJECT_FIELD_F32(0x1F)
+#define /*0x0FC*/ O_MENU_BUTTON_ORIG_POS_INDEX                  0x1D
+#define /*0x0FC*/ O_MENU_BUTTON_ORIG_POS_X_INDEX                (O_MENU_BUTTON_ORIG_POS_INDEX + 0) // 0x1D
+#define /*0x100*/ O_MENU_BUTTON_ORIG_POS_Y_INDEX                (O_MENU_BUTTON_ORIG_POS_INDEX + 1) // 0x1E
+#define /*0x104*/ O_MENU_BUTTON_ORIG_POS_Z_INDEX                (O_MENU_BUTTON_ORIG_POS_INDEX + 2) // 0x1F
+#define /*0x0FC*/ oMenuButtonOrigPosVec                         OBJECT_FIELD_F32(O_MENU_BUTTON_ORIG_POS_INDEX)
+#define /*0x0FC*/ oMenuButtonOrigPosX                           OBJECT_FIELD_F32(O_MENU_BUTTON_ORIG_POS_X_INDEX)
+#define /*0x100*/ oMenuButtonOrigPosY                           OBJECT_FIELD_F32(O_MENU_BUTTON_ORIG_POS_Y_INDEX)
+#define /*0x104*/ oMenuButtonOrigPosZ                           OBJECT_FIELD_F32(O_MENU_BUTTON_ORIG_POS_Z_INDEX)
 #define /*0x108*/ oMenuButtonScale                              OBJECT_FIELD_F32(0x20)
 #define /*0x10C*/ oMenuButtonActionPhase                        OBJECT_FIELD_S32(0x21)
 
 /* Manta Ray */
-#define /*0x0F4*/ oMantaTargetPitch                             OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oMantaTargetYaw                               OBJECT_FIELD_S32(0x1C)
+#define /*0x0F4*/ O_MANTA_TARGET_ANGLE_INDEX                    0x1B
+#define /*0x0F4*/ O_MANTA_TARGET_PITCH_INDEX                    (O_MANTA_TARGET_ANGLE_INDEX + 0) // 0x1B
+#define /*0x0F8*/ O_MANTA_TARGET_YAW_INDEX                      (O_MANTA_TARGET_ANGLE_INDEX + 1) // 0x1C
+#define /*0x0FC*/ O_MANTA_TARGET_ROLL_INDEX                     (O_MANTA_TARGET_ANGLE_INDEX + 2) // 0x1D
+#define /*0x0F4*/ oMantaTargetAngleVec                          OBJECT_FIELD_S32(O_MANTA_TARGET_ANGLE_INDEX)
+#define /*0x0F4*/ oMantaTargetPitch                             OBJECT_FIELD_S32(O_MANTA_TARGET_PITCH_INDEX)
+#define /*0x0F8*/ oMantaTargetYaw                               OBJECT_FIELD_S32(O_MANTA_TARGET_YAW_INDEX)
+#define /*0x0FC*/ oMantaTargetRoll                              OBJECT_FIELD_S32(O_MANTA_TARGET_ROLL_INDEX) // unused
 
 /* Merry-Go-Round */
 #define /*0x088*/ oMerryGoRoundStopped                          OBJECT_FIELD_S32(0x00)
@@ -746,9 +813,9 @@
 #define /*0x0F4*/ oRacingPenguinInitTextCooldown                OBJECT_FIELD_S32(0x1B)
 // 0x1D-0x21 reserved for pathing
 #define /*0x110*/ oRacingPenguinWeightedNewTargetSpeed          OBJECT_FIELD_F32(0x22)
-#define /*0x1AC*/ oRacingPenguinFinalTextbox                    OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oRacingPenguinFinalTextbox                    OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oRacingPenguinMarioWon                        OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oRacingPenguinReachedBottom                   OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oRacingPenguinReachedBottom                   OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oRacingPenguinMarioCheated                    OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Small Penguin */
@@ -801,9 +868,9 @@
 #define /*0x108*/ oPlatformOnTrackPitch                         OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oPlatformOnTrackYaw                           OBJECT_FIELD_S32(0x21)
 #define /*0x110*/ oPlatformOnTrackOffsetY                       OBJECT_FIELD_F32(0x22)
-#define /*0x1AC*/ oPlatformOnTrackIsNotSkiLift                  OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oPlatformOnTrackIsNotSkiLift                  OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oPlatformOnTrackIsNotHMC                      OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oPlatformOnTrackType                          OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oPlatformOnTrackType                          OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oPlatformOnTrackWasStoodOn                    OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Platform Spawner */
@@ -842,9 +909,14 @@
 #define /*0x0F4*/ oVolcanoTrapPitchVel                          OBJECT_FIELD_F32(0x1B)
 
 /* Lll Rotating Hex Flame */
-#define /*0x0F4*/ oLllRotatingHexFlameRelativePosX              OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oLllRotatingHexFlameRelativePosY              OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oLllRotatingHexFlameRelativePosZ              OBJECT_FIELD_F32(0x1D)
+#define /*0x0F4*/ O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_INDEX   0x1B
+#define /*0x0F4*/ O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_X_INDEX (O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_INDEX + 0) // 0x1B
+#define /*0x0F8*/ O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_Y_INDEX (O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_INDEX + 1) // 0x1C
+#define /*0x0FC*/ O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_Z_INDEX (O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_INDEX + 2) // 0x1D
+#define /*0x0F4*/ oLllRotatingHexFlameRelativePosVec            OBJECT_FIELD_F32(O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_INDEX)
+#define /*0x0F4*/ oLllRotatingHexFlameRelativePosX              OBJECT_FIELD_F32(O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_X_INDEX)
+#define /*0x0F8*/ oLllRotatingHexFlameRelativePosY              OBJECT_FIELD_F32(O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_Y_INDEX)
+#define /*0x0FC*/ oLllRotatingHexFlameRelativePosZ              OBJECT_FIELD_F32(O_LLL_ROTATING_HEX_FLAME_RELATIVE_POS_Z_INDEX)
 
 /* Scuttlebug */
 #define /*0x0F4*/ oScuttlebugHasNoLootCoins                     OBJECT_FIELD_S32(0x1B)
@@ -861,6 +933,7 @@
 /* Ship Part 3 */
 #define /*0x0F4*/ oShipPart3LoopPitch                           OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oShipPart3LoopRoll                            OBJECT_FIELD_S32(0x1C)
+// yaw?
 
 /* Sink When Stepped On */
 #define /*0x104*/ oSinkWhenSteppedOnTimer                       OBJECT_FIELD_S32(0x1F)
@@ -899,13 +972,15 @@
 /* Snufit */
 #define /*0x0F4*/ oSnufitRecoil                                 OBJECT_FIELD_S32(0x1B)
 #define /*0x0F8*/ oSnufitScale                                  OBJECT_FIELD_F32(0x1C)
+// 0x1D
 #define /*0x100*/ oSnufitCircularPeriod                         OBJECT_FIELD_S32(0x1E)
 #define /*0x104*/ oSnufitBodyScalePeriod                        OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oSnufitBodyBaseScale                          OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oSnufitBullets                                OBJECT_FIELD_S32(0x21)
-#define /*0x1AC*/ oSnufitXOffset                                OBJECT_FIELD_S16(0x49, 0)
+//! should these be an s32 vector?
+#define /*0x1AC*/ oSnufitXOffset                                OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oSnufitYOffset                                OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oSnufitZOffset                                OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oSnufitZOffset                                OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oSnufitBodyScale                              OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Spindel */
@@ -955,16 +1030,27 @@
 
 /* Swoop */
 #define /*0x0F4*/ oSwoopBonkCountdown                           OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oSwoopTargetPitch                             OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oSwoopTargetYaw                               OBJECT_FIELD_S32(0x1D)
+#define /*0x0F8*/ O_SWOOP_TARGET_ANGLE_INDEX                    0x1C
+#define /*0x0F8*/ O_SWOOP_TARGET_PITCH_INDEX                    (O_SWOOP_TARGET_ANGLE_INDEX + 0) // 0x1C
+#define /*0x0FC*/ O_SWOOP_TARGET_YAW_INDEX                      (O_SWOOP_TARGET_ANGLE_INDEX + 1) // 0x1D
+#define /*0x100*/ O_SWOOP_TARGET_ROLL_INDEX                     (O_SWOOP_TARGET_ANGLE_INDEX + 2) // 0x1E
+#define /*0x0F8*/ oSwoopTargetAngleVec                          OBJECT_FIELD_S32(O_SWOOP_TARGET_ANGLE_INDEX)
+#define /*0x0F8*/ oSwoopTargetPitch                             OBJECT_FIELD_S32(O_SWOOP_TARGET_PITCH_INDEX)
+#define /*0x0FC*/ oSwoopTargetYaw                               OBJECT_FIELD_S32(O_SWOOP_TARGET_YAW_INDEX)
+#define /*0x100*/ oSwoopTargetRoll                              OBJECT_FIELD_S32(O_SWOOP_TARGET_ROLL_INDEX) // unused
 
 /* Thwomp */
 #define /*0x0F4*/ oThwompRandomTimer                            OBJECT_FIELD_S32(0x1B)
 
 /* Tilting Platform */
-#define /*0x0F4*/ oTiltingPyramidNormalX                        OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oTiltingPyramidNormalY                        OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oTiltingPyramidNormalZ                        OBJECT_FIELD_F32(0x1D)
+#define /*0x0F4*/ O_TILTING_PYRAMID_NORMAL_INDEX                0x1B
+#define /*0x0F4*/ O_TILTING_PYRAMID_NORMAL_X_INDEX              (O_TILTING_PYRAMID_NORMAL_INDEX + 0) // 0x1B
+#define /*0x0F8*/ O_TILTING_PYRAMID_NORMAL_Y_INDEX              (O_TILTING_PYRAMID_NORMAL_INDEX + 1) // 0x1C
+#define /*0x0FC*/ O_TILTING_PYRAMID_NORMAL_Z_INDEX              (O_TILTING_PYRAMID_NORMAL_INDEX + 2) // 0x1D
+#define /*0x0F4*/ oTiltingPyramidNormalVec                      OBJECT_FIELD_F32(O_TILTING_PYRAMID_NORMAL_INDEX)
+#define /*0x0F4*/ oTiltingPyramidNormalX                        OBJECT_FIELD_F32(O_TILTING_PYRAMID_NORMAL_X_INDEX)
+#define /*0x0F8*/ oTiltingPyramidNormalY                        OBJECT_FIELD_F32(O_TILTING_PYRAMID_NORMAL_Y_INDEX)
+#define /*0x0FC*/ oTiltingPyramidNormalZ                        OBJECT_FIELD_F32(O_TILTING_PYRAMID_NORMAL_Z_INDEX)
 #define /*0x10C*/ oTiltingPyramidMarioOnPlatform                OBJECT_FIELD_S32(0x21)
 
 /* Toad Message */
@@ -1107,12 +1193,22 @@
 #define /*0x100*/ oWaterObjScaleYAngleVel                       OBJECT_FIELD_S32(0x1E)
 
 /* Water Ring (both variants) */
-#define /*0x0F4*/ oWaterRingScalePhaseX                         OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oWaterRingScalePhaseY                         OBJECT_FIELD_S32(0x1C)
-#define /*0x0FC*/ oWaterRingScalePhaseZ                         OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oWaterRingNormalX                             OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oWaterRingNormalY                             OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oWaterRingNormalZ                             OBJECT_FIELD_F32(0x20)
+#define /*0x0F4*/ O_WATER_RING_SCALE_PHASE_INDEX                0x1B
+#define /*0x0F4*/ O_WATER_RING_SCALE_PHASE_X_INDEX              (O_WATER_RING_SCALE_PHASE_INDEX + 0) // 0x1B
+#define /*0x0F8*/ O_WATER_RING_SCALE_PHASE_Y_INDEX              (O_WATER_RING_SCALE_PHASE_INDEX + 1) // 0x1C
+#define /*0x0FC*/ O_WATER_RING_SCALE_PHASE_Z_INDEX              (O_WATER_RING_SCALE_PHASE_INDEX + 2) // 0x1D
+#define /*0x0F4*/ oWaterRingScalePhaseVec                       OBJECT_FIELD_S32(O_WATER_RING_SCALE_PHASE_INDEX)
+#define /*0x0F4*/ oWaterRingScalePhaseX                         OBJECT_FIELD_S32(O_WATER_RING_SCALE_PHASE_X_INDEX)
+#define /*0x0F8*/ oWaterRingScalePhaseY                         OBJECT_FIELD_S32(O_WATER_RING_SCALE_PHASE_Y_INDEX)
+#define /*0x0FC*/ oWaterRingScalePhaseZ                         OBJECT_FIELD_S32(O_WATER_RING_SCALE_PHASE_Z_INDEX)
+#define /*0x100*/ O_WATER_RING_NORMAL_INDEX                     0x1E
+#define /*0x100*/ O_WATER_RING_NORMAL_X_INDEX                   (O_WATER_RING_NORMAL_INDEX + 0) // 0x1E
+#define /*0x104*/ O_WATER_RING_NORMAL_Y_INDEX                   (O_WATER_RING_NORMAL_INDEX + 1) // 0x1F
+#define /*0x108*/ O_WATER_RING_NORMAL_Z_INDEX                   (O_WATER_RING_NORMAL_INDEX + 2) // 0x20
+#define /*0x100*/ oWaterRingNormalVec                           OBJECT_FIELD_F32(O_WATER_RING_NORMAL_INDEX)
+#define /*0x100*/ oWaterRingNormalX                             OBJECT_FIELD_F32(O_WATER_RING_NORMAL_X_INDEX)
+#define /*0x104*/ oWaterRingNormalY                             OBJECT_FIELD_F32(O_WATER_RING_NORMAL_Y_INDEX)
+#define /*0x108*/ oWaterRingNormalZ                             OBJECT_FIELD_F32(O_WATER_RING_NORMAL_Z_INDEX)
 #define /*0x10C*/ oWaterRingMarioDistInFront                    OBJECT_FIELD_F32(0x21)
 #define /*0x110*/ oWaterRingIndex                               OBJECT_FIELD_S32(0x22)
 #define /*0x1AC*/ oWaterRingAvgScale                            OBJECT_FIELD_F32(0x49)

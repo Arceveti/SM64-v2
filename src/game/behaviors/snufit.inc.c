@@ -37,7 +37,7 @@ Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
     struct Object                       *obj;
     struct GraphNodeTranslationRotation *transNode;
     if (callContext == GEO_CONTEXT_RENDER) {
-        obj                       = (struct Object *) gCurGraphNodeObject;
+        obj                       = (struct Object                       *) gCurGraphNodeObject;
         transNode                 = (struct GraphNodeTranslationRotation *) node->next;
         transNode->translation[0] = obj->oSnufitXOffset;
         transNode->translation[1] = obj->oSnufitYOffset;
@@ -53,7 +53,7 @@ Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     struct Object         *obj;
     struct GraphNodeScale *scaleNode;
     if (callContext == GEO_CONTEXT_RENDER) {
-        obj              = (struct Object *) gCurGraphNodeObject;
+        obj              = (struct Object         *) gCurGraphNodeObject;
         scaleNode        = (struct GraphNodeScale *) node->next;
         scaleNode->scale = obj->oSnufitBodyScale / 1000.0f;
     }

@@ -53,33 +53,23 @@ void tumbling_bridge_act_spawn_sections(void) { // act 1
     struct Object *platformObj;
     s32 i;
     s32 bridgeID = o->oBehParams2ndByte;
-    s32 relativePlatformX;
-    s32 relativePlatformZ;
-    s32 relativePlatformY        = 0;
+    s32 relativePlatformX, relativePlatformZ, relativePlatformY = 0;
     s32 relativeInitialPlatformY = 0;
-
     for (i = 0; i < sTumblingBridgeParams[bridgeID].numBridgeSections; i++) {
-        relativePlatformX = 0;
-        relativePlatformZ = 0;
-
+        relativePlatformX = relativePlatformZ = 0;
         if (bridgeID == TUMBLING_BRIDGE_BP_BITFS) { // Spawn sideways in BITFS
             relativePlatformX = sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + sTumblingBridgeParams[bridgeID].platformWidth * i;
         } else {
             relativePlatformZ = sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + sTumblingBridgeParams[bridgeID].platformWidth * i;
         }
-
         if (cur_obj_has_behavior(bhvLllTumblingBridge)) {
             if (i % 3 == 0) relativePlatformY -= 150;
             relativeInitialPlatformY = 450;
         }
-
-        platformObj = spawn_object_relative(
-            OBJ_BP_NONE, relativePlatformX, relativePlatformY + relativeInitialPlatformY, relativePlatformZ, o,
-            sTumblingBridgeParams[bridgeID].model, bhvTumblingBridgePlatform);
-
+        platformObj = spawn_object_relative(OBJ_BP_NONE, relativePlatformX, relativePlatformY + relativeInitialPlatformY, relativePlatformZ, o,
+                                            sTumblingBridgeParams[bridgeID].model, bhvTumblingBridgePlatform);
         obj_set_collision_data(platformObj, sTumblingBridgeParams[bridgeID].segAddr);
     }
-
     o->oAction = TUMBLING_BRIDGE_ACT_NEAR;
 }
 

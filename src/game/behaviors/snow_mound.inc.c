@@ -20,17 +20,14 @@ void bhv_sliding_snow_mound_loop(void) {
 }
 
 void bhv_snow_mound_spawn_loop(void) {
-    struct Object *moundObj;
+    struct Object *moundObj = NULL;
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 6000) || o->oPosY + 1000.0f < gMarioObject->header.gfx.pos[1]) return;
-    if (o->oTimer ==  64
-     || o->oTimer == 128
-     || o->oTimer == 192
-     || o->oTimer == 224
-     || o->oTimer == 256) moundObj = spawn_object(o, MODEL_SL_SNOW_TRIANGLE, bhvSlidingSnowMound);
-    // if (!(o->oTimer & 0x3F)) moundObj = spawn_object(o, MODEL_SL_SNOW_TRIANGLE, bhvSlidingSnowMound);
-    if (moundObj && o->oTimer == 256) {
-        moundObj->header.gfx.scale[0] = 2.0f;
-        moundObj->header.gfx.scale[1] = 2.0f;
+    if (!(o->oTimer & 0x3F)) moundObj = spawn_object(o, MODEL_SL_SNOW_TRIANGLE, bhvSlidingSnowMound);
+    if (o->oTimer >= 256) {
+        if (moundObj != NULL) {
+            moundObj->header.gfx.scale[0] = 2.0f;
+            moundObj->header.gfx.scale[1] = 2.0f;
+        }
+        o->oTimer = 0;
     }
-    if (o->oTimer >= 256) o->oTimer = 0;
 }
