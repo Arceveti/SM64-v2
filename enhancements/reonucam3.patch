@@ -289,9 +289,9 @@ index dfcf16a..e56f8c0 100644
      if (c->mode != CAMERA_MODE_8_DIRECTIONS) {
          c->mode = CAMERA_MODE_8_DIRECTIONS;
          sStatusFlags &= ~CAM_FLAG_SMOOTH_MOVEMENT;
--        s8DirModeBaseYaw = 0;
+-        s8DirModeBaseYaw = 0x0;
 +        s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000;
-         s8DirModeYawOffset = 0;
+         s8DirModeYawOffset = 0x0;
      }
  }
 diff --git a/src/game/game_init.c b/src/game/game_init.c

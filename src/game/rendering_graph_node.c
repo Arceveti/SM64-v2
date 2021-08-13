@@ -258,7 +258,7 @@ LookAt lookAt;
 #endif
 
 #ifdef SILHOUETTE
-#define SIL_ALPHA            127
+#define SIL_ALPHA            0x7F
 #define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA // Last silhouette layer
 #define NUM_EXTRA_SIL_LAYERS 1                      // Number of silhouette layers - 1
 #define SCHWA AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL
@@ -273,7 +273,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #ifdef SILHOUETTE
     s32 j;
 #endif
-    s32 enableZBuffer = (node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0;
+    s32 enableZBuffer                     = (node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0;
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
 #ifdef F3DEX_GBI_2
@@ -281,7 +281,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
 #endif
     if (enableZBuffer) {
-        gDPPipeSync(       gDisplayListHead++);
+        gDPPipeSync(       gDisplayListHead++           );
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 #ifdef SILHOUETTE
@@ -380,7 +380,7 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
         gCurGraphNodeMasterList = node;
         for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) node->listHeads[i] = NULL;
         geo_process_node_and_siblings(node->node.children);
-        geo_process_master_list_sub(node);
+        geo_process_master_list_sub(  node               );
         gCurGraphNodeMasterList = NULL;
     }
 }
@@ -415,12 +415,9 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
 #else
         aspect = (4.0f/3.0f); // 1.33333f
 #endif
-
         guPerspective(mtx, &perspNorm, node->fov, aspect, node->near / WORLD_SCALE, node->far / WORLD_SCALE, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, perspNorm);
-
-        gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
-
+        gSPMatrix(        gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
         gCurGraphNodeCamFrustum = node;
         geo_process_node_and_siblings(node->fnNode.node.children);
         gCurGraphNodeCamFrustum = NULL;
@@ -434,11 +431,10 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
  * range of this node.
  */
 static void geo_process_level_of_detail(struct GraphNodeLevelOfDetail *node) {
-    f32 distanceFromCam;
 #ifdef AUTO_LOD
-    distanceFromCam = gIsConsole ? -gMatStack[gMatStackIndex][3][2] : 50;
+    f32 distanceFromCam = gIsConsole ? -gMatStack[gMatStackIndex][3][2] : 50;
 #else
-    distanceFromCam = -gMatStack[gMatStackIndex][3][2];
+    f32 distanceFromCam = -gMatStack[gMatStackIndex][3][2];
 #endif
     if ((f32)node->minDistance <= distanceFromCam && distanceFromCam < (f32)node->maxDistance && node->node.children != 0) geo_process_node_and_siblings(node->node.children);
 }
@@ -591,9 +587,9 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     gMatStackIndex++;
     vec3s_to_vec3f(translation, node->translation);\
     if (node->zOffset < 0) {
-        mtxf_align_camera(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
+        mtxf_align_facing_view(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     } else {
-        mtxf_billboard(   gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
+        mtxf_billboard(        gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     }
     if (gCurGraphNodeHeldObject != NULL) {
         mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], gCurGraphNodeHeldObject->objNode->header.gfx.scale);
@@ -694,7 +690,6 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
             }
         }
     }
-
     if (gCurAnimType == ANIM_TYPE_ROTATION) {
         rotation[0] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[1] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
@@ -715,10 +710,8 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
  * object's animation.
  */
 void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation) {
-    struct Animation *anim = node->curAnim;
-
+    struct Animation *anim            = node->curAnim;
     if (hasAnimation) node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
-
     node->animTimer = gAreaUpdateCounter;
     if (anim->flags & ANIM_FLAG_HOR_TRANS) {
         gCurAnimType = ANIM_TYPE_VERTICAL_TRANSLATION;
@@ -729,12 +722,10 @@ void geo_set_animation_globals(struct AnimInfo *node, s32 hasAnimation) {
     } else {
         gCurAnimType = ANIM_TYPE_TRANSLATION;
     }
-
-    gCurrAnimFrame     = node->animFrame;
-    gCurAnimEnabled    = (anim->flags & ANIM_FLAG_5) == 0;
-    gCurrAnimAttribute = segmented_to_virtual((void *) anim->index);
-    gCurAnimData       = segmented_to_virtual((void *) anim->values);
-
+    gCurrAnimFrame                = node->animFrame;
+    gCurAnimEnabled               = (anim->flags & ANIM_FLAG_5) == 0;
+    gCurrAnimAttribute            = segmented_to_virtual((void *) anim->index);
+    gCurAnimData                  = segmented_to_virtual((void *) anim->values);
     gCurAnimTranslationMultiplier = (anim->animYTransDivisor == 0) ? 1.0f : ((f32) node->animYTrans / (f32) anim->animYTransDivisor);
 }
 
@@ -750,11 +741,9 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
     Vec3f animOffset;
     f32 objScale;
     f32 shadowScale;
-    f32 sinAng;
-    f32 cosAng;
+    f32 sinAng, cosAng;
     struct GraphNode *geo;
     Mtx *mtx;
-
     if (gCurGraphNodeCamera != NULL && gCurGraphNodeObject != NULL) {
         if (gCurGraphNodeHeldObject != NULL) {
             get_pos_from_transform_mtx(shadowPos, gMatStack[gMatStackIndex], *gCurGraphNodeCamera->matrixPtr);
@@ -763,7 +752,6 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             vec3f_copy(shadowPos, gCurGraphNodeObject->pos);
             shadowScale = node->shadowScale * gCurGraphNodeObject->scale[0];
         }
-
         objScale = 1.0f;
         if (gCurAnimEnabled) {
             if (gCurAnimType == ANIM_TYPE_TRANSLATION
@@ -775,18 +763,14 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
                 gCurrAnimAttribute += 2;
                 animOffset[2]       = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
                 gCurrAnimAttribute -= 6;
-
                 // simple matrix rotation so the shadow offset rotates along with the object
-                sinAng = sins(gCurGraphNodeObject->angle[1]);
-                cosAng = coss(gCurGraphNodeObject->angle[1]);
-
-                shadowPos[0] += ( animOffset[0] * cosAng + animOffset[2] * sinAng);
-                shadowPos[2] += (-animOffset[0] * sinAng + animOffset[2] * cosAng);
+                sinAng              = sins(gCurGraphNodeObject->angle[1]);
+                cosAng              = coss(gCurGraphNodeObject->angle[1]);
+                shadowPos[0]       += ( animOffset[0] * cosAng + animOffset[2] * sinAng);
+                shadowPos[2]       += (-animOffset[0] * sinAng + animOffset[2] * cosAng);
             }
         }
-
-        shadowList = create_shadow_below_xyz(shadowPos[0], shadowPos[1], shadowPos[2], shadowScale,
-                                             node->shadowSolidity, node->shadowType);
+        shadowList = create_shadow_below_xyz(shadowPos[0], shadowPos[1], shadowPos[2], shadowScale, node->shadowSolidity, node->shadowType);
         if (shadowList != NULL) {
             mtx = alloc_display_list(sizeof(*mtx));
             gMatStackIndex++;
@@ -837,13 +821,9 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     s16 halfFov; // half of the fov in in-game angle units instead of degrees
     struct GraphNode *geo;
     f32 hScreenEdge;
-
     if (node->node.flags & GRAPH_RENDER_INVISIBLE) return FALSE;
-
-    geo = node->sharedChild;
-
-    halfFov = ((gCurGraphNodeCamFrustum->fov*aspect) / 2.0f + 1.0f) * 32768.0f / 180.0f + 0.5f;
-
+    geo         = node->sharedChild;
+    halfFov     = ((gCurGraphNodeCamFrustum->fov*aspect) / 2.0f + 1.0f) * 32768.0f / 180.0f + 0.5f;
     hScreenEdge = -matrix[3][2] * sins(halfFov) / coss(halfFov);
     // -matrix[3][2] is the depth, which gets multiplied by tan(halfFov) to get
     // the amount of units between the center of the screen and the horizontal edge
@@ -859,7 +839,7 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
         cullingRadius = 300;
     }
     // Don't render if the object is close to or behind the camera
-    if (matrix[3][2] > -100.0f + cullingRadius) return FALSE;
+    if (matrix[3][2] >   -100.0f + cullingRadius) return FALSE;
     //! This makes the HOLP not update when the camera is far away, and it
     //  makes PU travel safe when the camera is locked on the main map.
     //  If Mario were rendered with a depth over 65536 it would cause overflow
@@ -958,7 +938,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         gGeoTempState.attribute             = gCurrAnimAttribute;
         gGeoTempState.data                  = gCurAnimData;
         gCurAnimType                        = ANIM_TYPE_NONE;
-        gCurGraphNodeHeldObject = (void *) node;
+        gCurGraphNodeHeldObject             = (void *) node;
         if (node->objNode->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->objNode->header.gfx.animInfo, hasAnimation);
         geo_process_node_and_siblings(node->objNode->header.gfx.sharedChild);
         gCurGraphNodeHeldObject             = NULL;
@@ -1039,7 +1019,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         initialMatrix    = alloc_display_list(sizeof(*initialMatrix));
         gMatStackIndex   = 0;
         gCurAnimType     = ANIM_TYPE_NONE;
-        vec3s_set(viewport->vp.vtrans, node->x * 4, node->y * 4, 511);
+        vec3s_set(viewport->vp.vtrans, node->x     * 4, node->y      * 4, 511);
         vec3s_set(viewport->vp.vscale, node->width * 4, node->height * 4, 511);
         if (b != NULL) {
             clear_frame_buffer(clearColor);

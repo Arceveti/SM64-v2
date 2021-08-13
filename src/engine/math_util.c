@@ -171,7 +171,7 @@ static u16 gRandomSeed16;
 // Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
 u16 random_u16(void) {
     u16 temp1, temp2;
-    if (gRandomSeed16 == 22026) gRandomSeed16 = 0;
+    if (gRandomSeed16 == 0x560A) gRandomSeed16 = 0x0;
     temp1         = (gRandomSeed16 & 0x00FF) << 8;
     temp1         = temp1 ^ gRandomSeed16;
     gRandomSeed16 = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
@@ -180,7 +180,7 @@ u16 random_u16(void) {
     if (temp1 & 0x1) {
         gRandomSeed16 =   temp2 ^ 0x8180;
     } else {
-        gRandomSeed16 = ((temp2 == 43605) ? 0 : (temp2 ^ 0x1FF4));
+        gRandomSeed16 = ((temp2 == 0xAA55) ? 0 : (temp2 ^ 0x1FF4));
     }
     return gRandomSeed16;
 }
@@ -399,9 +399,7 @@ void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
     s32 i, j;
     for (i = 0; i < 3; i++) {
         out[i] = mat[3][i] * w;
-        for (j = 0; j < 3; j++) {
-            out[i] += mat[j][i] * in[j];
-        }
+        for (j = 0; j < 3; j++) out[i] += mat[j][i] * in[j];
     }
 }
 
@@ -410,9 +408,7 @@ void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
     s32 i, j;
     for (i = 0; i < 3; i++) {
         temp[i] = mat[3][i] * w;
-        for (j = 0; j < 3; j++) {
-            temp[i] += mat[j][i] * in[j];
-        }
+        for (j = 0; j < 3; j++) temp[i] += mat[j][i] * in[j];
     }
     out->v.ob[0] = temp[0];
     out->v.ob[1] = temp[1];
@@ -495,21 +491,11 @@ void mtxf_translate(Mat4 dest, Vec3f b) {
  */
 void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     register f32 invLength;
-    f32 dx;
-    f32 dz;
-    f32 xColY;
-    f32 yColY;
-    f32 zColY;
-    f32 xColZ;
-    f32 yColZ;
-    f32 zColZ;
-    f32 xColX;
-    f32 yColX;
-    f32 zColX;
-
-    dx = to[0] - from[0];
-    dz = to[2] - from[2];
-
+    register f32 xColY, yColY, zColY;
+    register f32 xColZ, yColZ, zColZ;
+    register f32 xColX, yColX, zColX;
+    register f32 dx = to[0] - from[0];
+    register f32 dz = to[2] - from[2];
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(dx * dx + dz * dz);
 #else
@@ -517,11 +503,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
 #endif
     dx *= invLength;
     dz *= invLength;
-
     yColY =  coss(roll);
     xColY =  sins(roll) * dz;
     zColY = -sins(roll) * dx;
-
     xColZ = to[0] - from[0];
     yColZ = to[1] - from[1];
     zColZ = to[2] - from[2];
@@ -533,7 +517,6 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColZ *= invLength;
     yColZ *= invLength;
     zColZ *= invLength;
-
     xColX = yColY * zColZ - zColY * yColZ;
     yColX = zColY * xColZ - xColY * zColZ;
     zColX = xColY * yColZ - yColY * xColZ;
@@ -545,7 +528,6 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColX *= invLength;
     yColX *= invLength;
     zColX *= invLength;
-
     xColY = yColZ * zColX - zColZ * yColX;
     yColY = zColZ * xColX - xColZ * zColX;
     zColY = xColZ * yColX - yColZ * xColX;
@@ -557,22 +539,18 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     xColY *= invLength;
     yColY *= invLength;
     zColY *= invLength;
-
     mtx[0][0] = xColX;
     mtx[1][0] = yColX;
     mtx[2][0] = zColX;
     mtx[3][0] = -(from[0] * xColX + from[1] * yColX + from[2] * zColX);
-
     mtx[0][1] = xColY;
     mtx[1][1] = yColY;
     mtx[2][1] = zColY;
     mtx[3][1] = -(from[0] * xColY + from[1] * yColY + from[2] * zColY);
-
     mtx[0][2] = xColZ;
     mtx[1][2] = yColZ;
     mtx[2][2] = zColZ;
     mtx[3][2] = -(from[0] * xColZ + from[1] * yColZ + from[2] * zColZ);
-
     mtx[0][3] = 0;
     mtx[1][3] = 0;
     mtx[2][3] = 0;
@@ -586,28 +564,22 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
 void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3s rotate) {
     register f32 sx = sins(rotate[0]);
     register f32 cx = coss(rotate[0]);
-
     register f32 sy = sins(rotate[1]);
     register f32 cy = coss(rotate[1]);
-
     register f32 sz = sins(rotate[2]);
     register f32 cz = coss(rotate[2]);
-
     dest[0][0] =  cy * cz + sx * sy * sz;
     dest[1][0] = -cy * sz + sx * sy * cz;
     dest[2][0] =  cx * sy;
     dest[3][0] = translate[0];
-
     dest[0][1] =  cx * sz;
     dest[1][1] =  cx * cz;
     dest[2][1] = -sx;
     dest[3][1] = translate[1];
-
     dest[0][2] = -sy * cz + sx * cy * sz;
     dest[1][2] =  sy * sz + sx * cy * cz;
     dest[2][2] =  cx * cy;
     dest[3][2] = translate[2];
-
     dest[0][3] = dest[1][3] = dest[2][3] = 0.0f;
     dest[3][3] = 1.0f;
 }
@@ -619,28 +591,22 @@ void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3s rotate) {
 void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
     register f32 sx = sins(c[0]);
     register f32 cx = coss(c[0]);
-
     register f32 sy = sins(c[1]);
     register f32 cy = coss(c[1]);
-
     register f32 sz = sins(c[2]);
     register f32 cz = coss(c[2]);
-
     dest[0][0] =  cy * cz;
     dest[0][1] =  cy * sz;
     dest[0][2] = -sy;
     dest[0][3] = 0;
-
     dest[1][0] =  sx * sy * cz - cx * sz;
     dest[1][1] =  sx * sy * sz + cx * cz;
     dest[1][2] =  sx * cy;
     dest[1][3] = 0;
-
     dest[2][0] =  cx * sy * cz + sx * sz;
     dest[2][1] =  cx * sy * sz - sx * cz;
     dest[2][2] =  cx * cy;
     dest[2][3] = 0;
-
     dest[3][0] =  b[0];
     dest[3][1] =  b[1];
     dest[3][2] =  b[2];
@@ -648,7 +614,7 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
 }
 
 /**
- * Set 'dest' to a transformation matrix that turns an object to face the camera.
+ * Set 'dest' to a transformation matrix that turns an object to face parallel to the camera.
  * 'mtx' is the look-at matrix from the camera
  * 'position' is the position of the object in the world
  * 'angle' rotates the object while still facing the camera.
@@ -658,17 +624,14 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
     dest[0][1] = sins(angle);
     dest[0][2] = 0;
     dest[0][3] = 0;
-
     dest[1][0] = -dest[0][1];
     dest[1][1] =  dest[0][0];
     dest[1][2] = 0;
     dest[1][3] = 0;
-
     dest[2][0] = 0;
     dest[2][1] = 0;
     dest[2][2] = 1;
     dest[2][3] = 0;
-
     if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
         dest[3][0] = mtx[3][0];
         dest[3][1] = mtx[3][1];
@@ -683,16 +646,13 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
 
 /**
  * Set 'dest' to a transformation matrix that turns an object to face directly at the camera
- * as opposed to mtxf_billboard which turns to face parallel to the camera.
  * 'mtx' is the look-at matrix from the camera
  * 'position' is the position of the object in the world
  * 'angle' rotates the object while still facing the camera.
  */
-void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffset) {
-    s16 xrot;
-    s16 yrot;
-    f32 cx, cy, cz;
-
+void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffset) {
+    register s16 xrot, yrot;
+    register f32 cx, cy, cz;
     if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
         dest[3][0] = mtx[3][0];
         dest[3][1] = mtx[3][1];
@@ -703,15 +663,12 @@ void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffse
         dest[3][2] = mtx[0][2] * position[0] + mtx[1][2] * position[1] + mtx[2][2] * position[2] + mtx[3][2];
     }
     dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
-
     // angle to camera pos
-    xrot = -atan2s(dest[3][2], dest[3][0]);
-    yrot =  atan2s(dest[3][2], dest[3][1]);
-
-    cx = coss(xrot);
-    cy = coss(yrot);
-    cz = coss(roll);
-
+    xrot       = -atan2s(dest[3][2], dest[3][0]);
+    yrot       =  atan2s(dest[3][2], dest[3][1]);
+    cx         = coss(xrot);
+    cy         = coss(yrot);
+    cz         = coss(roll);
     dest[2][0] = sins(xrot);
     dest[0][2] = -dest[2][0];
     dest[1][2] = sins(yrot);
@@ -734,34 +691,25 @@ void mtxf_align_camera(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffse
  * 'pos' is the object's position in the world
  */
 void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw) {
-    Vec3f lateralDir;
-    Vec3f leftDir;
-    Vec3f forwardDir;
-
-    vec3f_set(lateralDir, sins(yaw), 0, coss(yaw));
-    vec3f_normalize(upDir);
-
-    vec3f_cross(leftDir, upDir, lateralDir);
-    vec3f_normalize(leftDir);
-
-    vec3f_cross(forwardDir, leftDir, upDir);
-    vec3f_normalize(forwardDir);
-
+    Vec3f lateralDir, leftDir, forwardDir;
+    vec3f_set(                                  lateralDir, sins(yaw), 0x0, coss(yaw));
+    vec3f_normalize(                     upDir                                       );
+    vec3f_cross(                leftDir, upDir, lateralDir                           );
+    vec3f_normalize(            leftDir                                              );
+    vec3f_cross(    forwardDir, leftDir, upDir                                       );
+    vec3f_normalize(forwardDir                                                       );
     dest[0][0] = leftDir[0];
     dest[0][1] = leftDir[1];
     dest[0][2] = leftDir[2];
     dest[3][0] = pos[0];
-
     dest[1][0] = upDir[0];
     dest[1][1] = upDir[1];
     dest[1][2] = upDir[2];
     dest[3][1] = pos[1];
-
     dest[2][0] = forwardDir[0];
     dest[2][1] = forwardDir[1];
     dest[2][2] = forwardDir[2];
     dest[3][2] = pos[2];
-
     dest[0][3] = 0.0f;
     dest[1][3] = 0.0f;
     dest[2][3] = 0.0f;
@@ -778,57 +726,43 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw) {
  */
 void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
     struct Surface *floor;
-    Vec3f point0;
-    Vec3f point1;
-    Vec3f point2;
+    Vec3f point0, point1, point2;
     Vec3f forward;
-    Vec3f xColumn;
-    Vec3f yColumn;
-    Vec3f zColumn;
+    Vec3f xColumn, yColumn, zColumn;
     f32 avgY;
-    f32 minY = -radius * 3;
-
-    point0[0] = pos[0] + radius * sins(yaw + 0x2AAA);
-    point0[2] = pos[2] + radius * coss(yaw + 0x2AAA);
-    point1[0] = pos[0] + radius * sins(yaw + 0x8000);
-    point1[2] = pos[2] + radius * coss(yaw + 0x8000);
-    point2[0] = pos[0] + radius * sins(yaw + 0xD555);
-    point2[2] = pos[2] + radius * coss(yaw + 0xD555);
-
-    point0[1] = find_floor(point0[0], pos[1] + 150.0f, point0[2], &floor);
-    point1[1] = find_floor(point1[0], pos[1] + 150.0f, point1[2], &floor);
-    point2[1] = find_floor(point2[0], pos[1] + 150.0f, point2[2], &floor);
-
+    f32 minY  = -radius * 3;
+    point0[0] =                       pos[0] + radius * sins(yaw + 0x2AAA);
+    point0[2] =                       pos[2] + radius * coss(yaw + 0x2AAA);
+    point1[0] =                       pos[0] + radius * sins(yaw + 0x8000);
+    point1[2] =                       pos[2] + radius * coss(yaw + 0x8000);
+    point2[0] =                       pos[0] + radius * sins(yaw + 0xD555);
+    point2[2] =                       pos[2] + radius * coss(yaw + 0xD555);
+    point0[1] =         find_floor(point0[0],  pos[1] + 150.0f, point0[2], &floor);
+    point1[1] =         find_floor(point1[0],  pos[1] + 150.0f, point1[2], &floor);
+    point2[1] =         find_floor(point2[0],  pos[1] + 150.0f, point2[2], &floor);
     if (point0[1] - pos[1] < minY) point0[1] = pos[1];
     if (point1[1] - pos[1] < minY) point1[1] = pos[1];
     if (point2[1] - pos[1] < minY) point2[1] = pos[1];
-
     avgY = (point0[1] + point1[1] + point2[1]) / 3.0f;
-
     vec3f_set(forward, sins(yaw), 0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
-    vec3f_normalize(yColumn);
-
-    vec3f_cross(xColumn, yColumn, forward);
-    vec3f_normalize(xColumn);
-    vec3f_cross(zColumn, xColumn, yColumn);
-    vec3f_normalize(zColumn);
-
+    vec3f_normalize(                   yColumn                        );
+    vec3f_cross(              xColumn, yColumn, forward               );
+    vec3f_normalize(          xColumn                                 );
+    vec3f_cross(     zColumn, xColumn, yColumn                        );
+    vec3f_normalize( zColumn                                          );
     mtx[0][0] = xColumn[0];
     mtx[0][1] = xColumn[1];
     mtx[0][2] = xColumn[2];
     mtx[3][0] = pos[0];
-
     mtx[1][0] = yColumn[0];
     mtx[1][1] = yColumn[1];
     mtx[1][2] = yColumn[2];
     mtx[3][1] = (avgY < pos[1]) ? pos[1] : avgY;
-
     mtx[2][0] = zColumn[0];
     mtx[2][1] = zColumn[1];
     mtx[2][2] = zColumn[2];
     mtx[3][2] = pos[2];
-
     mtx[0][3] = 0;
     mtx[1][3] = 0;
     mtx[2][3] = 0;
@@ -845,10 +779,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
  */
 void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     Mat4 temp;
-    register f32 entry0;
-    register f32 entry1;
-    register f32 entry2;
-
+    register f32 entry0, entry1, entry2;
     // column 0
     entry0     = a[0][0];
     entry1     = a[0][1];
@@ -856,7 +787,6 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     temp[0][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[0][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[0][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
-
     // column 1
     entry0     = a[1][0];
     entry1     = a[1][1];
@@ -864,7 +794,6 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     temp[1][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[1][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[1][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
-
     // column 2
     entry0     = a[2][0];
     entry1     = a[2][1];
@@ -872,7 +801,6 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     temp[2][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0];
     temp[2][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1];
     temp[2][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2];
-
     // column 3
     entry0     = a[3][0];
     entry1     = a[3][1];
@@ -880,10 +808,8 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     temp[3][0] = entry0 * b[0][0] + entry1 * b[1][0] + entry2 * b[2][0] + b[3][0];
     temp[3][1] = entry0 * b[0][1] + entry1 * b[1][1] + entry2 * b[2][1] + b[3][1];
     temp[3][2] = entry0 * b[0][2] + entry1 * b[1][2] + entry2 * b[2][2] + b[3][2];
-
     temp[0][3] = temp[1][3] = temp[2][3] = 0;
     temp[3][3] = 1;
-
     mtxf_copy(dest, temp);
 }
 
@@ -993,12 +919,12 @@ void mtxf_rotate_xy(Mtx *mtx, s16 angle) {
  * the camera position.
  */
 void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
-    f32 camX = camMtx[3][0] * camMtx[0][0] + camMtx[3][1] * camMtx[0][1] + camMtx[3][2] * camMtx[0][2];
-    f32 camY = camMtx[3][0] * camMtx[1][0] + camMtx[3][1] * camMtx[1][1] + camMtx[3][2] * camMtx[1][2];
-    f32 camZ = camMtx[3][0] * camMtx[2][0] + camMtx[3][1] * camMtx[2][1] + camMtx[3][2] * camMtx[2][2];
-    dest[0]  = objMtx[3][0] * camMtx[0][0] + objMtx[3][1] * camMtx[0][1] + objMtx[3][2] * camMtx[0][2] - camX;
-    dest[1]  = objMtx[3][0] * camMtx[1][0] + objMtx[3][1] * camMtx[1][1] + objMtx[3][2] * camMtx[1][2] - camY;
-    dest[2]  = objMtx[3][0] * camMtx[2][0] + objMtx[3][1] * camMtx[2][1] + objMtx[3][2] * camMtx[2][2] - camZ;
+    f32 camX = (camMtx[3][0] * camMtx[0][0]) + (camMtx[3][1] * camMtx[0][1]) + (camMtx[3][2] * camMtx[0][2]);
+    f32 camY = (camMtx[3][0] * camMtx[1][0]) + (camMtx[3][1] * camMtx[1][1]) + (camMtx[3][2] * camMtx[1][2]);
+    f32 camZ = (camMtx[3][0] * camMtx[2][0]) + (camMtx[3][1] * camMtx[2][1]) + (camMtx[3][2] * camMtx[2][2]);
+    dest[0]  = (objMtx[3][0] * camMtx[0][0]) + (objMtx[3][1] * camMtx[0][1]) + (objMtx[3][2] * camMtx[0][2]) - camX;
+    dest[1]  = (objMtx[3][0] * camMtx[1][0]) + (objMtx[3][1] * camMtx[1][1]) + (objMtx[3][2] * camMtx[1][2]) - camY;
+    dest[2]  = (objMtx[3][0] * camMtx[2][0]) + (objMtx[3][1] * camMtx[2][1]) + (objMtx[3][2] * camMtx[2][2]) - camZ;
 }
 
 // Rotation/translation matrix inverse
@@ -1006,31 +932,25 @@ void mtxf_inverse_rotate_translate(Mat4 in, Mat4 out) {
     Mat4 invRot;
     Vec3f negTranslate;
     Mat4 invTranslate;
-
-    invRot[0][0] = in[0][0];
-    invRot[0][1] = in[1][0];
-    invRot[0][2] = in[2][0];
-    invRot[0][3] = 0.0f;
-
-    invRot[1][0] = in[0][1];
-    invRot[1][1] = in[1][1];
-    invRot[1][2] = in[2][1];
-    invRot[1][3] = 0.0f;
-
-    invRot[2][0] = in[0][2];
-    invRot[2][1] = in[1][2];
-    invRot[2][2] = in[2][2];
-    invRot[2][3] = 0.0f;
-
-    invRot[3][0] = 0.0f;
-    invRot[3][1] = 0.0f;
-    invRot[3][2] = 0.0f;
-    invRot[3][3] = 1.0f;
-
+    invRot[0][0]    = in[0][0];
+    invRot[0][1]    = in[1][0];
+    invRot[0][2]    = in[2][0];
+    invRot[0][3]    = 0.0f;
+    invRot[1][0]    = in[0][1];
+    invRot[1][1]    = in[1][1];
+    invRot[1][2]    = in[2][1];
+    invRot[1][3]    = 0.0f;
+    invRot[2][0]    = in[0][2];
+    invRot[2][1]    = in[1][2];
+    invRot[2][2]    = in[2][2];
+    invRot[2][3]    = 0.0f;
+    invRot[3][0]    = 0.0f;
+    invRot[3][1]    = 0.0f;
+    invRot[3][2]    = 0.0f;
+    invRot[3][3]    = 1.0f;
     negTranslate[0] = -in[3][0];
     negTranslate[1] = -in[3][1];
     negTranslate[2] = -in[3][2];
-
     mtxf_translate(invTranslate, negTranslate);
     mtxf_mul(out, invTranslate, invRot);
 }
@@ -1225,7 +1145,7 @@ s16 atan2s(f32 y, f32 x) {
     if (x >= 0) {
         if (y >= 0) {
             if (y >= x) {
-                ret = atan2_lookup(x, y);
+                ret =          atan2_lookup(x, y);
             } else {
                 ret = 0x4000 - atan2_lookup(y, x);
             }
@@ -1250,7 +1170,7 @@ s16 atan2s(f32 y, f32 x) {
             if (y < x) {
                 ret = 0xC000 + atan2_lookup(y, x);
             } else {
-                ret = -atan2_lookup(x, y);
+                ret =         -atan2_lookup(x, y);
             }
         }
     }
@@ -1273,11 +1193,11 @@ Vec4s *gSplineKeyframe;
 float gSplineKeyframeFraction;
 int gSplineState;
 
-#define CURVE_BEGIN_1 1
-#define CURVE_BEGIN_2 2
-#define CURVE_MIDDLE  3
-#define CURVE_END_1   4
-#define CURVE_END_2   5
+#define CURVE_BEGIN_1 0x1
+#define CURVE_BEGIN_2 0x2
+#define CURVE_MIDDLE  0x3
+#define CURVE_END_1   0x4
+#define CURVE_END_2   0x5
 
 /**
  * Set 'result' to a 4-vector with weights corresponding to interpolation
@@ -1312,33 +1232,33 @@ void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
     switch (gSplineState) {
         case CURVE_BEGIN_1:
             result[0] =  tinv3;
-            result[1] =  t3 * 1.75f - t2 * 4.5f + t * 3.0f;
-            result[2] = -t3 * (11 / 12.0f) + t2 * 1.5f;
-            result[3] =  t3 * (1 / 6.0f);
+            result[1] =     t3 *        1.75f - t2 * 4.5f + t * 3.0f;
+            result[2] =    -t3 * (11 / 12.0f) + t2 * 1.5f;
+            result[3] =     t3 * ( 1 /  6.0f);
             break;
         case CURVE_BEGIN_2:
             result[0] =  tinv3 * 0.25f;
-            result[1] =  t3 * (7 / 12.0f) - t2 * 1.25f + t * 0.25f + (7 / 12.0f);
-            result[2] = -t3 * 0.5f + t2 * 0.5f + t * 0.5f + (1 / 6.0f);
-            result[3] =  t3 * (1 / 6.0f);
+            result[1] =     t3 * (7 / 12.0f) - t2 * 1.25f + t * 0.25f + (7 / 12.0f);
+            result[2] =    -t3 *        0.5f + t2 * 0.5f  + t * 0.5f  + (1 /  6.0f);
+            result[3] =     t3 * (1 /  6.0f);
             break;
         case CURVE_MIDDLE:
             result[0] =  tinv3 * (1 / 6.0f);
-            result[1] =  t3 * 0.5f - t2 + (4 / 6.0f);
-            result[2] = -t3 * 0.5f + t2 * 0.5f + t * 0.5f + (1 / 6.0f);
-            result[3] =  t3 * (1 / 6.0f);
+            result[1] =     t3 * 0.5f - t2                   + (4 / 6.0f);
+            result[2] =    -t3 * 0.5f + t2 * 0.5f + t * 0.5f + (1 / 6.0f);
+            result[3] =     t3 * (1 / 6.0f);
             break;
         case CURVE_END_1:
-            result[0] =  tinv3 * (1 / 6.0f);
-            result[1] = -tinv3 * 0.5f + tinv2 * 0.5f + tinv * 0.5f + (1 / 6.0f);
+            result[0] =  tinv3 * (1 /  6.0f);
+            result[1] = -tinv3 *       0.5f  + tinv2 * 0.5f  + tinv * 0.5f  + (1 /  6.0f);
             result[2] =  tinv3 * (7 / 12.0f) - tinv2 * 1.25f + tinv * 0.25f + (7 / 12.0f);
-            result[3] =  t3 * 0.25f;
+            result[3] =     t3 * 0.25f;
             break;
         case CURVE_END_2:
-            result[0] =  tinv3 * (1 / 6.0f);
+            result[0] =  tinv3 * ( 1 /  6.0f);
             result[1] = -tinv3 * (11 / 12.0f) + tinv2 * 1.5f;
-            result[2] =  tinv3 * 1.75f - tinv2 * 4.5f + tinv * 3.0f;
-            result[3] =  t3;
+            result[2] =  tinv3 *        1.75f - tinv2 * 4.5f + tinv * 3.0f;
+            result[3] =     t3;
             break;
     }
 }
@@ -1377,15 +1297,9 @@ s32 anim_spline_poll(Vec3f result) {
         gSplineKeyframe++;
         gSplineKeyframeFraction--;
         switch (gSplineState) {
-            case CURVE_END_2:
-                hasEnded = TRUE;
-                break;
-            case CURVE_MIDDLE:
-                if (gSplineKeyframe[2][0] == 0) gSplineState = CURVE_END_1;
-                break;
-            default:
-                gSplineState++;
-                break;
+            case CURVE_END_2:                                  hasEnded = TRUE;            break;
+            case CURVE_MIDDLE: if (gSplineKeyframe[2][0] == 0) gSplineState = CURVE_END_1; break;
+            default:                                           gSplineState++;             break;
         }
     }
     return hasEnded;

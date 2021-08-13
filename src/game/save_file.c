@@ -86,7 +86,7 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
     s32 status = 1;
     if (gEepromProbe != 0) {
         s32 triesLeft = 4;
-        u32 offset = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer) >> 3;
+        u32 offset    = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer) >> 3;
         do {
 #if ENABLE_RUMBLE
             block_until_rumble_pak_free();
@@ -112,7 +112,7 @@ static s32 read_eeprom_data(void *buffer, s32 size) {
     s32 status = 0;
     if (gSramProbe != 0) {
         s32 triesLeft = 4;
-        u32 offset = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer);
+        u32 offset    = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer);
         do {
 #if ENABLE_RUMBLE
             block_until_rumble_pak_free();
@@ -137,7 +137,7 @@ static s32 write_eeprom_data(void *buffer, s32 size) {
     s32 status = 1;
     if (gSramProbe != 0) {
         s32 triesLeft = 4;
-        u32 offset = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer);
+        u32 offset    = (u32)((u8 *) buffer - (u8 *) &gSaveBuffer);
         do {
 #if ENABLE_RUMBLE
             block_until_rumble_pak_free();
@@ -169,7 +169,7 @@ static u16 calc_checksum(u8 *data, s32 size) {
  */
 static s32 verify_save_block_signature(void *buffer, s32 size, u16 magic) {
     struct SaveBlockSignature *sig = (struct SaveBlockSignature *) ((size - 4) + (u8 *) buffer);
-    if (sig->magic != magic) return FALSE;
+    if (sig->magic  != magic) return FALSE;
     if (sig->chksum != calc_checksum(buffer, size)) return FALSE;
     return TRUE;
 }
@@ -272,8 +272,7 @@ static void restore_save_file_data(s32 fileIndex, s32 srcSlot) {
 void save_file_do_save(s32 fileIndex) {
     if (gSaveFileModified) {
         // Compute checksum
-        add_save_block_signature(&gSaveBuffer.files[fileIndex][0],
-                           sizeof(gSaveBuffer.files[fileIndex][0]), SAVE_FILE_MAGIC);
+        add_save_block_signature(&gSaveBuffer.files[fileIndex][0], sizeof(gSaveBuffer.files[fileIndex][0]), SAVE_FILE_MAGIC);
         // Copy to backup slot
         bcopy(&gSaveBuffer.files[fileIndex][0], &gSaveBuffer.files[fileIndex][1],
         sizeof(gSaveBuffer.files[fileIndex][1]));

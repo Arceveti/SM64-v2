@@ -34,16 +34,16 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 invDenom;
     register f32 v, w;
     register f32 margin_radius = radius - 1.0f;
-    register s16 type;
+    register s16 type = SURFACE_DEFAULT;
     s32 numCols = 0;
-#if EXTENDED_BOUNDS_MODE > 1
+ #if EXTENDED_BOUNDS_MODE > 1
     const float down_scale = 1.0f / WORLD_SCALE;
     radius *= down_scale;
     x *= down_scale;
     y *= down_scale;
     z *= down_scale;
     margin_radius *= down_scale;
-#endif
+ #endif
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
     // Stay in this loop until out of walls.
@@ -52,9 +52,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surfaceNode = surfaceNode->next;
         type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
-#ifdef NEW_WATER_SURFACES
+ #ifdef NEW_WATER_SURFACES
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
-#endif
+ #endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
@@ -70,20 +70,20 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             }
         }
         if (y < surf->lowerY || y > surf->upperY) continue;
-#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
+ #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
         if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
-#endif
+ #endif
         offset = (surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset;
         if (offset < 0 || offset > radius) continue;
-        v0x = (f32)(surf->vertex2[0] - surf->vertex1[0]);
-        v0y = (f32)(surf->vertex2[1] - surf->vertex1[1]);
-        v0z = (f32)(surf->vertex2[2] - surf->vertex1[2]);
-        v1x = (f32)(surf->vertex3[0] - surf->vertex1[0]);
-        v1y = (f32)(surf->vertex3[1] - surf->vertex1[1]);
-        v1z = (f32)(surf->vertex3[2] - surf->vertex1[2]);
-        v2x = x - (f32)surf->vertex1[0];
-        v2y = y - (f32)surf->vertex1[1];
-        v2z = z - (f32)surf->vertex1[2];
+        v0x = (f32)(surf->vertex2[0] -      surf->vertex1[0]);
+        v0y = (f32)(surf->vertex2[1] -      surf->vertex1[1]);
+        v0z = (f32)(surf->vertex2[2] -      surf->vertex1[2]);
+        v1x = (f32)(surf->vertex3[0] -      surf->vertex1[0]);
+        v1y = (f32)(surf->vertex3[1] -      surf->vertex1[1]);
+        v1z = (f32)(surf->vertex3[2] -      surf->vertex1[2]);
+        v2x =                      x - (f32)surf->vertex1[0];
+        v2y =                      y - (f32)surf->vertex1[1];
+        v2z =                      z - (f32)surf->vertex1[2];
         // Face
         d00 = v0x * v0x + v0y * v0y + v0z * v0z;
         d01 = v0x * v1x + v0y * v1y + v0z * v1z;
@@ -141,12 +141,12 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         }
     edge_2_3:
         // Edge 2-3
-        v1x = (f32)(surf->vertex3[0] - surf->vertex2[0]);
-        v1y = (f32)(surf->vertex3[1] - surf->vertex2[1]);
-        v1z = (f32)(surf->vertex3[2] - surf->vertex2[2]);
-        v2x = x - (f32)surf->vertex2[0];
-        v2y = y - (f32)surf->vertex2[1];
-        v2z = z - (f32)surf->vertex2[2];
+        v1x = (f32)(surf->vertex3[0] -      surf->vertex2[0]);
+        v1y = (f32)(surf->vertex3[1] -      surf->vertex2[1]);
+        v1z = (f32)(surf->vertex3[2] -      surf->vertex2[2]);
+        v2x =                      x - (f32)surf->vertex2[0];
+        v2y =                      y - (f32)surf->vertex2[1];
+        v2z =                      z - (f32)surf->vertex2[2];
         if (v1y != 0.0f) {
             v = (v2y / v1y);
             if (v < 0.0f || v > 1.0f) continue;
@@ -171,11 +171,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
-#if EXTENDED_BOUNDS_MODE > 1
+ #if EXTENDED_BOUNDS_MODE > 1
     x *= WORLD_SCALE;
     y *= WORLD_SCALE;
     z *= WORLD_SCALE;
-#endif
+ #endif
     data->x = x;
     data->z = z;
     return numCols;
@@ -192,7 +192,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register s32 w1, w2, w3;
     register s32 y1, y2, y3;
     s32 numCols = 0;
-    s16 type;
+    s16 type = SURFACE_DEFAULT;
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
     // Stay in this loop until out of walls.
@@ -200,9 +200,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surf        = surfaceNode->surface;
         surfaceNode = surfaceNode->next;
         type        = surf->type;
-#ifdef NEW_WATER_SURFACES
+ #ifdef NEW_WATER_SURFACES
         if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
-#endif
+ #endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
             if (surf->flags & SURFACE_FLAG_NO_CAM_COLLISION) continue;
@@ -328,9 +328,8 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     struct WallCollisionData collisionData;
     struct Surface *wall = NULL;
-    f32 normX, normY, normZ;
-    f32 originOffset;
-    f32 offset, offsetAbsolute;
+    register f32 normX, normY, normZ;
+    register f32 originOffset, offset, offsetAbsolute;
     Vec3f newPos[4];
     s32 i;
     s32 numCollisions     = 0;
@@ -454,12 +453,12 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
  * Find the lowest ceiling above a given position and return the height.
  */
 f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
-    s16 cellZ, cellX;
+    register s16 cellZ, cellX;
     struct Surface *ceil, *dynamicCeil;
     struct SurfaceNode *surfaceList;
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
-    *pceil = NULL;
+    *pceil            = NULL;
 #ifdef BETTER_WALL_COLLISION
     if (xPos <= -LEVEL_BOUNDARY_MAX
      || xPos >=  LEVEL_BOUNDARY_MAX
@@ -644,7 +643,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
 struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight, f32 *pBottomHeight) {
     register struct Surface *surf;
     struct Surface *floor = NULL;
-    struct SurfaceNode *topSurfaceNode = surfaceNode;
+    struct SurfaceNode *topSurfaceNode    = surfaceNode;
     struct SurfaceNode *bottomSurfaceNode = surfaceNode;
     f32 height          = FLOOR_LOWER_LIMIT;
     f32 bottomHeight    = FLOOR_LOWER_LIMIT;

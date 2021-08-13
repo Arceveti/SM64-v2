@@ -129,9 +129,9 @@ void draw_profiler_mode_1(void) {
     //  it is theoretically possible they might not. In all cases, the RDP should finish later than RSP.
     //  Thus, this is not really a bug in practice, but should still be noted that the C doesn't check
     //  this.
-    draw_profiler_bar(clockBase, profiler->gfxTimes[0], profiler->gfxTimes[1], 216, GPACK_RGBA5551(255, 255, 40, 1));
+    draw_profiler_bar(clockBase, profiler->gfxTimes[0],  profiler->gfxTimes[1],  216, GPACK_RGBA5551(255, 255,  40, 1));
     // (orange)
-    draw_profiler_bar(clockBase, profiler->gfxTimes[1], profiler->gfxTimes[2], 216, GPACK_RGBA5551(255, 120, 40, 1));
+    draw_profiler_bar(clockBase, profiler->gfxTimes[1],  profiler->gfxTimes[2],  216, GPACK_RGBA5551(255, 120,  40, 1));
     // like earlier, toss the odd bit.
     profiler->numVblankTimes &= 0xFFFE;
 

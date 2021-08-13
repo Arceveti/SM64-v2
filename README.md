@@ -57,6 +57,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Some actor and behavior files have been moved around for consistency (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - Many object constants have been defined (Arceveti)
+- Most general use math functions moved to math_util.c
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
 - Extended debug info, with more info for [movement](https://i.imgur.com/ltr0cgZ.png), [input](https://i.imgur.com/ziv3lIz.png), and info for [floors](https://i.imgur.com/qYYqIau.png)/[ceilings](https://i.imgur.com/VZ9MaOC.png)/[walls](https://i.imgur.com/hKC4ibh.png) (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
@@ -89,6 +90,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti) *
 - Tiny Goombas (from THI) always drop their coin (Arceveti) *
 - Unagi and Klepto's stars become transparent stars after they are collected (SunlitSpace542) *
+- Bowser throws are more lenient (Arceveti) *
 - [Leaf particles fall from trees which contain Hoot](https://i.imgur.com/uTe87EF.png) (Arceveti) *
 - [Reimplemented the unused "sad" eye texture for the mother penguin in CCM](https://i.imgur.com/Uk8MNAe.png) *
 

@@ -420,11 +420,11 @@
 #define AIR_NUM_STEPS    4
 // Number of swimming steps per frame (Vanilla is 1)
 #define WATER_NUM_STEPS  4
-// Number of quarter frames before Mario falls off a ledge.
+// Number of steps before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering
 // (Arceveti)
-#define COYOTE_TIME 8
+#define COYOTE_TIME      8
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor
 // issues on actual level boundaries, such as extra knockback
