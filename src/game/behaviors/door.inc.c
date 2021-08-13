@@ -14,8 +14,7 @@ static struct DoorAction sDoorActions[] = {
                                             { -1,                          DOOR_ACT_CLOSED         },
                                           };
 
-static s32 sDoorOpenSounds[] = { SOUND_GENERAL_OPEN_WOOD_DOOR, SOUND_GENERAL_OPEN_IRON_DOOR };
-
+static s32 sDoorOpenSounds[]  = { SOUND_GENERAL_OPEN_WOOD_DOOR,  SOUND_GENERAL_OPEN_IRON_DOOR  };
 static s32 sDoorCloseSounds[] = { SOUND_GENERAL_CLOSE_WOOD_DOOR, SOUND_GENERAL_CLOSE_IRON_DOOR };
 
 void door_animation_and_reset(s32 animIndex) {
@@ -47,7 +46,6 @@ void play_warp_door_open_noise(void) {
 
 void bhv_door_loop(void) {
     s32 index = 0;
-    
     while (sDoorActions[index].flag != (u32)~0) {
         if (cur_obj_clear_interact_status_flag(sDoorActions[index].flag)) {
             set_door_camera_event();
@@ -55,27 +53,12 @@ void bhv_door_loop(void) {
         }
         index++;
     }
-
     switch (o->oAction) {
-        case DOOR_ACT_CLOSED:
-            cur_obj_init_animation_with_sound(DOOR_ANIM_CLOSED);
-            break;
-        case DOOR_ACT_PULLED:
-            door_animation_and_reset(DOOR_ANIM_PULLED);
-            play_door_open_noise();
-            break;
-        case DOOR_ACT_PUSHED:
-            door_animation_and_reset(DOOR_ANIM_PUSHED);
-            play_door_open_noise();
-            break;
-        case DOOR_ACT_WARP_PULLED:
-            door_animation_and_reset(DOOR_ANIM_WARP_PULLED);
-            play_warp_door_open_noise();
-            break;
-        case DOOR_ACT_WARP_PUSHED:
-            door_animation_and_reset(DOOR_ANIM_WARP_PUSHED);
-            play_warp_door_open_noise();
-            break;
+        case DOOR_ACT_CLOSED:      cur_obj_init_animation_with_sound(DOOR_ANIM_CLOSED     );                              break;
+        case DOOR_ACT_PULLED:      door_animation_and_reset(         DOOR_ANIM_PULLED     );      play_door_open_noise(); break;
+        case DOOR_ACT_PUSHED:      door_animation_and_reset(         DOOR_ANIM_PUSHED     );      play_door_open_noise(); break;
+        case DOOR_ACT_WARP_PULLED: door_animation_and_reset(         DOOR_ANIM_WARP_PULLED); play_warp_door_open_noise(); break;
+        case DOOR_ACT_WARP_PUSHED: door_animation_and_reset(         DOOR_ANIM_WARP_PUSHED); play_warp_door_open_noise(); break;
     }
     if (o->oAction == DOOR_ACT_CLOSED) load_object_collision_model();
     bhv_door_rendering_loop();
@@ -85,19 +68,16 @@ void bhv_door_init(void) {
     f32 x = o->oPosX;
     f32 z = o->oPosZ;
     struct Surface *floor;
-    find_floor(x, o->oPosY, z, &floor);
-    if (floor != NULL) o->oDoorSelfRoom = floor->room;
-
+    find_room_floor(x, o->oPosY, z, &floor);
+    if (floor != NULL) o->oDoorSelfRoom     = floor->room;
     x = o->oPosX + sins(o->oMoveAngleYaw) *  200.0f;
     z = o->oPosZ + coss(o->oMoveAngleYaw) *  200.0f;
-    find_floor(x, o->oPosY, z, &floor);
-    if (floor != NULL) o->oDoorForwardRoom = floor->room;
-
+    find_room_floor(x, o->oPosY, z, &floor);
+    if (floor != NULL) o->oDoorForwardRoom  = floor->room;
     x = o->oPosX + sins(o->oMoveAngleYaw) * -200.0f;
     z = o->oPosZ + coss(o->oMoveAngleYaw) * -200.0f;
-    find_floor(x, o->oPosY, z, &floor);
+    find_room_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorBackwardRoom = floor->room;
-
     if (o->oDoorSelfRoom > 0 && o->oDoorSelfRoom < 60) {
         gDoorAdjacentRooms[o->oDoorSelfRoom][0] = o->oDoorForwardRoom;
         gDoorAdjacentRooms[o->oDoorSelfRoom][1] = o->oDoorBackwardRoom;
@@ -106,9 +86,9 @@ void bhv_door_init(void) {
 
 void bhv_door_rendering_loop(void) {
     o->oDoorIsRendering = (gMarioCurrentRoom == 0
-     || o->oDoorSelfRoom == gMarioCurrentRoom
-     || gMarioCurrentRoom == o->oDoorForwardRoom
-     || gMarioCurrentRoom == o->oDoorBackwardRoom
+     || o->oDoorSelfRoom                         == gMarioCurrentRoom
+     || gMarioCurrentRoom                        == o->oDoorForwardRoom
+     || gMarioCurrentRoom                        == o->oDoorBackwardRoom
      || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom
      || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom
      || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom

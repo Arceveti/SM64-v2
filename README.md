@@ -115,7 +115,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Experimental:**
 - Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
-- Gravity flipping support (Arthurtilly) *
 
 # HackerSM64:
 

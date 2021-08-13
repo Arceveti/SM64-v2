@@ -985,6 +985,12 @@
     #define BBH_TILTING_TRAP_PLATFORM_ACT_MARIO_ON          0x0
     #define BBH_TILTING_TRAP_PLATFORM_ACT_MARIO_OFF         0x1
 
+/* Boo in Castle */
+    /* oAction */
+    #define BOO_IN_CASTLE_ACT_INIT                          0x0
+    #define BOO_IN_CASTLE_ACT_IDLE                          0x1
+    #define BOO_IN_CASTLE_ACT_FLEE                          0x2
+
 /* Boo */
     /* oBehParams2ndByte */
     #define BOO_BP_GHOST_HUNT                               0x0
@@ -996,7 +1002,7 @@
     #define BOO_ACT_BOUNCED_ON                              0x2
     #define BOO_ACT_ATTACKED                                0x3
     #define BOO_ACT_DEATH                                   0x4
-    #define BOO_ACT_5                                       0x5
+    #define BOO_ACT_MERRY_GO_ROUND_WAIT                     0x5
     /* oBooDeathStatus */
     #define BOO_DEATH_STATUS_ALIVE                          0x0
     #define BOO_DEATH_STATUS_DYING                          0x1
@@ -1045,6 +1051,11 @@
     #define BOO_STAIRCASE_BP_0                              0x0
     #define BOO_STAIRCASE_BP_1                              0x1
     #define BOO_STAIRCASE_BP_2                              0x2
+    /* oAction */
+    #define BOO_STAIRCASE_ACT_INIT                          0x0
+    #define BOO_STAIRCASE_ACT_RISE                          0x1
+    #define BOO_STAIRCASE_ACT_WOBBLE                        0x2
+    #define BOO_STAIRCASE_ACT_PLAY_JINGLE                   0x3
 
 /* BBH Haunted Bookshelf */
     /* oAction */
@@ -1081,6 +1092,10 @@
     #define FLYING_BOOKEND_ANIM_GROW                        0x2
 
 /* BBH Merry-Go-Round */
+    /* oAction */
+    #define BBH_MERRY_GO_ROUND_ACT_SPAWN_BOOS               0x0
+    #define BBH_MERRY_GO_ROUND_ACT_WAIT                     0x1
+    #define BBH_MERRY_GO_ROUND_ACT_STOPPED                  0x2
     /* gMarioCurrentRoom */
     #define BBH_NEAR_MERRY_GO_ROUND_ROOM                    0xA
     #define BBH_DYNAMIC_SURFACE_ROOM                        0x0
