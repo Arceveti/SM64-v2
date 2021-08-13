@@ -349,10 +349,8 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     for (i = 0; i < upperWall.numWalls; i++) {
         wallDYaw = atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x) - m->faceAngle[1];
         absWallDYaw = wallDYaw < 0 ? -wallDYaw : wallDYaw;
-        if (absWallDYaw > oldWallDYaw) {
-            oldWallDYaw = absWallDYaw;
-            m->wall = upperWall.walls[i];
-        }
+        if (absWallDYaw > oldWallDYaw) oldWallDYaw = absWallDYaw;
+        m->wall = upperWall.walls[i];
         if (wallDYaw >=  0x2AAA && wallDYaw <=  0x5555) continue;
         if (wallDYaw <= -0x2AAA && wallDYaw >= -0x5555) continue;
 #else
@@ -470,18 +468,27 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
 #ifdef BETTER_WALL_COLLISION
 s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallData) {
     s16 i;
-    s16 wallDYaw, oldWallDYaw, absWallDYaw;
-    s32 result;
-    result = AIR_STEP_NONE;
+    s32 result = AIR_STEP_NONE;
+    s16 wallDYaw;
+#ifndef WALL_SLIDE
+    s16 oldWallDYaw, absWallDYaw;
     if (m->wall != NULL) {
-        oldWallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
-        oldWallDYaw = oldWallDYaw < 0 ? -oldWallDYaw : oldWallDYaw;
+        oldWallDYaw = abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]);
     } else {
         oldWallDYaw = 0;
     }
+#endif
     for (i = 0; i < wallData->numWalls; i++) {
         if (wallData->walls[i] != NULL) {
             wallDYaw = atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x) - m->faceAngle[1];
+#ifdef WALL_SLIDE
+            m->wall = wallData->walls[i];
+            if (wallData->walls[i]->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
+            if ((wallDYaw < -0x5000 || wallDYaw > 0x5000) && m->vel[1] <= 0) {
+                m->flags |= MARIO_AIR_HIT_WALL;
+                result = AIR_STEP_HIT_WALL;
+            }
+#else
             if (wallData->walls[i]->type == SURFACE_BURNING) {
                 m->wall = wallData->walls[i];
                 return AIR_STEP_HIT_LAVA_WALL;
@@ -491,18 +498,12 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
             if (absWallDYaw > oldWallDYaw) {
                 oldWallDYaw = absWallDYaw;
                 m->wall = wallData->walls[i];
-#ifdef WALL_SLIDE
-                if ((wallDYaw < -0x5000 || wallDYaw > 0x5000) && m->vel[1] <= 0) {
-                    m->flags |= MARIO_AIR_HIT_WALL;
-                    result = AIR_STEP_HIT_WALL;
-                }
-#else
                 if (wallDYaw < -0x6000 || wallDYaw > 0x6000) {
                     m->flags |= MARIO_AIR_HIT_WALL;
                     result = AIR_STEP_HIT_WALL;
                 }
-#endif
             }
+#endif
         }
     }
     return result;

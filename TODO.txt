@@ -54,8 +54,7 @@
     - Object step height being a field
     - Gravity direction support
     - "Squished" death from any direction
-    - Walking across a non-slippery steep slope doesn't slow down Mario
-    - Properly fix perpendicular wall slide
+    - Walking sideways across a non-slippery steep slope shouldn't slow down Mario
 - Silhouette:
     - Silhouette for Mario's held/riding object
     - Mirror Mario should not have silhouette

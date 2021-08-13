@@ -572,12 +572,6 @@ s32 act_wall_slide(struct MarioState *m) {
 #endif
 
 s32 act_wall_kick_air(struct MarioState *m) {
-    s16 wallAngle;
-    if (m->wall != NULL) {
-        wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        // Snap Mario's rotation to be perpendicular ot the wall if it's close
-        if (abs_angle_diff(m->faceAngle[1], wallAngle) <= 0x1) m->faceAngle[1] = wallAngle;
-    }
 #ifdef ACTION_CANCELS
     if (check_kick_or_dive_in_air(m)) return TRUE;
 #else
@@ -1133,19 +1127,7 @@ s32 act_air_hit_wall(struct MarioState *m) {
 #ifdef WALL_SLIDE
     if (m->wall != NULL) {
         wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        //! Very hacky fix which causes Mario to start falling at a slight angle instead
-        // of falling straight down when hitting a wall at a perfect perpendicular angle
-        // because for some reason, hitting a wall at a perfect perpendicular angle
-        // doesn't trigger the wall slide.
-        if (m->faceAngle[1] - wallAngle == 0x0) {
-            if (m->faceAngle[1] < 0x0) {
-                m->faceAngle[1] -= 0x7FFF;
-            } else {
-                m->faceAngle[1] += 0x7FFF;
-            }
-        } else {
-            m->faceAngle[1] = (2.0f * wallAngle) - m->faceAngle[1] + 0x8000;
-        }
+        m->faceAngle[1] = (2.0f * wallAngle) - m->faceAngle[1] + 0x8000;
         if (++(m->actionTimer) <= 2) {
             if (m->input & INPUT_A_PRESSED) {
                 m->vel[1] = 52.0f;
