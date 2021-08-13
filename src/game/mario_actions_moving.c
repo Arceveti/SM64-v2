@@ -90,8 +90,7 @@ void check_ledge_climb_down(struct MarioState *m) {
     struct Surface *floor;
     f32 floorHeight;
     struct Surface *wall;
-    s16 wallAngle;
-    s16 wallDYaw;
+    s16 wallAngle, wallDYaw;
     if (m->forwardVel < 10.0f) {
         wallCols.x       = m->pos[0];
         wallCols.y       = m->pos[1];
@@ -103,7 +102,7 @@ void check_ledge_climb_down(struct MarioState *m) {
             if (floor != NULL && (wallCols.y - floorHeight > 160.0f)) {
                 wall = wallCols.walls[wallCols.numWalls - 1];
                 wallAngle = atan2s(wall->normal.z, wall->normal.x);
-                wallDYaw = wallAngle - m->faceAngle[1];
+                wallDYaw  = wallAngle - m->faceAngle[1];
                 if (wallDYaw > -0x4000 && wallDYaw < 0x4000) {
                     m->pos[0] = wallCols.x - 20.0f * wall->normal.x;
                     m->pos[2] = wallCols.z - 20.0f * wall->normal.z;
@@ -139,7 +138,8 @@ s32 set_triple_jump_action(struct MarioState *m, UNUSED u32 action, UNUSED u32 a
 }
 
 void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
-    s32 newFacingDYaw;
+    s32 newFacingDYaw; // not s16?
+    
     s16 facingDYaw;
     struct Surface *floor = m->floor;
     s16 slopeAngle = atan2s(floor->normal.z, floor->normal.x);
@@ -179,10 +179,10 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 lossFactor;
     f32 accel;
     f32 oldSpeed, newSpeed;
-    s32 stopped = FALSE;
+    s32 stopped      = FALSE;
     s16 intendedDYaw = m->intendedYaw - m->slideYaw;
-    f32 forward = coss(intendedDYaw);
-    f32 sideward = sins(intendedDYaw);
+    f32 forward      = coss(intendedDYaw);
+    f32 sideward     = sins(intendedDYaw);
     f32 slideVelXModifier, slideVelZModifier;
     //! 10k glitch
     if (forward < 0.0f && m->forwardVel >= 0.0f) forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
@@ -262,8 +262,7 @@ s32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
 }
 
 void update_shell_speed(struct MarioState *m) {
-    f32 maxTargetSpeed;
-    f32 targetSpeed;
+    f32 maxTargetSpeed, targetSpeed;
     if (m->floorHeight < m->waterLevel) {
         m->floorHeight         = m->waterLevel;
         m->floor               = &gWaterSurfacePseudoFloor;
@@ -310,8 +309,7 @@ s32 update_decelerating_speed(struct MarioState *m) {
 }
 
 void update_walking_speed(struct MarioState *m) {
-    f32 maxTargetSpeed;
-    f32 targetSpeed;
+    f32 maxTargetSpeed, targetSpeed;
 #ifdef GROUND_TURN_FIX
     s16 turnRange;
 #endif
@@ -399,7 +397,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
     s32 animSpeed;
     struct Object *marioObj = m->marioObj;
     s32 loop = TRUE;
-    s16 targetPitch         = 0;
+    s16 targetPitch         = 0x0;
     f32 intendedSpeed;
     intendedSpeed           = m->intendedMag > m->forwardVel ? m->intendedMag : m->forwardVel;
     if (intendedSpeed < 4.0f) intendedSpeed = 4.0f;
@@ -520,8 +518,7 @@ void anim_and_audio_for_heavy_walk(struct MarioState *m) {
 }
 
 void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
-    s16 wallAngle;
-    s16 dWallAngle;
+    s16 wallAngle, dWallAngle;
     f32 dx = m->pos[0] - startPos[0];
     f32 dz = m->pos[2] - startPos[2];
     f32 movedDistance = sqrtf(dx * dx + dz * dz);

@@ -6,10 +6,10 @@
 #include "types.h"
 
 
-#define TIMER_CONTROL_SHOW                  0
-#define TIMER_CONTROL_START                 1
-#define TIMER_CONTROL_STOP                  2
-#define TIMER_CONTROL_HIDE                  3
+#define TIMER_CONTROL_SHOW                  0x00
+#define TIMER_CONTROL_START                 0x01
+#define TIMER_CONTROL_STOP                  0x02
+#define TIMER_CONTROL_HIDE                  0x03
 
 #define WARP_OP_NONE                        0x00
 #define WARP_OP_LOOK_UP                     0x01

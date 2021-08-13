@@ -53,7 +53,6 @@ void bhv_hidden_blue_coin_loop(void) {
             }
             break;
     }
-
     o->oInteractStatus = INT_STATUS_NONE;
 }
 

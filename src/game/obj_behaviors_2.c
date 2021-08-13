@@ -544,14 +544,14 @@ static void obj_set_knockback_action(s32 attackType) {
     switch (attackType) {
         case ATTACK_KICK_OR_TRIP:
         case ATTACK_FAST_ATTACK:
-            o->oAction = OBJ_ACT_VERTICAL_KNOCKBACK;
+            o->oAction     = OBJ_ACT_VERTICAL_KNOCKBACK;
             o->oForwardVel = 20.0f;
-            o->oVelY = 50.0f;
+            o->oVelY       = 50.0f;
             break;
         default:
-            o->oAction = OBJ_ACT_HORIZONTAL_KNOCKBACK;
+            o->oAction     = OBJ_ACT_HORIZONTAL_KNOCKBACK;
             o->oForwardVel = 50.0f;
-            o->oVelY = 30.0f;
+            o->oVelY       = 30.0f;
             break;
     }
     o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
@@ -591,7 +591,7 @@ static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActi
         if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) {
             if (o->oAction != attackedMarioAction) {
                 o->oAction = attackedMarioAction;
-                o->oTimer = 0;
+                o->oTimer  = 0;
             }
         } else {
             attackType = o->oInteractStatus & INT_STATUS_ATTACK_MASK;
@@ -739,7 +739,6 @@ static void treat_far_home_as_mario(f32 threshold) {
         dy       = o->oHomeY - gMarioObject->oPosY;
         dz       = o->oHomeZ - gMarioObject->oPosZ;
         distance = sqrtf(dx * dx + dy * dy + dz * dz);
-
         if (distance > threshold) o->oDistanceToMario = 20000.0f;
     }
 }

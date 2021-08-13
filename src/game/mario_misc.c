@@ -439,15 +439,12 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
     u16 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
-    s16 pitch;
-    s16 yaw;
+    s16 pitch, yaw;
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    s32 lakituX;
-    s32 lakituY;
-    u32 lakituW;
-    u32 lakituH;
+    s32 lakituX, lakituY;
+    u32 lakituW, lakituH;
     const u32 lakituMaxW = 56;
     const u32 lakituMaxH = lakituMaxW >> 1;
 #endif
@@ -614,7 +611,7 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 gMirrorMario.sharedChild     = mario->header.gfx.sharedChild;
                 gMirrorMario.areaIndex       = mario->header.gfx.areaIndex;
                 vec3s_copy(gMirrorMario.angle, mario->header.gfx.angle);
-                vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos);
+                vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos  );
                 vec3f_copy(gMirrorMario.scale, mario->header.gfx.scale);
                 gMirrorMario.animInfo        = mario->header.gfx.animInfo;
                 mirroredX                    = MIRROR_X - gMirrorMario.pos[0];

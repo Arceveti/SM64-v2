@@ -334,8 +334,7 @@ void get_vertex_coords(s8 index, s8 shadowVertexType, s8 *xCoord, s8 *zCoord) {
 void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx, f32 *zPosVtx, s8 shadowVertexType) {
     f32 tiltedScale   = cosf(s.floorTilt     * M_PI / 180.0f) * s.shadowScale;
     f32 downwardAngle = s.floorDownwardAngle * M_PI / 180.0f;
-    f32 halfScale;
-    f32 halfTiltedScale;
+    f32 halfScale, halfTiltedScale;
     s8 xCoordUnit, zCoordUnit;
     struct FloorGeometry *dummy;
     // This makes xCoordUnit and yCoordUnit each one of -1, 0, or 1.

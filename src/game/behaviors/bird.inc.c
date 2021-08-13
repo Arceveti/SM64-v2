@@ -20,26 +20,19 @@ static void bird_act_inactive(void) {
         // and spawn 6 spawned birds (which will start flying on the next frame).
         if (o->oBehParams2ndByte != BIRD_BP_SPAWNED) {
             s32 i;
-
             cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
-
             for (i = 0; i < 6; i++) spawn_object(o, MODEL_BIRDS, bhvBird);
-
             // The spawner bird's home acts as its target location.
             o->oHomeX =   -20.0f;
             o->oHomeZ = -3990.0f;
         }
-
         // Start flying
         o->oAction = BIRD_ACT_FLY;
-
         // Start with a random yaw, and a random pitch from 1000 to 5000.
         // Positive pitch is downwards.
         o->oMoveAnglePitch = 5000 - (s32)(4000.0f * random_float());
-        o->oMoveAngleYaw = random_u16();
-
-        o->oBirdSpeed = 40.0f;
-
+        o->oMoveAngleYaw   = random_u16();
+        o->oBirdSpeed      = 40.0f;
         cur_obj_unhide();
     }
 }
@@ -51,10 +44,8 @@ static void bird_act_inactive(void) {
  */
 static void bird_act_fly(void) {
     f32 distance;
-
     // Compute forward velocity and vertical velocity from oBirdSpeed and pitch
     obj_compute_vel_from_move_pitch(o->oBirdSpeed);
-
     // If the bird's parent is higher than 8000 units, despawn the bird.
     // A spawned bird's parent is its spawner bird. A spawner bird's parent
     // is itself. In other words, when a group of birds has its spawner bird
@@ -65,32 +56,27 @@ static void bird_act_fly(void) {
         // If the bird is a spawner bird, fly towards its home; otherwise,
         // fly towards the bird's spawner bird.
         if (o->oBehParams2ndByte != BIRD_BP_SPAWNED) {
-            distance = cur_obj_lateral_dist_to_home();
-
+            distance            = cur_obj_lateral_dist_to_home();
             // The spawner bird will start with its downwards (positive) pitch
             // and will continuously decrease its pitch (i.e. make itself face more upwards)
             // until it reaches its home, at which point it will face directly up.
             // This is done by making its target pitch the arctangent of its distance
             // to its home and its position - 10,000 (which is always negative).
             o->oBirdTargetPitch = atan2s(distance, o->oPosY - 10000.0f);
-            o->oBirdTargetYaw = cur_obj_angle_to_home();
+            o->oBirdTargetYaw   = cur_obj_angle_to_home();
         } else {
             distance = lateral_dist_between_objects(o, o->parentObj);
-
             // The bird's target pitch will face directly to its spawner bird.
             o->oBirdTargetPitch = atan2s(distance, o->oPosY - o->parentObj->oPosY);
-            o->oBirdTargetYaw = obj_angle_to_object(o, o->parentObj);
-
+            o->oBirdTargetYaw   = obj_angle_to_object(o, o->parentObj);
             // The bird goes faster the farther it is from its spawner bird so it can catch up.
-            o->oBirdSpeed = 0.04f * dist_between_objects(o, o->parentObj) + 20.0f;
+            o->oBirdSpeed       = 0.04f * dist_between_objects(o, o->parentObj) + 20.0f;
         }
-
         // Approach to match the bird's target yaw and pitch.
         obj_move_pitch_approach( o->oBirdTargetPitch, 0x8C);
         cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 0x320);
         obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 0x258);
     }
-
     // The bird has no gravity, so this function only
     // moves the bird using its forward velocity.
     // Even if it did have gravity, it would only act as

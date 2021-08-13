@@ -126,8 +126,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
             // Check if there is an intangible floor in the current cell
             if (floor_type_exists_in_current_cell(gMarioObject->oPosX, gMarioObject->oPosZ, SURFACE_INTANGIBLE, FALSE)) {
                 // there is an intangible floor in the current cell, so look for it.
-                gFindFloorIncludeSurfaceIntangible = TRUE;
-                find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &floor);
+                find_room_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &floor);
             } else {
                 // Since no intangible floors are nearby, use Mario's floor instead.
                 floor = gMarioState->floor;
@@ -954,7 +953,8 @@ static s32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepSlop
     struct Surface *intendedFloor;
     f32 intendedX           = o->oPosX + o->oVelX;
     f32 intendedZ           = o->oPosZ + o->oVelZ;
-    f32 intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor);
+    gFindFloorIncludeSurfaceIntangible = TRUE;
+    f32 intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor); // find_room_floor?
     f32 deltaFloorHeight    = intendedFloorHeight - o->oFloorHeight;
     o->oMoveFlags           &= ~OBJ_MOVE_HIT_EDGE;
     if (o->oRoom            != -1
@@ -1068,11 +1068,11 @@ void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {
         if (o->oPosY < waterLevel) {
             cur_obj_move_update_underwater_flags();
         } else if (o->oPosY < o->oFloorHeight) {
-            o->oPosY = o->oFloorHeight;
+            o->oPosY       = o->oFloorHeight;
             o->oMoveFlags &= ~OBJ_MOVE_MASK_IN_WATER;
         } else {
-            o->oPosY = waterLevel;
-            o->oVelY = 0.0f;
+            o->oPosY       = waterLevel;
+            o->oVelY       = 0.0f;
             o->oMoveFlags &= ~(OBJ_MOVE_UNDERWATER_OFF_GROUND | OBJ_MOVE_UNDERWATER_ON_GROUND);
             o->oMoveFlags |= OBJ_MOVE_AT_WATER_SURFACE;
         }
@@ -1774,8 +1774,7 @@ void bhv_init_room(void) {
 #ifdef FIX_BHV_INIT_ROOM
     UNUSED f32 floorHeight;
     if (is_item_in_array(gCurrLevelNum, sLevelsWithRooms)) {
-        gFindFloorExcludeDynamic = TRUE;
-        floorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
+        floorHeight = find_room_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
         if (floor != NULL) o->oRoom = floor->room;
 #else
     f32 floorHeight;

@@ -453,6 +453,25 @@ void make_oblique(Mat4 toModify, Vec4f clipPlane) {
  * Matrix Operations *
  *********************/
 
+/**
+ * [0][0]   x scale
+ * [0][1]   y shear
+ * [0][2]   z x shear?
+ * [0][3]   width crop?
+ * [1][0]   x shear
+ * [1][1]   y scale
+ * [1][2]   z z shear?
+ * [1][3]   y crop?
+ * [2][0]   z x shear?
+ * [2][1]   z y shear?
+ * [2][2]   z scale
+ * [2][3]   z crop?
+ * [3][0]   x translation
+ * [3][1]   y translation
+ * [3][2]   z translation
+ * [3][3]   z translation scale?
+ **/
+
 /// Copy matrix 'src' to 'dest'
 void mtxf_copy(Mat4 dest, Mat4 src) {
     register s32 i;

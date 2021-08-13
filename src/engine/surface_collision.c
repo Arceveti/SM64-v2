@@ -513,8 +513,8 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  **************************************************/
 
 s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, s16 type, s32 dynamic) {
-    s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     struct SurfaceNode *surfaceNode;
     surfaceNode = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     // Check for surfaces that are a part of level geometry.
@@ -609,7 +609,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
         // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
         // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
         // Mario to pass through.
-        if (!gFindFloorIncludeSurfaceIntangible && type == SURFACE_INTANGIBLE) continue;
+        if (!gFindFloorIncludeSurfaceIntangible && (type == SURFACE_INTANGIBLE)) continue;
         // Determine if we are checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
 #ifdef NEW_WATER_SURFACES
@@ -767,9 +767,15 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // To prevent accidentally leaving the floor tangible, stop checking for it.
     gFindFloorIncludeSurfaceIntangible = FALSE;
 #ifdef FIX_BHV_INIT_ROOM
-    gFindFloorExcludeDynamic = FALSE;
+    gFindFloorExcludeDynamic           = FALSE;
 #endif
     return height;
+}
+
+f32 find_room_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
+    gFindFloorIncludeSurfaceIntangible = TRUE;
+    gFindFloorExcludeDynamic           = TRUE;
+    return find_floor(xPos, yPos, zPos, pfloor);
 }
 
 #ifdef NEW_WATER_SURFACES

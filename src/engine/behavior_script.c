@@ -412,7 +412,7 @@ static s32 bhv_cmd_animate(void) {
 // Command 0x1E: Finds the floor triangle directly under the object and moves the object down to it.
 // Usage: DROP_TO_FLOOR()
 static s32 bhv_cmd_drop_to_floor(void) {
-    gCurrentObject->oPosY = find_floor_height(gCurrentObject->oPosX, gCurrentObject->oPosY + 200.0f, gCurrentObject->oPosZ);
+    gCurrentObject->oPosY       = find_floor_height(gCurrentObject->oPosX, gCurrentObject->oPosY + 200.0f, gCurrentObject->oPosZ);
     gCurrentObject->oMoveFlags |= OBJ_MOVE_ON_GROUND;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;

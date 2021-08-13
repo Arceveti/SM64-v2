@@ -1,9 +1,9 @@
 // bomp.c.inc
 
 void bhv_small_bomp_init(void) {
-    o->oFaceAngleYaw -= 0x4000;
+    o->oFaceAngleYaw  -= 0x4000;
     o->oSmallBompInitX = o->oPosX;
-    o->oTimer = random_float() * 100.0f;
+    o->oTimer          = random_float() * 100.0f;
 }
 
 void bhv_small_bomp_loop(void) {
