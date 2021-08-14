@@ -5066,8 +5066,15 @@ s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, s16 *avoidYaw, s16 
 void find_mario_floor_and_ceil(struct PlayerGeometry *pg) {
     pg->currCeil            = gMarioState->ceil;
     pg->currCeilHeight      = gMarioState->ceilHeight;
+#if COYOTE_TIME > 0
+    if (gMarioState->coyoteTimer == 0) {
+        pg->currFloor       = gMarioState->floor;
+        pg->currFloorHeight = gMarioState->floorHeight;
+    }
+#else
     pg->currFloor           = gMarioState->floor;
     pg->currFloorHeight     = gMarioState->floorHeight;
+#endif
     pg->waterHeight         = gMarioState->waterLevel;
     if (pg->currFloorHeight != FLOOR_LOWER_LIMIT) {
         pg->currFloorType   = pg->currFloor->type;
