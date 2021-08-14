@@ -86,8 +86,7 @@ void bhv_goomba_triplet_spawner_update(void) {
                                           dx, 0, dz, o, MODEL_GOOMBA, bhvGoomba);
                 }
             }
-
-            o->oAction++;
+            o->oAction = GOOMBA_TRIPLET_SPAWNER_ACT_LOADED;
         }
     } else if (o->oDistanceToMario > 4000.0f) {
         // If Mario is too far away, enter the unloaded action. The goombas
@@ -100,17 +99,13 @@ void bhv_goomba_triplet_spawner_update(void) {
  * Initialization function for goomba.
  */
 void bhv_goomba_init(void) {
-    o->oGoombaSize  = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
-
-    o->oGoombaScale = sGoombaProperties[o->oGoombaSize].scale;
-    o->oDeathSound  = sGoombaProperties[o->oGoombaSize].deathSound;
-
+    o->oGoombaSize        = o->oBehParams2ndByte & GOOMBA_BP_SIZE_MASK;
+    o->oGoombaScale       = sGoombaProperties[o->oGoombaSize].scale;
+    o->oDeathSound        = sGoombaProperties[o->oGoombaSize].deathSound;
     obj_set_hitbox(o, &sGoombaHitbox);
-
     o->oDrawingDistance   = sGoombaProperties[o->oGoombaSize].drawDistance;
     o->oDamageOrCoinValue = sGoombaProperties[o->oGoombaSize].damage;
-
-    o->oGravity = -8.0f / 3.0f * o->oGoombaScale;
+    o->oGravity           = ((-8.0f / 3.0f) * o->oGoombaScale);
 }
 
 /**
@@ -118,9 +113,9 @@ void bhv_goomba_init(void) {
  */
 static void goomba_begin_jump(void) {
     cur_obj_play_sound_2(SOUND_OBJ_GOOMBA_ALERT);
-    o->oAction = GOOMBA_ACT_JUMP;
+    o->oAction     = GOOMBA_ACT_JUMP;
     o->oForwardVel = 0.0f;
-    o->oVelY = 50.0f / 3.0f * o->oGoombaScale;
+    o->oVelY       = ((50.0f / 3.0f) * o->oGoombaScale);
 }
 
 /**
@@ -141,12 +136,9 @@ static void mark_goomba_as_dead(void) {
  */
 static void goomba_act_walk(void) {
     treat_far_home_as_mario(1000.0f);
-
     obj_forward_vel_approach(o->oGoombaRelativeSpeed * o->oGoombaScale, 0.4f);
-
     // If walking fast enough, play footstep sounds
-    if (o->oGoombaRelativeSpeed > 4.0f / 3.0f) cur_obj_play_sound_at_anim_range(2, 17, SOUND_OBJ_GOOMBA_WALK);
-
+    if (o->oGoombaRelativeSpeed > (4.0f / 3.0f)) cur_obj_play_sound_at_anim_range(2, 17, SOUND_OBJ_GOOMBA_WALK);
     //! By strategically hitting a wall, steep slope, or another goomba, we can
     //  prevent the goomba from turning back toward home for a while (goomba
     //  chase extension)
@@ -162,20 +154,16 @@ static void goomba_act_walk(void) {
             o->oGoombaTargetYaw = o->oAngleToMario;
             o->oGoombaWalkTimer = random_linear_offset(20, 30);
         }
-
         if (!(o->oGoombaTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oGoombaTargetYaw))) {
             if (o->oDistanceToMario < 500.0f) {
                 // If close to marMarioio, begin chasing him. If not already chasing
                 // him, jump first
-
                 if (o->oGoombaRelativeSpeed <= 2.0f) goomba_begin_jump();
-
                 o->oGoombaTargetYaw     = o->oAngleToMario;
                 o->oGoombaRelativeSpeed = 20.0f;
             } else {
                 // If Mario is far away, walk at a normal pace, turning randomly
                 // and occasionally jumping
-
                 o->oGoombaRelativeSpeed = (4.0f / 3.0f);
                 if (o->oGoombaWalkTimer != 0) {
                     o->oGoombaWalkTimer--;
@@ -217,7 +205,6 @@ static void goomba_act_attacked_mario(void) {
  */
 static void goomba_act_jump(void) {
     obj_resolve_object_collisions(NULL);
-
     //! If we move outside the goomba's drawing radius the frame it enters the
     //  jump action, then it will keep its velY, but it will still be counted
     //  as being on the ground.
@@ -247,30 +234,22 @@ void huge_goomba_weakly_attacked(void) {
  */
 void bhv_goomba_update(void) {
     // PARTIAL_UPDATE
-
     f32 animSpeed;
-
     if (obj_update_standard_actions(o->oGoombaScale)) {
         // If this goomba has a spawner and Mario moved away from the spawner, unload
         if (o->parentObj != o && o->parentObj->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED) obj_mark_for_deletion(o);
-
         cur_obj_scale(o->oGoombaScale);
         obj_update_blinking(&o->oGoombaBlinkTimer, 30, 50, 5);
         cur_obj_update_floor_and_walls();
-
         if ((animSpeed = o->oForwardVel / o->oGoombaScale * 0.4f) < 1.0f) animSpeed = 1.0f;
-
         cur_obj_init_animation_with_accel_and_sound(GOOMBA_ANIM_DEFAULT, animSpeed);
-
         switch (o->oAction) {
             case GOOMBA_ACT_WALK:           goomba_act_walk();           break;
             case GOOMBA_ACT_ATTACKED_MARIO: goomba_act_attacked_mario(); break;
             case GOOMBA_ACT_JUMP:           goomba_act_jump();           break;
         }
-
         if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO, sGoombaAttackHandlers[o->oGoombaSize & 1])
          && o->oAction != GOOMBA_ACT_ATTACKED_MARIO) mark_goomba_as_dead();
-
         cur_obj_move_standard(-78);
     } else {
         o->oAnimState = TRUE;

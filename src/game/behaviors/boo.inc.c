@@ -349,7 +349,7 @@ static void (*sBooActions[])(void) = {
 };
 
 void bhv_boo_loop(void) {
-    //PARTIAL_UPDATE
+    // PARTIAL_UPDATE
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sBooActions);
     cur_obj_move_standard(78);
@@ -476,7 +476,7 @@ static void (*sBooGivingStarActions[])(void) = {
 };
 
 void bhv_big_boo_loop(void) {
-    //PARTIAL_UPDATE
+    // PARTIAL_UPDATE
     obj_set_hitbox(o, &sBooGivingStarHitbox);
     o->oGraphYOffset = (o->oBooBaseScale * 60.0f);
     cur_obj_update_floor_and_walls();
@@ -533,7 +533,7 @@ static void (*sBooWithCageActions[])(void) = {
 };
 
 void bhv_boo_with_cage_loop(void) {
-    //PARTIAL_UPDATE
+    // PARTIAL_UPDATE
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sBooWithCageActions);
     cur_obj_move_standard(78);
