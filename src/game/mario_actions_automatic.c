@@ -443,9 +443,8 @@ void update_ledge_climb(struct MarioState *m, s32 animation, u32 endAction) {
 
 s32 act_ledge_grab(struct MarioState *m) {
     f32 heightAboveFloor;
-    s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
-    s32 hasSpaceForMario = (m->ceilHeight - m->floorHeight >= 160.0f);
-
+    s16 intendedDYaw     = (m->intendedYaw - m->faceAngle[1]);
+    s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= 160.0f);
 #ifdef ACTION_CANCELS
     if (m->actionTimer <  5) m->actionTimer++;
 #else
@@ -475,9 +474,8 @@ s32 act_ledge_grab(struct MarioState *m) {
             return let_go_of_ledge(m);
         }
     }
-
-    heightAboveFloor = m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 30.0f);
-    if (hasSpaceForMario && heightAboveFloor < 100.0f) return set_mario_action(m, ACT_LEDGE_CLIMB_FAST, 0);
+    heightAboveFloor = (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 30.0f));
+    if (hasSpaceForMario && (heightAboveFloor < 100.0f)) return set_mario_action(m, ACT_LEDGE_CLIMB_FAST, 0);
     if (m->actionArg == 0) play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     stop_and_set_height_to_floor(m);
     set_mario_animation(m, MARIO_ANIM_IDLE_ON_LEDGE);

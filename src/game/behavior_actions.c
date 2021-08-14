@@ -77,9 +77,9 @@ struct SpawnParticlesInfo sMistParticles = { 2, 20, MODEL_MIST, 0, 40, 5, 30, 20
 
 // generate_wind_puffs/dust (something like that)
 void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
-    sMistParticles.sizeBase = size;
-    sMistParticles.sizeRange = size / 20.0f;
-    sMistParticles.offsetY = offsetY;
+    sMistParticles.sizeBase  = size;
+    sMistParticles.sizeRange = (size / 20.0f);
+    sMistParticles.offsetY   = offsetY;
     if (count == 0) {
         sMistParticles.count = 20;
     } else if (count > 20) {
@@ -133,12 +133,12 @@ void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
 void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
     static s16 angle;
     s32 i;
-    s16 separation = 0x10000 / n; // Evenly spread around a circle
+    s16 separation = (0x10000 / n); // Evenly spread around a circle
     for (i = 0; i < n; i++) {
-        spawn_object_relative(OBJ_BP_NONE, sins(angle + i * separation) * radius, (i + 1) * height,
-                                           coss(angle + i * separation) * radius, o, MODEL_NONE, bhvSparkleSpawn);
+        spawn_object_relative(OBJ_BP_NONE, (sins(angle + (i * separation)) * radius), ((i + 1) * height),
+                                           (coss(angle + (i * separation)) * radius), o, MODEL_NONE, bhvSparkleSpawn);
     }
-    angle += r * 0x100;
+    angle += (r * 0x100);
 }
 
 #include "behaviors/warp.inc.c"
@@ -172,7 +172,7 @@ void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
 
 s32 set_obj_anim_with_accel_and_sound(s16 frame1, s16 frame2, s32 sound) {
     f32 range;
-    if ((range = o->header.gfx.animInfo.animAccel / (f32) 0x10000) == 0) range = 1.0f;
+    if ((range = (o->header.gfx.animInfo.animAccel / (f32) 0x10000)) == 0) range = 1.0f;
     if (cur_obj_check_anim_frame_in_range(frame1, range)
      || cur_obj_check_anim_frame_in_range(frame2, range)) {
         cur_obj_play_sound_2(sound);

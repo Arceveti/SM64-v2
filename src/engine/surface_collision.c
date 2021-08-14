@@ -85,11 +85,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         v2y =                      y - (f32)surf->vertex1[1];
         v2z =                      z - (f32)surf->vertex1[2];
         // Face
-        d00 = (v0x * v0x) + (v0y * v0y) + (v0z * v0z);
-        d01 = (v0x * v1x) + (v0y * v1y) + (v0z * v1z);
-        d11 = (v1x * v1x) + (v1y * v1y) + (v1z * v1z);
-        d20 = (v2x * v0x) + (v2y * v0y) + (v2z * v0z);
-        d21 = (v2x * v1x) + (v2y * v1y) + (v2z * v1z);
+        d00 = ((v0x * v0x) + (v0y * v0y) + (v0z * v0z));
+        d01 = ((v0x * v1x) + (v0y * v1y) + (v0z * v1z));
+        d11 = ((v1x * v1x) + (v1y * v1y) + (v1z * v1z));
+        d20 = ((v2x * v0x) + (v2y * v0y) + (v2z * v0z));
+        d21 = ((v2x * v1x) + (v2y * v1y) + (v2z * v1z));
         invDenom = (1.0f / ((d00 * d11) - (d01 * d01))); // no sqrtf?
         v = (((d11 * d20) - (d01 * d21)) * invDenom);
         if ((v < 0.0f) || (v > 1.0f)) goto edge_1_2;
@@ -374,12 +374,15 @@ static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
 
 #ifdef BETTER_WALL_COLLISION
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
-    register f32 diff_x, diff_z, invDenom;
-    diff_x   = target1[0] - *x + target2[0] - *x;
-    diff_z   = target1[2] - *z + target2[2] - *z;
-    invDenom = margin / sqrtf(diff_x * diff_x + diff_z * diff_z);
-    *x      += diff_x * invDenom;
-    *z      += diff_z * invDenom;
+    register f32 diff_x   = target1[0] - *x + target2[0] - *x;
+    register f32 diff_z   = target1[2] - *z + target2[2] - *z;
+#ifdef FAST_INVSQRT
+    register f32 invDenom = margin * Q_rsqrtf((diff_x * diff_x) + (diff_z * diff_z));
+#else
+    register f32 invDenom = margin / sqrtf((diff_x * diff_x) + (diff_z * diff_z));
+#endif
+    *x      += (diff_x * invDenom);
+    *z      += (diff_z * invDenom);
 }
 #endif
 
@@ -834,7 +837,7 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
  */
 f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
     s32 i, numRegions;
-    s16 val;
+    register s16 val;
     register f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
@@ -855,7 +858,7 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
             hiZ = *p++;
             // If the location is within a water box and it is a water box.
             // Water is less than 50 val only, while above is gas and such.
-            if (loX < x && x < hiX && loZ < z && z < hiZ && val < 50) {
+            if ((loX < x) && (x < hiX) && (loZ < z) && (z < hiZ) && (val < 50)) {
                 // Set the water height. Since this breaks, only return the first height.
                 waterLevel = *p;
                 break;
@@ -877,7 +880,7 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
  */
 f32 find_water_level(f32 x, f32 z) {
     s32 i, numRegions;
-    s16 val;
+    register s16 val;
     register f32 loX, hiX, loZ, hiZ;
     f32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
@@ -898,7 +901,7 @@ f32 find_water_level(f32 x, f32 z) {
             hiZ = *p++;
             // If the location is within a water box and it is a water box.
             // Water is less than 50 val only, while above is gas and such.
-            if (loX < x && x < hiX && loZ < z && z < hiZ && val < 50) {
+            if ((loX < x) && (x < hiX) && (loZ < z) && (z < hiZ) && (val < 50)) {
                 // Set the water height. Since this breaks, only return the first height.
                 waterLevel = *p;
                 break;
@@ -914,7 +917,7 @@ f32 find_water_level(f32 x, f32 z) {
  */
 f32 find_poison_gas_level(f32 x, f32 z) {
     s32 i, numRegions;
-    s16 val;
+    register s16 val;
     register f32 loX, hiX, loZ, hiZ;
     f32 gasLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
@@ -929,7 +932,7 @@ f32 find_poison_gas_level(f32 x, f32 z) {
                 hiZ = p[4];
                 // If the location is within a gas's box and it is a gas box.
                 // Gas has a value of 50, 60, etc.
-                if (loX < x && x < hiX && loZ < z && z < hiZ && val % 10 == 0) {
+                if ((loX < x) && (x < hiX) && (loZ < z) && (z < hiZ) && ((val % 10) == 0)) {
                     // Set the gas height. Since this breaks, only return the first height.
                     gasLevel = p[5];
                     break;

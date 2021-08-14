@@ -91,20 +91,18 @@ const char *gNoControllerMsg[] = {
 #endif
 
 void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
-    u16 sp6 = ((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 1;
-
-    gFBSetColor = (sp6 << 16) | sp6;
+    u16 sp6 = (((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 0x1);
+    gFBSetColor       = ((sp6 << 16) | sp6);
     gViewportOverride = a;
-    gViewportClip = b;
+    gViewportClip     = b;
 }
 
 void set_warp_transition_rgb(u8 red, u8 green, u8 blue) {
-    u16 warpTransitionRGBA16 = ((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 1;
-
-    gWarpTransFBSetColor = (warpTransitionRGBA16 << 16) | warpTransitionRGBA16;
-    gWarpTransRed = red;
+    u16 warpTransitionRGBA16 = (((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 0x1);
+    gWarpTransFBSetColor = ((warpTransitionRGBA16 << 16) | warpTransitionRGBA16);
+    gWarpTransRed   = red;
     gWarpTransGreen = green;
-    gWarpTransBlue = blue;
+    gWarpTransBlue  = blue;
 }
 
 void print_intro_text(void) {
@@ -114,9 +112,9 @@ void print_intro_text(void) {
     if ((gGlobalTimer & 0x1F) < 20) {
         if (gControllerBits == 0) {
 #ifdef VERSION_EU
-            print_text_centered(SCREEN_WIDTH / 2, 20, gNoControllerMsg[language]);
+            print_text_centered((SCREEN_WIDTH / 2), 20, gNoControllerMsg[language]);
 #else
-            print_text_centered(SCREEN_WIDTH / 2, 20, "NO CONTROLLER");
+            print_text_centered((SCREEN_WIDTH / 2), 20, "NO CONTROLLER");
 #endif
         } else {
 #ifdef VERSION_EU
@@ -143,7 +141,7 @@ struct ObjectWarpNode *area_get_warp_node(u8 id) {
 }
 
 struct ObjectWarpNode *area_get_warp_node_from_params(struct Object *o) {
-    u8 id = (o->oBehParams & 0x00FF0000) >> 16;
+    u8 id = ((o->oBehParams & 0x00FF0000) >> 16);
     return area_get_warp_node(id);
 }
 
@@ -192,7 +190,7 @@ void clear_area_graph_nodes(void) {
     s32 i;
     if (gCurrentArea != NULL) {
         geo_call_global_function_nodes(&gCurrentArea->graphNode->node, GEO_CONTEXT_AREA_UNLOAD);
-        gCurrentArea = NULL;
+        gCurrentArea             = NULL;
         gWarpTransition.isActive = FALSE;
     }
     for (i = 0; i < 8; i++) {
@@ -204,7 +202,7 @@ void clear_area_graph_nodes(void) {
 }
 
 void load_area(s32 index) {
-    if (gCurrentArea == NULL && gAreaData[index].graphNode != NULL) {
+    if ((gCurrentArea == NULL) && (gAreaData[index].graphNode != NULL)) {
         gCurrentArea   = &gAreaData[index];
         gCurrAreaIndex = gCurrentArea->index;
         if (gCurrentArea->terrainData != NULL) load_area_terrain(index, gCurrentArea->terrainData,
@@ -236,7 +234,7 @@ void load_mario_area(void) {
 }
 
 void unload_mario_area(void) {
-    if (gCurrentArea != NULL && (gCurrentArea->flags & AREA_FLAG_LOAD)) {
+    if ((gCurrentArea != NULL) && (gCurrentArea->flags & AREA_FLAG_LOAD)) {
         unload_objects_from_area(gMarioSpawnInfo->activeAreaIndex);
         gCurrentArea->flags &= ~AREA_FLAG_LOAD;
         if (gCurrentArea->flags == AREA_FLAG_UNLOAD) unload_area();
@@ -293,9 +291,9 @@ void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue) {
         gWarpTransition.data.texTimer  = 0;
         if (transType & 1) { // Is the image fading in?
             gWarpTransition.data.startTexRadius = GFX_DIMENSIONS_FULL_RADIUS;
-            gWarpTransition.data.endTexRadius   = (transType >= 0x0F ? 16 : 0);
+            gWarpTransition.data.endTexRadius   = ((transType >= 0x0F) ? 16 : 0);
         } else { // The image is fading out. (Reverses start & end circles)
-            gWarpTransition.data.startTexRadius = (transType >= 0x0E ? 16 : 0);
+            gWarpTransition.data.startTexRadius = ((transType >= 0x0E) ? 16 : 0);
             gWarpTransition.data.endTexRadius   = GFX_DIMENSIONS_FULL_RADIUS;
         }
     }
@@ -333,15 +331,13 @@ const Gfx dl_draw_screen_shade_box[] = {
 
 void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
     create_dl_translation_matrix(G_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
-
     // This is a bit weird. It reuses the dialog text box (width 130, height -80),
     // so scale to at least fit the screen.
 #ifndef WIDESCREEN
     create_dl_scale_matrix(G_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
 #else
-    create_dl_scale_matrix(G_MTX_NOPUSH, GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
+    create_dl_scale_matrix(G_MTX_NOPUSH, ((GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT) / 130.0f), 3.0f, 1.0f);
 #endif
-
     gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
     gSPDisplayList(gDisplayListHead++, dl_draw_screen_shade_box);
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
@@ -359,8 +355,8 @@ void render_screen_overlay(void) {
     u32 a                = 0;
 #ifdef ENVIRONMENT_SCREEN_TINT
     f32 surfaceHeight    = -(gLakituState.oldPitch / 90.0f);
-    f32 waterLevel       = find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f;
-    f32 gasLevel         = find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f;
+    f32 waterLevel       = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f);
+    f32 gasLevel         = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f);
     if (gLakituState.pos[1] < waterLevel) {
         aWater = (waterLevel - gLakituState.pos[1]);
     } else if (gLakituState.pos[1] < gasLevel) {
@@ -370,7 +366,7 @@ void render_screen_overlay(void) {
     if (aWater > 63) aWater = 63;
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-    if (m->health < 0x100 && m->hurtShadeAlpha > 0) {
+    if ((m->health < 0x100) && (m->hurtShadeAlpha > 0)) {
         m->hurtShadeAlpha--;
     } else if (m->hurtShadeAlpha >= 4) {
         m->hurtShadeAlpha -= 4;
@@ -380,9 +376,9 @@ void render_screen_overlay(void) {
     a = aWater + aHurt;
     if (a > 0) {
 #ifdef DAMAGE_SCREEN_TINT
-        if (m->action == ACT_SHOCKED
-         || m->action == ACT_WATER_SHOCKED
-         || m->action == ACT_SHOCKWAVE_BOUNCE) vec3s_set(rgbHurt, 255, 238, 0);
+        if ((m->action == ACT_SHOCKED)
+         || (m->action == ACT_WATER_SHOCKED)
+         || (m->action == ACT_SHOCKWAVE_BOUNCE)) vec3s_set(rgbHurt, 255, 238, 0);
 #endif
         rgb[0] = ((rgbWater[0] * aWater) + (rgbHurt[0] * aHurt))/a;
         rgb[1] = ((rgbWater[1] * aWater) + (rgbHurt[1] * aHurt))/a;
@@ -402,10 +398,8 @@ void render_screen_overlay(void) {
 void render_game(void) {
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
-
-        gSPViewport(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
-
-        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
+        gSPViewport(  gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
         render_hud();
 #ifdef ENABLE_SCREEN_TINT_EFFECTS
         render_screen_overlay();
@@ -414,21 +408,19 @@ void render_game(void) {
         render_text_labels();
         do_cutscene_handler();
         print_displaying_credits_entry();
-        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
         gMenuOptSelectIndex = render_menus_and_dialogs();
-
         if (gMenuOptSelectIndex != 0) gSaveOptSelectIndex = gMenuOptSelectIndex;
-
         if (gViewportClip != NULL) {
             make_viewport_clip_rect(gViewportClip);
         } else {
-            gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
+            gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
         }
         if (gWarpTransition.isActive) {
             if (gWarpTransDelay == 0) {
                 gWarpTransition.isActive = !render_screen_transition(0, gWarpTransition.type, gWarpTransition.time, &gWarpTransition.data);
                 if (!gWarpTransition.isActive) {
-                    if (gWarpTransition.type & 1) {
+                    if (gWarpTransition.type & 0x1) {
                         gWarpTransition.pauseRendering = TRUE;
                     } else {
                         set_warp_transition_rgb(0, 0, 0);
