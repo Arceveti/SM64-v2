@@ -75,6 +75,8 @@ build/*
 # Specific assets
 !/textures/segment2/shadow_quarter_circle_64.ia8.png
 !/textures/segment2/shadow_quarter_square_64.ia8.png
+!/textures/segment2/segment2.06000.rgba16.png
+!/textures/segment2/segment2.umlaut.rgba16.png
 !/textures/segment2/segment2.minus.rgba16.png
 !/textures/segment2/segment2.yellow_coin.rgba16.png
 !/textures/segment2/segment2.blue_coin.rgba16.png
