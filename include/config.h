@@ -426,7 +426,7 @@
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering
 // (Arceveti)
-#define COYOTE_TIME      8
+#define COYOTE_TIME      12
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor
 // issues on actual level boundaries, such as extra knockback
