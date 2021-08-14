@@ -39,12 +39,12 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
         case 0: play_sound(SOUND_MARIO_PUNCH_YAH, m->marioObj->header.gfx.cameraToObject); // fall through
         case 1:
             set_mario_animation(m, MARIO_ANIM_FIRST_PUNCH);
-            m->actionArg = is_anim_past_end(m) ? 2 : 1;
+            m->actionArg = (is_anim_past_end(m) ? 2 : 1);
             if (m->marioObj->header.gfx.animInfo.animFrame >= 2) {
                 if (mario_check_object_grab(m)) return TRUE;
                 m->flags |= MARIO_PUNCHING;
             }
-            if (m->actionArg == 2) m->marioBodyState->punchState = (0 << 6) | 4;
+            if (m->actionArg == 2) m->marioBodyState->punchState = 0x4; // ((0 << 6) | 0x4);
             break;
         case 2:
             set_mario_animation(m, MARIO_ANIM_FIRST_PUNCH_FAST);
@@ -55,9 +55,9 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
         case 3: play_sound(SOUND_MARIO_PUNCH_WAH, m->marioObj->header.gfx.cameraToObject); // fall through
         case 4:
             set_mario_animation(m, MARIO_ANIM_SECOND_PUNCH);
-            m->actionArg = is_anim_past_end(m) ? 5 : 4;
+            m->actionArg = (is_anim_past_end(m) ? 5 : 4);
             if (m->marioObj->header.gfx.animInfo.animFrame > 0) m->flags |= MARIO_PUNCHING;
-            if (m->actionArg == 5) m->marioBodyState->punchState = (1 << 6) | 4;
+            if (m->actionArg == 5) m->marioBodyState->punchState = ((1 << 6) | 0x4);
             break;
         case 5:
             set_mario_animation(m, MARIO_ANIM_SECOND_PUNCH_FAST);
@@ -68,15 +68,15 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
         case 6:
             play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
             animFrame = set_mario_animation(m, MARIO_ANIM_GROUND_KICK);
-            if (animFrame == 0) m->marioBodyState->punchState = (2 << 6) | 6;
-            if (animFrame >= 0 && animFrame < 8) m->flags |= MARIO_KICKING;
+            if (animFrame == 0) m->marioBodyState->punchState = ((2 << 6) | 0x6);
+            if ((animFrame >= 0) && (animFrame < 8)) m->flags |= MARIO_KICKING;
             if (is_anim_at_end(m)) set_mario_action(m, endAction, 0);
             break;
         case 9:
             play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
             set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
             animFrame = m->marioObj->header.gfx.animInfo.animFrame;
-            if (animFrame >= 2 && animFrame < 8) m->flags |= MARIO_TRIPPING;
+            if ((animFrame >= 2) && (animFrame < 8)) m->flags |= MARIO_TRIPPING;
             if (is_anim_at_end(m)) set_mario_action(m, crouchEndAction, 0);
             break;
     }
@@ -84,9 +84,9 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
 }
 
 s32 act_punching(struct MarioState *m) {
-    if (m->input & INPUT_STOMPED                        ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
-    if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
-    if (m->actionState == 0 && (m->input & INPUT_A_DOWN)) return set_mario_action(         m, ACT_JUMP_KICK       , 0);
+    if (m->input & INPUT_STOMPED                                                                 ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
+    if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m                         );
+    if ((m->actionState == 0) && (m->input & INPUT_A_DOWN)                                       ) return set_mario_action(         m, ACT_JUMP_KICK       , 0);
     m->actionState = 1;
     if (m->actionArg == 0) m->actionTimer = 7;
     mario_set_forward_vel(m, sPunchingForwardVelocities[m->actionTimer]);
@@ -99,7 +99,7 @@ s32 act_punching(struct MarioState *m) {
 s32 act_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
-    if (m->actionState == 0 && is_anim_at_end(m) && m->usedObj != NULL) {
+    if ((m->actionState == 0) && is_anim_at_end(m) && (m->usedObj != NULL)) {
         mario_grab_used_object(m);
         play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
         m->actionState = 1;
@@ -172,7 +172,7 @@ s32 act_stomach_slide_stop(struct MarioState *m) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-        return drop_and_set_mario_action(m, analog_stick_held_back(m, 0x4000) ? ACT_BACKWARD_ROLLOUT : (m->forwardVel >= 0.0f ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT), 0);
+        return drop_and_set_mario_action(m, (analog_stick_held_back(m, 0x4000) ? ACT_BACKWARD_ROLLOUT : ((m->forwardVel >= 0.0f) ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT)), 0);
     }
 #endif
     if (m->input & INPUT_STOMPED    ) return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
@@ -204,12 +204,12 @@ s32 act_holding_bowser(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
 #ifdef LENIENT_BOWSER_THROWS
         s16 camAngleToBomb;
-        s16 camYaw = m->area->camera->yaw + 0x8000;
+        s16 camYaw = (m->area->camera->yaw + 0x8000);
         struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, 0x4000, &camAngleToBomb);
-        if (bowserBomb != NULL && (m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) && abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
+        if ((bowserBomb != NULL) && ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) && (abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000)) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
 #endif
 #ifndef VERSION_JP
-        play_sound((m->angleVel[1] <= -0xE00 || m->angleVel[1] >= 0xE00) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
+        play_sound((((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO), m->marioObj->header.gfx.cameraToObject);
 #else
         play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
 #endif
@@ -244,20 +244,20 @@ s32 act_holding_bowser(struct MarioState *m) {
     spin             = m->faceAngle[1];
     m->faceAngle[1] += m->angleVel[1];
     // play sound on overflow
-    if (m->angleVel[1] <= -0x100 && spin < m->faceAngle[1]) {
+    if ((m->angleVel[1] <= -0x100) && (spin < m->faceAngle[1])) {
 #if ENABLE_RUMBLE
         queue_rumble_data(4, 20);
 #endif
         play_sound(SOUND_OBJ_BOWSER_SPINNING, m->marioObj->header.gfx.cameraToObject);
     }
-    if (m->angleVel[1] >= 0x100 && spin > m->faceAngle[1]) {
+    if ((m->angleVel[1] >= 0x100) && (spin > m->faceAngle[1])) {
 #if ENABLE_RUMBLE
         queue_rumble_data(4, 20);
 #endif
         play_sound(SOUND_OBJ_BOWSER_SPINNING, m->marioObj->header.gfx.cameraToObject);
     }
     stationary_ground_step(m);
-    m->marioObj->header.gfx.angle[0] = (m->angleVel[1] > 0x0) ? -m->angleVel[1] : m->angleVel[1];
+    m->marioObj->header.gfx.angle[0] = ((m->angleVel[1] > 0x0) ? -m->angleVel[1] : m->angleVel[1]);
     return FALSE;
 }
 
@@ -281,7 +281,7 @@ s32 act_releasing_bowser(struct MarioState *m) {
 }
 
 s32 check_common_object_cancels(struct MarioState *m) {
-    f32 waterSurface = m->waterLevel - 100;
+    f32 waterSurface = (m->waterLevel - 100.0f);
     if (m->pos[1] < waterSurface ) return set_water_plunge_action(  m);
     if (m->input & INPUT_SQUISHED) return drop_and_set_mario_action(m, ACT_SQUISHED      , 0);
     if (m->health < 0x100        ) return drop_and_set_mario_action(m, ACT_STANDING_DEATH, 0);

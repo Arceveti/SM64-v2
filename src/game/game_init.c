@@ -334,9 +334,9 @@ void draw_reset_bars(void) {
  * Initial settings for the first rendered frame.
  */
 void render_init(void) {
-    gIsConsole = (IO_READ(DPC_PIPEBUSY_REG));
-    gBorderHeight = gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR;
-    gGfxPool = &gGfxPools[0];
+    gIsConsole    = (IO_READ(DPC_PIPEBUSY_REG) != 0);
+    gBorderHeight = (gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR);
+    gGfxPool      = &gGfxPools[0];
     set_segment_base_addr(1,  gGfxPool->buffer);
     gGfxSPTask       =       &gGfxPool->spTask;
     gDisplayListHead =        gGfxPool->buffer;

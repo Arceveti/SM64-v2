@@ -832,19 +832,19 @@ void cur_obj_get_dropped(void) {
     cur_obj_move_after_thrown_or_dropped(0.0f, 0.0f);
 }
 
-void cur_obj_set_model(s32 modelID) {
+void cur_obj_set_model(ModelID modelID) {
     o->header.gfx.sharedChild = gLoadedGraphNodes[modelID];
 }
 
-void obj_set_model(struct Object *obj, s32 modelID) {
+void obj_set_model(struct Object *obj, ModelID modelID) {
     obj->header.gfx.sharedChild = gLoadedGraphNodes[modelID];
 }
 
-s32 cur_obj_has_model(u16 modelID) {
+s32 cur_obj_has_model(ModelID modelID) {
     return (o->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
 }
 
-s32 obj_has_model(struct Object *obj, u16 modelID) {
+s32 obj_has_model(struct Object *obj, ModelID modelID) {
     return (obj->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
 }
 

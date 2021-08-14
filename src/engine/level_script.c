@@ -345,7 +345,7 @@ static void level_cmd_23(void) {
         s32 i;
         f32 f;
     } arg2;
-    ModelID model =       CMD_GET(s16, 2) & 0x0FFF;
+    ModelID model =       CMD_GET(ModelID, 2) & 0x0FFF;
     s16   arg0H   = ((u16)CMD_GET(s16, 2)) >> 12;
     void *arg1    =       CMD_GET(void *, 4);
     // load an f32, but using an integer load instruction for some reason (hence the union)

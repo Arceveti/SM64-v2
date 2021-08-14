@@ -106,10 +106,10 @@ Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED
     s16  sfx = 0;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (gPlayer1Controller->controllerData != NULL && !gWarpTransition.isActive) gd_copy_p1_contpad(gPlayer1Controller->controllerData);
-        gfx = (Gfx *) PHYSICAL_TO_VIRTUAL(gdm_gettestdl(asGenerated->parameter));
+        if ((gPlayer1Controller->controllerData != NULL) && !gWarpTransition.isActive) gd_copy_p1_contpad(gPlayer1Controller->controllerData);
+        gfx                    = (Gfx *) PHYSICAL_TO_VIRTUAL(gdm_gettestdl(asGenerated->parameter));
         gGoddardVblankCallback = gd_vblank;
-        sfx = gd_sfx_to_play();
+        sfx                    = gd_sfx_to_play();
         play_menu_sounds(sfx);
     }
     return gfx;
@@ -118,7 +118,7 @@ Gfx *geo_draw_mario_head_goddard(s32 callContext, struct GraphNode *node, UNUSED
 
 static void toad_message_faded(void) {
     if (gCurrentObject->oDistanceToMario > 700.0f) gCurrentObject->oToadMessageRecentlyTalked = FALSE;
-    if (!gCurrentObject->oToadMessageRecentlyTalked && gCurrentObject->oDistanceToMario < 600.0f) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
+    if (!gCurrentObject->oToadMessageRecentlyTalked && (gCurrentObject->oDistanceToMario < 600.0f)) gCurrentObject->oToadMessageState = TOAD_MESSAGE_OPACIFYING;
 }
 
 static void toad_message_opaque(void) {
@@ -138,7 +138,7 @@ static void toad_message_talking(void) {
     if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_DOWN, 
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, gCurrentObject->oToadMessageDialogId)) {
         gCurrentObject->oToadMessageRecentlyTalked = TRUE;
-        gCurrentObject->oToadMessageState = TOAD_MESSAGE_FADING;
+        gCurrentObject->oToadMessageState          = TOAD_MESSAGE_FADING;
         switch (gCurrentObject->oToadMessageDialogId) {
             case TOAD_STAR_1_DIALOG: gCurrentObject->oToadMessageDialogId = TOAD_STAR_1_DIALOG_AFTER; bhv_spawn_star_no_level_exit(0); break;
             case TOAD_STAR_2_DIALOG: gCurrentObject->oToadMessageDialogId = TOAD_STAR_2_DIALOG_AFTER; bhv_spawn_star_no_level_exit(1); break;
@@ -169,9 +169,9 @@ void bhv_toad_message_loop(void) {
 }
 
 void bhv_toad_message_init(void) {
-    s32 saveFlags = save_file_get_flags();
-    s32 starCount = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
-    s32 dialogId = (gCurrentObject->oBehParams >> 24) & 0xFF;
+    s32 saveFlags   = save_file_get_flags();
+    s32 starCount   = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
+    s32 dialogId    = ((gCurrentObject->oBehParams >> 24) & 0xFF);
     s32 enoughStars = TRUE;
     switch (dialogId) {
         case TOAD_STAR_1_DIALOG: enoughStars = (starCount >= TOAD_STAR_1_REQUIREMENT); if (saveFlags & SAVE_FLAG_COLLECTED_TOAD_STAR_1) dialogId = TOAD_STAR_1_DIALOG_AFTER; break;
@@ -190,19 +190,19 @@ void bhv_toad_message_init(void) {
 
 static void star_door_unlock_spawn_particles(s16 angleOffset) {
     struct Object *sparkleParticle = spawn_object(gCurrentObject, 0, bhvSparkleSpawn);
-    sparkleParticle->oPosX += 100.0f * sins((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset);
-    sparkleParticle->oPosZ += 100.0f * coss((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset);
+    sparkleParticle->oPosX += (100.0f * sins((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset));
+    sparkleParticle->oPosZ += (100.0f * coss((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset));
     // Particles are spawned lower each frame
-    sparkleParticle->oPosY -= gCurrentObject->oUnlockDoorStarTimer * 10.0f;
+    sparkleParticle->oPosY -= (gCurrentObject->oUnlockDoorStarTimer * 10.0f);
 }
 
 void bhv_unlock_door_star_init(void) {
-    gCurrentObject->oUnlockDoorStarState = UNLOCK_DOOR_STAR_RISING;
-    gCurrentObject->oUnlockDoorStarTimer = 0;
+    gCurrentObject->oUnlockDoorStarState  = UNLOCK_DOOR_STAR_RISING;
+    gCurrentObject->oUnlockDoorStarTimer  = 0;
     gCurrentObject->oUnlockDoorStarYawVel = 0x1000;
-    gCurrentObject->oPosX += 30.0f * sins(gMarioState->faceAngle[1] - 0x4000);
+    gCurrentObject->oPosX += (30.0f * sins(gMarioState->faceAngle[1] - 0x4000));
     gCurrentObject->oPosY += 160.0f;
-    gCurrentObject->oPosZ += 30.0f * coss(gMarioState->faceAngle[1] - 0x4000);
+    gCurrentObject->oPosZ += (30.0f * coss(gMarioState->faceAngle[1] - 0x4000));
     gCurrentObject->oMoveAngleYaw = 0x7800;
     obj_scale(gCurrentObject, 0.5f);
 }
@@ -213,9 +213,9 @@ void bhv_unlock_door_star_loop(void) {
     if (gCurrentObject->oUnlockDoorStarYawVel < 0x2400) gCurrentObject->oUnlockDoorStarYawVel += 0x60;
     switch (gCurrentObject->oUnlockDoorStarState) {
         case UNLOCK_DOOR_STAR_RISING:
-            gCurrentObject->oPosY += 3.4f; // Raise the star up in the air
+            gCurrentObject->oPosY         += 3.4f; // Raise the star up in the air
             gCurrentObject->oMoveAngleYaw += gCurrentObject->oUnlockDoorStarYawVel; // Apply yaw velocity
-            obj_scale(gCurrentObject, gCurrentObject->oUnlockDoorStarTimer / 50.0f + 0.5f); // Scale the star to be bigger
+            obj_scale(gCurrentObject, ((gCurrentObject->oUnlockDoorStarTimer / 50.0f) + 0.5f)); // Scale the star to be bigger
             if (++gCurrentObject->oUnlockDoorStarTimer == 30) {
                 gCurrentObject->oUnlockDoorStarTimer = 0;
                 gCurrentObject->oUnlockDoorStarState++; // Sets state to UNLOCK_DOOR_STAR_WAITING
@@ -225,7 +225,7 @@ void bhv_unlock_door_star_loop(void) {
             gCurrentObject->oMoveAngleYaw += gCurrentObject->oUnlockDoorStarYawVel; // Apply yaw velocity
             if (++gCurrentObject->oUnlockDoorStarTimer == 30) {
                 play_sound(SOUND_MENU_STAR_SOUND, gCurrentObject->header.gfx.cameraToObject); // Play final sound
-                cur_obj_hide();                                            // Hide the object
+                cur_obj_hide(); // Hide the object
                 gCurrentObject->oUnlockDoorStarTimer = 0;
                 gCurrentObject->oUnlockDoorStarState++; // Sets state to UNLOCK_DOOR_STAR_SPAWNING_PARTICLES
             }
@@ -255,13 +255,13 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
     Gfx *gfx;
     Gfx *gfxHead = NULL;
     if (alpha == 255) {
-        node->fnNode.node.flags = (node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8);
+        node->fnNode.node.flags = ((node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8));
         gfxHead = alloc_display_list(2 * sizeof(*gfxHead));
-        gfx = gfxHead;
+        gfx     = gfxHead;
     } else {
-        node->fnNode.node.flags = (node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
+        node->fnNode.node.flags = ((node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
         gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
-        gfx = gfxHead;
+        gfx     = gfxHead;
         gDPSetAlphaCompare(gfx++, G_AC_DITHER);
     }
     gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
@@ -278,7 +278,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
     s16 alpha;
     if (callContext == GEO_CONTEXT_RENDER) {
-        alpha = (bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 255;
+        alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 0xFF);
         gfx   = make_gfx_mario_alpha(asGenerated, alpha);
     }
     return gfx;
@@ -308,7 +308,7 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     s16 blinkFrame;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->eyeState == 0) {
-            blinkFrame = ((switchCase->numCases * 32 + gAreaUpdateCounter) >> 1) & 0x1F;
+            blinkFrame = (((switchCase->numCases * 32 + gAreaUpdateCounter) >> 1) & 0x1F);
             switchCase->selectedCase = (blinkFrame < 7) ? gMarioBlinkAnimation[blinkFrame] : 0;
         } else {
             switchCase->selectedCase = bodyState->eyeState - 1;
@@ -325,7 +325,7 @@ Gfx *geo_move_mario_part_from_parent(s32 callContext, UNUSED struct GraphNode *n
     struct Object *obj;
     if (callContext == GEO_CONTEXT_RENDER) {
         obj = (struct Object *) gCurGraphNodeObject;
-        if (obj == gMarioObject && obj->prevObj != NULL) {
+        if ((obj == gMarioObject) && (obj->prevObj != NULL)) {
             create_transformation_from_matrices(mtx2, mtx, *gCurGraphNodeCamera->matrixPtr);
             obj_update_pos_from_parent_transformation(mtx2, obj->prevObj);
             obj_set_gfx_pos_from_pos(obj->prevObj);
@@ -343,10 +343,10 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
     s32 action = bodyState->action;
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
-        if (action != ACT_BUTT_SLIDE
-         && action != ACT_HOLD_BUTT_SLIDE
-         && action != ACT_WALKING
-         && action != ACT_RIDING_SHELL_GROUND) vec3s_copy(bodyState->torsoAngle, gVec3sZero);
+        if ((action != ACT_BUTT_SLIDE)
+         && (action != ACT_HOLD_BUTT_SLIDE)
+         && (action != ACT_WALKING)
+         && (action != ACT_RIDING_SHELL_GROUND)) vec3s_copy(bodyState->torsoAngle, gVec3sZero);
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
         rotNode->rotation[2] = bodyState->torsoAngle[0];
@@ -363,7 +363,7 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
     s32 action                             = bodyState->action;
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
-        struct Camera *camera = gCurGraphNodeCamera->config.camera;
+        struct Camera            *camera  = gCurGraphNodeCamera->config.camera;
         if (camera->mode == CAMERA_MODE_C_UP) {
             rotNode->rotation[0] = gPlayerCameraState->headRotation[1];
             rotNode->rotation[2] = gPlayerCameraState->headRotation[0];
@@ -392,9 +392,9 @@ Gfx *geo_switch_mario_hand(s32 callContext, struct GraphNode *node, UNUSED Mat4 
             switchCase->selectedCase = ((bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING) != 0);
         } else {
             if (switchCase->numCases == 0) {
-                switchCase->selectedCase = (bodyState->handState < 5) ? bodyState->handState : MARIO_HAND_OPEN;
+                switchCase->selectedCase = ((bodyState->handState < 5) ? bodyState->handState : MARIO_HAND_OPEN);
             } else {
-                switchCase->selectedCase = (bodyState->handState < 2) ? bodyState->handState : MARIO_HAND_FISTS;
+                switchCase->selectedCase = ((bodyState->handState < 2) ? bodyState->handState : MARIO_HAND_FISTS);
             }
         }
     }
@@ -416,12 +416,12 @@ Gfx *geo_mario_hand_foot_scaler(s32 callContext, struct GraphNode *node, UNUSED 
     struct MarioBodyState     *bodyState   = &gBodyStates[0];
     if (callContext == GEO_CONTEXT_RENDER) {
         scaleNode->scale = 1.0f;
-        if (asGenerated->parameter == bodyState->punchState >> 6) {
-            if (sMarioAttackAnimCounter != gAreaUpdateCounter && (bodyState->punchState & 0x3F) > 0) {
+        if (asGenerated->parameter == (bodyState->punchState >> 6)) {
+            if ((sMarioAttackAnimCounter != gAreaUpdateCounter) && ((bodyState->punchState & 0x3F) > 0)) {
                 bodyState->punchState--;
                 sMarioAttackAnimCounter = gAreaUpdateCounter;
             }
-            scaleNode->scale = gMarioAttackScaleAnimation[asGenerated->parameter * 6 + (bodyState->punchState & 0x3F)] / 10.0f;
+            scaleNode->scale = (gMarioAttackScaleAnimation[(asGenerated->parameter * 6) + (bodyState->punchState & 0x3F)] / 10.0f);
         }
     }
     return NULL;
@@ -449,8 +449,8 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     const u32 lakituMaxH = lakituMaxW >> 1;
 #endif
     if (callContext == GEO_CONTEXT_RENDER) {
-        switchCase->selectedCase = bodyState->modelState >> 8;
-        if (bodyState->modelState & MODEL_STATE_METAL && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
+        switchCase->selectedCase = (bodyState->modelState >> 8);
+        if ((bodyState->modelState & MODEL_STATE_METAL) && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
             u16 *metalTexture = segmented_to_virtual(mario_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
@@ -461,8 +461,8 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             dist    = max(min(dist, min(lakituMaxW, lakituMaxH)), 0.0f);
             lakituW = (lakituMaxW - (dist * 2.0f));//*sins(pitch);
             lakituH = (lakituMaxH - (dist       ));//*max(coss(yaw), 0.5f);
-            lakituX = max(((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY))-lakituW       ), 0);
-            lakituY = max(((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX))-lakituH * 0.5f), 0);
+            lakituX = max(((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        ), 0);
+            lakituY = max(((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f)), 0);
 #endif
             generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -491,7 +491,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             lakituW = (64 - (dist       * 2.0f));
             lakituH = (32 - (dist             ));
             lakituX = (32 - (lakituW    * 0.5f));
-            lakituY = lakituX - 16;
+            lakituY = (lakituX - 16);
 #endif
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -525,10 +525,10 @@ Gfx *geo_switch_mario_cap_on_off(s32 callContext, struct GraphNode *node, UNUSED
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
     if (callContext == GEO_CONTEXT_RENDER) {
-        switchCase->selectedCase = bodyState->capState & 1;
+        switchCase->selectedCase = (bodyState->capState & 0x1);
         while (next != node) {
             if (next->type == GRAPH_NODE_TYPE_TRANSLATION_ROTATION) {
-                if (bodyState->capState & 2) {
+                if (bodyState->capState & 0x2) {
                     next->flags |=  GRAPH_RENDER_ACTIVE;
                 } else {
                     next->flags &= ~GRAPH_RENDER_ACTIVE;
@@ -550,11 +550,11 @@ Gfx *geo_mario_rotate_wing_cap_wings(s32 callContext, struct GraphNode *node, UN
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
         if (!gBodyStates[asGenerated->parameter >> 1].wingFlutter) {
-            rotX = (coss((gAreaUpdateCounter & 0xF) << 12) + 1.0f) * 4096.0f;
+            rotX = ((coss((gAreaUpdateCounter & 0xF) << 12) + 1.0f) * 4096.0f);
         } else {
-            rotX = (coss((gAreaUpdateCounter & 0x7) << 13) + 1.0f) * 6144.0f;
+            rotX = ((coss((gAreaUpdateCounter & 0x7) << 13) + 1.0f) * 6144.0f);
         }
-        rotNode->rotation[0] = (asGenerated->parameter & 1) ? rotX : -rotX;
+        rotNode->rotation[0] = ((asGenerated->parameter & 0x1) ? rotX : -rotX);
     }
     return NULL;
 }
@@ -571,9 +571,9 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *node, Mat
         if (marioState->heldObj != NULL) {
             asHeldObj->objNode = marioState->heldObj;
             switch (marioState->marioBodyState->grabPos) {
-                case GRAB_POS_LIGHT_OBJ: vec3s_set(asHeldObj->translation,  50,    0, (marioState->action & ACT_FLAG_THROWING) ? 0 : 100); break;
-                case GRAB_POS_HEAVY_OBJ: vec3s_set(asHeldObj->translation, 145, -173,                                                180); break;
-                case GRAB_POS_BOWSER:    vec3s_set(asHeldObj->translation,  80, -270,                                               1260); break;
+                case GRAB_POS_LIGHT_OBJ: vec3s_set(asHeldObj->translation,  50,    0, ((marioState->action & ACT_FLAG_THROWING) ? 0 : 100)); break;
+                case GRAB_POS_HEAVY_OBJ: vec3s_set(asHeldObj->translation, 145, -173,                                                  180); break;
+                case GRAB_POS_BOWSER:    vec3s_set(asHeldObj->translation,  80, -270,                                                 1260); break;
             }
         }
     } else if (callContext == GEO_CONTEXT_HELD_OBJ) {
@@ -614,8 +614,8 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos  );
                 vec3f_copy(gMirrorMario.scale, mario->header.gfx.scale);
                 gMirrorMario.animInfo        = mario->header.gfx.animInfo;
-                mirroredX                    = MIRROR_X - gMirrorMario.pos[0];
-                gMirrorMario.pos[0]          = mirroredX + MIRROR_X;
+                mirroredX                    = (MIRROR_X - gMirrorMario.pos[0]);
+                gMirrorMario.pos[0]          = (mirroredX + MIRROR_X);
                 gMirrorMario.angle[1]        = -gMirrorMario.angle[1];
                 gMirrorMario.scale[0]       *= -1.0f;
                 ((struct GraphNode *) &gMirrorMario)->flags |=  0x1;
@@ -634,7 +634,7 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
 Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     Gfx *gfx = NULL;
-    if (callContext == GEO_CONTEXT_RENDER && gCurGraphNodeObject == &gMirrorMario) {
+    if ((callContext == GEO_CONTEXT_RENDER) && (gCurGraphNodeObject == &gMirrorMario)) {
         gfx = alloc_display_list(3 * sizeof(*gfx));
         if (asGenerated->parameter == 0) {
             gSPClearGeometryMode(&gfx[0], G_CULL_BACK );
@@ -644,7 +644,7 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
             gSPSetGeometryMode(  &gfx[1], G_CULL_BACK );
         }
         gSPEndDisplayList(&gfx[2]);
-        asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8);
+        asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8));
     }
     return gfx;
 }

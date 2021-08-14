@@ -473,12 +473,8 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
     s32 result = AIR_STEP_NONE;
     s16 wallDYaw;
 #ifndef WALL_SLIDE
-    s16 oldWallDYaw, absWallDYaw;
-    if (m->wall != NULL) {
-        oldWallDYaw = abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]);
-    } else {
-        oldWallDYaw = 0;
-    }
+    s16 absWallDYaw;
+    s16 oldWallDYaw = ((m->wall != NULL) ? abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]) : 0x0);
 #endif
     for (i = 0; i < wallData->numWalls; i++) {
         if (wallData->walls[i] != NULL) {
@@ -514,7 +510,6 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
 
 s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepArg) {
 #ifdef BETTER_CEILING_HANDLING
-    s16 ceilAngle, ceilDYaw;
     f32 ceilSteepness;
 #endif
 #if NULL_FLOOR_STEPS > 0
@@ -601,9 +596,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
         } else {
             ceilSteepness = sqrtf((ceil->normal.x * ceil->normal.x) + (ceil->normal.z * ceil->normal.z));
-            ceilAngle     = atan2s(ceil->normal.z,  ceil->normal.x);
-            ceilDYaw      = (ceilAngle - m->marioObj->oMoveAngleYaw);
-            if ((ceilDYaw >= -0x4000) && (ceilDYaw <= 0x4000)) {
+            if (abs_angle_diff(atan2s(ceil->normal.z,  ceil->normal.x), m->marioObj->oMoveAngleYaw) <= 0x4000) {
                 if (m->vel[1] > 0.0f) {
                     m->slideVelX += (ceil->normal.x * m->vel[1] * ceilSteepness);
                     m->slideVelZ += (ceil->normal.z * m->vel[1] * ceilSteepness);
@@ -626,7 +619,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
  #endif
     }
 #else
-    if (nextPos[1] + 160.0f > ceilHeight) {
+    if ((nextPos[1] + 160.0f) > ceilHeight) {
         if (m->vel[1] >= 0.0f) {
             m->vel[1]  = 0.0f;
             //! Uses referenced ceiling instead of ceil (ceiling hang upwarp)
@@ -663,7 +656,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
             m->floorHeight  = ledgePos[1];
             m->floorAngle   = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
             m->faceAngle[0] = 0x0;
-            m->faceAngle[1] = atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + 0x8000;
+            m->faceAngle[1] = (atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + 0x8000);
         } else {
             vec3f_copy(m->pos, nextPos);
             m->floor        = floor;
@@ -690,16 +683,14 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     m->floorHeight  = floorHeight;
     if ((upperWall != NULL) || (lowerWall != NULL)) {
         m->wall = ((upperWall != NULL) ? upperWall : lowerWall);
-        wallDYaw = (atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1]);
+        wallDYaw = abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]);
         if (m->wall->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
  #ifdef WALL_SLIDE
-    if (((wallDYaw < -0x5000) || (wallDYaw > 0x5000)) && (m->vel[1] <= 0)) {
+        if (wallDYaw > 0x5000) && (m->vel[1] <= 0)) {
+ #elif WALLKICKS_46_DEGREES
+        if (wallDYaw > 0x5B00) { // 5F4A?
  #else
-  #ifdef WALLKICKS_46_DEGREES
-        if ((wallDYaw < -0x5F00) || (wallDYaw > 0x5700)) {
-  #else
-        if ((wallDYaw < -0x6000) || (wallDYaw > 0x6000)) {
-  #endif
+        if (wallDYaw > 0x6000) {
  #endif
             m->flags |= MARIO_AIR_HIT_WALL;
             return AIR_STEP_HIT_WALL;
@@ -748,9 +739,9 @@ void apply_gravity(struct MarioState *m) {
 #ifdef WALL_SLIDE
     } else if (m->action == ACT_WALL_SLIDE) {
         m->vel[1] -= 3.2f;
-        if (m->vel[1] < -TERMINAL_GRAVITY_VELOCITY * 0.5f) m->vel[1] = -TERMINAL_GRAVITY_VELOCITY*0.5f;
+        if (m->vel[1] < (-TERMINAL_GRAVITY_VELOCITY * 0.5f)) m->vel[1] = -TERMINAL_GRAVITY_VELOCITY*0.5f;
 #endif
-    } else if (m->action == ACT_LAVA_BOOST || m->action == ACT_FALL_AFTER_STAR_GRAB) {
+    } else if ((m->action == ACT_LAVA_BOOST) || (m->action == ACT_FALL_AFTER_STAR_GRAB)) {
         m->vel[1] -= 3.2f;
         if (m->vel[1] < -65.0f) m->vel[1] = -65.0f;
     } else if (m->action == ACT_GETTING_BLOWN) {
@@ -856,13 +847,13 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
 // They had these functions the whole time and never used them? Lol
 
 void set_vel_from_pitch_and_yaw(struct MarioState *m) {
-    m->vel[0] = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
-    m->vel[1] = m->forwardVel * sins(m->faceAngle[0]);
-    m->vel[2] = m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
+    m->vel[0] = (m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]));
+    m->vel[1] = (m->forwardVel * sins(m->faceAngle[0])                        );
+    m->vel[2] = (m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]));
 }
 
 void set_vel_from_yaw(struct MarioState *m) {
-    m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
+    m->vel[0] = m->slideVelX = (m->forwardVel * sins(m->faceAngle[1]));
     m->vel[1] = 0.0f;
-    m->vel[2] = m->slideVelZ = m->forwardVel * coss(m->faceAngle[1]);
+    m->vel[2] = m->slideVelZ = (m->forwardVel * coss(m->faceAngle[1]));
 }

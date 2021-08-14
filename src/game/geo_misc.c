@@ -78,13 +78,11 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
     s32 flags;
     struct GraphNodeGenerated *generatedNode;
     Gfx *displayListHead = NULL;
-    Gfx *displayList = NULL;
-
+    Gfx *displayList     = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
         flags = save_file_get_flags();
         if (gHudDisplay.stars >= 10 && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
             displayList = alloc_display_list(2 * sizeof(*displayList));
-
             if (displayList == NULL) {
                 return NULL;
             } else {
