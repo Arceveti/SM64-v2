@@ -21,9 +21,7 @@ static struct ObjectHitbox sAmpHitbox = {
  * Homing amp initialization function.
  */
 void bhv_homing_amp_init(void) {
-    o->oHomeX         = o->oPosX;
-    o->oHomeY         = o->oPosY;
-    o->oHomeZ         = o->oPosZ;
+    vec3f_copy(&o->oHomeVec, &o->oPosVec);
     o->oGravity       = 0.0f;
     o->oFriction      = 1.0f;
     o->oBuoyancy      = 1.0f;
@@ -46,7 +44,7 @@ static void check_amp_attack(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         // This function is used for both normal amps and homing amps,
         // AMP_ACT_ATTACK_COOLDOWN == HOMING_AMP_ACT_ATTACK_COOLDOWN
-        o->oAction = AMP_ACT_ATTACK_COOLDOWN;
+        o->oAction         = AMP_ACT_ATTACK_COOLDOWN;
         // Clear interact status
         o->oInteractStatus = INT_STATUS_NONE;
     }
@@ -87,10 +85,10 @@ static void homing_amp_appear_loop(void) {
  */
 static void homing_amp_chase_loop(void) {
     // Lock on to Mario if he ever goes within 11.25 degrees of the amp's line of sight
-    if ((o->oAngleToMario - 0x400 < o->oMoveAngleYaw)
-        && (o->oMoveAngleYaw < o->oAngleToMario + 0x400)) {
+    if (((o->oAngleToMario - 0x400) < o->oMoveAngleYaw)
+        && (o->oMoveAngleYaw < (o->oAngleToMario + 0x400))) {
         o->oHomingAmpLockedOn = TRUE;
-        o->oTimer = 0;
+        o->oTimer             = 0;
     }
     // If the amp is locked on to Mario, start "chasing" him by moving
     // in a straight line at 15 units/second for 32 frames.
@@ -100,12 +98,11 @@ static void homing_amp_chase_loop(void) {
         // Mario's head. Mario's graphics' Y + 150 is around the top of his head.
         // Note that the average Y will slowly go down to approach his head if the amp
         // is above his head, but if the amp is below it will instantly snap up.
-        if (o->oHomingAmpAvgY > gMarioObject->header.gfx.pos[1] + 150.0f) {
+        if (o->oHomingAmpAvgY > (gMarioObject->header.gfx.pos[1] + 150.0f)) {
             o->oHomingAmpAvgY -= 10.0f;
         } else {
-            o->oHomingAmpAvgY = gMarioObject->header.gfx.pos[1] + 150.0f;
+            o->oHomingAmpAvgY = (gMarioObject->header.gfx.pos[1] + 150.0f);
         }
-
         if (o->oTimer >= 31) o->oHomingAmpLockedOn = FALSE;
     } else {
         // If the amp is not locked on to Mario, move forward at 10 units/second
@@ -133,9 +130,7 @@ static void homing_amp_give_up_loop(void) {
     o->oForwardVel = 15.0f;
     if (o->oTimer >= 151) {
         // Hide the amp and reset it back to its inactive state
-        o->oPosX = o->oHomeX;
-        o->oPosY = o->oHomeY;
-        o->oPosZ = o->oHomeZ;
+        vec3f_copy(&o->oPosVec, &o->oHomeVec);
         o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
         o->oAction        = HOMING_AMP_ACT_INACTIVE;
         o->oAnimState     = AMP_ANIM_STATE_OFF;
@@ -168,7 +163,7 @@ void bhv_homing_amp_loop(void) {
         case HOMING_AMP_ACT_INACTIVE:
             if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800)) {
                 // Make the amp start to appear, and un-hide it.
-                o->oAction = HOMING_AMP_ACT_APPEAR;
+                o->oAction                =  HOMING_AMP_ACT_APPEAR;
                 o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
             }
             break;
@@ -195,16 +190,14 @@ void bhv_homing_amp_loop(void) {
  * Circling amp initialization function.
  */
 void bhv_circling_amp_init(void) {
-    o->oHomeX     = o->oPosX;
-    o->oHomeY     = o->oPosY;
-    o->oHomeZ     = o->oPosZ;
+    vec3f_copy(&o->oHomeVec, &o->oPosVec);
     o->oAnimState = AMP_ANIM_STATE_ON;
     // Determine the radius of the circling amp's circle
     switch (o->oBehParams2ndByte) {
         case AMP_BP_ROT_RADIUS_200: o->oAmpRadiusOfRotation = 200.0f; break;
         case AMP_BP_ROT_RADIUS_300: o->oAmpRadiusOfRotation = 300.0f; break;
         case AMP_BP_ROT_RADIUS_400: o->oAmpRadiusOfRotation = 400.0f; break;
-        case AMP_BP_ROT_RADIUS_0: break;
+        case AMP_BP_ROT_RADIUS_0:                                     break;
     }
     // Choose a random point along the amp's circle.
     // The amp's move angle represents its angle along the circle.
@@ -221,7 +214,7 @@ static void fixed_circling_amp_idle_loop(void) {
     f32 xToMario       = gMarioObject->header.gfx.pos[0]          - o->oPosX;
     f32 yToMario       = gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY;
     f32 zToMario       = gMarioObject->header.gfx.pos[2]          - o->oPosZ;
-    s16 vAngleToMario  = atan2s(sqrtf(xToMario * xToMario + zToMario * zToMario), -yToMario);
+    s16 vAngleToMario  = atan2s(sqrtf((xToMario * xToMario) + (zToMario * zToMario)), -yToMario);
     obj_turn_toward_object(o, gMarioObject, O_FACE_ANGLE_YAW_INDEX, 0x1000);
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, vAngleToMario, 0x1000);
     // Oscillate 40 units up and down.
@@ -248,9 +241,9 @@ static void circling_amp_idle_loop(void) {
     // twice that of the fixed amp. In other words, circling amps will
     // oscillate twice as fast. Also, unlike all other amps, circling
     // amps oscillate 60 units around their average Y instead of 40.
-    o->oPosX          = o->oHomeX + sins(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
-    o->oPosZ          = o->oHomeZ + coss(o->oMoveAngleYaw) * o->oAmpRadiusOfRotation;
-    o->oPosY          = o->oHomeY + coss(o->oAmpYPhase * 0x8B0) * 30.0f;
+    o->oPosX          = (o->oHomeX + (sins(o->oMoveAngleYaw     ) * o->oAmpRadiusOfRotation));
+    o->oPosZ          = (o->oHomeZ + (coss(o->oMoveAngleYaw     ) * o->oAmpRadiusOfRotation));
+    o->oPosY          = (o->oHomeY + (coss(o->oAmpYPhase * 0x8B0) * 30.0f                  ));
     o->oMoveAngleYaw += 0x400;
     o->oFaceAngleYaw  = o->oMoveAngleYaw + 0x4000;
     // Handle attacks

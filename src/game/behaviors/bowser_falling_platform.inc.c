@@ -41,7 +41,7 @@ void falling_bowser_plat_act_fall(void) {
     Vec3f pos;
     s16 angle;
     f32 val;
-    if (o->oTimer == 0 || o->oTimer == 22) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_FALL);
+    if ((o->oTimer == 0) || (o->oTimer == 22)) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_FALL);
     if (o->oTimer < 22) {
         set_environmental_camera_shake(SHAKE_ENV_FALLING_BITS_PLAT);
         o->oVelY    =  8.0f;
@@ -49,16 +49,16 @@ void falling_bowser_plat_act_fall(void) {
     } else {
         o->oGravity = -4.0f;
     }
-    if (!(o->oTimer & 0x1) && o->oTimer < 14) {
-        angle = sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8);
-        val = -(o->oTimer / 2) * 290 + 1740;
+    if (!(o->oTimer & 0x1) && (o->oTimer < 14)) {
+        angle    = (sBowserFallingPlatform[o->oBehParams2ndByte].angle + (gDebugInfo[4][1] << 8));
+        val      = ((-(o->oTimer / 2) * 290) + 1740);
         vec3f_copy(pos, &o->oPosVec);
-        o->oPosX = sBowserFallingPlatform[o->oBehParams2ndByte].posX + sins(angle + 0x14B0) * val;
-        o->oPosZ = sBowserFallingPlatform[o->oBehParams2ndByte].posZ + coss(angle + 0x14B0) * val;
+        o->oPosX = (sBowserFallingPlatform[o->oBehParams2ndByte].posX + (sins(angle + 0x14B0) * val));
+        o->oPosZ = (sBowserFallingPlatform[o->oBehParams2ndByte].posZ + (coss(angle + 0x14B0) * val));
         o->oPosY = 307.0f;
         spawn_mist_particles_variable(4, 0, 100.0f);
-        o->oPosX = sBowserFallingPlatform[o->oBehParams2ndByte].posX + sins(angle - 0x14B0) * val;
-        o->oPosZ = sBowserFallingPlatform[o->oBehParams2ndByte].posZ + coss(angle - 0x14B0) * val;
+        o->oPosX = (sBowserFallingPlatform[o->oBehParams2ndByte].posX + (sins(angle - 0x14B0) * val));
+        o->oPosZ = (sBowserFallingPlatform[o->oBehParams2ndByte].posZ + (coss(angle - 0x14B0) * val));
         spawn_mist_particles_variable(4, 0, 100);
         vec3f_copy(&o->oPosVec, pos);
     }

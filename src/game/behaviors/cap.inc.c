@@ -28,7 +28,6 @@ void cap_despawn(void) {
 
 void cap_check_quicksand(void) {
     if (sObjFloor == NULL) return;
-
     switch (sObjFloor->type) {
         case SURFACE_DEATH_PLANE:
             o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
@@ -43,8 +42,8 @@ void cap_check_quicksand(void) {
         case SURFACE_SHALLOW_MOVING_QUICKSAND:
         case SURFACE_MOVING_QUICKSAND:
             o->oAction       = CAP_ACT_MOVING_QUICKSAND;
-            o->oMoveAngleYaw = (sObjFloor->force & 0xFF) << 8;
-            o->oForwardVel   = 8.0f + 2.0f * -((sObjFloor->force & 0xFF00) >> 8);
+            o->oMoveAngleYaw = ((sObjFloor->force & 0xFF) << 8);
+            o->oForwardVel   = (8.0f + (2.0f * -((sObjFloor->force & 0xFF00) >> 8)));
             break;
         case SURFACE_INSTANT_QUICKSAND:
             o->oAction     = CAP_ACT_INSTANT_QUICKSAND;
@@ -52,8 +51,8 @@ void cap_check_quicksand(void) {
             break;
         case SURFACE_INSTANT_MOVING_QUICKSAND:
             o->oAction       = CAP_ACT_INSTANT_MOVING_QUICKSAND;
-            o->oMoveAngleYaw = (sObjFloor->force & 0xFF) << 8;
-            o->oForwardVel   = 8.0f + 2.0f * -((sObjFloor->force & 0xFF00) >> 8);
+            o->oMoveAngleYaw = ((sObjFloor->force & 0xFF) << 8);
+            o->oForwardVel   = (8.0f + (2.0f * -((sObjFloor->force & 0xFF00) >> 8)));
             break;
     }
 }
@@ -92,7 +91,7 @@ void bhv_wing_cap_init(void) {
 
 void cap_scale_vertically(void) {
     o->oCapScaleAngle += 0x2000;
-    o->header.gfx.scale[1] = coss(o->oCapScaleAngle) * 0.3f + 0.7f;
+    o->header.gfx.scale[1] = ((coss(o->oCapScaleAngle) * 0.3f) + 0.7f);
     if (o->oCapScaleAngle == 0x10000) {
         o->oCapScaleAngle        = 0x0;
         o->oCapDoScaleVertically = 2;

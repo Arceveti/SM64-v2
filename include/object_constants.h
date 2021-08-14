@@ -344,6 +344,10 @@
     #define BOWSER_SUB_ACT_DEAD_DEFAULT_END_OVER            0x4
     #define BOWSER_SUB_ACT_DEAD_FINAL_END                   0xA
     #define BOWSER_SUB_ACT_DEAD_FINAL_END_OVER              0xB
+        /* BOWSER_ACT_INTRO_WALK */
+    #define BOWSER_SUB_ACT_INTRO_WALK_LOOK_UP               0x0
+    #define BOWSER_SUB_ACT_INTRO_WALK_SLOWLY                0x1
+    #define BOWSER_SUB_ACT_INTRO_WALK_STOP                  0x2
         /* BOWSER_ACT_CHARGE_MARIO */
     #define BOWSER_SUB_ACT_CHARGE_START                     0x0
     #define BOWSER_SUB_ACT_CHARGE_RUN                       0x1
@@ -405,6 +409,11 @@
     #define BOWSER_FLOATING_FLAME_SPAWN_RED_FLAME           0x0
     #define BOWSER_FLOATING_FLAME_SPAWN_BLUE_FLAME_1        0x1
     #define BOWSER_FLOATING_FLAME_SPAWN_BLUE_FLAME_2        0x2
+
+/* Bowser Key */
+    /* oAction */
+    #define BOWSER_KEY_ACT_BOUNCING                         0x0
+    #define BOWSER_KEY_ACT_LANDED                           0x1
 
 /* Bowser Key Cutscene */
     /* Animations */
@@ -2203,6 +2212,10 @@
     #define BOWSER_PUZZLE_ACT_SPAWN_PIECES                  0x0
     #define BOWSER_PUZZLE_ACT_WAIT_FOR_COMPLETE             0x1
     #define BOWSER_PUZZLE_ACT_DONE                          0x2
+    /* oBowserPuzzleCompletionFlags */
+    #define BOWSER_PUZZLE_COMPLETION_FLAGS_NONE             0x0
+    #define BOWSER_PUZZLE_COMPLETION_FLAG_MARIO_ON_PLATFORM 0x1
+    #define BOWSER_PUZZLE_COMPLETION_FLAG_PUZZLE_COMPLETE   0x2
 
 /* Bowser Puzzle Piece */
     /* oAction */

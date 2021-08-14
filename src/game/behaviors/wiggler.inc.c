@@ -160,33 +160,29 @@ void wiggler_init_segments(void) {
  void wiggler_update_segments(void) {
     struct ChainSegment *prevBodyPart;
     struct ChainSegment *bodyPart;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    s16 dpitch;
-    s16 dyaw;
-    f32 dxz;
+    f32 dx, dy, dz, dxz;
+    s16 dpitch, dyaw;
     s32 i;
     f32 segmentLength;
 
-    segmentLength = 35.0f * o->header.gfx.scale[0];
+    segmentLength = (35.0f * o->header.gfx.scale[0]);
 
     for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
         prevBodyPart = &o->oWigglerSegments[i - 1];
         bodyPart     = &o->oWigglerSegments[i    ];
 
-        dx = bodyPart->posX - prevBodyPart->posX;
-        dy = bodyPart->posY - prevBodyPart->posY;
-        dz = bodyPart->posZ - prevBodyPart->posZ;
+        dx = (bodyPart->posX - prevBodyPart->posX);
+        dy = (bodyPart->posY - prevBodyPart->posY);
+        dz = (bodyPart->posZ - prevBodyPart->posZ);
 
         // As the head turns, propagate this rotation backward if the difference
         // is more than 45 degrees
         dyaw = atan2s(-dz, -dx) - prevBodyPart->yaw;
         clamp_s16(&dyaw, -0x2000, 0x2000);
-        bodyPart->yaw = prevBodyPart->yaw + dyaw;
+        bodyPart->yaw = (prevBodyPart->yaw + dyaw);
 
         // As the head tilts, propagate the tilt backward
-        dxz = sqrtf(dx * dx + dz * dz); //! fast invsqrt?
+        dxz = sqrtf((dx * dx) + (dz * dz)); //! fast invsqrt?
         dpitch = atan2s(dxz, dy) - prevBodyPart->pitch;
         clamp_s16(&dpitch, -0x2000, 0x2000);
         bodyPart->pitch = prevBodyPart->pitch + dpitch;
@@ -194,22 +190,22 @@ void wiggler_init_segments(void) {
         // Set the body part's position relative to the previous body part's
         // position, using the current body part's angles. This means that the
         // head can rotate up to 45 degrees without the body moving
-        bodyPart->posY = segmentLength * sins(bodyPart->pitch) + prevBodyPart->posY;
-        dxz            = segmentLength * coss(bodyPart->pitch);
-        bodyPart->posX = prevBodyPart->posX - dxz * sins(bodyPart->yaw);
-        bodyPart->posZ = prevBodyPart->posZ - dxz * coss(bodyPart->yaw);
+        bodyPart->posY = (segmentLength * sins(bodyPart->pitch)) + prevBodyPart->posY;
+        dxz            = (segmentLength * coss(bodyPart->pitch));
+        bodyPart->posX = prevBodyPart->posX - (dxz * sins(bodyPart->yaw));
+        bodyPart->posZ = prevBodyPart->posZ - (dxz * coss(bodyPart->yaw));
     }
 }
 
 /**
- * Show text if necessary. Then walk toward mario if not at full health, and
+ * Show text if necessary. Then walk toward Mario if not at full health, and
  * otherwise wander in random directions.
- * If attacked by mario, enter either the jumped on or knockback action.
+ * If attacked by Mario, enter either the jumped on or knockback action.
  */
 static void wiggler_act_walk(void) {
     s16 yawTurnSpeed;
 
-    o->oWigglerWalkAnimSpeed = 0.06f * o->oForwardVel;
+    o->oWigglerWalkAnimSpeed = (0.06f * o->oForwardVel);
 
     // Update text if necessary
     if (o->oWigglerTextStatus < WIGGLER_TEXT_STATUS_COMPLETED_DIALOG) {
@@ -241,7 +237,7 @@ static void wiggler_act_walk(void) {
 
             if (obj_bounce_off_walls_edges_objects(&o->oWigglerTargetYaw)) {
                 //! If the wiggler could self-intersect, or intersect a different
-                //  non-mario object, this could potentially be used to force
+                //  non-Mario object, this could potentially be used to force
                 //  the wiggler to walk straight - past his usual radius
                 o->oWigglerWalkAwayFromWallTimer = random_linear_offset(30, 30);
             } else {

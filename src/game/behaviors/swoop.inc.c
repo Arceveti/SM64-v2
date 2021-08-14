@@ -20,7 +20,7 @@ static struct ObjectHitbox sSwoopHitbox = {
 };
 
 /**
- * If necessary, grow to full size. Wait for mario to enter range, then turn
+ * If necessary, grow to full size. Wait for Mario to enter range, then turn
  * toward him and enter the move action.
  */
 static void swoop_act_idle(void) {
@@ -38,8 +38,8 @@ static void swoop_act_idle(void) {
 }
 
 /**
- * Swoop downward toward mario. Stop moving downward and speed up after reaching
- * him. Return to home once mario is far away.
+ * Swoop downward toward Mario. Stop moving downward and speed up after reaching
+ * him. Return to home once Mario is far away.
  */
 static void swoop_act_move(void) {
     cur_obj_init_animation_with_accel_and_sound(SWOOP_ANIM_FLY, 2.0f);
@@ -52,7 +52,7 @@ static void swoop_act_move(void) {
             o->oVelY       = -10.0f;
         }
     } else if (cur_obj_mario_far_away()) {
-        // If mario far away, reset
+        // If Mario far away, reset
         o->oAction = SWOOP_ACT_IDLE;
         cur_obj_set_pos_to_home();
         o->header.gfx.scale[0] = o->oForwardVel = o->oVelY = 0.0f;
@@ -61,8 +61,8 @@ static void swoop_act_move(void) {
         if (o->oSwoopBonkCountdown != 0) {
             o->oSwoopBonkCountdown--;
         } else if (o->oVelY != 0.0f) {
-            // If we're not done swooping, turn toward mario. When between
-            // 0 and 200 units above mario, increase speed and stop swooping
+            // If we're not done swooping, turn toward Mario. When between
+            // 0 and 200 units above Mario, increase speed and stop swooping
             o->oSwoopTargetYaw = o->oAngleToMario;
             if (o->oPosY < gMarioObject->oPosY + 200.0f) {
                 if (obj_y_vel_approach(0.0f, 0.5f)) o->oForwardVel *= 2.0f;
@@ -75,8 +75,8 @@ static void swoop_act_move(void) {
             o->oSwoopBonkCountdown = 30;
         }
 
-        // Tilt upward when approaching mario
-        if ((o->oSwoopTargetPitch = obj_get_pitch_from_vel()) == 0) o->oSwoopTargetPitch += o->oForwardVel * 500.0f;
+        // Tilt upward when approaching Mario
+        if ((o->oSwoopTargetPitch = obj_get_pitch_from_vel()) == 0) o->oSwoopTargetPitch += (o->oForwardVel * 500.0f);
 
         obj_move_pitch_approach(o->oSwoopTargetPitch, 0x8C);
 

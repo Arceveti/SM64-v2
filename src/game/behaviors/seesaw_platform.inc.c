@@ -34,7 +34,7 @@ void bhv_seesaw_platform_update(void) {
     o->oFaceAnglePitch += (s32) o->oSeesawPlatformPitchVel;
     if (absf(o->oSeesawPlatformPitchVel) > 10.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
     if (gMarioObject->platform == o) {
-        // Rotate toward mario
+        // Rotate toward Mario
         f32 rotation = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);
         // Deceleration is faster than acceleration
         rotation *= ((o->oSeesawPlatformPitchVel * rotation) < 0) ? 0.04f : 0.02f;

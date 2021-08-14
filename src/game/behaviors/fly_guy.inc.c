@@ -19,8 +19,8 @@ static struct ObjectHitbox sFlyGuyHitbox = {
 };
 
 /**
- * Return to regular size. When mario is close enough or home is far enough,
- * turn toward mario/home and enter the approach mario action.
+ * Return to regular size. When Mario is close enough or home is far enough,
+ * turn toward Mario/home and enter the approach Mario action.
  */
 static void fly_guy_act_idle(void) {
     o->oForwardVel = 0.0f;
@@ -31,7 +31,7 @@ static void fly_guy_act_idle(void) {
             obj_face_yaw_approach(o->oAngleToMario, 0x300);
             if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x300)) o->oAction = FLY_GUY_ACT_APPROACH_MARIO;
         } else {
-            // Randomly enter the approach mario action - but this doesn't
+            // Randomly enter the approach Mario action - but this doesn't
             // really do anything since we come right back to idle
             if (o->oFlyGuyIdleTimer >= 3 || o->oFlyGuyIdleTimer == (random_u16() & 0x1) + 2) {
                 o->oFlyGuyIdleTimer = 0;
@@ -44,8 +44,8 @@ static void fly_guy_act_idle(void) {
 }
 
 /**
- * Turn toward mario or home, and when positioned nicely, either lunge or shoot
- * fire. If mario is far away, stop and return to the idle action.
+ * Turn toward Mario or home, and when positioned nicely, either lunge or shoot
+ * fire. If Mario is far away, stop and return to the idle action.
  */
 static void fly_guy_act_approach_mario(void) {
     // If we are >2000 units from home or Mario is <2000 units from us
@@ -54,7 +54,7 @@ static void fly_guy_act_approach_mario(void) {
         // Turn toward home or Mario
         obj_face_yaw_approach(    o->oAngleToMario, 0x400);
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
-        // If facing toward mario and we are either near mario laterally or
+        // If facing toward Mario and we are either near Mario laterally or
         // far above him
         if (abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x2000) {
             if (o->oPosY - gMarioObject->oPosY > 400.0f || o->oDistanceToMario < 400.0f) {
@@ -77,7 +77,7 @@ static void fly_guy_act_approach_mario(void) {
 }
 
 /**
- * Lunge downward at mario, then twirl back up. Enter the approach mario action
+ * Lunge downward at Mario, then twirl back up. Enter the approach Mario action
  * afterward.
  */
 static void fly_guy_act_lunge(void) {
@@ -87,8 +87,8 @@ static void fly_guy_act_lunge(void) {
         cur_obj_rotate_yaw_toward(o->oFaceAngleYaw,           0x800);
         obj_face_pitch_approach(  o->oFlyGuyLungeTargetPitch, 0x400);
         // Possible values: {-0x1000, 0x0000, 0x1000}
-        o->oFlyGuyTargetRoll = 0x1000 * (s16)(random_float() * 3.0f) - 0x1000;
-        o->oTimer = 0;
+        o->oFlyGuyTargetRoll = ((0x1000 * (s16)(random_float() * 3.0f)) - 0x1000);
+        o->oTimer            = 0;
     } else {
         // Twirl back upward
         obj_face_pitch_approach(0x0,                  0x100);
@@ -96,7 +96,7 @@ static void fly_guy_act_lunge(void) {
         // Twirl in a spiral with curvature proportional to oFaceAngleRoll
         o->oMoveAngleYaw -= o->oFaceAngleRoll / 4;
         obj_face_yaw_approach(o->oMoveAngleYaw, 0x800);
-        // Continue moving upward until at least 200 units above mario
+        // Continue moving upward until at least 200 units above Mario
         if (o->oPosY < gMarioObject->oPosY + 200.0f) {
             obj_y_vel_approach(20.0f, 0.5f);
         } else if (obj_y_vel_approach(0.0f, 0.5f)) {
@@ -108,7 +108,7 @@ static void fly_guy_act_lunge(void) {
 }
 
 /**
- * Turn toward mario, then shoot fire. Then enter the idle action.
+ * Turn toward Mario, then shoot fire. Then enter the idle action.
  */
 static void fly_guy_act_shoot_fire(void) {
     s32 scaleStatus;

@@ -1,7 +1,7 @@
 // fishing_boo.c.inc
 
 // Unused behavior file for the Fishing Boo enemy.
-// The fire circles around mario and would make it
+// The fire circles around Mario and would make it
 // hard for him to jump or platform.
 // There is also a stubbed behavior script next to
 // the scripts associated with this, indicating
@@ -32,6 +32,6 @@ void bhv_beta_moving_flames_spawn_loop(void) {
 
 void bhv_beta_moving_flames_loop(void) {
     cur_obj_scale(5.0f);
-    o->oForwardVel = sins(o->oMovingFlameTimer) * 70.0f;
+    o->oForwardVel        = (sins(o->oMovingFlameTimer) * 70.0f);
     o->oMovingFlameTimer += 0x800;
 }

@@ -22,7 +22,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Added a few bonus objects in some levels () (Arceveti) *
 - Fixed the "Impossible" coins' locations (Arceveti) *
 - Both 1-Ups in the CCM slide shortcut are actually collectible (Arceveti) *
-- The Blast Away The Wall star spawns from the wall instead of existing in the world already *
+- The Blast Away The Wall star spawns from the wall instead of existing in the world already (AdyaGD) *
 - Fix for Lakitu cutscene detection bounds *
 - [Re-implementation of the unused SSL pillars cutscene](https://i.imgur.com/3yRH5Eu.png) (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti) *
 - [Re-implementation of the unused cracked ice in SL](https://i.imgur.com/d71vYsV.png) (SunlitSpace542, Arceveti) *
@@ -71,7 +71,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
 
 **HUD/Gameplay QoL:**
-- Slightly modified version of Reonu Cam 3 (Reonu, Arceveti) *
+- Slightly modified version of Reonu Cam 3 (Reonu) *
 - Signs and NPCs are easier to talk to (Arceveti) *
 - An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *

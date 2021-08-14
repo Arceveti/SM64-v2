@@ -37,9 +37,7 @@ void bhv_small_bully_init(void) {
 
 void bhv_big_bully_init(void) {
     cur_obj_init_animation(BULLY_ANIM_WALKING);
-    o->oHomeX            = o->oPosX;
-    o->oHomeY            = o->oPosY;
-    o->oHomeZ            = o->oPosZ;
+    vec3f_copy(&o->oHomeVec, &o->oPosVec);
     o->oBehParams2ndByte = BULLY_BP_SIZE_BIG;
     o->oGravity          = 5.0f;
     o->oFriction         = 0.93f;
@@ -48,9 +46,9 @@ void bhv_big_bully_init(void) {
 }
 
 void bully_check_mario_collision(void) {
-    if (o->oAction != OBJ_ACT_LAVA_DEATH
-     && o->oAction != OBJ_ACT_DEATH_PLANE_DEATH
-     && o->oInteractStatus & INT_STATUS_INTERACTED) {
+    if ((o->oAction != OBJ_ACT_LAVA_DEATH)
+     && (o->oAction != OBJ_ACT_DEATH_PLANE_DEATH)
+     && (o->oInteractStatus & INT_STATUS_INTERACTED)) {
         cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ2_SMALL_BULLY_ATTACKED : SOUND_OBJ2_LARGE_BULLY_ATTACKED);
         o->oInteractStatus &= ~INT_STATUS_INTERACTED;
         o->oAction          = BULLY_ACT_KNOCKBACK;
@@ -81,10 +79,10 @@ void bully_act_chase_mario(void) {
 }
 
 void bully_act_knockback(void) {
-    if (o->oForwardVel < 10.0f && (s32) o->oVelY == 0.0f) {
-        o->oForwardVel = 1.0f;
+    if ((o->oForwardVel < 10.0f) && ((s32) o->oVelY == 0.0f)) {
+        o->oForwardVel   = 1.0f;
         o->oBullyKBTimerAndMinionKOCounter++;
-        o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
+        o->oFlags       |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x500);
     } else {
@@ -99,7 +97,7 @@ void bully_act_knockback(void) {
 
 void bully_act_back_up(void) {
     if (o->oTimer == 0) {
-        o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
+        o->oFlags        &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
         o->oMoveAngleYaw += 0x8000;
     }
     o->oForwardVel = 5.0f;
@@ -117,7 +115,7 @@ void bully_act_back_up(void) {
 }
 
 void bully_backup_check(s16 collisionFlags) {
-    if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && o->oAction != BULLY_ACT_KNOCKBACK) {/* bit 3 */
+    if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && (o->oAction != BULLY_ACT_KNOCKBACK)) {/* bit 3 */
         o->oPosX   = o->oBullyPrevX;
         o->oPosZ   = o->oBullyPrevZ;
         o->oAction = BULLY_ACT_BACK_UP;
@@ -127,9 +125,9 @@ void bully_backup_check(s16 collisionFlags) {
 void bully_play_stomping_sound(void) {
     s16 animFrame = o->header.gfx.animInfo.animFrame;
     switch (o->oAction) {
-        case BULLY_ACT_PATROL:      if (animFrame == 0 || animFrame == 12) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE); break;
+        case BULLY_ACT_PATROL:      if ((animFrame == 0) || (animFrame == 12)) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE); break;
         case BULLY_ACT_CHASE_MARIO: // fall through
-        case BULLY_ACT_BACK_UP:     if (animFrame == 0 || animFrame ==  5) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE); break;
+        case BULLY_ACT_BACK_UP:     if ((animFrame == 0) || (animFrame ==  5)) cur_obj_play_sound_2((o->oBehParams2ndByte == BULLY_BP_SIZE_SMALL) ? SOUND_OBJ_BULLY_WALK_SMALL : SOUND_OBJ_BULLY_WALK_LARGE); break;
     }
 }
 
@@ -138,7 +136,7 @@ void bully_step(void) {
     bully_backup_check(collisionFlags);
     bully_play_stomping_sound();
     obj_check_floor_death(collisionFlags, sObjFloor);
-    if (o->oBullySubtype & BULLY_STYPE_CHILL && o->oPosY < 1030.0f) o->oAction = OBJ_ACT_LAVA_DEATH;
+    if ((o->oBullySubtype & BULLY_STYPE_CHILL) && (o->oPosY < 1030.0f)) o->oAction = OBJ_ACT_LAVA_DEATH;
 }
 
 void bully_spawn_coin(void) {
@@ -152,8 +150,8 @@ void bully_spawn_coin(void) {
 #endif
     coin->oForwardVel   =  10.0f;
     coin->oVelY         = 100.0f;
-    coin->oPosY         = o->oPosY + 310.0f;
-    coin->oMoveAngleYaw = (f32)(o->oBullyMarioCollisionAngle + 0x8000) + random_float() * 1024.0f;
+    coin->oPosY         = (o->oPosY + 310.0f);
+    coin->oMoveAngleYaw = ((f32)(o->oBullyMarioCollisionAngle + 0x8000) + (random_float() * 1024.0f));
 }
 
 void bully_act_level_death(void) {
@@ -174,9 +172,7 @@ void bully_act_level_death(void) {
 }
 
 void bhv_bully_loop(void) {
-    o->oBullyPrevX = o->oPosX;
-    o->oBullyPrevY = o->oPosY;
-    o->oBullyPrevZ = o->oPosZ;
+    vec3f_copy(&o->oBullyPrevVec, &o->oPosVec);
     //! Because this function runs no matter what, Mario is able to interrupt the bully's
     //  death action by colliding with it. Since the bully hitbox is tall enough to collide
     //  with Mario even when it is under a lava floor, this can get the bully stuck OOB
@@ -223,9 +219,7 @@ void big_bully_spawn_star(void) {
 
 void bhv_big_bully_with_minions_loop(void) {
     s16 collisionFlags;
-    o->oBullyPrevX = o->oPosX;
-    o->oBullyPrevY = o->oPosY;
-    o->oBullyPrevZ = o->oPosZ;
+    vec3f_copy(&o->oBullyPrevVec, &o->oPosVec);
     bully_check_mario_collision();
     switch (o->oAction) {
         case BULLY_ACT_PATROL:
@@ -246,7 +240,7 @@ void bhv_big_bully_with_minions_loop(void) {
             if (o->oBullyKBTimerAndMinionKOCounter == 3) {
                 play_puzzle_jingle();
                 if (o->oTimer >= 91) {
-                    o->oAction = BULLY_ACT_ACTIVATE_AND_FALL;
+                    o->oAction                         = BULLY_ACT_ACTIVATE_AND_FALL;
                     o->oBullyKBTimerAndMinionKOCounter = 0;
                 }
             }

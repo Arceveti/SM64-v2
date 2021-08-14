@@ -9,25 +9,19 @@
  */
 void bhv_hidden_blue_coin_loop(void) {
     struct Object *blueCoinSwitch;
-
     switch (o->oAction) {
         case HIDDEN_BLUE_COIN_ACT_INACTIVE:
             // Become invisible and intangible
             cur_obj_disable_rendering();
             cur_obj_become_intangible();
-
             // Set action to HIDDEN_BLUE_COIN_ACT_WAITING after the blue coin switch is found.
             o->oHiddenBlueCoinSwitch = cur_obj_nearest_object_with_behavior(bhvBlueCoinSwitch);
-
-            if (o->oHiddenBlueCoinSwitch != NULL) o->oAction++;
-
+            if (o->oHiddenBlueCoinSwitch != NULL) o->oAction = HIDDEN_BLUE_COIN_ACT_WAITING;
             break;
         case HIDDEN_BLUE_COIN_ACT_WAITING:
             // Wait until the blue coin switch starts ticking to activate.
             blueCoinSwitch = o->oHiddenBlueCoinSwitch;
-
             if (blueCoinSwitch->oAction == BLUE_COIN_SWITCH_ACT_TICKING) o->oAction = HIDDEN_BLUE_COIN_ACT_ACTIVE;
-
             break;
         case HIDDEN_BLUE_COIN_ACT_ACTIVE:
             // Become tangible
@@ -41,7 +35,6 @@ void bhv_hidden_blue_coin_loop(void) {
                 spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
                 obj_mark_for_deletion(o);
             }
-
             // After 200 frames of waiting and 20 2-frame blinks (for 240 frames total),
             // remove the object.
             if (cur_obj_wait_then_blink(200, 20)) {
@@ -62,33 +55,27 @@ void bhv_hidden_blue_coin_loop(void) {
 void bhv_blue_coin_switch_loop(void) {
     // The switch's model is 1/3 size.
     cur_obj_scale(3.0f);
-
     switch (o->oAction) {
         case BLUE_COIN_SWITCH_ACT_IDLE:
             // If Mario is on the switch and has ground-pounded,
             // recede and get ready to start ticking.
             if (gMarioObject->platform == o) {
                 if (gMarioStates[0].action == ACT_GROUND_POUND_LAND || gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND) {
-                    // Set to BLUE_COIN_SWITCH_ACT_RECEDING
-                    o->oAction++;
-
+                    o->oAction = BLUE_COIN_SWITCH_ACT_RECEDING;
 #ifdef BLUE_COIN_SWITCH_RETRY
                     // Recede at a rate of 16 units/frame.
-                    o->oVelY = -16.0f;
+                    o->oVelY    = -16.0f;
 #else
                     // Recede at a rate of 20 units/frame.
-                    o->oVelY = -20.0f;
+                    o->oVelY    = -20.0f;
 #endif
                     // Set gravity to 0 so it doesn't accelerate when receding.
                     o->oGravity = 0.0f;
-
                     cur_obj_play_sound_2(SOUND_GENERAL_SWITCH_DOOR_OPEN);
                 }
             }
-
             // Have collision
             load_object_collision_model();
-
             break;
         case BLUE_COIN_SWITCH_ACT_RECEDING:
             // Recede for 6 frames before going invisible and ticking.
@@ -100,17 +87,14 @@ void bhv_blue_coin_switch_loop(void) {
             if (o->oTimer > 5) {
                 cur_obj_hide();
 #endif
-                // Set to BLUE_COIN_SWITCH_ACT_TICKING
-                o->oAction++;
-
+                o->oAction = BLUE_COIN_SWITCH_ACT_TICKING;
 #ifdef BLUE_COIN_SWITCH_RETRY
                 // ???
-                o->oVelY = 0.0f;
+                o->oVelY    = 0.0f;
                 o->oGravity = 0.0f;
 #else
-                o->oPosY = gMarioObject->oPosY - 40.0f;
+                o->oPosY = (gMarioObject->oPosY - 40.0f);
 #endif
-
                 // Spawn particles.
                 spawn_mist_particles();
             } else {
@@ -119,7 +103,6 @@ void bhv_blue_coin_switch_loop(void) {
                 // Recede
                 cur_obj_move_using_fvel_and_gravity();
             }
-
             break;
         case BLUE_COIN_SWITCH_ACT_TICKING:
             // Tick faster when the blue coins start blinking
@@ -130,7 +113,7 @@ void bhv_blue_coin_switch_loop(void) {
                 obj_mark_for_deletion(o);
             // Set to BLUE_COIN_SWITCH_ACT_EXTENDING after the coins unload after the 240-frame timer expires.
             } else if (o->oTimer > 240) {
-                o->oAction++;
+                o->oAction  = BLUE_COIN_SWITCH_ACT_EXTENDING;
                 o->oVelY    = 16.0f;
                 o->oGravity =  0.0f;
             }
@@ -149,7 +132,7 @@ void bhv_blue_coin_switch_loop(void) {
 #else
             // Delete the switch (which stops the sound) after the last coin is collected,
             // or after the coins unload after the 240-frame timer expires.
-            if (cur_obj_nearest_object_with_behavior(bhvHiddenBlueCoin) == NULL || o->oTimer > 240) obj_mark_for_deletion(o);
+            if ((cur_obj_nearest_object_with_behavior(bhvHiddenBlueCoin) == NULL) || (o->oTimer > 240)) obj_mark_for_deletion(o);
 #endif
             break;
     }

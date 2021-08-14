@@ -21,7 +21,7 @@ static struct ObjectHitbox sEnemyLakituHitbox = {
 };
 
 /**
- * Wait for mario to approach, then spawn the cloud and become visible.
+ * Wait for Mario to approach, then spawn the cloud and become visible.
  */
 static void enemy_lakitu_act_uninitialized(void) {
     if (o->oDistanceToMario < 2000.0f) {
@@ -32,18 +32,18 @@ static void enemy_lakitu_act_uninitialized(void) {
 }
 
 /**
- * Accelerate toward mario vertically.
+ * Accelerate toward Mario vertically.
  */
 static void enemy_lakitu_update_vel_y(f32 offsetY) {
-    // In order to encourage oscillation, pass mario by a small margin before
+    // In order to encourage oscillation, pass Mario by a small margin before
     // accelerating the opposite direction
     f32 margin = (o->oVelY < 0.0f) ? -3.0f : 3.0f;
     obj_y_vel_approach((o->oPosY < gMarioObject->oPosY + offsetY + margin) ? 4.0f : -4.0f, 0.4f);
 }
 
 /**
- * Control speed based on distance to mario, turn toward mario, and change move
- * angle toward mario.
+ * Control speed based on distance to Mario, turn toward Mario, and change move
+ * angle toward Mario.
  */
 static void enemy_lakitu_update_speed_and_angle(void) {
     f32 minSpeed;
@@ -52,30 +52,30 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     f32 distToMario = o->oDistanceToMario;
     if (distToMario > 500.0f) distToMario = 500.0f;
 
-    // Move faster the farther away mario is and the faster mario is moving
+    // Move faster the farther away Mario is and the faster Mario is moving
     if ((minSpeed = 1.2f * gMarioStates[0].forwardVel) < 8.0f) minSpeed = 8.0f;
 
     o->oForwardVel = distToMario * 0.04f;
     clamp_f32(&o->oForwardVel, minSpeed, 40.0f);
 
-    // Accelerate toward mario vertically
+    // Accelerate toward Mario vertically
     enemy_lakitu_update_vel_y(300.0f);
 
-    // Turn toward mario except right after throwing a spiny
+    // Turn toward Mario except right after throwing a spiny
     if (o->oEnemyLakituFaceForwardCountdown != 0) {
         o->oEnemyLakituFaceForwardCountdown--;
     } else {
         obj_face_yaw_approach(o->oAngleToMario, 0x600);
     }
 
-    // Change move angle toward mario faster when farther from mario
+    // Change move angle toward Mario faster when farther from Mario
     turnSpeed = (s16)(distToMario * 2);
     clamp_s16(&turnSpeed, 0xC8, 0xFA0);
     cur_obj_rotate_yaw_toward(o->oAngleToMario, turnSpeed);
 }
 
 /**
- * When close enough to mario and facing roughly toward him, spawn a spiny and
+ * When close enough to Mario and facing roughly toward him, spawn a spiny and
  * hold it, then enter the hold spiny sub-action.
  */
 static void enemy_lakitu_sub_act_no_spiny(void) {
@@ -99,7 +99,7 @@ static void enemy_lakitu_sub_act_no_spiny(void) {
 }
 
 /**
- * When close to mario and facing toward him or when mario gets far enough away,
+ * When close to Mario and facing toward him or when Mario gets far enough away,
  * enter the throw spiny sub-action.
  */
 static void enemy_lakitu_sub_act_hold_spiny(void) {
@@ -150,7 +150,7 @@ static void enemy_lakitu_act_main(void) {
     }
     cur_obj_move_standard(78);
 
-    // Die and drop held spiny when attacked by mario
+    // Die and drop held spiny when attacked by Mario
     if (obj_check_attacks(&sEnemyLakituHitbox, o->oAction)) o->prevObj = NULL; // The spiny uses this as a signal to get thrown
 }
 

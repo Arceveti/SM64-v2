@@ -1,7 +1,7 @@
 
 /**
  * Behaviors for bhvWaterBombSpawner, bhvWaterBomb, and bhvWaterBombShadow.
- * The spawner spawns the water bombs that fall on mario from above. These ones
+ * The spawner spawns the water bombs that fall on Mario from above. These ones
  * start in the WATER_BOMB_ACT_INIT action.
  * Water bombs can also be shot by cannons. These ones stay in the
  * WATER_BOMB_ACT_SHOT_FROM_CANNON action.
@@ -26,31 +26,31 @@ static struct ObjectHitbox sWaterBombHitbox = {
 
 /**
  * Update function for bhvWaterBombSpawner.
- * Spawn water bombs targeting mario when he comes in range.
+ * Spawn water bombs targeting Mario when he comes in range.
  */
 void bhv_water_bomb_spawner_update(void) {
     f32 latDistToMario;
     f32 spawnerRadius;
 
-    spawnerRadius = 50 * (u16)(o->oBehParams >> 16) + 200.0f;
+    spawnerRadius = ((50 * (u16)(o->oBehParams >> 16)) + 200.0f);
     latDistToMario = lateral_dist_between_objects(o, gMarioObject);
 
-    // When mario is in range and a water bomb isn't already active
-    if (!o->oWaterBombSpawnerBombActive && latDistToMario < spawnerRadius
-        && gMarioObject->oPosY - o->oPosY < 1000.0f) {
+    // When Mario is in range and a water bomb isn't already active
+    if (!o->oWaterBombSpawnerBombActive && (latDistToMario < spawnerRadius)
+        && (gMarioObject->oPosY - o->oPosY) < 1000.0f) {
         if (o->oWaterBombSpawnerTimeToSpawn != 0) {
             o->oWaterBombSpawnerTimeToSpawn--;
         } else {
             struct Object *waterBomb = spawn_object_relative(OBJ_BP_NONE, 0, 2000, 0, o, MODEL_WATER_BOMB, bhvWaterBomb);
 
             if (waterBomb != NULL) {
-                // Drop farther ahead of mario when he is moving faster
-                f32 waterBombDistToMario = 28.0f * gMarioStates[0].forwardVel + 100.0f;
+                // Drop farther ahead of Mario when he is moving faster
+                f32 waterBombDistToMario = ((28.0f * gMarioStates[0].forwardVel) + 100.0f);
 
                 waterBomb->oAction = WATER_BOMB_ACT_INIT;
 
-                waterBomb->oPosX = gMarioObject->oPosX + waterBombDistToMario * sins(gMarioObject->oMoveAngleYaw);
-                waterBomb->oPosZ = gMarioObject->oPosZ + waterBombDistToMario * coss(gMarioObject->oMoveAngleYaw);
+                waterBomb->oPosX = (gMarioObject->oPosX + (waterBombDistToMario * sins(gMarioObject->oMoveAngleYaw)));
+                waterBomb->oPosZ = (gMarioObject->oPosZ + (waterBombDistToMario * coss(gMarioObject->oMoveAngleYaw)));
 
                 spawn_object(waterBomb, MODEL_WATER_BOMB_SHADOW, bhvWaterBombShadow);
 
@@ -121,20 +121,15 @@ static void water_bomb_act_drop(void) {
             } else {
                 create_sound_spawner(SOUND_OBJ_DIVING_IN_WATER);
             }
-
             set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
-
-            // Move toward mario
-            o->oMoveAngleYaw = o->oAngleToMario;
-            o->oForwardVel = 10.0f;
+            // Move toward Mario
+            o->oMoveAngleYaw          = o->oAngleToMario;
+            o->oForwardVel            = 10.0f;
             o->oWaterBombStretchSpeed = -40.0f;
         }
-
         // Make less of an attempt to unsquish on each bounce
-        o->oWaterBombStretchSpeed += 15.0f - o->oWaterBombNumBounces * 2.8f;
-
-        o->oWaterBombVerticalStretch += o->oWaterBombStretchSpeed * 0.01f;
-
+        o->oWaterBombStretchSpeed    += (15.0f - (o->oWaterBombNumBounces   * 2.8f));
+        o->oWaterBombVerticalStretch +=          (o->oWaterBombStretchSpeed * 0.01f);
         // After being too squished, explode
         if (o->oWaterBombVerticalStretch < -0.8f) {
             o->oAction = WATER_BOMB_ACT_EXPLODE;

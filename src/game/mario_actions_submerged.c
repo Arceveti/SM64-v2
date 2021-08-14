@@ -198,7 +198,7 @@ static u32 perform_water_step(struct MarioState *m) {
         nextPos[0] = m->pos[0] + step[0] / numSteps;
         nextPos[1] = m->pos[1] + step[1] / numSteps;
         nextPos[2] = m->pos[2] + step[2] / numSteps;
-        // If mario is at the surface, keep him there?
+        // If Mario is at the surface, keep him there?
         if (nextPos[1] > m->waterLevel - 80) {
             nextPos[1] = m->waterLevel - 80;
             m->vel[1]  = 0.0f;

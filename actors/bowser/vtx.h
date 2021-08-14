@@ -151,7 +151,7 @@ extern Vtx bowser_seg6_vertex_06043378;
 extern Vtx bowser_seg6_vertex_06043468;
 extern Vtx bowser_seg6_vertex_060434D8;
 
-struct ModifiableVertexGroup sBowserVertexGroups[140] = {
+struct ModifiableVertexGroup sBowserVertexGroups[] = {
     {&bowser_seg6_vertex_06038C80, 16},
     {&bowser_seg6_vertex_06038D80, 10},
     {&bowser_seg6_vertex_06038E20, 16},
@@ -304,5 +304,6 @@ struct ModifiableVertexGroup sBowserVertexGroups[140] = {
     {&bowser_seg6_vertex_06043278, 16},
     {&bowser_seg6_vertex_06043378, 15},
     {&bowser_seg6_vertex_06043468,  7},
-    {&bowser_seg6_vertex_060434D8,  7}
+    {&bowser_seg6_vertex_060434D8,  7},
+    NULL
 };

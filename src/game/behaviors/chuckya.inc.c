@@ -90,16 +90,16 @@ void chuckya_act_grabbed_mario(void) { // act 1
     switch (o->oSubAction) {
         case CHUCKYA_SUB_ACT_GRAB_MARIO:
             if (cur_obj_init_animation_and_check_if_near_end(CHUCKYA_ANIM_GRAB_MARIO)) o->oSubAction = CHUCKYA_SUB_ACT_HOLD_MARIO;
-            o->oChuckyaSubActionTimer = random_float() * 30.0f + 10.0f;
+            o->oChuckyaSubActionTimer         = ((random_float() * 30.0f) + 10.0f);
             o->oChuckyaNumPlayerEscapeActions = 0;
-            o->oForwardVel = 0.0f;
+            o->oForwardVel                    = 0.0f;
             break;
         case CHUCKYA_SUB_ACT_HOLD_MARIO:
             o->oChuckyaNumPlayerEscapeActions += player_performed_grab_escape_action();
             print_debug_bottom_up("%d", o->oChuckyaNumPlayerEscapeActions);
             if (o->oChuckyaNumPlayerEscapeActions > 10) {
                 o->oCommonAnchorAction = COMMON_ANCHOR_ACT_DROP_MARIO;
-                o->oAction             = CHUCKYA_ACT_RELEASE_MARIO; // drop mario
+                o->oAction             = CHUCKYA_ACT_RELEASE_MARIO; // Drop Mario
                 o->oInteractStatus &= ~(INT_STATUS_GRABBED_MARIO);
             } else {
                 cur_obj_init_animation_with_sound(CHUCKYA_ANIM_THROW_1);
@@ -113,8 +113,8 @@ void chuckya_act_grabbed_mario(void) { // act 1
             if (cur_obj_check_anim_frame(18)) {
                 cur_obj_play_sound_2(SOUND_OBJ_RELEASE_MARIO);
                 o->oCommonAnchorAction = COMMON_ANCHOR_ACT_THROW_MARIO;
-                o->oAction             = CHUCKYA_ACT_RELEASE_MARIO; // drop mario
-                o->oInteractStatus &= ~(INT_STATUS_GRABBED_MARIO);
+                o->oAction             = CHUCKYA_ACT_RELEASE_MARIO; // Drop Mario
+                o->oInteractStatus    &= ~(INT_STATUS_GRABBED_MARIO);
             }
             break;
     }

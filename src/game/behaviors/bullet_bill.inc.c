@@ -2,7 +2,7 @@
 
 // bullet bill smoke
 void bhv_white_puff_smoke_init(void) {
-    cur_obj_scale(random_float() * 2.0f + 2.0f);
+    cur_obj_scale(((random_float() * 2.0f) + 2.0f));
 }
 
 void bhv_bullet_bill_init(void) {
@@ -17,31 +17,28 @@ void bullet_bill_act_reset(void) {
     o->oFaceAngleRoll  = 0x0;
     o->oMoveFlags      = 0x0;
     cur_obj_set_pos_to_home();
-    o->oAction = BULLET_BILL_ACT_IDLE;
+    o->oAction         = BULLET_BILL_ACT_IDLE;
 }
 
 void bullet_bill_act_idle(void) {
-    s16 dYawToMario = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-    if (dYawToMario < 0x2000 && 400.0f < o->oDistanceToMario && o->oDistanceToMario < 1500.0f) o->oAction = BULLET_BILL_ACT_CHASING_MARIO;
+    if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x2000) && (400.0f < o->oDistanceToMario) && (o->oDistanceToMario < 1500.0f)) o->oAction = BULLET_BILL_ACT_CHASING_MARIO;
 }
 
 void bullet_bill_act_chasing_mario(void) {
     if (o->oTimer < 40) {
         o->oForwardVel = 3.0f;
     } else if (o->oTimer < 50) {
-        o->oForwardVel = (o->oTimer & 0x1) ? 3.0f : -3.0f;
+        o->oForwardVel = ((o->oTimer & 0x1) ? 3.0f : -3.0f);
     } else {
         if (o->oTimer > 70) cur_obj_update_floor_and_walls();
-
         spawn_object(o, MODEL_SMOKE, bhvWhitePuffSmoke);
         o->oForwardVel = 30.0f;
         if (o->oDistanceToMario > 300.0f) cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
-
         if (o->oTimer == 50) {
             cur_obj_play_sound_2(SOUND_OBJ_POUNDING_CANNON);
             cur_obj_shake_screen(SHAKE_POS_SMALL);
         }
-        if (o->oTimer > 150 || o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
+        if ((o->oTimer > 150) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL)) {
             o->oAction = BULLET_BILL_ACT_RESET;
             spawn_mist_particles();
         }
@@ -55,7 +52,7 @@ void bullet_bill_act_hit(void) {
     }
     o->oFaceAnglePitch += 0x1000;
     o->oFaceAngleRoll  += 0x1000;
-    o->oPosY += 20.0f;
+    o->oPosY           += 20.0f;
     if (o->oTimer > 90) o->oAction = BULLET_BILL_ACT_RESET;
 }
 

@@ -5,8 +5,8 @@
  * unused. See determine_dance_cutscene() in camera.c for details.
  * Cutscene Digits:
  *      0: Lakitu flies away after the dance
- *      1: The camera rotates around mario
- *      2: The camera goes to a closeup of mario
+ *      1: The camera rotates around Mario
+ *      2: The camera goes to a closeup of Mario
  *      3: Bowser keys and the grand star
  *      4: Default, used for 100 coin stars, 8 red coin stars in bowser levels, and secret stars
  */

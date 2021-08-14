@@ -1,7 +1,7 @@
 // rotating_octagonal_plat.inc.c
 
 static const Collision *sOctagonalPlatformCollision[] = {
-    bits_seg7_collision_0701AA84,
+    bits_seg7_collision_rotating_octagonal_platform,
     rr_seg7_collision_07029508,
 };
 

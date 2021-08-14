@@ -18,30 +18,27 @@
 void bhv_beta_trampoline_spring_loop(void) {
     f32 yScale;
     f32 yDisplacement;
-
     // Update to be 75 units under the trampoline top
-    obj_copy_pos_and_angle(o, o->parentObj);
+    obj_copy_pos_and_angle( o, o->parentObj);
     obj_copy_graph_y_offset(o, o->parentObj);
     o->oPosY -= 75.0f;
-
     // If the trampoline top is above its original position,
     // scale the spring by (the displacement)/10 + 1.
     // For this to work correctly, the arbitrary value of 10
     // must be replaced with 150 (the height of the trampoline).
     // Note that all of the numbers in this if/else block are doubles.
-    if ((yDisplacement = o->oPosY - o->oHomeY) >= 0) {
-        yScale = yDisplacement / 10.0f + 1.0f;
+    if ((yDisplacement = (o->oPosY - o->oHomeY)) >= 0) {
+        yScale = ((yDisplacement / 10.0f) + 1.0f);
     } else {
         // Otherwise (if the trampoline is compressed),
         // scale by 1 - (the displacement)/500.
         // For this to work correctly, the arbitrary value of 500
         // must be replaced with 150 (the height of the trampoline),
         // as with the above code.
-        yDisplacement = -yDisplacement;
-        yScale = 1.0f - yDisplacement / 500.0f;
-        o->oPosY += 75.0f * (1.0f - yScale);
+        yDisplacement =         -yDisplacement;
+        yScale        = (1.0f - (yDisplacement / 500.0f));
+        o->oPosY     += (75.0f * (1.0f - yScale));
     }
-
     // Scale the spring
     obj_scale_xyz(o, 1.0f, yScale, 1.0f);
 }
@@ -59,14 +56,11 @@ void bhv_beta_trampoline_top_loop(void) {
     // When initialized, spawn the rest of the trampoline
     if (o->oTimer == 0) {
         struct Object *trampolinePart;
-
         trampolinePart = spawn_object(o, MODEL_TRAMPOLINE_CENTER, bhvBetaTrampolineSpring);
-        trampolinePart->oPosY -= 75.0f;
-
+        trampolinePart->oPosY -=  75.0f;
         trampolinePart = spawn_object(o, MODEL_TRAMPOLINE_BASE, bhvStaticObject);
         trampolinePart->oPosY -= 150.0f;
     }
-
     // Update o->oBetaTrampolineMarioOnTrampoline, and reset
     // the trampoline's position if Mario's not on it.
     // Since the trampoline never moves, this doesn't do anything.
@@ -75,11 +69,11 @@ void bhv_beta_trampoline_top_loop(void) {
     if (gMarioObject->platform == o) {
         stub_mario_step_2();
         o->oBetaTrampolineMarioOnTrampoline = TRUE;
-        o->oPosY = (o->oPosY > (o->oHomeY - 150.0f + 75.0f)) ? (o->oPosY - 10) : (o->oHomeY - 150.0f + 65.0f);
-        o->oBetaTrampolineAdditiveYVel = ((o->oBehParams2ndByte >> 4) / 2.0f) + ((o->oHomeY - o->oPosY) / ((o->oBehParams2ndByte & 0x0F) / 2.0f));
+        o->oPosY                            = (o->oPosY > ((o->oHomeY - 150.0f) + 75.0f)) ? (o->oPosY - 10.0f) : ((o->oHomeY - 150.0f) + 65.0f);
+        o->oBetaTrampolineAdditiveYVel      = ((o->oBehParams2ndByte >> 4) / 2.0f) + ((o->oHomeY - o->oPosY) / ((o->oBehParams2ndByte & 0x0F) / 2.0f));
     } else {
         o->oBetaTrampolineMarioOnTrampoline = FALSE;
-        o->oPosY = (o->oPosY < (o->oHomeY - 10.0f)) ? (o->oPosY + 10.0f) : o->oHomeY;
-        o->oBetaTrampolineAdditiveYVel = 0;
+        o->oPosY                            = (o->oPosY < (o->oHomeY - 10.0f)) ? (o->oPosY + 10.0f) : o->oHomeY;
+        o->oBetaTrampolineAdditiveYVel      = 0;
     }
 }

@@ -74,7 +74,7 @@ extern const Collision bits_seg7_collision_level[];
 extern const MacroObject bits_seg7_macro_objs[];
 extern const Collision bits_seg7_collision_sliding_platform[];
 extern const Collision bits_seg7_collision_twin_sliding_platforms[];
-extern const Collision bits_seg7_collision_0701AA84[];
+extern const Collision bits_seg7_collision_rotating_octagonal_platform[];
 extern const Collision bits_seg7_collision_ferris_platform[];
 extern const Collision bits_seg7_collision_ferris_wheel_axle[];
 extern const Collision bits_seg7_collision_arrow_platform[];

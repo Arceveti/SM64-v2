@@ -225,7 +225,7 @@ s32 intro_game_over(void) {
 }
 
 /**
- * Plays the casual "It's a me mario" when the game stars.
+ * Plays the casual "It's a me Mario" when the game stars.
  */
 s32 intro_play_its_a_me_mario(void) {
     set_background_music(0, SEQ_SOUND_PLAYER, 0);

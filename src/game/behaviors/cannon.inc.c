@@ -3,9 +3,7 @@
 void opened_cannon_act_idle(void) {
     if (o->oTimer == 0) {
         o->oInteractStatus = INT_STATUS_NONE;
-        o->oPosX           = o->oHomeX;
-        o->oPosY           = o->oHomeY;
-        o->oPosZ           = o->oHomeZ;
+        vec3f_copy(&o->oPosVec, &o->oHomeVec);
         o->oMoveAnglePitch = 0x0;
         o->oMoveAngleYaw   = (s16)(o->oBehParams2ndByte << 8);
         o->oCannonAngle    = 0x0;
@@ -33,11 +31,11 @@ void opened_cannon_act_idle(void) {
 void opened_cannon_act_rising(void) {
     if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON_RISE);
     o->oPosY += 5.0f;
-    o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 2.0f;
-    o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 2.0f;
+    o->oPosX += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 2.0f);
+    o->oPosZ += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 2.0f);
     if (o->oTimer > 67) {
-        o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
-        o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
+        o->oPosX += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 4.0f);
+        o->oPosZ += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 4.0f);
         o->oAction = OPENED_CANNON_ACT_TURNING_YAW;
     }
 }
@@ -45,16 +43,16 @@ void opened_cannon_act_rising(void) {
 void opened_cannon_act_turning_yaw(void) {
     if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_OBJ_CANNON_TURN);
     if (o->oTimer < 4) {
-        o->oPosX += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
-        o->oPosZ += (f32)((o->oTimer / 2 & 0x1) - 0.5f) * 4.0f;
+        o->oPosX += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 4.0f);
+        o->oPosZ += ((f32)(((o->oTimer / 2) & 0x1) - 0.5f) * 4.0f);
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
-                o->oMoveAngleYaw = sins(o->oCannonAngle) * 0x4000 + ((s16)(o->oBehParams2ndByte << 8));
+                o->oMoveAngleYaw = ((sins(o->oCannonAngle) * 0x4000) + (s16)(o->oBehParams2ndByte << 8));
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
                 o->oCannonAngle = 0x0;
-                o->oAction = OPENED_CANNON_ACT_RAISE_BARREL;
+                o->oAction      = OPENED_CANNON_ACT_RAISE_BARREL;
             }
         }
     }
@@ -65,7 +63,7 @@ void opened_cannon_act_raise_barrel(void) {
     if (o->oTimer >= 4) {
         if (o->oTimer < 20) {
             o->oCannonAngle += 0x400;
-            o->oMoveAnglePitch = sins(o->oCannonAngle) * 0x2000;
+            o->oMoveAnglePitch = (sins(o->oCannonAngle) * 0x2000);
         } else if (o->oTimer >= 25) {
             o->oAction = OPENED_CANNON_ACT_READY;
         }

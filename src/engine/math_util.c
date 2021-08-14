@@ -140,14 +140,42 @@ s8 absc(s8 x) {
  ************************/
 
 /// Returns the lowest of three values.
-s16 min_3(s16 a0, s16 a1, s16 a2) {
+s16 min_3s(s16 a0, s16 a1, s16 a2) {
     if (a1 < a0) a0 = a1;
     if (a2 < a0) a0 = a2;
     return a0;
 }
 
 /// Returns the highest of three values.
-s16 max_3(s16 a0, s16 a1, s16 a2) {
+s16 max_3s(s16 a0, s16 a1, s16 a2) {
+    if (a1 > a0) a0 = a1;
+    if (a2 > a0) a0 = a2;
+    return a0;
+}
+
+/// Returns the lowest of three values.
+s32 min_3i(s32 a0, s32 a1, s32 a2) {
+    if (a1 < a0) a0 = a1;
+    if (a2 < a0) a0 = a2;
+    return a0;
+}
+
+/// Returns the highest of three values.
+s32 max_3i(s32 a0, s32 a1, s32 a2) {
+    if (a1 > a0) a0 = a1;
+    if (a2 > a0) a0 = a2;
+    return a0;
+}
+
+/// Returns the lowest of three values.
+f32 min_3f(f32 a0, f32 a1, f32 a2) {
+    if (a1 < a0) a0 = a1;
+    if (a2 < a0) a0 = a2;
+    return a0;
+}
+
+/// Returns the highest of three values.
+f32 max_3f(f32 a0, f32 a1, f32 a2) {
     if (a1 > a0) a0 = a1;
     if (a2 > a0) a0 = a2;
     return a0;
@@ -234,11 +262,25 @@ void vec3f_add(Vec3f dest, Vec3f a) {
     dest[2] += a[2];
 }
 
+/// Add vector 'a' to 'dest'
+void vec3f_sub(Vec3f dst, Vec3f a) {
+    dst[0] -= a[0];
+    dst[1] -= a[1];
+    dst[2] -= a[2];
+}
+
 /// Make 'dest' the sum of vectors a and b.
 void vec3f_sum(Vec3f dest, Vec3f a, Vec3f b) {
     dest[0] = a[0] + b[0];
     dest[1] = a[1] + b[1];
     dest[2] = a[2] + b[2];
+}
+
+/// Make 'dest' the difference of vectors a and b.
+void vec3f_diff(Vec3f dest, Vec3f a, Vec3f b) {
+    dest[0] = a[0] - b[0];
+    dest[1] = a[1] - b[1];
+    dest[2] = a[2] - b[2];
 }
 
 /// Copy vector src to dest

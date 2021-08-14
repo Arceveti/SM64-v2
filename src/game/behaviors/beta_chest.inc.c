@@ -13,7 +13,6 @@
 void bhv_beta_chest_bottom_init(void) {
     // Set the object's model
     cur_obj_set_model(MODEL_TREASURE_CHEST_BASE);
-
     // ??? Pointless code?
     // Maybe chests were originally intended to have random yaws.
     // Shoshinkai 1995 footage shows chests in DDD scattered around
@@ -22,7 +21,6 @@ void bhv_beta_chest_bottom_init(void) {
     // object was discarded?
     // o->oMoveAngleYaw = random_u16();
     // o->oMoveAngleYaw = 0x0;
-
     // Spawn the chest lid 97 units in the +Y direction and 77 units in the -Z direction.
     spawn_object_relative(OBJ_BP_NONE, 0, 97, -77, o, MODEL_TREASURE_CHEST_LID, bhvBetaChestLid);
 }
@@ -45,7 +43,6 @@ void bhv_beta_chest_lid_loop(void) {
     switch (o->oAction) {
         case BETA_CHEST_ACT_IDLE_CLOSED:
             if (dist_between_objects(o->parentObj, gMarioObject) < 300.0f) o->oAction = BETA_CHEST_ACT_OPENING;
-
             break;
         case BETA_CHEST_ACT_OPENING:
             if (o->oTimer == 0) {
@@ -53,12 +50,10 @@ void bhv_beta_chest_lid_loop(void) {
                 spawn_object_relative(OBJ_BP_NONE, 0, -80, 120, o, MODEL_BUBBLE, bhvWaterAirBubble);
                 play_sound(SOUND_GENERAL_OPEN_CHEST_WATER, o->header.gfx.cameraToObject);
             }
-
             // Rotate the lid 0x400 (1024) angle units per frame backwards.
             // When the lid becomes vertical, stop rotating.
             o->oFaceAnglePitch -= 0x400;
             if (o->oFaceAnglePitch < -0x4000) o->oAction = BETA_CHEST_ACT_IDLE_OPEN; 
-
             // Fall-through
         case BETA_CHEST_ACT_IDLE_OPEN:
             break;

@@ -26,7 +26,6 @@ static struct ObjectHitbox sBooCageHitbox = {
  */
 void bhv_boo_cage_loop(void) {
     obj_set_hitbox(o, &sBooCageHitbox);
-
     switch (o->oAction) {
         case BOO_CAGE_ACT_IN_BOO:
             // Don't let Mario enter BBH until the boo is killed

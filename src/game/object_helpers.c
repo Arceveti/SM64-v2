@@ -1552,6 +1552,7 @@ s32 cur_obj_follow_path(UNUSED s32 unusedArg) {
 }
 
 void chain_segment_init(struct ChainSegment *segment) {
+    // vec3f_set(segment->pos, 0.0f, 0.0f, 0.0f);
     segment->posX  = 0.0f;
     segment->posY  = 0.0f;
     segment->posZ  = 0.0f;

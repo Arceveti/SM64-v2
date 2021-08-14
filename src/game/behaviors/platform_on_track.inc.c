@@ -65,7 +65,7 @@ void bhv_platform_on_track_init(void) {
 
 /**
  * Move to the start waypoint, spawn the first track balls, and enter the
- * wait for mario action.
+ * wait for Mario action.
  */
 static void platform_on_track_act_init(void) {
     s32 i;
@@ -92,7 +92,7 @@ static void platform_on_track_act_init(void) {
 }
 
 /**
- * Wait for mario to stand on the platform for 20 frames, then begin moving.
+ * Wait for Mario to stand on the platform for 20 frames, then begin moving.
  */
 static void platform_on_track_act_wait_for_mario(void) {
     if (gMarioObject->platform == o) {
@@ -238,8 +238,8 @@ static void platform_on_track_rock_ski_lift(void) {
 
     o->oFaceAngleRoll += (s32) o->oPlatformOnTrackSkiLiftRollVel;
 
-    // Tilt away from the moving direction and toward mario
-    if (gMarioObject->platform == o) targetRoll = o->oForwardVel * sins(o->oMoveAngleYaw) * -50.0f + (s32)(o->oDistanceToMario * sins(o->oAngleToMario - o->oFaceAngleYaw) * -4.0f);
+    // Tilt away from the moving direction and toward Mario
+    if (gMarioObject->platform == o) targetRoll = ((o->oForwardVel * sins(o->oMoveAngleYaw) * -50.0f) + (s32)(o->oDistanceToMario * sins(o->oAngleToMario - o->oFaceAngleYaw) * -4.0f));
 
     oscillate_toward(
         /* value          */ &o->oFaceAngleRoll,
@@ -275,14 +275,14 @@ void bhv_platform_on_track_update(void) {
                 o->oPlatformOnTrackOffsetY    = -8.0f;
                 o->oPlatformOnTrackWasStoodOn = TRUE;
             }
-            targetRoll = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) * 0x4;
+            targetRoll = (o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) * 0x4);
         } else {
             targetRoll = 0x0;
         }
         o->oFaceAngleRoll = approach_s32(o->oFaceAngleRoll, targetRoll, 0x100, 0x100);
 #else
-        if (!o->oPlatformOnTrackWasStoodOn && gMarioObject->platform == o) {
-            o->oPlatformOnTrackOffsetY = -8.0f;
+        if (!o->oPlatformOnTrackWasStoodOn && (gMarioObject->platform == o)) {
+            o->oPlatformOnTrackOffsetY    = -8.0f;
             o->oPlatformOnTrackWasStoodOn = TRUE;
         }
 
@@ -297,6 +297,6 @@ void bhv_platform_on_track_update(void) {
  */
 void bhv_track_ball_update(void) {
     // Despawn after the elevator passes this ball
-    s16 relativeIndex = (s16) o->oBehParams2ndByte - (s16) o->parentObj->oPlatformOnTrackBaseBallIndex - 1;
-    if (relativeIndex < 1 || relativeIndex > 5) obj_mark_for_deletion(o);
+    s16 relativeIndex = ((s16) o->oBehParams2ndByte - (s16) o->parentObj->oPlatformOnTrackBaseBallIndex - 1);
+    if ((relativeIndex < 1) || (relativeIndex > 5)) obj_mark_for_deletion(o);
 }

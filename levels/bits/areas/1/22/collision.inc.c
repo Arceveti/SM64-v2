@@ -1,5 +1,5 @@
 // 0x0701AA84 - 0x0701AC28
-const Collision bits_seg7_collision_0701AA84[] = {
+const Collision bits_seg7_collision_rotating_octagonal_platform[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x18),
     COL_VERTEX(-385, -306, 179),

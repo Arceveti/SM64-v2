@@ -50,7 +50,7 @@
 
 struct ModifiableVertexGroup {
     const Vtx *vertexData;
-    const s16 vertexCount;
+    const u16 vertexCount;
 };
 
 static s32 sCapSaveFlags[] = { SAVE_FLAG_HAVE_WING_CAP, SAVE_FLAG_HAVE_METAL_CAP, SAVE_FLAG_HAVE_VANISH_CAP };

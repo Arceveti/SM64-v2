@@ -24,7 +24,7 @@ void bhv_castle_floor_trap_open_detect(void) {
 
 void bhv_castle_floor_trap_open(void) {
     if (o->oTimer == 0) play_sound(SOUND_GENERAL_CASTLE_TRAP_OPEN, gGlobalSoundSource);
-    o->oAngleVelRoll -= 0x100;
+    o->oAngleVelRoll  -= 0x100;
     o->oFaceAngleRoll += o->oAngleVelRoll;
     if (o->oFaceAngleRoll < -0x4000) {
         o->oFaceAngleRoll = -0x4000;
@@ -38,9 +38,9 @@ void bhv_castle_floor_trap_close_detect(void) {
 
 void bhv_castle_floor_trap_close(void) {
     o->oFaceAngleRoll += 0x400;
-    if (o->oFaceAngleRoll > 0x0) {
-        o->oFaceAngleRoll = 0x0;
-        o->oAction = CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT; // after closing, reloads open detection
+    if (o->oFaceAngleRoll   > 0x0) {
+        o->oFaceAngleRoll   = 0x0;
+        o->oAction          = CASTLE_FLOOR_TRAP_ACT_OPEN_DETECT; // after closing, reloads open detection
         o->oInteractStatus &= ~INT_STATUS_TRAP_TURN;
     }
 }

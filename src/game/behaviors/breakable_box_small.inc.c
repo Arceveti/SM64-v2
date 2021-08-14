@@ -18,26 +18,24 @@ void bhv_breakable_box_small_init(void) {
     o->oBuoyancy = 1.4f;
     cur_obj_scale(0.4f);
     obj_set_hitbox(o, &sBreakableBoxSmallHitbox);
-    o->oAnimState = BREAKABLE_BOX_ANIM_STATE_CORK_BOX;
+    o->oAnimState   = BREAKABLE_BOX_ANIM_STATE_CORK_BOX;
     o->activeFlags |= ACTIVE_FLAG_SMALL_BOX_NOT_THROWN;
 }
 
 void small_breakable_box_spawn_dust(void) {
     struct Object *smokeObj = spawn_object(o, MODEL_SMOKE, bhvSmoke);
-    smokeObj->oPosX += (s32)(random_float() * 80.0f) - 40;
-    smokeObj->oPosZ += (s32)(random_float() * 80.0f) - 40;
+    smokeObj->oPosX += ((s32)(random_float() * 80.0f) - 40);
+    smokeObj->oPosZ += ((s32)(random_float() * 80.0f) - 40);
 }
 
 void breakable_box_small_act_move(void) {
     s16 collisionFlags = object_step();
-
     obj_attack_collided_from_other_object(o);
     if (collisionFlags == OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_SMALL_BOX_LANDING);
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oForwardVel > 20.0f)) {
         cur_obj_play_sound_2(SOUND_ENV_SLIDING);
         small_breakable_box_spawn_dust();
     }
-
     if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
         spawn_mist_particles();
         spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 0.7f, 3);
@@ -45,22 +43,19 @@ void breakable_box_small_act_move(void) {
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
-
     obj_check_floor_death(collisionFlags, sObjFloor);
 }
 
 void breakable_box_small_released_loop(void) {
     o->oBreakableBoxSmallFramesSinceReleased++;
-
     // Begin flashing
     if (o->oBreakableBoxSmallFramesSinceReleased > 810) {
-        if (o->oBreakableBoxSmallFramesSinceReleased & 1) {
-            o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
+        if (o->oBreakableBoxSmallFramesSinceReleased & 0x1) {
+            o->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
         } else {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         }
     }
-
     // Despawn, and create a corkbox respawner
     if (o->oBreakableBoxSmallFramesSinceReleased > 900) {
         create_respawner(MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall, 3000);
@@ -124,6 +119,5 @@ void bhv_breakable_box_small_loop(void) {
             breakable_box_small_get_dropped();
             break;
     }
-
     o->oInteractStatus = INT_STATUS_NONE;
 }

@@ -34,6 +34,7 @@ void bhv_chain_chomp_chain_part_update(void) {
         struct ChainSegment *segment = &o->parentObj->oChainChompSegments[o->oBehParams2ndByte];
 
         // Set position relative to the pivot
+        // vec3f_sum(&o->oPosVec, &o->parentObj->parentObj->oPosVec, &segment->posVec);
         o->oPosX = o->parentObj->parentObj->oPosX + segment->posX;
         o->oPosY = o->parentObj->parentObj->oPosY + segment->posY;
         o->oPosZ = o->parentObj->parentObj->oPosZ + segment->posZ;
@@ -44,7 +45,7 @@ void bhv_chain_chomp_chain_part_update(void) {
 }
 
 /**
- * When mario gets close enough, allocate chain segments and spawn their objects.
+ * When Mario gets close enough, allocate chain segments and spawn their objects.
  */
 static void chain_chomp_act_uninitialized(void) {
     struct ChainSegment *segments;
@@ -155,7 +156,7 @@ static void chain_chomp_restore_normal_chain_lengths(void) {
 }
 
 /**
- * Turn toward mario. Wait a bit and then enter the lunging sub-action.
+ * Turn toward Mario. Wait a bit and then enter the lunging sub-action.
  */
 static void chain_chomp_sub_act_turn(void) {
     o->oGravity = -4.0f;
@@ -234,12 +235,11 @@ static void chain_chomp_sub_act_lunge(void) {
 }
 
 /**
- * Fall to the ground and interrupt mario into a cutscene action.
+ * Fall to the ground and interrupt Mario into a cutscene action.
  */
 static void chain_chomp_released_trigger_cutscene(void) {
     o->oForwardVel =  0.0f;
     o->oGravity    = -4.0f;
-
     //! Can delay this if we get into a cutscene-unfriendly action after the
     //  last post ground pound and before this
     if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK 
@@ -250,7 +250,7 @@ static void chain_chomp_released_trigger_cutscene(void) {
 }
 
 /**
- * Lunge 4 times, each time moving toward mario +/- 0x2000 angular units.
+ * Lunge 4 times, each time moving toward Mario +/- 0x2000 angular units.
  * Finally, begin a lunge toward x=1450, z=562 (near the gate).
  */
 static void chain_chomp_released_lunge_around(void) {
@@ -258,7 +258,7 @@ static void chain_chomp_released_lunge_around(void) {
 
     // Finish bounce
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-        // Before first bounce, turn toward mario and wait 2 seconds
+        // Before first bounce, turn toward Mario and wait 2 seconds
         if (o->oChainChompNumLunges == 0) {
             if (cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x320)) {
                 if (o->oTimer > 60) {
@@ -324,7 +324,7 @@ static void chain_chomp_released_jump_away(void) {
 }
 
 /**
- * Release mario and transition to the unload chain action.
+ * Release Mario and transition to the unload chain action.
  */
 static void chain_chomp_released_end_cutscene(void) {
     if (cutscene_object(CUTSCENE_STAR_SPAWN, o) == -1) {
@@ -339,14 +339,12 @@ static void chain_chomp_released_end_cutscene(void) {
  */
 static void chain_chomp_act_move(void) {
     f32 maxDistToPivot;
-
-    // Unload chain if mario is far enough
+    // Unload chain if Mario is far enough
     if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED && o->oDistanceToMario > 4000.0f) {
-        o->oAction = CHAIN_CHOMP_ACT_UNLOAD_CHAIN;
+        o->oAction     = CHAIN_CHOMP_ACT_UNLOAD_CHAIN;
         o->oForwardVel = o->oVelY = 0.0f;
     } else {
         cur_obj_update_floor_and_walls();
-
         switch (o->oChainChompReleaseStatus) {
             case CHAIN_CHOMP_NOT_RELEASED:
                 switch (o->oSubAction) {
@@ -404,15 +402,15 @@ static void chain_chomp_act_move(void) {
 
         chain_chomp_update_chain_segments();
 
-        // Begin a lunge if mario tries to attack
+        // Begin a lunge if Mario tries to attack
         if (obj_check_attacks(&sChainChompHitbox, o->oAction)) {
             o->oSubAction = CHAIN_CHOMP_SUB_ACT_LUNGE;
             // o->oChainChompMaxDistFromPivotPerChainPart = 900.0f / CHAIN_CHOMP_NUM_PARTS;
             o->oChainChompMaxDistFromPivotPerChainPart = 180.0f; // (CHAIN_CHOMP_NUM_PARTS * 180.0f) / CHAIN_CHOMP_NUM_PARTS;
-            o->oForwardVel =   0.0f;
-            o->oVelY       = 300.0f;
-            o->oGravity    =  -4.0f;
-            o->oChainChompTargetPitch = -0x3000;
+            o->oForwardVel                             =   0.0f;
+            o->oVelY                                   = 300.0f;
+            o->oGravity                                =  -4.0f;
+            o->oChainChompTargetPitch                  = -0x3000;
         }
     }
 }
@@ -443,14 +441,14 @@ void bhv_chain_chomp_update(void) {
  * Update function for wooden post.
  */
 void bhv_wooden_post_update(void) {
-    // When ground pounded by mario, drop by -45 + -20
+    // When ground pounded by Mario, drop by -45 + -20
     if (!o->oWoodenPostMarioPounding) {
         if ((o->oWoodenPostMarioPounding = cur_obj_is_mario_ground_pounding_platform())) {
             cur_obj_play_sound_2(SOUND_GENERAL_POUND_WOOD_POST);
             o->oWoodenPostSpeedY = -70.0f;
         }
     } else if (approach_f32_ptr(&o->oWoodenPostSpeedY, 0.0f, 25.0f)) {
-        // Stay still until mario is done ground pounding
+        // Stay still until Mario is done ground pounding
         o->oWoodenPostMarioPounding = cur_obj_is_mario_ground_pounding_platform();
     } else if ((o->oWoodenPostOffsetY += o->oWoodenPostSpeedY) < -190.0f) {
         // Once pounded, if this is the chain chomp's post, release the chain
@@ -466,11 +464,11 @@ void bhv_wooden_post_update(void) {
     if (o->oWoodenPostOffsetY != 0.0f) {
         o->oPosY = o->oHomeY + o->oWoodenPostOffsetY;
     } else if (!(o->oBehParams & WOODEN_POST_BP_NO_COINS_MASK)) {
-        // Reset the timer once mario is far enough
+        // Reset the timer once Mario is far enough
         if (o->oDistanceToMario > 400.0f) {
             o->oTimer = o->oWoodenPostTotalMarioAngle = 0x0;
         } else {
-            // When mario runs around the post 3 times within 200 frames, spawn
+            // When Mario runs around the post 3 times within 200 frames, spawn
             // coins
             o->oWoodenPostTotalMarioAngle += (s16)(o->oAngleToMario - o->oWoodenPostPrevAngleToMario);
             if (absi(o->oWoodenPostTotalMarioAngle) > 0x30000 && o->oTimer < 200) {

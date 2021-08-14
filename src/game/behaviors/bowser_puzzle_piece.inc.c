@@ -84,14 +84,12 @@ static struct BowserPuzzlePiece sBowserPuzzlePieces[] = {
 /**
  * Spawn a single puzzle piece.
  */
-void bhv_lll_bowser_puzzle_spawn_piece(s16 model, const BehaviorScript *behavior,
-                                       f32 xOffset, f32 zOffset,
-                                       s8 initialAction, s8 *actionList) {
-    struct Object *puzzlePiece = spawn_object(o, model, behavior);
-    puzzlePiece->oPosX += xOffset;
-    puzzlePiece->oPosY += 51.0f;
-    puzzlePiece->oPosZ += zOffset;
-    puzzlePiece->oAction = initialAction; // This action never gets executed.
+void bhv_lll_bowser_puzzle_spawn_piece(s16 model, const BehaviorScript *behavior, f32 xOffset, f32 zOffset, s8 initialAction, s8 *actionList) {
+    struct Object *puzzlePiece                = spawn_object(o, model, behavior);
+    puzzlePiece->oPosX                       += xOffset;
+    puzzlePiece->oPosY                       += 51.0f;
+    puzzlePiece->oPosZ                       += zOffset;
+    puzzlePiece->oAction                      = initialAction; // This action never gets executed.
     puzzlePiece->oBowserPuzzlePieceActionList = actionList;
     puzzlePiece->oBowserPuzzlePieceNextAction = actionList;
 }
@@ -101,15 +99,12 @@ void bhv_lll_bowser_puzzle_spawn_piece(s16 model, const BehaviorScript *behavior
  */
 void bhv_lll_bowser_puzzle_spawn_pieces(f32 pieceWidth) {
     s32 i;
-
     // Spawn all 14 puzzle pieces.
-    for (i = 0; i < 14; i++)
-        bhv_lll_bowser_puzzle_spawn_piece(sBowserPuzzlePieces[i].model, bhvLllBowserPuzzlePiece,
-                                          sBowserPuzzlePieces[i].xOffset * pieceWidth / 10.0f,
-                                          sBowserPuzzlePieces[i].zOffset * pieceWidth / 10.0f,
-                                          sBowserPuzzlePieces[i].initialAction,
-                                          sBowserPuzzlePieces[i].actionList);
-
+    for (i = 0; i < 14; i++) bhv_lll_bowser_puzzle_spawn_piece( sBowserPuzzlePieces[i].model, bhvLllBowserPuzzlePiece,
+                                                               (sBowserPuzzlePieces[i].xOffset * pieceWidth / 10.0f),
+                                                               (sBowserPuzzlePieces[i].zOffset * pieceWidth / 10.0f),
+                                                                sBowserPuzzlePieces[i].initialAction,
+                                                                sBowserPuzzlePieces[i].actionList);
     // The pieces should only be spawned once so go to the next action.
     o->oAction = BOWSER_PUZZLE_ACT_WAIT_FOR_COMPLETE;
 }
@@ -119,22 +114,19 @@ void bhv_lll_bowser_puzzle_spawn_pieces(f32 pieceWidth) {
  */
 void bhv_lll_bowser_puzzle_loop(void) {
     s32 i;
-    UNUSED struct Object *puzzlePieceObj;
     switch (o->oAction) {
         case BOWSER_PUZZLE_ACT_SPAWN_PIECES:
             bhv_lll_bowser_puzzle_spawn_pieces(512.0f);
             break;
         case BOWSER_PUZZLE_ACT_WAIT_FOR_COMPLETE:
             // If both completion flags are set and Mario is within 1000 units...
-            if (o->oBowserPuzzleCompletionFlags == 3 && o->oDistanceToMario < 1000.0f) {
+            if ((o->oBowserPuzzleCompletionFlags == (BOWSER_PUZZLE_COMPLETION_FLAG_MARIO_ON_PLATFORM | BOWSER_PUZZLE_COMPLETION_FLAG_PUZZLE_COMPLETE)) && (o->oDistanceToMario < 1000.0f)) {
                 // Spawn 5 coins.
-                for (i = 0; i < 5; i++) puzzlePieceObj = spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
-
+                for (i = 0; i < 5; i++) spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
                 // Reset completion flags (even though they never get checked again).
-                o->oBowserPuzzleCompletionFlags = 0;
-
+                o->oBowserPuzzleCompletionFlags = BOWSER_PUZZLE_COMPLETION_FLAGS_NONE;
                 // Go to next action so we don't spawn 5 coins ever again.
-                o->oAction = BOWSER_PUZZLE_ACT_DONE;
+                o->oAction                      = BOWSER_PUZZLE_ACT_DONE;
             }
             break;
         case BOWSER_PUZZLE_ACT_DONE:
@@ -147,23 +139,18 @@ void bhv_lll_bowser_puzzle_loop(void) {
  */
 void bhv_lll_bowser_puzzle_piece_update(void) {
     s8 *nextAction = o->oBowserPuzzlePieceNextAction;
-
     // If Mario is standing on this puzzle piece, set a flag in the parent.
-    if (gMarioObject->platform == o) o->parentObj->oBowserPuzzleCompletionFlags = 0x1;
+    if (gMarioObject->platform == o) o->parentObj->oBowserPuzzleCompletionFlags = BOWSER_PUZZLE_COMPLETION_FLAG_MARIO_ON_PLATFORM;
     // If we should advance to the next action...
     if (!o->oBowserPuzzlePieceContinuePerformingAction) {
         // Start doing the next action.
         cur_obj_change_action(*nextAction);
-
         // Advance the pointer to the next action.
-        nextAction++;
-        o->oBowserPuzzlePieceNextAction = nextAction;
-
+        o->oBowserPuzzlePieceNextAction = ++nextAction;
         // If we're at the end of the list...
         if (*nextAction == -1) {
             // Set the other completion flag in the parent.
-            o->parentObj->oBowserPuzzleCompletionFlags |= 2;
-
+            o->parentObj->oBowserPuzzleCompletionFlags |= BOWSER_PUZZLE_COMPLETION_FLAG_PUZZLE_COMPLETE;
             // The next action is the first action in the list again.
             o->oBowserPuzzlePieceNextAction = o->oBowserPuzzlePieceActionList;
         }
@@ -175,12 +162,12 @@ void bhv_lll_bowser_puzzle_piece_update(void) {
 void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UNUSED s32 a3) {
     // For the first 20 frames, shake the puzzle piece up and down.
     if (o->oTimer < 20) {
-        o->oBowserPuzzlePieceOffsetY = (o->oTimer & 0x1) ? 0.0f : -6.0f;
+        o->oBowserPuzzlePieceOffsetY = ((o->oTimer & 0x1) ? 0.0f : -6.0f);
     } else {
         // On frame 20, play the shifting sound.
         if (o->oTimer == 20) cur_obj_play_sound_2(SOUND_OBJ2_BOWSER_PUZZLE_PIECE_MOVE);
         // For the number of frames specified by duration, move the piece.
-        if (o->oTimer < duration + 20) {
+        if (o->oTimer < (duration + 20)) {
             o->oBowserPuzzlePieceOffsetX += xOffset;
             o->oBowserPuzzlePieceOffsetZ += zOffset;
         } else {
@@ -188,7 +175,6 @@ void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UN
             //   cur_obj_change_action is going to be called before the
             //   next action is performed anyway.
             o->oAction = BOWSER_PUZZLE_PIECE_ACT_IDLE;
-
             // Advance to the next action.
             o->oBowserPuzzlePieceContinuePerformingAction = FALSE;
         }
@@ -214,10 +200,6 @@ void (*sBowserPuzzlePieceActions[])(void) = {
 
 void bhv_lll_bowser_puzzle_piece_loop(void) {
     bhv_lll_bowser_puzzle_piece_update();
-
     cur_obj_call_action_function(sBowserPuzzlePieceActions);
-
-    o->oPosX = o->oBowserPuzzlePieceOffsetX + o->oHomeX;
-    o->oPosY = o->oBowserPuzzlePieceOffsetY + o->oHomeY;
-    o->oPosZ = o->oBowserPuzzlePieceOffsetZ + o->oHomeZ;
+    vec3f_sum(&o->oPosVec, &o->oBowserPuzzlePieceOffsetVec, &o->oHomeVec);
 }

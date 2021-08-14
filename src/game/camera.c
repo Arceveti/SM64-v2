@@ -935,7 +935,7 @@ void mode_8_directions_camera(struct Camera *c) {
         rButtonCounter++; // This increses whenever R is held.
     } else {
         if (rButtonCounter > 0 && rButtonCounter <= 5 && !((gPlayer1Controller->buttonDown & L_CBUTTONS) || (gPlayer1Controller->buttonDown & R_CBUTTONS) || (gMarioState->action & ACT_FLAG_SWIMMING_OR_FLYING))) {
-            // This centers the camera behind mario. It triggers when you let go of R in less than 5 frames.
+            // This centers the camera behind Mario. It triggers when you let go of R in less than 5 frames.
             s8DirModeYawOffset = 0x0;
             s8DirModeBaseYaw = gMarioState->faceAngle[1]-0x8000;
             gMarioState->area->camera->yaw = s8DirModeBaseYaw;
@@ -945,7 +945,7 @@ void mode_8_directions_camera(struct Camera *c) {
     }
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
         if (rButtonCounter2 <= 5) {
-            set_cam_angle(CAM_ANGLE_MARIO); // Enter mario cam if R is pressed 2 times in less than 5 frames
+            set_cam_angle(CAM_ANGLE_MARIO); // Enter Mario cam if R is pressed 2 times in less than 5 frames
             rButtonCounter2 = 6;
         } else {
             rButtonCounter2 = 0;
@@ -2621,12 +2621,6 @@ Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context) {
         case GEO_CONTEXT_RENDER: update_graph_node_camera(gc); break;
     }
     return NULL;
-}
-
-void vec3f_sub(Vec3f dst, Vec3f src) {
-    dst[0] -= src[0];
-    dst[1] -= src[1];
-    dst[2] -= src[2];
 }
 
 void object_pos_to_vec3f(Vec3f dst, struct Object *o) {

@@ -31,20 +31,17 @@ f32 sMontyMoleLastKilledPosZ;
  */
 static struct Object *link_objects_with_behavior(const BehaviorScript *behavior) {
     const BehaviorScript *behaviorAddr;
-    struct Object *obj;
-    struct Object *lastObject;
-    struct ObjectNode *listHead;
-
+    struct Object        *obj;
+    struct Object        *lastObject;
+    struct ObjectNode    *listHead;
     behaviorAddr = segmented_to_virtual(behavior);
-    lastObject = NULL;
-
-    listHead = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
-
-    obj = (struct Object *) listHead->next;
+    lastObject   = NULL;
+    listHead     = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
+    obj          = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
             obj->parentObj = lastObject;
-            lastObject = obj;
+            lastObject     = obj;
         }
         obj = (struct Object *) obj->header.next;
     }
@@ -52,7 +49,7 @@ static struct Object *link_objects_with_behavior(const BehaviorScript *behavior)
 }
 
 /**
- * Select a random hole that is within minDistToMario and 1500 of mario, and
+ * Select a random hole that is within minDistToMario and 1500 of Mario, and
  * whose cooldown is zero. Return NULL if no hole is available.
  */
 static struct Object *monty_mole_select_available_hole(f32 minDistToMario) {
@@ -60,9 +57,9 @@ static struct Object *monty_mole_select_available_hole(f32 minDistToMario) {
     s32 numAvailableHoles = 0;
 
     while (hole != NULL) {
-        if (hole->oMontyMoleHoleCooldown == 0
-         && hole->oDistanceToMario < 1500.0f
-         && hole->oDistanceToMario > minDistToMario) numAvailableHoles++;
+        if ((hole->oMontyMoleHoleCooldown == 0)
+         && (hole->oDistanceToMario < 1500.0f)
+         && (hole->oDistanceToMario > minDistToMario)) numAvailableHoles++;
 
         hole = hole->parentObj;
     }
@@ -74,9 +71,9 @@ static struct Object *monty_mole_select_available_hole(f32 minDistToMario) {
         numAvailableHoles = 0;
 
         while (hole != NULL) {
-            if (hole->oMontyMoleHoleCooldown == 0
-             && hole->oDistanceToMario < 1500.0f
-             && hole->oDistanceToMario > minDistToMario) {
+            if ((hole->oMontyMoleHoleCooldown == 0)
+             && (hole->oDistanceToMario < 1500.0f)
+             && (hole->oDistanceToMario > minDistToMario)) {
                 if (numAvailableHoles == selectedHole) return hole;
                 numAvailableHoles++;
             }
@@ -119,7 +116,7 @@ void monty_mole_spawn_dirt_particles(s8 offsetY, s8 velYBase) {
         /* sizeRange:       */ 7.0f,
     };
 
-    sMontyMoleRiseFromGroundParticles.offsetY = offsetY;
+    sMontyMoleRiseFromGroundParticles.offsetY  = offsetY;
     sMontyMoleRiseFromGroundParticles.velYBase = velYBase;
     cur_obj_spawn_particles(&sMontyMoleRiseFromGroundParticles);
 }
@@ -192,16 +189,16 @@ static void monty_mole_act_rise_from_hole(void) {
 }
 
 /**
- * If mario is close enough, then spawn a rock and enter the throw rock action.
+ * If Mario is close enough, then spawn a rock and enter the throw rock action.
  * Otherwise, enter the begin jump into hole action.
  */
 static void monty_mole_act_spawn_rock(void) {
     struct Object *rock;
 
     if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_GET_ROCK)) {
-        if (o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK
-            && abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x4000
-            && (rock = spawn_object(o, MODEL_PEBBLE, bhvMontyMoleRock)) != NULL) {
+        if ((o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK)
+            && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x4000)
+            && ((rock = spawn_object(o, MODEL_PEBBLE, bhvMontyMoleRock)) != NULL)) {
             o->prevObj = rock;
             o->oAction = MONTY_MOLE_ACT_THROW_ROCK;
         } else {
@@ -211,13 +208,13 @@ static void monty_mole_act_spawn_rock(void) {
 }
 
 /**
- * Wait until mario is relatively close, then set vely to 40 and enter the jump
+ * Wait until Mario is relatively close, then set vely to 40 and enter the jump
  * into hole action.
  */
 static void monty_mole_act_begin_jump_into_hole(void) {
     if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || obj_is_near_to_and_facing_mario(1000.0f, 0x4000)) {
-        o->oAction = MONTY_MOLE_ACT_JUMP_INTO_HOLE;
-        o->oVelY = 40.0f;
+        o->oAction  = MONTY_MOLE_ACT_JUMP_INTO_HOLE;
+        o->oVelY    = 40.0f;
         o->oGravity = -6.0f;
     }
 }

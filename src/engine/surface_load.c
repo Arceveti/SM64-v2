@@ -186,10 +186,10 @@ static s16 upper_cell_index(s32 coord) {
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
     register s16 cellZ, cellX;
-    register const s16 minX     = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s16 minZ     = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    register const s16 maxX     = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s16 maxZ     = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s16 minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s16 minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s16 maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s16 maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
     register const s16 minCellX = lower_cell_index(minX);
     register const s16 maxCellX = upper_cell_index(maxX);
     register const s16 minCellZ = lower_cell_index(minZ);
@@ -262,8 +262,8 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
 
     surface->originOffset = -(nx * x1 + ny * y1 + nz * z1);
 
-    surface->lowerY = min_3(y1, y2, y3) - 5;
-    surface->upperY = max_3(y1, y2, y3) + 5;
+    surface->lowerY = min_3s(y1, y2, y3) - 5;
+    surface->upperY = max_3s(y1, y2, y3) + 5;
 
     return surface;
 }

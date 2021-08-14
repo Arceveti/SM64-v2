@@ -54,8 +54,12 @@ float  Q_rsqrtf( float  number );
 double Q_rsqrtd( double number );
 #endif
 // Comparison
-s16  min_3(s16 a0, s16 a1, s16 a2);
-s16  max_3(s16 a0, s16 a1, s16 a2);
+s16  min_3s(s16 a0, s16 a1, s16 a2);
+s16  max_3s(s16 a0, s16 a1, s16 a2);
+s32  min_3i(s32 a0, s32 a1, s32 a2);
+s32  max_3i(s32 a0, s32 a1, s32 a2);
+f32  min_3f(f32 a0, f32 a1, f32 a2);
+f32  max_3f(f32 a0, f32 a1, f32 a2);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
@@ -68,7 +72,9 @@ s16  abs_angle_diff(s16 angle1, s16 angle2);
 void vec3f_copy(                         Vec3f dest, Vec3f src);
 void vec3f_set(                          Vec3f dest, f32 x, f32 y, f32 z);
 void vec3f_add(                          Vec3f dest, Vec3f a);
+void vec3f_sub(                          Vec3f dst, Vec3f a);
 void vec3f_sum(                          Vec3f dest, Vec3f a, Vec3f b);
+void vec3f_diff(                         Vec3f dest, Vec3f a, Vec3f b);
 void vec3s_copy(                         Vec3s dest, Vec3s src);
 void vec3s_set(                          Vec3s dest, s16 x, s16 y, s16 z);
 void vec3s_add(                          Vec3s dest, Vec3s a);

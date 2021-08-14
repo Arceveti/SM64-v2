@@ -78,7 +78,7 @@
 // #define TIGHTER_HANGING_CONTROLS
 // Disables fall damage
 #define NO_FALL_DAMAGE
-// Disables the scream that mario makes when falling off a great height (this is separate from actual fall damage)
+// Disables the scream that Mario makes when falling off a great height (this is separate from actual fall damage)
 // #define NO_FALL_DAMAGE_SOUND
 // Number of coins to spawn the "100 coin" star. If you remove the define altogether, then there won't be a 100 coin star at all.
 #define X_COIN_STAR 100
@@ -90,7 +90,7 @@
 // #define GLOBAL_STAR_IDS
 // Uncomment this if you want to skip the title screen (Super Mario 64 logo)
 // #define SKIP_TITLE_SCREEN
-// Uncomment this if you want to keep the mario head and not skip it
+// Uncomment this if you want to keep the Mario head and not skip it
 #define KEEP_MARIO_HEAD
 // Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad
 #define PARALLEL_LAKITU_CAM
@@ -220,7 +220,7 @@
 // Use painting data for the PSS painting instead of a static texture (Arceveti)
 // TODO: Painting Wobble
 #define PSS_PAINTING
-// Makes the WF star spawn from the wall instead of existing already (Unknown)
+// Makes the WF star spawn from the wall instead of existing already (AdyaGD)
 #define FIX_CANNONLESS
 // Re-implements and fixes unused SSL pillars cutscene
 // (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti)
@@ -321,7 +321,7 @@
 #define BLUE_COIN_SWITCH_RETRY
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
-// Clams don't hurt mario unless they are moving (opening/closing) (Arceveti)
+// Clams don't hurt Mario unless they are moving (opening/closing) (Arceveti)
 #define CLAMS_ONLY_HURT_WHEN_MOVING
 // Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti)
 #define COIN_LAVA_FLICKER
