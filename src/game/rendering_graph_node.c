@@ -15,6 +15,9 @@
 #include "sm64.h"
 #include "game_init.h"
 #include "engine/extended_bounds.h"
+#ifdef PUPPYPRINT
+#include "puppyprint.h"
+#endif
 
 #include "config.h"
 
@@ -149,52 +152,6 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
     } } };
 #else
 /* Rendermode settings for cycle 1 for all 8 layers. */
-#ifdef DISABLE_AA
-struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
-    G_RM_OPA_SURF,
-    G_RM_AA_OPA_SURF,
-    G_RM_AA_OPA_SURF,
-    G_RM_AA_OPA_SURF,
-    G_RM_AA_TEX_EDGE,
-    G_RM_AA_XLU_SURF,
-    G_RM_AA_XLU_SURF,
-    G_RM_AA_XLU_SURF,
-    } },
-    { {
-    /* z-buffered */
-    G_RM_ZB_OPA_SURF,
-    G_RM_ZB_OPA_SURF,
-    G_RM_ZB_OPA_DECAL,
-    G_RM_AA_ZB_OPA_INTER,
-    G_RM_AA_ZB_TEX_EDGE,
-    G_RM_ZB_XLU_SURF,
-    G_RM_ZB_XLU_DECAL,
-    G_RM_AA_ZB_XLU_INTER,
-    } } };
-
-/* Rendermode settings for cycle 2 for all 8 layers. */
-struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
-    G_RM_OPA_SURF2,
-    G_RM_AA_OPA_SURF2,
-    G_RM_AA_OPA_SURF2,
-    G_RM_AA_OPA_SURF2,
-    G_RM_AA_TEX_EDGE2,
-    G_RM_AA_XLU_SURF2,
-    G_RM_AA_XLU_SURF2,
-    G_RM_AA_XLU_SURF2,
-    } },
-    { {
-    /* z-buffered */
-    G_RM_ZB_OPA_SURF2,
-    G_RM_ZB_OPA_SURF2,
-    G_RM_ZB_OPA_DECAL2,
-    G_RM_AA_ZB_OPA_INTER2,
-    G_RM_AA_ZB_TEX_EDGE2,
-    G_RM_ZB_XLU_SURF2,
-    G_RM_ZB_XLU_DECAL2,
-    G_RM_AA_ZB_XLU_INTER2,
-    } } };
-#else
 struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
     G_RM_OPA_SURF,
     G_RM_AA_OPA_SURF,
@@ -239,7 +196,6 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
     G_RM_AA_ZB_XLU_DECAL2,
     G_RM_AA_ZB_XLU_INTER2,
     } } };
-#endif
 #endif
 
 struct GraphNodeRoot        *gCurGraphNodeRoot       = NULL;
@@ -1012,6 +968,9 @@ void geo_process_node_and_siblings(struct GraphNode *firstNode) {
  * to set up the projection and draw display lists.
  */
 void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) {
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     if (node->node.flags & GRAPH_RENDER_ACTIVE) {
         Mtx *initialMatrix;
         Vp *viewport     = alloc_display_list(sizeof(*viewport));
@@ -1019,8 +978,8 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         initialMatrix    = alloc_display_list(sizeof(*initialMatrix));
         gMatStackIndex   = 0;
         gCurAnimType     = ANIM_TYPE_NONE;
-        vec3s_set(viewport->vp.vtrans, node->x     * 4, node->y      * 4, 511);
-        vec3s_set(viewport->vp.vscale, node->width * 4, node->height * 4, 511);
+        vec3s_set(viewport->vp.vtrans, (node->x     * 4), (node->y      * 4), 511);
+        vec3s_set(viewport->vp.vscale, (node->width * 4), (node->height * 4), 511);
         if (b != NULL) {
             clear_frame_buffer(clearColor);
             make_viewport_clip_rect(b);
@@ -1046,4 +1005,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         }
         main_pool_free(gDisplayListHeap);
     }
+#ifdef PUPPYPRINT
+    profiler_update(graphTime, first);
+#endif
 }

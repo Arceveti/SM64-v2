@@ -7,6 +7,9 @@
 #include "heap.h"
 #include "load.h"
 #include "seqplayer.h"
+#ifdef PUPPYPRINT
+#include "game/puppyprint.h"
+#endif
 
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
 
@@ -136,8 +139,14 @@ u8 audioString49[] = "BANK LOAD MISS! FOR %d\n";
  * Performs an asynchronus (normal priority) DMA copy
  */
 void audio_dma_copy_async(uintptr_t devAddr, void *vAddr, size_t nbytes, OSMesgQueue *queue, OSIoMesg *mesg) {
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     osInvalDCache(vAddr, nbytes);
     osPiStartDma(mesg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, vAddr, nbytes, queue);
+#ifdef PUPPYPRINT
+    dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
 }
 
 /**
@@ -145,6 +154,9 @@ void audio_dma_copy_async(uintptr_t devAddr, void *vAddr, size_t nbytes, OSMesgQ
  * to 0x1000 bytes transfer at once.
  */
 void audio_dma_partial_copy_async(uintptr_t *devAddr, u8 **vAddr, ssize_t *remaining, OSMesgQueue *queue, OSIoMesg *mesg) {
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
 #if defined(VERSION_EU)
     ssize_t transfer = (*remaining >= 0x1000 ? 0x1000 : *remaining);
 #else
@@ -155,6 +167,9 @@ void audio_dma_partial_copy_async(uintptr_t *devAddr, u8 **vAddr, ssize_t *remai
     osPiStartDma(mesg, OS_MESG_PRI_NORMAL, OS_READ, *devAddr, *vAddr, transfer, queue);
     *devAddr += transfer;
     *vAddr += transfer;
+#ifdef PUPPYPRINT
+    dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
 }
 
 void decrease_sample_dma_ttls() {
@@ -164,7 +179,7 @@ void decrease_sample_dma_ttls() {
 #if defined(VERSION_EU)
         struct SharedDma *temp = &sSampleDmas[i];
 #else
-        struct SharedDma *temp = sSampleDmas + i;
+        struct SharedDma *temp = (sSampleDmas + i);
 #endif
         if (temp->ttl != 0) {
             temp->ttl--;
@@ -179,7 +194,7 @@ void decrease_sample_dma_ttls() {
 #if defined(VERSION_EU)
         struct SharedDma *temp = &sSampleDmas[i];
 #else
-        struct SharedDma *temp = sSampleDmas + i;
+        struct SharedDma *temp = (sSampleDmas + i);
 #endif
         if (temp->ttl != 0) {
             temp->ttl--;
@@ -199,7 +214,9 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef) {
     u32 i;
     u32 dmaIndex;
     ssize_t bufferPos;
-
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     if (arg2 != 0 || *dmaIndexRef >= sSampleDmaListSize1) {
         for (i = sSampleDmaListSize1; i < gSampleDmaNumListItems; i++) {
 #if defined(VERSION_EU)
@@ -221,10 +238,13 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef) {
                 }
                 dma->ttl = 60;
                 *dmaIndexRef = (u8) i;
+#ifdef PUPPYPRINT
+                dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
 #if defined(VERSION_EU)
                 return &dma->buffer[(devAddr - dma->source)];
 #else
-                return (devAddr - dma->source) + dma->buffer;
+                return ((devAddr - dma->source) + dma->buffer);
 #endif
             }
         }
@@ -257,10 +277,13 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef) {
                 sSampleDmaReuseQueueTail1++;
             }
             dma->ttl = 2;
+#ifdef PUPPYPRINT
+            dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
 #if defined(VERSION_EU)
-            return dma->buffer + (devAddr - dma->source);
+            return (dma->buffer + (devAddr - dma->source));
 #else
-            return (devAddr - dma->source) + dma->buffer;
+            return ((devAddr - dma->source) + dma->buffer);
 #endif
         }
     }
@@ -273,9 +296,9 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef) {
         hasDma = TRUE;
     }
 
-    transfer = dma->bufSize;
-    dmaDevAddr = devAddr & ~0xF;
-    dma->ttl = 2;
+    transfer    = dma->bufSize;
+    dmaDevAddr  = (devAddr & ~0xF);
+    dma->ttl    = 2;
     dma->source = dmaDevAddr;
 #ifdef VERSION_US
     osInvalDCache(dma->buffer, transfer);
@@ -284,12 +307,18 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef) {
     osPiStartDma(&gCurrAudioFrameDmaIoMesgBufs[gCurrAudioFrameDmaCount++], OS_MESG_PRI_NORMAL,
                      OS_READ, dmaDevAddr, dma->buffer, transfer, &gCurrAudioFrameDmaQueue);
     *dmaIndexRef = dmaIndex;
+#ifdef PUPPYPRINT
+    dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
     return (devAddr - dmaDevAddr) + dma->buffer;
 #else
     gCurrAudioFrameDmaCount++;
     osPiStartDma(&gCurrAudioFrameDmaIoMesgBufs[gCurrAudioFrameDmaCount - 1], OS_MESG_PRI_NORMAL,
                  OS_READ, dmaDevAddr, dma->buffer, transfer, &gCurrAudioFrameDmaQueue);
     *dmaIndexRef = dmaIndex;
+#ifdef PUPPYPRINT
+    dmaAudioTime[perfIteration] += (osGetTime()-first);
+#endif
     return dma->buffer + (devAddr - dmaDevAddr);
 #endif
 }
@@ -306,13 +335,13 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
 #if defined(VERSION_EU)
     sDmaBufSize = 0x400;
 #else
-    sDmaBufSize = 144 * 9;
+    sDmaBufSize = (144 * 9);
 #endif
 
 #if defined(VERSION_EU)
-    for (i = 0; i < gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4; i++) {
+    for (i = 0; i < (gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4); i++) {
 #else
-    for (i = 0; i < gMaxSimultaneousNotes * 3; i++) {
+    for (i = 0; i < (gMaxSimultaneousNotes * 3); i++) {
 #endif
         sSampleDmas[gSampleDmaNumListItems].buffer = soundAlloc(&gNotesAndBuffersPool, sDmaBufSize);
         if (sSampleDmas[gSampleDmaNumListItems].buffer == NULL) {
@@ -323,8 +352,8 @@ void init_sample_dma_buffers(UNUSED s32 arg0) {
 #endif
         }
         sSampleDmas[gSampleDmaNumListItems].bufSize = sDmaBufSize;
-        sSampleDmas[gSampleDmaNumListItems].source = 0;
-        sSampleDmas[gSampleDmaNumListItems].ttl = 0;
+        sSampleDmas[gSampleDmaNumListItems].source  = 0;
+        sSampleDmas[gSampleDmaNumListItems].ttl     = 0;
         gSampleDmaNumListItems++;
     }
 #if defined(VERSION_JP) || defined(VERSION_US)
@@ -332,7 +361,7 @@ out1:
 #endif
 
     for (i = 0; (u32) i < gSampleDmaNumListItems; i++) {
-        sSampleDmaReuseQueue1[i] = (u8) i;
+        sSampleDmaReuseQueue1[i]  = (u8) i;
         sSampleDmas[i].reuseIndex = (u8) i;
     }
 
@@ -345,7 +374,7 @@ out1:
 #if defined(VERSION_EU)
     sDmaBufSize = 0x200;
 #else
-    sDmaBufSize = 160 * 9;
+    sDmaBufSize = (160 * 9);
 #endif
     for (i = 0; i < gMaxSimultaneousNotes; i++) {
         sSampleDmas[gSampleDmaNumListItems].buffer = soundAlloc(&gNotesAndBuffersPool, sDmaBufSize);

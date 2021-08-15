@@ -96,6 +96,9 @@
 #define PARALLEL_LAKITU_CAM
 // Allows Mario to ledgegrab sloped floors
 // #define NO_FALSE_LEDGEGRABS
+// Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified.
+// #define PUPPYCAM
+
 
 // HACKER QOL 
 // Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value)
@@ -108,6 +111,9 @@
 #define ALL_SURFACES_HAVE_FORCE
 // Custom debug mode. Press DPAD left to show the debug UI. Press DPAD right to enter the noclip mode.
 //#define CUSTOM_DEBUG
+// Include Puppyprint, a display library for text and large images. Also includes a custom, enhanced performance profiler.
+// #define PUPPYPRINT
+#define PUPPYPRINT_DEBUG 0
 
 // BUG/GAME QOL FIXES
 // Fix instant warp offset not working when warping across different areas

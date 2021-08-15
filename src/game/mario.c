@@ -1181,6 +1181,12 @@ void update_mario_inputs(struct MarioState *m) {
     m->input                    = 0;
     m->collidedObjInteractTypes = m->marioObj->collidedObjInteractTypes;
     m->flags                   &= 0xFFFFFF;
+#ifdef PUPPYCAM
+    if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ENTER_FIRST_PERSON) {
+        m->input = INPUT_FIRST_PERSON;
+        return;
+    }
+#endif
     update_mario_button_inputs(m);
     update_mario_joystick_inputs(m);
     update_mario_geometry_inputs(m);
@@ -1231,7 +1237,7 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
     }
     if ((gPlayer1Controller->buttonPressed & R_TRIG) && (m->action & ACT_FLAG_SWIMMING)) {
-        s8DirModeBaseYaw = (((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000);
+        s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - 0x8000) + 0x1000) & 0xE000);
         gWaterCamOverride ^= TRUE;
     }
 #else

@@ -15,6 +15,9 @@
 #include "sm64.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#ifdef PUPPYPRINT
+#include "puppyprint.h"
+#endif
 
 #define MUSIC_NONE 0xFFFF
 
@@ -307,19 +310,42 @@ void audio_game_loop_tick(void) {
 void thread4_sound(UNUSED void *arg) {
     audio_init();
     sound_init();
-
+#ifdef PUPPYPRINT
+    OSTime lastTime;
+#endif
     osCreateMesgQueue(&sSoundMesgQueue, sSoundMesgBuf, ARRAY_COUNT(sSoundMesgBuf));
     set_vblank_handler(1, &sSoundVblankHandler, &sSoundMesgQueue, (OSMesg) 512);
-
     while (TRUE) {
         OSMesg msg;
         osRecvMesg(&sSoundMesgQueue, &msg, OS_MESG_BLOCK);
-        if (gResetTimer < 25) {
-            struct SPTask *spTask;
-            profiler_log_thread4_time();
-            spTask = create_next_audio_frame_task(); 
-            if (spTask != NULL) dispatch_audio_sptask(spTask);
-            profiler_log_thread4_time();
+#ifdef PUPPYPRINT
+        while (TRUE) {
+            lastTime = osGetTime();
+            dmaAudioTime[perfIteration] = 0;
+#endif
+            if (gResetTimer < 25) {
+                struct SPTask *spTask;
+                profiler_log_thread4_time();
+                spTask = create_next_audio_frame_task();
+                if (spTask != NULL) dispatch_audio_sptask(spTask);
+                profiler_log_thread4_time();
+#ifdef PUPPYPRINT
+                profiler_update(audioTime, lastTime);
+                audioTime[perfIteration] -= dmaAudioTime[perfIteration];
+                if ((benchmarkLoop > 0) && (benchOption == 1)) {
+                    benchmarkLoop--;
+                    benchMark[benchmarkLoop] = osGetTime() - lastTime;
+                    if (benchmarkLoop == 0) {
+                        puppyprint_profiler_finished();
+                        break;
+                    }
+                } else {
+                    break;
+                }
+#endif
+            }
+#ifdef PUPPYPRINT
         }
+#endif
     }
 }

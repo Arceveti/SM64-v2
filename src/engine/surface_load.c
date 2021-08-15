@@ -15,6 +15,9 @@
 #include "game/mario.h"
 #include "game/object_list_processor.h"
 #include "surface_load.h"
+#ifdef PUPPYPRINT
+#include "game/puppyprint.h"
+#endif
 
 #include "config.h"
 
@@ -422,7 +425,10 @@ u32 get_area_terrain_size(s16 *data) {
  */
 void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects) {
     s16 terrainLoadType;
-    s16 *vertexData        = NULL;
+    s16 *vertexData = NULL;
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     // Initialize the data for this.
     gEnvironmentRegions    = NULL;
     gSurfaceNodesAllocated = 0;
@@ -462,6 +468,9 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
     }
     gNumStaticSurfaceNodes = gSurfaceNodesAllocated;
     gNumStaticSurfaces     = gSurfacesAllocated;
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
 }
 
 /**
@@ -555,6 +564,9 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
  */
 void load_object_collision_model(void) {
     s16 vertexData[600];
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     s16 *collisionData = gCurrentObject->collisionData;
     f32 marioDist      = gCurrentObject->oDistanceToMario;
     f32 tangibleDist   = gCurrentObject->oCollisionDistance;
@@ -577,4 +589,7 @@ void load_object_collision_model(void) {
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
 }

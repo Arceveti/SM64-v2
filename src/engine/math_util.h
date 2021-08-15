@@ -28,12 +28,14 @@ extern f32 gSineTable[];
  */
 #define DEGREES(x) (s16)((x) * 0x10000 / 360)
 
-#define sins(x) gSineTable[  (u16) (x) >> 4]
-#define coss(x) gCosineTable[(u16) (x) >> 4]
+#define sins(x)  gSineTable[  (u16) (x) >> 4]
+#define coss(x)  gCosineTable[(u16) (x) >> 4]
 #define atans(x) gArctanTable[(u16) (x) >> 4] //! is this correct?
 
 #define min(a, b) ((a) <= (b) ? (a) : (b))
 #define max(a, b) ((a) >  (b) ? (a) : (b))
+
+#define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
 #define sqr(x) ((x) * (x))
 

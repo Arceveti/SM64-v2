@@ -7,6 +7,9 @@
 #include "area.h"
 #include "engine/geo_layout.h"
 #include "engine/graph_node.h"
+#ifdef PUPPYCAM
+#include "puppycam2.h"
+#endif
 
 #include "level_table.h"
 

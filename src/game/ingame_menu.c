@@ -23,6 +23,9 @@
 #include "text_strings.h"
 #include "types.h"
 #include "config.h"
+#ifdef PUPPYCAM
+#include "puppycam2.h"
+#endif
 
 u16 gDialogColorFadeTimer;
 s8  gLastDialogLineNum;
@@ -1231,7 +1234,9 @@ void render_pause_red_coins(void) {
     for (x = 0; x < gRedCoinsCollected; x++) print_animated_red_coin((GFX_DIMENSIONS_FROM_RIGHT_EDGE(30) - (x * 20)), 16);
 }
 
-#ifdef WIDE
+/// By default, not needed as puppycamera has an option, but should you wish to revert that, you are legally allowed.
+
+#if defined(WIDE) && !defined(PUPPYCAM)
 void render_widescreen_setting(void) {
     u8 textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43  };
     u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
@@ -1470,89 +1475,100 @@ s32 gCourseDoneMenuTimer      = 0;
 s32 gCourseCompleteCoins      = 0;
 s8  gHudFlash                 = FALSE;
 s16 render_pause_courses_and_castle(void) {
-    switch (gDialogBoxState) {
-        case DIALOG_STATE_OPENING:
-            gDialogLineNum   = MENU_OPT_DEFAULT;
-            gDialogTextAlpha = 0;
-            level_set_transition(-1, NULL);
-            play_sound(SOUND_MENU_PAUSE_OPEN, gGlobalSoundSource);
-            if ((gCurrCourseNum >= COURSE_MIN) && (gCurrCourseNum <= COURSE_MAX)) {
-                change_dialog_camera_angle();
-                gDialogBoxState = DIALOG_STATE_VERTICAL;
-            } else {
-                highlight_last_course_complete_stars();
-                gDialogBoxState = DIALOG_STATE_HORIZONTAL;
-            }
-            break;
-        case DIALOG_STATE_VERTICAL:
-            shade_screen();
-            render_pause_my_score_coins();
-            render_pause_red_coins();
+#ifdef PUPPYCAM
+    puppycam_check_pause_buttons();
+    if (!gPCOptionOpen) {
+#endif
+        switch (gDialogBoxState) {
+            case DIALOG_STATE_OPENING:
+                gDialogLineNum   = MENU_OPT_DEFAULT;
+                gDialogTextAlpha = 0;
+                level_set_transition(-1, NULL);
+                play_sound(SOUND_MENU_PAUSE_OPEN, gGlobalSoundSource);
+                if ((gCurrCourseNum >= COURSE_MIN) && (gCurrCourseNum <= COURSE_MAX)) {
+                    change_dialog_camera_angle();
+                    gDialogBoxState = DIALOG_STATE_VERTICAL;
+                } else {
+                    highlight_last_course_complete_stars();
+                    gDialogBoxState = DIALOG_STATE_HORIZONTAL;
+                }
+                break;
+            case DIALOG_STATE_VERTICAL:
+                shade_screen();
+                render_pause_my_score_coins();
+                render_pause_red_coins();
 #ifndef EXIT_COURSE_WHILE_MOVING
-            s32 exitCheck = gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT;
+                s32 exitCheck = gMarioStates[0].action & ACT_FLAG_PAUSE_EXIT;
 #else
-            s32 exitCheck = ((gMarioStates[0].pos[1] <= gMarioStates[0].floorHeight)
-                || (gMarioStates[0].action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT)));
+                s32 exitCheck = ((gMarioStates[0].pos[1] <= gMarioStates[0].floorHeight)
+                    || (gMarioStates[0].action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER | ACT_FLAG_PAUSE_EXIT)));
 #endif
 #ifndef DISABLE_EXIT_COURSE
-            if (exitCheck) render_pause_course_options(99, 93, &gDialogLineNum, 15);
+                if (exitCheck) render_pause_course_options(99, 93, &gDialogLineNum, 15);
 #endif
 #ifdef REONU_CAM_3
-            if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) render_camera_speed_setting(109, 60);
-            if (gPlayer3Controller->buttonPressed & (START_BUTTON)
-            || (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON) && !((gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R) && (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS)))) {
+                if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) render_camera_speed_setting(109, 60);
+                if (gPlayer3Controller->buttonPressed & (START_BUTTON)
+                || (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON) && !((gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R) && (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS)))) {
 #else
-            if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+                if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
 #endif
-                level_set_transition(0, NULL);
-                play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
-                gDialogBoxState = DIALOG_STATE_OPENING;
-                gMenuMode = MENU_MODE_NONE;
-                return ((gDialogLineNum == MENU_OPT_EXIT_COURSE) ? gDialogLineNum : MENU_OPT_DEFAULT); // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
+                    level_set_transition(0, NULL);
+                    play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
+                    gDialogBoxState = DIALOG_STATE_OPENING;
+                    gMenuMode = MENU_MODE_NONE;
+                    return ((gDialogLineNum == MENU_OPT_EXIT_COURSE) ? gDialogLineNum : MENU_OPT_DEFAULT); // MENU_OPT_CONTINUE or MENU_OPT_CAMERA_ANGLE_R
 #ifdef REONU_CAM_3
-            } else if ((gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R) && (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS)) {
-                if (gPlayer3Controller->buttonPressed & A_BUTTON) {
-                    if (gCameraSpeed < 4) {
-                        gCameraSpeed++;
-                    } else {
-                        gCameraSpeed = 0;
+                } else if ((gDialogLineNum == MENU_OPT_CAMERA_ANGLE_R) && (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS)) {
+                    if (gPlayer3Controller->buttonPressed & A_BUTTON) {
+                        if (gCameraSpeed < 4) {
+                            gCameraSpeed++;
+                        } else {
+                            gCameraSpeed = 0;
+                        }
+                        save_file_set_camera_speed(gCameraSpeed);
+                    } else if (gPlayer3Controller->buttonPressed & B_BUTTON) {
+                        if (gCameraSpeed > 0) {
+                            gCameraSpeed--;
+                        } else {
+                            gCameraSpeed = 4;
+                        }
+                        save_file_set_camera_speed(gCameraSpeed);
                     }
-                    save_file_set_camera_speed(gCameraSpeed);
-                } else if (gPlayer3Controller->buttonPressed & B_BUTTON) {
-                    if (gCameraSpeed > 0) {
-                        gCameraSpeed--;
-                    } else {
-                        gCameraSpeed = 4;
-                    }
-                    save_file_set_camera_speed(gCameraSpeed);
+#endif
                 }
-#endif
-            }
-            break;
-        case DIALOG_STATE_HORIZONTAL:
-            shade_screen();
-            print_hud_pause_colorful_str();
-            render_pause_castle_menu_box(    160, 143);
-            render_pause_castle_main_strings(104,  60);      
+                break;
+            case DIALOG_STATE_HORIZONTAL:
+                shade_screen();
+                print_hud_pause_colorful_str();
+                render_pause_castle_menu_box(    160, 143);
+                render_pause_castle_main_strings(104,  60);
 #ifdef PAUSE_BOWSER_KEYS
-            render_pause_bowser_keys();
+                render_pause_bowser_keys();
 #endif
 #ifdef REONU_CAM_3
-            if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) render_camera_speed_setting(190, 7);
+                if (gCurrentArea->camera->mode == CAMERA_MODE_8_DIRECTIONS) render_camera_speed_setting(190, 7);
 #endif
-            if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
-                level_set_transition(0, NULL);
-                play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
-                gMenuMode       = MENU_MODE_NONE;
-                gDialogBoxState = DIALOG_STATE_OPENING;
-                return MENU_OPT_DEFAULT;
-            }
-            break;
+                if (gPlayer3Controller->buttonPressed & (A_BUTTON | B_BUTTON | START_BUTTON)) {
+                    level_set_transition(0, NULL);
+                    play_sound(SOUND_MENU_PAUSE_CLOSE, gGlobalSoundSource);
+                    gMenuMode       = MENU_MODE_NONE;
+                    gDialogBoxState = DIALOG_STATE_OPENING;
+                    return MENU_OPT_DEFAULT;
+                }
+                break;
+        }
+#if defined(WIDE) && !defined(PUPPYCAM)
+        render_widescreen_setting();
+#endif
+        if (gDialogTextAlpha < 250) gDialogTextAlpha += 25;
+#ifdef PUPPYCAM
+    } else {
+        shade_screen();
+        puppycam_display_options();
     }
-#ifdef WIDE
-    render_widescreen_setting();
+    puppycam_render_option_text();
 #endif
-    if (gDialogTextAlpha < 250) gDialogTextAlpha += 25;
     return MENU_OPT_NONE;
 }
 

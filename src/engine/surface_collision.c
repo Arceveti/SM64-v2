@@ -8,6 +8,9 @@
 #include "surface_collision.h"
 #include "surface_load.h"
 #include "math_util.h"
+#ifdef PUPPYPRINT
+#include "game/puppyprint.h"
+#endif
 
 /**************************************************
  *                      WALLS                     *
@@ -288,6 +291,9 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
     s32 numCollisions = 0;
     s16 x             = colData->x;
     s16 z             = colData->z;
+#ifdef PUPPYPRINT
+    OSTime first      = osGetTime();
+#endif
     colData->numWalls = 0;
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
@@ -355,6 +361,9 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             }
         }
     }
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
     return numCollisions;
 }
 
@@ -459,6 +468,9 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     struct SurfaceNode *surfaceList;
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     *pceil            = NULL;
 #ifdef BETTER_WALL_COLLISION
     if ((xPos <= -LEVEL_BOUNDARY_MAX)
@@ -506,6 +518,9 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     *pceil = ceil;
     // Increment the debug tracker.
     gNumCalls.ceil++;
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
     return height;
 }
 
@@ -695,6 +710,9 @@ f32 find_floor_height(f32 x, f32 y, f32 z) {
  * Find the highest floor under a given position and return the height.
  */
 f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     struct Surface *floor, *dynamicFloor;
     struct SurfaceNode *surfaceList;
     f32 height        = FLOOR_LOWER_LIMIT;
@@ -732,7 +750,12 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
      || (z <= -LEVEL_BOUNDARY_MAX)
-     || (z >=  LEVEL_BOUNDARY_MAX)) return height;
+     || (z >=  LEVEL_BOUNDARY_MAX)) {
+#ifdef PUPPYPRINT
+        collisionTime[perfIteration] += (osGetTime()-first);
+#endif
+        return height;
+    }
     // Each level is split into cells to limit load, find the appropriate cell.
     register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
@@ -759,8 +782,6 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // If a floor was missed, increment the debug counter.
     if (floor == NULL) gNumFindFloorMisses++;
     *pfloor = floor;
-    // Increment the debug tracker.
-    gNumCalls.floor++;
     // To prevent the Merry-Go-Round room from loading when Mario passes above the hole that leads
     // there, SURFACE_INTANGIBLE is used. This prevent the wrong room from loading, but can also allow
     // Mario to pass through.
@@ -768,6 +789,11 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     gFindFloorIncludeSurfaceIntangible = FALSE;
 #ifdef FIX_BHV_INIT_ROOM
     gFindFloorExcludeDynamic           = FALSE;
+#endif
+    // Increment the debug tracker.
+    gNumCalls.floor++;
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
 #endif
     return height;
 }
@@ -843,6 +869,9 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
 #else
@@ -872,6 +901,9 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
         *pfloor = NULL;
 #endif
     }
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
     return waterLevel;
 }
 
@@ -886,6 +918,9 @@ f32 find_water_level(f32 x, f32 z) {
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
 #else
@@ -909,6 +944,9 @@ f32 find_water_level(f32 x, f32 z) {
             p++;
         }
     }
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
     return waterLevel;
 }
 
@@ -921,6 +959,9 @@ f32 find_poison_gas_level(f32 x, f32 z) {
     register f32 loX, hiX, loZ, hiZ;
     f32 gasLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
+#ifdef PUPPYPRINT
+    OSTime first = osGetTime();
+#endif
     if (p != NULL) {
         numRegions = *p++;
         for (i = 0; i < numRegions; i++) {
@@ -941,6 +982,9 @@ f32 find_poison_gas_level(f32 x, f32 z) {
             p += 6;
         }
     }
+#ifdef PUPPYPRINT
+    collisionTime[perfIteration] += (osGetTime()-first);
+#endif
     return gasLevel;
 }
 

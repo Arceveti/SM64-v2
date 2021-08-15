@@ -29,7 +29,9 @@
 #include "buffers/framebuffers.h"
 #include "texture_edit.h"
 #endif
-
+#ifdef PUPPYCAM
+#include "puppycam2.h"
+#endif
 #include "config.h"
 
 #define TOAD_STAR_1_REQUIREMENT 12
@@ -135,7 +137,7 @@ static void toad_message_opaque(void) {
 }
 
 static void toad_message_talking(void) {
-    if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_DOWN, 
+    if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_DOWN,
         DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, gCurrentObject->oToadMessageDialogId)) {
         gCurrentObject->oToadMessageRecentlyTalked = TRUE;
         gCurrentObject->oToadMessageState          = TOAD_MESSAGE_FADING;
@@ -262,7 +264,7 @@ static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
         node->fnNode.node.flags = ((node->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
         gfxHead = alloc_display_list(3 * sizeof(*gfxHead));
         gfx     = gfxHead;
-        gDPSetAlphaCompare(gfx++, G_AC_DITHER);
+        gDPSetAlphaCompare(gfx++, ((gMarioState->flags & MARIO_VANISH_CAP) ? G_AC_DITHER : G_AC_NONE));
     }
     gDPSetEnvColor(gfx++, 255, 255, 255, alpha);
     gSPEndDisplayList(gfx);
@@ -279,6 +281,12 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
     s16 alpha;
     if (callContext == GEO_CONTEXT_RENDER) {
         alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 0xFF);
+#ifdef PUPPYCAM
+        if (alpha > gPuppyCam.opacity) {
+            alpha = gPuppyCam.opacity;
+            bodyState->modelState |= MODEL_STATE_NOISE_ALPHA;
+        }
+#endif
         gfx   = make_gfx_mario_alpha(asGenerated, alpha);
     }
     return gfx;

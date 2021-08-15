@@ -14,6 +14,12 @@
 #include "save_file.h"
 #include "print.h"
 #include "engine/surface_load.h"
+#ifdef PUPPYCAM
+#include "puppycam2.h"
+#endif
+#ifdef PUPPYPRINT
+#include "puppyprint.h"
+#endif
 
 #include "config.h"
 
@@ -73,7 +79,11 @@ void print_fps(s32 x, s32 y) {
     f32 fps = calculate_and_update_fps();
     char text[14];
     sprintf(text, "FPS %2.2f", fps);
+#ifdef PUPPYPRINT
+    print_small_text(x, y, text, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
+#else
     print_text(x, y, text);
+#endif
 }
 
 // ------------ END OF FPS COUNER -----------------
@@ -587,13 +597,20 @@ void render_hud(void) {
 #endif
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_CAMERA_AND_POWER) {
             render_hud_power_meter();
+#ifdef PUPPYCAM
+            if (!gPuppyCam.enabled) render_hud_camera_status();
+#else
             render_hud_camera_status();
+#endif
         }
         if (hudDisplayFlags & HUD_DISPLAY_FLAG_TIMER) render_hud_timer();
         if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_SURFACES) print_text(10, 40, "SURFACE POOL FULL");
         if (gSurfacePoolError & NOT_ENOUGH_ROOM_FOR_NODES   ) print_text(10, 60, "SURFACE NODE POOL FULL");
 #ifdef CUSTOM_DEBUG
         if (gCustomDebugMode) render_debug_mode();
+#endif
+#ifdef PUPPYPRINT
+    print_set_envcolour(255,255,255,255);
 #endif
     }
 }

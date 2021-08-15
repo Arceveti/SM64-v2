@@ -19,6 +19,9 @@
 #include "platform_displacement.h"
 #include "profiler.h"
 #include "spawn_object.h"
+#ifdef PUPPYPRINT
+#include "puppyprint.h"
+#endif
 
 /**
  * Flags controlling what debug info is displayed.
@@ -532,6 +535,10 @@ void unload_deactivated_objects(void) {
  */
 void update_objects(void) {
     // s64 cycleCounts[30];
+#ifdef PUPPYPRINT
+    OSTime first   = osGetTime();
+    OSTime colTime = collisionTime[perfIteration];
+#endif
     // cycleCounts[0] = get_current_clock();
     gTimeStopState &= ~TIME_STOP_MARIO_OPENED_DOOR;
     gNumRoomedObjectsInMarioRoom        = 0;
@@ -579,4 +586,8 @@ void update_objects(void) {
         gTimeStopState &= ~TIME_STOP_ACTIVE;
     }
     gPrevFrameObjectCount = gObjectCounter;
+#ifdef PUPPYPRINT
+    profiler_update(behaviourTime, first);
+    behaviourTime[perfIteration] -= (collisionTime[perfIteration]+colTime);
+#endif
 }
