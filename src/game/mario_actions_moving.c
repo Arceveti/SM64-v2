@@ -525,16 +525,16 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
     if (m->forwardVel > 6.0f) mario_set_forward_vel(m, 6.0f);
     if (m->wall != NULL) {
         wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        dWallAngle = wallAngle - m->faceAngle[1];
+        dWallAngle = abs_angle_diff(wallAngle, m->faceAngle[1]);
     }
-    if ((m->wall == NULL) || (dWallAngle <= -0x71C8) || (dWallAngle >= 0x71C8)) {
+    if ((m->wall == NULL) || (dWallAngle >= 0x71C8)) {
         m->flags |= MARIO_PUSHING;
         set_mario_animation(m, MARIO_ANIM_PUSHING);
         play_step_sound(m, 6, 18);
     } else {
         set_mario_anim_with_accel(m, ((dWallAngle < 0) ? MARIO_ANIM_SIDESTEP_RIGHT : MARIO_ANIM_SIDESTEP_LEFT), animSpeed);
         if (m->marioObj->header.gfx.animInfo.animFrame < 20) {
-            play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
+            play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
             m->particleFlags |= PARTICLE_DUST;
         }
         m->actionState                   = 1;

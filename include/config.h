@@ -368,6 +368,8 @@
 // #define GRAVITY_DRAG
 // Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
 #define HOOT_YAW_FIX
+// Mario can move sideways on ledges (Arceveti)
+#define LEDGE_SIDLE
 // Unique wall slide which takes horizontal momentum into account (Arceveti)
 #define WALL_SLIDE
 // Hold A when bouncing on an enemy to go higher (Arceveti)

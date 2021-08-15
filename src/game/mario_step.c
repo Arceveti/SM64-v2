@@ -406,10 +406,10 @@ s32 perform_ground_step(struct MarioState *m) {
 }
 
 #ifdef BETTER_WALL_COLLISION
-//! crashed once on LLL volcano when rolling out on border of lava?
 struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWall, struct Surface *wall, Vec3f intendedPos, Vec3f nextPos, Vec3f ledgePos, struct Surface **ledgeFloor) {
     struct Surface *floor = *ledgeFloor;
     if (m->vel[1] > 0) return FALSE;
+    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT)) return FALSE;
     // Return the already grabbed wall if Mario is moving into it more than the newly tested wall
     if ((grabbedWall != NULL) && ((grabbedWall->normal.x * m->vel[0]) + (grabbedWall->normal.z * m->vel[2]) < (wall->normal.x * m->vel[0]) + (wall->normal.z * m->vel[2]))) return grabbedWall;
     f32 displacementX = (nextPos[0] - intendedPos[0]);

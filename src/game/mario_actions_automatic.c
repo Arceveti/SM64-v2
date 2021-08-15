@@ -401,12 +401,10 @@ s32 act_hang_moving(struct MarioState *m) {
 s32 let_go_of_ledge(struct MarioState *m) {
     f32 floorHeight;
     struct Surface *floor;
-
     m->vel[1]     =  0.0f;
     m->forwardVel = -8.0f;
     m->pos[0]    -= 60.0f * sins(m->faceAngle[1]);
     m->pos[2]    -= 60.0f * coss(m->faceAngle[1]);
-
     floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor);
     if (floorHeight < (m->pos[1] - 100.0f)) {
         m->pos[1] -= 100.0f;
@@ -443,12 +441,15 @@ void update_ledge_climb(struct MarioState *m, s32 animation, u32 endAction) {
 
 s32 act_ledge_grab(struct MarioState *m) {
     f32 heightAboveFloor;
-    s16 intendedDYaw     = abs_angle_diff(m->intendedYaw, m->faceAngle[1]);
+    s16 intendedDYaw     = (m->intendedYaw - m->faceAngle[1]);
     s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= 160.0f);
-#ifdef ACTION_CANCELS
-    if (m->actionTimer <  5) m->actionTimer++;
-#else
-    if (m->actionTimer < 10) m->actionTimer++;
+#ifdef LEDGE_SIDLE
+    s32 accel = 0x10000;
+    f32 sidewaysSpeed = 0.0f;
+    f32 nextX = m->pos[0];
+    f32 nextZ = m->pos[2];
+    UNUSED f32 nextFloorHeight = FLOOR_LOWER_LIMIT;
+    struct Surface *nextFloor;
 #endif
 #ifndef NO_FALSE_LEDGEGRABS
     if (m->floor->normal.y < COS25) return let_go_of_ledge(m);
@@ -464,21 +465,41 @@ s32 act_ledge_grab(struct MarioState *m) {
         return let_go_of_ledge(m);
     }
 #ifdef ACTION_CANCELS
-    if ((m->actionTimer ==  5) && (m->input & INPUT_NONZERO_ANALOG)) {
+    m->actionTimer++;
+    if ((m->actionTimer >=  5) && (m->input & INPUT_NONZERO_ANALOG)) {
 #else
-    if ((m->actionTimer == 10) && (m->input & INPUT_NONZERO_ANALOG)) {
+    if ((m->actionTimer >= 10) && (m->input & INPUT_NONZERO_ANALOG)) {
 #endif
-        if (intendedDYaw <= 0x4000) {
+        if (intendedDYaw >= -0x2000 && intendedDYaw <= 0x2000) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
-        } else {
+        } else if (intendedDYaw <= -0x6000 || intendedDYaw >= 0x6000) {
             return let_go_of_ledge(m);
         }
+#ifdef LEDGE_SIDLE
+        sidewaysSpeed = ((m->intendedMag / 8.0f) * sins(intendedDYaw));
+        nextX += (sidewaysSpeed * sins(m->faceAngle[1] + 0x4000));
+        nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
+        nextFloorHeight = find_floor(nextX, (m->pos[1] + 80.0f), nextZ, &nextFloor);
+        if (nextFloor != NULL) {
+            m->pos[0] = nextX;
+            m->pos[2] = nextZ;
+            accel *= ABS(sidewaysSpeed);
+            if ((m->actionTimer % (u32)ABS(sidewaysSpeed*2.0f)) == 0) {
+                play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
+                m->particleFlags |= PARTICLE_DUST;
+            }
+        }
+#endif
     }
     heightAboveFloor = (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 30.0f));
     if (hasSpaceForMario && (heightAboveFloor < 100.0f)) return set_mario_action(m, ACT_LEDGE_CLIMB_FAST, 0);
     if (m->actionArg == 0) play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     stop_and_set_height_to_floor(m);
+#ifdef LEDGE_SIDLE
+    set_mario_anim_with_accel(m, MARIO_ANIM_IDLE_ON_LEDGE, accel);
+#else
     set_mario_animation(m, MARIO_ANIM_IDLE_ON_LEDGE);
+#endif
     return FALSE;
 }
 

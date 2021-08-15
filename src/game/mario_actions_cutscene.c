@@ -716,22 +716,22 @@ s32 act_unlocking_star_door(struct MarioState *m) {
     switch (m->actionState) {
         case 0:
             m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-            if (m->actionArg & 2) m->faceAngle[1] += 0x8000;
+            if (m->actionArg & 0x2) m->faceAngle[1] += 0x8000;
             m->marioObj->oMarioReadingSignDPosX = m->pos[0];
             m->marioObj->oMarioReadingSignDPosZ = m->pos[2];
             set_mario_animation(m, MARIO_ANIM_SUMMON_STAR);
-            m->actionState++;
+            m->actionState = 1;
             break;
         case 1:
             if (is_anim_at_end(m)) {
                 spawn_object(m->marioObj, MODEL_STAR, bhvUnlockDoorStar);
-                m->actionState++;
+                m->actionState = 2;
             }
             break;
         case 2:
             if (m->actionTimer++ == 70) {
                 set_mario_animation(m, MARIO_ANIM_RETURN_STAR_APPROACH_DOOR);
-                m->actionState++;
+                m->actionState = 3;
             }
             break;
         case 3:
@@ -1576,13 +1576,13 @@ static void jumbo_star_cutscene_flying(struct MarioState *m) {
         case 0:
             set_mario_animation(m, MARIO_ANIM_WING_CAP_FLY);
             anim_spline_init(sJumboStarKeyframes);
-            m->actionState++;
+            m->actionState = 1;
             // fall through
         case 1:
             if (anim_spline_poll(targetPos)) {
                 // does this twice
                 set_mario_action(m, ACT_FREEFALL, 0);
-                m->actionState++;
+                m->actionState = 2;
             } else {
                 vec3f_diff(targetD, targetPos, m->pos);
                 targetHyp   = sqrtf((targetD[0] * targetD[0]) + (targetD[2] * targetD[2]));

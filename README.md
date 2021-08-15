@@ -106,6 +106,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. See config for more details (Arceveti) *
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
+- Mario can move sideways on ledges (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
