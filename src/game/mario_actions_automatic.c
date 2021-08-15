@@ -467,17 +467,17 @@ s32 act_ledge_grab(struct MarioState *m) {
     m->actionTimer++;
 #ifdef ACTION_CANCELS
     if ((m->actionTimer >=  5) && (m->input & INPUT_NONZERO_ANALOG)) {
-        if (m->actionTimer >= 0x10000) m->actionTimer = 5;
+        if (m->actionTimer >= 0xFFFF) m->actionTimer = 5;
 #else
     if ((m->actionTimer >= 10) && (m->input & INPUT_NONZERO_ANALOG)) {
-        if (m->actionTimer >= 0x10000) m->actionTimer = 10;
+        if (m->actionTimer >= 0xFFFF) m->actionTimer = 10;
 #endif
+#ifdef LEDGE_SIDLE
         if (intendedDYaw >= -0x2000 && intendedDYaw <= 0x2000) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
         } else if (intendedDYaw <= -0x6000 || intendedDYaw >= 0x6000) {
             return let_go_of_ledge(m);
         }
-#ifdef LEDGE_SIDLE
         sidewaysSpeed = ((m->intendedMag / 8.0f) * sins(intendedDYaw));
         nextX += (sidewaysSpeed * sins(m->faceAngle[1] + 0x4000));
         nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
@@ -490,6 +490,12 @@ s32 act_ledge_grab(struct MarioState *m) {
                 play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
                 m->particleFlags |= PARTICLE_DUST;
             }
+        }
+#else
+        if (intendedDYaw >= -0x4000 && intendedDYaw <= 0x4000) {
+            if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
+        } else {
+            return let_go_of_ledge(m);
         }
 #endif
     }
