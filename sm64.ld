@@ -300,45 +300,12 @@ SECTIONS
    END_SEG(behavior)
 
    /* 0x8016F000 21D7D0-255EC0 [386F0] */
-   BEGIN_SEG(goddard, SEG_GODDARD)
-   {
-      BUILD_DIR/src/menu*.o(.text);
-      BUILD_DIR/src/menu*.o(.data*);
-      BUILD_DIR/src/menu*.o(.rodata*);
-#ifdef KEEP_MARIO_HEAD
-      BUILD_DIR/libgoddard.a:*.o(.text);
-      /* goddard subsystem data */
-      BUILD_DIR/libgoddard.a:gd_main.o(.data*);
-      BUILD_DIR/libgoddard.a:draw_objects.o(.data*);
-      BUILD_DIR/libgoddard.a:objects.o(.data*);
-      BUILD_DIR/libgoddard.a:particles.o(.data*);
-      BUILD_DIR/libgoddard.a:dynlist_proc.o(.data*);
-      BUILD_DIR/libgoddard.a:string_utils.o(.data*);
-      BUILD_DIR/libgoddard.a:gd_math.o(.data*);
-      BUILD_DIR/libgoddard.a:joints.o(.data*);
-      BUILD_DIR/libgoddard.a:shape_helper.o(.data*);
-      BUILD_DIR/libgoddard.a:renderer.o(.data*);
-      /* goddard subsystem rodata */
-      BUILD_DIR/libgoddard.a:gd_main.o(.rodata*);
-      BUILD_DIR/libgoddard.a:gd_memory.o(.rodata*);
-      BUILD_DIR/libgoddard.a:draw_objects.o(.rodata*);
-      BUILD_DIR/libgoddard.a:objects.o(.rodata*);
-      BUILD_DIR/libgoddard.a:skin_movement.o(.rodata*);
-      BUILD_DIR/libgoddard.a:particles.o(.rodata*);
-      BUILD_DIR/libgoddard.a:dynlist_proc.o(.rodata*);
-      BUILD_DIR/libgoddard.a:string_utils.o(.rodata*);
-      BUILD_DIR/libgoddard.a:joints.o(.rodata*);
-      BUILD_DIR/libgoddard.a:skin.o(.rodata*);
-      BUILD_DIR/libgoddard.a:gd_math.o(.rodata*);
-      BUILD_DIR/libgoddard.a:shape_helper.o(.rodata*);
-      BUILD_DIR/libgoddard.a:renderer.o(.rodata*);
-#endif
-   /* BEGIN_SEG(goddard, RAM_END - GODDARD_SIZE)
+   BEGIN_SEG(goddard, RAM_END - GODDARD_SIZE)
    {
       #define LOAD
          #include "goddard.ld.inc"
       #undef LOAD
-      . = ALIGN(16); */
+      . = ALIGN(16);
    }
    END_SEG(goddard)
    BEGIN_NOLOAD(goddard)
@@ -347,10 +314,10 @@ SECTIONS
 #ifdef KEEP_MARIO_HEAD
       BUILD_DIR/libgoddard.a:*.o(.bss*);
 #endif
-      /* #define NOLOAD
+      #define NOLOAD
          #include "goddard.ld.inc"
       #undef NOLOAD
-      . = ALIGN(16); */
+      . = ALIGN(16);
    }
    END_NOLOAD(goddard)
 
