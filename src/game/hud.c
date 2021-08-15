@@ -466,7 +466,7 @@ void render_hud_keys(void) {
  */
 void render_hud_secrets(void) {
     if (gSecretsCollected > 0) {
-#ifdef COMPLETE_EN_US_SEGMENT2
+#if defined(COMPLETE_EN_US_SEGMENT2) || defined(BACKUP_SEGMENT2)
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), HUD_TOP_Y-24, "?"); // 'Question Mark' glyph
 #else
         print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), HUD_TOP_Y-24, "+"); // 'Silver Coin' glyph

@@ -5092,3 +5092,6 @@ title_screen_bg_dl_0A000190 = 0x80345678;
 title_screen_bg_dl_face_easter_egg_begin = 0x80345678;
 title_screen_bg_dl_face_easter_egg_end = 0x80345678;
 gFrameBuffers = 0x80345678;
+queue_rumble_data = 0x80345678;
+queue_rumble_decay = 0x80345678;
+title_screen_bg_dl_rumble_pak = 0x80345678;

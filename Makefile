@@ -778,18 +778,18 @@ $(BUILD_DIR)/libz.a: $(LIBZ_O_FILES)
 	@$(PRINT) "$(GREEN)Linking libz:  $(BLUE)$@ $(NO_COL)\n"
 	$(V)$(AR) rcs -o $@ $(LIBZ_O_FILES)
 
-# SS2: Goddard rules to get size
-$(BUILD_DIR)/goddard.ld: goddard.ld $(BUILD_DIR)/libgoddard.a
-	$(call print,Preprocessing linker script:,$<,$@)
-	$(V)$(CPP) $(CPPFLAGS) -DBUILD_DIR=$(BUILD_DIR) -MMD -MP -MT $@ -MF $@.d -o $@ $<
+# # SS2: Goddard rules to get size
+# $(BUILD_DIR)/goddard.ld: goddard.ld $(BUILD_DIR)/libgoddard.a
+# 	$(call print,Preprocessing linker script:,$<,$@)
+# 	$(V)$(CPP) $(CPPFLAGS) -DBUILD_DIR=$(BUILD_DIR) -MMD -MP -MT $@ -MF $@.d -o $@ $<
 
-$(BUILD_DIR)/goddard.elf: $(BUILD_DIR)/goddard.ld
-	@$(PRINT) "$(GREEN)Linking ELF file:  $(BLUE)$@ $(NO_COL)\n"
-	$(V)$(LD) --gc-sections -L $(BUILD_DIR) -T undefined_syms.txt -T $< -Map $(BUILD_DIR)/goddard.map --no-check-sections -o $@ -T tools/hardcoded_syms.txt $(wildcard $(BUILD_DIR)/src/menu/*.o) -L$(LIBS_DIR) -l$(ULTRALIB) -Llib -lgoddard -u sprintf -u osMapTLB -Llib/gcclib/$(LIBGCCDIR) -lgcc
+# $(BUILD_DIR)/goddard.elf: $(BUILD_DIR)/goddard.ld
+# 	@$(PRINT) "$(GREEN)Linking ELF file:  $(BLUE)$@ $(NO_COL)\n"
+# 	$(V)$(LD) --gc-sections -L $(BUILD_DIR) -T undefined_syms.txt -T $< -Map $(BUILD_DIR)/goddard.map --no-check-sections -o $@ -T tools/hardcoded_syms.txt $(wildcard $(BUILD_DIR)/src/menu/*.o) -L$(LIBS_DIR) -l$(ULTRALIB) -Llib -lgoddard -u sprintf -u osMapTLB -Llib/gcclib/$(LIBGCCDIR) -lgcc
 
-$(BUILD_DIR)/goddard.txt: $(BUILD_DIR)/goddard.elf
-	$(call print,Getting Goddard size...)
-	$(V)python3 tools/getGoddardSize.py $(BUILD_DIR)/goddard.map
+# $(BUILD_DIR)/goddard.txt: $(BUILD_DIR)/goddard.elf
+# 	$(call print,Getting Goddard size...)
+# 	$(V)python3 tools/getGoddardSize.py $(BUILD_DIR)/goddard.map
 
 # Link SM64 ELF file
 $(ELF): $(O_FILES) $(YAY0_OBJ_FILES) $(SEG_FILES) $(BUILD_DIR)/$(LD_SCRIPT) undefined_syms.txt $(BUILD_DIR)/libz.a $(BUILD_DIR)/libgoddard.a

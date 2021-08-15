@@ -146,17 +146,19 @@ void reset_rumble_timers_vibrate(s32 a0) {
     if (gCurrDemoInput != NULL) return;
     if (gCurrRumbleSettings.slip == 0) gCurrRumbleSettings.slip = 7;
     if (gCurrRumbleSettings.slip <  4) gCurrRumbleSettings.slip = 4;
-    if (a0 == 4) gCurrRumbleSettings.vibrate = 1;
-    if (a0 == 3) gCurrRumbleSettings.vibrate = 2;
-    if (a0 == 2) gCurrRumbleSettings.vibrate = 3;
-    if (a0 == 1) gCurrRumbleSettings.vibrate = 4;
-    if (a0 == 0) gCurrRumbleSettings.vibrate = 5;
+    switch (a0) {
+        case 0: gCurrRumbleSettings.vibrate = 5; break;
+        case 1: gCurrRumbleSettings.vibrate = 4; break;
+        case 2: gCurrRumbleSettings.vibrate = 3; break;
+        case 3: gCurrRumbleSettings.vibrate = 2; break;
+        case 4: gCurrRumbleSettings.vibrate = 1; break;
+    }
 }
 
 void queue_rumble_submerged(void) {
     if (gCurrDemoInput != NULL) return;
-    gCurrRumbleSettings.unk0A = 4;
-    gCurrRumbleSettings.unk0C = 4;
+    gCurrRumbleSettings.slip    = 4;
+    gCurrRumbleSettings.vibrate = 4;
 }
 
 static void thread6_rumble_loop(UNUSED void *a0) {

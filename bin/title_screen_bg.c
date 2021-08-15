@@ -140,7 +140,7 @@ const Gfx title_screen_bg_dl_face_easter_egg_end[] = {
     gsSPEndDisplayList(),
 };
 #endif
-#if defined(ENABLE_RUMBLE) && defined(COMPLETE_EN_US_SEGMENT2)
+#if ENABLE_RUMBLE
 ALIGNED8 static const Texture title_texture_rumble_pak[] = {
 #if defined(VERSION_JP) || defined(VERSION_SH)
 #include "textures/title_screen_bg/title_screen_bg.06648.rgba16.inc.c"
