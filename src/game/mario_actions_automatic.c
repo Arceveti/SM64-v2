@@ -464,11 +464,13 @@ s32 act_ledge_grab(struct MarioState *m) {
         if ((m->marioObj->oInteractStatus) & INT_STATUS_MARIO_KNOCKBACK_DMG) m->hurtCounter += ((m->flags & MARIO_CAP_ON_HEAD) ? 12 : 18);
         return let_go_of_ledge(m);
     }
-#ifdef ACTION_CANCELS
     m->actionTimer++;
+#ifdef ACTION_CANCELS
     if ((m->actionTimer >=  5) && (m->input & INPUT_NONZERO_ANALOG)) {
+        if (m->actionTimer >= 0x10000) m->actionTimer = 5;
 #else
     if ((m->actionTimer >= 10) && (m->input & INPUT_NONZERO_ANALOG)) {
+        if (m->actionTimer >= 0x10000) m->actionTimer = 10;
 #endif
         if (intendedDYaw >= -0x2000 && intendedDYaw <= 0x2000) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
