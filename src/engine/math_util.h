@@ -81,6 +81,8 @@ void vec3s_sum(                          Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_diff(                         Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_add(                          Vec3s dest, Vec3s a);
 void vec3s_sub(                          Vec3s dest, Vec3s a);
+void vec3s_to_vec3i(                     Vec3i dest, Vec3s a);
+void vec3i_to_vec3s(                     Vec3s dest, Vec3i a);
 void vec3s_to_vec3f(                     Vec3f dest, Vec3s a);
 void vec3f_to_vec3s(                     Vec3s dest, Vec3f a);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);

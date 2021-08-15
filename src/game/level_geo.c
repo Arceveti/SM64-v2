@@ -15,8 +15,7 @@
  */
 Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
     Vec3s marioPos;
-    Vec3s camFrom;
-    Vec3s camTo;
+    Vec3s camFrom, camTo;
     void *particleList;
     Gfx *gfx = NULL;
     if (callContext == GEO_CONTEXT_RENDER && gCurGraphNodeCamera != NULL) {
@@ -33,9 +32,9 @@ Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
                 Mtx *mtx = alloc_display_list(    sizeof(*mtx));
                 gfx      = alloc_display_list(2 * sizeof(*gfx));
                 mtxf_to_mtx(mtx, mtxf);
-                gSPMatrix(    &gfx[0], VIRTUAL_TO_PHYSICAL(mtx), G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+                gSPMatrix(    &gfx[0], VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
                 gSPBranchList(&gfx[1], VIRTUAL_TO_PHYSICAL(particleList));
-                execNode->fnNode.node.flags = (execNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OCCLUDE_SILHOUETTE_ALPHA << 8);
+                execNode->fnNode.node.flags = ((execNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OCCLUDE_SILHOUETTE_ALPHA << 8));
             }
             SET_HIGH_U16_OF_32(*params, gAreaUpdateCounter);
         }

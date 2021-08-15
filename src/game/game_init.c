@@ -158,8 +158,8 @@ void init_z_buffer(void) {
     gDPSetDepthSource(gDisplayListHead++, G_ZS_PIXEL);
     gDPSetDepthImage( gDisplayListHead++, gPhysicalZBuffer);
     gDPSetColorImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalZBuffer);
-    gDPSetFillColor(  gDisplayListHead++, GPACK_ZDZ(G_MAXFBZ, 0) << 16 | GPACK_ZDZ(G_MAXFBZ, 0));
-    gDPFillRectangle( gDisplayListHead++, 0, gBorderHeight, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 - gBorderHeight);
+    gDPSetFillColor(  gDisplayListHead++, ((GPACK_ZDZ(G_MAXFBZ, 0) << 16) | GPACK_ZDZ(G_MAXFBZ, 0)));
+    gDPFillRectangle( gDisplayListHead++, 0, gBorderHeight, (SCREEN_WIDTH - 1), ((SCREEN_HEIGHT - 1) - gBorderHeight));
 }
 
 /**
@@ -169,7 +169,7 @@ void select_frame_buffer(void) {
     gDPPipeSync(     gDisplayListHead++);
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalFrameBuffers[sRenderingFrameBuffer]);
-    gDPSetScissor(   gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, SCREEN_HEIGHT - gBorderHeight);
+    gDPSetScissor(   gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
 }
 
 /**
@@ -183,7 +183,7 @@ void clear_frame_buffer(s32 color) {
     gDPSetFillColor( gDisplayListHead++, color);
     gDPFillRectangle(gDisplayListHead++,
                      GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
-                     GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - gBorderHeight - 1);
+                     (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), ((SCREEN_HEIGHT - gBorderHeight) - 1));
     gDPPipeSync(     gDisplayListHead++);
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
@@ -192,10 +192,10 @@ void clear_frame_buffer(s32 color) {
  * Resets the viewport, readying it for the final image.
  */
 void clear_viewport(Vp *viewport, s32 color) {
-    s16 vpUlx = (viewport->vp.vtrans[0] - viewport->vp.vscale[0]) / 4 + 1;
-    s16 vpUly = (viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4 + 1;
-    s16 vpLrx = (viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4 - 2;
-    s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 2;
+    s16 vpUlx = (((viewport->vp.vtrans[0] - viewport->vp.vscale[0]) / 4) + 1);
+    s16 vpUly = (((viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4) + 1);
+    s16 vpLrx = (((viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4) - 2);
+    s16 vpLry = (((viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4) - 2);
 #ifdef WIDESCREEN
     vpUlx = GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(vpUlx);
     vpLrx = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(SCREEN_WIDTH - vpLrx);
@@ -217,13 +217,13 @@ void draw_screen_borders(void) {
     gDPSetScissor(   gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
-    gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551(0, 0, 0, 0) << 16 | GPACK_RGBA5551(0, 0, 0, 0));
+    gDPSetFillColor( gDisplayListHead++, ((GPACK_RGBA5551(0, 0, 0, 0) << 16) | GPACK_RGBA5551(0, 0, 0, 0)));
     if (gBorderHeight) {
         gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0,
-                        GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, gBorderHeight - 1);
+                        (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (gBorderHeight - 1));
         gDPFillRectangle(gDisplayListHead++,
-                        GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), SCREEN_HEIGHT - gBorderHeight,
-                        GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1, SCREEN_HEIGHT - 1);
+                        GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), (SCREEN_HEIGHT - gBorderHeight),
+                        (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (SCREEN_HEIGHT - 1));
     }
 }
 
@@ -232,10 +232,10 @@ void draw_screen_borders(void) {
  * Scissoring: https://jrra.zone/n64/doc/pro-man/pro12/12-03.htm#01
  */
 void make_viewport_clip_rect(Vp *viewport) {
-    s16 vpUlx = (viewport->vp.vtrans[0] - viewport->vp.vscale[0]) / 4 + 1;
-    s16 vpPly = (viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4 + 1;
-    s16 vpLrx = (viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4 - 1;
-    s16 vpLry = (viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4 - 1;
+    s16 vpUlx = (((viewport->vp.vtrans[0] - viewport->vp.vscale[0]) / 4) + 1);
+    s16 vpPly = (((viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4) + 1);
+    s16 vpLrx = (((viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4) - 1);
+    s16 vpLry = (((viewport->vp.vtrans[1] + viewport->vp.vscale[1]) / 4) - 1);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, vpUlx, vpPly, vpLrx, vpLry);
 }
 
@@ -244,7 +244,7 @@ void make_viewport_clip_rect(Vp *viewport) {
  * If you plan on using gSPLoadUcode, make sure to add OS_TASK_LOADABLE to the flags member.
  */
 void create_gfx_task_structure(void) {
-    s32 entries                        = gDisplayListHead - gGfxPool->buffer;
+    s32 entries                        = (gDisplayListHead - gGfxPool->buffer);
     gGfxSPTask->msgqueue               = &gGfxVblankQueue;
     gGfxSPTask->msg                    = (OSMesg) 2;
     gGfxSPTask->task.t.type            = M_GFXTASK;
@@ -311,14 +311,14 @@ void draw_reset_bars(void) {
     s32 width, height;
     s32 fbNum;
     u64 *fbPtr;
-    if (gResetTimer != 0 && gNmiResetBarsTimer < 15) {
+    if ((gResetTimer != 0) && (gNmiResetBarsTimer < 15)) {
         if (sRenderedFramebuffer == 0) {
             fbNum = 2;
         } else {
-            fbNum = sRenderedFramebuffer - 1;
+            fbNum = (sRenderedFramebuffer - 1);
         }
         fbPtr  = (u64 *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[fbNum]);
-        fbPtr += gNmiResetBarsTimer++ * (SCREEN_WIDTH / 4);
+        fbPtr += (gNmiResetBarsTimer++ * (SCREEN_WIDTH / 4));
         for (width = 0; width < ((SCREEN_HEIGHT / 16) + 1); width++) {
             // Loop must be one line to match on -O2
             for (height = 0; height < (SCREEN_WIDTH / 4); height++) *fbPtr++ = 0;
@@ -374,7 +374,7 @@ void select_gfx_pool(void) {
  * - Selects which framebuffer will be rendered and displayed to next time.
  */
 void display_and_vsync(void) {
-    if (IO_READ(DPC_PIPEBUSY_REG) && gIsConsole != 1) {
+    if (IO_READ(DPC_PIPEBUSY_REG) && !gIsConsole) {
         gIsConsole    = TRUE;
         gBorderHeight = BORDER_HEIGHT_CONSOLE;
     }
@@ -412,15 +412,15 @@ UNUSED static void record_demo(void) {
     s8 rawStickY = gPlayer1Controller->rawStickY;
     // If the stick is in deadzone, set its value to 0 to
     // nullify the effects. We do not record deadzone inputs.
-    if (rawStickX > -8 && rawStickX < 8) rawStickX = 0;
-    if (rawStickY > -8 && rawStickY < 8) rawStickY = 0;
+    if ((rawStickX > -8) && (rawStickX < 8)) rawStickX = 0;
+    if ((rawStickY > -8) && (rawStickY < 8)) rawStickY = 0;
     // Rrecord the distinct input and timer so long as they are unique.
     // If the timer hits 0xFF, reset the timer for the next demo input.
-    if (gRecordedDemoInput.timer == 0xFF
-     || buttonMask != gRecordedDemoInput.buttonMask
-     || rawStickX  != gRecordedDemoInput.rawStickX
-     || rawStickY  != gRecordedDemoInput.rawStickY) {
-        gRecordedDemoInput.timer = 0;
+    if ((gRecordedDemoInput.timer == 0xFF)
+     || (buttonMask != gRecordedDemoInput.buttonMask)
+     || (rawStickX  != gRecordedDemoInput.rawStickX)
+     || (rawStickY  != gRecordedDemoInput.rawStickY)) {
+        gRecordedDemoInput.timer      = 0;
         gRecordedDemoInput.buttonMask = buttonMask;
         gRecordedDemoInput.rawStickX  = rawStickX;
         gRecordedDemoInput.rawStickY  = rawStickY;
@@ -436,17 +436,17 @@ void adjust_analog_stick(struct Controller *controller) {
     controller->stickX = 0;
     controller->stickY = 0;
     // Modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
-    if (controller->rawStickX <= -8) controller->stickX = controller->rawStickX + 6;
-    if (controller->rawStickX >=  8) controller->stickX = controller->rawStickX - 6;
-    if (controller->rawStickY <= -8) controller->stickY = controller->rawStickY + 6;
-    if (controller->rawStickY >=  8) controller->stickY = controller->rawStickY - 6;
+    if (controller->rawStickX <= -8) controller->stickX = (controller->rawStickX + 6);
+    if (controller->rawStickX >=  8) controller->stickX = (controller->rawStickX - 6);
+    if (controller->rawStickY <= -8) controller->stickY = (controller->rawStickY + 6);
+    if (controller->rawStickY >=  8) controller->stickY = (controller->rawStickY - 6);
     // Calculate f32 magnitude from the center by vector length.
-    controller->stickMag = sqrtf(controller->stickX * controller->stickX + controller->stickY * controller->stickY);
+    controller->stickMag = sqrtf((controller->stickX * controller->stickX) + (controller->stickY * controller->stickY));
     // Magnitude cannot exceed 64.0f: if it does, modify the values
     // appropriately to flatten the values down to the allowed maximum value.
     if (controller->stickMag > 64) {
-        controller->stickX  *= 64 / controller->stickMag;
-        controller->stickY  *= 64 / controller->stickMag;
+        controller->stickX  *= (64 / controller->stickMag);
+        controller->stickY  *= (64 / controller->stickMag);
         controller->stickMag = 64;
     }
 }
@@ -490,7 +490,7 @@ void run_demo_inputs(void) {
             // upper 4 bits (A, B, Z, and Start) and shift then left by 8 to
             // match the correct input mask. We then add this to the masked
             // lower 4 bits to get the correct button mask.
-            gControllers[0].controllerData->button = ((gCurrDemoInput->buttonMask & 0xF0) << 8) + ((gCurrDemoInput->buttonMask & 0xF));
+            gControllers[0].controllerData->button = (((gCurrDemoInput->buttonMask & 0xF0) << 8) + (gCurrDemoInput->buttonMask & 0xF));
             // If start was pushed, put it into the demo sequence being input to end the demo.
             gControllers[0].controllerData->button |= startPushed;
             // Run the current demo input's timer down. if it hits 0, advance the demo input list.
@@ -670,9 +670,9 @@ void thread5_game_loop(UNUSED void *arg) {
             // subtract the end of the gfx pool with the display list to obtain the
             // amount of free space remaining.
 #ifdef HUD_LEADING_ZEROES
-            print_text_fmt_int(180, 8, "BUF %07d", gGfxPoolEnd - (u8 *) gDisplayListHead);
+            print_text_fmt_int(180, 8, "BUF %07d", (gGfxPoolEnd - (u8 *) gDisplayListHead));
 #else
-            print_text_fmt_int(180, 20, "BUF %d", gGfxPoolEnd - (u8 *) gDisplayListHead);
+            print_text_fmt_int(180, 20, "BUF %d", (gGfxPoolEnd - (u8 *) gDisplayListHead));
 #endif
         }
     }

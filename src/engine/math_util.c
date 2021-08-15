@@ -317,6 +317,20 @@ void vec3s_sub(Vec3s dest, Vec3s a) {
     vec3s_diff(dest, dest, a);
 }
 
+/// Convert short vector a to int vector 'dest'
+void vec3s_to_vec3i(Vec3i dest, Vec3s a) {
+    dest[0] = a[0];
+    dest[1] = a[1];
+    dest[2] = a[2];
+}
+
+/// Convert int vector a to short vector 'dest'
+void vec3i_to_vec3s(Vec3s dest, Vec3i a) {
+    dest[0] = a[0];
+    dest[1] = a[1];
+    dest[2] = a[2];
+}
+
 /// Convert short vector a to float vector 'dest'
 void vec3s_to_vec3f(Vec3f dest, Vec3s a) {
     dest[0] = a[0];

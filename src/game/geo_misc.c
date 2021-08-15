@@ -81,7 +81,7 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
     Gfx *displayList     = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
         flags = save_file_get_flags();
-        if (gHudDisplay.stars >= 10 && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
+        if ((gHudDisplay.stars >= 10) && !(flags & SAVE_FLAG_HAVE_WING_CAP)) {
             displayList = alloc_display_list(2 * sizeof(*displayList));
             if (displayList == NULL) {
                 return NULL;
@@ -89,7 +89,7 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
                 displayListHead = displayList;
             }
             generatedNode = (struct GraphNodeGenerated *) node;
-            generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
+            generatedNode->fnNode.node.flags = ((generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
             gSPDisplayList(   displayListHead++, dl_castle_lobby_wing_cap_light);
             gSPEndDisplayList(displayListHead);
         }
@@ -103,7 +103,7 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
 Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED f32 mtx[4][4]) {
     if (callContext != GEO_CONTEXT_RENDER) {
         sFlyingCarpetRippleTimer = 0;
-        sPrevAreaTimer           = gAreaUpdateCounter - 1;
+        sPrevAreaTimer           = (gAreaUpdateCounter - 1);
         sCurAreaTimer            = gAreaUpdateCounter;
         gFlyingCarpetState       = FLYING_CARPET_IDLE;
     } else {
@@ -138,9 +138,9 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
             col = n % 3;
             x   = vertexData[n * 4 + 0];
             y   = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
-            z   = vertexData[n * 4 + 1];
-            tx  = vertexData[n * 4 + 2];
-            ty  = vertexData[n * 4 + 3];
+            z   = vertexData[(n * 4) + 1];
+            tx  = vertexData[(n * 4) + 2];
+            ty  = vertexData[(n * 4) + 3];
             make_vertex(verts, n, x, y, z, tx, ty, 0, 127, 0, 255);
         }
         gSPDisplayList(   displayListHead++, dl_flying_carpet_begin);

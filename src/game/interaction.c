@@ -1247,10 +1247,10 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
     if (m->action & (ACT_FLAG_IDLE
      | ACT_FLAG_STATIONARY
      | ACT_FLAG_ALLOW_FIRST_PERSON)) return TRUE;
-    if (m->action == ACT_WALKING
-     || m->action == ACT_DECELERATING
-     || m->action == ACT_BRAKING
-     || m->action == ACT_BRAKING_STOP) {
+    if ((m->action == ACT_WALKING)
+     || (m->action == ACT_DECELERATING)
+     || (m->action == ACT_BRAKING)
+     || (m->action == ACT_BRAKING_STOP)) {
         if (arg) return TRUE;
         animID = m->marioObj->header.gfx.animInfo.animID;
         return ((animID == 0x0080) || (animID == 0x007F) || (animID == 0x006C));
@@ -1321,7 +1321,7 @@ u32 check_npc_talk(struct MarioState *m, struct Object *o) {
             m->interactObj     = o;
             m->usedObj         = o;
             push_mario_out_of_object(m, o, -10.0f);
-            return set_mario_action(m, ACT_WAITING_FOR_DIALOG, 0);
+            return set_mario_action( m, ACT_WAITING_FOR_DIALOG, 0);
         }
     }
     push_mario_out_of_object(m, o, -10.0f);
@@ -1371,7 +1371,7 @@ void check_kick_or_punch_wall(struct MarioState *m) {
 void mario_process_interactions(struct MarioState *m) {
     sDelayInvincTimer = FALSE;
     sInvulnerable     = ((m->action & ACT_FLAG_INVULNERABLE) || (m->invincTimer != 0));
-    if (!(m->action & ACT_FLAG_INTANGIBLE) && m->collidedObjInteractTypes != 0) {
+    if (!(m->action & ACT_FLAG_INTANGIBLE) && (m->collidedObjInteractTypes != 0x0)) {
         s32 i;
         for (i = 0; i < ARRAY_COUNT(sInteractionHandlers); i++) {
             u32 interactType = sInteractionHandlers[i].interactType;
@@ -1388,7 +1388,7 @@ void mario_process_interactions(struct MarioState *m) {
     check_kick_or_punch_wall(m);
     m->flags &= (~MARIO_PUNCHING & ~MARIO_KICKING & ~MARIO_TRIPPING);
     if (!(m->marioObj->collidedObjInteractTypes & (INTERACT_WARP_DOOR | INTERACT_DOOR))) sDisplayingDoorText = FALSE;
-    if (!(m->marioObj->collidedObjInteractTypes & INTERACT_WARP)) sJustTeleported = FALSE;
+    if (!(m->marioObj->collidedObjInteractTypes &  INTERACT_WARP)                      ) sJustTeleported     = FALSE;
 }
 
 void check_death_barrier(struct MarioState *m) {

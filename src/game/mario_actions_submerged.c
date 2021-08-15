@@ -161,7 +161,7 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
         struct Whirlpool *whirlpool = gCurrentArea->whirlpools[i];
         if (whirlpool != NULL) {
             f32 strength         = 0.0f;
-            Vec3f d; //! vec3_diff?
+            Vec3f d; //! vec3f/s diff?
             d[0]                 = whirlpool->pos[0] - m->pos[0];
             d[1]                 = whirlpool->pos[1] - m->pos[1];
             d[2]                 = whirlpool->pos[2] - m->pos[2];

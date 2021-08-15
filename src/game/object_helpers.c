@@ -145,6 +145,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
     return NULL;
 }
 
+//! move to math_util
 void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
     register f32 relX   = obj->oParentRelativePosX;
     register f32 relY   = obj->oParentRelativePosY;
@@ -257,9 +258,9 @@ s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleI
     switch (angleIndex) {
         case O_MOVE_ANGLE_PITCH_INDEX:
         case O_FACE_ANGLE_PITCH_INDEX:
-            a = target->oPosX - obj->oPosX;
-            c = target->oPosZ - obj->oPosZ;
-            a = sqrtf(a * a + c * c);
+            a = (target->oPosX - obj->oPosX);
+            c = (target->oPosZ - obj->oPosZ);
+            a = sqrtf((a * a) + (c * c));
             b =    -obj->oPosY;
             d = -target->oPosY;
             targetAngle = atan2s(a, d - b);
@@ -270,7 +271,7 @@ s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleI
             c =  target->oPosZ;
             b =     obj->oPosX;
             d =  target->oPosX;
-            targetAngle = atan2s(c - a, d - b);
+            targetAngle = atan2s((c - a), (d - b));
             break;
     }
     o->rawData.asU32[angleIndex] = approach_s16_symmetric(startAngle, targetAngle, turnAmount);
@@ -335,14 +336,14 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     f32 randomScale;
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE               ) newObj->oMoveAngleYaw = random_u16();
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_PLUS_8000) newObj->oMoveAngleYaw = (s16)(newObj->oMoveAngleYaw + 0x8000) + (s16) random_f32_around_zero(params->moveAngleRange);
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR          ) newObj->oMoveAngleYaw = (s16) newObj->oMoveAngleYaw           + (s16) random_f32_around_zero(params->moveAngleRange);
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((s16)(newObj->oMoveAngleYaw + 0x8000) + (s16) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD          ) newObj->oMoveAngleYaw = ((s16) newObj->oMoveAngleYaw           + (s16) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL     ) newObj->oPosY = find_water_level(newObj->oPosX, newObj->oPosZ);
-    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ           ) obj_translate_xz_random(newObj, params->moveRange);
+    if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ           ) obj_translate_xz_random( newObj, params->moveRange);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ          ) obj_translate_xyz_random(newObj, params->moveRange);
-    newObj->oForwardVel = random_float() * params->randForwardVelScale + params->randForwardVelOffset;
-    newObj->oVelY       = random_float() * params->randYVelScale       + params->randYVelOffset;
-    randomScale = random_float() * params->randSizeScale + params->randSizeOffset;
+    newObj->oForwardVel = ((random_float() * params->randForwardVelScale) + params->randForwardVelOffset);
+    newObj->oVelY       = ((random_float() * params->randYVelScale      ) + params->randYVelOffset      );
+    randomScale         = ((random_float() * params->randSizeScale      ) + params->randSizeOffset      );
     obj_scale(newObj, randomScale);
     return newObj;
 }
@@ -854,7 +855,7 @@ void mario_set_flag(s32 flag) {
 
 s32 cur_obj_clear_interact_status_flag(s32 flag) {
     if (o->oInteractStatus & flag) {
-        o->oInteractStatus &= flag ^ ~(0);
+        o->oInteractStatus &= (flag ^ ~(0));
         return TRUE;
     }
     return FALSE;

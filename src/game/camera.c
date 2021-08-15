@@ -2633,10 +2633,7 @@ void vec3f_to_object_pos(struct Object *o, Vec3f src) {
 }
 
 void unused_object_angle_to_vec3s(Vec3s dst, struct Object *o) {
-    //! vec3s_copy
-    dst[0] = o->oMoveAnglePitch;
-    dst[1] = o->oMoveAngleYaw;
-    dst[2] = o->oMoveAngleRoll;
+    vec3i_to_vec3s(dst, &o->oMoveAngleVec);
 }
 
 /**
@@ -3029,10 +3026,11 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 p
     s16 result = 0;
     // Direction from pos to (Lakitu's) goalPos
     //! vec3f_diff?
-    f32 goalDX = gLakituState.goalPos[0] - posX;
-    f32 goalDY = gLakituState.goalPos[1] - posY;
-    f32 goalDZ = gLakituState.goalPos[2] - posZ;
-    f32 dist   = sqrtf((goalDX * goalDX) + (goalDY * goalDY) + (goalDZ * goalDZ));
+    Vec3f goalD;
+    goalD[0] = (gLakituState.goalPos[0] - posX);
+    goalD[1] = (gLakituState.goalPos[1] - posY);
+    goalD[2] = (gLakituState.goalPos[2] - posZ);
+    f32 dist   = sqrtf((goalD[0] * goalD[0]) + (goalD[1] * goalD[1]) + (goalD[2] * goalD[2]));
     if (maxDist > dist) {
         //! vec3f_copy?
         pos[0] = posX;
@@ -3313,13 +3311,9 @@ void set_camera_roll_shake(s16 mag, s16 decay, s16 inc) {
  * Start shaking the camera's pitch, but reduce `mag` by it's distance from the camera
  */
 void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 posX, f32 posY, f32 posZ) {
-    Vec3f pos;
+    Vec3f pos = { posX, posY, posZ };
     f32 dist;
     s16 dummyPitch, dummyYaw;
-    //! vec3f_copy?
-    pos[0] = posX;
-    pos[1] = posY;
-    pos[2] = posZ;
     vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &dummyPitch, &dummyYaw);
     mag = reduce_by_dist_from_camera(mag, maxDist, posX, posY, posZ);
     if (mag != 0) set_camera_pitch_shake(mag, decay, inc);
@@ -3329,13 +3323,9 @@ void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 po
  * Start shaking the camera's yaw, but reduce `mag` by it's distance from the camera
  */
 void set_yaw_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 posX, f32 posY, f32 posZ) {
-    Vec3f pos;
+    Vec3f pos = { posX, posY, posZ };
     f32 dist;
     s16 dummyPitch, dummyYaw;
-    //! vec3f_copy?
-    pos[0] = posX;
-    pos[1] = posY;
-    pos[2] = posZ;
     vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &dummyPitch, &dummyYaw);
     mag = reduce_by_dist_from_camera(mag, maxDist, posX, posY, posZ);
     if (mag != 0) set_camera_yaw_shake(mag, decay, inc);
