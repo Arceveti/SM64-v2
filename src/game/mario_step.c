@@ -586,7 +586,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         return AIR_STEP_LANDED;
     }
 #ifdef BETTER_CEILING_HANDLING
-    if ((ceil != NULL) && ((nextPos[1] + m->marioObj->hitboxHeight) > ceilHeight)) {
+    if ((ceil != NULL) && ((nextPos[1] + 160.0f) > ceilHeight)) {
         if (floorHeight > nextPos[1]) return AIR_STEP_HIT_WALL;
         if ((m->vel[1] >= 0.0f) && !(m->prevAction & ACT_FLAG_HANGING) && (ceil->type == SURFACE_HANGABLE)) {
             m->vel[1] = 0.0f;
@@ -608,7 +608,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
                 m->vel[1] = 0.0f;
             }
         }
-        nextPos[1] = (ceilHeight - m->marioObj->hitboxHeight);
+        nextPos[1] = (ceilHeight - 160.0f);
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
         m->floorHeight = floorHeight;

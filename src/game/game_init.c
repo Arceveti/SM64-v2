@@ -374,6 +374,10 @@ void select_gfx_pool(void) {
  * - Selects which framebuffer will be rendered and displayed to next time.
  */
 void display_and_vsync(void) {
+    if (IO_READ(DPC_PIPEBUSY_REG) && gIsConsole != 1) {
+        gIsConsole    = TRUE;
+        gBorderHeight = BORDER_HEIGHT_CONSOLE;
+    }
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     osRecvMesg(&gGfxVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
     if (gGoddardVblankCallback != NULL) {

@@ -1029,9 +1029,8 @@ static f32 get_sound_volume(u8 bank, u8 soundIndex, f32 volumeRange) {
     f32 maxSoundDistance;
     f32 intensity;
 #ifndef VERSION_JP
-    s32 div = bank < 3 ? 2 : 3;
+    s32 div = ((bank < 3) ? 2 : 3);
 #endif
-
     if (!(sSoundBanks[bank][soundIndex].soundBits & SOUND_NO_VOLUME_LOSS)) {
 #ifdef VERSION_JP
         // Intensity linearly lowers from 1 at the camera to 0 at maxSoundDistance
@@ -1051,11 +1050,11 @@ static f32 get_sound_volume(u8 bank, u8 soundIndex, f32 volumeRange) {
             if (maxSoundDistance < sSoundBanks[bank][soundIndex].distance) {
                 intensity = ((AUDIO_MAX_DISTANCE - sSoundBanks[bank][soundIndex].distance) / (AUDIO_MAX_DISTANCE - maxSoundDistance)) * (1.0f - volumeRange);
             } else {
-                intensity = 1.0f - sSoundBanks[bank][soundIndex].distance / maxSoundDistance * volumeRange;
+                intensity = (1.0f - (sSoundBanks[bank][soundIndex].distance / maxSoundDistance * volumeRange));
             }
         }
 #endif
-        if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_VIBRATO) && intensity >= 0.08f) intensity -= (f32)(gAudioRandom & 0xf) / 192.0f;
+        if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_VIBRATO) && intensity >= 0.08f) intensity -= ((f32)(gAudioRandom & 0xf) / 192.0f);
     } else {
         intensity = 1.0f;
     }
@@ -1069,10 +1068,9 @@ static f32 get_sound_volume(u8 bank, u8 soundIndex, f32 volumeRange) {
  */
 static f32 get_sound_freq_scale(u8 bank, u8 item) {
     f32 amount;
-
     if (!(sSoundBanks[bank][item].soundBits & SOUND_CONSTANT_FREQUENCY)) {
         amount = sSoundBanks[bank][item].distance / AUDIO_MAX_DISTANCE;
-        if (sSoundBanks[bank][item].soundBits & SOUND_VIBRATO) amount += (f32)(gAudioRandom & 0xff) / 64.0f;
+        if (sSoundBanks[bank][item].soundBits & SOUND_VIBRATO) amount += ((f32)(gAudioRandom & 0xff) / 64.0f);
     } else {
         amount = 0.0f;
     }
@@ -1088,29 +1086,25 @@ static u8 get_sound_reverb(UNUSED u8 bank, UNUSED u8 soundIndex, u8 channelIndex
     u8 area;
     u8 level;
     u8 reverb;
-
 #ifndef VERSION_JP
     // Disable level reverb if NO_ECHO is set
     if (sSoundBanks[bank][soundIndex].soundBits & SOUND_NO_ECHO) {
         level = 0;
-        area = 0;
+        area  = 0;
     } else {
 #endif
         level = (gCurrLevelNum > LEVEL_MAX ? LEVEL_MAX : gCurrLevelNum);
-        area = gCurrAreaIndex - 1;
+        area  = gCurrAreaIndex - 1;
         if (area > 2) area = 2;
 #ifndef VERSION_JP
     }
 #endif
-
     // reverb = reverb adjustment + level reverb + a volume-dependent value
     // The volume-dependent value is 0 when volume is at maximum, and raises to
     // LOW_VOLUME_REVERB when the volume is 0
     reverb = (u8)((u8) gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->soundScriptIO[5]
                   + sLevelAreaReverbs[level][area]
-                  + (1.0f - gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume)
-                        * LOW_VOLUME_REVERB);
-
+                  + ((1.0f - gSequencePlayers[SEQ_PLAYER_SFX].channels[channelIndex]->volume) * LOW_VOLUME_REVERB));
     if (reverb > 0x7f) reverb = 0x7f;
     return reverb;
 }
@@ -1155,14 +1149,14 @@ static void update_game_sound(void) {
 
             if (soundIndex < 0xff
                 && sSoundBanks[bank][soundIndex].soundStatus != SOUND_STATUS_STOPPED) {
-                soundStatus = sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_STATUS;
-                soundId = (sSoundBanks[bank][soundIndex].soundBits >> SOUNDARGS_SHIFT_SOUNDID);
+                soundStatus =  sSoundBanks[bank][soundIndex].soundBits &  SOUNDARGS_MASK_STATUS;
+                soundId     = (sSoundBanks[bank][soundIndex].soundBits >> SOUNDARGS_SHIFT_SOUNDID);
 
                 sSoundBanks[bank][soundIndex].soundStatus = soundStatus;
 
                 if (soundStatus == SOUND_STATUS_WAITING) {
                     if (sSoundBanks[bank][soundIndex].soundBits & SOUND_LOWER_BACKGROUND_MUSIC) {
-                        sSoundBanksThatLowerBackgroundMusic |= 1 << bank;
+                        sSoundBanksThatLowerBackgroundMusic |= 0x1 << bank;
                         begin_background_music_fade(50);
                     }
 

@@ -179,7 +179,7 @@ void move_particle(struct ObjParticle *ptc) {
                 if (func_80182778(ptc) && ptc->subParticlesGrp != NULL) {
                     register struct ListNode *link;
                     if (ptc->unk80 != NULL) {
-                        ptc->unk80->unk3C     |= 1;
+                        ptc->unk80->unk3C     |= 0x1;
                         ptc->unk80->position.x = ptc->pos.x;
                         ptc->unk80->position.y = ptc->pos.y;
                         ptc->unk80->position.z = ptc->pos.z;

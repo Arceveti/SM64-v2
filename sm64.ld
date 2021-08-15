@@ -192,6 +192,7 @@ SECTIONS
       lib/PR/hvqm/hvqm2sp1.o(.rodata*);
    }
    END_SEG(main)
+   ASSERT((_mainSegmentRomEnd <= 0x101000), "Error: Please shrink your main segment to under 1MB.")
    BEGIN_NOLOAD(main)
    {
       BUILD_DIR/src/game*.o(.*bss*);
@@ -217,8 +218,6 @@ SECTIONS
    }
    END_NOLOAD(main)
 
-   /*ASSERT((. <= SEG_ENGINE), "Error: main segment extended into engine.")*/
-
    . = _mainSegmentBssEnd;
 
    BEGIN_SEG(engine, .)
@@ -237,8 +236,6 @@ SECTIONS
       . = ALIGN(0x40);
    }
    END_NOLOAD(engine)
-
-   /*ASSERT((. <= SEG_FRAMEBUFFERS), "Error: engine segment extended into framebuffers.")*/
 
    . = _engineSegmentBssEnd;
    BEGIN_NOLOAD(framebuffers)
@@ -336,6 +333,12 @@ SECTIONS
       BUILD_DIR/libgoddard.a:shape_helper.o(.rodata*);
       BUILD_DIR/libgoddard.a:renderer.o(.rodata*);
 #endif
+   /* BEGIN_SEG(goddard, RAM_END - GODDARD_SIZE)
+   {
+      #define LOAD
+         #include "goddard.ld.inc"
+      #undef LOAD
+      . = ALIGN(16); */
    }
    END_SEG(goddard)
    BEGIN_NOLOAD(goddard)
@@ -344,6 +347,10 @@ SECTIONS
 #ifdef KEEP_MARIO_HEAD
       BUILD_DIR/libgoddard.a:*.o(.bss*);
 #endif
+      /* #define NOLOAD
+         #include "goddard.ld.inc"
+      #undef NOLOAD
+      . = ALIGN(16); */
    }
    END_NOLOAD(goddard)
 

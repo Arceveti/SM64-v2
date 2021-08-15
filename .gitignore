@@ -50,6 +50,7 @@ build/*
 *.z64
 *.map
 .assets-local.txt
+errors.txt
 
 # Assets. Generally ignored, but ones with "custom" in the name are fine.
 /levels/**/*.png

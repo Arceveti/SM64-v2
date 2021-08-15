@@ -1084,7 +1084,7 @@ Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *con
         reset_painting(painting);
     } else if (callContext == GEO_CONTEXT_RENDER) {
         // Update the ddd painting before drawing
-        if (group == 1 && id == PAINTING_ID_DDD) move_ddd_painting(painting, 3456.0f, 5529.6f, 20.0f);
+        if ((group == 1) && (id == PAINTING_ID_DDD)) move_ddd_painting(painting, 3456.0f, 5529.6f, 20.0f);
         // Determine if the painting is transparent
         set_painting_layer(gen, painting);
         // Draw before updating
