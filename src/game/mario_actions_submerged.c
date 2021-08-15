@@ -200,8 +200,8 @@ static u32 perform_water_step(struct MarioState *m) {
         nextPos[1] = (m->pos[1] + (step[1] / numSteps));
         nextPos[2] = (m->pos[2] + (step[2] / numSteps));
         // If Mario is at the surface, keep him there?
-        if (nextPos[1] > (m->waterLevel - 80.0f)) {
-            nextPos[1] = (m->waterLevel - 80.0f);
+        if (nextPos[1] > (m->waterLevel - 80)) {
+            nextPos[1] = (m->waterLevel - 80);
             m->vel[1]  = 0.0f;
         }
         stepResult = perform_water_quarter_step(m, nextPos);
@@ -215,8 +215,8 @@ static u32 perform_water_step(struct MarioState *m) {
     // }
 #else
     vec3f_sum(nextPos, m->pos, step);
-    if (nextPos[1] > (m->waterLevel - 80.0f)) {
-        nextPos[1] = (m->waterLevel - 80.0f);
+    if (nextPos[1] > (m->waterLevel - 80)) {
+        nextPos[1] = (m->waterLevel - 80);
         m->vel[1]  = 0.0f;
     }
     stepResult = perform_water_full_step(m, nextPos);
@@ -229,8 +229,8 @@ static u32 perform_water_step(struct MarioState *m) {
 static void update_water_pitch(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     if (marioObj->header.gfx.angle[0] > 0x0) marioObj->header.gfx.pos[1]  += (60.0f * sins(marioObj->header.gfx.angle[0]) * sins(marioObj->header.gfx.angle[0])); // GRAVITY
-    if (marioObj->header.gfx.angle[0] < 0x0) marioObj->header.gfx.angle[0] =              (marioObj->header.gfx.angle[0] * 0.6f);  // 3 / 5; //  6 / 10;
-    if (marioObj->header.gfx.angle[0] > 0x0) marioObj->header.gfx.angle[0] =              (marioObj->header.gfx.angle[0] * 1.25f); // 5 / 4; // 10 /  8;
+    if (marioObj->header.gfx.angle[0] < 0x0) marioObj->header.gfx.angle[0] =              (marioObj->header.gfx.angle[0]  * 0.6f);  // 3 / 5; //  6 / 10;
+    if (marioObj->header.gfx.angle[0] > 0x0) marioObj->header.gfx.angle[0] =              (marioObj->header.gfx.angle[0]  * 1.25f); // 5 / 4; // 10 /  8;
 }
 
 static void stationary_slow_down(struct MarioState *m) {
@@ -375,7 +375,7 @@ static void reset_bob_variables(struct MarioState *m) {
  */
 static void surface_swim_bob(struct MarioState *m) {
     if (sBobIncrement != 0
-     && m->pos[1] > (m->waterLevel - 85.0f)
+     && m->pos[1] > (m->waterLevel - 85)
      && m->faceAngle[0] >= 0x0
      && (sBobTimer += sBobIncrement) >= 0x0) {
         m->marioObj->header.gfx.pos[1] += (sBobHeight * sins(sBobTimer)); // GRAVITY
@@ -428,9 +428,9 @@ static s32 check_water_jump(struct MarioState *m) {
     s32 probe = (s32)(m->pos[1] + 1.5f);
     if (m->input & INPUT_A_PRESSED) {
 #ifdef BETTER_WATER_JUMP
-        if ((probe >= (m->waterLevel - 80.0f)) && (((m->faceAngle[0] >= 0) && (m->controller->stickY < -32.0f)) || (m->wall != NULL))) {
+        if ((probe >= (m->waterLevel - 80)) && (((m->faceAngle[0] >= 0x0) && (m->controller->stickY < -32.0f)) || (m->wall != NULL))) {
 #else
-        if ((probe >= (m->waterLevel - 80.0f)) && (  m->faceAngle[0] >= 0) &&  m->controller->stickY < -60.0f) {
+        if ((probe >= (m->waterLevel - 80)) && (  m->faceAngle[0] >= 0x0) &&  m->controller->stickY < -60.0f) {
 #endif
             vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
             m->vel[1] = 62.0f;
@@ -965,7 +965,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
 }
 
 static s32 update_metal_water_jump_speed(struct MarioState *m) {
-    f32 waterSurface = (m->waterLevel - 100.0f);
+    f32 waterSurface = (m->waterLevel - 100);
     if ((m->vel[1] > 0.0f) && (m->pos[1] > waterSurface)) return TRUE;
     if (m->input & INPUT_NONZERO_ANALOG) {
         s16 intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
@@ -992,7 +992,7 @@ static s32 act_metal_water_standing(struct MarioState *m) {
     }
     if (is_anim_at_end(m) && (++m->actionState == 3)) m->actionState = 0;
     stop_and_set_height_to_floor(m);
-    if (m->pos[1] >= (m->waterLevel - 150.0f)) m->particleFlags |= PARTICLE_IDLE_WATER_WAVE;
+    if (m->pos[1] >= (m->waterLevel - 150)) m->particleFlags |= PARTICLE_IDLE_WATER_WAVE;
     return FALSE;
 }
 
@@ -1128,10 +1128,10 @@ static s32 act_hold_metal_water_fall_land(struct MarioState *m) {
 }
 
 static s32 check_common_submerged_cancels(struct MarioState *m) {
-    if (m->pos[1] > (m->waterLevel - 80.0f)) {
-        if ((m->waterLevel - 80.0f) > m->floorHeight) {
-            if ((m->pos[1] - (m->waterLevel - 80.0f)) < 50.0f) {
-                m->pos[1]  = (m->waterLevel - 80.0f); // lock mario to top if the falloff isn't big enough
+    if (m->pos[1] > (m->waterLevel - 80)) {
+        if ((m->waterLevel - 80) > m->floorHeight) {
+            if ((m->pos[1] - (m->waterLevel - 80)) < 50.0f) {
+                m->pos[1]  = (m->waterLevel - 80); // lock mario to top if the falloff isn't big enough
             } else {
                 return transition_submerged_to_airborne(m);
             }

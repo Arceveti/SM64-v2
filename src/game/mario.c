@@ -63,7 +63,7 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
-        targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
+        targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index );
     }
     if (o->header.gfx.animInfo.animID != targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
@@ -74,9 +74,9 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
             o->header.gfx.animInfo.animFrame = targetAnim->startFrame;
         } else {
             if (targetAnim->flags & ANIM_FLAG_FORWARD) {
-                o->header.gfx.animInfo.animFrame = targetAnim->startFrame + 1;
+                o->header.gfx.animInfo.animFrame = (targetAnim->startFrame + 1);
             } else {
-                o->header.gfx.animInfo.animFrame = targetAnim->startFrame - 1;
+                o->header.gfx.animInfo.animFrame = (targetAnim->startFrame - 1);
             }
         }
     }
@@ -102,9 +102,9 @@ s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel)
             o->header.gfx.animInfo.animFrameAccelAssist = (targetAnim->startFrame << 0x10);
         } else {
             if (targetAnim->flags & ANIM_FLAG_FORWARD) {
-                o->header.gfx.animInfo.animFrameAccelAssist = (targetAnim->startFrame << 0x10) + accel;
+                o->header.gfx.animInfo.animFrameAccelAssist = ((targetAnim->startFrame << 0x10) + accel);
             } else {
-                o->header.gfx.animInfo.animFrameAccelAssist = (targetAnim->startFrame << 0x10) - accel;
+                o->header.gfx.animInfo.animFrameAccelAssist = ((targetAnim->startFrame << 0x10) - accel);
             }
         }
         o->header.gfx.animInfo.animFrame = (o->header.gfx.animInfo.animFrameAccelAssist >> 0x10);
@@ -121,22 +121,22 @@ void set_anim_to_frame(struct MarioState *m, s16 animFrame) {
     struct Animation *curAnim = animInfo->curAnim;
     if (animInfo->animAccel) {
         if (curAnim->flags & ANIM_FLAG_FORWARD) {
-            animInfo->animFrameAccelAssist = (animFrame << 0x10) + animInfo->animAccel;
+            animInfo->animFrameAccelAssist = ((animFrame << 0x10) + animInfo->animAccel);
         } else {
-            animInfo->animFrameAccelAssist = (animFrame << 0x10) - animInfo->animAccel;
+            animInfo->animFrameAccelAssist = ((animFrame << 0x10) - animInfo->animAccel);
         }
     } else {
         if (curAnim->flags & ANIM_FLAG_FORWARD) {
-            animInfo->animFrame = animFrame + 1;
+            animInfo->animFrame = (animFrame + 1);
         } else {
-            animInfo->animFrame = animFrame - 1;
+            animInfo->animFrame = (animFrame - 1);
         }
     }
 }
 
 s32 is_anim_past_frame(struct MarioState *m, s16 animFrame) {
     s32 isPastFrame;
-    s32 acceleratedFrame = animFrame << 0x10;
+    s32 acceleratedFrame = (animFrame << 0x10);
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;
     struct Animation *curAnim = animInfo->curAnim;
     if (animInfo->animAccel) {
@@ -166,9 +166,9 @@ s16 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s tra
     s16 *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = (f32) sins(yaw);
     f32 c           = (f32) coss(yaw);
-    f32 dx          = *(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f;
-    translation[1]  = *(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f;
-    f32 dz          = *(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f;
+    f32 dx          = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
+    translation[1]  = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
+    f32 dz          = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
     translation[0]  = ( dx * c) + (dz * s);
     translation[2]  = (-dx * s) + (dz * c);
     return curAnim->flags;
@@ -217,10 +217,10 @@ void play_mario_jump_sound(struct MarioState *m) {
     if (!(m->flags & MARIO_MARIO_SOUND_PLAYED)) {
 #ifndef VERSION_JP
         if (m->action == ACT_TRIPLE_JUMP) {
-            play_sound(SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16), m->marioObj->header.gfx.cameraToObject);
+            play_sound((SOUND_MARIO_YAHOO_WAHA_YIPPEE + ((gAudioRandom % 5) << 16)), m->marioObj->header.gfx.cameraToObject);
         } else {
 #endif
-            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((gAudioRandom % 3) << 16), m->marioObj->header.gfx.cameraToObject);
+            play_sound((SOUND_MARIO_YAH_WAH_HOO       + ((gAudioRandom % 3) << 16)), m->marioObj->header.gfx.cameraToObject);
 #ifndef VERSION_JP
         }
 #endif
@@ -233,7 +233,7 @@ void play_mario_jump_sound(struct MarioState *m) {
  */
 void adjust_sound_for_speed(struct MarioState *m) {
     s32 absForwardVel = (m->forwardVel > 0.0f) ? m->forwardVel : -m->forwardVel;
-    set_sound_moving_speed(SOUND_BANK_MOVING, (absForwardVel > 100) ? 100 : absForwardVel);
+    set_sound_moving_speed(SOUND_BANK_MOVING, ((absForwardVel > 100) ? 100 : absForwardVel));
 }
 
 /**
@@ -250,11 +250,11 @@ void play_sound_and_spawn_particles(struct MarioState *m, u32 soundBits, u32 wav
         }
     }
     if ((m->flags & MARIO_METAL_CAP)
-     || soundBits == SOUND_ACTION_UNSTUCK_FROM_GROUND
-     || soundBits == SOUND_MARIO_PUNCH_HOO) {
+     || (soundBits == SOUND_ACTION_UNSTUCK_FROM_GROUND)
+     || (soundBits == SOUND_MARIO_PUNCH_HOO)) {
         play_sound(soundBits, m->marioObj->header.gfx.cameraToObject);
     } else {
-        play_sound(m->terrainSoundAddend + soundBits, m->marioObj->header.gfx.cameraToObject);
+        play_sound((m->terrainSoundAddend + soundBits), m->marioObj->header.gfx.cameraToObject);
     }
 }
 
@@ -281,14 +281,14 @@ void play_mario_landing_sound(struct MarioState *m, u32 soundBits) {
  * played once per action.
  */
 void play_mario_landing_sound_once(struct MarioState *m, u32 soundBits) {
-    play_mario_action_sound(m, (m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_LANDING : soundBits, 1);
+    play_mario_action_sound(m, ((m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_LANDING : soundBits), 1);
 }
 
 /**
  * Plays a heavy landing (ground pound, etc.) sound, accounting for metal cap.
  */
 void play_mario_heavy_landing_sound(struct MarioState *m, u32 soundBits) {
-    play_sound_and_spawn_particles(m, (m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_HEAVY_LANDING : soundBits, 1);
+    play_sound_and_spawn_particles(m, ((m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_HEAVY_LANDING : soundBits), 1);
 }
 
 /**
@@ -297,7 +297,7 @@ void play_mario_heavy_landing_sound(struct MarioState *m, u32 soundBits) {
  * making sure the sound is only played once per action.
  */
 void play_mario_heavy_landing_sound_once(struct MarioState *m, u32 soundBits) {
-    play_mario_action_sound(m, (m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_HEAVY_LANDING : soundBits, 1);
+    play_mario_action_sound(m, ((m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_HEAVY_LANDING : soundBits), 1);
 }
 
 /**
@@ -305,7 +305,7 @@ void play_mario_heavy_landing_sound_once(struct MarioState *m, u32 soundBits) {
  */
 void play_mario_sound(struct MarioState *m, s32 actionSound, s32 marioSound) {
     if (actionSound == SOUND_ACTION_TERRAIN_JUMP) {
-        play_mario_action_sound(m, (m->flags & MARIO_METAL_CAP) ? (s32) SOUND_ACTION_METAL_JUMP : (s32) SOUND_ACTION_TERRAIN_JUMP, 1);
+        play_mario_action_sound(m, ((m->flags & MARIO_METAL_CAP) ? (s32) SOUND_ACTION_METAL_JUMP : (s32) SOUND_ACTION_TERRAIN_JUMP), 1);
     } else {
         play_sound_if_no_flag(m, actionSound, MARIO_ACTION_SOUND_PLAYED);
     }
@@ -322,8 +322,8 @@ void play_mario_sound(struct MarioState *m, s32 actionSound, s32 marioSound) {
  */
 void mario_set_forward_vel(struct MarioState *m, f32 forwardVel) {
     m->forwardVel = forwardVel;
-    m->slideVelX  = sins(m->faceAngle[1]) * m->forwardVel;
-    m->slideVelZ  = coss(m->faceAngle[1]) * m->forwardVel;
+    m->slideVelX  = (sins(m->faceAngle[1]) * m->forwardVel);
+    m->slideVelZ  = (coss(m->faceAngle[1]) * m->forwardVel);
     m->vel[0]     = (f32) m->slideVelX;
     m->vel[2]     = (f32) m->slideVelZ;
 }
@@ -335,7 +335,7 @@ s32 mario_get_floor_class(struct MarioState *m) {
     // The slide terrain type defaults to slide slipperiness.
     // This doesn't matter too much since normally the slide terrain
     // is checked for anyways.
-    s32 floorClass = ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) ? SURFACE_CLASS_VERY_SLIPPERY : SURFACE_CLASS_DEFAULT;
+    s32 floorClass = (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) ? SURFACE_CLASS_VERY_SLIPPERY : SURFACE_CLASS_DEFAULT);
 
     if (m->floor != NULL) {
         switch (m->floor->type) {
@@ -393,17 +393,16 @@ s8 sTerrainSounds[7][6] = {
  */
 u32 mario_get_terrain_sound_addend(struct MarioState *m) {
     s16 floorSoundType;
-    s16 terrainType = m->area->terrainType & TERRAIN_MASK;
-    s32 ret = SOUND_TERRAIN_DEFAULT << 16;
+    s16 terrainType = (m->area->terrainType & TERRAIN_MASK);
+    s32 ret         = (SOUND_TERRAIN_DEFAULT << 16);
     s32 floorType;
     if (m->floor != NULL) {
         floorType = m->floor->type;
-
         if ((gCurrLevelNum != LEVEL_LLL) && (m->floorHeight < (m->waterLevel - 10))) {
             // Water terrain sound, excluding LLL since it uses water in the volcano.
-            ret = SOUND_TERRAIN_WATER << 16;
+            ret = (SOUND_TERRAIN_WATER << 16);
         } else if (SURFACE_IS_QUICKSAND(floorType)) {
-            ret = SOUND_TERRAIN_SAND << 16;
+            ret = (SOUND_TERRAIN_SAND  << 16);
         } else {
             switch (floorType) {
                 default:
@@ -480,7 +479,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
  * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
  */
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
-    return find_ceil(pos[0], height + 3.0f, pos[2], ceil);
+    return find_ceil(pos[0], (height + 3.0f), pos[2], ceil);
 }
 
 /**
@@ -490,9 +489,9 @@ s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
     s16 faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
-    if (turnYaw && m->forwardVel < 0.0f) faceAngleYaw += 0x8000;
-    faceAngleYaw = m->floorAngle - faceAngleYaw;
-    return (-0x4000 < faceAngleYaw) && (faceAngleYaw < 0x4000);
+    if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
+    faceAngleYaw = (m->floorAngle - faceAngleYaw);
+    return ((-0x4000 < faceAngleYaw) && (faceAngleYaw < 0x4000));
 }
 
 /**
@@ -500,7 +499,7 @@ s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
  */
 u32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
-    if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && m->floor->normal.y < COS1) return TRUE;
+    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS10; break;
         case SURFACE_SLIPPERY:      normY = COS20; break;
@@ -515,7 +514,7 @@ u32 mario_floor_is_slippery(struct MarioState *m) {
  */
 s32 mario_floor_is_slope(struct MarioState *m) {
     f32 normY;
-    if ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE && m->floor->normal.y < COS1) return TRUE;
+    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS5;  break;
         case SURFACE_SLIPPERY:      normY = COS10; break;
@@ -555,9 +554,9 @@ s32 mario_floor_is_steep(struct MarioState *m) {
  */
 f32 find_floor_height_relative_polar(struct MarioState *m, s16 angleFromMario, f32 distFromMario) {
     struct Surface *floor;
-    f32 y = sins(m->faceAngle[1] + angleFromMario) * distFromMario;
-    f32 x = coss(m->faceAngle[1] + angleFromMario) * distFromMario;
-    return find_floor(m->pos[0] + y, m->pos[1] + 100.0f, m->pos[2] + x, &floor);
+    f32 y = (sins(m->faceAngle[1] + angleFromMario) * distFromMario);
+    f32 x = (coss(m->faceAngle[1] + angleFromMario) * distFromMario);
+    return find_floor((m->pos[0] + y), (m->pos[1] + 100.0f), (m->pos[2] + x), &floor);
 }
 
 /**
@@ -567,16 +566,16 @@ s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
     struct Surface *floor;
     f32 forwardFloorY, backwardFloorY;
     f32 forwardYDelta, backwardYDelta;
-    f32 x                             = sins(m->faceAngle[1] + yawOffset) * 5.0f;
-    f32 z                             = coss(m->faceAngle[1] + yawOffset) * 5.0f;
+    f32 x                             = (sins(m->faceAngle[1] + yawOffset) * 5.0f);
+    f32 z                             = (coss(m->faceAngle[1] + yawOffset) * 5.0f);
     forwardFloorY                     = find_floor(m->pos[0] + x, m->pos[1] + 100.0f, m->pos[2] + z, &floor);
     if (floor == NULL) forwardFloorY  = m->floorHeight; // handle OOB slopes
     backwardFloorY                    = find_floor(m->pos[0] - x, m->pos[1] + 100.0f, m->pos[2] - z, &floor);
     if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
-    forwardYDelta                     = forwardFloorY - m->pos[1];
-    backwardYDelta                    = m->pos[1] - backwardFloorY;
+    forwardYDelta                     = (forwardFloorY - m->pos[1]);
+    backwardYDelta                    = (m->pos[1] - backwardFloorY);
     return atan2s(5.0f, (forwardYDelta * forwardYDelta < backwardYDelta * backwardYDelta) ? forwardYDelta : backwardYDelta);
 }
 
@@ -611,12 +610,12 @@ void set_steep_jump_action(struct MarioState *m) {
     if (m->forwardVel > 0.0f) {
         //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
         // undefined behavior if m->floorAngle >= 0.
-        s16 angleTemp     = m->floorAngle + 0x8000;
-        s16 faceAngleTemp = m->faceAngle[1] - angleTemp;
-        f32 y             = sins(faceAngleTemp) * m->forwardVel;
-        f32 x             = coss(faceAngleTemp) * m->forwardVel * 0.75f;
-        m->forwardVel     = sqrtf(y * y + x * x);
-        m->faceAngle[1]   = atan2s(x, y) + angleTemp;
+        s16 angleTemp     = (m->floorAngle + 0x8000);
+        s16 faceAngleTemp = (m->faceAngle[1] - angleTemp);
+        f32 y             = (sins(faceAngleTemp) * m->forwardVel);
+        f32 x             = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
+        m->forwardVel     = sqrtf((y * y) + (x * x));
+        m->faceAngle[1]   = (atan2s(x, y) + angleTemp);
     }
     drop_and_set_mario_action(m, ACT_STEEP_JUMP, 0);
 }
@@ -627,8 +626,8 @@ void set_steep_jump_action(struct MarioState *m) {
 static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVelY, f32 multiplier) {
     // get_additive_y_vel_for_jumps is always 0 and a stubbed function.
     // It was likely trampoline related based on code location.
-    m->vel[1] = initialVelY + get_additive_y_vel_for_jumps() + m->forwardVel * multiplier;
-    if (m->squishTimer != 0 || m->quicksandDepth > 1.0f) m->vel[1] *= 0.5f;
+    m->vel[1] = (initialVelY + get_additive_y_vel_for_jumps() + (m->forwardVel * multiplier));
+    if ((m->squishTimer != 0) || (m->quicksandDepth > 1.0f)) m->vel[1] *= 0.5f;
 }
 
 /**
@@ -636,7 +635,7 @@ static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVel
  */
 static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
     f32 forwardVel;
-    if ((m->squishTimer != 0 || m->quicksandDepth >= 1.0f)  && (action == ACT_DOUBLE_JUMP || action == ACT_TWIRLING)) action = ACT_JUMP;
+    if (((m->squishTimer != 0) || (m->quicksandDepth >= 1.0f)) && ((action == ACT_DOUBLE_JUMP) || (action == ACT_TWIRLING))) action = ACT_JUMP;
     switch (action) {
         case ACT_DOUBLE_JUMP:
             set_mario_y_vel_based_on_fspeed(m, 52.0f, 0.25f);
@@ -644,7 +643,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
         case ACT_BACKFLIP:
             m->marioObj->header.gfx.animInfo.animID = -1;
-            m->forwardVel = -16.0f;
+            m->forwardVel                           = -16.0f;
             set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
             break;
         case ACT_TRIPLE_JUMP:
@@ -664,7 +663,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             if (actionArg == 0) set_mario_y_vel_based_on_fspeed(m, 42.0f, 0.0f);
             break;
         case ACT_BURNING_JUMP:
-            m->vel[1] = 31.5f;
+            m->vel[1]     = 31.5f;
             m->forwardVel = 8.0f;
             break;
         case ACT_RIDING_SHELL_JUMP:
@@ -684,7 +683,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
             break;
         case ACT_SIDE_FLIP:
             set_mario_y_vel_based_on_fspeed(m, 62.0f, 0.0f);
-            m->forwardVel = 8.0f;
+            m->forwardVel   = 8.0f;
             m->faceAngle[1] = m->intendedYaw;
             break;
         case ACT_STEEP_JUMP:
@@ -735,11 +734,11 @@ static u32 set_mario_action_moving(struct MarioState *m, u32 action, UNUSED u32 
     f32 mag        = min(m->intendedMag, 8.0f);
     switch (action) {
         case ACT_WALKING:
-            if (floorClass != SURFACE_CLASS_VERY_SLIPPERY && 0.0f <= forwardVel && forwardVel < mag) m->forwardVel = mag;
+            if ((floorClass != SURFACE_CLASS_VERY_SLIPPERY) && (0.0f <= forwardVel) && (forwardVel < mag)) m->forwardVel = mag;
             m->marioObj->oMarioWalkingPitch = 0;
             break;
         case ACT_HOLD_WALKING:
-            if (0.0f <= forwardVel && forwardVel < mag / 2.0f) m->forwardVel = mag / 2.0f;
+            if ((0.0f <= forwardVel) && (forwardVel < (mag / 2.0f))) m->forwardVel = (mag / 2.0f);
             break;
         case ACT_BEGIN_SLIDING:
             action = mario_facing_downhill(m, FALSE) ? ACT_BUTT_SLIDE : ACT_STOMACH_SLIDE;
@@ -755,7 +754,7 @@ static u32 set_mario_action_moving(struct MarioState *m, u32 action, UNUSED u32 
  * Transition for certain submerged actions, which is actually just the metal jump actions.
  */
 static u32 set_mario_action_submerged(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
-    if (action == ACT_METAL_WATER_JUMP || action == ACT_HOLD_METAL_WATER_JUMP) m->vel[1] = 32.0f;
+    if ((action == ACT_METAL_WATER_JUMP) || (action == ACT_HOLD_METAL_WATER_JUMP)) m->vel[1] = 32.0f;
     return action;
 }
 
@@ -811,7 +810,6 @@ s32 set_jump_from_landing(struct MarioState *m) {
                 case ACT_JUMP_LAND:
                 case ACT_FREEFALL_LAND:
                 case ACT_SIDE_FLIP_LAND_STOP: set_mario_action(m, ACT_DOUBLE_JUMP, 0); break;
-
                 case ACT_DOUBLE_JUMP_LAND:
                     // If Mario has a wing cap, he ignores the typical speed
                     // requirement for a triple jump.
@@ -903,9 +901,9 @@ s32 transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     if (m->heldObj == NULL) {
-        return set_mario_action(m, (m->input & INPUT_A_DOWN) ? ACT_DIVE : ACT_FREEFALL, 0);
+        return set_mario_action(m, ((m->input & INPUT_A_DOWN) ? ACT_DIVE      : ACT_FREEFALL     ), 0);
     } else {
-        return set_mario_action(m, (m->input & INPUT_A_DOWN) ? ACT_HOLD_JUMP : ACT_HOLD_FREEFALL, 0);
+        return set_mario_action(m, ((m->input & INPUT_A_DOWN) ? ACT_HOLD_JUMP : ACT_HOLD_FREEFALL), 0);
     }
 }
 
@@ -914,8 +912,8 @@ s32 transition_submerged_to_airborne(struct MarioState *m) {
  * non-submerged action. This also applies the water surface camera preset.
  */
 s32 set_water_plunge_action(struct MarioState *m) {
-    m->forwardVel   = m->forwardVel / 4.0f;
-    m->vel[1]       = m->vel[1]     / 2.0f;
+    m->forwardVel   = (m->forwardVel / 4.0f);
+    m->vel[1]       = (m->vel[1]     / 2.0f);
     m->faceAngle[2] = 0x0;
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     if (!(m->action & ACT_FLAG_DIVING)) m->faceAngle[0] = 0x0;
@@ -951,8 +949,8 @@ void squish_mario_model(struct MarioState *m) {
         // If timer is less than 16, rubber-band Mario's size scale up and down.
         } else if (m->squishTimer <= 16) {
             m->squishTimer--;
-            m->marioObj->header.gfx.scale[1] = 1.0f - ((sSquishScaleOverTime[15 - m->squishTimer] * 0.6f) / 100.0f);
-            m->marioObj->header.gfx.scale[0] =        ((sSquishScaleOverTime[15 - m->squishTimer] * 0.4f) / 100.0f) + 1.0f;
+            m->marioObj->header.gfx.scale[1] = (1.0f - ((sSquishScaleOverTime[15 - m->squishTimer] * 0.6f) / 100.0f));
+            m->marioObj->header.gfx.scale[0] = (1.0f + ((sSquishScaleOverTime[15 - m->squishTimer] * 0.4f) / 100.0f));
             m->marioObj->header.gfx.scale[2] = m->marioObj->header.gfx.scale[0];
         } else {
             m->squishTimer--;
@@ -980,9 +978,9 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(210, 120,  "VY %d", m->vel[1]);
                 print_text_fmt_int(210, 104,  "VZ %d", m->vel[2]);
 
-                print_text_fmt_int(210,  88,  "RY %d", (m->faceAngle[1] * 45.0f) / 8192.0f);
+                print_text_fmt_int(210,  88,  "RY %d", ((m->faceAngle[1] * 45.0f) / 8192.0f));
                 print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
-                print_text_fmt_int(210,  56,  "MY %d", (atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f);
+                print_text_fmt_int(210,  56,  "MY %d", ((atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  56, "VEL", 0);
                 // STA short for "status," the official action name via SMS map.
                 print_text_fmt_int(210,  40, "STA %x", (m->action & ACT_ID_MASK));
@@ -1005,7 +1003,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
                     print_text_fmt_int(210,  88,   "FH %d", m->floorHeight);
 
-                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
                     print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
                     print_text_fmt_int(226,  56,    "0*%x", m->floor->force);
                     print_text_fmt_int(210,  40,   "RM %d", m->floor->room);
@@ -1030,7 +1028,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
                     print_text_fmt_int(210,  88,   "CH %d", m->ceilHeight);
 
-                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
                     print_text_fmt_int(128,  56, "SURF %x", m->ceil->type);
                     print_text_fmt_int(226,  56,    "0*%x", m->ceil->force);
                 }
@@ -1055,16 +1053,16 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                     print_text_fmt_int(184, 104,     "%d", m->wall->vertex3[1]);
                     print_text_fmt_int(248, 104,     "%d", m->wall->vertex3[2]);
                     
-                    print_text_fmt_int(210,  88,  "WRY %d", (atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  88,  "WRY %d", ((atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f));
 
-                    print_text_fmt_int(210,  72,  "ANG %d", (atan2s(surf_nY, steepness) * 45.0f) / 8192.0f);
+                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
                     print_text_fmt_int(128,  56, "SURF %x", m->wall->type);
                     print_text_fmt_int(226,  56,    "0*%x", m->wall->force);
                 }
                 // print_text_fmt_int(210, 56, "WALL", 0);
                 break;
             case 4:
-                print_text_fmt_int(210, 120, "C2 %d", (gGlobalTimer % 32767));
+                print_text_fmt_int(210, 120, "C2 %d", (gGlobalTimer & 0x7FFF));
                 print_text_fmt_int(210, 104, "AT %d", m->actionTimer);
 
                 print_text_fmt_int(210,  88, "AY %d", (coss(m->intendedYaw) * m->intendedMag)); // far to near
@@ -1083,9 +1081,9 @@ void debug_print_speed_action_normal(struct MarioState *m) {
             if (sDebugMode > 4) sDebugMode = 0;
         }
     }
-    if (gPlayer1Controller->buttonDown & Z_TRIG && gPlayer1Controller->buttonPressed & L_JPAD) {
+    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonPressed & L_JPAD)) {
         gShowDebugText ^= TRUE;
-        gDebugInfoFlags = gShowDebugText ? DEBUG_INFO_FLAG_ALL : DEBUG_INFO_NOFLAGS;
+        gDebugInfoFlags = (gShowDebugText ? DEBUG_INFO_FLAG_ALL : DEBUG_INFO_NOFLAGS);
     }
 }
 #endif
@@ -1128,10 +1126,11 @@ void update_mario_button_inputs(struct MarioState *m) {
  */
 void update_mario_joystick_inputs(struct MarioState *m) {
     struct Controller *controller = m->controller;
-    f32 mag = ((controller->stickMag / 64.0f) * (controller->stickMag / 64.0f)) * 64.0f;
-    m->intendedMag = mag / (m->squishTimer == 0 ? 2.0f : 8.0f);
+    f32 mag = (controller->stickMag / 64.0f);
+    mag = ((mag * mag) * 64.0f); //?
+    m->intendedMag = (mag / ((m->squishTimer == 0) ? 2.0f : 8.0f));
     if (m->intendedMag > 0.0f) {
-        m->intendedYaw = atan2s(-controller->stickY, controller->stickX) + m->area->camera->yaw;
+        m->intendedYaw = (atan2s(-controller->stickY, controller->stickX) + m->area->camera->yaw);
         m->input |= INPUT_NONZERO_ANALOG;
     } else {
         m->intendedYaw = m->faceAngle[1];
@@ -1144,9 +1143,9 @@ void update_mario_joystick_inputs(struct MarioState *m) {
 void update_mario_geometry_inputs(struct MarioState *m) {
     f32 gasLevel;
     f32 ceilToFloorDist;
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
-    f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
-    m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
+    f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
+    f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    m->floorHeight = find_floor(m->pos[0],  m->pos[1],  m->pos[2], &m->floor);
     // If Mario is OOB, move his position to his graphical position (which was not updated)
     // and check for the floor there.
     // This can cause errant behavior when combined with astral projection,
@@ -1161,14 +1160,14 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     if (m->floor != NULL) {
         m->floorAngle         = atan2s(m->floor->normal.z, m->floor->normal.x);
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
-        if ((m->pos[1] > m->waterLevel - 40) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;
+        if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;
         if ((m->floor->flags & SURFACE_FLAG_DYNAMIC) || (m->ceil && m->ceil->flags & SURFACE_FLAG_DYNAMIC)) {
-            ceilToFloorDist = m->ceilHeight - m->floorHeight;
-            if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= gMarioObject->hitboxHeight-10.0f)) m->input |= INPUT_SQUISHED;
+            ceilToFloorDist = (m->ceilHeight - m->floorHeight);
+            if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= (gMarioObject->hitboxHeight - 10.0f))) m->input |= INPUT_SQUISHED;
         }
-        if (m->pos[1] > m->floorHeight + 80.0f)  m->input |= INPUT_OFF_FLOOR;
-        if (m->pos[1] < (m->waterLevel - 10.0f)) m->input |= INPUT_IN_WATER;
-        if (m->pos[1] <     (gasLevel - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
+        if (m->pos[1] >  m->floorHeight +  80.0f)  m->input |= INPUT_OFF_FLOOR;
+        if (m->pos[1] < (m->waterLevel  -  10.0f)) m->input |= INPUT_IN_WATER;
+        if (m->pos[1] <      (gasLevel  - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
     } else {
         level_trigger_warp(m, WARP_OP_DEATH);
     }
@@ -1190,7 +1189,7 @@ void update_mario_inputs(struct MarioState *m) {
 #endif
     if (gCameraMovementFlags & CAM_MOVE_C_UP_MODE) {
         if (m->action & ACT_FLAG_ALLOW_FIRST_PERSON ||
-        (m->vel[0] < 8.0f && m->vel[1] < 8.0f && m->vel[2] < 8.0f && m->pos[1] <= m->floorHeight)) {
+        ((m->vel[0] < 8.0f) && (m->vel[1] < 8.0f) && (m->vel[2] < 8.0f) && (m->pos[1] <= m->floorHeight))) {
             m->input |= INPUT_FIRST_PERSON;
         } else {
             gCameraMovementFlags &= ~CAM_MOVE_C_UP_MODE;
@@ -1216,8 +1215,8 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
     extern s16 s8DirModeBaseYaw;
     if (!gWaterCamOverride) {
         if ((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) {
-            heightBelowWater = (f32)(m->waterLevel - 80) - m->pos[1];
-            camPreset = m->area->camera->mode;
+            heightBelowWater = ((f32)(m->waterLevel - 80) - m->pos[1]);
+            camPreset        = m->area->camera->mode;
             if (m->action & ACT_FLAG_METAL_WATER) {
                 if (camPreset != CAMERA_MODE_CLOSE) set_camera_mode(m->area->camera, CAMERA_MODE_CLOSE, 1);
             } else {
@@ -1232,12 +1231,12 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
     }
     if ((gPlayer1Controller->buttonPressed & R_TRIG) && (m->action & ACT_FLAG_SWIMMING)) {
-        s8DirModeBaseYaw = ((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000;
+        s8DirModeBaseYaw = (((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000);
         gWaterCamOverride ^= TRUE;
     }
 #else
     if ((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) {
-        heightBelowWater = (f32)(m->waterLevel - 80) - m->pos[1];
+        heightBelowWater = ((f32)(m->waterLevel - 80) - m->pos[1]);
         camPreset = m->area->camera->mode;
         if (m->action & ACT_FLAG_METAL_WATER) {
             if (camPreset != CAMERA_MODE_CLOSE) set_camera_mode(m->area->camera, CAMERA_MODE_CLOSE, 1);
@@ -1314,7 +1313,7 @@ void update_mario_health(struct MarioState *m) {
 #ifdef BREATH_METER
 void update_mario_breath(struct MarioState *m) {
     if (m->breath >= 0x100 && m->health >= 0x100) {
-        if (m->pos[1] < (m->waterLevel - 140.0f) && !(m->flags & MARIO_METAL_CAP) && !(m->action & ACT_FLAG_INTANGIBLE)) {
+        if (m->pos[1] < (m->waterLevel - 140) && !(m->flags & MARIO_METAL_CAP) && !(m->action & ACT_FLAG_INTANGIBLE)) {
             m->breath--;
             if (m->breath < 0x300) {
                 // Play a noise to alert the player when Mario is close to drowning.
@@ -1384,7 +1383,7 @@ void sink_mario_in_quicksand(struct MarioState *m) {
  * 100010001000100010001001001001001001001001001010101010101010101.
  */
 u64 sCapFlickerFrames = 0x4444449249255555;
-
+//!
 /**
  * Updates the cap flags mainly based on the cap timer.
  */
@@ -1427,10 +1426,10 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     //  this can be paused through to give continual invisibility. This leads to
     //  no interaction with objects.
     if ((m->invincTimer >= 3) && (gGlobalTimer & 0x1)) gMarioState->marioObj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-    if (flags & MARIO_CAP_IN_HAND) bodyState->handState = (flags & MARIO_WING_CAP) ? MARIO_HAND_HOLDING_WING_CAP : MARIO_HAND_HOLDING_CAP;
-    if (flags & MARIO_CAP_ON_HEAD) bodyState->capState  = (flags & MARIO_WING_CAP) ? MARIO_HAS_WING_CAP_ON       : MARIO_HAS_DEFAULT_CAP_ON;
+    if (flags & MARIO_CAP_IN_HAND) bodyState->handState = ((flags & MARIO_WING_CAP) ? MARIO_HAND_HOLDING_WING_CAP : MARIO_HAND_HOLDING_CAP  );
+    if (flags & MARIO_CAP_ON_HEAD) bodyState->capState  = ((flags & MARIO_WING_CAP) ? MARIO_HAS_WING_CAP_ON       : MARIO_HAS_DEFAULT_CAP_ON);
     // Short hitbox for crouching/crawling/etc.
-    m->marioObj->hitboxHeight = (m->action & ACT_FLAG_SHORT_HITBOX) ? 100.0f : 160.0f;
+    m->marioObj->hitboxHeight = ((m->action & ACT_FLAG_SHORT_HITBOX) ? 100.0f : 160.0f);
     if ((m->flags & MARIO_TELEPORTING) && (m->fadeWarpOpacity != 0xFF)) {
         bodyState->modelState &= ~MODEL_STATE_MASK;
         bodyState->modelState |= (MODEL_STATE_ALPHA | m->fadeWarpOpacity);
@@ -1445,8 +1444,9 @@ UNUSED static void debug_update_mario_cap(u16 button, s32 flags, u16 capTimer, u
     // This checks for Z_TRIG instead of Z_DOWN flag
     // (which is also what other debug functions do),
     // so likely debug behavior rather than unused behavior.
-    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonPressed & button)
-        && !(gMarioState->flags & flags)) {
+    if ((gPlayer1Controller->buttonDown & Z_TRIG)
+     && (gPlayer1Controller->buttonPressed & button)
+     && !(gMarioState->flags & flags)) {
         gMarioState->flags |= (flags + MARIO_CAP_ON_HEAD);
         if (capTimer > gMarioState->capTimer) gMarioState->capTimer = capTimer;
         play_cap_music(capMusic);
