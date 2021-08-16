@@ -97,7 +97,7 @@
 // Allows Mario to ledgegrab sloped floors
 // #define NO_FALSE_LEDGEGRABS
 // Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified.
-// #define PUPPYCAM
+#define PUPPYCAM
 
 
 // HACKER QOL 
