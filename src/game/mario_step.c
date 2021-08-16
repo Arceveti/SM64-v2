@@ -686,9 +686,9 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         wallDYaw = abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]);
         if (m->wall->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
  #ifdef WALL_SLIDE
-        if (wallDYaw > 0x5000) && (m->vel[1] <= 0)) {
+        if ((wallDYaw > 0x5000) && (m->vel[1] <= 0)) {
  #elif WALLKICKS_46_DEGREES
-        if (wallDYaw > 0x5B00) { // 5F4A?
+        if (wallDYaw > 0x5B00) { // 0x5F4A?
  #else
         if (wallDYaw > 0x6000) {
  #endif

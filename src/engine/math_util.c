@@ -1220,9 +1220,17 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
     approach_s16_asymptotic_bool(&current[2], target[2], zMul);
 }
 
-/*********
- * atans *
- *********/
+/******************
+ * Trig Functions *
+ ******************/
+
+s16 LENSIN(s16 length, s16 direction) {
+    return (length * sins(direction));
+}
+
+s16 LENCOS(s16 length, s16 direction) {
+    return (length * coss(direction));
+}
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming

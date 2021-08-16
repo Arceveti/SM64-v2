@@ -138,7 +138,9 @@ s32  approach_s16_asymptotic_bool(      s16 *current,   s16 target, s16 divisor)
 s32  approach_s16_asymptotic(           s16  current,   s16 target, s16 divisor);
 void approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
-// Atans
+// Trig
+s16  LENSIN(s16 length, s16 direction);
+s16  LENCOS(s16 length, s16 direction);
 s16  atan2s(f32 y, f32 x);
 f32  atan2f(f32 a, f32 b);
 // Curves

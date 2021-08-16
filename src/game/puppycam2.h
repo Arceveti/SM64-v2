@@ -88,10 +88,10 @@ struct gPuppyStruct
     u8  moveFlagAdd;            // A bit that multiplies movement rate of axes when moving, to centre them faster.
     s16 targetDist[2];
 
-    u8  cutscene;               // A boolean that decides whether a cutscene is active
+    u8    cutscene;             // A boolean that decides whether a cutscene is active
     s32 (*sceneFunc)();
-    u8  sceneInput;             // A boolean that decides whether the controller updates during the scene.
-    s32 sceneTimer;             // The cutscene timer that goes up during a cutscene.
+    u8    sceneInput;           // A boolean that decides whether the controller updates during the scene.
+    s32   sceneTimer;           // The cutscene timer that goes up during a cutscene.
     Vec3s scenePos;             // Where the camera is during a cutscene
     Vec3s sceneFocus;           // Where the camera looks during a cutscene
 
@@ -161,18 +161,16 @@ extern struct MemoryPool *gPuppyMemoryPool;
 extern void puppycam_boot(void);
 extern void puppycam_init(void);
 extern void puppycam_loop(void);
-extern void puppycam_shake(s16 x, s16 y, s16 z);
+UNUSED extern void puppycam_shake(s16 x, s16 y, s16 z);
 extern void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos);
 extern f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier);
 extern void puppycam_default_config(void);
-extern s16 LENCOS(s16 length, s16 direction);
-extern s16 LENSIN(s16 length, s16 direction);
 extern void puppycam_display_options(void);
 extern void puppycam_set_save(void);
 extern void puppycam_check_pause_buttons(void);
-extern void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput);
+UNUSED extern void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput);
 extern void puppycam_render_option_text();
-void puppycam_warp(f32 displacementX, f32 displacementY, f32 displacementZ);
+UNUSED void puppycam_warp(f32 displacementX, f32 displacementY, f32 displacementZ);
 
 #endif
 
