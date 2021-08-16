@@ -96,7 +96,7 @@ extern const Gfx bbh_seg7_dl_mesh_elevator[];
 extern const Gfx bbh_seg7_dl_merry_go_round[];
 extern const Gfx bbh_seg7_dl_coffin[];
 extern const Collision bbh_seg7_collision_level[];
-extern const u8 bbh_seg7_rooms[];
+extern const RoomsList bbh_seg7_rooms[];
 extern const MacroObject bbh_seg7_macro_objs[];
 extern const Collision bbh_seg7_collision_staircase_step[];
 extern const Collision bbh_seg7_collision_tilt_floor_platform[];

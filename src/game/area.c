@@ -51,9 +51,9 @@ Vp *gViewportClip        = NULL;
 s16 gWarpTransDelay      = 0;
 u32 gFBSetColor          = 0;
 u32 gWarpTransFBSetColor = 0;
-u8  gWarpTransRed        = 0;
-u8  gWarpTransGreen      = 0;
-u8  gWarpTransBlue       = 0;
+Color gWarpTransRed      = 0;
+Color gWarpTransGreen    = 0;
+Color gWarpTransBlue     = 0;
 s16 gCurrSaveFileNum     = 1;
 s16 gCurrLevelNum        = LEVEL_MIN;
 
@@ -100,7 +100,7 @@ void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
     gViewportClip     = b;
 }
 
-void set_warp_transition_rgb(u8 red, u8 green, u8 blue) {
+void set_warp_transition_rgb(Color red, Color green, Color blue) {
     u16 warpTransitionRGBA16 = (((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 0x1);
     gWarpTransFBSetColor = ((warpTransitionRGBA16 << 16) | warpTransitionRGBA16);
     gWarpTransRed   = red;
@@ -264,7 +264,7 @@ void area_update_objects(void) {
  * Sets up the information needed to play a warp transition, including the
  * transition type, time in frames, and the RGB color that will fill the screen.
  */
-void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue) {
+void play_transition(s16 transType, s16 time, Color red, Color green, Color blue) {
     gWarpTransition.isActive       = TRUE;
     gWarpTransition.type           = transType;
     gWarpTransition.time           = time;
@@ -307,7 +307,7 @@ void play_transition(s16 transType, s16 time, u8 red, u8 green, u8 blue) {
  * transition type, time in frames, and the RGB color that will fill the screen.
  * The transition will play only after a number of frames specified by 'delay'
  */
-void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 blue, s16 delay) {
+void play_transition_after_delay(s16 transType, s16 time, Color red, Color green, Color blue, s16 delay) {
     gWarpTransDelay = delay; // Number of frames to delay playing the transition.
     play_transition(transType, time, red, green, blue);
 }

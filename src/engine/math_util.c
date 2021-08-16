@@ -9,36 +9,17 @@
 
 #include "config.h"
 
-/******************************
- * Inline functions (Wiseguy) *
- ******************************/
-
-static __inline__ s32 roundf(f32 in) {
-    f32 tmp;
-    s32 out;
-    __asm__("round.w.s %0,%1" : "=f" (tmp) : "f" (in));
-    __asm__("mfc1 %0,%1" : "=r" (out) : "f" (tmp));
-    return out;
-}
-
-// http://www.terathon.com/code/oblique.html
-inline float sgn(float a) {
-    if (a > 0.0f) return ( 1.0f);
-    if (a < 0.0f) return (-1.0f);
-    return (0.0f);
-}
-
 /**************************
  * Float functions (Kaze) *
  **************************/
 
 #define FLOAT_MIN -3.40282e+38f
 
-static float const E = 2.718281828459f;
-float slow_logf(float x) {
-    float p = 0.0f;
-    float r = 0.0f, c = -1.0f;
-    int i;
+static f32 const E = 2.718281828459f;
+f32 slow_logf(f32 x) {
+    f32 p = 0.0f;
+    f32 r = 0.0f, c = -1.0f;
+    s32 i;
     if (x == 0.0f) return FLOAT_MIN;
     while (x < 0.5f) {
         x *= E;
@@ -52,9 +33,9 @@ float slow_logf(float x) {
     return (r - p);
 }
 
-float slow_expf(float x) {
-    float r = 1.0f, c = 1.0f;
-    int i;
+f32 slow_expf(f32 x) {
+    f32 r = 1.0f, c = 1.0f;
+    s32 i;
     x = -x;
     for (i = 1; i < 8; ++i) {
         c *= (x / i);
@@ -63,7 +44,7 @@ float slow_expf(float x) {
     return (1.0f / r);
 }
 
-float slow_powf(float base, float exponent) {
+f32 slow_powf(f32 base, f32 exponent) {
     if (base <= 0.0f) return 0.0f;
     return slow_expf(exponent * slow_logf(base));
 }
@@ -74,28 +55,28 @@ float slow_powf(float base, float exponent) {
  * Fast Inverse Square Root *
  ****************************/
 
-float Q_rsqrtf( float number ) {
+f32 Q_rsqrtf( f32 number ) {
 	long i;
-	float x2, y;
+	f32 x2, y;
 	x2 = (number * 0.5f);
 	y  =  number;
 	i  = *(long *) &y;
 	i  = (0x5f3759df - (i >> 1));
-	y  = *(float *) &i;
+	y  = *(f32 *) &i;
 	y  = (y * (1.5f - (x2 * y * y))); // 1st iteration
 	// y  = (y * (1.5f - (x2 * y * y))); // 2nd iteration, this can be removed
 	return y;
 }
 
-double Q_rsqrtd( double number ) {
+f64 Q_rsqrtd( f64 number ) {
 	long i;
-	double x2, y;
+	f64 x2, y;
 	x2 = (number * 0.5);
 	y  =  number;
 	i  = *(long *) &y;
     // The magic number is for doubles is from https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
 	i  = (0x5fe6eb50c7b537a9 - (i >> 1));
-	y  = *(double *) &i;
+	y  = *(f64 *) &i;
 	y  = (y * (1.5 - (x2 * y * y))); // 1st iteration
     // y  = (y * (1.5 - (x2 * y * y))); // 2nd iteration, this can be removed
 	return y;
@@ -106,112 +87,71 @@ double Q_rsqrtd( double number ) {
  * Rounding *
  ************/
 
-/// Round `num` to the nearest `s32`.
-s32 round_float_to_int(f32 num) {
-    // Note that double literals are used here, rather than float literals.
-    return num + ((num >= 0.0f) ? 0.5f : -0.5f);
+/// From Wiseguy
+static __inline__ s32 roundf(f32 in) {
+    f32 tmp;
+    s32 out;
+    __asm__("round.w.s %0,%1" : "=f" (tmp) : "f" (in));
+    __asm__("mfc1 %0,%1" : "=r" (out) : "f" (tmp));
+    return out;
 }
 
-/// Round `num` to the nearest `s32`.
-s32 round_double_to_int(f64 num) {
-    // Note that double literals are used here, rather than float literals.
-    return num + ((num >= 0.0) ? 0.5 : -0.5);
-}
-
-/// Round `num` to the nearest `s16`.
-s16 round_float_to_short(f32 num) {
-    // Note that double literals are used here, rather than float literals.
-    return num + ((num >= 0.0f) ? 0.5f : -0.5f);
-}
-
-/// Round `num` to the nearest `s16`.
-s16 round_double_to_short(f64 num) {
-    // Note that double literals are used here, rather than float literals.
-    return num + ((num >= 0.0) ? 0.5 : -0.5);
-}
+/// Round `num` to the nearest integer.
+s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
+s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
+s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
+s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 
 /***********************************
  * Absolute value & sign functions *
  ***********************************/
 
+/// From Wiseguy
+// http://www.terathon.com/code/oblique.html
+inline f32 sgn(f32 a) {
+    if (a > 0.0f) return ( 1.0f);
+    if (a < 0.0f) return (-1.0f);
+    return (0.0f);
+}
+
 s32 signum_positive(s32 x) {
     return ((x >= 0) ? 1 : -1);
 }
 
-/// double
-f64 absd(f64 x) {
-    return ((x >= 0.0) ? x : -x);
-}
+s8  absc(s8  x) { return ((x >= 0   ) ? x : -x); }
+s16 abss(s16 x) { return ((x >= 0   ) ? x : -x); }
+s32 absi(s32 x) { return ((x >= 0   ) ? x : -x); }
+f32 absf(f32 x) { return ((x >= 0.0f) ? x : -x); }
+f64 absd(f64 x) { return ((x >= 0.0 ) ? x : -x); }
 
-/// float
-f32 absf(f32 x) {
-    return ((x >= 0.0f) ? x : -x);
-}
-
-/// int
-s32 absi(s32 x) {
-    return ((x >= 0) ? x : -x);
-}
-
-/// short
-s16 abss(s16 x) {
-    return ((x >= 0) ? x : -x);
-}
-
-/// char
-s8 absc(s8 x) {
-    return ((x >= 0) ? x : -x);
-}
-
-/************************
- * Comparison functions *
- ************************/
+/***********************
+ * Min/Max 3 functions *
+ ***********************/
 
 /// Returns the lowest of three values.
-s16 min_3s(s16 a0, s16 a1, s16 a2) {
-    if (a1 < a0) a0 = a1;
-    if (a2 < a0) a0 = a2;
-    return a0;
-}
+s8  min_3c( s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+u8  min_3uc(u8  a0, u8  a1,  u8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+s16 min_3s( s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+u16 min_3us(s16 a0, u16 a1, u16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+s32 min_3i( s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+u32 min_3ui(u32 a0, u32 a1, u32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+f32 min_3f( f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+f64 min_3d( f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 
 /// Returns the highest of three values.
-s16 max_3s(s16 a0, s16 a1, s16 a2) {
-    if (a1 > a0) a0 = a1;
-    if (a2 > a0) a0 = a2;
-    return a0;
-}
-
-/// Returns the lowest of three values.
-s32 min_3i(s32 a0, s32 a1, s32 a2) {
-    if (a1 < a0) a0 = a1;
-    if (a2 < a0) a0 = a2;
-    return a0;
-}
-
-/// Returns the highest of three values.
-s32 max_3i(s32 a0, s32 a1, s32 a2) {
-    if (a1 > a0) a0 = a1;
-    if (a2 > a0) a0 = a2;
-    return a0;
-}
-
-/// Returns the lowest of three values.
-f32 min_3f(f32 a0, f32 a1, f32 a2) {
-    if (a1 < a0) a0 = a1;
-    if (a2 < a0) a0 = a2;
-    return a0;
-}
-
-/// Returns the highest of three values.
-f32 max_3f(f32 a0, f32 a1, f32 a2) {
-    if (a1 > a0) a0 = a1;
-    if (a2 > a0) a0 = a2;
-    return a0;
-}
+s8  max_3c( s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+u8  max_3uc(u8  a0,  u8 a1,  u8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+s16 max_3s( s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+u16 max_3us(u16 a0, u16 a1, u16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+s32 max_3i( s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+f32 max_3f( f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 
 /**********
  * Angles *
  **********/
+
 s16 abs_angle_diff(s16 angle1, s16 angle2) {
     s16 diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
@@ -226,13 +166,12 @@ static u16 gRandomSeed16;
 
 // Generate a pseudorandom integer from 0 to 65535 from the random seed, and update the seed.
 u16 random_u16(void) {
-    u16 temp1, temp2;
     if (gRandomSeed16 == 0x560A) gRandomSeed16 = 0x0;
-    temp1         = ((gRandomSeed16 & 0x00FF) << 8);
+    u16 temp1     = ((gRandomSeed16 & 0x00FF) << 8);
     temp1         =  (temp1 ^ gRandomSeed16);
     gRandomSeed16 = ((temp1 & 0x00FF) << 8) + ((temp1 & 0xFF00) >> 8);
     temp1         = ((temp1 & 0x00FF) << 1) ^ gRandomSeed16;
-    temp2         =  (temp1 >> 1) ^ 0xFF80;
+    u16 temp2     =  (temp1 >> 1) ^ 0xFF80;
     if (temp1 & 0x1) {
         gRandomSeed16 =  (temp2 ^ 0x8180);
     } else {
@@ -366,6 +305,13 @@ void vec3s_to_vec3f(Vec3f dest, Vec3s a) {
     dest[2] = a[2];
 }
 
+/// Convert int vector a to float vector 'dest'
+void vec3i_to_vec3f(Vec3f dest, Vec3i a) {
+    dest[0] = a[0];
+    dest[1] = a[1];
+    dest[2] = a[2];
+}
+
 /**
  * Convert float vector a to a short vector 'dest' by rounding the components
  * to the nearest integer.
@@ -377,7 +323,7 @@ void vec3f_to_vec3s(Vec3s dest, Vec3f a) {
 }
 
 /**
- * Convert float vector a to a short vector 'dest' by rounding the components
+ * Convert float vector a to a int vector 'dest' by rounding the components
  * to the nearest integer.
  */
 void vec3f_to_vec3i(s32 dest[3], Vec3f a) {
@@ -406,7 +352,7 @@ void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
 
 /// Get the magnitude of vector 'v'
 f32 vec3f_mag(Vec3f v) {
-	return sqrtf((v[0] * v[0]) + (v[1] * v[1]) + (v[2] * v[2]));
+	return sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
 }
 
 /// Scale vector 'dest' so it has length 1
@@ -415,7 +361,7 @@ void vec3f_normalize(Vec3f dest) {
         dest[0] = dest[1] = dest[2] = 0.0f;
     } else {
 #ifdef FAST_INVSQRT
-        register f32 mag = Q_rsqrtf((dest[0] * dest[0]) + (dest[1] * dest[1]) + (dest[2] * dest[2]));
+        register f32 mag = Q_rsqrtf(sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
 #else
         register f32 mag = 1.0f / vec3f_mag(dest);
 #endif
@@ -442,12 +388,13 @@ void vec3f_normalize_max(Vec3f dest, f32 max) {
  * Basically it converts the direction to spherical coordinates.
  */
 void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw) {
-    register f32 x = to[0] - from[0];
-    register f32 y = to[1] - from[1];
-    register f32 z = to[2] - from[2];
-    *dist  = sqrtf((x * x) + (y * y) + (z * z));
-    *pitch = atan2s(sqrtf((x * x) + (z * z)), y);
-    *yaw   = atan2s(z, x);
+    register f32 dx   = (to[0] - from[0]);
+    register f32 dy   = (to[1] - from[1]);
+    register f32 dz   = (to[2] - from[2]);
+    register f32 dxz2 = (sqr(dx) + sqr(dz));
+    *dist             = sqrtf(dxz2 + sqr(dy));
+    *pitch            = atan2s(sqrtf(dxz2), dy);
+    *yaw              = atan2s(dz, dx);
 }
 
 /**
@@ -472,7 +419,7 @@ void vec3f_div_f32(Vec3f dest, f32 scale) {
     dest[2] /= scale;
 }
 
-void vec3f_scale(Vec3f dest, Vec3f src, f32 scale, u32 doInverted) {
+void vec3f_scale_f32(Vec3f dest, Vec3f src, f32 scale, u32 doInverted) {
     if (doInverted) {
         dest[0] = (src[0] / scale);
         dest[1] = (src[1] / scale);
@@ -627,9 +574,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = -Q_rsqrtf((dx * dx) + (dz * dz));
+    invLength = -Q_rsqrtf(sqr(dx) + sqr(dz));
 #else
-    invLength = -1.0f / sqrtf((dx * dx) + (dz * dz));
+    invLength = -(1.0f / sqrtf(sqr(dx) + sqr(dz)));
 #endif
     dx *= invLength;
     dz *= invLength;
@@ -640,9 +587,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColZ = (to[1] - from[1]);
     zColZ = (to[2] - from[2]);
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = -Q_rsqrtf((xColZ * xColZ) + (yColZ * yColZ) + (zColZ * zColZ));
+    invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ));
 #else
-    invLength = -1.0f / sqrtf((xColZ * xColZ) + (yColZ * yColZ) + (zColZ * zColZ));
+    invLength = -(1.0f / sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)));
 #endif
     xColZ *= invLength;
     yColZ *= invLength;
@@ -651,9 +598,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColX = ((zColY * xColZ) - (xColY * zColZ));
     zColX = ((xColY * yColZ) - (yColY * xColZ));
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = Q_rsqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+    invLength = Q_rsqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX * zColX));
 #else
-    invLength = 1.0f / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+    invLength = (1.0f / sqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX)));
 #endif
     xColX *= invLength;
     yColX *= invLength;
@@ -662,9 +609,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColY = ((zColZ * xColX) - (xColZ * zColX));
     zColY = ((xColZ * yColX) - (yColZ * xColX));
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = Q_rsqrtf((xColY * xColY) + (yColY * yColY) + (zColY * zColY));
+    invLength = Q_rsqrtf(sqr(xColY) + sqr(yColY) + sqr(zColY));
 #else
-    invLength = 1.0f / sqrtf((xColY * xColY) + (yColY * yColY) + (zColY * zColY));
+    invLength = (1.0f / sqrtf(sqr(xColY) + sqr(yColY) + sqr(zColY)));
 #endif
     xColY *= invLength;
     yColY *= invLength;

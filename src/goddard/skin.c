@@ -118,8 +118,8 @@ void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
         nz  = (u8)(vtx->normal.z * 255.0f);
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
-            vnPos = vtxlink->data->n.ob;
-            vn = vtxlink->data;
+            vnPos    = vtxlink->data->n.ob;
+            vn       = vtxlink->data;
             *vnPos++ = x;
             *vnPos++ = y;
             *vnPos++ = z;

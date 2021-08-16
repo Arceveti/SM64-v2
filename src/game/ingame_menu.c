@@ -64,7 +64,7 @@ enum DialogMark { DIALOG_MARK_NONE = 0, DIALOG_MARK_DAKUTEN = 1, DIALOG_MARK_HAN
 #define DEFAULT_DIALOG_BOX_ANGLE 90.0f
 #define DEFAULT_DIALOG_BOX_SCALE 19.0f
 
-u8 gDialogCharWidths[256] = { // TODO: Is there a way to auto generate this?
+uchar gDialogCharWidths[256] = { // TODO: Is there a way to auto generate this?
     7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  6,  6,  6,
     6,  6,  5,  6,  6,  5,  8,  8,  6,  6,  6,  6,  6,  5,  6,  6,
     8,  7,  6,  6,  6,  5,  5,  6,  5,  5,  6,  5,  4,  5,  5,  3,
@@ -147,7 +147,7 @@ void create_dl_ortho_matrix(void) {
 #if !defined(VERSION_JP) && !defined(VERSION_SH)
 UNUSED
 #endif
-static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) {
+static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or Texture?
     s32 inPos;
     u16 bitMask;
     u8 *out;
@@ -166,7 +166,7 @@ static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) {
     return out;
 }
 
-void render_generic_char(u8 c) {
+void render_generic_char(uchar c) {
     void **fontLUT;
     void *packedTexture;
     fontLUT       = segmented_to_virtual(main_font_lut);
@@ -179,7 +179,7 @@ void render_generic_char(u8 c) {
 
 struct MultiTextEntry {
     u8 length;
-    u8 str[4];
+    uchar str[4];
 };
 
 #define TEXT_THE_RAW ASCII_TO_DIALOG('t'), ASCII_TO_DIALOG('h'), ASCII_TO_DIALOG('e'), 0x00
@@ -210,12 +210,12 @@ void render_multi_text_string(s8 multiTextID) {
  * Prints a generic white string.
  * In JP/EU a IA1 texture is used but in US a IA4 texture is used.
  */
-void print_generic_string(s16 x, s16 y, const u8 *str) {
+void print_generic_string(s16 x, s16 y, const uchar *str) {
     UNUSED s8 mark    = DIALOG_MARK_NONE; // unused in EU
     s32 strPos        = 0;
     u8  lineNum       = 1;
     s16 colorLoop;
-    u8  rgbaColors[4] = {0, 0, 0, 0};
+    ColorRGBA rgbaColors = {0, 0, 0, 0};
     u8  customColor   = FALSE;
     u8  diffTmp       = 0;
     create_dl_translation_matrix(G_MTX_PUSH, x, y, 0.0f);
@@ -298,7 +298,7 @@ void print_generic_string(s16 x, s16 y, const u8 *str) {
 /**
  * Prints a char depending on the index of the hud table list defined.
  */
-u32 print_hud_lut_char(s8 hudLUT, s16 x, s16 y, const u8 c) {
+u32 print_hud_lut_char(s8 hudLUT, s16 x, s16 y, const uchar c) {
     void **hudLUT1 = segmented_to_virtual(menu_hud_lut); // Japanese Menu HUD Color font
     void **hudLUT2 = segmented_to_virtual(main_hud_lut); // 0-9 A-Z HUD Color Font
     gDPPipeSync(gDisplayListHead++);
@@ -313,7 +313,7 @@ u32 print_hud_lut_char(s8 hudLUT, s16 x, s16 y, const u8 c) {
 /**
  * Prints a hud string depending on the hud table list defined.
  */
-void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
+void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const uchar *str) {
     s32 strPos     = 0;
     while (str[strPos] != GLOBAR_CHAR_TERMINATOR) {
         x += print_hud_lut_char(hudLUT, x, y, str[strPos]);
@@ -324,7 +324,7 @@ void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
 /**
  * Prints a centered hud string depending on the hud table list defined.
  */
-void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const u8 *str) {
+void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const uchar *str) {
     s32 strPos, strLength = 0;
     while (str[strLength] != GLOBAR_CHAR_TERMINATOR) strLength++;
     x -= (strLength * ((hudLUT == HUD_LUT_JPMENU) ? 8 : 6));
@@ -332,7 +332,7 @@ void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const u8 *str) {
 }
 
 
-void print_menu_generic_string(s16 x, s16 y, const u8 *str) {
+void print_menu_generic_string(s16 x, s16 y, const uchar *str) {
     UNUSED s8 mark = DIALOG_MARK_NONE; // unused in EU
     s32 strPos = 0;
     u32 curX = x;
@@ -369,7 +369,7 @@ void print_menu_generic_string(s16 x, s16 y, const u8 *str) {
     }
 }
 
-void print_credits_string(s16 x, s16 y, const u8 *str) {
+void print_credits_string(s16 x, s16 y, const uchar *str) {
     s32 strPos = 0;
     void **fontLUT = segmented_to_virtual(main_credits_font_lut);
     u32 curX = x;
@@ -428,7 +428,7 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
 
 // EU has both get_str_x_pos_from_center and get_str_x_pos_from_center_scale
 // US and JP only implement one or the other
-s16 get_str_x_pos_from_center(s16 centerPos, u8 *str, UNUSED f32 scale) {
+s16 get_str_x_pos_from_center(s16 centerPos, uchar *str, UNUSED f32 scale) {
     s16 strPos      = 0;
     f32 spacesWidth = 0.0f;
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
@@ -441,7 +441,7 @@ s16 get_str_x_pos_from_center(s16 centerPos, u8 *str, UNUSED f32 scale) {
 }
 
 
-s16 get_string_width(u8 *str) {
+s16 get_string_width(uchar *str) {
     s16 strPos = 0;
     s16 width  = 0;
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
@@ -451,11 +451,11 @@ s16 get_string_width(u8 *str) {
     return width;
 }
 
-u8 gHudSymCoin[] = { GLYPH_COIN    , GLYPH_SPACE };
-u8 gHudSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
+uchar gHudSymCoin[] = { GLYPH_COIN    , GLYPH_SPACE };
+uchar gHudSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
 
 void print_hud_my_score_coins(s32 useCourseCoinScore, s8 fileNum, s8 courseNum, s16 x, s16 y) {
-    u8 strNumCoins[4];
+    uchar strNumCoins[4];
     s16 numCoins;
     if (!useCourseCoinScore) {
         numCoins = (u16)(save_file_get_max_coin_score(courseNum) & 0xFFFF);
@@ -471,10 +471,10 @@ void print_hud_my_score_coins(s32 useCourseCoinScore, s8 fileNum, s8 courseNum, 
 }
 
 void print_hud_my_score_stars(s8 fileNum, s8 courseNum, s16 x, s16 y) {
-    u8 strStarCount[4];
+    uchar strStarCount[4];
     s16 starCount;
-    u8 textSymStar[] = { GLYPH_STAR    , GLYPH_SPACE };
-    u8 textSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
+    uchar textSymStar[] = { GLYPH_STAR    , GLYPH_SPACE };
+    uchar textSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
     starCount = save_file_get_course_star_count(fileNum, courseNum);
     if (starCount != 0) {
         print_hud_lut_string(HUD_LUT_GLOBAL,  x,       y, textSymStar );
@@ -484,7 +484,7 @@ void print_hud_my_score_stars(s8 fileNum, s8 courseNum, s16 x, s16 y) {
     }
 }
 
-void int_to_str(s32 num, u8 *dst) {
+void int_to_str(s32 num, uchar *dst) {
     s32 digit1, digit2, digit3;
     s8  pos = 0;
     if (num > 999) {
@@ -659,12 +659,12 @@ u32 ensure_nonnegative(s16 value) {
 }
 
 void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 lowerBound) {
-    u8 strChar;
+    uchar strChar;
     s16 colorLoop;
-    u8 rgbaColors[4] = {0, 0, 0, 0};
+    ColorRGBA rgbaColors = {0, 0, 0, 0};
     u8 customColor   = FALSE;
     u8 diffTmp       = 0;
-    u8 *str          = segmented_to_virtual(dialog->str);
+    uchar *str          = segmented_to_virtual(dialog->str);
     s8 lineNum       = 1;
     s8 totalLines;
     s8 pageState     = DIALOG_PAGE_STATE_NONE;
@@ -839,17 +839,17 @@ void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
 
 s16 gMenuMode = MENU_MODE_NONE;
 
-u8 gEndCutsceneStrEn0[] = { TEXT_FILE_MARIO_EXCLAMATION };
-u8 gEndCutsceneStrEn1[] = { TEXT_POWER_STARS_RESTORED   };
-u8 gEndCutsceneStrEn2[] = { TEXT_THANKS_TO_YOU          };
-u8 gEndCutsceneStrEn3[] = { TEXT_THANK_YOU_MARIO        };
-u8 gEndCutsceneStrEn4[] = { TEXT_SOMETHING_SPECIAL      };
-u8 gEndCutsceneStrEn5[] = { TEXT_LISTEN_EVERYBODY       };
-u8 gEndCutsceneStrEn6[] = { TEXT_LETS_HAVE_CAKE         };
-u8 gEndCutsceneStrEn7[] = { TEXT_FOR_MARIO              };
-u8 gEndCutsceneStrEn8[] = { TEXT_FILE_MARIO_QUESTION    };
+uchar gEndCutsceneStrEn0[] = { TEXT_FILE_MARIO_EXCLAMATION };
+uchar gEndCutsceneStrEn1[] = { TEXT_POWER_STARS_RESTORED   };
+uchar gEndCutsceneStrEn2[] = { TEXT_THANKS_TO_YOU          };
+uchar gEndCutsceneStrEn3[] = { TEXT_THANK_YOU_MARIO        };
+uchar gEndCutsceneStrEn4[] = { TEXT_SOMETHING_SPECIAL      };
+uchar gEndCutsceneStrEn5[] = { TEXT_LISTEN_EVERYBODY       };
+uchar gEndCutsceneStrEn6[] = { TEXT_LETS_HAVE_CAKE         };
+uchar gEndCutsceneStrEn7[] = { TEXT_FOR_MARIO              };
+uchar gEndCutsceneStrEn8[] = { TEXT_FILE_MARIO_QUESTION    };
 
-u8 *gEndCutsceneStringsEn[] = {
+uchar *gEndCutsceneStringsEn[] = {
     gEndCutsceneStrEn0,
     gEndCutsceneStrEn1,
     gEndCutsceneStrEn2,
@@ -997,7 +997,7 @@ void dl_rgba16_stop_cutscene_msg_fade(void) {
     }
 }
 
-u8 ascii_to_credits_char(u8 c) {
+uchar ascii_to_credits_char(uchar c) {
     if ((c >= 'A') && (c <= 'Z')) return (c - ('A' - 0xA));
     if ((c >= 'a') && (c <= 'z')) return (c - ('a' - 0xA)); // remap lower to upper case
     if ( c == ' ') return GLOBAL_CHAR_SPACE;
@@ -1010,8 +1010,8 @@ u8 ascii_to_credits_char(u8 c) {
 
 void print_credits_str_ascii(s16 x, s16 y, const char *str) {
     s32 pos = 0;
-    u8  c   = str[pos];
-    u8  creditStr[100];
+    uchar  c   = str[pos];
+    uchar  creditStr[100];
     while (c != 0) {
         creditStr[pos++] = ascii_to_credits_char(c);
         c                = str[pos];
@@ -1073,7 +1073,7 @@ void do_cutscene_handler(void) {
 void print_peach_letter_message(void) {
     void **dialogTable;
     struct DialogEntry *dialog;
-    u8 *str;
+    uchar *str;
     dialogTable = segmented_to_virtual(seg2_dialog_table);
     dialog      = segmented_to_virtual(dialogTable[gDialogID]);
     str         = segmented_to_virtual(dialog->str);
@@ -1139,11 +1139,11 @@ void reset_red_coins_collected(void) {
 
 #ifdef REONU_CAM_3
 void render_camera_speed_setting(s16 x, s16 y) {
-    u8 textCamInfoSpeeds[][17] = { { TEXT_CAM_INFO_SPEED_0 },
-                                   { TEXT_CAM_INFO_SPEED_1 },
-                                   { TEXT_CAM_INFO_SPEED_2 },
-                                   { TEXT_CAM_INFO_SPEED_3 },
-                                   { TEXT_CAM_INFO_SPEED_4 } };
+    uchar textCamInfoSpeeds[][17] = { { TEXT_CAM_INFO_SPEED_0 },
+                                      { TEXT_CAM_INFO_SPEED_1 },
+                                      { TEXT_CAM_INFO_SPEED_2 },
+                                      { TEXT_CAM_INFO_SPEED_3 },
+                                      { TEXT_CAM_INFO_SPEED_4 } };
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_generic_string(x, y, textCamInfoSpeeds[gCameraSpeed]);
@@ -1243,9 +1243,9 @@ void render_pause_red_coins(void) {
 
 #if defined(WIDE) && !defined(PUPPYCAM)
 void render_widescreen_setting(void) {
-    u8 textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43  };
-    u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-    u8 textPressL[]       = { TEXT_HUD_PRESS_L           };
+    uchar textCurrRatio43[]  = { TEXT_HUD_CURRENT_RATIO_43  };
+    uchar textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
+    uchar textPressL[]       = { TEXT_HUD_PRESS_L           };
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_generic_string(10, 20, (gWidescreen ? textCurrRatio169 : textCurrRatio43));
@@ -1265,15 +1265,15 @@ void render_widescreen_setting(void) {
 #define MYSCORE_X   62
 
 void render_pause_my_score_coins(void) {
-    u8 textCourse[]       = { TEXT_COURSE        };
-    u8 textMyScore[]      = { TEXT_MY_SCORE      };
-    u8 textStar[]         = { TEXT_STAR          };
-    u8 textUnfilledStar[] = { TEXT_UNFILLED_STAR };
-    u8 strCourseNum[4];
+    uchar textCourse[]       = { TEXT_COURSE        };
+    uchar textMyScore[]      = { TEXT_MY_SCORE      };
+    uchar textStar[]         = { TEXT_STAR          };
+    uchar textUnfilledStar[] = { TEXT_UNFILLED_STAR };
+    uchar strCourseNum[4];
     void **courseNameTbl;
-    u8 *courseName;
+    uchar *courseName;
     void **actNameTbl;
-    u8 *actName;
+    uchar *actName;
     u8 courseIndex;
     u8 starFlags;
     courseNameTbl = segmented_to_virtual(seg2_course_name_table);
@@ -1310,10 +1310,10 @@ void render_pause_my_score_coins(void) {
 #define Y_VAL7 2
 
 void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
-    u8 textLakituMario[]   = { TEXT_LAKITU_MARIO   };
-    u8 textLakituStop[]    = { TEXT_LAKITU_STOP    };
-    u8 textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
-    u8 textNormalFixed[]   = { TEXT_NORMAL_FIXED   };
+    uchar textLakituMario[]   = { TEXT_LAKITU_MARIO   };
+    uchar textLakituStop[]    = { TEXT_LAKITU_STOP    };
+    uchar textNormalUpClose[] = { TEXT_NORMAL_UPCLOSE };
+    uchar textNormalFixed[]   = { TEXT_NORMAL_FIXED   };
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
@@ -1336,9 +1336,9 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 #define Y_VAL8 2
 
 void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
-    u8 textContinue[]     = { TEXT_CONTINUE       };
-    u8 textExitCourse[]   = { TEXT_EXIT_COURSE    };
-    u8 textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+    uchar textContinue[]     = { TEXT_CONTINUE       };
+    uchar textExitCourse[]   = { TEXT_EXIT_COURSE    };
+    uchar textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
 #ifdef REONU_CAM_3
     u8 cameraMode = gCurrentArea->camera->mode;
 #endif
@@ -1398,7 +1398,7 @@ void highlight_last_course_complete_stars(void) {
 }
 
 void print_hud_pause_colorful_str(void) {
-    u8 textPause[] = { TEXT_PAUSE };
+    uchar textPause[] = { TEXT_PAUSE };
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_hud_lut_string(HUD_LUT_GLOBAL, 123, 81, textPause);
@@ -1407,8 +1407,8 @@ void print_hud_pause_colorful_str(void) {
 
 void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) {
     s16 hasStar    = 0;
-    u8  str[COURSE_STAGES_COUNT * 2];
-    u8  textStar[] = { TEXT_STAR };
+    uchar  str[COURSE_STAGES_COUNT * 2];
+    uchar  textStar[] = { TEXT_STAR };
     u8  starFlags  = save_file_get_star_flags(fileNum, courseNum);
     u16 starCount  = save_file_get_course_star_count(fileNum, courseNum);
     u16 nextStar   = 0;
@@ -1437,9 +1437,9 @@ void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) 
 
 void render_pause_castle_main_strings(s16 x, s16 y) {
     void **courseNameTbl = segmented_to_virtual(seg2_course_name_table);
-    u8 textCoin[] = { TEXT_COIN_X };
+    uchar textCoin[] = { TEXT_COIN_X };
     void *courseName;
-    u8 strVal[8];
+    uchar strVal[8];
     s16 starNum = gDialogLineNum;
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, &gDialogLineNum, -1, (COURSE_STAGES_COUNT + 1));
     if (gDialogLineNum == (COURSE_STAGES_COUNT + 1)) gDialogLineNum = 0;
@@ -1466,7 +1466,7 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
         int_to_str(save_file_get_course_coin_score((gCurrSaveFileNum - 1), gDialogLineNum), strVal);
         print_generic_string((x + 54), (y - 5), strVal);
     } else {
-        u8 textStarX[] = { TEXT_STAR_X };
+        uchar textStarX[] = { TEXT_STAR_X };
         courseName = segmented_to_virtual(courseNameTbl[COURSE_MAX]);
         print_generic_string((x + 40), (y + 13), textStarX);
         int_to_str(save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_BONUS_STAGES - 1), (COURSE_MAX - 1)), strVal);
@@ -1585,9 +1585,9 @@ s16 render_pause_courses_and_castle(void) {
 #define HUD_PRINT_CONGRATULATIONS 0x1
 
 void print_hud_course_complete_string(s8 str) {
-    u8 textHiScore[]         = { TEXT_HUD_HI_SCORE        };
-    u8 textCongratulations[] = { TEXT_HUD_CONGRATULATIONS };
-    u8 colorFade             = ((sins(gDialogColorFadeTimer) * 50.0f) + 200.0f);
+    uchar textHiScore[]         = { TEXT_HUD_HI_SCORE        };
+    uchar textCongratulations[] = { TEXT_HUD_CONGRATULATIONS };
+    uchar colorFade             = ((sins(gDialogColorFadeTimer) * 50.0f) + 200.0f);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, colorFade, colorFade, colorFade, 255);
     if (str == HUD_PRINT_HISCORE) {
@@ -1599,9 +1599,9 @@ void print_hud_course_complete_string(s8 str) {
 }
 
 void print_hud_course_complete_coins(s16 x, s16 y) {
-    u8 courseCompleteCoinsStr[4];
-    u8 hudTextSymCoin[] = { GLYPH_COIN,     GLYPH_SPACE };
-    u8 hudTextSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
+    uchar courseCompleteCoinsStr[4];
+    uchar hudTextSymCoin[] = { GLYPH_COIN,     GLYPH_SPACE };
+    uchar hudTextSymX[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     print_hud_lut_string(HUD_LUT_GLOBAL,  x,       y, hudTextSymCoin);
@@ -1641,13 +1641,13 @@ void play_star_fanfare_and_flash_hud(s32 arg, u8 starNum) {
 #define TXT_CLEAR_X2 (get_string_width(name) + 79)
 
 void render_course_complete_lvl_info_and_hud_str(void) {
-    u8 textCourse[]       = { TEXT_COURSE             };
-    UNUSED u8 textClear[] = { TEXT_CLEAR              };
-    u8 textSymStar[]      = { GLYPH_STAR, GLYPH_SPACE };
+    uchar textCourse[]       = { TEXT_COURSE             };
+    UNUSED uchar textClear[] = { TEXT_CLEAR              };
+    uchar textSymStar[]      = { GLYPH_STAR, GLYPH_SPACE };
     void **actNameTbl;
     void **courseNameTbl;
-    u8 *name;
-    u8 strCourseNum[4];
+    uchar *name;
+    uchar strCourseNum[4];
     actNameTbl    = segmented_to_virtual(seg2_act_name_table);
     courseNameTbl = segmented_to_virtual(seg2_course_name_table);
     if (gLastCompletedCourseNum <= COURSE_STAGES_MAX) {
@@ -1701,9 +1701,9 @@ void render_course_complete_lvl_info_and_hud_str(void) {
 
 #define X_VAL9 x
 void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) { // sp6e is 20
-    u8 textSaveAndContinue[]     = { TEXT_SAVE_AND_CONTINUE       };
-    u8 textSaveAndQuit[]         = { TEXT_SAVE_AND_QUIT           };
-    u8 textContinueWithoutSave[] = { TEXT_CONTINUE_WITHOUT_SAVING };
+    uchar textSaveAndContinue[]     = { TEXT_SAVE_AND_CONTINUE       };
+    uchar textSaveAndQuit[]         = { TEXT_SAVE_AND_QUIT           };
+    uchar textContinueWithoutSave[] = { TEXT_CONTINUE_WITHOUT_SAVING };
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);

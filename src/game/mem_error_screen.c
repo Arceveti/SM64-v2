@@ -38,12 +38,12 @@ u8 does_pool_end_lie_out_of_bounds(void *end) {
     }
 }
 // If you're using an N64 console, then you will need to buy an\nexpansion pak to play this ROM hack.
-u8 text_console_8mb[] = { TEXT_CONSOLE_8MB };
+uchar text_console_8mb[] = { TEXT_CONSOLE_8MB };
 // If you are using PJ64 1.6, go to: Options ► Settings ► Rom Settings Tab ► Memory Size then select 8
 // MB from the drop-down box.
-u8 text_pj64[] = { TEXT_PJ64 };
+uchar text_pj64[] = { TEXT_PJ64 };
 // If you are using PJ64 2.X, go to: Options ► Settings ► Config: ► Memory Size, select 8 MB
-u8 text_pj64_2[] = { TEXT_PJ64_2 };
+uchar text_pj64_2[] = { TEXT_PJ64_2 };
 Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node, UNUSED u32 context) {
     if (callContext) {
         if (gDelayForErrorMessage > 0) {

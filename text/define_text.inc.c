@@ -4,7 +4,7 @@
 
 // (this wasn't translated for US, and was removed in EU)
 
-static const u8 Debug0[] = {
+static const uchar Debug0[] = {
     _("ＳＴＡＧＥ　ＳＥＬＥＣＴ\n"
       "　つづける？\n"
       "　１　マウンテン\n"
@@ -15,7 +15,7 @@ static const u8 Debug0[] = {
       "　もどる")
 };
 
-static const u8 Debug1[] = {
+static const uchar Debug1[] = {
     _("ＰＡＵＳＥ　　　　\n"
       "　つづける？\n"
       "　やめる　？")
@@ -40,7 +40,7 @@ const struct DialogEntry *const seg2_debug_text_table[] = {
 // (defines en_dialog_table etc.)
 
 #define DEFINE_DIALOG(id, _1, _2, _3, _4, str) \
-    static const u8 dialog_text_ ## id[] = { str };
+    static const uchar dialog_text_ ## id[] = { str };
 
 #include "dialogs.h"
 
@@ -73,19 +73,19 @@ const struct DialogEntry *const seg2_dialog_table[] = {
 // (defines en_act_name_table etc.)
 
 #define COURSE_ACTS(id, name, a,b,c,d,e,f) \
-    static const u8 act_name_ ## id ## _1[] = { a }; \
-    static const u8 act_name_ ## id ## _2[] = { b }; \
-    static const u8 act_name_ ## id ## _3[] = { c }; \
-    static const u8 act_name_ ## id ## _4[] = { d }; \
-    static const u8 act_name_ ## id ## _5[] = { e }; \
-    static const u8 act_name_ ## id ## _6[] = { f };
+    static const uchar act_name_ ## id ## _1[] = { a }; \
+    static const uchar act_name_ ## id ## _2[] = { b }; \
+    static const uchar act_name_ ## id ## _3[] = { c }; \
+    static const uchar act_name_ ## id ## _4[] = { d }; \
+    static const uchar act_name_ ## id ## _5[] = { e }; \
+    static const uchar act_name_ ## id ## _6[] = { f };
 
 #define SECRET_STAR(id, name)
 #define CASTLE_SECRET_STARS(str)
 
 #undef EXTRA_TEXT
 #define EXTRA_TEXT(id, str) \
-    static const u8 extra_text_ ## id[] = { str };
+    static const uchar extra_text_ ## id[] = { str };
 
 #include "courses.h"
 
@@ -97,7 +97,7 @@ const struct DialogEntry *const seg2_dialog_table[] = {
     act_name_ ## id ## _4, act_name_ ## id ## _5, act_name_ ## id ## _6,
 #define EXTRA_TEXT(id, str) extra_text_ ## id,
 
-const u8 *const seg2_act_name_table[] = {
+const uchar *const seg2_act_name_table[] = {
 #include "courses.h"
     NULL
 };

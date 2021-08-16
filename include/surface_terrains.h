@@ -61,7 +61,7 @@
 #define SURFACE_NOISE_VERY_SLIPPERY_74       0x0074 // Very slippery floor with noise, unused
 #define SURFACE_NOISE_VERY_SLIPPERY          0x0075 // Very slippery floor with noise, used in CCM
 #define SURFACE_NO_CAM_COLLISION             0x0076 // Surface with no cam collision flag
-#define SURFACE_NO_CAM_COLLISION_77          0x0077 // Surface with no cam collision flag, unused
+#define SURFACE_NO_CAM_COLLISION_UNUSED      0x0077 // Surface with no cam collision flag, unused
 #define SURFACE_NO_CAM_COL_VERY_SLIPPERY     0x0078 // Surface with no cam collision flag, very slippery with noise (THI)
 #define SURFACE_NO_CAM_COL_SLIPPERY          0x0079 // Surface with no cam collision flag, slippery with noise (CCM, PSS and TTM slides)
 #define SURFACE_SWITCH                       0x007A // Surface with no cam collision flag, non-slippery with noise, used by switches and Dorrie

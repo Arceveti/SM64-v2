@@ -60,7 +60,7 @@ struct Skybox {
 
 struct Skybox sSkyBoxInfo[2];
 
-typedef const u8 *const SkyboxTexture[80 * SKYBOX_SIZE];
+typedef const Texture *const SkyboxTexture[80 * SKYBOX_SIZE];
 
 extern SkyboxTexture bbh_skybox_ptrlist;
 extern SkyboxTexture bidw_skybox_ptrlist;
@@ -90,7 +90,7 @@ SkyboxTexture *sSkyboxTextures[10] = {
  * The skybox color mask.
  * The final color of each pixel is computed from the bitwise AND of the color and the texture.
  */
-u8 sSkyboxColors[][3] = {
+Color sSkyboxColors[][3] = {
     { 0x50, 0x64, 0x5A },
     { 0xFF, 0xFF, 0xFF },
 };
@@ -199,10 +199,10 @@ Vtx *make_skybox_rect(s32 tileIndex, s8 colorIndex) {
  */
 void draw_skybox_tile_grid(Gfx **dlist, s8 background, s8 player, s8 colorIndex) {
     s32 row, col;
-    for (row = 0; row < (3 * SKYBOX_SIZE); row++) {
-        for (col = 0; col < (3 * SKYBOX_SIZE); col++) {
+    for ((row = 0); (row < (3 * SKYBOX_SIZE)); (row++)) {
+        for ((col = 0); (col < (3 * SKYBOX_SIZE)); (col++)) {
             s32 tileIndex = sSkyBoxInfo[player].upperLeftTile + row * SKYBOX_COLS + col;
-            const u8 *const texture = (*(SkyboxTexture *) segmented_to_virtual(sSkyboxTextures[background]))[tileIndex];
+            const Texture *const texture = (*(SkyboxTexture *) segmented_to_virtual(sSkyboxTextures[background]))[tileIndex];
             Vtx *vertices = make_skybox_rect(tileIndex, colorIndex);
             gLoadBlockTexture((*dlist)++, 32, 32, G_IM_FMT_RGBA, texture);
             gSPVertex(        (*dlist)++, VIRTUAL_TO_PHYSICAL(vertices), 4, 0);
@@ -218,12 +218,12 @@ void *create_skybox_ortho_matrix(s8 player) {
     f32 top    = sSkyBoxInfo[player].scaledY;
     Mtx *mtx   = alloc_display_list(sizeof(*mtx));
 #ifdef WIDESCREEN
-    f32 half_width = (4.0f / 3.0f) / GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_WIDTH / 2;
-    f32 center     = (sSkyBoxInfo[player].scaledX + SCREEN_WIDTH / 2);
+    f32 half_width = (4.0f / 3.0f) / GFX_DIMENSIONS_ASPECT_RATIO * (SCREEN_WIDTH / 2);
+    f32 center     = (sSkyBoxInfo[player].scaledX + (SCREEN_WIDTH / 2));
     if (half_width < SCREEN_WIDTH / 2) {
         // A wider screen than 4:3
-        left  = center - half_width;
-        right = center + half_width;
+        left  = (center - half_width);
+        right = (center + half_width);
     }
 #endif
     if (mtx != NULL) guOrtho(mtx, left, right, bottom, top, 0.0f, 3.0f, 1.0f);

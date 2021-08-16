@@ -48,9 +48,16 @@ typedef s16 MacroObject;
 typedef s16 Collision;
 typedef s16 Trajectory;
 typedef s16 PaintingData;
-typedef uintptr_t BehaviorScript;
-typedef u8 Texture;
 typedef u16 ModelID;
+typedef uintptr_t BehaviorScript;
+typedef u8 Color;
+typedef Color Alpha;
+typedef Color Texture;
+typedef u8 uchar;
+typedef u8 RoomsList;
+
+typedef Color ColorRGB[3];
+typedef Color ColorRGBA[4];
 
 enum SpTaskState {
     SPTASK_STATE_NOT_STARTED,

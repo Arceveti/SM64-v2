@@ -28,10 +28,10 @@ index 0000000..d7f27ad
 + s16 gCutsceneMsgXOffset;
 + s16 gCutsceneMsgYOffset;
 + s8 gRedCoinsCollected;
-++u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-++u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-++u8 textWideInfo[] = { TEXT_HUD_WIDE_INFO };
-++u8 textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
+++uchar textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
+++uchar textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
+++uchar textWideInfo[] = { TEXT_HUD_WIDE_INFO };
+++uchar textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
 ++extern u8 widescreen = 0;
 + 
 + extern u8 gLastCompletedCourseNum;
@@ -229,10 +229,10 @@ index 0000000..667e6e2
 + s16 gCutsceneMsgXOffset;
 + s16 gCutsceneMsgYOffset;
 + s8 gRedCoinsCollected;
-++u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-++u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-++u8 textWideInfo[] = { TEXT_HUD_WIDE_INFO };
-++u8 textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
+++uchar textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
+++uchar textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
+++uchar textWideInfo[] = { TEXT_HUD_WIDE_INFO };
+++uchar textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
 ++extern s32 widescreen = 0;
 + 
 + extern u8 gLastCompletedCourseNum;
@@ -256,12 +256,12 @@ index 0000000..667e6e2
 + 
 +@@ -2199,6 +2205,7 @@ void render_pause_my_score_coins(void) {
 + #else
-+     u8 textCourse[] = { TEXT_COURSE };
-+     u8 textMyScore[] = { TEXT_MY_SCORE };
++     uchar textCourse[] = { TEXT_COURSE };
++     uchar textMyScore[] = { TEXT_MY_SCORE };
 ++
 + #endif
-+     u8 textStar[] = { TEXT_STAR };
-+     u8 textUnfilledStar[] = { TEXT_UNFILLED_STAR };
++     uchar textStar[] = { TEXT_STAR };
++     uchar textUnfilledStar[] = { TEXT_UNFILLED_STAR };
 +@@ -2266,8 +2273,18 @@ void render_pause_my_score_coins(void) {
 +         print_generic_string(get_string_width(gTextCourseArr[gInGameLanguage]) + 51, 157, strCourseNum);
 + #else
@@ -481,10 +481,10 @@ index 8190f88..e4d0f32 100644
  s16 gCutsceneMsgXOffset;
  s16 gCutsceneMsgYOffset;
  s8 gRedCoinsCollected;
-+u8 textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
-+u8 textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
-+u8 textWideInfo[] = { TEXT_HUD_WIDE_INFO };
-+u8 textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
++uchar textCurrRatio43[] = { TEXT_HUD_CURRENT_RATIO_43 };
++uchar textCurrRatio169[] = { TEXT_HUD_CURRENT_RATIO_169 };
++uchar textWideInfo[] = { TEXT_HUD_WIDE_INFO };
++uchar textWideInfo2[] = { TEXT_HUD_WIDE_INFO2 };
 +u8 widescreen = 1;
  
  extern u8 gLastCompletedCourseNum;

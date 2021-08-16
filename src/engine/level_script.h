@@ -5,7 +5,7 @@
 
 struct LevelCommand;
 
-extern u8 level_script_entry[];
+extern u8 level_script_entry[]; //! LevelScript type?
 #ifdef USE_EXT_RAM
 extern u8 level_script_entry_error_screen[];
 #endif

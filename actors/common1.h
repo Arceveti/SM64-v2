@@ -252,14 +252,14 @@ extern const GeoLayout number_geo[];
 extern const Gfx pebble_seg3_dl_pebble[];
 
 // power_meter
-extern const u8 *const power_meter_health_segments_lut[];
+extern const Texture *const power_meter_health_segments_lut[];
 extern const Gfx dl_power_meter_base[];
 extern const Gfx dl_power_meter_health_segments_begin[];
 extern const Gfx dl_power_meter_health_segments_end[];
 
 #ifdef BREATH_METER
 // breath_meter
-extern const u8 *const breath_meter_segments_lut[];
+extern const Texture *const breath_meter_segments_lut[];
 extern const Gfx dl_breath_meter_base[];
 extern const Gfx dl_breath_meter_health_segments_begin[];
 extern const Gfx dl_breath_meter_health_segments_end[];

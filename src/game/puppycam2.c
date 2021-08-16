@@ -44,25 +44,25 @@ struct MemoryPool *gPuppyMemoryPool;
 s32 gPuppyError       = 0;
 
 #if defined(VERSION_EU)
-static u8 gPCOptionStringsFR[][64] = {{NC_ANALOGUE_FR    }, {NC_CAMX_FR       }, {NC_CAMY_FR       }, {NC_INVERTX_FR    }, {NC_INVERTY_FR    }, {NC_CAMC_FR}, {NC_SCHEME_FR}, {NC_WIDE_FR},};
-static u8 gPCOptionStringsDE[][64] = {{NC_ANALOGUE_DE    }, {NC_CAMX_DE       }, {NC_CAMY_DE       }, {NC_INVERTX_DE    }, {NC_INVERTY_DE    }, {NC_CAMC_DE}, {NC_SCHEME_DE}, {NC_WIDE_DE},};
-static u8 gPCFlagStringsFR  [][64] = {{OPTION_DISABLED_FR}, {OPTION_ENABLED_FR}, {OPTION_SCHEME1_FR}, {OPTION_SCHEME2_FR}, {OPTION_SCHEME3_FR}};
-static u8 gPCFlagStringsDE  [][64] = {{OPTION_DISABLED_DE}, {OPTION_ENABLED_DE}, {OPTION_SCHEME1_DE}, {OPTION_SCHEME2_DE}, {OPTION_SCHEME3_DE}};
-static u8 gPCToggleStringsFR[][64] = {{NC_ANALOGUE_EN    }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }};
-static u8 gPCToggleStringsDE[][64] = {{NC_ANALOGUE_EN    }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }};
-// static u8 gPCToggleStringsFR[][64] = {{NC_BUTTON_FR      }, {NC_BUTTON2_FR    }, {NC_OPTION_FR     }, {NC_HIGHLIGHT_L_FR}, {NC_HIGHLIGHT_R_FR}};
-// static u8 gPCToggleStringsDE[][64] = {{NC_BUTTON_DE      }, {NC_BUTTON2_DE    }, {NC_OPTION_DE     }, {NC_HIGHLIGHT_L_DE}, {NC_HIGHLIGHT_R_DE}};
+static uchar gPCOptionStringsFR[][64] = {{NC_ANALOGUE_FR    }, {NC_CAMX_FR       }, {NC_CAMY_FR       }, {NC_INVERTX_FR    }, {NC_INVERTY_FR    }, {NC_CAMC_FR}, {NC_SCHEME_FR}, {NC_WIDE_FR},};
+static uchar gPCOptionStringsDE[][64] = {{NC_ANALOGUE_DE    }, {NC_CAMX_DE       }, {NC_CAMY_DE       }, {NC_INVERTX_DE    }, {NC_INVERTY_DE    }, {NC_CAMC_DE}, {NC_SCHEME_DE}, {NC_WIDE_DE},};
+static uchar gPCFlagStringsFR  [][64] = {{OPTION_DISABLED_FR}, {OPTION_ENABLED_FR}, {OPTION_SCHEME1_FR}, {OPTION_SCHEME2_FR}, {OPTION_SCHEME3_FR}};
+static uchar gPCFlagStringsDE  [][64] = {{OPTION_DISABLED_DE}, {OPTION_ENABLED_DE}, {OPTION_SCHEME1_DE}, {OPTION_SCHEME2_DE}, {OPTION_SCHEME3_DE}};
+static uchar gPCToggleStringsFR[][64] = {{NC_ANALOGUE_EN    }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }};
+static uchar gPCToggleStringsDE[][64] = {{NC_ANALOGUE_EN    }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }, {NC_ANALOGUE_EN   }};
+// static uchar gPCToggleStringsFR[][64] = {{NC_BUTTON_FR      }, {NC_BUTTON2_FR    }, {NC_OPTION_FR     }, {NC_HIGHLIGHT_L_FR}, {NC_HIGHLIGHT_R_FR}};
+// static uchar gPCToggleStringsDE[][64] = {{NC_BUTTON_DE      }, {NC_BUTTON2_DE    }, {NC_OPTION_DE     }, {NC_HIGHLIGHT_L_DE}, {NC_HIGHLIGHT_R_DE}};
 #endif
-static u8 gPCOptionStringsEN[][64] = {{NC_ANALOGUE_EN    }, {NC_CAMX_EN       }, {NC_CAMY_EN       }, {NC_INVERTX_EN    }, {NC_INVERTY_EN    }, {NC_CAMC_EN}, {NC_SCHEME_EN}, {NC_WIDE_EN},};
-static u8 gPCFlagStringsEN  [][64] = {{OPTION_DISABLED_EN}, {OPTION_ENABLED_EN}, {OPTION_SCHEME1_EN}, {OPTION_SCHEME2_EN}, {OPTION_SCHEME3_EN}};
-static u8 gPCToggleStringsEN[][64] = {{NC_BUTTON_EN      }, {NC_BUTTON2_EN    }, {NC_OPTION_EN     }, {NC_HIGHLIGHT_L   }, {NC_HIGHLIGHT_R   }};
+static uchar gPCOptionStringsEN[][64] = {{NC_ANALOGUE_EN    }, {NC_CAMX_EN       }, {NC_CAMY_EN       }, {NC_INVERTX_EN    }, {NC_INVERTY_EN    }, {NC_CAMC_EN}, {NC_SCHEME_EN}, {NC_WIDE_EN},};
+static uchar gPCFlagStringsEN  [][64] = {{OPTION_DISABLED_EN}, {OPTION_ENABLED_EN}, {OPTION_SCHEME1_EN}, {OPTION_SCHEME2_EN}, {OPTION_SCHEME3_EN}};
+static uchar gPCToggleStringsEN[][64] = {{NC_BUTTON_EN      }, {NC_BUTTON2_EN    }, {NC_OPTION_EN     }, {NC_HIGHLIGHT_L   }, {NC_HIGHLIGHT_R   }};
 
 
 #define OPT 32 // Just a temp thing
 
-static u8 (*gPCOptionStringsPtr)[OPT][64] = (u8 (*)[OPT][64])&gPCOptionStringsEN;
-static u8 (*gPCFlagStringsPtr  )[OPT][64] = (u8 (*)[OPT][64])&gPCFlagStringsEN;
-static u8 (*gPCToggleStringsPtr)[OPT][64] = (u8 (*)[OPT][64])&gPCToggleStringsEN;
+static uchar (*gPCOptionStringsPtr)[OPT][64] = (uchar (*)[OPT][64])&gPCOptionStringsEN;
+static uchar (*gPCFlagStringsPtr  )[OPT][64] = (uchar (*)[OPT][64])&gPCFlagStringsEN;
+static uchar (*gPCToggleStringsPtr)[OPT][64] = (uchar (*)[OPT][64])&gPCToggleStringsEN;
 
 
 struct gPCOptionStruct // was static const
@@ -188,7 +188,7 @@ static void newcam_process_cutscene(void) {
 
 #define BLANK 0, 0, 0, ENVIRONMENT, 0, 0, 0, ENVIRONMENT
 
-static void puppycam_display_box(s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 a) {
+static void puppycam_display_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b, Alpha a) {
     gDPSetCombineMode(gDisplayListHead++, BLANK, BLANK);
     gDPSetCycleType(  gDisplayListHead++, G_CYC_1CYCLE);
     if (a !=255) {
@@ -217,8 +217,8 @@ void puppycam_change_setting(s8 toggle) {
     *gPCOptions[gPCOptionSelected].gPCOptionVar = CLAMP(*gPCOptions[gPCOptionSelected].gPCOptionVar, gPCOptions[gPCOptionSelected].gPCOptionMin, gPCOptions[gPCOptionSelected].gPCOptionMax);
 }
 
-void puppycam_print_text(s16 x, s16 y, u8 str[], u8 col) {
-    u8 textX = get_str_x_pos_from_center(x,str,10.0f);
+void puppycam_print_text(s16 x, s16 y, uchar str[], u8 col) {
+    uchar textX = get_str_x_pos_from_center(x, str, 10.0f);
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
     print_generic_string((textX + 1), (y - 1), str);
     if (col != 0) {
@@ -232,7 +232,7 @@ void puppycam_print_text(s16 x, s16 y, u8 str[], u8 col) {
 // Options menu
 void puppycam_display_options() {
     u8 i = 0;
-    u8 newstring[32];
+    uchar newstring[32];
     s16 scroll, scrollpos;
     // s16 var = gPCOptions;
     // s16 vr;
@@ -264,7 +264,7 @@ void puppycam_display_options() {
                 // Failsafe for if it somehow indexes an out of bounds array.
                 if (var < sizeof(gPCFlagStringsEN)) puppycam_print_text(160, (scroll - 12), (*gPCFlagStringsPtr)[var], (gPCOptionSelected - i));
             } else {
-                int_to_str(*gPCOptions[i].gPCOptionVar,newstring);
+                int_to_str(*gPCOptions[i].gPCOptionVar, newstring);
                 puppycam_print_text(160, (scroll - 12), newstring, (gPCOptionSelected-i));
                 puppycam_display_box(96, ((111 + (32 * i)) - (gPCOptionScroll * 32)), 224, ((117 + (32 * i)) - (gPCOptionScroll * 32)), 0x80, 0x80, 0x80, 0xFF);
                 maxvar =  gPCOptions[i].gPCOptionMax - gPCOptions[i].gPCOptionMin;

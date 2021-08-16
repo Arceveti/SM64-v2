@@ -1,6 +1,6 @@
 // capswitch.c.inc
 
-// UNUSED u8 sCapSwitchText[] = { DIALOG_010, DIALOG_011, DIALOG_012 };
+// UNUSED uchar sCapSwitchText[] = { DIALOG_010, DIALOG_011, DIALOG_012 };
 
 void cap_switch_act_init(void) {
     o->oAnimState = o->oBehParams2ndByte;

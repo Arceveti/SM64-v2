@@ -203,9 +203,9 @@ extern float sqrtf(float value);
 #define GU_PARSERDP_VERBOSE		1
 #define GU_PARSERDP_PRAREA		2
 #define GU_PARSERDP_PRHISTO		4
-#define GU_PARSERDP_DUMPONLY           32  /* doesn't need to be same as */
-                                           /* GU_PARSEGBI_DUMPOLNY, but this */
-                                           /* allows app to use interchangeably */
+#define GU_PARSERDP_DUMPONLY    32  /* doesn't need to be same as */
+                                    /* GU_PARSEGBI_DUMPOLNY, but this */
+                                    /* allows app to use interchangeably */
 
 extern void guParseRdpDL(u64 *rdp_dl, u64 nbytes, u8 flags);
 extern void guParseString(char *StringPointer, u64 nbytes);
@@ -228,7 +228,7 @@ guBlinkRdpDL(u64 *rdp_dl_in, u64 nbytes_in,
              u8 flags);
  
 /* flag values for guParseGbiDL() */
-#define GU_PARSEGBI_ROWMAJOR	        1
+#define GU_PARSEGBI_ROWMAJOR	1
 #define GU_PARSEGBI_NONEST		2
 #define GU_PARSEGBI_FLTMTX		4
 #define GU_PARSEGBI_SHOWDMA		8

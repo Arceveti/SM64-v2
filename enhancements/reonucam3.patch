@@ -337,15 +337,15 @@ diff --git a/src/game/ingame_menu.c b/src/game/ingame_menu.c
 index 158154c..9ffefec 100644
 --- a/src/game/ingame_menu.c
 +++ b/src/game/ingame_menu.c
-@@ -38,6 +38,12 @@ u8 textPressL[] = { TEXT_HUD_PRESS_L };
- u8 textWideInfo[] = { TEXT_HUD_WIDE_INFO };
+@@ -38,6 +38,12 @@ uchar textPressL[] = { TEXT_HUD_PRESS_L };
+ uchar textWideInfo[] = { TEXT_HUD_WIDE_INFO };
  #endif
  
-+u8 textCamInfoSlowest[] = { TEXT_CAM_INFO_SLOWEST };
-+u8 textCamInfoSlow[] = { TEXT_CAM_INFO_SLOW };
-+u8 textCamInfoMedium[] = { TEXT_CAM_INFO_MEDIUM };
-+u8 textCamInfoFast[] = { TEXT_CAM_INFO_FAST};
-+u8 textCamInfoFastest[] = { TEXT_CAM_INFO_FASTEST };
++uchar textCamInfoSlowest[] = { TEXT_CAM_INFO_SLOWEST };
++uchar textCamInfoSlow[] = { TEXT_CAM_INFO_SLOW };
++uchar textCamInfoMedium[] = { TEXT_CAM_INFO_MEDIUM };
++uchar textCamInfoFast[] = { TEXT_CAM_INFO_FAST};
++uchar textCamInfoFastest[] = { TEXT_CAM_INFO_FASTEST };
 +
  extern u8 gLastCompletedCourseNum;
  extern u8 gLastCompletedStarNum;

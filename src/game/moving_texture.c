@@ -96,10 +96,10 @@ struct MovtexObject {
     /// Assumes the animated vertices are buffered and correct texture is set
     Gfx *triDl;
     // if the list does not have per-vertex colors, all vertices have these colors
-    u8 r;      /// red
-    u8 g;      /// green
-    u8 b;      /// blue
-    u8 a;      /// alpha
+    Color r;      /// red
+    Color g;      /// green
+    Color b;      /// blue
+    Alpha a;      /// alpha
     s32 layer; /// the drawing layer for this mesh
 };
 
@@ -120,21 +120,21 @@ float gPaintingMarioYEntry = 0.0f;
 /// Variable to ensure the initial Wet-Dry World water level is set only once
 s32 gWdwWaterLevelSet = FALSE;
 
-extern u8 ssl_quicksand[];
-extern u8 ssl_pyramid_sand[];
-extern u8 ttc_yellow_triangle[];
+extern Texture ssl_quicksand[];
+extern Texture ssl_pyramid_sand[];
+extern Texture ttc_yellow_triangle[];
 
 /**
  * An array for converting a movtex texture id to a pointer that can
  * be passed to gDPSetTextureImage.
  */
-u8 *gMovtexIdToTexture[] = { texture_waterbox_water,     texture_waterbox_mist,
-                             texture_waterbox_jrb_water, texture_waterbox_unknown_water,
-                             texture_waterbox_lava,      ssl_quicksand,
-                             ssl_pyramid_sand,           ttc_yellow_triangle };
+Texture *gMovtexIdToTexture[] = { texture_waterbox_water,     texture_waterbox_mist,
+                                  texture_waterbox_jrb_water, texture_waterbox_unknown_water,
+                                  texture_waterbox_lava,      ssl_quicksand,
+                                  ssl_pyramid_sand,           ttc_yellow_triangle };
 
 extern Gfx castle_grounds_dl_waterfall[];
-extern s16 castle_grounds_movtex_tris_waterfall[];
+extern s16 castle_grounds_movtex_tris_waterfall[]; //! movtex tris typedef
 extern s16 ssl_movtex_tris_pyramid_sand_pathway_front[];
 extern Gfx ssl_dl_pyramid_sand_pathway_begin[];
 extern Gfx ssl_dl_pyramid_sand_pathway_end[];
@@ -266,7 +266,7 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
     //! Why was this global variable needed when they could just check for GEO_CONTEXT_AREA_LOAD?
     if (callContext != GEO_CONTEXT_RENDER) {
         gWdwWaterLevelSet = FALSE;
-    } else if (callContext == GEO_CONTEXT_RENDER && gEnvironmentRegions != NULL && !gWdwWaterLevelSet) {
+    } else if ((callContext == GEO_CONTEXT_RENDER) && (gEnvironmentRegions != NULL) && !gWdwWaterLevelSet) {
         if (gPaintingMarioYEntry <= 1382.4f) {
             wdwWaterHeight = 31;
         } else if (gPaintingMarioYEntry >= 1600.0f) {
@@ -274,7 +274,7 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
         } else {
             wdwWaterHeight = 1024;
         }
-        for (i = 0; i < *gEnvironmentRegions; i++) gEnvironmentRegions[i * 6 + 6] = wdwWaterHeight;
+        for ((i = 0); (i < *gEnvironmentRegions); (i++)) gEnvironmentRegions[(i * 6) + 6] = wdwWaterHeight;
         gWdwWaterLevelSet = TRUE;
     }
     return NULL;
@@ -287,7 +287,7 @@ Gfx *geo_wdw_set_initial_water_level(s32 callContext, UNUSED struct GraphNode *n
  */
 Gfx *geo_movtex_pause_control(s32 callContext, UNUSED struct GraphNode *node, UNUSED Mat4 mtx) {
     if (callContext != GEO_CONTEXT_RENDER) {
-        gMovtexCounterPrev = gAreaUpdateCounter - 1;
+        gMovtexCounterPrev = (gAreaUpdateCounter - 1);
         gMovtexCounter     = gAreaUpdateCounter;
     } else {
         gMovtexCounterPrev = gMovtexCounter;
@@ -305,9 +305,9 @@ Gfx *geo_movtex_pause_control(s32 callContext, UNUSED struct GraphNode *node, UN
  * rotOffset: gets added to base rotation
  * scale: how often the texture repeats, 1 = no repeat
  */
-void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot, s16 rotOffset, f32 scale, u8 alpha) {
-    s16 s = 32.0f * (32.0f * scale - 1.0f) * sins(rot + rotOffset);
-    s16 t = 32.0f * (32.0f * scale - 1.0f) * coss(rot + rotOffset);
+void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot, s16 rotOffset, f32 scale, Alpha alpha) {
+    s16 s = (32.0f * ((32.0f * scale) - 1.0f) * sins(rot + rotOffset));
+    s16 t = (32.0f * ((32.0f * scale) - 1.0f) * coss(rot + rotOffset));
     if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
         make_vertex(verts, index, x, y, z, s, t, 255, 255,   0, alpha);
     } else if (gMovtexVtxColor == MOVTEX_VTX_COLOR_RED) {
@@ -408,7 +408,7 @@ Gfx *movtex_gen_from_quad_array(s16 y, void *quadArrSegmented) {
     Gfx *subList;
     s32 i;
     if (gfxHead == NULL) return NULL;
-    for (i = 0; i < numLists; i++) {
+    for ((i = 0); (i < numLists); (i++)) {
         // quadArr is an array of s16, so sizeof(MovtexQuad) gets divided by 2
         subList = movtex_gen_from_quad(y, (struct MovtexQuad *) (&quadArr[i * (sizeof(struct MovtexQuad) / 2) + 1]));
         if (subList != NULL) gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
@@ -435,6 +435,7 @@ Gfx *movtex_gen_quads_id(s16 id, s16 y, void *movetexQuadsSegmented) {
     return NULL;
 }
 
+//! types?
 extern u8 bbh_movtex_merry_go_round_water_entrance[];
 extern u8 bbh_movtex_merry_go_round_water_side[];
 extern u8 ccm_movtex_penguin_puddle_water[];
@@ -534,7 +535,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         asGenerated = (struct GraphNodeGenerated *) node;
         if (asGenerated->parameter == JRB_MOVTEX_INTIAL_MIST) {
             if (gLakituState.goalPos[1] < 1024.0f) return NULL; // if camera under water
-            if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 1) return NULL; // first star in JRB complete
+            if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 0x1) return NULL; // first star in JRB complete
         } else if (asGenerated->parameter == HMC_MOVTEX_TOXIC_MAZE_MIST) {
             gMovtexVtxColor = MOVTEX_VTX_COLOR_YELLOW;
         } else if (asGenerated->parameter == SSL_MOVTEX_TOXBOX_QUICKSAND_MIST) {
@@ -546,8 +547,8 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         movtex_change_texture_format(asGenerated->parameter, &gfx);
         gMovetexLastTextureId = -1;
         for (i = 0; i < numWaterBoxes; i++) {
-            waterId = gEnvironmentRegions[i * 6 + 1];
-            waterY  = gEnvironmentRegions[i * 6 + 6];
+            waterId = gEnvironmentRegions[(i * 6) + 1];
+            waterY  = gEnvironmentRegions[(i * 6) + 6];
             subList = movtex_gen_quads_id(waterId, waterY, quadCollection);
             if (subList != NULL) gSPDisplayList(gfx++, VIRTUAL_TO_PHYSICAL(subList));
         }
@@ -564,8 +565,8 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
  * attr: which attribute to change
  */
 void update_moving_texture_offset(s16 *movtexVerts, s32 attr) {
-    s16 movSpeed = movtexVerts[MOVTEX_ATTR_SPEED];
-    s16 *curOffset = movtexVerts + attr;
+    s16 movSpeed   = movtexVerts[MOVTEX_ATTR_SPEED];
+    s16 *curOffset = (movtexVerts + attr);
 
     if (gMovtexCounter != gMovtexCounterPrev) {
         *curOffset += movSpeed;
@@ -585,9 +586,9 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
     s16 x    = movtexVerts[MOVTEX_ATTR_X];
     s16 y    = movtexVerts[MOVTEX_ATTR_Y];
     s16 z    = movtexVerts[MOVTEX_ATTR_Z];
-    u8 alpha = c->a;
-    u8 r1, g1, b1;
-    s8 r2, g2, b2;
+    Alpha alpha = c->a;
+    Color r1, g1, b1;
+    s8    r2, g2, b2; //! Color type?
     s16 s, t;
     switch (attrLayout) {
         case MOVTEX_LAYOUT_NOCOLOR:
@@ -615,42 +616,42 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
  * for their texture coordinates.
  */
 void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct MovtexObject *d, s8 attrLayout) {
-    u8 alpha = d->a;
+    Alpha alpha = d->a;
     s16 x, y, z;
     s16 baseS, baseT;
     s16 s, t;
     s16 offS, offT;
-    u8 r1, g1, b1;
-    s8 r2, g2, b2;
+    Color r1, g1, b1;
+    s8    r2, g2, b2; //! Color type?
     switch (attrLayout) {
         case MOVTEX_LAYOUT_NOCOLOR:
-            x     = movtexVerts[index * 5 + MOVTEX_ATTR_X        ];
-            y     = movtexVerts[index * 5 + MOVTEX_ATTR_Y        ];
-            z     = movtexVerts[index * 5 + MOVTEX_ATTR_Z        ];
-            baseS = movtexVerts[            MOVTEX_ATTR_NOCOLOR_S];
-            baseT = movtexVerts[            MOVTEX_ATTR_NOCOLOR_T];
-            offS  = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_S];
-            offT  = movtexVerts[index * 5 + MOVTEX_ATTR_NOCOLOR_T];
-            s     = baseS + ((offS * 32) * 32U);
-            t     = baseT + ((offT * 32) * 32U);
+            x     = movtexVerts[(index * 5) + MOVTEX_ATTR_X        ];
+            y     = movtexVerts[(index * 5) + MOVTEX_ATTR_Y        ];
+            z     = movtexVerts[(index * 5) + MOVTEX_ATTR_Z        ];
+            baseS = movtexVerts[              MOVTEX_ATTR_NOCOLOR_S];
+            baseT = movtexVerts[              MOVTEX_ATTR_NOCOLOR_T];
+            offS  = movtexVerts[(index * 5) + MOVTEX_ATTR_NOCOLOR_S];
+            offT  = movtexVerts[(index * 5) + MOVTEX_ATTR_NOCOLOR_T];
+            s     = (baseS + ((offS * 32) * 32U));
+            t     = (baseT + ((offT * 32) * 32U));
             r1    = d->r;
             g1    = d->g;
             b1    = d->b;
             make_vertex(verts, index, x, y, z, s, t, r1, g1, b1, alpha);
             break;
         case MOVTEX_LAYOUT_COLORED:
-            x     = movtexVerts[index * 8 + MOVTEX_ATTR_X];
-            y     = movtexVerts[index * 8 + MOVTEX_ATTR_Y];
-            z     = movtexVerts[index * 8 + MOVTEX_ATTR_Z];
-            baseS = movtexVerts[            7            ];
-            baseT = movtexVerts[            8            ];
-            offS  = movtexVerts[index * 8 + 7            ];
-            offT  = movtexVerts[index * 8 + 8            ];
-            s     = baseS + ((offS * 32) * 32U);
-            t     = baseT + ((offT * 32) * 32U);
-            r2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_R];
-            g2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_G];
-            b2    = movtexVerts[index * 8 + MOVTEX_ATTR_COLORED_B];
+            x     = movtexVerts[(index * 8) + MOVTEX_ATTR_X];
+            y     = movtexVerts[(index * 8) + MOVTEX_ATTR_Y];
+            z     = movtexVerts[(index * 8) + MOVTEX_ATTR_Z];
+            baseS = movtexVerts[              7            ];
+            baseT = movtexVerts[              8            ];
+            offS  = movtexVerts[(index * 8) + 7            ];
+            offT  = movtexVerts[(index * 8) + 8            ];
+            s     = (baseS + ((offS * 32) * 32U));
+            t     = (baseT + ((offT * 32) * 32U));
+            r2    = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_R];
+            g2    = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_G];
+            b2    = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_B];
             make_vertex(verts, index, x, y, z, s, t, r2, g2, b2, alpha);
             break;
     }
@@ -665,7 +666,7 @@ Gfx *movtex_gen_list(s16 *movtexVerts, struct MovtexObject *movtexList, s8 attrL
     Gfx *gfxHead = alloc_display_list(11 * sizeof(*gfxHead));
     Gfx *gfx = gfxHead;
     s32 i;
-    if (verts == NULL || gfxHead == NULL) return NULL;
+    if ((verts == NULL) || (gfxHead == NULL)) return NULL;
     movtex_write_vertex_first(verts, movtexVerts, movtexList, attrLayout);
     for (i = 1; i < movtexList->vtx_count; i++) movtex_write_vertex_index(verts, i, movtexVerts, movtexList, attrLayout);
     gSPDisplayList(   gfx++, movtexList->beginDl);
@@ -693,7 +694,7 @@ Gfx *geo_movtex_draw_nocolor(s32 callContext, struct GraphNode *node, UNUSED Mat
 #endif
         while (gMovtexNonColored[i].movtexVerts != 0) {
             if (gMovtexNonColored[i].geoId == asGenerated->parameter) {
-                asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexNonColored[i].layer << 8);
+                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexNonColored[i].layer << 8));
                 movtexVerts = segmented_to_virtual(gMovtexNonColored[i].movtexVerts);
                 update_moving_texture_offset(movtexVerts, MOVTEX_ATTR_NOCOLOR_S);
                 gfx = movtex_gen_list(movtexVerts, &gMovtexNonColored[i], MOVTEX_LAYOUT_NOCOLOR); // no perVertex colors
@@ -718,7 +719,7 @@ Gfx *geo_movtex_draw_colored(s32 callContext, struct GraphNode *node, UNUSED Mat
         asGenerated = (struct GraphNodeGenerated *) node;
         while (gMovtexColored[i].movtexVerts != 0) {
             if (gMovtexColored[i].geoId == asGenerated->parameter) {
-                asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored[i].layer << 8);
+                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored[i].layer << 8));
                 movtexVerts = segmented_to_virtual(gMovtexColored[i].movtexVerts);
                 update_moving_texture_offset(movtexVerts, MOVTEX_ATTR_COLORED_S);
                 gfx = movtex_gen_list(movtexVerts, &gMovtexColored[i], MOVTEX_LAYOUT_COLORED);
@@ -747,7 +748,7 @@ Gfx *geo_movtex_draw_colored_no_update(s32 callContext, struct GraphNode *node, 
         asGenerated = (struct GraphNodeGenerated *) node;
         while (gMovtexColored[i].movtexVerts != 0) {
             if (gMovtexColored[i].geoId == asGenerated->parameter) {
-                asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored[i].layer << 8);
+                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored[i].layer << 8));
                 movtexVerts = segmented_to_virtual(gMovtexColored[i].movtexVerts);
                 gfx = movtex_gen_list(movtexVerts, &gMovtexColored[i], MOVTEX_LAYOUT_COLORED);
                 break;
@@ -772,7 +773,7 @@ Gfx *geo_movtex_draw_colored_2_no_update(s32 callContext, struct GraphNode *node
         asGenerated = (struct GraphNodeGenerated *) node;
         while (gMovtexColored2[i].movtexVerts != 0) {
             if (gMovtexColored2[i].geoId == asGenerated->parameter) {
-                asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored2[i].layer << 8);
+                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored2[i].layer << 8));
                 movtexVerts = segmented_to_virtual(gMovtexColored2[i].movtexVerts);
                 gfx = movtex_gen_list(movtexVerts, &gMovtexColored2[i], MOVTEX_LAYOUT_COLORED);
                 break;

@@ -133,7 +133,7 @@ void puppyprint_profiler_finished(void) {
 }
 
 // RGB colour lookup table for colouring all the funny ram prints.
-u8 colourChart[33][3] = {
+ColorRGB colourChart[33] = {
     {255,   0,   0},
     {  0,   0, 255},
     {  0, 255,   0},
@@ -427,7 +427,7 @@ void puppyprint_profiler_process(void) {
 
 void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) {
     if (r != currEnv[0] || g != currEnv[1] || b != currEnv[2] || a != currEnv[3]) {
-        gDPSetEnvColor(gDisplayListHead++, (u8)r, (u8)g, (u8)b, (u8)a);
+        gDPSetEnvColor(gDisplayListHead++, (Color)r, (Color)g, (Color)b, (Alpha)a);
         currEnv[0] = r;
         currEnv[1] = g;
         currEnv[2] = b;
@@ -449,7 +449,7 @@ void finish_blank_box(void) {
 // This does some epic shenanigans to figure out the optimal way to draw this.
 // If the width is a multiple of 4, then use fillmode (fastest)
 // Otherwise, if there's transparency, it uses that rendermode, which is slower than using opaque rendermodes.
-void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 a) {
+void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b, Alpha a) {
     s32 cycleadd = 0;
     if (((ABS(x1 - x2) % 4) == 0) && (a == 255)) {
         gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);

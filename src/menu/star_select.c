@@ -90,9 +90,9 @@ void render_100_coin_star(u8 stars) {
     if (stars & (1 << 6)) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 #ifdef WIDE
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370*4.0f)/3.0f) : 370, 24, -300, 0x0, 0x0, 0x0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370 * 4.0f) / 3.0f) : 370, 24, -300, 0x0, 0x0, 0x0);
 #else
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType,                                   370, 24, -300, 0x0, 0x0, 0x0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvActSelectorStarType,                                       370, 24, -300, 0x0, 0x0, 0x0);
 #endif
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
@@ -232,24 +232,23 @@ void print_course_number(void) {
  */
 void print_act_selector_strings(void) {
 #ifdef VERSION_EU
-    unsigned char myScore[][10] = { {TEXT_MYSCORE}, {TEXT_MY_SCORE_FR}, {TEXT_MY_SCORE_DE} };
+    uchar myScore[][10] = { {TEXT_MYSCORE}, {TEXT_MY_SCORE_FR}, {TEXT_MY_SCORE_DE} };
 #else
-    unsigned char myScore[] = { TEXT_MYSCORE };
+    uchar myScore[]     = { TEXT_MYSCORE };
 #endif
-    unsigned char starNumbers[] = { TEXT_ZERO };
+    uchar starNumbers[] = { TEXT_ZERO };
 #ifdef VERSION_EU
-    u8 **levelNameTbl;
-    u8 *currLevelName;
-    u8 **actNameTbl;
+    uchar **levelNameTbl;
+    uchar *currLevelName;
+    uchar **actNameTbl;
 #else
-    u8 **levelNameTbl = segmented_to_virtual(seg2_course_name_table);
-    u8 *currLevelName = segmented_to_virtual(levelNameTbl[gCurrCourseNum - 1]);
-    u8 **actNameTbl   = segmented_to_virtual(seg2_act_name_table);
+    uchar **levelNameTbl = segmented_to_virtual(seg2_course_name_table);
+    uchar *currLevelName = segmented_to_virtual(levelNameTbl[gCurrCourseNum - 1]);
+    uchar **actNameTbl   = segmented_to_virtual(seg2_act_name_table);
 #endif
-    u8 *selectedActName;
+    uchar *selectedActName;
 #ifndef VERSION_EU
-    s16 lvlNameX;
-    s16 actNameX;
+    s16 lvlNameX, actNameX;
 #endif
     s8 i;
 #ifdef VERSION_EU

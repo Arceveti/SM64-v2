@@ -13,24 +13,24 @@
 /// The default painting side length
 #define PAINTING_SIZE 614.0f
 
-#define PAINTING_ID_DDD 7
+#define PAINTING_ID_DDD             0x7
 
-#define BOARD_BOWSERS_SUB 1
+#define BOARD_BOWSERS_SUB           0x1
 
-#define BOWSERS_SUB_BEATEN 0x2
-#define DDD_BACK 0x1
+#define BOWSERS_SUB_BEATEN          0x2
+#define DDD_BACK                    0x1
 
-#define PAINTING_IDLE    0
-#define PAINTING_RIPPLE  1
-#define PAINTING_ENTERED 2
+#define PAINTING_IDLE               0x0
+#define PAINTING_RIPPLE             0x1
+#define PAINTING_ENTERED            0x2
 
-#define RIPPLE_TRIGGER_PROXIMITY  10
-#define RIPPLE_TRIGGER_CONTINUOUS 20
+#define RIPPLE_TRIGGER_PROXIMITY   0x0A
+#define RIPPLE_TRIGGER_CONTINUOUS  0x14
 
 /// Painting that uses 1 or more images as a texture
-#define PAINTING_IMAGE   0
+#define PAINTING_IMAGE              0x0
 /// Painting that has one texture used for an environment map effect
-#define PAINTING_ENV_MAP 1
+#define PAINTING_ENV_MAP            0x1
 
 struct Painting
 {
@@ -55,6 +55,7 @@ struct Painting
     f32 yaw;
 
     /// The painting's position
+    //! Vec3f?
     f32 posX;
     f32 posY;
     f32 posZ;
@@ -103,7 +104,7 @@ struct Painting
     s8 rippleTrigger;
 
     /// The painting's transparency. Determines what layer the painting is in.
-    u8 alpha;
+    Alpha alpha;
 
     /// True if Mario was under the painting's y coordinate last frame
     s8 marioWasUnder;

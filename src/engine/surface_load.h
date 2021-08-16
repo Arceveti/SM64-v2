@@ -6,7 +6,7 @@
 #include "surface_collision.h"
 #include "types.h"
 
-extern u8 gSurfacePoolError;
+extern u8 gSurfacePoolError; //! uchar type?
 
 #define NUM_CELLS       (2 * LEVEL_BOUNDARY_MAX / CELL_SIZE)
 #define NUM_CELLS_INDEX (NUM_CELLS - 1)

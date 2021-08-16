@@ -45,7 +45,7 @@ static struct Object *sMainMenuButtons[NUM_BUTTONS];
 
 // Used to defined yes/no fade colors after a file is selected in the erase menu.
 // sYesNoColor[0]: YES | sYesNoColor[1]: NO
-static u8 sYesNoColor[2];
+static Alpha sYesNoColor[2];
 
 // The button that is selected when it is clicked.
 static s8 sSelectedButtonID = MENU_BUTTON_NONE;
@@ -54,7 +54,7 @@ static s8 sSelectedButtonID = MENU_BUTTON_NONE;
 static s8 sCurrentMenuLevel = MENU_LAYER_MAIN;
 
 // Used for text opacifying. If it is below 250, it is constantly incremented.
-static u8 sTextBaseAlpha = 0;
+static Alpha sTextBaseAlpha = 0;
 
 // 2D position of the cursor on the screen.
 // sCursorPos[0]: X | sCursorPos[1]: Y
@@ -77,7 +77,7 @@ static s8 sStatusMessageID = 0;
 
 // Used for text fading. The alpha value of text is calculated as
 // sTextBaseAlpha - sTextFadeAlpha.
-static u8 sTextFadeAlpha = 0;
+static Alpha sTextFadeAlpha = 0;
 
 // File select timer that keeps counting until it reaches 1000.
 // Used to prevent buttons from being clickable as soon as a menu loads.
@@ -109,39 +109,39 @@ static s8 sScoreFileCoinScoreMode = 0;
 
 // In EU, if no save file exists, open the language menu so the user can find it.
 
-static unsigned char textReturn[]          = { TEXT_RETURN            };
-static unsigned char textViewScore[]       = { TEXT_CHECK_SCORE       };
-static unsigned char textCopyFileButton[]  = { TEXT_COPY_FILE_BUTTON  };
-static unsigned char textEraseFileButton[] = { TEXT_ERASE_FILE_BUTTON };
+static uchar textReturn[]          = { TEXT_RETURN            };
+static uchar textViewScore[]       = { TEXT_CHECK_SCORE       };
+static uchar textCopyFileButton[]  = { TEXT_COPY_FILE_BUTTON  };
+static uchar textEraseFileButton[] = { TEXT_ERASE_FILE_BUTTON };
 
-static unsigned char textSoundModes[][8] = { { TEXT_STEREO }, { TEXT_MONO }, { TEXT_HEADSET } };
+static uchar textSoundModes[][8] = { { TEXT_STEREO }, { TEXT_MONO }, { TEXT_HEADSET } };
 
-static unsigned char textMarioA[] = { TEXT_FILE_MARIO_A };
-static unsigned char textMarioB[] = { TEXT_FILE_MARIO_B };
-static unsigned char textMarioC[] = { TEXT_FILE_MARIO_C };
-static unsigned char textMarioD[] = { TEXT_FILE_MARIO_D };
+static uchar textMarioA[] = { TEXT_FILE_MARIO_A };
+static uchar textMarioB[] = { TEXT_FILE_MARIO_B };
+static uchar textMarioC[] = { TEXT_FILE_MARIO_C };
+static uchar textMarioD[] = { TEXT_FILE_MARIO_D };
 
-static unsigned char textNew[]  = { TEXT_NEW                    };
-static unsigned char starIcon[] = { GLYPH_STAR,     GLYPH_SPACE };
-static unsigned char xIcon[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
+static uchar textNew[]  = { TEXT_NEW                    };
+static uchar starIcon[] = { GLYPH_STAR,     GLYPH_SPACE };
+static uchar xIcon[]    = { GLYPH_MULTIPLY, GLYPH_SPACE };
 
-static unsigned char textSelectFile[] = { TEXT_SELECT_FILE };
-static unsigned char textScore[]      = { TEXT_SCORE       };
-static unsigned char textCopy[]       = { TEXT_COPY        };
-static unsigned char textErase[]      = { TEXT_ERASE       };
+static uchar textSelectFile[] = { TEXT_SELECT_FILE };
+static uchar textScore[]      = { TEXT_SCORE       };
+static uchar textCopy[]       = { TEXT_COPY        };
+static uchar textErase[]      = { TEXT_ERASE       };
 
 
-static unsigned char textCheckFile[]             = { TEXT_CHECK_FILE           };
-static unsigned char textNoSavedDataExists[]     = { TEXT_NO_SAVED_DATA_EXISTS };
-static unsigned char textCopyFile[]              = { TEXT_COPY_FILE            };
-static unsigned char textCopyItToWhere[]         = { TEXT_COPY_IT_TO_WHERE     };
-static unsigned char textNoSavedDataExistsCopy[] = { TEXT_NO_SAVED_DATA_EXISTS };
-static unsigned char textCopyCompleted[]         = { TEXT_COPYING_COMPLETED    };
-static unsigned char textSavedDataExists[]       = { TEXT_SAVED_DATA_EXISTS    };
-static unsigned char textNoFileToCopyFrom[]      = { TEXT_NO_FILE_TO_COPY_FROM };
+static uchar textCheckFile[]             = { TEXT_CHECK_FILE           };
+static uchar textNoSavedDataExists[]     = { TEXT_NO_SAVED_DATA_EXISTS };
+static uchar textCopyFile[]              = { TEXT_COPY_FILE            };
+static uchar textCopyItToWhere[]         = { TEXT_COPY_IT_TO_WHERE     };
+static uchar textNoSavedDataExistsCopy[] = { TEXT_NO_SAVED_DATA_EXISTS };
+static uchar textCopyCompleted[]         = { TEXT_COPYING_COMPLETED    };
+static uchar textSavedDataExists[]       = { TEXT_SAVED_DATA_EXISTS    };
+static uchar textNoFileToCopyFrom[]      = { TEXT_NO_FILE_TO_COPY_FROM };
 
-static unsigned char textYes[] = { TEXT_YES };
-static unsigned char textNo[]  = { TEXT_NO  };
+static uchar textYes[] = { TEXT_YES };
+static uchar textNo[]  = { TEXT_NO  };
 
 
 /**
@@ -1132,7 +1132,7 @@ void print_menu_cursor(void) {
 /**
  * Prints a hud string depending of the hud table list defined with text fade properties.
  */
-void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const unsigned char *text) {
+void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_hud_lut_string(hudLUT, x, y, text);
@@ -1142,7 +1142,7 @@ void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const unsigned char *tex
 /**
  * Prints a centeredhud string depending of the hud table list defined with text fade properties.
  */
-void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const unsigned char *text) {
+void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_hud_lut_string_centered(hudLUT, x, y, text);
@@ -1153,7 +1153,7 @@ void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const unsigned 
 /**
  * Prints a generic white string with text fade properties.
  */
-void print_generic_string_fade(s16 x, s16 y, const unsigned char *text) {
+void print_generic_string_fade(s16 x, s16 y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_generic_string(x, y, text);
@@ -1181,11 +1181,11 @@ s32 update_text_fade_out(void) {
  * If a save doesn't exist, print "NEW" instead.
  */
 void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
-    u8 starCountText[4];
+    uchar starCountText[4];
     s8 offset = 0;
     s16 starCount;
     if (save_file_exists(fileIndex)) {
-        starCount = save_file_get_total_star_count(fileIndex, COURSE_MIN - 1, COURSE_MAX - 1);
+        starCount = save_file_get_total_star_count(fileIndex, (COURSE_MIN - 1), (COURSE_MAX - 1));
         // Print star icon
         print_hud_lut_string(HUD_LUT_GLOBAL, x, y, starIcon);
         // If star count is less than 100, print x icon and move
@@ -1196,7 +1196,7 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
         }
         // Print star count
         int_to_str(starCount, starCountText);
-        print_hud_lut_string(HUD_LUT_GLOBAL, x + offset + 16, y, starCountText);
+        print_hud_lut_string(HUD_LUT_GLOBAL, (x + offset + 16), y, starCountText);
     } else {
         // Print "new" text
         print_hud_lut_string(HUD_LUT_GLOBAL, x, y, LANGUAGE_ARRAY(textNew));
@@ -1471,11 +1471,11 @@ void print_erase_menu_prompt(s16 x, s16 y) {
  * Defines IDs for the top message of the erase menu and displays it if the ID is called in messageID.
  */
 void erase_menu_display_message(s8 messageID) {
-    unsigned char textEraseFile[]         = { TEXT_ERASE_FILE               };
-    unsigned char textSure[]              = { TEXT_SURE                     };
-    unsigned char textNoSavedDataExists[] = { TEXT_NO_SAVED_DATA_EXISTS     };
-    unsigned char textMarioAJustErased[]  = { TEXT_FILE_MARIO_A_JUST_ERASED };
-    unsigned char textSavedDataExists[]   = { TEXT_SAVED_DATA_EXISTS        };
+    uchar textEraseFile[]         = { TEXT_ERASE_FILE               };
+    uchar textSure[]              = { TEXT_SURE                     };
+    uchar textNoSavedDataExists[] = { TEXT_NO_SAVED_DATA_EXISTS     };
+    uchar textMarioAJustErased[]  = { TEXT_FILE_MARIO_A_JUST_ERASED };
+    uchar textSavedDataExists[]   = { TEXT_SAVED_DATA_EXISTS        };
     switch (messageID) {
         case ERASE_MSG_MAIN_TEXT:
             print_hud_lut_string_centered_fade(HUD_LUT_DIFF, ERASE_FILE_X, 35, LANGUAGE_ARRAY(textEraseFile));
@@ -1566,7 +1566,7 @@ void print_erase_menu_strings(void) {
 void print_sound_mode_menu_strings(void) {
     s32 mode;
     s16 textX;
-    unsigned char textSoundSelect[] = { TEXT_SOUND_SELECT };
+    uchar textSoundSelect[] = { TEXT_SOUND_SELECT };
     // Print "SOUND SELECT" text
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
@@ -1587,13 +1587,13 @@ void print_sound_mode_menu_strings(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
-unsigned char textStarX[] = { TEXT_STAR_X };
+uchar textStarX[] = { TEXT_STAR_X };
 
 /**
  * Prints castle secret stars collected in a score menu save file.
  */
 void print_score_file_castle_secret_stars(s8 fileIndex, s16 x, s16 y) {
-    unsigned char secretStarsText[20];
+    uchar secretStarsText[20];
     // Print "[star] x"
     print_menu_generic_string(x, y, textStarX);
     // Print number of castle secret stars
@@ -1609,12 +1609,12 @@ void print_score_file_castle_secret_stars(s8 fileIndex, s16 x, s16 y) {
  * Prints course coins collected in a score menu save file.
  */
 void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
-    unsigned char coinScoreText[20];
+    uchar coinScoreText[20];
     u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
-    unsigned char textCoinX[] = { TEXT_COIN_X };
-    unsigned char textStar[]  = { TEXT_STAR   };
+    uchar textCoinX[] = { TEXT_COIN_X };
+    uchar textStar[]  = { TEXT_STAR   };
     #define LENGTH 8
-    unsigned char fileNames[][LENGTH] = {
+    uchar fileNames[][LENGTH] = {
         { TEXT_4DASHES       }, // huh?
         { TEXT_SCORE_MARIO_A },
         { TEXT_SCORE_MARIO_B },
@@ -1647,7 +1647,7 @@ void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s1
  */
 void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
     s16 i = 0;
-    unsigned char starScoreText[19];
+    uchar starScoreText[19];
     u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
     s8 starCount = save_file_get_course_star_count(fileIndex, courseIndex);
     // Don't count 100 coin star
@@ -1674,10 +1674,10 @@ void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
  */
 void print_save_file_scores(s8 fileIndex) {
     u32 i;
-    unsigned char textMario[]      = { TEXT_MARIO    };
-    unsigned char textHiScore[]    = { TEXT_HI_SCORE };
-    unsigned char textMyScore[]    = { TEXT_MY_SCORE };
-    unsigned char textFileLetter[] = { TEXT_ZERO     };
+    uchar textMario[]      = { TEXT_MARIO    };
+    uchar textHiScore[]    = { TEXT_HI_SCORE };
+    uchar textMyScore[]    = { TEXT_MY_SCORE };
+    uchar textFileLetter[] = { TEXT_ZERO     };
     void **levelNameTable = segmented_to_virtual(seg2_course_name_table);
     textFileLetter[0] = fileIndex + ASCII_TO_DIALOG('A'); // get letter of file selected
     // Print file name at top

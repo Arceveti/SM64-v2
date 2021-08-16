@@ -87,9 +87,9 @@ struct Area
 // All the transition data to be used in screen_transition.c
 struct WarpTransitionData
 {
-    /*0x00*/ u8 red;
-    /*0x01*/ u8 green;
-    /*0x02*/ u8 blue;
+    /*0x00*/ Color red;
+    /*0x01*/ Color green;
+    /*0x02*/ Color blue;
 
     /*0x04*/ s16 startTexRadius;
     /*0x06*/ s16 endTexRadius;
@@ -178,8 +178,8 @@ void load_mario_area(void);
 void unload_mario_area(void);
 void change_area(s32 index);
 void area_update_objects(void);
-void play_transition(            s16 transType, s16 time, u8 red, u8 green, u8 blue);
-void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 blue, s16 delay);
+void play_transition(            s16 transType, s16 time, Color red, Color green, Color blue);
+void play_transition_after_delay(s16 transType, s16 time, Color red, Color green, Color blue, s16 delay);
 void shade_screen_color(u32 r, u32 g, u32 b, u32 a);
 void render_game(void);
 

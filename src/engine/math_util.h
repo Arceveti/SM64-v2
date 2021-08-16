@@ -40,33 +40,44 @@ extern f32 gSineTable[];
 #define sqr(x) ((x) * (x))
 
 // Kaze's float functions
-float slow_logf(float x);
-float slow_expf(float x);
-float slow_powf(float base, float exponent);
+f32 slow_logf(f32 x);
+f32 slow_expf(f32 x);
+f32 slow_powf(f32 base, f32 exponent);
 // Rounding
-s32 round_float_to_int(f32 num);
-s32 round_double_to_int(f64 num);
-s16 round_float_to_short(f32 num);
+s16 round_float_to_short( f32 num);
+s32 round_float_to_int(   f32 num);
 s16 round_double_to_short(f64 num);
+s32 round_double_to_int(  f64 num);
 // Sign functions
 s32  signum_positive(s32 x);
-f64  absd(f64 x);
-f32  absf(f32 x);
-s32  absi(s32 x);
-s16  abss(s16 x);
 s8   absc(s8  x);
+s16  abss(s16 x);
+s32  absi(s32 x);
+f32  absf(f32 x);
+f64  absd(f64 x);
 // Fast Inverse Square Root
 #ifdef FAST_INVSQRT
-float  Q_rsqrtf( float  number );
-double Q_rsqrtd( double number );
+f32  Q_rsqrtf( f32 number );
+f64  Q_rsqrtd( f64 number );
 #endif
-// Comparison
-s16  min_3s(s16 a0, s16 a1, s16 a2);
-s16  max_3s(s16 a0, s16 a1, s16 a2);
-s32  min_3i(s32 a0, s32 a1, s32 a2);
-s32  max_3i(s32 a0, s32 a1, s32 a2);
-f32  min_3f(f32 a0, f32 a1, f32 a2);
-f32  max_3f(f32 a0, f32 a1, f32 a2);
+// min_3
+s8   min_3c( s8  a0, s8  a1,  s8 a2);
+u8   min_3uc(u8  a0, u8  a1,  u8 a2);
+s16  min_3s( s16 a0, s16 a1, s16 a2);
+u16  min_3us(s16 a0, u16 a1, u16 a2);
+s32  min_3i( s32 a0, s32 a1, s32 a2);
+u32  min_3ui(u32 a0, u32 a1, u32 a2);
+f32  min_3f( f32 a0, f32 a1, f32 a2);
+f64  min_3d( f64 a0, f64 a1, f64 a2);
+// max_3
+s8   max_3c( s8  a0,  s8 a1,  s8 a2);
+u8   max_3uc(u8  a0,  u8 a1,  u8 a2);
+s16  max_3s( s16 a0, s16 a1, s16 a2);
+u16  max_3us(u16 a0, u16 a1, u16 a2);
+s32  max_3i( s32 a0, s32 a1, s32 a2);
+u32  max_3ui(u32 a0, u32 a1, u32 a2);
+f32  max_3f( f32 a0, f32 a1, f32 a2);
+f64  max_3d( f64 a0, f64 a1, f64 a2);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
@@ -91,6 +102,7 @@ void vec3s_sub(                          Vec3s dest, Vec3s a);
 void vec3s_to_vec3i(                     Vec3i dest, Vec3s a);
 void vec3i_to_vec3s(                     Vec3s dest, Vec3i a);
 void vec3s_to_vec3f(                     Vec3f dest, Vec3s a);
+void vec3i_to_vec3f(                     Vec3f dest, Vec3i a);
 void vec3f_to_vec3s(                     Vec3s dest, Vec3f a);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
@@ -101,7 +113,7 @@ void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, s16 *p
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, s16  pitch, s16  yaw);
 void vec3f_mul_f32(                      Vec3f dest, f32 scale);
 void vec3f_div_f32(                      Vec3f dest, f32 scale);
-void vec3f_scale(                        Vec3f dest, Vec3f src,   f32 scale, u32 doInverted);
+void vec3f_scale_f32(                        Vec3f dest, Vec3f src,   f32 scale, u32 doInverted);
 void vec3f_scale_vec3f(                  Vec3f dest, Vec3f src, Vec3f scale, u32 doInverted);
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);

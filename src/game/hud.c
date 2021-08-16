@@ -124,7 +124,7 @@ static s32 sCameraHUDStatus = CAM_STATUS_NONE;
 /**
  * Renders a rgba16 16x16 glyph texture from a table list.
  */
-void render_hud_tex_lut(s32 x, s32 y, u8 *texture) {
+void render_hud_tex_lut(s32 x, s32 y, Texture *texture) {
     gDPPipeSync(        gDisplayListHead++);
     gDPSetTextureImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
     gSPDisplayList(     gDisplayListHead++, &dl_hud_img_load_tex_block);
@@ -135,7 +135,7 @@ void render_hud_tex_lut(s32 x, s32 y, u8 *texture) {
 /**
  * Renders a rgba16 8x8 glyph texture from a table list.
  */
-void render_hud_small_tex_lut(s32 x, s32 y, u8 *texture) {
+void render_hud_small_tex_lut(s32 x, s32 y, Texture *texture) {
     gDPSetTile(         gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
                         G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD);
     gDPTileSync(        gDisplayListHead++);
@@ -154,7 +154,7 @@ void render_hud_small_tex_lut(s32 x, s32 y, u8 *texture) {
  * Renders power meter health segment texture using a table list.
  */
 void render_power_meter_health_segment(s16 numHealthWedges) {
-    u8 *(*healthLUT)[];
+    Texture *(*healthLUT)[];
     healthLUT = segmented_to_virtual(&power_meter_health_segments_lut);
     gDPPipeSync(       gDisplayListHead++);
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*healthLUT)[numHealthWedges - 1]);
@@ -275,7 +275,7 @@ void render_hud_power_meter(void) {
  * Renders breath meter health segment texture using a table list.
  */
 void render_breath_meter_segment(s16 numBreathWedges) {
-    u8 *(*breathLUT)[];
+    Texture *(*breathLUT)[];
     breathLUT = segmented_to_virtual(&breath_meter_segments_lut);
     gDPPipeSync(       gDisplayListHead++);
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, (*breathLUT)[numBreathWedges - 1]);
@@ -491,7 +491,7 @@ void render_hud_secrets(void) {
  * Renders the timer when Mario start sliding in PSS.
  */
 void render_hud_timer(void) {
-    u8 *(*hudLUT)[58];
+    Texture *(*hudLUT)[58];
     u16 timerValFrames;
     u16 timerMins, timerSecs, timerFracSecs;
     hudLUT         = segmented_to_virtual(&main_hud_lut);
@@ -531,7 +531,7 @@ void set_hud_camera_status(s16 status) {
  * the camera status called, a defined glyph is rendered.
  */
 void render_hud_camera_status(void) {
-    u8 *(*cameraLUT)[6];
+    Texture *(*cameraLUT)[6];
     cameraLUT = segmented_to_virtual(&main_hud_camera_lut);
     s32 x     = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_CAMERA_X);
     s32 y     = HUD_CAMERA_Y;

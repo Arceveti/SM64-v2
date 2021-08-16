@@ -143,7 +143,7 @@ typedef struct sprite Sprite;
  * For sprite->attr
  */
 
-#define SP_TRANSPARENT		0x00000001
+#define SP_TRANSPARENT	0x00000001
 #define SP_CUTOUT		0x00000002
 #define SP_HIDDEN		0x00000004
 #define SP_Z			0x00000008
@@ -178,13 +178,13 @@ typedef struct sprite Sprite;
  * Function prototypes
  */
 
-void spSetAttribute (Sprite *sp, s32 attr);
+void spSetAttribute   (Sprite *sp, s32 attr);
 void spClearAttribute (Sprite *sp, s32 attr);
-void spMove (Sprite *sp, s32 x, s32 y);
+void spMove  (Sprite *sp, s32 x, s32 y);
 void spScale (Sprite *sp, f32 sx, f32 sy);
 void spSetZ  (Sprite *sp, s32 z );
-void spColor (Sprite *sp, u8 red, u8 green, u8 blue, u8 alpha);
-Gfx *spDraw (Sprite *sp);
+void spColor (Sprite *sp, u8 red, u8 green, u8 blue, u8 alpha); //! Color type?
+Gfx *spDraw  (Sprite *sp);
 void spInit( Gfx **glistp );
 void spScissor( s32 xmin, s32 xmax, s32 ymin, s32 ymax );
 void spFinish( Gfx **glistp );

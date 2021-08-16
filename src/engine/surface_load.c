@@ -38,7 +38,7 @@ struct Surface     *sSurfacePool;
  * The size of the surface pool (2300 in vanilla).
  */
 s16 sSurfacePoolSize;
-u8  gSurfacePoolError = 0x0;
+u8  gSurfacePoolError = 0x0; //! uchar type?
 
 /**
  * Allocate the part of the surface node pool to contain a surface node.
@@ -170,11 +170,11 @@ static s16 upper_cell_index(s32 coord) {
     coord += LEVEL_BOUNDARY_MAX;
     if (coord < 0) coord = 0;
     // [0, 16)
-    index = coord / CELL_SIZE;
+    index = (coord / CELL_SIZE);
     // Include extra cell if close to boundary
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE > CELL_SIZE - 50) index++;
+    if ((coord % CELL_SIZE) > (CELL_SIZE - 50)) index++;
     if (index > NUM_CELLS_INDEX) index = NUM_CELLS_INDEX;
     // Potentially < 0, but since lower index is >= 0, not exploitable
     return index;
@@ -212,9 +212,9 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
 static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     struct Surface *surface;
 
-    register s16 offset1 = 3 * (*vertexIndices)[0];
-    register s16 offset2 = 3 * (*vertexIndices)[1];
-    register s16 offset3 = 3 * (*vertexIndices)[2];
+    register s16 offset1 = (3 * (*vertexIndices)[0]);
+    register s16 offset2 = (3 * (*vertexIndices)[1]);
+    register s16 offset3 = (3 * (*vertexIndices)[2]);
 
     register s32 x1 = *(vertexData + offset1 + 0);
     register s32 y1 = *(vertexData + offset1 + 1);
@@ -229,14 +229,14 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     register s32 z3 = *(vertexData + offset3 + 2);
 
     // (v2 - v1) x (v3 - v2)
-    register f32 nx = (y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2);
-    register f32 ny = (z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2);
-    register f32 nz = (x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2);
+    register f32 nx = ((y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2));
+    register f32 ny = ((z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2));
+    register f32 nz = ((x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2));
 
 #if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
-    register f32 mag = Q_rsqrtf(nx * nx + ny * ny + nz * nz);
+    register f32 mag = Q_rsqrtf((nx * nx) + (ny * ny) + (nz * nz));
 #else
-    register f32 mag = sqrtf(nx * nx + ny * ny + nz * nz);
+    register f32 mag = sqrtf((nx * nx) + (ny * ny) + (nz * nz));
     // Checking to make sure no DIV/0
     if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);
@@ -263,10 +263,10 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     surface->normal.y   = ny;
     surface->normal.z   = nz;
 
-    surface->originOffset = -(nx * x1 + ny * y1 + nz * z1);
+    surface->originOffset = -((nx * x1) + (ny * y1) + (nz * z1));
 
-    surface->lowerY = min_3s(y1, y2, y3) - 5;
-    surface->upperY = max_3s(y1, y2, y3) + 5;
+    surface->lowerY = (min_3i(y1, y2, y3) - 5);
+    surface->upperY = (max_3i(y1, y2, y3) + 5);
 
     return surface;
 }
@@ -277,13 +277,13 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
  * based on the surface type.
  */
 static s32 surface_has_force(s16 surfaceType) {
-    return (surfaceType == SURFACE_0004
-         || surfaceType == SURFACE_FLOWING_WATER
-         || surfaceType == SURFACE_DEEP_MOVING_QUICKSAND
-         || surfaceType == SURFACE_SHALLOW_MOVING_QUICKSAND
-         || surfaceType == SURFACE_MOVING_QUICKSAND
-         || surfaceType == SURFACE_HORIZONTAL_WIND
-         || surfaceType == SURFACE_INSTANT_MOVING_QUICKSAND);
+    return ((surfaceType == SURFACE_0004)
+         || (surfaceType == SURFACE_FLOWING_WATER)
+         || (surfaceType == SURFACE_DEEP_MOVING_QUICKSAND)
+         || (surfaceType == SURFACE_SHALLOW_MOVING_QUICKSAND)
+         || (surfaceType == SURFACE_MOVING_QUICKSAND)
+         || (surfaceType == SURFACE_HORIZONTAL_WIND)
+         || (surfaceType == SURFACE_INSTANT_MOVING_QUICKSAND));
 }
 #endif
 
@@ -292,10 +292,10 @@ static s32 surface_has_force(s16 surfaceType) {
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
 static s32 surf_has_no_cam_collision(s16 surfaceType) {
-    if (surfaceType == SURFACE_NO_CAM_COLLISION
-     || surfaceType == SURFACE_NO_CAM_COLLISION_77
-     || surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY
-     || surfaceType == SURFACE_SWITCH) return SURFACE_FLAG_NO_CAM_COLLISION;
+    if ((surfaceType == SURFACE_NO_CAM_COLLISION)
+     || (surfaceType == SURFACE_NO_CAM_COLLISION_UNUSED)
+     || (surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY)
+     || (surfaceType == SURFACE_SWITCH)) return SURFACE_FLAG_NO_CAM_COLLISION;
     return SURFACE_FLAG_NONE;
 }
 

@@ -1595,26 +1595,26 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
 
 #include "actors/bowser/vtx.h"
 
-void add_hue(u8 color[3], s32 hueAdd, s32 s) {
-    f32 min = min_3i(color[0], color[1], color[2]);
-    f32 max = max_3i(color[0], color[1], color[2]);
+void add_hue(ColorRGB color, s32 hueAdd, Color s) {
+    Color min = min_3uc(color[0], color[1], color[2]);
+    Color max = max_3uc(color[0], color[1], color[2]);
     if (min == max) return;
     f32 hue = 0.0f;
     if (       max == color[0]) { // red
-        hue = (       (color[1] - color[2]) / (max - min));
+        hue = (       (color[1] - color[2]) / (f32)(max - min));
     } else if (max == color[1]) { // green
-        hue = (2.0f + (color[2] - color[0]) / (max - min));
+        hue = (2.0f + (color[2] - color[0]) / (f32)(max - min));
     } else {                      // blue
-        hue = (4.0f + (color[0] - color[1]) / (max - min));
+        hue = (4.0f + (color[0] - color[1]) / (f32)(max - min));
     }
     if (hue < 0.0f) hue += 6.0f;
-    // this is the algorithm to convert from RGB to HSV
-    u8 h = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
-    u8 i =  (h >> 5); // We want a value of 0 thru 5
-    u8 f = ((h & 0x1F) << 3); // 'fractional' part of 'i' 0..248 in jumps
-    u8 pv = (0xFF -   s                    ); // pv will be in range 0 - 255
-    u8 qv = (0xFF - ((s *         f ) >> 8));
-    u8 tv = (0xFF - ((s * (0xFF - f)) >> 8));
+    // this is the algorithm to convert from RGB to HSV:
+    Color h = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
+    Color i =  (h >> 5);                                         // 0..5
+    Color f = ((h & 0x1F) << 3);                                 // 'fractional' part of 'i' 0..248 in jumps
+    Color pv = (0xFF -   s                    );                 // pv will be in range 0 - 255
+    Color qv = (0xFF - ((s *         f ) >> 8));
+    Color tv = (0xFF - ((s * (0xFF - f)) >> 8));
     switch (i) {
         case 0: color[0] = 0xFF; color[1] =   tv; color[2] =   pv; break;
         case 1: color[0] =   qv; color[1] = 0xFF; color[2] =   pv; break;

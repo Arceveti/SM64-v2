@@ -7,9 +7,9 @@ extern char *pAssertFile;
 extern int nAssertLine;
 extern char *pAssertExpression;
 extern int nAssertStopProgram;
-u16 fbFillColor = 0xFFFF;
+u16 fbFillColor   = 0xFFFF;
 u16 fbShadeColor = 0x0000;
-u16 *fbAddress = NULL;
+u16 *fbAddress   = NULL;
 extern u8 crashFont[];
 const char *szErrCodes[] = {
     "INTERRUPT",
