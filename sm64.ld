@@ -304,11 +304,11 @@ SECTIONS
    END_SEG(behavior)
 
    /* 0x8016F000 21D7D0-255EC0 [386F0] */
-#ifdef PRELIMINARY
+/* #ifdef PRELIMINARY */
    BEGIN_SEG(goddard, RAM_END - GODDARD_SIZE)
-#else
-   BEGIN_SEG(goddard, SEG_GODDARD) /* 0x80345678 */
-#endif
+/* #else
+   BEGIN_SEG(goddard, SEG_GODDARD)
+#endif */
    {
       KEEP(BUILD_DIR/src/menu*.o(.text));
       KEEP(BUILD_DIR/src/menu*.o(.data*));
