@@ -246,7 +246,7 @@ void puppycam_display_options() {
     puppycam_display_box(  48,  84, 272, 218, 0x0, 0x0, 0x0, 0x50);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    print_hud_lut_string(HUD_LUT_GLOBAL, 64, 40, (*gPCToggleStringsPtr)[2]); //! needs to be centered
+    print_hud_lut_string_centered(HUD_LUT_GLOBAL, (SCREEN_WIDTH/2), 40, (*gPCToggleStringsPtr)[2]); // was 64
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     if (gPCOptionCap > 4) {
         puppycam_display_box( 272,  84, 280, 218, 0x80, 0x80, 0x80, 0xFF);

@@ -135,9 +135,10 @@ void create_dl_translation_matrix(s8 pushOp,        f32 x, f32 y, f32 z);
 void create_dl_rotation_matrix(   s8 pushOp, f32 a, f32 x, f32 y, f32 z);
 void create_dl_ortho_matrix(void);
 void create_dl_scale_matrix(      s8 pushOp,        f32 x, f32 y, f32 z);
-void print_generic_string(           s16 x, s16 y, const u8 *str);
-void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str);
-void print_menu_generic_string(      s16 x, s16 y, const u8 *str);
+void print_generic_string(                    s16 x, s16 y, const u8 *str);
+void print_hud_lut_string(         s8 hudLUT, s16 x, s16 y, const u8 *str);
+void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const u8 *str);
+void print_menu_generic_string(               s16 x, s16 y, const u8 *str);
 void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8 maxIndex);
 #if defined(VERSION_US) || defined(VERSION_EU)
 s16 get_str_x_pos_from_center(s16 centerPos, u8 *str, f32 scale);

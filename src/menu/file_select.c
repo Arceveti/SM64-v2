@@ -1140,6 +1140,17 @@ void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const unsigned char *tex
 }
 
 /**
+ * Prints a centeredhud string depending of the hud table list defined with text fade properties.
+ */
+void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const unsigned char *text) {
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
+    print_hud_lut_string_centered(hudLUT, x, y, text);
+    gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
+}
+
+
+/**
  * Prints a generic white string with text fade properties.
  */
 void print_generic_string_fade(s16 x, s16 y, const unsigned char *text) {
@@ -1192,7 +1203,7 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
     }
 }
 
-#define SELECT_FILE_X    93
+#define SELECT_FILE_X   (SCREEN_WIDTH/2) // was 93
 #define SCORE_X          52
 #define COPY_X          117
 #define ERASE_X         177
@@ -1213,7 +1224,7 @@ void print_main_menu_strings(void) {
     // Print "SELECT FILE" text
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha);
-    print_hud_lut_string(HUD_LUT_DIFF, SELECT_FILE_X, 35, textSelectFile);
+    print_hud_lut_string_centered(HUD_LUT_DIFF, SELECT_FILE_X, 35, textSelectFile);
     // Print file star counts
     print_save_file_star_count(SAVE_FILE_A, SAVEFILE_X1,  78);
     print_save_file_star_count(SAVE_FILE_B, SAVEFILE_X2,  78);
@@ -1294,7 +1305,7 @@ void print_score_menu_strings(void) {
 }
 
 #define NOFILE_COPY_X  119
-#define COPY_FILE_X    104
+#define COPY_FILE_X    (SCREEN_WIDTH/2) // was 104
 #define COPYIT_WHERE_X 109
 #define NOSAVE_DATA_X2 101
 #define COPYCOMPLETE_X 110
@@ -1309,7 +1320,7 @@ void copy_menu_display_message(s8 messageID) {
             if (sAllFilesExist) {
                 print_generic_string_fade(NOFILE_COPY_X, 190, LANGUAGE_ARRAY(textNoFileToCopyFrom));
             } else {
-                print_hud_lut_string_fade(HUD_LUT_DIFF, COPY_FILE_X, 35, LANGUAGE_ARRAY(textCopyFile));
+                print_hud_lut_string_centered_fade(HUD_LUT_DIFF, COPY_FILE_X, 35, LANGUAGE_ARRAY(textCopyFile));
             }
             break;
         case COPY_MSG_COPY_WHERE:    print_generic_string_fade(COPYIT_WHERE_X, 190, LANGUAGE_ARRAY(textCopyItToWhere)  ); break;
@@ -1450,7 +1461,7 @@ void print_erase_menu_prompt(s16 x, s16 y) {
 //   US and EU   ---    JP
 // M a r i o   A --- マ リ オ Ａ
 // 0 1 2 3 4 5 6 --- 0 1 2 3
-#define ERASE_FILE_X     98
+#define ERASE_FILE_X     (SCREEN_WIDTH/2) // was 98
 #define NOSAVE_DATA_X3   100
 #define MARIO_ERASED_VAR 6
 #define MARIO_ERASED_X   100
@@ -1467,7 +1478,7 @@ void erase_menu_display_message(s8 messageID) {
     unsigned char textSavedDataExists[]   = { TEXT_SAVED_DATA_EXISTS        };
     switch (messageID) {
         case ERASE_MSG_MAIN_TEXT:
-            print_hud_lut_string_fade(HUD_LUT_DIFF, ERASE_FILE_X, 35, LANGUAGE_ARRAY(textEraseFile));
+            print_hud_lut_string_centered_fade(HUD_LUT_DIFF, ERASE_FILE_X, 35, LANGUAGE_ARRAY(textEraseFile));
             break;
         case ERASE_MSG_PROMPT:
             print_generic_string_fade(90, 190, LANGUAGE_ARRAY(textSure));

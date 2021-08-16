@@ -23,7 +23,7 @@
  * and a level select used for testing purposes.
  */
 
-#define STUB_LEVEL(textname, _1, _2, _3, _4, _5, _6, _7, _8) textname,
+#define STUB_LEVEL(  textname, _1, _2, _3, _4, _5, _6, _7, _8) textname,
 #define DEFINE_LEVEL(textname, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10) textname,
 
 static char sLevelSelectStageNames[64][16] = {
@@ -85,19 +85,12 @@ s32 run_level_id_or_demo(s32 level) {
  */
 s16 intro_level_select(void) {
     u32 index = 0;
-
     if (gPlayer1Controller->rawStickY < -60
      || gPlayer1Controller->rawStickX < -60
-     || gPlayer1Controller->buttonDown & (D_CBUTTONS | D_JPAD | L_CBUTTONS | L_JPAD)) {
-        index++;
-    }
-
+     || gPlayer1Controller->buttonDown & (D_CBUTTONS | D_JPAD | L_CBUTTONS | L_JPAD)) index++;
     if (gPlayer1Controller->rawStickY > 60
      || gPlayer1Controller->rawStickX > 60
-     || gPlayer1Controller->buttonDown & (U_CBUTTONS | U_JPAD | R_CBUTTONS | R_JPAD)) {
-        index += 2;
-    }
-
+     || gPlayer1Controller->buttonDown & (U_CBUTTONS | U_JPAD | R_CBUTTONS | R_JPAD)) index += 2;
     if (((index ^ gLevelSelectHoldKeyIndex) & index) == 2) {
         if (gCurrLevelNum > LEVEL_MAX) {
             gCurrLevelNum = LEVEL_MIN;
@@ -109,7 +102,6 @@ s16 intro_level_select(void) {
             gCurrLevelNum++;
         }
     }
-
     if (((index ^ gLevelSelectHoldKeyIndex) & index) == 1) {
         if (gCurrLevelNum < LEVEL_MIN) {
             // Same applies to here as above
@@ -122,7 +114,6 @@ s16 intro_level_select(void) {
             gCurrLevelNum--;
         }
     }
-
     if (gLevelSelectHoldKeyTimer == 10) {
         gLevelSelectHoldKeyTimer = 8;
         gLevelSelectHoldKeyIndex = 0;
@@ -130,23 +121,18 @@ s16 intro_level_select(void) {
         gLevelSelectHoldKeyTimer++;
         gLevelSelectHoldKeyIndex = index;
     }
-
     if ((index & 3) == 0) gLevelSelectHoldKeyTimer = 0;
-
     if (gCurrLevelNum > LEVEL_MAX) gCurrLevelNum = LEVEL_MIN; // exceeded max. set to min.
     if (gCurrLevelNum < LEVEL_MIN) gCurrLevelNum = LEVEL_MAX; // exceeded min. set to max.
-
     // Use file 4 and last act as a test
     gCurrSaveFileNum = 4;
-    gCurrActNum = 6;
-
+    gCurrActNum      = 6;
     print_text_centered(160, 80, "SELECT STAGE");
     print_text_centered(160, 30, "PRESS START BUTTON");
     print_text_fmt_int(  40, 60, "%2d", gCurrLevelNum);
     print_text(          80, 60, sLevelSelectStageNames[gCurrLevelNum - 1]); // print stage name
-
     // start being pressed signals the stage to be started. that is, unless...
-    if (gPlayer1Controller->buttonPressed & START_BUTTON || gPlayer1Controller->buttonPressed & A_BUTTON) {
+    if (gPlayer1Controller->buttonPressed & (START_BUTTON | A_BUTTON)) {
         // ... the level select quit combo is being pressed, which uses START. If this
         // is the case, quit the menu instead.
         if (gPlayer1Controller->buttonDown == (Z_TRIG | START_BUTTON | L_TRIG)) { // quit level select
@@ -164,19 +150,17 @@ s16 intro_level_select(void) {
  */
 s32 intro_regular(void) {
     s32 level = LEVEL_NONE;
-
 #ifndef VERSION_JP
     // When the game stars, gGlobalTimer is less than 129 frames,
     // so Mario greets the player. After that, he will always say
     // "press start to play" when it goes back to the title screen
     // (using SAVE AND QUIT)
     if (sPlayMarioGreeting) {
-        play_sound((gGlobalTimer < 129) ? SOUND_MARIO_HELLO : SOUND_MARIO_PRESS_START_TO_PLAY, gGlobalSoundSource);
+        play_sound(((gGlobalTimer < 129) ? SOUND_MARIO_HELLO : SOUND_MARIO_PRESS_START_TO_PLAY), gGlobalSoundSource);
         sPlayMarioGreeting = FALSE;
     }
 #endif
     print_intro_text();
-
     if (gPlayer1Controller->buttonPressed & START_BUTTON) {
         play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #if ENABLE_RUMBLE
@@ -186,7 +170,7 @@ s32 intro_regular(void) {
         // calls level ID 100 (or 101 adding level select bool value)
         // defined in level_intro_mario_head_regular JUMP_IF commands
         // 100 is File Select - 101 is Level Select
-        level = 100 + gDebugLevelSelect;
+        level = (100 + gDebugLevelSelect);
 #ifndef VERSION_JP
         sPlayMarioGreeting = TRUE;
 #endif
@@ -206,9 +190,7 @@ s32 intro_game_over(void) {
         sPlayMarioGameOver = FALSE;
     }
 #endif
-
     print_intro_text();
-
     if (gPlayer1Controller->buttonPressed & START_BUTTON) {
         play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #if ENABLE_RUMBLE

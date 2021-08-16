@@ -295,35 +295,40 @@ void print_generic_string(s16 x, s16 y, const u8 *str) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
-
 /**
- * Prints a hud string depending of the hud table list defined.
+ * Prints a char depending on the index of the hud table list defined.
  */
-void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
-    s32 strPos = 0;
+u32 print_hud_lut_char(s8 hudLUT, s16 x, s16 y, const u8 c) {
     void **hudLUT1 = segmented_to_virtual(menu_hud_lut); // Japanese Menu HUD Color font
     void **hudLUT2 = segmented_to_virtual(main_hud_lut); // 0-9 A-Z HUD Color Font
-    u32 curX = x;
-    u32 curY = y;
-    u32 xStride; // X separation
-    //? Shindou uses this.
-    xStride = ((hudLUT == HUD_LUT_JPMENU) ? 16 : 12); // HUD_LUT_GLOBAL
+    gDPPipeSync(gDisplayListHead++);
+    if (hudLUT == HUD_LUT_JPMENU) gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT1[c]);
+    if (hudLUT == HUD_LUT_GLOBAL) gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT2[c]);
+    gSPDisplayList(     gDisplayListHead++, dl_rgba16_load_tex_block);
+    gSPTextureRectangle(gDisplayListHead++, (x << 2), (y << 2), ((x + 16) << 2),
+                        ((y + 16) << 2), G_TX_RENDERTILE, 0, 0, (1 << 10), (1 << 10));
+    return ((hudLUT == HUD_LUT_JPMENU) ? 16 : 12);
+}
+
+/**
+ * Prints a hud string depending on the hud table list defined.
+ */
+void print_hud_lut_string(s8 hudLUT, s16 x, s16 y, const u8 *str) {
+    s32 strPos     = 0;
     while (str[strPos] != GLOBAR_CHAR_TERMINATOR) {
-        switch (str[strPos]) {
-            case GLOBAL_CHAR_SPACE:
-                curX += 8;
-                break;
-            default:
-                gDPPipeSync(gDisplayListHead++);
-                if (hudLUT == HUD_LUT_JPMENU) gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT1[str[strPos]]);
-                if (hudLUT == HUD_LUT_GLOBAL) gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, hudLUT2[str[strPos]]);
-                gSPDisplayList(     gDisplayListHead++, dl_rgba16_load_tex_block);
-                gSPTextureRectangle(gDisplayListHead++, (curX << 2), (curY << 2), ((curX + 16) << 2),
-                                    ((curY + 16) << 2), G_TX_RENDERTILE, 0, 0, (1 << 10), (1 << 10));
-                curX += xStride;
-        }
+        x += print_hud_lut_char(hudLUT, x, y, str[strPos]);
         strPos++;
     }
+}
+
+/**
+ * Prints a centered hud string depending on the hud table list defined.
+ */
+void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const u8 *str) {
+    s32 strPos, strLength = 0;
+    while (str[strLength] != GLOBAR_CHAR_TERMINATOR) strLength++;
+    x -= (strLength * ((hudLUT == HUD_LUT_JPMENU) ? 8 : 6));
+    for ((strPos = 0); (strPos < strLength); (strPos++)) x += print_hud_lut_char(hudLUT, x, y, str[strPos]);
 }
 
 

@@ -217,7 +217,7 @@ void print_course_number(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     int_to_str(gCurrCourseNum, courseNum);
-    print_hud_lut_string(HUD_LUT_GLOBAL, (gCurrCourseNum < 10) ? 152 : 143, 158, courseNum); // 1 or 2 digit number
+    print_hud_lut_string_centered(HUD_LUT_GLOBAL, ((SCREEN_WIDTH/2)-4), 158, courseNum); // was ((gCurrCourseNum < 10) ? 152 : 143), 1 or 2 digit number
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
