@@ -23,7 +23,7 @@
 #define NC_HIGHLIGHT_R 			_("<")
 #define NC_BUTTON_EN 			_("[R]: Options")
 #define NC_BUTTON2_EN 			_("[R]: Return")
-#define NC_OPTION_EN 			_("PUPPYCAM OPTIONS")
+#define NC_OPTION_EN 			_("CAMERA OPTIONS")
 
 #if defined(VERSION_EU)
 #define NC_CAMX_FR 				_("Sensibilite sur l'axe X")
@@ -68,8 +68,8 @@
 #define NC_BUTTON2_FR 			_("[R]: Retournez")
 #define NC_BUTTON2_DE 			_("[R]: Return")
 
-#define NC_OPTION_FR 			_("OPTIONS PUPPYCAM")
-#define NC_OPTION_DE 			_("PUPPYCAM OPTIONS")
+#define NC_OPTION_FR 			_("OPTIONS CAMERA")
+#define NC_OPTION_DE 			_("CAMERA OPTIONS")
 #endif
 #endif
 

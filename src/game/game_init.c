@@ -145,8 +145,8 @@ void init_rdp(void) {
  * Sets the initial RSP (Reality Signal Processor) settings.
  */
 void init_rsp(void) {
-    gSPClearGeometryMode(gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD);
-    gSPSetGeometryMode(  gDisplayListHead++, G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING);
+    gSPClearGeometryMode(gDisplayListHead++, (G_SHADE | G_SHADING_SMOOTH | G_CULL_BOTH | G_FOG | G_LIGHTING | G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR | G_LOD));
+    gSPSetGeometryMode(  gDisplayListHead++, (G_SHADE | G_SHADING_SMOOTH | G_CULL_BACK | G_LIGHTING));
     gSPNumLights(        gDisplayListHead++, NUMLIGHTS_1);
     gSPTexture(          gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
     // @bug Failing to set the clip ratio will result in warped triangles in F3DEX2
@@ -451,10 +451,10 @@ void adjust_analog_stick(struct Controller *controller) {
     controller->stickMag = sqrtf((controller->stickX * controller->stickX) + (controller->stickY * controller->stickY));
     // Magnitude cannot exceed 64.0f: if it does, modify the values
     // appropriately to flatten the values down to the allowed maximum value.
-    if (controller->stickMag > 64) {
+    if (controller->stickMag >  64) {
         controller->stickX  *= (64 / controller->stickMag);
         controller->stickY  *= (64 / controller->stickMag);
-        controller->stickMag = 64;
+        controller->stickMag =  64;
     }
 }
 
@@ -576,7 +576,7 @@ void init_controllers(void) {
     // only 2 are connected here. The third seems to have been reserved for debug
     // purposes and was never connected in the retail ROM, thus gPlayer3Controller
     // cannot be used, despite being referenced in various code.
-    for (cont = 0, port = 0; port < 4 && cont < 2; port++) {
+    for (((cont = 0), (port = 0)); ((port < 4) && (cont < 2)); (port++)) {
         // Is controller plugged in?
         if (gControllerBits & (1 << port)) {
             // The game allows you to have just 1 controller plugged
@@ -655,7 +655,7 @@ void thread5_game_loop(UNUSED void *arg) {
     gCameraSpeed = save_file_get_camera_speed();
 #endif
 #ifdef WIDE
-    gWidescreen = save_file_get_widescreen_mode();
+    gWidescreen  = save_file_get_widescreen_mode();
 #endif
     render_init();
     while (TRUE) {
@@ -705,9 +705,9 @@ void thread5_game_loop(UNUSED void *arg) {
             // subtract the end of the gfx pool with the display list to obtain the
             // amount of free space remaining.
 #ifdef HUD_LEADING_ZEROES
-            print_text_fmt_int(180, 8, "BUF %07d", (gGfxPoolEnd - (u8 *) gDisplayListHead));
+            print_text_fmt_int(180,  8, "BUF %07d", (gGfxPoolEnd - (u8 *) gDisplayListHead));
 #else
-            print_text_fmt_int(180, 20, "BUF %d", (gGfxPoolEnd - (u8 *) gDisplayListHead));
+            print_text_fmt_int(180, 20, "BUF %d",   (gGfxPoolEnd - (u8 *) gDisplayListHead));
 #endif
         }
     }

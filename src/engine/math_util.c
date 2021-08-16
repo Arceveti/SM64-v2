@@ -102,6 +102,34 @@ double Q_rsqrtd( double number ) {
 }
 #endif
 
+/************
+ * Rounding *
+ ************/
+
+/// Round `num` to the nearest `s32`.
+s32 round_float_to_int(f32 num) {
+    // Note that double literals are used here, rather than float literals.
+    return num + ((num >= 0.0f) ? 0.5f : -0.5f);
+}
+
+/// Round `num` to the nearest `s32`.
+s32 round_double_to_int(f64 num) {
+    // Note that double literals are used here, rather than float literals.
+    return num + ((num >= 0.0) ? 0.5 : -0.5);
+}
+
+/// Round `num` to the nearest `s16`.
+s16 round_float_to_short(f32 num) {
+    // Note that double literals are used here, rather than float literals.
+    return num + ((num >= 0.0f) ? 0.5f : -0.5f);
+}
+
+/// Round `num` to the nearest `s16`.
+s16 round_double_to_short(f64 num) {
+    // Note that double literals are used here, rather than float literals.
+    return num + ((num >= 0.0) ? 0.5 : -0.5);
+}
+
 /***********************************
  * Absolute value & sign functions *
  ***********************************/

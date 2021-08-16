@@ -356,9 +356,7 @@ void envfx_set_bubble_texture(s32 mode, s16 index) {
 Gfx *envfx_update_bubble_particles(s32 mode, UNUSED Vec3s marioPos, Vec3s camFrom, Vec3s camTo) {
     s32 i;
     s16 radius, pitch, yaw;
-    Vec3s vertex1;
-    Vec3s vertex2;
-    Vec3s vertex3;
+    Vec3s vertex1, vertex2, vertex3;
     Gfx *gfxStart;
     gfxStart = alloc_display_list((((sBubbleParticleMaxCount / 5) * 10) + sBubbleParticleMaxCount + 3) * sizeof(Gfx));
     if (gfxStart == NULL) return NULL;

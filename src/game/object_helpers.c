@@ -145,7 +145,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
     return NULL;
 }
 
-//! move to math_util
+//! move to math_util?
 void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
     register f32 relX   = obj->oParentRelativePosX;
     register f32 relY   = obj->oParentRelativePosY;
@@ -155,7 +155,7 @@ void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
     obj->oPosZ = ((relX * mtx[0][2]) + (relY * mtx[1][2]) + (relZ * mtx[2][2]) + mtx[3][2]);
 }
 
-//! move to math_util
+//! move to math_util?
 void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
     dst[0][0] = (src[0][0] * obj->header.gfx.scale[0]);
     dst[1][0] = (src[1][0] * obj->header.gfx.scale[1]);

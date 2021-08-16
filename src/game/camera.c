@@ -2917,7 +2917,7 @@ s32 update_camera_hud_status(struct Camera *c) {
     return status;
 }
 
-//! move to math_util?
+//! move to math_util
 s32 clamp_pitch(Vec3f from, Vec3f to, s16 maxPitch, s16 minPitch) {
     s32 outOfRange = 0;
     s16 pitch, yaw;
@@ -2955,7 +2955,7 @@ void set_or_approach_vec3f_asymptotic(Vec3f dst, Vec3f goal, f32 xMul, f32 yMul,
     set_or_approach_f32_asymptotic(&dst[2], goal[2], zMul);
 }
 
-//! move to math_util?
+//! move to math_util
 s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) {
     s16 dist = (target - *current);
     if (increment < 0) increment = -increment;
@@ -2977,7 +2977,7 @@ s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) 
     return !(*current == target);
 }
 
-//! move to math_util?
+//! move to math_util
 s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
     s16 dist = (target - current);
     if (increment < 0) increment = -increment;
@@ -3009,7 +3009,7 @@ s32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
     return !(*current == target);
 }
 
-//! move to math_util?
+//! move to math_util
 /**
  * Approaches a value by a given increment, returns FALSE if the target is reached.
  * Appears to be a strange way of implementing approach_f32_symmetric from object_helpers.c.
@@ -3036,7 +3036,7 @@ s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) 
     return !(*current == target);
 }
 
-//! move to math_util?
+//! move to math_util
 /**
  * Nearly the same as the above function, this one returns the new value in place of a bool.
  */

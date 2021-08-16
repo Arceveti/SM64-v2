@@ -1714,9 +1714,9 @@ void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) { // sp6e is 20
 
 s16 render_course_complete_screen(void) {
     s16 index;
-#ifdef VERSION_EU
-    gInGameLanguage = eu_get_language();
-#endif
+// #ifdef VERSION_EU
+//     gInGameLanguage = eu_get_language();
+// #endif
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();

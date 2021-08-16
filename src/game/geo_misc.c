@@ -30,8 +30,8 @@
 #define NUM_FLYING_CARPET_VERTICES 21
 extern const s16 flying_carpet_static_vertex_data[NUM_FLYING_CARPET_VERTICES];
 
-static s16 sCurAreaTimer = 1;
-static s16 sPrevAreaTimer = 0;
+static s16 sCurAreaTimer            = 1;
+static s16 sPrevAreaTimer           = 0;
 static s16 sFlyingCarpetRippleTimer = 0;
 
 s8 gFlyingCarpetState;
@@ -60,14 +60,6 @@ void make_vertex(Vtx *vtx, s32 n, f32 x, f32 y, f32 z, s16 tx, s16 ty, u8 r, u8 
     vtx[n].v.cn[1] = g;
     vtx[n].v.cn[2] = b;
     vtx[n].v.cn[3] = a;
-}
-
-/**
- * Round `num` to the nearest `s16`.
- */
-s16 round_float(f32 num) {
-    // Note that double literals are used here, rather than float literals.
-    return num + ((num >= 0.0) ? 0.5 : -0.5);
 }
 
 /**
@@ -131,13 +123,13 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
         verts            = alloc_display_list(NUM_FLYING_CARPET_VERTICES * sizeof(*verts));
         displayList      = alloc_display_list(7 * sizeof(*displayList));
         displayListHead  = displayList;
-        if (verts == NULL || displayList == NULL) return NULL;
-        generatedNode->fnNode.node.flags = (generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8);
-        for (n = 0; n <= 20; n++) {
-            row = n / 3;
-            col = n % 3;
-            x   = vertexData[n * 4 + 0];
-            y   = round_float(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
+        if ((verts == NULL) || (displayList == NULL)) return NULL;
+        generatedNode->fnNode.node.flags = ((generatedNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
+        for ((n = 0); (n <= 20); (n++)) {
+            row = (n / 3);
+            col = (n % 3);
+            x   = vertexData[(n * 4) + 0];
+            y   = round_float_to_short(sins(sFlyingCarpetRippleTimer + (row << 12) + (col << 14)) * 20.0f);
             z   = vertexData[(n * 4) + 1];
             tx  = vertexData[(n * 4) + 2];
             ty  = vertexData[(n * 4) + 3];
@@ -191,7 +183,7 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED f3
         }
 #endif
 #else
-        gSPDisplayList(displayListHead++, dl_cake_end_screen);
+        gSPDisplayList(   displayListHead++, dl_cake_end_screen);
 #endif
         gSPEndDisplayList(displayListHead);
     }

@@ -43,6 +43,11 @@ extern f32 gSineTable[];
 float slow_logf(float x);
 float slow_expf(float x);
 float slow_powf(float base, float exponent);
+// Rounding
+s32 round_float_to_int(f32 num);
+s32 round_double_to_int(f64 num);
+s16 round_float_to_short(f32 num);
+s16 round_double_to_short(f64 num);
 // Sign functions
 s32  signum_positive(s32 x);
 f64  absd(f64 x);
