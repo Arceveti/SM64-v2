@@ -3887,7 +3887,7 @@ void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3s rotation) {
     //! The Z axis is flipped here.
     pitchRotated[2] = -((to[2] * coss(rotation[0])) - (to[1] * sins(rotation[0])));
     pitchRotated[1] =  ((to[2] * sins(rotation[0])) + (to[1] * coss(rotation[0])));
-    pitchRotated[0] =   to[0];
+    pitchRotated[0] =    to[0];
     // Rotate again by rotation's yaw
     dst[0] = (from[0] + (pitchRotated[2] * sins(rotation[1])) + (pitchRotated[0] * coss(rotation[1])));
     dst[1] = (from[1] +  pitchRotated[1]);
@@ -7783,9 +7783,6 @@ void cutscene_double_doors_end(struct Camera *c) {
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
 }
 
-void cutscene_enter_painting_stub(UNUSED struct Camera *c) {
-}
-
 /**
  * Plays when Mario enters a painting. The camera flies up to the painting's center, then it slowly
  * zooms in until the star select screen appears.
@@ -7795,7 +7792,6 @@ void cutscene_enter_painting(struct Camera *c) {
     Vec3f paintingPos, focus, focusOffset;
     Vec3s paintingAngle;
     f32 floorHeight;
-    cutscene_event(cutscene_enter_painting_stub, c, 0, 0);
     // Zoom in
     set_fov_function(CAM_FOV_APP_20);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
@@ -7803,15 +7799,16 @@ void cutscene_enter_painting(struct Camera *c) {
         paintingAngle[0] = 0x0;
         paintingAngle[1] = (s32)((gRipplingPainting->yaw / 360.0f) * 65536.0f); // convert degrees to IAU
         paintingAngle[2] = 0x0;
-        focusOffset[0]   = gRipplingPainting->size / 2;
+        focusOffset[0]   = (gRipplingPainting->size / 2);
         focusOffset[1]   = focusOffset[0];
         focusOffset[2]   = 0;
+        //! vec3f_copy?
         paintingPos[0]   = gRipplingPainting->posX;
         paintingPos[1]   = gRipplingPainting->posY;
         paintingPos[2]   = gRipplingPainting->posZ;
         offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
         approach_vec3f_asymptotic(c->focus, focus, 0.1f, 0.1f, 0.1f);
-        focusOffset[2] = (((gRipplingPainting->size * 1000.0f) / 2.0f) / 307.0f);
+        focusOffset[2] = -(((gRipplingPainting->size * 1000.0f) / 2.0f) / 307.0f);
         offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
         floorHeight = (find_floor(focus[0], focus[1] + 500.0f, focus[2], &highFloor) + 125.0f);
         if (focus[1] < floorHeight) focus[1] = floorHeight;
