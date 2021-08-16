@@ -121,8 +121,8 @@ void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 n
     f32 nX2  =  sqr(nX);
     f32 nZ2  =  sqr(nZ);
     f32 nXZ2 =  nX2 + nZ2;
-    *objYawX = (nZ2 - nX2) * velX / nXZ2 - 2 * velZ * (nX * nZ) / nXZ2;
-    *objYawZ = (nX2 - nZ2) * velZ / nXZ2 - 2 * velX * (nX * nZ) / nXZ2;
+    *objYawX = ((nZ2 - nX2) * velX / nXZ2 - 2 * velZ * (nX * nZ) / nXZ2);
+    *objYawZ = ((nX2 - nZ2) * velZ / nXZ2 - 2 * velX * (nX * nZ) / nXZ2);
 }
 
 /**
@@ -134,8 +134,8 @@ s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
     hitbox.x       = objNewX;
     hitbox.y       = objY;
     hitbox.z       = objNewZ;
-    hitbox.offsetY = o->hitboxHeight / 2;
-    hitbox.radius  = o->hitboxRadius;
+    hitbox.offsetY = (o->hitboxHeight / 2);
+    hitbox.radius  =  o->hitboxRadius;
     if (find_wall_collisions(&hitbox) != 0) {
         o->oPosX    = hitbox.x;
         o->oPosY    = hitbox.y;

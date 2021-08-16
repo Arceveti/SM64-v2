@@ -350,7 +350,10 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     for (i = 0; i < upperWall.numWalls; i++) {
         wallDYaw = (atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x) - m->faceAngle[1]);
         // absWallDYaw = ((wallDYaw < 0) ? -wallDYaw : wallDYaw);
-        // if (absWallDYaw > oldWallDYaw) oldWallDYaw = absWallDYaw;
+        // if (absWallDYaw > oldWallDYaw) {
+        //     oldWallDYaw = absWallDYaw;
+        //     m->wall = upperWall.walls[i];
+        // }
         m->wall = upperWall.walls[i];
         if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) continue;
         if ((wallDYaw <= -0x2AAA) && (wallDYaw >= -0x5555)) continue;

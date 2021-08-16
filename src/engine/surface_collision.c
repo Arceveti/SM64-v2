@@ -106,13 +106,13 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         // Edge 1-2
         if (v0y != 0.0f) {
             v = (v2y / v0y);
-            if (v < 0.0f || v > 1.0f) goto edge_1_3;
+            if ((v < 0.0f) || (v > 1.0f)) goto edge_1_3;
             d00 = ((v0x * v) - v2x);
             d01 = ((v0z * v) - v2z);
             invDenom = sqrtf((d00 * d00) + (d01 * d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_1_3;
-            invDenom = offset / invDenom; // fast invsqrt?
+            invDenom = (offset / invDenom); // fast invsqrt?
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -126,7 +126,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         // Edge 1-3
         if (v1y != 0.0f) {
             v = (v2y / v1y);
-            if (v < 0.0f || v > 1.0f) goto edge_2_3;
+            if ((v < 0.0f) || (v > 1.0f)) goto edge_2_3;
             d00 = ((v1x * v) - v2x);
             d01 = ((v1z * v) - v2z);
             invDenom = sqrtf((d00 * d00) + (d01 * d01));
@@ -383,15 +383,15 @@ static f32 get_surface_height_at_location(s32 x, s32 z, struct Surface *surf) {
 
 #ifdef BETTER_WALL_COLLISION
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
-    register f32 diff_x   = target1[0] - *x + target2[0] - *x;
-    register f32 diff_z   = target1[2] - *z + target2[2] - *z;
+    register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
+    register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
 #ifdef FAST_INVSQRT
     register f32 invDenom = margin * Q_rsqrtf((diff_x * diff_x) + (diff_z * diff_z));
 #else
     register f32 invDenom = margin / sqrtf((diff_x * diff_x) + (diff_z * diff_z));
 #endif
-    *x      += (diff_x * invDenom);
-    *z      += (diff_z * invDenom);
+    *x += (diff_x * invDenom);
+    *z += (diff_z * invDenom);
 }
 #endif
 
@@ -424,7 +424,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
             continue;
         }
 #ifdef NEW_WATER_SURFACES
-        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+        if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
 #endif
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];

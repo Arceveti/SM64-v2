@@ -410,6 +410,12 @@
 #define SMOOTH_WATER_FLOOR_PITCH
 // Mario's squish scale is smooth rather than being instantly set (Arceveti)
 #define SMOOTH_SQUISH
+// Improved hanging which doesn't require holding down the A button (Arceveti)
+#define EASIER_HANGING
+// The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
+// #define SKIP_GROUND_LOWER_WALL
+// Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
+#define BETTER_CEILING_HANDLING
 // Improved wall collision detection, with rounded corners
 // Fixes Mario jittering when walking into multiple walls at once
 // (frameperfection/Frame#5375)
@@ -421,12 +427,6 @@
 // (Arceveti)
 #define UNDERWATER_STEEP_FLOORS_AS_WALLS
 #define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
-// The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
-// #define SKIP_GROUND_LOWER_WALL
-// Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
-#define BETTER_CEILING_HANDLING
-// Improved hanging which doesn't require holding down the A button (Arceveti)
-#define EASIER_HANGING
 
 // Number of ground steps per frame (Vanilla is 4)
 #define GROUND_NUM_STEPS 4

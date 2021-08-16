@@ -5083,7 +5083,7 @@ s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, s16 *avoidYaw, s16 
                     && !is_surf_within_bounding_box(wall, -1.0f, 150.0f, -1.0f)) {
                     // Calculate the avoid direction. The function returns the opposite direction so add 180
                     // degrees.
-                    *avoidYaw = calc_avoid_yaw(yawFromMario, wallYaw) + DEGREES(180);
+                    *avoidYaw = (calc_avoid_yaw(yawFromMario, wallYaw) + DEGREES(180));
                     camera_approach_s16_symmetric_bool(avoidYaw, horWallNorm, yawRange);
                     status = 3;
                     step   = 8;

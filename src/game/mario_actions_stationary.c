@@ -260,9 +260,9 @@ s32 act_standing_against_wall(struct MarioState *m) {
     if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
     if (m->input & INPUT_FIRST_PERSON) return set_mario_action(m, ACT_FIRST_PERSON    , 0);
     if (m->input & INPUT_B_PRESSED   ) return set_mario_action(m, ACT_PUNCHING        , 0);
-#ifdef BETTER_WALL_COLLISION
-    if (m->wall == NULL) return set_mario_action(m, ACT_IDLE, 0);
-#endif
+// #ifdef BETTER_WALL_COLLISION
+//     if (m->wall == NULL) return set_mario_action(m, ACT_IDLE, 0);
+// #endif
     set_mario_animation(m, MARIO_ANIM_STAND_AGAINST_WALL);
     stationary_ground_step(m);
     return FALSE;
