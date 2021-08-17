@@ -594,15 +594,25 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
+#ifdef POWER_STARS_HEAL
+        m->hurtCounter   = 0;
+        m->healCounter   = 31;
+#ifdef BREATH_METER
+        m->breathCounter = 31;
+#endif
+        if (!noExit) {
+#else
         if (!noExit) {
             m->hurtCounter   = 0;
             m->healCounter   = 0;
 #ifdef BREATH_METER
             m->breathCounter = 0;
 #endif
+#endif
             if (m->capTimer > 1) m->capTimer = 1;
+        } else {
+            starGrabAction = ACT_STAR_DANCE_NO_EXIT;
         }
-        if (noExit) starGrabAction = ACT_STAR_DANCE_NO_EXIT;
         if ((m->action & ACT_FLAG_SWIMMING) || (m->action & ACT_FLAG_METAL_WATER)) starGrabAction = ACT_STAR_DANCE_WATER;
 #ifdef AIR_STAR_DANCE
         if (m->action & ACT_FLAG_AIR) starGrabAction = ((m->pos[1] < (m->floorHeight + 1024.0f)) ? ACT_FALL_AFTER_STAR_GRAB : ACT_STAR_DANCE_WATER);

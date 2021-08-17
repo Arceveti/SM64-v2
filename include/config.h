@@ -372,6 +372,9 @@
 // Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
 #define MUSHROOMS_HEAL
 
+// Collecting a Power Star will fully heal Mario (Arceveti)
+#define POWER_STARS_HEAL
+
 // Koopa Shell boxes respawn (Arceveti)
 #define KOOPA_SHELL_BOXES_RESPAWN
 

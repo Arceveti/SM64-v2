@@ -91,13 +91,13 @@ void king_bobomb_act_grabbed_mario(void) { // act 3
             o->oKingBobombPlayerGrabEscapeActions += player_performed_grab_escape_action();
             print_debug_bottom_up("%d", o->oKingBobombPlayerGrabEscapeActions);
             if (o->oKingBobombPlayerGrabEscapeActions > 10) {
-                o->oKingBobombHoldingMarioState = HELD_DROPPED;
-                o->oAction = KING_BOBOMB_ACT_ACTIVE;
+                o->oKingBobombHoldingMarioState        = HELD_DROPPED;
+                o->oAction                             = KING_BOBOMB_ACT_ACTIVE;
                 o->oKingBobombPlayerGrabEscapeCooldown = 35;
-                o->oInteractStatus &= ~(INT_STATUS_GRABBED_MARIO);
+                o->oInteractStatus                    &= ~(INT_STATUS_GRABBED_MARIO);
             } else {
                 o->oForwardVel = 3.0f;
-                if (o->oKingBobombStationaryTimer > 20 && cur_obj_rotate_yaw_toward(0, 0x400)) {
+                if ((o->oKingBobombStationaryTimer > 20) && cur_obj_rotate_yaw_toward(0, 0x400)) {
                     o->oSubAction = KING_BOBOMB_SUB_ACT_GRABBED_MARIO_THROW;
                     cur_obj_init_animation_and_anim_frame(KING_BOBOMB_ANIM_THROW_MARIO, 22);
                 }
@@ -175,7 +175,7 @@ void king_bobomb_act_stop_music(void) { // act 8
 }
 
 void king_bobomb_act_been_thrown(void) { // act 4
-    if (o->oPosY - o->oHomeY > -100.0f) { // not thrown off hill
+    if ((o->oPosY - o->oHomeY) > -100.0f) { // not thrown off hill
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             o->oHealth--;
             o->oForwardVel = 0.0f;
@@ -215,7 +215,7 @@ void king_bobomb_act_return_home(void) { // act 5
             break;
         case KING_BOBOMB_SUB_ACT_RETURN_HOME_LANDING:
             cur_obj_init_animation_and_extend_if_at_end(KING_BOBOMB_ANIM_JUMP);
-            if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
+            if ((o->oVelY < 0.0f) && (o->oPosY < o->oHomeY)) {
                 o->oPosY                = o->oHomeY;
                 o->oVelY                =  0.0f;
                 o->oForwardVel          =  0.0f;

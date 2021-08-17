@@ -80,7 +80,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Fixed bomb clip (Arceveti) *
 - Signs and NPCs are easier to talk to (Arceveti) *
 - An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
-- Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
+- Collecting a Power Star or 1-Up Mushroom will fully heal Mario (Arceveti) *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
 - Respawning Koopa shell boxes (Arceveti) *
 - [Allow for retries on collecting the remaining blue coins from a blue coin switch](https://i.imgur.com/YbEgPEt.png) (Arceveti) *

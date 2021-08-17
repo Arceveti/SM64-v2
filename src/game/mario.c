@@ -981,6 +981,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(210,  88,  "RY %d", ((m->faceAngle[1] * 45.0f) / 8192.0f));
                 print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
                 print_text_fmt_int(210,  56,  "MY %d", ((atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f));
+                // print_text_fmt_int(210,  40,  "MY %d", ((m->area->camera->yaw * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  56, "VEL", 0);
                 // STA short for "status," the official action name via SMS map.
                 print_text_fmt_int(210,  40, "STA %x", (m->action & ACT_ID_MASK));

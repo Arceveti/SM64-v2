@@ -56,7 +56,6 @@
     - Only load collision for the current room
         - Separate function for finding current room
 - Objects:
-    - Non-exit power stars replenish health/breath
     - Make step height per-object
 - Physics:
     - Gravity direction support

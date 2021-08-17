@@ -424,8 +424,8 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWa
     // Only ledge grab if the wall displaced Mario in the opposite direction of
     // his velocity.
     if (((displacementX * m->vel[0]) + (displacementZ * m->vel[2])) > 0.0f) returnedWall = grabbedWall;
-    ledgePos[0] = (nextPos[0] - (wall->normal.x * 51.2f));
-    ledgePos[2] = (nextPos[2] - (wall->normal.z * 51.2f));
+    ledgePos[0] = (nextPos[0] - (wall->normal.x * 60.0f));
+    ledgePos[2] = (nextPos[2] - (wall->normal.z * 60.0f));
     ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + 100.0f), ledgePos[2], ledgeFloor);
     if ((ledgeFloor == NULL)
      || (ledgePos[1] < (nextPos[1] + 80.0f))

@@ -3,7 +3,7 @@
 s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
     f32 dx           = (dest[0] - src[0]);
     f32 dz           = (dest[2] - src[2]);
-    f32 planarDist   = sqrtf((dx * dx) + (dz * dz)); //! fast invsqrt?
+    f32 planarDist   = sqrtf(sqr(dx) + sqr(dz));
     s32 time;
     o->oMoveAngleYaw = atan2s(dz, dx);
     o->oVelY         = yVel;
@@ -38,11 +38,11 @@ void bhv_grand_star_loop(void) {
         }
         cur_obj_move_using_fvel_and_gravity();
         if (o->oSubAction == GRAND_STAR_SUB_ACT_START_JUMP) {
-            if (o->oPosY < o->oHomeY) {
+            if (o->oPosY       < o->oHomeY) {
                 o->oPosY       = o->oHomeY;
                 o->oVelY       = 60.0f;
                 o->oForwardVel = 0.0f;
-                o->oSubAction = GRAND_STAR_SUB_ACT_CONTINUE_JUMP;
+                o->oSubAction  = GRAND_STAR_SUB_ACT_CONTINUE_JUMP;
                 cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR_JUMP);
             }
         } else if (o->oVelY < 0.0f && o->oPosY < o->oHomeY + 200.0f) {
