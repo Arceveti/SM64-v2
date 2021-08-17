@@ -162,187 +162,243 @@
 #define IA8_COINS
 // Use a much better implementation of reverb over vanilla's fake echo reverb. Great for caves or eerie levels, as well as just a better audio experience in general.
 // Reverb parameters can be configured in audio/synthesis.c to meet desired aesthetic/performance needs.
-//#define BETTER_REVERB
+// #define BETTER_REVERB
 
 // If you want to change the extended boundaries mode, go to engine/extended_bounds.h and change EXTENDED_BOUNDS_MODE
 
-// -- SM64v2 specific settings --
 
-// -- Graphics --
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- SM64v2 specific settings --                                                                                               *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+
+/****************************************************************
+ * Graphics                                                     *
+ ****************************************************************/
 
 // Fixes the game reading the ia8 burn smoke texture as an rgba16
 #define BURN_SMOKE_FIX
+
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
+
 // Higher resolution coins rotating at 30 FPS (Arceveti)
 #define IA8_30FPS_COINS
+
 // Mario's silhouette when behind solid objects/surfaces
 // Also enables new render layers
 // (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti)
 #define SILHOUETTE
+
 // Use 64x64 quarter shadow textures instead of 16x16 (Arceveti)
 #define HD_SHADOW
+
 // Animate Bowser 3's rainbow effect (Arceveti)
 #define RAINBOW_BOWSER
+
 // Overlay effects (Arceveti)
 #define ENABLE_SCREEN_TINT_EFFECTS
-
-// -- The following require ENABLE_SCREEN_TINT_EFFECTS -- 
-#ifdef ENABLE_SCREEN_TINT_EFFECTS
 // - Red flash when damaged
 // - Yellow flashed when shocked
 #define DAMAGE_SCREEN_TINT
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
 #define ENVIRONMENT_SCREEN_TINT
-#endif
 
 // Read the framebuffer to the metal cap texture to make it look reflective (mks#2512, Rovert, Arceveti)
 #define METAL_CAP_REFLECTION
-
-// -- The following require METAL_CAP_REFLECTION --
-#ifdef METAL_CAP_REFLECTION
-// Overlay a shine texture over the metal cap texture (Arceveti)
+// - Overlay a shine texture over the metal cap texture (Arceveti)
 #define METAL_CAP_REFLECTION_SHINE
-// Make the metal cap reflection grayscale so it looks like metal instead of glass (Arceveti)
+// - Make the metal cap reflection grayscale so it looks like metal instead of glass (Arceveti)
 #define METAL_CAP_REFLECTION_GRAYSCALE
-// Draw a lakitu sprite in the metal cap reflection when in first person mode to cover up the duplicate Mario
-// METAL_CAP_REFLECTION_GRAYSCALE is recommended because
-// the lakitu sprite is an ia8 for the cloud's transparency
-// (Arceveti)
+// - Draw a lakitu sprite in the metal cap reflection when in first person mode to cover up the duplicate Mario
+// - METAL_CAP_REFLECTION_GRAYSCALE is recommended because
+// - the lakitu sprite is an ia8 for the cloud's transparency
+// - (Arceveti)
 #define METAL_CAP_REFLECTION_LAKITU
-#endif
 
-// -- Vanilla Level Changes --
+
+/****************************************************************
+ * Vanilla level changes                                        *
+ ****************************************************************/
 
 // Adds a few extra objects to some levels
 // Mainly recovery hearts, 1-ups, & cap boxes
 // (Arceveti)
 #define BONUS_OBJECTS
+
 // Fixes various "impossible" coin locations throughout the gane (Arceveti)
 #define FIX_IMPOSSIBLE_COINS
+
 // Fixes the 1ups in the CCM slide shortcut (Arceveti)
 #define FIX_CCM_SLIDE_1UPS
+
 // Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
+
 // Use painting data for the PSS painting instead of a static texture (Arceveti)
 // TODO: Painting Wobble
 #define PSS_PAINTING
+
 // Makes the WF star spawn from the wall instead of existing already (AdyaGD)
 #define FIX_CANNONLESS
+
 // Re-implements and fixes unused SSL pillars cutscene
 // (SunlitSpace542, AloXado320/AloYuisabelle, Arceveti)
 #define SSL_PILLARS_CUTSCENE
+
 // Re-implements cracked ice in SL (SunlitSpace542, Arceveti)
 #define DEEP_FREEZE_CRACKED_ICE
+
 // Adds a visual moving water current to the warp behind the Bowser's Sub door in DDD (Arceveti)
 #define DDD_WARP_CURRENT_TEXTURE
+
 // Disables the ambient rising/lowering water level in WDW and areas with a variable water level,
 // since it can cause subtle nausea.
 // (Arceveti)
 #define WDW_DISABLE_AMBIENT_WAVES
 
-// -- Bugfixes --
 
-// Makes obj_resolve_object_collisions work consistently (Arceveti)
-#define FIX_OBJ_COLLISIONS
-// Makes bhv_init_room only check static surfaces, since dynamic surfaces aren't assigned a room (Arceveti)
-#define FIX_BHV_INIT_ROOM
-// Fix DDD water rings (Arceveti)
-#define FIX_WATER_RINGS
-// Fix bomb clip
-#define FIX_BOMB_CLIP
-// Detect Mario's collision with lava regardless of action (Arceveti)
-#define FIX_LAVA_INTERACTION
-
-// -- Optimizations --
+/****************************************************************
+ * Optimizations                                                *
+ ****************************************************************/
 
 // Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
 #define UNIMPORTANT_OBJECTS
+
 // geo_switch_area always uses Mario's floor instead of looking for intangible floors.
 // when this is disabled, the game will still only try to find a new floor if there is
 // an intangible floor in the current cell
 // #define SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
+
 // Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
 // Use fast inverse square root for mtxf_lookat
 #define FAST_INVSQRT_MTXF_LOOKAT
+
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
 
-// -- Hacker QoL --
+
+/****************************************************************
+ * Hacker QoL                                                   *
+ ****************************************************************/
 
 // Enable debug level select (doesn't work if Goddard is skipped)
 #define DEBUG_LEVEL_SELECT
+
 // Enable debug info with info for velocity and info for floors/ceilings/walls
 // [COMPLETE_EN_US_SEGMENT2 is recommended]
 // (Arceveti)
 #define DEBUG_INFO
+
 // Debug Free Move by pressind Dpad up (Arceveti)
 #define ENABLE_DEBUG_FREE_MOVE
-// Vertical quicksand support (Wiseguy)
-#define WALL_QUICKSAND
-// Water surfaces (Thecozies)
-// #define NEW_WATER_SURFACES
+
+// Enables sSegmentROMTable (Arthurtilly?)
+#define SEGMENT_ROM_TABLE
+
+
+/****************************************************************
+ * HUD                                                          *
+ ****************************************************************/
+
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 // #define COMPLETE_EN_US_SEGMENT2
+
 // Include the backup missing segment2 characters.
 // This does not require building from the other ROM versions
 // (Arcevet)
 #define BACKUP_SEGMENT2
-// Enables sSegmentROMTable (Arthurtilly?)
-#define SEGMENT_ROM_TABLE
 
-// -- HUD/Gameplay QoL --
-
-// Slightly modified version of Reonu Cam 3 (Reonu)
-#define REONU_CAM_3
-// Camera approaches Mario's height much more quickly (Reonu)
-#define FAST_VERTICAL_CAMERA_MOVEMENT
-// Makes signs and NPCs easier to talk to (Arceveti)
-#define EASIER_DIALOG_TRIGGER
-// Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
-#define DIALOG_INDICATOR
-// Display number of Red Coins collected on the HUD (Arceveti)
-#define HUD_RED_COINS
-// Display number of Secrets collected on the HUD [COMPLETE_EN_US_SEGMENT2 is recommended] (Arceveti)
-#define HUD_SECRETS
-// Adds leading zeroes to the counters on the HUD (Arceveti)
-#define HUD_LEADING_ZEROES
-// Show Bowser Key on the castle pause menu
-#define PAUSE_BOWSER_KEYS
-// Fade warps have a particle effect to show where they are (Arceveti)
-#define VISIBLE_FADE_WARPS
 // Air/Breath meter is separate from health meter when underwater (Arceveti)
 #define BREATH_METER
 
-// -- Object Behaviors --
+// Display number of Red Coins collected on the HUD (Arceveti)
+#define HUD_RED_COINS
+
+// Display number of Secrets collected on the HUD [COMPLETE_EN_US_SEGMENT2 is recommended] (Arceveti)
+#define HUD_SECRETS
+
+// Adds leading zeroes to the counters on the HUD (Arceveti)
+#define HUD_LEADING_ZEROES
+
+// Show Bowser Key on the castle pause menu
+#define PAUSE_BOWSER_KEYS
+
+
+/****************************************************************
+ * Camera                                                       *
+ ****************************************************************/
+
+// Slightly modified version of Reonu Cam 3 (Reonu)
+#define REONU_CAM_3
+
+// Camera approaches Mario's height much more quickly (Reonu)
+#define FAST_VERTICAL_CAMERA_MOVEMENT
+
+
+/****************************************************************
+ * Object behaviors                                             *
+ ****************************************************************/
+
+// Makes obj_resolve_object_collisions work consistently (Arceveti)
+#define FIX_OBJ_COLLISIONS
+
+// Makes signs and NPCs easier to talk to (Arceveti)
+#define EASIER_DIALOG_TRIGGER
+
+// Show an "A" when Mario is able to talk [requires EASIER_DIALOG_TRIGGER] (Arceveti)
+#define DIALOG_INDICATOR
+
+// Fade warps have a particle effect to show where they are (Arceveti)
+#define VISIBLE_FADE_WARPS
 
 // Step height for objects. Comment out the define to use vanilla behavior. (Arceveti)
 #define OBJ_STEP_HEIGHT 32.0f
+
+// Fix DDD water rings (Arceveti)
+#define FIX_WATER_RINGS
+
+// Fix bomb clip
+#define FIX_BOMB_CLIP
+
 // Collecting a 1-Up Mushroom will fully heal Mario (Arceveti)
 #define MUSHROOMS_HEAL
+
 // Koopa Shell boxes respawn (Arceveti)
 #define KOOPA_SHELL_BOXES_RESPAWN
+
 // The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti)
 #define CONTROLLABLE_PLATFORM_SPEED
+
 // Allows for retries on collecting the remaining blue coins from a blue coin switch (Arceveti)
 #define BLUE_COIN_SWITCH_RETRY
+
 // Unagi's and Klepto's star becomes transparent after it's collected like other stars (SunlitSpace542)
 #define HELD_TRANSPARENT_STAR
+
 // Clams don't hurt Mario unless they are moving (opening/closing) (Arceveti)
 #define CLAMS_ONLY_HURT_WHEN_MOVING
+
 // Moving Coins flicker and disappear when they hit lava instead of being instantly deleted (Arceveti)
 #define COIN_LAVA_FLICKER
+
 // Tiny Goombas (from THI) always drop their coin (Arceveti)
 #define TINY_GOOMBA_ALWAYS_DROPS_COIN
+
 // Leaf particles occasionally fall from trees which contain Hoot (Arceveti)
 #define HOOT_TREE_PARTICLES
+
 // Reimplement the unused sad eye texture for the mother penguin
 #define PENGUIN_MOTHER_SAD_EYES
+
 // Makes bowser throws more lenient (Arceveti)
 #define LENIENT_BOWSER_THROWS
 
@@ -350,82 +406,48 @@
 // Vanilla is 5
 // Arceveti
 #define CHAIN_CHOMP_NUM_PARTS 5
+
 // The number of parts Pokey has, including the head
 // Vanilla is 5, max is 30
 // (Arceveti)
-#define POKEY_NUM_PARTS 5
+#define POKEY_NUM_PARTS       5
+
 // The number of segments Wiggler has, not including the head
 // Vanilla is 4. Visual bugs start appearing in the pause menu at about 20ish,
 // in-game at about 24ish, and crashes at about 28ish or higher.
 // (Arceveti)
-#define WIGGLER_NUM_SEGMENTS 4
+#define WIGGLER_NUM_SEGMENTS  4
 
-// -- Movement/Collision --
 
-// Lets Mario transition from more actions to more other actions (Arceveti)
-#define ACTION_CANCELS
-// Fixes turning around on the ground (Arceveti)
-#define GROUND_TURN_FIX
-// Allows for turning in midair (Arceveti)
-#define AIR_TURN
-// Mario's falling speed affects his horizontal movement speed.
-// This makes Mario's falling feel more realistic, but might 
-// occasionally feel restrictive.
-// This only has an effect if AIR_TURN is enabled.
-// (Arceveti)
-// #define GRAVITY_DRAG
-// Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
-#define HOOT_YAW_FIX
-// Mario can move sideways on ledges (Arceveti)
-#define LEDGE_SIDLE
-// Unique wall slide which takes horizontal momentum into account (Arceveti)
-#define WALL_SLIDE
-// Hold A when bouncing on an enemy to go higher (Arceveti)
-#define BOUNCE_BOOST
-// Hold Z while twirling to descend faster (Arceveti)
-#define Z_TWIRL
-// Enables the shindou pole fix and allows Mario to
-// swing around poles when grabbing them (Arceveti)
-#define POLE_SWING
-// Faster Crouching animation (Arceveti)
-#define FAST_CROUCHING
-// Underwater Ground pound similar to SMO (Unknown)
-#define AIR_STAR_DANCE
-// Makes it slightly easier to stay on narrow platforms (Arceveti)
-#define LEDGE_PROTECTION
-// Fixes false ledge grabs
-// Does nothing if BETTER_WALL_COLLISION is enabled.
-// (Arceveti)
-#define LEDGE_GRAB_FIX
-// Ground pound dive similar to SMO, can also be used to cancel
-// a ground pound if the analog stick is held back (Arceveti)
-#define GROUND_POUND_DIVE
-// Do air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti)
-#define GROUND_POUND_AIR_STEP
-// Prevents bonks when ground pounding next to a wall (Arceveti)
-#define GROUND_POUND_WALL_FIX
-// Don't fall after star grab if the floor is too far below (Arceveti)
-#define GROUND_POUND_JUMP
-// Ground pound jump similar to SMO (Unknown)
-#define WATER_GROUND_POUND
-// Makes jumping out of water easier (Arceveti)
-#define BETTER_WATER_JUMP
-// Makes the underwater koopa shell action last forever until the player cancels it (Arceveti)
-#define INFINITE_WATER_SHELL
-// Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
-#define SMOOTH_WATER_FLOOR_PITCH
-// Mario's squish scale is smooth rather than being instantly set (Arceveti)
-#define SMOOTH_SQUISH
-// Improved hanging which doesn't require holding down the A button (Arceveti)
-#define EASIER_HANGING
+/****************************************************************
+ * Collision                                                    *
+ ****************************************************************/
+
+// Water surfaces (Thecozies)
+// #define NEW_WATER_SURFACES
+
+// Vertical quicksand support (Wiseguy)
+#define WALL_QUICKSAND
+
+// Makes find_room_floor only check static surfaces, since dynamic surfaces aren't assigned a room (Arceveti)
+#define FIX_FIND_ROOM_FLOOR
+
+// Detect Mario's collision with lava regardless of action (Arceveti)
+#define FIX_LAVA_INTERACTION
+
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
 // #define SKIP_GROUND_LOWER_WALL
 // Improves ceiling handling, helps prevent unwanted bonks and softlocks (Arceveti)
 #define BETTER_CEILING_HANDLING
+
+// Maximum number of walls to check (vanilla is 4, higher is recommended)
+#define MAX_REFEREMCED_WALLS 16
+
 // Improved wall collision detection, with rounded corners
 // Fixes Mario jittering when walking into multiple walls at once
 // (frameperfection/Frame#5375)
 #define BETTER_WALL_COLLISION
+
 // Include steep floors when checking for walls when underwater
 // This fixes the weirdness caused by swimming into such slopes (as seen with the JRB pillars in vanilla)
 // May cause performance issues when underwater due to also iterating through the floors partition
@@ -434,39 +456,155 @@
 #define UNDERWATER_STEEP_FLOORS_AS_WALLS
 #define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
 
+// Minimum Y normal for floors (vanilla is 0.01f)
+#define MIN_FLOOR_NORMAL_Y 0.01f
+
+// Minimum Y normal for ceilings (vanilla is -0.01f, -0.2f is recommended)
+#define MAX_CEIL_NORMAL_Y -0.2f
+
+
+/****************************************************************
+ * Movement                                                     *
+ ****************************************************************/
+
+
+/********************************
+ * Movement - Ground            *
+ ********************************/
+
+// Fixes turning around on the ground (Arceveti)
+#define GROUND_TURN_FIX
+
+// Faster Crouching animation (Arceveti)
+#define FAST_CROUCHING
+
+// Makes it slightly easier to stay on narrow platforms (Arceveti)
+#define LEDGE_PROTECTION
+
+
+/********************************
+ * Movement - Airborne          *
+ ********************************/
+
+// Allows for turning in midair (Arceveti)
+#define AIR_TURN
+
+// Mario's falling speed affects his horizontal movement speed.
+// This makes Mario's falling feel more realistic, but might 
+// occasionally feel restrictive.
+// This only has an effect if AIR_TURN is enabled.
+// (Arceveti)
+// #define GRAVITY_DRAG
+// Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
+#define HOOT_YAW_FIX
+
+// Unique wall slide which takes horizontal momentum into account (Arceveti)
+#define WALL_SLIDE
+
+// Hold A when bouncing on an enemy to go higher (Arceveti)
+#define BOUNCE_BOOST
+
+// Hold Z while twirling to descend faster (Arceveti)
+#define Z_TWIRL
+
+// Don't fall after star grab if the floor is too far below (Arceveti)
+#define AIR_STAR_DANCE
+
+// Fixes false ledge grabs
+// Does nothing if BETTER_WALL_COLLISION is enabled.
+// (Arceveti)
+#define LEDGE_GRAB_FIX
+
+// Ground pound dive similar to SMO, can also be used to cancel
+// a ground pound if the analog stick is held back (Arceveti)
+#define GROUND_POUND_JUMP
+
+// Ground pound jump similar to SMO (Unknown)
+#define GROUND_POUND_DIVE
+
+// Do air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti)
+#define GROUND_POUND_AIR_STEP
+
+// Prevents bonks when ground pounding next to a wall (Arceveti)
+#define GROUND_POUND_WALL_FIX
+
+
+/********************************
+ * Movement - Submerged         *
+ ********************************/
+
+// Underwater Ground pound similar to SMO (Unknown)
+#define WATER_GROUND_POUND
+
+// Makes jumping out of water easier (Arceveti)
+#define BETTER_WATER_JUMP
+
+// Makes the underwater koopa shell action last forever until the player cancels it (Arceveti)
+#define INFINITE_WATER_SHELL
+
+// Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
+#define SMOOTH_WATER_FLOOR_PITCH
+
+
+/********************************
+ * Movement - Misc.             *
+ ********************************/
+
+// Lets Mario transition from more actions to more other actions (Arceveti)
+#define ACTION_CANCELS
+
+// Enables the shindou pole fix and allows Mario to
+// swing around poles when grabbing them (Arceveti)
+#define POLE_SWING
+
+// Mario can move sideways on ledges (Arceveti)
+#define LEDGE_SIDLE
+
+// Mario's squish scale is smooth rather than being instantly set (Arceveti)
+#define SMOOTH_SQUISH
+
+// Improved hanging which doesn't require holding down the A button (Arceveti)
+#define EASIER_HANGING
+
 // Number of ground steps per frame (Vanilla is 4)
 #define GROUND_NUM_STEPS 4
+
 // Number of air steps per frame (Vanilla is 4)
 #define AIR_NUM_STEPS    4
+
 // Number of swimming steps per frame (Vanilla is 1)
 #define WATER_NUM_STEPS  4
+
 // Number of steps before Mario falls off a ledge.
 // This allows Mario to walk over small gaps
 // and also helps prevent ledge jittering
 // (Arceveti)
 #define COYOTE_TIME      16
+
 // Number of null floors to check ahead through during a qstep.
 // Fixes many instances of invisible walls but may cause minor
 // issues on actual level boundaries, such as extra knockback
 // (Arceveti)
 #define NULL_FLOOR_STEPS 4
-// Maximum number of walls to check (vanilla is 4, higher is recommended)
-#define MAX_REFEREMCED_WALLS 16
+
 // Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
 #define MAX_SWIMMING_SPEED 32.0f
+
 // Terminal velovity for gravity (75.0f is default) (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY 75.0f
-// Minimum Y normal for floors (vanilla is 0.01f)
-#define MIN_FLOOR_NORMAL_Y 0.01f
-// Minimum Y normal for ceilings (vanilla is -0.01f, -0.2f is recommended)
-#define MAX_CEIL_NORMAL_Y -0.2f
 
-// -- Misc --
+
+/****************************************************************
+ * Misc.                                                        *
+ ****************************************************************/
 
 // Goddard easter egg from Shindou (Nintendo, Arceveti)
 #define GODDARD_EASTER_EGG
 
-// -- Experimental/Unfinished --
+
+/****************************************************************
+ * Experimental/Unfinished                                       *
+ ****************************************************************/
 
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS

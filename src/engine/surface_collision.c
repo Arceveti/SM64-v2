@@ -747,7 +747,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
-#ifdef FIX_BHV_INIT_ROOM
+#ifdef FIX_FIND_ROOM_FLOOR
     if (!gFindFloorExcludeDynamic) {
 #endif
         // In the next check, only check for floors higher than the previous check
@@ -779,7 +779,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor         = find_floor_from_list(surfaceList, x, y, z, &height);
-#ifdef FIX_BHV_INIT_ROOM
+#ifdef FIX_FIND_ROOM_FLOOR
     if (!gFindFloorExcludeDynamic) {
 #endif
         // In the next check, only check for floors higher than the previous check
@@ -793,7 +793,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
             floor  = dynamicFloor;
             height = dynamicHeight;
         }
-#ifdef FIX_BHV_INIT_ROOM
+#ifdef FIX_FIND_ROOM_FLOOR
     }
 #endif
     // If a floor was missed, increment the debug counter.
@@ -804,7 +804,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Mario to pass through.
     // To prevent accidentally leaving the floor tangible, stop checking for it.
     gFindFloorIncludeSurfaceIntangible = FALSE;
-#ifdef FIX_BHV_INIT_ROOM
+#ifdef FIX_FIND_ROOM_FLOOR
     gFindFloorExcludeDynamic           = FALSE;
 #endif
     // Increment the debug tracker.
@@ -817,7 +817,9 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 
 f32 find_room_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     gFindFloorIncludeSurfaceIntangible = TRUE;
+#ifdef FIX_FIND_ROOM_FLOOR
     gFindFloorExcludeDynamic           = TRUE;
+#endif
     return find_floor(xPos, yPos, zPos, pfloor);
 }
 

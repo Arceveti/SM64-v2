@@ -1,9 +1,13 @@
 **TODO:**
 - Known Bugs:
     - TTC push blocks don't push Mario
+    - Audio is scuffed
+        - Might be a HackerSM64 issue?
 - Crashes:
     - Properly fix HMC crash
-    - Enable rumble support and properly fix "heavy object" crash
+        - Current fix is increasing the gfx pool
+    - Properly fix rumble "heavy object" crash
+        - Current fix is '#define static' in rendering_graph_node.c
     - Fix ending cutscene crash
 - Optimizations:
     - Separate find_room function for geo_switch_area, and only check collision in current room
@@ -52,18 +56,19 @@
     - Only load collision for the current room
         - Separate function for finding current room
 - Objects:
-    - Non-exit power stars replenish health
-    - Object step height being a field
+    - Non-exit power stars replenish health/breath
+    - Make step height per-object
 - Physics:
     - Gravity direction support
     - "Squished" death from any direction
     - Walking sideways across a non-slippery steep slope shouldn't slow down Mario
+        - Example: SSL pillars
 - Silhouette:
     - Silhouette for Mario's held/riding object
     - Mirror Mario should not have silhouette
 - Metal cap effect:
     - Use vanilla metal cap texture if framebuffer is not enabled
-    - Make metal cap effect work on console
+    - Make metal cap effect work on console, otherwise use vanilla
 - HUD:
     - Rearrange HUD
         - Top Left:
@@ -77,8 +82,9 @@
         - Top Center:
             - Health meter
             - Breath meter
-                - Moves health meter to the side when active to keep balance, similar to SM63
-    - FPS counter
+                - Moves health meter to the side when active to keep screen space balance, similar to SM63
+    - Replace breath meter with a small non-intrusive one that follows mario's posision on screen?
+    - FPS counter on debug
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
@@ -86,7 +92,7 @@
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
 - Camera:
     - Focus on bomb when spinning Bowser
-    - Better camera controls in general lol
+    - Make puppycam collision not scuffed in certain areas
 - Files/Hacking QOL
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c

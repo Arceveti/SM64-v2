@@ -1762,7 +1762,7 @@ s32 is_item_in_array(s8 item, s8 *array) {
 
 void bhv_init_room(void) {
     struct Surface *floor = NULL;
-#ifdef FIX_BHV_INIT_ROOM
+#ifdef FIX_FIND_ROOM_FLOOR
     UNUSED f32 floorHeight;
     if (is_item_in_array(gCurrLevelNum, sLevelsWithRooms)) {
         floorHeight = find_room_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);

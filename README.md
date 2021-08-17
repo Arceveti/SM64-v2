@@ -31,14 +31,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Removed the ambient slow water level increasing and decreasing in WDW due to potential nausea (Arceveti) *
 - PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
-**Bugfixes:**
-- Fixed `obj_resolve_object_collisions()` not working consistently (Arceveti) *
-- Fixed `bhv_init_room()` checking dynamic surfaces for rooms (Arceveti) *
-- Fixed DDD water rings by using interaction checking (Arceveti) *
-- Fixed bomb clip (Arceveti) *
-- Mario's collision with lava is detected regardless of his action *
-- Many smaller bugs patched
-
 **Optimizations:**
 - Most doubles are now floats where the extra percision isn't needed
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
@@ -48,7 +40,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - More particles use OBJ_LIST_UNIMPORTANT so they can be unloaded when needed (Arceveti) *
 - [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
 - Use the floor's normal for alignment instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
-- Many smaller optimizations (Arceveti)
+- Many smaller optimizations/bugfixes (Arceveti)
 
 **Hacker QoL:**
 - Many unnamed variables have been named/documented (Arceveti, AloXado320, iProgramMC)
@@ -64,25 +56,30 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
 - Defines for specific cos() values used through out the game, usually for checking the Y normal of surfaces (Arceveti)
-- Vertical quicksand support (Wiseguy) *
-- The number of air/ground/water steps per frame are individually configurable
 - Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
 
-**HUD/Gameplay QoL:**
-- Slightly modified version of Reonu Cam 3 (Reonu) *
-- Signs and NPCs are easier to talk to (Arceveti) *
-- An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
+**HUD:**
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
 - Number of Secrets collected is displayed on the HUD (Arceveti) *
 - [A bowser key is shown on the Castle pause menu if Mario has a key but its door isn't unlocked yet](https://i.imgur.com/gqYIDmn.png) (Arceveti) *
 - [Leading zeroes on HUD counters like in modern Mario games](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 - [Air/Breath meter is separate from health meter when underwater](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 
+**Camera:**
+- Slightly modified version of Reonu Cam 3 (Reonu) *
+- Camera approaches Mario's height much more quickly (Reonu) *
+
 **Object Behaviors:**
 - `object_step()` allows moving objects to step up and down floors like Mario, with a configurable step height (Arceveti) *
+- Fixed `obj_resolve_object_collisions()` not working consistently (Arceveti) *
+- Fixed `bhv_init_room()` checking dynamic surfaces for rooms (Arceveti) *
+- Fixed DDD water rings by using interaction checking (Arceveti) *
+- Fixed bomb clip (Arceveti) *
+- Signs and NPCs are easier to talk to (Arceveti) *
+- An "A" is shown above an object or NPC when Mario is able to talk to it (Arceveti) *
 - Collecting a 1-Up Mushroom will fully heal Mario (Arceveti) *
 - The speed of a platform on a track can be controlled by standing near the front or back of it (Arceveti) *
 - Respawning Koopa shell boxes (Arceveti) *
@@ -95,7 +92,19 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [Leaf particles fall from trees which contain Hoot](https://i.imgur.com/uTe87EF.png) (Arceveti) *
 - [Reimplemented the unused "sad" eye texture for the mother penguin in CCM](https://i.imgur.com/Uk8MNAe.png) *
 
-**Collision/Movement:**
+**Collision:**
+- Mario's collision with lava is detected regardless of his action *
+- Vertical quicksand support (Wiseguy) *
+- Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
+- Improved slope fix and exposed ceilings fix (Arceveti)
+- Improved wall collision detection (frameperfection/Frame#5375)
+- Better ceiling handling (Arceveti) *
+
+**Movement:**
+- Turn circle fix (Arceveti) *
+- Midair turn (Arceveti) *
+- Faster transitions between actions (Arceveti) *
+- The number of air/ground/water steps per frame are individually configurable
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
@@ -103,11 +112,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Ground pound jump similar to SMO *
 - Underwater Ground pound similar to SMO *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
-- Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
-- Improved slope fix and exposed ceilings fix (Arceveti)
-- Improved wall collision detection (frameperfection/Frame#5375)
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
-- General movement improvements, including turn circle fix, midair turn, faster transitions between actions, better ceiling collision handling, less softlocks, etc. See config for more details (Arceveti) *
+- General movement improvements, less softlocks, etc. See config for more details (Arceveti) *
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Mario can move sideways on ledges (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
@@ -184,7 +190,7 @@ This is a fork of the ultrasm64 repo by CrashOveride which includes the followin
 - Tree particle fix (Whether a tree uses snow particles or not is decided via the model IDs instead of the course number) *
 - Coordinate overflow fix by falcobuster. Your levels will render correctly on console and LLE emulators even when using 2x or 4x bounds, while not hurting anything on HLE plugins. *This is automatic now, you don't have to set WORLD_SCALE manually.*
 - A couple vanilla texture fixes
-- Smoke fix (the smoke texture uses the correct texture format)
+- Smoke fix (the smoke texture uses the correct texture format) *
 
 **Neat Misc. Changes:**
 - Instant Input patch by Wiseguy (Removes all input lag caused by plugins supporting framebuffer)
