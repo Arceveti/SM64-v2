@@ -598,7 +598,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
     yColX = ((zColY * xColZ) - (xColY * zColZ));
     zColX = ((xColY * yColZ) - (yColY * xColZ));
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = Q_rsqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX * zColX));
+    invLength = Q_rsqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX));
 #else
     invLength = (1.0f / sqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX)));
 #endif
