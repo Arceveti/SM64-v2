@@ -91,7 +91,7 @@ struct SaveBuffer
     // Each of the four save files has two copies. If one is bad, the other is used as a backup.
     struct SaveFile files[NUM_SAVE_FILES][2];
     // The main menu data has two copies. If one is bad, the other is used as a backup.
-    struct MainMenuSaveData menuData[1];
+    struct MainMenuSaveData menuData[1]; //!?
 };
 
 #ifdef PUPPYCAM

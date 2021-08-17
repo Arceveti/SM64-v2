@@ -8,6 +8,7 @@
 #include "dialog_ids.h"
 #include "engine/math_util.h"
 #include "eu_translation.h"
+#include "segment_symbols.h"
 #include "game_init.h"
 #include "gfx_dimensions.h"
 #include "ingame_menu.h"
@@ -38,6 +39,25 @@ s8  gRedCoinsCollected;
 s8  gSecretsCollected;
 #endif
 
+#if MULTILANG
+#define seg2_course_name_table course_name_table_eu_en
+#define seg2_act_name_table act_name_table_eu_en
+#define seg2_dialog_table dialog_table_eu_en
+#endif
+
+s16 gInGameLanguage = 0;
+s16 gLoadedLanguage = 0;
+
+void *languageTable[][3] =
+{
+    {&seg2_dialog_table, &seg2_course_name_table, &seg2_act_name_table}, //In EU, this is just mirroring English.
+    #if MULTILANG
+    {&dialog_table_eu_en, &course_name_table_eu_en, &act_name_table_eu_en},
+    {&dialog_table_eu_fr, &course_name_table_eu_fr, &act_name_table_eu_fr},
+    {&dialog_table_eu_de, &course_name_table_eu_de, &act_name_table_eu_de},
+    #endif
+};
+
 extern u8 gLastCompletedCourseNum;
 extern u8 gLastCompletedStarNum;
 
@@ -64,24 +84,38 @@ enum DialogMark { DIALOG_MARK_NONE = 0, DIALOG_MARK_DAKUTEN = 1, DIALOG_MARK_HAN
 #define DEFAULT_DIALOG_BOX_ANGLE 90.0f
 #define DEFAULT_DIALOG_BOX_SCALE 19.0f
 
-uchar gDialogCharWidths[256] = { // TODO: Is there a way to auto generate this?
+#if defined(VERSION_US) || defined(VERSION_EU)
+u8 gDialogCharWidths[256] = { // TODO: Is there a way to auto generate this?
     7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  6,  6,  6,
     6,  6,  5,  6,  6,  5,  8,  8,  6,  6,  6,  6,  6,  5,  6,  6,
     8,  7,  6,  6,  6,  5,  5,  6,  5,  5,  6,  5,  4,  5,  5,  3,
     7,  5,  5,  5,  6,  5,  5,  5,  5,  5,  7,  7,  5,  5,  4,  4,
     8,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     8,  8,  8,  8,  7,  7,  6,  7,  7,  0,  0,  0,  0,  0,  0,  0,
+#ifdef VERSION_EU
+    6,  6,  6,  0,  6,  6,  6,  0,  0,  0,  0,  0,  0,  0,  0,  4,
+    5,  5,  5,  5,  6,  6,  6,  6,  0,  0,  0,  0,  0,  0,  0,  0,
+    5,  5,  5,  0,  6,  6,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  5,  5,  0,  0,  6,  6,  0,  0,  0,  0,  0,  0,  0,  5,  6,
+    0,  4,  4,  0,  0,  5,  5,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+#else
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  4,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5,  6,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+#endif
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+#ifdef VERSION_EU
+    7,  5, 10,  5,  9,  8,  4,  0,  0,  0,  0,  5,  5,  6,  5,  0,
+#else
     7,  5, 10,  5,  9,  8,  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+#endif
     0,  0,  5,  7,  7,  6,  6,  8,  0,  8, 10,  6,  4, 10,  0,  0
 };
+#endif
 
 s8  gDialogBoxState       = DIALOG_STATE_OPENING;
 f32 gDialogBoxOpenTimer   = DEFAULT_DIALOG_BOX_ANGLE;
@@ -166,13 +200,44 @@ static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or
     return out;
 }
 
+u8 *alloc_ia4_tex_from_i1(u8 *in, s16 width, s16 height) {
+    u32 size = (u32) width * (u32) height;
+    u8 *out;
+    s32 inPos;
+    s16 outPos;
+    u8 bitMask;
+    outPos = 0;
+    out = (u8 *) alloc_display_list(size);
+    if (out == NULL) return NULL;
+    for (inPos = 0; inPos < (width * height) / 4; inPos++) {
+        bitMask = 0x80;
+        while (bitMask != 0) {
+            out[outPos] = ((in[inPos] & bitMask) ? 0xF0 : 0x00);
+            bitMask /= 2;
+            out[outPos] = ((in[inPos] & bitMask) ? out[outPos] + 0x0F : out[outPos]);
+            bitMask /= 2;
+            outPos++;
+        }
+    }
+    return out;
+}
+
 void render_generic_char(uchar c) {
     void **fontLUT;
     void *packedTexture;
-    fontLUT       = segmented_to_virtual(main_font_lut);
-    packedTexture = segmented_to_virtual(fontLUT[c]);
+#ifdef VERSION_EU
+    void *unpackedTexture;
+#endif
+    fontLUT         = segmented_to_virtual(main_font_lut);
+    packedTexture   = segmented_to_virtual(fontLUT[c]);
+#ifdef VERSION_EU
+    unpackedTexture = alloc_ia4_tex_from_i1(packedTexture, 8, 8);
+    gDPPipeSync(       gDisplayListHead++);
+    gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, VIRTUAL_TO_PHYSICAL(unpackedTexture));
+#else
     gDPPipeSync(       gDisplayListHead++);
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_16b, 1, VIRTUAL_TO_PHYSICAL(packedTexture));
+#endif
     gSPDisplayList(    gDisplayListHead++, dl_ia_text_tex_settings);
 }
 
@@ -884,7 +949,7 @@ void render_dialog_entries(void) {
     void **dialogTable;
     struct DialogEntry *dialog;
     s8 lowerBound = 0;
-    dialogTable   = segmented_to_virtual(seg2_dialog_table);
+    dialogTable   = segmented_to_virtual(languageTable[gInGameLanguage][0]);
     dialog        = segmented_to_virtual(dialogTable[gDialogID]);
     // if the dialog entry is invalid, set the ID to -1.
     if (segmented_to_virtual(NULL) == dialog) {
@@ -1074,10 +1139,10 @@ void print_peach_letter_message(void) {
     void **dialogTable;
     struct DialogEntry *dialog;
     uchar *str;
-    dialogTable = segmented_to_virtual(seg2_dialog_table);
+    dialogTable = segmented_to_virtual(languageTable[gInGameLanguage][0]);
     dialog      = segmented_to_virtual(dialogTable[gDialogID]);
     str         = segmented_to_virtual(dialog->str);
-    create_dl_translation_matrix(G_MTX_PUSH, 97.0f, 118.0f, 0);
+    create_dl_translation_matrix(MENU_MTX_PUSH, 97.0f, 118.0f, 0);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
     gSPDisplayList(gDisplayListHead++, castle_grounds_seg7_dl_peach_letter);
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
@@ -1276,8 +1341,8 @@ void render_pause_my_score_coins(void) {
     uchar *actName;
     u8 courseIndex;
     u8 starFlags;
-    courseNameTbl = segmented_to_virtual(seg2_course_name_table);
-    actNameTbl    = segmented_to_virtual(seg2_act_name_table);
+    courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
+    actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
     courseIndex   = (gCurrCourseNum - 1);
     starFlags     = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
@@ -1436,8 +1501,8 @@ void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) 
 }
 
 void render_pause_castle_main_strings(s16 x, s16 y) {
-    void **courseNameTbl = segmented_to_virtual(seg2_course_name_table);
-    uchar textCoin[] = { TEXT_COIN_X };
+    void **courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
+    uchar textCoin[]     = { TEXT_COIN_X };
     void *courseName;
     uchar strVal[8];
     s16 starNum = gDialogLineNum;
@@ -1648,8 +1713,8 @@ void render_course_complete_lvl_info_and_hud_str(void) {
     void **courseNameTbl;
     uchar *name;
     uchar strCourseNum[4];
-    actNameTbl    = segmented_to_virtual(seg2_act_name_table);
-    courseNameTbl = segmented_to_virtual(seg2_course_name_table);
+    actNameTbl    = segmented_to_virtual(languageTable[gInGameLanguage][2]);
+    courseNameTbl = segmented_to_virtual(languageTable[gInGameLanguage][1]);
     if (gLastCompletedCourseNum <= COURSE_STAGES_MAX) {
         print_hud_course_complete_coins(118, 103);
         play_star_fanfare_and_flash_hud(TRUE, (1 << (gLastCompletedStarNum - 1)));
@@ -1719,9 +1784,6 @@ void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) { // sp6e is 20
 
 s16 render_course_complete_screen(void) {
     s16 index;
-// #ifdef VERSION_EU
-//     gInGameLanguage = eu_get_language();
-// #endif
     switch (gDialogBoxState) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();

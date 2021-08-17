@@ -13,7 +13,7 @@
 #ifdef USE_EXT_RAM
 #define GFX_POOL_SIZE 12800 // Size of how large the master display list (gDisplayListHead) can be
 #else
-#define GFX_POOL_SIZE 6400 // Size of how large the master display list (gDisplayListHead) can be
+#define GFX_POOL_SIZE 10000 // Size of how large the master display list (gDisplayListHead) can be
 #endif
 
 struct GfxPool {

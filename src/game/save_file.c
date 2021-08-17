@@ -204,7 +204,8 @@ static void save_main_menu_data(void) {
         // Compute checksum
         add_save_block_signature(&gSaveBuffer.menuData[0], sizeof(gSaveBuffer.menuData[0]), MENU_DATA_MAGIC);
         // Back up data
-        bcopy(&gSaveBuffer.menuData[0], &gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]));
+        // bcopy(&gSaveBuffer.menuData[0], &gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]));
+
         // Write to EEPROM
         write_eeprom_data(gSaveBuffer.menuData, sizeof(gSaveBuffer.menuData));
         gMainMenuDataModified = FALSE;
@@ -310,7 +311,7 @@ void save_file_load_all(void) {
     read_eeprom_data(&gSaveBuffer, sizeof(gSaveBuffer));
     // Verify the main menu data and create a backup copy if only one of the slots is valid.
     validSlots  = verify_save_block_signature(&gSaveBuffer.menuData[0], sizeof(gSaveBuffer.menuData[0]), MENU_DATA_MAGIC);
-    validSlots |= verify_save_block_signature(&gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]),MENU_DATA_MAGIC) << 1;
+    // validSlots |= verify_save_block_signature(&gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]), MENU_DATA_MAGIC) << 1;
     switch (validSlots) {
         case 0: wipe_main_menu_data();     break; // Neither copy is correct
         case 1: restore_main_menu_data(0); break; // Slot 0 is correct and slot 1 is incorrect
@@ -340,13 +341,19 @@ void puppycam_check_save(void) {
 void puppycam_get_save(void) {
     gPuppyCam.options                 = gSaveBuffer.menuData[0].saveOptions;
     gSaveBuffer.menuData[0].firstBoot = gSaveBuffer.menuData[0].firstBoot;
+#ifdef WIDE
+    gWidescreen = save_file_get_widescreen_mode();
+#endif
     puppycam_check_save();
 }
 
 void puppycam_set_save(void) {
     gSaveBuffer.menuData[0].saveOptions = gPuppyCam.options;
     gSaveBuffer.menuData[0].firstBoot   = 4;
-    gMainMenuDataModified               = TRUE;
+#ifdef WIDE
+    save_file_set_widescreen_mode(gWidescreen);
+#endif
+    gMainMenuDataModified = TRUE;
     save_main_menu_data();
 }
 #endif

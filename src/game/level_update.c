@@ -21,7 +21,7 @@
 #include "obj_behaviors.h"
 #include "save_file.h"
 #include "debug_course.h"
-#ifdef VERSION_EU
+#if MULTILANG
 #include "memory.h"
 #include "eu_translation.h"
 #include "segment_symbols.h"
@@ -914,14 +914,20 @@ s32 lvl_init_or_update(s16 initOrUpdate, UNUSED s32 levelNum) {
     return (initOrUpdate ? update_level() : init_level());
 }
 
-s32 lvl_init_from_save_file(UNUSED s16 initOrUpdate, s32 levelNum) {
-#ifdef VERSION_EU
-    s16 var = eu_get_language();
-    switch (var) {
+#if MULTILANG
+void load_language_text(void) {
+    switch (gInGameLanguage - 1) {
         case LANGUAGE_ENGLISH: load_segment_decompress(0x19, _translation_en_yay0SegmentRomStart, _translation_en_yay0SegmentRomEnd); break;
         case LANGUAGE_FRENCH:  load_segment_decompress(0x19, _translation_fr_yay0SegmentRomStart, _translation_fr_yay0SegmentRomEnd); break;
         case LANGUAGE_GERMAN:  load_segment_decompress(0x19, _translation_de_yay0SegmentRomStart, _translation_de_yay0SegmentRomEnd); break;
     }
+}
+#endif
+
+s32 lvl_init_from_save_file(UNUSED s16 initOrUpdate, s32 levelNum) {
+#if MULTILANG
+    gInGameLanguage = (eu_get_language() + 1);
+    load_language_text();
 #endif
     sWarpDest.type      = WARP_TYPE_NOT_WARPING;
     sDelayedWarpOp      = WARP_OP_NONE;

@@ -3,6 +3,9 @@
 
 #ifdef PUPPYCAM
 
+//How many times to store the terrain pitch. This stores it over 10 frames to help smooth over changes in curvature.
+#define NUM_PITCH_ITERATIONS 10
+
 #define PUPPYCAM_FLAGS_CUTSCENE          0x0001
 #define PUPPYCAM_FLAGS_SMOOTH            0x0002
 
@@ -33,10 +36,6 @@
     CMD_W(removeflags),                                                                                                               \
     CMD_BBH(flagpersistance, shape, room)
 
-// Some macros for the sake of basic human sanity.
-// #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
-// #define ABS(x) ((x) > 0.f ? (x) : -(x))
-
 struct gPuppyOptions
 {
     s16 analogue;
@@ -56,7 +55,6 @@ struct gPuppyStruct
     s16 pitch;                  // Vertical Direction the game reads as the active value.
     s16 pitchTarget;            // Vertical Direction that pitch tries to be.
     f32 pitchAcceleration;      // Vertical Direction that sets pitchTarget.
-    s16 posHeight[2];           // The first index is the ground offset of pos[1], the second index is the ground offset of focus[1].
     s16 zoom;                   // How far the camera is currently zoomed out
     u8  zoomSet;                // The current setting of which zoompoint to set the target to.
     s16 zoomTarget;             // The value that zoom tries to be.
@@ -69,10 +67,10 @@ struct gPuppyStruct
     s32   intendedFlags;        // The flagset the camera tries to be when it's not held hostage.
     s32   flags;                // Behaviour flags that affect different properties of the camera's behaviour
     Vec3s shake;                // How much the camera's shaking
-    u8  shakeFrames;            // How long the camera's shaking for
-    f32 shakeForce;             // How violently the camera's shaking
-    s32 framesSinceC[2];        // Counts the number of frames since the last C left or right press, to track double presses.
-    s16 collisionDistance;      // Tries to be zoom, but will be overwritten by collision detection
+    u8    shakeFrames;          // How long the camera's shaking for
+    f32   shakeForce;           // How violently the camera's shaking
+    s32   framesSinceC[2];      // Counts the number of frames since the last C left or right press, to track double presses.
+    s16   collisionDistance;    // Tries to be zoom, but will be overwritten by collision detection
     struct Object *targetObj;   // The object that the focus will base its positioning off. Usually Mario.
     struct Object *targetObj2;  // This is the second focus point that the camera will focus on. It'll focus between them.
     s16 povHeight;              // An offset of the focus object's Y value.
@@ -86,7 +84,9 @@ struct gPuppyStruct
     s16 moveZoom;               // A small zoom value that's added on top of the regular zoom when moving. It's pretty subtle, but gives the feeling of a bit of speed.
     u8  mode3Flags;             // A flagset for classic mode.
     u8  moveFlagAdd;            // A bit that multiplies movement rate of axes when moving, to centre them faster.
-    s16 targetDist[2];
+    s16 targetDist[2];          // Used with secondary view targets to smooth out the between status.
+    s16 intendedTerrainPitch;   // The pitch that the game wants the game to tilt towards, following the terrain.
+    s16 terrainPitch;           // The pitch the game tilts towards, when following terrain inclines.
 
     u8    cutscene;             // A boolean that decides whether a cutscene is active
     s32 (*sceneFunc)();
@@ -163,7 +163,7 @@ extern void puppycam_init(void);
 extern void puppycam_loop(void);
 UNUSED extern void puppycam_shake(s16 x, s16 y, s16 z);
 extern void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos);
-extern f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier);
+extern f32  approach_f32_asymptotic(f32 current, f32 target, f32 multiplier);
 extern void puppycam_default_config(void);
 extern void puppycam_display_options(void);
 extern void puppycam_set_save(void);

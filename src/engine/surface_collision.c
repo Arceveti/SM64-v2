@@ -301,8 +301,8 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
      || (z >=  LEVEL_BOUNDARY_MAX)) return numCollisions;
     // World (level) consists of a 16x16 grid. Find where the collision is on
     // the grid (round toward -inf)
-    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces belonging to objects.
     node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next;
     numCollisions += find_wall_collisions_from_list(node, colData);
@@ -478,8 +478,8 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
      || (zPos <= -LEVEL_BOUNDARY_MAX)
      || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil        = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &height);
@@ -488,20 +488,20 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     dynamicCeil = find_ceil_from_list(surfaceList, xPos, yPos, zPos, &dynamicHeight);
 #else
-    // (Parallel Universes) Because position is casted to an s16, reaching higher
+    // (Parallel Universes?) Because position is casted to an s16, reaching higher
     // float locations  can return ceilings despite them not existing there.
     // (Dynamic ceilings will unload due to the range.)
-    s16 x = (s16) xPos;
-    s16 y = (s16) yPos;
-    s16 z = (s16) zPos;
+    s32 x = xPos;
+    s32 y = yPos;
+    s32 z = zPos;
     // Check if position is within level bounds
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
      || (z <= -LEVEL_BOUNDARY_MAX)
      || (z >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS].next;
     ceil = find_ceil_from_list(surfaceList, x, y, z, &height);
@@ -656,17 +656,17 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
 /**
  * Iterate through the list of water floors and find the first water floor under a given point.
  */
-struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight, f32 *pBottomHeight) {
+struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight, s32 *pBottomHeight) {
     register struct Surface *surf;
     struct Surface *floor = NULL;
     struct SurfaceNode *topSurfaceNode    = surfaceNode;
     struct SurfaceNode *bottomSurfaceNode = surfaceNode;
-    f32 height          = FLOOR_LOWER_LIMIT;
-    f32 bottomHeight    = FLOOR_LOWER_LIMIT;
-    f32 topBottomHeight = FLOOR_LOWER_LIMIT;
+    s32 height          = FLOOR_LOWER_LIMIT;
+    s32 bottomHeight    = FLOOR_LOWER_LIMIT;
+    s32 topBottomHeight = FLOOR_LOWER_LIMIT;
     // Iterate through the list of water floors until there are no more water floors.
     while (bottomSurfaceNode != NULL) {
-        f32 curBottomHeight = FLOOR_LOWER_LIMIT;
+        s32 curBottomHeight = FLOOR_LOWER_LIMIT;
         surf                = bottomSurfaceNode->surface;
         bottomSurfaceNode   = bottomSurfaceNode->next;
         if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
@@ -681,7 +681,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
     }
     // Iterate through the list of water tops until there are no more water tops.
     while (topSurfaceNode != NULL) {
-        f32 curHeight  = FLOOR_LOWER_LIMIT;
+        s32 curHeight  = FLOOR_LOWER_LIMIT;
         surf           = topSurfaceNode->surface;
         topSurfaceNode = topSurfaceNode->next;
         if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
@@ -707,6 +707,23 @@ f32 find_floor_height(f32 x, f32 y, f32 z) {
 }
 
 /**
+ * Find the highest dynamic floor under a given position. Perhaps originally static
+ * and dynamic floors were checked separately.
+ */
+f32 unused_find_dynamic_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
+    struct SurfaceNode *surfaceList;
+    struct Surface *floor;
+    f32 floorHeight = FLOOR_LOWER_LIMIT;
+    // Each level is split into cells to limit load, find the appropriate cell.
+    register const s32 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s32 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    floor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &floorHeight);
+    *pfloor = floor;
+    return floorHeight;
+}
+
+/**
  * Find the highest floor under a given position and return the height.
  */
 f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
@@ -725,8 +742,8 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
      || (zPos <= -LEVEL_BOUNDARY_MAX)
      || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
@@ -742,9 +759,9 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
     // (Dynamic floors will unload due to the range.)
-    s16 x = (s16) xPos;
-    s16 y = (s16) yPos;
-    s16 z = (s16) zPos;
+    s32 x = xPos;
+    s32 y = yPos;
+    s32 z = zPos;
     *pfloor = NULL;
     // Check if position is within level bounds
     if ((x <= -LEVEL_BOUNDARY_MAX)
@@ -757,8 +774,8 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
         return height;
     }
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    register const s16 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const s32 cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     // Check for surfaces that are a part of level geometry.
     surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor         = find_floor_from_list(surfaceList, x, y, z, &height);
@@ -811,8 +828,8 @@ f32 find_room_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct Surface     *floor = NULL;
     struct SurfaceNode *surfaceList;
-    f32 height       = FLOOR_LOWER_LIMIT;
-    f32 bottomheight = FLOOR_LOWER_LIMIT;
+    s32 height       = FLOOR_LOWER_LIMIT;
+    s32 bottomheight = FLOOR_LOWER_LIMIT;
 #ifdef BETTER_WALL_COLLISION
     // Check if position is within level bounds
     if ((xPos <= -LEVEL_BOUNDARY_MAX)
@@ -820,8 +837,8 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
      || (zPos <= -LEVEL_BOUNDARY_MAX)
      || (zPos >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    register const s16 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s32 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s32 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, xPos, yPos, zPos, &height, &bottomheight);
@@ -829,17 +846,17 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // (Parallel Universes) Because position is casted to an s16, reaching higher
     // float locations  can return floors despite them not existing there.
     // (Dynamic floors will unload due to the range.)
-    s16 x = (s16) xPos;
-    s16 y = (s16) yPos;
-    s16 z = (s16) zPos;
+    s32 x = xPos;
+    s32 y = yPos;
+    s32 z = zPos;
     // Check if position is within level bounds
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
      || (z <= -LEVEL_BOUNDARY_MAX)
      || (z >=  LEVEL_BOUNDARY_MAX)) return height;
     // Each level is split into cells to limit load, find the appropriate cell.
-    register const s16 cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    register const s16 cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s32 cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
+    register const s32 cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, x, y, z, &height, &bottomheight);
@@ -861,11 +878,10 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 /**
  * Finds the height of water at a given location.
  */
-f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
+s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
     s32 i, numRegions;
-    register s16 val;
-    register f32 loX, hiX, loZ, hiZ;
-    f32 waterLevel = FLOOR_LOWER_LIMIT;
+    register s32 val, loX, hiX, loZ, hiZ;
+    s32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
@@ -910,11 +926,10 @@ f32 find_water_level_and_floor(f32 x, f32 z, struct Surface **pfloor) {
 /**
  * Finds the height of water at a given location.
  */
-f32 find_water_level(f32 x, f32 z) {
+s32 find_water_level(s32 x, s32 z) {
     s32 i, numRegions;
-    register s16 val;
-    register f32 loX, hiX, loZ, hiZ;
-    f32 waterLevel = FLOOR_LOWER_LIMIT;
+    register s32 val, loX, hiX, loZ, hiZ;
+    s32 waterLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
@@ -953,11 +968,10 @@ f32 find_water_level(f32 x, f32 z) {
 /**
  * Finds the height of the poison gas (used only in HMC) at a given location.
  */
-f32 find_poison_gas_level(f32 x, f32 z) {
+s32 find_poison_gas_level(s32 x, s32 z) {
     s32 i, numRegions;
-    register s16 val;
-    register f32 loX, hiX, loZ, hiZ;
-    f32 gasLevel = FLOOR_LOWER_LIMIT;
+    register s32 val, loX, hiX, loZ, hiZ;
+    s32 gasLevel = FLOOR_LOWER_LIMIT;
     s16 *p = gEnvironmentRegions;
 #ifdef PUPPYPRINT
     OSTime first = osGetTime();
@@ -1042,9 +1056,9 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
     // Get upper and lower bounds of ray
     if (dir[1] >= 0.0f) {
         top    = (orig[1] + (dir[1] * dir_length));
-        bottom = orig[1];
+        bottom =  orig[1];
     } else {
-        top    = orig[1];
+        top    =  orig[1];
         bottom = (orig[1] + (dir[1] * dir_length));
     }
     // Iterate through every surface of the list
@@ -1078,18 +1092,16 @@ void find_surface_on_ray_cell(s16 cellX, s16 cellZ, Vec3f orig, Vec3f normalized
 }
 
 void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos) {
-    f32 max_length;
     register s16 cellPrevX, cellPrevZ;
     Vec3f normalized_dir;
-    register f32 dir_length;
     register f32 step, dx, dz;
     u32 i;
     // Set that no surface has been hit
     *hit_surface = NULL;
     vec3f_sum(hit_pos, orig, dir);
     // Get normalized direction
-    dir_length = vec3f_mag(dir);
-    max_length = dir_length;
+    register f32 dir_length = vec3f_mag(dir);
+    f32 max_length = dir_length;
     vec3f_copy(normalized_dir, dir);
     vec3f_normalize(normalized_dir);
     // Get our cell coordinate
@@ -1104,9 +1116,9 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
 	}
     // Get cells we cross using DDA
     if (ABS(dir[0]) >= ABS(dir[2])) {
-        step = ((1 * ABS(dir[0])) / CELL_SIZE); //! STEPS
+        step = ((4 * ABS(dir[0])) / CELL_SIZE); //! STEPS
     } else {
-        step = ((1 * ABS(dir[2])) / CELL_SIZE); //! STEPS
+        step = ((4 * ABS(dir[2])) / CELL_SIZE); //! STEPS
     }
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);
