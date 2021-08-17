@@ -116,7 +116,7 @@ s8 sScoreFileCoinScoreMode = 0;
 
 // In EU, if no save file exists, open the language menu so the user can find it.
 
-uchar textReturn[][8]      = { {TEXT_RETURN}, };
+uchar textReturn[]         = { TEXT_RETURN };
 uchar textViewScore[]      = { TEXT_CHECK_SCORE };
 uchar textCopyFileButton[] = { TEXT_COPY_FILE_BUTTON };
 
@@ -128,7 +128,7 @@ uchar textSoundModes[][8] = { { TEXT_STEREO }, { TEXT_MONO }, { TEXT_HEADSET } }
 uchar textLanguageSelect[][17] = { { TEXT_LANGUAGE_SELECT } };
 #endif
 
-uchar textSoundSelect[][13] = { { TEXT_SOUND_SELECT },};
+uchar textSoundSelect[] = { TEXT_SOUND_SELECT };
 
 uchar textMarioA[] = { TEXT_FILE_MARIO_A };
 uchar textMarioB[] = { TEXT_FILE_MARIO_B };

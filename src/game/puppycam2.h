@@ -3,8 +3,8 @@
 
 #ifdef PUPPYCAM
 
-//How many times to store the terrain pitch. This stores it over 10 frames to help smooth over changes in curvature.
-#define NUM_PITCH_ITERATIONS 10
+// How many times to store the terrain pitch. This stores it over 10 frames to help smooth over changes in curvature.
+#define NUM_PITCH_ITERATIONS                 10
 
 #define PUPPYCAM_FLAGS_CUTSCENE          0x0001
 #define PUPPYCAM_FLAGS_SMOOTH            0x0002
