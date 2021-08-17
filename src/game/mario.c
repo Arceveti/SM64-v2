@@ -721,7 +721,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
 #endif
     }
     m->peakHeight = m->pos[1];
-    m->flags |= MARIO_JUMPING;
+    m->flags     |= MARIO_JUMPING;
     return action;
 }
 

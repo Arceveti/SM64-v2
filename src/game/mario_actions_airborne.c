@@ -817,9 +817,13 @@ s32 act_ground_pound(struct MarioState *m) {
     f32 yOffset;
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
     if (m->actionState == 0) {
+#ifdef GROUND_POUND_AIR_STEP
+        m->vel[1]  = 0.0f;
+        stepResult = perform_air_step(m, 0);
+#endif
         if (m->actionTimer < 10) {
             yOffset = (20 - (2 * m->actionTimer));
-            if ((m->pos[1] + yOffset + 160.0f) < m->ceilHeight) {
+            if (((m->pos[1] + 160.0f) + yOffset) < m->ceilHeight) {
                 m->pos[1]    += yOffset;
                 m->peakHeight = m->pos[1];
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);

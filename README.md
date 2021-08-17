@@ -99,8 +99,10 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
+- Air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti) *
 - Ground pound jump similar to SMO *
 - Underwater Ground pound similar to SMO *
+- Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
 - Improved slope fix and exposed ceilings fix (Arceveti)
 - Improved wall collision detection (frameperfection/Frame#5375)
@@ -109,7 +111,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Mario can move sideways on ledges (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
-- Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 
 **Misc:**

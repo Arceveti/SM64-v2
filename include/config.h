@@ -400,6 +400,8 @@
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)
 #define GROUND_POUND_DIVE
+// Do air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti)
+#define GROUND_POUND_AIR_STEP
 // Prevents bonks when ground pounding next to a wall (Arceveti)
 #define GROUND_POUND_WALL_FIX
 // Don't fall after star grab if the floor is too far below (Arceveti)
