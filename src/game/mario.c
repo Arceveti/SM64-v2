@@ -581,8 +581,8 @@ s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
 
 // default range is 0x471C
 s32 analog_stick_held_back(struct MarioState *m, s16 range) {
-    s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
-    return intendedDYaw < -range || intendedDYaw > range;
+    if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
+    return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
 }
 
 /**

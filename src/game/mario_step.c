@@ -410,30 +410,30 @@ s32 perform_ground_step(struct MarioState *m) {
 
 #ifdef BETTER_WALL_COLLISION
 struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWall, struct Surface *wall, Vec3f intendedPos, Vec3f nextPos, Vec3f ledgePos, struct Surface **ledgeFloor) {
-    struct Surface *floor = *ledgeFloor;
-    if (m->vel[1] > 0) return FALSE;
-    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT)) return FALSE;
+    struct Surface *returnedWall = wall;
+    if (m->vel[1] > 0.0f || wall == NULL) return FALSE;
+    if (grabbedWall == NULL) grabbedWall = wall;
+    if ((m->action == ACT_WALL_SLIDE)
+     || (m->action == ACT_FORWARD_ROLLOUT)
+     || (m->action == ACT_BACKWARD_ROLLOUT)
+     || analog_stick_held_back(m, 0x4000)) return FALSE;
     // Return the already grabbed wall if Mario is moving into it more than the newly tested wall
-    if ((grabbedWall != NULL) && ((grabbedWall->normal.x * m->vel[0]) + (grabbedWall->normal.z * m->vel[2]) < (wall->normal.x * m->vel[0]) + (wall->normal.z * m->vel[2]))) return grabbedWall;
+    if (((grabbedWall->normal.x * m->vel[0]) + (grabbedWall->normal.z * m->vel[2])) < ((wall->normal.x * m->vel[0]) + (wall->normal.z * m->vel[2]))) returnedWall = grabbedWall;
     f32 displacementX = (nextPos[0] - intendedPos[0]);
     f32 displacementZ = (nextPos[2] - intendedPos[2]);
     // Only ledge grab if the wall displaced Mario in the opposite direction of
     // his velocity.
-    if ((displacementX * m->vel[0]) + (displacementZ * m->vel[2]) > 0.0f) return grabbedWall;
-    ledgePos[0] = (nextPos[0] - (wall->normal.x * 60.0f));
-    ledgePos[2] = (nextPos[2] - (wall->normal.z * 60.0f));
-#ifdef LEDGE_GRAB_FIX
-    ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + 80.0f), ledgePos[2], ledgeFloor);
-    // floor = *ledgeFloor;
-    if ((floor == NULL) || (floor->normal.y < COS25) || (floor->type == SURFACE_BURNING) || SURFACE_IS_QUICKSAND(floor->type)) return FALSE;
-    if ((m->input & INPUT_NONZERO_ANALOG) && analog_stick_held_back(m, 0x4000)) return FALSE;
-#else
-    //! Since the search for floors starts at y + 160, we will sometimes grab
-    // a higher ledge than expected (glitchy ledge grab)
-    ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + 160.0f), ledgePos[2], ledgeFloor);
-#endif
-    if ((ledgePos[1] - nextPos[1]) <= 100.0f) return grabbedWall;
-    return wall;
+    if (((displacementX * m->vel[0]) + (displacementZ * m->vel[2])) > 0.0f) returnedWall = grabbedWall;
+    ledgePos[0] = (nextPos[0] - (wall->normal.x * 51.2f));
+    ledgePos[2] = (nextPos[2] - (wall->normal.z * 51.2f));
+    ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + 100.0f), ledgePos[2], ledgeFloor);
+    if ((ledgeFloor == NULL)
+     || (ledgePos[1] < (nextPos[1] + 80.0f))
+     || ((*ledgeFloor)->normal.y < COS25)
+     || ((*ledgeFloor)->type == SURFACE_BURNING)
+     || SURFACE_IS_QUICKSAND((*ledgeFloor)->type)) return FALSE;
+    // if (ledgePos[1] <= (nextPos[1] + 100.0f)) returnedWall = grabbedWall;
+    return returnedWall;
 }
 #else
 u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedPos, Vec3f nextPos) {
@@ -441,8 +441,7 @@ u32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intendedP
     Vec3f ledgePos;
     if (m->vel[1] > 0) return FALSE;
 #ifdef LEDGE_GRAB_FIX
-    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT)) return FALSE;
-    if ((m->input & INPUT_NONZERO_ANALOG) && analog_stick_held_back(m, 0x4000)) return FALSE;
+    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT) || analog_stick_held_back(m, 0x4000)) return FALSE;
 #endif
     f32 displacementX = (nextPos[0] - intendedPos[0]);
     f32 displacementZ = (nextPos[2] - intendedPos[2]);
@@ -651,9 +650,13 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     //! When the wall is not completely vertical or there is a slight wall
     // misalignment, you can activate these conditions in unexpected situations
 #ifdef BETTER_WALL_COLLISION
-    if ((stepArg & AIR_STEP_CHECK_LEDGE_GRAB) && (upperWall.numWalls == 0)) {
-        for (i = 0; i < lowerWall.numWalls; i++) if ((grabbedWall = check_ledge_grab(m, grabbedWall, lowerWall.walls[i], intendedPos, nextPos, ledgePos, &ledgeFloor))) stepResult = AIR_STEP_GRABBED_LEDGE;
-        if (stepResult == AIR_STEP_GRABBED_LEDGE) {
+    if ((stepArg & AIR_STEP_CHECK_LEDGE_GRAB) && (upperWall.numWalls == 0) && (lowerWall.numWalls != 0)) {
+        for (i = 0; i < lowerWall.numWalls; i++) {
+            if ((grabbedWall = check_ledge_grab(m, grabbedWall, lowerWall.walls[i], intendedPos, nextPos, ledgePos, &ledgeFloor))) {
+                stepResult = AIR_STEP_GRABBED_LEDGE;
+            }
+        }
+        if (stepResult == AIR_STEP_GRABBED_LEDGE) {// && ledgeFloor != NULL && grabbedWall != NULL) {
             vec3f_copy(m->pos, ledgePos);
             m->floor        = ledgeFloor;
             m->floorHeight  = ledgePos[1];

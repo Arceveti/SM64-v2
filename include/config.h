@@ -393,7 +393,9 @@
 #define AIR_STAR_DANCE
 // Makes it slightly easier to stay on narrow platforms (Arceveti)
 #define LEDGE_PROTECTION
-// Fixes false ledge grabs (Arceveti)
+// Fixes false ledge grabs
+// Does nothing if BETTER_WALL_COLLISION is enabled.
+// (Arceveti)
 #define LEDGE_GRAB_FIX
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)
