@@ -60,8 +60,7 @@ void one_up_move_away_from_mario(s16 collisionFlags) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     bhv_1up_interact();
-    if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) o->oAction = MUSHROOM_ACT_DISAPPEARING;
-    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) o->oAction = MUSHROOM_ACT_DISAPPEARING;
+    if ((collisionFlags & OBJ_COL_FLAG_HIT_WALL) || !is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) o->oAction = MUSHROOM_ACT_DISAPPEARING;
 }
 
 void bhv_1up_walking_loop(void) {

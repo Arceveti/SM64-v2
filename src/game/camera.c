@@ -611,14 +611,14 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
     struct Surface *surface;
     f32 marioFloorHeight, marioCeilHeight, camFloorHeight;
     f32 baseOff       = 125.0f;
-    f32 camCeilHeight = find_ceil(c->pos[0], gLakituState.goalPos[1] - 50.0f, c->pos[2], &surface);
+    f32 camCeilHeight = find_ceil(c->pos[0], (gLakituState.goalPos[1] - 50.0f), c->pos[2], &surface);
     f32 approachRate  = 20.0f;
     if (sMarioCamState->action & ACT_FLAG_HANGING) {
         marioCeilHeight  = sMarioGeometry.currCeilHeight;
         marioFloorHeight = sMarioGeometry.currFloorHeight;
-        if (marioFloorHeight < marioCeilHeight - 400.0f) marioFloorHeight = marioCeilHeight - 400.0f;
-        goalHeight = marioFloorHeight + (marioCeilHeight - marioFloorHeight) * 0.4f;
-        if (sMarioCamState->pos[1] - 400 > goalHeight) goalHeight = sMarioCamState->pos[1] - 400.0f;
+        if (marioFloorHeight < (marioCeilHeight - 400.0f)) marioFloorHeight = (marioCeilHeight - 400.0f);
+        goalHeight = (marioFloorHeight + ((marioCeilHeight - marioFloorHeight) * 0.4f));
+        if ((sMarioCamState->pos[1] - 400) > goalHeight) goalHeight = (sMarioCamState->pos[1] - 400.0f);
         approach_camera_height(c, goalHeight, 5.0f);
     } else {
         camFloorHeight   = find_floor(c->pos[0], c->pos[1] + 100.0f, c->pos[2], &surface) + baseOff;
@@ -629,9 +629,9 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
             c->pos[1]  = goalHeight;
         }
         // Warp camera to goalHeight if further than 1000 and Mario is stuck in the ground
-        if (sMarioCamState->action == ACT_BUTT_STUCK_IN_GROUND ||
-            sMarioCamState->action == ACT_HEAD_STUCK_IN_GROUND ||
-            sMarioCamState->action == ACT_FEET_STUCK_IN_GROUND) {
+        if ((sMarioCamState->action == ACT_BUTT_STUCK_IN_GROUND) ||
+            (sMarioCamState->action == ACT_HEAD_STUCK_IN_GROUND) ||
+            (sMarioCamState->action == ACT_FEET_STUCK_IN_GROUND)) {
             if (ABS(c->pos[1] - goalHeight) > 1000.0f) c->pos[1] = goalHeight;
         }
 #ifdef FAST_VERTICAL_CAMERA_MOVEMENT
@@ -654,11 +654,11 @@ s16 look_down_slopes(s16 camYaw) {
     // Default pitch
     s16 pitch = 0x05B0;
     // x and z offsets towards the camera
-    f32 xOff = sMarioCamState->pos[0] + sins(camYaw) * 40.0f;
-    f32 zOff = sMarioCamState->pos[2] + coss(camYaw) * 40.0f;
+    f32 xOff = (sMarioCamState->pos[0] + (sins(camYaw) * 40.0f));
+    f32 zOff = (sMarioCamState->pos[2] + (coss(camYaw) * 40.0f));
     f32 floorDY = find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1];
-    if (floor != NULL && floor->type != SURFACE_WALL_MISC && floorDY > 0) {
-        if (floor->normal.z == 0.0f && floorDY < 100.0f) {
+    if ((floor != NULL) && (floor->type != SURFACE_WALL_MISC) && (floorDY > 0)) {
+        if ((floor->normal.z == 0.0f) && (floorDY < 100.0f)) {
             pitch = 0x05B0;
         } else {
             // Add the slope's angle of declination to the pitch
@@ -684,7 +684,7 @@ void pan_ahead_of_player(struct Camera *c) {
     // Get distance and angle from camera to Mario.
     vec3f_get_dist_and_angle(c->pos, sMarioCamState->pos, &dist, &pitch, &yaw);
     // The camera will pan ahead up to about 30% of the camera's distance to Mario.
-    pan[2] = sins(0xC00) * dist;
+    pan[2] = (sins(0xC00) * dist);
     rotate_in_xz(pan, pan, sMarioCamState->faceAngle[1]);
     // rotate in the opposite direction
     yaw = -yaw;
@@ -695,7 +695,7 @@ void pan_ahead_of_player(struct Camera *c) {
     if (sMarioCamState->action == ACT_LONG_JUMP || (sMarioCamState->action != ACT_TOP_OF_POLE && (sMarioCamState->action & ACT_FLAG_ON_POLE))) pan[0] = -pan[0];
     // Slowly make the actual pan, sPanDistance, approach the calculated pan
     // If Mario is sleeping, then don't pan
-    approach_f32_asymptotic_bool(&sPanDistance, (sStatusFlags & CAM_FLAG_SLEEPING) ? 0.0f : pan[0], 0.025f);
+    approach_f32_asymptotic_bool(&sPanDistance, ((sStatusFlags & CAM_FLAG_SLEEPING) ? 0.0f : pan[0]), 0.025f);
     // Now apply the pan. It's a dir vector to the left or right, rotated by the camera's yaw to Mario
     pan[0] = sPanDistance;
     yaw    = -yaw;
@@ -968,20 +968,20 @@ void mode_8_directions_camera(struct Camera *c) {
  // extra functionality
     else if (gPlayer1Controller->buttonPressed & U_JPAD) {
         s8DirModeYawOffset = 0x0;
-        s8DirModeYawOffset = gMarioState->faceAngle[1]-0x8000;
+        s8DirModeYawOffset = (gMarioState->faceAngle[1] - 0x8000);
     }  else if (gPlayer1Controller->buttonDown & L_JPAD) {
         s8DirModeYawOffset -= DEGREES(2);
     } else if (gPlayer1Controller->buttonDown & R_JPAD) {
         s8DirModeYawOffset += DEGREES(2);
     } else if (gPlayer1Controller->buttonPressed & D_JPAD) {
-        s8DirModeYawOffset = s8DirModeYawOffset&0xE000;
+        s8DirModeYawOffset = (s8DirModeYawOffset & 0xE000);
     }
 #endif
     lakitu_zoom(400.0f, 0x900);
     c->nextYaw = update_8_directions_camera(c, c->focus, pos);
     c->pos[0] = pos[0];
     c->pos[2] = pos[2];
-    sAreaYawChange = sAreaYaw - oldAreaYaw;
+    sAreaYawChange = (sAreaYaw - oldAreaYaw);
     set_camera_height(c, pos[1]);
 #endif
 }
@@ -2484,8 +2484,8 @@ void init_camera(struct Camera *c) {
     Vec3f marioOffset;
     s32 i;
     sCreditsPlayer2Pitch = sCreditsPlayer2Yaw = 0x0;
-    gPrevLevel                                = gCurrLevelArea / 16;
-    gCurrLevelArea                            = gCurrLevelNum * 16 + gCurrentArea->index;
+    gPrevLevel                                = (gCurrLevelArea / 16);
+    gCurrLevelArea                            = ((gCurrLevelNum * 16) + gCurrentArea->index);
     sSelectionFlags                          &= CAM_MODE_MARIO_SELECTED;
     sFramesPaused                             = 0;
     gLakituState.mode                         = c->mode;
@@ -2508,7 +2508,7 @@ void init_camera(struct Camera *c) {
     sMarioGeometry.prevFloorType              = sMarioGeometry.currFloorType;
     sMarioGeometry.prevCeilType               = sMarioGeometry.currCeilType;
     for (i = 0; i < 32; i++) {
-        sCurCreditsSplinePos[i].index   = -1;
+        sCurCreditsSplinePos  [i].index = -1;
         sCurCreditsSplineFocus[i].index = -1;
     }
     sCutsceneSplineSegment                    = 0;
@@ -2581,6 +2581,9 @@ void init_camera(struct Camera *c) {
     gLakituState.nextYaw = gLakituState.yaw;
     c->yaw               = gLakituState.yaw;
     c->nextYaw           = gLakituState.yaw;
+#ifdef CAMERA_FIX
+    set_camera_mode(c, CAMERA_MODE_8_DIRECTIONS, 0);
+#endif
 #ifdef PUPPYCAM
     puppycam_init();
 #endif

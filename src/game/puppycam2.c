@@ -24,7 +24,7 @@
 #include "mario.h"
 #include "puppyprint.h"
 
-// #ifdef PUPPYCAM
+#ifdef PUPPYCAM
 
 // #define OFFSET              30.0f
 // #define STEPS                   4
@@ -408,7 +408,7 @@ void puppycam_input_pitch(void) {
         } else if ((gPlayer1Controller->buttonDown & D_CBUTTONS) || (gPuppyCam.stick2[1] != 0)) {
             gPuppyCam.pitchAcceleration += (50 * (gPuppyCam.options.sensitivityY / 100.f));
         } else {
-            gPuppyCam.pitchAcceleration = approach_f32_asymptotic(gPuppyCam.pitchAcceleration, 0, DECELERATION);
+            gPuppyCam.pitchAcceleration = 0; // approach_f32_asymptotic(gPuppyCam.pitchAcceleration, 0, DECELERATION);
         }
         gPuppyCam.pitchAcceleration = CLAMP(gPuppyCam.pitchAcceleration, -100, 100);
         // When Mario's moving, his pitch is clamped pretty aggressively, so this exists so you can shift your view up and down momentarily at an actually usable range, rather than the otherwise baby range.
@@ -428,7 +428,7 @@ void puppycam_input_zoom(void) {
 
 void puppycam_input_centre(void) {
     s32 inputDefault = L_TRIG;
-    if (gPuppyCam.options.inputType == 3) inputDefault = R_TRIG;
+    if (gPuppyCam.options.inputType == 2) inputDefault = R_TRIG;
     // Handles L button centering.
     if ((gPlayer1Controller->buttonPressed & inputDefault)
      &&  (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_YAW_ROTATION)
@@ -450,13 +450,13 @@ static void puppycam_input_hold_preset1(UNUSED f32 ivX) {
         play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gGlobalSoundSource);
     }
     if (((gPlayer1Controller->buttonDown & L_CBUTTONS) && !gPuppyCam.options.analogue) || (gPuppyCam.stick2[0] != 0)) {
-        gPuppyCam.yawAcceleration -= (50 * (gPuppyCam.options.sensitivityX / 100.f));
+        gPuppyCam.yawAcceleration -= (75 * (gPuppyCam.options.sensitivityX / 100.f));
         gPuppyCam.framesSinceC[0] = 0;
     } else if (((gPlayer1Controller->buttonDown & R_CBUTTONS) && !gPuppyCam.options.analogue) || (gPuppyCam.stick2[0] != 0)) {
-        gPuppyCam.yawAcceleration += (50 * (gPuppyCam.options.sensitivityX / 100.f));
+        gPuppyCam.yawAcceleration += (75 * (gPuppyCam.options.sensitivityX / 100.f));
         gPuppyCam.framesSinceC[1] = 0;
     } else {
-        gPuppyCam.yawAcceleration = approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
+        gPuppyCam.yawAcceleration = 0; // approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
     }
 }
 
@@ -478,11 +478,11 @@ static void puppycam_input_hold_preset2(f32 ivX) {
     }
     // Handles continuous movement as normal, as long as the button's held.
     if (gPlayer1Controller->buttonDown & L_CBUTTONS) {
-        gPuppyCam.yawAcceleration -= (10 * (gPuppyCam.options.sensitivityX / 100.f));
+        gPuppyCam.yawAcceleration -= (75 * (gPuppyCam.options.sensitivityX / 100.f));
     } else if (gPlayer1Controller->buttonDown & R_CBUTTONS) {
-        gPuppyCam.yawAcceleration += (10 * (gPuppyCam.options.sensitivityX / 100.f));
+        gPuppyCam.yawAcceleration += (75 * (gPuppyCam.options.sensitivityX / 100.f));
     } else {
-        gPuppyCam.yawAcceleration = approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
+        gPuppyCam.yawAcceleration = 0; // approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
     }
 }
 
@@ -499,7 +499,7 @@ static void puppycam_input_hold_preset3(UNUSED f32 ivX) {
         if (ABS(gPlayer1Controller->rawStickX) > DEADZONE) {
             gPuppyCam.yawAcceleration -= ((gPuppyCam.options.sensitivityX / 100.f) * stickMag[0]);
         } else {
-            gPuppyCam.yawAcceleration = approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
+            gPuppyCam.yawAcceleration = 0; // approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
         }
         if (ABS(gPlayer1Controller->rawStickY) > DEADZONE) {
             gPuppyCam.pitchAcceleration -= ((gPuppyCam.options.sensitivityY / 100.f) * stickMag[1]);
@@ -917,7 +917,7 @@ static void puppycam_collision(void) {
     Vec3f camdir[2];
     Vec3f hitpos[2];
     Vec3f target[2];
-    s16 pitchTotal = CLAMP(gPuppyCam.pitch+(gPuppyCam.swimPitch * 10) + gPuppyCam.terrainPitch, 800, 0x7800);
+    s16 pitchTotal = CLAMP(gPuppyCam.pitch + (gPuppyCam.swimPitch * 10) + gPuppyCam.edgePitch + gPuppyCam.terrainPitch, 800, 0x7800);
     s32 dist[2];
     if (gPuppyCam.targetObj == NULL) return;
     // The ray, starting from the top
@@ -932,14 +932,14 @@ static void puppycam_collision(void) {
     camdir[0][1] = (       LENCOS(gPuppyCam.zoomTarget,pitchTotal)                 + gPuppyCam.shake[1]);
     camdir[0][2] = (LENCOS(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[2]);
     vec3f_copy(camdir[1], camdir[0]);
-    find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0]);
-    find_surface_on_ray(target[1], camdir[1], &surf[1], hitpos[1]);
+    find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0], RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL);
+    find_surface_on_ray(target[1], camdir[1], &surf[1], hitpos[1], RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL);
 #ifdef BETTER_WALL_COLLISION
-    resolve_and_return_wall_collisions(hitpos[0], 0.0f, 50.0f, &wall0);
-    resolve_and_return_wall_collisions(hitpos[1], 0.0f, 50.0f, &wall1);
+    resolve_and_return_wall_collisions(hitpos[0], 0.0f, 25.0f, &wall0);
+    resolve_and_return_wall_collisions(hitpos[1], 0.0f, 25.0f, &wall1);
 #else
-    resolve_and_return_wall_collisions(hitpos[0], 0.0f, 50.0f);
-    resolve_and_return_wall_collisions(hitpos[1], 0.0f, 50.0f);
+    resolve_and_return_wall_collisions(hitpos[0], 0.0f, 25.0f);
+    resolve_and_return_wall_collisions(hitpos[1], 0.0f, 25.0f);
 #endif
     dist[0] = ((target[0][0] - hitpos[0][0]) * (target[0][0] - hitpos[0][0]) + (target[0][1] - hitpos[0][1]) * (target[0][1] - hitpos[0][1]) + (target[0][2] - hitpos[0][2]) * (target[0][2] - hitpos[0][2]));
     dist[1] = ((target[1][0] - hitpos[1][0]) * (target[1][0] - hitpos[1][0]) + (target[1][1] - hitpos[1][1]) * (target[1][1] - hitpos[1][1]) + (target[1][2] - hitpos[1][2]) * (target[1][2] - hitpos[1][2]));
@@ -1022,4 +1022,4 @@ void puppycam_loop(void) {
     puppycam_apply();
 }
 
-// #endif
+#endif

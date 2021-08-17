@@ -149,7 +149,7 @@ void audio_dma_copy_async(uintptr_t devAddr, void *vAddr, size_t nbytes, OSMesgQ
     osInvalDCache(vAddr, nbytes);
     osPiStartDma(mesg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, vAddr, nbytes, queue);
 #ifdef PUPPYPRINT
-    dmaAudioTime[perfIteration] += osGetTime()-first;
+    dmaAudioTime[perfIteration] += (osGetTime() - first);
 #endif
 }
 
@@ -172,7 +172,7 @@ void audio_dma_partial_copy_async(uintptr_t *devAddr, u8 **vAddr, ssize_t *remai
     *devAddr += transfer;
     *vAddr   += transfer;
 #ifdef PUPPYPRINT
-    dmaAudioTime[perfIteration] += osGetTime()-first;
+    dmaAudioTime[perfIteration] += (osGetTime() - first);
 #endif
 }
 

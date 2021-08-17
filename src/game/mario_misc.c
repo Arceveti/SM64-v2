@@ -287,7 +287,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
             bodyState->modelState |= MODEL_STATE_NOISE_ALPHA;
         }
 #endif
-        gfx   = make_gfx_mario_alpha(asGenerated, alpha);
+        gfx = make_gfx_mario_alpha(asGenerated, alpha);
     }
     return gfx;
 }

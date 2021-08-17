@@ -662,13 +662,18 @@
 #define /*0x0F8*/ oKleptoHomeYOffset                            OBJECT_FIELD_F32(0x1C)
 #define /*0x0FC*/ oKleptoHalfLateralDistToHome                  OBJECT_FIELD_F32(0x1D)
 #define /*0x100*/ oKleptoSpeed                                  OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oKleptoStartPosX                              OBJECT_FIELD_F32(0x1F)
-#define /*0x108*/ oKleptoStartPosY                              OBJECT_FIELD_F32(0x20)
-#define /*0x10C*/ oKleptoStartPosZ                              OBJECT_FIELD_F32(0x21)
+#define /*0x104*/ O_KLEPTO_START_POS_INDEX                      0x1F
+#define /*0x104*/ O_KLEPTO_START_POS_X_INDEX                    (O_KLEPTO_START_POS_INDEX + 0) // 0x1F
+#define /*0x108*/ O_KLEPTO_START_POS_Y_INDEX                    (O_KLEPTO_START_POS_INDEX + 1) // 0x20
+#define /*0x10C*/ O_KLEPTO_START_POS_Z_INDEX                    (O_KLEPTO_START_POS_INDEX + 2) // 0x21
+#define /*0x104*/ oKleptoStartPosVec                            OBJECT_FIELD_F32(O_KLEPTO_START_POS_INDEX)
+#define /*0x104*/ oKleptoStartPosX                              OBJECT_FIELD_F32(O_KLEPTO_START_POS_X_INDEX)
+#define /*0x108*/ oKleptoStartPosY                              OBJECT_FIELD_F32(O_KLEPTO_START_POS_Y_INDEX)
+#define /*0x10C*/ oKleptoStartPosZ                              OBJECT_FIELD_F32(O_KLEPTO_START_POS_Z_INDEX)
 #define /*0x110*/ oKleptoTimeUntilTargetChange                  OBJECT_FIELD_S32(0x22)
-#define /*0x1AC*/ oKleptoTargetNumber                           OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oKleptoTargetNumber                           OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oKleptoDiveTimer                              OBJECT_FIELD_S16(0x49, + 1)
-#define /*0x1B0*/ oKleptoPitchToTarget                          OBJECT_FIELD_S16(0x4A, 0)
+#define /*0x1B0*/ oKleptoPitchToTarget                          OBJECT_FIELD_S16(0x4A,   0)
 #define /*0x1B2*/ oKleptoYawToTarget                            OBJECT_FIELD_S16(0x4A, + 1)
 
 /* Koopa */

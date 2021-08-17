@@ -180,12 +180,12 @@ void beh_yellow_background_menu_loop(void) {
  */
 s32 check_clicked_button(s16 x, s16 y, f32 depth) {
     f32 a = 52.4213f;
-    f32 newX = ((f32) x * 160.0f) / (a * depth);
-    f32 newY = ((f32) y * 120.0f) / (a * 3 / 4 * depth);
-    s16 maxX = newX + 25.0f;
-    s16 minX = newX - 25.0f;
-    s16 maxY = newY + 21.0f;
-    s16 minY = newY - 21.0f;
+    f32 newX = (((f32) x * 160.0f) / (a *         depth));
+    f32 newY = (((f32) y * 120.0f) / (a * 3 / 4 * depth));
+    s16 maxX = (newX + 25.0f);
+    s16 minX = (newX - 25.0f);
+    s16 maxY = (newY + 21.0f);
+    s16 minY = (newY - 21.0f);
     return (sClickPos[0] < maxX && minX < sClickPos[0] && sClickPos[1] < maxY && minY < sClickPos[1]);
 }
 

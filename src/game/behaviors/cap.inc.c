@@ -100,8 +100,7 @@ void cap_scale_vertically(void) {
 
 void wing_vanish_cap_act_move(void) {
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
-    s16 collisionFlags = object_step();
-    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
+    if (object_step() & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
         if (o->oVelY != 0.0f) {
             o->oCapDoScaleVertically = 1;
@@ -132,8 +131,7 @@ void bhv_metal_cap_init(void) {
 
 void metal_cap_act_move(void) {
     o->oFaceAngleYaw += o->oForwardVel * 128.0f;
-    s16 collisionFlags = object_step();
-    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) cap_check_quicksand();
+    if (object_step() & OBJ_COL_FLAG_GROUNDED) cap_check_quicksand();
 }
 
 void bhv_metal_cap_loop(void) {
@@ -169,8 +167,7 @@ void normal_cap_set_save_flags(void) {
 void normal_cap_act_move(void) {
     o->oFaceAngleYaw   += o->oForwardVel * 128.0f;
     o->oFaceAnglePitch += o->oForwardVel *  80.0f;
-    s16 collisionFlags = object_step();
-    if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
+    if (object_step() & OBJ_COL_FLAG_GROUNDED) {
         cap_check_quicksand();
         if (o->oVelY != 0.0f) {
             o->oCapDoScaleVertically = 1;

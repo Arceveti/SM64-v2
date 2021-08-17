@@ -115,3 +115,5 @@ lib/libs2d_engine.a
 
 !/lib/PR/hvqm/*.o
 
+# .orig files
+*.orig

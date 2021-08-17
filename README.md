@@ -1,7 +1,7 @@
 # SM64v2
 **AFTER CLONING THE REPO, CHECK OUT THE `include/config.h` FILE BEFORE ANYTHING ELSE! IT THERE'S A LOT OF STUFF IN THIS REPO THAT CAN BE TOGGLED THERE.**
 
-NOTE: HMC crashes when entering via debug level select unless there is input on the first frame (?). This seems to be caused by Swoops as the crash does not occur when they are removed. This crash is also present on the upstream repositories.
+This repo needs BOTH an US ROM and a JP ROM in order to build. Place baserom.us.z64 in the repo as usual and ALSO place baserom.jp.z64
 
 This repo needs gcc in order to be able to build it. To install it, run `sudo apt install gcc-mips-linux-gnu`
 

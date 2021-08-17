@@ -408,6 +408,7 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
     if (selectedChild != NULL) geo_process_node_and_siblings(selectedChild);
 }
 
+//! move to math_util
 static void make_roll_matrix(Mtx *mtx, s16 angle) {
     Mat4 temp;
     mtxf_identity(temp);

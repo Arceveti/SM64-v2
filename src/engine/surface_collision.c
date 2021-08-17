@@ -519,7 +519,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     // Increment the debug tracker.
     gNumCalls.ceil++;
 #ifdef PUPPYPRINT
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return height;
 }
@@ -769,7 +769,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
      || (z <= -LEVEL_BOUNDARY_MAX)
      || (z >=  LEVEL_BOUNDARY_MAX)) {
 #ifdef PUPPYPRINT
-        collisionTime[perfIteration] += (osGetTime()-first);
+        collisionTime[perfIteration] += (osGetTime() - first);
 #endif
         return height;
     }
@@ -810,7 +810,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Increment the debug tracker.
     gNumCalls.floor++;
 #ifdef PUPPYPRINT
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return height;
 }
@@ -960,7 +960,7 @@ s32 find_water_level(s32 x, s32 z) {
         }
     }
 #ifdef PUPPYPRINT
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return waterLevel;
 }
@@ -997,7 +997,7 @@ s32 find_poison_gas_level(s32 x, s32 z) {
         }
     }
 #ifdef PUPPYPRINT
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return gasLevel;
 }
@@ -1074,28 +1074,35 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
     }
 }
 
-void find_surface_on_ray_cell(s16 cellX, s16 cellZ, Vec3f orig, Vec3f normalized_dir, f32 dir_length, struct Surface **hit_surface, Vec3f hit_pos, f32 *max_length) {
+void find_surface_on_ray_cell(s16 cellX, s16 cellZ, Vec3f orig, Vec3f normalized_dir, f32 dir_length, struct Surface **hit_surface, Vec3f hit_pos, f32 *max_length, s32 flags) {
 	// Skip if OOB
 	if ((cellX >= 0) && (cellX <= (NUM_CELLS - 1)) && (cellZ >= 0) && (cellZ <= (NUM_CELLS - 1))) {
 		// Iterate through each surface in this partition
-		if (normalized_dir[1] > -0.99999f) {
+		if (normalized_dir[1] > -0.99999f && flags & RAYCAST_FIND_CEIL) {
 			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 		}
-		if (normalized_dir[1] < 0.99999f) {
+		if (normalized_dir[1] < 0.99999f && flags & RAYCAST_FIND_FLOOR) {
 			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 		}
-		find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-		find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+		if (flags & RAYCAST_FIND_WALL) {
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+        }
+#ifdef NEW_WATER_SURFACES
+        if (flags & RAYCAST_FIND_WATER) {
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WATER].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+        }
+#endif
 	}
 }
 
-void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos) {
-    register s16 cellPrevX, cellPrevZ;
+void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags) {
     Vec3f normalized_dir;
     register f32 step, dx, dz;
-    u32 i;
+    s32 i;
     // Set that no surface has been hit
     *hit_surface = NULL;
     vec3f_sum(hit_pos, orig, dir);
@@ -1105,13 +1112,15 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     vec3f_copy(normalized_dir, dir);
     vec3f_normalize(normalized_dir);
     // Get our cell coordinate
-    register f32 fCellX = ((orig[0] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
-    register f32 fCellZ = ((orig[2] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
-    register s16 cellX  = (s16)fCellX;
-    register s16 cellZ  = (s16)fCellZ;
+    register f32 fCellX    = ((orig[0] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
+    register f32 fCellZ    = ((orig[2] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
+    register s32 cellX     = fCellX;
+    register s32 cellZ     = fCellZ;
+    register s32 cellPrevX = cellX;
+    register s32 cellPrevZ = cellZ;
     // Don't do DDA if straight down
     if ((normalized_dir[1] >= 0.99999f) || (normalized_dir[1] <= -0.99999f)) {
-		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length);
+		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
 		return;
 	}
     // Get cells we cross using DDA
@@ -1122,18 +1131,18 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     }
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);
-    for ((i = 0); ((i < step) && (*hit_surface == NULL)); i++) {
-		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length);
+    for ((i = 0); ((i < step) && (*hit_surface == NULL)); (i++)) {
+		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
         // Move cell coordinate
         fCellX   += dx;
         fCellZ   += dz;
         cellPrevX = cellX;
         cellPrevZ = cellZ;
-        cellX     = (s16)fCellX;
-        cellZ     = (s16)fCellZ;
+        cellX     = fCellX;
+        cellZ     = fCellZ;
         if ((cellPrevX != cellX) && (cellPrevZ != cellZ)) {
-            find_surface_on_ray_cell(cellX, cellPrevZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length);
-            find_surface_on_ray_cell(cellPrevX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length);
+            find_surface_on_ray_cell(cellX, cellPrevZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
+            find_surface_on_ray_cell(cellPrevX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
         }
     }
 }

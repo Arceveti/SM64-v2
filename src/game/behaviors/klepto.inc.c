@@ -265,9 +265,7 @@ static void klepto_act_reset_position(void) {
         }
     } else {
         o->oAction = KLEPTO_ACT_WAIT_FOR_MARIO;
-        o->oHomeX  = o->oKleptoStartPosX;
-        o->oHomeY  = o->oKleptoStartPosY;
-        o->oHomeZ  = o->oKleptoStartPosZ;
+        vec3f_copy(&o->oHomeVec, &o->oKleptoStartPosVec);
     }
 }
 

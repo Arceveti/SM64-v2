@@ -588,6 +588,6 @@ void update_objects(void) {
     gPrevFrameObjectCount = gObjectCounter;
 #ifdef PUPPYPRINT
     profiler_update(behaviourTime, first);
-    behaviourTime[perfIteration] -= (collisionTime[perfIteration]+colTime);
+    behaviourTime[perfIteration] -= (collisionTime[perfIteration] + colTime);
 #endif
 }
