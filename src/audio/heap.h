@@ -5,15 +5,15 @@
 
 #include "internal.h"
 
-#define SOUND_LOAD_STATUS_NOT_LOADED     0
-#define SOUND_LOAD_STATUS_IN_PROGRESS    1
-#define SOUND_LOAD_STATUS_COMPLETE       2
-#define SOUND_LOAD_STATUS_DISCARDABLE    3
-#define SOUND_LOAD_STATUS_4              4
-#define SOUND_LOAD_STATUS_5              5
+#define SOUND_LOAD_STATUS_NOT_LOADED     0x0
+#define SOUND_LOAD_STATUS_IN_PROGRESS    0x1
+#define SOUND_LOAD_STATUS_COMPLETE       0x2
+#define SOUND_LOAD_STATUS_DISCARDABLE    0x3
+#define SOUND_LOAD_STATUS_4              0x4
+#define SOUND_LOAD_STATUS_5              0x5
 
 #define IS_BANK_LOAD_COMPLETE(bankId) (gBankLoadStatus[bankId] >= SOUND_LOAD_STATUS_COMPLETE)
-#define IS_SEQ_LOAD_COMPLETE(seqId) (gSeqLoadStatus[seqId] >= SOUND_LOAD_STATUS_COMPLETE)
+#define IS_SEQ_LOAD_COMPLETE(  seqId) (gSeqLoadStatus[  seqId] >= SOUND_LOAD_STATUS_COMPLETE)
 
 struct SoundAllocPool
 {
@@ -120,10 +120,10 @@ void sound_init_main_pools(s32 sizeForAudioInitPool);
 void sound_alloc_pool_init(struct SoundAllocPool *pool, void *memAddr, u32 size);
 #ifdef VERSION_SH
 void *alloc_bank_or_seq(s32 poolIdx, s32 size, s32 arg3, s32 id);
-void *get_bank_or_seq(s32 poolIdx, s32 arg1, s32 id);
+void *get_bank_or_seq(  s32 poolIdx, s32 arg1, s32 id);
 #else
 void *alloc_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 size, s32 arg3, s32 id);
-void *get_bank_or_seq(struct SoundMultiPool *arg0, s32 arg1, s32 id);
+void *get_bank_or_seq(  struct SoundMultiPool *arg0, s32 arg1, s32 id);
 #endif
 #if defined(VERSION_EU) || defined(VERSION_SH)
 s32 audio_shut_down_and_reset_step(void);

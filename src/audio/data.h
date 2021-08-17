@@ -7,7 +7,7 @@
 #include "types.h"
 #include "synthesis.h"
 
-#define AUDIO_LOCK_UNINITIALIZED 0
+#define AUDIO_LOCK_UNINITIALIZED 0x0
 #define AUDIO_LOCK_NOT_LOADING   0x76557364
 #define AUDIO_LOCK_LOADING       0x19710515
 
@@ -19,6 +19,7 @@ extern struct AudioSessionSettingsEU gAudioSessionPresets[];
 #else
 extern struct AudioSessionSettings gAudioSessionPresets[18];
 #endif
+// extern u16 D_80332388[128]; // unused
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
 extern f32 gPitchBendFrequencyScale[256];
@@ -65,7 +66,8 @@ extern f32 gVolRampingRhs128[128];
 
 // non-constant .data
 extern s16 gTatumsPerBeat;
-extern s32 gAudioHeapSize; // AUDIO_HEAP_SIZE
+// extern s8  gUnusedCount80333EE8;
+extern s32 gAudioHeapSize;     // AUDIO_HEAP_SIZE
 extern s32 gAudioInitPoolSize; // AUDIO_INIT_POOL_SIZE
 extern volatile s32 gAudioLoadLock;
 
@@ -103,6 +105,9 @@ extern s16 gAiBufferLengths[NUMAIBUFFERS];
 #define AIBUFFER_LEN (0xa0 * 16)
 #endif
 
+// extern u32 gUnused80226E58[0x10];
+// extern u16 gUnused80226E98[0x10];
+
 extern u32 gAudioRandom;
 
 #ifdef EXPAND_AUDIO_HEAP
@@ -139,9 +144,11 @@ extern OSMesgQueue *D_SH_80350FA8;
 #endif
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
+// #define UNUSED_COUNT_80333EE8 24
 #define AUDIO_HEAP_SIZE (0x2c500 + EXT_AUDIO_HEAP_SIZE + EXT_AUDIO_INIT_POOL_SIZE + BETTER_REVERB_SIZE)
 #define AUDIO_INIT_POOL_SIZE (0x2c00 + EXT_AUDIO_INIT_POOL_SIZE)
 #else
+// #define UNUSED_COUNT_80333EE8 16
 #define AUDIO_HEAP_SIZE (0x31150 + EXT_AUDIO_HEAP_SIZE + EXT_AUDIO_INIT_POOL_SIZE + BETTER_REVERB_SIZE)
 #define AUDIO_INIT_POOL_SIZE (0x2500 + EXT_AUDIO_INIT_POOL_SIZE)
 #endif

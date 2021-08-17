@@ -11,10 +11,10 @@
 // which *is* orthogonal to the other. SEQ implicitly includes CHANNEL.
 // If none of the CHANNEL/SEQ/GLOBAL_FREELIST bits are set, all three locations
 // are tried.
-#define NOTE_ALLOC_LAYER 1
-#define NOTE_ALLOC_CHANNEL 2
-#define NOTE_ALLOC_SEQ 4
-#define NOTE_ALLOC_GLOBAL_FREELIST 8
+#define NOTE_ALLOC_LAYER           0x1
+#define NOTE_ALLOC_CHANNEL         0x2
+#define NOTE_ALLOC_SEQ             0x4
+#define NOTE_ALLOC_GLOBAL_FREELIST 0x8
 
 void process_notes(void);
 void seq_channel_layer_note_decay(          struct SequenceChannelLayer *seqLayer);
@@ -38,8 +38,8 @@ void note_set_vel_pan_reverb(struct Note *note, f32 velocity, u8 pan, u8 reverbV
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
 struct AudioBankSound *instrument_get_audio_bank_sound(struct Instrument *instrument, s32 semitone);
-struct Instrument *get_instrument_inner(s32 bankId, s32 instId);
-struct Drum       *get_drum(            s32 bankId, s32 drumId);
+struct Instrument     *get_instrument_inner(s32 bankId, s32 instId);
+struct Drum           *get_drum(            s32 bankId, s32 drumId);
 void note_init_volume(  struct Note *note);
 void note_set_frequency(struct Note *note, f32 frequency);
 void note_enable(       struct Note *note);

@@ -10,13 +10,13 @@
 // bit which may be read by the sequence script.
 #define SEQUENCE_ARGS(priority, seqId) ((priority << 8) | seqId)
 
-#define SOUND_MODE_STEREO           0
-#define SOUND_MODE_MONO             3
-#define SOUND_MODE_HEADSET          1
+#define SOUND_MODE_STEREO           0x0
+#define SOUND_MODE_MONO             0x3
+#define SOUND_MODE_HEADSET          0x1
 
-#define SEQ_PLAYER_LEVEL            0  // Level background music
-#define SEQ_PLAYER_ENV              1  // Misc music like the puzzle jingle
-#define SEQ_PLAYER_SFX              2  // Sound effects
+#define SEQ_PLAYER_LEVEL            0x0  // Level background music
+#define SEQ_PLAYER_ENV              0x1  // Misc music like the puzzle jingle
+#define SEQ_PLAYER_SFX              0x2  // Sound effects
 
 extern s32 gAudioErrorFlags;
 extern f32 gGlobalSoundSource[3];
@@ -45,7 +45,7 @@ void play_music(u8 player, u16 seqArgs, u16 fadeTimer);
 void stop_background_music(   u16 seqId);
 void fadeout_background_music(u16 seqId, u16 fadeOut);
 void drop_queued_background_music(void);
-u16 get_current_background_music(void);
+u16  get_current_background_music(void);
 void play_secondary_music(u8 seqId, u8 bgMusicVolume, u8 volume, u16 fadeTimer);
 void func_80321080(u16 fadeTimer);
 void func_803210D4(u16 fadeOutTime);
@@ -60,5 +60,10 @@ void sound_reset(u8 presetId);
 void audio_set_sound_mode(u8 soundMode);
 
 void audio_init(void); // in load.c
+
+// #if defined(VERSION_EU) || defined(VERSION_SH)
+// struct SPTask *unused_80321460();
+// struct SPTask *unused_80321460(void);
+// #endif
 
 #endif // AUDIO_EXTERNAL_H

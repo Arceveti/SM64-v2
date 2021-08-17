@@ -13,38 +13,51 @@
 #define SEQUENCE_PLAYERS   3
 #define SEQUENCE_CHANNELS 32
 #ifdef VERSION_JP
-#define SEQUENCE_LAYERS 48
+#define SEQUENCE_LAYERS   48
 #else
-#define SEQUENCE_LAYERS 52
+#define SEQUENCE_LAYERS   52
 #endif
 #endif
 
-#define LAYERS_MAX        4
-#define CHANNELS_MAX     16
+#define LAYERS_MAX                    0x04
+#define CHANNELS_MAX                  0x10
 
 #define NO_LAYER ((struct SequenceChannelLayer *)(-1))
 
-#define MUTE_BEHAVIOR_STOP_SCRIPT 0x80 // stop processing sequence/channel scripts
-#define MUTE_BEHAVIOR_STOP_NOTES  0x40 // prevent further notes from playing
-#define MUTE_BEHAVIOR_SOFTEN      0x20 // lower volume, by default to half
+#define MUTE_BEHAVIOR_STOP_SCRIPT     0x80 // stop processing sequence/channel scripts
+#define MUTE_BEHAVIOR_STOP_NOTES      0x40 // prevent further notes from playing
+#define MUTE_BEHAVIOR_SOFTEN          0x20 // lower volume, by default to half
 
-#define SEQUENCE_PLAYER_STATE_0        0
-#define SEQUENCE_PLAYER_STATE_FADE_OUT 1
-#define SEQUENCE_PLAYER_STATE_2        2
-#define SEQUENCE_PLAYER_STATE_3        3
-#define SEQUENCE_PLAYER_STATE_4        4
+#define SEQUENCE_PLAYER_STATE_0        0x0
+#define SEQUENCE_PLAYER_STATE_FADE_OUT 0x1
+#define SEQUENCE_PLAYER_STATE_2        0x2
+#define SEQUENCE_PLAYER_STATE_3        0x3
+#define SEQUENCE_PLAYER_STATE_4        0x4
 
-#define NOTE_PRIORITY_DISABLED  0
-#define NOTE_PRIORITY_STOPPING  1
-#define NOTE_PRIORITY_MIN       2
-#define NOTE_PRIORITY_DEFAULT   3
+#define NOTE_PRIORITY_DISABLED         0x0
+#define NOTE_PRIORITY_STOPPING         0x1
+#define NOTE_PRIORITY_MIN              0x2
+#define NOTE_PRIORITY_DEFAULT          0x3
 
 #define TATUMS_PER_BEAT 48
 
 // abi.h contains more details about the ADPCM and S8 codecs, "skip" skips codec processing
-#define CODEC_ADPCM 0
-#define CODEC_S8    1
-#define CODEC_SKIP  2
+#define CODEC_ADPCM 0x0
+#define CODEC_S8    0x1
+#define CODEC_SKIP  0x2
+
+#ifdef VERSION_JP
+#define TEMPO_SCALE 1
+#else
+#define TEMPO_SCALE TATUMS_PER_BEAT
+#endif
+
+// TODO: US_FLOAT should probably be renamed to JP_DOUBLE since eu seems to use floats too
+#ifdef VERSION_JP
+#define US_FLOAT(x) x
+#else
+#define US_FLOAT(x) x ## f
+#endif
 
 // Convert u8 or u16 to f32. On JP, this uses a u32->f32 conversion,
 // resulting in more bloated codegen, while on US it goes through s32.
@@ -72,14 +85,14 @@
 #endif
 
 #ifdef VERSION_EU
-#define eu_stubbed_printf_0(msg)          stubbed_printf(msg)
-#define eu_stubbed_printf_1(msg, a)       stubbed_printf(msg, a)
-#define eu_stubbed_printf_2(msg, a, b)    stubbed_printf(msg, a, b)
+#define eu_stubbed_printf_0(msg         ) stubbed_printf(msg         )
+#define eu_stubbed_printf_1(msg, a      ) stubbed_printf(msg, a      )
+#define eu_stubbed_printf_2(msg, a, b   ) stubbed_printf(msg, a, b   )
 #define eu_stubbed_printf_3(msg, a, b, c) stubbed_printf(msg, a, b, c)
 #else
-#define eu_stubbed_printf_0(msg)
-#define eu_stubbed_printf_1(msg, a)
-#define eu_stubbed_printf_2(msg, a, b)
+#define eu_stubbed_printf_0(msg         )
+#define eu_stubbed_printf_1(msg, a      )
+#define eu_stubbed_printf_2(msg, a, b   )
 #define eu_stubbed_printf_3(msg, a, b, c)
 #endif
 
@@ -165,11 +178,11 @@ struct AdpcmBook
 struct AudioBankSample
 {
 #ifdef VERSION_SH
-    /* 0x00 */ u32 codec : 4;
-    /* 0x00 */ u32 medium : 2;
-    /* 0x00 */ u32 bit1 : 1;
-    /* 0x00 */ u32 isPatched : 1;
-    /* 0x01 */ u32 size : 24;
+    /* 0x00 */ u32 codec     :  4;
+    /* 0x00 */ u32 medium    :  2;
+    /* 0x00 */ u32 bit1      :  1;
+    /* 0x00 */ u32 isPatched :  1;
+    /* 0x01 */ u32 size      : 24;
 #else
     u8 unused;
     u8 loaded;
@@ -866,6 +879,7 @@ struct UnkStruct80343D00 {
 };
 
 // in external.c
+// extern s32 D_SH_80343CF0;
 extern struct UnkStruct80343D00 D_SH_80343D00;
 #endif
 

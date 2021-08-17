@@ -18,7 +18,7 @@
 #endif
 #endif
 
-#define SAMPLES_TO_OVERPRODUCE 0x10
+#define SAMPLES_TO_OVERPRODUCE           0x10
 #define EXTRA_BUFFERED_AI_SAMPLES_TARGET 0x40
 
 #ifdef VERSION_JP
@@ -35,7 +35,7 @@ extern struct EuAudioCmd sAudioCmd[0x100];
 void func_8031D690(s32 player, FadeT fadeInTime);
 void seq_player_fade_to_zero_volume(s32 player, FadeT fadeOutTime);
 void decrease_sample_dma_ttls(void);
-s32 audio_shut_down_and_reset_step(void);
+s32  audio_shut_down_and_reset_step(void);
 void func_802ad7ec(u32);
 
 struct SPTask *create_next_audio_frame_task(void) {
@@ -48,95 +48,78 @@ struct SPTask *create_next_audio_frame_task(void) {
     s32 oldDmaCount;
     OSMesg sp30;
     OSMesg sp2C;
-
     gAudioFrameCount++;
     if (gAudioFrameCount % gAudioBufferParameters.presetUnk4 != 0) {
         stubbed_printf("DAC:Lost 1 Frame.\n");
         return NULL;
     }
-
     osSendMesg(OSMesgQueues[0], (OSMesg) gAudioFrameCount, 0);
-
     gAudioTaskIndex ^= 1;
     gCurrAiBufferIndex++;
-    gCurrAiBufferIndex %= NUMAIBUFFERS;
-    index = (gCurrAiBufferIndex - 2 + NUMAIBUFFERS) % NUMAIBUFFERS;
+    gCurrAiBufferIndex  %= NUMAIBUFFERS;
+    index                = (gCurrAiBufferIndex - 2 + NUMAIBUFFERS) % NUMAIBUFFERS;
     samplesRemainingInAI = osAiGetLength() / 4;
-
     if (gAiBufferLengths[index] != 0) osAiSetNextBuffer(gAiBuffers[index], gAiBufferLengths[index] * 4);
-
     oldDmaCount = gCurrAudioFrameDmaCount;
     if (oldDmaCount > AUDIO_FRAME_DMA_QUEUE_SIZE) stubbed_printf("DMA: Request queue over.( %d )\n", oldDmaCount);
     gCurrAudioFrameDmaCount = 0;
-
     decrease_sample_dma_ttls();
     if (osRecvMesg(OSMesgQueues[2], &sp30, 0) != -1) {
         gAudioResetPresetIdToLoad = (u8) (s32) sp30;
-        gAudioResetStatus = 5;
+        gAudioResetStatus         = 5;
     }
-
-    if (gAudioResetStatus != 0) {
-        if (audio_shut_down_and_reset_step() == 0) {
-            if (gAudioResetStatus == 0) osSendMesg(OSMesgQueues[3], (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
-            return NULL;
-        }
+    if ((gAudioResetStatus != 0) && (audio_shut_down_and_reset_step() == 0) && (gAudioResetStatus == 0)) {
+        osSendMesg(OSMesgQueues[3], (OSMesg) (s32) gAudioResetPresetIdToLoad, OS_MESG_NOBLOCK);
+        return NULL;
     }
-
-    gAudioTask = &gAudioTasks[gAudioTaskIndex];
-    gAudioCmd = gAudioCmdBuffers[gAudioTaskIndex];
-    index = gCurrAiBufferIndex;
-    currAiBuffer = gAiBuffers[index];
-
-    gAiBufferLengths[index] = ((gAudioBufferParameters.samplesPerFrameTarget - samplesRemainingInAI +
-         EXTRA_BUFFERED_AI_SAMPLES_TARGET) & ~0xf) + SAMPLES_TO_OVERPRODUCE;
+    gAudioTask              = &gAudioTasks[gAudioTaskIndex];
+    gAudioCmd               = gAudioCmdBuffers[gAudioTaskIndex];
+    index                   = gCurrAiBufferIndex;
+    currAiBuffer            = gAiBuffers[index];
+    gAiBufferLengths[index] = ((gAudioBufferParameters.samplesPerFrameTarget - samplesRemainingInAI + EXTRA_BUFFERED_AI_SAMPLES_TARGET) & ~0xf) + SAMPLES_TO_OVERPRODUCE;
     if (gAiBufferLengths[index] < gAudioBufferParameters.minAiBufferLength) gAiBufferLengths[index] = gAudioBufferParameters.minAiBufferLength;
     if (gAiBufferLengths[index] > gAudioBufferParameters.maxAiBufferLength) gAiBufferLengths[index] = gAudioBufferParameters.maxAiBufferLength;
-
     if (osRecvMesg(OSMesgQueues[1], &sp2C, OS_MESG_NOBLOCK) != -1) func_802ad7ec((u32) sp2C);
+    flags                  = 0;
+    gAudioCmd              = synthesis_execute(gAudioCmd, &writtenCmds, currAiBuffer, gAiBufferLengths[index]);
+    gAudioRandom           = ((gAudioRandom + gAudioFrameCount) * gAudioFrameCount);
+    gAudioRandom           = gAudioRandom + writtenCmds / 8;
 
-    flags = 0;
-    gAudioCmd = synthesis_execute(gAudioCmd, &writtenCmds, currAiBuffer, gAiBufferLengths[index]);
-    gAudioRandom = ((gAudioRandom + gAudioFrameCount) * gAudioFrameCount);
-    gAudioRandom = gAudioRandom + writtenCmds / 8;
+    index                  = gAudioTaskIndex;
+    gAudioTask->msgqueue   = NULL;
+    gAudioTask->msg        = NULL;
 
-    index = gAudioTaskIndex;
-    gAudioTask->msgqueue = NULL;
-    gAudioTask->msg      = NULL;
-
-    task = &gAudioTask->task.t;
-    task->type = M_AUDTASK;
-    task->flags = flags;
-    task->ucode_boot = rspbootTextStart;
-    task->ucode_boot_size = (u8 *) rspbootTextEnd - (u8 *) rspbootTextStart;
-    task->ucode = aspMainTextStart;
-    task->ucode_data = aspMainDataStart;
-    task->ucode_size = 0x800; // (this size is ignored)
-    task->ucode_data_size = (aspMainDataEnd - aspMainDataStart) * sizeof(u64);
-    task->dram_stack = NULL;
-    task->dram_stack_size = 0;
-    task->output_buff = NULL;
+    task                   = &gAudioTask->task.t;
+    task->type             = M_AUDTASK;
+    task->flags            = flags;
+    task->ucode_boot       = rspbootTextStart;
+    task->ucode_boot_size  = (u8 *) rspbootTextEnd - (u8 *) rspbootTextStart;
+    task->ucode            = aspMainTextStart;
+    task->ucode_data       = aspMainDataStart;
+    task->ucode_size       = 0x800; // (this size is ignored)
+    task->ucode_data_size  = (aspMainDataEnd - aspMainDataStart) * sizeof(u64);
+    task->dram_stack       = NULL;
+    task->dram_stack_size  = 0;
+    task->output_buff      = NULL;
     task->output_buff_size = NULL;
-    task->data_ptr = gAudioCmdBuffers[index];
-    task->data_size = writtenCmds * sizeof(u64);
-    task->yield_data_ptr = NULL;
-    task->yield_data_size = 0;
+    task->data_ptr         = gAudioCmdBuffers[index];
+    task->data_size        = writtenCmds * sizeof(u64);
+    task->yield_data_ptr   = NULL;
+    task->yield_data_size  = 0;
     return gAudioTask;
 }
 
 void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
     s32 i;
-
     switch (cmd->u.s.op) {
     case 0x81:
         preload_sequence(cmd->u.s.arg2, 3);
         break;
-
     case 0x82:
     case 0x88:
         load_sequence(cmd->u.s.arg1, cmd->u.s.arg2, cmd->u.s.arg3);
         func_8031D690(cmd->u.s.arg1, cmd->u2.as_s32);
         break;
-
     case 0x83:
         if (gSequencePlayers[cmd->u.s.arg1].enabled) {
             if (cmd->u2.as_s32 == 0) {
@@ -146,18 +129,15 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
             }
         }
         break;
-
     case 0xf0:
         gSoundMode = cmd->u2.as_s32;
         break;
-
     case 0xf1:
         for (i = 0; i < 4; i++) {
             gSequencePlayers[i].muted = TRUE;
             gSequencePlayers[i].recalculateVolume = TRUE;
         }
         break;
-
     case 0xf2:
         for (i = 0; i < 4; i++) {
             gSequencePlayers[i].muted = FALSE;
@@ -187,11 +167,11 @@ void seq_player_fade_to_zero_volume(s32 player, FadeT fadeOutTime) {
 
 void func_8031D690(s32 player, FadeT fadeInTime) {
     if (fadeInTime != 0) {
-        gSequencePlayers[player].state = 1;
-        gSequencePlayers[player].fadeTimerUnkEu = fadeInTime;
+        gSequencePlayers[player].state               = 1;
+        gSequencePlayers[player].fadeTimerUnkEu      = fadeInTime;
         gSequencePlayers[player].fadeRemainingFrames = fadeInTime;
-        gSequencePlayers[player].fadeVolume   = 0.0f;
-        gSequencePlayers[player].fadeVelocity = 0.0f;
+        gSequencePlayers[player].fadeVolume          = 0.0f;
+        gSequencePlayers[player].fadeVelocity        = 0.0f;
     }
 }
 
@@ -206,7 +186,7 @@ void port_eu_init_queues(void) {
 
 void func_802ad6f0(s32 arg0, s32 *arg1) {
     struct EuAudioCmd *cmd = &sAudioCmd[D_EU_80302010 & 0xff];
-    cmd->u.first = arg0;
+    cmd->u.first   = arg0;
     cmd->u2.as_u32 = *arg1;
     D_EU_80302010++;
 }
@@ -225,9 +205,7 @@ void func_802ad770(u32 arg0, s8 arg1) {
 }
 
 void func_802ad7a0(void) {
-    osSendMesg(OSMesgQueues[1],
-            (OSMesg)(u32)((D_EU_80302014 & 0xff) << 8 | (D_EU_80302010 & 0xff)),
-            OS_MESG_NOBLOCK);
+    osSendMesg(OSMesgQueues[1], (OSMesg)(u32)((D_EU_80302014 & 0xff) << 8 | (D_EU_80302010 & 0xff)), OS_MESG_NOBLOCK);
     D_EU_80302014 = D_EU_80302010;
 }
 
@@ -235,13 +213,11 @@ void func_802ad7ec(u32 arg0) {
     struct EuAudioCmd *cmd;
     struct SequencePlayer *seqPlayer;
     struct SequenceChannel *chan;
-    u8 end = arg0 & 0xff;
-    u8 i = (arg0 >> 8) & 0xff;
-
+    u8 end =  arg0       & 0xff;
+    u8 i   = (arg0 >> 8) & 0xff;
     for (;;) {
         if (i == end) break;
         cmd = &sAudioCmd[i++ & 0xff];
-
         if (cmd->u.s.arg1 < SEQUENCE_PLAYERS) {
             seqPlayer = &gSequencePlayers[cmd->u.s.arg1];
             if ((cmd->u.s.op & 0x80) != 0) {
@@ -249,18 +225,15 @@ void func_802ad7ec(u32 arg0) {
             } else if ((cmd->u.s.op & 0x40) != 0) {
                 switch (cmd->u.s.op) {
                 case 0x41:
-                    seqPlayer->fadeVolumeScale = cmd->u2.as_f32;
+                    seqPlayer->fadeVolumeScale   = cmd->u2.as_f32;
                     seqPlayer->recalculateVolume = TRUE;
                     break;
-
                 case 0x47:
                     seqPlayer->tempo = cmd->u2.as_s32 * TATUMS_PER_BEAT;
                     break;
-
                 case 0x48:
                     seqPlayer->transposition = cmd->u2.as_s8;
                     break;
-
                 case 0x46:
                     seqPlayer->seqVariationEu[cmd->u.s.arg3] = cmd->u2.as_s8;
                     break;
