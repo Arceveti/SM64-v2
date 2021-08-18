@@ -716,7 +716,7 @@ static s32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 index) 
         rel[0]    = (sPuppyVolumeStack[index]->pos[0] - gPuppyCam.targetObj->oPosX);
         rel[1]    = (sPuppyVolumeStack[index]->pos[1] - gPuppyCam.targetObj->oPosY);
         rel[2]    = (sPuppyVolumeStack[index]->pos[2] - gPuppyCam.targetObj->oPosZ);
-        dist      = sqrtf((rel[0] * rel[0]) + (rel[2] * rel[2]));
+        dist      = sqrtf(sqr(rel[0]) + sqr(rel[2]));
         distCheck = (dist < sPuppyVolumeStack[index]->radius[0]);
         if ((-sPuppyVolumeStack[index]->radius[1] < rel[1]) && (rel[1] < sPuppyVolumeStack[index]->radius[1]) && distCheck) {
             *volume = *sPuppyVolumeStack[index];
@@ -932,8 +932,8 @@ static void puppycam_collision(void) {
     camdir[0][1] = (       LENCOS(gPuppyCam.zoomTarget,pitchTotal)                 + gPuppyCam.shake[1]);
     camdir[0][2] = (LENCOS(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[2]);
     vec3f_copy(camdir[1], camdir[0]);
-    find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0], RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL);
-    find_surface_on_ray(target[1], camdir[1], &surf[1], hitpos[1], RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL);
+    find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0], (RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL));
+    find_surface_on_ray(target[1], camdir[1], &surf[1], hitpos[1], (RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL));
 #ifdef BETTER_WALL_COLLISION
     resolve_and_return_wall_collisions(hitpos[0], 0.0f, 25.0f, &wall0);
     resolve_and_return_wall_collisions(hitpos[1], 0.0f, 25.0f, &wall1);
@@ -941,8 +941,8 @@ static void puppycam_collision(void) {
     resolve_and_return_wall_collisions(hitpos[0], 0.0f, 25.0f);
     resolve_and_return_wall_collisions(hitpos[1], 0.0f, 25.0f);
 #endif
-    dist[0] = ((target[0][0] - hitpos[0][0]) * (target[0][0] - hitpos[0][0]) + (target[0][1] - hitpos[0][1]) * (target[0][1] - hitpos[0][1]) + (target[0][2] - hitpos[0][2]) * (target[0][2] - hitpos[0][2]));
-    dist[1] = ((target[1][0] - hitpos[1][0]) * (target[1][0] - hitpos[1][0]) + (target[1][1] - hitpos[1][1]) * (target[1][1] - hitpos[1][1]) + (target[1][2] - hitpos[1][2]) * (target[1][2] - hitpos[1][2]));
+    dist[0] = (sqr(target[0][0] - hitpos[0][0]) + sqr(target[0][1] - hitpos[0][1]) + sqr(target[0][2] - hitpos[0][2]));
+    dist[1] = (sqr(target[1][0] - hitpos[1][0]) + sqr(target[1][1] - hitpos[1][1]) + sqr(target[1][2] - hitpos[1][2]));
     gPuppyCam.collisionDistance = gPuppyCam.zoomTarget;
     if (surf[0] && surf[1]) {
         gPuppyCam.collisionDistance = sqrtf(MAX(dist[0], dist[1]));

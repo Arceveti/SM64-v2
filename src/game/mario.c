@@ -614,7 +614,7 @@ void set_steep_jump_action(struct MarioState *m) {
         s16 faceAngleTemp = (m->faceAngle[1] - angleTemp);
         f32 y             = (sins(faceAngleTemp) * m->forwardVel);
         f32 x             = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
-        m->forwardVel     = sqrtf((y * y) + (x * x));
+        m->forwardVel     = sqrtf(sqr(y) + sqr(x));
         m->faceAngle[1]   = (atan2s(x, y) + angleTemp);
     }
     drop_and_set_mario_action(m, ACT_STEEP_JUMP, 0);
@@ -988,7 +988,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 break;
             case 1:
                 if (m->floor != NULL) {
-                    steepness = sqrtf(((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
+                    steepness = sqrtf((sqr(m->floor->normal.x) + sqr(m->floor->normal.z)));
                     surf_nY = m->floor->normal.y;
                     print_text_fmt_int( 80, 136,   "F1 %d", m->floor->vertex1[0]);
                     print_text_fmt_int(184, 136,      "%d", m->floor->vertex1[1]);
@@ -1013,7 +1013,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 break;
             case 2:
                 if (m->ceil != NULL) {
-                    steepness = sqrtf(((m->ceil->normal.x * m->ceil->normal.x) + (m->ceil->normal.z * m->ceil->normal.z)));
+                    steepness = sqrtf((sqr(m->ceil->normal.x) + sqr(m->ceil->normal.z)));
                     surf_nY = m->ceil->normal.y;
                     print_text_fmt_int( 80, 136,   "C1 %d", m->ceil->vertex1[0]);
                     print_text_fmt_int(184, 136,      "%d", m->ceil->vertex1[1]);
@@ -1037,7 +1037,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 break;
             case 3:
                 if (m->wall != NULL) {
-                    steepness = sqrtf(((m->wall->normal.x * m->wall->normal.x) + (m->wall->normal.z * m->wall->normal.z)));
+                    steepness = sqrtf((sqr(m->wall->normal.x) + sqr(m->wall->normal.z)));
                     surf_nY = m->wall->normal.y;
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
                     if (surf_nY > MIN_FLOOR_NORMAL_Y || surf_nY < MAX_CEIL_NORMAL_Y) break;

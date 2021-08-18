@@ -3080,7 +3080,7 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 p
     goalD[0] = (gLakituState.goalPos[0] - posX);
     goalD[1] = (gLakituState.goalPos[1] - posY);
     goalD[2] = (gLakituState.goalPos[2] - posZ);
-    f32 dist   = sqrtf((goalD[0] * goalD[0]) + (goalD[1] * goalD[1]) + (goalD[2] * goalD[2]));
+    f32 dist   = sqrtf(sqr(goalD[0]) + sqr(goalD[1]) + sqr(goalD[2]));
     if (maxDist > dist) {
         //! vec3f_copy?
         pos[0] = posX;

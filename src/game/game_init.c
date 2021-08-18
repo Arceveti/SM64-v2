@@ -8,6 +8,7 @@
 #include "buffers/framebuffers.h"
 #include "buffers/zbuffer.h"
 #include "engine/level_script.h"
+#include "engine/math_util.h"
 #include "game_init.h"
 #include "main.h"
 #include "memory.h"
@@ -448,7 +449,7 @@ void adjust_analog_stick(struct Controller *controller) {
     if (controller->rawStickY <= -8) controller->stickY = (controller->rawStickY + 6);
     if (controller->rawStickY >=  8) controller->stickY = (controller->rawStickY - 6);
     // Calculate f32 magnitude from the center by vector length.
-    controller->stickMag = sqrtf((controller->stickX * controller->stickX) + (controller->stickY * controller->stickY));
+    controller->stickMag = sqrtf(sqr(controller->stickX) + sqr(controller->stickY));
     // Magnitude cannot exceed 64.0f: if it does, modify the values
     // appropriately to flatten the values down to the allowed maximum value.
     if (controller->stickMag >  64) {

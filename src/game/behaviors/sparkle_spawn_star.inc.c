@@ -14,7 +14,7 @@ struct ObjectHitbox sSparkleSpawnStarHitbox = {
 
 void bhv_spawned_star_init(void) {
     if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) o->oBehParams = o->parentObj->oBehParams;
-    if (save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & (1 << ((o->oBehParams >> 24) & 0xFF))) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
+    if (save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) & (1 << ((o->oBehParams >> 24) & 0xFF))) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 }
 
@@ -27,14 +27,12 @@ void set_sparkle_spawn_star_hitbox(void) {
 }
 
 void set_home_to_mario(void) {
-    o->oHomeX          = gMarioObject->oPosX;
-    o->oHomeZ          = gMarioObject->oPosZ;
-    o->oHomeY          = gMarioObject->oPosY;
-    o->oHomeY         += 250.0f;
-    o->oPosY           = o->oHomeY;
-    f32 dx = o->oHomeX - o->oPosX;
-    f32 dz = o->oHomeZ - o->oPosZ;
-    o->oForwardVel     = sqrtf(dx * dx + dz * dz) / 23.0f; //! fast invsqrt?
+    vec3f_copy(&o->oHomeVec, &gMarioObject->oPosVec);
+    o->oHomeY     += 250.0f;
+    o->oPosY       =  o->oHomeY;
+    f32 dx         = (o->oHomeX - o->oPosX);
+    f32 dz         = (o->oHomeZ - o->oPosZ);
+    o->oForwardVel = (sqrtf(sqr(dx) + sqr(dz)) / 23.0f); //! fast invsqrt?
 }
 
 void bhv_spawned_star_no_level_exit_loop(void) {
@@ -58,7 +56,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             }
             cur_obj_play_sound_1(SOUND_ENV_STAR);
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
-            if (o->oVelY < 0 && o->oPosY < o->oHomeY) {
+            if ((o->oVelY < 0) && (o->oPosY < o->oHomeY)) {
                 o->oAction = SPAWN_STAR_POS_CUTSCENE_ACT_BOUNCE;
                 o->oForwardVel =  0.0f;
                 o->oVelY       = 20.0f;
@@ -68,7 +66,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             break;
         case SPAWN_STAR_POS_CUTSCENE_ACT_BOUNCE:
             if (o->oVelY < -4.0f) o->oVelY = -4.0f;
-            if (o->oVelY <  0.0f && o->oPosY < o->oHomeY) {
+            if ((o->oVelY <  0.0f) && (o->oPosY < o->oHomeY)) {
                 gObjCutsceneDone = TRUE;
                 o->oVelY    = 0.0f;
                 o->oGravity = 0.0f;
@@ -95,7 +93,7 @@ void bhv_spawned_star_no_level_exit_loop(void) {
 
 void bhv_spawn_star_no_level_exit(u32 params) {
     struct Object *starObj = spawn_object(o, MODEL_STAR, bhvSpawnedStarNoLevelExit);
-    starObj->oBehParams          = params << 24;
+    starObj->oBehParams          = (params << 24);
     starObj->oInteractionSubtype = INT_SUBTYPE_NO_EXIT;
     obj_set_angle(starObj, 0x0, 0x0, 0x0);
 }

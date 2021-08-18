@@ -12,41 +12,37 @@
 //     { 0xFD0C, 0x0A66, 0xFF45 },
 // };
 static Vec3s sDonutPlatformPositions[] = {
-    {  2892, -2089, 6564 }, { -2156,  2211,  -87 }, {  1692,  2520,  -32 },
-    {  1487,  2520,  -32 }, {  1282,  2520,  -32 }, {  1356, -2089, 6564 },
-    {  2687, -2089, 6564 }, {  2482, -2089, 6564 }, {  1766, -2089, 6564 },
-    {  1561, -2089, 6564 }, { -4171, -2089, 6564 }, {   230, -2089, 6564 },
-    {    25, -2089, 6564 }, {  -179, -2089, 6564 }, { -3967, -2089, 6564 },
-    { -7345, -2447, 6522 }, { -4376, -2089, 6564 }, { -6321, -2089, 6522 },
-    { -6525, -2089, 6522 }, { -6730, -2089, 6522 }, { -4477, -2908, 6564 },
-    { -7140, -2447, 6522 }, { -6935, -2447, 6522 }, { -4887, -2908, 6564 },
-    { -4682, -2908, 6564 }, {  -961,  2662, -187 }, {   239,  1229, -173 },
-    {    34,  1229, -173 }, {  -169,  1229, -173 }, { -1165,  2662, -187 },
-    {  -756,  2662, -187 },
+    {  2892, -2089,  6564 }, { -2156,  2211,  -87 }, {  1692,  2520,   -32 },
+    {  1487,  2520,   -32 }, {  1282,  2520,  -32 }, {  1356, -2089,  6564 },
+    {  2687, -2089,  6564 }, {  2482, -2089, 6564 }, {  1766, -2089,  6564 },
+    {  1561, -2089,  6564 }, { -4171, -2089, 6564 }, {   230, -2089,  6564 },
+    {    25, -2089,  6564 }, {  -179, -2089, 6564 }, { -3967, -2089,  6564 },
+    { -7345, -2447,  6522 }, { -4376, -2089, 6564 }, { -6321, -2089,  6522 },
+    { -6525, -2089,  6522 }, { -6730, -2089, 6522 }, { -4477, -2908,  6564 },
+    { -7140, -2447,  6522 }, { -6935, -2447, 6522 }, { -4887, -2908,  6564 },
+    { -4682, -2908,  6564 }, {  -961,  2662, -187 }, {   239,  1229,  -173 },
+    {    34,  1229,  -173 }, {  -169,  1229, -173 }, { -1165,  2662,  -187 },
+    {  -756,  2662,  -187 },
 };
 
 void bhv_donut_platform_spawner_update(void) {
     s32 i;
     s32 platformFlag;
-    f32 dx;
-    f32 dy;
-    f32 dz;
+    Vec3f d;
     f32 marioSqDist;
-
-    for (i = 0, platformFlag = 1; i < 31; i++, platformFlag = platformFlag << 1) {
+    for (((i = 0), (platformFlag = 1)); (i < 31); ((i++), (platformFlag = (platformFlag << 1)))) {
         if (!(o->oDonutPlatformSpawnerSpawnedPlatforms & platformFlag)) {
-            dx = gMarioObject->oPosX - sDonutPlatformPositions[i][0];
-            dy = gMarioObject->oPosY - sDonutPlatformPositions[i][1];
-            dz = gMarioObject->oPosZ - sDonutPlatformPositions[i][2];
-            marioSqDist = ((dx * dx) + (dy * dy) + (dz * dz));
-
+            //! vec3f/s diff
+            d[0] = gMarioObject->oPosX - sDonutPlatformPositions[i][0];
+            d[1] = gMarioObject->oPosY - sDonutPlatformPositions[i][1];
+            d[2] = gMarioObject->oPosZ - sDonutPlatformPositions[i][2];
+            marioSqDist = (sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
             // dist > 1000 and dist < 2000
-            if (marioSqDist > 1000000.0f && marioSqDist < 4000000.0f) {
-                if (spawn_object_relative(i,
-                                          sDonutPlatformPositions[i][0],
-                                          sDonutPlatformPositions[i][1],
-                                          sDonutPlatformPositions[i][2],
-                                          o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform) != NULL) {
+            if ((marioSqDist > 1000000.0f) && (marioSqDist < 4000000.0f)) {
+                if (spawn_object_relative(i, sDonutPlatformPositions[i][0],
+                                             sDonutPlatformPositions[i][1],
+                                             sDonutPlatformPositions[i][2],
+                                             o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform) != NULL) {
                     o->oDonutPlatformSpawnerSpawnedPlatforms |= platformFlag;
                 }
             }
@@ -55,9 +51,8 @@ void bhv_donut_platform_spawner_update(void) {
 }
 
 void bhv_donut_platform_update(void) {
-    if (o->oTimer != 0 && ((o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) || o->oDistanceToMario > 2500.0f)) {
+    if ((o->oTimer != 0) && ((o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) || (o->oDistanceToMario > 2500.0f))) {
         o->parentObj->oDonutPlatformSpawnerSpawnedPlatforms = o->parentObj->oDonutPlatformSpawnerSpawnedPlatforms & ((1 << o->oBehParams2ndByte) ^ 0xFFFFFFFF);
-
         if (o->oDistanceToMario > 2500.0f) {
             obj_mark_for_deletion(o);
         } else {
@@ -77,7 +72,6 @@ void bhv_donut_platform_update(void) {
             cur_obj_update_floor_and_walls();
             cur_obj_move_standard(78);
         }
-
         load_object_collision_model();
     }
 }

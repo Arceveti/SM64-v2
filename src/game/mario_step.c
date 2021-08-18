@@ -597,7 +597,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
         if (-COS25 >= ceil->normal.y) {
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
         } else {
-            ceilSteepness = sqrtf((ceil->normal.x * ceil->normal.x) + (ceil->normal.z * ceil->normal.z));
+            ceilSteepness = sqrtf(sqr(ceil->normal.x) + sqr(ceil->normal.z));
             if (abs_angle_diff(atan2s(ceil->normal.z,  ceil->normal.x), m->marioObj->oMoveAngleYaw) <= 0x4000) {
                 if (m->vel[1] > 0.0f) {
                     m->slideVelX += (ceil->normal.x * m->vel[1] * ceilSteepness);
@@ -793,7 +793,7 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
     s32 stepResult = AIR_STEP_NONE;
     m->wall = NULL;
 #if AIR_NUM_STEPS > 1
-    const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(m->vel[0] * m->vel[0] + m->vel[1] * m->vel[1] + m->vel[2] * m->vel[2]) / 50.0f));*/
+    const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(sqr(m->vel[0]) + sqr(m->vel[1]) + sqr(m->vel[2])) / 50.0f));*/
     s32 i;
     s32 quarterStepResult;
     for (i = 0; i < numSteps; i++) {
@@ -810,7 +810,7 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
          || (quarterStepResult == AIR_STEP_GRABBED_CEILING)
          || (quarterStepResult == AIR_STEP_HIT_LAVA_WALL)) break;
 #ifdef WALL_QUICKSAND
-        if (quarterStepResult == AIR_STEP_HIT_WALL && m->wall && m->wall->type == SURFACE_INSTANT_QUICKSAND) {
+        if ((quarterStepResult == AIR_STEP_HIT_WALL) && m->wall && (m->wall->type == SURFACE_INSTANT_QUICKSAND)) {
             stepResult = AIR_STEP_DEATH;
             m->vel[0] = (-2.0f * m->wall->normal.x);
             m->vel[1] = (-2.0f * m->wall->normal.y);

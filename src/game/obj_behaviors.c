@@ -99,7 +99,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
         if (gCurGraphNodeHeldObject != NULL) heldObject = gCurGraphNodeHeldObject->objNode;
         gfxHead                    = alloc_display_list(3 * sizeof(Gfx));
         gfx                        = gfxHead;
-        obj->header.gfx.node.flags = (obj->header.gfx.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8);
+        obj->header.gfx.node.flags = ((obj->header.gfx.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
         gDPSetEnvColor(   gfx++, 255, 255, 255, heldObject->oOpacity);
         gSPEndDisplayList(gfx);
     }
@@ -113,8 +113,8 @@ void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 n
     f32 nX2  =  sqr(nX);
     f32 nZ2  =  sqr(nZ);
     f32 nXZ2 =  nX2 + nZ2;
-    *objYawX = ((nZ2 - nX2) * velX / nXZ2 - 2 * velZ * (nX * nZ) / nXZ2);
-    *objYawZ = ((nX2 - nZ2) * velZ / nXZ2 - 2 * velX * (nX * nZ) / nXZ2);
+    *objYawX = ((((nZ2 - nX2) * velX) / nXZ2) - ((2 * velZ * (nX * nZ)) / nXZ2));
+    *objYawZ = ((((nX2 - nZ2) * velZ) / nXZ2) - ((2 * velX * (nX * nZ)) / nXZ2));
 }
 
 /**
@@ -221,22 +221,22 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
 #endif
         o->oPosY = objFloorY;
         // Bounces an object if the ground is hit fast enough.
-        o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f;
+        o->oVelY = ((o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f);
     }
     //! (Obj Position Crash) If you got an object with height past 2^31, the game would crash.
-    if ((s32) o->oPosY >= (s32) objFloorY && (s32) o->oPosY < (s32) objFloorY + 37) {
+    if (((s32) o->oPosY >= (s32) objFloorY) && (s32) (o->oPosY < (s32) objFloorY + 37)) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
         floor_nX2 = sqr(floor_nX);
         floor_nZ2 = sqr(floor_nZ);
-        floor_nXZ = (floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * o->oGravity * 2;
+        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * o->oGravity * 2);
         // Adds horizontal component of gravity for horizontal speed.
         objVelX += floor_nX * floor_nXZ;
         objVelZ += floor_nZ * floor_nXZ;
-        if (objVelX < 0.000001f && objVelX > -0.000001f) objVelX = 0;
-        if (objVelZ < 0.000001f && objVelZ > -0.000001f) objVelZ = 0;
-        if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
+        if ((objVelX < 0.000001f) && (objVelX > -0.000001f)) objVelX = 0;
+        if ((objVelZ < 0.000001f) && (objVelZ > -0.000001f)) objVelZ = 0;
+        if ((objVelX != 0) || (objVelZ != 0)) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
         calc_obj_friction(&objFriction, floor_nY);
-        o->oForwardVel = sqrtf(objVelX * objVelX + objVelZ * objVelZ) * objFriction;
+        o->oForwardVel = (sqrtf(sqr(objVelX) + sqr(objVelZ)) * objFriction);
     }
 }
 
@@ -245,7 +245,7 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     f32 floor_nX  = objFloor->normal.x;
     f32 floor_nY  = objFloor->normal.y;
     f32 floor_nZ  = objFloor->normal.z;
-    f32 netYAccel = (1.0f - o->oBuoyancy) * (-o->oGravity);
+    f32 netYAccel = ((1.0f - o->oBuoyancy) * (-o->oGravity));
     o->oVelY -= netYAccel;
     // Caps vertical speed with a terminal velocity.
     if (o->oVelY >  TERMINAL_GRAVITY_VELOCITY) o->oVelY =  TERMINAL_GRAVITY_VELOCITY;
@@ -255,26 +255,26 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     if (o->oPosY < floorY) {
         o->oPosY = floorY;
         // Bounces an object if the ground is hit fast enough.
-        o->oVelY = (o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f;
+        o->oVelY = ((o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f);
     }
     // If moving fast near the surface of the water, flip vertical speed? To emulate skipping?
-    if (o->oForwardVel > 12.5f && (waterY + 30.0f) > o->oPosY && (waterY - 30.0f) < o->oPosY) o->oVelY = -o->oVelY;
-    if ((s32) o->oPosY >= (s32) floorY && (s32) o->oPosY < (s32) floorY + 37) {
+    if ((o->oForwardVel > 12.5f) && ((waterY + 30.0f) > o->oPosY) && ((waterY - 30.0f) < o->oPosY)) o->oVelY = -o->oVelY;
+    if (((s32) o->oPosY >= (s32) floorY) && ((s32) o->oPosY < (s32) floorY + 37)) {
         obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
         floor_nX2 = sqr(floor_nX);
         floor_nZ2 = sqr(floor_nZ);
-        floor_nXZ = (floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * netYAccel * 2;
+        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * netYAccel * 2);
         // Adds horizontal component of gravity for horizontal speed.
         objVelX  += floor_nX * floor_nXZ;
         objVelZ  += floor_nZ * floor_nXZ;
     }
-    if ( objVelX < 0.000001f &&  objVelX > -0.000001f)  objVelX = 0;
-    if ( objVelZ < 0.000001f &&  objVelZ > -0.000001f)  objVelZ = 0;
-    if (o->oVelY < 0.000001f && o->oVelY > -0.000001f) o->oVelY = 0;
-    if (objVelX != 0 || objVelZ != 0) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
+    if (( objVelX < 0.000001f) && ( objVelX > -0.000001f))  objVelX = 0;
+    if (( objVelZ < 0.000001f) && ( objVelZ > -0.000001f))  objVelZ = 0;
+    if ((o->oVelY < 0.000001f) && (o->oVelY > -0.000001f)) o->oVelY = 0;
+    if ((objVelX != 0) || (objVelZ != 0)) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
     // Decreases both vertical velocity and forward velocity. Likely so that skips above
     // don't loop infinitely.
-    o->oForwardVel = sqrtf(objVelX * objVelX + objVelZ * objVelZ) * 0.8f;
+    o->oForwardVel = (sqrtf(sqr(objVelX) + sqr(objVelZ)) * 0.8f);
     o->oVelY      *= 0.8f;
 }
 
@@ -292,7 +292,7 @@ void obj_update_pos_vel_xz(void) {
  */
 void obj_splash(s32 waterY, s32 objY) {
     // Spawns waves if near surface of water and plays a noise if entering.
-    if ((f32)(waterY + 30) > o->oPosY && o->oPosY > (f32)(waterY - 30)) {
+    if (((f32)(waterY + 30) > o->oPosY) && (o->oPosY > (f32)(waterY - 30))) {
         spawn_object(o, MODEL_IDLE_WATER_WAVE, bhvObjectWaterWave);
         if (o->oVelY < -20.0f) cur_obj_play_sound_2(SOUND_OBJ_DIVING_INTO_WATER);
     }
@@ -305,11 +305,11 @@ void obj_splash(s32 waterY, s32 objY) {
  * Returns flags for certain interactions.
  */
 s16 object_step(void) {
-    f32 objVelX = o->oForwardVel * sins(o->oMoveAngleYaw);
-    f32 objVelZ = o->oForwardVel * coss(o->oMoveAngleYaw);
-    f32 nextX   = o->oPosX + objVelX;
-    f32 nextY   = o->oPosY;
-    f32 nextZ   = o->oPosZ + objVelZ;
+    f32 objVelX = (o->oForwardVel * sins(o->oMoveAngleYaw));
+    f32 objVelZ = (o->oForwardVel * coss(o->oMoveAngleYaw));
+    f32 nextX   = (o->oPosX + objVelX);
+    f32 nextY   =  o->oPosY;
+    f32 nextZ   = (o->oPosZ + objVelZ);
     f32 waterY  = FLOOR_LOWER_LIMIT_MISC;
     f32 floorY;
     s16 collisionFlags = 0x0;
@@ -355,8 +355,8 @@ s16 object_step_without_floor_orient(void) {
  * position.
  */
 void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
-    o->oVelX    = obj->oForwardVel * sins(obj->oMoveAngleYaw);
-    o->oVelZ    = obj->oForwardVel * coss(obj->oMoveAngleYaw);
+    o->oVelX    = (obj->oForwardVel * sins(obj->oMoveAngleYaw));
+    o->oVelZ    = (obj->oForwardVel * coss(obj->oMoveAngleYaw));
     obj->oPosX +=   o->oVelX;
     obj->oPosY += obj->oVelY;
     obj->oPosZ +=   o->oVelZ;
@@ -366,20 +366,20 @@ void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
  * Checks if a point is within distance from Mario's graphical position. Test is exclusive.
  */
 s8 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
-    f32 dx = x - gMarioObject->header.gfx.pos[0];
-    f32 dy = y - gMarioObject->header.gfx.pos[1];
-    f32 dz = z - gMarioObject->header.gfx.pos[2];
-    return (((dx * dx) + (dy * dy) + (dz * dz)) < (f32)(dist * dist));
+    register f32 dx = (x - gMarioObject->header.gfx.pos[0]);
+    register f32 dy = (y - gMarioObject->header.gfx.pos[1]);
+    register f32 dz = (z - gMarioObject->header.gfx.pos[2]);
+    return ((sqr(dx) + sqr(dy) + sqr(dz)) < (f32)sqr(dist));
 }
 
 /**
  * Checks whether a point is within distance of a given point. Test is exclusive.
  */
 s8 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
-    f32 dx = x - obj->oPosX;
-    f32 dy = y - obj->oPosY;
-    f32 dz = z - obj->oPosZ;
-    return (((dx * dx) + (dy * dy) + (dz * dz)) < (f32)(dist * dist));
+    register f32 dx = (x - obj->oPosX);
+    register f32 dy = (y - obj->oPosY);
+    register f32 dz = (z - obj->oPosZ);
+    return ((sqr(dx) + sqr(dy) + sqr(dz)) < (f32)sqr(dist));
 }
 
 /**
@@ -400,8 +400,8 @@ void set_object_visibility(struct Object *obj, s32 dist) {
  * Turns an object towards home if Mario is not near to it.
  */
 s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 dist) {
-    f32 homeDistX = homeX - obj->oPosX;
-    f32 homeDistZ = homeZ - obj->oPosZ;
+    f32 homeDistX = (homeX - obj->oPosX);
+    f32 homeDistZ = (homeZ - obj->oPosZ);
     s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
     if (is_point_within_radius_of_mario(homeX, y, homeZ, dist)) {
         return TRUE;
@@ -419,13 +419,13 @@ void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 home
     f32 homeDistX, homeDistZ;
     f32 disp;
     if ((s32)(random_float() * 50.0f) == 0) {
-        disp        = (f32)(baseDisp * 2) * random_float() - (f32) baseDisp;
-        obj->oHomeX = disp + homeX;
-        obj->oHomeZ = disp + homeZ;
+        disp        = (((f32)(baseDisp * 2) * random_float()) - (f32) baseDisp);
+        obj->oHomeX = (disp + homeX);
+        obj->oHomeZ = (disp + homeZ);
     }
-    homeDistX = obj->oHomeX - obj->oPosX;
-    homeDistZ = obj->oHomeZ - obj->oPosZ;
-    angleToNewHome = atan2s(homeDistZ, homeDistX);
+    homeDistX          = (obj->oHomeX - obj->oPosX);
+    homeDistZ          = (obj->oHomeZ - obj->oPosZ);
+    angleToNewHome     = atan2s(homeDistZ, homeDistX);
     obj->oMoveAngleYaw = approach_s16_symmetric(obj->oMoveAngleYaw, angleToNewHome, 320);
 }
 
@@ -434,7 +434,7 @@ void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 home
  * of a given angle, within a certain range.
  */
 s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, s16 range) {
-    s16 dAngle = (u16) goal - (u16) base;
+    s16 dAngle = ((u16) goal - (u16) base);
     return (((f32) sins(-range) < (f32) sins(dAngle)) && ((f32) sins(dAngle) < (f32) sins(range)) && (coss(dAngle) > 0));
 }
 
@@ -467,8 +467,8 @@ void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
     s8 count;
     for (count = 0; count < nCoins; count++) {
         coin = spawn_object(obj, MODEL_YELLOW_COIN, bhvMovingYellowCoin);
-        coin->oForwardVel   = random_float() * 20.0f;
-        coin->oVelY         = random_float() * 40.0f + 20.0f;
+        coin->oForwardVel   =  (random_float() * 20.0f);
+        coin->oVelY         = ((random_float() * 40.0f) + 20.0f);
         coin->oMoveAngleYaw = random_u16();
     }
 }
@@ -559,10 +559,10 @@ s8 obj_lava_death(void) {
     if (!(o->oTimer & 0x7)) {
         cur_obj_play_sound_2(SOUND_OBJ_BULLY_EXPLODE_LAVA);
         deathSmoke = spawn_object(o, MODEL_SMOKE, bhvBobombBullyDeathSmoke);
-        deathSmoke->oPosX      += random_float() * 20.0f;
-        deathSmoke->oPosY      += random_float() * 20.0f;
-        deathSmoke->oPosZ      += random_float() * 20.0f;
-        deathSmoke->oForwardVel = random_float() * 10.0f;
+        deathSmoke->oPosX      += (random_float() * 20.0f);
+        deathSmoke->oPosY      += (random_float() * 20.0f);
+        deathSmoke->oPosZ      += (random_float() * 20.0f);
+        deathSmoke->oForwardVel = (random_float() * 10.0f);
     }
     return FALSE;
 }
@@ -590,7 +590,7 @@ s8 sDebugTimer           = 0;
 /**
  * Unused presumably debug function that tracks for a sequence of inputs.
  */
-s8 UNUSED debug_sequence_tracker(s16 debugInputSequence[]) {
+UNUSED s8 debug_sequence_tracker(s16 debugInputSequence[]) {
     // If end of sequence reached, return true.
     if (debugInputSequence[sDebugSequenceTracker] == 0) {
         sDebugSequenceTracker = 0;
@@ -601,9 +601,9 @@ s8 UNUSED debug_sequence_tracker(s16 debugInputSequence[]) {
         sDebugSequenceTracker++;
         sDebugTimer = 0;
     // If wrong input or timer reaches 10, reset sequence progress.
-    } else if (sDebugTimer == 10 || gPlayer3Controller->buttonPressed != 0) {
+    } else if ((sDebugTimer == 10) || (gPlayer3Controller->buttonPressed != 0)) {
         sDebugSequenceTracker = 0;
-        sDebugTimer = 0;
+        sDebugTimer           = 0;
         return FALSE;
     }
     sDebugTimer++;

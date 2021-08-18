@@ -1415,8 +1415,8 @@ void bowser_thrown_dropped_update(void) {
  */
 void bhv_bowser_loop(void) {
     // Set distance/angle values
-    o->oBowserDistToCentre  = sqrtf((o->oPosX * o->oPosX) + (o->oPosZ * o->oPosZ));
-    o->oBowserAngleToCentre = atan2s((0.0f - o->oPosZ), (0.0f - o->oPosX));
+    o->oBowserDistToCentre  = sqrtf(sqr(o->oPosX) + sqr(o->oPosZ));
+    o->oBowserAngleToCentre = atan2s((-o->oPosZ), (-o->oPosX));
     s16 angleToMario        = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);        //  AngleToMario from Bowser's perspective
     s16 angleToCentre       = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre); // AngleToCentre from Bowser's perspective
     // Reset Status

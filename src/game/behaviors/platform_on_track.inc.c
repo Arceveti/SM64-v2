@@ -86,7 +86,7 @@ static void platform_on_track_act_init(void) {
     if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0x0;
 
     // Spawn track balls
-    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for (i = 1; i < 6; i++) platform_on_track_update_pos_or_spawn_ball(i, o->oHomeX, o->oHomeY, o->oHomeZ);
+    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for (i = 1; i < 6; i++) platform_on_track_update_pos_or_spawn_ball(i, &o->oHomeVec);
 
     o->oAction = PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO;
 }
@@ -157,20 +157,16 @@ static void platform_on_track_act_move_along_track(void) {
             // Spawn a new track ball if necessary
             if (approach_f32_ptr(&o->oPlatformOnTrackDistMovedSinceLastBall, 300.0f, o->oForwardVel)) {
                 o->oPlatformOnTrackDistMovedSinceLastBall -= 300.0f;
-
-                o->oHomeX = o->oPosX;
-                o->oHomeY = o->oPosY;
-                o->oHomeZ = o->oPosZ;
+                vec3f_copy(&o->oHomeVec, &o->oPosVec);
                 o->oPlatformOnTrackBaseBallIndex = (u16)(o->oPlatformOnTrackBaseBallIndex + 1);
 
-                platform_on_track_update_pos_or_spawn_ball(5, o->oHomeX, o->oHomeY, o->oHomeZ);
+                platform_on_track_update_pos_or_spawn_ball(5, &o->oHomeVec);
             }
         }
-
-        platform_on_track_update_pos_or_spawn_ball(0, o->oPosX, o->oPosY, o->oPosZ);
+        platform_on_track_update_pos_or_spawn_ball(0, &o->oPosVec);
 
         o->oMoveAnglePitch = o->oPlatformOnTrackPitch;
-        o->oMoveAngleYaw = o->oPlatformOnTrackYaw;
+        o->oMoveAngleYaw   = o->oPlatformOnTrackYaw;
 
         //! Both oAngleVelYaw and oAngleVelRoll aren't reset until the platform
         //  starts moving again, resulting in unexpected platform displacement
@@ -179,7 +175,7 @@ static void platform_on_track_act_move_along_track(void) {
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
             s16 targetFaceYaw = o->oMoveAngleYaw + 0x4000;
-            s16 yawSpeed = abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20;
+            s16 yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
 
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);
@@ -189,7 +185,7 @@ static void platform_on_track_act_move_along_track(void) {
 
         // Turn face roll and compute roll vel
         if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_ROLL)) {
-            s16 rollSpeed = abs_angle_diff(o->oMoveAnglePitch, o->oFaceAngleRoll) / 20;
+            s16 rollSpeed = (abs_angle_diff(o->oMoveAnglePitch, o->oFaceAngleRoll) / 20);
 
             initialAngle = o->oFaceAngleRoll;
             clamp_s16(&rollSpeed, 100, 500);

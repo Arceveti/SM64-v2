@@ -19,19 +19,19 @@ void bhv_strong_wind_particle_loop(void) {
     if (o->oTimer == 0) {
         o->oStrongWindParticlePenguinObj = cur_obj_nearest_object_with_behavior(bhvSLWalkingPenguin);
         obj_translate_xyz_random(o, 100.0f);
-        o->oForwardVel = coss(o->oMoveAnglePitch) *  100.0f;
-        o->oVelY       = sins(o->oMoveAnglePitch) * -100.0f;
+        o->oForwardVel    = (coss(o->oMoveAnglePitch) *  100.0f);
+        o->oVelY          = (sins(o->oMoveAnglePitch) * -100.0f);
         o->oMoveAngleYaw += random_f32_around_zero(o->oBehParams2ndByte * 500); // Wind spread
-        o->oOpacity = 100;
+        o->oOpacity       = 100;
     }
     cur_obj_move_using_fvel_and_gravity();
     if (o->oTimer > 15) obj_mark_for_deletion(o);// Deactivate after 15 frames
     // If collided with the SL walking penguin, deactivate.
     penguinObj = o->oStrongWindParticlePenguinObj;
     if (penguinObj != NULL) {
-        penguinXDist = penguinObj->oSLWalkingPenguinWindCollisionXPos - o->oPosX;
-        penguinZDist = penguinObj->oSLWalkingPenguinWindCollisionZPos - o->oPosZ;
-        distanceFromPenguin = sqrtf(penguinXDist * penguinXDist + penguinZDist * penguinZDist);
+        penguinXDist = (penguinObj->oSLWalkingPenguinWindCollisionXPos - o->oPosX);
+        penguinZDist = (penguinObj->oSLWalkingPenguinWindCollisionZPos - o->oPosZ);
+        distanceFromPenguin = sqrtf(sqr(penguinXDist) + sqr(penguinZDist));
         if (distanceFromPenguin < 300.0f) {
             obj_mark_for_deletion(o);
             cur_obj_become_intangible();

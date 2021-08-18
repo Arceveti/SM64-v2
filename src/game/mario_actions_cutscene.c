@@ -1092,15 +1092,15 @@ s32 act_spawn_no_spin_landing(struct MarioState *m) {
 s32 act_bbh_enter_spin(struct MarioState *m) {
     f32 floorDist;
     f32 scale;
-    f32 cageDX     = m->usedObj->oPosX - m->pos[0];
-    f32 cageDZ     = m->usedObj->oPosZ - m->pos[2];
-    f32 cageDist   = sqrtf(cageDX * cageDX + cageDZ * cageDZ); //! fast invsqrt?
-    f32 forwardVel = (cageDist > 20.0f) ? 10.0f : (cageDist / 2.0f);
+    f32 cageDX     = (m->usedObj->oPosX - m->pos[0]);
+    f32 cageDZ     = (m->usedObj->oPosZ - m->pos[2]);
+    f32 cageDist   = sqrtf(sqr(cageDX) + sqr(cageDZ)); //! fast invsqrt?
+    f32 forwardVel = ((cageDist > 20.0f) ? 10.0f : (cageDist / 2.0f));
     if (forwardVel < 0.5f) forwardVel = 0.0f;
     switch (m->actionState) {
         case 0:
             floorDist = 512.0f - (m->pos[1] - m->floorHeight);
-            m->vel[1] = floorDist > 0 ? sqrtf(4.0f * floorDist + 1.0f) - 1.0f : 2.0f;
+            m->vel[1] = ((floorDist > 0) ? (sqrtf(4.0f * floorDist + 1.0f) - 1.0f) : 2.0f);
             m->actionState =   1;
             m->actionTimer = 100;
             // fall through
@@ -1147,18 +1147,17 @@ s32 act_bbh_enter_spin(struct MarioState *m) {
 }
 
 s32 act_bbh_enter_jump(struct MarioState *m) {
-    f32 cageDX;
-    f32 cageDZ;
+    f32 cageDX, cageDZ;
     f32 cageDist;
     play_mario_action_sound(m, m->flags & MARIO_METAL_CAP ? SOUND_ACTION_METAL_JUMP : SOUND_ACTION_TERRAIN_JUMP, 1);
     play_mario_jump_sound(m);
     if (m->actionState == 0) {
-        cageDX    = m->usedObj->oPosX - m->pos[0];
-        cageDZ    = m->usedObj->oPosZ - m->pos[2];
-        cageDist  = sqrtf(cageDX * cageDX + cageDZ * cageDZ); //! fast invsqrt?
+        cageDX    = (m->usedObj->oPosX - m->pos[0]);
+        cageDZ    = (m->usedObj->oPosZ - m->pos[2]);
+        cageDist  = sqrtf(sqr(cageDX) + sqr(cageDZ)); //! fast invsqrt?
         m->vel[1] = 60.0f;
         m->faceAngle[1] = atan2s(cageDZ, cageDX);
-        mario_set_forward_vel(m, cageDist / 20.0f);
+        mario_set_forward_vel(m, (cageDist / 20.0f));
         m->flags &= ~MARIO_JUMPING;
         m->actionState = 1;
     }
@@ -1178,7 +1177,7 @@ s32 act_teleport_fade_out(struct MarioState *m) {
     }
 #endif
     m->flags |= MARIO_TELEPORTING;
-    if (m->actionTimer   <  32) m->fadeWarpOpacity = (-m->actionTimer << 3) + 0xF8;
+    if (m->actionTimer   <  32) m->fadeWarpOpacity = ((-m->actionTimer << 3) + 0xF8);
     if (m->actionTimer++ == 20) level_trigger_warp(m, WARP_OP_TELEPORT);
     stop_and_set_height_to_floor(m);
     return FALSE;

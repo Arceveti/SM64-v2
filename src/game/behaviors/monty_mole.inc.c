@@ -20,9 +20,7 @@ s32 sMontyMoleKillStreak;
  * The position of the last killed monty mole, used for determining whether
  * the next killed monty mole is nearby.
  */
-f32 sMontyMoleLastKilledPosX;
-f32 sMontyMoleLastKilledPosY;
-f32 sMontyMoleLastKilledPosZ;
+Vec3f sMontyMoleLastKilledPos;
 
 /**
  * Link all objects with the given behavior using parentObj.
@@ -156,9 +154,9 @@ static void monty_mole_act_select_hole(void) {
         o->oPosZ = o->oMontyMoleCurrentHole->oPosZ;
 
         o->oFaceAnglePitch = 0x0;
-        o->oMoveAngleYaw = o->oMontyMoleCurrentHole->oAngleToMario;
+        o->oMoveAngleYaw   = o->oMontyMoleCurrentHole->oAngleToMario;
 
-        if (o->oDistanceToMario > 500.0f || minDistToMario > 100.0f || random_sign() < 0) {
+        if ((o->oDistanceToMario > 500.0f) || (minDistToMario > 100.0f) || (random_sign() < 0)) {
             o->oAction  = MONTY_MOLE_ACT_RISE_FROM_HOLE;
             o->oVelY    = 3.0f;
             o->oGravity = 0.0f;
@@ -180,9 +178,8 @@ static void monty_mole_act_select_hole(void) {
  */
 static void monty_mole_act_rise_from_hole(void) {
     cur_obj_init_animation_with_sound(MONTY_MOLE_ANIM_RISE);
-
     if (o->oMontyMoleHeightRelativeToFloor >= 49.0f) {
-        o->oPosY = o->oFloorHeight + 50.0f;
+        o->oPosY = (o->oFloorHeight + 50.0f);
         o->oVelY = 0.0f;
         if (cur_obj_check_if_near_animation_end()) o->oAction = MONTY_MOLE_ACT_SPAWN_ROCK;
     }
@@ -194,7 +191,6 @@ static void monty_mole_act_rise_from_hole(void) {
  */
 static void monty_mole_act_spawn_rock(void) {
     struct Object *rock;
-
     if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_GET_ROCK)) {
         if ((o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK)
             && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x4000)
@@ -227,7 +223,6 @@ static void monty_mole_act_throw_rock(void) {
         cur_obj_play_sound_2(SOUND_OBJ_MONTY_MOLE_ATTACK);
         o->prevObj = NULL;
     }
-
     if (cur_obj_check_if_near_animation_end()) o->oAction = MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE;
 }
 
@@ -236,11 +231,9 @@ static void monty_mole_act_throw_rock(void) {
  */
 static void monty_mole_act_jump_into_hole(void) {
     cur_obj_init_anim_extend(MONTY_MOLE_ANIM_JUMP_INTO_HOLE);
-
     o->oFaceAnglePitch = -atan2s(o->oVelY, -4.0f);
-
-    if (o->oVelY < 0.0f && o->oMontyMoleHeightRelativeToFloor < 120.0f) {
-        o->oAction = MONTY_MOLE_ACT_HIDE;
+    if ((o->oVelY < 0.0f) && (o->oMontyMoleHeightRelativeToFloor < 120.0f)) {
+        o->oAction  = MONTY_MOLE_ACT_HIDE;
         o->oGravity = 0.0f;
         monty_mole_spawn_dirt_particles(-80, 15);
     }
@@ -279,11 +272,10 @@ static void monty_mole_act_jump_out_of_hole(void) {
         cur_obj_init_animation_with_sound(MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_UP);
     } else {
         cur_obj_init_anim_extend(MONTY_MOLE_ANIM_JUMP_OUT_OF_HOLE_DOWN);
-
         if (o->oMontyMoleHeightRelativeToFloor < 50.0f) {
-            o->oPosY = o->oFloorHeight + 50.0f;
+            o->oPosY   = (o->oFloorHeight + 50.0f);
             o->oAction = MONTY_MOLE_ACT_BEGIN_JUMP_INTO_HOLE;
-            o->oVelY = o->oGravity = 0.0f;
+            o->oVelY   = (o->oGravity = 0.0f);
         }
     }
 }
@@ -308,12 +300,9 @@ static struct ObjectHitbox sMontyMoleHitbox = {
  */
 void bhv_monty_mole_update(void) {
     // PARTIAL_UPDATE
-
     o->oDeathSound = SOUND_OBJ_DYING_ENEMY1;
     cur_obj_update_floor_and_walls();
-
-    o->oMontyMoleHeightRelativeToFloor = o->oPosY - o->oFloorHeight;
-
+    o->oMontyMoleHeightRelativeToFloor = (o->oPosY - o->oFloorHeight);
     switch (o->oAction) {
         case MONTY_MOLE_ACT_SELECT_HOLE:          monty_mole_act_select_hole();          break;
         case MONTY_MOLE_ACT_RISE_FROM_HOLE:       monty_mole_act_rise_from_hole();       break;
@@ -324,16 +313,12 @@ void bhv_monty_mole_update(void) {
         case MONTY_MOLE_ACT_HIDE:                 monty_mole_act_hide();                 break;
         case MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE:     monty_mole_act_jump_out_of_hole();     break;
     }
-
     // Spawn a 1-up if you kill 8 monty moles
     if (obj_check_attacks(&sMontyMoleHitbox, o->oAction)) {
         if (sMontyMoleKillStreak != 0) {
-            f32 dx = o->oPosX - sMontyMoleLastKilledPosX;
-            f32 dy = o->oPosY - sMontyMoleLastKilledPosY;
-            f32 dz = o->oPosZ - sMontyMoleLastKilledPosZ;
-
-            f32 distToLastKill = sqrtf(dx * dx + dy * dy + dz * dz);
-
+            Vec3f d;
+            vec3f_diff(d, &o->oPosVec, sMontyMoleLastKilledPos);
+            f32 distToLastKill = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
             //! The two farthest holes on the bottom level of TTM are more than
             //  1500 units away from each other, so the counter resets if you
             //  attack moles in these holes consecutively.
@@ -346,19 +331,12 @@ void bhv_monty_mole_update(void) {
                 sMontyMoleKillStreak = 0;
             }
         }
-
         if (sMontyMoleKillStreak < (1 << 15)) sMontyMoleKillStreak++;
-
-        sMontyMoleLastKilledPosX = o->oPosX;
-        sMontyMoleLastKilledPosY = o->oPosY;
-        sMontyMoleLastKilledPosZ = o->oPosZ;
-
+        vec3f_copy(sMontyMoleLastKilledPos, &o->oPosVec);
         monty_mole_hide_in_hole();
-
         // Throw rock if holding one
         o->prevObj = NULL;
     }
-
     cur_obj_move_standard(78);
 }
 
@@ -367,22 +345,16 @@ void bhv_monty_mole_update(void) {
  */
 static void monty_mole_rock_act_held(void) {
     // The position is offset since the monty mole is throwing it with its hand
-    o->oParentRelativePosX =  80.0f;
-    o->oParentRelativePosY = -50.0f;
-    o->oParentRelativePosZ =   0.0f;
-
+    vec3f_set(&o->oParentRelativePosVec, 80.0f, -50.0f, 0.0f);
     if (o->parentObj->prevObj == NULL) {
         f32 distToMario = o->oDistanceToMario;
         if (distToMario > 600.0f) distToMario = 600.0f;
-        o->oAction = MONTY_MOLE_ROCK_ACT_MOVE;
-
+        o->oAction       = MONTY_MOLE_ROCK_ACT_MOVE;
         // The angle is adjusted to compensate for the start position offset
-        o->oMoveAngleYaw = (s32)(o->parentObj->oMoveAngleYaw + 0x1F4 - distToMario * 0.1f);
-
-        o->oForwardVel = 40.0f;
-        o->oVelY = distToMario * 0.08f + 8.0f;
-
-        o->oMoveFlags = OBJ_MOVE_NONE;
+        o->oMoveAngleYaw = (s32)(o->parentObj->oMoveAngleYaw + 0x1F4 - (distToMario * 0.1f));
+        o->oForwardVel   = 40.0f;
+        o->oVelY         = ((distToMario * 0.08f) + 8.0f);
+        o->oMoveFlags    = OBJ_MOVE_NONE;
     }
 }
 

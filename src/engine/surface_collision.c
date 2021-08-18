@@ -95,7 +95,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         d11 = (sqr(v1x) + sqr(v1y) + sqr(v1z));
         d20 = ((v2x * v0x) + (v2y * v0y) + (v2z * v0z));
         d21 = ((v2x * v1x) + (v2y * v1y) + (v2z * v1z));
-        invDenom = (1.0f / ((d00 * d11) - (d01 * d01))); // no sqrtf?
+        invDenom = (1.0f / ((d00 * d11) - (d01 * d01)));
         v = (((d11 * d20) - (d01 * d21)) * invDenom);
         if ((v < 0.0f) || (v > 1.0f)) goto edge_1_2;
         w = (((d00 * d21) - (d01 * d20)) * invDenom);

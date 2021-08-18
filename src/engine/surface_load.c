@@ -234,9 +234,9 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
     register f32 nz = ((x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2));
 
 #if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
-    register f32 mag = Q_rsqrtf((nx * nx) + (ny * ny) + (nz * nz));
+    register f32 mag = Q_rsqrtf(sqr(nx) + sqr(ny) + sqr(nz));
 #else
-    register f32 mag = sqrtf((nx * nx) + (ny * ny) + (nz * nz));
+    register f32 mag = sqrtf(sqr(nx) + sqr(ny) + sqr(nz));
     // Checking to make sure no DIV/0
     if (mag < 0.0001f) return NULL;
     mag = (f32)(1.0f / mag);

@@ -162,11 +162,11 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
         if (whirlpool != NULL) {
             f32 strength         = 0.0f;
             Vec3f d; //! vec3f/s diff?
-            d[0]                 = whirlpool->pos[0] - m->pos[0];
-            d[1]                 = whirlpool->pos[1] - m->pos[1];
-            d[2]                 = whirlpool->pos[2] - m->pos[2];
-            f32 lateralDist      = sqrtf((d[0] * d[0]) + (d[2] * d[2]));
-            f32 distance         = sqrtf((lateralDist * lateralDist) + (d[1] * d[1]));
+            d[0]                 = (whirlpool->pos[0] - m->pos[0]);
+            d[1]                 = (whirlpool->pos[1] - m->pos[1]);
+            d[2]                 = (whirlpool->pos[2] - m->pos[2]);
+            f32 lateralDist      = sqrtf(sqr(d[0]) + sqr(d[2]));
+            f32 distance         = sqrtf(sqr(lateralDist) + sqr(d[1]));
             s16 pitchToWhirlpool = atan2s(lateralDist, d[1]);
             s16 yawToWhirlpool   = atan2s(d[2], d[0]);
             yawToWhirlpool -= (s16)(0x2000 * (1000.0f / (distance + 1000.0f)));
@@ -174,7 +174,7 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
                 if ((gCurrLevelNum == LEVEL_DDD) && (gCurrAreaIndex == 2)) whirlpoolRadius = 4000.0f;
                 if ((distance >= 26.0f) && (distance < whirlpoolRadius)) strength = (whirlpool->strength * (1.0f - (distance / whirlpoolRadius)));
             } else if (distance < 2000.0f) {
-                strength = whirlpool->strength * (1.0f - distance / 2000.0f);
+                strength = (whirlpool->strength * (1.0f - distance / 2000.0f));
             }
             step[0] += (strength * coss(pitchToWhirlpool) * sins(yawToWhirlpool));
             step[1] += (strength * sins(pitchToWhirlpool)                       );
@@ -896,7 +896,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
     struct Object *whirlpool = m->usedObj;
     f32 dx = (m->pos[0] - whirlpool->oPosX);
     f32 dz = (m->pos[2] - whirlpool->oPosZ);
-    f32 distance = sqrtf((dx * dx) + (dz * dz));
+    f32 distance = sqrtf(sqr(dx) + sqr(dz));
     if ((marioObj->oMarioWhirlpoolPosY += m->vel[1]) < 0.0f) {
         marioObj->oMarioWhirlpoolPosY = 0.0f;
         if ((distance < 16.1f) && (m->actionTimer++ == 16)) level_trigger_warp(m, WARP_OP_DEATH);

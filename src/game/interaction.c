@@ -379,11 +379,11 @@ u32 bully_knock_back_mario(struct MarioState *m) {
     newBullyYaw          = atan2s(bullyData.velZ, bullyData.velX);
     marioDYaw            = abs_angle_diff(newMarioYaw, m->faceAngle[1]);
     m->faceAngle[1]      = newMarioYaw;
-    m->forwardVel        = sqrtf((marioData.velX * marioData.velX) + (marioData.velZ * marioData.velZ));
+    m->forwardVel        = sqrtf(sqr(marioData.velX) + sqr(marioData.velZ));
     m->pos[0]            = marioData.posX;
     m->pos[2]            = marioData.posZ;
     bully->oMoveAngleYaw = newBullyYaw;
-    bully->oForwardVel   = sqrtf((bullyData.velX * bullyData.velX) + (bullyData.velZ * bullyData.velZ));
+    bully->oForwardVel   = sqrtf(sqr(bullyData.velX) + sqr(bullyData.velZ));
     bully->oPosX         = bullyData.posX;
     bully->oPosZ         = bullyData.posZ;
     if (marioDYaw > 0x4000) {
@@ -475,7 +475,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     f32 minDistance = (o->hitboxRadius + m->marioObj->hitboxRadius + padding);
     f32 offsetX     = (m->pos[0] - o->oPosX);
     f32 offsetZ     = (m->pos[2] - o->oPosZ);
-    f32 distance    = sqrtf((offsetX * offsetX) + (offsetZ * offsetZ));
+    f32 distance    = sqrtf(sqr(offsetX) + sqr(offsetZ));
     f32 floorHeight;
     if (distance < minDistance) {
         struct Surface *floor;

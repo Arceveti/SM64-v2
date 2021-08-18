@@ -44,12 +44,14 @@ void bhv_collect_star_loop(void) {
 }
 
 void bhv_star_spawn_arc_init(void) {
-    o->oMoveAngleYaw         = atan2s(   o->oHomeZ - o->oPosZ,       o->oHomeX - o->oPosX);
-    o->oStarSpawnDisFromHome = sqrtf(sqr(o->oHomeX - o->oPosX) + sqr(o->oHomeZ - o->oPosZ));
-    o->oVelY                 = (o->oHomeY - o->oPosY)   / 30.0f;
-    o->oForwardVel           = o->oStarSpawnDisFromHome / 30.0f; //! fast invsqrt?
+    f32 dx                   = (o->oHomeX - o->oPosX);
+    f32 dz                   = (o->oHomeZ - o->oPosZ);
+    o->oMoveAngleYaw         = atan2s(   dz,       dx);
+    o->oStarSpawnDisFromHome = sqrtf(sqr(dx) + sqr(dz));
+    o->oVelY                 = ((o->oHomeY - o->oPosY)   / 30.0f);
+    o->oForwardVel           = (o->oStarSpawnDisFromHome / 30.0f); //! fast invsqrt?
     o->oStarSpawnVelY        = o->oPosY;
-    cutscene_object((o->oBehParams2ndByte == SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR || gCurrCourseNum == COURSE_BBH) ? CUTSCENE_STAR_SPAWN : CUTSCENE_RED_COIN_STAR_SPAWN, o);
+    cutscene_object((((o->oBehParams2ndByte == SPAWN_STAR_ARC_CUTSCENE_BP_DEFAULT_STAR) || (gCurrCourseNum == COURSE_BBH)) ? CUTSCENE_STAR_SPAWN : CUTSCENE_RED_COIN_STAR_SPAWN), o);
     set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
     o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
     cur_obj_become_intangible();

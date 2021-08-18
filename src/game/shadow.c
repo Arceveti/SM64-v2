@@ -223,12 +223,12 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
         s->floorNormalZ      = floorGeometry->normalZ;
         s->floorOriginOffset = floorGeometry->originOffset;
     }
-    if (overwriteSolidity) s->solidity = dim_shadow_with_distance(overwriteSolidity, yPos - s->floorHeight);
-    s->shadowScale                     = scale_shadow_with_distance(shadowScale, yPos - s->floorHeight);
+    if (overwriteSolidity) s->solidity = dim_shadow_with_distance(overwriteSolidity, (yPos - s->floorHeight));
+    s->shadowScale                     = scale_shadow_with_distance(shadowScale, (yPos - s->floorHeight));
     s->floorDownwardAngle              = atan2_deg(s->floorNormalZ, s->floorNormalX);
-    floorSteepness                     = sqrtf(s->floorNormalX * s->floorNormalX + s->floorNormalZ * s->floorNormalZ);
+    floorSteepness                     = sqrtf(sqr(s->floorNormalX) + sqr(s->floorNormalZ));
     // This if-statement avoids dividing by 0.
-    s->floorTilt = (floorSteepness == 0.0f) ? 0.0f : (90.0f - atan2_deg(floorSteepness, s->floorNormalY));
+    s->floorTilt = ((floorSteepness == 0.0f) ? 0.0f : (90.0f - atan2_deg(floorSteepness, s->floorNormalY)));
     return FALSE;
 }
 
@@ -241,11 +241,11 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
  */
 void get_texture_coords_9_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
 #ifdef HD_SHADOW
-    *textureX = vertexNum % 3 * 63 - 63;
-    *textureY = vertexNum / 3 * 63 - 63;
+    *textureX = (((vertexNum % 3) * 63) - 63);
+    *textureY = (((vertexNum / 3) * 63) - 63);
 #else
-    *textureX = vertexNum % 3 * 15 - 15;
-    *textureY = vertexNum / 3 * 15 - 15;
+    *textureX = (((vertexNum % 3) * 15) - 15);
+    *textureY = (((vertexNum / 3) * 15) - 15);
 #endif
 }
 
@@ -257,11 +257,11 @@ void get_texture_coords_9_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
  */
 void get_texture_coords_4_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
 #ifdef HD_SHADOW
-    *textureX = (vertexNum & 0x1) * 2 * 63 - 63;
-    *textureY = (vertexNum /   2) * 2 * 63 - 63;
+    *textureX = (((vertexNum & 0x1) * 2 * 63) - 63);
+    *textureY = (((vertexNum /   2) * 2 * 63) - 63);
 #else
-    *textureX = (vertexNum & 0x1) * 2 * 15 - 15;
-    *textureY = (vertexNum /   2) * 2 * 15 - 15;
+    *textureX = (((vertexNum & 0x1) * 2 * 15) - 15);
+    *textureY = (((vertexNum /   2) * 2 * 15) - 15);
 #endif
 }
 
@@ -310,8 +310,8 @@ f32 extrapolate_vertex_y_position(struct Shadow s, f32 vtxX, f32 vtxZ) {
  * return 15 times these values.
  */
 void get_vertex_coords(s8 index, s8 shadowVertexType, s8 *xCoord, s8 *zCoord) {
-    *xCoord = index % (3 - shadowVertexType) - 1;
-    *zCoord = index / (3 - shadowVertexType) - 1;
+    *xCoord = ((index % (3 - shadowVertexType)) - 1);
+    *zCoord = ((index / (3 - shadowVertexType)) - 1);
     // This just corrects the 4-vertex case to have consistent results with the
     // 9-vertex case.
     if (shadowVertexType == SHADOW_WITH_4_VERTS) {
@@ -332,15 +332,15 @@ void get_vertex_coords(s8 index, s8 shadowVertexType, s8 *xCoord, s8 *zCoord) {
  * behavior is overwritten.
  */
 void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx, f32 *zPosVtx, s8 shadowVertexType) {
-    f32 tiltedScale   = cosf(s.floorTilt     * M_PI / 180.0f) * s.shadowScale;
-    f32 downwardAngle = s.floorDownwardAngle * M_PI / 180.0f;
+    f32 tiltedScale   = (cosf(s.floorTilt     * M_PI / 180.0f) * s.shadowScale);
+    f32 downwardAngle = (s.floorDownwardAngle * M_PI / 180.0f);
     f32 halfScale, halfTiltedScale;
     s8 xCoordUnit, zCoordUnit;
     struct FloorGeometry *dummy;
     // This makes xCoordUnit and yCoordUnit each one of -1, 0, or 1.
     get_vertex_coords(index, shadowVertexType, &xCoordUnit, &zCoordUnit);
-    halfScale       = (xCoordUnit * s.shadowScale) / 2.0f;
-    halfTiltedScale = (zCoordUnit *   tiltedScale) / 2.0f;
+    halfScale       = ((xCoordUnit * s.shadowScale) / 2.0f);
+    halfTiltedScale = ((zCoordUnit *   tiltedScale) / 2.0f);
     *xPosVtx = (halfTiltedScale * sinf(downwardAngle)) + (halfScale * cosf(downwardAngle)) + s.parentX;
     *zPosVtx = (halfTiltedScale * cosf(downwardAngle)) - (halfScale * sinf(downwardAngle)) + s.parentZ;
     if (gShadowAboveWaterOrLava) {
@@ -374,10 +374,10 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
  * `calculate_vertex_xyz`.)
  */
 s16 floor_local_tilt(struct Shadow s, f32 vtxX, f32 vtxY, f32 vtxZ) {
-    f32 relX = vtxX - s.parentX;
-    f32 relY = vtxY - s.floorHeight;
-    f32 relZ = vtxZ - s.parentZ;
-    return (relX * s.floorNormalX) + (relY * s.floorNormalY) + (relZ * s.floorNormalZ);
+    register f32 relX = (vtxX - s.parentX);
+    register f32 relY = (vtxY - s.floorHeight);
+    register f32 relZ = (vtxZ - s.parentZ);
+    return ((relX * s.floorNormalX) + (relY * s.floorNormalY) + (relZ * s.floorNormalZ));
 }
 
 /**
@@ -409,9 +409,9 @@ void make_shadow_vertex(Vtx *vertices, s8 index, struct Shadow s, s8 shadowVerte
         yPosVtx = extrapolate_vertex_y_position(s, xPosVtx, zPosVtx);
         solidity = 0;
     }
-    relX = xPosVtx - s.parentX;
-    relY = yPosVtx - s.parentY;
-    relZ = zPosVtx - s.parentZ;
+    relX = (xPosVtx - s.parentX);
+    relY = (yPosVtx - s.parentY);
+    relZ = (zPosVtx - s.parentZ);
     make_shadow_vertex_at_xyz(vertices, index, relX, relY, relZ, solidity, shadowVertexType);
 }
 
@@ -441,7 +441,7 @@ void linearly_interpolate_solidity_positive(struct Shadow *s, u8 finalSolidity, 
     } else if (end < curr) {
         s->solidity = finalSolidity;
     } else {
-        s->solidity = (f32) finalSolidity * (curr - start) / (end - start);
+        s->solidity = ((f32) finalSolidity * (curr - start) / (end - start));
     }
 }
 
@@ -488,7 +488,7 @@ void correct_lava_shadow_height(struct Shadow *s) {
             s->floorHeight          =  3492.0f;
             gShadowAboveWaterOrLava = TRUE;
         }
-    } else if (gCurrLevelNum == LEVEL_LLL && gCurrAreaIndex == 1 && sSurfaceTypeBelowShadow == SURFACE_BURNING) {
+    } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 1) && (sSurfaceTypeBelowShadow == SURFACE_BURNING)) {
         s->floorHeight          = 5.0f;
         gShadowAboveWaterOrLava = TRUE;
     }
@@ -520,10 +520,11 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     }
     if (ret != 0) return NULL;
     verts       = alloc_display_list(9 * sizeof(Vtx));
+    if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));
-    if (verts == NULL || displayList == NULL) return NULL;
+    if (displayList == NULL) return NULL;
     correct_lava_shadow_height(&shadow);
-    for (i = 0; i < 9; i++) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
+    for ((i = 0); (i < 9); (i++)) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
     add_shadow_to_display_list(displayList, verts, SHADOW_WITH_9_VERTS, SHADOW_SHAPE_CIRCLE);
     return displayList;
 }
@@ -538,9 +539,10 @@ Gfx *create_shadow_circle_9_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
     s32 i;
     if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) return NULL;
     verts       = alloc_display_list(9 * sizeof(Vtx));
+    if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));
-    if (verts == NULL || displayList == NULL) return 0;
-    for (i = 0; i < 9; i++) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
+    if (displayList == NULL) return 0;
+    for ((i = 0); (i < 9); (i++)) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_9_VERTS);
     add_shadow_to_display_list(displayList, verts, SHADOW_WITH_9_VERTS, SHADOW_SHAPE_CIRCLE);
     return displayList;
 }
@@ -555,9 +557,10 @@ Gfx *create_shadow_circle_4_verts(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale,
     s32 i;
     if (init_shadow(&shadow, xPos, yPos, zPos, shadowScale, solidity) != 0) return NULL;
     verts       = alloc_display_list(4 * sizeof(Vtx));
+    if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));
-    if (verts == NULL || displayList == NULL) return 0;
-    for (i = 0; i < 4; i++) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_4_VERTS);
+    if (displayList == NULL) return 0;
+    for ((i = 0); (i < 4); (i++)) make_shadow_vertex(verts, i, shadow, SHADOW_WITH_4_VERTS);
     add_shadow_to_display_list(displayList, verts, SHADOW_WITH_4_VERTS, SHADOW_SHAPE_CIRCLE);
     return displayList;
 }
@@ -572,7 +575,7 @@ Gfx *create_shadow_circle_assuming_flat_ground(f32 xPos, f32 yPos, f32 zPos, s16
     struct FloorGeometry *dummy; // only for calling find_floor_height_and_data
     f32 distBelowFloor;
     f32 floorHeight = find_floor_height_and_data(xPos, yPos, zPos, &dummy);
-    f32 radius = shadowScale / 2;
+    f32 radius      = (shadowScale / 2);
     if (floorHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return NULL;
     } else {

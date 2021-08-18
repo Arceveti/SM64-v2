@@ -138,11 +138,10 @@ s32 set_triple_jump_action(struct MarioState *m, UNUSED u32 action, UNUSED u32 a
 
 void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     s32 newFacingDYaw; // not s16?
-    
     s16 facingDYaw;
     struct Surface *floor = m->floor;
     s16 slopeAngle = atan2s(floor->normal.z, floor->normal.x);
-    f32 steepness  = sqrtf((floor->normal.x * floor->normal.x) + (floor->normal.z * floor->normal.z));
+    f32 steepness  = sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z));
     m->slideVelX += (accel * steepness * sins(slopeAngle));
     m->slideVelZ += (accel * steepness * coss(slopeAngle));
     m->slideVelX *= lossFactor;
@@ -166,7 +165,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     mario_update_moving_sand(m);
     mario_update_windy_ground(m);
     //! Speed is capped a frame late (butt slide HSG)
-    m->forwardVel = sqrtf((m->slideVelX * m->slideVelX) + (m->slideVelZ * m->slideVelZ));
+    m->forwardVel = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     if (m->forwardVel > 100.0f) {
         m->slideVelX = (m->slideVelX * 100.0f / m->forwardVel);
         m->slideVelZ = (m->slideVelZ * 100.0f / m->forwardVel);
@@ -191,20 +190,20 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
         default:                          accel =  7.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
         case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
     }
-    oldSpeed          = sqrtf((m->slideVelX * m->slideVelX) + (m->slideVelZ * m->slideVelZ)); //! fast invsqrt?
+    oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ)); //! fast invsqrt?
     sideward          = ((m->intendedMag / 32.0f) * sideward * 0.05f);
     slideVelXModifier = (m->slideVelZ * sideward);
     slideVelZModifier = (m->slideVelX * sideward);
     m->slideVelX     += slideVelXModifier;
     m->slideVelZ     -= slideVelZModifier;
 #ifdef FAST_INVSQRT
-    newSpeed = Q_rsqrtf((m->slideVelX * m->slideVelX) + (m->slideVelZ * m->slideVelZ));
+    newSpeed = Q_rsqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     if ((oldSpeed > 0.0f) && (newSpeed > 0.0f)) {
         m->slideVelX = (m->slideVelX * oldSpeed * newSpeed);
         m->slideVelZ = (m->slideVelZ * oldSpeed * newSpeed);
     }
 #else
-    newSpeed = sqrtf((m->slideVelX * m->slideVelX) + (m->slideVelZ * m->slideVelZ));
+    newSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     if ((oldSpeed > 0.0f && newSpeed) > 0.0f) {
         m->slideVelX = ((m->slideVelX * oldSpeed) / newSpeed);
         m->slideVelZ = ((m->slideVelZ * oldSpeed) / newSpeed);
@@ -221,7 +220,7 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
 void apply_slope_accel(struct MarioState *m) {
     f32 slopeAccel;
     struct Surface *floor = m->floor;
-    f32 steepness = sqrtf((floor->normal.x * floor->normal.x) + (floor->normal.z * floor->normal.z));
+    f32 steepness = sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z));
     if (mario_floor_is_slope(m)) {
         s16 slopeClass = 0;
         if (m->action != ACT_SOFT_BACKWARD_GROUND_KB && m->action != ACT_SOFT_FORWARD_GROUND_KB) slopeClass = mario_get_floor_class(m);
@@ -519,7 +518,7 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
     s16 wallAngle, dWallAngle;
     f32 dx = (m->pos[0] - startPos[0]);
     f32 dz = (m->pos[2] - startPos[2]);
-    f32 movedDistance = sqrtf((dx * dx) + (dz * dz));
+    f32 movedDistance = sqrtf(sqr(dx) + sqr(dz));
     //! (Speed Crash) If a wall is after moving 16384 distance, this crashes.
     s32 animSpeed = (s32)((movedDistance * 2.0f) * 0x10000);
     if (m->forwardVel > 6.0f) mario_set_forward_vel(m, 6.0f);
