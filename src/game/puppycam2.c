@@ -618,14 +618,14 @@ static void puppycam_input_press(void) {
 static void puppycam_view_panning(void) {
     s32 expectedPanX, expectedPanZ;
     s32 height     = gPuppyCam.targetObj->oPosY;
-    s32 panEx      = ((gPuppyCam.zoomTarget >= 1000) * 250); // Removes the basic panning when idling if the zoom level is at the closest.
+    s32 panEx      = ((gPuppyCam.zoomTarget >= 1000) * 160); // Removes the basic panning when idling if the zoom level is at the closest.
     f32 slideSpeed = 1;
     f32 panMulti   = CLAMP(gPuppyCam.zoom/(f32)gPuppyCam.zoomPoints[2], 0.f, 1.f);
     if (gPuppyCam.options.inputType == 2) panMulti /= 2;
     if ((gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_PANSHIFT) && (gMarioState->action != ACT_HOLDING_BOWSER) && (gMarioState->action != ACT_SLEEPING) && (gMarioState->action != ACT_START_SLEEPING)) {
         if (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE) slideSpeed = 10;
-        expectedPanX = (LENSIN(panEx + (200 * (gMarioState->forwardVel / 32.f)), gMarioState->faceAngle[1]) * panMulti);
-        expectedPanZ = (LENCOS(panEx + (200 * (gMarioState->forwardVel / 32.f)), gMarioState->faceAngle[1]) * panMulti);
+        expectedPanX = (LENSIN(panEx + (200 * (gMarioState->forwardVel / 320.0f)), gMarioState->faceAngle[1]) * panMulti);
+        expectedPanZ = (LENCOS(panEx + (200 * (gMarioState->forwardVel / 320.0f)), gMarioState->faceAngle[1]) * panMulti);
         gPuppyCam.pan[0] = approach_f32_asymptotic(gPuppyCam.pan[0], expectedPanX, (0.02f * slideSpeed));
         gPuppyCam.pan[2] = approach_f32_asymptotic(gPuppyCam.pan[2], expectedPanZ, (0.02f * slideSpeed));
         if (gMarioState->vel[1] == 0.0f) {
@@ -638,9 +638,9 @@ static void puppycam_view_panning(void) {
             } else {
                 gPuppyCam.edgePitch = approach_s32(gPuppyCam.edgePitch,       0, 0x100, 0x100);
             }
-            gPuppyCam.pan[1] = approach_f32_asymptotic(gPuppyCam.pan[1], (panFloor - height), 0.25f);
+            gPuppyCam.pan[1] = approach_f32_asymptotic(gPuppyCam.pan[1], (panFloor - height), 0.025f);
         } else {
-            gPuppyCam.pan[1] = approach_f32_asymptotic(gPuppyCam.pan[1], 0, 0.5f);
+            gPuppyCam.pan[1] = approach_f32_asymptotic(gPuppyCam.pan[1], 0, 0.05f);
         }
     } else {
         vec3s_copy(gPuppyCam.pan, gVec3sZero);
@@ -666,7 +666,7 @@ void puppycam_terrain_angle(void) {
         if (ABS(gMarioState->floorHeight - floorHeight) > 350) {
             gPuppyCam.intendedTerrainPitch = 0x0;
         } else {
-            floorPitch = -atan2s(10.0f, (gMarioState->floorHeight - floorHeight));
+            floorPitch = -atan2s(30.0f, (gMarioState->floorHeight - floorHeight));
             gPuppyCam.intendedTerrainPitch = approach_f32_asymptotic(gPuppyCam.intendedTerrainPitch, floorPitch, adjustSpeed);
             gotTheOkay = TRUE;
         }
