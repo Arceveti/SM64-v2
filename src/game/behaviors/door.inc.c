@@ -70,29 +70,29 @@ void bhv_door_init(void) {
     struct Surface *floor;
     find_room_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorSelfRoom     = floor->room;
-    x = o->oPosX + sins(o->oMoveAngleYaw) *  200.0f;
-    z = o->oPosZ + coss(o->oMoveAngleYaw) *  200.0f;
+    x = (o->oPosX + (sins(o->oMoveAngleYaw) *  200.0f));
+    z = (o->oPosZ + (coss(o->oMoveAngleYaw) *  200.0f));
     find_room_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorForwardRoom  = floor->room;
-    x = o->oPosX + sins(o->oMoveAngleYaw) * -200.0f;
-    z = o->oPosZ + coss(o->oMoveAngleYaw) * -200.0f;
+    x = (o->oPosX + (sins(o->oMoveAngleYaw) * -200.0f));
+    z = (o->oPosZ + (coss(o->oMoveAngleYaw) * -200.0f));
     find_room_floor(x, o->oPosY, z, &floor);
     if (floor != NULL) o->oDoorBackwardRoom = floor->room;
-    if (o->oDoorSelfRoom > 0 && o->oDoorSelfRoom < 60) {
+    if ((o->oDoorSelfRoom > 0) && (o->oDoorSelfRoom < 60)) {
         gDoorAdjacentRooms[o->oDoorSelfRoom][0] = o->oDoorForwardRoom;
         gDoorAdjacentRooms[o->oDoorSelfRoom][1] = o->oDoorBackwardRoom;
     }
 }
 
 void bhv_door_rendering_loop(void) {
-    o->oDoorIsRendering = (gMarioCurrentRoom == 0
-     || o->oDoorSelfRoom                         == gMarioCurrentRoom
-     || gMarioCurrentRoom                        == o->oDoorForwardRoom
-     || gMarioCurrentRoom                        == o->oDoorBackwardRoom
-     || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom
-     || gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom
-     || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom
-     || gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom);
+    o->oDoorIsRendering = ((gMarioCurrentRoom == 0)
+     || (o->oDoorSelfRoom                         == gMarioCurrentRoom)
+     || (gMarioCurrentRoom                        == o->oDoorForwardRoom)
+     || (gMarioCurrentRoom                        == o->oDoorBackwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom));
     if (o->oDoorIsRendering) {
         o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
         gDoorRenderingTimer++;

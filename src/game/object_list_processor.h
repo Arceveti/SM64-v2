@@ -99,9 +99,7 @@ extern struct MemoryPool *gObjectMemoryPool;
 
 extern s16  gCheckingSurfaceCollisionsForCamera;
 extern s16  gFindFloorIncludeSurfaceIntangible;
-#ifdef FIX_FIND_ROOM_FLOOR
 extern s16  gFindFloorExcludeDynamic;
-#endif
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
 extern s16  gIncludeSteepFloorsInWallCollisionCheck;
 #endif

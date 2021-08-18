@@ -28,6 +28,9 @@ extern f32 gSineTable[];
  */
 #define DEGREES(x) (s16)((x) * 0x10000 / 360)
 
+#define DEG_PER_RAD 57.29577950560105
+#define RAD_PER_DEG (1.0 / DEG_PER_RAD)
+
 #define sins(x)  gSineTable[  (u16) (x) >> 4]
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
 #define atans(x) gArctanTable[(u16) (x) >> 4] //! is this correct?
@@ -93,6 +96,8 @@ void vec3f_sum(                          Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_diff(                         Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_add(                          Vec3f dest, Vec3f a);
 void vec3f_sub(                          Vec3f dest, Vec3f a);
+void vec3i_copy(                         Vec3i dest, Vec3i src);
+void vec3i_set(                          Vec3i dest, s32 x, s32 y, s32 z);
 void vec3s_copy(                         Vec3s dest, Vec3s src);
 void vec3s_set(                          Vec3s dest, s16 x, s16 y, s16 z);
 void vec3s_sum(                          Vec3s dest, Vec3s a, Vec3s b);

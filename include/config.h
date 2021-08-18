@@ -432,9 +432,6 @@
 // Vertical quicksand support (Wiseguy)
 #define WALL_QUICKSAND
 
-// Makes find_room_floor only check static surfaces, since dynamic surfaces aren't assigned a room (Arceveti)
-#define FIX_FIND_ROOM_FLOOR
-
 // Detect Mario's collision with lava regardless of action (Arceveti)
 #define FIX_LAVA_INTERACTION
 

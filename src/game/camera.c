@@ -3258,7 +3258,7 @@ s16 calculate_pitch(Vec3f from, Vec3f to) {
     f32 dx = (to[0] - from[0]);
     f32 dy = (to[1] - from[1]);
     f32 dz = (to[2] - from[2]);
-    return atan2s(sqrtf((dx * dx) + (dz * dz)), dy);
+    return atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
 }
 
 //! move to math_util
@@ -3276,7 +3276,7 @@ void calculate_angles(Vec3f from, Vec3f to, s16 *pitch, s16 *yaw) {
     f32 dx = (to[0] - from[0]);
     f32 dy = (to[1] - from[1]);
     f32 dz = (to[2] - from[2]);
-    *pitch = atan2s(sqrtf((dx * dx) + (dz * dz)), dy);
+    *pitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
     *yaw   = atan2s(dz, dx);
 }
 
@@ -3288,7 +3288,7 @@ f32 calc_abs_dist(Vec3f a, Vec3f b) {
     f32 distX = (b[0] - a[0]);
     f32 distY = (b[1] - a[1]);
     f32 distZ = (b[2] - a[2]);
-    return sqrtf((distX * distX) + (distY * distY) + (distZ * distZ));
+    return sqrtf(sqr(distX) + sqr(distY) + sqr(distZ));
 }
 
 //! move to math_util
@@ -3298,7 +3298,7 @@ f32 calc_abs_dist(Vec3f a, Vec3f b) {
 f32 calc_hor_dist(Vec3f a, Vec3f b) {
     f32 distX = (b[0] - a[0]);
     f32 distZ = (b[2] - a[2]);
-    return sqrtf((distX * distX) + (distZ * distZ));;
+    return sqrtf(sqr(distX) + sqr(distZ));;
 }
 
 //! move to math_util

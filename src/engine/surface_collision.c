@@ -23,7 +23,7 @@
 
 #ifdef BETTER_WALL_COLLISION
 static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struct WallCollisionData *data) {
-    const f32 corner_threshold = -0.9f;
+    const f32 corner_threshold = (-0.9f);
     register struct Surface *surf;
     register f32 offset;
     register f32 radius = data->radius;
@@ -36,11 +36,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 d00, d01, d11, d20, d21;
     register f32 invDenom;
     register f32 v, w;
-    register f32 margin_radius = radius - 1.0f;
+    register f32 margin_radius = (radius - 1.0f);
     register s16 type = SURFACE_DEFAULT;
     s32 numCols = 0;
  #if EXTENDED_BOUNDS_MODE > 1
-    const float down_scale = 1.0f / WORLD_SCALE;
+    const float down_scale = (1.0f / WORLD_SCALE);
     radius        *= down_scale;
     x             *= down_scale;
     y             *= down_scale;
@@ -56,7 +56,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         type        = surf->type;
         // Exclude a large number of walls immediately to optimize.
  #ifdef NEW_WATER_SURFACES
-        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+        if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
  #endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {
@@ -88,9 +88,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         v2y =                      y - (f32)surf->vertex1[1];
         v2z =                      z - (f32)surf->vertex1[2];
         // Face
-        d00 = ((v0x * v0x) + (v0y * v0y) + (v0z * v0z));
+        // d00 = ((v0x * v0x) + (v0y * v0y) + (v0z * v0z));
+        d00 = (sqr(v0x) + sqr(v0y) + sqr(v0z));
         d01 = ((v0x * v1x) + (v0y * v1y) + (v0z * v1z));
-        d11 = ((v1x * v1x) + (v1y * v1y) + (v1z * v1z));
+        // d11 = ((v1x * v1x) + (v1y * v1y) + (v1z * v1z));
+        d11 = (sqr(v1x) + sqr(v1y) + sqr(v1z));
         d20 = ((v2x * v0x) + (v2y * v0y) + (v2z * v0z));
         d21 = ((v2x * v1x) + (v2y * v1y) + (v2z * v1z));
         invDenom = (1.0f / ((d00 * d11) - (d01 * d01))); // no sqrtf?
@@ -109,7 +111,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             if ((v < 0.0f) || (v > 1.0f)) goto edge_1_3;
             d00 = ((v0x * v) - v2x);
             d01 = ((v0z * v) - v2z);
-            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_1_3;
             invDenom = (offset / invDenom); // fast invsqrt?
@@ -129,7 +131,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             if ((v < 0.0f) || (v > 1.0f)) goto edge_2_3;
             d00 = ((v1x * v) - v2x);
             d01 = ((v1z * v) - v2z);
-            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_2_3;
             invDenom = (offset / invDenom); // fast invsqrt?
@@ -155,7 +157,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             if ((v < 0.0f) || (v > 1.0f)) continue;
             d00 = ((v1x * v) - v2x);
             d01 = ((v1z * v) - v2z);
-            invDenom = sqrtf((d00 * d00) + (d01 * d01));
+            invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) continue;
             invDenom = (offset / invDenom); // fast invsqrt?
@@ -353,7 +355,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             normZ          = wall->normal.z;
             originOffset   = wall->originOffset;
             offset         = ((normX * newPos[i][0]) + (normY * newPos[i][1]) + (normZ * newPos[i][2]) + originOffset);
-            offsetAbsolute = ABS(offset);
+            offsetAbsolute = absf(offset);
             if (offsetAbsolute < radius) {
                 newPos[i][0] += (normX * (radius - offset));
                 newPos[i][2] += (normZ * (radius - offset));
@@ -362,7 +364,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
         }
     }
 #ifdef PUPPYPRINT
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return numCollisions;
 }
@@ -386,9 +388,9 @@ void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
     register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
 #ifdef FAST_INVSQRT
-    register f32 invDenom = margin * Q_rsqrtf((diff_x * diff_x) + (diff_z * diff_z));
+    register f32 invDenom = margin * Q_rsqrtf(sqr(diff_x) + sqr(diff_z));
 #else
-    register f32 invDenom = margin / sqrtf((diff_x * diff_x) + (diff_z * diff_z));
+    register f32 invDenom = margin / sqrtf(sqr(diff_x) + sqr(diff_z));
 #endif
     *x += (diff_x * invDenom);
     *z += (diff_z * invDenom);
@@ -451,7 +453,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
         if (height >= *pheight) continue;
         // if (y > (height + 78.0f)) continue;
         // Checks for ceiling interaction
-        if (y > height) continue;
+        if (y > height      ) continue;
         if (y > surf->upperY) continue;
         *pheight = height;
         ceil     = surf;
@@ -717,9 +719,9 @@ f32 unused_find_dynamic_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfl
     // Each level is split into cells to limit load, find the appropriate cell.
     register const s32 cellX = (((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
     register const s32 cellZ = (((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    surfaceList = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
-    floor = find_floor_from_list(surfaceList, xPos, yPos, zPos, &floorHeight);
-    *pfloor = floor;
+    surfaceList              = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
+    floor                    = find_floor_from_list(surfaceList, xPos, yPos, zPos, &floorHeight);
+    *pfloor                  = floor;
     return floorHeight;
 }
 
@@ -747,9 +749,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList  = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor        = find_floor_from_list(surfaceList, xPos, yPos, zPos, &height);
-#ifdef FIX_FIND_ROOM_FLOOR
     if (!gFindFloorExcludeDynamic) {
-#endif
         // In the next check, only check for floors higher than the previous check
         dynamicHeight = height;
         // Check for surfaces belonging to objects.
@@ -779,9 +779,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList   = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next;
     floor         = find_floor_from_list(surfaceList, x, y, z, &height);
-#ifdef FIX_FIND_ROOM_FLOOR
     if (!gFindFloorExcludeDynamic) {
-#endif
         // In the next check, only check for floors higher than the previous check
         dynamicHeight = height;
         // Check for surfaces belonging to objects.
@@ -793,9 +791,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
             floor  = dynamicFloor;
             height = dynamicHeight;
         }
-#ifdef FIX_FIND_ROOM_FLOOR
     }
-#endif
     // If a floor was missed, increment the debug counter.
     if (floor == NULL) gNumFindFloorMisses++;
     *pfloor = floor;
@@ -804,9 +800,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Mario to pass through.
     // To prevent accidentally leaving the floor tangible, stop checking for it.
     gFindFloorIncludeSurfaceIntangible = FALSE;
-#ifdef FIX_FIND_ROOM_FLOOR
     gFindFloorExcludeDynamic           = FALSE;
-#endif
     // Increment the debug tracker.
     gNumCalls.floor++;
 #ifdef PUPPYPRINT
@@ -817,9 +811,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
 
 f32 find_room_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     gFindFloorIncludeSurfaceIntangible = TRUE;
-#ifdef FIX_FIND_ROOM_FLOOR
     gFindFloorExcludeDynamic           = TRUE;
-#endif
     return find_floor(xPos, yPos, zPos, pfloor);
 }
 
@@ -1132,10 +1124,10 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
 		return;
 	}
     // Get cells we cross using DDA
-    if (ABS(dir[0]) >= ABS(dir[2])) {
-        step = ((4 * ABS(dir[0])) / CELL_SIZE); //! STEPS
+    if (absf(dir[0]) >= absf(dir[2])) {
+        step = ((4 * absf(dir[0])) / CELL_SIZE); //! STEPS
     } else {
-        step = ((4 * ABS(dir[2])) / CELL_SIZE); //! STEPS
+        step = ((4 * absf(dir[2])) / CELL_SIZE); //! STEPS
     }
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);
@@ -1200,7 +1192,7 @@ void debug_surface_list_info(f32 xPos, f32 zPos) {
     // Check dynamic ceilings
     list = gDynamicSurfacePartition[cellZ & NUM_CELLS_INDEX][cellX & NUM_CELLS_INDEX][SPATIAL_PARTITION_CEILS].next;
     numCeils += surface_list_length(list);
-    print_debug_top_down_mapinfo("area   %x", cellZ * NUM_CELLS + cellX);
+    print_debug_top_down_mapinfo("area   %x", ((cellZ * NUM_CELLS) + cellX));
     // Names represent ground, walls, and roofs as found in SMS.
     print_debug_top_down_mapinfo("dg %d", numFloors);
     print_debug_top_down_mapinfo("dw %d", numWalls);
@@ -1213,7 +1205,7 @@ void debug_surface_list_info(f32 xPos, f32 zPos) {
     // listal- List Allocated?, statbg- Static Background?, movebg- Moving Background?
     print_debug_top_down_mapinfo("listal %d", gSurfaceNodesAllocated);
     print_debug_top_down_mapinfo("statbg %d", gNumStaticSurfaces);
-    print_debug_top_down_mapinfo("movebg %d", gSurfacesAllocated - gNumStaticSurfaces);
+    print_debug_top_down_mapinfo("movebg %d", (gSurfacesAllocated - gNumStaticSurfaces));
     gNumCalls.floor = 0;
     gNumCalls.ceil  = 0;
     gNumCalls.wall  = 0;

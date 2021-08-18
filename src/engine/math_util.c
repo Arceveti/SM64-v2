@@ -97,10 +97,10 @@ static __inline__ s32 roundf(f32 in) {
 }
 
 /// Round `num` to the nearest integer.
-s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
-s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
-s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
-s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
+inline s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
+inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
+inline s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
+inline s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 
 /***********************************
  * Absolute value & sign functions *
@@ -114,45 +114,45 @@ inline f32 sgn(f32 a) {
     return (0.0f);
 }
 
-s32 signum_positive(s32 x) {
+inline s32 signum_positive(s32 x) {
     return ((x >= 0) ? 1 : -1);
 }
 
-s8  absc(s8  x) { return ((x >= 0   ) ? x : -x); }
-s16 abss(s16 x) { return ((x >= 0   ) ? x : -x); }
-s32 absi(s32 x) { return ((x >= 0   ) ? x : -x); }
-f32 absf(f32 x) { return ((x >= 0.0f) ? x : -x); }
-f64 absd(f64 x) { return ((x >= 0.0 ) ? x : -x); }
+inline s8  absc(s8  x) { return ((x < 0   ) ? -x : x); }
+inline s16 abss(s16 x) { return ((x < 0   ) ? -x : x); }
+inline s32 absi(s32 x) { return ((x < 0   ) ? -x : x); }
+inline f32 absf(f32 x) { return ((x < 0.0f) ? -x : x); }
+inline f64 absd(f64 x) { return ((x < 0.0 ) ? -x : x); }
 
 /***********************
  * Min/Max 3 functions *
  ***********************/
 
 /// Returns the lowest of three values.
-s8  min_3c( s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-u8  min_3uc(u8  a0, u8  a1,  u8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-s16 min_3s( s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-u16 min_3us(s16 a0, u16 a1, u16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-s32 min_3i( s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-u32 min_3ui(u32 a0, u32 a1, u32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-f32 min_3f( f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-f64 min_3d( f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s8  min_3c( s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline u8  min_3uc(u8  a0, u8  a1,  u8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s16 min_3s( s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline u16 min_3us(s16 a0, u16 a1, u16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s32 min_3i( s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline u32 min_3ui(u32 a0, u32 a1, u32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline f32 min_3f( f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline f64 min_3d( f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 
 /// Returns the highest of three values.
-s8  max_3c( s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-u8  max_3uc(u8  a0,  u8 a1,  u8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-s16 max_3s( s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-u16 max_3us(u16 a0, u16 a1, u16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-s32 max_3i( s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-f32 max_3f( f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s8  max_3c( s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline u8  max_3uc(u8  a0,  u8 a1,  u8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s16 max_3s( s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline u16 max_3us(u16 a0, u16 a1, u16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s32 max_3i( s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline f32 max_3f( f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 
 /**********
  * Angles *
  **********/
 
-s16 abs_angle_diff(s16 angle1, s16 angle2) {
+inline s16 abs_angle_diff(s16 angle1, s16 angle2) {
     s16 diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
     return absi(diff);
@@ -244,6 +244,20 @@ void vec3f_add(Vec3f dest, Vec3f a) {
 /// Subtract vector 'a' from 'dest'
 void vec3f_sub(Vec3f dest, Vec3f a) {
     vec3f_diff(dest, dest, a);
+}
+
+/// Set vector 'dest' to (x, y, z)
+void vec3i_set(Vec3i dest, s32 x, s32 y, s32 z) {
+    dest[0] = x;
+    dest[1] = y;
+    dest[2] = z;
+}
+
+/// Copy vector src to dest
+void vec3i_copy(Vec3i dest, Vec3i src) {
+    dest[0] = src[0];
+    dest[1] = src[1];
+    dest[2] = src[2];
 }
 
 /// Copy vector src to dest

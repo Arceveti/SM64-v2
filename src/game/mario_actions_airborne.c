@@ -171,7 +171,7 @@ void update_air_with_turn(struct MarioState *m) {
 #ifdef AIR_TURN
     f32 sidewaysSpeed = 0.0f;
     s32 turnRange;
-    f32 absYVel = ABS(m->vel[1]);
+    f32 absYVel = absf(m->vel[1]);
 #endif
     f32 dragThreshold;
     s16 intendedDYaw;

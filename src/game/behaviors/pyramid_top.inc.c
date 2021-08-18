@@ -26,25 +26,21 @@ void bhv_pyramid_top_init(void) {
  */
 void bhv_pyramid_top_spinning(void) {
     struct Object *pyramidFragment;
-
     // (TODO: What is this doing)
-    o->oPosX = o->oHomeX + sins(o->oTimer * 0x4000) * 40.0f;
-
+    o->oPosX = (o->oHomeX + (sins(o->oTimer * 0x4000) * 40.0f));
     // At first, move upward smoothly without rotating.
     if (o->oTimer < 60) {
-        o->oPosY = o->oHomeY + absf_2(sins(o->oTimer * 0x2000) * 10.0f);
+        o->oPosY = o->oHomeY + absf(sins(o->oTimer * 0x2000) * 10.0f);
     } else {
         // Then, rotate at an accelerating rate, and move upward at a constant rate.
         o->oAngleVelYaw += 0x100;
         if (o->oAngleVelYaw > 0x1800) {
             o->oAngleVelYaw = 0x1800;
-            o->oVelY = 5.0f;
+            o->oVelY        = 5.0f;
         }
-
         o->oFaceAngleYaw += o->oAngleVelYaw;
-        o->oPosY += o->oVelY;
+        o->oPosY         += o->oVelY;
     }
-
     // Every frame until 90 frames have passed, generate a pyramid fragment
     // with a random velocity and angle.
     if (o->oTimer < 90) {
@@ -54,7 +50,6 @@ void bhv_pyramid_top_spinning(void) {
         pyramidFragment->oPyramidTopFragmentsScale = 0.8f;
         pyramidFragment->oGravity                  = random_float() + 2.0f;
     }
-
     // After enough time, transition to the exploding state.
     if (o->oTimer == 150) o->oAction = PYRAMID_TOP_ACT_EXPLODE;
 }
@@ -69,11 +64,11 @@ void bhv_pyramid_top_explode(void) {
     // Generate 30 pyramid fragments with random properties.
     for (i = 0; i < 30; i++) {
         pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
-        pyramidFragment->oForwardVel               = random_float() * 50.0f + 80.0f;
-        pyramidFragment->oVelY                     = random_float() * 80.0f + 20.0f;
+        pyramidFragment->oForwardVel               = ((random_float() * 50.0f) + 80.0f);
+        pyramidFragment->oVelY                     = ((random_float() * 80.0f) + 20.0f);
         pyramidFragment->oMoveAngleYaw             = random_u16();
         pyramidFragment->oPyramidTopFragmentsScale = 3.0f;
-        pyramidFragment->oGravity                  = random_float() * 2.0f + 5.0f;
+        pyramidFragment->oGravity                  = ((random_float() * 2.0f) + 5.0f);
     }
 #ifdef SSL_PILLARS_CUTSCENE
     if (gMarioState->action & ACT_FLAG_RIDING_SHELL) disable_time_stop_including_mario();
@@ -96,7 +91,6 @@ void bhv_pyramid_top_loop(void) {
                 o->oAction = PYRAMID_TOP_ACT_SPINNING;
             }
             break;
-
         case PYRAMID_TOP_ACT_SPINNING:
             if (o->oTimer == 0) {
 #ifdef SSL_PILLARS_CUTSCENE
@@ -109,7 +103,6 @@ void bhv_pyramid_top_loop(void) {
             }
             bhv_pyramid_top_spinning();
             break;
-
         case PYRAMID_TOP_ACT_EXPLODE:
             if (o->oTimer == 0) create_sound_spawner(SOUND_GENERAL2_PYRAMID_TOP_EXPLOSION);
             bhv_pyramid_top_explode();

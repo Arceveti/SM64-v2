@@ -54,7 +54,6 @@
             - TOTWC
     - Cubic/3D collision cells
     - Only load collision for the current room
-        - Separate function for finding current room
 - Objects:
     - Make step height per-object
 - Physics:

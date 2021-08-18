@@ -344,7 +344,7 @@ static s16 *read_vertex_data(s16 **data) {
     numVertices = *(*data);
     (*data)++;
     vertexData  =   *data;
-    *data += 3 * numVertices;
+    *data += (3 * numVertices);
     return vertexData;
 }
 
@@ -355,7 +355,7 @@ static void load_environmental_regions(s16 **data) {
     s32 numRegions, i;
     gEnvironmentRegions =   *data;
     numRegions          = *(*data)++;
-    for (i = 0; i < numRegions; i++) {
+    for ((i = 0); (i < numRegions); (i++)) {
         *data += 5;
         gEnvironmentLevels[i] = *(*data)++;
     }
@@ -366,8 +366,8 @@ static void load_environmental_regions(s16 **data) {
  */
 void alloc_surface_pools(void) {
     sSurfacePoolSize = SURFACE_POOL_SIZE;
-    sSurfaceNodePool = main_pool_alloc(SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode), MEMORY_POOL_LEFT);
-    sSurfacePool     = main_pool_alloc(      sSurfacePoolSize * sizeof(struct Surface    ), MEMORY_POOL_LEFT);
+    sSurfaceNodePool = main_pool_alloc((SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode)), MEMORY_POOL_LEFT);
+    sSurfacePool     = main_pool_alloc((      sSurfacePoolSize * sizeof(struct Surface    )), MEMORY_POOL_LEFT);
     gCCMEnteredSlide = FALSE;
     reset_red_coins_collected();
 }
@@ -389,14 +389,14 @@ u32 get_area_terrain_size(s16 *data) {
         switch (terrainLoadType) {
             case TERRAIN_LOAD_VERTICES:
                 numVertices = *data++;
-                data += 3 * numVertices;
+                data       += (3 * numVertices);
                 break;
             case TERRAIN_LOAD_OBJECTS:
-                data += get_special_objects_size(data);
+                data       += get_special_objects_size(data);
                 break;
             case TERRAIN_LOAD_ENVIRONMENT:
                 numRegions = *data++;
-                data += 6 * numRegions;
+                data      += (6 * numRegions);
                 break;
             case TERRAIN_LOAD_CONTINUE:
                 continue;
@@ -406,15 +406,15 @@ u32 get_area_terrain_size(s16 *data) {
             default:
                 numSurfaces = *data++;
 #ifdef ALL_SURFACES_HAVE_FORCE
-                data += 4 * numSurfaces;
+                data += (4 * numSurfaces);
 #else
                 hasForce = surface_has_force(terrainLoadType);
-                data += (3 + hasForce) * numSurfaces;
+                data    += ((3 + hasForce) * numSurfaces);
 #endif
                 break;
         }
     }
-    return data - startPos;
+    return (data - startPos);
 }
 #endif
 
@@ -457,10 +457,10 @@ void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects
             continue;
         }
     }
-    if (macroObjects != NULL && *macroObjects != -1) {
+    if ((macroObjects != NULL) && (*macroObjects != -1)) {
         // If the first macro object presetID is within the range [0, 29].
         // Generally an early spawning method, every object is in BBH (the first level).
-        if (0 <= *macroObjects && *macroObjects < 30) {
+        if ((0 <= *macroObjects) && (*macroObjects < 30)) {
             spawn_macro_objects_hardcoded(index, macroObjects);
         } else { // A more general version that can spawn more objects.
             spawn_macro_objects(index, macroObjects);
@@ -513,9 +513,9 @@ void transform_object_vertices(s16 **data, s16 *vertexData) {
             *vertexData++ = (s16)(m[3][1]);
             *vertexData++ = (s16)(m[3][2]);
         } else {
-            *vertexData++ = (s16)(vx * m[0][0] + vy * m[1][0] + vz * m[2][0] + m[3][0]);
-            *vertexData++ = (s16)(vx * m[0][1] + vy * m[1][1] + vz * m[2][1] + m[3][1]);
-            *vertexData++ = (s16)(vx * m[0][2] + vy * m[1][2] + vz * m[2][2] + m[3][2]);
+            *vertexData++ = (s16)((vx * m[0][0]) + (vy * m[1][0]) + (vz * m[2][0]) + m[3][0]);
+            *vertexData++ = (s16)((vx * m[0][1]) + (vy * m[1][1]) + (vz * m[2][1]) + m[3][1]);
+            *vertexData++ = (s16)((vx * m[0][2]) + (vy * m[1][2]) + (vz * m[2][2]) + m[3][2]);
         }
     }
     *data = vertices;
@@ -533,10 +533,10 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
 #ifndef ALL_SURFACES_HAVE_FORCE
     s16 hasForce = surface_has_force(surfaceType);
 #endif
-    s16 flags = surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC;
+    s16 flags = (surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC);
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
-    s16 room = (gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp) ? 5 : 0);
+    s16 room = ((gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp)) ? 5 : 0);
     for (i = 0; i < numSurfaces; i++) {
         struct Surface *surface = read_surface_data(vertexData, data);
         if (surface != NULL) {

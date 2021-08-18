@@ -19,11 +19,9 @@ void bhv_ttm_rolling_log_init(void) {
 }
 
 void rolling_log_roll_log(void) {
-    f32 rollAmount;
-
     if (gMarioObject->platform == o) {
-        rollAmount = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-o->oMoveAngleYaw)
-                   - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-o->oMoveAngleYaw);
+        f32 rollAmount = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-o->oMoveAngleYaw)
+                       - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-o->oMoveAngleYaw);
         if (rollAmount > 0) {
             o->oAngleVelPitch += 0x10;
         } else {
@@ -57,33 +55,27 @@ void rolling_log_roll_log(void) {
 void bhv_rolling_log_loop(void) {
     f32 prevX = o->oPosX;
     f32 prevZ = o->oPosZ;
-
     rolling_log_roll_log();
-
-    o->oForwardVel = o->oAngleVelPitch / 0x40;
-    o->oVelX       = o->oForwardVel * sins(o->oMoveAngleYaw);
-    o->oVelZ       = o->oForwardVel * coss(o->oMoveAngleYaw);
-
+    o->oForwardVel = (o->oAngleVelPitch / 0x40);
+    o->oVelX       = (o->oForwardVel * sins(o->oMoveAngleYaw));
+    o->oVelZ       = (o->oForwardVel * coss(o->oMoveAngleYaw));
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
-
-    if (o->oRollingLogMaxDist < sqr(o->oPosX - o->oRollingLogX) + sqr(o->oPosZ - o->oRollingLogZ)) {
+    if (o->oRollingLogMaxDist < (sqr(o->oPosX - o->oRollingLogX) + sqr(o->oPosZ - o->oRollingLogZ))) {
         o->oForwardVel = 0.0f;
         o->oPosX       = prevX;
         o->oPosZ       = prevZ;
         o->oVelX       = 0.0f;
         o->oVelZ       = 0.0f;
     }
-
     o->oFaceAnglePitch += o->oAngleVelPitch;
-    if (absf_2(o->oFaceAnglePitch & 0x1FFF) < 528.0f && o->oAngleVelPitch != 0) cur_obj_play_sound_2(SOUND_GENERAL_ROLLING_LOG);
+    if ((absf(o->oFaceAnglePitch & 0x1FFF) < 528.0f) && (o->oAngleVelPitch != 0x0)) cur_obj_play_sound_2(SOUND_GENERAL_ROLLING_LOG);
 }
 
 void volcano_trap_act_fall(void) {
     o->oVolcanoTrapPitchVel += 4.0f;
-    o->oAngleVelPitch  += o->oVolcanoTrapPitchVel;
-    o->oFaceAnglePitch -= o->oAngleVelPitch;
-
+    o->oAngleVelPitch       += o->oVolcanoTrapPitchVel;
+    o->oFaceAnglePitch      -= o->oAngleVelPitch;
     if (o->oFaceAnglePitch      < -0x4000) {
         o->oFaceAnglePitch      = -0x4000;
         o->oAngleVelPitch       =  0x0;
@@ -95,7 +87,7 @@ void volcano_trap_act_fall(void) {
 }
 
 void volcano_trap_act_rise(void) {
-    o->oAngleVelPitch = 0x90;
+    o->oAngleVelPitch   = 0x90;
     o->oFaceAnglePitch += o->oAngleVelPitch;
     if (o->oFaceAnglePitch > 0x0) o->oFaceAnglePitch = 0x0;
     if (o->oTimer == 200) o->oAction = LLL_VOLCANO_TRAP_ACT_WAIT;
@@ -109,19 +101,16 @@ void bhv_volcano_trap_loop(void) {
                 cur_obj_play_sound_2(SOUND_GENERAL_VOLCANO_TRAP_FALL);
             }
             break;
-
         case LLL_VOLCANO_TRAP_ACT_FALL:
             volcano_trap_act_fall();
             break;
-
         case LLL_VOLCANO_TRAP_ACT_LAND:
-            if (o->oTimer <   8) o->oPosY = o->oHomeY + sins(o->oTimer * 0x1000) * 10.0f;
+            if (o->oTimer <   8) o->oPosY = (o->oHomeY + (sins(o->oTimer * 0x1000) * 10.0f));
             if (o->oTimer == 50) {
                 cur_obj_play_sound_2(SOUND_GENERAL_VOLCANO_TRAP_RISE);
                 o->oAction = LLL_VOLCANO_TRAP_ACT_RISE;
             }
             break;
-
         case LLL_VOLCANO_TRAP_ACT_RISE:
             volcano_trap_act_rise();
             break;
@@ -132,11 +121,10 @@ void bhv_lll_rolling_log_init(void) {
     o->oRollingLogX       = 5120.0f;
     o->oRollingLogZ       = 6016.0f;
     o->oRollingLogMaxDist = 1048576.0f;
-
-    o->oMoveAngleYaw   = 0x3FFF;
-    o->oForwardVel     =   0.0f;
-    o->oVelX           =   0.0f;
-    o->oVelZ           =   0.0f;
-    o->oFaceAnglePitch =    0x0;
-    o->oAngleVelPitch  =    0x0;
+    o->oMoveAngleYaw      = 0x3FFF;
+    o->oForwardVel        =   0.0f;
+    o->oVelX              =   0.0f;
+    o->oVelZ              =   0.0f;
+    o->oFaceAnglePitch    =    0x0;
+    o->oAngleVelPitch     =    0x0;
 }

@@ -451,7 +451,7 @@ void finish_blank_box(void) {
 // Otherwise, if there's transparency, it uses that rendermode, which is slower than using opaque rendermodes.
 void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b, Alpha a) {
     s32 cycleadd = 0;
-    if (((ABS(x1 - x2) % 4) == 0) && (a == 255)) {
+    if (((abss(x1 - x2) % 4) == 0) && (a == 255)) {
         gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);
         gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP);
         cycleadd = 1;

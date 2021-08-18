@@ -150,9 +150,7 @@ struct MemoryPool *gObjectMemoryPool;
 
 s16 gCheckingSurfaceCollisionsForCamera;
 s16 gFindFloorIncludeSurfaceIntangible;
-#ifdef FIX_FIND_ROOM_FLOOR
 s16 gFindFloorExcludeDynamic;
-#endif
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
 s16 gIncludeSteepFloorsInWallCollisionCheck;
 #endif
