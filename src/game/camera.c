@@ -3112,6 +3112,7 @@ s32 clamp_positions_and_find_yaw(Vec3f pos, Vec3f origin, f32 xMax, f32 xMin, f3
     return calculate_yaw(origin, pos);
 }
 
+//! move to math_util?
 /**
  * The yaw passed here is the yaw of the direction FROM Mario TO Lakitu.
  *
@@ -3132,95 +3133,6 @@ s32 calc_avoid_yaw(Angle yawFromMario, Angle wallYaw) {
         yawFromMario = (wallYaw + DEGREES(180));
     }
     return yawFromMario;
-}
-
-//! move to surface_collision
-/**
- * Checks if `surf` is within the rect prism defined by xMax, yMax, and zMax
- *
- * @param surf surface to check
- * @param xMax absolute-value max size in x, set to -1 to ignore
- * @param yMax absolute-value max size in y, set to -1 to ignore
- * @param zMax absolute-value max size in z, set to -1 to ignore
- */
-s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax) {
-    // Surface vertex coordinates
-    Vec3s sx, sy, sz;
-    // Max delta between x, y, and z
-    s16 dxMax = 0, dyMax = 0, dzMax = 0;
-    // Current deltas between x, y, and z
-    register f32 dx, dy, dz;
-    s32 i, j;
-    sx[0] = surf->vertex1[0];
-    sx[1] = surf->vertex2[0];
-    sx[2] = surf->vertex3[0];
-    sy[0] = surf->vertex1[1];
-    sy[1] = surf->vertex2[1];
-    sy[2] = surf->vertex3[1];
-    sz[0] = surf->vertex1[2];
-    sz[1] = surf->vertex2[2];
-    sz[2] = surf->vertex3[2];
-    for (i = 0; i < 3; i++) {
-        j = (i + 1);
-        if (j >= 3) j = 0;
-        dx = ABS(sx[i] - sx[j]);
-        if (dx > dxMax) dxMax = dx;
-        dy = ABS(sy[i] - sy[j]);
-        if (dy > dyMax) dyMax = dy;
-        dz = ABS(sz[i] - sz[j]);
-        if (dz > dzMax) dzMax = dz;
-    }
-    return (((yMax != -1.0f) && (dyMax < yMax)) || ((xMax != -1.0f) && (zMax != -1.0f) && (dxMax < xMax) && (dzMax < zMax)));
-}
-
-//! move to surface_collision
-/**
- * Checks if `pos` is behind the surface, using the dot product.
- *
- * Because the function only uses `surf`s first vertex, some surfaces can shadow others.
- */
-s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
-    s32 behindSurface = FALSE;
-    // Surface normal
-    f32 normX = (surf->vertex2[1] - surf->vertex1[1]) * (surf->vertex3[2] - surf->vertex2[2]) -
-                (surf->vertex3[1] - surf->vertex2[1]) * (surf->vertex2[2] - surf->vertex1[2]);
-    f32 normY = (surf->vertex2[2] - surf->vertex1[2]) * (surf->vertex3[0] - surf->vertex2[0]) -
-                (surf->vertex3[2] - surf->vertex2[2]) * (surf->vertex2[0] - surf->vertex1[0]);
-    f32 normZ = (surf->vertex2[0] - surf->vertex1[0]) * (surf->vertex3[1] - surf->vertex2[1]) -
-                (surf->vertex3[0] - surf->vertex2[0]) * (surf->vertex2[1] - surf->vertex1[1]);
-    f32 dirX  = (surf->vertex1[0] - pos[0]);
-    f32 dirY  = (surf->vertex1[1] - pos[1]);
-    f32 dirZ  = (surf->vertex1[2] - pos[2]);
-    if (dirX * normX + dirY * normY + dirZ * normZ < 0) behindSurface = TRUE;
-    return behindSurface;
-}
-
-//! move to surface_collision
-/**
- * Checks if the whole circular sector is behind the surface.
- */
-s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, s16 surfType) {
-    s32 behindSurface = TRUE;
-    s32 leftBehind    = 0;
-    s32 rightBehind   = 0;
-    f32 checkDist;
-    s16 checkPitch, checkYaw;
-    Vec3f checkPos;
-    if (surf != NULL) {
-        if ((surfType == -1) || (surf->type != surfType)) {
-            if (range == 0) {
-                behindSurface = is_behind_surface(to, surf);
-            } else {
-                vec3f_get_dist_and_angle(from, to, &checkDist, &checkPitch, &checkYaw);
-                vec3f_set_dist_and_angle(from, checkPos, checkDist, checkPitch, (checkYaw + range));
-                leftBehind = is_behind_surface(checkPos, surf);
-                vec3f_set_dist_and_angle(from, checkPos, checkDist, checkPitch, (checkYaw - range));
-                rightBehind = is_behind_surface(checkPos, surf);
-                behindSurface = leftBehind * rightBehind;
-            }
-        }
-    }
-    return behindSurface;
 }
 
 s32 is_mario_behind_surface(UNUSED struct Camera *c, struct Surface *surf) {
@@ -5069,9 +4981,9 @@ s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, Angle *avoidYaw, An
                     *avoidYaw = (calc_avoid_yaw(yawFromMario, wallYaw) + DEGREES(180));
                 }
             }
-            colData.x = sMarioCamState->pos[0] + ((cPos[0] - sMarioCamState->pos[0]) * checkDist);
-            colData.y = sMarioCamState->pos[1] + ((cPos[1] - sMarioCamState->pos[1]) * checkDist);
-            colData.z = sMarioCamState->pos[2] + ((cPos[2] - sMarioCamState->pos[2]) * checkDist);
+            colData.x = (sMarioCamState->pos[0] + ((cPos[0] - sMarioCamState->pos[0]) * checkDist));
+            colData.y = (sMarioCamState->pos[1] + ((cPos[1] - sMarioCamState->pos[1]) * checkDist));
+            colData.z = (sMarioCamState->pos[2] + ((cPos[2] - sMarioCamState->pos[2]) * checkDist));
             colData.radius = fineRadius;
             // Increase the fine check radius
             camera_approach_f32_symmetric_bool(&fineRadius, 200.0f, 20.0f);
@@ -5080,8 +4992,7 @@ s32 rotate_camera_around_walls(struct Camera *c, Vec3f cPos, Angle *avoidYaw, An
                 horWallNorm = atan2s(wall->normal.z, wall->normal.x);
                 wallYaw     = (horWallNorm + DEGREES(90));
                 // If Mario would be blocked by the surface, then avoid it
-                if ((is_range_behind_surface(sMarioCamState->pos, cPos, wall, yawRange, SURFACE_WALL_MISC) == 0)
-                    && (is_mario_behind_surface(c, wall))
+                if ((is_range_behind_surface(sMarioCamState->pos, cPos, wall, yawRange, SURFACE_WALL_MISC) == 0) && (is_mario_behind_surface(c, wall))
                     // Also check if the wall is tall enough to cover Mario
                     && !is_surf_within_bounding_box(wall, -1.0f, 150.0f, -1.0f)) {
                     // Calculate the avoid direction. The function returns the opposite direction so add 180
@@ -5344,7 +5255,7 @@ void store_info_star(struct Camera *c) {
  * Retrieve camera info for the star spawn cutscene
  */
 void retrieve_info_star(struct Camera *c) {
-    vec3f_copy(c->pos, sCameraStoreCutscene.pos);
+    vec3f_copy(c->pos,   sCameraStoreCutscene.pos);
     vec3f_copy(c->focus, sCameraStoreCutscene.focus);
 }
 

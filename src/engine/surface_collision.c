@@ -997,6 +997,96 @@ s32 find_poison_gas_level(s32 x, s32 z) {
 }
 
 /**************************************************
+ *                General Surfaces                *
+ **************************************************/
+
+/**
+ * Checks if `surf` is within the rect prism defined by xMax, yMax, and zMax
+ *
+ * @param surf surface to check
+ * @param xMax absolute-value max size in x, set to -1 to ignore
+ * @param yMax absolute-value max size in y, set to -1 to ignore
+ * @param zMax absolute-value max size in z, set to -1 to ignore
+ */
+s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax) {
+    // Surface vertex coordinates
+    Vec3s sx, sy, sz;
+    // Max delta between x, y, and z
+    s16 dxMax = 0, dyMax = 0, dzMax = 0;
+    // Current deltas between x, y, and z
+    register f32 dx, dy, dz;
+    s32 i, j;
+    sx[0] = surf->vertex1[0];
+    sx[1] = surf->vertex2[0];
+    sx[2] = surf->vertex3[0];
+    sy[0] = surf->vertex1[1];
+    sy[1] = surf->vertex2[1];
+    sy[2] = surf->vertex3[1];
+    sz[0] = surf->vertex1[2];
+    sz[1] = surf->vertex2[2];
+    sz[2] = surf->vertex3[2];
+    for (i = 0; i < 3; i++) {
+        j = (i + 1);
+        if (j >= 3) j = 0;
+        dx = ABS(sx[i] - sx[j]);
+        if (dx > dxMax) dxMax = dx;
+        dy = ABS(sy[i] - sy[j]);
+        if (dy > dyMax) dyMax = dy;
+        dz = ABS(sz[i] - sz[j]);
+        if (dz > dzMax) dzMax = dz;
+    }
+    return (((yMax != -1.0f) && (dyMax < yMax)) || ((xMax != -1.0f) && (zMax != -1.0f) && (dxMax < xMax) && (dzMax < zMax)));
+}
+
+/**
+ * Checks if `pos` is behind the surface, using the dot product.
+ *
+ * Because the function only uses `surf`s first vertex, some surfaces can shadow others.
+ */
+s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
+    s32 behindSurface = FALSE;
+    // Surface normal
+    f32 normX = (surf->vertex2[1] - surf->vertex1[1]) * (surf->vertex3[2] - surf->vertex2[2]) -
+                (surf->vertex3[1] - surf->vertex2[1]) * (surf->vertex2[2] - surf->vertex1[2]);
+    f32 normY = (surf->vertex2[2] - surf->vertex1[2]) * (surf->vertex3[0] - surf->vertex2[0]) -
+                (surf->vertex3[2] - surf->vertex2[2]) * (surf->vertex2[0] - surf->vertex1[0]);
+    f32 normZ = (surf->vertex2[0] - surf->vertex1[0]) * (surf->vertex3[1] - surf->vertex2[1]) -
+                (surf->vertex3[0] - surf->vertex2[0]) * (surf->vertex2[1] - surf->vertex1[1]);
+    f32 dirX  = (surf->vertex1[0] - pos[0]);
+    f32 dirY  = (surf->vertex1[1] - pos[1]);
+    f32 dirZ  = (surf->vertex1[2] - pos[2]);
+    if (dirX * normX + dirY * normY + dirZ * normZ < 0) behindSurface = TRUE;
+    return behindSurface;
+}
+
+/**
+ * Checks if the whole circular sector is behind the surface.
+ */
+s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, s16 surfType) {
+    s32 behindSurface = TRUE;
+    s32 leftBehind    = 0;
+    s32 rightBehind   = 0;
+    f32 checkDist;
+    Angle checkPitch, checkYaw;
+    Vec3f checkPos;
+    if (surf != NULL) {
+        if ((surfType == -1) || (surf->type != surfType)) {
+            if (range == 0) {
+                behindSurface = is_behind_surface(to, surf);
+            } else {
+                vec3f_get_dist_and_angle(from, to, &checkDist, &checkPitch, &checkYaw);
+                vec3f_set_dist_and_angle(from, checkPos, checkDist, checkPitch, (checkYaw + range));
+                leftBehind = is_behind_surface(checkPos, surf);
+                vec3f_set_dist_and_angle(from, checkPos, checkDist, checkPitch, (checkYaw - range));
+                rightBehind = is_behind_surface(checkPos, surf);
+                behindSurface = leftBehind * rightBehind;
+            }
+        }
+    }
+    return behindSurface;
+}
+
+/**************************************************
  *                   RAYCASTING                   *
  **************************************************/
 

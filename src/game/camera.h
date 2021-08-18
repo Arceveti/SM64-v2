@@ -600,7 +600,6 @@ s32  set_or_approach_s16_symmetric(     s16 *current,   s16 target, s16 incremen
 s32  camera_approach_f32_symmetric_bool(f32 *current,   f32 target, f32 increment);
 f32  camera_approach_f32_symmetric(     f32    value,   f32 target, f32 increment);
 s32  clamp_positions_and_find_yaw(Vec3f pos,  Vec3f origin, f32 xMax, f32 xMin, f32 zMax, f32 zMin);
-s32  is_range_behind_surface(     Vec3f from, Vec3f to, struct Surface *surf, s16 range, s16 surfType);
 void scale_along_line(Vec3f dest, Vec3f from, Vec3f to, f32 scale);
 Angle calculate_pitch(             Vec3f from, Vec3f to);
 Angle calculate_yaw(               Vec3f from, Vec3f to);
