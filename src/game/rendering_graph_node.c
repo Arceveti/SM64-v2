@@ -229,7 +229,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #ifdef SILHOUETTE
     s32 j;
 #endif
-    s32 enableZBuffer                     = (node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0;
+    s32 enableZBuffer                     = ((node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0);
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
 #ifdef F3DEX_GBI_2
@@ -241,11 +241,11 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 #ifdef SILHOUETTE
-    for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
+    for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
                 // check if the current layer is a silhouette layer
-                if ((i == LAYER_SILHOUETTE_OPAQUE || i == LAYER_SILHOUETTE_ALPHA)) {
+                if ((i == LAYER_SILHOUETTE_OPAQUE) || (i == LAYER_SILHOUETTE_ALPHA)) {
                     // Set render modes for the silhouette
                     gDPSetRenderMode(   gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA),
                                                             SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA));
@@ -260,14 +260,14 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
                                                             mode2List->modes[i]);
                 }
                 gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                    G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+                                                    (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
                 gSPDisplayList( gDisplayListHead++, currList->displayList);
                 currList = currList->next;
             }
         }
          // When reaching the last silhouette layer, render the "normal" versions of the silhouette layers:
         if (i == LAST_SIL_LAYER) {
-            for (j = i-NUM_EXTRA_SIL_LAYERS; j <= LAST_SIL_LAYER; j++) {
+            for ((j = (i - NUM_EXTRA_SIL_LAYERS)); (j <= LAST_SIL_LAYER); (j++)) {
                 // Disable fog for the non-silhouette versions
                 gSPClearGeometryMode(   gDisplayListHead++, G_FOG);
                 // reset the env color & alpha
@@ -278,7 +278,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
                 currList = node->listHeads[j];
                 while (currList != NULL) {
                     gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                        G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+                                                        (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
                     gSPDisplayList( gDisplayListHead++, currList->displayList);
                     currList = currList->next;
                 }
@@ -291,7 +291,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
             gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i], mode2List->modes[i]);
             while (currList != NULL) {
                 gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                          G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+                          (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
                 gSPDisplayList(gDisplayListHead++, currList->displayList);
                 currList = currList->next;
             }
@@ -309,7 +309,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
  * parameter. Look at the RenderModeContainer struct to see the corresponding
  * render modes of layers.
  */
-static void geo_append_display_list(void *displayList, s16 layer) {
+static void geo_append_display_list(void *displayList, DrawingLayer layer) {
 #ifdef F3DEX_GBI_2
     gSPLookAt(gDisplayListHead++, &lookAt);
 #endif

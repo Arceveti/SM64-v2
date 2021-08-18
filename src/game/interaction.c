@@ -170,8 +170,8 @@ Angle mario_obj_angle_to_object(struct MarioState *m, struct Object *o) {
  * action, speed, and position.
  */
 u32 determine_interaction(struct MarioState *m, struct Object *o) {
-    u32 interaction = 0;
-    u32 action      = m->action;
+    u32 interaction    = 0;
+    MarioAction action = m->action;
     if (action & ACT_FLAG_ATTACKING) {
         if ((action == ACT_PUNCHING) || (action == ACT_MOVE_PUNCHING) || (action == ACT_JUMP_KICK)) {
             Angle dYawToObject = abs_angle_diff(mario_obj_angle_to_object(m, o), m->faceAngle[1]);
@@ -317,7 +317,7 @@ void mario_retrieve_cap(void) {
 }
 
 u32 able_to_grab_object(struct MarioState *m, UNUSED struct Object *o) {
-    u32 action = m->action;
+    MarioAction action = m->action;
     if (action == ACT_DIVE_SLIDE || action == ACT_DIVE) {
         return (!(o->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO));
     } else if ((action == ACT_PUNCHING) || (action == ACT_MOVE_PUNCHING)) {
@@ -407,8 +407,8 @@ void hit_object_from_below(struct MarioState *m, UNUSED struct Object *o) {
     set_camera_shake_from_hit(SHAKE_HIT_FROM_BELOW);
 }
 
-// UNUSED static u32 unused_determine_knockback_action(struct MarioState *m) {
-//     u32 bonkAction;
+// UNUSED static MarioAction unused_determine_knockback_action(struct MarioState *m) {
+//     MarioAction bonkAction;
 //     Angle angleToObject = mario_obj_angle_to_object(m, m->interactObj);
 //     Angle facingDYaw    = (angleToObject - m->faceAngle[1]);
 //     if (m->forwardVel < 16.0f) m->forwardVel = 16.0f;
@@ -657,7 +657,7 @@ u32 interact_bbh_entrance(struct MarioState *m, UNUSED u32 interactType, struct 
 }
 
 u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 action;
+    MarioAction action;
     if (o->oInteractionSubtype & INT_SUBTYPE_FADING_WARP) {
         action = m->action;
         if (action == ACT_TELEPORT_FADE_IN) {
@@ -1109,7 +1109,7 @@ u32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct O
     return FALSE;
 }
 
-u32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+MarioAction check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     if ((!(m->action & (ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ATTACKING)) || !sInvulnerable)
         && (o->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO)) {
         if (object_facing_mario(m, o, 0x2AAA)) {
@@ -1243,7 +1243,7 @@ u32 interact_grabbable(struct MarioState *m, u32 interactType, struct Object *o)
 }
 
 u32 mario_can_talk(struct MarioState *m, u32 arg) {
-    s16 animID;
+    AnimID animID;
 #ifdef EASIER_DIALOG_TRIGGER
     if (m->action & (ACT_FLAG_AIR
      | ACT_FLAG_SHORT_HITBOX
@@ -1261,18 +1261,14 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
      || (m->action == ACT_DECELERATING)
      || (m->action == ACT_BRAKING)
      || (m->action == ACT_BRAKING_STOP)) {
-        if (arg) return TRUE;
-        animID = m->marioObj->header.gfx.animInfo.animID;
-        return ((animID == 0x0080) || (animID == 0x007F) || (animID == 0x006C));
-    }
 #else
     if (m->action & ACT_FLAG_IDLE) return TRUE;
     if (m->action == ACT_WALKING) {
+#endif
         if (arg) return TRUE;
         animID = m->marioObj->header.gfx.animInfo.animID;
-        return ((animID == 0x0080) || (animID == 0x007F) || (animID == 0x006C));
+        return ((animID == MARIO_ANIM_SIDESTEP_RIGHT) || (animID == MARIO_ANIM_SIDESTEP_LEFT) || (animID == MARIO_ANIM_PUSHING));
     }
-#endif
     return FALSE;
 }
 

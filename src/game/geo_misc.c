@@ -28,7 +28,7 @@
  */
 
 #define NUM_FLYING_CARPET_VERTICES 21
-extern const s16 flying_carpet_static_vertex_data[NUM_FLYING_CARPET_VERTICES];
+extern const RawVertexData flying_carpet_static_vertex_data[NUM_FLYING_CARPET_VERTICES];
 
 static s16 sCurAreaTimer            = 1;
 static s16 sPrevAreaTimer           = 0;
@@ -115,9 +115,9 @@ Gfx *geo_exec_flying_carpet_create(s32 callContext, struct GraphNode *node, UNUS
     s16 n, row, col, x, y, z, tx, ty;
     Vtx *verts;
     struct GraphNodeGenerated *generatedNode = (struct GraphNodeGenerated *) node;
-    s16 *vertexData      = segmented_to_virtual(&flying_carpet_static_vertex_data);
-    Gfx *displayList     = NULL;
-    Gfx *displayListHead = NULL;
+    RawVertexData *vertexData = segmented_to_virtual(&flying_carpet_static_vertex_data);
+    Gfx *displayList          = NULL;
+    Gfx *displayListHead      = NULL;
     struct Object *curGraphNodeObject;
     if (callContext == GEO_CONTEXT_RENDER) {
         verts            = alloc_display_list(NUM_FLYING_CARPET_VERTICES * sizeof(*verts));

@@ -81,9 +81,9 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
 #define MACRO_OBJ_Z      0x3
 #define MACRO_OBJ_PARAMS 0x4
 
-void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
+void spawn_macro_objects(s16 areaIndex, MacroObject *macroObjList) {
     s32 presetID;
-    s16 macroObject[5]; // See the 5 #define statements above. Should this be a struct?
+    MacroObject macroObject[5]; // See the 5 #define statements above. Should this be a struct?
     struct Object *newObj;
     // struct LoadedPreset preset;
     s16 param;
@@ -126,11 +126,11 @@ void spawn_macro_objects(s16 areaIndex, s16 *macroObjList) {
     }
 }
 
-void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
+void spawn_macro_objects_hardcoded(s16 areaIndex, MacroObject *macroObjList) {
     // This version of macroObjList has the preset and Y-Rotation separated,
     // and lacks behavior params. Might be an early version of the macro object list?
     s16 macroObjX, macroObjY, macroObjZ, macroObjRY;
-    s16 macroObjPreset;
+    MacroObject macroObjPreset;
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
     while (TRUE) {
@@ -155,7 +155,7 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, s16 *macroObjList) {
     }
 }
 
-void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
+void spawn_special_objects(s16 areaIndex, Collision **specialObjList) {
     s32 numOfSpecialObjects;
     s32 i;
     s32 offset;
@@ -225,10 +225,9 @@ void spawn_special_objects(s16 areaIndex, s16 **specialObjList) {
 }
 
 #ifdef NO_SEGMENTED_MEMORY
-u32 get_special_objects_size(s16 *data) {
-    s16 *startPos = data;
-    s32 numOfSpecialObjects;
-    s32 i;
+u32 get_special_objects_size(Collision *data) {
+    Collision *startPos = data;
+    s32 i, numOfSpecialObjects;
     u8 presetID;
     s32 offset;
     numOfSpecialObjects = *data++;
@@ -249,6 +248,6 @@ u32 get_special_objects_size(s16 *data) {
             default:                                   break;
         }
     }
-    return data - startPos;
+    return (data - startPos);
 }
 #endif

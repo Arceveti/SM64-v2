@@ -687,35 +687,35 @@
 #define	G_ZS_PRIM		(1 << G_MDSFT_ZSRCSEL)
 
 /* G_SETOTHERMODE_L gSetRenderMode */
-#define	AA_EN			0x8
-#define	Z_CMP			0x10
-#define	Z_UPD			0x20
-#define	IM_RD			0x40
-#define	CLR_ON_CVG		0x80
-#define	CVG_DST_CLAMP	0
-#define	CVG_DST_WRAP	0x100
-#define	CVG_DST_FULL	0x200
-#define	CVG_DST_SAVE	0x300
-#define	ZMODE_OPA		0
-#define	ZMODE_INTER		0x400
-#define	ZMODE_XLU		0x800
-#define	ZMODE_DEC		0xc00
-#define	CVG_X_ALPHA		0x1000
-#define	ALPHA_CVG_SEL	0x2000
-#define	FORCE_BL		0x4000
-#define	TEX_EDGE		0x0000 /* used to be 0x8000 */
+#define	AA_EN			(1 <<  3) // 0x0008
+#define	Z_CMP			(1 <<  4) // 0x0010
+#define	Z_UPD			(1 <<  5) // 0x0020
+#define	IM_RD			(1 <<  6) // 0x0040
+#define	CLR_ON_CVG		(1 <<  7) // 0x0080
+#define	CVG_DST_CLAMP	0x0000
+#define	CVG_DST_WRAP	(1 <<  8) // 0x0100
+#define	CVG_DST_FULL	(1 <<  9) // 0x0200
+#define	CVG_DST_SAVE	(CVG_DST_WRAP | CVG_DST_FULL) // 0x300
+#define	ZMODE_OPA		0x0000
+#define	ZMODE_INTER		(1 << 10) // 0x0400
+#define	ZMODE_XLU		(1 << 11) // 0x0800
+#define	ZMODE_DEC		(ZMODE_INTER | ZMODE_XLU) // 0xc00
+#define	CVG_X_ALPHA		(1 << 12) // 0x1000
+#define	ALPHA_CVG_SEL	(1 << 13) // 0x2000
+#define	FORCE_BL		(1 << 14) // 0x4000
+#define	TEX_EDGE		0x0000 /* used to be (1 << 15) // 0x8000 */
 
-#define	G_BL_CLR_IN		0
-#define	G_BL_CLR_MEM	1
-#define	G_BL_CLR_BL		2
-#define	G_BL_CLR_FOG	3
-#define	G_BL_1MA		0
-#define	G_BL_A_MEM		1
-#define	G_BL_A_IN		0
-#define	G_BL_A_FOG		1
-#define	G_BL_A_SHADE	2
-#define	G_BL_1			2
-#define	G_BL_0			3
+#define	G_BL_CLR_IN		0x0
+#define	G_BL_CLR_MEM	0x1
+#define	G_BL_CLR_BL		0x2
+#define	G_BL_CLR_FOG	0x3
+#define	G_BL_1MA		0x0
+#define	G_BL_A_MEM		0x1
+#define	G_BL_A_IN		0x0
+#define	G_BL_A_FOG		0x1
+#define	G_BL_A_SHADE	0x2
+#define	G_BL_1			0x2
+#define	G_BL_0			0x3
 
 #define	GBL_c1(m1a, m1b, m2a, m2b)	\
 	(m1a) << 30 | (m1b) << 26 | (m2a) << 22 | (m2b) << 18

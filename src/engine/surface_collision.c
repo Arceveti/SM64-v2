@@ -37,7 +37,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 invDenom;
     register f32 v, w;
     register f32 margin_radius = (radius - 1.0f);
-    register s16 type = SURFACE_DEFAULT;
+    register SurfaceType type = SURFACE_DEFAULT;
     s32 numCols = 0;
  #if EXTENDED_BOUNDS_MODE > 1
     const float down_scale = (1.0f / WORLD_SCALE);
@@ -197,7 +197,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register s32 w1, w2, w3;
     register s32 y1, y2, y3;
     s32 numCols = 0;
-    s16 type = SURFACE_DEFAULT;
+    SurfaceType type = SURFACE_DEFAULT;
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
     // Stay in this loop until out of walls.
@@ -410,7 +410,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, s32 
     register struct Surface *surf;
     f32 x1, z1, x2, z2, x3, z3;
     f32 height;
-    s16 type = SURFACE_DEFAULT;
+    SurfaceType type = SURFACE_DEFAULT;
     struct Surface *ceil = NULL;
     // *pheight = CELL_HEIGHT_LIMIT;
     // Stay in this loop until out of ceilings.
@@ -530,7 +530,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  *                     FLOORS                     *
  **************************************************/
 
-s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, s16 type, s32 dynamic) {
+s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, SurfaceType type, s32 dynamic) {
     register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     struct SurfaceNode *surfaceNode;
@@ -617,7 +617,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
 #endif
     register struct Surface *surf;
     f32 height;
-    s16 type = SURFACE_DEFAULT;
+    SurfaceType type = SURFACE_DEFAULT;
     struct Surface *floor = NULL;
     // Iterate through the list of floors until there are no more floors.
     while (surfaceNode != NULL) {
@@ -1062,7 +1062,7 @@ s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
 /**
  * Checks if the whole circular sector is behind the surface.
  */
-s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, s16 surfType) {
+s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, SurfaceType surfType) {
     s32 behindSurface = TRUE;
     s32 leftBehind    = 0;
     s32 rightBehind   = 0;

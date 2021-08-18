@@ -38,8 +38,8 @@
 /*
  * Exception vectors
  */
-#define SIZE_EXCVEC	0x80			/* Size of an exc. vec */
-#define	UT_VEC		K0BASE			/* utlbmiss vector */
+#define SIZE_EXCVEC	0x80				/* Size of an exc. vec */
+#define	UT_VEC		K0BASE				/* utlbmiss vector */
 #define	R_VEC		(K1BASE+0x1fc00000)	/* reset vector */
 #define	XUT_VEC		(K0BASE+0x80)		/* extended address tlbmiss */
 #define	ECC_VEC		(K0BASE+0x100)		/* Ecc exception vector */
@@ -84,13 +84,13 @@
  * TLB size constants
  */
 
-#define	NTLBENTRIES	31	/* entry 31 is reserved by rdb */
+#define	NTLBENTRIES			31	/* entry 31 is reserved by rdb */
 
 #define	TLBHI_VPN2MASK		0xffffe000
 #define	TLBHI_VPN2SHIFT		13
 #define	TLBHI_PIDMASK		0xff
 #define	TLBHI_PIDSHIFT		0
-#define	TLBHI_NPID			255		/* 255 to fit in 8 bits */
+#define	TLBHI_NPID			255			/* 255 to fit in 8 bits */
 
 #define	TLBLO_PFNMASK		0x3fffffc0
 #define	TLBLO_PFNSHIFT		6
@@ -99,9 +99,9 @@
 #define TLBLO_UNCACHED		0x10		/* not cached */
 #define TLBLO_NONCOHRNT		0x18		/* Cacheable non-coherent */
 #define TLBLO_EXLWR			0x28		/* Exclusive write */
-#define	TLBLO_D				0x4		/* writeable */
-#define	TLBLO_V				0x2		/* valid bit */
-#define	TLBLO_G				0x1		/* global access bit */
+#define	TLBLO_D				0x4			/* writeable */
+#define	TLBLO_V				0x2			/* valid bit */
+#define	TLBLO_G				0x1			/* global access bit */
 
 #define	TLBINX_PROBE		0x80000000
 #define	TLBINX_INXMASK		0x3f
@@ -147,38 +147,38 @@
  * Interrupt enable bits
  * (NOTE: bits set to 1 enable the corresponding level interrupt)
  */
-#define	SR_IMASK	0x0000ff00	/* Interrupt mask */
-#define	SR_IMASK8	0x00000000	/* mask level 8 */
-#define	SR_IMASK7	0x00008000	/* mask level 7 */
-#define	SR_IMASK6	0x0000c000	/* mask level 6 */
-#define	SR_IMASK5	0x0000e000	/* mask level 5 */
-#define	SR_IMASK4	0x0000f000	/* mask level 4 */
-#define	SR_IMASK3	0x0000f800	/* mask level 3 */
-#define	SR_IMASK2	0x0000fc00	/* mask level 2 */
-#define	SR_IMASK1	0x0000fe00	/* mask level 1 */
-#define	SR_IMASK0	0x0000ff00	/* mask level 0 */
+#define	SR_IMASK		0x0000ff00	/* Interrupt mask */
+#define	SR_IMASK8		0x00000000	/* mask level 8 */
+#define	SR_IMASK7		0x00008000	/* mask level 7 */
+#define	SR_IMASK6		0x0000c000	/* mask level 6 */
+#define	SR_IMASK5		0x0000e000	/* mask level 5 */
+#define	SR_IMASK4		0x0000f000	/* mask level 4 */
+#define	SR_IMASK3		0x0000f800	/* mask level 3 */
+#define	SR_IMASK2		0x0000fc00	/* mask level 2 */
+#define	SR_IMASK1		0x0000fe00	/* mask level 1 */
+#define	SR_IMASK0		0x0000ff00	/* mask level 0 */
 
-#define	SR_IBIT8	0x00008000	/* bit level 8 */
-#define	SR_IBIT7	0x00004000	/* bit level 7 */
-#define	SR_IBIT6	0x00002000	/* bit level 6 */
-#define	SR_IBIT5	0x00001000	/* bit level 5 */
-#define	SR_IBIT4	0x00000800	/* bit level 4 */
-#define	SR_IBIT3	0x00000400	/* bit level 3 */
-#define	SR_IBIT2	0x00000200	/* bit level 2 */
-#define	SR_IBIT1	0x00000100	/* bit level 1 */
+#define	SR_IBIT8		0x00008000	/* bit level 8 */
+#define	SR_IBIT7		0x00004000	/* bit level 7 */
+#define	SR_IBIT6		0x00002000	/* bit level 6 */
+#define	SR_IBIT5		0x00001000	/* bit level 5 */
+#define	SR_IBIT4		0x00000800	/* bit level 4 */
+#define	SR_IBIT3		0x00000400	/* bit level 3 */
+#define	SR_IBIT2		0x00000200	/* bit level 2 */
+#define	SR_IBIT1		0x00000100	/* bit level 1 */
 
 #define	SR_IMASKSHIFT	8
 
-#define	SR_KX		0x00000080	/* extended-addr TLB vec in kernel */
-#define	SR_SX		0x00000040	/* xtended-addr TLB vec supervisor */
-#define	SR_UX		0x00000020	/* xtended-addr TLB vec in user mode */
-#define	SR_KSU_MASK	0x00000018	/* mode mask */
-#define	SR_KSU_USR	0x00000010	/* user mode */
-#define	SR_KSU_SUP	0x00000008	/* supervisor mode */
-#define	SR_KSU_KER	0x00000000	/* kernel mode */
-#define	SR_ERL		0x00000004	/* Error level, 1=>cache error */
-#define	SR_EXL		0x00000002	/* Exception level, 1=>exception */
-#define	SR_IE		0x00000001	/* interrupt enable, 1=>enable */
+#define	SR_KX			0x00000080	/* extended-addr TLB vec in kernel */
+#define	SR_SX			0x00000040	/* xtended-addr TLB vec supervisor */
+#define	SR_UX			0x00000020	/* xtended-addr TLB vec in user mode */
+#define	SR_KSU_MASK		0x00000018	/* mode mask */
+#define	SR_KSU_USR		0x00000010	/* user mode */
+#define	SR_KSU_SUP		0x00000008	/* supervisor mode */
+#define	SR_KSU_KER		0x00000000	/* kernel mode */
+#define	SR_ERL			0x00000004	/* Error level, 1=>cache error */
+#define	SR_EXL			0x00000002	/* Exception level, 1=>exception */
+#define	SR_IE			0x00000001	/* interrupt enable, 1=>enable */
 
 /*
  * Cause Register
@@ -209,16 +209,16 @@
 #define	EXC_CODE(x)	((x)<<2)
 
 /* Hardware exception codes */
-#define	EXC_INT		EXC_CODE(0)	/* interrupt */
-#define	EXC_MOD		EXC_CODE(1)	/* TLB mod */
-#define	EXC_RMISS	EXC_CODE(2)	/* Read TLB Miss */
-#define	EXC_WMISS	EXC_CODE(3)	/* Write TLB Miss */
-#define	EXC_RADE	EXC_CODE(4)	/* Read Address Error */
-#define	EXC_WADE	EXC_CODE(5)	/* Write Address Error */
-#define	EXC_IBE		EXC_CODE(6)	/* Instruction Bus Error */
-#define	EXC_DBE		EXC_CODE(7)	/* Data Bus Error */
-#define	EXC_SYSCALL	EXC_CODE(8)	/* SYSCALL */
-#define	EXC_BREAK	EXC_CODE(9)	/* BREAKpoint */
+#define	EXC_INT		EXC_CODE(0)		/* interrupt */
+#define	EXC_MOD		EXC_CODE(1)		/* TLB mod */
+#define	EXC_RMISS	EXC_CODE(2)		/* Read TLB Miss */
+#define	EXC_WMISS	EXC_CODE(3)		/* Write TLB Miss */
+#define	EXC_RADE	EXC_CODE(4)		/* Read Address Error */
+#define	EXC_WADE	EXC_CODE(5)		/* Write Address Error */
+#define	EXC_IBE		EXC_CODE(6)		/* Instruction Bus Error */
+#define	EXC_DBE		EXC_CODE(7)		/* Data Bus Error */
+#define	EXC_SYSCALL	EXC_CODE(8)		/* SYSCALL */
+#define	EXC_BREAK	EXC_CODE(9)		/* BREAKpoint */
 #define	EXC_II		EXC_CODE(10)	/* Illegal Instruction */
 #define	EXC_CPU		EXC_CODE(11)	/* CoProcessor Unusable */
 #define	EXC_OV		EXC_CODE(12)	/* OVerflow */
@@ -243,24 +243,24 @@
 #define	C0_WRITEI	0x2		/* write ITLB entry addressed by C0_INDEX */
 #define	C0_WRITER	0x6		/* write ITLB entry addressed by C0_RAND */
 #define	C0_PROBE	0x8		/* probe for ITLB entry addressed by TLBHI */
-#define	C0_RFE		0x10		/* restore for exception */
+#define	C0_RFE		0x10	/* restore for exception */
 
 /*
  * 'cache' instruction definitions
  */
 
 /* Target cache */
-#define	CACH_PI		0x0	/* specifies primary inst. cache */
-#define	CACH_PD		0x1	/* primary data cache */
-#define	CACH_SI		0x2	/* secondary instruction cache */
-#define	CACH_SD		0x3	/* secondary data cache */
+#define	CACH_PI		0x0		/* specifies primary inst. cache */
+#define	CACH_PD		0x1		/* primary data cache */
+#define	CACH_SI		0x2		/* secondary instruction cache */
+#define	CACH_SD		0x3		/* secondary data cache */
 
 /* Cache operations */
-#define	C_IINV		0x0	/* index invalidate (inst, 2nd inst) */
-#define	C_IWBINV	0x0	/* index writeback inval (d, sd) */
-#define	C_ILT		0x4	/* index load tag (all) */
-#define	C_IST		0x8	/* index store tag (all) */
-#define	C_CDX		0xc	/* create dirty exclusive (d, sd) */
+#define	C_IINV		0x0		/* index invalidate (inst, 2nd inst) */
+#define	C_IWBINV	0x0		/* index writeback inval (d, sd) */
+#define	C_ILT		0x4		/* index load tag (all) */
+#define	C_IST		0x8		/* index store tag (all) */
+#define	C_CDX		0xc		/* create dirty exclusive (d, sd) */
 #define	C_HINV		0x10	/* hit invalidate (all) */
 #define	C_HWBINV	0x14	/* hit writeback inv. (d, sd) */
 #define	C_FILL		0x14	/* fill (i) */

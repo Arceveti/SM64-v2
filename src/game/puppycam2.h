@@ -25,13 +25,6 @@
 #define PUPPYCAM_MODE3_ZOOMED_OUT           0x4
 #define PUPPYCAM_MODE3_ENTER_FIRST_PERSON   0x8
 
-#define RAYCAST_FIND_FLOOR  (1 << 0) // 0x1
-#define RAYCAST_FIND_WALL   (1 << 1) // 0x2
-#define RAYCAST_FIND_CEIL   (1 << 2) // 0x4
-#define RAYCAST_FIND_WATER  (1 << 3) // 0x8
-#define RAYCAST_FIND_ALL    (0xFFFFFFFF)
-
-
 #include "include/command_macros_base.h"
 
 #define PUPPYVOLUME(x, y, z, length, height, width, yaw, functionptr, anglesptr, addflags, removeflags, flagpersistance, room, shape) \

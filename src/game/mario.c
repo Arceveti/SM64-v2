@@ -65,7 +65,7 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
         targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index );
     }
-    if (o->header.gfx.animInfo.animID != targetAnimID) {
+    if (o->header.gfx.animInfo.animID    != targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
         o->header.gfx.animInfo.curAnim    = targetAnim;
         o->header.gfx.animInfo.animAccel  = 0x0;
@@ -94,7 +94,7 @@ s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel)
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
         targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
     }
-    if (o->header.gfx.animInfo.animID != targetAnimID) {
+    if (o->header.gfx.animInfo.animID    != targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
         o->header.gfx.animInfo.curAnim    = targetAnim;
         o->header.gfx.animInfo.animYTrans = m->animYTrans;
@@ -475,6 +475,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 }
 #endif
 
+//! move to surface_collision
 /**
  * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
  */
@@ -485,7 +486,7 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
 /**
  * Determines if Mario is facing "downhill."
  */
-s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
+s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type?
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
@@ -589,7 +590,7 @@ s32 analog_stick_held_back(struct MarioState *m, Angle range) {
  * Adjusts Mario's camera and sound based on his action status.
  */
 void update_mario_sound_and_camera(struct MarioState *m) {
-    u32 action    = m->action;
+    MarioAction action    = m->action;
     s32 camPreset = m->area->camera->mode;
     if (action == ACT_FIRST_PERSON) {
         raise_background_noise(2);
@@ -633,7 +634,7 @@ static void set_mario_y_vel_based_on_fspeed(struct MarioState *m, f32 initialVel
 /**
  * Transitions for a variety of airborne actions.
  */
-static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actionArg) {
+static MarioAction set_mario_action_airborne(struct MarioState *m, MarioAction action, u32 actionArg) {
     f32 forwardVel;
     if (((m->squishTimer != 0) || (m->quicksandDepth >= 1.0f)) && ((action == ACT_DOUBLE_JUMP) || (action == ACT_TWIRLING))) action = ACT_JUMP;
     switch (action) {
@@ -728,7 +729,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
 /**
  * Transitions for a variety of moving actions.
  */
-static u32 set_mario_action_moving(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
+static MarioAction set_mario_action_moving(struct MarioState *m, MarioAction action, UNUSED u32 actionArg) {
     s16 floorClass = mario_get_floor_class(m);
     f32 forwardVel = m->forwardVel;
     f32 mag        = min(m->intendedMag, 8.0f);
@@ -753,7 +754,7 @@ static u32 set_mario_action_moving(struct MarioState *m, u32 action, UNUSED u32 
 /**
  * Transition for certain submerged actions, which is actually just the metal jump actions.
  */
-static u32 set_mario_action_submerged(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
+static MarioAction set_mario_action_submerged(struct MarioState *m, MarioAction action, UNUSED u32 actionArg) {
     if ((action == ACT_METAL_WATER_JUMP) || (action == ACT_HOLD_METAL_WATER_JUMP)) m->vel[1] = 32.0f;
     return action;
 }
@@ -761,7 +762,7 @@ static u32 set_mario_action_submerged(struct MarioState *m, u32 action, UNUSED u
 /**
  * Transitions for a variety of cutscene actions.
  */
-static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
+static MarioAction set_mario_action_cutscene(struct MarioState *m, MarioAction action, UNUSED u32 actionArg) {
     switch (action) {
         case ACT_EMERGE_FROM_PIPE:      m->vel[1] = 52.0f;              break;
         case ACT_FALL_AFTER_STAR_GRAB:  mario_set_forward_vel(m, 0.0f); break;
@@ -776,7 +777,7 @@ static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u3
  * Puts Mario into a given action, putting Mario through the appropriate
  * specific function if needed.
  */
-u32 set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
+MarioAction set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     switch (action & ACT_GROUP_MASK) {
         case ACT_GROUP_MOVING:    action = set_mario_action_moving(   m, action, actionArg); break;
         case ACT_GROUP_AIRBORNE:  action = set_mario_action_airborne( m, action, actionArg); break;
@@ -833,7 +834,7 @@ s32 set_jump_from_landing(struct MarioState *m) {
  * Puts Mario in a given action, as long as it is not overruled by
  * either a quicksand or steep jump.
  */
-s32 set_jumping_action(struct MarioState *m, u32 action, u32 actionArg) {
+MarioAction set_jumping_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     // Checks whether Mario is holding an object or not.
     if (m->quicksandDepth >= 11.0f) return set_mario_action(m, (m->heldObj == NULL) ? ACT_QUICKSAND_JUMP_LAND : ACT_HOLD_QUICKSAND_JUMP_LAND, 0);
     if (mario_floor_is_steep(m)) {
@@ -847,7 +848,7 @@ s32 set_jumping_action(struct MarioState *m, u32 action, u32 actionArg) {
 /**
  * Drop anything Mario is holding and set a new action.
  */
-s32 drop_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
+MarioAction drop_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     mario_stop_riding_and_holding(m);
     return set_mario_action(m, action, actionArg);
 }
@@ -855,7 +856,7 @@ s32 drop_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg) {
 /**
  * Increment Mario's hurt counter and set a new action.
  */
-s32 hurt_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg, s16 hurtCounter) {
+MarioAction hurt_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg, s16 hurtCounter) {
     m->hurtCounter = hurtCounter;
     return set_mario_action(m, action, actionArg);
 }
@@ -864,7 +865,7 @@ s32 hurt_and_set_mario_action(struct MarioState *m, u32 action, u32 actionArg, s
  * Checks a variety of inputs for common transitions between many different
  * actions. A common variant of the below function.
  */
-s32 check_common_action_exits(struct MarioState *m) {
+MarioAction check_common_action_exits(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_JUMP         , 0);
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_FREEFALL     , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_WALKING      , 0);
@@ -876,7 +877,7 @@ s32 check_common_action_exits(struct MarioState *m) {
  * Checks a variety of inputs for common transitions between many different
  * object holding actions. A holding variant of the above function.
  */
-s32 check_common_hold_action_exits(struct MarioState *m) {
+MarioAction check_common_hold_action_exits(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_HOLD_JUMP         , 0);
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_HOLD_FREEFALL     , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_HOLD_WALKING      , 0);
@@ -887,7 +888,7 @@ s32 check_common_hold_action_exits(struct MarioState *m) {
 /**
  * Transitions Mario from a submerged action to a walking action.
  */
-s32 transition_submerged_to_walking(struct MarioState *m) {
+MarioAction transition_submerged_to_walking(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
@@ -897,7 +898,7 @@ s32 transition_submerged_to_walking(struct MarioState *m) {
  * Transitions Mario from a submerged action to an airborne action.
  * You may want to change these actions to fit your hack
  */
-s32 transition_submerged_to_airborne(struct MarioState *m) {
+MarioAction transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     if (m->heldObj == NULL) {
@@ -911,7 +912,7 @@ s32 transition_submerged_to_airborne(struct MarioState *m) {
  * This is the transition function typically for entering a submerged action for a
  * non-submerged action. This also applies the water surface camera preset.
  */
-s32 set_water_plunge_action(struct MarioState *m) {
+MarioAction set_water_plunge_action(struct MarioState *m) {
     m->forwardVel   = (m->forwardVel / 4.0f);
     m->vel[1]       = (m->vel[1]     / 2.0f);
     m->faceAngle[2] = 0x0;
@@ -1396,7 +1397,7 @@ u64 sCapFlickerFrames = 0x4444449249255555;
  */
 u32 update_and_return_cap_flags(struct MarioState *m) {
     u32 flags = m->flags;
-    u32 action;
+    MarioAction action;
     if (m->capTimer > 0) {
         action = m->action;
         if ((m->capTimer <= 60)

@@ -24,8 +24,7 @@ void bhv_haunted_chair_init(void) {
 }
 
 void haunted_chair_act_fall_or_spin(void) {
-    s16 dAngleToPiano;
-
+    Angle dAngleToPiano;
     if (o->parentObj != o) { // Chair is next to piano
         if (o->oHauntedChairFallTargetAngle == 0x0) {
             if (lateral_dist_between_objects(o, o->parentObj) < 250.0f) {

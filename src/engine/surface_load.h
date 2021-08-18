@@ -31,7 +31,7 @@ typedef struct SurfaceNode SpatialPartitionCell[4];
 typedef struct SurfaceNode SpatialPartitionCell[3];
 #endif
 
-extern SpatialPartitionCell gStaticSurfacePartition[NUM_CELLS][NUM_CELLS];
+extern SpatialPartitionCell gStaticSurfacePartition [NUM_CELLS][NUM_CELLS];
 extern SpatialPartitionCell gDynamicSurfacePartition[NUM_CELLS][NUM_CELLS];
 extern struct SurfaceNode  *sSurfaceNodePool;
 extern struct Surface      *sSurfacePool;
@@ -39,9 +39,9 @@ extern s16 sSurfacePoolSize;
 
 void alloc_surface_pools(void);
 #ifdef NO_SEGMENTED_MEMORY
-u32 get_area_terrain_size(s16 *data);
+u32 get_area_terrain_size(Collision *data);
 #endif
-void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects);
+void load_area_terrain(s16 index, Collision *data, RoomsList *surfaceRooms, MacroObject *macroObjects);
 void clear_dynamic_surfaces(void);
 void load_object_collision_model(void);
 

@@ -23,6 +23,6 @@ void bhv_end_toad_loop(             void);
 s32  geo_switch_peach_eyes(s32 callContext, struct GraphNode *node, UNUSED s32 context);
 s32  mario_ready_to_speak(          void);
 s32  set_mario_npc_dialog(s32 actionArg);
-s32  mario_execute_cutscene_action(struct MarioState *m);
+MarioAction mario_execute_cutscene_action(struct MarioState *m);
 
 #endif // MARIO_ACTIONS_CUTSCENE_H

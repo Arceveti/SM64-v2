@@ -111,7 +111,7 @@ void mario_bonk_reflection(struct MarioState *m, u32 negateSpeed) {
     }
 }
 
-u32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
+MarioAction mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
     if ((m->action & ACT_FLAG_RIDING_SHELL) || (m->pos[1] > m->floorHeight)) {
         m->quicksandDepth = 0.0f;
     } else {
@@ -139,7 +139,7 @@ u32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
     return FALSE;
 }
 
-u32 mario_push_off_steep_floor(struct MarioState *m, u32 action, u32 actionArg) {
+MarioAction mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
     if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < 0x4000) {
         m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);;
         m->faceAngle[1] = m->floorAngle;

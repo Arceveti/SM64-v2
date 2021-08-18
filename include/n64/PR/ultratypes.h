@@ -33,23 +33,23 @@
  * General data types for R4300
  */
 
-typedef signed char            s8;
+typedef   signed char          s8;
 typedef unsigned char          u8;
-typedef signed short int       s16;
+typedef   signed short int     s16;
 typedef unsigned short int     u16;
-typedef signed int             s32;
+typedef   signed int           s32;
 typedef unsigned int           u32;
 
 typedef float  f32;
 typedef double f64;
 
 #ifdef TARGET_N64
-typedef signed long long int   s64;
+typedef   signed long long int s64;
 typedef unsigned long long int u64;
-typedef u32 size_t;
-typedef s32 ssize_t;
+typedef u32    size_t;
+typedef s32   ssize_t;
 typedef u32 uintptr_t;
-typedef s32 intptr_t;
+typedef s32  intptr_t;
 typedef s32 ptrdiff_t;
 
 typedef s8	  int8_t;

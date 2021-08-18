@@ -433,8 +433,8 @@ void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 home
  * A series of checks using sin and cos to see if a given angle is facing in the same direction
  * of a given angle, within a certain range.
  */
-s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, s16 range) {
-    s16 dAngle = ((u16) goal - (u16) base);
+s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
+    Angle dAngle = ((u16) goal - (u16) base);
     return (((f32) sins(-range) < (f32) sins(dAngle)) && ((f32) sins(dAngle) < (f32) sins(range)) && (coss(dAngle) > 0));
 }
 

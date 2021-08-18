@@ -100,7 +100,7 @@ struct MovtexObject {
     Color g;      /// green
     Color b;      /// blue
     Alpha a;      /// alpha
-    s32 layer; /// the drawing layer for this mesh
+    DrawingLayer layer; /// the drawing layer for this mesh
 };
 
 /// Counters to make textures move iff the game is not paused.
@@ -134,59 +134,59 @@ Texture *gMovtexIdToTexture[] = { texture_waterbox_water,     texture_waterbox_m
                                   ssl_pyramid_sand,           ttc_yellow_triangle };
 
 extern Gfx castle_grounds_dl_waterfall[];
-extern s16 castle_grounds_movtex_tris_waterfall[]; //! movtex tris typedef
-extern s16 ssl_movtex_tris_pyramid_sand_pathway_front[];
+extern Movtex castle_grounds_movtex_tris_waterfall[];
+extern Movtex ssl_movtex_tris_pyramid_sand_pathway_front[];
 extern Gfx ssl_dl_pyramid_sand_pathway_begin[];
 extern Gfx ssl_dl_pyramid_sand_pathway_end[];
 extern Gfx ssl_dl_pyramid_sand_pathway_front_end[];
-extern s16 ssl_movtex_tris_pyramid_sand_pathway_floor[];
+extern Movtex ssl_movtex_tris_pyramid_sand_pathway_floor[];
 extern Gfx ssl_dl_pyramid_sand_pathway_floor_begin[];
 extern Gfx ssl_dl_pyramid_sand_pathway_floor_end[];
-extern s16 ssl_movtex_tris_pyramid_sand_pathway_side[];
+extern Movtex ssl_movtex_tris_pyramid_sand_pathway_side[];
 extern Gfx ssl_dl_pyramid_sand_pathway_side_end[];
-extern s16 bitfs_movtex_tris_lava_first_section[];
+extern Movtex bitfs_movtex_tris_lava_first_section[];
 extern Gfx bitfs_dl_lava_sections[];
-extern s16 bitfs_movtex_tris_lava_second_section[];
-extern s16 bitfs_movtex_tris_lava_floor[];
+extern Movtex bitfs_movtex_tris_lava_second_section[];
+extern Movtex bitfs_movtex_tris_lava_floor[];
 extern Gfx bitfs_dl_lava_floor[];
-extern s16 lll_movtex_tris_lava_floor[];
+extern Movtex lll_movtex_tris_lava_floor[];
 extern Gfx lll_dl_lava_floor[];
-extern s16 lll_movtex_tris_lavafall_volcano[];
+extern Movtex lll_movtex_tris_lavafall_volcano[];
 extern Gfx lll_dl_lavafall_volcano[];
 #ifdef DDD_WARP_CURRENT_TEXTURE
-extern s16 ddd_movtex_tris_sub_hole[];
+extern Movtex ddd_movtex_tris_sub_hole[];
 extern Gfx ddd_dl_movtex_sub_hole[];
 #endif
-extern s16 cotmc_movtex_tris_water[];
+extern Movtex cotmc_movtex_tris_water[];
 extern Gfx cotmc_dl_water_begin[];
 extern Gfx cotmc_dl_water_end[];
 extern Gfx cotmc_dl_water[];
-extern s16 ttm_movtex_tris_begin_waterfall[];
+extern Movtex ttm_movtex_tris_begin_waterfall[];
 extern Gfx ttm_dl_waterfall[];
-extern s16 ttm_movtex_tris_end_waterfall[];
-extern s16 ttm_movtex_tris_begin_puddle_waterfall[];
+extern Movtex ttm_movtex_tris_end_waterfall[];
+extern Movtex ttm_movtex_tris_begin_puddle_waterfall[];
 extern Gfx ttm_dl_bottom_waterfall[];
-extern s16 ttm_movtex_tris_end_puddle_waterfall[];
-extern s16 ttm_movtex_tris_puddle_waterfall[];
+extern Movtex ttm_movtex_tris_end_puddle_waterfall[];
+extern Movtex ttm_movtex_tris_puddle_waterfall[];
 extern Gfx ttm_dl_puddle_waterfall[];
-extern s16 ssl_movtex_tris_pyramid_quicksand[];
+extern Movtex ssl_movtex_tris_pyramid_quicksand[];
 extern Gfx ssl_dl_quicksand_begin[];
 extern Gfx ssl_dl_quicksand_end[];
 extern Gfx ssl_dl_pyramid_quicksand[];
-extern s16 ssl_movtex_tris_pyramid_corners_quicksand[];
+extern Movtex ssl_movtex_tris_pyramid_corners_quicksand[];
 extern Gfx ssl_dl_pyramid_corners_quicksand[];
-extern s16 ssl_movtex_tris_sides_quicksand[];
+extern Movtex ssl_movtex_tris_sides_quicksand[];
 extern Gfx ssl_dl_sides_quicksand[];
-extern s16 ttc_movtex_tris_big_surface_treadmill[];
+extern Movtex ttc_movtex_tris_big_surface_treadmill[];
 extern Gfx ttc_dl_surface_treadmill_begin[];
 extern Gfx ttc_dl_surface_treadmill_end[];
 extern Gfx ttc_dl_surface_treadmill[];
-extern s16 ttc_movtex_tris_small_surface_treadmill[];
-extern s16 ssl_movtex_tris_quicksand_pit[];
+extern Movtex ttc_movtex_tris_small_surface_treadmill[];
+extern Movtex ssl_movtex_tris_quicksand_pit[];
 extern Gfx ssl_dl_quicksand_pit_begin[];
 extern Gfx ssl_dl_quicksand_pit_end[];
 extern Gfx ssl_dl_quicksand_pit[];
-extern s16 ssl_movtex_tris_pyramid_quicksand_pit[];
+extern Movtex ssl_movtex_tris_pyramid_quicksand_pit[];
 extern Gfx ssl_dl_pyramid_quicksand_pit_begin[];
 extern Gfx ssl_dl_pyramid_quicksand_pit_end[];
 

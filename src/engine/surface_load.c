@@ -38,7 +38,7 @@ struct Surface     *sSurfacePool;
  * The size of the surface pool (2300 in vanilla).
  */
 s16 sSurfacePoolSize;
-u8  gSurfacePoolError = 0x0; //! uchar type?
+u8  gSurfacePoolError = 0x0;
 
 /**
  * Allocate the part of the surface node pool to contain a surface node.
@@ -71,7 +71,7 @@ static struct Surface *alloc_surface(void) {
  * Iterates through the entire partition, clearing the surfaces.
  */
 static void clear_spatial_partition(SpatialPartitionCell *cells) {
-    register s32 i = NUM_CELLS * NUM_CELLS;
+    register s32 i = (NUM_CELLS * NUM_CELLS);
     while (i--) {
         (*cells)[SPATIAL_PARTITION_FLOORS].next = NULL;
         (*cells)[SPATIAL_PARTITION_CEILS ].next = NULL;
@@ -209,7 +209,7 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
  * @param vertexData The raw data containing vertex positions
  * @param vertexIndices Helper which tells positions in vertexData to start reading vertices
  */
-static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
+static struct Surface *read_surface_data(RawVertexData *vertexData, Collision **vertexIndices) {
     struct Surface *surface;
 
     register s16 offset1 = (3 * (*vertexIndices)[0]);
@@ -276,7 +276,7 @@ static struct Surface *read_surface_data(s16 *vertexData, s16 **vertexIndices) {
  * Returns whether a surface has exertion/moves Mario
  * based on the surface type.
  */
-static s32 surface_has_force(s16 surfaceType) {
+static s32 surface_has_force(SurfaceType surfaceType) {
     return ((surfaceType == SURFACE_0004)
          || (surfaceType == SURFACE_FLOWING_WATER)
          || (surfaceType == SURFACE_DEEP_MOVING_QUICKSAND)
@@ -291,7 +291,7 @@ static s32 surface_has_force(s16 surfaceType) {
  * Returns whether a surface should have the
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
-static s32 surf_has_no_cam_collision(s16 surfaceType) {
+static s32 surf_has_no_cam_collision(SurfaceType surfaceType) {
     if ((surfaceType == SURFACE_NO_CAM_COLLISION)
      || (surfaceType == SURFACE_NO_CAM_COLLISION_UNUSED)
      || (surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY)
@@ -303,7 +303,7 @@ static s32 surf_has_no_cam_collision(s16 surfaceType) {
  * Load in the surfaces for a given surface type. This includes setting the flags,
  * exertion, and room.
  */
-static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s8 **surfaceRooms) {
+static void load_static_surfaces(Collision **data, RawVertexData *vertexData, SurfaceType surfaceType, RoomsList **surfaceRooms) {
     s32 i, numSurfaces;
     struct Surface *surface;
     s8 room = 0;
@@ -338,9 +338,9 @@ static void load_static_surfaces(s16 **data, s16 *vertexData, s16 surfaceType, s
 /**
  * Read the data for vertices for reference by triangles.
  */
-static s16 *read_vertex_data(s16 **data) {
+static RawVertexData *read_vertex_data(Collision **data) {
     s32 numVertices;
-    s16 *vertexData;
+    RawVertexData *vertexData;
     numVertices = *(*data);
     (*data)++;
     vertexData  =   *data;
@@ -351,7 +351,7 @@ static s16 *read_vertex_data(s16 **data) {
 /**
  * Loads in special environmental regions, such as water, poison gas, and JRB fog.
  */
-static void load_environmental_regions(s16 **data) {
+static void load_environmental_regions(Collision **data) {
     s32 numRegions, i;
     gEnvironmentRegions =   *data;
     numRegions          = *(*data)++;
@@ -376,7 +376,7 @@ void alloc_surface_pools(void) {
 /**
  * Get the size of the terrain data, to get the correct size when copying later.
  */
-u32 get_area_terrain_size(s16 *data) {
+u32 get_area_terrain_size(Collision *data) {
     s16 *startPos = data;
     s32 end = FALSE;
     s16 terrainLoadType;
@@ -423,9 +423,9 @@ u32 get_area_terrain_size(s16 *data) {
  * Process the level file, loading in vertices, surfaces, some objects, and environmental
  * boxes (water, gas, JRB fog).
  */
-void load_area_terrain(s16 index, s16 *data, s8 *surfaceRooms, s16 *macroObjects) {
+void load_area_terrain(s16 index, Collision *data, RoomsList *surfaceRooms, MacroObject *macroObjects) {
     s16 terrainLoadType;
-    s16 *vertexData = NULL;
+    RawVertexData *vertexData = NULL;
 #ifdef PUPPYPRINT
     OSTime first = osGetTime();
 #endif
@@ -487,7 +487,7 @@ void clear_dynamic_surfaces(void) {
 /**
  * Applies an object's transformation to the object's vertices.
  */
-void transform_object_vertices(s16 **data, s16 *vertexData) {
+void transform_object_vertices(Collision **data, RawVertexData *vertexData) {
     register s16 *vertices;
     register f32 vx, vy, vz;
     register s32 numVertices;
@@ -524,7 +524,7 @@ void transform_object_vertices(s16 **data, s16 *vertexData) {
 /**
  * Load in the surfaces for the gCurrentObject. This includes setting the flags, exertion, and room.
  */
-void load_object_surfaces(s16 **data, s16 *vertexData) {
+void load_object_surfaces(Collision **data, RawVertexData *vertexData) {
     s32 i;
     s32 surfaceType = *(*data);
     (*data)++;
@@ -548,7 +548,7 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
             surface->force  = (hasForce ? *(*data + 3) : 0);
 #endif
             surface->flags |= flags;
-            surface->room   = (s8) room;
+            surface->room   = (RoomsList) room;
             add_surface(surface, TRUE);
         }
 #ifdef ALL_SURFACES_HAVE_FORCE
@@ -563,7 +563,7 @@ void load_object_surfaces(s16 **data, s16 *vertexData) {
  * Transform an object's vertices, reload them, and render the object.
  */
 void load_object_collision_model(void) {
-    s16 vertexData[600];
+    RawVertexData vertexData[600];
 #ifdef PUPPYPRINT
     OSTime first = osGetTime();
 #endif

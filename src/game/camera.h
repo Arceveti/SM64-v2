@@ -201,7 +201,7 @@ struct PlayerCameraState
     /**
      * Mario's action on this frame.
      */
-    /*0x00*/ u32 action;
+    /*0x00*/ MarioAction action;
     /*0x04*/ Vec3f pos;
     /*0x10*/ Vec3s faceAngle;
     /*0x16*/ Vec3s headRotation;

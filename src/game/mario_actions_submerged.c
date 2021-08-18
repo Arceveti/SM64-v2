@@ -43,7 +43,7 @@ static void set_swimming_at_surface_particles(struct MarioState *m, u32 particle
 
 static s32 swimming_near_surface(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return FALSE;
-    return (m->waterLevel - 80) - m->pos[1] < 400.0f;
+    return ((m->waterLevel - 80) - m->pos[1] < 400.0f);
 }
 
 static f32 get_buoyancy(struct MarioState *m) {
@@ -290,7 +290,7 @@ static void update_swimming_pitch(struct MarioState *m) {
     }
 }
 
-static void common_idle_step(struct MarioState *m, s32 animation, s32 animSpeed) {
+static void common_idle_step(struct MarioState *m, AnimID32 animation, s32 animSpeed) {
     Angle *val = &m->marioBodyState->headAngle[0];
     update_swimming_yaw(m);
     update_swimming_pitch(m);
@@ -311,8 +311,8 @@ static void common_idle_step(struct MarioState *m, s32 animation, s32 animSpeed)
     set_swimming_at_surface_particles(m, PARTICLE_IDLE_WATER_WAVE);
 }
 
-static s32 act_water_idle(struct MarioState *m) {
-    u32 val = 0x10000;
+static MarioAction act_water_idle(struct MarioState *m) {
+    u32 animSpeed = 0x10000;
 #ifdef ENABLE_DEBUG_FREE_MOVE
     if (gPlayer1Controller->buttonDown & U_JPAD) {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
@@ -325,12 +325,12 @@ static s32 act_water_idle(struct MarioState *m) {
 #ifdef WATER_GROUND_POUND
     if (m->input & INPUT_Z_PRESSED) return drop_and_set_mario_action(m, ACT_WATER_GROUND_POUND , 0);
 #endif
-    if (m->faceAngle[0] < -0x1000) val = 0x30000;
-    common_idle_step(m, MARIO_ANIM_WATER_IDLE, val);
+    if (m->faceAngle[0] < -0x1000) animSpeed = 0x30000;
+    common_idle_step(m, MARIO_ANIM_WATER_IDLE, animSpeed);
     return FALSE;
 }
 
-static s32 act_hold_water_idle(struct MarioState *m) {
+static MarioAction act_hold_water_idle(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP                                 ) return set_mario_action         (m, ACT_HOLD_METAL_WATER_FALLING, 0);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE              , 0);
     if (m->input & INPUT_B_PRESSED                                 ) return set_mario_action(         m, ACT_WATER_THROW             , 0);
@@ -339,7 +339,7 @@ static s32 act_hold_water_idle(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_action_end(struct MarioState *m) {
+static MarioAction act_water_action_end(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(         m, ACT_WATER_PUNCH        , 0);
     if (m->input & INPUT_A_PRESSED) return set_mario_action(         m, ACT_BREASTSTROKE       , 0);
@@ -351,7 +351,7 @@ static s32 act_water_action_end(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_water_action_end(struct MarioState *m) {
+static MarioAction act_hold_water_action_end(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_FALLING, 0);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE              , 0);
     if (m->input & INPUT_B_PRESSED                                 ) return set_mario_action(         m, ACT_WATER_THROW             , 0);
@@ -424,7 +424,7 @@ static void play_swimming_noise(struct MarioState *m) {
     if ((animFrame == 0) || (animFrame == 12)) play_sound(SOUND_ACTION_FLUTTER_KICK, m->marioObj->header.gfx.cameraToObject);
 }
 
-static s32 check_water_jump(struct MarioState *m) {
+static MarioAction check_water_jump(struct MarioState *m) {
     s32 probe = (s32)(m->pos[1] + 1.5f);
     if (m->input & INPUT_A_PRESSED) {
 #ifdef BETTER_WATER_JUMP
@@ -441,7 +441,7 @@ static s32 check_water_jump(struct MarioState *m) {
 }
 
 #ifdef WATER_GROUND_POUND
-static s32 act_water_ground_pound(struct MarioState *m) {
+static MarioAction act_water_ground_pound(struct MarioState *m) {
     u32 stepResult;
     f32 yOffset;
     s32 stateFlags = (m->heldObj != NULL);
@@ -525,7 +525,7 @@ static s32 act_water_ground_pound(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_ground_pound_land(struct MarioState *m) {
+static MarioAction act_water_ground_pound_land(struct MarioState *m) {
     m->actionState = 1;
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return set_mario_action(         m, ACT_WATER_ACTION_END, 0);
@@ -537,7 +537,7 @@ static s32 act_water_ground_pound_land(struct MarioState *m) {
 }
 #endif
 
-static s32 act_breaststroke(struct MarioState *m) {
+static MarioAction act_breaststroke(struct MarioState *m) {
     if (m->actionArg == 0) sSwimStrength = MIN_SWIM_STRENGTH;
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(         m, ACT_WATER_PUNCH        , 0);
@@ -569,7 +569,7 @@ static s32 act_breaststroke(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_swimming_end(struct MarioState *m) {
+static MarioAction act_swimming_end(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_WATER_PUNCH        , 0);
     if (m->actionTimer >= 15      ) return set_mario_action(m, ACT_WATER_ACTION_END   , 0);
@@ -586,7 +586,7 @@ static s32 act_swimming_end(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_flutter_kick(struct MarioState *m) {
+static MarioAction act_flutter_kick(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_WATER_PUNCH        , 0);
     if (!(m->input & INPUT_A_DOWN)) {
@@ -607,7 +607,7 @@ static s32 act_flutter_kick(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_breaststroke(struct MarioState *m) {
+static MarioAction act_hold_breaststroke(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_FALLING, 0);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE              , 0);
     if (++m->actionTimer == 17                                     ) return set_mario_action(         m, ACT_HOLD_FLUTTER_KICK       , 0);
@@ -635,7 +635,7 @@ static s32 act_hold_breaststroke(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_swimming_end(struct MarioState *m) {
+static MarioAction act_hold_swimming_end(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_FALLING, 0);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE              , 0);
     if (m->actionTimer >= 15                                       ) return set_mario_action(         m, ACT_HOLD_WATER_ACTION_END   , 0);
@@ -652,7 +652,7 @@ static s32 act_hold_swimming_end(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_flutter_kick(struct MarioState *m) {
+static MarioAction act_hold_flutter_kick(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_FALLING, 0);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE              , 0);
     if (m->input & INPUT_B_PRESSED                                 ) return set_mario_action(         m, ACT_WATER_THROW             , 0);
@@ -669,7 +669,7 @@ static s32 act_hold_flutter_kick(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_shell_swimming(struct MarioState *m) {
+static MarioAction act_water_shell_swimming(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_WATER_IDLE        , 0);
     if (m->input & INPUT_B_PRESSED                                 ) return set_mario_action(         m, ACT_WATER_THROW       , 0);
 #ifdef WATER_GROUND_POUND
@@ -690,13 +690,13 @@ static s32 act_water_shell_swimming(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 check_water_grab(struct MarioState *m) {
+static MarioAction check_water_grab(struct MarioState *m) {
     if (m->marioObj->collidedObjInteractTypes & INTERACT_GRABBABLE) {
         struct Object *object = mario_get_collided_object(m, INTERACT_GRABBABLE);
         if (object->oInteractionSubtype & INT_SUBTYPE_NOT_GRABBABLE) return FALSE;
         f32 dx = (object->oPosX - m->pos[0]);
         f32 dz = (object->oPosZ - m->pos[2]);
-        s16 dAngleToObject = abs_angle_diff(atan2s(dz, dx), m->faceAngle[1]);
+        Angle dAngleToObject = abs_angle_diff(atan2s(dz, dx), m->faceAngle[1]);
         if (dAngleToObject <= 0x2AAA) {
             m->usedObj = object;
             mario_grab_used_object(m);
@@ -707,7 +707,7 @@ static s32 check_water_grab(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_throw(struct MarioState *m) {
+static MarioAction act_water_throw(struct MarioState *m) {
     update_swimming_yaw(m);
     update_swimming_pitch(m);
     update_swimming_speed(m, MIN_SWIM_SPEED);
@@ -727,7 +727,7 @@ static s32 act_water_throw(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_punch(struct MarioState *m) {
+static MarioAction act_water_punch(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
 #ifdef ACTION_CANCELS
     if (m->actionTimer++ >= 2) {
@@ -770,7 +770,7 @@ static s32 act_water_punch(struct MarioState *m) {
     return FALSE;
 }
 
-static void common_water_knockback_step(struct MarioState *m, s32 animation, u32 endAction, s32 arg3) {
+static void common_water_knockback_step(struct MarioState *m, AnimID32 animation, MarioAction endAction, s32 arg3) {
     stationary_slow_down(m);
     perform_water_step(m);
     set_mario_animation(m, animation);
@@ -781,17 +781,17 @@ static void common_water_knockback_step(struct MarioState *m, s32 animation, u32
     }
 }
 
-static s32 act_backward_water_kb(struct MarioState *m) {
+static MarioAction act_backward_water_kb(struct MarioState *m) {
     common_water_knockback_step(m, MARIO_ANIM_BACKWARDS_WATER_KB, ACT_WATER_IDLE, m->actionArg);
     return FALSE;
 }
 
-static s32 act_forward_water_kb(struct MarioState *m) {
+static MarioAction act_forward_water_kb(struct MarioState *m) {
     common_water_knockback_step(m, MARIO_ANIM_WATER_FORWARD_KB, ACT_WATER_IDLE, m->actionArg);
     return FALSE;
 }
 
-static s32 act_water_shocked(struct MarioState *m) {
+static MarioAction act_water_shocked(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
     play_sound(SOUND_MOVING_SHOCKED, m->marioObj->header.gfx.cameraToObject);
     set_camera_shake_from_hit(SHAKE_SHOCK);
@@ -809,7 +809,7 @@ static s32 act_water_shocked(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_drowning(struct MarioState *m) {
+static MarioAction act_drowning(struct MarioState *m) {
     switch (m->actionState) {
         case 0:
             set_mario_animation(m, MARIO_ANIM_DROWNING_PART1);
@@ -828,7 +828,7 @@ static s32 act_drowning(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_death(struct MarioState *m) {
+static MarioAction act_water_death(struct MarioState *m) {
     stationary_slow_down(m);
     perform_water_step(m);
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
@@ -837,7 +837,7 @@ static s32 act_water_death(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_water_plunge(struct MarioState *m) {
+static MarioAction act_water_plunge(struct MarioState *m) {
     u32 stepResult;
     s32 stateFlags = (m->heldObj != NULL);
     f32 endVSpeed  = (swimming_near_surface(m) ? 0.0f : -5.0f);
@@ -888,7 +888,7 @@ static s32 act_water_plunge(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_caught_in_whirlpool(struct MarioState *m) {
+static MarioAction act_caught_in_whirlpool(struct MarioState *m) {
     f32 sinAngleChange, cosAngleChange;
     f32 newDistance;
     Angle angleChange;
@@ -964,7 +964,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
     m->vel[2]       =  m->slideVelZ;
 }
 
-static s32 update_metal_water_jump_speed(struct MarioState *m) {
+static MarioAction update_metal_water_jump_speed(struct MarioState *m) {
     f32 waterSurface = (m->waterLevel - 100);
     if ((m->vel[1] > 0.0f) && (m->pos[1] > waterSurface)) return TRUE;
     if (m->input & INPUT_NONZERO_ANALOG) {
@@ -981,7 +981,7 @@ static s32 update_metal_water_jump_speed(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_standing(struct MarioState *m) {
+static MarioAction act_metal_water_standing(struct MarioState *m) {
     if (!(m->flags & MARIO_METAL_CAP)  ) return set_mario_action(m, ACT_WATER_IDLE         , 0);
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_METAL_WATER_JUMP   , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
@@ -996,7 +996,7 @@ static s32 act_metal_water_standing(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_standing(struct MarioState *m) {
+static MarioAction act_hold_metal_water_standing(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_STANDING    , 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE         , 0);
     if (m->input & INPUT_A_PRESSED                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_JUMP   , 0);
@@ -1006,7 +1006,7 @@ static s32 act_hold_metal_water_standing(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_walking(struct MarioState *m) {
+static MarioAction act_metal_water_walking(struct MarioState *m) {
     s32 animSpeed;
     if (!(m->flags & MARIO_METAL_CAP)) return set_mario_action(m, ACT_WATER_IDLE          , 0);
     if (m->input & INPUT_FIRST_PERSON) return set_mario_action(m, ACT_METAL_WATER_STANDING, 0);
@@ -1023,7 +1023,7 @@ static s32 act_metal_water_walking(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_walking(struct MarioState *m) {
+static MarioAction act_hold_metal_water_walking(struct MarioState *m) {
     s32 animSpeed;
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_WALKING      , 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE          , 0);
@@ -1041,7 +1041,7 @@ static s32 act_hold_metal_water_walking(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_jump(struct MarioState *m) {
+static MarioAction act_metal_water_jump(struct MarioState *m) {
     if (!(m->flags & MARIO_METAL_CAP)   ) return set_mario_action(m, ACT_WATER_IDLE, 0);
     if (update_metal_water_jump_speed(m)) return set_mario_action(m, ACT_WATER_JUMP, 1);
     play_metal_water_jumping_sound(m, FALSE);
@@ -1053,7 +1053,7 @@ static s32 act_metal_water_jump(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_jump(struct MarioState *m) {
+static MarioAction act_hold_metal_water_jump(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_FALLING, 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE    , 0);
     if (update_metal_water_jump_speed(m)                           ) return set_mario_action(         m, ACT_HOLD_WATER_JUMP    , 1);
@@ -1066,7 +1066,7 @@ static s32 act_hold_metal_water_jump(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_falling(struct MarioState *m) {
+static MarioAction act_metal_water_falling(struct MarioState *m) {
     if (!(m->flags & MARIO_METAL_CAP)) return set_mario_action(m, ACT_WATER_IDLE, 0);
     if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (0x400 * sins(m->intendedYaw - m->faceAngle[1]));
     set_mario_animation(m, ((m->actionArg == 0) ? MARIO_ANIM_GENERAL_FALL : MARIO_ANIM_FALL_FROM_WATER));
@@ -1075,7 +1075,7 @@ static s32 act_metal_water_falling(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_falling(struct MarioState *m) {
+static MarioAction act_hold_metal_water_falling(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_FALLING, 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE    , 0);
     if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] += (0x400 * sins(m->intendedYaw - m->faceAngle[1]));
@@ -1085,7 +1085,7 @@ static s32 act_hold_metal_water_falling(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_jump_land(struct MarioState *m) {
+static MarioAction act_metal_water_jump_land(struct MarioState *m) {
     play_metal_water_jumping_sound(m, TRUE);
     if (!(m->flags & MARIO_METAL_CAP)  ) return set_mario_action(m, ACT_WATER_IDLE         , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
@@ -1095,7 +1095,7 @@ static s32 act_metal_water_jump_land(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_jump_land(struct MarioState *m) {
+static MarioAction act_hold_metal_water_jump_land(struct MarioState *m) {
     play_metal_water_jumping_sound(m, TRUE);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_STANDING    , 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE         , 0);
@@ -1106,7 +1106,7 @@ static s32 act_hold_metal_water_jump_land(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_metal_water_fall_land(struct MarioState *m) {
+static MarioAction act_metal_water_fall_land(struct MarioState *m) {
     play_metal_water_jumping_sound(m, TRUE);
     if (!(m->flags & MARIO_METAL_CAP)  ) return set_mario_action(m, ACT_WATER_IDLE         , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
@@ -1116,7 +1116,7 @@ static s32 act_metal_water_fall_land(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 act_hold_metal_water_fall_land(struct MarioState *m) {
+static MarioAction act_hold_metal_water_fall_land(struct MarioState *m) {
     play_metal_water_jumping_sound(m, TRUE);
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_STANDING    , 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE         , 0);
@@ -1127,7 +1127,7 @@ static s32 act_hold_metal_water_fall_land(struct MarioState *m) {
     return FALSE;
 }
 
-static s32 check_common_submerged_cancels(struct MarioState *m) {
+static MarioAction check_common_submerged_cancels(struct MarioState *m) {
     if (m->pos[1] > (m->waterLevel - 80)) {
         if ((m->waterLevel - 80) > m->floorHeight) {
             if ((m->pos[1] - (m->waterLevel - 80)) < 50.0f) {
@@ -1152,8 +1152,8 @@ static s32 check_common_submerged_cancels(struct MarioState *m) {
     return FALSE;
 }
 
-s32 mario_execute_submerged_action(struct MarioState *m) {
-    s32 cancel;
+MarioAction mario_execute_submerged_action(struct MarioState *m) {
+    MarioAction cancel;
     if (check_common_submerged_cancels(m)) return TRUE;
     m->quicksandDepth               = 0.0f;
     m->marioBodyState->headAngle[1] = 0x0;

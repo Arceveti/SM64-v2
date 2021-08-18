@@ -2,7 +2,7 @@
 
 struct SLWalkingPenguinStep {
     s32 stepLength;
-    s32 anim;
+    AnimID32 anim;
     f32 speed;
     f32 animSpeed;
 };

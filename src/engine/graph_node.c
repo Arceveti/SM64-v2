@@ -164,14 +164,14 @@ struct GraphNodeCamera *init_graph_node_camera(struct AllocOnlyPool *pool,
  */
 struct GraphNodeTranslationRotation *
 init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
-                                     struct GraphNodeTranslationRotation *graphNode, s32 drawingLayer,
+                                     struct GraphNodeTranslationRotation *graphNode, DrawingLayer drawingLayer,
                                      void *displayList, Vec3s translation, Vec3s rotation) {
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeTranslationRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
         vec3s_copy(graphNode->translation, translation);
         vec3s_copy(graphNode->rotation, rotation);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -182,13 +182,13 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
  */
 struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *pool,
                                                          struct GraphNodeTranslation *graphNode,
-                                                         s32 drawingLayer, void *displayList,
+                                                         DrawingLayer drawingLayer, void *displayList,
                                                          Vec3s translation) {
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeTranslation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION);
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -199,13 +199,13 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
  */
 struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
                                                    struct GraphNodeRotation *graphNode,
-                                                   s32 drawingLayer, void *displayList,
+                                                   DrawingLayer drawingLayer, void *displayList,
                                                    Vec3s rotation) {
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
         vec3s_copy(graphNode->rotation, rotation);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -215,12 +215,12 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
  * Allocates and returns a newly created scaling node
  */
 struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool,
-                                             struct GraphNodeScale *graphNode, s32 drawingLayer,
+                                             struct GraphNodeScale *graphNode, DrawingLayer drawingLayer,
                                              void *displayList, f32 scale) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeScale));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_SCALE);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->scale       = scale;
         graphNode->displayList = displayList;
     }
@@ -242,7 +242,7 @@ struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
         vec3s_copy(graphNode->angle, angle);
         graphNode->sharedChild                   = sharedChild;
         graphNode->throwMatrix                   = NULL;
-        graphNode->animInfo.animID               = 0;
+        graphNode->animInfo.animID               = 0; //? MARIO_ANIM_SLOW_LEDGE_CLIMB;
         graphNode->animInfo.curAnim              = NULL;
         graphNode->animInfo.animFrame            = 0;
         graphNode->animInfo.animFrameAccelAssist = 0;
@@ -272,13 +272,13 @@ struct GraphNodeCullingRadius *init_graph_node_culling_radius(struct AllocOnlyPo
  */
 struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool *pool,
                                                             struct GraphNodeAnimatedPart *graphNode,
-                                                            s32 drawingLayer, void *displayList,
+                                                            DrawingLayer drawingLayer, void *displayList,
                                                             Vec3s translation) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeAnimatedPart));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ANIMATED_PART);
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -289,13 +289,13 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
  */
 struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool,
                                                      struct GraphNodeBillboard *graphNode,
-                                                     s32 drawingLayer, void *displayList,
+                                                     DrawingLayer drawingLayer, void *displayList,
                                                      Vec3s translation, s32 zOffset) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeBillboard));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BILLBOARD);
         vec3s_copy(graphNode->translation, translation);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
         graphNode->zOffset     = zOffset;
     }
@@ -307,11 +307,11 @@ struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool,
  */
 struct GraphNodeDisplayList *init_graph_node_display_list(struct AllocOnlyPool *pool,
                                                           struct GraphNodeDisplayList *graphNode,
-                                                          s32 drawingLayer, void *displayList) {
+                                                          DrawingLayer drawingLayer, void *displayList) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeDisplayList));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_DISPLAY_LIST);
-        graphNode->node.flags  = (drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK);
+        graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
     return graphNode;
