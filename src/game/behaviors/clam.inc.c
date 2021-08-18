@@ -37,8 +37,7 @@ void clam_act_closing(void) {
 
 void clam_act_opening(void) {
     s16 i;
-    s16 bubblesX;
-    s16 bubblesZ;
+    s16 bubblesX, bubblesZ;
 #ifdef CLAMS_ONLY_HURT_WHEN_MOVING
     o->oDamageOrCoinValue = 0;
 #endif

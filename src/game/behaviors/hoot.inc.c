@@ -28,18 +28,18 @@ void hoot_floor_bounce(void) {
 
 void hoot_free_step(s16 fastOscY, s32 speed) {
     struct FloorGeometry *floorGeo;
-    s16 yaw       = o->oMoveAngleYaw;
-    s16 pitch     = o->oMoveAnglePitch;
+    Angle yaw     = o->oMoveAngleYaw;
+    Angle pitch   = o->oMoveAnglePitch;
     s16 animFrame = o->header.gfx.animInfo.animFrame;
     f32 xPrev     = o->oPosX;
     f32 zPrev     = o->oPosZ;
-    o->oVelY   = (sins(pitch) *  speed);
-    f32 hSpeed = (coss(pitch) *  speed);
-    o->oVelX   = (sins(yaw)   * hSpeed);
-    o->oVelZ   = (coss(yaw)   * hSpeed);
-    o->oPosX += o->oVelX;
-    o->oPosY -= (o->oVelY + (coss((s32)(animFrame * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4));
-    o->oPosZ += o->oVelZ;
+    o->oVelY      = (sins(pitch) *  speed);
+    f32 hSpeed    = (coss(pitch) *  speed);
+    o->oVelX      = (sins(yaw)   * hSpeed);
+    o->oVelZ      = (coss(yaw)   * hSpeed);
+    o->oPosX     += o->oVelX;
+    o->oPosY     -= (o->oVelY + (coss((s32)(animFrame * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4));
+    o->oPosZ     += o->oVelZ;
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
     if (floorGeo == NULL) {
         o->oPosX = xPrev;
@@ -50,8 +50,8 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
 
 void hoot_player_set_yaw(void) {
 #ifdef HOOT_YAW_FIX
-    s16 turnSpeed    = (gMarioState->intendedMag * 0x20);
-    o->oMoveAngleYaw = (gMarioState->intendedYaw - approach_s32((s16)(gMarioState->intendedYaw - o->oMoveAngleYaw), 0x0, turnSpeed, turnSpeed));
+    Angle turnSpeed  = (gMarioState->intendedMag * 0x20);
+    o->oMoveAngleYaw = (gMarioState->intendedYaw - approach_s32((Angle)(gMarioState->intendedYaw - o->oMoveAngleYaw), 0x0, turnSpeed, turnSpeed));
 #else
     s16 stickX = gPlayer3Controller->rawStickX;
     s16 stickY = gPlayer3Controller->rawStickY;
@@ -62,16 +62,16 @@ void hoot_player_set_yaw(void) {
 }
 
 void hoot_carry_step(s32 speed) {
-    s16 yaw       = o->oMoveAngleYaw;
-    s16 pitch     = o->oMoveAnglePitch;
+    Angle yaw     = o->oMoveAngleYaw;
+    Angle pitch   = o->oMoveAnglePitch;
     s16 animFrame = o->header.gfx.animInfo.animFrame;
-    o->oVelY   = (sins(pitch) *  speed);
-    f32 hSpeed = (coss(pitch) *  speed);
-    o->oVelX   = (sins(yaw)   * hSpeed);
-    o->oVelZ   = (coss(yaw)   * hSpeed);
-    o->oPosX  +=  o->oVelX;
-    o->oPosY  -= (o->oVelY + (coss((s32)(animFrame * 6553.6f)) * 50.0f / 4));
-    o->oPosZ  +=  o->oVelZ;
+    o->oVelY      = (sins(pitch) *  speed);
+    f32 hSpeed    = (coss(pitch) *  speed);
+    o->oVelX      = (sins(yaw)   * hSpeed);
+    o->oVelZ      = (coss(yaw)   * hSpeed);
+    o->oPosX     +=  o->oVelX;
+    o->oPosY     -= (o->oVelY + (coss((s32)(animFrame * 6553.6f)) * 50.0f / 4));
+    o->oPosZ     +=  o->oVelZ;
     if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_WING_FLAP);
 }
 

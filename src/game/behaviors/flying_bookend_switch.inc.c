@@ -38,9 +38,9 @@ struct ObjectHitbox sBookSwitchHitbox = {
 void flying_bookend_act_init(void) { // act 0
     if (obj_is_near_to_and_facing_mario(400.0f, 0x3000)) {
         cur_obj_play_sound_2(SOUND_OBJ_DEFAULT_DEATH);
-        o->oAction = FLYING_BOOKEND_ACT_GROW;
-        o->oBookendTargetPitch = o->oFaceAnglePitch + 0x7FFF;
-        o->oBookendTargetRoll  = o->oFaceAngleRoll  - 0x7FFF;
+        o->oAction             = FLYING_BOOKEND_ACT_GROW;
+        o->oBookendTargetPitch = (o->oFaceAnglePitch + 0x7FFF);
+        o->oBookendTargetRoll  = (o->oFaceAngleRoll  - 0x7FFF);
         cur_obj_set_model(MODEL_BOOKEND_PART);
     }
 }
@@ -48,7 +48,7 @@ void flying_bookend_act_init(void) { // act 0
 void flying_bookend_act_grow(void) { // act 1
     if (obj_forward_vel_approach(3.0f, 1.0f)) {
         if (cur_obj_init_anim_and_check_if_end(FLYING_BOOKEND_ANIM_GROW)) {
-            o->oAction = FLYING_BOOKEND_ACT_TURN_TOWARD_MARIO;
+            o->oAction     = FLYING_BOOKEND_ACT_TURN_TOWARD_MARIO;
             o->oForwardVel = 0.0f;
         } else {
             o->oForwardVel = 3.0f;
@@ -71,7 +71,7 @@ void flying_bookend_act_turn_toward_mario(void) { // act 2
 
     if (o->oForwardVel == 0.0f) {
         obj_turn_pitch_toward_mario(120.0f, 0x3E8);
-        o->oFaceAnglePitch = o->oMoveAnglePitch + 0x7FFF;
+        o->oFaceAnglePitch = (o->oMoveAnglePitch + 0x7FFF);
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x3E8);
         if (o->oTimer > 30) obj_compute_vel_from_move_pitch(50.0f);
     }

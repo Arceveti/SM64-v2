@@ -22,7 +22,7 @@ void stub_mario_step_2(void);
 
 void mario_bonk_reflection(       struct MarioState *, u32);
 void transfer_bully_speed(     struct BullyCollisionData *obj1, struct BullyCollisionData *obj2);
-void init_bully_collision_data(struct BullyCollisionData *data, f32 posX, f32 posZ, f32 forwardVel, s16 yaw, f32 conversionRatio, f32 radius);
+void init_bully_collision_data(struct BullyCollisionData *data, f32 posX, f32 posZ, f32 forwardVel, Angle yaw, f32 conversionRatio, f32 radius);
 u32  mario_update_quicksand(      struct MarioState *, f32);
 u32  mario_push_off_steep_floor(  struct MarioState *, u32, u32);
 u32  mario_update_moving_sand(    struct MarioState *);

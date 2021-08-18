@@ -119,9 +119,8 @@ static void klepto_change_target(void) {
 }
 
 static void klepto_circle_target(f32 radius, f32 targetSpeed) {
-    s16 turnAmount;
+    Angle turnAmount;
     f32 accel;
-
     if (o->oAnimState != KLEPTO_ANIM_STATE_HOLDING_NOTHING
      && (((o->oTimer > 60) && (o->oDistanceToMario > 2000.0f)) || (o->oTimer >= o->oKleptoTimeUntilTargetChange))) {
         klepto_change_target();
@@ -130,7 +129,7 @@ static void klepto_circle_target(f32 radius, f32 targetSpeed) {
     } else {
         turnAmount = (0x4000 - atan2s(radius, o->oKleptoDistanceToTarget - radius));
         accel      = 0.05f;
-        if ((s16)(o->oMoveAngleYaw - o->oKleptoYawToTarget) < 0) turnAmount = -turnAmount;
+        if ((Angle)(o->oMoveAngleYaw - o->oKleptoYawToTarget) < 0) turnAmount = -turnAmount;
         o->oKleptoYawToTarget += turnAmount;
         klepto_anim_dive();
         turnAmount = (abs_angle_diff(o->oKleptoYawToTarget, o->oMoveAngleYaw) * (0.03f * o->oKleptoSpeed));

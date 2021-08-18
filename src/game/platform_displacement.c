@@ -60,10 +60,10 @@ extern s32 gGlobalTimer;
  * Apply one frame of platform displacement to Mario or an object using the given
  * platform.
  */
-void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, Vec3f pos, s16 *yaw, struct Object *platform) {
+void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, Vec3f pos, Angle *yaw, struct Object *platform) {
     Vec3f platformPos, posDifference, scaledPos, yawVec;
     // Determine how much Mario turned on his own since last frame
-    s16 yawDifference = (*yaw - displaceInfo->prevYaw);
+    Angle yawDifference = (*yaw - displaceInfo->prevYaw);
     // Avoid a crash if the platform unloaded its collision while stood on
     if (platform->header.gfx.throwMatrix == NULL) return;
     vec3f_copy(platformPos, (*platform->header.gfx.throwMatrix)[3]);

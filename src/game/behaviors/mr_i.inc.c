@@ -111,8 +111,8 @@ void mr_i_act_spin_death(void) {
 }
 
 void mr_i_act_looking_at_mario(void) {
-    s16 dYaw;
-    s16 startYaw = o->oMoveAngleYaw;
+    Angle dYaw;
+    Angle startYaw = o->oMoveAngleYaw;
     if (o->oTimer == 0) {
         o->oMrISpinAngle     = (o->oBehParams2ndByte) ? 200 : 120;
         o->oMrISpinAmount    = 0;
@@ -121,7 +121,7 @@ void mr_i_act_looking_at_mario(void) {
     }
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX,   0x800);
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, 0x400);
-    dYaw = startYaw - (s16)(o->oMoveAngleYaw);
+    dYaw = startYaw - (Angle)(o->oMoveAngleYaw);
     if (!dYaw) {
         o->oMrISpinAmount    = 0;
         o->oMrISpinDirection = 0;
@@ -163,9 +163,9 @@ void mr_i_act_looking_at_mario(void) {
 }
 
 void mr_i_act_idle(void) {
-    s16 angleToMario                   = obj_angle_to_object(o, gMarioObject);
-    s16 angleDiffMoveYawToMario        = abs_angle_diff(o->oMoveAngleYaw, angleToMario);
-    s16 angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
+    Angle angleToMario                   = obj_angle_to_object(o, gMarioObject);
+    Angle angleDiffMoveYawToMario        = abs_angle_diff(o->oMoveAngleYaw, angleToMario);
+    Angle angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     if (o->oTimer == 0) {
         cur_obj_become_tangible();
         o->oMoveAnglePitch         = 0x0;

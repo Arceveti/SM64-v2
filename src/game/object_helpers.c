@@ -239,22 +239,23 @@ void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
     }
 }
 
-s32 cur_obj_rotate_yaw_toward(s16 target, s16 increment) {
-    s16 startYaw = (s16) o->oMoveAngleYaw;
+//! data type sizes?
+s32 cur_obj_rotate_yaw_toward(Angle target, Angle increment) {
+    Angle startYaw = (Angle) o->oMoveAngleYaw;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, target, increment);
-    return ((o->oAngleVelYaw = (s16)((s16) o->oMoveAngleYaw - startYaw)) == 0);
+    return ((o->oAngleVelYaw = (Angle)((Angle) o->oMoveAngleYaw - startYaw)) == 0);
 }
 
-s16 obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
+Angle obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
     register f32 z1 = obj1->oPosZ; register f32 z2 = obj2->oPosZ; // ordering of instructions...
     register f32 x1 = obj1->oPosX; register f32 x2 = obj2->oPosX;
     return atan2s((z2 - z1), (x2 - x1));
 }
 
-s16 obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleIndex, s16 turnAmount) {
+Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleIndex, Angle turnAmount) {
     register f32 a, b, c, d;
-    s16 targetAngle = 0x0;
-    s16 startAngle = o->rawData.asU32[angleIndex];
+    Angle targetAngle = 0x0;
+    Angle startAngle = o->rawData.asU32[angleIndex];
     switch (angleIndex) {
         case O_MOVE_ANGLE_PITCH_INDEX:
         case O_FACE_ANGLE_PITCH_INDEX:
@@ -286,7 +287,7 @@ void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z) {
     vec3f_set(&obj->oPosVec, x, y, z);
 }
 
-void obj_set_angle(struct Object *obj, s16 pitch, s16 yaw, s16 roll) {
+void obj_set_angle(struct Object *obj, Angle pitch, Angle yaw, Angle roll) {
     //! vec3i_set_s?
     obj->oFaceAnglePitch = pitch;
     obj->oFaceAngleYaw   = yaw;
@@ -301,7 +302,7 @@ void obj_set_angle(struct Object *obj, s16 pitch, s16 yaw, s16 roll) {
  * Spawns an object at an absolute location with a specified angle.
  */
 struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, u32 model, const BehaviorScript *behavior,
-                                         s16 x, s16 y, s16 z, s16 rx, s16 ry, s16 rz) {
+                                         s16 x, s16 y, s16 z, Angle rx, Angle ry, Angle rz) {
     // 'uselessArg' is unused in the function spawn_object_at_origin()
     struct Object *newObj = spawn_object_at_origin(parent, uselessArg, model, behavior);
     obj_set_pos(   newObj,  x,  y,  z);
@@ -315,7 +316,7 @@ struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, 
  * a copy-paste typo by one of the programmers.
  */
 struct Object *spawn_object_rel_with_rot(struct Object *parent, u32 model, const BehaviorScript *behavior,
-                                         s16 xOff, s16 yOff, s16 zOff, s16 rx, s16 ry, UNUSED s16 rz) {
+                                         s16 xOff, s16 yOff, s16 zOff, Angle rx, Angle ry, UNUSED Angle rz) {
     struct Object *newObj = spawn_object_at_origin(parent, 0, model, behavior);
     newObj->oFlags |= OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT;
     obj_set_parent_relative_pos(newObj, xOff, yOff, zOff);
@@ -333,8 +334,8 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     f32 randomScale;
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE              ) newObj->oMoveAngleYaw = random_u16();
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((s16)(newObj->oMoveAngleYaw + 0x8000) + (s16) random_f32_around_zero(params->moveAngleRange));
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((s16) newObj->oMoveAngleYaw           + (s16) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + 0x8000) + (Angle) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw           + (Angle) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL    ) newObj->oPosY         = find_water_level(newObj->oPosX, newObj->oPosZ);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ          ) obj_translate_xz_random( newObj, params->moveRange);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ         ) obj_translate_xyz_random(newObj, params->moveRange);
@@ -614,20 +615,20 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
 }
 
 // Finds the object closest to the line from [pos] toward [lookingYaw] within [yawRange]
-struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, s16 lookingYaw, s16 yawRange, s16 *yaw) {
+struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, Angle lookingYaw, Angle yawRange, Angle *yaw) {
     uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    s16 minYaw  = yawRange;
-    listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
-    obj         = (struct Object *) listHead->next;
+    Angle minYaw = yawRange;
+    listHead     = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
+    obj          = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
             f32 dx = (obj->oPosX - pos[0]);
             f32 dz = (obj->oPosZ - pos[2]);
-            s16 objYaw = atan2s(dz, dx);
-            s16 objDYaw = abs_angle_diff(lookingYaw, objYaw);
+            Angle objYaw  = atan2s(dz, dx);
+            Angle objDYaw = abs_angle_diff(lookingYaw, objYaw);
             if ((objDYaw < yawRange) && (objDYaw < abs_angle_diff(lookingYaw, minYaw))) {
                 closestObj = obj;
                 minYaw     = objYaw;
@@ -871,7 +872,7 @@ void cur_obj_update_floor_height(void) {
     struct Surface *floor;
 #ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
     struct Object *platform;
-    s16 nextYaw   = o->oFaceAngleYaw;
+    Angle nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
@@ -887,7 +888,7 @@ struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
     struct Surface *floor;
 #ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
     struct Object *platform;
-    s16 nextYaw   = o->oFaceAngleYaw;
+    Angle nextYaw = o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
@@ -1398,7 +1399,7 @@ void obj_set_pos_relative(struct Object *obj, struct Object *other, f32 dleft, f
     obj->oPosZ         = (other->oPosZ + dz);
 }
 
-s16 cur_obj_angle_to_home(void) {
+Angle cur_obj_angle_to_home(void) {
     f32 dx = (o->oHomeX - o->oPosX);
     f32 dz = (o->oHomeZ - o->oPosZ);
     return atan2s(dz, dx);
@@ -1428,7 +1429,7 @@ void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateInd
 
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {
     f32 translate[3];
-    s16 rotation[3];
+    Angle rotation[3];
     translate[0] = obj->rawData.asF32[posIndex   + 0];
     translate[1] = obj->rawData.asF32[posIndex   + 1];
     translate[2] = obj->rawData.asF32[posIndex   + 2];
@@ -1556,8 +1557,8 @@ void cur_obj_set_pos_via_transform(void) {
     vec3f_add(&o->oPosVec, &o->oVelVec);
 }
 
-s16 cur_obj_reflect_move_angle_off_wall(void) {
-    return o->oWallAngle - ((s16) o->oMoveAngleYaw - (s16) o->oWallAngle) + 0x8000;
+Angle cur_obj_reflect_move_angle_off_wall(void) {
+    return (o->oWallAngle - ((Angle) o->oMoveAngleYaw - (Angle) o->oWallAngle) + 0x8000);
 }
 
 void cur_obj_spawn_particles(struct SpawnParticlesInfo *info) {

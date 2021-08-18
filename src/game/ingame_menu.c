@@ -1250,7 +1250,7 @@ void shade_screen(void) {
 }
 
 #ifdef PAUSE_BOWSER_KEYS
-void print_bowser_key(s32 x, s32 y, s16 rotation) { // bowser key
+void print_bowser_key(s32 x, s32 y, Angle rotation) { // bowser key
     create_dl_translation_matrix(G_MTX_PUSH,               (x+4),  (y+18),    0.0f);
     create_dl_rotation_matrix(   G_MTX_NOPUSH,      -90,    0.0f,    0.0f,    1.0f);
     create_dl_rotation_matrix(   G_MTX_NOPUSH, rotation,    1.0f,    0.0f,    0.0f);
@@ -1263,7 +1263,7 @@ void print_bowser_key(s32 x, s32 y, s16 rotation) { // bowser key
 
 void render_pause_bowser_keys(void) {
     const s32 speed = 12;
-    s16 rotation;
+    Angle rotation;
     if (gHudDisplay.keys > 0) {
         rotation = ((gGlobalTimer % (360 / speed)) * -speed);
         print_bowser_key(GFX_DIMENSIONS_FROM_RIGHT_EDGE(30), 16, rotation);

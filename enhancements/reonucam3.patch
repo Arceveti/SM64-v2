@@ -204,7 +204,7 @@ index 25b27983..2ff11930 100644
 @@ -2116,7 +2177,7 @@ s16 update_default_camera(struct Camera *c) {
                                 gLakituState.goalPos[1],
                                 gLakituState.goalPos[2], &ceil);
-     s16 yawDir;
+     Angle yawDir;
 -
 +    
      handle_c_button_movement(c);
@@ -213,7 +213,7 @@ index 25b27983..2ff11930 100644
 @@ -3036,6 +3097,8 @@ void update_lakitu(struct Camera *c) {
  void update_camera(struct Camera *c) {
  
-+    extern s16 s8DirModeBaseYaw;
++    extern Angle s8DirModeBaseYaw;
 +
      gCamera = c;
      update_camera_hud_status(c);

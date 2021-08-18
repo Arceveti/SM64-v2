@@ -409,7 +409,7 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
 }
 
 //! move to math_util
-static void make_roll_matrix(Mtx *mtx, s16 angle) {
+static void make_roll_matrix(Mtx *mtx, Angle angle) {
     Mat4 temp;
     mtxf_identity(temp);
     temp[0][0] = coss(angle);

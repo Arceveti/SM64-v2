@@ -73,7 +73,7 @@ static s32 obj_is_rendering_enabled(void) {
     return (o->header.gfx.node.flags & GRAPH_RENDER_ACTIVE);
 }
 
-static s16 obj_get_pitch_from_vel(void) {
+static Angle obj_get_pitch_from_vel(void) {
     return -atan2s(o->oForwardVel, o->oVelY);
 }
 
@@ -220,12 +220,12 @@ static void cur_obj_spin_all_dimensions(f32 pitchSpeed, f32 rollSpeed) {
     }
 }
 
-static void obj_rotate_yaw_and_bounce_off_walls(s16 targetYaw, s16 turnAmount) {
+static void obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) targetYaw = cur_obj_reflect_move_angle_off_wall();
     cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
 }
 
-static s16 obj_get_pitch_to_home(f32 latDistToHome) {
+static Angle obj_get_pitch_to_home(f32 latDistToHome) {
     return atan2s(latDistToHome, o->oPosY - o->oHomeY);
 }
 
@@ -292,9 +292,9 @@ static s32 cur_obj_play_sound_at_anim_range(s8 startFrame1, s8 startFrame2, u32 
     return FALSE;
 }
 
-static s16 obj_turn_pitch_toward_mario(f32 targetOffsetY, s16 turnAmount) {
+static Angle obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
     o->oPosY -= targetOffsetY;
-    s16 targetPitch = obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, turnAmount);
+    Angle targetPitch = obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, turnAmount);
     o->oPosY += targetOffsetY;
     return targetPitch;
 }
@@ -318,51 +318,54 @@ static s32 obj_y_vel_approach(f32 target, f32 delta) {
     return approach_f32_ptr(&o->oVelY, target, delta);
 }
 
-static s32 obj_move_pitch_approach(s16 target, s16 delta) {
+static s32 obj_move_pitch_approach(Angle target, Angle delta) {
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, target, delta);
-    return ((s16) o->oMoveAnglePitch == target);
+    return ((Angle) o->oMoveAnglePitch == target);
 }
 
-static s32 obj_face_pitch_approach(s16 targetPitch, s16 deltaPitch) {
+static s32 obj_face_pitch_approach(Angle targetPitch, Angle deltaPitch) {
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, targetPitch, deltaPitch);
-    return ((s16) o->oFaceAnglePitch == targetPitch);
+    return ((Angle) o->oFaceAnglePitch == targetPitch);
 }
 
-static s32 obj_face_yaw_approach(s16 targetYaw, s16 deltaYaw) {
+static s32 obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw) {
     o->oFaceAngleYaw = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, deltaYaw);
-    return ((s16) o->oFaceAngleYaw == targetYaw);
+    return ((Angle) o->oFaceAngleYaw == targetYaw);
 }
 
-static s32 obj_face_roll_approach(s16 targetRoll, s16 deltaRoll) {
+static s32 obj_face_roll_approach(Angle targetRoll, Angle deltaRoll) {
     o->oFaceAngleRoll = approach_s16_symmetric(o->oFaceAngleRoll, targetRoll, deltaRoll);
-    return ((s16) o->oFaceAngleRoll == targetRoll);
+    return ((Angle) o->oFaceAngleRoll == targetRoll);
 }
 
-static s32 obj_smooth_turn(s16 *angleVel, s32 *angle, s16 targetAngle, f32 targetSpeedProportion, s16 accel, s16 minSpeed, s16 maxSpeed) {
-    s16 currentAngle = (s16)(*angle);
+static s32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, Angle accel, Angle minSpeed, Angle maxSpeed) {
+    Angle currentAngle = (Angle)(*angle);
     *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
-    s16 currentSpeed = absi(*angleVel);
+    Angle currentSpeed = absi(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
     *angle = approach_s16_symmetric(*angle, targetAngle, currentSpeed);
-    return (s16)(*angle) == targetAngle;
+    return (Angle)(*angle) == targetAngle;
 }
 
-static void obj_roll_to_match_yaw_turn(s16 targetYaw, s16 maxRoll, s16 rollSpeed) {
-    s16 targetRoll = o->oMoveAngleYaw - targetYaw;
+static void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rollSpeed) {
+    Angle targetRoll = o->oMoveAngleYaw - targetYaw;
     clamp_s16(&targetRoll, -maxRoll, maxRoll);
     obj_face_roll_approach(targetRoll, rollSpeed);
 }
 
+//! move to math_util
 static s16 random_linear_offset(s16 base, s16 range) {
     return (base + (s16)(range * random_float()));
 }
 
+//! move to math_util
 static s16 random_mod_offset(s16 base, s16 step, s16 mod) {
     return (base + (step * (random_u16() % mod)));
 }
 
-static s16 obj_random_fixed_turn(s16 delta) {
-    return (o->oMoveAngleYaw + ((s16) random_sign() * delta));
+//! move to math_util
+static Angle obj_random_fixed_turn(Angle delta) {
+    return (o->oMoveAngleYaw + ((Angle) random_sign() * delta));
 }
 
 /**
@@ -415,7 +418,7 @@ static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleL
 static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     struct Object *otherObject;
     f32 dx, dz;
-    s16 angle;
+    Angle angle;
     f32 radius, otherRadius, relativeRadius;
 #ifdef FIX_OBJ_COLLISIONS
     s32 i;
@@ -435,7 +438,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
             angle    = atan2s(dz, dx);
             o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
             o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
-            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) *targetYaw = (s16)((angle - o->oMoveAngleYaw) + angle + 0x8000);
+            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + 0x8000);
             return TRUE;
         }
     }
@@ -461,7 +464,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
             if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
                 // Bounce off object (or it would, if the above atan2s bug
                 // were fixed)
-                *targetYaw = (s16)((angle - o->oMoveAngleYaw) + angle + 0x8000);
+                *targetYaw = (Angle)(((angle - o->oMoveAngleYaw) + angle) + 0x8000);
                 return TRUE;
             }
         }
@@ -474,14 +477,14 @@ static s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *targetYaw = (s16)(o->oMoveAngleYaw + 0x8000);
+        *targetYaw = (Angle)(o->oMoveAngleYaw + 0x8000);
     } else if (!obj_resolve_object_collisions(targetYaw)) {
         return FALSE;
     }
     return TRUE;
 }
 
-static s32 obj_resolve_collisions_and_turn(s16 targetYaw, s16 turnSpeed) {
+static s32 obj_resolve_collisions_and_turn(Angle targetYaw, Angle turnSpeed) {
     obj_resolve_object_collisions(NULL);
     return (!cur_obj_rotate_yaw_toward(targetYaw, turnSpeed));
 }

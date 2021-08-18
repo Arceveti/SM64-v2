@@ -68,6 +68,7 @@ static u8 sGoombaAttackHandlers[][6] = {
  */
 void bhv_goomba_triplet_spawner_update(void) {
     s16 goombaFlag;
+    //! s16/Angle type?
     s32 angle, dAngle;
     s16 dx, dz;
     // If Mario is close enough and the goombas aren't currently loaded, then

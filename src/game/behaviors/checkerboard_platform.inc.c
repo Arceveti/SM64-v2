@@ -35,7 +35,7 @@ void checkerboard_plat_act_move_y(f32 vel, s32 time) {
     if (o->oTimer > time) o->oAction++;
 }
 
-void checkerboard_plat_act_rotate(s32 nextAction, s16 pitchAmt) {
+void checkerboard_plat_act_rotate(s32 nextAction, Angle pitchAmt) {
     o->oVelY = 0.0f;
     o->oAngleVelPitch = pitchAmt;
     if (o->oTimer + 1 == 0x8000 / absi(pitchAmt)) o->oAction = nextAction;

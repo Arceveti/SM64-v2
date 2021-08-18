@@ -109,9 +109,9 @@ void bhv_snufit_loop(void) {
         // Face Mario if he is within range.
         if (o->oDistanceToMario < 800.0f) {
             obj_turn_pitch_toward_mario(120.0f, 0x7D0);
-            if ((s16) o->oMoveAnglePitch > 0x2000) {
+            if ((Angle) o->oMoveAnglePitch > 0x2000) {
                 o->oMoveAnglePitch =  0x2000;
-            } else if ((s16) o->oMoveAnglePitch < -0x2000) {
+            } else if ((Angle) o->oMoveAnglePitch < -0x2000) {
                 o->oMoveAnglePitch = -0x2000;
             }
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x7D0);
@@ -127,12 +127,12 @@ void bhv_snufit_loop(void) {
         // Snufit orbits in a circular motion depending on an internal timer
         // and vertically off the global timer. The vertical position can be
         // manipulated using pauses since it uses the global timer.
-        o->oPosX            = o->oHomeX + 100.0f * coss(o->oSnufitCircularPeriod);
-        o->oPosY            = o->oHomeY +   8.0f * coss(4000 * gGlobalTimer);
-        o->oPosZ            = o->oHomeZ + 100.0f * sins(o->oSnufitCircularPeriod);
-        o->oSnufitYOffset   = -0x20;
-        o->oSnufitZOffset   = o->oSnufitRecoil + 180;
-        o->oSnufitBodyScale = (s16)(o->oSnufitBodyBaseScale + 666 + o->oSnufitBodyBaseScale * coss(o->oSnufitBodyScalePeriod));
+        o->oPosX                = (o->oHomeX + (100.0f * coss(o->oSnufitCircularPeriod)));
+        o->oPosY                = (o->oHomeY + (  8.0f * coss(4000 * gGlobalTimer)));
+        o->oPosZ                = (o->oHomeZ + (100.0f * sins(o->oSnufitCircularPeriod)));
+        o->oSnufitYOffset       = -0x20;
+        o->oSnufitZOffset       = o->oSnufitRecoil + 180;
+        o->oSnufitBodyScale     = (Angle)(o->oSnufitBodyBaseScale + 666 + o->oSnufitBodyBaseScale * coss(o->oSnufitBodyScalePeriod));
         if (o->oSnufitBodyScale > 1000) {
             o->oSnufitScale     = (o->oSnufitBodyScale - 1000) / 1000.0f + 1.0f;
             o->oSnufitBodyScale = 1000;

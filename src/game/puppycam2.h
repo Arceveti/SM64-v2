@@ -56,11 +56,11 @@ struct gPuppyOptions
 
 struct gPuppyStruct
 {
-    s16 yaw;                    // Horizontal Direction the game reads as the active value.
-    s16 yawTarget;              // Horizontal Direction that yaw tries to be.
+    Angle yaw;                  // Horizontal Direction the game reads as the active value.
+    Angle yawTarget;            // Horizontal Direction that yaw tries to be.
     f32 yawAcceleration;        // Horizontal Direction that sets yawTarget.
-    s16 pitch;                  // Vertical Direction the game reads as the active value.
-    s16 pitchTarget;            // Vertical Direction that pitch tries to be.
+    Angle pitch;                // Vertical Direction the game reads as the active value.
+    Angle pitchTarget;          // Vertical Direction that pitch tries to be.
     f32 pitchAcceleration;      // Vertical Direction that sets pitchTarget.
     s16 zoom;                   // How far the camera is currently zoomed out
     u8  zoomSet;                // The current setting of which zoompoint to set the target to.
@@ -86,14 +86,14 @@ struct gPuppyStruct
     s8  stick2[2];              // The value that's set and read for analogue stick.
     u8  stickN[2];              // This is set when the stick is neutral. It's to prevent rapidfire input.
     u8  enabled;                // A boolean that decides whether to use vanilla camera or puppy camera. Of course, anybody with this enabled is obligated to a death sentence :)
-    s16 swimPitch;              // Pitch adjustment that's applied when swimming. All pitch adjustment is clamped.
-    s16 edgePitch;              // Pitch adjustment that's applied when stood near an edge. All pitch adjustment is clamped.
+    Angle swimPitch;            // Pitch adjustment that's applied when swimming. All pitch adjustment is clamped.
+    Angle edgePitch;            // Pitch adjustment that's applied when stood near an edge. All pitch adjustment is clamped.
     s16 moveZoom;               // A small zoom value that's added on top of the regular zoom when moving. It's pretty subtle, but gives the feeling of a bit of speed.
     u8  mode3Flags;             // A flagset for classic mode.
     u8  moveFlagAdd;            // A bit that multiplies movement rate of axes when moving, to centre them faster.
     s16 targetDist[2];          // Used with secondary view targets to smooth out the between status.
-    s16 intendedTerrainPitch;   // The pitch that the game wants the game to tilt towards, following the terrain.
-    s16 terrainPitch;           // The pitch the game tilts towards, when following terrain inclines.
+    Angle intendedTerrainPitch; // The pitch that the game wants the game to tilt towards, following the terrain.
+    Angle terrainPitch;         // The pitch the game tilts towards, when following terrain inclines.
 
     u8    cutscene;             // A boolean that decides whether a cutscene is active
     s32 (*sceneFunc)();
@@ -111,9 +111,9 @@ struct sPuppyAngles
 {
     Vec3s pos;
     Vec3s focus;
-    s16 yaw;
-    s16 pitch;
-    s16 zoom;
+    Angle yaw;
+    Angle pitch;
+    Angle zoom;
 };
 
 //A bounding volume for activating puppycamera scripts and angles.
@@ -121,7 +121,7 @@ struct sPuppyVolume
 {
     Vec3s pos;                   // The set position of the volume
     Vec3s radius;                // Where it extends.
-    s16 rot;                     // The rotational angle of the volume.
+    Angle rot;                   // The rotational angle of the volume.
     s32 (*func)();               // a pointer to a function. Optional.
     struct sPuppyAngles *angles; // A pointer to a gPuppyAngles struct. Optional
     s32 flagsAdd;                // Adds behaviour flags.
@@ -154,9 +154,9 @@ enum gPuppyCamBeh
     PUPPYCAM_BEHAVIOUR_COLLISION        = 0x4000,
 
 
-    PUPPYCAM_BEHAVIOUR_DEFAULT = PUPPYCAM_BEHAVIOUR_X_MOVEMENT | PUPPYCAM_BEHAVIOUR_Y_MOVEMENT | PUPPYCAM_BEHAVIOUR_Z_MOVEMENT |
+    PUPPYCAM_BEHAVIOUR_DEFAULT = (PUPPYCAM_BEHAVIOUR_X_MOVEMENT | PUPPYCAM_BEHAVIOUR_Y_MOVEMENT | PUPPYCAM_BEHAVIOUR_Z_MOVEMENT |
     PUPPYCAM_BEHAVIOUR_YAW_ROTATION | PUPPYCAM_BEHAVIOUR_PITCH_ROTATION | PUPPYCAM_BEHAVIOUR_ZOOM_CHANGE |
-    PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER | PUPPYCAM_BEHAVIOUR_TURN_HELPER | PUPPYCAM_BEHAVIOUR_INPUT_NORMAL | PUPPYCAM_BEHAVIOUR_PANSHIFT | PUPPYCAM_BEHAVIOUR_COLLISION
+    PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER | PUPPYCAM_BEHAVIOUR_TURN_HELPER | PUPPYCAM_BEHAVIOUR_INPUT_NORMAL | PUPPYCAM_BEHAVIOUR_PANSHIFT | PUPPYCAM_BEHAVIOUR_COLLISION)
 };
 
 extern u8 gPCOptionOpen;

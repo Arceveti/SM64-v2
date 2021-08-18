@@ -95,17 +95,17 @@ static void boo_approach_target_opacity_and_update_scale(void) {
 static void boo_oscillate(s32 ignoreOpacity) {
     o->oFaceAnglePitch = sins(o->oBooOscillationTimer) * 0x400;
     if (o->oOpacity == 0xFF || ignoreOpacity) {
-        o->header.gfx.scale[0]   =  sins(o->oBooOscillationTimer) * 0.08f + o->oBooBaseScale;
-        o->header.gfx.scale[1]   = -sins(o->oBooOscillationTimer) * 0.08f + o->oBooBaseScale;
+        o->header.gfx.scale[0]   = (( sins(o->oBooOscillationTimer) * 0.08f) + o->oBooBaseScale);
+        o->header.gfx.scale[1]   = ((-sins(o->oBooOscillationTimer) * 0.08f) + o->oBooBaseScale);
         o->header.gfx.scale[2]   =  o->header.gfx.scale[0];
-        o->oGravity              =  sins(o->oBooOscillationTimer) * o->oBooBaseScale;
+        o->oGravity              =  (sins(o->oBooOscillationTimer) * o->oBooBaseScale);
         o->oBooOscillationTimer += 0x400;
     }
 }
 
 static s32 boo_vanish_or_appear(void) {
-    s16 relativeAngleToMario             = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-    s16 relativeMarioFaceAngle           = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
+    Angle relativeAngleToMario           = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
+    Angle relativeMarioFaceAngle         = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     // magic?
     s16 relativeAngleToMarioThreshhold   = 0x1568;
     s16 relativeMarioFaceAngleThreshhold = 0x6B58;
@@ -130,10 +130,10 @@ static void boo_set_move_yaw_for_during_hit(s32 hurt) {
     o->oBooMoveYawBeforeHit = (f32) o->oMoveAngleYaw;
     if (hurt) {
         o->oBooMoveYawDuringHit = gMarioObject->oMoveAngleYaw;
-    } else if (coss((s16)o->oMoveAngleYaw - (s16)o->oAngleToMario) < 0.0f) {
+    } else if (coss((Angle)o->oMoveAngleYaw - (Angle)o->oAngleToMario) < 0.0f) {
         o->oBooMoveYawDuringHit = o->oMoveAngleYaw;
     } else {
-        o->oBooMoveYawDuringHit = (s16)(o->oMoveAngleYaw + 0x8000);
+        o->oBooMoveYawDuringHit = (Angle)(o->oMoveAngleYaw + 0x8000);
     }
 }
 
@@ -246,9 +246,9 @@ static s32 boo_get_attack_status(void) {
 }
 
 // boo idle/chasing movement?
-static void boo_chase_mario(f32 minDY, s16 yawIncrement, f32 mul) {
+static void boo_chase_mario(f32 minDY, Angle yawIncrement, f32 mul) {
     f32 dy;
-    s16 targetYaw;
+    Angle targetYaw;
     if (boo_vanish_or_appear()) {
         o->oInteractType = INTERACT_BOUNCE_TOP;
         targetYaw        = ((cur_obj_lateral_dist_from_mario_to_home() > 1500.0f) ? cur_obj_angle_to_home() : o->oAngleToMario);
@@ -385,7 +385,7 @@ static void big_boo_act_stopped(void) {
 
 static void big_boo_act_chasing_mario(void) { // act 1
     s32 attackStatus;
-    s16 yawIncrement;
+    Angle yawIncrement;
     f32 mul;
     if (o->oHealth == 3) {
         yawIncrement = 0x180; mul = 0.5f;
@@ -574,7 +574,7 @@ void bhv_animated_texture_loop(void) {
 }
 
 void bhv_boo_in_castle_loop(void) {
-    s16 targetAngle;
+    Angle targetAngle;
     o->oBooBaseScale = 2.0f;
     switch (o->oAction) {
         case BOO_IN_CASTLE_ACT_INIT:

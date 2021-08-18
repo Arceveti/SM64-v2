@@ -175,7 +175,7 @@ void wiggler_init_segments(void) {
  * If attacked by Mario, enter either the jumped on or knockback action.
  */
 static void wiggler_act_walk(void) {
-    s16 yawTurnSpeed;
+    Angle yawTurnSpeed;
     o->oWigglerWalkAnimSpeed = (0.06f * o->oForwardVel);
     // Update text if necessary
     if (o->oWigglerTextStatus < WIGGLER_TEXT_STATUS_COMPLETED_DIALOG) {
@@ -211,7 +211,7 @@ static void wiggler_act_walk(void) {
                 } else if (o->oWigglerTimeUntilRandomTurn != 0) {
                     o->oWigglerTimeUntilRandomTurn--;
                 } else {
-                    o->oWigglerTargetYaw           = o->oMoveAngleYaw + 0x4000 * (s16) random_sign();
+                    o->oWigglerTargetYaw           = (o->oMoveAngleYaw + (0x4000 * (Angle) random_sign()));
                     o->oWigglerTimeUntilRandomTurn = random_linear_offset(30, 50);
                 }
             }
@@ -219,7 +219,7 @@ static void wiggler_act_walk(void) {
 
         // If moving at high speeds, could overflow. But can't reach such speeds
         // in practice
-        yawTurnSpeed = (s16)(30.0f * o->oForwardVel);
+        yawTurnSpeed = (Angle)(30.0f * o->oForwardVel);
         cur_obj_rotate_yaw_toward(o->oWigglerTargetYaw, yawTurnSpeed);
         obj_face_yaw_approach(o->oMoveAngleYaw, 2 * yawTurnSpeed);
         obj_face_pitch_approach(0, 0x320);

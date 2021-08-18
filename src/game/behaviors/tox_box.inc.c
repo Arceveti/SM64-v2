@@ -65,12 +65,12 @@ void tox_box_shake_screen(void) {
     if (o->oDistanceToMario < 3000.0f) cur_obj_shake_screen(SHAKE_POS_SMALL);
 }
 
-void tox_box_move(f32 forwardVel, f32 leftVel, s16 deltaPitch, s16 deltaRoll) {
+void tox_box_move(f32 forwardVel, f32 leftVel, Angle deltaPitch, Angle deltaRoll) {
     o->oPosY = 99.41124f * sins((f32)(o->oTimer + 1) / 8 * 0x8000) + o->oHomeY + 3.0f;
     o->oForwardVel      = forwardVel;
     o->oLeftVel         = leftVel;
     o->oFaceAnglePitch += deltaPitch;
-    if ((s16) o->oFaceAnglePitch < 0x0) deltaRoll = -deltaRoll;
+    if ((Angle) o->oFaceAnglePitch < 0x0) deltaRoll = -deltaRoll;
     o->oFaceAngleRoll += deltaRoll;
     cur_obj_set_pos_via_transform();
     if (o->oTimer == 7) {

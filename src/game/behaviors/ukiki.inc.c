@@ -47,7 +47,6 @@ Gfx *geo_update_projectile_pos_from_parent_copy(s32 callContext, UNUSED struct G
             obj_set_gfx_pos_from_pos(obj->prevObj);
         }
     }
-
     return NULL;
 }
 
@@ -63,8 +62,8 @@ void idle_ukiki_taunt(void) {
 
         // Counter keeps track of the iterations done, while ToBeDone
         // is the count of iterations to be done (between 2 and 5).
-        o->oUkikiTauntCounter = 0;
-        o->oUkikiTauntsToBeDone = (s16)(random_float() * 4.0f + 2.0f);
+        o->oUkikiTauntCounter   = 0;
+        o->oUkikiTauntsToBeDone = (Angle)((random_float() * 4.0f) + 2.0f);
     }
 
     // Switch goes from 1-4.
@@ -178,7 +177,7 @@ void ukiki_act_turn_to_mario(void) {
     s32 facingMario;
 
     // Initialize the action with a random fVel from 2-5.
-    if (o->oTimer == 0) o->oForwardVel = random_float() * 3.0f + 2.0f;
+    if (o->oTimer == 0) o->oForwardVel = ((random_float() * 3.0f) + 2.0f);
 
     cur_obj_init_animation_with_sound(UKIKI_ANIM_TURN);
 
@@ -198,14 +197,14 @@ void ukiki_act_turn_to_mario(void) {
  */
 void ukiki_act_run(void) {
     s32 fleeMario = TRUE;
-    s16 goalYaw = o->oAngleToMario + 0x8000;
+    Angle goalYaw = (o->oAngleToMario + 0x8000);
 
     if (is_cap_ukiki_and_mario_has_normal_cap_on_head()) {
         fleeMario = FALSE;
         goalYaw = o->oAngleToMario;
     }
 
-    if (o->oTimer == 0) o->oUkikiChaseFleeRange = random_float() * 100.0f + 350.0f;
+    if (o->oTimer == 0) o->oUkikiChaseFleeRange = ((random_float() * 100.0f) + 350.0f);
 
     cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
     cur_obj_rotate_yaw_toward(goalYaw, 0x800);
@@ -283,7 +282,7 @@ static Trajectory sCageUkikiPath[] = {
 void ukiki_act_go_to_cage(void) {
     struct Object* obj;
     f32 latDistToCage = 0.0f;
-    s16 yawToCage = 0;
+    Angle yawToCage = 0;
     obj = cur_obj_nearest_object_with_behavior(bhvUkikiCageChild);
 
     // Ultimately is checking the cage, as it points to the parent

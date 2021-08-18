@@ -22,16 +22,14 @@ struct ObjectHitbox sTweesterHitbox = {
  * its forward velocity.
  */
 void tweester_scale_and_move(f32 preScale) {
-    s16 dYaw  = 0x2C00;
-    f32 scale = preScale * 0.4f;
-
-    o->header.gfx.scale[0] = (( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale;
-    o->header.gfx.scale[1] = ((-coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.5f + 0.5f) * scale;
-    o->header.gfx.scale[2] = (( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale;
-
+    Angle dYaw              = 0x2C00;
+    f32 scale               = (preScale * 0.4f);
+    o->header.gfx.scale[0]  = ((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale);
+    o->header.gfx.scale[1]  = (((-coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.5f + 0.5f) * scale);
+    o->header.gfx.scale[2]  = ((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale);
     o->oTweesterScaleTimer += 0x200;
-    o->oForwardVel = 14.0f;
-    o->oFaceAngleYaw += dYaw;
+    o->oForwardVel          = 14.0f;
+    o->oFaceAngleYaw       += dYaw;
 }
 
 /**

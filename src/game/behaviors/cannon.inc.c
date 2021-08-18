@@ -5,7 +5,7 @@ void opened_cannon_act_idle(void) {
         o->oInteractStatus = INT_STATUS_NONE;
         vec3f_copy(&o->oPosVec, &o->oHomeVec);
         o->oMoveAnglePitch = 0x0;
-        o->oMoveAngleYaw   = (s16)(o->oBehParams2ndByte << 8);
+        o->oMoveAngleYaw   = (Angle)(o->oBehParams2ndByte << 8);
         o->oCannonAngle    = 0x0;
         o->oCannonIsActive = FALSE;
         cur_obj_enable_rendering();
@@ -48,7 +48,7 @@ void opened_cannon_act_turning_yaw(void) {
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
-                o->oMoveAngleYaw = ((sins(o->oCannonAngle) * 0x4000) + (s16)(o->oBehParams2ndByte << 8));
+                o->oMoveAngleYaw = ((sins(o->oCannonAngle) * 0x4000) + (Angle)(o->oBehParams2ndByte << 8));
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
                 o->oCannonAngle = 0x0;

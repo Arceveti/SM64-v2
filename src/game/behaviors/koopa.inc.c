@@ -98,12 +98,10 @@ static void koopa_play_footstep_sound(s8 animFrame1, s8 animFrame2) {
  * running away.
  */
 static s32 koopa_check_run_from_mario(void) {
-    if (o->oKoopaDistanceToMario < 300.0f
-        && abs_angle_diff(o->oKoopaAngleToMario, o->oMoveAngleYaw) < 0x3000) {
+    if ((o->oKoopaDistanceToMario < 300.0f) && (abs_angle_diff(o->oKoopaAngleToMario, o->oMoveAngleYaw) < 0x3000)) {
         o->oAction = KOOPA_SHELLED_ACT_RUN_FROM_MARIO;
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -115,7 +113,7 @@ static void koopa_shelled_act_stopped(void) {
     o->oForwardVel = 0.0f;
     if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_STOPPED)) {
         o->oAction = KOOPA_SHELLED_ACT_WALK;
-        o->oKoopaTargetYaw = o->oMoveAngleYaw + 0x2000 * (s16) random_sign();
+        o->oKoopaTargetYaw = (o->oMoveAngleYaw + (0x2000 * (Angle) random_sign()));
     }
 }
 
@@ -483,7 +481,7 @@ static void koopa_the_quick_act_show_init_text(void) {
 static s32 koopa_the_quick_detect_bowling_ball(void) {
     struct Object *ball;
     f32 distToBall;
-    s16 angleToBall;
+    Angle angleToBall;
     f32 ballSpeedInKoopaRunDir;
 
     ball = cur_obj_find_nearest_object_with_behavior(bhvBowlingBall, &distToBall);
@@ -543,7 +541,7 @@ static void koopa_the_quick_act_race(void) {
         if (cur_obj_follow_path(0) == PATH_REACHED_END) {
             o->oAction = KOOPA_THE_QUICK_ACT_DECELERATE;
         } else {
-            downhillSteepness = 1.0f + sins((s16)(f32) o->oPathedTargetPitch);
+            downhillSteepness = 1.0f + sins((Angle)(f32) o->oPathedTargetPitch);
             cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, (s32)(o->oKoopaAgility * 150.0f));
 
             switch (o->oSubAction) {

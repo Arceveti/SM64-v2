@@ -5,24 +5,24 @@ void bhv_lll_rotating_hex_flame_loop(void) {
     f32 y = o->oLllRotatingHexFlameRelativePosY;
     f32 z = o->oLllRotatingHexFlameRelativePosZ;
     cur_obj_set_pos_relative(o->parentObj, x, y, z);
-    o->oPosY = o->parentObj->oPosY + 100.0f;
+    o->oPosY = (o->parentObj->oPosY + 100.0f);
     if (o->parentObj->oAction == LLL_FIRE_BAR_ACT_REMOVE_FLAMES) obj_mark_for_deletion(o);
 }
 
-void fire_bar_spawn_flames(s16 yaw) {
+void fire_bar_spawn_flames(Angle yaw) {
     struct Object *flameObj;
     s32 i;
     s32 amt = o->oBehParams2ndByte; // Amount of flames to spawn
-    f32 xOffset = sins(yaw) * 200.0f;
-    f32 zOffset = coss(yaw) * 200.0f;
+    f32 xOffset = (sins(yaw) * 200.0f);
+    f32 zOffset = (coss(yaw) * 200.0f);
     for (i = 0; i < amt; i++) {
         flameObj = spawn_object(o, MODEL_RED_FLAME, bhvLllRotatingHexFlame);
         flameObj->oLllRotatingHexFlameRelativePosX += xOffset;
-        flameObj->oLllRotatingHexFlameRelativePosY = o->oPosY - 200.0f;
+        flameObj->oLllRotatingHexFlameRelativePosY = (o->oPosY - 200.0f);
         flameObj->oLllRotatingHexFlameRelativePosZ += zOffset;
         obj_scale(flameObj, 6.0f);
-        xOffset += sins(yaw) * 150.0f;
-        zOffset += coss(yaw) * 150.0f;
+        xOffset += (sins(yaw) * 150.0f);
+        zOffset += (coss(yaw) * 150.0f);
     }
 }
 

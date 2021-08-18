@@ -134,8 +134,7 @@ static void mr_blizzard_act_rise_from_ground(void) {
  */
 
 static void mr_blizzard_act_rotate(void) {
-
-    s16 angleDiff;
+    Angle angleDiff;
     f32 prevDizziness;
     // While Mr. Blizzard is on the ground, rotate toward Mario at
     // 8.4375 degrees/frame.
@@ -150,7 +149,6 @@ static void mr_blizzard_act_rotate(void) {
             } else {
                 o->oMrBlizzardChangeInDizziness += 8.0f;
             }
-
             // Incremement Dizziness by value of ChangeInDizziness
             o->oMrBlizzardDizziness += o->oMrBlizzardChangeInDizziness;
         } else if (o->oMrBlizzardDizziness != 0.0f) {

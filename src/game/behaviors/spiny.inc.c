@@ -78,7 +78,7 @@ static void spiny_act_walk(void) {
                     if (o->oSpinyTimeUntilTurn != 0) {
                         o->oSpinyTimeUntilTurn--;
                     } else {
-                        o->oSpinyTargetYaw = o->oMoveAngleYaw + (s16) random_sign() * 0x2000;
+                        o->oSpinyTargetYaw     = (o->oMoveAngleYaw + ((Angle) random_sign() * 0x2000));
                         o->oSpinyTimeUntilTurn = random_linear_offset(100, 100);
                     }
                 }

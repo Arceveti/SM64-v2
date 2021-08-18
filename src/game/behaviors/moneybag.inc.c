@@ -109,7 +109,7 @@ void moneybag_act_move_around(void) {
 void moneybag_act_return_home(void) {
     f32 dx           = o->oHomeX - o->oPosX;
     f32 dz           = o->oHomeZ - o->oPosZ;
-    s16 yawToHome    = atan2s(dz, dx);
+    Angle yawToHome  = atan2s(dz, dx);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
     s16 collisionFlags   = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)

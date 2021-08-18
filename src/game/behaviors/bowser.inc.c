@@ -94,7 +94,7 @@ void bhv_bowser_flame_spawn_loop(void) {
             o->oPosX           = (bowser->oPosX + ((posZ * sinsYaw) + (posX * cossYaw)));
             o->oPosZ           = (bowser->oPosZ + ((posZ * cossYaw) - (posX * sinsYaw)));
             o->oMoveAnglePitch =                  data[(5 * animFrame) + 4] + 0xC00;
-            o->oMoveAngleYaw   =                  data[(5 * animFrame) + 3] + (s16) bowser->oMoveAngleYaw;
+            o->oMoveAngleYaw   =                  data[(5 * animFrame) + 3] + (Angle) bowser->oMoveAngleYaw;
             // Spawns the flames on a non-odd animFrame value
             if (!(animFrame & 0x1)) spawn_object(o, MODEL_RED_FLAME, bhvFlameMovingForwardGrowing);
         }
@@ -437,8 +437,8 @@ void bowser_act_breath_fire(void) {
  * Makes Bowser walk towards Mario
  */
 void bowser_act_walk_to_mario(void) {
-    s16 turnSpeed;
-    s16 angleFromMario = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);
+    Angle turnSpeed;
+    Angle angleFromMario = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);
     // Set turning speed depending of the health
     // Also special case for BITFS
     if (o->oBehParams2ndByte == BOWSER_BP_BITFS) {
@@ -733,7 +733,7 @@ void bowser_act_spit_fire_onto_floor(void) {
  * Turns around Bowser from an specific yaw angle
  * Returns TRUE once the timer is bigger than the time set
  */
-s32 bowser_turn_on_timer(s32 time, s16 yaw) {
+s32 bowser_turn_on_timer(s32 time, Angle yaw) {
     switch (o->oSubAction) {
         case BOWSER_SUB_ACT_TURN_FROM_EDGE_START: if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_UP_START_WALK )) o->oSubAction = BOWSER_SUB_ACT_TURN_FROM_EDGE_STOP; break;
         case BOWSER_SUB_ACT_TURN_FROM_EDGE_STOP:  if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LOOK_DOWN_STOP_WALK)) o->oSubAction = BOWSER_SUB_ACT_TURN_FROM_EDGE_END;  break;
@@ -1151,8 +1151,8 @@ void bowser_act_dead(void) {
 /**
  * Sets values for the BITFS platform to tilt
  */
-void bowser_tilt_platform(struct Object *platform, s16 angSpeed) {
-    s16 angle = o->oBowserAngleToCentre + 0x8000;
+void bowser_tilt_platform(struct Object *platform, Angle angSpeed) {
+    Angle angle = o->oBowserAngleToCentre + 0x8000;
     platform->oAngleVelPitch = ( coss(angle) * angSpeed);
     platform->oAngleVelRoll  = (-sins(angle) * angSpeed);
 }
@@ -1196,7 +1196,7 @@ struct BowserTiltPlatformInfo sBowsertiltPlatformData[] = {
 void bowser_act_tilt_lava_platform(void) {
     // Set platform object
     struct Object *platform = cur_obj_nearest_object_with_behavior(bhvTiltingBowserLavaPlatform);
-    s16 angSpeed;
+    Angle angSpeed;
     // If there's not platform, return to default action
     if (platform == NULL) {
         o->oAction = BOWSER_ACT_DEFAULT;
@@ -1323,7 +1323,7 @@ void bowser_free_update(void) {
     struct Object *platform;
     UNUSED f32 floorHeight;
 #ifdef PLATFORM_DISPLACEMENT_2
-    s16 tmpOFaceAngleYaw = (s16) o->oFaceAngleYaw;
+    Angle tmpOFaceAngleYaw = (Angle) o->oFaceAngleYaw;
     if ((platform = o->platform) != NULL) {
         // NOTE: This function was at one point using '&o->oFaceAngleYaw', which is a s32 address. Should tmpOFaceAngleYaw be using the first 16 bits instead, or was that a bug?
         apply_platform_displacement(&sBowserDisplacementInfo, &o->oPosVec, &tmpOFaceAngleYaw, platform);
@@ -1417,8 +1417,8 @@ void bhv_bowser_loop(void) {
     // Set distance/angle values
     o->oBowserDistToCentre  = sqrtf(sqr(o->oPosX) + sqr(o->oPosZ));
     o->oBowserAngleToCentre = atan2s((-o->oPosZ), (-o->oPosX));
-    s16 angleToMario        = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);        //  AngleToMario from Bowser's perspective
-    s16 angleToCentre       = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre); // AngleToCentre from Bowser's perspective
+    Angle angleToMario      = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);        //  AngleToMario from Bowser's perspective
+    Angle angleToCentre     = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre); // AngleToCentre from Bowser's perspective
     // Reset Status
     o->oBowserStatus &= ~0xFF;
     // Set bitflag status for distance/angle values

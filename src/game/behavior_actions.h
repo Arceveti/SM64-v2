@@ -8,10 +8,10 @@ void spawn_triangle_break_particles(s16 numTris, s16 triModel, f32 triSize, s16 
 
 void spawn_mist_from_global(void);
 void clear_particle_flags(u32 flags);
-void spawn_wind_particles(s16 pitch, s16 yaw);
+void spawn_wind_particles(Angle pitch, Angle yaw);
 s32  check_if_moving_over_floor(f32 maxDist, f32 offset);
 s32  arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity);
-void tox_box_move(f32 forwardVel, f32 leftVel, s16 deltaPitch, s16 deltaRoll);
+void tox_box_move(f32 forwardVel, f32 leftVel, Angle deltaPitch, Angle deltaRoll);
 void play_penguin_walking_sound(s32 walk);
 s32  update_angle_from_move_flags(s32 *angle);
 void cur_obj_spawn_strong_wind_particles(s32 windSpread, f32 scale, f32 relPosX, f32 relPosY, f32 relPosZ);

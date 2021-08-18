@@ -2,7 +2,7 @@ struct BowserFallingPlatformData {
     const Collision *collision;
     s16 posX;
     s16 posZ;
-    s16 angle;
+    Angle angle;
 };
 
 struct BowserFallingPlatformData sBowserFallingPlatform[] = {
@@ -39,7 +39,7 @@ void falling_bowser_plat_act_check(void) {
 
 void falling_bowser_plat_act_fall(void) {
     Vec3f pos;
-    s16 angle;
+    Angle angle;
     f32 val;
     if ((o->oTimer == 0) || (o->oTimer == 22)) cur_obj_play_sound_2(SOUND_GENERAL_BOWSER_PLATFORM_FALL);
     if (o->oTimer < 22) {

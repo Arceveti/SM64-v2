@@ -652,7 +652,7 @@ void puppycam_terrain_angle(void) {
     s32 floor2 = find_floor_height(  gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100), gPuppyCam.pos[2]);
     s32 ceil   = 20000; // find_ceil(gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100), gPuppyCam.pos[2]);
     s32 farFromSurface;
-    s16 floorPitch;
+    Angle floorPitch;
     s32 gotTheOkay = FALSE;
     if ((gMarioState->action & ACT_FLAG_SWIMMING) || !(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER))  {
         gPuppyCam.intendedTerrainPitch = 0x0;
@@ -743,8 +743,8 @@ void puppycam_projection_behaviours(void) {
                 // It also scales with forward velocity, so it's a gradual effect as he speeds up.
                 if (((ABS(gPlayer1Controller->rawStickX) > 20) && !(gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) ||
                     (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE &&
-                     (s16)ABS((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - (((gMarioState->faceAngle[1]) % 0xFFFF) - 0x8000)) < 0x3000 ))
-                gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + 0x8000) - approach_s32((s16)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
+                     (Angle)ABS((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - (((gMarioState->faceAngle[1]) % 0xFFFF) - 0x8000)) < 0x3000 ))
+                gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
                 ((gPuppyCam.options.turnAggression * 10) * ABS(gMarioState->forwardVel / 32) * ABS(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
                 ((gPuppyCam.options.turnAggression * 10) * ABS(gMarioState->forwardVel / 32) * ABS(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
             }
@@ -793,7 +793,7 @@ void puppycam_projection_behaviours(void) {
             gPuppyCam.floorY[1]             = 0;
             gPuppyCam.targetFloorHeight     = gPuppyCam.targetObj->oPosY;
             gPuppyCam.lastTargetFloorHeight = gPuppyCam.targetObj->oPosY;
-            gPuppyCam.yawTarget             = ((gMarioState->faceAngle[1] + 0x8000) - approach_s32((s16)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
+            gPuppyCam.yawTarget             = ((gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
             (1000 * (gMarioState->forwardVel / 32)), (1000 * (gMarioState->forwardVel / 32))));
             if ((((gMarioState->waterLevel - 100) - gMarioState->pos[1]) > 5) && (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_PITCH_ROTATION)) {
                 gPuppyCam.swimPitch = approach_f32_asymptotic(gPuppyCam.swimPitch, (gMarioState->faceAngle[0] / 10), 0.05f);
@@ -835,10 +835,10 @@ static void puppycam_projection(void) {
     gPuppyCam.pitch       = CLAMP(gPuppyCam.pitch,       0x1000, 0x7000);
     gPuppyCam.pitchTarget = CLAMP(gPuppyCam.pitchTarget, 0x1000, 0x7000);
     // These are the base rotations going to be used.
-    gPuppyCam.yaw   = (gPuppyCam.yawTarget   - approach_f32_asymptotic((s16)(gPuppyCam.yawTarget   - gPuppyCam.yaw  ), 0, 0.3335f));
-    gPuppyCam.pitch = (gPuppyCam.pitchTarget - approach_f32_asymptotic((s16)(gPuppyCam.pitchTarget - gPuppyCam.pitch), 0, 0.3335f));
+    gPuppyCam.yaw    = (gPuppyCam.yawTarget   - approach_f32_asymptotic((Angle)(gPuppyCam.yawTarget   - gPuppyCam.yaw  ), 0, 0.3335f));
+    gPuppyCam.pitch  = (gPuppyCam.pitchTarget - approach_f32_asymptotic((Angle)(gPuppyCam.pitchTarget - gPuppyCam.pitch), 0, 0.3335f));
     // This adds the pitch effect when underwater, which is capped so it doesn't get out of control. If you're not swimming, swimpitch is 0, so it's normal.
-    s16 pitchTotal = CLAMP((gPuppyCam.pitch + (gPuppyCam.swimPitch * 10) + gPuppyCam.edgePitch + gPuppyCam.terrainPitch), 800, 0x7800);
+    Angle pitchTotal = CLAMP((gPuppyCam.pitch + (gPuppyCam.swimPitch * 10) + gPuppyCam.edgePitch + gPuppyCam.terrainPitch), 800, 0x7800);
     if (gPuppyCam.targetObj) {
         vec3s_set(targetPos, gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ);
         vec3s_copy(targetPos3, targetPos);
@@ -848,7 +848,7 @@ static void puppycam_projection(void) {
             targetPos3[1] = (s16)approach_f32_asymptotic(targetPos[1], targetPos2[1], 0.5f);
             targetPos3[2] = (s16)approach_f32_asymptotic(targetPos[2], targetPos2[2], 0.5f);
             gPuppyCam.targetDist[0] = approach_f32_asymptotic(gPuppyCam.targetDist[0], (ABS(LENCOS(sqrtf(((targetPos[0] - targetPos2[0]) * (targetPos[0] - targetPos2[0])) + ((targetPos[2] - targetPos2[2]) * (targetPos[2] - targetPos2[2]))),
-                            (s16)ABS((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - ((atan2s(targetPos[2]-targetPos2[2], targetPos[0]-targetPos2[0])) % 0xFFFF) - 0x8000) + 0x4000))), 0.2f);
+                            (Angle)ABS((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - ((atan2s(targetPos[2]-targetPos2[2], targetPos[0]-targetPos2[0])) % 0xFFFF) - 0x8000) + 0x4000))), 0.2f);
         } else {
             gPuppyCam.targetDist[0] = approach_f32_asymptotic(gPuppyCam.targetDist[0], 0, 0.2f);
         }
@@ -917,7 +917,7 @@ static void puppycam_collision(void) {
     Vec3f camdir[2];
     Vec3f hitpos[2];
     Vec3f target[2];
-    s16 pitchTotal = CLAMP(gPuppyCam.pitch + (gPuppyCam.swimPitch * 10) + gPuppyCam.edgePitch + gPuppyCam.terrainPitch, 800, 0x7800);
+    Angle pitchTotal = CLAMP(gPuppyCam.pitch + (gPuppyCam.swimPitch * 10) + gPuppyCam.edgePitch + gPuppyCam.terrainPitch, 800, 0x7800);
     s32 dist[2];
     if (gPuppyCam.targetObj == NULL) return;
     // The ray, starting from the top

@@ -43,6 +43,7 @@ typedef f32 Mat4[4][4];
 
 typedef uintptr_t GeoLayout;
 typedef uintptr_t LevelScript;
+typedef s16 Angle;
 typedef s16 Movtex;
 typedef s16 MacroObject;
 typedef s16 Collision;

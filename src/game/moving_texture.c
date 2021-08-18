@@ -305,7 +305,7 @@ Gfx *geo_movtex_pause_control(s32 callContext, UNUSED struct GraphNode *node, UN
  * rotOffset: gets added to base rotation
  * scale: how often the texture repeats, 1 = no repeat
  */
-void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot, s16 rotOffset, f32 scale, Alpha alpha) {
+void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, Angle rot, Angle rotOffset, f32 scale, Alpha alpha) {
     s16 s = (32.0f * ((32.0f * scale) - 1.0f) * sins(rot + rotOffset));
     s16 t = (32.0f * ((32.0f * scale) - 1.0f) * coss(rot + rotOffset));
     if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
@@ -324,9 +324,9 @@ void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, s16 rot
  */
 struct MovtexQuad {
     /// the current texture rotation in this quad
-    s16 rot;
+    Angle rot;
     /// gets added to rot every frame
-    s16 rotspeed;
+    Angle rotspeed;
     /// the amount of times the texture repeats. 1 = no repeat.
     s16 scale;
     /// Coordinates of vertices
@@ -350,21 +350,21 @@ s16 gMovetexLastTextureId;
  * Generates and returns a display list for a single MovtexQuad at height y.
  */
 Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
-    s16 rot;
-    s16 rotspeed  = quad->rotspeed;
-    s16 scale     = quad->scale;
-    s16 x1        = quad->x1;
-    s16 z1        = quad->z1;
-    s16 x2        = quad->x2;
-    s16 z2        = quad->z2;
-    s16 x3        = quad->x3;
-    s16 z3        = quad->z3;
-    s16 x4        = quad->x4;
-    s16 z4        = quad->z4;
-    s16 rotDir    = quad->rotDir;
-    s16 alpha     = quad->alpha;
-    s16 textureId = quad->textureId;
-    Vtx *verts    = alloc_display_list(4 * sizeof(*verts));
+    Angle rot;
+    Angle rotspeed = quad->rotspeed;
+    s16 scale      = quad->scale;
+    s16 x1         = quad->x1;
+    s16 z1         = quad->z1;
+    s16 x2         = quad->x2;
+    s16 z2         = quad->z2;
+    s16 x3         = quad->x3;
+    s16 z3         = quad->z3;
+    s16 x4         = quad->x4;
+    s16 z4         = quad->z4;
+    s16 rotDir     = quad->rotDir;
+    s16 alpha      = quad->alpha; //! u8/Alpha type?
+    s16 textureId  = quad->textureId;
+    Vtx *verts     = alloc_display_list(4 * sizeof(*verts));
     Gfx *gfxHead;
     Gfx *gfx;
     gfxHead = alloc_display_list(((textureId == gMovetexLastTextureId) ? 3 : 8) * sizeof(*gfxHead));

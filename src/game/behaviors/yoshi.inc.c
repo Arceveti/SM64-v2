@@ -55,17 +55,17 @@ void yoshi_idle_loop(void) {
 }
 
 void yoshi_talk_loop(void) {
-    if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) {
+    if ((Angle) o->oMoveAngleYaw == (Angle) o->oAngleToMario) {
         cur_obj_init_animation(YOSHI_ANIM_IDLE);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, DIALOG_161)) {
                 o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
                 o->oInteractStatus = INT_STATUS_NONE;
-                o->oHomeX = sYoshiHomeLocations[2];
-                o->oHomeZ = sYoshiHomeLocations[3];
-                o->oYoshiTargetYaw = atan2s(o->oHomeZ - o->oPosZ, o->oHomeX - o->oPosX);
-                o->oAction = YOSHI_ACT_GIVE_PRESENT;
+                o->oHomeX          = sYoshiHomeLocations[2];
+                o->oHomeZ          = sYoshiHomeLocations[3];
+                o->oYoshiTargetYaw = atan2s((o->oHomeZ - o->oPosZ), (o->oHomeX - o->oPosX));
+                o->oAction         = YOSHI_ACT_GIVE_PRESENT;
             }
         }
     } else {
@@ -76,8 +76,7 @@ void yoshi_talk_loop(void) {
 }
 
 void yoshi_walk_and_jump_off_roof_loop(void) {
-    s16 animFrame = o->header.gfx.animInfo.animFrame;
-
+    s16 animFrame  = o->header.gfx.animInfo.animFrame;
     o->oForwardVel = 10.0f;
     object_step();
     cur_obj_init_animation(YOSHI_ANIM_WALK);

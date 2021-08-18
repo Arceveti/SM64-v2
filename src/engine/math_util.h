@@ -88,7 +88,7 @@ f32  random_float( void);
 f32  random_f32_around_zero(f32 diameter);
 void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16 zRange);
 // Angles
-s16  abs_angle_diff(s16 angle1, s16 angle2);
+Angle  abs_angle_diff(Angle angle1, Angle angle2);
 // Vector Operations
 void vec3f_copy(                         Vec3f dest, Vec3f src);
 void vec3f_set(                          Vec3f dest, f32 x, f32 y, f32 z);
@@ -114,8 +114,8 @@ void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 f32  vec3f_mag(                          Vec3f v);
 void vec3f_normalize(                    Vec3f dest);
 void vec3f_normalize_max(                Vec3f dest, f32 max);
-void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw);
-void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, s16  pitch, s16  yaw);
+void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
+void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, Angle  pitch, Angle  yaw);
 void vec3f_mul_f32(                      Vec3f dest, f32 scale);
 void vec3f_div_f32(                      Vec3f dest, f32 scale);
 void vec3f_scale_f32(                        Vec3f dest, Vec3f src,   f32 scale, u32 doInverted);
@@ -131,13 +131,13 @@ void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 void mtxf_copy(                           Mat4 dest,  Mat4 src);
 void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
-void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, s16 roll);
+void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);
 void mtxf_rotate_zxy_and_translate(       Mat4 dest, Vec3f translate, Vec3s rotate);
 void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f b, Vec3s c);
-void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset);
-void mtxf_align_facing_view(                   Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffset);
-void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw);
-void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, s16 yaw, f32 radius);
+void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffset);
+void mtxf_align_facing_view(                   Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
+void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
+void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_mul_vec3s(                      Mat4  mtx, Vec3s b);
@@ -145,7 +145,7 @@ void mtxf_mul_vec3f(                      Mat4  mtx, Vec3f b);
 void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);
 void linear_mtxf_transpose_mul_vec3f(     Mat4  mtx, Vec3f dst, Vec3f v);
 void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
-void mtxf_rotate_xy(                      Mtx  *mtx, s16 angle);
+void mtxf_rotate_xy(                      Mtx  *mtx, Angle angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 // Approach
@@ -161,8 +161,8 @@ s32  approach_s16_asymptotic(           s16  current,   s16 target, s16 divisor)
 void approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
-s16  LENSIN(s16 length, s16 direction);
-s16  LENCOS(s16 length, s16 direction);
+s16  LENSIN(s16 length, Angle direction);
+s16  LENCOS(s16 length, Angle direction);
 s16  atan2s(f32 y, f32 x);
 f32  atan2f(f32 a, f32 b);
 // Curves

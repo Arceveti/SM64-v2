@@ -161,7 +161,7 @@ s32 is_anim_past_frame(struct MarioState *m, s16 animFrame) {
  */
 s16 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s translation) {
     struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
-    s16 animFrame   = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
+    s16  animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
     u16 *animIndex  = segmented_to_virtual((void *) curAnim->index);
     s16 *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = (f32) sins(yaw);
@@ -486,7 +486,7 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
  * Determines if Mario is facing "downhill."
  */
 s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) {
-    s16 faceAngleYaw = m->faceAngle[1];
+    Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
     if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
@@ -552,7 +552,7 @@ s32 mario_floor_is_steep(struct MarioState *m) {
 /**
  * Finds the floor height relative from Mario given polar displacement.
  */
-f32 find_floor_height_relative_polar(struct MarioState *m, s16 angleFromMario, f32 distFromMario) {
+f32 find_floor_height_relative_polar(struct MarioState *m, Angle angleFromMario, f32 distFromMario) {
     struct Surface *floor;
     f32 y = (sins(m->faceAngle[1] + angleFromMario) * distFromMario);
     f32 x = (coss(m->faceAngle[1] + angleFromMario) * distFromMario);
@@ -562,7 +562,7 @@ f32 find_floor_height_relative_polar(struct MarioState *m, s16 angleFromMario, f
 /**
  * Returns the slope of the floor based off points around Mario.
  */
-s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
+Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
     struct Surface *floor;
     f32 forwardFloorY, backwardFloorY;
     f32 forwardYDelta, backwardYDelta;
@@ -580,7 +580,7 @@ s16 find_floor_slope(struct MarioState *m, s16 yawOffset) {
 }
 
 // default range is 0x471C
-s32 analog_stick_held_back(struct MarioState *m, s16 range) {
+s32 analog_stick_held_back(struct MarioState *m, Angle range) {
     if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
 }
@@ -610,12 +610,12 @@ void set_steep_jump_action(struct MarioState *m) {
     if (m->forwardVel > 0.0f) {
         //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
         // undefined behavior if m->floorAngle >= 0.
-        s16 angleTemp     = (m->floorAngle + 0x8000);
-        s16 faceAngleTemp = (m->faceAngle[1] - angleTemp);
-        f32 y             = (sins(faceAngleTemp) * m->forwardVel);
-        f32 x             = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
-        m->forwardVel     = sqrtf(sqr(y) + sqr(x));
-        m->faceAngle[1]   = (atan2s(x, y) + angleTemp);
+        Angle angleTemp     = (m->floorAngle + 0x8000);
+        Angle faceAngleTemp = (m->faceAngle[1] - angleTemp);
+        f32 y               = (sins(faceAngleTemp) * m->forwardVel);
+        f32 x               = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
+        m->forwardVel       = sqrtf(sqr(y) + sqr(x));
+        m->faceAngle[1]     = (atan2s(x, y) + angleTemp);
     }
     drop_and_set_mario_action(m, ACT_STEEP_JUMP, 0);
 }

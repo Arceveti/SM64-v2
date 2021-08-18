@@ -152,7 +152,7 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
     s32 i;
     f32 whirlpoolRadius = 2000.0f;
     if (m->floor->type == SURFACE_FLOWING_WATER) {
-        s16 currentAngle = (m->floor->force << 8);
+        Angle currentAngle = (m->floor->force << 8);
         f32 currentSpeed = sWaterCurrentSpeeds[m->floor->force >> 8];
         step[0] += (currentSpeed * sins(currentAngle));
         step[2] += (currentSpeed * coss(currentAngle));
@@ -160,16 +160,16 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
     for (i = 0; i < 2; i++) {
         struct Whirlpool *whirlpool = gCurrentArea->whirlpools[i];
         if (whirlpool != NULL) {
-            f32 strength         = 0.0f;
+            f32 strength           = 0.0f;
             Vec3f d; //! vec3f/s diff?
-            d[0]                 = (whirlpool->pos[0] - m->pos[0]);
-            d[1]                 = (whirlpool->pos[1] - m->pos[1]);
-            d[2]                 = (whirlpool->pos[2] - m->pos[2]);
-            f32 lateralDist      = sqrtf(sqr(d[0]) + sqr(d[2]));
-            f32 distance         = sqrtf(sqr(lateralDist) + sqr(d[1]));
-            s16 pitchToWhirlpool = atan2s(lateralDist, d[1]);
-            s16 yawToWhirlpool   = atan2s(d[2], d[0]);
-            yawToWhirlpool -= (s16)(0x2000 * (1000.0f / (distance + 1000.0f)));
+            d[0]                   = (whirlpool->pos[0] - m->pos[0]);
+            d[1]                   = (whirlpool->pos[1] - m->pos[1]);
+            d[2]                   = (whirlpool->pos[2] - m->pos[2]);
+            f32 lateralDist        = sqrtf(sqr(d[0]) + sqr(d[2]));
+            f32 distance           = sqrtf(sqr(lateralDist) + sqr(d[1]));
+            Angle pitchToWhirlpool = atan2s(lateralDist, d[1]);
+            Angle yawToWhirlpool   = atan2s(d[2], d[0]);
+            yawToWhirlpool -= (Angle)(0x2000 * (1000.0f / (distance + 1000.0f)));
             if (whirlpool->strength >= 0) {
                 if ((gCurrLevelNum == LEVEL_DDD) && (gCurrAreaIndex == 2)) whirlpoolRadius = 4000.0f;
                 if ((distance >= 26.0f) && (distance < whirlpoolRadius)) strength = (whirlpool->strength * (1.0f - (distance / whirlpoolRadius)));
@@ -187,8 +187,8 @@ static u32 perform_water_step(struct MarioState *m) {
     u32 stepResult;
     Vec3f nextPos;
     Vec3f step;
-    // s16 floorYaw;
-    // s16 floorTurn;
+    // Angle floorYaw;
+    // Angle floorTurn;
     struct Object *marioObj = m->marioObj;
     vec3f_copy(step, m->vel);
     if (m->action & ACT_FLAG_SWIMMING) apply_water_current(m, step);
@@ -258,7 +258,7 @@ static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
 }
 
 static void update_swimming_yaw(struct MarioState *m) {
-    s16 targetYawVel = -(s16)(10.0f * m->controller->stickX);
+    Angle targetYawVel = -(Angle)(10.0f * m->controller->stickX);
     if (targetYawVel > 0x0) {
         if (m->angleVel[1] < 0x0) {
             m->angleVel[1] += 0x40;
@@ -281,8 +281,8 @@ static void update_swimming_yaw(struct MarioState *m) {
 }
 
 static void update_swimming_pitch(struct MarioState *m) {
-    s16 targetPitch = -(s16)(252.0f * m->controller->stickY);
-    s16 pitchVel    = ((m->faceAngle[0] < 0x0) ? 0x100 : 0x200);
+    Angle targetPitch = -(Angle)(252.0f * m->controller->stickY);
+    Angle pitchVel    = ((m->faceAngle[0] < 0x0) ? 0x100 : 0x200);
     if (m->faceAngle[0] < targetPitch) {
         if ((m->faceAngle[0] += pitchVel) > targetPitch) m->faceAngle[0] = targetPitch;
     } else if (m->faceAngle[0] > targetPitch) {
@@ -291,7 +291,7 @@ static void update_swimming_pitch(struct MarioState *m) {
 }
 
 static void common_idle_step(struct MarioState *m, s32 animation, s32 animSpeed) {
-    s16 *val = &m->marioBodyState->headAngle[0];
+    Angle *val = &m->marioBodyState->headAngle[0];
     update_swimming_yaw(m);
     update_swimming_pitch(m);
     update_swimming_speed(m, MIN_SWIM_SPEED);
@@ -385,7 +385,7 @@ static void surface_swim_bob(struct MarioState *m) {
 }
 
 static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
-    s16 floorPitch;
+    Angle floorPitch;
     update_swimming_yaw(m);
     update_swimming_pitch(m);
     update_swimming_speed(m, (swimStrength / 10.0f));
@@ -891,7 +891,7 @@ static s32 act_water_plunge(struct MarioState *m) {
 static s32 act_caught_in_whirlpool(struct MarioState *m) {
     f32 sinAngleChange, cosAngleChange;
     f32 newDistance;
-    s16 angleChange;
+    Angle angleChange;
     struct Object *marioObj  = m->marioObj;
     struct Object *whirlpool = m->usedObj;
     f32 dx = (m->pos[0] - whirlpool->oPosX);
@@ -906,7 +906,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
         angleChange = 0x1800;
     } else if (distance < 256.0f) {
         newDistance = (distance - (12.0f - (distance / 32.0f)));
-        angleChange = (s16)(0x1C00 - (distance * 20.0f));
+        angleChange = (Angle)(0x1C00 - (distance * 20.0f));
     } else {
         newDistance = (distance - 4.0f);
         angleChange = 0x800;
@@ -956,7 +956,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 32.0f) m->forwardVel = 32.0f;
-    m->faceAngle[1] = (m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
+    m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
     m->slideVelX    = (m->forwardVel * sins(m->faceAngle[1]));
     m->slideVelZ    = (m->forwardVel * coss(m->faceAngle[1]));
     m->vel[0]       =  m->slideVelX;
@@ -968,9 +968,9 @@ static s32 update_metal_water_jump_speed(struct MarioState *m) {
     f32 waterSurface = (m->waterLevel - 100);
     if ((m->vel[1] > 0.0f) && (m->pos[1] > waterSurface)) return TRUE;
     if (m->input & INPUT_NONZERO_ANALOG) {
-        s16 intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
-        m->forwardVel   += (0.8f  * coss(intendedDYaw));
-        m->faceAngle[1] += (0x200 * sins(intendedDYaw));
+        Angle intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
+        m->forwardVel     += (0.8f  * coss(intendedDYaw));
+        m->faceAngle[1]   += (0x200 * sins(intendedDYaw));
     } else {
         m->forwardVel = approach_f32(m->forwardVel, 0.0f, 0.25f, 0.25f);
     }

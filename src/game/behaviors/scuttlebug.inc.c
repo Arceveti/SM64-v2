@@ -60,7 +60,7 @@ void bhv_scuttlebug_loop(void) {
             break;
         case SCUTTLEBUG_SUB_ACT_HIT_WALL:
             o->oForwardVel = 5.0f;
-            if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) o->oSubAction = SCUTTLEBUG_SUB_ACT_MOVING;
+            if ((Angle) o->oMoveAngleYaw == (Angle) o->oAngleToMario) o->oSubAction = SCUTTLEBUG_SUB_ACT_MOVING;
             if (o->oPosY < o->oHomeY - 200.0f) obj_mark_for_deletion(o);
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
             break;

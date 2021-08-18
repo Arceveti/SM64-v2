@@ -46,9 +46,10 @@
  */
 struct Skybox {
     /// The camera's yaw, from 0 to 65536, which maps to 0 to 360 degrees
+    //! s16/Angle?
     u16 yaw;
     /// The camera's pitch, which is bounded by +-16384, which maps to -90 to 90 degrees
-    s16 pitch;
+    Angle pitch;
     /// The skybox's X position in world space
     f32 scaledX;
     /// The skybox's Y position in world space

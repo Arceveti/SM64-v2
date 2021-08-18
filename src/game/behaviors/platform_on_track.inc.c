@@ -174,25 +174,25 @@ static void platform_on_track_act_move_along_track(void) {
 
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
-            s16 targetFaceYaw = o->oMoveAngleYaw + 0x4000;
-            s16 yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
+            Angle targetFaceYaw = o->oMoveAngleYaw + 0x4000;
+            Angle yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
 
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);
             obj_face_yaw_approach(targetFaceYaw, yawSpeed);
-            o->oAngleVelYaw = (s16) o->oFaceAngleYaw - initialAngle;
+            o->oAngleVelYaw = (Angle) o->oFaceAngleYaw - initialAngle;
         }
 
         // Turn face roll and compute roll vel
         if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_ROLL)) {
-            s16 rollSpeed = (abs_angle_diff(o->oMoveAnglePitch, o->oFaceAngleRoll) / 20);
+            Angle rollSpeed = (abs_angle_diff(o->oMoveAnglePitch, o->oFaceAngleRoll) / 20);
 
             initialAngle = o->oFaceAngleRoll;
             clamp_s16(&rollSpeed, 100, 500);
             //! If the platform is moving counterclockwise upward or
             //  clockwise downward, this will be backward
             obj_face_roll_approach(o->oMoveAnglePitch, rollSpeed);
-            o->oAngleVelRoll = (s16) o->oFaceAngleRoll - initialAngle;
+            o->oAngleVelRoll = (Angle) o->oFaceAngleRoll - initialAngle;
         }
     }
 
@@ -252,7 +252,7 @@ static void platform_on_track_rock_ski_lift(void) {
  */
 void bhv_platform_on_track_update(void) {
 #ifdef CONTROLLABLE_PLATFORM_SPEED
-    s16 targetRoll; // visually pitch, since these platforms technically move sideways
+    Angle targetRoll; // visually pitch, since these platforms technically move sideways
 #endif
     switch (o->oAction) {
         case PLATFORM_ON_TRACK_ACT_INIT:             platform_on_track_act_init();             break;

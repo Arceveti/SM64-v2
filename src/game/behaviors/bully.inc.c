@@ -195,7 +195,7 @@ void bhv_bully_loop(void) {
     set_object_visibility(o, 3000);
 }
 
-void big_bully_spawn_minion(s32 x, s32 y, s32 z, s16 ry) {
+void big_bully_spawn_minion(s32 x, s32 y, s32 z, Angle ry) {
     struct Object *bully     = spawn_object_abs_with_rot(o, 0, MODEL_BULLY, bhvSmallBully, x, y, z, 0x0, ry, 0x0);
     bully->oBullySubtype     = BULLY_STYPE_MINION;
     bully->oBehParams2ndByte = BULLY_BP_SIZE_SMALL;

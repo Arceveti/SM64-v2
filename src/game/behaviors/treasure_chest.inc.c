@@ -87,7 +87,7 @@ void bhv_treasure_chest_bottom_loop(void) {
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
-void spawn_treasure_chest(s8 param, s32 x, s32 y, s32 z, s16 ry) {
+void spawn_treasure_chest(s8 param, s32 x, s32 y, s32 z, Angle ry) {
     struct Object *chestBaseObj;
     chestBaseObj = spawn_object_abs_with_rot(o, 0, MODEL_TREASURE_CHEST_BASE, bhvTreasureChestBottom, x, y, z, 0x0, ry, 0x0);
     chestBaseObj->oBehParams2ndByte = param;

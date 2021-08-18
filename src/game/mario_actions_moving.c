@@ -39,7 +39,7 @@ struct LandingAction sBackflipLandAction     = {         4,               0,    
 Mat4 sFloorAlignMatrix[2];
 
 s16 tilt_body_running(struct MarioState *m) {
-    s16 pitch = 0x0;
+    Angle pitch = 0x0;
     if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = find_floor_slope(m, 0x0);
     return (-pitch * m->forwardVel / 40.0f);
 }
@@ -89,7 +89,7 @@ void check_ledge_climb_down(struct MarioState *m) {
     struct Surface *floor;
     f32 floorHeight;
     struct Surface *wall;
-    s16 wallAngle, wallDYaw;
+    Angle wallAngle, wallDYaw;
     if (m->forwardVel < 10.0f) {
         wallCols.x       = m->pos[0];
         wallCols.y       = m->pos[1];
@@ -177,10 +177,10 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 lossFactor;
     f32 accel;
     f32 oldSpeed, newSpeed;
-    s32 stopped      = FALSE;
-    s16 intendedDYaw = (m->intendedYaw - m->slideYaw);
-    f32 forward      = coss(intendedDYaw);
-    f32 sideward     = sins(intendedDYaw);
+    s32 stopped        = FALSE;
+    Angle intendedDYaw = (m->intendedYaw - m->slideYaw);
+    f32 forward        = coss(intendedDYaw);
+    f32 sideward       = sins(intendedDYaw);
     f32 slideVelXModifier, slideVelZModifier;
     //! 10k glitch
     if (forward < 0.0f && m->forwardVel >= 0.0f) forward *= 0.5f + 0.5f * m->forwardVel / 100.0f;
@@ -278,7 +278,7 @@ void update_shell_speed(struct MarioState *m) {
     }
     if (m->forwardVel >  64.0f) m->forwardVel =  64.0f;
     if (m->forwardVel < -64.0f) m->forwardVel = -64.0f;
-    m->faceAngle[1] = (m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
+    m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
     apply_slope_accel(m);
 }
 
@@ -308,7 +308,7 @@ s32 update_decelerating_speed(struct MarioState *m) {
 void update_walking_speed(struct MarioState *m) {
     f32 maxTargetSpeed, targetSpeed;
 #ifdef GROUND_TURN_FIX
-    s16 turnRange;
+    Angle turnRange;
 #endif
     maxTargetSpeed = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 24.0f : 32.0f);
     targetSpeed    = m->intendedMag < maxTargetSpeed ? m->intendedMag : maxTargetSpeed;
@@ -337,12 +337,12 @@ void update_walking_speed(struct MarioState *m) {
         } else if (turnRange > 0xFFF) {
             turnRange = 0xFFF;
         }
-        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, turnRange, turnRange);
+        m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, turnRange, turnRange);
     }
 #elif SUPER_RESPONSIVE_CONTROLS
     m->faceAngle[1] = m->intendedYaw;
 #else
-    m->faceAngle[1] = (m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
+    m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
 #endif
     apply_slope_accel(m);
 }
@@ -394,7 +394,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
     s32 animSpeed;
     struct Object *marioObj = m->marioObj;
     s32 loop = TRUE;
-    s16 targetPitch         = 0x0;
+    Angle targetPitch         = 0x0;
     f32 intendedSpeed;
     intendedSpeed           = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
     if (intendedSpeed < 4.0f) intendedSpeed = 4.0f;
@@ -458,7 +458,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
         }
     }
 
-    marioObj->oMarioWalkingPitch  = (s16) approach_s32(marioObj->oMarioWalkingPitch, targetPitch, 0x800, 0x800);
+    marioObj->oMarioWalkingPitch  = (Angle) approach_s32(marioObj->oMarioWalkingPitch, targetPitch, 0x800, 0x800);
     marioObj->header.gfx.angle[0] = marioObj->oMarioWalkingPitch;
 }
 
@@ -515,7 +515,7 @@ void anim_and_audio_for_heavy_walk(struct MarioState *m) {
 }
 
 void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
-    s16 wallAngle, dWallAngle;
+    Angle wallAngle, dWallAngle;
     f32 dx = (m->pos[0] - startPos[0]);
     f32 dz = (m->pos[2] - startPos[2]);
     f32 movedDistance = sqrtf(sqr(dx) + sqr(dz));
@@ -543,15 +543,15 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
     }
 }
 
-void tilt_body_walking(struct MarioState *m, s16 startYaw) {
+void tilt_body_walking(struct MarioState *m, Angle startYaw) {
     struct MarioBodyState *marioBodyState = m->marioBodyState;
     s16 animID = m->marioObj->header.gfx.animInfo.animID;
     if (animID == MARIO_ANIM_WALKING || animID == MARIO_ANIM_RUNNING) {
-        s16 dYaw = m->faceAngle[1] - startYaw;
+        Angle dYaw = (m->faceAngle[1] - startYaw);
         //! (Speed Crash) These casts can cause a crash if (dYaw * forwardVel / 12) or
         //! (forwardVel * 170) exceed or equal 2^31.
-        s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel /  12.0f);
-        s16 nextBodyPitch = (s16)(       m->forwardVel * 170.0f);
+        Angle nextBodyRoll = -(Angle)(dYaw * m->forwardVel /  12.0f);
+        Angle nextBodyPitch = (Angle)(       m->forwardVel * 170.0f);
         if (nextBodyRoll  >  0x1555) nextBodyRoll  =  0x1555;
         if (nextBodyRoll  < -0x1555) nextBodyRoll  = -0x1555;
         if (nextBodyPitch >  0x1555) nextBodyPitch =  0x1555;
@@ -564,15 +564,15 @@ void tilt_body_walking(struct MarioState *m, s16 startYaw) {
     }
 }
 
-void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
+void tilt_body_ground_shell(struct MarioState *m, Angle startYaw) {
     struct MarioBodyState *marioBodyState = m->marioBodyState;
     struct Object *marioObj = m->marioObj;
-    s16 dYaw = m->faceAngle[1] - startYaw;
+    Angle dYaw = m->faceAngle[1] - startYaw;
     //! (Speed Crash) These casts can cause a crash if (dYaw * forwardVel / 12) or
     //! (forwardVel * 170) exceed or equal 2^31. Harder (if not impossible to do)
     //! while on a Koopa Shell making this less of an issue.
-    s16 nextBodyRoll = -(s16)(dYaw * m->forwardVel /  12.0f);
-    s16 nextBodyPitch = (s16)(       m->forwardVel * 170.0f);
+    Angle nextBodyRoll = -(Angle)(dYaw * m->forwardVel /  12.0f);
+    Angle nextBodyPitch = (Angle)(       m->forwardVel * 170.0f);
     if (nextBodyRoll  >  0x1800) nextBodyRoll  =  0x1800;
     if (nextBodyRoll  < -0x1800) nextBodyRoll  = -0x1800;
     if (nextBodyPitch >  0x1000) nextBodyPitch =  0x1000;
@@ -586,7 +586,7 @@ void tilt_body_ground_shell(struct MarioState *m, s16 startYaw) {
 
 s32 act_walking(struct MarioState *m) {
     Vec3f startPos;
-    s16 startYaw = m->faceAngle[1];
+    Angle startYaw = m->faceAngle[1];
     mario_drop_held_object(m);
     if (should_begin_sliding(m)      ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
     if (m->input & INPUT_FIRST_PERSON) return begin_braking_action(m);
@@ -891,7 +891,7 @@ s32 act_burning_ground(struct MarioState *m) {
     if (m->forwardVel <  8.0f) m->forwardVel =  8.0f;
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
-    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x600, 0x600);
+    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x600, 0x600);
     apply_slope_accel(m);
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) set_mario_action(m, ACT_BURNING_FALL, 0);
     set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, (s32)((m->forwardVel / 2.0f) * 0x10000));
@@ -911,7 +911,7 @@ s32 act_burning_ground(struct MarioState *m) {
 }
 
 void tilt_body_butt_slide(struct MarioState *m) {
-    s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
+    Angle intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
     m->marioBodyState->torsoAngle[0] = (s32)( (5461.3335f * (m->intendedMag / 32.0f) * coss(intendedDYaw)));
     m->marioBodyState->torsoAngle[2] = (s32)(-(5461.3335f * (m->intendedMag / 32.0f) * sins(intendedDYaw)));
 }
@@ -946,10 +946,10 @@ void common_slide_action(struct MarioState *m, u32 endAction, u32 airAction, s32
                 if (m->forwardVel > 16.0f) m->particleFlags |= PARTICLE_VERTICAL_STAR;
                 slide_bonk(m, ACT_GROUND_BONK, endAction);
             } else if (m->wall != NULL) {
-                s16 wallAngle  = atan2s(m->wall->normal.z, m->wall->normal.x);
-                f32 slideSpeed = sqrtf((m->slideVelX * m->slideVelX) + (m->slideVelZ * m->slideVelZ));
+                Angle wallAngle  = atan2s(m->wall->normal.z, m->wall->normal.x);
+                f32 slideSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
                 if ((slideSpeed *= 0.9f) < 4.0f) slideSpeed = 4.0f;
-                m->slideYaw = (wallAngle - ((s16)(m->slideYaw - wallAngle) + 0x8000));
+                m->slideYaw = (wallAngle - ((Angle)(m->slideYaw - wallAngle) + 0x8000));
                 m->vel[0] = m->slideVelX = (slideSpeed * sins(m->slideYaw));
                 m->vel[2] = m->slideVelZ = (slideSpeed * coss(m->slideYaw));
             }

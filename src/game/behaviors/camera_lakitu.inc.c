@@ -55,8 +55,8 @@ static void camera_lakitu_intro_act_spawn_cloud(void) {
  * Circle down to Mario, show the dialog, then fly away.
  */
 static void camera_lakitu_intro_act_show_dialog(void) {
-    s16 targetMovePitch = 0x0;
-    s16 targetMoveYaw   = 0x0;
+    Angle targetMovePitch = 0x0;
+    Angle targetMoveYaw   = 0x0;
     cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY);
     // Face toward Mario
     o->oFaceAnglePitch  = obj_turn_pitch_toward_mario(120.0f, 0x0);
@@ -74,8 +74,8 @@ static void camera_lakitu_intro_act_show_dialog(void) {
                 targetMoveYaw   = o->oAngleToMario;
             } else {
                 // Stay moving in a circle around Mario
-                s16 turnAmount = (0x4000 - atan2s(o->oCameraLakituCircleRadius, o->oDistanceToMario - o->oCameraLakituCircleRadius));
-                if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) turnAmount = -turnAmount;
+                Angle turnAmount = (0x4000 - atan2s(o->oCameraLakituCircleRadius, o->oDistanceToMario - o->oCameraLakituCircleRadius));
+                if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) turnAmount = -turnAmount;
                 targetMoveYaw   = (o->oAngleToMario + turnAmount);
                 targetMovePitch = o->oFaceAnglePitch;
                 approach_f32_ptr(&o->oCameraLakituCircleRadius, 200.0f, 50.0f);

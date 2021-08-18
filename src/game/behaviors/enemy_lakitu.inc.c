@@ -47,7 +47,7 @@ static void enemy_lakitu_update_vel_y(f32 offsetY) {
  */
 static void enemy_lakitu_update_speed_and_angle(void) {
     f32 minSpeed;
-    s16 turnSpeed;
+    Angle turnSpeed;
 
     f32 distToMario = o->oDistanceToMario;
     if (distToMario > 500.0f) distToMario = 500.0f;
@@ -69,7 +69,7 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     }
 
     // Change move angle toward Mario faster when farther from Mario
-    turnSpeed = (s16)(distToMario * 2);
+    turnSpeed = (Angle)(distToMario * 2);
     clamp_s16(&turnSpeed, 0xC8, 0xFA0);
     cur_obj_rotate_yaw_toward(o->oAngleToMario, turnSpeed);
 }

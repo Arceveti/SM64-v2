@@ -200,11 +200,11 @@ s32 act_picking_up_bowser(struct MarioState *m) {
 }
 
 s32 act_holding_bowser(struct MarioState *m) {
-    s16 spin;
+    Angle spin;
     if (m->input & INPUT_B_PRESSED) {
 #ifdef LENIENT_BOWSER_THROWS
-        s16 camAngleToBomb;
-        s16 camYaw = (m->area->camera->yaw + 0x8000);
+        Angle camAngleToBomb;
+        Angle camYaw = (m->area->camera->yaw + 0x8000);
         struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, 0x4000, &camAngleToBomb);
         if ((bowserBomb != NULL) && ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) && (abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000)) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
 #endif
@@ -228,7 +228,7 @@ s32 act_holding_bowser(struct MarioState *m) {
             m->twirlYaw = m->intendedYaw;
         } else {
             // spin = acceleration
-            spin = (s16)(m->intendedYaw - m->twirlYaw) / 0x80;
+            spin = ((Angle)(m->intendedYaw - m->twirlYaw) / 0x80);
             if (spin < -0x80) spin = -0x80;
             if (spin >  0x80) spin =  0x80;
             m->twirlYaw    = m->intendedYaw;

@@ -29,7 +29,7 @@ s32 check_common_idle_cancels(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE ) return set_mario_action(          m, ACT_BEGIN_SLIDING   , 0);
     if (m->input & INPUT_FIRST_PERSON) return set_mario_action(          m, ACT_FIRST_PERSON    , 0);
     if (m->input & INPUT_NONZERO_ANALOG) {
-        m->faceAngle[1] = (s16) m->intendedYaw;
+        m->faceAngle[1] = (Angle) m->intendedYaw;
         return set_mario_action(m, ACT_WALKING, 0);
     }
     if (m->input & INPUT_B_PRESSED   ) return set_mario_action(          m, ACT_PUNCHING        , 0);
@@ -48,7 +48,7 @@ s32 check_common_hold_idle_cancels(struct MarioState *m) {
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(         m, ACT_HOLD_FREEFALL     , 0);
     if (m->input & INPUT_ABOVE_SLIDE   ) return set_mario_action(         m, ACT_HOLD_BEGIN_SLIDING, 0);
     if (m->input & INPUT_NONZERO_ANALOG) {
-        m->faceAngle[1] = (s16) m->intendedYaw;
+        m->faceAngle[1] = (Angle) m->intendedYaw;
         return set_mario_action(m, ACT_HOLD_WALKING, 0);
     }
     if (m->input & INPUT_B_PRESSED     ) return set_mario_action(         m, ACT_THROWING          , 0);

@@ -323,8 +323,8 @@ s32 set_mario_npc_dialog(s32 actionArg) {
 // 23: end
 s32 act_reading_npc_dialog(struct MarioState *m) {
     s32 headTurnAmount = 0;
-    s16 angleToNPC     = 0x0;
-    s16 turnSpeed      = 0x800;
+    Angle angleToNPC   = 0x0;
+    Angle turnSpeed    = 0x800;
 
     if (m->actionArg == MARIO_DIALOG_LOOK_UP  ) headTurnAmount = -1024;
     if (m->actionArg == MARIO_DIALOG_LOOK_DOWN) headTurnAmount =   384;
@@ -749,9 +749,8 @@ s32 act_unlocking_star_door(struct MarioState *m) {
 }
 
 s32 act_entering_star_door(struct MarioState *m) {
-    f32 targetDX;
-    f32 targetDZ;
-    s16 targetAngle;
+    f32 targetDX, targetDZ;
+    Angle targetAngle;
     if (m->actionTimer++ == 0) {
         m->interactObj->oInteractStatus = INT_STATUS_DOOR_PULLED;
         // ~30 degrees / 1/12 rot
@@ -1239,7 +1238,7 @@ s32 act_shocked(struct MarioState *m) {
 s32 act_squished(struct MarioState *m) {
     f32 squishAmount;
     f32 spaceUnderCeil;
-    s16 surfAngle;
+    Angle surfAngle;
     s32 underSteepSurf = FALSE; // seems to be responsible for setting velocity?
 #ifdef SMOOTH_SQUISH
     Vec3f nextScale;
@@ -1576,7 +1575,7 @@ static void jumbo_star_cutscene_flying(struct MarioState *m) {
     Vec3f targetPos;
     Vec3f targetD;
     f32 targetHyp;
-    s16 targetAngle;
+    Angle targetAngle;
     switch (m->actionState) {
         case 0:
             set_mario_animation(m, MARIO_ANIM_WING_CAP_FLY);

@@ -57,7 +57,7 @@ void water_bomb_cannon_act_active(void) { // act 1
             obj_move_pitch_approach(o->oWaterCannonTargetMovePitch, 0x80);
             obj_face_yaw_approach(  o->oWaterCannonTargetFaceYaw,  0x100);
 
-            if ((s16) o->oFaceAngleYaw == (s16) o->oWaterCannonTargetFaceYaw) {
+            if ((Angle) o->oFaceAngleYaw == (Angle) o->oWaterCannonTargetFaceYaw) {
                 if (o->oWaterCannonRotationTimer != 0) {
                     o->oWaterCannonRotationTimer--;
                 } else {

@@ -190,7 +190,7 @@ void bhv_toad_message_init(void) {
     }
 }
 
-static void star_door_unlock_spawn_particles(s16 angleOffset) {
+static void star_door_unlock_spawn_particles(Angle angleOffset) {
     struct Object *sparkleParticle = spawn_object(gCurrentObject, 0, bhvSparkleSpawn);
     sparkleParticle->oPosX += (100.0f * sins((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset));
     sparkleParticle->oPosZ += (100.0f * coss((gCurrentObject->oUnlockDoorStarTimer * 0x2800) + angleOffset));
@@ -210,7 +210,7 @@ void bhv_unlock_door_star_init(void) {
 }
 
 void bhv_unlock_door_star_loop(void) {
-    s16 prevYaw = gCurrentObject->oMoveAngleYaw;
+    Angle prevYaw = gCurrentObject->oMoveAngleYaw;
     // Speed up the star every frame
     if (gCurrentObject->oUnlockDoorStarYawVel < 0x2400) gCurrentObject->oUnlockDoorStarYawVel += 0x60;
     switch (gCurrentObject->oUnlockDoorStarState) {
@@ -247,13 +247,13 @@ void bhv_unlock_door_star_loop(void) {
     }
     // Checks if the angle has cycled back to 0.
     // This means that the code will execute when the star completes a full revolution.
-    if (prevYaw > (s16) gCurrentObject->oMoveAngleYaw) play_sound(SOUND_GENERAL_SHORT_STAR, gCurrentObject->header.gfx.cameraToObject); // Play a sound every time the star spins once
+    if (prevYaw > (Angle) gCurrentObject->oMoveAngleYaw) play_sound(SOUND_GENERAL_SHORT_STAR, gCurrentObject->header.gfx.cameraToObject); // Play a sound every time the star spins once
 }
 
 /**
  * Generate a display list that sets the correct blend mode and color for vanish Mario.
  */
-static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) {
+static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) { //! u8/Alpha type?
     Gfx *gfx;
     Gfx *gfxHead = NULL;
     if (alpha == 255) {
@@ -447,7 +447,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
     u16 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
-    s16 pitch, yaw;
+    Angle pitch, yaw;
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -553,7 +553,7 @@ Gfx *geo_switch_mario_cap_on_off(s32 callContext, struct GraphNode *node, UNUSED
  * Should be placed before a rotation node.
  */
 Gfx *geo_mario_rotate_wing_cap_wings(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
-    s16 rotX;
+    Angle rotX;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;

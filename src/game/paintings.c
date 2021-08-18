@@ -1093,7 +1093,7 @@ Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *con
         // Update the painting
         painting_update_floors(painting);
         // only paintings with 0 pitch are treated as walls
-        if ((s16)painting->pitch == 0x0) {
+        if ((Angle)painting->pitch == 0x0) {
             wall_painting_update(painting, paintingGroup);
         } else {
             floor_painting_update(painting, paintingGroup);

@@ -69,7 +69,7 @@ index 00000000..1ffe0288
 +    u32 color;
 +    Vec3s center;
 +    Vec3s bounds;
-+    s16 yaw;
++    Angle yaw;
 +};
 +
 +struct DebugBox sBoxes[MAX_DEBUG_BOXES];
@@ -138,7 +138,7 @@ index 00000000..1ffe0288
 + *
 + * If there are already MAX_DEBUG_BOXES boxes, does nothing.
 + */
-+static void append_debug_box(Vec3f center, Vec3f bounds, s16 yaw)
++static void append_debug_box(Vec3f center, Vec3f bounds, Angle yaw)
 +{
 +    if (sNumBoxes >= MAX_DEBUG_BOXES) {
 +        return;
@@ -179,7 +179,7 @@ index 00000000..1ffe0288
 +/**
 + * Draws a debug box from (center - bounds) to (center + bounds), rotating it by `yaw`
 + */
-+void debug_box_rot(Vec3f center, Vec3f bounds, s16 yaw)
++void debug_box_rot(Vec3f center, Vec3f bounds, Angle yaw)
 +{
 +    append_debug_box(center, bounds, yaw);
 +}
@@ -198,7 +198,7 @@ index 00000000..1ffe0288
 +/**
 + * Draws a debug box from pMin to pMax, rotating it in the xz-plane by `yaw`
 + */
-+void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, s16 yaw)
++void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, Angle yaw)
 +{
 +    Vec3f center, bounds;
 +
@@ -330,10 +330,10 @@ index 00000000..540c85e4
 +
 +void debug_box_color(u32 color);
 +void debug_box(Vec3f center, Vec3f bounds);
-+void debug_box_rot(Vec3f center, Vec3f bounds, s16 yaw);
++void debug_box_rot(Vec3f center, Vec3f bounds, Angle yaw);
 +
 +void debug_box_pos(Vec3f pMin, Vec3f pMax);
-+void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, s16 yaw);
++void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, Angle yaw);
 +
 +void render_debug_boxes(void);
 +

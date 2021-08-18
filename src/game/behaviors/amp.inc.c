@@ -60,7 +60,7 @@ static void homing_amp_appear_loop(void) {
     // to Lakitu cam. Homing amps will point themselves towards this point when appearing.
     f32 relativeTargetX = gLakituState.goalPos[0] - o->oPosX;
     f32 relativeTargetZ = gLakituState.goalPos[2] - o->oPosZ;
-    s16 targetYaw       = atan2s(relativeTargetZ, relativeTargetX);
+    Angle targetYaw     = atan2s(relativeTargetZ, relativeTargetX);
     o->oMoveAngleYaw    = approach_s16_symmetric(o->oMoveAngleYaw, targetYaw, 0x1000);
     // For 30 frames, make the amp "appear" by increasing its size by 0.03 each frame,
     // except for the first frame (when oTimer == 0) because the expression in cur_obj_scale

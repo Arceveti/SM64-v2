@@ -179,7 +179,7 @@ void small_penguin_act_walking(void) { // act 0
 
 void small_penguin_act_near_mother(void) { // act 5
     f32 distToMother;
-    s16 angleToMother;
+    Angle angleToMother;
     struct Object *motherPenguinObj = cur_obj_nearest_object_with_behavior(bhvTuxiesMother);
     if (motherPenguinObj != NULL) {
         o->oForwardVel = (o->oDistanceToMario < 1000.0f) ? 2.0f : 0.0f;

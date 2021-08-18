@@ -108,7 +108,7 @@ void envfx_cleanup_snow(void *snowParticleArray) {
  * Given two points, return the vector from one to the other represented
  * as Euler angles and a length
  */
-void orbit_from_positions(Vec3s from, Vec3s to, s16 *radius, s16 *pitch, s16 *yaw) {
+void orbit_from_positions(Vec3s from, Vec3s to, s16 *radius, Angle *pitch, Angle *yaw) {
     f32 dx  = (to[0] - from[0]);
     f32 dy  = (to[1] - from[1]);
     f32 dz  = (to[2] - from[2]);
@@ -122,7 +122,7 @@ void orbit_from_positions(Vec3s from, Vec3s to, s16 *radius, s16 *pitch, s16 *ya
  * Calculate the 'result' vector as the position of the 'origin' vector
  * with a vector added represented by radius, pitch and yaw.
  */
-void pos_from_orbit(Vec3s origin, Vec3s result, s16 radius, s16 pitch, s16 yaw) {
+void pos_from_orbit(Vec3s origin, Vec3s result, s16 radius, Angle pitch, Angle yaw) {
     result[0] = (origin[0] + (radius * coss(pitch) * sins(yaw)));
     result[1] = (origin[1] + (radius * sins(pitch)            ));
     result[2] = (origin[2] + (radius * coss(pitch) * coss(yaw)));
@@ -230,7 +230,7 @@ void envfx_update_snow_water(s32 snowCylinderX, s32 snowCylinderY, s32 snowCylin
  * Rotates the input vertices according to the give pitch and yaw. This
  * is needed for billboarding of particles.
  */
-void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, s16 pitch, s16 yaw) {
+void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, Angle pitch, Angle yaw) {
     f32 cosPitch = coss(pitch);
     f32 sinPitch = sins(pitch);
     f32 cosMYaw  = coss(-yaw);

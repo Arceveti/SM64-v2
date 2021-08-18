@@ -1,25 +1,19 @@
 
 void dorrie_raise_head(void) {
-    s16 startAngle;
-    f32 xzDisp;
-    f32 yDisp;
-
+    Angle startAngle;
+    f32 xzDisp, yDisp;
     startAngle = o->oDorrieNeckAngle;
-
-    o->oDorrieNeckAngle -= (s16) absf(370.0f * sins(o->oDorrieHeadRaiseSpeed));
-
-    xzDisp = 440.0f * (coss(o->oDorrieNeckAngle) - coss(startAngle));
-    yDisp  = 440.0f * (sins(o->oDorrieNeckAngle) - sins(startAngle));
-
-    set_mario_pos(gMarioObject->oPosX + xzDisp * sins(o->oMoveAngleYaw), gMarioObject->oPosY - yDisp,
+    o->oDorrieNeckAngle -= (Angle) absf(370.0f * sins(o->oDorrieHeadRaiseSpeed));
+    xzDisp = (440.0f * (coss(o->oDorrieNeckAngle) - coss(startAngle)));
+    yDisp  = (440.0f * (sins(o->oDorrieNeckAngle) - sins(startAngle)));
+    set_mario_pos(gMarioObject->oPosX + xzDisp * sins(o->oMoveAngleYaw), (gMarioObject->oPosY - yDisp),
                   gMarioObject->oPosZ + xzDisp * coss(o->oMoveAngleYaw));
 }
 
 void dorrie_act_move(void) {
-    s16 startYaw;
-    s16 targetYaw;
-    s16 targetSpeed;
-    s16 circularTurn;
+    Angle startYaw, targetYaw;
+    Angle targetSpeed;
+    Angle circularTurn;
 
     startYaw = o->oMoveAngleYaw;
     o->oDorrieNeckAngle = -0x26F4;
@@ -36,15 +30,15 @@ void dorrie_act_move(void) {
             targetYaw = gMarioObject->oFaceAngleYaw;
             targetSpeed = 10.0f;
         } else {
-            circularTurn = 0x4000 - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f);
-            if ((s16)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) circularTurn = -circularTurn;
+            circularTurn = (0x4000 - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f));
+            if ((Angle)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) circularTurn = -circularTurn;
 
             targetYaw = o->oDorrieAngleToHome + circularTurn;
             targetSpeed = 5.0f;
         }
 
         obj_forward_vel_approach(targetSpeed, 0.5f);
-        o->oDorrieYawVel = approach_s16_symmetric(o->oDorrieYawVel, (s16)(targetYaw - o->oMoveAngleYaw) / 50, 0x5);
+        o->oDorrieYawVel = approach_s16_symmetric(o->oDorrieYawVel, ((Angle)(targetYaw - o->oMoveAngleYaw) / 50), 0x5);
         o->oMoveAngleYaw += o->oDorrieYawVel;
     }
 

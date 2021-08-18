@@ -216,7 +216,7 @@ static void eyerok_hand_act_open(void) {
         o->collisionData = segmented_to_virtual(ssl_seg7_collision_eyerok_hand_open);
 
         if (o->parentObj->oEyerokBossNumAwakeHands != 2) {
-            s16 angleToMario = o->oAngleToMario;
+            Angle angleToMario = o->oAngleToMario;
             clamp_s16(&angleToMario, -0x3000, 0x3000);
             o->oMoveAngleYaw = angleToMario;
             o->oForwardVel   = 50.0f;
@@ -305,7 +305,7 @@ static void eyerok_hand_act_die(void) {
 
 static void eyerok_hand_act_retreat(void) {
     f32 distToHome  = cur_obj_lateral_dist_to_home();
-    s16 angleToHome = cur_obj_angle_to_home();
+    Angle angleToHome = cur_obj_angle_to_home();
 
     if ((distToHome -= 40.0f) < 0.0f) distToHome = 0.0f;
 
@@ -339,8 +339,7 @@ static void eyerok_hand_act_target_mario(void) {
 }
 
 static void eyerok_hand_act_smash(void) {
-    s16 dYawToMario;
-
+    Angle dYawToMario;
     if (o->oTimer > 20) {
         if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
             if (o->oGravity < -4.0f) {
@@ -352,7 +351,7 @@ static void eyerok_hand_act_smash(void) {
                  && dYawToMario > 0x2000
                  && dYawToMario < 0x6000) {
                     o->oAction = EYEROK_HAND_ACT_FIST_SWEEP;
-                    o->oMoveAngleYaw = ((s16)(o->oFaceAngleYaw - o->oAngleToMario) < 0) ? 0x4000 : -0x4000;
+                    o->oMoveAngleYaw = (((Angle)(o->oFaceAngleYaw - o->oAngleToMario) < 0) ? 0x4000 : -0x4000);
                 } else {
                     o->oAction = EYEROK_HAND_ACT_RETREAT;
                 }

@@ -49,8 +49,8 @@ void bubba_act_attack(void) {
         } else if (o->oBubbaLungeTimer < 15) {
             o->oAnimState = BUBBA_ANIM_STATE_OPEN_MOUTH;
         } else if (o->oBubbaLungeTimer == 20) {
-            s16 val06 = 10000 - (s16)(20.0f * (find_water_level(o->oPosX, o->oPosZ) - o->oPosY)); //! name?
-            o->oBubbaTargetPitch -= val06;
+            Angle targetPitch = (10000 - (Angle)(20.0f * (find_water_level(o->oPosX, o->oPosZ) - o->oPosY)));
+            o->oBubbaTargetPitch -= targetPitch;
             o->oMoveAnglePitch    = o->oBubbaTargetPitch;
             o->oBubbaMovePitch    = 40.0f;
             obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
@@ -63,9 +63,9 @@ void bubba_act_attack(void) {
         }
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) {
-            s16 val04 = 0x4000 - atan2s(800.0f, (o->oDistanceToMario - 800.0f)); //! name?
-            if ((s16)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) val04 = -val04;
-            o->oBubbaTargetYaw = (o->oAngleToMario + val04);
+            Angle targetDYaw = (0x4000 - atan2s(800.0f, (o->oDistanceToMario - 800.0f)));
+            if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) targetDYaw = -targetDYaw;
+            o->oBubbaTargetYaw = (o->oAngleToMario + targetDYaw);
         } else {
             o->oBubbaTargetYaw = o->oAngleToMario;
         }

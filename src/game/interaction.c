@@ -153,13 +153,13 @@ u32 get_mario_cap_flag(struct Object *capObject) {
  * Returns true if the passed in object has a moving angle yaw
  * in the angular range given towards Mario.
  */
-u32 object_facing_mario(struct MarioState *m, struct Object *o, s16 angleRange) {
+u32 object_facing_mario(struct MarioState *m, struct Object *o, Angle angleRange) {
     f32 dx           = (m->pos[0] - o->oPosX);
     f32 dz           = (m->pos[2] - o->oPosZ);
     return (abs_angle_diff(atan2s(dz, dx), o->oMoveAngleYaw) <= angleRange);
 }
 
-s16 mario_obj_angle_to_object(struct MarioState *m, struct Object *o) {
+Angle mario_obj_angle_to_object(struct MarioState *m, struct Object *o) {
     f32 dx = (o->oPosX - m->pos[0]);
     f32 dz = (o->oPosZ - m->pos[2]);
     return atan2s(dz, dx);
@@ -174,7 +174,7 @@ u32 determine_interaction(struct MarioState *m, struct Object *o) {
     u32 action      = m->action;
     if (action & ACT_FLAG_ATTACKING) {
         if ((action == ACT_PUNCHING) || (action == ACT_MOVE_PUNCHING) || (action == ACT_JUMP_KICK)) {
-            s16 dYawToObject = abs_angle_diff(mario_obj_angle_to_object(m, o), m->faceAngle[1]);
+            Angle dYawToObject = abs_angle_diff(mario_obj_angle_to_object(m, o), m->faceAngle[1]);
             // 120 degrees total, or 60 each way
             if ((m->flags & MARIO_PUNCHING) && (dYawToObject <= 0x2AAA)) interaction = INT_PUNCH;
             // 120 degrees total, or 60 each way
@@ -289,8 +289,8 @@ void mario_blow_off_cap(struct MarioState *m, f32 capSpeed) {
         capObject                = spawn_object(m->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
         capObject->oPosY        += ((m->action & ACT_FLAG_SHORT_HITBOX) ? 120.0f : 180.0f);
         capObject->oForwardVel   = capSpeed;
-        capObject->oMoveAngleYaw = (s16)(m->faceAngle[1] + 0x400);
-        if (m->forwardVel < 0.0f) capObject->oMoveAngleYaw = (s16)(capObject->oMoveAngleYaw + 0x8000);
+        capObject->oMoveAngleYaw = (Angle)(m->faceAngle[1] + 0x400);
+        if (m->forwardVel < 0.0f) capObject->oMoveAngleYaw = (Angle)(capObject->oMoveAngleYaw + 0x8000);
     }
 }
 
@@ -409,8 +409,8 @@ void hit_object_from_below(struct MarioState *m, UNUSED struct Object *o) {
 
 // UNUSED static u32 unused_determine_knockback_action(struct MarioState *m) {
 //     u32 bonkAction;
-//     s16 angleToObject = mario_obj_angle_to_object(m, m->interactObj);
-//     s16 facingDYaw = angleToObject - m->faceAngle[1];
+//     Angle angleToObject = mario_obj_angle_to_object(m, m->interactObj);
+//     Angle facingDYaw    = (angleToObject - m->faceAngle[1]);
 //     if (m->forwardVel < 16.0f) m->forwardVel = 16.0f;
 //     m->faceAngle[1] = angleToObject;
 //     if (facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
@@ -435,8 +435,8 @@ u32 determine_knockback_action(struct MarioState *m, UNUSED s32 arg) {
     u32 bonkAction;
     s16 terrainIndex    = 0; // 1 = air, 2 = water, 0 = default
     s16 strengthIndex   = 0;
-    s16 angleToObject   = mario_obj_angle_to_object(m, m->interactObj);
-    s16 facingDYaw      = abs_angle_diff(angleToObject, m->faceAngle[1]);
+    Angle angleToObject = mario_obj_angle_to_object(m, m->interactObj);
+    Angle facingDYaw    = abs_angle_diff(angleToObject, m->faceAngle[1]);
     s16 remainingHealth = (m->health - (0x40 * m->hurtCounter));
     if (m->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
         terrainIndex = 2;
@@ -506,7 +506,7 @@ void bounce_back_from_attack(struct MarioState *m, u32 interaction) {
 u32 should_push_or_pull_door(struct MarioState *m, struct Object *o) {
     f32 dx   = (o->oPosX - m->pos[0]);
     f32 dz   = (o->oPosZ - m->pos[2]);
-    s16 dYaw = abs_angle_diff(o->oMoveAngleYaw, atan2s(dz, dx));
+    Angle dYaw = abs_angle_diff(o->oMoveAngleYaw, atan2s(dz, dx));
     return ((dYaw <= 0x4000) ? 0x00000001 : 0x00000002); //! names
 }
 
@@ -1139,7 +1139,7 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
             f32 velConv = m->forwardVel; // conserve the velocity.
             struct Object *marioObj = m->marioObj;
             u32 lowSpeed            = (velConv <= 10.0f);
-            s16 angleToPole         = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
+            Angle angleToPole       = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
             if ((angleToPole < -0x2AAA) || (angleToPole > 0x2AAA)) return FALSE;
 #else
             u32 lowSpeed            = (m->forwardVel <= 10.0f);
@@ -1281,8 +1281,8 @@ u32 mario_can_talk(struct MarioState *m, u32 arg) {
 
 u32 check_read_sign(struct MarioState *m, struct Object *o) {
 #ifdef EASIER_DIALOG_TRIGGER
-    s16 facingDYaw   = ((s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1]);
-    s16 dAngleToSign = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
+    Angle facingDYaw   = ((Angle)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1]);
+    Angle dAngleToSign = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
     if (mario_can_talk(m, TRUE) && object_facing_mario(m, o, SIGN_RANGE)
         && (facingDYaw   >= -SIGN_RANGE) && (facingDYaw   <= SIGN_RANGE)
         && (dAngleToSign >= -SIGN_RANGE) && (dAngleToSign <= SIGN_RANGE)) {
@@ -1296,7 +1296,7 @@ u32 check_read_sign(struct MarioState *m, struct Object *o) {
         if (m->input & READ_MASK) {
 #else
     if ((m->input & READ_MASK) && mario_can_talk(m, 0) && object_facing_mario(m, o, SIGN_RANGE)) {
-        s16 facingDYaw = ((s16)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1]);
+        Angle facingDYaw = ((Angle)(o->oMoveAngleYaw + 0x8000) - m->faceAngle[1]);
         if ((facingDYaw >= -SIGN_RANGE) && (facingDYaw <= SIGN_RANGE)) {
 #endif
             f32 targetX                         = (o->oPosX + (105.0f * sins(o->oMoveAngleYaw)));

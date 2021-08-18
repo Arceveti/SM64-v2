@@ -402,7 +402,7 @@ void set_object_visibility(struct Object *obj, s32 dist) {
 s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 dist) {
     f32 homeDistX = (homeX - obj->oPosX);
     f32 homeDistZ = (homeZ - obj->oPosZ);
-    s16 angleTowardsHome = atan2s(homeDistZ, homeDistX);
+    Angle angleTowardsHome = atan2s(homeDistZ, homeDistX);
     if (is_point_within_radius_of_mario(homeX, y, homeZ, dist)) {
         return TRUE;
     } else {
@@ -415,7 +415,7 @@ s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 
  * Randomly displaces an objects home if RNG says to, and turns the object towards its home.
  */
 void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 homeY, f32 homeZ, s32 baseDisp) {
-    s16 angleToNewHome;
+    Angle angleToNewHome;
     f32 homeDistX, homeDistZ;
     f32 disp;
     if ((s32)(random_float() * 50.0f) == 0) {

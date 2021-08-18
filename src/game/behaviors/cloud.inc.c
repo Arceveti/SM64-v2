@@ -153,9 +153,9 @@ void bhv_cloud_part_update(void) {
         obj_mark_for_deletion(o);
     } else {
         f32 size = (2.0f / 3.0f * o->parentObj->header.gfx.scale[0]);
-        s16 angleFromCenter = (o->parentObj->oFaceAngleYaw + (0x10000 / 5 * o->oBehParams2ndByte));
+        Angle angleFromCenter = (o->parentObj->oFaceAngleYaw + (0x10000 / 5 * o->oBehParams2ndByte));
         // Takes 32 frames to cycle
-        s16 localOffsetPhase = (0x800 * gGlobalTimer) + (0x4000 * o->oBehParams2ndByte);
+        Angle localOffsetPhase = (0x800 * gGlobalTimer) + (0x4000 * o->oBehParams2ndByte);
         f32 localOffset;
         f32 cloudRadius;
         cur_obj_scale(size);

@@ -27,7 +27,7 @@ void bhv_bbh_tilting_trap_platform_loop(void) {
         // Make the platform return to the horizontal at a speed of
         // 200 angle units/frame, and clamp it to 0 if it's within 200 units of 0.
         o->oAngleVelPitch = 0x0;
-        if ((s16) o->oFaceAnglePitch > 0x0) {
+        if ((Angle) o->oFaceAnglePitch > 0x0) {
             if (o->oFaceAnglePitch < 0xC8) {
                 o->oFaceAnglePitch =  0x0;
             } else {

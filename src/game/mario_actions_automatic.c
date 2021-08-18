@@ -142,7 +142,7 @@ s32 act_holding_pole(struct MarioState *m) {
 s32 act_climbing_pole(struct MarioState *m) {
     s32 animSpeed;
     struct Object *marioObj = m->marioObj;
-    s16 cameraAngle = m->area->camera->yaw;
+    Angle cameraAngle = m->area->camera->yaw;
     if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || (m->health < 0x100)) {
         add_tree_leaf_particles(m);
         m->forwardVel = -8.0f;
@@ -160,7 +160,7 @@ s32 act_climbing_pole(struct MarioState *m) {
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
     marioObj->oMarioPolePos   += (m->controller->stickY / 8.0f);
     marioObj->oMarioPoleYawVel = 0x0;
-    m->faceAngle[1] = cameraAngle - approach_s32((s16)(cameraAngle - m->faceAngle[1]), 0x0, 0x400, 0x400);
+    m->faceAngle[1] = cameraAngle - approach_s32((Angle)(cameraAngle - m->faceAngle[1]), 0x0, 0x400, 0x400);
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         animSpeed = ((m->controller->stickY / 4.0f) * 0x10000);
         set_mario_anim_with_accel(m, MARIO_ANIM_CLIMB_UP_POLE, animSpeed);
@@ -306,7 +306,7 @@ s32 update_hang_moving(struct MarioState *m) {
 #ifdef TIGHTER_HANGING_CONTROLS
         m->faceAngle[1] = m->intendedYaw;
 #else
-        m->faceAngle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800);
+        m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800);
 #endif
     m->slideYaw  =                       m->faceAngle[1];
     m->slideVelX = (m->forwardVel * sins(m->faceAngle[1]));
@@ -441,7 +441,7 @@ void update_ledge_climb(struct MarioState *m, s32 animation, u32 endAction) {
 
 s32 act_ledge_grab(struct MarioState *m) {
     f32 heightAboveFloor;
-    s16 intendedDYaw     = (m->intendedYaw - m->faceAngle[1]);
+    Angle intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
     s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= 160.0f);
 #ifdef LEDGE_SIDLE
     s32 accel = 0x10000;
@@ -557,8 +557,8 @@ s32 act_grabbed(struct MarioState *m) {
 
 s32 act_in_cannon(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
-    s16 startFacePitch      = m->faceAngle[0];
-    s16 startFaceYaw        = m->faceAngle[1];
+    Angle startFacePitch    = m->faceAngle[0];
+    Angle startFaceYaw      = m->faceAngle[1];
     switch (m->actionState) {
         case 0:
             m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
@@ -582,8 +582,8 @@ s32 act_in_cannon(struct MarioState *m) {
             }
             break;
         case 2:
-            m->faceAngle[0]                -= (s16)(m->controller->stickY * 10.0f);
-            marioObj->oMarioCannonInputYaw -= (s16)(m->controller->stickX * 10.0f);
+            m->faceAngle[0]                -= (Angle)(m->controller->stickY * 10.0f);
+            marioObj->oMarioCannonInputYaw -= (Angle)(m->controller->stickX * 10.0f);
             if (m->faceAngle[0] > 0x38E3) m->faceAngle[0] = 0x38E3;
             if (m->faceAngle[0] <    0x0) m->faceAngle[0] =    0x0;
             if (marioObj->oMarioCannonInputYaw >  0x4000) marioObj->oMarioCannonInputYaw =  0x4000;
@@ -624,7 +624,7 @@ s32 act_tornado_twirling(struct MarioState *m) {
     f32 floorHeight;
     struct Object *marioObj = m->marioObj;
     struct Object *usedObj  = m->usedObj;
-    s16 prevTwirlYaw        = m->twirlYaw;
+    Angle prevTwirlYaw        = m->twirlYaw;
     f32 dx = ((m->pos[0] - usedObj->oPosX) * 0.95f);
     f32 dz = ((m->pos[2] - usedObj->oPosZ) * 0.95f);
     if (m->vel[1] < 60.0f) m->vel[1] += 1.0f;

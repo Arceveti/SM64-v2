@@ -3,10 +3,8 @@
 void bhv_end_birds_2_loop(void) {
     Vec3f pos;
     f32 dist;
-    s16 pitch, yaw;
-
-    gCurrentObject->oForwardVel = (random_float() * 10.0f) + 25.0f;
-
+    Angle pitch, yaw;
+    gCurrentObject->oForwardVel = ((random_float() * 10.0f) + 25.0f);
     switch (gCurrentObject->oAction) {
         case END_BIRDS_ACT_INIT:
             cur_obj_scale(0.7f);
@@ -20,6 +18,5 @@ void bhv_end_birds_2_loop(void) {
             if ((gCurrentObject->oEndBirdCutsceneVars9PointX == 0.0f) && (gCurrentObject->oTimer == 0)) cur_obj_play_sound_2(SOUND_GENERAL_BIRDS_FLY_AWAY);
             break;
     }
-
     cur_obj_set_pos_via_transform();
 }

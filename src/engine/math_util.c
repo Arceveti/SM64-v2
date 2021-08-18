@@ -152,8 +152,8 @@ inline f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) 
  * Angles *
  **********/
 
-inline s16 abs_angle_diff(s16 angle1, s16 angle2) {
-    s16 diff = (angle2 - angle1);
+inline Angle abs_angle_diff(Angle angle1, Angle angle2) {
+    Angle diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
     return absi(diff);
 }
@@ -401,7 +401,7 @@ void vec3f_normalize_max(Vec3f dest, f32 max) {
  * of that vector, as well as the yaw and pitch angles.
  * Basically it converts the direction to spherical coordinates.
  */
-void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *yaw) {
+void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
     register f32 dx   = (to[0] - from[0]);
     register f32 dy   = (to[1] - from[1]);
     register f32 dz   = (to[2] - from[2]);
@@ -415,7 +415,7 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, s16 *pitch, s16 *
  * Construct the 'to' point which is distance 'dist' away from the 'from' position,
  * and has the angles pitch and yaw.
  */
-void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, s16 pitch, s16 yaw) {
+void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle yaw) {
     to[0] = (from[0] + (dist * coss(pitch) * sins(yaw)));
     to[1] = (from[1] + (dist * sins(pitch)            ));
     to[2] = (from[2] + (dist * coss(pitch) * coss(yaw)));
@@ -580,7 +580,7 @@ void mtxf_translate(Mat4 dest, Vec3f b) {
  * at the position 'to'. The up-vector is assumed to be (0, 1, 0), but the 'roll'
  * angle allows a bank rotation of the camera.
  */
-void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, s16 roll) {
+void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     register f32 invLength;
     register f32 xColY, yColY, zColY;
     register f32 xColZ, yColZ, zColZ;
@@ -710,7 +710,7 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
  * 'position' is the position of the object in the world
  * 'angle' rotates the object while still facing the camera.
  */
-void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset) {
+void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffset) {
     dest[0][0] = coss(angle);
     dest[0][1] = sins(angle);
     dest[0][2] = 0;
@@ -741,8 +741,8 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, s16 angle, s32 zOffset)
  * 'position' is the position of the object in the world
  * 'angle' rotates the object while still facing the camera.
  */
-void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 zOffset) {
-    register s16 xrot, yrot;
+void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
+    register Angle xrot, yrot;
     register f32 cx, cy, cz;
     if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
         dest[3][0] = mtx[3][0];
@@ -781,7 +781,7 @@ void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, s16 roll, s32 z
  * 'yaw' is the angle which it should face
  * 'pos' is the object's position in the world
  */
-void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw) {
+void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     Vec3f lateralDir, leftDir, forwardDir;
     vec3f_set(                                  lateralDir, sins(yaw), 0x0, coss(yaw));
     vec3f_normalize(                     upDir                                       );
@@ -815,7 +815,7 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, s16 yaw) {
  * 'pos' is the object's position in the world
  * 'radius' is the distance from each triangle vertex to the center
  */
-void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, s16 yaw, f32 radius) {
+void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     struct Surface *floor;
     Vec3f point0, point1, point2;
     Vec3f forward;
@@ -991,7 +991,7 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
 /**
  * Set 'mtx' to a transformation matrix that rotates around the z axis.
  */
-void mtxf_rotate_xy(Mtx *mtx, s16 angle) {
+void mtxf_rotate_xy(Mtx *mtx, Angle angle) {
     Mat4 temp;
     mtxf_identity(temp);
     temp[0][0] = coss(angle);
@@ -1213,11 +1213,11 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
  * Trig Functions *
  ******************/
 
-s16 LENSIN(s16 length, s16 direction) {
+s16 LENSIN(s16 length, Angle direction) {
     return (length * sins(direction));
 }
 
-s16 LENCOS(s16 length, s16 direction) {
+s16 LENCOS(s16 length, Angle direction) {
     return (length * coss(direction));
 }
 
@@ -1239,7 +1239,7 @@ static u16 atan2_lookup(f32 y, f32 x) {
  * Compute the angle from (0, 0) to (x, y) as a s16. Given that terrain is in
  * the xz-plane, this is commonly called with (z, x) to get a yaw angle.
  */
-s16 atan2s(f32 y, f32 x) {
+Angle atan2s(f32 y, f32 x) {
     u16 ret;
     if (x >= 0) {
         if (y >= 0) {
