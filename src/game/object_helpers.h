@@ -10,7 +10,7 @@
 struct ChainSegment
 {
     Vec3f pos;
-    Vec3s angle;
+    Vec3a angle;
 };
 
 #define WATER_DROPLET_FLAG_RAND_ANGLE                   (1 << 1) // 0x02

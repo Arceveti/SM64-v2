@@ -234,7 +234,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
 #ifdef F3DEX_GBI_2
     Mtx lMtx;
-    guLookAtReflect(&lMtx, &lookAt, 0, 0, 0, /* eye */ 0, 0, 1, /* at */ 1, 0, 0 /* up */);
+    guLookAtReflect(&lMtx, &lookAt, 0.0f, 0.0f, 0.0f, /* eye */ 0.0f, 0.0f, 1.0f, /* at */ 1.0f, 0.0f, 0.0f /* up */);
 #endif
     if (enableZBuffer) {
         gDPPipeSync(       gDisplayListHead++           );
@@ -618,7 +618,7 @@ static void geo_process_background(struct GraphNodeBackground *node) {
  */
 static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     Mat4  matrix;
-    Vec3s rotation;
+    Vec3a rotation;
     Vec3f translation;
     Mtx   *matrixPtr = alloc_display_list(sizeof(*matrixPtr));
 

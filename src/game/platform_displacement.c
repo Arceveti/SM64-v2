@@ -156,7 +156,7 @@ void apply_mario_platform_displacement(void) {
 void apply_platform_displacement(u32 isMario, struct Object *platform) {
     Vec3f objPos, platformPos;
     Vec3f currentObjectOffset, relativeOffset, newObjectOffset;
-    Vec3s rotation;
+    Vec3a rotation;
     f32 displaceMatrix[4][4];
     vec3i_to_vec3s(rotation, &platform->oAngleVelVec);
     if (isMario) {

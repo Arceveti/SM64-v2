@@ -203,8 +203,8 @@ struct PlayerCameraState
      */
     /*0x00*/ MarioAction action;
     /*0x04*/ Vec3f pos;
-    /*0x10*/ Vec3s faceAngle;
-    /*0x16*/ Vec3s headRotation;
+    /*0x10*/ Vec3a faceAngle;
+    /*0x16*/ Vec3a headRotation;
     /*0x1C*/ s16 unused;
     /**
      * Set to nonzero when an event, such as entering a door, starting the credits, or throwing bowser,
@@ -421,7 +421,7 @@ struct CutsceneVariable
     s32 unused1;
     Vec3f point;
     Vec3f unusedPoint;
-    Vec3s angle;
+    Vec3a angle;
 };
 
 /**
@@ -500,9 +500,9 @@ struct LakituState
     /*0x3E*/ u8 filler3E[10];
 
     /*0x48*/ f32 focusDistance; // unused
-    /*0x4C*/ Angle oldPitch; // unused
-    /*0x4E*/ Angle oldYaw;   // unused
-    /*0x50*/ Angle oldRoll;  // unused
+    /*0x4C*/ Angle oldPitch;    // unused
+    /*0x4E*/ Angle oldYaw;      // unused
+    /*0x50*/ Angle oldRoll;     // unused
 
     /// The angular offsets added to lakitu's pitch, yaw, and roll
     /*0x52*/ Vec3s shakeMagnitude;
@@ -631,7 +631,7 @@ void start_cutscene(              struct Camera *c, u8 cutscene);
 u8   get_cutscene_from_mario_status(struct Camera *c);
 void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ);
 void approach_camera_height(      struct Camera *c, f32 goal, f32 inc);
-void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3s rotation);
+void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation);
 Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, Angle yaw);
 void set_fixed_cam_axis_sa_lobby(UNUSED s16 preset);
 s16  camera_course_processing(    struct Camera *c);

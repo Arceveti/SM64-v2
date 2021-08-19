@@ -652,7 +652,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
  * Build a matrix that rotates around the z axis, then the x axis, then the y
  * axis, and then translates.
  */
-void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3s rotate) {
+void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
     register f32 sx = sins(rotate[0]);
     register f32 cx = coss(rotate[0]);
     register f32 sy = sins(rotate[1]);

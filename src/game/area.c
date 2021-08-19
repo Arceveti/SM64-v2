@@ -347,15 +347,20 @@ void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
 }
 
 #ifdef ENVIRONMENT_SCREEN_TINT
-static const ColorRGB waterOverlayColor     = {   5,  80, 150};
-static const ColorRGB poisonGasOverlayColor = { 255, 255,   0};
+static const ColorRGB   waterOverlayColor = {   5,  80, 150};
+static const ColorRGB     gasOverlayColor = { 255, 255,   0};
+static const ColorRGB    sandOverlayColor = { 220, 169, 115};
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-static const ColorRGB damageOverlayColor    = { 255,   0,   0};
-static const ColorRGB shockedOverlayColor   = { 255, 238,   0};
+static const ColorRGB  damageOverlayColor = { 255,   0,   0};
+static const ColorRGB shockedOverlayColor = { 255, 238,   0};
 #endif
-#if defined(DAMAGE_SCREEN_TINT) || defined(LLL_VOLCANO_TINT)
-static const ColorRGB lavaOverlayColor      = { 143,   6,   0};
+#if defined(LLL_VOLCANO_TINT) || defined(AREA_SCREEN_TINT)
+static const ColorRGB    lavaOverlayColor = { 143,   6,   0};
+#endif
+#ifdef AREA_SCREEN_TINT
+static const ColorRGB    snowOverlayColor = { 255, 255, 255};
+static const ColorRGB    darkOverlayColor = {   0,   0,   0};
 #endif
 
 //! find a better place for this?
@@ -366,23 +371,32 @@ void vec_rgb_copy(ColorRGB dest, const ColorRGB src) {
     dest[2] = src[2];
 }
 
-//! use ColorRGBA? u8 type breaks water/gas level checking though
 void render_screen_overlay(void) {
-    if (gMarioState->area == NULL) return;
+    if (gMarioState->area == NULL || gMarioObject == NULL) return;
 #ifdef ENVIRONMENT_SCREEN_TINT
     ColorRGBA colorEnv = {0, 0, 0, 0};
-    f32 surfaceHeight  = -(gLakituState.oldPitch / 90.0f);
-    f32 waterLevel     = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 32.0f);
-    f32 gasLevel       = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 32.0f);
-    f32 camHeight      = gLakituState.pos[1];
+#ifdef PUPPYCAM
+    f32 camHeight      = ((80.0f * coss(gPuppyCam.pitch)) + 125.0f);
+#else
+    f32 camHeight      = (-(gLakituState.oldPitch / 90.0f) + 125.0f);
+#endif
+    f32 waterLevel     = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + camHeight);
+    f32 gasLevel       = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + camHeight);
+#ifdef PUPPYCAM
+    camHeight          = gPuppyCam.pos[1];
+#else
+    camHeight          = gLakituState.pos[1];
+#endif
     if (camHeight < waterLevel) {
-        if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, waterOverlayColor); 
+        if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, waterOverlayColor);
     } else if (camHeight < gasLevel) {
-        if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, poisonGasOverlayColor);
+        if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv,   gasOverlayColor);
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
-        if ((colorEnv[3] = CLAMP((64 - ((s32)(gMarioState->pos[1]) >> 6)), 0, 64)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
+        if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
 #endif 
+    } else if (gMarioState->action == ACT_QUICKSAND_DEATH) {
+        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) vec_rgb_copy(colorEnv, sandOverlayColor);
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT
@@ -390,16 +404,9 @@ void render_screen_overlay(void) {
     if ((gMarioState->health < 0x100) && (gMarioState->hurtShadeAlpha > 0)) {
         gMarioState->hurtShadeAlpha--;
     } else if (gMarioState->hurtShadeAlpha >= 4) {
-        damageColor[3] = gMarioState->hurtShadeAlpha;
-        if (mario_is_shocked(gMarioState)) {
-            vec_rgb_copy(damageColor, shockedOverlayColor);
-        } else if (mario_is_burning(gMarioState)) {
-            vec_rgb_copy(damageColor, lavaOverlayColor);
-        } else {
-            vec_rgb_copy(damageColor, damageOverlayColor);
-        }
         gMarioState->hurtShadeAlpha -= 4;
     }
+    if ((damageColor[3] = gMarioState->hurtShadeAlpha) > 0) vec_rgb_copy(damageColor, (mario_is_shocked(gMarioState) ? shockedOverlayColor : damageOverlayColor));
 #endif
 #if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
     ColorRGBA color;

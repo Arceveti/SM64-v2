@@ -72,10 +72,12 @@ typedef u32 MarioStep;
 typedef u16 ModelID;
 typedef s32 DialogID;
 typedef uintptr_t BehaviorScript;
+typedef u8 uchar;
 typedef u8 Color;
 typedef Color Alpha;
 typedef Color Texture;
-typedef u8 uchar;
+
+typedef Angle Vec3a[3];
 
 typedef Color ColorRGB[3];
 typedef Color ColorRGBA[4];
@@ -152,7 +154,7 @@ struct GraphNodeObject
     /*0x14*/ struct GraphNode *sharedChild;
     /*0x18*/ s8 areaIndex;
     /*0x19*/ s8 activeAreaIndex;
-    /*0x1A*/ Vec3s angle;
+    /*0x1A*/ Vec3a angle;
     /*0x20*/ Vec3f pos;
     /*0x2C*/ Vec3f scale;
     /*0x38*/ struct AnimInfo animInfo;
@@ -281,8 +283,8 @@ struct MarioBodyState
     /*0x08*/ s16         modelState;
     /*0x0A*/ s8          grabPos;
     /*0x0B*/ u8          punchState; /// 2 bits for type of punch, 6 bits for punch animation timer
-    /*0x0C*/ Vec3s       torsoAngle;
-    /*0x12*/ Vec3s       headAngle;
+    /*0x0C*/ Vec3a       torsoAngle;
+    /*0x12*/ Vec3a       headAngle;
     /*0x18*/ Vec3f       heldObjLastPosition; /// also known as HOLP
     u8 padding[4];
 };
@@ -306,8 +308,8 @@ struct MarioState
     /*0x29*/ u8             framesSinceB;
     /*0x2A*/ u8             wallKickTimer;
     /*0x2B*/ u8             doubleJumpTimer;
-    /*0x2C*/ Vec3s          faceAngle;
-    /*0x32*/ Vec3s          angleVel;
+    /*0x2C*/ Vec3a          faceAngle;
+    /*0x32*/ Vec3a          angleVel;
     /*0x38*/ Angle          slideYaw;
     /*0x3A*/ Angle          twirlYaw;
     /*0x3C*/ Vec3f          pos;

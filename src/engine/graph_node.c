@@ -165,7 +165,7 @@ struct GraphNodeCamera *init_graph_node_camera(struct AllocOnlyPool *pool,
 struct GraphNodeTranslationRotation *
 init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
                                      struct GraphNodeTranslationRotation *graphNode, DrawingLayer drawingLayer,
-                                     void *displayList, Vec3s translation, Vec3s rotation) {
+                                     void *displayList, Vec3s translation, Vec3a rotation) {
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeTranslationRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
@@ -200,7 +200,7 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
 struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
                                                    struct GraphNodeRotation *graphNode,
                                                    DrawingLayer drawingLayer, void *displayList,
-                                                   Vec3s rotation) {
+                                                   Vec3a rotation) {
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
@@ -232,7 +232,7 @@ struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool,
  */
 struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
                                                struct GraphNodeObject *graphNode,
-                                               struct GraphNode *sharedChild, Vec3f pos, Vec3s angle,
+                                               struct GraphNode *sharedChild, Vec3f pos, Vec3a angle,
                                                Vec3f scale) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeObject));
     if (graphNode != NULL) {
@@ -531,7 +531,7 @@ void geo_reset_object_node(struct GraphNodeObject *graphNode) {
 /**
  * Initialize an object node using the given parameters
  */
-void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3s angle) {
+void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3a angle) {
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
     vec3f_copy(graphNode->pos, pos);
     vec3s_copy(graphNode->angle, angle);

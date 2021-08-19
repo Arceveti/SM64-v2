@@ -1171,7 +1171,7 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
     f32 distCamToFocus;
     f32 scaleToMario = 0.5f;
     Angle pitch, yaw;
-    Vec3s faceAngle;
+    Vec3a faceAngle;
     struct Surface *ceiling;
     Vec3f basePos;
     play_camera_buzz_if_c_sideways();
@@ -1515,14 +1515,14 @@ Angle update_slide_camera(struct Camera *c) {
         vec3f_get_dist_and_angle(c->pos, c->focus, &distCamToFocus, &camPitch, &camYaw);
         pitchScale = (distCamToFocus - maxCamDist + sLakituDist) / 10000.0f;
         if (pitchScale > 1.0f) pitchScale = 1.0f;
-        camPitch += 0x1000 * pitchScale;
+        camPitch += (0x1000 * pitchScale);
         vec3f_set_dist_and_angle(c->pos, c->focus, distCamToFocus, camPitch, camYaw);
     // Slide mode
     } else {
         vec3f_set_dist_and_angle(c->focus, c->pos, maxCamDist + sLakituDist, camPitch, camYaw);
         sStatusFlags |= CAM_FLAG_BLOCK_SMOOTH_MOVEMENT;
         // Stay above the slide floor
-        floorHeight = find_floor(c->pos[0], c->pos[1] + 200.0f, c->pos[2], &floor) + 125.0f;
+        floorHeight = (find_floor(c->pos[0], (c->pos[1] + 200.0f), c->pos[2], &floor) + 125.0f);
         if (c->pos[1] < floorHeight) c->pos[1] = floorHeight;
         // Stay closer than maxCamDist
         vec3f_get_dist_and_angle(c->focus, c->pos, &distCamToFocus, &camPitch, &camYaw);
@@ -1628,8 +1628,8 @@ Angle update_default_camera(struct Camera *c) {
         }
     } else if (xzDist < 250) {
         // Turn rapidly if very close to Mario
-        c->pos[0] += (250 - xzDist) * sins(yaw);
-        c->pos[2] += (250 - xzDist) * coss(yaw);
+        c->pos[0] += ((250 - xzDist) * sins(yaw));
+        c->pos[2] += ((250 - xzDist) * coss(yaw));
         if (sCSideButtonYaw == 0x0) {
             nextYawVel = 0x1000;
             sYawSpeed  = 0x0;
@@ -1651,7 +1651,7 @@ Angle update_default_camera(struct Camera *c) {
     } else {
         if (gMarioStates[0].forwardVel == 0.0f) {
             if (sStatusFlags & CAM_FLAG_COLLIDED_WITH_WALL) {
-                yawDir = ((yawGoal - yaw) / 0x100 >= 0x0)  ? -1 : 1;
+                yawDir = (((yawGoal - yaw) / 0x100 >= 0x0)  ? -1 : 1);
                 if ((sAvoidYawVel > 0x0 && yawDir > 0x0) || (sAvoidYawVel < 0 && yawDir < 0x0)) yawVel = nextYawVel;
             } else {
                 yawVel = nextYawVel;
@@ -1669,13 +1669,13 @@ Angle update_default_camera(struct Camera *c) {
     // Only zoom out if not obstructed by walls and Lakitu hasn't collided with any
     if (avoidStatus == 0 && !(sStatusFlags & CAM_FLAG_COLLIDED_WITH_WALL)) approach_f32_asymptotic_bool(&dist, zoomDist - 100.0f, 0.05f);
     vec3f_set_dist_and_angle(sMarioCamState->pos, cPos, dist, pitch, yaw);
-    cPos[1] += posHeight + 125.0f;
+    cPos[1] += (posHeight + 125.0f);
     // Move the camera away from walls and set the collision flag
     if (collide_with_walls(cPos, 10.0f, 80.0f) != 0) sStatusFlags |= CAM_FLAG_COLLIDED_WITH_WALL;
     c->focus[0]      = sMarioCamState->pos[0];
-    c->focus[1]      = sMarioCamState->pos[1] + 125.0f + focHeight;
+    c->focus[1]      = (sMarioCamState->pos[1] + 125.0f + focHeight);
     c->focus[2]      = sMarioCamState->pos[2];
-    marioFloorHeight = 125.0f + sMarioGeometry.currFloorHeight;
+    marioFloorHeight = (125.0f + sMarioGeometry.currFloorHeight);
     marioFloor       = sMarioGeometry.currFloor;
     camFloorHeight   = find_floor(cPos[0], cPos[1] + 50.0f, cPos[2], &cFloor) + 125.0f;
     for (scale = 0.1f; scale < 1.0f; scale += 0.2f) {
@@ -1698,7 +1698,7 @@ Angle update_default_camera(struct Camera *c) {
         waterHeight += 125.0f;
         distFromWater = waterHeight - marioFloorHeight;
         if (!(gCameraMovementFlags & CAM_MOVE_METAL_BELOW_WATER)) {
-            if (distFromWater > 800.0f &&  (sMarioCamState->action & ACT_FLAG_METAL_WATER)) gCameraMovementFlags |= CAM_MOVE_METAL_BELOW_WATER;
+            if (distFromWater > 800.0f &&  (sMarioCamState->action & ACT_FLAG_METAL_WATER)) gCameraMovementFlags |=  CAM_MOVE_METAL_BELOW_WATER;
         } else {
             if (distFromWater < 400.0f || !(sMarioCamState->action & ACT_FLAG_METAL_WATER)) gCameraMovementFlags &= ~CAM_MOVE_METAL_BELOW_WATER;
         }
@@ -1725,21 +1725,21 @@ Angle update_default_camera(struct Camera *c) {
     }
     if ((gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) && (sSelectionFlags & CAM_MODE_MARIO_ACTIVE)) {
         posHeight = 610.0f;
-        if (gCurrLevelArea == AREA_SSL_PYRAMID || gCurrLevelNum == LEVEL_CASTLE) posHeight /= 2;
+        if ((gCurrLevelArea == AREA_SSL_PYRAMID) || (gCurrLevelNum == LEVEL_CASTLE)) posHeight /= 2;
     }
     // Make Lakitu fly above the gas
     gasHeight = find_poison_gas_level(cPos[0], cPos[2]);
     if ((gasHeight != FLOOR_LOWER_LIMIT) && ((gasHeight += 130.0f) > c->pos[1])) c->pos[1] = gasHeight;
 
-    if (sMarioCamState->action & ACT_FLAG_HANGING || sMarioCamState->action == ACT_RIDING_HOOT) {
+    if ((sMarioCamState->action & ACT_FLAG_HANGING) || (sMarioCamState->action == ACT_RIDING_HOOT)) {
         camFloorHeight = sMarioCamState->pos[1] + 400.0f;
         if (c->mode == CAMERA_MODE_FREE_ROAM) camFloorHeight -= 100.0f;
         ceilHeight = CELL_HEIGHT_LIMIT;
         vec3f_copy(c->focus, sMarioCamState->pos);
     }
     if (sMarioCamState->action & ACT_FLAG_ON_POLE) {
-        camFloorHeight = gMarioStates[0].usedObj->oPosY + 125.0f;
-        if (sMarioCamState->pos[1] - 100.0f > camFloorHeight) camFloorHeight = sMarioCamState->pos[1] - 100.0f;
+        camFloorHeight = (gMarioStates[0].usedObj->oPosY + 125.0f);
+        if ((sMarioCamState->pos[1] - 100.0f) > camFloorHeight) camFloorHeight = (sMarioCamState->pos[1] - 100.0f);
         ceilHeight = CELL_HEIGHT_LIMIT;
         vec3f_copy(c->focus, sMarioCamState->pos);
     }
@@ -3797,7 +3797,7 @@ UNUSED static void unused_set_pos_rel_mario(struct Camera *c, f32 leftRight, f32
  *
  * @warning Flips the Z axis, so that relative to `rotation`, -Z moves forwards and +Z moves backwards.
  */
-void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3s rotation) {
+void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation) {
     Vec3f pitchRotated;
     // First rotate the direction by rotation's pitch
     //! The Z axis is flipped here.
@@ -3816,7 +3816,7 @@ void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3s rotation) {
  *
  * @warning Flips the Z axis, so that relative to `rotation`, -Z moves forwards and +Z moves backwards.
  */
-void offset_rotated_coords(Vec3f dst, Vec3f from, Vec3s rotation, f32 xTo, f32 yTo, f32 zTo) {
+void offset_rotated_coords(Vec3f dst, Vec3f from, Vec3a rotation, f32 xTo, f32 yTo, f32 zTo) {
     Vec3f to;
     vec3f_set(to, xTo, yTo, zTo);
     offset_rotated(dst, from, to, rotation);

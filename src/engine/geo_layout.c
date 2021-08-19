@@ -430,7 +430,7 @@ void geo_layout_cmd_node_translation(void) {
 */
 void geo_layout_cmd_node_rotation(void) {
     struct GraphNodeRotation *graphNode;
-    Vec3s angle;
+    Vec3a angle;
     DrawingLayer drawingLayer = LAYER_FORCE;
     s16 params                = cur_geo_cmd_u8(0x01);
     s16 *cmdPos               = (s16 *) gGeoLayoutCommand;

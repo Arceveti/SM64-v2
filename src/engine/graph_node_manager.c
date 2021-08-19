@@ -43,11 +43,12 @@ s16 *read_vec3s(Vec3s dst, s16 *src) {
  * Takes a pointer to three angles in degrees (supplied by a geo layout script)
  * and converts it to a vector of three in-game angle units in [-32768, 32767]
  * range.
+ * Vec3s ->s16
  */
-s16 *read_vec3s_angle(Vec3s dst, s16 *src) {
-    dst[0] = (next_s16_in_geo_script(&src) << 15) / 180;
-    dst[1] = (next_s16_in_geo_script(&src) << 15) / 180;
-    dst[2] = (next_s16_in_geo_script(&src) << 15) / 180;
+Angle *read_vec3s_angle(Vec3a dst, s16 *src) {
+    dst[0] = ((next_s16_in_geo_script(&src) << 15) / 180);
+    dst[1] = ((next_s16_in_geo_script(&src) << 15) / 180);
+    dst[2] = ((next_s16_in_geo_script(&src) << 15) / 180);
     return src;
 }
 

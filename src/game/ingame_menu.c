@@ -1403,15 +1403,22 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     uchar textContinue[]     = { TEXT_CONTINUE       };
     uchar textExitCourse[]   = { TEXT_EXIT_COURSE    };
+#ifndef PUPPYCAM
     uchar textCameraAngleR[] = { TEXT_CAMERA_ANGLE_R };
+#endif
 #ifdef REONU_CAM_3
     u8 cameraMode = gCurrentArea->camera->mode;
 #endif
+#ifdef PUPPYCAM
+    handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 2);
+#else
     handle_menu_scrolling(MENU_SCROLL_VERTICAL, index, 1, 3);
+#endif
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     print_generic_string((x + 10), (y -  2), textContinue);
     print_generic_string((x + 10), (y - 17), textExitCourse);
+#ifndef PUPPYCAM
 #ifdef REONU_CAM_3
     if ((*index != MENU_OPT_CAMERA_ANGLE_R) && (cameraMode != CAMERA_MODE_8_DIRECTIONS)) print_generic_string(x + 10, y - 33, textCameraAngleR);
     if ((*index != MENU_OPT_CAMERA_ANGLE_R) || (cameraMode == CAMERA_MODE_8_DIRECTIONS)) {
@@ -1419,11 +1426,13 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     if (*index != MENU_OPT_CAMERA_ANGLE_R) {
         print_generic_string((x + 10), (y - 33), textCameraAngleR);
 #endif
+#endif
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
         create_dl_translation_matrix(G_MTX_PUSH, (x - X_VAL8), ((y - ((*index - 1) * yIndex)) - Y_VAL8), 0);
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
         gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
         gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
+#ifndef PUPPYCAM
     }
 #ifdef REONU_CAM_3
     if (*index == MENU_OPT_CAMERA_ANGLE_R && cameraMode != CAMERA_MODE_8_DIRECTIONS) {
@@ -1432,6 +1441,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
 #endif
         render_pause_camera_options((x - 42), (y - 42), &gDialogCameraAngleIndex, 110);
     }
+#endif
 }
 
 void render_pause_castle_menu_box(s16 x, s16 y) {
