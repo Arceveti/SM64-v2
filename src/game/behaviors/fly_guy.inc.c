@@ -125,7 +125,7 @@ static void fly_guy_act_shoot_fire(void) {
                 o->oAction = FLY_GUY_ACT_IDLE;
             } else {
                 // We have reached below scale 1.2 in the shrinking portion
-                s16 fireMovePitch = obj_turn_pitch_toward_mario(0.0f, 0x0);
+                Angle fireMovePitch = obj_turn_pitch_toward_mario(0.0f, 0x0);
                 cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
                 clamp_s16(&fireMovePitch, 0x800, 0x3000);
 

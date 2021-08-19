@@ -101,12 +101,12 @@ MarioAction act_idle(struct MarioState *m) {
     return FALSE;
 }
 
-void play_anim_sound(struct MarioState *m, u32 actionState, s32 animFrame, u32 sound) {
+void play_anim_sound(struct MarioState *m, u32 actionState, AnimFrame32 animFrame, u32 sound) {
     if ((m->actionState == actionState) && (m->marioObj->header.gfx.animInfo.animFrame == animFrame)) play_sound(sound, m->marioObj->header.gfx.cameraToObject);
 }
 
 MarioAction act_start_sleeping(struct MarioState *m) {
-    s32 animFrame = 0;
+    AnimFrame32 animFrame = 0;
     if (check_common_idle_cancels(m)) return TRUE;
     if (m->quicksandDepth > 30.0f) return set_mario_action(m, ACT_IN_QUICKSAND, 0);
     if (m->actionState == 4) return set_mario_action(m, ACT_SLEEPING, 0);
@@ -130,7 +130,7 @@ MarioAction act_start_sleeping(struct MarioState *m) {
 }
 
 MarioAction act_sleeping(struct MarioState *m) {
-    s32 animFrame;
+    AnimFrame32 animFrame;
     if (m->input
         & (INPUT_NONZERO_ANALOG
          | INPUT_A_PRESSED
@@ -192,7 +192,7 @@ MarioAction act_waking_up(struct MarioState *m) {
 }
 
 MarioAction act_shivering(struct MarioState *m) {
-    s32 animFrame;
+    AnimFrame32 animFrame;
     if (m->input & INPUT_STOMPED    ) return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR  ) return set_mario_action(m, ACT_FREEFALL        , 0);
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(m, ACT_BEGIN_SLIDING   , 0);
@@ -225,7 +225,7 @@ MarioAction act_shivering(struct MarioState *m) {
 MarioAction act_coughing(struct MarioState *m) {
     if (check_common_idle_cancels(m)) return TRUE;
     stationary_ground_step(m);
-    s32 animFrame = set_mario_animation(m, MARIO_ANIM_COUGHING);
+    AnimFrame32 animFrame = set_mario_animation(m, MARIO_ANIM_COUGHING);
     if ((animFrame == 25) || (animFrame == 35)) play_sound(SOUND_MARIO_COUGHING3, m->marioObj->header.gfx.cameraToObject);
     if ((animFrame == 50) || (animFrame == 58)) play_sound(SOUND_MARIO_COUGHING2, m->marioObj->header.gfx.cameraToObject);
     if ((animFrame == 71) || (animFrame == 80)) play_sound(SOUND_MARIO_COUGHING1, m->marioObj->header.gfx.cameraToObject);

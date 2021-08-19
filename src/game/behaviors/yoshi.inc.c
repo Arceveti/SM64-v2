@@ -14,8 +14,8 @@ void bhv_yoshi_init(void) {
 }
 
 void yoshi_walk_loop(void) {
-    s16 animFrame = o->header.gfx.animInfo.animFrame;
-    o->oForwardVel = 10.0f;
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
+    o->oForwardVel        = 10.0f;
     object_step();
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oYoshiTargetYaw, 0x500);
     if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) o->oAction = YOSHI_ACT_IDLE;
@@ -76,8 +76,8 @@ void yoshi_talk_loop(void) {
 }
 
 void yoshi_walk_and_jump_off_roof_loop(void) {
-    s16 animFrame  = o->header.gfx.animInfo.animFrame;
-    o->oForwardVel = 10.0f;
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
+    o->oForwardVel        = 10.0f;
     object_step();
     cur_obj_init_animation(YOSHI_ANIM_WALK);
     if (o->oTimer == 0) cutscene_object(CUTSCENE_STAR_SPAWN, o);
@@ -85,10 +85,10 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
     if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) {
         cur_obj_init_animation(YOSHI_ANIM_JUMP);
         cur_obj_play_sound_2(SOUND_GENERAL_ENEMY_ALERT1);
-        o->oForwardVel = 50.0f;
-        o->oVelY = 40.0f;
+        o->oForwardVel   = 50.0f;
+        o->oVelY         = 40.0f;
         o->oMoveAngleYaw = -0x3FFF;
-        o->oAction = YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN;
+        o->oAction       = YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN;
     }
 
     if (animFrame == 0 || animFrame == 15) cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);

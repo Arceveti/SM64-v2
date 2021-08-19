@@ -30,7 +30,7 @@ void animated_stationary_ground_step(struct MarioState *m, AnimID32 animation, M
 // TRUE if grabs an object, FALSE otherwise
 s32 mario_update_punch_sequence(struct MarioState *m) {
     MarioAction endAction, crouchEndAction;
-    s32 animFrame;
+    AnimFrame32 animFrame;
     if (m->action & ACT_FLAG_MOVING) {
         endAction = ACT_WALKING, crouchEndAction = ACT_CROUCH_SLIDE;
     } else {

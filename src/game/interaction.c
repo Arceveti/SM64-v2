@@ -277,7 +277,7 @@ void mario_stop_riding_and_holding(struct MarioState *m) {
     }
 }
 
-u32 does_mario_have_normal_cap_on_head(struct MarioState *m) {
+Bool32 does_mario_have_normal_cap_on_head(struct MarioState *m) {
     return (m->flags & (MARIO_CAPS | MARIO_CAP_ON_HEAD)) == (MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
 }
 
@@ -295,11 +295,11 @@ void mario_blow_off_cap(struct MarioState *m, f32 capSpeed) {
 }
 
 #ifdef DEBUG_LEVEL_SELECT
-u32 mario_lose_cap_to_enemy(UNUSED u32 enemyType) {
+Bool32 mario_lose_cap_to_enemy(UNUSED u32 enemyType) {
     return FALSE;
 }
 #else
-u32 mario_lose_cap_to_enemy(u32 enemyType) {
+Bool32 mario_lose_cap_to_enemy(u32 enemyType) {
     if (does_mario_have_normal_cap_on_head(gMarioState)) {
         save_file_set_flags((enemyType == 1) ? SAVE_FLAG_CAP_ON_KLEPTO : SAVE_FLAG_CAP_ON_UKIKI);
         gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
@@ -336,17 +336,17 @@ struct Object *mario_get_collided_object(struct MarioState *m, u32 interactType)
     return NULL;
 }
 
-u32 mario_check_object_grab(struct MarioState *m) {
+Bool32 mario_check_object_grab(struct MarioState *m) {
     if (m->input & INPUT_INTERACT_OBJ_GRABBABLE) {
         if (virtual_to_segmented(0x13, m->interactObj->behavior) == bhvBowser) {
-            s16 facingDYaw = abs_angle_diff(m->faceAngle[1], m->interactObj->oMoveAngleYaw);
+            Angle facingDYaw = abs_angle_diff(m->faceAngle[1], m->interactObj->oMoveAngleYaw);
             if (facingDYaw <= 0x5555) {
                 m->faceAngle[1] = m->interactObj->oMoveAngleYaw;
                 m->usedObj      = m->interactObj;
                 return set_mario_action(m, ACT_PICKING_UP_BOWSER, 0);
             }
         } else {
-            s16 facingDYaw = abs_angle_diff(mario_obj_angle_to_object(m, m->interactObj), m->faceAngle[1]);
+            Angle facingDYaw = abs_angle_diff(mario_obj_angle_to_object(m, m->interactObj), m->faceAngle[1]);
             if (facingDYaw <= 0x2AAA) {
                 m->usedObj = m->interactObj;
                 if (!(m->action & ACT_FLAG_AIR)) set_mario_action(m, ((m->action & ACT_FLAG_DIVING) ? ACT_DIVE_PICKING_UP : ACT_PICKING_UP), 0);
@@ -1243,7 +1243,7 @@ u32 interact_grabbable(struct MarioState *m, u32 interactType, struct Object *o)
 }
 
 u32 mario_can_talk(struct MarioState *m, u32 arg) {
-    AnimID animID;
+    AnimID16 animID;
 #ifdef EASIER_DIALOG_TRIGGER
     if (m->action & (ACT_FLAG_AIR
      | ACT_FLAG_SHORT_HITBOX

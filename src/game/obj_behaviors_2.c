@@ -268,7 +268,7 @@ static s32 cur_obj_init_anim_and_check_if_end(s32 animIndex) {
     return cur_obj_check_if_near_animation_end();
 }
 
-static s32 cur_obj_init_anim_check_frame(s32 animIndex, s32 frame) {
+static s32 cur_obj_init_anim_check_frame(s32 animIndex, AnimFrame32 frame) {
     cur_obj_init_animation_with_sound(animIndex);
     return cur_obj_check_anim_frame(frame);
 }
@@ -396,7 +396,7 @@ static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero
     *value += (s32) *vel;
     if ((*value == target) || (((*value - target) * (startValue - target) < 0) && (*vel > -velCloseToZero) && (*vel < velCloseToZero))) {
         *value = target;
-        *vel = 0.0f;
+        *vel   = 0.0f;
         return TRUE;
     } else {
         if (*value >= target) accel = -accel;

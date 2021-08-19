@@ -574,7 +574,7 @@ void geo_obj_init_animation(struct GraphNodeObject *graphNode, struct Animation 
     struct Animation  *anim          = segmented_to_virtual(*animSegmented);
     if (graphNode->animInfo.curAnim != anim) {
         graphNode->animInfo.curAnim    = anim;
-        graphNode->animInfo.animFrame  = anim->startFrame + ((anim->flags & ANIM_FLAG_FORWARD) ? 1 : -1);
+        graphNode->animInfo.animFrame  = (anim->startFrame + ((anim->flags & ANIM_FLAG_FORWARD) ? 1 : -1));
         graphNode->animInfo.animAccel  = 0;
         graphNode->animInfo.animYTrans = 0;
     }
@@ -583,14 +583,14 @@ void geo_obj_init_animation(struct GraphNodeObject *graphNode, struct Animation 
 /**
  * Initialize the animation of an object node
  */
-void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr, u32 animAccel) {
+void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr, AnimAccel animAccel) {
     struct Animation **animSegmented = segmented_to_virtual(animPtrAddr);
     struct Animation  *anim          = segmented_to_virtual(*animSegmented);
     if (graphNode->animInfo.curAnim != anim) {
         graphNode->animInfo.curAnim              = anim;
         graphNode->animInfo.animYTrans           = 0;
-        graphNode->animInfo.animFrameAccelAssist = (anim->startFrame << 16) + ((anim->flags & ANIM_FLAG_FORWARD) ? animAccel : -animAccel);
-        graphNode->animInfo.animFrame            = graphNode->animInfo.animFrameAccelAssist >> 16;
+        graphNode->animInfo.animFrameAccelAssist = ((anim->startFrame << 16) + ((anim->flags & ANIM_FLAG_FORWARD) ? animAccel : -animAccel));
+        graphNode->animInfo.animFrame            = (graphNode->animInfo.animFrameAccelAssist >> 16);
     }
     graphNode->animInfo.animAccel = animAccel;
 }
@@ -602,12 +602,12 @@ void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Anim
  * and the second s16 the actual index. This index can be used to index in the array
  * with actual animation values.
  */
-s32 retrieve_animation_index(s32 frame, u16 **attributes) {
+s32 retrieve_animation_index(AnimFrame32 frame, u16 **attributes) {
     s32 result;
     if (frame < (*attributes)[0]) {
-        result = (*attributes)[1] + frame;
+        result = ((*attributes)[1] + frame);
     } else {
-        result = (*attributes)[1] + (*attributes)[0] - 1;
+        result = (((*attributes)[1] + (*attributes)[0]) - 1);
     }
     *attributes += 2;
     return result;
@@ -622,32 +622,32 @@ s16 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
     s32 result;
     struct Animation *anim;
     anim = obj->curAnim;
-    if (obj->animTimer == gAreaUpdateCounter || anim->flags & ANIM_FLAG_2) {
+    if ((obj->animTimer == gAreaUpdateCounter) || (anim->flags & ANIM_FLAG_2)) {
         if (accelAssist != NULL) accelAssist[0] = obj->animFrameAccelAssist;
         return obj->animFrame;
     }
     if (anim->flags & ANIM_FLAG_FORWARD) {
         if (obj->animAccel) {
-            result = obj->animFrameAccelAssist - obj->animAccel;
+            result = (obj->animFrameAccelAssist - obj->animAccel);
         } else {
-            result = (obj->animFrame - 1) << 16;
+            result = ((obj->animFrame - 1) << 16);
         }
         if (GET_HIGH_S16_OF_32(result) < anim->loopStart) {
             if (anim->flags & ANIM_FLAG_NOLOOP) {
                 SET_HIGH_S16_OF_32(result, anim->loopStart);
             } else {
-                SET_HIGH_S16_OF_32(result, anim->loopEnd - 1);
+                SET_HIGH_S16_OF_32(result, (anim->loopEnd - 1));
             }
         }
     } else {
         if (obj->animAccel != 0) {
-            result = obj->animFrameAccelAssist + obj->animAccel;
+            result = (obj->animFrameAccelAssist + obj->animAccel);
         } else {
-            result = (obj->animFrame + 1) << 16;
+            result = ((obj->animFrame + 1) << 16);
         }
         if (GET_HIGH_S16_OF_32(result) >= anim->loopEnd) {
             if (anim->flags & ANIM_FLAG_NOLOOP) {
-                SET_HIGH_S16_OF_32(result, anim->loopEnd - 1);
+                SET_HIGH_S16_OF_32(result, (anim->loopEnd - 1));
             } else {
                 SET_HIGH_S16_OF_32(result, anim->loopStart);
             }
@@ -670,7 +670,7 @@ UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3
     if (animation != NULL) {
         u16 *attribute       = segmented_to_virtual((void *) animation->index);
         s16 *values          = segmented_to_virtual((void *) animation->values);
-        s16 frame            = obj->animInfo.animFrame;
+        AnimFrame16 frame    = obj->animInfo.animFrame;
         if (frame < 0) frame = 0;
         position[0]          = (f32) values[retrieve_animation_index(frame, &attribute)];
         position[1]          = (f32) values[retrieve_animation_index(frame, &attribute)];

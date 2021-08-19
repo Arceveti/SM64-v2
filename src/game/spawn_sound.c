@@ -17,7 +17,7 @@
  */
 void exec_anim_sound_state(struct SoundState *soundStates) {
     s32 stateIdx = gCurrentObject->oSoundStateID;
-
+    //! if?
     switch (soundStates[stateIdx].playSound) {
         // since we have an array of sound states corresponding to
         // various behaviors, not all entries intend to play sounds. the
@@ -25,8 +25,7 @@ void exec_anim_sound_state(struct SoundState *soundStates) {
         case FALSE:
             break;
         case TRUE: {
-            s32 animFrame;
-
+            AnimFrame32 animFrame;
             // in the sound state information, -1 (0xFF) is for empty
             // animFrame entries. These checks skips them.
             if ((animFrame = soundStates[stateIdx].animFrame1) >= 0 && cur_obj_check_anim_frame(animFrame)) cur_obj_play_sound_2(soundStates[stateIdx].soundMagic);

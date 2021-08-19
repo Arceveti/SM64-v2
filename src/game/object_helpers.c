@@ -481,7 +481,7 @@ void cur_obj_init_animation_with_sound(s32 animIndex) {
 
 void cur_obj_init_animation_with_accel_and_sound(s32 animIndex, f32 accel) {
     struct Animation **anims = o->oAnimations;
-    s32 animAccel = (s32)(accel * 65536.0f);
+    AnimAccel animAccel = (AnimAccel)(accel * 65536.0f);
     geo_obj_init_animation_accel(&o->header.gfx, &anims[animIndex], animAccel);
     o->oSoundStateID = animIndex;
 }
@@ -712,14 +712,14 @@ void cur_obj_reverse_animation(void) {
 }
 
 void cur_obj_extend_animation_if_at_end(void) {
-    s32 frame =  o->header.gfx.animInfo.animFrame;
+    AnimFrame32 frame =  o->header.gfx.animInfo.animFrame;
     s32 end   = (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     if (frame == end) o->header.gfx.animInfo.animFrame--;
 }
 
 s32 cur_obj_check_if_near_animation_end(void) {
     u32 animFlags   = (s32) o->header.gfx.animInfo.curAnim->flags;
-    s32 animFrame   =       o->header.gfx.animInfo.animFrame;
+    AnimFrame32 animFrame   =       o->header.gfx.animInfo.animFrame;
     s32 nearLoopEnd =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     return (((animFlags & ANIM_FLAG_NOLOOP) && ((nearLoopEnd + 1) == animFrame)) || (animFrame == nearLoopEnd));
 }
@@ -728,17 +728,17 @@ s32 cur_obj_check_if_at_animation_end(void) {
     return (o->header.gfx.animInfo.animFrame == (o->header.gfx.animInfo.curAnim->loopEnd - 1));
 }
 
-s32 cur_obj_check_anim_frame(s32 frame) {
+s32 cur_obj_check_anim_frame(AnimFrame32 frame) {
     return (frame == o->header.gfx.animInfo.animFrame);
 }
 
-s32 cur_obj_check_anim_frame_in_range(s32 startFrame, s32 rangeLength) {
-    s32 animFrame = o->header.gfx.animInfo.animFrame;
+s32 cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength) {
+    AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
     return ((animFrame >= startFrame) && (animFrame < (startFrame + rangeLength)));
 }
 
-s32 cur_obj_check_frame_prior_current_frame(s16 *frame) {
-    s16 animFrame = o->header.gfx.animInfo.animFrame;
+s32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     while (*frame != -1) {
         if (*frame == animFrame) return TRUE;
         frame++;
@@ -1096,7 +1096,7 @@ f32 increment_velocity_toward_range(f32 value, f32 center, f32 zeroThreshold, f3
     }
 }
 
-s32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj2) {
+Bool32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj2) {
     s32 i;
     for (i = 0; i < obj1->numCollidedObjs; i++) if (obj1->collidedObjs[i] == obj2) return TRUE;
     return FALSE;
@@ -1110,11 +1110,11 @@ void obj_set_behavior(struct Object *obj, const BehaviorScript *behavior) {
     obj->behavior = segmented_to_virtual(behavior);
 }
 
-s32 cur_obj_has_behavior(const BehaviorScript *behavior) {
+Bool32 cur_obj_has_behavior(const BehaviorScript *behavior) {
     return (o->behavior == segmented_to_virtual(behavior));
 }
 
-s32 obj_has_behavior(struct Object *obj, const BehaviorScript *behavior) {
+Bool32 obj_has_behavior(struct Object *obj, const BehaviorScript *behavior) {
     return (obj->behavior == segmented_to_virtual(behavior));
 }
 
@@ -1229,8 +1229,8 @@ f32 cur_obj_abs_y_dist_to_home(void) {
     return dist;
 }
 
-s32 cur_obj_advance_looping_anim(void) {
-    s32 animFrame = o->header.gfx.animInfo.animFrame;
+UNUSED AnimFrame32 cur_obj_advance_looping_anim(void) {
+    AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
     s32 loopEnd   = o->header.gfx.animInfo.curAnim->loopEnd;
     if (animFrame < 0) {
         animFrame = 0;
@@ -2037,7 +2037,7 @@ void obj_copy_behavior_params(struct Object *dst, struct Object *src) {
     dst->oBehParams2ndByte = src->oBehParams2ndByte;
 }
 
-void cur_obj_init_animation_and_anim_frame(s32 animIndex, s32 animFrame) {
+void cur_obj_init_animation_and_anim_frame(s32 animIndex, AnimFrame32 animFrame) {
     cur_obj_init_animation_with_sound(animIndex);
     o->header.gfx.animInfo.animFrame = animFrame;
 }
@@ -2073,9 +2073,8 @@ s32 player_performed_grab_escape_action(void) {
     return result;
 }
 
-void cur_obj_unused_play_footstep_sound(s32 animFrame1, s32 animFrame2, s32 sound) {
-    if (cur_obj_check_anim_frame(animFrame1)
-     || cur_obj_check_anim_frame(animFrame2)) cur_obj_play_sound_2(sound);
+void cur_obj_unused_play_footstep_sound(AnimFrame32 animFrame1, AnimFrame32 animFrame2, s32 sound) {
+    if (cur_obj_check_anim_frame(animFrame1) || cur_obj_check_anim_frame(animFrame2)) cur_obj_play_sound_2(sound);
 }
 
 void enable_time_stop_including_mario(void) {

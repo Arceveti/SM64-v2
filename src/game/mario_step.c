@@ -199,10 +199,10 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
     vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
-s32 stationary_ground_step(struct MarioState *m) {
+MarioStep stationary_ground_step(struct MarioState *m) {
     u32 takeStep;
     struct Object *marioObj = m->marioObj;
-    u32 stepResult = GROUND_STEP_NONE;
+    MarioStep stepResult = GROUND_STEP_NONE;
     mario_set_forward_vel(m, 0.0f);
     takeStep  = mario_update_moving_sand(m);
     takeStep |= mario_update_windy_ground(m);
@@ -368,9 +368,9 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     return GROUND_STEP_NONE;
 }
 
-s32 perform_ground_step(struct MarioState *m) {
+MarioStep perform_ground_step(struct MarioState *m) {
     Vec3f intendedPos;
-    u32 stepResult;
+    MarioStep stepResult;
 #ifdef BETTER_WALL_COLLISION
     m->wall = NULL;
 #endif
@@ -510,7 +510,7 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
 }
 #endif
 
-s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepArg) {
+MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepArg) {
 #ifdef BETTER_CEILING_HANDLING
     f32 ceilSteepness;
 #endif
@@ -524,7 +524,7 @@ s32 perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepAr
     vec3f_copy(nextPos, intendedPos);
 #ifdef BETTER_WALL_COLLISION
     s16 i;
-    s32 stepResult = AIR_STEP_NONE;
+    MarioStep stepResult = AIR_STEP_NONE;
     struct WallCollisionData upperWall, lowerWall;
     Vec3f ledgePos;
     struct Surface *grabbedWall = NULL;
@@ -787,15 +787,15 @@ void apply_vertical_wind(struct MarioState *m) {
     }
 }
 
-s32 perform_air_step(struct MarioState *m, u32 stepArg) {
+MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     // Angle wallDYaw;
     Vec3f intendedPos;
-    s32 stepResult = AIR_STEP_NONE;
+    MarioStep stepResult = AIR_STEP_NONE;
     m->wall = NULL;
 #if AIR_NUM_STEPS > 1
     const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(sqr(m->vel[0]) + sqr(m->vel[1]) + sqr(m->vel[2])) / 50.0f));*/
     s32 i;
-    s32 quarterStepResult;
+    MarioStep quarterStepResult;
     for (i = 0; i < numSteps; i++) {
         intendedPos[0] = (m->pos[0] + (m->vel[0] / numSteps));
         intendedPos[1] = (m->pos[1] + (m->vel[1] / numSteps));

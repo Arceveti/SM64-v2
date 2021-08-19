@@ -530,7 +530,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
  *                     FLOORS                     *
  **************************************************/
 
-s32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, SurfaceType type, s32 dynamic) {
+Bool32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, SurfaceType type, Bool32 dynamic) {
     register const s16 cellX = ((((s32)xPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const s16 cellZ = ((((s32)zPos + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     struct SurfaceNode *surfaceNode;
@@ -1008,7 +1008,7 @@ s32 find_poison_gas_level(s32 x, s32 z) {
  * @param yMax absolute-value max size in y, set to -1 to ignore
  * @param zMax absolute-value max size in z, set to -1 to ignore
  */
-s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax) {
+Bool32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax) {
     // Surface vertex coordinates
     Vec3s sx, sy, sz;
     // Max delta between x, y, and z
@@ -1043,8 +1043,7 @@ s32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zM
  *
  * Because the function only uses `surf`s first vertex, some surfaces can shadow others.
  */
-s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
-    s32 behindSurface = FALSE;
+Bool32 is_behind_surface(Vec3f pos, struct Surface *surf) {
     // Surface normal
     f32 normX = (surf->vertex2[1] - surf->vertex1[1]) * (surf->vertex3[2] - surf->vertex2[2]) -
                 (surf->vertex3[1] - surf->vertex2[1]) * (surf->vertex2[2] - surf->vertex1[2]);
@@ -1055,15 +1054,14 @@ s32 is_behind_surface(Vec3f pos, struct Surface *surf) {
     f32 dirX  = (surf->vertex1[0] - pos[0]);
     f32 dirY  = (surf->vertex1[1] - pos[1]);
     f32 dirZ  = (surf->vertex1[2] - pos[2]);
-    if (dirX * normX + dirY * normY + dirZ * normZ < 0) behindSurface = TRUE;
-    return behindSurface;
+    return ((dirX * normX) + (dirY * normY) + (dirZ * normZ) < 0);
 }
 
 /**
  * Checks if the whole circular sector is behind the surface.
  */
-s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, SurfaceType surfType) {
-    s32 behindSurface = TRUE;
+Bool32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 range, SurfaceType surfType) {
+    Bool32 behindSurface = TRUE;
     s32 leftBehind    = 0;
     s32 rightBehind   = 0;
     f32 checkDist;
@@ -1079,7 +1077,7 @@ s32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 rang
                 leftBehind = is_behind_surface(checkPos, surf);
                 vec3f_set_dist_and_angle(from, checkPos, checkDist, checkPitch, (checkYaw - range));
                 rightBehind = is_behind_surface(checkPos, surf);
-                behindSurface = leftBehind * rightBehind;
+                behindSurface = (leftBehind * rightBehind);
             }
         }
     }

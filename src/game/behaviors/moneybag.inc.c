@@ -34,10 +34,9 @@ void bhv_moneybag_init(void) {
 
 void moneybag_check_mario_collision(void) {
     obj_set_hitbox(o, &sMoneybagHitbox);
-
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
         if (o->oInteractStatus & INT_STATUS_ATTACKED_MARIO) {/* bit 13 */
-            o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
+            o->oMoveAngleYaw = (o->oAngleToMario + 0x8000);
             o->oVelY         = 30.0f;
         }
         if (o->oInteractStatus & INT_STATUS_WAS_ATTACKED) o->oAction = MONEYBAG_ACT_DEATH; /* bit 14 */
@@ -46,8 +45,7 @@ void moneybag_check_mario_collision(void) {
 }
 
 void moneybag_jump(s8 collisionFlags) {
-    s16 animFrame = o->header.gfx.animInfo.animFrame;
-
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     switch (o->oMoneybagJumpState) {
         case MONEYBAG_JUMP_PREPARE:
             cur_obj_init_animation(MONEYBAG_ANIM_PREPARE_JUMP);

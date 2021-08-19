@@ -61,7 +61,7 @@ f32  aspect;
 struct GeoAnimState {
     /*0x00*/ u8 type;
     /*0x01*/ u8 enabled;
-    /*0x02*/ s16 frame;
+    /*0x02*/ AnimFrame16 frame;
     /*0x04*/ f32 translationMultiplier;
     /*0x08*/ u16 *attribute;
     /*0x0C*/ s16 *data;

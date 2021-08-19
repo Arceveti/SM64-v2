@@ -435,7 +435,7 @@ void add_shadow_to_display_list(Gfx *displayListHead, Vtx *verts, s8 shadowVerte
  * Linearly interpolate a shadow's solidity between zero and finalSolidity
  * depending on curr's relation to start and end.
  */
-void linearly_interpolate_solidity_positive(struct Shadow *s, u8 finalSolidity, s16 curr, s16 start, s16 end) {
+void linearly_interpolate_solidity_positive(struct Shadow *s, u8 finalSolidity, AnimFrame16 curr, AnimFrame16 start, AnimFrame16 end) {
     if (curr >= 0 && curr < start) {
         s->solidity = 0;
     } else if (end < curr) {
@@ -450,7 +450,7 @@ void linearly_interpolate_solidity_positive(struct Shadow *s, u8 finalSolidity, 
  * depending on curr's relation to start and end. Note that if curr < start,
  * the solidity will be zero.
  */
-void linearly_interpolate_solidity_negative(struct Shadow *s, u8 initialSolidity, s16 curr, s16 start, s16 end) {
+void linearly_interpolate_solidity_negative(struct Shadow *s, u8 initialSolidity, AnimFrame16 curr, AnimFrame16 start, AnimFrame16 end) {
     //! The curr < start case is not handled. Thus, if start != 0, this function
     // will have the surprising behavior of hiding the shadow until start.
     // This is not necessarily a bug, since this function is only used once,
@@ -466,7 +466,7 @@ void linearly_interpolate_solidity_negative(struct Shadow *s, u8 initialSolidity
  * Change a shadow's solidity based on the player's current animation frame.
  */
 s8 correct_shadow_solidity_for_animations(UNUSED s32 isLuigi, u8 initialSolidity, struct Shadow *shadow) {
-    s16 animFrame = gMarioObject->header.gfx.animInfo.animFrame;
+    AnimFrame16 animFrame = gMarioObject->header.gfx.animInfo.animFrame;
     switch (gMarioObject->header.gfx.animInfo.animID) {
         case MARIO_ANIM_IDLE_ON_LEDGE:                                                                                        return SHADOW_SOLIDITY_NO_SHADOW  ;
         case MARIO_ANIM_FAST_LEDGE_CLIMB: linearly_interpolate_solidity_positive(shadow, initialSolidity, animFrame,  5, 14); return SHADOW_SOILDITY_ALREADY_SET;

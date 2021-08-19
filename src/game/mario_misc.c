@@ -278,7 +278,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
     Gfx *gfx = NULL;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
-    s16 alpha;
+    s16 alpha; //! u8/Alpha type?
     if (callContext == GEO_CONTEXT_RENDER) {
         alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 0xFF);
 #ifdef PUPPYCAM

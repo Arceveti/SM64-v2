@@ -24,6 +24,10 @@ struct Controller
 #endif
 };
 
+typedef u8  Bool8;
+typedef u16 Bool16;
+typedef u32 Bool32;
+
 typedef s8  Vec2c[2];
 typedef s16 Vec2s[2];
 typedef s32 Vec2i[2];
@@ -52,14 +56,17 @@ typedef s16 Collision;
 typedef s16 RawVertexData;
 typedef s16 Trajectory;
 typedef s16 PaintingData;
-typedef s16 AnimID;
+typedef s16 AnimValue;
+typedef u16 AnimIndex;
+typedef s16 AnimID16;
 typedef s32 AnimID32;
-typedef s32 AnimFrame;
+typedef s16 AnimFrame16;
+typedef s32 AnimFrame32;
 typedef s32 AnimAccel;
 typedef s32 MarioAction;
 typedef s32 MarioActionArg;
 typedef u32 MarioInteraction;
-typedef u32 StepResult;
+typedef u32 MarioStep;
 typedef u16 ModelID;
 typedef s32 DialogID;
 typedef uintptr_t BehaviorScript;
@@ -106,12 +113,12 @@ struct VblankHandler
 struct Animation {
     /*0x00*/ s16 flags;
     /*0x02*/ s16 animYTransDivisor;
-    /*0x04*/ s16 startFrame;
+    /*0x04*/ AnimFrame16 startFrame;
     /*0x06*/ s16 loopStart;
     /*0x08*/ s16 loopEnd;
     /*0x0A*/ s16 unusedBoneCount;
-    /*0x0C*/ const s16 *values;
-    /*0x10*/ const u16 *index;
+    /*0x0C*/ const AnimValue *values;
+    /*0x10*/ const AnimIndex *index;
     /*0x14*/ u32 length; // only used with Mario animations to determine how much to load. 0 otherwise.
 };
 
@@ -129,13 +136,13 @@ struct GraphNode
 
 struct AnimInfo
 {
-    /*0x00 0x38*/ AnimID animID;
+    /*0x00 0x38*/ AnimID16 animID;
     /*0x02 0x3A*/ s16 animYTrans;
     /*0x04 0x3C*/ struct Animation *curAnim;
-    /*0x08 0x40*/ s16 animFrame;
+    /*0x08 0x40*/ AnimFrame16 animFrame;
     /*0x0A 0x42*/ u16 animTimer;
     /*0x0C 0x44*/ s32 animFrameAccelAssist;
-    /*0x10 0x48*/ s32 animAccel;
+    /*0x10 0x48*/ AnimAccel animAccel;
 };
 
 struct GraphNodeObject

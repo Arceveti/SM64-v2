@@ -12,8 +12,8 @@
  */
 void bhv_piranha_plant_waking_bubbles_loop(void) {
     if (o->oTimer == 0) {
-        o->oVelY         = random_float() * 10.0f + 5.0f;
-        o->oForwardVel   = random_float() * 10.0f + 5.0f;
+        o->oVelY         = ((random_float() * 10.0f) + 5.0f);
+        o->oForwardVel   = ((random_float() * 10.0f) + 5.0f);
         o->oMoveAngleYaw = random_u16();
     }
     cur_obj_move_using_fvel_and_gravity();
@@ -30,9 +30,9 @@ void bhv_piranha_plant_bubble_loop(void) {
     struct Object *parent = o->parentObj; // the Piranha Plant
     f32 scale = 0.0f;
     s32 i;
-    s32 frame = parent->header.gfx.animInfo.animFrame;
+    AnimFrame32 frame = parent->header.gfx.animInfo.animFrame;
     // TODO: rename lastFrame if it is inaccurate
-    s32 lastFrame = parent->header.gfx.animInfo.curAnim->loopEnd - 2;
+    AnimFrame32 lastFrame = (parent->header.gfx.animInfo.curAnim->loopEnd - 2);
     f32 doneShrinkingFrame; // the first frame after shrinking is done
     f32 beginGrowingFrame;  // the frame just before growing begins
 

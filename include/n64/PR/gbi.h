@@ -2594,8 +2594,8 @@ typedef union {
 	gMoveWd(pkt, G_MW_LIGHTCOL, G_MWO_b##n, col);								\
 }
 #define	gsSPLightColor(n, col)													\
-	gsMoveWd(G_MW_LIGHTCOL, G_MWO_a##n, col),									\
-	gsMoveWd(G_MW_LIGHTCOL, G_MWO_b##n, col)
+	gsMoveWd(    G_MW_LIGHTCOL, G_MWO_a##n, col),								\
+	gsMoveWd(    G_MW_LIGHTCOL, G_MWO_b##n, col)
 
 /* These macros use a structure "name" which is init'd with the gdSPDefLights macros*/
 
@@ -2607,8 +2607,8 @@ typedef union {
 }
 #define	gsSPSetLights0(name)													\
 	gsSPNumLights(NUMLIGHTS_0),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.a,    2)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.a,    2)
 
 #define	gSPSetLights1(pkt, name)												\
 {																				\
@@ -2618,8 +2618,8 @@ typedef union {
 }
 #define	gsSPSetLights1(name)													\
 	gsSPNumLights(NUMLIGHTS_1),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.a,    2)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.a,    2)
 
 #define	gSPSetLights2(pkt, name)												\
 {																				\
@@ -2630,9 +2630,9 @@ typedef union {
 }
 #define	gsSPSetLights2(name)													\
 	gsSPNumLights(NUMLIGHTS_2),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.a,    3)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.a,    3)
 
 #define	gSPSetLights3(pkt, name)												\
 {																				\
@@ -2644,10 +2644,10 @@ typedef union {
 }
 #define	gsSPSetLights3(name)													\
 	gsSPNumLights(NUMLIGHTS_3),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.l[2], 3),													\
-	gsSPLight(&name.a,    4)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.l[2], 3),												\
+	gsSPLight(    &name.a,    4)
 
 #define	gSPSetLights4(pkt, name)												\
 {																				\
@@ -2660,11 +2660,11 @@ typedef union {
 }
 #define	gsSPSetLights4(name)													\
 	gsSPNumLights(NUMLIGHTS_4),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.l[2], 3),													\
-	gsSPLight(&name.l[3], 4),													\
-	gsSPLight(&name.a,    5)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.l[2], 3),												\
+	gsSPLight(    &name.l[3], 4),												\
+	gsSPLight(    &name.a,    5)
 
 #define	gSPSetLights5(pkt, name)												\
 {																				\
@@ -2679,12 +2679,12 @@ typedef union {
 
 #define	gsSPSetLights5(name)													\
 	gsSPNumLights(NUMLIGHTS_5),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.l[2], 3),													\
-	gsSPLight(&name.l[3], 4),													\
-	gsSPLight(&name.l[4], 5),													\
-	gsSPLight(&name.a,    6)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.l[2], 3),												\
+	gsSPLight(    &name.l[3], 4),												\
+	gsSPLight(    &name.l[4], 5),												\
+	gsSPLight(    &name.a,    6)
 
 #define	gSPSetLights6(pkt, name)												\
 {																				\
@@ -2700,13 +2700,13 @@ typedef union {
 
 #define	gsSPSetLights6(name)													\
 	gsSPNumLights(NUMLIGHTS_6),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.l[2], 3),													\
-	gsSPLight(&name.l[3], 4),													\
-	gsSPLight(&name.l[4], 5),													\
-	gsSPLight(&name.l[5], 6),													\
-	gsSPLight(&name.a,    7)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.l[2], 3),												\
+	gsSPLight(    &name.l[3], 4),												\
+	gsSPLight(    &name.l[4], 5),												\
+	gsSPLight(    &name.l[5], 6),												\
+	gsSPLight(    &name.a,    7)
 
 #define	gSPSetLights7(pkt, name)												\
 {																				\
@@ -2723,14 +2723,14 @@ typedef union {
 
 #define	gsSPSetLights7(name)													\
 	gsSPNumLights(NUMLIGHTS_7),													\
-	gsSPLight(&name.l[0], 1),													\
-	gsSPLight(&name.l[1], 2),													\
-	gsSPLight(&name.l[2], 3),													\
-	gsSPLight(&name.l[3], 4),													\
-	gsSPLight(&name.l[4], 5),													\
-	gsSPLight(&name.l[5], 6),													\
-	gsSPLight(&name.l[6], 7),													\
-	gsSPLight(&name.a,    8)
+	gsSPLight(    &name.l[0], 1),												\
+	gsSPLight(    &name.l[1], 2),												\
+	gsSPLight(    &name.l[2], 3),												\
+	gsSPLight(    &name.l[3], 4),												\
+	gsSPLight(    &name.l[4], 5),												\
+	gsSPLight(    &name.l[5], 6),												\
+	gsSPLight(    &name.l[6], 7),												\
+	gsSPLight(    &name.a,    8)
 
 /*
  * Reflection/Hiliting Macros

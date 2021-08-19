@@ -58,7 +58,7 @@ s32 is_anim_past_end(struct MarioState *m) {
 /**
  * Sets Mario's animation without any acceleration, running at its default rate.
  */
-s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
+s16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
     struct Object    *o          = m->marioObj;
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
@@ -87,7 +87,7 @@ s16 set_mario_animation(struct MarioState *m, s32 targetAnimID) {
  * Sets Mario's animation where the animation is sped up or
  * slowed down via acceleration.
  */
-s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel) {
+s16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimID, AnimAccel accel) {
     struct Object *o = m->marioObj;
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
@@ -116,7 +116,7 @@ s16 set_mario_anim_with_accel(struct MarioState *m, s32 targetAnimID, s32 accel)
 /**
  * Sets the animation to a specific "next" frame from the frame given.
  */
-void set_anim_to_frame(struct MarioState *m, s16 animFrame) {
+void set_anim_to_frame(struct MarioState *m, AnimFrame16 animFrame) {
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;
     struct Animation *curAnim = animInfo->curAnim;
     if (animInfo->animAccel) {
@@ -134,7 +134,7 @@ void set_anim_to_frame(struct MarioState *m, s16 animFrame) {
     }
 }
 
-s32 is_anim_past_frame(struct MarioState *m, s16 animFrame) {
+s32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
     s32 isPastFrame;
     s32 acceleratedFrame = (animFrame << 0x10);
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;

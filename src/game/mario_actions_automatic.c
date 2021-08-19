@@ -140,9 +140,9 @@ MarioAction act_holding_pole(struct MarioState *m) {
 }
 
 MarioAction act_climbing_pole(struct MarioState *m) {
-    s32 animSpeed;
+    AnimAccel animSpeed;
     struct Object *marioObj = m->marioObj;
-    Angle cameraAngle = m->area->camera->yaw;
+    Angle cameraAngle       = m->area->camera->yaw;
     if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || (m->health < 0x100)) {
         add_tree_leaf_particles(m);
         m->forwardVel = -8.0f;
@@ -293,8 +293,8 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
     return HANG_NONE;
 }
 
-s32 update_hang_moving(struct MarioState *m) {
-    s32 stepResult;
+MarioStep update_hang_moving(struct MarioState *m) {
+    MarioStep stepResult;
     Vec3f nextPos;
 #ifdef EASIER_HANGING
     f32 maxSpeed = (m->intendedMag / 2.0f);
@@ -444,7 +444,7 @@ MarioAction act_ledge_grab(struct MarioState *m) {
     Angle intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
     s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= 160.0f);
 #ifdef LEDGE_SIDLE
-    s32 accel         = 0x10000;
+    AnimAccel accel         = 0x10000;
     f32 sidewaysSpeed = 0.0f;
     f32 nextX         = m->pos[0];
     f32 nextZ         = m->pos[2];

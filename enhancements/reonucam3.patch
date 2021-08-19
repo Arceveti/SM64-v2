@@ -22,12 +22,12 @@ index 25b27983..2ff11930 100644
 @@ -98,6 +98,7 @@ Vec3f sPlayer2FocusOffset;
   * The pitch used for the credits easter egg.
   */
- s16 sCreditsPlayer2Pitch;
+ Angle sCreditsPlayer2Pitch;
 +s16 rButtonCounter2;
  /**
   * The yaw used for the credits easter egg.
   */
-@@ -107,6 +108,7 @@ s16 sCreditsPlayer2Yaw;
+@@ -107,6 +108,7 @@ Angle sCreditsPlayer2Yaw;
   */
  u8 sFramesPaused;
  
@@ -201,7 +201,7 @@ index 25b27983..2ff11930 100644
  /**
   * Updates the camera in outward radial mode.
   * sModeOffsetYaw is calculated in radial_camera_move, which calls offset_yaw_outward_radial
-@@ -2116,7 +2177,7 @@ s16 update_default_camera(struct Camera *c) {
+@@ -2116,7 +2177,7 @@ Angle update_default_camera(struct Camera *c) {
                                 gLakituState.goalPos[1],
                                 gLakituState.goalPos[2], &ceil);
      Angle yawDir;

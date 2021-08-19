@@ -60,17 +60,17 @@ def parse_file(filename, lines):
         lines[lineindex] = line
 
         is_struct = line.startswith("struct Animation ") and line.endswith("[] = {")
-        is_indices = line.startswith("u16 ") and line.endswith("[] = {")
-        is_values = line.startswith("s16 ") and line.endswith("[] = {")
+        is_indices = line.startswith("AnimIndex ") and line.endswith("[] = {")
+        is_values = line.startswith("AnimValue ") and line.endswith("[] = {")
         if not is_struct and not is_indices and not is_values:
-            raise_error(filename, lineindex, "\"" + line + "\" does not follow the pattern \"static const struct Animation anim_x[] = {\", \"static const u16 anim_x_indices[] = {\" or \"static const s16 anim_x_values[] = {\"")
+            raise_error(filename, lineindex, "\"" + line + "\" does not follow the pattern \"static const struct Animation anim_x[] = {\", \"static const AnimIndex anim_x_indices[] = {\" or \"static const AnimValue anim_x_values[] = {\"")
 
         if is_struct:
             name = lines[lineindex][len("struct Animation "):-6]
             lineindex = parse_struct(filename, lines, lineindex, name)
             num_headers += 1
         else:
-            name = lines[lineindex][len("s16 "):-6]
+            name = lines[lineindex][len("AnimValue "):-6]
             lineindex = parse_array(filename, lines, lineindex, name, is_indices)
 
 try:
@@ -126,13 +126,13 @@ try:
                 str(v4),
                 str(v5),
                 str(indices_len),
-                "(const s16 *)(offsetof(struct MarioAnimsObj, " + values + ") - " + offset_to_struct + ")",
-                "(const u16 *)(offsetof(struct MarioAnimsObj, " + indices + ") - " + offset_to_struct + ")",
+                "(const AnimValue *)(offsetof(struct MarioAnimsObj, " + values + ") - " + offset_to_struct + ")",
+                "(const AnimIndex *)(offsetof(struct MarioAnimsObj, " + indices + ") - " + offset_to_struct + ")",
                 offset_to_end + " - " + offset_to_struct
             ]) + "},")
         else:
             is_indices, arr = obj
-            type = "u16" if is_indices else "s16"
+            type = "AnimIndex" if is_indices else "AnimValue"
             structdef.append("{} {}[{}];".format(type, name, len(arr)))
             structobj.append("{" + ",".join(arr) + "},")
 

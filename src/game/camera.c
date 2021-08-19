@@ -96,11 +96,11 @@ Vec3f sPlayer2FocusOffset;
 /**
  * The pitch used for the credits easter egg.
  */
-s16 sCreditsPlayer2Pitch;
+Angle sCreditsPlayer2Pitch;
 /**
  * The yaw used for the credits easter egg.
  */
-s16 sCreditsPlayer2Yaw;
+Angle sCreditsPlayer2Yaw;
 #ifdef REONU_CAM_3
 /**
  * Duration the R button is not pressed
@@ -122,9 +122,9 @@ extern struct HandheldShakePoint sHandheldShakeSpline[4];
 extern s16 sHandheldShakeMag;
 extern f32 sHandheldShakeTimer;
 extern f32 sHandheldShakeInc;
-extern s16 sHandheldShakePitch;
-extern s16 sHandheldShakeYaw;
-extern s16 sHandheldShakeRoll;
+extern Angle sHandheldShakePitch;
+extern Angle sHandheldShakeYaw;
+extern Angle sHandheldShakeRoll;
 extern s16 sSelectionFlags;
 extern s16 s2ndRotateFlags;
 extern s16 sCameraSoundFlags;
@@ -203,9 +203,9 @@ struct HandheldShakePoint sHandheldShakeSpline[4];
 s16 sHandheldShakeMag;
 f32 sHandheldShakeTimer;
 f32 sHandheldShakeInc;
-s16 sHandheldShakePitch;
-s16 sHandheldShakeYaw;
-s16 sHandheldShakeRoll;
+Angle sHandheldShakePitch;
+Angle sHandheldShakeYaw;
+Angle sHandheldShakeRoll;
 
 /**
  * Controls which object to spawn in the intro and ending cutscenes.
@@ -857,7 +857,7 @@ void radial_camera_move(struct Camera *c) {
  * Moves Lakitu from zoomed in to zoomed out and vice versa.
  * When C-Down mode is not active, sLakituDist and sLakituPitch decrease to 0x0.
  */
-void lakitu_zoom(f32 rangeDist, s16 rangePitch) {
+void lakitu_zoom(f32 rangeDist, Angle rangePitch) {
     if (sLakituDist < 0) {
         if ((sLakituDist += 30) >         0) sLakituDist = 0;
     } else if (rangeDist < sLakituDist) {
@@ -895,7 +895,7 @@ void update_yaw_and_dist_from_c_up(UNUSED struct Camera *c) {
  */
 void mode_radial_camera(struct Camera *c) {
     Vec3f pos;
-    s16 oldAreaYaw = sAreaYaw;
+    Angle oldAreaYaw = sAreaYaw;
     if (gCameraMovementFlags & CAM_MOVING_INTO_MODE) update_yaw_and_dist_from_c_up(c);
     radial_camera_input_default(c);
     radial_camera_move(c);
@@ -1799,12 +1799,13 @@ void mode_mario_camera(struct Camera *c) {
 /**
  * Rotates the camera around the spiral staircase.
  */
+//! Angle32
 s32 update_spiral_stairs_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     /// The focus (Mario)'s yaw around the stairs,
     /// The camera's yaw around the stairs.
-    s16 focYaw, posYaw;
+    Angle focYaw, posYaw;
     // unused
-    UNUSED s16 focPitch, posPitch;
+    UNUSED Angle focPitch, posPitch;
     Vec3f cPos, checkPos;
     struct Surface *floor;
     // unused
@@ -1906,8 +1907,8 @@ s32 exit_c_up(struct Camera *c) {
     s32 sector;
     f32 ceilHeight, floorHeight;
     f32 curDist, d;
-    s16 curPitch, curYaw;
-    s16 checkYaw = 0x0;
+    Angle curPitch, curYaw;
+    Angle checkYaw = 0x0;
     if ((gCameraMovementFlags & CAM_MOVE_C_UP_MODE) && !(gCameraMovementFlags & CAM_MOVE_STARTED_EXITING_C_UP)) {
         vec3f_copy(checkFoc, c->focus);
         checkFoc[0] = sMarioCamState->pos[0];
@@ -2185,7 +2186,7 @@ void update_lakitu(struct Camera *c) {
     Vec3f newPos;
     Vec3f newFoc;
     f32 distToFloor;
-    s16 newYaw;
+    Angle newYaw;
     if (!(gCameraMovementFlags & CAM_MOVE_PAUSE_SCREEN)) {
         newYaw = next_lakitu_state(newPos, newFoc, c->pos, c->focus, sOldPosition, sOldFocus, c->nextYaw);
         set_or_approach_s16_symmetric(&c->yaw, newYaw, sYawSpeed);
@@ -2251,7 +2252,7 @@ void update_lakitu(struct Camera *c) {
  */
 void update_camera(struct Camera *c) {
 #ifdef REONU_CAM_3
-    extern s16 s8DirModeBaseYaw;
+    extern Angle s8DirModeBaseYaw;
 #endif
     gCamera = c;
     update_camera_hud_status(c);
@@ -3540,7 +3541,7 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
  * Updates the camera based on which C buttons are pressed this frame
  */
 void handle_c_button_movement(struct Camera *c) {
-    s16 cSideYaw;
+    Angle cSideYaw;
     // Zoom in
     if (gPlayer1Controller->buttonPressed & U_CBUTTONS) {
         if ((c->mode != CAMERA_MODE_FIXED) && (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT)) {
@@ -4904,6 +4905,7 @@ s16 camera_course_processing(struct Camera *c) {
     return c->mode;
 }
 
+//! move to surface_collision?
 /**
  * Move `pos` between the nearest floor and ceiling
  * @param lastGood unused, passed as the last position the camera was in

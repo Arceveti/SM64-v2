@@ -111,24 +111,24 @@
 #define INT_STATUS_TOUCHED_BOB_OMB       (1 << 23) /* 0x00800000 */
 
 
-s16 mario_obj_angle_to_object(           struct MarioState *m, struct Object *o);
-void mario_stop_riding_object(           struct MarioState *m                  );
-void mario_grab_used_object(             struct MarioState *m                  );
-void mario_drop_held_object(             struct MarioState *m                  );
-void mario_throw_held_object(            struct MarioState *m                  );
-void mario_stop_riding_and_holding(      struct MarioState *m                  );
-u32 does_mario_have_normal_cap_on_head(  struct MarioState *m                  );
-void mario_blow_off_cap(                 struct MarioState *m, f32 capSpeed    );
+Angle mario_obj_angle_to_object(          struct MarioState *m, struct Object *o);
+void mario_stop_riding_object(            struct MarioState *m                  );
+void mario_grab_used_object(              struct MarioState *m                  );
+void mario_drop_held_object(              struct MarioState *m                  );
+void mario_throw_held_object(             struct MarioState *m                  );
+void mario_stop_riding_and_holding(       struct MarioState *m                  );
+Bool32 does_mario_have_normal_cap_on_head(struct MarioState *m                  );
+void mario_blow_off_cap(                  struct MarioState *m, f32 capSpeed    );
 #ifdef DEBUG_LEVEL_SELECT
-u32 mario_lose_cap_to_enemy(UNUSED u32 enemyType);
+Bool32 mario_lose_cap_to_enemy(UNUSED u32 enemyType);
 #else
-u32 mario_lose_cap_to_enemy(       u32 enemyType);
+Bool32 mario_lose_cap_to_enemy(       u32 enemyType);
 #endif
 void mario_retrieve_cap(void);
-struct Object *mario_get_collided_object(struct MarioState *m, u32 interactType);
-u32 mario_check_object_grab(             struct MarioState *m                  );
-u32 get_door_save_file_flag(             struct Object     *door               );
-void mario_process_interactions(         struct MarioState *m                  );
-void mario_handle_special_floors(        struct MarioState *m                  );
+struct Object *mario_get_collided_object( struct MarioState *m, u32 interactType);
+Bool32 mario_check_object_grab(           struct MarioState *m                  );
+u32 get_door_save_file_flag(              struct Object     *door               );
+void mario_process_interactions(          struct MarioState *m                  );
+void mario_handle_special_floors(         struct MarioState *m                  );
 
 #endif // INTERACTION_H

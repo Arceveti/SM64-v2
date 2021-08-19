@@ -71,7 +71,7 @@ void bobomb_act_patrol(void) {
 }
 
 void bobomb_act_chase_mario(void) {
-    s16 animFrame      = ++o->header.gfx.animInfo.animFrame;
+    AnimFrame16 animFrame      = ++o->header.gfx.animInfo.animFrame;
     o->oForwardVel     = 20.0f;
     s16 collisionFlags = object_step();
     if (animFrame == 5 || animFrame == 16) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
@@ -215,7 +215,7 @@ void bhv_bobomb_buddy_init(void) {
 }
 
 void bobomb_buddy_act_idle(void) {
-    s16 animFrame           = o->header.gfx.animInfo.animFrame;
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     vec3f_copy(&o->oBobombBuddyPosCopyVec, &o->oPosVec);
     object_step();
     if ((animFrame == 5) || (animFrame == 16))       cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
@@ -281,7 +281,7 @@ void bobomb_buddy_act_talk(void) {
 }
 
 void bobomb_buddy_act_turn_to_talk(void) {
-    s16 animFrame = o->header.gfx.animInfo.animFrame;
+    AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     if ((animFrame == 5) || (animFrame == 16)) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x1000);
     if ((Angle) o->oMoveAngleYaw == (Angle) o->oAngleToMario) o->oAction = BOBOMB_BUDDY_ACT_TALK;

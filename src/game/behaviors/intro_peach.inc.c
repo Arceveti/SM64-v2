@@ -6,7 +6,7 @@
  */
 void intro_peach_set_pos_and_opacity(struct Object *o, f32 targetOpacity, f32 increment) {
     Vec3f newPos;
-    s16 focusPitch, focusYaw;
+    Angle focusPitch, focusYaw;
     f32 UNUSED dist, newOpacity;
 
     vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &focusPitch, &focusYaw);

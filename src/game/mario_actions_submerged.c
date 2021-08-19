@@ -183,8 +183,8 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
     }
 }
 
-static u32 perform_water_step(struct MarioState *m) {
-    u32 stepResult;
+static MarioStep perform_water_step(struct MarioState *m) {
+    MarioStep stepResult;
     Vec3f nextPos;
     Vec3f step;
     // Angle floorYaw;
@@ -290,7 +290,7 @@ static void update_swimming_pitch(struct MarioState *m) {
     }
 }
 
-static void common_idle_step(struct MarioState *m, AnimID32 animation, s32 animSpeed) {
+static void common_idle_step(struct MarioState *m, AnimID32 animation, AnimAccel animSpeed) {
     Angle *val = &m->marioBodyState->headAngle[0];
     update_swimming_yaw(m);
     update_swimming_pitch(m);
@@ -312,7 +312,7 @@ static void common_idle_step(struct MarioState *m, AnimID32 animation, s32 animS
 }
 
 static MarioAction act_water_idle(struct MarioState *m) {
-    u32 animSpeed = 0x10000;
+    AnimAccel animSpeed = 0x10000;
 #ifdef ENABLE_DEBUG_FREE_MOVE
     if (gPlayer1Controller->buttonDown & U_JPAD) {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
@@ -420,7 +420,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
 }
 
 static void play_swimming_noise(struct MarioState *m) {
-    s16 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
+    AnimFrame16 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
     if ((animFrame == 0) || (animFrame == 12)) play_sound(SOUND_ACTION_FLUTTER_KICK, m->marioObj->header.gfx.cameraToObject);
 }
 
@@ -442,7 +442,7 @@ static MarioAction check_water_jump(struct MarioState *m) {
 
 #ifdef WATER_GROUND_POUND
 static MarioAction act_water_ground_pound(struct MarioState *m) {
-    u32 stepResult;
+    MarioStep stepResult;
     f32 yOffset;
     s32 stateFlags = (m->heldObj != NULL);
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
@@ -838,7 +838,7 @@ static MarioAction act_water_death(struct MarioState *m) {
 }
 
 static MarioAction act_water_plunge(struct MarioState *m) {
-    u32 stepResult;
+    MarioStep stepResult;
     s32 stateFlags = (m->heldObj != NULL);
     f32 endVSpeed  = (swimming_near_surface(m) ? 0.0f : -5.0f);
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(         m, ACT_METAL_WATER_FALLING, 1);
@@ -1007,12 +1007,12 @@ static MarioAction act_hold_metal_water_standing(struct MarioState *m) {
 }
 
 static MarioAction act_metal_water_walking(struct MarioState *m) {
-    s32 animSpeed;
+    AnimAccel animSpeed;
     if (!(m->flags & MARIO_METAL_CAP)) return set_mario_action(m, ACT_WATER_IDLE          , 0);
     if (m->input & INPUT_FIRST_PERSON) return set_mario_action(m, ACT_METAL_WATER_STANDING, 0);
     if (m->input & INPUT_A_PRESSED   ) return set_mario_action(m, ACT_METAL_WATER_JUMP    , 0);
     if (m->input & INPUT_IDLE        ) return set_mario_action(m, ACT_METAL_WATER_STANDING, 0);
-    if ((animSpeed = (s32)((m->forwardVel / 4.0f) * 0x10000)) < 0x1000) animSpeed = 0x1000;
+    if ((animSpeed = (AnimAccel)((m->forwardVel / 4.0f) * 0x10000)) < 0x1000) animSpeed = 0x1000;
     set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, animSpeed);
     play_metal_water_walking_sound(m);
     update_metal_water_walking_speed(m);
@@ -1024,13 +1024,13 @@ static MarioAction act_metal_water_walking(struct MarioState *m) {
 }
 
 static MarioAction act_hold_metal_water_walking(struct MarioState *m) {
-    s32 animSpeed;
+    AnimAccel animSpeed;
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) return drop_and_set_mario_action(m, ACT_METAL_WATER_WALKING      , 0);
     if (!(m->flags & MARIO_METAL_CAP)                              ) return set_mario_action(         m, ACT_HOLD_WATER_IDLE          , 0);
     if (m->input & INPUT_A_PRESSED                                 ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_JUMP    , 0);
     if (m->input & INPUT_IDLE                                      ) return set_mario_action(         m, ACT_HOLD_METAL_WATER_STANDING, 0);
     m->intendedMag *= 0.4f;
-    if ((animSpeed = (s32)((m->forwardVel / 2.0f) * 0x10000)) < 0x1000) animSpeed = 0x1000;
+    if ((animSpeed = (AnimAccel)((m->forwardVel / 2.0f) * 0x10000)) < 0x1000) animSpeed = 0x1000;
     set_mario_anim_with_accel(m, MARIO_ANIM_RUN_WITH_LIGHT_OBJ, animSpeed);
     play_metal_water_walking_sound(m);
     update_metal_water_walking_speed(m);

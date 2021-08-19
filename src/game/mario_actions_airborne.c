@@ -17,8 +17,8 @@
 
 #include "config.h"
 
-void play_flip_sounds(struct MarioState *m, s16 frame1, s16 frame2, s16 frame3) {
-    s32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
+void play_flip_sounds(struct MarioState *m, AnimFrame32 frame1, AnimFrame32 frame2, AnimFrame32 frame3) {
+    AnimFrame32 animFrame = m->marioObj->header.gfx.animInfo.animFrame;
     if ((animFrame == frame1)
      || (animFrame == frame2)
      || (animFrame == frame3)) play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
@@ -50,6 +50,7 @@ MarioAction lava_boost_on_wall(struct MarioState *m) {
 }
 
 #ifdef WALL_SLIDE
+//! move to surface_collision?
 void move_towards_wall(struct MarioState *m, f32 amount) {
     m->vel[0] += (m->wall->normal.x * amount);
     m->vel[1] += (m->wall->normal.y * amount);
@@ -331,12 +332,12 @@ void update_flying(struct MarioState *m) {
     m->slideVelZ = m->vel[2];
 }
 
-MarioAction common_air_action_step(struct MarioState *m, MarioAction landAction, AnimID32 animation, u32 stepArg,
+MarioStep common_air_action_step(struct MarioState *m, MarioAction landAction, AnimID32 animation, u32 stepArg,
 #ifndef AIR_TURN
 UNUSED
 #endif
 u32 withTurn) {
-    u32 stepResult;
+    MarioStep stepResult;
 #ifdef AIR_TURN
     if (withTurn) {
         update_air_with_turn(m);
@@ -812,7 +813,7 @@ MarioAction act_steep_jump(struct MarioState *m) {
 }
 
 MarioAction act_ground_pound(struct MarioState *m) {
-    u32 stepResult;
+    MarioStep stepResult;
     f32 yOffset;
     play_sound_if_no_flag(m, SOUND_ACTION_THROW, MARIO_ACTION_SOUND_PLAYED);
     if (m->actionState == 0) {
@@ -995,9 +996,9 @@ MarioAction act_crazy_box_bounce(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction common_air_knockback_step(struct MarioState *m, MarioAction landAction, MarioAction hardFallAction, AnimID32 animation, f32 speed) {
+MarioStep common_air_knockback_step(struct MarioState *m, MarioAction landAction, MarioAction hardFallAction, AnimID32 animation, f32 speed) {
     mario_set_forward_vel(m, speed);
-    u32 stepResult = perform_air_step(m, 0);
+    MarioStep stepResult = perform_air_step(m, 0);
     switch (stepResult) {
         case AIR_STEP_NONE:
             set_mario_animation(m, animation);
@@ -1396,7 +1397,7 @@ MarioAction act_slide_kick(struct MarioState *m) {
 }
 
 MarioAction act_jump_kick(struct MarioState *m) {
-    s32 animFrame;
+    AnimFrame32 animFrame;
     if (m->actionState == 0) {
         play_sound_if_no_flag(m, SOUND_MARIO_PUNCH_HOO, MARIO_ACTION_SOUND_PLAYED);
         m->marioObj->header.gfx.animInfo.animID = -1;

@@ -589,8 +589,8 @@ MarioAction act_fall_after_star_grab(struct MarioState *m) {
     return FALSE;
 }
 
-s32 common_death_handler(struct MarioState *m, AnimID32 animation, s32 frameToDeathWarp) {
-    s32 animFrame = set_mario_animation(m, animation);
+AnimFrame32 common_death_handler(struct MarioState *m, AnimID32 animation, AnimFrame32 frameToDeathWarp) {
+    AnimFrame32 animFrame = set_mario_animation(m, animation);
     if (animFrame == frameToDeathWarp) level_trigger_warp(m, WARP_OP_DEATH);
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
     stop_and_set_height_to_floor(m);
@@ -908,7 +908,7 @@ MarioAction act_falling_exit_airborne(struct MarioState *m) {
 }
 
 MarioAction act_exit_land_save_dialog(struct MarioState *m) {
-    s32 animFrame;
+    AnimFrame32 animFrame;
     stationary_ground_step(m);
     play_mario_landing_sound_once(m, SOUND_ACTION_TERRAIN_LANDING);
     switch (m->actionState) {
@@ -1339,7 +1339,7 @@ MarioAction act_squished(struct MarioState *m) {
 }
 
 MarioAction act_putting_on_cap(struct MarioState *m) {
-    s32 animFrame = set_mario_animation(m, MARIO_ANIM_PUT_CAP_ON);
+    AnimFrame32 animFrame = set_mario_animation(m, MARIO_ANIM_PUT_CAP_ON);
     if (animFrame ==  0) enable_time_stop();
     if (animFrame == 28) cutscene_put_cap_on(m);
     if (is_anim_at_end(m)) {
@@ -1354,8 +1354,8 @@ MarioAction act_putting_on_cap(struct MarioState *m) {
     return FALSE;
 }
 
-void stuck_in_ground_handler(struct MarioState *m, AnimID32 animation, s32 unstuckFrame, s32 target2, s32 target3, MarioAction endAction) {
-    s32 animFrame = set_mario_animation(m, animation);
+void stuck_in_ground_handler(struct MarioState *m, AnimID32 animation, AnimFrame32 unstuckFrame, AnimFrame32 target2, AnimFrame32 target3, MarioAction endAction) {
+    AnimFrame32 animFrame = set_mario_animation(m, animation);
     if (m->input & INPUT_A_PRESSED) {
         m->actionTimer++;
         if (m->actionTimer >= 5 && animFrame < unstuckFrame - 1) {
@@ -1542,7 +1542,7 @@ static void jumbo_star_cutscene_falling(struct MarioState *m) {
 // jumbo star cutscene: Mario takes off
 static void jumbo_star_cutscene_taking_off(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
-    s32 animFrame;
+    AnimFrame32 animFrame;
     if (m->actionState == 0) {
         set_mario_animation(m, MARIO_ANIM_FINAL_BOWSER_RAISE_HAND_SPIN);
         marioObj->oMarioJumboStarCutscenePosZ = 0.0f;
@@ -1574,7 +1574,7 @@ static void jumbo_star_cutscene_taking_off(struct MarioState *m) {
 static void jumbo_star_cutscene_flying(struct MarioState *m) {
     Vec3f targetPos;
     Vec3f targetD;
-    f32 targetHyp;
+    f32   targetHyp;
     Angle targetAngle;
     switch (m->actionState) {
         case 0:
@@ -1760,7 +1760,7 @@ static void end_peach_cutscene_run_to_peach(struct MarioState *m) {
 // "Mario!"
 // "The power of the Stars is restored to the castle..."
 static void end_peach_cutscene_dialog_1(struct MarioState *m) {
-    s32 animFrame = set_mario_animation(m, (m->actionState == 0) ? MARIO_ANIM_CREDITS_TAKE_OFF_CAP : MARIO_ANIM_CREDITS_LOOK_UP);
+    AnimFrame32 animFrame = set_mario_animation(m, (m->actionState == 0) ? MARIO_ANIM_CREDITS_TAKE_OFF_CAP : MARIO_ANIM_CREDITS_LOOK_UP);
     if (m->actionState == 0) {
         if (animFrame == 8) cutscene_take_cap_off(m);
         if (is_anim_at_end(m)) m->actionState++;
@@ -1875,7 +1875,7 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
 }
 
 static void end_peach_cutscene_star_dance(struct MarioState *m) {
-    s32 animFrame = set_mario_animation(m, MARIO_ANIM_CREDITS_PEACE_SIGN);
+    AnimFrame32 animFrame = set_mario_animation(m, MARIO_ANIM_CREDITS_PEACE_SIGN);
     if (animFrame      == 77) cutscene_put_cap_on(m);
     if (animFrame      == 88) play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
     if (animFrame      >= 98) m->marioBodyState->handState = MARIO_HAND_PEACE_SIGN;

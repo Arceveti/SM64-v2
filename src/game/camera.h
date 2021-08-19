@@ -632,7 +632,7 @@ u8   get_cutscene_from_mario_status(struct Camera *c);
 void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ);
 void approach_camera_height(      struct Camera *c, f32 goal, f32 inc);
 void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3s rotation);
-s16  next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, Angle yaw);
+Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, Angle yaw);
 void set_fixed_cam_axis_sa_lobby(UNUSED s16 preset);
 s16  camera_course_processing(    struct Camera *c);
 void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood);

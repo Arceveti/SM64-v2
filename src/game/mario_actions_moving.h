@@ -5,7 +5,7 @@
 
 #include "types.h"
 
-void play_step_sound(            struct MarioState *m, s16 frame1, s16 frame2);
+void play_step_sound(            struct MarioState *m, AnimFrame16 frame1, AnimFrame16 frame2);
 MarioAction mario_execute_moving_action(struct MarioState *m);
 
 #endif // MARIO_ACTIONS_MOVING

@@ -401,9 +401,9 @@ void geo_reset_object_node(       struct GraphNodeObject *graphNode);
 void geo_obj_init(                struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3s angle);
 void geo_obj_init_spawninfo(      struct GraphNodeObject *graphNode, struct SpawnInfo *spawn);
 void geo_obj_init_animation(      struct GraphNodeObject *graphNode, struct Animation **animPtrAddr);
-void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr, u32 animAccel);
+void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Animation **animPtrAddr, AnimAccel animAccel);
 
-s32  retrieve_animation_index(s32 frame, u16 **attributes);
+s32  retrieve_animation_index(AnimFrame32 frame, u16 **attributes);
 
 s16  geo_update_animation_frame(        struct AnimInfo        *obj, s32 *accelAssist);
 UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position);

@@ -74,7 +74,7 @@ void bhv_bowser_tail_anchor_loop(void) {
  */
 void bhv_bowser_flame_spawn_loop(void) {
     struct Object *bowser = o->parentObj;
-    s32 animFrame;
+    AnimFrame32 animFrame;
     f32 posX, posZ;
     f32 cossYaw = coss(bowser->oMoveAngleYaw);
     f32 sinsYaw = sins(bowser->oMoveAngleYaw);
@@ -527,9 +527,9 @@ void bowser_act_spit_fire_into_sky(void) {
     // Play animation
     cur_obj_init_animation_with_sound(BOWSER_ANIM_BREATH_UP);
     // Set frames
-    s32 frame = o->header.gfx.animInfo.animFrame;
+    AnimFrame32 frame = o->header.gfx.animInfo.animFrame;
     // Spawn flames in the middle of the animation
-    if (frame > 24 && frame < 36) {
+    if ((frame > 24) && (frame < 36)) {
         cur_obj_play_sound_1(SOUND_AIR_BOWSER_SPIT_FIRE);
         if (frame == 35) { // Spawns Blue flames at this frame
             spawn_object_relative(BOWSER_FLAME_BLUE_BP_SPAWN_BLUE_FLAMES, 0, 0x190, 0x64, o, MODEL_RED_FLAME, bhvBlueBowserFlame);

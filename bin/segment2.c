@@ -2897,6 +2897,7 @@ const Gfx dl_paintings_draw_ripples[] = {
 
 // 14A60: triangle mesh
 // 0x02014A60
+//! PaintingData?
 const s16 seg2_painting_triangle_mesh[] = {
     157, // numVtx
     // format:
@@ -3334,6 +3335,7 @@ const s16 seg2_painting_triangle_mesh[] = {
  *      num neighbors, neighbor0, neighbor1, ...
  * The nth entry corresponds to the nth vertex in seg2_painting_triangle_mesh
  */
+//! PaintingData?
 const s16 seg2_painting_mesh_neighbor_tris[] = {
       3,   1,   2,   3,
       1,   1,

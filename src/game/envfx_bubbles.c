@@ -327,7 +327,7 @@ void append_bubble_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s verte
  */
 void envfx_set_bubble_texture(s32 mode, s16 index) {
     void **imageArr;
-    s16 frame = (gEnvFxBuffer + index)->animFrame;
+    AnimFrame16 frame = (gEnvFxBuffer + index)->animFrame;
     switch (mode) {
         case ENVFX_FLOWERS:
             imageArr = segmented_to_virtual(&flower_bubbles_textures_ptr_0B002008);

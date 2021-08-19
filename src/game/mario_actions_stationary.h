@@ -8,7 +8,7 @@
 MarioAction check_common_idle_cancels(      struct MarioState *m);
 MarioAction check_common_hold_idle_cancels( struct MarioState *m);
 MarioAction act_idle(                       struct MarioState *m);
-void        play_anim_sound(                struct MarioState *m, u32 actionState, s32 animFrame, u32 sound);
+void        play_anim_sound(                struct MarioState *m, u32 actionState, AnimFrame32 animFrame, u32 sound);
 MarioAction act_start_sleeping(             struct MarioState *m);
 MarioAction act_sleeping(                   struct MarioState *m);
 MarioAction act_waking_up(                  struct MarioState *m);
