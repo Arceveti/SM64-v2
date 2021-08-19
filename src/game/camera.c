@@ -2551,7 +2551,7 @@ void init_camera(struct Camera *c) {
             break;
         case LEVEL_SA:               marioOffset[2] =  200.0f;                        break;
         case LEVEL_CASTLE_COURTYARD: marioOffset[2] = -300.0f;                        break;
-        case LEVEL_LLL: gCameraMovementFlags |= CAM_MOVE_ZOOMED_OUT;                  break;
+        case LEVEL_LLL:              gCameraMovementFlags |= CAM_MOVE_ZOOMED_OUT;     break;
         case LEVEL_CASTLE:           marioOffset[2] =  150.0f;                        break;
         case LEVEL_RR: vec3f_set(sFixedModeBasePosition, -2985.0f, 478.0f, -5568.0f); break;
     }

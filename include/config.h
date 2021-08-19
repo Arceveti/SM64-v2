@@ -200,13 +200,14 @@
 #define RAINBOW_BOWSER
 
 // Overlay effects (Arceveti)
-#define ENABLE_SCREEN_TINT_EFFECTS
 // - Red flash when damaged
 // - Yellow flashed when shocked
 #define DAMAGE_SCREEN_TINT
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
 #define ENVIRONMENT_SCREEN_TINT
+// - Lava color tint specifically for inside the LLL volcano (requires ENVIRONMENT_SCREEN_TINT)
+#define LLL_VOLCANO_TINT
 
 // Read the framebuffer to the metal cap texture to make it look reflective (mks#2512, Rovert, Arceveti)
 #define METAL_CAP_REFLECTION

@@ -89,8 +89,9 @@
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
 - Camera:
-    - Focus on bomb when spinning Bowser
-    - Make puppycam collision not scuffed in certain areas
+    - Focus on nearest bomb to center of view when spinning Bowser
+    - Make Puppycam collision not scuffed in certain areas
+    - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c

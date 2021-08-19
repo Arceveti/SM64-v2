@@ -312,7 +312,7 @@ void play_transition_after_delay(s16 transType, s16 time, Color red, Color green
     play_transition(transType, time, red, green, blue);
 }
 
-#ifdef ENABLE_SCREEN_TINT_EFFECTS
+#if defined(ENVIRONMENT_SCREEN_TINT) || defined(DAMAGE_SCREEN_TINT)
 // 0x0200EDA8 - 0x0200EDE8
 static const Vtx vertex_screen_shade_box[] = {
     {{{     0,    -80,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
@@ -346,55 +346,76 @@ void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
-void render_screen_overlay(void) {
-#ifdef DAMAGE_SCREEN_TINT
-    struct MarioState *m = gMarioState;
-#endif
-    Vec3s rgbWater       = {   5,  80, 150};
-    Vec3s rgbHurt        = { 255,   0,   0};
-    Vec3s rgb            = {   0,   0,   0};
-    u32 aWater           = 0;
-    u32 aHurt            = 0;
-    u32 a                = 0;
 #ifdef ENVIRONMENT_SCREEN_TINT
-    f32 surfaceHeight    = -(gLakituState.oldPitch / 90.0f);
-    f32 waterLevel       = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f);
-    f32 gasLevel         = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 40.0f);
-    if (gLakituState.pos[1] < waterLevel) {
-        aWater = (waterLevel - gLakituState.pos[1]);
-    } else if (gLakituState.pos[1] < gasLevel) {
-        aWater = (  gasLevel - gLakituState.pos[1]);
-        vec3s_set(rgbWater, 255, 255, 0);
-    }
-    if (aWater > 63) aWater = 63;
+static const ColorRGB waterOverlayColor     = {   5,  80, 150};
+static const ColorRGB poisonGasOverlayColor = { 255, 255,   0};
 #endif
 #ifdef DAMAGE_SCREEN_TINT
+static const ColorRGB damageOverlayColor    = { 255,   0,   0};
+static const ColorRGB shockedOverlayColor   = { 255, 238,   0};
+#endif
+#if defined(DAMAGE_SCREEN_TINT) || defined(LLL_VOLCANO_TINT)
+static const ColorRGB lavaOverlayColor      = { 143,   6,   0};
+#endif
+
+//! find a better place for this?
+/// Copy ColorRGB vector src to dest
+void vec_rgb_copy(ColorRGB dest, const ColorRGB src) {
+    dest[0] = src[0];
+    dest[1] = src[1];
+    dest[2] = src[2];
+}
+
+//! use ColorRGBA? u8 type breaks water/gas level checking though
+void render_screen_overlay(void) {
+    struct MarioState *m = gMarioState;
+    if (m->area == NULL) return;
+#ifdef ENVIRONMENT_SCREEN_TINT
+    ColorRGBA colorEnv = {0, 0, 0, 0};
+    f32 surfaceHeight  = -(gLakituState.oldPitch / 90.0f);
+    f32 waterLevel     = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 32.0f);
+    f32 gasLevel       = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + surfaceHeight + 32.0f);
+    f32 camHeight      = gLakituState.pos[1];
+    if (camHeight < waterLevel) {
+        if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, waterOverlayColor); 
+    } else if (camHeight < gasLevel) {
+        if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, poisonGasOverlayColor);
+#ifdef LLL_VOLCANO_TINT
+    } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
+        if ((colorEnv[3] = CLAMP((64 - ((s32)(m->pos[1]) >> 6)), 0, 64)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
+#endif 
+    }
+#endif
+#ifdef DAMAGE_SCREEN_TINT
+    ColorRGBA damageColor = {0, 0, 0, 0};
+    MarioAction action = m->action;
     if ((m->health < 0x100) && (m->hurtShadeAlpha > 0)) {
         m->hurtShadeAlpha--;
     } else if (m->hurtShadeAlpha >= 4) {
+        damageColor[3] = m->hurtShadeAlpha;
+        if ((action == ACT_SHOCKED) || (action == ACT_WATER_SHOCKED) || (action == ACT_SHOCKWAVE_BOUNCE)) {
+            vec_rgb_copy(damageColor, shockedOverlayColor);
+        } else if (m->particleFlags & PARTICLE_FIRE) {
+            vec_rgb_copy(damageColor, lavaOverlayColor);
+        } else {
+            vec_rgb_copy(damageColor, damageOverlayColor);
+        }
         m->hurtShadeAlpha -= 4;
     }
-    aHurt = m->hurtShadeAlpha;
 #endif
-    a = aWater + aHurt;
-    if (a > 0) {
-#ifdef DAMAGE_SCREEN_TINT
-        if ((m->action == ACT_SHOCKED)
-         || (m->action == ACT_WATER_SHOCKED)
-         || (m->action == ACT_SHOCKWAVE_BOUNCE)) vec3s_set(rgbHurt, 255, 238, 0);
-#endif
-        rgb[0] = ((rgbWater[0] * aWater) + (rgbHurt[0] * aHurt))/a;
-        rgb[1] = ((rgbWater[1] * aWater) + (rgbHurt[1] * aHurt))/a;
-        rgb[2] = ((rgbWater[2] * aWater) + (rgbHurt[2] * aHurt))/a;
-        if (rgb[0] <   0) rgb[0] =   0;
-        if (rgb[1] <   0) rgb[1] =   0;
-        if (rgb[2] <   0) rgb[2] =   0;
-        if (rgb[0] > 255) rgb[0] = 255;
-        if (rgb[1] > 255) rgb[1] = 255;
-        if (rgb[2] > 255) rgb[2] = 255;
-        if (    a  > 255)     a  = 255;
-        shade_screen_color(rgb[0], rgb[1], rgb[2], a);
+#if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
+    ColorRGBA color;
+    if ((color[3] = (colorEnv[3] + damageColor[3])) > 0) {
+        color[0] = (((colorEnv[0] * colorEnv[3]) + (damageColor[0] * damageColor[3])) / color[3]);
+        color[1] = (((colorEnv[1] * colorEnv[3]) + (damageColor[1] * damageColor[3])) / color[3]);
+        color[2] = (((colorEnv[2] * colorEnv[3]) + (damageColor[2] * damageColor[3])) / color[3]);
+        shade_screen_color(color[0], color[1], color[2], color[3]);
     }
+#elif defined(ENVIRONMENT_SCREEN_TINT)
+    shade_screen_color(colorEnv[0], colorEnv[1], colorEnv[2], colorEnv[3]);
+#elif defined(DAMAGE_SCREEN_TINT)
+    shade_screen_color(damageColor[0], damageColor[1], damageColor[2], damageColor[3]);
+#endif
 }
 #endif
 
@@ -404,7 +425,7 @@ void render_game(void) {
         gSPViewport(  gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
         render_hud();
-#ifdef ENABLE_SCREEN_TINT_EFFECTS
+#if defined(ENVIRONMENT_SCREEN_TINT) || defined(DAMAGE_SCREEN_TINT)
         render_screen_overlay();
 #endif
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
