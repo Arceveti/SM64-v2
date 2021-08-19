@@ -34,15 +34,15 @@
 
 struct gPuppyStruct gPuppyCam;
 struct sPuppyVolume *sPuppyVolumeStack[MAX_PUPPYCAM_VOLUMES];
-s16 sFloorHeight      = 0;
-u8  gPCOptionOpen     = 0;
-s8  gPCOptionSelected = 0;
-s32 gPCOptionTimer    = 0;
-u8  gPCOptionIndex    = 0;
-u8  gPCOptionScroll   = 0;
-u16 gPuppyVolumeCount = 0;
+s16   sFloorHeight      = 0;
+Bool8 gPCOptionOpen     = FALSE;
+s8    gPCOptionSelected = 0;
+s32   gPCOptionTimer    = 0;
+u8    gPCOptionIndex    = 0;
+u8    gPCOptionScroll   = 0;
+u16   gPuppyVolumeCount = 0;
 struct MemoryPool *gPuppyMemoryPool;
-s32 gPuppyError       = 0;
+s32   gPuppyError       = 0;
 
 #if defined(VERSION_EU)
 static uchar  gPCOptionStringsFR[][64] = {{NC_ANALOGUE_FR}, {NC_CAMX_FR}, {NC_CAMY_FR}, {NC_INVERTX_FR}, {NC_INVERTY_FR}, {NC_CAMC_FR}, {NC_SCHEME_FR}, {NC_WIDE_FR}, {OPTION_LANGUAGE_FR}};
@@ -131,7 +131,7 @@ void puppycam_boot(void) {
     gPuppyCam.stickN[1]     = 0;
     gPuppyMemoryPool        = mem_pool_init(MAX_PUPPYCAM_VOLUMES * sizeof(struct sPuppyVolume), MEMORY_POOL_LEFT);
     gPuppyVolumeCount       = 0;
-    gPuppyCam.enabled       = 1;
+    gPuppyCam.enabled       = TRUE;
     puppycam_get_save();
 }
 
@@ -171,7 +171,7 @@ static void newcam_set_language(void) {
 /// CUTSCENE
 
 UNUSED void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput) {
-    gPuppyCam.cutscene   = 1;
+    gPuppyCam.cutscene   = TRUE;
     gPuppyCam.sceneTimer = 0;
     gPuppyCam.sceneFunc  = scene;
     gPuppyCam.sceneInput = lockinput;
@@ -180,8 +180,8 @@ UNUSED void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput) {
 static void newcam_process_cutscene(void) {
     if (gPuppyCam.cutscene) {
         if ((gPuppyCam.sceneFunc)() == 1) {
-            gPuppyCam.cutscene   = 0;
-            gPuppyCam.sceneInput = 0;
+            gPuppyCam.cutscene   = FALSE;
+            gPuppyCam.sceneInput = FALSE;
             gPuppyCam.flags      = gPuppyCam.intendedFlags;
         }
         gPuppyCam.sceneTimer++;
@@ -212,7 +212,7 @@ static void puppycam_display_box(s32 x1, s32 y1, s32 x2, s32 y2, Color r, Color 
 void puppycam_change_setting(s8 toggle) {
     if (gPlayer1Controller->buttonDown & A_BUTTON) toggle*=  5;
     if (gPlayer1Controller->buttonDown & B_BUTTON) toggle*= 10;
-    if (gPCOptions[gPCOptionSelected].gPCOptionMin == FALSE && gPCOptions[gPCOptionSelected].gPCOptionMax == TRUE) {
+    if (!gPCOptions[gPCOptionSelected].gPCOptionMin && (gPCOptions[gPCOptionSelected].gPCOptionMax == TRUE)) {
         *gPCOptions[gPCOptionSelected].gPCOptionVar ^= 1;
     } else {
         *gPCOptions[gPCOptionSelected].gPCOptionVar += toggle;
@@ -300,14 +300,14 @@ extern struct SaveBuffer gSaveBuffer;
 void puppycam_check_pause_buttons() {
     if (gPlayer1Controller->buttonPressed & R_TRIG) {
         play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
-        if (gPCOptionOpen == 0) {
-            gPCOptionOpen = 1;
+        if (!gPCOptionOpen) {
+            gPCOptionOpen = TRUE;
 #if MULTILANG
             newcam_set_language();
             eu_set_language(gInGameLanguage-1);
 #endif
         } else {
-            gPCOptionOpen = 0;
+            gPCOptionOpen = FALSE;
 #if MULTILANG
             load_language_text();
 #endif
@@ -960,7 +960,7 @@ static void puppycam_collision(void) {
     }
     #define START_DIST 500
     #define END_DIST   250
-    gPuppyCam.opacity = CLAMP((f32)(((gPuppyCam.zoom - END_DIST) / 255.0f) * (START_DIST-END_DIST)), 0, 255);
+    gPuppyCam.opacity = CLAMP((f32)(((gPuppyCam.zoom - END_DIST) / 255.0f) * (START_DIST - END_DIST)), 0, 255);
 }
 
 extern Vec3f sOldPosition;

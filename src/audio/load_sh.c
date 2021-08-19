@@ -1243,7 +1243,7 @@ s32 func_sh_802f573c(s32 audioResetStatus) {
         }
         if (osRecvMesg(&gUnkQueue2, (OSMesg *) &idx, OS_MESG_NOBLOCK) == -1) return 0;
         idx >>= 0x18;
-        if (D_SH_8034EC88[idx].isFree == FALSE) {
+        if (!D_SH_8034EC88[idx].isFree) {
             sample = D_SH_8034EC88[idx].sample;
             added = (sample->sampleAddr + sample->size + sample->medium);
             if (added == D_SH_8034EC88[idx].endAndMediumIdentification) {

@@ -368,8 +368,7 @@ void vec_rgb_copy(ColorRGB dest, const ColorRGB src) {
 
 //! use ColorRGBA? u8 type breaks water/gas level checking though
 void render_screen_overlay(void) {
-    struct MarioState *m = gMarioState;
-    if (m->area == NULL) return;
+    if (gMarioState->area == NULL) return;
 #ifdef ENVIRONMENT_SCREEN_TINT
     ColorRGBA colorEnv = {0, 0, 0, 0};
     f32 surfaceHeight  = -(gLakituState.oldPitch / 90.0f);
@@ -382,25 +381,24 @@ void render_screen_overlay(void) {
         if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, poisonGasOverlayColor);
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
-        if ((colorEnv[3] = CLAMP((64 - ((s32)(m->pos[1]) >> 6)), 0, 64)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
+        if ((colorEnv[3] = CLAMP((64 - ((s32)(gMarioState->pos[1]) >> 6)), 0, 64)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
 #endif 
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT
     ColorRGBA damageColor = {0, 0, 0, 0};
-    MarioAction action = m->action;
-    if ((m->health < 0x100) && (m->hurtShadeAlpha > 0)) {
-        m->hurtShadeAlpha--;
-    } else if (m->hurtShadeAlpha >= 4) {
-        damageColor[3] = m->hurtShadeAlpha;
-        if ((action == ACT_SHOCKED) || (action == ACT_WATER_SHOCKED) || (action == ACT_SHOCKWAVE_BOUNCE)) {
+    if ((gMarioState->health < 0x100) && (gMarioState->hurtShadeAlpha > 0)) {
+        gMarioState->hurtShadeAlpha--;
+    } else if (gMarioState->hurtShadeAlpha >= 4) {
+        damageColor[3] = gMarioState->hurtShadeAlpha;
+        if (mario_is_shocked(gMarioState)) {
             vec_rgb_copy(damageColor, shockedOverlayColor);
-        } else if (m->particleFlags & PARTICLE_FIRE) {
+        } else if (mario_is_burning(gMarioState)) {
             vec_rgb_copy(damageColor, lavaOverlayColor);
         } else {
             vec_rgb_copy(damageColor, damageOverlayColor);
         }
-        m->hurtShadeAlpha -= 4;
+        gMarioState->hurtShadeAlpha -= 4;
     }
 #endif
 #if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
@@ -420,7 +418,7 @@ void render_screen_overlay(void) {
 #endif
 
 void render_game(void) {
-    if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
+    if ((gCurrentArea != NULL) && !gWarpTransition.pauseRendering) {
         geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
         gSPViewport(  gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));

@@ -199,14 +199,14 @@ void sequence_player_init_channels(struct SequencePlayer *seqPlayer, u16 channel
     struct SequenceChannel *seqChannel;
     s32 i;
     for (i = 0; i < CHANNELS_MAX; i++) {
-        if (channelBits & 1) {
+        if (channelBits & 0x1) {
             seqChannel = seqPlayer->channels[i];
-            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == TRUE && seqChannel->seqPlayer == seqPlayer) {
+            if ((IS_SEQUENCE_CHANNEL_VALID(seqChannel) == TRUE) && (seqChannel->seqPlayer == seqPlayer)) {
                 sequence_channel_disable(seqChannel);
                 seqChannel->seqPlayer = NULL;
             }
             seqChannel = allocate_sequence_channel();
-            if (IS_SEQUENCE_CHANNEL_VALID(seqChannel) == FALSE) {
+            if (!IS_SEQUENCE_CHANNEL_VALID(seqChannel)) {
                 eu_stubbed_printf_0("Audio:Track:Warning: No Free Notetrack\n");
                 gAudioErrorFlags       = (i + 0x10000);
                 seqPlayer->channels[i] = seqChannel;
@@ -399,7 +399,7 @@ u16 m64_read_compressed_u16(struct M64ScriptState *state) {
 #if defined(VERSION_SH)
 void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     s32 cmd;
-    if (layer->enabled == FALSE) return;
+    if (!layer->enabled) return;
     if (layer->delay > 1) {
         layer->delay--;
         if (!layer->stopSomething && layer->delay <= layer->duration) {
@@ -829,9 +829,9 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     cmd = FALSE;
     if (!layer->continuousNotes) {
         cmd = TRUE;
-    } else if (layer->note == NULL || layer->status == SOUND_LOAD_STATUS_NOT_LOADED) {
+    } else if ((layer->note == NULL) || (layer->status == SOUND_LOAD_STATUS_NOT_LOADED)) {
         cmd = TRUE;
-    } else if (sameSound == FALSE) {
+    } else if (!sameSound) {
         seq_channel_layer_note_decay(layer);
         cmd = TRUE;
     }
@@ -843,8 +843,8 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     else if (layer->sound == NULL) {
         init_synthetic_wave(layer->note, layer);
     }
-    if (cmd != FALSE) layer->note = alloc_note(layer);
-    if (layer->note != NULL && layer->note->parentLayer == layer) note_vibrato_init(layer->note);
+    if (cmd) layer->note = alloc_note(layer);
+    if ((layer->note != NULL) && (layer->note->parentLayer == layer)) note_vibrato_init(layer->note);
 // #if defined(VERSION_EU) || defined(VERSION_SH)
 //     if (seqChannel) {
 //     }

@@ -142,7 +142,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
 #pragma inline routine(get_instrument)
 #endif
     sameSound = TRUE;
-    if ((*layer).enabled == FALSE) return;
+    if (!(*layer).enabled) return;
     if ((*layer).delay > 1) {
         (*layer).delay--;
         if (!layer->stopSomething && layer->delay <= layer->duration) {
@@ -406,12 +406,12 @@ l13cc:
         cmdSemitone = TRUE;
     } else if (layer->note == NULL || layer->status == SOUND_LOAD_STATUS_NOT_LOADED) {
         cmdSemitone = TRUE;
-    } else if (sameSound == FALSE) {
+    } else if (!sameSound) {
         seq_channel_layer_note_decay(layer);
         cmdSemitone = TRUE;
     } else if (layer->sound == NULL) {
         init_synthetic_wave(layer->note, layer);
     }
-    if (cmdSemitone != FALSE) (*layer).note = alloc_note(layer);
+    if (cmdSemitone) (*layer).note = alloc_note(layer);
     if (layer->note != NULL && layer->note->parentLayer == layer) note_vibrato_init(layer->note);
 }

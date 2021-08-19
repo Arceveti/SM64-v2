@@ -42,23 +42,23 @@ u32 sDebugMode;
 /**
  * Checks if Mario's animation has reached its end point.
  */
-s32 is_anim_at_end(struct MarioState *m) {
+Bool32 is_anim_at_end(struct MarioState *m) {
     struct Object *o = m->marioObj;
-    return (o->header.gfx.animInfo.animFrame + 1) == o->header.gfx.animInfo.curAnim->loopEnd;
+    return ((o->header.gfx.animInfo.animFrame + 1) == o->header.gfx.animInfo.curAnim->loopEnd);
 }
 
 /**
  * Checks if Mario's animation has surpassed 2 frames before its end point.
  */
-s32 is_anim_past_end(struct MarioState *m) {
+Bool32 is_anim_past_end(struct MarioState *m) {
     struct Object *o = m->marioObj;
-    return o->header.gfx.animInfo.animFrame >= (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    return (o->header.gfx.animInfo.animFrame >= (o->header.gfx.animInfo.curAnim->loopEnd - 2));
 }
 
 /**
  * Sets Mario's animation without any acceleration, running at its default rate.
  */
-s16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
+AnimFrame16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
     struct Object    *o          = m->marioObj;
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
@@ -87,12 +87,12 @@ s16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
  * Sets Mario's animation where the animation is sped up or
  * slowed down via acceleration.
  */
-s16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimID, AnimAccel accel) {
+AnimFrame16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimID, AnimAccel accel) {
     struct Object *o = m->marioObj;
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
-        targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
+        targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index );
     }
     if (o->header.gfx.animInfo.animID    != targetAnimID) {
         o->header.gfx.animInfo.animID     = targetAnimID;
@@ -134,8 +134,8 @@ void set_anim_to_frame(struct MarioState *m, AnimFrame16 animFrame) {
     }
 }
 
-s32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
-    s32 isPastFrame;
+Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
+    Bool32 isPastFrame;
     s32 acceleratedFrame = (animFrame << 0x10);
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;
     struct Animation *curAnim = animInfo->curAnim;
@@ -162,15 +162,15 @@ s32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
 s16 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s translation) {
     struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
     s16  animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
-    u16 *animIndex  = segmented_to_virtual((void *) curAnim->index);
+    u16 *animIndex  = segmented_to_virtual((void *) curAnim->index );
     s16 *animValues = segmented_to_virtual((void *) curAnim->values);
-    f32 s           = (f32) sins(yaw);
-    f32 c           = (f32) coss(yaw);
+    f32 s           = sins(yaw);
+    f32 c           = coss(yaw);
     f32 dx          = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
     translation[1]  = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
     f32 dz          = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
-    translation[0]  = ( dx * c) + (dz * s);
-    translation[2]  = (-dx * s) + (dz * c);
+    translation[0]  = (( dx * c) + (dz * s));
+    translation[2]  = ((-dx * s) + (dz * c));
     return curAnim->flags;
 }
 
@@ -317,6 +317,23 @@ void play_mario_sound(struct MarioState *m, s32 actionSound, s32 marioSound) {
  *                     ACTIONS                    *
  **************************************************/
 
+Bool32 mario_is_shocked(struct MarioState *m) {
+    MarioAction act = m->action;
+    return ((act == ACT_SHOCKED         )
+         || (act == ACT_WATER_SHOCKED   )
+         || (act == ACT_SHOCKWAVE_BOUNCE));
+}
+
+Bool32 mario_is_burning(struct MarioState *m) {
+    MarioAction act = m->action;
+    return ((m->particleFlags & PARTICLE_FIRE)
+         || (act == ACT_BURNING_GROUND )
+         || (act == ACT_BURNING_JUMP   )
+         || (act == ACT_BURNING_FALL   )
+         || (act == ACT_LAVA_BOOST     )
+         || (act == ACT_LAVA_BOOST_LAND));
+}
+
 /**
  * Sets Mario's other velocities from his forward speed.
  */
@@ -324,8 +341,8 @@ void mario_set_forward_vel(struct MarioState *m, f32 forwardVel) {
     m->forwardVel = forwardVel;
     m->slideVelX  = (sins(m->faceAngle[1]) * m->forwardVel);
     m->slideVelZ  = (coss(m->faceAngle[1]) * m->forwardVel);
-    m->vel[0]     = (f32) m->slideVelX;
-    m->vel[2]     = (f32) m->slideVelZ;
+    m->vel[0]     = m->slideVelX;
+    m->vel[2]     = m->slideVelZ;
 }
 
 /**
@@ -336,7 +353,6 @@ s32 mario_get_floor_class(struct MarioState *m) {
     // This doesn't matter too much since normally the slide terrain
     // is checked for anyways.
     s32 floorClass = (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) ? SURFACE_CLASS_VERY_SLIPPERY : SURFACE_CLASS_DEFAULT);
-
     if (m->floor != NULL) {
         switch (m->floor->type) {
             case SURFACE_NOT_SLIPPERY:
@@ -362,28 +378,20 @@ s32 mario_get_floor_class(struct MarioState *m) {
         }
     }
     // Crawling allows Mario to not slide on certain steeper surfaces.
-    if (m->action == ACT_CRAWLING && m->floor->normal.y > 0.5f && floorClass == SURFACE_CLASS_DEFAULT) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
+    if ((m->action == ACT_CRAWLING) && (m->floor->normal.y > 0.5f) && (floorClass == SURFACE_CLASS_DEFAULT)) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
     return floorClass;
 }
 
 // clang-format off
 s8 sTerrainSounds[7][6] = {
-    // default,              hard,                 slippery,
-    // very slippery,        noisy default,        noisy slippery
-    { SOUND_TERRAIN_DEFAULT, SOUND_TERRAIN_STONE , SOUND_TERRAIN_GRASS  ,
-      SOUND_TERRAIN_GRASS  , SOUND_TERRAIN_GRASS , SOUND_TERRAIN_DEFAULT }, // TERRAIN_GRASS
-    { SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE  ,
-      SOUND_TERRAIN_STONE  , SOUND_TERRAIN_GRASS , SOUND_TERRAIN_GRASS   }, // TERRAIN_STONE
-    { SOUND_TERRAIN_SNOW   , SOUND_TERRAIN_ICE   , SOUND_TERRAIN_SNOW   ,
-      SOUND_TERRAIN_ICE    , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SNOW
-    { SOUND_TERRAIN_SAND   , SOUND_TERRAIN_STONE , SOUND_TERRAIN_SAND   ,
-      SOUND_TERRAIN_SAND   , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SAND
-    { SOUND_TERRAIN_SPOOKY , SOUND_TERRAIN_SPOOKY, SOUND_TERRAIN_SPOOKY ,
-      SOUND_TERRAIN_SPOOKY , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SPOOKY
-    { SOUND_TERRAIN_DEFAULT, SOUND_TERRAIN_STONE , SOUND_TERRAIN_GRASS  ,
-      SOUND_TERRAIN_ICE    , SOUND_TERRAIN_STONE , SOUND_TERRAIN_ICE     }, // TERRAIN_WATER
-    { SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE  ,
-      SOUND_TERRAIN_STONE  , SOUND_TERRAIN_ICE   , SOUND_TERRAIN_ICE     }, // TERRAIN_SLIDE
+    // default,              hard,                 slippery,              very slippery,         noisy default,        noisy slippery
+    { SOUND_TERRAIN_DEFAULT, SOUND_TERRAIN_STONE , SOUND_TERRAIN_GRASS  , SOUND_TERRAIN_GRASS  , SOUND_TERRAIN_GRASS , SOUND_TERRAIN_DEFAULT }, // TERRAIN_GRASS
+    { SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE  , SOUND_TERRAIN_GRASS , SOUND_TERRAIN_GRASS   }, // TERRAIN_STONE
+    { SOUND_TERRAIN_SNOW   , SOUND_TERRAIN_ICE   , SOUND_TERRAIN_SNOW   , SOUND_TERRAIN_ICE    , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SNOW
+    { SOUND_TERRAIN_SAND   , SOUND_TERRAIN_STONE , SOUND_TERRAIN_SAND   , SOUND_TERRAIN_SAND   , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SAND
+    { SOUND_TERRAIN_SPOOKY , SOUND_TERRAIN_SPOOKY, SOUND_TERRAIN_SPOOKY , SOUND_TERRAIN_SPOOKY , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE   }, // TERRAIN_SPOOKY
+    { SOUND_TERRAIN_DEFAULT, SOUND_TERRAIN_STONE , SOUND_TERRAIN_GRASS  , SOUND_TERRAIN_ICE    , SOUND_TERRAIN_STONE , SOUND_TERRAIN_ICE     }, // TERRAIN_WATER
+    { SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE , SOUND_TERRAIN_STONE  , SOUND_TERRAIN_STONE  , SOUND_TERRAIN_ICE   , SOUND_TERRAIN_ICE     }, // TERRAIN_SLIDE
 };
 // clang-format on
 
@@ -393,16 +401,14 @@ s8 sTerrainSounds[7][6] = {
  */
 u32 mario_get_terrain_sound_addend(struct MarioState *m) {
     s16 floorSoundType;
-    s16 terrainType = (m->area->terrainType & TERRAIN_MASK);
-    s32 ret         = (SOUND_TERRAIN_DEFAULT << 16);
-    s32 floorType;
+    SurfaceType floorType;
     if (m->floor != NULL) {
         floorType = m->floor->type;
         if ((gCurrLevelNum != LEVEL_LLL) && (m->floorHeight < (m->waterLevel - 10))) {
             // Water terrain sound, excluding LLL since it uses water in the volcano.
-            ret = (SOUND_TERRAIN_WATER << 16);
+            return (SOUND_TERRAIN_WATER << 16);
         } else if (SURFACE_IS_QUICKSAND(floorType)) {
-            ret = (SOUND_TERRAIN_SAND  << 16);
+            return (SOUND_TERRAIN_SAND  << 16);
         } else {
             switch (floorType) {
                 default:
@@ -435,10 +441,10 @@ u32 mario_get_terrain_sound_addend(struct MarioState *m) {
                     floorSoundType = 5;
                     break;
             }
-            ret = sTerrainSounds[terrainType][floorSoundType] << 16;
+            return (sTerrainSounds[(m->area->terrainType & TERRAIN_MASK)][floorSoundType] << 16);
         }
     }
-    return ret;
+    return (SOUND_TERRAIN_DEFAULT << 16);
 }
 
 /**
@@ -486,7 +492,7 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
 /**
  * Determines if Mario is facing "downhill."
  */
-s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type?
+Bool32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type?
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
@@ -498,7 +504,7 @@ s32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type?
 /**
  * Determines if a surface is slippery based on the surface class.
  */
-u32 mario_floor_is_slippery(struct MarioState *m) {
+Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
     if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
@@ -507,13 +513,13 @@ u32 mario_floor_is_slippery(struct MarioState *m) {
         default:                    normY = COS38; break;
         case SURFACE_NOT_SLIPPERY:  normY =  0.0f; break;
     }
-    return m->floor->normal.y <= normY;
+    return (m->floor->normal.y <= normY);
 }
 
 /**
  * Determines if a surface is a slope based on the surface class.
  */
-s32 mario_floor_is_slope(struct MarioState *m) {
+Bool32 mario_floor_is_slope(struct MarioState *m) {
     f32 normY;
     if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
@@ -522,15 +528,14 @@ s32 mario_floor_is_slope(struct MarioState *m) {
         default:                    normY = COS15; break;
         case SURFACE_NOT_SLIPPERY:  normY = COS20; break;
     }
-    return m->floor->normal.y <= normY;
+    return (m->floor->normal.y <= normY);
 }
 
 /**
  * Determines if a surface is steep based on the surface class.
  */
-s32 mario_floor_is_steep(struct MarioState *m) {
+Bool32 mario_floor_is_steep(struct MarioState *m) {
     f32 normY;
-    s32 result = FALSE;
 #ifdef JUMP_KICK_FIX
     if (m->floor->type == SURFACE_NOT_SLIPPERY) return FALSE;
 #endif
@@ -545,9 +550,9 @@ s32 mario_floor_is_steep(struct MarioState *m) {
             default:                    normY = COS30; break;
             case SURFACE_NOT_SLIPPERY:  normY = COS30; break;
         }
-        result = m->floor->normal.y <= normY;
+        return (m->floor->normal.y <= normY);
     }
-    return result;
+    return FALSE;
 }
 
 /**
@@ -569,19 +574,19 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
     f32 forwardYDelta, backwardYDelta;
     f32 x                             = (sins(m->faceAngle[1] + yawOffset) * 5.0f);
     f32 z                             = (coss(m->faceAngle[1] + yawOffset) * 5.0f);
-    forwardFloorY                     = find_floor(m->pos[0] + x, m->pos[1] + 100.0f, m->pos[2] + z, &floor);
+    forwardFloorY                     = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
     if (floor == NULL) forwardFloorY  = m->floorHeight; // handle OOB slopes
-    backwardFloorY                    = find_floor(m->pos[0] - x, m->pos[1] + 100.0f, m->pos[2] - z, &floor);
+    backwardFloorY                    = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
     if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
     forwardYDelta                     = (forwardFloorY - m->pos[1]);
     backwardYDelta                    = (m->pos[1] - backwardFloorY);
-    return atan2s(5.0f, (forwardYDelta * forwardYDelta < backwardYDelta * backwardYDelta) ? forwardYDelta : backwardYDelta);
+    return atan2s(5.0f, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 }
 
 // default range is 0x471C
-s32 analog_stick_held_back(struct MarioState *m, Angle range) {
+Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
 }
@@ -703,7 +708,7 @@ static MarioAction set_mario_action_airborne(struct MarioState *m, MarioAction a
         case ACT_LONG_JUMP:
             m->marioObj->header.gfx.animInfo.animID = -1;
             set_mario_y_vel_based_on_fspeed(m, 30.0f, 0.0f);
-            m->marioObj->oMarioLongJumpIsSlow = m->forwardVel > 16.0f ? FALSE : TRUE;
+            m->marioObj->oMarioLongJumpIsSlow = (m->forwardVel < 16.0f);
             //! (BLJ's) This properly handles long jumps from getting forward speed with
             //  too much velocity, but misses backwards longs allowing high negative speeds.
             if ((m->forwardVel *= 1.5f) > 48.0f) m->forwardVel = 48.0f;
@@ -961,6 +966,9 @@ void squish_mario_model(struct MarioState *m) {
 }
 
 #ifdef DEBUG_INFO
+
+extern void print_fps(s32 x, s32 y);
+
 /**
  * Debug function that prints floor normal, velocity, and action information.
  */
@@ -1072,9 +1080,10 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(64,   56, "INP %016b", m->input);
                 break;
         }
-        print_text_fmt_int(16, 48, "F %d", gNumCalls.floor);
-        print_text_fmt_int(16, 32, "C %d", gNumCalls.ceil );
-        print_text_fmt_int(16, 16, "W %d", gNumCalls.wall );
+        print_text_fmt_int(16, 64, "F %d", gNumCalls.floor);
+        print_text_fmt_int(16, 48, "C %d", gNumCalls.ceil );
+        print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
+        print_fps(16, 16);
         gNumCalls.floor = 0;
         gNumCalls.ceil  = 0;
         gNumCalls.wall  = 0;
@@ -1083,7 +1092,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
             if (sDebugMode > 4) sDebugMode = 0;
         }
     }
-    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonPressed & L_JPAD)) {
+    if (gPlayer1Controller->buttonPressed & L_JPAD) {
         gShowDebugText ^= TRUE;
         gDebugInfoFlags = (gShowDebugText ? DEBUG_INFO_FLAG_ALL : DEBUG_INFO_NOFLAGS);
     }

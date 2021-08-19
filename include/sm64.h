@@ -164,31 +164,31 @@
 #define PARTICLE_TRIANGLE             /* 0x00040000 */ (1 << 18)
 #define PARTICLE_19                   /* 0x00080000 */ (1 << 19)
 
-#define MODEL_STATE_ALPHA               0x100
-#define MODEL_STATE_NOISE_ALPHA        (0x080 | MODEL_STATE_ALPHA)
-#define MODEL_STATE_METAL               0x200
+#define MODEL_STATE_ALPHA                (1 << 8)                      //  0x100
+#define MODEL_STATE_NOISE_ALPHA         ((1 << 7) | MODEL_STATE_ALPHA) // (0x080 | MODEL_STATE_ALPHA)
+#define MODEL_STATE_METAL                (1 << 9)                      //  0x200
 
 #define MODEL_STATE_MASK                0xFF
 
-#define MARIO_NORMAL_CAP                0x00000001
-#define MARIO_VANISH_CAP                0x00000002
-#define MARIO_METAL_CAP                 0x00000004
-#define MARIO_WING_CAP                  0x00000008
-#define MARIO_CAP_ON_HEAD               0x00000010
-#define MARIO_CAP_IN_HAND               0x00000020
-#define MARIO_METAL_SHOCK               0x00000040
-#define MARIO_TELEPORTING               0x00000080
-#define MARIO_JUMPING                   0x00000100
-#define MARIO_NO_PURPLE_SWITCH          0x00002000
-#define MARIO_ACTION_SOUND_PLAYED       0x00010000
-#define MARIO_MARIO_SOUND_PLAYED        0x00020000
-#define MARIO_FALL_SOUND_PLAYED         0x00040000
-#define MARIO_PUNCHING                  0x00100000
-#define MARIO_KICKING                   0x00200000
-#define MARIO_TRIPPING                  0x00400000
-#define MARIO_LEDGE_CLIMB_CAMERA        0x02000000
-#define MARIO_AIR_HIT_WALL              0x40000000
-#define MARIO_PUSHING                   0x80000000
+#define MARIO_NORMAL_CAP                /* 0x00000001 */ (1 <<  0)
+#define MARIO_VANISH_CAP                /* 0x00000002 */ (1 <<  1)
+#define MARIO_METAL_CAP                 /* 0x00000004 */ (1 <<  2)
+#define MARIO_WING_CAP                  /* 0x00000008 */ (1 <<  3)
+#define MARIO_CAP_ON_HEAD               /* 0x00000010 */ (1 <<  4)
+#define MARIO_CAP_IN_HAND               /* 0x00000020 */ (1 <<  5)
+#define MARIO_METAL_SHOCK               /* 0x00000040 */ (1 <<  6)
+#define MARIO_TELEPORTING               /* 0x00000080 */ (1 <<  7)
+#define MARIO_JUMPING                   /* 0x00000100 */ (1 <<  8)
+#define MARIO_NO_PURPLE_SWITCH          /* 0x00002000 */ (1 << 13)
+#define MARIO_ACTION_SOUND_PLAYED       /* 0x00010000 */ (1 << 16)
+#define MARIO_MARIO_SOUND_PLAYED        /* 0x00020000 */ (1 << 17)
+#define MARIO_FALL_SOUND_PLAYED         /* 0x00040000 */ (1 << 18)
+#define MARIO_PUNCHING                  /* 0x00100000 */ (1 << 20)
+#define MARIO_KICKING                   /* 0x00200000 */ (1 << 21)
+#define MARIO_TRIPPING                  /* 0x00400000 */ (1 << 22)
+#define MARIO_LEDGE_CLIMB_CAMERA        /* 0x02000000 */ (1 << 25)
+#define MARIO_AIR_HIT_WALL              /* 0x40000000 */ (1 << 30)
+#define MARIO_PUSHING                   /* 0x80000000 */ (1 << 31)
 
 #define MARIO_SPECIAL_CAPS (MARIO_VANISH_CAP | MARIO_METAL_CAP | MARIO_WING_CAP)
 #define MARIO_CAPS         (MARIO_NORMAL_CAP | MARIO_SPECIAL_CAPS)
