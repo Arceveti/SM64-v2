@@ -407,29 +407,29 @@ void hit_object_from_below(struct MarioState *m, UNUSED struct Object *o) {
     set_camera_shake_from_hit(SHAKE_HIT_FROM_BELOW);
 }
 
-// UNUSED static MarioAction unused_determine_knockback_action(struct MarioState *m) {
-//     MarioAction bonkAction;
-//     Angle angleToObject = mario_obj_angle_to_object(m, m->interactObj);
-//     Angle facingDYaw    = (angleToObject - m->faceAngle[1]);
-//     if (m->forwardVel < 16.0f) m->forwardVel = 16.0f;
-//     m->faceAngle[1] = angleToObject;
-//     if (facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
-//         m->forwardVel *= -1.0f;
-//         if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING)) {
-//             bonkAction = ACT_BACKWARD_AIR_KB;
-//         } else {
-//             bonkAction = ACT_SOFT_BACKWARD_GROUND_KB;
-//         }
-//     } else {
-//         m->faceAngle[1] += 0x8000;
-//         if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING)) {
-//             bonkAction = ACT_FORWARD_AIR_KB;
-//         } else {
-//             bonkAction = ACT_SOFT_FORWARD_GROUND_KB;
-//         }
-//     }
-//     return bonkAction;
-// }
+UNUSED static MarioAction unused_determine_knockback_action(struct MarioState *m) {
+    MarioAction bonkAction;
+    Angle angleToObject = mario_obj_angle_to_object(m, m->interactObj);
+    Angle facingDYaw    = (angleToObject - m->faceAngle[1]);
+    if (m->forwardVel < 16.0f) m->forwardVel = 16.0f;
+    m->faceAngle[1] = angleToObject;
+    if (facingDYaw >= -0x4000 && facingDYaw <= 0x4000) {
+        m->forwardVel *= -1.0f;
+        if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING)) {
+            bonkAction = ACT_BACKWARD_AIR_KB;
+        } else {
+            bonkAction = ACT_SOFT_BACKWARD_GROUND_KB;
+        }
+    } else {
+        m->faceAngle[1] += 0x8000;
+        if (m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING)) {
+            bonkAction = ACT_FORWARD_AIR_KB;
+        } else {
+            bonkAction = ACT_SOFT_FORWARD_GROUND_KB;
+        }
+    }
+    return bonkAction;
+}
 
 u32 determine_knockback_action(struct MarioState *m, UNUSED s32 arg) {
     u32 bonkAction;
@@ -1109,7 +1109,7 @@ u32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct O
     return FALSE;
 }
 
-MarioAction check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     if ((!(m->action & (ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ATTACKING)) || !sInvulnerable)
         && (o->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO)) {
         if (object_facing_mario(m, o, 0x2AAA)) {

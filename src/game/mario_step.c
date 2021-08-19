@@ -111,7 +111,7 @@ void mario_bonk_reflection(struct MarioState *m, u32 negateSpeed) {
     }
 }
 
-MarioAction mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
+Bool32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
     if ((m->action & ACT_FLAG_RIDING_SHELL) || (m->pos[1] > m->floorHeight)) {
         m->quicksandDepth = 0.0f;
     } else {
@@ -139,7 +139,7 @@ MarioAction mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
     return FALSE;
 }
 
-MarioAction mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
+Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
     if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < 0x4000) {
         m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);;
         m->faceAngle[1] = m->floorAngle;
@@ -150,7 +150,7 @@ MarioAction mario_push_off_steep_floor(struct MarioState *m, MarioAction action,
     return set_mario_action(m, action, actionArg);
 }
 
-u32 mario_update_moving_sand(struct MarioState *m) {
+Bool32 mario_update_moving_sand(struct MarioState *m) {
     struct Surface *floor = m->floor;
     s32 floorType         = floor->type;
     if ((floorType == SURFACE_DEEP_MOVING_QUICKSAND)
@@ -166,7 +166,7 @@ u32 mario_update_moving_sand(struct MarioState *m) {
     return FALSE;
 }
 
-u32 mario_update_windy_ground(struct MarioState *m) {
+Bool32 mario_update_windy_ground(struct MarioState *m) {
     struct Surface *floor = m->floor;
     if (floor->type == SURFACE_HORIZONTAL_WIND) {
         f32 pushSpeed;

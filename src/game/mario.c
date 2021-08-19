@@ -777,7 +777,7 @@ static MarioAction set_mario_action_cutscene(struct MarioState *m, MarioAction a
  * Puts Mario into a given action, putting Mario through the appropriate
  * specific function if needed.
  */
-MarioAction set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
+Bool32 set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     switch (action & ACT_GROUP_MASK) {
         case ACT_GROUP_MOVING:    action = set_mario_action_moving(   m, action, actionArg); break;
         case ACT_GROUP_AIRBORNE:  action = set_mario_action_airborne( m, action, actionArg); break;
@@ -799,7 +799,7 @@ MarioAction set_mario_action(struct MarioState *m, MarioAction action, u32 actio
 /**
  * Puts Mario into a specific jumping action from a landing action.
  */
-s32 set_jump_from_landing(struct MarioState *m) {
+Bool32 set_jump_from_landing(struct MarioState *m) {
     if (m->quicksandDepth >= 11.0f) return set_mario_action(m, (m->heldObj == NULL) ? ACT_QUICKSAND_JUMP_LAND : ACT_HOLD_QUICKSAND_JUMP_LAND, 0);
     if (mario_floor_is_steep(m)) {
         set_steep_jump_action(m);
@@ -834,7 +834,7 @@ s32 set_jump_from_landing(struct MarioState *m) {
  * Puts Mario in a given action, as long as it is not overruled by
  * either a quicksand or steep jump.
  */
-MarioAction set_jumping_action(struct MarioState *m, MarioAction action, u32 actionArg) {
+Bool32 set_jumping_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     // Checks whether Mario is holding an object or not.
     if (m->quicksandDepth >= 11.0f) return set_mario_action(m, (m->heldObj == NULL) ? ACT_QUICKSAND_JUMP_LAND : ACT_HOLD_QUICKSAND_JUMP_LAND, 0);
     if (mario_floor_is_steep(m)) {
@@ -848,7 +848,7 @@ MarioAction set_jumping_action(struct MarioState *m, MarioAction action, u32 act
 /**
  * Drop anything Mario is holding and set a new action.
  */
-MarioAction drop_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
+Bool32 drop_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     mario_stop_riding_and_holding(m);
     return set_mario_action(m, action, actionArg);
 }
@@ -856,7 +856,7 @@ MarioAction drop_and_set_mario_action(struct MarioState *m, MarioAction action, 
 /**
  * Increment Mario's hurt counter and set a new action.
  */
-MarioAction hurt_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg, s16 hurtCounter) {
+Bool32 hurt_and_set_mario_action(struct MarioState *m, MarioAction action, u32 actionArg, s16 hurtCounter) {
     m->hurtCounter = hurtCounter;
     return set_mario_action(m, action, actionArg);
 }
@@ -865,7 +865,7 @@ MarioAction hurt_and_set_mario_action(struct MarioState *m, MarioAction action, 
  * Checks a variety of inputs for common transitions between many different
  * actions. A common variant of the below function.
  */
-MarioAction check_common_action_exits(struct MarioState *m) {
+Bool32 check_common_action_exits(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_JUMP         , 0);
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_FREEFALL     , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_WALKING      , 0);
@@ -877,7 +877,7 @@ MarioAction check_common_action_exits(struct MarioState *m) {
  * Checks a variety of inputs for common transitions between many different
  * object holding actions. A holding variant of the above function.
  */
-MarioAction check_common_hold_action_exits(struct MarioState *m) {
+Bool32 check_common_hold_action_exits(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_HOLD_JUMP         , 0);
     if (m->input & INPUT_OFF_FLOOR     ) return set_mario_action(m, ACT_HOLD_FREEFALL     , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_HOLD_WALKING      , 0);
@@ -888,7 +888,7 @@ MarioAction check_common_hold_action_exits(struct MarioState *m) {
 /**
  * Transitions Mario from a submerged action to a walking action.
  */
-MarioAction transition_submerged_to_walking(struct MarioState *m) {
+Bool32 transition_submerged_to_walking(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
@@ -898,7 +898,7 @@ MarioAction transition_submerged_to_walking(struct MarioState *m) {
  * Transitions Mario from a submerged action to an airborne action.
  * You may want to change these actions to fit your hack
  */
-MarioAction transition_submerged_to_airborne(struct MarioState *m) {
+Bool32 transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
     vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
     if (m->heldObj == NULL) {
@@ -912,7 +912,7 @@ MarioAction transition_submerged_to_airborne(struct MarioState *m) {
  * This is the transition function typically for entering a submerged action for a
  * non-submerged action. This also applies the water surface camera preset.
  */
-MarioAction set_water_plunge_action(struct MarioState *m) {
+Bool32 set_water_plunge_action(struct MarioState *m) {
     m->forwardVel   = (m->forwardVel / 4.0f);
     m->vel[1]       = (m->vel[1]     / 2.0f);
     m->faceAngle[2] = 0x0;
@@ -1473,7 +1473,7 @@ void queue_rumble_particles(void) {
 /**
  * Main function for executing Mario's behavior.
  */
-s32 execute_mario_action(UNUSED struct Object *o) {
+Bool32 execute_mario_action(UNUSED struct Object *o) {
     s32 inLoop = TRUE;
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;

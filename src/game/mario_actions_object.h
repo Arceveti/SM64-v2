@@ -5,7 +5,7 @@
 
 #include "types.h"
 
-s32         mario_update_punch_sequence(struct MarioState *m);
-MarioAction mario_execute_object_action(struct MarioState *m);
+Bool32 mario_update_punch_sequence(struct MarioState *m);
+Bool32 mario_execute_object_action(struct MarioState *m);
 
 #endif // MARIO_ACTIONS_OBJECT_H

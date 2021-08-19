@@ -20,16 +20,16 @@ f32  get_additive_y_vel_for_jumps(void);
 void stub_mario_step_1(struct MarioState *m);
 void stub_mario_step_2(void);
 
-void mario_bonk_reflection(            struct MarioState *m, u32 negateSpeed);
-void transfer_bully_speed(             struct BullyCollisionData *obj1, struct BullyCollisionData *obj2);
-void init_bully_collision_data(        struct BullyCollisionData *data, f32 posX, f32 posZ, f32 forwardVel, Angle yaw, f32 conversionRatio, f32 radius);
-MarioAction  mario_update_quicksand(   struct MarioState *m, f32 sinkingSpeed);
-MarioAction mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg);
-u32  mario_update_moving_sand(         struct MarioState *m);
-u32  mario_update_windy_ground(        struct MarioState *m);
-void stop_and_set_height_to_floor(     struct MarioState *m);
-MarioStep stationary_ground_step(      struct MarioState *m);
-MarioStep perform_ground_step(         struct MarioState *m);
-MarioStep perform_air_step(            struct MarioState *m, u32 stepArg);
+void mario_bonk_reflection(       struct MarioState *m, u32 negateSpeed);
+void transfer_bully_speed(        struct BullyCollisionData *obj1, struct BullyCollisionData *obj2);
+void init_bully_collision_data(   struct BullyCollisionData *data, f32 posX, f32 posZ, f32 forwardVel, Angle yaw, f32 conversionRatio, f32 radius);
+Bool32 mario_update_quicksand(    struct MarioState *m, f32 sinkingSpeed);
+Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg);
+Bool32 mario_update_moving_sand(  struct MarioState *m);
+Bool32 mario_update_windy_ground( struct MarioState *m);
+void stop_and_set_height_to_floor(struct MarioState *m);
+MarioStep stationary_ground_step( struct MarioState *m);
+MarioStep perform_ground_step(    struct MarioState *m);
+MarioStep perform_air_step(       struct MarioState *m, u32 stepArg);
 
 #endif // MARIO_STEP_H

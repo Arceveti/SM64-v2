@@ -28,7 +28,7 @@ void animated_stationary_ground_step(struct MarioState *m, AnimID32 animation, M
 }
 
 // TRUE if grabs an object, FALSE otherwise
-s32 mario_update_punch_sequence(struct MarioState *m) {
+Bool32 mario_update_punch_sequence(struct MarioState *m) {
     MarioAction endAction, crouchEndAction;
     AnimFrame32 animFrame;
     if (m->action & ACT_FLAG_MOVING) {
@@ -84,7 +84,7 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_punching(struct MarioState *m) {
+Bool32 act_punching(struct MarioState *m) {
     if (m->input & INPUT_STOMPED                                                                 ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m                         );
     if ((m->actionState == 0) && (m->input & INPUT_A_DOWN)                                       ) return set_mario_action(         m, ACT_JUMP_KICK       , 0);
@@ -97,7 +97,7 @@ MarioAction act_punching(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_picking_up(struct MarioState *m) {
+Bool32 act_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
     if ((m->actionState == 0) && is_anim_at_end(m) && (m->usedObj != NULL)) {
@@ -120,7 +120,7 @@ MarioAction act_picking_up(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_dive_picking_up(struct MarioState *m) {
+Bool32 act_dive_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED    ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR  ) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
     if (m->input & INPUT_ABOVE_SLIDE) return drop_and_set_mario_action(m, ACT_BEGIN_SLIDING   , 0);
@@ -128,7 +128,7 @@ MarioAction act_dive_picking_up(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_placing_down(struct MarioState *m) {
+Bool32 act_placing_down(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
     if (++m->actionTimer == 8) mario_drop_held_object(m);
@@ -136,7 +136,7 @@ MarioAction act_placing_down(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_throwing(struct MarioState *m) {
+Bool32 act_throwing(struct MarioState *m) {
     if (m->heldObj && (m->heldObj->oInteractionSubtype & INT_SUBTYPE_HOLDABLE_NPC)) return set_mario_action(m, ACT_PLACING_DOWN, 0);
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
@@ -152,7 +152,7 @@ MarioAction act_throwing(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_heavy_throw(struct MarioState *m) {
+Bool32 act_heavy_throw(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
     if (++m->actionTimer == 13) {
@@ -167,7 +167,7 @@ MarioAction act_heavy_throw(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_stomach_slide_stop(struct MarioState *m) {
+Bool32 act_stomach_slide_stop(struct MarioState *m) {
 #ifdef ACTION_CANCELS
     if (m->input & (INPUT_A_PRESSED | INPUT_B_PRESSED)) {
 #if ENABLE_RUMBLE
@@ -183,7 +183,7 @@ MarioAction act_stomach_slide_stop(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_picking_up_bowser(struct MarioState *m) {
+Bool32 act_picking_up_bowser(struct MarioState *m) {
     if (m->actionState == 0) {
         m->actionState = 1;
         m->angleVel[1] = 0;
@@ -200,7 +200,7 @@ MarioAction act_picking_up_bowser(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_holding_bowser(struct MarioState *m) {
+Bool32 act_holding_bowser(struct MarioState *m) {
     Angle spin;
     if (m->input & INPUT_B_PRESSED) {
 #ifdef LENIENT_BOWSER_THROWS
@@ -262,7 +262,7 @@ MarioAction act_holding_bowser(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction act_releasing_bowser(struct MarioState *m) {
+Bool32 act_releasing_bowser(struct MarioState *m) {
     if (++m->actionTimer == 1) {
         if (m->actionArg == 0) {
 #if ENABLE_RUMBLE
@@ -281,7 +281,7 @@ MarioAction act_releasing_bowser(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction check_common_object_cancels(struct MarioState *m) {
+Bool32 check_common_object_cancels(struct MarioState *m) {
     f32 waterSurface = (m->waterLevel - 100.0f);
     if (m->pos[1] < waterSurface ) return set_water_plunge_action(  m);
     if (m->input & INPUT_SQUISHED) return drop_and_set_mario_action(m, ACT_SQUISHED      , 0);
@@ -289,8 +289,8 @@ MarioAction check_common_object_cancels(struct MarioState *m) {
     return FALSE;
 }
 
-MarioAction mario_execute_object_action(struct MarioState *m) {
-    MarioAction cancel = FALSE;
+Bool32 mario_execute_object_action(struct MarioState *m) {
+    Bool32 cancel = FALSE;
     if (check_common_object_cancels(m))  return TRUE;
     if (mario_update_quicksand(m, 0.5f)) return TRUE;
     /* clang-format off */
