@@ -65,20 +65,20 @@ struct SPTask *sCurrentAudioSPTask    = NULL;
 struct SPTask *sCurrentDisplaySPTask  = NULL;
 struct SPTask *sNextAudioSPTask       = NULL;
 struct SPTask *sNextDisplaySPTask     = NULL;
-s8  sAudioEnabled                     = TRUE;
+Bool8 sAudioEnabled                   = TRUE;
 u32 gNumVblanks                       = 0;
 s8  gResetTimer                       = 0;
 s8  gNmiResetBarsTimer                = 0;
 #ifdef DEBUG_LEVEL_SELECT
-s8  gDebugLevelSelect                 = TRUE;
+Bool8 gDebugLevelSelect               = TRUE;
 #else
-s8  gDebugLevelSelect                 = FALSE;
+Bool8 gDebugLevelSelect               = FALSE;
 #endif
-s8  gShowProfiler                     = FALSE;
+Bool8 gShowProfiler                   = FALSE;
 #ifdef DEBUG_INFO
-s8  gShowDebugText                    = TRUE;
+Bool8 gShowDebugText                  = TRUE;
 #else
-s8  gShowDebugText                    = FALSE;
+Bool8 gShowDebugText                  = FALSE;
 #endif
 
 // unused

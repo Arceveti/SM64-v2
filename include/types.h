@@ -49,11 +49,13 @@ typedef uintptr_t GeoLayout;
 typedef uintptr_t LevelScript;
 typedef s32 DrawingLayer;
 typedef s16 Angle;
-typedef s16 SurfaceType;
+typedef s32 SurfaceType;
 typedef s16 Movtex;
 typedef s16 MacroObject;
-typedef s16 Collision;
+typedef ROOM_DATA_TYPE      RoomData;
+typedef COLLISION_DATA_TYPE Collision;      // Collision is by default an s16
 typedef s16 RawVertexData;
+typedef s32 CellIndex;
 typedef s16 Trajectory;
 typedef s16 PaintingData;
 typedef s16 AnimValue;
@@ -74,7 +76,6 @@ typedef u8 Color;
 typedef Color Alpha;
 typedef Color Texture;
 typedef u8 uchar;
-typedef u8 RoomsList;
 
 typedef Color ColorRGB[3];
 typedef Color ColorRGBA[4];
@@ -255,7 +256,7 @@ struct Surface
     /*0x00*/ SurfaceType type;
     /*0x02*/ s16         force;
     /*0x04*/ s8          flags;
-    /*0x05*/ s8          room;
+    /*0x05*/ RoomData    room;
     /*0x06*/ s16         lowerY;
     /*0x08*/ s16         upperY;
     /*0x0A*/ Vec3s       vertex1;

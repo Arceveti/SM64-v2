@@ -590,7 +590,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(sqr(dx) + sqr(dz));
 #else
-    invLength = -(1.0f / sqrtf(sqr(dx) + sqr(dz)));
+    invLength = -(1.0f / MAX(sqrtf(sqr(dx) + sqr(dz)), 0.00001f));
 #endif
     dx *= invLength;
     dz *= invLength;
@@ -603,7 +603,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ));
 #else
-    invLength = -(1.0f / sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)));
+    invLength = -(1.0f / MAX(sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)), 0.00001f));
 #endif
     xColZ *= invLength;
     yColZ *= invLength;
@@ -614,7 +614,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = Q_rsqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX));
 #else
-    invLength = (1.0f / sqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX)));
+    invLength = (1.0f / MAX(sqrtf(sqr(xColX) + sqr(yColX) + sqr(zColX)), 0.00001f));
 #endif
     xColX *= invLength;
     yColX *= invLength;
@@ -625,7 +625,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = Q_rsqrtf(sqr(xColY) + sqr(yColY) + sqr(zColY));
 #else
-    invLength = (1.0f / sqrtf(sqr(xColY) + sqr(yColY) + sqr(zColY)));
+    invLength = (1.0f / MAX(sqrtf(sqr(xColY) + sqr(yColY) + sqr(zColY)), 0.00001f));
 #endif
     xColY *= invLength;
     yColY *= invLength;

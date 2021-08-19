@@ -46,7 +46,7 @@ extern Gfx                 *gDisplayListHead;
 extern u8                  *gGfxPoolEnd;
 extern struct GfxPool      *gGfxPool;
 extern u8                   gControllerBits;
-extern u8                   gIsConsole;
+extern Bool8                gIsConsole;
 #ifdef WIDE
 extern s16                  gWidescreen;
 #endif

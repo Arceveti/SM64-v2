@@ -81,7 +81,7 @@ UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 
 #define MACRO_OBJ_Z      0x3
 #define MACRO_OBJ_PARAMS 0x4
 
-void spawn_macro_objects(s16 areaIndex, MacroObject *macroObjList) {
+void spawn_macro_objects(s32 areaIndex, MacroObject *macroObjList) {
     s32 presetID;
     MacroObject macroObject[5]; // See the 5 #define statements above. Should this be a struct?
     struct Object *newObj;
@@ -126,7 +126,7 @@ void spawn_macro_objects(s16 areaIndex, MacroObject *macroObjList) {
     }
 }
 
-void spawn_macro_objects_hardcoded(s16 areaIndex, MacroObject *macroObjList) {
+void spawn_macro_objects_hardcoded(s32 areaIndex, MacroObject *macroObjList) {
     // This version of macroObjList has the preset and Y-Rotation separated,
     // and lacks behavior params. Might be an early version of the macro object list?
     s16 macroObjX, macroObjY, macroObjZ, macroObjRY;
@@ -155,7 +155,7 @@ void spawn_macro_objects_hardcoded(s16 areaIndex, MacroObject *macroObjList) {
     }
 }
 
-void spawn_special_objects(s16 areaIndex, Collision **specialObjList) {
+void spawn_special_objects(s32 areaIndex, Collision **specialObjList) {
     s32 numOfSpecialObjects;
     s32 i;
     s32 offset;

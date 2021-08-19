@@ -97,14 +97,14 @@ static void clear_static_surfaces(void) {
  * @param cellZ The Z position of the cell in which the surface resides
  * @param surface The surface to add
  */
-static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surface *surface) {
+static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ, struct Surface *surface) {
     struct SurfaceNode *newNode = alloc_surface_node();
     struct SurfaceNode *list;
-    s16 surfacePriority, priority;
-    s16 sortDir;
-    s16 listIndex;
+    s32 surfacePriority, priority;
+    s32 sortDir;
+    s32 listIndex;
 #ifdef NEW_WATER_SURFACES
-    s16 isWater = (surface->type == SURFACE_NEW_WATER || surface->type == SURFACE_NEW_WATER_BOTTOM);
+    Bool32 isWater = ((surface->type == SURFACE_NEW_WATER) || (surface->type == SURFACE_NEW_WATER_BOTTOM));
     if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
         listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
 #else
@@ -143,29 +143,29 @@ static void add_surface_to_cell(s16 dynamic, s16 cellX, s16 cellZ, struct Surfac
  * time). This function determines the lower cell for a given x/z position.
  * @param coord The coordinate to test
  */
-static s16 lower_cell_index(s32 coord) {
-    s16 index;
+static CellIndex lower_cell_index(s32 coord) {
+    CellIndex index;
     // Move from range [-0x2000, 0x2000) to [0, 0x4000)
     coord += LEVEL_BOUNDARY_MAX;
     if (coord < 0) coord = 0;
     // [0, 16)
-    index = coord / CELL_SIZE;
+    index = (coord / CELL_SIZE);
     // Include extra cell if close to boundary
     //! Some wall checks are larger than the buffer, meaning wall checks can
     //  miss walls that are near a cell border.
-    if (coord % CELL_SIZE < 50) index--;
+    if ((coord % CELL_SIZE) < 50) index--;
     if (index < 0) index = 0;
     // Potentially > 15, but since the upper index is <= 15, not exploitable
     return index;
 }
 
 /**
- * Every level is split into 16 * 16 cells of surfaces (to limit computing
+ * Every level is split into 16x16 cells of surfaces (to limit computing
  * time). This function determines the upper cell for a given x/z position.
  * @param coord The coordinate to test
  */
-static s16 upper_cell_index(s32 coord) {
-    s16 index;
+static CellIndex upper_cell_index(s32 coord) {
+    CellIndex index;
     // Move from range [-0x2000, 0x2000) to [0, 0x4000)
     coord += LEVEL_BOUNDARY_MAX;
     if (coord < 0) coord = 0;
@@ -188,15 +188,15 @@ static s16 upper_cell_index(s32 coord) {
  * @param dynamic Boolean determining whether the surface is static or dynamic
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
-    register s16 cellZ, cellX;
-    register const s16 minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s16 minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    register const s16 maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s16 maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    register const s16 minCellX = lower_cell_index(minX);
-    register const s16 maxCellX = upper_cell_index(maxX);
-    register const s16 minCellZ = lower_cell_index(minZ);
-    register const s16 maxCellZ = upper_cell_index(maxZ);
+    register CellIndex cellZ, cellX;
+    register const s32 minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32 minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s32 maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32 maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const CellIndex minCellX = lower_cell_index(minX);
+    register const CellIndex maxCellX = upper_cell_index(maxX);
+    register const CellIndex minCellZ = lower_cell_index(minZ);
+    register const CellIndex maxCellZ = upper_cell_index(maxZ);
     for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
         for (cellX = minCellX; cellX <= maxCellX; cellX++) {
             add_surface_to_cell(dynamic, cellX, cellZ, surface);
@@ -209,12 +209,12 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
  * @param vertexData The raw data containing vertex positions
  * @param vertexIndices Helper which tells positions in vertexData to start reading vertices
  */
-static struct Surface *read_surface_data(RawVertexData *vertexData, Collision **vertexIndices) {
+static struct Surface *read_surface_data(Collision *vertexData, Collision **vertexIndices) {
     struct Surface *surface;
 
-    register s16 offset1 = (3 * (*vertexIndices)[0]);
-    register s16 offset2 = (3 * (*vertexIndices)[1]);
-    register s16 offset3 = (3 * (*vertexIndices)[2]);
+    register s32 offset1 = (3 * (*vertexIndices)[0]);
+    register s32 offset2 = (3 * (*vertexIndices)[1]);
+    register s32 offset3 = (3 * (*vertexIndices)[2]);
 
     register s32 x1 = *(vertexData + offset1 + 0);
     register s32 y1 = *(vertexData + offset1 + 1);
@@ -303,14 +303,14 @@ static s32 surf_has_no_cam_collision(SurfaceType surfaceType) {
  * Load in the surfaces for a given surface type. This includes setting the flags,
  * exertion, and room.
  */
-static void load_static_surfaces(Collision **data, RawVertexData *vertexData, SurfaceType surfaceType, RoomsList **surfaceRooms) {
+static void load_static_surfaces(Collision **data, Collision *vertexData, SurfaceType surfaceType, RoomData **surfaceRooms) {
     s32 i, numSurfaces;
     struct Surface *surface;
-    s8 room = 0;
+    RoomData room = 0;
 #ifndef ALL_SURFACES_HAVE_FORCE
     s16 hasForce = surface_has_force(surfaceType);
 #endif
-    s16 flags = surf_has_no_cam_collision(surfaceType);
+    s32 flags = surf_has_no_cam_collision(surfaceType);
     numSurfaces = *(*data);
     (*data)++;
     for (i = 0; i < numSurfaces; i++) {
@@ -338,9 +338,9 @@ static void load_static_surfaces(Collision **data, RawVertexData *vertexData, Su
 /**
  * Read the data for vertices for reference by triangles.
  */
-static RawVertexData *read_vertex_data(Collision **data) {
-    s32 numVertices;
-    RawVertexData *vertexData;
+static Collision *read_vertex_data(Collision **data) {
+    Collision numVertices;
+    Collision *vertexData;
     numVertices = *(*data);
     (*data)++;
     vertexData  =   *data;
@@ -377,12 +377,11 @@ void alloc_surface_pools(void) {
  * Get the size of the terrain data, to get the correct size when copying later.
  */
 u32 get_area_terrain_size(Collision *data) {
-    s16 *startPos = data;
+    Collision *startPos = data;
     s32 end = FALSE;
-    s16 terrainLoadType;
-    s32 numVertices, numRegions, numSurfaces;
+    Collision terrainLoadType, numVertices, numRegions, numSurfaces;
 #ifndef ALL_SURFACES_HAVE_FORCE
-    s16 hasForce;
+    Bool16 hasForce;
 #endif
     while (!end) {
         terrainLoadType = *data++;
@@ -423,9 +422,9 @@ u32 get_area_terrain_size(Collision *data) {
  * Process the level file, loading in vertices, surfaces, some objects, and environmental
  * boxes (water, gas, JRB fog).
  */
-void load_area_terrain(s16 index, Collision *data, RoomsList *surfaceRooms, MacroObject *macroObjects) {
-    s16 terrainLoadType;
-    RawVertexData *vertexData = NULL;
+void load_area_terrain(s32 index, Collision *data, RoomData *surfaceRooms, MacroObject *macroObjects) {
+    Collision terrainLoadType;
+    Collision *vertexData = NULL;
 #ifdef PUPPYPRINT
     OSTime first = osGetTime();
 #endif
@@ -487,10 +486,10 @@ void clear_dynamic_surfaces(void) {
 /**
  * Applies an object's transformation to the object's vertices.
  */
-void transform_object_vertices(Collision **data, RawVertexData *vertexData) {
-    register s16 *vertices;
+void transform_object_vertices(Collision **data, Collision *vertexData) {
+    register Collision *vertices;
     register f32 vx, vy, vz;
-    register s32 numVertices;
+    register Collision numVertices;
     Mat4 *objectTransform;
     Mat4 m;
     objectTransform = &gCurrentObject->transform;
@@ -508,14 +507,14 @@ void transform_object_vertices(Collision **data, RawVertexData *vertexData) {
         vy = *(vertices++);
         vz = *(vertices++);
         //! No bounds check on vertex data
-        if (vx == 0 && vy == 0 && vz == 0) {
-            *vertexData++ = (s16)(m[3][0]);
-            *vertexData++ = (s16)(m[3][1]);
-            *vertexData++ = (s16)(m[3][2]);
+        if ((vx == 0) && (vy == 0) && (vz == 0)) {
+            *vertexData++ = (Collision)(m[3][0]);
+            *vertexData++ = (Collision)(m[3][1]);
+            *vertexData++ = (Collision)(m[3][2]);
         } else {
-            *vertexData++ = (s16)((vx * m[0][0]) + (vy * m[1][0]) + (vz * m[2][0]) + m[3][0]);
-            *vertexData++ = (s16)((vx * m[0][1]) + (vy * m[1][1]) + (vz * m[2][1]) + m[3][1]);
-            *vertexData++ = (s16)((vx * m[0][2]) + (vy * m[1][2]) + (vz * m[2][2]) + m[3][2]);
+            *vertexData++ = (Collision)((vx * m[0][0]) + (vy * m[1][0]) + (vz * m[2][0]) + m[3][0]);
+            *vertexData++ = (Collision)((vx * m[0][1]) + (vy * m[1][1]) + (vz * m[2][1]) + m[3][1]);
+            *vertexData++ = (Collision)((vx * m[0][2]) + (vy * m[1][2]) + (vz * m[2][2]) + m[3][2]);
         }
     }
     *data = vertices;
@@ -524,19 +523,19 @@ void transform_object_vertices(Collision **data, RawVertexData *vertexData) {
 /**
  * Load in the surfaces for the gCurrentObject. This includes setting the flags, exertion, and room.
  */
-void load_object_surfaces(Collision **data, RawVertexData *vertexData) {
+void load_object_surfaces(Collision **data, Collision *vertexData) {
     s32 i;
-    s32 surfaceType = *(*data);
+    Collision surfaceType = *(*data);
     (*data)++;
-    s32 numSurfaces = *(*data);
+    Collision numSurfaces = *(*data);
     (*data)++;
 #ifndef ALL_SURFACES_HAVE_FORCE
-    s16 hasForce = surface_has_force(surfaceType);
+    Bool16 hasForce = surface_has_force(surfaceType);
 #endif
-    s16 flags = (surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC);
+    s32 flags = (surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC);
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
-    s16 room = ((gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp)) ? 5 : 0);
+    RoomData room = ((gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp)) ? 5 : 0);
     for (i = 0; i < numSurfaces; i++) {
         struct Surface *surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
@@ -548,7 +547,7 @@ void load_object_surfaces(Collision **data, RawVertexData *vertexData) {
             surface->force  = (hasForce ? *(*data + 3) : 0);
 #endif
             surface->flags |= flags;
-            surface->room   = (RoomsList) room;
+            surface->room   = (RoomData) room;
             add_surface(surface, TRUE);
         }
 #ifdef ALL_SURFACES_HAVE_FORCE
@@ -563,13 +562,13 @@ void load_object_surfaces(Collision **data, RawVertexData *vertexData) {
  * Transform an object's vertices, reload them, and render the object.
  */
 void load_object_collision_model(void) {
-    RawVertexData vertexData[600];
+    Collision vertexData[600];
 #ifdef PUPPYPRINT
     OSTime first = osGetTime();
 #endif
-    s16 *collisionData = gCurrentObject->collisionData;
-    f32 marioDist      = gCurrentObject->oDistanceToMario;
-    f32 tangibleDist   = gCurrentObject->oCollisionDistance;
+    Collision *collisionData = gCurrentObject->collisionData;
+    f32 marioDist            = gCurrentObject->oDistanceToMario;
+    f32 tangibleDist         = gCurrentObject->oCollisionDistance;
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
     if (gCurrentObject->oDistanceToMario == 19000.0f) marioDist = dist_between_objects(gCurrentObject, gMarioObject);

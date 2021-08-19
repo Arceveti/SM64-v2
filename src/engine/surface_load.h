@@ -41,7 +41,7 @@ void alloc_surface_pools(void);
 #ifdef NO_SEGMENTED_MEMORY
 u32 get_area_terrain_size(Collision *data);
 #endif
-void load_area_terrain(s16 index, Collision *data, RoomsList *surfaceRooms, MacroObject *macroObjects);
+void load_area_terrain(s32 index, Collision *data, RoomData *surfaceRooms, MacroObject *macroObjects);
 void clear_dynamic_surfaces(void);
 void load_object_collision_model(void);
 

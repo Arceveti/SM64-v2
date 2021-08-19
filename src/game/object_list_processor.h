@@ -97,25 +97,25 @@ extern s32 gNumStaticSurfaces;
 
 extern struct MemoryPool *gObjectMemoryPool;
 
-extern s16  gCheckingSurfaceCollisionsForCamera;
-extern s16  gFindFloorIncludeSurfaceIntangible;
-extern s16  gFindFloorExcludeDynamic;
+extern Bool16     gCheckingSurfaceCollisionsForCamera;
+extern Bool16     gFindFloorIncludeSurfaceIntangible;
+extern Bool16     gFindFloorExcludeDynamic;
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
-extern s16  gIncludeSteepFloorsInWallCollisionCheck;
+extern Bool16     gIncludeSteepFloorsInWallCollisionCheck;
 #endif
-extern s16 *gEnvironmentRegions;
-extern s32  gEnvironmentLevels[20];
-extern s8   gDoorAdjacentRooms[60][2];
-extern s16  gMarioCurrentRoom;
-extern s16  gDoorRenderingTimer;
-extern s16  gTHIWaterDrained;
-extern s16  gTTCSpeedSetting;
-extern s16  gMarioShotFromCannon;
-extern s16  gCCMEnteredSlide;
-extern s16  gNumRoomedObjectsInMarioRoom;
-extern s16  gNumRoomedObjectsNotInMarioRoom;
-extern s16  gWDWWaterLevelChanging;
-extern s16  gMarioOnMerryGoRound;
+extern Collision *gEnvironmentRegions;
+extern s32        gEnvironmentLevels[20];   //! Collision?
+extern RoomData   gDoorAdjacentRooms[60][2];
+extern s16        gMarioCurrentRoom;        //! roomData?
+extern s16        gDoorRenderingTimer;
+extern Bool16     gTHIWaterDrained;
+extern s16        gTTCSpeedSetting;
+extern Bool16     gMarioShotFromCannon;
+extern Bool16     gCCMEnteredSlide;
+extern s16        gNumRoomedObjectsInMarioRoom;
+extern s16        gNumRoomedObjectsNotInMarioRoom;
+extern Bool16     gWDWWaterLevelChanging;
+extern Bool16     gMarioOnMerryGoRound;
 
 
 void bhv_mario_update(void);

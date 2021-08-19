@@ -1,5 +1,5 @@
 // 0x0707782C - 0x0707808C
-const RoomsList inside_castle_seg7_area_1_rooms[] = {
+const RoomData inside_castle_seg7_area_1_rooms[] = {
      1,  9,  9,  1,  9,  9,  9,  9, // 0-7
      9,  9,  1,  1,  1,  9,  9, 17, // 8-15
      1,  9, 17, 17,  9,  9, 17,  9, // 16-23

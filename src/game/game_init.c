@@ -51,7 +51,7 @@ struct GfxPool *gGfxPool;
 OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
 u8 gControllerBits;
-u8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
+Bool8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
 u8 gBorderHeight;
 #ifdef REONU_CAM_3
 s8 gCameraSpeed = 2;
