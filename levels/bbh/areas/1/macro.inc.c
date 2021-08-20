@@ -2,8 +2,8 @@
 const MacroObject bbh_seg7_macro_objs[] = {
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,           /*yaw*/   0, /*pos*/  -800,  -205,  2915, /*behParam*/ DIALOG_063),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,           /*yaw*/   0, /*pos*/   400,  -205,  3057, /*behParam*/ DIALOG_085),
-    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,           /*yaw*/   0, /*pos*/  2026,  -205,  2966, /*behParam*/ DIALOG_102),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,           /*yaw*/ 135, /*pos*/ -1546,  -205,  4813, /*behParam*/ DIALOG_086),
+    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,           /*yaw*/   0, /*pos*/  2026,  -205,  2966, /*behParam*/ DIALOG_102),
     MACRO_OBJECT(               /*preset*/ macro_haunted_chair,             /*yaw*/  90, /*pos*/ -1960,   -20,   340                         ),
     MACRO_OBJECT(               /*preset*/ macro_haunted_chair,             /*yaw*/ 270, /*pos*/ -1080,    20,   160                         ),
     MACRO_OBJECT(               /*preset*/ macro_box_vanish_cap,            /*yaw*/   0, /*pos*/  1268,  1050,  1860                         ),
@@ -34,5 +34,8 @@ const MacroObject bbh_seg7_macro_objs[] = {
     MACRO_OBJECT(               /*preset*/ macro_breakable_box_three_coins, /*yaw*/  45, /*pos*/ -3800,  -205,  4600                         ),
     MACRO_OBJECT(               /*preset*/ macro_breakable_box_three_coins, /*yaw*/  45, /*pos*/ -3660,  -205,  4459                         ),
     MACRO_OBJECT(               /*preset*/ macro_jumping_box,               /*yaw*/   0, /*pos*/  -224,  -224,  6140                         ),
+#ifdef BONUS_OBJECTS
+    MACRO_OBJECT(               /*preset*/ macro_recovery_heart,            /*yaw*/   0, /*pos*/   960, -2400,  1800                         ),
+#endif
     MACRO_OBJECT_END(),
 };

@@ -106,7 +106,7 @@ static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ
 #ifdef NEW_WATER_SURFACES
     Bool32 isWater = ((surface->type == SURFACE_NEW_WATER) || (surface->type == SURFACE_NEW_WATER_BOTTOM));
     if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
-        listIndex = isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS;
+        listIndex = (isWater ? SPATIAL_PARTITION_WATER : SPATIAL_PARTITION_FLOORS);
 #else
     if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
         listIndex = SPATIAL_PARTITION_FLOORS;
@@ -121,7 +121,7 @@ static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ
 #ifndef BETTER_WALL_COLLISION
         // Vanilla is 0.707 ~cos(50)
         // Why are these cos(50) instead of cos(45)?
-        if (surface->normal.x < -COS50 || surface->normal.x > COS50) surface->flags |= SURFACE_FLAG_X_PROJECTION;
+        if ((surface->normal.x < -COS50) || (surface->normal.x > COS50)) surface->flags |= SURFACE_FLAG_X_PROJECTION;
 #endif
     }
     surfacePriority  = surface->upperY * sortDir;
@@ -189,10 +189,10 @@ static CellIndex upper_cell_index(s32 coord) {
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
     register CellIndex cellZ, cellX;
-    register const s32 minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s32 minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    register const s32 maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s32 maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s32       minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32       minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s32       maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32       maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
     register const CellIndex minCellX = lower_cell_index(minX);
     register const CellIndex maxCellX = upper_cell_index(maxX);
     register const CellIndex minCellZ = lower_cell_index(minZ);

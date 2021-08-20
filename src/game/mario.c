@@ -583,6 +583,7 @@ f32 find_floor_height_relative_polar(struct MarioState *m, Angle angleFromMario,
  * Returns the slope of the floor based off points around Mario.
  */
 Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
+    if (m->pos[1] > m->floorHeight) return 0x0;
     struct Surface *floor;
     f32 forwardFloorY, backwardFloorY;
     f32 forwardYDelta, backwardYDelta;
@@ -981,14 +982,33 @@ void squish_mario_model(struct MarioState *m) {
 
 #ifdef DEBUG_INFO
 
+void debug_print_surface_info(struct Surface *surf) {
+    print_text_fmt_int( 80, 136,   "V1 %d", surf->vertex1[0]);
+    print_text_fmt_int(184, 136,      "%d", surf->vertex1[1]);
+    print_text_fmt_int(248, 136,      "%d", surf->vertex1[2]);
+
+    print_text_fmt_int( 80, 120,   "V2 %d", surf->vertex2[0]);
+    print_text_fmt_int(184, 120,      "%d", surf->vertex2[1]);
+    print_text_fmt_int(248, 120,      "%d", surf->vertex2[2]);
+
+    print_text_fmt_int( 80, 104,   "V3 %d", surf->vertex3[0]);
+    print_text_fmt_int(184, 104,      "%d", surf->vertex3[1]);
+    print_text_fmt_int(248, 104,      "%d", surf->vertex3[2]);
+
+    f32 surf_nY = surf->normal.y;
+    f32 steepness = sqrtf((sqr(surf->normal.x) + sqr(surf->normal.z)));
+    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
+
+    print_text_fmt_int(128,  56, "SURF %x", surf->type);
+    print_text_fmt_int(226,  56,    "0*%x", surf->force);
+}
+
 extern void print_fps(s32 x, s32 y);
 
 /**
  * Debug function that prints floor normal, velocity, and action information.
  */
 void debug_print_speed_action_normal(struct MarioState *m) {
-    f32 steepness;
-    f32 surf_nY;
     if (gShowDebugText) {
         print_text_fmt_int(210, 184, "PX %d", m->pos[0]);
         print_text_fmt_int(210, 168, "PY %d", m->pos[1]);
@@ -1011,85 +1031,28 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 break;
             case 1:
                 if (m->floor != NULL) {
-                    steepness = sqrtf((sqr(m->floor->normal.x) + sqr(m->floor->normal.z)));
-                    surf_nY = m->floor->normal.y;
-                    print_text_fmt_int( 80, 136,   "F1 %d", m->floor->vertex1[0]);
-                    print_text_fmt_int(184, 136,      "%d", m->floor->vertex1[1]);
-                    print_text_fmt_int(248, 136,      "%d", m->floor->vertex1[2]);
-
-                    print_text_fmt_int( 80, 120,   "F2 %d", m->floor->vertex2[0]);
-                    print_text_fmt_int(184, 120,      "%d", m->floor->vertex2[1]);
-                    print_text_fmt_int(248, 120,      "%d", m->floor->vertex2[2]);
-
-                    print_text_fmt_int( 80, 104,   "F3 %d", m->floor->vertex3[0]);
-                    print_text_fmt_int(184, 104,      "%d", m->floor->vertex3[1]);
-                    print_text_fmt_int(248, 104,      "%d", m->floor->vertex3[2]);
-
+                    debug_print_surface_info(m->floor);
                     print_text_fmt_int(210,  88,   "FH %d", m->floorHeight);
-
-                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
-                    print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
-                    print_text_fmt_int(226,  56,    "0*%x", m->floor->force);
                     print_text_fmt_int(210,  40,   "RM %d", m->floor->room);
-#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-                    print_text_fmt_int(16, 128, "FMG %d", (1.0f - sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z))) * 1000);
-                    print_text_fmt_int(16, 112, "FNY %d", m->floor->normal.y * 1000);
-                    print_text_fmt_int(16,  96, "FST %d", m->steepness * 1000);
-                    print_text_fmt_int(16,  80, "FSL %d", coss(find_floor_slope(m, 0x0)) * 1000);
-#endif
                 }
-                // print_text_fmt_int(210, 56, "FLOOR", 0);
+                print_text_fmt_int(16, 80, "FLOOR", 0);
+                print_text_fmt_int(16, 64, "F %d", gNumCalls.floor);
                 break;
             case 2:
                 if (m->ceil != NULL) {
-                    steepness = sqrtf((sqr(m->ceil->normal.x) + sqr(m->ceil->normal.z)));
-                    surf_nY = m->ceil->normal.y;
-                    print_text_fmt_int( 80, 136,   "C1 %d", m->ceil->vertex1[0]);
-                    print_text_fmt_int(184, 136,      "%d", m->ceil->vertex1[1]);
-                    print_text_fmt_int(248, 136,      "%d", m->ceil->vertex1[2]);
-
-                    print_text_fmt_int( 80, 120,   "C2 %d", m->ceil->vertex2[0]);
-                    print_text_fmt_int(184, 120,      "%d", m->ceil->vertex2[1]);
-                    print_text_fmt_int(248, 120,      "%d", m->ceil->vertex2[2]);
-
-                    print_text_fmt_int( 80, 104,   "C3 %d", m->ceil->vertex3[0]);
-                    print_text_fmt_int(184, 104,      "%d", m->ceil->vertex3[1]);
-                    print_text_fmt_int(248, 104,      "%d", m->ceil->vertex3[2]);
-
+                    debug_print_surface_info(m->ceil);
                     print_text_fmt_int(210,  88,   "CH %d", m->ceilHeight);
-
-                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
-                    print_text_fmt_int(128,  56, "SURF %x", m->ceil->type);
-                    print_text_fmt_int(226,  56,    "0*%x", m->ceil->force);
                 }
-                // print_text_fmt_int(210, 56, "CEIL", 0);
+                print_text_fmt_int(16, 80, "CEIL", 0);
+                // print_text_fmt_int(16, 48, "C %d", gNumCalls.ceil );
                 break;
             case 3:
                 if (m->wall != NULL) {
-                    steepness = sqrtf((sqr(m->wall->normal.x) + sqr(m->wall->normal.z)));
-                    surf_nY = m->wall->normal.y;
-#ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
-                    if (surf_nY > MIN_FLOOR_NORMAL_Y || surf_nY < MAX_CEIL_NORMAL_Y) break;
-#endif
-                    print_text_fmt_int( 80, 136,  "W1 %d", m->wall->vertex1[0]);
-                    print_text_fmt_int(184, 136,     "%d", m->wall->vertex1[1]);
-                    print_text_fmt_int(248, 136,     "%d", m->wall->vertex1[2]);
-
-                    print_text_fmt_int( 80, 120,  "W2 %d", m->wall->vertex2[0]);
-                    print_text_fmt_int(184, 120,     "%d", m->wall->vertex2[1]);
-                    print_text_fmt_int(248, 120,     "%d", m->wall->vertex2[2]);
-
-                    print_text_fmt_int( 80, 104,  "W3 %d", m->wall->vertex3[0]);
-                    print_text_fmt_int(184, 104,     "%d", m->wall->vertex3[1]);
-                    print_text_fmt_int(248, 104,     "%d", m->wall->vertex3[2]);
-                    
+                    debug_print_surface_info(m->wall);
                     print_text_fmt_int(210,  88,  "WRY %d", ((atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f));
-
-                    print_text_fmt_int(210,  72,  "ANG %d", ((atan2s(surf_nY, steepness) * 45.0f) / 8192.0f));
-                    print_text_fmt_int(128,  56, "SURF %x", m->wall->type);
-                    print_text_fmt_int(226,  56,    "0*%x", m->wall->force);
                 }
-                // print_text_fmt_int(210, 56, "WALL", 0);
+                print_text_fmt_int(16, 80, "WALL", 0);
+                print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
                 break;
             case 4:
                 print_text_fmt_int(210, 120, "C2 %d", (gGlobalTimer & 0x7FFF));

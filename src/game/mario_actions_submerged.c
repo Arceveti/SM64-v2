@@ -62,8 +62,9 @@ static f32 get_buoyancy(struct MarioState *m) {
 static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #ifdef BETTER_WALL_COLLISION
     struct WallCollisionData wallData;
-#endif
+#else
     struct Surface *wall;
+#endif
     struct Surface *ceil;
     struct Surface *floor;
     f32 ceilHeight;
@@ -71,11 +72,11 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     f32 ceilAmt;
     // f32 floorAmt;
 #ifdef BETTER_WALL_COLLISION
+    m->wall = NULL;
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
     gIncludeSteepFloorsInWallCollisionCheck = TRUE;
 #endif
     resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f, &wallData);
-    wall = wallData.walls[0];
 #else
     wall        = resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f);
 #endif
@@ -93,18 +94,22 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         return WATER_STEP_HIT_CEILING;
     }
     if (nextPos[1] <= floorHeight) {
-        nextPos[1] = floorHeight;
+        nextPos[1]  = floorHeight;
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_FLOOR;
     }
     vec3f_copy(m->pos, nextPos);
-    m->wall        = wall;
     m->floor       = floor;
     m->floorHeight = floorHeight;
-    //? m->ceil = ceil;
-    return ((wall != NULL) ? WATER_STEP_HIT_WALL : WATER_STEP_NONE);
+    m->ceil        = ceil;
+    if (wallData.numWalls > 0) {
+        m->wall = wallData.walls[0]; //! only returns the first wall
+        return WATER_STEP_HIT_WALL;
+    } else {
+        return WATER_STEP_NONE;
+    }
 }
 #else
 static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
