@@ -205,12 +205,20 @@
 // Animate Bowser 3's rainbow effect (Arceveti)
 #define RAINBOW_BOWSER
 
+// Allows for the in-game FoV to be changed
+// If Puppycam is enabled, it will be an option in the menu.
+// (Arceveti)
+#define CUSTOM_FOV
+// Default FoV percentage
+#define DEFAULT_FOV_PERCENT 100
+
 // Overlay effects (Arceveti)
 // - Red flash when damaged
-// - Yellow flashed when shocked
+// - Yellow flash when shocked
 #define DAMAGE_SCREEN_TINT
 // - Blueish tint when underwater
 // - Greenish tint when in toxic gas
+// - Sand color fills the screen when under quicksand
 #define ENVIRONMENT_SCREEN_TINT
 // - Lava color tint specifically for inside the LLL volcano (requires ENVIRONMENT_SCREEN_TINT)
 #define LLL_VOLCANO_TINT

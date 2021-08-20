@@ -391,12 +391,12 @@ void render_screen_overlay(void) {
         if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, waterOverlayColor);
     } else if (camHeight < gasLevel) {
         if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv,   gasOverlayColor);
+    } else if (gMarioState->action == ACT_QUICKSAND_DEATH) {
+        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) vec_rgb_copy(colorEnv, sandOverlayColor);
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
         if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
 #endif 
-    } else if (gMarioState->action == ACT_QUICKSAND_DEATH) {
-        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) vec_rgb_copy(colorEnv, sandOverlayColor);
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT

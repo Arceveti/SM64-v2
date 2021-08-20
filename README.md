@@ -16,6 +16,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [64x64 quarter shadow textures](https://i.imgur.com/JwWg5VF.png) (Arceveti) *
 - [King Bob-omb blinks](https://i.imgur.com/Gnhu2CV.png)
 - [Reflective metal cap texture using the framebuffer](https://i.imgur.com/IixJWBy.png) (mks#2512, Rovert, Arceveti) *
+- FoV slider in Puppycam's menu (Arceveti) *
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)

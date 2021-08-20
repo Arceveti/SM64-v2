@@ -50,6 +50,9 @@ extern Bool8                gIsConsole;
 #ifdef WIDE
 extern s16                  gWidescreen;
 #endif
+#ifdef CUSTOM_FOV
+extern s16                  gFieldOfView;
+#endif
 #ifdef REONU_CAM_3
 extern s8                   gCameraSpeed;
 extern u8                   gWaterCamOverride;

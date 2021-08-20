@@ -131,7 +131,11 @@ void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 void mtxf_copy(                           Mat4 dest,  Mat4 src);
 void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
+#ifdef CUSTOM_FOV
+void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll, f32 fov);
+#else
 void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);
+#endif
 void mtxf_rotate_zxy_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
 void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f b, Vec3s c);
 void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffset);

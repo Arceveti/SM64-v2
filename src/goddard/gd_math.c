@@ -4,6 +4,8 @@
 #include "gd_macros.h"
 #include "renderer.h"
 
+//! can this be combined with math_util?
+
 /**
  * Finds the square root of a float by treating
  * it as a double and finding the square root from there.
@@ -16,19 +18,16 @@ f32 gd_sqrt_f(f32 val) {
 /*
  * lol
  */
-float gd_Q_rsqrt( float number )
-{
+f32 gd_Q_rsqrt( f32 number ) {
 	long i;
-	float x2, y;
-	const float threehalfs = 1.5F;
-
-	x2 = number * 0.5F;
+	f32 x2, y;
+	const f32 threehalfs = 1.5f;
+	x2 = (number * 0.5f);
 	y  = number;
 	i  = * ( long * ) &y;
-	i  = 0x5f3759df - ( i >> 1 ); 
-	y  = * ( float * ) &i;
-	y  = y * ( threehalfs - ( x2 * y * y ) );
-
+	i  = (0x5f3759df - (i >> 1)); 
+	y  = * (f32 *) &i;
+	y  = (y * (threehalfs - (x2 * y * y)));
 	return y;
 }
 #endif
@@ -46,19 +45,19 @@ f32 gd_rand_float(void) {
     u32 i;
     for (i = 0; i < 4; i++) {
         if (sPrimarySeed & 0x80000000) {
-            sPrimarySeed = sPrimarySeed << 1 | 1;
+            sPrimarySeed = sPrimarySeed << 1 | 0x1;
         } else {
             sPrimarySeed <<= 1;
         }
     }
     sPrimarySeed += 4;
     /* Seed Switch */
-    if ((sPrimarySeed ^= osGetTime()) & 1) {
+    if ((sPrimarySeed ^= osGetTime()) & 0x1) {
         temp = sPrimarySeed;
         sPrimarySeed = sSecondarySeed;
         sSecondarySeed = temp;
     }
-    return (sPrimarySeed & 0xFFFF) / 65535.0f;
+    return ((sPrimarySeed & 0xFFFF) / 65535.0f);
 }
 
 /* 249AAC -> 249AEC */
@@ -92,13 +91,13 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     struct GdVec3f norm;
     // No reason to do this? mtx is set lower.
     gd_set_identity_mat4(mtx);
-    d.z = xTo - xFrom;
-    d.y = yTo - yFrom;
-    d.x = zTo - zFrom;
-    invLength = ABS(d.z) + ABS(d.y) + ABS(d.x);
+    d.z = (xTo - xFrom);
+    d.y = (yTo - yFrom);
+    d.x = (zTo - zFrom);
+    invLength = (ABS(d.z) + ABS(d.y) + ABS(d.x));
     // Scales 'd' if smaller than 10 or larger than 10,000 to be
     // of a magnitude of 10,000.
-    if (invLength > 10000.0f || invLength < 10.0f) {
+    if ((invLength > 10000.0f) || (invLength < 10.0f)) {
         norm.x  = d.z;
         norm.y  = d.y;
         norm.z  = d.x;
@@ -113,29 +112,29 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
 #ifdef FAST_INVSQRT
     invLength = -gd_Q_rsqrt(SQ(d.z) + SQ(d.y) + SQ(d.x));
 #else
-    invLength = -1.0f / gd_sqrt_f(SQ(d.z) + SQ(d.y) + SQ(d.x));
+    invLength = -(1.0f / gd_sqrt_f(SQ(d.z) + SQ(d.y) + SQ(d.x)));
 #endif
     d.z   *= invLength;
     d.y   *= invLength;
     d.x   *= invLength;
-    colX.z = yColY * d.x - xColY * d.y;
-    colX.y = xColY * d.z - zColY * d.x;
-    colX.x = zColY * d.y - yColY * d.z;
+    colX.z = ((yColY * d.x) - (xColY * d.y));
+    colX.y = ((xColY * d.z) - (zColY * d.x));
+    colX.x = ((zColY * d.y) - (yColY * d.z));
 #ifdef FAST_INVSQRT
     invLength = gd_Q_rsqrt(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
 #else
-    invLength = 1.0f / gd_sqrt_f(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
+    invLength = (1.0f / gd_sqrt_f(SQ(colX.z) + SQ(colX.y) + SQ(colX.x)));
 #endif
     colX.z *= invLength;
     colX.y *= invLength;
     colX.x *= invLength;
-    zColY   = d.y * colX.x - d.x * colX.y;
-    yColY   = d.x * colX.z - d.z * colX.x;
-    xColY   = d.z * colX.y - d.y * colX.z;
+    zColY   = ((d.y * colX.x) - (d.x * colX.y));
+    yColY   = ((d.x * colX.z) - (d.z * colX.x));
+    xColY   = ((d.z * colX.y) - (d.y * colX.z));
 #ifdef FAST_INVSQRT
     invLength = gd_Q_rsqrt(SQ(zColY) + SQ(yColY) + SQ(xColY));
 #else
-    invLength = 1.0f / gd_sqrt_f(SQ(zColY) + SQ(yColY) + SQ(xColY));
+    invLength = (1.0f / gd_sqrt_f(SQ(zColY) + SQ(yColY) + SQ(xColY)));
 #endif
     zColY *= invLength;
     yColY *= invLength;
@@ -144,17 +143,17 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     (*mtx)[0][0] = colX.z;
     (*mtx)[1][0] = colX.y;
     (*mtx)[2][0] = colX.x;
-    (*mtx)[3][0] = -(xFrom * colX.z + yFrom * colX.y + zFrom * colX.x);
+    (*mtx)[3][0] = -((xFrom * colX.z) + (yFrom * colX.y) + (zFrom * colX.x));
 
     (*mtx)[0][1] = zColY;
     (*mtx)[1][1] = yColY;
     (*mtx)[2][1] = xColY;
-    (*mtx)[3][1] = -(xFrom * zColY + yFrom * yColY + zFrom * xColY);
+    (*mtx)[3][1] = -((xFrom * zColY) + (yFrom * yColY) + (zFrom * xColY));
 
     (*mtx)[0][2] = d.z;
     (*mtx)[1][2] = d.y;
     (*mtx)[2][2] = d.x;
-    (*mtx)[3][2] = -(xFrom * d.z + yFrom * d.y + zFrom * d.x);
+    (*mtx)[3][2] = -((xFrom * d.z) + (yFrom * d.y) + (zFrom * d.x));
 
     (*mtx)[0][3] = 0.0f;
     (*mtx)[1][3] = 0.0f;
@@ -333,7 +332,7 @@ void gd_absrot_mat4(Mat4f *mtx, s32 axisnum, f32 ang) {
             break;
         default: gd_exit(); // Bad axis num
     }
-    gd_create_rot_mat_angular(&rMat, &rot, ang / 2.0f);
+    gd_create_rot_mat_angular(&rMat, &rot, (ang / 2.0f));
     gd_mult_mat4f(mtx, &rMat, mtx);
 }
 
@@ -346,7 +345,7 @@ f32 gd_vec3f_magnitude(struct GdVec3f *vec) {
  */
 s32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
-    if ((mag = SQ(vec->x) + SQ(vec->y) + SQ(vec->z)) == 0.0f) return FALSE;
+    if ((mag = (SQ(vec->x) + SQ(vec->y) + SQ(vec->z))) == 0.0f) return FALSE;
 #ifdef FAST_INVSQRT
     mag = gd_Q_rsqrt(mag);
 #else
@@ -376,9 +375,9 @@ s32 gd_normalize_vec3f(struct GdVec3f *vec) {
  */
 void gd_cross_vec3f(struct GdVec3f *a, struct GdVec3f *b, struct GdVec3f *dst) {
     struct GdVec3f result;
-    result.x = (a->y * b->z) - (a->z * b->y);
-    result.y = (a->z * b->x) - (a->x * b->z);
-    result.z = (a->x * b->y) - (a->y * b->x);
+    result.x = ((a->y * b->z) - (a->z * b->y));
+    result.y = ((a->z * b->x) - (a->x * b->z));
+    result.z = ((a->x * b->y) - (a->y * b->x));
     dst->x   = result.x;
     dst->y   = result.y;
     dst->z   = result.z;
@@ -388,7 +387,7 @@ void gd_cross_vec3f(struct GdVec3f *a, struct GdVec3f *b, struct GdVec3f *dst) {
  * Returns the dot product of 'a' and 'b'.
  */
 f32 gd_dot_vec3f(struct GdVec3f *a, struct GdVec3f *b) {
-    return (a->x * b->x) + (a->y * b->y) + (a->z * b->z);
+    return ((a->x * b->x) + (a->y * b->y) + (a->z * b->z));
 }
 
 /**
@@ -497,7 +496,7 @@ f32 gd_3x3_det(f32 r0c0, f32 r0c1, f32 r0c2,
  * returns the determinant.
  */
 f32 gd_2x2_det(f32 a, f32 b, f32 c, f32 d) {
-    return (a * d - b * c);
+    return ((a * d) - (b * c));
 }
 
 /**
@@ -534,7 +533,7 @@ void gd_create_rot_matrix(Mat4f *mtx, struct GdVec3f *vec, f32 s, f32 c) {
     rev.z = vec->x;
     rev.y = vec->y;
     rev.x = vec->z;
-    oneMinusCos = 1.0f - c;
+    oneMinusCos = (1.0f - c);
 
     (*mtx)[0][0] = oneMinusCos * rev.z * rev.z + c;
     (*mtx)[0][1] = oneMinusCos * rev.z * rev.y + s * rev.x;

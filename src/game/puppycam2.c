@@ -45,14 +45,14 @@ struct MemoryPool *gPuppyMemoryPool;
 s32   gPuppyError       = 0;
 
 #if defined(VERSION_EU)
-static uchar  gPCOptionStringsFR[][64] = {{NC_ANALOGUE_FR}, {NC_CAMX_FR}, {NC_CAMY_FR}, {NC_INVERTX_FR}, {NC_INVERTY_FR}, {NC_CAMC_FR}, {NC_SCHEME_FR}, {NC_WIDE_FR}, {OPTION_LANGUAGE_FR}};
-static uchar  gPCOptionStringsDE[][64] = {{NC_ANALOGUE_DE}, {NC_CAMX_DE}, {NC_CAMY_DE}, {NC_INVERTX_DE}, {NC_INVERTY_DE}, {NC_CAMC_DE}, {NC_SCHEME_DE}, {NC_WIDE_DE}, {OPTION_LANGUAGE_DE}};
+static uchar  gPCOptionStringsFR[][64] = {{NC_ANALOGUE_FR}, {NC_CAMX_FR}, {NC_CAMY_FR}, {NC_INVERTX_FR}, {NC_INVERTY_FR}, {NC_CAMC_FR}, {NC_SCHEME_FR}, {NC_WIDE_FR}, {OPTION_LANGUAGE_FR}, {NC_FOV_FR}};
+static uchar  gPCOptionStringsDE[][64] = {{NC_ANALOGUE_DE}, {NC_CAMX_DE}, {NC_CAMY_DE}, {NC_INVERTX_DE}, {NC_INVERTY_DE}, {NC_CAMC_DE}, {NC_SCHEME_DE}, {NC_WIDE_DE}, {OPTION_LANGUAGE_DE}, {NC_FOV_DE}};
 static uchar  gPCFlagStringsFR  [][64] = {{OPTION_DISABLED_FR}, {OPTION_ENABLED_FR}, {OPTION_SCHEME1_FR}, {OPTION_SCHEME2_FR}, {OPTION_SCHEME3_FR}, {TEXT_ENGLISH}, {TEXT_FRENCH}, {TEXT_GERMAN},};
 static uchar  gPCFlagStringsDE  [][64] = {{OPTION_DISABLED_DE}, {OPTION_ENABLED_DE}, {OPTION_SCHEME1_DE}, {OPTION_SCHEME2_DE}, {OPTION_SCHEME3_DE}, {TEXT_ENGLISH}, {TEXT_FRENCH}, {TEXT_GERMAN},};
 static uchar  gPCToggleStringsFR[][64] = {{NC_BUTTON_FR}, {NC_BUTTON2_FR}, {NC_OPTION_FR}, {NC_HIGHLIGHT_L}, {NC_HIGHLIGHT_R},};
 static uchar  gPCToggleStringsDE[][64] = {{NC_BUTTON_DE}, {NC_BUTTON2_DE}, {NC_OPTION_DE}, {NC_HIGHLIGHT_L}, {NC_HIGHLIGHT_R},};
 #endif
-static uchar  gPCOptionStringsEN[][64] = {{NC_ANALOGUE_EN}, {NC_CAMX_EN}, {NC_CAMY_EN}, {NC_INVERTX_EN}, {NC_INVERTY_EN}, {NC_CAMC_EN}, {NC_SCHEME_EN}, {NC_WIDE_EN}, {OPTION_LANGUAGE_EN}};
+static uchar  gPCOptionStringsEN[][64] = {{NC_ANALOGUE_EN}, {NC_CAMX_EN}, {NC_CAMY_EN}, {NC_INVERTX_EN}, {NC_INVERTY_EN}, {NC_CAMC_EN}, {NC_SCHEME_EN}, {NC_WIDE_EN}, {OPTION_LANGUAGE_EN}, {NC_FOV_EN}};
 static uchar  gPCFlagStringsEN  [][64] = {{OPTION_DISABLED_EN}, {OPTION_ENABLED_EN}, {OPTION_SCHEME1_EN}, {OPTION_SCHEME2_EN}, {OPTION_SCHEME3_EN}, {TEXT_ENGLISH}, {TEXT_FRENCH}, {TEXT_GERMAN},};
 static uchar  gPCToggleStringsEN[][64] = {{NC_BUTTON_EN}, {NC_BUTTON2_EN}, {NC_OPTION_EN}, {NC_HIGHLIGHT_L}, {NC_HIGHLIGHT_R},};
 
@@ -77,6 +77,9 @@ static const struct gPCOptionStruct gPCOptions[] = {
 // If the min and max are 0 and 1, then the value text is used, otherwise it's ignored.
 #ifdef WIDE
     {/*Option Name*/ 7, /*Option Variable*/ &gWidescreen,                      /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
+#endif
+#ifdef CUSTOM_FOV
+    {/*Option Name*/ 9, /*Option Variable*/ &gFieldOfView,                     /*Option Value Text Start*/ 255, /*Option Minimum*/     1, /*Option Maximum*/  500},
 #endif
 #if MULTILANG
     {/*Option Name*/ 8, /*Option Variable*/ &gInGameLanguage,                  /*Option Value Text Start*/   4, /*Option Minimum*/     1, /*Option Maximum*/    3},

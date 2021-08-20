@@ -92,6 +92,9 @@ u32 gGlobalTimer = 0;
 #ifdef WIDE
 s16 gWidescreen;
 #endif
+#ifdef CUSTOM_FOV
+s16 gFieldOfView = DEFAULT_FOV_PERCENT;
+#endif
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer  = 0;

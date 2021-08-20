@@ -469,18 +469,18 @@ void vec3f_rotate(Mat4 mat, Vec3f in, Vec3f out) {
 
 void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
     s32 i, j;
-    for (i = 0; i < 3; i++) {
-        out[i] = mat[3][i] * w;
-        for (j = 0; j < 3; j++) out[i] += mat[j][i] * in[j];
+    for ((i = 0); (i < 3); (i++)) {
+        out[i] = (mat[3][i] * w);
+        for ((j = 0); (j < 3); (j++)) out[i] += (mat[j][i] * in[j]);
     }
 }
 
 void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
     Vec3f temp;
     s32 i, j;
-    for (i = 0; i < 3; i++) {
-        temp[i] = mat[3][i] * w;
-        for (j = 0; j < 3; j++) temp[i] += mat[j][i] * in[j];
+    for ((i = 0); (i < 3); (i++)) {
+        temp[i] = (mat[3][i] * w);
+        for ((j = 0); (j < 3); (j++)) temp[i] += (mat[j][i] * in[j]);
     }
     out->v.ob[0] = temp[0];
     out->v.ob[1] = temp[1];
@@ -580,7 +580,11 @@ void mtxf_translate(Mat4 dest, Vec3f b) {
  * at the position 'to'. The up-vector is assumed to be (0, 1, 0), but the 'roll'
  * angle allows a bank rotation of the camera.
  */
+#ifdef CUSTOM_FOV
+void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll, f32 fov) {
+#else
 void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
+#endif
     register f32 invLength;
     register f32 xColY, yColY, zColY;
     register f32 xColZ, yColZ, zColZ;
@@ -594,16 +598,24 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #endif
     dx *= invLength;
     dz *= invLength;
-    yColY =  coss(roll);
-    xColY =  sins(roll) * dz;
-    zColY = -sins(roll) * dx;
+    yColY =   coss(roll);
+    xColY = ( sins(roll) * dz);
+    zColY = (-sins(roll) * dx);
     xColZ = (to[0] - from[0]);
     yColZ = (to[1] - from[1]);
     zColZ = (to[2] - from[2]);
+#ifdef CUSTOM_FOV
+#ifdef FAST_INVSQRT_MTXF_LOOKAT
+    invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)) * fov;
+#else
+    invLength = -(fov / MAX(sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)), 0.00001f));
+#endif
+#else
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ));
 #else
     invLength = -(1.0f / MAX(sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)), 0.00001f));
+#endif
 #endif
     xColZ *= invLength;
     yColZ *= invLength;
