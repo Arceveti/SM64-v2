@@ -393,7 +393,7 @@ MarioStep perform_ground_step(struct MarioState *m) {
         intendedPos[1] =  m->pos[1];
         stepResult = perform_ground_quarter_step(m, intendedPos);  
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-    m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
+        steepness = m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
 #endif
         if ((stepResult == GROUND_STEP_LEFT_GROUND) || (stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS)) break;
     }
