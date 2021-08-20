@@ -26,7 +26,7 @@ f32 slow_logf(f32 x) {
         ++p;
     }
     x -= 1.0f;
-    for (i = 1; i < 8; ++i) {
+    for ((i = 1); (i < 8); (++i)) {
         c *= -x;
         r += (c / i);
     }
@@ -37,7 +37,7 @@ f32 slow_expf(f32 x) {
     f32 r = 1.0f, c = 1.0f;
     s32 i;
     x = -x;
-    for (i = 1; i < 8; ++i) {
+    for ((i = 1); (i < 8); (++i)) {
         c *= (x / i);
         r += c;
     }
@@ -63,8 +63,8 @@ f32 Q_rsqrtf( f32 number ) {
 	i  = *(long *) &y;
 	i  = (0x5f3759df - (i >> 1));
 	y  = *(f32 *) &i;
-	y  = (y * (1.5f - (x2 * y * y))); // 1st iteration
-	// y  = (y * (1.5f - (x2 * y * y))); // 2nd iteration, this can be removed
+	y  = (y * (1.5f - (x2 * sqr(y)))); // 1st iteration
+	// y  = (y * (1.5f - (x2 * sqr(y)))); // 2nd iteration, this can be removed
 	return y;
 }
 
@@ -77,11 +77,17 @@ f64 Q_rsqrtd( f64 number ) {
     // The magic number is for doubles is from https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
 	i  = (0x5fe6eb50c7b537a9 - (i >> 1));
 	y  = *(f64 *) &i;
-	y  = (y * (1.5 - (x2 * y * y))); // 1st iteration
-    // y  = (y * (1.5 - (x2 * y * y))); // 2nd iteration, this can be removed
+	y  = (y * (1.5 - (x2 * sqr(y)))); // 1st iteration
+    // y  = (y * (1.5 - (x2 * sqr(y)))); // 2nd iteration, this can be removed
 	return y;
 }
 #endif
+
+/* 249B2C -> 249BA4 */
+f64 sqrtd(f64 x) {
+    if (x < 1.0e-7) return 0.0;
+    return sqrtf(x);
+}
 
 /************
  * Rounding *
@@ -98,7 +104,7 @@ static __inline__ s32 roundf(f32 in) {
 
 /// Round `num` to the nearest integer.
 inline s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
-inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
+inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); } //! use roundf instead?
 inline s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 inline s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 
@@ -183,6 +189,34 @@ u16 random_u16(void) {
 // Return either -1 or 1 with a 50:50 chance.
 s32 random_sign(void) {
     return ((random_u16() >= 0x7FFF) ? 1 : -1);
+}
+
+// data
+static u32 sPrimarySeed   = 0x12345678; // @ 801A82A4
+static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
+
+/**
+ * Returns a random floating point number between 0 and 1 (inclusive)
+ * TODO: figure out type of rng generator?
+ */
+f32 gd_rand_float(void) {
+    u32 temp;
+    u32 i;
+    for (i = 0; i < 4; i++) {
+        if (sPrimarySeed & 0x80000000) {
+            sPrimarySeed = sPrimarySeed << 1 | 0x1;
+        } else {
+            sPrimarySeed <<= 1;
+        }
+    }
+    sPrimarySeed += 4;
+    /* Seed Switch */
+    if ((sPrimarySeed ^= osGetTime()) & 0x1) {
+        temp = sPrimarySeed;
+        sPrimarySeed = sSecondarySeed;
+        sSecondarySeed = temp;
+    }
+    return ((sPrimarySeed & 0xFFFF) / 65535.0f);
 }
 
 // Generate a pseudorandom float in the range [0, 1).
@@ -1225,26 +1259,22 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
  * Trig Functions *
  ******************/
 
-s16 LENSIN(s16 length, Angle direction) {
-    return (length * sins(direction));
-}
+f64 sind(f64 x) { return sinf(x); }
+f64 cosd(f64 x) { return cosf(x); }
 
-s16 LENCOS(s16 length, Angle direction) {
-    return (length * coss(direction));
-}
+s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
+s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming
  * the resulting angle is in range [0, 0x2000] (1/8 of a circle).
  */
 static u16 atan2_lookup(f32 y, f32 x) {
-    u16 ret;
     if (x == 0) {
-        ret = gArctanTable[0];
+        return gArctanTable[0];
     } else {
-        ret = gArctanTable[(s32)((((y / x) * 1024) + 0.5f))];
+        return gArctanTable[(s32)((((y / x) * 1024) + 0.5f))];
     }
-    return ret;
 }
 
 /**

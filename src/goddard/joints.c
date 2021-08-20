@@ -9,6 +9,7 @@
 #include "objects.h"
 #include "sfx.h"
 #include "skin.h"
+#include "engine/math_util.h"
 
 static s32 sJointCount;                   // @ 801BA974
 

@@ -26,7 +26,7 @@ extern f32 gSineTable[];
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000
  * This should be used mainly to make camera code clearer at first glance.
  */
-#define DEGREES(x) (s16)((x) * 0x10000 / 360)
+#define DEGREES(x) (Angle)((x) * 0x10000 / 360)
 
 #define DEG_PER_RAD 57.29577950560105
 #define RAD_PER_DEG (1.0 / DEG_PER_RAD)
@@ -35,8 +35,8 @@ extern f32 gSineTable[];
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
 #define atans(x) gArctanTable[(u16) (x) >> 4] //! is this correct?
 
-#define min(a, b) ((a) <= (b) ? (a) : (b))
-#define max(a, b) ((a) >  (b) ? (a) : (b))
+#define min(a, b) ((a) > (b) ? (b) : (a))
+#define max(a, b) ((a) > (b) ? (a) : (b))
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
@@ -63,6 +63,7 @@ f64  absd(f64 x);
 f32  Q_rsqrtf( f32 number );
 f64  Q_rsqrtd( f64 number );
 #endif
+f64  sqrtd(f64 x);
 // min_3
 s8   min_3c( s8  a0, s8  a1,  s8 a2);
 u8   min_3uc(u8  a0, u8  a1,  u8 a2);
@@ -84,6 +85,7 @@ f64  max_3d( f64 a0, f64 a1, f64 a2);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
+f32  gd_rand_float(void);
 f32  random_float( void);
 f32  random_f32_around_zero(f32 diameter);
 void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16 zRange);
@@ -165,6 +167,8 @@ s32  approach_s16_asymptotic(           s16  current,   s16 target, s16 divisor)
 void approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
+f64  sind(f64 x);
+f64  cosd(f64 x);
 s16  LENSIN(s16 length, Angle direction);
 s16  LENCOS(s16 length, Angle direction);
 s16  atan2s(f32 y, f32 x);

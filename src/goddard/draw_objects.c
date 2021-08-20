@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "shape_helper.h"
 #include "draw_objects.h"
+#include "engine/math_util.h"
 
 /**
  * @file draw_objects.c
@@ -289,7 +290,7 @@ void draw_camera(struct ObjCamera *cam) {
         sp44.y  = cam->lookAt.y;
         sp44.z  = cam->lookAt.z;
     }
-    if (ABS(cam->worldPos.x - sp44.x) + ABS(cam->worldPos.z - sp44.z) == 0.0f) return; // Zero view distance
+    if (absf(cam->worldPos.x - sp44.x) + absf(cam->worldPos.z - sp44.z) == 0.0f) return; // Zero view distance
     gd_dl_lookat(cam, cam->worldPos.x, cam->worldPos.y, cam->worldPos.z, sp44.x, sp44.y, sp44.z, cam->unkA4);
 }
 
@@ -297,10 +298,10 @@ void draw_camera(struct ObjCamera *cam) {
 void world_pos_to_screen_coords(struct GdVec3f *pos, struct ObjCamera *cam, struct ObjView *view) {
     gd_rotate_and_translate_vec3f(pos, &cam->unkE8);
     if (pos->z > -256.0f) return;
-    pos->x *= 256.0f / -pos->z;
-    pos->y *= 256.0f /  pos->z;
-    pos->x += view->lowerRight.x / 2.0f;
-    pos->y += view->lowerRight.y / 2.0f;
+    pos->x *= (256.0f / -pos->z);
+    pos->y *= (256.0f /  pos->z);
+    pos->x += (view->lowerRight.x / 2.0f);
+    pos->y += (view->lowerRight.y / 2.0f);
 }
 
 /**
@@ -327,8 +328,8 @@ void check_grabable_click(struct GdObj *input) {
     objPos.y = (*mtx)[3][1];
     objPos.z = (*mtx)[3][2];
     world_pos_to_screen_coords(&objPos, gViewUpdateCamera, sUpdateViewState.view);
-    if (ABS(gGdCtrl.csrX - objPos.x) < 20.0f
-     && ABS(gGdCtrl.csrY - objPos.y) < 20.0f) {
+    if (absf(gGdCtrl.csrX - objPos.x) < 20.0f
+     && absf(gGdCtrl.csrY - objPos.y) < 20.0f) {
         // store (size, Obj Type, Obj Index) in s16 pick buffer array
         store_in_pickbuf(2);
         store_in_pickbuf(obj->type);

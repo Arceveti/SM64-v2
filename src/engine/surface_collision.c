@@ -1012,10 +1012,10 @@ Bool32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32
     // Surface vertex coordinates
     Vec3s sx, sy, sz;
     // Max delta between x, y, and z
-    s16 dxMax = 0, dyMax = 0, dzMax = 0;
+    register s16 dxMax = 0, dyMax = 0, dzMax = 0;
     // Current deltas between x, y, and z
     register f32 dx, dy, dz;
-    s32 i, j;
+    register s32 i, j;
     sx[0] = surf->vertex1[0];
     sx[1] = surf->vertex2[0];
     sx[2] = surf->vertex3[0];

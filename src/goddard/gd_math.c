@@ -3,78 +3,9 @@
 #include "gd_math.h"
 #include "gd_macros.h"
 #include "renderer.h"
+#include "engine/math_util.h"
 
 //! can this be combined with math_util?
-
-/**
- * Finds the square root of a float by treating
- * it as a double and finding the square root from there.
- */
-f32 gd_sqrt_f(f32 val) {
-    return (f32) gd_sqrt_d(val);
-}
-
-#ifdef FAST_INVSQRT
-/*
- * lol
- */
-f32 gd_Q_rsqrt( f32 number ) {
-	long i;
-	f32 x2, y;
-	const f32 threehalfs = 1.5f;
-	x2 = (number * 0.5f);
-	y  = number;
-	i  = * ( long * ) &y;
-	i  = (0x5f3759df - (i >> 1)); 
-	y  = * (f32 *) &i;
-	y  = (y * (threehalfs - (x2 * y * y)));
-	return y;
-}
-#endif
-
-// data
-static u32 sPrimarySeed   = 0x12345678; // @ 801A82A4
-static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
-
-/**
- * Returns a random floating point number between 0 and 1 (inclusive)
- * TODO: figure out type of rng generator?
- */
-f32 gd_rand_float(void) {
-    u32 temp;
-    u32 i;
-    for (i = 0; i < 4; i++) {
-        if (sPrimarySeed & 0x80000000) {
-            sPrimarySeed = sPrimarySeed << 1 | 0x1;
-        } else {
-            sPrimarySeed <<= 1;
-        }
-    }
-    sPrimarySeed += 4;
-    /* Seed Switch */
-    if ((sPrimarySeed ^= osGetTime()) & 0x1) {
-        temp = sPrimarySeed;
-        sPrimarySeed = sSecondarySeed;
-        sSecondarySeed = temp;
-    }
-    return ((sPrimarySeed & 0xFFFF) / 65535.0f);
-}
-
-/* 249AAC -> 249AEC */
-f64 gd_sin_d(f64 x) {
-    return sinf(x);
-}
-
-/* 249AEC -> 249B2C */
-f64 gd_cos_d(f64 x) {
-    return cosf(x);
-}
-
-/* 249B2C -> 249BA4 */
-f64 gd_sqrt_d(f64 x) {
-    if (x < 1.0e-7) return 0.0;
-    return sqrtf(x);
-}
 
 /**
  * Set mtx to a look-at matrix for the camera. The resulting transformation
@@ -94,7 +25,7 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     d.z = (xTo - xFrom);
     d.y = (yTo - yFrom);
     d.x = (zTo - zFrom);
-    invLength = (ABS(d.z) + ABS(d.y) + ABS(d.x));
+    invLength = (absf(d.z) + absf(d.y) + absf(d.x));
     // Scales 'd' if smaller than 10 or larger than 10,000 to be
     // of a magnitude of 10,000.
     if ((invLength > 10000.0f) || (invLength < 10.0f)) {
@@ -110,9 +41,9 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
         d.x     = norm.z;
     }
 #ifdef FAST_INVSQRT
-    invLength = -gd_Q_rsqrt(SQ(d.z) + SQ(d.y) + SQ(d.x));
+    invLength = -Q_rsqrtf(sqr(d.z) + sqr(d.y) + sqr(d.x));
 #else
-    invLength = -(1.0f / gd_sqrt_f(SQ(d.z) + SQ(d.y) + SQ(d.x)));
+    invLength = -(1.0f / sqrtf(sqr(d.z) + sqr(d.y) + sqr(d.x)));
 #endif
     d.z   *= invLength;
     d.y   *= invLength;
@@ -121,9 +52,9 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     colX.y = ((xColY * d.z) - (zColY * d.x));
     colX.x = ((zColY * d.y) - (yColY * d.z));
 #ifdef FAST_INVSQRT
-    invLength = gd_Q_rsqrt(SQ(colX.z) + SQ(colX.y) + SQ(colX.x));
+    invLength = Q_rsqrtf(sqr(colX.z) + sqr(colX.y) + sqr(colX.x));
 #else
-    invLength = (1.0f / gd_sqrt_f(SQ(colX.z) + SQ(colX.y) + SQ(colX.x)));
+    invLength = (1.0f / sqrtf(sqr(colX.z) + sqr(colX.y) + sqr(colX.x)));
 #endif
     colX.z *= invLength;
     colX.y *= invLength;
@@ -132,9 +63,9 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     yColY   = ((d.x * colX.z) - (d.z * colX.x));
     xColY   = ((d.z * colX.y) - (d.y * colX.z));
 #ifdef FAST_INVSQRT
-    invLength = gd_Q_rsqrt(SQ(zColY) + SQ(yColY) + SQ(xColY));
+    invLength = Q_rsqrtf(sqr(zColY) + sqr(yColY) + sqr(xColY));
 #else
-    invLength = (1.0f / gd_sqrt_f(SQ(zColY) + SQ(yColY) + SQ(xColY)));
+    invLength = (1.0f / sqrtf(sqr(zColY) + sqr(yColY) + sqr(xColY)));
 #endif
     zColY *= invLength;
     yColY *= invLength;
@@ -214,10 +145,10 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
     unit.y = vec->y;
     unit.z = vec->z;
     gd_normalize_vec3f(&unit);
-    hMag = gd_sqrt_f(SQ(unit.x) + SQ(unit.z));
+    hMag = sqrtf(sqr(unit.x) + sqr(unit.z));
     roll *= radPerDeg; // convert roll from degrees to radians
-    s = gd_sin_d(roll);
-    c = gd_cos_d(roll);
+    s = sind(roll);
+    c = cosd(roll);
     gd_set_identity_mat4(mtx);
     if (hMag != 0.0f) {
         invertedHMag = 1.0f / hMag;
@@ -300,11 +231,11 @@ void gd_clamp_vec3f(struct GdVec3f *vec, f32 limit) {
  * Rotates a 2D vector by some angle in degrees.
  */
 void gd_rot_2d_vec(f32 deg, f32 *x, f32 *y) {
-    f32 rad = deg / DEG_PER_RAD;
-    f32 xP = (*x * gd_cos_d(rad)) - (*y * gd_sin_d(rad));
-    f32 yP = (*x * gd_sin_d(rad)) + (*y * gd_cos_d(rad));
-    *x = xP;
-    *y = yP;
+    f32 rad = (deg / DEG_PER_RAD);
+    f32 xP  = ((*x * cosd(rad)) - (*y * sind(rad)));
+    f32 yP  = ((*x * sind(rad)) + (*y * cosd(rad)));
+    *x      = xP;
+    *y      = yP;
 }
 
 /**
@@ -337,7 +268,7 @@ void gd_absrot_mat4(Mat4f *mtx, s32 axisnum, f32 ang) {
 }
 
 f32 gd_vec3f_magnitude(struct GdVec3f *vec) {
-    return gd_sqrt_f(SQ(vec->x) + SQ(vec->y) + SQ(vec->z));
+    return sqrtf(sqr(vec->x) + sqr(vec->y) + sqr(vec->z));
 }
 
 /**
@@ -345,11 +276,11 @@ f32 gd_vec3f_magnitude(struct GdVec3f *vec) {
  */
 s32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
-    if ((mag = (SQ(vec->x) + SQ(vec->y) + SQ(vec->z))) == 0.0f) return FALSE;
+    if ((mag = (sqr(vec->x) + sqr(vec->y) + sqr(vec->z))) == 0.0f) return FALSE;
 #ifdef FAST_INVSQRT
-    mag = gd_Q_rsqrt(mag);
+    mag = Q_rsqrtf(mag);
 #else
-    mag = gd_sqrt_f(mag);
+    mag = sqrtf(mag);
 #endif
     // gd_sqrt_f rounds near 0 numbers to 0, so verify again.
     if (mag == 0.0f) {
@@ -560,8 +491,8 @@ void gd_create_rot_matrix(Mat4f *mtx, struct GdVec3f *vec, f32 s, f32 c) {
  * Creates a rotation matrix about vector 'vec' with ang in degrees.
  */
 void gd_create_rot_mat_angular(Mat4f *mtx, struct GdVec3f *vec, f32 ang) {
-    f32 s = gd_sin_d(ang / (DEG_PER_RAD / 2.0f));
-    f32 c = gd_cos_d(ang / (DEG_PER_RAD / 2.0f));
+    f32 s = sind(ang / (DEG_PER_RAD / 2.0f));
+    f32 c = cosd(ang / (DEG_PER_RAD / 2.0f));
     gd_create_rot_matrix(mtx, vec, s, c);
 }
 

@@ -12,6 +12,7 @@
 #include "shape_helper.h"
 #include "skin.h"
 #include "types.h"
+#include "engine/math_util.h"
 
 #define MAX_GD_DLS 1000
 #define OS_MESG_SI_COMPLETE 0x33333333
@@ -1079,7 +1080,7 @@ void func_8019F2C4(f32 angle, s8 axis) {
 void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 yTo, f32 zTo, f32 colXY) {
     LookAt *lookat;
     colXY *= RAD_PER_DEG;
-    gd_mat4f_lookat(&cam->unkE8, xFrom, yFrom, zFrom, xTo, yTo, zTo, gd_sin_d(colXY), gd_cos_d(colXY), 0.0f);
+    gd_mat4f_lookat(&cam->unkE8, xFrom, yFrom, zFrom, xTo, yTo, zTo, sind(colXY), cosd(colXY), 0.0f);
     mat4_to_mtx(&cam->unkE8, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),  G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
     /*  col           colc          dir
@@ -1256,14 +1257,14 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f), (s32)(colour->b * 255.0f), 255);
-    vec.z = cam->unkE8[0][2] + arg4->x;
-    vec.y = cam->unkE8[1][2] + arg4->y;
-    vec.x = cam->unkE8[2][2] + arg4->z;
+    vec.z = (cam->unkE8[0][2] + arg4->x);
+    vec.y = (cam->unkE8[1][2] + arg4->y);
+    vec.x = (cam->unkE8[2][2] + arg4->z);
 #ifdef FAST_INVSQRT
-    mag = gd_Q_rsqrt(SQ(vec.z) + SQ(vec.y) + SQ(vec.x));
+    mag = Q_rsqrtf(sqr(vec.z) + sqr(vec.y) + sqr(vec.x));
     if (mag > 0.1f) {
 #else
-    mag = sqrtf(SQ(vec.z) + SQ(vec.y) + SQ(vec.x));
+    mag = sqrtf(sqr(vec.z) + sqr(vec.y) + sqr(vec.x));
     if (mag > 0.1f) {
         mag = 1.0f / mag;
 #endif
@@ -1514,14 +1515,14 @@ void parse_p1_controller(void) {
     if (gdctrl->startedDragging) {
         gdctrl->dragStartX = gdctrl->csrX;
         gdctrl->dragStartY = gdctrl->csrY;
-        if (gdctrl->currFrame - gdctrl->dragStartFrame < 10) gdctrl->AbtnPressWait = TRUE;
+        if ((gdctrl->currFrame - gdctrl->dragStartFrame) < 10) gdctrl->AbtnPressWait = TRUE;
     }
     if (gdctrl->dragging) gdctrl->dragStartFrame = gdctrl->currFrame;
     gdctrl->currFrame++;
     if (currInputs->button & START_BUTTON && !(prevInputs->button & START_BUTTON)) gdctrl->newStartPress ^= 1;
     // deadzone checks
-    if (ABS(gdctrl->stickX) >= 6) gdctrl->csrX += gdctrl->stickX * 0.1f;
-    if (ABS(gdctrl->stickY) >= 6) gdctrl->csrY -= gdctrl->stickY * 0.1f;
+    if (absi(gdctrl->stickX) >= 6) gdctrl->csrX += (gdctrl->stickX * 0.1f);
+    if (absi(gdctrl->stickY) >= 6) gdctrl->csrY -= (gdctrl->stickY * 0.1f);
     // clamp cursor position within screen view bounds
     if (gdctrl->csrX < sScreenView->parent->upperLeft.x + 16.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + 16.0f;
     if (gdctrl->csrX > sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f;

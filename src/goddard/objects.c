@@ -13,6 +13,7 @@
 #include "renderer.h"
 #include "sfx.h"
 #include "skin.h"
+#include "engine/math_util.h"
 
 // bss
 struct GdBoundingBox gSomeBoundingBox;
@@ -653,8 +654,8 @@ void drag_picked_object(struct GdObj *inputObj) {
     if (gViewUpdateCamera == NULL) return;
     dispMag = gd_vec3f_magnitude(&gViewUpdateCamera->unk40);
     dispMag /= 1000.0f; //! fast invsqrt?
-    displacement.x = ((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag;
-    displacement.y = ((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag;
+    displacement.x = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
+    displacement.y = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement.z = 0.0f;
     gd_inverse_mat4f(&gViewUpdateCamera->unkE8, &sp40);
     gd_mat4f_mult_vec3f(&displacement, &sp40);
@@ -662,7 +663,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     if ((inputObj->drawFlags & OBJ_PICKED) && gGdCtrl.dragging) {
         gd_play_sfx(GD_SFX_PINCH_FACE);
         // Note: this second sfx won't play, as it is "overwritten" by the first
-        if (ABS(ctrl->stickDeltaX) + ABS(ctrl->stickDeltaY) >= 11) gd_play_sfx(GD_SFX_PINCH_FACE_2);
+        if (absi(ctrl->stickDeltaX) + absi(ctrl->stickDeltaY) >= 11) gd_play_sfx(GD_SFX_PINCH_FACE_2);
         switch (inputObj->type) {
             case OBJ_TYPE_JOINTS:
                 ((struct ObjJoint *) obj)->mat128[3][0] += displacement.x;
