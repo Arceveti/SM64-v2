@@ -39,8 +39,8 @@ extern Gfx dl_paintings_rippling_begin[];
 extern Gfx dl_paintings_rippling_end[];
 extern Gfx dl_paintings_env_mapped_begin[];
 extern Gfx dl_paintings_env_mapped_end[];
-extern u8 seg2_painting_triangle_mesh[]; //! s16?
-extern u8 seg2_painting_mesh_neighbor_tris[]; //! s16?
+extern PaintingData seg2_painting_triangle_mesh[];
+extern PaintingData seg2_painting_mesh_neighbor_tris[];
 extern Texture* main_hud_lut[58];
 extern Gfx dl_hud_img_load_tex_block[];
 extern Gfx dl_hud_img_begin[];

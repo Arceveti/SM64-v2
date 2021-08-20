@@ -2843,7 +2843,7 @@ const Gfx dl_ia8_up_arrow_end[] = {
 };
 
 // 0x02014958 - 0x02014960
-static const Lights1 seg2_lights_02014958 = gdSPDefLights1(
+static const Lights1 seg2_lights_painting_env_mapped = gdSPDefLights1(
     0x50, 0x50, 0x50,
     0xff, 0xff, 0xff, 0x32, 0x32, 0x32
 );
@@ -2853,8 +2853,8 @@ const Gfx dl_paintings_rippling_begin[] = {
     gsDPPipeSync(),
     gsSPSetGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
-    gsSPLight(&seg2_lights_02014958.l, 1),
-    gsSPLight(&seg2_lights_02014958.a, 2),
+    gsSPLight(&seg2_lights_painting_env_mapped.l, 1),
+    gsSPLight(&seg2_lights_painting_env_mapped.a, 2),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPEndDisplayList(),
 };
@@ -2872,8 +2872,8 @@ const Gfx dl_paintings_env_mapped_begin[] = {
     gsDPPipeSync(),
     gsSPSetGeometryMode(G_LIGHTING | G_TEXTURE_GEN),
     gsDPSetCombineMode(G_CC_DECALRGB, G_CC_DECALRGB),
-    gsSPLight(&seg2_lights_02014958.l, 1),
-    gsSPLight(&seg2_lights_02014958.a, 2),
+    gsSPLight(&seg2_lights_painting_env_mapped.l, 1),
+    gsSPLight(&seg2_lights_painting_env_mapped.a, 2),
     gsSPTexture(0x4000, 0x4000, 0, G_TX_RENDERTILE, G_ON),
     gsSPEndDisplayList(),
 };
@@ -2897,8 +2897,7 @@ const Gfx dl_paintings_draw_ripples[] = {
 
 // 14A60: triangle mesh
 // 0x02014A60
-//! PaintingData?
-const s16 seg2_painting_triangle_mesh[] = {
+const PaintingData seg2_painting_triangle_mesh[] = {
     157, // numVtx
     // format:
     // 2D point (x, y), ripple (0 or 1)
@@ -3335,8 +3334,7 @@ const s16 seg2_painting_triangle_mesh[] = {
  *      num neighbors, neighbor0, neighbor1, ...
  * The nth entry corresponds to the nth vertex in seg2_painting_triangle_mesh
  */
-//! PaintingData?
-const s16 seg2_painting_mesh_neighbor_tris[] = {
+const PaintingData seg2_painting_mesh_neighbor_tris[] = {
       3,   1,   2,   3,
       1,   1,
       4,   1,   2,   4,   5,

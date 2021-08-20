@@ -173,11 +173,10 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     if ((newFacingDYaw < -0x4000) || (newFacingDYaw >  0x4000)) m->forwardVel *= -1.0f;
 }
 
-s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
+Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     f32 lossFactor;
     f32 accel;
     f32 oldSpeed, newSpeed;
-    s32 stopped        = FALSE;
     Angle intendedDYaw = (m->intendedYaw - m->slideYaw);
     f32 forward        = coss(intendedDYaw);
     f32 sideward       = sins(intendedDYaw);
@@ -212,9 +211,9 @@ s32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     update_sliding_angle(m, accel, lossFactor);
     if (!mario_floor_is_slope(m) && ((m->forwardVel * m->forwardVel) < (stopSpeed * stopSpeed))) {
         mario_set_forward_vel(m, 0.0f);
-        stopped = TRUE;
+        return TRUE;
     }
-    return stopped;
+    return FALSE;
 }
 
 void apply_slope_accel(struct MarioState *m) {
@@ -223,7 +222,7 @@ void apply_slope_accel(struct MarioState *m) {
     f32 steepness = sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z));
     if (mario_floor_is_slope(m)) {
         s16 slopeClass = 0;
-        if (m->action != ACT_SOFT_BACKWARD_GROUND_KB && m->action != ACT_SOFT_FORWARD_GROUND_KB) slopeClass = mario_get_floor_class(m);
+        if ((m->action != ACT_SOFT_BACKWARD_GROUND_KB) && (m->action != ACT_SOFT_FORWARD_GROUND_KB)) slopeClass = mario_get_floor_class(m);
         switch (slopeClass) {
             case SURFACE_CLASS_VERY_SLIPPERY: slopeAccel = 5.3f; break;
             case SURFACE_CLASS_SLIPPERY:      slopeAccel = 2.7f; break;
@@ -246,7 +245,7 @@ void apply_slope_accel(struct MarioState *m) {
     mario_update_windy_ground(m);
 }
 
-s32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
+Bool32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
     apply_slope_accel(m);
     if (!mario_floor_is_slope(m)) {
         m->forwardVel *= frictionFactor;

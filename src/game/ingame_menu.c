@@ -400,8 +400,8 @@ void print_hud_lut_string_centered(s8 hudLUT, s16 x, s16 y, const uchar *str) {
 void print_menu_generic_string(s16 x, s16 y, const uchar *str) {
     UNUSED s8 mark = DIALOG_MARK_NONE; // unused in EU
     s32 strPos = 0;
-    u32 curX = x;
-    u32 curY = y;
+    u32 curX   = x;
+    u32 curY   = y;
     void **fontLUT = segmented_to_virtual(menu_font_lut);
     while (str[strPos] != DIALOG_CHAR_TERMINATOR) {
         switch (str[strPos]) {
@@ -771,7 +771,7 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
                     } else if (str[strIdx] >= 0x10) {
                         customColor = 2;
                         strIdx = (colorLoop - 8);
-                        for (diffTmp = 0; diffTmp < 8; ++diffTmp) {
+                        for ((diffTmp = 0); (diffTmp < 8); (++diffTmp)) {
                             if (str[strIdx + diffTmp] != 0x9F) break;
                         }
                         if (diffTmp == 8) strIdx += diffTmp;
@@ -875,26 +875,26 @@ void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
     // King Bob-omb (Start), Whomp (Defeated), King Bob-omb (Defeated, missing in JP), Eyerock (Defeated), Wiggler (Defeated)
     s16 dialogBossStop[]  = { DIALOG_017, DIALOG_115, DIALOG_116, DIALOG_118, DIALOG_152 };
     s16 i;
-    for (i = 0; i < (s16) ARRAY_COUNT(dialogBossStart); i++) {
+    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogBossStart)); (i++)) {
         if (dialogBossStart[i] == dialogID) {
             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
             play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_BOSS), 0);
             return;
         }
     }
-    for (i = 0; i < (s16) ARRAY_COUNT(dialogRaceSound); i++) {
+    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogRaceSound)); (i++)) {
         if ((dialogRaceSound[i] == dialogID) && (gDialogLineNum == 1)) {
             play_race_fanfare();
             return;
         }
     }
-    for (i = 0; i < (s16) ARRAY_COUNT(dialogStarSound); i++) {
+    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogStarSound)); (i++)) {
         if ((dialogStarSound[i] == dialogID) && (gDialogLineNum == 1)) {
             play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
             return;
         }
     }
-    for (i = 0; i < (s16) ARRAY_COUNT(dialogBossStop); i++) {
+    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogBossStop)); (i++)) {
         if (dialogBossStop[i] == dialogID) {
             seq_player_fade_out(SEQ_PLAYER_LEVEL, 1);
             return;
@@ -1354,7 +1354,7 @@ void render_pause_my_score_coins(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    if (courseIndex < COURSE_STAGES_COUNT && save_file_get_course_star_count(gCurrSaveFileNum - 1, courseIndex) != 0) print_generic_string(MYSCORE_X, 121, textMyScore);
+    if ((courseIndex < COURSE_STAGES_COUNT) && (save_file_get_course_star_count((gCurrSaveFileNum - 1), courseIndex) != 0)) print_generic_string(MYSCORE_X, 121, textMyScore);
     courseName = segmented_to_virtual(courseNameTbl[courseIndex]);
     if (courseIndex < COURSE_STAGES_COUNT) {
         print_generic_string(63, 157, textCourse);
@@ -1382,10 +1382,10 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    print_generic_string(x + 14,     y +  2, textLakituMario);
-    print_generic_string(x + TXT1_X, y - 13, textNormalUpClose);
-    print_generic_string(x + 124,    y +  2, textLakituStop);
-    print_generic_string(x + TXT2_X, y - 13, textNormalFixed);
+    print_generic_string((x + 14    ), (y +  2), textLakituMario);
+    print_generic_string((x + TXT1_X), (y - 13), textNormalUpClose);
+    print_generic_string((x + 124   ), (y +  2), textLakituStop);
+    print_generic_string((x + TXT2_X), (y - 13), textNormalFixed);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     create_dl_translation_matrix(G_MTX_PUSH, (((*index - 1) * xIndex) + x), (y + Y_VAL7), 0);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
@@ -1420,7 +1420,7 @@ void render_pause_course_options(s16 x, s16 y, s8 *index, s16 yIndex) {
     print_generic_string((x + 10), (y - 17), textExitCourse);
 #ifndef PUPPYCAM
 #ifdef REONU_CAM_3
-    if ((*index != MENU_OPT_CAMERA_ANGLE_R) && (cameraMode != CAMERA_MODE_8_DIRECTIONS)) print_generic_string(x + 10, y - 33, textCameraAngleR);
+    if ((*index != MENU_OPT_CAMERA_ANGLE_R) && (cameraMode != CAMERA_MODE_8_DIRECTIONS)) print_generic_string((x + 10), (y - 33), textCameraAngleR);
     if ((*index != MENU_OPT_CAMERA_ANGLE_R) || (cameraMode == CAMERA_MODE_8_DIRECTIONS)) {
 #else
     if (*index != MENU_OPT_CAMERA_ANGLE_R) {
@@ -1481,12 +1481,12 @@ void print_hud_pause_colorful_str(void) {
 }
 
 void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) {
-    s16 hasStar    = 0;
-    uchar  str[COURSE_STAGES_COUNT * 2];
-    uchar  textStar[] = { TEXT_STAR };
-    u8  starFlags  = save_file_get_star_flags(fileNum, courseNum);
-    u16 starCount  = save_file_get_course_star_count(fileNum, courseNum);
-    u16 nextStar   = 0;
+    s16 hasStar      = 0;
+    uchar str[COURSE_STAGES_COUNT * 2];
+    uchar textStar[] = { TEXT_STAR };
+    u8  starFlags    = save_file_get_star_flags(fileNum, courseNum);
+    u16 starCount    = save_file_get_course_star_count(fileNum, courseNum);
+    u16 nextStar     = 0;
     if (starFlags & 0x40) {
         starCount--;
         print_generic_string((x + 89), (y - 5), textStar);
@@ -1527,7 +1527,7 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
                 gDialogLineNum--;
             }
             if ((gDialogLineNum == COURSE_STAGES_COUNT) || (gDialogLineNum == -1)) {
-                gDialogLineNum =  COURSE_STAGES_COUNT;
+                gDialogLineNum = COURSE_STAGES_COUNT;
                 break;
             }
         }

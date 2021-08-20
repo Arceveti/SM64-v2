@@ -75,7 +75,7 @@ struct gPuppyStruct
     struct Object *targetObj2;      // This is the second focus point that the camera will focus on. It'll focus between them.
     s16   povHeight;                // An offset of the focus object's Y value.
     s16   floorY[2];                // Floor offsets, to allow a grace period before following Mario into the air.
-    u8    opacity;                  // A value set by collision distance, to fade Mario out if you're too close.
+    Alpha opacity;                  // A value set by collision distance, to fade Mario out if you're too close.
     s8    stick2[2];                // The value that's set and read for analogue stick.
     u8    stickN[2];                // This is set when the stick is neutral. It's to prevent rapidfire input.
     Bool8 enabled;                  // A boolean that decides whether to use vanilla camera or puppy camera.

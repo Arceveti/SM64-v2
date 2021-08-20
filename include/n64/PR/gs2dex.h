@@ -23,7 +23,7 @@ extern "C" {
  *===========================================================================*/
 #define	GS_CALC_DXT(line)	(((1<< G_TX_DXT_FRAC)-1)/(line)+1)
 #define	GS_PIX2TMEM(pix, siz)	((pix)>>(4-(siz)))
-#define	GS_PIX2DXT(pix, siz)	GS_CALC_DXT(GS_PIX2TMEM((pix), (siz)))
+#define	GS_PIX2DXT( pix, siz)	GS_CALC_DXT(GS_PIX2TMEM((pix), (siz)))
 
 /*===========================================================================*
  *	Data structures for S2DEX microcode

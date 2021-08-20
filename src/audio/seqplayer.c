@@ -1799,7 +1799,7 @@ void sequence_channel_process_script(struct SequenceChannel *seqChannel) {
                         goto out;
                     case 0x10:
                         seqChannel->soundScriptIO[loBits] = -1;
-                        func_sh_802f47c8(seqChannel->bankId, (u8)value, &seqChannel->soundScriptIO[loBits]); //!?
+                        func_sh_802f47c8(seqChannel->bankId, (u8)value, &seqChannel->soundScriptIO[loBits]);
                         // if (func_sh_802f47c8(seqChannel->bankId, (u8)value, &seqChannel->soundScriptIO[loBits]) == -1) {
                         // }
                         break;

@@ -1,5 +1,5 @@
-//! HMC crashes on load from debug level select. Removing a couple of some of the more active
-//! objects from here (swoop, scuttlebug, snufit, etc.) prevents the crash. However, TTC has
+//! If GFX pool is too low, HMC crashes on load from debug level select. Removing a couple of some of the
+//! more active objects from here (swoop, scuttlebug, snufit, etc.) prevents the crash. However, TTC has
 //! more macro objects than HMC and do not have the same issue. Why?
 
 // 0x0702AA78 - 0x0702ADC2
@@ -16,7 +16,7 @@ const MacroObject hmc_seg7_macro_objs[] = {
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 270, /*pos*/   500, -4300,  3644, /*behParam*/ DIALOG_127),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 180, /*pos*/  2006,     0,  6713, /*behParam*/ DIALOG_124),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/  2510,     0,  2800, /*behParam*/ DIALOG_140),
-    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/  90, /*pos*/   510,     0,  5380, /*behParam*/ DIALOG_139),
+    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/  90, /*pos*/   512,     0,  5380, /*behParam*/ DIALOG_139),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 135, /*pos*/ -4370,  2860, -2243, /*behParam*/ DIALOG_043),
     MACRO_OBJECT(               /*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/  -439,   220, -2540), // 2
     MACRO_OBJECT(               /*preset*/ macro_swoop,                       /*yaw*/   0, /*pos*/    80,   140, -4660),

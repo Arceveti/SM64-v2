@@ -253,7 +253,7 @@ void bhv_unlock_door_star_loop(void) {
 /**
  * Generate a display list that sets the correct blend mode and color for vanish Mario.
  */
-static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, s16 alpha) { //! u8/Alpha type?
+static Gfx *make_gfx_mario_alpha(struct GraphNodeGenerated *node, Alpha alpha) {
     Gfx *gfx;
     Gfx *gfxHead = NULL;
     if (alpha == 255) {
@@ -278,7 +278,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
     Gfx *gfx = NULL;
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
-    s16 alpha; //! u8/Alpha type?
+    Alpha alpha;
     if (callContext == GEO_CONTEXT_RENDER) {
         alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 0xFF);
 #ifdef PUPPYCAM

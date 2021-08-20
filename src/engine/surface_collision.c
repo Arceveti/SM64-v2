@@ -1093,8 +1093,6 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     register f32 a, f, u, v;
     Vec3f add_dir;
     Vec3f norm;
-    // Ignore certain surface types.
-    if ((surface->type == SURFACE_INTANGIBLE) || (surface->flags & SURFACE_FLAG_NO_CAM_COLLISION)) return FALSE;
     // Get surface normal and some other stuff
     norm[0] = 0;
     norm[1] = surface->normal.y;
@@ -1147,7 +1145,14 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
         bottom = (orig[1] + (dir[1] * dir_length));
     }
     // Iterate through every surface of the list
-    for (; list != NULL; list = list->next) {
+    for (; (list != NULL); (list = list->next)) {
+        // Ignore certain surface types.
+        if (gCheckingSurfaceCollisionsForCamera) {
+ #ifdef NEW_WATER_SURFACES
+            if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
+ #endif
+            if ((list->surface->type == SURFACE_INTANGIBLE) || (list->surface->flags & SURFACE_FLAG_NO_CAM_COLLISION)) continue;
+        }
         // Reject surface if out of vertical bounds
         if ((list->surface->lowerY > top) || (list->surface->upperY < bottom)) continue;
         // Check intersection between the ray and this surface
@@ -1187,6 +1192,8 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
 	}
 }
 
+#define STEPS 4
+
 void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags) {
     Vec3f normalized_dir;
     register f32 step, dx, dz;
@@ -1213,9 +1220,9 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
 	}
     // Get cells we cross using DDA
     if (absf(dir[0]) >= absf(dir[2])) {
-        step = ((4 * absf(dir[0])) / CELL_SIZE); //! STEPS
+        step = ((STEPS * absf(dir[0])) / CELL_SIZE);
     } else {
-        step = ((4 * absf(dir[2])) / CELL_SIZE); //! STEPS
+        step = ((STEPS * absf(dir[2])) / CELL_SIZE);
     }
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);
@@ -1234,6 +1241,8 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
         }
     }
 }
+
+#undef STEPS
 
 /**************************************************
  *                      DEBUG                     *

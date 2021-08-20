@@ -3124,7 +3124,7 @@ s32 clamp_positions_and_find_yaw(Vec3f pos, Vec3f origin, f32 xMax, f32 xMin, f3
  * @warning this is jank. It actually returns the yaw that will rotate further INTO the wall. So, the
  *          developers just add 180 degrees to the result.
  */
-s32 calc_avoid_yaw(Angle yawFromMario, Angle wallYaw) {
+Angle calc_avoid_yaw(Angle yawFromMario, Angle wallYaw) {
     if (((wallYaw - yawFromMario) + DEGREES(90)) < 0) {
         // Deflect to the right
         yawFromMario = wallYaw;
@@ -3136,7 +3136,7 @@ s32 calc_avoid_yaw(Angle yawFromMario, Angle wallYaw) {
     return yawFromMario;
 }
 
-s32 is_mario_behind_surface(UNUSED struct Camera *c, struct Surface *surf) {
+Bool32 is_mario_behind_surface(UNUSED struct Camera *c, struct Surface *surf) {
     return is_behind_surface(sMarioCamState->pos, surf);
 }
 
@@ -3151,12 +3151,12 @@ void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
     dst[2] = (((to[2] - from[2]) * scale) + from[2]);
 }
 
-//! move to math_util
+//! move to math_util?
 /**
  * Effectively created a rectangular prism defined by a vector starting at the center
  * and extending to the corners. If the position is in this box, the function returns true.
  */
-s32 is_pos_in_bounds(Vec3f pos, Vec3f center, Vec3f bounds, Angle boundsYaw) {
+Bool32 is_pos_in_bounds(Vec3f pos, Vec3f center, Vec3f bounds, Angle boundsYaw) {
     Vec3f rel;
     vec3f_diff(rel, center, pos);
     rotate_in_xz(rel, rel, boundsYaw);
@@ -4810,7 +4810,7 @@ s16 camera_course_processing(struct Camera *c) {
     u8  oldMode      = c->mode;
     if (c->mode == CAMERA_MODE_C_UP) c->mode = sModeInfo.lastMode;
     check_blocking_area_processing(&c->mode);
-    if (level > LEVEL_COUNT + 1) level = LEVEL_COUNT + 1;
+    if (level > (LEVEL_COUNT + 1)) level = (LEVEL_COUNT + 1);
     if (sCameraTriggers[level] != NULL) {
         // Process positional triggers.
         // All triggered events are called, not just the first one.
@@ -4863,7 +4863,7 @@ s16 camera_course_processing(struct Camera *c) {
                 if ((sFixedModeBasePosition[0] ==  210.0f)
                  && (sFixedModeBasePosition[1] ==  420.0f)
                  && (sFixedModeBasePosition[2] == 3109.0f)
-                 && (sMarioCamState->pos[1] < 1800.0f)) transition_to_camera_mode(c, CAMERA_MODE_CLOSE, 30);
+                 && (sMarioCamState->pos[1]    <  1800.0f)) transition_to_camera_mode(c, CAMERA_MODE_CLOSE, 30);
                 break;
             case AREA_SSL_PYRAMID: set_mode_if_not_set_by_surface(c, CAMERA_MODE_OUTWARD_RADIAL); break;
             case AREA_SSL_OUTSIDE: set_mode_if_not_set_by_surface(c, CAMERA_MODE_RADIAL        ); break;
@@ -5092,7 +5092,7 @@ s16 cutscene_object(u8 cutscene, struct Object *o) {
     if ((gCamera->cutscene == CUTSCENE_NONE) && (sObjectCutscene == CUTSCENE_NONE)) {
         if (gRecentCutscene != cutscene) {
             start_object_cutscene(cutscene, o);
-            return 1;
+            return  1;
         } else {
             return -1;
         }
@@ -9075,8 +9075,8 @@ void obj_rotate_towards_point(struct Object *o, Vec3f point, Angle pitchOff, Ang
     Vec3f oPos;
     object_pos_to_vec3f(oPos, o);
     vec3f_get_dist_and_angle(oPos, point, &dist, &pitch, &yaw);
-    o->oMoveAnglePitch = approach_s16_asymptotic(o->oMoveAnglePitch, (pitchOff - pitch), pitchDiv);
-    o->oMoveAngleYaw   = approach_s16_asymptotic(o->oMoveAngleYaw, (yaw + yawOff), yawDiv);
+    o->oMoveAnglePitch = approach_s16_asymptotic(o->oMoveAnglePitch, (pitchOff -  pitch), pitchDiv);
+    o->oMoveAngleYaw   = approach_s16_asymptotic(o->oMoveAngleYaw,   (yaw      + yawOff),   yawDiv);
 }
 
 #include "behaviors/intro_peach.inc.c"

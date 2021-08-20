@@ -170,7 +170,7 @@ void spawn_special_objects(s32 areaIndex, Collision **specialObjList) {
     (*specialObjList)++;
     gMacroObjectDefaultParent.header.gfx.areaIndex       = areaIndex;
     gMacroObjectDefaultParent.header.gfx.activeAreaIndex = areaIndex;
-    for (i = 0; i < numOfSpecialObjects; i++) {
+    for ((i = 0); (i < numOfSpecialObjects); (i++)) {
         presetID = (u8) **specialObjList;
         (*specialObjList)++;
         x = **specialObjList;

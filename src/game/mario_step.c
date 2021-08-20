@@ -152,7 +152,7 @@ Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 
 
 Bool32 mario_update_moving_sand(struct MarioState *m) {
     struct Surface *floor = m->floor;
-    s32 floorType         = floor->type;
+    SurfaceType floorType = floor->type;
     if ((floorType == SURFACE_DEEP_MOVING_QUICKSAND)
      || (floorType == SURFACE_SHALLOW_MOVING_QUICKSAND)
      || (floorType == SURFACE_MOVING_QUICKSAND)
@@ -217,7 +217,7 @@ MarioStep stationary_ground_step(struct MarioState *m) {
     return stepResult;
 }
 
-static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
+static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #ifdef BETTER_WALL_COLLISION
     struct WallCollisionData lowerWall, upperWall;
     s16 i;
@@ -726,7 +726,7 @@ void apply_twirl_gravity(struct MarioState *m) {
     if (m->vel[1] < terminalVelocity) m->vel[1] = terminalVelocity;
 }
 
-u32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
+Bool32 should_strengthen_gravity_for_jump_ascent(struct MarioState *m) {
     if (!(m->flags & MARIO_JUMPING)) return FALSE;
     if (m->action & (ACT_FLAG_INTANGIBLE | ACT_FLAG_INVULNERABLE)) return FALSE;
     if (!(m->input & INPUT_A_DOWN) && (m->vel[1] > 20.0f)) return (m->action & ACT_FLAG_CONTROL_JUMP_HEIGHT) != 0;

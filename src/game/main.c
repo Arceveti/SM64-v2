@@ -390,19 +390,19 @@ void turn_off_audio(void) {
 
 void change_vi(OSViMode *mode, int width, int height){
     mode->comRegs.width  =   width;
-    mode->comRegs.xScale = ((width*512)/320);
+    mode->comRegs.xScale = ((width * 512) / 320);
     if (height > 240) {
         mode->comRegs.ctrl     |= 0x40;
-        mode->fldRegs[0].origin = (width*2);
-        mode->fldRegs[1].origin = (width*4);
-        mode->fldRegs[0].yScale = (0x2000000|((height*1024)/240));
-        mode->fldRegs[1].yScale = (0x2000000|((height*1024)/240));
-        mode->fldRegs[0].vStart = (mode->fldRegs[1].vStart-0x20002);
+        mode->fldRegs[0].origin = (width * 2);
+        mode->fldRegs[1].origin = (width * 4);
+        mode->fldRegs[0].yScale = (0x2000000 | ((height * 1024) / 240));
+        mode->fldRegs[1].yScale = (0x2000000 | ((height * 1024) / 240));
+        mode->fldRegs[0].vStart = (mode->fldRegs[1].vStart - 0x20002);
     } else {
-        mode->fldRegs[0].origin = (width*2);
-        mode->fldRegs[1].origin = (width*4);
-        mode->fldRegs[0].yScale = ((height*1024)/240);
-        mode->fldRegs[1].yScale = ((height*1024)/240);
+        mode->fldRegs[0].origin = (width * 2);
+        mode->fldRegs[1].origin = (width * 4);
+        mode->fldRegs[0].yScale = ((height * 1024) / 240);
+        mode->fldRegs[1].yScale = ((height * 1024) / 240);
     }
 }
 
@@ -434,7 +434,7 @@ void thread1_idle(UNUSED void *arg) {
 
 #if CLEARRAM
 void ClearRAM(void) {
-    bzero(_mainSegmentEnd, (size_t)osMemSize - (size_t)OS_K0_TO_PHYSICAL(_mainSegmentEnd));
+    bzero(_mainSegmentEnd, ((size_t)osMemSize - (size_t)OS_K0_TO_PHYSICAL(_mainSegmentEnd)));
 }
 #endif
 
@@ -460,6 +460,6 @@ void main_func(void) {
 #ifdef ISVPRINT
     osInitialize_fakeisv();
 #endif
-    create_thread(&gIdleThread, 1, thread1_idle, NULL, gIdleThreadStack + 0x800, 100);
+    create_thread(&gIdleThread, 1, thread1_idle, NULL, (gIdleThreadStack + 0x800), 100);
     osStartThread(&gIdleThread);
 }

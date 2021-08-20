@@ -477,12 +477,12 @@ void render_hud_keys(void) {
 void render_hud_secrets(void) {
     if (gSecretsCollected > 0) {
 #if defined(COMPLETE_EN_US_SEGMENT2) || defined(BACKUP_SEGMENT2)
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), (HUD_TOP_Y-24), "?"); // 'Question Mark' glyph
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X     ), (HUD_TOP_Y - 24), "?"); // 'Question Mark' glyph
 #else
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X   ), (HUD_TOP_Y-24), "+"); // 'Silver Coin' glyph
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X     ), (HUD_TOP_Y - 24), "+"); // 'Silver Coin' glyph
 #endif
-        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X+18), (HUD_TOP_Y-24), "*"); // 'X' glyph
-        print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X+32), (HUD_TOP_Y-24), "%d", gSecretsCollected);
+        print_text(         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X + 18), (HUD_TOP_Y - 24), "*"); // 'X' glyph
+        print_text_fmt_int( GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(HUD_SECRETS_X + 32), (HUD_TOP_Y - 24), "%d", gSecretsCollected);
     }
 }
 #endif
@@ -498,9 +498,9 @@ void render_hud_timer(void) {
     timerValFrames = gHudDisplay.timer;
 #ifdef VERSION_EU
     switch (eu_get_language()) {
-        case LANGUAGE_ENGLISH: print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y-24), "TIME" ); break;
-        case LANGUAGE_FRENCH:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y-24), "TEMPS"); break;
-        case LANGUAGE_GERMAN:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y-24), "ZEIT" ); break;
+        case LANGUAGE_ENGLISH: print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y - 24), "TIME" ); break;
+        case LANGUAGE_FRENCH:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y - 24), "TEMPS"); break;
+        case LANGUAGE_GERMAN:  print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y - 24), "ZEIT" ); break;
     }
 #endif
     timerMins     =   (timerValFrames / (30 * 60));
@@ -509,12 +509,12 @@ void render_hud_timer(void) {
 #ifndef VERSION_EU
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X), (HUD_TOP_Y-24), "TIME");
 #endif
-    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 59 ), (HUD_TOP_Y- 24), "%0d" , timerMins    );
-    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 79 ), (HUD_TOP_Y- 24), "%02d", timerSecs    );
-    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 115), (HUD_TOP_Y- 24), "%d"  , timerFracSecs);
+    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 59 ), (HUD_TOP_Y -  24), "%0d" , timerMins    );
+    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 79 ), (HUD_TOP_Y -  24), "%02d", timerSecs    );
+    print_text_fmt_int((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 115), (HUD_TOP_Y -  24), "%d"  , timerFracSecs);
     gSPDisplayList(gDisplayListHead++, dl_hud_img_begin);
-    render_hud_tex_lut((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 69 ), (HUD_TOP_Y-177), (*hudLUT)[GLYPH_APOSTROPHE]);
-    render_hud_tex_lut((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 104), (HUD_TOP_Y-177), (*hudLUT)[GLYPH_DOUBLE_QUOTE]);
+    render_hud_tex_lut((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 69 ), (HUD_TOP_Y - 177), (*hudLUT)[GLYPH_APOSTROPHE]);
+    render_hud_tex_lut((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_TIMER_X) + 104), (HUD_TOP_Y - 177), (*hudLUT)[GLYPH_DOUBLE_QUOTE]);
     gSPDisplayList(gDisplayListHead++, dl_hud_img_end);
 }
 

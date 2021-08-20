@@ -41,20 +41,20 @@ const char *sDebugEnemyStringInfo[] = {
 s32 sDebugInfoDPadMask     = 0;
 s32 sDebugInfoDPadUpdID    = 0;
 #ifdef DEBUG_INFO
-s8 sDebugLvSelectCheckFlag = TRUE;
+Bool8 sDebugLvSelectCheckFlag = TRUE;
 #else
-s8 sDebugLvSelectCheckFlag = FALSE;
+Bool8 sDebugLvSelectCheckFlag = FALSE;
 #endif
 
 #define DEBUG_PAGE_MIN DEBUG_PAGE_OBJECTINFO
 #define DEBUG_PAGE_MAX DEBUG_PAGE_ENEMYINFO
 
 s8  sDebugPage             = DEBUG_PAGE_MIN;
-s8  sNoExtraDebug          = FALSE;
+Bool8 sNoExtraDebug          = FALSE;
 #ifdef DEBUG_INFO
-s8  sDebugStringArrPrinted = TRUE;
+Bool8 sDebugStringArrPrinted = TRUE;
 #else
-s8  sDebugStringArrPrinted = FALSE;
+Bool8 sDebugStringArrPrinted = FALSE;
 #endif
 s8  sDebugSysCursor        = 0;
 s8  sDebugInfoButtonSeqID  = 0;
@@ -135,9 +135,9 @@ void print_debug_top_down_normal(const char *str, s32 number) {
 
 void print_mapinfo(void) {
     struct Surface *pfloor;
-    s32 area  = ((s32) gCurrentObject->oPosX + 0x2000) / 1024
-              + ((s32) gCurrentObject->oPosZ + 0x2000) / 1024 * 16;
-    s32 angY  = gCurrentObject->oMoveAngleYaw / 182.044000f;
+    s32 area  = (((s32) gCurrentObject->oPosX + 0x2000) / 1024)
+              + (((s32) gCurrentObject->oPosZ + 0x2000) /   64); // / 1024 * 16);
+    s32 angY  = (gCurrentObject->oMoveAngleYaw / 182.044000f); //! angle type?
     f32 bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
     f32 water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
     print_debug_top_down_normal("mapinfo", 0);
@@ -175,16 +175,15 @@ void print_stageinfo(void) {
  */
 void print_string_array_info(const char **strArr) {
     s32 i;
-
     if (!sDebugStringArrPrinted) {
         sDebugStringArrPrinted = TRUE;
         // sDebugPage is assumed to be 4 or 5 here.
         for (i = 0; i < 8; i++) print_debug_top_down_mapinfo(strArr[i], gDebugInfo[sDebugPage][i]);
         // modify the cursor position so the cursor prints at the correct location.
         // this is equivalent to (sDebugSysCursor - 8)
-        set_text_array_x_y(0, -1 - (u32)(7 - sDebugSysCursor));
+        set_text_array_x_y(0, (-1 - (u32)(7 - sDebugSysCursor)));
         print_debug_top_down_mapinfo(strArr[8], 0); // print the cursor
-        set_text_array_x_y(0,            7 - sDebugSysCursor);
+        set_text_array_x_y(0,            (7 - sDebugSysCursor));
     }
 }
 
@@ -221,7 +220,7 @@ void update_debug_dpadmask(void) {
 void debug_unknown_level_select_check(void) {
     if (!sDebugLvSelectCheckFlag) {
         sDebugLvSelectCheckFlag = TRUE;
-        gDebugInfoFlags         = gDebugLevelSelect ? DEBUG_INFO_FLAG_LSELECT : DEBUG_INFO_NOFLAGS;
+        gDebugInfoFlags         = (gDebugLevelSelect ? DEBUG_INFO_FLAG_LSELECT : DEBUG_INFO_NOFLAGS);
         gNumCalls.floor         = 0;
         gNumCalls.ceil          = 0;
         gNumCalls.wall          = 0;
@@ -305,7 +304,7 @@ void try_modify_debug_controls(void) {
             if (gPlayer1Controller->buttonDown & A_BUTTON) {
                 gDebugInfo[sDebugPage][sDebugSysCursor] = gDebugInfoOverwrite[sDebugPage][sDebugSysCursor];
             } else {
-                gDebugInfo[sDebugPage][sDebugSysCursor] = gDebugInfo[sDebugPage][sDebugSysCursor] - modifier;
+                gDebugInfo[sDebugPage][sDebugSysCursor] = (gDebugInfo[sDebugPage][sDebugSysCursor] - modifier);
             }
         }
         if (sDebugInfoDPadMask & R_JPAD) gDebugInfo[sDebugPage][sDebugSysCursor] = gDebugInfo[sDebugPage][sDebugSysCursor] + modifier;
