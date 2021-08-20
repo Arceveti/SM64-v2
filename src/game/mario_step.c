@@ -249,8 +249,13 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
 #if NULL_FLOOR_STEPS > 0
     vec3f_copy(startPos, nextPos);
     while ((floor == NULL) && (missedFloors < NULL_FLOOR_STEPS)) {
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+        nextPos[0] += (m->steepness * (m->vel[0] / AIR_NUM_STEPS));
+        nextPos[2] += (m->steepness * (m->vel[2] / AIR_NUM_STEPS));
+#else
         nextPos[0] += (m->floor->normal.y * (m->vel[0] / AIR_NUM_STEPS));
         nextPos[2] += (m->floor->normal.y * (m->vel[2] / AIR_NUM_STEPS));
+#endif
  #ifdef BETTER_WALL_COLLISION
         resolve_and_return_wall_collisions(nextPos, 30.0f, 24.0f, &lowerWall);
         resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f, &upperWall);
@@ -374,22 +379,33 @@ MarioStep perform_ground_step(struct MarioState *m) {
 #ifdef BETTER_WALL_COLLISION
     m->wall = NULL;
 #endif
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    f32 steepness = m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
+#else
+    f32 steepness = m->floor->normal.y;
+#endif
 #if GROUND_NUM_STEPS > 1
     const f32 numSteps = GROUND_NUM_STEPS;
     s32 i;
     for (i = 0; i < numSteps; i++) {
-        intendedPos[0] = (m->pos[0] + (m->floor->normal.y * (m->vel[0] / numSteps)));
-        intendedPos[2] = (m->pos[2] + (m->floor->normal.y * (m->vel[2] / numSteps)));
+        intendedPos[0] = (m->pos[0] + (steepness * (m->vel[0] / numSteps)));
+        intendedPos[2] = (m->pos[2] + (steepness * (m->vel[2] / numSteps)));
         intendedPos[1] =  m->pos[1];
-        stepResult = perform_ground_quarter_step(m, intendedPos);
+        stepResult = perform_ground_quarter_step(m, intendedPos);  
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
+#endif
         if ((stepResult == GROUND_STEP_LEFT_GROUND) || (stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS)) break;
     }
 #else
     // Step once
-    intendedPos[0] = (m->pos[0] + (m->floor->normal.y * m->vel[0]));
-    intendedPos[2] = (m->pos[2] + (m->floor->normal.y * m->vel[2]));
+    intendedPos[0] = (m->pos[0] + (steepness * m->vel[0]));
+    intendedPos[2] = (m->pos[2] + (steepness * m->vel[2]));
     intendedPos[1] =  m->pos[1];
     stepResult = perform_ground_quarter_step(m, intendedPos);
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
+#endif
 #endif
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);

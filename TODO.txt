@@ -53,20 +53,22 @@
             - WMOTR
             - TOTWC
     - Cubic/3D collision cells
-    - Only load collision for the current room
+    - Only load collision for the current room (?)
+    - Optimize/reduce find_floor calls (and other collision checks)
 - Objects:
     - Make step height per-object
-- Physics:
+- Physics/Movement:
     - Gravity direction support
     - "Squished" death from any direction
-    - Walking sideways across a non-slippery steep slope shouldn't slow down Mario
-        - Example: SSL pillars
-- Silhouette:
-    - Silhouette for Mario's held/riding object
-    - Mirror Mario should not have silhouette
-- Metal cap effect:
-    - Use vanilla metal cap texture if framebuffer is not enabled
-    - Make metal cap effect work on console, otherwise use vanilla
+    - Fix using a shell to go up the side of SSL pillars with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
+- Graphics
+    - Fix sideways environment map textures when fixing guLookAtReflect in geo_process_master_list_sub
+    - Silhouette:
+        - Silhouette for Mario's held/riding object
+        - Mirror Mario should not have silhouette
+    - Metal cap effect:
+        - Use vanilla metal cap texture if framebuffer is not enabled
+        - Make metal cap effect work on console, otherwise use vanilla
 - HUD:
     - Rearrange HUD
         - Top Left:
@@ -88,9 +90,11 @@
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
+    - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
 - Camera:
     - Focus on nearest bomb to center of view when spinning Bowser
     - Make Puppycam collision not scuffed in certain areas
+        - Separate (super low-poly) collision maps specifically for the camera?
     - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
     - Split camera file into camera and cutscene files

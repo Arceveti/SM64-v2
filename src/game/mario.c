@@ -492,13 +492,13 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
 /**
  * Determines if Mario is facing "downhill."
  */
-Bool32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type?
+Bool32 mario_facing_downhill(struct MarioState *m, Bool32 turnYaw) { //! Angle type?
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
     if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
-    faceAngleYaw = (m->floorAngle - faceAngleYaw);
-    return ((-0x4000 < faceAngleYaw) && (faceAngleYaw < 0x4000));
+    faceAngleYaw = abs_angle_diff(m->floorAngle, faceAngleYaw);
+    return (faceAngleYaw < 0x4000);
 }
 
 /**
@@ -506,14 +506,19 @@ Bool32 mario_facing_downhill(struct MarioState *m, s32 turnYaw) { //! Angle type
  */
 Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
-    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
+// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+//     f32 steepness = m->steepness;
+// #else
+    f32 steepness = m->floor->normal.y;
+// #endif
+    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (steepness < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS10; break;
         case SURFACE_SLIPPERY:      normY = COS20; break;
         default:                    normY = COS38; break;
         case SURFACE_NOT_SLIPPERY:  normY =  0.0f; break;
     }
-    return (m->floor->normal.y <= normY);
+    return (steepness <= normY);
 }
 
 /**
@@ -521,14 +526,19 @@ Bool32 mario_floor_is_slippery(struct MarioState *m) {
  */
 Bool32 mario_floor_is_slope(struct MarioState *m) {
     f32 normY;
-    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (m->floor->normal.y < COS1)) return TRUE;
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    f32 steepness = m->steepness;
+#else
+    f32 steepness = m->floor->normal.y;
+#endif
+    if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (steepness < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS5;  break;
         case SURFACE_SLIPPERY:      normY = COS10; break;
         default:                    normY = COS15; break;
         case SURFACE_NOT_SLIPPERY:  normY = COS20; break;
     }
-    return (m->floor->normal.y <= normY);
+    return (steepness <= normY);
 }
 
 /**
@@ -550,7 +560,11 @@ Bool32 mario_floor_is_steep(struct MarioState *m) {
             default:                    normY = COS30; break;
             case SURFACE_NOT_SLIPPERY:  normY = COS30; break;
         }
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+        return (m->steepness <= normY);
+#else
         return (m->floor->normal.y <= normY);
+#endif
     }
     return FALSE;
 }
@@ -747,10 +761,10 @@ static MarioAction set_mario_action_moving(struct MarioState *m, MarioAction act
             if ((0.0f <= forwardVel) && (forwardVel < (mag / 2.0f))) m->forwardVel = (mag / 2.0f);
             break;
         case ACT_BEGIN_SLIDING:
-            action = mario_facing_downhill(m, FALSE) ? ACT_BUTT_SLIDE : ACT_STOMACH_SLIDE;
+            action = (mario_facing_downhill(m, FALSE) ? ACT_BUTT_SLIDE : ACT_STOMACH_SLIDE);
             break;
         case ACT_HOLD_BEGIN_SLIDING:
-            action = mario_facing_downhill(m, FALSE) ? ACT_HOLD_BUTT_SLIDE : ACT_HOLD_STOMACH_SLIDE;
+            action = (mario_facing_downhill(m, FALSE) ? ACT_HOLD_BUTT_SLIDE : ACT_HOLD_STOMACH_SLIDE);
             break;
     }
     return action;
@@ -1017,6 +1031,12 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                     print_text_fmt_int(128,  56, "SURF %x", m->floor->type);
                     print_text_fmt_int(226,  56,    "0*%x", m->floor->force);
                     print_text_fmt_int(210,  40,   "RM %d", m->floor->room);
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+                    print_text_fmt_int(16, 128, "FMG %d", (1.0f - sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z))) * 1000);
+                    print_text_fmt_int(16, 112, "FNY %d", m->floor->normal.y * 1000);
+                    print_text_fmt_int(16,  96, "FST %d", m->steepness * 1000);
+                    print_text_fmt_int(16,  80, "FSL %d", coss(find_floor_slope(m, 0x0)) * 1000);
+#endif
                 }
                 // print_text_fmt_int(210, 56, "FLOOR", 0);
                 break;

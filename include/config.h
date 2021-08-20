@@ -488,7 +488,12 @@
  ********************************/
 
 // Fixes turning around on the ground (Arceveti)
-#define GROUND_TURN_FIX
+#define FIX_GROUND_TURN_RADIUS
+
+// Uses the relative angles of Mario's slope rather than surface normals
+// This allows Mario to properly walk laterally across floor surfaces
+// (Arceveti)
+#define FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 
 // Faster Crouching animation (Arceveti)
 #define FAST_CROUCHING

@@ -208,10 +208,10 @@ static MarioStep perform_water_step(struct MarioState *m) {
         if (stepResult == WATER_STEP_CANCELLED) break;
     }
     // // Turn away from floors
-    // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1-m->floor->normal.y)) {
+    // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1.0f - m->floor->normal.y)) {
     //     floorYaw = atan2s(m->floor->normal.z, m->floor->normal.x);
-    //     floorTurn = (1-m->floor->normal.y)*0x800;
-    //     m->faceAngle[1] = floorYaw - approach_s32(floorYaw - m->faceAngle[1], 0x0, floorTurn, floorTurn);
+    //     floorTurn = (1.0f - m->floor->normal.y) * 0x800;
+    //     m->faceAngle[1] = floorYaw - approach_s32((floorYaw - m->faceAngle[1]), 0x0, floorTurn, floorTurn);
     // }
 #else
     vec3f_sum(nextPos, m->pos, step);
@@ -951,7 +951,11 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
         m->forwardVel += 1.1f;
     } else if (m->forwardVel <= targetSpeed) {
         m->forwardVel += (1.1f - (m->forwardVel / 43.0f));
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    } else if (m->steepness >= 0.95f) {
+#else
     } else if (m->floor->normal.y >= 0.95f) {
+#endif
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 32.0f) m->forwardVel = 32.0f;

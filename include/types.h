@@ -351,6 +351,10 @@ struct MarioState
     /*0xBC*/ f32            peakHeight;
     /*0xC0*/ f32            quicksandDepth;
     /*0xC4*/ f32            windGravity;
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+           Angle            floorPitch;
+             f32            steepness;
+#endif
 #if COYOTE_TIME > 0
              u8             coyoteTimer;
 #endif

@@ -39,7 +39,7 @@ void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struc
 struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius);
 #endif
 f32    vec3f_find_ceil(                             Vec3f pos, f32 height, struct Surface **ceil);
-Bool32 mario_facing_downhill(                struct MarioState *m, s32 turnYaw);
+Bool32 mario_facing_downhill(                struct MarioState *m, Bool32 turnYaw);
 Bool32 mario_floor_is_slippery(              struct MarioState *m);
 Bool32 mario_floor_is_slope(                 struct MarioState *m);
 Bool32 mario_floor_is_steep(                 struct MarioState *m);

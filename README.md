@@ -102,6 +102,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Better ceiling handling (Arceveti) *
 
 **Movement:**
+- Uses the relative angles of Mario's slope rather than surface normals, allowing Mario to properly walk laterally across floor surfaces (Arceveti) *
 - Turn circle fix (Arceveti) *
 - Midair turn (Arceveti) *
 - Faster transitions between actions (Arceveti) *
