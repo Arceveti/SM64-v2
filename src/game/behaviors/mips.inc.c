@@ -96,8 +96,8 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
  * Continue to follow our path around the basement area.
  */
 void bhv_mips_act_follow_path(void) {
-    s16 collisionFlags = OBJ_COL_FLAGS_NONE;
-    s32 followStatus   = 0x0;
+    ColFlags collisionFlags = OBJ_COL_FLAGS_NONE;
+    s32 followStatus        = 0x0;
     struct Waypoint **pathBase;
     struct Waypoint *waypoint;
 
@@ -143,7 +143,7 @@ void bhv_mips_act_wait_for_animation_done(void) {
  * Handles MIPS falling down after being thrown.
  */
 void bhv_mips_act_fall_down(void) {
-    s16 collisionFlags               = object_step();
+    ColFlags collisionFlags          = object_step();
     o->header.gfx.animInfo.animFrame = 0;
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         o->oAction       = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
@@ -183,8 +183,6 @@ void bhv_mips_free(void) {
  * Handles MIPS being held by Mario.
  */
 void bhv_mips_held(void) {
-    s16 dialogID;
-
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
     cur_obj_init_animation(MIPS_ANIM_HELD); // Held animation.
     cur_obj_set_pos_relative(gMarioObject, 0.0f, 60.0f, 100.0f);
@@ -193,7 +191,7 @@ void bhv_mips_held(void) {
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        dialogID = (o->oBehParams2ndByte == MIPS_BP_STAR_1 ? DIALOG_084 : DIALOG_162);
+        DialogID dialogID = (o->oBehParams2ndByte == MIPS_BP_STAR_1 ? DIALOG_084 : DIALOG_162);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID)) {

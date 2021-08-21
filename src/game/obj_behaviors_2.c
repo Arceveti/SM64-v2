@@ -84,7 +84,7 @@ static Angle obj_get_pitch_from_vel(void) {
  * If the player declines the race, then disable time stop and allow Mario to
  * move again.
  */
-static s32 obj_update_race_proposition_dialog(s16 dialogID) {
+static s32 obj_update_race_proposition_dialog(DialogID dialogID) {
     s32 dialogResponse = cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
         (DIALOG_FLAG_TURN_TO_MARIO | DIALOG_FLAG_TIME_STOP_ENABLED), CUTSCENE_RACE_DIALOG, dialogID);
     if (dialogResponse == DIALOG_RESPONSE_NO) {

@@ -1,6 +1,7 @@
 **TODO:**
 - Known Bugs:
     - Seesaws freeze sometimes?
+        - Related to FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT?
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:

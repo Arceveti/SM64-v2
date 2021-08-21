@@ -114,7 +114,7 @@ void bully_act_back_up(void) {
     }
 }
 
-void bully_backup_check(s16 collisionFlags) {
+void bully_backup_check(ColFlags collisionFlags) {
     if (!(collisionFlags & OBJ_COL_FLAG_NO_Y_VEL) && (o->oAction != BULLY_ACT_KNOCKBACK)) {/* bit 3 */
         o->oPosX   = o->oBullyPrevX;
         o->oPosZ   = o->oBullyPrevZ;
@@ -132,7 +132,7 @@ void bully_play_stomping_sound(void) {
 }
 
 void bully_step(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     bully_backup_check(collisionFlags);
     bully_play_stomping_sound();
     obj_check_floor_death(collisionFlags, sObjFloor);
@@ -218,7 +218,7 @@ void big_bully_spawn_star(void) {
 }
 
 void bhv_big_bully_with_minions_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     vec3f_copy(&o->oBullyPrevVec, &o->oPosVec);
     bully_check_mario_collision();
     switch (o->oAction) {

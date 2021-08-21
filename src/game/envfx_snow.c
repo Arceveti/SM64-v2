@@ -58,7 +58,7 @@ extern void *tiny_bubble_dl_blue;
  * Initialize snow particles by allocating a buffer for storing their state
  * and setting a start amount.
  */
-s32 envfx_init_snow(s32 mode) {
+Bool32 envfx_init_snow(s32 mode) {
     switch (mode) {
         case ENVFX_MODE_NONE:     return FALSE;
         case ENVFX_SNOW_NORMAL:   gSnowParticleMaxCount = 140; gSnowParticleCount    =   5; break;
@@ -133,7 +133,7 @@ void pos_from_orbit(Vec3s origin, Vec3s result, s16 radius, Angle pitch, Angle y
  * 'view' is a cylinder of radius 300 and height 400 centered at the input
  * x, y and z.
  */
-s32 envfx_is_snowflake_alive(s32 index, s32 snowCylinderX, s32 snowCylinderY, s32 snowCylinderZ) {
+Bool32 envfx_is_snowflake_alive(s32 index, s32 snowCylinderX, s32 snowCylinderY, s32 snowCylinderZ) {
     s32 x = (gEnvFxBuffer + index)->xPos;
     s32 y = (gEnvFxBuffer + index)->yPos;
     s32 z = (gEnvFxBuffer + index)->zPos;

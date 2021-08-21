@@ -78,7 +78,7 @@ void snowmans_bottom_act_final_stretch(void) { // act 2
 }
 
 void snowmans_bottom_act_reach_end(void) { // act 3
-    s16 collisionFlags = object_step_without_floor_orient();
+    ColFlags collisionFlags = object_step_without_floor_orient();
     if ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED) {
         o->oAction = SNOWMANS_BOTTOM_ACT_COLLISION;
         cur_obj_become_intangible();
@@ -153,7 +153,7 @@ void bhv_snowmans_head_init(void) {
 }
 
 void bhv_snowmans_head_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case SNOWMANS_HEAD_ACT_ASK:
             if (trigger_obj_dialog_when_facing(&o->oSnowmansHeadDialogActive, DIALOG_109, 400.0f, MARIO_DIALOG_LOOK_FRONT)) o->oAction = SNOWMANS_HEAD_ACT_NONE;

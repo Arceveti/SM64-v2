@@ -24,9 +24,9 @@
 // Change the '8' to whatever MB limit you want.
 // Note: only special emulators allow for RAM sizes above 8 MB.
 #define REQUIRED_MIN_MEM_SIZE 1048576 * 8
-u8 gNotEnoughMemory = FALSE;
+Bool8 gNotEnoughMemory = FALSE;
 u8 gDelayForErrorMessage = 0;
-u8 does_pool_end_lie_out_of_bounds(void *end) {
+Bool8 does_pool_end_lie_out_of_bounds(void *end) {
     u32 endPhy  =  ((u32) end) & 0x1FFFFFFF;
     u32 memSize = *((u32 *   )   0x80000318);
     if (endPhy > memSize) {

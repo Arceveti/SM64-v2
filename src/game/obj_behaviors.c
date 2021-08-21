@@ -58,7 +58,7 @@ static struct Surface *sObjFloor;
  * Set to false when an object close to the floor should not be oriented in reference
  * to it. Happens with boulder, falling pillar, and the rolling snowman body.
  */
-static s8 sOrientObjWithFloor = TRUE;
+static Bool8 sOrientObjWithFloor = TRUE;
 
 /**
  * Keeps track of Mario's previous non-zero room.
@@ -69,7 +69,7 @@ s16 sPrevCheckMarioRoom = 0;
 /**
  * Tracks whether or not Yoshi has walked/jumped off the roof.
  */
-s8 sYoshiDead = FALSE;
+Bool8 sYoshiDead = FALSE;
 
 extern void *ccm_seg7_trajectory_snowman;
 extern void *inside_castle_seg7_trajectory_mips;
@@ -120,7 +120,7 @@ void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 n
 /**
  * Finds any wall collisions, applies them, and turns away from the surface.
  */
-s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
+Bool8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
     struct WallCollisionData hitbox;
     register f32 wall_nX, wall_nY, wall_nZ, objVelXCopy, objVelZCopy;
     f32 objYawX, objYawZ;
@@ -149,7 +149,7 @@ s8 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
 /**
  * Turns an object away from steep floors, similarly to walls.
  */
-s8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ) {
+Bool8 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ) {
     f32 floor_nY, objVelXCopy, objVelZCopy, objYawX, objYawZ;
     if (objFloor == NULL) {
         //! (OOB Object Crash) TRUNC overflow exception after 36 minutes
@@ -196,7 +196,7 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
  * Determines an object's forward speed multiplier.
  */
 void calc_obj_friction(f32 *objFriction, f32 floor_nY) {
-    *objFriction = (floor_nY < 0.2f && o->oFriction < 0.9999f) ? 0 : o->oFriction;
+    *objFriction = (((floor_nY < 0.2f) && (o->oFriction < 0.9999f)) ? 0 : o->oFriction);
 }
 
 /**
@@ -297,14 +297,14 @@ void obj_splash(s32 waterY, s32 objY) {
         if (o->oVelY < -20.0f) cur_obj_play_sound_2(SOUND_OBJ_DIVING_INTO_WATER);
     }
     // Spawns bubbles if underwater.
-    if ((objY + 50) < waterY && !(gGlobalTimer & 0x1F)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
+    if (((objY + 50) < waterY) && !(gGlobalTimer & 0x1F)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvObjectBubble);
 }
 
 /**
  * Generic object move function. Handles walls, water, floors, and gravity.
  * Returns flags for certain interactions.
  */
-s16 object_step(void) {
+ColFlags object_step(void) {
     f32 objVelX = (o->oForwardVel * sins(o->oMoveAngleYaw));
     f32 objVelZ = (o->oForwardVel * coss(o->oMoveAngleYaw));
     f32 nextX   = (o->oPosX + objVelX);
@@ -312,7 +312,7 @@ s16 object_step(void) {
     f32 nextZ   = (o->oPosZ + objVelZ);
     f32 waterY  = FLOOR_LOWER_LIMIT_MISC;
     f32 floorY;
-    s16 collisionFlags = 0x0;
+    ColFlags collisionFlags = 0x0;
     // Find any wall collisions, receive the push, and set the flag.
     if (!obj_find_wall(nextX, nextY, nextZ, objVelX, objVelZ)) collisionFlags |= OBJ_COL_FLAG_HIT_WALL;
     floorY = find_floor(nextX, nextY, nextZ, &sObjFloor);
@@ -340,9 +340,9 @@ s16 object_step(void) {
  * Takes an object step but does not orient with the object's floor.
  * Used for boulders, falling pillars, and the rolling snowman body.
  */
-s16 object_step_without_floor_orient(void) {
+ColFlags object_step_without_floor_orient(void) {
     sOrientObjWithFloor = FALSE;
-    s16 collisionFlags  = object_step();
+    ColFlags collisionFlags  = object_step();
     sOrientObjWithFloor = TRUE;
     return collisionFlags;
 }
@@ -365,7 +365,7 @@ void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
 /**
  * Checks if a point is within distance from Mario's graphical position. Test is exclusive.
  */
-s8 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
+Bool8 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
     register f32 dx = (x - gMarioObject->header.gfx.pos[0]);
     register f32 dy = (y - gMarioObject->header.gfx.pos[1]);
     register f32 dz = (z - gMarioObject->header.gfx.pos[2]);
@@ -375,7 +375,7 @@ s8 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
 /**
  * Checks whether a point is within distance of a given point. Test is exclusive.
  */
-s8 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
+Bool8 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
     register f32 dx = (x - obj->oPosX);
     register f32 dy = (y - obj->oPosY);
     register f32 dz = (z - obj->oPosZ);
@@ -399,7 +399,7 @@ void set_object_visibility(struct Object *obj, s32 dist) {
 /**
  * Turns an object towards home if Mario is not near to it.
  */
-s8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 dist) {
+Bool8 obj_return_home_if_safe(struct Object *obj, f32 homeX, f32 y, f32 homeZ, s32 dist) {
     f32 homeDistX = (homeX - obj->oPosX);
     f32 homeDistZ = (homeZ - obj->oPosZ);
     Angle angleTowardsHome = atan2s(homeDistZ, homeDistX);
@@ -433,7 +433,7 @@ void obj_return_and_displace_home(struct Object *obj, f32 homeX, UNUSED f32 home
  * A series of checks using sin and cos to see if a given angle is facing in the same direction
  * of a given angle, within a certain range.
  */
-s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
+Bool8 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
     Angle dAngle = ((u16) goal - (u16) base);
     return (((f32) sins(-range) < (f32) sins(dAngle)) && ((f32) sins(dAngle) < (f32) sins(range)) && (coss(dAngle) > 0));
 }
@@ -441,7 +441,7 @@ s8 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
 /**
  * Finds any wall collisions and returns what the displacement vector would be.
  */
-s8 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
+Bool8 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
     hitbox.x       = x;
     hitbox.y       = y;
@@ -465,7 +465,7 @@ s8 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
 void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
     struct Object *coin;
     s8 count;
-    for (count = 0; count < nCoins; count++) {
+    for ((count = 0); (count < nCoins); (count++)) {
         coin = spawn_object(obj, MODEL_YELLOW_COIN, bhvMovingYellowCoin);
         coin->oForwardVel   =  (random_float() * 20.0f);
         coin->oVelY         = ((random_float() * 40.0f) + 20.0f);
@@ -476,7 +476,7 @@ void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
 /**
  * Controls whether certain objects should flicker/when to despawn.
  */
-s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
+Bool8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
     if (obj->oTimer < lifeSpan) return FALSE;
     if (obj->oTimer < lifeSpan + 40) {
         if (obj->oTimer & 0x1) {
@@ -494,8 +494,8 @@ s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
 /**
  * Checks if a given room is Mario's current room, even if on an object.
  */
-s8 current_mario_room_check(s16 room) {
-    s16 result;
+Bool8 current_mario_room_check(RoomData room) {
+    Bool8 result;
     // Since object surfaces have room 0, this tests if the surface is an
     // object first and uses the last room if so.
     if (gMarioCurrentRoom == 0) {
@@ -511,7 +511,7 @@ s8 current_mario_room_check(s16 room) {
  * Triggers dialog when Mario is facing an object and controls it while in the dialog.
  */
 //! DialogID16?
-s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 actionArg) {
+s16 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s32 actionArg) {
     s16 dialogueResponse;
     if ((is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, (s32) dist)
       && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x1000)
@@ -532,7 +532,7 @@ s16 trigger_obj_dialog_when_facing(s32 *inDialog, s16 dialogID, f32 dist, s32 ac
 /**
  *Checks if a floor is one that should cause an object to "die".
  */
-void obj_check_floor_death(s16 collisionFlags, struct Surface *floor) {
+void obj_check_floor_death(ColFlags collisionFlags, struct Surface *floor) {
     if (floor == NULL) return;
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         switch (floor->type) {
@@ -591,7 +591,7 @@ s8 sDebugTimer           = 0;
 /**
  * Unused presumably debug function that tracks for a sequence of inputs.
  */
-UNUSED s8 debug_sequence_tracker(s16 debugInputSequence[]) {
+UNUSED Bool8 debug_sequence_tracker(s16 debugInputSequence[]) {
     // If end of sequence reached, return true.
     if (debugInputSequence[sDebugSequenceTracker] == 0) {
         sDebugSequenceTracker = 0;

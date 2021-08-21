@@ -1899,7 +1899,7 @@ void play_dialog_sound(u8 dialogID) {
 
 #ifndef VERSION_JP
     // "You've stepped on the (Wing|Metal|Vanish) Cap Switch"
-    if (dialogID == DIALOG_010 || dialogID == DIALOG_011 || dialogID == DIALOG_012) play_puzzle_jingle();
+    if ((dialogID == DIALOG_010) || (dialogID == DIALOG_011) || (dialogID == DIALOG_012)) play_puzzle_jingle();
 #endif
 }
 

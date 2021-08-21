@@ -56,7 +56,7 @@ void pole_1up_move_towards_mario(void) {
     bhv_1up_interact();
 }
 
-void one_up_move_away_from_mario(s16 collisionFlags) {
+void one_up_move_away_from_mario(ColFlags collisionFlags) {
     o->oForwardVel = 8.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     bhv_1up_interact();
@@ -89,7 +89,7 @@ void bhv_1up_walking_loop(void) {
 }
 
 void bhv_1up_running_away_loop(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             if (o->oTimer >= 18) spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
@@ -114,7 +114,7 @@ void bhv_1up_running_away_loop(void) {
 }
 
 void sliding_1up_move(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) {
         o->oForwardVel += 25.0f;
         o->oVelY        = 0.0f;
@@ -149,7 +149,7 @@ void bhv_1up_loop(void) {
 }
 
 void bhv_1up_jump_on_approach_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) {
@@ -172,7 +172,7 @@ void bhv_1up_jump_on_approach_loop(void) {
 }
 
 void bhv_1up_hidden_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case MUSHROOM_ACT_INIT:
             o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;

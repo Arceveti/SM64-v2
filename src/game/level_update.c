@@ -234,7 +234,7 @@ void fade_into_special_warp(u32 arg, u32 color) {
 
 void load_level_init_text(u32 arg) {
     s32 gotAchievement;
-    u32 dialogID = gCurrentArea->dialog[arg];
+    DialogID dialogID = gCurrentArea->dialog[arg];
     switch (dialogID) {
         case DIALOG_129: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP; break;
         case DIALOG_130: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP ; break;

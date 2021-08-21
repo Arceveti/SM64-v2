@@ -61,7 +61,7 @@ void bobomb_check_interactions(void) {
 
 void bobomb_act_patrol(void) {
     o->oForwardVel     = 5.0f;
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     if (obj_return_home_if_safe(o, o->oHomeX, o->oHomeY, o->oHomeZ, 400)
         && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)) {
         o->oBobombFuseLit = TRUE;
@@ -73,14 +73,14 @@ void bobomb_act_patrol(void) {
 void bobomb_act_chase_mario(void) {
     AnimFrame16 animFrame      = ++o->header.gfx.animInfo.animFrame;
     o->oForwardVel     = 20.0f;
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     if (animFrame == 5 || animFrame == 16) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x800);
     obj_check_floor_death(collisionFlags, sObjFloor);
 }
 
 void bobomb_act_launched(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
 #ifdef FIX_BOMB_CLIP
     cur_obj_become_intangible();
 #endif

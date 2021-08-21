@@ -717,27 +717,27 @@ void cur_obj_extend_animation_if_at_end(void) {
     if (frame == end) o->header.gfx.animInfo.animFrame--;
 }
 
-s32 cur_obj_check_if_near_animation_end(void) {
+Bool32 cur_obj_check_if_near_animation_end(void) {
     u32 animFlags   = (s32) o->header.gfx.animInfo.curAnim->flags;
     AnimFrame32 animFrame   =       o->header.gfx.animInfo.animFrame;
     s32 nearLoopEnd =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     return (((animFlags & ANIM_FLAG_NOLOOP) && ((nearLoopEnd + 1) == animFrame)) || (animFrame == nearLoopEnd));
 }
 
-s32 cur_obj_check_if_at_animation_end(void) {
+Bool32 cur_obj_check_if_at_animation_end(void) {
     return (o->header.gfx.animInfo.animFrame == (o->header.gfx.animInfo.curAnim->loopEnd - 1));
 }
 
-s32 cur_obj_check_anim_frame(AnimFrame32 frame) {
+Bool32 cur_obj_check_anim_frame(AnimFrame32 frame) {
     return (frame == o->header.gfx.animInfo.animFrame);
 }
 
-s32 cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength) {
+Bool32 cur_obj_check_anim_frame_in_range(AnimFrame32 startFrame, s32 rangeLength) {
     AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
     return ((animFrame >= startFrame) && (animFrame < (startFrame + rangeLength)));
 }
 
-s32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
+Bool32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
     AnimFrame16 animFrame = o->header.gfx.animInfo.animFrame;
     while (*frame != -1) {
         if (*frame == animFrame) return TRUE;
@@ -746,11 +746,11 @@ s32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
     return FALSE;
 }
 
-s32 mario_is_in_air_action(void) {
+Bool32 mario_is_in_air_action(void) {
     return (gMarioStates[0].action & ACT_FLAG_AIR);
 }
 
-s32 mario_is_dive_sliding(void) {
+Bool32 mario_is_dive_sliding(void) {
     return (gMarioStates[0].action == ACT_DIVE_SLIDE);
 }
 
@@ -811,11 +811,11 @@ void obj_set_model(struct Object *obj, ModelID modelID) {
     obj->header.gfx.sharedChild = gLoadedGraphNodes[modelID];
 }
 
-s32 cur_obj_has_model(ModelID modelID) {
+Bool32 cur_obj_has_model(ModelID modelID) {
     return (o->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
 }
 
-s32 obj_has_model(struct Object *obj, ModelID modelID) {
+Bool32 obj_has_model(struct Object *obj, ModelID modelID) {
     return (obj->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
 }
 
@@ -823,7 +823,7 @@ void mario_set_flag(s32 flag) {
     gMarioStates[0].flags |= flag;
 }
 
-s32 cur_obj_clear_interact_status_flag(s32 flag) {
+Bool32 cur_obj_clear_interact_status_flag(s32 flag) {
     if (o->oInteractStatus & flag) {
         o->oInteractStatus &= (flag ^ ~(0));
         return TRUE;
@@ -1601,7 +1601,7 @@ void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox) {
     obj->hitboxDownOffset = (obj->header.gfx.scale[1] * hitbox->downOffset   );
 }
 
-s32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
+Bool32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
     s32 timeBlinking;
     if (o->oTimer >= timeUntilBlinking) {
         if ((timeBlinking = o->oTimer - timeUntilBlinking) & 0x1) {
@@ -1614,8 +1614,8 @@ s32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
     return FALSE;
 }
 
-s32 cur_obj_is_mario_ground_pounding_platform(void) {
-    return (gMarioObject->platform == o && (gMarioStates[0].action == ACT_GROUND_POUND_LAND || gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND));
+Bool32 cur_obj_is_mario_ground_pounding_platform(void) {
+    return (gMarioObject->platform == o && ((gMarioStates[0].action == ACT_GROUND_POUND_LAND) || (gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)));
 }
 
 void spawn_mist_particles(void) {
@@ -1686,11 +1686,11 @@ void cur_obj_set_pos_to_home_with_debug(void) {
     cur_obj_scale((gDebugInfo[5][3] / 100.0f) + 1.0f); // was 1.0l
 }
 
-s32 cur_obj_is_mario_on_platform(void) {
+Bool32 cur_obj_is_mario_on_platform(void) {
     return (gMarioObject->platform == o);
 }
 
-s32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
+Bool32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
     if (o->oTimer & 0x1) {
         o->oPosY -= amount;
     } else {
@@ -1699,7 +1699,7 @@ s32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
     return (o->oTimer == (cycles * 2));
 }
 
-s32 jiggle_bbh_stair(s32 timer) {
+Bool32 jiggle_bbh_stair(s32 timer) {
     if ((timer >= 4) || (timer < 0)) return TRUE;
     o->oPosY += sBbhStairJiggleOffsets[timer];
     return FALSE;
@@ -1710,18 +1710,18 @@ void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
     actionFunction();
 }
 
-s32 cur_obj_mario_far_away(void) {
+Bool32 cur_obj_mario_far_away(void) {
     Vec3f d;
     vec3f_diff(d, &o->oHomeVec, &gMarioObject->oPosVec);
     f32 marioDistToHome = vec3f_mag(d);
-    return (o->oDistanceToMario > 2000.0f && marioDistToHome > 2000.0f);
+    return ((o->oDistanceToMario > 2000.0f) && (marioDistToHome > 2000.0f));
 }
 
-s32 is_mario_moving_fast_or_in_air(s32 speedThreshold) {
+Bool32 is_mario_moving_fast_or_in_air(s32 speedThreshold) {
     return ((gMarioStates[0].forwardVel > speedThreshold) || (gMarioStates[0].action & ACT_FLAG_AIR));
 }
 
-s32 is_item_in_array(s8 item, s8 *array) {
+Bool32 is_item_in_array(s8 item, s8 *array) {
     while (*array != -1) {
         if (*array == item) return TRUE;
         array++;
@@ -1756,7 +1756,7 @@ void cur_obj_enable_rendering_if_mario_in_room(void) {
     }
 }
 
-s32 cur_obj_set_hitbox_and_die_if_attacked(struct ObjectHitbox *hitbox, s32 deathSound, s32 noLootCoins) {
+Bool32 cur_obj_set_hitbox_and_die_if_attacked(struct ObjectHitbox *hitbox, s32 deathSound, s32 noLootCoins) {
     s32 interacted = FALSE;
     obj_set_hitbox(o, hitbox);
     if (noLootCoins) o->oNumLootCoins = 0;
@@ -1794,7 +1794,7 @@ void cur_obj_if_hit_wall_bounce_away(void) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = o->oWallAngle;
 }
 
-s32 cur_obj_hide_if_mario_far_away_y(f32 distY) {
+Bool32 cur_obj_hide_if_mario_far_away_y(f32 distY) {
     if (absf(o->oPosY - gMarioObject->oPosY) < distY) {
         cur_obj_unhide();
         return FALSE;
@@ -1810,11 +1810,10 @@ Gfx *geo_offset_klepto_held_object(s32 callContext, struct GraphNode *node, UNUS
         ((struct GraphNodeTranslationRotation *) node->next)->translation[1] = 300;
         ((struct GraphNodeTranslationRotation *) node->next)->translation[2] = 0;
     }
-
     return NULL;
 }
 
-s32 obj_is_hidden(struct Object *obj) {
+Bool32 obj_is_hidden(struct Object *obj) {
     return (obj->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
 }
 
@@ -1854,7 +1853,7 @@ static void cur_obj_end_dialog(s32 dialogFlags, s32 dialogResult) {
     if (!(dialogFlags & DIALOG_FLAG_TIME_STOP_ENABLED)) set_mario_npc_dialog(MARIO_DIALOG_STOP);
 }
 
-s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, s32 dialogID, UNUSED s32 unused) {
+s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, DialogID dialogID, UNUSED s32 unused) {
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
     switch (o->oDialogState) {
         case DIALOG_STATUS_ENABLE_TIME_STOP:
@@ -1918,7 +1917,7 @@ s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, s32 dialogID, UNUSED s
     return dialogResponse;
 }
 
-s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cutsceneTable, s32 dialogID) {
+s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cutsceneTable, DialogID dialogID) {
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
     s32 doneTurning    = TRUE;
     switch (o->oDialogState) {
@@ -1999,7 +1998,7 @@ void cur_obj_align_gfx_with_floor(void) {
     }
 }
 
-s32 mario_is_within_rectangle(s16 minX, s16 maxX, s16 minZ, s16 maxZ) {
+Bool32 mario_is_within_rectangle(s16 minX, s16 maxX, s16 minZ, s16 maxZ) {
     return !((gMarioObject->oPosX < minX) || (maxX < gMarioObject->oPosX)
           || (gMarioObject->oPosZ < minZ) || (maxZ < gMarioObject->oPosZ));
 }
@@ -2008,11 +2007,10 @@ void cur_obj_shake_screen(s32 shake) {
     set_camera_shake_from_point(shake, o->oPosX, o->oPosY, o->oPosZ);
 }
 
-s32 obj_attack_collided_from_other_object(struct Object *obj) {
-    s32 numCollidedObjs;
+Bool32 obj_attack_collided_from_other_object(struct Object *obj) {
     struct Object *other;
-    s32 touchedOtherObject = FALSE;
-    numCollidedObjs = obj->numCollidedObjs;
+    Bool32 touchedOtherObject = FALSE;
+    s32 numCollidedObjs = obj->numCollidedObjs;
     if (numCollidedObjs != 0) {
         other = obj->collidedObjs[0];
         if (other != gMarioObject) {
@@ -2023,8 +2021,8 @@ s32 obj_attack_collided_from_other_object(struct Object *obj) {
     return touchedOtherObject;
 }
 
-s32 cur_obj_was_attacked_or_ground_pounded(void) {
-    s32 attacked = FALSE;
+Bool32 cur_obj_was_attacked_or_ground_pounded(void) {
+    Bool32 attacked = FALSE;
     if ((o->oInteractStatus & INT_STATUS_INTERACTED)
         && (o->oInteractStatus & INT_STATUS_WAS_ATTACKED)) attacked = TRUE;
     if (cur_obj_is_mario_ground_pounding_platform()) attacked = TRUE;
@@ -2033,7 +2031,7 @@ s32 cur_obj_was_attacked_or_ground_pounded(void) {
 }
 
 void obj_copy_behavior_params(struct Object *dst, struct Object *src) {
-    dst->oBehParams = src->oBehParams;
+    dst->oBehParams        = src->oBehParams;
     dst->oBehParams2ndByte = src->oBehParams2ndByte;
 }
 
@@ -2052,7 +2050,7 @@ void cur_obj_init_animation_and_extend_if_at_end(s32 animIndex) {
     cur_obj_extend_animation_if_at_end();
 }
 
-s32 cur_obj_check_grabbed_mario(void) {
+Bool32 cur_obj_check_grabbed_mario(void) {
     if (o->oInteractStatus & INT_STATUS_GRABBED_MARIO) {
         o->oKingBobombHoldingMarioState = HELD_HELD;
         cur_obj_become_intangible();
@@ -2061,11 +2059,11 @@ s32 cur_obj_check_grabbed_mario(void) {
     return FALSE;
 }
 
-s32 player_performed_grab_escape_action(void) {
-    static s32 grabReleaseState;
-    s32 result = FALSE;
+Bool32 player_performed_grab_escape_action(void) {
+    static Bool32 grabReleaseState;
+    Bool32 result = FALSE;
     if (gPlayer1Controller->stickMag < 30.0f) grabReleaseState = FALSE;
-    if ((grabReleaseState == 0) && (gPlayer1Controller->stickMag > 40.0f)) {
+    if ((!grabReleaseState) && (gPlayer1Controller->stickMag > 40.0f)) {
         grabReleaseState = TRUE;
         result = TRUE;
     }
@@ -2087,7 +2085,7 @@ void disable_time_stop_including_mario(void) {
     o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
 }
 
-s32 cur_obj_check_interacted(void) {
+Bool32 cur_obj_check_interacted(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->oInteractStatus = INT_STATUS_NONE;
         return TRUE;

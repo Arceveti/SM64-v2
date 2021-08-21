@@ -63,7 +63,7 @@ void bowling_ball_set_waypoints(void) {
 void bhv_bowling_ball_roll_loop(void) {
     s32 pathResult           = 0;
     bowling_ball_set_waypoints();
-    s16 collisionFlags       = object_step();
+    ColFlags collisionFlags  = object_step();
     pathResult               = cur_obj_follow_path(pathResult);
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw         = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
@@ -166,7 +166,7 @@ void bhv_free_bowling_ball_init(void) {
 }
 
 void bhv_free_bowling_ball_roll_loop(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     bowling_ball_set_hitbox();
     if (o->oForwardVel > 10.0f) {
         set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);

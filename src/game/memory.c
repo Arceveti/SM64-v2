@@ -588,7 +588,7 @@ void setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buff
     list->bufTarget                     = buffer;
 }
 
-s32 load_patchable_table(struct DmaHandlerList *list, s32 index) {
+Bool32 load_patchable_table(struct DmaHandlerList *list, s32 index) {
     struct DmaTable *table = list->dmaTable;
     if ((u32)index < table->count) {
         u8 *addr = table->srcAddr + table->anim[index].offset;

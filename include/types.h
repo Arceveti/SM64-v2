@@ -71,6 +71,7 @@ typedef u32 MarioInteraction;
 typedef u32 MarioStep;
 typedef u16 ModelID;
 typedef s32 DialogID;
+typedef s16 ColFlags;
 typedef uintptr_t BehaviorScript;
 typedef u8 uchar;
 typedef u8 Color;

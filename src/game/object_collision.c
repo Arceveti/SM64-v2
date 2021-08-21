@@ -19,7 +19,7 @@ struct Object *debug_print_obj_collision(struct Object *a) {
     return NULL;
 }
 
-s32 detect_object_hitbox_overlap(struct Object *a, struct Object *b) {
+Bool32 detect_object_hitbox_overlap(struct Object *a, struct Object *b) {
     f32 dya_bottom      = (a->oPosY - a->hitboxDownOffset);
     f32 dyb_bottom      = (b->oPosY - b->hitboxDownOffset);
     f32 dx              = (a->oPosX - b->oPosX);
@@ -44,7 +44,7 @@ s32 detect_object_hitbox_overlap(struct Object *a, struct Object *b) {
     return FALSE;
 }
 
-s32 detect_object_hurtbox_overlap(struct Object *a, struct Object *b) {
+Bool32 detect_object_hurtbox_overlap(struct Object *a, struct Object *b) {
     f32 dya_bottom      = (a->oPosY - a->hitboxDownOffset);
     f32 dyb_bottom      = (b->oPosY - b->hitboxDownOffset);
     f32 dx              = (a->oPosX - b->oPosX);

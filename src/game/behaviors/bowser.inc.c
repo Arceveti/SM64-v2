@@ -1089,7 +1089,7 @@ s32 bowser_dead_default_stage_ending(void) {
  * Returns TRUE once done
  */
 s32 bowser_dead_final_stage_ending(void) {
-    s32 dialogID;
+    DialogID dialogID;
     if (o->oBowserTimer < 2) {
         // Set dialog whenever you have 120 stars or not
         dialogID = ((gHudDisplay.stars < 120) ? DIALOG_121 : DIALOG_163);

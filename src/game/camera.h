@@ -639,7 +639,7 @@ void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood);
 s32  rotate_camera_around_walls(  struct Camera *c, Vec3f cPos, Angle *avoidYaw, Angle yawRange);
 void find_mario_floor_and_ceil(struct PlayerGeometry *pg);
 void start_object_cutscene_without_focus(u8 cutscene);
-s16  cutscene_object_with_dialog(        u8 cutscene, struct Object *o, s16 dialogID);
+s16  cutscene_object_with_dialog(        u8 cutscene, struct Object *o, DialogID dialogID);
 s16  cutscene_object_without_dialog(     u8 cutscene, struct Object *o);
 s16  cutscene_object(                    u8 cutscene, struct Object *o);
 void play_cutscene(struct Camera *c);

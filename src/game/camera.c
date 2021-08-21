@@ -5067,7 +5067,7 @@ s16 unused_dialog_cutscene_response(u8 cutscene) {
     }
 }
 
-s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, s16 dialogID) {
+s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, DialogID dialogID) {
     s16 response = DIALOG_RESPONSE_NONE;
     if ((gCamera->cutscene == CUTSCENE_NONE) && (sObjectCutscene == CUTSCENE_NONE)) {
         if (gRecentCutscene != cutscene) {

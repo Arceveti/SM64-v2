@@ -231,7 +231,7 @@ void envfx_update_jetstream(void) {
  * the state of each particle and setting the initial and max count.
  * Analogous to init_snow_particles, but for bubbles.
  */
-s32 envfx_init_bubble(s32 mode) {
+Bool32 envfx_init_bubble(s32 mode) {
     s32 i;
     switch (mode) {
         case ENVFX_MODE_NONE:

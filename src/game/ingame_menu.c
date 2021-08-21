@@ -865,36 +865,36 @@ void render_dialog_string_color(s8 linesPerBox) {
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
 }
 
-void handle_special_dialog_text(s16 dialogID) { // dialog ID tables, in order
+void handle_special_dialog_text(DialogID dialogID) { // dialog ID tables, in order
     // King Bob-omb (Start), Whomp (Start), King Bob-omb (throw him out), Eyerock (Start), Wiggler (Start)
-    s16 dialogBossStart[] = { DIALOG_017, DIALOG_114, DIALOG_128, DIALOG_117, DIALOG_150 };
+    DialogID dialogBossStart[] = { DIALOG_017, DIALOG_114, DIALOG_128, DIALOG_117, DIALOG_150 };
     // Koopa the Quick (BOB), Koopa the Quick (THI), Penguin Race, Fat Penguin Race (120 stars)
-    s16 dialogRaceSound[] = { DIALOG_005, DIALOG_009, DIALOG_055, DIALOG_164             };
+    DialogID dialogRaceSound[] = { DIALOG_005, DIALOG_009, DIALOG_055, DIALOG_164             };
     // Red Switch, Green Switch, Blue Switch, 100 coins star, Bowser Red Coin Star
-    s16 dialogStarSound[] = { DIALOG_010, DIALOG_011, DIALOG_012, DIALOG_013, DIALOG_014 };
+    DialogID dialogStarSound[] = { DIALOG_010, DIALOG_011, DIALOG_012, DIALOG_013, DIALOG_014 };
     // King Bob-omb (Start), Whomp (Defeated), King Bob-omb (Defeated, missing in JP), Eyerock (Defeated), Wiggler (Defeated)
-    s16 dialogBossStop[]  = { DIALOG_017, DIALOG_115, DIALOG_116, DIALOG_118, DIALOG_152 };
-    s16 i;
-    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogBossStart)); (i++)) {
+    DialogID dialogBossStop[]  = { DIALOG_017, DIALOG_115, DIALOG_116, DIALOG_118, DIALOG_152 };
+    DialogID i;
+    for ((i = 0); (i < ARRAY_COUNT(dialogBossStart)); (i++)) {
         if (dialogBossStart[i] == dialogID) {
             seq_player_unlower_volume(SEQ_PLAYER_LEVEL, 60);
             play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_BOSS), 0);
             return;
         }
     }
-    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogRaceSound)); (i++)) {
+    for ((i = 0); (i < ARRAY_COUNT(dialogRaceSound)); (i++)) {
         if ((dialogRaceSound[i] == dialogID) && (gDialogLineNum == 1)) {
             play_race_fanfare();
             return;
         }
     }
-    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogStarSound)); (i++)) {
+    for ((i = 0); (i < ARRAY_COUNT(dialogStarSound)); (i++)) {
         if ((dialogStarSound[i] == dialogID) && (gDialogLineNum == 1)) {
             play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
             return;
         }
     }
-    for ((i = 0); (i < (s16) ARRAY_COUNT(dialogBossStop)); (i++)) {
+    for ((i = 0); (i < ARRAY_COUNT(dialogBossStop)); (i++)) {
         if (dialogBossStop[i] == dialogID) {
             seq_player_fade_out(SEQ_PLAYER_LEVEL, 1);
             return;
@@ -1117,10 +1117,10 @@ void do_cutscene_handler(void) {
     // screen. if (message_duration = 50) and (msg_timer = 55)
     // then after the first 5 frames, the message will remain
     // on screen for another 50 frames until it starts fading.
-    if ((gCutsceneMsgDuration + 5) < gCutsceneMsgTimer) gCutsceneMsgFade -= 50;
+    if ((gCutsceneMsgDuration +  5) < gCutsceneMsgTimer) gCutsceneMsgFade -= 50;
     // like the first check, it takes 5 frames to fade out, so
     // perform a + 10 to account for the earlier check (10-5=5).
-    if (gCutsceneMsgDuration + 10 < gCutsceneMsgTimer) {
+    if ((gCutsceneMsgDuration + 10) < gCutsceneMsgTimer) {
         gCutsceneMsgIndex = -1;
         gCutsceneMsgFade  =  0;
         gCutsceneMsgTimer =  0;
@@ -1239,10 +1239,10 @@ void shade_screen(void) {
     create_dl_translation_matrix(G_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
     // This is a bit weird. It reuses the dialog text box (width 130, height -80),
     // so scale to at least fit the screen.
-#ifndef WIDESCREEN
-    create_dl_scale_matrix(G_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
+#ifdef WIDESCREEN
+    create_dl_scale_matrix(G_MTX_NOPUSH, (GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f), 3.0f, 1.0f);
 #else
-    create_dl_scale_matrix(G_MTX_NOPUSH, GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT / 130.0f, 3.0f, 1.0f);
+    create_dl_scale_matrix(G_MTX_NOPUSH, 2.6f, 3.4f, 1.0f);
 #endif
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 110);
     gSPDisplayList(gDisplayListHead++, dl_draw_text_bg_box);
@@ -1251,10 +1251,10 @@ void shade_screen(void) {
 
 #ifdef PAUSE_BOWSER_KEYS
 void print_bowser_key(s32 x, s32 y, Angle rotation) { // bowser key
-    create_dl_translation_matrix(G_MTX_PUSH,               (x+4),  (y+18),    0.0f);
-    create_dl_rotation_matrix(   G_MTX_NOPUSH,      -90,    0.0f,    0.0f,    1.0f);
-    create_dl_rotation_matrix(   G_MTX_NOPUSH, rotation,    1.0f,    0.0f,    0.0f);
-    create_dl_scale_matrix(      G_MTX_NOPUSH,           0.0625f, 0.0625f, 0.0625f);
+    create_dl_translation_matrix(G_MTX_PUSH,             (x +  4), (y + 18),     0.0f);
+    create_dl_rotation_matrix(   G_MTX_NOPUSH,      -90,     0.0f,     0.0f,     1.0f);
+    create_dl_rotation_matrix(   G_MTX_NOPUSH, rotation,     1.0f,     0.0f,     0.0f);
+    create_dl_scale_matrix(      G_MTX_NOPUSH,            0.0625f,  0.0625f,  0.0625f);
     gSPSetGeometryMode(  gDisplayListHead++, G_ZBUFFER);
     gSPDisplayList(      gDisplayListHead++, bowser_key_dl);
     gSPPopMatrix(        gDisplayListHead++, G_MTX_MODELVIEW);
@@ -1769,13 +1769,13 @@ void render_course_complete_lvl_info_and_hud_str(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
-#define TXT_SAVEOPTIONS_X x + 12
-#define TXT_SAVECONT_Y         0
-#define TXT_SAVEQUIT_Y        20
-#define TXT_CONTNOSAVE_Y      40
+#define TXT_SAVEOPTIONS_X (x + 12)
+#define TXT_SAVECONT_Y          0
+#define TXT_SAVEQUIT_Y         20
+#define TXT_CONTNOSAVE_Y       40
 
 #define X_VAL9 x
-void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) { // sp6e is 20
+void render_save_confirmation(s16 x, s16 y, s8 *index, s16 yPos) { // last arg is always 20
     uchar textSaveAndContinue[]     = { TEXT_SAVE_AND_CONTINUE       };
     uchar textSaveAndQuit[]         = { TEXT_SAVE_AND_QUIT           };
     uchar textContinueWithoutSave[] = { TEXT_CONTINUE_WITHOUT_SAVING };
@@ -1786,7 +1786,7 @@ void render_save_confirmation(s16 x, s16 y, s8 *index, s16 sp6e) { // sp6e is 20
     print_generic_string(TXT_SAVEOPTIONS_X, y - TXT_SAVEQUIT_Y,   textSaveAndQuit        );
     print_generic_string(TXT_SAVEOPTIONS_X, y - TXT_CONTNOSAVE_Y, textContinueWithoutSave);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
-    create_dl_translation_matrix(G_MTX_PUSH, X_VAL9, (y - (((*index - 1) * sp6e))), 0);
+    create_dl_translation_matrix(G_MTX_PUSH, X_VAL9, (y - (((*index - 1) * yPos))), 0);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);

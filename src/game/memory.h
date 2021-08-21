@@ -81,9 +81,9 @@ struct MemoryPool *mem_pool_init(u32 size, u32 side);
 void *mem_pool_alloc(struct MemoryPool *pool, u32 size);
 void  mem_pool_free( struct MemoryPool *pool, void *addr);
 
-void *alloc_display_list(u32 size);
-void setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buffer);
-s32  load_patchable_table(struct DmaHandlerList *list, s32 index);
+void  *alloc_display_list(u32 size);
+void   setup_dma_table_list(struct DmaHandlerList *list, void *srcAddr, void *buffer);
+Bool32 load_patchable_table(struct DmaHandlerList *list, s32 index);
 
 #ifdef SEGMENT_ROM_TABLE
 extern uintptr_t sSegmentROMTable[32];

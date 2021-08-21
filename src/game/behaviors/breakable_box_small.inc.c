@@ -29,7 +29,7 @@ void small_breakable_box_spawn_dust(void) {
 }
 
 void breakable_box_small_act_move(void) {
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     obj_attack_collided_from_other_object(o);
     if (collisionFlags == OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_SMALL_BOX_LANDING);
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oForwardVel > 20.0f)) {

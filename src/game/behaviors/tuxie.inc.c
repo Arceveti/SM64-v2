@@ -36,7 +36,7 @@ void tuxies_mother_act_received_baby(void) { // act 2
 void tuxies_mother_act_receiving_baby(void) { // act 1
     s32 motherParam;
     s32 babyParam;
-    s32 dialogID;
+    DialogID dialogID;
     switch (o->oSubAction) {
         case MOTHER_PENGUIN_SUB_ACT_RECEIVE_BABY:
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);

@@ -36,7 +36,7 @@ s32 coin_step(s16 *collisionFlagsPtr) {
 }
 
 void moving_coin_flicker(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     coin_step(&collisionFlags);
     obj_flicker_and_disappear(o, 0);
 }
@@ -55,7 +55,7 @@ void bhv_moving_yellow_coin_init(void) {
 }
 
 void bhv_moving_yellow_coin_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case MOV_YCOIN_ACT_IDLE:
             coin_step(&collisionFlags);
@@ -103,8 +103,7 @@ void bhv_moving_blue_coin_init(void) {
 }
 
 void bhv_moving_blue_coin_loop(void) {
-    s16 collisionFlags;
-
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case MOV_BCOIN_ACT_STILL:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1500)) o->oAction = MOV_BCOIN_ACT_MOVING;
@@ -122,7 +121,6 @@ void bhv_moving_blue_coin_loop(void) {
             obj_flicker_and_disappear(o, 600);
             break;
     }
-
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {/* bit 15 */
         coin_collected();
         o->oInteractStatus = INT_STATUS_NONE;
@@ -137,7 +135,7 @@ void bhv_blue_coin_sliding_jumping_init(void) {
 }
 
 void blue_coin_sliding_away_from_mario(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     o->oForwardVel   = 15.0f;
     o->oMoveAngleYaw = o->oAngleToMario + 0x8000;
     if (coin_step(&collisionFlags)) o->oVelY += 18.0f;
@@ -146,15 +144,14 @@ void blue_coin_sliding_away_from_mario(void) {
 }
 
 void blue_coin_sliding_slow_down(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
     coin_step(&collisionFlags);
     if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) o->oAction = MOV_BCOIN_ACT_MOVING;
     if (o->oTimer >= 151) o->oAction = MOV_BCOIN_ACT_STOPPED;
 }
 
 void bhv_blue_coin_sliding_loop(void) {
-    s16 collisionFlags;
-
+    ColFlags collisionFlags;
     switch (o->oAction) {
         case MOV_BCOIN_ACT_STILL:
             if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 500)) o->oAction = 1;
@@ -199,7 +196,7 @@ void bhv_blue_coin_sliding_loop(void) {
 }
 
 void bhv_blue_coin_jumping_loop(void) {
-    s16 collisionFlags;
+    ColFlags collisionFlags;
 
     switch (o->oAction) {
         case MOV_BCOIN_ACT_STILL:

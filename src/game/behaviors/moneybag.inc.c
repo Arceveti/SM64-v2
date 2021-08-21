@@ -88,7 +88,7 @@ void moneybag_jump(s8 collisionFlags) {
 
 void moneybag_act_move_around(void) {
     obj_return_and_displace_home(o, o->oHomeX, o->oHomeY, o->oHomeZ, 200);
-    s16 collisionFlags = object_step();
+    ColFlags collisionFlags = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)
         && (o->oMoneybagJumpState == MONEYBAG_JUMP_LANDING)) {
         if ((s32)(random_float() * 6.0f) == 1) {
@@ -109,7 +109,7 @@ void moneybag_act_return_home(void) {
     f32 dz           = o->oHomeZ - o->oPosZ;
     Angle yawToHome  = atan2s(dz, dx);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
-    s16 collisionFlags   = object_step();
+    ColFlags collisionFlags   = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED)
         && (o->oMoneybagJumpState == MONEYBAG_JUMP_LANDING)) {
         o->oMoneybagJumpState = MONEYBAG_JUMP_WALK_HOME;
