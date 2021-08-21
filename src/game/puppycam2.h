@@ -152,6 +152,7 @@ enum gPuppyCamBeh
     PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER | PUPPYCAM_BEHAVIOUR_TURN_HELPER | PUPPYCAM_BEHAVIOUR_INPUT_NORMAL | PUPPYCAM_BEHAVIOUR_PANSHIFT | PUPPYCAM_BEHAVIOUR_COLLISION)
 };
 
+extern const struct sPuppyAngles puppyAnglesNull;
 extern Bool8 gPCOptionOpen;
 extern s32 gPuppyError;
 extern struct gPuppyStruct gPuppyCam;

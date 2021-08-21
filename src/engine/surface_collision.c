@@ -658,7 +658,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, s32
 /**
  * Iterate through the list of water floors and find the first water floor under a given point.
  */
-struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, f32 *pheight, s32 *pBottomHeight) {
+struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 x, s32 y, s32 z, s32 *pheight, s32 *pBottomHeight) {
     register struct Surface *surf;
     struct Surface *floor = NULL;
     struct SurfaceNode *topSurfaceNode    = surfaceNode;
@@ -1149,7 +1149,7 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
         // Ignore certain surface types.
         if (gCheckingSurfaceCollisionsForCamera) {
  #ifdef NEW_WATER_SURFACES
-            if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
+            if ((list->surface->type == SURFACE_NEW_WATER) || (list->surface->type == SURFACE_NEW_WATER_BOTTOM)) continue;
  #endif
             if ((list->surface->type == SURFACE_INTANGIBLE) || (list->surface->flags & SURFACE_FLAG_NO_CAM_COLLISION)) continue;
         }

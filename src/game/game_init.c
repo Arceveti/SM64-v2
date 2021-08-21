@@ -37,6 +37,7 @@
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif
+#include "debug_box.h"
 
 // First 3 controller slots
 struct Controller gControllers[3];
@@ -688,6 +689,9 @@ void thread5_game_loop(UNUSED void *arg) {
             select_gfx_pool();
             read_controller_inputs();
             addr = level_script_execute(addr);
+#if defined(VISUAL_DEBUG) && !defined(PUPPYPRINT)
+            debug_box_input();
+#endif
 #ifdef PUPPYPRINT
             profiler_update(scriptTime, lastTime);
             if ((benchmarkLoop > 0) && (benchOption == 0)) {

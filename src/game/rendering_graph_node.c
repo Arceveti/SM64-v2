@@ -18,6 +18,7 @@
 #ifdef PUPPYPRINT
 #include "puppyprint.h"
 #endif
+#include "debug_box.h"
 
 #include "config.h"
 
@@ -819,7 +820,7 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
  */
 static void geo_process_object(struct Object *node) {
     Mat4 mtxf;
-    s32 hasAnimation = (node->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
+    s32 hasAnimation = ((node->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0);
     if (node->header.gfx.areaIndex == gCurGraphNodeRoot->areaIndex) {
         if (node->header.gfx.throwMatrix != NULL) {
             mtxf_mul(gMatStack[gMatStackIndex + 1], *node->header.gfx.throwMatrix, gMatStack[gMatStackIndex]);
@@ -841,6 +842,29 @@ static void geo_process_object(struct Object *node) {
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
             if (node->header.gfx.sharedChild != NULL) {
+                #ifdef VISUAL_DEBUG
+                if (hitboxView) {
+                    Vec3f bnds1;
+                    Vec3f bnds2;
+                    // This will create a cylinder that visualises their hitbox.
+                    // If they do not have a hitbox, it will be a small white cube instead.
+                    if (node->oIntangibleTimer != -1) {
+                        vec3f_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
+                        vec3f_set(bnds2, node->hitboxRadius, node->hitboxHeight-node->hitboxDownOffset, node->hitboxRadius);
+                        debug_box_color(0x800000FF);
+                        debug_box(bnds1, bnds2, DEBUG_SHAPE_CYLINDER);
+                        vec3f_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
+                        vec3f_set(bnds2, node->hurtboxRadius, node->hurtboxHeight, node->hurtboxRadius);
+                        debug_box_color(0x8FF00000);
+                        debug_box(bnds1, bnds2, DEBUG_SHAPE_CYLINDER);
+                    } else {
+                        vec3f_set(bnds1, node->oPosX, (node->oPosY - 15), node->oPosZ);
+                        vec3f_set(bnds2, 30, 30, 30);
+                        debug_box_color(0x80FFFFFF);
+                        debug_box(bnds1, bnds2, DEBUG_SHAPE_BOX);
+                    }
+                }
+                #endif
                 gCurGraphNodeObject = (struct GraphNodeObject *) node;
                 node->header.gfx.sharedChild->parent = &node->header.gfx.node;
                 geo_process_node_and_siblings(node->header.gfx.sharedChild);
@@ -882,9 +906,9 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
     if (node->fnNode.func != NULL)   node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     if (node->objNode     != NULL && node->objNode->header.gfx.sharedChild != NULL) {
         s32 hasAnimation = (node->objNode->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
-        translation[0] = node->translation[0] / 4.0f;
-        translation[1] = node->translation[1] / 4.0f;
-        translation[2] = node->translation[2] / 4.0f;
+        translation[0] = (node->translation[0] / 4.0f);
+        translation[1] = (node->translation[1] / 4.0f);
+        translation[2] = (node->translation[2] / 4.0f);
         mtxf_translate(mat, translation);
         mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
         gMatStack[                 gMatStackIndex + 1][3][0] = gMatStack[gMatStackIndex][3][0];
