@@ -493,12 +493,16 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
  * Determines if Mario is facing "downhill."
  */
 Bool32 mario_facing_downhill(struct MarioState *m, Bool32 turnYaw) { //! Angle type?
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    return (m->floorPitch < 0x0);
+#else
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
     if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
     faceAngleYaw = abs_angle_diff(m->floorAngle, faceAngleYaw);
     return (faceAngleYaw < 0x4000);
+#endif
 }
 
 /**
@@ -506,6 +510,7 @@ Bool32 mario_facing_downhill(struct MarioState *m, Bool32 turnYaw) { //! Angle t
  */
 Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
+
 // #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 //     f32 steepness = m->steepness;
 // #else
@@ -1154,6 +1159,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     if (m->floor != NULL) {
         m->floorAngle         = atan2s(m->floor->normal.z, m->floor->normal.x);
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
+
         if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;
         if ((m->floor->flags & SURFACE_FLAG_DYNAMIC) || (m->ceil && m->ceil->flags & SURFACE_FLAG_DYNAMIC)) {
             ceilToFloorDist = (m->ceilHeight - m->floorHeight);

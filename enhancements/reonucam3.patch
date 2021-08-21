@@ -79,12 +79,12 @@ index 25b27983..2ff11930 100644
 +    }
 +
 +    if ((gPlayer1Controller->buttonDown & R_TRIG) && (gPlayer1Controller->buttonDown & U_CBUTTONS)) {
-+        gKeepCliffCam = 1;
++        gKeepCliffCam = TRUE;
 +        pitch = DEGREES(60);
 +    } else if (((gPlayer1Controller->buttonDown & U_CBUTTONS) || (gPlayer1Controller->buttonDown & R_TRIG)) && gKeepCliffCam) {
 +        pitch = DEGREES(60);
 +    } else {
-+        gKeepCliffCam = 0;
++        gKeepCliffCam = FALSE;
 +    }
 +
 +
@@ -314,7 +314,7 @@ index 317e33bf..6687016d 100644
 +u8 gCameraSpeed = 2;
 +u8 gWaterCamOverride;
 +u8 gFlyingCamOverride;
-+u8 gKeepCliffCam;
++Bool8 gKeepCliffCam;
 +s32 gCliffTimer;
  #ifdef EEP
  s8 gEepromProbe;
@@ -338,7 +338,7 @@ index 84a31755..817c58df 100644
 +extern u8 gCameraSpeed;
 +extern u8 gWaterCamOverride;
 +extern u8 gFlyingCamOverride;
-+extern u8 gKeepCliffCam;
++extern Bool8 gKeepCliffCam;
  extern u8 gBorderHeight;
  #ifdef CUSTOM_DEBUG
  extern u8 gCustomDebugMode;

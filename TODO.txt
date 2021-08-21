@@ -1,7 +1,7 @@
 **TODO:**
 - Known Bugs:
     - Seesaws freeze sometimes?
-        - Related to FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT?
+        - Caused by mario_floor_is_slippery
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:

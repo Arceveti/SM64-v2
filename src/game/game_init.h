@@ -57,7 +57,7 @@ extern s16                  gFieldOfView;
 extern s8                   gCameraSpeed;
 extern u8                   gWaterCamOverride;
 extern u8                   gFlyingCamOverride;
-extern u8                   gKeepCliffCam;
+extern Bool8                gKeepCliffCam;
 #endif
 extern u8                   gBorderHeight;
 #ifdef CUSTOM_DEBUG

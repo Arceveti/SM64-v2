@@ -51,15 +51,15 @@ struct GfxPool *gGfxPool;
 // OS Controllers
 OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
-u8 gControllerBits;
+u8    gControllerBits;
 Bool8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
-u8 gBorderHeight;
+u8    gBorderHeight;
 #ifdef REONU_CAM_3
-s8 gCameraSpeed = 2;
-u8 gWaterCamOverride;
-u8 gFlyingCamOverride;
-u8 gKeepCliffCam;
-s32 gCliffTimer;
+s8    gCameraSpeed = 2;
+u8    gWaterCamOverride;
+u8    gFlyingCamOverride;
+Bool8 gKeepCliffCam;
+s32   gCliffTimer;
 #endif
 #ifdef CUSTOM_DEBUG
 u8 gCustomDebugMode;
@@ -127,18 +127,18 @@ void init_rdp(void) {
     gDPSetScissor(       gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gDPSetCombineMode(   gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
 
-    gDPSetTextureLOD(    gDisplayListHead++, G_TL_TILE);
-    gDPSetTextureLUT(    gDisplayListHead++, G_TT_NONE);
-    gDPSetTextureDetail( gDisplayListHead++, G_TD_CLAMP);
-    gDPSetTexturePersp(  gDisplayListHead++, G_TP_PERSP);
-    gDPSetTextureFilter( gDisplayListHead++, G_TF_BILERP);
-    gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
+    gDPSetTextureLOD(    gDisplayListHead++, G_TL_TILE   );
+    gDPSetTextureLUT(    gDisplayListHead++, G_TT_NONE   );
+    gDPSetTextureDetail( gDisplayListHead++, G_TD_CLAMP  );
+    gDPSetTexturePersp(  gDisplayListHead++, G_TP_PERSP  );
+    gDPSetTextureFilter( gDisplayListHead++, G_TF_BILERP );
+    gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT   );
 
-    gDPSetCombineKey(    gDisplayListHead++, G_CK_NONE);
-    gDPSetAlphaCompare(  gDisplayListHead++, G_AC_NONE);
+    gDPSetCombineKey(    gDisplayListHead++, G_CK_NONE   );
+    gDPSetAlphaCompare(  gDisplayListHead++, G_AC_NONE   );
     gDPSetRenderMode(    gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetColorDither(   gDisplayListHead++, G_CD_MAGICSQ);
-    gDPSetCycleType(     gDisplayListHead++, G_CYC_FILL);
+    gDPSetCycleType(     gDisplayListHead++, G_CYC_FILL  );
 
 #ifdef VERSION_SH
     gDPSetAlphaDither(   gDisplayListHead++, G_AD_PATTERN);
@@ -332,7 +332,7 @@ void draw_reset_bars(void) {
         fbPtr += (gNmiResetBarsTimer++ * (SCREEN_WIDTH / 4));
         for (width = 0; width < ((SCREEN_HEIGHT / 16) + 1); width++) {
             // Loop must be one line to match on -O2
-            for (height = 0; height < (SCREEN_WIDTH / 4); height++) *fbPtr++ = 0;
+            for ((height = 0); (height < (SCREEN_WIDTH / 4)); (height++)) *fbPtr++ = 0;
             fbPtr += ((SCREEN_WIDTH / 4) * 14);
         }
     }
