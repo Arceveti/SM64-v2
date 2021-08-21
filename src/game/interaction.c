@@ -42,40 +42,40 @@
     (INT_GROUND_POUND_OR_TWIRL | INT_PUNCH | INT_KICK | INT_TRIP | INT_SLIDE_KICK \
      | INT_FAST_ATTACK_OR_SHELL | INT_HIT_FROM_ABOVE | INT_HIT_FROM_BELOW)
 
-#define INT_ATTACK_NOT_WEAK_FROM_ABOVE                                                \
+#define INT_ATTACK_NOT_WEAK_FROM_ABOVE                                            \
     (INT_GROUND_POUND_OR_TWIRL | INT_PUNCH | INT_KICK | INT_TRIP | INT_HIT_FROM_BELOW)
 
-u8 sDelayInvincTimer;
-s16 sInvulnerable;
-u32 interact_coin(          struct MarioState *, u32, struct Object *);
-u32 interact_water_ring(    struct MarioState *, u32, struct Object *);
-u32 interact_star_or_key(   struct MarioState *, u32, struct Object *);
-u32 interact_bbh_entrance(  struct MarioState *, u32, struct Object *);
-u32 interact_warp(          struct MarioState *, u32, struct Object *);
-u32 interact_warp_door(     struct MarioState *, u32, struct Object *);
-u32 interact_door(          struct MarioState *, u32, struct Object *);
-u32 interact_cannon_base(   struct MarioState *, u32, struct Object *);
-u32 interact_igloo_barrier( struct MarioState *, u32, struct Object *);
-u32 interact_tornado(       struct MarioState *, u32, struct Object *);
-u32 interact_whirlpool(     struct MarioState *, u32, struct Object *);
-u32 interact_strong_wind(   struct MarioState *, u32, struct Object *);
-u32 interact_flame(         struct MarioState *, u32, struct Object *);
-u32 interact_snufit_bullet( struct MarioState *, u32, struct Object *);
-u32 interact_clam_or_bubba( struct MarioState *, u32, struct Object *);
-u32 interact_bully(         struct MarioState *, u32, struct Object *);
-u32 interact_shock(         struct MarioState *, u32, struct Object *);
-u32 interact_mr_blizzard(   struct MarioState *, u32, struct Object *);
-u32 interact_hit_from_below(struct MarioState *, u32, struct Object *);
-u32 interact_bounce_top(    struct MarioState *, u32, struct Object *);
-u32 interact_spiny_walking( struct MarioState *, u32, struct Object *);
-u32 interact_damage(        struct MarioState *, u32, struct Object *);
-u32 interact_breakable(     struct MarioState *, u32, struct Object *);
-u32 interact_koopa_shell(   struct MarioState *, u32, struct Object *);
-u32 interact_pole(          struct MarioState *, u32, struct Object *);
-u32 interact_hoot(          struct MarioState *, u32, struct Object *);
-u32 interact_cap(           struct MarioState *, u32, struct Object *);
-u32 interact_grabbable(     struct MarioState *, u32, struct Object *);
-u32 interact_text(          struct MarioState *, u32, struct Object *);
+Bool8  sDelayInvincTimer;
+Bool16 sInvulnerable;
+Bool32 interact_coin(          struct MarioState *, u32, struct Object *);
+Bool32 interact_water_ring(    struct MarioState *, u32, struct Object *);
+Bool32 interact_star_or_key(   struct MarioState *, u32, struct Object *);
+Bool32 interact_bbh_entrance(  struct MarioState *, u32, struct Object *);
+Bool32 interact_warp(          struct MarioState *, u32, struct Object *);
+Bool32 interact_warp_door(     struct MarioState *, u32, struct Object *);
+Bool32 interact_door(          struct MarioState *, u32, struct Object *);
+Bool32 interact_cannon_base(   struct MarioState *, u32, struct Object *);
+Bool32 interact_igloo_barrier( struct MarioState *, u32, struct Object *);
+Bool32 interact_tornado(       struct MarioState *, u32, struct Object *);
+Bool32 interact_whirlpool(     struct MarioState *, u32, struct Object *);
+Bool32 interact_strong_wind(   struct MarioState *, u32, struct Object *);
+Bool32 interact_flame(         struct MarioState *, u32, struct Object *);
+Bool32 interact_snufit_bullet( struct MarioState *, u32, struct Object *);
+Bool32 interact_clam_or_bubba( struct MarioState *, u32, struct Object *);
+Bool32 interact_bully(         struct MarioState *, u32, struct Object *);
+Bool32 interact_shock(         struct MarioState *, u32, struct Object *);
+Bool32 interact_mr_blizzard(   struct MarioState *, u32, struct Object *);
+Bool32 interact_hit_from_below(struct MarioState *, u32, struct Object *);
+Bool32 interact_bounce_top(    struct MarioState *, u32, struct Object *);
+Bool32 interact_spiny_walking( struct MarioState *, u32, struct Object *);
+Bool32 interact_damage(        struct MarioState *, u32, struct Object *);
+Bool32 interact_breakable(     struct MarioState *, u32, struct Object *);
+Bool32 interact_koopa_shell(   struct MarioState *, u32, struct Object *);
+Bool32 interact_pole(          struct MarioState *, u32, struct Object *);
+Bool32 interact_hoot(          struct MarioState *, u32, struct Object *);
+Bool32 interact_cap(           struct MarioState *, u32, struct Object *);
+Bool32 interact_grabbable(     struct MarioState *, u32, struct Object *);
+Bool32 interact_text(          struct MarioState *, u32, struct Object *);
 
 struct InteractionHandler {
     u32 interactType;
@@ -472,7 +472,7 @@ MarioAction determine_knockback_action(struct MarioState *m, UNUSED s32 arg) {
 }
 
 void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 padding) {
-    f32 minDistance = (o->hitboxRadius + m->marioObj->hitboxRadius + padding);
+    f32 minDistance = ((o->hitboxRadius + m->marioObj->hitboxRadius) + padding);
     f32 offsetX     = (m->pos[0] - o->oPosX);
     f32 offsetZ     = (m->pos[2] - o->oPosZ);
     f32 distance    = sqrtf(sqr(offsetX) + sqr(offsetZ));

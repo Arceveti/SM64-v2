@@ -245,7 +245,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     upperWall = resolve_and_return_wall_collisions(nextPos, 60.0f, 50.0f);
 #endif
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-
+    // m->wall     = NULL;
 #if NULL_FLOOR_STEPS > 0
     vec3f_copy(startPos, nextPos);
     while ((floor == NULL) && (missedFloors < NULL_FLOOR_STEPS)) {
@@ -288,11 +288,11 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     if (nextPos[1] > (floorHeight + 100.0f)) {
 #ifdef LEDGE_PROTECTION
         if ((m->input & INPUT_NONZERO_ANALOG)
-            && (m->forwardVel <= 32.0f)
-            && !(m->action & ACT_FLAG_SHORT_HITBOX)
-            && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
-            && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
-            && analog_stick_held_back(m, 0x471C)) {
+         && (m->forwardVel <= 32.0f)
+         && !(m->action & ACT_FLAG_SHORT_HITBOX)
+         && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
+         && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
+         && analog_stick_held_back(m, 0x471C)) {
             return GROUND_STEP_NONE;
         }
 #endif
@@ -319,16 +319,8 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
         Angle surfAngle;
         s32 underSteepSurf = FALSE;
         if ((floor != NULL) && (ceil != NULL)) {
-            // steep floor
-            if (floor->normal.y < COS25) {
-                surfAngle = atan2s(floor->normal.z, floor->normal.x);
-                underSteepSurf = TRUE;
-            }
-            // steep ceiling
-            if (-COS25 < ceil->normal.y) {
-                surfAngle = atan2s(ceil->normal.z, ceil->normal.x);
-                underSteepSurf = TRUE;
-            }
+            if (floor->normal.y < COS25) { surfAngle = atan2s(floor->normal.z, floor->normal.x); underSteepSurf = TRUE; } // steep floor
+            if (-COS25 < ceil->normal.y) { surfAngle = atan2s( ceil->normal.z,  ceil->normal.x); underSteepSurf = TRUE; } // steep ceiling
         }
         if (underSteepSurf) {
             m->vel[0]  = (sins(surfAngle) * 10.0f);
@@ -545,6 +537,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     Vec3f ledgePos;
     struct Surface *grabbedWall = NULL;
     struct Surface *ledgeFloor;
+    // m->wall = NULL;
     resolve_and_return_wall_collisions(nextPos, 150.0f, 50.0f, &upperWall);
     resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);
 #else

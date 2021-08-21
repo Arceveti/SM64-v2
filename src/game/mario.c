@@ -590,7 +590,7 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
     f32 x                             = (sins(m->faceAngle[1] + yawOffset) * 5.0f);
     f32 z                             = (coss(m->faceAngle[1] + yawOffset) * 5.0f);
     forwardFloorY                     = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
-    if (floor == NULL) forwardFloorY  = m->floorHeight; // handle OOB slopes
+    if (floor == NULL)  forwardFloorY = m->floorHeight; // handle OOB slopes
     backwardFloorY                    = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
     if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
     //! If Mario is near OOB, these floorY's can sometimes be -11000.

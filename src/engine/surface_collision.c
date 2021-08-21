@@ -27,9 +27,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register struct Surface *surf;
     register f32 offset;
     register f32 radius = data->radius;
-    register f32 x      = data->x;
-    register f32 y      = data->y + data->offsetY;
-    register f32 z      = data->z;
+    register f32 x      =  data->x;
+    register f32 y      = (data->y + data->offsetY);
+    register f32 z      =  data->z;
     register f32 v0x, v0y, v0z;
     register f32 v1x, v1y, v1z;
     register f32 v2x, v2y, v2z;
@@ -77,7 +77,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
  #endif
         offset = ((surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset);
-        if ((offset < 0) || (offset > radius)) continue;
+        if ((offset < -radius) || (offset > radius)) continue;
         v0x = (f32)(surf->vertex2[0] -      surf->vertex1[0]);
         v0y = (f32)(surf->vertex2[1] -      surf->vertex1[1]);
         v0z = (f32)(surf->vertex2[2] -      surf->vertex1[2]);
@@ -206,7 +206,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         surfaceNode = surfaceNode->next;
         type        = surf->type;
  #ifdef NEW_WATER_SURFACES
-        if (type == SURFACE_NEW_WATER || type == SURFACE_NEW_WATER_BOTTOM) continue;
+        if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
  #endif
         // Determine if checking for the camera or not.
         if (gCheckingSurfaceCollisionsForCamera) {

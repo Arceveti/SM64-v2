@@ -167,12 +167,12 @@ s32  approach_s16_asymptotic(           s16  current,   s16 target, s16 divisor)
 void approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
-f64  sind(f64 x);
-f64  cosd(f64 x);
-s16  LENSIN(s16 length, Angle direction);
-s16  LENCOS(s16 length, Angle direction);
-s16  atan2s(f32 y, f32 x);
-f32  atan2f(f32 a, f32 b);
+f64   sind(f64 x);
+f64   cosd(f64 x);
+s16   LENSIN(s16 length, Angle direction);
+s16   LENCOS(s16 length, Angle direction);
+Angle atan2s(f32 y, f32 x);
+f32   atan2f(f32 a, f32 b);
 // Curves
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);
 void anim_spline_init(Vec4s *keyFrames);

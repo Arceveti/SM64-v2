@@ -8,7 +8,7 @@
 Bool32 check_common_idle_cancels(      struct MarioState *m);
 Bool32 check_common_hold_idle_cancels( struct MarioState *m);
 Bool32 act_idle(                       struct MarioState *m);
-void        play_anim_sound(                struct MarioState *m, u32 actionState, AnimFrame32 animFrame, u32 sound);
+void   play_anim_sound(                struct MarioState *m, u32 actionState, AnimFrame32 animFrame, u32 sound);
 Bool32 act_start_sleeping(             struct MarioState *m);
 Bool32 act_sleeping(                   struct MarioState *m);
 Bool32 act_waking_up(                  struct MarioState *m);
@@ -18,7 +18,7 @@ Bool32 act_standing_against_wall(      struct MarioState *m);
 Bool32 act_in_quicksand(               struct MarioState *m);
 Bool32 act_crouching(                  struct MarioState *m);
 Bool32 act_panting(                    struct MarioState *m);
-void        stopping_step(                  struct MarioState *m, AnimID32 animID, MarioAction action);
+void   stopping_step(                  struct MarioState *m, AnimID32 animID, MarioAction action);
 Bool32 act_braking_stop(               struct MarioState *m);
 Bool32 act_butt_slide_stop(            struct MarioState *m);
 Bool32 act_hold_butt_slide_stop(       struct MarioState *m);

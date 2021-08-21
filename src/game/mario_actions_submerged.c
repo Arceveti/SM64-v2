@@ -91,6 +91,7 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
         m->floorHeight = floorHeight;
+        if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
         return WATER_STEP_HIT_CEILING;
     }
     if (nextPos[1] <= floorHeight) {
@@ -98,6 +99,7 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
         m->floorHeight = floorHeight;
+        if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
         return WATER_STEP_HIT_FLOOR;
     }
     vec3f_copy(m->pos, nextPos);
