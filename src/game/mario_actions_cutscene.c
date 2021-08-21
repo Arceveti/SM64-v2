@@ -424,6 +424,7 @@ Bool32 act_reading_automatic_dialog(struct MarioState *m) {
 }
 
 Bool32 act_reading_sign(struct MarioState *m) {
+    if (m->pos[1] < (m->floorHeight + 160.0f)) m->pos[1] = m->floorHeight; // Fixes sign on slopes
     struct Object *marioObj = m->marioObj;
     play_sound_if_no_flag(m, SOUND_ACTION_READ_SIGN, MARIO_ACTION_SOUND_PLAYED);
     switch (m->actionState) {

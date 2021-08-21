@@ -472,7 +472,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         } else if (intendedDYaw <= -0x6000 || intendedDYaw >= 0x6000) {
             return let_go_of_ledge(m);
         }
-        sidewaysSpeed = ((m->intendedMag / 8.0f) * sins(intendedDYaw));
+        sidewaysSpeed = ((m->intendedMag / 4.0f) * sins(intendedDYaw));
         nextX += (sidewaysSpeed * sins(m->faceAngle[1] + 0x4000));
         nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
         nextFloorHeight = find_floor(nextX, (m->pos[1] + 80.0f), nextZ, &nextFloor);
