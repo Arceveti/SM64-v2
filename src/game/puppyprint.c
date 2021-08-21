@@ -97,11 +97,11 @@ extern u8 _goddardSegmentEnd[];
 
 //Here is stored the rom addresses of the global code segments. If you get rid of any, it's best to just write them as NULL.
 s32 ramP[5][2] = {
-    {&_buffersSegmentBssStart, &_buffersSegmentBssEnd},
-    {&_mainSegmentStart, &_mainSegmentEnd},
-    {&_engineSegmentStart, &_engineSegmentEnd},
+    {&_buffersSegmentBssStart,      &_buffersSegmentBssEnd     },
+    {&_mainSegmentStart,            &_mainSegmentEnd           },
+    {&_engineSegmentStart,          &_engineSegmentEnd         },
     {&_framebuffersSegmentBssStart, &_framebuffersSegmentBssEnd},
-    {&_goddardSegmentStart, &_goddardSegmentEnd},
+    {&_goddardSegmentStart,         &_goddardSegmentEnd        },
 };
 
 void puppyprint_calculate_ram_usage(void) {
@@ -111,15 +111,15 @@ void puppyprint_calculate_ram_usage(void) {
         if (!ramP[i][0] || !ramP[i][1]) continue;
         temp[0] = ramP[i][0];
         temp[1] = ramP[i][1];
-        ramsizeSegment[i] = temp[1] - temp[0];
+        ramsizeSegment[i] = (temp[1] - temp[0]);
     }
     // These are a bit hacky, but what can ye do eh?
     // gEffectsMemoryPool is 0x4000, gObjectsMemoryPool is 0x800. Epic C limitations mean I can't just sizeof their values :)
     ramsizeSegment[5] = (0x4000 + 0x800);
     ramsizeSegment[6] = (SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode)) + (SURFACE_POOL_SIZE * sizeof(struct Surface));
-    ramsizeSegment[7] = gAudioHeapSize + gAudioInitPoolSize;
-    ramsizeSegment[8] = audioPool[0] + audioPool[1] + audioPool[2] + audioPool[3] + audioPool[4] + audioPool[5] +
-                        audioPool[6] + audioPool[7] + audioPool[8] + audioPool[9] + audioPool[10] + audioPool[11];
+    ramsizeSegment[7] = (gAudioHeapSize + gAudioInitPoolSize);
+    ramsizeSegment[8] = (audioPool[0] + audioPool[1] + audioPool[2] + audioPool[3] + audioPool[4] + audioPool[5] +
+                         audioPool[6] + audioPool[7] + audioPool[8] + audioPool[9] + audioPool[10] + audioPool[11]);
 }
 
 void puppyprint_profiler_finished(void) {
@@ -138,37 +138,37 @@ void puppyprint_profiler_finished(void) {
 
 // RGB colour lookup table for colouring all the funny ram prints.
 ColorRGB colourChart[33] = {
-    {255,   0,   0},
-    {  0,   0, 255},
-    {  0, 255,   0},
-    {255, 255,   0},
-    {255,   0, 255},
-    {255, 127,   0},
-    {  0, 255, 255},
-    { 51, 255,  51},
-    {255, 153, 153},
-    {204,   0, 102},
-    {  0, 153, 153},
-    {153, 255, 153},
-    {  0,   0, 128},
-    {128,   0, 128},
-    {218, 165,  32},
-    {107, 142,  35},
-    {188, 143, 143},
-    {210, 105,  30},
-    {154, 205,  50},
-    {165,  42,  42},
-    {255, 105, 180},
-    {139,  69,  19},
-    {250, 240, 230},
-    { 95, 158, 160},
-    { 60, 179, 113},
-    {255,  69,   0},
-    {128,   0,   0},
-    {216, 191, 216},
-    {244, 164,  96},
-    {176, 196, 222},
-    {255, 255, 255}};
+    { 255,    0,    0},
+    {   0,    0,  255},
+    {   0,  255,    0},
+    { 255,  255,    0},
+    { 255,    0,  255},
+    { 255,  127,    0},
+    {   0,  255,  255},
+    {  51,  255,   51},
+    { 255,  153,  153},
+    { 204,    0,  102},
+    {   0,  153,  153},
+    { 153,  255,  153},
+    {   0,    0,  128},
+    { 128,    0,  128},
+    { 218,  165,   32},
+    { 107,  142,   35},
+    { 188,  143,  143},
+    { 210,  105,   30},
+    { 154,  205,   50},
+    { 165,   42,   42},
+    { 255,  105,  180},
+    { 139,   69,   19},
+    { 250,  240,  230},
+    {  95,  158,  160},
+    {  60,  179,  113},
+    { 255,   69,    0},
+    { 128,    0,    0},
+    { 216,  191,  216},
+    { 244,  164,   96},
+    { 176,  196,  222},
+    { 255,  255,  255}};
 
 //Change this to alter the width of the bar at the bottom.
 #define BAR_LENGTH 200
@@ -177,18 +177,18 @@ void print_ram_bar(void) {
     s32 i = 0;
     f32 perfPercentage;
     s32 graphPos  = 0;
-    s32 prevGraph = 160-(BAR_LENGTH/2);
+    s32 prevGraph = (160 - (BAR_LENGTH / 2));
     s32 ramsize   = osGetMemSize();
     prepare_blank_box();
-    for (i = 0; i < 32; i++) {
+    for ((i = 0); (i < 32); (i++)) {
         if (ramsizeSegment[i] == 0) continue;
-        perfPercentage = (f32)ramsizeSegment[i]/ramsize;
-        graphPos = prevGraph + CLAMP((BAR_LENGTH*perfPercentage), 1, 160+(BAR_LENGTH/2));
+        perfPercentage = ((f32)ramsizeSegment[i] / ramsize);
+        graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage)), 1, (160 + (BAR_LENGTH / 2)));
         render_blank_box(prevGraph, 210, graphPos, 218, colourChart[i][0], colourChart[i][1], colourChart[i][2], 255);
-        prevGraph = graphPos;
+        prevGraph      = graphPos;
     }
-    perfPercentage = (f32)ramsizeSegment[32]/ramsize;
-    graphPos       = prevGraph + CLAMP((BAR_LENGTH*perfPercentage), 1, 160+(BAR_LENGTH/2));
+    perfPercentage = ((f32)ramsizeSegment[32] / ramsize);
+    graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage)), 1, (160 + (BAR_LENGTH / 2)));
     render_blank_box(prevGraph, 210, graphPos, 218, 255, 255, 255, 255);
     prevGraph = graphPos;
     render_blank_box(prevGraph, 210, 160+(BAR_LENGTH/2), 218, 0, 0, 0, 255);
@@ -210,24 +210,24 @@ const char ramNames[9][32] = {
 s8 nameTable = sizeof(ramNames)/32;
 
 void print_ram_overview(void) {
-    s32 i = 0;
+    s32 i     =  0;
     char textBytes[32];
-    s32 x = 80;
-    s32 y = 16;
-    s32 drawn = 0;
+    s32 x     = 80;
+    s32 y     = 16;
+    s32 drawn =  0;
     prepare_blank_box();
     render_blank_box(0, 0, 320, 240, 0, 0, 0, 192);
     finish_blank_box();
-    for (i = 0; i < 33; i++) {
+    for ((i = 0); (i < 33); (i++)) {
         if (drawn == 16) {
             x = 240;
-            y = 16;
+            y =  16;
         }
         if (ramsizeSegment[i] == 0) continue;
         if (i < 9) {
             sprintf(textBytes, "%s: %X", ramNames[i], ramsizeSegment[i]);
         } else {
-            sprintf(textBytes, "Segment %02X: %X",i-nameTable+2, ramsizeSegment[i]);
+            sprintf(textBytes, "Segment %02X: %X", (i - nameTable + 2), ramsizeSegment[i]);
         }
         print_set_envcolour(colourChart[i][0], colourChart[i][1], colourChart[i][2], 255);
         print_small_text(x, y, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
@@ -237,13 +237,14 @@ void print_ram_overview(void) {
 }
 
 void benchmark_custom(void) {
+    if ((benchmarkLoop == 0) || (benchOption != 2)) return;
     OSTime lastTime;
     while (TRUE) {
         lastTime = osGetTime();
         // Insert your function here!
-        if (benchmarkLoop > 0 && benchOption == 2) {
+        if ((benchmarkLoop > 0) && (benchOption == 2)) {
             benchmarkLoop--;
-            benchMark[benchmarkLoop] = osGetTime() - lastTime;
+            benchMark[benchmarkLoop] = (osGetTime() - lastTime);
             if (benchmarkLoop == 0) {
                 puppyprint_profiler_finished();
                 break;
@@ -278,17 +279,14 @@ void puppyprint_render_profiler(void) {
     OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime+audioTime[NUM_PERF_ITERATIONS]+dmaAudioTime[NUM_PERF_ITERATIONS]);
     char textBytes[80];
     if (!fDebug) return;
-    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available()/(f32)mempool)*100));
+    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available() / (f32)mempool) * 100));
     print_small_text(160, 224, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
-
     if (!ramViewer && !benchViewer) {
         print_fps(16,40);
-        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)OS_CYCLES_TO_USEC(cpuTime)/333, (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime)/333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime)/333);
+        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)OS_CYCLES_TO_USEC(cpuTime) / 333, (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime) / 333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime) / 333);
         print_small_text(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
-
         sprintf(textBytes, "OBJ: %d/%d", gObjectCounter, OBJECT_POOL_CAPACITY);
         print_small_text(16, 124, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
-
         // Very little point printing useless info if Mayro doesn't even exist.
         if (gMarioState->marioObj) {
             sprintf(textBytes, "Mario Pos#X: %d#Y: %d#Z: %d#D: %X", (s32)(gMarioState->pos[0]), (s32)(gMarioState->pos[1]), (s32)(gMarioState->pos[2]), (u16)(gMarioState->faceAngle[1]));
@@ -299,24 +297,22 @@ void puppyprint_render_profiler(void) {
             sprintf(textBytes, "Camera Pos#X: %d#Y: %d#Z: %d#D: %X", (s32)(gCamera->pos[0]), (s32)(gCamera->pos[1]), (s32)(gCamera->pos[2]), (u16)(gCamera->yaw));
             print_small_text(304, 140, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
         }
-
         if (benchmarkTimer > 0) {
             benchmarkTimer--;
             prepare_blank_box();
             //sprintf(textBytes, "Benchmark: %dus#High: %dus", (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS+1]));
-            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dus", (f32)(benchmarkProgramTimer)*0.000001f, (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS+1]));
-            render_blank_box(160-(get_text_width(textBytes)/2)-4, 158, 160+(get_text_width(textBytes)/2)+4, 196, 0, 0, 0, 255);
+            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dus", (f32)(benchmarkProgramTimer) * 0.000001f, (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
+            render_blank_box((160 - (get_text_width(textBytes) / 2) - 4), 158, (160 + (get_text_width(textBytes) / 2) + 4), 196, 0, 0, 0, 255);
             print_set_envcolour(255, 255, 255, 255);
             print_small_text(160, 160, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
             finish_blank_box();
         }
-
         #define ADDTIMES MAX((collisionTime[NUM_PERF_ITERATIONS] + graphTime[NUM_PERF_ITERATIONS] + behaviourTime[NUM_PERF_ITERATIONS] + audioTime[NUM_PERF_ITERATIONS] + dmaTime[NUM_PERF_ITERATIONS])/80, 1)
-        perfPercentage[0] = MAX((collisionTime[NUM_PERF_ITERATIONS]/ADDTIMES), 1);
-        perfPercentage[1] = MAX((graphTime[    NUM_PERF_ITERATIONS]/ADDTIMES), 1);
-        perfPercentage[2] = MAX((behaviourTime[NUM_PERF_ITERATIONS]/ADDTIMES), 1);
-        perfPercentage[3] = MAX((audioTime[    NUM_PERF_ITERATIONS]/ADDTIMES), 1);
-        perfPercentage[4] = MAX((dmaTime[      NUM_PERF_ITERATIONS]/ADDTIMES), 1);
+        perfPercentage[0] = MAX((collisionTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);
+        perfPercentage[1] = MAX((graphTime[    NUM_PERF_ITERATIONS] / ADDTIMES), 1);
+        perfPercentage[2] = MAX((behaviourTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);
+        perfPercentage[3] = MAX((audioTime[    NUM_PERF_ITERATIONS] / ADDTIMES), 1);
+        perfPercentage[4] = MAX((dmaTime[      NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         #undef ADDTIMES
 
         sprintf(textBytes, "Collision: <COL_99505099>%dus", (s32)OS_CYCLES_TO_USEC(collisionTime[NUM_PERF_ITERATIONS]));
@@ -362,7 +358,7 @@ void get_average_perf_time(OSTime *time) {
     // This takes all but the last index of the timer array, and creates an average value, which is written to the last index.
     s32 i     = 0;
     s32 total = 0;
-    for (i = 0; i < NUM_PERF_ITERATIONS-1; i++) total += time[i];
+    for ((i = 0); (i < (NUM_PERF_ITERATIONS - 1)); (i++)) total += time[i];
     time[NUM_PERF_ITERATIONS] = total/NUM_PERF_ITERATIONS;
 }
 
@@ -371,7 +367,7 @@ void puppyprint_profiler_process(void) {
     tmemTime[  perfIteration] = (IO_READ(DPC_TMEM_REG));
     busTime[   perfIteration] = (IO_READ(DPC_PIPEBUSY_REG));
     OSTime newTime = osGetTime();
-    if (gGlobalTimer % 15 == 0) {
+    if ((gGlobalTimer % 15) == 0) {
         get_average_perf_time(scriptTime);
         get_average_perf_time(behaviourTime);
         get_average_perf_time(collisionTime);
@@ -401,12 +397,12 @@ void puppyprint_profiler_process(void) {
 
     if (fDebug) {
         if (gPlayer1Controller->buttonPressed & D_JPAD) {
-            benchViewer ^= 1;
-            ramViewer = 0;
+            benchViewer    ^= 1;
+            ramViewer       = 0;
             collisionViewer = 0;
         } else if (gPlayer1Controller->buttonPressed & U_JPAD) {
-            ramViewer ^= 1;
-            benchViewer = 0;
+            ramViewer      ^= 1;
+            benchViewer     = 0;
             collisionViewer = 0;
         }
 #ifdef VISUAL_DEBUG
@@ -427,17 +423,17 @@ void puppyprint_profiler_process(void) {
         benchmark_custom();
     }
 #if PUPPYPRINT_DEBUG
-    if (gPlayer1Controller->buttonDown & U_JPAD && gPlayer1Controller->buttonPressed & L_TRIG) {
-        ramViewer = 0;
+    if ((gPlayer1Controller->buttonDown & U_JPAD) && (gPlayer1Controller->buttonPressed & L_TRIG)) {
+        ramViewer   = 0;
         benchViewer = 0;
-        fDebug ^= 1;
+        fDebug     ^= 1;
     }
 #endif
     if (perfIteration++ == NUM_PERF_ITERATIONS-1) perfIteration = 0;
 }
 
 void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) {
-    if (r != currEnv[0] || g != currEnv[1] || b != currEnv[2] || a != currEnv[3]) {
+    if ((r != currEnv[0]) || (g != currEnv[1]) || (b != currEnv[2]) || (a != currEnv[3])) {
         gDPSetEnvColor(gDisplayListHead++, (Color)r, (Color)g, (Color)b, (Alpha)a);
         currEnv[0] = r;
         currEnv[1] = g;
@@ -494,55 +490,55 @@ u8 textLen[] = {
 
 void get_char_from_byte(u8 letter, s32 *textX, s32 *textY, s32 *spaceX, s32 *offsetY) {
     *offsetY = 0;
-    if (letter >= '0' && letter <= '9') { // Line 1
-        *textX = (letter - '0') * 4;
-        *textY = 0;
+    if ((letter >= '0') && (letter <= '9')) { // Line 1
+        *textX  = (letter - '0') * 4;
+        *textY  = 0;
         *spaceX = textLen[letter - '0'];
-    } else if (letter >= 'A' && letter <= 'P') { // Line 2
-        *textX = ((letter - 'A') * 4);
-        *textY = 6;
-        *spaceX = textLen[letter - 'A'+16];
-    } else if (letter >= 'Q' && letter <= 'Z') { // Line 3
-        *textX = ((letter - 'Q') * 4);
-        *textY = 12;
-        *spaceX = textLen[letter - 'Q'+32];
-    } else if (letter >= 'a' && letter <= 'p') { // Line 4
-        *textX = ((letter - 'a') * 4);
-        *textY = 18;
-        *spaceX = textLen[letter - 'a'+48];
-    } else if (letter >= 'q' && letter <= 'z') { // Line 5
-        *textX = ((letter - 'q') * 4);
-        *textY = 24;
-        *spaceX = textLen[letter - 'q'+64];
+    } else if ((letter >= 'A') && (letter <= 'P')) { // Line 2
+        *textX  = ((letter - 'A') * 4);
+        *textY  = 6;
+        *spaceX = textLen[letter - 'A' + 16];
+    } else if ((letter >= 'Q') && (letter <= 'Z')) { // Line 3
+        *textX  = ((letter - 'Q') * 4);
+        *textY  = 12;
+        *spaceX = textLen[letter - 'Q' + 32];
+    } else if ((letter >= 'a') && (letter <= 'p')) { // Line 4
+        *textX  = ((letter - 'a') * 4);
+        *textY  = 18;
+        *spaceX = textLen[letter - 'a' + 48];
+    } else if ((letter >= 'q') && (letter <= 'z')) { // Line 5
+        *textX  = ((letter - 'q') * 4);
+        *textY  = 24;
+        *spaceX = textLen[letter - 'q' + 64];
     } else { // Space, the final frontier.
-        *textX = 128;
-        *textY = 0;
+        *textX  = 128;
+        *textY  = 0;
         *spaceX = 2;
     }
 
     switch (letter) {
-        case '-': *textX = 40; *textY = 0; *spaceX = textLen[10]; break; //Hyphen
-        case '+': *textX = 44; *textY = 0; *spaceX = textLen[11]; break; //Plus
-        case '(': *textX = 48; *textY = 0; *spaceX = textLen[12]; break; //Open Bracket
-        case ')': *textX = 52; *textY = 0; *spaceX = textLen[13]; break; //Close Bracket
-        case '!': *textX = 56; *textY = 0; *spaceX = textLen[14]; break; //Exclamation mark
-        case '?': *textX = 60; *textY = 0; *spaceX = textLen[15]; break; //Question mark
+        case '-': *textX = 40; *textY = 0; *spaceX = textLen[10]; break; // Hyphen
+        case '+': *textX = 44; *textY = 0; *spaceX = textLen[11]; break; // Plus
+        case '(': *textX = 48; *textY = 0; *spaceX = textLen[12]; break; // Open Bracket
+        case ')': *textX = 52; *textY = 0; *spaceX = textLen[13]; break; // Close Bracket
+        case '!': *textX = 56; *textY = 0; *spaceX = textLen[14]; break; // Exclamation mark
+        case '?': *textX = 60; *textY = 0; *spaceX = textLen[15]; break; // Question mark
 
-        case '"': *textX = 40; *textY = 12; *spaceX = textLen[42]; break; //Speech mark
-        case 0x27: *textX = 44; *textY = 12; *spaceX = textLen[43]; break; //Apostrophe.
-        case ':': *textX = 48; *textY = 12; *spaceX = textLen[44]; break; //Colon
-        case ';': *textX = 52; *textY = 12; *spaceX = textLen[45]; break; //Semicolon
-        case '.': *textX = 56; *textY = 12; *spaceX = textLen[46]; break; //Full stop
-        case ',': *textX = 60; *textY = 12; *spaceX = textLen[47]; break; //Comma
+        case '"': *textX = 40; *textY = 12; *spaceX = textLen[42]; break; // Speech mark
+        case 0x27: *textX = 44; *textY = 12; *spaceX = textLen[43]; break; // Apostrophe.
+        case ':': *textX = 48; *textY = 12; *spaceX = textLen[44]; break; // Colon
+        case ';': *textX = 52; *textY = 12; *spaceX = textLen[45]; break; // Semicolon
+        case '.': *textX = 56; *textY = 12; *spaceX = textLen[46]; break; // Full stop
+        case ',': *textX = 60; *textY = 12; *spaceX = textLen[47]; break; // Comma
 
-        case '~': *textX = 40; *textY = 24; *spaceX = textLen[74]; break; //Tilde
-        case '@': *textX = 44; *textY = 24; *spaceX = textLen[75]; break; //Umlaut
-        case '^': *textX = 48; *textY = 24; *spaceX = textLen[76]; break; //Caret
-        case '/': *textX = 52; *textY = 24; *spaceX = textLen[77]; break; //Slash
-        case '_': *textX = 56; *textY = 24; *spaceX = textLen[78]; break; //Percent
-        case '&': *textX = 60; *textY = 24; *spaceX = textLen[79]; break; //Ampersand
+        case '~': *textX = 40; *textY = 24; *spaceX = textLen[74]; break; // Tilde
+        case '@': *textX = 44; *textY = 24; *spaceX = textLen[75]; break; // Umlaut
+        case '^': *textX = 48; *textY = 24; *spaceX = textLen[76]; break; // Caret
+        case '/': *textX = 52; *textY = 24; *spaceX = textLen[77]; break; // Slash
+        case '_': *textX = 56; *textY = 24; *spaceX = textLen[78]; break; // Percent
+        case '&': *textX = 60; *textY = 24; *spaceX = textLen[79]; break; // Ampersand
 
-        //This is for the letters that sit differently on the line. It just moves them down a bit.
+        // This is for the letters that sit differently on the line. It just moves them down a bit.
         case 'g': *offsetY = 1; break;
         case 'q': *offsetY = 1; break;
         case 'p': *offsetY = 3; break;
@@ -555,23 +551,23 @@ s8 waveToggle = 0;
 
 s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
     s32 len = 0;
-    while (str[i+len] != '>' && i+len < (signed)strlen(str)) len++;
+    while ((str[i + len] != '>') && ((i + len) < (signed)strlen(str))) len++;
     len++;
 
     if (runCMD) {
         if (strncmp(str+i, "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to 99 for each, so 99000000 is red.
             s32 r, g, b, a;
             // Each value is taken from the strong. The first is multiplied by 10, because it's a larger significant value, then it adds the next digit onto it.
-            r = (str[i+ 5] - '0')*10;
-            r += str[i+ 6] - '0';
-            g = (str[i+ 7] - '0')*10;
-            g += str[i+ 8] - '0';
-            b = (str[i+ 9] - '0')*10;
-            b += str[i+10] - '0';
-            a = (str[i+11] - '0')*10;
-            a += str[i+12] - '0';
+            r = (str[i +  5] - '0') * 10;
+            r += str[i +  6] - '0';
+            g = (str[i +  7] - '0') * 10;
+            g += str[i +  8] - '0';
+            b = (str[i +  9] - '0') * 10;
+            b += str[i + 10] - '0';
+            a = (str[i + 11] - '0') * 10;
+            a += str[i + 12] - '0';
             // Multiply each value afterwards by 2.575f to make 255.
-            print_set_envcolour(r*2.575f, g*2.575f, b*2.575f, a*2.575f);
+            print_set_envcolour((r * 2.575f), (g * 2.575f), (b * 2.575f), (a * 2.575f));
         } else if (strncmp(str+i, "<FADE_xxxxxxxx,xxxxxxxx,xx>", 6) == 0) { // Same as above, except it fades between two colours. The third set of numbers is the speed it fades.
             s32 r, g, b, a, r2, g2, b2, a2, spd, r3, g3, b3, a3, r4, g4, b4, a4;
             r    = (str[i+ 6] - '0')*10;
