@@ -69,7 +69,7 @@ extern Mat4 gMatStack[32]; //XXX: Hack
 /**
  * The color that new boxes will be drawn with.
  */
-u32 sCurBoxColor = DBG_BOX_ALPHA << 24 | DBG_BOX_DEF_COLOR;
+u32 sCurBoxColor = (DBG_BOX_ALPHA << 24 | DBG_BOX_DEF_COLOR);
 
 /**
  * The allocated size of a rotated box's dl
@@ -141,16 +141,14 @@ extern s32 gSurfacesAllocated;
 void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     struct SurfaceNode *node;
     struct Surface *surf;
-    CellIndex cellX, cellZ;
     s32 i = 0;
     s32 col[3] = {0xFF, 0x00, 0x00};
-
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) return;
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) return;
-
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-
+    if (x <= -LEVEL_BOUNDARY_MAX
+     || x >=  LEVEL_BOUNDARY_MAX
+     || z <= -LEVEL_BOUNDARY_MAX
+     || z >=  LEVEL_BOUNDARY_MAX) return;
+    CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for (i = 0; i < 8; i++) {
         switch (i) {
             case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; col[0] = 0x00; col[1] = 0xFF; col[2] = 0x00; break;
@@ -162,15 +160,12 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
             case 6: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; col[0] = 0xFF; col[1] = 0xFF; col[2] = 0x00; break;
             case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; col[0] = 0xFF; col[1] = 0xFF; col[2] = 0x00; break;
         }
-
         while (node != NULL) {
             surf = node->surface;
             node = node->next;
-
-            make_vertex(verts, gVisualSurfaceCount    , surf->vertex1[0], surf->vertex1[1], surf->vertex1[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 1, surf->vertex2[0], surf->vertex2[1], surf->vertex2[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 2, surf->vertex3[0], surf->vertex3[1], surf->vertex3[2], 0, 0, col[0], col[1], col[2], 0x80);
-
+            make_vertex(verts,  gVisualSurfaceCount     , surf->vertex1[0], surf->vertex1[1], surf->vertex1[2], 0, 0, col[0], col[1], col[2], 0x80);
+            make_vertex(verts, (gVisualSurfaceCount + 1), surf->vertex2[0], surf->vertex2[1], surf->vertex2[2], 0, 0, col[0], col[1], col[2], 0x80);
+            make_vertex(verts, (gVisualSurfaceCount + 2), surf->vertex3[0], surf->vertex3[1], surf->vertex3[2], 0, 0, col[0], col[1], col[2], 0x80);
             gVisualSurfaceCount+=3;
         }
     }
@@ -178,21 +173,17 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
 
 void iterate_surfaces_envbox(Vtx *verts) {
     Collision *p = gEnvironmentRegions;
-    s32 numRegions;
-    s32 col[3] = {0xFF, 0xFF, 0x00};
     s32 i = 0;
-
+    s32 col[3] = {0xFF, 0xFF, 0x00};
     if (p != NULL) {
-        numRegions = *p++;
-        for (i = 0; i < numRegions; i++) {
+        s32 numRegions = *p++;
+        for ((i = 0); (i < numRegions); (i++)) {
             make_vertex(verts, gVisualSurfaceCount    , p[1], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
             make_vertex(verts, gVisualSurfaceCount + 1, p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
             make_vertex(verts, gVisualSurfaceCount + 2, p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
-
             make_vertex(verts, gVisualSurfaceCount + 3, p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
             make_vertex(verts, gVisualSurfaceCount + 4, p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
             make_vertex(verts, gVisualSurfaceCount + 5, p[3], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
-
             gVisualSurfaceCount += 6;
             gVisualOffset       += 6;
             p                   += 6;
@@ -216,7 +207,6 @@ void visual_surface_display(Vtx *verts, s32 iteration) {
     } else {
         vts = gVisualOffset;
     }
-
     while (vts > 0) {
         if (count == VERTCOUNT) {
             ntx = MIN(VERTCOUNT, vts);
@@ -225,12 +215,12 @@ void visual_surface_display(Vtx *verts, s32 iteration) {
             vtl   = VERTCOUNT;
         }
         if (vtl >= 6) {
-            gSP2Triangles(gDisplayListHead++, count + 0, count + 1, count + 2, 0, count + 3, count + 4, count + 5, 0);
+            gSP2Triangles(gDisplayListHead++, (count + 0), (count + 1), (count + 2), 0, (count + 3), (count + 4), (count + 5), 0);
             vts   -= 6;
             vtl   -= 6;
             count += 6;
         } else if (vtl >= 3) {
-            gSP1Triangle(gDisplayListHead++, count + 0, count + 1, count + 2, 0);
+            gSP1Triangle(gDisplayListHead++, (count + 0), (count + 1), (count + 2), 0);
             vts   -= 3;
             vtl   -= 6;
             count += 3;
@@ -240,19 +230,17 @@ void visual_surface_display(Vtx *verts, s32 iteration) {
 
 s32 iterate_surface_count(s32 x, s32 z) {
     struct SurfaceNode *node;
-    CellIndex cellX, cellZ;
     s32 i = 0;
     s32 j = 0;
     Collision *p = gEnvironmentRegions;
     s32 numRegions;
-
-    if (x <= -LEVEL_BOUNDARY_MAX || x >= LEVEL_BOUNDARY_MAX) return 0;
-    if (z <= -LEVEL_BOUNDARY_MAX || z >= LEVEL_BOUNDARY_MAX) return 0;
-
-    cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-
-    for (i = 0; i < 8; i++) {
+    if (x <= -LEVEL_BOUNDARY_MAX
+     || x >=  LEVEL_BOUNDARY_MAX
+     || z <= -LEVEL_BOUNDARY_MAX
+     || z >=  LEVEL_BOUNDARY_MAX) return 0;
+    CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    for ((i = 0); (i < 8); (i++)) {
         switch (i) {
             case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; break;
             case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; break;
@@ -275,38 +263,24 @@ s32 iterate_surface_count(s32 x, s32 z) {
     return j;
 }
 
-void visual_surface_loop(void)
-{
+void visual_surface_loop(void) {
     Vtx *verts;
     Mtx *mtx;
-
     if (!gSurfaceNodesAllocated || !gSurfacesAllocated || !gMarioState->marioObj) return;
-
     mtx =           alloc_display_list(sizeof(Mtx));
-    verts = alloc_display_list((iterate_surface_count(gMarioState->pos[0], gMarioState->pos[2])*3) * sizeof(Vtx));
-
+    verts = alloc_display_list((iterate_surface_count(gMarioState->pos[0], gMarioState->pos[2]) * 3) * sizeof(Vtx));
     gVisualSurfaceCount = 0;
     gVisualOffset       = 0;
-
-    if (mtx == NULL || verts == NULL) return;
-
+    if ((mtx == NULL) || (verts == NULL)) return;
     mtxf_to_mtx(mtx, gMatStack[1]);
-
     gSPDisplayList(gDisplayListHead++, dl_visual_surface);
-
-    gSPMatrix(gDisplayListHead++, mtx, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
-
+    gSPMatrix(     gDisplayListHead++, mtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
     iterate_surfaces_visual(gMarioState->pos[0], gMarioState->pos[2], verts);
-
     visual_surface_display(verts, 0);
-
     iterate_surfaces_envbox(verts);
-
     gSPDisplayList(gDisplayListHead++, dl_debug_box_begin_water);
-
     visual_surface_display(verts, 1);
-
-    gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
+    gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
     gSPDisplayList(gDisplayListHead++, dl_debug_box_end);
 }
 
@@ -318,14 +292,11 @@ void visual_surface_loop(void)
 static void append_debug_box(Vec3f center, Vec3f bounds, Angle yaw, s32 type) {
     if (hitboxView) {
         if (sNumBoxes >= MAX_DEBUG_BOXES) return;
-
         vec3f_to_vec3s(sBoxes[sNumBoxes].center, center);
         vec3f_to_vec3s(sBoxes[sNumBoxes].bounds, bounds);
-
         sBoxes[sNumBoxes].yaw   = yaw;
         sBoxes[sNumBoxes].color = sCurBoxColor;
         sBoxes[sNumBoxes].type  = type;
-
         ++sNumBoxes;
     }
 }
@@ -373,16 +344,10 @@ void debug_box_pos(Vec3f pMin, Vec3f pMax, s32 type) {
  */
 void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, Angle yaw, s32 type) {
     Vec3f center, bounds;
-
     bounds[0] = ((pMax[0] - pMin[0]) / 2.0f);
     bounds[1] = ((pMax[1] - pMin[1]) / 2.0f);
     bounds[2] = ((pMax[2] - pMin[2]) / 2.0f);
-
     vec3f_sum(center, pMin, bounds);
-    // center[0] = (pMin[0] + bounds[0]);
-    // center[1] = (pMin[1] + bounds[1]);
-    // center[2] = (pMin[2] + bounds[2]);
-
     append_debug_box(center, bounds, yaw, type);
 }
 
@@ -397,36 +362,28 @@ static void render_box(int index, Vtx *vbox, Vtx *vcylinder) {
     Mtx *mtx;
     struct DebugBox *box = &sBoxes[index];
     s32 color            = box->color;
-
     // Translate to the origin, rotate, then translate back, effectively rotating the box about
     // its center
     mtx       = alloc_display_list(sizeof(Mtx));
     translate = alloc_display_list(sizeof(Mtx));
     rotate    = alloc_display_list(sizeof(Mtx));
     scale     = alloc_display_list(sizeof(Mtx));
-
     if ((mtx == NULL) || (translate == NULL) || (rotate == NULL) || (scale == NULL)) return;
-
     mtxf_to_mtx(mtx, gMatStack[1]);
     guTranslate(translate, box->center[0],  box->center[1],  box->center[2]);
     guRotate(rotate, (box->yaw / (float)0x10000 * 360.0f), 0, 1.0f, 0);
     guScale(scale, ((f32) box->bounds[0] * 0.01f), ((f32) box->bounds[1] * 0.01f), ((f32) box->bounds[2] * 0.01f));
-
-    gSPMatrix(gDisplayListHead++, mtx,           G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
-    gSPMatrix(gDisplayListHead++, translate,     G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH);
-    gSPMatrix(gDisplayListHead++, rotate,        G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH);
-    gSPMatrix(gDisplayListHead++, scale,         G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH);
-
+    gSPMatrix(     gDisplayListHead++, mtx,          (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
+    gSPMatrix(     gDisplayListHead++, translate,    (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
+    gSPMatrix(     gDisplayListHead++, rotate,       (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
+    gSPMatrix(     gDisplayListHead++, scale,        (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
     gDPSetEnvColor(gDisplayListHead++, (color >> 16) & 0xFF, (color >> 8) & 0xFF, (color) & 0xFF, (color >> 24) & 0xFF);
-
     if (box->type == DEBUG_SHAPE_BOX) {
-        gSPVertex(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(vbox), 8, 0);
+        gSPVertex(    gDisplayListHead++, VIRTUAL_TO_PHYSICAL(vbox), 8, 0);
         gSP2Triangles(gDisplayListHead++, 5, 4, 6, 0x0, 5, 6, 7, 0x0); // front
         gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0x0, 2, 1, 3, 0x0); // back
-
         gSP2Triangles(gDisplayListHead++, 4, 0, 2, 0x0, 2, 6, 4, 0x0); // left
         gSP2Triangles(gDisplayListHead++, 1, 5, 3, 0x0, 3, 5, 7, 0x0); // right
-
         gSP2Triangles(gDisplayListHead++, 1, 0, 4, 0x0, 1, 4, 5, 0x0); // top
         gSP2Triangles(gDisplayListHead++, 2, 3, 6, 0x0, 6, 3, 7, 0x0); // bottom
     } else {
@@ -440,7 +397,6 @@ static void render_box(int index, Vtx *vbox, Vtx *vcylinder) {
         gSP2Triangles(gDisplayListHead++,  0, 17, 19,  0,  0, 19, 21,  0);
         gSP2Triangles(gDisplayListHead++,  0, 21, 23,  0,  0, 23,  1,  0);
         */
-
         // Side
         gSP2Triangles(gDisplayListHead++,  1,  2,  3,  0,  2,  3,  4,  0);
         gSP2Triangles(gDisplayListHead++,  3,  4,  5,  0,  4,  5,  6,  0);
@@ -454,7 +410,6 @@ static void render_box(int index, Vtx *vbox, Vtx *vcylinder) {
         gSP2Triangles(gDisplayListHead++, 19, 20, 21,  0, 20, 21, 22,  0);
         gSP2Triangles(gDisplayListHead++, 21, 22, 23,  0, 22, 23, 24,  0);
         gSP2Triangles(gDisplayListHead++, 23, 24,  1,  0, 24,  1,  2,  0);
-
         // Top
         gSP2Triangles(gDisplayListHead++, 25,  2,  4,  0, 25,  4,  6,  0);
         gSP2Triangles(gDisplayListHead++, 25,  6,  8,  0, 25,  8, 10,  0);
@@ -470,17 +425,12 @@ void render_debug_boxes(void) {
     s32 i;
     Vtx *debugBoxVtx;
     Vtx *debugCylinderVtx;
-
     debug_box_color(DBG_BOX_DEF_COLOR);
-
     if (sNumBoxes == 0) return;
-
     // Create the vertices for the box.
     debugBoxVtx      = alloc_display_list( 8 * sizeof(Vtx));
     debugCylinderVtx = alloc_display_list(26 * sizeof(Vtx));
-
-    if (debugBoxVtx == NULL || debugCylinderVtx == NULL) return;
-
+    if ((debugBoxVtx == NULL) || (debugCylinderVtx == NULL)) return;
     DBG_BOX_VTX_BOX(0, -100,  100, -100);
     DBG_BOX_VTX_BOX(1,  100,  100, -100);
     DBG_BOX_VTX_BOX(2, -100, -100, -100);
@@ -489,22 +439,17 @@ void render_debug_boxes(void) {
     DBG_BOX_VTX_BOX(5,  100,  100,  100);
     DBG_BOX_VTX_BOX(6, -100, -100,  100);
     DBG_BOX_VTX_BOX(7,  100, -100,  100);
-
-    DBG_BOX_VTX_CYL(0, 0, 0, 0);
-    for (i = 0; i < (CYLINDER_VERTS); i++) {
-        DBG_BOX_VTX_CYL(1 + i,
+    DBG_BOX_VTX_CYL(0,    0,    0,    0);
+    for ((i = 0); (i < (CYLINDER_VERTS)); (i++)) {
+        DBG_BOX_VTX_CYL((1 + i),
         0 + (100 * coss((0xFFFF / ((CYLINDER_VERTS) / 2)) * (i / 2))),
         0 + (100 * (i & 0x1)),
         0 + (100 * sins((0xFFFF / ((CYLINDER_VERTS) / 2)) * (i / 2))));
     }
-    DBG_BOX_VTX_CYL(CYLINDER_VERTS+1, 0, 100, 0);
-
+    DBG_BOX_VTX_CYL((CYLINDER_VERTS + 1), 0, 100, 0);
     gSPDisplayList(gDisplayListHead++, dl_debug_box_begin);
-
-    for (i = 0; i < sNumBoxes; ++i) render_box(i, debugBoxVtx, debugCylinderVtx);
-
+    for ((i = 0); (i < sNumBoxes); (++i)) render_box(i, debugBoxVtx, debugCylinderVtx);
     sNumBoxes = 0;
-
     gSPDisplayList(gDisplayListHead++, dl_debug_box_end);
 }
 

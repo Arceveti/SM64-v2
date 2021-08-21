@@ -842,7 +842,7 @@ static void geo_process_object(struct Object *node) {
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
             if (node->header.gfx.sharedChild != NULL) {
-                #ifdef VISUAL_DEBUG
+#ifdef VISUAL_DEBUG
                 if (hitboxView) {
                     Vec3f bnds1;
                     Vec3f bnds2;
@@ -864,7 +864,7 @@ static void geo_process_object(struct Object *node) {
                         debug_box(bnds1, bnds2, DEBUG_SHAPE_BOX);
                     }
                 }
-                #endif
+#endif
                 gCurGraphNodeObject = (struct GraphNodeObject *) node;
                 node->header.gfx.sharedChild->parent = &node->header.gfx.node;
                 geo_process_node_and_siblings(node->header.gfx.sharedChild);
@@ -911,9 +911,10 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         translation[2] = (node->translation[2] / 4.0f);
         mtxf_translate(mat, translation);
         mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
-        gMatStack[                 gMatStackIndex + 1][3][0] = gMatStack[gMatStackIndex][3][0];
-        gMatStack[                 gMatStackIndex + 1][3][1] = gMatStack[gMatStackIndex][3][1];
-        gMatStack[                 gMatStackIndex + 1][3][2] = gMatStack[gMatStackIndex][3][2];
+        vec3f_copy(gMatStack[gMatStackIndex + 1][3], gMatStack[gMatStackIndex][3]);
+        // gMatStack[                 gMatStackIndex + 1][3][0] = gMatStack[gMatStackIndex][3][0];
+        // gMatStack[                 gMatStackIndex + 1][3][1] = gMatStack[gMatStackIndex][3][1];
+        // gMatStack[                 gMatStackIndex + 1][3][2] = gMatStack[gMatStackIndex][3][2];
         mtxf_mul(        gMatStack[gMatStackIndex + 1], mat,   gMatStack[gMatStackIndex + 1]);
         mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1],        gMatStack[gMatStackIndex + 1], node->objNode->header.gfx.scale);
         if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_HELD_OBJ, &node->fnNode.node, (struct AllocOnlyPool *) gMatStack[gMatStackIndex + 1]);

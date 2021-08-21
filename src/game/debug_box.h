@@ -14,7 +14,7 @@
  * The max amount of debug boxes before debug_box() just returns.
  * You can set this to something higher, but you might run out of space in the gfx pool.
  */
-#define MAX_DEBUG_BOXES 512
+#define MAX_DEBUG_BOXES      512
 
 #define DEBUG_SHAPE_BOX      0x0
 #define DEBUG_SHAPE_CYLINDER 0x1
