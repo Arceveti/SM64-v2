@@ -358,7 +358,7 @@ static void geo_process_ortho_projection(struct GraphNodeOrthoProjection *node) 
         f32 bottom = (gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f * node->scale;
         guOrtho(mtx, left, right, bottom, top, -2.0f, 2.0f, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, 0xFFFF);
-        gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+        gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
         geo_process_node_and_siblings(node->node.children);
     }
 }
@@ -372,11 +372,11 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
         u16 perspNorm;
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
 #ifdef WIDE
-        aspect = (gWidescreen && (gCurrLevelNum != 0x01)) ? (16.0f/9.0f) : (4.0f/3.0f); // 1.775f, 1.33333f
+        aspect = (gWidescreen && (gCurrLevelNum != 0x01)) ? (16.0f / 9.0f) : (4.0f / 3.0f); // 1.775f, 1.33333f
 #else
-        aspect = (4.0f/3.0f); // 1.33333f
+        aspect = (4.0f / 3.0f); // 1.33333f
 #endif
-        guPerspective(mtx, &perspNorm, node->fov, aspect, node->near / WORLD_SCALE, node->far / WORLD_SCALE, 1.0f);
+        guPerspective(mtx, &perspNorm, node->fov, aspect, (node->near / WORLD_SCALE), (node->far / WORLD_SCALE), 1.0f);
         gSPPerspNormalize(gDisplayListHead++, perspNorm);
         gSPMatrix(        gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
         gCurGraphNodeCamFrustum = node;
@@ -630,7 +630,6 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     Vec3a rotation;
     Vec3f translation;
     Mtx   *matrixPtr = alloc_display_list(sizeof(*matrixPtr));
-
     vec3s_copy(rotation, gVec3sZero);
     vec3f_set(translation, node->translation[0], node->translation[1], node->translation[2]);
     if (gCurAnimType == ANIM_TYPE_TRANSLATION) {

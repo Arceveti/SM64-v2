@@ -3754,7 +3754,11 @@ void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation) {
     Vec3f pitchRotated;
     // First rotate the direction by rotation's pitch
     //! The Z axis is flipped here.
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    pitchRotated[2] =   (to[2] * coss(rotation[0])) + (to[1] * sins(rotation[0])));
+#else
     pitchRotated[2] = -((to[2] * coss(rotation[0])) - (to[1] * sins(rotation[0])));
+#endif
     pitchRotated[1] =  ((to[2] * sins(rotation[0])) + (to[1] * coss(rotation[0])));
     pitchRotated[0] =    to[0];
     // Rotate again by rotation's yaw
@@ -4236,7 +4240,11 @@ void cam_bbh_fall_off_roof(struct Camera *c) {
 void cam_bbh_fall_into_pool(struct Camera *c) {
     Vec3f dir;
     set_camera_mode_close_cam(&c->mode);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set(dir, 0.0f, 0.0f, -300.0f);
+#else
     vec3f_set(dir, 0.0f, 0.0f, 300.0f);
+#endif
     offset_rotated(gLakituState.goalPos, sMarioCamState->pos, dir, sMarioCamState->faceAngle);
     gLakituState.goalPos[1] = -2300.0f;
     vec3f_copy(c->pos, gLakituState.goalPos);
@@ -6069,7 +6077,11 @@ void cutscene_bowser_arena_set_focus(struct Camera *c) {
  */
 void cutscene_bowser_arena_adjust_offsets(UNUSED struct Camera *c) {
     approach_s16_asymptotic_bool(&sCutsceneVars[3].angle[0],   0x6C8,  0x1E);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    approach_f32_asymptotic_bool(&sCutsceneVars[0].point[2],  200.0f, 0.02f);
+#else
     approach_f32_asymptotic_bool(&sCutsceneVars[0].point[2], -200.0f, 0.02f);
+#endif
     approach_f32_asymptotic_bool(&sCutsceneVars[3].point[2],  550.0f, 0.02f);
 }
 
@@ -6100,13 +6112,17 @@ void cutscene_stop_dialog(UNUSED struct Camera *c) {
  */
 void cutscene_bowser_arena_start(struct Camera *c) {
     sCutsceneVars[3].point[2] = 430.0f;
-    sCutsceneVars[3].angle[1] = gSecondCameraFocus->oMoveAngleYaw - DEGREES(45);
+    sCutsceneVars[3].angle[1] = (gSecondCameraFocus->oMoveAngleYaw - DEGREES(45));
     sCutsceneVars[3].angle[0] = 0xD90;
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set(sCutsceneVars[0].point, 0.0f, 120.0f, 600.0f);
+#else
     //! Tricky math: Bowser starts at (0, 307, -1000), with a moveAngle of (0,0,0). A sane person would
     //! expect this offset to move the focus to (0, 427, -1800).
     //! BUT because offset_rotated() flips the Z direction (to match sm64's coordinate system), this
     //! offset actually moves the focus to (0, 427, -200)
     vec3f_set(sCutsceneVars[0].point, 0.0f, 120.0f, -800.0f);
+#endif
     vec3s_set(sCutsceneVars[2].angle, gSecondCameraFocus->oMoveAnglePitch, gSecondCameraFocus->oMoveAngleYaw, gSecondCameraFocus->oMoveAngleRoll);
     // Set the camera's position and focus.
     cutscene_bowser_arena_set_pos(c);
@@ -6123,7 +6139,6 @@ void bowser_fight_intro_dialog(UNUSED struct Camera *c) {
         case LEVEL_BOWSER_3: create_dialog_box(DIALOG_093); break;
         default: break;
     }
-    
 }
 
 /**
@@ -7213,8 +7228,13 @@ void cutscene_unlock_key_door_start(struct Camera *c) {
     Vec3f posOff, focusOff;
     vec3f_copy(    sCutsceneVars[0].point, c->pos  );
     vec3f_copy(    sCutsceneVars[1].point, c->focus);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set(  posOff, -206.0f, 108.0f, -234.0f);
+    vec3f_set(focusOff,   48.0f, 104.0f,  193.0f);
+#else
     vec3f_set(  posOff, -206.0f, 108.0f,  234.0f);
     vec3f_set(focusOff,   48.0f, 104.0f, -193.0f);
+#endif
     offset_rotated(sCutsceneVars[2].point, sMarioCamState->pos,   posOff, sMarioCamState->faceAngle);
     offset_rotated(sCutsceneVars[3].point, sMarioCamState->pos, focusOff, sMarioCamState->faceAngle);
 }
@@ -7598,7 +7618,11 @@ void cutscene_sliding_doors_open_start(struct Camera *c) {
 void cutscene_sliding_doors_open_set_cvars(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[1].point, sMarioCamState->pos);
     vec3s_copy(sCutsceneVars[0].angle, sMarioCamState->faceAngle);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set( sCutsceneVars[0].point, 80.0f, 325.0f, -200.0f);
+#else
     vec3f_set( sCutsceneVars[0].point, 80.0f, 325.0f, 200.0f);
+#endif
 }
 
 /**
@@ -7627,7 +7651,11 @@ void cutscene_sliding_doors_follow_mario(struct Camera *c) {
     sCutsceneVars[1].point[2] = sMarioCamState->pos[2];
     // Decrease cvar0's offsets, moving the camera behind Mario at his eye height.
     approach_f32_asymptotic_bool(&sCutsceneVars[0].point[0], 0, 0.1f);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    camera_approach_f32_symmetric_bool(&sCutsceneVars[0].point[2], -125.0f, 50.0f);
+#else
     camera_approach_f32_symmetric_bool(&sCutsceneVars[0].point[2], 125.0f, 50.0f);
+#endif
     // Update cvar0's angle
     approach_vec3s_asymptotic(sCutsceneVars[0].angle, sMarioCamState->faceAngle, 16, 16, 16);
     // Apply the offset to the camera's position
@@ -7684,7 +7712,11 @@ void cutscene_enter_painting(struct Camera *c) {
         paintingPos[2]   = gRipplingPainting->posZ;
         offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
         approach_vec3f_asymptotic(c->focus, focus, 0.1f, 0.1f, 0.1f);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+        focusOffset[2] = (((gRipplingPainting->size * 1000.0f) / 2.0f) / 307.0f);
+#else
         focusOffset[2] = -(((gRipplingPainting->size * 1000.0f) / 2.0f) / 307.0f);
+#endif
         offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
         floorHeight = (find_floor(focus[0], focus[1] + 500.0f, focus[2], &highFloor) + 125.0f);
         if (focus[1] < floorHeight) focus[1] = floorHeight;
@@ -7715,8 +7747,13 @@ void cutscene_enter_painting(struct Camera *c) {
 void cutscene_exit_painting_start(struct Camera *c) {
     struct Surface *floor;
     f32 floorHeight;
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set(sCutsceneVars[2].point, 258.0f, -352.0f, -1189.0f);
+    vec3f_set(sCutsceneVars[1].point,  65.0f, -155.0f,  -444.0f);
+#else
     vec3f_set(sCutsceneVars[2].point, 258.0f, -352.0f, 1189.0f);
     vec3f_set(sCutsceneVars[1].point,  65.0f, -155.0f,  444.0f);
+#endif
     if (gPrevLevel == LEVEL_TTM) {
         sCutsceneVars[1].point[1] = 0.0f;
         sCutsceneVars[1].point[2] = 0.0f;
@@ -7920,7 +7957,11 @@ void cutscene_door_move_behind_mario(struct Camera *c) {
     determine_pushing_or_pulling_door(&doorRotation);
     set_focus_rel_mario(c, 0.0f, 125.0f, 0.0f, 0);
     vec3s_set(sCutsceneVars[0].angle, 0x0, (sMarioCamState->faceAngle[1] + doorRotation), 0x0);
+#ifdef FIX_CAMERA_OFFSET_ROTATED
+    vec3f_set(camOffset, 0.0f, 125.0f, -250.0f);
+#else
     vec3f_set(camOffset, 0.0f, 125.0f, 250.0f);
+#endif
     offset_rotated(c->pos, sMarioCamState->pos, camOffset, sCutsceneVars[0].angle);
 }
 
