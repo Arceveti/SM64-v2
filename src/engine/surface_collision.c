@@ -327,6 +327,40 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 }
 
 /**
+ * Collides with walls and returns the most recent wall.
+ */
+#ifdef BETTER_WALL_COLLISION
+void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
+    collisionData->x       = pos[0];
+    collisionData->y       = pos[1];
+    collisionData->z       = pos[2];
+    collisionData->radius  = radius;
+    collisionData->offsetY = offset;
+    find_wall_collisions(collisionData);
+    pos[0] = collisionData->x;
+    pos[1] = collisionData->y;
+    pos[2] = collisionData->z;
+}
+#else
+struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius) {
+    struct WallCollisionData collisionData;
+    struct Surface *wall  = NULL;
+    collisionData.x       = pos[0];
+    collisionData.y       = pos[1];
+    collisionData.z       = pos[2];
+    collisionData.radius  = radius;
+    collisionData.offsetY = offset;
+    if (find_wall_collisions(&collisionData)) wall = collisionData.walls[collisionData.numWalls - 1];
+    pos[0] = collisionData.x;
+    pos[1] = collisionData.y;
+    pos[2] = collisionData.z;
+    //! This only returns the most recent wall and can also return NULL
+    //! there are no wall collisions.
+    return wall;
+}
+#endif
+
+/**
  * Check `pos` for collisions within `radius`, and update `pos`
  * Used for the camera
  *
@@ -524,6 +558,13 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return height;
+}
+
+/**
+ * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
+ */
+f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
+    return find_ceil(pos[0], (height + 3.0f), pos[2], ceil);
 }
 
 /**************************************************

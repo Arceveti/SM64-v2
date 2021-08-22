@@ -120,6 +120,7 @@ void vec3f_get_lateral_dist(             Vec3f from, Vec3f to, f32 *dist);
 void vec3f_get_dist(                     Vec3f from, Vec3f to, f32 *dist);
 void vec3f_get_pitch(                    Vec3f from, Vec3f to,            Angle *pitch);
 void vec3f_get_yaw(                      Vec3f from, Vec3f to,                          Angle *yaw);
+void vec3f_get_angle(                    Vec3f from, Vec3f to, Angle *pitch, Angle *yaw);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, Angle  pitch, Angle  yaw);
 void vec3f_mul_f32(                      Vec3f dest, f32 scale);
@@ -161,6 +162,7 @@ void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 // Approach
 s32  approach_s32(                      s32  current,   s32 target, s32 inc, s32 dec);
 f32  approach_f32(                      f32  current,   f32 target, f32 inc, f32 dec);
+f32  approach_f32_by_increment(         f32  current,   f32 target, f32 inc);
 s32  approach_f32_signed(               f32   *value,   f32 target, f32 inc);
 f32  approach_f32_symmetric(            f32    value,   f32 target, f32 inc);
 s16  approach_s16_symmetric(            s16    value,   s16 target, s16 inc);

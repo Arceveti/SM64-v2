@@ -59,21 +59,11 @@ void move_towards_wall(struct MarioState *m, f32 amount) {
 #endif
 
 Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
-    f32 fallHeight;
-    f32 damageHeight;
 #ifdef NO_FALL_DAMAGE
     return FALSE;
 #endif
-    fallHeight = (m->peakHeight - m->pos[1]);
-#pragma GCC diagnostic push
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wtautological-constant-out-of-range-compare"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wtype-limits"
-#endif
-    //! Never true
-    damageHeight = ((m->actionState == ACT_GROUND_POUND) ? 600.0f : 1150.0f);
-#pragma GCC diagnostic pop
+    f32 fallHeight = (m->peakHeight - m->pos[1]);
+    f32 damageHeight = 1200;
     if ((m->action != ACT_TWIRLING) && (m->floor->type != SURFACE_BURNING)) {
         if (m->vel[1] < -55.0f) {
             if (fallHeight > 3000.0f) {

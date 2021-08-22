@@ -5,7 +5,7 @@
  * The object essentially just tilts and moves Mario with it.
  */
 
-//! move to math_util.c
+//! move to math_util?
 /**
  * Creates a transform matrix on a variable passed in from given normals
  * and the object's position.
@@ -23,29 +23,8 @@ void create_transform_from_normals(Mat4 transform, f32 xNorm, f32 yNorm, f32 zNo
  */
 void bhv_platform_normals_init(void) {
     Mat4 *transform = &o->transform;
-    vec3f_set(&o->oTiltingPyramidNormalVec, 0.0f, 1.0f, 0.0f);
+    vec3f_set(&o->oTiltingPyramidNormalVec,   0.0f, 1.0f, 0.0f);
     create_transform_from_normals(*transform, 0.0f, 1.0f, 0.0f);
-}
-
-//! move to math_util.c
-/**
- * Returns a value that is src incremented/decremented by inc towards goal
- * until goal is reached. Does not overshoot.
- */
-f32 approach_by_increment(f32 goal, f32 src, f32 inc) {
-    f32 newVal;
-    if (src <= goal) {
-        if (goal - src < inc) {
-            newVal = goal;
-        } else {
-            newVal = src + inc;
-        }
-    } else if (goal - src > -inc) {
-        newVal = goal;
-    } else {
-        newVal = src - inc;
-    }
-    return newVal;
 }
 
 /**
@@ -60,7 +39,6 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     Vec3f posAfterRotation;
     // Mario's position
     f32 mx, my, mz;
-    s32 marioOnPlatform = FALSE;
     Mat4 *transform = &o->transform;
     if (gMarioObject->platform == o) {
         get_mario_pos(&mx, &my, &mz);
@@ -80,7 +58,6 @@ void bhv_tilting_inverted_pyramid_loop(void) {
         } else {
             vec3f_set(d, 0.0f, 1.0f, 0.0f);
         }
-        if (o->oTiltingPyramidMarioOnPlatform) marioOnPlatform = TRUE;
         o->oTiltingPyramidMarioOnPlatform = TRUE;
     } else {
         vec3f_set(d, 0.0f, 1.0f, 0.0f);
@@ -88,13 +65,12 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     }
     // Approach the normals by 0.01f towards the new goal, then create a transform matrix and orient the object. 
     // Outside of the other conditionals since it needs to tilt regardless of whether Mario is on.
-    o->oTiltingPyramidNormalX = approach_by_increment(d[0], o->oTiltingPyramidNormalX, 0.01f);
-    o->oTiltingPyramidNormalY = approach_by_increment(d[1], o->oTiltingPyramidNormalY, 0.01f);
-    o->oTiltingPyramidNormalZ = approach_by_increment(d[2], o->oTiltingPyramidNormalZ, 0.01f);
+    o->oTiltingPyramidNormalX = approach_f32_by_increment(o->oTiltingPyramidNormalX, d[0], 0.01f);
+    o->oTiltingPyramidNormalY = approach_f32_by_increment(o->oTiltingPyramidNormalY, d[1], 0.01f);
+    o->oTiltingPyramidNormalZ = approach_f32_by_increment(o->oTiltingPyramidNormalZ, d[2], 0.01f);
     create_transform_from_normals(*transform, o->oTiltingPyramidNormalX, o->oTiltingPyramidNormalY, o->oTiltingPyramidNormalZ);
-
     // If Mario is on the platform, adjust his position for the platform tilt.
-    if (marioOnPlatform) {
+    if (o->oTiltingPyramidMarioOnPlatform) {
         linear_mtxf_mul_vec3f(*transform, posAfterRotation, dist);
 #ifndef PLATFORM_DISPLACEMENT_2
         mx += (posAfterRotation[0] - posBeforeRotation[0]);

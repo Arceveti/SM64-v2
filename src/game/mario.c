@@ -448,48 +448,6 @@ u32 mario_get_terrain_sound_addend(struct MarioState *m) {
 }
 
 /**
- * Collides with walls and returns the most recent wall.
- */
-#ifdef BETTER_WALL_COLLISION
-void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
-    collisionData->x       = pos[0];
-    collisionData->y       = pos[1];
-    collisionData->z       = pos[2];
-    collisionData->radius  = radius;
-    collisionData->offsetY = offset;
-    find_wall_collisions(collisionData);
-    pos[0] = collisionData->x;
-    pos[1] = collisionData->y;
-    pos[2] = collisionData->z;
-}
-#else
-struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius) {
-    struct WallCollisionData collisionData;
-    struct Surface *wall  = NULL;
-    collisionData.x       = pos[0];
-    collisionData.y       = pos[1];
-    collisionData.z       = pos[2];
-    collisionData.radius  = radius;
-    collisionData.offsetY = offset;
-    if (find_wall_collisions(&collisionData)) wall = collisionData.walls[collisionData.numWalls - 1];
-    pos[0] = collisionData.x;
-    pos[1] = collisionData.y;
-    pos[2] = collisionData.z;
-    //! This only returns the most recent wall and can also return NULL
-    //! there are no wall collisions.
-    return wall;
-}
-#endif
-
-//! move to surface_collision
-/**
- * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
- */
-f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
-    return find_ceil(pos[0], (height + 3.0f), pos[2], ceil);
-}
-
-/**
  * Determines if Mario is facing "downhill."
  */
 Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
@@ -506,11 +464,11 @@ Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
  */
 Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
-// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-//     f32 steepness = m->steepness;
-// #else
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    f32 steepness = m->steepness;
+#else
     f32 steepness = m->floor->normal.y;
-// #endif
+#endif
     if (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE) && (steepness < COS1)) return TRUE;
     switch (mario_get_floor_class(m)) {
         case SURFACE_VERY_SLIPPERY: normY = COS10; break;

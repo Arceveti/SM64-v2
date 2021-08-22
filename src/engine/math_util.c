@@ -412,7 +412,7 @@ void vec3f_normalize(Vec3f dest) {
 #ifdef FAST_INVSQRT
         register f32 mag = Q_rsqrtf(sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
 #else
-        register f32 mag = 1.0f / vec3f_mag(dest);
+        register f32 mag = (1.0f / vec3f_mag(dest));
 #endif
         if (mag == 0.0f) {
             vec3f_copy(dest, gVec3fZero);
@@ -431,12 +431,14 @@ void vec3f_normalize_max(Vec3f dest, f32 max) {
     }
 }
 
+/// Finds the horizontal distance between two vectors.
 void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *dist) {
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
     *dist           = sqrtf(sqr(dx) + sqr(dz));
 }
 
+/// Finds the distance between two vectors.
 void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
     register f32 dx = (to[0] - from[0]);
     register f32 dy = (to[1] - from[1]);
@@ -444,6 +446,7 @@ void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
     *dist           = sqrtf(sqr(dx) + sqr(dz) + sqr(dy));
 }
 
+/// Finds the pitch between two vectors.
 void vec3f_get_pitch(Vec3f from, Vec3f to, Angle *pitch) {
     register f32 dx = (to[0] - from[0]);
     register f32 dy = (to[1] - from[1]);
@@ -451,10 +454,20 @@ void vec3f_get_pitch(Vec3f from, Vec3f to, Angle *pitch) {
     *pitch          = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
 }
 
+/// Finds the yaw between two vectors.
 void vec3f_get_yaw(Vec3f from, Vec3f to, Angle *yaw) {
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
     *yaw            = atan2s(dz, dx);
+}
+
+/// Calculates the pitch and yaw between two vectors.
+void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
+    f32 dx = (to[0] - from[0]);
+    f32 dy = (to[1] - from[1]);
+    f32 dz = (to[2] - from[2]);
+    *pitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
+    *yaw   = atan2s(dz, dx);
 }
 
 /**
@@ -1153,6 +1166,26 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
         if (current < target) current = target;
     }
     return current;
+}
+
+/**
+ * Returns a value that is src incremented/decremented by inc towards goal
+ * until goal is reached. Does not overshoot.
+ */
+f32 approach_f32_by_increment(f32 current, f32 target, f32 inc) {
+    f32 newVal;
+    if (current <= target) {
+        if ((target - current) < inc) {
+            newVal = target;
+        } else {
+            newVal = (current + inc);
+        }
+    } else if ((target - current) > -inc) {
+        newVal = target;
+    } else {
+        newVal = (current - inc);
+    }
+    return newVal;
 }
 
 s32 approach_f32_signed(f32 *value, f32 target, f32 inc) {
