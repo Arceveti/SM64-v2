@@ -617,7 +617,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         m->pos[1] = nextPos[1];
         return AIR_STEP_HIT_WALL;
     }
-    if ((m->action & ACT_FLAG_RIDING_SHELL) && floorHeight < waterLevel) {
+    if ((m->action & ACT_FLAG_RIDING_SHELL) && (floorHeight < waterLevel)) {
         floorHeight         = waterLevel;
         floor               = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
@@ -724,9 +724,13 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     vec3f_copy(m->pos, nextPos);
     m->floor        = floor;
     m->floorHeight  = floorHeight;
-    stepResult      = bonk_or_hit_lava_wall(m, &upperWall);
-    if (stepResult != AIR_STEP_NONE) return stepResult;
-    return bonk_or_hit_lava_wall(m, &lowerWall);
+    if (upperWall.numWalls > 0) {
+        stepResult  = bonk_or_hit_lava_wall(m, &upperWall);
+        if (stepResult != AIR_STEP_NONE) return stepResult;
+    } else {
+        stepResult = AIR_STEP_NONE;
+    }
+    return ((lowerWall.numWalls > 0) ? bonk_or_hit_lava_wall(m, &lowerWall) : AIR_STEP_NONE);
 #else
     if ((stepArg & AIR_STEP_CHECK_LEDGE_GRAB) && (upperWall == NULL) && (lowerWall != NULL)) {
         if (check_ledge_grab(m, lowerWall, intendedPos, nextPos)) return AIR_STEP_GRABBED_LEDGE;
