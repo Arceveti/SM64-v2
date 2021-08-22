@@ -79,7 +79,7 @@ static s32 eval_script_op(s8 op, s32 arg) {
 
 static void level_cmd_load_and_execute(void) {
     main_pool_push_state();
-    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT);
+    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT, CMD_GET(void *, 16), CMD_GET(void *, 20));
     *sStackTop++ = (uintptr_t) NEXT_CMD;
     *sStackTop++ = (uintptr_t) sStackBase;
     sStackBase   = sStackTop;
@@ -90,8 +90,8 @@ static void level_cmd_exit_and_execute(void) {
     void *targetAddr = CMD_GET(void *, 12);
     main_pool_pop_state();
     main_pool_push_state();
-    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT);
-    sStackTop   = sStackBase;
+    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT, CMD_GET(void *, 16), CMD_GET(void *, 20));
+    sStackTop = sStackBase;
     sCurrentCmd = segmented_to_virtual(targetAddr);
 }
 
@@ -246,7 +246,7 @@ static void level_cmd_load_to_fixed_address(void) {
 }
 
 static void level_cmd_load_raw(void) {
-    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT);
+    load_segment(CMD_GET(s16, 2), CMD_GET(void *, 4), CMD_GET(void *, 8), MEMORY_POOL_LEFT, CMD_GET(void *, 12), CMD_GET(void *, 16));
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -283,11 +283,15 @@ static void level_cmd_init_level(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
+extern s32 gTlbEntries;
+
 static void level_cmd_clear_level(void) {
     clear_objects();
     clear_area_graph_nodes();
     clear_areas();
     main_pool_pop_state();
+    gTlbEntries = 0;
+    osUnmapTLBAll();
     sCurrentCmd = CMD_NEXT;
 }
 

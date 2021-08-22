@@ -243,7 +243,9 @@ Gfx *geo_cannon_circle_base(s32 callContext, struct GraphNode *node, UNUSED Mat4
      && (gCurrentArea != NULL)
      && (gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON)) {
         graphNode->fnNode.node.flags = ((graphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_TRANSPARENT << 8));
+#ifndef L3DEX2_ALONE
         dlist = render_cannon_circle_base();
+#endif
     }
     return dlist;
 }

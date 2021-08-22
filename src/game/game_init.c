@@ -261,31 +261,34 @@ void make_viewport_clip_rect(Vp *viewport) {
  * If you plan on using gSPLoadUcode, make sure to add OS_TASK_LOADABLE to the flags member.
  */
 void create_gfx_task_structure(void) {
-    s32 entries                        = (gDisplayListHead - gGfxPool->buffer);
-    gGfxSPTask->msgqueue               = &gGfxVblankQueue;
-    gGfxSPTask->msg                    = (OSMesg) 2;
-    gGfxSPTask->task.t.type            = M_GFXTASK;
-    gGfxSPTask->task.t.ucode_boot      =                                 rspbootTextStart;
-    gGfxSPTask->task.t.ucode_boot_size = ((u8 *) rspbootTextEnd - (u8 *) rspbootTextStart);
-    gGfxSPTask->task.t.flags           = 0;
-#ifdef  F3DZEX_GBI_2
-    gGfxSPTask->task.t.ucode      = gspF3DZEX2_PosLight_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspF3DZEX2_PosLight_fifoDataStart;
+    s32 entries                         = (gDisplayListHead - gGfxPool->buffer);
+    gGfxSPTask->msgqueue                = &gGfxVblankQueue;
+    gGfxSPTask->msg                     = (OSMesg) 2;
+    gGfxSPTask->task.t.type             = M_GFXTASK;
+    gGfxSPTask->task.t.ucode_boot       =                                 rspbootTextStart;
+    gGfxSPTask->task.t.ucode_boot_size  = ((u8 *) rspbootTextEnd - (u8 *) rspbootTextStart);
+    gGfxSPTask->task.t.flags            = 0x0;
+#ifdef  L3DEX2_ALONE
+    gGfxSPTask->task.t.ucode            = gspL3DEX2_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspL3DEX2_fifoDataStart;
+#elif  F3DZEX_GBI_2
+    gGfxSPTask->task.t.ucode            = gspF3DZEX2_PosLight_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspF3DZEX2_PosLight_fifoDataStart;
 #elif   F3DEX2PL_GBI
-    gGfxSPTask->task.t.ucode      = gspF3DEX2_PosLight_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspF3DEX2_PosLight_fifoDataStart;
+    gGfxSPTask->task.t.ucode            = gspF3DEX2_PosLight_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspF3DEX2_PosLight_fifoDataStart;
 #elif   F3DEX_GBI_2
-    gGfxSPTask->task.t.ucode      = gspF3DEX2_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspF3DEX2_fifoDataStart;
+    gGfxSPTask->task.t.ucode            = gspF3DEX2_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspF3DEX2_fifoDataStart;
 #elif   F3DEX_GBI
-    gGfxSPTask->task.t.ucode      = gspF3DEX_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspF3DEX_fifoDataStart;
+    gGfxSPTask->task.t.ucode            = gspF3DEX_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspF3DEX_fifoDataStart;
 #elif   SUPER3D_GBI
-    gGfxSPTask->task.t.ucode      = gspSuper3D_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspSuper3D_fifoDataStart;
+    gGfxSPTask->task.t.ucode            = gspSuper3D_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspSuper3D_fifoDataStart;
 #else
-    gGfxSPTask->task.t.ucode      = gspFast3D_fifoTextStart;
-    gGfxSPTask->task.t.ucode_data = gspFast3D_fifoDataStart;
+    gGfxSPTask->task.t.ucode            = gspFast3D_fifoTextStart;
+    gGfxSPTask->task.t.ucode_data       = gspFast3D_fifoDataStart;
 #endif
     gGfxSPTask->task.t.ucode_size       = SP_UCODE_SIZE; // (this size is ignored)
     gGfxSPTask->task.t.ucode_data_size  = SP_UCODE_DATA_SIZE;
@@ -629,7 +632,7 @@ void setup_game_memory(void) {
     set_segment_base_addr(24, (void *) gDemoInputsMemAlloc);
     setup_dma_table_list(&gDemoInputsBuf, gDemoInputs, gDemoInputsMemAlloc);
     // Setup Level Script Entry
-    load_segment(0x10, _entrySegmentRomStart, _entrySegmentRomEnd, MEMORY_POOL_LEFT);
+    load_segment(0x10, _entrySegmentRomStart, _entrySegmentRomEnd, MEMORY_POOL_LEFT, NULL, NULL);
     // Setup Segment 2 (Fonts, Text, etc)
     load_segment_decompress(2, _segment2_mio0SegmentRomStart, _segment2_mio0SegmentRomEnd);
 }
