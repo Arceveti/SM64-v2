@@ -97,7 +97,7 @@ static void koopa_play_footstep_sound(s8 animFrame1, s8 animFrame2) {
  * If Mario is close to koopa, and koopa is facing toward Mario, then begin
  * running away.
  */
-static s32 koopa_check_run_from_mario(void) {
+static Bool32 koopa_check_run_from_mario(void) {
     if ((o->oKoopaDistanceToMario < 300.0f) && (abs_angle_diff(o->oKoopaAngleToMario, o->oMoveAngleYaw) < 0x3000)) {
         o->oAction = KOOPA_SHELLED_ACT_RUN_FROM_MARIO;
         return TRUE;

@@ -24,7 +24,7 @@ static struct ObjectHitbox sMovingBlueCoinHitbox = {
     /* hurtboxHeight:     */ 0,
 };
 
-s32 coin_step(s16 *collisionFlagsPtr) {
+Bool32 coin_step(ColFlags *collisionFlagsPtr) {
     *collisionFlagsPtr = object_step();
     obj_check_floor_death(*collisionFlagsPtr, sObjFloor);
     if ((*collisionFlagsPtr & OBJ_COL_FLAG_GROUNDED)

@@ -343,7 +343,7 @@ void addto_groupfirst(struct ObjGroup *group, struct GdObj *obj) {
 /**
  * Returns TRUE if `obj` is a member of `group`, or FALSE otherwise
  */
-s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) {
+s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) { //! Bool32?
     struct ListNode *node = group->firstMember;
     while (node != NULL) {
         if (node->obj->index == obj->index) return TRUE;

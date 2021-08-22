@@ -3,7 +3,7 @@
 struct DoorAction
 {
     u32 flag;
-    s32 action;
+    ObjAction action;
 };
 
 static struct DoorAction sDoorActions[] = {

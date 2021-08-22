@@ -60,7 +60,7 @@ void bhv_flame_bowser_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_move_standard(78);
     if (o->oVelY < -4.0f) o->oVelY = -4.0f;
-    if (o->oAction == 0) {
+    if (o->oAction == 0) { //! action names
         cur_obj_become_intangible();
         bowser_flame_move();
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {

@@ -11,8 +11,8 @@ void bhv_rotating_clock_arm_loop(void) {
     //   allowing him to change the Tick Tock Clock speed setting.
     // Probably a safety check for when you leave the level through the painting
     //   to make sure the setting isn't accidentally locked in as you fly out.
-    if (o->oAction == 0) {
-        if (marioSurface->type == SURFACE_DEFAULT && o->oTimer >= 4) o->oAction++;
+    if (o->oAction == 0) { //! action names
+        if (marioSurface->type == SURFACE_DEFAULT && o->oTimer >= 4) o->oAction = 1;
     } else if (o->oAction == 1) {
         // If Mario is touching the Tick Tock Clock painting...
         if (marioSurface != NULL
@@ -38,7 +38,7 @@ void bhv_rotating_clock_arm_loop(void) {
             }
 
             // Increment the action to stop animating the hands.
-            o->oAction++;
+            o->oAction = 2;
         }
     }
 

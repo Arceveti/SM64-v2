@@ -36,7 +36,7 @@ static u8 sSpinyWalkAttackHandlers[] = {
 /**
  * If the spiny was spawned by lakitu and Mario is far away, despawn.
  */
-static s32 spiny_check_active(void) {
+static Bool32 spiny_check_active(void) {
     if (o->parentObj != o) {
         if (o->oDistanceToMario > 2500.0f) {
             if (obj_has_behavior(o->parentObj, bhvEnemyLakitu)) o->parentObj->oEnemyLakituNumSpinies--;
@@ -44,7 +44,6 @@ static s32 spiny_check_active(void) {
             return FALSE;
         }
     }
-
     return TRUE;
 }
 

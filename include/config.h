@@ -613,7 +613,7 @@
 // Mario hitbox values
 // Vanilla is 160.0f
 #define MARIO_HITBOX_HEIGHT         160.0f
-#define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT/2)
+#define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT / 2)
 
 #define MARIO_SHORT_HITBOX_HEIGHT   100.0f
 #define MARIO_EYE_LEVEL             100.0f

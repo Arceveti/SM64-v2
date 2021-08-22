@@ -119,7 +119,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
     f32 amountToMove;
     Vec3f d;
     f32 distToNextWaypoint;
-    if (ballIndex == 0 || ((u16)(o->oBehParams >> 16) & 0x0080)) {
+    if ((ballIndex == 0) || ((u16)(o->oBehParams >> 16) & 0x0080)) {
         initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
         nextWaypoint = initialPrevWaypoint;
         if (ballIndex != 0) {
@@ -144,7 +144,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
             d[0]               = (nextWaypoint->pos[0] - pos[0]);
             d[1]               = (nextWaypoint->pos[1] - pos[1]);
             d[2]               = (nextWaypoint->pos[2] - pos[2]);
-            distToNextWaypoint = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
+            distToNextWaypoint = vec3f_mag(d);
             // Move directly to the next waypoint, even if it's farther away
             // than amountToMove
             amountToMove -= distToNextWaypoint;
@@ -235,7 +235,7 @@ static void obj_compute_vel_from_move_pitch(f32 speed) {
 }
 
 //! move to math_util
-static s32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
+static Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
     if (*value <= minimum) {
         *value = minimum;
     } else if (*value >= maximum) {
@@ -247,7 +247,7 @@ static s32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
 }
 
 //! move to math_util
-static s32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
+static Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
     if (*value <= minimum) {
         *value = minimum;
     } else if (*value >= maximum) {
@@ -263,17 +263,17 @@ static void cur_obj_init_anim_extend(s32 animIndex) {
     cur_obj_extend_animation_if_at_end();
 }
 
-static s32 cur_obj_init_anim_and_check_if_end(s32 animIndex) {
+static Bool32 cur_obj_init_anim_and_check_if_end(s32 animIndex) {
     cur_obj_init_animation_with_sound(animIndex);
     return cur_obj_check_if_near_animation_end();
 }
 
-static s32 cur_obj_init_anim_check_frame(s32 animIndex, AnimFrame32 frame) {
+static Bool32 cur_obj_init_anim_check_frame(s32 animIndex, AnimFrame32 frame) {
     cur_obj_init_animation_with_sound(animIndex);
     return cur_obj_check_anim_frame(frame);
 }
 
-static s32 cur_obj_set_anim_if_at_end(s32 animIndex) {
+static Bool32 cur_obj_set_anim_if_at_end(s32 animIndex) {
     if (cur_obj_check_if_at_animation_end()) {
         cur_obj_init_animation_with_sound(animIndex);
         return TRUE;
@@ -281,9 +281,9 @@ static s32 cur_obj_set_anim_if_at_end(s32 animIndex) {
     return FALSE;
 }
 
-static s32 cur_obj_play_sound_at_anim_range(s8 startFrame1, s8 startFrame2, u32 sound) {
+static Bool32 cur_obj_play_sound_at_anim_range(s8 startFrame1, s8 startFrame2, u32 sound) {
     s32 rangeLength;
-    if ((rangeLength = o->header.gfx.animInfo.animAccel / 0x10000) <= 0) rangeLength = 1;
+    if ((rangeLength = (o->header.gfx.animInfo.animAccel / 0x10000)) <= 0) rangeLength = 1;
     if (cur_obj_check_anim_frame_in_range(startFrame1, rangeLength)
      || cur_obj_check_anim_frame_in_range(startFrame2, rangeLength)) {
         cur_obj_play_sound_2(sound);
@@ -300,7 +300,7 @@ static Angle obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
 }
 
 //! move to math_util
-static s32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
+static Bool32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
     if (*px > target) delta = -delta;
     *px += delta;
     if ((*px - target) * delta >= 0) {
@@ -310,41 +310,41 @@ static s32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
     return FALSE;
 }
 
-static s32 obj_forward_vel_approach(f32 target, f32 delta) {
+static Bool32 obj_forward_vel_approach(f32 target, f32 delta) {
     return approach_f32_ptr(&o->oForwardVel, target, delta);
 }
 
-static s32 obj_y_vel_approach(f32 target, f32 delta) {
+static Bool32 obj_y_vel_approach(f32 target, f32 delta) {
     return approach_f32_ptr(&o->oVelY, target, delta);
 }
 
-static s32 obj_move_pitch_approach(Angle target, Angle delta) {
+static Bool32 obj_move_pitch_approach(Angle target, Angle delta) {
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, target, delta);
     return ((Angle) o->oMoveAnglePitch == target);
 }
 
-static s32 obj_face_pitch_approach(Angle targetPitch, Angle deltaPitch) {
+static Bool32 obj_face_pitch_approach(Angle targetPitch, Angle deltaPitch) {
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, targetPitch, deltaPitch);
     return ((Angle) o->oFaceAnglePitch == targetPitch);
 }
 
-static s32 obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw) {
+static Bool32 obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw) {
     o->oFaceAngleYaw = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, deltaYaw);
     return ((Angle) o->oFaceAngleYaw == targetYaw);
 }
 
-static s32 obj_face_roll_approach(Angle targetRoll, Angle deltaRoll) {
+static Bool32 obj_face_roll_approach(Angle targetRoll, Angle deltaRoll) {
     o->oFaceAngleRoll = approach_s16_symmetric(o->oFaceAngleRoll, targetRoll, deltaRoll);
     return ((Angle) o->oFaceAngleRoll == targetRoll);
 }
 
-static s32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, Angle accel, Angle minSpeed, Angle maxSpeed) {
+static Bool32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, Angle accel, Angle minSpeed, Angle maxSpeed) {
     Angle currentAngle = (Angle)(*angle);
     *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
     Angle currentSpeed = absi(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
     *angle = approach_s16_symmetric(*angle, targetAngle, currentSpeed);
-    return (Angle)(*angle) == targetAngle;
+    return ((Angle)(*angle) == targetAngle);
 }
 
 static void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rollSpeed) {
@@ -391,7 +391,7 @@ static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale)
 }
 
 //! move to math_util
-static s32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
+static Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
     s32 startValue = *value;
     *value += (s32) *vel;
     if ((*value == target) || (((*value - target) * (startValue - target) < 0) && (*vel > -velCloseToZero) && (*vel < velCloseToZero))) {
@@ -415,7 +415,7 @@ static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleL
     o->oAnimState = !(*blinkTimer > blinkLength);
 }
 
-static s32 obj_resolve_object_collisions(s32 *targetYaw) {
+static Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! Angle type?
     struct Object *otherObject;
     f32 dx, dz;
     Angle angle;
@@ -473,7 +473,7 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     return FALSE;
 }
 
-static s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {
+static Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
@@ -537,7 +537,7 @@ static void obj_set_squished_action(void) {
     o->oAction = OBJ_ACT_SQUISHED;
 }
 
-static s32 obj_die_if_above_lava_and_health_non_positive(void) {
+static Bool32 obj_die_if_above_lava_and_health_non_positive(void) {
     if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND) {
         if (o->oGravity + o->oBuoyancy > 0.0f
             || find_water_level(o->oPosX, o->oPosZ) - o->oPosY < 150.0f) return FALSE;
@@ -555,7 +555,7 @@ static s32 obj_die_if_above_lava_and_health_non_positive(void) {
     return TRUE;
 }
 
-static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioAction, u8 *attackHandlers) {
+static s32 obj_handle_attacks(struct ObjectHitbox *hitbox, ObjAction attackedMarioAction, u8 *attackHandlers) {
     s32 attackType;
     obj_set_hitbox(o, hitbox);
     //! Die immediately if above lava
@@ -611,7 +611,7 @@ static void obj_act_squished(f32 baseScale) {
     cur_obj_move_standard(-78);
 }
 
-static s32 obj_update_standard_actions(f32 scale) {
+static Bool32 obj_update_standard_actions(f32 scale) {
     if (o->oAction < 100) {
         return TRUE;
     } else {
@@ -629,7 +629,7 @@ static s32 obj_update_standard_actions(f32 scale) {
     }
 }
 
-static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioAction) {
+static s32 obj_check_attacks(struct ObjectHitbox *hitbox, ObjAction attackedMarioAction) {
     s32 attackType;
     obj_set_hitbox(o, hitbox);
     //! Dies immediately if above lava
@@ -652,7 +652,7 @@ static s32 obj_check_attacks(struct ObjectHitbox *hitbox, s32 attackedMarioActio
     return 0;
 }
 
-static s32 obj_move_for_one_second(s32 endAction) {
+static Bool32 obj_move_for_one_second(ObjAction endAction) {
     cur_obj_update_floor_and_walls();
     cur_obj_extend_animation_if_at_end();
     if (o->oTimer > 30) {

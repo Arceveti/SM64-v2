@@ -155,9 +155,9 @@ Bool16     gFindFloorExcludeDynamic;
 Bool16     gIncludeSteepFloorsInWallCollisionCheck;
 #endif
 Collision *gEnvironmentRegions;
-s32        gEnvironmentLevels[20];  //! Collision?
+Collision  gEnvironmentLevels[20];
 RoomData   gDoorAdjacentRooms[60][2];
-s16        gMarioCurrentRoom;       //! RoomData?
+RoomData   gMarioCurrentRoom;
 s16        gDoorRenderingTimer;
 Bool16     gTHIWaterDrained;
 s16        gTTCSpeedSetting;

@@ -2,15 +2,15 @@
 
 // called when WDW is loaded.
 void bhv_init_changing_water_level_loop(void) {
-    if (gCurrentObject->oAction == 0) {
-        if (gEnvironmentRegions != NULL) gCurrentObject->oAction++;
+    if (gCurrentObject->oAction == 0) { //! action names
+        if (gEnvironmentRegions != NULL) gCurrentObject->oAction = 1;
     } else if (gCurrentObject->oTimer < 10) {
         *gEnvironmentLevels = gEnvironmentRegions[6];
     } else {
 #ifdef WDW_DISABLE_AMBIENT_WAVES
         gEnvironmentRegions[6] = *gEnvironmentLevels;
 #else
-        gEnvironmentRegions[6] = *gEnvironmentLevels + sins(o->oWaterLevelTriggerAmbientWaves) * 20.0f;
+        gEnvironmentRegions[6] = (*gEnvironmentLevels + (sins(o->oWaterLevelTriggerAmbientWaves) * 20.0f));
         gCurrentObject->oWaterLevelTriggerAmbientWaves += 0x200;
 #endif
     }
@@ -32,7 +32,7 @@ void bhv_water_level_diamond_loop(void) {
                 break;
             case WATER_LEVEL_DIAMOND_ACT_CHANGE_WATER_LEVEL:
                 o->oAngleVelYaw = 0x0;
-                *gEnvironmentLevels = (s32) approach_f32_symmetric((f32) *gEnvironmentLevels, (f32) o->oWaterLevelTriggerTargetWaterLevel, 10.0f);
+                *gEnvironmentLevels = approach_f32_symmetric((f32) *gEnvironmentLevels, (f32) o->oWaterLevelTriggerTargetWaterLevel, 10.0f);
                 if (*gEnvironmentLevels == o->oWaterLevelTriggerTargetWaterLevel) {
                     if ((Angle) o->oFaceAngleYaw == 0x0) {
                         o->oAction = WATER_LEVEL_DIAMOND_ACT_IDLE_SPINNING;

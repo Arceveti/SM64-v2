@@ -42,7 +42,7 @@ void bhv_animates_on_floor_switch_press_loop(void) {
             o->oFloorSwitchPressAnimationTickTimer = 0;
         }
     } else if (o->parentObj->oAction == PURPLE_SWITCH_ACT_TICKING) {
-        o->oFloorSwitchPressAnimationDoResetTime ^= TRUE;
+        o->oFloorSwitchPressAnimationDoResetTime     ^= TRUE;
         o->oFloorSwitchPressAnimationSwitchNotTicking = TRUE;
     }
     if (o->oFloorSwitchPressAnimationTickTimer != 0) {

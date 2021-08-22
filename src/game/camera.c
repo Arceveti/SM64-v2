@@ -428,23 +428,23 @@ struct PlayerCameraState *sLuigiCamState = &gPlayerCameraState[1];
 Vec3f sFixedModeBasePosition = { 646.0f, 143.0f, -1513.0f };
 f32   sCameraSpeeds[]        = { 0.5f, 1.0f, 1.5f, 2.0f, 3.5f };
 
-s32 update_radial_camera(           struct Camera *c, Vec3f, Vec3f);
-s32 update_outward_radial_camera(   struct Camera *c, Vec3f, Vec3f);
-s32 update_behind_mario_camera(     struct Camera *c, Vec3f, Vec3f);
-s32 update_mario_camera(            struct Camera *c, Vec3f, Vec3f);
-s32 unused_update_mode_5_camera(    struct Camera *c, Vec3f, Vec3f);
-s32 update_c_up(                    struct Camera *c, Vec3f, Vec3f);
-s32 nop_update_water_camera(        struct Camera *c, Vec3f, Vec3f);
-s32 update_slide_or_0f_camera(      struct Camera *c, Vec3f, Vec3f);
-s32 update_in_cannon(               struct Camera *c, Vec3f, Vec3f);
-s32 update_boss_fight_camera(       struct Camera *c, Vec3f, Vec3f);
-s32 update_parallel_tracking_camera(struct Camera *c, Vec3f, Vec3f);
-s32 update_fixed_camera(            struct Camera *c, Vec3f, Vec3f);
-s32 update_8_directions_camera(     struct Camera *c, Vec3f, Vec3f);
-s32 update_slide_or_0f_camera(      struct Camera *c, Vec3f, Vec3f);
-s32 update_spiral_stairs_camera(    struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_radial_camera(           struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_outward_radial_camera(   struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_behind_mario_camera(     struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_mario_camera(            struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle unused_update_mode_5_camera(    struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_c_up(                    struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle nop_update_water_camera(        struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_slide_or_0f_camera(      struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_in_cannon(               struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_boss_fight_camera(       struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_parallel_tracking_camera(struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_fixed_camera(            struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_8_directions_camera(     struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_slide_or_0f_camera(      struct Camera *c, Vec3f, Vec3f);
+CameraTransitionAngle update_spiral_stairs_camera(    struct Camera *c, Vec3f, Vec3f);
 
-typedef s32 (*CameraTransition)(struct Camera *c, Vec3f, Vec3f);
+typedef CameraTransitionAngle (*CameraTransition)(struct Camera *c, Vec3f, Vec3f);
 CameraTransition sModeTransitions[] = {
     NULL,
     update_radial_camera,
@@ -718,7 +718,7 @@ Angle find_in_bounds_yaw_wdw_bob_thi(UNUSED Vec3f pos, UNUSED Vec3f origin, Angl
 /**
  * Rotates the camera around the area's center point.
  */
-s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 cenDistX = (sMarioCamState->pos[0] - c->areaCenX);
     f32 cenDistZ = (sMarioCamState->pos[2] - c->areaCenZ);
     Angle camYaw = (atan2s(cenDistZ, cenDistX) + sModeOffsetYaw);
@@ -736,7 +736,7 @@ s32 update_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 /**
  * Update the camera during 8 directional mode
  */
-s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     Angle camYaw = s8DirModeBaseYaw + s8DirModeYawOffset;
     Angle pitch  = look_down_slopes(camYaw);
     f32 posY, focusY;
@@ -992,7 +992,7 @@ void mode_8_directions_camera(struct Camera *c) {
  * Updates the camera in outward radial mode.
  * sModeOffsetYaw is calculated in radial_camera_move, which calls offset_yaw_outward_radial
  */
-s32 update_outward_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_outward_radial_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 xDistFocToMario = (sMarioCamState->pos[0] - c->areaCenX);
     f32 zDistFocToMario = (sMarioCamState->pos[2] - c->areaCenZ);
     Angle camYaw        = (atan2s(zDistFocToMario, xDistFocToMario) + sModeOffsetYaw + DEGREES(180));
@@ -1036,7 +1036,7 @@ void mode_outward_radial_camera(struct Camera *c) {
  * Although, annoyingly, it's not truly parallel, the function returns the yaw from the camera to Mario,
  * so Mario will run slightly towards the camera.
  */
-s32 update_parallel_tracking_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_parallel_tracking_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     Vec3f path[2];
     Vec3f parMidPoint;
     Vec3f marioOffset, camOffset;
@@ -1167,7 +1167,7 @@ s32 update_parallel_tracking_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 /**
  * Updates the camera during fixed mode.
  */
-s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
+CameraTransitionAngle update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
     f32 focusFloorOff;
     f32 goalHeight, ceilHeight, heightOffset;
     f32 distCamToFocus;
@@ -1221,7 +1221,7 @@ s32 update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED Vec3f pos) {
 /**
  * Updates the camera during a boss fight
  */
-s32 update_boss_fight_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     struct Object *o;
     f32 focusDistance;
     // Floor normal values & originOffset
@@ -1320,7 +1320,7 @@ struct ParallelTrackingPoint sBBHLibraryParTrackPath[] = {
     { 0, {     0.0f,    0.0f,     0.0f },  0.0f, 0.0f },
 };
 
-s32 unused_update_mode_5_camera(UNUSED struct Camera *c, UNUSED Vec3f focus, UNUSED Vec3f pos) {
+CameraTransitionAngle unused_update_mode_5_camera(UNUSED struct Camera *c, UNUSED Vec3f focus, UNUSED Vec3f pos) {
    return 0;
 }
 
@@ -1355,7 +1355,7 @@ void mode_fixed_camera(struct Camera *c) {
  *
  * The C-Buttons rotate the camera 90 degrees left/right and 67.5 degrees up/down.
  */
-s32 update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_behind_mario_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     f32 dist;
     Angle absPitch;
     Angle pitch, yaw;
@@ -1542,7 +1542,7 @@ void mode_behind_mario_camera(struct Camera *c) {
     c->nextYaw = mode_behind_mario(c);
 }
 
-s32 nop_update_water_camera(UNUSED struct Camera *c, UNUSED Vec3f focus, UNUSED Vec3f pos) {
+CameraTransitionAngle nop_update_water_camera(UNUSED struct Camera *c, UNUSED Vec3f focus, UNUSED Vec3f pos) {
    return 0;
 }
 
@@ -1556,7 +1556,7 @@ void mode_water_surface_camera(struct Camera *c) {
 /**
  * Used in sModeTransitions for CLOSE and FREE_ROAM mode
  */
-s32 update_mario_camera(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_mario_camera(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
     Angle yaw = sMarioCamState->faceAngle[1] + sModeOffsetYaw + DEGREES(180);
     focus_on_mario(focus, pos, 125.0f, 125.0f, gCameraZoomDist, 0x05B0, yaw);
     return sMarioCamState->faceAngle[1];
@@ -1803,8 +1803,7 @@ void mode_mario_camera(struct Camera *c) {
 /**
  * Rotates the camera around the spiral staircase.
  */
-//! Angle32
-s32 update_spiral_stairs_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_spiral_stairs_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
     /// The focus (Mario)'s yaw around the stairs,
     /// The camera's yaw around the stairs.
     Angle focYaw, posYaw;
@@ -1856,7 +1855,7 @@ void mode_spiral_stairs_camera(struct Camera *c) {
     c->nextYaw = update_spiral_stairs_camera(c, c->focus, c->pos);
 }
 
-s32 update_slide_or_0f_camera(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_slide_or_0f_camera(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
     Angle yaw = sMarioCamState->faceAngle[1] + sModeOffsetYaw + DEGREES(180);
     focus_on_mario(focus, pos, 125.0f, 125.0f, 800.0f, 5461, yaw);
     return sMarioCamState->faceAngle[1];
@@ -1977,7 +1976,7 @@ s32 exit_c_up(struct Camera *c) {
 /**
  * The mode used when C-Up is pressed.
  */
-s32 update_c_up(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_c_up(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
     Angle pitch = sCUpCameraPitch;
     Angle yaw   = (sMarioCamState->faceAngle[1] + sModeOffsetYaw + DEGREES(180));
     focus_on_mario(focus, pos, 125.0f, 125.0f, 250.0f, pitch, yaw);
@@ -2071,7 +2070,7 @@ Bool32 mode_c_up_camera(struct Camera *c) {
 /**
  * Used when Mario is in a cannon.
  */
-s32 update_in_cannon(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
+CameraTransitionAngle update_in_cannon(UNUSED struct Camera *c, Vec3f focus, Vec3f pos) {
     focus_on_mario(pos, focus, (125.0f + sCannonYOffset), 125.0f, 800.0f, sMarioCamState->faceAngle[0], sMarioCamState->faceAngle[1]);
     return sMarioCamState->faceAngle[1];
 }

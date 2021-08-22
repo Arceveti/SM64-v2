@@ -25,9 +25,9 @@ static s32 D_801A8238[5] = {
 };
 
 // fn declarations
-void move_particle(  struct ObjParticle *);
-int  func_80182778(  struct ObjParticle *);
-void func_80182A08(  struct ObjParticle *, struct GdVec3f *b);
+void   move_particle(  struct ObjParticle *);
+Bool32 func_80182778(  struct ObjParticle *);
+void   func_80182A08(  struct ObjParticle *, struct GdVec3f *b);
 
 /* 230CC0 -> 230DCC */
 struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z) {
@@ -45,7 +45,7 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z)
 }
 
 /* 230F48 -> 2311D8 */
-int func_80182778(struct ObjParticle *ptc) {
+Bool32 func_80182778(struct ObjParticle *ptc) {
     s32 sp4 = 0;
     if (ptc->unk7C->animSeqNum == 2 && ptc->unk74 == 1) {
         while (D_801A81D4[sp4] != 0) {

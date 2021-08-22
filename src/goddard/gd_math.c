@@ -274,7 +274,7 @@ f32 gd_vec3f_magnitude(struct GdVec3f *vec) {
 /**
  * Normalizes a vec3f to have a length of 1.
  */
-s32 gd_normalize_vec3f(struct GdVec3f *vec) {
+Bool32 gd_normalize_vec3f(struct GdVec3f *vec) {
     f32 mag;
     if ((mag = (sqr(vec->x) + sqr(vec->y) + sqr(vec->z))) == 0.0f) return FALSE;
 #ifdef FAST_INVSQRT

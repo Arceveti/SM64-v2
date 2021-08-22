@@ -348,7 +348,7 @@ Gfx *geo_move_mario_part_from_parent(s32 callContext, UNUSED struct GraphNode *n
 Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
-    s32 action = bodyState->action;
+    MarioAction action = bodyState->action;
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
         if ((action != ACT_BUTT_SLIDE)
@@ -368,7 +368,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
 Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeGenerated *asGenerated = (struct GraphNodeGenerated *) node;
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
-    s32 action                             = bodyState->action;
+    MarioAction action                     = bodyState->action;
     if (callContext == GEO_CONTEXT_RENDER) {
         struct GraphNodeRotation *rotNode = (struct GraphNodeRotation *) node->next;
         struct Camera            *camera  = gCurGraphNodeCamera->config.camera;

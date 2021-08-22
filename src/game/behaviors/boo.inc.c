@@ -166,7 +166,7 @@ static void boo_reset_after_hit(void) {
 }
 
 // called iff boo/big boo/cage boo is in action 2, which only occurs if it was non-attack-ly interacted with/bounced on?
-static s32 boo_update_after_bounced_on(f32 a0) {
+static Bool32 boo_update_after_bounced_on(f32 a0) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(FALSE);
     if (o->oTimer < 32) {
@@ -181,7 +181,7 @@ static s32 boo_update_after_bounced_on(f32 a0) {
 }
 
 // called iff big boo nonlethally hit
-static s32 big_boo_update_during_nonlethal_hit(f32 a0) {
+static Bool32 big_boo_update_during_nonlethal_hit(f32 a0) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(TRUE);
     if (o->oTimer < 32) {
@@ -199,7 +199,7 @@ static s32 big_boo_update_during_nonlethal_hit(f32 a0) {
 
 // called every frame once Mario lethally hits the boo until the boo is deleted,
 // returns whether death is complete
-static s32 boo_update_during_death(void) {
+static Bool32 boo_update_during_death(void) {
     struct Object *parentBigBoo;
     if (o->oTimer == 0) {
         o->oForwardVel     = 40.0f;

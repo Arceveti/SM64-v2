@@ -511,14 +511,14 @@ void chk_shapegen(struct ObjShape *shape) {
     if (shapeVtx != NULL && shapeFaces != NULL) {
         if (shapeVtx->linkType & 0x1) {
             // These ListNodes point to special, compressed data structures
-            vtxdata = (struct GdVtxData *) shapeVtx->firstMember->obj;
+            vtxdata  = (struct GdVtxData  *) shapeVtx->firstMember->obj;
             facedata = (struct GdFaceData *) shapeFaces->firstMember->obj;
             if (facedata->type != 1) gd_exit(); // unsupported poly type
             if (vtxdata->type  != 1) gd_exit(); // unsupported vertex type
             if (vtxdata->count >= VTX_BUF_SIZE) gd_exit(); // too many vertices
             vtxbuf     = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *));
             oldObjHead = gGdObjectList;
-            for (i = 0; i < vtxdata->count; i++) {
+            for ((i = 0); (i < vtxdata->count); (i++)) {
                 vtx = gd_make_vertex(vtxdata->data[i][0], vtxdata->data[i][1], vtxdata->data[i][2]);
                 vtx->normal.x = vtx->normal.y = vtx->normal.z = 0.0f;
                 vtxbuf[i] = vtx;
@@ -542,14 +542,14 @@ void chk_shapegen(struct ObjShape *shape) {
                 vtxbuf[facedata->data[i][3]]->normal.z += face->normal.z;
             }
             if (shape->flag & 0x10) {
-                for (i = 0; i < vtxdata->count; i++) {
+                for ((i = 0); (i < vtxdata->count); (i++)) {
                     vtxbuf[i]->normal.x = vtxbuf[i]->pos.x;
                     vtxbuf[i]->normal.y = vtxbuf[i]->pos.y;
                     vtxbuf[i]->normal.z = vtxbuf[i]->pos.z;
                     gd_normalize_vec3f(&vtxbuf[i]->normal);
                 }
             } else {
-                for (i = 0; i < vtxdata->count; i++) gd_normalize_vec3f(&vtxbuf[i]->normal);
+                for ((i = 0); (i < vtxdata->count); (i++)) gd_normalize_vec3f(&vtxbuf[i]->normal);
             }
             gd_free(vtxbuf);
             madeFaces = make_group_of_type(OBJ_TYPE_FACES, oldObjHead);

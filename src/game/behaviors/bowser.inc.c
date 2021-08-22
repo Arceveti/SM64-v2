@@ -136,7 +136,7 @@ void bhv_bowser_body_anchor_loop(void) {
 /**
  * Bowser's shockwave attack, spawns only in BITS
  */
-s32 bowser_spawn_shockwave(void) {
+Bool32 bowser_spawn_shockwave(void) {
     struct Object *wave;
     if (o->oBehParams2ndByte == BOWSER_BP_BITS) {
         wave        = spawn_object(o, MODEL_BOWSER_WAVE, bhvBowserShockWave);
@@ -242,7 +242,7 @@ void bowser_act_intro_walk(void) {
 /**
  * List of actions to debug Bowser
  */
-s8 sBowserDebugActions[] = {
+ObjAction8 sBowserDebugActions[] = {
     BOWSER_ACT_CHARGE_MARIO,
     BOWSER_ACT_SPIT_FIRE_INTO_SKY,
     BOWSER_ACT_SPIT_FIRE_ONTO_FLOOR,
@@ -586,7 +586,7 @@ void bowser_act_hit_mine(void) {
  * Makes Bowser do his jump start animation
  * Returns TRUE on the middle of the jump
  */
-s32 bowser_set_anim_jump(void) {
+Bool32 bowser_set_anim_jump(void) {
     cur_obj_init_animation_with_sound(BOWSER_ANIM_JUMP_START);
     return cur_obj_check_anim_frame(11);
 }
@@ -595,7 +595,7 @@ s32 bowser_set_anim_jump(void) {
  * Reset speed, play jump stop animation and do attacks in BITDW
  * Returns TRUE when Bowser lands
  */
-s32 bowser_land(void) {
+Bool32 bowser_land(void) {
     if (o->oMoveFlags & OBJ_MOVE_LANDED) {
         o->oForwardVel = 0.0f;
         o->oVelY       = 0.0f;
@@ -805,7 +805,7 @@ void bowser_act_charge_mario(void) {
 /**
  * Checks if Bowser hits a mine from a distance, returns TRUE if so
  */
-s32 bowser_check_hit_mine(void) {
+Bool32 bowser_check_hit_mine(void) {
     f32 dist;
     struct Object *mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
     if ((mine != NULL) && (dist < 800.0f)) {
@@ -1056,7 +1056,7 @@ s16 sBowserDefeatedDialogText[3] = { DIALOG_119, DIALOG_120, DIALOG_121 };
  * Bowser's dead sequence that plays in BITDW/BITFS
  * Returns TRUE once done
  */
-s32 bowser_dead_default_stage_ending(void) {
+Bool32 bowser_dead_default_stage_ending(void) {
     if (o->oBowserTimer < 2) {
         // Lower music volume
         if (o->oBowserTimer == 0) {
@@ -1088,7 +1088,7 @@ s32 bowser_dead_default_stage_ending(void) {
  * Bowser's dead sequence that plays in BITS
  * Returns TRUE once done
  */
-s32 bowser_dead_final_stage_ending(void) {
+Bool32 bowser_dead_final_stage_ending(void) {
     DialogID dialogID;
     if (o->oBowserTimer < 2) {
         // Set dialog whenever you have 120 stars or not
@@ -1241,7 +1241,7 @@ void bowser_act_tilt_lava_platform(void) {
 /**
  * Check if Bowser is offstage from a large distance or landed on a lethal floor
  */
-s32 bowser_check_fallen_off_stage(void) {
+Bool32 bowser_check_fallen_off_stage(void) {
     if ((o->oAction != BOWSER_ACT_JUMP_ONTO_STAGE) && (o->oAction != BOWSER_ACT_TILT_LAVA_PLATFORM)) {
         if (o->oPosY < (o->oHomeY - 1000.0f)) return TRUE;
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {

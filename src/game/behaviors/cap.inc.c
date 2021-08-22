@@ -12,7 +12,7 @@ static struct ObjectHitbox sCapHitbox = {
     /* hurtboxHeight:     */ 90,
 };
 
-s32 cap_set_hitbox(void) {
+Bool32 cap_set_hitbox(void) {
     obj_set_hitbox(o, &sCapHitbox);
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->activeFlags     = ACTIVE_FLAG_DEACTIVATED;

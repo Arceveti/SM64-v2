@@ -692,7 +692,7 @@ void puppycam_terrain_angle(void) {
 // };
 
 // Checks the bounding box of a puppycam volume. If it's inside, then set the pointer to the current index.
-static s32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 index) {
+static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 index) {
     s32 rel[3];
     s32 pos[2];
     f32 distCheck;

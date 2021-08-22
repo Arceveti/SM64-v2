@@ -186,7 +186,7 @@ struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f3
 }
 
 /* 23E298 -> 23E328; orig name: func_8018FAC8 */
-s32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* always NULL */, f32 weight) {
+Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* always NULL */, f32 weight) {
     struct ObjWeight *w;
     if (j->weightGrp == NULL) j->weightGrp = make_group(0);
     w = make_weight(id, vtx, weight);

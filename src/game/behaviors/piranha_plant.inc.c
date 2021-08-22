@@ -33,7 +33,7 @@ void piranha_plant_act_idle(void) {
  *
  * @return 1 if the player interacted with the Piranha Plant, 0 otherwise
  */
-s32 piranha_plant_check_interactions(void) {
+Bool32 piranha_plant_check_interactions(void) {
     s32 i;
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         func_80321080(50);

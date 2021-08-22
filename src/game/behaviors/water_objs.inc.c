@@ -67,16 +67,16 @@ void bhv_small_water_wave_loop(void) {
 }
 
 void scale_bubble_sin(void) {
-    o->header.gfx.scale[0] = sins(o->oWaterObjScaleXAngle) * 0.5f + 2.0f;
+    o->header.gfx.scale[0]   = ((sins(o->oWaterObjScaleXAngle) * 0.5f) + 2.0f);
     o->oWaterObjScaleXAngle += o->oWaterObjScaleXAngleVel;
-    o->header.gfx.scale[1] = sins(o->oWaterObjScaleYAngle) * 0.5f + 2.0f;
+    o->header.gfx.scale[1]   = ((sins(o->oWaterObjScaleYAngle) * 0.5f) + 2.0f);
     o->oWaterObjScaleYAngle += o->oWaterObjScaleYAngleVel;
 }
 
 void bhv_particle_init(void) {
     obj_scale_xyz(o, 2.0f, 2.0f, 1.0f);
-    o->oWaterObjScaleXAngleVel = 0x800 + (s32)(random_float() * 2048.0f);
-    o->oWaterObjScaleYAngleVel = 0x800 + (s32)(random_float() * 2048.0f);
+    o->oWaterObjScaleXAngleVel = (0x800 + (s32)(random_float() * 2048.0f));
+    o->oWaterObjScaleYAngleVel = (0x800 + (s32)(random_float() * 2048.0f));
     obj_translate_xyz_random(o, 100.0f);
 }
 
@@ -98,10 +98,10 @@ void bhv_small_bubbles_loop(void) {
 }
 
 void bhv_fish_group_loop(void) {
-    if ((gMarioCurrentRoom == 15 || gMarioCurrentRoom == 7) && gGlobalTimer & 1) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleBubbles);
+    if (((gMarioCurrentRoom == 15) || (gMarioCurrentRoom == 7)) && (gGlobalTimer & 0x1)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleBubbles);
 }
 
 void bhv_water_waves_init(void) {
     s32 i;
-    for (i = 0; i < 3; i++) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticle);
+    for ((i = 0); (i < 3); (i++)) spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticle);
 }

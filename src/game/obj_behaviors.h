@@ -8,7 +8,7 @@
 #include "types.h"
 
 void set_yoshi_as_not_dead(void);
-s32  coin_step(s16 *collisionFlagsPtr);
+Bool32 coin_step(ColFlags *collisionFlagsPtr);
 void moving_coin_flicker(void);
 void coin_collected(void);
 void bhv_moving_yellow_coin_init(void);

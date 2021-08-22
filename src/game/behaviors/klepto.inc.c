@@ -25,7 +25,7 @@ static void klepto_target_mario(void) {
     o->oKleptoDiveTimer        = -60;
 }
 
-static s32 klepto_set_and_check_if_anim_at_end(void) {
+static Bool32 klepto_set_and_check_if_anim_at_end(void) {
     if (o->oSoundStateID == KLEPTO_ANIM_DIVE_FLAP_6) {
         cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_FLAP_5);
     } else if (o->oSoundStateID == KLEPTO_ANIM_DIVE_FLAP_5) {

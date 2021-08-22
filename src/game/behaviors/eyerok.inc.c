@@ -124,7 +124,7 @@ void bhv_eyerok_boss_loop(void) {
     }
 }
 
-static s32 eyerok_hand_check_attacked(void) {
+static Bool32 eyerok_hand_check_attacked(void) {
     if (o->oEyerokReceivedAttack != 0 && abs_angle_diff(o->oAngleToMario, o->oFaceAngleYaw) < 0x3000) {
         cur_obj_play_sound_2(SOUND_OBJ2_EYEROK_SOUND_SHORT);
 

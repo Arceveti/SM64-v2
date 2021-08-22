@@ -36,7 +36,7 @@ struct PlatformDisplacementInfo sObjectDisplacementInfo;
 static s8 sBbhStairJiggleOffsets[] = { -8, 8, -4, 4 };
 static s8 sLevelsWithRooms[]       = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
-static s32 clear_move_flag(u32 *, s32);
+static Bool32 clear_move_flag(u32 *, s32);
 
 #define o gCurrentObject
 
@@ -695,7 +695,7 @@ static void cur_obj_reset_timer_and_subaction(void) {
     o->oSubAction = 0;
 }
 
-void cur_obj_change_action(s32 action) {
+void cur_obj_change_action(ObjAction action) {
     o->oAction     = action;
     o->oPrevAction = action;
     cur_obj_reset_timer_and_subaction();
@@ -759,7 +759,7 @@ void cur_obj_set_y_vel_and_animation(f32 yVel, s32 animIndex) {
     cur_obj_init_animation_with_sound(animIndex);
 }
 
-void cur_obj_unrender_set_action_and_anim(s32 animIndex, s32 action) {
+void cur_obj_unrender_set_action_and_anim(s32 animIndex, ObjAction action) {
     cur_obj_become_intangible();
     cur_obj_disable_rendering();
     // only set animation if non-negative value
@@ -782,13 +782,13 @@ static void cur_obj_move_after_thrown_or_dropped(f32 forwardVel, f32 velY) {
     if (o->oForwardVel != 0.0f) cur_obj_move_y(/*gravity*/ -4.0f, /*bounciness*/ -0.1f, /*buoyancy*/ 2.0f);
 }
 
-void cur_obj_get_thrown_or_placed(f32 forwardVel, f32 velY, s32 thrownAction) {
+void cur_obj_get_thrown_or_placed(f32 forwardVel, f32 velY, ObjAction thrownAction) {
     // Interestingly, when bowser is thrown, he is offset slightly to Mario's right
     if (o->behavior == segmented_to_virtual(bhvBowser)) cur_obj_set_pos_relative_to_parent(-41.684f, 85.859f, 321.577f);
     cur_obj_become_tangible();
     cur_obj_enable_rendering();
     o->oHeldState = HELD_FREE;
-    if ((o->oInteractionSubtype & INT_SUBTYPE_HOLDABLE_NPC) || forwardVel == 0.0f) {
+    if ((o->oInteractionSubtype & INT_SUBTYPE_HOLDABLE_NPC) || (forwardVel == 0.0f)) {
         cur_obj_move_after_thrown_or_dropped(0.0f, 0.0f);
     } else {
         o->oAction = thrownAction;
@@ -920,7 +920,7 @@ void cur_obj_apply_drag_xz(f32 dragStrength) {
     apply_drag_to_value(&o->oVelZ, dragStrength);
 }
 
-static s32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepSlopes) {
+static Bool32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepSlopes) {
     struct Surface *intendedFloor;
     f32 intendedX           = (o->oPosX + o->oVelX);
     f32 intendedZ           = (o->oPosZ + o->oVelZ);
@@ -1056,7 +1056,7 @@ void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {
     }
 }
 
-static s32 clear_move_flag(u32 *bitSet, s32 flag) {
+static Bool32 clear_move_flag(u32 *bitSet, s32 flag) {
     if (*bitSet & flag) {
         *bitSet &= flag ^ 0xFFFFFFFF;
         return TRUE;
@@ -1130,7 +1130,7 @@ f32 cur_obj_lateral_dist_to_home(void) {
     return sqrtf(sqr(dx) + sqr(dz));
 }
 
-s32 cur_obj_outside_home_square(f32 halfLength) {
+Bool32 cur_obj_outside_home_square(f32 halfLength) {
     if (o->oHomeX - halfLength > o->oPosX) return TRUE;
     if (o->oHomeX + halfLength < o->oPosX) return TRUE;
     if (o->oHomeZ - halfLength > o->oPosZ) return TRUE;
@@ -1138,7 +1138,7 @@ s32 cur_obj_outside_home_square(f32 halfLength) {
     return FALSE;
 }
 
-s32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
+Bool32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
     if (o->oHomeX + minX > o->oPosX) return TRUE;
     if (o->oHomeX + maxX < o->oPosX) return TRUE;
     if (o->oHomeZ + minZ > o->oPosZ) return TRUE;
@@ -1363,7 +1363,7 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
     }
 }
 
-static s32 cur_obj_within_bounds(f32 bounds) {
+static Bool32 cur_obj_within_bounds(f32 bounds) {
     if ((o->oPosX < -bounds) || (bounds < o->oPosX)) return FALSE;
     if ((o->oPosY < -bounds) || (bounds < o->oPosY)) return FALSE;
     if ((o->oPosZ < -bounds) || (bounds < o->oPosZ)) return FALSE;
