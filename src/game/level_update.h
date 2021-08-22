@@ -95,7 +95,7 @@ extern s16 sDelayedWarpOp;
 extern s16 sDelayedWarpTimer;
 extern s16 sSourceWarpNodeId;
 extern s32 sDelayedWarpArg;
-extern s8 sTimerRunning;
+extern Bool8 sTimerRunning;
 
 struct HudDisplay {
     /*0x00*/ s16 lives;
@@ -111,7 +111,7 @@ struct HudDisplay {
 };
 
 extern struct HudDisplay gHudDisplay;
-extern s8 gNeverEnteredCastle;
+extern Bool8 gNeverEnteredCastle;
 
 enum HUDDisplayFlag {
     HUD_DISPLAY_FLAG_LIVES            = 0x0001,
@@ -129,7 +129,7 @@ enum HUDDisplayFlag {
     HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = 0x8000,
 
     HUD_DISPLAY_NONE                  = 0x0000,
-    HUD_DISPLAY_DEFAULT               = HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS
+    HUD_DISPLAY_DEFAULT               = (HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS)
 };
 
 
@@ -139,10 +139,10 @@ void load_level_init_text(  u32 arg);
 s16  level_trigger_warp(struct MarioState *m, s32 warpOp);
 void level_set_transition(s16 length, void (*updateFunction)(s16 *));
 
-s32  lvl_init_or_update(                  s16 initOrUpdate, UNUSED s32 levelNum);
-s32  lvl_init_from_save_file(      UNUSED s16 initOrUpdate,        s32 levelNum);
-s32  lvl_set_current_level(        UNUSED s16 initOrUpdate,        s32 levelNum);
-s32  lvl_play_the_end_screen_sound(UNUSED s16 initOrUpdate, UNUSED s32 levelNum);
-void basic_update(UNUSED s16 *arg);
+Bool32 lvl_init_or_update(                  Bool32 initOrUpdate, UNUSED s32 levelNum);
+Bool32 lvl_init_from_save_file(      UNUSED Bool32 initOrUpdate,        s32 levelNum);
+Bool32 lvl_set_current_level(        UNUSED Bool32 initOrUpdate,        s32 levelNum);
+Bool32 lvl_play_the_end_screen_sound(UNUSED Bool32 initOrUpdate, UNUSED s32 levelNum);
+void   basic_update(UNUSED s16 *arg);
 
 #endif // LEVEL_UPDATE_H

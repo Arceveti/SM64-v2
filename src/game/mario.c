@@ -1433,9 +1433,9 @@ UNUSED static void debug_update_mario_cap(u16 button, s32 flags, u16 capTimer, u
 
 #if ENABLE_RUMBLE
 void queue_rumble_particles(void) {
-    if (gMarioState->particleFlags & PARTICLE_HORIZONTAL_STAR
-     || gMarioState->particleFlags & PARTICLE_VERTICAL_STAR
-     || gMarioState->particleFlags & PARTICLE_TRIANGLE) queue_rumble_data(5, 80);
+    if ((gMarioState->particleFlags & PARTICLE_HORIZONTAL_STAR)
+     || (gMarioState->particleFlags & PARTICLE_VERTICAL_STAR)
+     || (gMarioState->particleFlags & PARTICLE_TRIANGLE)) queue_rumble_data(5, 80);
     if (gMarioState->heldObj && gMarioState->heldObj->behavior == segmented_to_virtual(bhvBobomb)) reset_rumble_timers_slip();
 }
 #endif
@@ -1540,23 +1540,17 @@ void init_mario(void) {
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], gMarioState->pos[1], gMarioState->pos[2], &gMarioState->floor);
     if (gMarioState->pos[1] < gMarioState->floorHeight) gMarioState->pos[1] = gMarioState->floorHeight;
     gMarioState->marioObj->header.gfx.pos[1]          = gMarioState->pos[1];
-    gMarioState->action = (gMarioState->pos[1] <= (gMarioState->waterLevel - 100)) ? ACT_WATER_IDLE : ACT_IDLE;
+    gMarioState->action = ((gMarioState->pos[1] <= (gMarioState->waterLevel - 100)) ? ACT_WATER_IDLE : ACT_IDLE);
     mario_reset_bodystate(    gMarioState);
     update_mario_info_for_cam(gMarioState);
     gMarioState->marioBodyState->punchState           = 0;
-    gMarioState->marioObj->oPosX                      = gMarioState->pos[0];
-    gMarioState->marioObj->oPosY                      = gMarioState->pos[1];
-    gMarioState->marioObj->oPosZ                      = gMarioState->pos[2];
-    gMarioState->marioObj->oMoveAnglePitch            = gMarioState->faceAngle[0];
-    gMarioState->marioObj->oMoveAngleYaw              = gMarioState->faceAngle[1];
-    gMarioState->marioObj->oMoveAngleRoll             = gMarioState->faceAngle[2];
+    vec3f_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
+    vec3s_to_vec3i(&gMarioState->marioObj->oMoveAngleVec, gMarioState->faceAngle);
     vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
     vec3s_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
     if (save_file_get_cap_pos(capPos) && (count_objects_with_behavior(bhvNormalCap) > 1)) {
         capObject                                     = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
-        capObject->oPosX                              = capPos[0];
-        capObject->oPosY                              = capPos[1];
-        capObject->oPosZ                              = capPos[2];
+        vec3s_to_vec3f(&capObject->oPosVec, capPos);
         capObject->oForwardVel                        = 0.0f;
         capObject->oMoveAngleYaw                      = 0x0;
     }

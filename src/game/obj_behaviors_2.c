@@ -684,13 +684,13 @@ static Bool32 obj_move_for_one_second(ObjAction endAction) {
 static void treat_far_home_as_mario(f32 threshold) {
     Vec3f d;
     vec3f_diff(d, &o->oHomeVec, &o->oPosVec);
-    f32 distance = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
+    f32 distance = vec3f_mag(d);
     if (distance > threshold) {
         o->oAngleToMario    = atan2s(d[2], d[0]);
         o->oDistanceToMario = 25000.0f;
     } else {
         vec3f_diff(d, &o->oHomeVec, &gMarioObject->oPosVec);
-        distance = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
+        distance = vec3f_mag(d);
         if (distance > threshold) o->oDistanceToMario = 20000.0f;
     }
 }

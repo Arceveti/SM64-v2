@@ -1,13 +1,13 @@
 /*======================================================================*/
-/*		NuSYS							*/
-/*		nupisraminit.c						*/
-/*									*/
-/*		Copyright (C) 1997, NINTENDO Co,Ltd.			*/
-/*									*/
+/*		NuSYS															*/
+/*		nupisraminit.c													*/
+/*																		*/
+/*		Copyright (C) 1997, NINTENDO Co,Ltd.							*/
+/*																		*/
 /*----------------------------------------------------------------------*/
-/* Ver 1.2	98/07/4		Created by Kensaku Ohki(SLANP)		*/
+/* Ver 1.2	98/07/4		Created by Kensaku Ohki(SLANP)					*/
 /*----------------------------------------------------------------------*/
-/* $Id: nupiinitsram.c,v 1.2 1998/07/11 11:22:46 ohki Exp $	*/
+/* $Id: nupiinitsram.c,v 1.2 1998/07/11 11:22:46 ohki Exp $				*/
 /*======================================================================*/
 #include <ultra64.h>
 
@@ -22,18 +22,17 @@ OSPiHandle*		nuPiSramHandle;
 static OSPiHandle	SramHandle;
 
 /*----------------------------------------------------------------------*/
-/*	nuPiSramInit  - Initialization of handle for SRAM		*/
-/*	Initialize handle for SRAM					*/
-/*	IN:	None							*/
+/*	nuPiSramInit  - Initialization of handle for SRAM					*/
+/*	Initialize handle for SRAM											*/
+/*	IN:	None															*/
 /*	RET:	If detected, return 1, otherwise 0							*/
 /*----------------------------------------------------------------------*/
-int nuPiInitSram()
-{
+int nuPiInitSram() {
     if (SramHandle.baseAddress == PHYS_TO_K1(SRAM_START_ADDR))
 	return 0;
     
     /* Fill basic information */
-    SramHandle.type = DEVICE_TYPE_SRAM;
+    SramHandle.type        = DEVICE_TYPE_SRAM;
     SramHandle.baseAddress = PHYS_TO_K1(SRAM_START_ADDR);
     
     /* Get Domain parameters */

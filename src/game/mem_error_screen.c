@@ -27,7 +27,7 @@
 Bool8 gNotEnoughMemory = FALSE;
 u8 gDelayForErrorMessage = 0;
 Bool32 does_pool_end_lie_out_of_bounds(void *end) {
-    u32 endPhy  =  ((u32) end) & 0x1FFFFFFF;
+    u32 endPhy  = (((u32) end) & 0x1FFFFFFF);
     u32 memSize = *((u32 *   )   0x80000318);
     if (endPhy > memSize) {
         gNotEnoughMemory = TRUE;
@@ -42,7 +42,7 @@ Bool32 does_pool_end_lie_out_of_bounds(void *end) {
 uchar text_console_8mb[] = { TEXT_CONSOLE_8MB };
 // If you are using PJ64 1.6, go to: Options ► Settings ► Rom Settings Tab ► Memory Size then select 8
 // MB from the drop-down box.
-uchar text_pj64[] = { TEXT_PJ64 };
+uchar text_pj64[]   = { TEXT_PJ64 };
 // If you are using PJ64 2.X, go to: Options ► Settings ► Config: ► Memory Size, select 8 MB
 uchar text_pj64_2[] = { TEXT_PJ64_2 };
 

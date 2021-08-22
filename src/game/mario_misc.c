@@ -317,9 +317,9 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->eyeState == 0) {
             blinkFrame = (((switchCase->numCases * 32 + gAreaUpdateCounter) >> 1) & 0x1F);
-            switchCase->selectedCase = (blinkFrame < 7) ? gMarioBlinkAnimation[blinkFrame] : 0;
+            switchCase->selectedCase = ((blinkFrame < 7) ? gMarioBlinkAnimation[blinkFrame] : 0);
         } else {
-            switchCase->selectedCase = bodyState->eyeState - 1;
+            switchCase->selectedCase = (bodyState->eyeState - 1);
         }
     }
     return NULL;
@@ -355,6 +355,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
          && (action != ACT_HOLD_BUTT_SLIDE)
          && (action != ACT_WALKING)
          && (action != ACT_RIDING_SHELL_GROUND)) vec3s_copy(bodyState->torsoAngle, gVec3sZero);
+        //! vec3s_copy_offset?
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
         rotNode->rotation[2] = bodyState->torsoAngle[0];
@@ -376,6 +377,7 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
             rotNode->rotation[0] = gPlayerCameraState->headRotation[1];
             rotNode->rotation[2] = gPlayerCameraState->headRotation[0];
         } else if (action & ACT_FLAG_WATER_OR_TEXT) {
+            //! vec3s_copy_offset?
             rotNode->rotation[0] = bodyState->headAngle[1];
             rotNode->rotation[1] = bodyState->headAngle[2];
             rotNode->rotation[2] = bodyState->headAngle[0];
@@ -400,7 +402,7 @@ Gfx *geo_switch_mario_hand(s32 callContext, struct GraphNode *node, UNUSED Mat4 
             switchCase->selectedCase = ((bodyState->action & ACT_FLAG_SWIMMING_OR_FLYING) != 0);
         } else {
             if (switchCase->numCases == 0) {
-                switchCase->selectedCase = ((bodyState->handState < 5) ? bodyState->handState : MARIO_HAND_OPEN);
+                switchCase->selectedCase = ((bodyState->handState < 5) ? bodyState->handState : MARIO_HAND_OPEN );
             } else {
                 switchCase->selectedCase = ((bodyState->handState < 2) ? bodyState->handState : MARIO_HAND_FISTS);
             }
@@ -454,7 +456,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     s32 lakituX, lakituY;
     u32 lakituW, lakituH;
     const u32 lakituMaxW = 56;
-    const u32 lakituMaxH = lakituMaxW >> 1;
+    const u32 lakituMaxH = (lakituMaxW >> 1);
 #endif
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = (bodyState->modelState >> 8);
@@ -467,8 +469,8 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             // dist /=  16.0f;
             dist *= 0.0625;
             dist    = max(min(dist, min(lakituMaxW, lakituMaxH)), 0.0f);
-            lakituW = (lakituMaxW - (dist * 2.0f));//*sins(pitch);
-            lakituH = (lakituMaxH - (dist       ));//*max(coss(yaw), 0.5f);
+            lakituW = (lakituMaxW - (dist * 2.0f)); // * sins(pitch);
+            lakituH = (lakituMaxH - (dist       )); // * max(coss(yaw), 0.5f);
             lakituX = max(((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        ), 0);
             lakituY = max(((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f)), 0);
 #endif
@@ -519,7 +521,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
         }
     }
 #else
-    if (callContext == GEO_CONTEXT_RENDER) switchCase->selectedCase = bodyState->modelState >> 8;
+    if (callContext == GEO_CONTEXT_RENDER) switchCase->selectedCase = (bodyState->modelState >> 8);
 #endif
     return NULL;
 }
@@ -652,6 +654,7 @@ Gfx *geo_mirror_mario_backface_culling(s32 callContext, struct GraphNode *node, 
             gSPSetGeometryMode(  &gfx[1], G_CULL_BACK );
         }
         gSPEndDisplayList(&gfx[2]);
+        //! Mirror Mario shouldn't have a silhouette, but stuff breaks if this doesn't match the regular Mario model.
         asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_SILHOUETTE_OPAQUE << 8));
     }
     return gfx;

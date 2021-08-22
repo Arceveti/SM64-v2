@@ -1,11 +1,11 @@
 /*======================================================================*/
-/*		NuSYS							*/
-/*		nupireadsram.c						*/
-/*									*/
-/*		Copyright (C) 1997, NINTENDO Co,Ltd.			*/
-/*									*/
+/*		NuSYS															*/
+/*		nupireadsram.c													*/
+/*																		*/
+/*		Copyright (C) 1997, NINTENDO Co,Ltd.							*/
+/*																		*/
 /*----------------------------------------------------------------------*/
-/* Ver 1.2	98/07/11	Created by Kensaku Ohki(SLANP)		*/
+/* Ver 1.2	98/07/11	Created by Kensaku Ohki(SLANP)					*/
 /*----------------------------------------------------------------------*/
 /* $Id: nupireadwritesram.c,v 1.3 1999/06/09 02:33:22 ohki Exp $		*/
 /*======================================================================*/
@@ -13,19 +13,18 @@
 
 extern OSPiHandle*		nuPiSramHandle;
 /*----------------------------------------------------------------------*/
-/*	nuPiReadWriteSram  - DMA transfers data to and from SRAM.	*/
-/*	The message queue is a local variable so it can be used         */
+/*	nuPiReadWriteSram  - DMA transfers data to and from SRAM.			*/
+/*	The message queue is a local variable so it can be used      	   */
 /*     between threads.                                                 */
-/*	IN:	addr	      SRAM address. 				*/
-/*		buf_ptr	RDRAM address. 					*/
-/*		size	      Transfer size. 				*/
-/*	RET:	None							*/
+/*	IN:	addr	      SRAM address. 									*/
+/*		buf_ptr	RDRAM address. 											*/
+/*		size	      Transfer size. 									*/
+/*	RET:	None														*/
 /*----------------------------------------------------------------------*/
-int nuPiReadWriteSram(u32 addr, void* buf_ptr, u32 size, s32 flag)
-{  
+int nuPiReadWriteSram(u32 addr, void* buf_ptr, u32 size, s32 flag) {  
     OSIoMesg	dmaIoMesgBuf;
     OSMesgQueue dmaMesgQ;
-    OSMesg	dmaMesgBuf;
+    OSMesg		dmaMesgBuf;
 
     /* Create the message queue. */
     osCreateMesgQueue(&dmaMesgQ, &dmaMesgBuf, 1);
@@ -36,12 +35,12 @@ int nuPiReadWriteSram(u32 addr, void* buf_ptr, u32 size, s32 flag)
     dmaIoMesgBuf.devAddr      = (u32)addr;
     dmaIoMesgBuf.size         = size;
 
-    if(flag == OS_READ){
-	/* Make CPU cache invalid */
-	osInvalDCache((void*)buf_ptr, (s32)size);
+    if (flag == OS_READ) {
+        /* Make CPU cache invalid */
+        osInvalDCache((void*)buf_ptr, (s32)size);
     } else {
-	/* Write back */
-	osWritebackDCache((void*)buf_ptr, (s32)size);
+        /* Write back */
+        osWritebackDCache((void*)buf_ptr, (s32)size);
     }
     osEPiStartDma(nuPiSramHandle, &dmaIoMesgBuf, flag);
 

@@ -83,10 +83,8 @@ Bool8 gShowDebugText                  = FALSE;
 
 // unused
 UNUSED void handle_debug_key_sequences(void) {
-    static u16 sProfilerKeySequence[]  = { U_JPAD, U_JPAD, D_JPAD, D_JPAD,
-                                           L_JPAD, R_JPAD, L_JPAD, R_JPAD };
-    static u16 sDebugTextKeySequence[] = { D_JPAD, D_JPAD, U_JPAD, U_JPAD,
-                                           L_JPAD, R_JPAD, L_JPAD, R_JPAD };
+    static u16 sProfilerKeySequence[]  = { U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
+    static u16 sDebugTextKeySequence[] = { D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
     static s16 sProfilerKey  = 0;
     static s16 sDebugTextKey = 0;
     if (gPlayer3Controller->buttonPressed != 0) {
@@ -162,13 +160,13 @@ void receive_new_tasks(void) {
             case 1: sNextDisplaySPTask = spTask; break;
         }
     }
-    if (sCurrentAudioSPTask == NULL && sNextAudioSPTask != NULL) {
+    if ((sCurrentAudioSPTask == NULL) && (sNextAudioSPTask != NULL)) {
         sCurrentAudioSPTask = sNextAudioSPTask;
-        sNextAudioSPTask = NULL;
+        sNextAudioSPTask    = NULL;
     }
-    if (sCurrentDisplaySPTask == NULL && sNextDisplaySPTask != NULL) {
+    if ((sCurrentDisplaySPTask == NULL) && (sNextDisplaySPTask != NULL)) {
         sCurrentDisplaySPTask = sNextDisplaySPTask;
-        sNextDisplaySPTask = NULL;
+        sNextDisplaySPTask    = NULL;
     }
 }
 
@@ -412,9 +410,9 @@ void change_vi(OSViMode *mode, int width, int height){
 void thread1_idle(UNUSED void *arg) {
     osCreateViManager(OS_PRIORITY_VIMGR);
 	switch ( osTvType ) {
-        case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; break; //osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
-        case OS_TV_MPAL: VI = osViModeTable[OS_VI_MPAL_LAN1]; break; //osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
-        case OS_TV_PAL:  VI = osViModeTable[OS_VI_PAL_LAN1 ]; break; //osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
+        case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
+        case OS_TV_MPAL: VI = osViModeTable[OS_VI_MPAL_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
+        case OS_TV_PAL:  VI = osViModeTable[OS_VI_PAL_LAN1 ]; break; // osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
 	}
     change_vi(  &VI, SCREEN_WIDTH, SCREEN_HEIGHT);
     osViSetMode(&VI);
