@@ -1,7 +1,5 @@
 **TODO:**
 - Known Bugs:
-    - Seesaws freeze sometimes?
-        - Caused by mario_floor_is_slippery -> INPUT_ABOVE_SLIDE -> check_common_idle_cancels -> ACT_BEGIN_SLIDING
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:

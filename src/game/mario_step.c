@@ -200,21 +200,26 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
 }
 
 MarioStep stationary_ground_step(struct MarioState *m) {
-    u32 takeStep;
+    mario_set_forward_vel(m, 0.0f);
+#ifdef STATIONARY_GROUND_STEPS
+    mario_update_moving_sand(m);
+    mario_update_windy_ground(m);
+    return perform_ground_step(m);
+#else
     struct Object *marioObj = m->marioObj;
     MarioStep stepResult = GROUND_STEP_NONE;
-    mario_set_forward_vel(m, 0.0f);
+    Bool32 takeStep;
     takeStep  = mario_update_moving_sand(m);
     takeStep |= mario_update_windy_ground(m);
     if (takeStep) {
         stepResult = perform_ground_step(m);
     } else {
-        //? This is responsible for several stationary downwarps.
         if (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT)) m->pos[1] = m->floorHeight;
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
         vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     }
     return stepResult;
+#endif
 }
 
 static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
@@ -328,15 +333,20 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
 #endif
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
     if ((m->pos[1] <= (m->floorHeight + MARIO_STEP_HEIGHT)) && (nextPos[1] <= (floorHeight + MARIO_STEP_HEIGHT))) {
-    // if (m->pos[1] <= m->floorHeight) {
-        register f32 dx = (m->pos[0] - nextPos[0]);
-        register f32 dz = (m->pos[2] - nextPos[2]);
-        m->steepness = coss(m->floorPitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), ABS(floorHeight - m->floorHeight)));
+        f32 dist;
+        vec3f_get_lateral_dist(m->pos, nextPos, &dist);
+        if (dist == 0.0f) {
+            // if not moving, use the floor's y normal like vanilla
+            m->floorPitch = 0x0;
+            m->steepness  = floor->normal.y;
+        } else {
+            m->steepness = coss(m->floorPitch = atan2s(dist, (floorHeight - m->floorHeight)));
+        }
     } else {
+        // If doing ground steps in air (Coyote Time), assume a flat floor
         m->floorPitch = 0x0;
         m->steepness  = 1.0f;
     }
-    // m->steepness = coss(m->floorPitch = find_floor_pitch_from_floors(m->pos, nextPos, m->floorHeight, floorHeight));
 #endif
 #ifdef BETTER_CEILING_HANDLING
     // Handle getting stuck between a sloped floor/ceiling
@@ -372,23 +382,28 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     } else {
         oldWallDYaw = 0;
     }
-    for (i = 0; i < upperWall.numWalls; i++) {
-        wallDYaw    = (atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x) - m->faceAngle[1]);
-        absWallDYaw = abss(wallDYaw);
-        if (absWallDYaw >= oldWallDYaw) {
-            oldWallDYaw = absWallDYaw;
-            m->wall     = upperWall.walls[i];
+    if (upperWall.numWalls == 0) {
+        m->wall = NULL;
+    } else {
+        for (i = 0; i < upperWall.numWalls; i++) {
+            wallDYaw    = (atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x) - m->faceAngle[1]);
+            absWallDYaw = abss(wallDYaw);
+            if (absWallDYaw >= oldWallDYaw) {
+                oldWallDYaw = absWallDYaw;
+                m->wall     = upperWall.walls[i];
+            }
+            // m->wall = upperWall.walls[i];
+            if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) continue;
+            if ((wallDYaw <= -0x2AAA) && (wallDYaw >= -0x5555)) continue;
+            return GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS;
         }
-        // m->wall = upperWall.walls[i];
-        if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) continue;
-        if ((wallDYaw <= -0x2AAA) && (wallDYaw >= -0x5555)) continue;
 #else
     if (upperWall != NULL) {
         Angle wallDYaw = atan2s(upperWall->normal.z, upperWall->normal.x) - m->faceAngle[1];
         if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) return GROUND_STEP_NONE;
         if ((wallDYaw <= -0x2AAA) && (wallDYaw >= -0x5555)) return GROUND_STEP_NONE;
-#endif
         return GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS;
+#endif
     }
     return GROUND_STEP_NONE;
 }
@@ -396,17 +411,14 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
 MarioStep perform_ground_step(struct MarioState *m) {
     Vec3f intendedPos;
     MarioStep stepResult;
-#ifdef BETTER_WALL_COLLISION
-    m->wall = NULL;
-#endif
+// #ifdef BETTER_WALL_COLLISION
+//     m->wall = NULL;
+// #endif
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
     f32 steepness = m->steepness;
+#else
+    f32 steepness = m->floor->normal.y;
 #endif
-// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-//     f32 steepness = m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0, 5.0f));
-// #else
-//     f32 steepness = m->floor->normal.y;
-// #endif
 #if GROUND_NUM_STEPS > 1
     const f32 numSteps = GROUND_NUM_STEPS;
     s32 i;
@@ -414,10 +426,7 @@ MarioStep perform_ground_step(struct MarioState *m) {
         intendedPos[0] = (m->pos[0] + (steepness * (m->vel[0] / numSteps)));
         intendedPos[2] = (m->pos[2] + (steepness * (m->vel[2] / numSteps)));
         intendedPos[1] =  m->pos[1];
-        stepResult = perform_ground_quarter_step(m, intendedPos);  
-// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-//         steepness = m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
-// #endif
+        stepResult = perform_ground_quarter_step(m, intendedPos);
         if ((stepResult == GROUND_STEP_LEFT_GROUND) || (stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS)) break;
     }
 #else
@@ -426,9 +435,6 @@ MarioStep perform_ground_step(struct MarioState *m) {
     intendedPos[2] = (m->pos[2] + (steepness * m->vel[2]));
     intendedPos[1] =  m->pos[1];
     stepResult = perform_ground_quarter_step(m, intendedPos);
-#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-    m->steepness = coss(m->floorPitch = find_floor_slope(m, 0x0));
-#endif
 #endif
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
@@ -518,32 +524,36 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
     Angle absWallDYaw;
     Angle oldWallDYaw = ((m->wall != NULL) ? abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]) : 0x0);
 #endif
-    for (i = 0; i < wallData->numWalls; i++) {
-        if (wallData->walls[i] != NULL) {
-            wallDYaw = (atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x) - m->faceAngle[1]);
+    if (wallData->numWalls == 0) {
+        m->wall = NULL;
+    } else {
+        for (i = 0; i < wallData->numWalls; i++) {
+            if (wallData->walls[i] != NULL) {
+                wallDYaw = (atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x) - m->faceAngle[1]);
 #ifdef WALL_SLIDE
-            m->wall = wallData->walls[i];
-            if (wallData->walls[i]->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
-            if (((wallDYaw < -0x5000) || (wallDYaw > 0x5000)) && (m->vel[1] <= 0)) {
-                m->flags |= MARIO_AIR_HIT_WALL;
-                result = AIR_STEP_HIT_WALL;
-            }
-#else
-            if (wallData->walls[i]->type == SURFACE_BURNING) {
                 m->wall = wallData->walls[i];
-                return AIR_STEP_HIT_LAVA_WALL;
-            }
-            // Update wall reference (bonked wall) only if the new wall has a better facing angle
-            absWallDYaw = abss(wallDYaw); // ((wallDYaw < 0) ? -wallDYaw : wallDYaw);
-            if (absWallDYaw > oldWallDYaw) {
-                oldWallDYaw = absWallDYaw;
-                m->wall = wallData->walls[i];
-                if ((wallDYaw < -0x6000) || (wallDYaw > 0x6000)) {
+                if (wallData->walls[i]->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
+                if (((wallDYaw < -0x5000) || (wallDYaw > 0x5000)) && (m->vel[1] <= 0)) {
                     m->flags |= MARIO_AIR_HIT_WALL;
                     result = AIR_STEP_HIT_WALL;
                 }
-            }
+#else
+                if (wallData->walls[i]->type == SURFACE_BURNING) {
+                    m->wall = wallData->walls[i];
+                    return AIR_STEP_HIT_LAVA_WALL;
+                }
+                // Update wall reference (bonked wall) only if the new wall has a better facing angle
+                absWallDYaw = abss(wallDYaw); // ((wallDYaw < 0) ? -wallDYaw : wallDYaw);
+                if (absWallDYaw > oldWallDYaw) {
+                    oldWallDYaw = absWallDYaw;
+                    m->wall = wallData->walls[i];
+                    if ((wallDYaw < -0x6000) || (wallDYaw > 0x6000)) {
+                        m->flags |= MARIO_AIR_HIT_WALL;
+                        result = AIR_STEP_HIT_WALL;
+                    }
+                }
 #endif
+            }
         }
     }
     return result;
@@ -832,7 +842,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     // Angle wallDYaw;
     Vec3f intendedPos;
     MarioStep stepResult = AIR_STEP_NONE;
-    m->wall = NULL;
+    // m->wall = NULL;
 #if AIR_NUM_STEPS > 1
     const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(sqr(m->vel[0]) + sqr(m->vel[1]) + sqr(m->vel[2])) / 50.0f));*/
     s32 i;

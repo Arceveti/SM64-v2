@@ -63,11 +63,11 @@ Bool32 act_idle(struct MarioState *m) {
         return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
     }
 #endif
-    if (m->quicksandDepth > 30.0f                 ) return set_mario_action(m, ACT_IN_QUICKSAND, 0);
-    if (m->input & INPUT_IN_POISON_GAS            ) return set_mario_action(m, ACT_COUGHING    , 0);
-    if (!(m->actionArg & 0x1) && m->health < 0x300) return set_mario_action(m, ACT_PANTING     , 0);
-    if (check_common_idle_cancels(m)              ) return TRUE;
-    if (m->actionState == 3                       ) return set_mario_action(m, (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW) ? ACT_SHIVERING : ACT_START_SLEEPING), 0);
+    if (m->quicksandDepth > 30.0f                   ) return set_mario_action(m, ACT_IN_QUICKSAND, 0);
+    if (m->input & INPUT_IN_POISON_GAS              ) return set_mario_action(m, ACT_COUGHING    , 0);
+    if (!(m->actionArg & 0x1) && (m->health < 0x300)) return set_mario_action(m, ACT_PANTING     , 0);
+    if (check_common_idle_cancels(m)                ) return TRUE;
+    if (m->actionState == 3                         ) return set_mario_action(m, (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW) ? ACT_SHIVERING : ACT_START_SLEEPING), 0);
     if (m->actionArg & 0x1) {
         set_mario_animation(m, MARIO_ANIM_STAND_AGAINST_WALL);
     } else {
@@ -258,9 +258,9 @@ Bool32 act_standing_against_wall(struct MarioState *m) {
     if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
     if (m->input & INPUT_FIRST_PERSON) return set_mario_action(m, ACT_FIRST_PERSON    , 0);
     if (m->input & INPUT_B_PRESSED   ) return set_mario_action(m, ACT_PUNCHING        , 0);
-// #ifdef BETTER_WALL_COLLISION
-//     if (m->wall == NULL              ) return set_mario_action(m, ACT_IDLE            , 0);
-// #endif
+#ifdef BETTER_WALL_COLLISION
+    if (m->wall == NULL              ) return set_mario_action(m, ACT_IDLE            , 0);
+#endif
     set_mario_animation(m, MARIO_ANIM_STAND_AGAINST_WALL);
     stationary_ground_step(m);
     return FALSE;

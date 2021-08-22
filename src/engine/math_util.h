@@ -177,6 +177,8 @@ f64   sind(f64 x);
 f64   cosd(f64 x);
 s16   LENSIN(s16 length, Angle direction);
 s16   LENCOS(s16 length, Angle direction);
+s16    acos(f32 c);
+double acosd(double x);
 f32   acosf(f32 x);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);

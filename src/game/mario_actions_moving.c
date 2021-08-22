@@ -141,7 +141,7 @@ Bool32 set_triple_jump_action(struct MarioState *m, UNUSED MarioAction action, U
 }
 
 void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
-    s32 newFacingDYaw; // not s16?
+    s32 newFacingDYaw; //! not s16?
     Angle facingDYaw;
     struct Surface *floor = m->floor;
     Angle slopeAngle = atan2s(floor->normal.z, floor->normal.x);

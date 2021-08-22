@@ -1037,13 +1037,13 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(64,   56, "INP %016b", m->input);
                 break;
         }
-        print_text_fmt_int(16, 112, "FA %d", m->floorAngle);
-        print_text_fmt_int(16, 96, "FS %d", m->steepness * 1000);
-        print_text_fmt_int(16, 80, "FN %d", m->floor->normal.y * 1000);
-        print_text_fmt_int(16, 64, "F %d", gNumCalls.floor);
-        print_text_fmt_int(16, 48, "C %d", gNumCalls.ceil );
-        print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
-        print_fps(16, 16);
+        // print_text_fmt_int(16, 112, "FA %d", m->floorAngle);
+        // print_text_fmt_int(16,  96, "FS %d", m->steepness * 1000);
+        // print_text_fmt_int(16,  80, "FN %d", m->floor->normal.y * 1000);
+        print_text_fmt_int(16,  64,  "F %d", gNumCalls.floor);
+        print_text_fmt_int(16,  48,  "C %d", gNumCalls.ceil );
+        print_text_fmt_int(16,  32,  "W %d", gNumCalls.wall );
+        print_fps(16, 16); 
         gNumCalls.floor = 0;
         gNumCalls.ceil  = 0;
         gNumCalls.wall  = 0;

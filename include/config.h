@@ -493,8 +493,12 @@
 // Fixes turning around on the ground (Arceveti)
 #define FIX_GROUND_TURN_RADIUS
 
+// Perform ground steps while standing still. This fixes several bugs. (Arceveti)
+#define STATIONARY_GROUND_STEPS
+
 // Uses the relative angles of Mario's slope rather than surface normals
-// This allows Mario to properly walk laterally across floor surfaces
+// This allows Mario to properly walk laterally across floor surfaces.
+// STATIONARY_GROUND_STEPS is recommended
 // (Arceveti)
 #define FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 

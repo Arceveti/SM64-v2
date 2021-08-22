@@ -203,9 +203,9 @@ static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
 f32 gd_rand_float(void) {
     u32 temp;
     u32 i;
-    for (i = 0; i < 4; i++) {
+    for ((i = 0); (i < 4); (i++)) {
         if (sPrimarySeed & 0x80000000) {
-            sPrimarySeed = sPrimarySeed << 1 | 0x1;
+            sPrimarySeed = (sPrimarySeed << 1 | 0x1);
         } else {
             sPrimarySeed <<= 1;
         }
@@ -809,7 +809,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffse
     dest[2][1] = 0;
     dest[2][2] = 1;
     dest[2][3] = 0;
-    if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
+    if ((position[0] == 0) && (position[1] == 0) && (position[2] == 0)) {
         dest[3][0] = mtx[3][0];
         dest[3][1] = mtx[3][1];
         dest[3][2] = mtx[3][2];
@@ -830,7 +830,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffse
 void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
     register Angle xrot, yrot;
     register f32 cx, cy, cz;
-    if (position[0] == 0 && position[1] == 0 && position[2] == 0) {
+    if ((position[0] == 0) && (position[1] == 0) && (position[2] == 0)) {
         dest[3][0] = mtx[3][0];
         dest[3][1] = mtx[3][1];
         dest[3][2] = mtx[3][2];
@@ -839,7 +839,7 @@ void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32
         dest[3][1] = ((mtx[0][1] * position[0]) + (mtx[1][1] * position[1]) + (mtx[2][1] * position[2]) + mtx[3][1]);
         dest[3][2] = ((mtx[0][2] * position[0]) + (mtx[1][2] * position[1]) + (mtx[2][2] * position[2]) + mtx[3][2]);
     }
-    dest[3][3] = ((zOffset == 0 || dest[3][2] == 0) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
+    dest[3][3] = (((zOffset == 0) || (dest[3][2] == 0)) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
     // angle to camera pos
     xrot       = -atan2s(dest[3][2], dest[3][0]);
     yrot       =  atan2s(dest[3][2], dest[3][1]);
@@ -907,7 +907,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     Vec3f forward;
     Vec3f xColumn, yColumn, zColumn;
     f32 avgY;
-    f32 minY  = -radius * 3;
+    f32 minY  = (-radius * 3);
     point0[0] = (pos[0] + (radius * sins(yaw + 0x2AAA)));
     point0[2] = (pos[2] + (radius * coss(yaw + 0x2AAA)));
     point1[0] = (pos[0] + (radius * sins(yaw + 0x8000)));
@@ -1325,14 +1325,28 @@ f64 cosd(f64 x) { return cosf(x); }
 s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
 s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
 
+
+//! these 3 functions do not seem to work
+
+s16 acos(f32 c) {
+    for (s16 i = 0; i < 0x1000; i++) {
+        if (gCosineTable[i] == c) return i;
+    }
+    return 0x0;
+}
+
 f32 acosf(f32 x) {
     f32 f0 = (float)(M_PI / 2.0) - (sinf(x) / cosf(x));
     f32 f2;
     do {
         f2 = (cosf(f0) - x) / sinf(f0);
         f0 += f2;
-    } while (f2 < -0.00001f || f2 > 0.00001f);
+    } while ((f2 < -0.00001f) || (f2 > 0.00001f));
     return f0;
+}
+
+double acosd(double x) {
+   return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
 }
 
 /**
