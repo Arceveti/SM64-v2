@@ -96,13 +96,13 @@ void exclamation_box_act_scaling(void) {
         o->oVelY    = 0.0f;
         o->oGravity = 0.0f;
     }
-    o->oExclamationBoxVerticalScale   = ( sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.3f + 0.0f;
-    o->oExclamationBoxHorizontalScale = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.5f + 1.0f;
-    o->oGraphYOffset                  = (-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f;
+    o->oExclamationBoxVerticalScale   = ((( sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.3f) + 0.0f);
+    o->oExclamationBoxHorizontalScale = (((-sins(o->oExclamationBoxScaleAngle) + 1.0f) *  0.5f) + 1.0f);
+    o->oGraphYOffset                  =  ((-sins(o->oExclamationBoxScaleAngle) + 1.0f) * 26.0f);
     o->oExclamationBoxScaleAngle += 0x1000;
-    o->header.gfx.scale[0] = o->oExclamationBoxHorizontalScale * 2.0f;
-    o->header.gfx.scale[1] = o->oExclamationBoxVerticalScale   * 2.0f;
-    o->header.gfx.scale[2] = o->oExclamationBoxHorizontalScale * 2.0f;
+    o->header.gfx.scale[0] = (o->oExclamationBoxHorizontalScale * 2.0f);
+    o->header.gfx.scale[1] = (o->oExclamationBoxVerticalScale   * 2.0f);
+    o->header.gfx.scale[2] = (o->oExclamationBoxHorizontalScale * 2.0f);
     if (o->oTimer == 7) o->oAction = EXCLAMATION_BOX_ACT_EXPLODE;
 }
 
@@ -114,7 +114,7 @@ void exclamation_box_spawn_contents(struct ExclamationBoxContents *contentsList,
             contentsObj->oVelY         = 20.0f;
             contentsObj->oForwardVel   =  3.0f;
             contentsObj->oMoveAngleYaw = gMarioObject->oMoveAngleYaw;
-            o->oBehParams |= contentsList->behParams << 24;
+            o->oBehParams |= (contentsList->behParams << 24);
             if (contentsList->model == MODEL_STAR) o->oFlags |= OBJ_FLAG_PERSISTENT_RESPAWN;
             break;
         }

@@ -15,22 +15,19 @@ static struct ObjectHitbox sCollectStarHitbox = {
 };
 
 void bhv_collect_star_init(void) {
-    s8 starId;
     u8 currentLevelStarFlags;
-
-    starId = (o->oBehParams >> 24) & 0xFF;
+    s8 starId = ((o->oBehParams >> 24) & 0xFF);
 #ifdef GLOBAL_STAR_IDS
-    currentLevelStarFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, (starId/7) - 1);
+    currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), ((starId / 7) - 1));
     if (currentLevelStarFlags & (1 << (starId % 7))) {
 #else
-    currentLevelStarFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+    currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     if (currentLevelStarFlags & (1 << starId)) {
 #endif
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
     } else {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
     }
-
     obj_set_hitbox(o, &sCollectStarHitbox);
 }
 
@@ -63,7 +60,6 @@ void bhv_star_spawn_arc_loop(void) {
             o->oFaceAngleYaw += 0x1000;
             if (o->oTimer > 20) o->oAction = SPAWN_STAR_ARC_CUTSCENE_ACT_GO_TO_HOME;
             break;
-
         case SPAWN_STAR_ARC_CUTSCENE_ACT_GO_TO_HOME:
             obj_move_xyz_using_fvel_and_yaw(o);
             o->oStarSpawnVelY += o->oVelY;
@@ -80,12 +76,11 @@ void bhv_star_spawn_arc_loop(void) {
                 play_power_star_jingle(TRUE);
             }
             break;
-
         case SPAWN_STAR_ARC_CUTSCENE_ACT_BOUNCE:
             o->oVelY = (o->oTimer < 20) ? (20 - o->oTimer) : (-10.0f);
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             obj_move_xyz_using_fvel_and_yaw(o);
-            o->oFaceAngleYaw = o->oFaceAngleYaw - o->oTimer * 0x10 + 0x1000;
+            o->oFaceAngleYaw = (o->oFaceAngleYaw - (o->oTimer * 0x10) + 0x1000);
             cur_obj_play_sound_1(SOUND_ENV_STAR);
 
             if (o->oPosY < o->oHomeY) {
@@ -95,7 +90,6 @@ void bhv_star_spawn_arc_loop(void) {
                 o->oAction = SPAWN_STAR_ARC_CUTSCENE_ACT_END;
             }
             break;
-
         case SPAWN_STAR_ARC_CUTSCENE_ACT_END:
             o->oFaceAngleYaw += 0x800;
             if (o->oTimer == 20) {
@@ -153,7 +147,7 @@ void bhv_hidden_red_coin_star_init(void) {
         starObj->oBehParams = o->oBehParams;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
-    o->oHiddenStarTriggerCounter = 8 - numRedCoinsRemaining;
+    o->oHiddenStarTriggerCounter = (8 - numRedCoinsRemaining);
 }
 
 void bhv_hidden_red_coin_star_loop(void) {
@@ -164,7 +158,6 @@ void bhv_hidden_red_coin_star_loop(void) {
         case HIDDEN_STAR_ACT_INACTIVE:
             if (o->oHiddenStarTriggerCounter == 8) o->oAction = HIDDEN_STAR_ACT_ACTIVE;
             break;
-
         case HIDDEN_STAR_ACT_ACTIVE:
             if (o->oTimer > 2) {
                 spawn_red_coin_cutscene_star(o->oPosX, o->oPosY, o->oPosZ);
