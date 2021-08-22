@@ -63,11 +63,11 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
     ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &ceil);
-    if (m->pos[1] > (ceilHeight - 160.0f)) {
-        m->pos[1] = (ceilHeight - 160.0f);
+    if (m->pos[1] > (ceilHeight - MARIO_HITBOX_HEIGHT)) {
+        m->pos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
         marioObj->oMarioPolePos = (m->pos[1] - m->usedObj->oPosY);
     }
-    floorHeight = find_floor(m->pos[0], m->pos[1]+100.0f, m->pos[2], &floor);
+    floorHeight = find_floor(m->pos[0], (m->pos[1] + MARIO_SHORT_HITBOX_HEIGHT), m->pos[2], &floor);
     if (m->pos[1] < floorHeight) {
         m->pos[1] = floorHeight;
         set_mario_action(m, ACT_IDLE, 0);
@@ -112,7 +112,7 @@ Bool32 act_holding_pole(struct MarioState *m) {
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
     if (m->controller->stickY > 16.0f) {
-        f32 poleTop = (m->usedObj->hitboxHeight - 100.0f);
+        f32 poleTop = (m->usedObj->hitboxHeight - MARIO_SHORT_HITBOX_HEIGHT);
         const BehaviorScript *poleBehavior = virtual_to_segmented(0x13, m->usedObj->behavior);
         if (marioObj->oMarioPolePos < (poleTop - 0.4f)                       ) return set_mario_action(m, ACT_CLIMBING_POLE         , 0);
         if ((poleBehavior != bhvGiantPole) && (m->controller->stickY > 50.0f)) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 0);
@@ -393,13 +393,12 @@ Bool32 act_hang_moving(struct MarioState *m) {
 }
 
 Bool32 let_go_of_ledge(struct MarioState *m) {
-    f32 floorHeight;
     struct Surface *floor;
     m->vel[1]     =  0.0f;
     m->forwardVel = -8.0f;
     m->pos[0]    -= 60.0f * sins(m->faceAngle[1]);
     m->pos[2]    -= 60.0f * coss(m->faceAngle[1]);
-    floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor);
+    f32 floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor);
     if (floorHeight < (m->pos[1] - 100.0f)) {
         m->pos[1] -= 100.0f;
     } else {
@@ -416,7 +415,7 @@ void climb_up_ledge(struct MarioState *m) {
 }
 
 void update_ledge_climb_camera(struct MarioState *m) {
-    f32 dist = (m->actionTimer < 14) ? m->actionTimer : 14.0f;
+    f32 dist = ((m->actionTimer < 14) ? m->actionTimer : 14.0f);
     m->statusForCamera->pos[0] = (m->pos[0] + (dist * sins(m->faceAngle[1])));
     m->statusForCamera->pos[2] = (m->pos[2] + (dist * coss(m->faceAngle[1])));
     m->statusForCamera->pos[1] =  m->pos[1];
@@ -436,9 +435,9 @@ void update_ledge_climb(struct MarioState *m, AnimID32 animation, MarioAction en
 Bool32 act_ledge_grab(struct MarioState *m) {
     f32 heightAboveFloor;
     Angle intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
-    s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= 160.0f);
+    s32 hasSpaceForMario = ((m->ceilHeight - m->floorHeight) >= MARIO_HITBOX_HEIGHT);
 #ifdef LEDGE_SIDLE
-    AnimAccel accel         = 0x10000;
+    AnimAccel accel   = 0x10000;
     f32 sidewaysSpeed = 0.0f;
     f32 nextX         = m->pos[0];
     f32 nextZ         = m->pos[2];

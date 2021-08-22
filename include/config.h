@@ -610,6 +610,16 @@
 // (Arceveti)
 #define NULL_FLOOR_STEPS 4
 
+// Mario hitbox values
+// Vanilla is 160.0f
+#define MARIO_HITBOX_HEIGHT         160.0f
+#define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT/2)
+
+#define MARIO_SHORT_HITBOX_HEIGHT   100.0f
+#define MARIO_EYE_LEVEL             100.0f
+
+#define MARIO_STEP_HEIGHT           80.0f
+
 // Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
 #define MAX_SWIMMING_SPEED 32.0f
 

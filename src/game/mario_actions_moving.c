@@ -43,9 +43,9 @@ Angle tilt_body_running(struct MarioState *m) {
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
     if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = m->floorPitch;
 #else
-    if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = find_floor_slope(m, 0x0);
+    if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = find_floor_slope(m, 0x0, 5.0f);
 #endif
-    return (-pitch * m->forwardVel / 40.0f);
+    return ((-pitch * m->forwardVel) / 40.0f);
 }
 
 void play_step_sound(struct MarioState *m, AnimFrame16 frame1, AnimFrame16 frame2) {
@@ -66,7 +66,7 @@ void align_with_floor(struct MarioState *m) {
 #ifdef FAST_FLOOR_ALIGN
     struct Surface *floor = m->floor;
     Vec3f floorNormal;
-    if ((floor != NULL) && (m->pos[1] < (m->floorHeight + 80.0f))) {
+    if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
         if (floor->normal.y > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
@@ -102,7 +102,7 @@ void check_ledge_climb_down(struct MarioState *m) {
         wallCols.offsetY = -10.0f;
         if (find_wall_collisions(&wallCols) != 0) {
             floorHeight = find_floor(wallCols.x, wallCols.y, wallCols.z, &floor);
-            if ((floor != NULL) && ((wallCols.y - floorHeight) > 160.0f)) {
+            if ((floor != NULL) && ((wallCols.y - floorHeight) > MARIO_HITBOX_HEIGHT)) {
                 wall = wallCols.walls[wallCols.numWalls - 1];
                 wallAngle = atan2s(wall->normal.z, wall->normal.x);
                 wallDYaw  = abs_angle_diff(wallAngle, m->faceAngle[1]);
@@ -554,7 +554,7 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
         m->actionState                   = 1;
         m->actionArg                     = (wallAngle + 0x8000);
         m->marioObj->header.gfx.angle[1] = (wallAngle + 0x8000);
-        m->marioObj->header.gfx.angle[2] = find_floor_slope(m, 0x4000);
+        m->marioObj->header.gfx.angle[2] = find_floor_slope(m, 0x4000, 5.0f);
     }
 }
 

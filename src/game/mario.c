@@ -492,17 +492,13 @@ f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
 /**
  * Determines if Mario is facing "downhill."
  */
-Bool32 mario_facing_downhill(struct MarioState *m, Bool32 turnYaw) { //! Angle type?
-#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-    return (m->floorPitch < 0x0);
-#else
+Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
-    if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
+    // if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
     faceAngleYaw = abs_angle_diff(m->floorAngle, faceAngleYaw);
     return (faceAngleYaw < 0x4000);
-#endif
 }
 
 /**
@@ -510,7 +506,6 @@ Bool32 mario_facing_downhill(struct MarioState *m, Bool32 turnYaw) { //! Angle t
  */
 Bool32 mario_floor_is_slippery(struct MarioState *m) {
     f32 normY;
-
 // #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 //     f32 steepness = m->steepness;
 // #else
@@ -587,13 +582,13 @@ f32 find_floor_height_relative_polar(struct MarioState *m, Angle angleFromMario,
 /**
  * Returns the slope of the floor based off points around Mario.
  */
-Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
-    if (m->pos[1] > m->floorHeight) return 0x0;
+Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario) {
+    if (m->pos[1] > (m->floorHeight + MARIO_STEP_HEIGHT)) return 0x0;
     struct Surface *floor;
     f32 forwardFloorY, backwardFloorY;
     f32 forwardYDelta, backwardYDelta;
-    f32 x                             = (sins(m->faceAngle[1] + yawOffset) * 5.0f);
-    f32 z                             = (coss(m->faceAngle[1] + yawOffset) * 5.0f);
+    f32 x                             = (sins(m->faceAngle[1] + yawOffset) * distFromMario);
+    f32 z                             = (coss(m->faceAngle[1] + yawOffset) * distFromMario);
     forwardFloorY                     = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
     if (floor == NULL)  forwardFloorY = m->floorHeight; // handle OOB slopes
     backwardFloorY                    = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
@@ -602,8 +597,24 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset) {
     //  This will cause these to be off and give improper slopes.
     forwardYDelta                     = (forwardFloorY - m->pos[1]);
     backwardYDelta                    = (m->pos[1] - backwardFloorY);
-    return atan2s(5.0f, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+    // return atan2s(distFromMario, (ABS(forwardYDelta) < ABS(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+    return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 }
+
+// Angle find_floor_pitch_from_floors(Vec3f oldPos, Vec3f newPos, f32 oldFloorHeight, f32 newFloorHeight) {
+//     // if ((oldPos[1] > (oldFloorHeight + MARIO_STEP_HEIGHT)) || (newPos[1] > (newFloorHeight + MARIO_STEP_HEIGHT))) return 0x0;
+//     if (oldPos[1] > (oldFloorHeight + MARIO_STEP_HEIGHT)) return 0x0;
+//     register f32 dx = (oldPos[0] - newPos[0]);
+//     register f32 dz = (oldPos[2] - newPos[2]);
+//     f32 distFromMario = sqrtf(sqr(dx) + sqr(dz));
+//     f32 forwardYDelta, backwardYDelta;
+//     //! If Mario is near OOB, these floorY's can sometimes be -11000.
+//     //  This will cause these to be off and give improper slopes.
+//     forwardYDelta  = (newFloorHeight - newPos[1]);
+//     backwardYDelta = (oldPos[1] - oldFloorHeight);
+//     // return atan2s(distFromMario, (ABS(forwardYDelta) < ABS(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+//     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+// }
 
 // default range is 0x471C
 Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
@@ -1068,6 +1079,9 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(64,   56, "INP %016b", m->input);
                 break;
         }
+        print_text_fmt_int(16, 112, "FA %d", m->floorAngle);
+        print_text_fmt_int(16, 96, "FS %d", m->steepness * 1000);
+        print_text_fmt_int(16, 80, "FN %d", m->floor->normal.y * 1000);
         print_text_fmt_int(16, 64, "F %d", gNumCalls.floor);
         print_text_fmt_int(16, 48, "C %d", gNumCalls.ceil );
         print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
@@ -1165,9 +1179,9 @@ void update_mario_geometry_inputs(struct MarioState *m) {
             ceilToFloorDist = (m->ceilHeight - m->floorHeight);
             if ((0.0f <= ceilToFloorDist) && (ceilToFloorDist <= (gMarioObject->hitboxHeight - 10.0f))) m->input |= INPUT_SQUISHED;
         }
-        if (m->pos[1] >  m->floorHeight +  80.0f)  m->input |= INPUT_OFF_FLOOR;
-        if (m->pos[1] < (m->waterLevel  -  10.0f)) m->input |= INPUT_IN_WATER;
-        if (m->pos[1] <      (gasLevel  - 100.0f)) m->input |= INPUT_IN_POISON_GAS;
+        if (m->pos[1] >  m->floorHeight +         MARIO_STEP_HEIGHT)  m->input |= INPUT_OFF_FLOOR;
+        if (m->pos[1] < (m->waterLevel  -                     10.0f)) m->input |= INPUT_IN_WATER;
+        if (m->pos[1] <      (gasLevel  - MARIO_SHORT_HITBOX_HEIGHT)) m->input |= INPUT_IN_POISON_GAS;
     } else {
         level_trigger_warp(m, WARP_OP_DEATH);
     }
@@ -1435,7 +1449,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     if (flags & MARIO_CAP_IN_HAND) bodyState->handState = ((flags & MARIO_WING_CAP) ? MARIO_HAND_HOLDING_WING_CAP : MARIO_HAND_HOLDING_CAP  );
     if (flags & MARIO_CAP_ON_HEAD) bodyState->capState  = ((flags & MARIO_WING_CAP) ? MARIO_HAS_WING_CAP_ON       : MARIO_HAS_DEFAULT_CAP_ON);
     // Short hitbox for crouching/crawling/etc.
-    m->marioObj->hitboxHeight = ((m->action & ACT_FLAG_SHORT_HITBOX) ? 100.0f : 160.0f);
+    m->marioObj->hitboxHeight = ((m->action & ACT_FLAG_SHORT_HITBOX) ? MARIO_SHORT_HITBOX_HEIGHT : MARIO_HITBOX_HEIGHT);
     if ((m->flags & MARIO_TELEPORTING) && (m->fadeWarpOpacity != 0xFF)) {
         bodyState->modelState &= ~MODEL_STATE_MASK;
         bodyState->modelState |= (MODEL_STATE_ALPHA | m->fadeWarpOpacity);
@@ -1550,6 +1564,10 @@ void init_mario(void) {
 #endif
     gMarioState->capTimer                             = 0;
     gMarioState->quicksandDepth                       = 0.0f;
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    gMarioState->floorPitch                           = 0x0;
+    gMarioState->steepness                            = 1.0f;
+#endif
     gMarioState->heldObj                              = NULL;
     gMarioState->riddenObj                            = NULL;
     gMarioState->usedObj                              = NULL;
@@ -1596,7 +1614,7 @@ void init_mario_from_save_file(void) {
     gMarioState->controller            = &gControllers[0];
     gMarioState->animList              = &gMarioAnimsBuf;
     gMarioState->numCoins              = 0;
-    gMarioState->numStars              = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
+    gMarioState->numStars              = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
     gMarioState->numKeys               = 0;
     if (save_file_get_flags() & SAVE_FLAG_HAVE_KEY_1) gMarioState->numKeys++;
     if (save_file_get_flags() & SAVE_FLAG_HAVE_KEY_2) gMarioState->numKeys++;

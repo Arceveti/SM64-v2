@@ -1,19 +1,18 @@
 // kickable_board.c.inc
 
 s32 check_mario_attacking(void) {
-    if (obj_check_if_collided_with_object(o, gMarioObject)
-     && abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000) {
-        if (gMarioStates[0].action == ACT_SLIDE_KICK
-         || gMarioStates[0].action == ACT_PUNCHING
-         || gMarioStates[0].action == ACT_MOVE_PUNCHING
-         || gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE
-         || gMarioStates[0].action == ACT_BACKWARD_GROUND_KB
-         || gMarioStates[0].action == ACT_SOFT_BACKWARD_GROUND_KB
-         || gMarioStates[0].action == ACT_HARD_BACKWARD_GROUND_KB) return WF_ATTACK_GROUND;
-        if (gMarioStates[0].action == ACT_JUMP_KICK
-         || gMarioStates[0].action == ACT_WALL_KICK_AIR
-         || gMarioStates[0].action == ACT_BACKWARD_AIR_KB
-         || gMarioStates[0].action == ACT_HARD_BACKWARD_AIR_KB) return WF_ATTACK_AIR;
+    if (obj_check_if_collided_with_object(o, gMarioObject) && (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000)) {
+        if ((gMarioStates[0].action == ACT_SLIDE_KICK)
+         || (gMarioStates[0].action == ACT_PUNCHING)
+         || (gMarioStates[0].action == ACT_MOVE_PUNCHING)
+         || (gMarioStates[0].action == ACT_SLIDE_KICK_SLIDE)
+         || (gMarioStates[0].action == ACT_BACKWARD_GROUND_KB)
+         || (gMarioStates[0].action == ACT_SOFT_BACKWARD_GROUND_KB)
+         || (gMarioStates[0].action == ACT_HARD_BACKWARD_GROUND_KB)) return WF_ATTACK_GROUND;
+        if ((gMarioStates[0].action == ACT_JUMP_KICK)
+         || (gMarioStates[0].action == ACT_WALL_KICK_AIR)
+         || (gMarioStates[0].action == ACT_BACKWARD_AIR_KB)
+         || (gMarioStates[0].action == ACT_HARD_BACKWARD_AIR_KB)) return WF_ATTACK_AIR;
     }
     return WF_ATTACK_NONE;
 }
@@ -37,9 +36,9 @@ void bhv_kickable_board_loop(void) {
         case KICKABLE_BOARD_ACT_ROCKING:
             o->oFaceAnglePitch = 0x0;
             load_object_collision_model();
-            o->oFaceAnglePitch = -sins(o->oKickableBoardRockingAngleAmount) * o->oKickableBoardRockingTimer;
-            if (o->oTimer > 30 && (attackValue = check_mario_attacking())) {
-                if (gMarioObject->oPosY > o->oPosY + 160.0f && attackValue == WF_ATTACK_AIR) {
+            o->oFaceAnglePitch = (-sins(o->oKickableBoardRockingAngleAmount) * o->oKickableBoardRockingTimer);
+            if ((o->oTimer > 30) && (attackValue = check_mario_attacking())) {
+                if ((gMarioObject->oPosY > (o->oPosY + 160.0f)) && (attackValue == WF_ATTACK_AIR)) {
                     o->oAction = KICKABLE_BOARD_ACT_FALLING;
                     cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2);
                 } else {

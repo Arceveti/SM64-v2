@@ -116,6 +116,10 @@ void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 f32  vec3f_mag(                          Vec3f v);
 void vec3f_normalize(                    Vec3f dest);
 void vec3f_normalize_max(                Vec3f dest, f32 max);
+void vec3f_get_lateral_dist(             Vec3f from, Vec3f to, f32 *dist);
+void vec3f_get_dist(                     Vec3f from, Vec3f to, f32 *dist);
+void vec3f_get_pitch(                    Vec3f from, Vec3f to,            Angle *pitch);
+void vec3f_get_yaw(                      Vec3f from, Vec3f to,                          Angle *yaw);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, Angle  pitch, Angle  yaw);
 void vec3f_mul_f32(                      Vec3f dest, f32 scale);
@@ -171,6 +175,7 @@ f64   sind(f64 x);
 f64   cosd(f64 x);
 s16   LENSIN(s16 length, Angle direction);
 s16   LENCOS(s16 length, Angle direction);
+f32   acosf(f32 x);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);
 // Curves

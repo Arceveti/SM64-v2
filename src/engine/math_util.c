@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include <math.h>
 
 #include "sm64.h"
 #include "engine/graph_node.h"
@@ -425,9 +426,35 @@ void vec3f_normalize(Vec3f dest) {
 void vec3f_normalize_max(Vec3f dest, f32 max) {
     register f32 mag = vec3f_mag(dest); 
     if (mag > max) {
-        mag = max / mag; //! fast invsqrt?
+        mag = (max / mag); //! fast invsqrt?
         vec3f_mul_f32(dest, mag);
     }
+}
+
+void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *dist) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dz = (to[2] - from[2]);
+    *dist           = sqrtf(sqr(dx) + sqr(dz));
+}
+
+void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    *dist           = sqrtf(sqr(dx) + sqr(dz) + sqr(dy));
+}
+
+void vec3f_get_pitch(Vec3f from, Vec3f to, Angle *pitch) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    *pitch          = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
+}
+
+void vec3f_get_yaw(Vec3f from, Vec3f to, Angle *yaw) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dz = (to[2] - from[2]);
+    *yaw            = atan2s(dz, dx);
 }
 
 /**
@@ -436,13 +463,13 @@ void vec3f_normalize_max(Vec3f dest, f32 max) {
  * Basically it converts the direction to spherical coordinates.
  */
 void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
-    register f32 dx   = (to[0] - from[0]);
-    register f32 dy   = (to[1] - from[1]);
-    register f32 dz   = (to[2] - from[2]);
-    register f32 dxz2 = (sqr(dx) + sqr(dz));
-    *dist             = sqrtf(dxz2 + sqr(dy));
-    *pitch            = atan2s(sqrtf(dxz2), dy);
-    *yaw              = atan2s(dz, dx);
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    register f32 ld = (sqr(dx) + sqr(dz));
+    *dist           = sqrtf(ld + sqr(dy));
+    *pitch          = atan2s(sqrtf(ld), dy);
+    *yaw            = atan2s(dz, dx);
 }
 
 /**
@@ -1264,6 +1291,16 @@ f64 cosd(f64 x) { return cosf(x); }
 
 s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
 s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
+
+f32 acosf(f32 x) {
+    f32 f0 = (float)(M_PI / 2.0) - (sinf(x) / cosf(x));
+    f32 f2;
+    do {
+        f2 = (cosf(f0) - x) / sinf(f0);
+        f0 += f2;
+    } while (f2 < -0.00001f || f2 > 0.00001f);
+    return f0;
+}
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming

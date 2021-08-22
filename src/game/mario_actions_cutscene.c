@@ -424,7 +424,7 @@ Bool32 act_reading_automatic_dialog(struct MarioState *m) {
 }
 
 Bool32 act_reading_sign(struct MarioState *m) {
-    if (m->pos[1] < (m->floorHeight + 160.0f)) m->pos[1] = m->floorHeight; // Fixes sign on slopes
+    if (m->pos[1] < (m->floorHeight + MARIO_HITBOX_HEIGHT)) m->pos[1] = m->floorHeight; // Fixes sign on slopes
     struct Object *marioObj = m->marioObj;
     play_sound_if_no_flag(m, SOUND_ACTION_READ_SIGN, MARIO_ACTION_SOUND_PLAYED);
     switch (m->actionState) {
@@ -502,9 +502,9 @@ Bool32 act_debug_free_move(struct MarioState *m) {
     floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], pos[1], pos[2], &ceil);
     if (floor == NULL) return FALSE;
-    if (ceilHeight - floorHeight >= 160.0f) {
+    if ((ceilHeight - floorHeight) >= MARIO_HITBOX_HEIGHT) {
         if ((floor != NULL) && ( pos[1] < floorHeight)) pos[1] = floorHeight;
-        if (( ceil != NULL) && ((pos[1] + 160.0f) > ceilHeight)) pos[1] = (ceilHeight - 160.0f);
+        if (( ceil != NULL) && ((pos[1] + MARIO_HITBOX_HEIGHT) > ceilHeight)) pos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
         vec3f_copy(m->pos, pos);
     }
     m->faceAngle[1] = m->intendedYaw;
@@ -636,7 +636,7 @@ Bool32 act_quicksand_death(struct MarioState *m) {
         m->actionTimer = 0;
     }
     if (m->actionState == 1) {
-        if (m->quicksandDepth >= 100.0f) play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
+        if (m->quicksandDepth >= MARIO_SHORT_HITBOX_HEIGHT) play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
         if (m->actionArg == 0) {
             if ((m->quicksandDepth += 5.0f) >= 180.0f) {
                 level_trigger_warp(m, WARP_OP_DEATH);
@@ -1241,14 +1241,14 @@ Bool32 act_squished(struct MarioState *m) {
     if ((spaceUnderCeil = m->ceilHeight - m->floorHeight) < 0) spaceUnderCeil = 0;
     switch (m->actionState) {
         case 0:
-            if (spaceUnderCeil > 160.0f) {
+            if (spaceUnderCeil > MARIO_HITBOX_HEIGHT) {
                 m->squishTimer = 0;
                 return set_mario_action(m, ACT_IDLE, 0);
             }
             m->squishTimer = 0xFF;
             if (spaceUnderCeil >= 10.1f) {
                 // Mario becomes a pancake
-                squishAmount = (spaceUnderCeil / 160.0f);
+                squishAmount = (spaceUnderCeil / MARIO_HITBOX_HEIGHT);
 #ifdef SMOOTH_SQUISH
                 vec3f_set(nextScale, (2.0f - squishAmount), squishAmount, (2.0f - squishAmount));
                 approach_vec3f_asymptotic(m->marioObj->header.gfx.scale, nextScale, 0.5f, 0.5f, 0.5f);

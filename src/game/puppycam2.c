@@ -789,7 +789,7 @@ void puppycam_projection_behaviours(void) {
             if (gPuppyCam.pitchTarget < 0x2000) gPuppyCam.pitchTarget = approach_f32_asymptotic(gPuppyCam.pitchTarget, 0x2000, 0.2f);
             /* // Will tilt the camera just a wip thing though, doesn't work too well but will hopefully replace view_height_offset eventually.
             if (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER && gMarioState->floor && gMarioState->action & ACT_FLAG_MOVING) {
-                gPuppyCam.terrainPitch = approach_f32_asymptotic(gPuppyCam.terrainPitch, find_floor_slope(gMarioState, 0), (gMarioState->intendedMag / 32) * 0.2);
+                gPuppyCam.terrainPitch = approach_f32_asymptotic(gPuppyCam.terrainPitch, find_floor_slope(gMarioState, 0), ((gMarioState->intendedMag / 32) * 0.2), 5.0f);
             } else {
                 gPuppyCam.terrainPitch = approach_f32_asymptotic(gPuppyCam.terrainPitch, 0, 0.2);
             }*/

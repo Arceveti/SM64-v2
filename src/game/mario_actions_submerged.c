@@ -83,11 +83,11 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil );
     if (floor == NULL) return WATER_STEP_CANCELLED;
-    if ((ceil != NULL) && (((nextPos[1] + 160.0f) >= ceilHeight) || ((ceilHeight - floorHeight) < 160.0f))) {
-        ceilAmt = ((nextPos[1] + 160.0f) - ceilHeight);
+    if ((ceil != NULL) && (((nextPos[1] + MARIO_HITBOX_HEIGHT) >= ceilHeight) || ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT))) {
+        ceilAmt = ((nextPos[1] + MARIO_HITBOX_HEIGHT) - ceilHeight);
         nextPos[0] += (ceil->normal.x * ceilAmt);
         nextPos[2] += (ceil->normal.z * ceilAmt);
-        nextPos[1] = (ceilHeight - 160.0f);
+        nextPos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -133,20 +133,20 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if (nextPos[1] >= floorHeight) {
-        if ((ceilHeight - nextPos[1]) >= 160.0f) {
+        if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {
             vec3f_copy(m->pos, nextPos);
             m->floor       = floor;
             m->floorHeight = floorHeight;
             return ((wall != NULL) ? WATER_STEP_HIT_WALL : WATER_STEP_NONE);
         }
-        if ((ceilHeight - floorHeight) < 160.0f) return WATER_STEP_CANCELLED;
+        if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         //! Water ceiling downwarp
-        vec3f_set(m->pos, nextPos[0], (ceilHeight - 160.0f), nextPos[2]);
+        vec3f_set(m->pos, nextPos[0], (ceilHeight - MARIO_HITBOX_HEIGHT), nextPos[2]);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_CEILING;
     } else {
-        if ((ceilHeight - floorHeight) < 160.0f) return WATER_STEP_CANCELLED;
+        if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         vec3f_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -398,7 +398,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
     update_swimming_speed(m, (swimStrength / 10.0f));
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
-            floorPitch = -find_floor_slope(m, -0x8000);
+            floorPitch = -find_floor_slope(m, -0x8000, 5.0f);
 #ifdef SMOOTH_WATER_FLOOR_PITCH
             if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = approach_s32(m->faceAngle[0], floorPitch, 0x800, 0x800);
 #else
@@ -464,7 +464,7 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
         play_sound(SOUND_GENERAL_WING_FLAP, m->marioObj->header.gfx.cameraToObject);
         if (m->actionTimer < 10) {
             yOffset = (20 - (2 * m->actionTimer));
-            if (((m->pos[1] + yOffset + 160.0f) < m->ceilHeight) && ((m->pos[1] + yOffset + 160.0f) < m->waterLevel)) {
+            if (((m->pos[1] + yOffset + MARIO_HITBOX_HEIGHT) < m->ceilHeight) && ((m->pos[1] + yOffset + MARIO_HITBOX_HEIGHT) < m->waterLevel)) {
                 m->pos[1] += yOffset;
                 vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
             }

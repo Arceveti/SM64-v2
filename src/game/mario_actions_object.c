@@ -282,7 +282,7 @@ Bool32 act_releasing_bowser(struct MarioState *m) {
 }
 
 Bool32 check_common_object_cancels(struct MarioState *m) {
-    f32 waterSurface = (m->waterLevel - 100.0f);
+    f32 waterSurface = (m->waterLevel - MARIO_SHORT_HITBOX_HEIGHT);
     if (m->pos[1] < waterSurface ) return set_water_plunge_action(  m);
     if (m->input & INPUT_SQUISHED) return drop_and_set_mario_action(m, ACT_SQUISHED      , 0);
     if (m->health < 0x100        ) return drop_and_set_mario_action(m, ACT_STANDING_DEATH, 0);
