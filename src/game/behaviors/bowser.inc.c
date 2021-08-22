@@ -1152,7 +1152,7 @@ void bowser_act_dead(void) {
  * Sets values for the BITFS platform to tilt
  */
 void bowser_tilt_platform(struct Object *platform, Angle angSpeed) {
-    Angle angle = o->oBowserAngleToCentre + 0x8000;
+    Angle angle = (o->oBowserAngleToCentre + 0x8000);
     platform->oAngleVelPitch = ( coss(angle) * angSpeed);
     platform->oAngleVelRoll  = (-sins(angle) * angSpeed);
 }

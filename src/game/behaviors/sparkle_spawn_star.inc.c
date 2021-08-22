@@ -75,12 +75,9 @@ void bhv_spawned_star_no_level_exit_loop(void) {
             spawn_object(o, MODEL_NONE, bhvSparkleSpawn);
             break;
         case SPAWN_STAR_POS_CUTSCENE_ACT_END:
-            // Removed to fix a softlock, doesn't seem to be needed anyways
-            // if ((gCamera->cutscene == CUTSCENE_NONE) && (gRecentCutscene == CUTSCENE_NONE)) {
-                clear_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
-                o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
-                o->oAction = SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION;
-            // }
+            clear_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
+            o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
+            o->oAction = SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION;
             break;
         case SPAWN_STAR_POS_CUTSCENE_ACT_SLOW_STAR_ROTATION:
             set_sparkle_spawn_star_hitbox();

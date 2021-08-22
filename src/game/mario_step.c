@@ -524,9 +524,9 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
     Angle absWallDYaw;
     Angle oldWallDYaw = ((m->wall != NULL) ? abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]) : 0x0);
 #endif
-    if (wallData->numWalls == 0) {
-        m->wall = NULL;
-    } else {
+    // if (wallData->numWalls == 0) {
+    //     m->wall = NULL;
+    // } else {
         for (i = 0; i < wallData->numWalls; i++) {
             if (wallData->walls[i] != NULL) {
                 wallDYaw = (atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x) - m->faceAngle[1]);
@@ -555,7 +555,7 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
 #endif
             }
         }
-    }
+    // }
     return result;
 }
 #endif
@@ -579,7 +579,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     Vec3f ledgePos;
     struct Surface *grabbedWall = NULL;
     struct Surface *ledgeFloor;
-    // m->wall = NULL;
+    m->wall = NULL;
     resolve_and_return_wall_collisions(nextPos, 150.0f, 50.0f, &upperWall);
     resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);
 #else
