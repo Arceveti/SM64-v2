@@ -2,14 +2,14 @@
 
 static struct ObjectHitbox sBobombHitbox = {
     /* interactType:      */ INTERACT_GRABBABLE,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
-    /* radius:            */ 65,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
+    /* radius:            */  65,
     /* height:            */ 113,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* hurtboxRadius:     */   0,
+    /* hurtboxHeight:     */   0,
 };
 
 void bhv_bobomb_init(void) {
@@ -62,8 +62,7 @@ void bobomb_check_interactions(void) {
 void bobomb_act_patrol(void) {
     o->oForwardVel     = 5.0f;
     ColFlags collisionFlags = object_step();
-    if (obj_return_home_if_safe(o, o->oHomeX, o->oHomeY, o->oHomeZ, 400)
-        && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)) {
+    if (obj_return_home_if_safe(o, o->oHomeX, o->oHomeY, o->oHomeZ, 400) && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x2000)) {
         o->oBobombFuseLit = TRUE;
         o->oAction        = BOBOMB_ACT_CHASE_MARIO;
     }
@@ -71,10 +70,10 @@ void bobomb_act_patrol(void) {
 }
 
 void bobomb_act_chase_mario(void) {
-    AnimFrame16 animFrame      = ++o->header.gfx.animInfo.animFrame;
-    o->oForwardVel     = 20.0f;
+    AnimFrame16 animFrame   = ++o->header.gfx.animInfo.animFrame;
+    o->oForwardVel          = 20.0f;
     ColFlags collisionFlags = object_step();
-    if (animFrame == 5 || animFrame == 16) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
+    if ((animFrame == 5) || (animFrame == 16)) cur_obj_play_sound_2(SOUND_OBJ_BOBOMB_WALK);
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x800);
     obj_check_floor_death(collisionFlags, sObjFloor);
 }
@@ -192,7 +191,7 @@ void bhv_bobomb_loop(void) {
         }
         curr_obj_random_blink(&o->oBobombBlinkTimer);
         if (o->oBobombFuseLit) {
-            dustPeriodMinus1 = (o->oBobombFuseTimer >= 121) ? 1 : 7;
+            dustPeriodMinus1 = ((o->oBobombFuseTimer >= 121) ? 1 : 7);
             if (!(dustPeriodMinus1 & o->oBobombFuseTimer)) spawn_object(o, MODEL_SMOKE, bhvBobombFuseSmoke); /* oBobombFuseTimer % 2 or oBobombFuseTimer % 8 */
             cur_obj_play_sound_1(SOUND_AIR_BOBOMB_LIT_FUSE);
             o->oBobombFuseTimer++;

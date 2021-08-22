@@ -1,31 +1,32 @@
 // metal_box.c.inc
 
 struct ObjectHitbox sMetalBoxHitbox = {
-    /* interactType:      */ 0,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 0,
+    /* interactType:      */   0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
     /* radius:            */ 220,
     /* height:            */ 300,
     /* hurtboxRadius:     */ 220,
     /* hurtboxHeight:     */ 300,
 };
 
-s32 check_if_moving_over_floor(f32 maxDist, f32 offset) {
+
+//! move to object_helpers?
+Bool32 check_if_moving_over_floor(f32 maxDist, f32 offset) {
     struct Surface *floor;
-    f32 xPos = o->oPosX + sins(o->oMoveAngleYaw) * offset;
-    f32 floorHeight;
-    f32 zPos = o->oPosZ + coss(o->oMoveAngleYaw) * offset;
-    floorHeight = find_floor(xPos, o->oPosY, zPos, &floor);
-    return (absf(floorHeight - o->oPosY) < maxDist); // abs
+    f32 xPos        = (o->oPosX + (sins(o->oMoveAngleYaw) * offset));
+    f32 zPos        = (o->oPosZ + (coss(o->oMoveAngleYaw) * offset));
+    f32 floorHeight = find_floor(xPos, o->oPosY, zPos, &floor);
+    return (absf(floorHeight - o->oPosY) < maxDist);
 }
 
 void bhv_pushable_loop(void) {
     Angle angleToMario;
     obj_set_hitbox(o, &sMetalBoxHitbox);
     o->oForwardVel = 0.0f;
-    if (obj_check_if_collided_with_object(o, gMarioObject) && gMarioStates[0].flags & MARIO_PUSHING) {
+    if (obj_check_if_collided_with_object(o, gMarioObject) && (gMarioStates[0].flags & MARIO_PUSHING)) {
         angleToMario = obj_angle_to_object(o, gMarioObject);
         if (abs_angle_diff(angleToMario, gMarioObject->oMoveAngleYaw) > 0x4000) {
             o->oMoveAngleYaw = (Angle)((gMarioObject->oMoveAngleYaw + 0x2000) & 0xc000);

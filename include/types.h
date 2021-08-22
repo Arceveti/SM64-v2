@@ -80,6 +80,7 @@ typedef u8 uchar;
 typedef u8 Color;
 typedef Color Alpha;
 typedef Color Texture;
+typedef u16 ImageTexture;
 
 typedef Angle Vec3a[3];
 

@@ -55,7 +55,7 @@ struct {
     u64 stack[0x800 / sizeof(u64)];
     OSMesgQueue mesgQueue;
     OSMesg mesg;
-    u16 *framebuffer;
+    ImageTexture *framebuffer;
     u16 width;
     u16 height;
 } gCrashScreen;
@@ -94,7 +94,7 @@ void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
 }
 
 static char *write_to_buf(char *buffer, const char *data, size_t size) {
-    return (char *) memcpy(buffer, data, size) + size;
+    return ((char *) memcpy(buffer, data, size) + size);
 }
 
 void crash_screen_print(s32 x, s32 y, const char *fmt, ...) {
@@ -216,14 +216,14 @@ void thread2_crash_screen(UNUSED void *arg) {
     for (;;) {}
 }
 
-void crash_screen_set_framebuffer(u16 *framebuffer, u16 width, u16 height) {
+void crash_screen_set_framebuffer(ImageTexture *framebuffer, u16 width, u16 height) {
     gCrashScreen.framebuffer = framebuffer;
     gCrashScreen.width       = width;
     gCrashScreen.height      = height;
 }
 
 void crash_screen_init(void) {
-    gCrashScreen.framebuffer = ((u16 *) (osMemSize | 0x80000000) - (SCREEN_WIDTH * SCREEN_HEIGHT));
+    gCrashScreen.framebuffer = ((ImageTexture *) (osMemSize | 0x80000000) - (SCREEN_WIDTH * SCREEN_HEIGHT));
     gCrashScreen.width       = SCREEN_WIDTH;
     gCrashScreen.height      = SCREEN_HEIGHT;
     osCreateMesgQueue(&gCrashScreen.mesgQueue, &gCrashScreen.mesg, 1);

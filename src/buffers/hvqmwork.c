@@ -23,12 +23,12 @@
 /*
  * If the compressed data for decoding is only in 4:1:1 format:
  */
-	u16 hvqwork[(MAXWIDTH/8)*(MAXHEIGHT/8)*6];
+	u16 hvqwork[(MAXWIDTH / 8) * (MAXHEIGHT / 8) * 6];
 #else
 /*
  * If 4:2:2 data will (also) be decoded:
  */
-	u16 hvqwork[(MAXWIDTH/8)*(MAXHEIGHT/4)*4];
+	u16 hvqwork[(MAXWIDTH / 8) * (MAXHEIGHT / 4) * 4];
 #endif
 
 /*

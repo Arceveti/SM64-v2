@@ -5,10 +5,10 @@
  */
 static struct ObjectHitbox sTreasureChestBottomHitbox = {
     /* interactType:      */ INTERACT_SHOCK,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   1,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 300,
     /* height:            */ 300,
     /* hurtboxRadius:     */ 310,
@@ -58,8 +58,7 @@ void bhv_treasure_chest_bottom_loop(void) {
     switch (o->oAction) {
         case TREASURE_CHEST_BOTTOM_ACT_CLOSE:
             if (obj_check_if_facing_toward_angle(o->oMoveAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x3000)
-             && is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 150)
-             && !o->parentObj->oTreasureChestDoCloseChests) {
+             && is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 150) && !o->parentObj->oTreasureChestDoCloseChests) {
                 if (o->parentObj->oTreasureChestNumOpenedChests == o->oBehParams2ndByte) {
                     play_sound(SOUND_GENERAL2_RIGHT_ANSWER, gGlobalSoundSource);
                     o->parentObj->oTreasureChestNumOpenedChests++;
@@ -88,8 +87,7 @@ void bhv_treasure_chest_bottom_loop(void) {
 }
 
 void spawn_treasure_chest(s8 param, s32 x, s32 y, s32 z, Angle ry) {
-    struct Object *chestBaseObj;
-    chestBaseObj = spawn_object_abs_with_rot(o, 0, MODEL_TREASURE_CHEST_BASE, bhvTreasureChestBottom, x, y, z, 0x0, ry, 0x0);
+    struct Object *chestBaseObj     = spawn_object_abs_with_rot(o, 0, MODEL_TREASURE_CHEST_BASE, bhvTreasureChestBottom, x, y, z, 0x0, ry, 0x0);
     chestBaseObj->oBehParams2ndByte = param;
 }
 

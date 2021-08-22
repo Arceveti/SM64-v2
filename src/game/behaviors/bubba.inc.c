@@ -2,10 +2,10 @@
 
 static struct ObjectHitbox sBubbaHitbox = {
     /* interactType:      */ INTERACT_CLAM_OR_BUBBA,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 99,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   1,
+    /* health:            */  99,
+    /* numLootCoins:      */   0,
     /* radius:            */ 300,
     /* height:            */ 200,
     /* hurtboxRadius:     */ 300,

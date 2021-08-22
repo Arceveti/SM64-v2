@@ -8,9 +8,9 @@
 static struct ObjectHitbox sAmpHitbox = {
     /* interactType:      */ INTERACT_SHOCK,
     /* downOffset:        */ 40,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* damageOrCoinValue: */  1,
+    /* health:            */  0,
+    /* numLootCoins:      */  0,
     /* radius:            */ 40,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 50,
@@ -58,8 +58,8 @@ static void homing_amp_appear_loop(void) {
     // In Lakitu and Mario cam, it is usually very close to the current camera position.
     // In Fixed cam, it is the point behind Mario the camera will go to when transitioning
     // to Lakitu cam. Homing amps will point themselves towards this point when appearing.
-    f32 relativeTargetX = gLakituState.goalPos[0] - o->oPosX;
-    f32 relativeTargetZ = gLakituState.goalPos[2] - o->oPosZ;
+    f32 relativeTargetX = (gLakituState.goalPos[0] - o->oPosX);
+    f32 relativeTargetZ = (gLakituState.goalPos[2] - o->oPosZ);
     Angle targetYaw     = atan2s(relativeTargetZ, relativeTargetX);
     o->oMoveAngleYaw    = approach_s16_symmetric(o->oMoveAngleYaw, targetYaw, 0x1000);
     // For 30 frames, make the amp "appear" by increasing its size by 0.03 each frame,
@@ -67,7 +67,7 @@ static void homing_amp_appear_loop(void) {
     // evaluates to 0.1, which is the same as it was before. After 30 frames, it ends at
     // a scale factor of 0.97. The amp remains at 97% of its real height for 60 more frames.
     if (o->oTimer < 30) {
-        cur_obj_scale(0.1f + 0.9f * (f32)(o->oTimer / 30.0f));
+        cur_obj_scale(0.1f + (0.9f * (f32)(o->oTimer / 30.0f)));
     } else {
         o->oAnimState = AMP_ANIM_STATE_ON;
     }
@@ -112,10 +112,10 @@ static void homing_amp_chase_loop(void) {
         // The amp's average Y will approach Mario's graphical Y position + 250
         // at a rate of 10 units per frame. Interestingly, this is different from
         // the + 150 used while chasing him. Could this be a typo?
-        if (o->oHomingAmpAvgY < gMarioObject->header.gfx.pos[1] + 250.0f) o->oHomingAmpAvgY += 10.0f;
+        if (o->oHomingAmpAvgY < (gMarioObject->header.gfx.pos[1] + 250.0f)) o->oHomingAmpAvgY += 10.0f;
     }
     // The amp's position will sinusoidally oscillate 40 units around its average Y.
-    o->oPosY = o->oHomingAmpAvgY + sins(o->oAmpYPhase * 0x400) * 20.0f;
+    o->oPosY = (o->oHomingAmpAvgY + (sins(o->oAmpYPhase * 0x400) * 20.0f));
     // Handle attacks
     check_amp_attack();
     // Give up if Mario goes further than 1500 units from the amp's original position

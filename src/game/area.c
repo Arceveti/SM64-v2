@@ -95,14 +95,14 @@ const char *gNoControllerMsg[] = {
 #endif
 
 void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
-    u16 sp6 = (((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 0x1);
+    ImageTexture sp6 = (((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 0x1);
     gFBSetColor       = ((sp6 << 16) | sp6);
     gViewportOverride = a;
     gViewportClip     = b;
 }
 
 void set_warp_transition_rgb(Color red, Color green, Color blue) {
-    u16 warpTransitionRGBA16 = (((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 0x1);
+    ImageTexture warpTransitionRGBA16 = (((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 0x1);
     gWarpTransFBSetColor = ((warpTransitionRGBA16 << 16) | warpTransitionRGBA16);
     gWarpTransRed   = red;
     gWarpTransGreen = green;

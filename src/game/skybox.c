@@ -46,8 +46,7 @@
  */
 struct Skybox {
     /// The camera's yaw, from 0 to 65536, which maps to 0 to 360 degrees
-    //! s16/Angle?
-    u16 yaw;
+    u16 yaw; //! s16/Angle?
     /// The camera's pitch, which is bounded by +-16384, which maps to -90 to 90 degrees
     Angle pitch;
     /// The skybox's X position in world space
@@ -140,8 +139,8 @@ f32 calculate_skybox_scaled_x(s8 player, f32 fov) {
     f32 yaw       = sSkyBoxInfo[player].yaw;
     f32 yawScaled = (SCREEN_WIDTH * 360.0f * yaw / (fov * 65536.0f));
     // Round the scaled yaw. Since yaw is a u16, it doesn't need to check for < 0
-    f32 scaledX = yawScaled + 0.5f;
-    if (scaledX > SKYBOX_WIDTH) scaledX -= (s32) scaledX / SKYBOX_WIDTH * SKYBOX_WIDTH;
+    f32 scaledX = (yawScaled + 0.5f);
+    if (scaledX > SKYBOX_WIDTH) scaledX -= ((s32) scaledX / SKYBOX_WIDTH * SKYBOX_WIDTH);
     return (SKYBOX_WIDTH - scaledX);
 }
 
@@ -214,8 +213,8 @@ void draw_skybox_tile_grid(Gfx **dlist, s8 background, s8 player, s8 colorIndex)
 
 void *create_skybox_ortho_matrix(s8 player) {
     f32 left   = sSkyBoxInfo[player].scaledX;
-    f32 right  = sSkyBoxInfo[player].scaledX + SCREEN_WIDTH;
-    f32 bottom = sSkyBoxInfo[player].scaledY - SCREEN_HEIGHT;
+    f32 right  = (sSkyBoxInfo[player].scaledX + SCREEN_WIDTH);
+    f32 bottom = (sSkyBoxInfo[player].scaledY - SCREEN_HEIGHT);
     f32 top    = sSkyBoxInfo[player].scaledY;
     Mtx *mtx   = alloc_display_list(sizeof(*mtx));
 #ifdef WIDESCREEN

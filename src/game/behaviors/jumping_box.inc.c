@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sJumpingBoxHitbox = {
     /* interactType:      */ INTERACT_GRABBABLE,
-    /* downOffset:        */ 20,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 5,
+    /* downOffset:        */  20,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   5,
     /* radius:            */ 150,
     /* height:            */ 250,
     /* hurtboxRadius:     */ 150,
@@ -16,12 +16,12 @@ void jumping_box_act_idle(void) {
     if (o->oSubAction == JUMPING_BOX_SUB_ACT_IDLE_BOUNCING) {
         if (o->oJumpingBoxRandomTimer-- < 0) o->oSubAction = JUMPING_BOX_SUB_ACT_IDLE_RESET_TIMER;
         if (o->oTimer > 0) {
-            o->oVelY = random_float() * 5.0f + 15.0f;
+            o->oVelY      = ((random_float() * 5.0f) + 15.0f);
             o->oSubAction = JUMPING_BOX_SUB_ACT_IDLE_RESET_TIMER;
         }
     } else if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
-        o->oSubAction = JUMPING_BOX_SUB_ACT_IDLE_BOUNCING;
-        o->oJumpingBoxRandomTimer = random_float() * 60.0f + 30.0f;
+        o->oSubAction             = JUMPING_BOX_SUB_ACT_IDLE_BOUNCING;
+        o->oJumpingBoxRandomTimer = ((random_float() * 60.0f) + 30.0f);
     }
 }
 

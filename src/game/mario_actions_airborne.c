@@ -160,7 +160,7 @@ void update_air_with_turn(struct MarioState *m) {
 #ifdef AIR_TURN
     f32 sidewaysSpeed = 0.0f;
     Angle turnRange;
-    f32 absYVel = absf(m->vel[1]);
+    f32 absYVel = ABSF(m->vel[1]);
 #endif
     f32 dragThreshold;
     Angle intendedDYaw;
@@ -530,7 +530,7 @@ Bool32 act_wall_slide(struct MarioState *m) {
         wallDintendedYaw = abs_angle_diff(wallAngle, m->intendedYaw);
         if ((m->intendedMag > 16.0f) && (wallDintendedYaw <= 0x2000)) {
             m->faceAngle[1] = m->intendedYaw;
-            m->forwardVel  *= ABS(sins(wallDintendedYaw));
+            m->forwardVel  *= abss(sins(wallDintendedYaw));
             return set_mario_action(m, ACT_FREEFALL, 0);
         } else {
             sideward = ((m->intendedMag / 32.0f) * sins((Angle)(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX))) * 0.05f);

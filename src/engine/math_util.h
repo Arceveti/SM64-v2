@@ -20,7 +20,8 @@
 extern f32 gSineTable[];
 #define gCosineTable (gSineTable + 0x400)
 
-#define ABS(x) ((x) > 0.0f ? (x) : -(x))
+#define ABSF(x) ((x) > 0.0f ? (x) : -(x))
+#define ABSI(x) ((x) > 0    ? (x) : -(x))
 
 /**
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000
@@ -47,6 +48,7 @@ f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
 f32 slow_powf(f32 base, f32 exponent);
 // Rounding
+f32 froundf(f32 in);
 s16 round_float_to_short( f32 num);
 s32 round_float_to_int(   f32 num);
 s16 round_double_to_short(f64 num);

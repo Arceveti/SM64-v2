@@ -7,14 +7,14 @@
 
 struct ObjectHitbox sTweesterHitbox = {
     /* interactType:      */ INTERACT_TORNADO,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */    0,
+    /* damageOrCoinValue: */    0,
+    /* health:            */    0,
+    /* numLootCoins:      */    0,
     /* radius:            */ 1500,
     /* height:            */ 4000,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* hurtboxRadius:     */    0,
+    /* hurtboxHeight:     */    0,
 };
 
 /**
@@ -24,9 +24,9 @@ struct ObjectHitbox sTweesterHitbox = {
 void tweester_scale_and_move(f32 preScale) {
     Angle dYaw              = 0x2C00;
     f32 scale               = (preScale * 0.4f);
-    o->header.gfx.scale[0]  = ((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale);
-    o->header.gfx.scale[1]  = (((-coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.5f + 0.5f) * scale);
-    o->header.gfx.scale[2]  = ((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f * 0.3f + 1.0f) * scale);
+    o->header.gfx.scale[0]  = ((((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f) * 0.3f) + 1.0f) * scale);
+    o->header.gfx.scale[1]  = (((((-coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f) * 0.5f) + 0.5f) * scale);
+    o->header.gfx.scale[2]  = ((((( coss(o->oTweesterScaleTimer) + 1.0f) * 0.5f) * 0.3f) + 1.0f) * scale);
     o->oTweesterScaleTimer += 0x200;
     o->oForwardVel          = 14.0f;
     o->oFaceAngleYaw       += dYaw;
@@ -57,10 +57,10 @@ void tweester_act_idle(void) {
  * After Mario is twirling, then return home.
  */
 void tweester_act_chase(void) {
-    f32 activationRadius = o->oBehParams2ndByte * 100;
-    o->oAngleToHome = cur_obj_angle_to_home();
+    f32 activationRadius = (o->oBehParams2ndByte * 100);
+    o->oAngleToHome      = cur_obj_angle_to_home();
     cur_obj_play_sound_1(SOUND_ENV_WIND1);
-    o->oForwardVel = 20.0f;
+    o->oForwardVel       = 20.0f;
     if ((cur_obj_lateral_dist_from_mario_to_home() < activationRadius) && (o->oSubAction == TWEESTER_SUB_ACT_CHASE_MARIO)) {
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
         print_debug_top_down_objectinfo("off ", 0);
@@ -82,8 +82,7 @@ void tweester_act_chase(void) {
  * action if Mario is 2500 units away or 12 seconds passed.
  */
 void tweester_act_hide(void) {
-    f32 shrinkTimer = 60.0f - o->oTimer;
-
+    f32 shrinkTimer  = (60.0f - o->oTimer);
     if (shrinkTimer >= 0.0f) {
         tweester_scale_and_move(shrinkTimer / 60.0f);
     } else {
@@ -112,16 +111,13 @@ void bhv_tweester_loop(void) {
  */
 void bhv_tweester_sand_particle_loop(void) {
     o->oMoveAngleYaw += 0x3700;
-    o->oForwardVel += 15.0f;
-    o->oPosY += 22.0f;
-
+    o->oForwardVel   += 15.0f;
+    o->oPosY         += 22.0f;
     cur_obj_scale(random_float() + 1.0f);
-
     if (o->oTimer == 0) {
         obj_translate_xz_random(o, 100.0f);
         o->oFaceAnglePitch = random_u16();
         o->oFaceAngleYaw   = random_u16();
     }
-
     if (o->oTimer > 15) obj_mark_for_deletion(o);
 }

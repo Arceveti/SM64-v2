@@ -4,8 +4,8 @@
 // plant code later on reuses this function.
 void bhv_piranha_particle_loop(void) {
     if (o->oTimer == 0) {
-        o->oVelY       = 20.0f + 20.0f * random_float();
-        o->oForwardVel = 20.0f + 20.0f * random_float();
+        o->oVelY         = (20.0f + (20.0f * random_float()));
+        o->oForwardVel   = (20.0f + (20.0f * random_float()));
         o->oMoveAngleYaw = random_u16();
     }
     cur_obj_move_using_fvel_and_gravity();
@@ -17,7 +17,7 @@ void mr_i_piranha_particle_act_move(void) {
     cur_obj_update_floor_and_walls();
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         o->oAction = MR_I_PIRANHA_PARTICLE_ACT_INTERACTED;
-    } else if ((o->oTimer >= 101) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) {
+    } else if ((o->oTimer >= 101) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         obj_mark_for_deletion(o);
         spawn_mist_particles();
     }
@@ -26,7 +26,7 @@ void mr_i_piranha_particle_act_move(void) {
 void mr_i_piranha_particle_act_interacted(void) {
     s32 i;
     obj_mark_for_deletion(o);
-    for (i = 0; i < 10; i++) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
+    for ((i = 0); (i < 10); (i++)) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
 }
 
 void (*sMrIParticleActions[])(void) = { mr_i_piranha_particle_act_move, mr_i_piranha_particle_act_interacted };
@@ -36,12 +36,11 @@ void bhv_mr_i_particle_loop(void) {
 }
 
 void spawn_mr_i_particle(void) {
-    struct Object *particle;
     f32 scaleY = o->header.gfx.scale[1];
-    particle = spawn_object(o, MODEL_PURPLE_MARBLE, bhvMrIParticle);
-    particle->oPosY +=                          50.0f * scaleY;
-    particle->oPosX += sins(o->oMoveAngleYaw) * 90.0f * scaleY;
-    particle->oPosZ += coss(o->oMoveAngleYaw) * 90.0f * scaleY;
+    struct Object *particle = spawn_object(o, MODEL_PURPLE_MARBLE, bhvMrIParticle);
+    particle->oPosY += (                         50.0f * scaleY);
+    particle->oPosX += (sins(o->oMoveAngleYaw) * 90.0f * scaleY);
+    particle->oPosZ += (coss(o->oMoveAngleYaw) * 90.0f * scaleY);
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
 }
 
@@ -49,11 +48,11 @@ void bhv_mr_i_body_loop(void) {
     obj_copy_pos_and_angle(o, o->parentObj);
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         obj_copy_scale(o, o->parentObj);
-        obj_set_parent_relative_pos(o, 0, 0, o->header.gfx.scale[1] * 100.0f);
+        obj_set_parent_relative_pos(o, 0, 0, (o->header.gfx.scale[1] * 100.0f));
         obj_build_transform_from_pos_and_angle(o, O_PARENT_RELATIVE_POS_INDEX, O_MOVE_ANGLE_INDEX);
         obj_translate_local(o, O_POS_INDEX, O_PARENT_RELATIVE_POS_INDEX);
         o->oFaceAnglePitch = o->oMoveAnglePitch;
-        o->oGraphYOffset = o->header.gfx.scale[1] * 100.0f;
+        o->oGraphYOffset   = (o->header.gfx.scale[1] * 100.0f);
     }
     if (!o->parentObj->oMrIBlinking) {
         o->oAnimState = -1;
@@ -70,22 +69,22 @@ void mr_i_act_spin_death(void) {
     s16 startYaw;
     f32 shakeY;
     f32 baseScale;
-    f32 BBHScaleModifier = o->oBehParams2ndByte ? 2.0f : 1.0f;
-    s16 direction        = (o->oMrISpinDirection < 0) ? 0x1000 : -0x1000;
-    f32 spinAmount       = (o->oTimer + 1) / 96.0f;
+    f32 BBHScaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
+    s16 direction        = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
+    f32 spinAmount       = ((o->oTimer + 1) / 96.0f);
     if (o->oTimer < 64) {
         startYaw          = o->oMoveAngleYaw;
-        o->oMoveAngleYaw += direction * coss(0x4000 * spinAmount);
-        if (startYaw < 0x0 && o->oMoveAngleYaw >= 0x0) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
-        o->oMoveAnglePitch = (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
+        o->oMoveAngleYaw += (direction * coss(0x4000 * spinAmount));
+        if ((startYaw < 0x0) && (o->oMoveAngleYaw >= 0x0)) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
+        o->oMoveAnglePitch = ((1.0f - coss(0x4000 * spinAmount)) * -0x4000);
         cur_obj_shake_y(4.0f);
     } else if (o->oTimer < 96) {
         if (o->oTimer == 64) cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
-        shakeY = (f32)(o->oTimer - 63) / 32;
-        o->oMoveAngleYaw  += direction * coss(0x4000 * spinAmount);
-        o->oMoveAnglePitch =     (1.0f - coss(0x4000 * spinAmount)) * -0x4000;
+        shakeY = ((f32)(o->oTimer - 63) / 32);
+        o->oMoveAngleYaw  += (direction * coss(0x4000 * spinAmount));
+        o->oMoveAnglePitch =     ((1.0f - coss(0x4000 * spinAmount)) * -0x4000);
         cur_obj_shake_y((s32)((1.0f - shakeY) * 4)); // trucating the f32?
-        baseScale = coss(0x4000 * shakeY) * 0.4f + 0.6f;
+        baseScale = ((coss(0x4000 * shakeY) * 0.4f) + 0.6f);
         cur_obj_scale(baseScale * BBHScaleModifier);
     } else if (o->oTimer < 104) {
         // do nothing
@@ -93,7 +92,7 @@ void mr_i_act_spin_death(void) {
         if (o->oTimer == 104) {
             cur_obj_become_intangible();
             spawn_mist_particles();
-            o->oMrISize = BBHScaleModifier * 0.6f;
+            o->oMrISize = (BBHScaleModifier * 0.6f);
             if (o->oBehParams2ndByte) {
                 o->oPosY += 100.0f;
                 spawn_default_star(1370, 2000.0f, -320.0f);
@@ -102,7 +101,7 @@ void mr_i_act_spin_death(void) {
                 cur_obj_spawn_loot_blue_coin();
             }
         }
-        o->oMrISize -= 0.2f * BBHScaleModifier;
+        o->oMrISize -= (0.2f * BBHScaleModifier);
         if (o->oMrISize < 0) o->oMrISize = 0; // Prevent negative scale
         cur_obj_scale(o->oMrISize);
     } else {
@@ -114,7 +113,7 @@ void mr_i_act_looking_at_mario(void) {
     Angle dYaw;
     Angle startYaw = o->oMoveAngleYaw;
     if (o->oTimer == 0) {
-        o->oMrISpinAngle     = (o->oBehParams2ndByte) ? 200 : 120;
+        o->oMrISpinAngle     = ((o->oBehParams2ndByte) ? 200 : 120); //! param names?
         o->oMrISpinAmount    = 0;
         o->oMrISpinDirection = 0;
         o->oMrIParticleTimer = 0;
@@ -149,15 +148,15 @@ void mr_i_act_looking_at_mario(void) {
     }
     if (o->oMrISpinAmount < 5000) {
         if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget) o->oMrIBlinking = TRUE;
-        if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 20) {
+        if (o->oMrIParticleTimer == (o->oMrIParticleTimerTarget + 20)) {
             spawn_mr_i_particle();
             o->oMrIParticleTimer = 0;
-            o->oMrIParticleTimerTarget = (s32)(random_float() * 50.0f + 50.0f);
+            o->oMrIParticleTimerTarget = (s32)((random_float() * 50.0f) + 50.0f);
         }
         o->oMrIParticleTimer++;
     } else {
         o->oMrIParticleTimer = 0;
-        o->oMrIParticleTimerTarget = (s32)(random_float() * 50.0f + 50.0f);
+        o->oMrIParticleTimerTarget = (s32)((random_float() * 50.0f) + 50.0f);
     }
     if (o->oDistanceToMario > 800.0f) o->oAction = MR_I_ACT_IDLE;
 }
@@ -170,10 +169,10 @@ void mr_i_act_idle(void) {
         cur_obj_become_tangible();
         o->oMoveAnglePitch         = 0x0;
         o->oMrIParticleTimer       = 30;
-        o->oMrIParticleTimerTarget = random_float() * 20.0f;
-        o->oAngleVelYaw            = (o->oMrIParticleTimerTarget & 0x1) ? -256 : 256;
+        o->oMrIParticleTimerTarget = (random_float() * 20.0f);
+        o->oAngleVelYaw            = ((o->oMrIParticleTimerTarget & 0x1) ? -256 : 256);
     }
-    if (angleDiffMoveYawToMario < 1024 && angleDiffMoveYawToMarioFaceYaw > 0x4000) {
+    if ((angleDiffMoveYawToMario < 1024) && (angleDiffMoveYawToMarioFaceYaw > 0x4000)) {
         if (o->oDistanceToMario < 700.0f) {
             o->oAction = MR_I_ACT_LOOKING_AT_MARIO;
         } else {
@@ -184,9 +183,9 @@ void mr_i_act_idle(void) {
         o->oMrIParticleTimer = 30;
     }
     if (o->oMrIParticleTimer == o->oMrIParticleTimerTarget + 60) o->oMrIBlinking = TRUE;
-    if (o->oMrIParticleTimerTarget + 80 < o->oMrIParticleTimer) {
+    if ((o->oMrIParticleTimerTarget + 80) < o->oMrIParticleTimer) {
         o->oMrIParticleTimer       = 0;
-        o->oMrIParticleTimerTarget = random_float() * 80.0f;
+        o->oMrIParticleTimerTarget = (random_float() * 80.0f);
         spawn_mr_i_particle();
     }
 }
@@ -202,19 +201,19 @@ void (*sMrIActions[])(void) = { mr_i_act_far_away, mr_i_act_idle, mr_i_act_looki
 
 struct ObjectHitbox sMrIHitbox = {
     /* interactType:      */ INTERACT_DAMAGE,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 2,
-    /* health:            */ 2,
-    /* numLootCoins:      */ 5,
-    /* radius:            */ 80,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   2,
+    /* health:            */   2,
+    /* numLootCoins:      */   5,
+    /* radius:            */  80,
     /* height:            */ 150,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* hurtboxRadius:     */   0,
+    /* hurtboxHeight:     */   0,
 };
 
 void bhv_mr_i_loop(void) {
     obj_set_hitbox(o, &sMrIHitbox);
     cur_obj_call_action_function(sMrIActions);
-    if (o->oAction != MR_I_ACT_SPIN_DEATH && (o->oDistanceToMario > 3000.0f || o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) o->oAction = MR_I_ACT_FAR_AWAY;
+    if ((o->oAction != MR_I_ACT_SPIN_DEATH) && ((o->oDistanceToMario > 3000.0f) || (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM))) o->oAction = MR_I_ACT_FAR_AWAY;
     o->oInteractStatus = INT_STATUS_NONE;
 }

@@ -23,7 +23,7 @@ static void beta_holdable_object_drop(void) {
     // Re-enable rendering
     cur_obj_enable_rendering();
     cur_obj_get_dropped();
-    o->oHeldState = HELD_FREE;
+    o->oHeldState  = HELD_FREE;
     o->oForwardVel = 0.0f;
     o->oVelY       = 0.0f;
 }

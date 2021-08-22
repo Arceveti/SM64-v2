@@ -29,19 +29,16 @@ void bhv_coffin_spawner_loop(void) {
     struct Object *coffin;
     s32 i;
     s16 relativeZ;
-
     if (o->oAction == COFFIN_SPAWNER_ACT_COFFINS_UNLOADED) {
         if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-            for (i = 0; i < 6; i++) {
+            for ((i = 0); (i < 6); (i++)) {
                 relativeZ = coffinRelativePos[i].z;
-
                 // Behavior param of COFFIN_BP_STATIONARY for all even i, COFFIN_BP_MOVING for all odd
-                coffin = spawn_object_relative(i & 0x1, coffinRelativePos[i].x, 0, relativeZ, o, MODEL_BBH_WOODEN_TOMB, bhvCoffin);
-
+                coffin = spawn_object_relative((i & 0x1), coffinRelativePos[i].x, 0, relativeZ, o, MODEL_BBH_WOODEN_TOMB, bhvCoffin);
                 // Never true, game would enter a while(1) before it could.
                 // Possible a remnant of days this didn't happen.
                 // Rotate the coffin 180 degrees if its on the other side of the room.
-                if (coffin != NULL && relativeZ > 0) coffin->oFaceAngleYaw = 0x8000;
+                if ((coffin != NULL) && (relativeZ > 0)) coffin->oFaceAngleYaw = 0x8000;
             }
             o->oAction = COFFIN_SPAWNER_ACT_COFFINS_LOADED;
         }
@@ -58,24 +55,19 @@ void bhv_coffin_spawner_loop(void) {
 void coffin_act_idle(void) {
     f32 yawCos;
     // f32 yawSin;
-    f32 dx;
-    f32 dz;
-    f32 distForwards;
-    f32 distSideways;
-
+    f32 dx, dz;
+    f32 distForwards, distSideways;
     if (o->oBehParams2ndByte != COFFIN_BP_STATIONARY) {
         // Lay down if standing
         if (o->oFaceAnglePitch != 0x0) {
             o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, -0x7D0, 0xC8);
-
             // If the coffin landed...
             if (obj_face_pitch_approach(0, -o->oAngleVelPitch)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
-
                 // This bit changes the coffin's position,
                 // spawns dust there, then resets the position.
                 obj_perform_position_op(POS_OP_SAVE_POSITION);
-                o->oMoveAngleYaw = o->oFaceAngleYaw - 0x4000;
+                o->oMoveAngleYaw = (o->oFaceAngleYaw - 0x4000);
                 obj_set_dist_from_home(200.0f);
                 spawn_mist_from_global();
                 obj_perform_position_op(POS_OP_RESTORE_POSITION);
@@ -86,21 +78,18 @@ void coffin_act_idle(void) {
             // Yaw never changes and is aligned, so yawCos = 1 or -1, yawSin = 0
             yawCos = coss(o->oFaceAngleYaw);
             // yawSin = sins(o->oFaceAngleYaw);
-
-            dx = gMarioObject->oPosX - o->oPosX;
-            dz = gMarioObject->oPosZ - o->oPosZ;
-
-            distForwards = dx * yawCos; // + dz * yawSin;
-            distSideways = dz * yawCos; // - dx * yawSin;
-
+            dx = (gMarioObject->oPosX - o->oPosX);
+            dz = (gMarioObject->oPosZ - o->oPosZ);
+            distForwards = (dx * yawCos); // + (dz * yawSin);
+            distSideways = (dz * yawCos); // - (dx * yawSin);
             // This checks a box around the coffin and if it has been a bit since it stood up.
             // It also checks in the case Mario is squished, so he doesn't get permanently squished.
-            if (o->oTimer > 60
-             && (o->oDistanceToMario > 100.0f || gMarioState->action == ACT_SQUISHED)
-             && gMarioObject->oPosY - o->oPosY < 200.0f
-             && absf(distForwards) < 140.0f
-             && distSideways <  150.0f
-             && distSideways > -450.0f) {
+            if ((o->oTimer > 60)
+             && ((o->oDistanceToMario > 100.0f) || (gMarioState->action == ACT_SQUISHED))
+             && ((gMarioObject->oPosY - o->oPosY) < 200.0f)
+             && (ABSF(distForwards) < 140.0f)
+             && (distSideways <  150.0f)
+             && (distSideways > -450.0f)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_BUTTON_PRESS_2_LOWPRIO);
                 o->oAction = COFFIN_ACT_STAND_UP;
             }
@@ -125,7 +114,7 @@ void coffin_act_stand_up(void) {
         } else if (o->oTimer > 30) {
             if (!(gGlobalTimer & 0x3)) cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
             // Shake the coffin while its standing
-            o->oFaceAngleRoll = 0x190 * (gGlobalTimer & 0x1) - 0xC8;
+            o->oFaceAngleRoll = ((0x190 * (gGlobalTimer & 0x1)) - 0xC8);
         }
         o->oAngleVelPitch = 0x0;
     }

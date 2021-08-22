@@ -632,10 +632,10 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
         if ((sMarioCamState->action == ACT_BUTT_STUCK_IN_GROUND) ||
             (sMarioCamState->action == ACT_HEAD_STUCK_IN_GROUND) ||
             (sMarioCamState->action == ACT_FEET_STUCK_IN_GROUND)) {
-            if (ABS(c->pos[1] - goalHeight) > 1000.0f) c->pos[1] = goalHeight;
+            if (absf(c->pos[1] - goalHeight) > 1000.0f) c->pos[1] = goalHeight;
         }
 #ifdef FAST_VERTICAL_CAMERA_MOVEMENT
-        approachRate += (ABS(c->pos[1] - goalHeight) / 20);
+        approachRate += (absf(c->pos[1] - goalHeight) / 20);
 #endif
         approach_camera_height(c, goalHeight, approachRate);
         if (camCeilHeight != CELL_HEIGHT_LIMIT) {
@@ -1624,7 +1624,7 @@ Angle update_default_camera(struct Camera *c) {
     vec3f_get_lateral_dist(sMarioCamState->pos, c->pos, &xzDist);
     if (sStatusFlags & CAM_FLAG_BEHIND_MARIO_POST_DOOR) {
         if (xzDist >= 250) sStatusFlags &= ~CAM_FLAG_BEHIND_MARIO_POST_DOOR;
-        if (ABS((sMarioCamState->faceAngle[1] - yaw) / 2) < 0x1800) {
+        if (abss((sMarioCamState->faceAngle[1] - yaw) / 2) < 0x1800) {
             sStatusFlags &= ~CAM_FLAG_BEHIND_MARIO_POST_DOOR;
             yaw = sCameraYawAfterDoorCutscene + DEGREES(180);
             dist = 800.0f;
@@ -3204,7 +3204,7 @@ void set_camera_pitch_shake(s16 mag, s16 decay, s16 inc) {
  * Start shaking the camera's yaw (side to side)
  */
 void set_camera_yaw_shake(s16 mag, s16 decay, s16 inc) {
-    if (ABS(mag) > ABS(gLakituState.shakeMagnitude[1])) {
+    if (ABSI(mag) > ABSI(gLakituState.shakeMagnitude[1])) {
         gLakituState.shakeMagnitude[1] = mag;
         gLakituState.shakeYawDecay     = decay;
         gLakituState.shakeYawVel       = inc;
@@ -3736,8 +3736,7 @@ void set_focus_rel_mario(struct Camera *c, f32 leftRight, f32 yOff, f32 forwBack
  * @param yawOff offset to Mario's faceAngle, changes the direction of `leftRight` and `forwBack`
  */
 UNUSED static void unused_set_pos_rel_mario(struct Camera *c, f32 leftRight, f32 yOff, f32 forwBack, Angle yawOff) {
-    //! s16/Angle?
-    u16 yaw = sMarioCamState->faceAngle[1] + yawOff;
+    Angle yaw = (sMarioCamState->faceAngle[1] + yawOff);
     c->pos[0] = (sMarioCamState->pos[0] + (forwBack * sins(yaw)) + (leftRight * coss(yaw)));
     c->pos[1] = (sMarioCamState->pos[1] + yOff);
     c->pos[2] = (sMarioCamState->pos[2] + (forwBack * coss(yaw)) - (leftRight * sins(yaw)));
@@ -3826,7 +3825,7 @@ Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, 
     // Transition from the last mode to the current one
     if (sModeTransition.framesLeft > 0) {
         vec3f_get_dist_and_angle(curFoc, curPos, &goalDist, &goalPitch, &goalYaw);
-        distVelocity  = (           ABS(goalDist - sModeTransition.posDist ) /  distTimer);
+        distVelocity  = (          absf(goalDist - sModeTransition.posDist ) /  distTimer);
         pitchVelocity = (abs_angle_diff(goalPitch, sModeTransition.posPitch) / angleTimer);
         yawVelocity   = (abs_angle_diff(goalYaw,   sModeTransition.posYaw  ) / angleTimer);
         camera_approach_f32_symmetric_bool(&sModeTransition.posDist,  goalDist,  distVelocity);
@@ -5290,7 +5289,7 @@ void cutscene_ending_mario_fall_start(struct Camera *c) {
  */
 void cutscene_ending_mario_fall_focus_mario(struct Camera *c) {
     Vec3f offset;
-    vec3f_set(offset, 0.0f, 80.0f, (ABS(sMarioCamState->pos[1] - c->pos[1]) * -0.1f));
+    vec3f_set(offset, 0.0f, 80.0f, (absf(sMarioCamState->pos[1] - c->pos[1]) * -0.1f));
     if (offset[2] > -100.0f) offset[2] = -100.0f;
     offset_rotated(c->focus, sMarioCamState->pos, offset, sMarioCamState->faceAngle);
 }
@@ -6335,7 +6334,7 @@ void cutscene_red_coin_star_warp(struct Camera *c) {
     vec3f_get_dist_and_angle(sCutsceneVars[1].point, c->pos, &dist, &pitch, &yaw);
     vec3f_get_yaw(sCutsceneVars[1].point, c->pos,           &posYaw);
     vec3f_get_yaw(sCutsceneVars[1].point, sMarioCamState->pos, &yaw);
-    if (ABS((yaw - posYaw) + DEGREES(90)) < ABS((yaw - posYaw) - DEGREES(90))) {
+    if (abss((yaw - posYaw) + DEGREES(90)) < abss((yaw - posYaw) - DEGREES(90))) {
         yaw += DEGREES(90);
     } else {
         yaw -= DEGREES(90);
@@ -6448,7 +6447,7 @@ void cutscene_prepare_cannon_fly_to_cannon(struct Camera *c) {
  * Used in the cannon opening cutscene to fly back to the camera's last position and focus
  */
 void cannon_approach_prev(f32 *value, f32 target) {
-    f32 inc = (ABS(target - *value) / sCutsceneVars[2].point[0]);
+    f32 inc = (absf(target - *value) / sCutsceneVars[2].point[0]);
     camera_approach_f32_symmetric_bool(value, target, inc);
 }
 

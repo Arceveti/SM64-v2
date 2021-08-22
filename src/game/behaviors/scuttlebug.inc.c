@@ -2,22 +2,23 @@
 
 struct ObjectHitbox sScuttlebugHitbox = {
     /* interactType:      */ INTERACT_BOUNCE_TOP,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 3,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   1,
+    /* health:            */   1,
+    /* numLootCoins:      */   3,
     /* radius:            */ 130,
-    /* height:            */ 70,
-    /* hurtboxRadius:     */ 90,
-    /* hurtboxHeight:     */ 60,
+    /* height:            */  70,
+    /* hurtboxRadius:     */  90,
+    /* hurtboxHeight:     */  60,
 };
 
+//! Angle type for param?
 s32 update_angle_from_move_flags(s32 *angle) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *angle = o->oWallAngle;
-        return 1;
+        return  1;
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *angle = o->oMoveAngleYaw + 0x8000;
+        *angle = (o->oMoveAngleYaw + 0x8000);
         return -1;
     }
     return 0;
@@ -26,15 +27,13 @@ s32 update_angle_from_move_flags(s32 *angle) {
 void bhv_scuttlebug_loop(void) {
     f32 accel;
     cur_obj_update_floor_and_walls();
-    if (o->oSubAction != SCUTTLEBUG_SUB_ACT_RESET && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) o->oSubAction = SCUTTLEBUG_SUB_ACT_ALERT;
+    if ((o->oSubAction != SCUTTLEBUG_SUB_ACT_RESET) && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) o->oSubAction = SCUTTLEBUG_SUB_ACT_ALERT;
     if (o->oSubAction != SCUTTLEBUG_SUB_ACT_MOVING) o->oScuttlebugIsAtttacking = FALSE;
     switch (o->oSubAction) {
         case SCUTTLEBUG_SUB_ACT_RESET:
             if (o->oMoveFlags & OBJ_MOVE_LANDED) cur_obj_play_sound_2(SOUND_OBJ_GOOMBA_ALERT);
             if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-                o->oHomeX = o->oPosX;
-                o->oHomeY = o->oPosY;
-                o->oHomeZ = o->oPosZ;
+                vec3f_copy(&o->oHomeVec, &o->oPosVec);
                 o->oSubAction = SCUTTLEBUG_SUB_ACT_MOVING;
             }
             break;
@@ -87,7 +86,7 @@ void bhv_scuttlebug_loop(void) {
             if (o->oScuttlebugTimer > 30) o->oSubAction = SCUTTLEBUG_SUB_ACT_RESET;
             break;
     }
-    accel = (o->oForwardVel < 10.0f) ? 1.0f : 3.0f;
+    accel = ((o->oForwardVel < 10.0f) ? 1.0f : 3.0f);
     cur_obj_init_animation_with_accel_and_sound(SCUTTLEBUG_ANIM_JUMP, accel);
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) set_obj_anim_with_accel_and_sound(SCUTTLEBUG_ANIM_WALK, 23, SOUND_OBJ2_SCUTTLEBUG_WALK);
     if (o->parentObj != o) {
@@ -100,7 +99,7 @@ void bhv_scuttlebug_loop(void) {
 void bhv_scuttlebug_spawn_loop(void) {
     struct Object *scuttlebug;
     if (o->oAction == SCUTTLEBUG_SPAWNER_ACT_ACTIVE) {
-        if (o->oTimer > 30 && 500.0f < o->oDistanceToMario && o->oDistanceToMario < 1500.0f) {
+        if ((o->oTimer > 30) && (500.0f < o->oDistanceToMario) && (o->oDistanceToMario < 1500.0f)) {
             cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
             scuttlebug                            = spawn_object(o, MODEL_SCUTTLEBUG, bhvScuttlebug);
             scuttlebug->oScuttlebugHasNoLootCoins = o->oScuttlebugSpawnerSpawnWithNoLootCoins;

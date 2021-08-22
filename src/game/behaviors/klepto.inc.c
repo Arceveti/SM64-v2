@@ -1,12 +1,12 @@
 static struct ObjectHitbox sKleptoHitbox = {
     /* interactType:      */ INTERACT_HIT_FROM_BELOW,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
     /* radius:            */ 160,
     /* height:            */ 250,
-    /* hurtboxRadius:     */ 80,
+    /* hurtboxRadius:     */  80,
     /* hurtboxHeight:     */ 200,
 };
 
@@ -80,9 +80,7 @@ void bhv_klepto_init(void) {
         o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
 #endif
     } else {
-        o->oKleptoStartPosX = o->oPosX;
-        o->oKleptoStartPosY = o->oPosY;
-        o->oKleptoStartPosZ = o->oPosZ;
+        vec3f_copy(&o->oKleptoStartPosVec, &o->oPosVec);
         if (save_file_get_flags() & SAVE_FLAG_CAP_ON_KLEPTO) {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_CAP;
         } else {
@@ -98,7 +96,7 @@ static void klepto_change_target(void) {
     f32 targetDist, minTargetDist;
     if (o->oDistanceToMario > 2000.0f) {
         minTargetDist = 99999.0f;
-        for (i = 0; i < 3; i++) {
+        for ((i = 0); (i < 3); (i++)) {
             dx = (gMarioObject->oPosX - sKleptoTargetPositions[i][0]);
             dz = (gMarioObject->oPosZ - sKleptoTargetPositions[i][2]);
             targetDist = sqrtf(sqr(dx) + sqr(dz));
@@ -108,14 +106,14 @@ static void klepto_change_target(void) {
             }
         }
     } else {
-        newTarget = random_u16() % 3;
+        newTarget = (random_u16() % 0x3);
     }
     o->oKleptoHomeYOffset           = (400 * absi(newTarget - o->oKleptoTargetNumber));
     o->oKleptoTargetNumber          = newTarget;
     o->oHomeX                       =  sKleptoTargetPositions[o->oKleptoTargetNumber][0];
     o->oHomeY                       = (sKleptoTargetPositions[o->oKleptoTargetNumber][1] + o->oKleptoHomeYOffset);
     o->oHomeZ                       =  sKleptoTargetPositions[o->oKleptoTargetNumber][2];
-    o->oKleptoHalfLateralDistToHome = cur_obj_lateral_dist_to_home() / 2;
+    o->oKleptoHalfLateralDistToHome = (cur_obj_lateral_dist_to_home() / 2);
 }
 
 static void klepto_circle_target(f32 radius, f32 targetSpeed) {
@@ -195,17 +193,17 @@ static void klepto_act_dive_at_mario(void) {
         f32 dy = (o->oPosY - gMarioObject->oPosY);
         if (o->oSoundStateID == KLEPTO_ANIM_DIVE_AT_MARIO_3) {
             cur_obj_set_anim_if_at_end(KLEPTO_ANIM_DIVE_AT_MARIO_4);
-        } else if (o->oVelY > 0.0f && dy > 200.0f) {
+        } else if ((o->oVelY > 0.0f) && (dy > 200.0f)) {
             cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_AT_MARIO_2);
         }
         o->oKleptoPitchToTarget = -0x3000;
         if (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_NOTHING) {
             if (o->oSubAction == KLEPTO_SUB_ACT_DIVE_TURN_PITCH) {
                 o->oKleptoPitchToTarget = obj_turn_pitch_toward_mario(0.0f, 0x0);
-                o->oKleptoYawToTarget = o->oAngleToMario;
+                o->oKleptoYawToTarget   = o->oAngleToMario;
                 if (dy < 160.0f) o->oSubAction = KLEPTO_SUB_ACT_DIVE_STOP;
             }
-            if (gMarioStates[0].action != ACT_SLEEPING
+            if ((gMarioStates[0].action != ACT_SLEEPING)
                 && !(gMarioStates[0].action & (ACT_FLAG_SHORT_HITBOX | ACT_FLAG_BUTT_OR_STOMACH_SLIDE))
                 && (o->oDistanceToMario < 200.0f) && (dy > 50.0f) && (dy < 90.0f)) {
                 if (mario_lose_cap_to_enemy(1)) o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_CAP;

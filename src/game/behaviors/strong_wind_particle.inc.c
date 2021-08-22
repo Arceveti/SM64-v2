@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sStrongWindParticleHitbox = {
     /* interactType:      */ INTERACT_STRONG_WIND,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  0,
+    /* health:            */  0,
+    /* numLootCoins:      */  0,
     /* radius:            */ 20,
     /* height:            */ 70,
     /* hurtboxRadius:     */ 20,

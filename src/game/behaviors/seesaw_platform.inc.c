@@ -32,7 +32,7 @@ void bhv_seesaw_platform_init(void) {
  */
 void bhv_seesaw_platform_update(void) {
     o->oFaceAnglePitch += (s32) o->oSeesawPlatformPitchVel;
-    if (absf(o->oSeesawPlatformPitchVel) > 10.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
+    if (ABSF(o->oSeesawPlatformPitchVel) > 10.0f) cur_obj_play_sound_1(SOUND_ENV_BOAT_ROCKING1);
     if (gMarioObject->platform == o) {
         // Rotate toward Mario
         f32 rotation = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);

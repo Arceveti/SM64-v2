@@ -108,11 +108,11 @@ static void puppycam_analogue_stick(void) {
     // I make the X axis negative, so that the movement reflects the Cbuttons.
     gPuppyCam.stick2[0] = -gPlayer2Controller->rawStickX;
     gPuppyCam.stick2[1] =  gPlayer2Controller->rawStickY;
-    if (ABS(gPuppyCam.stick2[0]) < DEADZONE) {
+    if (absc(gPuppyCam.stick2[0]) < DEADZONE) {
         gPuppyCam.stick2[0] = 0;
         gPuppyCam.stickN[0] = 0;
     }
-    if (ABS(gPuppyCam.stick2[1]) < DEADZONE) {
+    if (absc(gPuppyCam.stick2[1]) < DEADZONE) {
         gPuppyCam.stick2[1] = 0;
         gPuppyCam.stickN[1] = 0;
     }
@@ -139,7 +139,7 @@ void puppycam_boot(void) {
     gPuppyCam.stick2[1]     = 0;
     gPuppyCam.stickN[0]     = 0;
     gPuppyCam.stickN[1]     = 0;
-    gPuppyMemoryPool        = mem_pool_init(MAX_PUPPYCAM_VOLUMES * sizeof(struct sPuppyVolume), MEMORY_POOL_LEFT);
+    gPuppyMemoryPool        = mem_pool_init((MAX_PUPPYCAM_VOLUMES * sizeof(struct sPuppyVolume)), MEMORY_POOL_LEFT);
     gPuppyVolumeCount       = 0;
     gPuppyCam.enabled       = TRUE;
     puppycam_get_save();
@@ -325,7 +325,7 @@ void puppycam_check_pause_buttons() {
         }
     }
     if (gPCOptionOpen) {
-        if ((ABS(gPlayer1Controller->rawStickY) > 60) || (gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD))) {
+        if ((abss(gPlayer1Controller->rawStickY) > 60) || (gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD))) {
             gPCOptionTimer -= 1;
             if (gPCOptionTimer <= 0) {
                 if (gPCOptionIndex == 0) {
@@ -343,7 +343,7 @@ void puppycam_check_pause_buttons() {
                     if (gPCOptionSelected >= gPCOptionCap) gPCOptionSelected = 0;
                 }
             }
-        } else if ((ABS(gPlayer1Controller->rawStickX) > 60) || (gPlayer1Controller->buttonDown & (L_JPAD | R_JPAD))) {
+        } else if ((abss(gPlayer1Controller->rawStickX) > 60) || (gPlayer1Controller->buttonDown & (L_JPAD | R_JPAD))) {
             gPCOptionTimer -= 1;
             if (gPCOptionTimer <= 0) {
                 if (gPCOptionIndex == 0) {
@@ -506,12 +506,12 @@ static void puppycam_input_hold_preset3(UNUSED f32 ivX) {
     if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_IN) {
         gPuppyCam.flags &= ~PUPPYCAM_BEHAVIOUR_COLLISION;
         // Handles continuous movement as normal, as long as the button's held.
-        if (ABS(gPlayer1Controller->rawStickX) > DEADZONE) {
+        if (abss(gPlayer1Controller->rawStickX) > DEADZONE) {
             gPuppyCam.yawAcceleration -= ((gPuppyCam.options.sensitivityX / 100.f) * stickMag[0]);
         } else {
             gPuppyCam.yawAcceleration = 0; // approach_f32_asymptotic(gPuppyCam.yawAcceleration, 0, DECELERATION);
         }
-        if (ABS(gPlayer1Controller->rawStickY) > DEADZONE) {
+        if (abss(gPlayer1Controller->rawStickY) > DEADZONE) {
             gPuppyCam.pitchAcceleration -= ((gPuppyCam.options.sensitivityY / 100.f) * stickMag[1]);
         } else {
             gPuppyCam.pitchAcceleration = approach_f32_asymptotic(gPuppyCam.pitchAcceleration, 0, DECELERATION);
@@ -673,7 +673,7 @@ void puppycam_terrain_angle(void) {
         f32 x = gPuppyCam.targetObj->oPosX - (10 * sins(gPuppyCam.yaw));
         f32 z = gPuppyCam.targetObj->oPosZ - (10 * coss(gPuppyCam.yaw));
         f32 floorHeight = find_floor_height(x, (gPuppyCam.targetObj->oPosY + 100), z);
-        if (ABS(gMarioState->floorHeight - floorHeight) > 350) {
+        if (absf(gMarioState->floorHeight - floorHeight) > 350) {
             gPuppyCam.intendedTerrainPitch = 0x0;
         } else {
             floorPitch = -atan2s(30.0f, (gMarioState->floorHeight - floorHeight));
@@ -807,7 +807,7 @@ void puppycam_projection_behaviours(void) {
             gPuppyCam.moveZoom = approach_f32(gPuppyCam.moveZoom, 0, 5, 5);
         }
         // Zooms the camera in further when underwater.
-        if ((gPuppyCam.pitch > 0x38C0) && ABS(gPuppyCam.swimPitch) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch-0x38C0)/3072.0f), 0.0f, 1.0f));
+        if ((gPuppyCam.pitch > 0x38C0) && abss(gPuppyCam.swimPitch) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch-0x38C0)/3072.0f), 0.0f, 1.0f));
         if (!(gMarioState->action & ACT_FLAG_SWIMMING)) {
             gPuppyCam.floorY[0] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); // was 0, 300
             gPuppyCam.floorY[1] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); // was 0, 350
@@ -871,8 +871,9 @@ static void puppycam_projection(void) {
             targetPos3[0] = (s16)approach_f32_asymptotic(targetPos[0], targetPos2[0], 0.5f);
             targetPos3[1] = (s16)approach_f32_asymptotic(targetPos[1], targetPos2[1], 0.5f);
             targetPos3[2] = (s16)approach_f32_asymptotic(targetPos[2], targetPos2[2], 0.5f);
-            gPuppyCam.targetDist[0] = approach_f32_asymptotic(gPuppyCam.targetDist[0], (ABS(LENCOS(sqrtf(((targetPos[0] - targetPos2[0]) * (targetPos[0] - targetPos2[0])) + ((targetPos[2] - targetPos2[2]) * (targetPos[2] - targetPos2[2]))),
-                            (Angle)ABS((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - ((atan2s(targetPos[2]-targetPos2[2], targetPos[0]-targetPos2[0])) % 0xFFFF) - 0x8000) + 0x4000))), 0.2f);
+            f32 dx = (targetPos[0] - targetPos2[0]);
+            f32 dz = (targetPos[2] - targetPos2[2]);
+            gPuppyCam.targetDist[0] = approach_f32_asymptotic(gPuppyCam.targetDist[0], (abss(LENCOS(sqrtf(sqr(dx) + sqr(dz)), abss((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - (atan2s(dz, dx) % 0xFFFF) - 0x8000) + 0x4000))), 0.2f);
         } else {
             gPuppyCam.targetDist[0] = approach_f32_asymptotic(gPuppyCam.targetDist[0], 0, 0.2f);
         }

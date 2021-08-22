@@ -1,16 +1,24 @@
 // yoshi.c.inc
 
+struct YoshiHomeLocation {
+    s16 x;
+    s16 z;
+};
+
 // X/Z coordinates of Yoshi's homes that he switches between.
 // Note that this doesn't contain the Y coordinate since the castle roof is flat,
 // so o->oHomeY is never updated.
-static s16 sYoshiHomeLocations[] = { 0, -5625, -1364, -5912, -1403, -4609, -1004, -5308 };
+static const struct YoshiHomeLocation sYoshiHomeLocations[] = { {     0, -5625 },
+                                                                { -1364, -5912 },
+                                                                { -1403, -4609 },
+                                                                { -1004, -5308 } };
 
 void bhv_yoshi_init(void) {
     o->oGravity            = 2.0f;
     o->oFriction           = 0.9f;
     o->oBuoyancy           = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_NPC;
-    if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) < 120 || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if (save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) < 120 || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void yoshi_walk_loop(void) {
@@ -31,22 +39,22 @@ void yoshi_walk_loop(void) {
 void yoshi_idle_loop(void) {
     s16 chosenHome;
     if (o->oTimer > 90) {
-        chosenHome = random_float() * 3.99f;
+        chosenHome = (random_float() * 3.99f);
         if (o->oYoshiChosenHome == chosenHome) {
             return;
         } else {
             o->oYoshiChosenHome = chosenHome;
         }
-        o->oHomeX          = sYoshiHomeLocations[o->oYoshiChosenHome * 2    ];
-        o->oHomeZ          = sYoshiHomeLocations[o->oYoshiChosenHome * 2 + 1];
-        o->oYoshiTargetYaw = atan2s(o->oHomeZ - o->oPosZ, o->oHomeX - o->oPosX);
+        o->oHomeX          = sYoshiHomeLocations[o->oYoshiChosenHome].x;
+        o->oHomeZ          = sYoshiHomeLocations[o->oYoshiChosenHome].z;
+        o->oYoshiTargetYaw = atan2s((o->oHomeZ - o->oPosZ), (o->oHomeX - o->oPosX));
         o->oAction         = YOSHI_ACT_WALK;
     }
     cur_obj_init_animation(YOSHI_ANIM_IDLE);
     if (o->oInteractStatus == INT_STATUS_INTERACTED) o->oAction = YOSHI_ACT_TALK;
     // Credits; Yoshi appears at this position overlooking the castle near the end of the credits
-    if (gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING ||
-        gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING) {
+    if ((gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING)
+     || (gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING)) {
         o->oAction = YOSHI_ACT_CREDITS;
         o->oPosX   = -1798.0f;
         o->oPosY   =  3174.0f;
@@ -62,8 +70,8 @@ void yoshi_talk_loop(void) {
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, DIALOG_161)) {
                 o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
                 o->oInteractStatus = INT_STATUS_NONE;
-                o->oHomeX          = sYoshiHomeLocations[2];
-                o->oHomeZ          = sYoshiHomeLocations[3];
+                o->oHomeX          = sYoshiHomeLocations[1].x;
+                o->oHomeZ          = sYoshiHomeLocations[1].z;
                 o->oYoshiTargetYaw = atan2s((o->oHomeZ - o->oPosZ), (o->oHomeX - o->oPosX));
                 o->oAction         = YOSHI_ACT_GIVE_PRESENT;
             }
@@ -90,8 +98,8 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
         o->oMoveAngleYaw = -0x3FFF;
         o->oAction       = YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN;
     }
-
-    if (animFrame == 0 || animFrame == 15) cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);
+    //! play footstep sound function?
+    if ((animFrame == 0) || (animFrame == 15)) cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);
 }
 
 void yoshi_finish_jumping_and_despawn_loop(void) {

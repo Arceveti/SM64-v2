@@ -7,9 +7,9 @@ extern char *pAssertFile;
 extern int nAssertLine;
 extern char *pAssertExpression;
 extern int nAssertStopProgram;
-u16 fbFillColor   = 0xFFFF;
-u16 fbShadeColor = 0x0000;
-u16 *fbAddress   = NULL;
+ImageTexture fbFillColor   = 0xFFFF;
+ImageTexture fbShadeColor = 0x0000;
+ImageTexture *fbAddress   = NULL;
 extern u8 crashFont[];
 const char *szErrCodes[] = {
     "INTERRUPT",
@@ -94,7 +94,7 @@ u8 ascii_to_idx(char c) {
 }
 
 void fb_set_address(void *address) {
-    fbAddress = (u16 *) address;
+    fbAddress = (ImageTexture *) address;
 }
 
 void fb_swap() {
@@ -113,7 +113,7 @@ void fb_fill(int baseX, int baseY, int width, int height) {
 }
 
 void fb_draw_char(int x, int y, u8 idx) {
-    u16 *out = &fbAddress[(y * 320) + x];
+    ImageTexture *out = &fbAddress[(y * 320) + x];
     const u8 *in = &crashFont[idx * 3];
     int nbyte;
     int nrow;

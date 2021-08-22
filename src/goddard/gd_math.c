@@ -25,7 +25,7 @@ void gd_mat4f_lookat(Mat4f *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     d.z = (xTo - xFrom);
     d.y = (yTo - yFrom);
     d.x = (zTo - zFrom);
-    invLength = (absf(d.z) + absf(d.y) + absf(d.x));
+    invLength = (ABSF(d.z) + ABSF(d.y) + ABSF(d.x));
     // Scales 'd' if smaller than 10 or larger than 10,000 to be
     // of a magnitude of 10,000.
     if ((invLength > 10000.0f) || (invLength < 10.0f)) {
@@ -330,8 +330,8 @@ void gd_inverse_mat4f(Mat4f *src, Mat4f *dst) {
     s32 j;
     gd_adjunct_mat4f(src, dst);
     f32 determinant = gd_mat4f_det(dst);
-    if (ABS(determinant) < 1e-5f) gd_exit(); // Non-singular matrix, no inverse!
-    for (i = 0; i < 4; i++) for (j = 0; j < 4; j++) (*dst)[i][j] /= determinant;
+    if (ABSF(determinant) < 1e-5f) gd_exit(); // Non-singular matrix, no inverse!
+    for ((i = 0); (i < 4); (i++)) for ((j = 0); (j < 4); (j++)) (*dst)[i][j] /= determinant;
 }
 
 /**
@@ -395,18 +395,18 @@ f32 gd_mat4f_det(Mat4f *mtx) {
     inv.r2.c0 = (*mtx)[3][1];
     inv.r1.c0 = (*mtx)[3][2];
     inv.r0.c0 = (*mtx)[3][3];
-    det = (inv.r3.c3 * gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                                  inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                                  inv.r0.c2, inv.r0.c1, inv.r0.c0)
-         - inv.r2.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                                  inv.r1.c2, inv.r1.c1, inv.r1.c0,
-                                  inv.r0.c2, inv.r0.c1, inv.r0.c0))
-         + inv.r1.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                                  inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                                  inv.r0.c2, inv.r0.c1, inv.r0.c0)
-         - inv.r0.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
-                                  inv.r2.c2, inv.r2.c1, inv.r2.c0,
-                                  inv.r1.c2, inv.r1.c1, inv.r1.c0);
+    det = ((inv.r3.c3 * gd_3x3_det(inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                   inv.r1.c2, inv.r1.c1, inv.r1.c0,
+                                   inv.r0.c2, inv.r0.c1, inv.r0.c0))
+         - (inv.r2.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                   inv.r1.c2, inv.r1.c1, inv.r1.c0,
+                                   inv.r0.c2, inv.r0.c1, inv.r0.c0)))
+         + (inv.r1.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                   inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                   inv.r0.c2, inv.r0.c1, inv.r0.c0))
+         - (inv.r0.c3 * gd_3x3_det(inv.r3.c2, inv.r3.c1, inv.r3.c0,
+                                   inv.r2.c2, inv.r2.c1, inv.r2.c0,
+                                   inv.r1.c2, inv.r1.c1, inv.r1.c0));
     return det;
 }
 
@@ -417,9 +417,9 @@ f32 gd_mat4f_det(Mat4f *mtx) {
 f32 gd_3x3_det(f32 r0c0, f32 r0c1, f32 r0c2,
                f32 r1c0, f32 r1c1, f32 r1c2, 
                f32 r2c0, f32 r2c1, f32 r2c2) {
-    return r0c0 * gd_2x2_det(r1c1, r1c2, r2c1, r2c2)
-         - r1c0 * gd_2x2_det(r0c1, r0c2, r2c1, r2c2)
-         + r2c0 * gd_2x2_det(r0c1, r0c2, r1c1, r1c2);
+    return ((r0c0 * gd_2x2_det(r1c1, r1c2, r2c1, r2c2))
+          - (r1c0 * gd_2x2_det(r0c1, r0c2, r2c1, r2c2))
+          + (r2c0 * gd_2x2_det(r0c1, r0c2, r1c1, r1c2)));
 }
 
 /**
@@ -437,13 +437,13 @@ void gd_shift_mat_up(Mat4f *mtx) {
     s32 i;
     s32 j;
     f32 temp[3];
-    for (i = 0; i < 3; i++) temp[i] = (*mtx)[0][i + 1];
-    for (i = 1; i < 4; i++) for (j = 1; j < 4; j++) (*mtx)[i - 1][j - 1] = (*mtx)[i][j];
+    for ((i = 0); (i < 3); (i++)) temp[i] = (*mtx)[0][i + 1];
+    for ((i = 1); (i < 4); (i++)) for ((j = 1); (j < 4); (j++)) (*mtx)[i - 1][j - 1] = (*mtx)[i][j];
     (*mtx)[0][3] = 0.0f;
     (*mtx)[1][3] = 0.0f;
     (*mtx)[2][3] = 0.0f;
     (*mtx)[3][3] = 1.0f;
-    for (i = 0; i < 3; i++) (*mtx)[3][i] = temp[i];
+    for ((i = 0); (i < 3); (i++)) (*mtx)[3][i] = temp[i];
 }
 
 /**
@@ -547,9 +547,9 @@ void gd_copy_mat4f(const Mat4f *src, Mat4f *dst) {
 void gd_rotate_and_translate_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
     struct GdVec3f out;
 
-    out.x  = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
-    out.y  = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
-    out.z  = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
+    out.x  = (((*mtx)[0][0] * vec->x) + ((*mtx)[1][0] * vec->y) + ((*mtx)[2][0] * vec->z));
+    out.y  = (((*mtx)[0][1] * vec->x) + ((*mtx)[1][1] * vec->y) + ((*mtx)[2][1] * vec->z));
+    out.z  = (((*mtx)[0][2] * vec->x) + ((*mtx)[1][2] * vec->y) + ((*mtx)[2][2] * vec->z));
     out.x += (*mtx)[3][0];
     out.y += (*mtx)[3][1];
     out.z += (*mtx)[3][2];
@@ -563,9 +563,9 @@ void gd_rotate_and_translate_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
  */
 void gd_mat4f_mult_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
     struct GdVec3f out;
-    out.x  = (*mtx)[0][0] * vec->x + (*mtx)[1][0] * vec->y + (*mtx)[2][0] * vec->z;
-    out.y  = (*mtx)[0][1] * vec->x + (*mtx)[1][1] * vec->y + (*mtx)[2][1] * vec->z;
-    out.z  = (*mtx)[0][2] * vec->x + (*mtx)[1][2] * vec->y + (*mtx)[2][2] * vec->z;
+    out.x  = (((*mtx)[0][0] * vec->x) + ((*mtx)[1][0] * vec->y) + ((*mtx)[2][0] * vec->z));
+    out.y  = (((*mtx)[0][1] * vec->x) + ((*mtx)[1][1] * vec->y) + ((*mtx)[2][1] * vec->z));
+    out.z  = (((*mtx)[0][2] * vec->x) + ((*mtx)[1][2] * vec->y) + ((*mtx)[2][2] * vec->z));
     vec->x = out.x;
     vec->y = out.y;
     vec->z = out.z;
@@ -573,10 +573,10 @@ void gd_mat4f_mult_vec3f(struct GdVec3f *vec, const Mat4f *mtx) {
 
 #define MAT4_DOT_PROD(A, B, R, row, col)                                                               \
     {                                                                                                  \
-        (R)[(row)][(col)]  = (A)[(row)][0] * (B)[0][(col)];                                            \
-        (R)[(row)][(col)] += (A)[(row)][1] * (B)[1][(col)];                                            \
-        (R)[(row)][(col)] += (A)[(row)][2] * (B)[2][(col)];                                            \
-        (R)[(row)][(col)] += (A)[(row)][3] * (B)[3][(col)];                                            \
+        (R)[(row)][(col)]  = ((A)[(row)][0] * (B)[0][(col)]);                                          \
+        (R)[(row)][(col)] += ((A)[(row)][1] * (B)[1][(col)]);                                          \
+        (R)[(row)][(col)] += ((A)[(row)][2] * (B)[2][(col)]);                                          \
+        (R)[(row)][(col)] += ((A)[(row)][3] * (B)[3][(col)]);                                          \
     }
 
 #define MAT4_MULTIPLY(A, B, R)                                                                         \

@@ -9,23 +9,22 @@
  */
 static struct ObjectHitbox sRedCoinHitbox = {
     /* interactType:      */ INTERACT_COIN,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 2,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   2,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 100,
-    /* height:            */ 64,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* height:            */  64,
+    /* hurtboxRadius:     */   0,
+    /* hurtboxHeight:     */   0,
 };
 
 /**
  * Red coin initialization function. Sets the coin's hitbox and parent object.
  */
 void bhv_red_coin_init(void) {
-    struct Object *hiddenRedCoinStar;
     // Set the red coins to have a parent of the closest red coin star.
-    hiddenRedCoinStar = cur_obj_nearest_object_with_behavior(bhvHiddenRedCoinStar);
+    struct Object *hiddenRedCoinStar = cur_obj_nearest_object_with_behavior(bhvHiddenRedCoinStar);
     if (hiddenRedCoinStar != NULL) {
         o->parentObj = hiddenRedCoinStar;
     } else {
@@ -50,20 +49,17 @@ void bhv_red_coin_loop(void) {
         if (o->parentObj != NULL) {
             // ...increment the star's counter.
             o->parentObj->oHiddenStarTriggerCounter++;
-
             // For JP version, play an identical sound for all coins.
 #ifdef VERSION_JP
             create_sound_spawner(SOUND_GENERAL_RED_COIN);
 #endif
             // Spawn the orange number counter, as long as it isn't the last coin.
             if (o->parentObj->oHiddenStarTriggerCounter != 8) spawn_orange_number(o->parentObj->oHiddenStarTriggerCounter, 0, 0, 0);
-
             // On all versions but the JP version, each coin collected plays a higher noise.
 #ifndef VERSION_JP
             play_sound(SOUND_MENU_COLLECT_RED_COIN + (((u8) o->parentObj->oHiddenStarTriggerCounter - 1) << 16), gGlobalSoundSource);
 #endif
         }
-
         coin_collected();
         // Despawn the coin.
         o->oInteractStatus = INT_STATUS_NONE;

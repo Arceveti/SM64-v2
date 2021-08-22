@@ -12,10 +12,10 @@
  */
 static struct ObjectHitbox sWigglerBodyPartHitbox = {
     /* interactType:      */ INTERACT_BOUNCE_TOP,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 3,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  3,
     /* health:            */ 99, // never decreases
-    /* numLootCoins:      */ 0,
+    /* numLootCoins:      */  0,
     /* radius:            */ 20,
     /* height:            */ 20,
     /* hurtboxRadius:     */ 20,
@@ -27,10 +27,10 @@ static struct ObjectHitbox sWigglerBodyPartHitbox = {
  */
 static struct ObjectHitbox sWigglerHitbox = {
     /* interactType:      */ INTERACT_BOUNCE_TOP,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 3,
-    /* health:            */ 4,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  3,
+    /* health:            */  4,
+    /* numLootCoins:      */  0,
     /* radius:            */ 60,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 30,
@@ -70,11 +70,11 @@ void bhv_wiggler_body_part_update(void) {
     o->oFaceAnglePitch = segment->angle[0];
     o->oFaceAngleYaw   = segment->angle[1];
     // TODO: What is this for?
-    posOffset = -37.5f * o->header.gfx.scale[0];
-    d[1]  = posOffset * (coss(o->oFaceAnglePitch) - posOffset);
-    dxz   = posOffset *  sins(o->oFaceAnglePitch);
-    d[0]  =       dxz *  sins(o->oFaceAngleYaw  );
-    d[2]  =       dxz *  coss(o->oFaceAngleYaw  );
+    posOffset = (-37.5f * o->header.gfx.scale[0]);
+    d[1]      = (posOffset * (coss(o->oFaceAnglePitch) - posOffset));
+    dxz       = (posOffset *  sins(o->oFaceAnglePitch));
+    d[0]      = (      dxz *  sins(o->oFaceAngleYaw  ));
+    d[2]      = (      dxz *  coss(o->oFaceAngleYaw  ));
     vec3f_sum(&o->oPosVec, segment->pos, d);
     if (o->oPosY < o->parentObj->oWigglerFallThroughFloorsHeight) {
         //! Since position is recomputed each frame, tilting the wiggler up
@@ -108,7 +108,7 @@ void wiggler_init_segments(void) {
         // object. Segment 0 represents the wiggler's head, and segment i>0
         // represents body part i.
         o->oWigglerSegments = segments;
-        for (i = 0; i < WIGGLER_NUM_SEGMENTS; i++) {
+        for ((i = 0); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
             chain_segment_init(segments + i);
             vec3f_copy((segments + i)->pos, &o->oPosVec);
             (segments + i)->angle[0] = o->oFaceAnglePitch;
@@ -116,7 +116,7 @@ void wiggler_init_segments(void) {
         }
         o->header.gfx.animInfo.animFrame = -1;
         // Spawn each body part
-        for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
+        for ((i = 1); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
             bodyPart = spawn_object_relative(i, 0, 0, 0, o, MODEL_WIGGLER_BODY, bhvWigglerBody);
             if (bodyPart != NULL) {
                 obj_init_animation_with_sound(bodyPart, wiggler_seg5_anims_0500C874, WIGGLER_ANIM_WALK);
@@ -141,11 +141,11 @@ void wiggler_init_segments(void) {
     struct ChainSegment *bodyPart;
     Vec3f d;
     f32  dxz;
-    s16 dpitch, dyaw;
+    Angle dpitch, dyaw;
     s32 i;
     f32 segmentLength;
     segmentLength = (35.0f * o->header.gfx.scale[0]);
-    for (i = 1; i < WIGGLER_NUM_SEGMENTS; i++) {
+    for ((i = 1); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
         prevBodyPart = &o->oWigglerSegments[i - 1];
         bodyPart     = &o->oWigglerSegments[i    ];
         vec3f_diff(d, bodyPart->pos, prevBodyPart->pos);
@@ -216,7 +216,6 @@ static void wiggler_act_walk(void) {
                 }
             }
         }
-
         // If moving at high speeds, could overflow. But can't reach such speeds
         // in practice
         yawTurnSpeed = (Angle)(30.0f * o->oForwardVel);
@@ -281,8 +280,8 @@ static void wiggler_act_knockback(void) {
     } else {
         obj_face_pitch_approach(0, 0x190);
     }
-    if (obj_forward_vel_approach(0.0f, 1.0f) && o->oFaceAnglePitch == 0x0) {
-        o->oAction = WIGGLER_ACT_WALK;
+    if (obj_forward_vel_approach(0.0f, 1.0f) && (o->oFaceAnglePitch == 0x0)) {
+        o->oAction       = WIGGLER_ACT_WALK;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
     }
     obj_check_attacks(&sWigglerHitbox, o->oAction);

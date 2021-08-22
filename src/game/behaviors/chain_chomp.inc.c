@@ -14,13 +14,13 @@
  */
 static struct ObjectHitbox sChainChompHitbox = {
     /* interactType:      */ INTERACT_MR_BLIZZARD,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 3,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 0,
-    /* radius:            */ 80,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   3,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
+    /* radius:            */  80,
     /* height:            */ 160,
-    /* hurtboxRadius:     */ 80,
+    /* hurtboxRadius:     */  80,
     /* hurtboxHeight:     */ 160,
 };
 
@@ -54,13 +54,13 @@ static void chain_chomp_act_uninitialized(void) {
             // 1 connects the pivot to the chain part next to the chain chomp
             // (chain part 1), etc.
             o->oChainChompSegments = segments;
-            for (i = 0; i < CHAIN_CHOMP_NUM_PARTS; i++) chain_segment_init(&segments[i]);
+            for ((i = 0); (i < CHAIN_CHOMP_NUM_PARTS); (i++)) chain_segment_init(&segments[i]);
             cur_obj_set_pos_to_home();
             // Spawn the pivot and set to parent
             if ((o->parentObj = spawn_object(o, CHAIN_CHOMP_CHAIN_PART_BP_PIVOT, bhvChainChompChainPart)) != NULL) {
                 // Spawn the non-pivot chain parts, starting from the chain
                 // chomp and moving toward the pivot
-                for (i = 1; i < CHAIN_CHOMP_NUM_PARTS; i++) spawn_object_relative(i, 0, 0, 0, o, MODEL_METALLIC_BALL, bhvChainChompChainPart);
+                for ((i = 1); (i < CHAIN_CHOMP_NUM_PARTS); (i++)) spawn_object_relative(i, 0, 0, 0, o, MODEL_METALLIC_BALL, bhvChainChompChainPart);
                 o->oAction = CHAIN_CHOMP_ACT_MOVE;
                 cur_obj_unhide();
             }
@@ -93,7 +93,7 @@ static void chain_chomp_update_chain_segments(void) {
         // Cap distance to pivot (so that it stretches when the chomp moves far
         // from the wooden post)
         vec3f_add(offset, prevSegment->pos);
-        maxTotalOffset = o->oChainChompMaxDistFromPivotPerChainPart * (CHAIN_CHOMP_NUM_PARTS - i);
+        maxTotalOffset = (o->oChainChompMaxDistFromPivotPerChainPart * (CHAIN_CHOMP_NUM_PARTS - i));
         vec3f_normalize_max(offset, maxTotalOffset);
         vec3f_copy(segment->pos, offset);
     }
@@ -104,7 +104,7 @@ static void chain_chomp_update_chain_segments(void) {
  * distance between chain parts. Restore these values to normal.
  */
 static void chain_chomp_restore_normal_chain_lengths(void) {
-    // approach_f32_ptr(&o->oChainChompMaxDistFromPivotPerChainPart, 750.0f / CHAIN_CHOMP_NUM_PARTS, 4.0f);
+    // approach_f32_ptr(&o->oChainChompMaxDistFromPivotPerChainPart, (750.0f / CHAIN_CHOMP_NUM_PARTS), 4.0f);
     approach_f32_ptr(&o->oChainChompMaxDistFromPivotPerChainPart, 150.0f, 4.0f);
     o->oChainChompMaxDistBetweenChainParts = o->oChainChompMaxDistFromPivotPerChainPart;
 }
@@ -127,7 +127,7 @@ static void chain_chomp_sub_act_turn(void) {
                         // the lunging sub-action.
                         cur_obj_play_sound_2(SOUND_GENERAL_CHAIN_CHOMP2);
                         o->oSubAction = CHAIN_CHOMP_SUB_ACT_LUNGE;
-                        // o->oChainChompMaxDistFromPivotPerChainPart = 900.0f / CHAIN_CHOMP_NUM_PARTS;
+                        // o->oChainChompMaxDistFromPivotPerChainPart = (900.0f / CHAIN_CHOMP_NUM_PARTS);
                         o->oChainChompMaxDistFromPivotPerChainPart = 180.0f;
                         o->oForwardVel                             = 140.0f;
                         o->oVelY                                   =  20.0f;
@@ -189,7 +189,7 @@ static void chain_chomp_released_trigger_cutscene(void) {
      && (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND)
      && (cutscene_object(CUTSCENE_STAR_SPAWN, o) == 1)) {
         o->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_LUNGE_AROUND;
-        o->oTimer = 0;
+        o->oTimer                   = 0;
     }
 }
 
@@ -261,7 +261,7 @@ static void chain_chomp_released_break_gate(void) {
  */
 static void chain_chomp_released_jump_away(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-        gObjCutsceneDone = TRUE;
+        gObjCutsceneDone            = TRUE;
         o->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_END_CUTSCENE;
     }
 }
@@ -393,7 +393,7 @@ void bhv_wooden_post_update(void) {
             // When Mario runs around the post 3 times within 200 frames, spawn
             // coins
             o->oWoodenPostTotalMarioAngle += (Angle)(o->oAngleToMario - o->oWoodenPostPrevAngleToMario);
-            if ((absi(o->oWoodenPostTotalMarioAngle) > 0x30000) && (o->oTimer < 200)) {
+            if ((ABSI(o->oWoodenPostTotalMarioAngle) > 0x30000) && (o->oTimer < 200)) {
                 obj_spawn_loot_yellow_coins(o, 5, 20.0f);
                 set_object_respawn_info_bits(o, RESPAWN_INFO_TYPE_32);
             }

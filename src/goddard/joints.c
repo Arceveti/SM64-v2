@@ -26,28 +26,28 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
     struct GdObj *attobj;
     // The joint acts somewhat like a spring in that the further it is moved
     // from its original position, the more resistance it has to moving further
-    offset.x = self->mat128[3][0] - self->initPos.x;
-    offset.y = self->mat128[3][1] - self->initPos.y;
-    offset.z = self->mat128[3][2] - self->initPos.z;
+    offset.x = (self->mat128[3][0] - self->initPos.x);
+    offset.y = (self->mat128[3][1] - self->initPos.y);
+    offset.z = (self->mat128[3][2] - self->initPos.z);
     if (self->header.drawFlags & OBJ_PICKED) {
-        self->velocity.x = offset.x * -0.25f;
-        self->velocity.y = offset.y * -0.25f;
-        self->velocity.z = offset.z * -0.25f;
+        self->velocity.x = (offset.x * -0.25f);
+        self->velocity.y = (offset.y * -0.25f);
+        self->velocity.z = (offset.z * -0.25f);
         self->flags |= 0x2000;
     } else {
         if (!gGdCtrl.trgR) { // R trigger is released
             // Set velocity so that the joint approaches its initial position
-            self->velocity.x -= offset.x * 0.5f;
-            self->velocity.y -= offset.y * 0.5f;
-            self->velocity.z -= offset.z * 0.5f;
+            self->velocity.x -= (offset.x * 0.5f);
+            self->velocity.y -= (offset.y * 0.5f);
+            self->velocity.z -= (offset.z * 0.5f);
             // Decay the velocity
             self->velocity.x *= 0.8f;
             self->velocity.y *= 0.8f;
             self->velocity.z *= 0.8f;
             // If the joint's velocity has decayed enough and it is very close
             // to its original position, stop its movement altogether
-            if ((ABS(self->velocity.x) + ABS(self->velocity.y) + ABS(self->velocity.z) < 1.0f)
-             && (ABS(offset.x) + ABS(offset.y) + ABS(offset.z) < 1.0f)) {
+            if ((ABSF(self->velocity.x) + ABSF(self->velocity.y) + ABSF(self->velocity.z) < 1.0f)
+             && (ABSF(offset.x) + ABSF(offset.y) + ABSF(offset.z) < 1.0f)) {
                 self->velocity.x = self->velocity.y = self->velocity.z = 0.0f;
                 self->mat128[3][0] -= offset.x;
                 self->mat128[3][1] -= offset.y;
@@ -65,14 +65,14 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
     self->mat128[3][1] += self->velocity.y;
     self->mat128[3][2] += self->velocity.z;
     if (self->header.drawFlags & OBJ_PICKED) {
-        gGdCtrl.csrX -= (gGdCtrl.csrX - gGdCtrl.dragStartX) * 0.2f;
-        gGdCtrl.csrY -= (gGdCtrl.csrY - gGdCtrl.dragStartY) * 0.2f;
+        gGdCtrl.csrX -= ((gGdCtrl.csrX - gGdCtrl.dragStartX) * 0.2f);
+        gGdCtrl.csrY -= ((gGdCtrl.csrY - gGdCtrl.dragStartY) * 0.2f);
     }
     // update position of attached objects
-    offset.x = self->mat128[3][0] - self->initPos.x;
-    offset.y = self->mat128[3][1] - self->initPos.y;
-    offset.z = self->mat128[3][2] - self->initPos.z;
-    for (att = self->attachedObjsGrp->firstMember; att != NULL; att = att->next) {
+    offset.x = (self->mat128[3][0] - self->initPos.x);
+    offset.y = (self->mat128[3][1] - self->initPos.y);
+    offset.z = (self->mat128[3][2] - self->initPos.z);
+    for ((att = self->attachedObjsGrp->firstMember); (att != NULL); (att = att->next)) {
         attobj = att->obj;
         set_cur_dynobj(attobj);
         attObjMtx = d_get_matrix_ptr();

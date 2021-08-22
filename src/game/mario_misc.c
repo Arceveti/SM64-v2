@@ -445,10 +445,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
 #ifdef METAL_CAP_REFLECTION
 #ifdef METAL_CAP_REFLECTION_SHINE
-    u16 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
+    ImageTexture *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    u16 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
+    ImageTexture *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
     Angle pitch, yaw;
 #endif
     f32 dist;
@@ -461,7 +461,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = (bodyState->modelState >> 8);
         if ((bodyState->modelState & MODEL_STATE_METAL) && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
-            u16 *metalTexture = segmented_to_virtual(mario_texture_metal);
+            ImageTexture *metalTexture = segmented_to_virtual(mario_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
             // c up is 250.0f
@@ -493,7 +493,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #endif
         }
         if (find_closest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
-            u16 *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
+            ImageTexture *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             dist -= 250.0f;
             dist /= 16.0f;

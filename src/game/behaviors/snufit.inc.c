@@ -7,26 +7,26 @@
 
 struct ObjectHitbox sSnufitHitbox = {
     /* interactType:      */ INTERACT_HIT_FROM_BELOW,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 2,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 2,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   2,
+    /* health:            */   0,
+    /* numLootCoins:      */   2,
     /* radius:            */ 100,
-    /* height:            */ 60,
-    /* hurtboxRadius:     */ 70,
-    /* hurtboxHeight:     */ 50,
+    /* height:            */  60,
+    /* hurtboxRadius:     */  70,
+    /* hurtboxHeight:     */  50,
 };
 
 struct ObjectHitbox sSnufitBulletHitbox = {
     /* interactType:      */ INTERACT_SNUFIT_BULLET,
-    /* downOffset:        */ 50,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  50,
+    /* damageOrCoinValue: */   1,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 100,
-    /* height:            */ 50,
+    /* height:            */  50,
     /* hurtboxRadius:     */ 100,
-    /* hurtboxHeight:     */ 50,
+    /* hurtboxHeight:     */  50,
 };
 
 /**
@@ -39,6 +39,7 @@ Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
     if (callContext == GEO_CONTEXT_RENDER) {
         obj                       = (struct Object                       *) gCurGraphNodeObject;
         transNode                 = (struct GraphNodeTranslationRotation *) node->next;
+        //! oSnufitOffsetVec?
         transNode->translation[0] = obj->oSnufitXOffset;
         transNode->translation[1] = obj->oSnufitYOffset;
         transNode->translation[2] = obj->oSnufitZOffset;
@@ -55,7 +56,7 @@ Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     if (callContext == GEO_CONTEXT_RENDER) {
         obj              = (struct Object         *) gCurGraphNodeObject;
         scaleNode        = (struct GraphNodeScale *) node->next;
-        scaleNode->scale = obj->oSnufitBodyScale / 1000.0f;
+        scaleNode->scale = (obj->oSnufitBodyScale / 1000.0f);
     }
     return NULL;
 }
@@ -67,12 +68,12 @@ Gfx *geo_snufit_scale_body(s32 callContext, struct GraphNode *node, UNUSED Mat4 
 void snufit_act_idle(void) {
     //! This line would could cause a crash in certain PU situations,
     // if the game would not have already crashed.
-    if (o->oTimer > (s32)(o->oDistanceToMario / 10.0f) && o->oDistanceToMario < 800.0f) {
+    if (o->oTimer > (s32)(o->oDistanceToMario / 10.0f) && (o->oDistanceToMario < 800.0f)) {
     // if (o->oDistanceToMario < 800.0f) {
         // Controls an alternating scaling factor in a cos.
         o->oSnufitBodyScalePeriod = approach_s16_symmetric(o->oSnufitBodyScalePeriod, 0x0, 0x5DC);
         o->oSnufitBodyBaseScale   = approach_s16_symmetric(o->oSnufitBodyBaseScale, 0x258,   0xF);
-        if ((s16) o->oSnufitBodyScalePeriod == 0 && o->oSnufitBodyBaseScale == 0x258) {
+        if (((s16) o->oSnufitBodyScalePeriod == 0) && (o->oSnufitBodyBaseScale == 0x258)) {
             o->oAction = SNUFIT_ACT_SHOOT;
             o->oSnufitBullets = 0;
         }
@@ -87,9 +88,9 @@ void snufit_act_idle(void) {
 void snufit_act_shoot(void) {
     o->oSnufitBodyScalePeriod = approach_s16_symmetric(o->oSnufitBodyScalePeriod, -0x8000, 0xBB8);
     o->oSnufitBodyBaseScale   = approach_s16_symmetric(o->oSnufitBodyBaseScale,      0xA7,  0x14);
-    if ((u16) o->oSnufitBodyScalePeriod == 0x8000 && o->oSnufitBodyBaseScale == 0xA7) {
+    if (((u16) o->oSnufitBodyScalePeriod == 0x8000) && (o->oSnufitBodyBaseScale == 0xA7)) {
         o->oAction = SNUFIT_ACT_IDLE;
-    } else if (o->oSnufitBullets < 3 && o->oTimer >= 3) {
+    } else if ((o->oSnufitBullets < 3) && (o->oTimer >= 3)) {
         o->oSnufitBullets++;
         cur_obj_play_sound_2(SOUND_OBJ_SNUFIT_SHOOT);
         spawn_object_relative(OBJ_BP_NONE, 0, -20, 40, o, MODEL_BOWLING_BALL, bhvSnufitBalls);
@@ -131,10 +132,10 @@ void bhv_snufit_loop(void) {
         o->oPosY                = (o->oHomeY + (  8.0f * coss(4000 * gGlobalTimer)));
         o->oPosZ                = (o->oHomeZ + (100.0f * sins(o->oSnufitCircularPeriod)));
         o->oSnufitYOffset       = -0x20;
-        o->oSnufitZOffset       = o->oSnufitRecoil + 180;
-        o->oSnufitBodyScale     = (Angle)(o->oSnufitBodyBaseScale + 666 + o->oSnufitBodyBaseScale * coss(o->oSnufitBodyScalePeriod));
+        o->oSnufitZOffset       = (o->oSnufitRecoil + 180);
+        o->oSnufitBodyScale     = ((Angle)(o->oSnufitBodyBaseScale + 666 + (o->oSnufitBodyBaseScale * coss(o->oSnufitBodyScalePeriod))));
         if (o->oSnufitBodyScale > 1000) {
-            o->oSnufitScale     = (o->oSnufitBodyScale - 1000) / 1000.0f + 1.0f;
+            o->oSnufitScale     = (((o->oSnufitBodyScale - 1000) / 1000.0f) + 1.0f);
             o->oSnufitBodyScale = 1000;
         } else {
             o->oSnufitScale = 1.0f;
@@ -149,7 +150,7 @@ void bhv_snufit_loop(void) {
  */
 void bhv_snufit_balls_loop(void) {
     // If far from Mario or in a different room, despawn.
-    if ((o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) || (o->oTimer != 0 && o->oDistanceToMario > 1500.0f)) obj_mark_for_deletion(o);
+    if ((o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) || ((o->oTimer != 0) && (o->oDistanceToMario > 1500.0f))) obj_mark_for_deletion(o);
     // Gravity =/= 0 after it has hit Mario while metal.
     if (o->oGravity == 0.0f) {
         cur_obj_update_floor_and_walls();
@@ -162,7 +163,7 @@ void bhv_snufit_balls_loop(void) {
             o->oVelY          =  30.0f;
             o->oGravity       =  -4.0f;
             cur_obj_become_intangible();
-        } else if (o->oAction == SNUFIT_BALL_ACT_HIT_MARIO || (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL))) {
+        } else if ((o->oAction == SNUFIT_BALL_ACT_HIT_MARIO) || (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL))) {
             // The Snufit shot Mario and has fulfilled its lonely existance.
             //! The above check could theoretically be avoided by finding a geometric
             //! situation that does not trigger those flags (Water?). If found,

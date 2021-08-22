@@ -11,14 +11,14 @@
  */
 static struct ObjectHitbox sBooCageHitbox = {
     /* interactType:      */ INTERACT_BBH_ENTRANCE,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 120,
     /* height:            */ 300,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* hurtboxRadius:     */   0,
+    /* hurtboxHeight:     */   0,
 };
 
 /**

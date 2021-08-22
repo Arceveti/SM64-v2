@@ -389,7 +389,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             normZ          = wall->normal.z;
             originOffset   = wall->originOffset;
             offset         = ((normX * newPos[i][0]) + (normY * newPos[i][1]) + (normZ * newPos[i][2]) + originOffset);
-            offsetAbsolute = absf(offset);
+            offsetAbsolute = ABSF(offset);
             if (offsetAbsolute < radius) {
                 newPos[i][0] += (normX * (radius - offset));
                 newPos[i][2] += (normZ * (radius - offset));
@@ -1069,11 +1069,11 @@ Bool32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32
     for (i = 0; i < 3; i++) {
         j = (i + 1);
         if (j >= 3) j = 0;
-        dx = ABS(sx[i] - sx[j]);
+        dx = ABSF(sx[i] - sx[j]);
         if (dx > dxMax) dxMax = dx;
-        dy = ABS(sy[i] - sy[j]);
+        dy = ABSF(sy[i] - sy[j]);
         if (dy > dyMax) dyMax = dy;
-        dz = ABS(sz[i] - sz[j]);
+        dz = ABSF(sz[i] - sz[j]);
         if (dz > dzMax) dzMax = dz;
     }
     return (((yMax != -1.0f) && (dyMax < yMax)) || ((xMax != -1.0f) && (zMax != -1.0f) && (dxMax < xMax) && (dzMax < zMax)));
@@ -1212,11 +1212,11 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
 	// Skip if OOB
 	if ((cellX >= 0) && (cellX <= (NUM_CELLS - 1)) && (cellZ >= 0) && (cellZ <= (NUM_CELLS - 1))) {
 		// Iterate through each surface in this partition
-		if (normalized_dir[1] > -0.99999f && flags & RAYCAST_FIND_CEIL) {
+		if ((normalized_dir[1] > -0.99999f) && (flags & RAYCAST_FIND_CEIL)) {
 			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 		}
-		if (normalized_dir[1] < 0.99999f && flags & RAYCAST_FIND_FLOOR) {
+		if ((normalized_dir[1] <  0.99999f) && (flags & RAYCAST_FIND_FLOOR)) {
 			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
 		}
@@ -1260,10 +1260,10 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
 		return;
 	}
     // Get cells we cross using DDA
-    if (absf(dir[0]) >= absf(dir[2])) {
-        step = ((STEPS * absf(dir[0])) / CELL_SIZE);
+    if (ABSF(dir[0]) >= ABSF(dir[2])) {
+        step = ((STEPS * ABSF(dir[0])) / CELL_SIZE);
     } else {
-        step = ((STEPS * absf(dir[2])) / CELL_SIZE);
+        step = ((STEPS * ABSF(dir[2])) / CELL_SIZE);
     }
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);

@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sBowserKeyHitbox = {
     /* interactType:      */ INTERACT_STAR_OR_KEY,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 160,
     /* height:            */ 100,
     /* hurtboxRadius:     */ 160,

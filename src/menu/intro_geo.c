@@ -3,6 +3,7 @@
 #include "game/memory.h"
 #include "game/segment2.h"
 #include "game/segment7.h"
+#include "engine/math_util.h"
 #include "intro_geo.h"
 #include "sm64.h"
 #include "textures.h"
@@ -52,25 +53,21 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
         dl               = alloc_display_list(4 * sizeof(*dl      ));
         dlIter           = dl;
         // determine scale based on the frame counter
-        if (sIntroFrameCounter >= 0 && sIntroFrameCounter < INTRO_STEPS_ZOOM_IN) {
+        if ((sIntroFrameCounter >= 0) && (sIntroFrameCounter < INTRO_STEPS_ZOOM_IN)) {
             // zooming in
-            scale[0] = scaleTable1[(sIntroFrameCounter * 3)    ];
-            scale[1] = scaleTable1[(sIntroFrameCounter * 3) + 1];
-            scale[2] = scaleTable1[(sIntroFrameCounter * 3) + 2];
-        } else if (sIntroFrameCounter >= INTRO_STEPS_ZOOM_IN && sIntroFrameCounter < INTRO_STEPS_HOLD_1) {
+            vec3f_copy(scale, &scaleTable1[(sIntroFrameCounter * 3)]);
+        } else if ((sIntroFrameCounter >= INTRO_STEPS_ZOOM_IN) && (sIntroFrameCounter < INTRO_STEPS_HOLD_1)) {
             // holding
             scale[0] = scale[1] = scale[2] = 1.0f;
-        } else if (sIntroFrameCounter >= INTRO_STEPS_HOLD_1  && sIntroFrameCounter < INTRO_STEPS_ZOOM_OUT) {
+        } else if ((sIntroFrameCounter >= INTRO_STEPS_HOLD_1)  && (sIntroFrameCounter < INTRO_STEPS_ZOOM_OUT)) {
             // zooming out
-            scale[0] = scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3)    ];
-            scale[1] = scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3) + 1];
-            scale[2] = scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3) + 2];
+            vec3f_copy(scale, &scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3)]);
         } else {
             // disappeared
             scale[0] = scale[1] = scale[2] = 0.0f;
         }
         guScale(scaleMat, scale[0], scale[1], scale[2]);
-        gSPMatrix(        dlIter++, scaleMat, G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
+        gSPMatrix(        dlIter++, scaleMat, (G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH));
         gSPDisplayList(   dlIter++, &intro_seg7_dl_main_logo);  // draw model
         gSPPopMatrix(     dlIter++, G_MTX_MODELVIEW);
         gSPEndDisplayList(dlIter);
@@ -141,11 +138,10 @@ static Gfx *intro_backdrop_one_image(s32 index, s8 *backgroundTable) {
     const Texture *const *vIntroBgTable = segmented_to_virtual(textureTables[backgroundTable[index]]);
     s32 i;
     guTranslate(mtx, xCoords[index], yCoords[index], 0.0f);
-    gSPMatrix(              displayListIter++, mtx, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_PUSH);
+    gSPMatrix(              displayListIter++, mtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_PUSH));
     gSPDisplayList(         displayListIter++, &title_screen_bg_dl_0A000118);
-    for (i = 0; i < 4; ++i) {
-        gDPLoadTextureBlock(displayListIter++, vIntroBgTable[i], G_IM_FMT_RGBA, G_IM_SIZ_16b, 80, 20, 0,
-                            G_TX_CLAMP, G_TX_CLAMP, 7, 6, G_TX_NOLOD, G_TX_NOLOD)
+    for ((i = 0); (i < 4); (++i)) {
+        gDPLoadTextureBlock(displayListIter++, vIntroBgTable[i], G_IM_FMT_RGBA, G_IM_SIZ_16b, 80, 20, 0, G_TX_CLAMP, G_TX_CLAMP, 7, 6, G_TX_NOLOD, G_TX_NOLOD)
         gSPDisplayList(     displayListIter++, introBackgroundDlRows[i]);
     }
     gSPPopMatrix(           displayListIter++, G_MTX_MODELVIEW);
@@ -174,9 +170,9 @@ Gfx *geo_intro_regular_backdrop(s32 state, struct GraphNode *node, UNUSED void *
         dlIter = dl;
         graphNode->node.flags = (graphNode->node.flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8);
         gSPDisplayList(   dlIter++, &dl_proj_mtx_fullscreen);
-        gSPDisplayList(   dlIter++, &title_screen_bg_dl_0A000100);
-        for (i = 0; i < 12; ++i) gSPDisplayList(dlIter++, intro_backdrop_one_image(i, backgroundTable));
-        gSPDisplayList(   dlIter++, &title_screen_bg_dl_0A000190);
+        gSPDisplayList(   dlIter++, &title_screen_bg_dl_start);
+        for ((i = 0); (i < 12); (++i)) gSPDisplayList(dlIter++, intro_backdrop_one_image(i, backgroundTable));
+        gSPDisplayList(   dlIter++, &title_screen_bg_dl_end);
         gSPEndDisplayList(dlIter);
     }
     return dl;
@@ -200,7 +196,7 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
     if (state != 1) {  // reset
         sGameOverFrameCounter =  0;
         sGameOverTableIndex   = -2;
-        for (i = 0; i < ARRAY_COUNT(gameOverBackgroundTable); ++i) gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
+        for ((i = 0); (i < ARRAY_COUNT(gameOverBackgroundTable)); (++i)) gameOverBackgroundTable[i] = INTRO_BACKGROUND_GAME_OVER;
     } else {  // draw
         dl     = alloc_display_list(16 * sizeof(*dl));
         dlIter = dl;
@@ -214,7 +210,6 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
             if (sGameOverTableIndex != 11 && !(sGameOverFrameCounter & 0x1)) {
                 // order of tiles that are flipped from "Game Over" to "Super Mario 64"
                 static s8 flipOrder[] = { 0, 1, 2, 3, 7, 11, 10, 9, 8, 4, 5, 6 };
-
                 sGameOverTableIndex++;
                 gameOverBackgroundTable[flipOrder[sGameOverTableIndex]] = INTRO_BACKGROUND_SUPER_MARIO;
             }
@@ -223,10 +218,10 @@ Gfx *geo_intro_gameover_backdrop(s32 state, struct GraphNode *node, UNUSED void 
         graphNode->flags = ((graphNode->flags & GRAPH_NODE_TYPES_MASK) | (LAYER_OPAQUE << 8));
 
         // draw all the tiles
-        gSPDisplayList(dlIter++, &dl_proj_mtx_fullscreen);
-        gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000100);
-        for (j = 0; j < ARRAY_COUNT(gameOverBackgroundTable); ++j) gSPDisplayList(dlIter++, intro_backdrop_one_image(j, gameOverBackgroundTable));
-        gSPDisplayList(dlIter++, &title_screen_bg_dl_0A000190);
+        gSPDisplayList(   dlIter++, &dl_proj_mtx_fullscreen);
+        gSPDisplayList(   dlIter++, &title_screen_bg_dl_start);
+        for ((j = 0); (j < ARRAY_COUNT(gameOverBackgroundTable)); (++j)) gSPDisplayList(dlIter++, intro_backdrop_one_image(j, gameOverBackgroundTable));
+        gSPDisplayList(   dlIter++, &title_screen_bg_dl_end);
         gSPEndDisplayList(dlIter);
     }
     return dl;
@@ -263,16 +258,16 @@ void intro_gen_face_texrect(Gfx **dlIter, s32 imageW, s32 imageH) {
     s32 x, y;
     s32 x1 = 0;
     s32 y1 = 0;
-    s32 x2 = imageW-1;
-    s32 y2 = imageH-1;
-    for (y = 0; y < 6; y++) {
-        for (x = 0; x < 8; x++) {
-            if (sFaceVisible[y*8 + x] != 0) gSPTextureRectangle((*dlIter)++, (x * imageW + x1) << 2, (y * imageH + y1) << 2, (x * imageW + x2) << 2, (y * imageH + y2) << 2, 0, 0, 0, (4 << 10), (1 << 10));
+    s32 x2 = (imageW - 1);
+    s32 y2 = (imageH - 1);
+    for ((y = 0); (y < 6); (y++)) {
+        for ((x = 0); (x < 8); (x++)) {
+            if (sFaceVisible[(y * 8) + x] != 0) gSPTextureRectangle((*dlIter)++, (((x * imageW) + x1) << 2), (((y * imageH) + y1) << 2), (((x * imageW) + x2) << 2), (((y * imageH) + y2) << 2), 0, 0, 0, (4 << 10), (1 << 10));
         }
     }
 }
 
-Gfx *intro_draw_face(u16 *image, s32 imageW, s32 imageH) {
+Gfx *intro_draw_face(ImageTexture *image, s32 imageW, s32 imageH) {
     Gfx *dl;
     Gfx *dlIter;
     dl = alloc_display_list(130 * sizeof(Gfx));
@@ -282,42 +277,42 @@ Gfx *intro_draw_face(u16 *image, s32 imageW, s32 imageH) {
         dlIter = dl;
     }
     gSPDisplayList(         dlIter++, title_screen_bg_dl_face_easter_egg_begin);
-    gDPLoadTextureBlock(    dlIter++, VIRTUAL_TO_PHYSICAL(image), G_IM_FMT_RGBA, G_IM_SIZ_16b, imageW, imageH, 0, G_TX_CLAMP | G_TX_NOMIRROR, G_TX_CLAMP | G_TX_NOMIRROR, 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(    dlIter++, VIRTUAL_TO_PHYSICAL(image), G_IM_FMT_RGBA, G_IM_SIZ_16b, imageW, imageH, 0, (G_TX_CLAMP | G_TX_NOMIRROR), (G_TX_CLAMP | G_TX_NOMIRROR), 6, 6, G_TX_NOLOD, G_TX_NOLOD);
     intro_gen_face_texrect(&dlIter, imageW, imageH);
     gSPDisplayList(         dlIter++, title_screen_bg_dl_face_easter_egg_end);
     gSPEndDisplayList(      dlIter++);
     return dl;
 }
 
-u16 *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
-    u16 *fb;
-    u16 *image;
+ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
+    ImageTexture *fb;
+    ImageTexture *image;
     s32 pixel;
     f32 size = (sampleW * sampleH);
     f32 r, g, b;
     s32 iy, ix, sy, sx;
     s32 idy, idx, sdy;
     fb = gFrameBuffers[sRenderingFrameBuffer];
-    image = alloc_display_list((imageW * imageH) * sizeof(u16));
+    image = alloc_display_list((imageW * imageH) * sizeof(ImageTexture));
     if (image == NULL) return NULL;
-    for (iy = 0; iy < imageH; iy++) {
+    for ((iy = 0); (iy < imageH); (iy++)) {
         idy = ((sampleH * iy) + yOffset);
-        for (ix = 0; ix < imageW; ix++) {
+        for ((ix = 0); (ix < imageW); (ix++)) {
             r = g = b = 0;
             idx = ((sampleW * ix) + xOffset);
-            for (sy = 0; sy < sampleH; sy++) {
-                sdy = SCREEN_WIDTH * (idy + sy) + idx;
-                for (sx = 0; sx < sampleW; sx++) {
-                    pixel = sdy + sx;
+            for ((sy = 0); (sy < sampleH); (sy++)) {
+                sdy = ((SCREEN_WIDTH * (idy + sy)) + idx);
+                for ((sx = 0); (sx < sampleW); (sx++)) {
+                    pixel = (sdy + sx);
                     r += ((fb[pixel] >> 0xB) & 0x1F);
                     g += ((fb[pixel] >> 0x6) & 0x1F);
                     b += ((fb[pixel] >> 0x1) & 0x1F);
                 }
             }
             size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = ((((u16) (r / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
-                                        ((((u16) (g / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
-                                        ((((u16) (b / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 0x1;
+            image[(imageH * iy) + ix] = ((((ImageTexture) (r / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
+                                        ((((ImageTexture) (g / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
+                                        ((((ImageTexture) (b / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 0x1;
         }
     }
     return image;
@@ -325,7 +320,7 @@ u16 *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH,
 
 Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *genNode = (struct GraphNodeGenerated *)node;
-    u16 *image;
+    ImageTexture *image;
     Gfx *dl = NULL;
     s32 i;
     if (state != 1) {

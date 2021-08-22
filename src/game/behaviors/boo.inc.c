@@ -1,15 +1,15 @@
 // boo.c.inc
 
 static struct ObjectHitbox sBooGivingStarHitbox = {
-    /* interactType: */      0,
-    /* downOffset: */        0,
-    /* damageOrCoinValue: */ 3,
-    /* health: */            3,
-    /* numLootCoins: */      0,
+    /* interactType: */        0,
+    /* downOffset: */          0,
+    /* damageOrCoinValue: */   3,
+    /* health: */              3,
+    /* numLootCoins: */        0,
     /* radius: */            140,
-    /* height: */            80,
-    /* hurtboxRadius: */     40,
-    /* hurtboxHeight: */     60,
+    /* height: */             80,
+    /* hurtboxRadius: */      40,
+    /* hurtboxHeight: */      60,
 };
 
 // Boo Roll

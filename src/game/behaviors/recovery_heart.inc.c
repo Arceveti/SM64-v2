@@ -1,10 +1,10 @@
 
 struct ObjectHitbox sRecoveryHeartHitbox = {
-    /* interactType:      */ 0,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* interactType:      */  0,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  0,
+    /* health:            */  0,
+    /* numLootCoins:      */  0,
     /* radius:            */ 50,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 50,
@@ -18,12 +18,11 @@ void bhv_recovery_heart_loop(void) {
             cur_obj_play_sound_2(SOUND_GENERAL_HEART_SPIN);
             o->oSpinningHeartPlayedSound = TRUE;
         }
-        o->oAngleVelYaw = (s32)(200.0f * gMarioStates[0].forwardVel) + 1000;
+        o->oAngleVelYaw = ((s32)(200.0f * gMarioStates[0].forwardVel) + 1000);
     } else {
         o->oSpinningHeartPlayedSound = FALSE;
-
         if ((o->oAngleVelYaw -= 50) < 400) {
-            o->oAngleVelYaw = 400;
+            o->oAngleVelYaw            = 400;
             o->oSpinningHeartTotalSpin = 0;
         }
     }

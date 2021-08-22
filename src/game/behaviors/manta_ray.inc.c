@@ -19,22 +19,21 @@ static Trajectory sMantaRayTraj[] = {
 
 static struct ObjectHitbox sMantaRayHitbox = {
     /* interactType:      */ INTERACT_DAMAGE,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 3,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   3,
+    /* numLootCoins:      */   0,
     /* radius:            */ 210,
-    /* height:            */ 60,
+    /* height:            */  60,
     /* hurtboxRadius:     */ 200,
-    /* hurtboxHeight:     */ 50,
+    /* hurtboxHeight:     */  50,
 };
 
 /**
  * Initializes the manta ray when spawned.
  */
 void bhv_manta_ray_init(void) {
-    struct Object *ringManager;
-    ringManager = spawn_object(o, MODEL_NONE, bhvMantaRayRingManager);
+    struct Object *ringManager = spawn_object(o, MODEL_NONE, bhvMantaRayRingManager);
     o->parentObj = ringManager;
     obj_set_hitbox(o, &sMantaRayHitbox);
     cur_obj_scale(2.5f);
@@ -48,19 +47,16 @@ static void manta_ray_move(void) {
     o->oMantaTargetYaw   = o->oPathedTargetYaw;
     o->oMantaTargetPitch = o->oPathedTargetPitch;
     o->oForwardVel       = 10.0f;
-
     o->oMoveAngleYaw     = approach_s16_symmetric(o->oMoveAngleYaw,   o->oMantaTargetYaw,   0x80);
     o->oMoveAnglePitch   = approach_s16_symmetric(o->oMoveAnglePitch, o->oMantaTargetPitch, 0x80);
-
     // This causes the ray to tilt as it turns.
     if ((Angle) o->oMantaTargetYaw != (Angle) o->oMoveAngleYaw) {
         o->oMoveAngleRoll -= 0x5B;
-        if (o->oMoveAngleRoll < -5461.3332f) o->oMoveAngleRoll = -0x4000 / 3;
+        if (o->oMoveAngleRoll < -5461.3332f) o->oMoveAngleRoll = (-0x4000 / 3);
     } else {
         o->oMoveAngleRoll += 0x5B;
-        if (o->oMoveAngleRoll >  5461.3332f) o->oMoveAngleRoll =  0x4000 / 3;
+        if (o->oMoveAngleRoll >  5461.3332f) o->oMoveAngleRoll = ( 0x4000 / 3);
     }
-
     cur_obj_set_pos_via_transform();
     if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
 }
@@ -72,10 +68,10 @@ static void manta_ray_act_spawn_ring(void) {
         o->oTimer             = 0;
         ring                  = spawn_object(o, MODEL_WATER_RING, bhvMantaRayWaterRing);
         ring->oFaceAngleYaw   = o->oMoveAngleYaw;
-        ring->oFaceAnglePitch = o->oMoveAnglePitch + 0x4000;
-        ring->oPosX           = o->oPosX + 200.0f * sins(o->oMoveAngleYaw + 0x8000);
-        ring->oPosY           = o->oPosY + 10.0f + 200.0f * sins(o->oMoveAnglePitch);
-        ring->oPosZ           = o->oPosZ + 200.0f * coss(o->oMoveAngleYaw + 0x8000);
+        ring->oFaceAnglePitch = (o->oMoveAnglePitch + 0x4000);
+        ring->oPosX           = (o->oPosX + (200.0f * sins(o->oMoveAngleYaw + 0x8000)));
+        ring->oPosY           = (o->oPosY + 10.0f + (200.0f * sins(o->oMoveAnglePitch)));
+        ring->oPosZ           = (o->oPosZ + (200.0f * coss(o->oMoveAngleYaw + 0x8000)));
         ring->oWaterRingIndex = ringManager->oWaterRingMgrNextRingIndex;
         ringManager->oWaterRingMgrNextRingIndex++;
         if (ringManager->oWaterRingMgrNextRingIndex > 10000) ringManager->oWaterRingMgrNextRingIndex = 0;
@@ -100,11 +96,9 @@ void bhv_manta_ray_loop(void) {
                 o->oAction = MANTA_ACT_NO_RINGS;
             }
             break;
-
         case MANTA_ACT_NO_RINGS:
             manta_ray_move();
             break;
     }
-
     if (o->oInteractStatus & INT_STATUS_INTERACTED) o->oInteractStatus = INT_STATUS_NONE;
 }

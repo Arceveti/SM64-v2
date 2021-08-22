@@ -60,7 +60,7 @@ void bhv_blue_coin_switch_loop(void) {
             // If Mario is on the switch and has ground-pounded,
             // recede and get ready to start ticking.
             if (gMarioObject->platform == o) {
-                if (gMarioStates[0].action == ACT_GROUND_POUND_LAND || gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND) {
+                if ((gMarioStates[0].action == ACT_GROUND_POUND_LAND) || (gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)) {
                     o->oAction = BLUE_COIN_SWITCH_ACT_RECEDING;
 #ifdef BLUE_COIN_SWITCH_RETRY
                     // Recede at a rate of 16 units/frame.
@@ -106,7 +106,7 @@ void bhv_blue_coin_switch_loop(void) {
             break;
         case BLUE_COIN_SWITCH_ACT_TICKING:
             // Tick faster when the blue coins start blinking
-            play_sound((o->oTimer < 200) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
+            play_sound(((o->oTimer < 200) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW), gGlobalSoundSource);
 #ifdef BLUE_COIN_SWITCH_RETRY
             if (cur_obj_nearest_object_with_behavior(bhvHiddenBlueCoin) == NULL) {
                 spawn_mist_particles_variable(0, 0, 46.0f);

@@ -26,10 +26,10 @@
 #include <PR/sptask.h>
 
 #ifndef MAX
-#define MAX(a,b) (((a)>(b))?(a):(b))
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 #ifndef MIN
-#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #define M_PI		3.14159265358979323846
@@ -39,10 +39,10 @@
 #define	FIX32TOF(x)	((float)(x) * (1.0f / (float)0x00010000))
 #define	FTOFRAC8(x)	((int) MIN(((x) * (128.0f)), 127.0f) & 0xff)
 
-#define  FILTER_WRAP 0
-#define  FILTER_CLAMP 1
+#define  FILTER_WRAP  0x0
+#define  FILTER_CLAMP 0x1
 
-#define RAND(x) (guRandom()%x)	/* random number between 0 to x */
+#define RAND(x) (guRandom() % x)	/* random number between 0 to x */
 
 /*
  * Data Structures

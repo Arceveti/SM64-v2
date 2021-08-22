@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sHauntedChairHitbox = {
     /* interactType:      */ INTERACT_MR_BLIZZARD,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 2,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  2,
+    /* health:            */  0,
+    /* numLootCoins:      */  0,
     /* radius:            */ 50,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 50,
@@ -13,10 +13,9 @@ struct ObjectHitbox sHauntedChairHitbox = {
 };
 
 void bhv_haunted_chair_init(void) {
-    struct Object *pianoObj;
     f32 dist;
-    pianoObj = cur_obj_find_nearest_object_with_behavior(bhvMadPiano, &dist);
-    if (pianoObj != NULL && dist < 300.0f) {
+    struct Object *pianoObj = cur_obj_find_nearest_object_with_behavior(bhvMadPiano, &dist);
+    if ((pianoObj != NULL) && (dist < 300.0f)) {
         o->parentObj = pianoObj;
     } else {
         o->oHauntedChairSpinTimer = 1;
@@ -28,15 +27,15 @@ void haunted_chair_act_fall_or_spin(void) {
     if (o->parentObj != o) { // Chair is next to piano
         if (o->oHauntedChairFallTargetAngle == 0x0) {
             if (lateral_dist_between_objects(o, o->parentObj) < 250.0f) {
-                dAngleToPiano = obj_angle_to_object(o, o->parentObj) - o->oFaceAngleYaw + 0x2000;
+                dAngleToPiano = (obj_angle_to_object(o, o->parentObj) - o->oFaceAngleYaw + 0x2000);
                 if (dAngleToPiano & 0x4000) {
                     o->oHauntedChairFallFromPianoAngle = &o->oFaceAngleRoll;
-                    o->oHauntedChairFallTargetAngle = (dAngleToPiano > 0x0) ? 0x4000 : -0x4000;
+                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano > 0x0) ? 0x4000 : -0x4000);
                 } else {
                     o->oHauntedChairFallFromPianoAngle = &o->oFaceAnglePitch;
-                    o->oHauntedChairFallTargetAngle = (dAngleToPiano < 0x0) ? 0x5000 : -0x4000; // why 0x5000?
+                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano < 0x0) ? 0x5000 : -0x4000); // why 0x5000?
                 }
-                o->oHauntedChairPitchVel = (o->oHauntedChairFallTargetAngle < 0x0) ? -1500.0f : 1500.0f;
+                o->oHauntedChairPitchVel = ((o->oHauntedChairFallTargetAngle < 0x0) ? -1500.0f : 1500.0f);
             }
         } else {
             oscillate_toward(o->oHauntedChairFallFromPianoAngle, &o->oHauntedChairPitchVel, o->oHauntedChairFallTargetAngle, 4000.0f, 20.0f, 2.0f); // Fall over when the piano awakens
@@ -61,7 +60,7 @@ void haunted_chair_act_fall_or_spin(void) {
         }
         if (o->oTimer > 30) {
             o->oAction = HAUNTED_CHAIR_ACT_FLY;
-            o->oHauntedChairPitchVel  = 0.0f;
+            o->oHauntedChairPitchVel  =   0.0f;
             o->oHauntedChairRollVel   = 200.0f;
             o->oHauntedChairSpinTimer = 40;
         }
@@ -71,10 +70,8 @@ void haunted_chair_act_fall_or_spin(void) {
 
 void haunted_chair_act_fly(void) {
     cur_obj_update_floor_and_walls();
-
     if (o->oTimer < 70) {
-        o->oVelY = (o->oTimer < 50) ? 6.0f : 0.0f;
-
+        o->oVelY = ((o->oTimer < 50) ? 6.0f : 0.0f);
         o->oGravity = 0.0f;
         oscillate_toward(&o->oFaceAnglePitch, &o->oHauntedChairPitchVel, -0x0FA0, 200.0f, 20.0f, 2.0f);
         oscillate_toward(&o->oFaceAngleRoll,  &o->oHauntedChairRollVel ,  0x0000,   0.0f, 20.0f, 1.0f);

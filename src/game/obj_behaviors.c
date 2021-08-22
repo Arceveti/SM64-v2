@@ -215,7 +215,7 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     o->oPosY += o->oVelY;
     // Snap the object up to the floor.
 #ifdef OBJ_STEP_HEIGHT
-    if (ABS(o->oPosY - objFloorY) < OBJ_STEP_HEIGHT) {
+    if (absf(o->oPosY - objFloorY) < OBJ_STEP_HEIGHT) {
 #else
     if (o->oPosY < objFloorY) {
 #endif

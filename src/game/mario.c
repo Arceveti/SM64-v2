@@ -543,19 +543,17 @@ f32 find_floor_height_relative_polar(struct MarioState *m, Angle angleFromMario,
 Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario) {
     if (m->pos[1] > (m->floorHeight + MARIO_STEP_HEIGHT)) return 0x0;
     struct Surface *floor;
-    f32 forwardFloorY, backwardFloorY;
-    f32 forwardYDelta, backwardYDelta;
     f32 x                             = (sins(m->faceAngle[1] + yawOffset) * distFromMario);
     f32 z                             = (coss(m->faceAngle[1] + yawOffset) * distFromMario);
-    forwardFloorY                     = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
+    f32 forwardFloorY                 = find_floor((m->pos[0] + x), (m->pos[1] + 100.0f), (m->pos[2] + z), &floor);
     if (floor == NULL)  forwardFloorY = m->floorHeight; // handle OOB slopes
-    backwardFloorY                    = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
+    f32 backwardFloorY                = find_floor((m->pos[0] - x), (m->pos[1] + 100.0f), (m->pos[2] - z), &floor);
     if (floor == NULL) backwardFloorY = m->floorHeight; // handle OOB slopes
     //! If Mario is near OOB, these floorY's can sometimes be -11000.
     //  This will cause these to be off and give improper slopes.
-    forwardYDelta                     = (forwardFloorY - m->pos[1]);
-    backwardYDelta                    = (m->pos[1] - backwardFloorY);
-    // return atan2s(distFromMario, (ABS(forwardYDelta) < ABS(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+    f32 forwardYDelta                 = (forwardFloorY - m->pos[1]);
+    f32 backwardYDelta                = (m->pos[1] - backwardFloorY);
+    // return atan2s(distFromMario, (ABSF(forwardYDelta) < ABSF(backwardYDelta)) ? forwardYDelta : backwardYDelta);
     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 }
 
@@ -570,7 +568,7 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
 //     //  This will cause these to be off and give improper slopes.
 //     forwardYDelta  = (newFloorHeight - newPos[1]);
 //     backwardYDelta = (oldPos[1] - oldFloorHeight);
-//     // return atan2s(distFromMario, (ABS(forwardYDelta) < ABS(backwardYDelta)) ? forwardYDelta : backwardYDelta);
+//     // return atan2s(distFromMario, (ABSF(forwardYDelta) < ABSF(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 //     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 // }
 

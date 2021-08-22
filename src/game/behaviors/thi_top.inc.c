@@ -16,7 +16,7 @@ void bhv_thi_huge_island_top_loop(void) {
 void bhv_thi_tiny_island_top_loop(void) {
     if (!gTHIWaterDrained) {
         if (o->oAction == THI_TOP_ACT_IDLE) {
-            if (o->oDistanceToMario < 500.0f && (gMarioStates[0].action == ACT_GROUND_POUND_LAND || gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)) {
+            if ((o->oDistanceToMario < 500.0f) && ((gMarioStates[0].action == ACT_GROUND_POUND_LAND) || (gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND))) {
                 o->oAction = THI_TOP_ACT_DRAIN_WATER;
                 cur_obj_spawn_particles(&sThiTopPuffs);
                 spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 0.3f, 3);

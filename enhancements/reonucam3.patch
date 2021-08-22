@@ -62,7 +62,7 @@ index 25b27983..2ff11930 100644
              }
          }
 -        approach_camera_height(c, goalHeight, 20.0f);
-+        approachRate += ABS(c->pos[1] - goalHeight) / 20;
++        approachRate += absf(c->pos[1] - goalHeight) / 20;
 +        approach_camera_height(c, goalHeight, approachRate);
          if (camCeilHeight != CELL_HEIGHT_LIMIT) {
              camCeilHeight -= baseOff;

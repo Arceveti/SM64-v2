@@ -587,7 +587,7 @@ void update_cursor(void);
 void update_view_and_dl(struct ObjView *view);
 static void update_render_mode(void);
 void gddl_is_loading_shine_dl(s32 dlLoad);
-void gd_put_sprite(u16 *sprite, s32 x, s32 y, s32 wx, s32 wy);
+void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy);
 void reset_cur_dl_indices(void);
 
 // TODO: make a gddl_num_t?
@@ -1521,8 +1521,8 @@ void parse_p1_controller(void) {
     gdctrl->currFrame++;
     if (currInputs->button & START_BUTTON && !(prevInputs->button & START_BUTTON)) gdctrl->newStartPress ^= 1;
     // deadzone checks
-    if (absi(gdctrl->stickX) >= 6) gdctrl->csrX += (gdctrl->stickX * 0.1f);
-    if (absi(gdctrl->stickY) >= 6) gdctrl->csrY -= (gdctrl->stickY * 0.1f);
+    if (ABSI(gdctrl->stickX) >= 6) gdctrl->csrX += (gdctrl->stickX * 0.1f);
+    if (ABSI(gdctrl->stickY) >= 6) gdctrl->csrY -= (gdctrl->stickY * 0.1f);
     // clamp cursor position within screen view bounds
     if (gdctrl->csrX < sScreenView->parent->upperLeft.x + 16.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + 16.0f;
     if (gdctrl->csrX > sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f;
@@ -1790,18 +1790,17 @@ void store_in_pickbuf(s16 data) {
 ** in the pick buf is a tupple of three halves: (datasize, objtype, objnumber)
 ** (datasize is always 2) */
 s32 get_cur_pickbuf_offset(void) {
-    return sPickBufPosition / 3;
+    return (sPickBufPosition / 3);
 }
 
 /* 254AC0 -> 254DFC; orig name: PutSprite */
-void gd_put_sprite(u16 *sprite, s32 x, s32 y, s32 wx, s32 wy) {
-    s32 c;
-    s32 r;
+void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy) {
+    s32 c, r;
     gSPDisplayList(next_gfx(), osVirtualToPhysical(gd_dl_sprite_start_tex_block));
-    for (r = 0; r < wy; r += 32) {
-        for (c = 0; c < wx; c += 32) {
+    for ((r = 0); (r < wy); (r += 32)) {
+        for ((c = 0); (c < wx); (c += 32)) {
              gDPLoadTextureBlock(next_gfx(), (r * 32) + sprite + c, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
-                G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD)
+                (G_TX_WRAP | G_TX_NOMIRROR), (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD)
              gSPTextureRectangle(next_gfx(), x << 2, (y + r) << 2, (x + 32) << 2, (y + r + 32) << 2,
                 G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
         }
@@ -1819,10 +1818,10 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
     UNUSED struct ObjNet *net;
     sHandShape = make_shape("mouse");
     sHandShape->dlNums[0] = gd_startdisplist(7);
-    gd_put_sprite((u16 *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((ImageTexture *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     sHandShape->dlNums[1] = gd_startdisplist(7);
-    gd_put_sprite((u16 *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((ImageTexture *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     d_start_group("mouseg");
     net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));

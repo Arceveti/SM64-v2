@@ -69,11 +69,11 @@ void bhv_beta_trampoline_top_loop(void) {
     if (gMarioObject->platform == o) {
         stub_mario_step_2();
         o->oBetaTrampolineMarioOnTrampoline = TRUE;
-        o->oPosY                            = (o->oPosY > ((o->oHomeY - 150.0f) + 75.0f)) ? (o->oPosY - 10.0f) : ((o->oHomeY - 150.0f) + 65.0f);
-        o->oBetaTrampolineAdditiveYVel      = ((o->oBehParams2ndByte >> 4) / 2.0f) + ((o->oHomeY - o->oPosY) / ((o->oBehParams2ndByte & 0x0F) / 2.0f));
+        o->oPosY                            = ((o->oPosY > ((o->oHomeY - 150.0f) + 75.0f)) ? (o->oPosY - 10.0f) : ((o->oHomeY - 150.0f) + 65.0f));
+        o->oBetaTrampolineAdditiveYVel      = (((o->oBehParams2ndByte >> 4) / 2.0f) + ((o->oHomeY - o->oPosY) / ((o->oBehParams2ndByte & 0x0F) / 2.0f)));
     } else {
         o->oBetaTrampolineMarioOnTrampoline = FALSE;
-        o->oPosY                            = (o->oPosY < (o->oHomeY - 10.0f)) ? (o->oPosY + 10.0f) : o->oHomeY;
+        o->oPosY                            = ((o->oPosY < (o->oHomeY - 10.0f)) ? (o->oPosY + 10.0f) : o->oHomeY);
         o->oBetaTrampolineAdditiveYVel      = 0;
     }
 }

@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sBreakableBoxHitbox = {
     /* interactType:      */ INTERACT_BREAKABLE,
-    /* downOffset:        */ 20,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  20,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
     /* radius:            */ 150,
     /* height:            */ 200,
     /* hurtboxRadius:     */ 150,
@@ -63,13 +63,13 @@ void hidden_breakable_box_actions(void) {
 
 void hidden_unbreakable_box_actions(void) {
     struct Object *switchObj;
-    obj_set_collision_data(o, wdw_seg7_collision_07018528);
+    obj_set_collision_data(o, wdw_seg7_collision_hidden_platform);
     switch (o->oAction) {
         case BREAKABLE_BOX_ACT_HIDDEN:
             cur_obj_disable_rendering();
             cur_obj_become_intangible();
             if (o->oHiddenObjectSwitchObj == NULL) o->oHiddenObjectSwitchObj = cur_obj_nearest_object_with_behavior(bhvFloorSwitchHiddenObjects);
-            if ((switchObj = o->oHiddenObjectSwitchObj) != NULL && switchObj->oAction == PURPLE_SWITCH_ACT_TICKING) {
+            if ((switchObj = o->oHiddenObjectSwitchObj) != NULL && (switchObj->oAction == PURPLE_SWITCH_ACT_TICKING)) {
                 o->oAction = BREAKABLE_BOX_ACT_ACTIVE;
                 cur_obj_enable_rendering();
                 cur_obj_unhide();

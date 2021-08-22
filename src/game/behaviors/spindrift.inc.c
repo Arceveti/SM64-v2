@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sSpindriftHitbox = {
     /* interactType:      */ INTERACT_BOUNCE_TOP,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 2,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 3,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  2,
+    /* health:            */  1,
+    /* numLootCoins:      */  3,
     /* radius:            */ 90,
     /* height:            */ 80,
     /* hurtboxRadius:     */ 80,
@@ -30,9 +30,9 @@ void bhv_spindrift_loop(void) {
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             o->oForwardVel = -10.0f;
             if (o->oTimer > 20) {
-                o->oAction = SPINDRIFT_ACT_ACTIVE;
+                o->oAction         = SPINDRIFT_ACT_ACTIVE;
                 o->oInteractStatus = INT_STATUS_NONE;
-                o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
+                o->oFlags         |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             }
             break;
     }

@@ -10,10 +10,10 @@
  */
 static struct ObjectHitbox sGoombaHitbox = {
     /* interactType:      */ INTERACT_BOUNCE_TOP,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 1,
+    /* downOffset:        */  0,
+    /* damageOrCoinValue: */  1,
+    /* health:            */  0,
+    /* numLootCoins:      */  1,
     /* radius:            */ 72,
     /* height:            */ 50,
     /* hurtboxRadius:     */ 42,
@@ -77,13 +77,13 @@ void bhv_goomba_triplet_spawner_update(void) {
         if (o->oDistanceToMario < 3000.0f) {
             // The spawner is capable of spawning more than 3 goombas, but this
             // is not used in the game
-            dAngle = 0x10000 / (((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_EXTRA_GOOMBAS_MASK) >> 2) + 3);
-            for (angle = 0x0, goombaFlag = 1 << 8; angle < 0xFFFF; angle += dAngle, goombaFlag <<= 1) {
+            dAngle = (0x10000 / (((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_EXTRA_GOOMBAS_MASK) >> 2) + 3));
+            for ((angle = 0x0), goombaFlag = (1 << 8); (angle < 0xFFFF); ((angle += dAngle), (goombaFlag <<= 1))) {
                 // Only spawn goombas which haven't been killed yet
                 if (!(o->oBehParams & goombaFlag)) {
                     dx = (500.0f * coss(angle));
                     dz = (500.0f * sins(angle));
-                    spawn_object_relative((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK) | (goombaFlag >> 6),
+                    spawn_object_relative(((o->oBehParams2ndByte & GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK) | (goombaFlag >> 6)),
                                           dx, 0, dz, o, MODEL_GOOMBA, bhvGoomba);
                 }
             }
@@ -127,7 +127,7 @@ static void goomba_begin_jump(void) {
 static void mark_goomba_as_dead(void) {
     if (o->parentObj != o) {
         set_object_respawn_info_bits(o->parentObj, (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) >> 2);
-        o->parentObj->oBehParams = o->parentObj->oBehParams | (o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6;
+        o->parentObj->oBehParams = (o->parentObj->oBehParams | ((o->oBehParams2ndByte & GOOMBA_BP_TRIPLET_FLAG_MASK) << 6));
     }
 }
 
@@ -137,7 +137,7 @@ static void mark_goomba_as_dead(void) {
  */
 static void goomba_act_walk(void) {
     treat_far_home_as_mario(1000.0f);
-    obj_forward_vel_approach(o->oGoombaRelativeSpeed * o->oGoombaScale, 0.4f);
+    obj_forward_vel_approach((o->oGoombaRelativeSpeed * o->oGoombaScale), 0.4f);
     // If walking fast enough, play footstep sounds
     if (o->oGoombaRelativeSpeed > (4.0f / 3.0f)) cur_obj_play_sound_at_anim_range(2, 17, SOUND_OBJ_GOOMBA_WALK);
     //! By strategically hitting a wall, steep slope, or another goomba, we can
@@ -169,7 +169,7 @@ static void goomba_act_walk(void) {
                 if (o->oGoombaWalkTimer != 0) {
                     o->oGoombaWalkTimer--;
                 } else {
-                    if (random_u16() & 3) {
+                    if (random_u16() & 0x3) {
                         o->oGoombaTargetYaw = obj_random_fixed_turn(0x2000);
                         o->oGoombaWalkTimer = random_linear_offset(100, 100);
                     } else {
@@ -238,7 +238,7 @@ void bhv_goomba_update(void) {
     f32 animSpeed;
     if (obj_update_standard_actions(o->oGoombaScale)) {
         // If this goomba has a spawner and Mario moved away from the spawner, unload
-        if (o->parentObj != o && o->parentObj->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED) obj_mark_for_deletion(o);
+        if ((o->parentObj != o) && (o->parentObj->oAction == GOOMBA_TRIPLET_SPAWNER_ACT_UNLOADED)) obj_mark_for_deletion(o);
         cur_obj_scale(o->oGoombaScale);
         obj_update_blinking(&o->oGoombaBlinkTimer, 30, 50, 5);
         cur_obj_update_floor_and_walls();
@@ -249,8 +249,7 @@ void bhv_goomba_update(void) {
             case GOOMBA_ACT_ATTACKED_MARIO: goomba_act_attacked_mario(); break;
             case GOOMBA_ACT_JUMP:           goomba_act_jump();           break;
         }
-        if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO, sGoombaAttackHandlers[o->oGoombaSize & 1])
-         && o->oAction != GOOMBA_ACT_ATTACKED_MARIO) mark_goomba_as_dead();
+        if (obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO, sGoombaAttackHandlers[o->oGoombaSize & 0x1]) && (o->oAction != GOOMBA_ACT_ATTACKED_MARIO)) mark_goomba_as_dead();
         cur_obj_move_standard(-78);
     } else {
         o->oAnimState = TRUE;

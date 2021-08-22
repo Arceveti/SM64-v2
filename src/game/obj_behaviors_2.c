@@ -341,7 +341,7 @@ static Bool32 obj_face_roll_approach(Angle targetRoll, Angle deltaRoll) {
 static Bool32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, Angle accel, Angle minSpeed, Angle maxSpeed) {
     Angle currentAngle = (Angle)(*angle);
     *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
-    Angle currentSpeed = absi(*angleVel);
+    Angle currentSpeed = ABSI(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
     *angle = approach_s16_symmetric(*angle, targetAngle, currentSpeed);
     return ((Angle)(*angle) == targetAngle);

@@ -20,7 +20,7 @@ void bhv_blue_fish_movement_loop(void) {
                 o->oAngleVelPitch = (((random_float() * 5.0f) < 2.0f) ? random_f32_around_zero(128.0f) : 0);
             }
             // Set forward velocity and progress oAction to BLUE_FISH_ACT_TURN.
-            o->oForwardVel = o->oBlueFishRandomVel + 3.0f;
+            o->oForwardVel = (o->oBlueFishRandomVel + 3.0f);
             if (o->oTimer >= (o->oBlueFishRandomTime + 60)) o->oAction = BLUE_FISH_ACT_TURN;
             // Set pitch velocity
             if (o->oTimer < ((o->oBlueFishRandomTime + 60) / 2)) {
@@ -58,7 +58,7 @@ void bhv_blue_fish_movement_loop(void) {
             break;
     }
     // Calculates Y velocity and calls physics engine.
-    o->oVelY = -sins(o->oFaceAnglePitch) * o->oForwardVel;
+    o->oVelY = (-sins(o->oFaceAnglePitch) * o->oForwardVel);
     cur_obj_move_using_fvel_and_gravity();
     // Deletes object if the parent has oAction set to BLUE_FISH_ACT_DUPLICATE.
     if (o->parentObj->oAction == BLUE_FISH_ACT_DUPLICATE) obj_mark_for_deletion(o);
@@ -75,7 +75,7 @@ void bhv_tank_fish_group_loop(void) {
         case BLUE_FISH_ACT_SPAWN:
             if ((gMarioCurrentRoom == 15) || (gMarioCurrentRoom ==  7)) {
                 // spawns fifteen fish and moves them within 200.0f
-                for (i = 0; i < 15; i++) {
+                for ((i = 0); (i < 15); (i++)) {
                     fish = spawn_object_relative(OBJ_BP_NONE, 300, 0, -200, o, MODEL_FISH, bhvBlueFish);
                     obj_translate_xyz_random(fish, 200.0f);
                 }

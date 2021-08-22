@@ -64,7 +64,7 @@ void heave_ho_act_throw_mario(void) { // act 3
 
 void heave_ho_act_inactive(void) { // act 0
     cur_obj_set_pos_to_home();
-    if (find_water_level(o->oPosX, o->oPosZ) < o->oPosY && o->oDistanceToMario < 4000.0f) {
+    if ((find_water_level(o->oPosX, o->oPosZ) < o->oPosY) && (o->oDistanceToMario < 4000.0f)) {
         cur_obj_become_tangible();
         cur_obj_unhide();
         o->oAction = HEAVE_HO_ACT_WINDING_UP;
@@ -80,7 +80,7 @@ void heave_ho_move(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sHeaveHoActions);
     cur_obj_move_standard(-78);
-    o->oGraphYOffset = (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) ? -15.0f : 0.0f;
+    o->oGraphYOffset = ((o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) ? -15.0f : 0.0f);
     if (o->oForwardVel > 3.0f) cur_obj_play_sound_1(SOUND_AIR_HEAVEHO_MOVE);
     if (o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER) o->oAction = HEAVE_HO_ACT_INACTIVE;
     if (o->oInteractStatus & INT_STATUS_GRABBED_MARIO) {
@@ -92,10 +92,10 @@ void heave_ho_move(void) {
 void bhv_heave_ho_loop(void) {
     cur_obj_scale(2.0f);
     switch (o->oHeldState) {
-        case HELD_FREE:    heave_ho_move();                                                              break;
+        case HELD_FREE:    heave_ho_move();                                                                   break;
         case HELD_HELD:    cur_obj_unrender_set_action_and_anim(HEAVE_HO_ANIM_MOVING, HEAVE_HO_ACT_INACTIVE); break;
-        case HELD_THROWN:  cur_obj_get_dropped();                                                        break;
-        case HELD_DROPPED: cur_obj_get_dropped();                                                        break;
+        case HELD_THROWN:  cur_obj_get_dropped();                                                             break;
+        case HELD_DROPPED: cur_obj_get_dropped();                                                             break;
     }
     o->oInteractStatus = INT_STATUS_NONE;
 }

@@ -103,6 +103,10 @@ static __inline__ s32 roundf(f32 in) {
     return out;
 }
 
+inline f32 froundf(f32 in) {
+    return roundf(in);
+}
+
 /// Round `num` to the nearest integer.
 inline s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
 inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); } //! use roundf instead?
@@ -162,7 +166,7 @@ inline f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) 
 inline Angle abs_angle_diff(Angle angle1, Angle angle2) {
     Angle diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
-    return absi(diff);
+    return abss(diff);
 }
 
 /*************************
@@ -205,7 +209,7 @@ f32 gd_rand_float(void) {
     u32 i;
     for ((i = 0); (i < 4); (i++)) {
         if (sPrimarySeed & 0x80000000) {
-            sPrimarySeed = (sPrimarySeed << 1 | 0x1);
+            sPrimarySeed = ((sPrimarySeed << 1) | 0x1);
         } else {
             sPrimarySeed <<= 1;
         }

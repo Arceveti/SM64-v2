@@ -1,5 +1,5 @@
 // 0x0700C7C8 - 0x0700C8F0
-static const s16 castle_grounds_seg7_animvalue_flags[] = {
+static const AnimValue castle_grounds_seg7_animvalue_flags[] = {
         0,   480, 16383,  4835,  3907,  2463,   721, -1101, -2789, -4125, -4928, -5481, -5883, -6121, -6182, -6054,
     -5723, -5177, -4309, -2785,  -812,  1339,  3401,  5102,  6174,  6692,  6939,  6952,  6769,  6428,  5967,  5423,
      3581,  2871,  1610,   109, -1318, -2361, -2855, -3215, -3491, -3677, -3768, -3758, -3642, -3414, -3068, -2526,
@@ -13,7 +13,7 @@ static const s16 castle_grounds_seg7_animvalue_flags[] = {
 };
 
 // 0x0700C8F0 - 0x0700C944
-static const u16 castle_grounds_seg7_animindex_flags[] = {
+static const AnimIndex castle_grounds_seg7_animindex_flags[] = {
     0x0001, 0x0000, 0x0001, 0x0001, 0x0001, 0x0000, 0x0001, 0x0002, 0x0001, 0x0000, 0x0001, 0x0000,
     0x0001, 0x0000, 0x0001, 0x0000, 0x001D, 0x0077,
     0x0001, 0x0000, 0x0001, 0x0000, 0x001D, 0x005A,

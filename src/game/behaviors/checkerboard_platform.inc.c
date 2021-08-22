@@ -10,18 +10,17 @@ struct CheckerBoardPlatformInitPosition sCheckerBoardPlatformInitPositions[] = {
                                                                                  { 235, { 1.2f, 2.0f, 1.2f }, 11.6f } };
 
 void bhv_checkerboard_elevator_group_init(void) {
-    s32 relativePosY;
-    s32 relativePosZ;
+    s32 relativePosY, relativePosZ;
     s32 type;
     s32 i;
     struct Object *platformObj;
     // oBehParams2ndByte determines the relative height of the platforms
     if (o->oBehParams2ndByte == CHECKERBOARD_PLATFORM_GROUP_BP_SET_DEFAULT) o->oBehParams2ndByte = CHECKERBOARD_PLATFORM_GROUP_BP_DEFAULT_MAX;
-    relativePosY = o->oBehParams2ndByte * 10;
-    type = (o->oBehParams >> 24) & 0xFF;
-    for (i = 0; i < 2; i++) {
-        relativePosZ = (i == 0 ? -sCheckerBoardPlatformInitPositions[type].relPosZ : sCheckerBoardPlatformInitPositions[type].relPosZ);
-        platformObj = spawn_object_relative(i, 0, i * relativePosY, relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM, bhvCheckerboardPlatformSub);
+    relativePosY = (o->oBehParams2ndByte * 10);
+    type = ((o->oBehParams >> 24) & 0xFF);
+    for ((i = 0); (i < 2); (i++)) {
+        relativePosZ = ((i == 0) ? -sCheckerBoardPlatformInitPositions[type].relPosZ : sCheckerBoardPlatformInitPositions[type].relPosZ);
+        platformObj = spawn_object_relative(i, 0, (i * relativePosY), relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM, bhvCheckerboardPlatformSub);
         platformObj->oCheckerBoardPlatformRadius  = sCheckerBoardPlatformInitPositions[type].radius;
         vec3f_copy(platformObj->header.gfx.scale,   sCheckerBoardPlatformInitPositions[type].scaleVec);
     }
@@ -36,9 +35,9 @@ void checkerboard_plat_act_move_y(f32 vel, s32 time) {
 }
 
 void checkerboard_plat_act_rotate(s32 nextAction, Angle pitchAmt) {
-    o->oVelY = 0.0f;
+    o->oVelY          = 0.0f;
     o->oAngleVelPitch = pitchAmt;
-    if (o->oTimer + 1 == 0x8000 / absi(pitchAmt)) o->oAction = nextAction;
+    if ((o->oTimer + 1) == (0x8000 / ABSI(pitchAmt))) o->oAction = nextAction;
     o->oCheckerBoardPlatformRotateAction = nextAction;
 }
 
@@ -57,12 +56,12 @@ void bhv_checkerboard_platform_loop(void) {
         case CHECKERBOARD_PLATFORM_ACT_MOVE_DOWN:       checkerboard_plat_act_move_y(-10.0f, o->oCheckerBoardPlatformHeight);   break;
         case CHECKERBOARD_PLATFORM_ACT_ROTATE_DOWN:     checkerboard_plat_act_rotate(CHECKERBOARD_PLATFORM_ACT_MOVE_UP,  -512); break;
     }
-    o->oMoveAnglePitch += absi(o->oAngleVelPitch);
-    o->oFaceAnglePitch += absi(o->oAngleVelPitch);
+    o->oMoveAnglePitch += ABSI(o->oAngleVelPitch);
+    o->oFaceAnglePitch += ABSI(o->oAngleVelPitch);
     o->oFaceAngleYaw = o->oMoveAngleYaw;
     if (o->oMoveAnglePitch != 0x0) {
-        o->oForwardVel = signum_positive(o->oAngleVelPitch) * sins(o->oMoveAnglePitch) * radius;
-        o->oVelY       = signum_positive(o->oAngleVelPitch) * coss(o->oMoveAnglePitch) * radius;
+        o->oForwardVel = (signum_positive(o->oAngleVelPitch) * sins(o->oMoveAnglePitch) * radius);
+        o->oVelY       = (signum_positive(o->oAngleVelPitch) * coss(o->oMoveAnglePitch) * radius);
     }
     // Prevent the lower platform from flipping
     if (o->oCheckerBoardPlatformRotateAction == CHECKERBOARD_PLATFORM_ACT_MOVE_UP) {

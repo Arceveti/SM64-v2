@@ -64,8 +64,8 @@ void draw_profiler_bar(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16
     // perform the render if start is less than end. in most cases, it should be.
     if (rectX1 < rectX2) {
         gDPPipeSync(     gDisplayListHead++);
-        gDPSetFillColor( gDisplayListHead++, color << 16 | color);
-        gDPFillRectangle(gDisplayListHead++, rectX1, posY, rectX2, posY + 2);
+        gDPSetFillColor( gDisplayListHead++, ((color << 16) | color));
+        gDPFillRectangle(gDisplayListHead++, rectX1, posY, rectX2, (posY + 2));
     }
 }
 
@@ -73,7 +73,7 @@ void draw_reference_profiler_bars(void) {
     // Draws the reference "max" bars underneath the real thing.
     // Blue
     gDPPipeSync(     gDisplayListHead++);
-    gDPSetFillColor( gDisplayListHead++, GPACK_RGBA5551( 40,  80, 255, 1) << 16 | GPACK_RGBA5551( 40,  80, 255, 1));
+    gDPSetFillColor( gDisplayListHead++, (GPACK_RGBA5551( 40,  80, 255, 1) << 16) | GPACK_RGBA5551( 40,  80, 255, 1));
     gDPFillRectangle(gDisplayListHead++,  30, 220, 79, 222);
     // Yellow
     gDPPipeSync(     gDisplayListHead++);

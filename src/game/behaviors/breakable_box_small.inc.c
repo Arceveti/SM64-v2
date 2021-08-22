@@ -2,10 +2,10 @@
 
 struct ObjectHitbox sBreakableBoxSmallHitbox = {
     /* interactType:      */ INTERACT_GRABBABLE,
-    /* downOffset:        */ 20,
-    /* damageOrCoinValue: */ 0,
-    /* health:            */ 1,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */  20,
+    /* damageOrCoinValue: */   0,
+    /* health:            */   1,
+    /* numLootCoins:      */   0,
     /* radius:            */ 150,
     /* height:            */ 250,
     /* hurtboxRadius:     */ 150,

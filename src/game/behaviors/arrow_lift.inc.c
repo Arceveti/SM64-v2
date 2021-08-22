@@ -22,7 +22,7 @@ static s32 arrow_lift_move_away(void) {
     o->oArrowLiftDisplacement += o->oForwardVel;
     // Stop the platform after moving 384 units.
     if (o->oArrowLiftDisplacement > 384.0f) {
-        o->oForwardVel            = 0.0f;
+        o->oForwardVel            =   0.0f;
         o->oArrowLiftDisplacement = 384.0f;
         doneMoving                = TRUE;
     }
@@ -35,7 +35,7 @@ static s32 arrow_lift_move_away(void) {
  */
 static s8 arrow_lift_move_back(void) {
     s8 doneMoving              = FALSE;
-    o->oMoveAngleYaw           = o->oFaceAngleYaw + 0x4000;
+    o->oMoveAngleYaw           = (o->oFaceAngleYaw + 0x4000);
     o->oVelY                   =  0.0f;
     o->oForwardVel             = 12.0f;
     o->oArrowLiftDisplacement -= o->oForwardVel;
@@ -56,7 +56,7 @@ void bhv_arrow_lift_loop(void) {
     switch (o->oAction) {
         case ARROW_LIFT_ACT_IDLE:
             // Wait 61 frames before moving.
-            if (o->oTimer > 60 && gMarioObject->platform == o) o->oAction = ARROW_LIFT_ACT_MOVING_AWAY;
+            if ((o->oTimer > 60) && (gMarioObject->platform == o)) o->oAction = ARROW_LIFT_ACT_MOVING_AWAY;
             break;
         case ARROW_LIFT_ACT_MOVING_AWAY:
             if (arrow_lift_move_away()) o->oAction = ARROW_LIFT_ACT_MOVING_BACK;
