@@ -250,19 +250,19 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
                 // check if the current layer is a silhouette layer
-                if ((i == LAYER_SILHOUETTE_OPAQUE) || (i == LAYER_SILHOUETTE_ALPHA)) {
+                if (gSilhouette && ((i == LAYER_SILHOUETTE_OPAQUE) || (i == LAYER_SILHOUETTE_ALPHA))) {
                     // Set render modes for the silhouette
                     gDPSetRenderMode(   gDisplayListHead++, SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA),
                                                             SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA));
                     // Enable fog for silhouette models
                     gSPSetGeometryMode( gDisplayListHead++, G_FOG);
                     gSPFogPosition(     gDisplayListHead++, 0, 1 );
-                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA     ); // silhouette color & alpha
-                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_ALPHA >> 1); // silhouette env transparency
+                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0,  SIL_ALPHA      ); // silhouette color & alpha
+                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, (SIL_ALPHA >> 1)); // silhouette env transparency
                 } else {
                     // use only the normal mode list for non-silhouette layers
-                    gDPSetRenderMode(   gDisplayListHead++, mode1List->modes[i],
-                                                            mode2List->modes[i]);
+                    gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i],
+                                                         mode2List->modes[i]);
                 }
                 gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
                                                     (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
@@ -270,8 +270,8 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
                 currList = currList->next;
             }
         }
-         // When reaching the last silhouette layer, render the "normal" versions of the silhouette layers:
-        if (i == LAST_SIL_LAYER) {
+        // When reaching the last silhouette layer, render the "normal" versions of the silhouette layers:
+        if (gSilhouette && (i == LAST_SIL_LAYER)) {
             for ((j = (i - NUM_EXTRA_SIL_LAYERS)); (j <= LAST_SIL_LAYER); (j++)) {
                 // Disable fog for the non-silhouette versions
                 gSPClearGeometryMode(   gDisplayListHead++, G_FOG);
@@ -339,7 +339,7 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
     s32 i;
     if (gCurGraphNodeMasterList == NULL && node->node.children != NULL) {
         gCurGraphNodeMasterList = node;
-        for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) node->listHeads[i] = NULL;
+        for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) node->listHeads[i] = NULL;
         geo_process_node_and_siblings(node->node.children);
         geo_process_master_list_sub(  node               );
         gCurGraphNodeMasterList = NULL;
@@ -352,10 +352,10 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
 static void geo_process_ortho_projection(struct GraphNodeOrthoProjection *node) {
     if (node->node.children != NULL) {
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
-        f32 left   = (gCurGraphNodeRoot->x - gCurGraphNodeRoot->width ) / 2.0f * node->scale;
-        f32 right  = (gCurGraphNodeRoot->x + gCurGraphNodeRoot->width ) / 2.0f * node->scale;
-        f32 top    = (gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f * node->scale;
-        f32 bottom = (gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f * node->scale;
+        f32 left   = ((gCurGraphNodeRoot->x - gCurGraphNodeRoot->width ) / 2.0f * node->scale);
+        f32 right  = ((gCurGraphNodeRoot->x + gCurGraphNodeRoot->width ) / 2.0f * node->scale);
+        f32 top    = ((gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f * node->scale);
+        f32 bottom = ((gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f * node->scale);
         guOrtho(mtx, left, right, bottom, top, -2.0f, 2.0f, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, 0xFFFF);
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
@@ -393,11 +393,11 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
  */
 static void geo_process_level_of_detail(struct GraphNodeLevelOfDetail *node) {
 #ifdef AUTO_LOD
-    f32 distanceFromCam = gIsConsole ? -gMatStack[gMatStackIndex][3][2] : 50;
+    f32 distanceFromCam = (gIsConsole ? -gMatStack[gMatStackIndex][3][2] : 50);
 #else
     f32 distanceFromCam = -gMatStack[gMatStackIndex][3][2];
 #endif
-    if ((f32)node->minDistance <= distanceFromCam && distanceFromCam < (f32)node->maxDistance && node->node.children != 0) geo_process_node_and_siblings(node->node.children);
+    if (((f32)node->minDistance <= distanceFromCam) && (distanceFromCam < (f32)node->maxDistance) && (node->node.children != 0)) geo_process_node_and_siblings(node->node.children);
 }
 
 /**
@@ -788,8 +788,8 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     f32 hScreenEdge;
     if (node->node.flags & GRAPH_RENDER_INVISIBLE) return FALSE;
     geo         = node->sharedChild;
-    halfFov     = ((gCurGraphNodeCamFrustum->fov*aspect) / 2.0f + 1.0f) * 32768.0f / 180.0f + 0.5f;
-    hScreenEdge = -matrix[3][2] * sins(halfFov) / coss(halfFov);
+    halfFov     = (((((gCurGraphNodeCamFrustum->fov * aspect) / 2.0f) + 1.0f) * 32768.0f / 180.0f) + 0.5f);
+    hScreenEdge = (-matrix[3][2] * sins(halfFov) / coss(halfFov));
     // -matrix[3][2] is the depth, which gets multiplied by tan(halfFov) to get
     // the amount of units between the center of the screen and the horizontal edge
     // given the distance from the object to the camera.
@@ -804,14 +804,14 @@ static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
         cullingRadius = 300;
     }
     // Don't render if the object is close to or behind the camera
-    if (matrix[3][2] >   -100.0f + cullingRadius) return FALSE;
+    if (matrix[3][2] > (  -100.0f + cullingRadius)) return FALSE;
     //! This makes the HOLP not update when the camera is far away, and it
     //  makes PU travel safe when the camera is locked on the main map.
     //  If Mario were rendered with a depth over 65536 it would cause overflow
     //  when converting the transformation matrix to a fixed point matrix.
-    if (matrix[3][2] < -20000.0f - cullingRadius) return FALSE;
+    if (matrix[3][2] < (-20000.0f - cullingRadius)) return FALSE;
     // Check whether the object is horizontally in view
-    return !((matrix[3][0] > hScreenEdge + cullingRadius) || (matrix[3][0] < -hScreenEdge - cullingRadius));
+    return !((matrix[3][0] > (hScreenEdge + cullingRadius)) || (matrix[3][0] < (-hScreenEdge - cullingRadius)));
 }
 
 /**
@@ -910,10 +910,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         translation[2] = (node->translation[2] / 4.0f);
         mtxf_translate(mat, translation);
         mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
-        vec3f_copy(gMatStack[gMatStackIndex + 1][3], gMatStack[gMatStackIndex][3]);
-        // gMatStack[                 gMatStackIndex + 1][3][0] = gMatStack[gMatStackIndex][3][0];
-        // gMatStack[                 gMatStackIndex + 1][3][1] = gMatStack[gMatStackIndex][3][1];
-        // gMatStack[                 gMatStackIndex + 1][3][2] = gMatStack[gMatStackIndex][3][2];
+        vec3f_copy(      gMatStack[gMatStackIndex + 1][3],     gMatStack[gMatStackIndex    ][3]);
         mtxf_mul(        gMatStack[gMatStackIndex + 1], mat,   gMatStack[gMatStackIndex + 1]);
         mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1],        gMatStack[gMatStackIndex + 1], node->objNode->header.gfx.scale);
         if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_HELD_OBJ, &node->fnNode.node, (struct AllocOnlyPool *) gMatStack[gMatStackIndex + 1]);

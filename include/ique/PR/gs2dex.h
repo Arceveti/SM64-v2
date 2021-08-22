@@ -324,9 +324,9 @@ typedef	struct	{
  *---------------------------------------------------------------------------*/
 #define	G_MW_GENSTAT	0x08	/* G_MW_FOG ��Ʊ���ͤʤΤ����� */
 
-#define	gSPSetStatus(pkt, sid, val)	\
+#define	gSPSetStatus(pkt, sid, val) \
 	gMoveWd((pkt), G_MW_GENSTAT, (sid), (val))
-#define	gsSPSetStatus(sid, val)	\
+#define	gsSPSetStatus(sid, val)     \
 	gsMoveWd(      G_MW_GENSTAT, (sid), (val))
 
 /*---------------------------------------------------------------------------*
@@ -340,8 +340,8 @@ typedef	struct	{
 #define	G_OBJRM_SHRINKSIZE_2	0x20
 #define	G_OBJRM_WIDEN					0x40
 
-#define	gSPObjRenderMode(pkt, mode)   gImmp1((pkt),G_OBJ_RENDERMODE,(mode))
-#define	gsSPObjRenderMode(mode)	      gsImmp1(     G_OBJ_RENDERMODE,(mode))
+#define	gSPObjRenderMode(pkt, mode)   gImmp1((pkt), G_OBJ_RENDERMODE, (mode))
+#define	gsSPObjRenderMode(mode)	      gsImmp1(      G_OBJ_RENDERMODE, (mode))
 
 /*===========================================================================*
  *	Render Mode Macro

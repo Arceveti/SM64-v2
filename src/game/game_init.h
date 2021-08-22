@@ -53,6 +53,12 @@ extern s16                  gWidescreen;
 #ifdef CUSTOM_FOV
 extern s16                  gFieldOfView;
 #endif
+#ifdef SILHOUETTE
+extern s16                  gSilhouette;
+#endif
+// #ifndef DISABLE_AA
+// extern s16                  gAntiAliasing;
+// #endif
 #ifdef REONU_CAM_3
 extern s8                   gCameraSpeed;
 extern u8                   gWaterCamOverride;

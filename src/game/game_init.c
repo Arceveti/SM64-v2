@@ -96,6 +96,12 @@ s16 gWidescreen;
 #ifdef CUSTOM_FOV
 s16 gFieldOfView = DEFAULT_FOV_PERCENT;
 #endif
+#ifdef SILHOUETTE
+s16 gSilhouette = TRUE;
+#endif
+// #ifndef DISABLE_AA
+// s16 gAntiAliasing = TRUE;
+// #endif
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer  = 0;
