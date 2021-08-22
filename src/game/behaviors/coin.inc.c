@@ -2,18 +2,18 @@
 
 struct ObjectHitbox sYellowCoinHitbox = {
     /* interactType:      */ INTERACT_COIN,
-    /* downOffset:        */ 0,
-    /* damageOrCoinValue: */ 1,
-    /* health:            */ 0,
-    /* numLootCoins:      */ 0,
+    /* downOffset:        */   0,
+    /* damageOrCoinValue: */   1,
+    /* health:            */   0,
+    /* numLootCoins:      */   0,
     /* radius:            */ 100,
-    /* height:            */ 64,
-    /* hurtboxRadius:     */ 0,
-    /* hurtboxHeight:     */ 0,
+    /* height:            */  64,
+    /* hurtboxRadius:     */   0,
+    /* hurtboxHeight:     */   0,
 };
 
-s16 sCoinArrowPositions[][2] = { { 0, -150 }, {    0, -50 }, {  0,  50 }, {   0, 150 },
-                                { -50, 100 }, { -100,  50 }, { 50, 100 }, { 100,  50 } };
+s16 sCoinArrowPositions[][2] = { {   0, -150 }, {    0, -50 }, {  0,  50 }, {   0, 150 },
+                                 { -50,  100 }, { -100,  50 }, { 50, 100 }, { 100,  50 } };
 
 Bool32 bhv_coin_sparkles_init(void) {
     if (o->oInteractStatus & INT_STATUS_INTERACTED && !(o->oInteractStatus & INT_STATUS_TOUCHED_BOB_OMB)) {
@@ -58,8 +58,8 @@ void bhv_temp_coin_loop(void) {
 }
 
 void bhv_coin_init(void) {
-    o->oVelY         = random_float() * 10.0f + 30.0f + o->oCoinBaseYVel;
-    o->oForwardVel   = random_float() * 10.0f;
+    o->oVelY         = ((random_float() * 10.0f) + 30.0f + o->oCoinBaseYVel);
+    o->oForwardVel   =  (random_float() * 10.0f);
     o->oMoveAngleYaw = random_u16();
     cur_obj_set_behavior(bhvYellowCoin);
     obj_set_hitbox(o, &sYellowCoinHitbox);
@@ -131,27 +131,27 @@ void bhv_coin_formation_spawn_loop(void) {
 void spawn_coin_in_formation(s32 index, s32 shape) {
     struct Object *newCoin;
     Vec3i pos;
-    s32 spawnCoin    = TRUE;
-    s32 snapToGround = TRUE;
+    Bool32 spawnCoin    = TRUE;
+    Bool32 snapToGround = TRUE;
     pos[0] = pos[1] = pos[2] = 0;
     switch (shape & 0x7) {
         case COIN_FORMATION_BP_HORIZONTAL_LINE:
-            pos[2] = 160 * (index - 2);
+            pos[2] = (160 * (index - 2));
             if (index > 4) spawnCoin = FALSE;
             break;
         case COIN_FORMATION_BP_VERTICAL_LINE:
             snapToGround = FALSE;
-            pos[1] = 160 * index * 0.8f; // 128 * index
+            pos[1] = (160 * index * 0.8f); // 128 * index
             if (index > 4) spawnCoin = FALSE;
             break;
         case COIN_FORMATION_BP_HORIZONTAL_RING:
-            pos[0] = sins(index << 13) * 300.0f;
-            pos[2] = coss(index << 13) * 300.0f;
+            pos[0] = (sins(index << 13) * 300.0f);
+            pos[2] = (coss(index << 13) * 300.0f);
             break;
         case COIN_FORMATION_BP_VERTICAL_RING:
             snapToGround = FALSE;
-            pos[0] = coss(index << 13) * 200.0f;
-            pos[1] = sins(index << 13) * 200.0f + 200.0f;
+            pos[0] =  (coss(index << 13) * 200.0f);
+            pos[1] = ((sins(index << 13) * 200.0f) + 200.0f);
             break;
         case COIN_FORMATION_BP_ARROW:
             pos[0] = sCoinArrowPositions[index][0];
@@ -167,7 +167,7 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
 }
 
 void bhv_coin_formation_init(void) {
-    o->oCoinRespawnBits = (o->oBehParams >> 8) & 0xFF;
+    o->oCoinRespawnBits = ((o->oBehParams >> 8) & 0xFF);
 }
 
 void bhv_coin_formation_loop(void) {
@@ -175,7 +175,7 @@ void bhv_coin_formation_loop(void) {
     switch (o->oAction) {
         case COIN_FORMATION_ACT_INACTIVE:
             if (o->oDistanceToMario < 4000.0f) { //! hardcoded draw distance
-                for (bitIndex = 0; bitIndex < 8; bitIndex++) if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
+                for ((bitIndex = 0); (bitIndex < 8); (bitIndex++)) if (!(o->oCoinRespawnBits & (1 << bitIndex))) spawn_coin_in_formation(bitIndex, o->oBehParams2ndByte);
                 o->oAction = COIN_FORMATION_ACT_ACTIVE;
             }
             break;
@@ -195,7 +195,7 @@ void coin_inside_boo_act_dropped(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_if_hit_wall_bounce_away();
     if (o->oMoveFlags & OBJ_MOVE_BOUNCE) cur_obj_play_sound_2(SOUND_GENERAL_COIN_DROP);
-    if (o->oTimer > 90 || (o->oMoveFlags & OBJ_MOVE_LANDED)) {
+    if ((o->oTimer > 90) || (o->oMoveFlags & OBJ_MOVE_LANDED)) {
         obj_set_hitbox(o, &sYellowCoinHitbox);
         cur_obj_become_tangible();
         cur_obj_set_behavior(bhvYellowCoin);
@@ -210,7 +210,7 @@ void coin_inside_boo_act_carried(void) {
     s16 marioMoveYaw;
     struct Object *parent = o->parentObj;
     cur_obj_become_intangible();
-    if (o->oTimer == 0 && gCurrLevelNum == LEVEL_BBH) {
+    if ((o->oTimer == 0) && (gCurrLevelNum == LEVEL_BBH)) {
         cur_obj_set_model(MODEL_BLUE_COIN);
         cur_obj_scale(0.7f);
     }
@@ -218,8 +218,8 @@ void coin_inside_boo_act_carried(void) {
     if (parent->oBooDeathStatus == BOO_DEATH_STATUS_DYING) {
         o->oAction   = COIN_INSIDE_BOO_ACT_DROPPED;
         marioMoveYaw = gMarioObject->oMoveAngleYaw;
-        o->oVelX     = sins(marioMoveYaw) * 3.0f;
-        o->oVelZ     = coss(marioMoveYaw) * 3.0f;
+        o->oVelX     = (sins(marioMoveYaw) * 3.0f);
+        o->oVelZ     = (coss(marioMoveYaw) * 3.0f);
         o->oVelY     = 35.0f;
     }
 }
@@ -237,6 +237,6 @@ void bhv_coin_sparkles_loop(void) {
 void bhv_coin_sparkles_spawner_loop(void) {
     struct Object *sparkleObj;
     sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvCoinSparkles);
-    sparkleObj->oPosX += random_float() * 30.0f - 15.0f;
-    sparkleObj->oPosZ += random_float() * 30.0f - 15.0f;
+    sparkleObj->oPosX += ((random_float() * 30.0f) - 15.0f);
+    sparkleObj->oPosZ += ((random_float() * 30.0f) - 15.0f);
 }

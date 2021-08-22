@@ -22,6 +22,7 @@ OSMesgQueue gRumbleThreadVIMesgQueue;
 struct RumbleData     gRumbleDataQueue[3];
 struct RumbleSettings gCurrRumbleSettings;
 
+//! Bool32?
 s32 sRumblePakThreadActive = FALSE;
 s32 sRumblePakActive       = FALSE;
 s32 sRumblePakErrorCount   = 0;
@@ -127,7 +128,7 @@ void queue_rumble_decay(s16 decay) {
     gRumbleDataQueue[2].decay = decay;
 }
 
-u8 is_rumble_finished_and_queue_empty(void) {
+Bool8 is_rumble_finished_and_queue_empty(void) {
     if (gCurrRumbleSettings.start + gCurrRumbleSettings.timer >= 4) return FALSE;
     if (gRumbleDataQueue[0].comm != RUMBLE_EVENT_NOMESG) return FALSE;
     if (gRumbleDataQueue[1].comm != RUMBLE_EVENT_NOMESG) return FALSE;
@@ -174,8 +175,8 @@ static void thread6_rumble_loop(UNUSED void *a0) {
         update_rumble_pak();
         if (sRumblePakActive) {
             if (sRumblePakErrorCount >= 30) sRumblePakActive = FALSE;
-        } else if (gNumVblanks % 60 == 0) {
-            sRumblePakActive = osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1;
+        } else if ((gNumVblanks % 60) == 0) {
+            sRumblePakActive = (osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1);
             sRumblePakErrorCount = 0;
         }
         if (gRumblePakTimer > 0) gRumblePakTimer--;
@@ -183,7 +184,7 @@ static void thread6_rumble_loop(UNUSED void *a0) {
 }
 
 void cancel_rumble(void) {
-    sRumblePakActive    = osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1;
+    sRumblePakActive    = (osMotorInit(&gSIEventMesgQueue, &gRumblePakPfs, gPlayer1Controller->port) < 1);
     if (sRumblePakActive) osMotorStop(&gRumblePakPfs);
     gRumbleDataQueue[0].comm  = RUMBLE_EVENT_NOMESG;
     gRumbleDataQueue[1].comm  = RUMBLE_EVENT_NOMESG;
@@ -195,7 +196,7 @@ void cancel_rumble(void) {
 
 void create_thread_6(void) {
     osCreateMesgQueue(&gRumbleThreadVIMesgQueue, gRumbleThreadVIMesgBuf, 1);
-    osCreateThread(&gRumblePakThread, 6, thread6_rumble_loop, NULL, gThread6Stack + 0x2000, 30);
+    osCreateThread(&gRumblePakThread, 6, thread6_rumble_loop, NULL, (gThread6Stack + 0x2000), 30);
     osStartThread(&gRumblePakThread);
 }
 

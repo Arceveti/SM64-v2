@@ -102,13 +102,13 @@ extern void puppycam_check_save(void);
 
 STATIC_ASSERT(sizeof(struct SaveBuffer) <= EEPROM_SIZE, "ERROR: Save struct too big for specified save type");
 
-extern u8 gLastCompletedCourseNum;
-extern u8 gLastCompletedStarNum;
-extern s8 sUnusedGotGlobalCoinHiScore;
-extern u8 gGotFileCoinHiScore;
-extern u8 gCurrCourseStarFlags;
-extern u8 gSpecialTripleJump;
-extern s8 gLevelToCourseNumTable[];
+extern u8    gLastCompletedCourseNum;
+extern u8    gLastCompletedStarNum;
+extern Bool8 sUnusedGotGlobalCoinHiScore;
+extern Bool8 gGotFileCoinHiScore;
+extern u8    gCurrCourseStarFlags;
+extern Bool8 gSpecialTripleJump;
+extern s8    gLevelToCourseNumTable[];
 
 // game progress flags
 #define SAVE_FLAG_FILE_EXISTS            /* 0x00000001 */ (1 <<  0)
@@ -154,44 +154,44 @@ struct WarpCheckpoint {
 
 extern struct WarpCheckpoint gWarpCheckpoint;
 
-extern s8 gMainMenuDataModified;
-extern s8 gSaveFileModified;
+extern Bool8 gMainMenuDataModified;
+extern Bool8 gSaveFileModified;
 
-void save_file_do_save(s32 fileIndex);
-void save_file_erase(  s32 fileIndex);
-void save_file_copy(s32 srcFileIndex, s32 destFileIndex);
-void save_file_load_all(void);
-void save_file_reload(  void);
-void save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
-s32  save_file_exists(s32 fileIndex);
-u32  save_file_get_max_coin_score(                  s32 courseIndex);
-s32  save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);
-s32  save_file_get_total_star_count( s32 fileIndex, s32 minCourse, s32 maxCourse);
-void save_file_set_flags(  u32 flags);
-void save_file_clear_flags(u32 flags);
-u32  save_file_get_flags(void);
-u32  save_file_get_star_flags(       s32 fileIndex, s32 courseIndex);
-void save_file_set_star_flags(       s32 fileIndex, s32 courseIndex, u32 starFlags);
-s32  save_file_get_course_coin_score(s32 fileIndex, s32 courseIndex);
-s32  save_file_is_cannon_unlocked( void);
-void save_file_set_cannon_unlocked(void);
-void save_file_set_cap_pos(s16 x, s16 y, s16 z);
-s32  save_file_get_cap_pos(Vec3s capPos);
-void save_file_set_sound_mode(u16 mode);
-u16  save_file_get_sound_mode(void);
+void   save_file_do_save(s32 fileIndex);
+void   save_file_erase(  s32 fileIndex);
+void   save_file_copy(s32 srcFileIndex, s32 destFileIndex);
+void   save_file_load_all(void);
+void   save_file_reload(  void);
+void   save_file_collect_star_or_key(s16 coinScore, s16 starIndex);
+s32    save_file_exists(s32 fileIndex);
+u32    save_file_get_max_coin_score(                  s32 courseIndex);
+s32    save_file_get_course_star_count(s32 fileIndex, s32 courseIndex);
+s32    save_file_get_total_star_count( s32 fileIndex, s32 minCourse, s32 maxCourse);
+void   save_file_set_flags(  u32 flags);
+void   save_file_clear_flags(u32 flags);
+u32    save_file_get_flags(void);
+u32    save_file_get_star_flags(       s32 fileIndex, s32 courseIndex);
+void   save_file_set_star_flags(       s32 fileIndex, s32 courseIndex, u32 starFlags);
+s32    save_file_get_course_coin_score(s32 fileIndex, s32 courseIndex);
+s32    save_file_is_cannon_unlocked( void);
+void   save_file_set_cannon_unlocked(void);
+void   save_file_set_cap_pos(s16 x, s16 y, s16 z);
+Bool32 save_file_get_cap_pos(Vec3s capPos);
+void   save_file_set_sound_mode(u16 mode);
+u16    save_file_get_sound_mode(void);
 #ifdef REONU_CAM_3
-u8   save_file_get_camera_speed(void);
-void save_file_set_camera_speed(u8 speed);
+u8     save_file_get_camera_speed(void);
+void   save_file_set_camera_speed(u8 speed);
 #endif
 #ifdef WIDE
-void save_file_set_widescreen_mode(u8 mode);
-u8   save_file_get_widescreen_mode(void);
+void   save_file_set_widescreen_mode(u8 mode);
+u8     save_file_get_widescreen_mode(void);
 #endif
-void save_file_move_cap_to_default_location(void);
+void   save_file_move_cap_to_default_location(void);
 
-void disable_warp_checkpoint(void);
-void check_if_should_set_warp_checkpoint(struct WarpNode *warpNode);
-s32  check_warp_checkpoint(              struct WarpNode *warpNode);
+void   disable_warp_checkpoint(void);
+void   check_if_should_set_warp_checkpoint(struct WarpNode *warpNode);
+s32    check_warp_checkpoint(              struct WarpNode *warpNode);
 
 #ifdef VERSION_EU
 enum EuLanguages {

@@ -510,11 +510,11 @@ Bool32 current_mario_room_check(RoomData room) {
 /**
  * Triggers dialog when Mario is facing an object and controls it while in the dialog.
  */
-//! DialogID16?
+//! sBool32? DialogID16?
 s16 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s32 actionArg) {
     s16 dialogueResponse;
     if ((is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, (s32) dist)
-      && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x1000)
+      && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, (gMarioObject->header.gfx.angle[1] + 0x8000), 0x1000)
       && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x1000)) || (*inDialog)) {
         *inDialog = TRUE;
         if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) { //If Mario is speaking.

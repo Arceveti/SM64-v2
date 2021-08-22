@@ -3,6 +3,7 @@
 
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
+#include "types.h"
 
 /**
  * Shadow types. Shadows are circles, squares, or hardcoded rectangles, and
@@ -10,9 +11,9 @@
  */
 enum ShadowType
 {
-    SHADOW_CIRCLE_9_VERTS             = 0,
-    SHADOW_CIRCLE_4_VERTS             = 1,
-    SHADOW_CIRCLE_4_VERTS_FLAT_UNUSED = 2,
+    SHADOW_CIRCLE_9_VERTS             =  0,
+    SHADOW_CIRCLE_4_VERTS             =  1,
+    SHADOW_CIRCLE_4_VERTS_FLAT_UNUSED =  2,
     SHADOW_SQUARE_PERMANENT           = 10,
     SHADOW_SQUARE_SCALABLE            = 11,
     SHADOW_SQUARE_TOGGLABLE           = 12,
@@ -27,23 +28,23 @@ enum ShadowType
 /**
  * Flag for if Mario is on a flying carpet.
  */
-extern s8 sMarioOnFlyingCarpet;
+extern Bool8 sMarioOnFlyingCarpet;
 
 /**
  * The surface type below the current shadow.
  */
-extern s16 sSurfaceTypeBelowShadow;
+extern SurfaceType sSurfaceTypeBelowShadow;
 
 /**
  * Flag for if the current shadow is above water or lava.
  */
-extern s8 gShadowAboveWaterOrLava;
-extern s8 gShadowAboveCustomWater;
+extern Bool8 gShadowAboveWaterOrLava;
+extern Bool8 gShadowAboveCustomWater;
 
 /**
  * Flag for if Mario is on ice or a flying carpet.
  */
-extern s8 gMarioOnIceOrCarpet;
+extern Bool8 gMarioOnIceOrCarpet;
 
 /**
  * Given the (x, y, z) location of an object, create a shadow below that object

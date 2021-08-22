@@ -384,8 +384,8 @@ void bowser_bits_actions(void) {
 #if BUGFIX_BOWSER_FALLEN_OFF_STAGE
 void bowser_reset_fallen_off_stage(void) {
     if ((o->oVelY < 0) && (o->oPosY < (o->oHomeY - 300.0f))) {
-        o->oPosX       = o->oPosZ = 0.0f;
-        o->oPosY       = o->oHomeY + 2000.0f;
+        o->oPosX       =  o->oPosZ = 0.0f;
+        o->oPosY       = (o->oHomeY + 2000.0f);
         o->oVelY       = 0.0f;
         o->oForwardVel = 0.0f;
     }
@@ -551,7 +551,7 @@ void bowser_act_hit_mine(void) {
     if (o->oTimer == 0) {
         o->oForwardVel     = -400.0f;
         o->oVelY           =  100.0f;
-        o->oMoveAngleYaw   = o->oBowserAngleToCentre + 0x8000;
+        o->oMoveAngleYaw   = (o->oBowserAngleToCentre + 0x8000);
         o->oBowserEyesShut = TRUE; // close eyes
     }
     switch (o->oSubAction) {
@@ -1167,7 +1167,7 @@ struct BowserTiltPlatformInfo {
     // -1 = Move angle in front of Bowser
 	s16	flag;
     // Sets platform's tilt angle speed (pattern: positive then negative)
-	s16	angSpeed;
+	Angle	angSpeed;
     // Sets how much time the platform can tilt, increases each move
  	s16	time;
 };
@@ -1202,7 +1202,7 @@ void bowser_act_tilt_lava_platform(void) {
         o->oAction = BOWSER_ACT_DEFAULT;
     } else {
         s32 i = 0;
-        s32 isNotTilting = TRUE;
+        Bool32 isNotTilting = TRUE;
         // Active platform tilting if the timer is not 0
         while (sBowsertiltPlatformData[i].time != 0) {
             // Move if the time values is more than the timer

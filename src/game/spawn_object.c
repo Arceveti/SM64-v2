@@ -122,7 +122,7 @@ void init_free_object_list(void) {
     struct Object *obj   = &gObjectPool[0];
     gFreeObjectList.next = (struct ObjectNode *) obj;
     // Link each object in the pool to the following object
-    for (i = 0; i < poolLength - 1; i++) {
+    for ((i = 0); (i < (poolLength - 1)); (i++)) {
         obj->header.next = &(obj + 1)->header;
         obj++;
     }
@@ -135,7 +135,7 @@ void init_free_object_list(void) {
  */
 void clear_object_lists(struct ObjectNode *objLists) {
     s32 i;
-    for (i = 0; i < NUM_OBJ_LISTS; i++) {
+    for ((i = 0); (i < NUM_OBJ_LISTS); (i++)) {
         objLists[i].next = &objLists[i];
         objLists[i].prev = &objLists[i];
     }
@@ -187,19 +187,19 @@ struct Object *allocate_object(struct ObjectNode *objList) {
         }
     }
     // Initialize object fields
-    obj->activeFlags              = ACTIVE_FLAG_ACTIVE | ACTIVE_FLAG_ALLOCATED;
+    obj->activeFlags              = (ACTIVE_FLAG_ACTIVE | ACTIVE_FLAG_ALLOCATED);
     obj->parentObj                = obj;
     obj->prevObj                  = NULL;
     obj->collidedObjInteractTypes = 0;
     obj->numCollidedObjs          = 0;
 #if IS_64_BIT
-    for (i = 0; i < 0x50; i++) {
-        obj->rawData.asS32[i] = 0;
+    for ((i = 0); (i < 0x50); (i++)) {
+        obj->rawData.asS32[i]     = 0;
         obj->ptrData.asVoidPtr[i] = NULL;
     }
 #else
     // -O2 needs everything until = on the same line
-    for (i = 0; i < 0x50; i++) obj->rawData.asS32[i] = 0;
+    for ((i = 0); (i < 0x50); (i++)) obj->rawData.asS32[i] = 0;
 #endif
     // obj->unused1                = 0;
     obj->bhvStackIndex          = 0;
@@ -216,7 +216,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->oDamageOrCoinValue     = 0;
     obj->oHealth                = 2048;
     obj->oCollisionDistance     = 1000.0f;
-    obj->oDrawingDistance       = (gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f;
+    obj->oDrawingDistance       = ((gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f);
     mtxf_identity(obj->transform);
     obj->respawnInfoType        = RESPAWN_INFO_TYPE_NULL;
     obj->respawnInfo            = NULL;
@@ -236,7 +236,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
 static void snap_object_to_floor(struct Object *obj) {
     struct Surface *surface;
     obj->oFloorHeight = find_floor(obj->oPosX, obj->oPosY, obj->oPosZ, &surface);
-    if (obj->oFloorHeight + 2.0f > obj->oPosY && obj->oPosY > obj->oFloorHeight - 10.0f) {
+    if (((obj->oFloorHeight + 2.0f) > obj->oPosY) && (obj->oPosY > (obj->oFloorHeight - 10.0f))) {
         obj->oPosY = obj->oFloorHeight;
         obj->oMoveFlags |= OBJ_MOVE_ON_GROUND;
     }
@@ -253,7 +253,7 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
     // If the first behavior script command is "begin <object list>", then
     // extract the object list from it
     if ((bhvScript[0] >> 24) == 0) {
-        objListIndex = (bhvScript[0] >> 16) & 0xFFFF;
+        objListIndex = ((bhvScript[0] >> 16) & 0xFFFF);
     } else {
         objListIndex = OBJ_LIST_DEFAULT;
     }

@@ -63,16 +63,16 @@ struct Skybox sSkyBoxInfo[2];
 
 typedef const Texture *const SkyboxTexture[80 * SKYBOX_SIZE];
 
-extern SkyboxTexture bbh_skybox_ptrlist;
-extern SkyboxTexture bidw_skybox_ptrlist;
-extern SkyboxTexture bitfs_skybox_ptrlist;
-extern SkyboxTexture bits_skybox_ptrlist;
-extern SkyboxTexture ccm_skybox_ptrlist;
+extern SkyboxTexture         bbh_skybox_ptrlist;
+extern SkyboxTexture        bidw_skybox_ptrlist;
+extern SkyboxTexture       bitfs_skybox_ptrlist;
+extern SkyboxTexture        bits_skybox_ptrlist;
+extern SkyboxTexture         ccm_skybox_ptrlist;
 extern SkyboxTexture cloud_floor_skybox_ptrlist;
-extern SkyboxTexture clouds_skybox_ptrlist;
-extern SkyboxTexture ssl_skybox_ptrlist;
-extern SkyboxTexture water_skybox_ptrlist;
-extern SkyboxTexture wdw_skybox_ptrlist;
+extern SkyboxTexture      clouds_skybox_ptrlist;
+extern SkyboxTexture         ssl_skybox_ptrlist;
+extern SkyboxTexture       water_skybox_ptrlist;
+extern SkyboxTexture         wdw_skybox_ptrlist;
 
 SkyboxTexture *sSkyboxTextures[10] = {
     &water_skybox_ptrlist,
@@ -235,7 +235,7 @@ void *create_skybox_ortho_matrix(s8 player) {
  * Creates the skybox's display list, then draws the 3x3 grid of tiles.
  */
 Gfx *init_skybox_display_list(s8 player, s8 background, s8 colorIndex) {
-    s32 dlCommandCount = (5 + ((3 * 3) * 7)); //!? 5 for the start and end, plus 9 skybox tiles
+    s32 dlCommandCount = (5 + (sqr(3) * 7)); //!? 5 for the start and end, plus 9 skybox tiles
     void *skybox = alloc_display_list(dlCommandCount * sizeof(Gfx) * sqr(SKYBOX_SIZE));
     Gfx *dlist = skybox;
     if (skybox == NULL) {

@@ -49,16 +49,16 @@ struct Shadow {
  * This is used to disable shadows during specific frames of Mario's
  * animations.
  */
-#define SHADOW_SOLIDITY_NO_SHADOW 0
+#define SHADOW_SOLIDITY_NO_SHADOW 0x0
 /**
  * Constant to indicate that a shadow's solidity has been pre-set by a previous
  * function and should not be overwritten.
  */
-#define SHADOW_SOILDITY_ALREADY_SET 1
+#define SHADOW_SOILDITY_ALREADY_SET 0x1
 /**
  * Constant to indicate that a shadow's solidity has not yet been set.
  */
-#define SHADOW_SOLIDITY_NOT_YET_SET 2
+#define SHADOW_SOLIDITY_NOT_YET_SET 0x2
 
 /**
  * Constant to indicate any sort of circular shadow.
@@ -72,11 +72,11 @@ struct Shadow {
 /**
  * Constant to indicate a shadow consists of 9 vertices.
  */
-#define SHADOW_WITH_9_VERTS 0
+#define SHADOW_WITH_9_VERTS 0x0
 /**
  * Constant to indicate a shadow consists of 4 vertices.
  */
-#define SHADOW_WITH_4_VERTS 1
+#define SHADOW_WITH_4_VERTS 0x1
 
 /**
  * A struct containing info about hardcoded rectangle shadows.
@@ -101,11 +101,11 @@ shadowRectangle rectangles[2] = {
 };
 
 // See shadow.h for documentation.
-s8  gShadowAboveWaterOrLava;
-s8  gShadowAboveCustomWater;
-s8  gMarioOnIceOrCarpet;
-s8  sMarioOnFlyingCarpet;
-s16 sSurfaceTypeBelowShadow;
+Bool8       gShadowAboveWaterOrLava;
+Bool8       gShadowAboveCustomWater;
+Bool8       gMarioOnIceOrCarpet;
+Bool8       sMarioOnFlyingCarpet;
+SurfaceType sSurfaceTypeBelowShadow;
 
 /**
  * Let (oldZ, oldX) be the relative coordinates of a point on a rectangle,
@@ -115,10 +115,11 @@ s16 sSurfaceTypeBelowShadow;
  */
 void rotate_rectangle(f32 *newZ, f32 *newX, f32 oldZ, f32 oldX) {
     struct Object *obj = (struct Object *) gCurGraphNodeObject;
-    *newZ = oldZ * coss(obj->oFaceAngleYaw) - oldX * sins(obj->oFaceAngleYaw);
-    *newX = oldZ * sins(obj->oFaceAngleYaw) + oldX * coss(obj->oFaceAngleYaw);
+    *newZ = ((oldZ * coss(obj->oFaceAngleYaw)) - (oldX * sins(obj->oFaceAngleYaw)));
+    *newX = ((oldZ * sins(obj->oFaceAngleYaw)) + (oldX * coss(obj->oFaceAngleYaw)));
 }
 
+//! move to math_util
 /**
  * Return atan2(a, b) in degrees. Note that the argument order is swapped from
  * the standard atan2.
@@ -135,9 +136,9 @@ f32 scale_shadow_with_distance(f32 initial, f32 distFromFloor) {
     if (distFromFloor <= 0.0f) {
         return initial;
     } else if (distFromFloor >= 600.0f) {
-        return initial * 0.5f;
+        return (initial * 0.5f);
     } else {
-        return initial * (1.0f - (0.5f * distFromFloor / 600.0f));
+        return (initial * (1.0f - (0.5f * distFromFloor / 600.0f)));
     }
 }
 
@@ -145,7 +146,7 @@ f32 scale_shadow_with_distance(f32 initial, f32 distFromFloor) {
  * Disable a shadow when its parent object is more than 600 units from the ground.
  */
 f32 disable_shadow_with_distance(f32 shadowScale, f32 distFromFloor) {
-    return (distFromFloor >= 600.0f ? 0.0f : shadowScale);
+    return ((distFromFloor >= 600.0f) ? 0.0f : shadowScale);
 }
 
 /**
@@ -299,7 +300,7 @@ void make_shadow_vertex_at_xyz(Vtx *vertices, s8 index, f32 relX, f32 relY, f32 
  * according to the floor's normal vector.
  */
 f32 extrapolate_vertex_y_position(struct Shadow s, f32 vtxX, f32 vtxZ) {
-    return -(s.floorNormalX * vtxX + s.floorNormalZ * vtxZ + s.floorOriginOffset) / s.floorNormalY;
+    return (-((s.floorNormalX * vtxX) + (s.floorNormalZ * vtxZ) + s.floorOriginOffset) / s.floorNormalY);
 }
 
 /**
@@ -341,8 +342,8 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
     get_vertex_coords(index, shadowVertexType, &xCoordUnit, &zCoordUnit);
     halfScale       = ((xCoordUnit * s.shadowScale) / 2.0f);
     halfTiltedScale = ((zCoordUnit *   tiltedScale) / 2.0f);
-    *xPosVtx = (halfTiltedScale * sinf(downwardAngle)) + (halfScale * cosf(downwardAngle)) + s.parentX;
-    *zPosVtx = (halfTiltedScale * cosf(downwardAngle)) - (halfScale * sinf(downwardAngle)) + s.parentZ;
+    *xPosVtx = ((halfTiltedScale * sinf(downwardAngle)) + (halfScale * cosf(downwardAngle)) + s.parentX);
+    *zPosVtx = ((halfTiltedScale * cosf(downwardAngle)) - (halfScale * sinf(downwardAngle)) + s.parentZ);
     if (gShadowAboveWaterOrLava) {
         *yPosVtx = s.floorHeight;
     } else {
@@ -373,6 +374,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
  * the y-value from `find_floor_height_and_data`. (See the bottom of
  * `calculate_vertex_xyz`.)
  */
+//! Angle type?
 s16 floor_local_tilt(struct Shadow s, f32 vtxX, f32 vtxY, f32 vtxZ) {
     register f32 relX = (vtxX - s.parentX);
     register f32 relY = (vtxY - s.floorHeight);
@@ -404,8 +406,8 @@ void make_shadow_vertex(Vtx *vertices, s8 index, struct Shadow s, s8 shadowVerte
      * The gShadowAboveWaterOrLava check is redundant, since `floor_local_tilt`
      * will always be 0 over water or lava (since they are always flat).
      */
-    if (shadowVertexType == SHADOW_WITH_9_VERTS && !gShadowAboveWaterOrLava
-        && floor_local_tilt(s, xPosVtx, yPosVtx, zPosVtx) != 0) {
+    if ((shadowVertexType == SHADOW_WITH_9_VERTS) && !gShadowAboveWaterOrLava
+        && (floor_local_tilt(s, xPosVtx, yPosVtx, zPosVtx) != 0x0)) {
         yPosVtx = extrapolate_vertex_y_position(s, xPosVtx, zPosVtx);
         solidity = 0;
     }
@@ -436,7 +438,7 @@ void add_shadow_to_display_list(Gfx *displayListHead, Vtx *verts, s8 shadowVerte
  * depending on curr's relation to start and end.
  */
 void linearly_interpolate_solidity_positive(struct Shadow *s, u8 finalSolidity, AnimFrame16 curr, AnimFrame16 start, AnimFrame16 end) {
-    if (curr >= 0 && curr < start) {
+    if ((curr >= 0) && (curr < start)) {
         s->solidity = 0;
     } else if (end < curr) {
         s->solidity = finalSolidity;
@@ -505,7 +507,7 @@ Gfx *create_shadow_player(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     s8 ret = 0;
     s32 i;
     // Update global variables about whether Mario is on a flying carpet.
-    if (gCurrLevelNum == LEVEL_RR && sSurfaceTypeBelowShadow != SURFACE_DEATH_PLANE) {
+    if ((gCurrLevelNum == LEVEL_RR) && (sSurfaceTypeBelowShadow != SURFACE_DEATH_PLANE)) {
         switch (gFlyingCarpetState) {
             case FLYING_CARPET_MOVING_WITHOUT_MARIO: gMarioOnIceOrCarpet  = TRUE;
                                                      sMarioOnFlyingCarpet = TRUE; break;
@@ -626,7 +628,7 @@ s32 get_shadow_height_solidity(f32 xPos, f32 yPos, f32 zPos, f32 *shadowHeight, 
         return TRUE;
     } else {
         waterLevel = find_water_level(xPos, zPos);
-        if (waterLevel >= FLOOR_LOWER_LIMIT_SHADOW && yPos >= waterLevel && waterLevel >= *shadowHeight) {
+        if ((waterLevel >= FLOOR_LOWER_LIMIT_SHADOW) && (yPos >= waterLevel) && (waterLevel >= *shadowHeight)) {
             gShadowAboveWaterOrLava = TRUE;
             *shadowHeight = waterLevel;
             *solidity = 200;
@@ -646,9 +648,9 @@ Gfx *create_shadow_square(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 soli
     if (get_shadow_height_solidity(xPos, yPos, zPos, &shadowHeight, &solidity)) return NULL;
     distFromShadow = yPos - shadowHeight;
     switch (shadowType) {
-        case SHADOW_SQUARE_PERMANENT: shadowRadius =                              shadowScale                  / 2.0f; break;
-        case SHADOW_SQUARE_SCALABLE:  shadowRadius = scale_shadow_with_distance(  shadowScale, distFromShadow) / 2.0f; break;
-        case SHADOW_SQUARE_TOGGLABLE: shadowRadius = disable_shadow_with_distance(shadowScale, distFromShadow) / 2.0f; break;
+        case SHADOW_SQUARE_PERMANENT: shadowRadius = (                             shadowScale                  / 2.0f); break;
+        case SHADOW_SQUARE_SCALABLE:  shadowRadius = (scale_shadow_with_distance(  shadowScale, distFromShadow) / 2.0f); break;
+        case SHADOW_SQUARE_TOGGLABLE: shadowRadius = (disable_shadow_with_distance(shadowScale, distFromShadow) / 2.0f); break;
         default: return NULL;
     }
     return create_shadow_rectangle(shadowRadius, shadowRadius, -distFromShadow, solidity);
@@ -676,7 +678,7 @@ Gfx *create_shadow_hardcoded_rectangle(f32 xPos, f32 yPos, f32 zPos, UNUSED s16 
     } else {
         // This code is never used because the third element of the rectangle
         // struct is always TRUE.
-        halfWidth = rectangles[idx].halfWidth;
+        halfWidth  = rectangles[idx].halfWidth;
         halfLength = rectangles[idx].halfLength;
     }
     return create_shadow_rectangle(halfWidth, halfLength, -distFromShadow, solidity);

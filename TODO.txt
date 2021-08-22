@@ -54,6 +54,7 @@
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor calls (and other collision checks)
+    - Replace m->floorPitch usage with getting an angle from m->steepness, to save an s16 entry in MarioState struct
 - Objects:
     - Make step height per-object
 - Physics/Movement:
@@ -81,9 +82,9 @@
         - Top Center:
             - Health meter
             - Breath meter
-                - Moves health meter to the side when active to keep screen space balance, similar to SM63
+                - Move health meter to the side when active to keep screen space balance, similar to SM63
     - Replace breath meter with a small non-intrusive one that follows mario's posision on screen?
-    - FPS counter on debug
+    - Make Puppycam menu more vanilla style
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area

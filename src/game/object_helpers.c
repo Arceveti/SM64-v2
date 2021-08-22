@@ -1919,7 +1919,7 @@ s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, DialogID dialogID, UNU
 
 s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cutsceneTable, DialogID dialogID) {
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
-    s32 doneTurning    = TRUE;
+    Bool32 doneTurning    = TRUE;
     switch (o->oDialogState) {
         case DIALOG_STATUS_ENABLE_TIME_STOP:
             // Wait for Mario to be ready to speak, and then enable time stop

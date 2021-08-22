@@ -36,13 +36,13 @@ static u8  sPlayingInfiniteStairs      = FALSE;
 static s16 sSoundMenuModeToSoundMode[] = { SOUND_MODE_STEREO, SOUND_MODE_MONO, SOUND_MODE_HEADSET };
 // Only the 20th array element is used.
 static u32 sMenuSoundsExtra[] = {
-    SOUND_MOVING_TERRAIN_SLIDE + (0 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (1 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (2 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (3 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (4 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (5 << 16),
-    SOUND_MOVING_TERRAIN_SLIDE + (6 << 16),
+    (SOUND_MOVING_TERRAIN_SLIDE + (0 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (1 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (2 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (3 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (4 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (5 << 16)),
+    (SOUND_MOVING_TERRAIN_SLIDE + (6 << 16)),
     SOUND_MOVING_LAVA_BURN,
     SOUND_MOVING_SLIDE_DOWN_TREE,
     SOUND_MOVING_SLIDE_DOWN_POLE,
@@ -73,7 +73,7 @@ static u32 sMenuSoundsExtra[] = {
     SOUND_AIR_BLOW_FIRE,
     SOUND_ENV_ELEVATOR4,
 };
-static s8 sPaintingEjectSoundPlayed = FALSE;
+static Bool8 sPaintingEjectSoundPlayed = FALSE;
 
 void play_menu_sounds_extra(s32 soundIndex, void *b);
 
@@ -158,7 +158,6 @@ void play_menu_sounds(s16 soundMenuFlags) {
     } else if (soundMenuFlags & SOUND_MENU_FLAG_CAMERAZOOMOUT) {
         play_sound(SOUND_MENU_CAMERA_ZOOM_OUT,   gGlobalSoundSource);
     }
-
     if (soundMenuFlags & 0x100) play_menu_sounds_extra(20, NULL);
 #if ENABLE_RUMBLE
     if (soundMenuFlags & SOUND_MENU_FLAG_LETGOMARIOFACE) queue_rumble_data(10, 60);
@@ -171,7 +170,7 @@ void play_menu_sounds(s16 soundMenuFlags) {
  * Called from threads: thread5_game_loop
  */
 void play_painting_eject_sound(void) {
-    if (gRipplingPainting != NULL && gRipplingPainting->state == PAINTING_ENTERED) {
+    if ((gRipplingPainting != NULL) && (gRipplingPainting->state == PAINTING_ENTERED)) {
         // ripple when Mario enters painting
         if (!sPaintingEjectSoundPlayed) play_sound(SOUND_GENERAL_PAINTING_EJECT, gMarioStates[0].marioObj->header.gfx.cameraToObject);
         sPaintingEjectSoundPlayed = TRUE;
@@ -184,16 +183,14 @@ void play_painting_eject_sound(void) {
  * Called from threads: thread5_game_loop
  */
 void play_infinite_stairs_music(void) {
-    u8 shouldPlay = FALSE;
-
+    Bool8 shouldPlay = FALSE;
     /* Infinite stairs? */
-    if (gCurrLevelNum == LEVEL_CASTLE
-     && gCurrAreaIndex == 2
-     && gMarioState->numStars < 70
-     && gMarioState->floor != NULL
-     && gMarioState->floor->room == 6
-     && gMarioState->pos[2] < 2540.0f) shouldPlay = TRUE;
-
+    if ((gCurrLevelNum == LEVEL_CASTLE)
+     && (gCurrAreaIndex == 2)
+     && (gMarioState->numStars < 70)
+     && (gMarioState->floor != NULL)
+     && (gMarioState->floor->room == 6)
+     && (gMarioState->pos[2] < 2540.0f)) shouldPlay = TRUE;
     if (sPlayingInfiniteStairs ^ shouldPlay) {
         sPlayingInfiniteStairs = shouldPlay;
         if (shouldPlay) {
@@ -210,7 +207,7 @@ void play_infinite_stairs_music(void) {
 void set_background_music(u16 a, u16 seqArgs, s16 fadeTimer) {
     if (gResetTimer == 0 && seqArgs != sCurrentMusic) {
         sound_reset((gCurrCreditsEntry != NULL) ? 7 : a);
-        if (!gNeverEnteredCastle || seqArgs != SEQ_LEVEL_INSIDE_CASTLE) {
+        if (!gNeverEnteredCastle || (seqArgs != SEQ_LEVEL_INSIDE_CASTLE)) {
             play_music(SEQ_PLAYER_LEVEL, seqArgs, fadeTimer);
             sCurrentMusic = seqArgs;
         }
@@ -249,8 +246,8 @@ void play_cutscene_music(u16 seqArgs) {
  * Called from threads: thread5_game_loop
  */
 void play_shell_music(void) {
-    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION), 0);
-    sCurrentShellMusic = SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP | SEQ_VARIATION);
+    play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, (SEQ_EVENT_POWERUP | SEQ_VARIATION)), 0);
+    sCurrentShellMusic = SEQUENCE_ARGS(4, (SEQ_EVENT_POWERUP | SEQ_VARIATION));
 }
 
 /**
@@ -268,7 +265,7 @@ void stop_shell_music(void) {
  */
 void play_cap_music(u16 seqArgs) {
     play_music(SEQ_PLAYER_LEVEL, seqArgs, 0);
-    if (sCurrentCapMusic != MUSIC_NONE && sCurrentCapMusic != seqArgs) stop_background_music(sCurrentCapMusic);
+    if ((sCurrentCapMusic != MUSIC_NONE) && (sCurrentCapMusic != seqArgs)) stop_background_music(sCurrentCapMusic);
     sCurrentCapMusic = seqArgs;
 }
 
@@ -334,7 +331,7 @@ void thread4_sound(UNUSED void *arg) {
                 audioTime[perfIteration] -= dmaAudioTime[perfIteration];
                 if ((benchmarkLoop > 0) && (benchOption == 1)) {
                     benchmarkLoop--;
-                    benchMark[benchmarkLoop] = osGetTime() - lastTime;
+                    benchMark[benchmarkLoop] = (osGetTime() - lastTime);
                     if (benchmarkLoop == 0) {
                         puppyprint_profiler_finished();
                         break;

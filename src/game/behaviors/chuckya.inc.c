@@ -28,8 +28,9 @@ void bhv_chuckya_anchor_mario_loop(void) {
     common_anchor_mario_behavior(40.0f, 40.0f, INT_STATUS_MARIO_UNK6);
 }
 
-s32 approach_forward_vel(f32 *arr, f32 target, f32 amt) {
-    s32 alreadyEqual = FALSE;
+//! move to math_util?
+Bool32 approach_forward_vel(f32 *arr, f32 target, f32 amt) {
+    Bool32 alreadyEqual = FALSE;
     if (arr[0] > target) {
         arr[0] -= amt;
         if (arr[0] < target) arr[0] = target;
@@ -104,7 +105,7 @@ void chuckya_act_grabbed_mario(void) { // act 1
             } else {
                 cur_obj_init_animation_with_sound(CHUCKYA_ANIM_THROW_1);
                 o->oMoveAngleYaw += INT_STATUS_GRABBED_MARIO;
-                if (o->oChuckyaSubActionTimer-- < 0 && (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16)) o->oSubAction = CHUCKYA_SUB_ACT_THROW_MARIO;
+                if ((o->oChuckyaSubActionTimer-- < 0) && (check_if_moving_over_floor(50.0f, 150.0f) || o->oChuckyaSubActionTimer < -16)) o->oSubAction = CHUCKYA_SUB_ACT_THROW_MARIO;
             }
             break;
         case CHUCKYA_SUB_ACT_THROW_MARIO:
@@ -145,7 +146,7 @@ void chuckya_move(void) {
     cur_obj_call_action_function(sChuckyaActions);
     cur_obj_move_standard(-30);
     if (o->oInteractStatus & INT_STATUS_GRABBED_MARIO) {
-        o->oAction = CHUCKYA_ACT_GRABBED_MARIO;
+        o->oAction             = CHUCKYA_ACT_GRABBED_MARIO;
         o->oCommonAnchorAction = COMMON_ANCHOR_ACT_SET_MARIO_GFX_TO_POS;
         cur_obj_play_sound_2(SOUND_OBJ_GRAB_MARIO);
     }

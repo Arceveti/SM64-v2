@@ -314,7 +314,7 @@ void puppycam_check_pause_buttons() {
             gPCOptionOpen = TRUE;
 #if MULTILANG
             newcam_set_language();
-            eu_set_language(gInGameLanguage-1);
+            eu_set_language(gInGameLanguage - 1);
 #endif
         } else {
             gPCOptionOpen = FALSE;
@@ -332,12 +332,12 @@ void puppycam_check_pause_buttons() {
                     gPCOptionIndex++;
                     gPCOptionTimer += 10;
                 } else {
-                    gPCOptionTimer += 5;
+                    gPCOptionTimer +=  5;
                 }
                 play_sound(SOUND_MENU_CHANGE_SELECT, gGlobalSoundSource);
                 if ((gPlayer1Controller->rawStickY >= 60) || (gPlayer1Controller->buttonDown & U_JPAD)) {
                     gPCOptionSelected--;
-                    if (gPCOptionSelected < 0) gPCOptionSelected = gPCOptionCap-1;
+                    if (gPCOptionSelected < 0) gPCOptionSelected = (gPCOptionCap - 1);
                 } else if ((gPlayer1Controller->rawStickY <= -60) || (gPlayer1Controller->buttonDown & D_JPAD)) {
                     gPCOptionSelected++;
                     if (gPCOptionSelected >= gPCOptionCap) gPCOptionSelected = 0;

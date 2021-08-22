@@ -1111,7 +1111,7 @@ void patch_sound(struct AudioBankSound *sound, struct AudioBank *memBase, struct
 #define PATCH(x, base) (patched = (void *)((uintptr_t) (x) + (uintptr_t) base))
     if ((uintptr_t) sound->sample <= 0x80000000) {
         sample = sound->sample = PATCH(sound->sample, memBase);
-        if (sample->size != 0 && sample->isPatched != TRUE) {
+        if ((sample->size != 0) && (sample->isPatched != TRUE)) {
             sample->loop = PATCH(sample->loop, memBase);
             sample->book = PATCH(sample->book, memBase);
             switch (sample->medium) {
@@ -1128,7 +1128,7 @@ void patch_sound(struct AudioBankSound *sound, struct AudioBank *memBase, struct
                     break;
             }
             sample->isPatched = TRUE;
-            if (sample->bit1 && sample->medium != 0) D_SH_8034EA88[D_SH_8034F688++] = sample;
+            if (sample->bit1 && (sample->medium != 0)) D_SH_8034EA88[D_SH_8034F688++] = sample;
         }
     }
 #undef PATCH

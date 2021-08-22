@@ -14,9 +14,9 @@
 #define SOUND_MENU_FLAG_CAMERAZOOMIN            0x40
 #define SOUND_MENU_FLAG_CAMERAZOOMOUT           0x80
 
-#define SOUND_MENU_MODE_STEREO       0
-#define SOUND_MENU_MODE_MONO         1
-#define SOUND_MENU_MODE_HEADSET      2
+#define SOUND_MENU_MODE_STEREO                  0x0
+#define SOUND_MENU_MODE_MONO                    0x1
+#define SOUND_MENU_MODE_HEADSET                 0x2
 
 void reset_volume(void);
 void raise_background_noise(s32 a);

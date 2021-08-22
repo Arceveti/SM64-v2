@@ -105,32 +105,32 @@ u32 clamp_byte(u32 val) {
 
 // ia4 to 0-255
 u32 bits3_to_byte(u32 value) {
-    return (u32)(value * (255.0f/7.0f));
-    return (value & 0x7) << 0x5;
+    return (u32)(value * (255.0f / 7.0f));
+    return ((value & 0x7) << 0x5);
 }
 
 // ia8 to 0-255
 u32 bits4_to_byte(u32 value) {
     // return value * 17; // 255/15
-    return (value & 0xF) << 0x4;
+    return ((value & 0xF) << 0x4);
 }
 
 // rgba16 to 0-255
 u32 bits5_to_byte(u32 value) {
-    // return (u32)(value * (255.0f/31.0f));
-    return (value & 0x1F) << 0x3;
+    // return (u32)(value * (255.0f / 31.0f));
+    return ((value & 0x1F) << 0x3);
 }
 
 // 0-255
 u32 bits6_to_byte(u32 value) {
-    // return (u32)(value * (255.0f/63.0f));
-    return (value & 0x3F) << 0x2;
+    // return (u32)(value * (255.0f / 63.0f));
+    return ((value & 0x3F) << 0x2);
 }
 
 // to 0-255
 u32 bits7_to_byte(u32 value) {
-    // return (u32)(value * (255.0f/127.0f));
-    return (value & 0x7F) << 0x1;
+    // return (u32)(value * (255.0f / 127.0f));
+    return ((value & 0x7F) << 0x1);
 }
 
 
@@ -138,31 +138,31 @@ u32 bits7_to_byte(u32 value) {
 // 0-7 (0-255 to ia4)
 u32 byte_to_bits3(u32 value) {
     // return (u32)((value * 7.0f) / 255.0f);
-    return (value & 0xE0) >> 0x5;
+    return ((value & 0xE0) >> 0x5);
 }
 
 // 0-15 (0-255 to ia8)
 u32 byte_to_bits4(u32 value) {
     // return (u32)(value / 17.0f); // 255/15
-    return (value & 0xF0) >> 0x4;
+    return ((value & 0xF0) >> 0x4);
 }
 
 // 0-31 (0-255 to rgba16)
 u32 byte_to_bits5(u32 value) {
     // return (u32)((value * 31.0f) / 255.0f);
-    return (value & 0xF8) >> 0x3;
+    return ((value & 0xF8) >> 0x3);
 }
 
 // 0-63
 u32 byte_to_bits6(u32 value) {
     // return (u32)((value * 63.0f) / 255.0f);
-    return (value & 0xFC) >> 0x2;
+    return ((value & 0xFC) >> 0x2);
 }
 
 // 0-127
 u32 byte_to_bits7(u32 value) {
     // return (u32)((value * 127.0f) / 255.0f);
-    return (value & 0xFE) >> 0x1;
+    return ((value & 0xFE) >> 0x1);
 }
 
 
@@ -187,17 +187,17 @@ u32 value_to_rgba16(u32 val) {
 
 // 0-31
 u32 rgba16_get_red(u32 rgba) {
-    return (rgba >> 0xB) & 0x1F;
+    return ((rgba >> 0xB) & 0x1F);
 }
 
 // 0-31
 u32 rgba16_get_blue(u32 rgba) {
-    return (rgba >> 0x6) & 0x1F;
+    return ((rgba >> 0x6) & 0x1F);
 }
 
 // 0-31
 u32 rgba16_get_green(u32 rgba) {
-    return (rgba >> 0x1) & 0x1F;
+    return ((rgba >> 0x1) & 0x1F);
 }
 
 // 0-1
@@ -209,22 +209,22 @@ u32 rgba16_get_alpha(u32 rgba) {
 
 // 0-15
 u32 ia8_get_color(u32 ia) {
-    return (ia >> 0x4) & 0xF;
+    return ((ia >> 0x4) & 0xF);
 }
 
 // 0-15
 u32 ia8_get_alpha(u32 ia) {
-    return ia & 0xF;
+    return (ia & 0xF);
 }
 
 // 0-255
 u32 ia16_get_color(u32 ia) {
-    return (ia >> 0x8) & 0xFF;
+    return ((ia >> 0x8) & 0xFF);
 }
 
 // 0-255
 u32 ia16_get_alpha(u32 ia) {
-    return ia & 0xFF;
+    return (ia & 0xFF);
 }
 
 // ia8 value
@@ -239,9 +239,9 @@ u32 ia16_set(u32 i, u32 a) {
 
 // 0-31
 u32 rgba16_get_average_color(u32 rgba) {
-    return ((rgba16_get_red(rgba) +
+    return (((rgba16_get_red(rgba) +
              rgba16_get_blue(rgba) +
-             rgba16_get_green(rgba)) / 3) & 0x1F;
+             rgba16_get_green(rgba)) / 3) & 0x1F);
 }
 
 // rgba value
@@ -271,13 +271,13 @@ u32 i8_to_rgba16(u32 i) {
 
 // rgba16 value
 u32 ia8_to_rgba16_threshhold(u32 ia, u32 alphaThreshhold) {
-    const u32 color = (ia >> 3) & 0x1F;
+    const u32 color = ((ia >> 3) & 0x1F);
     return rgba16_set_grayscale(color, ((ia8_get_alpha(ia) >= alphaThreshhold) ? 1 : 0));
 }
 
 // rgba16 value
 u32 ia16_to_rgba16_thresshold(u32 ia, u32 alphaThreshhold) {
-    const u32 color = (ia >> 11) & 0x1F;
+    const u32 color = ((ia >> 11) & 0x1F);
     return rgba16_set_grayscale(color, ((ia16_get_alpha(ia) >= alphaThreshhold) ? 1 : 0));
 }
 
@@ -285,15 +285,15 @@ u32 ia16_to_rgba16_thresshold(u32 ia, u32 alphaThreshhold) {
 
 // rgba16 value
 u32 ia8_to_rgba16(u32 ia) {
-    const u32 color = ia8_get_color(ia) << 0x1;//(ia >> 3) & 0x1F;
-    const u32 alpha = (ia >> 3) & 0x1; //!?
+    const u32 color = (ia8_get_color(ia) << 0x1);//(ia >> 3) & 0x1F;
+    const u32 alpha = ((ia >> 3) & 0x1); //!?
     return rgba16_set_grayscale(color, alpha);
 }
 
 // rgba16 value
 u32 ia16_to_rgba16(u32 ia) {
-    const u32 color = (ia >> 11) & 0x1F;
-    const u32 alpha = (ia >>  7) & 0x1; //!?
+    const u32 color = ((ia >> 11) & 0x1F);
+    const u32 alpha = ((ia >>  7) & 0x1); //!?
     return rgba16_set_grayscale(color, alpha);
 }
 
@@ -309,23 +309,23 @@ u32 rgba16_to_ia16(u32 rgba) {
     return ((rgba16_get_average_color(rgba) << 12) | ((rgba & 0x1) < 7));
 }
 
-#define METALTEX_Y_MIN 76479 // (SCREEN_WIDTH*(SCREEN_HEIGHT-1)) - 1
-#define METALTEX_Y_MAX 76799 // (SCREEN_WIDTH*(SCREEN_HEIGHT)) - 1
+#define METALTEX_Y_MIN 76479 // (SCREEN_WIDTH * (SCREEN_HEIGHT - 1)) - 1
+#define METALTEX_Y_MAX 76799 // (SCREEN_WIDTH * (SCREEN_HEIGHT)) - 1
 #define METALTEX_DY       10 // SCREEN_WIDTH/TEXTURE_HEIGHT
 
-#define METALTEX_X_MIN  2889 // 3*trunc((SCREEN_HEIGHT-1)/TEXTURE_WIDTH)*SCREEN_WIDTH | 3*dx
-#define METALTEX_X_MAX 64320 // (TEXTURE_WIDTH+3)*trunc((SCREEN_HEIGHT-1)/TEXTURE_WIDTH)*SCREEN_WIDTH | (TEXTURE_WIDTH+3)*dx
-#define METALTEX_DX      960 // trunc((SCREEN_HEIGHT-1)/TEXTURE_WIDTH)*SCREEN_WIDTH
+#define METALTEX_X_MIN  2889 // 3 * trunc((SCREEN_HEIGHT - 1)/TEXTURE_WIDTH) * SCREEN_WIDTH | 3 * dx
+#define METALTEX_X_MAX 64320 // (TEXTURE_WIDTH + 3) * trunc((SCREEN_HEIGHT - 1) / TEXTURE_WIDTH) * SCREEN_WIDTH | (TEXTURE_WIDTH + 3) * dx
+#define METALTEX_DX      960 // trunc((SCREEN_HEIGHT - 1) / TEXTURE_WIDTH) * SCREEN_WIDTH
 
 #ifdef METAL_CAP_REFLECTION_GRAYSCALE
 void generate_metal_texture(u16 *dst, u16 *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
-    for (y = METALTEX_Y_MIN; y < METALTEX_Y_MAX; y += METALTEX_DY) {
-        for (x = METALTEX_X_MIN; x < METALTEX_X_MAX; x += METALTEX_DX) {
+    for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
+        for ((x = METALTEX_X_MIN); (x < METALTEX_X_MAX); (x += METALTEX_DX)) {
             dst[dstIndex] = rgba16_set_grayscale(rgba16_get_average_color(src[srcIndex]), 1);
             dstIndex++;
-            srcIndex = y-x;
+            srcIndex = (y - x);
         }
     }
 }
@@ -333,11 +333,11 @@ void generate_metal_texture(u16 *dst, u16 *src) {
 void generate_metal_texture(u16 *dst, u16 *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
-    for (y = METALTEX_Y_MIN; y < METALTEX_Y_MAX; y += METALTEX_DY) {
-        for (x = METALTEX_X_MIN; x < METALTEX_X_MAX; x += METALTEX_DX) {
+    for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
+        for ((x = METALTEX_X_MIN); (x < METALTEX_X_MAX); (x += METALTEX_DX)) {
             dst[dstIndex] = src[srcIndex];
             dstIndex++;
-            srcIndex = y-x;
+            srcIndex = (y - x);
         }
     }
 }
@@ -364,42 +364,42 @@ void copy_partial_image(u16 *dst,  u16 *src,
     if (dstY > (s32)dstTH) return;
     if (srcX > (s32)srcTW) return;
     if (srcY > (s32)srcTH) return;
-    if (dst == NULL || src == NULL) return;
+    if ((dst == NULL) || (src == NULL)) return;
     u32 x, y;
     f32 srcIndex = 0, dstIndex = 0;
-    const u32 srcStartIndex = (srcY*srcTW)+srcX;
-    const u32 dstStartIndex = (dstY*dstTW)+dstX;
-    const f32 dx = ((f32)srcW)/((f32)dstW*2.0f);
-    const f32 dy = ((f32)srcH)/((f32)dstH*2.0f);
+    const u32 srcStartIndex = ((srcY * srcTW) + srcX);
+    const u32 dstStartIndex = ((dstY * dstTW) + dstX);
+    const f32 dx = ((f32)srcW) / ((f32)dstW * 2.0f);
+    const f32 dy = ((f32)srcH) / ((f32)dstH * 2.0f);
     u32 xdx, ydy;
     u32 dstIndexY, srcIndexY;
     u32 srcV, dstV;
     u32 dstColor, dstAlpha;
     u32 srcColor, srcAlpha;
     u32 resultColor;
-    for (y = 0; y < dstH; y++) {                // loop rows
-        if (dstY + y > dstTH) break;            // bounds check
+    for ((y = 0); (y < dstH); (y++)) {          // loop rows
+        if ((dstY + y) > dstTH) break;          // bounds check
         ydy = (y*dy);
-        if (srcY + ydy > srcTH) break;          // bounds check
-        srcIndexY = srcStartIndex + (ydy*srcTW);
-        dstIndexY = dstStartIndex + (y*dstTW);
-        for (x = 0; x < dstW; x++) {            // loop columns
+        if ((srcY + ydy) > srcTH) break;        // bounds check
+        srcIndexY = (srcStartIndex + (ydy * srcTW));
+        dstIndexY = (dstStartIndex + (y * dstTW));
+        for ((x = 0); (x < dstW); (x++)) {      // loop columns
             if (dstX + x > dstTW) break;        // bounds check
-            xdx = (x*dx);
-            if (srcX + xdx > srcTW) break;      // bounds check
-            srcIndex = srcIndexY + xdx;
-            dstIndex = dstIndexY + x;
+            xdx = (x * dx);
+            if ((srcX + xdx) > srcTW) break;    // bounds check
+            srcIndex = (srcIndexY + xdx);
+            dstIndex = (dstIndexY + x);
             dstV = dst[(s32)dstIndex];
             srcV = src[(s32)srcIndex];
             // 0001 11111
             dstAlpha = ((dstV & 0x1) ? 0x1F : 0x0);
             if (dstAlpha == 0x0) continue;
-            srcAlpha = ia8_get_alpha(srcV) << 0x1;
+            srcAlpha = (ia8_get_alpha(srcV) << 0x1);
             if (srcAlpha == 0x0) continue;
             dstColor = rgba16_get_average_color(dstV);
-            srcColor = ia8_get_color(srcV) << 0x1;
+            srcColor = (ia8_get_color(srcV) << 0x1);
             if (srcColor == dstColor) continue;
-            resultColor        = (srcColor * srcAlpha / 0x1F) + (dstColor * dstAlpha * (0x1F - srcAlpha) / (0x3C1));
+            resultColor        = ((srcColor * srcAlpha / 0x1F) + (dstColor * dstAlpha * (0x1F - srcAlpha) / (0x3C1)));
             dst[(s32)dstIndex] = rgba16_set_grayscale(resultColor, 1);
         }
     }
@@ -410,14 +410,14 @@ void overlay_i8_on_rgba16_additive(u16 *dst, u16 *src, u32 width, u32 height) {
     u32 i;
     u32 srcI;
     u32 srcVal, dstVal;
-    for (i = 0; i < size; i++) {
+    for ((i = 0); (i < size); (i++)) {
         srcVal = src[i >> 1];
         dstVal = dst[i     ];
         srcI = i8_to_rgba16_color(srcVal);
         if (srcI > 0x0) {
-            dst[i] = rgba16_set((rgba16_get_red(  dstVal)+srcI),
-                                (rgba16_get_blue( dstVal)+srcI),
-                                (rgba16_get_green(dstVal)+srcI), 1);
+            dst[i] = rgba16_set((rgba16_get_red(  dstVal) + srcI),
+                                (rgba16_get_blue( dstVal) + srcI),
+                                (rgba16_get_green(dstVal) + srcI), 1);
         }
     }
 }
