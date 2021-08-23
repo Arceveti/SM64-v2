@@ -74,7 +74,7 @@ struct GeoAnimState gGeoTempState;
 
 u8   gCurAnimType;
 u8   gCurAnimEnabled;
-s16  gCurrAnimFrame;
+AnimFrame16 gCurrAnimFrame;
 f32  gCurAnimTranslationMultiplier;
 u16 *gCurrAnimAttribute;
 s16 *gCurAnimData;
@@ -630,7 +630,6 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     Vec3a rotation;
     Vec3f translation;
     Mtx   *matrixPtr = alloc_display_list(sizeof(*matrixPtr));
-    vec3s_copy(rotation, gVec3sZero);
     vec3f_set(translation, node->translation[0], node->translation[1], node->translation[2]);
     if (gCurAnimType == ANIM_TYPE_TRANSLATION) {
         translation[0] += (gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier);
@@ -659,6 +658,8 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         rotation[0] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[1] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
+    } else {
+        vec3s_copy(rotation, gVec3sZero);
     }
     mtxf_rotate_xyz_and_translate(matrix, translation, rotation);
     mtxf_mul(gMatStack[gMatStackIndex + 1], matrix, gMatStack[gMatStackIndex]);

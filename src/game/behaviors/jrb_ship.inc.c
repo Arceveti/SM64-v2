@@ -13,8 +13,8 @@ struct ObjectHitbox sSkullSlidingBoxHitbox = {
 };
 
 void bhv_ship_part_3_loop(void) {
-    s16 initialPitch = o->oFaceAnglePitch;
-    s16 initialRoll  = o->oFaceAngleRoll;
+    Angle initialPitch = o->oFaceAnglePitch;
+    Angle initialRoll  = o->oFaceAngleRoll;
     cur_obj_set_pos_to_home_with_debug();
     o->oShipPart3LoopPitch += 0x100;
     o->oFaceAnglePitch = (sins(o->oShipPart3LoopPitch) * 1024.0f);

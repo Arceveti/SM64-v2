@@ -27,7 +27,7 @@ struct WaterDropletParams
     s16 flags; // Droplet spawn flags, see defines above
     ModelID model;
     const BehaviorScript *behavior;
-    s16 moveAngleRange; // Only used for RAND_ANGLE_INCR flags
+    s16 moveAngleRange; // Only used for RAND_ANGLE_INCR flags //! Angle type?
     s16 moveRange;      // Only used for RAND_OFFSET flags
     f32 randForwardVelOffset;
     f32 randForwardVelScale;

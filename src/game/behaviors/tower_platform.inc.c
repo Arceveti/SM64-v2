@@ -51,13 +51,13 @@ void bhv_wf_sliding_tower_platform_loop(void) {
 }
 
 //! ModelID?
-void spawn_and_init_wf_platforms(s16 model, const BehaviorScript *bhv) {
+void spawn_and_init_wf_platforms(ModelID model, const BehaviorScript *bhv) {
     struct Object *platform = spawn_object(o, model, bhv);
-    Angle yaw = o->oPlatformSpawnerWFTowerPlatformNum * o->oPlatformSpawnerWFTowerDYaw + o->oPlatformSpawnerWFTowerYawOffset;
+    Angle yaw = ((o->oPlatformSpawnerWFTowerPlatformNum * o->oPlatformSpawnerWFTowerDYaw) + o->oPlatformSpawnerWFTowerYawOffset);
     platform->oMoveAngleYaw                = yaw;
-    platform->oPosX                       += o->oPlatformSpawnerWFTowerRadius * sins(yaw);
-    platform->oPosY                       += 100 * o->oPlatformSpawnerWFTowerPlatformNum;
-    platform->oPosZ                       += o->oPlatformSpawnerWFTowerRadius * coss(yaw);
+    platform->oPosX                       += (o->oPlatformSpawnerWFTowerRadius * sins(yaw));
+    platform->oPosY                       += (100 * o->oPlatformSpawnerWFTowerPlatformNum);
+    platform->oPosZ                       += (o->oPlatformSpawnerWFTowerRadius * coss(yaw));
     platform->oPlatformWFTowerMoveDistance = o->oPlatformSpawnerWFTowerMoveDistance;
     platform->oPlatformWFTowerForwardVel   = o->oPlatformSpawnerWFTowerForwardVel;
     o->oPlatformSpawnerWFTowerPlatformNum++;

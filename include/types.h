@@ -71,6 +71,7 @@ typedef s32 MarioActionArg;
 typedef u32 MarioInteraction;
 typedef u32 MarioStep;
 typedef u16 ModelID;
+typedef u32 ModelID32;
 typedef s32 DialogID;
 typedef s8  ObjAction8;
 typedef s32 ObjAction;

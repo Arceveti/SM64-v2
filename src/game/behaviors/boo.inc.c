@@ -13,6 +13,7 @@ static struct ObjectHitbox sBooGivingStarHitbox = {
 };
 
 // Boo Roll
+//! Angle type?
 static s16 sBooHitRotations[] = { 6047, 5664, 5292, 4934, 4587, 4254, 3933, 3624, 3329, 3046, 2775,
                                   2517, 2271, 2039, 1818, 1611, 1416, 1233, 1063,  906,  761,  629,
                                    509,  402,  308,  226,  157,  100,   56,   25,    4,    0        };
@@ -107,12 +108,12 @@ static s32 boo_vanish_or_appear(void) {
     Angle relativeAngleToMario           = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
     Angle relativeMarioFaceAngle         = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     // magic?
-    s16 relativeAngleToMarioThreshhold   = 0x1568;
-    s16 relativeMarioFaceAngleThreshhold = 0x6B58;
-    s32 doneAppearing                    = FALSE;
-    o->oVelY                             = 0.0f;
-    if (relativeAngleToMario > relativeAngleToMarioThreshhold ||
-        relativeMarioFaceAngle < relativeMarioFaceAngleThreshhold) {
+    Angle relativeAngleToMarioThreshhold   = 0x1568; //  5480   DEGREES(30)?
+    Angle relativeMarioFaceAngleThreshhold = 0x6B58; // 27480   DEGREES(151)?
+    s32 doneAppearing                      = FALSE;
+    o->oVelY                               = 0.0f;
+    if ((relativeAngleToMario > relativeAngleToMarioThreshhold)
+     || (relativeMarioFaceAngle < relativeMarioFaceAngleThreshhold)) {
         if (o->oOpacity == 40) {
             o->oBooTargetOpacity = 255;
             cur_obj_play_sound_2(SOUND_OBJ_BOO_LAUGH_LONG);
@@ -170,7 +171,7 @@ static Bool32 boo_update_after_bounced_on(f32 a0) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(FALSE);
     if (o->oTimer < 32) {
-        boo_move_during_hit(FALSE, sBooHitRotations[o->oTimer]/5000.0f * a0);
+        boo_move_during_hit(FALSE, (sBooHitRotations[o->oTimer] / 5000.0f * a0));
     } else {
         cur_obj_become_tangible();
         boo_reset_after_hit();
@@ -185,7 +186,7 @@ static Bool32 big_boo_update_during_nonlethal_hit(f32 a0) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(TRUE);
     if (o->oTimer < 32) {
-        boo_move_during_hit(TRUE, sBooHitRotations[o->oTimer]/5000.0f * a0);
+        boo_move_during_hit(TRUE, (sBooHitRotations[o->oTimer] / 5000.0f) * a0);
     } else if (o->oTimer < 48) {
         big_boo_shake_after_hit();
     } else {

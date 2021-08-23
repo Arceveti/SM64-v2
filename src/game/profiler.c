@@ -4,7 +4,7 @@
 #include "profiler.h"
 #include "game_init.h"
 
-s16 gProfilerMode = FALSE;
+Bool16 gProfilerMode = FALSE;
 
 // the thread 3 info is logged on the opposite profiler from what is used by
 // the thread4 and 5 loggers. It's likely because the sound thread runs at a

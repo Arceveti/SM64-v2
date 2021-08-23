@@ -198,6 +198,7 @@ u8 sAudioSynthesisPad[0x20];
 #endif
 
 #ifdef BETTER_REVERB
+//! move to math_util?
 static inline s16 clamp16(s32 x) {
     if (x >=  32767) return  32767;
     if (x <= -32768) return -32768;

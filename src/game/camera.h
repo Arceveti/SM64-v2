@@ -625,7 +625,6 @@ void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation);
 Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, Angle yaw);
 void set_fixed_cam_axis_sa_lobby(UNUSED s16 preset);
 s16  camera_course_processing(    struct Camera *c);
-void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood);
 s32  rotate_camera_around_walls(  struct Camera *c, Vec3f cPos, Angle *avoidYaw, Angle yawRange);
 void find_mario_floor_and_ceil(struct PlayerGeometry *pg);
 void start_object_cutscene_without_focus(u8 cutscene);

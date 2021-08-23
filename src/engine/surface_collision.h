@@ -48,6 +48,7 @@ void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struc
 struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius);
 #endif
 s32    collide_with_walls(               Vec3f pos, f32 offsetY, f32 radius);
+void   resolve_geometry_collisions(      Vec3f pos, UNUSED Vec3f lastGood);
 f32    find_ceil(                        f32  xPos, f32  yPos, f32  zPos, struct Surface **pceil);
 f32    vec3f_find_ceil(                  Vec3f pos, f32 height, struct Surface **ceil);
 Bool32 floor_type_exists_in_current_cell(f32  xPos, f32  zPos, SurfaceType type, Bool32 dynamic);

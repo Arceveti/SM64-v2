@@ -122,7 +122,7 @@ index 25b27983..2ff11930 100644
   */
 @@ -1177,42 +1221,59 @@ void mode_8_directions_camera(struct Camera *c) {
      Vec3f pos;
-     s16 oldAreaYaw = sAreaYaw;
+     Angle oldAreaYaw = sAreaYaw;
 +    // Get the camera speed based on the user's setting
 +    f32 cameraSpeed = set_camera_speed();
  

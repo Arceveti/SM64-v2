@@ -276,7 +276,7 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
  * Returns whether a surface has exertion/moves Mario
  * based on the surface type.
  */
-static s32 surface_has_force(SurfaceType surfaceType) {
+static Bool32 surface_has_force(SurfaceType surfaceType) {
     return ((surfaceType == SURFACE_0004)
          || (surfaceType == SURFACE_FLOWING_WATER)
          || (surfaceType == SURFACE_DEEP_MOVING_QUICKSAND)
@@ -291,7 +291,7 @@ static s32 surface_has_force(SurfaceType surfaceType) {
  * Returns whether a surface should have the
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
-static s32 surf_has_no_cam_collision(SurfaceType surfaceType) {
+static Bool32 surf_has_no_cam_collision(SurfaceType surfaceType) {
     if ((surfaceType == SURFACE_NO_CAM_COLLISION)
      || (surfaceType == SURFACE_NO_CAM_COLLISION_UNUSED)
      || (surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY)
@@ -308,9 +308,9 @@ static void load_static_surfaces(Collision **data, Collision *vertexData, Surfac
     struct Surface *surface;
     RoomData room = 0;
 #ifndef ALL_SURFACES_HAVE_FORCE
-    s16 hasForce = surface_has_force(surfaceType);
+    Bool16 hasForce = surface_has_force(surfaceType);
 #endif
-    s32 flags = surf_has_no_cam_collision(surfaceType);
+    Bool32 flags = surf_has_no_cam_collision(surfaceType);
     numSurfaces = *(*data);
     (*data)++;
     for (i = 0; i < numSurfaces; i++) {

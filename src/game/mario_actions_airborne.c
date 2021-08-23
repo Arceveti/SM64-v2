@@ -121,7 +121,7 @@ Bool32 check_fall_damage_or_get_stuck(struct MarioState *m, MarioAction hardFall
 Bool32 check_horizontal_wind(struct MarioState *m) {
     struct Surface *floor;
     f32 speed;
-    s16 pushAngle;
+    Angle pushAngle;
     floor = m->floor;
     if (floor->type == SURFACE_HORIZONTAL_WIND) {
         pushAngle     = (floor->force << 8);

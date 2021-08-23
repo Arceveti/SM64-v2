@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "engine/behavior_script.h"
 #include "engine/surface_collision.h"
+#include "engine/math_util.h"
 #include "game_init.h"
 #include "main.h"
 #include "object_constants.h"
@@ -38,8 +39,8 @@ const char *sDebugEnemyStringInfo[] = {
     "B" // cursor
 };
 
-s32 sDebugInfoDPadMask     = 0;
-s32 sDebugInfoDPadUpdID    = 0;
+s32   sDebugInfoDPadMask     = 0;
+s32   sDebugInfoDPadUpdID    = 0;
 #ifdef DEBUG_INFO
 Bool8 sDebugLvSelectCheckFlag = TRUE;
 #else
@@ -49,7 +50,7 @@ Bool8 sDebugLvSelectCheckFlag = FALSE;
 #define DEBUG_PAGE_MIN DEBUG_PAGE_OBJECTINFO
 #define DEBUG_PAGE_MAX DEBUG_PAGE_ENEMYINFO
 
-s8  sDebugPage             = DEBUG_PAGE_MIN;
+s8    sDebugPage             = DEBUG_PAGE_MIN;
 Bool8 sNoExtraDebug          = FALSE;
 #ifdef DEBUG_INFO
 Bool8 sDebugStringArrPrinted = TRUE;
@@ -137,7 +138,7 @@ void print_mapinfo(void) {
     struct Surface *pfloor;
     s32 area  = (((s32) gCurrentObject->oPosX + 0x2000) / 1024)
               + (((s32) gCurrentObject->oPosZ + 0x2000) /   64); // / 1024 * 16);
-    s32 angY  = (gCurrentObject->oMoveAngleYaw / 182.044000f); //! angle type?
+    s32 angY  = (gCurrentObject->oMoveAngleYaw / DEGREES(1)); //! s16/Angle type?
     f32 bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
     f32 water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
     print_debug_top_down_normal("mapinfo", 0);

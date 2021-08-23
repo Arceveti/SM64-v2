@@ -66,7 +66,7 @@ void bhv_mr_i_body_loop(void) {
 }
 
 void mr_i_act_spin_death(void) {
-    s16 startYaw;
+    Angle startYaw;
     f32 shakeY;
     f32 baseScale;
     f32 BBHScaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);

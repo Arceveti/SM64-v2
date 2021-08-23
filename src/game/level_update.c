@@ -185,7 +185,7 @@ Bool8 gNeverEnteredCastle;
 struct MarioState *gMarioState = &gMarioStates[0];
 Bool8 sWarpCheckpointActive = FALSE;
 
-u16 level_control_timer(s32 timerOp) {
+u32 level_control_timer(s32 timerOp) {
     switch (timerOp) {
         case TIMER_CONTROL_SHOW:
             gHudDisplay.flags |= HUD_DISPLAY_FLAG_TIMER;
@@ -375,7 +375,7 @@ void warp_credits(void) {
 }
 
 void check_instant_warp(void) {
-    s16 cameraAngle;
+    Angle cameraAngle;
     struct Surface *floor;
     if (gCurrLevelNum == LEVEL_CASTLE && save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 70) return;
     if ((floor = gMarioState->floor) != NULL) {
@@ -499,7 +499,7 @@ void initiate_painting_warp(void) {
  * based on the warp operation and sometimes Mario's used object.
  * Return the time left until the delayed warp is initiated.
  */
-s16 level_trigger_warp(struct MarioState *m, s32 warpOp) {
+s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
     Bool32 fadeMusic = TRUE;
     if (sDelayedWarpOp == WARP_OP_NONE) {
         m->invincTimer  = -1;

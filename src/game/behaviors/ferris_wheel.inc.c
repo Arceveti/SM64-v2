@@ -11,7 +11,7 @@
 struct FerrisWheelProperties {
     void const *axleCollision;
     void const *platformCollision;
-    s16 platformModel;
+    ModelID platformModel;
 };
 
 /**
@@ -30,13 +30,10 @@ static struct FerrisWheelProperties sFerrisWheelProperties[] = {
 void bhv_ferris_wheel_axle_init(void) {
     struct Object *platform;
     s32 i;
-
     o->collisionData = segmented_to_virtual(sFerrisWheelProperties[o->oBehParams2ndByte].axleCollision);
-
     // Spawn 4 platforms at 90 degrees from each other
     for (i = 0; i < 4; i++) {
         platform = spawn_object_relative(i, 0, 0, 0, o, sFerrisWheelProperties[o->oBehParams2ndByte].platformModel, bhvFerrisWheelPlatform);
-
         if (platform != NULL) platform->collisionData = segmented_to_virtual(sFerrisWheelProperties[o->oBehParams2ndByte].platformCollision);
     }
 }
@@ -47,16 +44,12 @@ void bhv_ferris_wheel_axle_init(void) {
  */
 void bhv_ferris_wheel_platform_update(void) {
     f32 offsetXZ;
-    s16 offsetAngle;
-
+    Angle offsetAngle;
     obj_perform_position_op(POS_OP_SAVE_POSITION);
-
-    offsetAngle = o->parentObj->oFaceAngleRoll + o->oBehParams2ndByte * 0x4000;
-    offsetXZ = 400.0f * coss(offsetAngle);
-
-    o->oPosX = o->parentObj->oPosX + offsetXZ * sins(o->parentObj->oMoveAngleYaw) + 300.0f * coss(o->parentObj->oMoveAngleYaw);
-    o->oPosY = o->parentObj->oPosY + 400.0f   * sins(offsetAngle);
-    o->oPosZ = o->parentObj->oPosZ + offsetXZ * coss(o->parentObj->oMoveAngleYaw) + 300.0f * sins(o->parentObj->oMoveAngleYaw);
-
+    offsetAngle = (o->parentObj->oFaceAngleRoll + (o->oBehParams2ndByte * 0x4000));
+    offsetXZ    = (400.0f * coss(offsetAngle));
+    o->oPosX    = (o->parentObj->oPosX + (offsetXZ * sins(o->parentObj->oMoveAngleYaw)) + (300.0f * coss(o->parentObj->oMoveAngleYaw)));
+    o->oPosY    = (o->parentObj->oPosY + (400.0f   * sins(offsetAngle)));
+    o->oPosZ    = (o->parentObj->oPosZ + (offsetXZ * coss(o->parentObj->oMoveAngleYaw)) + (300.0f * sins(o->parentObj->oMoveAngleYaw)));
     obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 }

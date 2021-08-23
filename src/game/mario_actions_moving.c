@@ -836,7 +836,7 @@ Bool32 act_hold_decelerating(struct MarioState *m) {
 }
 
 Bool32 act_riding_shell_ground(struct MarioState *m) {
-    s16 startYaw = m->faceAngle[1];
+    Angle startYaw = m->faceAngle[1];
     if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_RIDING_SHELL_JUMP, 0);
     if (m->input & INPUT_Z_PRESSED) {
         mario_stop_riding_object(m);

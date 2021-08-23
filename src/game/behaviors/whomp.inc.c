@@ -53,7 +53,7 @@ void whomp_turn(void) {
 }
 
 void whomp_patrol(void) {
-    s16 marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
+    Angle marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
     f32 distWalked = cur_obj_lateral_dist_to_home();
     f32 patrolDist = (gCurrLevelNum == LEVEL_BITS) ? 200.0f : 700.0f; // should be a param?
 
@@ -73,7 +73,7 @@ void whomp_patrol(void) {
 }
 
 void king_whomp_chase(void) {
-    s16 marioAngle;
+    Angle marioAngle;
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);

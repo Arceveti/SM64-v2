@@ -99,8 +99,8 @@ static void obj_set_dist_from_home(f32 distFromHome) {
     o->oPosZ = (o->oHomeZ + (distFromHome * sins(o->oMoveAngleYaw)));
 }
 
-static s32 obj_is_near_to_and_facing_mario(f32 maxDist, Angle maxAngleDiff) {
-    return (o->oDistanceToMario < maxDist && abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < maxAngleDiff);
+static Bool32 obj_is_near_to_and_facing_mario(f32 maxDist, Angle maxAngleDiff) {
+    return ((o->oDistanceToMario < maxDist) && (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario)) < maxAngleDiff);
 }
 
 static void obj_perform_position_op(s32 op) {

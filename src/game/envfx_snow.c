@@ -286,7 +286,8 @@ void append_snowflake_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s ve
  */
 Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo) {
     s32 i;
-    s16 radius, pitch, yaw;
+    s16 radius;
+    Angle pitch, yaw;
     Vec3s snowCylinderPos;
     struct SnowFlakeVertex vertex1, vertex2, vertex3;
     Gfx *gfxStart;

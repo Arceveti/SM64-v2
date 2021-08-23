@@ -63,7 +63,7 @@ void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s
 
 UNUSED static void spawn_macro_coin_unknown(const BehaviorScript *behavior, s16 a1[]) {
     struct Object *obj;
-    s16 model              = ((bhvYellowCoin == behavior) ? MODEL_YELLOW_COIN : MODEL_NONE);
+    ModelID model          = ((bhvYellowCoin == behavior) ? MODEL_YELLOW_COIN : MODEL_NONE);
     obj                    = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, a1[1], a1[2], a1[3], 0x0, convert_rotation(a1[0]), 0x0);
     obj->oUnusedCoinParams =   a1[4];
     obj->oBehParams        = ((a1[4] & 0xFF) >> 16);

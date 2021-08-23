@@ -161,9 +161,9 @@ Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
  */
 s16 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s translation) {
     struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
-    s16  animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
-    u16 *animIndex  = segmented_to_virtual((void *) curAnim->index );
-    s16 *animValues = segmented_to_virtual((void *) curAnim->values);
+    AnimFrame16 animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
+    AnimIndex  *animIndex  = segmented_to_virtual((void *) curAnim->index );
+    AnimValue  *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = sins(yaw);
     f32 c           = coss(yaw);
     f32 dx          = (*(animValues + (retrieve_animation_index(animFrame, &animIndex))) / 4.0f);
@@ -1188,7 +1188,7 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
     f32 heightBelowWater;
     s16 camPreset;
 #ifdef REONU_CAM_3
-    extern s16 s8DirModeBaseYaw;
+    extern Angle s8DirModeBaseYaw;
     if (!gWaterCamOverride) {
         if ((m->action & ACT_GROUP_MASK) == ACT_GROUP_SUBMERGED) {
             heightBelowWater = ((f32)(m->waterLevel - 80) - m->pos[1]);

@@ -564,10 +564,9 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
  * movtexVerts: vertices to update
  * attr: which attribute to change
  */
-void update_moving_texture_offset(s16 *movtexVerts, s32 attr) {
+void update_moving_texture_offset(RawVertexData *movtexVerts, s32 attr) {
     s16 movSpeed   = movtexVerts[MOVTEX_ATTR_SPEED];
     s16 *curOffset = (movtexVerts + attr);
-
     if (gMovtexCounter != gMovtexCounterPrev) {
         *curOffset += movSpeed;
         // note that texture coordinates are 6.10 fixed point, so this does modulo 1
@@ -582,7 +581,7 @@ void update_moving_texture_offset(s16 *movtexVerts, s32 attr) {
  * vertex's coordinates as base on which to apply offset.
  * The first vertex has offset 0 by definition, simplifying the calculations a bit.
  */
-void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *c, s8 attrLayout) {
+void movtex_write_vertex_first(Vtx *vtx, RawVertexData *movtexVerts, struct MovtexObject *c, s8 attrLayout) {
     s16 x    = movtexVerts[MOVTEX_ATTR_X];
     s16 y    = movtexVerts[MOVTEX_ATTR_Y];
     s16 z    = movtexVerts[MOVTEX_ATTR_Z];
@@ -615,7 +614,7 @@ void movtex_write_vertex_first(Vtx *vtx, s16 *movtexVerts, struct MovtexObject *
  * movtex_write_vertex_first and subsequent vertices use vertex 0 as a base
  * for their texture coordinates.
  */
-void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct MovtexObject *d, s8 attrLayout) {
+void movtex_write_vertex_index(Vtx *verts, s32 index, RawVertexData *movtexVerts, struct MovtexObject *d, s8 attrLayout) {
     Alpha alpha = d->a;
     s16 x, y, z;
     s16 baseS, baseT;
@@ -661,7 +660,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, s16 *movtexVerts, struct M
  * Generate a displaylist for a MovtexObject.
  * 'attrLayout' is one of MOVTEX_LAYOUT_NOCOLOR and MOVTEX_LAYOUT_COLORED.
  */
-Gfx *movtex_gen_list(s16 *movtexVerts, struct MovtexObject *movtexList, s8 attrLayout) {
+Gfx *movtex_gen_list(RawVertexData *movtexVerts, struct MovtexObject *movtexList, s8 attrLayout) {
     Vtx *verts   = alloc_display_list(movtexList->vtx_count * sizeof(*verts));
     Gfx *gfxHead = alloc_display_list(11 * sizeof(*gfxHead));
     Gfx *gfx = gfxHead;
@@ -683,7 +682,7 @@ Gfx *movtex_gen_list(s16 *movtexVerts, struct MovtexObject *movtexList, s8 attrL
  */
 Gfx *geo_movtex_draw_nocolor(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     s32 i;
-    s16 *movtexVerts;
+    RawVertexData *movtexVerts;
     struct GraphNodeGenerated *asGenerated;
     Gfx *gfx = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -711,7 +710,7 @@ Gfx *geo_movtex_draw_nocolor(s32 callContext, struct GraphNode *node, UNUSED Mat
  */
 Gfx *geo_movtex_draw_colored(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     s32 i;
-    s16 *movtexVerts;
+    RawVertexData *movtexVerts;
     struct GraphNodeGenerated *asGenerated;
     Gfx *gfx = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -740,7 +739,7 @@ Gfx *geo_movtex_draw_colored(s32 callContext, struct GraphNode *node, UNUSED Mat
  */
 Gfx *geo_movtex_draw_colored_no_update(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     s32 i;
-    s16 *movtexVerts;
+    RawVertexData *movtexVerts;
     struct GraphNodeGenerated *asGenerated;
     Gfx *gfx = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -765,7 +764,7 @@ Gfx *geo_movtex_draw_colored_no_update(s32 callContext, struct GraphNode *node, 
  */
 Gfx *geo_movtex_draw_colored_2_no_update(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     s32 i;
-    s16 *movtexVerts;
+    RawVertexData *movtexVerts;
     struct GraphNodeGenerated *asGenerated;
     Gfx *gfx = NULL;
     if (callContext == GEO_CONTEXT_RENDER) {

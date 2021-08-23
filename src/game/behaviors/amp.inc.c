@@ -211,10 +211,10 @@ void bhv_circling_amp_init(void) {
  */
 static void fixed_circling_amp_idle_loop(void) {
     // Turn towards Mario, in both yaw and pitch.
-    f32 xToMario       = (gMarioObject->header.gfx.pos[0]          - o->oPosX);
-    f32 yToMario       = (gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY);
-    f32 zToMario       = (gMarioObject->header.gfx.pos[2]          - o->oPosZ);
-    s16 vAngleToMario  = atan2s(sqrtf(sqr(xToMario) + sqr(zToMario)), -yToMario);
+    f32 xToMario        = (gMarioObject->header.gfx.pos[0]          - o->oPosX);
+    f32 yToMario        = (gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY);
+    f32 zToMario        = (gMarioObject->header.gfx.pos[2]          - o->oPosZ);
+    Angle vAngleToMario = atan2s(sqrtf(sqr(xToMario) + sqr(zToMario)), -yToMario);
     obj_turn_toward_object(o, gMarioObject, O_FACE_ANGLE_YAW_INDEX, 0x1000);
     o->oFaceAnglePitch = approach_s16_symmetric(o->oFaceAnglePitch, vAngleToMario, 0x1000);
     // Oscillate 40 units up and down.

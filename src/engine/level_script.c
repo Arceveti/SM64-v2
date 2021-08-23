@@ -352,7 +352,7 @@ static void level_cmd_23(void) {
         s32 i;
         f32 f;
     } arg2;
-    ModelID model =       CMD_GET(ModelID, 2) & 0x0FFF;
+    ModelID model =      (CMD_GET(ModelID, 2) & 0x0FFF);
     s16   arg0H   = ((u16)CMD_GET(s16, 2)) >> 12;
     void *arg1    =       CMD_GET(void *, 4);
     // load an f32, but using an integer load instruction for some reason (hence the union)
@@ -368,7 +368,7 @@ static void level_cmd_init_mario(void) {
     vec3s_set(gMarioSpawnInfo->startAngle, 0, 0, 0);
     gMarioSpawnInfo->activeAreaIndex = -1;
     gMarioSpawnInfo->areaIndex       =  0;
-    gMarioSpawnInfo->behaviorArg     = CMD_GET(u32, 4);
+    gMarioSpawnInfo->behaviorArg     = CMD_GET(u32,    4);
     gMarioSpawnInfo->behaviorScript  = CMD_GET(void *, 8);
     gMarioSpawnInfo->modelNode       = gLoadedGraphNodes[CMD_GET(ModelID, 0x2)];
     gMarioSpawnInfo->next            = NULL;
@@ -376,11 +376,11 @@ static void level_cmd_init_mario(void) {
 }
 
 static void level_cmd_place_object(void) {
-    u8 val7 = 1 << (gCurrActNum - 1);
+    u8 val7 = (1 << (gCurrActNum - 1));
     u16 model;
     struct SpawnInfo *spawnInfo;
 
-    if (sCurrAreaIndex != -1 && ((CMD_GET(u8, 2) & val7) || CMD_GET(u8, 2) == 0x1F)) {
+    if ((sCurrAreaIndex != -1) && ((CMD_GET(u8, 2) & val7) || (CMD_GET(u8, 2) == 0x1F))) {
         model                                   = CMD_GET(u32, 0x18);
         spawnInfo                               = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
         spawnInfo->startPos[0]                  = CMD_GET(s16, 4);

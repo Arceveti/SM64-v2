@@ -133,10 +133,10 @@ enum HUDDisplayFlag {
 };
 
 
-u16  level_control_timer(s32 timerOp);
+u32  level_control_timer(s32 timerOp);
 void fade_into_special_warp(u32 arg, u32 color);
 void load_level_init_text(  u32 arg);
-s16  level_trigger_warp(struct MarioState *m, s32 warpOp);
+s32  level_trigger_warp(struct MarioState *m, s32 warpOp);
 void level_set_transition(s16 length, void (*updateFunction)(s16 *));
 
 Bool32 lvl_init_or_update(                  Bool32 initOrUpdate, UNUSED s32 levelNum);

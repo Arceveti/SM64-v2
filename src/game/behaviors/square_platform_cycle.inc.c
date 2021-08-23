@@ -1,7 +1,7 @@
 // square_platform_cycle.c.inc
 
-//! s16/Angle?
-s32 square_plat_set_yaw_until_timer(u16 yaw, s32 time) {
+//! s16/Angle for yaw param?
+Bool32 square_plat_set_yaw_until_timer(u16 yaw, s32 time) {
     o->oMoveAngleYaw = yaw;
     return (time < o->oTimer);
 }

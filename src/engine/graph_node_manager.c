@@ -45,7 +45,7 @@ s16 *read_vec3s(Vec3s dst, s16 *src) {
  * range.
  * Vec3s ->s16
  */
-Angle *read_vec3s_angle(Vec3a dst, s16 *src) {
+Angle *read_vec3s_angle(Vec3a dst, Angle *src) {
     dst[0] = ((next_s16_in_geo_script(&src) << 15) / 180);
     dst[1] = ((next_s16_in_geo_script(&src) << 15) / 180);
     dst[2] = ((next_s16_in_geo_script(&src) << 15) / 180);

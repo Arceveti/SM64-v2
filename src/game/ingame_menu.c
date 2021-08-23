@@ -565,7 +565,7 @@ void int_to_str(s32 num, uchar *dst) {
     dst[pos  ] = DIALOG_CHAR_TERMINATOR;
 }
 
-s16 get_dialog_id(void) {
+DialogID get_dialog_id(void) {
     return gDialogID;
 }
 

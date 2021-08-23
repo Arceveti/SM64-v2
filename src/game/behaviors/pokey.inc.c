@@ -122,7 +122,7 @@ void bhv_pokey_body_part_update(void) {
 static void pokey_act_uninitialized(void) {
     struct Object *bodyPart;
     s32 i;
-    s16 partModel;
+    ModelID partModel;
     if (o->oDistanceToMario < 4000.0f) { // vanilla was 2000.0f
         partModel = MODEL_POKEY_HEAD;
         for ((i = 0); (i < POKEY_NUM_PARTS); (i++)) {

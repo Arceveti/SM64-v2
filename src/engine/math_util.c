@@ -334,6 +334,30 @@ void vec3i_set(Vec3i dest, s32 x, s32 y, s32 z) {
     dest[2] = z;
 }
 
+/// Make 'dest' the sum of vectors a and b.
+void vec3i_sum(Vec3i dest, Vec3i a, Vec3i b) {
+    dest[0] = (a[0] + b[0]);
+    dest[1] = (a[1] + b[1]);
+    dest[2] = (a[2] + b[2]);
+}
+
+/// Make 'dest' the difference of vectors a and b.
+void vec3i_diff(Vec3i dest, Vec3i a, Vec3i b) {
+    dest[0] = (a[0] - b[0]);
+    dest[1] = (a[1] - b[1]);
+    dest[2] = (a[2] - b[2]);
+}
+
+/// Add vector a to 'dest'
+void vec3i_add(Vec3i dest, Vec3i a) {
+    vec3i_sum(dest, dest, a);
+}
+
+/// Subtract vector a from 'dest'
+void vec3i_sub(Vec3i dest, Vec3i a) {
+    vec3i_diff(dest, dest, a);
+}
+
 /// Copy vector src to dest
 void vec3i_copy(Vec3i dest, Vec3i src) {
     dest[0] = src[0];

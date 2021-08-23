@@ -15,6 +15,7 @@
 
 Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
 Vec3s gVec3sZero = {    0,    0,    0 };
+Vec3i gVec3iZero = {    0,    0,    0 };
 Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
 // UNUSED Vec3s gVec3sOne  = {    1,    1,    1 };
 

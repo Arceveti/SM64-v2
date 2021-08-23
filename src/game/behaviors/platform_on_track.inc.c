@@ -176,7 +176,7 @@ static void platform_on_track_act_wait_for_mario(void) {
  * return to the init action, or continue moving back to the start waypoint.
  */
 static void platform_on_track_act_move_along_track(void) {
-    s16 initialAngle;
+    Angle initialAngle;
 #ifdef CONTROLLABLE_PLATFORM_SPEED
     f32 targetVel = 10.0f;
 #endif
@@ -185,18 +185,16 @@ static void platform_on_track_act_move_along_track(void) {
     } else if (!o->oPlatformOnTrackIsNotHMC) {
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
     }
-
     // Fall after reaching the last waypoint if desired
-    if (o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_END
+    if ((o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_END)
         && !((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_RETURN_TO_START)) {
         o->oAction = PLATFORM_ON_TRACK_ACT_FALL;
     } else {
         // The ski lift should pause or stop after reaching a special waypoint
-        if (o->oPlatformOnTrackPrevWaypointFlags != 0 && !o->oPlatformOnTrackIsNotSkiLift) {
-            if (o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_END
-                || o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_PLATFORM_ON_TRACK_PAUSE) {
+        if ((o->oPlatformOnTrackPrevWaypointFlags != 0) && !o->oPlatformOnTrackIsNotSkiLift) {
+            if ((o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_END)
+             || (o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_PLATFORM_ON_TRACK_PAUSE)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_WOBBLE_LOWPRIO);
-
                 o->oForwardVel = 0.0f;
                 if (o->oPlatformOnTrackPrevWaypointFlags == WAYPOINT_FLAGS_END) {
                     o->oAction = PLATFORM_ON_TRACK_ACT_INIT;
@@ -210,7 +208,7 @@ static void platform_on_track_act_move_along_track(void) {
                 obj_forward_vel_approach(10.0f, 0.1f);
             } else {
 #ifdef CONTROLLABLE_PLATFORM_SPEED
-                targetVel = (gMarioObject->platform == o ? o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw) - 10.0f : 10.0f);
+                targetVel = ((gMarioObject->platform == o) ? ((o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw)) - 10.0f) : 10.0f);
                 if (targetVel < 10.0f) {
                     targetVel = 10.0f;
                 } else if (targetVel > 16.0f) {

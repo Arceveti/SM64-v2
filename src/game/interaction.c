@@ -360,7 +360,7 @@ Bool32 mario_check_object_grab(struct MarioState *m) {
 MarioAction bully_knock_back_mario(struct MarioState *m) {
     struct BullyCollisionData marioData;
     struct BullyCollisionData bullyData;
-    s16 newMarioYaw, newBullyYaw, marioDYaw;
+    Angle  newMarioYaw, newBullyYaw, marioDYaw;
     struct Object *bully = m->interactObj;
     //! Conversion ratios multiply to more than 1 (could allow unbounded speed
     // with bonk cancel - but this isn't important for regular bully battery)
@@ -479,7 +479,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     f32 floorHeight;
     if (distance < minDistance) {
         struct Surface *floor;
-        s16 pushAngle = ((distance == 0.0f) ? m->faceAngle[1] : atan2s(offsetZ, offsetX));
+        Angle pushAngle = ((distance == 0.0f) ? m->faceAngle[1] : atan2s(offsetZ, offsetX));
         f32 newMarioX = (o->oPosX + (minDistance * sins(pushAngle)));
         f32 newMarioZ = (o->oPosZ + (minDistance * coss(pushAngle)));
         f32_find_wall_collision(&newMarioX, &m->pos[1], &newMarioZ, 60.0f, 50.0f);

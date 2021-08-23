@@ -408,6 +408,27 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     return numCollisions;
 }
 
+/**
+ * Move `pos` between the nearest floor and ceiling
+ * @param lastGood unused, passed as the last position the camera was in
+ */
+void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
+    f32 ceilY, floorY;
+    struct Surface *surf;
+    f32_find_wall_collision(&pos[0], &pos[1], &pos[2], 0.0f, 100.0f);
+    floorY = find_floor(pos[0], (pos[1] + 50.0f), pos[2], &surf);
+    ceilY  = find_ceil( pos[0], (pos[1] - 50.0f), pos[2], &surf);
+    if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT == ceilY) && pos[1] < (floorY += 125.0f)) pos[1] = floorY;
+    if ((FLOOR_LOWER_LIMIT == floorY) && (CELL_HEIGHT_LIMIT != ceilY) && pos[1] > ( ceilY -= 125.0f)) pos[1] =  ceilY;
+    if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT != ceilY)) {
+        floorY += 125.0f;
+        ceilY  -= 125.0f;
+        if ((pos[1] <= floorY) && (pos[1] <  ceilY)) pos[1] = floorY;
+        if ((pos[1] >  floorY) && (pos[1] >= ceilY)) pos[1] =  ceilY;
+        if ((pos[1] <= floorY) && (pos[1] >= ceilY)) pos[1] = ((floorY + ceilY) * 0.5f);
+    }
+}
+
 
 /**************************************************
  *                     CEILINGS                   *

@@ -127,7 +127,7 @@
 #define MIDDLE_Y 80
 
 /// A copy of the type of floor Mario is standing on.
-s16 gPaintingMarioFloorType;
+SurfaceType gPaintingMarioFloorType;
 // A copy of Mario's position
 f32 gPaintingMarioXPos;
 f32 gPaintingMarioYPos;
@@ -585,7 +585,7 @@ s16 calculate_ripple_at_point(struct Painting *painting, f32 posX, f32 posY) {
  * If movable, return the ripple function at (posX, posY)
  * else return 0
  */
-s16 ripple_if_movable(struct Painting *painting, s16 movable, s16 posX, s16 posY) {
+s16 ripple_if_movable(struct Painting *painting, Bool32 movable, s16 posX, s16 posY) {
     if (movable) return calculate_ripple_at_point(painting, posX, posY);
     return 0;
 }
@@ -609,7 +609,7 @@ s16 ripple_if_movable(struct Painting *painting, s16 movable, s16 posX, s16 posY
  *
  * The mesh used in game, seg2_painting_triangle_mesh, is in bin/segment2.c.
  */
-void painting_generate_mesh(struct Painting *painting, s16 *mesh, s16 numTris) {
+void painting_generate_mesh(struct Painting *painting, PaintingData *mesh, PaintingData numTris) {
     s16 i;
     gPaintingMesh = mem_pool_alloc(gEffectsMemoryPool, numTris * sizeof(struct PaintingMeshVertex));
     // accesses are off by 1 since the first entry is the number of vertices
@@ -637,14 +637,14 @@ void painting_generate_mesh(struct Painting *painting, s16 *mesh, s16 numTris) {
  *
  * The mesh used in game, seg2_painting_triangle_mesh, is in bin/segment2.c.
  */
-void painting_calculate_triangle_normals(s16 *mesh, s16 numVtx, s16 numTris) {
+void painting_calculate_triangle_normals(PaintingData *mesh, PaintingData numVtx, PaintingData numTris) {
     s16 i;
     gPaintingTriNorms = mem_pool_alloc(gEffectsMemoryPool, numTris * sizeof(Vec3f));
     for (i = 0; i < numTris; i++) {
-        s16 tri = ((numVtx * 3) + (i * 3) + 2); // Add 2 because of the 2 length entries preceding the list
-        s16 v0 = mesh[tri];
-        s16 v1 = mesh[tri + 1];
-        s16 v2 = mesh[tri + 2];
+        PaintingData tri = ((numVtx * 3) + (i * 3) + 2); // Add 2 because of the 2 length entries preceding the list
+        PaintingData v0 = mesh[tri];
+        PaintingData v1 = mesh[tri + 1];
+        PaintingData v2 = mesh[tri + 2];
         f32 x0 = gPaintingMesh[v0].pos[0];
         f32 y0 = gPaintingMesh[v0].pos[1];
         f32 z0 = gPaintingMesh[v0].pos[2];
@@ -744,7 +744,7 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
  * If the textureMap doesn't describe the whole mesh, then multiple calls are needed to draw the whole
  * painting.
  */
-Gfx *render_painting(Texture *img, s16 tWidth, s16 tHeight, s16 *textureMap, s16 mapVerts, s16 mapTris, Alpha alpha) {
+Gfx *render_painting(Texture *img, s16 tWidth, s16 tHeight, s16 *textureMap, PaintingData mapVerts, PaintingData mapTris, Alpha alpha) {
     s16 group;
     s16 map;
     s16 triGroup;
@@ -841,8 +841,8 @@ Gfx *painting_model_view_transform(struct Painting *painting) {
  * Ripple a painting that has 1 or more images that need to be mapped
  */
 Gfx *painting_ripple_image(struct Painting *painting) {
-    s16 meshVerts;
-    s16 meshTris;
+    PaintingData meshVerts;
+    PaintingData meshTris;
     s16 i;
     s16 *textureMap;
     s16 imageCount     = painting->imageCount;
@@ -906,10 +906,10 @@ Gfx *painting_ripple_env_mapped(struct Painting *painting) {
  * The mesh and vertex normals are regenerated and freed every frame.
  */
 Gfx *display_painting_rippling(struct Painting *painting) {
-    s16 *mesh         = segmented_to_virtual(seg2_painting_triangle_mesh);
-    s16 *neighborTris = segmented_to_virtual(seg2_painting_mesh_neighbor_tris);
-    s16 numVtx  = mesh[0];
-    s16 numTris = mesh[(numVtx * 3) + 1];
+    PaintingData *mesh         = segmented_to_virtual(seg2_painting_triangle_mesh);
+    PaintingData *neighborTris = segmented_to_virtual(seg2_painting_mesh_neighbor_tris);
+    PaintingData numVtx  = mesh[0];
+    PaintingData numTris = mesh[(numVtx * 3) + 1];
     Gfx *dlist  = NULL;
     // Generate the mesh and its lighting data
     painting_generate_mesh(       painting, mesh, numVtx);

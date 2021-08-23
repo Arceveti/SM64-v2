@@ -1188,7 +1188,7 @@ void cur_obj_set_hurtbox_radius_and_height(f32 radius, f32 height) {
     o->hurtboxHeight = height;
 }
 
-static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel, const BehaviorScript *coinBehavior, s16 posJitter, s16 model) {
+static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel, const BehaviorScript *coinBehavior, s16 posJitter, ModelID model) {
     s32 i;
     f32 spawnHeight;
     struct Surface *floor;
@@ -1241,7 +1241,7 @@ UNUSED AnimFrame32 cur_obj_advance_looping_anim(void) {
     return ((animFrame << 16) / loopEnd);
 }
 
-static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) {
+static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type because it's in degrees
     struct Surface *intendedFloor;
     f32 intendedX, intendedFloorHeight, intendedZ;
     f32 deltaFloorHeight;
@@ -1271,9 +1271,9 @@ s32 cur_obj_resolve_wall_collisions(void) {
     if (radius > 0.1f) { // was 0.1l
         collisionData.offsetY = offsetY;
         collisionData.radius  = radius;
-        collisionData.x       = (s16) o->oPosX;
-        collisionData.y       = (s16) o->oPosY;
-        collisionData.z       = (s16) o->oPosZ;
+        collisionData.x       = (Collision) o->oPosX;
+        collisionData.y       = (Collision) o->oPosY;
+        collisionData.z       = (Collision) o->oPosZ;
         numCollisions         = find_wall_collisions(&collisionData);
         if (numCollisions != 0) {
             o->oPosX          = collisionData.x;
@@ -1324,7 +1324,7 @@ void cur_obj_update_floor_and_walls(void) {
     cur_obj_update_floor_and_resolve_wall_collisions(60);
 }
 
-void cur_obj_move_standard(s16 steepSlopeAngleDegrees) {
+void cur_obj_move_standard(s16 steepSlopeAngleDegrees) { // not Angle type because it's in degrees
     f32 gravity                      = o->oGravity;
     f32 bounciness                   = o->oBounciness;
     f32 buoyancy                     = o->oBuoyancy;
@@ -1435,7 +1435,7 @@ void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s1
     rotation[0]  = obj->rawData.asS32[angleIndex + 0];
     rotation[1]  = obj->rawData.asS32[angleIndex + 1];
     rotation[2]  = obj->rawData.asS32[angleIndex + 2];
-    if (translate != gVec3fZero || rotation != gVec3sZero) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
+    if ((translate != gVec3fZero) || (rotation != gVec3sZero)) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
 }
 
 void obj_set_throw_matrix_from_transform(struct Object *obj) {
@@ -1464,17 +1464,11 @@ void obj_create_transform_from_self(struct Object *obj) {
 }
 
 void cur_obj_rotate_move_angle_using_vel(void) {
-    //! vec3i_add?
-    o->oMoveAnglePitch += o->oAngleVelPitch;
-    o->oMoveAngleYaw   += o->oAngleVelYaw;
-    o->oMoveAngleRoll  += o->oAngleVelRoll;
+    vec3i_add(&o->oMoveAngleVec, &o->oAngleVelVec);
 }
 
 void cur_obj_rotate_face_angle_using_vel(void) {
-    //! vec3i_add?
-    o->oFaceAnglePitch += o->oAngleVelPitch;
-    o->oFaceAngleYaw   += o->oAngleVelYaw;
-    o->oFaceAngleRoll  += o->oAngleVelRoll;
+    vec3i_add(&o->oFaceAngleVec, &o->oAngleVelVec);
 }
 
 void cur_obj_set_face_angle_to_move_angle(void) {

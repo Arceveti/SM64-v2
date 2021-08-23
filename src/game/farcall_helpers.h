@@ -25,9 +25,9 @@
 
 s32  obj_is_rendering_enabled(void);
 s16  obj_get_pitch_from_vel(void);
-s32  obj_update_race_proposition_dialog(s16 dialogID);
+s32  obj_update_race_proposition_dialog(DialogID dialogID);
 void obj_set_dist_from_home(f32 distFromHome);
-s32  obj_is_near_to_and_facing_mario(f32 maxDist, s16 maxAngleDiff);
+Bool32 obj_is_near_to_and_facing_mario(f32 maxDist, Angle maxAngleDiff);
 void obj_perform_position_op(s32 op);
 void cur_obj_spin_all_dimensions(f32 arg0, f32 arg1);
 s16  obj_get_pitch_to_home(f32 latDistToHome);
@@ -46,7 +46,7 @@ s32  obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw);
 s32  obj_face_roll_approach(Angle targetRoll, Angle deltaRoll);
 s32  obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, s16 accel, s16 minSpeed, s16 maxSpeed);
 void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rollSpeed);
-s16  obj_random_fixed_turn(Angle delta);
+Angle obj_random_fixed_turn(Angle delta);
 s32  obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale);
 s32  oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel,  f32 slowdown);
 void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLengthRange, s16 blinkLength);

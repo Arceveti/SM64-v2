@@ -1,5 +1,5 @@
 struct RacingPenguinData {
-    s16 text;
+    s16 text; //! DialogID16?
     f32 radius;
     f32 height;
 };
@@ -33,14 +33,14 @@ static void racing_penguin_act_show_init_text(void) {
         o->oAction                  = RACING_PENGUIN_ACT_PREPARE_FOR_RACE;
         o->oVelY                    = 60.0f;
     } else if (response == DIALOG_RESPONSE_NO) {
-        o->oAction = RACING_PENGUIN_ACT_WAIT_FOR_MARIO;
+        o->oAction                        = RACING_PENGUIN_ACT_WAIT_FOR_MARIO;
         o->oRacingPenguinInitTextCooldown = 60;
     }
 }
 
 static void racing_penguin_act_prepare_for_race(void) {
     if (obj_begin_race(TRUE)) {
-        o->oAction = RACING_PENGUIN_ACT_RACE;
+        o->oAction     = RACING_PENGUIN_ACT_RACE;
         o->oForwardVel = 20.0f;
     }
     cur_obj_rotate_yaw_toward(0x4000, 0x9C4);

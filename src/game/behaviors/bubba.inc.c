@@ -105,7 +105,7 @@ void bhv_bubba_loop(void) {
         } else {
             approach_f32_ptr(&o->oBubbaAirVelY, 0.0f, 4.0f);
             if ((o->oBubbaJumpHeight -= o->oBubbaAirVelY) > 1.0f) {
-                s16 rand              = random_u16();
+                s16 rand              = random_u16(); //! Angle type?
                 o->oBubbaJumpHeight  -= 1.0f;
                 spawn_object_relative(OBJ_BP_NONE, (150.0f * coss(rand)), 0x64, (150.0f * sins(rand)), o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
             }

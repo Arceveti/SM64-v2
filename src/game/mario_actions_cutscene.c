@@ -242,7 +242,7 @@ void handle_save_menu(struct MarioState *m) {
  * and yaw plus relative yaw.
  */
 //! modelID type?
-struct Object *spawn_obj_at_mario_rel_yaw(struct MarioState *m, s32 model, const BehaviorScript *behavior, s16 relYaw) {
+struct Object *spawn_obj_at_mario_rel_yaw(struct MarioState *m, s32 model, const BehaviorScript *behavior, Angle relYaw) {
     struct Object *o = spawn_object(m->marioObj, model, behavior);
     o->oFaceAngleYaw = (m->faceAngle[1] + relYaw);
     vec3f_copy(&o->oPosVec, m->pos);

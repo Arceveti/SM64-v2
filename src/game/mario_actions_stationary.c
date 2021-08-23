@@ -593,10 +593,10 @@ Bool32 act_first_person(struct MarioState *m) {
         set_camera_mode(m->area->camera, -1, 1);
         return set_mario_action(m, ACT_IDLE, 0);
     }
-    if (m->floor->type == SURFACE_LOOK_UP_WARP
+    if ((m->floor->type == SURFACE_LOOK_UP_WARP)
         && save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 10) {
-        s16 headRX  =   m->statusForCamera->headRotation[0];
-        s16 totalRY = (((m->statusForCamera->headRotation[1] * 4) / 3) + m->faceAngle[1]);
+        Angle headRX  =   m->statusForCamera->headRotation[0];
+        Angle totalRY = (((m->statusForCamera->headRotation[1] * 4) / 3) + m->faceAngle[1]);
         if ((headRX == -0x1800) && ((totalRY < -0x6FFF) || (totalRY >= 0x7000))) level_trigger_warp(m, WARP_OP_LOOK_UP);
     }
     stationary_ground_step(m);

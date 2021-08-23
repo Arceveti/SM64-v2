@@ -356,7 +356,8 @@ void geo_layout_cmd_node_camera(void) {
 */
 void geo_layout_cmd_node_translation_rotation(void) {
     struct GraphNodeTranslationRotation *graphNode;
-    Vec3s translation, rotation;
+    Vec3s translation;
+    Vec3a rotation;
     void *displayList = NULL;
     DrawingLayer  drawingLayer = LAYER_FORCE;
     s16  params                = cur_geo_cmd_u8(0x01);

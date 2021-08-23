@@ -5,6 +5,7 @@
 #include "geo_misc.h"
 #include "gfx_dimensions.h"
 #include "level_update.h"
+#include "game_init.h"
 #include "memory.h"
 #include "save_file.h"
 #include "segment2.h"
@@ -137,7 +138,7 @@ ColorRGB sSkyboxColors[] = {
  */
 f32 calculate_skybox_scaled_x(s8 player, f32 fov) {
     f32 yaw       = sSkyBoxInfo[player].yaw;
-    f32 yawScaled = (SCREEN_WIDTH * 360.0f * yaw / (fov * 65536.0f));
+    f32 yawScaled = ((SCREEN_WIDTH * 360.0f * yaw) / (fov * 65536.0f));
     // Round the scaled yaw. Since yaw is a u16, it doesn't need to check for < 0
     f32 scaledX = (yawScaled + 0.5f);
     if (scaledX > SKYBOX_WIDTH) scaledX -= ((s32) scaledX / SKYBOX_WIDTH * SKYBOX_WIDTH);
@@ -150,11 +151,11 @@ f32 calculate_skybox_scaled_x(s8 player, f32 fov) {
  * fov may have been used in an earlier version, but the developers changed the function to always use
  * 90 degrees.
  */
-f32 calculate_skybox_scaled_y(s8 player, UNUSED f32 fov) {
+f32 calculate_skybox_scaled_y(s8 player, f32 fov) {
     // Convert pitch to degrees. Pitch is bounded between -90 (looking down) and 90 (looking up).
     f32 pitchInDegrees                   = ((f32) sSkyBoxInfo[player].pitch * 360.0f / 65535.0f);
     // Scale by 360 / fov
-    f32 degreesToScale                   = (360.0f * pitchInDegrees / 90.0f);
+    f32 degreesToScale                   = (360.0f * pitchInDegrees / fov);
     // Since pitch can be negative, and the tile grid starts 1 octant above the camera's focus, add
     // 5 octants to the y position
     f32 scaledY                          = (degreesToScale + (5 * SKYBOX_TILE_HEIGHT));
@@ -270,10 +271,14 @@ Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov,
     f32 cameraFaceZ = (focZ - posZ);
     s8  colorIndex  = 1;
     // If the first star is collected in JRB, make the sky darker and slightly green
-    if (background == 8 && !(save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 0x1)) colorIndex = 0;
+    if ((background == 8) && !(save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & 0x1)) colorIndex = 0;
+#ifdef UNLOCK_SKYBOX_FOV
+    if (fov == 0.0f) fov = (90.0f);// * (gFieldOfView / 100.0f));
+#else
     //! fov is always set to 90.0f. If this line is removed, then the game crashes because fov is 0 on
     //! the first frame, which causes a floating point divide by 0
-    if (fov == 0.0f) fov = 90.0f;
+    fov = (90.0f);// * (gFieldOfView / 100.0f));
+#endif
     sSkyBoxInfo[player].yaw           = atan2s(cameraFaceZ, cameraFaceX);
     sSkyBoxInfo[player].pitch         = atan2s(sqrtf(sqr(cameraFaceX) + sqr(cameraFaceZ)), cameraFaceY);
     sSkyBoxInfo[player].scaledX       = calculate_skybox_scaled_x(player, fov);

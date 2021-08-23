@@ -646,12 +646,14 @@
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
 
-
 // Fixes the guLookAtReflect call, but since vanilla's environment mapped textures
-// are sideways, they show as sideways.
+// are sideways, they will appear as sideways in-game if this is enabled.
 // #define FIX_REFLECT_MTX
 
-// Fixes offset_rotated in camera.c
+// Fixes the inverse Z values in offset_rotated and other functions in camera.c
 // #define FIX_CAMERA_OFFSET_ROTATED
+
+// In vanilla, the skybox FOV is always 90 degrees.
+// #define UNLOCK_SKYBOX_FOV
 
 #endif // CONFIG_H

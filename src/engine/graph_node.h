@@ -363,6 +363,7 @@ extern s16 gCurGraphNodeIndex;
 
 extern Vec3f gVec3fZero;
 extern Vec3s gVec3sZero;
+extern Vec3i gVec3iZero;
 extern Vec3f gVec3fOne;
 extern Vec3s gVec3sOne;
 
