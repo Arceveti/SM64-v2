@@ -14,16 +14,13 @@
  * Float functions (Kaze) *
  **************************/
 
-#define FLOAT_MIN -3.40282e+38f
-
-static f32 const E = 2.718281828459f;
 f32 slow_logf(f32 x) {
     f32 p = 0.0f;
     f32 r = 0.0f, c = -1.0f;
     s32 i;
-    if (x == 0.0f) return FLOAT_MIN;
+    if (x == 0.0f) return __FLT_MIN__;
     while (x < 0.5f) {
-        x *= E;
+        x *= CONST_EULER_F;
         ++p;
     }
     x -= 1.0f;
@@ -1168,9 +1165,9 @@ void mtxf_rotate_xy(Mtx *mtx, Angle angle) {
  * the camera position.
  */
 void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
-    f32 camX = ((camMtx[3][0] * camMtx[0][0]) + (camMtx[3][1] * camMtx[0][1]) + (camMtx[3][2] * camMtx[0][2]));
-    f32 camY = ((camMtx[3][0] * camMtx[1][0]) + (camMtx[3][1] * camMtx[1][1]) + (camMtx[3][2] * camMtx[1][2]));
-    f32 camZ = ((camMtx[3][0] * camMtx[2][0]) + (camMtx[3][1] * camMtx[2][1]) + (camMtx[3][2] * camMtx[2][2]));
+    register f32 camX = ((camMtx[3][0] * camMtx[0][0]) + (camMtx[3][1] * camMtx[0][1]) + (camMtx[3][2] * camMtx[0][2]));
+    register f32 camY = ((camMtx[3][0] * camMtx[1][0]) + (camMtx[3][1] * camMtx[1][1]) + (camMtx[3][2] * camMtx[1][2]));
+    register f32 camZ = ((camMtx[3][0] * camMtx[2][0]) + (camMtx[3][1] * camMtx[2][1]) + (camMtx[3][2] * camMtx[2][2]));
     dest[0]  = ((objMtx[3][0] * camMtx[0][0]) + (objMtx[3][1] * camMtx[0][1]) + (objMtx[3][2] * camMtx[0][2]) - camX);
     dest[1]  = ((objMtx[3][0] * camMtx[1][0]) + (objMtx[3][1] * camMtx[1][1]) + (objMtx[3][2] * camMtx[1][2]) - camY);
     dest[2]  = ((objMtx[3][0] * camMtx[2][0]) + (objMtx[3][1] * camMtx[2][1]) + (objMtx[3][2] * camMtx[2][2]) - camZ);
@@ -1245,177 +1242,68 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
  * until goal is reached. Does not overshoot.
  */
 f32 approach_f32_by_increment(f32 current, f32 target, f32 inc) {
-    f32 newVal;
     if (current <= target) {
-        if ((target - current) < inc) {
-            newVal = target;
-        } else {
-            newVal = (current + inc);
-        }
-    } else if ((target - current) > -inc) {
-        newVal = target;
+        return (((target - current) <  inc) ? target : (current + inc));
     } else {
-        newVal = (current - inc);
+        return (((target - current) > -inc) ? target : (current - inc));
     }
-    return newVal;
 }
 
-Bool32 approach_f32_ptr(f32 *value, f32 target, f32 inc) {
-    if (*value > target) inc = -inc;
-    *value += inc;
-    if ((*value - target) * inc >= 0) {
-        *value = target;
+Bool32 approach_f32_ptr(f32 *current, f32 target, f32 inc) {
+    if (*current > target) inc = -inc;
+    *current += inc;
+    if (((*current - target) * inc) >= 0) {
+        *current = target;
         return TRUE;
     }
     return FALSE;
 }
 
-Bool32 approach_f32_ptr_signed(f32 *value, f32 target, f32 inc) {
+Bool32 approach_f32_ptr_signed(f32 *current, f32 target, f32 inc) {
     Bool32 reachedTarget = FALSE;
-    *value += inc;
+    *current += inc;
     if (inc >= 0.0f) {
-        if (*value > target) {
-            *value = target;
+        if (*current > target) {
+            *current = target;
             reachedTarget = TRUE;
         }
     } else {
-        if (*value < target) {
-            *value = target;
+        if (*current < target) {
+            *current = target;
             reachedTarget = TRUE;
         }
     }
     return reachedTarget;
 }
 
-f32 approach_f32_symmetric(f32 value, f32 target, f32 inc) {
-    f32 dist;
-    if ((dist = (target - value)) >= 0.0f) {
-        if (dist > inc) {
-            value += inc;
-        } else {
-            value = target;
-        }
-    } else {
-        if (dist < -inc) {
-            value -= inc;
-        } else {
-            value = target;
-        }
-    }
-    return value;
-}
-
-//! rename
-/**
- * Approaches a value by a given increment, returns FALSE if the target is reached.
- * Appears to be a strange way of implementing approach_f32_symmetric from object_helpers.c.
- * It could possibly be an older version of the function
- */
-Bool32 camera_approach_f32_symmetric_bool(f32 *value, f32 target, f32 inc) {
-    f32 dist = (target - *value);
+f32 approach_f32_symmetric(f32 current, f32 target, f32 inc) {
+    f32 dist = (target - current);
     if (inc < 0) inc = -inc;
-    if (dist > 0) {
-        dist -= inc;
-        if (dist > 0) {
-            *value = (target - dist);
-        } else {
-            *value = target;
-        }
+    if (dist >= 0.0f) {
+        current = ((dist >  inc) ? (current + inc) : target);
     } else {
-        dist += inc;
-        if (dist < 0) {
-            *value = (target - dist);
-        } else {
-            *value = target;
-        }
-    }
-    return !(*value == target);
-}
-
-//! rename
-/**
- * Nearly the same as the above function, this one returns the new value in place of a bool.
- */
-f32 camera_approach_f32_symmetric(f32 value, f32 target, f32 inc) {
-    f32 dist = (target - value);
-    if (inc < 0) inc = -inc;
-    if (dist > 0) {
-        dist -= inc;
-        if (dist > 0) {
-            value = (target - dist);
-        } else {
-            value = target;
-        }
-    } else {
-        dist += inc;
-        if (dist < 0) {
-            value = (target - dist);
-        } else {
-            value = target;
-        }
-    }
-    return value;
-}
-
-s16 approach_s16_symmetric(s16 value, s16 target, s16 inc) {
-    s16 dist = (target - value);
-    if (dist >= 0) {
-        if (dist > inc) {
-            value += inc;
-        } else {
-            value = target;
-        }
-    } else {
-        if (dist < -inc) {
-            value -= inc;
-        } else {
-            value = target;
-        }
-    }
-    return value;
-}
-
-//! rename
-s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 inc) {
-    s16 dist = (target - current);
-    if (inc < 0) inc = -inc;
-    if (dist > 0) {
-        dist -= inc;
-        if (dist >= 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
-    } else {
-        dist += inc;
-        if (dist <= 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
+        current = ((dist < -inc) ? (current - inc) : target);
     }
     return current;
 }
 
-//! rename
-Bool32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
-    s16 dist = (target - *current);
-    if (inc < 0) inc = -inc;
-    if (dist > 0) {
-        dist -= inc;
-        if (dist >= 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
+Bool32 approach_f32_symmetric_bool(f32 *current, f32 target, f32 inc) {
+    *current = approach_f32_symmetric(*current, target, inc);
+    return !(*current == target);
+}
+
+s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
+    s16 dist = (target - current);
+    if (dist >= 0) {
+        current = ((dist >  inc) ? (current + inc) : target);
     } else {
-        dist += inc;
-        if (dist <= 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
+        current = ((dist < -inc) ? (current - inc) : target);
     }
+    return current;
+}
+
+Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
+    *current = approach_s16_symmetric(*current, target, inc);
     return !(*current == target);
 }
 
@@ -1434,8 +1322,7 @@ Bool32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
  * Nearly the same as the above function, returns new value instead.
  */
 f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
-    current = (current + ((target - current) * multiplier));
-    return current;
+    return (current = (current + ((target - current) * multiplier)));
 }
 
 /**
@@ -1444,15 +1331,7 @@ f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
  * reciprocal of what it would be in the previous two functions.
  */
 Bool32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
-    s16 temp = *current;
-    if (divisor == 0) {
-        *current = target;
-    } else {
-        temp    -= target;
-        temp    -= (temp / divisor);
-        temp    += target;
-        *current = temp;
-    }
+    *current = approach_s16_asymptotic(*current, target, divisor);
     return !(*current == target);
 }
 
@@ -1465,18 +1344,13 @@ s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor) {
     if (divisor == 0) {
         current = target;
     } else {
-        temp -= target;
-        temp -= (temp / divisor);
-        temp += target;
+        temp   -= target;
+        temp   -= (temp / divisor);
+        temp   += target;
         current = temp;
     }
     return current;
 }
-
-// Angle approach_angle(Angle current, Angle target, Angle inc) {
-//     // return (target - approach_s32((Angle)(target - current), 0x0, inc, inc));
-//     return approach_s16_symmetric(current, target, inc);
-// }
 
 /**
  * Applies the approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the given
@@ -1502,35 +1376,11 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
  * Trig Functions *
  ******************/
 
-f64 sind(f64 x) { return sinf(x); }
-f64 cosd(f64 x) { return cosf(x); }
+inline f64 sind(f64 x) { return sinf(x); }
+inline f64 cosd(f64 x) { return cosf(x); }
 
-s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
-s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
-
-
-//! these 3 functions do not seem to work
-
-s16 acos(f32 c) {
-    for (s16 i = 0; i < 0x1000; i++) {
-        if (gCosineTable[i] == c) return i;
-    }
-    return 0x0;
-}
-
-f32 acosf(f32 x) {
-    f32 f0 = (float)(M_PI / 2.0) - (sinf(x) / cosf(x));
-    f32 f2;
-    do {
-        f2 = (cosf(f0) - x) / sinf(f0);
-        f0 += f2;
-    } while ((f2 < -0.00001f) || (f2 > 0.00001f));
-    return f0;
-}
-
-double acosd(double x) {
-   return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
-}
+inline s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
+inline s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming
@@ -1642,11 +1492,11 @@ int gSplineState;
  * TODO: verify the classification of the spline / figure out how polynomials were computed
  */
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c) {
-    f32 tinv = 1 - t;
-    f32 tinv2 = (tinv  * tinv);
-    f32 tinv3 = (tinv2 * tinv);
-    f32 t2 = (t  * t);
-    f32 t3 = (t2 * t);
+    register f32 tinv = (1 - t);
+    register f32 tinv2 = (tinv  * tinv);
+    register f32 tinv3 = (tinv2 * tinv);
+    register f32 t2 = (t  * t);
+    register f32 t3 = (t2 * t);
     switch (gSplineState) {
         case CURVE_BEGIN_1:
             result[0] =   tinv3;

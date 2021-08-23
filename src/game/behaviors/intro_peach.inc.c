@@ -14,7 +14,7 @@ void intro_peach_set_pos_and_opacity(struct Object *o, f32 targetOpacity, f32 in
                              o->oIntroPeachYawFromFocus + focusYaw);
     vec3f_to_object_pos(o, newPos);
     newOpacity  = o->oOpacity;
-    camera_approach_f32_symmetric_bool(&newOpacity, targetOpacity, increment);
+    approach_f32_symmetric_bool(&newOpacity, targetOpacity, increment);
     o->oOpacity = newOpacity;
 }
 

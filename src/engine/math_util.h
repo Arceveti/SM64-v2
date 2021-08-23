@@ -19,6 +19,7 @@
  */
 extern f32 gSineTable[];
 #define gCosineTable (gSineTable + 0x400)
+extern s16 gArctanTable[];
 
 #define ABSF(x) ((x) > 0.0f ? (x) : -(x))
 #define ABSI(x) ((x) > 0    ? (x) : -(x))
@@ -31,6 +32,9 @@ extern f32 gSineTable[];
 
 #define DEG_PER_RAD 57.29577950560105
 #define RAD_PER_DEG (1.0 / DEG_PER_RAD)
+
+#define CONST_EULER_D 2.71828182845904523536028747135266249775724709369995
+#define CONST_EULER_F 2.71828182845904523536028747135266249775724709369995f
 
 #define sins(x)  gSineTable[  (u16) (x) >> 4]
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
@@ -173,19 +177,16 @@ void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
 f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
 f32    approach_f32_by_increment(         f32  current,   f32 target,   f32 inc);
-Bool32 approach_f32_ptr(                  f32   *value,   f32 target,   f32 inc);
-Bool32 approach_f32_ptr_signed(           f32   *value,   f32 target,   f32 inc);
-f32    approach_f32_symmetric(            f32    value,   f32 target,   f32 inc);
-Bool32 camera_approach_f32_symmetric_bool(f32   *value,   f32 target,   f32 inc);
-f32    camera_approach_f32_symmetric(     f32    value,   f32 target,   f32 inc);
-s16    approach_s16_symmetric(            s16    value,   s16 target,   s16 inc);
-s32    camera_approach_s16_symmetric(     s16  current,   s16 target,   s16 inc);
-Bool32 camera_approach_s16_symmetric_bool(s16 *current,   s16 target,   s16 inc);
+Bool32 approach_f32_ptr(                  f32 *current,   f32 target,   f32 inc);
+Bool32 approach_f32_ptr_signed(           f32 *current,   f32 target,   f32 inc);
+f32    approach_f32_symmetric(            f32  current,   f32 target,   f32 inc);
+Bool32 approach_f32_symmetric_bool(       f32 *current,   f32 target,   f32 inc);
+s32    approach_s16_symmetric(            s16  current,   s16 target,   s16 inc);
+Bool32 approach_s16_symmetric_bool(       s16 *current,   s16 target,   s16 inc);
 Bool32 approach_f32_asymptotic_bool(      f32 *current,   f32 target,   f32 multiplier);
 f32    approach_f32_asymptotic(           f32  current,   f32 target,   f32 multiplier);
 Bool32 approach_s16_asymptotic_bool(      s16 *current,   s16 target,   s16 divisor);
 s32    approach_s16_asymptotic(           s16  current,   s16 target,   s16 divisor);
-Angle  approach_angle(                   Angle current, Angle target, Angle inc);
 void   approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 void   approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
@@ -193,9 +194,6 @@ f64   sind(f64 x);
 f64   cosd(f64 x);
 s16   LENSIN(s16 length, Angle direction);
 s16   LENCOS(s16 length, Angle direction);
-s16    acos(f32 c);
-double acosd(double x);
-f32   acosf(f32 x);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);
 f32   atan2_deg(f32 a, f32 b);

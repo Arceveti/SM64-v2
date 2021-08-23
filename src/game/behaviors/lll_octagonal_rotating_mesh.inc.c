@@ -10,34 +10,34 @@ enum {
 //! Note: useless zero at the reset instruction, there's no accesses beyond that anyway
 
 struct LllOctagonalMeshAction {
-    s16 instruction;
-    s16 time;
+    s16   instruction;
+    s16   time;
     Angle moveAngle;
-    s16 forwardVel;
+    s16   forwardVel;
 };
 
 // Path for big bullies platforms
 static struct LllOctagonalMeshAction gLllOctagonalMeshAction0[] = {
-    // instruction            time moveAngle  forwardVel
-	{ LLL_OCTMESH_LINEAR_MOVE,    30,   0x4000,         0 },
-	{ LLL_OCTMESH_CHANGE_DIR,    220,      900,        30 },
-	{ LLL_OCTMESH_CHANGE_DIR,     30,        0,       -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,    30,  -0x4000,         0 },
-	{ LLL_OCTMESH_CHANGE_DIR,    220,      900,        30 },
-	{ LLL_OCTMESH_CHANGE_DIR,     30,        0,       -30 },
-	{ LLL_OCTMESH_RESET,           0,        0,         0 }
+    // instruction                time  moveAngle  forwardVel
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x4000,          0 },
+	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
+	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,   -0x4000,          0 },
+	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
+	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+	{ LLL_OCTMESH_RESET,             0,         0,          0 }
 };
 
 // Path for rolling log
 static struct LllOctagonalMeshAction gLllOctagonalMeshAction1[] = {
-    // instruction              time moveAngle  forwardVel
-	{ LLL_OCTMESH_WAIT_FOR_MARIO,    0,        0,         0 },
-	{ LLL_OCTMESH_CHANGE_DIR,      475,      900,        30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,        0,       -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,   0x8000,         0 },
-	{ LLL_OCTMESH_CHANGE_DIR,      475,      900,        30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,        0,       -30 },
-	{ LLL_OCTMESH_RESET,             0,        0,         0 }
+    // instruction                time  moveAngle  forwardVel
+	{ LLL_OCTMESH_WAIT_FOR_MARIO,    0,         0,          0 },
+	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
+	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x8000,          0 },
+	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
+	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+	{ LLL_OCTMESH_RESET,             0,         0,          0 }
 };
 
 // picked by oBehParams2ndByte
@@ -50,7 +50,7 @@ s32 lll_octagonal_mesh_move(struct LllOctagonalMeshAction *actionTable, s32 acti
             o->oMoveAngleYaw =  action->moveAngle;
             o->oForwardVel   = (action->forwardVel / 100.0f);
             if (cur_obj_is_mario_on_platform()) {
-                actionOffset += 4;
+                actionOffset++;
                 o->oTimer     = 0;
             }
             break;
@@ -58,14 +58,14 @@ s32 lll_octagonal_mesh_move(struct LllOctagonalMeshAction *actionTable, s32 acti
             o->oMoveAngleYaw =  action->moveAngle;
             o->oForwardVel   = (action->forwardVel / 100.0f);
             if (o->oTimer    >  action->time) {
-                actionOffset += 4;
+                actionOffset++;
                 o->oTimer     = 0;
             }
             break;
         case LLL_OCTMESH_CHANGE_DIR:
-            approach_f32_ptr_signed(&o->oForwardVel, (action->forwardVel / 100.0f), (action->forwardVel / 100.0f));
+            approach_f32_ptr_signed(&o->oForwardVel, (action->moveAngle / 100.0f), (action->forwardVel / 100.0f));
             if (o->oTimer > action->time) {
-                actionOffset += 4;
+                actionOffset++;
                 o->oTimer     = 0;
             }
             break;
@@ -80,6 +80,7 @@ s32 lll_octagonal_mesh_move(struct LllOctagonalMeshAction *actionTable, s32 acti
 s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, f32 *posOffset, s32 standTimerInc, s32 moveDownAmount) {
 	// if Mario is on the platform...
     if (cur_obj_is_mario_on_platform()) {
+        if (cur_obj_is_mario_ground_pounding_platform()) standTimerInc <<= 2;
         if (standTimer[0] < 0x4000) {
             standTimer[0] += standTimerInc;
         } else {
@@ -100,7 +101,7 @@ void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     if (o->oAction == LLL_OCTAGONAL_ROTATING_MESH_ACT_RESET) {
         // reset the platform (when initting?)
         o->oLllOctmeshActionOffset = 0;
-        o->oAction = LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE;
+        o->oAction                 = LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE;
     } else {
         o->oLllOctmeshActionOffset = lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctmeshActionOffset);
     }

@@ -1426,7 +1426,7 @@ static void intro_cutscene_peach_lakitu_scene(struct MarioState *m) {
 #endif
 
 static void intro_cutscene_raise_pipe(struct MarioState *m) {
-    sIntroWarpPipeObj->oPosY = camera_approach_f32_symmetric(sIntroWarpPipeObj->oPosY, 260.0f, 10.0f);
+    sIntroWarpPipeObj->oPosY = approach_f32_symmetric(sIntroWarpPipeObj->oPosY, 260.0f, 10.0f);
     if (m->actionTimer == 0) play_sound(SOUND_MENU_EXIT_PIPE, sIntroWarpPipeObj->header.gfx.cameraToObject);
     if (m->actionTimer++ == TIMER_RAISE_PIPE) {
         m->vel[1] = 60.0f;
@@ -1706,7 +1706,7 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
         sEndToadAnims[0]           =   4;
         sEndToadAnims[1]           =   5;
     }
-    if (m->actionTimer >= TIMER_FADE_IN_PEACH) sEndPeachObj->oOpacity = camera_approach_f32_symmetric(sEndPeachObj->oOpacity, 255.0f, 2.0f);
+    if (m->actionTimer >= TIMER_FADE_IN_PEACH) sEndPeachObj->oOpacity = approach_f32_symmetric(sEndPeachObj->oOpacity, 255.0f, 2.0f);
     if (m->actionTimer >= 40) generate_yellow_sparkles(0, 2628, -1300, 150.0f);
     if (m->actionTimer == TIMER_DESCEND_PEACH) advance_cutscene_step(m);
     // probably added sounds later and missed the previous >= 40 check
