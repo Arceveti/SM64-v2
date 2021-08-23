@@ -66,7 +66,7 @@ void bhv_butterfly_loop(void);
 void bhv_hoot_init(void);
 f32  hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist);
 void hoot_floor_bounce(void);
-void hoot_free_step(s16 fastOscY, s32 speed);
+void hoot_free_step(Bool32 fastOscY, s32 speed);
 void hoot_player_set_yaw(void);
 void hoot_carry_step(s32 speed);
 void hoot_surface_collision(f32 xPrev, f32 zPrev);

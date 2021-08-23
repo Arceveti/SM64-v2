@@ -512,11 +512,21 @@ void vec3f_get_yaw(Vec3f from, Vec3f to, Angle *yaw) {
 
 /// Calculates the pitch and yaw between two vectors.
 void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
-    f32 dx = (to[0] - from[0]);
-    f32 dy = (to[1] - from[1]);
-    f32 dz = (to[2] - from[2]);
-    *pitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
-    *yaw   = atan2s(dz, dx);
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    *pitch          = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
+    *yaw            = atan2s(dz, dx);
+}
+
+/// Finds the horizontal distance and angles between two vectors.
+void vec3f_get_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    *dist           = sqrtf(sqr(dx) + sqr(dz));
+    *pitch          = atan2s(*dist, dy);
+    *yaw            = atan2s(dz, dx);
 }
 
 /**

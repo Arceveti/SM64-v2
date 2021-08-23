@@ -129,6 +129,7 @@ void vec3f_get_dist(                     Vec3f from, Vec3f to, f32 *dist);
 void vec3f_get_pitch(                    Vec3f from, Vec3f to,            Angle *pitch);
 void vec3f_get_yaw(                      Vec3f from, Vec3f to,                          Angle *yaw);
 void vec3f_get_angle(                    Vec3f from, Vec3f to, Angle *pitch, Angle *yaw);
+void vec3f_get_lateral_dist_and_angle(   Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, Angle  pitch, Angle  yaw);
 void vec3f_mul_f32(                      Vec3f dest, f32 scale);

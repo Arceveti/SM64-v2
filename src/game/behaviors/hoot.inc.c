@@ -18,15 +18,15 @@ f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist) {
 void hoot_floor_bounce(void) {
     struct FloorGeometry *floorGeo;
     f32 floorY  = hoot_find_next_floor(&floorGeo, 375.0f);
-    if ((floorY +  75.0f) > o->oPosY) o->oMoveAnglePitch -= 3640.8888f;
+    if ((floorY +  75.0f) > o->oPosY) o->oMoveAnglePitch -= DEGREES(20);
     floorY      = hoot_find_next_floor(&floorGeo, 200.0f);
-    if ((floorY + 125.0f) > o->oPosY) o->oMoveAnglePitch -= 7281.7776f;
+    if ((floorY + 125.0f) > o->oPosY) o->oMoveAnglePitch -= DEGREES(40);
     floorY      = hoot_find_next_floor(&floorGeo,   0.0f);
     if ((floorY + 125.0f) > o->oPosY) o->oPosY = (floorY + 125.0f);
-    if (o->oMoveAnglePitch < -21845.3328f) o->oMoveAnglePitch = -21845;
+    if (o->oMoveAnglePitch < -DEGREES(120)) o->oMoveAnglePitch = -DEGREES(120);
 }
 
-void hoot_free_step(s16 fastOscY, s32 speed) {
+void hoot_free_step(UNUSED Bool32 fastOscY, s32 speed) {
     struct FloorGeometry *floorGeo;
     Angle yaw             = o->oMoveAngleYaw;
     Angle pitch           = o->oMoveAnglePitch;
@@ -38,7 +38,7 @@ void hoot_free_step(s16 fastOscY, s32 speed) {
     o->oVelX              = (sins(yaw)   * hSpeed);
     o->oVelZ              = (coss(yaw)   * hSpeed);
     o->oPosX             += o->oVelX;
-    o->oPosY             -= (o->oVelY + (coss((s32)(animFrame * ((fastOscY == 0) ? 3276.8f : 6553.6f))) * 50.0f / 4));
+    o->oPosY             -= (o->oVelY + (coss((s32)(animFrame * (fastOscY ? 6553.6f : 3276.8f))) * 50.0f / 4));
     o->oPosZ             += o->oVelZ;
     find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
     if (floorGeo == NULL) {
@@ -98,7 +98,7 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
     }
     if (absf(o->oPosX) > 8000.0f) o->oPosX = xPrev;
     if (absf(o->oPosZ) > 8000.0f) o->oPosZ = zPrev;
-    if (floorY + 125.0f > o->oPosY) o->oPosY = floorY + 125.0f;
+    if ((floorY + 125.0f) > o->oPosY) o->oPosY = (floorY + 125.0f);
 }
 
 void hoot_act_ascent(void) {
@@ -143,12 +143,10 @@ void hoot_action_loop(void) {
 }
 
 void hoot_turn_to_home(void) {
-    Vec3f homeDist;
-    vec3f_diff(homeDist, &o->oHomeVec, &o->oPosVec);
-    s16 hAngleToHome   = atan2s(homeDist[2], homeDist[1]);
-    s16 vAngleToHome   = atan2s(sqrtf(sqr(homeDist[1]) + sqr(homeDist[2])), -homeDist[1]);
-    o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw  , hAngleToHome, 0x140);
-    o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, vAngleToHome, 0x140);
+    Angle pitchToHome, yawToHome;
+    vec3f_get_angle(&o->oPosVec, &o->oHomeVec, &pitchToHome, &yawToHome);
+    o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw  ,  yawToHome  , 0x140);
+    o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, -pitchToHome, 0x140);
 }
 
 void hoot_awake_loop(void) {
@@ -159,7 +157,7 @@ void hoot_awake_loop(void) {
         cur_obj_init_animation(HOOT_ANIM_DEFAULT);
         hoot_turn_to_home();
         hoot_floor_bounce();
-        hoot_free_step(0, 10);
+        hoot_free_step(FALSE, 10);
         o->oAction = HOOT_ACT_ASCENT;
         o->oTimer  = 0;
     }
