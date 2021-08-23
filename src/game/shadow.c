@@ -119,15 +119,6 @@ void rotate_rectangle(f32 *newZ, f32 *newX, f32 oldZ, f32 oldX) {
     *newX = ((oldZ * sins(obj->oFaceAngleYaw)) + (oldX * coss(obj->oFaceAngleYaw)));
 }
 
-//! move to math_util
-/**
- * Return atan2(a, b) in degrees. Note that the argument order is swapped from
- * the standard atan2.
- */
-f32 atan2_deg(f32 a, f32 b) {
-    return ((f32) atan2s(a, b) / 65535.0f * 360.0f);
-}
-
 /**
  * Shrink a shadow when its parent object is further from the floor, given the
  * initial size of the shadow and the current distance.

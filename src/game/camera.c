@@ -2678,6 +2678,7 @@ Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context) {
     return NULL;
 }
 
+//! move to object_helpers?
 void object_pos_to_vec3f(Vec3f dst, struct Object *o) {
     vec3f_copy(dst, &o->oPosVec);
 }
@@ -2688,26 +2689,6 @@ void vec3f_to_object_pos(struct Object *o, Vec3f src) {
 
 void unused_object_angle_to_vec3s(Vec3s dst, struct Object *o) {
     vec3i_to_vec3s(dst, &o->oMoveAngleVec);
-}
-
-//! move to math_util
-/**
- * Produces values using a cubic b-spline curve. Basically Q is the used output,
- * u is a value between 0 and 1 that represents the position along the spline,
- * and a0-a3 are parameters that define the spline.
- *
- * The spline is described at www2.cs.uregina.ca/~anima/408/Notes/Interpolation/UniformBSpline.htm
- */
-void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3) {
-    f32 B[4];
-    if (u > 1.0f) u = 1.0f;
-    B[0] = (((1.0f - u) * (1.0f - u) * (1.0f - u)) / 6.0f);
-    B[1] = (( u * u * u) / 2.0f) -  (u * u)                      + 0.6666667f;
-    B[2] = ((-u * u * u) / 2.0f) + ((u * u) / 2.0f) + (u / 2.0f) + 0.16666667f;
-    B[3] = (( u * u * u) / 6.0f);
-    Q[0] = ((B[0] * a0[0]) + (B[1] * a1[0]) + (B[2] * a2[0]) + (B[3] * a3[0]));
-    Q[1] = ((B[0] * a0[1]) + (B[1] * a1[1]) + (B[2] * a2[1]) + (B[3] * a3[1]));
-    Q[2] = ((B[0] * a0[2]) + (B[1] * a1[2]) + (B[2] * a2[2]) + (B[3] * a3[2]));
 }
 
 /**
@@ -2924,18 +2905,6 @@ s32 update_camera_hud_status(struct Camera *c) {
     return status;
 }
 
-//! move to math_util
-s32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch) {
-    s32 outOfRange = 0;
-    Angle pitch, yaw;
-    f32 dist;
-    vec3f_get_dist_and_angle(from, to, &dist, &pitch, &yaw);
-    if (pitch > maxPitch) { pitch = maxPitch; outOfRange++; }
-    if (pitch < minPitch) { pitch = minPitch; outOfRange++; }
-    vec3f_set_dist_and_angle(from, to,  dist,  pitch,  yaw);
-    return outOfRange;
-}
-
 Bool32 is_point_within_radius_of_mario_cam_state(f32 x, f32 y, f32 z, f32 maxDist) {
     register f32 dx = (x - sMarioCamState->pos[0]);
     register f32 dy = (y - sMarioCamState->pos[1]);
@@ -2953,6 +2922,7 @@ Bool32 set_or_approach_f32_asymptotic(f32 *dst, f32 goal, f32 scale) {
     return !(*dst == goal);
 }
 
+//! move to math_util?
 /**
  * Applies the set_or_approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the
  * given vector.
@@ -2963,50 +2933,6 @@ void set_or_approach_vec3f_asymptotic(Vec3f dst, Vec3f goal, f32 xMul, f32 yMul,
     set_or_approach_f32_asymptotic(&dst[2], goal[2], zMul);
 }
 
-//! move to math_util
-Bool32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) {
-    s16 dist = (target - *current);
-    if (increment < 0) increment = -increment;
-    if (dist > 0) {
-        dist -= increment;
-        if (dist >= 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
-    } else {
-        dist += increment;
-        if (dist <= 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
-    }
-    return !(*current == target);
-}
-
-//! move to math_util
-s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
-    s16 dist = (target - current);
-    if (increment < 0) increment = -increment;
-    if (dist > 0) {
-        dist -= increment;
-        if (dist >= 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
-    } else {
-        dist += increment;
-        if (dist <= 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
-    }
-    return current;
-}
-
 //! move to math_util?
 Bool32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
@@ -3015,58 +2941,6 @@ Bool32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
         *current = target;
     }
     return !(*current == target);
-}
-
-//! move to math_util
-/**
- * Approaches a value by a given increment, returns FALSE if the target is reached.
- * Appears to be a strange way of implementing approach_f32_symmetric from object_helpers.c.
- * It could possibly be an older version of the function
- */
-Bool32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) {
-    f32 dist = (target - *current);
-    if (increment < 0) increment = -increment;
-    if (dist > 0) {
-        dist -= increment;
-        if (dist > 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
-    } else {
-        dist += increment;
-        if (dist < 0) {
-            *current = (target - dist);
-        } else {
-            *current = target;
-        }
-    }
-    return !(*current == target);
-}
-
-//! move to math_util
-/**
- * Nearly the same as the above function, this one returns the new value in place of a bool.
- */
-f32 camera_approach_f32_symmetric(f32 current, f32 target, f32 increment) {
-    f32 dist = (target - current);
-    if (increment < 0) increment = -increment;
-    if (dist > 0) {
-        dist -= increment;
-        if (dist > 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
-    } else {
-        dist += increment;
-        if (dist < 0) {
-            current = (target - dist);
-        } else {
-            current = target;
-        }
-    }
-    return current;
 }
 
 /**
@@ -3139,17 +3013,6 @@ Angle calc_avoid_yaw(Angle yawFromMario, Angle wallYaw) {
         yawFromMario = (wallYaw + DEGREES(180));
     }
     return yawFromMario;
-}
-
-//! move to math_util
-/**
- * Calculates the distance between two points and sets a vector to a point
- * scaled along a line between them. Typically, somewhere in the middle.
- */
-void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
-    dst[0] = (((to[0] - from[0]) * scale) + from[0]);
-    dst[1] = (((to[1] - from[1]) * scale) + from[1]);
-    dst[2] = (((to[2] - from[2]) * scale) + from[2]);
 }
 
 //! move to math_util?

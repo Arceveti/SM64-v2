@@ -84,11 +84,17 @@ s32  max_3i( s32 a0, s32 a1, s32 a2);
 u32  max_3ui(u32 a0, u32 a1, u32 a2);
 f32  max_3f( f32 a0, f32 a1, f32 a2);
 f64  max_3d( f64 a0, f64 a1, f64 a2);
+// Clamp
+Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
+Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
+Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
 f32  gd_rand_float(void);
 f32  random_float( void);
+s16  random_linear_offset(s16 base, s16 range);
+s16  random_mod_offset(s16 base, s16 step, s16 mod);
 f32  random_f32_around_zero(f32 diameter);
 void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16 zRange);
 // Angles
@@ -131,7 +137,8 @@ void vec3f_scale_f32(                        Vec3f dest, Vec3f src,   f32 scale,
 void vec3f_scale_vec3f(                  Vec3f dest, Vec3f src, Vec3f scale, u32 doInverted);
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);
-void vec3f_transform_vtx(                 Mat4 mat, Vec3f in, f32 w, Vtx *out);
+void vec3f_transform_vtx(                 Mat4 mat, Vec3f in, f32 w, Vtx  *out);
+void scale_along_line(                   Vec3f dest, Vec3f from, Vec3f to, f32 scale);
 f32  vec3f_dot(                          Vec3f a, Vec3f b);
 f32  vec4f_dot(                          Vec4f a, Vec4f b);
 void vec4f_scale(                        Vec4f dest, Vec4f src, f32 scale);
@@ -147,8 +154,8 @@ void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angl
 #endif
 void mtxf_rotate_zxy_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
 void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f b, Vec3s c);
-void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffset);
-void mtxf_align_facing_view(                   Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
+void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
+void mtxf_align_facing_view(              Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
 void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
 void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
@@ -162,18 +169,24 @@ void mtxf_rotate_xy(                      Mtx  *mtx, Angle angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 // Approach
-s32  approach_s32(                      s32  current,   s32 target, s32 inc, s32 dec);
-f32  approach_f32(                      f32  current,   f32 target, f32 inc, f32 dec);
-f32  approach_f32_by_increment(         f32  current,   f32 target, f32 inc);
-s32  approach_f32_signed(               f32   *value,   f32 target, f32 inc);
-f32  approach_f32_symmetric(            f32    value,   f32 target, f32 inc);
-s16  approach_s16_symmetric(            s16    value,   s16 target, s16 inc);
-s32  approach_f32_asymptotic_bool(      f32 *current,   f32 target, f32 multiplier);
-f32  approach_f32_asymptotic(           f32  current,   f32 target, f32 multiplier);
-s32  approach_s16_asymptotic_bool(      s16 *current,   s16 target, s16 divisor);
-s32  approach_s16_asymptotic(           s16  current,   s16 target, s16 divisor);
-void approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
-void approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
+s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
+f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
+f32    approach_f32_by_increment(         f32  current,   f32 target,   f32 inc);
+Bool32 approach_f32_ptr(                  f32   *value,   f32 target,   f32 inc);
+Bool32 approach_f32_ptr_signed(           f32   *value,   f32 target,   f32 inc);
+f32    approach_f32_symmetric(            f32    value,   f32 target,   f32 inc);
+Bool32 camera_approach_f32_symmetric_bool(f32   *value,   f32 target,   f32 inc);
+f32    camera_approach_f32_symmetric(     f32    value,   f32 target,   f32 inc);
+s16    approach_s16_symmetric(            s16    value,   s16 target,   s16 inc);
+s32    camera_approach_s16_symmetric(     s16  current,   s16 target,   s16 inc);
+Bool32 camera_approach_s16_symmetric_bool(s16 *current,   s16 target,   s16 inc);
+Bool32 approach_f32_asymptotic_bool(      f32 *current,   f32 target,   f32 multiplier);
+f32    approach_f32_asymptotic(           f32  current,   f32 target,   f32 multiplier);
+Bool32 approach_s16_asymptotic_bool(      s16 *current,   s16 target,   s16 divisor);
+s32    approach_s16_asymptotic(           s16  current,   s16 target,   s16 divisor);
+Angle  approach_angle(                   Angle current, Angle target, Angle inc);
+void   approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
+void   approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
 f64   sind(f64 x);
 f64   cosd(f64 x);
@@ -184,9 +197,11 @@ double acosd(double x);
 f32   acosf(f32 x);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);
+f32   atan2_deg(f32 a, f32 b);
 // Curves
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);
 void anim_spline_init(Vec4s *keyFrames);
-s32  anim_spline_poll( Vec3f result);
+Bool32 anim_spline_poll( Vec3f result);
+void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3);
 
 #endif // MATH_UTIL_H

@@ -24,6 +24,74 @@ static void const *sPlatformOnTrackPaths[] = {
     lll_seg7_trajectory_07028660,   rr_seg7_trajectory_0702ED9C,               rr_seg7_trajectory_0702EEE0,
 };
 
+static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos) {
+    struct Object   *trackBall;
+    struct Waypoint *initialPrevWaypoint;
+    struct Waypoint *nextWaypoint;
+    struct Waypoint *prevWaypoint;
+    f32 amountToMove;
+    Vec3f d;
+    f32 distToNextWaypoint;
+    if ((ballIndex == 0) || ((u16)(o->oBehParams >> 16) & 0x0080)) {
+        initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
+        nextWaypoint = initialPrevWaypoint;
+        if (ballIndex != 0) {
+            amountToMove = 300.0f * ballIndex;
+        } else {
+            obj_perform_position_op(POS_OP_SAVE_POSITION);
+            o->oPlatformOnTrackPrevWaypointFlags = 0;
+            amountToMove = o->oForwardVel;
+        }
+        do {
+            prevWaypoint = nextWaypoint;
+            nextWaypoint++;
+            if (nextWaypoint->flags == WAYPOINT_FLAGS_END) {
+                if (ballIndex == 0) o->oPlatformOnTrackPrevWaypointFlags = WAYPOINT_FLAGS_END;
+                if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_RETURN_TO_START)) {
+                    nextWaypoint = o->oPlatformOnTrackStartWaypoint;
+                } else {
+                    return;
+                }
+            }
+            //! vec3f/s_diff(d, nextWaypoint->pos, pos);
+            d[0]               = (nextWaypoint->pos[0] - pos[0]);
+            d[1]               = (nextWaypoint->pos[1] - pos[1]);
+            d[2]               = (nextWaypoint->pos[2] - pos[2]);
+            distToNextWaypoint = vec3f_mag(d);
+            // Move directly to the next waypoint, even if it's farther away
+            // than amountToMove
+            amountToMove -= distToNextWaypoint;
+            vec3f_add(pos, d);
+        } while (amountToMove > 0.0f);
+        // If we moved farther than amountToMove, move in the opposite direction
+        // No risk of near-zero division: If distToNextWaypoint is close to
+        // zero, then that means we didn't cross a waypoint this frame (since
+        // otherwise distToNextWaypoint would equal the distance between two
+        // waypoints, which should never be that small). But this implies that
+        // amountToMove - distToNextWaypoint <= 0, and amountToMove is at least
+        // 0.1 (from platform on track behavior).
+        distToNextWaypoint = (amountToMove / distToNextWaypoint);  //! fast invsqrt?
+        pos[0] += (d[0] * distToNextWaypoint);
+        pos[1] += (d[1] * distToNextWaypoint);
+        pos[2] += (d[2] * distToNextWaypoint);
+        if (ballIndex != 0) {
+            trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o, MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
+            if (trackBall != NULL) {
+                vec3f_copy(&trackBall->oPosVec, pos);
+            }
+        } else {
+            if (prevWaypoint != initialPrevWaypoint) {
+                if (o->oPlatformOnTrackPrevWaypointFlags == 0x0) o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
+                o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
+            }
+            vec3f_copy(&o->oPosVec, pos);
+            obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
+            o->oPlatformOnTrackPitch = atan2s(sqrtf(sqr(o->oVelX) + sqr(o->oVelZ)), -o->oVelY);
+            o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
+        }
+    }
+}
+
 /**
  * Despawn all track balls and enter the init action.
  */

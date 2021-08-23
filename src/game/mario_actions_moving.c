@@ -352,17 +352,19 @@ void update_walking_speed(struct MarioState *m) {
         } else if (turnRange > 0xFFF) {
             turnRange = 0xFFF;
         }
-        m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, turnRange, turnRange);
+        // m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, turnRange, turnRange);
+        m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, turnRange);
     }
 #elif SUPER_RESPONSIVE_CONTROLS
     m->faceAngle[1] =  m->intendedYaw;
 #else
-    m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
+    // m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
+    m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, 0x800);
 #endif
     apply_slope_accel(m);
 }
 
-s32 should_begin_sliding(struct MarioState *m) {
+Bool32 should_begin_sliding(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) {
         s32 slideLevel = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE;
         s32 movingBackward = m->forwardVel <= -1.0f;
@@ -905,7 +907,8 @@ Bool32 act_burning_ground(struct MarioState *m) {
     if (m->forwardVel <  8.0f) m->forwardVel =  8.0f;
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
     m->forwardVel = approach_f32(m->forwardVel, 32.0f, 4.0f, 1.0f);
-    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x600, 0x600);
+    // if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] = m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x600, 0x600);
+    if (m->input & INPUT_NONZERO_ANALOG) m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, 0x600);
     apply_slope_accel(m);
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) set_mario_action(m, ACT_BURNING_FALL, 0);
     set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, (s32)((m->forwardVel / 2.0f) * 0x10000));

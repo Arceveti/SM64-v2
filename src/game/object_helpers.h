@@ -65,7 +65,7 @@ void   obj_set_held_state(          struct Object *obj,  const BehaviorScript *h
 f32    lateral_dist_between_objects(struct Object *obj1, struct Object *obj2);
 f32    dist_between_objects(        struct Object *obj1, struct Object *obj2);
 void   cur_obj_forward_vel_approach_upward(f32 target,   f32 increment);
-s32    cur_obj_rotate_yaw_toward(        Angle target, Angle increment);
+Bool32 cur_obj_rotate_yaw_toward(        Angle target, Angle increment);
 Angle  obj_angle_to_object(        struct Object *obj1, struct Object *obj2);
 Angle  obj_turn_toward_object(     struct Object *obj, struct Object *target, s16 angleIndex, Angle turnAmount);
 void   obj_set_parent_relative_pos(struct Object *obj, s16 relX, s16 relY, s16 relZ);

@@ -9,14 +9,13 @@
 void bhv_mips_init(void) {
     // Retrieve star flags for Castle Secret Stars on current save file.
     u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, -1);
-
     // If the player has >= 15 stars and hasn't collected first MIPS star...
-    if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 15
+    if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 15)
         && !(starFlags & SAVE_FLAG_TO_STAR_FLAG(SAVE_FLAG_COLLECTED_MIPS_STAR_1))) {
         o->oBehParams2ndByte    = MIPS_BP_STAR_1;
         o->oMipsForwardVelocity = 40.0f;
     // If the player has >= 50 stars and hasn't collected second MIPS star...
-    } else if (save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1) >= 50
+    } else if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 50)
              && !(starFlags & SAVE_FLAG_TO_STAR_FLAG(SAVE_FLAG_COLLECTED_MIPS_STAR_2))) {
         o->oBehParams2ndByte    = MIPS_BP_STAR_2;
         o->oMipsForwardVelocity = 45.0f;
@@ -24,13 +23,10 @@ void bhv_mips_init(void) {
         // No MIPS stars are available, hide MIPS.
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
-
     o->oInteractionSubtype = INT_SUBTYPE_HOLDABLE_NPC;
-
     o->oGravity  = 15.0f;
     o->oFriction = 0.89f;
     o->oBuoyancy = 1.2f;
-
     cur_obj_init_animation(MIPS_ANIM_IDLE);
 }
 
@@ -46,27 +42,25 @@ s16 bhv_mips_find_furthest_waypoint_to_mario(void) {
     f32 distanceToMario;
     struct Waypoint **pathBase;
     struct Waypoint *waypoint;
-
     pathBase = segmented_to_virtual(&inside_castle_seg7_trajectory_mips);
-
     // For each waypoint in MIPS path...
-    for (i = 0; i < 10; i++) {
+    for ((i = 0); (i < 10); (i++)) {
         waypoint = segmented_to_virtual(pathBase[i]);
         x = waypoint->pos[0];
         y = waypoint->pos[1];
         z = waypoint->pos[2];
-
         // Is the waypoint within 800 units of MIPS?
         if (is_point_close_to_object(o, x, y, z, 800)) {
             // Is this further from Mario than the last waypoint?
-            distanceToMario = sqr(x - gMarioObject->header.gfx.pos[0]) + sqr(z - gMarioObject->header.gfx.pos[2]);
+            f32 dx = (x - gMarioObject->header.gfx.pos[0]);
+            f32 dz = (z - gMarioObject->header.gfx.pos[2]);
+            distanceToMario = sqr(dx) + sqr(dz);
             if (furthestWaypointDistance < distanceToMario) {
-                furthestWaypointIndex = i;
+                furthestWaypointIndex    = i;
                 furthestWaypointDistance = distanceToMario;
             }
         }
     }
-
     // Set MIPS' next waypoint to be the closest waypoint to Mario.
     o->oMipsStartWaypointIndex = furthestWaypointIndex;
     return (s16) o->oMipsStartWaypointIndex;
@@ -100,26 +94,21 @@ void bhv_mips_act_follow_path(void) {
     s32 followStatus        = 0x0;
     struct Waypoint **pathBase;
     struct Waypoint *waypoint;
-
     // Retrieve current waypoint.
     pathBase = segmented_to_virtual(&inside_castle_seg7_trajectory_mips);
     waypoint = segmented_to_virtual(*(pathBase + o->oMipsStartWaypointIndex));
-
     // Set start waypoint and follow the path from there.
     o->oPathedStartWaypoint = waypoint;
-    followStatus = cur_obj_follow_path(followStatus);
-
+    followStatus            = cur_obj_follow_path(followStatus);
     // Update velocity and angle and do movement.
-    o->oForwardVel   = o->oMipsForwardVelocity;
-    o->oMoveAngleYaw = o->oPathedTargetYaw;
-    collisionFlags   = object_step();
-
+    o->oForwardVel          = o->oMipsForwardVelocity;
+    o->oMoveAngleYaw        = o->oPathedTargetYaw;
+    collisionFlags          = object_step();
     // If we are at the end of the path, do idle animation and wait for Mario.
     if (followStatus == PATH_REACHED_END) {
         cur_obj_init_animation(MIPS_ANIM_IDLE);
         o->oAction = MIPS_ACT_WAIT_FOR_NEARBY_MARIO;
     }
-
     // Play sounds during walk animation.
     if (cur_obj_check_if_near_animation_end() && (collisionFlags & OBJ_COL_FLAG_UNDERWATER)) {
         cur_obj_play_sound_2(SOUND_OBJ_MIPS_RABBIT_WATER);
@@ -187,11 +176,10 @@ void bhv_mips_held(void) {
     cur_obj_init_animation(MIPS_ANIM_HELD); // Held animation.
     cur_obj_set_pos_relative(gMarioObject, 0.0f, 60.0f, 100.0f);
     cur_obj_become_intangible();
-
     // If MIPS hasn't spawned his star yet...
     if (o->oMipsStarStatus == MIPS_STAR_STATUS_HAVENT_SPAWNED_STAR) {
         // Choose dialog based on which MIPS encounter this is.
-        DialogID dialogID = (o->oBehParams2ndByte == MIPS_BP_STAR_1 ? DIALOG_084 : DIALOG_162);
+        DialogID dialogID = ((o->oBehParams2ndByte == MIPS_BP_STAR_1) ? DIALOG_084 : DIALOG_162);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
             o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID)) {

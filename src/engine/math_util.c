@@ -159,6 +159,43 @@ inline u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) 
 inline f32 max_3f( f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 inline f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 
+/*******************
+ * Clamp functions *
+ *******************/
+
+Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch) {
+    Bool32 outOfRange = FALSE;
+    Angle pitch, yaw;
+    f32 dist;
+    vec3f_get_dist_and_angle(from, to, &dist, &pitch, &yaw);
+    if (pitch > maxPitch) { pitch = maxPitch; outOfRange = TRUE; }
+    if (pitch < minPitch) { pitch = minPitch; outOfRange = TRUE; }
+    vec3f_set_dist_and_angle(from, to,  dist,  pitch,  yaw);
+    return outOfRange;
+}
+
+Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
+    if (*value <= minimum) {
+        *value = minimum;
+    } else if (*value >= maximum) {
+        *value = maximum;
+    } else {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
+    if (*value <= minimum) {
+        *value = minimum;
+    } else if (*value >= maximum) {
+        *value = maximum;
+    } else {
+        return FALSE;
+    }
+    return TRUE;
+}
+
 /**********
  * Angles *
  **********/
@@ -231,6 +268,14 @@ f32 random_float(void) {
 
 f32 random_f32_around_zero(f32 diameter) {
     return ((random_float() * diameter) - (diameter / 2));
+}
+
+s16 random_linear_offset(s16 base, s16 range) {
+    return (base + (s16)(range * random_float()));
+}
+
+s16 random_mod_offset(s16 base, s16 step, s16 mod) {
+    return (base + (step * (random_u16() % mod)));
 }
 
 /**
@@ -565,6 +610,16 @@ void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
     out->v.ob[2] = temp[2];
 }
 
+/**
+ * Calculates the distance between two points and sets a vector to a point
+ * scaled along a line between them. Typically, somewhere in the middle.
+ */
+void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
+    dst[0] = (((to[0] - from[0]) * scale) + from[0]);
+    dst[1] = (((to[1] - from[1]) * scale) + from[1]);
+    dst[2] = (((to[2] - from[2]) * scale) + from[2]);
+}
+
 f32 vec3f_dot(Vec3f a, Vec3f b) {
     return ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]));
 }
@@ -798,11 +853,11 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
  * Set 'dest' to a transformation matrix that turns an object to face parallel to the camera.
  * 'mtx' is the look-at matrix from the camera
  * 'position' is the position of the object in the world
- * 'angle' rotates the object while still facing the camera.
+ * 'roll' rotates the object while still facing the camera.
  */
-void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffset) {
-    dest[0][0] = coss(angle);
-    dest[0][1] = sins(angle);
+void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
+    dest[0][0] = coss(roll);
+    dest[0][1] = sins(roll);
     dest[0][2] = 0;
     dest[0][3] = 0;
     dest[1][0] = -dest[0][1];
@@ -829,7 +884,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle angle, s32 zOffse
  * Set 'dest' to a transformation matrix that turns an object to face directly at the camera
  * 'mtx' is the look-at matrix from the camera
  * 'position' is the position of the object in the world
- * 'angle' rotates the object while still facing the camera.
+ * 'roll' rotates the object while still facing the camera.
  */
 void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
     register Angle xrot, yrot;
@@ -879,17 +934,20 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     vec3f_normalize(            leftDir                                              );
     vec3f_cross(    forwardDir, leftDir, upDir                                       );
     vec3f_normalize(forwardDir                                                       );
-    dest[0][0] = leftDir[0];
-    dest[0][1] = leftDir[1];
-    dest[0][2] = leftDir[2];
+    vec3f_copy(dest[0], leftDir);
+    // dest[0][0] = leftDir[0];
+    // dest[0][1] = leftDir[1];
+    // dest[0][2] = leftDir[2];
     dest[3][0] = pos[0];
-    dest[1][0] = upDir[0];
-    dest[1][1] = upDir[1];
-    dest[1][2] = upDir[2];
+    vec3f_copy(dest[1], upDir);
+    // dest[1][0] = upDir[0];
+    // dest[1][1] = upDir[1];
+    // dest[1][2] = upDir[2];
     dest[3][1] = pos[1];
-    dest[2][0] = forwardDir[0];
-    dest[2][1] = forwardDir[1];
-    dest[2][2] = forwardDir[2];
+    vec3f_copy(dest[2], forwardDir);
+    // dest[2][0] = forwardDir[0];
+    // dest[2][1] = forwardDir[1];
+    // dest[2][2] = forwardDir[2];
     dest[3][2] = pos[2];
     dest[0][3] = 0.0f;
     dest[1][3] = 0.0f;
@@ -1192,8 +1250,18 @@ f32 approach_f32_by_increment(f32 current, f32 target, f32 inc) {
     return newVal;
 }
 
-s32 approach_f32_signed(f32 *value, f32 target, f32 inc) {
-    s32 reachedTarget = FALSE;
+Bool32 approach_f32_ptr(f32 *value, f32 target, f32 inc) {
+    if (*value > target) inc = -inc;
+    *value += inc;
+    if ((*value - target) * inc >= 0) {
+        *value = target;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+Bool32 approach_f32_ptr_signed(f32 *value, f32 target, f32 inc) {
+    Bool32 reachedTarget = FALSE;
     *value += inc;
     if (inc >= 0.0f) {
         if (*value > target) {
@@ -1227,6 +1295,58 @@ f32 approach_f32_symmetric(f32 value, f32 target, f32 inc) {
     return value;
 }
 
+//! rename
+/**
+ * Approaches a value by a given increment, returns FALSE if the target is reached.
+ * Appears to be a strange way of implementing approach_f32_symmetric from object_helpers.c.
+ * It could possibly be an older version of the function
+ */
+Bool32 camera_approach_f32_symmetric_bool(f32 *value, f32 target, f32 inc) {
+    f32 dist = (target - *value);
+    if (inc < 0) inc = -inc;
+    if (dist > 0) {
+        dist -= inc;
+        if (dist > 0) {
+            *value = (target - dist);
+        } else {
+            *value = target;
+        }
+    } else {
+        dist += inc;
+        if (dist < 0) {
+            *value = (target - dist);
+        } else {
+            *value = target;
+        }
+    }
+    return !(*value == target);
+}
+
+//! rename
+/**
+ * Nearly the same as the above function, this one returns the new value in place of a bool.
+ */
+f32 camera_approach_f32_symmetric(f32 value, f32 target, f32 inc) {
+    f32 dist = (target - value);
+    if (inc < 0) inc = -inc;
+    if (dist > 0) {
+        dist -= inc;
+        if (dist > 0) {
+            value = (target - dist);
+        } else {
+            value = target;
+        }
+    } else {
+        dist += inc;
+        if (dist < 0) {
+            value = (target - dist);
+        } else {
+            value = target;
+        }
+    }
+    return value;
+}
+
 s16 approach_s16_symmetric(s16 value, s16 target, s16 inc) {
     s16 dist = (target - value);
     if (dist >= 0) {
@@ -1245,12 +1365,56 @@ s16 approach_s16_symmetric(s16 value, s16 target, s16 inc) {
     return value;
 }
 
+//! rename
+s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 inc) {
+    s16 dist = (target - current);
+    if (inc < 0) inc = -inc;
+    if (dist > 0) {
+        dist -= inc;
+        if (dist >= 0) {
+            current = (target - dist);
+        } else {
+            current = target;
+        }
+    } else {
+        dist += inc;
+        if (dist <= 0) {
+            current = (target - dist);
+        } else {
+            current = target;
+        }
+    }
+    return current;
+}
+
+//! rename
+Bool32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
+    s16 dist = (target - *current);
+    if (inc < 0) inc = -inc;
+    if (dist > 0) {
+        dist -= inc;
+        if (dist >= 0) {
+            *current = (target - dist);
+        } else {
+            *current = target;
+        }
+    } else {
+        dist += inc;
+        if (dist <= 0) {
+            *current = (target - dist);
+        } else {
+            *current = target;
+        }
+    }
+    return !(*current == target);
+}
+
 /**
  * Approaches an f32 value by taking the difference between the target and current value
  * and adding a fraction of that to the current value.
  * Edits the current value directly, returns TRUE if the target has been reached, FALSE otherwise.
  */
-s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
+Bool32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
     if (multiplier > 1.0f) multiplier = 1.0f;
     *current = (*current + ((target - *current) * multiplier));
     return !(*current == target);
@@ -1269,7 +1433,7 @@ f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
  * is reached. Note: Since this function takes integers as parameters, the last argument is the
  * reciprocal of what it would be in the previous two functions.
  */
-s32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
+Bool32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
     s16 temp = *current;
     if (divisor == 0) {
         *current = target;
@@ -1298,6 +1462,11 @@ s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor) {
     }
     return current;
 }
+
+// Angle approach_angle(Angle current, Angle target, Angle inc) {
+//     // return (target - approach_s32((Angle)(target - current), 0x0, inc, inc));
+//     return approach_s16_symmetric(current, target, inc);
+// }
 
 /**
  * Applies the approach_f32_asymptotic_bool function to each of the X, Y, & Z components of the given
@@ -1413,6 +1582,16 @@ f32 atan2f(f32 y, f32 x) {
     return (((f32) atan2s(y, x) * M_PI) / 0x8000);
 }
 
+
+/**
+ * Return atan2(a, b) in degrees. Note that the argument order is swapped from
+ * the standard atan2.
+ * Used for shadows.
+ */
+f32 atan2_deg(f32 a, f32 b) {
+    return ((f32) atan2s(a, b) / 65535.0f * 360.0f);
+}
+
 /**********
  * Curves *
  **********/
@@ -1511,10 +1690,10 @@ void anim_spline_init(Vec4s *keyFrames) {
  * anim_spline_init should be called before polling for vectors.
  * Returns TRUE when the last point is reached, FALSE otherwise.
  */
-s32 anim_spline_poll(Vec3f result) {
+Bool32 anim_spline_poll(Vec3f result) {
     Vec4f weights;
     s32 i;
-    s32 hasEnded = FALSE;
+    Bool32 hasEnded = FALSE;
     vec3f_copy(result, gVec3fZero);
     spline_get_weights(weights, gSplineKeyframeFraction, gSplineState);
     for (i = 0; i < 4; i++) {
@@ -1532,4 +1711,23 @@ s32 anim_spline_poll(Vec3f result) {
         }
     }
     return hasEnded;
+}
+
+/**
+ * Produces values using a cubic b-spline curve. Basically Q is the used output,
+ * u is a value between 0 and 1 that represents the position along the spline,
+ * and a0-a3 are parameters that define the spline.
+ *
+ * The spline is described at www2.cs.uregina.ca/~anima/408/Notes/Interpolation/UniformBSpline.htm
+ */
+void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3) {
+    f32 B[4];
+    if (u > 1.0f) u = 1.0f;
+    B[0] = (((1.0f - u) * (1.0f - u) * (1.0f - u)) / 6.0f);
+    B[1] = (( u * u * u) / 2.0f) -  (u * u)                      + 0.6666667f;
+    B[2] = ((-u * u * u) / 2.0f) + ((u * u) / 2.0f) + (u / 2.0f) + 0.16666667f;
+    B[3] = (( u * u * u) / 6.0f);
+    Q[0] = ((B[0] * a0[0]) + (B[1] * a1[0]) + (B[2] * a2[0]) + (B[3] * a3[0]));
+    Q[1] = ((B[0] * a0[1]) + (B[1] * a1[1]) + (B[2] * a2[1]) + (B[3] * a3[1]));
+    Q[2] = ((B[0] * a0[2]) + (B[1] * a1[2]) + (B[2] * a2[2]) + (B[3] * a3[2]));
 }

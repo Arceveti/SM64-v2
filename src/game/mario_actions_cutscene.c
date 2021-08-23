@@ -341,8 +341,8 @@ Bool32 act_reading_npc_dialog(struct MarioState *m) {
 #else
         angleToNPC = mario_obj_angle_to_object(m, m->usedObj);
 #endif
-        m->faceAngle[1] = angleToNPC - approach_s32(((angleToNPC - m->faceAngle[1]) << 16 >> 16), 0x0, turnSpeed, turnSpeed);
-        // m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], angleToNPC, 0x800);
+        // m->faceAngle[1] = angleToNPC - approach_s32(((angleToNPC - m->faceAngle[1]) << 16 >> 16), 0x0, turnSpeed, turnSpeed);
+        m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], angleToNPC, turnSpeed);
         // turn head to npc
         m->actionTimer += headTurnAmount;
         // set animation

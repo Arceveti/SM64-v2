@@ -20,4 +20,9 @@ void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 sca
                    f32 startSpeed, f32 endSpeed, Angle movePitch);
 void obj_set_speed_to_zero(void);
 
+void obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount);
+Bool32 obj_resolve_object_collisions(s32 *targetYaw);
+Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw);
+s32 obj_resolve_collisions_and_turn(Angle targetYaw, Angle turnSpeed);
+
 #endif // OBJ_BEHAVIORS_2_H

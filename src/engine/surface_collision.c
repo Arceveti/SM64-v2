@@ -16,11 +16,16 @@
  *                      WALLS                     *
  **************************************************/
 
+void move_towards_wall(struct MarioState *m, f32 amount) {
+    m->vel[0] += (m->wall->normal.x * amount);
+    m->vel[1] += (m->wall->normal.y * amount);
+    m->vel[2] += (m->wall->normal.z * amount);
+}
+
 /**
  * Iterate through the list of walls until all walls are checked and
  * have given their wall push.
  */
-
 #ifdef BETTER_WALL_COLLISION
 static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struct WallCollisionData *data) {
     const f32 corner_threshold = (-0.9f);

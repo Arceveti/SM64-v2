@@ -239,8 +239,7 @@ void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
     }
 }
 
-//! data type sizes?
-s32 cur_obj_rotate_yaw_toward(Angle target, Angle increment) {
+Bool32 cur_obj_rotate_yaw_toward(Angle target, Angle increment) {
     Angle startYaw = (Angle) o->oMoveAngleYaw;
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, target, increment);
     return ((o->oAngleVelYaw = (Angle)((Angle) o->oMoveAngleYaw - startYaw)) == 0);

@@ -39,7 +39,7 @@ struct FloorGeometry
     f32 originOffset;
 };
 
-Bool32 floor_type_exists_in_current_cell(f32 xPos, f32 zPos, SurfaceType type, Bool32 dynamic);
+void move_towards_wall(struct MarioState *m, f32 amount);
 s32  f32_find_wall_collision(   f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 radius);
 s32  find_wall_collisions(struct WallCollisionData *colData);
 #ifdef BETTER_WALL_COLLISION
@@ -47,16 +47,17 @@ void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struc
 #else
 struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius);
 #endif
-s32  collide_with_walls(        Vec3f pos, f32 offsetY, f32 radius);
-f32  find_ceil(                 f32  xPos, f32  yPos, f32  zPos, struct Surface       **pceil   );
-f32  vec3f_find_ceil(           Vec3f pos, f32 height, struct Surface **ceil);
-f32  find_floor_height_and_data(f32  xPos, f32  yPos, f32  zPos, struct FloorGeometry **floorGeo);
-f32  find_floor_height(         f32  x,    f32  y,    f32  z);
-f32  find_floor(                f32  xPos, f32  yPos, f32  zPos, struct Surface **pfloor);
-f32  find_room_floor(           f32  xPos, f32  yPos, f32  zPos, struct Surface **pfloor);
-s32  find_water_level_and_floor(s32  x,               s32  z,    struct Surface **pfloor);
-s32  find_water_level(          s32  x,               s32  z);
-s32  find_poison_gas_level(     s32  x,               s32  z);
+s32    collide_with_walls(               Vec3f pos, f32 offsetY, f32 radius);
+f32    find_ceil(                        f32  xPos, f32  yPos, f32  zPos, struct Surface **pceil);
+f32    vec3f_find_ceil(                  Vec3f pos, f32 height, struct Surface **ceil);
+Bool32 floor_type_exists_in_current_cell(f32  xPos, f32  zPos, SurfaceType type, Bool32 dynamic);
+f32    find_floor_height_and_data(       f32  xPos, f32  yPos, f32  zPos, struct FloorGeometry **floorGeo);
+f32    find_floor_height(                f32  x,    f32  y,    f32  z);
+f32    find_floor(                       f32  xPos, f32  yPos, f32  zPos, struct Surface **pfloor);
+f32    find_room_floor(                  f32  xPos, f32  yPos, f32  zPos, struct Surface **pfloor);
+s32    find_water_level_and_floor(       s32  x,               s32  z,    struct Surface **pfloor);
+s32    find_water_level(                 s32  x,               s32  z);
+s32    find_poison_gas_level(            s32  x,               s32  z);
 Bool32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax);
 Bool32 is_behind_surface(            Vec3f pos, struct Surface *surf);
 Bool32 is_range_behind_surface(     Vec3f from, Vec3f to, struct Surface *surf, s16 range, SurfaceType surfType);

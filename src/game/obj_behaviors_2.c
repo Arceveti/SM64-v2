@@ -99,7 +99,7 @@ static void obj_set_dist_from_home(f32 distFromHome) {
     o->oPosZ = (o->oHomeZ + (distFromHome * sins(o->oMoveAngleYaw)));
 }
 
-static s32 obj_is_near_to_and_facing_mario(f32 maxDist, s16 maxAngleDiff) {
+static s32 obj_is_near_to_and_facing_mario(f32 maxDist, Angle maxAngleDiff) {
     return (o->oDistanceToMario < maxDist && abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < maxAngleDiff);
 }
 
@@ -108,74 +108,6 @@ static void obj_perform_position_op(s32 op) {
         case POS_OP_SAVE_POSITION:    vec3f_copy(sObjSavedPos, &o->oPosVec              ); break;
         case POS_OP_COMPUTE_VELOCITY: vec3f_diff(&o->oVelVec,  &o->oPosVec, sObjSavedPos); break;
         case POS_OP_RESTORE_POSITION: vec3f_copy(&o->oPosVec,               sObjSavedPos); break;
-    }
-}
-
-static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos) {
-    struct Object   *trackBall;
-    struct Waypoint *initialPrevWaypoint;
-    struct Waypoint *nextWaypoint;
-    struct Waypoint *prevWaypoint;
-    f32 amountToMove;
-    Vec3f d;
-    f32 distToNextWaypoint;
-    if ((ballIndex == 0) || ((u16)(o->oBehParams >> 16) & 0x0080)) {
-        initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
-        nextWaypoint = initialPrevWaypoint;
-        if (ballIndex != 0) {
-            amountToMove = 300.0f * ballIndex;
-        } else {
-            obj_perform_position_op(POS_OP_SAVE_POSITION);
-            o->oPlatformOnTrackPrevWaypointFlags = 0;
-            amountToMove = o->oForwardVel;
-        }
-        do {
-            prevWaypoint = nextWaypoint;
-            nextWaypoint++;
-            if (nextWaypoint->flags == WAYPOINT_FLAGS_END) {
-                if (ballIndex == 0) o->oPlatformOnTrackPrevWaypointFlags = WAYPOINT_FLAGS_END;
-                if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_RETURN_TO_START)) {
-                    nextWaypoint = o->oPlatformOnTrackStartWaypoint;
-                } else {
-                    return;
-                }
-            }
-            //! vec3f/s_diff(d, nextWaypoint->pos, pos);
-            d[0]               = (nextWaypoint->pos[0] - pos[0]);
-            d[1]               = (nextWaypoint->pos[1] - pos[1]);
-            d[2]               = (nextWaypoint->pos[2] - pos[2]);
-            distToNextWaypoint = vec3f_mag(d);
-            // Move directly to the next waypoint, even if it's farther away
-            // than amountToMove
-            amountToMove -= distToNextWaypoint;
-            vec3f_add(pos, d);
-        } while (amountToMove > 0.0f);
-        // If we moved farther than amountToMove, move in the opposite direction
-        // No risk of near-zero division: If distToNextWaypoint is close to
-        // zero, then that means we didn't cross a waypoint this frame (since
-        // otherwise distToNextWaypoint would equal the distance between two
-        // waypoints, which should never be that small). But this implies that
-        // amountToMove - distToNextWaypoint <= 0, and amountToMove is at least
-        // 0.1 (from platform on track behavior).
-        distToNextWaypoint = (amountToMove / distToNextWaypoint);  //! fast invsqrt?
-        pos[0] += (d[0] * distToNextWaypoint);
-        pos[1] += (d[1] * distToNextWaypoint);
-        pos[2] += (d[2] * distToNextWaypoint);
-        if (ballIndex != 0) {
-            trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o, MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
-            if (trackBall != NULL) {
-                vec3f_copy(&trackBall->oPosVec, pos);
-            }
-        } else {
-            if (prevWaypoint != initialPrevWaypoint) {
-                if (o->oPlatformOnTrackPrevWaypointFlags == 0x0) o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
-                o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
-            }
-            vec3f_copy(&o->oPosVec, pos);
-            obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
-            o->oPlatformOnTrackPitch = atan2s(sqrtf(sqr(o->oVelX) + sqr(o->oVelZ)), -o->oVelY);
-            o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
-        }
     }
 }
 
@@ -220,11 +152,6 @@ static void cur_obj_spin_all_dimensions(f32 pitchSpeed, f32 rollSpeed) {
     }
 }
 
-static void obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount) {
-    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) targetYaw = cur_obj_reflect_move_angle_off_wall();
-    cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
-}
-
 static Angle obj_get_pitch_to_home(f32 latDistToHome) {
     return atan2s(latDistToHome, o->oPosY - o->oHomeY);
 }
@@ -232,30 +159,6 @@ static Angle obj_get_pitch_to_home(f32 latDistToHome) {
 static void obj_compute_vel_from_move_pitch(f32 speed) {
     o->oForwardVel = (speed *  coss(o->oMoveAnglePitch));
     o->oVelY       = (speed * -sins(o->oMoveAnglePitch));
-}
-
-//! move to math_util
-static Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum) {
-    if (*value <= minimum) {
-        *value = minimum;
-    } else if (*value >= maximum) {
-        *value = maximum;
-    } else {
-        return FALSE;
-    }
-    return TRUE;
-}
-
-//! move to math_util
-static Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
-    if (*value <= minimum) {
-        *value = minimum;
-    } else if (*value >= maximum) {
-        *value = maximum;
-    } else {
-        return FALSE;
-    }
-    return TRUE;
 }
 
 static void cur_obj_init_anim_extend(s32 animIndex) {
@@ -297,17 +200,6 @@ static Angle obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
     Angle targetPitch = obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, turnAmount);
     o->oPosY += targetOffsetY;
     return targetPitch;
-}
-
-//! move to math_util
-static Bool32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
-    if (*px > target) delta = -delta;
-    *px += delta;
-    if ((*px - target) * delta >= 0) {
-        *px = target;
-        return TRUE;
-    }
-    return FALSE;
 }
 
 static Bool32 obj_forward_vel_approach(f32 target, f32 delta) {
@@ -353,17 +245,7 @@ static void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rol
     obj_face_roll_approach(targetRoll, rollSpeed);
 }
 
-//! move to math_util
-static s16 random_linear_offset(s16 base, s16 range) {
-    return (base + (s16)(range * random_float()));
-}
-
-//! move to math_util
-static s16 random_mod_offset(s16 base, s16 step, s16 mod) {
-    return (base + (step * (random_u16() % mod)));
-}
-
-//! move to math_util
+//! move to math_util?
 static Angle obj_random_fixed_turn(Angle delta) {
     return (o->oMoveAngleYaw + ((Angle) random_sign() * delta));
 }
@@ -415,7 +297,14 @@ static void obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleL
     o->oAnimState = !(*blinkTimer > blinkLength);
 }
 
-static Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! Angle type?
+//! move to object_collision
+void obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount) {
+    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) targetYaw = cur_obj_reflect_move_angle_off_wall();
+    cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
+}
+
+//! move to object_collision
+Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
     struct Object *otherObject;
     f32 dx, dz;
     Angle angle;
@@ -473,7 +362,8 @@ static Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! Angle type?
     return FALSE;
 }
 
-static Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
+//! move to object_collision
+Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
@@ -484,7 +374,8 @@ static Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle typ
     return TRUE;
 }
 
-static s32 obj_resolve_collisions_and_turn(Angle targetYaw, Angle turnSpeed) {
+//! move to object_collision
+s32 obj_resolve_collisions_and_turn(Angle targetYaw, Angle turnSpeed) {
     obj_resolve_object_collisions(NULL);
     return (!cur_obj_rotate_yaw_toward(targetYaw, turnSpeed));
 }
@@ -736,7 +627,7 @@ static void treat_far_home_as_mario(f32 threshold) {
 /**
  * Used by bowser, fly guy, piranha plant, and fire spitters.
  */
-void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, s32 model, f32 startSpeed, f32 endSpeed, s16 movePitch) {
+void obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, s32 model, f32 startSpeed, f32 endSpeed, Angle movePitch) {
     struct Object *obj = spawn_object_relative_with_scale(SMALL_PIRANHA_FLAME_BP_MOVE, relativePosX, relativePosY, relativePosZ, scale, o, model, bhvSmallPiranhaFlame);
     if (obj != NULL) {
         obj->oSmallPiranhaFlameStartSpeed = startSpeed;

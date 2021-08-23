@@ -49,15 +49,6 @@ Bool32 lava_boost_on_wall(struct MarioState *m) {
     return drop_and_set_mario_action(m, ACT_LAVA_BOOST, 1);
 }
 
-#ifdef WALL_SLIDE
-//! move to surface_collision?
-void move_towards_wall(struct MarioState *m, f32 amount) {
-    m->vel[0] += (m->wall->normal.x * amount);
-    m->vel[1] += (m->wall->normal.y * amount);
-    m->vel[2] += (m->wall->normal.z * amount);
-}
-#endif
-
 Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
 #ifdef NO_FALL_DAMAGE
     return FALSE;
@@ -176,7 +167,8 @@ void update_air_with_turn(struct MarioState *m) {
             if ((m->forwardVel > 4.0f) || (absYVel > 36.0f)) {
                 turnRange = min(((m->intendedMag - m->forwardVel) * absYVel), 0x4000);
                 if (turnRange < 0x100) turnRange = 0x100;
-                m->faceAngle[1] = (m->intendedYaw - approach_s32(intendedDYaw, 0x0, turnRange, turnRange));
+                // m->faceAngle[1] = (m->intendedYaw - approach_s32(intendedDYaw, 0x0, turnRange, turnRange));
+                m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, turnRange);
             }
             sidewaysSpeed = (intendedMag * sins(intendedDYaw) * 10.0f);
 #else

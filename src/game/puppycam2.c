@@ -766,11 +766,11 @@ void puppycam_projection_behaviours(void) {
                 // The deal here, is if Mario's moving, or he's sliding and the camera's within 90 degrees behind him, it'll auto focus behind him, with an intensity based on the camera's centre speed.
                 // It also scales with forward velocity, so it's a gradual effect as he speeds up.
                 if (((abss(gPlayer1Controller->rawStickX) > 20) && !(gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) ||
-                    (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE &&
-                     (Angle)abss((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - (((gMarioState->faceAngle[1]) % 0xFFFF) - 0x8000)) < 0x3000 ))
-                gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
-                ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
-                ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
+                    (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE && (Angle)abss((((gPuppyCam.yaw + 0x8000) % 0xFFFF) - 0x8000) - (((gMarioState->faceAngle[1]) % 0xFFFF) - 0x8000)) < 0x3000))
+                // gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
+                // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
+                // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
+                gPuppyCam.yawTarget = approach_s16_symmetric(gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + 0x8000), ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
             }
         } else { // If none of the above is true, it'll attempt to do this instead.
             // If the camera's in these modes, snap the yaw to prevent desync.
@@ -817,8 +817,8 @@ void puppycam_projection_behaviours(void) {
             gPuppyCam.floorY[1]             = 0;
             gPuppyCam.targetFloorHeight     = gPuppyCam.targetObj->oPosY;
             gPuppyCam.lastTargetFloorHeight = gPuppyCam.targetObj->oPosY;
-            gPuppyCam.yawTarget             = ((gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0,
-            (1000 * (gMarioState->forwardVel / 32)), (1000 * (gMarioState->forwardVel / 32))));
+            // gPuppyCam.yawTarget             = ((gMarioState->faceAngle[1] + 0x8000) - approach_s32((Angle)((gMarioState->faceAngle[1] + 0x8000) - gPuppyCam.yawTarget), 0, (1000 * (gMarioState->forwardVel / 32)), (1000 * (gMarioState->forwardVel / 32))));
+            gPuppyCam.yawTarget             = approach_s16_symmetric(gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + 0x8000), (1000 * (gMarioState->forwardVel / 32)));
             if ((((gMarioState->waterLevel - 100) - gMarioState->pos[1]) > 5) && (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_PITCH_ROTATION)) {
                 gPuppyCam.swimPitch = approach_f32_asymptotic(gPuppyCam.swimPitch, (gMarioState->faceAngle[0] / 10), 0.05f);
             } else {
