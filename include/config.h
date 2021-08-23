@@ -294,7 +294,7 @@
 // Use fast inverse square root from Quake III
 #define FAST_INVSQRT
 
-// Use fast inverse square root for surface normals (casues some noticable issues, especially in slide levels)
+// Use fast inverse square root for surface normals (casues some noticable issues, including freezing, especially in slide levels)
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
 // Use fast inverse square root for mtxf_lookat

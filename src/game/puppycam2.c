@@ -86,7 +86,7 @@ static const struct gPCOptionStruct gPCOptions[] = {
     {/*Option Name*/  7, /*Option Variable*/ &gWidescreen,                      /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
 #endif
 #ifdef CUSTOM_FOV
-    {/*Option Name*/  9, /*Option Variable*/ &gFieldOfView,                     /*Option Value Text Start*/ 255, /*Option Minimum*/     1, /*Option Maximum*/  500},
+    {/*Option Name*/  9, /*Option Variable*/ &gFieldOfView,                     /*Option Value Text Start*/ 255, /*Option Minimum*/    10, /*Option Maximum*/  290},
 #endif
 #if MULTILANG
     {/*Option Name*/  8, /*Option Variable*/ &gInGameLanguage,                  /*Option Value Text Start*/   4, /*Option Minimum*/     1, /*Option Maximum*/    3},

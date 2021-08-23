@@ -234,6 +234,7 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
     register f32 nz = ((x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2));
 
 #if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
+    //! Broken
     register f32 mag = Q_rsqrtf(sqr(nx) + sqr(ny) + sqr(nz));
 #else
     register f32 mag = sqrtf(sqr(nx) + sqr(ny) + sqr(nz));

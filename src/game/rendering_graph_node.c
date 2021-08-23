@@ -437,11 +437,7 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     make_roll_matrix(rollMtx, node->rollScreen);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(rollMtx), (G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH));
-#ifdef CUSTOM_FOV
-    mtxf_lookat(cameraTransform, node->pos, node->focus, node->roll, (gFieldOfView / 100.0f));
-#else
     mtxf_lookat(cameraTransform, node->pos, node->focus, node->roll);
-#endif
     mtxf_mul(gMatStack[gMatStackIndex + 1], cameraTransform, gMatStack[gMatStackIndex]);
     gMatStackIndex++;
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);

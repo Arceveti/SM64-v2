@@ -53,7 +53,7 @@ f32 slow_powf(f32 base, f32 exponent) {
  * Fast Inverse Square Root *
  ****************************/
 
-f32 Q_rsqrtf( f32 number ) {
+f32 Q_rsqrtf(f32 number) {
 	long i;
 	f32 x2, y;
 	x2 = (number * 0.5f);
@@ -66,7 +66,7 @@ f32 Q_rsqrtf( f32 number ) {
 	return y;
 }
 
-f64 Q_rsqrtd( f64 number ) {
+f64 Q_rsqrtd(f64 number) {
 	long i;
 	f64 x2, y;
 	x2 = (number * 0.5);
@@ -81,7 +81,6 @@ f64 Q_rsqrtd( f64 number ) {
 }
 #endif
 
-/* 249B2C -> 249BA4 */
 f64 sqrtd(f64 x) {
     if (x < 1.0e-7) return 0.0;
     return sqrtf(x);
@@ -744,11 +743,7 @@ void mtxf_translate(Mat4 dest, Vec3f b) {
  * at the position 'to'. The up-vector is assumed to be (0, 1, 0), but the 'roll'
  * angle allows a bank rotation of the camera.
  */
-#ifdef CUSTOM_FOV
-void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll, f32 fov) {
-#else
 void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
-#endif
     register f32 invLength;
     register f32 xColY, yColY, zColY;
     register f32 xColZ, yColZ, zColZ;
@@ -768,18 +763,10 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     xColZ = (to[0] - from[0]);
     yColZ = (to[1] - from[1]);
     zColZ = (to[2] - from[2]);
-#ifdef CUSTOM_FOV
-#ifdef FAST_INVSQRT_MTXF_LOOKAT
-    invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)) * fov;
-#else
-    invLength = -(fov / MAX(sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)), 0.00001f));
-#endif
-#else
 #ifdef FAST_INVSQRT_MTXF_LOOKAT
     invLength = -Q_rsqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ));
 #else
     invLength = -(1.0f / MAX(sqrtf(sqr(xColZ) + sqr(yColZ) + sqr(zColZ)), 0.00001f));
-#endif
 #endif
     xColZ *= invLength;
     yColZ *= invLength;

@@ -8872,7 +8872,11 @@ Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context) 
             //! No default case
         }
     }
+#ifdef CUSTOM_FOV
+    perspective->fov = (sFOVState.fov * (gFieldOfView / 100.0f));
+#else
     perspective->fov = sFOVState.fov;
+#endif
     shake_camera_fov(perspective);
     return NULL;
 }
