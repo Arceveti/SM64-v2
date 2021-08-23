@@ -128,7 +128,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Experimental:**
 - Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
 
-# HackerSM64:
+# HackerSM64: ![](https://i.imgur.com/s0LUbTo.gif)
 
 This is a fork of the ultrasm64 repo by CrashOveride which includes the following commonly used patches (patches marked with `*` are toggleable in `config.h`): 
 

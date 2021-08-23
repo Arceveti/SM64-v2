@@ -30,7 +30,6 @@
 #define ALIGN4(val)  (((val) + 0x3) & ~0x3)
 #define ALIGN8(val)  (((val) + 0x7) & ~0x7)
 #define ALIGN16(val) (((val) + 0xF) & ~0xF)
-// #define ALIGN(val, alignment) (((val) + ((alignment) - 1)) & ~((alignment) - 1))
 
 struct MainPoolState {
     u32 freeSpace;
@@ -273,7 +272,7 @@ void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
  * Perform a DMA read from ROM, allocating space in the memory pool to write to.
  * Return the destination address.
  */
-static void *dynamic_dma_read(u8 *srcStart, u8 *srcEnd, u32 side, u32 alignment, u32 bssLength) {
+void *dynamic_dma_read(u8 *srcStart, u8 *srcEnd, u32 side, u32 alignment, u32 bssLength) {
     void *dest;
     u32 size = ALIGN16(srcEnd - srcStart);
     u32 offset = 0;
@@ -288,16 +287,19 @@ static void *dynamic_dma_read(u8 *srcStart, u8 *srcEnd, u32 side, u32 alignment,
 
 #define TLB_PAGE_SIZE 4096 // Blocksize of TLB transfers. Larger values can be faster to transfer, but more wasteful of RAM.
 s32 gTlbEntries = 0;
+u8 gTlbSegments[32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-void mapTLBPages(uintptr_t virtualAddress, uintptr_t physicalAddress, s32 length) {
+void mapTLBPages(uintptr_t virtualAddress, uintptr_t physicalAddress, s32 length, s32 segment) {
     while (length > 0) {
         if (length > TLB_PAGE_SIZE) {
             osMapTLB(gTlbEntries++, OS_PM_4K, (void *)virtualAddress, physicalAddress, (physicalAddress + TLB_PAGE_SIZE), -1);
-            virtualAddress  += TLB_PAGE_SIZE;
+            virtualAddress += TLB_PAGE_SIZE;
             physicalAddress += TLB_PAGE_SIZE;
             length          -= TLB_PAGE_SIZE;
+            gTlbSegments[segment]++;
         } else {
             osMapTLB(gTlbEntries++, OS_PM_4K, (void *)virtualAddress, physicalAddress, -1, -1);
+            gTlbSegments[segment]++;
         }
         virtualAddress  += TLB_PAGE_SIZE;
         physicalAddress += TLB_PAGE_SIZE;
@@ -317,7 +319,7 @@ void *load_segment(s32 segment, u8 *srcStart, u8 *srcEnd, u32 side, u8 *bssStart
         if (addr != NULL) {
             u8 *realAddr = (u8 *)ALIGN((uintptr_t)addr, TLB_PAGE_SIZE);
             set_segment_base_addr(segment, realAddr);
-            mapTLBPages((segment << 24), VIRTUAL_TO_PHYSICAL(realAddr), ((srcEnd - srcStart) + ((uintptr_t)bssEnd - (uintptr_t)bssStart)));
+            mapTLBPages((segment << 24), VIRTUAL_TO_PHYSICAL(realAddr), ((srcEnd - srcStart) + ((uintptr_t)bssEnd - (uintptr_t)bssStart)), segment);
         }
     } else {
         addr = dynamic_dma_read(srcStart, srcEnd, side, 0, 0);
