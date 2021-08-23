@@ -515,40 +515,33 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
     s16 i;
     s32 result = AIR_STEP_NONE;
     Angle wallDYaw;
-#ifndef WALL_SLIDE
     Angle oldWallDYaw = ((m->wall != NULL) ? abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]) : 0x0);
-#endif
-    // if (wallData->numWalls == 0) {
-    //     m->wall = NULL;
-    // } else {
+    if (wallData->numWalls == 0) {
+        m->wall = NULL;
+    } else {
         for (i = 0; i < wallData->numWalls; i++) {
             if (wallData->walls[i] != NULL) {
-                wallDYaw = abs_angle_diff(atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x), m->faceAngle[1]);
-#ifdef WALL_SLIDE
-                m->wall = wallData->walls[i];
-                if (wallData->walls[i]->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
-                if ((wallDYaw > 0x5000) && (m->vel[1] <= 0.0f)) {
-                    m->flags |= MARIO_AIR_HIT_WALL;
-                    result = AIR_STEP_HIT_WALL;
-                }
-#else
                 if (wallData->walls[i]->type == SURFACE_BURNING) {
                     m->wall = wallData->walls[i];
                     return AIR_STEP_HIT_LAVA_WALL;
                 }
+                wallDYaw = abs_angle_diff(atan2s(wallData->walls[i]->normal.z, wallData->walls[i]->normal.x), m->faceAngle[1]);
                 // Update wall reference (bonked wall) only if the new wall has a better facing angle
-                if (wallDYaw > oldWallDYaw) {
+                if (wallDYaw >= oldWallDYaw) {
                     oldWallDYaw = wallDYaw;
                     m->wall = wallData->walls[i];
+#ifdef WALL_SLIDE
+                    if ((wallDYaw > 0x5000) && (m->vel[1] <= 0.0f)) {
+#else
                     if (wallDYaw > 0x6000) {
+#endif
                         m->flags |= MARIO_AIR_HIT_WALL;
                         result = AIR_STEP_HIT_WALL;
                     }
                 }
-#endif
             }
         }
-    // }
+    }
     return result;
 }
 #endif
@@ -572,7 +565,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     Vec3f ledgePos;
     struct Surface *grabbedWall = NULL;
     struct Surface *ledgeFloor;
-    m->wall = NULL;
+    // m->wall = NULL;
     resolve_and_return_wall_collisions(nextPos, 150.0f, 50.0f, &upperWall);
     resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);
 #else
@@ -789,7 +782,7 @@ void apply_gravity(struct MarioState *m) {
 #ifdef WALL_SLIDE
     } else if (m->action == ACT_WALL_SLIDE) {
         m->vel[1] -= 3.2f;
-        if (m->vel[1] < (-TERMINAL_GRAVITY_VELOCITY * 0.5f)) m->vel[1] = -TERMINAL_GRAVITY_VELOCITY*0.5f;
+        if (m->vel[1] < (-TERMINAL_GRAVITY_VELOCITY * 0.5f)) m->vel[1] = (-TERMINAL_GRAVITY_VELOCITY * 0.5f);
 #endif
     } else if ((m->action == ACT_LAVA_BOOST) || (m->action == ACT_FALL_AFTER_STAR_GRAB)) {
         m->vel[1] -= 3.2f;
@@ -853,7 +846,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
          || (quarterStepResult == AIR_STEP_GRABBED_LEDGE)
          || (quarterStepResult == AIR_STEP_GRABBED_CEILING)
          || (quarterStepResult == AIR_STEP_HIT_LAVA_WALL)) break;
-#ifdef WALL_QUICKSAND
+ #ifdef WALL_QUICKSAND
         if ((quarterStepResult == AIR_STEP_HIT_WALL) && m->wall && (m->wall->type == SURFACE_INSTANT_QUICKSAND)) {
             stepResult = AIR_STEP_DEATH;
             m->vel[0] = (-2.0f * m->wall->normal.x);
@@ -862,14 +855,14 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
             drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 1);
             return stepResult;
         }
-#endif
+ #endif
     }
 #else
     // Step once
     vec3f_sum(intendedPos, m->pos, m->vel);
     stepResult = perform_air_quarter_step(m, intendedPos, stepArg);
-#ifdef WALL_QUICKSAND
-    if ((quarterStepResult == AIR_STEP_HIT_WALL) && m->wall && (m->wall->type == SURFACE_INSTANT_QUICKSAND)) {
+ #ifdef WALL_QUICKSAND
+    if ((quarterStepResult == AIR_STEP_HIT_WALL) && (m->wall) && (m->wall->type == SURFACE_INSTANT_QUICKSAND)) {
         stepResult = AIR_STEP_DEATH;
         m->vel[0] = (-2.0f * m->wall->normal.x);
         m->vel[1] = (-2.0f * m->wall->normal.y);
@@ -877,7 +870,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
         drop_and_set_mario_action(m, ACT_QUICKSAND_DEATH, 1);
         return stepResult;
     }
-#endif
+ #endif
 #endif
     if (m->vel[1] >= 0.0f) m->peakHeight = m->pos[1];
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);

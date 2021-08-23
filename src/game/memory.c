@@ -293,7 +293,7 @@ void mapTLBPages(uintptr_t virtualAddress, uintptr_t physicalAddress, s32 length
     while (length > 0) {
         if (length > TLB_PAGE_SIZE) {
             osMapTLB(gTlbEntries++, OS_PM_4K, (void *)virtualAddress, physicalAddress, (physicalAddress + TLB_PAGE_SIZE), -1);
-            virtualAddress += TLB_PAGE_SIZE;
+            virtualAddress  += TLB_PAGE_SIZE;
             physicalAddress += TLB_PAGE_SIZE;
             length          -= TLB_PAGE_SIZE;
             gTlbSegments[segment]++;
