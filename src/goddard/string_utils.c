@@ -26,7 +26,7 @@ char *gd_strcat(char *dst, const char *src) {
 
 /* 23C67C -> 23C728; orig name: func_8018DEB0 */
 /* Returns a bool, not the position of the mismatch */
-s32 gd_str_not_equal(const char *str1, const char *str2) {
+Bool32 gd_str_not_equal(const char *str1, const char *str2) {
     while (*str1 && *str2) if (*str1++ != *str2++) return TRUE;
-    return *str1 != '\0' || *str2 != '\0';
+    return ((*str1 != '\0') || (*str2 != '\0'));
 }

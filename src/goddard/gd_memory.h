@@ -16,8 +16,8 @@ struct GMemBlock {
 /// Block list types for `GMemBlock.blockType`. Note that Empty Blocks don't have
 /// a specific value.
 enum GMemBlockTypes {
-    G_MEM_BLOCK_FREE = 1,
-    G_MEM_BLOCK_USED = 2
+    G_MEM_BLOCK_FREE = 0x1,
+    G_MEM_BLOCK_USED = 0x2
 };
 /* Block Permanence Defines */
 /* This may be collections of certain allocation types

@@ -20,7 +20,7 @@ void set_joint_vecs(struct ObjJoint *, f32, f32, f32);
  * Controls movement of grabbable joints
  */
 void grabbable_joint_update_func(struct ObjJoint *self) {
-    Mat4f *attObjMtx;
+    Mat4 *attObjMtx;
     struct GdVec3f offset;  // difference between current position and initial position
     register struct ListNode *att;
     struct GdObj *attobj;
@@ -53,7 +53,7 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
                 self->mat128[3][1] -= offset.y;
                 self->mat128[3][2] -= offset.z;
             }
-            if (self->flags & 0x2000) gd_play_sfx(GD_SFX_LET_GO_FACE);
+            if (self->flags & 0x2000) gd_play_sfx(GD_SFX_LET_GO_FACE); //! flag name
             self->flags &= ~0x2000;
         } else {
             // freeze position of joint
@@ -84,19 +84,17 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
  * Update function for Mario's eye joints, which makes them follow the cursor
  */
 void eye_joint_update_func(struct ObjJoint *self) {
-    Mat4f *sp5C;
+    Mat4 *sp5C;
     struct GdVec3f sp50;
     struct GdVec3f sp44;
     register struct ListNode *att;
     struct GdObj *attobj;
-    if (sCurrentMoveCamera == NULL || (self->rootAnimator != NULL && self->rootAnimator->state != 7)) return;
+    if ((sCurrentMoveCamera == NULL) || ((self->rootAnimator != NULL) && (self->rootAnimator->state != 7))) return;
     set_cur_dynobj((struct GdObj *)self);
     sp5C = d_get_rot_mtx_ptr();
-    sp44.x = (*sp5C)[3][0];
-    sp44.y = (*sp5C)[3][1];
-    sp44.z = (*sp5C)[3][2];
+    vec3f_to_gdvec3f(&sp44, (*sp5C)[3]);
     world_pos_to_screen_coords(&sp44, sCurrentMoveCamera, sCurrentMoveView);
-    sp50.x =   gGdCtrl.csrX - sp44.x;
+    sp50.x =  (gGdCtrl.csrX - sp44.x);
     sp50.y = -(gGdCtrl.csrY - sp44.y);
     sp50.z =  0.0f;
     sp50.x *= 2.0f;
@@ -130,9 +128,7 @@ void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z) {
     j->initPos.x    = x;
     j->initPos.y    = y;
     j->initPos.z    = z;
-    j->mat128[3][0] = x;
-    j->mat128[3][1] = y;
-    j->mat128[3][2] = z;
+    vec3f_set(j->mat128[3], x, y, z);
 }
 
 /* 23D818 -> 23DA18 */
@@ -147,13 +143,13 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
         j->nextjoint = oldhead;
         oldhead->prevjoint = j;
     }
-    gd_set_identity_mat4(&j->matE8);
+    gd_set_identity_mat4(&j->matE8 );
     gd_set_identity_mat4(&j->mat128);
     set_joint_vecs(j, x, y, z);
     j->type       = 0;
     j->id         = sJointCount;
     j->flags      = flags;
-    j->colourNum  = (j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK;
+    j->colourNum  = ((j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK);
     j->unk1C4     = NULL;
     j->shapePtr   = NULL;
     j->scale.x    = 1.0f;
@@ -175,7 +171,7 @@ struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f3
     struct ObjJoint *j;
     j                    = make_joint(0, x, y, z);
     j->shapePtr          = shape;
-    j->type              = 5;
+    j->type              = 5; //! type name
     j->flags            |= flags;
     j->colourNum         = COLOUR_PINK;
     j->header.drawFlags |= OBJ_IS_GRABBALE;
@@ -209,22 +205,17 @@ void func_80191220(struct ObjJoint *j) {
     j->worldPos.x += j->unk3C.x;
     j->worldPos.y += j->unk3C.y;
     j->worldPos.z += j->unk3C.z;
+    // vec3f_to_gdvec3f(&j->unk1A8, gVec3fZero);
     j->unk1A8.x = j->unk1A8.y = j->unk1A8.z = 0.0f;
 }
 
 /* 23FDD4 -> 23FFF4 */
 void reset_joint(struct ObjJoint *j) {
-    j->worldPos.x = j->initPos.x;
-    j->worldPos.y = j->initPos.y;
-    j->worldPos.z = j->initPos.z;
+    gd_vec3f_copy(&j->worldPos, &j->initPos);
 
-    j->unk30.x    = j->initPos.x;
-    j->unk30.y    = j->initPos.y;
-    j->unk30.z    = j->initPos.z;
+    gd_vec3f_copy(&j->unk30, &j->initPos);
 
-    j->unk3C.x    = j->initPos.x;
-    j->unk3C.y    = j->initPos.y;
-    j->unk3C.z    = j->initPos.z;
+    gd_vec3f_copy(&j->unk3C, &j->initPos);
 
     j->velocity.x = j->velocity.y = j->velocity.z = 0.0f;
     j->unk84.x    = j->unk84.y    = j->unk84.z    = 0.0f;

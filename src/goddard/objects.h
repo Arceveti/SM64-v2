@@ -14,7 +14,7 @@ typedef void (*applyproc_t)(void *);
 extern struct GdBoundingBox gSomeBoundingBox;
 extern struct ObjCamera *sCurrentMoveCamera;
 extern struct ObjView *sCurrentMoveView;
-extern Mat4f D_801B9DC8;
+extern Mat4 D_801B9DC8;
 extern struct ObjGroup* sCurrentMoveGrp;
 extern struct ObjCamera* gGdCameraList;
 extern struct ObjGroup* gGdGroupList;
@@ -42,7 +42,7 @@ struct ObjGroup    *make_group_of_type(enum ObjTypeFlag type, struct GdObj *from
 struct ObjGroup    *make_group(s32 count, ...);
 void addto_group(                                           struct ObjGroup *group, struct GdObj *obj);
 void addto_groupfirst(                                      struct ObjGroup *group, struct GdObj *obj);
-s32  group_contains_obj(                                    struct ObjGroup *group, struct GdObj *obj);
+Bool32 group_contains_obj(                                  struct ObjGroup *group, struct GdObj *obj);
 s32  apply_to_obj_types_in_group(s32 types, applyproc_t fn, struct ObjGroup *group);
 s32  transform_child_objects_recursive(struct GdObj *obj,                           struct GdObj *parentObj);
 void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTransform *t2, f32 dt);

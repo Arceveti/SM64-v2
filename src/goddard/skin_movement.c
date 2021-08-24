@@ -8,7 +8,7 @@
 
 /* bss */
 struct ObjWeight *sResetCurWeight;
-static Mat4f D_801B9EA8; // TODO: rename to sHead2Mtx?
+static Mat4 D_801B9EA8; // TODO: rename to sHead2Mtx?
 
 s32 sResetWeightVtxNum;
 
@@ -19,12 +19,12 @@ void scale_verts(struct ObjGroup *group) {
     register f32 scaleFac;
     register struct ListNode *link;
     struct ObjVertex *vtx;
-    for (link = group->firstMember; link != NULL; link = link->next) {
+    for ((link = group->firstMember); (link != NULL); (link = link->next)) {
         vtx = (struct ObjVertex *) link->obj;
         if ((scaleFac = vtx->scaleFactor) != 0.0f) {
-            vtx->pos.x = vtx->initPos.x * scaleFac;
-            vtx->pos.y = vtx->initPos.y * scaleFac;
-            vtx->pos.z = vtx->initPos.z * scaleFac;
+            vtx->pos.x = (vtx->initPos.x * scaleFac);
+            vtx->pos.y = (vtx->initPos.y * scaleFac);
+            vtx->pos.z = (vtx->initPos.z * scaleFac);
         } else {
             vtx->pos.x = vtx->pos.y = vtx->pos.z = 0.0f;
         }
@@ -51,15 +51,13 @@ void func_80181894(struct ObjJoint *joint) {
             linkedObj                = link->obj;
             curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {
-                stackVec.x           = curWeight->vec20.x;
-                stackVec.y           = curWeight->vec20.y;
-                stackVec.z           = curWeight->vec20.z;
+                gd_vec3f_copy(&stackVec, &curWeight->vec20);
                 gd_rotate_and_translate_vec3f(&stackVec, &joint->matE8);
                 connectedVtx         = curWeight->vtx;
                 scaleFactor          = curWeight->weightVal;
-                connectedVtx->pos.x += stackVec.x * scaleFactor;
-                connectedVtx->pos.y += stackVec.y * scaleFactor;
-                connectedVtx->pos.z += stackVec.z * scaleFactor;
+                connectedVtx->pos.x += (stackVec.x * scaleFactor);
+                connectedVtx->pos.y += (stackVec.y * scaleFactor);
+                connectedVtx->pos.z += (stackVec.z * scaleFactor);
             }
         }
     }
@@ -70,13 +68,9 @@ void reset_weight_vtx(struct ObjVertex *vtx) {
     struct GdVec3f localVec;
     if (sResetWeightVtxNum++ == sResetCurWeight->vtxId) {  // found matching vertex
         sResetCurWeight->vtx     = vtx;
-        localVec.x               = vtx->pos.x;
-        localVec.y               = vtx->pos.y;
-        localVec.z               = vtx->pos.z;
+        gd_vec3f_copy(&localVec, &vtx->pos);
         gd_rotate_and_translate_vec3f(&localVec, &D_801B9EA8);
-        sResetCurWeight->vec20.x = localVec.x;
-        sResetCurWeight->vec20.y = localVec.y;
-        sResetCurWeight->vec20.z = localVec.z;
+        gd_vec3f_copy(&sResetCurWeight->vec20, &localVec);
         vtx->scaleFactor        -= sResetCurWeight->weightVal;
     }
 }

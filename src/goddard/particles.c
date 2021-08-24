@@ -9,7 +9,7 @@
 
 // static types
 typedef union {
-    struct ObjVertex *vtx;
+    struct ObjVertex   *vtx;
     struct ObjParticle *ptc;
 } VtxPtc;
 
@@ -25,9 +25,9 @@ static s32 D_801A8238[5] = {
 };
 
 // fn declarations
-void   move_particle(  struct ObjParticle *);
-Bool32 func_80182778(  struct ObjParticle *);
-void   func_80182A08(  struct ObjParticle *, struct GdVec3f *b);
+void   move_particle(  struct ObjParticle *ptc);
+Bool32 func_80182778(  struct ObjParticle *ptc);
+void   func_80182A08(  struct ObjParticle *ptc, struct GdVec3f *b);
 
 /* 230CC0 -> 230DCC */
 struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z) {
@@ -47,12 +47,12 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z)
 /* 230F48 -> 2311D8 */
 Bool32 func_80182778(struct ObjParticle *ptc) {
     s32 sp4 = 0;
-    if (ptc->unk7C->animSeqNum == 2 && ptc->unk74 == 1) {
+    if ((ptc->unk7C->animSeqNum == 2) && (ptc->unk74 == 1)) {
         while (D_801A81D4[sp4] != 0) {
             if (D_801A81D4[sp4] == ptc->unk7C->frame) {
-                ptc->pos.x = D_801A81D4[sp4 + 1] * 10.0f;
-                ptc->pos.y = D_801A81D4[sp4 + 2] * 10.0f;
-                ptc->pos.z = D_801A81D4[sp4 + 3] * 10.0f;
+                ptc->pos.x = (D_801A81D4[sp4 + 1] * 10.0f);
+                ptc->pos.y = (D_801A81D4[sp4 + 2] * 10.0f);
+                ptc->pos.z = (D_801A81D4[sp4 + 3] * 10.0f);
                 return TRUE;
             }
             sp4 += 4;
@@ -61,9 +61,9 @@ Bool32 func_80182778(struct ObjParticle *ptc) {
     if (ptc->unk7C->animSeqNum == 1 && ptc->unk74 == 1) {
         while (D_801A8238[sp4] != 0) {
             if (D_801A8238[sp4] == ptc->unk7C->frame) {
-                ptc->pos.x = D_801A8238[sp4 + 1] * 10.0f;
-                ptc->pos.y = D_801A8238[sp4 + 2] * 10.0f;
-                ptc->pos.z = D_801A8238[sp4 + 3] * 10.0f;
+                ptc->pos.x = (D_801A8238[sp4 + 1] * 10.0f);
+                ptc->pos.y = (D_801A8238[sp4 + 2] * 10.0f);
+                ptc->pos.z = (D_801A8238[sp4 + 3] * 10.0f);
                 return TRUE;
             }
             sp4 += 4;
@@ -85,11 +85,11 @@ void func_80182A08(struct ObjParticle *ptc, struct GdVec3f *b) {
                 linkedPtc->pos.x = ptc->pos.x;
                 linkedPtc->pos.y = ptc->pos.y;
                 linkedPtc->pos.z = ptc->pos.z;
-                linkedPtc->timeout = 12.0f - gd_rand_float() * 5.0f;
+                linkedPtc->timeout = (12.0f - (gd_rand_float() * 5.0f));
                 do {
-                    linkedPtc->unk38.x = gd_rand_float() * 50.0f - 25.0f;
-                    linkedPtc->unk38.y = gd_rand_float() * 50.0f - 25.0f;
-                    linkedPtc->unk38.z = gd_rand_float() * 50.0f - 25.0f;
+                    linkedPtc->unk38.x = ((gd_rand_float() * 50.0f) - 25.0f);
+                    linkedPtc->unk38.y = ((gd_rand_float() * 50.0f) - 25.0f);
+                    linkedPtc->unk38.z = ((gd_rand_float() * 50.0f) - 25.0f);
                 } while (gd_vec3f_magnitude(&linkedPtc->unk38) > 30.0f);
                 linkedPtc->unk38.x += b->x;
                 linkedPtc->unk38.y += b->y;
@@ -114,12 +114,12 @@ void move_particle(struct ObjParticle *ptc) {
     if (  ptc->flags & GD_PARTICLE_FLAG_2)  return;
     if (!(ptc->flags & GD_PARTICLE_FLAG_8)) return;
     if (ptc->particleType == 3) {
-        sp40.x = -gViewUpdateCamera->unkE8[2][0] *  50.0f;
-        sp40.y = -gViewUpdateCamera->unkE8[2][1] *  50.0f;
-        sp40.z =  gViewUpdateCamera->unkE8[2][2] *  50.0f;
-        sp34.x =  gViewUpdateCamera->unkE8[2][0] * -20.0f;
-        sp34.y =  gViewUpdateCamera->unkE8[2][1] * -20.0f;
-        sp34.z =  gViewUpdateCamera->unkE8[2][2] * -20.0f;
+        sp40.x = (-gViewUpdateCamera->unkE8[2][0] *  50.0f);
+        sp40.y = (-gViewUpdateCamera->unkE8[2][1] *  50.0f);
+        sp40.z = ( gViewUpdateCamera->unkE8[2][2] *  50.0f);
+        sp34.x = ( gViewUpdateCamera->unkE8[2][0] * -20.0f);
+        sp34.y = ( gViewUpdateCamera->unkE8[2][1] * -20.0f);
+        sp34.z = ( gViewUpdateCamera->unkE8[2][2] * -20.0f);
     }
     if (ptc->attachedToObj != NULL) {
         set_cur_dynobj(ptc->attachedToObj);
@@ -135,9 +135,7 @@ void move_particle(struct ObjParticle *ptc) {
             }
         }
         d_get_world_pos(&sp64);
-        ptc->pos.x = sp64.x;
-        ptc->pos.y = sp64.y;
-        ptc->pos.z = sp64.z;
+        gd_vec3f_copy(&ptc->pos, &sp64);
     }
     sp7C = -0.4f;
     ptc->pos.x += ptc->unk38.x;
@@ -150,7 +148,7 @@ void move_particle(struct ObjParticle *ptc) {
             switch (ptc->unk64) {
                 case 1:
                     ptc->subParticlesGrp = make_group(0);
-                    for (i = 0; i < 50; i++) {
+                    for ((i = 0); (i < 50); (i++)) {
                         particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
@@ -160,7 +158,7 @@ void move_particle(struct ObjParticle *ptc) {
                 case 2:
                 case 3:
                     ptc->subParticlesGrp = make_group(0);
-                    for (i = 0; i < 30; i++) {
+                    for ((i = 0); (i < 30); (i++)) {
                         particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos.x, ptc->pos.y, ptc->pos.z);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
@@ -176,27 +174,23 @@ void move_particle(struct ObjParticle *ptc) {
     if (ptc->particleType == 3) {
         switch (ptc->unk64) {
             case 1:
-                if (func_80182778(ptc) && ptc->subParticlesGrp != NULL) {
+                if (func_80182778(ptc) && (ptc->subParticlesGrp != NULL)) {
                     register struct ListNode *link;
                     if (ptc->unk80 != NULL) {
                         ptc->unk80->unk3C     |= 0x1;
-                        ptc->unk80->position.x = ptc->pos.x;
-                        ptc->unk80->position.y = ptc->pos.y;
-                        ptc->unk80->position.z = ptc->pos.z;
+                        gd_vec3f_copy(&ptc->unk80->position, &ptc->pos);
                     }
                     link = ptc->subParticlesGrp->firstMember;
                     while (link != NULL) {
                         struct ObjParticle *linkedPtc = (struct ObjParticle *) link->obj;
-                        linkedPtc->pos.x   = ptc->pos.x;
-                        linkedPtc->pos.y   = ptc->pos.y;
-                        linkedPtc->pos.z   = ptc->pos.z;
+                        gd_vec3f_copy(&linkedPtc->pos, &ptc->pos);
                         linkedPtc->timeout = 20;
                         do {
-                            linkedPtc->unk38.x = gd_rand_float() * 64.0f - 32.0f;
-                            linkedPtc->unk38.y = gd_rand_float() * 64.0f - 32.0f;
-                            linkedPtc->unk38.z = gd_rand_float() * 64.0f - 32.0f;
+                            linkedPtc->unk38.x = ((gd_rand_float() * 64.0f) - 32.0f);
+                            linkedPtc->unk38.y = ((gd_rand_float() * 64.0f) - 32.0f);
+                            linkedPtc->unk38.z = ((gd_rand_float() * 64.0f) - 32.0f);
                         } while (gd_vec3f_magnitude(&linkedPtc->unk38) > 32.0f);
-                        linkedPtc->unk30             = gd_rand_float() * 180.0f;
+                        linkedPtc->unk30             = (gd_rand_float() * 180.0f);
                         linkedPtc->header.drawFlags &= ~OBJ_INVISIBLE;
                         linkedPtc->flags            |= GD_PARTICLE_FLAG_8;
                         link = link->next;

@@ -19,7 +19,7 @@
 struct GdBoundingBox gSomeBoundingBox;
 struct ObjCamera *sCurrentMoveCamera; // @ 801B9DB8
 struct ObjView   *sCurrentMoveView;   // @ 801B9DBC
-Mat4f D_801B9DC8;
+Mat4 D_801B9DC8;
 struct ObjGroup  *sCurrentMoveGrp;    // @ 801B9E14
 struct ObjCamera *gGdCameraList;      // @ 801B9E4C
 struct ObjGroup  *gGdGroupList;       // @ 801B9E54
@@ -343,7 +343,7 @@ void addto_groupfirst(struct ObjGroup *group, struct GdObj *obj) {
 /**
  * Returns TRUE if `obj` is a member of `group`, or FALSE otherwise
  */
-s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) { //! Bool32?
+Bool32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) { //! Bool32?
     struct ListNode *node = group->firstMember;
     while (node != NULL) {
         if (node->obj->index == obj->index) return TRUE;
@@ -360,7 +360,7 @@ s32 group_contains_obj(struct ObjGroup *group, struct GdObj *obj) { //! Bool32?
 s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *group) {
     struct ListNode *curLink;
     struct ListNode *nextLink;
-    struct GdObj *linkedObj;
+    struct GdObj    *linkedObj;
     enum ObjTypeFlag linkedObjType;
     applyproc_t objFn;
     s32 fnAppliedCount;
@@ -388,19 +388,19 @@ s32 apply_to_obj_types_in_group(s32 types, applyproc_t func, struct ObjGroup *gr
 s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj) {
     struct ListNode *curLink;
     struct ObjGroup *curGroup;
-    Mat4f *parentUnkMtx;
-    Mat4f *iMtx;
-    Mat4f *unkMtx;
-    Mat4f *rotMtx;
-    Mat4f *rotMtx2;
+    Mat4 *parentUnkMtx;
+    Mat4 *iMtx;
+    Mat4 *unkMtx;
+    Mat4 *rotMtx;
+    Mat4 *rotMtx2;
     struct GdVec3f scale;
     if (parentObj != NULL) {
         set_cur_dynobj(parentObj);
-        parentUnkMtx = d_get_matrix_ptr();
-        rotMtx = (Mat4f *) d_get_rot_mtx_ptr();
+        parentUnkMtx =          d_get_matrix_ptr();
+        rotMtx       = (Mat4 *) d_get_rot_mtx_ptr();
         set_cur_dynobj(obj);
-        iMtx = d_get_i_mtx_ptr();
-        rotMtx2 = (Mat4f *) d_get_rot_mtx_ptr();
+        iMtx    =          d_get_i_mtx_ptr();
+        rotMtx2 = (Mat4 *) d_get_rot_mtx_ptr();
         d_get_scale(&scale);
         unkMtx = d_get_matrix_ptr();
         gd_mult_mat4f(iMtx, parentUnkMtx, unkMtx);
@@ -408,9 +408,9 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         gd_scale_mat4f_by_vec3f(rotMtx2, &scale);
     } else {
         set_cur_dynobj(obj);
-        unkMtx = d_get_matrix_ptr();
-        iMtx = d_get_i_mtx_ptr();
-        rotMtx = (Mat4f *) d_get_rot_mtx_ptr();
+        unkMtx =          d_get_matrix_ptr();
+        iMtx   =          d_get_i_mtx_ptr();
+        rotMtx = (Mat4 *) d_get_rot_mtx_ptr();
         d_get_scale(&scale);
         gd_set_identity_mat4(unkMtx);
         gd_copy_mat4f(iMtx, rotMtx);
@@ -435,18 +435,18 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
  * as the result of the transformation.
  */
 void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTransform *t2, f32 dt) {
-    Mat4f mtx;
+    Mat4 mtx;
     gd_set_identity_mat4(&mtx);
     if (dt != 0.0f) {
         struct GdAnimTransform transform;
         // interpolate rotation between t1 and t2
-        transform.rotate.x = t1->rotate.x + (t2->rotate.x - t1->rotate.x) * dt;
-        transform.rotate.y = t1->rotate.y + (t2->rotate.y - t1->rotate.y) * dt;
-        transform.rotate.z = t1->rotate.z + (t2->rotate.z - t1->rotate.z) * dt;
+        transform.rotate.x = (t1->rotate.x + ((t2->rotate.x - t1->rotate.x) * dt));
+        transform.rotate.y = (t1->rotate.y + ((t2->rotate.y - t1->rotate.y) * dt));
+        transform.rotate.z = (t1->rotate.z + ((t2->rotate.z - t1->rotate.z) * dt));
         // interpolate position between t1 and t2
-        transform.pos.x = t1->pos.x + (t2->pos.x - t1->pos.x) * dt;
-        transform.pos.y = t1->pos.y + (t2->pos.y - t1->pos.y) * dt;
-        transform.pos.z = t1->pos.z + (t2->pos.z - t1->pos.z) * dt;
+        transform.pos.x    = (t1->pos.x + ((t2->pos.x - t1->pos.x) * dt));
+        transform.pos.y    = (t1->pos.y + ((t2->pos.y - t1->pos.y) * dt));
+        transform.pos.z    = (t1->pos.z + ((t2->pos.z - t1->pos.z) * dt));
         // not going to interpolate scale?
         gd_scale_mat4f_by_vec3f(     &mtx, &t1->scale);
         gd_rot_mat_about_vec(        &mtx, &transform.rotate);
@@ -462,8 +462,8 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
 /* @ 22DD94 for 0x1060; orig name: func_8017F5C4 */
 void move_animator(struct ObjAnimator *animObj) {
     struct AnimDataInfo *animData; // array?
-    Mat4f *mtxArr;
-    Mat4f localMtx;
+    Mat4 *mtxArr;
+    Mat4 localMtx;
     struct GdAnimTransform *triPtr;
     struct GdAnimTransform currTransform; // transformation for the current keyframe
     struct GdAnimTransform nextTransform; // transformation for the next keyframe
@@ -503,8 +503,8 @@ void move_animator(struct ObjAnimator *animObj) {
         linkedObj = link->obj;
         set_cur_dynobj(linkedObj);
         switch (animData->type) {
-            case GD_ANIM_MTX4x4: // data = Mat4f* (f32[4][4])
-                mtxArr = (Mat4f *) animData->data;
+            case GD_ANIM_MTX4x4: // data = Mat4* (f32[4][4])
+                mtxArr = (Mat4 *) animData->data;
                 /* This needs be be un-dereferenced pointer addition to make the registers match */
                 d_set_i_matrix(mtxArr + (s32) animObj->frame);
                 break;
@@ -512,35 +512,27 @@ void move_animator(struct ObjAnimator *animObj) {
                 animData3s16 = (s16(*)[3]) animData->data;
                 // keep current object scale
                 d_get_scale(&currTransform.scale);
-                nextTransform.scale.x = currTransform.scale.x;
-                nextTransform.scale.y = currTransform.scale.y;
-                nextTransform.scale.z = currTransform.scale.z;
+                gd_vec3f_copy(&nextTransform.scale, &currTransform.scale);
                 // keep current object position
                 d_get_init_pos(&currTransform.pos);
-                nextTransform.pos.x = currTransform.pos.x;
-                nextTransform.pos.y = currTransform.pos.y;
-                nextTransform.pos.z = currTransform.pos.z;
+                gd_vec3f_copy(&nextTransform.pos, &currTransform.pos);
                 // use animation rotation
-                currTransform.rotate.x = (f32) animData3s16[currKeyFrame][0] * scale;
-                currTransform.rotate.y = (f32) animData3s16[currKeyFrame][1] * scale;
-                currTransform.rotate.z = (f32) animData3s16[currKeyFrame][2] * scale;
-                nextTransform.rotate.x = (f32) animData3s16[nextKeyFrame][0] * scale;
-                nextTransform.rotate.y = (f32) animData3s16[nextKeyFrame][1] * scale;
-                nextTransform.rotate.z = (f32) animData3s16[nextKeyFrame][2] * scale;
+                currTransform.rotate.x = ((f32) animData3s16[currKeyFrame][0] * scale);
+                currTransform.rotate.y = ((f32) animData3s16[currKeyFrame][1] * scale);
+                currTransform.rotate.z = ((f32) animData3s16[currKeyFrame][2] * scale);
+                nextTransform.rotate.x = ((f32) animData3s16[nextKeyFrame][0] * scale);
+                nextTransform.rotate.y = ((f32) animData3s16[nextKeyFrame][1] * scale);
+                nextTransform.rotate.z = ((f32) animData3s16[nextKeyFrame][2] * scale);
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_POS3S: // data = s16(*)[3] - position only
                 animData3s16 = (s16(*)[3]) animData->data;
                 // keep current object scale
                 d_get_scale(&currTransform.scale);
-                nextTransform.scale.x = currTransform.scale.x;
-                nextTransform.scale.y = currTransform.scale.y;
-                nextTransform.scale.z = currTransform.scale.z;
+                gd_vec3f_copy(&nextTransform.scale, &currTransform.scale);
                 // keep current object rotation
                 d_get_init_rot(&currTransform.rotate);
-                nextTransform.rotate.x = currTransform.rotate.x;
-                nextTransform.rotate.y = currTransform.rotate.y;
-                nextTransform.rotate.z = currTransform.rotate.z;
+                gd_vec3f_copy(&nextTransform.rotate, &currTransform.rotate);
                 // use animation position
                 currTransform.pos.x = (f32) animData3s16[currKeyFrame][0];
                 currTransform.pos.y = (f32) animData3s16[currKeyFrame][1];
@@ -554,45 +546,43 @@ void move_animator(struct ObjAnimator *animObj) {
                 animData6s16 = (s16(*)[6]) animData->data;
                 // keep current object scale
                 d_get_scale(&currTransform.scale);
-                nextTransform.scale.x  = currTransform.scale.x;
-                nextTransform.scale.y  = currTransform.scale.y;
-                nextTransform.scale.z  = currTransform.scale.z;
+                gd_vec3f_copy(&nextTransform.scale, &currTransform.scale);
                 // use animation rotation
-                currTransform.rotate.x = (f32) animData6s16[currKeyFrame][0] * scale;
-                currTransform.rotate.y = (f32) animData6s16[currKeyFrame][1] * scale;
-                currTransform.rotate.z = (f32) animData6s16[currKeyFrame][2] * scale;
-                nextTransform.rotate.x = (f32) animData6s16[nextKeyFrame][0] * scale;
-                nextTransform.rotate.y = (f32) animData6s16[nextKeyFrame][1] * scale;
-                nextTransform.rotate.z = (f32) animData6s16[nextKeyFrame][2] * scale;
+                currTransform.rotate.x = ((f32) animData6s16[currKeyFrame][0] * scale);
+                currTransform.rotate.y = ((f32) animData6s16[currKeyFrame][1] * scale);
+                currTransform.rotate.z = ((f32) animData6s16[currKeyFrame][2] * scale);
+                nextTransform.rotate.x = ((f32) animData6s16[nextKeyFrame][0] * scale);
+                nextTransform.rotate.y = ((f32) animData6s16[nextKeyFrame][1] * scale);
+                nextTransform.rotate.z = ((f32) animData6s16[nextKeyFrame][2] * scale);
                 // use animation position
-                currTransform.pos.x    = (f32) animData6s16[currKeyFrame][3];
-                currTransform.pos.y    = (f32) animData6s16[currKeyFrame][4];
-                currTransform.pos.z    = (f32) animData6s16[currKeyFrame][5];
-                nextTransform.pos.x    = (f32) animData6s16[nextKeyFrame][3];
-                nextTransform.pos.y    = (f32) animData6s16[nextKeyFrame][4];
-                nextTransform.pos.z    = (f32) animData6s16[nextKeyFrame][5];
+                currTransform.pos.x    =  (f32) animData6s16[currKeyFrame][3];
+                currTransform.pos.y    =  (f32) animData6s16[currKeyFrame][4];
+                currTransform.pos.z    =  (f32) animData6s16[currKeyFrame][5];
+                nextTransform.pos.x    =  (f32) animData6s16[nextKeyFrame][3];
+                nextTransform.pos.y    =  (f32) animData6s16[nextKeyFrame][4];
+                nextTransform.pos.z    =  (f32) animData6s16[nextKeyFrame][5];
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_SCALE3S_POS3S_ROT3S: // data = s16(*)[9] - scale, position, and rotation
                 animData9s16 = (s16(*)[9]) animData->data;
-                currTransform.scale.x  = (f32) animData9s16[currKeyFrame][0] * scale;
-                currTransform.scale.y  = (f32) animData9s16[currKeyFrame][1] * scale;
-                currTransform.scale.z  = (f32) animData9s16[currKeyFrame][2] * scale;
-                currTransform.rotate.x = (f32) animData9s16[currKeyFrame][3] * scale;
-                currTransform.rotate.y = (f32) animData9s16[currKeyFrame][4] * scale;
-                currTransform.rotate.z = (f32) animData9s16[currKeyFrame][5] * scale;
-                currTransform.pos.x    = (f32) animData9s16[currKeyFrame][6];
-                currTransform.pos.y    = (f32) animData9s16[currKeyFrame][7];
-                currTransform.pos.z    = (f32) animData9s16[currKeyFrame][8];
-                nextTransform.scale.x  = (f32) animData9s16[nextKeyFrame][0] * scale;
-                nextTransform.scale.y  = (f32) animData9s16[nextKeyFrame][1] * scale;
-                nextTransform.scale.z  = (f32) animData9s16[nextKeyFrame][2] * scale;
-                nextTransform.rotate.x = (f32) animData9s16[nextKeyFrame][3] * scale;
-                nextTransform.rotate.y = (f32) animData9s16[nextKeyFrame][4] * scale;
-                nextTransform.rotate.z = (f32) animData9s16[nextKeyFrame][5] * scale;
-                nextTransform.pos.x    = (f32) animData9s16[nextKeyFrame][6];
-                nextTransform.pos.y    = (f32) animData9s16[nextKeyFrame][7];
-                nextTransform.pos.z    = (f32) animData9s16[nextKeyFrame][8];
+                currTransform.scale.x  = ((f32) animData9s16[currKeyFrame][0] * scale);
+                currTransform.scale.y  = ((f32) animData9s16[currKeyFrame][1] * scale);
+                currTransform.scale.z  = ((f32) animData9s16[currKeyFrame][2] * scale);
+                currTransform.rotate.x = ((f32) animData9s16[currKeyFrame][3] * scale);
+                currTransform.rotate.y = ((f32) animData9s16[currKeyFrame][4] * scale);
+                currTransform.rotate.z = ((f32) animData9s16[currKeyFrame][5] * scale);
+                currTransform.pos.x    =  (f32) animData9s16[currKeyFrame][6];
+                currTransform.pos.y    =  (f32) animData9s16[currKeyFrame][7];
+                currTransform.pos.z    =  (f32) animData9s16[currKeyFrame][8];
+                nextTransform.scale.x  = ((f32) animData9s16[nextKeyFrame][0] * scale);
+                nextTransform.scale.y  = ((f32) animData9s16[nextKeyFrame][1] * scale);
+                nextTransform.scale.z  = ((f32) animData9s16[nextKeyFrame][2] * scale);
+                nextTransform.rotate.x = ((f32) animData9s16[nextKeyFrame][3] * scale);
+                nextTransform.rotate.y = ((f32) animData9s16[nextKeyFrame][4] * scale);
+                nextTransform.rotate.z = ((f32) animData9s16[nextKeyFrame][5] * scale);
+                nextTransform.pos.x    =  (f32) animData9s16[nextKeyFrame][6];
+                nextTransform.pos.y    =  (f32) animData9s16[nextKeyFrame][7];
+                nextTransform.pos.z    =  (f32) animData9s16[nextKeyFrame][8];
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_CAMERA_EYE3S_LOOKAT3S: // s16(*)[6]?
@@ -646,8 +636,8 @@ void drag_picked_object(struct GdObj *inputObj) {
     struct GdVec3f displacement;
     struct GdVec3f spC4;
     struct GdControl *ctrl;
-    Mat4f sp80;
-    Mat4f sp40;
+    Mat4 sp80;
+    Mat4 sp40;
     struct GdObj *obj;
     f32 dispMag;
     ctrl = &gGdCtrl;
@@ -703,8 +693,8 @@ void move_camera(struct ObjCamera *cam) {
     struct GdVec3f spD4;
     struct GdVec3f spC8;
     struct GdVec3f spB0;
-    Mat4f sp70;
-    Mat4f *sp2C;
+    Mat4 sp70;
+    Mat4 *sp2C;
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
@@ -714,14 +704,14 @@ void move_camera(struct ObjCamera *cam) {
         set_cur_dynobj(spEC);
         d_get_world_pos(&spE0);
         d_get_matrix(&sp70);
-        spC8.x = sp70[2][0] - cam->unk58;
-        spC8.z = sp70[2][2] - cam->unk60;
-        cam->unk58 += spC8.x * cam->unk180.y;
-        cam->unk60 += spC8.z * cam->unk180.y;
-        cam->unkA8[2][0] = cam->unk58;
+        spC8.x = (sp70[2][0] - cam->unk58);
+        spC8.z = (sp70[2][2] - cam->unk60);
+        cam->unk58 += (spC8.x * cam->unk180.y);
+        cam->unk60 += (spC8.z * cam->unk180.y);
+        cam->unkA8[2][0] =  cam->unk58;
         cam->unkA8[2][1] = 0.0f;
-        cam->unkA8[2][2] = cam->unk60;
-        cam->unkA8[0][0] = cam->unkA8[2][2];
+        cam->unkA8[2][2] =  cam->unk60;
+        cam->unkA8[0][0] =  cam->unkA8[2][2];
         cam->unkA8[0][1] = 0.0f;
         cam->unkA8[0][2] = -cam->unkA8[2][0];
         cam->unkA8[1][0] = 0.0f;
@@ -747,30 +737,24 @@ void move_camera(struct ObjCamera *cam) {
         if (ctrl->cright) cam->unk128.y -= cam->unk134.y;
         if (ctrl->cup   ) cam->unk128.x += cam->unk134.x;
         if (ctrl->cdown ) cam->unk128.x -= cam->unk134.x;
-        cam->unk128.x = gd_clamp_f32(cam->unk128.x, 80.0f);
-        cam->unk4C.x  = cam->zoomPositions[cam->zoomLevel].x;
-        cam->unk4C.y  = cam->zoomPositions[cam->zoomLevel].y;
-        cam->unk4C.z  = cam->zoomPositions[cam->zoomLevel].z;
+        clamp_f32(&cam->unk128.x, -80.0f, 80.0f);
+        gd_vec3f_copy(&cam->unk4C, &cam->zoomPositions[cam->zoomLevel]);
         gd_rot_2d_vec(  cam->unk128.x, &cam->unk4C.y, &cam->unk4C.z);
         gd_rot_2d_vec( -cam->unk128.y, &cam->unk4C.x, &cam->unk4C.z);
-        cam->unk40.x += (cam->unk4C.x - cam->unk40.x) * cam->unk17C;
-        cam->unk40.y += (cam->unk4C.y - cam->unk40.y) * cam->unk17C;
-        cam->unk40.z += (cam->unk4C.z - cam->unk40.z) * cam->unk17C;
+        cam->unk40.x += ((cam->unk4C.x - cam->unk40.x) * cam->unk17C);
+        cam->unk40.y += ((cam->unk4C.y - cam->unk40.y) * cam->unk17C);
+        cam->unk40.z += ((cam->unk4C.z - cam->unk40.z) * cam->unk17C);
     } else {
         gd_set_identity_mat4(sp2C);
     }
-    spD4.x = cam->unk40.x;
-    spD4.y = cam->unk40.y;
-    spD4.z = cam->unk40.z;
-    spD4.x += spB0.x;
+    gd_vec3f_copy(&spD4, &cam->unk40);
+    spD4.x += spB0.x; // offset1
     spD4.y += spB0.y;
     spD4.z += spB0.z;
     gd_mult_mat4f(sp2C, &cam->unkA8, &cam->unkA8);
     gd_mat4f_mult_vec3f(&spD4, &cam->unkA8);
-    cam->worldPos.x  = spD4.x;
-    cam->worldPos.y  = spD4.y;
-    cam->worldPos.z  = spD4.z;
-    cam->worldPos.x += spE0.x;
+    gd_vec3f_copy(&cam->worldPos, &spD4);
+    cam->worldPos.x += spE0.x; // offset2
     cam->worldPos.y += spE0.y;
     cam->worldPos.z += spE0.z;
 }
@@ -786,7 +770,7 @@ void move_group_members(void) {
     // move_lights_in_grp(sCurrentMoveGrp);
     move_particles_in_grp(sCurrentMoveGrp);
     move_animators(sCurrentMoveGrp);
-    for (i = 0; i <= 0; i++) move_nets(sCurrentMoveGrp);
+    for ((i = 0); (i <= 0); (i++)) move_nets(sCurrentMoveGrp);
     move_cameras_in_grp(sCurrentMoveGrp);
 }
 

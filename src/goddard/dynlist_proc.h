@@ -13,33 +13,33 @@ typedef void *DynObjName;
 /// Macros for casting between types of names,
 /// as the name can be either a number or a string.
 /// @{
-#define DynNameAsStr(name) ((char *)(name))
+#define DynNameAsStr(name)         ((char *)(name))
 #define DynNameAsInt(name) ((u32)(uintptr_t)(name))
-#define AsDynName(unk)   ((DynObjName)(unk))
+#define AsDynName(unk)         ((DynObjName)(unk))
 /// @}
 /// @}
 
 /// `d_makeobj()` object types
 enum DObjTypes {
-    // D_CAR_DYNAMICS  = 0,
-    D_NET           = 1,
-    D_JOINT         = 2,
-    // D_ANOTHER_JOINT = 3,
-    D_CAMERA        = 4,
-    // D_VERTEX        = 5,
-    // D_FACE          = 6,
-    // D_PLANE         = 7,
-    // D_BONE          = 8,
-    D_MATERIAL      = 9,
-    D_SHAPE         = 10,
-    // D_GADGET        = 11,
-    // D_LABEL         = 12,
-    D_VIEW          = 13,
-    D_ANIMATOR      = 14,
-    D_DATA_GRP      = 15, ///< An `ObjGroup` that links to raw vertex or face data
-    D_PARTICLE      = 16,
-    D_LIGHT         = 17,
-    D_GROUP         = 18
+    D_CAR_DYNAMICS  = 0x00, // unused
+    D_NET           = 0x01,
+    D_JOINT         = 0x02,
+    D_ANOTHER_JOINT = 0x03, // unused
+    D_CAMERA        = 0x04,
+    D_VERTEX        = 0x05, // unused
+    D_FACE          = 0x06, // unused
+    D_PLANE         = 0x07, // unused
+    D_BONE          = 0x08, // unused
+    D_MATERIAL      = 0x09,
+    D_SHAPE         = 0x0A,
+    D_GADGET        = 0x0B, // unused
+    D_LABEL         = 0x0C, // unused
+    D_VIEW          = 0x0D,
+    D_ANIMATOR      = 0x0E,
+    D_DATA_GRP      = 0x0F, ///< An `ObjGroup` that links to raw vertex or face data
+    D_PARTICLE      = 0x10,
+    D_LIGHT         = 0x11,
+    D_GROUP         = 0x12
 };
 
 // functions
@@ -68,11 +68,11 @@ void d_set_flags(s32 flags);
 void d_set_obj_draw_flag(enum ObjDrawingFlags flag);
 void d_set_type(s32 type);
 void d_set_diffuse(f32 r, f32 g, f32 b);
-void d_get_matrix(Mat4f *dst);
-Mat4f *d_get_rot_mtx_ptr(void);
-void d_set_i_matrix(Mat4f *src);
-Mat4f *d_get_matrix_ptr(void);
-Mat4f *d_get_i_mtx_ptr( void);
+void d_get_matrix(Mat4 *dst);
+Mat4 *d_get_rot_mtx_ptr(void);
+void d_set_i_matrix(Mat4 *src);
+Mat4 *d_get_matrix_ptr(void);
+Mat4 *d_get_i_mtx_ptr( void);
 f32 d_calc_world_dist_btwn(struct GdObj *obj1, struct GdObj *obj2);
 
 #endif // GD_DYNLIST_PROCESSOR_H

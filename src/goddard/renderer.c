@@ -11,7 +11,6 @@
 #include "sfx.h"
 #include "shape_helper.h"
 #include "skin.h"
-#include "types.h"
 #include "engine/math_util.h"
 
 #define MAX_GD_DLS 1000
@@ -95,7 +94,7 @@ static struct ObjView *sMSceneView;     // Mario scene view
 static s32 sVertexBufStartIndex;        // Vtx start in GD Dl
 static s32 sUpdateMarioScene;           // update dl Vtx from ObjVertex?
 static Mtx sIdnMtx;
-static Mat4f sInitIdnMat4;
+static Mat4 sInitIdnMat4;
 static s8 sVtxCvrtNormBuf[3];
 static s16 sAlpha;
 static s32 sNumLights;
@@ -965,25 +964,23 @@ s32 gd_enddlsplist_parent(void) {
 /* 24D3D8 -> 24D458; orig name: func_8019EC08 */
 u32 new_gddl_from(Gfx *dl) {
     struct GdDisplayList *gddl;
-
     gddl = new_gd_dl(0, 0, 0, 0, 0, 0);
     gddl->gfx = (Gfx *) (GD_LOWER_24((uintptr_t) dl) + D_801BAF28);
     return gddl->number;
 }
 
 /* 24D4C4 -> 24D63C; orig name: func_8019ECF4 */
-void mat4_to_mtx(Mat4f *src, Mtx *dst) {
+//! move to gd_math/math_util
+void mat4_to_mtx(Mat4 *src, Mtx *dst) {
 #ifndef GBI_FLOATS
-    s32 i;
-    s32 j;
-    s32 w1;
-    s32 w2;
+    s32 i, j;
+    s32 w1, w2;
     s32 *mtxInt = (s32 *) dst->m[0]; // s32 part
     s32 *mtxFrc = (s32 *) dst->m[2]; // frac part
-    for (i = 0; i < 4; i++) {
-        for (j = 0; j < 2; j++) {
-            w1 = (s32)((*src)[i][j * 2] * 65536.0f);
-            w2 = (s32)((*src)[i][j * 2 + 1] * 65536.0f);
+    for ((i = 0); (i < 4); (i++)) {
+        for ((j = 0); (j < 2); (j++)) {
+            w1 = (s32)((*src)[i][(j * 2)    ] * 65536.0f);
+            w2 = (s32)((*src)[i][(j * 2) + 1] * 65536.0f);
             *mtxInt = MTX_INTPART_PACK(w1, w2);
             mtxInt++;
             *mtxFrc = MTX_FRACPART_PACK(w1, w2);
@@ -998,7 +995,7 @@ void mat4_to_mtx(Mat4f *src, Mtx *dst) {
 /**
  * Adds a display list operation that multiplies the current matrix with `mtx`.
  */
-void gd_dl_mul_matrix(Mat4f *mtx) {
+void gd_dl_mul_matrix(Mat4 *mtx) {
     mat4_to_mtx(mtx, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)), sMtxParamType | G_MTX_MUL | G_MTX_NOPUSH);
     next_mtx();
@@ -1007,7 +1004,7 @@ void gd_dl_mul_matrix(Mat4f *mtx) {
 /**
  * Adds a display list operation that replaces the current matrix with `mtx`.
  */
-void gd_dl_load_matrix(Mat4f *mtx) {
+void gd_dl_load_matrix(Mat4 *mtx) {
     mat4_to_mtx(mtx, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)), sMtxParamType | G_MTX_LOAD | G_MTX_NOPUSH);
     next_mtx();
@@ -1058,7 +1055,7 @@ void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z) {
  * Adds a display list operation that scales the current matrix by `x`, `y`, and `z`.
  */
 void gd_dl_scale(f32 x, f32 y, f32 z) {
-    Mat4f mtx;
+    Mat4 mtx;
     struct GdVec3f scaleVec;
     scaleVec.x = x;
     scaleVec.y = y;
@@ -1070,9 +1067,9 @@ void gd_dl_scale(f32 x, f32 y, f32 z) {
 
 /* 24DA94 -> 24DAE8 */
 void func_8019F2C4(f32 angle, s8 axis) {
-    Mat4f mtx;
+    Mat4 mtx;
     gd_set_identity_mat4(&mtx);
-    gd_absrot_mat4(      &mtx, axis - 120, -angle);
+    gd_absrot_mat4(      &mtx, (axis - 120), -angle);
     gd_dl_mul_matrix(    &mtx);
 }
 

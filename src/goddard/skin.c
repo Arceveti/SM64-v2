@@ -179,9 +179,9 @@ static void move_joints_in_net(struct ObjNet *net) {
     register struct ListNode *link;
     struct GdObj *obj;
     if ((grp = net->unk1C8) != NULL) {
-        for (link = grp->firstMember; link != NULL; link = link->next) {
+        for ((link = grp->firstMember); (link != NULL); (link = link->next)) {
             obj = link->obj;
-            if (obj->type == OBJ_TYPE_JOINTS && ((struct ObjJoint *) obj)->updateFunc != NULL) (*((struct ObjJoint *) obj)->updateFunc)((struct ObjJoint *) obj);
+            if ((obj->type == OBJ_TYPE_JOINTS) && ((struct ObjJoint *) obj)->updateFunc != NULL) (*((struct ObjJoint *) obj)->updateFunc)((struct ObjJoint *) obj);
         }
     }
 }
@@ -194,7 +194,7 @@ void move_net(struct ObjNet *net) {
         case NET_TYPE_DYNAMIC_BONES:   move_bonesnet(     net); break;
         case NET_TYPE_SCALED_VERTICES: move_skin(         net); break;
         case NET_TYPE_JOINTS:          move_joints_in_net(net); break;
-        default: gd_exit(); // fatal_printf("move_net(%d(%d)): Undefined net type", net->id, net->netType);
+        default: gd_exit(); // Undefined net type
     }
 }
 
@@ -208,9 +208,9 @@ void move_nets(struct ObjGroup *group) {
 void func_8019373C(struct ObjNet *net) {
     register struct ListNode *link;
     struct ObjVertex *vtx;
-    if (net->netType == NET_TYPE_SCALED_VERTICES && net->shapePtr != NULL) {
+    if ((net->netType == NET_TYPE_SCALED_VERTICES) && (net->shapePtr != NULL)) {
         net->shapePtr->scaledVtxGroup = make_group(0);
-        for (link = net->shapePtr->vtxGroup->firstMember; link != NULL; link = link->next) {
+        for ((link = net->shapePtr->vtxGroup->firstMember); (link != NULL); (link = link->next)) {
             vtx = (struct ObjVertex *) link->obj;
             if (vtx->scaleFactor != 1.0f) addto_group(net->shapePtr->scaledVtxGroup, &vtx->header);
         }

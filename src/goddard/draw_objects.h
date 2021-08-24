@@ -7,17 +7,17 @@
 #include "macros.h"
 
 enum ColourNum {
-    COLOUR_BLACK     =  0,
-    COLOUR_WHITE     =  1,
-    COLOUR_RED       =  2,
-    COLOUR_GREEN     =  3,
-    COLOUR_BLUE      =  4,
-    COLOUR_GRAY      =  5,
-    COLOUR_DARK_GRAY =  6,
-    COLOUR_DARK_BLUE =  7,
-    COLOUR_YELLOW    =  8,
-    COLOUR_PINK      =  9,
-    COLOUR_BLACK2    = 10
+    COLOUR_BLACK     = 0x0,
+    COLOUR_WHITE     = 0x1,
+    COLOUR_RED       = 0x2,
+    COLOUR_GREEN     = 0x3,
+    COLOUR_BLUE      = 0x4,
+    COLOUR_GRAY      = 0x5,
+    COLOUR_DARK_GRAY = 0x6,
+    COLOUR_DARK_BLUE = 0x7,
+    COLOUR_YELLOW    = 0x8,
+    COLOUR_PINK      = 0x9,
+    COLOUR_BLACK2    = 0xA
 };
 
 // data

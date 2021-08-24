@@ -29,36 +29,26 @@ static struct GdVec3f sVertexScaleFactor;
  * Computes the normal vector for a face based on three of its vertices.
  */
 void calc_face_normal(struct ObjFace *face) {
-    struct GdVec3f p1;
-    struct GdVec3f p2;
-    struct GdVec3f p3;
-    struct GdVec3f normal;
+    Vec3f p1, p2, p3;
+    Vec3n normal;
     struct ObjVertex *vtx1;
     struct ObjVertex *vtx2;
     struct ObjVertex *vtx3;
     f32 mul = 1000.0f;
     if (face->vtxCount >= 3) {  // need at least three points to compute a normal
-        vtx1 = face->vertices[0];
-        p1.x = vtx1->pos.x;
-        p1.y = vtx1->pos.y;
-        p1.z = vtx1->pos.z;
-        vtx2 = face->vertices[1];
-        p2.x = vtx2->pos.x;
-        p2.y = vtx2->pos.y;
-        p2.z = vtx2->pos.z;
-        vtx3 = face->vertices[2];
-        p3.x = vtx3->pos.x;
-        p3.y = vtx3->pos.y;
-        p3.z = vtx3->pos.z;
+        vtx1  = face->vertices[0];
+        gdvec3f_to_vec3f(p1, &vtx1->pos);
+        vtx2  = face->vertices[1];
+        gdvec3f_to_vec3f(p2, &vtx2->pos);
+        vtx3  = face->vertices[2];
+        gdvec3f_to_vec3f(p3, &vtx3->pos);
         // calculate the cross product of edges (p2 - p1) and (p3 - p2)
         // not sure why each component is multiplied by 1000. maybe to avoid loss of precision when normalizing? 
-        normal.x = (((p2.y - p1.y) * (p3.z - p2.z)) - ((p2.z - p1.z) * (p3.y - p2.y))) * mul;
-        normal.y = (((p2.z - p1.z) * (p3.x - p2.x)) - ((p2.x - p1.x) * (p3.z - p2.z))) * mul;
-        normal.z = (((p2.x - p1.x) * (p3.y - p2.y)) - ((p2.y - p1.y) * (p3.x - p2.x))) * mul;
-        gd_normalize_vec3f(&normal);
-        face->normal.x = normal.x;
-        face->normal.y = normal.y;
-        face->normal.z = normal.z;
+        normal[0] = ((((p2[1] - p1[1]) * (p3[2] - p2[2])) - ((p2[2] - p1[2]) * (p3[1] - p2[1]))) * mul);
+        normal[1] = ((((p2[2] - p1[2]) * (p3[0] - p2[0])) - ((p2[0] - p1[0]) * (p3[2] - p2[2]))) * mul);
+        normal[2] = ((((p2[0] - p1[0]) * (p3[1] - p2[1])) - ((p2[1] - p1[1]) * (p3[0] - p2[0]))) * mul);
+        vec3f_normalize(normal);
+        vec3f_to_gdvec3f(&face->normal, normal);
     }
 }
 
@@ -250,8 +240,8 @@ void animate_mario_head_normal(struct ObjAnimator *self) {
  * sparkle particles
  */
 s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
-    struct ObjNet      *sp54; // net made with sp48 group
-    struct ObjGroup    *sp48; // Joint group
+    struct ObjNet      *sp54;         // net made with sp48 group
+    struct ObjGroup    *sp48;         // Joint group
     struct ObjGroup    *mainShapesGrp;
     struct GdObj       *sp38;         // object list head before making a bunch of joints
     struct GdObj       *faceJoint;    // joint on the face that `grabberJoint` pulls
@@ -359,7 +349,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
 
 /* @ 249288 for 0xe0 */
 void load_shapes2(void) {
-    sGdShapeCount = 0;
+    sGdShapeCount    = 0;
     sGdShapeListHead = NULL;
-    gGdLightGroup = make_group(0);
+    gGdLightGroup    = make_group(0);
 }

@@ -51,7 +51,7 @@ void  stash_current_gddl(void);
 void  pop_gddl_stash(void);
 s32   gd_startdisplist(s32 memarea);
 s32   gd_enddlsplist_parent(void);
-void  gd_dl_load_matrix(Mat4f *mtx);
+void  gd_dl_load_matrix(Mat4 *mtx);
 void  gd_dl_push_matrix(void);
 void  gd_dl_pop_matrix(void);
 void  gd_dl_mul_trans_matrix( f32 x, f32 y, f32 z);

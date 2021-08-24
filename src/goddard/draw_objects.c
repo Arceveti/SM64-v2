@@ -85,7 +85,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
                 f32 f, f32 g, f32 h, // translate shape + store offset (unused)
                 f32 i, f32 j, f32 k, // translate shape
                 f32 l, f32 m, f32 n, // rotate x, y, z
-                s32 colorIdx, Mat4f *rotMtx) {
+                s32 colorIdx, Mat4 *rotMtx) {
     struct GdVec3f vec;
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
@@ -152,7 +152,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 pos
 
 void draw_light(struct ObjLight *light) {
     struct GdVec3f sp94;
-    Mat4f sp54;
+    Mat4 sp54;
     struct ObjShape *shape;
     if (sSceneProcessType == FIND_PICKS) return;
     sLightColours[0].r = light->colour.r;
@@ -284,9 +284,7 @@ void draw_camera(struct ObjCamera *cam) {
         sp44.y += cam->lookAt.y;
         sp44.z += cam->lookAt.z;
     } else {
-        sp44.x  = cam->lookAt.x;
-        sp44.y  = cam->lookAt.y;
-        sp44.z  = cam->lookAt.z;
+        gd_vec3f_copy(&sp44, &cam->lookAt);
     }
     if (absf(cam->worldPos.x - sp44.x) + absf(cam->worldPos.z - sp44.z) == 0.0f) return; // Zero view distance
     gd_dl_lookat(cam, cam->worldPos.x, cam->worldPos.y, cam->worldPos.z, sp44.x, sp44.y, sp44.z, cam->unkA4);
@@ -316,15 +314,13 @@ void world_pos_to_screen_coords(struct GdVec3f *pos, struct ObjCamera *cam, stru
 void check_grabable_click(struct GdObj *input) {
     struct GdVec3f objPos;
     struct GdObj  *obj;
-    Mat4f *mtx;
+    Mat4 *mtx;
     if (gViewUpdateCamera == NULL) return;
     obj = input;
     if (!(obj->drawFlags & OBJ_IS_GRABBALE)) return;
     set_cur_dynobj(obj);
     mtx = d_get_rot_mtx_ptr();
-    objPos.x = (*mtx)[3][0];
-    objPos.y = (*mtx)[3][1];
-    objPos.z = (*mtx)[3][2];
+    vec3f_to_gdvec3f(&objPos, (*mtx)[3]);
     world_pos_to_screen_coords(&objPos, gViewUpdateCamera, sUpdateViewState.view);
     if ((absf(gGdCtrl.csrX - objPos.x) < 20.0f)
      && (absf(gGdCtrl.csrY - objPos.y) < 20.0f)) {
@@ -475,7 +471,7 @@ void register_light(struct ObjLight *light) {
 /* 229180 -> 229564 */
 void update_lighting(struct ObjLight *light) {
     f32 sp24; // diffuse factor?
-    f32 sp20;
+    f32 dot;
     f32 sp1C;
     light->colour.r = (light->diffuse.r * light->unk30);
     light->colour.g = (light->diffuse.g * light->unk30);
@@ -492,19 +488,19 @@ void update_lighting(struct ObjLight *light) {
     }
     sp24 = light->unk30;
     if (light->flags & LIGHT_UNK02) {
-        sp20 = -gd_dot_vec3f(&sLightPositionCache[light->id], &light->unk80);
+        dot = -gd_dot_vec3f(&sLightPositionCache[light->id], &light->unk80);
         sp1C = (1.0f - (light->unk38 / 90.0f));
-        if (sp20 > sp1C) {
-            sp20 = ((sp20 - sp1C) * (1.0f / (1.0f - sp1C)));
-            if (sp20 > 1.0f) {
-                sp20 = 1.0f;
-            } else if (sp20 < 0.0f) {
-                sp20 = 0.0f;
+        if (dot > sp1C) {
+            dot = ((dot - sp1C) * (1.0f / (1.0f - sp1C)));
+            if (dot > 1.0f) {
+                dot = 1.0f;
+            } else if (dot < 0.0f) {
+                dot = 0.0f;
             }
         } else {
-            sp20 = 0.0f;
+            dot = 0.0f;
         }
-        sp24 *= sp20;
+        sp24 *= dot;
     }
     set_light_id(light->id);
     gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse.r * sp24), (light->diffuse.g * sp24), (light->diffuse.b * sp24));
@@ -515,9 +511,7 @@ void update_lighting(struct ObjLight *light) {
 /* 229568 -> 229658; orig name: func_8017AD98 */
 void update_shaders(struct ObjShape *shape, struct GdVec3f *offset) {
     stash_current_gddl();
-    sLightPositionOffset.x = offset->x;
-    sLightPositionOffset.y = offset->y;
-    sLightPositionOffset.z = offset->z;
+    gd_vec3f_copy(&sLightPositionOffset, offset);
     sPhongLight = NULL;
     if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) update_lighting  , gGdLightGroup  );
     if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);
@@ -683,15 +677,15 @@ void update_view(struct ObjView *view) {
             if (gGdCtrl.startedDragging) {
                 init_pick_buf(sPickBuffer, ARRAY_COUNT(sPickBuffer));
                 drawscene(FIND_PICKS, sUpdateViewState.view->components, NULL);
-                pickOffset = get_cur_pickbuf_offset();
-                sPickDataTemp = 0;
-                sPickedObject = NULL;
+                pickOffset       = get_cur_pickbuf_offset();
+                sPickDataTemp    = 0;
+                sPickedObject    = NULL;
                 sPickObjDistance = 10000000.0f;
                 if (pickOffset < 0) {
                     gd_exit(); // Pick buffer too small
                 } else if (pickOffset > 0) {
                     pickDataIdx = 0;
-                    for (i = 0; i < pickOffset; i++) {
+                    for ((i = 0); (i < pickOffset); (i++)) {
                         pickDataSize = sPickBuffer[pickDataIdx++];
                         if (pickDataSize != 0) {
                             switch ((pickedObjType = sPickBuffer[pickDataIdx++])) {

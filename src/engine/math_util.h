@@ -45,7 +45,8 @@ extern s16 gArctanTable[];
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
-#define sqr(x) ((x) * (x))
+#define sqr(x)  ((x) * (x))
+#define cube(x) ((x) * (x) * (x))
 
 // Kaze's float functions
 f32 slow_logf(f32 x);
@@ -93,6 +94,7 @@ f64  max_3d( f64 a0, f64 a1, f64 a2);
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
 Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum);
+// f32    clamp_f32_abs(f32 a, f32 b);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
@@ -106,6 +108,7 @@ void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16
 Angle  abs_angle_diff(Angle angle1, Angle angle2);
 // Vector Operations
 void vec3f_copy(                         Vec3f dest, Vec3f src);
+void vec3f_copy_inverse(                 Vec3f dest, Vec3f src);
 void vec3f_set(                          Vec3f dest, f32 x, f32 y, f32 z);
 void vec3f_sum(                          Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_diff(                         Vec3f dest, Vec3f a, Vec3f b);
@@ -174,6 +177,10 @@ void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
 void mtxf_rotate_xy(                      Mtx  *mtx, Angle angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
+f32    det_2x2(f32 a, f32 b, f32 c, f32 d);
+f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
+               f32 r1c0, f32 r1c1, f32 r1c2, 
+               f32 r2c0, f32 r2c1, f32 r2c2);
 // Approach
 s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
 f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
