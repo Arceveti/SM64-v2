@@ -6,7 +6,7 @@
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
 
-//! can this be combined with math_util?
+//! TODO: Combine this with math_util.c
 
 /**
  * Set mtx to a look-at matrix for the camera. The resulting transformation

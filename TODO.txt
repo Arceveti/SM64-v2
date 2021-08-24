@@ -1,6 +1,7 @@
 **TODO:**
 - Known Bugs:
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
+    - Goddard joints don't move properly on the Z axis
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:
@@ -60,6 +61,7 @@
 - Objects:
     - Make step height per-object
 - Physics/Movement:
+    - Ability to move between walls that share an edge when ledge grab sidling
     - Gravity direction support
     - "Squished" death from any direction
 - Graphics
@@ -90,7 +92,7 @@
             - Breath meter
                 - Move health meter to the side when active to keep screen space balance, similar to SM63
     - Replace breath meter with a small non-intrusive one that follows mario's posision on screen?
-    - Make Puppycam menu more vanilla style
+    - Move Puppycam menu to under Exit Course
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
@@ -105,3 +107,4 @@
 - Files/Hacking QOL
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
+        - Including gd_math

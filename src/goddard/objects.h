@@ -14,7 +14,6 @@ typedef void (*applyproc_t)(void *);
 extern struct GdBoundingBox gSomeBoundingBox;
 extern struct ObjCamera *sCurrentMoveCamera;
 extern struct ObjView *sCurrentMoveView;
-extern Mat4 D_801B9DC8;
 extern struct ObjGroup* sCurrentMoveGrp;
 extern struct ObjCamera* gGdCameraList;
 extern struct ObjGroup* gGdGroupList;

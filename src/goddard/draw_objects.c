@@ -269,7 +269,7 @@ void draw_net(struct ObjNet *self) {
     s32 netColor;
     if (sSceneProcessType == FIND_PICKS) return;
     netColor = ((net->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : net->colourNum);
-    if (net->shapePtr != NULL) draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->mat168);
+    if (net->shapePtr != NULL) draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->rotationMtx);
     if (net->unk1C8   != NULL) draw_group(net->unk1C8);
 }
 

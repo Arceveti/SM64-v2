@@ -565,7 +565,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     Vec3f ledgePos;
     struct Surface *grabbedWall = NULL;
     struct Surface *ledgeFloor;
-    // m->wall = NULL;
+    m->wall = NULL;
     resolve_and_return_wall_collisions(nextPos, 150.0f, 50.0f, &upperWall);
     resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);
 #else

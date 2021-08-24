@@ -266,30 +266,31 @@ void d_attach_joint_to_net(DynObjName name) {
  */
 void add_to_dynobj_list(struct GdObj *newobj, DynObjName name) {
     char idbuf[0x100];
-    if (sGdDynObjList == NULL) {
-        sGdDynObjList = gd_malloc_temp(DYNOBJ_LIST_SIZE * sizeof(struct DynObjInfo));
-        if (sGdDynObjList == NULL) gd_exit(); // Cant allocate dynlist memory
-    }
-    if (sUseIntegerNames) {
-        sprintf(idbuf, "N%d", DynNameAsInt(name));
-        name = NULL;
+    if (sLoadedDynObjs < DYNOBJ_LIST_SIZE) {
+        if (sGdDynObjList == NULL) {
+            sGdDynObjList = gd_malloc_temp(DYNOBJ_LIST_SIZE * sizeof(struct DynObjInfo));
+            if (sGdDynObjList == NULL) gd_exit(); // Cant allocate dynlist memory
+        }
+        if (sUseIntegerNames) {
+            sprintf(idbuf, "N%d", DynNameAsInt(name));
+            name = NULL;
+        } else {
+            sprintf(idbuf, "U%d", ((u32) sLoadedDynObjs) + 1);
+        }
+        if (DynNameAsStr(name) != NULL) {
+            if (get_dynobj_info(name) != NULL) gd_exit(); // Object with same name already exists
+            gd_strcpy(sGdDynObjList[sLoadedDynObjs].name, DynNameAsStr(name));
+        } else {
+            gd_strcpy(sGdDynObjList[sLoadedDynObjs].name, idbuf);
+        }
+        gd_strcat(sGdDynObjList[sLoadedDynObjs].name, sDynNameSuffix);
+        if (gd_strlen(sGdDynObjList[sLoadedDynObjs].name) > (DYNOBJ_NAME_SIZE - 1)) gd_exit(); // dyn list obj name too long
+        sGdDynObjList[sLoadedDynObjs].num   = sLoadedDynObjs;
+        sDynListCurInfo                     = &sGdDynObjList[sLoadedDynObjs];
+        sGdDynObjList[sLoadedDynObjs++].obj = newobj;
     } else {
-        sprintf(idbuf, "U%d", ((u32) sLoadedDynObjs) + 1);
+        gd_exit(); // Too many dynlist objects
     }
-    if (DynNameAsStr(name) != NULL) {
-        if (get_dynobj_info(name) != NULL) gd_exit(); // Object with same name already exists
-        gd_strcpy(sGdDynObjList[sLoadedDynObjs].name, DynNameAsStr(name));
-    } else {
-        gd_strcpy(sGdDynObjList[sLoadedDynObjs].name, idbuf);
-    }
-    gd_strcat(sGdDynObjList[sLoadedDynObjs].name, sDynNameSuffix);
-    if (gd_strlen(sGdDynObjList[sLoadedDynObjs].name) > (DYNOBJ_NAME_SIZE - 1)) gd_exit(); // dyn list obj name too long
-    sGdDynObjList[sLoadedDynObjs].num   = sLoadedDynObjs;
-    sDynListCurInfo                     = &sGdDynObjList[sLoadedDynObjs];
-    sGdDynObjList[sLoadedDynObjs++].obj = newobj;
-    //! A good place to bounds-check your array is
-    // after you finish writing a new member to it.
-    if (sLoadedDynObjs >= DYNOBJ_LIST_SIZE) gd_exit(); // Too many dynlist objects
     sDynListCurObj = newobj;
 }
 
@@ -541,9 +542,7 @@ void chk_shapegen(struct ObjShape *shape) {
             }
             if (shape->flag & 0x10) { //! flag name
                 for ((i = 0); (i < vtxdata->count); (i++)) {
-                    vtxbuf[i]->normal.x = vtxbuf[i]->pos.x;
-                    vtxbuf[i]->normal.y = vtxbuf[i]->pos.y;
-                    vtxbuf[i]->normal.z = vtxbuf[i]->pos.z;
+                    gd_vec3f_copy(&vtxbuf[i]->normal, &vtxbuf[i]->pos);
                     gd_normalize_vec3f(&vtxbuf[i]->normal);
                 }
             } else {
@@ -939,9 +938,7 @@ void d_set_rel_pos(f32 x, f32 y, f32 z) {
  */
 void d_addto_rel_pos(struct GdVec3f *src) {
     struct GdObj *dynobj = sDynListCurObj;
-
     if (sDynListCurObj == NULL) gd_exit();
-
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_VERTICES:
             ((struct ObjVertex *) dynobj)->pos.x += src->x;
@@ -1080,7 +1077,6 @@ void d_set_att_offset(const struct GdVec3f *off) {
  */
 void d_set_world_pos(f32 x, f32 y, f32 z) {
     if (sDynListCurObj == NULL) gd_exit();
-
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_CAMERAS:
             ((struct ObjCamera *) sDynListCurObj)->worldPos.x = x;
@@ -1390,8 +1386,8 @@ void d_set_matrix(Mat4 *src) {
 void d_set_rot_mtx(Mat4 *src) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: gd_copy_mat4f(src, &((struct ObjJoint *) sDynListCurObj)->mat128); break;
-        case OBJ_TYPE_NETS:   gd_copy_mat4f(src, &((struct ObjNet   *) sDynListCurObj)->mat168); break;
+        case OBJ_TYPE_JOINTS: gd_copy_mat4f(src, &((struct ObjJoint *) sDynListCurObj)->rotationMtx); break;
+        case OBJ_TYPE_NETS:   gd_copy_mat4f(src, &((struct ObjNet   *) sDynListCurObj)->rotationMtx); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRMatrix()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1402,8 +1398,8 @@ void d_set_rot_mtx(Mat4 *src) {
 Mat4 *d_get_rot_mtx_ptr(void) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: return &((struct ObjJoint *) sDynListCurObj)->mat128;
-        case OBJ_TYPE_NETS:   return &((struct ObjNet   *) sDynListCurObj)->mat168;
+        case OBJ_TYPE_JOINTS: return &((struct ObjJoint *) sDynListCurObj)->rotationMtx;
+        case OBJ_TYPE_NETS:   return &((struct ObjNet   *) sDynListCurObj)->rotationMtx;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetRMatrixPtr()", sDynListCurInfo->name, sDynListCurObj->type);
     } // No null return due to `fatal_printf()` being a non-returning function?
 }
@@ -1417,8 +1413,8 @@ void d_set_i_matrix(Mat4 *src) {
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_NETS:   gd_copy_mat4f(src, &((struct ObjNet   *) dynobj)->matE8 ); break;
-        case OBJ_TYPE_JOINTS: gd_copy_mat4f(src, &((struct ObjJoint *) dynobj)->mat168); break;
+        case OBJ_TYPE_NETS:   gd_copy_mat4f(src, &((struct ObjNet   *) dynobj)->idMtx); break;
+        case OBJ_TYPE_JOINTS: gd_copy_mat4f(src, &((struct ObjJoint *) dynobj)->idMtx); break;
         case OBJ_TYPE_LIGHTS:
             ((struct ObjLight *) dynobj)->position.x = (*src)[3][0];
             ((struct ObjLight *) dynobj)->position.y = (*src)[3][1];
@@ -1450,8 +1446,8 @@ Mat4 *d_get_i_mtx_ptr(void) {
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_NETS:   return &((struct ObjNet   *) dynobj)->matE8;  break;
-        case OBJ_TYPE_JOINTS: return &((struct ObjJoint *) dynobj)->mat168; break;
+        case OBJ_TYPE_NETS:   return &((struct ObjNet   *) dynobj)->idMtx;  break;
+        case OBJ_TYPE_JOINTS: return &((struct ObjJoint *) dynobj)->idMtx; break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetIMatrixPtr()", sDynListCurInfo->name, sDynListCurObj->type);
     } // No null return due to `fatal_printf()` being a non-returning function?
 }

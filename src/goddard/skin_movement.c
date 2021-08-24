@@ -47,7 +47,7 @@ void func_80181894(struct ObjJoint *joint) {
     struct GdObj *linkedObj;
     weightGroup = joint->weightGrp;
     if (weightGroup != NULL) {
-        for (link = weightGroup->firstMember; link != NULL; link = link->next) {
+        for ((link = weightGroup->firstMember); (link != NULL); (link = link->next)) {
             linkedObj                = link->obj;
             curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {

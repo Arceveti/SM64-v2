@@ -35,18 +35,16 @@ void compute_net_bounding_box(struct ObjNet *net) {
 /* 240894 -> 240A64; orig name: func_801920C4 */
 void reset_net(struct ObjNet *net) {
     struct ObjGroup *grp;
-    net->worldPos.x = net->initPos.x;
-    net->worldPos.y = net->initPos.y;
-    net->worldPos.z = net->initPos.z;
+    gd_vec3f_copy(&net->worldPos, &net->initPos);
     net->velocity.x = net->velocity.y = net->velocity.z = 0.0f;
     net->torque.x   = net->torque.y   = net->torque.z   = 0.0f;
     compute_net_bounding_box(net);
     gGdSkinNet = net;
-    gd_set_identity_mat4(&net->mat168);
-    gd_set_identity_mat4(&net->matE8);
-    gd_rot_mat_about_vec(&net->matE8, &net->unk68); // set rot mtx to initial rotation?
-    gd_add_vec3f_to_mat4f_offset(&net->matE8, &net->worldPos); // set to initial position?
-    gd_copy_mat4f(&net->matE8, &net->mat128);
+    gd_set_identity_mat4(&net->rotationMtx);
+    gd_set_identity_mat4(&net->idMtx);
+    gd_rot_mat_about_vec(&net->idMtx, &net->unk68); // set rot mtx to initial rotation?
+    gd_add_vec3f_to_mat4f_offset(&net->idMtx, &net->worldPos); // set to initial position?
+    gd_copy_mat4f(&net->idMtx, &net->mat128);
     if ((grp = net->unk1C8) != NULL) {
         apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint  , grp);
         apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80191220, grp);
@@ -91,7 +89,6 @@ struct ObjNet *make_net(struct ObjGroup *group) {
 /* 24142C -> 24149C; orig name: func_80192C5C */
 void move_bonesnet(struct ObjNet *net) {
     struct ObjGroup *group;
-    gd_set_identity_mat4(&D_801B9DC8); //! unused?
     if ((group = net->unk1C8) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
 }
 

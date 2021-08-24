@@ -19,7 +19,6 @@
 struct GdBoundingBox gSomeBoundingBox;
 struct ObjCamera *sCurrentMoveCamera; // @ 801B9DB8
 struct ObjView   *sCurrentMoveView;   // @ 801B9DBC
-Mat4 D_801B9DC8;
 struct ObjGroup  *sCurrentMoveGrp;    // @ 801B9E14
 struct ObjCamera *gGdCameraList;      // @ 801B9E4C
 struct ObjGroup  *gGdGroupList;       // @ 801B9E54
@@ -634,44 +633,37 @@ void move_animator(struct ObjAnimator *animObj) {
 /* @ 22EDF4 for 0x300; orig name: func_80180624 */
 void drag_picked_object(struct GdObj *inputObj) {
     struct GdVec3f displacement;
-    struct GdVec3f spC4;
-    struct GdControl *ctrl;
+    struct GdControl *ctrl = &gGdCtrl;
     Mat4 sp80;
-    Mat4 sp40;
+    Mat4 dispMtx;
     struct GdObj *obj;
     f32 dispMag;
-    ctrl = &gGdCtrl;
     if (gViewUpdateCamera == NULL) return;
-    dispMag = gd_vec3f_magnitude(&gViewUpdateCamera->unk40);
-    dispMag /= 1000.0f; //! fast invsqrt?
+    dispMag = gd_vec3f_magnitude(&gViewUpdateCamera->unk40) / 1000.0f; //! fast invsqrt?
     displacement.x = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
     displacement.y = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement.z = 0.0f;
-    gd_inverse_mat4f(&gViewUpdateCamera->unkE8, &sp40);
-    gd_mat4f_mult_vec3f(&displacement, &sp40);
+    gd_inverse_mat4f(&gViewUpdateCamera->unkE8, &dispMtx);
+    gd_mat4f_mult_vec3f(&displacement, &dispMtx);
     obj = inputObj;
-    if ((inputObj->drawFlags & OBJ_PICKED) && gGdCtrl.dragging) {
+    if ((inputObj->drawFlags & OBJ_PICKED) && (gGdCtrl.dragging)) {
         gd_play_sfx(GD_SFX_PINCH_FACE);
         // Note: this second sfx won't play, as it is "overwritten" by the first
         if (ABSI(ctrl->stickDeltaX) + ABSI(ctrl->stickDeltaY) >= 11) gd_play_sfx(GD_SFX_PINCH_FACE_2);
         switch (inputObj->type) {
             case OBJ_TYPE_JOINTS:
-                ((struct ObjJoint *) obj)->mat128[3][0] += displacement.x;
-                ((struct ObjJoint *) obj)->mat128[3][1] += displacement.y;
-                ((struct ObjJoint *) obj)->mat128[3][2] += displacement.z;
+                ((struct ObjJoint *) obj)->rotationMtx[3][0] += displacement.x;
+                ((struct ObjJoint *) obj)->rotationMtx[3][1] += displacement.y;
+                ((struct ObjJoint *) obj)->rotationMtx[3][2] += displacement.z;
                 break;
             case OBJ_TYPE_NETS:
                 gd_inverse_mat4f(&((struct ObjNet *) obj)->mat128, &sp80);
-                spC4.x = displacement.x;
-                spC4.y = displacement.y;
-                spC4.z = displacement.z;
-                gd_mat4f_mult_vec3f(&spC4, &sp80);
-                ((struct ObjNet *) obj)->matE8[3][0] += displacement.x;
-                ((struct ObjNet *) obj)->matE8[3][1] += displacement.y;
-                ((struct ObjNet *) obj)->matE8[3][2] += displacement.z;
+                ((struct ObjNet *) obj)->idMtx[3][0] += displacement.x;
+                ((struct ObjNet *) obj)->idMtx[3][1] += displacement.y;
+                ((struct ObjNet *) obj)->idMtx[3][2] += displacement.z;
                 break;
             case OBJ_TYPE_PARTICLES:
-            default: break;
+            default:;
         }
     }
 }
@@ -688,41 +680,27 @@ void find_and_drag_picked_object(struct ObjGroup *group) {
 
 /* @ 22F180 for 0x624; orig name: func_801809B0 */
 void move_camera(struct ObjCamera *cam) {
-    struct GdObj *spEC;
-    struct GdVec3f spE0;
-    struct GdVec3f spD4;
+    struct GdObj *obj;
+    struct GdVec3f worldPos; // world pos
+    struct GdVec3f nextPos;
     struct GdVec3f spC8;
-    struct GdVec3f spB0;
-    Mat4 sp70;
-    Mat4 *sp2C;
+    Mat4 mtx;
+    Mat4 *idMtx;
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
-    spE0.x = spE0.y = spE0.z = 0.0f;
-    spB0.x = spB0.y = spB0.z = 0.0f;
-    if ((spEC = cam->unk30) != NULL) {
-        set_cur_dynobj(spEC);
-        d_get_world_pos(&spE0);
-        d_get_matrix(&sp70);
-        spC8.x = (sp70[2][0] - cam->unk58);
-        spC8.z = (sp70[2][2] - cam->unk60);
+    worldPos.x = worldPos.y = worldPos.z = 0.0f;
+    if ((obj = cam->unk30) != NULL) {
+        set_cur_dynobj(obj);
+        d_get_world_pos(&worldPos);
+        d_get_matrix(&mtx);
+        spC8.x = (mtx[2][0] - cam->unk58);
+        spC8.z = (mtx[2][2] - cam->unk60);
         cam->unk58 += (spC8.x * cam->unk180.y);
         cam->unk60 += (spC8.z * cam->unk180.y);
-        cam->unkA8[2][0] =  cam->unk58;
-        cam->unkA8[2][1] = 0.0f;
-        cam->unkA8[2][2] =  cam->unk60;
-        cam->unkA8[0][0] =  cam->unkA8[2][2];
-        cam->unkA8[0][1] = 0.0f;
-        cam->unkA8[0][2] = -cam->unkA8[2][0];
-        cam->unkA8[1][0] = 0.0f;
-        cam->unkA8[1][1] = 1.0f;
-        cam->unkA8[1][2] = 0.0f;
-        //! setting the unkA8 matrix above is pointless, if we're just going to overwrite it with the identity matrix.
-        gd_set_identity_mat4(&cam->unkA8);
-    } else {
-        gd_set_identity_mat4(&cam->unkA8);
     }
-    sp2C = &cam->unk64;
+    gd_set_identity_mat4(&cam->unkA8);
+    idMtx = &cam->unk64;
     if ((cam->flags & CAMERA_FLAG_CONTROLLABLE) != 0) {
         if (ctrl->btnB && !ctrl->prevFrame->btnB) {  // new B press
             cam->zoomLevel++;
@@ -745,18 +723,15 @@ void move_camera(struct ObjCamera *cam) {
         cam->unk40.y += ((cam->unk4C.y - cam->unk40.y) * cam->unk17C);
         cam->unk40.z += ((cam->unk4C.z - cam->unk40.z) * cam->unk17C);
     } else {
-        gd_set_identity_mat4(sp2C);
+        gd_set_identity_mat4(idMtx);
     }
-    gd_vec3f_copy(&spD4, &cam->unk40);
-    spD4.x += spB0.x; // offset1
-    spD4.y += spB0.y;
-    spD4.z += spB0.z;
-    gd_mult_mat4f(sp2C, &cam->unkA8, &cam->unkA8);
-    gd_mat4f_mult_vec3f(&spD4, &cam->unkA8);
-    gd_vec3f_copy(&cam->worldPos, &spD4);
-    cam->worldPos.x += spE0.x; // offset2
-    cam->worldPos.y += spE0.y;
-    cam->worldPos.z += spE0.z;
+    gd_vec3f_copy(&nextPos, &cam->unk40);
+    gd_mult_mat4f(idMtx, &cam->unkA8, &cam->unkA8);
+    gd_mat4f_mult_vec3f(&nextPos, &cam->unkA8);
+    gd_vec3f_copy(&cam->worldPos, &nextPos);
+    cam->worldPos.x += worldPos.x; // offset2
+    cam->worldPos.y += worldPos.y;
+    cam->worldPos.z += worldPos.z;
 }
 
 /* @ 22F7A4 for 0x38; orig name: func_80180FD4 */

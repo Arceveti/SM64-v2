@@ -5,8 +5,7 @@
 #include <ultra64.h>
 #include "types.h"
 
-
-//! replace with Vec3f?
+//! TODO: replace with Vec3f
 /* Vector Types */
 struct GdVec3f
 {
@@ -151,6 +150,8 @@ struct ObjGroup {
     /* 0x74 */ s32 id;
 }; /* sizeof = 0x78 */
 
+#define JOINT_FLAG_GRABBED (1 << 13) // 0x2000
+
 struct ObjJoint {
     /* 0x000 */ struct GdObj header;
     /* 0x014 */ struct GdVec3f worldPos;                // position in world space
@@ -175,8 +176,8 @@ struct ObjJoint {
     /* 0x0D8 */ u8  padD8[4];
     /* 0x0DC */ struct GdVec3f friction;
     /* 0x0E8 */ Mat4 matE8;                             // matrix4x4
-    /* 0x128 */ Mat4 mat128;                            // "rot matrix"
-    /* 0x168 */ Mat4 mat168;                            // "id matrix"
+    /* 0x128 */ Mat4 rotationMtx;                       // "rot matrix"
+    /* 0x168 */ Mat4 idMtx;                             // "id matrix"
     /* 0x1A8 */ struct GdVec3f unk1A8;
     /* 0x1B4 */ s32 id;
     /* 0x1B8 */ u8  pad1B8[4];
@@ -310,9 +311,9 @@ struct ObjNet {
     /* 0x0D4 */ struct GdVec3f unusedCollDispOff;   // unused
     /* 0x0E0 */ f32 unusedCollMaxD;                 // unused
     /* 0x0E4 */ f32 maxRadius;
-    /* 0x0E8 */ Mat4 matE8;
+    /* 0x0E8 */ Mat4 idMtx;
     /* 0x128 */ Mat4 mat128;
-    /* 0x168 */ Mat4 mat168;                        // "rotation matrix"
+    /* 0x168 */ Mat4 rotationMtx;                   // "rotation matrix"
     /* 0x1A8 */ struct ObjShape *shapePtr;
     /* 0x1AC */ struct GdVec3f scale;
     /* 0x1B8 */ f32 unusedMass;                     // unused
