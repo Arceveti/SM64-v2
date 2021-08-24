@@ -7,18 +7,18 @@
 extern const GeoLayout bob_geo_chain_chomp_gate[];
 extern const GeoLayout bob_geo_seesaw_platform[];
 extern const GeoLayout bob_geo_grate_door[];
-extern const GeoLayout bob_geo_000488[];
+extern const GeoLayout bob_geo_area_1[];
 
 // leveldata
 extern const Gfx bob_seg7_dl_07004390[];
-extern const Gfx bob_seg7_dl_07009D80[];
-extern const Gfx bob_seg7_dl_0700A470[];
-extern const Gfx bob_seg7_dl_0700A920[];
+extern const Gfx bob_seg7_dl_rocks_and_flowers[];
+extern const Gfx bob_seg7_dl_tree_shadows[];
+extern const Gfx bob_seg7_dl_fence_and_bars[];
 extern const Gfx bob_seg7_dl_0700DD18[];
-extern const Gfx bob_seg7_dl_0700E338[];
-extern const Gfx bob_seg7_dl_0700E458[];
-extern const Gfx bob_seg7_dl_0700E768[];
-extern const Gfx bob_seg7_dl_0700E8A0[];
+extern const Gfx bob_seg7_dl_warp_caves[];
+extern const Gfx bob_seg7_dl_chain_chomp_gate[];
+extern const Gfx bob_seg7_dl_seesaw_platform[];
+extern const Gfx bob_seg7_dl_grate_door[];
 extern const Collision bob_seg7_collision_level[];
 extern const MacroObject bob_seg7_macro_objs[];
 extern const Collision bob_seg7_collision_chain_chomp_gate[];

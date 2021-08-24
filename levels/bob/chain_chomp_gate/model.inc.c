@@ -1,23 +1,23 @@
 // 0x0700E3E0 - 0x0700E420
-static const Vtx bob_seg7_vertex_0700E3E0[] = {
-    {{{   512,      0,      0}, 0, { -7184,  -5142}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   512,    640,      0}, 0, { -7184,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -511,    640,      0}, 0, {   990,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -511,      0,      0}, 0, {   990,  -5142}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx bob_seg7_vertex_chain_chomp_gate[] = {
+    {{{   512,      0,      0}, 0, { -7168,  -5136}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   512,    640,      0}, 0, { -7168,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -512,    640,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -512,      0,      0}, 0, { 31<<5,  -5136}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700E420 - 0x0700E458
-static const Gfx bob_seg7_dl_0700E420[] = {
+static const Gfx bob_seg7_sub_dl_chain_chomp_gate[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800_vertical_bars),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bob_seg7_vertex_0700E3E0, 4, 0),
+    gsSPVertex(bob_seg7_vertex_chain_chomp_gate, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0700E458 - 0x0700E510
-const Gfx bob_seg7_dl_0700E458[] = {
+const Gfx bob_seg7_dl_chain_chomp_gate[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -32,7 +32,7 @@ const Gfx bob_seg7_dl_0700E458[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bob_seg7_dl_0700E420),
+    gsSPDisplayList(bob_seg7_sub_dl_chain_chomp_gate),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

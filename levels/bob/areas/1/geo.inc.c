@@ -1,5 +1,5 @@
 // 0x0E000488
-const GeoLayout bob_geo_000488[] = {
+const GeoLayout bob_geo_area_1[] = {
    GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
@@ -15,12 +15,12 @@ const GeoLayout bob_geo_000488[] = {
          GEO_OPEN_NODE(),
             GEO_CAMERA(1, 0, 2000, 6000, 3072, 0, -4608, geo_camera_main),
             GEO_OPEN_NODE(),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, bob_seg7_dl_07004390),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, bob_seg7_dl_07009D80),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, bob_seg7_dl_0700A470),
-               GEO_DISPLAY_LIST(LAYER_ALPHA, bob_seg7_dl_0700A920),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, bob_seg7_dl_0700DD18),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, bob_seg7_dl_0700E338),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE,            bob_seg7_dl_07004390),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE,            bob_seg7_dl_rocks_and_flowers),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, bob_seg7_dl_tree_shadows),
+               GEO_DISPLAY_LIST(LAYER_ALPHA,             bob_seg7_dl_fence_and_bars),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE,            bob_seg7_dl_0700DD18),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE,            bob_seg7_dl_warp_caves),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),
             GEO_CLOSE_NODE(),

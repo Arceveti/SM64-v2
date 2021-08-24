@@ -1,25 +1,25 @@
 // 0x0700E810 - 0x0700E860
-static const Vtx bob_seg7_vertex_0700E810[] = {
-    {{{     0,    384,      0}, 0, { -1956,  -2076}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   320,    640,      0}, 0, {   598,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   128,    640,      0}, 0, {  -934,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      0}, 0, { -1956,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   320,      0,      0}, 0, {   598,    990}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx bob_seg7_vertex_grate_door[] = {
+    {{{     0,    384,      0}, 0, { -1956,  -2080}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   320,    640,      0}, 0, {   592,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   128,    640,      0}, 0, {  -928,  -4120}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      0}, 0, { -1956,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   320,      0,      0}, 0, {   592,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700E860 - 0x0700E8A0
-static const Gfx bob_seg7_dl_0700E860[] = {
+static const Gfx bob_seg7_sub_dl_grate_door[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, generic_09008800_vertical_bars),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(bob_seg7_vertex_0700E810, 5, 0),
+    gsSPVertex(bob_seg7_vertex_grate_door, 5, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  4, 0x0),
-    gsSP1Triangle( 0,  4,  1, 0x0),
+    gsSP1Triangle(  0,  4,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0700E8A0 - 0x0700E958
-const Gfx bob_seg7_dl_0700E8A0[] = {
+const Gfx bob_seg7_dl_grate_door[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -34,7 +34,7 @@ const Gfx bob_seg7_dl_0700E8A0[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bob_seg7_dl_0700E860),
+    gsSPDisplayList(bob_seg7_sub_dl_grate_door),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
