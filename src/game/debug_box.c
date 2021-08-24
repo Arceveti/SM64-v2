@@ -48,7 +48,7 @@ struct DebugBox {
 
 struct DebugVert
 {
-    VtxPos3s pos;
+    Vec3t pos;
     Vec3n normal;
 };
 
