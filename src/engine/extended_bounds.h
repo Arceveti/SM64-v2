@@ -29,13 +29,7 @@
 // for the static assert macro
 #include "macros.h"
 #include "segments.h"
-
-// set this to the extended bounds mode you want, then do "make clean".
-#ifndef USE_EXT_RAM
-#define EXTENDED_BOUNDS_MODE 0
-#else
-#define EXTENDED_BOUNDS_MODE 1
-#endif
+#include "config.h"
 
 // CELL_SIZE
 

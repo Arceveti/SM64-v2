@@ -1,14 +1,13 @@
 // celebration_star.c.inc
 
 void bhv_celebration_star_init(void) {
-    o->oHomeX                       = gMarioObject->header.gfx.pos[0];
-    o->oPosY                        = gMarioObject->header.gfx.pos[1] + 30.0f;
-    o->oHomeZ                       = gMarioObject->header.gfx.pos[2];
-    o->oMoveAngleYaw                = gMarioObject->header.gfx.angle[1] + 0x8000;
+    o->oHomeX                       =  gMarioObject->header.gfx.pos[0];
+    o->oPosY                        = (gMarioObject->header.gfx.pos[1] + 30.0f);
+    o->oHomeZ                       =  gMarioObject->header.gfx.pos[2];
+    o->oMoveAngleYaw                = (gMarioObject->header.gfx.angle[1] + 0x8000);
     o->oCelebStarDiameterOfRotation = 100;
 #if BUGFIX_STAR_BOWSER_KEY
-    if (gCurrLevelNum == LEVEL_BOWSER_1
-     || gCurrLevelNum == LEVEL_BOWSER_2) {
+    if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_BOWSER_KEY];
         o->oFaceAnglePitch = 0x0;
         o->oFaceAngleRoll  = 0xC000;

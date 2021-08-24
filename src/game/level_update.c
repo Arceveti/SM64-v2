@@ -404,10 +404,11 @@ void check_instant_warp(void) {
 Bool32 music_unchanged_through_warp(s16 warpNodeId) {
     struct ObjectWarpNode *warpNode = area_get_warp_node(warpNodeId);
     s16 levelNum                    = (warpNode->node.destLevel & 0x7F);
+#if BUGFIX_KOOPA_RACE_MUSIC
     s16 destArea                    =  warpNode->node.destArea;
     Bool32 unchanged                = TRUE;
     s16 currBgMusic;
-    if (levelNum == LEVEL_BOB && levelNum == gCurrLevelNum && destArea == gCurrAreaIndex) {
+    if ((levelNum == LEVEL_BOB) && (levelNum == gCurrLevelNum) && (destArea == gCurrAreaIndex)) {
         currBgMusic = get_current_background_music();
         if ((currBgMusic == SEQUENCE_ARGS(4, (SEQ_EVENT_POWERUP | SEQ_VARIATION)))
          || (currBgMusic == SEQUENCE_ARGS(4,  SEQ_EVENT_POWERUP))) unchanged = FALSE;
@@ -417,6 +418,12 @@ Bool32 music_unchanged_through_warp(s16 warpNodeId) {
         unchanged      = (levelNum == gCurrLevelNum) && (destParam1 == gCurrentArea->musicParam) && (destParam2 == gCurrentArea->musicParam2);
         if (get_current_background_music() != destParam2) unchanged = FALSE;
     }
+#else
+    u16 destParam1   = gAreas[warpNode->node.destArea].musicParam;
+    u16 destParam2   = gAreas[warpNode->node.destArea].musicParam2;
+    Bool32 unchanged = ((levelNum == gCurrLevelNum) && (destParam1 == gCurrentArea->musicParam) && (destParam2 == gCurrentArea->musicParam2));
+    if (get_current_background_music() != destParam2) unchanged = FALSE;
+#endif
     return unchanged;
 }
 
@@ -667,8 +674,12 @@ void update_hud_values(void) {
             play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
         }
         if (gMarioState->numLives > 100) gMarioState->numLives = 100;
+#if BUGFIX_MAX_LIVES
         if (gMarioState->numCoins > 999) gMarioState->numCoins = 999;
         if (gHudDisplay.coins     > 999) gHudDisplay.coins     = 999;
+#else
+        if (gMarioState->numCoins > 999) gMarioState->numLives = (s8) 999; //! Wrong variable
+#endif
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
         gHudDisplay.keys  = gMarioState->numKeys;

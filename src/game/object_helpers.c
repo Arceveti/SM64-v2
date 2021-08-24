@@ -1849,6 +1849,7 @@ static void cur_obj_end_dialog(s32 dialogFlags, s32 dialogResult) {
 s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, DialogID dialogID, UNUSED s32 unused) {
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
     switch (o->oDialogState) {
+#if BUGFIX_DIALOG_TIME_STOP
         case DIALOG_STATUS_ENABLE_TIME_STOP:
             // Patched :(
             // Wait for Mario to be ready to speak, and then enable time stop
@@ -1862,6 +1863,18 @@ s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, DialogID dialogID, UNU
             }
             // Fall through so that Mario's action is interrupted immediately
             // after time is stopped
+#else
+        case DIALOG_STATUS_ENABLE_TIME_STOP:
+            //! We enable time stop even if Mario is not ready to speak. This
+            //  allows us to move during time stop as long as Mario never enters
+            //  an action that can be interrupted with text.
+            if (gMarioState->health >= 0x100) {
+                gTimeStopState |= TIME_STOP_ENABLED;
+                o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+                o->oDialogState++;
+            }
+            break;
+#endif
         case DIALOG_STATUS_INTERRUPT:
             // Interrupt until Mario is actually speaking with the NPC
             if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) {
@@ -1914,6 +1927,7 @@ s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cuts
     s32 dialogResponse = DIALOG_RESPONSE_NONE;
     Bool32 doneTurning    = TRUE;
     switch (o->oDialogState) {
+#if BUGFIX_DIALOG_TIME_STOP
         case DIALOG_STATUS_ENABLE_TIME_STOP:
             // Wait for Mario to be ready to speak, and then enable time stop
             if (mario_ready_to_speak() || (gMarioState->action == ACT_READING_NPC_DIALOG)) {
@@ -1927,6 +1941,19 @@ s32 cur_obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cuts
             }
             // Fall through so that Mario's action is interrupted immediately
             // after time is stopped
+#else
+        case DIALOG_STATUS_ENABLE_TIME_STOP:
+            //! We enable time stop even if Mario is not ready to speak. This
+            //  allows us to move during time stop as long as Mario never enters
+            //  an action that can be interrupted with text.
+            if (gMarioState->health >= 0x0100) {
+                gTimeStopState |= TIME_STOP_ENABLED;
+                o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
+                o->oDialogState++;
+                o->oDialogResponse = DIALOG_RESPONSE_NONE;
+            }
+            break;
+#endif
         case DIALOG_STATUS_INTERRUPT:
             // Additional flag that makes the NPC rotate towards to Mario
             if (dialogFlags & DIALOG_FLAG_TURN_TO_MARIO) {

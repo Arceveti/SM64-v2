@@ -1,12 +1,16 @@
 #ifndef CONFIG_H
 #define CONFIG_H
-// HACKERSM64 CONFIG DEFINES NEAR BOTTOM
+
 /**
  * @file config.h
  * A catch-all file for configuring various bugfixes and other settings (maybe eventually) in SM64
  */
 
-// Bug Fixes
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Version-Specific Bug Fixes --                                                                                             *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
 // --| Post-JP Version Nintendo Bug Fixes
 /// Fixes bug where obtaining over 999 coins sets the number of lives to 999 (or -25)
 #define BUGFIX_MAX_LIVES (1 || VERSION_US || VERSION_EU || VERSION_SH)
@@ -29,173 +33,104 @@
 #define BUGFIX_BOWSER_FALLEN_OFF_STAGE (1 || VERSION_US || VERSION_EU || VERSION_SH)
 /// Fixes bug where Bowser would look weird while fading out
 #define BUGFIX_BOWSER_FADING_OUT (1 || VERSION_US || VERSION_EU || VERSION_SH)
-/// Removes multi-language cake screen
+
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- ROM Settingss --                                                                                                          *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Internal ROM name. NEEDS TO BE **EXACTLY** 20 CHARACTERS. Can't be 19 characters, can't be 21 characters. You can fill it with spaces.
+// The end quote should be here:               "
+#define INTERNAL_ROM_NAME "SUPERMARIO64        "
+
+// Use 8MB RAM instead of 4MB
+#define USE_EXT_RAM
+
+// Clear RAM on boot (HackerSM64)
+#define CLEARRAM 1
+
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Misc. Settingss --                                                                                                        *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Set this to the extended bounds mode you want, then do "make clean".
+// See engine/extended_bounds.h for info.
+// (anonymous_moose)
+#define EXTENDED_BOUNDS_MODE 1
+
+// Adds multiple languages to the game. Just a placeholder for the most part,
+// because it only works with EU, and must be enabled with EU.
+// (HackerSM64)
+#define MULTILANG (0 || VERSION_EU)
+
+/// Removes multi-language cake screen (HackerSM64)
 #define EU_CUSTOM_CAKE_FIX 1
 
-// Support Rumble Pak
+// Support Rumble Pak (HackerSM64)
 // Currently not recommended, as it may cause random crashes.
 // #define ENABLE_RUMBLE (1 || VERSION_SH)
 
-// Clear RAM on boot
-#define CLEARRAM 1
+// Goddard easter egg from Shindou
+#define GODDARD_EASTER_EGG
 
-// Screen Size Defines
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Graphics Settings --                                                                                                      *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Screen Size Defines (HackerSM64)
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
-// Border Height Define for NTSC Versions
+// Border Height Define for NTSC Versions (HackerSM64)
 #ifdef TARGET_N64
 // Size of the black border at the top and bottom of the screen. You can set it to different values for console and emulator.
 // There is generally no reason to have a value other than 0 for emulator. As for console, it provides a (small) performance boost.
 #define BORDER_HEIGHT_CONSOLE  0
 #define BORDER_HEIGHT_EMULATOR 0
-
 #endif
 
-// -- HackerSM64 specific settings --
-
-// TEST LEVEL
-// Uncomment this define and set a test level in order to boot straight into said level.
-// This allows you to quickly test the level you're working on.
-// If you want the game to boot normally, just comment out the define again.
-// #define TEST_LEVEL LEVEL_CASTLE
-
-// COMMON HACK CHANGES
-// Internal ROM name. NEEDS TO BE **EXACTLY** 20 CHARACTERS. Can't be 19 characters, can't be 21 characters. You can fill it with spaces.
-// The end quote should be here:               "
-#define INTERNAL_ROM_NAME "SUPERMARIO64        "
-// Disable lives and hide the lives counter
-// #define DISABLE_LIVES
-// Skip peach letter cutscene
-#define PEACH_SKIP
-// Fixes the castle music sometimes triggering after getting a dialog
-#define CASTLE_MUSIC_FIX
-// Remove course specific camera processing
-#define CAMERA_FIX
-// Change the movement speed when hanging from a ceiling (the vanilla value is 4.0f)
-#define HANGING_SPEED 12.0f
-// Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles"
-// #define TIGHTER_HANGING_CONTROLS
-// Disables fall damage
-#define NO_FALL_DAMAGE
-// Disables the scream that Mario makes when falling off a great height (this is separate from actual fall damage)
-// #define NO_FALL_DAMAGE_SOUND
-// Number of coins to spawn the "100 coin" star. If you remove the define altogether, then there won't be a 100 coin star at all.
-#define X_COIN_STAR 100
-// Platform displacement 2 also known as momentum patch. Makes Mario keep the momemtum from moving platforms. Doesn't break treadmills anymore!
-#define PLATFORM_DISPLACEMENT_2
-// Stars don't kick you out of the level
-// #define NON_STOP_STARS
-// Uncomment this if you want global star IDs (useful for creating an open world hack ala MVC)
-// #define GLOBAL_STAR_IDS
-// Uncomment this if you want to skip the title screen (Super Mario 64 logo)
-// #define SKIP_TITLE_SCREEN
-// Uncomment this if you want to keep the Mario head and not skip it
-#define KEEP_MARIO_HEAD
-// Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad
-#define PARALLEL_LAKITU_CAM
-// Allows Mario to ledgegrab sloped floors
-// #define NO_FALSE_LEDGEGRABS
-// Adds multiple languages to the game. Just a placeholder for the most part, because it only works with EU, and must be enabled with EU.
-#define MULTILANG (0 || VERSION_EU)
-// Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified.
-#define PUPPYCAM
-
-
-// HACKER QOL
-// Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value)
-#define LONGER_POLES
-// Number of possible unique model ID's (keep it higher than 256)
-#define MODEL_ID_COUNT 256
-// Increase audio heap size to allow for more concurrent notes to be played and for more custom sequences/banks to be imported (does nothing with EU and SH versions)
-#define EXPAND_AUDIO_HEAP
-// Allow all surfaces types to have force, (doesn't require setting force, just allows it to be optional).
-#define ALL_SURFACES_HAVE_FORCE
-// Custom debug mode. Press DPAD left to show the debug UI. Press DPAD right to enter the noclip mode.
-// #define CUSTOM_DEBUG
-// Include Puppyprint, a display library for text and large images. Also includes a custom, enhanced performance profiler.
-// #define PUPPYPRINT
-#define PUPPYPRINT_DEBUG 0
-// Visual debug enables some collision visuals. Tapping Right on the dpad will cycle between visual hitboxes, visual surfaces, both, and neither.
-// If puppyprint is enabled, then this can be cycled only while the screen is active.
-#define VISUAL_DEBUG
-
-// BUG/GAME QOL FIXES
-// Fix instant warp offset not working when warping across different areas
-#define INSTANT_WARP_OFFSET_FIX
-// Whether a tree uses snow particles or not is decided via the model IDs instead of the course number
-#define TREE_PARTICLE_FIX
-// Allows Mario to jump kick on steep surfaces that are set to be non slippery, instead of being forced to dive
-#define JUMP_KICK_FIX
-// Allow Mario to grab hangable ceilings from any state
-#define HANGING_FIX
-// The last frame that will be considered a firsty when wallkicking
-#define FIRSTY_LAST_FRAME 1
-// 46 degree wallkicks
-#define WALLKICKS_46_DEGREES
-// Disable BLJs and crush SimpleFlips's dreams
-// #define DISABLE_BLJ
-
-// RELATING TO EXIT COURSE
-// Disable exit course
-// #define DISABLE_EXIT_COURSE
-// Decides whether you can exit course while moving (has no effect if you disable exit course)
-#define EXIT_COURSE_WHILE_MOVING
-// Decides which level "exit course" takes you to (has no effect if you disable exit course)
-#define EXIT_COURSE_LEVEL LEVEL_CASTLE
-// Decides the area node "exit course" takes you to (has no effect if you disable exit course)
-#define EXIT_COURSE_AREA 0x01
-// Decides the warp node "exit course" takes you to (has no effect if you disable exit course)
-#define EXIT_COURSE_NODE 0x1F
-
-// OTHER ENHANCEMENTS
-// Enable widescreen (16:9) support
+// Enable widescreen (16:9) support (HackerSM64)
 #define WIDE
+
 // Skybox size modifier, changing this will add support for larger skybox images. NOTE: Vanilla skyboxes may break if you change this option. Be sure to rescale them accordingly.
 // Whenever you change this, make sure to run "make -C tools clean" to rebuild the skybox tool (alternatively go into skyconv.c and change the file in any way (like adding/deleting a space) to specifically rebuild that tool).
 // When increasing this, you should probably also increase the GFX pool size. (the GFX_POOL_SIZE define in src/game/game_init.h)
+// (HackerSM64)
 #define SKYBOX_SIZE 1
+
 // When this option is enabled, LODs will ONLY work on console.
 // When this option is disabled, LODs will work regardless of whether console or emulator is used.
 // Regardless of whether this setting is enabled or not, you can use gIsConsole to wrap your own code in a console check.
+// (HackerSM64)
 #define AUTO_LOD
+
 // Disable AA (Recommended: it changes nothing on emulator, and it makes console run better)
+// (HackerSM64)
 #define DISABLE_AA
-// Makes the coins ia8 64x64 instead of ia16 32x32. Uses new ia8 textures so that vanilla coins look better.
+
+// Makes the coins ia8 64x64 instead of ia16 32x32.
+// Uses new ia8 textures so that vanilla coins look better.
+// (HackerSM64)
 #define IA8_COINS
-// Use a much better implementation of reverb over vanilla's fake echo reverb. Great for caves or eerie levels, as well as just a better audio experience in general.
-// Reverb parameters can be configured in audio/synthesis.c to meet desired aesthetic/performance needs.
-// #define BETTER_REVERB
-// Collision data is the type that the collision system uses. All data by default is stored as an s16, but you may change it to s32.
-// Naturally, that would double the size of all collision data, but would allow you to use 32 bit values instead of 16.
-// Rooms are s8 in vanilla, but if you somehow have more than 255 rooms, you may raise this number.
-// Currently, they *must* say as u8/s8, because the room tables generated by literally anything are explicitly u8 and don't use a macro, making this currently infeasable.
-#define COLLISION_DATA_TYPE s16
-#define ROOM_DATA_TYPE u8
 
-// If you want to change the extended boundaries mode, go to engine/extended_bounds.h and change EXTENDED_BOUNDS_MODE
-
-
-
-/********************************************************************************************************************************
- *                                                                                                                              *
- * -- SM64v2 specific settings --                                                                                               *
- *                                                                                                                              *
- ********************************************************************************************************************************/
-
-
-/****************************************************************
- * Graphics                                                     *
- ****************************************************************/
+// Higher resolution coins rotating at 30 FPS 
+// Overwrites IA8_COINS
+// (Arceveti)
+#define IA8_30FPS_COINS
 
 // Fixes the game reading the ia8 burn smoke texture as an rgba16
 #define BURN_SMOKE_FIX
 
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
-
-// Higher resolution coins rotating at 30 FPS (Arceveti)
-#define IA8_30FPS_COINS
 
 // Mario's silhouette when behind solid objects/surfaces
 // Also enables new render layers
@@ -239,12 +174,44 @@
 #define METAL_CAP_REFLECTION_LAKITU
 
 
-/****************************************************************
- * Vanilla level changes                                        *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Audio Settings --                                                                                                         *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Increase audio heap size to allow for more concurrent notes to be played and for more custom sequences/banks to be imported.
+// Does nothing with EU and SH versions
+// (HackerSM64)
+#define EXPAND_AUDIO_HEAP
+
+// Use a much better implementation of reverb over vanilla's fake echo reverb. Great for caves or eerie levels, as well as just a better audio experience in general.
+// Reverb parameters can be configured in audio/synthesis.c to meet desired aesthetic/performance needs.
+// (HackerSM64)
+// #define BETTER_REVERB
+
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Vanilla Level/Cutscene Settings --                                                                                        *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Uncomment this if you want to skip the title screen (Super Mario 64 logo)
+// (HackerSM64)
+// #define SKIP_TITLE_SCREEN
+
+// Uncomment this if you want to keep the Mario head and not skip it (HackerSM64)
+#define KEEP_MARIO_HEAD
+
+// Skip peach letter cutscene (HackerSM64)
+// #define PEACH_SKIP
+
+// Fixes the castle music sometimes triggering after getting a dialog (HackerSM64)
+#define CASTLE_MUSIC_FIX
 
 // Adds a few extra objects to some levels
-// Mainly recovery hearts, 1-ups, & cap boxes
+// Mainly Recovery Hearts, 1-Ups, & Cap Boxes
 // (Arceveti)
 #define BONUS_OBJECTS
 
@@ -280,9 +247,11 @@
 #define WDW_DISABLE_AMBIENT_WAVES
 
 
-/****************************************************************
- * Optimizations                                                *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Optimizations --                                                                                                          *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
 
 // Set more object types to use "OBJ_LIST_UNIMPORTANT" so they can be unloaded when needed (Arceveti)
 #define UNIMPORTANT_OBJECTS
@@ -304,9 +273,34 @@
 #define FAST_FLOOR_ALIGN
 
 
-/****************************************************************
- * Hacker QoL                                                   *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Hacker QoL --                                                                                                             *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// TEST LEVEL (HackerSM64)
+// Uncomment this define and set a test level in order to boot straight into said level.
+// This allows you to quickly test the level you're working on.
+// If you want the game to boot normally, just comment out the define again.
+// #define TEST_LEVEL LEVEL_CASTLE
+
+// Number of possible unique model ID's (keep it higher than 256)
+#define MODEL_ID_COUNT 256
+
+// Custom debug mode. Press DPAD left to show the debug UI. Press DPAD right to enter the noclip mode. (HackerSM64)
+// #define CUSTOM_DEBUG
+
+// Include Puppyprint, a display library for text and large images.
+// Also includes a custom, enhanced performance profiler.
+// (FazanaJ, HackerSM64)
+// #define PUPPYPRINT
+#define PUPPYPRINT_DEBUG 0
+
+// Visual debug enables some collision visuals.
+// Tapping Right on the dpad will cycle between visual hitboxes, visual surfaces, both, and neither.
+// If puppyprint is enabled, then this can be cycled only while the screen is active. (HackerSM64)
+#define VISUAL_DEBUG
 
 // Enable debug level select (doesn't work if Goddard is skipped)
 #define DEBUG_LEVEL_SELECT
@@ -323,9 +317,24 @@
 #define SEGMENT_ROM_TABLE
 
 
-/****************************************************************
- * HUD                                                          *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- HUD Settingss --                                                                                                          *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Disable exit course (HackerSM64)
+// #define DISABLE_EXIT_COURSE
+
+// Decides which level "exit course" takes you to (has no effect if you disable exit course)
+#define EXIT_COURSE_LEVEL LEVEL_CASTLE
+// Decides the area node "exit course" takes you to (has no effect if you disable exit course)
+#define EXIT_COURSE_AREA 0x01
+// Decides the warp node "exit course" takes you to (has no effect if you disable exit course)
+#define EXIT_COURSE_NODE 0x1F
+
+// Disable lives and hide the lives counter (HackerSM64)
+// #define DISABLE_LIVES
 
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 // #define COMPLETE_EN_US_SEGMENT2
@@ -351,9 +360,20 @@
 #define PAUSE_BOWSER_KEYS
 
 
-/****************************************************************
- * Camera                                                       *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Camera Settingss --                                                                                                       *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad (HackerSM64)
+#define PARALLEL_LAKITU_CAM
+
+// Remove course specific camera processing (HackerSM64)
+#define CAMERA_FIX
+
+// Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified. (FazanaJ, HackerSM64)
+#define PUPPYCAM
 
 // Slightly modified version of Reonu Cam 3 (Reonu)
 // #define REONU_CAM_3
@@ -362,9 +382,33 @@
 // #define FAST_VERTICAL_CAMERA_MOVEMENT
 
 
-/****************************************************************
- * Object behaviors                                             *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Object Behavior Settingss --                                                                                              *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Stars don't kick you out of the level (HackerSM64)
+// #define NON_STOP_STARS
+
+// Uncomment this if you want global star IDs
+// Useful for creating an open world hack ala MVC
+// (HackerSM64)
+// #define GLOBAL_STAR_IDS
+
+// Number of coins to spawn the "100 coin" star.
+// If you remove the define altogether, then there won't be a 100 coin star at all.
+// (HackerSM64)
+#define X_COIN_STAR 100
+
+// Fix instant warp offset not working when warping across different areas (HackerSM64)
+#define INSTANT_WARP_OFFSET_FIX
+
+// Whether a tree uses snow particles or not is decided via the model IDs instead of the course number (HackerSM64)
+#define TREE_PARTICLE_FIX
+
+// Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value) (HackerSM64)
+#define LONGER_POLES
 
 // Makes obj_resolve_object_collisions work consistently (Arceveti)
 #define FIX_OBJ_COLLISIONS
@@ -440,9 +484,29 @@
 #define WIGGLER_NUM_SEGMENTS  4
 
 
-/****************************************************************
- * Collision                                                    *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Collision Settingss --                                                                                                    *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+// Collision data is the type that the collision system uses. All data by default is stored as an s16, but you may change it to s32.
+// Naturally, that would double the size of all collision data, but would allow you to use 32 bit values instead of 16.
+// Rooms are s8 in vanilla, but if you somehow have more than 255 rooms, you may raise this number.
+// Currently, they *must* say as u8/s8, because the room tables generated by literally anything are explicitly u8 and don't use a macro, making this currently infeasable.
+#define COLLISION_DATA_TYPE s16
+#define ROOM_DATA_TYPE u8
+
+// Platform displacement 2 also known as momentum patch.
+// Makes Mario keep the momemtum from moving platforms.
+// Doesn't break treadmills anymore!
+// (HackerSM64)
+#define PLATFORM_DISPLACEMENT_2
+
+// Allow all surfaces types to have force.
+// Doesn't require setting force, just allows it to be optional.
+// (HackerSM64)
+#define ALL_SURFACES_HAVE_FORCE
 
 // Water surfaces (Thecozies)
 #define NEW_WATER_SURFACES
@@ -481,14 +545,22 @@
 #define MAX_CEIL_NORMAL_Y -0.2f
 
 
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Movement Settingss --                                                                                                     *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+
 /****************************************************************
- * Movement                                                     *
+ * Movement - Ground                                            *
  ****************************************************************/
 
+// Disable BLJs and crush SimpleFlips's dreams (HackerSM64)
+// #define DISABLE_BLJ
 
-/********************************
- * Movement - Ground            *
- ********************************/
+// Allows Mario to jump kick on steep surfaces that are set to be non slippery, instead of being forced to dive (HackerSM64)
+#define JUMP_KICK_FIX
 
 // Fixes turning around on the ground (Arceveti)
 #define FIX_GROUND_TURN_RADIUS
@@ -509,9 +581,17 @@
 #define LEDGE_PROTECTION
 
 
-/********************************
- * Movement - Airborne          *
- ********************************/
+/****************************************************************
+ * Movement - Airborne                                          *
+ ****************************************************************/
+
+// Disables fall damage (HackerSM64)
+#define NO_FALL_DAMAGE
+
+// Disables the scream that Mario makes when falling off a great height.
+// This is separate from actual fall damage
+// (HackerSM64)
+// #define NO_FALL_DAMAGE_SOUND
 
 // Allows for turning in midair (Arceveti)
 #define AIR_TURN
@@ -525,7 +605,15 @@
 // Use intendedYaw to control Hoot instead of raw left and right inputs (Arceveti)
 #define HOOT_YAW_FIX
 
-// Unique wall slide which takes horizontal momentum into account (Arceveti)
+// The last frame that will be considered a firsty when wallkicking (HackerSM64)
+#define FIRSTY_LAST_FRAME 1
+
+// 46 degree wallkicks (HackerSM64)
+#define WALLKICKS_46_DEGREES
+
+// Unique wall slide which takes horizontal momentum into account
+// Overwrites FIRSTY_LAST_FRAME and WALLKICKS_46_DEGREES
+// (Arceveti)
 #define WALL_SLIDE
 
 // Hold A when bouncing on an enemy to go higher (Arceveti)
@@ -537,7 +625,10 @@
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
 
-// Fixes false ledge grabs
+// Allows Mario to ledgegrab sloped floors (HackerSM64)
+// #define NO_FALSE_LEDGEGRABS
+
+// Properly fixes false ledge grabs
 // Does nothing if BETTER_WALL_COLLISION is enabled.
 // (Arceveti)
 #define LEDGE_GRAB_FIX
@@ -555,10 +646,16 @@
 // Prevents bonks when ground pounding next to a wall (Arceveti)
 #define GROUND_POUND_WALL_FIX
 
+// Allow Mario to grab hangable ceilings from any state (HackerSM64)
+#define HANGING_FIX
 
-/********************************
- * Movement - Submerged         *
- ********************************/
+
+/****************************************************************
+ * Movement - Submerged                                         *
+ ****************************************************************/
+
+// Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
+#define MAX_SWIMMING_SPEED 32.0f
 
 // Underwater Ground pound similar to SMO (Unknown)
 #define WATER_GROUND_POUND
@@ -573,9 +670,14 @@
 #define SMOOTH_WATER_FLOOR_PITCH
 
 
-/********************************
- * Movement - Misc.             *
- ********************************/
+/****************************************************************
+ * Movement - Misc.                                             *
+ ****************************************************************/
+
+// Decides whether you can exit course while moving
+// Has no effect if you disable exit course)
+// (HackerSM64)
+#define EXIT_COURSE_WHILE_MOVING
 
 // Lets Mario transition from more actions to more other actions (Arceveti)
 #define ACTION_CANCELS
@@ -589,6 +691,13 @@
 
 // Mario's squish scale is smooth rather than being instantly set (Arceveti)
 #define SMOOTH_SQUISH
+
+// Change the movement speed when hanging from a ceiling (the vanilla value is 4.0f)
+// (HackerSM64)
+#define HANGING_SPEED 12.0f
+
+// Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles" (HackerSM64)
+// #define TIGHTER_HANGING_CONTROLS
 
 // Improved hanging which doesn't require holding down the A button (Arceveti)
 #define EASIER_HANGING
@@ -624,24 +733,15 @@
 
 #define MARIO_STEP_HEIGHT           80.0f
 
-// Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
-#define MAX_SWIMMING_SPEED 32.0f
-
 // Terminal velovity for gravity (75.0f is default) (Arceveti)
-#define TERMINAL_GRAVITY_VELOCITY 75.0f
+#define TERMINAL_GRAVITY_VELOCITY   75.0f
 
 
-/****************************************************************
- * Misc.                                                        *
- ****************************************************************/
-
-// Goddard easter egg from Shindou (Nintendo, Arceveti)
-#define GODDARD_EASTER_EGG
-
-
-/****************************************************************
- * Experimental/Unfinished                                      *
- ****************************************************************/
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Experimental/Unfinished Settingss --                                                                                      *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
 
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS

@@ -1,5 +1,6 @@
 **TODO:**
 - Known Bugs:
+    - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:
@@ -12,33 +13,34 @@
     - Separate find_room function for geo_switch_area, and only check collision in current room
     - Save space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
-            - Bobomb body
-            - King Bobomb body
-            - King Bobomb hand
-            - Bobomb Buddy body
-            - Bully body
-            - Big Bully body
-            - Chuckya body
-            - Chuckya hand/antenna
-            - Fire Spitter
-            - Bowser bombs
-            - Amp
-            - Swoop body
-            - Goomba body
-            - Scuttlebug eyes
-            - Spindrift head
-            - Mr. I body
-            - Snufit body
-            - Snufit Bullets
-            - Wiggler segment
-            - Wiggler head
-            - Wiggler nose
-            - WF giant pole top
-        - Billboard Textured Spheres:
-            - Chill Bully body
-            - Scuttlebug body
-            - Snowman part
-            - Whwomp hand
+            - Smooth
+                - Bobomb body
+                - King Bobomb body
+                - King Bobomb hand
+                - Bobomb Buddy body
+                - Bully body
+                - Big Bully body
+                - Chuckya body
+                - Chuckya hand/antenna
+                - Fire Spitter
+                - Bowser bombs
+                - Amp
+                - Swoop body
+                - Goomba body
+                - Scuttlebug eyes
+                - Spindrift head
+                - Mr. I body
+                - Snufit body
+                - Snufit Bullets
+                - Wiggler segment
+                - Wiggler head
+                - Wiggler nose
+                - WF giant pole top
+            - Textured:
+                - Chill Bully body
+                - Scuttlebug body
+                - Snowman part
+                - Whwomp hand
         - Light gray checker in various Levels
         - Various water & lava textures
         - Circular gradient:
@@ -60,9 +62,13 @@
 - Physics/Movement:
     - Gravity direction support
     - "Squished" death from any direction
-    - Fix using a shell to go up the side of SSL pillars with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
 - Graphics
+    - Proper Skyboxes like in SM64DS
+        - https://jaxry.github.io/panorama-to-cubemap/
+        - Requires some sort of distortion?
+        - Texture filtering on edges?
     - Fix sideways environment map textures when fixing guLookAtReflect in geo_process_master_list_sub
+        - Can't just rotate the textures themselves because those are Nintendo assets
     - Silhouette:
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette
