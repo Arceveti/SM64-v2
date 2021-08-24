@@ -5,7 +5,7 @@
 // field-specific and object-specific constants, e.g. actions.
 
 /* activeFlags */
-#define ACTIVE_FLAG_DEACTIVATED              0x0000  // 0x0000
+#define ACTIVE_FLAG_DEACTIVATED            (0 <<  0) // 0x0000
 #define ACTIVE_FLAG_ACTIVE                 (1 <<  0) // 0x0001
 #define ACTIVE_FLAG_FAR_AWAY               (1 <<  1) // 0x0002
 #define ACTIVE_FLAG_UNK2                   (1 <<  2) // 0x0004
@@ -59,7 +59,7 @@
 #define DIALOG_STATUS_STOP_DIALOG       0x03
 #define DIALOG_STATUS_DISABLE_TIME_STOP 0x04
 
-#define DIALOG_FLAG_NONE                0x00
+#define DIALOG_FLAG_NONE               (0 <<  0) // 0x00
 #define DIALOG_FLAG_TURN_TO_MARIO      (1 <<  0) // 0x01 // cutscene only
 #define DIALOG_FLAG_TEXT_DEFAULT       (1 <<  1) // 0x02
 #define DIALOG_FLAG_TEXT_RESPONSE      (1 <<  2) // 0x04 // non-cutscene only
@@ -67,7 +67,7 @@
 #define DIALOG_FLAG_TIME_STOP_ENABLED  (1 <<  4) // 0x10
 
 /* oMoveFlags */
-#define OBJ_MOVE_NONE                   0x0000   // 0x0000
+#define OBJ_MOVE_NONE                  (0 <<  0) // 0x0000
 #define OBJ_MOVE_LANDED                (1 <<  0) // 0x0001
 #define OBJ_MOVE_ON_GROUND             (1 <<  1) // 0x0002  // mutually exclusive to OBJ_MOVE_LANDED
 #define OBJ_MOVE_LEFT_GROUND           (1 <<  2) // 0x0004

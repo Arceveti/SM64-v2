@@ -11,16 +11,16 @@
 #include "game/mario_actions_cutscene.h"
 
 // sky background params
-#define BACKGROUND_OCEAN_SKY        0
-#define BACKGROUND_FLAMING_SKY      1
-#define BACKGROUND_UNDERWATER_CITY  2
-#define BACKGROUND_BELOW_CLOUDS     3
-#define BACKGROUND_SNOW_MOUNTAINS   4
-#define BACKGROUND_DESERT           5
-#define BACKGROUND_HAUNTED          6
-#define BACKGROUND_GREEN_SKY        7
-#define BACKGROUND_ABOVE_CLOUDS     8
-#define BACKGROUND_PURPLE_SKY       9
+#define BACKGROUND_OCEAN_SKY        0x0
+#define BACKGROUND_FLAMING_SKY      0x1
+#define BACKGROUND_UNDERWATER_CITY  0x2
+#define BACKGROUND_BELOW_CLOUDS     0x3
+#define BACKGROUND_SNOW_MOUNTAINS   0x4
+#define BACKGROUND_DESERT           0x5
+#define BACKGROUND_HAUNTED          0x6
+#define BACKGROUND_GREEN_SKY        0x7
+#define BACKGROUND_ABOVE_CLOUDS     0x8
+#define BACKGROUND_PURPLE_SKY       0x9
 
 // geo layout macros
 

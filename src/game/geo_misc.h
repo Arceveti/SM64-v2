@@ -15,11 +15,11 @@ extern s8 gFlyingCarpetState;
 
 #ifndef GBI_FLOATS
 extern void make_vertex(
-    Vtx *vtx, s32 n, s16 x, s16 y, s16 z, s16 tx, s16 ty, Color r, Color g, Color b, Alpha a
+    Vtx *vtx, s32 n, VtxPosS x, VtxPosS y, VtxPosS z, TextureCoord tx, TextureCoord ty, Color r, Color g, Color b, Alpha a
 );
 #else
 extern void make_vertex(
-    Vtx *vtx, s32 n, f32 x, f32 y, f32 z, s16 tx, s16 ty, Color r, Color g, Color b, Alpha a
+    Vtx *vtx, s32 n, VtxPosF x, VtxPosF y, VtxPosF z, TextureCoord tx, TextureCoord ty, Color r, Color g, Color b, Alpha a
 );
 #endif
 extern Gfx *geo_exec_inside_castle_light(       s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]);

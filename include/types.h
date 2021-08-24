@@ -49,6 +49,7 @@ typedef uintptr_t GeoLayout;
 typedef uintptr_t LevelScript;
 typedef s32 DrawingLayer;
 typedef s16 Angle;
+typedef f32 Normal;
 typedef s32 CameraTransitionAngle;
 typedef s32 SurfaceType;
 typedef s16 Movtex;
@@ -56,6 +57,8 @@ typedef s16 MacroObject;
 typedef ROOM_DATA_TYPE      RoomData;
 typedef COLLISION_DATA_TYPE Collision;      // Collision is by default an s16
 typedef s16 RawVertexData;
+typedef s16 VtxPosS;
+typedef f32 VtxPosF;
 typedef s32 CellIndex;
 typedef s16 Trajectory;
 typedef s16 PaintingData;
@@ -76,6 +79,8 @@ typedef s32 DialogID;
 typedef s8  ObjAction8;
 typedef s32 ObjAction;
 typedef s16 ColFlags;
+typedef s16 TextureCoord;
+typedef TextureCoord ScreenPos;
 typedef uintptr_t BehaviorScript;
 typedef u8 uchar;
 typedef u8 Color;
@@ -83,7 +88,9 @@ typedef Color Alpha;
 typedef Color Texture;
 typedef u16 ImageTexture;
 
+typedef VtxPosS VtxPos3s;
 typedef Angle Vec3a[3];
+typedef Normal Vec3n[3];
 
 typedef Color ColorRGB[3];
 typedef Color ColorRGBA[4];

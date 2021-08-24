@@ -178,15 +178,15 @@ void beh_yellow_background_menu_loop(void) {
  * Check if a button was clicked.
  * depth = 200.0 for main menu, 22.0 for submenus.
  */
-s32 check_clicked_button(s16 x, s16 y, f32 depth) {
-    f32 a = 52.4213f;
-    f32 newX = (((f32) x * 160.0f) / (a *         depth));
-    f32 newY = (((f32) y * 120.0f) / (a * 3 / 4 * depth));
-    s16 maxX = (newX + 25.0f);
-    s16 minX = (newX - 25.0f);
-    s16 maxY = (newY + 21.0f);
-    s16 minY = (newY - 21.0f);
-    return (sClickPos[0] < maxX && minX < sClickPos[0] && sClickPos[1] < maxY && minY < sClickPos[1]);
+s32 check_clicked_button(ScreenPos x, ScreenPos y, f32 depth) {
+    f32          a = 52.4213f;
+    f32       newX = (((f32) x * 160.0f) / (a *         depth));
+    f32       newY = (((f32) y * 120.0f) / (a * 3 / 4 * depth));
+    ScreenPos maxX = (newX + 25.0f);
+    ScreenPos minX = (newX - 25.0f);
+    ScreenPos maxY = (newY + 21.0f);
+    ScreenPos minY = (newY - 21.0f);
+    return ((sClickPos[0] < maxX) && (minX < sClickPos[0]) && (sClickPos[1] < maxY) && (minY < sClickPos[1]));
 }
 
 /**
@@ -1186,7 +1186,7 @@ void print_menu_cursor(void) {
 /**
  * Prints a hud string depending of the hud table list defined with text fade properties.
  */
-void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const uchar *text) {
+void print_hud_lut_string_fade(s8 hudLUT, ScreenPos x, ScreenPos y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_hud_lut_string(hudLUT, x, y, text);
@@ -1196,7 +1196,7 @@ void print_hud_lut_string_fade(s8 hudLUT, s16 x, s16 y, const uchar *text) {
 /**
  * Prints a centeredhud string depending of the hud table list defined with text fade properties.
  */
-void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const uchar *text) {
+void print_hud_lut_string_centered_fade(s8 hudLUT, ScreenPos x, ScreenPos y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_hud_lut_string_centered(hudLUT, x, y, text);
@@ -1207,7 +1207,7 @@ void print_hud_lut_string_centered_fade(s8 hudLUT, s16 x, s16 y, const uchar *te
 /**
  * Prints a generic white string with text fade properties.
  */
-void print_generic_string_fade(s16 x, s16 y, const uchar *text) {
+void print_generic_string_fade(ScreenPos x, ScreenPos y, const uchar *text) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, sTextBaseAlpha - sTextFadeAlpha);
     print_generic_string(x, y, text);
@@ -1234,9 +1234,9 @@ s32 update_text_fade_out(void) {
  * Prints the amount of stars of a save file.
  * If a save doesn't exist, print "NEW" instead.
  */
-void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
+void print_save_file_star_count(s8 fileIndex, ScreenPos x, ScreenPos y) {
     uchar starCountText[4];
-    s8 offset = 0;
+    ScreenPos offset = 0;
     s16 starCount;
     if (save_file_exists(fileIndex)) {
         starCount = save_file_get_total_star_count(fileIndex, (COURSE_MIN - 1), (COURSE_MAX - 1));
@@ -1452,10 +1452,10 @@ void print_copy_menu_strings(void) {
 /**
  * Prints the "YES NO" prompt and checks if one of the prompts are hovered to do it's functions.
  */
-void print_erase_menu_prompt(s16 x, s16 y) {
-    s16 colorFade = (gGlobalTimer << 12);
-    s16 cursorX   = (sCursorPos[0] + CURSOR_X);
-    s16 cursorY   = (sCursorPos[1] + 120.0f);
+void print_erase_menu_prompt(ScreenPos x, ScreenPos y) {
+    s16 colorFade     = (gGlobalTimer << 12);
+    ScreenPos cursorX = (sCursorPos[0] + CURSOR_X);
+    ScreenPos cursorY = (sCursorPos[1] + 120.0f);
     if ((cursorX < MENU_ERASE_YES_MAX_X   ) && (cursorX >= MENU_ERASE_YES_MIN_X   )
      && (cursorY < MENU_ERASE_YES_NO_MAX_Y) && (cursorY >= MENU_ERASE_YES_NO_MIN_Y)) {
         // Fade "YES" string color but keep "NO" gray
@@ -1668,7 +1668,7 @@ uchar textStarX[] = { TEXT_STAR_X };
 /**
  * Prints castle secret stars collected in a score menu save file.
  */
-void print_score_file_castle_secret_stars(s8 fileIndex, s16 x, s16 y) {
+void print_score_file_castle_secret_stars(s8 fileIndex, ScreenPos x, ScreenPos y) {
     uchar secretStarsText[20];
     // Print "[star] x"
     print_menu_generic_string(x, y, textStarX);
@@ -1684,7 +1684,7 @@ void print_score_file_castle_secret_stars(s8 fileIndex, s16 x, s16 y) {
 /**
  * Prints course coins collected in a score menu save file.
  */
-void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
+void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, ScreenPos x, ScreenPos y) {
     uchar coinScoreText[20];
     u8 stars = save_file_get_star_flags(fileIndex, courseIndex);
     uchar textCoinX[] = { TEXT_COIN_X };
@@ -1721,7 +1721,7 @@ void print_score_file_course_coin_score(s8 fileIndex, s16 courseIndex, s16 x, s1
 /**
  * Prints stars collected in a score menu save file.
  */
-void print_score_file_star_score(s8 fileIndex, s16 courseIndex, s16 x, s16 y) {
+void print_score_file_star_score(s8 fileIndex, s16 courseIndex, ScreenPos x, ScreenPos y) {
     s16 i = 0;
     uchar starScoreText[19];
     u8 stars     = save_file_get_star_flags(       fileIndex, courseIndex);

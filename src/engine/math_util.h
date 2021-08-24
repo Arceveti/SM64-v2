@@ -57,6 +57,7 @@ s16 round_float_to_short( f32 num);
 s32 round_float_to_int(   f32 num);
 s16 round_double_to_short(f64 num);
 s32 round_double_to_int(  f64 num);
+s8  normalize_component(  f32 comp);
 // Sign functions
 s32  signum_positive(s32 x);
 s8   absc(s8  x);

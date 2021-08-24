@@ -122,14 +122,12 @@ struct Painting
  * Contains the position and normal of a vertex in the painting's generated mesh.
  */
 struct PaintingMeshVertex {
-    /*0x00*/ s16 pos[3];
+    /*0x00*/ VtxPosS pos[3];
     /*0x06*/ s8 norm[3];
 };
 
 extern SurfaceType gPaintingMarioFloorType;
-extern f32 gPaintingMarioXPos;
-extern f32 gPaintingMarioYPos;
-extern f32 gPaintingMarioZPos;
+extern Vec3f gPaintingMarioPos;
 
 extern struct PaintingMeshVertex *gPaintingMesh;
 extern Vec3f                     *gPaintingTriNorms;

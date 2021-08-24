@@ -129,9 +129,7 @@
 /// A copy of the type of floor Mario is standing on.
 SurfaceType gPaintingMarioFloorType;
 // A copy of Mario's position
-f32 gPaintingMarioXPos;
-f32 gPaintingMarioYPos;
-f32 gPaintingMarioZPos;
+Vec3f gPaintingMarioPos;
 
 /**
  * When a painting is rippling, this mesh is generated each frame using the Painting's parameters.
@@ -205,7 +203,7 @@ void stop_other_paintings(s16 *idptr, struct Painting *paintingGroup[]) {
  */
 f32 painting_mario_y(struct Painting *painting) {
     // Add 50 to make the ripple closer to Mario's center of mass.
-    f32 relY = ((gPaintingMarioYPos - painting->posY) + 50.0f);
+    f32 relY = ((gPaintingMarioPos[1] - painting->posY) + 50.0f);
     if (relY < 0.0f) {
         relY = 0.0f;
     } else if (relY > painting->size) {
@@ -218,7 +216,7 @@ f32 painting_mario_y(struct Painting *painting) {
  * @return Mario's z position inside the painting (bounded).
  */
 f32 painting_mario_z(struct Painting *painting) {
-    f32 relZ = painting->posZ - gPaintingMarioZPos;
+    f32 relZ = painting->posZ - gPaintingMarioPos[2];
     if (relZ < 0.0f) {
         relZ = 0.0f;
     } else if (relZ > painting->size) {
@@ -271,7 +269,7 @@ f32 painting_nearest_4th(struct Painting *painting) {
  * @return Mario's x position inside the painting (bounded).
  */
 f32 painting_mario_x(struct Painting *painting) {
-    f32 relX = (gPaintingMarioXPos - painting->posX);
+    f32 relX = (gPaintingMarioPos[0] - painting->posX);
     if (relX < 0.0f) {
         relX = 0.0f;
     } else if (relX > painting->size) {
@@ -324,7 +322,7 @@ void painting_state(s8 state, struct Painting *painting, struct Painting *painti
     painting->state      = state;
     painting->rippleX    = painting_ripple_x(painting, xSource);
     painting->rippleY    = painting_ripple_y(painting, ySource);
-    gPaintingMarioYEntry = gPaintingMarioYPos;
+    gPaintingMarioYEntry = gPaintingMarioPos[1];
     if (resetTimer) painting->rippleTimer = 0.0f;
     gRipplingPainting    = painting;
 }
@@ -505,7 +503,7 @@ void painting_update_floors(struct Painting *painting) {
     painting->floorEntered   = ((painting->lastFloor ^ painting->currFloor) & painting->currFloor);
     painting->marioWasUnder  = painting->marioIsUnder;
     // Check if Mario has fallen below the painting (used for floor paintings)
-    painting->marioIsUnder   = (gPaintingMarioYPos < painting->posY);
+    painting->marioIsUnder   = (gPaintingMarioPos[1] < painting->posY);
     // Mario "went under" if he was not under last frame, but is under now
     painting->marioWentUnder = ((painting->marioWasUnder ^ painting->marioIsUnder) & painting->marioIsUnder);
 }
@@ -661,21 +659,6 @@ void painting_calculate_triangle_normals(PaintingData *mesh, PaintingData numVtx
     }
 }
 
-//! move to math_util
-/**
- * Rounds a floating-point component of a normal vector to an s8 by multiplying it by 127 or 128 and
- * rounding away from 0.
- */
-s8 normalize_component(f32 comp) {
-    if (comp > 0.0) {
-        return comp * 127.0 + 0.5; // round up
-    } else if (comp < 0.0) {
-        return comp * 128.0 - 0.5; // round down
-    } else {
-        return 0;                  // don't round 0
-    }
-}
-
 /**
  * Approximates the painting mesh's vertex normals by averaging the normals of all triangles sharing a
  * vertex. Used for Gouraud lighting.
@@ -744,13 +727,13 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
  * If the textureMap doesn't describe the whole mesh, then multiple calls are needed to draw the whole
  * painting.
  */
-Gfx *render_painting(Texture *img, s16 tWidth, s16 tHeight, s16 *textureMap, PaintingData mapVerts, PaintingData mapTris, Alpha alpha) {
+Gfx *render_painting(Texture *img, TextureCoord tWidth, TextureCoord tHeight, TextureCoord *textureMap, PaintingData mapVerts, PaintingData mapTris, Alpha alpha) {
     s16 group;
     s16 map;
     s16 triGroup;
-    s16 mapping;
+    TextureCoord mapping;
     s16 meshVtx;
-    s16 tx, ty;
+    TextureCoord tx, ty;
     // We can fit 15 (16 / 3) vertices in the RSP's vertex buffer.
     // Group triangles by 5, with one remainder group.
     s16 triGroups    = (mapTris / 5);
@@ -845,19 +828,19 @@ Gfx *painting_ripple_image(struct Painting *painting) {
     PaintingData meshTris;
     s16 i;
     s16 *textureMap;
-    s16 imageCount     = painting->imageCount;
-    s16 tWidth         = painting->textureWidth;
-    s16 tHeight        = painting->textureHeight;
-    s16 **textureMaps  = segmented_to_virtual(painting->textureMaps);
-    Texture **textures = segmented_to_virtual(painting->textureArray);
-    Gfx *dlist         = alloc_display_list((imageCount + 6) * sizeof(Gfx));
-    Gfx *gfx           = dlist;
+    s16 imageCount             = painting->imageCount;
+    TextureCoord tWidth        = painting->textureWidth;
+    TextureCoord tHeight       = painting->textureHeight;
+    TextureCoord **textureMaps = segmented_to_virtual(painting->textureMaps );
+    Texture **textures         = segmented_to_virtual(painting->textureArray);
+    Gfx *dlist                 = alloc_display_list((imageCount + 6) * sizeof(Gfx));
+    Gfx *gfx                   = dlist;
     if (dlist == NULL) return dlist;
     gSPDisplayList(gfx++, painting_model_view_transform(painting));
     gSPDisplayList(gfx++, dl_paintings_rippling_begin);
     gSPDisplayList(gfx++, painting->rippleDisplayList);
     // Map each image to the mesh's vertices
-    for (i = 0; i < imageCount; i++) {
+    for ((i = 0); (i < imageCount); (i++)) {
         textureMap = segmented_to_virtual(textureMaps[i]);
         meshVerts  = textureMap[0];
         meshTris   = textureMap[(meshVerts * 3) + 1];
@@ -877,13 +860,13 @@ Gfx *painting_ripple_image(struct Painting *painting) {
 Gfx *painting_ripple_env_mapped(struct Painting *painting) {
     s16 meshVerts;
     s16 meshTris;
-    s16 *textureMap;
-    s16 tWidth        = painting->textureWidth;
-    s16 tHeight       = painting->textureHeight;
-    s16 **textureMaps = segmented_to_virtual(painting->textureMaps);
-    Texture  **tArray = segmented_to_virtual(painting->textureArray);
-    Gfx *dlist        = alloc_display_list(7 * sizeof(Gfx));
-    Gfx *gfx          = dlist;
+    TextureCoord *textureMap;
+    TextureCoord tWidth        = painting->textureWidth;
+    TextureCoord tHeight       = painting->textureHeight;
+    TextureCoord **textureMaps = segmented_to_virtual(painting->textureMaps );
+    Texture      **tArray      = segmented_to_virtual(painting->textureArray);
+    Gfx *dlist                 = alloc_display_list(7 * sizeof(Gfx));
+    Gfx *gfx                   = dlist;
     if (dlist == NULL) return dlist;
     gSPDisplayList(gfx++, painting_model_view_transform(painting));
     gSPDisplayList(gfx++, dl_paintings_env_mapped_begin);
@@ -1076,8 +1059,8 @@ void floor_painting_update(struct Painting *painting, struct Painting *paintingG
  */
 Gfx *geo_painting_draw(s32 callContext, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *gen = (struct GraphNodeGenerated *) node;
-    s32 group = (gen->parameter >> 8) & 0xFF;
-    s32 id    =  gen->parameter       & 0xFF;
+    s32 group = ((gen->parameter >> 8) & 0xFF);
+    s32 id    = ( gen->parameter       & 0xFF);
     Gfx *paintingDlist = NULL;
     struct Painting **paintingGroup = sPaintingGroups[group];
     struct Painting  *painting      = segmented_to_virtual(paintingGroup[id]);
@@ -1117,9 +1100,7 @@ Gfx *geo_painting_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED 
         // Store Mario's floor and position
         find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &surface); //! use gMarioState floor instead?
         gPaintingMarioFloorType = surface->type;
-        gPaintingMarioXPos      = gMarioObject->oPosX;
-        gPaintingMarioYPos      = gMarioObject->oPosY;
-        gPaintingMarioZPos      = gMarioObject->oPosZ;
+        vec3f_copy(gPaintingMarioPos, &gMarioObject->oPosVec);
     }
     return NULL;
 }

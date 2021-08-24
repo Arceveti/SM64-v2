@@ -90,8 +90,8 @@ void print_fps(s32 x, s32 y) {
 
 struct PowerMeterHUD {
     s8 animation;
-    s16 x;
-    s16 y;
+    ScreenPos x;
+    ScreenPos y;
 };
 
 // Stores health segmented value defined by numHealthWedges

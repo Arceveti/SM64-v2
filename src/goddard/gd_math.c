@@ -140,31 +140,32 @@ void gd_create_origin_lookat(Mat4f *mtx, struct GdVec3f *vec, f32 roll) {
     f32 hMag;
     f32 c, s;
     f32 radPerDeg = RAD_PER_DEG;
-    struct GdVec3f unit;
-    unit.x = vec->x;
-    unit.y = vec->y;
-    unit.z = vec->z;
-    gd_normalize_vec3f(&unit);
-    hMag = sqrtf(sqr(unit.x) + sqr(unit.z));
+    Vec3f unit;
+    unit[0] = vec->x;
+    unit[1] = vec->y;
+    unit[2] = vec->z;
+    // gd_normalize_vec3f(&unit);
+    vec3f_normalize(unit);
+    hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
     roll *= radPerDeg; // convert roll from degrees to radians
     s = sind(roll);
     c = cosd(roll);
     gd_set_identity_mat4(mtx);
     if (hMag != 0.0f) {
         invertedHMag = 1.0f / hMag;
-        (*mtx)[0][0] = ((-unit.z * c) - (s * unit.y * unit.x)) * invertedHMag;
-        (*mtx)[1][0] = (( unit.z * s) - (c * unit.y * unit.x)) * invertedHMag;
-        (*mtx)[2][0] =                               -unit.x;
+        (*mtx)[0][0] = ((-unit[2] * c) - (s * unit[1] * unit[0])) * invertedHMag;
+        (*mtx)[1][0] = (( unit[2] * s) - (c * unit[1] * unit[0])) * invertedHMag;
+        (*mtx)[2][0] =                                 -unit[0];
         (*mtx)[3][0] = 0.0f;
 
         (*mtx)[0][1] = s * hMag;
         (*mtx)[1][1] = c * hMag;
-        (*mtx)[2][1] = -unit.y;
+        (*mtx)[2][1] = -unit[1];
         (*mtx)[3][1] = 0.0f;
 
-        (*mtx)[0][2] = (( c * unit.x) - (s * unit.y * unit.z)) * invertedHMag;
-        (*mtx)[1][2] = ((-s * unit.x) - (c * unit.y * unit.z)) * invertedHMag;
-        (*mtx)[2][2] =                               -unit.z;
+        (*mtx)[0][2] = (( c * unit[0]) - (s * unit[1] * unit[2])) * invertedHMag;
+        (*mtx)[1][2] = ((-s * unit[0]) - (c * unit[1] * unit[2])) * invertedHMag;
+        (*mtx)[2][2] =                                 -unit[2];
         (*mtx)[3][2] = 0.0f;
 
         (*mtx)[0][3] = 0.0f;

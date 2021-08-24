@@ -306,8 +306,8 @@ Gfx *geo_movtex_pause_control(s32 callContext, UNUSED struct GraphNode *node, UN
  * scale: how often the texture repeats, 1 = no repeat
  */
 void movtex_make_quad_vertex(Vtx *verts, s32 index, s16 x, s16 y, s16 z, Angle rot, Angle rotOffset, f32 scale, Alpha alpha) {
-    s16 s = (32.0f * ((32.0f * scale) - 1.0f) * sins(rot + rotOffset));
-    s16 t = (32.0f * ((32.0f * scale) - 1.0f) * coss(rot + rotOffset));
+    TextureCoord s = (32.0f * ((32.0f * scale) - 1.0f) * sins(rot + rotOffset));
+    TextureCoord t = (32.0f * ((32.0f * scale) - 1.0f) * coss(rot + rotOffset));
     if (gMovtexVtxColor == MOVTEX_VTX_COLOR_YELLOW) {
         make_vertex(verts, index, x, y, z, s, t, 255, 255,   0, alpha);
     } else if (gMovtexVtxColor == MOVTEX_VTX_COLOR_RED) {
@@ -588,7 +588,7 @@ void movtex_write_vertex_first(Vtx *vtx, RawVertexData *movtexVerts, struct Movt
     Alpha alpha = c->a;
     Color r1, g1, b1;
     s8    r2, g2, b2; //! Color type?
-    s16 s, t;
+    TextureCoord s, t;
     switch (attrLayout) {
         case MOVTEX_LAYOUT_NOCOLOR:
             r1 = c->r;
@@ -618,7 +618,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, RawVertexData *movtexVerts
     Alpha alpha = d->a;
     s16 x, y, z;
     s16 baseS, baseT;
-    s16 s, t;
+    TextureCoord s, t;
     s16 offS, offT;
     Color r1, g1, b1;
     s8    r2, g2, b2; //! Color type?

@@ -6,8 +6,8 @@
 // How many times to store the terrain pitch. This stores it over 10 frames to help smooth over changes in curvature.
 #define NUM_PITCH_ITERATIONS                 10
 
-#define PUPPYCAM_FLAGS_CUTSCENE          0x0001
-#define PUPPYCAM_FLAGS_SMOOTH            0x0002
+#define PUPPYCAM_FLAGS_CUTSCENE             0x1
+#define PUPPYCAM_FLAGS_SMOOTH               0x2
 
 #define PUPPY_ERROR_POOL_FULL               0x1
 
@@ -20,10 +20,10 @@
 #define PUPPYVOLUME_SHAPE_BOX               0x0
 #define PUPPYVOLUME_SHAPE_CYLINDER          0x1
 
-#define PUPPYCAM_MODE3_ZOOMED_IN            0x1
-#define PUPPYCAM_MODE3_ZOOMED_MED           0x2
-#define PUPPYCAM_MODE3_ZOOMED_OUT           0x4
-#define PUPPYCAM_MODE3_ENTER_FIRST_PERSON   0x8
+#define PUPPYCAM_MODE3_ZOOMED_IN            (1 << 0) // 0x1
+#define PUPPYCAM_MODE3_ZOOMED_MED           (1 << 1) // 0x2
+#define PUPPYCAM_MODE3_ZOOMED_OUT           (1 << 2) // 0x4
+#define PUPPYCAM_MODE3_ENTER_FIRST_PERSON   (1 << 3) // 0x8
 
 #include "include/command_macros_base.h"
 

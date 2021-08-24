@@ -156,17 +156,17 @@
 #define SURFACE_WOBBLING_WARP                0x00FD // Pool warp (HMC & DDD)
 #define SURFACE_TRAPDOOR                     0x00FF // Bowser Left trapdoor, has no action defined
 
-#define SURFACE_IS_QUICKSAND(cmd)     (cmd >= 0x21 && cmd < 0x28)   // Doesn't include SURFACE_INSTANT_MOVING_QUICKSAND
-#define SURFACE_IS_NOT_HARD(cmd)      (cmd != SURFACE_HARD && \
-                                     !(cmd >= 0x35 && cmd <= 0x37))
-#define SURFACE_IS_PAINTING_WARP(cmd) (cmd >= 0xD3 && cmd < 0xFD)
+#define SURFACE_IS_QUICKSAND(cmd)     (cmd >= SURFACE_SHALLOW_QUICKSAND && cmd <= SURFACE_MOVING_QUICKSAND)   // Doesn't include SURFACE_INSTANT_MOVING_QUICKSAND
+#define SURFACE_IS_NOT_HARD(cmd)      (cmd != SURFACE_HARD              && \
+                                     !(cmd >= SURFACE_HARD_SLIPPERY     && cmd <= SURFACE_HARD_NOT_SLIPPERY))
+#define SURFACE_IS_PAINTING_WARP(cmd) (cmd >= SURFACE_PAINTING_WARP_D3  && cmd <  SURFACE_WOBBLING_WARP)
 
 #define SURFACE_CLASS_DEFAULT           0x0000
 #define SURFACE_CLASS_VERY_SLIPPERY     0x0013
 #define SURFACE_CLASS_SLIPPERY          0x0014
 #define SURFACE_CLASS_NOT_SLIPPERY      0x0015
 
-#define SURFACE_FLAG_NONE               0x0000
+#define SURFACE_FLAG_NONE             (0 << 0)
 #define SURFACE_FLAG_DYNAMIC          (1 << 0) // 0x0001
 #define SURFACE_FLAG_NO_CAM_COLLISION (1 << 1) // 0x0002
 #define SURFACE_FLAG_X_PROJECTION     (1 << 3) // 0x0008

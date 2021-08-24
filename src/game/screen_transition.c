@@ -16,7 +16,7 @@
 u8  sTransitionColorFadeCount  [4] = { 0 };
 u16 sTransitionTextureFadeCount[2] = { 0 };
 
-s32 set_and_reset_transition_fade_timer(s8 fadeTimer, u8 transTime) {
+Bool32 set_and_reset_transition_fade_timer(s8 fadeTimer, u8 transTime) {
     sTransitionColorFadeCount[fadeTimer]++;
     if (sTransitionColorFadeCount[fadeTimer] == transTime) {
         sTransitionColorFadeCount[fadeTimer]   = 0;
@@ -48,7 +48,7 @@ Vtx *vertex_transition_color(struct WarpTransitionData *transData, Alpha alpha) 
     return verts;
 }
 
-s32 dl_transition_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData, Alpha alpha) {
+Bool32 dl_transition_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData, Alpha alpha) {
     Vtx *verts = vertex_transition_color(transData, alpha);
     if (verts != NULL) {
         gSPDisplayList(   gDisplayListHead++, dl_proj_mtx_fullscreen);
@@ -61,12 +61,12 @@ s32 dl_transition_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *t
     return set_and_reset_transition_fade_timer(fadeTimer, transTime);
 }
 
-s32 render_fade_transition_from_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData) {
+Bool32 render_fade_transition_from_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData) {
     Alpha alpha = set_transition_color_fade_alpha(TRUE, fadeTimer, transTime);
     return dl_transition_color(fadeTimer, transTime, transData, alpha);
 }
 
-s32 render_fade_transition_into_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData) {
+Bool32 render_fade_transition_into_color(s8 fadeTimer, u8 transTime, struct WarpTransitionData *transData) {
     Alpha alpha = set_transition_color_fade_alpha(FALSE, fadeTimer, transTime);
     return dl_transition_color(fadeTimer, transTime, transData, alpha);
 }
@@ -102,7 +102,7 @@ s16 center_tex_transition_y(struct WarpTransitionData *transData, f32 texTransTi
     return (s16)(y + 0.5f);
 }
 
-void make_tex_transition_vertex(Vtx *verts, s32 n, s8 fadeTimer, struct WarpTransitionData *transData, s16 centerTransX, s16 centerTransY, s16 texRadius1, s16 texRadius2, s16 tx, s16 ty) {
+void make_tex_transition_vertex(Vtx *verts, s32 n, s8 fadeTimer, struct WarpTransitionData *transData, s16 centerTransX, s16 centerTransY, s16 texRadius1, s16 texRadius2, TextureCoord tx, TextureCoord ty) {
     Color r       = transData->red;
     Color g       = transData->green;
     Color b       = transData->blue;
@@ -143,7 +143,7 @@ void *sTextureTransitionID[] = {
     texture_transition_bowser_half,
 };
 
-s32 render_textured_transition(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData, s8 texID, s8 transTexType) {
+Bool32 render_textured_transition(s8 fadeTimer, s8 transTime, struct WarpTransitionData *transData, s8 texID, s8 transTexType) {
     f32 texTransTime   = calc_tex_transition_time(fadeTimer, transTime, transData);
     u16 texTransPos    = convert_tex_transition_angle_to_pos(transData);
     s16 centerTransX   = center_tex_transition_x(transData, texTransTime, texTransPos);
@@ -175,7 +175,7 @@ s32 render_textured_transition(s8 fadeTimer, s8 transTime, struct WarpTransition
     return set_and_reset_transition_fade_timer(fadeTimer, transTime);
 }
 
-s32 render_screen_transition(s8 fadeTimer, s8 transType, u8 transTime, struct WarpTransitionData *transData) {
+Bool32 render_screen_transition(s8 fadeTimer, s8 transType, u8 transTime, struct WarpTransitionData *transData) {
     switch (transType) {
         case WARP_TRANSITION_FADE_FROM_COLOR:  return render_fade_transition_from_color(fadeTimer, transTime, transData                                     ); break;
         case WARP_TRANSITION_FADE_INTO_COLOR:  return render_fade_transition_into_color(fadeTimer, transTime, transData                                     ); break;
@@ -189,7 +189,7 @@ s32 render_screen_transition(s8 fadeTimer, s8 transType, u8 transTime, struct Wa
         case WARP_TRANSITION_FADE_INTO_BOWSER: return render_textured_transition(       fadeTimer, transTime, transData, TEX_TRANS_BOWSER, TRANS_TYPE_MIRROR); break;
         default:                               return render_fade_transition_from_color(fadeTimer, transTime, transData                                     ); break;
     }
-    return 0;
+    return FALSE;
 }
 
 Gfx *render_cannon_circle_base(void) {

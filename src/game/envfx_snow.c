@@ -27,9 +27,9 @@
 
 // Might be duplicate
 struct SnowFlakeVertex {
-    s16 x;
-    s16 y;
-    s16 z;
+    VtxPosS x;
+    VtxPosS y;
+    VtxPosS z;
 };
 
 struct EnvFxParticle *gEnvFxBuffer;

@@ -11,7 +11,7 @@
  * and the object's position.
  */
 void create_transform_from_normals(Mat4 transform, f32 xNorm, f32 yNorm, f32 zNorm) {
-    Vec3f normal;
+    Vec3n normal;
     Vec3f pos;
     vec3f_copy(pos, &o->oPosVec);
     vec3f_set(normal, xNorm, yNorm, zNorm);

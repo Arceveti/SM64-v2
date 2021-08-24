@@ -48,8 +48,8 @@ struct DebugBox {
 
 struct DebugVert
 {
-    Vec3s pos;
-    Vec3f normal;
+    VtxPos3s pos;
+    Vec3n normal;
 };
 
 struct DebugBox sBoxes[MAX_DEBUG_BOXES];

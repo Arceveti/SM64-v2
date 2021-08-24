@@ -9,9 +9,9 @@
 // Fourth Byte (Upper Nibble): More bitflags
 // Fourth Byte (Lower Nibble): Sound Status (this is set to SOUND_STATUS_PLAYING when passed to the audio driver.)
 #define SOUND_ARG_LOAD(bank, soundID, priority, flags) (\
-    ((u32) (bank) << 28) | \
-    ((u32) (soundID) << 16) | \
-    ((u32) (priority) << 8) | \
+    ((u32) (bank)     << 28) | \
+    ((u32) (soundID)  << 16) | \
+    ((u32) (priority) <<  8) | \
     (flags) | \
     SOUND_STATUS_WAITING)
 
@@ -20,28 +20,28 @@
 #define SOUNDARGS_MASK_PRIORITY     0x0000FF00
 #define SOUNDARGS_MASK_STATUS       0x0000000F
 
-#define SOUNDARGS_SHIFT_BANK        28
-#define SOUNDARGS_SHIFT_SOUNDID     16
-#define SOUNDARGS_SHIFT_PRIORITY    8
+#define SOUNDARGS_SHIFT_BANK        0x1C // 28
+#define SOUNDARGS_SHIFT_SOUNDID     0x10 // 16
+#define SOUNDARGS_SHIFT_PRIORITY    0x08 //  8
 
 /* Sound banks */
-#define SOUND_BANK_ACTION     0
-#define SOUND_BANK_MOVING     1
-#define SOUND_BANK_VOICE      2
-#define SOUND_BANK_GENERAL    3
-#define SOUND_BANK_ENV        4
-#define SOUND_BANK_OBJ        5
-#define SOUND_BANK_AIR        6
-#define SOUND_BANK_MENU       7
-#define SOUND_BANK_GENERAL2   8
-#define SOUND_BANK_OBJ2       9
-#define SOUND_BANK_COUNT     10
+#define SOUND_BANK_ACTION       0x0
+#define SOUND_BANK_MOVING       0x1
+#define SOUND_BANK_VOICE        0x2
+#define SOUND_BANK_GENERAL      0x3
+#define SOUND_BANK_ENV          0x4
+#define SOUND_BANK_OBJ          0x5
+#define SOUND_BANK_AIR          0x6
+#define SOUND_BANK_MENU         0x7
+#define SOUND_BANK_GENERAL2     0x8
+#define SOUND_BANK_OBJ2         0x9
+#define SOUND_BANK_COUNT        0xA
 
 #define SOUND_BANKS_ALL_BITS 0xffff
 #define SOUND_BANKS_ALL ((1 << SOUND_BANK_COUNT) - 1)
 #define SOUND_BANKS_FOREGROUND (\
     (1 << SOUND_BANK_ACTION) |\
-    (1 << SOUND_BANK_VOICE) |\
+    (1 << SOUND_BANK_VOICE)  |\
     (1 << SOUND_BANK_MENU))
 #define SOUND_BANKS_BACKGROUND (SOUND_BANKS_ALL & ~SOUND_BANKS_FOREGROUND)
 #define SOUND_BANKS_DISABLED_DURING_INTRO_CUTSCENE (\
@@ -52,30 +52,30 @@
 #define SOUND_BANKS_DISABLED_AFTER_CREDITS (\
     (1 << SOUND_BANK_ACTION) |\
     (1 << SOUND_BANK_MOVING) |\
-    (1 << SOUND_BANK_VOICE) |\
+    (1 << SOUND_BANK_VOICE)  |\
     (1 << SOUND_BANK_GENERAL))
 
 /* Audio playback bitflags. */
-#define SOUND_NO_VOLUME_LOSS        0x1000000 // No volume loss with distance
-#define SOUND_VIBRATO               0x2000000 // Randomly alter frequency each audio frame
-#define SOUND_NO_PRIORITY_LOSS      0x4000000 // Do not prioritize closer sounds
-#define SOUND_CONSTANT_FREQUENCY    0x8000000 // Frequency is not affected by distance or speed. If
-                                              // not set, frequency will increase with distance.
-                                              // For sounds in SOUND_BANK_MOVING, frequency will
-                                              // further increase with speed, and volume will
-                                              // decrease at slow speeds.
+#define SOUND_NO_VOLUME_LOSS            (1 << 24) // 0x1000000 // No volume loss with distance
+#define SOUND_VIBRATO                   (1 << 25) // 0x2000000 // Randomly alter frequency each audio frame
+#define SOUND_NO_PRIORITY_LOSS          (1 << 26) // 0x4000000 // Do not prioritize closer sounds
+#define SOUND_CONSTANT_FREQUENCY        (1 << 27) // 0x8000000 // Frequency is not affected by distance or speed. If
+                                                               // not set, frequency will increase with distance.
+                                                               // For sounds in SOUND_BANK_MOVING, frequency will
+                                                               // further increase with speed, and volume will
+                                                               // decrease at slow speeds.
 
 /* Audio lower bitflags. */
-#define SOUND_LOWER_BACKGROUND_MUSIC  0x10 // Lower volume of background music while playing
-#define SOUND_NO_ECHO                 0x20 // Disable level reverb. Not in JP
-#define SOUND_DISCRETE                0x80 // Every call to play_sound restarts the sound. If not
-                                           // set, the sound is continuous and play_sound should be
-                                           // called at least every other frame to keep it playing
+#define SOUND_LOWER_BACKGROUND_MUSIC    (1 << 4) // 0x10 // Lower volume of background music while playing
+#define SOUND_NO_ECHO                   (1 << 5) // 0x20 // Disable level reverb. Not in JP
+#define SOUND_DISCRETE                  (1 << 7) // 0x80 // Every call to play_sound restarts the sound. If not
+                                                         // set, the sound is continuous and play_sound should be
+                                                         // called at least every other frame to keep it playing
 
 /* Audio Status */
-#define SOUND_STATUS_STOPPED        0
-#define SOUND_STATUS_WAITING        1
-#define SOUND_STATUS_PLAYING        2
+#define SOUND_STATUS_STOPPED        0x0
+#define SOUND_STATUS_WAITING        0x1
+#define SOUND_STATUS_PLAYING        0x2
 
 /**
  * Terrain types. mario_get_terrain_sound_addend computes a
@@ -83,17 +83,17 @@
  * level and the floor type that Mario is standing on. That value is then added
  * to the sound ID for the TERRAIN_* sounds.
  */
-#define SOUND_TERRAIN_DEFAULT   0 // e.g. air
-#define SOUND_TERRAIN_GRASS     1
-#define SOUND_TERRAIN_WATER     2
-#define SOUND_TERRAIN_STONE     3
-#define SOUND_TERRAIN_SPOOKY    4 // squeaky floor
-#define SOUND_TERRAIN_SNOW      5
-#define SOUND_TERRAIN_ICE       6
-#define SOUND_TERRAIN_SAND      7
+#define SOUND_TERRAIN_DEFAULT       0x0 // e.g. air
+#define SOUND_TERRAIN_GRASS         0x1
+#define SOUND_TERRAIN_WATER         0x2
+#define SOUND_TERRAIN_STONE         0x3
+#define SOUND_TERRAIN_SPOOKY        0x4 // squeaky floor
+#define SOUND_TERRAIN_SNOW          0x5
+#define SOUND_TERRAIN_ICE           0x6
+#define SOUND_TERRAIN_SAND          0x7
 
 // silence
-#define NO_SOUND                    0
+#define NO_SOUND                    0x0
 
 /**
  * The table below defines all sounds that exist in the game, and which flags

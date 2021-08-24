@@ -109,6 +109,20 @@ inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f :
 inline s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 inline s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
 
+/**
+ * Rounds a floating-point component of a normal vector to an s8 by multiplying it by 127 or 128 and
+ * rounding away from 0.
+ */
+s8 normalize_component(f32 comp) {
+    if (comp > 0.0) {
+        return comp * 127.0 + 0.5; // round up
+    } else if (comp < 0.0) {
+        return comp * 128.0 - 0.5; // round down
+    } else {
+        return 0;                  // don't round 0
+    }
+}
+
 /***********************************
  * Absolute value & sign functions *
  ***********************************/

@@ -4,6 +4,8 @@
 #include <PR/ultratypes.h>
 #include <ultra64.h>
 
+
+//! replace with Vec3f?
 /* Vector Types */
 struct GdVec3f
 {

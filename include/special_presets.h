@@ -6,11 +6,11 @@
 #include "model_ids.h"
 
 // Special Preset types
-#define SPTYPE_NO_YROT_OR_PARAMS  0 // object is 8-bytes long, no y-rotation or any behavior params
-#define SPTYPE_YROT_NO_PARAMS     1 // object is 10-bytes long, has y-rotation but no params
-#define SPTYPE_PARAMS_AND_YROT    2 // object is 12-bytes long, has y-rotation and params
-#define SPTYPE_UNKNOWN            3 // object is 14-bytes long, has 3 extra shorts that get converted to floats.
-#define SPTYPE_DEF_PARAM_AND_YROT 4 // object is 10-bytes long, has y-rotation and uses the default param
+#define SPTYPE_NO_YROT_OR_PARAMS  0x0 // object is  8-bytes long,  no y-rotation or any behavior params
+#define SPTYPE_YROT_NO_PARAMS     0x1 // object is 10-bytes long, has y-rotation but no params
+#define SPTYPE_PARAMS_AND_YROT    0x2 // object is 12-bytes long, has y-rotation and params
+#define SPTYPE_UNKNOWN            0x3 // object is 14-bytes long, has 3 extra shorts that get converted to floats.
+#define SPTYPE_DEF_PARAM_AND_YROT 0x4 // object is 10-bytes long, has y-rotation and uses the default param
 
 struct SpecialPreset
 {
