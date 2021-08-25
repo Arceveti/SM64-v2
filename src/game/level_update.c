@@ -510,27 +510,27 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
     Bool32 fadeMusic = TRUE;
     if (sDelayedWarpOp == WARP_OP_NONE) {
         m->invincTimer  = -1;
-        sDelayedWarpArg = 0;
+        sDelayedWarpArg =  0;
         sDelayedWarpOp  = warpOp;
         switch (warpOp) {
             case WARP_OP_DEMO_NEXT:
             case WARP_OP_DEMO_END: sDelayedWarpTimer = 20; // Must be one line to match on -O2
                 sSourceWarpNodeId = WARP_NODE_F0;
-                gSavedCourseNum = COURSE_NONE;
-                fadeMusic = FALSE;
+                gSavedCourseNum   = COURSE_NONE;
+                fadeMusic         = FALSE;
                 play_transition(WARP_TRANSITION_FADE_INTO_STAR, 0x14, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_CREDITS_END:
                 sDelayedWarpTimer = 60;
                 sSourceWarpNodeId = WARP_NODE_F0;
-                fadeMusic = FALSE;
-                gSavedCourseNum = COURSE_NONE;
+                fadeMusic         = FALSE;
+                gSavedCourseNum   = COURSE_NONE;
                 play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x3C, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_STAR_EXIT:
                 sDelayedWarpTimer = 32;
                 sSourceWarpNodeId = WARP_NODE_F0;
-                gSavedCourseNum = COURSE_NONE;
+                gSavedCourseNum   = COURSE_NONE;
                 play_transition(WARP_TRANSITION_FADE_INTO_MARIO, 0x20, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_DEATH:
@@ -726,7 +726,7 @@ Bool32 play_mode_normal(void) {
     }
     warp_area();
     check_instant_warp();
-    if (sTimerRunning && gHudDisplay.timer < 17999) gHudDisplay.timer++;
+    if (sTimerRunning && (gHudDisplay.timer < 17999)) gHudDisplay.timer++;
     area_update_objects();
     update_hud_values();
     if (gCurrentArea != NULL) update_camera(gCurrentArea->camera);

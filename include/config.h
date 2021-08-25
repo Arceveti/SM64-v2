@@ -593,6 +593,11 @@
 // (HackerSM64)
 // #define NO_FALL_DAMAGE_SOUND
 
+// Vanilla is 1150.0f
+#define FALL_DAMAGE_HEIGHT_SMALL 1200.0f
+// Vanilla is 3000.0f
+#define FALL_DAMAGE_HEIGHT_LARGE 3000.0f
+
 // Allows for turning in midair (Arceveti)
 #define AIR_TURN
 

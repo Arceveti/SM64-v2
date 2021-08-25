@@ -866,7 +866,7 @@ static Bool32 act_water_plunge(struct MarioState *m) {
     stepResult = perform_water_step(m);
     if (m->actionState == 0) {
         play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
-        if ((m->peakHeight - m->pos[1]) > 1150.0f) play_sound(SOUND_MARIO_HAHA_WATER, m->marioObj->header.gfx.cameraToObject);
+        if ((m->peakHeight - m->pos[1]) > FALL_DAMAGE_HEIGHT_SMALL) play_sound(SOUND_MARIO_HAHA_WATER, m->marioObj->header.gfx.cameraToObject);
         m->particleFlags |= PARTICLE_WATER_SPLASH;
         m->actionState    = 1;
 #if ENABLE_RUMBLE

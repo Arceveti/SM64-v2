@@ -688,7 +688,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     // misalignment, you can activate these conditions in unexpected situations
 #ifdef BETTER_WALL_COLLISION
     if ((stepArg & AIR_STEP_CHECK_LEDGE_GRAB) && (upperWall.numWalls == 0) && (lowerWall.numWalls != 0)) {
-        for (i = 0; i < lowerWall.numWalls; i++) if ((grabbedWall = check_ledge_grab(m, grabbedWall, lowerWall.walls[i], intendedPos, nextPos, ledgePos, &ledgeFloor))) stepResult = AIR_STEP_GRABBED_LEDGE;
+        for ((i = 0); (i < lowerWall.numWalls); (i++)) if ((grabbedWall = check_ledge_grab(m, grabbedWall, lowerWall.walls[i], intendedPos, nextPos, ledgePos, &ledgeFloor))) stepResult = AIR_STEP_GRABBED_LEDGE;
         if (stepResult == AIR_STEP_GRABBED_LEDGE) {// && ledgeFloor != NULL && grabbedWall != NULL) {
             vec3f_copy(m->pos, ledgePos);
             m->floor        = ledgeFloor;
@@ -709,8 +709,6 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     if (upperWall.numWalls > 0) {
         stepResult  = bonk_or_hit_lava_wall(m, &upperWall);
         if (stepResult != AIR_STEP_NONE) return stepResult;
-    } else {
-        stepResult = AIR_STEP_NONE;
     }
     return ((lowerWall.numWalls > 0) ? bonk_or_hit_lava_wall(m, &lowerWall) : AIR_STEP_NONE);
 #else
@@ -807,9 +805,8 @@ void apply_gravity(struct MarioState *m) {
 
 void apply_vertical_wind(struct MarioState *m) {
     f32 maxVelY;
-    f32 offsetY;
     if (m->action != ACT_GROUND_POUND) {
-        offsetY = (m->pos[1] + 1500.0f);
+        f32 offsetY = (m->pos[1] + 1500.0f);
         if ((m->floor->type == SURFACE_VERTICAL_WIND) && (-3000.0f < offsetY) && (offsetY < 2000.0f)) {
             if (offsetY >= 0.0f) {
                 maxVelY = (10000.0f / (offsetY + 200.0f));

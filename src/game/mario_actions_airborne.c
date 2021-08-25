@@ -30,7 +30,7 @@ void play_far_fall_sound(struct MarioState *m) {
      && (action != ACT_TWIRLING)
      && (action != ACT_FLYING)
      && !(m->flags & MARIO_FALL_SOUND_PLAYED)
-     && ((m->peakHeight - m->pos[1]) > 1150.0f)) {
+     && ((m->peakHeight - m->pos[1]) > FALL_DAMAGE_HEIGHT_SMALL)) {
         play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->header.gfx.cameraToObject);
         m->flags |= MARIO_FALL_SOUND_PLAYED;
     }
@@ -53,10 +53,9 @@ Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
 #ifdef NO_FALL_DAMAGE
     return FALSE;
 #endif
-    f32 fallHeight = (m->peakHeight - m->pos[1]);
-    f32 damageHeight = 1200;
     if ((m->action != ACT_TWIRLING) && (m->floor->type != SURFACE_BURNING) && (m->vel[1] < -55.0f)) {
-        if (fallHeight > 3000.0f) {
+        f32 fallHeight = (m->peakHeight - m->pos[1]);
+        if (fallHeight > FALL_DAMAGE_HEIGHT_LARGE) {
             m->hurtCounter += ((m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24);
 #if ENABLE_RUMBLE
             queue_rumble_data(5, 80);
@@ -64,7 +63,7 @@ Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
             set_camera_shake_from_hit(SHAKE_FALL_DAMAGE);
             play_sound(SOUND_MARIO_ATTACKED, m->marioObj->header.gfx.cameraToObject);
             return drop_and_set_mario_action(m, hardFallAction, 4);
-        } else if ((fallHeight > damageHeight) && !mario_floor_is_slippery(m)) {
+        } else if ((fallHeight > FALL_DAMAGE_HEIGHT_SMALL) && !mario_floor_is_slippery(m)) {
             m->hurtCounter += ((m->flags & MARIO_CAP_ON_HEAD) ? 8 : 12);
             m->squishTimer  = 30;
 #if ENABLE_RUMBLE
@@ -397,7 +396,7 @@ Bool32 act_jump(struct MarioState *m) {
     if (check_kick_or_dive_in_air(m)) return TRUE;
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND, 0);
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
-    common_air_action_step(m, ACT_JUMP_LAND, MARIO_ANIM_SINGLE_JUMP, AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG, TRUE);
+    common_air_action_step(m, ACT_JUMP_LAND, MARIO_ANIM_SINGLE_JUMP, (AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG), TRUE);
     return FALSE;
 }
 
@@ -406,7 +405,7 @@ Bool32 act_double_jump(struct MarioState *m) {
     if (check_kick_or_dive_in_air(m)) return TRUE;
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND, 0);
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_HOOHOO);
-    common_air_action_step(m, ACT_DOUBLE_JUMP_LAND, animation, AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG, TRUE);
+    common_air_action_step(m, ACT_DOUBLE_JUMP_LAND, animation, (AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG), TRUE);
     return FALSE;
 }
 
@@ -560,7 +559,7 @@ Bool32 act_wall_kick_air(struct MarioState *m) {
 #endif
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND, 0);
     play_mario_jump_sound(m);
-    common_air_action_step(m, ACT_JUMP_LAND, MARIO_ANIM_SLIDEJUMP, AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG, (++(m->actionTimer) > 30));
+    common_air_action_step(m, ACT_JUMP_LAND, MARIO_ANIM_SLIDEJUMP, (AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG), (++(m->actionTimer) > 30));
     return FALSE;
 }
 
