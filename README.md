@@ -128,9 +128,12 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 **Experimental:**
 - Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
 
-# HackerSM64: ![](https://i.imgur.com/s0LUbTo.gif)
+# ![](https://i.imgur.com/CeOukzk.gif) HackerSM64 ![](https://i.imgur.com/s0LUbTo.gif)
 
 This is a fork of the ultrasm64 repo by CrashOveride which includes the following commonly used patches (patches marked with `*` are toggleable in `config.h`): 
+
+**Lighting Engine by Wiseguy**
+- Lighting Engine is available on a separate branch `(lighting-engine)`. Instructions on how to use it are in the readme of that branch.
 
 **Puppycam**
 - Puppycam is available on the master branch now, you can toogle it in config.h. *
