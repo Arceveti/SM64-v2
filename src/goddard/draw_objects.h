@@ -33,7 +33,7 @@ struct GdColour *gd_get_colour(s32 idx);
 void draw_face(                 struct ObjFace  *face);
 void draw_net(                  struct ObjNet   *self);
 void draw_camera(               struct ObjCamera *cam);
-void world_pos_to_screen_coords(struct GdVec3f   *pos, struct ObjCamera *cam, struct ObjView *view);
+void world_pos_to_screen_coords(       Vec3f      pos, struct ObjCamera *cam, struct ObjView *view);
 void draw_nothing(       UNUSED struct GdObj     *nop);
 void draw_particle(             struct GdObj     *obj);
 void draw_group(                struct ObjGroup  *grp);

@@ -17,8 +17,8 @@
 #define OS_MESG_SI_COMPLETE 0x33333333
 
 #ifndef NO_SEGMENTED_MEMORY
-#define GD_VIRTUAL_TO_PHYSICAL(addr) ((uintptr_t)(addr) &0x0FFFFFFF)
-#define GD_LOWER_24(addr)            ((uintptr_t)(addr) &0x00FFFFFF)
+#define GD_VIRTUAL_TO_PHYSICAL(addr) ((uintptr_t)(addr)  & 0x0FFFFFFF)
+#define GD_LOWER_24(addr)            ((uintptr_t)(addr)  & 0x00FFFFFF)
 #define GD_LOWER_29(addr)           (((uintptr_t)(addr)) & 0x1FFFFFFF)
 #else
 #define GD_VIRTUAL_TO_PHYSICAL(addr)   (addr)
@@ -26,8 +26,8 @@
 #define GD_LOWER_29(addr) (((uintptr_t)(addr)))
 #endif
 
-#define MTX_INTPART_PACK(w1, w2) (((w1) &0xFFFF0000) | (((w2) >> 16) & 0xFFFF))
-#define MTX_FRACPART_PACK(w1, w2) ((((w1) << 16) & 0xFFFF0000) | ((w2) &0xFFFF))
+#define MTX_INTPART_PACK( w1, w2) (( (w1)        & 0xFFFF0000) | (((w2) >> 16) & 0xFFFF))
+#define MTX_FRACPART_PACK(w1, w2) ((((w1) << 16) & 0xFFFF0000) | ( (w2)        & 0xFFFF))
 #define LOOKAT_PACK(c) ((s32) MIN(((c) * (128.0)), 127.0) & 0xff)
 
 // structs
@@ -66,10 +66,6 @@ struct GdDisplayList {
 #define DL_CURRENT_GFX(dl)   ((dl)->gfx[(dl)->curGfxIdx])
 #define DL_CURRENT_VP(dl)    ((dl)->vp[(dl)->curVpIdx])
 
-struct LightDirVec {
-    s32 x, y, z;
-};
-
 // bss
 static OSMesgQueue D_801BE830; // controller msg queue
 static OSMesg D_801BE848[10];
@@ -100,7 +96,7 @@ static s16 sAlpha;
 static s32 sNumLights;
 static struct GdColour sAmbScaleColour;
 static struct GdColour sLightScaleColours[2];
-static struct LightDirVec sLightDirections[2];
+static Vec3i sLightDirections[2];
 static s32 sLightId;
 static Hilite sHilites[600];
 static struct GdDisplayList *sStaticDl;
@@ -734,7 +730,7 @@ void gd_add_to_heap(void *addr, u32 size) {
 /* 24AAE0 -> 24AB7C */
 void gdm_init(void *blockpool, u32 size) {
     // Align downwards?
-    size = (size - 8) & ~7;
+    size = ((size - 8) & ~0x7);
     // Align to next double word boundry?
     blockpool = (void *) (((uintptr_t) blockpool + 8) & ~7);
     sMemBlockPoolBase = blockpool;
@@ -1052,12 +1048,9 @@ void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z) {
  */
 void gd_dl_scale(f32 x, f32 y, f32 z) {
     Mat4 mtx;
-    struct GdVec3f scaleVec;
-    scaleVec.x = x;
-    scaleVec.y = y;
-    scaleVec.z = z;
+    Vec3f scaleVec = {x, y, z};
     gd_set_identity_mat4(&mtx);
-    gd_scale_mat4f_by_vec3f(&mtx, &scaleVec);
+    gd_scale_mat4f_by_vec3f(&mtx, scaleVec);
     gd_dl_mul_matrix(&mtx);
 }
 
@@ -1124,9 +1117,9 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
     s32 i;
     // Add the vertex index to the buffer if it doesn't already exist
     for (i = sVertexBufStartIndex; i < (sVertexBufStartIndex + sVertexBufCount); i++) {
-        if (sCurrentGdDl->vtx[i].n.ob[0] == (s16) x
-         && sCurrentGdDl->vtx[i].n.ob[1] == (s16) y
-         && sCurrentGdDl->vtx[i].n.ob[2] == (s16) z) {
+        if ((sCurrentGdDl->vtx[i].n.ob[0] == (s16) x)
+         && (sCurrentGdDl->vtx[i].n.ob[1] == (s16) y)
+         && (sCurrentGdDl->vtx[i].n.ob[2] == (s16) z)) {
             sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) i;
             return NULL;
         }
@@ -1184,10 +1177,10 @@ void gd_dl_flush_vertices(void) {
         // load vertex data
         gSPVertex(next_gfx(), osVirtualToPhysical(&sCurrentGdDl->vtx[sVertexBufStartIndex]), sVertexBufCount, 0);
         // load triangle data
-        for (i = 0; i < sTriangleBufCount; i++) {
-            gSP1Triangle(next_gfx(), sTriangleBuf[i][0] - sVertexBufStartIndex,
-                                     sTriangleBuf[i][1] - sVertexBufStartIndex,
-                                     sTriangleBuf[i][2] - sVertexBufStartIndex, 0);
+        for ((i = 0); (i < sTriangleBufCount); (i++)) {
+            gSP1Triangle(next_gfx(), (sTriangleBuf[i][0] - sVertexBufStartIndex),
+                                     (sTriangleBuf[i][1] - sVertexBufStartIndex),
+                                     (sTriangleBuf[i][2] - sVertexBufStartIndex), 0);
         }
     }
     func_801A0038();
@@ -1195,7 +1188,7 @@ void gd_dl_flush_vertices(void) {
 
 /* 24EA88 -> 24EAF4 */
 void set_render_alpha(f32 alpha) {
-    sAlpha = alpha * 255.0f;
+    sAlpha = (alpha * 255.0f);
     update_render_mode();
 }
 
@@ -1237,36 +1230,33 @@ void branch_to_gddl(s32 dlNum) {
 // phong shading function?
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
-                   struct GdVec3f   *arg4,  // vector to light source?
-                   struct GdColour  *colour // light color
-) {
+                   Vec3f phongLightPosition,   // vector to light source?
+                   struct GdColour  *colour) { // light color
     Hilite *hilite;
     Vec3f vec;
     f32 mag; // magnitude of vec
-    f32 sp38;
-    f32 sp34;
-    sp38 = 32.0f; // x scale factor?
-    sp34 = 32.0f; // y scale factor?
+    const f32 xMul = 32.0f; // x scale factor?
+    const f32 yMul = 32.0f; // y scale factor?
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f), (s32)(colour->b * 255.0f), 255);
-    vec[2] = (cam->unkE8[0][2] + arg4->x);
-    vec[1] = (cam->unkE8[1][2] + arg4->y);
-    vec[0] = (cam->unkE8[2][2] + arg4->z);
+    vec[2] = (cam->unkE8[0][2] + phongLightPosition[0]);
+    vec[1] = (cam->unkE8[1][2] + phongLightPosition[1]);
+    vec[0] = (cam->unkE8[2][2] + phongLightPosition[2]);
 #ifdef FAST_INVSQRT
     mag = Q_rsqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
     if (mag > 0.1f) {
 #else
-    mag = sqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
+    mag = vec3f_mag(vec);
     if (mag > 0.1f) {
         mag = 1.0f / mag;
 #endif
         vec3f_mul_f32(vec, mag);
-        hilite->h.x1 = (((vec[2] * cam->unkE8[0][0]) + (vec[1] * cam->unkE8[1][0]) + (vec[0] * cam->unkE8[2][0])) * sp38 * 2.0f) + (sp38 * 4.0f);
-        hilite->h.y1 = (((vec[2] * cam->unkE8[0][1]) + (vec[1] * cam->unkE8[1][1]) + (vec[0] * cam->unkE8[2][1])) * sp34 * 2.0f) + (sp34 * 4.0f);
+        hilite->h.x1 = (((vec[2] * cam->unkE8[0][0]) + (vec[1] * cam->unkE8[1][0]) + (vec[0] * cam->unkE8[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
+        hilite->h.y1 = (((vec[2] * cam->unkE8[0][1]) + (vec[1] * cam->unkE8[1][1]) + (vec[0] * cam->unkE8[2][1])) * yMul * 2.0f) + (yMul * 4.0f);
     } else {
-        hilite->h.x1 = sp38 * 2.0f;
-        hilite->h.y1 = sp34 * 2.0f;
+        hilite->h.x1 = (xMul * 2.0f);
+        hilite->h.y1 = (yMul * 2.0f);
     }
 }
 
@@ -1343,28 +1333,28 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc[1] = scaledColours[1];
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc[2] = scaledColours[2];
         // 801A13B0
-        lightDir[0] = (s8)sLightDirections[i].x;
-        lightDir[1] = (s8)sLightDirections[i].y;
-        lightDir[2] = (s8)sLightDirections[i].z;
+        lightDir[0] = (s8)sLightDirections[i][0];
+        lightDir[1] = (s8)sLightDirections[i][1];
+        lightDir[2] = (s8)sLightDirections[i][2];
         // 801A141C
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[0] = lightDir[0];
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[1] = lightDir[1];
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[2] = lightDir[2];
         // 801A14C4
-        gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), i + 1);
+        gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), (i + 1));
     }
     // L801A1550
-    gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl)), i + 1);
+    gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl)), (i + 1));
     next_light();
     gd_enddlsplist();
     return 0;
 }
 
 /* 24FE94 -> 24FF80; orig name: func_801A16C4; only from verts? */
-void set_Vtx_norm_buf_2(struct GdVec3f *norm) {
-    sVtxCvrtNormBuf[0] = (s8)(norm->x * 127.0f);
-    sVtxCvrtNormBuf[1] = (s8)(norm->y * 127.0f);
-    sVtxCvrtNormBuf[2] = (s8)(norm->z * 127.0f);
+void set_Vtx_norm_buf_2(Vec3f norm) {
+    sVtxCvrtNormBuf[0] = (s8)(norm[0] * 127.0f);
+    sVtxCvrtNormBuf[1] = (s8)(norm[1] * 127.0f);
+    sVtxCvrtNormBuf[2] = (s8)(norm[2] * 127.0f);
 }
 
 /* 24FF80 -> 24FFDC; orig name: func_801A17B0 */
@@ -1381,12 +1371,12 @@ void set_gd_mtx_parameters(s32 params) {
 static void gd_dl_viewport(void) {
     Vp *vp;
     vp = &DL_CURRENT_VP(sCurrentGdDl);
-    vp->vp.vscale[0] = (s16)(sActiveView->lowerRight.x * 2.0f);  // x scale
-    vp->vp.vscale[1] = (s16)(sActiveView->lowerRight.y * 2.0f);  // y scale
+    vp->vp.vscale[0] = (s16)(sActiveView->lowerRight[0] * 2.0f);  // x scale
+    vp->vp.vscale[1] = (s16)(sActiveView->lowerRight[1] * 2.0f);  // y scale
     vp->vp.vscale[2] = 0x1FF;  // z scale
     vp->vp.vscale[3] = 0x000;
-    vp->vp.vtrans[0] = (s16)((sActiveView->upperLeft.x * 4.0f) + (sActiveView->lowerRight.x * 2.0f));  // x offset
-    vp->vp.vtrans[1] = (s16)((sActiveView->upperLeft.y * 4.0f) + (sActiveView->lowerRight.y * 2.0f));  // y offset
+    vp->vp.vtrans[0] = (s16)((sActiveView->upperLeft[0] * 4.0f) + (sActiveView->lowerRight[0] * 2.0f));  // x offset
+    vp->vp.vtrans[1] = (s16)((sActiveView->upperLeft[1] * 4.0f) + (sActiveView->lowerRight[1] * 2.0f));  // y offset
     vp->vp.vtrans[2] = 0x1FF;  // z offset
     vp->vp.vtrans[3] = 0x000;
     gSPViewport(next_gfx(), osVirtualToPhysical(vp));
@@ -1429,25 +1419,25 @@ void gddl_is_loading_shine_dl(s32 dlLoad) {
 /* 250C18 -> 251014; orig name: func_801A2448 */
 void start_view_dl(struct ObjView *view) {
     f32 ulx, uly, lrx, lry;
-    if (view->upperLeft.x < view->parent->upperLeft.x) {
-        ulx = view->parent->upperLeft.x;
+    if (view->upperLeft[0] < view->parent->upperLeft[0]) {
+        ulx = view->parent->upperLeft[0];
     } else {
-        ulx = view->upperLeft.x;
+        ulx = view->upperLeft[0];
     }
-    if (view->upperLeft.x + view->lowerRight.x > view->parent->upperLeft.x + view->parent->lowerRight.x) {
-        lrx = view->parent->upperLeft.x + view->parent->lowerRight.x;
+    if ((view->upperLeft[0] + view->lowerRight[0]) > (view->parent->upperLeft[0] + view->parent->lowerRight[0])) {
+        lrx = view->parent->upperLeft[0] + view->parent->lowerRight[0];
     } else {
-        lrx = view->upperLeft.x + view->lowerRight.x;
+        lrx = (view->upperLeft[0] + view->lowerRight[0]);
     }
-    if (view->upperLeft.y < view->parent->upperLeft.y) {
-        uly = view->parent->upperLeft.y;
+    if (view->upperLeft[1] < view->parent->upperLeft[1]) {
+        uly = view->parent->upperLeft[1];
     } else {
-        uly = view->upperLeft.y;
+        uly = view->upperLeft[1];
     }
-    if (view->upperLeft.y + view->lowerRight.y > view->parent->upperLeft.y + view->parent->lowerRight.y) {
-        lry = view->parent->upperLeft.y + view->parent->lowerRight.y;
+    if ((view->upperLeft[1] + view->lowerRight[1]) > (view->parent->upperLeft[1] + view->parent->lowerRight[1])) {
+        lry = (view->parent->upperLeft[1] + view->parent->lowerRight[1]);
     } else {
-        lry = view->upperLeft.y + view->lowerRight.y;
+        lry = (view->upperLeft[1] + view->lowerRight[1]);
     }
     if (ulx >= lrx) ulx = lrx - 1.0f;
     if (uly >= lry) uly = lry - 1.0f;
@@ -1512,10 +1502,10 @@ void parse_p1_controller(void) {
     if (ABSI(gdctrl->stickX) >= 6) gdctrl->csrX += (gdctrl->stickX * 0.1f);
     if (ABSI(gdctrl->stickY) >= 6) gdctrl->csrY -= (gdctrl->stickY * 0.1f);
     // clamp cursor position within screen view bounds
-    if (gdctrl->csrX < sScreenView->parent->upperLeft.x + 16.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + 16.0f;
-    if (gdctrl->csrX > sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f) gdctrl->csrX = sScreenView->parent->upperLeft.x + sScreenView->parent->lowerRight.x - 48.0f;
-    if (gdctrl->csrY < sScreenView->parent->upperLeft.y + 16.0f) gdctrl->csrY = sScreenView->parent->upperLeft.y + 16.0f;
-    if (gdctrl->csrY > sScreenView->parent->upperLeft.y + sScreenView->parent->lowerRight.y - 32.0f) gdctrl->csrY = sScreenView->parent->upperLeft.y + sScreenView->parent->lowerRight.y - 32.0f;
+    if (gdctrl->csrX < ( sScreenView->parent->upperLeft[0]                                       + 16.0f)) gdctrl->csrX = ( sScreenView->parent->upperLeft[0]                                       + 16.0f);
+    if (gdctrl->csrX > ((sScreenView->parent->upperLeft[0] + sScreenView->parent->lowerRight[0]) - 48.0f)) gdctrl->csrX = ((sScreenView->parent->upperLeft[0] + sScreenView->parent->lowerRight[0]) - 48.0f);
+    if (gdctrl->csrY < ( sScreenView->parent->upperLeft[1]                                       + 16.0f)) gdctrl->csrY = ( sScreenView->parent->upperLeft[1]                                       + 16.0f);
+    if (gdctrl->csrY > ((sScreenView->parent->upperLeft[1] + sScreenView->parent->lowerRight[1]) - 32.0f)) gdctrl->csrY = ((sScreenView->parent->upperLeft[1] + sScreenView->parent->lowerRight[1]) - 32.0f);
     for (i = 0; i < sizeof(OSContPad); i++) ((u8 *) prevInputs)[i] = ((u8 *) currInputs)[i];
 }
 
@@ -1536,9 +1526,9 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
             sAmbScaleColour.b = f3;
             break;
         case GD_PROP_LIGHT_DIR:
-            sLightDirections[sLightId].x = (s32)(f1 * 120.0f);
-            sLightDirections[sLightId].y = (s32)(f2 * 120.0f);
-            sLightDirections[sLightId].z = (s32)(f3 * 120.0f);
+            sLightDirections[sLightId][0] = (s32)(f1 * 120.0f);
+            sLightDirections[sLightId][1] = (s32)(f2 * 120.0f);
+            sLightDirections[sLightId][2] = (s32)(f3 * 120.0f);
             break;
         case GD_PROP_DIFUSE_COLOUR:
             sLightScaleColours[sLightId].r = f1;
@@ -1596,9 +1586,9 @@ s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
         if (view->flags & VIEW_COLOUR_BUF) {
             // sprintf(memtrackerName, "%s CBuf", name);
             // start_memtracker(memtrackerName);
-            view->colourBufs[0] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
+            view->colourBufs[0] = gd_malloc((u32)((2.0f * view->lowerRight[0] * view->lowerRight[1]) + 64.0f), 0x20);
             if (view->flags & VIEW_2_COL_BUF) {
-                view->colourBufs[1] = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x20);
+                view->colourBufs[1] = gd_malloc((u32)((2.0f * view->lowerRight[0] * view->lowerRight[1]) + 64.0f), 0x20);
             } else {
                 view->colourBufs[1] = view->colourBufs[0];
             }
@@ -1614,7 +1604,7 @@ s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
             // sprintf(memtrackerName, "%s ZBuf", name);
             // start_memtracker(memtrackerName);
             if (view->flags & VIEW_ALLOC_ZBUF) {
-                view->zbuf = gd_malloc((u32)(2.0f * view->lowerRight.x * view->lowerRight.y + 64.0f), 0x40);
+                view->zbuf = gd_malloc((u32)((2.0f * view->lowerRight[0] * view->lowerRight[1]) + 64.0f), 0x40);
                 if (view->zbuf == NULL) gd_exit(); // Not enough DRAM for Z buffer
                 view->zbuf = (void *) ALIGN((uintptr_t) view->zbuf, 64);
             }
@@ -1668,16 +1658,16 @@ void update_cursor(void) {
         sHandView->flags &= ~VIEW_UPDATE;
         gd_play_sfx(GD_SFX_HAND_DISAPPEAR);
     }
-    sHandView->upperLeft.x = (f32) gGdCtrl.csrX;
-    sHandView->upperLeft.y = (f32) gGdCtrl.csrY;
+    sHandView->upperLeft[0] = (f32) gGdCtrl.csrX;
+    sHandView->upperLeft[1] = (f32) gGdCtrl.csrY;
     // Make hand display list
     begin_gddl(sHandShape->dlNums[gGdFrameBufNum]);
-    gd_put_sprite((u16 *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft.x, sHandView->upperLeft.y, 0x20, 0x20);
+    gd_put_sprite((u16 *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft[0], sHandView->upperLeft[1], 0x20, 0x20);
     gd_enddlsplist_parent();
-    if (sHandView->upperLeft.x <  sHandView->parent->upperLeft.x)  sHandView->upperLeft.x  = sHandView->parent->upperLeft.x;
-    if (sHandView->upperLeft.x > (sHandView->parent->upperLeft.x + sHandView->parent->lowerRight.x)) sHandView->upperLeft.x =  sHandView->parent->upperLeft.x + sHandView->parent->lowerRight.x;
-    if (sHandView->upperLeft.y <  sHandView->parent->upperLeft.y)  sHandView->upperLeft.y  = sHandView->parent->upperLeft.y;
-    if (sHandView->upperLeft.y > (sHandView->parent->upperLeft.y + sHandView->parent->lowerRight.y)) sHandView->upperLeft.y =  sHandView->parent->upperLeft.y + sHandView->parent->lowerRight.y;
+    if (sHandView->upperLeft[0] <  sHandView->parent->upperLeft[0]                                    ) sHandView->upperLeft[0] =  sHandView->parent->upperLeft[0];
+    if (sHandView->upperLeft[0] > (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0])) sHandView->upperLeft[0] = (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0]);
+    if (sHandView->upperLeft[1] <  sHandView->parent->upperLeft[1]                                    ) sHandView->upperLeft[1] =  sHandView->parent->upperLeft[1];
+    if (sHandView->upperLeft[1] > (sHandView->parent->upperLeft[1] + sHandView->parent->lowerRight[1])) sHandView->upperLeft[1] = (sHandView->parent->upperLeft[1] + sHandView->parent->lowerRight[1]);
 }
 
 /* 2538E0 -> 253938 */
@@ -1698,10 +1688,8 @@ void update_view_and_dl(struct ObjView *view) {
 
 /* 253BC8 -> 2540E0 */
 void gd_init(void) {
-    s32 i;
-    s8 *data;
-    i = (u32)(sMemBlockPoolSize - DOUBLE_SIZE_ON_64_BIT(0x3E800));
-    data = gd_allocblock(i);
+    s32 i = (u32)(sMemBlockPoolSize - DOUBLE_SIZE_ON_64_BIT(0x3E800));
+    s8 *data = gd_allocblock(i);
     gd_add_mem_to_heap(i, data, 0x10);
     sAlpha            = (u16) 0xff;
     gGdFrameBufNum    = 0;
@@ -1714,9 +1702,7 @@ void gd_init(void) {
         sLightScaleColours[i].r = 1.0f;
         sLightScaleColours[i].g = 0.0f;
         sLightScaleColours[i].b = 0.0f;
-        sLightDirections[i].x   = 0;
-        sLightDirections[i].y   = 120;
-        sLightDirections[i].z   = 0;
+        vec3i_set(sLightDirections[i], 0, 120, 0);
     }
     sNumLights = NUMLIGHTS_2;
     gd_set_identity_mat4(&sInitIdnMat4);
@@ -1729,7 +1715,7 @@ void gd_init(void) {
     sDynamicMainDls[1] = new_gd_dl(1,  600,   10, 200,  10, 3);
     sMHeadMainDls[0]   = new_gd_dl(1,  100,    0,   0,   0, 0);
     sMHeadMainDls[1]   = new_gd_dl(1,  100,    0,   0,   0, 0);
-    for (i = 0; i < ARRAY_COUNT(sViewDls); i++) {
+    for ((i = 0); (i < ARRAY_COUNT(sViewDls)); (i++)) {
         sViewDls[i][0] = create_child_gdl(1, sDynamicMainDls[0]);
         sViewDls[i][1] = create_child_gdl(1, sDynamicMainDls[1]);
     }
@@ -1787,10 +1773,10 @@ void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy) {
     gSPDisplayList(next_gfx(), osVirtualToPhysical(gd_dl_sprite_start_tex_block));
     for ((r = 0); (r < wy); (r += 32)) {
         for ((c = 0); (c < wx); (c += 32)) {
-             gDPLoadTextureBlock(next_gfx(), (r * 32) + sprite + c, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+             gDPLoadTextureBlock(next_gfx(), ((r * 32) + sprite + c), G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                 (G_TX_WRAP | G_TX_NOMIRROR), (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD)
-             gSPTextureRectangle(next_gfx(), x << 2, (y + r) << 2, (x + 32) << 2, (y + r + 32) << 2,
-                G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+             gSPTextureRectangle(next_gfx(), (x << 2), ((y + r) << 2), ((x + 32) << 2), ((y + r + 32) << 2),
+                G_TX_RENDERTILE, 0, 0, (1 << 10), (1 << 10));
         }
     }
     gDPPipeSync(     next_gfx());
@@ -1832,7 +1818,6 @@ static void gd_block_dma(u32 romAddr, void *vAddr, s32 size) {
     s32 blockSize;
     do {
         if ((blockSize = size) > 0x1000) blockSize = 0x1000;
-
         osPiStartDma(&sGdDMAReqMesg, OS_MESG_PRI_NORMAL, OS_READ, romAddr, vAddr, blockSize, &sGdDMAQueue);
         osRecvMesg(&sGdDMAQueue, &sGdDMACompleteMsg, OS_MESG_BLOCK);
         romAddr += blockSize;
@@ -1845,29 +1830,24 @@ static void gd_block_dma(u32 romAddr, void *vAddr, s32 size) {
  * Loads the specified DynList from ROM and processes it.
  */
 struct GdObj *load_dynlist(struct DynList *dynlist) {
-    u32 segSize;
-    u8 *allocSegSpace;
     void *allocPtr;
-    uintptr_t dynlistSegStart;
-    uintptr_t dynlistSegEnd;
-    s32 i;
     s32 tlbEntries;
     struct GdObj *loadedList;
-    i = -1;
-    dynlistSegStart = (uintptr_t) _gd_dynlistsSegmentRomStart;
-    dynlistSegEnd   = (uintptr_t) _gd_dynlistsSegmentRomEnd;
+    s32 i = -1;
+    uintptr_t dynlistSegStart = (uintptr_t) _gd_dynlistsSegmentRomStart;
+    uintptr_t dynlistSegEnd   = (uintptr_t) _gd_dynlistsSegmentRomEnd;
 #define PAGE_SIZE 65536  // size of a 64K TLB page 
-    segSize = dynlistSegEnd - dynlistSegStart;
-    allocSegSpace = gd_malloc_temp(segSize + PAGE_SIZE);
+    u32 segSize   = (dynlistSegEnd - dynlistSegStart);
+    u8 *allocSegSpace = gd_malloc_temp(segSize + PAGE_SIZE);
     if ((allocPtr = (void *) allocSegSpace) == NULL) gd_exit(); // Not enough DRAM for DATA segment
     allocSegSpace = (u8 *) (((uintptr_t) allocSegSpace + PAGE_SIZE) & 0xFFFF0000);
     // Copy the dynlist data from ROM
     gd_block_dma(dynlistSegStart, (void *) allocSegSpace, segSize);
     osUnmapTLBAll();
-    tlbEntries = (segSize / PAGE_SIZE) / 2 + 1;
+    tlbEntries = (((segSize / PAGE_SIZE) / 2) + 1);
     if (tlbEntries >= 31) gd_exit(); // too many TLBs
     // Map virtual address 0x04000000 to `allocSegSpace`
-    for (i = 0; i < tlbEntries; i++) {
+    for ((i = 0); (i < tlbEntries); (i++)) {
         osMapTLB(i, OS_PM_64K,
             (void *) (uintptr_t) (0x04000000 + (i * 2 * PAGE_SIZE)),  // virtual address to map
             GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) +         0),  // even page address

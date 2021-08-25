@@ -17,7 +17,11 @@ Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
 Vec3s gVec3sZero = {    0,    0,    0 };
 Vec3i gVec3iZero = {    0,    0,    0 };
 Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
-UNUSED Vec3s gVec3sOne  = {    1,    1,    1 };
+Vec3s gVec3sOne  = {    1,    1,    1 }; // unused
+
+Vec3f gVec3fX    = { 1.0f, 0.0f, 0.0f };
+Vec3f gVec3fY    = { 0.0f, 1.0f, 0.0f };
+Vec3f gVec3fZ    = { 0.0f, 0.0f, 1.0f };
 
 /**************************
  * Float functions (Kaze) *
@@ -407,6 +411,13 @@ void vec3i_copy(Vec3i dest, Vec3i src) {
 }
 
 /// Copy vector src to dest
+void vec3uc_copy(Vec3c dest, Vec3c src) {
+    dest[0] = src[0];
+    dest[1] = src[1];
+    dest[2] = src[2];
+}
+
+/// Copy vector src to dest
 void vec3s_copy(Vec3s dest, Vec3s src) {
     dest[0] = src[0];
     dest[1] = src[1];
@@ -515,6 +526,27 @@ void vec3f_zero(Vec3f v) {
     v[0] = v[1] = v[2] = 0.0f;
 }
 
+/**
+ * Clamps a vector within a set range about zero.
+ */
+UNUSED void vec3f_clamp(Vec3f vec, f32 limit) {
+    if (vec[0] > limit) {
+        vec[0] = limit;
+    } else if (vec[0] < -limit) {
+        vec[0] = -limit;
+    }
+    if (vec[1] > limit) {
+        vec[1] = limit;
+    } else if (vec[1] < -limit) {
+        vec[1] = -limit;
+    }
+    if (vec[2] > limit) {
+        vec[2] = limit;
+    } else if (vec[2] < -limit) {
+        vec[2] = -limit;
+    }
+}
+
 /// Get the magnitude of vector 'v'
 f32 vec3f_mag(Vec3f v) {
 	return sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
@@ -523,7 +555,7 @@ f32 vec3f_mag(Vec3f v) {
 /// Scale vector 'dest' so it has length 1
 void vec3f_normalize(Vec3f dest) {
      if (dest == gVec3fZero) {
-        dest[0] = dest[1] = dest[2] = 0.0f;
+        vec3f_zero(dest);
     } else {
 #ifdef FAST_INVSQRT
         register f32 mag = Q_rsqrtf(sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
@@ -627,13 +659,21 @@ void vec3f_mul_f32(Vec3f dest, f32 scale) {
     dest[2] *= scale;
 }
 
+void vec3f_mul_vec3f(Vec3f dest, Vec3f scale) {
+    vec3f_scale_vec3f(dest, dest, scale, FALSE);
+}
+
 void vec3f_div_f32(Vec3f dest, f32 scale) {
     dest[0] /= scale;
     dest[1] /= scale;
     dest[2] /= scale;
 }
 
-void vec3f_scale_f32(Vec3f dest, Vec3f src, f32 scale, u32 doInverted) {
+void vec3f_div_vec3f(Vec3f dest, Vec3f scale) {
+    vec3f_scale_vec3f(dest, dest, scale, TRUE);
+}
+
+void vec3f_scale_f32(Vec3f dest, Vec3f src, f32 scale, Bool32 doInverted) {
     if (doInverted) {
         dest[0] = (src[0] / scale);
         dest[1] = (src[1] / scale);
@@ -648,7 +688,7 @@ void vec3f_scale_f32(Vec3f dest, Vec3f src, f32 scale, u32 doInverted) {
 /**
  * Upscale or downscale a vector by another vector.
  */
-void vec3f_scale_vec3f(Vec3f dest, Vec3f src, Vec3f scale, u32 doInverted) {
+void vec3f_scale_vec3f(Vec3f dest, Vec3f src, Vec3f scale, Bool32 doInverted) {
     if (doInverted) {
         dest[0] = (src[0] / scale[0]);
         dest[1] = (src[1] / scale[1]);
@@ -697,10 +737,13 @@ void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
     dst[2] = (((to[2] - from[2]) * scale) + from[2]);
 }
 
+
+/// Returns the dot product of 'a' and 'b'.
 f32 vec3f_dot(Vec3f a, Vec3f b) {
     return ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]));
 }
 
+/// Returns the dot product of 'a' and 'b'.
 f32 vec4f_dot(Vec4f a, Vec4f b) {
     return ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]) + (a[3] * b[3]));
 }
@@ -762,16 +805,28 @@ void mtxf_copy(Mat4 dest, Mat4 src) {
     for ((i = 0); (i < 16); (i++)) *d++ = *s++;
 }
 
+void mtxf_end(Mat4 mtx) {
+    mtx[0][3] = 0.0f;
+    mtx[1][3] = 0.0f;
+    mtx[2][3] = 0.0f;
+    mtx[3][3] = 1.0f;
+}
+
 /**
  * Set mtx to the identity matrix
  */
 void mtxf_identity(Mat4 mtx) {
-    register s32 i;
-    register f32 *dest;
-    // initialize everything except the first and last cells to 0
-    for (dest = (f32 *) mtx + 1, i = 0; i < 14; dest++   , i++) *dest = 0;
-    // initialize the diagonal cells to 1
-    for (dest = (f32 *) mtx    , i = 0; i <  4; dest += 5, i++) *dest = 1;
+    vec3f_copy(mtx[0], gVec3fX);
+    vec3f_copy(mtx[1], gVec3fY);
+    vec3f_copy(mtx[2], gVec3fZ);
+    vec3f_copy(mtx[3], gVec3fZero);
+    mtxf_end(mtx);
+    // register s32 i;
+    // register f32 *dest;
+    // // initialize everything except the first and last cells to 0
+    // for (dest = (f32 *) mtx + 1, i = 0; i < 14; dest++   , i++) *dest = 0;
+    // // initialize the diagonal cells to 1
+    // for (dest = (f32 *) mtx    , i = 0; i <  4; dest += 5, i++) *dest = 1;
 }
 
 /**
@@ -779,9 +834,7 @@ void mtxf_identity(Mat4 mtx) {
  */
 void mtxf_translate(Mat4 dest, Vec3f b) {
     mtxf_identity(dest);
-    dest[3][0] = b[0];
-    dest[3][1] = b[1];
-    dest[3][2] = b[2];
+    vec3f_copy(dest[3], b);
 }
 
 /**
@@ -852,10 +905,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     mtx[1][2] = yColZ;
     mtx[2][2] = zColZ;
     mtx[3][2] = -((from[0] * xColZ) + (from[1] * yColZ) + (from[2] * zColZ));
-    mtx[0][3] = 0;
-    mtx[1][3] = 0;
-    mtx[2][3] = 0;
-    mtx[3][3] = 1;
+    mtxf_end(mtx);
 }
 
 /**
@@ -1644,12 +1694,14 @@ Bool32 anim_spline_poll(Vec3f result) {
  */
 void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3) {
     register f32 B[4];
-    if (u > 1.0f) u = 1.0f;
-    register f32 nu = (1.0f - u);
+    if (u > 1.0f) u  = 1.0f;
+    register f32 nu  = (1.0f - u);
+    register f32 su  = sqr(u);
+    register f32 cu2 = (cube(u) / 2.0f);
     B[0] = (  cube(nu) / 6.0f);
-    B[1] = (( cube( u) / 2.0f) -  sqr(u)                      + 0.66666667f);
-    B[2] = ((-cube( u) / 2.0f) + (sqr(u) / 2.0f) + (u / 2.0f) + 0.16666667f);
-    B[3] = (( cube( u) / 6.0f)                                             );
+    B[1] = (( cu2       ) -  su                      + 0.66666667f);
+    B[2] = ((-cu2       ) + (su / 2.0f) + (u / 2.0f) + 0.16666667f);
+    B[3] = (( cu2 / 3.0f)                                             );
     Q[0] = ((B[0] * a0[0]) + (B[1] * a1[0]) + (B[2] * a2[0]) + (B[3] * a3[0]));
     Q[1] = ((B[0] * a0[1]) + (B[1] * a1[1]) + (B[2] * a2[1]) + (B[3] * a3[1]));
     Q[2] = ((B[0] * a0[2]) + (B[1] * a1[2]) + (B[2] * a2[2]) + (B[3] * a3[2]));

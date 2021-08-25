@@ -54,6 +54,10 @@ extern Vec3i gVec3iZero;
 extern Vec3f gVec3fOne;
 extern Vec3s gVec3sOne;
 
+extern Vec3f gVec3fX;
+extern Vec3f gVec3fY;
+extern Vec3f gVec3fZ;
+
 // Kaze's float functions
 f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
@@ -137,9 +141,11 @@ void vec3i_to_vec3s(                     Vec3s dest, Vec3i a);
 void vec3s_to_vec3f(                     Vec3f dest, Vec3s a);
 void vec3i_to_vec3f(                     Vec3f dest, Vec3i a);
 void vec3f_to_vec3s(                     Vec3s dest, Vec3f a);
+void vec3uc_copy(                        Vec3c dest, Vec3c src);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_zero(                         Vec3f v);
+void vec3f_clamp(                        Vec3f vec, f32 limit);
 f32  vec3f_mag(                          Vec3f v);
 void vec3f_normalize(                    Vec3f dest);
 void vec3f_normalize_max(                Vec3f dest, f32 max);
@@ -151,9 +157,11 @@ void vec3f_get_angle(                    Vec3f from, Vec3f to, Angle *pitch, Ang
 void vec3f_get_lateral_dist_and_angle(   Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_get_dist_and_angle(           Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw);
 void vec3f_set_dist_and_angle(           Vec3f from, Vec3f to, f32  dist, Angle  pitch, Angle  yaw);
-void vec3f_mul_f32(                      Vec3f dest, f32 scale);
-void vec3f_div_f32(                      Vec3f dest, f32 scale);
-void vec3f_scale_f32(                        Vec3f dest, Vec3f src,   f32 scale, u32 doInverted);
+void vec3f_mul_f32(                      Vec3f dest,   f32 scale);
+void vec3f_mul_vec3f(                    Vec3f dest, Vec3f scale);
+void vec3f_div_f32(                      Vec3f dest,   f32 scale);
+void vec3f_div_vec3f(                    Vec3f dest, Vec3f scale);
+void vec3f_scale_f32(                    Vec3f dest, Vec3f src,   f32 scale, u32 doInverted);
 void vec3f_scale_vec3f(                  Vec3f dest, Vec3f src, Vec3f scale, u32 doInverted);
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);
@@ -165,6 +173,7 @@ void vec4f_scale(                        Vec4f dest, Vec4f src, f32 scale);
 void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 // Matrix operations
 void mtxf_copy(                           Mat4 dest,  Mat4 src);
+void mtxf_end(                            Mat4 mtx);
 void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
 void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);

@@ -21,62 +21,52 @@ void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z);
  */
 void grabbable_joint_update_func(struct ObjJoint *self) {
     Mat4 *attObjMtx;
-    struct GdVec3f offset;  // difference between current position and initial position
+    Vec3f offset;  // difference between current position and initial position
     register struct ListNode *att;
     struct GdObj *attobj;
     // The joint acts somewhat like a spring in that the further it is moved
     // from its original position, the more resistance it has to moving further
-    offset.x = (self->rotationMtx[3][0] - self->initPos.x);
-    offset.y = (self->rotationMtx[3][1] - self->initPos.y);
-    offset.z = (self->rotationMtx[3][2] - self->initPos.z);
+    vec3f_diff(offset, self->rotationMtx[3], self->initPos);
     if (self->header.drawFlags & OBJ_PICKED) {
-        self->velocity.x = (offset.x * -0.25f);
-        self->velocity.y = (offset.y * -0.25f);
-        self->velocity.z = (offset.z * -0.25f);
+        self->velocity[0] = (offset[0] * -0.25f);
+        self->velocity[1] = (offset[1] * -0.25f);
+        self->velocity[2] = (offset[2] * -0.25f);
         self->flags |= JOINT_FLAG_GRABBED;
     } else {
         if (!gGdCtrl.trgR) { // R trigger is released
             // Set velocity so that the joint approaches its initial position
-            self->velocity.x -= (offset.x * 0.5f);
-            self->velocity.y -= (offset.y * 0.5f);
-            self->velocity.z -= (offset.z * 0.5f);
+            self->velocity[0] -= (offset[0] * 0.5f);
+            self->velocity[1] -= (offset[1] * 0.5f);
+            self->velocity[2] -= (offset[2] * 0.5f);
             // Decay the velocity
-            self->velocity.x *= 0.8f;
-            self->velocity.y *= 0.8f;
-            self->velocity.z *= 0.8f;
+            vec3f_mul_f32(self->velocity, 0.8f);
             // If the joint's velocity has decayed enough and it is very close
             // to its original position, stop its movement altogether
-            if ((ABSF(self->velocity.x) + ABSF(self->velocity.y) + ABSF(self->velocity.z) < 1.0f)
-             && (ABSF(offset.x) + ABSF(offset.y) + ABSF(offset.z) < 1.0f)) {
-                self->velocity.x = self->velocity.y = self->velocity.z = 0.0f;
-                self->rotationMtx[3][0] -= offset.x;
-                self->rotationMtx[3][1] -= offset.y;
-                self->rotationMtx[3][2] -= offset.z;
+            if (((ABSF(self->velocity[0]) + ABSF(self->velocity[1]) + ABSF(self->velocity[2])) < 1.0f)
+             && ((ABSF(offset[0]) + ABSF(offset[1]) + ABSF(offset[2])) < 1.0f)) {
+                vec3f_zero(self->velocity);
+                vec3f_sub(self->rotationMtx[3], offset);
             }
             if (self->flags & JOINT_FLAG_GRABBED) gd_play_sfx(GD_SFX_LET_GO_FACE);
             self->flags &= ~JOINT_FLAG_GRABBED;
         } else {
             // freeze position of joint
-            self->velocity.x = self->velocity.y = self->velocity.z = 0.0f;
+            vec3f_zero(self->velocity);
         }
     }
     // update position
-    self->rotationMtx[3][0] += self->velocity.x;
-    self->rotationMtx[3][1] += self->velocity.y;
-    self->rotationMtx[3][2] += self->velocity.z;
+    vec3f_add(self->rotationMtx[3], self->velocity);
     if (self->header.drawFlags & OBJ_PICKED) {
         gGdCtrl.csrX -= ((gGdCtrl.csrX - gGdCtrl.dragStartX) * 0.2f);
         gGdCtrl.csrY -= ((gGdCtrl.csrY - gGdCtrl.dragStartY) * 0.2f);
     }
     // update position of attached objects
-    offset.x = (self->rotationMtx[3][0] - self->initPos.x);
-    offset.y = (self->rotationMtx[3][1] - self->initPos.y);
-    offset.z = (self->rotationMtx[3][2] - self->initPos.z);
+    vec3f_diff(offset, self->rotationMtx[3], self->initPos);
     for ((att = self->attachedObjsGrp->firstMember); (att != NULL); (att = att->next)) {
         attobj = att->obj;
         set_cur_dynobj(attobj);
         attObjMtx = d_get_matrix_ptr();
-        gd_add_vec3f_to_mat4f_offset(attObjMtx, &offset);
+        vec3f_add((*attObjMtx)[3], offset);
     }
 }
 
@@ -84,50 +74,38 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
  * Update function for Mario's eye joints, which makes them follow the cursor
  */
 void eye_joint_update_func(struct ObjJoint *self) {
-    Mat4 *sp5C;
-    struct GdVec3f sp50;
-    struct GdVec3f sp44;
+    Mat4 *rotMtx;
+    Vec3f offset;
+    Vec3f sp44;
     register struct ListNode *att;
     struct GdObj *attobj;
     if ((sCurrentMoveCamera == NULL) || ((self->rootAnimator != NULL) && (self->rootAnimator->state != 7))) return;
     set_cur_dynobj((struct GdObj *)self);
-    sp5C = d_get_rot_mtx_ptr();
-    vec3f_to_gdvec3f(&sp44, (*sp5C)[3]);
-    world_pos_to_screen_coords(&sp44, sCurrentMoveCamera, sCurrentMoveView);
-    sp50.x =  (gGdCtrl.csrX - sp44.x);
-    sp50.y = -(gGdCtrl.csrY - sp44.y);
-    sp50.z =  0.0f;
-    sp50.x *= 2.0f;
-    sp50.y *= 2.0f;
-    sp50.z *= 2.0f;
-    if (gd_vec3f_magnitude(&sp50) > 30.0f) {
-        gd_normalize_vec3f(&sp50);
-        sp50.x *= 30.0f;
-        sp50.y *= 30.0f;
-        sp50.z *= 30.0f;
+    rotMtx = d_get_rot_mtx_ptr();
+    vec3f_copy(sp44, (*rotMtx)[3]);
+    world_pos_to_screen_coords(sp44, sCurrentMoveCamera, sCurrentMoveView);
+    offset[0]  =  (gGdCtrl.csrX - sp44[0]);
+    offset[1]  = -(gGdCtrl.csrY - sp44[1]);
+    offset[2]  = 0.0f;
+    vec3f_mul_f32(offset, 2.0f);
+    if (vec3f_mag(offset) > 30.0f) {
+        vec3f_normalize(offset);
+        vec3f_mul_f32(offset, 30.0f);
     }
     for (att = self->attachedObjsGrp->firstMember; att != NULL; att = att->next) {
         attobj = att->obj;
         set_cur_dynobj(attobj);
-        sp5C = d_get_rot_mtx_ptr();
-        gd_add_vec3f_to_mat4f_offset(sp5C, &sp50);
+        rotMtx = d_get_rot_mtx_ptr();
+        vec3f_add((*rotMtx)[3], offset);
     }
 }
 
 /* 23D748 -> 23D818; orig name: func_8018EF78 */
 void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z) {
-    j->worldPos.x   = x;
-    j->worldPos.y   = y;
-    j->worldPos.z   = z;
-    j->unk30.x      = x;
-    j->unk30.y      = y;
-    j->unk30.z      = z;
-    j->unk3C.x      = x;
-    j->unk3C.y      = y;
-    j->unk3C.z      = z;
-    j->initPos.x    = x;
-    j->initPos.y    = y;
-    j->initPos.z    = z;
+    vec3f_set(j->worldPos, x, y, z);
+    vec3f_set(j->unk30, x, y, z);
+    vec3f_set(j->unk3C, x, y, z);
+    vec3f_set(j->initPos, x, y, z);
     vec3f_set(j->rotationMtx[3], x, y, z);
 }
 
@@ -152,8 +130,8 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
     j->colourNum  = ((j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK);
     j->unk1C4     = NULL;
     j->shapePtr   = NULL;
-    vec3f_to_gdvec3f(&j->scale, gVec3fOne);
-    vec3f_to_gdvec3f(&j->friction, gVec3fZero);
+    vec3f_copy(j->scale, gVec3fOne);
+    vec3f_zero(j->friction);
     j->updateFunc = NULL;
     return j;
 }
@@ -188,33 +166,30 @@ Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* alwa
 
 /* 23F9F0 -> 23FB90 */
 void func_80191220(struct ObjJoint *j) {
-    gd_vec3f_copy(&j->unk48, &j->initPos); // storing "attached offset"?
-    gd_mat4f_mult_vec3f(&j->unk48, &gGdSkinNet->mat128);
-    gd_vec3f_copy(&j->unk3C, &j->unk48);
-    gd_vec3f_copy(&j->worldPos, &gGdSkinNet->worldPos);
-    j->worldPos.x += j->unk3C.x;
-    j->worldPos.y += j->unk3C.y;
-    j->worldPos.z += j->unk3C.z;
-    // vec3f_to_gdvec3f(&j->unk1A8, gVec3fZero);
-    j->unk1A8.x = j->unk1A8.y = j->unk1A8.z = 0.0f;
+    vec3f_copy(j->unk48, j->initPos); // storing "attached offset"?
+    gd_mat4f_mult_vec3f(j->unk48, &gGdSkinNet->mat128);
+    vec3f_copy(j->unk3C, j->unk48);
+    vec3f_copy(j->worldPos, gGdSkinNet->worldPos);
+    vec3f_add(j->worldPos, j->unk3C);
+    // vec3f_zero(j->unk1A8); // unused
 }
 
 /* 23FDD4 -> 23FFF4 */
 void reset_joint(struct ObjJoint *j) {
-    gd_vec3f_copy(&j->worldPos, &j->initPos);
-    gd_vec3f_copy(&j->unk30, &j->initPos);
-    gd_vec3f_copy(&j->unk3C, &j->initPos);
-    j->velocity.x = j->velocity.y = j->velocity.z = 0.0f;
-    j->unk84.x    = j->unk84.y    = j->unk84.z    = 0.0f;
-    j->unk90.x    = j->unk90.y    = j->unk90.z    = 0.0f;
-    j->unk1A8.x   = j->unk1A8.y   = j->unk1A8.z   = 0.0f;
+    vec3f_copy(j->worldPos, j->initPos);
+    vec3f_copy(j->unk30, j->initPos);
+    vec3f_copy(j->unk3C, j->initPos);
+    vec3f_zero(j->velocity);
+    // vec3f_zero(j->unk84);  // unused
+    // vec3f_zero(j->unk90);  // unused
+    // vec3f_zero(j->unk1A8); // unused
     gd_set_identity_mat4(        &j->idMtx);
-    gd_scale_mat4f_by_vec3f(     &j->idMtx, (struct GdVec3f *) &j->scale);
-    gd_rot_mat_about_vec(        &j->idMtx, (struct GdVec3f *) &j->unk6C);
-    gd_add_vec3f_to_mat4f_offset(&j->idMtx, &j->attachOffset);
+    gd_scale_mat4f_by_vec3f(   &j->idMtx, j->scale);
+    gd_rot_mat_about_vec3f(      &j->idMtx, j->initRotation);
+    vec3f_add(j->idMtx[3], j->attachOffset);
     gd_copy_mat4f(               &j->idMtx, &j->matE8);
     gd_set_identity_mat4(        &j->rotationMtx);
-    gd_add_vec3f_to_mat4f_offset(&j->rotationMtx, &j->initPos);
+    vec3f_add(j->rotationMtx[3], j->initPos);
 }
 
 /* 2406B8 -> 2406E0; orig name: func_80191EE8 */

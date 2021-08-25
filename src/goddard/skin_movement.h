@@ -3,8 +3,9 @@
 
 #include <PR/ultratypes.h>
 
+//! combine with skin.h?
+
 void scale_verts(        struct ObjGroup *group);
-void move_skin(          struct ObjNet   *net  );
 void func_80181894(      struct ObjJoint *joint);
 void reset_joint_weights(struct ObjJoint *joint);
 

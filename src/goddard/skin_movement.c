@@ -6,6 +6,8 @@
 #include "skin.h"
 #include "skin_movement.h"
 
+//! combine with skin.c?
+
 /* bss */
 struct ObjWeight *sResetCurWeight;
 static Mat4 D_801B9EA8; // TODO: rename to sHead2Mtx?
@@ -22,24 +24,19 @@ void scale_verts(struct ObjGroup *group) {
     for ((link = group->firstMember); (link != NULL); (link = link->next)) {
         vtx = (struct ObjVertex *) link->obj;
         if ((scaleFac = vtx->scaleFactor) != 0.0f) {
-            vtx->pos.x = (vtx->initPos.x * scaleFac);
-            vtx->pos.y = (vtx->initPos.y * scaleFac);
-            vtx->pos.z = (vtx->initPos.z * scaleFac);
+            vtx->pos[0] = (vtx->initPos[0] * scaleFac);
+            vtx->pos[1] = (vtx->initPos[1] * scaleFac);
+            vtx->pos[2] = (vtx->initPos[2] * scaleFac);
         } else {
-            vtx->pos.x = vtx->pos.y = vtx->pos.z = 0.0f;
+            vec3f_zero(vtx->pos);
         }
     }
-}
-
-/* @ 23000C for 0x58; orig name: func8018183C*/
-void move_skin(struct ObjNet *net) {
-    if (net->shapePtr != NULL) scale_verts(net->shapePtr->scaledVtxGroup);
 }
 
 /* @ 230064 for 0x13C*/
 void func_80181894(struct ObjJoint *joint) {
     register struct ObjGroup *weightGroup; // baseGroup? weights Only?
-    struct GdVec3f stackVec;
+    Vec3f stackVec;
     register struct ObjWeight *curWeight;
     register struct ObjVertex *connectedVtx;
     register struct ListNode *link;
@@ -51,13 +48,13 @@ void func_80181894(struct ObjJoint *joint) {
             linkedObj                = link->obj;
             curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {
-                gd_vec3f_copy(&stackVec, &curWeight->vec20);
-                gd_rotate_and_translate_vec3f(&stackVec, &joint->matE8);
+                vec3f_copy(stackVec, curWeight->vec20);
+                gd_rotate_and_translate_vec3f(stackVec, &joint->matE8);
                 connectedVtx         = curWeight->vtx;
                 scaleFactor          = curWeight->weightVal;
-                connectedVtx->pos.x += (stackVec.x * scaleFactor);
-                connectedVtx->pos.y += (stackVec.y * scaleFactor);
-                connectedVtx->pos.z += (stackVec.z * scaleFactor);
+                connectedVtx->pos[0] += (stackVec[0] * scaleFactor);
+                connectedVtx->pos[1] += (stackVec[1] * scaleFactor);
+                connectedVtx->pos[2] += (stackVec[2] * scaleFactor);
             }
         }
     }
@@ -65,12 +62,12 @@ void func_80181894(struct ObjJoint *joint) {
 
 /* @ 2301A0 for 0x110 */
 void reset_weight_vtx(struct ObjVertex *vtx) {
-    struct GdVec3f localVec;
+    Vec3f localVec;
     if (sResetWeightVtxNum++ == sResetCurWeight->vtxId) {  // found matching vertex
         sResetCurWeight->vtx     = vtx;
-        gd_vec3f_copy(&localVec, &vtx->pos);
-        gd_rotate_and_translate_vec3f(&localVec, &D_801B9EA8);
-        gd_vec3f_copy(&sResetCurWeight->vec20, &localVec);
+        vec3f_copy(localVec, vtx->pos);
+        gd_rotate_and_translate_vec3f(localVec, &D_801B9EA8);
+        vec3f_copy(sResetCurWeight->vec20, localVec);
         vtx->scaleFactor        -= sResetCurWeight->weightVal;
     }
 }

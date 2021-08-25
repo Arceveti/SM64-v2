@@ -18,12 +18,12 @@ void compute_net_bounding_box(struct ObjNet *net) {
     reset_bounding_box();
     if (net->unk1D0 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1D0);
     if (net->unk1C8 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1C8);
-    gSomeBoundingBox.minX *= net->scale.x;
-    gSomeBoundingBox.maxX *= net->scale.x;
-    gSomeBoundingBox.minY *= net->scale.y;
-    gSomeBoundingBox.maxY *= net->scale.y;
-    gSomeBoundingBox.minZ *= net->scale.z;
-    gSomeBoundingBox.maxZ *= net->scale.z;
+    gSomeBoundingBox.minX *= net->scale[0];
+    gSomeBoundingBox.maxX *= net->scale[0];
+    gSomeBoundingBox.minY *= net->scale[1];
+    gSomeBoundingBox.maxY *= net->scale[1];
+    gSomeBoundingBox.minZ *= net->scale[2];
+    gSomeBoundingBox.maxZ *= net->scale[2];
     net->boundingBox.minX  = gSomeBoundingBox.minX;
     net->boundingBox.minY  = gSomeBoundingBox.minY;
     net->boundingBox.minZ  = gSomeBoundingBox.minZ;
@@ -35,15 +35,15 @@ void compute_net_bounding_box(struct ObjNet *net) {
 /* 240894 -> 240A64; orig name: func_801920C4 */
 void reset_net(struct ObjNet *net) {
     struct ObjGroup *grp;
-    gd_vec3f_copy(&net->worldPos, &net->initPos);
-    net->velocity.x = net->velocity.y = net->velocity.z = 0.0f;
-    net->torque.x   = net->torque.y   = net->torque.z   = 0.0f;
+    vec3f_copy(net->worldPos, net->initPos);
+    vec3f_zero(net->velocity);
+    // vec3f_zero(net->torque); // unused
     compute_net_bounding_box(net);
     gGdSkinNet = net;
     gd_set_identity_mat4(&net->rotationMtx);
     gd_set_identity_mat4(&net->idMtx);
-    gd_rot_mat_about_vec(&net->idMtx, &net->unk68); // set rot mtx to initial rotation?
-    gd_add_vec3f_to_mat4f_offset(&net->idMtx, &net->worldPos); // set to initial position?
+    gd_rot_mat_about_vec3f(&net->idMtx, net->unk68); // set rot mtx to initial rotation?
+    vec3f_add(net->idMtx[3], net->worldPos); // set to initial position?
     gd_copy_mat4f(&net->idMtx, &net->mat128);
     if ((grp = net->unk1C8) != NULL) {
         apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint  , grp);
@@ -71,9 +71,9 @@ struct ObjNet *make_net(struct ObjGroup *group) {
     struct ObjNet *net;
     net            = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
     gd_set_identity_mat4(&net->mat128);
-    net->initPos.x = net->initPos.y = net->initPos.z = 0.0f;
+    vec3f_zero(net->initPos);
     net->id        = ++sNetCount;
-    net->scale.x   = net->scale.y = net->scale.z = 1.0f;
+    vec3f_zero(net->scale);
     net->shapePtr  = NULL;
     net->unk1C8    = group;
     net->unk1CC    = NULL;
@@ -98,21 +98,21 @@ void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
     u8 nx, ny, nz;
     register struct VtxLink *vtxlink;
 #ifndef GBI_FLOATS
-    register s16 *vnPos;
+    register RawVertexData *vnPos;
 #endif
-    register s16 x, y, z;
+    register RawVertexData x, y, z;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;
     for (link = grp->firstMember; link != NULL; link = link->next) {
         obj = link->obj;
         vtx = (struct ObjVertex *) obj;
-        x   = (s16) vtx->pos.x;
-        y   = (s16) vtx->pos.y;
-        z   = (s16) vtx->pos.z;
-        nx  = (u8)(vtx->normal.x * 255.0f);
-        ny  = (u8)(vtx->normal.y * 255.0f);
-        nz  = (u8)(vtx->normal.z * 255.0f);
+        x   = (RawVertexData) vtx->pos[0];
+        y   = (RawVertexData) vtx->pos[1];
+        z   = (RawVertexData) vtx->pos[2];
+        nx  = (u8)(vtx->normal[0] * 255.0f);
+        ny  = (u8)(vtx->normal[1] * 255.0f);
+        nz  = (u8)(vtx->normal[2] * 255.0f);
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vnPos    = vtxlink->data->n.ob;
@@ -137,18 +137,18 @@ void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
 void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
     register struct VtxLink *vtxlink;
 #ifndef GBI_FLOATS
-    register s16 *vtxcoords;
+    register RawVertexData *vtxcoords;
 #endif
-    register s16 x, y, z;
+    register RawVertexData x, y, z;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;
     for (link = grp->firstMember; link != NULL; link = link->next) {
         obj = link->obj;
         vtx = (struct ObjVertex *) obj;
-        x = (s16) vtx->pos.x;
-        y = (s16) vtx->pos.y;
-        z = (s16) vtx->pos.z;
+        x = (RawVertexData) vtx->pos[0];
+        y = (RawVertexData) vtx->pos[1];
+        z = (RawVertexData) vtx->pos[2];
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vtxcoords = vtxlink->data->v.ob;
@@ -166,7 +166,7 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
 
 /* 241BCC -> 241CA0; orig name: Proc801933FC */
 void convert_net_verts(struct ObjNet *net) {
-    if (net->shapePtr !=                    NULL && net->shapePtr->unk30 ) convert_gd_verts_to_Vn( net->shapePtr->vtxGroup);
+    if (net->shapePtr !=                     NULL && net->shapePtr->unk30 ) convert_gd_verts_to_Vn( net->shapePtr->vtxGroup      );
     if (net->netType  == NET_TYPE_SCALED_VERTICES && net->shapePtr != NULL) convert_gd_verts_to_Vtx(net->shapePtr->scaledVtxGroup);
 }
 
@@ -187,10 +187,10 @@ static void move_joints_in_net(struct ObjNet *net) {
 void move_net(struct ObjNet *net) {
     gGdSkinNet = net;
     switch (net->netType) {
-        case NET_TYPE_SHAPE:                                    break;
-        case NET_TYPE_DYNAMIC_BONES:   move_bonesnet(     net); break;
-        case NET_TYPE_SCALED_VERTICES: move_skin(         net); break;
-        case NET_TYPE_JOINTS:          move_joints_in_net(net); break;
+        case NET_TYPE_SHAPE:                                                                                  break;
+        case NET_TYPE_DYNAMIC_BONES:                              move_bonesnet(     net);                    break;
+        case NET_TYPE_SCALED_VERTICES: if (net->shapePtr != NULL) scale_verts(net->shapePtr->scaledVtxGroup); break;
+        case NET_TYPE_JOINTS:                                     move_joints_in_net(net);                    break;
         default: gd_exit(); // Undefined net type
     }
 }

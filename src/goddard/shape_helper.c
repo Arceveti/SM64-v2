@@ -23,7 +23,7 @@ struct        ObjShape *gShapeSilverStar    = NULL; // @ 801A82F8
 static struct ObjShape *sGdShapeListHead;           // @ 801BAC50
 static             u32  sGdShapeCount;              // @ 801BAC54
 /// factor for scaling vertices in an `ObjShape` when calling `scale_verts_in_shape()`
-static struct GdVec3f sVertexScaleFactor;
+static           Vec3f  sVertexScaleFactor;
 
 /**
  * Computes the normal vector for a face based on three of its vertices.
@@ -37,18 +37,18 @@ void calc_face_normal(struct ObjFace *face) {
     f32 mul = 1000.0f;
     if (face->vtxCount >= 3) {  // need at least three points to compute a normal
         vtx1  = face->vertices[0];
-        gdvec3f_to_vec3f(p1, &vtx1->pos);
+        vec3f_copy(p1, vtx1->pos);
         vtx2  = face->vertices[1];
-        gdvec3f_to_vec3f(p2, &vtx2->pos);
+        vec3f_copy(p2, vtx2->pos);
         vtx3  = face->vertices[2];
-        gdvec3f_to_vec3f(p3, &vtx3->pos);
+        vec3f_copy(p3, vtx3->pos);
         // calculate the cross product of edges (p2 - p1) and (p3 - p2)
         // not sure why each component is multiplied by 1000. maybe to avoid loss of precision when normalizing? 
         normal[0] = ((((p2[1] - p1[1]) * (p3[2] - p2[2])) - ((p2[2] - p1[2]) * (p3[1] - p2[1]))) * mul);
         normal[1] = ((((p2[2] - p1[2]) * (p3[0] - p2[0])) - ((p2[0] - p1[0]) * (p3[2] - p2[2]))) * mul);
         normal[2] = ((((p2[0] - p1[0]) * (p3[1] - p2[1])) - ((p2[1] - p1[1]) * (p3[0] - p2[0]))) * mul);
         vec3f_normalize(normal);
-        vec3f_to_gdvec3f(&face->normal, normal);
+        vec3f_copy(face->normal, normal);
     }
 }
 
@@ -57,18 +57,12 @@ struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
     struct ObjVertex *vtx;
     vtx              = (struct ObjVertex *) make_object(OBJ_TYPE_VERTICES);
     vtx->id          = 0xD1D4;
-    vtx->pos.x       = x;
-    vtx->pos.y       = y;
-    vtx->pos.z       = z;
-    vtx->initPos.x   = x;
-    vtx->initPos.y   = y;
-    vtx->initPos.z   = z;
+    vec3f_set(vtx->pos,     x, y, z);
+    vec3f_set(vtx->initPos, x, y, z);
     vtx->scaleFactor = 1.0f;
     vtx->gbiVerts    = NULL;
     vtx->alpha       = 1.0f;
-    vtx->normal.x    = 0.0f;
-    vtx->normal.y    = 1.0f;
-    vtx->normal.z    = 0.0f;
+    vec3f_copy(vtx->normal, gVec3fY);
     return vtx;
 }
 
@@ -106,7 +100,7 @@ struct ObjShape *make_shape(UNUSED const char *name) {
     curShapeHead     = sGdShapeListHead;
     sGdShapeListHead = newShape;
     if (curShapeHead != NULL) {
-        newShape->nextShape = curShapeHead;
+        newShape->nextShape     = curShapeHead;
         curShapeHead->prevShape = newShape;
     }
     newShape->id        = sGdShapeCount;
@@ -128,22 +122,18 @@ struct ObjShape *make_shape(UNUSED const char *name) {
 
 /* @ 2469C0 for 0xc8 */
 void scale_obj_position(struct GdObj *obj) {
-    struct GdVec3f pos;
+    Vec3f pos;
     if (obj->type == OBJ_TYPE_GROUPS) return;
     set_cur_dynobj(obj);
-    d_get_rel_pos(&pos);
-    pos.x *= sVertexScaleFactor.x;
-    pos.y *= sVertexScaleFactor.y;
-    pos.z *= sVertexScaleFactor.z;
-    d_set_rel_pos( pos.x, pos.y, pos.z);
-    d_set_init_pos(pos.x, pos.y, pos.z);
+    d_get_rel_pos(pos);
+    vec3f_mul_vec3f(pos, sVertexScaleFactor);
+    d_set_rel_pos( pos[0], pos[1], pos[2]);
+    d_set_init_pos(pos[0], pos[1], pos[2]);
 }
 
 /* @ 246B1C for 0x88 */
 void scale_verts_in_shape(struct ObjShape *shape, f32 x, f32 y, f32 z) {
-    sVertexScaleFactor.x = x;
-    sVertexScaleFactor.y = y;
-    sVertexScaleFactor.z = z;
+    vec3f_set(sVertexScaleFactor, x, y, z);
     if (shape->vtxGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) scale_obj_position, shape->vtxGroup);
 }
 
@@ -262,9 +252,9 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     d_set_rel_pos(  0.0f, 200.0f, 2000.0f);
     d_set_world_pos(0.0f, 200.0f, 2000.0f);
     d_set_flags(4);
-    camera->lookAt.x =   0.0f;
-    camera->lookAt.y = 200.0f;
-    camera->lookAt.z =   0.0f;
+    camera->lookAt[0] =   0.0f;
+    camera->lookAt[1] = 200.0f;
+    camera->lookAt[2] =   0.0f;
     addto_group(gMarioFaceGrp, &camera->header);
     addto_group(gMarioFaceGrp, &animator->header);
     d_set_name_suffix(NULL);  // stop adding "l" to generated dynobj names
