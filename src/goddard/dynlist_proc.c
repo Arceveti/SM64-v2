@@ -1158,11 +1158,7 @@ void d_set_id(s32 id) {
 void d_set_ambient(f32 r, f32 g, f32 b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS:
-            ((struct ObjMaterial *) sDynListCurObj)->Ka.r = r;
-            ((struct ObjMaterial *) sDynListCurObj)->Ka.g = g;
-            ((struct ObjMaterial *) sDynListCurObj)->Ka.b = b;
-            break;
+        case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Ka, r, g, b); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetAmbient()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1173,16 +1169,8 @@ void d_set_ambient(f32 r, f32 g, f32 b) {
 void d_set_diffuse(f32 r, f32 g, f32 b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS:
-            ((struct ObjMaterial *) sDynListCurObj)->Kd.r = r;
-            ((struct ObjMaterial *) sDynListCurObj)->Kd.g = g;
-            ((struct ObjMaterial *) sDynListCurObj)->Kd.b = b;
-            break;
-        case OBJ_TYPE_LIGHTS:
-            ((struct ObjLight *) sDynListCurObj)->diffuse.r = r;
-            ((struct ObjLight *) sDynListCurObj)->diffuse.g = g;
-            ((struct ObjLight *) sDynListCurObj)->diffuse.b = b;
-            break;
+        case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Kd,      r, g, b); break;
+        case OBJ_TYPE_LIGHTS:    vec3f_set(((struct ObjLight    *) sDynListCurObj)->diffuse, r, g, b); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetDiffuse()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1198,8 +1186,8 @@ void d_get_matrix(Mat4 *dst) {
         case OBJ_TYPE_NETS:      gd_copy_mat4f(&((struct ObjNet    *) dynobj)->mat128, dst); break;
         case OBJ_TYPE_JOINTS:    gd_copy_mat4f(&((struct ObjJoint  *) dynobj)->matE8 , dst); break;
         case OBJ_TYPE_CAMERAS:   gd_copy_mat4f(&((struct ObjCamera *) dynobj)->unkE8 , dst); break;
-        case OBJ_TYPE_PARTICLES: gd_set_identity_mat4(dst); break;
-        case OBJ_TYPE_SHAPES:    gd_set_identity_mat4(dst); break;
+        case OBJ_TYPE_PARTICLES: gd_set_identity_mat4(                                 dst); break;
+        case OBJ_TYPE_SHAPES:    gd_set_identity_mat4(                                 dst); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetMatrix()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }

@@ -1,6 +1,7 @@
 #include <PR/ultratypes.h>
 
 #include "sm64.h"
+#include "mario_actions_submerged.h"
 #include "level_update.h"
 #include "memory.h"
 #include "engine/math_util.h"
@@ -456,9 +457,9 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_WATER_ACTION_END   , 0);
     if (m->flags & MARIO_METAL_CAP) {
-        stateFlags |= 0x4;
+        stateFlags |= PLUNGE_FLAG_METAL_CAP;
     } else if ((m->prevAction & ACT_FLAG_DIVING) || (m->input & INPUT_A_DOWN)) {
-        stateFlags |= 0x2;
+        stateFlags |= PLUNGE_FLAG_DIVING;
     }
     if (m->actionArg == 1) m->actionState = 1;
     if (m->actionState == 0) {
@@ -856,9 +857,9 @@ static Bool32 act_water_plunge(struct MarioState *m) {
 #endif
 #endif
     if (m->flags & MARIO_METAL_CAP) {
-        stateFlags |= 0x4;
+        stateFlags |= PLUNGE_FLAG_METAL_CAP;
     } else if ((m->prevAction & ACT_FLAG_DIVING) || (m->input & INPUT_A_DOWN)) {
-        stateFlags |= 0x2;
+        stateFlags |= PLUNGE_FLAG_DIVING;
     }
     m->actionTimer++;
     stationary_slow_down(m);

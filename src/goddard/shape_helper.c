@@ -54,8 +54,7 @@ void calc_face_normal(struct ObjFace *face) {
 
 /* @ 245CDC for 0x118 */
 struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
-    struct ObjVertex *vtx;
-    vtx              = (struct ObjVertex *) make_object(OBJ_TYPE_VERTICES);
+    struct ObjVertex *vtx = (struct ObjVertex *) make_object(OBJ_TYPE_VERTICES);
     vtx->id          = 0xD1D4;
     vec3f_set(vtx->pos,     x, y, z);
     vec3f_set(vtx->initPos, x, y, z);
@@ -68,12 +67,9 @@ struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
 
 /* @ 245DF4 for 0xAC */
 struct ObjFace *make_face_with_colour(f32 r, f32 g, f32 b) {
-    struct ObjFace *newFace;
-    newFace           = (struct ObjFace *) make_object(OBJ_TYPE_FACES);
-    newFace->colour.r = r;
-    newFace->colour.g = g;
-    newFace->colour.b = b;
-    newFace->vtxCount = 0;
+    struct ObjFace *newFace = (struct ObjFace *) make_object(OBJ_TYPE_FACES);
+    vec3f_set(newFace->colour, r, g, b);
+    newFace->vtxCount =  0;
     newFace->mtlId    = -1;
     newFace->mtl      = NULL;
     return newFace;

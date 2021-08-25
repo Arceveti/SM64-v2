@@ -97,7 +97,6 @@ void gd_rot_mat_about_vec3f(Mat4 *mtx, Vec3f vec) {
     if (vec[2] != 0.0f) gd_absrot_mat4(mtx, GD_Z_AXIS, vec[2]);
 }
 
-//! move to math_util
 /**
  * Creates a lookat matrix, but specifically from the perspective of the origin.
  * Rolls is only ever 0 in practice, and this is really only ever used once.
@@ -132,17 +131,9 @@ void gd_create_origin_lookat(Mat4 *mtx, Vec3f vec, f32 roll) {
         (*mtx)[1][2] = (((-s * unit[0]) - (c * unit[1] * unit[2])) * invertedHMag);
         (*mtx)[2][2] =                                  -unit[2];
     } else {
-        (*mtx)[0][0] = 0.0f;
-        (*mtx)[1][0] = 1.0f;
-        (*mtx)[2][0] = 0.0f;
-
-        (*mtx)[0][1] = 0.0f;
-        (*mtx)[1][1] = 0.0f;
-        (*mtx)[2][1] = 1.0f;
-
-        (*mtx)[0][2] = 1.0f;
-        (*mtx)[1][2] = 0.0f;
-        (*mtx)[2][2] = 0.0f;
+        vec3f_copy((*mtx)[0], gVec3fZ);
+        vec3f_copy((*mtx)[1], gVec3fX);
+        vec3f_copy((*mtx)[2], gVec3fY);
     }
     vec3f_copy((*mtx)[3], gVec3fZero);
     mtxf_end(*mtx);
@@ -167,15 +158,9 @@ void gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang) {
     Mat4 rMat;
     Vec3f rot;
     switch (axisnum) {
-        case GD_X_AXIS:
-            vec3f_copy(rot, gVec3fX);
-            break;
-        case GD_Y_AXIS:
-            vec3f_copy(rot, gVec3fY);
-            break;
-        case GD_Z_AXIS:
-            vec3f_copy(rot, gVec3fZ);
-            break;
+        case GD_X_AXIS: vec3f_copy(rot, gVec3fX); break;
+        case GD_Y_AXIS: vec3f_copy(rot, gVec3fY); break;
+        case GD_Z_AXIS: vec3f_copy(rot, gVec3fZ); break;
         default: gd_exit(); // Bad axis num
     }
     gd_create_rot_mat_angular(&rMat, rot, (ang / 2.0f));

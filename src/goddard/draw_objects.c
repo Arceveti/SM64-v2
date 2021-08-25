@@ -32,19 +32,19 @@ enum SceneType {
 };
 
 // data
-static struct GdColour sClrWhite        =   { 1.0f, 1.0f, 1.0f };   // @ 801A8070
-static struct GdColour sClrRed          =   { 1.0f, 0.0f, 0.0f };   // @ 801A807C
-static struct GdColour sClrGreen        =   { 0.0f, 1.0f, 0.0f };   // @ 801A8088
-static struct GdColour sClrBlue         =   { 0.0f, 0.0f, 1.0f };   // @ 801A8094
-static struct GdColour sClrErrDarkBlue  =   { 0.0f, 0.0f, 6.0f };   // @ 801A80A0
-static struct GdColour sClrPink         =   { 1.0f, 0.0f, 1.0f };   // @ 801A80AC
-static struct GdColour sClrBlack        =   { 0.0f, 0.0f, 0.0f };   // @ 801A80B8
-static struct GdColour sClrGrey         =   { 0.6f, 0.6f, 0.6f };   // @ 801A80C4
-static struct GdColour sClrDarkGrey     =   { 0.4f, 0.4f, 0.4f };   // @ 801A80D0
-static struct GdColour sClrYellow       =   { 1.0f, 1.0f, 0.0f };   // @ 801A80DC
-static struct GdColour sLightColours[1] = { { 1.0f, 1.0f, 0.0f } }; // @ 801A80E8
-static struct GdColour *sSelectedColour = &sClrRed;                 // @ 801A80F4
-struct ObjCamera *gViewUpdateCamera = NULL;                         // @ 801A80F8
+static GdColour sClrWhite        =   { 1.0f, 1.0f, 1.0f };   // @ 801A8070
+static GdColour sClrRed          =   { 1.0f, 0.0f, 0.0f };   // @ 801A807C
+static GdColour sClrGreen        =   { 0.0f, 1.0f, 0.0f };   // @ 801A8088
+static GdColour sClrBlue         =   { 0.0f, 0.0f, 1.0f };   // @ 801A8094
+static GdColour sClrErrDarkBlue  =   { 0.0f, 0.0f, 6.0f };   // @ 801A80A0
+static GdColour sClrPink         =   { 1.0f, 0.0f, 1.0f };   // @ 801A80AC
+static GdColour sClrBlack        =   { 0.0f, 0.0f, 0.0f };   // @ 801A80B8
+static GdColour sClrGrey         =   { 0.6f, 0.6f, 0.6f };   // @ 801A80C4
+static GdColour sClrDarkGrey     =   { 0.4f, 0.4f, 0.4f };   // @ 801A80D0
+static GdColour sClrYellow       =   { 1.0f, 1.0f, 0.0f };   // @ 801A80DC
+static GdColour sLightColours[1] = { { 1.0f, 1.0f, 0.0f } }; // @ 801A80E8
+static GdColour *sSelectedColour = &sClrRed;                 // @ 801A80F4
+struct ObjCamera *gViewUpdateCamera = NULL;                  // @ 801A80F8
 static s32 sLightDlCounter = 1; // @ 801A81A0
 
 // bss
@@ -89,7 +89,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     Vec3f vec;
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
-    vec[0] = vec[1] = vec[2] = 0.0f;
+    vec3f_zero(vec);
     if (flag & 0x02) {
         gd_dl_load_trans_matrix(f, g, h);
         vec[0] += f;
@@ -109,7 +109,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         sUseSelectedColor = TRUE;
         sSelectedColour = gd_get_colour(colorIdx);
         if (sSelectedColour != NULL) {
-            gd_dl_material_lighting(-1, sSelectedColour, GD_MTL_LIGHTS);
+            gd_dl_material_lighting(-1, *sSelectedColour, GD_MTL_LIGHTS);
         } else {
             gd_exit(); // Bad colour
         }
@@ -148,9 +148,7 @@ void draw_light(struct ObjLight *light) {
     Mat4 idMtx;
     struct ObjShape *shape;
     if (sSceneProcessType == FIND_PICKS) return;
-    sLightColours[0].r = light->colour.r;
-    sLightColours[0].g = light->colour.g;
-    sLightColours[0].b = light->colour.b;
+    vec3f_copy(sLightColours[0], light->colour);
     if (light->flags & LIGHT_UNK02) {
         gd_set_identity_mat4(&idMtx); //! overwritten?
         vec[0] = -light->unk80[0];
@@ -171,7 +169,7 @@ void draw_material(struct ObjMaterial *mtl) {
     if (mtlType == GD_MTL_SHINE_DL) {
         if ((sPhongLight != NULL) && (sPhongLight->unk30 > 0.0f)) {
             if (gViewUpdateCamera != NULL) {
-                gd_dl_hilite(mtl->gddlNumber, gViewUpdateCamera, sPhongLightPosition, &sPhongLight->colour);
+                gd_dl_hilite(mtl->gddlNumber, gViewUpdateCamera, sPhongLightPosition, sPhongLight->colour);
             } else {
                 gd_exit(); // no active camera for phong
             }
@@ -180,9 +178,9 @@ void draw_material(struct ObjMaterial *mtl) {
         }
     }
     if (!sUseSelectedColor) {
-        gd_dl_material_lighting(mtl->gddlNumber, &mtl->Kd, mtlType);
+        gd_dl_material_lighting(mtl->gddlNumber, mtl->Kd, mtlType);
     } else {
-        gd_dl_material_lighting(mtl->gddlNumber, sSelectedColour, GD_MTL_LIGHTS);
+        gd_dl_material_lighting(mtl->gddlNumber, *sSelectedColour, GD_MTL_LIGHTS);
     }
 }
 
@@ -207,7 +205,7 @@ void create_mtl_gddl_if_empty(struct ObjMaterial *mtl) {
  * @param idx Index of colour
  * @return Pointer to a GdColour struct
  */
-struct GdColour *gd_get_colour(s32 idx) {
+GdColour *gd_get_colour(s32 idx) {
     switch (idx) {
         case COLOUR_BLACK:     return &sClrBlack;        break;
         case COLOUR_WHITE:     return &sClrWhite;        break;
@@ -403,20 +401,18 @@ void draw_shape_faces(struct ObjShape *shape) {
  */
 void draw_particle(struct GdObj *obj) {
     struct ObjParticle *ptc = (struct ObjParticle *) obj;
-    struct GdColour *white;
-    struct GdColour *black;
+    GdColour white;
+    GdColour black;
     f32 brightness;
     if (ptc->timeout > 0) {
-        white      = &sClrWhite;
-        black      = &sClrBlack;
+        vec3f_copy(white, sClrWhite);
+        vec3f_copy(black, sClrBlack);
         brightness = (ptc->timeout / 10.0f);
-        sLightColours[0].r = (((white->r - black->r) * brightness) + black->r);
-        sLightColours[0].g = (((white->g - black->g) * brightness) + black->g);
-        sLightColours[0].b = (((white->b - black->b) * brightness) + black->b);
+        sLightColours[0][0] = (((white[0] - black[0]) * brightness) + black[0]);
+        sLightColours[0][1] = (((white[1] - black[1]) * brightness) + black[1]);
+        sLightColours[0][2] = (((white[2] - black[2]) * brightness) + black[2]);
     } else {
-        sLightColours[0].r = 0.0f;
-        sLightColours[0].g = 0.0f;
-        sLightColours[0].b = 0.0f;
+        vec3f_zero(sLightColours[0]);
     }
     if (ptc->timeout > 0) {
         ptc->shapePtr->unk50 = ptc->timeout;
@@ -463,9 +459,9 @@ void update_lighting(struct ObjLight *light) {
     f32 sp24; // diffuse factor?
     f32 dot;
     f32 sp1C;
-    light->colour.r = (light->diffuse.r * light->unk30);
-    light->colour.g = (light->diffuse.g * light->unk30);
-    light->colour.b = (light->diffuse.b * light->unk30);
+    light->colour[0] = (light->diffuse[0] * light->unk30);
+    light->colour[1] = (light->diffuse[1] * light->unk30);
+    light->colour[2] = (light->diffuse[2] * light->unk30);
     vec3f_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
     vec3f_normalize(sLightPositionCache[light->id]);
     if (light->flags & LIGHT_UNK20) {
@@ -478,7 +474,7 @@ void update_lighting(struct ObjLight *light) {
         sp1C = (1.0f - (light->unk38 / 90.0f));
         if (dot > sp1C) {
             dot = ((dot - sp1C) * (1.0f / (1.0f - sp1C)));
-            if (dot > 1.0f) {
+            if (dot > 1.0f) { // ternary?
                 dot = 1.0f;
             } else if (dot < 0.0f) {
                 dot = 0.0f;
@@ -489,7 +485,7 @@ void update_lighting(struct ObjLight *light) {
         sp24 *= dot;
     }
     set_light_id(light->id);
-    gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse.r * sp24), (light->diffuse.g * sp24), (light->diffuse.b * sp24));
+    gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse[0] * sp24), (light->diffuse[1] * sp24), (light->diffuse[2] * sp24));
     gd_setproperty(GD_PROP_LIGHT_DIR, sLightPositionCache[light->id][0], sLightPositionCache[light->id][1], sLightPositionCache[light->id][2]);
     gd_setproperty(GD_PROP_LIGHTING, 2.0f, 0.0f, 0.0f);
 }

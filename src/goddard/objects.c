@@ -213,9 +213,7 @@ struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 u
     newView->lowerRight[1]   = (f32) lry;
     newView->unk48           = 1.0f;
     newView->unk4C           = 1.0f;
-    newView->colour.r        = newView->id * 0.1f;
-    newView->colour.g        = 0.06f;
-    newView->colour.b        = 1.0f;
+    vec3f_set(newView->colour, (newView->id * 0.1f), 0.06f, 1.0f);
     newView->proc            = NULL;
     newView->unk9C           = 0;
     if (name != NULL) newView->unk1C = setup_view_buffers(name, newView);

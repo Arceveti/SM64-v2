@@ -20,9 +20,7 @@ struct GdAnimTransform {
     Vec3f pos;
 };
 
-struct GdColour {
-    f32 r, g, b;
-};
+typedef Vec3f GdColour;
 
 /* dynlist entries and types */
 union DynUnion {
@@ -344,7 +342,7 @@ struct ObjVertex {
  */
 struct ObjFace {
     /* 0x00 */ struct GdObj header;
-    /* 0x14 */ struct GdColour colour;
+    /* 0x14 */ GdColour colour;
     /* 0x20 */ s32 colourNum;                       // "colour" index
     /* 0x24 */ Vec3f normal;
     /* 0x30 */ s32 vtxCount;
@@ -398,8 +396,8 @@ struct ObjMaterial {
     /* 0x20 */ char name[8];
     /* 0x28 */ s32 type;
     /* 0x2C */ u8  pad2C[4];
-    /* 0x30 */ struct GdColour Ka;  // ambient color
-    /* 0x3C */ struct GdColour Kd;  // diffuse color
+    /* 0x30 */ GdColour Ka;  // ambient color
+    /* 0x3C */ GdColour Kd;  // diffuse color
     /* 0x48 */ u8  pad48[0x58-0x48];
     /* 0x58 */ void *texture;       // set by d_usetexture; never seems to be non-null though.
     /* 0x5C */ s32 gddlNumber;
@@ -455,7 +453,7 @@ struct ObjView {
     /* 0x70 */ s32 gdDlNum;
     /* 0x74 */ s32 unk74;
     /* 0x78 */ s32 unk78;
-    /* 0x7C */ struct GdColour colour;
+    /* 0x7C */ GdColour colour;
     /* 0x88 */ struct ObjView *parent;          // maybe not a true parent, but link to buffers in parent?
     /* 0x8C */ void *zbuf;
     /* 0x90 */ void *colourBufs[2];             // frame buffers?
@@ -528,13 +526,13 @@ struct ObjLight {
     /* 0x40 */ s32 unk40;
     /* 0x44 */ u8  pad3[0x8];
     /* 0x4C */ s32 unk4C;
-    /* 0x50 */ struct GdColour diffuse;
-    /* 0x5C */ struct GdColour colour;
+    /* 0x50 */ GdColour diffuse;
+    /* 0x5C */ GdColour colour;
     /* 0x68 */ Vec3f unk68;     // unused
     /* 0x74 */ Vec3f position;
     /* 0x80 */ Vec3f unk80;
     /* 0x8C */ Vec3f unk8C;
-    /* 0x98 */ s32 unk98;
+    /* 0x98 */ s32   unk98;
     /* 0x9C */ struct ObjShape *unk9C;
 }; /* sizeof = 0xA0 */
 

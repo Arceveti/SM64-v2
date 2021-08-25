@@ -94,8 +94,8 @@ static Mat4 sInitIdnMat4;
 static s8 sVtxCvrtNormBuf[3];
 static s16 sAlpha;
 static s32 sNumLights;
-static struct GdColour sAmbScaleColour;
-static struct GdColour sLightScaleColours[2];
+static GdColour sAmbScaleColour;
+static GdColour sLightScaleColours[2];
 static Vec3i sLightDirections[2];
 static s32 sLightId;
 static Hilite sHilites[600];
@@ -1205,13 +1205,9 @@ void set_light_num(s32 n) {
 
 /* 24EB24 -> 24EC18 */
 s32 create_mtl_gddl(void) {
-    s32 dlnum;
-    struct GdColour blue;
-    blue.r = 0.0f;
-    blue.g = 0.0f;
-    blue.b = 1.0f;
-    dlnum  = gd_startdisplist(7);
-    gd_dl_material_lighting(dlnum, &blue, GD_MTL_TEX_OFF);
+    GdColour blue = {0.0f, 0.0f, 1.0f};
+    s32 dlnum     = gd_startdisplist(7);
+    gd_dl_material_lighting(dlnum, blue, GD_MTL_TEX_OFF);
     gd_enddlsplist_parent();
     sCurrentGdDl->totalVtx    = sCurrentGdDl->curVtxIdx;
     sCurrentGdDl->totalMtx    = sCurrentGdDl->curMtxIdx;
@@ -1231,7 +1227,7 @@ void branch_to_gddl(s32 dlNum) {
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
                    Vec3f phongLightPosition,   // vector to light source?
-                   struct GdColour  *colour) { // light color
+                   GdColour colour) {        // light color
     Hilite *hilite;
     Vec3f vec;
     f32 mag; // magnitude of vec
@@ -1239,7 +1235,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     const f32 yMul = 32.0f; // y scale factor?
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
-    gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f), (s32)(colour->b * 255.0f), 255);
+    gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour[0] * 255.0f), (s32)(colour[1] * 255.0f), (s32)(colour[2] * 255.0f), 255);
     vec[2] = (cam->unkE8[0][2] + phongLightPosition[0]);
     vec[1] = (cam->unkE8[1][2] + phongLightPosition[1]);
     vec[0] = (cam->unkE8[2][2] + phongLightPosition[2]);
@@ -1263,7 +1259,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
 /**
  * Adds some display list commands that perform lighting for a material
  */
-s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
+s32 gd_dl_material_lighting(s32 id, GdColour colour, s32 material) {
     s32 i;
     s32 numLights = sNumLights;
     s32 scaledColours[3];
@@ -1286,9 +1282,9 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
             break;
         default:
             gddl_is_loading_shine_dl(FALSE);
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0]  = colour->r * 255.0f;
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1]  = colour->g * 255.0f;
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2]  = colour->b * 255.0f;
+            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0]  = (colour[0] * 255.0f);
+            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1]  = (colour[1] * 255.0f);
+            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2]  = (colour[2] * 255.0f);
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[0] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0];
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[1] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1];
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[2] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2];
@@ -1308,9 +1304,9 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
             break;
     }
     // L801A0EF4
-    scaledColours[0] = (s32)(colour->r * sAmbScaleColour.r * 255.0f);
-    scaledColours[1] = (s32)(colour->g * sAmbScaleColour.g * 255.0f);
-    scaledColours[2] = (s32)(colour->b * sAmbScaleColour.b * 255.0f);
+    scaledColours[0] = (s32)(colour[0] * sAmbScaleColour[0] * 255.0f);
+    scaledColours[1] = (s32)(colour[1] * sAmbScaleColour[1] * 255.0f);
+    scaledColours[2] = (s32)(colour[2] * sAmbScaleColour[2] * 255.0f);
     // 801A0FE4
     DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0] = scaledColours[0];
     DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1] = scaledColours[1];
@@ -1321,10 +1317,10 @@ s32 gd_dl_material_lighting(s32 id, struct GdColour *colour, s32 material) {
     DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[2] = scaledColours[2];
     // 801A10EC
     gSPNumLights(next_gfx(), numLights);
-    for (i = 0; i < numLights; i++) { // L801A1134
-        scaledColours[0] = colour->r * sLightScaleColours[i].r * 255.0f;
-        scaledColours[1] = colour->g * sLightScaleColours[i].g * 255.0f;
-        scaledColours[2] = colour->b * sLightScaleColours[i].b * 255.0f;
+    for ((i = 0); (i < numLights); (i++)) { // L801A1134
+        scaledColours[0] = (colour[0] * sLightScaleColours[i][0] * 255.0f);
+        scaledColours[1] = (colour[1] * sLightScaleColours[i][1] * 255.0f);
+        scaledColours[2] = (colour[2] * sLightScaleColours[i][2] * 255.0f);
         // 801A1260
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col[0]  = scaledColours[0];
         DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col[1]  = scaledColours[1];
@@ -1520,21 +1516,13 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
                 case 0: gSPClearGeometryMode(next_gfx(), G_LIGHTING); break;
             }
             break;
-        case GD_PROP_AMB_COLOUR:
-            sAmbScaleColour.r = f1;
-            sAmbScaleColour.g = f2;
-            sAmbScaleColour.b = f3;
-            break;
+        case GD_PROP_AMB_COLOUR: vec3f_set(sAmbScaleColour, f1, f2, f3); break;
         case GD_PROP_LIGHT_DIR:
             sLightDirections[sLightId][0] = (s32)(f1 * 120.0f);
             sLightDirections[sLightId][1] = (s32)(f2 * 120.0f);
             sLightDirections[sLightId][2] = (s32)(f3 * 120.0f);
             break;
-        case GD_PROP_DIFUSE_COLOUR:
-            sLightScaleColours[sLightId].r = f1;
-            sLightScaleColours[sLightId].g = f2;
-            sLightScaleColours[sLightId].b = f3;
-            break;
+        case GD_PROP_DIFUSE_COLOUR: vec3f_set(sLightScaleColours[sLightId], f1, f2, f3); break;
         case GD_PROP_CULLING:
             parm = (s32) f1;
             switch (parm) {
@@ -1695,13 +1683,9 @@ void gd_init(void) {
     gGdFrameBufNum    = 0;
     sGdDlCount        = 0;
     sLightId          = 0;
-    sAmbScaleColour.r = 0.0f;
-    sAmbScaleColour.g = 0.0f;
-    sAmbScaleColour.b = 0.0f;
-    for (i = 0; i < ARRAY_COUNT(sLightScaleColours); i++) {
-        sLightScaleColours[i].r = 1.0f;
-        sLightScaleColours[i].g = 0.0f;
-        sLightScaleColours[i].b = 0.0f;
+    vec3f_zero(sAmbScaleColour);
+    for ((i = 0); (i < ARRAY_COUNT(sLightScaleColours)); (i++)) {
+        vec3f_set(sLightScaleColours[i], 1.0f, 0.0f, 0.0f);
         vec3i_set(sLightDirections[i], 0, 120, 0);
     }
     sNumLights = NUMLIGHTS_2;
@@ -1720,9 +1704,7 @@ void gd_init(void) {
         sViewDls[i][1] = create_child_gdl(1, sDynamicMainDls[1]);
     }
     sScreenView           = make_view("screenview2", (VIEW_2_COL_BUF | VIEW_UNK_1000 | VIEW_COLOUR_BUF | VIEW_Z_BUF), 0, 0, 0, 320, 240, NULL);
-    sScreenView->colour.r = 0.0f;
-    sScreenView->colour.g = 0.0f;
-    sScreenView->colour.b = 0.0f;
+    vec3f_zero(sScreenView->colour);
     sScreenView->parent   = sScreenView;
     sScreenView->flags   &= ~VIEW_UPDATE;
     sActiveView           = sScreenView;

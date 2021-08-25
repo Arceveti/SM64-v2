@@ -43,7 +43,7 @@ void reset_net(struct ObjNet *net) {
     gd_set_identity_mat4(&net->rotationMtx);
     gd_set_identity_mat4(&net->idMtx);
     gd_rot_mat_about_vec3f(&net->idMtx, net->unk68); // set rot mtx to initial rotation?
-    vec3f_add(net->idMtx[3], net->worldPos); // set to initial position?
+    vec3f_add(net->idMtx[3], net->worldPos);         // set to initial position?
     gd_copy_mat4f(&net->idMtx, &net->mat128);
     if ((grp = net->unk1C8) != NULL) {
         apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint  , grp);
@@ -122,6 +122,7 @@ void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
             *vnPos++ = z;
 #else
             vn = vtxlink->data;
+            // vec3f_set?
             vn->n.ob[0] = x;
             vn->n.ob[1] = y;
             vn->n.ob[2] = z;
@@ -152,10 +153,12 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vtxcoords = vtxlink->data->v.ob;
+            // vec3s_set?
             vtxcoords[0] = x;
             vtxcoords[1] = y;
             vtxcoords[2] = z;
 #else
+            // vec3f_set?
             vtxlink->data->v.ob[0] = x;
             vtxlink->data->v.ob[1] = y;
             vtxlink->data->v.ob[2] = z;
