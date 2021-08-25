@@ -2,13 +2,22 @@
 #include <math.h>
 
 #include "sm64.h"
-#include "engine/graph_node.h"
 #include "math_util.h"
 #include "surface_collision.h"
 #include "extended_bounds.h"
 #include "trig_tables.inc.c"
 
 #include "config.h"
+
+// unused Mtx(s)
+// UNUSED s16 identityMtx[4][4] = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+// UNUSED s16 zeroMtx[4][4]     = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+
+Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
+Vec3s gVec3sZero = {    0,    0,    0 };
+Vec3i gVec3iZero = {    0,    0,    0 };
+Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
+UNUSED Vec3s gVec3sOne  = {    1,    1,    1 };
 
 /**************************
  * Float functions (Kaze) *
@@ -499,6 +508,11 @@ void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
     dest[0] = ((a[1] * b[2]) - (b[1] * a[2]));
     dest[1] = ((a[2] * b[0]) - (b[2] * a[0]));
     dest[2] = ((a[0] * b[1]) - (b[0] * a[1]));
+}
+
+/// Sets vector 'v' to zero
+void vec3f_zero(Vec3f v) {
+    v[0] = v[1] = v[2] = 0.0f;
 }
 
 /// Get the magnitude of vector 'v'

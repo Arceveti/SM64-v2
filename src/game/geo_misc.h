@@ -6,9 +6,9 @@
 
 enum FlyingCarpetState
 {
-    FLYING_CARPET_IDLE = 0,
+    FLYING_CARPET_IDLE                 = 0,
     FLYING_CARPET_MOVING_WITHOUT_MARIO = 1,
-    FLYING_CARPET_MOVING_WITH_MARIO = 2
+    FLYING_CARPET_MOVING_WITH_MARIO    = 2
 };
 
 extern s8 gFlyingCarpetState;

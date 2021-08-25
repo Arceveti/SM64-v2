@@ -808,10 +808,7 @@ s32 gd_sfx_to_play(void) {
 
 /* 24B088 -> 24B418 */
 Gfx *gdm_gettestdl(UNUSED s32 id) {
-    struct GdDisplayList *gddl;
-    struct GdVec3f vec;
-    vec.x = vec.y = vec.z = 0.0f;
-    gddl  = NULL;
+    struct GdDisplayList *gddl = NULL;
     update_view_and_dl(sMSceneView);
     if (sHandView != NULL) update_view_and_dl(sHandView);
     sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
@@ -824,8 +821,7 @@ Gfx *gdm_gettestdl(UNUSED s32 id) {
 
 /* 24B5D4 -> 24B6AC */
 struct GdDisplayList *alloc_displaylist(u32 id) {
-    struct GdDisplayList *gdDl;
-    gdDl = gd_malloc_perm(sizeof(struct GdDisplayList));
+    struct GdDisplayList *gdDl = gd_malloc_perm(sizeof(struct GdDisplayList));
     if (gdDl == NULL) gd_exit(); // Out of DL mem
     gdDl->number = sGdDlCount++;
     if (sGdDlCount >= MAX_GD_DLS) gd_exit(); // fatal_printf("alloc_displaylist() too many display lists %d (MAX %d)", sGdDlCount + 1, MAX_GD_DLS);
@@ -1245,7 +1241,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct GdColour  *colour // light color
 ) {
     Hilite *hilite;
-    struct GdVec3f vec;
+    Vec3f vec;
     f32 mag; // magnitude of vec
     f32 sp38;
     f32 sp34;
@@ -1254,22 +1250,20 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour->r * 255.0f), (s32)(colour->g * 255.0f), (s32)(colour->b * 255.0f), 255);
-    vec.z = (cam->unkE8[0][2] + arg4->x);
-    vec.y = (cam->unkE8[1][2] + arg4->y);
-    vec.x = (cam->unkE8[2][2] + arg4->z);
+    vec[2] = (cam->unkE8[0][2] + arg4->x);
+    vec[1] = (cam->unkE8[1][2] + arg4->y);
+    vec[0] = (cam->unkE8[2][2] + arg4->z);
 #ifdef FAST_INVSQRT
-    mag = Q_rsqrtf(sqr(vec.z) + sqr(vec.y) + sqr(vec.x));
+    mag = Q_rsqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
     if (mag > 0.1f) {
 #else
-    mag = sqrtf(sqr(vec.z) + sqr(vec.y) + sqr(vec.x));
+    mag = sqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
     if (mag > 0.1f) {
         mag = 1.0f / mag;
 #endif
-        vec.z *= mag;
-        vec.y *= mag;
-        vec.x *= mag;
-        hilite->h.x1 = (((vec.z * cam->unkE8[0][0]) + (vec.y * cam->unkE8[1][0]) + (vec.x * cam->unkE8[2][0])) * sp38 * 2.0f) + (sp38 * 4.0f);
-        hilite->h.y1 = (((vec.z * cam->unkE8[0][1]) + (vec.y * cam->unkE8[1][1]) + (vec.x * cam->unkE8[2][1])) * sp34 * 2.0f) + (sp34 * 4.0f);
+        vec3f_mul_f32(vec, mag);
+        hilite->h.x1 = (((vec[2] * cam->unkE8[0][0]) + (vec[1] * cam->unkE8[1][0]) + (vec[0] * cam->unkE8[2][0])) * sp38 * 2.0f) + (sp38 * 4.0f);
+        hilite->h.y1 = (((vec[2] * cam->unkE8[0][1]) + (vec[1] * cam->unkE8[1][1]) + (vec[0] * cam->unkE8[2][1])) * sp34 * 2.0f) + (sp34 * 4.0f);
     } else {
         hilite->h.x1 = sp38 * 2.0f;
         hilite->h.y1 = sp34 * 2.0f;
@@ -1434,10 +1428,7 @@ void gddl_is_loading_shine_dl(s32 dlLoad) {
 
 /* 250C18 -> 251014; orig name: func_801A2448 */
 void start_view_dl(struct ObjView *view) {
-    f32 ulx;
-    f32 uly;
-    f32 lrx;
-    f32 lry;
+    f32 ulx, uly, lrx, lry;
     if (view->upperLeft.x < view->parent->upperLeft.x) {
         ulx = view->parent->upperLeft.x;
     } else {
@@ -1462,7 +1453,7 @@ void start_view_dl(struct ObjView *view) {
     if (uly >= lry) uly = lry - 1.0f;
     gDPSetScissor(       next_gfx(), G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
     gSPClearGeometryMode(next_gfx(), 0xFFFFFFFF);
-    gSPSetGeometryMode(  next_gfx(), G_LIGHTING | G_CULL_BACK | G_SHADING_SMOOTH | G_SHADE);
+    gSPSetGeometryMode(  next_gfx(), (G_LIGHTING | G_CULL_BACK | G_SHADING_SMOOTH | G_SHADE));
     if (view->flags & VIEW_ALLOC_ZBUF) gSPSetGeometryMode(next_gfx(), G_ZBUFFER);
     gd_dl_viewport();
     update_render_mode();

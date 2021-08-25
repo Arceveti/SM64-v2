@@ -63,6 +63,7 @@ struct ObjGroup *d_get_att_objgroup(void);
 void d_get_scale(    struct GdVec3f *dst);
 void d_set_world_pos(f32 x, f32 y, f32 z);
 void d_get_world_pos(struct GdVec3f *dst);
+void d_vec3f_get_world_pos(Vec3f dst);
 void d_set_scale(    f32 x, f32 y, f32 z);
 void d_set_flags(s32 flags);
 void d_set_obj_draw_flag(enum ObjDrawingFlags flag);

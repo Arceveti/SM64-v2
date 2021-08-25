@@ -341,7 +341,7 @@ struct GdObj *d_makeobj(enum DObjTypes type, DynObjName name) {
 void d_attach_to(s32 flag, struct GdObj *obj) {
     struct ObjGroup *attgrp;
     struct GdVec3f currObjPos; // transformed into attach offset
-    struct GdVec3f objPos;
+    Vec3f objPos;
     d_stash_dynobj();
     if (sDynListCurObj == NULL) gd_exit();
     // find or generate attachment groups
@@ -357,10 +357,10 @@ void d_attach_to(s32 flag, struct GdObj *obj) {
     if (flag & 0x9) {
         d_get_world_pos(&currObjPos);
         set_cur_dynobj(obj);
-        d_get_world_pos(&objPos);
-        currObjPos.x -= objPos.x;
-        currObjPos.y -= objPos.y;
-        currObjPos.z -= objPos.z;
+        d_vec3f_get_world_pos(objPos);
+        currObjPos.x -= objPos[0];
+        currObjPos.y -= objPos[1];
+        currObjPos.z -= objPos[2];
     }
     d_unstash_dynobj();
     switch (sDynListCurObj->type) {
@@ -1149,6 +1149,47 @@ void d_get_world_pos(struct GdVec3f *dst) {
 }
 
 /**
+ * Copy the world position of the current dynamic object into `dst`.
+ */
+void d_vec3f_get_world_pos(Vec3f dst) {
+    if (sDynListCurObj == NULL) gd_exit();
+    switch (sDynListCurObj->type) {
+        case OBJ_TYPE_VERTICES:
+            dst[0] = ((struct ObjVertex *) sDynListCurObj)->pos.x;
+            dst[1] = ((struct ObjVertex *) sDynListCurObj)->pos.y;
+            dst[2] = ((struct ObjVertex *) sDynListCurObj)->pos.z;
+            break;
+        case OBJ_TYPE_JOINTS:
+            dst[0] = ((struct ObjJoint *) sDynListCurObj)->worldPos.x;
+            dst[1] = ((struct ObjJoint *) sDynListCurObj)->worldPos.y;
+            dst[2] = ((struct ObjJoint *) sDynListCurObj)->worldPos.z;
+            break;
+        case OBJ_TYPE_NETS:
+            dst[0] = ((struct ObjNet *) sDynListCurObj)->worldPos.x;
+            dst[1] = ((struct ObjNet *) sDynListCurObj)->worldPos.y;
+            dst[2] = ((struct ObjNet *) sDynListCurObj)->worldPos.z;
+            break;
+        case OBJ_TYPE_PARTICLES:
+            dst[0] = ((struct ObjParticle *) sDynListCurObj)->pos.x;
+            dst[1] = ((struct ObjParticle *) sDynListCurObj)->pos.y;
+            dst[2] = ((struct ObjParticle *) sDynListCurObj)->pos.z;
+            break;
+        case OBJ_TYPE_CAMERAS:
+            dst[0] = ((struct ObjCamera *) sDynListCurObj)->worldPos.x;
+            dst[1] = ((struct ObjCamera *) sDynListCurObj)->worldPos.y;
+            dst[2] = ((struct ObjCamera *) sDynListCurObj)->worldPos.z;
+            break;
+        case OBJ_TYPE_SHAPES: vec3f_zero(dst); break;
+        case OBJ_TYPE_LIGHTS:
+            dst[0] = ((struct ObjLight *) sDynListCurObj)->position.x;
+            dst[1] = ((struct ObjLight *) sDynListCurObj)->position.y;
+            dst[2] = ((struct ObjLight *) sDynListCurObj)->position.z;
+            break;
+        default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetWorldPos()", sDynListCurInfo->name, sDynListCurObj->type);
+    }
+}
+
+/**
  * Scale the current dynamic object by factor `(x, y, z)`.
  *
  * @note Sets the lower right coordinates of an `ObjView`
@@ -1457,17 +1498,13 @@ Mat4 *d_get_i_mtx_ptr(void) {
  * two `GdObj`s. The objects don't have to be dynamic objects.
  */
 f32 d_calc_world_dist_btwn(struct GdObj *obj1, struct GdObj *obj2) {
-    struct GdVec3f obj1pos;
-    struct GdVec3f obj2pos;
-    struct GdVec3f posdiff;
+    Vec3f obj1pos, obj2pos, posdiff;
     set_cur_dynobj(obj1);
-    d_get_world_pos(&obj1pos);
+    d_vec3f_get_world_pos(obj1pos);
     set_cur_dynobj(obj2);
-    d_get_world_pos(&obj2pos);
-    posdiff.x = (obj2pos.x - obj1pos.x);
-    posdiff.y = (obj2pos.y - obj1pos.y);
-    posdiff.z = (obj2pos.z - obj1pos.z);
-    return gd_vec3f_magnitude(&posdiff);
+    d_vec3f_get_world_pos(obj2pos);
+    vec3f_diff(posdiff, obj2pos, obj1pos);
+    return vec3f_mag(posdiff);
 }
 
 /**

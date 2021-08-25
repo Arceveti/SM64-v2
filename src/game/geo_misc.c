@@ -51,7 +51,7 @@ void make_vertex(Vtx *vtx, s32 n, VtxPosF x, VtxPosF y, VtxPosF z, TextureCoord 
     vtx[n].v.ob[1] = y;
     vtx[n].v.ob[2] = z;
 
-    vtx[n].v.flag = 0;
+    vtx[n].v.flag  = 0;
 
     vtx[n].v.tc[0] = tx;
     vtx[n].v.tc[1] = ty;

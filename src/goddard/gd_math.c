@@ -3,7 +3,6 @@
 #include "gd_math.h"
 #include "gd_macros.h"
 #include "renderer.h"
-#include "engine/graph_node.h"
 #include "engine/math_util.h"
 
 //! TODO: Combine this with math_util.c
@@ -30,9 +29,7 @@ void gd_mat4f_lookat(Mat4 *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
     // Scales 'd' if smaller than 10 or larger than 10,000 to be
     // of a magnitude of 10,000.
     if ((invLength > 10000.0f) || (invLength < 10.0f)) {
-        norm[0]  = d[2];
-        norm[1]  = d[1];
-        norm[2]  = d[0];
+        vec3f_copy_inverse(norm, d);
         vec3f_normalize(norm);
         vec3f_mul_f32(norm, 10000.0f);
         vec3f_copy_inverse(d, norm);
@@ -292,11 +289,11 @@ Bool32 gd_normalize_vec3f(struct GdVec3f *vec) {
  * Stores the cross product of 'a' x 'b' in 'dst'.
  */
 void gd_cross_vec3f(struct GdVec3f *a, struct GdVec3f *b, struct GdVec3f *dst) {
-    struct GdVec3f result;
-    result.x = ((a->y * b->z) - (a->z * b->y));
-    result.y = ((a->z * b->x) - (a->x * b->z));
-    result.z = ((a->x * b->y) - (a->y * b->x));
-    gd_vec3f_copy(dst, &result);
+    Vec3f result;
+    result[0] = ((a->y * b->z) - (a->z * b->y));
+    result[1] = ((a->z * b->x) - (a->x * b->z));
+    result[2] = ((a->x * b->y) - (a->y * b->x));
+    vec3f_to_gdvec3f(dst, result);
 }
 
 /**

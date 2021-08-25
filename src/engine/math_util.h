@@ -48,6 +48,12 @@ extern s16 gArctanTable[];
 #define sqr(x)  ((x) * (x))
 #define cube(x) ((x) * (x) * (x))
 
+extern Vec3f gVec3fZero;
+extern Vec3s gVec3sZero;
+extern Vec3i gVec3iZero;
+extern Vec3f gVec3fOne;
+extern Vec3s gVec3sOne;
+
 // Kaze's float functions
 f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
@@ -133,6 +139,7 @@ void vec3i_to_vec3f(                     Vec3f dest, Vec3i a);
 void vec3f_to_vec3s(                     Vec3s dest, Vec3f a);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
+void vec3f_zero(                         Vec3f v);
 f32  vec3f_mag(                          Vec3f v);
 void vec3f_normalize(                    Vec3f dest);
 void vec3f_normalize_max(                Vec3f dest, f32 max);

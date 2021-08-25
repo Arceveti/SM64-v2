@@ -489,7 +489,7 @@ void handle_menu_scrolling(s8 scrollDirection, s8 *currentIndex, s8 minIndex, s8
         gMenuHoldKeyTimer++;
         gMenuHoldKeyIndex = index;
     }
-    if (!(index & 3)) gMenuHoldKeyTimer = 0;
+    if (!(index & 0x3)) gMenuHoldKeyTimer = 0;
 }
 
 // EU has both get_str_x_pos_from_center and get_str_x_pos_from_center_scale
@@ -728,15 +728,15 @@ void handle_dialog_text_and_pages(s8 colorMode, struct DialogEntry *dialog, s8 l
     uchar strChar;
     s16 colorLoop;
     ColorRGBA rgbaColors = {0, 0, 0, 0};
-    u8 customColor   = FALSE;
-    u8 diffTmp       = 0;
+    u8  customColor  = FALSE;
+    u8  diffTmp      = 0;
     uchar *str          = segmented_to_virtual(dialog->str);
-    s8 lineNum       = 1;
-    s8 totalLines;
-    s8 pageState     = DIALOG_PAGE_STATE_NONE;
+    s8  lineNum      = 1;
+    s8  totalLines;
+    s8  pageState    = DIALOG_PAGE_STATE_NONE;
     UNUSED s8 mark   = DIALOG_MARK_NONE; // unused in US, EU
-    s8 xMatrix       = 1;
-    s8 linesPerBox   = dialog->linesPerBox;
+    s8  xMatrix      = 1;
+    s8  linesPerBox  = dialog->linesPerBox;
     s16 strIdx;
     s16 linePos      = 0;
     if (gDialogBoxState == DIALOG_STATE_HORIZONTAL) {
@@ -1284,7 +1284,7 @@ void print_animated_red_coin(ScreenPos x, ScreenPos y) {
     create_dl_scale_matrix(G_MTX_NOPUSH, 0.25f, 0.25f, 1.0f);
     gDPSetRenderMode(gDisplayListHead++, G_RM_TEX_EDGE, G_RM_TEX_EDGE2);
 #ifdef IA8_30FPS_COINS
-    switch (timer & 7) {
+    switch (timer & 0x7) {
         case 0: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_0     ); break;
         case 1: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_22_5  ); break;
         case 2: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_45    ); break;
@@ -1295,7 +1295,7 @@ void print_animated_red_coin(ScreenPos x, ScreenPos y) {
         case 7: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_22_5_r); break;
     }
 #else
-    switch (timer & 6) {
+    switch (timer & 0x6) {
         case 0: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_front_0     ); break;
         case 2: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_tilt_right_0); break;
         case 4: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_side_0      ); break;
@@ -1377,9 +1377,9 @@ void render_pause_my_score_coins(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
-#define TXT1_X 3
+#define TXT1_X   3
 #define TXT2_X 119
-#define Y_VAL7 2
+#define Y_VAL7   2
 
 void render_pause_camera_options(ScreenPos x, ScreenPos y, s8 *index, s16 xIndex) {
     uchar textLakituMario[]   = { TEXT_LAKITU_MARIO   };

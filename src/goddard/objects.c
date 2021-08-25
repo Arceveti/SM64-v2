@@ -42,15 +42,15 @@ void reset_bounding_box(void) { /* Initialize Plane? */
 }
 
 void add_obj_pos_to_bounding_box(struct GdObj *obj) {
-    struct GdVec3f pos;
+    Vec3f pos;
     set_cur_dynobj(obj);
-    d_get_world_pos(&pos);
-    if (pos.x < gSomeBoundingBox.minX) gSomeBoundingBox.minX = pos.x;
-    if (pos.y < gSomeBoundingBox.minY) gSomeBoundingBox.minY = pos.y;
-    if (pos.z < gSomeBoundingBox.minZ) gSomeBoundingBox.minZ = pos.z;
-    if (pos.x > gSomeBoundingBox.maxX) gSomeBoundingBox.maxX = pos.x;
-    if (pos.y > gSomeBoundingBox.maxY) gSomeBoundingBox.maxY = pos.y;
-    if (pos.z > gSomeBoundingBox.maxZ) gSomeBoundingBox.maxZ = pos.z;
+    d_vec3f_get_world_pos(pos);
+    if (pos[0] < gSomeBoundingBox.minX) gSomeBoundingBox.minX = pos[0];
+    if (pos[1] < gSomeBoundingBox.minY) gSomeBoundingBox.minY = pos[1];
+    if (pos[2] < gSomeBoundingBox.minZ) gSomeBoundingBox.minZ = pos[2];
+    if (pos[0] > gSomeBoundingBox.maxX) gSomeBoundingBox.maxX = pos[0];
+    if (pos[1] > gSomeBoundingBox.maxY) gSomeBoundingBox.maxY = pos[1];
+    if (pos[2] > gSomeBoundingBox.maxZ) gSomeBoundingBox.maxZ = pos[2];
 }
 
 /**
@@ -681,23 +681,23 @@ void find_and_drag_picked_object(struct ObjGroup *group) {
 /* @ 22F180 for 0x624; orig name: func_801809B0 */
 void move_camera(struct ObjCamera *cam) {
     struct GdObj *obj;
-    struct GdVec3f worldPos; // world pos
+    Vec3f worldPos; // world pos
     struct GdVec3f nextPos;
-    struct GdVec3f spC8;
+    Vec3f latPos;
     Mat4 mtx;
     Mat4 *idMtx;
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
-    worldPos.x = worldPos.y = worldPos.z = 0.0f;
+    vec3f_zero(worldPos);
     if ((obj = cam->unk30) != NULL) {
         set_cur_dynobj(obj);
-        d_get_world_pos(&worldPos);
+        d_vec3f_get_world_pos(worldPos);
         d_get_matrix(&mtx);
-        spC8.x = (mtx[2][0] - cam->unk58);
-        spC8.z = (mtx[2][2] - cam->unk60);
-        cam->unk58 += (spC8.x * cam->unk180.y);
-        cam->unk60 += (spC8.z * cam->unk180.y);
+        latPos[0]   = (mtx[2][0] - cam->unk58);
+        latPos[2]   = (mtx[2][2] - cam->unk60);
+        cam->unk58 += (latPos[0] * cam->unk180.y);
+        cam->unk60 += (latPos[2] * cam->unk180.y);
     }
     gd_set_identity_mat4(&cam->unkA8);
     idMtx = &cam->unk64;
@@ -729,9 +729,9 @@ void move_camera(struct ObjCamera *cam) {
     gd_mult_mat4f(idMtx, &cam->unkA8, &cam->unkA8);
     gd_mat4f_mult_vec3f(&nextPos, &cam->unkA8);
     gd_vec3f_copy(&cam->worldPos, &nextPos);
-    cam->worldPos.x += worldPos.x; // offset2
-    cam->worldPos.y += worldPos.y;
-    cam->worldPos.z += worldPos.z;
+    cam->worldPos.x += worldPos[0]; // offset2
+    cam->worldPos.y += worldPos[1];
+    cam->worldPos.z += worldPos[2];
 }
 
 /* @ 22F7A4 for 0x38; orig name: func_80180FD4 */

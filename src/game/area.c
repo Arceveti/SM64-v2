@@ -289,12 +289,12 @@ void play_transition(s16 transType, s16 time, Color red, Color green, Color blue
         // If you really wanted to, you could place the start at one corner and the end at
         // the opposite corner. This will make the transition image look like it is moving
         // across the screen.
-        gWarpTransition.data.startTexX = SCREEN_WIDTH  / 2;
-        gWarpTransition.data.startTexY = SCREEN_HEIGHT / 2;
-        gWarpTransition.data.endTexX   = SCREEN_WIDTH  / 2;
-        gWarpTransition.data.endTexY   = SCREEN_HEIGHT / 2;
+        gWarpTransition.data.startTexX = (SCREEN_WIDTH  / 2);
+        gWarpTransition.data.startTexY = (SCREEN_HEIGHT / 2);
+        gWarpTransition.data.endTexX   = (SCREEN_WIDTH  / 2);
+        gWarpTransition.data.endTexY   = (SCREEN_HEIGHT / 2);
         gWarpTransition.data.texTimer  = 0;
-        if (transType & 1) { // Is the image fading in?
+        if (transType & 0x1) { // Is the image fading in?
             gWarpTransition.data.startTexRadius = GFX_DIMENSIONS_FULL_RADIUS;
             gWarpTransition.data.endTexRadius   = ((transType >= 0x0F) ? 16 : 0);
         } else { // The image is fading out. (Reverses start & end circles)

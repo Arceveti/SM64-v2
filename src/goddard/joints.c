@@ -152,14 +152,8 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
     j->colourNum  = ((j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK);
     j->unk1C4     = NULL;
     j->shapePtr   = NULL;
-    // vec3f_to_gdvec3f(&j->scale, gVec3fOne);
-    j->scale.x    = 1.0f;
-    j->scale.y    = 1.0f;
-    j->scale.z    = 1.0f;
-    // vec3f_to_gdvec3f(&j->friction, gVec3fZero);
-    j->friction.x = 0.0f;
-    j->friction.y = 0.0f;
-    j->friction.z = 0.0f;
+    vec3f_to_gdvec3f(&j->scale, gVec3fOne);
+    vec3f_to_gdvec3f(&j->friction, gVec3fZero);
     j->updateFunc = NULL;
     return j;
 }

@@ -18,7 +18,7 @@
  */
 
 // forward declarations
-void update_shaders(  struct ObjShape *, struct GdVec3f *);
+void update_shaders(  struct ObjShape *, Vec3f offset);
 void draw_shape_faces(struct ObjShape *);
 void register_light(  struct ObjLight *);
 
@@ -51,7 +51,7 @@ static s32 sLightDlCounter = 1; // @ 801A81A0
 struct ObjGroup *gGdLightGroup; // @ 801B9BB8; is this the main light group? only light group?
 
 static enum SceneType sSceneProcessType; // @ 801B9C00
-static s32 sUseSelectedColor;            // @ 801B9C04
+static Bool32 sUseSelectedColor;         // @ 801B9C04
 static s16 sPickBuffer[100];             ///< buffer of objects near click
 static s32 sPickDataTemp;                ///< now, only data is the object number of a selected joint
 static f32 sPickObjDistance;             ///< distance between object position and cursor click location
@@ -86,21 +86,19 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
                 f32 i, f32 j, f32 k, // translate shape
                 f32 l, f32 m, f32 n, // rotate x, y, z
                 s32 colorIdx, Mat4 *rotMtx) {
-    struct GdVec3f vec;
+    Vec3f vec;
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
-    vec.x = vec.y = vec.z = 0.0f;
+    vec[0] = vec[1] = vec[2] = 0.0f;
     if (flag & 0x02) {
         gd_dl_load_trans_matrix(f, g, h);
-        vec.x += f;
-        vec.y += g;
-        vec.z += h;
+        vec[0] += f;
+        vec[1] += g;
+        vec[2] += h;
     }
     if ((flag & 0x10) && rotMtx != NULL) {
         gd_dl_load_matrix(rotMtx);
-        vec.x += (*rotMtx)[3][0];
-        vec.y += (*rotMtx)[3][1];
-        vec.z += (*rotMtx)[3][2];
+        vec3f_add(vec, (*rotMtx)[3]);
     }
     if (flag & 0x08) {
         if (m != 0.0f) func_8019F2C4(m, 121);
@@ -119,16 +117,13 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         sUseSelectedColor = FALSE;
         sSelectedColour   = NULL;
     }
-
-    if (sNumActiveLights != 0 && shape->mtlGroup != NULL) {
+    if ((sNumActiveLights != 0) && (shape->mtlGroup != NULL)) {
         if (rotMtx != NULL) {
-            vec.x = (*rotMtx)[3][0];
-            vec.y = (*rotMtx)[3][1];
-            vec.z = (*rotMtx)[3][2];
+            vec3f_copy(vec, (*rotMtx)[3]);
         } else {
-            vec.x = vec.y = vec.z = 0.0f;
+            vec3f_zero(vec);
         }
-        update_shaders(shape, &vec);
+        update_shaders(shape, vec);
     }
     if (flag & 0x04) gd_dl_mul_trans_matrix(i, j, k);
     if (flag & 0x01) gd_dl_scale(c, d, e);
@@ -275,19 +270,18 @@ void draw_net(struct ObjNet *self) {
 
 /* 22803C -> 22829C */
 void draw_camera(struct ObjCamera *cam) {
-    struct GdVec3f sp44;
-    sp44.x = sp44.y = sp44.z = 0.0f;
+    Vec3f sp44 = {0.0f, 0.0f, 0.0f};
     if (cam->unk30 != NULL) {
         set_cur_dynobj(cam->unk30);
-        d_get_world_pos(&sp44);
-        sp44.x += cam->lookAt.x;
-        sp44.y += cam->lookAt.y;
-        sp44.z += cam->lookAt.z;
+        d_vec3f_get_world_pos(sp44);
+        sp44[0] += cam->lookAt.x;
+        sp44[1] += cam->lookAt.y;
+        sp44[2] += cam->lookAt.z;
     } else {
-        gd_vec3f_copy(&sp44, &cam->lookAt);
+        gdvec3f_to_vec3f(sp44, &cam->lookAt);
     }
-    if (absf(cam->worldPos.x - sp44.x) + absf(cam->worldPos.z - sp44.z) == 0.0f) return; // Zero view distance
-    gd_dl_lookat(cam, cam->worldPos.x, cam->worldPos.y, cam->worldPos.z, sp44.x, sp44.y, sp44.z, cam->unkA4);
+    if (absf(cam->worldPos.x - sp44[0]) + absf(cam->worldPos.z - sp44[2]) == 0.0f) return; // Zero view distance
+    gd_dl_lookat(cam, cam->worldPos.x, cam->worldPos.y, cam->worldPos.z, sp44[0], sp44[1], sp44[2], cam->unkA4);
 }
 
 /* 22836C -> 228498 */
@@ -509,9 +503,9 @@ void update_lighting(struct ObjLight *light) {
 }
 
 /* 229568 -> 229658; orig name: func_8017AD98 */
-void update_shaders(struct ObjShape *shape, struct GdVec3f *offset) {
+void update_shaders(struct ObjShape *shape, Vec3f offset) {
     stash_current_gddl();
-    gd_vec3f_copy(&sLightPositionOffset, offset);
+    vec3f_to_gdvec3f(&sLightPositionOffset, offset);
     sPhongLight = NULL;
     if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) update_lighting  , gGdLightGroup  );
     if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);
@@ -541,9 +535,8 @@ void create_shape_mtl_gddls(struct ObjShape *shape) {
  */
 void create_shape_gddl(struct ObjShape *s) {
     struct ObjShape *shape = s;
-    s32 shapedl;
     create_shape_mtl_gddls(shape);
-    shapedl = gd_startdisplist(7);
+    s32 shapedl = gd_startdisplist(7);
     if (shapedl == 0) return;
     setup_lights();
     sUseSelectedColor = FALSE;

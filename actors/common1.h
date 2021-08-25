@@ -299,8 +299,8 @@ extern const Gfx tree_seg3_dl_palm[];
 extern const GeoLayout warp_pipe_geo[];
 extern const Gfx warp_pipe_seg3_sub_dl_sides[];
 extern const Gfx warp_pipe_seg3_dl_sides[];
-extern const Gfx warp_pipe_seg3_dl_top[];
-extern const Gfx warp_pipe_seg3_dl_inside[];
+extern const Gfx warp_pipe_seg3_sub_dl_top[];
+extern const Gfx warp_pipe_seg3_sub_dl_inside[];
 extern const Gfx warp_pipe_seg3_dl_top_inside[];
 extern const Collision warp_pipe_seg3_collision_warp_pipe[];
 

@@ -110,22 +110,22 @@ const Gfx warp_pipe_seg3_sub_dl_sides[] = {
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
+    gsSP1Triangle( 11, 13, 14, 0x0),
     gsSPVertex(warp_pipe_seg3_vertex_03007AF0, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
     gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle( 0, 14,  1, 0x0),
+    gsSP1Triangle(  0, 14,  1, 0x0),
     gsSPVertex(warp_pipe_seg3_vertex_03007BE0, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 13, 14, 0x0),
+    gsSP1Triangle( 11, 13, 14, 0x0),
     gsSPVertex(warp_pipe_seg3_vertex_03007CD0, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
     gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle( 0, 14,  1, 0x0),
+    gsSP1Triangle(  0, 14,  1, 0x0),
     gsSPVertex(warp_pipe_seg3_vertex_03007DC0, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
@@ -158,20 +158,20 @@ static const Lights1 warp_pipe_seg3_lights_03009010 = gdSPDefLights1(
 static const Vtx warp_pipe_seg3_vertex_03009028[] = {
     {{{   109,    205,   -109}, 0, {   400,   -176}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{     0,    205,   -154}, 0, {    16,     48}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{     0,    205,   -102}, 0, {   192,    192}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -109,    205,    109}, 0, {   640,   1088}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{     0,    205,    102}, 0, {   864,    720}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{     0,    205,   -102}, 0, {  6<<5,   6<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -109,    205,    109}, 0, { 20<<5,  34<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{     0,    205,    102}, 0, { 27<<5,    720}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   -72,    205,     72}, 0, {   608,    880}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{     0,    205,    154}, 0, {  1040,    864}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -154,    205,      0}, 0, {   192,    944}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{     0,    205,    154}, 0, {  1040,  27<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -154,    205,      0}, 0, {  6<<5,    944}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   109,    205,    109}, 0, {  1120,    400}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    72,    205,     72}, 0, {   928,    416}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    72,    205,     72}, 0, { 29<<5,    416}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  -102,    205,      0}, 0, {   304,    784}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -109,    205,   -109}, 0, {   -72,    512}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   -72,    205,    -72}, 0, {   128,    496}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   154,    205,      0}, 0, {   864,    -32}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   102,    205,      0}, 0, {   744,    128}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{    72,    205,    -72}, 0, {   448,     32}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -109,    205,   -109}, 0, {   -72,  16<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   -72,    205,    -72}, 0, {  4<<5,    496}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   154,    205,      0}, 0, { 27<<5,    -32}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,    205,      0}, 0, {   744,   4<<5}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{    72,    205,    -72}, 0, {   448,   1<<5}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x03009128
@@ -188,7 +188,7 @@ ALIGNED8 static const Texture warp_pipe_seg3_texture_top[] = {
 };
 
 // 0x03009968 - 0x03009A20
-const Gfx warp_pipe_seg3_dl_top[] = {
+const Gfx warp_pipe_seg3_sub_dl_top[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_top),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -207,7 +207,7 @@ const Gfx warp_pipe_seg3_dl_top[] = {
 };
 
 // 0x03009A20 - 0x03009A50
-const Gfx warp_pipe_seg3_dl_inside[] = {
+const Gfx warp_pipe_seg3_sub_dl_inside[] = {
     gsSPLight(&warp_pipe_seg3_lights_03009010.l, 1),
     gsSPLight(&warp_pipe_seg3_lights_03009010.a, 2),
     gsSPVertex(warp_pipe_seg3_vertex_03009128, 4, 0),
@@ -225,11 +225,11 @@ const Gfx warp_pipe_seg3_dl_top_inside[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(warp_pipe_seg3_dl_top),
+    gsSPDisplayList(warp_pipe_seg3_sub_dl_top),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPDisplayList(warp_pipe_seg3_dl_inside),
+    gsSPDisplayList(warp_pipe_seg3_sub_dl_inside),
     gsSPSetGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };

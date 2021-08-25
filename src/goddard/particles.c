@@ -105,7 +105,7 @@ void func_80182A08(struct ObjParticle *ptc, struct GdVec3f *b) {
 /* 231454 -> 231D40; orig name: Unknown80182C84 */
 void move_particle(struct ObjParticle *ptc) {
     f32 sp7C;
-    struct GdVec3f sp64;
+    Vec3f worldPos;
     struct ObjParticle *particle;
     s32 i;
     struct ObjCamera *camera;
@@ -123,7 +123,7 @@ void move_particle(struct ObjParticle *ptc) {
     }
     if (ptc->attachedToObj != NULL) {
         set_cur_dynobj(ptc->attachedToObj);
-        if (ptc->particleType == 3 && ptc->unk64 == 3) {
+        if ((ptc->particleType == 3) && (ptc->unk64 == 3)) {
             camera = (struct ObjCamera *) ptc->attachedToObj;
             // Camera->unk18C = ObjView here
             if (camera->unk18C->pickedObj != NULL) {
@@ -134,8 +134,8 @@ void move_particle(struct ObjParticle *ptc) {
                 ptc->flags &= ~GD_PARTICLE_FLAG_B;
             }
         }
-        d_get_world_pos(&sp64);
-        gd_vec3f_copy(&ptc->pos, &sp64);
+        d_vec3f_get_world_pos(worldPos);
+        vec3f_to_gdvec3f(&ptc->pos, worldPos);
     }
     sp7C = -0.4f;
     ptc->pos.x += ptc->unk38.x;

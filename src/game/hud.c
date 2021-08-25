@@ -30,12 +30,12 @@
  **/
 
 #define HUD_TOP_Y           209
-#define HUD_BOTTOM_Y        31
+#define HUD_BOTTOM_Y         31
 #define HUD_TIMER_X         150 // from right edge
 #define HUD_COINS_X         152 // from right edge
-#define HUD_STARS_X         78
-#define HUD_CAMERA_X        54
-#define HUD_CAMERA_Y        (SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4;
+#define HUD_STARS_X          78
+#define HUD_CAMERA_X         54
+#define HUD_CAMERA_Y        ((SCREEN_HEIGHT - HUD_BOTTOM_Y) - 4);
 #define HUD_POWER_METER_Y   166
 
 #ifdef BREATH_METER
@@ -45,15 +45,15 @@
 #endif
 
 #ifdef HUD_RED_COINS
-#define HUD_LIVES_X         8
+#define HUD_LIVES_X           8
 #define HUD_POWER_METER_X   142
-#define HUD_RED_COINS_X     70
-#define HUD_SECRETS_X       8
+#define HUD_RED_COINS_X      70
+#define HUD_SECRETS_X         8
 #else
-#define HUD_LIVES_X         22
+#define HUD_LIVES_X          22
 #define HUD_POWER_METER_X   140
-#define HUD_RED_COINS_X     8
-#define HUD_SECRETS_X       8
+#define HUD_RED_COINS_X       8
+#define HUD_SECRETS_X         8
 #endif
 
 // ------------- FPS COUNTER ---------------
