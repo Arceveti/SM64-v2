@@ -740,7 +740,7 @@ static void process_sound_request(u32 bits, f32 *pos) {
                 // interrupt it and play the new sound instead.
                 // Otherwise the new sound is continuous and equals the existing sound, so we just
                 // need to update the sound's freshness.
-                if ((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) != 0 || (bits & SOUNDARGS_MASK_SOUNDID) != (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID)) {
+                if (((sSoundBanks[bank][soundIndex].soundBits & SOUND_DISCRETE) != 0) || ((bits & SOUNDARGS_MASK_SOUNDID) != (sSoundBanks[bank][soundIndex].soundBits & SOUNDARGS_MASK_SOUNDID))) {
                     update_background_music_after_sound(bank, soundIndex);
                     sSoundBanks[bank][soundIndex].soundBits = bits;
                     // In practice, the starting status is always WAITING
@@ -763,7 +763,7 @@ static void process_sound_request(u32 bits, f32 *pos) {
     }
     if (counter == 0) sSoundMovingSpeed[bank] = 32;
     // If free list has more than one element remaining
-    if (sSoundBanks[bank][sSoundBankFreeListFront[bank]].next != 0xff && soundIndex != 0) {
+    if ((sSoundBanks[bank][sSoundBankFreeListFront[bank]].next != 0xff) && (soundIndex != 0)) {
         // Allocate from free list
         soundIndex = sSoundBankFreeListFront[bank];
         dist                                                  = (sqrtf((pos[0] * pos[0]) + (pos[1] * pos[1]) + (pos[2] * pos[2])) * one);
@@ -773,7 +773,7 @@ static void process_sound_request(u32 bits, f32 *pos) {
         sSoundBanks[bank][soundIndex].distance                = dist;
         sSoundBanks[bank][soundIndex].soundBits               = bits;
         // In practice, the starting status is always WAITING
-        sSoundBanks[bank][soundIndex].soundStatus             = bits & SOUNDARGS_MASK_STATUS;
+        sSoundBanks[bank][soundIndex].soundStatus             = (bits & SOUNDARGS_MASK_STATUS);
         sSoundBanks[bank][soundIndex].freshness               = SOUND_MAX_FRESHNESS;
 
         // Append to end of used list and pop from front of free list

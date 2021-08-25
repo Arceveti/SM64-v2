@@ -807,8 +807,8 @@ void puppycam_projection_behaviours(void) {
         // Zooms the camera in further when underwater.
         if ((gPuppyCam.pitch > 0x38C0) && abss(gPuppyCam.swimPitch) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch - 0x38C0) / 3072.0f), 0.0f, 1.0f));
         if (!(gMarioState->action & ACT_FLAG_SWIMMING)) {
-            gPuppyCam.floorY[0] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); // was -300, 300
-            gPuppyCam.floorY[1] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); // was -300, 350
+            gPuppyCam.floorY[0] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); //! was -300, 300
+            gPuppyCam.floorY[1] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); //! was -300, 350
             gPuppyCam.swimPitch = approach_f32_asymptotic(gPuppyCam.swimPitch, 0, 0.2f);
         } else {
             gPuppyCam.floorY[0]             = 0;
@@ -945,7 +945,7 @@ static void puppycam_collision(void) {
     if (gPuppyCam.targetObj == NULL) return;
     // The ray, starting from the top
     target[0][0] =  gPuppyCam.targetObj->oPosX;
-    target[0][1] = (gPuppyCam.targetObj->oPosY + (gPuppyCam.povHeight) - CLAMP(gPuppyCam.targetObj->oPosY - gPuppyCam.targetFloorHeight, 0, 320)); // was 300
+    target[0][1] = (gPuppyCam.targetObj->oPosY + (gPuppyCam.povHeight) - CLAMP(gPuppyCam.targetObj->oPosY - gPuppyCam.targetFloorHeight, 0, 320)); //! was 300
     target[0][2] =  gPuppyCam.targetObj->oPosZ;
     // The ray, starting from the bottom
     target[1][0] =  gPuppyCam.targetObj->oPosX;

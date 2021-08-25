@@ -567,7 +567,7 @@ static Bool32 act_breaststroke(struct MarioState *m) {
         }
     }
     if (m->actionTimer == 1) {
-        play_sound(sSwimStrength == MIN_SWIM_STRENGTH ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST, m->marioObj->header.gfx.cameraToObject);
+        play_sound(((sSwimStrength == MIN_SWIM_STRENGTH) ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST), m->marioObj->header.gfx.cameraToObject);
         reset_bob_variables(m);
     }
 #if ENABLE_RUMBLE
@@ -599,7 +599,7 @@ static Bool32 act_flutter_kick(struct MarioState *m) {
     if (m->flags & MARIO_METAL_CAP) return set_mario_action(m, ACT_METAL_WATER_FALLING, 1);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_WATER_PUNCH        , 0);
     if (!(m->input & INPUT_A_DOWN)) {
-        if (m->actionTimer == 0 && sSwimStrength < 280) sSwimStrength += 10;
+        if ((m->actionTimer == 0) && (sSwimStrength < 280)) sSwimStrength += 10;
         return set_mario_action(m, ACT_SWIMMING_END, 0);
     }
 #ifdef WATER_GROUND_POUND

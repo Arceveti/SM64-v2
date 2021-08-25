@@ -40,9 +40,9 @@ void add_tree_leaf_particles(struct MarioState *m) {
 void play_climbing_sounds(struct MarioState *m, s32 direction) {
     s32 isOnTree = (m->usedObj->behavior == segmented_to_virtual(bhvTree));
     if (direction) {
-        if (is_anim_past_frame(m, 1)) play_sound(isOnTree ? SOUND_ACTION_CLIMB_UP_TREE : SOUND_ACTION_CLIMB_UP_POLE, m->marioObj->header.gfx.cameraToObject);
+        if (is_anim_past_frame(m, 1)) play_sound(((isOnTree) ? SOUND_ACTION_CLIMB_UP_TREE : SOUND_ACTION_CLIMB_UP_POLE), m->marioObj->header.gfx.cameraToObject);
     } else {
-        play_sound(isOnTree ? SOUND_MOVING_SLIDE_DOWN_TREE : SOUND_MOVING_SLIDE_DOWN_POLE, m->marioObj->header.gfx.cameraToObject);
+        play_sound(((isOnTree) ? SOUND_MOVING_SLIDE_DOWN_TREE : SOUND_MOVING_SLIDE_DOWN_POLE), m->marioObj->header.gfx.cameraToObject);
     }
 }
 
@@ -73,7 +73,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
         set_mario_action(m, ACT_IDLE, 0);
         result = POLE_TOUCHED_FLOOR;
     } else if (marioObj->oMarioPolePos < poleBottom) {
-        m->pos[1] = m->usedObj->oPosY + poleBottom;
+        m->pos[1] = (m->usedObj->oPosY + poleBottom);
         set_mario_action(m, ACT_FREEFALL, 0);
         result = POLE_FELL_OFF;
     } else if (collided) {
