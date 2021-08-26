@@ -119,7 +119,7 @@
 #define OBJ_BP_NONE                                         0x0
 
 /* oAction */
-#define OBJ_ACT_PROJECTILE_HIT_MARIO                       -0x1 
+#define OBJ_ACT_PROJECTILE_HIT_MARIO                       -0x1
 
 #define OBJ_ACT_LAVA_DEATH                                  100
 #define OBJ_ACT_DEATH_PLANE_DEATH                           101

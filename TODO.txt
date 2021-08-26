@@ -1,5 +1,6 @@
 **TODO:**
 - Known Bugs:
+    - BoB bowling balls get stuck in the ground when they land after falling
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar for some reason
     - Goddard joints don't move properly on the Z axis

@@ -34,7 +34,7 @@ static Trajectory sThiTinyMetalBallTraj[] = {
     TRAJECTORY_POS(4, /*pos*/ -1178,   -83, -1496),
     TRAJECTORY_POS(5, /*pos*/  -292,  -424, -1425),
     TRAJECTORY_POS(6, /*pos*/   250,  -491, -1433),
-    TRAJECTORY_POS(7, /*pos*/   862,  -613, -1449),
+    TRAJECTORY_POS(7, /*pos*/   862,  -614, -1449),
     TRAJECTORY_POS(8, /*pos*/  1058, -1960, -1449),
     TRAJECTORY_END(),
 };

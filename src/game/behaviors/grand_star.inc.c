@@ -4,11 +4,10 @@ s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
     f32 dx           = (dest[0] - src[0]);
     f32 dz           = (dest[2] - src[2]);
     f32 planarDist   = sqrtf(sqr(dx) + sqr(dz));
-    s32 time;
     o->oMoveAngleYaw = atan2s(dz, dx);
     o->oVelY         = yVel;
     o->oGravity      = gravity;
-    time             = (((-2.0f / o->oGravity) * yVel) - 1.0f);
+    s32 time         = (((-2.0f / o->oGravity) * yVel) - 1.0f);
     o->oForwardVel   = (planarDist / time); //! fast invsqrt?
     return time;
 }

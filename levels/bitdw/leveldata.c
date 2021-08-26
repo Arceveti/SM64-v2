@@ -17,7 +17,7 @@
 #include "levels/bitdw/areas/1/quartzy_path_1/model.inc.c"
 #include "levels/bitdw/areas/1/quartzy_path_2/model.inc.c"
 #include "levels/bitdw/areas/1/quartzy_path_fences/model.inc.c"
-#include "levels/bitdw/areas/1/octogonal_platform/model.inc.c"
+#include "levels/bitdw/areas/1/octagonal_platform/model.inc.c"
 #include "levels/bitdw/areas/1/platform_with_hill/model.inc.c"
 #include "levels/bitdw/areas/1/wooden_platform/model.inc.c"
 #include "levels/bitdw/areas/1/platforms_and_tilting/model.inc.c"

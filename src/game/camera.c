@@ -4769,9 +4769,9 @@ s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoid
     fineRadius   = 100.0f;
     for (step = 0; step < 8; step++) {
         // Start at Mario, move backwards to Lakitu's position
-        colData.x      = (sMarioCamState->pos[0] + ((cPos[0] - (sMarioCamState->pos[0]) * checkDist)));
-        colData.y      = (sMarioCamState->pos[1] + ((cPos[1] - (sMarioCamState->pos[1]) * checkDist)));
-        colData.z      = (sMarioCamState->pos[2] + ((cPos[2] - (sMarioCamState->pos[2]) * checkDist)));
+        colData.pos[0] = (sMarioCamState->pos[0] + ((cPos[0] - (sMarioCamState->pos[0]) * checkDist)));
+        colData.pos[1] = (sMarioCamState->pos[1] + ((cPos[1] - (sMarioCamState->pos[1]) * checkDist)));
+        colData.pos[2] = (sMarioCamState->pos[2] + ((cPos[2] - (sMarioCamState->pos[2]) * checkDist)));
         colData.radius = coarseRadius;
         // Increase the coarse check radius
         approach_f32_symmetric_bool(&coarseRadius, 250.0f, 30.0f);
@@ -4791,9 +4791,9 @@ s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoid
                     *avoidYaw = (calc_avoid_yaw(yawFromMario, wallYaw) + DEGREES(180));
                 }
             }
-            colData.x = (sMarioCamState->pos[0] + ((cPos[0] - sMarioCamState->pos[0]) * checkDist));
-            colData.y = (sMarioCamState->pos[1] + ((cPos[1] - sMarioCamState->pos[1]) * checkDist));
-            colData.z = (sMarioCamState->pos[2] + ((cPos[2] - sMarioCamState->pos[2]) * checkDist));
+            colData.pos[0] = (sMarioCamState->pos[0] + ((cPos[0] - sMarioCamState->pos[0]) * checkDist));
+            colData.pos[1] = (sMarioCamState->pos[1] + ((cPos[1] - sMarioCamState->pos[1]) * checkDist));
+            colData.pos[2] = (sMarioCamState->pos[2] + ((cPos[2] - sMarioCamState->pos[2]) * checkDist));
             colData.radius = fineRadius;
             // Increase the fine check radius
             approach_f32_symmetric_bool(&fineRadius, 200.0f, 20.0f);

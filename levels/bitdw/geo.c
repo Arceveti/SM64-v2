@@ -19,7 +19,7 @@
 #include "levels/bitdw/areas/1/quartzy_path_1/geo.inc.c"
 #include "levels/bitdw/areas/1/quartzy_path_2/geo.inc.c"
 #include "levels/bitdw/areas/1/quartzy_path_fences/geo.inc.c"
-#include "levels/bitdw/areas/1/octogonal_platform/geo.inc.c"
+#include "levels/bitdw/areas/1/octagonal_platform/geo.inc.c"
 #include "levels/bitdw/areas/1/platform_with_hill/geo.inc.c"
 #include "levels/bitdw/areas/1/wooden_platform/geo.inc.c"
 #include "levels/bitdw/areas/1/platforms_and_tilting/geo.inc.c"

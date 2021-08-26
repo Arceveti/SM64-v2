@@ -32,7 +32,7 @@ void set_door_camera_event(void) {
 }
 
 void play_door_open_noise(void) {
-    s32 isMetalDoor = cur_obj_has_model(MODEL_HMC_METAL_DOOR);
+    Bool32 isMetalDoor = cur_obj_has_model(MODEL_HMC_METAL_DOOR);
     if (o->oTimer == 0) {
         cur_obj_play_sound_2(sDoorOpenSounds[isMetalDoor]);
         gTimeStopState |= TIME_STOP_MARIO_OPENED_DOOR;
@@ -86,12 +86,12 @@ void bhv_door_init(void) {
 
 void bhv_door_rendering_loop(void) {
     o->oDoorIsRendering = ((gMarioCurrentRoom == 0)
-     || (o->oDoorSelfRoom                         == gMarioCurrentRoom)
-     || (gMarioCurrentRoom                        == o->oDoorForwardRoom)
+     || (o->oDoorSelfRoom                         == gMarioCurrentRoom   )
+     || (gMarioCurrentRoom                        == o->oDoorForwardRoom )
      || (gMarioCurrentRoom                        == o->oDoorBackwardRoom)
-     || (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorForwardRoom )
      || (gDoorAdjacentRooms[gMarioCurrentRoom][0] == o->oDoorBackwardRoom)
-     || (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom)
+     || (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorForwardRoom )
      || (gDoorAdjacentRooms[gMarioCurrentRoom][1] == o->oDoorBackwardRoom));
     if (o->oDoorIsRendering) {
         o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;

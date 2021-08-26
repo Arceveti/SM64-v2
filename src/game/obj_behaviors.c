@@ -112,7 +112,7 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
 void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 nZ, f32 *objYawX, f32 *objYawZ) {
     f32 nX2  =  sqr(nX);
     f32 nZ2  =  sqr(nZ);
-    f32 nXZ2 =  nX2 + nZ2;
+    f32 nXZ2 = (nX2 + nZ2);
     *objYawX = ((((nZ2 - nX2) * velX) / nXZ2) - ((2 * velZ * (nX * nZ)) / nXZ2));
     *objYawZ = ((((nX2 - nZ2) * velZ) / nXZ2) - ((2 * velX * (nX * nZ)) / nXZ2));
 }
@@ -124,15 +124,11 @@ Bool32 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVel
     struct WallCollisionData hitbox;
     register f32 wall_nX, wall_nY, wall_nZ, objVelXCopy, objVelZCopy;
     f32 objYawX, objYawZ;
-    hitbox.x       = objNewX;
-    hitbox.y       = objY;
-    hitbox.z       = objNewZ;
+    vec3f_set(hitbox.pos, objNewX, objY, objNewZ);
     hitbox.offsetY = (o->hitboxHeight / 2);
     hitbox.radius  =  o->hitboxRadius;
     if (find_wall_collisions(&hitbox) != 0) {
-        o->oPosX    = hitbox.x;
-        o->oPosY    = hitbox.y;
-        o->oPosZ    = hitbox.z;
+        vec3f_copy(&o->oPosVec, hitbox.pos);
         wall_nX     = hitbox.walls[0]->normal.x;
         wall_nY     = hitbox.walls[0]->normal.y;
         wall_nZ     = hitbox.walls[0]->normal.z;
@@ -158,7 +154,7 @@ Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 
     }
     floor_nY = objFloor->normal.y;
     // If the floor is steep and we are below it (i.e. walking into it), turn away from the floor.
-    if (floor_nY < 0.5f && floorY > o->oPosY) {
+    if ((floor_nY < 0.5f) && (floorY > o->oPosY)) {
         //? are these needed?
         objVelXCopy = objVelX;
         objVelZCopy = objVelZ;
@@ -182,12 +178,10 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
     throwMatrix = alloc_display_list(sizeof(*throwMatrix));
     // If out of memory, fail to try orienting the object.
     if (throwMatrix == NULL) return;
-    objVisualPosition[0] = obj->oPosX;
-    objVisualPosition[1] = obj->oPosY + obj->oGraphYOffset;
-    objVisualPosition[2] = obj->oPosZ;
-    surfaceNormals[0]    = normalX;
-    surfaceNormals[1]    = normalY;
-    surfaceNormals[2]    = normalZ;
+    objVisualPosition[0] =  obj->oPosX;
+    objVisualPosition[1] = (obj->oPosY + obj->oGraphYOffset);
+    objVisualPosition[2] =  obj->oPosZ;
+    vec3f_set(surfaceNormals, normalX, normalY, normalZ);
     mtxf_align_terrain_normal(*throwMatrix, surfaceNormals, objVisualPosition, obj->oFaceAngleYaw);
     obj->header.gfx.throwMatrix = throwMatrix;
 }
@@ -443,15 +437,14 @@ Bool32 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
  */
 Bool32 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
-    hitbox.x       = x;
-    hitbox.y       = y;
-    hitbox.z       = z;
+    vec3f_set(hitbox.pos, x, y, z);
     hitbox.offsetY = 10.0f;
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
-        dist[0] = hitbox.x - x;
-        dist[1] = hitbox.y - y;
-        dist[2] = hitbox.z - z;
+        //! vec3f_diff?
+        dist[0] = hitbox.pos[0] - x;
+        dist[1] = hitbox.pos[1] - y;
+        dist[2] = hitbox.pos[2] - z;
         return TRUE;
     } else {
         return FALSE;
@@ -478,7 +471,7 @@ void obj_spawn_yellow_coins(struct Object *obj, s8 nCoins) {
  */
 Bool32 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
     if (obj->oTimer < lifeSpan) return FALSE;
-    if (obj->oTimer < lifeSpan + 40) {
+    if (obj->oTimer < (lifeSpan + 40)) {
         if (obj->oTimer & 0x1) {
             obj->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
         } else {

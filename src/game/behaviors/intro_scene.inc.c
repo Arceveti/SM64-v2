@@ -5,7 +5,6 @@ void spawn_child_obj_relative(struct Object *parent,
                    Angle pitchOffset, Angle yawOffset, Angle rollOffset,
                    s16 forwardVel, s32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object(parent, model, behavior);
-
     obj->header.gfx.animInfo.animFrame    = (random_float() * 6.0f);
     obj->oEndBirdCutsceneVars9PointX      = sCutsceneVars[9].point[0];
     sCutsceneVars[9].point[0]            += 1.0f;
@@ -20,21 +19,16 @@ void spawn_child_obj_relative(struct Object *parent,
 }
 
 void bhv_intro_scene_loop(void) {
-    UNUSED struct Object *obj;
-
     if (gCutsceneObjSpawn != CUTSCENE_OBJ_NONE) {
-        gCurrentObject->oPosX           = gCamera->pos[0];
-        gCurrentObject->oPosY           = gCamera->pos[1];
-        gCurrentObject->oPosZ           = gCamera->pos[2];
+        vec3f_copy(&gCurrentObject->oPosVec, gCamera->pos);
         gCurrentObject->oMoveAnglePitch = 0x0;
         gCurrentObject->oMoveAngleYaw   = 0x0;
-
         switch (gCutsceneObjSpawn) {
             case CUTSCENE_OBJ_BEGINNING_LAKITU:
-                obj = spawn_object(gCurrentObject, MODEL_LAKITU, bhvBeginningLakitu);
+                spawn_object(gCurrentObject, MODEL_LAKITU, bhvBeginningLakitu);
                 break;
             case CUTSCENE_OBJ_BEGINNING_PEACH:
-                obj = spawn_object(gCurrentObject, MODEL_PEACH , bhvBeginningPeach);
+                spawn_object(gCurrentObject, MODEL_PEACH , bhvBeginningPeach);
                 break;
             case CUTSCENE_OBJ_7_END_BIRDS_1:
                 spawn_child_obj_relative(gCurrentObject,    0,  205,   500, 0x1000, 0x6000, -0x1E00, 25, MODEL_BIRDS, bhvEndBirds1);
@@ -57,7 +51,6 @@ void bhv_intro_scene_loop(void) {
                 spawn_child_obj_relative(gCurrentObject, -250,  255,  -700,      0,      0,       0, 25, MODEL_BIRDS, bhvEndBirds2);
                 break;
         }
-
         gCutsceneObjSpawn = CUTSCENE_OBJ_NONE;
     }
 }

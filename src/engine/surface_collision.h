@@ -25,7 +25,7 @@
 
 struct WallCollisionData
 {
-    /*0x00*/ f32 x, y, z;
+    /*0x00*/ Vec3f pos; // f32 x, y, z;
     /*0x0C*/ f32 offsetY;
     /*0x10*/ f32 radius;
     /*0x14*/ s16 unused;

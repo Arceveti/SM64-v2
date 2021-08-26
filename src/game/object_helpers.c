@@ -1268,14 +1268,10 @@ s32 cur_obj_resolve_wall_collisions(void) {
     if (radius > 0.1f) { // was 0.1l
         collisionData.offsetY = offsetY;
         collisionData.radius  = radius;
-        collisionData.x       = (Collision) o->oPosX;
-        collisionData.y       = (Collision) o->oPosY;
-        collisionData.z       = (Collision) o->oPosZ;
+        vec3f_copy(collisionData.pos, &o->oPosVec);
         numCollisions         = find_wall_collisions(&collisionData);
         if (numCollisions != 0) {
-            o->oPosX          = collisionData.x;
-            o->oPosY          = collisionData.y;
-            o->oPosZ          = collisionData.z;
+            vec3f_copy(&o->oPosVec, collisionData.pos);
             wall              = collisionData.walls[collisionData.numWalls - 1];
             o->oWallAngle     = atan2s(wall->normal.z, wall->normal.x);
             return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEGREES(90));

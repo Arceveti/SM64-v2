@@ -3,8 +3,8 @@
 
 #include <PR/ultratypes.h>
 
-#define BHV_PROC_CONTINUE 0
-#define BHV_PROC_BREAK    1
+#define BHV_PROC_CONTINUE 0x0
+#define BHV_PROC_BREAK    0x1
 
 #define cur_obj_get_int(  offset) gCurrentObject->OBJECT_FIELD_S32(offset)
 #define cur_obj_get_float(offset) gCurrentObject->OBJECT_FIELD_F32(offset)

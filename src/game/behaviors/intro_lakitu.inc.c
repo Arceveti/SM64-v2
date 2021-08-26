@@ -103,15 +103,15 @@ void bhv_intro_lakitu_loop(void) {
             cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
             vec3f_set(fromPoint, -1128.0f, 560.0f, 4664.0f);
             gCurrentObject->oMoveAngleYaw             += 0x200;
-            gCurrentObject->oIntroLakituDistToBirdsX   = approach_f32_asymptotic(gCurrentObject->oIntroLakituDistToBirdsX, 100.0f, 0.03f);
+            approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituDistToBirdsX, 100.0f, 0.03f);
             gCurrentObject->oFaceAnglePitch            = atan2s(200.0f, (gCurrentObject->oPosY - 400.0f));
             gCurrentObject->oFaceAngleYaw              = approach_s16_asymptotic(gCurrentObject->oFaceAngleYaw, (gCurrentObject->oMoveAngleYaw + DEGREES(180)), 4);
             vec3f_set_dist_and_angle(fromPoint, toPoint, gCurrentObject->oIntroLakituDistToBirdsX, 0, gCurrentObject->oMoveAngleYaw);
             toPoint[1] += 150.0f * coss((s16) gCurrentObject->oIntroLakituDistToBirdsZ);
             gCurrentObject->oIntroLakituDistToBirdsZ  += gCurrentObject->oIntroLakituEndBirds1DestZ;
-            gCurrentObject->oIntroLakituEndBirds1DestZ = approach_f32_asymptotic(gCurrentObject->oIntroLakituEndBirds1DestZ, 512.0f, 0.05f);
+            approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituEndBirds1DestZ, 512.0f, 0.05f);
             toPoint[0] += gCurrentObject->oIntroLakituEndBirds1DestY;
-            gCurrentObject->oIntroLakituEndBirds1DestY = approach_f32_asymptotic(gCurrentObject->oIntroLakituEndBirds1DestY,   0.0f, 0.05f);
+            approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituEndBirds1DestY,   0.0f, 0.05f);
             vec3f_to_object_pos(gCurrentObject, toPoint);
 
             if (gCurrentObject->oTimer == 31) {
@@ -147,7 +147,7 @@ void bhv_intro_lakitu_loop(void) {
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2:
             object_pos_to_vec3f(toPoint, gCurrentObject);
             if (gCurrentObject->oTimer > 60) {
-                gCurrentObject->oForwardVel      = approach_f32_asymptotic(gCurrentObject->oForwardVel, -10.0f, 0.05f);
+                approach_f32_asymptotic_bool(&gCurrentObject->oForwardVel, -10.0f, 0.05f);
                 gCurrentObject->oMoveAngleYaw   += 0x78;
                 gCurrentObject->oMoveAnglePitch += 0x40;
                 vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
@@ -162,7 +162,7 @@ void bhv_intro_lakitu_loop(void) {
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3:
             object_pos_to_vec3f(toPoint, gCurrentObject);
-            gCurrentObject->oForwardVel     =       approach_f32_asymptotic(gCurrentObject->oForwardVel, 60.0f, 0.05f);
+            approach_f32_asymptotic_bool(&gCurrentObject->oForwardVel, 60.0f, 0.05f);
             vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
             gCurrentObject->oFaceAngleYaw   = approach_s16_symmetric(gCurrentObject->oFaceAngleYaw, targetYaw, 0x200);
             if (gCurrentObject->oTimer < 62) gCurrentObject->oMoveAngleYaw = approach_s16_asymptotic(gCurrentObject->oMoveAngleYaw, 0x1800, 0x1E);
