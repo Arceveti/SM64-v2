@@ -123,7 +123,7 @@ static void water_bomb_act_drop(void) {
             o->oVelY = (1.8f * o->oWaterBombStretchSpeed);
         }
     } else {
-        approach_f32_ptr(&o->oWaterBombVerticalStretch, 0.0f, 0.008f);
+        approach_f32_bool(&o->oWaterBombVerticalStretch, 0.0f, 0.008f);
         o->oWaterBombOnGround = FALSE;
     }
     o->header.gfx.scale[1] = (o->oWaterBombVerticalStretch + 1.0f);

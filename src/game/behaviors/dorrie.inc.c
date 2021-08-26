@@ -121,7 +121,7 @@ void bhv_dorrie_update(void) {
         }
 
         o->oDorrieOffsetY += o->oDorrieVelY;
-        approach_f32_ptr(&o->oDorrieVelY, 3.0f, 1.0f);
+        approach_f32_bool(&o->oDorrieVelY, 3.0f, 1.0f);
         if (o->oDorrieVelY > 0.0f && o->oDorrieOffsetY > maxOffsetY) o->oDorrieOffsetY = maxOffsetY;
 
         o->oPosY = o->oHomeY + o->oDorrieOffsetY;

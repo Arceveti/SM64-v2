@@ -266,6 +266,7 @@
 // Use fast inverse square root for surface normals (casues some noticable issues, including freezing, especially in slide levels)
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
+
 // Use fast inverse square root for mtxf_lookat
 #define FAST_INVSQRT_MTXF_LOOKAT
 

@@ -206,8 +206,7 @@ f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
 // Approach
 s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
 f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
-Bool32 approach_f32_by_increment(         f32 *current,   f32 target,   f32 inc);
-Bool32 approach_f32_ptr(                  f32 *current,   f32 target,   f32 inc);
+Bool32 approach_f32_bool(                  f32 *current,   f32 target,   f32 inc);
 Bool32 approach_f32_signed(               f32 *current,   f32 target,   f32 inc);
 f32    approach_f32_symmetric(            f32  current,   f32 target,   f32 inc);
 Bool32 approach_f32_symmetric_bool(       f32 *current,   f32 target,   f32 inc);

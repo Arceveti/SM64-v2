@@ -67,7 +67,7 @@ static void cloud_fwoosh_update(void) {
             }
         } else {
             // Return to normal size
-            approach_f32_ptr(&o->header.gfx.scale[0], 3.0f, 0.012f);
+            approach_f32_bool(&o->header.gfx.scale[0], 3.0f, 0.012f);
             o->oCloudFwooshMovementRadius += 0xC8;
 
             // If Mario stays nearby for 100 frames, begin blowing

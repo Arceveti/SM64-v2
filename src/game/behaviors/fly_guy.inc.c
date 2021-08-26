@@ -24,7 +24,7 @@ static struct ObjectHitbox sFlyGuyHitbox = {
  */
 static void fly_guy_act_idle(void) {
     o->oForwardVel = 0.0f;
-    if (approach_f32_ptr(&o->header.gfx.scale[0], 1.5f, 0.02f)) {
+    if (approach_f32_bool(&o->header.gfx.scale[0], 1.5f, 0.02f)) {
         // If we are >2000 units from home or Mario is <2000 units from us
         if ((o->oDistanceToMario >= 25000.0f) || (o->oDistanceToMario < 2000.0f)) {
             // Turn toward home or Mario

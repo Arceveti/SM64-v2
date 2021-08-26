@@ -3172,14 +3172,14 @@ void shake_camera_roll(Angle *roll) {
 s32 offset_yaw_outward_radial(struct Camera *c, Angle areaYaw) {
     Angle yawGoal = DEGREES(60);
     Angle yaw     = sModeOffsetYaw;
-    f32 distFromAreaCenter;
+    f32   distFromAreaCenter;
     Vec3f areaCenter;
     Angle dYaw;
     switch (gCurrLevelArea) {
         case AREA_TTC:
-            areaCenter[0]      = c->areaCenX;
-            areaCenter[1]      = sMarioCamState->pos[1];
-            areaCenter[2]      = c->areaCenZ;
+            areaCenter[0] = c->areaCenX;
+            areaCenter[1] = sMarioCamState->pos[1];
+            areaCenter[2] = c->areaCenZ;
             vec3f_get_dist(areaCenter, sMarioCamState->pos, &distFromAreaCenter);
             if (800.0f > distFromAreaCenter) yawGoal = 0x3800;
             break;

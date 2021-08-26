@@ -13,7 +13,7 @@ void bhv_small_piranha_flame_loop(void) {
         }
     } else {
         cur_obj_update_floor_and_walls();
-        if (approach_f32_ptr(&o->oSmallPiranhaFlameStartSpeed, o->oSmallPiranhaFlameEndSpeed, 0.6f)) cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
+        if (approach_f32_bool(&o->oSmallPiranhaFlameStartSpeed, o->oSmallPiranhaFlameEndSpeed, 0.6f)) cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
 
         obj_compute_vel_from_move_pitch(o->oSmallPiranhaFlameStartSpeed);
         cur_obj_move_standard(-78);
@@ -36,6 +36,6 @@ void bhv_small_piranha_flame_loop(void) {
 
 void bhv_fly_guy_flame_loop(void) {
     cur_obj_move_using_fvel_and_gravity();
-    if (approach_f32_ptr(&o->header.gfx.scale[0], 0.0f, 0.6f)) obj_mark_for_deletion(o);
+    if (approach_f32_bool(&o->header.gfx.scale[0], 0.0f, 0.6f)) obj_mark_for_deletion(o);
     cur_obj_scale(o->header.gfx.scale[0]);
 }

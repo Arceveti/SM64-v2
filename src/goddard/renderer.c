@@ -1226,7 +1226,7 @@ void branch_to_gddl(s32 dlNum) {
 // phong shading function?
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
-                   Vec3f phongLightPosition,   // vector to light source?
+                   Vec3f phongLightPosition, // vector to light source?
                    GdColour colour) {        // light color
     Hilite *hilite;
     Vec3f vec;

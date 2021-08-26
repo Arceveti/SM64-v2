@@ -32,32 +32,23 @@ void bhv_platform_normals_init(void) {
  * then gradually tilt back moving Mario with them.
  */
 void bhv_tilting_inverted_pyramid_loop(void) {
-    f32 mag;
     Vec3f d;
     Vec3f dist;
     Vec3f posBeforeRotation;
     Vec3f posAfterRotation;
+#ifndef PLATFORM_DISPLACEMENT_2
     // Mario's position
     f32 mx, my, mz;
+#endif
     Mat4 *transform = &o->transform;
     if (gMarioObject->platform == o) {
+#ifndef PLATFORM_DISPLACEMENT_2
         get_mario_pos(&mx, &my, &mz);
+#endif
         vec3f_diff(dist, &gMarioObject->oPosVec, &o->oPosVec);
         linear_mtxf_mul_vec3f(*transform, posBeforeRotation, dist);
         vec3f_diff(d, &gMarioObject->oPosVec, &o->oPosVec);
-#ifdef FAST_INVSQRT
-        mag = Q_rsqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
-        if (mag != 0.0f) {
-#else
-        mag = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
-        if (mag != 0.0f) {
-            // Normalizing
-            mag = (1.0f / mag);
-#endif
-            vec3f_mul_f32(d, mag);
-        } else {
-            vec3f_set(d, 0.0f, 1.0f, 0.0f);
-        }
+        vec3f_normalize(d);
         o->oTiltingPyramidMarioOnPlatform = TRUE;
     } else {
         vec3f_set(d, 0.0f, 1.0f, 0.0f);
@@ -65,9 +56,9 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     }
     // Approach the normals by 0.01f towards the new goal, then create a transform matrix and orient the object. 
     // Outside of the other conditionals since it needs to tilt regardless of whether Mario is on.
-    approach_f32_by_increment(&o->oTiltingPyramidNormalX, d[0], 0.01f);
-    approach_f32_by_increment(&o->oTiltingPyramidNormalY, d[1], 0.01f);
-    approach_f32_by_increment(&o->oTiltingPyramidNormalZ, d[2], 0.01f);
+    approach_f32_bool(&o->oTiltingPyramidNormalX, d[0], 0.01f);
+    approach_f32_bool(&o->oTiltingPyramidNormalY, d[1], 0.01f);
+    approach_f32_bool(&o->oTiltingPyramidNormalZ, d[2], 0.01f);
     create_transform_from_normals(*transform, o->oTiltingPyramidNormalX, o->oTiltingPyramidNormalY, o->oTiltingPyramidNormalZ);
     // If Mario is on the platform, adjust his position for the platform tilt.
     if (o->oTiltingPyramidMarioOnPlatform) {

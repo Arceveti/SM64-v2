@@ -104,8 +104,8 @@ static void chain_chomp_update_chain_segments(void) {
  * distance between chain parts. Restore these values to normal.
  */
 static void chain_chomp_restore_normal_chain_lengths(void) {
-    // approach_f32_ptr(&o->oChainChompMaxDistFromPivotPerChainPart, (750.0f / CHAIN_CHOMP_NUM_PARTS), 4.0f);
-    approach_f32_ptr(&o->oChainChompMaxDistFromPivotPerChainPart, 150.0f, 4.0f);
+    // approach_f32_bool(&o->oChainChompMaxDistFromPivotPerChainPart, (750.0f / CHAIN_CHOMP_NUM_PARTS), 4.0f);
+    approach_f32_bool(&o->oChainChompMaxDistFromPivotPerChainPart, 150.0f, 4.0f);
     o->oChainChompMaxDistBetweenChainParts = o->oChainChompMaxDistFromPivotPerChainPart;
 }
 
@@ -167,7 +167,7 @@ static void chain_chomp_sub_act_lunge(void) {
         // Turn toward pivot
         cur_obj_rotate_yaw_toward(atan2s(o->oChainChompSegments[0].pos[2], o->oChainChompSegments[0].pos[0]), 0x1000);
         if (o->oChainChompSignedMaxDistBetweenChainParts != 0.0f) {
-            approach_f32_ptr(&o->oChainChompSignedMaxDistBetweenChainParts, 0.0f, 0.8f);
+            approach_f32_bool(&o->oChainChompSignedMaxDistBetweenChainParts, 0.0f, 0.8f);
         } else {
             o->oSubAction = CHAIN_CHOMP_SUB_ACT_TURN;
         }
@@ -370,7 +370,7 @@ void bhv_wooden_post_update(void) {
             cur_obj_play_sound_2(SOUND_GENERAL_POUND_WOOD_POST);
             o->oWoodenPostSpeedY = -70.0f;
         }
-    } else if (approach_f32_ptr(&o->oWoodenPostSpeedY, 0.0f, 25.0f)) {
+    } else if (approach_f32_bool(&o->oWoodenPostSpeedY, 0.0f, 25.0f)) {
         // Stay still until Mario is done ground pounding
         o->oWoodenPostMarioPounding = cur_obj_is_mario_ground_pounding_platform();
     } else if ((o->oWoodenPostOffsetY += o->oWoodenPostSpeedY) < -190.0f) {

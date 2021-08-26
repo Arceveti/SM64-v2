@@ -579,20 +579,16 @@ f32 vec3f_mag(Vec3f v) {
 
 /// Scale vector 'dest' so it has length 1
 void vec3f_normalize(Vec3f dest) {
-     if (dest == gVec3fZero) {
-        vec3f_zero(dest);
-    } else {
 #ifdef FAST_INVSQRT
-        register f32 mag = Q_rsqrtf(sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
+    register f32 mag = Q_rsqrtf(sqr(dest[0]) + sqr(dest[1]) + sqr(dest[2]));
 #else
-        register f32 mag = (1.0f / vec3f_mag(dest));
+    register f32 mag = (1.0f / MAX(vec3f_mag(dest), 0.00001f));
 #endif
-        if (mag == 0.0f) {
-            vec3f_zero(dest);
-            return;
-        }
-        vec3f_mul_f32(dest, mag);
+    if (mag == 0.0f) {
+        vec3f_copy(dest, gVec3fY);
+        return;
     }
+    vec3f_mul_f32(dest, mag);
 }
 
 /// Scale vector 'dest' so it has length 'max'
@@ -1401,8 +1397,6 @@ Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
     return !(*current == target);
 }
 
-
-//! TODO: Combine all these approach_f32 functions
 /**
  * Return the value 'current' after it tries to approach target, going up at
  * most 'inc' and going down at most 'dec'.
@@ -1418,22 +1412,7 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
     return current;
 }
 
-/**
- * Returns a value that is src incremented/decremented by inc towards goal
- * until goal is reached. Does not overshoot.
- */
-Bool32 approach_f32_by_increment(f32 *current, f32 target, f32 inc) {
-    if (*current < target) {
-        *current = (((target - *current) <  inc) ? target : (*current + inc));
-    } else if (*current > target) {
-        *current = (((target - *current) > -inc) ? target : (*current - inc));
-    } else {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-Bool32 approach_f32_ptr(f32 *current, f32 target, f32 inc) {
+Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc) {
     if (*current > target) inc = -inc;
     *current += inc;
     if (((*current - target) * inc) >= 0) {

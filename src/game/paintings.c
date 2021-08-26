@@ -2,9 +2,7 @@
 
 #include "sm64.h"
 #include "area.h"
-#ifdef FAST_INVSQRT
 #include "engine/math_util.h"
-#endif
 #include "engine/graph_node.h"
 #include "engine/surface_collision.h"
 #include "game_init.h"
@@ -679,44 +677,24 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
     s16 i, j;
     s16 neighbors;
     s16 entry = 0;
-
-    for (i = 0; i < numVtx; i++) {
-        f32 nx = 0.0f, ny = 0.0f, nz = 0.0f;
-        f32 nlen;
+    for ((i = 0); (i < numVtx); (i++)) {
+        Vec3n n = {0.0f, 0.0f, 0.0f};
         // The first number of each entry is the number of adjacent tris
         neighbors = neighborTris[entry];
-        for (j = 0; j < neighbors; j++) {
+        for ((j = 0); (j < neighbors); (j++)) {
             tri = neighborTris[(entry + j) + 1];
-            nx += gPaintingTriNorms[tri][0];
-            ny += gPaintingTriNorms[tri][1];
-            nz += gPaintingTriNorms[tri][2];
+            vec3f_add(n, gPaintingTriNorms[tri]);
         }
         // Move to the next vertex's entry
-        entry += neighbors + 1;
+        entry += (neighbors + 1);
         // average the surface normals from each neighboring tri
-        nx /= neighbors;
-        ny /= neighbors;
-        nz /= neighbors;
-#ifdef FAST_INVSQRT
-        nlen = Q_rsqrtf(sqr(nx) + sqr(ny) + sqr(nz));
-#else
-        nlen = sqrtf(sqr(nx) + sqr(ny) + sqr(nz));
-#endif
-        if (nlen == 0.0f) {
-            gPaintingMesh[i].norm[0] = 0;
-            gPaintingMesh[i].norm[1] = 0;
-            gPaintingMesh[i].norm[2] = 0;
-        } else {
-#ifdef FAST_INVSQRT
-            gPaintingMesh[i].norm[0] = normalize_component(nx * nlen);
-            gPaintingMesh[i].norm[1] = normalize_component(ny * nlen);
-            gPaintingMesh[i].norm[2] = normalize_component(nz * nlen);
-#else
-            gPaintingMesh[i].norm[0] = normalize_component(nx / nlen);
-            gPaintingMesh[i].norm[1] = normalize_component(ny / nlen);
-            gPaintingMesh[i].norm[2] = normalize_component(nz / nlen);
-#endif
-        }
+        n[0] /= neighbors;
+        n[1] /= neighbors;
+        n[2] /= neighbors;
+        vec3f_normalize(n);
+        gPaintingMesh[i].norm[0] = normalize_component(n[0]);
+        gPaintingMesh[i].norm[1] = normalize_component(n[1]);
+        gPaintingMesh[i].norm[2] = normalize_component(n[2]);
     }
 }
 

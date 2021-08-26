@@ -444,9 +444,9 @@ void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
     register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
 #ifdef FAST_INVSQRT
-    register f32 invDenom = margin * Q_rsqrtf(sqr(diff_x) + sqr(diff_z));
+    register f32 invDenom = (margin * Q_rsqrtf(sqr(diff_x) + sqr(diff_z)));
 #else
-    register f32 invDenom = margin / sqrtf(sqr(diff_x) + sqr(diff_z));
+    register f32 invDenom = (margin / sqrtf(sqr(diff_x) + sqr(diff_z)));
 #endif
     *x += (diff_x * invDenom);
     *z += (diff_z * invDenom);

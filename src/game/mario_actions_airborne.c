@@ -157,7 +157,7 @@ void update_air_with_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
+        approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
             intendedMag  = (m->intendedMag / 32.0f);
@@ -203,7 +203,7 @@ void update_air_without_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
+        approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
             intendedMag    = (m->intendedMag / 32.0f);
@@ -1296,7 +1296,7 @@ Bool32 act_lava_boost(struct MarioState *m) {
         queue_rumble_data(5, 80);
     }
 #endif
-    if (!(m->input & INPUT_NONZERO_ANALOG)) approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
+    if (!(m->input & INPUT_NONZERO_ANALOG)) approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
     update_lava_boost_or_twirling(m);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:

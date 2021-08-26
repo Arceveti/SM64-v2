@@ -63,7 +63,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     o->oFaceAngleYaw    = o->oAngleToMario;
     // After finishing dialog, fly away and despawn
     if (o->oCameraLakituFinishedDialog) {
-        approach_f32_ptr(&o->oCameraLakituSpeed, 60.0f, 3.0f);
+        approach_f32_bool(&o->oCameraLakituSpeed, 60.0f, 3.0f);
         if (o->oDistanceToMario > 6000.0f) obj_mark_for_deletion(o);
         targetMovePitch = -0x3000; // 67.5 degrees
         targetMoveYaw   = -0x6000; // 135 degrees
@@ -78,18 +78,18 @@ static void camera_lakitu_intro_act_show_dialog(void) {
                 if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) turnAmount = -turnAmount;
                 targetMoveYaw   = (o->oAngleToMario + turnAmount);
                 targetMovePitch = o->oFaceAnglePitch;
-                approach_f32_ptr(&o->oCameraLakituCircleRadius, 200.0f, 50.0f);
+                approach_f32_bool(&o->oCameraLakituCircleRadius, 200.0f, 50.0f);
                 if (o->oDistanceToMario < 1000.0f) {
                     if (!o->oCameraLakituIntroMusicPlayed) {
                         play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_LAKITU), 0);
                         o->oCameraLakituIntroMusicPlayed = TRUE;
                     }
                     // Once within 1000 units, slow down
-                    approach_f32_ptr(&o->oCameraLakituSpeed, 20.0f, 1.0f);
+                    approach_f32_bool(&o->oCameraLakituSpeed, 20.0f, 1.0f);
                     if ((o->oDistanceToMario < 500.0f) && (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oFaceAngleYaw) > 0x7000)) {
                         // Once within 500 units and facing toward Mario, come
                         // to a stop
-                        approach_f32_ptr(&o->oCameraLakituSpeed, 0.0f, 5.0f);
+                        approach_f32_bool(&o->oCameraLakituSpeed, 0.0f, 5.0f);
                     }
                 }
             }

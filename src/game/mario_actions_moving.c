@@ -303,7 +303,7 @@ s32 apply_slope_decel(struct MarioState *m, f32 decelCoef) {
         default:                          decel = (decelCoef * 2.0f); break;
         case SURFACE_CLASS_NOT_SLIPPERY:  decel = (decelCoef * 3.0f); break;
     }
-    approach_f32_by_increment(&m->forwardVel, 0.0f, decel);
+    approach_f32_bool(&m->forwardVel, 0.0f, decel);
     if (m->forwardVel == 0.0f) stopped = TRUE;
     apply_slope_accel(m);
     return stopped;
@@ -311,7 +311,7 @@ s32 apply_slope_decel(struct MarioState *m, f32 decelCoef) {
 
 s32 update_decelerating_speed(struct MarioState *m) {
     s32 stopped = FALSE;
-    approach_f32_by_increment(&m->forwardVel, 0.0f, 1.0f);
+    approach_f32_bool(&m->forwardVel, 0.0f, 1.0f);
     if (m->forwardVel == 0.0f) stopped = TRUE;
     mario_set_forward_vel(m, m->forwardVel);
     mario_update_moving_sand(m);

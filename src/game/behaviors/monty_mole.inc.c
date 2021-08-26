@@ -238,7 +238,7 @@ static void monty_mole_act_hide(void) {
         cur_obj_hide();
         monty_mole_hide_in_hole();
     } else {
-        approach_f32_ptr(&o->oVelY, -4.0f, 0.5f);
+        approach_f32_bool(&o->oVelY, -4.0f, 0.5f);
     }
 }
 

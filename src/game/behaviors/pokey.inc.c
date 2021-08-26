@@ -67,7 +67,7 @@ void bhv_pokey_body_part_update(void) {
             //  was above it will instantly shrink and begin expanding in its
             //  place.
             } else if ((o->parentObj->oPokeyBottomBodyPartSize < 1.0f) && ((o->oBehParams2ndByte + 1) == o->parentObj->oPokeyNumAliveBodyParts)) {
-                approach_f32_ptr(&o->parentObj->oPokeyBottomBodyPartSize, 1.0f, 0.1f);
+                approach_f32_bool(&o->parentObj->oPokeyBottomBodyPartSize, 1.0f, 0.1f);
                 cur_obj_scale(   (o->parentObj->oPokeyBottomBodyPartSize * 3.0f));
             }
             //! Pausing causes jumps in offset angle
