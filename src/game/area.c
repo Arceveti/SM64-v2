@@ -24,7 +24,7 @@
 #include "save_file.h"
 #include "level_table.h"
 #include "dialog_ids.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
 #include "debug_box.h"
@@ -474,7 +474,7 @@ void render_game(void) {
             clear_frame_buffer(gWarpTransFBSetColor);
         }
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     puppyprint_render_profiler();
 #endif
     gViewportOverride = NULL;

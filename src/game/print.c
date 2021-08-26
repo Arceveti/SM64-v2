@@ -2,7 +2,7 @@
 
 #include "config.h"
 #include "game_init.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "print.h"
 #include "segment2.h"
 

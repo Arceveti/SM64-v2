@@ -337,7 +337,7 @@ ACTOR_DIR      := actors
 LEVEL_DIRS     := $(patsubst levels/%,%,$(dir $(wildcard levels/*/header.h)))
 
 # Directories containing source files
-SRC_DIRS += src src/game src/engine src/audio src/menu src/buffers actors levels bin data assets asm lib sound
+SRC_DIRS += src src/boot src/game src/engine src/audio src/menu src/buffers actors levels bin data assets asm lib sound
 LIBZ_SRC_DIRS := src/libz
 GODDARD_SRC_DIRS := src/goddard src/goddard/dynlists
 BIN_DIRS := bin bin/$(VERSION)
@@ -543,7 +543,7 @@ libultra: $(BUILD_DIR)/libultra.a
 # Extra object file dependencies
 $(BUILD_DIR)/asm/boot.o:              $(IPL3_RAW_FILES)
 $(BUILD_DIR)/src/game/crash_screen.o: $(CRASH_TEXTURE_C_FILES)
-$(BUILD_DIR)/src/game/version.o:      $(BUILD_DIR)/src/game/version_data.h
+$(BUILD_DIR)/src/boot/version.o:      $(BUILD_DIR)/src/boot/version_data.h
 $(BUILD_DIR)/lib/rsp.o:               $(BUILD_DIR)/rsp/rspboot.bin $(BUILD_DIR)/rsp/fast3d.bin $(BUILD_DIR)/rsp/audio.bin
 $(SOUND_BIN_DIR)/sound_data.o:        $(SOUND_BIN_DIR)/sound_data.ctl $(SOUND_BIN_DIR)/sound_data.tbl $(SOUND_BIN_DIR)/sequences.bin $(SOUND_BIN_DIR)/bank_sets
 $(BUILD_DIR)/levels/scripts.o:        $(BUILD_DIR)/include/level_headers.h
@@ -596,7 +596,7 @@ $(BUILD_DIR)/include/text_strings.h: $(BUILD_DIR)/include/text_menu_strings.h
 $(BUILD_DIR)/src/menu/file_select.o: $(BUILD_DIR)/include/text_strings.h
 $(BUILD_DIR)/src/menu/star_select.o: $(BUILD_DIR)/include/text_strings.h
 $(BUILD_DIR)/src/game/ingame_menu.o: $(BUILD_DIR)/include/text_strings.h
-$(BUILD_DIR)/src/game/mem_error_screen.o: $(BUILD_DIR)/include/text_strings.h
+$(BUILD_DIR)/src/boot/mem_error_screen.o: $(BUILD_DIR)/include/text_strings.h
 $(BUILD_DIR)/src/game/puppycam2.o: $(BUILD_DIR)/include/text_strings.h
 
 #==============================================================================#
@@ -749,7 +749,7 @@ $(BUILD_DIR)/include/level_headers.h: levels/level_headers.h.in
 	$(V)$(CPP) $(CPPFLAGS) -I . $< | sed -E 's|(.+)|#include "\1"|' > $@
 
 # Generate version_data.h
-$(BUILD_DIR)/src/game/version_data.h: tools/make_version.sh
+$(BUILD_DIR)/src/boot/version_data.h: tools/make_version.sh
 	@$(PRINT) "$(GREEN)Generating:  $(BLUE)$@ $(NO_COL)\n"
 	$(V)tools/make_version.sh $(CROSS) > $@
 

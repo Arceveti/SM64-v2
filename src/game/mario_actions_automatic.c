@@ -8,7 +8,7 @@
 #include "mario.h"
 #include "mario_step.h"
 #include "engine/math_util.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "engine/graph_node.h"
 #include "save_file.h"
 #include "engine/surface_collision.h"

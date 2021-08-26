@@ -3,7 +3,7 @@
 
 #include "game/level_update.h"
 #include "math_util.h"
-#include "game/memory.h"
+#include "boot/memory.h"
 #include "graph_node.h"
 #include "game/rendering_graph_node.h"
 #include "game/area.h"

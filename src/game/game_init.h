@@ -7,7 +7,7 @@
 #include <PR/os_message.h>
 
 #include "types.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "segments.h"
 
 #ifdef USE_EXT_RAM

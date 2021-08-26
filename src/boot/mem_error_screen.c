@@ -10,11 +10,12 @@
 #include "segments.h"
 #ifdef USE_EXT_RAM
 #include "text_strings.h"
-#include "game_init.h"
+#include "mem_error_screen.h"
+#include "game/game_init.h"
 #include "main.h"
-#include "print.h"
-#include "ingame_menu.h"
-#include "segment2.h"
+#include "game/print.h"
+#include "game/ingame_menu.h"
+#include "game/segment2.h"
 #include "../engine/level_script.h"
 // Ensure that USE_EXT_RAM is defined.
 // #ifndef USE_EXT_RAM

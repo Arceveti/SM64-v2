@@ -6,7 +6,7 @@
 #include "engine/surface_collision.h"
 #include "geo_misc.h"
 #include "level_table.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "object_list_processor.h"
 #include "rendering_graph_node.h"
 #include "segment2.h"

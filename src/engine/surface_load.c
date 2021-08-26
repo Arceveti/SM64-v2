@@ -8,14 +8,14 @@
 #include "behavior_script.h"
 #include "behavior_data.h"
 #include "math_util.h"
-#include "game/memory.h"
+#include "boot/memory.h"
 #include "game/object_helpers.h"
 #include "game/macro_special_objects.h"
 #include "surface_collision.h"
 #include "game/mario.h"
 #include "game/object_list_processor.h"
 #include "surface_load.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "game/puppyprint.h"
 #endif
 
@@ -426,7 +426,7 @@ u32 get_area_terrain_size(Collision *data) {
 void load_area_terrain(s32 index, Collision *data, RoomData *surfaceRooms, MacroObject *macroObjects) {
     Collision terrainLoadType;
     Collision *vertexData = NULL;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     // Initialize the data for this.
@@ -468,7 +468,7 @@ void load_area_terrain(s32 index, Collision *data, RoomData *surfaceRooms, Macro
     }
     gNumStaticSurfaceNodes = gSurfaceNodesAllocated;
     gNumStaticSurfaces     = gSurfacesAllocated;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime()-first);
 #endif
 }
@@ -564,7 +564,7 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
  */
 void load_object_collision_model(void) {
     Collision vertexData[600];
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     Collision *collisionData = gCurrentObject->collisionData;
@@ -589,7 +589,7 @@ void load_object_collision_model(void) {
     } else {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime()-first);
 #endif
 }

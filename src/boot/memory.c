@@ -6,7 +6,7 @@
 
 #include "buffers/buffers.h"
 #include "slidec.h"
-#include "game_init.h"
+#include "game/game_init.h"
 #include "main.h"
 #include "memory.h"
 #include "segment_symbols.h"
@@ -21,9 +21,7 @@
 #include "usb/usb.h"
 #include "usb/debug.h"
 #endif
-#ifdef PUPPYPRINT
-#include "puppyprint.h"
-#endif
+#include "game/puppyprint.h"
 
 
 // round up to the next multiple
@@ -134,8 +132,8 @@ void main_pool_init(void *start, void *end) {
     sPoolListHeadL->next = NULL;
     sPoolListHeadR->prev = NULL;
     sPoolListHeadR->next = NULL;
-#ifdef PUPPYPRINT
-    mempool              = sPoolFreeSpace;
+#if PUPPYPRINT_DEBUG
+    mempool = sPoolFreeSpace;
 #endif
 }
 
@@ -251,7 +249,7 @@ u32 main_pool_pop_state(void) {
  */
 void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
     u32 size = ALIGN16(srcEnd - srcStart);
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     osInvalDCache(dest, size);
@@ -263,7 +261,7 @@ void dma_read(u8 *dest, u8 *srcStart, u8 *srcEnd) {
         srcStart += copySize;
         size     -= copySize;
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     dmaTime[perfIteration] += (osGetTime() - first);
 #endif
 }
@@ -328,8 +326,8 @@ void *load_segment(s32 segment, u8 *srcStart, u8 *srcEnd, u32 side, u8 *bssStart
 #ifdef SEGMENT_ROM_TABLE
     sSegmentROMTable[segment] = (uintptr_t) srcStart;
 #endif
-#ifdef PUPPYPRINT
-    ramsizeSegment[segment+nameTable-2] = ((s32)srcEnd - (s32)srcStart);
+#if PUPPYPRINT_DEBUG
+    ramsizeSegment[segment + nameTable - 2] = ((s32)srcEnd - (s32)srcStart);
 #endif
     return addr;
 }
@@ -406,8 +404,8 @@ void *load_segment_decompress(s32 segment, u8 *srcStart, u8 *srcEnd) {
             main_pool_free(compressed);
         }
     }
-#ifdef PUPPYPRINT
-    ramsizeSegment[segment + nameTable - 2] = ((s32)srcEnd - (s32)srcStart);
+#if PUPPYPRINT_DEBUG
+    ramsizeSegment[segment+nameTable - 2] = ((s32)srcEnd - (s32)srcStart);
 #endif
     return dest;
 }

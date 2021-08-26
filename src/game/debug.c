@@ -6,7 +6,7 @@
 #include "engine/surface_collision.h"
 #include "engine/math_util.h"
 #include "game_init.h"
-#include "main.h"
+#include "boot/main.h"
 #include "object_constants.h"
 #include "object_fields.h"
 #include "object_helpers.h"

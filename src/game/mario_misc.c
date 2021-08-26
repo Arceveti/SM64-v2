@@ -18,7 +18,7 @@
 #include "level_update.h"
 #include "mario_actions_cutscene.h"
 #include "mario_misc.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"
 #include "rendering_graph_node.h"

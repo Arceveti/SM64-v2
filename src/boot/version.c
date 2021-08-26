@@ -1,5 +1,5 @@
 #include "version.h"
-#include "src/game/version_data.h"
+#include "src/boot/version_data.h"
 
 char __username__[] = __USERNAME__;
 char __datetime__[] = __DATETIME__;

@@ -6,6 +6,7 @@
 // This is how many indexes of timers are saved at once. higher creates a smoother average, but naturally uses more RAM. 15's fine.
 #define NUM_PERF_ITERATIONS      15
 #define NUM_BENCH_ITERATIONS    150
+#define LOG_BUFFER_SIZE          16
 
 #define BENCHMARK_GAME          0x1
 #define BENCHMARK_AUDIO         0x2
@@ -64,8 +65,10 @@ extern void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 heig
 extern s32  get_text_height(const char *str);
 extern s32  get_text_width( const char *str);
 extern void prepare_blank_box(void);
-extern void finish_blank_box( void);
+extern void finish_blank_box(void);
 extern void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b, Alpha a);
+extern void append_puppyprint_log(char str[255]);
+extern char consoleLogTable[LOG_BUFFER_SIZE][255];
 
 #endif
 

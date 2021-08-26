@@ -27,7 +27,7 @@
 #include "levels/bowser_3/header.h"
 #include "levels/castle_inside/header.h"
 #include "levels/hmc/header.h"
-#include "main.h"
+#include "boot/main.h"
 #include "mario.h"
 #include "mario_actions_cutscene.h"
 #include "mario_step.h"

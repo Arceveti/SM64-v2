@@ -17,7 +17,7 @@
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
 
@@ -79,7 +79,7 @@ void print_fps(s32 x, s32 y) {
     f32 fps = calculate_and_update_fps();
     char text[14];
     sprintf(text, "FPS %2.2f", fps);
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     print_small_text(x, y, text, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
 #else
     print_text(x, y, text);
@@ -609,7 +609,7 @@ void render_hud(void) {
 #ifdef CUSTOM_DEBUG
         if (gCustomDebugMode) render_debug_mode();
 #endif
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     print_set_envcolour(255,255,255,255);
 #endif
     }

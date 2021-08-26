@@ -12,6 +12,10 @@ Inside this display, if you press up on the dpad again, you can switch between p
 If you press dpad down, you can toggle the benchmarking display.
 You can press dpad left or right to change which option, and you can measure game thread or audio thread performance by default.
 There's also a custom option that's left blank. It runs benchmark_custom which can contain anything of your choice.
+You can press dpad right to cycle between collision visuals, from surface collision, hitbox collision, both, or neither.
+dpad left will toggle the logging view, which will display a number of strings you've sent through for debugging purposes, like
+a modern game engine's developer's console.
+
 - Collision marks the time it takes to generate and process collision.
 - Behaviour marks the time it takes for objects to perform their behaviours. This excludes collision.
 - Graph measures the time it takes to process the node graphs, which is all the 3D geometry and rendering.
@@ -25,7 +29,7 @@ There's also a custom option that's left blank. It runs benchmark_custom which c
 
 #include "config.h"
 #include "game_init.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "print.h"
 #include "segment2.h"
 #include "string.h"
@@ -42,16 +46,19 @@ There's also a custom option that's left blank. It runs benchmark_custom which c
 
 u8 currEnv[4];
 Bool8 fDebug      = FALSE;
+
+#if PUPPYPRINT_DEBUG
 Bool8 benchViewer = FALSE;
 u8    benchOption = 0;
+s8    logViewer   = 0; // Bool8?
 
-//Profiler values
+// Profiler values
 s8  perfIteration         = 0;
 s16 benchmarkLoop         = 0;
 s32 benchmarkTimer        = 0;
 s32 benchmarkProgramTimer = 0;
 s8  benchmarkType         = 0;
-//General
+// General
 OSTime cpuTime     = 0;
 OSTime rspTime     = 0;
 OSTime rdpTime     = 0;
@@ -60,7 +67,7 @@ OSTime loadTime    = 0;
 OSTime gLastOSTime = 0;
 OSTime rspDelta    = 0;
 s32 benchMark[NUM_BENCH_ITERATIONS + 2];
-//CPU
+// CPU
 OSTime collisionTime[NUM_PERF_ITERATIONS + 1];
 OSTime behaviourTime[NUM_PERF_ITERATIONS + 1];
 OSTime scriptTime[   NUM_PERF_ITERATIONS + 1];
@@ -68,19 +75,19 @@ OSTime graphTime[    NUM_PERF_ITERATIONS + 1];
 OSTime audioTime[    NUM_PERF_ITERATIONS + 1];
 OSTime dmaTime[      NUM_PERF_ITERATIONS + 1];
 OSTime dmaAudioTime[ NUM_PERF_ITERATIONS + 1];
-//RSP
+// RSP
 OSTime audioTime[ NUM_PERF_ITERATIONS + 1];
 OSTime rspGenTime[NUM_PERF_ITERATIONS + 1];
-//RDP
+// RDP
 OSTime bufferTime[NUM_PERF_ITERATIONS + 1];
 OSTime tmemTime[  NUM_PERF_ITERATIONS + 1];
 OSTime busTime[   NUM_PERF_ITERATIONS + 1];
-//RAM
+// RAM
 Bool8 ramViewer = FALSE;
 s32 ramsizeSegment[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 s32 audioPool[12];
 s32 mempool;
-//Collision
+// Collision
 Bool8 collisionViewer = FALSE; // unused?
 s32 numSurfaces       = 0;
 
@@ -95,7 +102,7 @@ extern u8 _buffersSegmentBssEnd[];
 extern u8 _goddardSegmentStart[];
 extern u8 _goddardSegmentEnd[];
 
-//Here is stored the rom addresses of the global code segments. If you get rid of any, it's best to just write them as NULL.
+// Here is stored the rom addresses of the global code segments. If you get rid of any, it's best to just write them as NULL.
 s32 ramP[5][2] = {
     {&_buffersSegmentBssStart,      &_buffersSegmentBssEnd     },
     {&_mainSegmentStart,            &_mainSegmentEnd           },
@@ -270,6 +277,31 @@ void print_which_benchmark(void) {
     print_small_text(160,120, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
 }
 
+char consoleLogTable[LOG_BUFFER_SIZE][255];
+
+void append_puppyprint_log(char str[255]) {
+    s32 i;
+    for ((i = 0); (i < (LOG_BUFFER_SIZE - 1)); (i++)) {
+        memcpy(consoleLogTable[i], consoleLogTable[i + 1], 255);
+    }
+    memcpy(consoleLogTable[LOG_BUFFER_SIZE - 1], str, 255);
+}
+
+#define LINE_HEIGHT (8 + ((LOG_BUFFER_SIZE - 1) * 12))
+
+void print_console_log(void) {
+    s32 i;
+    prepare_blank_box();
+    render_blank_box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
+    finish_blank_box();
+    for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) {
+        if (consoleLogTable[i] == NULL) continue;
+        print_small_text(16, (LINE_HEIGHT) - (i * 12), consoleLogTable[i], PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
+    }
+}
+
+#undef LINE_HEIGHT
+
 extern void print_fps(s32 x, s32 y);
 
 void puppyprint_render_profiler(void) {
@@ -281,9 +313,9 @@ void puppyprint_render_profiler(void) {
     if (!fDebug) return;
     sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available() / (f32)mempool) * 100));
     print_small_text(160, 224, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
-    if (!ramViewer && !benchViewer) {
+    if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16, 40);
-        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)OS_CYCLES_TO_USEC(cpuTime) / 333, (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime) / 333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime) / 333);
+        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)OS_CYCLES_TO_USEC(cpuTime)/333, (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime)/333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime)/333);
         print_small_text(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
         sprintf(textBytes, "OBJ: %d/%d", gObjectCounter, OBJECT_POOL_CAPACITY);
         print_small_text(16, 124, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
@@ -344,6 +376,8 @@ void puppyprint_render_profiler(void) {
         render_blank_box(prevGraph, 104, 304, 112, 255, 0, 255, 255);
     } else if (ramViewer) {
         print_ram_overview();
+    } else if (logViewer) {
+        print_console_log();
     } else if (benchViewer) {
         print_which_benchmark();
     }
@@ -394,19 +428,22 @@ void puppyprint_profiler_process(void) {
 
     gLastOSTime = newTime;
     if (gGlobalTimer > 5) IO_WRITE(DPC_STATUS_REG, DPC_CLR_CLOCK_CTR | DPC_CLR_CMD_CTR | DPC_CLR_PIPE_CTR | DPC_CLR_TMEM_CTR);
-
     if (fDebug) {
         if (gPlayer1Controller->buttonPressed & D_JPAD) {
-            benchViewer    ^= TRUE;
-            ramViewer       = FALSE;
-            collisionViewer = FALSE;
+            benchViewer ^= TRUE;
+            ramViewer    = FALSE;
+            logViewer    = FALSE;
         } else if (gPlayer1Controller->buttonPressed & U_JPAD) {
-            ramViewer      ^= TRUE;
-            benchViewer     = FALSE;
-            collisionViewer = FALSE;
+            ramViewer   ^= TRUE;
+            benchViewer  = FALSE;
+            logViewer    = FALSE;
+        } else if (gPlayer1Controller->buttonPressed & L_JPAD) {
+            logViewer   ^= TRUE;
+            ramViewer    = FALSE;
+            benchViewer  = FALSE;
         }
 #ifdef VISUAL_DEBUG
-        else if (!benchViewer && !ramViewer) {
+        else if (!benchViewer && !ramViewer && !logViewer) {
             debug_box_input();
         }
 #endif
@@ -422,15 +459,14 @@ void puppyprint_profiler_process(void) {
         }
         benchmark_custom();
     }
-#if PUPPYPRINT_DEBUG
     if ((gPlayer1Controller->buttonDown & U_JPAD) && (gPlayer1Controller->buttonPressed & L_TRIG)) {
         ramViewer   = FALSE;
         benchViewer = FALSE;
         fDebug     ^= TRUE;
     }
-#endif
-    if (perfIteration++ == NUM_PERF_ITERATIONS-1) perfIteration = 0;
+    if (perfIteration++ == NUM_PERF_ITERATIONS - 1) perfIteration = 0;
 }
+#endif
 
 void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) {
     if ((r != currEnv[0]) || (g != currEnv[1]) || (b != currEnv[2]) || (a != currEnv[3])) {
@@ -737,7 +773,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
-void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, s32 scaleX, s32 scaleY, s32 mode) {
+void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNUSED s32 scaleX, UNUSED s32 scaleY, s32 mode) {
     s32 posW, posH, imW, imH, peakH, maskW, maskH, cycles, num, i, modeSC, mOne;
     i     =   0;
     num   = 256;
@@ -756,7 +792,7 @@ void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, s32
     }
     // Find how best to seperate the horizontal. Keep going until it finds a whole value.
     while (TRUE) {
-        f32 val =  (f32)width/(f32)num;
+        f32 val = ((f32)width / (f32)num);
         if (((s32)val == val) && ((s32) val >= 1)) {
             imW = num;
             break;

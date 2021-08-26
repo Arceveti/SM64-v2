@@ -221,6 +221,8 @@ void note_vibrato_init(struct Note *note) {
     note->vibratoFreqScale    = 1.0f;
     note->portamentoFreqScale = 1.0f;
     vib = &note->vibratoState;
+
+/* This code was probably removed from EU and SH for a reason; probably because it's dumb and makes vibrato harder to use well.
 #if defined(VERSION_JP) || defined(VERSION_US)
     if (note->parentLayer->seqChannel->vibratoExtentStart  == 0
      && note->parentLayer->seqChannel->vibratoExtentTarget == 0
@@ -229,6 +231,8 @@ void note_vibrato_init(struct Note *note) {
         return;
     }
 #endif
+*/
+
     vib->active = TRUE;
     vib->time   = 0;
 #if defined(VERSION_EU) || defined(VERSION_SH)

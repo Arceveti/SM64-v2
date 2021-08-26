@@ -1,6 +1,6 @@
 #include "types.h"
 #include "include/segment_symbols.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "engine/math_util.h"
 #include "src/engine/behavior_script.h"
 #include "texscroll.h"

@@ -8,7 +8,7 @@
 #include "level_update.h"
 #include "game_init.h"
 #include "level_update.h"
-#include "main.h"
+#include "boot/main.h"
 #include "engine/math_util.h"
 #include "engine/graph_node.h"
 #include "area.h"
@@ -22,7 +22,7 @@
 #include "save_file.h"
 #include "debug_course.h"
 #if MULTILANG
-#include "memory.h"
+#include "boot/memory.h"
 #include "eu_translation.h"
 #include "segment_symbols.h"
 #endif
@@ -32,8 +32,9 @@
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif
-
-#include "config.h"
+#if PUPPYPRINT_DEBUG
+#include "puppyprint.h"
+#endif
 
 #define PLAY_MODE_NORMAL        0x00
 #define PLAY_MODE_PAUSED        0x02
@@ -869,6 +870,10 @@ Bool32 update_level(void) {
 
 Bool32 init_level(void) {
     Bool32 fadeFromColor = FALSE;
+#if PUPPYPRINT_DEBUG
+    char textBytes[64];
+    OSTime first = osGetTime();
+#endif
     set_play_mode(PLAY_MODE_NORMAL);
     sDelayedWarpOp      = WARP_OP_NONE;
     sTransitionTimer    = 0;
@@ -915,6 +920,10 @@ Bool32 init_level(void) {
     if (gCurrDemoInput == NULL) cancel_rumble();
 #endif
     if (gMarioState->action == ACT_INTRO_CUTSCENE) sound_banks_disable(SEQ_PLAYER_SFX, SOUND_BANKS_DISABLED_DURING_INTRO_CUTSCENE);
+#if PUPPYPRINT_DEBUG
+    sprintf(textBytes, "Level loaded in %dus", (s32)(OS_CYCLES_TO_USEC(osGetTime() - first)));
+    append_puppyprint_log(textBytes);
+#endif
     return TRUE;
 }
 

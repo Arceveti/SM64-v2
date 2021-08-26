@@ -11,7 +11,7 @@
 #include "levels/rr/header.h"
 #include "mario.h"
 #include "mario_actions_cutscene.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "object_list_processor.h"
 #include "rendering_graph_node.h"
 #include "save_file.h"

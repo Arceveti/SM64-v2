@@ -9,7 +9,7 @@
 #include "area.h"
 #include "interaction.h"
 #include "mario_actions_object.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "behavior_data.h"
 #include "rumble_init.h"
 

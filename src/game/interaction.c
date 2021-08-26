@@ -15,7 +15,7 @@
 #include "level_update.h"
 #include "mario.h"
 #include "mario_step.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "obj_behaviors.h"
 #include "object_helpers.h"
 #include "save_file.h"

@@ -8,7 +8,7 @@
 #include "surface_collision.h"
 #include "surface_load.h"
 #include "math_util.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "game/puppyprint.h"
 #endif
 
@@ -296,10 +296,10 @@ s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 ra
 s32 find_wall_collisions(struct WallCollisionData *colData) {
     struct SurfaceNode *node;
     s32 numCollisions = 0;
-    s16 x             = colData->x;
-    s16 z             = colData->z;
-#ifdef PUPPYPRINT
-    OSTime first      = osGetTime();
+    s32 x = colData->x;
+    s32 z = colData->z;
+#if PUPPYPRINT_DEBUG
+    OSTime first = osGetTime();
 #endif
     colData->numWalls = 0;
     if ((x <= -LEVEL_BOUNDARY_MAX)
@@ -402,7 +402,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             }
         }
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return numCollisions;
@@ -523,7 +523,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     struct SurfaceNode *surfaceList;
     f32 height        = CELL_HEIGHT_LIMIT;
     f32 dynamicHeight = CELL_HEIGHT_LIMIT;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     *pceil            = NULL;
@@ -549,7 +549,7 @@ f32 find_ceil(f32 xPos, f32 yPos, f32 zPos, struct Surface **pceil) {
     *pceil = ceil;
     // Increment the debug tracker.
     gNumCalls.ceil++;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return height;
@@ -744,7 +744,7 @@ UNUSED f32 unused_find_dynamic_floor(f32 xPos, f32 yPos, f32 zPos, struct Surfac
  * Find the highest floor under a given position and return the height.
  */
 f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     struct Surface *floor, *dynamicFloor;
@@ -757,7 +757,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
      || (xPos >=  LEVEL_BOUNDARY_MAX)
      || (zPos <= -LEVEL_BOUNDARY_MAX)
      || (zPos >=  LEVEL_BOUNDARY_MAX)) {   
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
         collisionTime[perfIteration] += (osGetTime() - first);
 #endif
         return height;
@@ -791,7 +791,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     gFindFloorExcludeDynamic           = FALSE;
     // Increment the debug tracker.
     gNumCalls.floor++;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return height;
@@ -865,7 +865,7 @@ s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
     register s32 val, loX, hiX, loZ, hiZ;
     s32 waterLevel = FLOOR_LOWER_LIMIT;
     Collision *p = gEnvironmentRegions;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
 #ifdef NEW_WATER_SURFACES
@@ -899,7 +899,7 @@ s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
         *pfloor = NULL;
 #endif
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime()-first);
 #endif
     return waterLevel;
@@ -913,7 +913,7 @@ s32 find_water_level(s32 x, s32 z) {
     register s32 val, loX, hiX, loZ, hiZ;
     s32 waterLevel = FLOOR_LOWER_LIMIT;
     Collision *p = gEnvironmentRegions;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
 #ifdef NEW_WATER_SURFACES
@@ -941,7 +941,7 @@ s32 find_water_level(s32 x, s32 z) {
             p++;
         }
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return waterLevel;
@@ -955,7 +955,7 @@ s32 find_poison_gas_level(s32 x, s32 z) {
     register s32 val, loX, hiX, loZ, hiZ;
     s32 gasLevel = FLOOR_LOWER_LIMIT;
     Collision *p = gEnvironmentRegions;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     if (p != NULL) {
@@ -978,7 +978,7 @@ s32 find_poison_gas_level(s32 x, s32 z) {
             p += 6;
         }
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return gasLevel;
@@ -1121,7 +1121,7 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
     f32 length;
     Vec3f chk_hit_pos;
     register f32 top, bottom;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     // Get upper and lower bounds of ray
@@ -1150,7 +1150,7 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
             *max_length = length;
         }
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     collisionTime[perfIteration] += (osGetTime() - first);
 #endif
 }

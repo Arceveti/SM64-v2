@@ -3,7 +3,7 @@
 #include "sm64.h"
 #include "mario_actions_submerged.h"
 #include "level_update.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "engine/math_util.h"
 #include "area.h"
 #include "game_init.h"

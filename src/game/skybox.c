@@ -6,7 +6,7 @@
 #include "gfx_dimensions.h"
 #include "level_update.h"
 #include "game_init.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "save_file.h"
 #include "segment2.h"
 #include "sm64.h"

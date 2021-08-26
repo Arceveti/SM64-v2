@@ -7,15 +7,15 @@
 #ifdef METAL_CAP_REFLECTION_LAKITU
 #include "level_update.h"
 #endif
-#include "main.h"
-#include "memory.h"
+#include "boot/main.h"
+#include "boot/memory.h"
 #include "print.h"
 #include "rendering_graph_node.h"
 #include "shadow.h"
 #include "sm64.h"
 #include "game_init.h"
 #include "engine/extended_bounds.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
 #include "debug_box.h"
@@ -996,7 +996,7 @@ void geo_process_node_and_siblings(struct GraphNode *firstNode) {
  * to set up the projection and draw display lists.
  */
 void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) {
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
     if (node->node.flags & GRAPH_RENDER_ACTIVE) {
@@ -1033,7 +1033,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         }
         main_pool_free(gDisplayListHeap);
     }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     profiler_update(graphTime, first);
 #endif
 }

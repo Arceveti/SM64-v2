@@ -9,7 +9,7 @@
 #include "game/game_init.h"
 #include "game/ingame_menu.h"
 #include "game/level_update.h"
-#include "game/memory.h"
+#include "boot/memory.h"
 #include "game/object_helpers.h"
 #include "game/object_list_processor.h"
 #include "game/save_file.h"

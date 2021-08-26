@@ -16,7 +16,7 @@
 #include "include/text_strings.h"
 #include "segment2.h"
 #include "ingame_menu.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "object_list_processor.h"
 #include "object_helpers.h"
 #include "behavior_data.h"

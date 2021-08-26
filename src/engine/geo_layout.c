@@ -3,7 +3,7 @@
 
 #include "geo_layout.h"
 #include "math_util.h"
-#include "game/memory.h"
+#include "boot/memory.h"
 #include "graph_node.h"
 
 typedef void (*GeoLayoutCommandProc)(void);

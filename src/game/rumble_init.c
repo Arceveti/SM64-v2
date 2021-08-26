@@ -2,7 +2,7 @@
 #include "macros.h"
 
 #include "buffers/buffers.h"
-#include "main.h"
+#include "boot/main.h"
 #include "rumble_init.h"
 #include "config.h"
 

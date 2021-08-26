@@ -6,7 +6,7 @@
 #include "engine/math_util.h"
 #include "level_table.h"
 #include "level_update.h"
-#include "main.h"
+#include "boot/main.h"
 #include "paintings.h"
 #include "print.h"
 #include "profiler.h"
@@ -15,7 +15,7 @@
 #include "sm64.h"
 #include "sound_init.h"
 #include "rumble_init.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
 
@@ -307,7 +307,7 @@ void audio_game_loop_tick(void) {
 void thread4_sound(UNUSED void *arg) {
     audio_init();
     sound_init();
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime lastTime;
 #endif
     osCreateMesgQueue(&sSoundMesgQueue, sSoundMesgBuf, ARRAY_COUNT(sSoundMesgBuf));
@@ -315,7 +315,7 @@ void thread4_sound(UNUSED void *arg) {
     while (TRUE) {
         OSMesg msg;
         osRecvMesg(&sSoundMesgQueue, &msg, OS_MESG_BLOCK);
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
         while (TRUE) {
             lastTime = osGetTime();
             dmaAudioTime[perfIteration] = 0;
@@ -326,7 +326,7 @@ void thread4_sound(UNUSED void *arg) {
                 spTask = create_next_audio_frame_task();
                 if (spTask != NULL) dispatch_audio_sptask(spTask);
                 profiler_log_thread4_time();
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
                 profiler_update(audioTime, lastTime);
                 audioTime[perfIteration] -= dmaAudioTime[perfIteration];
                 if ((benchmarkLoop > 0) && (benchOption == 1)) {
@@ -341,7 +341,7 @@ void thread4_sound(UNUSED void *arg) {
                 }
 #endif
             }
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
         }
 #endif
     }

@@ -8,7 +8,7 @@
 #include "game/game_init.h"
 #include "geo_misc.h"
 #include "gfx_dimensions.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "screen_transition.h"
 #include "segment2.h"
 #include "sm64.h"

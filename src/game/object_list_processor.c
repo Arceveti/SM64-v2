@@ -12,14 +12,14 @@
 #include "interaction.h"
 #include "level_update.h"
 #include "mario.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "object_collision.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"
 #include "platform_displacement.h"
 #include "profiler.h"
 #include "spawn_object.h"
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
 
@@ -533,7 +533,7 @@ void unload_deactivated_objects(void) {
  */
 void update_objects(void) {
     // s64 cycleCounts[30];
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime first   = osGetTime();
     OSTime colTime = collisionTime[perfIteration];
 #endif
@@ -584,7 +584,7 @@ void update_objects(void) {
         gTimeStopState &= ~TIME_STOP_ACTIVE;
     }
     gPrevFrameObjectCount = gObjectCounter;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     profiler_update(behaviourTime, first);
     behaviourTime[perfIteration] -= (collisionTime[perfIteration] + colTime);
 #endif

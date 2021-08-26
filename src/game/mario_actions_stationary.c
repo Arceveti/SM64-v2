@@ -14,7 +14,7 @@
 #include "mario.h"
 #include "mario_actions_stationary.h"
 #include "mario_step.h"
-#include "memory.h"
+#include "boot/memory.h"
 #include "save_file.h"
 #include "sound_init.h"
 #include "surface_terrains.h"
