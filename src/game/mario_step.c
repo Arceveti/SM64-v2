@@ -196,7 +196,7 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
     //? This is responsible for some downwarps.
     if (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT)) m->pos[1] = m->floorHeight;
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
 MarioStep stationary_ground_step(struct MarioState *m) {
@@ -216,7 +216,7 @@ MarioStep stationary_ground_step(struct MarioState *m) {
     } else {
         if (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT)) m->pos[1] = m->floorHeight;
         vec3f_copy(marioObj->header.gfx.pos, m->pos);
-        vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+        vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     }
     return stepResult;
 #endif
@@ -433,7 +433,7 @@ MarioStep perform_ground_step(struct MarioState *m) {
 #endif
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) stepResult = GROUND_STEP_HIT_WALL;
 #ifdef WALL_QUICKSAND
     // Handle wall quicksand
@@ -875,7 +875,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     if (m->action != ACT_FLYING) apply_gravity(m);
     apply_vertical_wind(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     /*if (stepResult == AIR_STEP_HIT_WALL && m->wall != NULL) {
         wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
         if ((stepArg & AIR_STEP_CHECK_BONK) && (wallDYaw < -0x6000 || wallDYaw > 0x6000)) {

@@ -27,7 +27,7 @@
 #include "sound_init.h"
 #ifdef METAL_CAP_REFLECTION
 #include "buffers/framebuffers.h"
-#include "texture_edit.h"
+#include "engine/texture_edit.h"
 #endif
 #ifdef PUPPYCAM
 #include "puppycam2.h"
@@ -354,7 +354,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
         if ((action != ACT_BUTT_SLIDE)
          && (action != ACT_HOLD_BUTT_SLIDE)
          && (action != ACT_WALKING)
-         && (action != ACT_RIDING_SHELL_GROUND)) vec3s_copy(bodyState->torsoAngle, gVec3sZero);
+         && (action != ACT_RIDING_SHELL_GROUND)) vec3a_copy(bodyState->torsoAngle, gVec3sZero);
         //! vec3s_copy_offset?
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
@@ -382,8 +382,8 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
             rotNode->rotation[1] = bodyState->headAngle[2];
             rotNode->rotation[2] = bodyState->headAngle[0];
         } else {
-            vec3s_set(bodyState->headAngle, 0x0, 0x0, 0x0);
-            vec3s_set(rotNode->rotation,    0x0, 0x0, 0x0);
+            vec3a_set(bodyState->headAngle, 0x0, 0x0, 0x0);
+            vec3a_set(rotNode->rotation,    0x0, 0x0, 0x0);
         }
     }
     return NULL;
@@ -620,7 +620,7 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 // TODO: Is this a geo layout copy or a graph node copy?
                 gMirrorMario.sharedChild     = mario->header.gfx.sharedChild;
                 gMirrorMario.areaIndex       = mario->header.gfx.areaIndex;
-                vec3s_copy(gMirrorMario.angle, mario->header.gfx.angle);
+                vec3a_copy(gMirrorMario.angle, mario->header.gfx.angle);
                 vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos  );
                 vec3f_copy(gMirrorMario.scale, mario->header.gfx.scale);
                 gMirrorMario.animInfo        = mario->header.gfx.animInfo;

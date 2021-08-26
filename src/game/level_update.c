@@ -363,7 +363,7 @@ void warp_credits(void) {
     gCurrLevelNum = sWarpDest.levelNum;
     load_area(sWarpDest.areaIdx);
     vec3s_copy(gPlayerSpawnInfos[0].startPos, gCurrCreditsEntry->marioPos);
-    vec3s_set(gPlayerSpawnInfos[0].startAngle, 0x0, (0x100 * gCurrCreditsEntry->marioAngle), 0x0);
+    vec3a_set(gPlayerSpawnInfos[0].startAngle, 0x0, (0x100 * gCurrCreditsEntry->marioAngle), 0x0);
     gPlayerSpawnInfos[0].areaIndex = sWarpDest.areaIdx;
     load_mario_area();
     init_mario();

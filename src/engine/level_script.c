@@ -379,8 +379,8 @@ static void level_cmd_23(void) {
 }
 
 static void level_cmd_init_mario(void) {
-    vec3s_set(gMarioSpawnInfo->startPos  , 0, 0, 0);
-    vec3s_set(gMarioSpawnInfo->startAngle, 0, 0, 0);
+    vec3s_set(gMarioSpawnInfo->startPos,     0,   0,   0);
+    vec3a_set(gMarioSpawnInfo->startAngle, 0x0, 0x0, 0x0);
     gMarioSpawnInfo->activeAreaIndex = -1;
     gMarioSpawnInfo->areaIndex       =  0;
     gMarioSpawnInfo->behaviorArg     = CMD_GET(u32,    4);
@@ -398,12 +398,12 @@ static void level_cmd_place_object(void) {
     if ((sCurrAreaIndex != -1) && ((CMD_GET(u8, 2) & val7) || (CMD_GET(u8, 2) == 0x1F))) {
         model                                   = CMD_GET(u32, 0x18);
         spawnInfo                               = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
-        spawnInfo->startPos[0]                  = CMD_GET(s16, 4);
-        spawnInfo->startPos[1]                  = CMD_GET(s16, 6);
-        spawnInfo->startPos[2]                  = CMD_GET(s16, 8);
-        spawnInfo->startAngle[0]                = CMD_GET(s16, 10) * 0x8000 / 180;
-        spawnInfo->startAngle[1]                = CMD_GET(s16, 12) * 0x8000 / 180;
-        spawnInfo->startAngle[2]                = CMD_GET(s16, 14) * 0x8000 / 180;
+        spawnInfo->startPos[0]                  =  CMD_GET(s16, 4);
+        spawnInfo->startPos[1]                  =  CMD_GET(s16, 6);
+        spawnInfo->startPos[2]                  =  CMD_GET(s16, 8);
+        spawnInfo->startAngle[0]                = (CMD_GET(s16, 10) * 0x8000 / 180);
+        spawnInfo->startAngle[1]                = (CMD_GET(s16, 12) * 0x8000 / 180);
+        spawnInfo->startAngle[2]                = (CMD_GET(s16, 14) * 0x8000 / 180);
         spawnInfo->areaIndex                    = sCurrAreaIndex;
         spawnInfo->activeAreaIndex              = sCurrAreaIndex;
         spawnInfo->behaviorArg                  = CMD_GET(u32, 16);
@@ -570,7 +570,7 @@ static void level_cmd_set_mario_start_pos(void) {
 #else
     vec3s_copy(gMarioSpawnInfo->startPos, CMD_GET(Vec3s, 6));
 #endif
-    vec3s_set(gMarioSpawnInfo->startAngle, 0, CMD_GET(s16, 4) * 0x8000 / 180, 0);
+    vec3a_set(gMarioSpawnInfo->startAngle, 0x0, (CMD_GET(s16, 4) * 0x8000 / 180), 0x0);
     sCurrentCmd = CMD_NEXT;
 }
 

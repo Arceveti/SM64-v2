@@ -3029,7 +3029,7 @@ Bool32 is_pos_in_bounds(Vec3f pos, Vec3f center, Vec3f bounds, Angle boundsYaw) 
             (-bounds[2] < rel[2]) && (rel[2] < bounds[2]));
 }
 
-//! move to math_util
+//! move to math_util?
 /**
  * Rotates a vector in the horizontal plane and copies it to a new vector.
  */
@@ -3039,7 +3039,7 @@ void rotate_in_xz(Vec3f dst, Vec3f src, Angle yaw) {
     dst[2] = ((src[2] * coss(yaw)) - (src[0] * sins(yaw)));
 }
 
-//! move to math_util
+//! move to math_util?
 /**
  * Rotates a vector in the YZ plane and copies it to a new vector.
  *
@@ -3416,7 +3416,7 @@ void clear_cutscene_vars(UNUSED struct Camera *c) {
     for (i = 0; i < 10; i++) {
         vec3f_set(sCutsceneVars[i].point, 0.0f, 0.0f, 0.0f);
         // vec3f_set(sCutsceneVars[i].unusedPoint, 0.0f, 0.0f, 0.0f);
-        vec3s_set(sCutsceneVars[i].angle, 0x0, 0x0, 0x0);
+        vec3a_set(sCutsceneVars[i].angle, 0x0, 0x0, 0x0);
     }
 }
 
@@ -5406,7 +5406,7 @@ void cutscene_grand_star_front_of_mario(struct Camera *c) {
  * Started shortly after Mario starts the triple jump. Stores Mario's face angle and zeros cvar2.
  */
 void cutscene_grand_star_mario_jump(UNUSED struct Camera *c) {
-    vec3s_set(sCutsceneVars[0].angle, 0x0, sMarioCamState->faceAngle[1], 0x0);
+    vec3a_set(sCutsceneVars[0].angle, 0x0, sMarioCamState->faceAngle[1], 0x0);
     vec3f_set(sCutsceneVars[2].point, 0.0f, 0.0f, 0.0f);
 }
 
@@ -5967,7 +5967,7 @@ void cutscene_bowser_arena_start(struct Camera *c) {
     //! offset actually moves the focus to (0, 427, -200)
     vec3f_set(sCutsceneVars[0].point, 0.0f, 120.0f, -800.0f);
 #endif
-    vec3s_set(sCutsceneVars[2].angle, gSecondCameraFocus->oMoveAnglePitch, gSecondCameraFocus->oMoveAngleYaw, gSecondCameraFocus->oMoveAngleRoll);
+    vec3a_set(sCutsceneVars[2].angle, gSecondCameraFocus->oMoveAnglePitch, gSecondCameraFocus->oMoveAngleYaw, gSecondCameraFocus->oMoveAngleRoll);
     // Set the camera's position and focus.
     cutscene_bowser_arena_set_pos(c);
     cutscene_bowser_arena_set_focus(c);
@@ -6276,7 +6276,7 @@ void cutscene_prepare_cannon_start(struct Camera *c) {
     sCutsceneVars[2].point[0] = 30.0f;
     // Store the cannon door's position in sCutsceneVars[3]'s point
     object_pos_to_vec3f(sCutsceneVars[3].point, gCutsceneFocus);
-    vec3s_set(sCutsceneVars[5].angle, 0x0, 0x0, 0x0);
+    vec3a_set(sCutsceneVars[5].angle, 0x0, 0x0, 0x0);
 }
 
 /**
@@ -6810,7 +6810,7 @@ void cutscene_read_message_end(struct Camera *c) {
  */
 void cutscene_exit_succ_start(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[7].point, sMarioCamState->pos);
-    vec3s_copy(sCutsceneVars[7].angle, sMarioCamState->faceAngle);
+    vec3a_copy(sCutsceneVars[7].angle, sMarioCamState->faceAngle);
     vec3f_set(sCutsceneVars[6].point,   6.0f, 363.0f, 543.0f);
     vec3f_set(sCutsceneVars[5].point, 137.0f, 226.0f, 995.0f);
 }
@@ -6922,7 +6922,7 @@ void cutscene_exit_non_painting_succ(struct Camera *c) {
  */
 void cutscene_non_painting_death_start(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[7].point, sMarioCamState->pos);
-    vec3s_copy(sCutsceneVars[7].angle, sMarioCamState->faceAngle);
+    vec3a_copy(sCutsceneVars[7].angle, sMarioCamState->faceAngle);
     vec3f_set( sCutsceneVars[6].point, -42.0f, 350.0f,  727.0f);
     // This is always overwritten, except in the unused cutscene_exit_bowser_death()
     vec3f_set( sCutsceneVars[5].point, 107.0f, 226.0f, 1187.0f);
@@ -7461,7 +7461,7 @@ void cutscene_sliding_doors_open_start(struct Camera *c) {
  */
 void cutscene_sliding_doors_open_set_cvars(UNUSED struct Camera *c) {
     vec3f_copy(sCutsceneVars[1].point, sMarioCamState->pos);
-    vec3s_copy(sCutsceneVars[0].angle, sMarioCamState->faceAngle);
+    vec3a_copy(sCutsceneVars[0].angle, sMarioCamState->faceAngle);
 #ifdef FIX_CAMERA_OFFSET_ROTATED
     vec3f_set( sCutsceneVars[0].point, 80.0f, 325.0f, -200.0f);
 #else
@@ -7538,22 +7538,15 @@ void cutscene_double_doors_end(struct Camera *c) {
 void cutscene_enter_painting(struct Camera *c) {
     struct Surface *floor, *highFloor;
     Vec3f paintingPos, focus, focusOffset;
-    Vec3s paintingAngle;
+    Vec3a paintingAngle;
     f32 floorHeight;
     // Zoom in
     set_fov_function(CAM_FOV_APP_20);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
     if (gRipplingPainting != NULL) {
-        paintingAngle[0] = 0x0;
-        paintingAngle[1] = (s32)((gRipplingPainting->yaw / 360.0f) * 65536.0f); // convert degrees to IAU
-        paintingAngle[2] = 0x0;
-        focusOffset[0]   = (gRipplingPainting->size / 2);
-        focusOffset[1]   = focusOffset[0];
-        focusOffset[2]   = 0;
-        //! vec3f_copy?
-        paintingPos[0]   = gRipplingPainting->posX;
-        paintingPos[1]   = gRipplingPainting->posY;
-        paintingPos[2]   = gRipplingPainting->posZ;
+        vec3a_set(paintingAngle, 0x0, (s32)((gRipplingPainting->yaw / 360.0f) * 65536.0f), 0x0); // convert degrees to IAU
+        vec3f_set(focusOffset, (gRipplingPainting->size / 2), focusOffset[0], 0.0f);
+        vec3f_copy(paintingPos, gRipplingPainting->pos);
         offset_rotated(focus, paintingPos, focusOffset, paintingAngle);
         approach_vec3f_asymptotic(c->focus, focus, 0.1f, 0.1f, 0.1f);
 #ifdef FIX_CAMERA_OFFSET_ROTATED
@@ -7665,7 +7658,7 @@ void cutscene_unused_exit_start(struct Camera *c) {
     Vec3f offset;
     Vec3s marioAngle;
     vec3f_set(offset, 200.0f, 300.0f, 200.0f);
-    vec3s_set(marioAngle, 0x0, sMarioCamState->faceAngle[1], 0x0);
+    vec3a_set(marioAngle, 0x0, sMarioCamState->faceAngle[1], 0x0);
     offset_rotated(c->pos, sMarioCamState->pos, offset, marioAngle);
     set_focus_rel_mario(c, 0.0f, 125.0f, 0.0f, 0);
 }
@@ -7800,7 +7793,7 @@ void cutscene_door_move_behind_mario(struct Camera *c) {
     reset_pan_distance(c);
     determine_pushing_or_pulling_door(&doorRotation);
     set_focus_rel_mario(c, 0.0f, 125.0f, 0.0f, 0);
-    vec3s_set(sCutsceneVars[0].angle, 0x0, (sMarioCamState->faceAngle[1] + doorRotation), 0x0);
+    vec3a_set(sCutsceneVars[0].angle, 0x0, (sMarioCamState->faceAngle[1] + doorRotation), 0x0);
 #ifdef FIX_CAMERA_OFFSET_ROTATED
     vec3f_set(camOffset, 0.0f, 125.0f, -250.0f);
 #else

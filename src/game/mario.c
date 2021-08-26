@@ -578,6 +578,13 @@ Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
 }
 
+// void update_mario_move_angles(struct MarioState *m) {
+//     register f32 ls = (sqr(m->vel[0]) + m->vel[2]);
+//     m->moveYaw      = atan2s(m->vel[2], m->vel[0]);
+//     m->lateralSpeed = sqrtf(ls);
+//     m->moveSpeed    = sqrtf(ls + sqr(m->vel[1]));
+// }
+
 /**
  * Adjusts Mario's camera and sound based on his action status.
  */
@@ -882,7 +889,7 @@ Bool32 check_common_hold_action_exits(struct MarioState *m) {
  */
 Bool32 transition_submerged_to_walking(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
     return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
 }
 
@@ -892,7 +899,7 @@ Bool32 transition_submerged_to_walking(struct MarioState *m) {
  */
 Bool32 transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
     if (m->heldObj == NULL) {
         return set_mario_action(m, ((m->input & INPUT_A_DOWN) ? ACT_DIVE      : ACT_FREEFALL     ), 0);
     } else {
@@ -908,7 +915,7 @@ Bool32 set_water_plunge_action(struct MarioState *m) {
     m->forwardVel   = (m->forwardVel / 4.0f);
     m->vel[1]       = (m->vel[1]     / 2.0f);
     m->faceAngle[2] = 0x0;
-    vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
     if (!(m->action & ACT_FLAG_DIVING)) m->faceAngle[0] = 0x0;
     if (m->area->camera->mode != CAMERA_MODE_WATER_SURFACE) set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
 #ifdef WATER_GROUND_POUND
@@ -1325,7 +1332,7 @@ void update_mario_breath(struct MarioState *m) {
 void update_mario_info_for_cam(struct MarioState *m) {
     m->marioBodyState->action  = m->action;
     m->statusForCamera->action = m->action;
-    vec3s_copy(m->statusForCamera->faceAngle, m->faceAngle);
+    vec3a_copy(m->statusForCamera->faceAngle, m->faceAngle);
     if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) vec3f_copy(m->statusForCamera->pos, m->pos);
 }
 
@@ -1531,8 +1538,8 @@ void init_mario(void) {
     gMarioState->area                                 = gCurrentArea;
     gMarioState->marioObj                             = gMarioObject;
     gMarioState->marioObj->header.gfx.animInfo.animID = -1;
-    vec3s_copy(    gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
-    vec3s_set(     gMarioState->angleVel , 0, 0, 0);
+    vec3a_copy(    gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
+    vec3a_set(     gMarioState->angleVel , 0, 0, 0);
     vec3s_to_vec3f(gMarioState->pos      , gMarioSpawnInfo->startPos);
     vec3f_set(     gMarioState->vel      , 0, 0, 0);
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], gMarioState->pos[1], gMarioState->pos[2], &gMarioState->floor);
@@ -1545,7 +1552,7 @@ void init_mario(void) {
     vec3f_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
     vec3s_to_vec3i(&gMarioState->marioObj->oMoveAngleVec, gMarioState->faceAngle);
     vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-    vec3s_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
+    vec3a_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
     if (save_file_get_cap_pos(capPos) && (count_objects_with_behavior(bhvNormalCap) > 1)) {
         capObject                                     = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
         vec3s_to_vec3f(&capObject->oPosVec, capPos);

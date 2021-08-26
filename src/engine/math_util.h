@@ -48,6 +48,9 @@ extern s16 gArctanTable[];
 #define sqr(x)  ((x) * (x))
 #define cube(x) ((x) * (x) * (x))
 
+#define vec3a_copy(dst, src    ) (vec3s_copy((dst), (src)        ))
+#define vec3a_set( dst, x, y, z) (vec3s_set( (dst), (x), (y), (z)))
+
 extern Vec3f gVec3fZero;
 extern Vec3s gVec3sZero;
 extern Vec3i gVec3iZero;

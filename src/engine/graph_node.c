@@ -161,7 +161,7 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
         vec3s_copy(graphNode->translation, translation);
-        vec3s_copy(graphNode->rotation, rotation);
+        vec3a_copy(graphNode->rotation, rotation);
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -195,7 +195,7 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
-        vec3s_copy(graphNode->rotation, rotation);
+        vec3a_copy(graphNode->rotation, rotation);
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -230,7 +230,7 @@ struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_OBJECT);
         vec3f_copy(graphNode->pos, pos);
         vec3f_copy(graphNode->scale, scale);
-        vec3s_copy(graphNode->angle, angle);
+        vec3a_copy(graphNode->angle, angle);
         graphNode->sharedChild                   = sharedChild;
         graphNode->throwMatrix                   = NULL;
         graphNode->animInfo.animID               = 0; //? MARIO_ANIM_SLOW_LEDGE_CLIMB;
@@ -525,7 +525,7 @@ void geo_reset_object_node(struct GraphNodeObject *graphNode) {
 void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3a angle) {
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
     vec3f_copy(graphNode->pos, pos);
-    vec3s_copy(graphNode->angle, angle);
+    vec3a_copy(graphNode->angle, angle);
     graphNode->sharedChild      = sharedChild;
     graphNode->unk4C            = 0;
     graphNode->throwMatrix      = NULL;
@@ -541,7 +541,7 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
  */
 void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo *spawn) {
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
-    vec3s_copy(graphNode->angle, spawn->startAngle);
+    vec3a_copy(graphNode->angle, spawn->startAngle);
     graphNode->pos[0]           = (f32) spawn->startPos[0];
     graphNode->pos[1]           = (f32) spawn->startPos[1];
     graphNode->pos[2]           = (f32) spawn->startPos[2];

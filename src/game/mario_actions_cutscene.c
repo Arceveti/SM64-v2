@@ -332,7 +332,7 @@ Bool32 act_reading_npc_dialog(struct MarioState *m) {
     if (m->actionState < 8) {
         // turn to NPC
 #ifdef SSL_PILLARS_CUTSCENE
-        if (gCutsceneFocus != NULL && gCutsceneFocus->behavior == segmented_to_virtual(bhvPyramidTop)) {
+        if ((gCutsceneFocus != NULL) && (gCutsceneFocus->behavior == segmented_to_virtual(bhvPyramidTop))) {
             angleToNPC = mario_obj_angle_to_object(m, gCutsceneFocus);
             turnSpeed = 0x1000;
         } else {
@@ -346,7 +346,7 @@ Bool32 act_reading_npc_dialog(struct MarioState *m) {
         // turn head to npc
         m->actionTimer += headTurnAmount;
         // set animation
-        set_mario_animation(m, m->heldObj == NULL ? MARIO_ANIM_FIRST_PERSON : MARIO_ANIM_IDLE_WITH_LIGHT_OBJ);
+        set_mario_animation(m, ((m->heldObj == NULL) ? MARIO_ANIM_FIRST_PERSON : MARIO_ANIM_IDLE_WITH_LIGHT_OBJ));
     } else if ((m->actionState >= 9) && (m->actionState < 17)) {
         // look back from facing NPC
         m->actionTimer -= headTurnAmount;
@@ -358,8 +358,8 @@ Bool32 act_reading_npc_dialog(struct MarioState *m) {
         }
     }
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
-    vec3s_set( m->marioBodyState->headAngle, m->actionTimer, 0x0, 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioBodyState->headAngle, m->actionTimer, 0x0, 0x0);
     if (m->actionState != 8) m->actionState++;
     return FALSE;
 }
@@ -368,7 +368,7 @@ Bool32 act_reading_npc_dialog(struct MarioState *m) {
 Bool32 act_waiting_for_dialog(struct MarioState *m) {
     set_mario_animation(m, ((m->heldObj == NULL) ? MARIO_ANIM_FIRST_PERSON : MARIO_ANIM_IDLE_WITH_LIGHT_OBJ));
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return FALSE;
 }
 
@@ -419,7 +419,7 @@ Bool32 act_reading_automatic_dialog(struct MarioState *m) {
         }
     }
     // apply head turn
-    vec3s_set(m->marioBodyState->headAngle, m->actionTimer, 0, 0);
+    vec3a_set(m->marioBodyState->headAngle, m->actionTimer, 0, 0);
     return FALSE;
 }
 
@@ -454,7 +454,7 @@ Bool32 act_reading_sign(struct MarioState *m) {
             break;
     }
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return FALSE;
 }
 
@@ -509,7 +509,7 @@ Bool32 act_debug_free_move(struct MarioState *m) {
     }
     m->faceAngle[1] = m->intendedYaw;
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return FALSE;
 }
 
@@ -568,7 +568,7 @@ Bool32 act_star_dance_water(struct MarioState *m) {
     m->faceAngle[1] = m->area->camera->yaw;
     set_mario_animation(m, ((m->actionState == 2) ? MARIO_ANIM_RETURN_FROM_WATER_STAR_DANCE : MARIO_ANIM_WATER_STAR_DANCE));
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     general_star_dance_handler(m, 1);
     if ((m->actionState != 2) && (m->actionTimer >= 62)) m->marioBodyState->handState = MARIO_HAND_PEACE_SIGN;
     return FALSE;
@@ -1562,7 +1562,7 @@ static void jumbo_star_cutscene_taking_off(struct MarioState *m) {
     vec3f_set(m->pos, 0.0f, 307.0f, marioObj->oMarioJumboStarCutscenePosZ);
     update_mario_pos_for_anim(m);
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
 // jumbo star cutscene: Mario flying
@@ -2006,7 +2006,7 @@ static Bool32 act_credits_cutscene(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_WATER_IDLE);
         vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
         // will copy over roll and pitch, if set
-        vec3s_copy(m->marioObj->header.gfx.angle, m->faceAngle);
+        vec3a_copy(m->marioObj->header.gfx.angle, m->faceAngle);
         m->particleFlags |= PARTICLE_BUBBLE;
     } else {
         set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);

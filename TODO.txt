@@ -1,6 +1,7 @@
 **TODO:**
 - Known Bugs:
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
+        - Reads a null floor when hitting the pillar for some reason
     - Goddard joints don't move properly on the Z axis
     - Audio is scuffed
         - Might be a HackerSM64 issue?
@@ -108,3 +109,85 @@
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
         - Including gd_math
+    - Move to src/boot:
+        - crash?
+        - nupiinitsram.c
+        - nupireadwritesram.c
+        - sram.h
+    - Move to src/engine:
+        - print?
+        - printf?
+        - object_collision?
+        - platform_displacement?
+        - rendering_graph_node?
+    - Move to src/menu?
+        - segment7.h
+        - hud
+        - ingame_menu
+        - save_file?
+        - print?
+        - printf?
+    - Boot or Engine folder?
+        - rumble_init
+        - _Ldtob.c
+        - _Litob.c
+        - _Printf.c
+    - Move to src/audio?
+        - sound_init
+        - spawn_sound?
+    - New /src/ folders:
+        - src/mario or src/player
+            - interaction?
+            - mario_actions_airborne
+            - mario_actions_automatic
+            - mario_actions_cutscene
+            - mario_actions_moving
+            - mario_actions_object
+            - mario_actions_stationary
+            - mario_actions_submerged
+            - mario_step
+            - mario
+            - platform_displacement
+        - src/object
+            - interaction?
+            - behavior_actions
+            - macro_special_objects
+            - obj_behaviors
+            - obj_behaviors_2
+            - object_collision
+            - object_helpers
+            - object_list_processor?
+            - spawn_object
+            - spawn_sound?
+        - src/camera
+            - camera
+            - cutscene
+            - Puppycam2
+        - src/debug
+            - crash_screen
+            - crash
+            - debug_box
+            - debug_course
+            - debug
+            - profiler
+            - puppycam
+        - src/area
+            - area
+            - level_update
+            - object_list_processor?
+        - src/geo
+            - envfx_bubbles
+            - envfx_snow
+            - geo_misc
+            - level_geo
+            - mario_misc
+            - moving_texture
+            - paintings
+            - screen_transition
+            - segment2.h?
+            - shadow
+            - skybox
+            - texscroll
+        - keep in src/game?
+            - game_init
+

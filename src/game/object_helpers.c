@@ -1515,7 +1515,7 @@ s32 cur_obj_follow_path(UNUSED s32 unusedArg) {
 
 void chain_segment_init(struct ChainSegment *segment) {
     vec3f_set(segment->pos, 0.0f, 0.0f, 0.0f);
-    vec3s_set(segment->angle, 0x0, 0x0, 0x0);
+    vec3a_set(segment->angle, 0x0, 0x0, 0x0);
 }
 
 void obj_scale_random(struct Object *obj, f32 rangeLength, f32 minScale) {

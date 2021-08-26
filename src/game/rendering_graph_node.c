@@ -655,7 +655,7 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         rotation[1] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
     } else {
-        vec3s_copy(rotation, gVec3sZero);
+        vec3a_copy(rotation, gVec3sZero);
     }
     mtxf_rotate_xyz_and_translate(matrix, translation, rotation);
     mtxf_mul(gMatStack[gMatStackIndex + 1], matrix, gMatStack[gMatStackIndex]);

@@ -369,7 +369,7 @@ void geo_layout_cmd_node_translation_rotation(void) {
             break;
         case 0x1:
             cmdPos = read_vec3s(translation, &cmdPos[1]);
-            vec3s_copy(rotation, gVec3sZero);
+            vec3a_copy(rotation, gVec3sZero);
             break;
         case 0x2:
             cmdPos = read_vec3s_angle(rotation, &cmdPos[1]);

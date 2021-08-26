@@ -55,10 +55,7 @@ struct Painting
     f32 yaw;
 
     /// The painting's position
-    //! Vec3f?
-    f32 posX;
-    f32 posY;
-    f32 posZ;
+    Vec3f pos;
 
     /// Controls how high the peaks of the ripple are.
     f32 currRippleMag;
@@ -95,8 +92,8 @@ struct Painting
 
     // Texture data
     const Texture *const *textureArray;
-    s16 textureWidth;
-    s16 textureHeight;
+    TextureCoord textureWidth;
+    TextureCoord textureHeight;
 
     /// Display list used when the painting is rippling.
     const Gfx *rippleDisplayList;

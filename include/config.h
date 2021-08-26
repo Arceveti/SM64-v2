@@ -553,8 +553,73 @@
 
 
 /****************************************************************
- * Movement - Ground                                            *
+ * Movement: General                                            *
  ****************************************************************/
+
+// Decides whether you can exit course while moving
+// Has no effect if you disable exit course)
+// (HackerSM64)
+#define EXIT_COURSE_WHILE_MOVING
+
+// Lets Mario transition from more actions to more other actions (Arceveti)
+#define ACTION_CANCELS
+
+// Enables the shindou pole fix and allows Mario to
+// swing around poles when grabbing them (Arceveti)
+#define POLE_SWING
+
+// Mario can move sideways on ledges (Arceveti)
+#define LEDGE_SIDLE
+
+// Mario's squish scale is smooth rather than being instantly set (Arceveti)
+#define SMOOTH_SQUISH
+
+// Change the movement speed when hanging from a ceiling (the vanilla value is 4.0f)
+// (HackerSM64)
+#define HANGING_SPEED 12.0f
+
+// Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles" (HackerSM64)
+// #define TIGHTER_HANGING_CONTROLS
+
+// Improved hanging which doesn't require holding down the A button (Arceveti)
+#define EASIER_HANGING
+
+// Number of steps before Mario falls off a ledge.
+// This allows Mario to walk over small gaps
+// and also helps prevent ledge jittering
+// (Arceveti)
+#define COYOTE_TIME      16
+
+// Number of null floors to check ahead through during a qstep.
+// Fixes many instances of invisible walls but may cause minor
+// issues on actual level boundaries, such as extra knockback
+// (Arceveti)
+#define NULL_FLOOR_STEPS 4
+
+// Mario hitbox values
+// Vanilla is 160.0f
+#define MARIO_HITBOX_HEIGHT         160.0f
+#define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT / 2)
+
+// Mario's hitbox height when in certain actions, such as crouching
+
+#define MARIO_SHORT_HITBOX_HEIGHT   100.0f
+// Mario's eye level for the camera
+#define MARIO_EYE_LEVEL             100.0f
+
+// The amount Mario will be able to be warped up/down onto a floor when walking onto it
+#define MARIO_STEP_HEIGHT           80.0f
+
+// Terminal velovity for gravity (75.0f is default) (Arceveti)
+#define TERMINAL_GRAVITY_VELOCITY   75.0f
+
+
+/****************************************************************
+ * Movement: Ground                                             *
+ ****************************************************************/
+
+// Number of ground steps per frame (Vanilla is 4)
+#define GROUND_NUM_STEPS 4
 
 // Disable BLJs and crush SimpleFlips's dreams (HackerSM64)
 // #define DISABLE_BLJ
@@ -582,8 +647,11 @@
 
 
 /****************************************************************
- * Movement - Airborne                                          *
+ * Movement: Airborne                                           *
  ****************************************************************/
+
+// Number of air steps per frame (Vanilla is 4)
+#define AIR_NUM_STEPS    4
 
 // Disables fall damage (HackerSM64)
 #define NO_FALL_DAMAGE
@@ -645,7 +713,10 @@
 // Ground pound jump similar to SMO (Unknown)
 #define GROUND_POUND_DIVE
 
-// Do air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti)
+// Do air steps while ground pounding
+// This preventing stuff like clipping through whomps,
+// but still isn't enough in some cases
+// (Arceveti)
 #define GROUND_POUND_AIR_STEP
 
 // Prevents bonks when ground pounding next to a wall (Arceveti)
@@ -656,8 +727,11 @@
 
 
 /****************************************************************
- * Movement - Submerged                                         *
+ * Movement: Submerged                                          *
  ****************************************************************/
+
+// Number of swimming steps per frame (Vanilla is 1)
+#define WATER_NUM_STEPS  4
 
 // Maximum swimming speed (vanilla is 28.0f, 32.0f is recommended)
 #define MAX_SWIMMING_SPEED 32.0f
@@ -673,73 +747,6 @@
 
 // Makes the pitch change when hitting the floor underwater smooth instead of instant (Arceveti)
 #define SMOOTH_WATER_FLOOR_PITCH
-
-
-/****************************************************************
- * Movement - Misc.                                             *
- ****************************************************************/
-
-// Decides whether you can exit course while moving
-// Has no effect if you disable exit course)
-// (HackerSM64)
-#define EXIT_COURSE_WHILE_MOVING
-
-// Lets Mario transition from more actions to more other actions (Arceveti)
-#define ACTION_CANCELS
-
-// Enables the shindou pole fix and allows Mario to
-// swing around poles when grabbing them (Arceveti)
-#define POLE_SWING
-
-// Mario can move sideways on ledges (Arceveti)
-#define LEDGE_SIDLE
-
-// Mario's squish scale is smooth rather than being instantly set (Arceveti)
-#define SMOOTH_SQUISH
-
-// Change the movement speed when hanging from a ceiling (the vanilla value is 4.0f)
-// (HackerSM64)
-#define HANGING_SPEED 12.0f
-
-// Makes Mario face the direction of the analog stick directly while hanging from a ceiling, without doing "semicircles" (HackerSM64)
-// #define TIGHTER_HANGING_CONTROLS
-
-// Improved hanging which doesn't require holding down the A button (Arceveti)
-#define EASIER_HANGING
-
-// Number of ground steps per frame (Vanilla is 4)
-#define GROUND_NUM_STEPS 4
-
-// Number of air steps per frame (Vanilla is 4)
-#define AIR_NUM_STEPS    4
-
-// Number of swimming steps per frame (Vanilla is 1)
-#define WATER_NUM_STEPS  4
-
-// Number of steps before Mario falls off a ledge.
-// This allows Mario to walk over small gaps
-// and also helps prevent ledge jittering
-// (Arceveti)
-#define COYOTE_TIME      16
-
-// Number of null floors to check ahead through during a qstep.
-// Fixes many instances of invisible walls but may cause minor
-// issues on actual level boundaries, such as extra knockback
-// (Arceveti)
-#define NULL_FLOOR_STEPS 4
-
-// Mario hitbox values
-// Vanilla is 160.0f
-#define MARIO_HITBOX_HEIGHT         160.0f
-#define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT / 2)
-
-#define MARIO_SHORT_HITBOX_HEIGHT   100.0f
-#define MARIO_EYE_LEVEL             100.0f
-
-#define MARIO_STEP_HEIGHT           80.0f
-
-// Terminal velovity for gravity (75.0f is default) (Arceveti)
-#define TERMINAL_GRAVITY_VELOCITY   75.0f
 
 
 /********************************************************************************************************************************
@@ -759,6 +766,7 @@
 // #define FIX_CAMERA_OFFSET_ROTATED
 
 // In vanilla, the skybox FOV is always 90 degrees.
+// FoV seems to control skybox rotation due to how skyboxes are
 // #define UNLOCK_SKYBOX_FOV
 
 #endif // CONFIG_H

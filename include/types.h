@@ -364,6 +364,10 @@ struct MarioState
     /*0xBC*/ f32            peakHeight;
     /*0xC0*/ f32            quicksandDepth;
     /*0xC4*/ f32            windGravity;
+        //    Angle            movePitch;
+        //    Angle            moveYaw;
+        //      f32            lateralSpeed;
+        //      f32            moveSpeed;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
            Angle            floorPitch;
              f32            steepness;

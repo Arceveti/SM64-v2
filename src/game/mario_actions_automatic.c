@@ -87,7 +87,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
         }
     }
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set(m->marioObj->header.gfx.angle, m->usedObj->oMoveAnglePitch, m->faceAngle[1], m->usedObj->oMoveAngleRoll);
+    vec3a_set(m->marioObj->header.gfx.angle, m->usedObj->oMoveAnglePitch, m->faceAngle[1], m->usedObj->oMoveAngleRoll);
     return result;
 }
 
@@ -316,7 +316,7 @@ MarioStep update_hang_moving(struct MarioState *m) {
     nextPos[1]   =  m->pos[1];
     stepResult   = perform_hanging_step(m, nextPos);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return stepResult;
 }
 
@@ -328,7 +328,7 @@ void update_hang_stationary(struct MarioState *m) {
     vec3f_copy(m->vel, gVec3fZero);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
 #ifdef EASIER_HANGING
-    vec3s_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #endif
 }
 
@@ -607,7 +607,7 @@ Bool32 act_in_cannon(struct MarioState *m) {
             }
     }
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_DIVE);
     return FALSE;
 }
@@ -655,7 +655,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
     // Play sound on angle overflow
     if (prevTwirlYaw > m->twirlYaw) play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, (m->faceAngle[1] + m->twirlYaw), 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, (m->faceAngle[1] + m->twirlYaw), 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

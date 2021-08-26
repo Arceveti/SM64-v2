@@ -231,7 +231,7 @@ static MarioStep perform_water_step(struct MarioState *m) {
     stepResult = perform_water_full_step(m, nextPos);
 #endif
     vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3s_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
+    vec3a_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
     return stepResult;
 }
 
@@ -441,7 +441,7 @@ static Bool32 check_water_jump(struct MarioState *m) {
 #else
         if ((probe >= (m->waterLevel - 80)) && (  m->faceAngle[0] >= 0x0) &&  m->controller->stickY < -60.0f) {
 #endif
-            vec3s_set(m->angleVel, 0x0, 0x0, 0x0);
+            vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
             m->vel[1] = 62.0f;
             return set_mario_action(m, ((m->heldObj == NULL) ? ACT_WATER_JUMP : ACT_HOLD_WATER_JUMP), 0);
         }
@@ -935,7 +935,7 @@ static Bool32 act_caught_in_whirlpool(struct MarioState *m) {
     m->faceAngle[1] = (atan2s(dz, dx) + 0x8000);
     set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3s_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

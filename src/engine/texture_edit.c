@@ -2,7 +2,7 @@
 
 #include <PR/ultratypes.h>
 
-#include "engine/math_util.h"
+#include "math_util.h"
 // #include "gfx_dimensions.h"
 #include "texture_edit.h"
 

@@ -41,6 +41,7 @@ f32    find_floor_height_relative_polar(     struct MarioState *m, Angle angleFr
 Angle  find_floor_slope(                     struct MarioState *m, Angle yawOffset,      f32 distFromMario);
 // Angle  find_floor_pitch_from_floors(Vec3f oldPos, Vec3f newPos, f32 oldFloorHeight, f32 newFloorHeight);
 Bool32 analog_stick_held_back(               struct MarioState *m, Angle range);
+void   update_mario_move_angles(             struct MarioState *m);
 void   update_mario_sound_and_camera(        struct MarioState *m);
 void   set_steep_jump_action(                struct MarioState *m);
 Bool32 set_mario_action(                     struct MarioState *m, MarioAction action, u32 actionArg);
