@@ -49,7 +49,6 @@ u8 gLevelSelectHoldKeyTimer = 0;
  */
 s32 run_level_id_or_demo(s32 level) {
     gCurrDemoInput = NULL;
-
     if (level == LEVEL_NONE) {
         if (!gPlayer1Controller->buttonDown && !gPlayer1Controller->stickMag) {
             // start the demo. 800 frames has passed while
@@ -85,12 +84,12 @@ s32 run_level_id_or_demo(s32 level) {
  */
 s16 intro_level_select(void) {
     u32 index = 0;
-    if (gPlayer1Controller->rawStickY < -60
-     || gPlayer1Controller->rawStickX < -60
-     || gPlayer1Controller->buttonDown & (D_CBUTTONS | D_JPAD | L_CBUTTONS | L_JPAD)) index++;
-    if (gPlayer1Controller->rawStickY > 60
-     || gPlayer1Controller->rawStickX > 60
-     || gPlayer1Controller->buttonDown & (U_CBUTTONS | U_JPAD | R_CBUTTONS | R_JPAD)) index += 2;
+    if ((gPlayer1Controller->rawStickY < -60)
+     || (gPlayer1Controller->rawStickX < -60)
+     || (gPlayer1Controller->buttonDown & (D_CBUTTONS | D_JPAD | L_CBUTTONS | L_JPAD))) index++;
+    if ((gPlayer1Controller->rawStickY > 60)
+     || (gPlayer1Controller->rawStickX > 60)
+     || (gPlayer1Controller->buttonDown & (U_CBUTTONS | U_JPAD | R_CBUTTONS | R_JPAD))) index += 2;
     if (((index ^ gLevelSelectHoldKeyIndex) & index) == 2) {
         if (gCurrLevelNum > LEVEL_MAX) {
             gCurrLevelNum = LEVEL_MIN;
@@ -183,7 +182,6 @@ s32 intro_regular(void) {
  */
 s32 intro_game_over(void) {
     s32 level = LEVEL_NONE;
-
 #ifndef VERSION_JP
     if (sPlayMarioGameOver) {
         play_sound(SOUND_MARIO_GAME_OVER, gGlobalSoundSource);
@@ -198,7 +196,7 @@ s32 intro_game_over(void) {
         queue_rumble_decay(1);
 #endif
         // same criteria as intro_regular
-        level = 100 + gDebugLevelSelect;
+        level = (100 + gDebugLevelSelect);
 #ifndef VERSION_JP
         sPlayMarioGameOver = TRUE;
 #endif

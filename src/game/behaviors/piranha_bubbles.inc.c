@@ -35,20 +35,16 @@ void bhv_piranha_plant_bubble_loop(void) {
     AnimFrame32 lastFrame = (parent->header.gfx.animInfo.curAnim->loopEnd - 2);
     f32 doneShrinkingFrame; // the first frame after shrinking is done
     f32 beginGrowingFrame;  // the frame just before growing begins
-
     cur_obj_set_pos_relative(parent, 0.0f, 72.0f, 180.0f);
-
     switch (o->oAction) {
         case PIRANHA_PLANT_BUBBLE_ACT_IDLE:
             cur_obj_disable_rendering();
             scale = 0.0f;
             if (parent->oAction == PIRANHA_PLANT_ACT_SLEEPING) o->oAction = PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP;
             break;
-
         case PIRANHA_PLANT_BUBBLE_ACT_GROW_SHRINK_LOOP:
             if (parent->oDistanceToMario < parent->oDrawingDistance) {
                 cur_obj_enable_rendering();
-
                 if (parent->oAction == PIRANHA_PLANT_ACT_SLEEPING) {
                     /**
                      * Set the frame after shrinking is done to be slightly before
@@ -56,13 +52,12 @@ void bhv_piranha_plant_bubble_loop(void) {
                      * slightly after halfway. This leaves about 8 frames during
                      * which the bubble is at its smallest, where its scale is 1.0f.
                      */
-                    doneShrinkingFrame = lastFrame / 2.0f - 4.0f;
-                    beginGrowingFrame  = lastFrame / 2.0f + 4.0f;
-
+                    doneShrinkingFrame = ((lastFrame / 2.0f) - 4.0f);
+                    beginGrowingFrame  = ((lastFrame / 2.0f) + 4.0f);
                     // Note that the bubble always starts this loop at its largest.
                     if (frame < doneShrinkingFrame) {
                         // Shrink from 5.0f to 1.0f.
-                        scale = coss(frame / doneShrinkingFrame * 0x4000) * 4.0f + 1.0f;
+                        scale = ((coss((frame / doneShrinkingFrame) * 0x4000) * 4.0f) + 1.0f);
                     } else if (frame > beginGrowingFrame) {
                         // Grow from 1.0f to 5.0f.
                         scale = sins((
@@ -83,14 +78,11 @@ void bhv_piranha_plant_bubble_loop(void) {
                 cur_obj_disable_rendering();
             }
             break;
-
         case PIRANHA_PLANT_BUBBLE_ACT_BURST:
             cur_obj_disable_rendering();
             scale = 0.0f;
-
             // Spawn 15 small bubbles to make it look like this bubble burst.
-            for (i = 0; i < 15; i++) try_to_spawn_object(0, 1.0f, o, MODEL_BUBBLE, bhvPiranhaPlantWakingBubbles);
-
+            for ((i = 0); (i < 15); (i++)) try_to_spawn_object(0, 1.0f, o, MODEL_BUBBLE, bhvPiranhaPlantWakingBubbles);
             o->oAction = PIRANHA_PLANT_BUBBLE_ACT_IDLE;
             scale = 1.0f; // this has no effect; it is set to 0 in the idle state
             break;

@@ -56,7 +56,7 @@ void hidden_breakable_box_actions(void) {
             cur_obj_become_intangible();
             cur_obj_disable_rendering();
             o->oInteractStatus = INT_STATUS_NONE;
-            if ((switchObj = o->oHiddenObjectSwitchObj) != NULL && switchObj->oAction == PURPLE_SWITCH_ACT_IDLE) o->oAction = BREAKABLE_BOX_ACT_HIDDEN;
+            if (((switchObj = o->oHiddenObjectSwitchObj) != NULL) && (switchObj->oAction == PURPLE_SWITCH_ACT_IDLE)) o->oAction = BREAKABLE_BOX_ACT_HIDDEN;
             break;
     }
 }

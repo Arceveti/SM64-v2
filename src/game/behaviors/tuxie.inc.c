@@ -72,13 +72,12 @@ void tuxies_mother_act_receiving_baby(void) { // act 1
 }
 
 void tuxies_mother_act_idle(void) { // act 0
-    s32 nearBaby = FALSE;
     f32 dist;
     struct Object *smallPenguinObj = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &dist);
     cur_obj_scale(4.0f);
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
-    nearBaby = (dist < 500.0f);
-    if (smallPenguinObj != NULL && dist < 300.0f && smallPenguinObj->oHeldState != HELD_FREE) {
+    Bool32 nearBaby = (dist < 500.0f);
+    if ((smallPenguinObj != NULL) && (dist < 300.0f) && (smallPenguinObj->oHeldState != HELD_FREE)) {
         o->oAction = MOTHER_PENGUIN_ACT_RECEIVE_BABY;
         smallPenguinObj->oSmallPenguinReturnedToMother = TRUE;
         o->prevObj = smallPenguinObj;
@@ -125,16 +124,16 @@ void small_penguin_act_walking_away_from_mario(void) { // act 2
     s32 nearMother = FALSE;
     if (o->oTimer == 0) nearMother = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
-    o->oForwardVel = o->oSmallPenguinNextForwardVel + 3.0f;
-    cur_obj_rotate_yaw_toward(o->oAngleToMario + DEGREES(180), (o->oSmallPenguinYawIncrement + 0x600));
-    if (o->oDistanceToMario > o->oSmallPenguinRandomDistanceCheck + 500.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
+    o->oForwardVel = (o->oSmallPenguinNextForwardVel + 3.0f);
+    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEGREES(180)), (o->oSmallPenguinYawIncrement + 0x600));
+    if (o->oDistanceToMario > (o->oSmallPenguinRandomDistanceCheck + 500.0f)) o->oAction = SMALL_PENGUIN_ACT_WALKING;
     small_penguin_dive_with_mario();
     if (nearMother) o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
 }
 
 void small_penguin_act_walking_toward_mario(void) { // act 1
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
-    o->oForwardVel = o->oSmallPenguinNextForwardVel + 3.0f;
+    o->oForwardVel = (o->oSmallPenguinNextForwardVel + 3.0f);
     cur_obj_rotate_yaw_toward(o->oAngleToMario, (o->oSmallPenguinYawIncrement + 0x600));
     if (o->oDistanceToMario < o->oSmallPenguinRandomDistanceCheck + 300.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
     if (o->oDistanceToMario > 1100.0f) o->oAction = SMALL_PENGUIN_ACT_WALKING;
@@ -145,7 +144,7 @@ void small_penguin_act_dive_sliding(void) { // act 3
     if (o->oTimer > 5) {
         if (o->oTimer == 6) cur_obj_play_sound_2(SOUND_OBJ_BABY_PENGUIN_DIVE);
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_DIVE_SLIDE);
-        if (o->oTimer > 25 && !mario_is_dive_sliding()) o->oAction = SMALL_PENGUIN_ACT_DIVE_SLIDING_STOP;
+        if ((o->oTimer > 25) && !mario_is_dive_sliding()) o->oAction = SMALL_PENGUIN_ACT_DIVE_SLIDING_STOP;
     }
 }
 
@@ -162,15 +161,15 @@ void small_penguin_act_walking(void) { // act 0
 
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
     if (o->oTimer == 0) {
-        o->oSmallPenguinYawIncrement = (s32)(random_float() * 0x400);
-        o->oSmallPenguinRandomDistanceCheck = random_float() * 100.0f;
-        o->oSmallPenguinNextForwardVel = random_float();
-        o->oForwardVel = 0.0f;
-        nearMother =  (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
+        o->oSmallPenguinYawIncrement        = (s32)(random_float() * 0x400);
+        o->oSmallPenguinRandomDistanceCheck = (random_float() * 100.0f);
+        o->oSmallPenguinNextForwardVel      = random_float();
+        o->oForwardVel                      = 0.0f;
+        nearMother                          = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
     }
-    if (o->oDistanceToMario < 1000.0f && o->oSmallPenguinRandomDistanceCheck + 600.0f < o->oDistanceToMario) {
+    if ((o->oDistanceToMario < 1000.0f) && ((o->oSmallPenguinRandomDistanceCheck + 600.0f) < o->oDistanceToMario)) {
         o->oAction = SMALL_PENGUIN_ACT_WALKING_TOWARD_MARIO;
-    } else if (o->oDistanceToMario < o->oSmallPenguinRandomDistanceCheck + 300.0f) {
+    } else if (o->oDistanceToMario < (o->oSmallPenguinRandomDistanceCheck + 300.0f)) {
         o->oAction = SMALL_PENGUIN_ACT_WALKING_AWAY_FROM_MARIO;
     }
     if (nearMother) o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
@@ -182,7 +181,7 @@ void small_penguin_act_near_mother(void) { // act 5
     Angle angleToMother;
     struct Object *motherPenguinObj = cur_obj_nearest_object_with_behavior(bhvTuxiesMother);
     if (motherPenguinObj != NULL) {
-        o->oForwardVel = (o->oDistanceToMario < 1000.0f) ? 2.0f : 0.0f;
+        o->oForwardVel = ((o->oDistanceToMario < 1000.0f) ? 2.0f : 0.0f);
         distToMother = dist_between_objects(o, motherPenguinObj);
         angleToMother = obj_angle_to_object(o, motherPenguinObj);
         if (distToMother > 200.0f) {
@@ -242,7 +241,6 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSE
     struct Object *obj;
     struct GraphNodeSwitchCase *switchCase;
     s32 timer;
-
     if (callContext == GEO_CONTEXT_RENDER) {
         obj = (struct Object *) gCurGraphNodeObject;
         switchCase = (struct GraphNodeSwitchCase *) node;
@@ -250,14 +248,13 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSE
 #ifdef PENGUIN_MOTHER_SAD_EYES
         u32 isMother = obj_has_behavior(obj, bhvTuxiesMother);
         s32 babyDelivered = obj->oAction == MOTHER_PENGUIN_ACT_RECEIVED_BABY;
-        switchCase->selectedCase = (!isMother || babyDelivered) ? PENGUIN_ANIM_STATE_EYES_OPEN : PENGUIN_ANIM_STATE_EYES_SAD;
+        switchCase->selectedCase = ((!isMother || babyDelivered) ? PENGUIN_ANIM_STATE_EYES_OPEN : PENGUIN_ANIM_STATE_EYES_SAD);
 #endif
-
         // timer logic for blinking. uses cases 0-2.
         timer = gGlobalTimer % 50;
         if (timer < 43) {
 #ifdef PENGUIN_MOTHER_SAD_EYES
-            switchCase->selectedCase = (!isMother || babyDelivered) ? PENGUIN_ANIM_STATE_EYES_OPEN : PENGUIN_ANIM_STATE_EYES_SAD;
+            switchCase->selectedCase = ((!isMother || babyDelivered) ? PENGUIN_ANIM_STATE_EYES_OPEN : PENGUIN_ANIM_STATE_EYES_SAD);
 #else
             switchCase->selectedCase = PENGUIN_ANIM_STATE_EYES_OPEN;
 #endif
@@ -268,12 +265,11 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSE
         } else {
             switchCase->selectedCase = PENGUIN_ANIM_STATE_EYES_HALF_CLOSED;
         }
-
         /** make Tuxie's Mother have angry eyes if Mario takes the correct baby
          * after giving it back. The easiest way to check this is to see if she's
          * moving, since she only does when she's chasing Mario.
          */
-        if (segmented_to_virtual(bhvTuxiesMother) == obj->behavior && obj->oForwardVel > 5.0f) switchCase->selectedCase = PENGUIN_ANIM_STATE_EYES_ANGRY;
+        if ((segmented_to_virtual(bhvTuxiesMother) == obj->behavior) && (obj->oForwardVel > 5.0f)) switchCase->selectedCase = PENGUIN_ANIM_STATE_EYES_ANGRY;
     }
     return NULL;
 }

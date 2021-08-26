@@ -35,7 +35,7 @@ void bhv_ttc_moving_bar_init(void) {
  * Wait a delay if necessary, then begin pulling back.
  */
 static void ttc_moving_bar_act_wait(void) {
-    if (o->oTTCMovingBarDelay != 0 && o->oTimer > o->oTTCMovingBarDelay) {
+    if ((o->oTTCMovingBarDelay != 0) && (o->oTimer > o->oTTCMovingBarDelay)) {
         // This is zero except on the first cycle, and is used to desync the
         // bars from each other at the very beginning
         if (o->oTTCMovingBarStoppedTimer != 0) {
@@ -87,8 +87,8 @@ static void ttc_moving_bar_reset(void) {
  */
 static void ttc_moving_bar_act_extend(void) {
     // If we passed the 250 threshold and we have decelerated enough
-    if ((o->oTTCMovingBarOffset == 250.0f || (250.0f - o->oTTCMovingBarOffset) * (250.0f - o->oTTCMovingBarStartOffset) < 0.0f)
-        && o->oTTCMovingBarSpeed > -8.0f && o->oTTCMovingBarSpeed < 8.0f) {
+    if (((o->oTTCMovingBarOffset == 250.0f) || (((250.0f - o->oTTCMovingBarOffset) * (250.0f - o->oTTCMovingBarStartOffset)) < 0.0f))
+        && (o->oTTCMovingBarSpeed > -8.0f) && (o->oTTCMovingBarSpeed < 8.0f)) {
         // Begin retracting
         o->oAction            = TTC_MOVING_BAR_ACT_RETRACT;
         o->oTTCMovingBarSpeed = 0.0f;
@@ -100,8 +100,8 @@ static void ttc_moving_bar_act_extend(void) {
         o->oTTCMovingBarSpeed += accel;
         // When we pass neutral on random setting, then stop immediately with
         // 25% probability (fake out)
-        if (gTTCSpeedSetting == TTC_SPEED_RANDOM
-         && o->oTTCMovingBarOffset * o->oTTCMovingBarStartOffset < 0.0f
+        if ((gTTCSpeedSetting == TTC_SPEED_RANDOM)
+         && ((o->oTTCMovingBarOffset * o->oTTCMovingBarStartOffset) < 0.0f)
          && !(random_u16() & 0x3)) ttc_moving_bar_reset();
     }
 }

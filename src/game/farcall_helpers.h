@@ -46,7 +46,7 @@ s32  obj_forward_vel_approach(f32 target, f32 delta);
 s32  obj_y_vel_approach(f32 target, f32 delta);
 s32  obj_move_pitch_approach(Angle target, Angle delta);
 s32  obj_face_pitch_approach(Angle targetPitch, Angle deltaPitch);
-s32  obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw);
+Bool32 obj_face_yaw_approach(Angle targetYaw, Angle deltaYaw);
 s32  obj_face_roll_approach(Angle targetRoll, Angle deltaRoll);
 s32  obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, s16 accel, s16 minSpeed, s16 maxSpeed);
 void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rollSpeed);

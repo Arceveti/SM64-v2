@@ -47,7 +47,7 @@ void unagi_follow_path(s32 nextAction) { // act 1 4
         if (cur_obj_check_if_at_animation_end()) cur_obj_init_animation_with_sound((o->oAction != nextAction && (o->oPathedPrevWaypointFlags & 0xFF) >= 7) ? UNAGI_ANIM_STATIC_STRAIGHT : UNAGI_ANIM_SWIM);
     }
     if (cur_obj_check_anim_frame(6)) cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
-    if (cur_obj_follow_path(0) == -1) o->oAction = nextAction;
+    if (cur_obj_follow_path() == PATH_REACHED_END) o->oAction = nextAction;
     o->oMoveAnglePitch = o->oFaceAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, o->oPathedTargetPitch, 0x32);
     cur_obj_rotate_yaw_toward( o->oPathedTargetYaw, 0x78);
     obj_roll_to_match_yaw_turn(o->oPathedTargetYaw, 0x2000, 0x64);

@@ -249,10 +249,9 @@ static Trajectory sCageUkikiPath[] = {
  * our death. Ukiki is a tad suicidal.
  */
 void ukiki_act_go_to_cage(void) {
-    struct Object* obj;
-    f32 latDistToCage = 0.0f;
-    Angle yawToCage = 0;
-    obj = cur_obj_nearest_object_with_behavior(bhvUkikiCageChild);
+    f32 latDistToCage  = 0.0f;
+    Angle yawToCage    = 0x0;
+    struct Object *obj = cur_obj_nearest_object_with_behavior(bhvUkikiCageChild);
     // Ultimately is checking the cage, as it points to the parent
     // of a dummy child object of the cage.
     if (obj != NULL) {
@@ -266,7 +265,7 @@ void ukiki_act_go_to_cage(void) {
         case UKIKI_SUB_ACT_CAGE_RUN_TO_CAGE:
             cur_obj_init_animation_with_sound(UKIKI_ANIM_RUN);
             o->oPathedStartWaypoint = (struct Waypoint *) sCageUkikiPath;
-            if (cur_obj_follow_path(0) != PATH_REACHED_END) {
+            if (cur_obj_follow_path() != PATH_REACHED_END) {
                 o->oForwardVel = 10.0f;
                 cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, 0x400);
                 o->oPosY = o->oFloorHeight;
@@ -370,7 +369,7 @@ void (*sUkikiActions[])(void) = {
 void ukiki_free_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sUkikiActions);
-    s32 steepSlopeAngleDegrees = ((o->oAction == UKIKI_ACT_GO_TO_CAGE || o->oAction == UKIKI_ACT_RETURN_HOME) ? -88 : -20);
+    s32 steepSlopeAngleDegrees = (((o->oAction == UKIKI_ACT_GO_TO_CAGE) || (o->oAction == UKIKI_ACT_RETURN_HOME)) ? -88 : -20);
     cur_obj_move_standard(steepSlopeAngleDegrees);
     handle_cap_ukiki_reset();
     if (!(o->oMoveFlags & OBJ_MOVE_MASK_IN_WATER)) exec_anim_sound_state(sUkikiSoundStates);
@@ -404,9 +403,9 @@ void cage_ukiki_held_loop(void) {
                     set_mario_npc_dialog(MARIO_DIALOG_STOP);
                     if (gDialogResponse == DIALOG_RESPONSE_YES) {
                         o->oInteractionSubtype |= INT_SUBTYPE_DROP_IMMEDIATELY;
-                        o->oUkikiTextState = UKIKI_TEXT_GO_TO_CAGE;
+                        o->oUkikiTextState      = UKIKI_TEXT_GO_TO_CAGE;
                     } else {
-                        o->oUkikiTextState = UKIKI_TEXT_DO_NOT_LET_GO;
+                        o->oUkikiTextState    = UKIKI_TEXT_DO_NOT_LET_GO;
                         o->oUkikiTextboxTimer = 60;
                     }
                 }
@@ -422,8 +421,8 @@ void cage_ukiki_held_loop(void) {
         // If ukiki is far below his home, stop him from trying to
         // walk to the cage and getting stuck.
         o->oUkikiTextState = UKIKI_TEXT_DEFAULT;
-        o->oTimer = 0;
-        o->oAction = UKIKI_ACT_WAIT_TO_RESPAWN;
+        o->oTimer          = 0;
+        o->oAction         = UKIKI_ACT_WAIT_TO_RESPAWN;
     }
 }
 
@@ -466,9 +465,9 @@ void cap_ukiki_held_loop(void) {
  * Initializatation for ukiki, determines if it has Mario's cap.
  */
 void bhv_ukiki_init(void) {
-    if (o->oBehParams2ndByte == UKIKI_CAP && save_file_get_flags() & SAVE_FLAG_CAP_ON_UKIKI) {
+    if ((o->oBehParams2ndByte == UKIKI_CAP) && (save_file_get_flags() & SAVE_FLAG_CAP_ON_UKIKI)) {
         o->oUkikiTextState = UKIKI_TEXT_HAS_CAP;
-        o->oUkikiHasCap |= UKIKI_CAP_ON;
+        o->oUkikiHasCap   |= UKIKI_CAP_ON;
     }
 }
 

@@ -207,11 +207,10 @@ static void mr_blizzard_act_death(void) {
     // at .03 units per frame. Spawn coins and set the coins to not respawn.
     if (o->oTimer >= 30) {
         if (o->oTimer == 30) cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
-
         if (o->oMrBlizzardScale != 0.0f) {
             if ((o->oMrBlizzardScale -= 0.03f) <= 0.0f) {
                 o->oMrBlizzardScale = 0.0f;
-                if (!(o->oBehParams & 0x0000FF00)) {
+                if (!(o->oBehParams & 0x0000FF00)) { //! param name
                     obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);
                     set_object_respawn_info_bits(o, RESPAWN_INFO_TYPE_32);
                 }
@@ -320,7 +319,6 @@ void bhv_mr_blizzard_update(void) {
         case MR_BLIZZARD_ACT_DEATH:            mr_blizzard_act_death();            break;
         case MR_BLIZZARD_ACT_JUMP:             mr_blizzard_act_jump();             break;
     }
-
     // Set roll angle equal to dizziness, making Mr. Blizzard
     // slowly fall over.
     o->oFaceAngleRoll = o->oMrBlizzardDizziness;

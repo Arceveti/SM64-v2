@@ -36,7 +36,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
         initialPrevWaypoint = o->oPlatformOnTrackPrevWaypoint;
         nextWaypoint = initialPrevWaypoint;
         if (ballIndex != 0) {
-            amountToMove = 300.0f * ballIndex;
+            amountToMove = (300.0f * ballIndex);
         } else {
             obj_perform_position_op(POS_OP_SAVE_POSITION);
             o->oPlatformOnTrackPrevWaypointFlags = 0;
@@ -120,9 +120,9 @@ static void platform_on_track_mario_not_on_platform(void) {
  */
 void bhv_platform_on_track_init(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        s16 pathIndex                    =  (u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_PATH;
-        o->oPlatformOnTrackType          = ((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_TYPE) >> 4;
-        o->oPlatformOnTrackIsNotSkiLift  = o->oPlatformOnTrackType - PLATFORM_ON_TRACK_TYPE_SKI_LIFT;
+        s16 pathIndex                    =  ((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_PATH);
+        o->oPlatformOnTrackType          = (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_MASK_TYPE) >> 4);
+        o->oPlatformOnTrackIsNotSkiLift  = (o->oPlatformOnTrackType - PLATFORM_ON_TRACK_TYPE_SKI_LIFT);
         o->collisionData                 = segmented_to_virtual(sPlatformOnTrackCollisionModels[o->oPlatformOnTrackType]);
         o->oPlatformOnTrackStartWaypoint = segmented_to_virtual(sPlatformOnTrackPaths[pathIndex]);
         o->oPlatformOnTrackIsNotHMC      = pathIndex - 4;
@@ -137,25 +137,18 @@ void bhv_platform_on_track_init(void) {
  */
 static void platform_on_track_act_init(void) {
     s32 i;
-
     o->oPlatformOnTrackPrevWaypoint      = o->oPlatformOnTrackStartWaypoint;
     o->oPlatformOnTrackPrevWaypointFlags = 0;
     o->oPlatformOnTrackBaseBallIndex     = 0;
-
     o->oPosX = o->oHomeX = o->oPlatformOnTrackStartWaypoint->pos[0];
     o->oPosY = o->oHomeY = o->oPlatformOnTrackStartWaypoint->pos[1];
     o->oPosZ = o->oHomeZ = o->oPlatformOnTrackStartWaypoint->pos[2];
-
     o->oFaceAngleYaw = o->oBehParams2ndByte;
     o->oForwardVel   = o->oVelX = o->oVelY = o->oVelZ = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
-
     o->oPlatformOnTrackWasStoodOn = FALSE;
-
     if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0x0;
-
     // Spawn track balls
-    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for (i = 1; i < 6; i++) platform_on_track_update_pos_or_spawn_ball(i, &o->oHomeVec);
-
+    if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) for ((i = 1); (i < 6); (i++)) platform_on_track_update_pos_or_spawn_ball(i, &o->oHomeVec);
     o->oAction = PLATFORM_ON_TRACK_ACT_WAIT_FOR_MARIO;
 }
 
@@ -225,34 +218,27 @@ static void platform_on_track_act_move_along_track(void) {
                 o->oPlatformOnTrackDistMovedSinceLastBall -= 300.0f;
                 vec3f_copy(&o->oHomeVec, &o->oPosVec);
                 o->oPlatformOnTrackBaseBallIndex = (u16)(o->oPlatformOnTrackBaseBallIndex + 1);
-
                 platform_on_track_update_pos_or_spawn_ball(5, &o->oHomeVec);
             }
         }
         platform_on_track_update_pos_or_spawn_ball(0, &o->oPosVec);
-
         o->oMoveAnglePitch = o->oPlatformOnTrackPitch;
         o->oMoveAngleYaw   = o->oPlatformOnTrackYaw;
-
         //! Both oAngleVelYaw and oAngleVelRoll aren't reset until the platform
         //  starts moving again, resulting in unexpected platform displacement
         //  after reappearing
-
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
             Angle targetFaceYaw = (o->oMoveAngleYaw + DEGREES(90));
             Angle yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
-
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);
             obj_face_yaw_approach(targetFaceYaw, yawSpeed);
             o->oAngleVelYaw = (Angle) o->oFaceAngleYaw - initialAngle;
         }
-
         // Turn face roll and compute roll vel
         if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_ROLL)) {
             Angle rollSpeed = (abs_angle_diff(o->oMoveAnglePitch, o->oFaceAngleRoll) / 20);
-
             initialAngle = o->oFaceAngleRoll;
             clamp_s16(&rollSpeed, 100, 500);
             //! If the platform is moving counterclockwise upward or
@@ -261,7 +247,6 @@ static void platform_on_track_act_move_along_track(void) {
             o->oAngleVelRoll = ((Angle) o->oFaceAngleRoll - initialAngle);
         }
     }
-
     if (gMarioObject->platform != o) {
         platform_on_track_mario_not_on_platform();
     } else {
@@ -283,7 +268,6 @@ static void platform_on_track_act_pause_briefly(void) {
  */
 static void platform_on_track_act_fall(void) {
     cur_obj_move_using_vel_and_gravity();
-
     if (gMarioObject->platform != o) {
         platform_on_track_mario_not_on_platform();
     } else {
@@ -297,12 +281,9 @@ static void platform_on_track_act_fall(void) {
  */
 static void platform_on_track_rock_ski_lift(void) {
     s32 targetRoll = 0x0;
-
     o->oFaceAngleRoll += (s32) o->oPlatformOnTrackSkiLiftRollVel;
-
     // Tilt away from the moving direction and toward Mario
     if (gMarioObject->platform == o) targetRoll = ((o->oForwardVel * sins(o->oMoveAngleYaw) * -50.0f) + (s32)(o->oDistanceToMario * sins(o->oAngleToMario - o->oFaceAngleYaw) * -4.0f));
-
     oscillate_toward(
         /* value          */ &o->oFaceAngleRoll,
         /* vel            */ &o->oPlatformOnTrackSkiLiftRollVel,
@@ -327,7 +308,6 @@ void bhv_platform_on_track_update(void) {
         case PLATFORM_ON_TRACK_ACT_PAUSE_BRIEFLY:    platform_on_track_act_pause_briefly();    break;
         case PLATFORM_ON_TRACK_ACT_FALL:             platform_on_track_act_fall();             break;
     }
-
     if (!o->oPlatformOnTrackIsNotSkiLift) {
         platform_on_track_rock_ski_lift();
     } else if (o->oPlatformOnTrackType == PLATFORM_ON_TRACK_TYPE_CARPET) {
@@ -347,7 +327,6 @@ void bhv_platform_on_track_update(void) {
             o->oPlatformOnTrackOffsetY    = -8.0f;
             o->oPlatformOnTrackWasStoodOn = TRUE;
         }
-
         approach_f32_bool(&o->oPlatformOnTrackOffsetY, 0.0f, 0.5f);
         o->oPosY += o->oPlatformOnTrackOffsetY;
 #endif

@@ -20,8 +20,8 @@ void bhv_ttm_rolling_log_init(void) {
 
 void rolling_log_roll_log(void) {
     if (gMarioObject->platform == o) {
-        f32 rollAmount = (gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-o->oMoveAngleYaw)
-                       - (gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-o->oMoveAngleYaw);
+        f32 rollAmount = (((gMarioObject->header.gfx.pos[2] - o->oPosZ) * coss(-o->oMoveAngleYaw))
+                       -  ((gMarioObject->header.gfx.pos[0] - o->oPosX) * sins(-o->oMoveAngleYaw)));
         if (rollAmount > 0) {
             o->oAngleVelPitch += 0x10;
         } else {
@@ -37,7 +37,7 @@ void rolling_log_roll_log(void) {
                 } else {
                     o->oAngleVelPitch += 0x10;
                 }
-                if (o->oAngleVelPitch < 0x10 && o->oAngleVelPitch > -0x10) o->oAngleVelPitch = 0;
+                if ((o->oAngleVelPitch < 0x10) && (o->oAngleVelPitch > -0x10)) o->oAngleVelPitch = 0;
             }
         } else {
             if (o->oAngleVelPitch != 0x100) {
@@ -46,7 +46,7 @@ void rolling_log_roll_log(void) {
                 } else {
                     o->oAngleVelPitch += 0x10;
                 }
-                if (o->oAngleVelPitch < 0x110 && o->oAngleVelPitch > 0xF0) o->oAngleVelPitch = 0x100;
+                if ((o->oAngleVelPitch < 0x110) && (o->oAngleVelPitch > 0xF0)) o->oAngleVelPitch = 0x100;
             }
         }
     }

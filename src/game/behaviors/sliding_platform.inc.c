@@ -21,7 +21,7 @@ void bhv_wf_sliding_platform_loop(void) {
             }
             break;
         case WF_SLID_BRICK_PTFM_ACT_EXTEND:
-            if (o->oTimer >= 500.0f / o->oWFSlidBrickPtfmMovVel) {
+            if (o->oTimer >= (500.0f / o->oWFSlidBrickPtfmMovVel)) {
                 o->oForwardVel = 0.0f;
                 o->oPosX       = (o->oHomeX + 512.0f);
             }
@@ -32,12 +32,12 @@ void bhv_wf_sliding_platform_loop(void) {
             }
             break;
         case WF_SLID_BRICK_PTFM_ACT_RETRACT:
-            if (o->oTimer >= 500.0f / o->oWFSlidBrickPtfmMovVel) {
+            if (o->oTimer >= (500.0f / o->oWFSlidBrickPtfmMovVel)) {
                 o->oForwardVel = 0.0f;
                 o->oPosX       = o->oHomeX;
             }
             if (o->oTimer == 90) {
-                o->oAction = WF_SLID_BRICK_PTFM_ACT_EXTEND;
+                o->oAction        = WF_SLID_BRICK_PTFM_ACT_EXTEND;
                 o->oForwardVel    = o->oWFSlidBrickPtfmMovVel;
                 o->oMoveAngleYaw -= DEGREES(180);
             }

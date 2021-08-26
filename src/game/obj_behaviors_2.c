@@ -234,7 +234,7 @@ static Bool32 obj_face_roll_approach(Angle targetRoll, Angle deltaRoll) {
 
 static Bool32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f32 targetSpeedProportion, Angle accel, Angle minSpeed, Angle maxSpeed) {
     Angle currentAngle = (Angle)(*angle);
-    *angleVel = approach_s16_symmetric(*angleVel, (targetAngle - currentAngle) * targetSpeedProportion, accel);
+    *angleVel = approach_s16_symmetric(*angleVel, ((targetAngle - currentAngle) * targetSpeedProportion), accel);
     Angle currentSpeed = ABSI(*angleVel);
     clamp_s16(&currentSpeed, minSpeed, maxSpeed);
     *angle = approach_s16_symmetric(*angle, targetAngle, currentSpeed);
@@ -242,7 +242,7 @@ static Bool32 obj_smooth_turn(Angle *angleVel, s32 *angle, Angle targetAngle, f3
 }
 
 static void obj_roll_to_match_yaw_turn(Angle targetYaw, Angle maxRoll, Angle rollSpeed) {
-    Angle targetRoll = o->oMoveAngleYaw - targetYaw;
+    Angle targetRoll = (o->oMoveAngleYaw - targetYaw);
     clamp_s16(&targetRoll, -maxRoll, maxRoll);
     obj_face_roll_approach(targetRoll, rollSpeed);
 }
@@ -266,7 +266,7 @@ static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale)
     } else if (o->oTimer > 10) {
         if (approach_f32_bool(&o->header.gfx.scale[0], endScale, 0.05f)) {
             return -1;
-        } else if (*scaleVel != 0.0f && o->header.gfx.scale[0] < shootFireScale) {
+        } else if ((*scaleVel != 0.0f) && (o->header.gfx.scale[0] < shootFireScale)) {
             *scaleVel = 0.0f;
             return 1;
         }
@@ -432,8 +432,8 @@ static void obj_set_squished_action(void) {
 
 static Bool32 obj_die_if_above_lava_and_health_non_positive(void) {
     if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND) {
-        if (o->oGravity + o->oBuoyancy > 0.0f
-            || find_water_level(o->oPosX, o->oPosZ) - o->oPosY < 150.0f) return FALSE;
+        if (((o->oGravity + o->oBuoyancy) > 0.0f)
+            || ((find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 150.0f)) return FALSE;
     } else if (!(o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA)) {
         if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER) {
             if (o->oWallHitboxRadius < 200.0f) {

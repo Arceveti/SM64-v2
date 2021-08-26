@@ -182,7 +182,7 @@ void   obj_set_throw_matrix_from_transform(   struct Object *obj);
 void   obj_build_transform_relative_to_parent(struct Object *obj);
 void   obj_create_transform_from_self(        struct Object *obj);
 void   cur_obj_rotate_face_angle_using_vel(void);
-s32    cur_obj_follow_path(UNUSED s32 unusedArg);
+s32    cur_obj_follow_path(void);
 void   chain_segment_init(struct ChainSegment *segment);
 void   obj_scale_random(        struct Object *obj, f32 rangeLength, f32 minScale);
 void   obj_translate_xyz_random(struct Object *obj, f32 rangeLength);

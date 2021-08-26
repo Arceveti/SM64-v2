@@ -66,7 +66,7 @@ void tox_box_shake_screen(void) {
 }
 
 void tox_box_move(f32 forwardVel, f32 leftVel, Angle deltaPitch, Angle deltaRoll) {
-    o->oPosY = 99.41124f * sins((f32)(o->oTimer + 1) / 8 * 0x8000) + o->oHomeY + 3.0f;
+    o->oPosY = ((99.41124f * sins((f32)(o->oTimer + 1) / 8 * 0x8000)) + o->oHomeY + 3.0f);
     o->oForwardVel      = forwardVel;
     o->oLeftVel         = leftVel;
     o->oFaceAnglePitch += deltaPitch;

@@ -18,11 +18,9 @@ void bhv_ukiki_cage_star_loop(void) {
     switch (o->oAction) {
         case UKIKI_CAGE_STAR_ACT_IN_CAGE:
             // Initialization to see if the star is collected (blue) or not (yellow).
-            if (o->oTimer == 0 && (save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1) & 2)) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
-
+            if ((o->oTimer == 0) && (save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) & 0x2)) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
             obj_copy_pos(o, o->parentObj);
             obj_copy_behavior_params(o, o->parentObj);
-
             // When they cage hides itself, spawn particles and the star.
             if (o->parentObj->oAction == UKIKI_CAGE_ACT_HIDE) o->oAction++;
             break;
@@ -33,7 +31,6 @@ void bhv_ukiki_cage_star_loop(void) {
             spawn_default_star(2500.0f, -1200.0f, 1300.0f);
             break;
     }
-
     // Spin to look like a star.
     o->oFaceAngleYaw += 0x400;
 }

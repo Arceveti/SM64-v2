@@ -45,14 +45,14 @@ void one_up_loop_in_air(void) {
 }
 
 void pole_1up_move_towards_mario(void) {
-    f32 dx             = (gMarioObject->header.gfx.pos[0]          - o->oPosX);
-    f32 dy             = (gMarioObject->header.gfx.pos[1] + 120.0f - o->oPosY);
-    f32 dz             = (gMarioObject->header.gfx.pos[2]          - o->oPosZ);
+    f32 dx             = ( gMarioObject->header.gfx.pos[0]          - o->oPosX);
+    f32 dy             = ((gMarioObject->header.gfx.pos[1] + 120.0f) - o->oPosY);
+    f32 dz             = ( gMarioObject->header.gfx.pos[2]          - o->oPosZ);
     Angle targetPitch  = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX, 0x1000);
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, targetPitch, 0x1000);
-    o->oVelY           = sins(o->oMoveAnglePitch) * 30.0f;
-    o->oForwardVel     = coss(o->oMoveAnglePitch) * 30.0f;
+    o->oVelY           = (sins(o->oMoveAnglePitch) * 30.0f);
+    o->oForwardVel     = (coss(o->oMoveAnglePitch) * 30.0f);
     bhv_1up_interact();
 }
 
@@ -72,7 +72,7 @@ void bhv_1up_walking_loop(void) {
             one_up_loop_in_air();
             if (o->oTimer == 37) {
                 cur_obj_become_tangible();
-                o->oAction = MUSHROOM_ACT_MOVING;
+                o->oAction     = MUSHROOM_ACT_MOVING;
                 o->oForwardVel = 2.0f;
             }
             break;
@@ -236,7 +236,7 @@ void bhv_1up_hidden_in_pole_loop(void) {
             one_up_loop_in_air();
             if (o->oTimer == 37) {
                 cur_obj_become_tangible();
-                o->oAction = MUSHROOM_ACT_MOVING;
+                o->oAction     = MUSHROOM_ACT_MOVING;
                 o->oForwardVel = 10.0f;
             }
             break;
@@ -258,7 +258,7 @@ void bhv_1up_hidden_in_pole_spawner_loop(void) {
         // For bhvHidden1upInPole, oBehParams2ndByte is used for how many frames is
         // required for Mario to activate it, instead of the Bowser requirement.
         spawn_object_relative(0x2, 0, 50, 0, o, MODEL_1UP, bhvHidden1upInPole);
-        for (i = 0; i < 2; i++) spawn_object_relative(0x0, 0, i * -200, 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
+        for ((i = 0); (i < 2); (i++)) spawn_object_relative(0x0, 0, (i * -200), 0, o, MODEL_NONE, bhvHidden1upInPoleTrigger);
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 }

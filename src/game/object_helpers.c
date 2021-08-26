@@ -1468,7 +1468,7 @@ void cur_obj_set_face_angle_to_move_angle(void) {
     vec3i_copy(&o->oFaceAngleVec, &o->oMoveAngleVec);
 }
 
-s32 cur_obj_follow_path(UNUSED s32 unusedArg) {
+s32 cur_obj_follow_path(void) {
     struct Waypoint *startWaypoint;
     struct Waypoint *lastWaypoint;
     struct Waypoint *targetWaypoint;

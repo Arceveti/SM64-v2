@@ -12,7 +12,6 @@ struct ObjectHitbox sMetalBoxHitbox = {
     /* hurtboxHeight:     */ 300,
 };
 
-
 //! move to object_helpers?
 Bool32 check_if_moving_over_floor(f32 maxDist, f32 offset) {
     struct Surface *floor;

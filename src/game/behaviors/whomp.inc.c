@@ -174,17 +174,14 @@ void whomp_on_ground(void) {
 
 void whomp_on_ground_general(void) {
     if (o->oSubAction != WHOMP_SUB_ACT_GROUND_STAND_UP) {
-        o->oForwardVel    = 0.0f;
-        o->oAngleVelPitch = 0x0;
-        o->oAngleVelYaw   = 0x0;
-        o->oAngleVelRoll  = 0x0;
-
+        o->oForwardVel = 0.0f;
+        vec3i_copy(&o->oAngleVelVec, gVec3iZero);
         if (o->oBehParams2ndByte != WHOMP_BP_NORMAL) {
             king_whomp_on_ground();
         } else {
             whomp_on_ground();
         }
-        if (o->oTimer > 100 || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) o->oSubAction = WHOMP_SUB_ACT_GROUND_STAND_UP;
+        if ((o->oTimer > 100) || (gMarioState->action == ACT_SQUISHED && o->oTimer > 30)) o->oSubAction = WHOMP_SUB_ACT_GROUND_STAND_UP;
     } else {
         if (o->oFaceAnglePitch > 0x0) {
             o->oAngleVelPitch = -0x200;

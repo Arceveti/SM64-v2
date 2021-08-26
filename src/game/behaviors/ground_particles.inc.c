@@ -5,7 +5,7 @@ static struct SpawnParticlesInfo sSandParticles       = { 0,  5, MODEL_SAND_DUST
 static struct SpawnParticlesInfo sSnowParticles       = { 0,  5, MODEL_WHITE_PARTICLE_DL,  0,  0, 20, 20, 0, 252, 30,  2.0f, 2.0f };
 
 void bhv_pound_white_puffs_init(void) {
-    clear_particle_flags(0x8000); //! particle flags names
+    clear_particle_flags(ACTIVE_PARTICLE_MIST_CIRCLE);
     spawn_mist_from_global();
 }
 
@@ -14,7 +14,7 @@ void spawn_mist_from_global(void) {
 }
 
 void bhv_ground_sand_init(void) {
-    clear_particle_flags(0x4000); //! particle flags names
+    clear_particle_flags(ACTIVE_PARTICLE_DIRT);
     cur_obj_spawn_particles(&sSandParticles);
 }
 
@@ -32,6 +32,6 @@ void clear_particle_flags(u32 flags) {
 }
 
 void bhv_ground_snow_init(void) {
-    clear_particle_flags(1 << 16);
+    clear_particle_flags(ACTIVE_PARTICLE_SNOW);
     cur_obj_spawn_particles(&sSnowParticles);
 }

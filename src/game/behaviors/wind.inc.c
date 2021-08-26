@@ -2,7 +2,7 @@
 
 void spawn_wind_particles(Angle pitch, Angle yaw) {
     s32 i;
-    for (i = 0; i < 3; i++) {
+    for ((i = 0); (i < 3); (i++)) {
         struct Object *wind = spawn_object(o, MODEL_MIST, bhvWind);
         wind->oMoveAngleYaw   = yaw;
         wind->oMoveAnglePitch = pitch;
@@ -17,7 +17,7 @@ void bhv_wind_loop(void) {
             obj_translate_xz_random(o, 900.0f);
             o->oPosX         += (sins(o->oMoveAngleYaw + DEGREES(180)) * size); // NOP as Pitch is 0
             o->oPosY         += 80.0f + random_f32_around_zero(200.0f);
-            o->oPosZ         += (coss(o->oMoveAngleYaw + DEGREES(180)) * size); // -coss(a) * sp2E
+            o->oPosZ         += (coss(o->oMoveAngleYaw + DEGREES(180)) * size); // -coss(a) * size
             o->oMoveAngleYaw += random_f32_around_zero(4000.0f);
             o->oForwardVel    = ((random_float() * 70.0f) + 50.0f);
         } else {

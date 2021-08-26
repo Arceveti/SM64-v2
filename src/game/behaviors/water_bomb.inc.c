@@ -32,7 +32,7 @@ void bhv_water_bomb_spawner_update(void) {
     f32 spawnerRadius = ((50 * (u16)(o->oBehParams >> 16)) + 200.0f);
     f32 latDistToMario = lateral_dist_between_objects(o, gMarioObject);
     // When Mario is in range and a water bomb isn't already active
-    if (!o->oWaterBombSpawnerBombActive && (latDistToMario < spawnerRadius) && (gMarioObject->oPosY - o->oPosY) < 1000.0f) {
+    if (!o->oWaterBombSpawnerBombActive && (latDistToMario < spawnerRadius) && ((gMarioObject->oPosY - o->oPosY) < 1000.0f)) {
         if (o->oWaterBombSpawnerTimeToSpawn != 0) {
             o->oWaterBombSpawnerTimeToSpawn--;
         } else {
@@ -127,7 +127,7 @@ static void water_bomb_act_drop(void) {
         o->oWaterBombOnGround = FALSE;
     }
     o->header.gfx.scale[1] = (o->oWaterBombVerticalStretch + 1.0f);
-    stretch                = o->oWaterBombVerticalStretch;
+    stretch                =  o->oWaterBombVerticalStretch;
     if (o->oWaterBombNumBounces == 3.0f) stretch *= 4.0f;
     o->header.gfx.scale[0] = o->header.gfx.scale[2] = (1.0f - stretch);
     cur_obj_move_standard(78);

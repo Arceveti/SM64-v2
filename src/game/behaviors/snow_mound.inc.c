@@ -13,7 +13,7 @@ void bhv_sliding_snow_mound_loop(void) {
             o->oPosX += o->oVelX;
             o->oVelY  = -10.0f;
             o->oPosY += o->oVelY;
-            o->oPosZ  = o->oHomeZ - 2.0f;
+            o->oPosZ  = (o->oHomeZ - 2.0f);
             if (o->oTimer > 50) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
             break;
     }
@@ -21,7 +21,7 @@ void bhv_sliding_snow_mound_loop(void) {
 
 void bhv_snow_mound_spawn_loop(void) {
     struct Object *moundObj = NULL;
-    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 6000) || o->oPosY + 1000.0f < gMarioObject->header.gfx.pos[1]) return;
+    if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 6000) || ((o->oPosY + 1000.0f) < gMarioObject->header.gfx.pos[1])) return;
     if (!(o->oTimer & 0x3F)) moundObj = spawn_object(o, MODEL_SL_SNOW_TRIANGLE, bhvSlidingSnowMound);
     if (o->oTimer >= 256) {
         if (moundObj != NULL) {

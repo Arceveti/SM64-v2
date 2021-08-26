@@ -91,7 +91,6 @@ void bhv_mips_act_wait_for_nearby_mario(void) {
  */
 void bhv_mips_act_follow_path(void) {
     ColFlags collisionFlags = OBJ_COL_FLAGS_NONE;
-    s32 followStatus        = 0x0;
     struct Waypoint **pathBase;
     struct Waypoint *waypoint;
     // Retrieve current waypoint.
@@ -99,7 +98,7 @@ void bhv_mips_act_follow_path(void) {
     waypoint = segmented_to_virtual(*(pathBase + o->oMipsStartWaypointIndex));
     // Set start waypoint and follow the path from there.
     o->oPathedStartWaypoint = waypoint;
-    followStatus            = cur_obj_follow_path(followStatus);
+    s32 followStatus        = cur_obj_follow_path();
     // Update velocity and angle and do movement.
     o->oForwardVel          = o->oMipsForwardVelocity;
     o->oMoveAngleYaw        = o->oPathedTargetYaw;

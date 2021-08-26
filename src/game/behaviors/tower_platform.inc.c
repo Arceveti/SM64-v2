@@ -33,7 +33,7 @@ void bhv_wf_elevator_tower_platform_loop(void) {
 }
 
 void bhv_wf_sliding_tower_platform_loop(void) {
-    s32 moveTimer = o->oPlatformWFTowerMoveDistance / o->oPlatformWFTowerForwardVel;
+    s32 moveTimer = (o->oPlatformWFTowerMoveDistance / o->oPlatformWFTowerForwardVel);
     switch (o->oAction) {
         case WF_TOWER_SLIDING_PLATFORM_ACT_BACKWARD:
             if (o->oTimer > moveTimer) o->oAction = WF_TOWER_SLIDING_PLATFORM_ACT_FORWARD;
@@ -65,7 +65,7 @@ void spawn_and_init_wf_platforms(ModelID model, const BehaviorScript *bhv) {
 
 void spawn_wf_platform_group(void) {
     o->oPlatformSpawnerWFTowerPlatformNum  = 0;
-    o->oPlatformSpawnerWFTowerYawOffset    = 0;
+    o->oPlatformSpawnerWFTowerYawOffset    = 0x0;
     o->oPlatformSpawnerWFTowerDYaw         = DEGREES(45);
     o->oPlatformSpawnerWFTowerRadius       = 704.0f;
     o->oPlatformSpawnerWFTowerMoveDistance = 380.0f;
@@ -85,14 +85,14 @@ void bhv_tower_platform_group_loop(void) {
     o->oDistanceToMario = dist_between_objects(o, gMarioObject);
     switch (o->oAction) {
         case WF_TOWER_PLATFORM_GROUP_ACT_INACTIVE:
-            if (marioY > o->oHomeY - 1000.0f) o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_SPAWN_PLATFORMS;
+            if (marioY > (o->oHomeY - 1000.0f)) o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_SPAWN_PLATFORMS;
             break;
         case WF_TOWER_PLATFORM_GROUP_ACT_SPAWN_PLATFORMS:
             spawn_wf_platform_group();
             o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_ACTIVE;
             break;
         case WF_TOWER_PLATFORM_GROUP_ACT_ACTIVE:
-            if (marioY < o->oHomeY - 1000.0f) o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_REMOVE_PLATFORMS;
+            if (marioY < (o->oHomeY - 1000.0f)) o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_REMOVE_PLATFORMS;
             break;
         case WF_TOWER_PLATFORM_GROUP_ACT_REMOVE_PLATFORMS:
             o->oAction = WF_TOWER_PLATFORM_GROUP_ACT_INACTIVE;

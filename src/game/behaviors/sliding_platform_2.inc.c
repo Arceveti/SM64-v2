@@ -15,9 +15,9 @@ void bhv_sliding_plat_2_init(void) {
     u16 params = (u16)(o->oBehParams >> 16);
     s32 collisionDataIndex;
 
-    collisionDataIndex = (params & SLIDING_PLATFORM_TYPE_MASK) >> 7;
-    o->collisionData = segmented_to_virtual(sSlidingPlatform2CollisionData[collisionDataIndex]);
-    o->oBackAndForthPlatformPathLength = 50.0f * (params & SLIDING_PLATFORM_LENGTH_MASK);
+    collisionDataIndex = ((params & SLIDING_PLATFORM_TYPE_MASK) >> 7);
+    o->collisionData   = segmented_to_virtual(sSlidingPlatform2CollisionData[collisionDataIndex]);
+    o->oBackAndForthPlatformPathLength = (50.0f * (params & SLIDING_PLATFORM_LENGTH_MASK));
 
     if (collisionDataIndex < SLIDING_PLATFORM_BP_RR_PYRAMID || collisionDataIndex > SLIDING_PLATFORM_BP_NULL) {
         o->oBackAndForthPlatformVel = 15.0f;
@@ -36,14 +36,11 @@ void bhv_sliding_plat_2_loop(void) {
             o->oTimer = 0;
         }
     }
-
     obj_perform_position_op(POS_OP_SAVE_POSITION);
-
     if (o->oBackAndForthPlatformDirection != 0.0f) {
-        o->oPosY = o->oHomeY + o->oBackAndForthPlatformDistance * o->oBackAndForthPlatformDirection;
+        o->oPosY = (o->oHomeY + (o->oBackAndForthPlatformDistance * o->oBackAndForthPlatformDirection));
     } else {
         obj_set_dist_from_home(o->oBackAndForthPlatformDistance);
     }
-
     obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 }

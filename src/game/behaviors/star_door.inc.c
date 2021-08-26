@@ -13,7 +13,7 @@ void bhv_star_door_loop(void) {
         case STAR_DOOR_ACT_CLOSED:
             cur_obj_become_tangible();
             if (o->oInteractStatus & (INT_STATUS_DOOR_PULLED | INT_STATUS_DOOR_PUSHED)) o->oAction = STAR_DOOR_ACT_OPENING;
-            if ((doorObj != NULL) && doorObj->oAction != STAR_DOOR_ACT_CLOSED) o->oAction = STAR_DOOR_ACT_OPENING;
+            if ((doorObj != NULL) && (doorObj->oAction != STAR_DOOR_ACT_CLOSED)) o->oAction = STAR_DOOR_ACT_OPENING;
             break;
         case STAR_DOOR_ACT_OPENING:
             if ((o->oTimer == 0) && ((Angle)(o->oMoveAngleYaw) >= 0x0)) {

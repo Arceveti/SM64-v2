@@ -55,18 +55,18 @@ void tumbling_bridge_act_spawn_sections(void) { // act 1
     s32 bridgeID = o->oBehParams2ndByte;
     s32 relativePlatformX, relativePlatformZ, relativePlatformY = 0;
     s32 relativeInitialPlatformY = 0;
-    for (i = 0; i < sTumblingBridgeParams[bridgeID].numBridgeSections; i++) {
+    for ((i = 0); (i < sTumblingBridgeParams[bridgeID].numBridgeSections); (i++)) {
         relativePlatformX = relativePlatformZ = 0;
         if (bridgeID == TUMBLING_BRIDGE_BP_BITFS) { // Spawn sideways in BITFS
-            relativePlatformX = sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + sTumblingBridgeParams[bridgeID].platformWidth * i;
+            relativePlatformX = (sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + (sTumblingBridgeParams[bridgeID].platformWidth * i));
         } else {
-            relativePlatformZ = sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + sTumblingBridgeParams[bridgeID].platformWidth * i;
+            relativePlatformZ = (sTumblingBridgeParams[bridgeID].bridgeRelativeStartingXorZ + (sTumblingBridgeParams[bridgeID].platformWidth * i));
         }
         if (cur_obj_has_behavior(bhvLllTumblingBridge)) {
-            if (i % 3 == 0) relativePlatformY -= 150;
+            if ((i % 3) == 0) relativePlatformY -= 150;
             relativeInitialPlatformY = 450;
         }
-        platformObj = spawn_object_relative(OBJ_BP_NONE, relativePlatformX, relativePlatformY + relativeInitialPlatformY, relativePlatformZ, o,
+        platformObj = spawn_object_relative(OBJ_BP_NONE, relativePlatformX, (relativePlatformY + relativeInitialPlatformY), relativePlatformZ, o,
                                             sTumblingBridgeParams[bridgeID].model, bhvTumblingBridgePlatform);
         obj_set_collision_data(platformObj, sTumblingBridgeParams[bridgeID].segAddr);
     }
@@ -89,7 +89,7 @@ void tumbling_bridge_act_reset(void) { // act 3
 }
 
 void tumbling_bridge_act_far(void) { // act 0
-    if (cur_obj_has_behavior(bhvLllTumblingBridge) || o->oDistanceToMario < 1000.0f) o->oAction = TUMBLING_BRIDGE_ACT_SPAWN_SECTIONS;
+    if (cur_obj_has_behavior(bhvLllTumblingBridge) || (o->oDistanceToMario < 1000.0f)) o->oAction = TUMBLING_BRIDGE_ACT_SPAWN_SECTIONS;
 }
 
 void (*sTumblingBridgeActions[])(void) = { tumbling_bridge_act_far,

@@ -50,7 +50,7 @@ void bhv_water_splash_spawn_droplets(void) {
     s32 i;
     if (o->oTimer == 0) o->oPosY = find_water_level(o->oPosX, o->oPosZ);
     if (o->oPosY > FLOOR_LOWER_LIMIT_MISC) { // Make sure it is not at the default water level
-        for (i = 0; i < 3; i++) spawn_water_droplet(o, &sWaterSplashDropletParams);
+        for ((i = 0); (i < 3); (i++)) spawn_water_droplet(o, &sWaterSplashDropletParams);
     }
 }
 

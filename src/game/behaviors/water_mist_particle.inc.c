@@ -2,7 +2,7 @@
 // TODO: Is this really "mist"?
 
 void bhv_water_mist_spawn_loop(void) {
-    clear_particle_flags(0x20000);
+    clear_particle_flags(ACTIVE_PARTICLE_BREATH);
     spawn_object(o, MODEL_MIST, bhvWaterMist);
 }
 
@@ -14,7 +14,7 @@ void bhv_water_mist_loop(void) {
     }
     cur_obj_move_using_fvel_and_gravity();
     o->oOpacity -= 42;
-    scale = (254 - o->oOpacity) / 254.0f * 1.0f + 0.5f; // seen this before
+    scale = ((((254 - o->oOpacity) / 254.0f) * 1.0f) + 0.5f); // seen this before
     cur_obj_scale(scale);
     if (o->oOpacity < 2) obj_mark_for_deletion(o);
 }

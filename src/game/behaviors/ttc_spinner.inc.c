@@ -18,7 +18,6 @@ static s16 sTTCSpinnerSpeeds[] = {
  */
 void bhv_ttc_spinner_update(void) {
     o->oAngleVelPitch = sTTCSpinnerSpeeds[gTTCSpeedSetting];
-
     if (gTTCSpeedSetting == TTC_SPEED_RANDOM) {
         if (o->oTimer > o->oTTCChangeDirTimer) {
             o->oTTCSpinnerDir = random_sign();
@@ -31,6 +30,5 @@ void bhv_ttc_spinner_update(void) {
             o->oAngleVelPitch = 0x0;
         }
     }
-
     o->oFaceAnglePitch += o->oAngleVelPitch;
 }

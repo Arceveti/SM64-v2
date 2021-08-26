@@ -501,7 +501,7 @@ static void koopa_the_quick_act_race(void) {
     if (obj_begin_race(FALSE)) {
         // Hitbox is slightly larger while racing
         cur_obj_push_mario_away_from_cylinder(180.0f, 300.0f);
-        if (cur_obj_follow_path(0) == PATH_REACHED_END) {
+        if (cur_obj_follow_path() == PATH_REACHED_END) {
             o->oAction = KOOPA_THE_QUICK_ACT_DECELERATE;
         } else {
             downhillSteepness = (1.0f + sins((Angle)(f32) o->oPathedTargetPitch));

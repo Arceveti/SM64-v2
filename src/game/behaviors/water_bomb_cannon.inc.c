@@ -20,8 +20,8 @@ void bhv_bubble_cannon_barrel_loop(void) {
                     o->oForwardVel = 35.0f;
                     waterBombObj = spawn_object(o, MODEL_WATER_BOMB, bhvWaterBomb);
                     if (waterBombObj != NULL) {
-                        waterBombObj->oForwardVel = -100.0f;
-                        waterBombObj->header.gfx.scale[1] = 1.7f;
+                        waterBombObj->oForwardVel         = -100.0f;
+                        waterBombObj->header.gfx.scale[1] =    1.7f;
                     }
                     set_camera_shake_from_point(SHAKE_POS_MEDIUM, o->oPosX, o->oPosY, o->oPosZ);
                 }
@@ -56,7 +56,7 @@ void water_bomb_cannon_act_active(void) { // act 1
                 } else {
                     cur_obj_play_sound_2(SOUND_OBJ_WATER_BOMB_CANNON);
                     o->oWaterCannonIdleTimer = 70;
-                    o->oWaterCannonTargetMovePitch =  (0x1000 + (0x400 * (random_u16() & 0x3)));
+                    o->oWaterCannonTargetMovePitch = (0x1000 + (0x400 * (random_u16() & 0x3)));
                     o->oWaterCannonTargetFaceYaw   = (-DEGREES(45) + o->oMoveAngleYaw + (0x1000 * (random_u16() % 5)));
                     o->oWaterCannonRotationTimer   = 60;
                 }

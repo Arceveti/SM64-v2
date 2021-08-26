@@ -12,7 +12,6 @@
 void piranha_plant_act_idle(void) {
     cur_obj_become_intangible();
     cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
-
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
     /**
      * This call is necessary because a Piranha Plant may enter this state
@@ -21,7 +20,6 @@ void piranha_plant_act_idle(void) {
      */
     cur_obj_scale(1.0f);
 #endif
-
     if (o->oDistanceToMario < 1200.0f) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
 }
 
@@ -41,7 +39,7 @@ Bool32 piranha_plant_check_interactions(void) {
             cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_DYING);
 
             // Spawn 20 intangible purple particles that quickly dissipate.
-            for (i = 0; i < 20; i++) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
+            for ((i = 0); (i < 20); (i++)) spawn_object(o, MODEL_PURPLE_MARBLE, bhvPurpleParticle);
             o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
         } else {
             o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
@@ -64,12 +62,9 @@ Bool32 piranha_plant_check_interactions(void) {
 void piranha_plant_act_sleeping(void) {
     cur_obj_become_tangible();
     o->oInteractType = INTERACT_BOUNCE_TOP;
-
     cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
-
     cur_obj_set_hitbox_radius_and_height( 250.0f, 200.0f);
     cur_obj_set_hurtbox_radius_and_height(150.0f, 100.0f);
-
 #if BUGFIX_PIRANHA_PLANT_SLEEP_DAMAGE
     /**
      * Make Piranha Plants harmless, but tangible, while they sleep.
@@ -81,7 +76,6 @@ void piranha_plant_act_sleeping(void) {
      */
     o->oDamageOrCoinValue = 3;
 #endif
-
     if (o->oDistanceToMario < 400.0f) {
         if (mario_moving_fast_enough_to_make_piranha_plant_bite()) o->oAction = PIRANHA_PLANT_ACT_WOKEN_UP;
     } else if (o->oDistanceToMario < 1000.0f) {
@@ -108,7 +102,7 @@ void piranha_plant_act_woken_up(void) {
     o->oDamageOrCoinValue = 3;
 #endif
     if (o->oTimer == 0) func_80321080(50);
-    if (!piranha_plant_check_interactions() && o->oTimer > 10) {
+    if (!piranha_plant_check_interactions() && (o->oTimer > 10)) {
         o->oAction = PIRANHA_PLANT_ACT_BITING;
     }
 }
@@ -164,15 +158,13 @@ void piranha_plant_act_shrink_and_die(void) {
      */
     } else if (o->oPiranhaPlantScale > 0.0f) {
         // Shrink by 0.04f per frame.
-        o->oPiranhaPlantScale = o->oPiranhaPlantScale - 0.04f;
+        o->oPiranhaPlantScale = (o->oPiranhaPlantScale - 0.04f);
     } else {
         o->oPiranhaPlantScale = 0.0f;
         cur_obj_spawn_loot_blue_coin();
         o->oAction = PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN;
     }
-
     cur_obj_scale(o->oPiranhaPlantScale);
-
 #if BUGFIX_PIRANHA_PLANT_STATE_RESET
     piranha_plant_reset_when_far(); // see this function's comment
 #endif
@@ -192,7 +184,6 @@ void piranha_plant_act_wait_to_respawn(void) {
 void piranha_plant_act_respawn(void) {
     cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_SLEEPING);
     if (o->oTimer == 0) o->oPiranhaPlantScale = 0.3f;
-
     /**
      * This state only occurs after PIRANHA_PLANT_ACT_WAIT_TO_RESPAWN, which
      * in turn only occurs after PIRANHA_PLANT_ACT_SHRINK_AND_DIE. The latter
@@ -223,26 +214,19 @@ static s8 sPiranhaPlantBiteSoundFrames[] = { 12, 28, 50, 64, -1 };
  */
 void piranha_plant_act_biting(void) {
     AnimFrame32 frame = o->header.gfx.animInfo.animFrame;
-
     cur_obj_become_tangible();
-
     o->oInteractType = INTERACT_DAMAGE;
-
     cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_BITE);
-
     cur_obj_set_hitbox_radius_and_height( 150.0f, 100.0f);
     cur_obj_set_hurtbox_radius_and_height(150.0f, 100.0f);
-
     // Play a bite sound effect on certain frames.
     if (is_item_in_array(frame, sPiranhaPlantBiteSoundFrames)) cur_obj_play_sound_2(SOUND_OBJ2_PIRANHA_PLANT_BITE);
-
     // Move to face the player.
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x400);
-
-    if (o->oDistanceToMario > 500.0f && cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_STOPPED_BITING;
+    if ((o->oDistanceToMario > 500.0f) && cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_STOPPED_BITING;
     // If the player is wearing the Metal Cap and interacts with the Piranha
     // Plant, the Piranha Plant will die.
-    if (o->oInteractStatus & INT_STATUS_INTERACTED && gMarioState->flags & MARIO_METAL_CAP) o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
+    if ((o->oInteractStatus & INT_STATUS_INTERACTED) && (gMarioState->flags & MARIO_METAL_CAP)) o->oAction = PIRANHA_PLANT_ACT_ATTACKED;
 }
 
 /**
@@ -252,7 +236,7 @@ void piranha_plant_act_biting(void) {
  * This is called from both the "stopped biting" state and the "sleeping" state.
  */
 s32 mario_moving_fast_enough_to_make_piranha_plant_bite(void) {
-    return (gMarioStates[0].vel[1] > 10.0f || gMarioStates[0].forwardVel > 10.0f);
+    return ((gMarioStates[0].vel[1] > 10.0f) || (gMarioStates[0].forwardVel > 10.0f));
 }
 
 /**
@@ -263,7 +247,6 @@ s32 mario_moving_fast_enough_to_make_piranha_plant_bite(void) {
 void piranha_plant_act_stopped_biting(void) {
     cur_obj_become_intangible();
     cur_obj_init_animation_with_sound(PIRANHA_PLANT_ANIM_STOP_BITING);
-
     if (cur_obj_check_if_near_animation_end()) o->oAction = PIRANHA_PLANT_ACT_SLEEPING;
     /**
      * Note that this state only occurs initially when the player goes further
@@ -272,7 +255,7 @@ void piranha_plant_act_stopped_biting(void) {
      * of the Piranha Plant during the short time the Piranha Plant's nod
      * animation plays.
      */
-    if (o->oDistanceToMario < 400.0f && mario_moving_fast_enough_to_make_piranha_plant_bite()) o->oAction = PIRANHA_PLANT_ACT_BITING;
+    if ((o->oDistanceToMario < 400.0f) && mario_moving_fast_enough_to_make_piranha_plant_bite()) o->oAction = PIRANHA_PLANT_ACT_BITING;
 }
 
 /**
@@ -295,7 +278,6 @@ void (*TablePiranhaPlantActions[])(void) = {
  */
 void bhv_piranha_plant_loop(void) {
     cur_obj_call_action_function(TablePiranhaPlantActions);
-
     // In WF, hide all Piranha Plants once high enough up.
     if (gCurrLevelNum == LEVEL_WF) {
         if (gMarioObject->oPosY > 3400.0f) {

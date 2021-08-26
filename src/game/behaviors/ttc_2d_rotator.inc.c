@@ -27,9 +27,9 @@ static s16 sTTC2DRotatorTimeBetweenTurns[][4] = {
     },
     {
         /* TTC_SPEED_SLOW    */ 20,
-        /* TTC_SPEED_FAST    */ 5,
-        /* TTC_SPEED_RANDOM  */ 5,
-        /* TTC_SPEED_STOPPED */ 0,
+        /* TTC_SPEED_FAST    */  5,
+        /* TTC_SPEED_RANDOM  */  5,
+        /* TTC_SPEED_STOPPED */  0,
     },
 };
 
@@ -47,19 +47,16 @@ void bhv_ttc_2d_rotator_init(void) {
  * turn, then increment the target yaw and possibly change direction.
  */
 void bhv_ttc_2d_rotator_update(void) {
-    s32 startYaw = o->oFaceAngleYaw;
-
+    Angle startYaw = o->oFaceAngleYaw;
     if (o->oTTC2DRotatorRandomDirTimer != 0) o->oTTC2DRotatorRandomDirTimer--;
-
     // Wait until rotated to target yaw
-    if (o->oTTC2DRotatorMinTimeUntilNextTurn != 0
+    if ((o->oTTC2DRotatorMinTimeUntilNextTurn != 0)
         && obj_face_yaw_approach(o->oTTC2DRotatorTargetYaw, 0xC8)) {
         // and until MinTimeUntilNextTurn has passed.
         if (o->oTimer > o->oTTC2DRotatorMinTimeUntilNextTurn) {
             // Increment target yaw
             o->oTTC2DRotatorTargetYaw += o->oTTC2DRotatorIncrement;
             o->oTimer = 0;
-
             if (gTTCSpeedSetting == TTC_SPEED_RANDOM) {
                 // If ready for a change in direction, then pick a new
                 // direction
@@ -72,12 +69,10 @@ void bhv_ttc_2d_rotator_update(void) {
                         o->oTTC2DRotatorRandomDirTimer = random_mod_offset(30, 30, 3);
                     }
                 }
-
                 o->oTTC2DRotatorMinTimeUntilNextTurn = random_mod_offset(10, 20, 3);
             }
         }
     }
-
-    o->oAngleVelYaw = o->oFaceAngleYaw - startYaw;
+    o->oAngleVelYaw = (o->oFaceAngleYaw - startYaw);
     if (o->oBehParams2ndByte == TTC_2D_ROTATOR_BP_HAND) load_object_collision_model();
 }

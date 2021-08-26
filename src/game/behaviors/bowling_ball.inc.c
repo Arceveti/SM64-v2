@@ -17,7 +17,7 @@ static Trajectory sThiHugeMetalBallTraj[] = {
     TRAJECTORY_POS(1, /*pos*/ -5000,    81, -2753),
     TRAJECTORY_POS(2, /*pos*/ -5040,    33, -3846),
     TRAJECTORY_POS(3, /*pos*/ -4966,    38, -4966),
-    TRAJECTORY_POS(4, /*pos*/ -4013,  -259, -4893),
+    TRAJECTORY_POS(4, /*pos*/ -4013,  -256, -4893),
     TRAJECTORY_POS(5, /*pos*/ -2573, -1019, -4780),
     TRAJECTORY_POS(6, /*pos*/ -1053, -1399, -4806),
     TRAJECTORY_POS(7, /*pos*/   760, -1637, -4833),
@@ -61,15 +61,14 @@ void bowling_ball_set_waypoints(void) {
 }
 
 void bhv_bowling_ball_roll_loop(void) {
-    s32 pathResult           = 0;
     bowling_ball_set_waypoints();
     ColFlags collisionFlags  = object_step();
-    pathResult               = cur_obj_follow_path(pathResult);
+    s32 pathResult           = cur_obj_follow_path();
     o->oBowlingBallTargetYaw = o->oPathedTargetYaw;
     o->oMoveAngleYaw         = approach_s16_symmetric(o->oMoveAngleYaw, o->oBowlingBallTargetYaw, 0x400);
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     bowling_ball_set_hitbox();
-    if (pathResult == -1) {
+    if (pathResult == PATH_REACHED_END) {
         if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 7000)) {
             spawn_mist_particles();
             spawn_mist_particles_variable(0, 0, 92.0f);
@@ -81,7 +80,7 @@ void bhv_bowling_ball_roll_loop(void) {
 
 void bhv_bowling_ball_initializeLoop(void) {
     bowling_ball_set_waypoints();
-    cur_obj_follow_path(0);
+    cur_obj_follow_path();
     o->oMoveAngleYaw = o->oPathedTargetYaw;
     switch (o->oBehParams2ndByte) {
         case BBALL_BP_STYPE_BOB_UPPER: o->oForwardVel = 20.0f; break;

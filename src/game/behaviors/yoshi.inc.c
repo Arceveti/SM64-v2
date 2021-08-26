@@ -18,7 +18,7 @@ void bhv_yoshi_init(void) {
     o->oFriction           = 0.9f;
     o->oBuoyancy           = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_NPC;
-    if (save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) < 120 || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) < 120) || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }
 
 void yoshi_walk_loop(void) {
@@ -28,7 +28,7 @@ void yoshi_walk_loop(void) {
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oYoshiTargetYaw, 0x500);
     if (is_point_close_to_object(o, o->oHomeX, 3174.0f, o->oHomeZ, 200)) o->oAction = YOSHI_ACT_IDLE;
     cur_obj_init_animation(YOSHI_ANIM_WALK);
-    if (animFrame == 0 || animFrame == 15) cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);
+    if ((animFrame == 0) || (animFrame == 15)) cur_obj_play_sound_2(SOUND_GENERAL_YOSHI_WALK);
     if (o->oInteractStatus == INT_STATUS_INTERACTED) o->oAction = YOSHI_ACT_TALK;
     if (o->oPosY < 2100.0f) {
         create_respawner(MODEL_YOSHI, bhvYoshi, 3000);
@@ -56,9 +56,7 @@ void yoshi_idle_loop(void) {
     if ((gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING)
      || (gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING)) {
         o->oAction = YOSHI_ACT_CREDITS;
-        o->oPosX   = -1798.0f;
-        o->oPosY   =  3174.0f;
-        o->oPosZ   = -3644.0f;
+        vec3f_set(&o->oPosVec, -1798.0f, 3174.0f, -3644.0f);
     }
 }
 
@@ -95,7 +93,7 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
         cur_obj_play_sound_2(SOUND_GENERAL_ENEMY_ALERT1);
         o->oForwardVel   = 50.0f;
         o->oVelY         = 40.0f;
-        o->oMoveAngleYaw = -0x3FFF;
+        o->oMoveAngleYaw = -(DEGREES(90) - 1);
         o->oAction       = YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN;
     }
     //! play footstep sound function?
@@ -116,7 +114,6 @@ void yoshi_finish_jumping_and_despawn_loop(void) {
 
 void yoshi_give_present_loop(void) {
     s32 timer = gGlobalTimer;
-
     if (gHudDisplay.lives == 100) {
         play_sound(SOUND_GENERAL_COLLECT_1UP, gGlobalSoundSource);
         gSpecialTripleJump = TRUE;
@@ -139,6 +136,5 @@ void bhv_yoshi_loop(void) {
         case YOSHI_ACT_GIVE_PRESENT:               yoshi_give_present_loop();               break;
         case YOSHI_ACT_CREDITS:                    cur_obj_init_animation(YOSHI_ANIM_IDLE); break;
     }
-
     curr_obj_random_blink(&o->oYoshiBlinkTimer);
 }

@@ -22,6 +22,7 @@ s32 sMontyMoleKillStreak;
  */
 Vec3f sMontyMoleLastKilledPos;
 
+//! move to object_helpers/behavior
 /**
  * Link all objects with the given behavior using parentObj.
  * The result is a singly linked list in reverse processing order. Return the

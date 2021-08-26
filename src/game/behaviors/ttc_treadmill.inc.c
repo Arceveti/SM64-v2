@@ -25,25 +25,20 @@ extern s16 ttc_movtex_tris_big_surface_treadmill[];
 extern s16 ttc_movtex_tris_small_surface_treadmill[];
 
 void bhv_ttc_treadmill_init(void) {
-    o->collisionData = segmented_to_virtual(sTTCTreadmillCollisionModels[o->oBehParams2ndByte & TREADMILL_BP_SIZE_MASK]);
-
+    o->collisionData             = segmented_to_virtual(sTTCTreadmillCollisionModels[o->oBehParams2ndByte & TREADMILL_BP_SIZE_MASK]);
     o->oTTCTreadmillBigSurface   = segmented_to_virtual(ttc_movtex_tris_big_surface_treadmill);
     o->oTTCTreadmillSmallSurface = segmented_to_virtual(ttc_movtex_tris_small_surface_treadmill);
-
-    *o->oTTCTreadmillBigSurface = *o->oTTCTreadmillSmallSurface = sTTCTreadmillSpeeds[gTTCSpeedSetting];
-
-    sMasterTreadmill = NULL;
+    *o->oTTCTreadmillBigSurface  = *o->oTTCTreadmillSmallSurface = sTTCTreadmillSpeeds[gTTCSpeedSetting];
+    sMasterTreadmill             = NULL;
 }
 
 /**
  * Update function for bhvTTCTreadmill.
  */
 void bhv_ttc_treadmill_update(void) {
-    if (sMasterTreadmill == o || sMasterTreadmill == NULL) {
+    if ((sMasterTreadmill == o) || (sMasterTreadmill == NULL)) {
         sMasterTreadmill = o;
-
         cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
-
         if (gTTCSpeedSetting == TTC_SPEED_RANDOM) {
             // Stay still for 5 frames, then accelerate toward the target speed
             // until it's time to switch
@@ -51,8 +46,8 @@ void bhv_ttc_treadmill_update(void) {
                 // Then stop and select new target speed and time until switch
                 if (approach_f32_bool(&o->oTTCTreadmillSpeed, 0.0f, 10.0f)) {
                     o->oTTCTreadmillTimeUntilSwitch = random_mod_offset(10, 20, 7);
-                    o->oTTCTreadmillTargetSpeed     = random_sign() * 50.0f;
-                    o->oTimer = 0;
+                    o->oTTCTreadmillTargetSpeed     = (random_sign() * 50.0f);
+                    o->oTimer                       = 0;
                 }
             } else if (o->oTimer > 5) {
                 approach_f32_bool(&o->oTTCTreadmillSpeed, o->oTTCTreadmillTargetSpeed, 10.0f);
@@ -60,6 +55,6 @@ void bhv_ttc_treadmill_update(void) {
             *o->oTTCTreadmillBigSurface = *o->oTTCTreadmillSmallSurface = o->oTTCTreadmillSpeed;
         }
     }
-    o->oForwardVel = 0.084f * *o->oTTCTreadmillBigSurface;
+    o->oForwardVel = (0.084f * *o->oTTCTreadmillBigSurface);
     cur_obj_compute_vel_xz();
 }

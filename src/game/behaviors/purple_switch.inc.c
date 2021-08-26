@@ -15,9 +15,9 @@ void bhv_purple_switch_loop(void) {
         case PURPLE_SWITCH_ACT_IDLE:
             cur_obj_set_model(MODEL_PURPLE_SWITCH);
             cur_obj_scale(1.5f);
-            if (gMarioObject->platform == o
+            if ((gMarioObject->platform == o)
              && !(gMarioStates[0].action & MARIO_NO_PURPLE_SWITCH)
-             && lateral_dist_between_objects(o, gMarioObject) < 127.5f) o->oAction = PURPLE_SWITCH_ACT_PRESSED;
+             && (lateral_dist_between_objects(o, gMarioObject) < 127.5f)) o->oAction = PURPLE_SWITCH_ACT_PRESSED;
             break;
         /**
          * Collapse the switch downward, play a sound, and shake the screen.
@@ -39,7 +39,7 @@ void bhv_purple_switch_loop(void) {
          * up. When time is up, move to a waiting-while-pressed state.
          */
         case PURPLE_SWITCH_ACT_TICKING:
-            play_sound(o->oTimer < 360 ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW, gGlobalSoundSource);
+            play_sound(((o->oTimer < 360) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW), gGlobalSoundSource);
             if (o->oTimer > 400) o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
             break;
         /**

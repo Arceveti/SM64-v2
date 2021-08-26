@@ -45,10 +45,10 @@ void bhv_pyramid_top_spinning(void) {
     // with a random velocity and angle.
     if (o->oTimer < 90) {
         pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
-        pyramidFragment->oForwardVel               = random_float() * 10.0f + 20.0f;
+        pyramidFragment->oForwardVel               = ((random_float() * 10.0f) + 20.0f);
         pyramidFragment->oMoveAngleYaw             = random_u16();
         pyramidFragment->oPyramidTopFragmentsScale = 0.8f;
-        pyramidFragment->oGravity                  = random_float() + 2.0f;
+        pyramidFragment->oGravity                  =  (random_float() + 2.0f);
     }
     // After enough time, transition to the exploding state.
     if (o->oTimer == 150) o->oAction = PYRAMID_TOP_ACT_EXPLODE;
