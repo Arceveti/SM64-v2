@@ -783,7 +783,7 @@ void bowser_act_charge_mario(void) {
             spawn_object_relative_with_scale(OBJ_BP_NONE,  100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
             spawn_object_relative_with_scale(OBJ_BP_NONE, -100, -50, 0, 3.0f, o, MODEL_SMOKE, bhvWhitePuffSmoke2);
             // End Charge once Bowser stops running
-            if (approach_f32_ptr_signed(&o->oForwardVel, 0, -1.0f)) o->oSubAction = BOWSER_SUB_ACT_CHARGE_END;
+            if (approach_f32_signed(&o->oForwardVel, 0, -1.0f)) o->oSubAction = BOWSER_SUB_ACT_CHARGE_END;
             cur_obj_extend_animation_if_at_end();
             break;
         case BOWSER_SUB_ACT_CHARGE_END:
@@ -893,7 +893,7 @@ void bowser_act_jump_onto_stage(void) {
                 o->oDragStrength = 0.0f;
                 if (o->oBowserDistToCentre < 2500.0f) {
                     if (absf(o->oFloorHeight - o->oHomeY) < 100.0f) {
-                        approach_f32_ptr_signed(&o->oForwardVel, 0.0f, -5.0f);
+                        approach_f32_signed(&o->oForwardVel, 0.0f, -5.0f);
                     } else {
                         cur_obj_forward_vel_approach_upward(150.0f, 2.0f);
                     }
@@ -980,7 +980,7 @@ void bowser_fly_back_dead(void) {
     o->oVelY         = 100.0f;
     o->oMoveAngleYaw = (o->oBowserAngleToCentre + 0x8000);
     o->oBowserTimer  = 0;
-    o->oSubAction    = BOWSER_SUB_ACT_DEAD_BOUNCE; 
+    o->oSubAction    = BOWSER_SUB_ACT_DEAD_BOUNCE;
 }
 
 /**

@@ -1034,12 +1034,11 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
                 break;
             case 4:
-                print_text_fmt_int(210, 120, "C2 %d", (gGlobalTimer & 0x7FFF));
-                print_text_fmt_int(210, 104, "AT %d", m->actionTimer);
-
-                print_text_fmt_int(210,  88, "AY %d", (coss(m->intendedYaw) * m->intendedMag)); // far to near
-                print_text_fmt_int(210,  72, "AX %d", (sins(m->intendedYaw) * m->intendedMag)); // left to right
-                print_text_fmt_int(64,   56, "INP %016b", m->input);
+                print_text_fmt_int(210, 104, "C2 %d", (gGlobalTimer & 0x7FFF));
+                print_text_fmt_int(210,  88, "AT %d", m->actionTimer);
+                print_text_fmt_int(210,  72, "AY %d", (coss(m->intendedYaw) * m->intendedMag)); // far to near
+                print_text_fmt_int(210,  56, "AX %d", (sins(m->intendedYaw) * m->intendedMag)); // left to right
+                print_text_fmt_int(64,   40, "INP %016b", m->input);
                 break;
         }
         // print_text_fmt_int(16, 112, "FA %d", m->floorAngle);
@@ -1048,7 +1047,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
         print_text_fmt_int(16,  64,  "F %d", gNumCalls.floor);
         print_text_fmt_int(16,  48,  "C %d", gNumCalls.ceil );
         print_text_fmt_int(16,  32,  "W %d", gNumCalls.wall );
-        print_fps(16, 16); 
+        print_fps(16, 16);
         gNumCalls.floor = 0;
         gNumCalls.ceil  = 0;
         gNumCalls.wall  = 0;

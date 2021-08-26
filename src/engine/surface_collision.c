@@ -439,7 +439,7 @@ static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
     return -((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y;
 }
 
-#ifdef BETTER_WALL_COLLISION
+#ifdef CEILING_MARGINS
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
     register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
@@ -457,7 +457,7 @@ void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
  * Iterate through the list of ceilings and find the first ceiling over a given point.
  */
 static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 x, f32 y, f32 z, f32 *pheight) {
-#ifdef BETTER_WALL_COLLISION
+#ifdef CEILING_MARGINS
     const f32 margin = 1.5f;
 #endif
     register struct Surface *surf;
@@ -483,12 +483,12 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
 #endif
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
-#ifdef BETTER_WALL_COLLISION
+#ifdef CEILING_MARGINS
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x1, &z1, surf->vertex2, surf->vertex3, margin);
 #endif
         z2 = surf->vertex2[2];
         x2 = surf->vertex2[0];
-#ifdef BETTER_WALL_COLLISION
+#ifdef CEILING_MARGINS
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x2, &z2, surf->vertex3, surf->vertex1, margin);
 #endif
         // Checking if point is in bounds of the triangle laterally.
@@ -496,7 +496,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
         // Slight optimization by checking these later.
         x3 = surf->vertex3[0];
         z3 = surf->vertex3[2];
-#ifdef BETTER_WALL_COLLISION
+#ifdef CEILING_MARGINS
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x3, &z3, surf->vertex1, surf->vertex2, margin);
 #endif
         if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) continue;
@@ -756,7 +756,7 @@ f32 find_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     if ((xPos <= -LEVEL_BOUNDARY_MAX)
      || (xPos >=  LEVEL_BOUNDARY_MAX)
      || (zPos <= -LEVEL_BOUNDARY_MAX)
-     || (zPos >=  LEVEL_BOUNDARY_MAX)) {   
+     || (zPos >=  LEVEL_BOUNDARY_MAX)) {
 #if PUPPYPRINT_DEBUG
         collisionTime[perfIteration] += (osGetTime() - first);
 #endif
@@ -812,7 +812,6 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     struct SurfaceNode *surfaceList;
     s32 height       = FLOOR_LOWER_LIMIT;
     s32 bottomheight = FLOOR_LOWER_LIMIT;
-#ifdef BETTER_WALL_COLLISION
     // Check if position is within level bounds
     if ((xPos <= -LEVEL_BOUNDARY_MAX)
      || (xPos >=  LEVEL_BOUNDARY_MAX)
@@ -824,25 +823,6 @@ f32 find_water_floor(f32 xPos, f32 yPos, f32 zPos, struct Surface **pfloor) {
     // Check for surfaces that are a part of level geometry.
     surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
     floor = find_water_floor_from_list(surfaceList, xPos, yPos, zPos, &height, &bottomheight);
-#else
-    // (Parallel Universes) Because position is casted to an s16, reaching higher
-    // float locations  can return floors despite them not existing there.
-    // (Dynamic floors will unload due to the range.)
-    s32 x = xPos;
-    s32 y = yPos;
-    s32 z = zPos;
-    // Check if position is within level bounds
-    if ((x <= -LEVEL_BOUNDARY_MAX)
-     || (x >=  LEVEL_BOUNDARY_MAX)
-     || (z <= -LEVEL_BOUNDARY_MAX)
-     || (z >=  LEVEL_BOUNDARY_MAX)) return height;
-    // Each level is split into cells to limit load, find the appropriate cell.
-    register const CellIndex cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    register const CellIndex cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX;
-    // Check for surfaces that are a part of level geometry.
-    surfaceList = gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next;
-    floor = find_water_floor_from_list(surfaceList, x, y, z, &height, &bottomheight);
-#endif
     if (floor == NULL) {
         height       = FLOOR_LOWER_LIMIT;
         bottomheight = FLOOR_LOWER_LIMIT;
@@ -1156,18 +1136,18 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
 }
 
 void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3n normalized_dir, f32 dir_length, struct Surface **hit_surface, Vec3f hit_pos, f32 *max_length, s32 flags) {
-	// Skip if OOB
-	if ((cellX >= 0) && (cellX <= (NUM_CELLS - 1)) && (cellZ >= 0) && (cellZ <= (NUM_CELLS - 1))) {
-		// Iterate through each surface in this partition
-		if ((normalized_dir[1] > -0.99999f) && (flags & RAYCAST_FIND_CEIL)) {
-			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-		}
-		if ((normalized_dir[1] <  0.99999f) && (flags & RAYCAST_FIND_FLOOR)) {
-			find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-			find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-		}
-		if (flags & RAYCAST_FIND_WALL) {
+    // Skip if OOB
+    if ((cellX >= 0) && (cellX <= (NUM_CELLS - 1)) && (cellZ >= 0) && (cellZ <= (NUM_CELLS - 1))) {
+        // Iterate through each surface in this partition
+        if ((normalized_dir[1] > -0.99999f) && (flags & RAYCAST_FIND_CEIL)) {
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+        }
+        if ((normalized_dir[1] <  0.99999f) && (flags & RAYCAST_FIND_FLOOR)) {
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+        }
+        if (flags & RAYCAST_FIND_WALL) {
             find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
             find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
@@ -1177,7 +1157,7 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
             find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
 #endif
-	}
+    }
 }
 
 void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags) {
@@ -1201,9 +1181,9 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     register CellIndex cellPrevZ = cellZ;
     // Don't do DDA if straight down
     if ((normalized_dir[1] >= 0.99999f) || (normalized_dir[1] <= -0.99999f)) {
-		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
-		return;
-	}
+        find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
+        return;
+    }
     // Get cells we cross using DDA
     if (ABSF(dir[0]) >= ABSF(dir[2])) {
         step = ((RAY_STEPS * ABSF(dir[0])) / CELL_SIZE);
@@ -1213,7 +1193,7 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     dx = ((dir[0] / step) / CELL_SIZE);
     dz = ((dir[2] / step) / CELL_SIZE);
     for ((i = 0); ((i < step) && (*hit_surface == NULL)); (i++)) {
-		find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
+        find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
         // Move cell coordinate
         fCellX   += dx;
         fCellZ   += dz;

@@ -200,10 +200,7 @@ void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
     dst[3][1] = ((a1[3][0] * a2[1][0]) + (a1[3][1] * a2[1][1]) + (a1[3][2] * a2[1][2]) - y);
     dst[3][2] = ((a1[3][0] * a2[2][0]) + (a1[3][1] * a2[2][1]) + (a1[3][2] * a2[2][2]) - z);
 
-    dst[0][3] = 0;
-    dst[1][3] = 0;
-    dst[2][3] = 0;
-    dst[3][3] = 1.0f;
+    mtxf_end(dst);
 }
 
 void obj_set_held_state(struct Object *obj, const BehaviorScript *heldBehavior) {

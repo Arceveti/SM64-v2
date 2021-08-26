@@ -63,7 +63,7 @@ u32 clamp_1bit(u32 val) {
     return (val >= 0x1);
 }
 
-// 
+//
 u32 clamp_2bits(u32 val) {
     return clamp_0_u32(val, 0x3);
 }
@@ -353,7 +353,7 @@ void generate_metal_texture(u16 *dst, u16 *src) {
 // 1 px dst y = dy px src y
 void copy_partial_image(u16 *dst,  u16 *src,
                         s32 dstX,  s32 dstY,  // 16,  0,
-                        u32 dstW,  u32 dstH,  // 32, 32, 
+                        u32 dstW,  u32 dstH,  // 32, 32,
                         u32 dstTW, u32 dstTH, // 64, 32,
                         UNUSED u32 dstFormat, UNUSED u32 dstPixelSize,
                         s32 srcX,  s32 srcY,  //  0,  0,

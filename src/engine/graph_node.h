@@ -45,7 +45,7 @@
 
 // The number of master lists. A master list determines the order and render
 // mode with which display lists are drawn.
-#ifdef SILHOUETTE
+#if SILHOUETTE
 #define GFX_NUM_MASTER_LISTS 13
 #else
 #define GFX_NUM_MASTER_LISTS 8

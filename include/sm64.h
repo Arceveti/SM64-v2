@@ -70,7 +70,7 @@
 #define DEBUG_INFO_FLAG_ALL     0xFF
 
 // Layers
-#ifdef SILHOUETTE
+#if SILHOUETTE
 #define LAYER_FORCE                     0x0
 #define LAYER_OPAQUE                    0x1
 #define LAYER_OPAQUE_INTER              0x2

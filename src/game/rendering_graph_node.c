@@ -85,7 +85,7 @@ struct RenderModeContainer {
     u32 modes[GFX_NUM_MASTER_LISTS];
 };
 
-#ifdef SILHOUETTE
+#if SILHOUETTE
 /* Rendermode settings for cycle 1 for all 13 layers. */
 struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
     G_RM_OPA_SURF,                      // LAYER_FORCE
@@ -214,11 +214,11 @@ s16 gMarioScreenX, gMarioScreenY;
 LookAt lookAt;
 #endif
 
-#ifdef SILHOUETTE
-#define SIL_ALPHA            0x7F
+#if SILHOUETTE
+#define SIL_CVG_THRESHOLD    0x3F                   // 32..255
 #define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA // Last silhouette layer
 #define NUM_EXTRA_SIL_LAYERS 1                      // Number of silhouette layers - 1
-#define SCHWA AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL
+#define SCHWA (AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL)
 #endif
 
 /**
@@ -227,7 +227,7 @@ LookAt lookAt;
 static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     struct DisplayListNode *currList;
     s32 i;
-#ifdef SILHOUETTE
+#if SILHOUETTE
     s32 j;
 #endif
     s32 enableZBuffer                     = ((node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0);
@@ -245,7 +245,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gDPPipeSync(       gDisplayListHead++           );
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
-#ifdef SILHOUETTE
+#if SILHOUETTE
     for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
@@ -257,8 +257,8 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
                     // Enable fog for silhouette models
                     gSPSetGeometryMode( gDisplayListHead++, G_FOG);
                     gSPFogPosition(     gDisplayListHead++, 0, 1 );
-                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0,  SIL_ALPHA      ); // silhouette color & alpha
-                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, (SIL_ALPHA >> 1)); // silhouette env transparency
+                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SILHOUETTE); // silhouette color & alpha
+                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_CVG_THRESHOLD); // silhouette env transparency
                 } else {
                     // use only the normal mode list for non-silhouette layers
                     gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i],
@@ -291,7 +291,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         }
     }
 #else
-    for (i = 0; i < GFX_NUM_MASTER_LISTS; i++) {
+    for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) {
         if ((currList = node->listHeads[i]) != NULL) {
             gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i], mode2List->modes[i]);
             while (currList != NULL) {
@@ -337,7 +337,7 @@ static void geo_append_display_list(void *displayList, DrawingLayer layer) {
  */
 static void geo_process_master_list(struct GraphNodeMasterList *node) {
     s32 i;
-    if (gCurGraphNodeMasterList == NULL && node->node.children != NULL) {
+    if ((gCurGraphNodeMasterList == NULL) && (node->node.children != NULL)) {
         gCurGraphNodeMasterList = node;
         for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) node->listHeads[i] = NULL;
         geo_process_node_and_siblings(node->node.children);
@@ -352,10 +352,10 @@ static void geo_process_master_list(struct GraphNodeMasterList *node) {
 static void geo_process_ortho_projection(struct GraphNodeOrthoProjection *node) {
     if (node->node.children != NULL) {
         Mtx *mtx = alloc_display_list(sizeof(*mtx));
-        f32 left   = ((gCurGraphNodeRoot->x - gCurGraphNodeRoot->width ) / 2.0f * node->scale);
-        f32 right  = ((gCurGraphNodeRoot->x + gCurGraphNodeRoot->width ) / 2.0f * node->scale);
-        f32 top    = ((gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f * node->scale);
-        f32 bottom = ((gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f * node->scale);
+        f32 left   = (((gCurGraphNodeRoot->x - gCurGraphNodeRoot->width ) / 2.0f) * node->scale);
+        f32 right  = (((gCurGraphNodeRoot->x + gCurGraphNodeRoot->width ) / 2.0f) * node->scale);
+        f32 top    = (((gCurGraphNodeRoot->y - gCurGraphNodeRoot->height) / 2.0f) * node->scale);
+        f32 bottom = (((gCurGraphNodeRoot->y + gCurGraphNodeRoot->height) / 2.0f) * node->scale);
         guOrtho(mtx, left, right, bottom, top, -2.0f, 2.0f, 1.0f);
         gSPPerspNormalize(gDisplayListHead++, 0xFFFF);
         gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
@@ -409,7 +409,7 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
     struct GraphNode *selectedChild = node->fnNode.node.children;
     s32 i;
     if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
-    for (i = 0; selectedChild != NULL && node->selectedCase > i; i++) selectedChild = selectedChild->next;
+    for ((i = 0); ((selectedChild != NULL) && (node->selectedCase > i)); (i++)) selectedChild = selectedChild->next;
     if (selectedChild != NULL) geo_process_node_and_siblings(selectedChild);
 }
 
@@ -607,8 +607,7 @@ static void geo_process_background(struct GraphNodeBackground *node) {
         gDPPipeSync(      gfx++);
         gDPSetCycleType(  gfx++, G_CYC_FILL);
         gDPSetFillColor(  gfx++, node->background);
-        gDPFillRectangle( gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
-                                (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (SCREEN_HEIGHT - gBorderHeight - 1));
+        gDPFillRectangle( gfx++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight, (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), ((SCREEN_HEIGHT - gBorderHeight) - 1));
         gDPPipeSync(      gfx++);
         gDPSetCycleType(  gfx++, G_CYC_1CYCLE);
         gSPEndDisplayList(gfx++);

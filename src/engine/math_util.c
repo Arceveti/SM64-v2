@@ -67,30 +67,30 @@ f32 slow_powf(f32 base, f32 exponent) {
  ****************************/
 
 f32 Q_rsqrtf(f32 number) {
-	long i;
-	f32 x2, y;
-	x2 = (number * 0.5f);
-	y  =  number;
-	i  = *(long *) &y;
-	i  = (0x5f3759df - (i >> 1));
-	y  = *(f32 *) &i;
-	y  = (y * (1.5f - (x2 * sqr(y)))); // 1st iteration
-	// y  = (y * (1.5f - (x2 * sqr(y)))); // 2nd iteration, this can be removed
-	return y;
+    long i;
+    f32 x2, y;
+    x2 = (number * 0.5f);
+    y  =  number;
+    i  = *(long *) &y;
+    i  = (0x5f3759df - (i >> 1));
+    y  = *(f32 *) &i;
+    y  = (y * (1.5f - (x2 * sqr(y)))); // 1st iteration
+    // y  = (y * (1.5f - (x2 * sqr(y)))); // 2nd iteration, this can be removed
+    return y;
 }
 
 f64 Q_rsqrtd(f64 number) {
-	long i;
-	f64 x2, y;
-	x2 = (number * 0.5);
-	y  =  number;
-	i  = *(long *) &y;
+    long i;
+    f64 x2, y;
+    x2 = (number * 0.5);
+    y  =  number;
+    i  = *(long *) &y;
     // The magic number is for doubles is from https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
-	i  = (0x5fe6eb50c7b537a9 - (i >> 1));
-	y  = *(f64 *) &i;
-	y  = (y * (1.5 - (x2 * sqr(y)))); // 1st iteration
+    i  = (0x5fe6eb50c7b537a9 - (i >> 1));
+    y  = *(f64 *) &i;
+    y  = (y * (1.5 - (x2 * sqr(y)))); // 1st iteration
     // y  = (y * (1.5 - (x2 * sqr(y)))); // 2nd iteration, this can be removed
-	return y;
+    return y;
 }
 #endif
 
@@ -117,10 +117,10 @@ inline f32 froundf(f32 in) {
 }
 
 /// Round `num` to the nearest integer.
-inline s16 round_float_to_short( f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); }
-inline s32 round_float_to_int(   f32 num) { return num + ((num >= 0.0f) ? 0.5f : -0.5f); } //! use roundf instead?
-inline s16 round_double_to_short(f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
-inline s32 round_double_to_int(  f64 num) { return num + ((num >= 0.0 ) ? 0.5  : -0.5 ); }
+inline s16 round_float_to_short( f32 num) { return (num + ((num >= 0.0f) ? 0.5f : -0.5f)); }
+inline s32 round_float_to_int(   f32 num) { return (num + ((num >= 0.0f) ? 0.5f : -0.5f)); } //! use roundf instead?
+inline s16 round_double_to_short(f64 num) { return (num + ((num >= 0.0 ) ? 0.5  : -0.5 )); }
+inline s32 round_double_to_int(  f64 num) { return (num + ((num >= 0.0 ) ? 0.5  : -0.5 )); }
 
 /**
  * Rounds a floating-point component of a normal vector to an s8 by multiplying it by 127 or 128 and
@@ -163,24 +163,24 @@ inline f64 absd(f64 x) { return ((x < 0.0 ) ? -x : x); }
  ***********************/
 
 /// Returns the lowest of three values.
-inline s8  min_3c( s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s8  min_3c (s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 inline u8  min_3uc(u8  a0, u8  a1,  u8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline s16 min_3s( s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s16 min_3s (s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 inline u16 min_3us(s16 a0, u16 a1, u16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline s32 min_3i( s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s32 min_3i (s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 inline u32 min_3ui(u32 a0, u32 a1, u32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline f32 min_3f( f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline f64 min_3d( f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline f32 min_3f (f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline f64 min_3d (f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
 
 /// Returns the highest of three values.
-inline s8  max_3c( s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s8  max_3c (s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 inline u8  max_3uc(u8  a0,  u8 a1,  u8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline s16 max_3s( s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s16 max_3s (s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 inline u16 max_3us(u16 a0, u16 a1, u16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline s32 max_3i( s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s32 max_3i (s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 inline u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline f32 max_3f( f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline f64 max_3d( f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline f32 max_3f (f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline f64 max_3d (f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
 
 /*******************
  * Clamp functions *
@@ -455,6 +455,31 @@ void vec3s_sub(Vec3s dest, Vec3s a) {
     vec3s_diff(dest, dest, a);
 }
 
+/**
+ * Given two points, return the vector from one to the other represented
+ * as Euler angles and a length
+ */
+void vec3s_get_dist_and_angle(Vec3s from, Vec3s to, s16 *dist, Angle *pitch, Angle *yaw) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    register f32 ld = (sqr(dx) + sqr(dz));
+    *dist           = sqrtf(ld + sqr(dy));
+    *pitch          = atan2s(sqrtf(ld), dy);
+    *yaw            = atan2s(dz, dx);
+}
+
+/**
+ * Calculate the 'result' vector as the position of the 'origin' vector
+ * with a vector added represented by radius, pitch and yaw.
+ */
+void vec3s_set_dist_and_angle(Vec3s from, Vec3s to, s16 dist, Angle pitch, Angle yaw) {
+    register f32 dc  = (dist * coss(pitch));
+    to[0] = (from[0] + (  dc * sins(yaw  )));
+    to[1] = (from[1] + (dist * sins(pitch)));
+    to[2] = (from[2] + (  dc * coss(yaw  )));
+}
+
 /// Convert short vector a to int vector 'dest'
 void vec3s_to_vec3i(Vec3i dest, Vec3s a) {
     dest[0] = a[0];
@@ -531,17 +556,17 @@ void vec3f_zero(Vec3f v) {
  */
 UNUSED void vec3f_clamp(Vec3f vec, f32 limit) {
     if (vec[0] > limit) {
-        vec[0] = limit;
+        vec[0] =  limit;
     } else if (vec[0] < -limit) {
         vec[0] = -limit;
     }
     if (vec[1] > limit) {
-        vec[1] = limit;
+        vec[1] =  limit;
     } else if (vec[1] < -limit) {
         vec[1] = -limit;
     }
     if (vec[2] > limit) {
-        vec[2] = limit;
+        vec[2] =  limit;
     } else if (vec[2] < -limit) {
         vec[2] = -limit;
     }
@@ -549,7 +574,7 @@ UNUSED void vec3f_clamp(Vec3f vec, f32 limit) {
 
 /// Get the magnitude of vector 'v'
 f32 vec3f_mag(Vec3f v) {
-	return sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
+    return sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
 }
 
 /// Scale vector 'dest' so it has length 1
@@ -563,7 +588,7 @@ void vec3f_normalize(Vec3f dest) {
         register f32 mag = (1.0f / vec3f_mag(dest));
 #endif
         if (mag == 0.0f) {
-            vec3f_copy(dest, gVec3fZero);
+            vec3f_zero(dest);
             return;
         }
         vec3f_mul_f32(dest, mag);
@@ -572,8 +597,12 @@ void vec3f_normalize(Vec3f dest) {
 
 /// Scale vector 'dest' so it has length 'max'
 void vec3f_normalize_max(Vec3f dest, f32 max) {
-    register f32 mag = vec3f_mag(dest); 
+    register f32 mag = vec3f_mag(dest);
     if (mag > max) {
+        if (mag == 0.0f) {
+            vec3f_zero(dest);
+            return;
+        }
         mag = (max / mag); //! fast invsqrt?
         vec3f_mul_f32(dest, mag);
     }
@@ -648,9 +677,10 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Ang
  * and has the angles pitch and yaw.
  */
 void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle yaw) {
-    to[0] = (from[0] + (dist * coss(pitch) * sins(yaw)));
-    to[1] = (from[1] + (dist * sins(pitch)            ));
-    to[2] = (from[2] + (dist * coss(pitch) * coss(yaw)));
+    register f32 dc  = (dist * coss(pitch) );
+    to[0] = (from[0] + (  dc * sins(yaw  )));
+    to[1] = (from[1] + (dist * sins(pitch)));
+    to[2] = (from[2] + (  dc * coss(yaw  )));
 }
 
 void vec3f_mul_f32(Vec3f dest, f32 scale) {
@@ -725,6 +755,33 @@ void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
     out->v.ob[0] = temp[0];
     out->v.ob[1] = temp[1];
     out->v.ob[2] = temp[2];
+}
+
+/**
+ * Rotates the input vertices according to the give pitch and yaw. This
+ * is needed for billboarding of particles.
+ */
+void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, Angle pitch, Angle yaw) {
+    f32 cosPitch = coss(pitch);
+    f32 sinPitch = sins(pitch);
+    f32 cosMYaw  = coss(-yaw);
+    f32 sinMYaw  = sins(-yaw);
+    Vec3f v1, v2, v3;
+    vec3s_to_vec3f(v1, vertex1);
+    vec3s_to_vec3f(v2, vertex2);
+    vec3s_to_vec3f(v3, vertex3);
+
+    vertex1[0] = ((v1[0] * cosMYaw ) + (v1[1] * ( sinPitch * sinMYaw)) + (v1[2] * (-sinMYaw * cosPitch)));
+    vertex1[1] = ((v1[1] * cosPitch) + (v1[2] *   sinPitch));
+    vertex1[2] = ((v1[0] * sinMYaw ) + (v1[1] * (-sinPitch * cosMYaw)) + (v1[2] * (cosPitch * cosMYaw )));
+
+    vertex2[0] = ((v2[0] * cosMYaw ) + (v2[1] * ( sinPitch * sinMYaw)) + (v2[2] * (-sinMYaw * cosPitch)));
+    vertex2[1] = ((v2[1] * cosPitch) + (v2[2] *   sinPitch));
+    vertex2[2] = ((v2[0] * sinMYaw ) + (v2[1] * (-sinPitch * cosMYaw)) + (v2[2] * (cosPitch * cosMYaw )));
+
+    vertex3[0] = ((v3[0] * cosMYaw ) + (v3[1] * ( sinPitch * sinMYaw)) + (v3[2] * (-sinMYaw * cosPitch)));
+    vertex3[1] = ((v3[1] * cosPitch) + (v3[2] *   sinPitch));
+    vertex3[2] = ((v3[0] * sinMYaw ) + (v3[1] * (-sinPitch * cosMYaw)) + (v3[2] * (cosPitch * cosMYaw )));
 }
 
 /**
@@ -819,7 +876,7 @@ void mtxf_identity(Mat4 mtx) {
     vec3f_copy(mtx[0], gVec3fX);
     vec3f_copy(mtx[1], gVec3fY);
     vec3f_copy(mtx[2], gVec3fZ);
-    vec3f_copy(mtx[3], gVec3fZero);
+    vec3f_zero(mtx[3]);
     mtxf_end(mtx);
     // register s32 i;
     // register f32 *dest;
@@ -922,46 +979,38 @@ void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
     dest[0][0] = (( cy * cz) + (sx * sy * sz));
     dest[1][0] = ((-cy * sz) + (sx * sy * cz));
     dest[2][0] =  ( cx * sy);
-    dest[3][0] = translate[0];
     dest[0][1] =  ( cx * sz);
     dest[1][1] =  ( cx * cz);
     dest[2][1] = -sx;
-    dest[3][1] = translate[1];
     dest[0][2] = ((-sy * cz) + (sx * cy * sz));
     dest[1][2] = (( sy * sz) + (sx * cy * cz));
     dest[2][2] =  ( cx * cy);
-    dest[3][2] = translate[2];
-    dest[0][3] = dest[1][3] = dest[2][3] = 0.0f;
-    dest[3][3] = 1.0f;
+    vec3f_copy(dest[3], translate);
+    mtxf_end(dest);
 }
 
 /**
  * Build a matrix that rotates around the x axis, then the y axis, then the z
  * axis, and then translates.
  */
-void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f b, Vec3s c) {
-    register f32 sx = sins(c[0]);
-    register f32 cx = coss(c[0]);
-    register f32 sy = sins(c[1]);
-    register f32 cy = coss(c[1]);
-    register f32 sz = sins(c[2]);
-    register f32 cz = coss(c[2]);
+void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
+    register f32 sx = sins(rotate[0]);
+    register f32 cx = coss(rotate[0]);
+    register f32 sy = sins(rotate[1]);
+    register f32 cy = coss(rotate[1]);
+    register f32 sz = sins(rotate[2]);
+    register f32 cz = coss(rotate[2]);
     dest[0][0] = (cy * cz);
     dest[0][1] = (cy * sz);
     dest[0][2] = -sy;
-    dest[0][3] = 0;
     dest[1][0] = ((sx * sy * cz) - (cx * sz));
     dest[1][1] = ((sx * sy * sz) + (cx * cz));
     dest[1][2] = (sx * cy);
-    dest[1][3] = 0;
     dest[2][0] = ((cx * sy * cz) + (sx * sz));
     dest[2][1] = ((cx * sy * sz) - (sx * cz));
     dest[2][2] = (cx * cy);
-    dest[2][3] = 0;
-    dest[3][0] =  b[0];
-    dest[3][1] =  b[1];
-    dest[3][2] =  b[2];
-    dest[3][3] = 1;
+    vec3f_copy(dest[3], translate);
+    mtxf_end(dest);
 }
 
 /**
@@ -1053,10 +1102,7 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     dest[3][1] = pos[1];
     vec3f_copy(dest[2], forwardDir);
     dest[3][2] = pos[2];
-    dest[0][3] = 0.0f;
-    dest[1][3] = 0.0f;
-    dest[2][3] = 0.0f;
-    dest[3][3] = 1.0f;
+    mtxf_end(dest);
 }
 
 /**
@@ -1095,15 +1141,12 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     vec3f_cross(     zColumn, xColumn, yColumn                        );
     vec3f_normalize( zColumn                                          );
     vec3f_copy(mtx[0], xColumn);
-    mtx[3][0] = pos[0];
     vec3f_copy(mtx[1], yColumn);
-    mtx[3][1] = ((avgY < pos[1]) ? pos[1] : avgY);
     vec3f_copy(mtx[2], zColumn);
+    mtx[3][0] = pos[0];
+    mtx[3][1] = ((avgY < pos[1]) ? pos[1] : avgY);
     mtx[3][2] = pos[2];
-    mtx[0][3] = 0;
-    mtx[1][3] = 0;
-    mtx[2][3] = 0;
-    mtx[3][3] = 1;
+    mtxf_end(mtx);
 }
 
 /**
@@ -1199,7 +1242,7 @@ void mtxf_mul_vec3f(Mat4 mtx, Vec3f b) {
  */
 void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
     s32 i;
-    for (i = 0; i < 3; i++) dst[i] = ((mtx[0][i] * v[0]) + (mtx[1][i] * v[1]) + (mtx[2][i] * v[2]));
+    for ((i = 0); (i < 3); (i++)) dst[i] = ((mtx[0][i] * v[0]) + (mtx[1][i] * v[1]) + (mtx[2][i] * v[2]));
 }
 
 /**
@@ -1212,7 +1255,7 @@ void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
  */
 void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
     s32 i;
-    for (i = 0; i < 3; i++) dst[i] = ((mtx[i][0] * v[0]) + (mtx[i][1] * v[1]) + (mtx[i][2] * v[2]));
+    for ((i = 0); (i < 3); (i++)) dst[i] = ((mtx[i][0] * v[0]) + (mtx[i][1] * v[1]) + (mtx[i][2] * v[2]));
 }
 
 /**
@@ -1225,13 +1268,13 @@ void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
  * and no crashes occur.
  */
 void mtxf_to_mtx(Mtx *dest, Mat4 src) {
-	Mat4 temp;
-	register s32 i, j;
-	for((i = 0); (i < 4); (i++)) {
-		for((j = 0); (j < 3); (j++)) temp[i][j] = (src[i][j] / WORLD_SCALE);
-		temp[i][3] = src[i][3];
-	}
-	guMtxF2L( temp, dest );
+    Mat4 temp;
+    register s32 i, j;
+    for((i = 0); (i < 4); (i++)) {
+        for((j = 0); (j < 3); (j++)) temp[i][j] = (src[i][j] / WORLD_SCALE);
+        temp[i][3] = src[i][3];
+    }
+    guMtxF2L( temp, dest );
 }
 
 /**
@@ -1272,17 +1315,14 @@ void mtxf_inverse_rotate_translate(Mat4 in, Mat4 out) {
     invRot[0][0]    = in[0][0];
     invRot[0][1]    = in[1][0];
     invRot[0][2]    = in[2][0];
-    invRot[0][3]    = 0.0f;
     invRot[1][0]    = in[0][1];
     invRot[1][1]    = in[1][1];
     invRot[1][2]    = in[2][1];
-    invRot[1][3]    = 0.0f;
     invRot[2][0]    = in[0][2];
     invRot[2][1]    = in[1][2];
     invRot[2][2]    = in[2][2];
-    invRot[2][3]    = 0.0f;
-    vec3f_copy(invRot[3], gVec3fZero);
-    invRot[3][3]    = 1.0f;
+    vec3f_zero(invRot[3]);
+    mtxf_end(invRot);
     negTranslate[0] = -in[3][0];
     negTranslate[1] = -in[3][1];
     negTranslate[2] = -in[3][2];
@@ -1303,7 +1343,7 @@ f32 det_2x2(f32 a, f32 b, f32 c, f32 d) {
  * returns the determinant.
  */
 f32 det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
-            f32 r1c0, f32 r1c1, f32 r1c2, 
+            f32 r1c0, f32 r1c1, f32 r1c2,
             f32 r2c0, f32 r2c1, f32 r2c2) {
     return ((r0c0 * det_2x2(r1c1, r1c2, r2c1, r2c2))
           - (r1c0 * det_2x2(r0c1, r0c2, r2c1, r2c2))
@@ -1331,6 +1371,23 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
     return current;
 }
 
+s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
+    s16 dist = (target - current);
+    if (dist >= 0) { // target >= current
+        current = ((dist >  inc) ? (current + inc) : target);
+    } else { // target < current
+        current = ((dist < -inc) ? (current - inc) : target);
+    }
+    return current;
+}
+
+Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
+    *current = approach_s16_symmetric(*current, target, inc);
+    return !(*current == target);
+}
+
+
+//! TODO: Combine all these approach_f32 functions
 /**
  * Return the value 'current' after it tries to approach target, going up at
  * most 'inc' and going down at most 'dec'.
@@ -1339,23 +1396,39 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
     if (current < target) {
         current += inc;
         if (current > target) current = target;
-    } else {
+    } else if (current > target) {
         current -= dec;
         if (current < target) current = target;
     }
     return current;
 }
 
+Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc) {
+    if (*current < target) {
+        *current += inc;
+        if (*current > target) *current = target;
+    } else if (*current > target) {
+        *current -= inc;
+        if (*current < target) *current = target;
+    } else {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 /**
  * Returns a value that is src incremented/decremented by inc towards goal
  * until goal is reached. Does not overshoot.
  */
-f32 approach_f32_by_increment(f32 current, f32 target, f32 inc) {
-    if (current <= target) {
-        return (((target - current) <  inc) ? target : (current + inc));
+Bool32 approach_f32_by_increment(f32 *current, f32 target, f32 inc) {
+    if (*current < target) {
+        *current = (((target - *current) <  inc) ? target : (*current + inc));
+    } else if (*current > target) {
+        *current = (((target - *current) > -inc) ? target : (*current - inc));
     } else {
-        return (((target - current) > -inc) ? target : (current - inc));
+        return TRUE;
     }
+    return FALSE;
 }
 
 Bool32 approach_f32_ptr(f32 *current, f32 target, f32 inc) {
@@ -1368,29 +1441,12 @@ Bool32 approach_f32_ptr(f32 *current, f32 target, f32 inc) {
     return FALSE;
 }
 
-Bool32 approach_f32_ptr_signed(f32 *current, f32 target, f32 inc) {
-    Bool32 reachedTarget = FALSE;
-    *current += inc;
-    if (inc >= 0.0f) {
-        if (*current > target) {
-            *current = target;
-            reachedTarget = TRUE;
-        }
-    } else {
-        if (*current < target) {
-            *current = target;
-            reachedTarget = TRUE;
-        }
-    }
-    return reachedTarget;
-}
-
 f32 approach_f32_symmetric(f32 current, f32 target, f32 inc) {
     f32 dist = (target - current);
     if (inc < 0) inc = -inc;
-    if (dist >= 0.0f) {
+    if (dist >= 0.0f) { // target >= current
         current = ((dist >  inc) ? (current + inc) : target);
-    } else {
+    } else { // target < current
         current = ((dist < -inc) ? (current - inc) : target);
     }
     return current;
@@ -1401,19 +1457,20 @@ Bool32 approach_f32_symmetric_bool(f32 *current, f32 target, f32 inc) {
     return !(*current == target);
 }
 
-s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
-    s16 dist = (target - current);
-    if (dist >= 0) {
-        current = ((dist >  inc) ? (current + inc) : target);
+Bool32 approach_f32_signed(f32 *current, f32 target, f32 inc) {
+    *current += inc;
+    if (inc >= 0.0f) {
+        if (*current > target) {
+            *current = target;
+            return TRUE;
+        }
     } else {
-        current = ((dist < -inc) ? (current - inc) : target);
+        if (*current < target) {
+            *current = target;
+            return TRUE;
+        }
     }
-    return current;
-}
-
-Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
-    *current = approach_s16_symmetric(*current, target, inc);
-    return !(*current == target);
+    return FALSE;
 }
 
 /**
@@ -1551,7 +1608,6 @@ f32 atan2f(f32 y, f32 x) {
     return (((f32) atan2s(y, x) * M_PI) / 0x8000);
 }
 
-
 /**
  * Return atan2(a, b) in degrees. Note that the argument order is swapped from
  * the standard atan2.
@@ -1666,7 +1722,7 @@ Bool32 anim_spline_poll(Vec3f result) {
     Vec4f weights;
     s32 i;
     Bool32 hasEnded = FALSE;
-    vec3f_copy(result, gVec3fZero);
+    vec3f_zero(result);
     spline_get_weights(weights, gSplineKeyframeFraction, gSplineState);
     for ((i = 0); (i < 4); (i++)) {
         result[0] += (weights[i] * gSplineKeyframe[i][1]);
@@ -1697,11 +1753,11 @@ void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a
     if (u > 1.0f) u  = 1.0f;
     register f32 nu  = (1.0f - u);
     register f32 su  = sqr(u);
-    register f32 cu2 = (cube(u) / 2.0f);
+    register f32 hcu = (cube(u) / 2.0f);
     B[0] = (  cube(nu) / 6.0f);
-    B[1] = (( cu2       ) -  su                      + 0.66666667f);
-    B[2] = ((-cu2       ) + (su / 2.0f) + (u / 2.0f) + 0.16666667f);
-    B[3] = (( cu2 / 3.0f)                                             );
+    B[1] = (( hcu       ) -  su                      + 0.66666667f);
+    B[2] = ((-hcu       ) + (su / 2.0f) + (u / 2.0f) + 0.16666667f);
+    B[3] = (( hcu / 3.0f)                                         );
     Q[0] = ((B[0] * a0[0]) + (B[1] * a1[0]) + (B[2] * a2[0]) + (B[3] * a3[0]));
     Q[1] = ((B[0] * a0[1]) + (B[1] * a1[1]) + (B[2] * a2[1]) + (B[3] * a3[1]));
     Q[2] = ((B[0] * a0[2]) + (B[1] * a1[2]) + (B[2] * a2[2]) + (B[3] * a3[2]));

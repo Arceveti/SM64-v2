@@ -1192,22 +1192,22 @@ CameraTransitionAngle update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED 
     faceAngle[2] = 0x0;
     vec3f_copy(basePos, sFixedModeBasePosition);
     vec3f_add(basePos, sCastleEntranceOffset);
-    if (sMarioGeometry.currFloorType != SURFACE_DEATH_PLANE && sMarioGeometry.currFloorHeight != FLOOR_LOWER_LIMIT) {
+    if ((sMarioGeometry.currFloorType != SURFACE_DEATH_PLANE) && (sMarioGeometry.currFloorHeight != FLOOR_LOWER_LIMIT)) {
         goalHeight = (sMarioGeometry.currFloorHeight + basePos[1] + heightOffset);
     } else {
         goalHeight = gLakituState.goalPos[1];
     }
-    if (300 > distCamToFocus) goalHeight += 300 - distCamToFocus;
-    ceilHeight = find_ceil(c->pos[0], goalHeight - 100.0f, c->pos[2], &ceiling);
-    if (ceilHeight != CELL_HEIGHT_LIMIT && (goalHeight > (ceilHeight -= 125.0f))) goalHeight = ceilHeight;
+    if (300 > distCamToFocus) goalHeight += (300 - distCamToFocus);
+    ceilHeight = find_ceil(c->pos[0], (goalHeight - 100.0f), c->pos[2], &ceiling);
+    if ((ceilHeight != CELL_HEIGHT_LIMIT) && (goalHeight > (ceilHeight -= 125.0f))) goalHeight = ceilHeight;
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
         approach_f32_symmetric_bool(&c->pos[1], goalHeight, 15.0f);
     } else {
         if (goalHeight < sMarioCamState->pos[1] - 500.0f) goalHeight = (sMarioCamState->pos[1] - 500.0f);
         c->pos[1] = goalHeight;
     }
-    c->pos[0] = basePos[0] + (sMarioCamState->pos[0] - basePos[0]) * scaleToMario;
-    c->pos[2] = basePos[2] + (sMarioCamState->pos[2] - basePos[2]) * scaleToMario;
+    c->pos[0] = (basePos[0] + ((sMarioCamState->pos[0] - basePos[0]) * scaleToMario));
+    c->pos[2] = (basePos[2] + ((sMarioCamState->pos[2] - basePos[2]) * scaleToMario));
     if (scaleToMario != 0.0f) {
         vec3f_get_dist_and_angle(c->focus, c->pos, &distCamToFocus, &pitch, &yaw);
         if (distCamToFocus > 1000.0f) {
@@ -1273,7 +1273,7 @@ CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Ve
         ny = floor->normal.y;
         nz = floor->normal.z;
         oo = floor->originOffset;
-        pos[1] = 300.0f - (nx * pos[0] + nz * pos[2] + oo) / ny;
+        pos[1] = (300.0f - ((nx * pos[0] + nz * pos[2] + oo) / ny));
         switch (gCurrLevelArea) {
             case AREA_BOB: // fall through
             case AREA_WF: pos[1] += 125.0f; break;
@@ -1294,7 +1294,7 @@ CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Ve
     // This doesn't zoom out of bounds because pos is set above each frame.
     // The constant 0x1000 doubles the pitch from the center when sLakituPitch is 0
     // When Lakitu is fully zoomed out, the pitch comes to 0x3800, or 78.75 degrees, up from the focus.
-    vec3f_set_dist_and_angle(pos, pos, sLakituDist, sLakituPitch + 0x1000, yaw);
+    vec3f_set_dist_and_angle(pos, pos, sLakituDist, (sLakituPitch + 0x1000), yaw);
     return yaw;
 }
 
@@ -1364,8 +1364,8 @@ CameraTransitionAngle update_behind_mario_camera(struct Camera *c, Vec3f focus, 
     Angle goalYawOff = 0x0;
     Angle yawSpeed;
     Angle pitchInc   = 0x20;
-    f32 maxDist      = 800.0f;
-    f32 focYOff      = 125.0f;
+    f32   maxDist    = 800.0f;
+    f32   focYOff    = 125.0f;
     // Zoom in when Mario R_TRIG mode is active
     if (sSelectionFlags & CAM_MODE_MARIO_ACTIVE) {
         maxDist = 350.0f;
@@ -1492,7 +1492,7 @@ Angle update_slide_camera(struct Camera *c) {
     Angle goalPitch = 0x1555;
     Angle goalYaw   = (sMarioCamState->faceAngle[1] + DEGREES(180));
     // Zoom in when inside the CCM shortcut
-    sLakituDist   = approach_f32(sLakituDist, (sStatusFlags & CAM_FLAG_CCM_SLIDE_SHORTCUT) ? -600.0f : 0.0f, 20.0f, 20.0f);
+    sLakituDist   = approach_f32(sLakituDist, ((sStatusFlags & CAM_FLAG_CCM_SLIDE_SHORTCUT) ? -600.0f : 0.0f), 20.0f, 20.0f);
     // No C-Button input in this mode, notify the player with a buzzer
     play_camera_buzz_if_cbutton();
     // Focus on Mario

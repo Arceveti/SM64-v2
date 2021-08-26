@@ -39,7 +39,7 @@ void bub_move_vertically(s32 a0) {
     f32 parentY = o->parentObj->oPosY;
     if (((parentY - 100.0f - o->oCheepCheepMaxYOffset) < o->oPosY)
         && (o->oPosY < (parentY + 1000.0f + o->oCheepCheepMaxYOffset))) {
-        o->oPosY = approach_f32_symmetric(o->oPosY, o->oCheepCheepTargetY, a0);
+        approach_f32_symmetric_bool(&o->oPosY, o->oCheepCheepTargetY, a0);
     }
 }
 

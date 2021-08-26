@@ -157,7 +157,7 @@ void update_air_with_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        m->forwardVel = approach_f32(m->forwardVel, 0.0f, 0.35f, 0.35f);
+        approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
             intendedMag  = (m->intendedMag / 32.0f);
@@ -203,8 +203,7 @@ void update_air_without_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        m->forwardVel = approach_f32(m->forwardVel, 0.0f, 0.35f, 0.35f);
-
+        approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
             intendedMag    = (m->intendedMag / 32.0f);
@@ -604,7 +603,7 @@ Bool32 act_twirling(struct MarioState *m) {
 #ifdef Z_TWIRL
     if (m->input & INPUT_Z_DOWN) {
         yawVelTarget = 0x2400;
-    } else 
+    } else
 #endif
     if (m->input & INPUT_A_DOWN) {
         yawVelTarget = 0x2000;
@@ -1128,7 +1127,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
             }
             return set_mario_action(m, ACT_WALL_SLIDE, 0);
         }
-        m->marioObj->header.gfx.angle[1] = wallAngle; 
+        m->marioObj->header.gfx.angle[1] = wallAngle;
     }
 #else
     if (m->heldObj != NULL) mario_drop_held_object(m);
@@ -1297,7 +1296,7 @@ Bool32 act_lava_boost(struct MarioState *m) {
         queue_rumble_data(5, 80);
     }
 #endif
-    if (!(m->input & INPUT_NONZERO_ANALOG)) m->forwardVel = approach_f32(m->forwardVel, 0.0f, 0.35f, 0.35f);
+    if (!(m->input & INPUT_NONZERO_ANALOG)) approach_f32_by_increment(&m->forwardVel, 0.0f, 0.35f);
     update_lava_boost_or_twirling(m);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:

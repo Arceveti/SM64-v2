@@ -139,6 +139,8 @@ void vec3s_sum(                          Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_diff(                         Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_add(                          Vec3s dest, Vec3s a);
 void vec3s_sub(                          Vec3s dest, Vec3s a);
+void vec3s_get_dist_and_angle(           Vec3s from, Vec3s to, s16 *dist, Angle *pitch, Angle *yaw);
+void vec3s_set_dist_and_angle(           Vec3s from, Vec3s to, s16  dist, Angle  pitch, Angle  yaw);
 void vec3s_to_vec3i(                     Vec3i dest, Vec3s a);
 void vec3i_to_vec3s(                     Vec3s dest, Vec3i a);
 void vec3s_to_vec3f(                     Vec3f dest, Vec3s a);
@@ -169,6 +171,7 @@ void vec3f_scale_vec3f(                  Vec3f dest, Vec3f src, Vec3f scale, u32
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);
 void vec3f_transform_vtx(                 Mat4 mat, Vec3f in, f32 w, Vtx  *out);
+void rotate_triangle_vertices(           Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, Angle pitch, Angle yaw);
 void scale_along_line(                   Vec3f dest, Vec3f from, Vec3f to, f32 scale);
 f32  vec3f_dot(                          Vec3f a, Vec3f b);
 f32  vec4f_dot(                          Vec4f a, Vec4f b);
@@ -181,7 +184,7 @@ void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
 void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);
 void mtxf_rotate_zxy_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
-void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f b, Vec3s c);
+void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
 void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
 void mtxf_align_facing_view(              Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);
 void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
@@ -198,14 +201,15 @@ void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 f32    det_2x2(f32 a, f32 b, f32 c, f32 d);
 f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
-               f32 r1c0, f32 r1c1, f32 r1c2, 
+               f32 r1c0, f32 r1c1, f32 r1c2,
                f32 r2c0, f32 r2c1, f32 r2c2);
 // Approach
 s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
 f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
-f32    approach_f32_by_increment(         f32  current,   f32 target,   f32 inc);
+Bool32 approach_f32_by_increment(         f32 *current,   f32 target,   f32 inc);
 Bool32 approach_f32_ptr(                  f32 *current,   f32 target,   f32 inc);
-Bool32 approach_f32_ptr_signed(           f32 *current,   f32 target,   f32 inc);
+Bool32 approach_f32_bool(                 f32 *current,   f32 target,   f32 inc);
+Bool32 approach_f32_signed(               f32 *current,   f32 target,   f32 inc);
 f32    approach_f32_symmetric(            f32  current,   f32 target,   f32 inc);
 Bool32 approach_f32_symmetric_bool(       f32 *current,   f32 target,   f32 inc);
 s32    approach_s16_symmetric(            s16  current,   s16 target,   s16 inc);

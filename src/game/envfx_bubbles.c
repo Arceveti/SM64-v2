@@ -43,12 +43,13 @@ s32 particle_is_laterally_close(s32 index, s32 x, s32 z, s32 distance) {
     return !(sqr(xPos - x) + sqr(zPos - z) > sqr(distance));
 }
 
+//! replace with rng function from math_util?
 /**
  * Generate a uniform random number in range [-2000, -1000[ or [1000, 2000[
  * Used to position flower particles
  */
 s32 random_flower_offset(void) {
-    s32 result = random_float() * 2000.0f - 1000.0f;
+    s32 result = ((random_float() * 2000.0f) - 1000.0f);
     if (result < 0) {
         result -= 1000;
     } else {
@@ -65,7 +66,7 @@ void envfx_update_flower(Vec3s centerPos) {
     s32 i;
     struct FloorGeometry *floorGeo; // unused
     s32 timer   = gGlobalTimer;
-    for (i = 0; i < sBubbleParticleMaxCount; i++) {
+    for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = particle_is_laterally_close(i, centerPos[0], centerPos[2], 3000);
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->xPos = (random_flower_offset() + centerPos[0]);
@@ -103,7 +104,7 @@ void envfx_set_lava_bubble_position(s32 index, Vec3s centerPos) {
         (gEnvFxBuffer + index)->yPos = FLOOR_LOWER_LIMIT_MISC;
         return;
     }
-    (gEnvFxBuffer + index)->yPos = (surface->type == SURFACE_BURNING ? floorY : FLOOR_LOWER_LIMIT_MISC);
+    (gEnvFxBuffer + index)->yPos = ((surface->type == SURFACE_BURNING) ? floorY : FLOOR_LOWER_LIMIT_MISC);
 }
 
 /**
@@ -114,7 +115,7 @@ void envfx_update_lava(UNUSED Vec3s centerPos) {
     s32 i;
     s32 timer = gGlobalTimer;
     s8 chance;
-    for (i = 0; i < sBubbleParticleMaxCount; i++) {
+    for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         if (!(gEnvFxBuffer + i)->isAlive) {
             envfx_set_lava_bubble_position(i, centerPos);
             (gEnvFxBuffer + i)->isAlive = TRUE;
@@ -164,7 +165,7 @@ s32 envfx_is_whirlpool_bubble_alive(s32 index) {
  */
 void envfx_update_whirlpool(void) {
     s32 i;
-    for (i = 0; i < sBubbleParticleMaxCount; i++) {
+    for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_whirlpool_bubble_alive(i);
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() *  1000.0f);
@@ -209,7 +210,7 @@ s32 envfx_is_jestream_bubble_alive(s32 index) {
  */
 void envfx_update_jetstream(void) {
     s32 i;
-    for (i = 0; i < sBubbleParticleMaxCount; i++) {
+    for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_jestream_bubble_alive(i);
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() * 300.0f);
@@ -255,7 +256,7 @@ Bool32 envfx_init_bubble(s32 mode) {
     if (!gEnvFxBuffer) return FALSE;
     bzero(gEnvFxBuffer, (sBubbleParticleCount * sizeof(struct EnvFxParticle)));
     bzero(gEnvFxBubbleConfig, sizeof(gEnvFxBubbleConfig));
-    if (mode == ENVFX_LAVA_BUBBLES) for (i = 0; i < sBubbleParticleCount; i++) (gEnvFxBuffer + i)->animFrame = (random_float() * 7.0f);
+    if (mode == ENVFX_LAVA_BUBBLES) for ((i = 0); (i < sBubbleParticleCount); (i++)) (gEnvFxBuffer + i)->animFrame = (random_float() * 7.0f);
     gEnvFxMode = mode;
     return TRUE;
 }
@@ -303,7 +304,7 @@ void append_bubble_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s verte
     s32 i = 0;
     Vtx *vertBuf = alloc_display_list(15 * sizeof(Vtx));
     if (vertBuf == NULL) return;
-    for (i = 0; i < 15; i += 3) {
+    for ((i = 0); (i < 15); (i += 3)) {
         vertBuf[i    ] = template[0];
         (vertBuf + i    )->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->xPos + vertex1[0]);
         (vertBuf + i    )->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->yPos + vertex1[1]);
@@ -362,11 +363,11 @@ Gfx *envfx_update_bubble_particles(s32 mode, UNUSED Vec3s marioPos, Vec3s camFro
     gfxStart = alloc_display_list((((sBubbleParticleMaxCount / 5) * 10) + sBubbleParticleMaxCount + 3) * sizeof(Gfx));
     if (gfxStart == NULL) return NULL;
     sGfxCursor = gfxStart;
-    orbit_from_positions(             camTo,          camFrom, &radius, &pitch, &yaw);
+    vec3s_get_dist_and_angle(         camTo,          camFrom, &radius, &pitch, &yaw);
     envfx_bubbles_update_switch(mode, camTo, vertex1, vertex2, vertex3);
     rotate_triangle_vertices(                vertex1, vertex2, vertex3,  pitch,  yaw);
     gSPDisplayList(sGfxCursor++, &tiny_bubble_dl_0B006D38);
-    for (i = 0; i < sBubbleParticleMaxCount; i += 5) {
+    for ((i = 0); (i < sBubbleParticleMaxCount); (i += 5)) {
         gDPPipeSync(sGfxCursor++);
         envfx_set_bubble_texture(mode, i);
         append_bubble_vertex_buffer(sGfxCursor++, i, vertex1, vertex2, vertex3, (Vtx *) gBubbleTempVtx);

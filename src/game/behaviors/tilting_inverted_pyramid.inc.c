@@ -65,9 +65,9 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     }
     // Approach the normals by 0.01f towards the new goal, then create a transform matrix and orient the object. 
     // Outside of the other conditionals since it needs to tilt regardless of whether Mario is on.
-    o->oTiltingPyramidNormalX = approach_f32_by_increment(o->oTiltingPyramidNormalX, d[0], 0.01f);
-    o->oTiltingPyramidNormalY = approach_f32_by_increment(o->oTiltingPyramidNormalY, d[1], 0.01f);
-    o->oTiltingPyramidNormalZ = approach_f32_by_increment(o->oTiltingPyramidNormalZ, d[2], 0.01f);
+    approach_f32_by_increment(&o->oTiltingPyramidNormalX, d[0], 0.01f);
+    approach_f32_by_increment(&o->oTiltingPyramidNormalY, d[1], 0.01f);
+    approach_f32_by_increment(&o->oTiltingPyramidNormalZ, d[2], 0.01f);
     create_transform_from_normals(*transform, o->oTiltingPyramidNormalX, o->oTiltingPyramidNormalY, o->oTiltingPyramidNormalZ);
     // If Mario is on the platform, adjust his position for the platform tilt.
     if (o->oTiltingPyramidMarioOnPlatform) {

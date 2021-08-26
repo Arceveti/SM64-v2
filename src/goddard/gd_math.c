@@ -118,24 +118,26 @@ void gd_create_origin_lookat(Mat4 *mtx, Vec3f vec, f32 roll) {
     if (hMag != 0.0f) {
         f32 s = sind(roll);
         f32 c = cosd(roll);
+        f32 su1 = (s * unit[1]);
+        f32 cu1 = (s * unit[1]);
         invertedHMag = (1.0f / hMag); //! fast invsqrt
-        (*mtx)[0][0] = (((-unit[2] * c) - (s * unit[1] * unit[0])) * invertedHMag);
-        (*mtx)[1][0] = ((( unit[2] * s) - (c * unit[1] * unit[0])) * invertedHMag);
-        (*mtx)[2][0] =                                  -unit[0];
+        (*mtx)[0][0] = (((-unit[2] * c) - (su1 * unit[0])) * invertedHMag);
+        (*mtx)[1][0] = ((( unit[2] * s) - (cu1 * unit[0])) * invertedHMag);
+        (*mtx)[2][0] =                          -unit[0];
 
         (*mtx)[0][1] = (s * hMag);
         (*mtx)[1][1] = (c * hMag);
-        (*mtx)[2][1] =                       -unit[1];
+        (*mtx)[2][1] = -unit[1];
 
-        (*mtx)[0][2] = ((( c * unit[0]) - (s * unit[1] * unit[2])) * invertedHMag);
-        (*mtx)[1][2] = (((-s * unit[0]) - (c * unit[1] * unit[2])) * invertedHMag);
-        (*mtx)[2][2] =                                  -unit[2];
+        (*mtx)[0][2] = ((( c * unit[0]) - (su1 * unit[2])) * invertedHMag);
+        (*mtx)[1][2] = (((-s * unit[0]) - (cu1 * unit[2])) * invertedHMag);
+        (*mtx)[2][2] =                          -unit[2];
     } else {
         vec3f_copy((*mtx)[0], gVec3fZ);
         vec3f_copy((*mtx)[1], gVec3fX);
         vec3f_copy((*mtx)[2], gVec3fY);
     }
-    vec3f_copy((*mtx)[3], gVec3fZero);
+    vec3f_zero((*mtx)[3]);
     mtxf_end(*mtx);
 }
 
@@ -271,28 +273,33 @@ void gd_shift_mat_up(Mat4 *mtx) {
  * Creates a rotation matrix to multiply the primary matrix by.
  * s/c are sin(angle)/cos(angle). That angular rotation is about vector
  * 'vec'.
- * 
+ *
  * Matrix has form-
  *
- * | (1-c)z^2+c (1-c)zy-sx (1-c)xz-sy 0 | 
+ * | (1-c)z^2+c (1-c)zy-sx (1-c)xz-sy 0 |
  * | (1-c)zy-sx (1-c)y^2+c (1-c)xy-sz 0 |
  * | (1-c)xz-sy (1-c)xy-sz (1-c)x^2+c 0 |
  * |      0          0          0     1 |
  */
 void gd_create_rot_matrix(Mat4 *mtx, Vec3f vec, f32 s, f32 c) {
-    Vec3f rev;
+    Vec3f rev, srev;
     vec3f_copy_inverse(rev, vec);
-    f32 oneMinusCos = (1.0f - c);
-    (*mtx)[0][0] = ((oneMinusCos * rev[2] * rev[2]) +  c          );
-    (*mtx)[0][1] = ((oneMinusCos * rev[2] * rev[1]) + (s * rev[0]));
-    (*mtx)[0][2] = ((oneMinusCos * rev[2] * rev[0]) - (s * rev[1]));
-    (*mtx)[1][0] = ((oneMinusCos * rev[2] * rev[1]) -  s * rev[0] );
-    (*mtx)[1][1] = ((oneMinusCos * rev[1] * rev[1]) +  c          );
-    (*mtx)[1][2] = ((oneMinusCos * rev[1] * rev[0]) +  s * rev[2] );
-    (*mtx)[2][0] = ((oneMinusCos * rev[2] * rev[0]) + (s * rev[1]));
-    (*mtx)[2][1] = ((oneMinusCos * rev[1] * rev[0]) - (s * rev[2]));
-    (*mtx)[2][2] = ((oneMinusCos * rev[0] * rev[0]) +  c          );
-    vec3f_copy((*mtx)[3], gVec3fZero);
+    vec3f_copy(srev, rev);
+    vec3f_mul_f32(srev, s);
+    register f32 oneMinusCos = (1.0f - c);
+    register f32 omc10 = (oneMinusCos * rev[1] * rev[0]);
+    register f32 omc20 = (oneMinusCos * rev[2] * rev[0]);
+    register f32 omc21 = (oneMinusCos * rev[2] * rev[1]);
+    (*mtx)[0][0] = ((oneMinusCos * sqr(rev[2])) + c);
+    (*mtx)[0][1] = (omc21 + srev[0]);
+    (*mtx)[0][2] = (omc20 - srev[1]);
+    (*mtx)[1][0] = (omc21 - srev[0]);
+    (*mtx)[1][1] = ((oneMinusCos * sqr(rev[1])) + c);
+    (*mtx)[1][2] = (omc10 + srev[2]);
+    (*mtx)[2][0] = (omc20 + srev[1]);
+    (*mtx)[2][1] = (omc10 - srev[2]);
+    (*mtx)[2][2] = ((oneMinusCos * sqr(rev[0])) + c);
+    vec3f_zero((*mtx)[3]);
     mtxf_end(*mtx);
 }
 
@@ -312,7 +319,7 @@ void gd_set_identity_mat4(Mat4 *mtx) {
     vec3f_copy((*mtx)[0], gVec3fX);
     vec3f_copy((*mtx)[1], gVec3fY);
     vec3f_copy((*mtx)[2], gVec3fZ);
-    vec3f_copy((*mtx)[3], gVec3fZero);
+    vec3f_zero((*mtx)[3]);
     mtxf_end(*mtx);
 }
 
@@ -320,6 +327,7 @@ void gd_set_identity_mat4(Mat4 *mtx) {
  * Copies a mat4f from src to dst.
  */
 void gd_copy_mat4f(const Mat4 *src, Mat4 *dst) {
+    //! mtxf_copy?
     (*dst)[0][0] = (*src)[0][0];
     (*dst)[0][1] = (*src)[0][1];
     (*dst)[0][2] = (*src)[0][2];

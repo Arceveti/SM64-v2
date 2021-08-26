@@ -63,7 +63,7 @@ s32 lll_octagonal_mesh_move(struct LllOctagonalMeshAction *actionTable, s32 acti
             }
             break;
         case LLL_OCTMESH_CHANGE_DIR:
-            approach_f32_ptr_signed(&o->oForwardVel, (action->moveAngle / 100.0f), (action->forwardVel / 100.0f));
+            approach_f32_signed(&o->oForwardVel, (action->moveAngle / 100.0f), (action->forwardVel / 100.0f));
             if (o->oTimer > action->time) {
                 actionOffset++;
                 o->oTimer     = 0;

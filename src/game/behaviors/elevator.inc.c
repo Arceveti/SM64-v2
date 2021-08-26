@@ -28,8 +28,8 @@ void elevator_act_idle(void) {
 
 void elevator_act_moving_up(void) {
     cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
-    if (o->oTimer == 0 && cur_obj_is_mario_on_platform()) elevator_starting_shake();
-    approach_f32_ptr_signed(&o->oVelY, 10.0f, 2.0f);
+    if ((o->oTimer == 0) && cur_obj_is_mario_on_platform()) elevator_starting_shake();
+    approach_f32_signed(&o->oVelY, 10.0f, 2.0f);
     o->oPosY += o->oVelY;
     if (o->oPosY > o->oElevatorMaxY) {
         o->oPosY = o->oElevatorMaxY;
@@ -45,8 +45,8 @@ void elevator_act_moving_up(void) {
 
 void elevator_act_moving_down(void) { // Pretty similar code to action 1
     cur_obj_play_sound_1(SOUND_ENV_ELEVATOR1);
-    if (o->oTimer == 0 && cur_obj_is_mario_on_platform()) elevator_starting_shake();
-    approach_f32_ptr_signed(&o->oVelY, -10.0f, -2.0f);
+    if ((o->oTimer == 0) && cur_obj_is_mario_on_platform()) elevator_starting_shake();
+    approach_f32_signed(&o->oVelY, -10.0f, -2.0f);
     o->oPosY += o->oVelY;
     if (o->oPosY < o->oElevatorMinY) {
         o->oPosY = o->oElevatorMinY;
@@ -86,12 +86,12 @@ void bhv_elevator_init(void) {
     if (sElevatorHeights[index][1] == 0) {
         o->oElevatorMinY = sElevatorHeights[index][0];
         o->oElevatorMaxY = o->oHomeY;
-        o->oElevatorMidY = (o->oElevatorMinY + o->oElevatorMaxY) / 2.0f;
+        o->oElevatorMidY = ((o->oElevatorMinY + o->oElevatorMaxY) / 2.0f);
         o->oElevatorType = cur_obj_has_behavior(bhvRrElevatorPlatform);
     } else {
         o->oElevatorMinY = sElevatorHeights[index][0];
         o->oElevatorMaxY = sElevatorHeights[index][1];
-        o->oElevatorMidY = (o->oElevatorMinY + o->oElevatorMaxY) / 2.0f;
+        o->oElevatorMidY = ((o->oElevatorMinY + o->oElevatorMaxY) / 2.0f);
         o->oElevatorType = ELEVATOR_TYPE_ABOVE_HOME;
     }
 }

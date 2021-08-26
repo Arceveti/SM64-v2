@@ -273,14 +273,14 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
 #endif
     floorHeight = find_floor(  nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
-    if (floor == NULL)                      return HANG_HIT_CEIL_OR_OOB;
-    if (ceil  == NULL)                      return HANG_LEFT_CEIL;
-    if (ceilHeight - floorHeight <= 144.0f) return HANG_HIT_CEIL_OR_OOB;
-    if (ceil->type != SURFACE_HANGABLE)     return HANG_LEFT_CEIL;
-    ceilOffset = ceilHeight - (nextPos[1] + 144.0f);
-    if (ceilOffset < -30.0f) return HANG_HIT_CEIL_OR_OOB;
-    if (ceilOffset >  30.0f) return HANG_LEFT_CEIL;
-    nextPos[1] = m->ceilHeight - 144.0f;
+    if (floor == NULL                                          ) return HANG_HIT_CEIL_OR_OOB;
+    if (ceil  == NULL                                          ) return HANG_LEFT_CEIL;
+    if (ceilHeight - floorHeight <= MARIO_HANGING_HITBOX_HEIGHT) return HANG_HIT_CEIL_OR_OOB;
+    if (ceil->type != SURFACE_HANGABLE                         ) return HANG_LEFT_CEIL;
+    ceilOffset = (ceilHeight - (nextPos[1] + MARIO_HANGING_HITBOX_HEIGHT));
+    if (ceilOffset < -30.0f                                    ) return HANG_HIT_CEIL_OR_OOB;
+    if (ceilOffset >  30.0f                                    ) return HANG_LEFT_CEIL;
+    nextPos[1] = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
     vec3f_copy(m->pos, nextPos);
     m->floor       = floor;
     m->floorHeight = floorHeight;
@@ -324,8 +324,8 @@ void update_hang_stationary(struct MarioState *m) {
     m->forwardVel = 0.0f;
     m->slideVelX  = 0.0f;
     m->slideVelZ  = 0.0f;
-    m->pos[1]     = (m->ceilHeight - 144.0f);
-    vec3f_copy(m->vel, gVec3fZero);
+    m->pos[1]     = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
+    vec3f_zero(m->vel);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
 #ifdef EASIER_HANGING
     vec3a_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);

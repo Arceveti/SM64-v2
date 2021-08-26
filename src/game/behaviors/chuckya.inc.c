@@ -28,21 +28,6 @@ void bhv_chuckya_anchor_mario_loop(void) {
     common_anchor_mario_behavior(40.0f, 40.0f, INT_STATUS_MARIO_UNK6);
 }
 
-//! move to math_util?
-Bool32 approach_forward_vel(f32 *arr, f32 target, f32 amt) {
-    Bool32 alreadyEqual = FALSE;
-    if (arr[0] > target) {
-        arr[0] -= amt;
-        if (arr[0] < target) arr[0] = target;
-    } else if (arr[0] < target) {
-        arr[0] += amt;
-        if (arr[0] > target) arr[0] = target;
-    } else {
-        alreadyEqual = TRUE;
-    }
-    return alreadyEqual;
-}
-
 void chuckya_act_moving(void) { // act 0
     s32 initialSubAction;
     if (o->oTimer == 0) o->oChuckyaSubActionTimer = 0;
@@ -52,25 +37,25 @@ void chuckya_act_moving(void) { // act 0
             o->oForwardVel = 0.0f;
             if (cur_obj_lateral_dist_from_mario_to_home() < 2000.0f) {
                 cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
-                if (o->oChuckyaSubActionTimer > 40 || abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < 0x1000) o->oSubAction = CHUCKYA_SUB_ACT_ACCELERATE;
+                if ((o->oChuckyaSubActionTimer > 40) || (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < 0x1000)) o->oSubAction = CHUCKYA_SUB_ACT_ACCELERATE;
             } else {
                 o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
             }
             break;
         case CHUCKYA_SUB_ACT_ACCELERATE:
-            approach_forward_vel(&o->oForwardVel, 30.0f, 4.0f);
+            approach_f32_bool(&o->oForwardVel, 30.0f, 4.0f);
             if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > 0x4000) o->oSubAction = CHUCKYA_SUB_ACT_STOP;
             if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
             break;
         case CHUCKYA_SUB_ACT_STOP:
-            approach_forward_vel(&o->oForwardVel, 0, 4.0f);
+            approach_f32_bool(&o->oForwardVel, 0, 4.0f);
             if (o->oChuckyaSubActionTimer > 48) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO;
             break;
         case CHUCKYA_SUB_ACT_TURN_TOWARD_HOME:
             if (cur_obj_lateral_dist_to_home() < 500.0f) {
                 o->oForwardVel = 0.0f;
             } else {
-                approach_forward_vel(&o->oForwardVel, 10.0f, 4.0f);
+                approach_f32_bool(&o->oForwardVel, 10.0f, 4.0f);
                 o->oAngleToMario = cur_obj_angle_to_home();
                 cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
             }

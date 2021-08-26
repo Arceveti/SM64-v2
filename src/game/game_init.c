@@ -96,7 +96,7 @@ s16 gWidescreen;
 #ifdef CUSTOM_FOV
 s16 gFieldOfView = DEFAULT_FOV_PERCENT;
 #endif
-#ifdef SILHOUETTE
+#if SILHOUETTE
 s16 gSilhouette = TRUE;
 #endif
 // #ifndef DISABLE_AA

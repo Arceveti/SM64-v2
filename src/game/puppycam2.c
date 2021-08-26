@@ -74,7 +74,7 @@ struct gPCOptionStruct // was static const
 
 static const struct gPCOptionStruct gPCOptions[] = {
 // If the min and max are 0 and 1, then the value text is used, otherwise it's ignored.
-#ifdef SILHOUETTE
+#if SILHOUETTE
     {/*Option Name*/ 11, /*Option Variable*/ &gSilhouette,                      /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
 #endif
 // #ifndef DISABLE_AA
