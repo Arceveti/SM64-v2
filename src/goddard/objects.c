@@ -588,12 +588,8 @@ void move_animator(struct ObjAnimator *animObj) {
                     nextTransform.pos[1] = (f32) animDataCam[currKeyFrame][4];
                     nextTransform.pos[2] = (f32) animDataCam[currKeyFrame][5];
 
-                    ((struct ObjCamera *) linkedObj)->worldPos[0] = currTransform.pos[0];
-                    ((struct ObjCamera *) linkedObj)->worldPos[1] = currTransform.pos[1];
-                    ((struct ObjCamera *) linkedObj)->worldPos[2] = currTransform.pos[2];
-                    ((struct ObjCamera *) linkedObj)->lookAt[0]   = nextTransform.pos[0];
-                    ((struct ObjCamera *) linkedObj)->lookAt[1]   = nextTransform.pos[1];
-                    ((struct ObjCamera *) linkedObj)->lookAt[2]   = nextTransform.pos[2];
+                    vec3f_copy(((struct ObjCamera *) linkedObj)->worldPos, currTransform.pos);
+                    vec3f_copy(((struct ObjCamera *) linkedObj)->lookAt,   nextTransform.pos);
                 }
                 break;
             case GD_ANIM_SCALE3F_ROT3F_POS3F: // scale, rotation, and position (as floats)

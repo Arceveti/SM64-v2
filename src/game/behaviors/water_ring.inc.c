@@ -2,12 +2,12 @@
 
 #ifndef FIX_WATER_RINGS
 f32 water_ring_calc_mario_dist(void) {
-    f32 marioDistX = o->oPosX -  gMarioObject->header.gfx.pos[0];
-    f32 marioDistY = o->oPosY - (gMarioObject->header.gfx.pos[1] + MARIO_HALF_HITBOX_HEIGHT);
-    f32 marioDistZ = o->oPosZ -  gMarioObject->header.gfx.pos[2];
-    f32 marioDistInFront = marioDistX * o->oWaterRingNormalX
-                         + marioDistY * o->oWaterRingNormalY
-                         + marioDistZ * o->oWaterRingNormalZ;
+    f32 marioDistX = (o->oPosX -  gMarioObject->header.gfx.pos[0]);
+    f32 marioDistY = (o->oPosY - (gMarioObject->header.gfx.pos[1] + MARIO_HALF_HITBOX_HEIGHT));
+    f32 marioDistZ = (o->oPosZ -  gMarioObject->header.gfx.pos[2]);
+    f32 marioDistInFront = ((marioDistX * o->oWaterRingNormalX)
+                          + (marioDistY * o->oWaterRingNormalY)
+                          + (marioDistZ * o->oWaterRingNormalZ));
     return marioDistInFront;
 }
 #endif
@@ -54,14 +54,14 @@ void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
     f32 marioDistInFront = water_ring_calc_mario_dist();
 
     if (!is_point_close_to_object(o, gMarioObject->header.gfx.pos[0],
-                                     gMarioObject->header.gfx.pos[1] + MARIO_HALF_HITBOX_HEIGHT,
+                                    (gMarioObject->header.gfx.pos[1] + MARIO_HALF_HITBOX_HEIGHT),
                                      gMarioObject->header.gfx.pos[2],
                                      ((avgScale + 0.2f) * 120.0f))) {
         o->oWaterRingMarioDistInFront = marioDistInFront;
         return;
     }
 
-    if (o->oWaterRingMarioDistInFront * marioDistInFront < 0) {
+    if ((o->oWaterRingMarioDistInFront * marioDistInFront) < 0) {
 #endif
         ringSpawner = o->parentObj;
         if (ringSpawner) {
@@ -192,7 +192,6 @@ void manta_water_ring_act_not_collected(void) { // for manta ray
     water_ring_check_collection(avgScale, ringManager);
     water_ring_set_scale(avgScale);
     set_object_visibility(o, 5000);
-
     if ((ringSpawner->oWaterRingSpawnerRingsCollected == 4) && (o->oWaterRingIndex == (ringManager->oWaterRingMgrLastRingCollected + 1))) o->oOpacity = ((sins(o->oTimer * 0x1000) * 200.0f) + 50.0f);
     o->oWaterRingAvgScale = avgScale;
 }

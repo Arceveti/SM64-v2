@@ -64,6 +64,7 @@
     - Make step height per-object
 - Physics/Movement:
     - Ability to move between walls that share an edge when ledge grab sidling
+    - Hanging quarter steps?
     - Gravity direction support
     - "Squished" death from any direction
 - Graphics

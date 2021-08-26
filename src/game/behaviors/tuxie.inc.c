@@ -121,7 +121,7 @@ void small_penguin_dive_with_mario(void) {
 }
 
 void small_penguin_act_walking_away_from_mario(void) { // act 2
-    s32 nearMother = FALSE;
+    Bool32 nearMother = FALSE;
     if (o->oTimer == 0) nearMother = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
     o->oForwardVel = (o->oSmallPenguinNextForwardVel + 3.0f);
@@ -158,7 +158,6 @@ void small_penguin_act_dive_sliding_stop(void) { // act 4
 
 void small_penguin_act_walking(void) { // act 0
     s32 nearMother = FALSE;
-
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
     if (o->oTimer == 0) {
         o->oSmallPenguinYawIncrement        = (s32)(random_float() * 0x400);

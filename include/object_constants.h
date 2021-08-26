@@ -2160,6 +2160,11 @@
     #define TRIPLET_BUTTERFLY_TYPE_EXPLODES                 0x0
     #define TRIPLET_BUTTERFLY_TYPE_SPAWN_1UP                0x1
 
+/* Changing Water Level */
+    /* oAction */
+    #define WATER_LEVEL_ACT_INIT                            0x0
+    #define WATER_LEVEL_ACT_IDLE                            0x1
+
 /* Water Level Diamond */
     /* oAction */
     // Loading

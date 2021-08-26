@@ -1,4 +1,3 @@
-//! @bug MODEL CRASAHES HMC
 /**
  * Behavior for bhvSwoop.
  * Has a native room.

@@ -50,7 +50,6 @@ void bhv_wf_sliding_tower_platform_loop(void) {
     if (o->parentObj->oAction == WF_TOWER_PLATFORM_GROUP_ACT_REMOVE_PLATFORMS) obj_mark_for_deletion(o);
 }
 
-//! ModelID?
 void spawn_and_init_wf_platforms(ModelID model, const BehaviorScript *bhv) {
     struct Object *platform = spawn_object(o, model, bhv);
     Angle yaw = ((o->oPlatformSpawnerWFTowerPlatformNum * o->oPlatformSpawnerWFTowerDYaw) + o->oPlatformSpawnerWFTowerYawOffset);

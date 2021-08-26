@@ -64,7 +64,7 @@ void bhv_flame_bowser_loop(void) {
         cur_obj_become_intangible();
         bowser_flame_move();
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-            o->oAction++;
+            o->oAction = 1;
             if (cur_obj_has_behavior(bhvFlameLargeBurningOut)) {
                 o->oFlameScale = 8.0f;
             } else {

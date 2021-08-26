@@ -2,8 +2,8 @@
 
 // called when WDW is loaded.
 void bhv_init_changing_water_level_loop(void) {
-    if (gCurrentObject->oAction == 0) { //! action names
-        if (gEnvironmentRegions != NULL) gCurrentObject->oAction = 1;
+    if (gCurrentObject->oAction == WATER_LEVEL_ACT_INIT) {
+        if (gEnvironmentRegions != NULL) gCurrentObject->oAction = WATER_LEVEL_ACT_IDLE;
     } else if (gCurrentObject->oTimer < 10) {
         *gEnvironmentLevels = gEnvironmentRegions[6];
     } else {
