@@ -128,7 +128,7 @@ void bhv_blue_coin_sliding_jumping_init(void) {
 void blue_coin_sliding_away_from_mario(void) {
     ColFlags collisionFlags;
     o->oForwardVel   = 15.0f;
-    o->oMoveAngleYaw = (o->oAngleToMario + 0x8000);
+    o->oMoveAngleYaw = (o->oAngleToMario + DEGREES(180));
     if (coin_step(&collisionFlags)) o->oVelY += 18.0f;
     if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) o->oAction = MOV_BCOIN_ACT_STOPPED; /* bit 1 */
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1000)) o->oAction = MOV_BCOIN_ACT_SLOWING_DOWN;

@@ -12,6 +12,7 @@
 #include "game/debug.h"
 #include "menu/file_select.h"
 #include "engine/surface_load.h"
+#include "engine/math_util.h"
 
 #include "actors/common0.h"
 #include "actors/common1.h"
@@ -5255,7 +5256,7 @@ const BehaviorScript bhvSeesawPlatform[] = {
 const BehaviorScript bhvFerrisWheelAxle[] = {
     BEGIN(OBJ_LIST_SURFACE),
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
-    ADD_INT(oMoveAngleYaw, 0x4000),
+    ADD_INT(oMoveAngleYaw, DEGREES(90)),
     CALL_NATIVE(bhv_ferris_wheel_axle_init),
     BEGIN_LOOP(),
         ADD_INT(oFaceAngleRoll, 0x190),
@@ -5564,7 +5565,7 @@ const BehaviorScript bhvMadPiano[] = {
     LOAD_ANIMATIONS(oAnimations, mad_piano_seg5_anims_05009B14),
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 40, /*Gravity*/ 0, /*Bounciness*/ -50, /*Drag strength*/ 1000, /*Friction*/ 1000, /*Buoyancy*/ 200, /*Unused*/ 0, 0),
     SET_HOME(),
-    ADD_INT(oMoveAngleYaw, 0x4000),
+    ADD_INT(oMoveAngleYaw, DEGREES(90)),
     CALL_NATIVE(bhv_init_room),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_mad_piano_update),
@@ -5608,7 +5609,7 @@ const BehaviorScript bhvBookSwitch[] = {
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_HOME(),
     SET_FLOAT(oGraphYOffset, 30),
-    ADD_INT(oMoveAngleYaw, 0x4000),
+    ADD_INT(oMoveAngleYaw, DEGREES(90)),
     CALL_NATIVE(bhv_init_room),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_book_switch_loop),
@@ -5878,7 +5879,7 @@ const BehaviorScript bhvRedCoinStarMarker[] = {
     OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
     DROP_TO_FLOOR(),
     SCALE(/*Unused*/ 0, /*Field*/ 150),
-    SET_INT(oFaceAnglePitch, 0x4000),
+    SET_INT(oFaceAnglePitch, DEGREES(90)),
     ADD_FLOAT(oPosY, 60),
     CALL_NATIVE(bhv_red_coin_star_marker_init),
     BEGIN_LOOP(),

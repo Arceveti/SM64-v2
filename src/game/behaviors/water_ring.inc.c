@@ -41,7 +41,7 @@ void bhv_jet_stream_water_ring_init(void) {
     water_ring_init();
     o->oOpacity = 70;
     cur_obj_init_animation(WATER_RING_ANIM_WOBBLE);
-    o->oFaceAnglePitch = 0x8000;
+    o->oFaceAnglePitch = DEGREES(180);
 }
 
 #ifdef FIX_WATER_RINGS

@@ -9,6 +9,7 @@
 #include "engine/graph_node.h"
 #include "engine/surface_collision.h"
 #include "engine/surface_load.h"
+#include "engine/math_util.h"
 #include "interaction.h"
 #include "level_update.h"
 #include "mario.h"
@@ -232,12 +233,8 @@ void copy_mario_state_to_object(void) {
     s32 i = 0;
     // L is real
     if (gCurrentObject != gMarioObject) i++;
-    gCurrentObject->oVelX           = gMarioStates[i].vel[0];
-    gCurrentObject->oVelY           = gMarioStates[i].vel[1];
-    gCurrentObject->oVelZ           = gMarioStates[i].vel[2];
-    gCurrentObject->oPosX           = gMarioStates[i].pos[0];
-    gCurrentObject->oPosY           = gMarioStates[i].pos[1];
-    gCurrentObject->oPosZ           = gMarioStates[i].pos[2];
+    vec3f_copy(&gCurrentObject->oVelVec, gMarioStates[i].vel);
+    vec3f_copy(&gCurrentObject->oPosVec, gMarioStates[i].pos);
     gCurrentObject->oMoveAnglePitch = gCurrentObject->header.gfx.angle[0];
     gCurrentObject->oMoveAngleYaw   = gCurrentObject->header.gfx.angle[1];
     gCurrentObject->oMoveAngleRoll  = gCurrentObject->header.gfx.angle[2];

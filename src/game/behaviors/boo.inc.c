@@ -134,7 +134,7 @@ static void boo_set_move_yaw_for_during_hit(s32 hurt) {
     } else if (coss((Angle)o->oMoveAngleYaw - (Angle)o->oAngleToMario) < 0.0f) {
         o->oBooMoveYawDuringHit = o->oMoveAngleYaw;
     } else {
-        o->oBooMoveYawDuringHit = (Angle)(o->oMoveAngleYaw + 0x8000);
+        o->oBooMoveYawDuringHit = (Angle)(o->oMoveAngleYaw + DEGREES(180));
     }
 }
 
@@ -156,8 +156,8 @@ static void boo_move_during_hit(s32 roll, f32 fVel) {
 
 static void big_boo_shake_after_hit(void) {
     // Oscillate yaw
-    s32 oscillationVel = o->oTimer * 0x2000 - 0x3E000;
-    o->oFaceAngleYaw += coss(oscillationVel) * 0x400;
+    s32 oscillationVel = ((o->oTimer * 0x2000) - 0x3E000);
+    o->oFaceAngleYaw += (coss(oscillationVel) * 0x400);
 }
 
 static void boo_reset_after_hit(void) {
@@ -171,7 +171,7 @@ static Bool32 boo_update_after_bounced_on(f32 a0) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(FALSE);
     if (o->oTimer < 32) {
-        boo_move_during_hit(FALSE, (sBooHitRotations[o->oTimer] / 5000.0f * a0));
+        boo_move_during_hit(FALSE, ((sBooHitRotations[o->oTimer] / 5000.0f) * a0));
     } else {
         cur_obj_become_tangible();
         boo_reset_after_hit();

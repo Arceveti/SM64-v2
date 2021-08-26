@@ -240,7 +240,7 @@ static void platform_on_track_act_move_along_track(void) {
 
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
-            Angle targetFaceYaw = o->oMoveAngleYaw + 0x4000;
+            Angle targetFaceYaw = (o->oMoveAngleYaw + DEGREES(90));
             Angle yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
 
             initialAngle = o->oFaceAngleYaw;
@@ -258,7 +258,7 @@ static void platform_on_track_act_move_along_track(void) {
             //! If the platform is moving counterclockwise upward or
             //  clockwise downward, this will be backward
             obj_face_roll_approach(o->oMoveAnglePitch, rollSpeed);
-            o->oAngleVelRoll = (Angle) o->oFaceAngleRoll - initialAngle;
+            o->oAngleVelRoll = ((Angle) o->oFaceAngleRoll - initialAngle);
         }
     }
 

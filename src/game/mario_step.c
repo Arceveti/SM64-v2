@@ -86,7 +86,7 @@ void transfer_bully_speed(struct BullyCollisionData *obj1, struct BullyCollision
 void init_bully_collision_data(struct BullyCollisionData *data, f32 posX, f32 posZ, f32 forwardVel, Angle yaw, f32 conversionRatio, f32 radius) {
     if (forwardVel < 0.0f) {
         forwardVel *= -1.0f;
-        yaw        += 0x8000;
+        yaw        += DEGREES(180);
     }
     data->radius          = radius;
     data->conversionRatio = conversionRatio;
@@ -107,7 +107,7 @@ void mario_bonk_reflection(struct MarioState *m, u32 negateSpeed) {
     if (negateSpeed) {
         mario_set_forward_vel(m, -m->forwardVel);
     } else {
-        m->faceAngle[1] += 0x8000;
+        m->faceAngle[1] += DEGREES(180);
     }
 }
 
@@ -140,12 +140,12 @@ Bool32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
 }
 
 Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
-    if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < 0x4000) {
+    if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < DEGREES(90)) {
         m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);;
         m->faceAngle[1] = m->floorAngle;
     } else {
         m->forwardVel   = -16.0f;// * (1.0f-m->floor->normal.y);
-        m->faceAngle[1] = (m->floorAngle + 0x8000);
+        m->faceAngle[1] = (m->floorAngle + DEGREES(180));
     }
     return set_mario_action(m, action, actionArg);
 }
@@ -174,7 +174,7 @@ Bool32 mario_update_windy_ground(struct MarioState *m) {
         if (m->action & ACT_FLAG_MOVING) {
             Angle pushDYaw = (m->faceAngle[1] - pushAngle);
             pushSpeed = ((m->forwardVel > 0.0f) ? (-m->forwardVel * 0.5f) : -8.0f);
-            if ((pushDYaw > -0x4000) && (pushDYaw < 0x4000)) pushSpeed *= -1.0f;
+            if ((pushDYaw > -DEGREES(90)) && (pushDYaw < DEGREES(90))) pushSpeed *= -1.0f;
             pushSpeed *= coss(pushDYaw);
         } else {
             pushSpeed = (3.2f + (gGlobalTimer & 0x3));
@@ -383,20 +383,20 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     if (upperWall.numWalls == 0) {
         m->wall = NULL;
     } else {
-        for (i = 0; i < upperWall.numWalls; i++) {
-            wallDYaw    = abs_angle_diff(atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x), m->faceAngle[1]);
+        for ((i = 0); (i < upperWall.numWalls); (i++)) {
+            wallDYaw = abs_angle_diff(atan2s(upperWall.walls[i]->normal.z, upperWall.walls[i]->normal.x), m->faceAngle[1]);
             if (wallDYaw >= oldWallDYaw) {
                 oldWallDYaw = wallDYaw;
                 m->wall     = upperWall.walls[i];
             }
             // m->wall = upperWall.walls[i];
-            if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) continue;
+            if ((wallDYaw >= DEGREES(60)) && (wallDYaw <= DEGREES(120))) continue;
             return GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS;
         }
 #else
     if (upperWall != NULL) {
         Angle wallDYaw = abs_angle_diff(atan2s(upperWall->normal.z, upperWall->normal.x), m->faceAngle[1]);
-        if ((wallDYaw >=  0x2AAA) && (wallDYaw <=  0x5555)) return GROUND_STEP_NONE;
+        if ((wallDYaw >= DEGREES(60)) && (wallDYaw <= DEGREES(120))) return GROUND_STEP_NONE;
         return GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS;
 #endif
     }
@@ -456,7 +456,7 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWa
     if ((m->action == ACT_WALL_SLIDE)
      || (m->action == ACT_FORWARD_ROLLOUT)
      || (m->action == ACT_BACKWARD_ROLLOUT)
-     || analog_stick_held_back(m, 0x4000)) return FALSE;
+     || analog_stick_held_back(m, DEGREES(90))) return FALSE;
     if (grabbedWall == NULL) grabbedWall = wall;
     //! find better wall angle?
     // Return the already grabbed wall if Mario is moving into it more than the newly tested wall
@@ -483,7 +483,7 @@ Bool32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intend
     Vec3f ledgePos;
     if (m->vel[1] > 0) return FALSE;
 #ifdef LEDGE_GRAB_FIX
-    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT) || analog_stick_held_back(m, 0x4000)) return FALSE;
+    if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT) || analog_stick_held_back(m, DEGREES(90))) return FALSE;
 #endif
     f32 displacementX = (nextPos[0] - intendedPos[0]);
     f32 displacementZ = (nextPos[2] - intendedPos[2]);
@@ -506,7 +506,7 @@ Bool32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intend
     m->floorHeight  = ledgePos[1];
     m->floorAngle   = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
     m->faceAngle[0] = 0x0;
-    m->faceAngle[1] = (atan2s(wall->normal.z, wall->normal.x) + 0x8000);
+    m->faceAngle[1] = (atan2s(wall->normal.z, wall->normal.x) + DEGREES(180));
     return TRUE;
 }
 #endif
@@ -534,7 +534,7 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
 #ifdef WALL_SLIDE
                     if ((wallDYaw > 0x5000) && (m->vel[1] <= 0.0f)) {
 #else
-                    if (wallDYaw > 0x6000) {
+                    if (wallDYaw > DEGREES(135)) {
 #endif
                         m->flags |= MARIO_AIR_HIT_WALL;
                         result = AIR_STEP_HIT_WALL;
@@ -636,7 +636,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
         } else {
             ceilSteepness = sqrtf(sqr(ceil->normal.x) + sqr(ceil->normal.z));
-            if (abs_angle_diff(atan2s(ceil->normal.z,  ceil->normal.x), m->marioObj->oMoveAngleYaw) <= 0x4000) {
+            if (abs_angle_diff(atan2s(ceil->normal.z,  ceil->normal.x), m->marioObj->oMoveAngleYaw) <= DEGREES(90)) {
                 if (m->vel[1] > 0.0f) {
                     m->slideVelX += (ceil->normal.x * m->vel[1] * ceilSteepness);
                     m->slideVelZ += (ceil->normal.z * m->vel[1] * ceilSteepness);
@@ -696,7 +696,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
             m->floorHeight  = ledgePos[1];
             m->floorAngle   = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
             m->faceAngle[0] = 0x0;
-            m->faceAngle[1] = (atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + 0x8000);
+            m->faceAngle[1] = (atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + DEGREES(180));
         } else {
             vec3f_copy(m->pos, nextPos);
             m->floor        = floor;
@@ -732,7 +732,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
  #elif WALLKICKS_46_DEGREES
         if (wallDYaw > 0x5B00) { // 0x5F4A?
  #else
-        if (wallDYaw > 0x6000) {
+        if (wallDYaw > DEGREES(135)) {
  #endif
             m->flags |= MARIO_AIR_HIT_WALL;
             return AIR_STEP_HIT_WALL;
@@ -878,7 +878,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     /*if (stepResult == AIR_STEP_HIT_WALL && m->wall != NULL) {
         wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
-        if ((stepArg & AIR_STEP_CHECK_BONK) && (wallDYaw < -0x6000 || wallDYaw > 0x6000)) {
+        if ((stepArg & AIR_STEP_CHECK_BONK) && (wallDYaw < -DEGREES(135) || wallDYaw > DEGREES(135))) {
             if (m->forwardVel > 16.0f) mario_bonk_reflection(m, (stepArg & AIR_STEP_BONK_NEGATE_SPEED), m->wall);
         }
     }*/

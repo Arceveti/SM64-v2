@@ -52,10 +52,10 @@ static void manta_ray_move(void) {
     // This causes the ray to tilt as it turns.
     if ((Angle) o->oMantaTargetYaw != (Angle) o->oMoveAngleYaw) {
         o->oMoveAngleRoll -= 0x5B;
-        if (o->oMoveAngleRoll < -5461.3332f) o->oMoveAngleRoll = (-0x4000 / 3);
+        if (o->oMoveAngleRoll < -DEGREES(30)) o->oMoveAngleRoll = (-DEGREES(90) / 3);
     } else {
         o->oMoveAngleRoll += 0x5B;
-        if (o->oMoveAngleRoll >  5461.3332f) o->oMoveAngleRoll = ( 0x4000 / 3);
+        if (o->oMoveAngleRoll >  DEGREES(30)) o->oMoveAngleRoll = ( DEGREES(90) / 3);
     }
     cur_obj_set_pos_via_transform();
     if (animFrame == 0) cur_obj_play_sound_2(SOUND_GENERAL_MOVING_WATER);
@@ -68,10 +68,10 @@ static void manta_ray_act_spawn_ring(void) {
         o->oTimer             = 0;
         ring                  = spawn_object(o, MODEL_WATER_RING, bhvMantaRayWaterRing);
         ring->oFaceAngleYaw   = o->oMoveAngleYaw;
-        ring->oFaceAnglePitch = (o->oMoveAnglePitch + 0x4000);
-        ring->oPosX           = (o->oPosX + (200.0f * sins(o->oMoveAngleYaw + 0x8000)));
+        ring->oFaceAnglePitch = (o->oMoveAnglePitch + DEGREES(90));
+        ring->oPosX           = (o->oPosX + (200.0f * sins(o->oMoveAngleYaw + DEGREES(180))));
         ring->oPosY           = (o->oPosY + 10.0f + (200.0f * sins(o->oMoveAnglePitch)));
-        ring->oPosZ           = (o->oPosZ + (200.0f * coss(o->oMoveAngleYaw + 0x8000)));
+        ring->oPosZ           = (o->oPosZ + (200.0f * coss(o->oMoveAngleYaw + DEGREES(180))));
         ring->oWaterRingIndex = ringManager->oWaterRingMgrNextRingIndex;
         ringManager->oWaterRingMgrNextRingIndex++;
         if (ringManager->oWaterRingMgrNextRingIndex > 10000) ringManager->oWaterRingMgrNextRingIndex = 0;

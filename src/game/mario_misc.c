@@ -202,9 +202,9 @@ void bhv_unlock_door_star_init(void) {
     gCurrentObject->oUnlockDoorStarState  = UNLOCK_DOOR_STAR_RISING;
     gCurrentObject->oUnlockDoorStarTimer  = 0;
     gCurrentObject->oUnlockDoorStarYawVel = 0x1000;
-    gCurrentObject->oPosX += (30.0f * sins(gMarioState->faceAngle[1] - 0x4000));
+    gCurrentObject->oPosX += (30.0f * sins(gMarioState->faceAngle[1] - DEGREES(90)));
     gCurrentObject->oPosY += 160.0f;
-    gCurrentObject->oPosZ += (30.0f * coss(gMarioState->faceAngle[1] - 0x4000));
+    gCurrentObject->oPosZ += (30.0f * coss(gMarioState->faceAngle[1] - DEGREES(90)));
     gCurrentObject->oMoveAngleYaw = 0x7800;
     obj_scale(gCurrentObject, 0.5f);
 }

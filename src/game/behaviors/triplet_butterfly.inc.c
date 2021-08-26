@@ -27,7 +27,7 @@ static void triplet_butterfly_act_init(void) {
     if ((butterflyNum != 0) || (o->oDistanceToMario < 200.0f)) {
         if (butterflyNum == 0) {
             for ((i = 1); (i < 3); (i++)) spawn_object_relative(i, 0, 0, 0, o, MODEL_BUTTERFLY, bhvTripletButterfly);
-            o->oTripletButterflySelectedButterfly = random_u16() % 3;
+            o->oTripletButterflySelectedButterfly = (random_u16() % 3);
         }
         //! TODO: Describe this glitch
         if (o->parentObj->oTripletButterflySelectedButterfly == o->oBehParams2ndByte) {
@@ -38,7 +38,7 @@ static void triplet_butterfly_act_init(void) {
         // Default butterfly type is TRIPLET_BUTTERFLY_TYPE_EXPLODES
         o->oAction                  = TRIPLET_BUTTERFLY_ACT_WANDER;
         o->oTripletButterflyBaseYaw = (o->oBehParams2ndByte * (0x10000 / 3));
-        o->oMoveAngleYaw            = (s32)(o->oTripletButterflyBaseYaw + random_linear_offset(0, 0x5555));
+        o->oMoveAngleYaw            = (s32)(o->oTripletButterflyBaseYaw + random_linear_offset(0, DEGREES(120)));
         o->oTripletButterflySpeed   = random_linear_offset(15, 15);
         cur_obj_unhide();
     }
@@ -59,7 +59,7 @@ static void triplet_butterfly_act_wander(void) {
             }
         }
         if (o->oHomeY < o->oFloorHeight) o->oHomeY = o->oFloorHeight;
-        o->oTripletButterflyTargetPitch = ((o->oPosY < (o->oHomeY + random_linear_offset(50, 50))) ? -0x2000 : 0x2000);
+        o->oTripletButterflyTargetPitch = ((o->oPosY < (o->oHomeY + random_linear_offset(50, 50))) ? -DEGREES(45) : DEGREES(45));
         obj_move_pitch_approach(o->oTripletButterflyTargetPitch, 400);
         cur_obj_rotate_yaw_toward(o->oTripletButterflyTargetYaw, random_linear_offset(400, 800));
     }

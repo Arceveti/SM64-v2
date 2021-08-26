@@ -93,8 +93,8 @@ void bhv_intro_lakitu_loop(void) {
                 gCurrentObject->oIntroLakituDistToBirdsZ   = -4096.0f;
                 gCurrentObject->oIntroLakituEndBirds1DestZ =  2048.0f;
                 gCurrentObject->oIntroLakituEndBirds1DestY =  -200.0f;
-                gCurrentObject->oMoveAngleYaw              =   0x8000;
-                gCurrentObject->oFaceAngleYaw              = gCurrentObject->oMoveAngleYaw + 0x4000;
+                gCurrentObject->oMoveAngleYaw              = DEGREES(180);
+                gCurrentObject->oFaceAngleYaw              = (gCurrentObject->oMoveAngleYaw + DEGREES(90));
                 gCurrentObject->oMoveAnglePitch            =    0x800;
             }
             cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
@@ -105,7 +105,7 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oMoveAngleYaw             += 0x200;
             gCurrentObject->oIntroLakituDistToBirdsX   = approach_f32_asymptotic(gCurrentObject->oIntroLakituDistToBirdsX, 100.0f, 0.03f);
             gCurrentObject->oFaceAnglePitch            = atan2s(200.0f, (gCurrentObject->oPosY - 400.0f));
-            gCurrentObject->oFaceAngleYaw              = approach_s16_asymptotic(gCurrentObject->oFaceAngleYaw, gCurrentObject->oMoveAngleYaw + 0x8000, 4);
+            gCurrentObject->oFaceAngleYaw              = approach_s16_asymptotic(gCurrentObject->oFaceAngleYaw, (gCurrentObject->oMoveAngleYaw + DEGREES(180)), 4);
             vec3f_set_dist_and_angle(fromPoint, toPoint, gCurrentObject->oIntroLakituDistToBirdsX, 0, gCurrentObject->oMoveAngleYaw);
             toPoint[1] += 150.0f * coss((s16) gCurrentObject->oIntroLakituDistToBirdsZ);
             gCurrentObject->oIntroLakituDistToBirdsZ  += gCurrentObject->oIntroLakituEndBirds1DestZ;

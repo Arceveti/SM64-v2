@@ -202,6 +202,8 @@ static Angle obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
     return targetPitch;
 }
 
+
+//! use math_util functions directly for these?
 static Bool32 obj_forward_vel_approach(f32 target, f32 delta) {
     return approach_f32_ptr(&o->oForwardVel, target, delta);
 }
@@ -327,7 +329,7 @@ Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
             angle    = atan2s(dz, dx);
             o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
             o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
-            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + 0x8000);
+            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < DEGREES(90)) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEGREES(180));
             return TRUE;
         }
     }
@@ -350,10 +352,10 @@ Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
             o->oPosZ           = (newCenterZ - (radius      * sins(angle)));
             otherObject->oPosX = (newCenterX + (otherRadius * coss(angle)));
             otherObject->oPosZ = (newCenterZ + (otherRadius * sins(angle)));
-            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
+            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < DEGREES(90)) {
                 // Bounce off object (or it would, if the above atan2s bug
                 // were fixed)
-                *targetYaw = (Angle)(((angle - o->oMoveAngleYaw) + angle) + 0x8000);
+                *targetYaw = (Angle)(((angle - o->oMoveAngleYaw) + angle) + DEGREES(180));
                 return TRUE;
             }
         }
@@ -367,7 +369,7 @@ Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *targetYaw = (Angle)(o->oMoveAngleYaw + 0x8000);
+        *targetYaw = (Angle)(o->oMoveAngleYaw + DEGREES(180));
     } else if (!obj_resolve_object_collisions(targetYaw)) {
         return FALSE;
     }

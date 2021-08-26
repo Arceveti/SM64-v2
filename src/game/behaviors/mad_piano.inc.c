@@ -57,7 +57,7 @@ static void mad_piano_act_attack(void) {
 
 void bhv_mad_piano_update(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        o->oFaceAngleYaw = (o->oMoveAngleYaw - 0x4000);
+        o->oFaceAngleYaw = (o->oMoveAngleYaw - DEGREES(90));
         switch (o->oAction) {
             case MAD_PIANO_ACT_WAIT:   mad_piano_act_wait();   break;
             case MAD_PIANO_ACT_ATTACK: mad_piano_act_attack(); break;

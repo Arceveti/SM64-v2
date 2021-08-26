@@ -222,7 +222,7 @@ void handle_save_menu(struct MarioState *m) {
         // not quitting
         if (gSaveOptSelectIndex != MENU_OPT_SAVE_AND_QUIT) {
             disable_time_stop();
-            m->faceAngle[1] += 0x8000;
+            m->faceAngle[1] += DEGREES(180);
             // figure out what dialog to show, if we should
             dialogID = get_star_collection_dialog(m);
             if (dialogID) {
@@ -680,10 +680,10 @@ s32 launch_mario_until_land(struct MarioState *m, MarioAction endAction, AnimID3
 Bool32 act_unlocking_key_door(struct MarioState *m) {
     m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
     Angle dAngle = abs_angle_diff(m->usedObj->oFaceAngleYaw, m->faceAngle[1]);
-    f32 offset = ((dAngle <= 0x4000) ? 75.0f : -75.0f);
+    f32 offset = ((dAngle <= DEGREES(90)) ? 75.0f : -75.0f);
     m->pos[0] = (m->usedObj->oPosX + (coss(m->faceAngle[1]) * offset));
     m->pos[2] = (m->usedObj->oPosZ + (sins(m->faceAngle[1]) * offset));
-    if (m->actionArg & 0x2) m->faceAngle[1] += 0x8000;
+    if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
     if (m->actionTimer == 0) {
         spawn_obj_at_mario_rel_yaw(m, MODEL_BOWSER_KEY_CUTSCENE, bhvBowserKeyUnlockDoor, 0);
         set_mario_animation(m, MARIO_ANIM_UNLOCK_DOOR);
@@ -695,7 +695,7 @@ Bool32 act_unlocking_key_door(struct MarioState *m) {
     update_mario_pos_for_anim(m);
     stop_and_set_height_to_floor(m);
     if (is_anim_at_end(m)) {
-        if (m->usedObj->oBehParams >> 24 == 1) {
+        if ((m->usedObj->oBehParams >> 24) == 1) {
             save_file_set_flags(SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR);
             save_file_clear_flags(SAVE_FLAG_HAVE_KEY_2);
         } else {
@@ -713,7 +713,7 @@ Bool32 act_unlocking_star_door(struct MarioState *m) {
     switch (m->actionState) {
         case 0:
             m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-            if (m->actionArg & 0x2) m->faceAngle[1] += 0x8000;
+            if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
             m->marioObj->oMarioReadingSignDPosX = m->pos[0];
             m->marioObj->oMarioReadingSignDPosZ = m->pos[2];
             set_mario_animation(m, MARIO_ANIM_SUMMON_STAR);
@@ -751,8 +751,8 @@ Bool32 act_entering_star_door(struct MarioState *m) {
     if (m->actionTimer++ == 0) {
         m->interactObj->oInteractStatus = INT_STATUS_DOOR_PULLED;
         // ~30 degrees / 1/12 rot
-        targetAngle = (m->usedObj->oMoveAngleYaw + 0x1555);
-        if (m->actionArg & 2) targetAngle += 0x5556; // ~120 degrees / 1/3 rot (total 150d / 5/12)
+        targetAngle = (m->usedObj->oMoveAngleYaw + DEGREES(30));
+        if (m->actionArg & 0x2) targetAngle += DEGREES(120); // ~120 degrees / 1/3 rot (total 150d / 5/12)
         // targetDX and targetDZ are the offsets to add to Mario's position to
         // have Mario stand 150 units in front of the door
         targetDX = (m->usedObj->oPosX + (150.0f * sins(targetAngle)) - m->pos[0]);
@@ -770,7 +770,7 @@ Bool32 act_entering_star_door(struct MarioState *m) {
         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, 0x00028000);
     } else {
         m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-        if (m->actionArg & 0x2) m->faceAngle[1] += 0x8000;
+        if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
         m->pos[0] += (12.0f * sins(m->faceAngle[1]));
         m->pos[2] += (12.0f * coss(m->faceAngle[1]));
         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, 0x00028000);
@@ -798,7 +798,7 @@ Bool32 act_going_through_door(struct MarioState *m) {
     if (m->actionArg & 0x4) {
         if (m->actionTimer == 16) level_trigger_warp(m, WARP_OP_WARP_DOOR);
     } else if (is_anim_at_end(m)) {
-        if (m->actionArg & 0x2) m->faceAngle[1] += 0x8000;
+        if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
         set_mario_action(m, ACT_IDLE, 0);
     }
     m->actionTimer++;
@@ -1426,7 +1426,7 @@ static void intro_cutscene_peach_lakitu_scene(struct MarioState *m) {
 #endif
 
 static void intro_cutscene_raise_pipe(struct MarioState *m) {
-    sIntroWarpPipeObj->oPosY = approach_f32_symmetric(sIntroWarpPipeObj->oPosY, 260.0f, 10.0f);
+    approach_f32_symmetric_bool(&sIntroWarpPipeObj->oPosY, 260.0f, 10.0f);
     if (m->actionTimer == 0) play_sound(SOUND_MENU_EXIT_PIPE, sIntroWarpPipeObj->header.gfx.cameraToObject);
     if (m->actionTimer++ == TIMER_RAISE_PIPE) {
         m->vel[1] = 60.0f;
@@ -1623,8 +1623,8 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
     offsetY = (offsetY * (4 / 3));
     offsetZ = (offsetZ * (4 / 3));
     spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, (x - offsetX), (y - offsetY), (z - offsetZ), 0x0, 0x0, 0x0);
-    sSparkleGenTheta += 0x3800;
-    sSparkleGenPhi   += 0x6000;
+    sSparkleGenTheta += 0x3800; // 78.75 degrees
+    sSparkleGenPhi   += 0x6000; // 135 degrees
 }
 
 // not sure what this does, returns the height of the floor.
@@ -1706,7 +1706,7 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
         sEndToadAnims[0]           =   4;
         sEndToadAnims[1]           =   5;
     }
-    if (m->actionTimer >= TIMER_FADE_IN_PEACH) sEndPeachObj->oOpacity = approach_f32_symmetric(sEndPeachObj->oOpacity, 255.0f, 2.0f);
+    if (m->actionTimer >= TIMER_FADE_IN_PEACH) approach_s32_symmetric_bool(&sEndPeachObj->oOpacity, 255, 2);
     if (m->actionTimer >= 40) generate_yellow_sparkles(0, 2628, -1300, 150.0f);
     if (m->actionTimer == TIMER_DESCEND_PEACH) advance_cutscene_step(m);
     // probably added sounds later and missed the previous >= 40 check
@@ -2044,7 +2044,7 @@ static Bool32 act_end_waving_cutscene(struct MarioState *m) {
     }
     set_mario_animation(m, MARIO_ANIM_CREDITS_WAVING);
     stop_and_set_height_to_floor(m);
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEGREES(180);
     m->marioObj->header.gfx.pos[0]   -= 60.0f;
     m->marioBodyState->handState      = MARIO_HAND_RIGHT_OPEN;
     if (m->actionTimer++ == 300) level_trigger_warp(m, WARP_OP_CREDITS_END);

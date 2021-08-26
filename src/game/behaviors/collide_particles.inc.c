@@ -21,13 +21,13 @@ void bhv_punch_tiny_triangle_loop(void) {
     o->oAnimState = 5;
     cur_obj_scale(o->oCollisionParticleScale);
     o->oCollisionParticleScale -= 0.2f;
-    if (gDebugInfo[4][0] + 6 < o->oTimer) obj_mark_for_deletion(o);
+    if ((gDebugInfo[4][0] + 6) < o->oTimer) obj_mark_for_deletion(o);
 }
 
 void bhv_punch_tiny_triangle_init(void) {
     s32 i;
     struct Object *triangle;
-    for (i = 0; i < 6; i++) {
+    for ((i = 0); (i < 6); (i++)) {
         triangle                = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPunchTinyTriangle);
         triangle->oMoveAngleYaw = (gMarioObject->oMoveAngleYaw + sTinyTriMovementParams[2 * i] + 0x8000);
         triangle->oVelY         = (sins(sTinyTriMovementParams[(2 * i) + 1]) * 25.0f);

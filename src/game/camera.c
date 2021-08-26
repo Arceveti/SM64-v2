@@ -489,39 +489,39 @@ void set_camera_shake_from_hit(s16 shake) {
             break;
         case SHAKE_SMALL_DAMAGE:
             if (sMarioCamState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
-                set_camera_yaw_shake( 0x200, 0x10, 0x1000);
-                set_camera_roll_shake(0x400, 0x20, 0x1000);
-                set_fov_shake(        0x100, 0x30, 0x8000);
+                set_camera_yaw_shake( 0x200, 0x10, 0x1000); // 22.5 degrees
+                set_camera_roll_shake(0x400, 0x20, 0x1000); // 22.5 degrees
+                set_fov_shake(        0x100, 0x30, 0x8000); // 180 degrees
             } else {
-                set_camera_yaw_shake(  0x80,  0x8, 0x4000);
-                set_camera_roll_shake( 0x80,  0x8, 0x4000);
-                set_fov_shake(        0x100, 0x30, 0x8000);
+                set_camera_yaw_shake(  0x80,  0x8, 0x4000); // 90 degrees
+                set_camera_roll_shake( 0x80,  0x8, 0x4000); // 90 degrees
+                set_fov_shake(        0x100, 0x30, 0x8000); // 180 degrees
             }
             gLakituState.focHSpeed = 0.0f;
             gLakituState.posHSpeed = 0.0f;
             break;
         case SHAKE_MED_DAMAGE:
             if (sMarioCamState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
-                set_camera_yaw_shake( 0x400, 0x20, 0x1000);
-                set_camera_roll_shake(0x600, 0x30, 0x1000);
-                set_fov_shake(        0x180, 0x40, 0x8000);
+                set_camera_yaw_shake( 0x400, 0x20, 0x1000); // 22.5 degrees
+                set_camera_roll_shake(0x600, 0x30, 0x1000); // 22.5 degrees
+                set_fov_shake(        0x180, 0x40, 0x8000); // 180 degrees
             } else {
-                set_camera_yaw_shake( 0x100, 0x10, 0x4000);
-                set_camera_roll_shake(0x100, 0x10, 0x4000);
-                set_fov_shake(        0x180, 0x40, 0x8000);
+                set_camera_yaw_shake( 0x100, 0x10, 0x4000); // 90 degrees
+                set_camera_roll_shake(0x100, 0x10, 0x4000); // 90 degrees
+                set_fov_shake(        0x180, 0x40, 0x8000); // 180 degrees
             }
             gLakituState.focHSpeed = 0.0f;
             gLakituState.posHSpeed = 0.0f;
             break;
         case SHAKE_LARGE_DAMAGE:
             if (sMarioCamState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
-                set_camera_yaw_shake( 0x600, 0x30, 0x1000);
-                set_camera_roll_shake(0x800, 0x40, 0x1000);
-                set_fov_shake(        0x200, 0x50, 0x8000);
+                set_camera_yaw_shake( 0x600, 0x30, 0x1000); // 22.5 degrees
+                set_camera_roll_shake(0x800, 0x40, 0x1000); // 22.5 degrees
+                set_fov_shake(        0x200, 0x50, 0x8000); // 180 degrees
             } else {
-                set_camera_yaw_shake( 0x180, 0x20, 0x4000);
-                set_camera_roll_shake(0x200, 0x20, 0x4000);
-                set_fov_shake(        0x200, 0x50, 0x8000);
+                set_camera_yaw_shake( 0x180, 0x20, 0x4000); // 90 degrees
+                set_camera_roll_shake(0x200, 0x20, 0x4000); // 90 degrees
+                set_fov_shake(        0x200, 0x50, 0x8000); // 180 degrees
             }
             gLakituState.focHSpeed = 0.0f;
             gLakituState.posHSpeed = 0.0f;
@@ -926,7 +926,7 @@ void mode_8_directions_camera(struct Camera *c) {
     } else if ((gPlayer1Controller->buttonPressed & R_CBUTTONS) && !(gPlayer1Controller->buttonDown & R_TRIG)) {
         s8DirModeBaseYaw += DEGREES(45);
     } else if (gPlayer2Controller->rawStickX) {
-        s8DirModeBaseYaw += DEGREES(gPlayer2Controller->rawStickX * 4 / 64); // Analog camera support (Use the "Dual Analog" input mode in Parallel Launcher)
+        s8DirModeBaseYaw += DEGREES((gPlayer2Controller->rawStickX * 4) / 64); // Analog camera support (Use the "Dual Analog" input mode in Parallel Launcher)
     }
     if (gPlayer1Controller->buttonDown & R_TRIG) {
         if (gPlayer1Controller->buttonDown & L_CBUTTONS) {
@@ -936,10 +936,10 @@ void mode_8_directions_camera(struct Camera *c) {
         }
         rButtonCounter++; // This increses whenever R is held.
     } else {
-        if (rButtonCounter > 0 && rButtonCounter <= 5 && !((gPlayer1Controller->buttonDown & L_CBUTTONS) || (gPlayer1Controller->buttonDown & R_CBUTTONS) || (gMarioState->action & ACT_FLAG_SWIMMING_OR_FLYING))) {
+        if ((rButtonCounter > 0) && (rButtonCounter <= 5) && !((gPlayer1Controller->buttonDown & L_CBUTTONS) || (gPlayer1Controller->buttonDown & R_CBUTTONS) || (gMarioState->action & ACT_FLAG_SWIMMING_OR_FLYING))) {
             // This centers the camera behind Mario. It triggers when you let go of R in less than 5 frames.
             s8DirModeYawOffset = 0x0;
-            s8DirModeBaseYaw = gMarioState->faceAngle[1]-0x8000;
+            s8DirModeBaseYaw = (gMarioState->faceAngle[1] - DEGREES(180));
             gMarioState->area->camera->yaw = s8DirModeBaseYaw;
             play_sound_rbutton_changed();
         }
@@ -955,7 +955,7 @@ void mode_8_directions_camera(struct Camera *c) {
     } else {
         rButtonCounter2++;
     }
-    if (gPlayer1Controller->buttonPressed & D_JPAD) s8DirModeBaseYaw = (s8DirModeBaseYaw + 0x1000) & 0xE000; // Lock the camera to the nearest 45deg axis
+    if (gPlayer1Controller->buttonPressed & D_JPAD) s8DirModeBaseYaw = (s8DirModeBaseYaw + 0x1000) & DEGREES(-45); // Lock the camera to the nearest 45deg axis
     lakitu_zoom(400.0f, 0x900);
     c->nextYaw = update_8_directions_camera(c, c->focus, pos);
     set_camera_height(c, pos[1]);
@@ -970,13 +970,13 @@ void mode_8_directions_camera(struct Camera *c) {
  // extra functionality
     else if (gPlayer1Controller->buttonPressed & U_JPAD) {
         s8DirModeYawOffset = 0x0;
-        s8DirModeYawOffset = (gMarioState->faceAngle[1] - 0x8000);
+        s8DirModeYawOffset = (gMarioState->faceAngle[1] - DEGREES(180));
     }  else if (gPlayer1Controller->buttonDown & L_JPAD) {
         s8DirModeYawOffset -= DEGREES(2);
     } else if (gPlayer1Controller->buttonDown & R_JPAD) {
         s8DirModeYawOffset += DEGREES(2);
     } else if (gPlayer1Controller->buttonPressed & D_JPAD) {
-        s8DirModeYawOffset = (s8DirModeYawOffset & 0xE000);
+        s8DirModeYawOffset = (s8DirModeYawOffset & DEGREES(-45));
     }
 #endif
     lakitu_zoom(400.0f, 0x900);
@@ -1489,10 +1489,10 @@ Angle update_slide_camera(struct Camera *c) {
     f32 maxCamDist;
     f32 pitchScale;
     Angle camPitch, camYaw;
-    Angle goalPitch = 0x1555;
+    Angle goalPitch = DEGREES(30);
     Angle goalYaw   = (sMarioCamState->faceAngle[1] + DEGREES(180));
     // Zoom in when inside the CCM shortcut
-    sLakituDist   = approach_f32(sLakituDist, ((sStatusFlags & CAM_FLAG_CCM_SLIDE_SHORTCUT) ? -600.0f : 0.0f), 20.0f, 20.0f);
+    approach_s16_symmetric_bool(&sLakituDist, ((sStatusFlags & CAM_FLAG_CCM_SLIDE_SHORTCUT) ? -600 : 0), 20);
     // No C-Button input in this mode, notify the player with a buzzer
     play_camera_buzz_if_cbutton();
     // Focus on Mario
@@ -1510,7 +1510,7 @@ Angle update_slide_camera(struct Camera *c) {
     }
     approach_s16_symmetric_bool(&camPitch, goalPitch, 0x100);
     // Hoot mode
-    if (sMarioCamState->action != ACT_RIDING_HOOT && sMarioGeometry.currFloorType == SURFACE_DEATH_PLANE) {
+    if ((sMarioCamState->action != ACT_RIDING_HOOT) && (sMarioGeometry.currFloorType == SURFACE_DEATH_PLANE)) {
         vec3f_set_dist_and_angle(c->focus, pos, maxCamDist + sLakituDist, camPitch, camYaw);
         c->pos[0] = pos[0];
         c->pos[2] = pos[2];
@@ -1990,15 +1990,15 @@ void move_mario_head_c_up(UNUSED struct Camera *c) {
     sCUpCameraPitch += (Angle)(gPlayer1Controller->stickY * 10.0f);
     sModeOffsetYaw  -= (Angle)(gPlayer1Controller->stickX * 10.0f);
     // Bound looking up to nearly 80 degrees.
-    if (sCUpCameraPitch >  0x38E3) sCUpCameraPitch =  0x38E3;
+    if (sCUpCameraPitch >  DEGREES( 80)) sCUpCameraPitch =  DEGREES( 80);
     // Bound looking down to -45 degrees
-    if (sCUpCameraPitch < -0x2000) sCUpCameraPitch = -0x2000;
+    if (sCUpCameraPitch < -DEGREES( 45)) sCUpCameraPitch = -DEGREES( 45);
     // Bound the camera yaw to +-120 degrees
-    if (sModeOffsetYaw  >  0x5555) sModeOffsetYaw  =  0x5555;
-    if (sModeOffsetYaw  < -0x5555) sModeOffsetYaw  = -0x5555;
+    if (sModeOffsetYaw  >  DEGREES(120)) sModeOffsetYaw  =  DEGREES(120);
+    if (sModeOffsetYaw  < -DEGREES(120)) sModeOffsetYaw  = -DEGREES(120);
     // Give Mario's neck natural-looking constraints
-    sMarioCamState->headRotation[0] = sCUpCameraPitch * 3 / 4;
-    sMarioCamState->headRotation[1] = sModeOffsetYaw  * 3 / 4;
+    sMarioCamState->headRotation[0] = ((sCUpCameraPitch * 3) / 4);
+    sMarioCamState->headRotation[1] = ((sModeOffsetYaw  * 3) / 4);
 }
 
 /**
@@ -2269,7 +2269,7 @@ void update_camera(struct Camera *c) {
         if (cam_select_alt_mode(0) == CAM_SELECTION_MARIO && (gPlayer1Controller->buttonPressed & R_TRIG)) {
 #ifdef REONU_CAM_3
             if (set_cam_angle(0) == CAM_ANGLE_MARIO) {
-                s8DirModeBaseYaw = (((gMarioState->faceAngle[1]-0x8000) + 0x1000) & 0xE000);
+                s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - DEGREES(180)) + 0x1000) & DEGREES(-45));
 #else
             if (set_cam_angle(0) == CAM_ANGLE_LAKITU) {
                 set_cam_angle(CAM_ANGLE_MARIO);
@@ -2393,9 +2393,9 @@ void update_camera(struct Camera *c) {
     if (c->cutscene != CUTSCENE_NONE) {
         gPuppyCam.yawTarget = gCamera->yaw;
         gPuppyCam.yaw       = gCamera->yaw;
-        if (gMarioState->action == ACT_ENTERING_STAR_DOOR) { // god this is stupid and the fact I have to continue doing this is testament to the idiocy of the star door cutscene >:(
-            gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + 0x8000);
-            gPuppyCam.yaw       = (gMarioState->faceAngle[1] + 0x8000);
+        if (gMarioState->action == ACT_ENTERING_STAR_DOOR) { //! god this is stupid and the fact I have to continue doing this is testament to the idiocy of the star door cutscene >:(
+            gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + DEGREES(180));
+            gPuppyCam.yaw       = (gMarioState->faceAngle[1] + DEGREES(180));
         }
     }
     if ((c->cutscene == CUTSCENE_NONE) && gPuppyCam.enabled && !(gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON)) {
@@ -3187,7 +3187,7 @@ s32 offset_yaw_outward_radial(struct Camera *c, Angle areaYaw) {
             // This mask splits the 360 degrees of yaw into 4 corners. It adds 45 degrees so that the yaw
             // offset at the corner will be 0, but the yaw offset near the center will face more towards
             // the direction Mario is running in.
-            yawGoal = (((areaYaw & 0xC000) - areaYaw) + DEGREES(45));
+            yawGoal = (((areaYaw & DEGREES(-90)) - areaYaw) + DEGREES(45));
             if (yawGoal < 0x0) yawGoal = -yawGoal;
             yawGoal = ((yawGoal / 32) * 48);
             break;
@@ -3679,7 +3679,7 @@ Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, 
     vec3f_copy(newPos, curPos);
     vec3f_copy(newFoc, curFoc);
     if (sStatusFlags & CAM_FLAG_START_TRANSITION) {
-        for (i = 0; i < 3; i++) {
+        for ((i = 0); (i < 3); (i++)) {
             // Add Mario's displacement from this frame to the last frame's pos and focus
             // Makes the transition start from where the camera would have moved
             startPos[i] = ((oldPos[i] + sMarioCamState->pos[i]) - sModeTransition.marioPos[i]);
@@ -3718,8 +3718,8 @@ Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, 
         vec3f_get_yaw(newFoc, newPos, &yaw);
     } else {
         sModeTransition.posDist  = 0.0f;
-        sModeTransition.posPitch = 0;
-        sModeTransition.posYaw   = 0;
+        sModeTransition.posPitch = 0x0;
+        sModeTransition.posYaw   = 0x0;
         sStatusFlags &= ~CAM_FLAG_TRANSITION_OUT_OF_C_UP;
     }
     vec3f_copy(sModeTransition.marioPos, sMarioCamState->pos);
@@ -3757,7 +3757,7 @@ void set_camera_mode_8_directions(struct Camera *c) {
         c->mode       = CAMERA_MODE_8_DIRECTIONS;
         sStatusFlags &= ~CAM_FLAG_SMOOTH_MOVEMENT;
 #ifdef REONU_CAM_3
-        s8DirModeBaseYaw   = (((gMarioState->faceAngle[1] - 0x8000) + 0x1000) & 0xE000);
+        s8DirModeBaseYaw   = (((gMarioState->faceAngle[1] - DEGREES(180)) + 0x1000) & DEGREES(-45));
 #else
         s8DirModeBaseYaw   = 0x0;
 #endif
@@ -4396,40 +4396,40 @@ struct CameraTrigger sCamCCM[] = {
  * and one trigger that starts the enter pool cutscene when Mario enters HMC.
  */
 struct CameraTrigger sCamCastle[] = {
-    { 1, cam_castle_close_mode,               -1100,   657, -1346, 300, 150, 300,  0      },
-    { 1, cam_castle_enter_lobby,              -1099,   657,  -803, 300, 150, 300,  0      },
-    { 1, cam_castle_close_mode,               -2304,  -264, -4072, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,               -2304,   145, -1344, 140, 150, 140,  0      },
-    { 1, cam_castle_enter_lobby,              -2304,   145,  -802, 140, 150, 140,  0      },
+    { 1, cam_castle_close_mode,               -1100,   657, -1346, 300, 150, 300,          0x0  },
+    { 1, cam_castle_enter_lobby,              -1099,   657,  -803, 300, 150, 300,          0x0  },
+    { 1, cam_castle_close_mode,               -2304,  -264, -4072, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,               -2304,   145, -1344, 140, 150, 140,          0x0  },
+    { 1, cam_castle_enter_lobby,              -2304,   145,  -802, 140, 150, 140,          0x0  },
     //! Sets the camera mode when leaving secret aquarium
-    { 1, cam_castle_close_mode,                2816,  1200,  -256, 100, 100, 100,  0      },
-    { 1, cam_castle_close_mode,                 256,  -161, -4226, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,                 256,   145, -1344, 140, 150, 140,  0      },
-    { 1, cam_castle_enter_lobby,                256,   145,  -802, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,               -1024,    44, -4870, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,                -459,   145, -1020, 140, 150, 140,  0x6000 },
-    { 1, cam_castle_enter_lobby,                -85,   145,  -627, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,               -1589,   145, -1020, 140, 150, 140, -0x6000 },
-    { 1, cam_castle_enter_lobby,              -1963,   145,  -627, 140, 150, 140,  0      },
-    { 1, cam_castle_leave_lobby_sliding_door, -2838,   657, -1659, 200, 150, 150,  0x2000 },
-    { 1, cam_castle_enter_lobby_sliding_door, -2319,   512, -1266, 300, 150, 300,  0x2000 },
-    { 1, cam_castle_close_mode,                 844,   759, -1657,  40, 150,  40, -0x2000 },
-    { 1, cam_castle_enter_lobby,                442,   759, -1292, 140, 150, 140, -0x2000 },
-    { 2, cam_castle_enter_spiral_stairs,      -1000,   657,  1740, 200, 300, 200,  0      },
-    { 2, cam_castle_enter_spiral_stairs,       -996,  1348,  1814, 200, 300, 200,  0      },
-    { 2, cam_castle_close_mode,                -946,   657,  2721,  50, 150,  50,  0      },
-    { 2, cam_castle_close_mode,                -996,  1348,   907,  50, 150,  50,  0      },
-    { 2, cam_castle_close_mode,                -997,  1348,  1450, 140, 150, 140,  0      },
-    { 1, cam_castle_close_mode,               -4942,   452,  -461, 140, 150, 140,  0x4000 },
-    { 1, cam_castle_close_mode,               -3393,   350,  -793, 140, 150, 140,  0x4000 },
-    { 1, cam_castle_enter_lobby,              -2851,   350,  -792, 140, 150, 140,  0x4000 },
-    { 1, cam_castle_enter_lobby,                803,   350,  -228, 140, 150, 140, -0x4000 },
-    { 1, cam_castle_close_mode,                1345,   350,  -229, 140, 150, 140,  0x4000 },
-    { 1, cam_castle_close_mode,                -946,  -929,   622, 300, 150, 300,  0      },
-    { 2, cam_castle_look_upstairs,             -205,  1456,  2508, 210, 928, 718,  0      },
-    { 1, cam_castle_basement_look_downstairs, -1027,  -587,  -718, 318, 486, 577,  0      },
-    { 1, cam_castle_lobby_entrance,           -1024,   376,  1830, 300, 400, 300,  0      },
-    { 3, cam_castle_hmc_start_pool_cutscene,   2485, -1689, -2659, 600,  50, 600,  0      },
+    { 1, cam_castle_close_mode,                2816,  1200,  -256, 100, 100, 100,          0x0  },
+    { 1, cam_castle_close_mode,                 256,  -161, -4226, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,                 256,   145, -1344, 140, 150, 140,          0x0  },
+    { 1, cam_castle_enter_lobby,                256,   145,  -802, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,               -1024,    44, -4870, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,                -459,   145, -1020, 140, 150, 140,  DEGREES(135) },
+    { 1, cam_castle_enter_lobby,                -85,   145,  -627, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,               -1589,   145, -1020, 140, 150, 140, -DEGREES(135) },
+    { 1, cam_castle_enter_lobby,              -1963,   145,  -627, 140, 150, 140,          0x0  },
+    { 1, cam_castle_leave_lobby_sliding_door, -2838,   657, -1659, 200, 150, 150,  DEGREES( 45) },
+    { 1, cam_castle_enter_lobby_sliding_door, -2319,   512, -1266, 300, 150, 300,  DEGREES( 45) },
+    { 1, cam_castle_close_mode,                 844,   759, -1657,  40, 150,  40, -DEGREES( 45) },
+    { 1, cam_castle_enter_lobby,                442,   759, -1292, 140, 150, 140, -DEGREES( 45) },
+    { 2, cam_castle_enter_spiral_stairs,      -1000,   657,  1740, 200, 300, 200,          0x0  },
+    { 2, cam_castle_enter_spiral_stairs,       -996,  1348,  1814, 200, 300, 200,          0x0  },
+    { 2, cam_castle_close_mode,                -946,   657,  2721,  50, 150,  50,          0x0  },
+    { 2, cam_castle_close_mode,                -996,  1348,   907,  50, 150,  50,          0x0  },
+    { 2, cam_castle_close_mode,                -997,  1348,  1450, 140, 150, 140,          0x0  },
+    { 1, cam_castle_close_mode,               -4942,   452,  -461, 140, 150, 140,  DEGREES( 90) },
+    { 1, cam_castle_close_mode,               -3393,   350,  -793, 140, 150, 140,  DEGREES( 90) },
+    { 1, cam_castle_enter_lobby,              -2851,   350,  -792, 140, 150, 140,  DEGREES( 90) },
+    { 1, cam_castle_enter_lobby,                803,   350,  -228, 140, 150, 140, -DEGREES( 90) },
+    { 1, cam_castle_close_mode,                1345,   350,  -229, 140, 150, 140,  DEGREES( 90) },
+    { 1, cam_castle_close_mode,                -946,  -929,   622, 300, 150, 300,          0x0  },
+    { 2, cam_castle_look_upstairs,             -205,  1456,  2508, 210, 928, 718,          0x0  },
+    { 1, cam_castle_basement_look_downstairs, -1027,  -587,  -718, 318, 486, 577,          0x0  },
+    { 1, cam_castle_lobby_entrance,           -1024,   376,  1830, 300, 400, 300,          0x0  },
+    { 3, cam_castle_hmc_start_pool_cutscene,   2485, -1689, -2659, 600,  50, 600,          0x0  },
     NULL_TRIGGER
 };
 
@@ -4440,66 +4440,66 @@ struct CameraTrigger sCamCastle[] = {
  * The triggers are also responsible for warping the camera below platforms.
  */
 struct CameraTrigger sCamBBH[] = {
-    { 1, cam_bbh_enter_front_door,                       742,     0,  2369,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_leave_front_door,                       741,     0,  1827,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                 222,     0,  1458,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                 222,     0,   639,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                 435,     0,   222,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1613,     0,   222,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1827,     0,  1459,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                -495,   819,  1407,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                -495,   819,   640,  250, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                 179,   819,   222,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1613,   819,   222,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1827,   819,   486,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_lower,                          2369,     0,  1459,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_lower,                          3354,     0,  1347,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_lower,                          2867,   514,  1843,  512, 102,  409,    0x0 },
-    { 1, cam_bbh_room_4,                                3354,     0,   804,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_4,                                1613,     0,  -320,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_8,                                 435,     0,  -320,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_5_library,                       -2021,     0,   803,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_5_library,                        -320,     0,   640,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_5_library_to_hidden_transition,  -1536,   358,  -254,  716, 363,  102,    0x0 },
-    { 1, cam_bbh_room_5_hidden_to_library_transition,  -1536,   358,  -459,  716, 363,  102,    0x0 },
-    { 1, cam_bbh_room_5_hidden,                        -1560,     0, -1314,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_3,                                -320,     0,  1459,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_3,                               -2021,     0,  1345,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_library,                        2369,   819,   486,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_library,                        2369,  1741,   486,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_2_library_to_trapdoor_transition, 2867,  1228,  1174,  716, 414,  102,    0x0 },
-    { 1, cam_bbh_room_2_trapdoor_transition,            2867,  1228,  1378,  716, 414,  102,    0x0 },
-    { 1, cam_bbh_room_2_trapdoor,                       2369,   819,  1818,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_9_attic,                          1829,  1741,   486,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_9_attic,                           741,  1741,  1587,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_9_attic_transition,                102,  2048,  -191,  100, 310,  307,    0x0 },
-    { 1, cam_bbh_room_9_mr_i_transition,                 409,  2048,  -191,  100, 310,  307,    0x0 },
-    { 1, cam_bbh_room_13_balcony,                        742,  1922,  2164,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_fall_off_roof,                          587,  1322,  2677, 1000, 400,  600,    0x0 },
-    { 1, cam_bbh_room_3,                               -1037,   819,  1408,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_3,                               -1970,  1024,  1345,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_8,                                 179,   819,  -320,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_7_mr_i,                           1613,   819,  -320,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_7_mr_i_to_coffins_transition,     2099,  1228,  -819,  102, 414,  716,    0x0 },
-    { 1, cam_bbh_room_7_coffins_to_mr_i_transition,     2304,  1228,  -819,  102, 414,  716,    0x0 },
-    { 1, cam_bbh_room_6,                               -1037,   819,   640,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_6,                               -1970,  1024,   803,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200,    0x0 },
-    { 1, cam_bbh_fall_into_pool,                        2355, -1112,  -193, 1228, 500, 1343,    0x0 },
-    { 1, cam_bbh_fall_into_pool,                        2355, -1727,  1410, 1228, 500,  705,    0x0 },
-    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  1827,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  2369,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4929,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4387,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_room_0_back_entrance,                  1887, -2457,   204,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_room_0,                                1272, -2457,   204,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_room_0,                               -1681, -2457,   204,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_room_0_back_entrance,                 -2296, -2457,   204,  250, 200,  250,    0x0 },
-    { 1, cam_bbh_elevator,                             -2939,  -605,  5367,  800, 100,  800,    0x0 },
-    { 1, cam_bbh_room_12_upper,                        -2939,  -205,  5367,  300, 100,  300,    0x0 },
-    { 1, cam_bbh_room_12_upper,                        -2332,  -204,  4714,  250, 200,  250, 0x6000 },
-    { 1, cam_bbh_room_0_back_entrance,                 -1939,  -204,  4340,  250, 200,  250, 0x6000 },
+    { 1, cam_bbh_enter_front_door,                       742,     0,  2369,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_leave_front_door,                       741,     0,  1827,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                 222,     0,  1458,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                 222,     0,   639,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                 435,     0,   222,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1613,     0,   222,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1827,     0,  1459,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                -495,   819,  1407,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                -495,   819,   640,  250, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                 179,   819,   222,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1613,   819,   222,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1827,   819,   486,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_lower,                          2369,     0,  1459,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_lower,                          3354,     0,  1347,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_lower,                          2867,   514,  1843,  512, 102,  409,          0x0 },
+    { 1, cam_bbh_room_4,                                3354,     0,   804,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_4,                                1613,     0,  -320,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_8,                                 435,     0,  -320,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_5_library,                       -2021,     0,   803,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_5_library,                        -320,     0,   640,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_5_library_to_hidden_transition,  -1536,   358,  -254,  716, 363,  102,          0x0 },
+    { 1, cam_bbh_room_5_hidden_to_library_transition,  -1536,   358,  -459,  716, 363,  102,          0x0 },
+    { 1, cam_bbh_room_5_hidden,                        -1560,     0, -1314,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_3,                                -320,     0,  1459,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_3,                               -2021,     0,  1345,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_library,                        2369,   819,   486,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_library,                        2369,  1741,   486,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_2_library_to_trapdoor_transition, 2867,  1228,  1174,  716, 414,  102,          0x0 },
+    { 1, cam_bbh_room_2_trapdoor_transition,            2867,  1228,  1378,  716, 414,  102,          0x0 },
+    { 1, cam_bbh_room_2_trapdoor,                       2369,   819,  1818,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_9_attic,                          1829,  1741,   486,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_9_attic,                           741,  1741,  1587,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_9_attic_transition,                102,  2048,  -191,  100, 310,  307,          0x0 },
+    { 1, cam_bbh_room_9_mr_i_transition,                 409,  2048,  -191,  100, 310,  307,          0x0 },
+    { 1, cam_bbh_room_13_balcony,                        742,  1922,  2164,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_fall_off_roof,                          587,  1322,  2677, 1000, 400,  600,          0x0 },
+    { 1, cam_bbh_room_3,                               -1037,   819,  1408,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_3,                               -1970,  1024,  1345,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_8,                                 179,   819,  -320,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_7_mr_i,                           1613,   819,  -320,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_7_mr_i_to_coffins_transition,     2099,  1228,  -819,  102, 414,  716,          0x0 },
+    { 1, cam_bbh_room_7_coffins_to_mr_i_transition,     2304,  1228,  -819,  102, 414,  716,          0x0 },
+    { 1, cam_bbh_room_6,                               -1037,   819,   640,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_6,                               -1970,  1024,   803,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_room_1,                                1827,   819,  1818,  200, 200,  200,          0x0 },
+    { 1, cam_bbh_fall_into_pool,                        2355, -1112,  -193, 1228, 500, 1343,          0x0 },
+    { 1, cam_bbh_fall_into_pool,                        2355, -1727,  1410, 1228, 500,  705,          0x0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  1827,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  2369,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4929,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_elevator_room_lower,                      0, -2457,  4387,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_room_0_back_entrance,                  1887, -2457,   204,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_room_0,                                1272, -2457,   204,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_room_0,                               -1681, -2457,   204,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_room_0_back_entrance,                 -2296, -2457,   204,  250, 200,  250,          0x0 },
+    { 1, cam_bbh_elevator,                             -2939,  -605,  5367,  800, 100,  800,          0x0 },
+    { 1, cam_bbh_room_12_upper,                        -2939,  -205,  5367,  300, 100,  300,          0x0 },
+    { 1, cam_bbh_room_12_upper,                        -2332,  -204,  4714,  250, 200,  250, DEGREES(135) },
+    { 1, cam_bbh_room_0_back_entrance,                 -1939,  -204,  4340,  250, 200,  250, DEGREES(135) },
     NULL_TRIGGER
 };
 
@@ -6652,10 +6652,10 @@ void cutscene_dialog_start(struct Camera *c) {
     sCutsceneVars[9].point[1] += (gCutsceneFocus->hitboxHeight + 200.0f);
     vec3f_get_yaw(sCutsceneVars[8].point, sCutsceneVars[9].point, &sCutsceneVars[9].angle[1]);
     vec3f_get_yaw(sMarioCamState->pos, gLakituState.curPos, &yaw);
-    if ((yaw - sCutsceneVars[9].angle[1]) & 0x8000) {
-        sCutsceneVars[9].angle[1] -= 0x6000;
+    if ((yaw - sCutsceneVars[9].angle[1]) & DEGREES(180)) {
+        sCutsceneVars[9].angle[1] -= DEGREES(135);
     } else {
-        sCutsceneVars[9].angle[1] += 0x6000;
+        sCutsceneVars[9].angle[1] += DEGREES(135);
     }
 }
 
@@ -7435,7 +7435,7 @@ void cutscene_credits(struct Camera *c) {
     copy_spline_segment(sCurCreditsSplineFocus, focus);
     move_point_along_spline(c->pos,   sCurCreditsSplinePos,   &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
     move_point_along_spline(c->focus, sCurCreditsSplineFocus, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
-    player2_rotate_cam(c, -0x2000, 0x2000, -0x4000, 0x4000);
+    player2_rotate_cam(c, -DEGREES(45), DEGREES(45), -DEGREES(90), DEGREES(90));
 }
 
 /**
@@ -7448,7 +7448,7 @@ void cutscene_sliding_doors_open_start(struct Camera *c) {
     // If the camera is too close, warp it backwards set it to a better angle.
     if (dist  < 500.0f) {
         dist  = 500.0f;
-        yaw   = (sMarioCamState->faceAngle[1] + 0x8800);
+        yaw   = (sMarioCamState->faceAngle[1] + 0x8800); // -168.75 degrees
         pitch = 0x800;
     }
     vec3f_set_dist_and_angle(sMarioCamState->pos, c->pos,  dist,  pitch,  yaw);
@@ -8888,8 +8888,8 @@ void set_fov_function(u8 func) {
  */
 void cutscene_set_fov_shake_preset(u8 preset) {
     switch (preset) {
-        case 1: set_fov_shake(0x100, 0x30, 0x8000); break;
-        case 2: set_fov_shake(0x400, 0x20, 0x4000); break;
+        case 1: set_fov_shake(0x100, 0x30, DEGREES(180)); break;
+        case 2: set_fov_shake(0x400, 0x20, DEGREES( 90)); break;
     }
 }
 
@@ -8901,10 +8901,10 @@ void cutscene_set_fov_shake_preset(u8 preset) {
  */
 void set_fov_shake_from_point_preset(u8 preset, f32 posX, f32 posY, f32 posZ) {
     switch (preset) {
-        case SHAKE_FOV_SMALL:  set_fov_shake_from_point(0x100, 0x30, 0x8000, 3000.0f, posX, posY, posZ); break;
-        case SHAKE_FOV_MEDIUM: set_fov_shake_from_point(0x200, 0x30, 0x8000, 4000.0f, posX, posY, posZ); break;
-        case SHAKE_FOV_LARGE:  set_fov_shake_from_point(0x300, 0x30, 0x8000, 6000.0f, posX, posY, posZ); break;
-        case SHAKE_FOV_UNUSED: set_fov_shake_from_point(0x800, 0x20, 0x4000, 3000.0f, posX, posY, posZ); break;
+        case SHAKE_FOV_SMALL:  set_fov_shake_from_point(0x100, 0x30, DEGREES(180), 3000.0f, posX, posY, posZ); break;
+        case SHAKE_FOV_MEDIUM: set_fov_shake_from_point(0x200, 0x30, DEGREES(180), 4000.0f, posX, posY, posZ); break;
+        case SHAKE_FOV_LARGE:  set_fov_shake_from_point(0x300, 0x30, DEGREES(180), 6000.0f, posX, posY, posZ); break;
+        case SHAKE_FOV_UNUSED: set_fov_shake_from_point(0x800, 0x20, DEGREES( 90), 3000.0f, posX, posY, posZ); break;
     }
 }
 

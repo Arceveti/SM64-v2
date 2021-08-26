@@ -330,8 +330,8 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     f32 randomScale;
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE              ) newObj->oMoveAngleYaw = random_u16();
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + 0x8000) + (Angle) random_f32_around_zero(params->moveAngleRange));
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw           + (Angle) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + DEGREES(180)) + (Angle) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw                 + (Angle) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL    ) newObj->oPosY         = find_water_level(newObj->oPosX, newObj->oPosZ);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ          ) obj_translate_xz_random( newObj, params->moveRange);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XYZ         ) obj_translate_xyz_random(newObj, params->moveRange);
@@ -573,7 +573,7 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
-        if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED && obj != o) {
+        if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (obj != o)) {
             f32 objDist = dist_between_objects(o, obj);
             if (objDist < minDist) {
                 closestObj = obj;
@@ -596,9 +596,9 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj         = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
-        if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
+        if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
             vec3f_diff(d, pos, &obj->oPosVec);
-            f32 objDist = sqrtf(sqr(d[0]) + sqr(d[1]) + sqr(d[2]));
+            f32 objDist = vec3f_mag(d);
             if (objDist < minDist) {
                 closestObj = obj;
                 minDist    = objDist;
@@ -620,7 +620,7 @@ struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *beh
     listHead     = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj          = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
-        if (obj->behavior == behaviorAddr && obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) {
+        if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
             f32 dx = (obj->oPosX - pos[0]);
             f32 dz = (obj->oPosZ - pos[2]);
             Angle objYaw  = atan2s(dz, dx);
@@ -1249,7 +1249,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type
         intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor);
         deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
         if (intendedFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
-            o->oWallAngle = o->oMoveAngleYaw + 0x8000;
+            o->oWallAngle = (o->oMoveAngleYaw + DEGREES(180));
             return 2;
         } else if ((intendedFloor->normal.y < steepNormalY) && (deltaFloorHeight > 0) && (intendedFloorHeight > o->oPosY)) {
             o->oWallAngle = atan2s(intendedFloor->normal.z, intendedFloor->normal.x);
@@ -1278,7 +1278,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
             o->oPosZ          = collisionData.z;
             wall              = collisionData.walls[collisionData.numWalls - 1];
             o->oWallAngle     = atan2s(wall->normal.z, wall->normal.x);
-            return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > 0x4000);
+            return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEGREES(90));
         }
     }
     return FALSE;
@@ -1548,7 +1548,7 @@ void cur_obj_set_pos_via_transform(void) {
 }
 
 Angle cur_obj_reflect_move_angle_off_wall(void) {
-    return (o->oWallAngle - ((Angle) o->oMoveAngleYaw - (Angle) o->oWallAngle) + 0x8000);
+    return (o->oWallAngle - ((Angle) o->oMoveAngleYaw - (Angle) o->oWallAngle) + DEGREES(180));
 }
 
 void cur_obj_spawn_particles(struct SpawnParticlesInfo *info) {

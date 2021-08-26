@@ -1,6 +1,6 @@
 
 void bhv_swing_platform_init(void) {
-    o->oSwingPlatformAngle = 0x2000;
+    o->oSwingPlatformAngle = DEGREES(45);
 }
 
 void bhv_swing_platform_update(void) {

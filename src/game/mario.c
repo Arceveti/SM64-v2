@@ -456,7 +456,7 @@ Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
     // always passed as zero.
     // if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
     faceAngleYaw = abs_angle_diff(m->floorAngle, faceAngleYaw);
-    return (faceAngleYaw < 0x4000);
+    return (faceAngleYaw < DEGREES(90));
 }
 
 /**
@@ -610,7 +610,7 @@ void set_steep_jump_action(struct MarioState *m) {
     if (m->forwardVel > 0.0f) {
         //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
         // undefined behavior if m->floorAngle >= 0.
-        Angle angleTemp     = (m->floorAngle + 0x8000);
+        Angle angleTemp     = (m->floorAngle + DEGREES(180));
         Angle faceAngleTemp = (m->faceAngle[1] - angleTemp);
         f32 y               = (sins(faceAngleTemp) * m->forwardVel);
         f32 x               = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
@@ -689,7 +689,7 @@ static MarioAction set_mario_action_airborne(struct MarioState *m, MarioAction a
         case ACT_STEEP_JUMP:
             m->marioObj->header.gfx.animInfo.animID = -1;
             set_mario_y_vel_based_on_fspeed(m, 42.0f, 0.25f);
-            m->faceAngle[0] = -0x2000;
+            m->faceAngle[0] = -DEGREES(45);
             break;
         case ACT_LAVA_BOOST:
             m->vel[1] = 84.0f;
@@ -1213,7 +1213,7 @@ void set_submerged_cam_preset_and_spawn_bubbles(struct MarioState *m) {
         set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
     }
     if ((gPlayer1Controller->buttonPressed & R_TRIG) && (m->action & ACT_FLAG_SWIMMING)) {
-        s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - 0x8000) + 0x1000) & 0xE000);
+        s8DirModeBaseYaw = (((gMarioState->faceAngle[1] - DEGREES(180)) + 0x1000) & DEGREES(-45));
         gWaterCamOverride ^= TRUE;
     }
 #else

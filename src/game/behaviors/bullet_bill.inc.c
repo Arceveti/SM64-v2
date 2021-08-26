@@ -21,7 +21,7 @@ void bullet_bill_act_reset(void) {
 }
 
 void bullet_bill_act_idle(void) {
-    if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x2000) && (400.0f < o->oDistanceToMario) && (o->oDistanceToMario < 1500.0f)) o->oAction = BULLET_BILL_ACT_CHASING_MARIO;
+    if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEGREES(45)) && (400.0f < o->oDistanceToMario) && (o->oDistanceToMario < 1500.0f)) o->oAction = BULLET_BILL_ACT_CHASING_MARIO;
 }
 
 void bullet_bill_act_chasing_mario(void) {

@@ -101,13 +101,13 @@ Bool32 act_holding_pole(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
 #ifdef ACTION_CANCELS
-        if (analog_stick_held_back(m, 0x4000)) {
+        if (analog_stick_held_back(m, DEGREES(90))) {
             m->faceAngle[1]  = m->intendedYaw;
         } else {
-            m->faceAngle[1] += 0x8000;
+            m->faceAngle[1] += DEGREES(180);
         }
 #else
-        m->faceAngle[1] += 0x8000;
+        m->faceAngle[1] += DEGREES(180);
 #endif
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
@@ -150,10 +150,10 @@ Bool32 act_climbing_pole(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
-        if (analog_stick_held_back(m, 0x4000)) {
+        if (analog_stick_held_back(m, DEGREES(90))) {
             m->faceAngle[1]  = m->intendedYaw;
         } else {
-            m->faceAngle[1] += 0x8000;
+            m->faceAngle[1] += DEGREES(180);
         }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
@@ -181,10 +181,10 @@ Bool32 act_grab_pole_slow(struct MarioState *m) {
     }
     if (m->input & INPUT_A_PRESSED) {
         add_tree_leaf_particles(m);
-        if (analog_stick_held_back(m, 0x4000)) {
+        if (analog_stick_held_back(m, DEGREES(90))) {
             m->faceAngle[1]  = m->intendedYaw;
         } else {
-            m->faceAngle[1] += 0x8000;
+            m->faceAngle[1] += DEGREES(180);
         }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
@@ -213,7 +213,7 @@ Bool32 act_grab_pole_fast(struct MarioState *m) {
         if (m->input & INPUT_NONZERO_ANALOG) {
             m->faceAngle[1]  = m->intendedYaw;
         } else {
-            m->faceAngle[1] += 0x8000;
+            m->faceAngle[1] += DEGREES(180);
         }
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
@@ -468,14 +468,14 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (m->actionTimer >= 0xFFFF) m->actionTimer = 10;
 #endif
 #ifdef LEDGE_SIDLE
-        if (intendedDYaw >= -0x2000 && intendedDYaw <= 0x2000) {
+        if (intendedDYaw >= -DEGREES(45) && intendedDYaw <= DEGREES(45)) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
-        } else if (intendedDYaw <= -0x6000 || intendedDYaw >= 0x6000) {
+        } else if (intendedDYaw <= -DEGREES(135) || intendedDYaw >= DEGREES(135)) {
             return let_go_of_ledge(m);
         }
         sidewaysSpeed = ((m->intendedMag / 4.0f) * sins(intendedDYaw));
-        nextX += (sidewaysSpeed * sins(m->faceAngle[1] + 0x4000));
-        nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + 0x4000));
+        nextX += (sidewaysSpeed * sins(m->faceAngle[1] + DEGREES(90)));
+        nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + DEGREES(90)));
         nextFloorHeight = find_floor(nextX, (m->pos[1] + 80.0f), nextZ, &nextFloor);
         if (nextFloor != NULL) {
             m->pos[0] = nextX;
@@ -487,14 +487,14 @@ Bool32 act_ledge_grab(struct MarioState *m) {
             }
         }
 #else
-        if (intendedDYaw >= -0x4000 && intendedDYaw <= 0x4000) {
+        if (intendedDYaw >= -DEGREES(90) && intendedDYaw <= DEGREES(90)) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
         } else {
             return let_go_of_ledge(m);
         }
 #endif
     }
-    heightAboveFloor = (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 30.0f));
+    heightAboveFloor = (m->pos[1] - find_floor_height_relative_polar(m, -DEGREES(180), 30.0f));
     if (hasSpaceForMario && (heightAboveFloor < 100.0f)) return set_mario_action(m, ACT_LEDGE_CLIMB_FAST, 0);
     if (m->actionArg == 0) play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     stop_and_set_height_to_floor(m);
@@ -579,10 +579,10 @@ Bool32 act_in_cannon(struct MarioState *m) {
         case 2:
             m->faceAngle[0]                -= (Angle)(m->controller->stickY * 10.0f);
             marioObj->oMarioCannonInputYaw -= (Angle)(m->controller->stickX * 10.0f);
-            if (m->faceAngle[0] > 0x38E3) m->faceAngle[0] = 0x38E3;
-            if (m->faceAngle[0] <    0x0) m->faceAngle[0] =    0x0;
-            if (marioObj->oMarioCannonInputYaw >  0x4000) marioObj->oMarioCannonInputYaw =  0x4000;
-            if (marioObj->oMarioCannonInputYaw < -0x4000) marioObj->oMarioCannonInputYaw = -0x4000;
+            if (m->faceAngle[0] > DEGREES(80)) m->faceAngle[0] = DEGREES(80);
+            if (m->faceAngle[0] <         0x0) m->faceAngle[0] =         0x0;
+            if (marioObj->oMarioCannonInputYaw >  DEGREES(45)) marioObj->oMarioCannonInputYaw =  DEGREES(45);
+            if (marioObj->oMarioCannonInputYaw < -DEGREES(45)) marioObj->oMarioCannonInputYaw = -DEGREES(45);
             m->faceAngle[1] = (marioObj->oMarioCannonObjectYaw + marioObj->oMarioCannonInputYaw);
             if (m->input & INPUT_A_PRESSED) {
                 m->forwardVel = (100.0f * coss(m->faceAngle[0])                        );
@@ -628,7 +628,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
         if (m->vel[1] < 20.0f) m->vel[1] = 20.0f;
         return set_mario_action(m, ACT_TWIRLING, 1);
     }
-    if (m->angleVel[1] < 0x3000) m->angleVel[1] += 0x100;
+    if (m->angleVel[1] < 0x3000) m->angleVel[1] += 0x100; // 0x3000 = 67.5 degrees
     if (marioObj->oMarioTornadoYawVel < 0x1000) marioObj->oMarioTornadoYawVel += 0x100;
     m->twirlYaw += m->angleVel[1];
     sinAngleVel  = sins(marioObj->oMarioTornadoYawVel);

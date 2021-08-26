@@ -27,13 +27,13 @@ void haunted_chair_act_fall_or_spin(void) {
     if (o->parentObj != o) { // Chair is next to piano
         if (o->oHauntedChairFallTargetAngle == 0x0) {
             if (lateral_dist_between_objects(o, o->parentObj) < 250.0f) {
-                dAngleToPiano = (obj_angle_to_object(o, o->parentObj) - o->oFaceAngleYaw + 0x2000);
-                if (dAngleToPiano & 0x4000) {
+                dAngleToPiano = (obj_angle_to_object(o, o->parentObj) - o->oFaceAngleYaw + DEGREES(45));
+                if (dAngleToPiano & DEGREES(90)) {
                     o->oHauntedChairFallFromPianoAngle = &o->oFaceAngleRoll;
-                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano > 0x0) ? 0x4000 : -0x4000);
+                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano > 0x0) ? DEGREES(90) : -DEGREES(90));
                 } else {
                     o->oHauntedChairFallFromPianoAngle = &o->oFaceAnglePitch;
-                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano < 0x0) ? 0x5000 : -0x4000); // why 0x5000?
+                    o->oHauntedChairFallTargetAngle = ((dAngleToPiano < 0x0) ? 0x5000 : -DEGREES(90)); //! why 0x5000?
                 }
                 o->oHauntedChairPitchVel = ((o->oHauntedChairFallTargetAngle < 0x0) ? -1500.0f : 1500.0f);
             }

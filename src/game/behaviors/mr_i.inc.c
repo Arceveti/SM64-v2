@@ -74,17 +74,17 @@ void mr_i_act_spin_death(void) {
     f32 spinAmount       = ((o->oTimer + 1) / 96.0f);
     if (o->oTimer < 64) {
         startYaw          = o->oMoveAngleYaw;
-        o->oMoveAngleYaw += (direction * coss(0x4000 * spinAmount));
+        o->oMoveAngleYaw += (direction * coss(DEGREES(90) * spinAmount));
         if ((startYaw < 0x0) && (o->oMoveAngleYaw >= 0x0)) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
-        o->oMoveAnglePitch = ((1.0f - coss(0x4000 * spinAmount)) * -0x4000);
+        o->oMoveAnglePitch = ((1.0f - coss(DEGREES(90) * spinAmount)) * -DEGREES(90));
         cur_obj_shake_y(4.0f);
     } else if (o->oTimer < 96) {
         if (o->oTimer == 64) cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
         shakeY = ((f32)(o->oTimer - 63) / 32);
-        o->oMoveAngleYaw  += (direction * coss(0x4000 * spinAmount));
-        o->oMoveAnglePitch =     ((1.0f - coss(0x4000 * spinAmount)) * -0x4000);
+        o->oMoveAngleYaw  += (direction * coss(DEGREES(90) * spinAmount));
+        o->oMoveAnglePitch =     ((1.0f - coss(DEGREES(90) * spinAmount)) * -DEGREES(90));
         cur_obj_shake_y((s32)((1.0f - shakeY) * 4)); // trucating the f32?
-        baseScale = ((coss(0x4000 * shakeY) * 0.4f) + 0.6f);
+        baseScale = ((coss(DEGREES(90) * shakeY) * 0.4f) + 0.6f);
         cur_obj_scale(baseScale * BBHScaleModifier);
     } else if (o->oTimer < 104) {
         // do nothing
@@ -172,7 +172,7 @@ void mr_i_act_idle(void) {
         o->oMrIParticleTimerTarget = (random_float() * 20.0f);
         o->oAngleVelYaw            = ((o->oMrIParticleTimerTarget & 0x1) ? -256 : 256);
     }
-    if ((angleDiffMoveYawToMario < 1024) && (angleDiffMoveYawToMarioFaceYaw > 0x4000)) {
+    if ((angleDiffMoveYawToMario < 0x400) && (angleDiffMoveYawToMarioFaceYaw > DEGREES(90))) {
         if (o->oDistanceToMario < 700.0f) {
             o->oAction = MR_I_ACT_LOOKING_AT_MARIO;
         } else {

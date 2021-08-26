@@ -43,7 +43,7 @@ static void racing_penguin_act_prepare_for_race(void) {
         o->oAction     = RACING_PENGUIN_ACT_RACE;
         o->oForwardVel = 20.0f;
     }
-    cur_obj_rotate_yaw_toward(0x4000, 0x9C4);
+    cur_obj_rotate_yaw_toward(DEGREES(90), 0x9C4);
 }
 
 static void racing_penguin_act_race(void) {

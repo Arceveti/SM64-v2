@@ -245,7 +245,7 @@ static void circling_amp_idle_loop(void) {
     o->oPosZ          = (o->oHomeZ + (coss(o->oMoveAngleYaw     ) * o->oAmpRadiusOfRotation));
     o->oPosY          = (o->oHomeY + (coss(o->oAmpYPhase * 0x8B0) * 30.0f                  ));
     o->oMoveAngleYaw += 0x400;
-    o->oFaceAngleYaw  = o->oMoveAngleYaw + 0x4000;
+    o->oFaceAngleYaw  = (o->oMoveAngleYaw + DEGREES(90));
     // Handle attacks
     check_amp_attack();
     // Oscillate

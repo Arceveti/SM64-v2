@@ -187,7 +187,7 @@ static void mr_blizzard_act_death(void) {
                 save_file_clear_flags(SAVE_FLAG_CAP_ON_MR_BLIZZARD);
                 cap = spawn_object_relative(OBJ_BP_NONE, 5, 105, 0, o, MODEL_MARIOS_CAP, bhvNormalCap);
                 if (cap != NULL) {
-                    cap->oMoveAngleYaw = (o->oFaceAngleYaw + ((o->oFaceAngleRoll < 0) ? 0x4000 : -0x4000));
+                    cap->oMoveAngleYaw = (o->oFaceAngleYaw + ((o->oFaceAngleRoll < 0) ? DEGREES(90) : -DEGREES(90)));
                     cap->oForwardVel   = 10.0f;
                 }
                 // Mr. Blizzard no longer spawns with Mario's cap on.
@@ -275,7 +275,7 @@ static void mr_blizzard_act_jump(void) {
             // If Mr. Blizzard is more than 700 units from its home, change its target yaw
             // by 180 degrees, jump in the air, set distance from home to 0.
             if (o->oMrBlizzardDistFromHome > 700) {
-                o->oMrBlizzardTargetMoveYaw += 0x8000;
+                o->oMrBlizzardTargetMoveYaw += DEGREES(180);
                 o->oVelY                     = 25.0f;
                 o->oMrBlizzardTimer          = 30;
                 o->oMrBlizzardDistFromHome   =  0;

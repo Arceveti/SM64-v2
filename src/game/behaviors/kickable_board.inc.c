@@ -1,7 +1,7 @@
 // kickable_board.c.inc
 
 s32 check_mario_attacking(void) {
-    if (obj_check_if_collided_with_object(o, gMarioObject) && (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000)) {
+    if (obj_check_if_collided_with_object(o, gMarioObject) && (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > DEGREES(135))) {
         if ((gMarioStates[0].action == ACT_SLIDE_KICK)
          || (gMarioStates[0].action == ACT_PUNCHING)
          || (gMarioStates[0].action == ACT_MOVE_PUNCHING)
@@ -59,8 +59,8 @@ void bhv_kickable_board_loop(void) {
             cur_obj_set_model(MODEL_WF_KICKABLE_BOARD_FELLED);
             o->oAngleVelPitch -= 0x80;
             o->oFaceAnglePitch += o->oAngleVelPitch;
-            if (o->oFaceAnglePitch < -0x4000) {
-                o->oFaceAnglePitch = -0x4000;
+            if (o->oFaceAnglePitch < -DEGREES(90)) {
+                o->oFaceAnglePitch = -DEGREES(90);
                 o->oAngleVelPitch  = 0x0;
                 o->oAction = KICKABLE_BOARD_ACT_IDLE_HORIZONTAL;
                 cur_obj_shake_screen(SHAKE_POS_SMALL);

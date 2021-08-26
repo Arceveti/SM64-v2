@@ -98,7 +98,7 @@ void bully_act_knockback(void) {
 void bully_act_back_up(void) {
     if (o->oTimer == 0) {
         o->oFlags        &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW; /* bit 3 */
-        o->oMoveAngleYaw += 0x8000;
+        o->oMoveAngleYaw += DEGREES(180);
     }
     o->oForwardVel = 5.0f;
     //! bully_backup_check() happens after this function, and has the potential to reset
@@ -151,7 +151,7 @@ void bully_spawn_coin(void) {
     coin->oForwardVel   =  10.0f;
     coin->oVelY         = 100.0f;
     coin->oPosY         = (o->oPosY + 310.0f);
-    coin->oMoveAngleYaw = ((f32)(o->oBullyMarioCollisionAngle + 0x8000) + (random_float() * 1024.0f));
+    coin->oMoveAngleYaw = ((f32)(o->oBullyMarioCollisionAngle + DEGREES(180)) + (random_float() * 1024.0f));
 }
 
 void bully_act_level_death(void) {

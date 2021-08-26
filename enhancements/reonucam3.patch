@@ -146,7 +146,7 @@ index 25b27983..2ff11930 100644
 - // extra functionality
 -    else if (gPlayer1Controller->buttonPressed & U_JPAD) {
 -        s8DirModeYawOffset = 0;
--        s8DirModeYawOffset = gMarioState->faceAngle[1]-0x8000;
+-        s8DirModeYawOffset = (gMarioState->faceAngle[1] - DEGREES(180));
 -    }
 -    else if (gPlayer1Controller->buttonDown & L_JPAD) {
 -        s8DirModeYawOffset -= DEGREES(2);
@@ -165,7 +165,7 @@ index 25b27983..2ff11930 100644
 +        if (rButtonCounter > 0 && rButtonCounter <= 5 && !((gPlayer1Controller->buttonDown & L_CBUTTONS) || (gPlayer1Controller->buttonDown & R_CBUTTONS) || (gMarioState->action & ACT_FLAG_SWIMMING_OR_FLYING))) {
 +            // This centers the camera behind mario. It triggers when you let go of R in less than 5 frames.
 +            s8DirModeYawOffset = 0;
-+            s8DirModeBaseYaw = gMarioState->faceAngle[1]-0x8000;
++            s8DirModeBaseYaw = (gMarioState->faceAngle[1] - DEGREES(180));
 +            gMarioState->area->camera->yaw = s8DirModeBaseYaw;
 +            play_sound_rbutton_changed();
 +        }

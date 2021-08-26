@@ -62,12 +62,12 @@ void cap_sink_quicksand(void) {
         case CAP_ACT_QUICKSAND:
             if (o->oTimer < 10) {
                 o->oGraphYOffset -= 1.0f;
-                o->oFaceAnglePitch = 0x2000;
+                o->oFaceAnglePitch = DEGREES(45);
             }
             break;
         case CAP_ACT_MOVING_QUICKSAND:
             if (o->oTimer < 10) o->oGraphYOffset -= 3.0f;
-            o->oFaceAnglePitch = 0x2000;
+            o->oFaceAnglePitch = DEGREES(45);
             break;
         case CAP_ACT_INSTANT_QUICKSAND:
             o->oGraphYOffset -= 1.0f;
@@ -76,7 +76,7 @@ void cap_sink_quicksand(void) {
         case CAP_ACT_INSTANT_MOVING_QUICKSAND:
             o->oGraphYOffset -= 6.0f;
             if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-            o->oFaceAnglePitch = 0x2000;
+            o->oFaceAnglePitch = DEGREES(45);
             break;
     }
     cap_check_quicksand();
@@ -90,7 +90,7 @@ void bhv_wing_cap_init(void) {
 }
 
 void cap_scale_vertically(void) {
-    o->oCapScaleAngle += 0x2000;
+    o->oCapScaleAngle += DEGREES(45);
     o->header.gfx.scale[1] = ((coss(o->oCapScaleAngle) * 0.3f) + 0.7f);
     if (o->oCapScaleAngle == 0x10000) {
         o->oCapScaleAngle        = 0x0;

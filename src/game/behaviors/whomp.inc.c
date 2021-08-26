@@ -55,14 +55,12 @@ void whomp_turn(void) {
 void whomp_patrol(void) {
     Angle marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
     f32 distWalked = cur_obj_lateral_dist_to_home();
-    f32 patrolDist = (gCurrLevelNum == LEVEL_BITS) ? 200.0f : 700.0f; // should be a param?
-
+    f32 patrolDist = ((gCurrLevelNum == LEVEL_BITS) ? 200.0f : 700.0f); // should be a param?
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
-
     if (distWalked > patrolDist) {
         o->oAction = WHOMP_ACT_TURN;
-    } else if (marioAngle < 0x2000) {
+    } else if (marioAngle < DEGREES(45)) {
         if (o->oDistanceToMario < 1500.0f) {
             o->oForwardVel = 9.0f;
             cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);
@@ -77,10 +75,9 @@ void king_whomp_chase(void) {
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
-
     if (o->oTimer > 30) {
         marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-        if (marioAngle < 0x2000) {
+        if (marioAngle < DEGREES(45)) {
             if (o->oDistanceToMario < 1500.0f) {
                 o->oForwardVel = 9.0f;
                 cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);
@@ -88,7 +85,6 @@ void king_whomp_chase(void) {
             if (o->oDistanceToMario < 300.0f) o->oAction = WHOMP_ACT_PREPARE_JUMP;
         }
     }
-
     whomp_play_sfx_from_pound_animation();
     if (mario_is_far_below_object(1000.0f)) {
         o->oAction = WHOMP_ACT_INIT;
@@ -107,9 +103,9 @@ void whomp_jump(void) {
     if (o->oTimer >= 8) {
         o->oAngleVelPitch += 0x100;
         o->oFaceAnglePitch += o->oAngleVelPitch;
-        if (o->oFaceAnglePitch > 0x4000) {
+        if (o->oFaceAnglePitch > DEGREES(90)) {
             o->oAngleVelPitch  = 0x0;
-            o->oFaceAnglePitch = 0x4000;
+            o->oFaceAnglePitch = DEGREES(90);
             o->oAction = WHOMP_ACT_LAND;
         }
     }

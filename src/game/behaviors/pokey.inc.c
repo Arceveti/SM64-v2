@@ -188,7 +188,7 @@ static void pokey_act_wander(void) {
                     if (o->oPokeyChangeTargetTimer != 0) {
                         o->oPokeyChangeTargetTimer--;
                     } else if (o->oDistanceToMario > 2000.0f) {
-                        o->oPokeyTargetYaw         = obj_random_fixed_turn(0x2000);
+                        o->oPokeyTargetYaw         = obj_random_fixed_turn(DEGREES(45));
                         o->oPokeyChangeTargetTimer = random_linear_offset(30, 50);
                     } else {
                         // The goal of this computation is to make pokey approach
@@ -196,11 +196,11 @@ static void pokey_act_wander(void) {
                         // him when he is nearby
                         // targetAngleOffset is 0 when distance to Mario is >= 1838.4
                         // and 0x4000 when distance to Mario is <= 200
-                        targetAngleOffset = (s32)(0x4000 - (o->oDistanceToMario - 200.0f) * 10.0f);
+                        targetAngleOffset = (s32)(DEGREES(90) - (o->oDistanceToMario - 200.0f) * 10.0f);
                         if (targetAngleOffset < 0) {
                             targetAngleOffset = 0;
-                        } else if (targetAngleOffset > 0x4000) {
-                            targetAngleOffset = 0x4000;
+                        } else if (targetAngleOffset > DEGREES(90)) {
+                            targetAngleOffset = DEGREES(90);
                         }
                         // If we need to rotate CCW to get to Mario, then negate
                         // the target angle offset

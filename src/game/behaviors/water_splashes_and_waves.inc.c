@@ -38,7 +38,7 @@ struct WaterDropletParams gShallowWaterWaveDropletParams = {
     /* Flags                     */ WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD | WATER_DROPLET_FLAG_RAND_ANGLE | WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL,
     /* Model                     */ MODEL_WHITE_PARTICLE_SMALL,
     /* Behavior                  */ bhvWaterDroplet,
-    /* Move angle range          */ 0x6000,
+    /* Move angle range          */ DEGREES(135),
     /* Unused (flag-specific)    */     0,
     /* Random fvel offset, scale */  2.0f,  8.0f,
     /* Random yvel offset, scale */ 10.0f, 10.0f,

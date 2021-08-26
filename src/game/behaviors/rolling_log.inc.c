@@ -76,8 +76,8 @@ void volcano_trap_act_fall(void) {
     o->oVolcanoTrapPitchVel += 4.0f;
     o->oAngleVelPitch       += o->oVolcanoTrapPitchVel;
     o->oFaceAnglePitch      -= o->oAngleVelPitch;
-    if (o->oFaceAnglePitch      < -0x4000) {
-        o->oFaceAnglePitch      = -0x4000;
+    if (o->oFaceAnglePitch      < -DEGREES(90)) {
+        o->oFaceAnglePitch      = -DEGREES(90);
         o->oAngleVelPitch       =  0x0;
         o->oVolcanoTrapPitchVel =  0x0;
         o->oAction = LLL_VOLCANO_TRAP_ACT_LAND;

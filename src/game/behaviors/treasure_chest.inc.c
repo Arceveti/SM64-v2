@@ -31,8 +31,8 @@ void bhv_treasure_chest_top_loop(void) {
                 }
             }
             o->oFaceAnglePitch -= 0x200;
-            if (o->oFaceAnglePitch < -0x4000) {
-                o->oFaceAnglePitch = -0x4000;
+            if (o->oFaceAnglePitch < -DEGREES(90)) {
+                o->oFaceAnglePitch = -DEGREES(90);
                 o->oAction         = TREASURE_CHEST_TOP_ACT_OPENED;
                 if (o->parentObj->oBehParams2ndByte != TREASURE_CHEST_BP_4) spawn_orange_number(o->parentObj->oBehParams2ndByte, 0, -40, 0);
             }
@@ -57,7 +57,7 @@ void bhv_treasure_chest_bottom_init(void) {
 void bhv_treasure_chest_bottom_loop(void) {
     switch (o->oAction) {
         case TREASURE_CHEST_BOTTOM_ACT_CLOSE:
-            if (obj_check_if_facing_toward_angle(o->oMoveAngleYaw, gMarioObject->header.gfx.angle[1] + 0x8000, 0x3000)
+            if (obj_check_if_facing_toward_angle(o->oMoveAngleYaw, (gMarioObject->header.gfx.angle[1] + DEGREES(180)), 0x3000)
              && is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 150) && !o->parentObj->oTreasureChestDoCloseChests) {
                 if (o->parentObj->oTreasureChestNumOpenedChests == o->oBehParams2ndByte) {
                     play_sound(SOUND_GENERAL2_RIGHT_ANSWER, gGlobalSoundSource);

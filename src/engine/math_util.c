@@ -1120,12 +1120,12 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     Vec3f xColumn, yColumn, zColumn;
     f32 avgY;
     f32 minY  = (-radius * 3);
-    point0[0] = (pos[0] + (radius * sins(yaw + 0x2AAA)));
-    point0[2] = (pos[2] + (radius * coss(yaw + 0x2AAA)));
-    point1[0] = (pos[0] + (radius * sins(yaw + 0x8000)));
-    point1[2] = (pos[2] + (radius * coss(yaw + 0x8000)));
-    point2[0] = (pos[0] + (radius * sins(yaw + 0xD555)));
-    point2[2] = (pos[2] + (radius * coss(yaw + 0xD555)));
+    point0[0] = (pos[0] + (radius * sins(yaw + DEGREES( 60))));
+    point0[2] = (pos[2] + (radius * coss(yaw + DEGREES( 60))));
+    point1[0] = (pos[0] + (radius * sins(yaw + DEGREES(180))));
+    point1[2] = (pos[2] + (radius * coss(yaw + DEGREES(180))));
+    point2[0] = (pos[0] + (radius * sins(yaw + DEGREES(-60))));
+    point2[2] = (pos[2] + (radius * coss(yaw + DEGREES(-60))));
     point0[1] =           find_floor(point0[0], (pos[1] + 150.0f), point0[2], &floor);
     point1[1] =           find_floor(point1[0], (pos[1] + 150.0f), point1[2], &floor);
     point2[1] =           find_floor(point2[0], (pos[1] + 150.0f), point2[2], &floor);
@@ -1371,6 +1371,21 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
     return current;
 }
 
+s32 approach_s32_symmetric(s32 current, s32 target, s32 inc) {
+    s32 dist = (target - current);
+    if (dist >= 0) { // target >= current
+        current = ((dist >  inc) ? (current + inc) : target);
+    } else { // target < current
+        current = ((dist < -inc) ? (current - inc) : target);
+    }
+    return current;
+}
+
+Bool32 approach_s32_symmetric_bool(s32 *current, s32 target, s32 inc) {
+    *current = approach_s32_symmetric(*current, target, inc);
+    return !(*current == target);
+}
+
 s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
     s16 dist = (target - current);
     if (dist >= 0) { // target >= current
@@ -1401,19 +1416,6 @@ f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
         if (current < target) current = target;
     }
     return current;
-}
-
-Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc) {
-    if (*current < target) {
-        *current += inc;
-        if (*current > target) *current = target;
-    } else if (*current > target) {
-        *current -= inc;
-        if (*current < target) *current = target;
-    } else {
-        return TRUE;
-    }
-    return FALSE;
 }
 
 /**

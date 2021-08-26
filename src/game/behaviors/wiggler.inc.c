@@ -152,12 +152,12 @@ void wiggler_init_segments(void) {
         // As the head turns, propagate this rotation backward if the difference
         // is more than 45 degrees
         dyaw = (atan2s(-d[2], -d[0]) - prevBodyPart->angle[1]);
-        clamp_s16(&dyaw, -0x2000, 0x2000);
+        clamp_s16(&dyaw, -DEGREES(45), DEGREES(45));
         bodyPart->angle[1] = (prevBodyPart->angle[1] + dyaw);
         // As the head tilts, propagate the tilt backward
         dxz = sqrtf(sqr(d[0]) + sqr(d[2]));
         dpitch = (atan2s(dxz, d[1]) - prevBodyPart->angle[0]);
-        clamp_s16(&dpitch, -0x2000, 0x2000);
+        clamp_s16(&dpitch, -DEGREES(45), DEGREES(45));
         bodyPart->angle[0] = (prevBodyPart->angle[0] + dpitch);
         // Set the body part's position relative to the previous body part's
         // position, using the current body part's angles. This means that the
@@ -211,7 +211,7 @@ static void wiggler_act_walk(void) {
                 } else if (o->oWigglerTimeUntilRandomTurn != 0) {
                     o->oWigglerTimeUntilRandomTurn--;
                 } else {
-                    o->oWigglerTargetYaw           = (o->oMoveAngleYaw + (0x4000 * (Angle) random_sign()));
+                    o->oWigglerTargetYaw           = (o->oMoveAngleYaw + (DEGREES(90) * (Angle) random_sign()));
                     o->oWigglerTimeUntilRandomTurn = random_linear_offset(30, 50);
                 }
             }

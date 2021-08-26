@@ -30,7 +30,7 @@ void dorrie_act_move(void) {
             targetYaw = gMarioObject->oFaceAngleYaw;
             targetSpeed = 10.0f;
         } else {
-            circularTurn = (0x4000 - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f));
+            circularTurn = (DEGREES(90) - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f));
             if ((Angle)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) circularTurn = -circularTurn;
 
             targetYaw = o->oDorrieAngleToHome + circularTurn;
@@ -46,8 +46,8 @@ void dorrie_act_move(void) {
 }
 
 void dorrie_begin_head_raise(s32 liftingMario) {
-    o->oDorrieLiftingMario = liftingMario;
-    o->oAction = DORRIE_ACT_RAISE_HEAD;
+    o->oDorrieLiftingMario   = liftingMario;
+    o->oAction               = DORRIE_ACT_RAISE_HEAD;
     o->oDorrieHeadRaiseSpeed = 0;
 }
 

@@ -153,7 +153,7 @@ Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 
     f32 floor_nY, objVelXCopy, objVelZCopy, objYawX, objYawZ;
     if (objFloor == NULL) {
         //! (OOB Object Crash) TRUNC overflow exception after 36 minutes
-        o->oMoveAngleYaw += 0x8000; // vanilla was 32767.999200000002; /* ¯\_(ツ)_/¯ */
+        o->oMoveAngleYaw += DEGREES(180); // vanilla was 32767.999200000002; /* ¯\_(ツ)_/¯ */
         return FALSE;
     }
     floor_nY = objFloor->normal.y;
@@ -514,7 +514,7 @@ Bool32 current_mario_room_check(RoomData room) {
 s16 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s32 actionArg) {
     s16 dialogueResponse;
     if ((is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, (s32) dist)
-      && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, (gMarioObject->header.gfx.angle[1] + 0x8000), 0x1000)
+      && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, (gMarioObject->header.gfx.angle[1] + DEGREES(180)), 0x1000)
       && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x1000)) || (*inDialog)) {
         *inDialog = TRUE;
         if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) { //If Mario is speaking.

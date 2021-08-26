@@ -170,11 +170,11 @@ static void goomba_act_walk(void) {
                     o->oGoombaWalkTimer--;
                 } else {
                     if (random_u16() & 0x3) {
-                        o->oGoombaTargetYaw = obj_random_fixed_turn(0x2000);
+                        o->oGoombaTargetYaw = obj_random_fixed_turn(DEGREES(45));
                         o->oGoombaWalkTimer = random_linear_offset(100, 100);
                     } else {
                         goomba_begin_jump();
-                        o->oGoombaTargetYaw = obj_random_fixed_turn(0x6000);
+                        o->oGoombaTargetYaw = obj_random_fixed_turn(DEGREES(135));
                     }
                 }
             }

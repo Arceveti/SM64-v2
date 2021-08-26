@@ -4,13 +4,13 @@ void bhv_celebration_star_init(void) {
     o->oHomeX                       =  gMarioObject->header.gfx.pos[0];
     o->oPosY                        = (gMarioObject->header.gfx.pos[1] + 30.0f);
     o->oHomeZ                       =  gMarioObject->header.gfx.pos[2];
-    o->oMoveAngleYaw                = (gMarioObject->header.gfx.angle[1] + 0x8000);
+    o->oMoveAngleYaw                = (gMarioObject->header.gfx.angle[1] + DEGREES(180));
     o->oCelebStarDiameterOfRotation = 100;
 #if BUGFIX_STAR_BOWSER_KEY
     if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_BOWSER_KEY];
         o->oFaceAnglePitch = 0x0;
-        o->oFaceAngleRoll  = 0xC000;
+        o->oFaceAngleRoll  = DEGREES(-90);
         cur_obj_scale(0.1f);
         o->oCelebStarIsBowserKey = TRUE;
     } else {
@@ -32,8 +32,8 @@ void celeb_star_act_spin_around_mario(void) {
     o->oPosX          = (o->oHomeX + (sins(o->oMoveAngleYaw) * (f32)(o->oCelebStarDiameterOfRotation / 2)));
     o->oPosZ          = (o->oHomeZ + (coss(o->oMoveAngleYaw) * (f32)(o->oCelebStarDiameterOfRotation / 2)));
     o->oPosY         += 5.0f;
-    o->oFaceAngleYaw += 0x1000;
-    o->oMoveAngleYaw += 0x2000;
+    o->oFaceAngleYaw += 0x1000; // 22.5 degrees
+    o->oMoveAngleYaw += DEGREES(45);
     if (o->oTimer == 40) o->oAction = CELEB_STAR_ACT_FACE_CAMERA;
     if (o->oTimer < 35) {
         spawn_object(o, MODEL_SPARKLES, bhvCelebrationStarSparkle);

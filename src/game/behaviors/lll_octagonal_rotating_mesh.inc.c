@@ -19,10 +19,10 @@ struct LllOctagonalMeshAction {
 // Path for big bullies platforms
 static struct LllOctagonalMeshAction gLllOctagonalMeshAction0[] = {
     // instruction                time  moveAngle  forwardVel
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x4000,          0 },
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x4000,          0 }, // 90 degrees
 	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
 	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,   -0x4000,          0 },
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,   -0x4000,          0 }, // 90 degrees
 	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
 	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
 	{ LLL_OCTMESH_RESET,             0,         0,          0 }
@@ -34,7 +34,7 @@ static struct LllOctagonalMeshAction gLllOctagonalMeshAction1[] = {
 	{ LLL_OCTMESH_WAIT_FOR_MARIO,    0,         0,          0 },
 	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
 	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x8000,          0 },
+	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x8000,          0 }, // 180 degrees
 	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
 	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
 	{ LLL_OCTMESH_RESET,             0,         0,          0 }

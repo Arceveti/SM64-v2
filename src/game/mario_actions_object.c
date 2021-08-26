@@ -173,7 +173,7 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
-        return drop_and_set_mario_action(m, (analog_stick_held_back(m, 0x4000) ? ACT_BACKWARD_ROLLOUT : ((m->forwardVel >= 0.0f) ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT)), 0);
+        return drop_and_set_mario_action(m, (analog_stick_held_back(m, DEGREES(90)) ? ACT_BACKWARD_ROLLOUT : ((m->forwardVel >= 0.0f) ? ACT_FORWARD_ROLLOUT : ACT_BACKWARD_ROLLOUT)), 0);
     }
 #endif
     if (m->input & INPUT_STOMPED    ) return set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
@@ -205,9 +205,9 @@ Bool32 act_holding_bowser(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
 #ifdef LENIENT_BOWSER_THROWS
         Angle camAngleToBomb;
-        Angle camYaw = (m->area->camera->yaw + 0x8000);
-        struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, 0x4000, &camAngleToBomb);
-        if ((bowserBomb != NULL) && ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) && (abs_angle_diff(m->faceAngle[1], camYaw) < 0x4000)) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
+        Angle camYaw = (m->area->camera->yaw + DEGREES(180));
+        struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, DEGREES(90), &camAngleToBomb);
+        if ((bowserBomb != NULL) && ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) && (abs_angle_diff(m->faceAngle[1], camYaw) < DEGREES(90))) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
 #endif
 #ifndef VERSION_JP
         play_sound((((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO), m->marioObj->header.gfx.cameraToObject);

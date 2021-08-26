@@ -1,7 +1,7 @@
 // bomp.c.inc
 
 void bhv_small_bomp_init(void) {
-    o->oFaceAngleYaw  -= 0x4000;
+    o->oFaceAngleYaw  -= DEGREES(90);
     o->oSmallBompInitX = o->oPosX;
     o->oTimer          = (random_float() * 100.0f);
 }
@@ -33,7 +33,7 @@ void bhv_small_bomp_loop(void) {
             if (o->oTimer        == 60) {
                 o->oAction        = BOMP_ACT_RETRACT;
                 o->oForwardVel    = 10.0f;
-                o->oMoveAngleYaw -= 0x8000;
+                o->oMoveAngleYaw -= DEGREES(180);
                 cur_obj_play_sound_2(SOUND_OBJ_BOMP_SLIDE);
             }
             break;
@@ -45,14 +45,14 @@ void bhv_small_bomp_loop(void) {
             if (o->oTimer        == 90) {
                 o->oAction        = BOMP_ACT_POKE_OUT;
                 o->oForwardVel    = 25.0f;
-                o->oMoveAngleYaw -= 0x8000;
+                o->oMoveAngleYaw -= DEGREES(180);
             }
             break;
     }
 }
 
 void bhv_large_bomp_init(void) {
-    o->oMoveAngleYaw += 0x4000;
+    o->oMoveAngleYaw += DEGREES(90);
     o->oTimer         = (random_float() * 100.0f);
 }
 
@@ -83,7 +83,7 @@ void bhv_large_bomp_loop(void) {
             if (o->oTimer        == 60) {
                 o->oAction        = BOMP_ACT_RETRACT;
                 o->oForwardVel    = 10.0f;
-                o->oMoveAngleYaw -= 0x8000;
+                o->oMoveAngleYaw -= DEGREES(180);
                 cur_obj_play_sound_2(SOUND_OBJ_BOMP_SLIDE);
             }
             break;
@@ -95,7 +95,7 @@ void bhv_large_bomp_loop(void) {
             if (o->oTimer        == 90) {
                 o->oAction        = BOMP_ACT_POKE_OUT;
                 o->oForwardVel    = 25.0f;
-                o->oMoveAngleYaw -= 0x8000;
+                o->oMoveAngleYaw -= DEGREES(180);
             }
             break;
     }

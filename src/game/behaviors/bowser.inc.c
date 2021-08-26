@@ -464,8 +464,8 @@ void bowser_act_walk_to_mario(void) {
                 // Reset fire sky status
                 if (o->oBowserStatus & BOWSER_STATUS_FIRE_SKY) {
                     if (o->oBowserTimer > 4) o->oBowserStatus &= ~BOWSER_STATUS_FIRE_SKY;
-                // Do subaction below if angles is less than 0x2000
-                } else if (angleFromMario < 0x2000) {
+                // Do subaction below if angles is less than 45 degrees
+                } else if (angleFromMario < DEGREES(45)) {
                     o->oSubAction = BOWSER_SUB_ACT_WALK_TO_MARIO_STOP;
                 }
             }
@@ -503,7 +503,7 @@ void bowser_act_teleport(void) {
                 o->oSubAction    = BOWSER_SUB_ACT_TELEPORT_STOP;
                 o->oMoveAngleYaw = o->oAngleToMario; // update angle
             }
-            if ((abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > 0x4000) && (o->oDistanceToMario > 500.0f)) {
+            if ((abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > DEGREES(90)) && (o->oDistanceToMario > 500.0f)) {
                 o->oSubAction    = BOWSER_SUB_ACT_TELEPORT_STOP;
                 o->oMoveAngleYaw = o->oAngleToMario; // update angle
                 cur_obj_play_sound_2(SOUND_OBJ2_BOWSER_TELEPORT);
@@ -551,7 +551,7 @@ void bowser_act_hit_mine(void) {
     if (o->oTimer == 0) {
         o->oForwardVel     = -400.0f;
         o->oVelY           =  100.0f;
-        o->oMoveAngleYaw   = (o->oBowserAngleToCentre + 0x8000);
+        o->oMoveAngleYaw   = (o->oBowserAngleToCentre + DEGREES(180));
         o->oBowserEyesShut = TRUE; // close eyes
     }
     switch (o->oSubAction) {
@@ -978,7 +978,7 @@ void bowser_fly_back_dead(void) {
     // More knockback in BITS
     o->oForwardVel   = ((o->oBehParams2ndByte == BOWSER_BP_BITS) ? -400.0f : -200.0f);
     o->oVelY         = 100.0f;
-    o->oMoveAngleYaw = (o->oBowserAngleToCentre + 0x8000);
+    o->oMoveAngleYaw = (o->oBowserAngleToCentre + DEGREES(180));
     o->oBowserTimer  = 0;
     o->oSubAction    = BOWSER_SUB_ACT_DEAD_BOUNCE;
 }
@@ -1004,7 +1004,7 @@ s32 bowser_dead_wait_for_mario(void) {
     s32 ret = FALSE;
     cur_obj_become_intangible();
     if (cur_obj_init_animation_and_check_if_near_end(BOWSER_ANIM_LAY_DOWN)
-     && (o->oDistanceToMario < 700.0f) && (abs_angle_diff(gMarioObject->oMoveAngleYaw, o->oAngleToMario) > 0x6000)) ret = TRUE;
+     && (o->oDistanceToMario < 700.0f) && (abs_angle_diff(gMarioObject->oMoveAngleYaw, o->oAngleToMario) > DEGREES(135))) ret = TRUE;
     cur_obj_extend_animation_if_at_end();
     o->oBowserTimer = 0;
     return ret;
@@ -1152,7 +1152,7 @@ void bowser_act_dead(void) {
  * Sets values for the BITFS platform to tilt
  */
 void bowser_tilt_platform(struct Object *platform, Angle angSpeed) {
-    Angle angle = (o->oBowserAngleToCentre + 0x8000);
+    Angle angle = (o->oBowserAngleToCentre + DEGREES(180));
     platform->oAngleVelPitch = ( coss(angle) * angSpeed);
     platform->oAngleVelRoll  = (-sins(angle) * angSpeed);
 }
@@ -1423,10 +1423,10 @@ void bhv_bowser_loop(void) {
     o->oBowserStatus &= ~0xFF;
     // Set bitflag status for distance/angle values
     // Only the first one is used
-    if (angleToMario           <  0x2000) o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;
-    if (angleToCentre          <  0x3800) o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE; // unused
-    if (o->oBowserDistToCentre < 1000.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE; // unused
-    if (o->oDistanceToMario    <  850.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO; // unused
+    if (angleToMario           <  0x2000) o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;  // 45 degrees
+    if (angleToCentre          <  0x3800) o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE; // 78.75 degrees, unused
+    if (o->oBowserDistToCentre < 1000.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE;  // unused
+    if (o->oDistanceToMario    <  850.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO;   // unused
     // Update Held state actions
     switch (o->oHeldState) {
         case HELD_FREE:    bowser_free_update();           break;
@@ -1523,7 +1523,7 @@ void bowser_open_eye_switch(struct Object *obj, struct GraphNodeSwitchCase *swit
     switch (eyeCase) {
         case BOWSER_EYES_OPEN:
             // Mario is in Bowser's field of view
-            if (abs_angle_diff(obj->oMoveAngleYaw, obj->oAngleToMario) > 0x2000) {
+            if (abs_angle_diff(obj->oMoveAngleYaw, obj->oAngleToMario) > DEGREES(45)) {
                 if (obj->oAngleVelYaw > 0) switchCase->selectedCase = BOWSER_EYES_RIGHT;
                 if (obj->oAngleVelYaw < 0) switchCase->selectedCase = BOWSER_EYES_LEFT;
             }
