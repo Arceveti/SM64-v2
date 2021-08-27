@@ -306,10 +306,18 @@ ColFlags object_step(void) {
     f32 nextZ   = (o->oPosZ + objVelZ);
     f32 waterY  = FLOOR_LOWER_LIMIT_MISC;
     f32 floorY;
+#ifdef CENTERED_COLLISION
+    f32 midY = (nextY + (o->hitboxHeight / 2.0f));
+    ColFlags collisionFlags = 0x0;
+    // Find any wall collisions, receive the push, and set the flag.
+    if (!obj_find_wall(nextX, midY, nextZ, objVelX, objVelZ)) collisionFlags |= OBJ_COL_FLAG_HIT_WALL;
+    floorY = find_floor(nextX, midY, nextZ, &sObjFloor);
+#else
     ColFlags collisionFlags = 0x0;
     // Find any wall collisions, receive the push, and set the flag.
     if (!obj_find_wall(nextX, nextY, nextZ, objVelX, objVelZ)) collisionFlags |= OBJ_COL_FLAG_HIT_WALL;
     floorY = find_floor(nextX, nextY, nextZ, &sObjFloor);
+#endif
     if (turn_obj_away_from_steep_floor(sObjFloor, floorY, objVelX, objVelZ)) {
         waterY = find_water_level(nextX, nextZ);
         if (waterY > nextY) {

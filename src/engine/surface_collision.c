@@ -492,7 +492,6 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
         // Find the ceil height at the specific point.
         height = get_surface_height_at_location(x, z, surf);
         if (height >= *pheight) continue;
-        // if (y > (height + 78.0f)) continue;
         // Checks for ceiling interaction
         if (y > height      ) continue;
         if (y > surf->upperY) continue;
@@ -540,13 +539,14 @@ f32 find_ceil(f32 x, f32 y, f32 z, struct Surface **pceil) {
     return height;
 }
 
+#ifndef CENTERED_COLLISION
 /**
  * Finds the ceiling from a vec3f horizontally and a height (with 3.0f vertical buffer).
  */
 f32 vec3f_find_ceil(Vec3f pos, f32 height, struct Surface **ceil) {
     return find_ceil(pos[0], (height + 3.0f), pos[2], ceil);
 }
-
+#endif
 /**************************************************
  *                     FLOORS                     *
  **************************************************/
@@ -641,6 +641,17 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, f32
         if (!check_within_floor_triangle_bounds(x, z, surf)) continue;
         // Get the height of the point on the tri
         height = get_surface_height_at_location(x, z, surf);
+#ifdef CENTERED_COLLISION
+        // Ignore if the height is below or the same as the current surface height
+        if (height <= *pheight) continue;
+        // Check if the original location is above the floor height
+        if (y < height) continue;
+        // Set current surface and height for next iteration
+        *pheight = height;
+        floor    = surf;
+        // Exit the loop if it's not possible for another floor to be closer to the original point
+        if (y == height) break;
+#else
         // Ignore if the height is below or the same as the current surface height, without the buffer
         if (height <= *pheight) continue;
         // Check if the original location is more than 78 units above the floor height
@@ -650,6 +661,7 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, f32
         floor    = surf;
         // Exit the loop if it's not possible for another floor to be closer to the original point
         if (y == (height - 78.0f)) break;
+#endif
     }
     return floor;
 }
@@ -673,13 +685,19 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         bottomSurfaceNode   = bottomSurfaceNode->next;
         if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curBottomHeight = get_surface_height_at_location(x, z, surf);
-        // if (curBottomHeight <  (y - 78.0f)) continue;
-        // if (curBottomHeight >= (y - 78.0f)) bottomHeight = curBottomHeight;
+#ifdef CENTERED_COLLISION
+        if (curBottomHeight < y) {
+            if (curBottomHeight > topBottomHeight) topBottomHeight = curBottomHeight;
+            continue;
+        }
+        if (curBottomHeight >= y) bottomHeight = curBottomHeight;
+#else
         if (curBottomHeight < (y + 78.0f)) {
             if (curBottomHeight > topBottomHeight) topBottomHeight = curBottomHeight;
             continue;
         }
         if (curBottomHeight >= (y + 78.0f)) bottomHeight = curBottomHeight;
+#endif
     }
     // Iterate through the list of water tops until there are no more water tops.
     while (topSurfaceNode != NULL) {

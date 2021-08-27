@@ -372,6 +372,9 @@ struct MarioState
     /*0xBC*/ f32            peakHeight;
     /*0xC0*/ f32            quicksandDepth;
     /*0xC4*/ f32            windGravity;
+#ifdef CENTERED_COLLISION
+             f32            midY;
+#endif
         //    Angle            movePitch;
         //    Angle            moveYaw;
         //      f32            lateralSpeed;

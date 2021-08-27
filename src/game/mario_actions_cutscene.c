@@ -497,8 +497,13 @@ Bool32 act_debug_free_move(struct MarioState *m) {
 #else
     m->wall = resolve_and_return_wall_collisions(pos, 60.0f, 50.0f);
 #endif
+#ifdef CENTERED_COLLISION
+    floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
+    ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
+#else
     floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], pos[1], pos[2], &ceil);
+#endif
     if (floor == NULL) return FALSE;
     if ((ceilHeight - floorHeight) >= MARIO_HITBOX_HEIGHT) {
         if ((floor != NULL) && ( pos[1] < floorHeight)) pos[1] = floorHeight;
@@ -1236,17 +1241,17 @@ Bool32 act_squished(struct MarioState *m) {
 #ifdef SMOOTH_SQUISH
     Vec3f nextScale;
 #endif
-    if ((spaceUnderCeil = m->ceilHeight - m->floorHeight) < 0) spaceUnderCeil = 0;
+    if ((spaceUnderCeil = (m->ceilHeight - m->floorHeight)) < 0) spaceUnderCeil = 0;
     switch (m->actionState) {
         case 0:
-            if (spaceUnderCeil > MARIO_HITBOX_HEIGHT) {
+            if (spaceUnderCeil > m->marioObj->hitboxHeight) {
                 m->squishTimer = 0;
                 return set_mario_action(m, ACT_IDLE, 0);
             }
             m->squishTimer = 0xFF;
             if (spaceUnderCeil >= 10.1f) {
                 // Mario becomes a pancake
-                squishAmount = (spaceUnderCeil / MARIO_HITBOX_HEIGHT);
+                squishAmount = (spaceUnderCeil / m->marioObj->hitboxHeight);
 #ifdef SMOOTH_SQUISH
                 vec3f_set(nextScale, (2.0f - squishAmount), squishAmount, (2.0f - squishAmount));
                 approach_vec3f_asymptotic(m->marioObj->header.gfx.scale, nextScale, 0.5f, 0.5f, 0.5f);

@@ -21,11 +21,7 @@ static void handle_merry_go_round_music(void) {
         }
     } else {
         // Get Mario's floor and floor surface type
-        struct Surface *marioFloor;
-        u16 marioFloorType;
-        // find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &marioFloor);
-        marioFloor     = gMarioState->floor;
-        marioFloorType = ((marioFloor == NULL) ? 0 : marioFloor->type);
+        SurfaceType marioFloorType = ((gMarioState->floor == NULL) ? SURFACE_DEFAULT : gMarioState->floor->type);
         // All floors in the merry-go-round's enclosure have surface type 0x1A.
         // The cur_obj_is_mario_on_platform check is redundant since the merry-go-round
         // has surface type 0x1A, so Mario cannot be on the merry-go-round

@@ -1076,7 +1076,11 @@ Gfx *geo_painting_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED 
         gLastPaintingUpdateCounter = gPaintingUpdateCounter;
         gPaintingUpdateCounter     = gAreaUpdateCounter;
         // Store Mario's floor and position
+#ifdef CENTERED_COLLISION
+        find_floor(gMarioObject->oPosX, (gMarioObject->oPosY + MARIO_HALF_HITBOX_HEIGHT), gMarioObject->oPosZ, &surface); //! use gMarioState floor instead?
+#else
         find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &surface); //! use gMarioState floor instead?
+#endif
         gPaintingMarioFloorType = surface->type;
         vec3f_copy(gPaintingMarioPos, &gMarioObject->oPosVec);
     }

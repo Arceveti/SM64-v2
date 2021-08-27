@@ -17,7 +17,11 @@ Bool32 check_if_moving_over_floor(f32 maxDist, f32 offset) {
     struct Surface *floor;
     f32 xPos        = (o->oPosX + (sins(o->oMoveAngleYaw) * offset));
     f32 zPos        = (o->oPosZ + (coss(o->oMoveAngleYaw) * offset));
+#ifdef CENTERED_COLLISION
+    f32 floorHeight = find_floor(xPos, (o->oPosY + OBJ_STEP_HEIGHT), zPos, &floor);
+#else
     f32 floorHeight = find_floor(xPos, o->oPosY, zPos, &floor);
+#endif
     return (absf(floorHeight - o->oPosY) < maxDist);
 }
 

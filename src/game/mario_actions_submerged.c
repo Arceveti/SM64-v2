@@ -81,8 +81,13 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
 #else
     wall        = resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f);
 #endif
+#ifdef CENTERED_COLLISION
+    floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
+    ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+#else
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
-    ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil );
+    ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
+#endif
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if ((ceil != NULL) && (((nextPos[1] + MARIO_HITBOX_HEIGHT) >= ceilHeight) || ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT))) {
         ceilAmt = ((nextPos[1] + MARIO_HITBOX_HEIGHT) - ceilHeight);
@@ -130,8 +135,13 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
 #else
     wall        = resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f);
 #endif
+#ifdef CENTERED_COLLISION
+    floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
+    ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+#else
     floorHeight = find_floor(nextPos[0], nextPos[1], nextPos[2], &floor);
     ceilHeight  = vec3f_find_ceil(nextPos, nextPos[1], &ceil);
+#endif
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if (nextPos[1] >= floorHeight) {
         if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {

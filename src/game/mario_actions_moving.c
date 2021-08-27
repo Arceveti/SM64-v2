@@ -99,7 +99,11 @@ void check_ledge_climb_down(struct MarioState *m) {
         wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
         if (find_wall_collisions(&wallCols) != 0) {
+#ifdef CENTERED_COLLISION
+            floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
+#else
             floorHeight = find_floor(wallCols.pos[0], wallCols.pos[1], wallCols.pos[2], &floor);
+#endif
             if ((floor != NULL) && ((wallCols.pos[1] - floorHeight) > MARIO_HITBOX_HEIGHT)) {
                 wall = wallCols.walls[wallCols.numWalls - 1];
                 wallAngle = atan2s(wall->normal.z, wall->normal.x);

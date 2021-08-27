@@ -621,8 +621,8 @@ void set_camera_height(struct Camera *c, f32 goalHeight) {
         if ((sMarioCamState->pos[1] - 400) > goalHeight) goalHeight = (sMarioCamState->pos[1] - 400.0f);
         approach_camera_height(c, goalHeight, 5.0f);
     } else {
-        camFloorHeight   = find_floor(c->pos[0], c->pos[1] + MARIO_EYE_LEVEL, c->pos[2], &surface) + baseOff;
-        marioFloorHeight = baseOff + sMarioGeometry.currFloorHeight;
+        camFloorHeight   = find_floor(c->pos[0], (c->pos[1] + MARIO_EYE_LEVEL), c->pos[2], &surface) + baseOff;
+        marioFloorHeight = (baseOff + sMarioGeometry.currFloorHeight);
         if (camFloorHeight < marioFloorHeight) camFloorHeight = marioFloorHeight;
         if (goalHeight < camFloorHeight) {
             goalHeight = camFloorHeight;
@@ -7613,7 +7613,7 @@ void cutscene_exit_painting_move_to_floor(struct Camera *c) {
     struct Surface *floor;
     Vec3f floorHeight;
     vec3f_copy(floorHeight, sMarioCamState->pos);
-    floorHeight[1] = find_floor(sMarioCamState->pos[0], sMarioCamState->pos[1] + 10.0f, sMarioCamState->pos[2], &floor);
+    floorHeight[1] = find_floor(sMarioCamState->pos[0], (sMarioCamState->pos[1] + 10.0f), sMarioCamState->pos[2], &floor);
     if (floor != NULL) {
         floorHeight[1] = (floorHeight[1] + ((sMarioCamState->pos[1] - floorHeight[1]) * 0.7f) + 125.0f);
         approach_vec3f_asymptotic(c->focus, floorHeight, 0.2f, 0.2f, 0.2f);
