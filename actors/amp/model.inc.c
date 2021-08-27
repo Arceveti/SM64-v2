@@ -17,11 +17,11 @@ ALIGNED8 static const Texture dAmpMouthTexture[] = {
 };
 
 static const Vtx dAmpElectricityVertices[] = {
-    {{{   224,      0,    -90}, 0, ST_B(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   187,    149,      0}, 0, ST_B(    8, 34.5), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,      0,     90}, 0, ST_B(   16,   16), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   187,   -149,      0}, 0, ST_B(    8,   -4), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,      0,    -90}, 0, ST_B(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,    -90}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   187,    149,      0}, 0, ST_B(     8,   34.5), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,     90}, 0, ST_B(    16,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   187,   -149,      0}, 0, ST_B(     8,     -4), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,    -90}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 const Gfx dAmpElectricitySubDl[] = {

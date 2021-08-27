@@ -567,7 +567,7 @@ Bool32 act_in_cannon(struct MarioState *m) {
             m->usedObj->oInteractStatus         = INT_STATUS_INTERACTED;
             m->statusForCamera->cameraEvent     = CAM_EVENT_CANNON;
             m->statusForCamera->usedObj         = m->usedObj;
-            vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
+            vec3f_zero(m->vel);
             m->pos[0]      =  m->usedObj->oPosX;
             m->pos[1]      = (m->usedObj->oPosY + 350.0f);
             m->pos[2]      =  m->usedObj->oPosZ;
