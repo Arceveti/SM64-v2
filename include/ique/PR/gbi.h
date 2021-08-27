@@ -23,6 +23,12 @@
 #include <PR/ultratypes.h>
 
 /*
+ * Converts texture pixel coordinates to S and T values
+ */
+#define TC(tc)		(((tc) - 1) * 32)
+#define ST(s, t)	{TC(s), TC(t)}
+
+/*
  * To use the F3DEX ucodes, define F3DEX_GBI before include this file.
  *
  *     #define  F3DEX_GBI
@@ -3362,6 +3368,8 @@ typedef union {
 #else
 #define G_TX_LDBLK_MAX_TXL	2047
 #endif /* _HW_VERSION_1 */
+
+#define CALC_LRS(x, y)	((x * y) - 1)
 
 #define TXL2WORDS(txls, b_txl)	MAX(1, ((txls)*(b_txl)/8))
 #define CALC_DXT(width, b_txl)	\

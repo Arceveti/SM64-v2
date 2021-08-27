@@ -119,7 +119,7 @@ struct Painting
  * Contains the position and normal of a vertex in the painting's generated mesh.
  */
 struct PaintingMeshVertex {
-    /*0x00*/ VtxPosS pos[3];
+    /*0x00*/ Vec3vs pos;
     /*0x06*/ s8 norm[3];
 };
 

@@ -284,20 +284,14 @@ void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z) {
 }
 
 void obj_set_angle(struct Object *obj, Angle pitch, Angle yaw, Angle roll) {
-    //! vec3i_set_s?
-    obj->oFaceAnglePitch = pitch;
-    obj->oFaceAngleYaw   = yaw;
-    obj->oFaceAngleRoll  = roll;
-
-    obj->oMoveAnglePitch = pitch;
-    obj->oMoveAngleYaw   = yaw;
-    obj->oMoveAngleRoll  = roll;
+    vec3i_set(&obj->oFaceAngleVec, pitch, yaw, roll);
+    vec3i_set(&obj->oMoveAngleVec, pitch, yaw, roll);
 }
 
 /*
  * Spawns an object at an absolute location with a specified angle.
  */
-struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, u32 model, const BehaviorScript *behavior,
+struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, ModelID32 model, const BehaviorScript *behavior,
                                          s16 x, s16 y, s16 z, Angle rx, Angle ry, Angle rz) {
     // 'uselessArg' is unused in the function spawn_object_at_origin()
     struct Object *newObj = spawn_object_at_origin(parent, uselessArg, model, behavior);
@@ -311,7 +305,7 @@ struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, 
  * The rz argument is never used, and the z offset is used for z-rotation instead. This is most likely
  * a copy-paste typo by one of the programmers.
  */
-struct Object *spawn_object_rel_with_rot(struct Object *parent, u32 model, const BehaviorScript *behavior,
+struct Object *spawn_object_rel_with_rot(struct Object *parent, ModelID32 model, const BehaviorScript *behavior,
                                          s16 xOff, s16 yOff, s16 zOff, Angle rx, Angle ry, UNUSED Angle rz) {
     struct Object *newObj = spawn_object_at_origin(parent, 0, model, behavior);
     newObj->oFlags |= OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT;
@@ -320,7 +314,7 @@ struct Object *spawn_object_rel_with_rot(struct Object *parent, u32 model, const
     return newObj;
 }
 
-struct Object *spawn_obj_with_transform_flags(struct Object *parent, s32 model, const BehaviorScript *behavior) {
+struct Object *spawn_obj_with_transform_flags(struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *newObj = spawn_object(parent, model, behavior);
     newObj->oFlags |= (OBJ_FLAG_UPDATE_TRANSFORM_FOR_THROW_MATRIX | OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM);
     return newObj;
@@ -342,7 +336,8 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     return newObj;
 }
 
-struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedArg, u32 model, const BehaviorScript *behavior) {
+//! ModelID?
+struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedArg, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj;
     const BehaviorScript *behaviorAddr;
     behaviorAddr                    = segmented_to_virtual(behavior);
@@ -354,13 +349,13 @@ struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedAr
     return obj;
 }
 
-struct Object *spawn_object(struct Object *parent, s32 model, const BehaviorScript *behavior) {
+struct Object *spawn_object(struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
     obj_copy_pos_and_angle(obj, parent);
     return obj;
 }
 
-struct Object *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *parent, s32 model, const BehaviorScript *behavior) {
+struct Object *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj;
     if (gFreeObjectList.next != NULL) {
         obj = spawn_object(parent, model, behavior);
@@ -372,7 +367,7 @@ struct Object *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *parent
     }
 }
 
-struct Object *spawn_object_with_scale(struct Object *parent, s32 model, const BehaviorScript *behavior, f32 scale) {
+struct Object *spawn_object_with_scale(struct Object *parent, ModelID32 model, const BehaviorScript *behavior, f32 scale) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
     obj_copy_pos_and_angle(obj, parent);
     obj_scale(obj, scale);
@@ -385,26 +380,27 @@ static void obj_build_relative_transform(struct Object *obj) {
 }
 
 struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
-                                     struct Object *parent, s32 model, const BehaviorScript *behavior) {
+                                     struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
 
     obj_copy_pos_and_angle(      obj, parent);
     obj_set_parent_relative_pos( obj, relativePosX, relativePosY, relativePosZ);
     obj_build_relative_transform(obj);
-    obj->oBehParams2ndByte =  behaviorParam;
-    obj->oBehParams        = (behaviorParam & 0xFF) << 16;
+    obj->oBehParams2ndByte =   behaviorParam;
+    obj->oBehParams        = ((behaviorParam & 0xFF) << 16);
     return obj;
 }
 
+//! ModelID
 struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale,
-                                                struct Object *parent, s32 model, const BehaviorScript *behavior) {
+                                                struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_relative(behaviorParam, relativePosX, relativePosY, relativePosZ, parent, model, behavior);
     obj_scale(obj, scale);
     return obj;
 }
 
 // Unused
-void cur_obj_move_using_vel(void) {
+UNUSED void cur_obj_move_using_vel(void) {
     o->oPosX += o->oVelX;
     o->oPosY += o->oVelY;
     o->oPosZ += o->oVelZ;
@@ -1472,9 +1468,7 @@ s32 cur_obj_follow_path(void) {
     struct Waypoint *startWaypoint;
     struct Waypoint *lastWaypoint;
     struct Waypoint *targetWaypoint;
-    f32 prevToNextX, prevToNextY, prevToNextZ;
-    f32 objToNextXZ;
-    f32 objToNextX, objToNextY, objToNextZ;
+    Vec3s prevToNext, objToNext;
     if (o->oPathedPrevWaypointFlags == 0) {
         o->oPathedPrevWaypoint = o->oPathedStartWaypoint;
         o->oPathedPrevWaypointFlags = WAYPOINT_FLAGS_INITIALIZED;
@@ -1482,24 +1476,20 @@ s32 cur_obj_follow_path(void) {
     startWaypoint = o->oPathedStartWaypoint;
     lastWaypoint  = o->oPathedPrevWaypoint;
     if ((lastWaypoint + 1)->flags != WAYPOINT_FLAGS_END) {
-        targetWaypoint = lastWaypoint + 1;
+        targetWaypoint = (lastWaypoint + 1);
     } else {
         targetWaypoint = startWaypoint;
     }
     o->oPathedPrevWaypointFlags = lastWaypoint->flags | WAYPOINT_FLAGS_INITIALIZED;
-    //! vec3 f/s diff
-    prevToNextX                 = targetWaypoint->pos[0] - lastWaypoint->pos[0];
-    prevToNextY                 = targetWaypoint->pos[1] - lastWaypoint->pos[1];
-    prevToNextZ                 = targetWaypoint->pos[2] - lastWaypoint->pos[2];
-    //! vec3 f/s diff
-    objToNextX                  = targetWaypoint->pos[0] - o->oPosX;
-    objToNextY                  = targetWaypoint->pos[1] - o->oPosY;
-    objToNextZ                  = targetWaypoint->pos[2] - o->oPosZ;
-    objToNextXZ                 = sqrtf(sqr(objToNextX) + sqr(objToNextZ));
-    o->oPathedTargetYaw         = atan2s(objToNextZ,   objToNextX);
-    o->oPathedTargetPitch       = atan2s(objToNextXZ, -objToNextY);
+    vec3s_diff(prevToNext, targetWaypoint->pos, lastWaypoint->pos);
+    //! vec3 s/i diff
+    objToNext[0]                = (targetWaypoint->pos[0] - o->oPosX);
+    objToNext[1]                = (targetWaypoint->pos[1] - o->oPosY);
+    objToNext[2]                = (targetWaypoint->pos[2] - o->oPosZ);
+    o->oPathedTargetYaw         = atan2s(objToNext[2], objToNext[0]);
+    o->oPathedTargetPitch       = atan2s(sqrtf(sqr(objToNext[0]) + sqr(objToNext[2])), -objToNext[1]);
     // If dot(prevToNext, objToNext) <= 0 (i.e. reached other side of target waypoint)
-    if (prevToNextX * objToNextX + prevToNextY * objToNextY + prevToNextZ * objToNextZ <= 0.0f) {
+    if (((prevToNext[0] * objToNext[0]) + (prevToNext[1] * objToNext[1]) + (prevToNext[2] * objToNext[2])) <= 0) {
         o->oPathedPrevWaypoint = targetWaypoint;
         return (((targetWaypoint + 1)->flags == WAYPOINT_FLAGS_END) ? PATH_REACHED_END : PATH_REACHED_WAYPOINT);
     }
@@ -1512,7 +1502,7 @@ void chain_segment_init(struct ChainSegment *segment) {
 }
 
 void obj_scale_random(struct Object *obj, f32 rangeLength, f32 minScale) {
-    f32 scale = random_float() * rangeLength + minScale;
+    f32 scale = ((random_float() * rangeLength) + minScale);
     obj_scale(obj, scale);
 }
 
@@ -1590,9 +1580,9 @@ void obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox) {
 Bool32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
     s32 timeBlinking;
     if (o->oTimer >= timeUntilBlinking) {
-        if ((timeBlinking = o->oTimer - timeUntilBlinking) & 0x1) {
+        if ((timeBlinking = (o->oTimer - timeUntilBlinking)) & 0x1) {
             o->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE;
-            if (timeBlinking / 2 > numBlinks) return TRUE;
+            if ((timeBlinking / 2) > numBlinks) return TRUE; //? timeBlinking >> 1
         } else {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         }
@@ -1601,7 +1591,7 @@ Bool32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
 }
 
 Bool32 cur_obj_is_mario_ground_pounding_platform(void) {
-    return (gMarioObject->platform == o && ((gMarioStates[0].action == ACT_GROUND_POUND_LAND) || (gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)));
+    return ((gMarioObject->platform == o) && ((gMarioStates[0].action == ACT_GROUND_POUND_LAND) || (gMarioStates[0].action == ACT_WATER_GROUND_POUND_LAND)));
 }
 
 void spawn_mist_particles(void) {
@@ -1644,7 +1634,7 @@ s32 cur_obj_set_direction_table(s8 *pattern) {
 }
 
 s32 cur_obj_progress_direction_table(void) {
-    s8 action;
+    ObjAction8 action;
     s8 *pattern  =  o->oToxBoxMovementPattern;
     s32 nextStep = (o->oToxBoxMovementStep + 1);
     if (pattern[nextStep] != TOX_BOX_ACT_END) {
@@ -1666,9 +1656,9 @@ void cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end) {
 
 void cur_obj_set_pos_to_home_with_debug(void) {
     //! vec3 f/s sum?
-    o->oPosX = o->oHomeX + gDebugInfo[5][0];
-    o->oPosY = o->oHomeY + gDebugInfo[5][1];
-    o->oPosZ = o->oHomeZ + gDebugInfo[5][2];
+    o->oPosX = (o->oHomeX + gDebugInfo[5][0]);
+    o->oPosY = (o->oHomeY + gDebugInfo[5][1]);
+    o->oPosZ = (o->oHomeZ + gDebugInfo[5][2]);
     cur_obj_scale((gDebugInfo[5][3] / 100.0f) + 1.0f); // was 1.0l
 }
 

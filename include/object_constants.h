@@ -1758,6 +1758,12 @@
     #define WATER_BOMB_ACT_DROP                             0x2
     #define WATER_BOMB_ACT_EXPLODE                          0x3
 
+/* TTC Painting Clock Arm */
+    /* oAction */
+    #define CLOCK_ARM_ACT_CHECK_DEFAULT                     0x0
+    #define CLOCK_ARM_ACT_MOVING                            0x1
+    #define CLOCK_ARM_ACT_STOP                              0x2
+
 /* TTC rotating solid */
     /* oBehParams2ndByte */
     #define TTC_ROTATING_SOLID_BP_CUBE                      0x0
@@ -2341,6 +2347,11 @@
     /* oBehParams2ndByte */
     #define WHITE_PUFF_EXPLODE_BP_FAST_FADE                 0x2
     #define WHITE_PUFF_EXPLODE_BP_SLOW_FADE                 0x3
+
+/* Collide Particles */
+    /* oAnimState */
+    #define COLLIDE_PARTICLE_ANIM_STATE_TINY_STAR       0x4
+    #define COLLIDE_PARTICLE_ANIM_STATE_TINY_TRIANGLE   0x5
 
 /* Music Touch */
     /* oAction */

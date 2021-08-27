@@ -3,7 +3,7 @@
 void spawn_child_obj_relative(struct Object *parent,
                    s16 xOffset, s16 yOffset, s16 zOffset,
                    Angle pitchOffset, Angle yawOffset, Angle rollOffset,
-                   s16 forwardVel, s32 model, const BehaviorScript *behavior) {
+                   s16 forwardVel, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object(parent, model, behavior);
     obj->header.gfx.animInfo.animFrame    = (random_float() * 6.0f);
     obj->oEndBirdCutsceneVars9PointX      = sCutsceneVars[9].point[0];

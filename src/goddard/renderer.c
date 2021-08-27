@@ -94,8 +94,8 @@ static Mat4 sInitIdnMat4;
 static s8 sVtxCvrtNormBuf[3];
 static s16 sAlpha;
 static s32 sNumLights;
-static GdColour sAmbScaleColour;
-static GdColour sLightScaleColours[2];
+static ColorRGBf sAmbScaleColour;
+static ColorRGBf sLightScaleColours[2];
 static Vec3i sLightDirections[2];
 static s32 sLightId;
 static Hilite sHilites[600];
@@ -1205,8 +1205,8 @@ void set_light_num(s32 n) {
 
 /* 24EB24 -> 24EC18 */
 s32 create_mtl_gddl(void) {
-    GdColour blue = {0.0f, 0.0f, 1.0f};
-    s32 dlnum     = gd_startdisplist(7);
+    ColorRGBf blue = {0.0f, 0.0f, 1.0f};
+    s32 dlnum      = gd_startdisplist(7);
     gd_dl_material_lighting(dlnum, blue, GD_MTL_TEX_OFF);
     gd_enddlsplist_parent();
     sCurrentGdDl->totalVtx    = sCurrentGdDl->curVtxIdx;
@@ -1227,7 +1227,7 @@ void branch_to_gddl(s32 dlNum) {
 void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
                    struct ObjCamera *cam,
                    Vec3f phongLightPosition, // vector to light source?
-                   GdColour colour) {        // light color
+                   ColorRGBf colour) {       // light color
     Hilite *hilite;
     Vec3f vec;
     f32 mag; // magnitude of vec
@@ -1259,7 +1259,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
 /**
  * Adds some display list commands that perform lighting for a material
  */
-s32 gd_dl_material_lighting(s32 id, GdColour colour, s32 material) {
+s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
     s32 i;
     s32 numLights = sNumLights;
     s32 scaledColours[3];

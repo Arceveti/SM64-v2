@@ -38,8 +38,8 @@ Vtx_t gBubbleTempVtx[3] = {
  * kill flower and bubble particles.
  */
 s32 particle_is_laterally_close(s32 index, s32 x, s32 z, s32 distance) {
-    s32 xPos = (gEnvFxBuffer + index)->xPos;
-    s32 zPos = (gEnvFxBuffer + index)->zPos;
+    s32 xPos = (gEnvFxBuffer + index)->pos[0];
+    s32 zPos = (gEnvFxBuffer + index)->pos[2];
     return !(sqr(xPos - x) + sqr(zPos - z) > sqr(distance));
 }
 
@@ -69,10 +69,10 @@ void envfx_update_flower(Vec3s centerPos) {
     for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = particle_is_laterally_close(i, centerPos[0], centerPos[2], 3000);
         if (!(gEnvFxBuffer + i)->isAlive) {
-            (gEnvFxBuffer + i)->xPos = (random_flower_offset() + centerPos[0]);
-            (gEnvFxBuffer + i)->zPos = (random_flower_offset() + centerPos[2]);
-            (gEnvFxBuffer + i)->yPos = find_floor_height_and_data((gEnvFxBuffer + i)->xPos, 10000.0f,
-                                                                  (gEnvFxBuffer + i)->zPos, &floorGeo);
+            (gEnvFxBuffer + i)->pos[0] = (random_flower_offset() + centerPos[0]);
+            (gEnvFxBuffer + i)->pos[2] = (random_flower_offset() + centerPos[2]);
+            (gEnvFxBuffer + i)->pos[1] = find_floor_height_and_data((gEnvFxBuffer + i)->pos[0], 10000.0f,
+                                                                    (gEnvFxBuffer + i)->pos[2], &floorGeo);
             (gEnvFxBuffer + i)->isAlive   = TRUE;
             (gEnvFxBuffer + i)->animFrame = (random_float() * 5.0f);
         } else if (!(timer & 0x03)) {
@@ -93,18 +93,18 @@ void envfx_update_flower(Vec3s centerPos) {
  */
 void envfx_set_lava_bubble_position(s32 index, Vec3s centerPos) {
     struct Surface *surface;
-    (    gEnvFxBuffer + index)->xPos = (((random_float() * 6000.0f) - 3000.0f) + centerPos[0]);
-    (    gEnvFxBuffer + index)->zPos = (((random_float() * 6000.0f) - 3000.0f) + centerPos[2]);
-    if ((gEnvFxBuffer + index)->xPos >  8000) (gEnvFxBuffer + index)->xPos = ( 16000 - (gEnvFxBuffer + index)->xPos);
-    if ((gEnvFxBuffer + index)->xPos < -8000) (gEnvFxBuffer + index)->xPos = (-16000 - (gEnvFxBuffer + index)->xPos);
-    if ((gEnvFxBuffer + index)->zPos >  8000) (gEnvFxBuffer + index)->zPos = ( 16000 - (gEnvFxBuffer + index)->zPos);
-    if ((gEnvFxBuffer + index)->zPos < -8000) (gEnvFxBuffer + index)->zPos = (-16000 - (gEnvFxBuffer + index)->zPos);
-    s16 floorY = find_floor((gEnvFxBuffer + index)->xPos, (centerPos[1] + 500), (gEnvFxBuffer + index)->zPos, &surface);
+    (    gEnvFxBuffer + index)->pos[0] = (((random_float() * 6000.0f) - 3000.0f) + centerPos[0]);
+    (    gEnvFxBuffer + index)->pos[2] = (((random_float() * 6000.0f) - 3000.0f) + centerPos[2]);
+    if ((gEnvFxBuffer + index)->pos[0] >  8000) (gEnvFxBuffer + index)->pos[0] = ( 16000 - (gEnvFxBuffer + index)->pos[0]);
+    if ((gEnvFxBuffer + index)->pos[0] < -8000) (gEnvFxBuffer + index)->pos[0] = (-16000 - (gEnvFxBuffer + index)->pos[0]);
+    if ((gEnvFxBuffer + index)->pos[2] >  8000) (gEnvFxBuffer + index)->pos[2] = ( 16000 - (gEnvFxBuffer + index)->pos[2]);
+    if ((gEnvFxBuffer + index)->pos[2] < -8000) (gEnvFxBuffer + index)->pos[2] = (-16000 - (gEnvFxBuffer + index)->pos[2]);
+    s16 floorY = find_floor((gEnvFxBuffer + index)->pos[0], (centerPos[1] + 500), (gEnvFxBuffer + index)->pos[2], &surface);
     if (surface == NULL) {
-        (gEnvFxBuffer + index)->yPos = FLOOR_LOWER_LIMIT_MISC;
+        (gEnvFxBuffer + index)->pos[1] = FLOOR_LOWER_LIMIT_MISC;
         return;
     }
-    (gEnvFxBuffer + index)->yPos = ((surface->type == SURFACE_BURNING) ? floorY : FLOOR_LOWER_LIMIT_MISC);
+    (gEnvFxBuffer + index)->pos[1] = ((surface->type == SURFACE_BURNING) ? floorY : FLOOR_LOWER_LIMIT_MISC);
 }
 
 /**
@@ -119,7 +119,7 @@ void envfx_update_lava(UNUSED Vec3s centerPos) {
         if (!(gEnvFxBuffer + i)->isAlive) {
             envfx_set_lava_bubble_position(i, centerPos);
             (gEnvFxBuffer + i)->isAlive = TRUE;
-        } else if (!(timer & 0x01)) {
+        } else if (!(timer & 0x1)) {
             (gEnvFxBuffer + i)->animFrame++;
             if ((gEnvFxBuffer + i)->animFrame > 8) {
                 (gEnvFxBuffer + i)->isAlive   = FALSE;
@@ -135,19 +135,19 @@ void envfx_update_lava(UNUSED Vec3s centerPos) {
  * according to the pitch and yaw of the whirlpool.
  */
 void envfx_rotate_around_whirlpool(s32 *x, s32 *y, s32 *z) {
-    s32 vecX     = *x -  gEnvFxBubbleConfig[ENVFX_STATE_DEST_X];
-    s32 vecY     = *y -  gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y];
-    s32 vecZ     = *z -  gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z];
+    Vec3i vec;
+    vec[0]       = (*x - gEnvFxBubbleConfig[ENVFX_STATE_DEST_X]);
+    vec[1]       = (*y - gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y]);
+    vec[2]       = (*z - gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z]);
     f32 cosPitch = coss( gEnvFxBubbleConfig[ENVFX_STATE_PITCH ]);
     f32 sinPitch = sins( gEnvFxBubbleConfig[ENVFX_STATE_PITCH ]);
     f32 cosMYaw  = coss(-gEnvFxBubbleConfig[ENVFX_STATE_YAW   ]);
     f32 sinMYaw  = sins(-gEnvFxBubbleConfig[ENVFX_STATE_YAW   ]);
-    f32 rotatedX = (((vecX * cosMYaw ) - (sinMYaw  * cosPitch * vecY)) - (sinPitch * sinMYaw * vecZ));
-    f32 rotatedY = (((vecX * sinMYaw ) + (cosPitch * cosMYaw  * vecY)) - (sinPitch * cosMYaw * vecZ));
-    f32 rotatedZ = ((vecY * sinPitch) + (cosPitch * vecZ));
-    *x           = gEnvFxBubbleConfig[ENVFX_STATE_DEST_X] + (s32) rotatedX;
-    *y           = gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y] + (s32) rotatedY;
-    *z           = gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z] + (s32) rotatedZ;
+    f32 cospY    = (cosPitch * vec[1]);
+    f32 sinpZ    = (sinPitch * vec[2]);
+    *x           = (gEnvFxBubbleConfig[ENVFX_STATE_DEST_X] + (((vec[0] * cosMYaw ) - (sinMYaw  * cospY)) - (sinMYaw * sinpZ)));
+    *y           = (gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y] + (((vec[0] * sinMYaw ) + (cosMYaw  * cospY)) - (cosMYaw * sinpZ)));
+    *z           = (gEnvFxBubbleConfig[ENVFX_STATE_DEST_Z] +  ((vec[1] * sinPitch) + (cosPitch * vec[2])                    ));
 }
 
 /**
@@ -170,25 +170,25 @@ void envfx_update_whirlpool(void) {
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() *  1000.0f);
             (gEnvFxBuffer + i)->angleAndDist[0] = (random_float() * 65536.0f);
-            (gEnvFxBuffer + i)->xPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->zPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[0]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[2]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
             (gEnvFxBuffer + i)->bubbleY         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 100.0f) - 50.0f));
-            (gEnvFxBuffer + i)->yPos            = (i + gEnvFxBuffer)->bubbleY;
+            (gEnvFxBuffer + i)->pos[1]          = (i + gEnvFxBuffer)->bubbleY;
             // (gEnvFxBuffer + i)->unusedBubbleVar = 0;
             (gEnvFxBuffer + i)->isAlive         = TRUE;
-            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->xPos,
-                                          &(gEnvFxBuffer + i)->yPos,
-                                          &(gEnvFxBuffer + i)->zPos);
+            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->pos[0],
+                                          &(gEnvFxBuffer + i)->pos[1],
+                                          &(gEnvFxBuffer + i)->pos[2]);
         } else {
             (gEnvFxBuffer + i)->angleAndDist[1] -= 40;
             (gEnvFxBuffer + i)->angleAndDist[0] += ((s16)(3000 - ((gEnvFxBuffer + i)->angleAndDist[1] * 2)) + 0x400);
-            (gEnvFxBuffer + i)->xPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->zPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[0]           = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[2]           = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
             (gEnvFxBuffer + i)->bubbleY         -= (40 - ((s16)(gEnvFxBuffer + i)->angleAndDist[1] / 100));
-            (gEnvFxBuffer + i)->yPos            = (i + gEnvFxBuffer)->bubbleY;
-            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->xPos,
-                                          &(gEnvFxBuffer + i)->yPos,
-                                          &(gEnvFxBuffer + i)->zPos);
+            (gEnvFxBuffer + i)->pos[1]           = (i + gEnvFxBuffer)->bubbleY;
+            envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->pos[0],
+                                          &(gEnvFxBuffer + i)->pos[1],
+                                          &(gEnvFxBuffer + i)->pos[2]);
         }
     }
 }
@@ -201,7 +201,7 @@ s32 envfx_is_jestream_bubble_alive(s32 index) {
     return !(!particle_is_laterally_close(index,
              gEnvFxBubbleConfig[ENVFX_STATE_SRC_X],
              gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z],  1000)
-         || (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + 1500) < (gEnvFxBuffer + index)->yPos);
+         || (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + 1500) < (gEnvFxBuffer + index)->pos[1]);
 }
 
 /**
@@ -215,14 +215,14 @@ void envfx_update_jetstream(void) {
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() * 300.0f);
             (gEnvFxBuffer + i)->angleAndDist[0] = random_u16();
-            (gEnvFxBuffer + i)->xPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->zPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->yPos            = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 400.0f) - 200.0f));
+            (gEnvFxBuffer + i)->pos[0]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[2]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
+            (gEnvFxBuffer + i)->pos[1]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 400.0f) - 200.0f));
         } else {
             (gEnvFxBuffer + i)->angleAndDist[1] += 10;
-            (gEnvFxBuffer + i)->xPos += (sins((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
-            (gEnvFxBuffer + i)->zPos += (coss((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
-            (gEnvFxBuffer + i)->yPos -=     (((gEnvFxBuffer + i)->angleAndDist[1] / 30) - 50);
+            (gEnvFxBuffer + i)->pos[0] += (sins((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
+            (gEnvFxBuffer + i)->pos[2] += (coss((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
+            (gEnvFxBuffer + i)->pos[1] -=     (((gEnvFxBuffer + i)->angleAndDist[1] / 30) - 50);
         }
     }
 }
@@ -306,17 +306,17 @@ void append_bubble_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s verte
     if (vertBuf == NULL) return;
     for ((i = 0); (i < 15); (i += 3)) {
         vertBuf[i    ] = template[0];
-        (vertBuf + i    )->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->xPos + vertex1[0]);
-        (vertBuf + i    )->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->yPos + vertex1[1]);
-        (vertBuf + i    )->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->zPos + vertex1[2]);
+        (vertBuf + i    )->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->pos[0] + vertex1[0]);
+        (vertBuf + i    )->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->pos[1] + vertex1[1]);
+        (vertBuf + i    )->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->pos[2] + vertex1[2]);
         vertBuf[i + 1] = template[1];
-        (vertBuf + i + 1)->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->xPos + vertex2[0]);
-        (vertBuf + i + 1)->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->yPos + vertex2[1]);
-        (vertBuf + i + 1)->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->zPos + vertex2[2]);
+        (vertBuf + i + 1)->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->pos[0] + vertex2[0]);
+        (vertBuf + i + 1)->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->pos[1] + vertex2[1]);
+        (vertBuf + i + 1)->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->pos[2] + vertex2[2]);
         vertBuf[i + 2] = template[2];
-        (vertBuf + i + 2)->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->xPos + vertex3[0]);
-        (vertBuf + i + 2)->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->yPos + vertex3[1]);
-        (vertBuf + i + 2)->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->zPos + vertex3[2]);
+        (vertBuf + i + 2)->v.ob[0] = ((gEnvFxBuffer + (index + (i / 3)))->pos[0] + vertex3[0]);
+        (vertBuf + i + 2)->v.ob[1] = ((gEnvFxBuffer + (index + (i / 3)))->pos[1] + vertex3[1]);
+        (vertBuf + i + 2)->v.ob[2] = ((gEnvFxBuffer + (index + (i / 3)))->pos[2] + vertex3[2]);
     }
     gSPVertex(gfx, VIRTUAL_TO_PHYSICAL(vertBuf), 15, 0);
 }

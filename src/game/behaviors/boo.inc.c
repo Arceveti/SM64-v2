@@ -13,10 +13,40 @@ static struct ObjectHitbox sBooGivingStarHitbox = {
 };
 
 // Boo Roll
-//! Angle type?
-static s16 sBooHitRotations[] = { 6047, 5664, 5292, 4934, 4587, 4254, 3933, 3624, 3329, 3046, 2775,
-                                  2517, 2271, 2039, 1818, 1611, 1416, 1233, 1063,  906,  761,  629,
-                                   509,  402,  308,  226,  157,  100,   56,   25,    4,    0        };
+static Angle sBooHitRotations[] = {
+    0x179F,
+    0x1620,
+    0x14AC,
+    0x1346,
+    0x11EB,
+    0x109E,
+    0x0B75,
+    0x0E28,
+    0x0D01,
+    0x0BE6,
+    0x0AD7,
+    0x09D5,
+    0x08DF,
+    0x07F7,
+    0x071A,
+    0x064B,
+    0x0588,
+    0x04D1,
+    0x0427,
+    0x038A,
+    0x02F9,
+    0x0275,
+    0x01FD,
+    0x0192,
+    0x0134,
+    0x00E2,
+    0x009D, 
+    0x0064,
+    0x0038,
+    0x0019,
+    0x0004,
+    0x0000
+};
 
 // Relative positions
 static s16 sCourtyardBooTripletPositions[][3] = {
@@ -35,7 +65,7 @@ void bhv_boo_init(void) {
     o->oBooInitialMoveYaw = o->oMoveAngleYaw;
 }
 
-static s32 boo_should_be_stopped(void) {
+static Bool32 boo_should_be_stopped(void) {
     if (cur_obj_has_behavior(bhvMerryGoRoundBigBoo) || cur_obj_has_behavior(bhvMerryGoRoundBoo)) {
         return (!gMarioOnMerryGoRound);
     } else {
@@ -52,7 +82,7 @@ static s32 boo_should_be_active(void) {
     } else if (o->oRoom == -1) {
         return (o->oDistanceToMario < activationRadius);
     } else if (!boo_should_be_stopped()) {
-        return (o->oDistanceToMario < activationRadius && (o->oRoom == gMarioCurrentRoom || gMarioCurrentRoom == 0));
+        return ((o->oDistanceToMario < activationRadius) && ((o->oRoom == gMarioCurrentRoom) || (gMarioCurrentRoom == 0)));
     }
     return FALSE;
 }
@@ -89,13 +119,13 @@ static void boo_approach_target_opacity_and_update_scale(void) {
             if (o->oBooTargetOpacity > o->oOpacity) o->oOpacity = o->oBooTargetOpacity;
         }
     }
-    scale = (o->oOpacity/255.0f * 0.4f + 0.6f) * o->oBooBaseScale;
+    scale = (((o->oOpacity / 255.0f) * 0.4f) + 0.6f) * o->oBooBaseScale;
     cur_obj_scale(scale);
 }
 
 static void boo_oscillate(s32 ignoreOpacity) {
-    o->oFaceAnglePitch = sins(o->oBooOscillationTimer) * 0x400;
-    if (o->oOpacity == 0xFF || ignoreOpacity) {
+    o->oFaceAnglePitch = (sins(o->oBooOscillationTimer) * 0x400);
+    if ((o->oOpacity == 0xFF) || ignoreOpacity) {
         o->header.gfx.scale[0]   = (( sins(o->oBooOscillationTimer) * 0.08f) + o->oBooBaseScale);
         o->header.gfx.scale[1]   = ((-sins(o->oBooOscillationTimer) * 0.08f) + o->oBooBaseScale);
         o->header.gfx.scale[2]   =  o->header.gfx.scale[0];
@@ -110,7 +140,7 @@ static s32 boo_vanish_or_appear(void) {
     // magic?
     Angle relativeAngleToMarioThreshhold   = 0x1568; //  5480   DEGREES(30)?
     Angle relativeMarioFaceAngleThreshhold = 0x6B58; // 27480   DEGREES(151)?
-    s32 doneAppearing                      = FALSE;
+    Bool32 doneAppearing                   = FALSE;
     o->oVelY                               = 0.0f;
     if ((relativeAngleToMario > relativeAngleToMarioThreshhold)
      || (relativeMarioFaceAngle < relativeMarioFaceAngleThreshhold)) {
@@ -138,13 +168,14 @@ static void boo_set_move_yaw_for_during_hit(s32 hurt) {
     }
 }
 
-static void boo_move_during_hit(s32 roll, f32 fVel) {
+//! s16/Angle type for roll?
+static void boo_move_during_hit(Bool32 roll, f32 fVel) {
     // Boos seem to have been supposed to oscillate up then down then back again
     // when hit. However it seems the programmers forgot to scale the cosine,
     // so the Y velocity goes from 1 to -1 and back to 1 over 32 frames.
     // This is such a small change that the Y position only changes by 5 units.
     // It's completely unnoticable in-game.
-    // s32 oscillationVel = o->oTimer * 0x800 + 0x800;
+    // s32 oscillationVel = ((o->oTimer * 0x800) + 0x800);
     o->oForwardVel     = fVel;
     // o->oVelY           = coss(oscillationVel);
     o->oMoveAngleYaw   = o->oBooMoveYawDuringHit;
@@ -167,11 +198,11 @@ static void boo_reset_after_hit(void) {
 }
 
 // called iff boo/big boo/cage boo is in action 2, which only occurs if it was non-attack-ly interacted with/bounced on?
-static Bool32 boo_update_after_bounced_on(f32 a0) {
+static Bool32 boo_update_after_bounced_on(f32 fVel) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(FALSE);
     if (o->oTimer < 32) {
-        boo_move_during_hit(FALSE, ((sBooHitRotations[o->oTimer] / 5000.0f) * a0));
+        boo_move_during_hit(FALSE, ((sBooHitRotations[o->oTimer] / 5000.0f) * fVel));
     } else {
         cur_obj_become_tangible();
         boo_reset_after_hit();
@@ -182,11 +213,11 @@ static Bool32 boo_update_after_bounced_on(f32 a0) {
 }
 
 // called iff big boo nonlethally hit
-static Bool32 big_boo_update_during_nonlethal_hit(f32 a0) {
+static Bool32 big_boo_update_during_nonlethal_hit(f32 fVel) {
     boo_stop();
     if (o->oTimer == 0) boo_set_move_yaw_for_during_hit(TRUE);
     if (o->oTimer < 32) {
-        boo_move_during_hit(TRUE, (sBooHitRotations[o->oTimer] / 5000.0f) * a0);
+        boo_move_during_hit(TRUE, (sBooHitRotations[o->oTimer] / 5000.0f) * fVel);
     } else if (o->oTimer < 48) {
         big_boo_shake_after_hit();
     } else {
@@ -547,8 +578,7 @@ void bhv_merry_go_round_boo_manager_loop(void) {
         case BBH_MERRY_GO_ROUND_ACT_SPAWN_BOOS:
             if (o->oDistanceToMario < 1000.0f) {
                 if (o->oMerryGoRoundBooManagerNumBoosKilled < 5) {
-                    if (o->oMerryGoRoundBooManagerNumBoosSpawned != 5
-                     && (o->oMerryGoRoundBooManagerNumBoosSpawned - o->oMerryGoRoundBooManagerNumBoosKilled < 2)) {
+                    if ((o->oMerryGoRoundBooManagerNumBoosSpawned != 5) && ((o->oMerryGoRoundBooManagerNumBoosSpawned - o->oMerryGoRoundBooManagerNumBoosKilled) < 2)) {
                         spawn_object(o, MODEL_BOO, bhvMerryGoRoundBoo);
                         o->oMerryGoRoundBooManagerNumBoosSpawned++;
                     }

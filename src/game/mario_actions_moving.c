@@ -412,7 +412,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
     AnimAccel animSpeed;
     struct Object *marioObj = m->marioObj;
     Bool32 loop = TRUE;
-    Angle targetPitch         = 0x0;
+    Angle targetPitch       = 0x0;
     f32 intendedSpeed;
     intendedSpeed           = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
     if (intendedSpeed < 4.0f) intendedSpeed = 4.0f;

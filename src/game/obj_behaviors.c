@@ -432,6 +432,7 @@ Bool32 obj_check_if_facing_toward_angle(u32 base, u32 goal, Angle range) {
     return (((f32) sins(-range) < (f32) sins(dAngle)) && ((f32) sins(dAngle) < (f32) sins(range)) && (coss(dAngle) > 0));
 }
 
+//! move to surface_collision?
 /**
  * Finds any wall collisions and returns what the displacement vector would be.
  */
@@ -441,7 +442,7 @@ Bool32 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     hitbox.offsetY = 10.0f;
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
-        //! vec3f_diff?
+        //? can xyz be a vec
         dist[0] = hitbox.pos[0] - x;
         dist[1] = hitbox.pos[1] - y;
         dist[2] = hitbox.pos[2] - z;

@@ -424,7 +424,7 @@
 #define VISIBLE_FADE_WARPS
 
 // Step height for objects. Comment out the define to use vanilla behavior. (Arceveti)
-#define OBJ_STEP_HEIGHT 32.0f
+#define OBJ_STEP_HEIGHT 40.0f
 
 // Fix DDD water rings (Arceveti)
 #define FIX_WATER_RINGS

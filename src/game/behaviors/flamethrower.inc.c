@@ -39,7 +39,7 @@ void bhv_flamethrower_loop(void) {
     struct Object *flame;
     f32 flameVel;
     s32 flameTimeRemaining;
-    s32 model;
+    ModelID32 model;
     if (o->oAction == FLAMETHROWER_ACT_IDLE) {
         if ((gCurrLevelNum != LEVEL_BBH || gMarioOnMerryGoRound) && o->oDistanceToMario < 2000.0f) o->oAction = FLAMETHROWER_ACT_BLOW_FIRE;
     } else if (o->oAction == FLAMETHROWER_ACT_BLOW_FIRE) {

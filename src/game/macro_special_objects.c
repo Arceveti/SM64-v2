@@ -16,8 +16,7 @@
  * that can be used by in-game objects.
  */
 Angle convert_rotation(Angle inRotation) {
-    //! s16/Angle?
-    u16 rotation = (((u16)(inRotation & 0xFF)) << 8);
+    UAngle rotation = (((UAngle)(inRotation & 0xFF)) << 8);
     if (rotation == 0x3F00) rotation = 0x4000;
     if (rotation == 0x7F00) rotation = 0x8000;
     if (rotation == 0xBF00) rotation = 0xC000;
@@ -30,7 +29,7 @@ Angle convert_rotation(Angle inRotation) {
  * parameters filling up the upper 2 bytes of newObj->oBehParams.
  * The object will not spawn if 'behavior' is NULL.
  */
-void spawn_macro_abs_yrot_2params(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, Angle ry, s16 params) {
+void spawn_macro_abs_yrot_2params(ModelID32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, Angle ry, s16 params) {
     if (behavior != NULL) {
         struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, convert_rotation(ry), 0x0);
         newObj->oBehParams = (((u32) params) << 16);
@@ -42,7 +41,7 @@ void spawn_macro_abs_yrot_2params(s32 model, const BehaviorScript *behavior, s16
  * a single parameter filling up the upper byte of newObj->oBehParams.
  * The object will not spawn if 'behavior' is NULL.
  */
-void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, Angle ry, s16 param) {
+void spawn_macro_abs_yrot_param1(ModelID32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, Angle ry, s16 param) {
     if (behavior != NULL) {
         struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, convert_rotation(ry), 0x0);
         newObj->oBehParams = (((u32) param) << 24);
@@ -53,7 +52,7 @@ void spawn_macro_abs_yrot_param1(s32 model, const BehaviorScript *behavior, s16 
  * Spawns an object at an absolute location with currently 3 unknown variables that get converted to
  * floats. Oddly enough, this function doesn't care if 'behavior' is NULL or not.
  */
-void spawn_macro_abs_special(s32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 unkA, s16 unkB, s16 unkC) {
+void spawn_macro_abs_special(ModelID32 model, const BehaviorScript *behavior, s16 x, s16 y, s16 z, s16 unkA, s16 unkB, s16 unkC) {
     struct Object *newObj = spawn_object_abs_with_rot(&gMacroObjectDefaultParent, 0, model, behavior, x, y, z, 0x0, 0x0, 0x0);
     // Are all three of these values unused?
     newObj->oMacroUnk108 = (f32) unkA;

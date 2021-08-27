@@ -140,8 +140,8 @@ void bhv_thi_bowling_ball_spawner_loop(void) {
 
 void bhv_bob_pit_bowling_ball_init(void) {
     o->oGravity  = 12.0f;
-    o->oFriction = 1.0f;
-    o->oBuoyancy = 2.0f;
+    o->oFriction =  1.0f;
+    o->oBuoyancy =  2.0f;
 }
 
 void bhv_bob_pit_bowling_ball_loop(void) {

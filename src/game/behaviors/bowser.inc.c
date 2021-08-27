@@ -1595,7 +1595,7 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
 
 #include "actors/bowser/vtx.h"
 
-void add_hue(ColorRGB color, s32 hueAdd, Color s) {
+void add_hue(ColorRGB color, Color hueAdd, Color s) {
     Color min = min_3uc(color[0], color[1], color[2]);
     Color max = max_3uc(color[0], color[1], color[2]);
     if (min == max) return;
@@ -1609,10 +1609,10 @@ void add_hue(ColorRGB color, s32 hueAdd, Color s) {
     }
     if (hue < 0.0f) hue += 6.0f;
     // this is the algorithm to convert from RGB to HSV:
-    Color h = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
-    Color i =  (h >> 5);                                         // 0..5
-    Color f = ((h & 0x1F) << 3);                                 // 'fractional' part of 'i' 0..248 in jumps
-    Color pv = (0xFF -   s                    );                 // pv will be in range 0 - 255
+    Color h  = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
+    Color i  =  (h >> 5);                                         // 0..5
+    Color f  = ((h & 0x1F) << 3);                                 // 'fractional' part of 'i' 0..248 in jumps
+    Color pv = (0xFF -   s                    );                  // pv will be in range 0 - 255
     Color qv = (0xFF - ((s *         f ) >> 8));
     Color tv = (0xFF - ((s * (0xFF - f)) >> 8));
     switch (i) {
@@ -1628,11 +1628,10 @@ void add_hue(ColorRGB color, s32 hueAdd, Color s) {
 
 void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
     Vtx *verts;
-    u16 j, i = 0;
-    while (sBowserVertexGroups[i].vertexData != NULL) {
+    u16 j, i;
+    for ((i = 0); (sBowserVertexGroups[i].vertexData != NULL); (i++)) {
         verts = segmented_to_virtual(sBowserVertexGroups[i].vertexData);
-        for (j = 0; j < sBowserVertexGroups[i].vertexCount; j++) add_hue(verts[j].v.cn, speed, sat);
-        i++;
+        for ((j = 0); (j < sBowserVertexGroups[i].vertexCount); (j++)) add_hue(verts[j].v.cn, speed, sat);
     }
 }
 

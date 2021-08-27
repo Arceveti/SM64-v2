@@ -352,7 +352,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     if (((nextPos[1] + m->marioObj->hitboxHeight) > ceilHeight) && (floorHeight < ceilHeight)) {
         // softlock fix
         Angle surfAngle;
-        s32 underSteepSurf = FALSE;
+        Bool32 underSteepSurf = FALSE;
         if ((floor != NULL) && (ceil != NULL)) {
             if (floor->normal.y < COS25) { surfAngle = atan2s(floor->normal.z, floor->normal.x); underSteepSurf = TRUE; } // steep floor
             if (-COS25 < ceil->normal.y) { surfAngle = atan2s( ceil->normal.z,  ceil->normal.x); underSteepSurf = TRUE; } // steep ceiling

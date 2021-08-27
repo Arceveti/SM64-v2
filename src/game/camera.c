@@ -2650,7 +2650,7 @@ void create_camera(struct GraphNodeCamera *gc, struct AllocOnlyPool *pool) {
     c->defMode        = mode;
     c->cutscene       = CUTSCENE_NONE;
     c->doorStatus     = DOOR_DEFAULT;
-    //! vec3f_copy
+    //? vec3f_copy?
     c->areaCenX       = gc->focus[0];
     c->areaCenY       = gc->focus[1];
     c->areaCenZ       = gc->focus[2];
@@ -2949,19 +2949,18 @@ Bool32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
  *
  * @return the reduced value
  */
+//? can pos be Vec3f?
 s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 posZ) {
     Vec3f pos;
     Angle pitch, yaw, goalPitch, goalYaw;
     s16 result = 0;
     // Direction from pos to (Lakitu's) goalPos
-    //! vec3f_diff?
     Vec3f goalD;
     goalD[0] = (gLakituState.goalPos[0] - posX);
     goalD[1] = (gLakituState.goalPos[1] - posY);
     goalD[2] = (gLakituState.goalPos[2] - posZ);
     f32 dist   = sqrtf(sqr(goalD[0]) + sqr(goalD[1]) + sqr(goalD[2]));
     if (maxDist > dist) {
-        //! vec3f_copy?
         vec3f_set(pos, posX, posY, posZ);
         vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &pitch, &yaw);
         if (dist < maxDist) {

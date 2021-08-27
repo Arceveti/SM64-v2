@@ -1448,7 +1448,7 @@ void queue_rumble_particles(void) {
  * Main function for executing Mario's behavior.
  */
 Bool32 execute_mario_action(UNUSED struct Object *o) {
-    s32 inLoop = TRUE;
+    Bool32 inLoop = TRUE;
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(      gMarioState);
@@ -1540,7 +1540,7 @@ void init_mario(void) {
     vec3a_copy(    gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
     vec3a_set(     gMarioState->angleVel , 0, 0, 0);
     vec3s_to_vec3f(gMarioState->pos      , gMarioSpawnInfo->startPos);
-    vec3f_set(     gMarioState->vel      , 0, 0, 0);
+    vec3f_zero(    gMarioState->vel);
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], gMarioState->pos[1], gMarioState->pos[2], &gMarioState->floor);
     if (gMarioState->pos[1] < gMarioState->floorHeight) gMarioState->pos[1] = gMarioState->floorHeight;
     gMarioState->marioObj->header.gfx.pos[1]          = gMarioState->pos[1];

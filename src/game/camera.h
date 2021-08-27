@@ -429,6 +429,7 @@ struct CutsceneVariable
  * update_lakitu, its pos and focus are used to calculate lakitu's next position and focus, which are
  * then used to render the game.
  */
+//? can areaCen be Vec3f?
 struct Camera
 {
     /*0x00*/ u8 mode; // What type of mode the camera uses (see defines above)

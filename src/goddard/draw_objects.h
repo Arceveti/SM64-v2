@@ -29,7 +29,7 @@ extern struct ObjGroup *gGdLightGroup;  // ObjGroup* of ObjLights
 // functions
 void draw_light(   struct ObjLight  *light);
 void draw_material(struct ObjMaterial *mtl);
-GdColour *gd_get_colour(s32 idx);
+ColorRGBf *gd_get_colour(s32 idx);
 void draw_face(                 struct ObjFace  *face);
 void draw_net(                  struct ObjNet   *self);
 void draw_camera(               struct ObjCamera *cam);

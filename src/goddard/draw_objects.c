@@ -32,18 +32,18 @@ enum SceneType {
 };
 
 // data
-static GdColour sClrWhite        =   { 1.0f, 1.0f, 1.0f };   // @ 801A8070
-static GdColour sClrRed          =   { 1.0f, 0.0f, 0.0f };   // @ 801A807C
-static GdColour sClrGreen        =   { 0.0f, 1.0f, 0.0f };   // @ 801A8088
-static GdColour sClrBlue         =   { 0.0f, 0.0f, 1.0f };   // @ 801A8094
-static GdColour sClrErrDarkBlue  =   { 0.0f, 0.0f, 6.0f };   // @ 801A80A0
-static GdColour sClrPink         =   { 1.0f, 0.0f, 1.0f };   // @ 801A80AC
-static GdColour sClrBlack        =   { 0.0f, 0.0f, 0.0f };   // @ 801A80B8
-static GdColour sClrGrey         =   { 0.6f, 0.6f, 0.6f };   // @ 801A80C4
-static GdColour sClrDarkGrey     =   { 0.4f, 0.4f, 0.4f };   // @ 801A80D0
-static GdColour sClrYellow       =   { 1.0f, 1.0f, 0.0f };   // @ 801A80DC
-static GdColour sLightColours[1] = { { 1.0f, 1.0f, 0.0f } }; // @ 801A80E8
-static GdColour *sSelectedColour = &sClrRed;                 // @ 801A80F4
+static ColorRGBf sClrWhite        =   { 1.0f, 1.0f, 1.0f };   // @ 801A8070
+static ColorRGBf sClrRed          =   { 1.0f, 0.0f, 0.0f };   // @ 801A807C
+static ColorRGBf sClrGreen        =   { 0.0f, 1.0f, 0.0f };   // @ 801A8088
+static ColorRGBf sClrBlue         =   { 0.0f, 0.0f, 1.0f };   // @ 801A8094
+static ColorRGBf sClrErrDarkBlue  =   { 0.0f, 0.0f, 6.0f };   // @ 801A80A0
+static ColorRGBf sClrPink         =   { 1.0f, 0.0f, 1.0f };   // @ 801A80AC
+static ColorRGBf sClrBlack        =   { 0.0f, 0.0f, 0.0f };   // @ 801A80B8
+static ColorRGBf sClrGrey         =   { 0.6f, 0.6f, 0.6f };   // @ 801A80C4
+static ColorRGBf sClrDarkGrey     =   { 0.4f, 0.4f, 0.4f };   // @ 801A80D0
+static ColorRGBf sClrYellow       =   { 1.0f, 1.0f, 0.0f };   // @ 801A80DC
+static ColorRGBf sLightColours[1] = { { 1.0f, 1.0f, 0.0f } }; // @ 801A80E8
+static ColorRGBf *sSelectedColour = &sClrRed;                 // @ 801A80F4
 struct ObjCamera *gViewUpdateCamera = NULL;                  // @ 801A80F8
 static s32 sLightDlCounter = 1; // @ 801A81A0
 
@@ -193,19 +193,19 @@ void create_mtl_gddl_if_empty(struct ObjMaterial *mtl) {
 }
 
 /**
- * @brief Convert a numeric index into pointer to a struct GdColour
+ * @brief Convert a numeric index into pointer to a struct ColorRGBf
  *
  * A simple switch case to convert from index @p idx to a pointer to the
- * three f32 GdColour structure. Goddard stored the index in a structure,
+ * three f32 ColorRGBf structure. Goddard stored the index in a structure,
  * and uses this function to get the colour RGB values if needed.
  * -1 uses the environment colour.
  * A possible enhancement for this is to ennumerate all colours, and then
  * use those enumerations and/or enum type where ever a colour is requested
  *
  * @param idx Index of colour
- * @return Pointer to a GdColour struct
+ * @return Pointer to a ColorRGBf struct
  */
-GdColour *gd_get_colour(s32 idx) {
+ColorRGBf *gd_get_colour(s32 idx) {
     switch (idx) {
         case COLOUR_BLACK:     return &sClrBlack;        break;
         case COLOUR_WHITE:     return &sClrWhite;        break;
@@ -401,8 +401,8 @@ void draw_shape_faces(struct ObjShape *shape) {
  */
 void draw_particle(struct GdObj *obj) {
     struct ObjParticle *ptc = (struct ObjParticle *) obj;
-    GdColour white;
-    GdColour black;
+    ColorRGBf white;
+    ColorRGBf black;
     f32 brightness;
     if (ptc->timeout > 0) {
         vec3f_copy(white, sClrWhite);

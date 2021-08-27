@@ -473,13 +473,13 @@ struct GraphNode *geo_make_first_child(struct GraphNode *newFirstChild) {
  * traverses the scene graph and calls the functions of global nodes.
  */
 void geo_call_global_function_nodes_helper(struct GraphNode *graphNode, s32 callContext) {
-    struct GraphNode **globalPtr;
-    struct GraphNode *curNode;
+    struct GraphNode  **globalPtr;
+    struct GraphNode   *curNode;
     struct FnGraphNode *asFnNode;
     curNode = graphNode;
     do {
         asFnNode = (struct FnGraphNode *) curNode;
-        if (curNode->type & GRAPH_NODE_TYPE_FUNCTIONAL && asFnNode->func != NULL) asFnNode->func(callContext, curNode, NULL);
+        if ((curNode->type & GRAPH_NODE_TYPE_FUNCTIONAL) && (asFnNode->func != NULL)) asFnNode->func(callContext, curNode, NULL);
         if (curNode->children != NULL) {
             switch (curNode->type) {
                 case GRAPH_NODE_TYPE_MASTER_LIST: globalPtr = (struct GraphNode **) &gCurGraphNodeMasterList; break;
@@ -542,9 +542,7 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
 void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo *spawn) {
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
     vec3a_copy(graphNode->angle, spawn->startAngle);
-    graphNode->pos[0]           = (f32) spawn->startPos[0];
-    graphNode->pos[1]           = (f32) spawn->startPos[1];
-    graphNode->pos[2]           = (f32) spawn->startPos[2];
+    vec3s_to_vec3f(graphNode->pos, spawn->startPos);
     graphNode->areaIndex        = spawn->areaIndex;
     graphNode->activeAreaIndex  = spawn->activeAreaIndex;
     graphNode->sharedChild      = spawn->modelNode;

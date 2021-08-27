@@ -102,7 +102,6 @@ void controllable_platform_shake_on_wall_hit(void) {
         o->oFaceAngleRoll  = (sins(o->oTimer * 0x1000) * 182.04444f * 10.0f);
         o->oPosY           = (o->oControllablePlatformInitPosY + (sins(o->oTimer * 0x2000) * 20.0f));
     }
-
     if (o->oTimer == 32) {
         sControllablePlatformDirectionState = o->oControllablePlatformWallHitDirection;
         o->oFaceAnglePitch                  = 0x0;
@@ -180,6 +179,6 @@ void bhv_controllable_platform_loop(void) {
     controllable_platform_tilt_from_mario();
     o->oPosX += o->oVelX;
     o->oPosZ += o->oVelZ;
-    if (sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED
-     && sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING) cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
+    if ((sControllablePlatformDirectionState != DIRECTION_STATE_STOPPED)
+     && (sControllablePlatformDirectionState != DIRECTION_STATE_DISAPPEARING)) cur_obj_play_sound_1(SOUND_ENV_ELEVATOR2);
 }

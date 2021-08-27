@@ -8,6 +8,7 @@
 #define ENVFX_SNOW_NORMAL       0x1  // CCM, SL
 #define ENVFX_SNOW_WATER        0x2  // Secret Aquarium, Sunken Ship
 #define ENVFX_SNOW_BLIZZARD     0x3  // unused
+#define ENVFX_SNOW_LAVA         0x4  //! TODO: Lava embers
 
 #define ENVFX_BUBBLE_START      0xA // Separates snow effects and flower/bubble effects
 
@@ -19,9 +20,10 @@
 struct EnvFxParticle {
     s8 isAlive;
     AnimFrame16 animFrame; // lava bubbles and flowers have frame animations
-    s32 xPos;
-    s32 yPos;
-    s32 zPos;
+    Vec3i pos;
+    // s32 xPos;
+    // s32 yPos;
+    // s32 zPos;
     s32 angleAndDist[2]; // for whirpools, [0] = angle from center, [1] = distance from center
     s32 unusedBubbleVar; // set to zero for bubbles when respawning, never used elsewhere
     s32 bubbleY; // for Bubbles, yPos is always set to this

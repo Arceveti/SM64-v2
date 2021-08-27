@@ -49,6 +49,7 @@ typedef uintptr_t GeoLayout;
 typedef uintptr_t LevelScript;
 typedef s32 DrawingLayer;
 typedef s16 Angle;
+typedef u16 UAngle;
 typedef f32 Normal;
 typedef s32 CameraTransitionAngle;
 typedef s16 Movtex;
@@ -83,14 +84,19 @@ typedef s16 TextureCoord;
 typedef TextureCoord ScreenPos;
 typedef uintptr_t BehaviorScript;
 typedef u8 uchar;
+typedef f32 ColorF;
 typedef u8 Color;
 typedef Color Alpha;
 typedef Color Texture;
 typedef u16 ImageTexture;
 
+typedef VtxPosF   Vec3vf[3];
+typedef VtxPosS   Vec3vs[3];
 typedef Angle     Vec3a[3];
 typedef Normal    Vec3n[3];
 typedef Collision Vec3t[3];
+
+typedef ColorF ColorRGBf[3];
 
 typedef Color ColorRGB[3];
 typedef Color ColorRGBA[4];

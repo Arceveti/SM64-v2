@@ -235,15 +235,9 @@ void copy_mario_state_to_object(void) {
     if (gCurrentObject != gMarioObject) i++;
     vec3f_copy(&gCurrentObject->oVelVec, gMarioStates[i].vel);
     vec3f_copy(&gCurrentObject->oPosVec, gMarioStates[i].pos);
-    gCurrentObject->oMoveAnglePitch = gCurrentObject->header.gfx.angle[0];
-    gCurrentObject->oMoveAngleYaw   = gCurrentObject->header.gfx.angle[1];
-    gCurrentObject->oMoveAngleRoll  = gCurrentObject->header.gfx.angle[2];
-    gCurrentObject->oFaceAnglePitch = gCurrentObject->header.gfx.angle[0];
-    gCurrentObject->oFaceAngleYaw   = gCurrentObject->header.gfx.angle[1];
-    gCurrentObject->oFaceAngleRoll  = gCurrentObject->header.gfx.angle[2];
-    gCurrentObject->oAngleVelPitch  = gMarioStates[i].angleVel[0];
-    gCurrentObject->oAngleVelYaw    = gMarioStates[i].angleVel[1];
-    gCurrentObject->oAngleVelRoll   = gMarioStates[i].angleVel[2];
+    vec3s_to_vec3i(&gCurrentObject->oMoveAngleVec, gCurrentObject->header.gfx.angle);
+    vec3s_to_vec3i(&gCurrentObject->oFaceAngleVec, gCurrentObject->header.gfx.angle);
+    vec3s_to_vec3i(&gCurrentObject->oAngleVelVec, gMarioStates[i].angleVel);
 }
 
 /**
@@ -262,9 +256,8 @@ void spawn_particle(u32 activeParticleFlag, ModelID model, const BehaviorScript 
  * Mario's primary behavior update function.
  */
 void bhv_mario_update(void) {
-    u32 particleFlags = 0x0;
     s32 i;
-    particleFlags = execute_mario_action(gCurrentObject);
+    u32 particleFlags = execute_mario_action(gCurrentObject);
     gCurrentObject->oMarioParticleFlags = particleFlags;
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object
@@ -385,7 +378,7 @@ void unload_objects_from_area(s32 areaIndex) {
     struct ObjectNode *list;
     s32 i;
     gObjectLists = gObjectListArray;
-    for (i = 0; i < NUM_OBJ_LISTS; i++) {
+    for ((i = 0); (i < NUM_OBJ_LISTS); (i++)) {
         list = gObjectLists + i;
         node = list->next;
         while (node != list) {
@@ -418,7 +411,7 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
             object->oBehParams        = spawnInfo->behaviorArg;
             // The second byte of the behavior parameters is copied over to a special field
             // as it is the most frequently used by objects.
-            object->oBehParams2ndByte = ((spawnInfo->behaviorArg) >> 16) & 0xFF;
+            object->oBehParams2ndByte = (((spawnInfo->behaviorArg) >> 16) & 0xFF);
             object->behavior          = script;
             // object->unused1           = 0;
             // Record death/collection in the SpawnInfo
@@ -429,15 +422,9 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
                 geo_make_first_child(&object->header.gfx.node);
             }
             geo_obj_init_spawninfo(&object->header.gfx, spawnInfo);
-            object->oPosX             = spawnInfo->startPos[0];
-            object->oPosY             = spawnInfo->startPos[1];
-            object->oPosZ             = spawnInfo->startPos[2];
-            object->oFaceAnglePitch   = spawnInfo->startAngle[0];
-            object->oFaceAngleYaw     = spawnInfo->startAngle[1];
-            object->oFaceAngleRoll    = spawnInfo->startAngle[2];
-            object->oMoveAnglePitch   = spawnInfo->startAngle[0];
-            object->oMoveAngleYaw     = spawnInfo->startAngle[1];
-            object->oMoveAngleRoll    = spawnInfo->startAngle[2];
+            vec3s_to_vec3f(&object->oPosVec, spawnInfo->startPos);
+            vec3s_to_vec3i(&object->oFaceAngleVec, spawnInfo->startAngle);
+            vec3s_to_vec3i(&object->oMoveAngleVec, spawnInfo->startAngle);
         }
         spawnInfo = spawnInfo->next;
     }
@@ -452,14 +439,14 @@ void clear_objects(void) {
     gTimeStopState    = 0;
     gMarioObject      = NULL;
     gMarioCurrentRoom = 0;
-    for (i = 0; i < 60; i++) {
+    for ((i = 0); (i < 60); (i++)) {
         gDoorAdjacentRooms[i][0] = 0;
         gDoorAdjacentRooms[i][1] = 0;
     }
     debug_unknown_level_select_check();
     init_free_object_list();
     clear_object_lists(gObjectListArray);
-    for (i = 0; i < OBJECT_POOL_CAPACITY; i++) {
+    for ((i = 0); (i < OBJECT_POOL_CAPACITY); (i++)) {
         gObjectPool[i].activeFlags = ACTIVE_FLAG_DEACTIVATED;
         geo_reset_object_node(&gObjectPool[i].header.gfx);
     }

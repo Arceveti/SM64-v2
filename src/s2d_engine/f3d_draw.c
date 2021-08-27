@@ -26,7 +26,6 @@ void f3d_rdp_init(void) {
 void setup_f3d_texture(int idx) {
     gDPPipeSync(gdl_head++);
 
-
     gDPSetEnvColor(gdl_head++, s2d_red, s2d_green, s2d_blue, s2d_alpha);
 
     gDPLoadTextureBlock(

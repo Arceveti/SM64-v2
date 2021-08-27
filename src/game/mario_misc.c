@@ -355,7 +355,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
          && (action != ACT_HOLD_BUTT_SLIDE)
          && (action != ACT_WALKING)
          && (action != ACT_RIDING_SHELL_GROUND)) vec3a_copy(bodyState->torsoAngle, gVec3sZero);
-        //! vec3s_copy_offset?
+        // offset by -1
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
         rotNode->rotation[2] = bodyState->torsoAngle[0];
@@ -377,7 +377,7 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
             rotNode->rotation[0] = gPlayerCameraState->headRotation[1];
             rotNode->rotation[2] = gPlayerCameraState->headRotation[0];
         } else if (action & ACT_FLAG_WATER_OR_TEXT) {
-            //! vec3s_copy_offset?
+            // offset by -1
             rotNode->rotation[0] = bodyState->headAngle[1];
             rotNode->rotation[1] = bodyState->headAngle[2];
             rotNode->rotation[2] = bodyState->headAngle[0];
