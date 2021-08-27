@@ -125,10 +125,10 @@ Bool32 mario_lose_cap_to_enemy(UNUSED u32 enemyType);
 Bool32 mario_lose_cap_to_enemy(       u32 enemyType);
 #endif
 void mario_retrieve_cap(void);
-struct Object *mario_get_collided_object( struct MarioState *m, u32 interactType);
-Bool32 mario_check_object_grab(           struct MarioState *m                  );
-u32 get_door_save_file_flag(              struct Object     *door               );
-void mario_process_interactions(          struct MarioState *m                  );
-void mario_handle_special_floors(         struct MarioState *m                  );
+struct Object *mario_get_collided_object( struct MarioState *m, InteractType interactType);
+Bool32 mario_check_object_grab(           struct MarioState *m                           );
+u32 get_door_save_file_flag(              struct Object     *door                        );
+void mario_process_interactions(          struct MarioState *m                           );
+void mario_handle_special_floors(         struct MarioState *m                           );
 
 #endif // INTERACTION_H

@@ -198,6 +198,7 @@ void linear_mtxf_transpose_mul_vec3f(     Mat4  mtx, Vec3f dst, Vec3f v);
 void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
 void mtxf_rotate_xy(                      Mtx  *mtx, Angle angle);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
+void create_transformation_from_matrices( Mat4  dst, Mat4 a1, Mat4 a2);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 f32    det_2x2(f32 a, f32 b, f32 c, f32 d);
 f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,

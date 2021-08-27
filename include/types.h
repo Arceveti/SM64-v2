@@ -43,6 +43,7 @@ typedef s16 Vec4s[4];
 typedef s32 Vec4i[4];
 typedef f32 Vec4f[4];
 
+typedef f32 Mat3[3][3];
 typedef f32 Mat4[4][4];
 
 typedef uintptr_t GeoLayout;
@@ -73,6 +74,7 @@ typedef s32 AnimAccel;
 typedef s32 MarioAction;
 typedef s32 MarioActionArg;
 typedef u32 MarioInteraction;
+typedef u32 InteractType;
 typedef u32 MarioStep;
 typedef u16 ModelID;
 typedef u32 ModelID32;
@@ -197,7 +199,7 @@ struct Object
     /*0x000*/ struct ObjectNode header;
     /*0x068*/ struct Object *parentObj;
     /*0x06C*/ struct Object *prevObj;
-    /*0x070*/ u32 collidedObjInteractTypes;
+    /*0x070*/ InteractType collidedObjInteractTypes;
     /*0x074*/ s16 activeFlags;
     /*0x076*/ s16 numCollidedObjs;
     /*0x078*/ struct Object *collidedObjs[4];
@@ -255,7 +257,7 @@ struct Object
 
 struct ObjectHitbox
 {
-    /*0x00*/ u32 interactType;
+    /*0x00*/ InteractType interactType;
     /*0x04*/ u8  downOffset;
     /*0x05*/ s8  damageOrCoinValue;
     /*0x06*/ s8  health;

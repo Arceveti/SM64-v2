@@ -124,12 +124,12 @@ static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ
         if ((surface->normal.x < -COS50) || (surface->normal.x > COS50)) surface->flags |= SURFACE_FLAG_X_PROJECTION;
 #endif
     }
-    surfacePriority  = surface->upperY * sortDir;
+    surfacePriority  = (surface->upperY * sortDir);
     newNode->surface = surface;
     list             = &(dynamic ? gDynamicSurfacePartition : gStaticSurfacePartition)[cellZ][cellX][listIndex];
     // Loop until we find the appropriate place for the surface in the list.
     while (list->next != NULL) {
-        priority  = list->next->surface->vertex1[1] * sortDir;
+        priority  = (list->next->surface->upperY * sortDir);
         if (surfacePriority > priority) break;
         list      = list->next;
     }

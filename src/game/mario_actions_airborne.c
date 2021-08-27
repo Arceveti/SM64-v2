@@ -166,8 +166,7 @@ void update_air_with_turn(struct MarioState *m) {
             if ((m->forwardVel > 4.0f) || (absYVel > 36.0f)) {
                 turnRange = min(((m->intendedMag - m->forwardVel) * absYVel), DEGREES(90));
                 if (turnRange < 0x100) turnRange = 0x100;
-                // m->faceAngle[1] = (m->intendedYaw - approach_s32(intendedDYaw, 0x0, turnRange, turnRange));
-                m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, turnRange);
+                approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
             }
             sidewaysSpeed = (intendedMag * sins(intendedDYaw) * 10.0f);
 #else

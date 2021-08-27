@@ -583,8 +583,6 @@ void reset_camera(                struct Camera *c);
 void init_camera(                 struct Camera *c);
 void select_mario_cam_mode(void);
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context);
-void object_pos_to_vec3f(Vec3f dst, struct Object *o);
-void vec3f_to_object_pos(           struct Object *o, Vec3f src);
 Bool32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *splineSegment, f32 *progress);
 s32  cam_select_alt_mode(s32 angle);
 s32  set_cam_angle(      s32 mode);

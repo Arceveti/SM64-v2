@@ -443,9 +443,9 @@ Bool32 obj_find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
         //? can xyz be a vec
-        dist[0] = hitbox.pos[0] - x;
-        dist[1] = hitbox.pos[1] - y;
-        dist[2] = hitbox.pos[2] - z;
+        dist[0] = (hitbox.pos[0] - x);
+        dist[1] = (hitbox.pos[1] - y);
+        dist[2] = (hitbox.pos[2] - z);
         return TRUE;
     } else {
         return FALSE;

@@ -63,6 +63,7 @@
 - Objects:
     - Make step height per-object
 - Physics/Movement:
+    - Make Mario's collision based on the center of hitbox instead of the bottom
     - Ability to move between walls that share an edge when ledge grab sidling
     - Hanging quarter steps?
     - Gravity direction support

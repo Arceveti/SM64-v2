@@ -99,7 +99,7 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
 
 void hoot_act_ascent(void) {
     o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw, atan2s(-o->oPosZ, -o->oPosX), 0x500);
-    o->oMoveAnglePitch = 0xCE38;
+    o->oMoveAnglePitch = DEGREES(290);
     if (o->oTimer >= 29) {
         cur_obj_play_sound_1(SOUND_ENV_WIND2);
         o->header.gfx.animInfo.animFrame = 1;
@@ -187,8 +187,7 @@ void bhv_hoot_loop(void) {
             break;
         case HOOT_AVAIL_WANTS_TO_TALK:
             hoot_awake_loop();
-            if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK 
-                && cutscene_object_with_dialog(CUTSCENE_DIALOG, o, DIALOG_044)) {
+            if ((set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK) && cutscene_object_with_dialog(CUTSCENE_DIALOG, o, DIALOG_044)) {
                 set_mario_npc_dialog(MARIO_DIALOG_STOP);
                 cur_obj_become_tangible();
                 o->oHootAvailability = HOOT_AVAIL_READY_TO_FLY;

@@ -219,8 +219,7 @@ static MarioStep perform_water_step(struct MarioState *m) {
     // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1.0f - m->floor->normal.y)) {
     //     floorYaw = atan2s(m->floor->normal.z, m->floor->normal.x);
     //     floorTurn = (1.0f - m->floor->normal.y) * 0x800;
-    //     // m->faceAngle[1] = floorYaw - approach_s32((floorYaw - m->faceAngle[1]), 0x0, floorTurn, floorTurn);
-    //     m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], floorYaw, floorTurn);
+    //     m->faceAngle[1] = approach_s16_symmetric_bool(&m->faceAngle[1], floorYaw, floorTurn);
     // }
 #else
     vec3f_sum(nextPos, m->pos, step);
@@ -968,8 +967,7 @@ static void update_metal_water_walking_speed(struct MarioState *m) {
         m->forwardVel -= 1.0f;
     }
     if (m->forwardVel > 32.0f) m->forwardVel = 32.0f;
-    // m->faceAngle[1] = (m->intendedYaw - approach_s32((Angle)(m->intendedYaw - m->faceAngle[1]), 0x0, 0x800, 0x800));
-    m->faceAngle[1] = approach_s16_symmetric(m->faceAngle[1], m->intendedYaw, 0x800);
+    approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, 0x800);
     m->slideVelX    = (m->forwardVel * sins(m->faceAngle[1]));
     m->slideVelZ    = (m->forwardVel * coss(m->faceAngle[1]));
     m->vel[0]       =  m->slideVelX;

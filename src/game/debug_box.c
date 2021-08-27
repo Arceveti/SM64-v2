@@ -69,12 +69,12 @@ extern Mat4 gMatStack[32]; //XXX: Hack
 /**
  * The color that new boxes will be drawn with.
  */
-u32 sCurBoxColor = (DBG_BOX_ALPHA << 24 | DBG_BOX_DEF_COLOR);
+u32 sCurBoxColor = ((DBG_BOX_ALPHA << 24) | DBG_BOX_DEF_COLOR);
 
 /**
  * The allocated size of a rotated box's dl
  */
-#define DBG_BOX_DLSIZE ((s32)(6 * sizeof(Gfx) + 8 * sizeof(Vtx)))
+#define DBG_BOX_DLSIZE ((s32)((6 * sizeof(Gfx)) + (8 * sizeof(Vtx))))
 
 /**
  * Sets up the RCP for drawing the boxes
@@ -143,13 +143,13 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     struct Surface *surf;
     s32 i = 0;
     s32 col[3] = {0xFF, 0x00, 0x00};
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return;
-    CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    for (i = 0; i < 8; i++) {
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return;
+    register const CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    for ((i = 0); (i < 8); (i++)) {
         switch (i) {
             case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; col[0] = 0x00; col[1] = 0xFF; col[2] = 0x00; break;
             case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; col[0] = 0x00; col[1] = 0xFF; col[2] = 0x00; break;
@@ -230,16 +230,15 @@ void visual_surface_display(Vtx *verts, s32 iteration) {
 
 s32 iterate_surface_count(s32 x, s32 z) {
     struct SurfaceNode *node;
-    s32 i = 0;
-    s32 j = 0;
+    s32 i = 0, j = 0;
     Collision *p = gEnvironmentRegions;
     s32 numRegions;
-    if (x <= -LEVEL_BOUNDARY_MAX
-     || x >=  LEVEL_BOUNDARY_MAX
-     || z <= -LEVEL_BOUNDARY_MAX
-     || z >=  LEVEL_BOUNDARY_MAX) return 0;
-    CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
-    CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    if ((x <= -LEVEL_BOUNDARY_MAX)
+     || (x >=  LEVEL_BOUNDARY_MAX)
+     || (z <= -LEVEL_BOUNDARY_MAX)
+     || (z >=  LEVEL_BOUNDARY_MAX)) return 0;
+    register const CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
+    register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for ((i = 0); (i < 8); (i++)) {
         switch (i) {
             case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; break;

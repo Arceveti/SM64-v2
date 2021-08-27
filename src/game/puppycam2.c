@@ -984,9 +984,10 @@ static void puppycam_collision(void) {
             }
         }
     }
-    #define START_DIST 500
-    #define END_DIST   250
-    gPuppyCam.opacity = CLAMP((f32)(((gPuppyCam.zoom - END_DIST) / 255.0f) * (START_DIST - END_DIST)), 0, 255);
+    // #define START_DIST 500
+    // #define END_DIST   250
+    // gPuppyCam.opacity = CLAMP((f32)(((gPuppyCam.zoom - END_DIST) / 255.0f) * (START_DIST - END_DIST)), 0, 255);
+    gPuppyCam.opacity = approach_s32_symmetric(gPuppyCam.opacity, ((gPuppyCam.zoom > 320) ? 255 : 0), 51);
 }
 
 extern Vec3f sOldPosition;
@@ -995,16 +996,16 @@ extern struct PlayerGeometry sMarioGeometry;
 
 // Applies the PuppyCam values to the actual game's camera, giving the final product.
 static void puppycam_apply(void) {
-    vec3f_set(gLakituState.pos,       (f32)gPuppyCam.pos[0],   (f32)gPuppyCam.pos[1],   (f32)gPuppyCam.pos[2]);
-    vec3f_set(gLakituState.goalPos,   (f32)gPuppyCam.pos[0],   (f32)gPuppyCam.pos[1],   (f32)gPuppyCam.pos[2]);
-    vec3f_set(gLakituState.curPos,    (f32)gPuppyCam.pos[0],   (f32)gPuppyCam.pos[1],   (f32)gPuppyCam.pos[2]);
-    vec3f_set(gCamera->pos,           (f32)gPuppyCam.pos[0],   (f32)gPuppyCam.pos[1],   (f32)gPuppyCam.pos[2]);
-    vec3f_set(sOldPosition,           (f32)gPuppyCam.pos[0],   (f32)gPuppyCam.pos[1],   (f32)gPuppyCam.pos[2]);
-    vec3f_set(gLakituState.focus,     (f32)gPuppyCam.focus[0], (f32)gPuppyCam.focus[1], (f32)gPuppyCam.focus[2]);
-    vec3f_set(gLakituState.goalFocus, (f32)gPuppyCam.focus[0], (f32)gPuppyCam.focus[1], (f32)gPuppyCam.focus[2]);
-    vec3f_set(gLakituState.curFocus,  (f32)gPuppyCam.focus[0], (f32)gPuppyCam.focus[1], (f32)gPuppyCam.focus[2]);
-    vec3f_set(gCamera->focus,         (f32)gPuppyCam.focus[0], (f32)gPuppyCam.focus[1], (f32)gPuppyCam.focus[2]);
-    vec3f_set(sOldFocus,              (f32)gPuppyCam.focus[0], (f32)gPuppyCam.focus[1], (f32)gPuppyCam.focus[2]);
+    vec3s_to_vec3f(gLakituState.pos,       gPuppyCam.pos  );
+    vec3s_to_vec3f(gLakituState.goalPos,   gPuppyCam.pos  );
+    vec3s_to_vec3f(gLakituState.curPos,    gPuppyCam.pos  );
+    vec3s_to_vec3f(gCamera->pos,           gPuppyCam.pos  );
+    vec3s_to_vec3f(sOldPosition,           gPuppyCam.pos  );
+    vec3s_to_vec3f(gLakituState.focus,     gPuppyCam.focus);
+    vec3s_to_vec3f(gLakituState.goalFocus, gPuppyCam.focus);
+    vec3s_to_vec3f(gLakituState.curFocus,  gPuppyCam.focus);
+    vec3s_to_vec3f(gCamera->focus,         gPuppyCam.focus);
+    vec3s_to_vec3f(sOldFocus,              gPuppyCam.focus);
     gCamera->yaw         = gPuppyCam.yaw;
     gCamera->nextYaw     = gPuppyCam.yaw;
     gLakituState.yaw     = gPuppyCam.yaw;

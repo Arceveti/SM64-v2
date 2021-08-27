@@ -14,10 +14,10 @@ void intro_lakitu_set_offset_from_camera(struct Object *o, Vec3f offset) {
     Vec3a focusAngles;
     Angle offsetPitch, offsetYaw;
     vec3f_add(offset, gCamera->pos);
-    vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &focusAngles[0],              &focusAngles[1]);
-    vec3f_get_dist_and_angle(gCamera->pos,         offset, &dist, &offsetPitch,                 &offsetYaw);
-    vec3f_set_dist_and_angle(gCamera->pos,         offset,  dist,  focusAngles[0] + offsetPitch, focusAngles[1] + offsetYaw);
-    vec3f_to_object_pos(o, offset);
+    vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &focusAngles[0],                &focusAngles[1]);
+    vec3f_get_dist_and_angle(gCamera->pos,         offset, &dist, &offsetPitch,                   &offsetYaw);
+    vec3f_set_dist_and_angle(gCamera->pos,         offset,  dist, (focusAngles[0] + offsetPitch), (focusAngles[1] + offsetYaw));
+    vec3f_copy(&o->oPosVec, offset);
 }
 
 void intro_lakitu_set_focus(struct Object *o, Vec3f newFocus) {
@@ -112,8 +112,7 @@ void bhv_intro_lakitu_loop(void) {
             approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituEndBirds1DestZ, 512.0f, 0.05f);
             toPoint[0] += gCurrentObject->oIntroLakituEndBirds1DestY;
             approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituEndBirds1DestY,   0.0f, 0.05f);
-            vec3f_to_object_pos(gCurrentObject, toPoint);
-
+            vec3f_copy(&gCurrentObject->oPosVec, toPoint);
             if (gCurrentObject->oTimer == 31) {
                 gCurrentObject->oPosY -= 158.0f;
                 // Spawn white ground particles
@@ -137,7 +136,7 @@ void bhv_intro_lakitu_loop(void) {
             cur_obj_enable_rendering();
             vec3f_set(offset, -100.0f, 100.0f, 300.0f);
             offset_rotated(toPoint, gCamera->pos, offset, sMarioCamState->faceAngle);
-            vec3f_to_object_pos(gCurrentObject, toPoint);
+            vec3f_copy(&gCurrentObject->oPosVec, toPoint);
             gCurrentObject->oMoveAnglePitch = 0x1000;
             gCurrentObject->oMoveAngleYaw   = 0x9000;
             gCurrentObject->oFaceAnglePitch = (gCurrentObject->oMoveAnglePitch / 2);
@@ -145,7 +144,7 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oAction         = INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2;
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2:
-            object_pos_to_vec3f(toPoint, gCurrentObject);
+            vec3f_copy(toPoint, &gCurrentObject->oPosVec);
             if (gCurrentObject->oTimer > 60) {
                 approach_f32_asymptotic_bool(&gCurrentObject->oForwardVel, -10.0f, 0.05f);
                 gCurrentObject->oMoveAngleYaw   += 0x78;
@@ -161,7 +160,7 @@ void bhv_intro_lakitu_loop(void) {
             cur_obj_set_pos_via_transform();
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3:
-            object_pos_to_vec3f(toPoint, gCurrentObject);
+            vec3f_copy(toPoint, &gCurrentObject->oPosVec);
             approach_f32_asymptotic_bool(&gCurrentObject->oForwardVel, 60.0f, 0.05f);
             vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
             gCurrentObject->oFaceAngleYaw   = approach_s16_symmetric(gCurrentObject->oFaceAngleYaw, targetYaw, 0x200);

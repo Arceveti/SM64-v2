@@ -1244,7 +1244,7 @@ CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Ve
     yaw = (sModeOffsetYaw + DEGREES(45));
     // Get boss's position and whether Mario is holding it.
     if ((o = gSecondCameraFocus) != NULL) {
-        object_pos_to_vec3f(secondFocus, o);
+        vec3f_copy(secondFocus, &o->oPosVec);
         heldState = o->oHeldState;
     } else {
     // If no boss is there, just rotate around the area's center point.
@@ -2678,19 +2678,6 @@ Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context) {
     return NULL;
 }
 
-//! move to object_helpers?
-void object_pos_to_vec3f(Vec3f dst, struct Object *o) {
-    vec3f_copy(dst, &o->oPosVec);
-}
-
-void vec3f_to_object_pos(struct Object *o, Vec3f src) {
-    vec3f_copy(&o->oPosVec, src);
-}
-
-void unused_object_angle_to_vec3s(Vec3s dst, struct Object *o) {
-    vec3i_to_vec3s(dst, &o->oMoveAngleVec);
-}
-
 /**
  * Computes the point that is `progress` percent of the way through segment `splineSegment` of `spline`,
  * and stores the result in `p`. `progress` and `splineSegment` are updated if `progress` becomes >= 1.0.
@@ -2727,7 +2714,7 @@ Bool32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16
     if ((spline[segment    ].index == -1)
      || (spline[segment + 1].index == -1)
      || (spline[segment + 2].index == -1)) return TRUE;
-    for (i = 0; i < 4; i++) {
+    for ((i = 0); (i < 4); (i++)) {
         controlPoints[i][0] = spline[segment + i].point[0];
         controlPoints[i][1] = spline[segment + i].point[1];
         controlPoints[i][2] = spline[segment + i].point[2];
@@ -2765,7 +2752,7 @@ s32 cam_select_alt_mode(s32 selection) {
         sCameraSoundFlags |= CAM_SOUND_UNUSED_SELECT_MARIO;
     }
     // The alternate mode is up-close, but the player just selected fixed in the pause menu
-    if (selection == CAM_SELECTION_FIXED && (sSelectionFlags & CAM_MODE_MARIO_SELECTED)) {
+    if ((selection == CAM_SELECTION_FIXED) && (sSelectionFlags & CAM_MODE_MARIO_SELECTED)) {
         // So change to normal mode in case the user paused in up-close mode
         set_cam_angle(CAM_ANGLE_LAKITU);
         sSelectionFlags &= ~CAM_MODE_MARIO_SELECTED;
@@ -2839,11 +2826,7 @@ void shake_camera_handheld(Vec3f pos, Vec3f focus) {
     if (sHandheldShakeMag == 0) {
         vec3f_set(shakeOffset, 0.0f, 0.0f, 0.0f);
     } else {
-        for ((i = 0); (i < 4); (i++)) {
-            shakeSpline[i][0] = sHandheldShakeSpline[i].point[0];
-            shakeSpline[i][1] = sHandheldShakeSpline[i].point[1];
-            shakeSpline[i][2] = sHandheldShakeSpline[i].point[2];
-        }
+        for ((i = 0); (i < 4); (i++)) vec3s_to_vec3f(shakeSpline[i], sHandheldShakeSpline[i].point);
         evaluate_cubic_spline(sHandheldShakeTimer, shakeOffset, shakeSpline[0], shakeSpline[1], shakeSpline[2], shakeSpline[3]);
         if (1.0f <= (sHandheldShakeTimer += sHandheldShakeInc)) {
             // The first 3 control points are always (0,0,0), so the random spline is always just a
@@ -2959,7 +2942,7 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, f32 posX, f32 posY, f32 p
     goalD[0] = (gLakituState.goalPos[0] - posX);
     goalD[1] = (gLakituState.goalPos[1] - posY);
     goalD[2] = (gLakituState.goalPos[2] - posZ);
-    f32 dist   = sqrtf(sqr(goalD[0]) + sqr(goalD[1]) + sqr(goalD[2]));
+    f32 dist = vec3f_mag(goalD);
     if (maxDist > dist) {
         vec3f_set(pos, posX, posY, posZ);
         vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &pitch, &yaw);
@@ -6035,7 +6018,7 @@ void cutscene_star_spawn_store_info(struct Camera *c) {
 void cutscene_star_spawn_focus_star(struct Camera *c) {
     Vec3f starPos;
     if (gCutsceneFocus != NULL) {
-        object_pos_to_vec3f(starPos, gCutsceneFocus);
+        vec3f_copy(starPos, &gCutsceneFocus->oPosVec);
         starPos[1] += gCutsceneFocus->hitboxHeight;
         approach_vec3f_asymptotic(c->focus, starPos, 0.1f, 0.1f, 0.1f);
     }
@@ -6139,7 +6122,7 @@ void cutscene_exit_fall_to_castle_grounds(struct Camera *c) {
  * Start the red coin star spawning cutscene.
  */
 void cutscene_red_coin_star_start(struct Camera *c) {
-    object_pos_to_vec3f(sCutsceneVars[1].point, gCutsceneFocus);
+    vec3f_copy(sCutsceneVars[1].point, &gCutsceneFocus->oPosVec);
     store_info_star(c);
     // Store the default fov for after the cutscene
     sCutsceneVars[2].point[2] = sFOVState.fov;
@@ -6274,7 +6257,7 @@ void cutscene_prepare_cannon_start(struct Camera *c) {
     vec3f_copy(sCutsceneVars[0].point, c->focus);
     sCutsceneVars[2].point[0] = 30.0f;
     // Store the cannon door's position in sCutsceneVars[3]'s point
-    object_pos_to_vec3f(sCutsceneVars[3].point, gCutsceneFocus);
+    vec3f_copy(sCutsceneVars[3].point, &gCutsceneFocus->oPosVec);
     vec3a_set(sCutsceneVars[5].angle, 0x0, 0x0, 0x0);
 }
 
@@ -6647,7 +6630,7 @@ void cutscene_dialog_start(struct Camera *c) {
     vec3f_copy(sCutsceneVars[8].point, sMarioCamState->pos);
     sCutsceneVars[8].point[1] += 125.0f;
     // Store gCutsceneFocus's position and yaw
-    object_pos_to_vec3f(sCutsceneVars[9].point, gCutsceneFocus);
+    vec3f_copy(sCutsceneVars[9].point, &gCutsceneFocus->oPosVec);
     sCutsceneVars[9].point[1] += (gCutsceneFocus->hitboxHeight + 200.0f);
     vec3f_get_yaw(sCutsceneVars[8].point, sCutsceneVars[9].point, &sCutsceneVars[9].angle[1]);
     vec3f_get_yaw(sMarioCamState->pos, gLakituState.curPos, &yaw);
@@ -8914,7 +8897,7 @@ void obj_rotate_towards_point(struct Object *o, Vec3f point, Angle pitchOff, Ang
     f32 dist;
     Angle pitch, yaw;
     Vec3f oPos;
-    object_pos_to_vec3f(oPos, o);
+    vec3f_copy(oPos, &o->oPosVec);
     vec3f_get_dist_and_angle(oPos, point, &dist, &pitch, &yaw);
     o->oMoveAnglePitch = approach_s16_asymptotic(o->oMoveAnglePitch, (pitchOff -  pitch), pitchDiv);
     o->oMoveAngleYaw   = approach_s16_asymptotic(o->oMoveAngleYaw,   (yaw      + yawOff),   yawDiv);

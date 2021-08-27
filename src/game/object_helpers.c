@@ -178,31 +178,6 @@ void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
     dst[3][3] = src[3][3];
 }
 
-//! move to math_util
-void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
-    register f32 x     = ((a2[3][0] * a2[0][0]) + (a2[3][1] * a2[0][1]) + (a2[3][2] * a2[0][2]));
-    register f32 y     = ((a2[3][0] * a2[1][0]) + (a2[3][1] * a2[1][1]) + (a2[3][2] * a2[1][2]));
-    register f32 z     = ((a2[3][0] * a2[2][0]) + (a2[3][1] * a2[2][1]) + (a2[3][2] * a2[2][2]));
-
-    dst[0][0] = ((a1[0][0] * a2[0][0]) + (a1[0][1] * a2[0][1]) + (a1[0][2] * a2[0][2]));
-    dst[0][1] = ((a1[0][0] * a2[1][0]) + (a1[0][1] * a2[1][1]) + (a1[0][2] * a2[1][2]));
-    dst[0][2] = ((a1[0][0] * a2[2][0]) + (a1[0][1] * a2[2][1]) + (a1[0][2] * a2[2][2]));
-
-    dst[1][0] = ((a1[1][0] * a2[0][0]) + (a1[1][1] * a2[0][1]) + (a1[1][2] * a2[0][2]));
-    dst[1][1] = ((a1[1][0] * a2[1][0]) + (a1[1][1] * a2[1][1]) + (a1[1][2] * a2[1][2]));
-    dst[1][2] = ((a1[1][0] * a2[2][0]) + (a1[1][1] * a2[2][1]) + (a1[1][2] * a2[2][2]));
-
-    dst[2][0] = ((a1[2][0] * a2[0][0]) + (a1[2][1] * a2[0][1]) + (a1[2][2] * a2[0][2]));
-    dst[2][1] = ((a1[2][0] * a2[1][0]) + (a1[2][1] * a2[1][1]) + (a1[2][2] * a2[1][2]));
-    dst[2][2] = ((a1[2][0] * a2[2][0]) + (a1[2][1] * a2[2][1]) + (a1[2][2] * a2[2][2]));
-
-    dst[3][0] = ((a1[3][0] * a2[0][0]) + (a1[3][1] * a2[0][1]) + (a1[3][2] * a2[0][2]) - x);
-    dst[3][1] = ((a1[3][0] * a2[1][0]) + (a1[3][1] * a2[1][1]) + (a1[3][2] * a2[1][2]) - y);
-    dst[3][2] = ((a1[3][0] * a2[2][0]) + (a1[3][1] * a2[2][1]) + (a1[3][2] * a2[2][2]) - z);
-
-    mtxf_end(dst);
-}
-
 void obj_set_held_state(struct Object *obj, const BehaviorScript *heldBehavior) {
     obj->parentObj = o;
     if (obj->oFlags & OBJ_FLAG_HOLDABLE) {
@@ -2017,7 +1992,7 @@ Bool32 obj_attack_collided_from_other_object(struct Object *obj) {
     if (numCollidedObjs != 0) {
         other = obj->collidedObjs[0];
         if (other != gMarioObject) {
-            other->oInteractStatus |= ATTACK_PUNCH | INT_STATUS_WAS_ATTACKED | INT_STATUS_INTERACTED | INT_STATUS_TOUCHED_BOB_OMB;
+            other->oInteractStatus |= (ATTACK_PUNCH | INT_STATUS_WAS_ATTACKED | INT_STATUS_INTERACTED | INT_STATUS_TOUCHED_BOB_OMB);
             touchedOtherObject = TRUE;
         }
     }

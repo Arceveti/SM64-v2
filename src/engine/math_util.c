@@ -1303,6 +1303,30 @@ void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
     dest[2]  = ((objMtx[3][0] * camMtx[2][0]) + (objMtx[3][1] * camMtx[2][1]) + (objMtx[3][2] * camMtx[2][2]) - camZ);
 }
 
+void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
+    register f32 x = ((a2[3][0] * a2[0][0]) + (a2[3][1] * a2[0][1]) + (a2[3][2] * a2[0][2]));
+    register f32 y = ((a2[3][0] * a2[1][0]) + (a2[3][1] * a2[1][1]) + (a2[3][2] * a2[1][2]));
+    register f32 z = ((a2[3][0] * a2[2][0]) + (a2[3][1] * a2[2][1]) + (a2[3][2] * a2[2][2]));
+
+    dst[0][0] = ((a1[0][0] * a2[0][0]) + (a1[0][1] * a2[0][1]) + (a1[0][2] * a2[0][2]));
+    dst[0][1] = ((a1[0][0] * a2[1][0]) + (a1[0][1] * a2[1][1]) + (a1[0][2] * a2[1][2]));
+    dst[0][2] = ((a1[0][0] * a2[2][0]) + (a1[0][1] * a2[2][1]) + (a1[0][2] * a2[2][2]));
+
+    dst[1][0] = ((a1[1][0] * a2[0][0]) + (a1[1][1] * a2[0][1]) + (a1[1][2] * a2[0][2]));
+    dst[1][1] = ((a1[1][0] * a2[1][0]) + (a1[1][1] * a2[1][1]) + (a1[1][2] * a2[1][2]));
+    dst[1][2] = ((a1[1][0] * a2[2][0]) + (a1[1][1] * a2[2][1]) + (a1[1][2] * a2[2][2]));
+
+    dst[2][0] = ((a1[2][0] * a2[0][0]) + (a1[2][1] * a2[0][1]) + (a1[2][2] * a2[0][2]));
+    dst[2][1] = ((a1[2][0] * a2[1][0]) + (a1[2][1] * a2[1][1]) + (a1[2][2] * a2[1][2]));
+    dst[2][2] = ((a1[2][0] * a2[2][0]) + (a1[2][1] * a2[2][1]) + (a1[2][2] * a2[2][2]));
+
+    dst[3][0] = ((a1[3][0] * a2[0][0]) + (a1[3][1] * a2[0][1]) + (a1[3][2] * a2[0][2]) - x);
+    dst[3][1] = ((a1[3][0] * a2[1][0]) + (a1[3][1] * a2[1][1]) + (a1[3][2] * a2[1][2]) - y);
+    dst[3][2] = ((a1[3][0] * a2[2][0]) + (a1[3][1] * a2[2][1]) + (a1[3][2] * a2[2][2]) - z);
+
+    mtxf_end(dst);
+}
+
 // Rotation/translation matrix inverse
 void mtxf_inverse_rotate_translate(Mat4 in, Mat4 out) {
     Mat4 invRot;
@@ -1393,7 +1417,13 @@ s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
 }
 
 Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
-    *current = approach_s16_symmetric(*current, target, inc);
+    // *current = approach_s16_symmetric(*current, target, inc);
+    s16 dist = (target - *current);
+    if (dist >= 0) { // target >= current
+        *current = ((dist >  inc) ? (*current + inc) : target);
+    } else { // target < current
+        *current = ((dist < -inc) ? (*current - inc) : target);
+    }
     return !(*current == target);
 }
 

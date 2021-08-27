@@ -1034,6 +1034,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
                 break;
             case 4:
+                print_text_fmt_int(210, 120, "C2 %d", m->marioObj->numCollidedObjs);
                 print_text_fmt_int(210, 104, "C2 %d", (gGlobalTimer & 0x7FFF));
                 print_text_fmt_int(210,  88, "AT %d", m->actionTimer);
                 print_text_fmt_int(210,  72, "AY %d", (coss(m->intendedYaw) * m->intendedMag)); // far to near

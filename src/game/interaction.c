@@ -47,39 +47,39 @@
 
 Bool8  sDelayInvincTimer;
 Bool16 sInvulnerable;
-Bool32 interact_coin(          struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_water_ring(    struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_star_or_key(   struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_bbh_entrance(  struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_warp(          struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_warp_door(     struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_door(          struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_cannon_base(   struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_igloo_barrier( struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_tornado(       struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_whirlpool(     struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_strong_wind(   struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_flame(         struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_snufit_bullet( struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_clam_or_bubba( struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_bully(         struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_shock(         struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_mr_blizzard(   struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_hit_from_below(struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_bounce_top(    struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_spiny_walking( struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_damage(        struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_breakable(     struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_koopa_shell(   struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_pole(          struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_hoot(          struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_cap(           struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_grabbable(     struct MarioState *m, u32 interactType, struct Object *o);
-Bool32 interact_text(          struct MarioState *m, u32 interactType, struct Object *o);
+Bool32 interact_coin(          struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_water_ring(    struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_star_or_key(   struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_bbh_entrance(  struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_warp(          struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_warp_door(     struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_door(          struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_cannon_base(   struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_igloo_barrier( struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_tornado(       struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_whirlpool(     struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_strong_wind(   struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_flame(         struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_snufit_bullet( struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_clam_or_bubba( struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_bully(         struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_shock(         struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_mr_blizzard(   struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_hit_from_below(struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_bounce_top(    struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_spiny_walking( struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_damage(        struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_breakable(     struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_koopa_shell(   struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_pole(          struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_hoot(          struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_cap(           struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_grabbable(     struct MarioState *m, InteractType interactType, struct Object *o);
+Bool32 interact_text(          struct MarioState *m, InteractType interactType, struct Object *o);
 
 struct InteractionHandler {
-    u32 interactType;
-    u32 (*handler)(struct MarioState *, u32, struct Object *);
+    InteractType interactType;
+    Bool32 (*handler)(struct MarioState *m, InteractType interactType, struct Object *o);
 };
 
 static struct InteractionHandler sInteractionHandlers[] = {
@@ -169,8 +169,8 @@ Angle mario_obj_angle_to_object(struct MarioState *m, struct Object *o) {
  * Determines Mario's interaction with a given object depending on their proximity,
  * action, speed, and position.
  */
-u32 determine_interaction(struct MarioState *m, struct Object *o) {
-    u32 interaction    = 0;
+MarioInteraction determine_interaction(struct MarioState *m, struct Object *o) {
+    MarioInteraction interaction = 0;
     MarioAction action = m->action;
     if (action & ACT_FLAG_ATTACKING) {
         if ((action == ACT_PUNCHING) || (action == ACT_MOVE_PUNCHING) || (action == ACT_JUMP_KICK)) {
@@ -213,7 +213,7 @@ u32 determine_interaction(struct MarioState *m, struct Object *o) {
 /**
  * Sets the interaction types for INT_STATUS_INTERACTED, INT_STATUS_WAS_ATTACKED
  */
-u32 attack_object(struct Object *o, s32 interaction) {
+u32 attack_object(struct Object *o, MarioInteraction interaction) {
     u32 attackType = 0;
     switch (interaction) {
         case INT_GROUND_POUND_OR_TWIRL: attackType = ATTACK_GROUND_POUND_OR_TWIRL; break;
@@ -326,7 +326,7 @@ Bool32 able_to_grab_object(struct MarioState *m, UNUSED struct Object *o) {
     return FALSE;
 }
 
-struct Object *mario_get_collided_object(struct MarioState *m, u32 interactType) {
+struct Object *mario_get_collided_object(struct MarioState *m, InteractType interactType) {
     s32 i;
     struct Object *object;
     for ((i = 0); (i < m->marioObj->numCollidedObjs); (i++)) {
@@ -493,7 +493,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     }
 }
 
-void bounce_back_from_attack(struct MarioState *m, u32 interaction) {
+void bounce_back_from_attack(struct MarioState *m, MarioInteraction interaction) {
     if (interaction & (INT_PUNCH | INT_KICK | INT_TRIP)) {
         if (m->action == ACT_PUNCHING) m->action = ACT_MOVE_PUNCHING;
         mario_set_forward_vel(m, ((m->action & ACT_FLAG_AIR) ? -16.0f : -48.0f));
@@ -551,7 +551,7 @@ void reset_mario_pitch(struct MarioState *m) {
     }
 }
 
-Bool32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_coin(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     m->numCoins      +=      o->oDamageOrCoinValue;
     m->healCounter   += (4 * o->oDamageOrCoinValue);
 #ifdef BREATH_METER
@@ -570,7 +570,7 @@ Bool32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Objec
     return FALSE;
 }
 
-Bool32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_water_ring(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
 #ifdef BREATH_METER
     m->breathCounter += (4 * o->oDamageOrCoinValue);
 #else
@@ -580,7 +580,7 @@ Bool32 interact_water_ring(struct MarioState *m, UNUSED u32 interactType, struct
     return FALSE;
 }
 
-Bool32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_star_or_key(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     u32 starIndex;
     MarioAction starGrabAction = ACT_STAR_DANCE_EXIT;
 #ifdef NON_STOP_STARS
@@ -644,7 +644,7 @@ Bool32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struc
     return FALSE;
 }
 
-Bool32 interact_bbh_entrance(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_bbh_entrance(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if ((m->action != ACT_BBH_ENTER_SPIN) && (m->action != ACT_BBH_ENTER_JUMP)) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_INTERACTED;
@@ -656,7 +656,7 @@ Bool32 interact_bbh_entrance(struct MarioState *m, UNUSED u32 interactType, stru
     return FALSE;
 }
 
-Bool32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_warp(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction action;
     if (o->oInteractionSubtype & INT_SUBTYPE_FADING_WARP) {
         action = m->action;
@@ -696,7 +696,7 @@ Bool32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Objec
     return FALSE;
 }
 
-Bool32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_warp_door(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction doorAction = 0;
 #ifndef DEBUG_LEVEL_SELECT
     u32 saveFlags  = save_file_get_flags();
@@ -748,7 +748,7 @@ u32 get_door_save_file_flag(struct Object *door) {
     return saveFileFlag;
 }
 
-Bool32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     s16 requiredNumStars = (o->oBehParams >> 24);
 #ifndef DEBUG_LEVEL_SELECT
     s16 numStars = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
@@ -797,7 +797,7 @@ Bool32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Objec
     return FALSE;
 }
 
-Bool32 interact_cannon_base(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_cannon_base(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (m->action != ACT_IN_CANNON) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_INTERACTED;
@@ -808,7 +808,7 @@ Bool32 interact_cannon_base(struct MarioState *m, UNUSED u32 interactType, struc
     return FALSE;
 }
 
-Bool32 interact_igloo_barrier(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_igloo_barrier(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     //! Sets used object without changing action (LOTS of interesting glitches,
     // but unfortunately the igloo barrier is the only object with this interaction
     // type)
@@ -818,7 +818,7 @@ Bool32 interact_igloo_barrier(struct MarioState *m, UNUSED u32 interactType, str
     return FALSE;
 }
 
-Bool32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_tornado(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     struct Object *marioObj = m->marioObj;
     if ((m->action != ACT_TORNADO_TWIRLING) && (m->action != ACT_SQUISHED)) {
         mario_stop_riding_and_holding(m);
@@ -838,7 +838,7 @@ Bool32 interact_tornado(struct MarioState *m, UNUSED u32 interactType, struct Ob
     return FALSE;
 }
 
-Bool32 interact_whirlpool(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_whirlpool(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     struct Object *marioObj = m->marioObj;
     if (m->action != ACT_CAUGHT_IN_WHIRLPOOL) {
         mario_stop_riding_and_holding(m);
@@ -856,7 +856,7 @@ Bool32 interact_whirlpool(struct MarioState *m, UNUSED u32 interactType, struct 
     return FALSE;
 }
 
-Bool32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_strong_wind(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (m->action != ACT_GETTING_BLOWN) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_INTERACTED;
@@ -873,7 +873,7 @@ Bool32 interact_strong_wind(struct MarioState *m, UNUSED u32 interactType, struc
     return FALSE;
 }
 
-Bool32 interact_flame(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_flame(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     u32 burningAction = ACT_BURNING_JUMP;
     if (!sInvulnerable && !(m->flags & MARIO_METAL_CAP) && !(m->flags & MARIO_VANISH_CAP)
         && !(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) {
@@ -896,7 +896,7 @@ Bool32 interact_flame(struct MarioState *m, UNUSED u32 interactType, struct Obje
     return FALSE;
 }
 
-Bool32 interact_snufit_bullet(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_snufit_bullet(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (!sInvulnerable && !(m->flags & MARIO_VANISH_CAP)) {
         if (m->flags & MARIO_METAL_CAP) {
             o->oInteractStatus = INT_STATUS_INTERACTED | INT_STATUS_WAS_ATTACKED;
@@ -914,7 +914,7 @@ Bool32 interact_snufit_bullet(struct MarioState *m, UNUSED u32 interactType, str
     return FALSE;
 }
 
-Bool32 interact_clam_or_bubba(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_clam_or_bubba(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (o->oInteractionSubtype & INT_SUBTYPE_EATS_MARIO) {
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj     = o;
@@ -926,9 +926,9 @@ Bool32 interact_clam_or_bubba(struct MarioState *m, UNUSED u32 interactType, str
     return TRUE;
 }
 
-Bool32 interact_bully(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
-    m->interactObj  = o;
+Bool32 interact_bully(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
+    MarioInteraction interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
+    m->interactObj = o;
     if (interaction & INT_ATTACK_NOT_FROM_BELOW) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
@@ -956,7 +956,7 @@ Bool32 interact_bully(struct MarioState *m, UNUSED u32 interactType, struct Obje
     return FALSE;
 }
 
-Bool32 interact_shock(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_shock(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (!sInvulnerable && !(m->flags & MARIO_VANISH_CAP)
         && !(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) {
         u32 actionArg      = !(m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING));
@@ -978,19 +978,19 @@ Bool32 interact_shock(struct MarioState *m, UNUSED u32 interactType, struct Obje
     return FALSE;
 }
 
-UNUSED static Bool32 interact_stub(UNUSED struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+UNUSED static Bool32 interact_stub(UNUSED struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (!(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) sDelayInvincTimer = TRUE;
     return FALSE;
 }
 
-Bool32 interact_mr_blizzard(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_mr_blizzard(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (take_damage_and_knock_back(m, o)) return TRUE;
     if (!(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) sDelayInvincTimer = TRUE;
     return FALSE;
 }
 
-Bool32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
+Bool32 interact_hit_from_below(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
+    MarioInteraction interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
     if (interaction & INT_ANY_ATTACK) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
@@ -1021,8 +1021,8 @@ Bool32 interact_hit_from_below(struct MarioState *m, UNUSED u32 interactType, st
     return FALSE;
 }
 
-Bool32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
+Bool32 interact_bounce_top(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
+    MarioInteraction interaction = ((m->flags & MARIO_METAL_CAP) ? INT_FAST_ATTACK_OR_SHELL : determine_interaction(m, o));
     if (interaction & INT_ATTACK_NOT_FROM_BELOW) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
@@ -1052,8 +1052,8 @@ Bool32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct
     return FALSE;
 }
 
-Bool32 interact_spiny_walking(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 interaction = determine_interaction(m, o);
+Bool32 interact_spiny_walking(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
+    MarioInteraction interaction = determine_interaction(m, o);
     if (interaction & INT_PUNCH) {
         o->oInteractStatus = INT_STATUS_INTERACTED | INT_STATUS_WAS_ATTACKED | ATTACK_PUNCH;
         bounce_back_from_attack(m, interaction);
@@ -1064,14 +1064,14 @@ Bool32 interact_spiny_walking(struct MarioState *m, UNUSED u32 interactType, str
     return FALSE;
 }
 
-Bool32 interact_damage(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_damage(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (take_damage_and_knock_back(m, o)) return TRUE;
     if (!(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) sDelayInvincTimer = TRUE;
     return FALSE;
 }
 
-Bool32 interact_breakable(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    u32 interaction = determine_interaction(m, o);
+Bool32 interact_breakable(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
+    MarioInteraction interaction = determine_interaction(m, o);
     if (interaction & INT_ATTACK_NOT_WEAK_FROM_ABOVE) {
         attack_object(o, interaction);
         bounce_back_from_attack(m, interaction);
@@ -1089,9 +1089,9 @@ Bool32 interact_breakable(struct MarioState *m, UNUSED u32 interactType, struct 
     return FALSE;
 }
 
-Bool32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_koopa_shell(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (!(m->action & ACT_FLAG_RIDING_SHELL)) {
-        u32 interaction = determine_interaction(m, o);
+        MarioInteraction interaction = determine_interaction(m, o);
         if ((interaction == INT_HIT_FROM_ABOVE)
          || (m->action == ACT_WALKING)
          || (m->action == ACT_HOLD_WALKING)) {
@@ -1109,7 +1109,7 @@ Bool32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struc
     return FALSE;
 }
 
-Bool32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 check_object_grab_mario(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if ((!(m->action & (ACT_FLAG_AIR | ACT_FLAG_INVULNERABLE | ACT_FLAG_ATTACKING)) || !sInvulnerable)
         && (o->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO)) {
         if (object_facing_mario(m, o, DEGREES(60))) {
@@ -1130,7 +1130,7 @@ Bool32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, st
     return FALSE;
 }
 
-Bool32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction actionId = (m->action & ACT_ID_MASK);
     if ((actionId >= 0x080) && (actionId < 0x0A0)) {
         if (!(m->prevAction & ACT_FLAG_ON_POLE) || (m->usedObj != o)) {
@@ -1138,11 +1138,11 @@ Bool32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Objec
 #if defined(VERSION_SH) || defined(POLE_SWING)
             f32 velConv = m->forwardVel; // conserve the velocity.
             struct Object *marioObj = m->marioObj;
-            u32 lowSpeed            = (velConv <= 10.0f);
+            Bool32 lowSpeed         = (velConv <= 10.0f);
             Angle angleToPole       = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
             if ((angleToPole < -DEGREES(60)) || (angleToPole > DEGREES(60))) return FALSE;
 #else
-            u32 lowSpeed            = (m->forwardVel <= 10.0f);
+            Bool32 lowSpeed         = (m->forwardVel <= 10.0f);
             struct Object *marioObj = m->marioObj;
 #endif
             mario_stop_riding_and_holding(m);
@@ -1173,7 +1173,7 @@ Bool32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Objec
     return FALSE;
 }
 
-Bool32 interact_hoot(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_hoot(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction actionId = m->action & ACT_ID_MASK;
     //! Can pause to advance the global timer without falling too far, allowing
     // you to regrab after letting go.
@@ -1193,7 +1193,7 @@ Bool32 interact_hoot(struct MarioState *m, UNUSED u32 interactType, struct Objec
     return FALSE;
 }
 
-Bool32 interact_cap(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_cap(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     u32 capFlag  = get_mario_cap_flag(o);
     u16 capMusic = 0;
     u16 capTime  = 0;
@@ -1222,10 +1222,10 @@ Bool32 interact_cap(struct MarioState *m, UNUSED u32 interactType, struct Object
     return FALSE;
 }
 
-Bool32 interact_grabbable(struct MarioState *m, u32 interactType, struct Object *o) {
+Bool32 interact_grabbable(struct MarioState *m, InteractType interactType, struct Object *o) {
     const BehaviorScript *script = virtual_to_segmented(0x13, o->behavior);
     if (o->oInteractionSubtype & INT_SUBTYPE_KICKABLE) {
-        u32 interaction = determine_interaction(m, o);
+        MarioInteraction interaction = determine_interaction(m, o);
         if (interaction & (INT_KICK | INT_TRIP)) {
             attack_object(o, interaction);
             bounce_back_from_attack(m, interaction);
@@ -1300,8 +1300,8 @@ Bool32 check_read_sign(struct MarioState *m, struct Object *o) {
             m->marioObj->oMarioReadingSignDYaw  = facingDYaw;
             m->marioObj->oMarioReadingSignDPosX = (targetX - m->pos[0]);
             m->marioObj->oMarioReadingSignDPosZ = (targetZ - m->pos[2]);
-            m->interactObj = o;
-            m->usedObj     = o;
+            m->interactObj                      = o;
+            m->usedObj                          = o;
             return set_mario_action(m, ACT_READING_SIGN, 0);
         }
     }
@@ -1334,7 +1334,7 @@ Bool32 check_npc_talk(struct MarioState *m, struct Object *o) {
     return FALSE;
 }
 
-Bool32 interact_text(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+Bool32 interact_text(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     if (o->oInteractionSubtype & INT_SUBTYPE_SIGN) {
         return check_read_sign(m, o);
     } else if (o->oInteractionSubtype & INT_SUBTYPE_NPC) {
@@ -1380,7 +1380,7 @@ void mario_process_interactions(struct MarioState *m) {
     if (!(m->action & ACT_FLAG_INTANGIBLE) && (m->collidedObjInteractTypes != 0x0)) {
         s32 i;
         for (i = 0; i < ARRAY_COUNT(sInteractionHandlers); i++) {
-            u32 interactType = sInteractionHandlers[i].interactType;
+            InteractType interactType = sInteractionHandlers[i].interactType;
             if (m->collidedObjInteractTypes & interactType) {
                 struct Object *object = mario_get_collided_object(m, interactType);
                 m->collidedObjInteractTypes &= ~interactType;
