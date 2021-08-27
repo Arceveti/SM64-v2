@@ -260,9 +260,9 @@ static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
     if (m->forwardVel < 0.0f           ) m->forwardVel  = 0.0f;
     if (m->forwardVel > maxSpeed       ) m->forwardVel  = maxSpeed;
     if (m->forwardVel > decelThreshold ) m->forwardVel -= 0.5f;
-    m->vel[0] = (m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]));
-    m->vel[1] = (m->forwardVel * sins(m->faceAngle[0])) + buoyancy;
-    m->vel[2] = (m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]));
+    m->vel[0] =  (m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]));
+    m->vel[1] = ((m->forwardVel * sins(m->faceAngle[0])) + buoyancy);
+    m->vel[2] =  (m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]));
 }
 
 static void update_swimming_yaw(struct MarioState *m) {
@@ -289,7 +289,7 @@ static void update_swimming_yaw(struct MarioState *m) {
 }
 
 static void update_swimming_pitch(struct MarioState *m) {
-    Angle targetPitch = -(Angle)(252.0f * m->controller->stickY);
+    Angle targetPitch = -(Angle)(256.0f * m->controller->stickY);
     Angle pitchVel    = ((m->faceAngle[0] < 0x0) ? 0x100 : 0x200);
     if (m->faceAngle[0] < targetPitch) {
         if ((m->faceAngle[0] += pitchVel) > targetPitch) m->faceAngle[0] = targetPitch;
@@ -382,10 +382,10 @@ static void reset_bob_variables(struct MarioState *m) {
  * Controls the bobbing that happens when you swim near the surface.
  */
 static void surface_swim_bob(struct MarioState *m) {
-    if (sBobIncrement != 0
-     && m->pos[1] > (m->waterLevel - 85)
-     && m->faceAngle[0] >= 0x0
-     && (sBobTimer += sBobIncrement) >= 0x0) {
+    if ((sBobIncrement != 0)
+     && (m->pos[1] > (m->waterLevel - 85))
+     && (m->faceAngle[0] >= 0x0)
+     && ((sBobTimer += sBobIncrement) >= 0x0)) {
         m->marioObj->header.gfx.pos[1] += (sBobHeight * sins(sBobTimer)); // GRAVITY
         return;
     }

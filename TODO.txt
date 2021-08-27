@@ -6,6 +6,7 @@
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:
+    - Clipping + freezing when falling down front wall of back half of JRB ship
     - Entering a level after being in another level sometimes whitescreens
     - Properly fix HMC crash
         - Current fix is increasing the gfx pool

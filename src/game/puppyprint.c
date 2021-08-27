@@ -87,9 +87,6 @@ Bool8 ramViewer = FALSE;
 s32 ramsizeSegment[33] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 s32 audioPool[12];
 s32 mempool;
-// Collision
-Bool8 collisionViewer = FALSE; // unused?
-s32 numSurfaces       = 0;
 
 extern u8 _mainSegmentStart[];
 extern u8 _mainSegmentEnd[];
