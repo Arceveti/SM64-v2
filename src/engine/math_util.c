@@ -1758,11 +1758,11 @@ Bool32 anim_spline_poll(Vec3f result) {
 /**
  * Produces values using a cubic b-spline curve. Basically Q is the used output,
  * u is a value between 0 and 1 that represents the position along the spline,
- * and a0-a3 are parameters that define the spline.
+ * and s1-a4 are parameters that define the spline.
  *
  * The spline is described at www2.cs.uregina.ca/~anima/408/Notes/Interpolation/UniformBSpline.htm
  */
-void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3) {
+void vec3f_evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4) {
     register f32 B[4];
     if (u > 1.0f) u  = 1.0f;
     register f32 nu  = (1.0f - u);
@@ -1772,7 +1772,26 @@ void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a
     B[1] = (( hcu       ) -  su                      + 0.66666667f);
     B[2] = ((-hcu       ) + (su / 2.0f) + (u / 2.0f) + 0.16666667f);
     B[3] = (( hcu / 3.0f)                                         );
-    Q[0] = ((B[0] * a0[0]) + (B[1] * a1[0]) + (B[2] * a2[0]) + (B[3] * a3[0]));
-    Q[1] = ((B[0] * a0[1]) + (B[1] * a1[1]) + (B[2] * a2[1]) + (B[3] * a3[1]));
-    Q[2] = ((B[0] * a0[2]) + (B[1] * a1[2]) + (B[2] * a2[2]) + (B[3] * a3[2]));
+    Q[0] = ((B[0] * s1[0]) + (B[1] * s2[0]) + (B[2] * s3[0]) + (B[3] * s4[0]));
+    Q[1] = ((B[0] * s1[1]) + (B[1] * s2[1]) + (B[2] * s3[1]) + (B[3] * s4[1]));
+    Q[2] = ((B[0] * s1[2]) + (B[1] * s2[2]) + (B[2] * s3[2]) + (B[3] * s4[2]));
+}
+
+/*
+ * It takes the next 4 spline points and extrapolates a curvature based positioning of the camera vector that's passed through.
+ * It's a standard B spline
+ */
+void vec3s_evaluate_cubic_spline(f32 u, Vec3s Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4) {
+    register f32 B[4];
+    if (u > 1.0f) u = 1.0f;
+    register f32 nu  = (1.0f - u);
+    register f32 su  = sqr(u);
+    register f32 hcu = (cube(u) / 2.0f);
+    B[0] = (cube(nu) / 6.0f);
+    B[1] = (( hcu       ) -  su                      + 0.66666667f);
+    B[2] = ((-hcu       ) + (su / 2.0f) + (u / 2.0f) + 0.16666667f);
+    B[3] =  ( hcu / 3.0f);
+    Q[0] = ((B[0] * s1[0]) + (B[1] * s2[0]) + (B[2] * s3[0]) + (B[3] * s4[0]));
+    Q[1] = ((B[0] * s1[1]) + (B[1] * s2[1]) + (B[2] * s3[1]) + (B[3] * s4[1]));
+    Q[2] = ((B[0] * s1[2]) + (B[1] * s2[2]) + (B[2] * s3[2]) + (B[3] * s4[2]));
 }

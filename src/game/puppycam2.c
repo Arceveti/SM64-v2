@@ -185,23 +185,6 @@ UNUSED void puppycam_activate_cutscene(s32 (*scene)(), s32 lockinput) {
     gPuppyCam.sceneInput = lockinput;
 }
 
-//! TODO: combine with the one in math_util.c
-// If you've read camera.c this will look familiar.
-// It takes the next 4 spline points and extrapolates a curvature based positioning of the camera vector that's passed through.
-// It's a standard B spline
-static void puppycam_evaluate_spline(f32 progress, Vec3s cameraPos, Vec3f spline1, Vec3f spline2, Vec3f spline3, Vec3f spline4) {
-    f32 tempP[4];
-    if (progress > 1.0f) progress = 1.0f;
-    tempP[0] = ((1.0f - progress) * (1.0f - progress) * (1.0f - progress) / 6.0f);
-    tempP[1] = (( progress * progress * progress / 2.0f) -  sqr(progress)                             + 0.6666667f);
-    tempP[2] = ((-progress * progress * progress / 2.0f) + (sqr(progress) / 2.0f) + (progress / 2.0f) + 0.16666667f);
-    tempP[3] =  ( progress * progress * progress / 6.0f);
-
-    cameraPos[0] = ((tempP[0] * spline1[0]) + (tempP[1] * spline2[0]) + (tempP[2] * spline3[0]) + (tempP[3] * spline4[0]));
-    cameraPos[1] = ((tempP[0] * spline1[1]) + (tempP[1] * spline2[1]) + (tempP[2] * spline3[1]) + (tempP[3] * spline4[1]));
-    cameraPos[2] = ((tempP[0] * spline1[2]) + (tempP[1] * spline2[2]) + (tempP[2] * spline3[2]) + (tempP[3] * spline4[2]));
-}
-
 Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline splineFocus[], s32 mode, s32 index) {
     Vec3f tempPoints[4];
     f32 tempProgress[2] = {0.0f, 0.0f};
@@ -213,10 +196,10 @@ Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline
     if ((mode == PUPPYSPLINE_FOLLOW) && ((splineFocus[gPuppyCam.splineIndex].index == -1) || (splineFocus[gPuppyCam.splineIndex + 1].index == -1) || (splineFocus[gPuppyCam.splineIndex + 2].index == -1))) return TRUE;
     vec3f_set(prevPos, gPuppyCam.pos[0], gPuppyCam.pos[1], gPuppyCam.pos[2]);
     for ((i = 0); (i < 4); (i++)) vec3f_set(tempPoints[i], splinePos[gPuppyCam.splineIndex + i].pos[0], splinePos[gPuppyCam.splineIndex + i].pos[1], splinePos[gPuppyCam.splineIndex + i].pos[2]);
-    puppycam_evaluate_spline(gPuppyCam.splineProgress, gPuppyCam.pos, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
+    vec3s_evaluate_cubic_spline(gPuppyCam.splineProgress, gPuppyCam.pos, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
     if (mode == PUPPYSPLINE_FOLLOW) {
         for ((i = 0); (i < 4); (i++)) vec3f_set(tempPoints[i], splineFocus[gPuppyCam.splineIndex + i].pos[0], splineFocus[gPuppyCam.splineIndex + i].pos[1], splineFocus[gPuppyCam.splineIndex + i].pos[2]);
-        puppycam_evaluate_spline(gPuppyCam.splineProgress, gPuppyCam.focus, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
+        vec3s_evaluate_cubic_spline(gPuppyCam.splineProgress, gPuppyCam.focus, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
     }
     if (splinePos[gPuppyCam.splineIndex+1].speed != 0) tempProgress[0] = (1.0f / splinePos[gPuppyCam.splineIndex + 1].speed);
     if (splinePos[gPuppyCam.splineIndex+2].speed != 0) tempProgress[1] = (1.0f / splinePos[gPuppyCam.splineIndex + 2].speed);

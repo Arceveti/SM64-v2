@@ -2719,7 +2719,7 @@ Bool32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16
         controlPoints[i][1] = spline[segment + i].point[1];
         controlPoints[i][2] = spline[segment + i].point[2];
     }
-    evaluate_cubic_spline(u, p, controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
+    vec3f_evaluate_cubic_spline(u, p, controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3]);
     if (spline[*splineSegment + 1].speed != 0)  firstSpeed = (1.0f / spline[*splineSegment + 1].speed);
     if (spline[*splineSegment + 2].speed != 0) secondSpeed = (1.0f / spline[*splineSegment + 2].speed);
     progressChange = (((secondSpeed - firstSpeed) * *progress) + firstSpeed);
@@ -2827,7 +2827,7 @@ void shake_camera_handheld(Vec3f pos, Vec3f focus) {
         vec3f_set(shakeOffset, 0.0f, 0.0f, 0.0f);
     } else {
         for ((i = 0); (i < 4); (i++)) vec3s_to_vec3f(shakeSpline[i], sHandheldShakeSpline[i].point);
-        evaluate_cubic_spline(sHandheldShakeTimer, shakeOffset, shakeSpline[0], shakeSpline[1], shakeSpline[2], shakeSpline[3]);
+        vec3f_evaluate_cubic_spline(sHandheldShakeTimer, shakeOffset, shakeSpline[0], shakeSpline[1], shakeSpline[2], shakeSpline[3]);
         if (1.0f <= (sHandheldShakeTimer += sHandheldShakeInc)) {
             // The first 3 control points are always (0,0,0), so the random spline is always just a
             // straight line

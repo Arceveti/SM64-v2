@@ -233,6 +233,7 @@ f32   atan2_deg(f32 a, f32 b);
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);
 void anim_spline_init(Vec4s *keyFrames);
 Bool32 anim_spline_poll( Vec3f result);
-void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a3);
+void vec3f_evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4);
+void vec3s_evaluate_cubic_spline(f32 u, Vec3s Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4);
 
 #endif // MATH_UTIL_H
