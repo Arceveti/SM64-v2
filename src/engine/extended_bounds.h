@@ -55,28 +55,24 @@
     #undef LEVEL_BOUNDARY_MAX // Undefine the old value to avoid compiler warnings
     #define LEVEL_BOUNDARY_MAX      0x2000L
     #define CELL_SIZE               0x400
-    #define WORLD_SCALE             1.0f
     #define SURFACE_POOL_SIZE       4000
     #define SURFACE_NODE_POOL_SIZE  12000
 #elif EXTENDED_BOUNDS_MODE == 1 // Vanilla size with performance but more RAM usage
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x2000L
     #define CELL_SIZE               0x200
-    #define WORLD_SCALE             2.0f
     #define SURFACE_POOL_SIZE       4000
     #define SURFACE_NODE_POOL_SIZE  16000
 #elif EXTENDED_BOUNDS_MODE == 2 // 2x bounds
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x4000L
     #define CELL_SIZE               0x400
-    #define WORLD_SCALE             2.0f
     #define SURFACE_POOL_SIZE       8200
     #define SURFACE_NODE_POOL_SIZE  22000
 #elif EXTENDED_BOUNDS_MODE == 3 // 4x bounds
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x8000L
     #define CELL_SIZE               0x400
-    #define WORLD_SCALE             4.0f
     #define SURFACE_POOL_SIZE       8200
     #define SURFACE_NODE_POOL_SIZE  24600
 #endif

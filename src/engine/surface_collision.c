@@ -5,6 +5,7 @@
 #include "game/level_update.h"
 #include "game/mario.h"
 #include "game/object_list_processor.h"
+#include "game/rendering_graph_node.h"
 #include "surface_collision.h"
 #include "surface_load.h"
 #include "math_util.h"
@@ -52,7 +53,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register SurfaceType type = SURFACE_DEFAULT;
     s32 numCols = 0;
  #if EXTENDED_BOUNDS_MODE > 1
-    const float down_scale = (1.0f / WORLD_SCALE);
+    const float down_scale = (1.0f / gWorldScale);
     radius        *= down_scale;
     x             *= down_scale;
     y             *= down_scale;
@@ -187,9 +188,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         numCols++;
     }
  #if EXTENDED_BOUNDS_MODE > 1
-    x *= WORLD_SCALE;
-    y *= WORLD_SCALE;
-    z *= WORLD_SCALE;
+    x *= gWorldScale;
+    y *= gWorldScale;
+    z *= gWorldScale;
  #endif
     data->pos[0] = x;
     data->pos[2] = z;

@@ -6,6 +6,7 @@
 #include "surface_collision.h"
 #include "extended_bounds.h"
 #include "trig_tables.inc.c"
+#include "game/rendering_graph_node.h"
 
 #include "config.h"
 
@@ -1267,10 +1268,12 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
     Mat4 temp;
     register s32 i, j;
     for((i = 0); (i < 4); (i++)) {
-        for((j = 0); (j < 3); (j++)) temp[i][j] = (src[i][j] / WORLD_SCALE);
+        for((j = 0); (j < 3); (j++)) {
+            temp[i][j] = (src[i][j] / gWorldScale);
+        }
         temp[i][3] = src[i][3];
     }
-    guMtxF2L( temp, dest );
+    guMtxF2L(temp, dest);
 }
 
 /**

@@ -15,6 +15,7 @@ extern u16 gAreaUpdateCounter;
 #ifdef METAL_CAP_REFLECTION_LAKITU
 extern s16 gMarioScreenX, gMarioScreenY;
 #endif
+extern f32 gWorldScale;
 
 // after processing an object, the type is reset to this
 #define ANIM_TYPE_NONE                  0x0
