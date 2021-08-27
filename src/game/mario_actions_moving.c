@@ -342,7 +342,7 @@ void update_walking_speed(struct MarioState *m) {
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
 #ifdef FIX_GROUND_TURN_RADIUS
     if ((m->forwardVel < 0.0f) && (m->heldObj == NULL)) {
-        m->faceAngle[1] += 0x8000;
+        m->faceAngle[1] += DEGREES(180);
         m->forwardVel *= -1.0f;
     }
     if (analog_stick_held_back(m, 0x471C) && (m->heldObj == NULL)) {
@@ -367,12 +367,10 @@ void update_walking_speed(struct MarioState *m) {
 }
 
 Bool32 should_begin_sliding(struct MarioState *m) {
-    if (m->input & INPUT_ABOVE_SLIDE) {
-        s32 slideLevel = ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE);
-        s32 movingBackward = m->forwardVel <= -1.0f;
-        return (slideLevel || movingBackward || mario_facing_downhill(m, FALSE));
-    }
-    return FALSE;
+    return ((m->input & INPUT_ABOVE_SLIDE)
+    && (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SLIDE)
+     || (m->forwardVel <= -1.0f)
+     || mario_facing_downhill(m, FALSE)));
 }
 
 Bool32 check_ground_dive_or_punch(struct MarioState *m) {
@@ -1150,7 +1148,7 @@ Bool32 act_dive_slide(struct MarioState *m) {
     return FALSE;
 }
 
-AnimFrame32 common_ground_knockback_action(struct MarioState *m, AnimID32 animation, AnimFrame32 checkFrame, s32 playLandingSound, s32 actionArg) {
+AnimFrame32 common_ground_knockback_action(struct MarioState *m, AnimID32 animation, AnimFrame32 checkFrame, Bool32 playLandingSound, s32 actionArg) {
     AnimFrame32 animFrame;
     if (playLandingSound) play_mario_heavy_landing_sound_once(m, SOUND_ACTION_TERRAIN_BODY_HIT_GROUND);
     if (actionArg > 0) {
@@ -1237,7 +1235,7 @@ Bool32 act_death_exit_land(struct MarioState *m) {
     return FALSE;
 }
 
-MarioStep common_landing_action(struct MarioState *m, s16 animation, MarioAction airAction) {
+MarioStep common_landing_action(struct MarioState *m, AnimID16 animation, MarioAction airAction) {
     MarioStep stepResult;
     if (m->input & INPUT_NONZERO_ANALOG) {
         apply_landing_accel(m, 0.98f);
@@ -1274,7 +1272,11 @@ Bool32 common_landing_cancels(struct MarioState *m, struct LandingAction *landin
     if (m->input & INPUT_Z_PRESSED                  ) return set_mario_action(          m, ACT_CROUCH_SLIDE              , 0);
 #endif
     if (m->input & INPUT_OFF_FLOOR                  ) return set_mario_action(          m, landingAction->offFloorAction , 0);
-    if (m->floor->normal.y < COS73                  ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
+// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    if (m->steepness < COS73                        ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
+// #else
+//     if (m->floor->normal.y < COS73                  ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
+// #endif
     m->doubleJumpTimer = landingAction->doubleJumpTimer;
     if (should_begin_sliding(m)                     ) return set_mario_action(          m, landingAction->slideAction    , 0);
     if (m->input & INPUT_FIRST_PERSON               ) return set_mario_action(          m, landingAction->endAction      , 0);

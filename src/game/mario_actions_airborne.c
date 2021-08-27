@@ -1015,7 +1015,7 @@ Bool32 act_backward_air_kb(struct MarioState *m) {
     if ((++(m->actionTimer) > 30) && (m->input & INPUT_Z_PRESSED)) return set_mario_action(m, ACT_GROUND_POUND, 0);
 #endif
     play_knockback_sound(m);
-    common_air_knockback_step(m, ACT_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, 0x0002, -16.0f);
+    common_air_knockback_step(m, ACT_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -16.0f);
     return FALSE;
 }
 
@@ -1026,26 +1026,26 @@ Bool32 act_forward_air_kb(struct MarioState *m) {
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND, 0);
 #endif
     play_knockback_sound(m);
-    common_air_knockback_step(m, ACT_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, 0x002D, 16.0f);
+    common_air_knockback_step(m, ACT_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, 16.0f);
     return FALSE;
 }
 
 Bool32 act_hard_backward_air_kb(struct MarioState *m) {
     play_knockback_sound(m);
-    common_air_knockback_step(m, ACT_HARD_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, 0x0002, -16.0f);
+    common_air_knockback_step(m, ACT_HARD_BACKWARD_GROUND_KB, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -16.0f);
     return FALSE;
 }
 
 Bool32 act_hard_forward_air_kb(struct MarioState *m) {
     play_knockback_sound(m);
-    common_air_knockback_step(m, ACT_HARD_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, 0x002D, 16.0f);
+    common_air_knockback_step(m, ACT_HARD_FORWARD_GROUND_KB, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, 16.0f);
     return FALSE;
 }
 
 Bool32 act_thrown_backward(struct MarioState *m) {
     MarioAction landAction = (m->actionArg != 0) ? ACT_HARD_BACKWARD_GROUND_KB : ACT_BACKWARD_GROUND_KB;
     play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_MARIO_SOUND_PLAYED);
-    common_air_knockback_step(m, landAction, ACT_HARD_BACKWARD_GROUND_KB, 0x0002, m->forwardVel);
+    common_air_knockback_step(m, landAction, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, m->forwardVel);
     m->forwardVel *= 0.98f;
     return FALSE;
 }
@@ -1054,7 +1054,7 @@ Bool32 act_thrown_forward(struct MarioState *m) {
     Angle pitch;
     MarioAction landAction = (m->actionArg != 0) ? ACT_HARD_FORWARD_GROUND_KB : ACT_FORWARD_GROUND_KB;
     play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_MARIO_SOUND_PLAYED);
-    if (common_air_knockback_step(m, landAction, ACT_HARD_FORWARD_GROUND_KB, 0x002D, m->forwardVel) == AIR_STEP_NONE) {
+    if (common_air_knockback_step(m, landAction, ACT_HARD_FORWARD_GROUND_KB, MARIO_ANIM_AIR_FORWARD_KB, m->forwardVel) == AIR_STEP_NONE) {
         pitch = atan2s(m->forwardVel, -m->vel[1]);
         if (pitch > 0x1800) pitch = 0x1800;
         m->marioObj->header.gfx.angle[0] = pitch + 0x1800;
@@ -1071,7 +1071,7 @@ Bool32 act_soft_bonk(struct MarioState *m) {
 #else
     play_knockback_sound(m);
 #endif
-    common_air_knockback_step(m, ACT_FREEFALL_LAND, ACT_HARD_BACKWARD_GROUND_KB, 0x0056, m->forwardVel);
+    common_air_knockback_step(m, ACT_FREEFALL_LAND, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_GENERAL_FALL, m->forwardVel);
     return FALSE;
 }
 
