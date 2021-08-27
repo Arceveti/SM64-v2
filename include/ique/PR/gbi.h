@@ -25,8 +25,13 @@
 /*
  * Converts texture pixel coordinates to S and T values
  */
-#define TC(tc)		(((tc) - 1) * 32)
-#define ST(s, t)	{TC(s), TC(t)}
+// Bilerp/Average filter
+#define TC_B(p)		(((p) == 0) ? 0 : ((((p) > 0) ? ((p) - 1) : ((p) + 1)) * 32))
+#define ST_B(s, t)	{TC_B(s), TC_B(t)}
+
+// Point filter
+#define TC_P(p)		(((p) + 0.25) * 32)
+#define ST_P(s, t)	{TC_P(s), TC_P(t)}
 
 /*
  * To use the F3DEX ucodes, define F3DEX_GBI before include this file.

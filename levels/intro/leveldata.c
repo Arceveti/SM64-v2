@@ -3319,18 +3319,18 @@ const Gfx intro_seg7_dl_main_logo[] = {
 
 // 0x0700B420 - 0x0700B460
 static const Vtx intro_seg7_vertex_copyright[] = {
-    {{{    96,     42,     -1}, 0, {     0,  16<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,     42,     -1}, 0, {128<<5,  16<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,     58,     -1}, 0, {128<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    96,     58,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    96,     42,     -1}, 0, ST_P(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,     42,     -1}, 0, ST_P(   128,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,     58,     -1}, 0, ST_P(   128,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    96,     58,     -1}, 0, ST_P(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700B460 - 0x0700B4A0
 static const Vtx intro_seg7_vertex_trademark[] = {
-    {{{   268,    180,     -1}, 0, {     0,  16<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   284,    180,     -1}, 0, { 17<<5,  16<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   284,    196,     -1}, 0, { 17<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   268,    196,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   268,    180,     -1}, 0, ST_P(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   284,    180,     -1}, 0, ST_P(    17,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   284,    196,     -1}, 0, ST_P(    17,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   268,    196,     -1}, 0, ST_P(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 #if defined(VERSION_EU) || defined(VERSION_SH) || defined (COMPLETE_EN_US_SEGMENT2)
@@ -3383,7 +3383,7 @@ const Gfx intro_seg7_dl_copyright_trademark[] = {
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsDPSetEnvColor(255, 255, 255, 255),
     gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
-    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetTextureFilter(G_TF_DEFAULT),
     gsSPEndDisplayList(),
 };
 

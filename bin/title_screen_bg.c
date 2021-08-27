@@ -5,22 +5,22 @@
 
 // 0x0A000000 - 0x0A000100
 static const Vtx title_screen_bg_vertex_0A000000[] = {
-    {{{     0,     60,     -1}, 0, {     0,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     60,     -1}, 0, { 79<<5,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     80,     -1}, 0, { 79<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     80,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     40,     -1}, 0, {     0,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     40,     -1}, 0, { 79<<5,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     60,     -1}, 0, { 79<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     60,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     20,     -1}, 0, {     0,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     20,     -1}, 0, { 79<<5,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     40,     -1}, 0, { 79<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     40,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,     -1}, 0, {     0,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,      0,     -1}, 0, { 79<<5,  19<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    80,     20,     -1}, 0, { 79<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     20,     -1}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     60,     -1}, 0, ST_B(     0,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     60,     -1}, 0, ST_B(    80,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     80,     -1}, 0, ST_B(    80,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     80,     -1}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     40,     -1}, 0, ST_B(     0,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     40,     -1}, 0, ST_B(    80,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     60,     -1}, 0, ST_B(    80,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     60,     -1}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     20,     -1}, 0, ST_B(     0,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     20,     -1}, 0, ST_B(    80,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     40,     -1}, 0, ST_B(    80,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     40,     -1}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     -1}, 0, ST_B(     0,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,      0,     -1}, 0, ST_B(    80,     20), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    80,     20,     -1}, 0, ST_B(    80,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     20,     -1}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0A000100 - 0x0A000118
@@ -135,7 +135,7 @@ const Gfx title_screen_bg_dl_face_easter_egg_end[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsDPSetTexturePersp(G_TP_PERSP),
-    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetTextureFilter(G_TF_DEFAULT),
     gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
     gsSPEndDisplayList(),
 };
@@ -157,16 +157,16 @@ const Gfx title_screen_bg_dl_rumble_pak[] = {
     gsDPSetRenderMode(G_RM_NOOP, G_RM_NOOP2),
     gsDPSetScissor(G_SC_NON_INTERLACE, 0, 0, 319, 239),
 #if defined(VERSION_JP) || defined(VERSION_SH)
-    gsDPLoadTextureTile(title_texture_rumble_pak, G_IM_FMT_RGBA, G_IM_SIZ_16b, 80, 0, 0, 0, 79, 23, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPTextureRectangle(220 << 2, 200 << 2, 299 << 2, 223 << 2, G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10),
+    gsDPLoadTextureTile(title_texture_rumble_pak, G_IM_FMT_RGBA, G_IM_SIZ_16b, 80, 0, 0, 0, (80 - 1), (24 - 1), 0, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPTextureRectangle((220 << G_TEXTURE_IMAGE_FRAC), (200 << G_TEXTURE_IMAGE_FRAC), ((300 - 1) << G_TEXTURE_IMAGE_FRAC), ((224 - 1) << G_TEXTURE_IMAGE_FRAC), G_TX_RENDERTILE, 0, 0, (4 << 10), (1 << 10)),
 #else
-    gsDPLoadTextureTile(title_texture_rumble_pak, G_IM_FMT_RGBA, G_IM_SIZ_16b, 30, 24, 0, 0, 29, 23, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPTextureRectangle(270 << 2, 200 << 2, 299 << 2, 223 << 2, G_TX_RENDERTILE, 0, 0, 4 << 10, 1 << 10),
+    gsDPLoadTextureTile(title_texture_rumble_pak, G_IM_FMT_RGBA, G_IM_SIZ_16b, 30, 24, 0, 0, (30 - 1), (24 - 1), 0, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 5, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSPTextureRectangle((270 << G_TEXTURE_IMAGE_FRAC), (200 << G_TEXTURE_IMAGE_FRAC), ((300 - 1) << G_TEXTURE_IMAGE_FRAC), ((224 - 1) << G_TEXTURE_IMAGE_FRAC), G_TX_RENDERTILE, 0, 0, (4 << 10), (1 << 10)),
 #endif
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsDPSetTexturePersp(G_TP_PERSP),
-    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetTextureFilter(G_TF_DEFAULT),
     gsDPSetRenderMode(G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2),
     gsSPEndDisplayList(),
 };

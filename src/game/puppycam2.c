@@ -697,8 +697,8 @@ void puppycam_terrain_angle(void) {
 
 // Checks the bounding box of a puppycam volume. If it's inside, then set the pointer to the current index.
 static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 index) {
-    s32 rel[3];
-    s32 pos[2];
+    Vec3i rel;
+    Vec2i pos;
     f32 distCheck;
     if ((sPuppyVolumeStack[index]->room != gMarioCurrentRoom) && (sPuppyVolumeStack[index]->room != -1)) return FALSE;
     if (sPuppyVolumeStack[index]->shape == PUPPYVOLUME_SHAPE_BOX) {

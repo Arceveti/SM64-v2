@@ -23,6 +23,6 @@ const Gfx castle_grounds_seg7_us_dl_peach_signature[] = {
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
     gsDPSetEnvColor(255, 255, 255, 255),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
-    gsDPSetTextureFilter(G_TF_BILERP),
+    gsDPSetTextureFilter(G_TF_DEFAULT),
     gsSPEndDisplayList(),
 };

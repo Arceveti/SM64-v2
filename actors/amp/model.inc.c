@@ -17,11 +17,11 @@ ALIGNED8 static const Texture dAmpMouthTexture[] = {
 };
 
 static const Vtx dAmpElectricityVertices[] = {
-    {{{   224,      0,    -90}, 0, ST(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   187,    149,      0}, 0, ST(    8, 34.5), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,      0,     90}, 0, ST(   16,   16), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   187,   -149,      0}, 0, ST(    8,   -3), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   224,      0,    -90}, 0, ST(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,    -90}, 0, ST_B(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   187,    149,      0}, 0, ST_B(    8, 34.5), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,     90}, 0, ST_B(   16,   16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   187,   -149,      0}, 0, ST_B(    8,   -4), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   224,      0,    -90}, 0, ST_B(    0,   16), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 const Gfx dAmpElectricitySubDl[] = {
@@ -51,10 +51,10 @@ const Gfx dAmpElectricityDl[] = {
 };
 
 static const Vtx dAmpEyeVertices[] = {
-    {{{    68,     72,    158}, 0, ST(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -27,    -72,    164}, 0, ST( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
-    {{{    68,    -72,    158}, 0, ST( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -27,     72,    164}, 0, ST(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    68,     72,    158}, 0, ST_B(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -27,    -72,    164}, 0, ST_B( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    68,    -72,    158}, 0, ST_B( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -27,     72,    164}, 0, ST_B(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 const Gfx dAmpEyeSubDl[] = {
@@ -84,10 +84,10 @@ const Gfx dAmpEyeDl[] = {
 };
 
 static const Vtx dAmpMouthVertices[] = {
-    {{{   -32,     72,    164}, 0, ST(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -128,    -72,    121}, 0, ST( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -32,    -72,    164}, 0, ST( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -128,     72,    121}, 0, ST(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,     72,    164}, 0, ST_B(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -128,    -72,    121}, 0, ST_B( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,    -72,    164}, 0, ST_B( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -128,     72,    121}, 0, ST_B(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 const Gfx dAmpMouthSubDl[] = {
@@ -117,10 +117,10 @@ const Gfx dAmpMouthDl[] = {
 };
 
 static const Vtx dAmpBodyVertices[] = {
-    {{{   -40,    -40,      0}, 0, ST(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
-    {{{    40,     40,      0}, 0, ST( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,     40,      0}, 0, ST(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{    40,    -40,      0}, 0, ST( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    -40,      0}, 0, ST_B(  0,  32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    40,     40,      0}, 0, ST_B( 32,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,     40,      0}, 0, ST_B(  0,   0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    40,    -40,      0}, 0, ST_B( 32,  32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 const Gfx dAmpBodySubDl[] = {

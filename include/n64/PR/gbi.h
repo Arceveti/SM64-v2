@@ -26,8 +26,13 @@
 /*
  * Converts texture pixel coordinates to S and T values
  */
-#define TC(tc)		(((tc) - 1) * 32)
-#define ST(s, t)	{TC(s), TC(t)}
+// Bilerp/Average filter
+#define TC_B(p)		(((p) == 0) ? 0 : ((((p) > 0) ? ((p) - 0.5) : ((p) + 0.5)) * 32))
+#define ST_B(s, t)	{TC_B(s), TC_B(t)}
+
+// Point filter
+#define TC_P(p)		(((p) + 0.25) * 32)
+#define ST_P(s, t)	{TC_P(s), TC_P(t)}
 
 /*
  * To use the F3DEX ucodes, define F3DEX_GBI before include this file.
@@ -178,38 +183,38 @@
 #define	G_SPRITE2D_DRAW         (G_IMMFIRST - 2)
 
 /* RDP commands: */
-#define	G_NOOP			0xc0	/*   0 */
+#define	G_NOOP				0xC0	/*   0 */
 
 #endif  /* F3DEX_GBI_2 */
 
 /* RDP commands: */
-#define	G_SETCIMG			0xff	/*  -1 */
-#define	G_SETZIMG			0xfe	/*  -2 */
-#define	G_SETTIMG			0xfd	/*  -3 */
-#define	G_SETCOMBINE		0xfc	/*  -4 */
-#define	G_SETENVCOLOR		0xfb	/*  -5 */
-#define	G_SETPRIMCOLOR		0xfa	/*  -6 */
-#define	G_SETBLENDCOLOR		0xf9	/*  -7 */
-#define	G_SETFOGCOLOR		0xf8	/*  -8 */
-#define	G_SETFILLCOLOR		0xf7	/*  -9 */
-#define	G_FILLRECT			0xf6	/* -10 */
-#define	G_SETTILE			0xf5	/* -11 */
-#define	G_LOADTILE			0xf4	/* -12 */
-#define	G_LOADBLOCK			0xf3	/* -13 */
-#define	G_SETTILESIZE		0xf2	/* -14 */
-#define	G_LOADTLUT			0xf0	/* -16 */
-#define	G_RDPSETOTHERMODE	0xef	/* -17 */
-#define	G_SETPRIMDEPTH		0xee	/* -18 */
-#define	G_SETSCISSOR		0xed	/* -19 */
-#define	G_SETCONVERT		0xec	/* -20 */
-#define	G_SETKEYR			0xeb	/* -21 */
-#define	G_SETKEYGB			0xea	/* -22 */
-#define	G_RDPFULLSYNC		0xe9	/* -23 */
-#define	G_RDPTILESYNC		0xe8	/* -24 */
-#define	G_RDPPIPESYNC		0xe7	/* -25 */
-#define	G_RDPLOADSYNC		0xe6	/* -26 */
-#define	G_TEXRECTFLIP		0xe5	/* -27 */
-#define	G_TEXRECT			0xe4	/* -28 */
+#define	G_SETCIMG			0xFF	/*  -1 */
+#define	G_SETZIMG			0xFE	/*  -2 */
+#define	G_SETTIMG			0xFD	/*  -3 */
+#define	G_SETCOMBINE		0xFC	/*  -4 */
+#define	G_SETENVCOLOR		0xFB	/*  -5 */
+#define	G_SETPRIMCOLOR		0xFa	/*  -6 */
+#define	G_SETBLENDCOLOR		0xF9	/*  -7 */
+#define	G_SETFOGCOLOR		0xF8	/*  -8 */
+#define	G_SETFILLCOLOR		0xF7	/*  -9 */
+#define	G_FILLRECT			0xF6	/* -10 */
+#define	G_SETTILE			0xF5	/* -11 */
+#define	G_LOADTILE			0xF4	/* -12 */
+#define	G_LOADBLOCK			0xF3	/* -13 */
+#define	G_SETTILESIZE		0xF2	/* -14 */
+#define	G_LOADTLUT			0xF0	/* -16 */
+#define	G_RDPSETOTHERMODE	0xEF	/* -17 */
+#define	G_SETPRIMDEPTH		0xEE	/* -18 */
+#define	G_SETSCISSOR		0xED	/* -19 */
+#define	G_SETCONVERT		0xEC	/* -20 */
+#define	G_SETKEYR			0xEB	/* -21 */
+#define	G_SETKEYGB			0xEA	/* -22 */
+#define	G_RDPFULLSYNC		0xE9	/* -23 */
+#define	G_RDPTILESYNC		0xE8	/* -24 */
+#define	G_RDPPIPESYNC		0xE7	/* -25 */
+#define	G_RDPLOADSYNC		0xE6	/* -26 */
+#define	G_TEXRECTFLIP		0xE5	/* -27 */
+#define	G_TEXRECT			0xE4	/* -28 */
 
 /*
  * The following commands are the "generated" RDP commands; the user
@@ -219,14 +224,14 @@
  * These id's are -56, -52, -54, -50, -55, -51, -53, -49, ...
  *                                 edge, shade, texture, zbuff bits:  estz
  */
-#define	G_TRI_FILL				0xc8	/* fill triangle:            11001000 */
-#define	G_TRI_SHADE				0xcc	/* shade triangle:           11001100 */
-#define	G_TRI_TXTR				0xca	/* texture triangle:         11001010 */
-#define	G_TRI_SHADE_TXTR		0xce	/* shade, texture triangle:  11001110 */
-#define	G_TRI_FILL_ZBUFF		0xc9	/* fill, zbuff triangle:     11001001 */
-#define	G_TRI_SHADE_ZBUFF		0xcd	/* shade, zbuff triangle:    11001101 */
-#define	G_TRI_TXTR_ZBUFF		0xcb	/* texture, zbuff triangle:  11001011 */
-#define	G_TRI_SHADE_TXTR_ZBUFF	0xcf	/* shade, txtr, zbuff trngl: 11001111 */
+#define	G_TRI_FILL				0xC8	/* fill triangle:            11001000 */
+#define	G_TRI_SHADE				0xCC	/* shade triangle:           11001100 */
+#define	G_TRI_TXTR				0xCA	/* texture triangle:         11001010 */
+#define	G_TRI_SHADE_TXTR		0xCE	/* shade, texture triangle:  11001110 */
+#define	G_TRI_FILL_ZBUFF		0xC9	/* fill, zbuff triangle:     11001001 */
+#define	G_TRI_SHADE_ZBUFF		0xCD	/* shade, zbuff triangle:    11001101 */
+#define	G_TRI_TXTR_ZBUFF		0xCB	/* texture, zbuff triangle:  11001011 */
+#define	G_TRI_SHADE_TXTR_ZBUFF	0xCF	/* shade, txtr, zbuff trngl: 11001111 */
 
 /*
  * A TRI_FILL triangle is just the edges. You need to set the DP

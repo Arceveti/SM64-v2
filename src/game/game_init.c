@@ -137,7 +137,7 @@ void init_rdp(void) {
     gDPSetTextureLUT(    gDisplayListHead++, G_TT_NONE   );
     gDPSetTextureDetail( gDisplayListHead++, G_TD_CLAMP  );
     gDPSetTexturePersp(  gDisplayListHead++, G_TP_PERSP  );
-    gDPSetTextureFilter( gDisplayListHead++, G_TF_BILERP );
+    gDPSetTextureFilter( gDisplayListHead++, G_TF_DEFAULT);
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT   );
 
     gDPSetCombineKey(    gDisplayListHead++, G_CK_NONE   );

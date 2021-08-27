@@ -174,6 +174,11 @@
 // - (Arceveti)
 #define METAL_CAP_REFLECTION_LAKITU
 
+// Default texture filtering method:
+// - G_TF_POINT     Point sampling mode, basically Minecraft textures.
+// - G_TF_AVERAGE   Averages the surrounding texels.
+// - G_TF_BILERP    Bilinear interpolation on the surrounding texels, default.
+#define G_TF_DEFAULT    G_TF_BILERP
 
 /********************************************************************************************************************************
  *                                                                                                                              *
