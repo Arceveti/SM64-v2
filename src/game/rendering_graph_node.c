@@ -377,8 +377,8 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
 #else
         aspect = (4.0f / 3.0f); // 1.33333f
 #endif
-        gWorldScale = (gCamera ? (MAX(((gCamera->pos[0] * gCamera->pos[0]) + (gCamera->pos[1] * gCamera->pos[1]) + (gCamera->pos[2] * gCamera->pos[2])) / 67108864, 1.0f)) : 1.0f);
-        guPerspective(mtx, &perspNorm, node->fov, aspect, (node->far / 300) / gWorldScale, (node->far / gWorldScale), 1.0f);
+        gWorldScale = (gCamera ? (MAX((sqr(gCamera->pos[0]) + sqr(gCamera->pos[1]) + sqr(gCamera->pos[2])) / sqr(0x2000), 1.0f)) : 1.0f);
+        guPerspective(mtx, &perspNorm, node->fov, aspect, ((node->near) / gWorldScale), ((node->far) / gWorldScale), 1.0f);
         gSPPerspNormalize(gDisplayListHead++, perspNorm);
         gSPMatrix(        gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
         gCurGraphNodeCamFrustum = node;

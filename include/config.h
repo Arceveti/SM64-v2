@@ -624,7 +624,7 @@
 #define MARIO_HANGING_HITBOX_HEIGHT (MARIO_HITBOX_HEIGHT - 16.0f)
 
 // The amount Mario will be able to be warped up/down onto a floor when walking onto it
-#define MARIO_STEP_HEIGHT           80.0f // 20.0f with CENTERED_COLLISION
+#define MARIO_STEP_HEIGHT           40.0f // 20.0f with CENTERED_COLLISION
 
 // Terminal velovity for gravity (75.0f is default) (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY   75.0f

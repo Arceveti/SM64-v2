@@ -1542,11 +1542,11 @@ void gd_create_ortho_matrix(f32 l, f32 r, f32 b, f32 t, f32 n, f32 f) {
     gSPPerspNormalize(next_gfx(), 0xFFFF);
     guOrtho(&DL_CURRENT_MTX(sCurrentGdDl), l, r, b, t, n, f, 1.0f);
     orthoMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
-    gSPMatrix(next_gfx(), orthoMtx, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(next_gfx(), orthoMtx, (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
     guRotate(&DL_CURRENT_MTX(sCurrentGdDl), 0.0f, 0.0f, 0.0f, 1.0f);
     rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
-    gSPMatrix(next_gfx(), rotMtx, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(next_gfx(), rotMtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
 }
 
@@ -1559,11 +1559,11 @@ void gd_create_perspective_matrix(f32 fovy, f32 aspect, f32 near, f32 far) {
     guPerspective(&DL_CURRENT_MTX(sCurrentGdDl), &perspNorm, fovy, aspect, near, far, 1.0f);
     gSPPerspNormalize(next_gfx(), perspNorm);
     perspecMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
-    gSPMatrix(next_gfx(), perspecMtx, G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(next_gfx(), perspecMtx, (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
     guRotate(&DL_CURRENT_MTX(sCurrentGdDl), 0.0f, 0.0f, 0.0f, 1.0f);
     rotMtx = GD_LOWER_29(&DL_CURRENT_MTX(sCurrentGdDl));
-    gSPMatrix(next_gfx(), rotMtx, G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH);
+    gSPMatrix(next_gfx(), rotMtx, (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
     next_mtx();
 }
 

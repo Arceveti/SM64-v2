@@ -33,7 +33,6 @@
 
 // CELL_SIZE
 
-// WORLD_SCALE
 // Coordinate overflow fix by falcobuster.
 // Your levels will render correctly on console and LLE emulators
 // even when using 2x or 4x bounds, while not hurting anything on HLE plugins.
