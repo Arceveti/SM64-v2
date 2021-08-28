@@ -174,7 +174,7 @@ void reset_joint(struct ObjJoint *j) {
     // vec3f_zero(j->unk90);  // unused
     // vec3f_zero(j->unk1A8); // unused
     mtxf_identity(j->idMtx);
-    gd_scale_mat4f_by_vec3f(    &j->idMtx, j->scale);
+    mtxf_scale_self_vec3f(    j->idMtx, j->scale);
     gd_rot_mat_about_vec3f(     &j->idMtx, j->initRotation);
     vec3f_add(j->idMtx[3], j->attachOffset);
     mtxf_copy(j->matE8, j->idMtx);

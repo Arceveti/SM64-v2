@@ -23,8 +23,6 @@ enum GdRotAxis {
 // Needed for gd_math.c itself.
 void   gd_adjunct_mat4f(Mat4 *src, Mat4 *dst);
 f32    mtxf_det(Mat4 *mtx);
-void   gd_mtxf_lookat(Mat4 *mtx, Vec3f from, Vec3f to, f32 zColY, f32 yColY, f32 xColY);
-void   gd_scale_mat4f_by_vec3f(   Mat4 *mtx, Vec3f vec);
 void   gd_rot_mat_about_vec3f(      Mat4 *mtx, Vec3f vec);
 void   gd_create_origin_lookat(     Mat4 *mtx, Vec3f vec, f32 roll);
 void   gd_rot_2d_vec(f32 deg, f32 *x, f32 *y);

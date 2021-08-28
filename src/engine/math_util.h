@@ -211,6 +211,7 @@ void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Ang
 void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
+void mtxf_scale_self_vec3f(                 Mat4  mtx, Vec3f vec);
 void mtxf_mul_vec3s(                      Mat4  mtx, Vec3s b);
 void mtxf_mul_vec3f(                      Mat4  mtx, Vec3f b);
 void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);

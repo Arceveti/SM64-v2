@@ -8,59 +8,6 @@
 //! TODO: Combine this with math_util.c
 
 /**
- * Set mtx to a look-at matrix for the camera. The resulting transformation
- * transforms the world as if there exists a camera at position 'from' pointed
- * at the position 'to'.
- * An effective goddard copy of mtxf_lookat.
- */
-void gd_mtxf_lookat(Mat4 *mtx, Vec3f from, Vec3f to, f32 zColY, f32 yColY, f32 xColY) {
-    Vec3f colX, colY, colZ;
-    vec3f_set(colY, xColY, yColY, zColY);
-
-    colZ[2] = (to[0] - from[0]);
-    colZ[1] = (to[1] - from[1]);
-    colZ[0] = (to[2] - from[2]);
-    vec3f_normalize_negative(colZ);
-
-    colX[2] = ((colY[1] * colZ[0]) - (colY[0] * colZ[1]));
-    colX[1] = ((colY[0] * colZ[2]) - (colY[2] * colZ[0]));
-    colX[0] = ((colY[2] * colZ[1]) - (colY[1] * colZ[2]));
-    vec3f_normalize(colX);
-
-    colY[2]   = ((colZ[1] * colX[0]) - (colZ[0] * colX[1]));
-    colY[1]   = ((colZ[0] * colX[2]) - (colZ[2] * colX[0]));
-    colY[0]   = ((colZ[2] * colX[1]) - (colZ[1] * colX[2]));
-    vec3f_normalize(colY);
-
-    (*mtx)[0][0] = colX[2];
-    (*mtx)[1][0] = colX[1];
-    (*mtx)[2][0] = colX[0];
-
-    (*mtx)[0][1] = colY[2];
-    (*mtx)[1][1] = colY[1];
-    (*mtx)[2][1] = colY[0];
-
-    (*mtx)[0][2] = colZ[2];
-    (*mtx)[1][2] = colZ[1];
-    (*mtx)[2][2] = colZ[0];
-
-    (*mtx)[3][0] = -((from[0] * colX[2]) + (from[1] * colX[1]) + (from[2] * colX[0]));
-    (*mtx)[3][1] = -((from[0] * colY[2]) + (from[1] * colY[1]) + (from[2] * colY[0]));
-    (*mtx)[3][2] = -((from[0] * colZ[2]) + (from[1] * colZ[1]) + (from[2] * colZ[0]));
-
-    mtxf_end(*mtx);
-}
-
-/**
- * Scales a mat4f in each dimension by a vector.
- */
-void gd_scale_mat4f_by_vec3f(Mat4 *mtx, Vec3f vec) {
-    vec3f_mul_f32((*mtx)[0], vec[0]);
-    vec3f_mul_f32((*mtx)[1], vec[1]);
-    vec3f_mul_f32((*mtx)[2], vec[2]);
-}
-
-/**
  * Rotates the matrix 'mtx' about the vector given.
  */
 void gd_rot_mat_about_vec3f(Mat4 *mtx, Vec3f vec) {
@@ -133,10 +80,10 @@ void gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang) {
     Mat4 rMat;
     Vec3f rot;
     switch (axisnum) {
-        case GD_X_AXIS: vec3f_copy(rot, gVec3fX); break;
-        case GD_Y_AXIS: vec3f_copy(rot, gVec3fY); break;
-        case GD_Z_AXIS: vec3f_copy(rot, gVec3fZ); break;
-        default: gd_exit(); // Bad axis num
+        case GD_X_AXIS: vec3f_copy(rot, gVec3fX   ); break;
+        case GD_Y_AXIS: vec3f_copy(rot, gVec3fY   ); break;
+        case GD_Z_AXIS: vec3f_copy(rot, gVec3fZ   ); break;
+        default:        vec3f_copy(rot, gVec3fZero); break;
     }
     gd_create_rot_mat_angular(&rMat, rot, (ang / 2.0f));
     gd_mult_mat4f(mtx, &rMat, mtx);

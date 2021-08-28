@@ -396,7 +396,7 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         unkMtx = d_get_matrix_ptr();
         gd_mult_mat4f(iMtx, parentUnkMtx, unkMtx);
         gd_mult_mat4f(iMtx, rotMtx, rotMtx2);
-        gd_scale_mat4f_by_vec3f(rotMtx2, scale);
+        mtxf_scale_self_vec3f(*rotMtx2, scale);
     } else {
         set_cur_dynobj(obj);
         unkMtx =          d_get_matrix_ptr();
@@ -405,7 +405,7 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         d_get_scale(scale);
         mtxf_identity(*unkMtx);
         mtxf_copy(*rotMtx, *iMtx);
-        gd_scale_mat4f_by_vec3f(rotMtx, scale);
+        mtxf_scale_self_vec3f(*rotMtx, scale);
     }
     // Recursively call this function on attached children
     set_cur_dynobj(obj);
@@ -439,7 +439,7 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
         transform.pos[1]    = (t1->pos[1] + ((t2->pos[1] - t1->pos[1]) * dt));
         transform.pos[2]    = (t1->pos[2] + ((t2->pos[2] - t1->pos[2]) * dt));
         // not going to interpolate scale?
-        gd_scale_mat4f_by_vec3f(     &mtx, t1->scale);
+        mtxf_scale_self_vec3f(     mtx, t1->scale);
         gd_rot_mat_about_vec3f(      &mtx, transform.rotate);
         vec3f_add(mtx[3], transform.pos);
     } else {
@@ -604,7 +604,7 @@ void move_animator(struct ObjAnimator *animObj) {
             case GD_ANIM_SCALE3F_ROT3F_POS3F_2:  // similar to GD_ANIM_SCALE3F_ROT3F_POS3F, but no interpolation? what matrix does d_set_i_matrix set? Maybe Identity Matrix?
                 triPtr = (struct GdAnimTransform *) animData->data;
                 mtxf_identity(localMtx);
-                gd_scale_mat4f_by_vec3f(&localMtx, triPtr->scale);
+                mtxf_scale_self_vec3f(localMtx, triPtr->scale);
                 gd_rot_mat_about_vec3f(&localMtx, triPtr->rotate);
                 vec3f_add(localMtx[3], triPtr->pos);
                 d_set_i_matrix(&localMtx);

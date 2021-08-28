@@ -14,7 +14,7 @@ void bhv_openable_grill_door_loop(void) {
         if (gCurrentObject->parentObj->oOpenableGrillIsOpen) gCurrentObject->oAction = OPENABLE_GRILL_DOOR_ACT_OPENING;
     } else if (gCurrentObject->oAction == OPENABLE_GRILL_DOOR_ACT_OPENING) {
         if (gCurrentObject->oTimer < 64) {
-            gCurrentObject->oMoveAngleYaw -= gCurrentObject->oBehParams2ndByte * 0x100;
+            gCurrentObject->oMoveAngleYaw -= (gCurrentObject->oBehParams2ndByte * 0x100);
         } else {
             gCurrentObject->oAction = OPENABLE_GRILL_DOOR_ACT_OPEN;
         }

@@ -549,16 +549,16 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
     gMatStackIndex++;
-    vec3s_to_vec3f(translation, node->translation);\
+    vec3s_to_vec3f(translation, node->translation);
     if (node->zOffset < 0) {
         mtxf_align_facing_view(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     } else {
         mtxf_billboard(        gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     }
     if (gCurGraphNodeHeldObject != NULL) {
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], gCurGraphNodeHeldObject->objNode->header.gfx.scale);
+        mtxf_scale_self_vec3f(gMatStack[gMatStackIndex], gCurGraphNodeHeldObject->objNode->header.gfx.scale);
     } else if (gCurGraphNodeObject != NULL) {
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex], gCurGraphNodeObject->scale);
+        mtxf_scale_self_vec3f(gMatStack[gMatStackIndex], gCurGraphNodeObject->scale);
     }
     mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
     gMatStackFixed[gMatStackIndex] = mtx;
@@ -827,7 +827,7 @@ static void geo_process_object(struct Object *node) {
             mtxf_rotate_zxy_and_translate(mtxf, node->header.gfx.pos, node->header.gfx.angle);
             mtxf_mul(gMatStack[gMatStackIndex + 1], mtxf, gMatStack[gMatStackIndex]);
         }
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex + 1], node->header.gfx.scale);
+        mtxf_scale_self_vec3f(gMatStack[gMatStackIndex + 1], node->header.gfx.scale);
         node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
         vec3f_copy(node->header.gfx.cameraToObject, gMatStack[gMatStackIndex][3]);
         // FIXME: correct types
@@ -907,7 +907,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
         vec3f_copy(      gMatStack[gMatStackIndex + 1][3],     gMatStack[gMatStackIndex    ][3]);
         mtxf_mul(        gMatStack[gMatStackIndex + 1], mat,   gMatStack[gMatStackIndex + 1]);
-        mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1],        gMatStack[gMatStackIndex + 1], node->objNode->header.gfx.scale);
+        mtxf_scale_self_vec3f(gMatStack[gMatStackIndex + 1], node->objNode->header.gfx.scale);
         if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_HELD_OBJ, &node->fnNode.node, (struct AllocOnlyPool *) gMatStack[gMatStackIndex + 1]);
         gMatStackIndex++;
         mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);

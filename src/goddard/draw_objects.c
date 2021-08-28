@@ -519,7 +519,6 @@ void create_shape_mtl_gddls(struct ObjShape *shape) {
  * @return Either `-1` if the DL couldn't be created,
  *         or the created DL's reference index
  * @bug Nothing is returned if the DL is created
- * @note Contains string literals that suggest a removed `printf` call
  */
 void create_shape_gddl(struct ObjShape *s) {
     struct ObjShape *shape = s;
@@ -540,10 +539,9 @@ void create_shape_gddl(struct ObjShape *s) {
  *
  * @param grp `ObjGroup` containing `ObjShape` to create GdDLs for
  * @return void
- * @note Contains string literals that suggest a removed `printf` call
  */
 void create_gddl_for_shapes(struct ObjGroup *grp) {
-    apply_to_obj_types_in_group(OBJ_TYPE_SHAPES, (applyproc_t) create_shape_gddl, grp); // printf("made %d display lists\n", shapedls);
+    apply_to_obj_types_in_group(OBJ_TYPE_SHAPES, (applyproc_t) create_shape_gddl, grp); // made [shapedls] display lists
 }
 
 /**

@@ -1050,7 +1050,7 @@ void gd_dl_scale(f32 x, f32 y, f32 z) {
     Mat4 mtx;
     Vec3f scaleVec = {x, y, z};
     mtxf_identity(mtx);
-    gd_scale_mat4f_by_vec3f(&mtx, scaleVec);
+    mtxf_scale_self_vec3f(mtx, scaleVec);
     gd_dl_mul_matrix(&mtx);
 }
 
@@ -1066,7 +1066,7 @@ void gd_dl_rotate(f32 angle, s8 axis) {
 void gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY) {
     LookAt *lookat;
     colXY *= RAD_PER_DEG;
-    gd_mtxf_lookat(&cam->lookatMtx, from, to, sind(colXY), cosd(colXY), 0.0f);
+    mtxf_lookat(cam->lookatMtx, from, to, colXY);
     mat4_to_mtx(&cam->lookatMtx, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),  G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
     /*  col           colc          dir
@@ -1356,8 +1356,8 @@ void set_Vtx_norm_buf_2(Vec3f norm) {
 /* 24FF80 -> 24FFDC; orig name: func_801A17B0 */
 void set_gd_mtx_parameters(s32 params) {
     switch (params) {
-        case G_MTX_PROJECTION | G_MTX_MUL | G_MTX_PUSH: sMtxParamType = G_MTX_PROJECTION; break;
-        case G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_PUSH: sMtxParamType = G_MTX_MODELVIEW ; break;
+        case (G_MTX_PROJECTION | G_MTX_MUL | G_MTX_PUSH): sMtxParamType = G_MTX_PROJECTION; break;
+        case (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_PUSH): sMtxParamType = G_MTX_MODELVIEW;  break;
     }
 }
 
@@ -1502,7 +1502,7 @@ void parse_p1_controller(void) {
     if (gdctrl->csrX > ((sScreenView->parent->upperLeft[0] + sScreenView->parent->lowerRight[0]) - 48.0f)) gdctrl->csrX = ((sScreenView->parent->upperLeft[0] + sScreenView->parent->lowerRight[0]) - 48.0f);
     if (gdctrl->csrY < ( sScreenView->parent->upperLeft[1]                                       + 16.0f)) gdctrl->csrY = ( sScreenView->parent->upperLeft[1]                                       + 16.0f);
     if (gdctrl->csrY > ((sScreenView->parent->upperLeft[1] + sScreenView->parent->lowerRight[1]) - 32.0f)) gdctrl->csrY = ((sScreenView->parent->upperLeft[1] + sScreenView->parent->lowerRight[1]) - 32.0f);
-    for (i = 0; i < sizeof(OSContPad); i++) ((u8 *) prevInputs)[i] = ((u8 *) currInputs)[i];
+    for ((i = 0); (i < sizeof(OSContPad)); (i++)) ((u8 *) prevInputs)[i] = ((u8 *) currInputs)[i];
 }
 
 /* 251E18 -> 2522B0 */

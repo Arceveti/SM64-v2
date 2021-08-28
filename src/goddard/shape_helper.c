@@ -161,7 +161,7 @@ void animate_mario_head_gameover(struct ObjAnimator *self) {
  */
 void animate_mario_head_normal(struct ObjAnimator *self) {
     s32 state = 0; // TODO: label these states
-    s32 aBtnPressed = gGdCtrl.dragging;
+    Bool32 aBtnPressed = gGdCtrl.dragging;
     switch (self->state) {
         case 0:
             // initialize?
@@ -248,9 +248,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     d_set_rel_pos(  0.0f, 200.0f, 2000.0f);
     d_set_world_pos(0.0f, 200.0f, 2000.0f);
     d_set_flags(4);
-    camera->lookAt[0] =   0.0f;
-    camera->lookAt[1] = 200.0f;
-    camera->lookAt[2] =   0.0f;
+    vec3f_set(camera->lookAt, 0.0f, 200.0f, 0.0f);
     addto_group(gMarioFaceGrp, &camera->header);
     addto_group(gMarioFaceGrp, &animator->header);
     d_set_name_suffix(NULL);  // stop adding "l" to generated dynobj names

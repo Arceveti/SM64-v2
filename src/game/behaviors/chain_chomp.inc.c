@@ -46,7 +46,7 @@ void bhv_chain_chomp_chain_part_update(void) {
 static void chain_chomp_act_uninitialized(void) {
     struct ChainSegment *segments;
     s32 i;
-    if (o->oDistanceToMario < 3000.0f) {
+    if (o->oDistanceToMario < o->oDrawingDistance) {
         segments = mem_pool_alloc(gObjectMemoryPool, (CHAIN_CHOMP_NUM_PARTS * sizeof(struct ChainSegment)));
         if (segments != NULL) {
             // Each segment represents the offset of a chain part to the pivot.
@@ -81,7 +81,7 @@ static void chain_chomp_update_chain_segments(void) {
     s32 i;
     // Segment 0 connects the pivot to the chain chomp itself, and segment i>0
     // connects the pivot to chain part i (1 is closest to the chain chomp).
-    for (i = 1; i < CHAIN_CHOMP_NUM_PARTS; i++) {
+    for ((i = 1); (i < CHAIN_CHOMP_NUM_PARTS); (i++)) {
         prevSegment = &o->oChainChompSegments[i - 1];
         segment     = &o->oChainChompSegments[i    ];
         // Apply gravity
@@ -283,7 +283,7 @@ static void chain_chomp_released_end_cutscene(void) {
 static void chain_chomp_act_move(void) {
     f32 maxDistToPivot;
     // Unload chain if Mario is far enough
-    if ((o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED) && (o->oDistanceToMario > 4000.0f)) {
+    if ((o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED) && (o->oDistanceToMario > (o->oDrawingDistance + 1000.0f))) {
         o->oAction     = CHAIN_CHOMP_ACT_UNLOAD_CHAIN;
         o->oForwardVel = o->oVelY = 0.0f;
     } else {

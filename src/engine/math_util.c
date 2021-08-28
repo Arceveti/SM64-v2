@@ -1200,6 +1200,15 @@ void mtxf_scale_vec3f(Mat4 dest, Mat4 mtx, Vec3f s) {
 }
 
 /**
+ * Scales a mat4f in each dimension by a vector.
+ */
+void mtxf_scale_self_vec3f(Mat4 mtx, Vec3f vec) {
+    vec3f_mul_f32(mtx[0], vec[0]);
+    vec3f_mul_f32(mtx[1], vec[1]);
+    vec3f_mul_f32(mtx[2], vec[2]);
+}
+
+/**
  * Multiply a vector with a transformation matrix, which applies the transformation
  * to the point. Note that the bottom row is assumed to be [0, 0, 0, 1], which is
  * true for transformation matrices if the translation has a w component of 1.
