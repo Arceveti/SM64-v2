@@ -1154,8 +1154,8 @@ void handle_controller_cursor_input(void) {
     if ((rawStickY > -2) && (rawStickY < 2)) rawStickY = 0;
     if ((rawStickX > -2) && (rawStickX < 2)) rawStickX = 0;
     // Move cursor
-    sCursorPos[0] += rawStickX / 8;
-    sCursorPos[1] += rawStickY / 8;
+    sCursorPos[0] += (rawStickX / 8);
+    sCursorPos[1] += (rawStickY / 8);
     // Stop cursor from going offscreen
     if (sCursorPos[0] >  132.0f) sCursorPos[0] =  132.0f;
     if (sCursorPos[0] < -132.0f) sCursorPos[0] = -132.0f;

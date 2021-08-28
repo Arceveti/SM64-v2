@@ -62,7 +62,7 @@ void bubba_act_attack(void) {
             obj_move_pitch_approach(o->oBubbaTargetPitch, 0x190);
         }
     } else {
-        if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) { // 67.5 degrees
+        if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < DEG(67.5)) {
             Angle targetDYaw = (DEG(90) - atan2s(800.0f, (o->oDistanceToMario - 800.0f)));
             if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) targetDYaw = -targetDYaw;
             o->oBubbaTargetYaw = (o->oAngleToMario + targetDYaw);

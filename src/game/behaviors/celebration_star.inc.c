@@ -32,8 +32,8 @@ void celeb_star_act_spin_around_mario(void) {
     o->oPosX          = (o->oHomeX + (sins(o->oMoveAngleYaw) * (f32)(o->oCelebStarDiameterOfRotation / 2)));
     o->oPosZ          = (o->oHomeZ + (coss(o->oMoveAngleYaw) * (f32)(o->oCelebStarDiameterOfRotation / 2)));
     o->oPosY         += 5.0f;
-    o->oFaceAngleYaw += 0x1000; // 22.5 degrees
-    o->oMoveAngleYaw += DEG(45);
+    o->oFaceAngleYaw += DEG(22.5);
+    o->oMoveAngleYaw += DEG(  45);
     if (o->oTimer == 40) o->oAction = CELEB_STAR_ACT_FACE_CAMERA;
     if (o->oTimer < 35) {
         spawn_object(o, MODEL_SPARKLES, bhvCelebrationStarSparkle);
@@ -50,7 +50,7 @@ void celeb_star_act_face_camera(void) {
 #else
         cur_obj_scale((f32) o->oTimer / 10.0f);
 #endif
-        o->oFaceAngleYaw += 0x1000;
+        o->oFaceAngleYaw += DEG(22.5);
     } else {
         o->oFaceAngleYaw = gMarioObject->header.gfx.angle[1];
     }

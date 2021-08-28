@@ -635,7 +635,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
         if (m->vel[1] < 20.0f) m->vel[1] = 20.0f;
         return set_mario_action(m, ACT_TWIRLING, 1);
     }
-    if (m->angleVel[1] < 0x3000) m->angleVel[1] += 0x100; // 0x3000 = 67.5 degrees
+    if (m->angleVel[1] < DEG(67.5)) m->angleVel[1] += 0x100;
     if (marioObj->oMarioTornadoYawVel < 0x1000) marioObj->oMarioTornadoYawVel += 0x100;
     m->twirlYaw += m->angleVel[1];
     sinAngleVel  = sins(marioObj->oMarioTornadoYawVel);

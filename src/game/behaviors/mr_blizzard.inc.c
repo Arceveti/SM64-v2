@@ -155,7 +155,7 @@ static void mr_blizzard_act_rotate(void) {
         // If Dizziness is not 0 and Mr. Blizzard's FaceRollAngle has a magnitude greater than
         // 67.5 degrees move to death action, delete the snowball, and make Mr. Blizzard intangible.
         if (o->oMrBlizzardDizziness != 0.0f) {
-            if (ABSI(o->oFaceAngleRoll) > 0x3000) {
+            if (ABSI(o->oFaceAngleRoll) > DEG(67.5)) {
                 o->oAction = MR_BLIZZARD_ACT_DEATH;
                 o->prevObj = o->oMrBlizzardHeldObj = NULL;
                 cur_obj_become_intangible();
@@ -166,7 +166,7 @@ static void mr_blizzard_act_rotate(void) {
             o->oMrBlizzardChangeInDizziness    = 300.0f;
             o->prevObj = o->oMrBlizzardHeldObj = NULL;
             // After 60 frames, if Mario is within 11.25 degrees of Mr. Blizzard, throw snowball action.
-        } else if ((o->oTimer > 60) && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800)) {
+        } else if ((o->oTimer > 60) && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(11.25))) {
             o->oAction = MR_BLIZZARD_ACT_THROW_SNOWBALL;
         }
     }

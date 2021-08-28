@@ -1417,16 +1417,16 @@ void bhv_bowser_loop(void) {
     // Set distance/angle values
     o->oBowserDistToCentre  = sqrtf(sqr(o->oPosX) + sqr(o->oPosZ));
     o->oBowserAngleToCentre = atan2s((-o->oPosZ), (-o->oPosX));
-    Angle angleToMario      = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario);        //  AngleToMario from Bowser's perspective
+    Angle angleToMario      = abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario       ); // AngleToMario  from Bowser's perspective
     Angle angleToCentre     = abs_angle_diff(o->oMoveAngleYaw, o->oBowserAngleToCentre); // AngleToCentre from Bowser's perspective
     // Reset Status
     o->oBowserStatus &= ~0xFF;
     // Set bitflag status for distance/angle values
     // Only the first one is used
-    if (angleToMario           <  0x2000) o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;  // 45 degrees
-    if (angleToCentre          <  0x3800) o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE; // 78.75 degrees, unused
-    if (o->oBowserDistToCentre < 1000.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE;  // unused
-    if (o->oDistanceToMario    <  850.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO;   // unused
+    if (angleToMario           < DEG(   45)) o->oBowserStatus |= BOWSER_STATUS_ANGLE_MARIO;
+    if (angleToCentre          < DEG(78.75)) o->oBowserStatus |= BOWSER_STATUS_ANGLE_CENTRE;
+    if (o->oBowserDistToCentre <    1000.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_CENTRE;  // unused
+    if (o->oDistanceToMario    <     850.0f) o->oBowserStatus |= BOWSER_STATUS_DIST_MARIO;   // unused
     // Update Held state actions
     switch (o->oHeldState) {
         case HELD_FREE:    bowser_free_update();           break;

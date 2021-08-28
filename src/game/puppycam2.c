@@ -454,7 +454,7 @@ void puppycam_input_pitch(void) {
         }
         gPuppyCam.pitchAcceleration = CLAMP(gPuppyCam.pitchAcceleration, -100, 100);
         // When Mario's moving, his pitch is clamped pretty aggressively, so this exists so you can shift your view up and down momentarily at an actually usable range, rather than the otherwise baby range.
-        if ((gMarioState->action & ACT_FLAG_MOVING) && ((gPuppyCam.pitch >= 0x3800) || (gPuppyCam.pitch <= DEG(45)))) gPuppyCam.moveFlagAdd = 8; // 0x3800 = 78.75 degrees
+        if ((gMarioState->action & ACT_FLAG_MOVING) && ((gPuppyCam.pitch >= DEG(78.75)) || (gPuppyCam.pitch <= DEG(45)))) gPuppyCam.moveFlagAdd = 8;
     }
 }
 
@@ -807,9 +807,9 @@ void puppycam_projection_behaviours(void) {
     // This will only be executed if Mario's the target. If it's not, it'll reset the
     if (gPuppyCam.targetObj == gMarioState->marioObj) { // was =
         if ((gPuppyCam.options.turnAggression > 0)
-         && (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_TURN_HELPER)
+         &&  (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_TURN_HELPER)
          && !(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_INPUT_8DIR)
-         && (gMarioState->vel[1] == 0.0f)
+         &&  (gMarioState->vel[1] == 0.0f)
          && !(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_INPUT_4DIR)
          && (gPuppyCam.options.inputType != 2)) { // Holy hell this is getting spicy.
             // With turn aggression enabled, or if Mario's sliding, adjust the camera view behind mario.
@@ -818,7 +818,7 @@ void puppycam_projection_behaviours(void) {
                 // The deal here, is if Mario's moving, or he's sliding and the camera's within 90 degrees behind him, it'll auto focus behind him, with an intensity based on the camera's centre speed.
                 // It also scales with forward velocity, so it's a gradual effect as he speeds up.
                 if (((abss(gPlayer1Controller->rawStickX) > 20) && !(gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) ||
-                    (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE && (Angle)abss((((gPuppyCam.yaw + DEG(180)) % 0xFFFF) - DEG(180)) - (((gMarioState->faceAngle[1]) % 0xFFFF) - DEG(180))) < 0x3000)) { // 67.5 degrees
+                    (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE && (Angle)abss((((gPuppyCam.yaw + DEG(180)) % 0xFFFF) - DEG(180)) - (((gMarioState->faceAngle[1]) % 0xFFFF) - DEG(180))) < DEG(67.5))) {
                 // gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + DEG(180)) - approach_s32((Angle)((gMarioState->faceAngle[1] + DEG(180)) - gPuppyCam.yawTarget), 0,
                 // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
                 // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
@@ -844,8 +844,8 @@ void puppycam_projection_behaviours(void) {
         // Attempts at automatic adjustment that only apply when moving or jumping.
         if ((gMarioState->action & ACT_FLAG_MOVING) || (gMarioState->action & ACT_FLAG_AIR) || ((gMarioState->action & ACT_FLAG_SWIMMING) && !gMarioState->waterLevel - 100 - gMarioState->pos[1] > 5 && (gMarioState->forwardVel != 0.0f))) {
             // Clamp the height when moving. You can still look up and down to a reasonable degree but it readjusts itself the second you let go.
-            if (gPuppyCam.pitchTarget > 0x3800) gPuppyCam.pitchTarget = approach_f32_asymptotic(gPuppyCam.pitchTarget, 0x3800, 0.2f); // 78.75 degrees
-            if (gPuppyCam.pitchTarget < 0x2000) gPuppyCam.pitchTarget = approach_f32_asymptotic(gPuppyCam.pitchTarget, 0x2000, 0.2f); // 45 degrees
+            if (gPuppyCam.pitchTarget > 0x3800) gPuppyCam.pitchTarget = approach_f32_asymptotic(gPuppyCam.pitchTarget, DEG(78.75), 0.2f);
+            if (gPuppyCam.pitchTarget < 0x2000) gPuppyCam.pitchTarget = approach_f32_asymptotic(gPuppyCam.pitchTarget, DEG(   45), 0.2f);
             /* // Will tilt the camera just a wip thing though, doesn't work too well but will hopefully replace view_height_offset eventually.
             if (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_HEIGHT_HELPER && gMarioState->floor && gMarioState->action & ACT_FLAG_MOVING) {
                 gPuppyCam.terrainPitch = approach_f32_asymptotic(gPuppyCam.terrainPitch, find_floor_slope(gMarioState, 0), ((gMarioState->intendedMag / 32) * 0.2), 5.0f);
@@ -912,8 +912,8 @@ static void puppycam_projection(void) {
     // Extra behaviours that get tacked onto the projection. Will be completely ignored if there is no target object.
     puppycam_projection_behaviours();
     // These are what the base rotations aspire to be.
-    gPuppyCam.pitch       = CLAMP(gPuppyCam.pitch,       0x1000, 0x7000); // 0x700 = 157.5 degrees
-    gPuppyCam.pitchTarget = CLAMP(gPuppyCam.pitchTarget, 0x1000, 0x7000);
+    gPuppyCam.pitch       = CLAMP(gPuppyCam.pitch,       DEG(22.5), DEG(157.5));
+    gPuppyCam.pitchTarget = CLAMP(gPuppyCam.pitchTarget, DEG(22.5), DEG(157.5));
     // These are the base rotations going to be used.
     gPuppyCam.yaw    = (gPuppyCam.yawTarget   - approach_f32_asymptotic((Angle)(gPuppyCam.yawTarget   - gPuppyCam.yaw  ), 0, 0.3335f));
     gPuppyCam.pitch  = (gPuppyCam.pitchTarget - approach_f32_asymptotic((Angle)(gPuppyCam.pitchTarget - gPuppyCam.pitch), 0, 0.3335f));

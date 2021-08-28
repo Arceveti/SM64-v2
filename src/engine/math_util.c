@@ -335,6 +335,13 @@ void vec3f_copy(Vec3f dest, Vec3f src) {
     dest[2] = src[2];
 }
 
+/// Copy vector 'src' to 'dest'
+void vec3f_copy_y_offset(Vec3f dest, Vec3f src, f32 offset) {
+    dest[0] =  src[0];
+    dest[1] = (src[1] + offset);
+    dest[2] =  src[2];
+}
+
 /// Copy vector 'src' to 'dest' in inverse order
 void vec3f_copy_inverse(Vec3f dest, Vec3f src) {
     dest[0] = src[2];

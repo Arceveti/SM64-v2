@@ -107,7 +107,7 @@ void bhv_intro_lakitu_loop(void) {
             gCurrentObject->oFaceAnglePitch            = atan2s(200.0f, (gCurrentObject->oPosY - 400.0f));
             gCurrentObject->oFaceAngleYaw              = approach_s16_asymptotic(gCurrentObject->oFaceAngleYaw, (gCurrentObject->oMoveAngleYaw + DEG(180)), 4);
             vec3f_set_dist_and_angle(fromPoint, toPoint, gCurrentObject->oIntroLakituDistToBirdsX, 0, gCurrentObject->oMoveAngleYaw);
-            toPoint[1] += 150.0f * coss((s16) gCurrentObject->oIntroLakituDistToBirdsZ);
+            toPoint[1] += (150.0f * coss((s16) gCurrentObject->oIntroLakituDistToBirdsZ));
             gCurrentObject->oIntroLakituDistToBirdsZ  += gCurrentObject->oIntroLakituEndBirds1DestZ;
             approach_f32_asymptotic_bool(&gCurrentObject->oIntroLakituEndBirds1DestZ, 512.0f, 0.05f);
             toPoint[0] += gCurrentObject->oIntroLakituEndBirds1DestY;
@@ -137,8 +137,8 @@ void bhv_intro_lakitu_loop(void) {
             vec3f_set(offset, -100.0f, 100.0f, 300.0f);
             offset_rotated(toPoint, gCamera->pos, offset, sMarioCamState->faceAngle);
             vec3f_copy(&gCurrentObject->oPosVec, toPoint);
-            gCurrentObject->oMoveAnglePitch = 0x1000;
-            gCurrentObject->oMoveAngleYaw   = 0x9000;
+            gCurrentObject->oMoveAnglePitch = DEG(22.5);
+            gCurrentObject->oMoveAngleYaw   = 0x9000; // DEG(-157.5);
             gCurrentObject->oFaceAnglePitch = (gCurrentObject->oMoveAnglePitch / 2);
             gCurrentObject->oFaceAngleYaw   =  gCurrentObject->oMoveAngleYaw;
             gCurrentObject->oAction         = INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2;

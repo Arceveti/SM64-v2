@@ -48,10 +48,10 @@ void mat2_ident(uObjMtx *dst, float scale) {
 }
 // cos -sin sin cos
 void mat2_rotate(uObjMtx *dst, f32 degrees) {
-	dst->m.A = ftoq(cosf(degrees));
-	dst->m.B = ftoq(sinf(degrees));
+	dst->m.A = ftoq( cosf(degrees));
+	dst->m.B = ftoq( sinf(degrees));
 	dst->m.C = ftoq(-sinf(degrees));
-	dst->m.D = ftoq(cosf(degrees));
+	dst->m.D = ftoq( cosf(degrees));
 }
 
 void mat2_mul(uObjMtx *m1, uObjMtx *m2) {

@@ -1626,8 +1626,8 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
     offsetY = (offsetY * (4 / 3));
     offsetZ = (offsetZ * (4 / 3));
     spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, (x - offsetX), (y - offsetY), (z - offsetZ), 0x0, 0x0, 0x0);
-    sSparkleGenTheta += 0x3800; // 78.75 degrees
-    sSparkleGenPhi   += 0x6000; // 135 degrees
+    sSparkleGenTheta += DEG(78.75);
+    sSparkleGenPhi   += DEG(  135);
 }
 
 // not sure what this does, returns the height of the floor.

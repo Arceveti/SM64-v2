@@ -601,13 +601,13 @@ Bool32 act_twirling(struct MarioState *m) {
     Angle yawVelTarget;
 #ifdef Z_TWIRL
     if (m->input & INPUT_Z_DOWN) {
-        yawVelTarget = 0x2800; // 56.25 degrees
+        yawVelTarget = DEG(56.25);
     } else
 #endif
     if (m->input & INPUT_A_DOWN) {
-        yawVelTarget = 0x2000; // 45 degrees
+        yawVelTarget = DEG(45);
     } else {
-        yawVelTarget = 0x1800; // 33.75 degrees
+        yawVelTarget = DEG(33.75);
     }
     m->angleVel[1] = approach_s32(m->angleVel[1], yawVelTarget, 0x200, 0x200);
     m->twirlYaw   += m->angleVel[1];

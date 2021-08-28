@@ -30,19 +30,19 @@ extern s16 gArctanTable[];
  */
 #define DEG( x) (Angle)((x) * 0x10000 / 360)
 
-#define DEG30   0x1555
-#define DEG45   0x2000
-#define DEG60   0x2AAA
-#define DEG90   0x4000
-#define DEG120  0x5555
-#define DEG135  0x6000
-#define DEG180  0x8000
-#define DEGN135 0xA000
-#define DEGN120 0xAAAB
-#define DEGN90  0xC000
-#define DEGN60  0xD555
-#define DEGN45  0xE000
-#define DEGN30  0xEAAB
+// #define DEG30   0x1555
+// #define DEG45   0x2000
+// #define DEG60   0x2AAA
+// #define DEG90   0x4000
+// #define DEG120  0x5555
+// #define DEG135  0x6000
+// #define DEG180  0x8000
+// #define DEGN135 0xA000
+// #define DEGN120 0xAAAB
+// #define DEGN90  0xC000
+// #define DEGN60  0xD555
+// #define DEGN45  0xE000
+// #define DEGN30  0xEAAB
 
 #define DEG_PER_RAD 57.29577950560105
 #define RAD_PER_DEG (1.0 / DEG_PER_RAD)
@@ -135,6 +135,7 @@ void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16
 Angle  abs_angle_diff(Angle angle1, Angle angle2);
 // Vector Operations
 void vec3f_copy(                         Vec3f dest, Vec3f src);
+void vec3f_copy_y_offset(                Vec3f dest, Vec3f src, f32 offset);
 void vec3f_copy_inverse(                 Vec3f dest, Vec3f src);
 void vec3f_set(                          Vec3f dest, f32 x, f32 y, f32 z);
 void vec3f_sum(                          Vec3f dest, Vec3f a, Vec3f b);

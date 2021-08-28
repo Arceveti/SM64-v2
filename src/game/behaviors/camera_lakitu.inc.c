@@ -65,8 +65,8 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     if (o->oCameraLakituFinishedDialog) {
         approach_f32_bool(&o->oCameraLakituSpeed, 60.0f, 3.0f);
         if (o->oDistanceToMario > 6000.0f) obj_mark_for_deletion(o);
-        targetMovePitch = -0x3000; // 67.5 degrees
-        targetMoveYaw   = -0x6000; // 135 degrees
+        targetMovePitch = -DEG(67.5);
+        targetMoveYaw   = -DEG( 135);
     } else {
         if (o->oCameraLakituSpeed != 0.0f) {
             if (o->oDistanceToMario > 5000.0f) {

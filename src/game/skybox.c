@@ -54,7 +54,6 @@ struct Skybox {
     f32 scaledX;
     /// The skybox's Y position in world space
     f32 scaledY;
-
     /// The index of the upper-left tile in the 3x3 grid that gets drawn
     s32 upperLeftTile;
 };
