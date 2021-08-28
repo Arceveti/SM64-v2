@@ -164,7 +164,7 @@ void update_air_with_turn(struct MarioState *m) {
             m->forwardVel += (1.5f * coss(intendedDYaw) * intendedMag);
 #ifdef AIR_TURN
             if ((m->forwardVel > 4.0f) || (absYVel > 36.0f)) {
-                turnRange = min(((m->intendedMag - m->forwardVel) * absYVel), DEGREES(90));
+                turnRange = min(((m->intendedMag - m->forwardVel) * absYVel), DEG(90));
                 if (turnRange < 0x100) turnRange = 0x100;
                 approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
             }
@@ -177,8 +177,8 @@ void update_air_with_turn(struct MarioState *m) {
         if (m->forwardVel > dragThreshold) m->forwardVel -= 1.0f;
         if (m->forwardVel <        -16.0f) m->forwardVel += 2.0f;
 #ifdef AIR_TURN
-        m->slideVelX = ((m->forwardVel * sins(m->faceAngle[1])) + (sidewaysSpeed * sins(m->faceAngle[1] + DEGREES(90))));
-        m->slideVelZ = ((m->forwardVel * coss(m->faceAngle[1])) + (sidewaysSpeed * coss(m->faceAngle[1] + DEGREES(90))));
+        m->slideVelX = ((m->forwardVel * sins(m->faceAngle[1])) + (sidewaysSpeed * sins(m->faceAngle[1] + DEG(90))));
+        m->slideVelZ = ((m->forwardVel * coss(m->faceAngle[1])) + (sidewaysSpeed * coss(m->faceAngle[1] + DEG(90))));
 #ifdef GRAVITY_DRAG
         if (m->vel[1] < 0.0f) {
             dragThreshold = (((-m->vel[1]) / (dragThreshold * 2.0f)) + 1.0f);
@@ -216,8 +216,8 @@ void update_air_without_turn(struct MarioState *m) {
         m->slideVelX = (m->forwardVel * sins(m->faceAngle[1]));
         m->slideVelZ = (m->forwardVel * coss(m->faceAngle[1]));
 
-        m->slideVelX += (sidewaysSpeed * sins(m->faceAngle[1] + DEGREES(90)));
-        m->slideVelZ += (sidewaysSpeed * coss(m->faceAngle[1] + DEGREES(90)));
+        m->slideVelX += (sidewaysSpeed * sins(m->faceAngle[1] + DEG(90)));
+        m->slideVelZ += (sidewaysSpeed * coss(m->faceAngle[1] + DEG(90)));
 
         m->vel[0] = m->slideVelX;
         m->vel[2] = m->slideVelZ;
@@ -233,7 +233,7 @@ void update_lava_boost_or_twirling(struct MarioState *m) {
         m->forwardVel   += (coss(intendedDYaw) * intendedMag);
         m->faceAngle[1] += (sins(intendedDYaw) * intendedMag * 1024.0f);
         if (m->forwardVel < 0.0f) {
-            m->faceAngle[1] += DEGREES(180);
+            m->faceAngle[1] += DEG(180);
             m->forwardVel   *= -1.0f;
         }
         if (m->forwardVel > 32.0f) m->forwardVel -= 2.0f;
@@ -289,7 +289,7 @@ void update_flying_pitch(struct MarioState *m) {
 void update_flying(struct MarioState *m) {
     update_flying_pitch(m);
     update_flying_yaw(m);
-    m->forwardVel -= ((2.0f * ((f32) m->faceAngle[0] / DEGREES(90))) + 0.1f);
+    m->forwardVel -= ((2.0f * ((f32) m->faceAngle[0] / DEG(90))) + 0.1f);
     m->forwardVel -= (0.5f * (1.0f - coss(m->angleVel[1])));
     if (m->forwardVel <  0.0f) m->forwardVel = 0.0f;
     if (m->forwardVel > 16.0f) {
@@ -300,8 +300,8 @@ void update_flying(struct MarioState *m) {
         m->faceAngle[0] -= 0x400;
     }
     m->faceAngle[0] += m->angleVel[0];
-    if (m->faceAngle[0] >  DEGREES(60)) m->faceAngle[0] =  DEGREES(60);
-    if (m->faceAngle[0] < -DEGREES(60)) m->faceAngle[0] = -DEGREES(60);
+    if (m->faceAngle[0] >  DEG(60)) m->faceAngle[0] =  DEG(60);
+    if (m->faceAngle[0] < -DEG(60)) m->faceAngle[0] = -DEG(60);
     m->vel[0]    = (m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]));
     m->vel[1]    = (m->forwardVel * sins(m->faceAngle[0])                        );
     m->vel[2]    = (m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]));
@@ -344,14 +344,14 @@ u32 withTurn) {
 #endif
 #ifndef WALL_SLIDE
                 mario_bonk_reflection(m, FALSE);
-                m->faceAngle[1] += DEGREES(180);
+                m->faceAngle[1] += DEG(180);
 #endif
                 if (m->wall != NULL) {
                     set_mario_action(m, ACT_AIR_HIT_WALL, 0);
                 } else {
 #ifdef WALL_SLIDE
                     mario_bonk_reflection(m, FALSE);
-                    m->faceAngle[1] += DEGREES(180);
+                    m->faceAngle[1] += DEG(180);
 #endif
                     if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
 
@@ -486,12 +486,12 @@ Bool32 act_hold_freefall(struct MarioState *m) {
 Bool32 act_side_flip(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_DIVE, 0);
     if (m->input & INPUT_Z_PRESSED) {
-        m->marioObj->header.gfx.angle[1] += DEGREES(180);
+        m->marioObj->header.gfx.angle[1] += DEG(180);
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, 0);
     if (common_air_action_step(m, ACT_SIDE_FLIP_LAND, MARIO_ANIM_SLIDEFLIP, AIR_STEP_CHECK_LEDGE_GRAB | AIR_STEP_CHECK_HANG, TRUE) != AIR_STEP_GRABBED_LEDGE) {
-        m->marioObj->header.gfx.angle[1] += DEGREES(180);
+        m->marioObj->header.gfx.angle[1] += DEG(180);
     }
     // This must be one line to match on -O2
     // clang-format off
@@ -517,7 +517,7 @@ Bool32 act_wall_slide(struct MarioState *m) {
     if (m->input & INPUT_NONZERO_ANALOG) {
         wallAngle        = atan2s(wall->normal.z, wall->normal.x);
         wallDintendedYaw = abs_angle_diff(wallAngle, m->intendedYaw);
-        if ((m->intendedMag > 16.0f) && (wallDintendedYaw <= DEGREES(45))) {
+        if ((m->intendedMag > 16.0f) && (wallDintendedYaw <= DEG(45))) {
             m->faceAngle[1] = m->intendedYaw;
             m->forwardVel  *= abss(sins(wallDintendedYaw));
             return set_mario_action(m, ACT_FREEFALL, 0);
@@ -646,14 +646,14 @@ Bool32 act_dive(struct MarioState *m) {
 #endif
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_NONE:
-            if ((m->vel[1] < 0.0f) && (m->faceAngle[0] > -DEGREES(60))) {
+            if ((m->vel[1] < 0.0f) && (m->faceAngle[0] > -DEG(60))) {
                 m->faceAngle[0] -= 0x200;
-                if (m->faceAngle[0] < -DEGREES(60)) m->faceAngle[0] = -DEGREES(60);
+                if (m->faceAngle[0] < -DEG(60)) m->faceAngle[0] = -DEG(60);
             }
             m->marioObj->header.gfx.angle[0] = -m->faceAngle[0];
             break;
         case AIR_STEP_LANDED:
-            if (should_get_stuck_in_ground(m) && (m->faceAngle[0] == -DEGREES(60))) {
+            if (should_get_stuck_in_ground(m) && (m->faceAngle[0] == -DEG(60))) {
 #if ENABLE_RUMBLE
                 queue_rumble_data(5, 80);
 #endif
@@ -1001,7 +1001,7 @@ MarioStep common_air_knockback_step(struct MarioState *m, MarioAction landAction
 Bool32 check_wall_kick(struct MarioState *m) {
     if ((m->input & INPUT_A_PRESSED) && (m->wallKickTimer != 0) && (m->prevAction == ACT_AIR_HIT_WALL)) {
 #ifndef WALL_SLIDE
-        m->faceAngle[1] += DEGREES(180);
+        m->faceAngle[1] += DEG(180);
 #endif
         return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     }
@@ -1110,7 +1110,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
     if (m->heldObj != NULL) mario_drop_held_object(m);
     if (m->wall != NULL) {
         wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        m->faceAngle[1] = (((2.0f * wallAngle) - m->faceAngle[1]) + DEGREES(180));
+        m->faceAngle[1] = (((2.0f * wallAngle) - m->faceAngle[1]) + DEG(180));
         if (++(m->actionTimer) <= 2) {
             if (m->input & INPUT_A_PRESSED) {
                 m->vel[1] = 52.0f;
@@ -1119,8 +1119,8 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
         } else {
             if ((m->prevAction != ACT_WALL_SLIDE)
              && (m->intendedMag > 16.0f)
-             && abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->intendedYaw) <= DEGREES(45)) {
-                m->faceAngle[1] = (m->intendedYaw + DEGREES(180));
+             && abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->intendedYaw) <= DEG(45)) {
+                m->faceAngle[1] = (m->intendedYaw + DEG(180));
                 m->forwardVel   = 0.0f;
                 return set_mario_action(m, ACT_FREEFALL, 0);
             }
@@ -1133,7 +1133,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
     if (++(m->actionTimer) <= FIRSTY_LAST_FRAME) {
         if (m->input & INPUT_A_PRESSED) {
             m->vel[1]        = 52.0f;
-            m->faceAngle[1] += DEGREES(180);
+            m->faceAngle[1] += DEG(180);
             return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
         }
     } else if (m->forwardVel >= 38.0f) {
@@ -1506,7 +1506,7 @@ Bool32 act_flying(struct MarioState *m) {
                 if (m->actionTimer++ == 0) play_sound(SOUND_ACTION_HIT, m->marioObj->header.gfx.cameraToObject);
                 if (m->actionTimer == 30)  m->actionTimer = 0;
                 m->faceAngle[0] -= 0x200;
-                if (m->faceAngle[0] < -DEGREES(60)) m->faceAngle[0] = -DEGREES(60);
+                if (m->faceAngle[0] < -DEG(60)) m->faceAngle[0] = -DEG(60);
                 m->marioObj->header.gfx.angle[0] = -m->faceAngle[0];
                 m->marioObj->header.gfx.angle[2] =  m->faceAngle[2];
             }
@@ -1541,7 +1541,7 @@ Bool32 act_riding_hoot(struct MarioState *m) {
     m->pos[0]       =  m->usedObj->oPosX;
     m->pos[1]       = (m->usedObj->oPosY - 92.5f);
     m->pos[2]       =  m->usedObj->oPosZ;
-    m->faceAngle[1] = (DEGREES(90) - m->usedObj->oMoveAngleYaw);
+    m->faceAngle[1] = (DEG(90) - m->usedObj->oMoveAngleYaw);
     if (m->actionState == 0) {
         set_mario_animation(m, MARIO_ANIM_HANG_ON_CEILING);
         if (is_anim_at_end(m)) {
@@ -1551,7 +1551,7 @@ Bool32 act_riding_hoot(struct MarioState *m) {
     }
     vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set(m->marioObj->header.gfx.angle, 0x0, (DEGREES(90) - m->faceAngle[1]), 0x0);
+    vec3a_set(m->marioObj->header.gfx.angle, 0x0, (DEG(90) - m->faceAngle[1]), 0x0);
     return FALSE;
 }
 
@@ -1668,7 +1668,7 @@ Bool32 act_special_triple_jump(struct MarioState *m) {
 #ifdef WALL_SLIDE
             if (m->forwardVel > 16.0f) {
                 mario_bonk_reflection(m, FALSE);
-                m->faceAngle[1] += DEGREES(180);
+                m->faceAngle[1] += DEG(180);
                 if (m->wall != NULL) {
                     set_mario_action(m, ACT_AIR_HIT_WALL, 0);
                 } else {

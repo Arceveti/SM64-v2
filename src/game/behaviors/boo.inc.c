@@ -138,8 +138,8 @@ static s32 boo_vanish_or_appear(void) {
     Angle relativeAngleToMario           = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
     Angle relativeMarioFaceAngle         = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
     // magic?
-    Angle relativeAngleToMarioThreshhold   = 0x1568; //  5480   DEGREES(30)?
-    Angle relativeMarioFaceAngleThreshhold = 0x6B58; // 27480   DEGREES(151)?
+    Angle relativeAngleToMarioThreshhold   = 0x1568; //  5480   DEG(30)?
+    Angle relativeMarioFaceAngleThreshhold = 0x6B58; // 27480   DEG(151)?
     Bool32 doneAppearing                   = FALSE;
     o->oVelY                               = 0.0f;
     if ((relativeAngleToMario > relativeAngleToMarioThreshhold)
@@ -164,7 +164,7 @@ static void boo_set_move_yaw_for_during_hit(s32 hurt) {
     } else if (coss((Angle)o->oMoveAngleYaw - (Angle)o->oAngleToMario) < 0.0f) {
         o->oBooMoveYawDuringHit = o->oMoveAngleYaw;
     } else {
-        o->oBooMoveYawDuringHit = (Angle)(o->oMoveAngleYaw + DEGREES(180));
+        o->oBooMoveYawDuringHit = (Angle)(o->oMoveAngleYaw + DEG(180));
     }
 }
 

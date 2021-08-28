@@ -1117,12 +1117,12 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     Vec3f xColumn, yColumn, zColumn;
     f32 avgY;
     f32 minY  = (-radius * 3);
-    point0[0] = (pos[0] + (radius * sins(yaw + DEGREES( 60))));
-    point0[2] = (pos[2] + (radius * coss(yaw + DEGREES( 60))));
-    point1[0] = (pos[0] + (radius * sins(yaw + DEGREES(180))));
-    point1[2] = (pos[2] + (radius * coss(yaw + DEGREES(180))));
-    point2[0] = (pos[0] + (radius * sins(yaw + DEGREES(-60))));
-    point2[2] = (pos[2] + (radius * coss(yaw + DEGREES(-60))));
+    point0[0] = (pos[0] + (radius * sins(yaw + DEG( 60))));
+    point0[2] = (pos[2] + (radius * coss(yaw + DEG( 60))));
+    point1[0] = (pos[0] + (radius * sins(yaw + DEG(180))));
+    point1[2] = (pos[2] + (radius * coss(yaw + DEG(180))));
+    point2[0] = (pos[0] + (radius * sins(yaw + DEG(-60))));
+    point2[2] = (pos[2] + (radius * coss(yaw + DEG(-60))));
     point0[1] =           find_floor(point0[0], (pos[1] + 150.0f), point0[2], &floor);
     point1[1] =           find_floor(point1[0], (pos[1] + 150.0f), point1[2], &floor);
     point2[1] =           find_floor(point2[0], (pos[1] + 150.0f), point2[2], &floor);

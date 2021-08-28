@@ -18,7 +18,7 @@ void bhv_1up_interact(void) {
 }
 
 void bhv_1up_common_init(void) {
-    o->oMoveAnglePitch = -DEGREES(90);
+    o->oMoveAnglePitch = -DEG(90);
     o->oGravity        = 3.0f;
     o->oFriction       = 1.0f;
     o->oBuoyancy       = 1.0f;
@@ -58,7 +58,7 @@ void pole_1up_move_towards_mario(void) {
 
 void one_up_move_away_from_mario(ColFlags collisionFlags) {
     o->oForwardVel   = 8.0f;
-    o->oMoveAngleYaw = (o->oAngleToMario + DEGREES(180));
+    o->oMoveAngleYaw = (o->oAngleToMario + DEG(180));
     bhv_1up_interact();
     if ((collisionFlags & OBJ_COL_FLAG_HIT_WALL) || !is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 3000)) o->oAction = MUSHROOM_ACT_DISAPPEARING;
 }

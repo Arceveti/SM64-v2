@@ -125,7 +125,7 @@ static void klepto_circle_target(f32 radius, f32 targetSpeed) {
         o->oKleptoTimeUntilTargetChange = random_linear_offset(300, 300);
         o->oAction                      = KLEPTO_ACT_APPROACH_TARGET_HOLDING;
     } else {
-        turnAmount = (DEGREES(90) - atan2s(radius, o->oKleptoDistanceToTarget - radius));
+        turnAmount = (DEG(90) - atan2s(radius, o->oKleptoDistanceToTarget - radius));
         accel      = 0.05f;
         if ((Angle)(o->oMoveAngleYaw - o->oKleptoYawToTarget) < 0) turnAmount = -turnAmount;
         o->oKleptoYawToTarget += turnAmount;
@@ -218,7 +218,7 @@ static void klepto_act_dive_at_mario(void) {
 static void klepto_act_struck_by_mario(void) {
     cur_obj_init_animation_with_sound(KLEPTO_ANIM_STRUCK_BY_MARIO);
     obj_face_pitch_approach(                            0x0, 800);
-    obj_face_yaw_approach((o->oMoveAngleYaw + DEGREES(180)), 800);
+    obj_face_yaw_approach((o->oMoveAngleYaw + DEG(180)), 800);
     obj_face_roll_approach(                             0x0, 800);
     if (cur_obj_check_if_near_animation_end()) {
         o->oAction         = KLEPTO_ACT_RETREAT;
@@ -297,7 +297,7 @@ void bhv_klepto_update(void) {
             o->oAnimState    = KLEPTO_ANIM_STATE_HOLDING_NOTHING;
             o->oAction       = KLEPTO_ACT_STRUCK_BY_MARIO;
             o->oGravity      = -2.0f;
-            o->oMoveAngleYaw = (o->oAngleToMario + DEGREES(180));
+            o->oMoveAngleYaw = (o->oAngleToMario + DEG(180));
             o->oFlags &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
             cur_obj_become_intangible();
         } else if ((gMarioStates[0].action == ACT_SLEEPING) || (gMarioStates[0].action & (ACT_FLAG_SHORT_HITBOX | ACT_FLAG_BUTT_OR_STOMACH_SLIDE))) {

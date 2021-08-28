@@ -114,7 +114,7 @@ static void koopa_shelled_act_stopped(void) {
     o->oForwardVel = 0.0f;
     if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_STOPPED)) {
         o->oAction = KOOPA_SHELLED_ACT_WALK;
-        o->oKoopaTargetYaw = (o->oMoveAngleYaw + (DEGREES(45) * (Angle) random_sign()));
+        o->oKoopaTargetYaw = (o->oMoveAngleYaw + (DEG(45) * (Angle) random_sign()));
     }
 }
 
@@ -180,13 +180,13 @@ static void koopa_shelled_act_run_from_mario(void) {
     koopa_play_footstep_sound(0, 11);
     // If far from home, run toward it
     if (o->oDistanceToMario >= 25000.0f) {
-        o->oAngleToMario    += DEGREES(180);
+        o->oAngleToMario    += DEG(180);
         o->oDistanceToMario  = 0.0f;
     }
     if ((o->oTimer > 30) && (o->oDistanceToMario > 800.0f)) {
         if (obj_forward_vel_approach(0.0f, 1.0f)) o->oAction = KOOPA_SHELLED_ACT_STOPPED;
     } else {
-        cur_obj_rotate_yaw_toward((o->oAngleToMario + DEGREES(180)), 0x400);
+        cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), 0x400);
         obj_forward_vel_approach(17.0f, 1.0f);
     }
 }
@@ -292,17 +292,17 @@ static void koopa_unshelled_act_run(void) {
             if (o->oKoopaUnshelledTimeUntilTurn != 0) {
                 o->oKoopaUnshelledTimeUntilTurn--;
             } else {
-                o->oKoopaTargetYaw = obj_random_fixed_turn(DEGREES(45));
+                o->oKoopaTargetYaw = obj_random_fixed_turn(DEG(45));
             }
         }
         // If Mario is far away, or our running away from Mario coincides with
         // running toward the shell
-        if ((o->oDistanceToMario > 800.0f) || ((shell != NULL) && (abs_angle_diff(o->oKoopaTargetYaw, o->oAngleToMario + DEGREES(180)) < DEGREES(45)))) {
+        if ((o->oDistanceToMario > 800.0f) || ((shell != NULL) && (abs_angle_diff(o->oKoopaTargetYaw, o->oAngleToMario + DEG(180)) < DEG(45)))) {
             // then turn toward the shell
             cur_obj_rotate_yaw_toward(o->oKoopaTargetYaw, 0x600);
         } else {
             // otherwise continue running from Mario
-            cur_obj_rotate_yaw_toward((o->oAngleToMario + DEGREES(180)), 0x600);
+            cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), 0x600);
         }
     }
     // If we think we have a shot, dive for the shell
@@ -455,7 +455,7 @@ static s32 koopa_the_quick_detect_bowling_ball(void) {
     if (ball != NULL) {
         angleToBall            = obj_turn_toward_object(o, ball, O_MOVE_ANGLE_YAW_INDEX, 0x0);
         ballSpeedInKoopaRunDir = ball->oForwardVel * coss(ball->oMoveAngleYaw - o->oMoveAngleYaw);
-        if (abs_angle_diff(o->oMoveAngleYaw, angleToBall) < DEGREES(90)) {
+        if (abs_angle_diff(o->oMoveAngleYaw, angleToBall) < DEG(90)) {
             // The ball is in front of ktq
             if (distToBall < 400.0f) {
                 if (ballSpeedInKoopaRunDir < (o->oForwardVel * 0.7f)) {

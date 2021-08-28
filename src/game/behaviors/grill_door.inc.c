@@ -28,7 +28,7 @@ void bhv_openable_grill_loop(void) {
         case OEPNABLE_GRILL_ACT_SPAWN:
             grillIdx = o->oBehParams2ndByte;
             grillObj = spawn_object_relative(OPENABLE_GRILL_DOOR_BP_SIDE_FLIPPED,    gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
-            grillObj->oMoveAngleYaw += DEGREES(180);
+            grillObj->oMoveAngleYaw += DEG(180);
             obj_set_collision_data(grillObj, gOpenableGrills[grillIdx].collision);
             grillObj = spawn_object_relative(OPENABLE_GRILL_DOOR_BP_SIDE_UNFLIPPED, -gOpenableGrills[grillIdx].halfWidth, 0, 0, o, gOpenableGrills[grillIdx].modelID, bhvOpenableGrillDoor);
             obj_set_collision_data(grillObj, gOpenableGrills[grillIdx].collision);

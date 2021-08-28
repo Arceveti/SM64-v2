@@ -299,7 +299,7 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     f32 randomScale;
     struct Object *newObj = spawn_object(parent, params->model, params->behavior);
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE              ) newObj->oMoveAngleYaw = random_u16();
-    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + DEGREES(180)) + (Angle) random_f32_around_zero(params->moveAngleRange));
+    if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD) newObj->oMoveAngleYaw = ((Angle)(newObj->oMoveAngleYaw + DEG(180)) + (Angle) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD ) newObj->oMoveAngleYaw = ((Angle) newObj->oMoveAngleYaw                 + (Angle) random_f32_around_zero(params->moveAngleRange));
     if (params->flags & WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL    ) newObj->oPosY         = find_water_level(newObj->oPosX, newObj->oPosZ);
     if (params->flags & WATER_DROPLET_FLAG_RAND_OFFSET_XZ          ) obj_translate_xz_random( newObj, params->moveRange);
@@ -1236,7 +1236,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type
     struct Surface *intendedFloor;
     f32 intendedX, intendedFloorHeight, intendedZ;
     f32 deltaFloorHeight;
-    f32 steepNormalY = coss(DEGREES(steepAngleDegrees));
+    f32 steepNormalY = coss(DEG(steepAngleDegrees));
     if (o->oForwardVel != 0.0f) {
         intendedX           = (o->oPosX + o->oVelX);
         intendedZ           = (o->oPosZ + o->oVelZ);
@@ -1247,7 +1247,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type
 #endif
         deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
         if (intendedFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
-            o->oWallAngle = (o->oMoveAngleYaw + DEGREES(180));
+            o->oWallAngle = (o->oMoveAngleYaw + DEG(180));
             return 2;
         } else if ((intendedFloor->normal.y < steepNormalY) && (deltaFloorHeight > 0) && (intendedFloorHeight > o->oPosY)) {
             o->oWallAngle = atan2s(intendedFloor->normal.z, intendedFloor->normal.x);
@@ -1272,7 +1272,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
             vec3f_copy(&o->oPosVec, collisionData.pos);
             wall              = collisionData.walls[collisionData.numWalls - 1];
             o->oWallAngle     = atan2s(wall->normal.z, wall->normal.x);
-            return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEGREES(90));
+            return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEG(90));
         }
     }
     return FALSE;
@@ -1341,7 +1341,7 @@ void cur_obj_move_standard(s16 steepSlopeAngleDegrees) { // not Angle type becau
         } else if (steepSlopeAngleDegrees == -30) {
             steepSlopeNormalY = -COS30;
         } else {
-            steepSlopeNormalY = coss(DEGREES(steepSlopeAngleDegrees));
+            steepSlopeNormalY = coss(DEG(steepSlopeAngleDegrees));
         }
         cur_obj_compute_vel_xz();
         cur_obj_apply_drag_xz(dragStrength);
@@ -1536,7 +1536,7 @@ void cur_obj_set_pos_via_transform(void) {
 }
 
 Angle cur_obj_reflect_move_angle_off_wall(void) {
-    return (o->oWallAngle - ((Angle) o->oMoveAngleYaw - (Angle) o->oWallAngle) + DEGREES(180));
+    return (o->oWallAngle - ((Angle) o->oMoveAngleYaw - (Angle) o->oWallAngle) + DEG(180));
 }
 
 void cur_obj_spawn_particles(struct SpawnParticlesInfo *info) {

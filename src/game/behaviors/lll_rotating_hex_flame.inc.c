@@ -32,7 +32,7 @@ void fire_bar_act_inactive(void) {
 
 void fire_bar_act_spawn_flames(void) {
     fire_bar_spawn_flames( 0x0   );
-    fire_bar_spawn_flames(-DEGREES(180));
+    fire_bar_spawn_flames(-DEG(180));
     o->oAngleVelYaw  = 0x0;
     o->oMoveAngleYaw = 0x0;
     o->oAction       = LLL_FIRE_BAR_ACT_ACTIVE;

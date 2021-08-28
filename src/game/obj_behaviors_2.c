@@ -329,7 +329,7 @@ Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
             angle    = atan2s(dz, dx);
             o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
             o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
-            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < DEGREES(90)) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEGREES(180));
+            if ((targetYaw != NULL) && abs_angle_diff(o->oMoveAngleYaw, angle) < DEG(90)) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEG(180));
             return TRUE;
         }
     }
@@ -352,10 +352,10 @@ Bool32 obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
             o->oPosZ           = (newCenterZ - (radius      * sins(angle)));
             otherObject->oPosX = (newCenterX + (otherRadius * coss(angle)));
             otherObject->oPosZ = (newCenterZ + (otherRadius * sins(angle)));
-            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < DEGREES(90)) {
+            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < DEG(90)) {
                 // Bounce off object (or it would, if the above atan2s bug
                 // were fixed)
-                *targetYaw = (Angle)(((angle - o->oMoveAngleYaw) + angle) + DEGREES(180));
+                *targetYaw = (Angle)(((angle - o->oMoveAngleYaw) + angle) + DEG(180));
                 return TRUE;
             }
         }
@@ -369,7 +369,7 @@ Bool32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *targetYaw = (Angle)(o->oMoveAngleYaw + DEGREES(180));
+        *targetYaw = (Angle)(o->oMoveAngleYaw + DEG(180));
     } else if (!obj_resolve_object_collisions(targetYaw)) {
         return FALSE;
     }

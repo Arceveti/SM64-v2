@@ -229,7 +229,7 @@ static void platform_on_track_act_move_along_track(void) {
         //  after reappearing
         // Turn face yaw and compute yaw vel
         if (!((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_YAW)) {
-            Angle targetFaceYaw = (o->oMoveAngleYaw + DEGREES(90));
+            Angle targetFaceYaw = (o->oMoveAngleYaw + DEG(90));
             Angle yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);

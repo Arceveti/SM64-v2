@@ -45,7 +45,7 @@ void snowmans_bottom_act_follow_path(void) { // act 1
     o->oMoveAngleYaw            = approach_s16_symmetric(o->oMoveAngleYaw, o->oSnowmansBottomTargetYaw, 0x400);
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
     if (pathResult == PATH_REACHED_END) {
-        o->oSnowmansBottomTargetYaw = ((obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, DEGREES(45)) && o->oSnowmansBottomHitCheckpointNearMario) ? o->oAngleToMario : o->oMoveAngleYaw);
+        o->oSnowmansBottomTargetYaw = ((obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, DEG(45)) && o->oSnowmansBottomHitCheckpointNearMario) ? o->oAngleToMario : o->oMoveAngleYaw);
         o->oAction                  = SNOWMANS_BOTTOM_ACT_FINAL_STRETCH;
     }
 }

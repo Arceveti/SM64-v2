@@ -15,9 +15,9 @@ void bhv_wind_loop(void) {
         o->oOpacity = 100;
         if (o->oMoveAnglePitch == 0x0) {
             obj_translate_xz_random(o, 900.0f);
-            o->oPosX         += (sins(o->oMoveAngleYaw + DEGREES(180)) * size); // NOP as Pitch is 0
+            o->oPosX         += (sins(o->oMoveAngleYaw + DEG(180)) * size); // NOP as Pitch is 0
             o->oPosY         += 80.0f + random_f32_around_zero(200.0f);
-            o->oPosZ         += (coss(o->oMoveAngleYaw + DEGREES(180)) * size); // -coss(a) * size
+            o->oPosZ         += (coss(o->oMoveAngleYaw + DEG(180)) * size); // -coss(a) * size
             o->oMoveAngleYaw += random_f32_around_zero(4000.0f);
             o->oForwardVel    = ((random_float() * 70.0f) + 50.0f);
         } else {

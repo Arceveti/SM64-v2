@@ -222,7 +222,7 @@ void handle_save_menu(struct MarioState *m) {
         // not quitting
         if (gSaveOptSelectIndex != MENU_OPT_SAVE_AND_QUIT) {
             disable_time_stop();
-            m->faceAngle[1] += DEGREES(180);
+            m->faceAngle[1] += DEG(180);
             // figure out what dialog to show, if we should
             dialogID = get_star_collection_dialog(m);
             if (dialogID) {
@@ -683,10 +683,10 @@ s32 launch_mario_until_land(struct MarioState *m, MarioAction endAction, AnimID3
 Bool32 act_unlocking_key_door(struct MarioState *m) {
     m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
     Angle dAngle = abs_angle_diff(m->usedObj->oFaceAngleYaw, m->faceAngle[1]);
-    f32 offset = ((dAngle <= DEGREES(90)) ? 75.0f : -75.0f);
+    f32 offset = ((dAngle <= DEG(90)) ? 75.0f : -75.0f);
     m->pos[0] = (m->usedObj->oPosX + (coss(m->faceAngle[1]) * offset));
     m->pos[2] = (m->usedObj->oPosZ + (sins(m->faceAngle[1]) * offset));
-    if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
+    if (m->actionArg & 0x2) m->faceAngle[1] += DEG(180);
     if (m->actionTimer == 0) {
         spawn_obj_at_mario_rel_yaw(m, MODEL_BOWSER_KEY_CUTSCENE, bhvBowserKeyUnlockDoor, 0);
         set_mario_animation(m, MARIO_ANIM_UNLOCK_DOOR);
@@ -716,7 +716,7 @@ Bool32 act_unlocking_star_door(struct MarioState *m) {
     switch (m->actionState) {
         case 0:
             m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-            if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
+            if (m->actionArg & 0x2) m->faceAngle[1] += DEG(180);
             m->marioObj->oMarioReadingSignDPosX = m->pos[0];
             m->marioObj->oMarioReadingSignDPosZ = m->pos[2];
             set_mario_animation(m, MARIO_ANIM_SUMMON_STAR);
@@ -754,8 +754,8 @@ Bool32 act_entering_star_door(struct MarioState *m) {
     if (m->actionTimer++ == 0) {
         m->interactObj->oInteractStatus = INT_STATUS_DOOR_PULLED;
         // ~30 degrees / 1/12 rot
-        targetAngle = (m->usedObj->oMoveAngleYaw + DEGREES(30));
-        if (m->actionArg & 0x2) targetAngle += DEGREES(120); // ~120 degrees / 1/3 rot (total 150d / 5/12)
+        targetAngle = (m->usedObj->oMoveAngleYaw + DEG(30));
+        if (m->actionArg & 0x2) targetAngle += DEG(120); // ~120 degrees / 1/3 rot (total 150d / 5/12)
         // targetDX and targetDZ are the offsets to add to Mario's position to
         // have Mario stand 150 units in front of the door
         targetDX = (m->usedObj->oPosX + (150.0f * sins(targetAngle)) - m->pos[0]);
@@ -773,7 +773,7 @@ Bool32 act_entering_star_door(struct MarioState *m) {
         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, 0x00028000);
     } else {
         m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-        if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
+        if (m->actionArg & 0x2) m->faceAngle[1] += DEG(180);
         m->pos[0] += (12.0f * sins(m->faceAngle[1]));
         m->pos[2] += (12.0f * coss(m->faceAngle[1]));
         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, 0x00028000);
@@ -801,7 +801,7 @@ Bool32 act_going_through_door(struct MarioState *m) {
     if (m->actionArg & 0x4) {
         if (m->actionTimer == 16) level_trigger_warp(m, WARP_OP_WARP_DOOR);
     } else if (is_anim_at_end(m)) {
-        if (m->actionArg & 0x2) m->faceAngle[1] += DEGREES(180);
+        if (m->actionArg & 0x2) m->faceAngle[1] += DEG(180);
         set_mario_action(m, ACT_IDLE, 0);
     }
     m->actionTimer++;
@@ -2047,7 +2047,7 @@ static Bool32 act_end_waving_cutscene(struct MarioState *m) {
     }
     set_mario_animation(m, MARIO_ANIM_CREDITS_WAVING);
     stop_and_set_height_to_floor(m);
-    m->marioObj->header.gfx.angle[1] += DEGREES(180);
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     m->marioObj->header.gfx.pos[0]   -= 60.0f;
     m->marioBodyState->handState      = MARIO_HAND_RIGHT_OPEN;
     if (m->actionTimer++ == 300) level_trigger_warp(m, WARP_OP_CREDITS_END);

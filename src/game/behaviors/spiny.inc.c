@@ -72,7 +72,7 @@ static void spiny_act_walk(void) {
                     if (o->oSpinyTimeUntilTurn != 0) {
                         o->oSpinyTimeUntilTurn--;
                     } else {
-                        o->oSpinyTargetYaw     = (o->oMoveAngleYaw + ((Angle) random_sign() * DEGREES(45)));
+                        o->oSpinyTargetYaw     = (o->oMoveAngleYaw + ((Angle) random_sign() * DEG(45)));
                         o->oSpinyTimeUntilTurn = random_linear_offset(100, 100);
                     }
                 }
@@ -122,7 +122,7 @@ static void spiny_act_thrown_by_lakitu(void) {
     if (spiny_check_active()) {
         cur_obj_update_floor_and_walls();
         o->oGraphYOffset    = 15.0f;
-        o->oFaceAnglePitch -= DEGREES(45);
+        o->oFaceAnglePitch -= DEG(45);
         cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
             cur_obj_play_sound_2(SOUND_OBJ_SPINY_LAND);

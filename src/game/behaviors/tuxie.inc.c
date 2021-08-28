@@ -125,7 +125,7 @@ void small_penguin_act_walking_away_from_mario(void) { // act 2
     if (o->oTimer == 0) nearMother = (cur_obj_dist_to_nearest_object_with_behavior(bhvTuxiesMother) < 1000.0f);
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
     o->oForwardVel = (o->oSmallPenguinNextForwardVel + 3.0f);
-    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEGREES(180)), (o->oSmallPenguinYawIncrement + 0x600));
+    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), (o->oSmallPenguinYawIncrement + 0x600));
     if (o->oDistanceToMario > (o->oSmallPenguinRandomDistanceCheck + 500.0f)) o->oAction = SMALL_PENGUIN_ACT_WALKING;
     small_penguin_dive_with_mario();
     if (nearMother) o->oAction = SMALL_PENGUIN_ACT_NEAR_MOTHER;
@@ -186,7 +186,7 @@ void small_penguin_act_near_mother(void) { // act 5
         if (distToMother > 200.0f) {
             cur_obj_rotate_yaw_toward(angleToMother, 0x400);
         } else {
-            cur_obj_rotate_yaw_toward((angleToMother + DEGREES(180)), 0x400);
+            cur_obj_rotate_yaw_toward((angleToMother + DEG(180)), 0x400);
         }
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
     }

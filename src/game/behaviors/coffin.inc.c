@@ -38,7 +38,7 @@ void bhv_coffin_spawner_loop(void) {
                 // Never true, game would enter a while(1) before it could.
                 // Possible a remnant of days this didn't happen.
                 // Rotate the coffin 180 degrees if its on the other side of the room.
-                if ((coffin != NULL) && (relativeZ > 0)) coffin->oFaceAngleYaw = DEGREES(180);
+                if ((coffin != NULL) && (relativeZ > 0)) coffin->oFaceAngleYaw = DEG(180);
             }
             o->oAction = COFFIN_SPAWNER_ACT_COFFINS_LOADED;
         }
@@ -67,7 +67,7 @@ void coffin_act_idle(void) {
                 // This bit changes the coffin's position,
                 // spawns dust there, then resets the position.
                 obj_perform_position_op(POS_OP_SAVE_POSITION);
-                o->oMoveAngleYaw = (o->oFaceAngleYaw - DEGREES(90));
+                o->oMoveAngleYaw = (o->oFaceAngleYaw - DEG(90));
                 obj_set_dist_from_home(200.0f);
                 spawn_mist_from_global();
                 obj_perform_position_op(POS_OP_RESTORE_POSITION);
@@ -103,9 +103,9 @@ void coffin_act_idle(void) {
  */
 void coffin_act_stand_up(void) {
     // Stand up
-    if (o->oFaceAnglePitch != DEGREES(90)) {
+    if (o->oFaceAnglePitch != DEG(90)) {
         o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, 0x3E8, 0xC8);
-        obj_face_pitch_approach(DEGREES(90), o->oAngleVelPitch);
+        obj_face_pitch_approach(DEG(90), o->oAngleVelPitch);
     } else {
         // Stay standing
         if (o->oTimer > 60) {

@@ -65,7 +65,7 @@ void spawn_and_init_wf_platforms(ModelID model, const BehaviorScript *bhv) {
 void spawn_wf_platform_group(void) {
     o->oPlatformSpawnerWFTowerPlatformNum  = 0;
     o->oPlatformSpawnerWFTowerYawOffset    = 0x0;
-    o->oPlatformSpawnerWFTowerDYaw         = DEGREES(45);
+    o->oPlatformSpawnerWFTowerDYaw         = DEG(45);
     o->oPlatformSpawnerWFTowerRadius       = 704.0f;
     o->oPlatformSpawnerWFTowerMoveDistance = 380.0f;
     o->oPlatformSpawnerWFTowerForwardVel   = 3.0f;

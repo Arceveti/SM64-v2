@@ -241,7 +241,7 @@ void bhv_book_switch_loop(void) {
                     // Spawn the projectile book
                     bookendObj = spawn_object_abs_with_rot(o, 0, MODEL_BOOKEND, bhvFlyingBookend,
                                                             ((0x1FC * rand01) - 0x8CA), 890, z,
-                                                            0x0, ((DEGREES(180) * rand01) + DEGREES(90)), 0x0);
+                                                            0x0, ((DEG(180) * rand01) + DEG(90)), 0x0);
                     // Set its action
                     if (bookendObj != NULL) bookendObj->oAction = FLYING_BOOKEND_ACT_FLY_FORWARD;
 

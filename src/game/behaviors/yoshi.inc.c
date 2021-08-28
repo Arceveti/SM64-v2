@@ -93,7 +93,7 @@ void yoshi_walk_and_jump_off_roof_loop(void) {
         cur_obj_play_sound_2(SOUND_GENERAL_ENEMY_ALERT1);
         o->oForwardVel   = 50.0f;
         o->oVelY         = 40.0f;
-        o->oMoveAngleYaw = -(DEGREES(90) - 1);
+        o->oMoveAngleYaw = -(DEG(90) - 1);
         o->oAction       = YOSHI_ACT_FINISH_JUMPING_AND_DESPAWN;
     }
     //! play footstep sound function?

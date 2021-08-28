@@ -254,7 +254,7 @@ void load_level_init_text(u32 arg) {
 }
 
 void init_door_warp(struct SpawnInfo *spawnInfo, u32 arg1) {
-    if (arg1 & 0x00000002) spawnInfo->startAngle[1] += DEGREES(180); //! arg name
+    if (arg1 & 0x00000002) spawnInfo->startAngle[1] += DEG(180); //! arg name
     spawnInfo->startPos[0] += (300.0f * sins(spawnInfo->startAngle[1]));
     spawnInfo->startPos[2] += (300.0f * coss(spawnInfo->startAngle[1]));
 }

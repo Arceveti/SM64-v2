@@ -138,7 +138,7 @@ void print_mapinfo(void) {
     struct Surface *pfloor;
     s32 area  = (((s32) gCurrentObject->oPosX + 0x2000) / 1024)
               + (((s32) gCurrentObject->oPosZ + 0x2000) /   64); // / 1024 * 16);
-    s32 angY  = (gCurrentObject->oMoveAngleYaw / DEGREES(1)); //! s16/Angle type?
+    s32 angY  = (gCurrentObject->oMoveAngleYaw / DEG(1)); //! s16/Angle type?
     f32 bgY   = find_floor(      gCurrentObject->oPosX, gCurrentObject->oPosY, gCurrentObject->oPosZ, &pfloor);
     f32 water = find_water_level(gCurrentObject->oPosX,                        gCurrentObject->oPosZ);
     print_debug_top_down_normal("mapinfo", 0);

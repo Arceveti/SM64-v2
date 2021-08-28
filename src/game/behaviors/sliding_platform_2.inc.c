@@ -21,7 +21,7 @@ void bhv_sliding_plat_2_init(void) {
 
     if (collisionDataIndex < SLIDING_PLATFORM_BP_RR_PYRAMID || collisionDataIndex > SLIDING_PLATFORM_BP_NULL) {
         o->oBackAndForthPlatformVel = 15.0f;
-        if (params & SLIDING_PLATFORM_DIRECTION_MASK) o->oMoveAngleYaw += DEGREES(180);
+        if (params & SLIDING_PLATFORM_DIRECTION_MASK) o->oMoveAngleYaw += DEG(180);
     } else {
         o->oBackAndForthPlatformVel = 10.0f;
         o->oBackAndForthPlatformDirection = ((params & SLIDING_PLATFORM_DIRECTION_MASK) ? -1.0f : 1.0f);

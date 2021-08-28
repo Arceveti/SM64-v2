@@ -44,7 +44,7 @@ void chuckya_act_moving(void) { // act 0
             break;
         case CHUCKYA_SUB_ACT_ACCELERATE:
             approach_f32_bool(&o->oForwardVel, 30.0f, 4.0f);
-            if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > DEGREES(90)) o->oSubAction = CHUCKYA_SUB_ACT_STOP;
+            if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > DEG(90)) o->oSubAction = CHUCKYA_SUB_ACT_STOP;
             if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
             break;
         case CHUCKYA_SUB_ACT_STOP:

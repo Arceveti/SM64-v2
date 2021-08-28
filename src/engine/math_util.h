@@ -25,10 +25,24 @@ extern s16 gArctanTable[];
 #define ABSI(x) ((x) > 0    ? (x) : -(x))
 
 /**
- * Converts an angle in degrees to sm64's s16 angle units. For example, DEGREES(90) == 0x4000
+ * Converts an angle in degrees to sm64's s16 angle units. For example, DEG(90) == 0x4000
  * This should be used mainly to make camera code clearer at first glance.
  */
-#define DEGREES( x) (Angle)((x) * 0x10000 / 360)
+#define DEG( x) (Angle)((x) * 0x10000 / 360)
+
+#define DEG30   0x1555
+#define DEG45   0x2000
+#define DEG60   0x2AAA
+#define DEG90   0x4000
+#define DEG120  0x5555
+#define DEG135  0x6000
+#define DEG180  0x8000
+#define DEGN135 0xA000
+#define DEGN120 0xAAAB
+#define DEGN90  0xC000
+#define DEGN60  0xD555
+#define DEGN45  0xE000
+#define DEGN30  0xEAAB
 
 #define DEG_PER_RAD 57.29577950560105
 #define RAD_PER_DEG (1.0 / DEG_PER_RAD)

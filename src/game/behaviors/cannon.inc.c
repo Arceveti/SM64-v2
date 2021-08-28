@@ -48,7 +48,7 @@ void opened_cannon_act_turning_yaw(void) {
     } else {
         if (o->oTimer >= 6) {
             if (o->oTimer < 22) {
-                o->oMoveAngleYaw = ((sins(o->oCannonAngle) * DEGREES(90)) + (Angle)(o->oBehParams2ndByte << 8));
+                o->oMoveAngleYaw = ((sins(o->oCannonAngle) * DEG(90)) + (Angle)(o->oBehParams2ndByte << 8));
                 o->oCannonAngle += 0x400;
             } else if (o->oTimer >= 26) {
                 o->oCannonAngle = 0x0;
@@ -63,7 +63,7 @@ void opened_cannon_act_raise_barrel(void) {
     if (o->oTimer >= 4) {
         if (o->oTimer < 20) {
             o->oCannonAngle += 0x400;
-            o->oMoveAnglePitch = (sins(o->oCannonAngle) * DEGREES(45));
+            o->oMoveAnglePitch = (sins(o->oCannonAngle) * DEG(45));
         } else if (o->oTimer >= 25) {
             o->oAction = OPENED_CANNON_ACT_READY;
         }

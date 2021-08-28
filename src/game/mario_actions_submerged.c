@@ -187,7 +187,7 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
             f32 distance           = sqrtf(sqr(lateralDist) + sqr(d[1]));
             Angle pitchToWhirlpool = atan2s(lateralDist, d[1]);
             Angle yawToWhirlpool   = atan2s(d[2], d[0]);
-            yawToWhirlpool -= (Angle)(DEGREES(45) * (1000.0f / (distance + 1000.0f)));
+            yawToWhirlpool -= (Angle)(DEG(45) * (1000.0f / (distance + 1000.0f)));
             if (whirlpool->strength >= 0) {
                 if ((gCurrLevelNum == LEVEL_DDD) && (gCurrAreaIndex == 2)) whirlpoolRadius = 4000.0f;
                 if ((distance >= 26.0f) && (distance < whirlpoolRadius)) strength = (whirlpool->strength * (1.0f - (distance / whirlpoolRadius)));
@@ -715,7 +715,7 @@ static Bool32 check_water_grab(struct MarioState *m) {
         f32 dx = (object->oPosX - m->pos[0]);
         f32 dz = (object->oPosZ - m->pos[2]);
         Angle dAngleToObject = abs_angle_diff(atan2s(dz, dx), m->faceAngle[1]);
-        if (dAngleToObject <= DEGREES(60)) {
+        if (dAngleToObject <= DEG(60)) {
             m->usedObj = object;
             mario_grab_used_object(m);
             m->marioBodyState->grabPos = GRAB_POS_LIGHT_OBJ;
@@ -941,7 +941,7 @@ static Bool32 act_caught_in_whirlpool(struct MarioState *m) {
     m->pos[0]       = (whirlpool->oPosX + (dx * cosAngleChange) + (dz * sinAngleChange));
     m->pos[2]       = (whirlpool->oPosZ - (dx * sinAngleChange) + (dz * cosAngleChange));
     m->pos[1]       = (whirlpool->oPosY + marioObj->oMarioWhirlpoolPosY);
-    m->faceAngle[1] = (atan2s(dz, dx) + DEGREES(180));
+    m->faceAngle[1] = (atan2s(dz, dx) + DEG(180));
     set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);

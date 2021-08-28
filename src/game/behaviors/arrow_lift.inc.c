@@ -14,7 +14,7 @@
  */
 static s32 arrow_lift_move_away(void) {
     s8 doneMoving = FALSE;
-    o->oMoveAngleYaw = (o->oFaceAngleYaw - DEGREES(90));
+    o->oMoveAngleYaw = (o->oFaceAngleYaw - DEG(90));
     o->oVelY         =  0.0f;
     o->oForwardVel   = 12.0f;
     // Cumulative displacement is used to keep track of how far the platform
@@ -35,7 +35,7 @@ static s32 arrow_lift_move_away(void) {
  */
 static s8 arrow_lift_move_back(void) {
     s8 doneMoving              = FALSE;
-    o->oMoveAngleYaw           = (o->oFaceAngleYaw + DEGREES(90));
+    o->oMoveAngleYaw           = (o->oFaceAngleYaw + DEG(90));
     o->oVelY                   =  0.0f;
     o->oForwardVel             = 12.0f;
     o->oArrowLiftDisplacement -= o->oForwardVel;

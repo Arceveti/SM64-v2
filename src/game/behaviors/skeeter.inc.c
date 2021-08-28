@@ -101,7 +101,7 @@ static void skeeter_act_walk(void) {
                         o->oSkeeterWaitTime--;
                     } else if (cur_obj_check_if_near_animation_end()) {
                         if (random_u16() & 0x0003) {
-                            o->oSkeeterTargetAngle = obj_random_fixed_turn(DEGREES(45));
+                            o->oSkeeterTargetAngle = obj_random_fixed_turn(DEG(45));
                             o->oSkeeterWaitTime    = random_linear_offset(100, 100);
                         } else {
                             o->oAction          = SKEETER_ACT_IDLE;

@@ -102,15 +102,15 @@ void ukiki_act_idle(void) {
     if (o->oUkikiTextState == UKIKI_TEXT_GO_TO_CAGE) o->oAction = UKIKI_ACT_GO_TO_CAGE;
     // Jump away from Mario after stealing his cap.
     if (o->oUkikiTextState == UKIKI_TEXT_STOLE_CAP) {
-        o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + DEGREES(180);
+        o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + DEG(180);
         if (check_if_moving_over_floor(50.0f, 150.0f)) {
             o->oAction = UKIKI_ACT_JUMP;
         } else {
-            o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + DEGREES(90);
+            o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + DEG(90);
             if (check_if_moving_over_floor(50.0f, 150.0f)) {
                 o->oAction = UKIKI_ACT_JUMP;
             } else {
-                o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw - DEGREES(90);
+                o->oMoveAngleYaw = gMarioObject->oMoveAngleYaw - DEG(90);
                 if (check_if_moving_over_floor(50.0f, 150.0f)) o->oAction = UKIKI_ACT_JUMP;
             }
         }
@@ -175,7 +175,7 @@ void ukiki_act_turn_to_mario(void) {
  */
 void ukiki_act_run(void) {
     s32 fleeMario = TRUE;
-    Angle goalYaw = (o->oAngleToMario + DEGREES(180));
+    Angle goalYaw = (o->oAngleToMario + DEG(180));
     if (is_cap_ukiki_and_mario_has_normal_cap_on_head()) {
         fleeMario = FALSE;
         goalYaw = o->oAngleToMario;
@@ -198,7 +198,7 @@ void ukiki_act_run(void) {
         } else if((o->oMoveFlags & OBJ_MOVE_HIT_EDGE)) {
             if (is_mario_moving_fast_or_in_air(10)) {
                 o->oAction = UKIKI_ACT_JUMP;
-                o->oMoveAngleYaw += DEGREES(180);
+                o->oMoveAngleYaw += DEG(180);
             }
         }
     }

@@ -123,7 +123,7 @@ static void fish_act_flee(void) {
     if (o->oForwardVel < o->oFishGoalVel) o->oForwardVel = (o->oForwardVel + 0.5f);
     o->oFishGoalY = gMarioObject->oPosY + o->oFishHeightOffset;
     // Rotate fish away from Mario.
-    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEGREES(180)), o->oFishYawVel);
+    cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), o->oFishYawVel);
     if (o->oPosY < o->oFishWaterLevel - 50.0f) {
         if (fishY < 0.0f) fishY = -fishY;
         fish_vertical_roam((fishY < 500.0f) ? 2 : 4);

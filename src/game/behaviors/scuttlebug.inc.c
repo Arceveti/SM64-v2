@@ -18,7 +18,7 @@ s32 update_angle_from_move_flags(s32 *angle) {
         *angle = o->oWallAngle;
         return  1;
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *angle = (o->oMoveAngleYaw + DEGREES(180));
+        *angle = (o->oMoveAngleYaw + DEG(180));
         return -1;
     }
     return 0;

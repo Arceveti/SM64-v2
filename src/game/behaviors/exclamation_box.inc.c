@@ -78,7 +78,7 @@ void exclamation_box_act_active(void) {
     }
     if (cur_obj_was_attacked_or_ground_pounded()) {
         cur_obj_become_intangible();
-        o->oExclamationBoxScaleAngle = DEGREES(90);
+        o->oExclamationBoxScaleAngle = DEG(90);
         o->oVelY        = 30.0f;
         o->oGravity     = -8.0f;
         o->oFloorHeight = o->oPosY;

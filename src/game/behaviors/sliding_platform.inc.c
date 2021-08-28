@@ -1,7 +1,7 @@
 // sliding_platform.c.inc
 
 void bhv_wf_sliding_platform_init(void) {
-    o->oFaceAngleYaw -= DEGREES(90);
+    o->oFaceAngleYaw -= DEG(90);
     o->oPosX         += 2.0f;
     o->oHomeX         = o->oPosX;
     switch (o->oBehParams2ndByte) {
@@ -28,7 +28,7 @@ void bhv_wf_sliding_platform_loop(void) {
             if (o->oTimer == 60) {
                 o->oAction        = WF_SLID_BRICK_PTFM_ACT_RETRACT;
                 o->oForwardVel    = o->oWFSlidBrickPtfmMovVel;
-                o->oMoveAngleYaw -= DEGREES(180);
+                o->oMoveAngleYaw -= DEG(180);
             }
             break;
         case WF_SLID_BRICK_PTFM_ACT_RETRACT:
@@ -39,7 +39,7 @@ void bhv_wf_sliding_platform_loop(void) {
             if (o->oTimer == 90) {
                 o->oAction        = WF_SLID_BRICK_PTFM_ACT_EXTEND;
                 o->oForwardVel    = o->oWFSlidBrickPtfmMovVel;
-                o->oMoveAngleYaw -= DEGREES(180);
+                o->oMoveAngleYaw -= DEG(180);
             }
             break;
     }

@@ -32,7 +32,7 @@ void bubba_act_idle(void) {
         } else if (o->oBubbaRandomTimer != 0) {
             o->oBubbaRandomTimer--;
         } else {
-            o->oBubbaTargetYaw   = obj_random_fixed_turn(DEGREES(45));
+            o->oBubbaTargetYaw   = obj_random_fixed_turn(DEG(45));
             o->oBubbaRandomTimer = random_linear_offset(100, 100);
         }
     }
@@ -63,7 +63,7 @@ void bubba_act_attack(void) {
         }
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < 0x3000) { // 67.5 degrees
-            Angle targetDYaw = (DEGREES(90) - atan2s(800.0f, (o->oDistanceToMario - 800.0f)));
+            Angle targetDYaw = (DEG(90) - atan2s(800.0f, (o->oDistanceToMario - 800.0f)));
             if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) targetDYaw = -targetDYaw;
             o->oBubbaTargetYaw = (o->oAngleToMario + targetDYaw);
         } else {
@@ -85,7 +85,7 @@ void bhv_bubba_loop(void) {
     o->oInteractionSubtype &= ~INT_SUBTYPE_EATS_MARIO;
     o->oBubbaNextTargetPitchTowardMario = obj_turn_pitch_toward_mario(120.0f, 0);
     if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x1000)
-        && (abs_angle_diff((o->oBubbaNextTargetPitchTowardMario + 0x800), o->oMoveAnglePitch) < DEGREES(45))) {
+        && (abs_angle_diff((o->oBubbaNextTargetPitchTowardMario + 0x800), o->oMoveAnglePitch) < DEG(45))) {
         if ((o->oAnimState != BUBBA_ANIM_STATE_CLOSED_MOUTH) && (o->oDistanceToMario < 250.0f)) o->oInteractionSubtype |= INT_SUBTYPE_EATS_MARIO;
         o->hurtboxRadius = 100.0f;
     } else {

@@ -6,7 +6,7 @@ void bhv_bubble_cannon_barrel_loop(void) {
         obj_mark_for_deletion(o);
     } else {
         o->oMoveAngleYaw   =  o->parentObj->oFaceAngleYaw;
-        o->oMoveAnglePitch = (o->parentObj->oMoveAnglePitch + DEGREES(90));
+        o->oMoveAnglePitch = (o->parentObj->oMoveAnglePitch + DEG(90));
         o->oFaceAnglePitch =  o->parentObj->oMoveAnglePitch;
         if ((o->oCannonBarrelBubblesForwardVelCheck += o->oForwardVel) > 0.0f) {
             cur_obj_set_pos_via_transform();
@@ -57,7 +57,7 @@ void water_bomb_cannon_act_active(void) { // act 1
                     cur_obj_play_sound_2(SOUND_OBJ_WATER_BOMB_CANNON);
                     o->oWaterCannonIdleTimer = 70;
                     o->oWaterCannonTargetMovePitch = (0x1000 + (0x400 * (random_u16() & 0x3)));
-                    o->oWaterCannonTargetFaceYaw   = (-DEGREES(45) + o->oMoveAngleYaw + (0x1000 * (random_u16() % 5)));
+                    o->oWaterCannonTargetFaceYaw   = (-DEG(45) + o->oMoveAngleYaw + (0x1000 * (random_u16() % 5)));
                     o->oWaterCannonRotationTimer   = 60;
                 }
             }

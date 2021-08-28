@@ -18,12 +18,12 @@ f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist) {
 void hoot_floor_bounce(void) {
     struct FloorGeometry *floorGeo;
     f32 floorY  = hoot_find_next_floor(&floorGeo, 375.0f);
-    if ((floorY +  75.0f) > o->oPosY) o->oMoveAnglePitch -= DEGREES(20);
+    if ((floorY +  75.0f) > o->oPosY) o->oMoveAnglePitch -= DEG(20);
     floorY      = hoot_find_next_floor(&floorGeo, 200.0f);
-    if ((floorY + 125.0f) > o->oPosY) o->oMoveAnglePitch -= DEGREES(40);
+    if ((floorY + 125.0f) > o->oPosY) o->oMoveAnglePitch -= DEG(40);
     floorY      = hoot_find_next_floor(&floorGeo,   0.0f);
     if ((floorY + 125.0f) > o->oPosY) o->oPosY = (floorY + 125.0f);
-    if (o->oMoveAnglePitch < -DEGREES(120)) o->oMoveAnglePitch = -DEGREES(120);
+    if (o->oMoveAnglePitch < -DEG(120)) o->oMoveAnglePitch = -DEG(120);
 }
 
 void hoot_free_step(UNUSED Bool32 fastOscY, s32 speed) {
@@ -107,7 +107,7 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
 
 void hoot_act_ascent(void) {
     o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw, atan2s(-o->oPosZ, -o->oPosX), 0x500);
-    o->oMoveAnglePitch = DEGREES(290);
+    o->oMoveAnglePitch = DEG(290);
     if (o->oTimer >= 29) {
         cur_obj_play_sound_1(SOUND_ENV_WIND2);
         o->header.gfx.animInfo.animFrame = 1;

@@ -9,7 +9,7 @@ void bhv_castle_floor_trap_init(void) {
     struct Object *floorTrapObj;
     floorTrapObj = spawn_object_relative(OBJ_BP_NONE, -358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
     floorTrapObj = spawn_object_relative(OBJ_BP_NONE,  358, 0, 0, o, MODEL_CASTLE_BOWSER_TRAP, bhvFloorTrapInCastle);
-    floorTrapObj->oMoveAngleYaw += DEGREES(180);
+    floorTrapObj->oMoveAngleYaw += DEG(180);
 }
 
 void bhv_castle_floor_trap_open_detect(void) {
@@ -26,8 +26,8 @@ void bhv_castle_floor_trap_open(void) {
     if (o->oTimer == 0) play_sound(SOUND_GENERAL_CASTLE_TRAP_OPEN, gGlobalSoundSource);
     o->oAngleVelRoll  -= 0x100;
     o->oFaceAngleRoll += o->oAngleVelRoll;
-    if (o->oFaceAngleRoll < -DEGREES(90)) {
-        o->oFaceAngleRoll = -DEGREES(90);
+    if (o->oFaceAngleRoll < -DEG(90)) {
+        o->oFaceAngleRoll = -DEG(90);
         o->oAction = CASTLE_FLOOR_TRAP_ACT_CLOSE_DETECT; // after opening is done, enable close detection
     }
 }

@@ -18,7 +18,7 @@ void bhv_horizontal_grindel_update(void) {
         if (cur_obj_rotate_yaw_toward(o->oHorizontalGrindelTargetYaw, 0x400)) {
             if (o->oTimer > 60) {
                 if (o->oHorizontalGrindelDistToHome > 300.0f) {
-                    o->oHorizontalGrindelTargetYaw += DEGREES(180);
+                    o->oHorizontalGrindelTargetYaw += DEG(180);
                     o->oHorizontalGrindelDistToHome = 0.0f;
                 } else {
                     cur_obj_play_sound_2(SOUND_OBJ_KING_BOBOMB_JUMP);
@@ -36,6 +36,6 @@ void bhv_horizontal_grindel_update(void) {
         if (o->oVelY < 0.0f) o->oGravity = -16.0f;
     }
 
-    o->oFaceAngleYaw = (o->oMoveAngleYaw + DEGREES(90));
+    o->oFaceAngleYaw = (o->oMoveAngleYaw + DEG(90));
     cur_obj_move_standard(78);
 }

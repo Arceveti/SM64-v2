@@ -30,7 +30,7 @@ static void swoop_act_idle(void) {
         o->oAction = SWOOP_ACT_MOVE;
         o->oVelY   = -12.0f;
     }
-    o->oFaceAngleRoll = DEGREES(180);
+    o->oFaceAngleRoll = DEG(180);
 }
 
 /**

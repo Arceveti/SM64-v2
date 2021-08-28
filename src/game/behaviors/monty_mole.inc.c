@@ -175,7 +175,7 @@ static void monty_mole_act_rise_from_hole(void) {
 static void monty_mole_act_spawn_rock(void) {
     struct Object *rock;
     if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_GET_ROCK)) {
-        if ((o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK) && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEGREES(90)) && ((rock = spawn_object(o, MODEL_PEBBLE, bhvMontyMoleRock)) != NULL)) {
+        if ((o->oBehParams2ndByte != MONTY_MOLE_BP_NO_ROCK) && (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(90)) && ((rock = spawn_object(o, MODEL_PEBBLE, bhvMontyMoleRock)) != NULL)) {
             o->prevObj = rock;
             o->oAction = MONTY_MOLE_ACT_THROW_ROCK;
         } else {
@@ -189,7 +189,7 @@ static void monty_mole_act_spawn_rock(void) {
  * into hole action.
  */
 static void monty_mole_act_begin_jump_into_hole(void) {
-    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || obj_is_near_to_and_facing_mario(1000.0f, DEGREES(90))) {
+    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || obj_is_near_to_and_facing_mario(1000.0f, DEG(90))) {
         o->oAction  = MONTY_MOLE_ACT_JUMP_INTO_HOLE;
         o->oVelY    = 40.0f;
         o->oGravity = -6.0f;

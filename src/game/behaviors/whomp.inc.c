@@ -60,7 +60,7 @@ void whomp_patrol(void) {
     o->oForwardVel = 3.0f;
     if (distWalked > patrolDist) {
         o->oAction = WHOMP_ACT_TURN;
-    } else if (marioAngle < DEGREES(45)) {
+    } else if (marioAngle < DEG(45)) {
         if (o->oDistanceToMario < 1500.0f) {
             o->oForwardVel = 9.0f;
             cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);
@@ -77,7 +77,7 @@ void king_whomp_chase(void) {
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
     if (o->oTimer > 30) {
         marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-        if (marioAngle < DEGREES(45)) {
+        if (marioAngle < DEG(45)) {
             if (o->oDistanceToMario < 1500.0f) {
                 o->oForwardVel = 9.0f;
                 cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);
@@ -103,9 +103,9 @@ void whomp_jump(void) {
     if (o->oTimer >= 8) {
         o->oAngleVelPitch += 0x100;
         o->oFaceAnglePitch += o->oAngleVelPitch;
-        if (o->oFaceAnglePitch > DEGREES(90)) {
+        if (o->oFaceAnglePitch > DEG(90)) {
             o->oAngleVelPitch  = 0x0;
-            o->oFaceAnglePitch = DEGREES(90);
+            o->oFaceAnglePitch = DEG(90);
             o->oAction = WHOMP_ACT_LAND;
         }
     }

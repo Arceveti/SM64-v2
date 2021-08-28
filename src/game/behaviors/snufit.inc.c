@@ -110,10 +110,10 @@ void bhv_snufit_loop(void) {
         // Face Mario if he is within range.
         if (o->oDistanceToMario < 800.0f) {
             obj_turn_pitch_toward_mario(120.0f, 0x7D0);
-            if ((Angle) o->oMoveAnglePitch > DEGREES(45)) {
-                o->oMoveAnglePitch =  DEGREES(45);
-            } else if ((Angle) o->oMoveAnglePitch < -DEGREES(45)) {
-                o->oMoveAnglePitch = -DEGREES(45);
+            if ((Angle) o->oMoveAnglePitch > DEG(45)) {
+                o->oMoveAnglePitch =  DEG(45);
+            } else if ((Angle) o->oMoveAnglePitch < -DEG(45)) {
+                o->oMoveAnglePitch = -DEG(45);
             }
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x7D0);
         } else {
@@ -158,7 +158,7 @@ void bhv_snufit_balls_loop(void) {
         if (obj_check_attacks(&sSnufitBulletHitbox, SNUFIT_BALL_ACT_HIT_MARIO)) {
             // We hit Mario while he is metal!
             // Bounce off, and fall until the first check is true.
-            o->oMoveAngleYaw += DEGREES(180);
+            o->oMoveAngleYaw += DEG(180);
             o->oForwardVel   *=  0.05f;
             o->oVelY          =  30.0f;
             o->oGravity       =  -4.0f;

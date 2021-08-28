@@ -30,7 +30,7 @@ void dorrie_act_move(void) {
             targetYaw = gMarioObject->oFaceAngleYaw;
             targetSpeed = 10.0f;
         } else {
-            circularTurn = (DEGREES(90) - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f));
+            circularTurn = (DEG(90) - atan2s(2000.0f, o->oDorrieDistToHome - 2000.0f));
             if ((Angle)(o->oMoveAngleYaw - o->oDorrieAngleToHome) < 0) circularTurn = -circularTurn;
 
             targetYaw = o->oDorrieAngleToHome + circularTurn;

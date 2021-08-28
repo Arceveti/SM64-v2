@@ -44,7 +44,7 @@ static void camera_lakitu_intro_act_spawn_cloud(void) {
     if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK) {
         o->oAction                   = CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG;
         vec3f_set(&o->oPosVec, 1800.0f, 2400.0f, -2400.0f);
-        o->oMoveAnglePitch           =  DEGREES(90);
+        o->oMoveAnglePitch           =  DEG(90);
         o->oCameraLakituSpeed        =   60.0f;
         o->oCameraLakituCircleRadius = 1000.0f;
         spawn_object_relative_with_scale(CLOUD_BP_LAKITU_CLOUD, 0, 0, 0, 2.0f, o, MODEL_MIST, bhvCloud);
@@ -74,7 +74,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
                 targetMoveYaw   = o->oAngleToMario;
             } else {
                 // Stay moving in a circle around Mario
-                Angle turnAmount = (DEGREES(90) - atan2s(o->oCameraLakituCircleRadius, o->oDistanceToMario - o->oCameraLakituCircleRadius));
+                Angle turnAmount = (DEG(90) - atan2s(o->oCameraLakituCircleRadius, o->oDistanceToMario - o->oCameraLakituCircleRadius));
                 if ((Angle)(o->oMoveAngleYaw - o->oAngleToMario) < 0x0) turnAmount = -turnAmount;
                 targetMoveYaw   = (o->oAngleToMario + turnAmount);
                 targetMovePitch = o->oFaceAnglePitch;
