@@ -103,6 +103,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Movement:**
 - Perform ground steps while standing still (Arceveti) *
+- Configurable fall damage height *
 - Uses the relative angles of Mario's slope rather than surface normals, allowing Mario to properly walk laterally across floor surfaces (Arceveti) *
 - Turn circle fix (Arceveti) *
 - Midair turn (Arceveti) *
@@ -120,12 +121,15 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Mario can move sideways on ledges (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
+- Configurable wall kick/slide angle (Arceveti) *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *
 
 **Misc:**
 - Goddard easter egg from Shindou *
 
 **Experimental:**
+- Unlock FPS *
+- Check Mario's collision from the his center rather than his feet (Arceveti) *
 - Platform Displacement 2 for objects other than Mario & Bowser (Arceveti) *
 
 # ![](https://i.imgur.com/CeOukzk.gif) HackerSM64 ![](https://i.imgur.com/s0LUbTo.gif)

@@ -208,7 +208,7 @@ struct GraphNodeObject      *gCurGraphNodeObject     = NULL;
 struct GraphNodeHeldObject  *gCurGraphNodeHeldObject = NULL;
 u16 gAreaUpdateCounter = 0;
 #ifdef METAL_CAP_REFLECTION_LAKITU
-s16 gMarioScreenX, gMarioScreenY;
+ScreenPos gMarioScreenX, gMarioScreenY;
 #endif
 
 #ifdef F3DEX_GBI_2
@@ -781,7 +781,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
  */
 static s32 obj_is_in_view(struct GraphNodeObject *node, Mat4 matrix) {
     s16 cullingRadius;
-    s16 halfFov; // half of the fov in in-game angle units instead of degrees
+    Angle halfFov; // half of the fov in in-game angle units instead of degrees
     struct GraphNode *geo;
     f32 hScreenEdge;
     if (node->node.flags & GRAPH_RENDER_INVISIBLE) return FALSE;
@@ -830,9 +830,6 @@ static void geo_process_object(struct Object *node) {
         mtxf_scale_vec3f(gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex + 1], node->header.gfx.scale);
         node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
         vec3f_copy(node->header.gfx.cameraToObject, gMatStack[gMatStackIndex][3]);
-        // node->header.gfx.cameraToObject[0] =  gMatStack[  gMatStackIndex][3][0];
-        // node->header.gfx.cameraToObject[1] =  gMatStack[  gMatStackIndex][3][1];
-        // node->header.gfx.cameraToObject[2] =  gMatStack[  gMatStackIndex][3][2];
         // FIXME: correct types
         if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo, hasAnimation);
         if (obj_is_in_view(&node->header.gfx, gMatStack[gMatStackIndex])) {
@@ -842,8 +839,7 @@ static void geo_process_object(struct Object *node) {
             if (node->header.gfx.sharedChild != NULL) {
 #ifdef VISUAL_DEBUG
                 if (hitboxView) {
-                    Vec3f bnds1;
-                    Vec3f bnds2;
+                    Vec3f bnds1, bnds2;
                     // This will create a cylinder that visualises their hitbox.
                     // If they do not have a hitbox, it will be a small white cube instead.
                     if (node->oIntangibleTimer != -1) {
@@ -903,7 +899,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
 #endif
     if ( node->fnNode.func != NULL)     node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     if ((node->objNode     != NULL) && (node->objNode->header.gfx.sharedChild != NULL)) {
-        s32 hasAnimation = (node->objNode->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
+        Bool32 hasAnimation = ((node->objNode->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0);
         translation[0] = (node->translation[0] / 4.0f);
         translation[1] = (node->translation[1] / 4.0f);
         translation[2] = (node->translation[2] / 4.0f);
@@ -951,7 +947,7 @@ void geo_try_process_children(struct GraphNode *node) {
  * be iterated over.
  */
 void geo_process_node_and_siblings(struct GraphNode *firstNode) {
-    s16 iterateChildren            = TRUE;
+    Bool16 iterateChildren            = TRUE;
     struct GraphNode *curGraphNode = firstNode;
     struct GraphNode *parent       = curGraphNode->parent;
     // In the case of a switch node, exactly one of the children of the node is

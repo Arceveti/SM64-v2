@@ -1132,17 +1132,17 @@ Bool32 check_object_grab_mario(struct MarioState *m, UNUSED InteractType interac
 
 Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction actionId = (m->action & ACT_ID_MASK);
-    if ((actionId >= 0x080) && (actionId < 0x0A0)) {
+    if ((actionId >= ACT_GROUP_AIRBORNE) && (actionId < ACT_HOLD_JUMP)) {
         if (!(m->prevAction & ACT_FLAG_ON_POLE) || (m->usedObj != o)) {
             f32 poleBottom;
 #if defined(VERSION_SH) || defined(POLE_SWING)
             f32 velConv = m->forwardVel; // conserve the velocity.
             struct Object *marioObj = m->marioObj;
-            Bool32 lowSpeed         = (velConv <= 10.0f);
+            Bool32 lowSpeed         = (velConv <= GROUND_SPEED_THRESHOLD_2);
             Angle angleToPole       = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
             if ((angleToPole < -DEG(60)) || (angleToPole > DEG(60))) return FALSE;
 #else
-            Bool32 lowSpeed         = (m->forwardVel <= 10.0f);
+            Bool32 lowSpeed         = (m->forwardVel <= GROUND_SPEED_THRESHOLD_2);
             struct Object *marioObj = m->marioObj;
 #endif
             mario_stop_riding_and_holding(m);

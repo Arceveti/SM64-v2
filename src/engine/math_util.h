@@ -97,6 +97,8 @@ f64  absd(f64 x);
 #ifdef FAST_INVSQRT
 f32  Q_rsqrtf( f32 number );
 f64  Q_rsqrtd( f64 number );
+f32  Q_invmagf(Vec3f v);
+f64  Q_invmagd(Vec3d v);
 #endif
 f64  sqrtd(f64 x);
 // min_3
@@ -167,7 +169,9 @@ void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_zero(                         Vec3f v);
 void vec3f_clamp(                        Vec3f vec, f32 limit);
 f32  vec3f_mag(                          Vec3f v);
+f32  vec3f_invmag(                       Vec3f v);
 void vec3f_normalize(                    Vec3f dest);
+void vec3f_normalize_negative(           Vec3f dest);
 void vec3f_normalize_max(                Vec3f dest, f32 max);
 void vec3f_get_lateral_dist(             Vec3f from, Vec3f to, f32 *dist);
 void vec3f_get_dist(                     Vec3f from, Vec3f to, f32 *dist);
@@ -193,7 +197,8 @@ f32  vec4f_dot(                          Vec4f a, Vec4f b);
 void vec4f_scale(                        Vec4f dest, Vec4f src, f32 scale);
 void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 // Matrix operations
-void mtxf_copy(                           Mat4 dest,  Mat4 src);
+void mtxf_copy(                           Mat4 dest, const Mat4 src);
+void mtxf_shift_up(                       Mat4 mtx);
 void mtxf_end(                            Mat4 mtx);
 void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);

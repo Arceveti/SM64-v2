@@ -23,7 +23,7 @@ enum GdRotAxis {
 // Needed for gd_math.c itself.
 void   gd_adjunct_mat4f(Mat4 *src, Mat4 *dst);
 f32    mtxf_det(Mat4 *mtx);
-void   gd_mat4f_lookat(Mat4 *mtx, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 yTo, f32 zTo, f32 zColY, f32 yColY, f32 xColY);
+void   gd_mtxf_lookat(Mat4 *mtx, Vec3f from, Vec3f to, f32 zColY, f32 yColY, f32 xColY);
 void   gd_scale_mat4f_by_vec3f(   Mat4 *mtx, Vec3f vec);
 void   gd_rot_mat_about_vec3f(      Mat4 *mtx, Vec3f vec);
 void   gd_create_origin_lookat(     Mat4 *mtx, Vec3f vec, f32 roll);
@@ -31,8 +31,6 @@ void   gd_rot_2d_vec(f32 deg, f32 *x, f32 *y);
 void   gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang);
 void   gd_inverse_mat4f(Mat4 *src, Mat4 *dst);
 void   gd_create_rot_mat_angular(Mat4 *mtx, Vec3f vec, f32 ang);
-void   gd_set_identity_mat4(Mat4 *mtx);
-void   gd_copy_mat4f(const Mat4 *src, Mat4 *dst);
 void   gd_rotate_and_translate_vec3f(Vec3f vec, const Mat4 *mtx);
 void   gd_mat4f_mult_vec3f(          Vec3f vec, const Mat4 *mtx);
 void   gd_mult_mat4f(const Mat4 *mA, const Mat4 *mB, Mat4 *dst);

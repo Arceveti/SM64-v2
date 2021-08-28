@@ -893,21 +893,21 @@ Bool32 init_level(void) {
         }
         if (gCurrentArea != NULL) {
             reset_camera(gCurrentArea->camera);
-#ifdef PEACH_SKIP
+#ifdef SKIP_PEACH_LETTER_CUTSCENE
             if ((gCurrDemoInput != NULL) || (!gDebugLevelSelect && (gMarioState->action != ACT_UNINITIALIZED))) set_mario_action(gMarioState, ACT_IDLE, 0);
         }
 #else
-        if (gCurrDemoInput != NULL) {
-            set_mario_action(gMarioState, ACT_IDLE, 0);
-        } else if (!gDebugLevelSelect && (gMarioState->action != ACT_UNINITIALIZED)) {
-            if (save_file_exists(gCurrSaveFileNum - 1)) {
+            if (gCurrDemoInput != NULL) {
                 set_mario_action(gMarioState, ACT_IDLE, 0);
-            } else {
-                set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
-                fadeFromColor = TRUE;
+            } else if (!gDebugLevelSelect && (gMarioState->action != ACT_UNINITIALIZED)) {
+                if (save_file_exists(gCurrSaveFileNum - 1)) {
+                    set_mario_action(gMarioState, ACT_IDLE, 0);
+                } else {
+                    set_mario_action(gMarioState, ACT_INTRO_CUTSCENE, 0);
+                    fadeFromColor = TRUE;
+                }
             }
         }
-    }
 #endif
         if (fadeFromColor) {
             play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 0x5A, 0xFF, 0xFF, 0xFF);
@@ -951,7 +951,7 @@ Bool32 lvl_init_from_save_file(UNUSED Bool32 initOrUpdate, s32 levelNum) {
 #endif
     sWarpDest.type      = WARP_TYPE_NOT_WARPING;
     sDelayedWarpOp      = WARP_OP_NONE;
-#ifdef CASTLE_MUSIC_FIX
+#ifdef FIX_CASTLE_MUSIC
     gNeverEnteredCastle = FALSE;
 #else
     gNeverEnteredCastle = !save_file_exists(gCurrSaveFileNum - 1);

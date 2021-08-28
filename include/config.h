@@ -48,8 +48,8 @@
 // Use 8MB RAM instead of 4MB
 #define USE_EXT_RAM
 
-// Clear RAM on boot (HackerSM64)
-#define CLEARRAM 1
+// Clear RAM on boot (UltraSM64)
+#define CLEARRAM
 
 
 /********************************************************************************************************************************
@@ -69,13 +69,13 @@
 #define MULTILANG (0 || VERSION_EU)
 
 /// Removes multi-language cake screen (HackerSM64)
-#define EU_CUSTOM_CAKE_FIX 1
+#define EU_CUSTOM_CAKE_FIX
 
-// Support Rumble Pak (HackerSM64)
+// Support Rumble Pak (UltraSM64)
 // Currently not recommended, as it may cause random crashes.
 // #define ENABLE_RUMBLE (1 || VERSION_SH)
 
-// Goddard easter egg from Shindou
+// Goddard easter egg from Shindou (Arceveti)
 #define GODDARD_EASTER_EGG
 
 
@@ -85,11 +85,11 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
-// Screen Size Defines (HackerSM64)
+// Screen Size Defines (UltraSM64)
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
-// Border Height Define for NTSC Versions (HackerSM64)
+// Border Height Define for NTSC Versions (UltraSM64)
 #ifdef TARGET_N64
 // Size of the black border at the top and bottom of the screen. You can set it to different values for console and emulator.
 // There is generally no reason to have a value other than 0 for emulator. As for console, it provides a (small) performance boost.
@@ -207,14 +207,15 @@
 // (HackerSM64)
 // #define SKIP_TITLE_SCREEN
 
+// Skip peach letter cutscene (HackerSM64)
+// #define SKIP_PEACH_LETTER_CUTSCENE
+
 // Uncomment this if you want to keep the Mario head and not skip it (HackerSM64)
 #define KEEP_MARIO_HEAD
 
-// Skip peach letter cutscene (HackerSM64)
-// #define PEACH_SKIP
-
 // Fixes the castle music sometimes triggering after getting a dialog (HackerSM64)
-#define CASTLE_MUSIC_FIX
+#define FIX_CASTLE_MUSIC
+
 // Fixes various "impossible" coin locations throughout the gane (Arceveti)
 #define FIX_IMPOSSIBLE_COINS
 
@@ -223,10 +224,6 @@
 
 // Fixes Lakitu cutscene detection bounds
 #define FIX_LAKITU_SKIP
-
-// Use painting data for the PSS painting instead of a static texture (Arceveti)
-// TODO: Painting Wobble
-#define PSS_PAINTING
 
 // Makes the WF star spawn from the wall instead of existing already (AdyaGD)
 #define FIX_CANNONLESS
@@ -245,6 +242,10 @@
 // since it can cause subtle nausea.
 // (Arceveti)
 #define WDW_DISABLE_AMBIENT_WAVES
+
+// Use painting data for the PSS painting instead of a static texture (Arceveti)
+// TODO: Painting Wobble
+#define PSS_PAINTING
 
 // Adds a few extra objects to some levels
 // Mainly Recovery Hearts, 1-Ups, & Cap Boxes
@@ -526,7 +527,6 @@
 // The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
 // #define SKIP_GROUND_LOWER_WALL
 
-
 // Maximum number of walls to check (vanilla is 4, higher is recommended)
 #define MAX_REFEREMCED_WALLS 16
 
@@ -624,7 +624,7 @@
 #define MARIO_HANGING_HITBOX_HEIGHT (MARIO_HITBOX_HEIGHT - 16.0f)
 
 // The amount Mario will be able to be warped up/down onto a floor when walking onto it
-#define MARIO_STEP_HEIGHT           40.0f // 20.0f with CENTERED_COLLISION
+#define MARIO_STEP_HEIGHT           (MARIO_HITBOX_HEIGHT / 4.0f)
 
 // Terminal velovity for gravity (75.0f is default) (Arceveti)
 #define TERMINAL_GRAVITY_VELOCITY   75.0f
@@ -645,6 +645,15 @@
 
 // Fixes turning around on the ground (Arceveti)
 #define FIX_GROUND_TURN_RADIUS
+
+// Prevent bonks when walking into a wall (Arceveti)
+#define LESS_GROUND_BONKS
+
+// Threshold for whether Mario is walking "fast"
+// Vanilla is 16.0f & 10.0f
+// (Arceveti)
+#define GROUND_SPEED_THRESHOLD   10.0f
+#define GROUND_SPEED_THRESHOLD_2 10.0f
 
 // Perform ground steps while standing still. This fixes several bugs. (Arceveti)
 #define STATIONARY_GROUND_STEPS
@@ -669,8 +678,6 @@
 // Number of air steps per frame (Vanilla is 4)
 #define AIR_NUM_STEPS    4
 
-// Disables fall damage (HackerSM64)
-#define NO_FALL_DAMAGE
 
 // Disables the scream that Mario makes when falling off a great height.
 // This is separate from actual fall damage
@@ -681,6 +688,11 @@
 #define FALL_DAMAGE_HEIGHT_SMALL 1200.0f
 // Vanilla is 3000.0f
 #define FALL_DAMAGE_HEIGHT_LARGE 3000.0f
+
+// Disables fall damage
+// Overwrites the above values
+// (HackerSM64)
+#define NO_FALL_DAMAGE
 
 // Allows for turning in midair (Arceveti)
 #define AIR_TURN
@@ -696,11 +708,14 @@
 // The last frame that will be considered a firsty when wallkicking (HackerSM64)
 #define FIRSTY_LAST_FRAME 1
 
-// 46 degree wallkicks (HackerSM64)
-#define WALLKICKS_46_DEGREES
+// Wallkick/wallslide angle in degrees
+// Vanilla is 45
+// (Arceveti)
+#define WALL_KICK_DEGREES 22.5
 
 // Unique wall slide which takes horizontal momentum into account
-// Overwrites FIRSTY_LAST_FRAME and WALLKICKS_46_DEGREES
+// Overwrites FIRSTY_LAST_FRAME
+// WALL_KICK_DEGREES 22.5 is recommended
 // (Arceveti)
 #define WALL_SLIDE
 
@@ -712,9 +727,6 @@
 
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
-
-// Allows Mario to ledgegrab sloped floors (HackerSM64)
-// #define NO_FALSE_LEDGEGRABS
 
 // Properly fixes false ledge grabs
 // Does nothing if BETTER_WALL_COLLISION is enabled.

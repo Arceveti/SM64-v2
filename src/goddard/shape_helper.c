@@ -105,13 +105,13 @@ struct ObjShape *make_shape(UNUSED const char *name) {
     newShape->faceCount = 0;
     newShape->dlNums[0] = 0;
     newShape->dlNums[1] = 0;
-    newShape->unk3C     = 0;
+    newShape->cullFaces = FALSE;
     newShape->faceGroup = NULL; /* whoops, NULL-ed twice */
     newShape->alpha     = 1.0f;
     newShape->vtxGroup  = NULL;
     newShape->faceGroup = NULL;
     newShape->mtlGroup  = NULL;
-    newShape->unk30     = 0;
+    // newShape->connectVerts = FALSE; // unused
     newShape->unk50     = 0;
     return newShape;
 }

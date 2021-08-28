@@ -453,9 +453,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
     UNUSED f32 nextFloorHeight = FLOOR_LOWER_LIMIT;
     struct Surface *nextFloor;
 #endif
-#ifndef NO_FALSE_LEDGEGRABS
     if (m->floor->normal.y < COS25) return let_go_of_ledge(m);
-#endif
 #ifdef ACTION_CANCELS
     if (m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED | INPUT_OFF_FLOOR)) return let_go_of_ledge(m);
 #else

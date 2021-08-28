@@ -16,8 +16,8 @@ static s32 sNetCount; // @ 801BAAF8
 /* 2406E0 -> 240894 */
 void compute_net_bounding_box(struct ObjNet *net) {
     reset_bounding_box();
-    if (net->unk1D0 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1D0);
-    if (net->unk1C8 != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->unk1C8);
+    if (net->vertexGrp != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->vertexGrp);
+    if (net->nodeGrp   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_ALL, (applyproc_t) add_obj_pos_to_bounding_box, net->nodeGrp  );
     gSomeBoundingBox.minX *= net->scale[0];
     gSomeBoundingBox.maxX *= net->scale[0];
     gSomeBoundingBox.minY *= net->scale[1];
@@ -40,15 +40,12 @@ void reset_net(struct ObjNet *net) {
     // vec3f_zero(net->torque); // unused
     compute_net_bounding_box(net);
     gGdSkinNet = net;
-    gd_set_identity_mat4(&net->rotationMtx);
-    gd_set_identity_mat4(&net->idMtx);
+    mtxf_identity(net->rotationMtx);
+    mtxf_identity(net->idMtx);
     gd_rot_mat_about_vec3f(&net->idMtx, net->unk68); // set rot mtx to initial rotation?
     vec3f_add(net->idMtx[3], net->worldPos);         // set to initial position?
-    gd_copy_mat4f(&net->idMtx, &net->mat128);
-    if ((grp = net->unk1C8) != NULL) {
-        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint  , grp);
-        apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80191220, grp);
-    }
+    mtxf_copy(net->invMtx, net->idMtx);
+    if ((grp = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint, grp);
 }
 
 /* 240A64 -> 240ACC */
@@ -62,7 +59,7 @@ void func_801922FC(struct ObjNet *net) {
     gGdSkinNet = net;
     if (net->netType == NET_TYPE_DYNAMIC_BONES) {
         if (net->shapePtr         != NULL) scale_verts(net->shapePtr->vtxGroup);
-        if ((group = net->unk1C8) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint_weights, group);
+        if ((group = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint_weights, group);
     }
 }
 
@@ -70,14 +67,14 @@ void func_801922FC(struct ObjNet *net) {
 struct ObjNet *make_net(struct ObjGroup *group) {
     struct ObjNet *net;
     net            = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
-    gd_set_identity_mat4(&net->mat128);
+    mtxf_identity(net->invMtx);
     vec3f_zero(net->initPos);
     net->id        = ++sNetCount;
     vec3f_zero(net->scale);
     net->shapePtr  = NULL;
-    net->unk1C8    = group;
-    net->unk1CC    = NULL;
-    net->unk1D0    = NULL;
+    net->nodeGrp   = group;
+    net->faceGroup = NULL;
+    net->vertexGrp = NULL;
     net->netType   = NET_TYPE_DEFAULT;
     net->unk3C     = 1;
     net->colourNum = COLOUR_BLACK;
@@ -89,7 +86,7 @@ struct ObjNet *make_net(struct ObjGroup *group) {
 /* 24142C -> 24149C; orig name: func_80192C5C */
 void move_bonesnet(struct ObjNet *net) {
     struct ObjGroup *group;
-    if ((group = net->unk1C8) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
+    if ((group = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) func_80181894, group);
 }
 
 /* 241768 -> 241AB4; orig name: func_80192F98 */
@@ -169,7 +166,6 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
 
 /* 241BCC -> 241CA0; orig name: Proc801933FC */
 void convert_net_verts(struct ObjNet *net) {
-    if (net->shapePtr !=                     NULL && net->shapePtr->unk30 ) convert_gd_verts_to_Vn( net->shapePtr->vtxGroup      );
     if (net->netType  == NET_TYPE_SCALED_VERTICES && net->shapePtr != NULL) convert_gd_verts_to_Vtx(net->shapePtr->scaledVtxGroup);
 }
 
@@ -178,7 +174,7 @@ static void move_joints_in_net(struct ObjNet *net) {
     struct ObjGroup *grp;
     register struct ListNode *link;
     struct GdObj *obj;
-    if ((grp = net->unk1C8) != NULL) {
+    if ((grp = net->nodeGrp) != NULL) {
         for ((link = grp->firstMember); (link != NULL); (link = link->next)) {
             obj = link->obj;
             if ((obj->type == OBJ_TYPE_JOINTS) && ((struct ObjJoint *) obj)->updateFunc != NULL) (*((struct ObjJoint *) obj)->updateFunc)((struct ObjJoint *) obj);

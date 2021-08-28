@@ -102,10 +102,10 @@ void eye_joint_update_func(struct ObjJoint *self) {
 
 /* 23D748 -> 23D818; orig name: func_8018EF78 */
 void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z) {
-    vec3f_set(j->worldPos, x, y, z);
-    vec3f_set(j->unk30, x, y, z);
-    vec3f_set(j->unk3C, x, y, z);
-    vec3f_set(j->initPos, x, y, z);
+    vec3f_set(j->worldPos,       x, y, z);
+    vec3f_set(j->pos,            x, y, z);
+    vec3f_set(j->relPos,         x, y, z);
+    vec3f_set(j->initPos,        x, y, z);
     vec3f_set(j->rotationMtx[3], x, y, z);
 }
 
@@ -115,14 +115,14 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
     struct ObjJoint *oldhead;
     j = (struct ObjJoint *) make_object(OBJ_TYPE_JOINTS);
     sJointCount++;
-    oldhead = gGdJointList;
+    oldhead      = gGdJointList;
     gGdJointList = j;
     if (oldhead != NULL) {
-        j->nextjoint = oldhead;
+        j->nextjoint       = oldhead;
         oldhead->prevjoint = j;
     }
-    gd_set_identity_mat4(&j->matE8 );
-    gd_set_identity_mat4(&j->rotationMtx);
+    mtxf_identity(j->matE8 );
+    mtxf_identity(j->rotationMtx);
     set_joint_vecs(j, x, y, z);
     j->type       = 0;
     j->id         = sJointCount;
@@ -164,32 +164,29 @@ Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* alwa
     return TRUE;
 }
 
-/* 23F9F0 -> 23FB90 */
-void func_80191220(struct ObjJoint *j) {
-    vec3f_copy(j->unk48, j->initPos); // storing "attached offset"?
-    gd_mat4f_mult_vec3f(j->unk48, &gGdSkinNet->mat128);
-    vec3f_copy(j->unk3C, j->unk48);
-    vec3f_copy(j->worldPos, gGdSkinNet->worldPos);
-    vec3f_add(j->worldPos, j->unk3C);
-    // vec3f_zero(j->unk1A8); // unused
-}
-
 /* 23FDD4 -> 23FFF4 */
 void reset_joint(struct ObjJoint *j) {
     vec3f_copy(j->worldPos, j->initPos);
-    vec3f_copy(j->unk30, j->initPos);
-    vec3f_copy(j->unk3C, j->initPos);
+    vec3f_copy(j->pos,      j->initPos);
+    vec3f_copy(j->relPos,   j->initPos);
     vec3f_zero(j->velocity);
     // vec3f_zero(j->unk84);  // unused
     // vec3f_zero(j->unk90);  // unused
     // vec3f_zero(j->unk1A8); // unused
-    gd_set_identity_mat4(       &j->idMtx);
+    mtxf_identity(j->idMtx);
     gd_scale_mat4f_by_vec3f(    &j->idMtx, j->scale);
     gd_rot_mat_about_vec3f(     &j->idMtx, j->initRotation);
     vec3f_add(j->idMtx[3], j->attachOffset);
-    gd_copy_mat4f(              &j->idMtx, &j->matE8);
-    gd_set_identity_mat4(       &j->rotationMtx);
+    mtxf_copy(j->matE8, j->idMtx);
+    mtxf_identity(j->rotationMtx);
     vec3f_add(j->rotationMtx[3], j->initPos);
+
+    vec3f_copy(j->nextPos, j->initPos); // storing "attached offset"?
+    gd_mat4f_mult_vec3f(j->nextPos, &gGdSkinNet->invMtx);
+    vec3f_copy(j->relPos, j->nextPos);
+    vec3f_copy(j->worldPos, gGdSkinNet->worldPos);
+    vec3f_add( j->worldPos, j->relPos);
+    // vec3f_zero(j->unk1A8); // unused
 }
 
 /* 2406B8 -> 2406E0; orig name: func_80191EE8 */

@@ -13,68 +13,40 @@
  * at the position 'to'.
  * An effective goddard copy of mtxf_lookat.
  */
-void gd_mat4f_lookat(Mat4 *mtx, f32 xFrom, f32 yFrom, f32 zFrom,
-                                f32 xTo,   f32 yTo,   f32 zTo,
-                                f32 zColY, f32 yColY, f32 xColY) {
-    f32 invLength;
-    Vec3f d;
-    Vec3f colX;
-    Vec3f norm;
-    // No reason to do this? mtx is set lower.
-    gd_set_identity_mat4(mtx);
-    d[2] = (xTo - xFrom);
-    d[1] = (yTo - yFrom);
-    d[0] = (zTo - zFrom);
-    invLength = (ABSF(d[2]) + ABSF(d[1]) + ABSF(d[0]));
-    // Scales 'd' if smaller than 10 or larger than 10,000 to be
-    // of a magnitude of 10,000.
-    if ((invLength > 10000.0f) || (invLength < 10.0f)) {
-        vec3f_copy_inverse(norm, d);
-        vec3f_normalize(norm);
-        vec3f_mul_f32(norm, 10000.0f);
-        vec3f_copy_inverse(d, norm);
-    }
-#ifdef FAST_INVSQRT
-    invLength = -Q_rsqrtf(sqr(d[2]) + sqr(d[1]) + sqr(d[0]));
-#else
-    invLength = -(1.0f / vec3f_mag(d));
-#endif
-    vec3f_mul_f32(d, invLength);
-    colX[2] = ((yColY * d[0]) - (xColY * d[1]));
-    colX[1] = ((xColY * d[2]) - (zColY * d[0]));
-    colX[0] = ((zColY * d[1]) - (yColY * d[2]));
-#ifdef FAST_INVSQRT
-    invLength = Q_rsqrtf(sqr(colX[2]) + sqr(colX[1]) + sqr(colX[0]));
-#else
-    invLength = (1.0f / vev3f_mag(colX));
-#endif
-    vec3f_mul_f32(colX, invLength);
-    zColY   = ((d[1] * colX[0]) - (d[0] * colX[1]));
-    yColY   = ((d[0] * colX[2]) - (d[2] * colX[0]));
-    xColY   = ((d[2] * colX[1]) - (d[1] * colX[2]));
-#ifdef FAST_INVSQRT
-    invLength = Q_rsqrtf(sqr(zColY) + sqr(yColY) + sqr(xColY));
-#else
-    invLength = (1.0f / sqrtf(sqr(zColY) + sqr(yColY) + sqr(xColY)));
-#endif
-    zColY *= invLength;
-    yColY *= invLength;
-    xColY *= invLength;
+void gd_mtxf_lookat(Mat4 *mtx, Vec3f from, Vec3f to, f32 zColY, f32 yColY, f32 xColY) {
+    Vec3f colX, colY, colZ;
+    vec3f_set(colY, xColY, yColY, zColY);
+
+    colZ[2] = (to[0] - from[0]);
+    colZ[1] = (to[1] - from[1]);
+    colZ[0] = (to[2] - from[2]);
+    vec3f_normalize_negative(colZ);
+
+    colX[2] = ((colY[1] * colZ[0]) - (colY[0] * colZ[1]));
+    colX[1] = ((colY[0] * colZ[2]) - (colY[2] * colZ[0]));
+    colX[0] = ((colY[2] * colZ[1]) - (colY[1] * colZ[2]));
+    vec3f_normalize(colX);
+
+    colY[2]   = ((colZ[1] * colX[0]) - (colZ[0] * colX[1]));
+    colY[1]   = ((colZ[0] * colX[2]) - (colZ[2] * colX[0]));
+    colY[0]   = ((colZ[2] * colX[1]) - (colZ[1] * colX[2]));
+    vec3f_normalize(colY);
 
     (*mtx)[0][0] = colX[2];
     (*mtx)[1][0] = colX[1];
     (*mtx)[2][0] = colX[0];
-    (*mtx)[3][0] = -((xFrom * colX[2]) + (yFrom * colX[1]) + (zFrom * colX[0]));
 
-    (*mtx)[0][1] = zColY;
-    (*mtx)[1][1] = yColY;
-    (*mtx)[2][1] = xColY;
-    (*mtx)[3][1] = -((xFrom * zColY) + (yFrom * yColY) + (zFrom * xColY));
+    (*mtx)[0][1] = colY[2];
+    (*mtx)[1][1] = colY[1];
+    (*mtx)[2][1] = colY[0];
 
-    (*mtx)[0][2] = d[2];
-    (*mtx)[1][2] = d[1];
-    (*mtx)[2][2] = d[0];
-    (*mtx)[3][2] = -((xFrom * d[2]) + (yFrom * d[1]) + (zFrom * d[0]));
+    (*mtx)[0][2] = colZ[2];
+    (*mtx)[1][2] = colZ[1];
+    (*mtx)[2][2] = colZ[0];
+
+    (*mtx)[3][0] = -((from[0] * colX[2]) + (from[1] * colX[1]) + (from[2] * colX[0]));
+    (*mtx)[3][1] = -((from[0] * colY[2]) + (from[1] * colY[1]) + (from[2] * colY[0]));
+    (*mtx)[3][2] = -((from[0] * colZ[2]) + (from[1] * colZ[1]) + (from[2] * colZ[0]));
 
     mtxf_end(*mtx);
 }
@@ -114,7 +86,6 @@ void gd_create_origin_lookat(Mat4 *mtx, Vec3f vec, f32 roll) {
     vec3f_normalize(unit);
     f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
     roll *= radPerDeg; // convert roll from degrees to radians
-    gd_set_identity_mat4(mtx); //! overwritten?
     if (hMag != 0.0f) {
         f32 s = sind(roll);
         f32 c = cosd(roll);
@@ -146,8 +117,10 @@ void gd_create_origin_lookat(Mat4 *mtx, Vec3f vec, f32 roll) {
  */
 void gd_rot_2d_vec(f32 deg, f32 *x, f32 *y) {
     f32 rad = (deg / DEG_PER_RAD);
-    f32 xP  = ((*x * cosd(rad)) - (*y * sind(rad)));
-    f32 yP  = ((*x * sind(rad)) + (*y * cosd(rad)));
+    f32 sr  = sind(rad);
+    f32 cr  = cosd(rad);
+    f32 xP  = ((*x * cr) - (*y * sr));
+    f32 yP  = ((*x * sr) + (*y * cr));
     *x      = xP;
     *y      = yP;
 }
@@ -258,18 +231,6 @@ f32 mtxf_det(Mat4 *mtx) {
 }
 
 /**
- * Shifts a matrix up by one row, putting the top row on bottom.
- */
-void gd_shift_mat_up(Mat4 *mtx) {
-    s32 i, j;
-    f32 temp[3];
-    for ((i = 0); (i < 3); (i++)) temp[i] = (*mtx)[0][i + 1];
-    for ((i = 1); (i < 4); (i++)) for ((j = 1); (j < 4); (j++)) (*mtx)[i - 1][j - 1] = (*mtx)[i][j];
-    mtxf_end(*mtx);
-    for ((i = 0); (i < 3); (i++)) (*mtx)[3][i] = temp[i];
-}
-
-/**
  * Creates a rotation matrix to multiply the primary matrix by.
  * s/c are sin(angle)/cos(angle). That angular rotation is about vector
  * 'vec'.
@@ -313,45 +274,10 @@ void gd_create_rot_mat_angular(Mat4 *mtx, Vec3f vec, f32 ang) {
 }
 
 /**
- * Sets a mat4f matrix to an identity matrix.
- */
-void gd_set_identity_mat4(Mat4 *mtx) {
-    vec3f_copy((*mtx)[0], gVec3fX);
-    vec3f_copy((*mtx)[1], gVec3fY);
-    vec3f_copy((*mtx)[2], gVec3fZ);
-    vec3f_zero((*mtx)[3]);
-    mtxf_end(*mtx);
-}
-
-/**
- * Copies a mat4f from src to dst.
- */
-void gd_copy_mat4f(const Mat4 *src, Mat4 *dst) {
-    //! mtxf_copy?
-    (*dst)[0][0] = (*src)[0][0];
-    (*dst)[0][1] = (*src)[0][1];
-    (*dst)[0][2] = (*src)[0][2];
-    (*dst)[0][3] = (*src)[0][3];
-    (*dst)[1][0] = (*src)[1][0];
-    (*dst)[1][1] = (*src)[1][1];
-    (*dst)[1][2] = (*src)[1][2];
-    (*dst)[1][3] = (*src)[1][3];
-    (*dst)[2][0] = (*src)[2][0];
-    (*dst)[2][1] = (*src)[2][1];
-    (*dst)[2][2] = (*src)[2][2];
-    (*dst)[2][3] = (*src)[2][3];
-    (*dst)[3][0] = (*src)[3][0];
-    (*dst)[3][1] = (*src)[3][1];
-    (*dst)[3][2] = (*src)[3][2];
-    (*dst)[3][3] = (*src)[3][3];
-}
-
-/**
  * Transforms a vec3f, rotating with the main 3x3 portion of the mat4f
  * and translating with the 4th column.
  */
 void gd_rotate_and_translate_vec3f(Vec3f vec, const Mat4 *mtx) {
-    //! Setting vec directly breaks things somehow
     Vec3f out;
     out[0] = ((((*mtx)[0][0] * vec[0]) + ((*mtx)[1][0] * vec[1]) + ((*mtx)[2][0] * vec[2])) + (*mtx)[3][0]);
     out[1] = ((((*mtx)[0][1] * vec[0]) + ((*mtx)[1][1] * vec[1]) + ((*mtx)[2][1] * vec[2])) + (*mtx)[3][1]);
@@ -402,7 +328,7 @@ void gd_mat4f_mult_vec3f(Vec3f vec, const Mat4 *mtx) {
 void gd_mult_mat4f(const Mat4 *mA, const Mat4 *mB, Mat4 *dst) {
     Mat4 res;
     MAT4_MULTIPLY((*mA), (*mB), res);
-    gd_copy_mat4f(&res, dst);
+    mtxf_copy(*dst, res);
 }
 
 #undef MAT4_MULTIPLY

@@ -430,7 +430,7 @@ void thread1_idle(UNUSED void *arg) {
     while (TRUE) { ; }
 }
 
-#if CLEARRAM
+#ifdef CLEARRAM
 void ClearRAM(void) {
     bzero(_mainSegmentEnd, ((size_t)osMemSize - (size_t)OS_K0_TO_PHYSICAL(_mainSegmentEnd)));
 }
@@ -451,7 +451,7 @@ void osInitialize_fakeisv() {
 #endif
 
 void main_func(void) {
-#if CLEARRAM
+#ifdef CLEARRAM
     ClearRAM();
 #endif
     __osInitialize_common();

@@ -67,7 +67,7 @@ struct GdDisplayList {
 #define DL_CURRENT_VP(dl)    ((dl)->vp[(dl)->curVpIdx])
 
 // bss
-static OSMesgQueue D_801BE830; // controller msg queue
+static OSMesgQueue sGdControllerMsgQ; // controller msg queue
 static OSMesg D_801BE848[10];
 static OSMesgQueue sGdDMAQueue;
 static OSMesg sGdMesgBuf[1];
@@ -108,7 +108,7 @@ static struct GdDisplayList *sGdDLArray[MAX_GD_DLS]; // indexed by dl number (gd
 static s32 sPickBufLen;
 static s32 sPickBufPosition;
 static s16 *sPickBuf;
-static LookAt D_801BE7D0[3];
+static LookAt gGdLookAts[3];
 static u32 sMemBlockPoolSize = 1;
 static s32 sMemBlockPoolUsed = 0;
 s32 gGdFrameBufNum           = 0;
@@ -202,10 +202,10 @@ ALIGNED8 static Texture gd_texture_white_star_7[] = {
 };
 
 static Vtx_t gd_vertex_star[] = {
-    {{   -64,     0,     0}, 0, {     0, 31<<5}, {0x00, 0x00, 0x7F}},
-    {{    64,     0,     0}, 0, { 31<<5, 31<<5}, {0x00, 0x00, 0x7F}},
-    {{    64,   128,     0}, 0, { 31<<5,     0}, {0x00, 0x00, 0x7F}},
-    {{   -64,   128,     0}, 0, {     0,     0}, {0x00, 0x00, 0x7F}},
+    {{   -64,     0,     0}, 0, ST_P(     0,    32), {0x00, 0x00, 0x7F}},
+    {{    64,     0,     0}, 0, ST_P(    32,    32), {0x00, 0x00, 0x7F}},
+    {{    64,   128,     0}, 0, ST_P(    32,     0), {0x00, 0x00, 0x7F}},
+    {{   -64,   128,     0}, 0, ST_P(     0,     0), {0x00, 0x00, 0x7F}},
 };
 
 static Gfx gd_dl_star_common[] = {
@@ -385,10 +385,10 @@ ALIGNED8 static Texture gd_texture_sparkle_5[] = {
 };
 
 static Vtx_t gd_vertex_sparkle[] = {
-    {{   -32,      0,      0}, 0, {      0,  62<<5}, {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,      0,      0}, 0, {  62<<5,  62<<5}, {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,     64,      0}, 0, {  62<<5,      0}, {  0x00, 0x00, 0x7F, 0x00}},
-    {{   -32,     64,      0}, 0, {      0,      0}, {  0x00, 0x00, 0x7F, 0x00}},
+    {{   -32,      0,      0}, 0, ST_P(      0,     63), {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,      0,      0}, 0, ST_P(     63,     63), {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,     64,      0}, 0, ST_P(     63,      0), {  0x00, 0x00, 0x7F, 0x00}},
+    {{   -32,     64,      0}, 0, ST_P(      0,      0), {  0x00, 0x00, 0x7F, 0x00}},
 };
 
 static Gfx gd_dl_sparkle[] = {
@@ -396,13 +396,13 @@ static Gfx gd_dl_sparkle[] = {
     gsSPClearGeometryMode(G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR),
     gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, 
-                G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, 
+                (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, 
-                G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, 
+                (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPVertex(gd_vertex_sparkle, 4, 0),
     gsSP2Triangles(0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPTexture(0x0001, 0x0001, 0, G_TX_RENDERTILE, G_OFF),
@@ -550,7 +550,7 @@ static Gfx gd_dl_mario_face_shine[] = {
     gsDPSetTextureFilter(G_TF_DEFAULT),
     gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
     gsDPLoadTextureBlock(gd_texture_mario_face_shine, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0, 
-                        G_TX_WRAP | G_TX_NOMIRROR, G_TX_WRAP | G_TX_NOMIRROR, 5, 5, G_TX_NOLOD, G_TX_NOLOD),
+                        (G_TX_WRAP | G_TX_NOMIRROR), (G_TX_WRAP | G_TX_NOMIRROR), 5, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsDPPipeSync(),
     gsSPEndDisplayList(),
 };
@@ -581,7 +581,7 @@ void parse_p1_controller(void);
 void update_cursor(void);
 void update_view_and_dl(struct ObjView *view);
 static void update_render_mode(void);
-void gddl_is_loading_shine_dl(s32 dlLoad);
+void gddl_is_loading_shine_dl(Bool32 dlLoad);
 void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy);
 void reset_cur_dl_indices(void);
 
@@ -794,7 +794,7 @@ void gd_copy_p1_contpad(OSContPad *p1cont) {
     u32 i;
     u8 *src  = (u8 *) p1cont;
     u8 *dest = (u8 *) &sGdContPads[0];
-    for (i = 0; i < sizeof(OSContPad); i++) dest[i] = src[i];
+    for ((i = 0); (i < sizeof(OSContPad)); (i++)) dest[i] = src[i];
 }
 
 /* 24B058 -> 24B088; orig name: gd_sfx_to_play */
@@ -809,7 +809,7 @@ Gfx *gdm_gettestdl(UNUSED s32 id) {
     if (sHandView != NULL) update_view_and_dl(sHandView);
     sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
     gSPEndDisplayList(next_gfx());
-    gddl = sCurrentGdDl;
+    gddl              = sCurrentGdDl;
     sUpdateMarioScene = TRUE;
     if (gddl == NULL) gd_exit(); // no display list
     return (void *) osVirtualToPhysical(gddl->gfx);
@@ -1049,25 +1049,25 @@ void gd_dl_load_trans_matrix(f32 x, f32 y, f32 z) {
 void gd_dl_scale(f32 x, f32 y, f32 z) {
     Mat4 mtx;
     Vec3f scaleVec = {x, y, z};
-    gd_set_identity_mat4(&mtx);
+    mtxf_identity(mtx);
     gd_scale_mat4f_by_vec3f(&mtx, scaleVec);
     gd_dl_mul_matrix(&mtx);
 }
 
 /* 24DA94 -> 24DAE8 */
-void func_8019F2C4(f32 angle, s8 axis) {
+void gd_dl_rotate(f32 angle, s8 axis) {
     Mat4 mtx;
-    gd_set_identity_mat4(&mtx);
+    mtxf_identity(mtx);
     gd_absrot_mat4(      &mtx, (axis - 120), -angle);
     gd_dl_mul_matrix(    &mtx);
 }
 
 /* 24DAE8 -> 24E1A8 */
-void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xTo, f32 yTo, f32 zTo, f32 colXY) {
+void gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY) {
     LookAt *lookat;
     colXY *= RAD_PER_DEG;
-    gd_mat4f_lookat(&cam->unkE8, xFrom, yFrom, zFrom, xTo, yTo, zTo, sind(colXY), cosd(colXY), 0.0f);
-    mat4_to_mtx(&cam->unkE8, &DL_CURRENT_MTX(sCurrentGdDl));
+    gd_mtxf_lookat(&cam->lookatMtx, from, to, sind(colXY), cosd(colXY), 0.0f);
+    mat4_to_mtx(&cam->lookatMtx, &DL_CURRENT_MTX(sCurrentGdDl));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),  G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
     /*  col           colc          dir
         0  1  2   3   4  5  6   7   8  9  10  11
@@ -1075,13 +1075,13 @@ void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xT
        16 17 18  19  20 21  22 23  24 25  26  27
     { { 0, 0, 0}, _, {0, 0, 0}, _, {0, 0, 0}, _}
     */
-    lookat = &D_801BE7D0[gGdFrameBufNum];
-    lookat->l[0].l.dir[0]  = LOOKAT_PACK(cam->unkE8[0][0]);
-    lookat->l[0].l.dir[1]  = LOOKAT_PACK(cam->unkE8[1][0]);
-    lookat->l[0].l.dir[2]  = LOOKAT_PACK(cam->unkE8[2][0]);
-    lookat->l[1].l.dir[0]  = LOOKAT_PACK(cam->unkE8[0][1]);
-    lookat->l[1].l.dir[1]  = LOOKAT_PACK(cam->unkE8[1][1]);
-    lookat->l[1].l.dir[2]  = LOOKAT_PACK(cam->unkE8[2][1]);
+    lookat                 = &gGdLookAts[gGdFrameBufNum];
+    lookat->l[0].l.dir[0]  = LOOKAT_PACK(cam->lookatMtx[0][0]);
+    lookat->l[0].l.dir[1]  = LOOKAT_PACK(cam->lookatMtx[1][0]);
+    lookat->l[0].l.dir[2]  = LOOKAT_PACK(cam->lookatMtx[2][0]);
+    lookat->l[1].l.dir[0]  = LOOKAT_PACK(cam->lookatMtx[0][1]);
+    lookat->l[1].l.dir[1]  = LOOKAT_PACK(cam->lookatMtx[1][1]);
+    lookat->l[1].l.dir[2]  = LOOKAT_PACK(cam->lookatMtx[2][1]);
     lookat->l[0].l.col[0]  = 0;
     lookat->l[0].l.col[1]  = 0;
     lookat->l[0].l.col[2]  = 0;
@@ -1098,7 +1098,7 @@ void gd_dl_lookat(struct ObjCamera *cam, f32 xFrom, f32 yFrom, f32 zFrom, f32 xT
     lookat->l[1].l.colc[1] = 0x80;
     lookat->l[1].l.colc[2] = 0;
     lookat->l[1].l.pad2    = 0;
-    gSPLookAt(next_gfx(), osVirtualToPhysical(&D_801BE7D0[gGdFrameBufNum]));
+    gSPLookAt(next_gfx(), osVirtualToPhysical(&gGdLookAts[gGdFrameBufNum]));
     next_mtx();
 }
 
@@ -1117,25 +1117,25 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
     s32 i;
     // Add the vertex index to the buffer if it doesn't already exist
     for (i = sVertexBufStartIndex; i < (sVertexBufStartIndex + sVertexBufCount); i++) {
-        if ((sCurrentGdDl->vtx[i].n.ob[0] == (s16) x)
-         && (sCurrentGdDl->vtx[i].n.ob[1] == (s16) y)
-         && (sCurrentGdDl->vtx[i].n.ob[2] == (s16) z)) {
+        if ((sCurrentGdDl->vtx[i].n.ob[0] == (RawVertexData) x)
+         && (sCurrentGdDl->vtx[i].n.ob[1] == (RawVertexData) y)
+         && (sCurrentGdDl->vtx[i].n.ob[2] == (RawVertexData) z)) {
             sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) i;
             return NULL;
         }
     }
     sVertexBufCount++;
     sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) sCurrentGdDl->curVtxIdx;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[0] = (s16) x;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[1] = (s16) y;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[2] = (s16) z;
+    DL_CURRENT_VTX(sCurrentGdDl).n.ob[0] = (RawVertexData) x;
+    DL_CURRENT_VTX(sCurrentGdDl).n.ob[1] = (RawVertexData) y;
+    DL_CURRENT_VTX(sCurrentGdDl).n.ob[2] = (RawVertexData) z;
     DL_CURRENT_VTX(sCurrentGdDl).n.flag  = 0;
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[0] = sVtxCvrtTCBuf[0];
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[1] = sVtxCvrtTCBuf[1];
     DL_CURRENT_VTX(sCurrentGdDl).n.n[0]  = sVtxCvrtNormBuf[0];
     DL_CURRENT_VTX(sCurrentGdDl).n.n[1]  = sVtxCvrtNormBuf[1];
     DL_CURRENT_VTX(sCurrentGdDl).n.n[2]  = sVtxCvrtNormBuf[2];
-    DL_CURRENT_VTX(sCurrentGdDl).n.a     = (u8)(alpha * 255.0f);
+    DL_CURRENT_VTX(sCurrentGdDl).n.a     = (Alpha)(alpha * 255.0f);
     vtx = &DL_CURRENT_VTX(sCurrentGdDl);
     next_vtx();
     return vtx;
@@ -1146,7 +1146,7 @@ void func_8019FEF0(void) {
     sTriangleBufCount++;
     if (sVertexBufCount >= 12) {
         gd_dl_flush_vertices();
-        func_801A0038();
+        gd_dl_reset_buffers();
     }
 }
 
@@ -1164,7 +1164,7 @@ void gd_dl_make_triangle(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 x3,
 }
 
 /* 24E808 -> 24E840 */
-void func_801A0038(void) {
+void gd_dl_reset_buffers(void) {
     sVertexBufCount      = 0;
     sTriangleBufCount    = 0;
     sVertexBufStartIndex = sCurrentGdDl->curVtxIdx;
@@ -1183,7 +1183,7 @@ void gd_dl_flush_vertices(void) {
                                      (sTriangleBuf[i][2] - sVertexBufStartIndex), 0);
         }
     }
-    func_801A0038();
+    gd_dl_reset_buffers();
 }
 
 /* 24EA88 -> 24EAF4 */
@@ -1236,9 +1236,9 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     if (idx >= 0xc8) gd_exit(); // too many hilites
     hilite = &sHilites[idx];
     gDPSetPrimColor(next_gfx(), 0, 0, (s32)(colour[0] * 255.0f), (s32)(colour[1] * 255.0f), (s32)(colour[2] * 255.0f), 255);
-    vec[2] = (cam->unkE8[0][2] + phongLightPosition[0]);
-    vec[1] = (cam->unkE8[1][2] + phongLightPosition[1]);
-    vec[0] = (cam->unkE8[2][2] + phongLightPosition[2]);
+    vec[2] = (cam->lookatMtx[0][2] + phongLightPosition[0]);
+    vec[1] = (cam->lookatMtx[1][2] + phongLightPosition[1]);
+    vec[0] = (cam->lookatMtx[2][2] + phongLightPosition[2]);
 #ifdef FAST_INVSQRT
     mag = Q_rsqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
     if (mag > 0.1f) {
@@ -1248,8 +1248,8 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
         mag = 1.0f / mag;
 #endif
         vec3f_mul_f32(vec, mag);
-        hilite->h.x1 = (((vec[2] * cam->unkE8[0][0]) + (vec[1] * cam->unkE8[1][0]) + (vec[0] * cam->unkE8[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
-        hilite->h.y1 = (((vec[2] * cam->unkE8[0][1]) + (vec[1] * cam->unkE8[1][1]) + (vec[0] * cam->unkE8[2][1])) * yMul * 2.0f) + (yMul * 4.0f);
+        hilite->h.x1 = (((vec[2] * cam->lookatMtx[0][0]) + (vec[1] * cam->lookatMtx[1][0]) + (vec[0] * cam->lookatMtx[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
+        hilite->h.y1 = (((vec[2] * cam->lookatMtx[0][1]) + (vec[1] * cam->lookatMtx[1][1]) + (vec[0] * cam->lookatMtx[2][1])) * yMul * 2.0f) + (yMul * 4.0f);
     } else {
         hilite->h.x1 = (xMul * 2.0f);
         hilite->h.y1 = (yMul * 2.0f);
@@ -1403,7 +1403,7 @@ void gd_set_one_cycle(void) {
 }
 
 /* 250B58 -> 250C18 */
-void gddl_is_loading_shine_dl(s32 dlLoad) {
+void gddl_is_loading_shine_dl(Bool32 dlLoad) {
     if (dlLoad) {
         gSPDisplayList(next_gfx(), osVirtualToPhysical(&gd_dl_mario_face_shine));
     } else {
@@ -1435,8 +1435,8 @@ void start_view_dl(struct ObjView *view) {
     } else {
         lry = (view->upperLeft[1] + view->lowerRight[1]);
     }
-    if (ulx >= lrx) ulx = lrx - 1.0f;
-    if (uly >= lry) uly = lry - 1.0f;
+    if (ulx >= lrx) ulx = (lrx - 1.0f);
+    if (uly >= lry) uly = (lry - 1.0f);
     gDPSetScissor(       next_gfx(), G_SC_NON_INTERLACE, ulx, uly, lrx, lry);
     gSPClearGeometryMode(next_gfx(), 0xFFFFFFFF);
     gSPSetGeometryMode(  next_gfx(), (G_LIGHTING | G_CULL_BACK | G_SHADING_SMOOTH | G_SHADE));
@@ -1455,28 +1455,28 @@ void parse_p1_controller(void) {
     // Copy current inputs to previous 
     u8 *src  = (u8 *) gdctrl;
     u8 *dest = (u8 *) gdctrl->prevFrame;
-    for (i = 0; i < sizeof(struct GdControl); i++) *dest++ = *src++;
+    for ((i = 0); (i < sizeof(struct GdControl)); (i++)) *dest++ = *src++;
     gdctrl->unk50 = gdctrl->unk4C = gdctrl->dup = gdctrl->ddown = 0;
     currInputs = &sGdContPads[0];
     prevInputs = &sPrevFrameCont[0];
     // stick values
-    gdctrl->stickXf     = currInputs->stick_x;
-    gdctrl->stickYf     = currInputs->stick_y;
-    gdctrl->stickDeltaX = gdctrl->stickX;
-    gdctrl->stickDeltaY = gdctrl->stickY;
-    gdctrl->stickX      = currInputs->stick_x;
-    gdctrl->stickY      = currInputs->stick_y;
+    gdctrl->stickXf      = currInputs->stick_x;
+    gdctrl->stickYf      = currInputs->stick_y;
+    gdctrl->stickDeltaX  = gdctrl->stickX;
+    gdctrl->stickDeltaY  = gdctrl->stickY;
+    gdctrl->stickX       = currInputs->stick_x;
+    gdctrl->stickY       = currInputs->stick_y;
     gdctrl->stickDeltaX -= gdctrl->stickX;
     gdctrl->stickDeltaY -= gdctrl->stickY;
     // button values (as bools)
-    gdctrl->trgL   = (currInputs->button & L_TRIG    ) != 0;
-    gdctrl->trgR   = (currInputs->button & R_TRIG    ) != 0;
-    gdctrl->btnA   = (currInputs->button & A_BUTTON  ) != 0;
-    gdctrl->btnB   = (currInputs->button & B_BUTTON  ) != 0;
-    gdctrl->cleft  = (currInputs->button & L_CBUTTONS) != 0;
-    gdctrl->cright = (currInputs->button & R_CBUTTONS) != 0;
-    gdctrl->cup    = (currInputs->button & U_CBUTTONS) != 0;
-    gdctrl->cdown  = (currInputs->button & D_CBUTTONS) != 0;
+    gdctrl->trgL   = ((currInputs->button & L_TRIG    ) != 0);
+    gdctrl->trgR   = ((currInputs->button & R_TRIG    ) != 0);
+    gdctrl->btnA   = ((currInputs->button & A_BUTTON  ) != 0);
+    gdctrl->btnB   = ((currInputs->button & B_BUTTON  ) != 0);
+    gdctrl->cleft  = ((currInputs->button & L_CBUTTONS) != 0);
+    gdctrl->cright = ((currInputs->button & R_CBUTTONS) != 0);
+    gdctrl->cup    = ((currInputs->button & U_CBUTTONS) != 0);
+    gdctrl->cdown  = ((currInputs->button & D_CBUTTONS) != 0);
     // but not these buttons??
     gdctrl->dleft  = currInputs->button & L_JPAD;
     gdctrl->dright = currInputs->button & R_JPAD;
@@ -1604,7 +1604,7 @@ s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
         view->parent = sScreenView;
     }
     view->gdDlNum = 0;
-    view->unk74   = 0;
+    // view->unk74   = 0; // unused
     if (view->flags & VIEW_DEFAULT_PARENT) view->parent = NULL;
     return 0;
 }
@@ -1613,17 +1613,17 @@ s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
 void gd_init_controllers(void) {
     OSContPad *p1cont = &sPrevFrameCont[0];
     u32 i;
-    osCreateMesgQueue(          &D_801BE830, D_801BE848, ARRAY_COUNT(D_801BE848));
-    osSetEventMesg(OS_EVENT_SI, &D_801BE830, (OSMesg) OS_MESG_SI_COMPLETE);
-    osContInit(                 &D_801BE830, &D_801BAEA0, D_801BAE60);
-    osContStartReadData(        &D_801BE830);
-    for (i = 0; i < sizeof(OSContPad); i++) ((u8 *) p1cont)[i] = 0;
+    osCreateMesgQueue(          &sGdControllerMsgQ, D_801BE848, ARRAY_COUNT(D_801BE848));
+    osSetEventMesg(OS_EVENT_SI, &sGdControllerMsgQ, (OSMesg) OS_MESG_SI_COMPLETE);
+    osContInit(                 &sGdControllerMsgQ, &D_801BAEA0, D_801BAE60);
+    osContStartReadData(        &sGdControllerMsgQ);
+    for ((i = 0); (i < sizeof(OSContPad)); (i++)) ((u8 *) p1cont)[i] = 0;
 }
 
 /* 253018 -> 253084 */
 void func_801A4848(s32 linkDl) {
     struct GdDisplayList *curDl;
-    curDl = sCurrentGdDl;
+    curDl        = sCurrentGdDl;
     sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
     branch_cur_dl_to_num(linkDl);
     sCurrentGdDl = curDl;
@@ -1637,7 +1637,7 @@ void set_active_view(struct ObjView *v) {
 /* 2533DC -> 253728; orig name: func_801A4C0C */
 void update_cursor(void) {
     if (sHandView == NULL) return;
-    if (gGdCtrl.currFrame - gGdCtrl.dragStartFrame < 300) {
+    if ((gGdCtrl.currFrame - gGdCtrl.dragStartFrame) < 300) {
         sHandView->flags |= VIEW_UPDATE;
         // by playing the sfx every frame, it will only play once as it
         // never leaves the "sfx played last frame" buffer
@@ -1656,11 +1656,6 @@ void update_cursor(void) {
     if (sHandView->upperLeft[0] > (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0])) sHandView->upperLeft[0] = (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0]);
     if (sHandView->upperLeft[1] <  sHandView->parent->upperLeft[1]                                    ) sHandView->upperLeft[1] =  sHandView->parent->upperLeft[1];
     if (sHandView->upperLeft[1] > (sHandView->parent->upperLeft[1] + sHandView->parent->lowerRight[1])) sHandView->upperLeft[1] = (sHandView->parent->upperLeft[1] + sHandView->parent->lowerRight[1]);
-}
-
-/* 2538E0 -> 253938 */
-void Proc801A5110(struct ObjView *view) {
-    if (view->flags & VIEW_UPDATE) apply_to_obj_types_in_group(OBJ_TYPE_NETS, (applyproc_t) convert_net_verts, view->components);
 }
 
 /* 253938 -> 2539DC; orig name: func_801A5168 */
@@ -1689,7 +1684,7 @@ void gd_init(void) {
         vec3i_set(sLightDirections[i], 0, 120, 0);
     }
     sNumLights = NUMLIGHTS_2;
-    gd_set_identity_mat4(&sInitIdnMat4);
+    mtxf_identity(sInitIdnMat4);
     mat4_to_mtx(&sInitIdnMat4, &sIdnMtx);
     // remove_all_memtrackers();
     null_obj_lists();
@@ -1714,8 +1709,8 @@ void gd_init(void) {
     // 801A5868
     gGdCtrl.newStartPress  = FALSE;
     gGdCtrl.prevFrame      = &gGdCtrlPrev;
-    gGdCtrl.csrX           = 160;
-    gGdCtrl.csrY           = 120;
+    gGdCtrl.csrX           =   160;
+    gGdCtrl.csrY           =   120;
     gGdCtrl.dragStartFrame = -1000;
 }
 

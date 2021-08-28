@@ -69,7 +69,7 @@ void d_set_flags(s32 flags);
 void d_set_obj_draw_flag(enum ObjDrawingFlags flag);
 void d_set_type(s32 type);
 void d_set_diffuse(f32 r, f32 g, f32 b);
-void d_get_matrix(Mat4 *dst);
+void d_get_matrix(Mat4 dst);
 Mat4 *d_get_rot_mtx_ptr(void);
 void d_set_i_matrix(Mat4 *src);
 Mat4 *d_get_matrix_ptr(void);

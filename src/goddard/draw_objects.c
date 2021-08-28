@@ -101,9 +101,9 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
         vec3f_add(vec, (*rotMtx)[3]);
     }
     if (flag & 0x08) {
-        if (m != 0.0f) func_8019F2C4(m, 121);
-        if (l != 0.0f) func_8019F2C4(l, 120);
-        if (n != 0.0f) func_8019F2C4(n, 122);
+        if (m != 0.0f) gd_dl_rotate(m, 121);
+        if (l != 0.0f) gd_dl_rotate(l, 120);
+        if (n != 0.0f) gd_dl_rotate(n, 122);
     }
     if (colorIdx != 0) {
         sUseSelectedColor = TRUE;
@@ -137,7 +137,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 pos
     if (shape == NULL) return;
     if (flag & 0x02) {
         vec3f_set(pos, posX, posY, posZ);
-        if (gViewUpdateCamera != NULL) gd_rotate_and_translate_vec3f(pos, &gViewUpdateCamera->unkE8);
+        if (gViewUpdateCamera != NULL) gd_rotate_and_translate_vec3f(pos, &gViewUpdateCamera->lookatMtx);
         gd_dl_load_trans_matrix(pos[0], pos[1], pos[2]);
     }
     draw_shape_faces(shape);
@@ -150,7 +150,7 @@ void draw_light(struct ObjLight *light) {
     if (sSceneProcessType == FIND_PICKS) return;
     vec3f_copy(sLightColours[0], light->colour);
     if (light->flags & LIGHT_UNK02) {
-        gd_set_identity_mat4(&idMtx); //! overwritten?
+        mtxf_identity(idMtx); //! overwritten?
         vec[0] = -light->unk80[0];
         vec[1] = -light->unk80[1];
         vec[2] = -light->unk80[2];
@@ -167,7 +167,7 @@ void draw_light(struct ObjLight *light) {
 void draw_material(struct ObjMaterial *mtl) {
     s32 mtlType = mtl->type;
     if (mtlType == GD_MTL_SHINE_DL) {
-        if ((sPhongLight != NULL) && (sPhongLight->unk30 > 0.0f)) {
+        if ((sPhongLight != NULL) && (sPhongLight->diffuseFac > 0.0f)) {
             if (gViewUpdateCamera != NULL) {
                 gd_dl_hilite(mtl->gddlNumber, gViewUpdateCamera, sPhongLightPosition, sPhongLight->colour);
             } else {
@@ -261,26 +261,26 @@ void draw_net(struct ObjNet *self) {
     if (sSceneProcessType == FIND_PICKS) return;
     netColor = ((net->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : net->colourNum);
     if (net->shapePtr != NULL) draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->rotationMtx);
-    if (net->unk1C8   != NULL) draw_group(net->unk1C8);
+    if (net->nodeGrp   != NULL) draw_group(net->nodeGrp);
 }
 
 /* 22803C -> 22829C */
 void draw_camera(struct ObjCamera *cam) {
     Vec3f pos = {0.0f, 0.0f, 0.0f};
-    if (cam->unk30 != NULL) {
-        set_cur_dynobj(cam->unk30);
+    if (cam->dynObj != NULL) {
+        set_cur_dynobj(cam->dynObj);
         d_vec3f_get_world_pos(pos);
         vec3f_add(pos, cam->lookAt);
     } else {
         vec3f_copy(pos, cam->lookAt);
     }
     if (absf(cam->worldPos[0] - pos[0]) + absf(cam->worldPos[2] - pos[2]) == 0.0f) return; // Zero view distance
-    gd_dl_lookat(cam, cam->worldPos[0], cam->worldPos[1], cam->worldPos[2], pos[0], pos[1], pos[2], cam->unkA4);
+    gd_dl_lookat(cam, cam->worldPos, pos, cam->unkA4);
 }
 
 /* 22836C -> 228498 */
 void world_pos_to_screen_coords(Vec3f pos, struct ObjCamera *cam, struct ObjView *view) {
-    gd_rotate_and_translate_vec3f(pos, &cam->unkE8);
+    gd_rotate_and_translate_vec3f(pos, &cam->lookatMtx);
     if (pos[2] > -256.0f) return;
     pos[0] *= (256.0f / -pos[2]);
     pos[1] *= (256.0f /  pos[2]);
@@ -390,7 +390,7 @@ void draw_shape_faces(struct ObjShape *shape) {
     if (shape->dlNums[gGdFrameBufNum] != 0) {
         draw_indexed_dl(shape->dlNums[gGdFrameBufNum], shape->unk50);
     } else if (shape->faceGroup != NULL) {
-        func_801A0038();
+        gd_dl_reset_buffers();
         draw_group(shape->faceGroup);
         gd_dl_flush_vertices();
     }
@@ -456,19 +456,19 @@ void register_light(struct ObjLight *light) {
 
 /* 229180 -> 229564 */
 void update_lighting(struct ObjLight *light) {
-    f32 sp24; // diffuse factor?
+    f32 diffuseFac; // diffuse factor?
     f32 dot;
     f32 sp1C;
-    light->colour[0] = (light->diffuse[0] * light->unk30);
-    light->colour[1] = (light->diffuse[1] * light->unk30);
-    light->colour[2] = (light->diffuse[2] * light->unk30);
+    light->colour[0] = (light->diffuse[0] * light->diffuseFac);
+    light->colour[1] = (light->diffuse[1] * light->diffuseFac);
+    light->colour[2] = (light->diffuse[2] * light->diffuseFac);
     vec3f_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
     vec3f_normalize(sLightPositionCache[light->id]);
     if (light->flags & LIGHT_UNK20) {
         vec3f_copy(sPhongLightPosition, sLightPositionCache[light->id]);
         sPhongLight = light;
     }
-    sp24 = light->unk30;
+    diffuseFac = light->diffuseFac;
     if (light->flags & LIGHT_UNK02) {
         dot = -vec3f_dot(sLightPositionCache[light->id], light->unk80);
         sp1C = (1.0f - (light->unk38 / 90.0f));
@@ -482,10 +482,10 @@ void update_lighting(struct ObjLight *light) {
         } else {
             dot = 0.0f;
         }
-        sp24 *= dot;
+        diffuseFac *= dot;
     }
     set_light_id(light->id);
-    gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse[0] * sp24), (light->diffuse[1] * sp24), (light->diffuse[2] * sp24));
+    gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse[0] * diffuseFac), (light->diffuse[1] * diffuseFac), (light->diffuse[2] * diffuseFac));
     gd_setproperty(GD_PROP_LIGHT_DIR, sLightPositionCache[light->id][0], sLightPositionCache[light->id][1], sLightPositionCache[light->id][2]);
     gd_setproperty(GD_PROP_LIGHTING, 2.0f, 0.0f, 0.0f);
 }
@@ -528,7 +528,7 @@ void create_shape_gddl(struct ObjShape *s) {
     if (shapedl == 0) return;
     setup_lights();
     sUseSelectedColor = FALSE;
-    if (shape->unk3C == 0) draw_shape_faces(shape);
+    if (!shape->cullFaces) draw_shape_faces(shape);
     gd_enddlsplist_parent();
     shape->dlNums[0] = shapedl;
     shape->dlNums[1] = shapedl;

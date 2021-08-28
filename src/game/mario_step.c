@@ -18,7 +18,7 @@ struct Surface gWaterSurfacePseudoFloor = {
     0,                     // force
     0,                     // flags
     0,                     // room
-    0, 0,                  // lowerY, upperY
+    -5, 5,                 // lowerY, upperY
     { 0, 0, 0 },           // vertex1
     { 0, 0, 0 },           // vertex2
     { 0, 0, 0 },           // vertex3
@@ -548,9 +548,9 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
                     oldWallDYaw = wallDYaw;
                     m->wall     = wallData->walls[i];
 #ifdef WALL_SLIDE
-                    if ((wallDYaw > 0x5000) && (m->vel[1] <= 0.0f)) {
+                    if ((wallDYaw > DEG(180 - WALL_KICK_DEGREES)) && (m->vel[1] <= 0.0f)) {
 #else
-                    if (wallDYaw > DEG(135)) {
+                    if (wallDYaw > DEG(180 - WALL_KICK_DEGREES)) {
 #endif
                         m->flags |= MARIO_AIR_HIT_WALL;
                         result = AIR_STEP_HIT_WALL;
@@ -756,11 +756,9 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         wallDYaw = abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->faceAngle[1]);
         if (m->wall->type == SURFACE_BURNING) return AIR_STEP_HIT_LAVA_WALL;
  #ifdef WALL_SLIDE
-        if ((wallDYaw > 0x5000) && (m->vel[1] <= 0.0f)) {
- #elif WALLKICKS_46_DEGREES
-        if (wallDYaw > 0x5B00) { // 0x5F4A?
+        if ((wallDYaw > DEG(180 - WALL_KICK_DEGREES)) && (m->vel[1] <= 0.0f)) {
  #else
-        if (wallDYaw > DEG(135)) {
+        if (wallDYaw > DEG(180 - WALL_KICK_DEGREES)) {
  #endif
             m->flags |= MARIO_AIR_HIT_WALL;
             return AIR_STEP_HIT_WALL;

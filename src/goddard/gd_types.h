@@ -148,9 +148,9 @@ struct ObjJoint {
     /* 0x024 */ struct ObjJoint *prevjoint;             // prev joint? linked joint?
     /* 0x028 */ struct ObjJoint *nextjoint;
     /* 0x02C */ void (*updateFunc)(struct ObjJoint*);   // seems to update attached objects? see grabbable_joint_update_func
-    /* 0x030 */ Vec3f unk30;                            // huge array of vecs? another matrix?
-    /* 0x03C */ Vec3f unk3C;                            // relative position?
-    /* 0x048 */ Vec3f unk48;
+    /* 0x030 */ Vec3f pos;                              // huge array of vecs? another matrix?
+    /* 0x03C */ Vec3f relPos;                           // relative position?
+    /* 0x048 */ Vec3f nextPos;
     /* 0x054 */ Vec3f initPos;                          // attached offset? (with +200 as well)
     /* 0x060 */ u8    pad60[0x6C-0x60];
     /* 0x06C */ Vec3f initRotation;                     // initial rotation vec
@@ -159,10 +159,10 @@ struct ObjJoint {
     /* 0x090 */ Vec3f unk90;                            // Set to 0 and unused?
     /* 0x09C */ Vec3f scale;
     /* 0x0A8 */ Vec3f unkA8;                            // unused
-    /* 0x0B4 */ Vec3f unkB4;
+    /* 0x0B4 */ Vec3f unkB4;                            // unused
     /* 0x0C0 */ Vec3f shapeOffset;
-    /* 0x0CC */ Vec3f unkCC;
-    /* 0x0D8 */ u8   padD8[4];
+    /* 0x0CC */ Vec3f unkCC;                            // unused
+    /* 0x0D8 */ u8    padD8[4];
     /* 0x0DC */ Vec3f friction;
     /* 0x0E8 */ Mat4 matE8;                             // matrix4x4
     /* 0x128 */ Mat4 rotationMtx;                       // "rot matrix"
@@ -171,7 +171,7 @@ struct ObjJoint {
     /* 0x1B4 */ s32  id;
     /* 0x1B8 */ u8   pad1B8[4];
     /* 0x1BC */ s32  flags;                             // "flags" - 0x2000 = grabbed
-    /* 0x1C0 */ s32  unk1C0;
+    /* 0x1C0 */ s32  unk1C0;                            // unused
     /* 0x1C4 */ struct ObjGroup *unk1C4;                // bone group?
     /* 0x1C8 */ s32 colourNum;
     /* 0x1CC */ s32 type;                               // 0 = normal joint, 5 = grabbable joint. seems to be set, but never used
@@ -183,7 +183,7 @@ struct ObjJoint {
     /* 0x200 */ Vec3f attachOffset;
     /* 0x20C */ struct GdObj *attachedToObj;            // object that this object is attached to
     /* 0x210 */ u8  pad210[0x228-0x210];
-    /* 0x228 */ f32 unk228;
+    /* 0x228 */ f32 unk228;                             // unused
 }; /* sizeof = 0x22C */
 
 /* Particle Types (+60)
@@ -204,9 +204,9 @@ struct ObjParticle {
     /* 0x1C */ struct ObjShape *shapePtr;           // looks like a shape...
     /* 0x20 */ Vec3f pos;                           // some kind of position - relative? world?
     /* 0x2C */ u8  pad2C[0x30-0x2C];
-    /* 0x30 */ f32 unk30;
+    /* 0x30 */ f32 unk30;                           // unused
     /* 0x34 */ u8  pad34[0x38-0x34];
-    /* 0x38 */ Vec3f unk38;                         // velocity?
+    /* 0x38 */ Vec3f vel;                           // velocity?
     /* 0x44 */ f32 unk44;                           // not vec?
     /* 0x48 */ f32 unk48;                           // not vec?
     /* 0x4C */ u8  pad4C[0x50-0x4C];
@@ -242,16 +242,16 @@ struct ObjShape {
     /* 0x24 */ struct ObjGroup *scaledVtxGroup;     /* group for type 2 shapenets only ? vertices whose scaleFactor is not 1 get put into this group. */
     /* 0x28 */ u8  pad28[4];
     /* 0x2C */ struct ObjGroup *mtlGroup;           /* what does this group do? materials? */
-    /* 0x30 */ s32 unk30;
+    /* 0x30 */ Bool32 connectVerts;
     /* 0x34 */ s32 faceCount;                       /* face count? based on get_3DG1_shape */
     /* 0x38 */ s32 vtxCount;                        /* vtx count? based on get_3DG1_shape */
-    /* 0x3C */ s32 unk3C;                           // bool? if FALSE, then draw_shape_faces(shape)
+    /* 0x3C */ Bool32 cullFaces;                    // bool? if FALSE, then draw_shape_faces(shape)
     /* 0x40 */ u32 id;
     /* 0x44 */ s32 flag;                            // what are the flag values? only from dynlists?
     /* 0x48 */ s32 dlNums[2];                       // gd dl number for each frame buffer (??) [0, 1]
                s32 unk50;                           // frame number (index into dlNums)?
     /* 0x54 */ u8  pad54[0x58-0x54];                // part of above array??
-    /* 0x58 */ f32 alpha;                           // paramF? opacitiy? something with rendertype
+    /* 0x58 */ AlphaF alpha;                        // paramF? opacitiy? something with rendertype
     /* 0x5C */ char name[0x40];
 }; /* sizeof = 0x9C */
 
@@ -301,17 +301,17 @@ struct ObjNet {
     /* 0x0E0 */ f32 unusedCollMaxD;                 // unused
     /* 0x0E4 */ f32 maxRadius;
     /* 0x0E8 */ Mat4 idMtx;
-    /* 0x128 */ Mat4 mat128;
+    /* 0x128 */ Mat4 invMtx;
     /* 0x168 */ Mat4 rotationMtx;                   // "rotation matrix"
     /* 0x1A8 */ struct ObjShape *shapePtr;
     /* 0x1AC */ Vec3f scale;
     /* 0x1B8 */ f32 unusedMass;                     // unused
     /* 0x1BC */ s32 numModes;                       // unused
-    /* 0x1C0 */ struct ObjGroup *unk1C0;            // group of `ObjVertex` or `ObjParticle`
+    /* 0x1C0 */ struct ObjGroup *unk1C0;            // group of `ObjVertex` or `ObjParticle`, unused
     /* 0x1C4 */ struct ObjGroup *skinGrp;           // SkinGroup (from reset_weight) (joints and bones)
-    /* 0x1C8 */ struct ObjGroup *unk1C8;            // "node group" (joints, weights?)
-    /* 0x1CC */ struct ObjGroup *unk1CC;            // plane group (only type 1?)
-    /* 0x1D0 */ struct ObjGroup *unk1D0;            // vertex group
+    /* 0x1C8 */ struct ObjGroup *nodeGrp;           // "node group" (joints, weights?)
+    /* 0x1CC */ struct ObjGroup *faceGroup;         // plane group (only type 1?)
+    /* 0x1D0 */ struct ObjGroup *vertexGrp;         // vertex group
     /* 0x1D4 */ struct ObjGroup *attachedObjsGrp;
     /* 0x1D8 */ Vec3f attachOffset;
     /* 0x1E4 */ s32 attachFlags;                    // d_attach_to arg 0; "AttFlag"
@@ -359,15 +359,15 @@ struct ObjCamera {
     /* 0x024 */ struct ObjCamera* next;
     /* 0x028 */ s32 id;
     /* 0x02C */ s32 flags;                          // flag of some sort
-    /* 0x030 */ struct GdObj* unk30;                // pointer to some type of object
+    /* 0x030 */ struct GdObj* dynObj;               // pointer to some type of object
     /* 0x034 */ Vec3f lookAt;                       // point that the camera faces
-    /* 0x040 */ Vec3f unk40;                        // relative position related?
+    /* 0x040 */ Vec3f relPos;                       // relative position related?
     /* 0x04C */ Vec3f unk4C;
     /* 0x058 */ Vec3f unk58;
     /* 0x064 */ Mat4 unk64;                         // matrix4x4
     /* 0x0A4 */ f32  unkA4;
     /* 0x0A8 */ Mat4 unkA8;                         // matrix4x4
-    /* 0x0E8 */ Mat4 unkE8;
+    /* 0x0E8 */ Mat4 lookatMtx;
     /* 0x128 */ Vec3f unk128;                       // possibly
     /* 0x134 */ Vec3f unk134;
     /* 0x140 */ Vec3f zoomPositions[4];             // zoom positions (*1, *1.5, *2, empty fourth)
@@ -449,7 +449,7 @@ struct ObjView {
     /* 0x60 */ Vec3f clipping;                  // z-coordinate of (x: near, y: far) clipping plane?
     /* 0x6C */ const char *namePtr;
     /* 0x70 */ s32 gdDlNum;
-    /* 0x74 */ s32 unk74;
+    /* 0x74 */ s32 unk74;                       // unused
     /* 0x78 */ s32 unk78;
     /* 0x7C */ ColorRGBf colour;
     /* 0x88 */ struct ObjView *parent;          // maybe not a true parent, but link to buffers in parent?
@@ -517,7 +517,7 @@ struct ObjLight {
     /* 0x20 */ char name[8];
     /* 0x28 */ u8  pad28[4];
     /* 0x2C */ s32 flags;
-    /* 0x30 */ f32 unk30;       // color (5C) = Kd (50) * 30
+    /* 0x30 */ f32 diffuseFac;  // color (5C) = Kd (50) * 30
     /* 0x34 */ u8  pad34[4];
     /* 0x38 */ f32 unk38;       // calculated diffuse theta (in degrees?)
     /* 0x3C */ s32 unk3C;

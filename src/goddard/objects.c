@@ -150,10 +150,10 @@ struct ObjCamera *make_camera(void) {
         newCam->next        = oldCameraHead;
         oldCameraHead->prev = newCam;
     }
-    newCam->flags = CAMERA_FLAG_16;
-    newCam->unk30 = NULL;
-    gd_set_identity_mat4(&newCam->unk64);
-    gd_set_identity_mat4(&newCam->unkA8);
+    newCam->flags  = CAMERA_FLAG_16;
+    newCam->dynObj = NULL;
+    mtxf_identity(newCam->unk64);
+    mtxf_identity(newCam->unkA8);
     newCam->unk180[0]    = 1.0f;
     newCam->unk180[1]    = 0.1f;
     newCam->unk180[2]    = 1.0f;
@@ -186,13 +186,13 @@ struct ObjLight *make_light(void) {
     struct ObjLight *newLight;
     newLight = (struct ObjLight *) make_object(OBJ_TYPE_LIGHTS);
     // gd_strcpy(newLight->name, "x");
-    newLight->id      = 0;
-    newLight->unk30   = 1.0f;
-    newLight->unk4C   = 0;
-    newLight->flags   = LIGHT_NEW_UNCOUNTED;
-    newLight->unk98   = 0;
-    newLight->unk40   = 0;
-    vec3f_zero(newLight->unk68); // unused
+    newLight->id         = 0;
+    newLight->diffuseFac = 1.0f;
+    newLight->unk4C      = 0;
+    newLight->flags      = LIGHT_NEW_UNCOUNTED;
+    newLight->unk98      = 0;
+    // newLight->unk40      = 0; // unused
+    // vec3f_zero(newLight->unk68); // unused
     return newLight;
 }
 
@@ -403,8 +403,8 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         iMtx   =          d_get_i_mtx_ptr();
         rotMtx = (Mat4 *) d_get_rot_mtx_ptr();
         d_get_scale(scale);
-        gd_set_identity_mat4(unkMtx);
-        gd_copy_mat4f(iMtx, rotMtx);
+        mtxf_identity(*unkMtx);
+        mtxf_copy(*rotMtx, *iMtx);
         gd_scale_mat4f_by_vec3f(rotMtx, scale);
     }
     // Recursively call this function on attached children
@@ -427,7 +427,7 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
  */
 void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTransform *t2, f32 dt) {
     Mat4 mtx;
-    gd_set_identity_mat4(&mtx);
+    mtxf_identity(mtx);
     if (dt != 0.0f) {
         struct GdAnimTransform transform;
         // interpolate rotation between t1 and t2
@@ -601,9 +601,9 @@ void move_animator(struct ObjAnimator *animObj) {
                 d_set_i_matrix(&sp28->matrix);
                 d_set_scale(sp28->vec[0], sp28->vec[1], sp28->vec[2]);
                 break;
-            case GD_ANIM_SCALE3F_ROT3F_POS3F_2:  // similar to GD_ANIM_SCALE3F_ROT3F_POS3F, but no interpolation? what matrix does d_set_i_matrix set?
+            case GD_ANIM_SCALE3F_ROT3F_POS3F_2:  // similar to GD_ANIM_SCALE3F_ROT3F_POS3F, but no interpolation? what matrix does d_set_i_matrix set? Maybe Identity Matrix?
                 triPtr = (struct GdAnimTransform *) animData->data;
-                gd_set_identity_mat4(&localMtx);
+                mtxf_identity(localMtx);
                 gd_scale_mat4f_by_vec3f(&localMtx, triPtr->scale);
                 gd_rot_mat_about_vec3f(&localMtx, triPtr->rotate);
                 vec3f_add(localMtx[3], triPtr->pos);
@@ -622,16 +622,16 @@ void move_animator(struct ObjAnimator *animObj) {
 void drag_picked_object(struct GdObj *inputObj) {
     Vec3f displacement;
     struct GdControl *ctrl = &gGdCtrl;
-    Mat4 sp80;
+    // Mat4 invMtx;
     Mat4 dispMtx;
     struct GdObj *obj;
     f32 dispMag;
     if (gViewUpdateCamera == NULL) return;
-    dispMag = vec3f_mag(gViewUpdateCamera->unk40) / 1000.0f; //! fast invsqrt?
+    dispMag = vec3f_mag(gViewUpdateCamera->relPos) / 1000.0f; //! fast invsqrt?
     displacement[0] = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
     displacement[1] = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement[2] = 0.0f;
-    gd_inverse_mat4f(&gViewUpdateCamera->unkE8, &dispMtx);
+    gd_inverse_mat4f(&gViewUpdateCamera->lookatMtx, &dispMtx);
     gd_mat4f_mult_vec3f(displacement, &dispMtx);
     obj = inputObj;
     if ((inputObj->drawFlags & OBJ_PICKED) && (gGdCtrl.dragging)) {
@@ -643,7 +643,7 @@ void drag_picked_object(struct GdObj *inputObj) {
                 vec3f_add(((struct ObjJoint *) obj)->rotationMtx[3], displacement);
                 break;
             case OBJ_TYPE_NETS:
-                gd_inverse_mat4f(&((struct ObjNet *) obj)->mat128, &sp80);
+                // gd_inverse_mat4f(&((struct ObjNet *) obj)->invMtx, &invMtx);
                 vec3f_add(((struct ObjNet *) obj)->idMtx[3], displacement);
                 break;
             case OBJ_TYPE_PARTICLES:
@@ -672,16 +672,16 @@ void move_camera(struct ObjCamera *cam) {
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
     vec3f_zero(worldPos);
-    if ((obj = cam->unk30) != NULL) {
+    if ((obj = cam->dynObj) != NULL) {
         set_cur_dynobj(obj);
         d_vec3f_get_world_pos(worldPos);
-        d_get_matrix(&mtx);
-        latPos[0]   = (mtx[2][0] - cam->unk58[0]);
-        latPos[2]   = (mtx[2][2] - cam->unk58[2]);
+        d_get_matrix(mtx);
+        latPos[0]      = (mtx[2][0] - cam->unk58[0]);
+        latPos[2]      = (mtx[2][2] - cam->unk58[2]);
         cam->unk58[0] += (latPos[0] * cam->unk180[1]);
         cam->unk58[2] += (latPos[2] * cam->unk180[1]);
     }
-    gd_set_identity_mat4(&cam->unkA8);
+    mtxf_identity(cam->unkA8);
     idMtx = &cam->unk64;
     if ((cam->flags & CAMERA_FLAG_CONTROLLABLE) != 0) {
         if (ctrl->btnB && !ctrl->prevFrame->btnB) {  // new B press
@@ -699,19 +699,19 @@ void move_camera(struct ObjCamera *cam) {
         if (ctrl->cdown ) cam->unk128[0] -= cam->unk134[0];
         clamp_f32(&cam->unk128[0], -80.0f, 80.0f);
         vec3f_copy(cam->unk4C, cam->zoomPositions[cam->zoomLevel]);
-        gd_rot_2d_vec(  cam->unk128[0], &cam->unk4C[1], &cam->unk4C[2]);
-        gd_rot_2d_vec( -cam->unk128[1], &cam->unk4C[0], &cam->unk4C[2]);
-        cam->unk40[0] += ((cam->unk4C[0] - cam->unk40[0]) * cam->unk17C);
-        cam->unk40[1] += ((cam->unk4C[1] - cam->unk40[1]) * cam->unk17C);
-        cam->unk40[2] += ((cam->unk4C[2] - cam->unk40[2]) * cam->unk17C);
+        gd_rot_2d_vec( cam->unk128[0], &cam->unk4C[1], &cam->unk4C[2]);
+        gd_rot_2d_vec(-cam->unk128[1], &cam->unk4C[0], &cam->unk4C[2]);
+        cam->relPos[0] += ((cam->unk4C[0] - cam->relPos[0]) * cam->unk17C);
+        cam->relPos[1] += ((cam->unk4C[1] - cam->relPos[1]) * cam->unk17C);
+        cam->relPos[2] += ((cam->unk4C[2] - cam->relPos[2]) * cam->unk17C);
     } else {
-        gd_set_identity_mat4(idMtx);
+        mtxf_identity(*idMtx);
     }
-    vec3f_copy(nextPos, cam->unk40);
+    vec3f_copy(nextPos, cam->relPos);
     gd_mult_mat4f(idMtx, &cam->unkA8, &cam->unkA8);
     gd_mat4f_mult_vec3f(nextPos, &cam->unkA8);
     vec3f_copy(cam->worldPos, nextPos);
-    vec3f_add(cam->worldPos, worldPos);
+    vec3f_add( cam->worldPos, worldPos);
 }
 
 /* @ 22F7A4 for 0x38; orig name: func_80180FD4 */
