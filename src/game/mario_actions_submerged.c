@@ -6,7 +6,7 @@
 #include "boot/memory.h"
 #include "engine/math_util.h"
 #include "area.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "save_file.h"
 #include "sound_init.h"
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS

@@ -5,7 +5,7 @@
 #include "camera.h"
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "geo_misc.h"
 #include "gfx_dimensions.h"
 #include "boot/memory.h"

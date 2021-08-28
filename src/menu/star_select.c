@@ -6,7 +6,7 @@
 #include "engine/graph_node.h"
 #include "eu_translation.h"
 #include "game/area.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "game/ingame_menu.h"
 #include "game/level_update.h"
 #include "boot/memory.h"
@@ -20,7 +20,7 @@
 #include "star_select.h"
 #include "text_strings.h"
 #include "prevent_bss_reordering.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 
 /**
  * @file star_select.c

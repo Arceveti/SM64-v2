@@ -9,7 +9,7 @@
 #include "engine/math_util.h"
 #include "file_select.h"
 #include "game/area.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "game/ingame_menu.h"
 #include "game/object_helpers.h"
 #include "game/object_list_processor.h"

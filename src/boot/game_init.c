@@ -10,16 +10,16 @@
 #include "engine/level_script.h"
 #include "engine/math_util.h"
 #include "game_init.h"
-#include "boot/main.h"
-#include "boot/memory.h"
-#include "profiler.h"
-#include "save_file.h"
+#include "main.h"
+#include "memory.h"
+#include "game/profiler.h"
+#include "game/save_file.h"
 #include "seq_ids.h"
-#include "sound_init.h"
-#include "print.h"
-#include "segment2.h"
+#include "game/sound_init.h"
+#include "game/print.h"
+#include "game/segment2.h"
 #include "segment_symbols.h"
-#include "rumble_init.h"
+#include "game/rumble_init.h"
 #ifdef HVQM
 #include <hvqm/hvqm.h>
 #endif
@@ -35,9 +35,9 @@
 #endif
 #include <prevent_bss_reordering.h>
 #ifdef PUPPYCAM
-#include "puppycam2.h"
+#include "game/puppycam2.h"
 #endif
-#include "debug_box.h"
+#include "game/debug_box.h"
 
 // First 3 controller slots
 struct Controller gControllers[3];
@@ -89,6 +89,7 @@ struct DmaHandlerList gMarioAnimsBuf;
 struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
+u32 gFrameTimer  = 0;
 u32 gGlobalTimer = 0;
 #ifdef WIDE
 s16 gWidescreen;
@@ -372,6 +373,9 @@ void render_init(void) {
 #else
     if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
 #endif
+#ifdef DOUBLE_FPS
+    gFrameTimer++;
+#endif
     gGlobalTimer++;
 }
 
@@ -385,6 +389,14 @@ void select_gfx_pool(void) {
     gDisplayListHead =        gGfxPool->buffer;
     gGfxPoolEnd      = (u8 *)(gGfxPool->buffer + GFX_POOL_SIZE);
 }
+
+#ifndef UNLOCK_FPS
+#define VI_YEILD_GFX    osRecvMesg(&gGfxVblankQueue,  &gMainReceivedMesg, OS_MESG_BLOCK);
+#define VI_YEILD_GAME   osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+#else
+#define VI_YEILD_GFX 
+#define VI_YEILD_GAME
+#endif
 
 /**
  * This function:
@@ -400,17 +412,19 @@ void display_and_vsync(void) {
     }
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     // gIsConsole = (IO_READ(DPC_PIPEBUSY_REG) != 0);
-    osRecvMesg(&gGfxVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    VI_YEILD_GFX
     if (gGoddardVblankCallback != NULL) {
         gGoddardVblankCallback();
         gGoddardVblankCallback = NULL;
     }
     exec_display_list(&gGfxPool->spTask);
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
-    osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    VI_YEILD_GAME
     osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[sRenderedFramebuffer]));
     profiler_log_thread5_time(THREAD5_END);
-    osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+#ifndef DOUBLE_FPS
+    VI_YEILD_GAME
+#endif
     // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
 #ifndef VC_HACKS
     if (gIsConsole) { // Read RDP Clock Register, has a value of zero on emulators
@@ -419,6 +433,10 @@ void display_and_vsync(void) {
         if (++sRenderingFrameBuffer == 3) sRenderingFrameBuffer = 0;
 #ifndef VC_HACKS
     }
+#endif
+#ifdef DOUBLE_FPS
+    gFrameTimer++;
+    if (gFrameTimer & 0x1)
 #endif
     gGlobalTimer++;
 }
@@ -534,7 +552,7 @@ void read_controller_inputs(void) {
 #endif
     }
     run_demo_inputs();
-    for (i = 0; i < 2; i++) {
+    for ((i = 0); (i < 2); (i++)) {
         struct Controller *controller = &gControllers[i];
         // if we're receiving inputs, update the controller struct with the new button info.
         if (controller->controllerData != NULL) {

@@ -5,7 +5,7 @@
 #include "behavior_script.h"
 #include "game/area.h"
 #include "game/behavior_actions.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "game/mario.h"
 #include "boot/memory.h"
 #include "game/obj_behaviors_2.h"

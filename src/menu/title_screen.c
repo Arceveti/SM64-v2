@@ -3,7 +3,7 @@
 #include "audio/external.h"
 #include "engine/math_util.h"
 #include "game/area.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "game/level_update.h"
 #include "boot/main.h"
 #include "boot/memory.h"

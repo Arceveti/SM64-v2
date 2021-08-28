@@ -20,7 +20,7 @@
  */
 
 #include "sm64.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "game/geo_misc.h"
 #include "engine/math_util.h"
 #include "area.h"

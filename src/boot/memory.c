@@ -6,7 +6,7 @@
 
 #include "buffers/buffers.h"
 #include "slidec.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "main.h"
 #include "memory.h"
 #include "segment_symbols.h"

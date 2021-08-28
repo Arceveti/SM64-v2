@@ -14,7 +14,7 @@
 #include "engine/math_util.h"
 #include "engine/surface_collision.h"
 #include "engine/surface_load.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "geo_misc.h"
 #include "ingame_menu.h"
 #include "interaction.h"

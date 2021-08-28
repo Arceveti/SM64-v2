@@ -2,7 +2,7 @@
 
 #include "sm64.h"
 #include "dialog_ids.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "boot/memory.h"
 #include "ingame_menu.h"
 #include "envfx_snow.h"

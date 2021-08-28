@@ -8,7 +8,7 @@
 #include "puppycam2.h"
 #include "audio/external.h"
 #include "audio/data.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "engine/math_util.h"
 #include "print.h"
 #include "engine/surface_collision.h"

@@ -2,7 +2,7 @@
 
 #include "sm64.h"
 #include "profiler.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 
 Bool16 gProfilerMode = FALSE;
 

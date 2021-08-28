@@ -6,7 +6,7 @@
 #include "dialog_ids.h"
 #include "audio/external.h"
 #include "level_update.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "level_update.h"
 #include "boot/main.h"
 #include "engine/math_util.h"

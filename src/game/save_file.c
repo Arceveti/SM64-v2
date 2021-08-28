@@ -1,7 +1,7 @@
 #include <ultra64.h>
 
 #include "sm64.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "boot/main.h"
 #include "engine/math_util.h"
 #include "area.h"

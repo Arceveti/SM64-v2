@@ -6,7 +6,7 @@
 #include "synthesis.h"
 #include "seqplayer.h"
 #include "effects.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #if PUPPYPRINT_DEBUG
 #include "game/puppyprint.h"
 #endif

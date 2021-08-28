@@ -1,7 +1,7 @@
 #include <ultra64.h>
 
 #include "sm64.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "boot/memory.h"
 #include "envfx_snow.h"
 #include "envfx_bubbles.h"

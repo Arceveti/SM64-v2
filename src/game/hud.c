@@ -3,7 +3,7 @@
 #include "sm64.h"
 #include "actors/common1.h"
 #include "gfx_dimensions.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "level_update.h"
 #include "camera.h"
 #include "print.h"

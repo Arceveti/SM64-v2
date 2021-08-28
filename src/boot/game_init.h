@@ -7,7 +7,7 @@
 #include <PR/os_message.h>
 
 #include "types.h"
-#include "boot/memory.h"
+#include "memory.h"
 #include "segments.h"
 
 #ifdef USE_EXT_RAM
@@ -94,6 +94,9 @@ extern u8  gDemoInputs[];
 
 extern u16 sRenderingFrameBuffer;
 extern u32 gGlobalTimer;
+#ifdef DOUBLE_FPS
+extern u32 gFrameTimer;
+#endif
 
 void setup_game_memory(void);
 void thread5_game_loop(UNUSED void *arg);

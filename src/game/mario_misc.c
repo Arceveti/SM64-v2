@@ -12,7 +12,7 @@
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
 #include "envfx_snow.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "goddard/renderer.h"
 #include "interaction.h"
 #include "level_update.h"

@@ -5,7 +5,7 @@
 
 #include "sm64.h"
 
-// #include "game_init.h"
+// #include "boot/game_init.h"
 
 #include "printf.h"
 

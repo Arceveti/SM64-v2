@@ -9,7 +9,7 @@
 #include "textures.h"
 #include "types.h"
 #include "buffers/framebuffers.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "audio/external.h"
 #include "prevent_bss_reordering.h"
 

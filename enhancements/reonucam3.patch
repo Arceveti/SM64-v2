@@ -303,10 +303,10 @@ index 25b27983..2ff11930 100644
          s8DirModeYawOffset = 0x0;
      }
  }
-diff --git a/src/game/game_init.c b/src/game/game_init.c
+diff --git a/src/boot/game_init.c b/src/boot/game_init.c
 index 317e33bf..6687016d 100644
---- a/src/game/game_init.c
-+++ b/src/game/game_init.c
+--- a/src/boot/game_init.c
++++ b/src/boot/game_init.c
 @@ -51,6 +51,11 @@ u8 gBorderHeight;
  #ifdef CUSTOM_DEBUG
  u8 gCustomDebugMode;
@@ -327,10 +327,10 @@ index 317e33bf..6687016d 100644
  #ifdef WIDE
      gWidescreen = save_file_get_widescreen_mode();
  #endif
-diff --git a/src/game/game_init.h b/src/game/game_init.h
+diff --git a/src/boot/game_init.h b/src/boot/game_init.h
 index 84a31755..817c58df 100644
---- a/src/game/game_init.h
-+++ b/src/game/game_init.h
+--- a/src/boot/game_init.h
++++ b/src/boot/game_init.h
 @@ -45,6 +45,10 @@ extern u8 gIsConsole;
  #ifdef WIDE
  extern s16 gWidescreen;

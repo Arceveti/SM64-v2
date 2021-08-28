@@ -7,7 +7,7 @@
 #include "camera.h"
 #include "engine/math_util.h"
 #ifdef ENABLE_DEBUG_FREE_MOVE
-#include "game_init.h"
+#include "boot/game_init.h"
 #endif
 #include "interaction.h"
 #include "level_update.h"

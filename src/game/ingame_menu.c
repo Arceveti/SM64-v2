@@ -9,7 +9,7 @@
 #include "engine/math_util.h"
 #include "eu_translation.h"
 #include "segment_symbols.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "gfx_dimensions.h"
 #include "ingame_menu.h"
 #include "level_update.h"

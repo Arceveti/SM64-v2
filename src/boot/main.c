@@ -5,7 +5,7 @@
 
 #include "sm64.h"
 #include "audio/external.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "memory.h"
 #include "game/sound_init.h"
 #include "game/profiler.h"

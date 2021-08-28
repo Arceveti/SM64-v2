@@ -8,7 +8,7 @@
 #include "seqplayer.h"
 #include "internal.h"
 #include "external.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 
 
 #define DMEM_ADDR_TEMP                   0x000

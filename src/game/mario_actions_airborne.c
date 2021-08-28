@@ -7,7 +7,7 @@
 #include "cutscene.h"
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "interaction.h"
 #include "level_update.h"
 #include "mario.h"

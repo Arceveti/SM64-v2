@@ -11,7 +11,7 @@
 #ifdef USE_EXT_RAM
 #include "text_strings.h"
 #include "mem_error_screen.h"
-#include "game/game_init.h"
+#include "boot/game_init.h"
 #include "main.h"
 #include "game/print.h"
 #include "game/ingame_menu.h"

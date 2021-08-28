@@ -2,7 +2,7 @@
 
 #include "area.h"
 #include "engine/math_util.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "gfx_dimensions.h"
 #ifdef METAL_CAP_REFLECTION_LAKITU
 #include "level_update.h"
@@ -13,7 +13,7 @@
 #include "rendering_graph_node.h"
 #include "shadow.h"
 #include "sm64.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "engine/extended_bounds.h"
 #if PUPPYPRINT_DEBUG
 #include "puppyprint.h"

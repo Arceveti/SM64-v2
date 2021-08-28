@@ -1,7 +1,7 @@
 #include <ultra64.h>
 
 #include "config.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "boot/memory.h"
 #include "print.h"
 #include "segment2.h"

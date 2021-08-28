@@ -1,9 +1,9 @@
-diff --git a/src/game/game_init.c b/src/game/game_init.c
+diff --git a/src/boot/game_init.c b/src/boot/game_init.c
 index b961ca52..adfde049 100644
---- a/src/game/game_init.c
-+++ b/src/game/game_init.c
+--- a/src/boot/game_init.c
++++ b/src/boot/game_init.c
 @@ -11,6 +11,7 @@
- #include "game_init.h"
+ #include "boot/game_init.h"
  #include "main.h"
  #include "memory.h"
 +#include "object_list_processor.h"

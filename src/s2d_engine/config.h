@@ -53,7 +53,7 @@ extern char s2d_kerning_table[];
 #define gdl_head gDisplayListHead
 extern Gfx *gdl_head;
 
-#include "src/game/game_init.h"
+#include "src/boot/game_init.h"
 #define CONTROLLER_INPUT gPlayer1Controller->buttonPressed
 #define CONTROLLER_HELD_INPUT gPlayer1Controller->buttonDown
 

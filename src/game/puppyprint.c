@@ -28,7 +28,7 @@ a modern game engine's developer's console.
 #ifdef PUPPYPRINT
 
 #include "config.h"
-#include "game_init.h"
+#include "boot/game_init.h"
 #include "boot/memory.h"
 #include "print.h"
 #include "segment2.h"
