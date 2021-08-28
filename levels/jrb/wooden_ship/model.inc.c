@@ -1,11 +1,11 @@
 // 0x070081A8 - 0x070081C0
-static const Lights1 jrb_seg7_lights_070081A8 = gdSPDefLights1(
+static const Lights1 jrb_seg7_lights_ship_window = gdSPDefLights1(
     0x1e, 0x2c, 0x3a,
     0x79, 0xb2, 0xeb, 0x28, 0x28, 0x28
 );
 
 // 0x070081C0 - 0x070081D8
-static const Lights1 jrb_seg7_lights_070081C0 = gdSPDefLights1(
+static const Lights1 jrb_seg7_lights_ship = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
@@ -218,8 +218,8 @@ static const Gfx jrb_seg7_dl_07008B88[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081A8.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship_window.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship_window.a, 2),
     gsSPVertex(jrb_seg7_vertex_070081D8, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
@@ -244,8 +244,8 @@ static const Gfx jrb_seg7_dl_07008C90[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081C0.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship.a, 2),
     gsSPVertex(jrb_seg7_vertex_07008478, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  2,  3,  0, 0x0),
     gsSP2Triangles( 2,  4,  3, 0x0,  5,  6,  7, 0x0),
@@ -318,7 +318,7 @@ static const Gfx jrb_seg7_dl_07008F70[] = {
 };
 
 // 0x07008FD8 - 0x070090B0
-const Gfx jrb_seg7_dl_07008FD8[] = {
+const Gfx jrb_seg7_dl_ship_left_half_part[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
@@ -349,7 +349,7 @@ const Gfx jrb_seg7_dl_07008FD8[] = {
 };
 
 // 0x070090B0 - 0x07009190
-const Gfx jrb_seg7_dl_070090B0[] = {
+const Gfx jrb_seg7_dl_sunken_ship[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2),
@@ -388,18 +388,18 @@ static const Lights1 jrb_seg7_lights_070091A8 = gdSPDefLights1(
 
 // 0x070091D8 - 0x07009218
 static const Vtx jrb_seg7_vertex_070091D8[] = {
-    {{{  -679,   1024,  -1426}, 0, { 31<<5,      0}, {0x8f, 0x00, 0xc8, 0xff}}},
-    {{{  -588,    819,  -1610}, 0, {     0,  31<<5}, {0x8f, 0x00, 0xc8, 0xff}}},
-    {{{  -679,    819,  -1426}, 0, { 31<<5,  31<<5}, {0x8f, 0x00, 0xc8, 0xff}}},
-    {{{  -588,   1024,  -1610}, 0, {     0,      0}, {0x8f, 0x00, 0xc8, 0xff}}},
+    {{{  -679,   1024,  -1426}, 0, ST_B(    32,      0), {0x8f, 0x00, 0xc8, 0xff}}},
+    {{{  -588,    819,  -1610}, 0, ST_B(     0,     32), {0x8f, 0x00, 0xc8, 0xff}}},
+    {{{  -679,    819,  -1426}, 0, ST_B(    32,     32), {0x8f, 0x00, 0xc8, 0xff}}},
+    {{{  -588,   1024,  -1610}, 0, ST_B(     0,      0), {0x8f, 0x00, 0xc8, 0xff}}},
 };
 
 // 0x07009218 - 0x07009258
 static const Vtx jrb_seg7_vertex_07009218[] = {
-    {{{  -205,   1024,  -1955}, 0, { 63<<5,      0}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{   205,   1024,  -1955}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{   205,    819,  -1955}, 0, {     0,  31<<5}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{  -205,    819,  -1955}, 0, { 63<<5,  31<<5}, {0x00, 0x00, 0x81, 0xff}}},
+    {{{  -205,   1024,  -1955}, 0, ST_B(    64,      0), {0x00, 0x00, 0x81, 0xff}}},
+    {{{   205,   1024,  -1955}, 0, ST_B(     0,      0), {0x00, 0x00, 0x81, 0xff}}},
+    {{{   205,    819,  -1955}, 0, ST_B(     0,     32), {0x00, 0x00, 0x81, 0xff}}},
+    {{{  -205,    819,  -1955}, 0, ST_B(    64,     32), {0x00, 0x00, 0x81, 0xff}}},
 };
 
 // 0x07009258 - 0x07009358
@@ -428,7 +428,7 @@ static const Vtx jrb_seg7_vertex_07009358[] = {
     {{{  -102,   -205,  -1331}, 0, {  1160,   1442}, {0xa1, 0xc0, 0xcb, 0xff}}},
     {{{  -102,    205,  -1536}, 0, { 47<<5,    304}, {0x9f, 0xe8, 0xb3, 0xff}}},
     {{{  -102,    512,  -1638}, 0, {  1842,   -480}, {0xa7, 0x00, 0xa7, 0xff}}},
-    {{{  -102,    410,  -1536}, 0, {  1842,   -146}, {0xc8, 0x00, 0x8f, 0xff}}},
+    {{{  -102,    410,  -1536}, 0, {  1842,   -144}, {0xc8, 0x00, 0x8f, 0xff}}},
 };
 
 // 0x070093A8 - 0x07009488
@@ -451,8 +451,8 @@ static const Vtx jrb_seg7_vertex_070093A8[] = {
 
 // 0x07009488 - 0x07009588
 static const Vtx jrb_seg7_vertex_07009488[] = {
-    {{{   307,    717,  -1946}, 0, {  -540,   8142}, {0x00, 0xb6, 0x9a, 0xff}}},
-    {{{   307,    410,  -1536}, 0, {  -540,  11208}, {0x00, 0x9b, 0xb4, 0xff}}},
+    {{{   307,    717,  -1946}, 0, {  -544,   8142}, {0x00, 0xb6, 0x9a, 0xff}}},
+    {{{   307,    410,  -1536}, 0, {  -544,  11208}, {0x00, 0x9b, 0xb4, 0xff}}},
     {{{  -307,    410,  -1536}, 0, {  2524,  11208}, {0xd6, 0xb8, 0xa1, 0xff}}},
     {{{  -717,    614,  -1331}, 0, {  9372, 127<<5}, {0x90, 0xdd, 0xd2, 0xff}}},
     {{{  -512,    717,  -1741}, 0, { 11004,  95<<5}, {0xa6, 0xd3, 0xb4, 0xff}}},
@@ -519,8 +519,8 @@ static const Gfx jrb_seg7_dl_07009798[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081A8.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship_window.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship_window.a, 2),
     gsSPVertex(jrb_seg7_vertex_070091D8, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPLight(&jrb_seg7_lights_070091A8.l, 1),
@@ -535,8 +535,8 @@ static const Gfx jrb_seg7_dl_07009808[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081C0.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship.a, 2),
     gsSPVertex(jrb_seg7_vertex_07009258, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  3,  7, 0x0,  3,  5,  7, 0x0),
@@ -592,7 +592,7 @@ static const Gfx jrb_seg7_dl_07009A10[] = {
 };
 
 // 0x07009A58 - 0x07009B30
-const Gfx jrb_seg7_dl_07009A58[] = {
+const Gfx jrb_seg7_dl_ship_back_left_part[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
@@ -623,7 +623,7 @@ const Gfx jrb_seg7_dl_07009A58[] = {
 };
 
 // 0x07009B30 - 0x07009C10
-const Gfx jrb_seg7_dl_07009B30[] = {
+const Gfx jrb_seg7_dl_sunken_ship_back[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2),
@@ -803,8 +803,8 @@ static const Gfx jrb_seg7_dl_0700A2F8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081A8.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship_window.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship_window.a, 2),
     gsSPVertex(jrb_seg7_vertex_07009C58, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
@@ -823,8 +823,8 @@ static const Gfx jrb_seg7_dl_0700A3A8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081C0.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship.a, 2),
     gsSPVertex(jrb_seg7_vertex_07009E38, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  3,  5, 0x0,  6,  5,  7, 0x0),
@@ -852,8 +852,8 @@ static const Gfx jrb_seg7_dl_0700A470[] = {
     gsSP2Triangles( 4,  0,  5, 0x0,  7,  1,  3, 0x0),
     gsSP2Triangles( 7,  2,  1, 0x0,  6,  7,  3, 0x0),
     gsSP2Triangles( 0,  2,  5, 0x0,  6,  3,  4, 0x0),
-    gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081C0.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship.a, 2),
     gsSPVertex(jrb_seg7_vertex_0700A048, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
@@ -876,7 +876,7 @@ static const Gfx jrb_seg7_dl_0700A470[] = {
 };
 
 // 0x0700A608 - 0x0700A6D8
-const Gfx jrb_seg7_dl_0700A608[] = {
+const Gfx jrb_seg7_dl_ship_right_half_part[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
@@ -987,8 +987,8 @@ static const Gfx jrb_seg7_dl_0700AA98[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09005800_window),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081A8.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081A8.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship_window.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship_window.a, 2),
     gsSPVertex(jrb_seg7_vertex_0700A708, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSPEndDisplayList(),
@@ -999,8 +999,8 @@ static const Gfx jrb_seg7_dl_0700AAE0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09000000_ship_edge),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&jrb_seg7_lights_070081C0.l, 1),
-    gsSPLight(&jrb_seg7_lights_070081C0.a, 2),
+    gsSPLight(&jrb_seg7_lights_ship.l, 1),
+    gsSPLight(&jrb_seg7_lights_ship.a, 2),
     gsSPVertex(jrb_seg7_vertex_0700A748, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 4,  6,  5, 0x0,  4,  7,  6, 0x0),
@@ -1035,7 +1035,7 @@ static const Gfx jrb_seg7_dl_0700AB60[] = {
 };
 
 // 0x0700AC68 - 0x0700AD38
-const Gfx jrb_seg7_dl_0700AC68[] = {
+const Gfx jrb_seg7_dl_ship_back_right_part[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

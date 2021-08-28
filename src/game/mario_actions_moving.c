@@ -41,7 +41,7 @@ Mat4 sFloorAlignMatrix[2];
 Angle tilt_body_running(struct MarioState *m) {
     Angle pitch = 0x0;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-    if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = m->floorPitch;
+    if ((m->pos[1] <= m->floorHeight) && (m->steepness < COS1)) pitch = m->floorPitch;
 #else
     if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = find_floor_slope(m, 0x0, 5.0f);
 #endif
@@ -67,7 +67,11 @@ void align_with_floor(struct MarioState *m) {
     struct Surface *floor = m->floor;
     Vec3f floorNormal;
     if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
+// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+//         if (floor->steepness > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
+// #else
         if (floor->normal.y > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
+// #endif
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
             vec3f_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
@@ -1272,11 +1276,11 @@ Bool32 common_landing_cancels(struct MarioState *m, struct LandingAction *landin
     if (m->input & INPUT_Z_PRESSED                  ) return set_mario_action(          m, ACT_CROUCH_SLIDE              , 0);
 #endif
     if (m->input & INPUT_OFF_FLOOR                  ) return set_mario_action(          m, landingAction->offFloorAction , 0);
-// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-//     if (m->steepness < COS73                        ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
-// #else
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    if (m->steepness < COS73                        ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
+#else
     if (m->floor->normal.y < COS73                  ) return mario_push_off_steep_floor(m, landingAction->verySteepAction, 0);
-// #endif
+#endif
     m->doubleJumpTimer = landingAction->doubleJumpTimer;
     if (should_begin_sliding(m)                     ) return set_mario_action(          m, landingAction->slideAction    , 0);
     if (m->input & INPUT_FIRST_PERSON               ) return set_mario_action(          m, landingAction->endAction      , 0);

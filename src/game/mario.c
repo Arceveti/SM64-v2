@@ -378,7 +378,11 @@ s32 mario_get_floor_class(struct MarioState *m) {
         }
     }
     // Crawling allows Mario to not slide on certain steeper surfaces.
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+    if ((m->action == ACT_CRAWLING) && (m->steepness > 0.5f) && (floorClass == SURFACE_CLASS_DEFAULT)) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
+#else
     if ((m->action == ACT_CRAWLING) && (m->floor->normal.y > 0.5f) && (floorClass == SURFACE_CLASS_DEFAULT)) floorClass = SURFACE_CLASS_NOT_SLIPPERY;
+#endif
     return floorClass;
 }
 
