@@ -20,6 +20,7 @@
 #include "game/segment2.h"
 #include "segment_symbols.h"
 #include "game/rumble_init.h"
+// #include "PR/os_convert.h"
 #ifdef HVQM
 #include <hvqm/hvqm.h>
 #endif
@@ -31,7 +32,7 @@
 #include "sram.h"
 #endif
 #if PUPPYPRINT_DEBUG
-#include "puppyprint.h"
+#include "game/puppyprint.h"
 #endif
 #include <prevent_bss_reordering.h>
 #ifdef PUPPYCAM
@@ -89,7 +90,6 @@ struct DmaHandlerList gMarioAnimsBuf;
 struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
-u32 gFrameTimer  = 0;
 u32 gGlobalTimer = 0;
 #ifdef WIDE
 s16 gWidescreen;
@@ -373,9 +373,6 @@ void render_init(void) {
 #else
     if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
 #endif
-#ifdef DOUBLE_FPS
-    gFrameTimer++;
-#endif
     gGlobalTimer++;
 }
 
@@ -433,10 +430,6 @@ void display_and_vsync(void) {
         if (++sRenderingFrameBuffer == 3) sRenderingFrameBuffer = 0;
 #ifndef VC_HACKS
     }
-#endif
-#ifdef DOUBLE_FPS
-    gFrameTimer++;
-    if (gFrameTimer & 0x1)
 #endif
     gGlobalTimer++;
 }

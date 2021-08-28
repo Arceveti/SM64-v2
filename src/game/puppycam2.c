@@ -129,9 +129,7 @@ void puppycam_default_config(void) {
 
 // Initial setup. Ran at the beginning of the game and never again.
 void puppycam_boot(void) {
-    gPuppyCam.zoomPoints[0] = 600;
-    gPuppyCam.zoomPoints[1] = 1000;
-    gPuppyCam.zoomPoints[2] = 1500;
+    vec3s_set(gPuppyCam.zoomPoints, 600, 1000, 1500);
     gPuppyCam.povHeight     = 125;
     gPuppyCam.stick2[0]     = 0;
     gPuppyCam.stick2[1]     = 0;

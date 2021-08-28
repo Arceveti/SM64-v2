@@ -318,9 +318,9 @@ void thread3_main(UNUSED void *arg) {
     osStartThread(&gSoundThread);
 #ifdef USE_EXT_RAM
     if (!gNotEnoughMemory) {
-        create_thread(&gGameLoopThread, 5, thread5_game_loop             , NULL, gThread5Stack + 0x2000, 10);
+        create_thread(&gGameLoopThread, 5, thread5_game_loop             , NULL, (gThread5Stack + 0x2000), 10);
     } else {
-        create_thread(&gGameLoopThread, 5, thread5_mem_error_message_loop, NULL, gThread5Stack + 0x2000, 10);
+        create_thread(&gGameLoopThread, 5, thread5_mem_error_message_loop, NULL, (gThread5Stack + 0x2000), 10);
     }
 #else
     create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, gThread5Stack + 0x2000, 10);
