@@ -109,8 +109,8 @@ typedef struct OSMesgQueue_s {
 
 /* Flags to turn blocking on/off when sending/receiving message */
 
-#define	OS_MESG_NOBLOCK		0
-#define	OS_MESG_BLOCK		1
+#define	OS_MESG_NOBLOCK		0x0
+#define	OS_MESG_BLOCK		0x1
 
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)

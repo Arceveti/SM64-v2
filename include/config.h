@@ -711,11 +711,11 @@
 // Wallkick/wallslide angle in degrees
 // Vanilla is 45
 // (Arceveti)
-#define WALL_KICK_DEGREES 22.5
+#define WALL_KICK_DEGREES 67.5
 
 // Unique wall slide which takes horizontal momentum into account
 // Overwrites FIRSTY_LAST_FRAME
-// WALL_KICK_DEGREES 22.5 is recommended
+// WALL_KICK_DEGREES 67.5 is recommended
 // (Arceveti)
 #define WALL_SLIDE
 
@@ -781,8 +781,6 @@
  * -- Experimental/Unfinished Settingss --                                                                                      *
  *                                                                                                                              *
  ********************************************************************************************************************************/
-
-// #define DOUBLE_FPS
 
 // #define UNLOCK_FPS
 

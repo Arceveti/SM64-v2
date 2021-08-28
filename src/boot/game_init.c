@@ -387,14 +387,6 @@ void select_gfx_pool(void) {
     gGfxPoolEnd      = (u8 *)(gGfxPool->buffer + GFX_POOL_SIZE);
 }
 
-#ifndef UNLOCK_FPS
-#define VI_YEILD_GFX    osRecvMesg(&gGfxVblankQueue,  &gMainReceivedMesg, OS_MESG_BLOCK);
-#define VI_YEILD_GAME   osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-#else
-#define VI_YEILD_GFX 
-#define VI_YEILD_GAME
-#endif
-
 /**
  * This function:
  * - Sends the current master display list out to be rendered.
@@ -409,18 +401,22 @@ void display_and_vsync(void) {
     }
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     // gIsConsole = (IO_READ(DPC_PIPEBUSY_REG) != 0);
-    VI_YEILD_GFX
+#ifndef UNLOCK_FPS
+    osRecvMesg(&gGfxVblankQueue,  &gMainReceivedMesg, OS_MESG_BLOCK);
+#endif
     if (gGoddardVblankCallback != NULL) {
         gGoddardVblankCallback();
         gGoddardVblankCallback = NULL;
     }
     exec_display_list(&gGfxPool->spTask);
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
-    VI_YEILD_GAME
+#ifndef UNLOCK_FPS
+    osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+#endif
     osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[sRenderedFramebuffer]));
     profiler_log_thread5_time(THREAD5_END);
-#ifndef DOUBLE_FPS
-    VI_YEILD_GAME
+#ifndef UNLOCK_FPS
+    osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 #endif
     // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
 #ifndef VC_HACKS

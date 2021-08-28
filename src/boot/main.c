@@ -37,6 +37,7 @@ OSThread gIdleThread;
 OSThread gMainThread;
 OSThread gGameLoopThread;
 OSThread gSoundThread;
+// OSThread gRenderingThread;
 
 OSIoMesg gDmaIoMesg;
 OSMesg   gMainReceivedMesg;
@@ -314,7 +315,7 @@ void thread3_main(UNUSED void *arg) {
     osSyncPrintf("Compiler: %s\n", __compiler__);
     osSyncPrintf("Linker  : %s\n", __linker__);
 #endif
-    create_thread(&gSoundThread, 4, thread4_sound, NULL, gThread4Stack + 0x2000, 20);
+    create_thread(&gSoundThread, 4, thread4_sound, NULL, (gThread4Stack + 0x2000), 20);
     osStartThread(&gSoundThread);
 #ifdef USE_EXT_RAM
     if (!gNotEnoughMemory) {
@@ -323,7 +324,7 @@ void thread3_main(UNUSED void *arg) {
         create_thread(&gGameLoopThread, 5, thread5_mem_error_message_loop, NULL, (gThread5Stack + 0x2000), 10);
     }
 #else
-    create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, gThread5Stack + 0x2000, 10);
+    create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, (gThread5Stack + 0x2000), 10);
 #endif
     osStartThread(&gGameLoopThread);
     while (TRUE) {
