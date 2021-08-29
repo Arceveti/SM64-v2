@@ -27,6 +27,16 @@
 
 #ifdef PUPPYCAM
 
+//! move to math_util
+static inline float smooth(float x) {
+    x = CLAMP(x, 0, 1);
+    return (sqr(x) * (3.0f - (2.0f * x)));
+}
+
+static inline float softClamp(float x, float a, float b) {
+    return ((smooth((2.0f / 3.0f) * (x - a) / (b - a) + (1.0f / 6.0f)) * (b - a)) + a);
+}
+
 #define PUPPYCAM_DECELERATION 0.66f
 #define PUPPYCAM_DEADZONE        20
 #define SCRIPT_MEMORY_POOL   0x1000
@@ -858,10 +868,10 @@ void puppycam_projection_behaviours(void) {
             gPuppyCam.moveZoom = approach_f32(gPuppyCam.moveZoom, 0, 5, 5);
         }
         // Zooms the camera in further when underwater.
-        if ((gPuppyCam.pitch > 0x38C0) && abss(gPuppyCam.swimPitch) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch - 0x38C0) / 3072.0f), 0.0f, 1.0f));
+        if ((gPuppyCam.pitch > 0x38C0) && (ABSI(gPuppyCam.swimPitch)) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch - 0x38C0) / 3072.0f), 0.0f, 1.0f));
         if (!(gMarioState->action & ACT_FLAG_SWIMMING)) {
-            gPuppyCam.floorY[0] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); //! was -300, 300
-            gPuppyCam.floorY[1] = CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -320, 320); //! was -300, 350
+            gPuppyCam.floorY[0] = softClamp((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -180, 320); //! was -180, 300
+            gPuppyCam.floorY[1] = softClamp((gPuppyCam.targetObj->oPosY - gPuppyCam.lastTargetFloorHeight), -180, 320); //! was -180, 350
             gPuppyCam.swimPitch = approach_f32_asymptotic(gPuppyCam.swimPitch, 0, 0.2f);
         } else {
             gPuppyCam.floorY[0]             = 0;
