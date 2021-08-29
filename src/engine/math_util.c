@@ -194,6 +194,10 @@ inline f64 max_3d (f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) 
  * Clamp functions *
  *******************/
 
+u32 clamp_bits(u32 val, u32 size) {
+    return MIN(val, (u32)((1 << (size)) - 1));
+}
+
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch) {
     Bool32 outOfRange = FALSE;
     Angle pitch, yaw;
@@ -603,6 +607,11 @@ UNUSED void vec3f_clamp(Vec3f vec, f32 limit) {
     } else if (vec[2] < -limit) {
         vec[2] = -limit;
     }
+}
+
+/// Get the average of vector 'v'
+f32 vec3f_average(Vec3f v) {
+    return ((v[0] + v[1] + v[2]) / 3.0f);
 }
 
 /// Get the magnitude of vector 'v'

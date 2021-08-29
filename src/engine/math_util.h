@@ -5,6 +5,8 @@
 
 #include "types.h"
 
+#define BITMASK(size) ((1 << (size)) - 1)
+
 /*
  * The sine and cosine tables overlap, but "#define gCosineTable (gSineTable +
  * 0x400)" doesn't give expected codegen; gSineTable and gCosineTable need to
@@ -120,6 +122,7 @@ u32  max_3ui(u32 a0, u32 a1, u32 a2);
 f32  max_3f( f32 a0, f32 a1, f32 a2);
 f64  max_3d( f64 a0, f64 a1, f64 a2);
 // Clamp
+u32    clamp_bits(u32 val, u32 size);
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
 Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum);
@@ -171,6 +174,7 @@ void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_zero(                         Vec3f v);
 void vec3f_clamp(                        Vec3f vec, f32 limit);
+f32  vec3f_average(                      Vec3f v);
 f32  vec3f_mag(                          Vec3f v);
 f32  vec3f_invmag(                       Vec3f v);
 void vec3f_normalize(                    Vec3f dest);

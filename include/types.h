@@ -24,13 +24,13 @@ struct Controller
 #endif
 };
 
-// Booleans
+// -- Booleans --
 
 typedef u8  Bool8;
 typedef u16 Bool16;
 typedef u32 Bool32;
 
-// Vectors
+// -- Vectors --
 
 typedef s8  Vec2c[2];
 typedef s16 Vec2s[2];
@@ -54,7 +54,7 @@ typedef f32 Mat2[2][2];
 typedef f32 Mat3[3][3];
 typedef f32 Mat4[4][4];
 
-// Data
+// -- Data --
 
 typedef uintptr_t GeoLayout;
 typedef uintptr_t LevelScript;
@@ -89,13 +89,13 @@ typedef TextureCoord ScreenPos;
 typedef uintptr_t BehaviorScript;
 typedef u8 uchar;
 
-// Angle
+// -- Angle --
 
 typedef s16 Angle;
 typedef u16 UAngle;
 typedef Angle Vec3a[3];
 
-// Collision
+// -- Collision --
 
 typedef s32 CellIndex;
 
@@ -113,8 +113,9 @@ typedef VtxPosC   Vec3vc[3];
 typedef f32       Normal;
 typedef Normal    Vec3n[3];
 
-// Color
+// -- Color --
 
+// 0.0f to 1.0f
 typedef f32    ColorF;
 typedef ColorF AlphaF;
 typedef ColorF ColorRGBf[3];
@@ -122,6 +123,7 @@ typedef ColorF ColorRGBAf[4];
 typedef ColorF ColorHSVf[3];
 typedef ColorF ColorHSVAf[4];
 
+// 0 to 255
 typedef u8    Color;
 typedef Color Alpha;
 typedef Color ColorRGB[3];
@@ -129,23 +131,26 @@ typedef Color ColorRGBA[4];
 typedef Color ColorHSV[3];
 typedef Color ColorHSVA[4];
 
-typedef u32 CompositeColor; // to be casted to one of the following:
+// Formats:
+typedef u32 CompositeColor;     // to be casted to one of the following:
 
-typedef u8  I4;  // u4
+typedef u8  I4;                 // u4
 typedef u8  I8;
-typedef u8  IA4; // u4, components u3 & u1
+typedef u8  IA4;                // u4, components u3 & u1
 typedef u8  IA8;
 typedef u16 IA16;
 typedef u8  IA16Component;
 typedef u16 RGBA16;
-typedef u8  RGBA16Component; // u5 & u1
+typedef u8  RGBA16Component;    // u5 & u1
 typedef u32 RGBA32;
 typedef u8  RGBA32Component;
-typedef u8  CI4; // u4
+typedef u8  CI4;                // u4
 typedef u8  CI8;
 
 typedef Color Texture;
 typedef RGBA16 ImageTexture;
+
+
 
 enum SpTaskState {
     SPTASK_STATE_NOT_STARTED,

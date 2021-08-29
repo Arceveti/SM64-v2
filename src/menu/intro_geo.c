@@ -4,6 +4,7 @@
 #include "game/segment2.h"
 #include "game/segment7.h"
 #include "engine/math_util.h"
+#include "engine/colors.h"
 #include "intro_geo.h"
 #include "sm64.h"
 #include "textures.h"
@@ -304,15 +305,15 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
                 sdy = ((SCREEN_WIDTH * (idy + sy)) + idx);
                 for ((sx = 0); (sx < sampleW); (sx++)) {
                     pixel = (sdy + sx);
-                    color[0] += ((fb[pixel] >> 0xB) & 0x1F);
-                    color[1] += ((fb[pixel] >> 0x6) & 0x1F);
-                    color[2] += ((fb[pixel] >> 0x1) & 0x1F);
+                    color[0] += RGBA16_R(fb[pixel]);
+                    color[1] += RGBA16_G(fb[pixel]);
+                    color[2] += RGBA16_B(fb[pixel]);
                 }
             }
             size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = ((((ImageTexture) (color[0] / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
-                                        ((((ImageTexture) (color[1] / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
-                                        ((((ImageTexture) (color[2] / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 0x1;
+            image[(imageH * iy) + ix] = (((((ImageTexture)((color[0] / size) + 0.5f) << 0xB) & 0xF800) & 0xFFFF) |
+                                         ((((ImageTexture)((color[1] / size) + 0.5f) << 0x6) &  0x7C0) & 0xFFFF) |
+                                         ((((ImageTexture)((color[2] / size) + 0.5f) << 0x1) &   0x3E) & 0xFFFF) | 0x1);
         }
     }
     return image;
@@ -324,7 +325,7 @@ Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *c
     Gfx *dl = NULL;
     s32 i;
     if (state != 1) {
-        for (i = 0; i < 48; i++) sFaceVisible[i] = FALSE;
+        for ((i = 0); (i < 48); (i++)) sFaceVisible[i] = FALSE;
     } else if (state == 1) {
         if (sFaceCounter == 0) {
             if (gPlayer1Controller->buttonPressed & Z_TRIG) {
