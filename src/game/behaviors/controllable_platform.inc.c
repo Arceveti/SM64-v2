@@ -142,30 +142,30 @@ void bhv_controllable_platform_loop(void) {
             break;
         case DIRECTION_STATE_SOUTH:
             o->oVelZ = 10.0f;
-            wallDisplacement[0] = obj_find_wall_displacement(dist1, (o->oPosX + 250.0f), o->oPosY, (o->oPosZ + 300.0f), 50.0f);
-            // wallDisplacement[1] = obj_find_wall_displacement(dist2,  o->oPosX          , o->oPosY, (o->oPosZ + 300.0f), 50.0f);
-            wallDisplacement[2] = obj_find_wall_displacement(dist3, (o->oPosX - 250.0f), o->oPosY, (o->oPosZ + 300.0f), 50.0f);
+            wallDisplacement[0] = find_wall_displacement(dist1, (o->oPosX + 250.0f), o->oPosY, (o->oPosZ + 300.0f), 50.0f);
+            // wallDisplacement[1] = find_wall_displacement(dist2,  o->oPosX          , o->oPosY, (o->oPosZ + 300.0f), 50.0f);
+            wallDisplacement[2] = find_wall_displacement(dist3, (o->oPosX - 250.0f), o->oPosY, (o->oPosZ + 300.0f), 50.0f);
             controllable_platform_check_walls(MOVE_DIRECTION_SOUTH, wallDisplacement, dist1, dist2, dist3);
             break;
         case DIRECTION_STATE_NORTH:
             o->oVelZ = -10.0f;
-            wallDisplacement[0] = obj_find_wall_displacement(dist1, (o->oPosX + 250.0f), o->oPosY, (o->oPosZ - 300.0f), 50.0f);
-            // wallDisplacement[1] = obj_find_wall_displacement(dist2,  o->oPosX          , o->oPosY, (o->oPosZ - 300.0f), 50.0f);
-            wallDisplacement[2] = obj_find_wall_displacement(dist3, (o->oPosX - 250.0f), o->oPosY, (o->oPosZ - 300.0f), 50.0f);
+            wallDisplacement[0] = find_wall_displacement(dist1, (o->oPosX + 250.0f), o->oPosY, (o->oPosZ - 300.0f), 50.0f);
+            // wallDisplacement[1] = find_wall_displacement(dist2,  o->oPosX          , o->oPosY, (o->oPosZ - 300.0f), 50.0f);
+            wallDisplacement[2] = find_wall_displacement(dist3, (o->oPosX - 250.0f), o->oPosY, (o->oPosZ - 300.0f), 50.0f);
             controllable_platform_check_walls(MOVE_DIRECTION_NORTH, wallDisplacement, dist1, dist2, dist3);
             break;
         case DIRECTION_STATE_EAST:
             o->oVelX = 10.0f;
-            wallDisplacement[0] = obj_find_wall_displacement(dist1, (o->oPosX + 300.0f), o->oPosY, (o->oPosZ + 250.0f), 50.0f);
-            // wallDisplacement[1] = obj_find_wall_displacement(dist2, (o->oPosX + 300.0f), o->oPosY,  o->oPosZ          , 50.0f);
-            wallDisplacement[2] = obj_find_wall_displacement(dist3, (o->oPosX + 300.0f), o->oPosY, (o->oPosZ - 250.0f), 50.0f);
+            wallDisplacement[0] = find_wall_displacement(dist1, (o->oPosX + 300.0f), o->oPosY, (o->oPosZ + 250.0f), 50.0f);
+            // wallDisplacement[1] = find_wall_displacement(dist2, (o->oPosX + 300.0f), o->oPosY,  o->oPosZ          , 50.0f);
+            wallDisplacement[2] = find_wall_displacement(dist3, (o->oPosX + 300.0f), o->oPosY, (o->oPosZ - 250.0f), 50.0f);
             controllable_platform_check_walls(MOVE_DIRECTION_EAST, wallDisplacement, dist1, dist2, dist3);
             break;
         case DIRECTION_STATE_WEST:
             o->oVelX = -10.0f;
-            wallDisplacement[0] = obj_find_wall_displacement(dist1, (o->oPosX - 300.0f), o->oPosY, (o->oPosZ + 250.0f), 50.0f);
-            // wallDisplacement[1] = obj_find_wall_displacement(dist2, (o->oPosX - 300.0f), o->oPosY,  o->oPosZ          , 50.0f);
-            wallDisplacement[2] = obj_find_wall_displacement(dist3, (o->oPosX - 300.0f), o->oPosY, (o->oPosZ - 250.0f), 50.0f);
+            wallDisplacement[0] = find_wall_displacement(dist1, (o->oPosX - 300.0f), o->oPosY, (o->oPosZ + 250.0f), 50.0f);
+            // wallDisplacement[1] = find_wall_displacement(dist2, (o->oPosX - 300.0f), o->oPosY,  o->oPosZ          , 50.0f);
+            wallDisplacement[2] = find_wall_displacement(dist3, (o->oPosX - 300.0f), o->oPosY, (o->oPosZ - 250.0f), 50.0f);
             controllable_platform_check_walls(MOVE_DIRECTION_WEST, wallDisplacement, dist1, dist2, dist3);
             break;
         case DIRECTION_STATE_HIT_WALL:

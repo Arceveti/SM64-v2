@@ -52,6 +52,7 @@ struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 ra
 #endif
 s32    collide_with_walls(               Vec3f pos, f32 offsetY, f32 radius);
 void   resolve_geometry_collisions(      Vec3f pos, UNUSED Vec3f lastGood);
+Bool32 find_wall_displacement(           Vec3f dist, f32 x, f32 y, f32 z, f32 radius);
 f32    find_ceil(                        f32  xPos, f32  yPos, f32  zPos, struct Surface **pceil);
 #ifndef CENTERED_COLLISION
 f32    vec3f_find_ceil(                  Vec3f pos, f32 height, struct Surface **ceil);

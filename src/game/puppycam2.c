@@ -27,16 +27,6 @@
 
 #ifdef PUPPYCAM
 
-//! move to math_util
-static inline float smooth(float x) {
-    x = CLAMP(x, 0, 1);
-    return (sqr(x) * (3.0f - (2.0f * x)));
-}
-
-static inline float softClamp(float x, float a, float b) {
-    return ((smooth((2.0f / 3.0f) * (x - a) / (b - a) + (1.0f / 6.0f)) * (b - a)) + a);
-}
-
 #define PUPPYCAM_DECELERATION 0.66f
 #define PUPPYCAM_DEADZONE        20
 #define SCRIPT_MEMORY_POOL   0x1000

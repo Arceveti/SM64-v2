@@ -124,6 +124,8 @@ Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
 Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum);
 // f32    clamp_f32_abs(f32 a, f32 b);
+f32 smooth(f32 x);
+f32 softClamp(f32 x, f32 a, f32 b);
 // RNG
 u16  random_u16(   void);
 s32  random_sign(  void);
@@ -135,6 +137,7 @@ f32  random_f32_around_zero(f32 diameter);
 void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16 zRange);
 // Angles
 Angle  abs_angle_diff(Angle angle1, Angle angle2);
+Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown);
 // Vector Operations
 void vec3f_copy(                         Vec3f dest, Vec3f src);
 void vec3f_copy_y_offset(                Vec3f dest, Vec3f src, f32 offset);
@@ -212,6 +215,7 @@ void mtxf_align_facing_view(              Mat4 dest, Mat4 mtx, Vec3f position, A
 void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
 void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
+void mtxf_transform_from_normals(         Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32 zNorm);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_scale_self_vec3f(                 Mat4  mtx, Vec3f vec);
 void mtxf_mul_vec3s(                      Mat4  mtx, Vec3s b);

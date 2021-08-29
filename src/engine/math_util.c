@@ -239,6 +239,16 @@ Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum) {
 //     return a;
 // }
 
+inline f32 smooth(f32 x) {
+    x = CLAMP(x, 0, 1);
+    return (sqr(x) * (3.0f - (2.0f * x)));
+}
+
+inline f32 softClamp(f32 x, f32 a, f32 b) {
+    return ((smooth((2.0f / 3.0f) * (x - a) / (b - a) + (1.0f / 6.0f)) * (b - a)) + a);
+}
+
+
 /**********
  * Angles *
  **********/
@@ -247,6 +257,21 @@ inline Angle abs_angle_diff(Angle angle1, Angle angle2) {
     Angle diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
     return abss(diff);
+}
+
+Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
+    s32 startValue = *value;
+    *value += (s32) *vel;
+    if ((*value == target) || (((*value - target) * (startValue - target) < 0) && (*vel > -velCloseToZero) && (*vel < velCloseToZero))) {
+        *value = target;
+        *vel   = 0.0f;
+        return TRUE;
+    } else {
+        if (*value >= target) accel = -accel;
+        if ((*vel * accel) < 0.0f) accel *= slowdown;
+        *vel += accel;
+    }
+    return FALSE;
 }
 
 /*************************
@@ -1192,6 +1217,16 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     mtx[3][1] = MAX(pos[1], avgY);
     mtx[3][2] = pos[2];
     mtxf_end(mtx);
+}
+
+/**
+ * Creates a transform matrix on a variable passed in from given normals
+ * and the object's position.
+ */
+void mtxf_transform_from_normals(Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32 zNorm) {
+    Vec3n normal;
+    vec3f_set(normal, xNorm, yNorm, zNorm);
+    mtxf_align_terrain_normal(dest, normal, pos, 0);
 }
 
 /**

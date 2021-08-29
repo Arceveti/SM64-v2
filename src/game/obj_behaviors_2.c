@@ -273,22 +273,6 @@ s32 cur_obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale) {
     return 0;
 }
 
-//! move to math_util
-Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
-    s32 startValue = *value;
-    *value += (s32) *vel;
-    if ((*value == target) || (((*value - target) * (startValue - target) < 0) && (*vel > -velCloseToZero) && (*vel < velCloseToZero))) {
-        *value = target;
-        *vel   = 0.0f;
-        return TRUE;
-    } else {
-        if (*value >= target) accel = -accel;
-        if ((*vel * accel) < 0.0f) accel *= slowdown;
-        *vel += accel;
-    }
-    return FALSE;
-}
-
 void cur_obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLengthRange, s16 blinkLength) {
     if (*blinkTimer != 0) {
         (*blinkTimer)--;

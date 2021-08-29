@@ -5,26 +5,13 @@
  * The object essentially just tilts and moves Mario with it.
  */
 
-//! move to math_util?
-/**
- * Creates a transform matrix on a variable passed in from given normals
- * and the object's position.
- */
-void create_transform_from_normals(Mat4 transform, f32 xNorm, f32 yNorm, f32 zNorm) {
-    Vec3n normal;
-    Vec3f pos;
-    vec3f_copy(pos, &o->oPosVec);
-    vec3f_set(normal, xNorm, yNorm, zNorm);
-    mtxf_align_terrain_normal(transform, normal, pos, 0);
-}
-
 /**
  * Initialize the object's transform matrix with Y being up.
  */
 void bhv_platform_normals_init(void) {
     Mat4 *transform = &o->transform;
     vec3f_set(&o->oTiltingPyramidNormalVec,   0.0f, 1.0f, 0.0f);
-    create_transform_from_normals(*transform, 0.0f, 1.0f, 0.0f);
+    mtxf_transform_from_normals(*transform, &o->oPosVec, 0.0f, 1.0f, 0.0f);
 }
 
 /**
@@ -59,7 +46,7 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     approach_f32_bool(&o->oTiltingPyramidNormalX, d[0], 0.01f);
     approach_f32_bool(&o->oTiltingPyramidNormalY, d[1], 0.01f);
     approach_f32_bool(&o->oTiltingPyramidNormalZ, d[2], 0.01f);
-    create_transform_from_normals(*transform, o->oTiltingPyramidNormalX, o->oTiltingPyramidNormalY, o->oTiltingPyramidNormalZ);
+    mtxf_transform_from_normals(*transform, &o->oPosVec, o->oTiltingPyramidNormalX, o->oTiltingPyramidNormalY, o->oTiltingPyramidNormalZ);
     // If Mario is on the platform, adjust his position for the platform tilt.
     if (o->oTiltingPyramidMarioOnPlatform) {
         linear_mtxf_mul_vec3f(*transform, posAfterRotation, dist);
