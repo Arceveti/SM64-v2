@@ -38,7 +38,7 @@ static void enemy_lakitu_update_vel_y(f32 offsetY) {
     // In order to encourage oscillation, pass Mario by a small margin before
     // accelerating the opposite direction
     f32 margin = ((o->oVelY < 0.0f) ? -3.0f : 3.0f);
-    obj_y_vel_approach(((o->oPosY < (gMarioObject->oPosY + offsetY + margin)) ? 4.0f : -4.0f), 0.4f);
+    cur_obj_y_vel_approach(((o->oPosY < (gMarioObject->oPosY + offsetY + margin)) ? 4.0f : -4.0f), 0.4f);
 }
 
 /**
@@ -60,7 +60,7 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     if (o->oEnemyLakituFaceForwardCountdown != 0) {
         o->oEnemyLakituFaceForwardCountdown--;
     } else {
-        obj_face_yaw_approach(o->oAngleToMario, 0x600);
+        cur_obj_face_yaw_approach(o->oAngleToMario, 0x600);
     }
     // Change move angle toward Mario faster when farther from Mario
     turnSpeed = (Angle)(distToMario * 2);
@@ -127,7 +127,7 @@ static void enemy_lakitu_act_main(void) {
     cur_obj_update_floor_and_walls();
     enemy_lakitu_update_speed_and_angle();
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
-    obj_update_blinking(&o->oEnemyLakituBlinkTimer, 20, 40, 4);
+    cur_obj_update_blinking(&o->oEnemyLakituBlinkTimer, 20, 40, 4);
     switch (o->oSubAction) {
         case ENEMY_LAKITU_SUB_ACT_NO_SPINY:    enemy_lakitu_sub_act_no_spiny();    break;
         case ENEMY_LAKITU_SUB_ACT_HOLD_SPINY:  enemy_lakitu_sub_act_hold_spiny();  break;
@@ -135,7 +135,7 @@ static void enemy_lakitu_act_main(void) {
     }
     cur_obj_move_standard(78);
     // Die and drop held spiny when attacked by Mario
-    if (obj_check_attacks(&sEnemyLakituHitbox, o->oAction)) o->prevObj = NULL; // The spiny uses this as a signal to get thrown
+    if (cur_obj_check_attacks(&sEnemyLakituHitbox, o->oAction)) o->prevObj = NULL; // The spiny uses this as a signal to get thrown
 }
 
 /**
@@ -143,7 +143,7 @@ static void enemy_lakitu_act_main(void) {
  */
 void bhv_enemy_lakitu_update(void) {
     // PARTIAL_UPDATE
-    treat_far_home_as_mario(2000.0f);
+    cur_obj_treat_far_home_as_mario(2000.0f);
     switch (o->oAction) {
         case ENEMY_LAKITU_ACT_UNINITIALIZED: enemy_lakitu_act_uninitialized(); break;
         case ENEMY_LAKITU_ACT_MAIN:          enemy_lakitu_act_main();          break;

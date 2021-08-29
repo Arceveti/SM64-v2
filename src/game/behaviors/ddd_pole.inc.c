@@ -16,5 +16,5 @@ void bhv_ddd_pole_update(void) {
             o->oTimer = 0;
         }
     }
-    obj_set_dist_from_home(o->oDDDPoleOffset);
+    cur_obj_set_dist_from_home(o->oDDDPoleOffset);
 }

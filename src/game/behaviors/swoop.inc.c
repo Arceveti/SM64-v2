@@ -42,7 +42,7 @@ static void swoop_act_move(void) {
     if (cur_obj_check_if_near_animation_end()) cur_obj_play_sound_2(SOUND_OBJ_SWOOP_FLAP);
     if (o->oForwardVel == 0.0f) {
         // If we haven't started moving yet, begin swooping
-        if (obj_face_roll_approach(0, 0x9C4)) {
+        if (cur_obj_face_roll_approach(0, 0x9C4)) {
             o->oForwardVel =  10.0f;
             o->oVelY       = -10.0f;
         }
@@ -60,9 +60,9 @@ static void swoop_act_move(void) {
             // 0 and 200 units above Mario, increase speed and stop swooping
             o->oSwoopTargetYaw = o->oAngleToMario;
             if (o->oPosY < (gMarioObject->oPosY + 200.0f)) {
-                if (obj_y_vel_approach(0.0f, 0.5f)) o->oForwardVel *= 2.0f;
+                if (cur_obj_y_vel_approach(0.0f, 0.5f)) o->oForwardVel *= 2.0f;
             } else {
-                obj_y_vel_approach(-10.0f, 0.5f);
+                cur_obj_y_vel_approach(-10.0f, 0.5f);
             }
         } else if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
             // Bounce off a wall and don't bounce again for 30 frames.
@@ -70,11 +70,11 @@ static void swoop_act_move(void) {
             o->oSwoopBonkCountdown = 30;
         }
         // Tilt upward when approaching Mario
-        if ((o->oSwoopTargetPitch = obj_get_pitch_from_vel()) == 0) o->oSwoopTargetPitch += (o->oForwardVel * 500.0f);
-        obj_move_pitch_approach(o->oSwoopTargetPitch, 0x8C);
+        if ((o->oSwoopTargetPitch = cur_obj_get_pitch_from_vel()) == 0) o->oSwoopTargetPitch += (o->oForwardVel * 500.0f);
+        cur_obj_move_pitch_approach(o->oSwoopTargetPitch, 0x8C);
         // Jitter yaw a bit
         cur_obj_rotate_yaw_toward((o->oSwoopTargetYaw + (s32)(0xBB8 * coss(0xFA0 * gGlobalTimer))), 0x4B0);
-        obj_roll_to_match_yaw_turn(o->oSwoopTargetYaw, 0x3000, 500);
+        cur_obj_roll_to_match_yaw_turn(o->oSwoopTargetYaw, 0x3000, 500);
         // Jitter roll a bit
         o->oFaceAngleRoll += (s32)(1000 * coss(20000 * gGlobalTimer));
     }
@@ -94,6 +94,6 @@ void bhv_swoop_update(void) {
         }
         cur_obj_scale(o->header.gfx.scale[0]);
         cur_obj_move_standard(78);
-        obj_check_attacks(&sSwoopHitbox, o->oAction);
+        cur_obj_check_attacks(&sSwoopHitbox, o->oAction);
     }
 }

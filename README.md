@@ -76,7 +76,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Object Behaviors:**
 - `object_step()` allows moving objects to step up and down floors like Mario, with a configurable step height (Arceveti) *
-- Fixed `obj_resolve_object_collisions()` not working consistently (Arceveti) *
+- Fixed `cur_obj_resolve_object_collisions()` not working consistently (Arceveti) *
 - Fixed `bhv_init_room()` checking dynamic surfaces for rooms (Arceveti) *
 - Fixed DDD water rings by using interaction checking (Arceveti) *
 - Fixed bomb clip (Arceveti) *

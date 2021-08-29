@@ -24,7 +24,7 @@ static void racing_penguin_act_wait_for_mario(void) {
 }
 
 static void racing_penguin_act_show_init_text(void) {
-    s32 response = obj_update_race_proposition_dialog(sRacingPenguinData[o->oBehParams2ndByte].text);
+    s32 response = cur_obj_update_race_proposition_dialog(sRacingPenguinData[o->oBehParams2ndByte].text);
     if (response == DIALOG_RESPONSE_YES) {
         cur_obj_nearest_object_with_behavior(bhvPenguinRaceFinishLine   )->parentObj = o;
         cur_obj_nearest_object_with_behavior(bhvPenguinRaceShortcutCheck)->parentObj = o;
@@ -64,7 +64,7 @@ static void racing_penguin_act_race(void) {
         }
         targetSpeed = (0.1f * (o->oRacingPenguinWeightedNewTargetSpeed + targetSpeed));
         clamp_f32(&targetSpeed, minSpeed, 150.0f);
-        obj_forward_vel_approach(targetSpeed, 0.4f);
+        cur_obj_forward_vel_approach(targetSpeed, 0.4f);
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_DIVE_SLIDE);
         cur_obj_rotate_yaw_toward(o->oPathedTargetYaw, (s32)(15.0f * o->oForwardVel));
         if (cur_obj_check_if_at_animation_end() && (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND)) {

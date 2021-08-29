@@ -189,7 +189,7 @@ static void monty_mole_act_spawn_rock(void) {
  * into hole action.
  */
 static void monty_mole_act_begin_jump_into_hole(void) {
-    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || obj_is_near_to_and_facing_mario(1000.0f, DEG(90))) {
+    if (cur_obj_init_anim_and_check_if_end(MONTY_MOLE_ANIM_BEGIN_JUMP_INTO_HOLE) || cur_obj_is_near_to_and_facing_mario(1000.0f, DEG(90))) {
         o->oAction  = MONTY_MOLE_ACT_JUMP_INTO_HOLE;
         o->oVelY    = 40.0f;
         o->oGravity = -6.0f;
@@ -294,7 +294,7 @@ void bhv_monty_mole_update(void) {
         case MONTY_MOLE_ACT_JUMP_OUT_OF_HOLE:     monty_mole_act_jump_out_of_hole();     break;
     }
     // Spawn a 1-up if you kill 8 monty moles
-    if (obj_check_attacks(&sMontyMoleHitbox, o->oAction)) {
+    if (cur_obj_check_attacks(&sMontyMoleHitbox, o->oAction)) {
         if (sMontyMoleKillStreak != 0) {
             Vec3f d;
             vec3f_diff(d, &o->oPosVec, sMontyMoleLastKilledPos);
@@ -390,7 +390,7 @@ void bhv_monty_mole_rock_update(void) {
     // PARTIAL_UPDATE
     //! Since we can prevent them from despawning using partial updates, we
     //  can fill up object slots to crash the game.
-    obj_check_attacks(&sMontyMoleRockHitbox, o->oAction);
+    cur_obj_check_attacks(&sMontyMoleRockHitbox, o->oAction);
     switch (o->oAction) {
         case MONTY_MOLE_ROCK_ACT_HELD: monty_mole_rock_act_held(); break;
         case MONTY_MOLE_ROCK_ACT_MOVE: monty_mole_rock_act_move(); break;

@@ -57,17 +57,17 @@ static void spiny_act_walk(void) {
             // After touching the ground for the first time, stop. From now on,
             // ensure that face angle and move angle agree
             if (!(o->oFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW)) {
-                if (obj_forward_vel_approach(0.0f, 1.0f)) {
+                if (cur_obj_forward_vel_approach(0.0f, 1.0f)) {
                     o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
                     o->oMoveAngleYaw = o->oFaceAngleYaw;
                 }
             } else {
-                obj_forward_vel_approach(1.0f, 0.2f);
+                cur_obj_forward_vel_approach(1.0f, 0.2f);
             }
             if (o->oSpinyTurningAwayFromWall) {
-                o->oSpinyTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oSpinyTargetYaw, 0x80);
+                o->oSpinyTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oSpinyTargetYaw, 0x80);
             } else {
-                if (!(o->oSpinyTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oSpinyTargetYaw))) {
+                if (!(o->oSpinyTurningAwayFromWall = cur_obj_bounce_off_walls_edges_objects(&o->oSpinyTargetYaw))) {
                     // Walk and occasionally randomly change direction
                     if (o->oSpinyTimeUntilTurn != 0) {
                         o->oSpinyTimeUntilTurn--;
@@ -83,7 +83,7 @@ static void spiny_act_walk(void) {
             o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
         }
         cur_obj_move_standard(-78);
-        if (obj_handle_attacks(&sSpinyHitbox, SPINY_ACT_ATTACKED_MARIO, sSpinyWalkAttackHandlers)) {
+        if (cur_obj_handle_attacks(&sSpinyHitbox, SPINY_ACT_ATTACKED_MARIO, sSpinyWalkAttackHandlers)) {
             // When attacked by Mario, lessen the knockback
             o->oAction       = SPINY_ACT_WALK;
             o->oForwardVel  *= 0.1f;
@@ -135,7 +135,7 @@ static void spiny_act_thrown_by_lakitu(void) {
             o->oMoveAngleYaw = cur_obj_reflect_move_angle_off_wall();
         }
         cur_obj_move_standard(-78);
-        if (obj_check_attacks(&sSpinyHitbox, o->oAction) && (o->parentObj != o)) o->parentObj->oEnemyLakituNumSpinies--;
+        if (cur_obj_check_attacks(&sSpinyHitbox, o->oAction) && (o->parentObj != o)) o->parentObj->oEnemyLakituNumSpinies--;
     }
 }
 
@@ -148,6 +148,6 @@ void bhv_spiny_update(void) {
         case SPINY_ACT_WALK:             spiny_act_walk();                        break;
         case SPINY_ACT_HELD_BY_LAKITU:   spiny_act_held_by_lakitu();              break;
         case SPINY_ACT_THROWN_BY_LAKITU: spiny_act_thrown_by_lakitu();            break;
-        case SPINY_ACT_ATTACKED_MARIO:   obj_move_for_one_second(SPINY_ACT_WALK); break;
+        case SPINY_ACT_ATTACKED_MARIO:   cur_obj_move_for_one_second(SPINY_ACT_WALK); break;
     }
 }

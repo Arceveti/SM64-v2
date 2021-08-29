@@ -722,7 +722,7 @@ void bowser_act_spit_fire_onto_floor(void) {
     o->oBowserRandSplitFloor = ((gHudDisplay.wedges < 4) ? 3 : ((random_float() * 3.0f) + 1.0f));
     // Play animation and split fire at a specific frame
     cur_obj_init_animation_with_sound(BOWSER_ANIM_BREATH_QUICK);
-    if (cur_obj_check_anim_frame(5)) obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
+    if (cur_obj_check_anim_frame(5)) cur_obj_spit_fire(0, 200, 180, 7.0f, MODEL_RED_FLAME, 30.0f, 10.0f, 0x1000);
     // Use subaction as a timer when the animation is over
     if (cur_obj_check_if_near_animation_end()) o->oSubAction = BOWSER_SUB_ACT_SPIT_FIRE_FLOOR_STOP;
     // Return to default act once we get past rand value

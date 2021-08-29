@@ -43,7 +43,7 @@ void clam_act_opening(void) {
 #endif
     if (o->oTimer > 150) {
         o->oAction = CLAM_ACT_CLOSING;
-    } else if (obj_is_rendering_enabled() && cur_obj_init_anim_check_frame(CLAM_ANIM_OPENING, 8)) {
+    } else if (cur_obj_is_rendering_enabled() && cur_obj_init_anim_check_frame(CLAM_ANIM_OPENING, 8)) {
         for ((i = -0x2000); (i < 0x2000); (i += 0x555)) {
             // Opening and spawning bubbles
             bubblesX = (s16)(100.0f * sins(i));
@@ -61,5 +61,5 @@ void bhv_clam_loop(void) {
         case CLAM_ACT_CLOSING: clam_act_closing(); break;
         case CLAM_ACT_OPENING: clam_act_opening(); break;
     }
-    obj_check_attacks(&sClamShellHitbox, o->oAction);
+    cur_obj_check_attacks(&sClamShellHitbox, o->oAction);
 }

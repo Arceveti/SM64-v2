@@ -51,7 +51,7 @@ void bhv_ttc_2d_rotator_update(void) {
     if (o->oTTC2DRotatorRandomDirTimer != 0) o->oTTC2DRotatorRandomDirTimer--;
     // Wait until rotated to target yaw
     if ((o->oTTC2DRotatorMinTimeUntilNextTurn != 0)
-        && obj_face_yaw_approach(o->oTTC2DRotatorTargetYaw, 0xC8)) {
+        && cur_obj_face_yaw_approach(o->oTTC2DRotatorTargetYaw, 0xC8)) {
         // and until MinTimeUntilNextTurn has passed.
         if (o->oTimer > o->oTTC2DRotatorMinTimeUntilNextTurn) {
             // Increment target yaw

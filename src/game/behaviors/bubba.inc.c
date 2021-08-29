@@ -14,9 +14,9 @@ static struct ObjectHitbox sBubbaHitbox = {
 
 void bubba_act_idle(void) {
     f32 lateralDistToHome = cur_obj_lateral_dist_to_home();
-    treat_far_home_as_mario(2000.0f);
+    cur_obj_treat_far_home_as_mario(2000.0f);
     o->oAnimState        = BUBBA_ANIM_STATE_CLOSED_MOUTH;
-    o->oBubbaTargetPitch = obj_get_pitch_to_home(lateralDistToHome);
+    o->oBubbaTargetPitch = cur_obj_get_pitch_to_home(lateralDistToHome);
     approach_f32_bool(&o->oBubbaMovePitch, 5.0f, 0.5f);
     if (o->oBubbaHitWall != 0) {
         if (abs_angle_diff(o->oMoveAngleYaw, o->oBubbaTargetYaw) < 800) o->oBubbaHitWall = 0;
@@ -32,14 +32,14 @@ void bubba_act_idle(void) {
         } else if (o->oBubbaRandomTimer != 0) {
             o->oBubbaRandomTimer--;
         } else {
-            o->oBubbaTargetYaw   = obj_random_fixed_turn(DEG(45));
+            o->oBubbaTargetYaw   = cur_obj_random_fixed_turn(DEG(45));
             o->oBubbaRandomTimer = random_linear_offset(100, 100);
         }
     }
 }
 
 void bubba_act_attack(void) {
-    treat_far_home_as_mario(2500.0f);
+    cur_obj_treat_far_home_as_mario(2500.0f);
     if (o->oDistanceToMario > 2500.0f) {
         o->oAction = BUBBA_ACT_IDLE;
     } else if (o->oBubbaLungeTimer != 0) {
@@ -53,13 +53,13 @@ void bubba_act_attack(void) {
             o->oBubbaTargetPitch -= targetPitch;
             o->oMoveAnglePitch    = o->oBubbaTargetPitch;
             o->oBubbaMovePitch    = 40.0f;
-            obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
+            cur_obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
             o->oAnimState         = BUBBA_ANIM_STATE_CLOSED_MOUTH;
         } else {
             o->oBubbaTargetYaw    = o->oAngleToMario;
             o->oBubbaTargetPitch  = o->oBubbaNextTargetPitchTowardMario;
             cur_obj_rotate_yaw_toward(o->oBubbaTargetYaw, 0x190);
-            obj_move_pitch_approach(o->oBubbaTargetPitch, 0x190);
+            cur_obj_move_pitch_approach(o->oBubbaTargetPitch, 0x190);
         }
     } else {
         if (abs_angle_diff(gMarioObject->oFaceAngleYaw, o->oAngleToMario) < DEG(67.5)) {
@@ -70,7 +70,7 @@ void bubba_act_attack(void) {
             o->oBubbaTargetYaw = o->oAngleToMario;
         }
         o->oBubbaTargetPitch = o->oBubbaNextTargetPitchTowardMario;
-        if (obj_is_near_to_and_facing_mario(500.0f, 3000)
+        if (cur_obj_is_near_to_and_facing_mario(500.0f, 3000)
             && abs_angle_diff(o->oBubbaTargetPitch, o->oMoveAnglePitch) < 3000) {
             o->oBubbaLungeTimer = 30;
             o->oBubbaMovePitch  = 0x0;
@@ -83,7 +83,7 @@ void bubba_act_attack(void) {
 
 void bhv_bubba_loop(void) {
     o->oInteractionSubtype &= ~INT_SUBTYPE_EATS_MARIO;
-    o->oBubbaNextTargetPitchTowardMario = obj_turn_pitch_toward_mario(120.0f, 0);
+    o->oBubbaNextTargetPitchTowardMario = cur_obj_turn_pitch_toward_mario(120.0f, 0);
     if ((abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x1000)
         && (abs_angle_diff((o->oBubbaNextTargetPitchTowardMario + 0x800), o->oMoveAnglePitch) < DEG(45))) {
         if ((o->oAnimState != BUBBA_ANIM_STATE_CLOSED_MOUTH) && (o->oDistanceToMario < 250.0f)) o->oInteractionSubtype |= INT_SUBTYPE_EATS_MARIO;
@@ -110,17 +110,17 @@ void bhv_bubba_loop(void) {
                 spawn_object_relative(OBJ_BP_NONE, (150.0f * coss(rand)), 0x64, (150.0f * sins(rand)), o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleSnow);
             }
         }
-        obj_smooth_turn(&o->oBubbaPitchVel, &o->oMoveAnglePitch, o->oBubbaTargetPitch, 0.05f, 10, 50, 2000);
-        obj_smooth_turn(&o->oBubbaYawVel,   &o->oMoveAngleYaw,   o->oBubbaTargetYaw,   0.05f, 10, 50, 2000);
-        obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
+        cur_obj_smooth_turn(&o->oBubbaPitchVel, &o->oMoveAnglePitch, o->oBubbaTargetPitch, 0.05f, 10, 50, 2000);
+        cur_obj_smooth_turn(&o->oBubbaYawVel,   &o->oMoveAngleYaw,   o->oBubbaTargetYaw,   0.05f, 10, 50, 2000);
+        cur_obj_compute_vel_from_move_pitch(o->oBubbaMovePitch);
     } else {
         o->oBubbaMovePitch = sqrtf(sqr(o->oForwardVel) + sqr(o->oVelY));
-        o->oMoveAnglePitch = obj_get_pitch_from_vel();
-        obj_face_pitch_approach(o->oMoveAnglePitch, 400);
+        o->oMoveAnglePitch = cur_obj_get_pitch_from_vel();
+        cur_obj_face_pitch_approach(o->oMoveAnglePitch, 400);
         o->oBubbaPitchVel  = 0x0;
     }
-    obj_face_pitch_approach(o->oMoveAnglePitch, 400);
-    obj_check_attacks(&sBubbaHitbox, o->oAction);
+    cur_obj_face_pitch_approach(o->oMoveAnglePitch, 400);
+    cur_obj_check_attacks(&sBubbaHitbox, o->oAction);
     cur_obj_move_standard(78);
     o->oFloorHeight += 150.0f;
     if (o->oPosY < o->oFloorHeight) o->oPosY = o->oFloorHeight;

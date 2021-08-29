@@ -326,7 +326,7 @@ void bhv_mr_blizzard_update(void) {
     o->oGraphYOffset = (o->oMrBlizzardGraphYOffset + absf(20.0f * sins(o->oFaceAngleRoll)) - (40.0f * (1.0f - o->oMrBlizzardScale)));
     cur_obj_scale(o->oMrBlizzardScale);
     cur_obj_move_standard(78);
-    obj_check_attacks(&sMrBlizzardHitbox, o->oAction);
+    cur_obj_check_attacks(&sMrBlizzardHitbox, o->oAction);
 }
 
 /**
@@ -379,7 +379,7 @@ struct ObjectHitbox sMrBlizzardSnowballHitbox = {
 static void mr_blizzard_snowball_act_collision(void) {
     // Set snowball to interact with walls, floors, and Mario.
     cur_obj_update_floor_and_walls();
-    obj_check_attacks(&sMrBlizzardSnowballHitbox, OBJ_ACT_PROJECTILE_HIT_MARIO);
+    cur_obj_check_attacks(&sMrBlizzardSnowballHitbox, OBJ_ACT_PROJECTILE_HIT_MARIO);
     // If snowball collides with the ground, delete snowball.
     if ((o->oAction == OBJ_ACT_PROJECTILE_HIT_MARIO) || (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_ENTERED_WATER))) {
         mr_blizzard_spawn_white_particles(6, 0, 5, 10, 3);

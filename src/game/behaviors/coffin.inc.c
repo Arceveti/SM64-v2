@@ -62,15 +62,15 @@ void coffin_act_idle(void) {
         if (o->oFaceAnglePitch != 0x0) {
             o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, -0x7D0, 0xC8);
             // If the coffin landed...
-            if (obj_face_pitch_approach(0, -o->oAngleVelPitch)) {
+            if (cur_obj_face_pitch_approach(0, -o->oAngleVelPitch)) {
                 cur_obj_play_sound_2(SOUND_GENERAL_ELEVATOR_MOVE_2);
                 // This bit changes the coffin's position,
                 // spawns dust there, then resets the position.
-                obj_perform_position_op(POS_OP_SAVE_POSITION);
+                cur_obj_perform_position_op(POS_OP_SAVE_POSITION);
                 o->oMoveAngleYaw = (o->oFaceAngleYaw - DEG(90));
-                obj_set_dist_from_home(200.0f);
+                cur_obj_set_dist_from_home(200.0f);
                 spawn_mist_from_global();
-                obj_perform_position_op(POS_OP_RESTORE_POSITION);
+                cur_obj_perform_position_op(POS_OP_RESTORE_POSITION);
             }
 
             o->oTimer = 0;
@@ -105,7 +105,7 @@ void coffin_act_stand_up(void) {
     // Stand up
     if (o->oFaceAnglePitch != DEG(90)) {
         o->oAngleVelPitch = approach_s16_symmetric(o->oAngleVelPitch, 0x3E8, 0xC8);
-        obj_face_pitch_approach(DEG(90), o->oAngleVelPitch);
+        cur_obj_face_pitch_approach(DEG(90), o->oAngleVelPitch);
     } else {
         // Stay standing
         if (o->oTimer > 60) {

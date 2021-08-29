@@ -60,7 +60,7 @@ static void triplet_butterfly_act_wander(void) {
         }
         if (o->oHomeY < o->oFloorHeight) o->oHomeY = o->oFloorHeight;
         o->oTripletButterflyTargetPitch = ((o->oPosY < (o->oHomeY + random_linear_offset(50, 50))) ? -DEG(45) : DEG(45));
-        obj_move_pitch_approach(o->oTripletButterflyTargetPitch, 400);
+        cur_obj_move_pitch_approach(o->oTripletButterflyTargetPitch, 400);
         cur_obj_rotate_yaw_toward(o->oTripletButterflyTargetYaw, random_linear_offset(400, 800));
     }
 }
@@ -93,7 +93,7 @@ static void triplet_butterfly_act_activate(void) {
 
 static void triplet_butterfly_act_explode(void) {
     f32 scaleIncrease;
-    obj_check_attacks(&sTripletButterflyExplodeHitbox, -1);
+    cur_obj_check_attacks(&sTripletButterflyExplodeHitbox, -1);
     if ((o->oAction == -1) || (o->oMoveFlags & OBJ_MOVE_HIT_WALL) || (o->oTimer >= 158)) {
         o->oPosY += o->oGraphYOffset;
         spawn_object(o, MODEL_EXPLOSION, bhvExplosion);
@@ -111,7 +111,7 @@ static void triplet_butterfly_act_explode(void) {
         }
         approach_f32_bool(&o->oTripletButterflySpeed, 20.0f, 1.0f);
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x320);
-        obj_turn_pitch_toward_mario(-100.0f, 0x320);
+        cur_obj_turn_pitch_toward_mario(-100.0f, 0x320);
     }
 }
 
@@ -124,6 +124,6 @@ void bhv_triplet_butterfly_update(void) {
         case TRIPLET_BUTTERFLY_ACT_EXPLODE:  triplet_butterfly_act_explode();  break;
     }
     cur_obj_scale(o->oTripletButterflyScale);
-    obj_compute_vel_from_move_pitch(o->oTripletButterflySpeed);
+    cur_obj_compute_vel_from_move_pitch(o->oTripletButterflySpeed);
     cur_obj_move_standard(78);
 }

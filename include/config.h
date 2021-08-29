@@ -420,7 +420,7 @@
 // Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value) (HackerSM64)
 #define LONGER_POLES
 
-// Makes obj_resolve_object_collisions work consistently (Arceveti)
+// Makes cur_obj_resolve_object_collisions work consistently (Arceveti)
 #define FIX_OBJ_COLLISIONS
 
 // Makes signs and NPCs easier to talk to (Arceveti)

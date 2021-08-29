@@ -123,7 +123,7 @@ static void ttc_moving_bar_act_retract(void) {
  */
 void bhv_ttc_moving_bar_update(void) {
     o->oTTCMovingBarStartOffset = o->oTTCMovingBarOffset;
-    obj_perform_position_op(POS_OP_SAVE_POSITION);
+    cur_obj_perform_position_op(POS_OP_SAVE_POSITION);
     o->oTTCMovingBarOffset += o->oTTCMovingBarSpeed;
     switch (o->oAction) {
         case TTC_MOVING_BAR_ACT_WAIT:      ttc_moving_bar_act_wait();      break;
@@ -131,6 +131,6 @@ void bhv_ttc_moving_bar_update(void) {
         case TTC_MOVING_BAR_ACT_EXTEND:    ttc_moving_bar_act_extend();    break;
         case TTC_MOVING_BAR_ACT_RETRACT:   ttc_moving_bar_act_retract();   break;
     }
-    obj_set_dist_from_home(o->oTTCMovingBarOffset);
-    obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
+    cur_obj_set_dist_from_home(o->oTTCMovingBarOffset);
+    cur_obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 }

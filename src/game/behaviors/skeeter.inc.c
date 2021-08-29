@@ -36,7 +36,7 @@ static void skeeter_act_idle(void) {
         cur_obj_init_animation_with_sound(SKEETER_ANIM_WATER_IDLE);
         if (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE) {
             skeeter_spawn_waves();
-            if ((o->oTimer > 60) && obj_smooth_turn(&o->oSkeeterAngleVel, &o->oMoveAngleYaw, o->oSkeeterTargetAngle, 0.02f, 5, 50, 200)) {
+            if ((o->oTimer > 60) && cur_obj_smooth_turn(&o->oSkeeterAngleVel, &o->oMoveAngleYaw, o->oSkeeterTargetAngle, 0.02f, 5, 50, 200)) {
                 if (o->oSkeeterWaitTime != 0) {
                     o->oSkeeterWaitTime--;
                 } else if (cur_obj_check_if_near_animation_end()) {
@@ -61,12 +61,12 @@ static void skeeter_act_lunge(void) {
             o->oForwardVel  *= 0.3f;
             o->oFlags       &= ~OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         }
-        if (obj_forward_vel_approach(0.0f, 0.8f) && cur_obj_check_if_at_animation_end()) {
+        if (cur_obj_forward_vel_approach(0.0f, 0.8f) && cur_obj_check_if_at_animation_end()) {
             o->oMoveAngleYaw = o->oFaceAngleYaw;
             if (o->oDistanceToMario >= 25000.0f) {
                 o->oSkeeterTargetAngle = o->oAngleToMario;
             } else {
-                o->oSkeeterTargetAngle = obj_random_fixed_turn(random_u16() % 0x2000);
+                o->oSkeeterTargetAngle = cur_obj_random_fixed_turn(random_u16() % 0x2000);
             }
             o->oAction          = SKEETER_ACT_IDLE;
             o->oSkeeterWaitTime = random_linear_offset(0, 30);
@@ -80,18 +80,18 @@ static void skeeter_act_walk(void) {
     if (!(o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND)) {
         o->oAction = SKEETER_ACT_IDLE;
     } else {
-        obj_forward_vel_approach(o->oSkeeterTargetForwardVel, 0.4f);
+        cur_obj_forward_vel_approach(o->oSkeeterTargetForwardVel, 0.4f);
         accel = (0.12f * o->oForwardVel);
         cur_obj_init_animation_with_accel_and_sound(SKEETER_ANIM_WALK, accel);
         cur_obj_play_sound_at_anim_range(3, 13, SOUND_OBJ_SKEETER_WALK);
         if (o->oSkeeterTurningAwayFromWall) {
-            o->oSkeeterTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oSkeeterTargetAngle, 0x400);
+            o->oSkeeterTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oSkeeterTargetAngle, 0x400);
         } else {
             if (o->oDistanceToMario >= 25000.0f) {
                 o->oSkeeterTargetAngle = o->oAngleToMario;
                 o->oSkeeterWaitTime = random_linear_offset(20, 30);
             }
-            if ((o->oSkeeterTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oSkeeterTargetAngle)) == 0) {
+            if ((o->oSkeeterTurningAwayFromWall = cur_obj_bounce_off_walls_edges_objects(&o->oSkeeterTargetAngle)) == 0) {
                 if (o->oDistanceToMario < 500.0f) {
                     o->oSkeeterTargetAngle      = o->oAngleToMario;
                     o->oSkeeterTargetForwardVel = 20.0f;
@@ -101,7 +101,7 @@ static void skeeter_act_walk(void) {
                         o->oSkeeterWaitTime--;
                     } else if (cur_obj_check_if_near_animation_end()) {
                         if (random_u16() & 0x0003) {
-                            o->oSkeeterTargetAngle = obj_random_fixed_turn(DEG(45));
+                            o->oSkeeterTargetAngle = cur_obj_random_fixed_turn(DEG(45));
                             o->oSkeeterWaitTime    = random_linear_offset(100, 100);
                         } else {
                             o->oAction          = SKEETER_ACT_IDLE;
@@ -117,14 +117,14 @@ static void skeeter_act_walk(void) {
 
 void bhv_skeeter_update(void) {
     o->oDeathSound = SOUND_OBJ_SNUFIT_SKEETER_DEATH;
-    treat_far_home_as_mario(1000.0f);
+    cur_obj_treat_far_home_as_mario(1000.0f);
     cur_obj_update_floor_and_walls();
     switch (o->oAction) {
         case SKEETER_ACT_IDLE:  skeeter_act_idle();  break;
         case SKEETER_ACT_LUNGE: skeeter_act_lunge(); break;
         case SKEETER_ACT_WALK:  skeeter_act_walk();  break;
     }
-    obj_check_attacks(&sSkeeterHitbox, o->oAction);
+    cur_obj_check_attacks(&sSkeeterHitbox, o->oAction);
     cur_obj_move_standard(-78);
 }
 

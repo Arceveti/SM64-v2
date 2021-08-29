@@ -47,7 +47,7 @@ void bhv_ttc_rotating_solid_update(void) {
             // 4. Rotate
             s32 targetRoll = (s32)((f32) o->oTTCRotatingSolidNumTurns / o->oTTCRotatingSolidNumSides * 0x10000);
             s32 startRoll = o->oFaceAngleRoll;
-            obj_face_roll_approach(targetRoll, 0x4B0);
+            cur_obj_face_roll_approach(targetRoll, 0x4B0);
             o->oAngleVelRoll = (o->oFaceAngleRoll - startRoll);
             if (o->oAngleVelRoll == 0) {
                 cur_obj_play_sound_2(SOUND_GENERAL2_ROTATING_BLOCK_CLICK);

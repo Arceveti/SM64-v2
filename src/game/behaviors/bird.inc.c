@@ -45,7 +45,7 @@ static void bird_act_inactive(void) {
 static void bird_act_fly(void) {
     f32 distance;
     // Compute forward velocity and vertical velocity from oBirdSpeed and pitch
-    obj_compute_vel_from_move_pitch(o->oBirdSpeed);
+    cur_obj_compute_vel_from_move_pitch(o->oBirdSpeed);
     // If the bird's parent is higher than 8000 units, despawn the bird.
     // A spawned bird's parent is its spawner bird. A spawner bird's parent
     // is itself. In other words, when a group of birds has its spawner bird
@@ -73,16 +73,16 @@ static void bird_act_fly(void) {
             o->oBirdSpeed       = ((0.04f * dist_between_objects(o, o->parentObj)) + 20.0f);
         }
         // Approach to match the bird's target yaw and pitch.
-        obj_move_pitch_approach( o->oBirdTargetPitch,  0x8C);
+        cur_obj_move_pitch_approach( o->oBirdTargetPitch,  0x8C);
         cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 0x320);
-        obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 0x258);
+        cur_obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 0x258);
     }
     // The bird has no gravity, so this function only
     // moves the bird using its forward velocity.
     // Even if it did have gravity, it would only act as
     // a constant added to its Y position every frame since
     // its Y velocity is reset every frame by
-    // obj_compute_vel_from_move_pitch.
+    // cur_obj_compute_vel_from_move_pitch.
     cur_obj_move_using_fvel_and_gravity();
 }
 

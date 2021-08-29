@@ -24,7 +24,7 @@ const MacroObject ccm_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(               /*preset*/ macro_coin_arrow,                /*yaw*/  75, /*pos*/ -2586, -4889, -4096                         ),
     MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  -488,  3100, -2305                         ),
     MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/ -3120, -1200, -2080                         ),
-    MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  2940, -1400,  2630                         ),
+    MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  2900, -1400,  2600                         ),
     MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  -600,  -512,  1940                         ),
     MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/ -3814, -2112,  6427                         ),
     MACRO_OBJECT(               /*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  2700, -4600,  1230                         ),

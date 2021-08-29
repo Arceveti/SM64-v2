@@ -93,7 +93,7 @@ void bhv_activated_back_and_forth_platform_update(void) {
         o->oActivatedBackAndForthPlatformCountdown = 20;
     }
     // Save the object's current position to a safe location.
-    obj_perform_position_op(POS_OP_SAVE_POSITION);
+    cur_obj_perform_position_op(POS_OP_SAVE_POSITION);
     // Update the object's position.
     // If the platform moves vertically...
     if (o->oActivatedBackAndForthPlatformVertical) {
@@ -107,8 +107,8 @@ void bhv_activated_back_and_forth_platform_update(void) {
         // Update the position using the object's home (original position), facing angle, and offset.
         // This has to be done manually when the platform is vertical because only the yaw is used
         // by this function; it doesn't update the Y position.
-        obj_set_dist_from_home(-o->oActivatedBackAndForthPlatformOffset);
+        cur_obj_set_dist_from_home(-o->oActivatedBackAndForthPlatformOffset);
     }
     // Compute the object's velocity using the old saved position.
-    obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
+    cur_obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
 }

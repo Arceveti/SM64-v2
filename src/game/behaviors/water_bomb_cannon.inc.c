@@ -10,7 +10,7 @@ void bhv_bubble_cannon_barrel_loop(void) {
         o->oFaceAnglePitch =  o->parentObj->oMoveAnglePitch;
         if ((o->oCannonBarrelBubblesForwardVelCheck += o->oForwardVel) > 0.0f) {
             cur_obj_set_pos_via_transform();
-            obj_forward_vel_approach(-5.0f, 18.0f);
+            cur_obj_forward_vel_approach(-5.0f, 18.0f);
         } else {
             o->oCannonBarrelBubblesForwardVelCheck = 0.0f;
             obj_copy_pos(o, o->parentObj);
@@ -48,8 +48,8 @@ void water_bomb_cannon_act_active(void) { // act 1
         if (o->oWaterCannonIdleTimer != 0) {
             o->oWaterCannonIdleTimer--;
         } else {
-            obj_move_pitch_approach(o->oWaterCannonTargetMovePitch, 0x80);
-            obj_face_yaw_approach(  o->oWaterCannonTargetFaceYaw,  0x100);
+            cur_obj_move_pitch_approach(o->oWaterCannonTargetMovePitch, 0x80);
+            cur_obj_face_yaw_approach(  o->oWaterCannonTargetFaceYaw,  0x100);
             if ((Angle) o->oFaceAngleYaw == (Angle) o->oWaterCannonTargetFaceYaw) {
                 if (o->oWaterCannonRotationTimer != 0) {
                     o->oWaterCannonRotationTimer--;

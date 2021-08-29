@@ -50,8 +50,8 @@ void unagi_follow_path(s32 nextAction) { // act 1 4
     if (cur_obj_follow_path() == PATH_REACHED_END) o->oAction = nextAction;
     o->oMoveAnglePitch = o->oFaceAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, o->oPathedTargetPitch, 0x32);
     cur_obj_rotate_yaw_toward( o->oPathedTargetYaw, 0x78);
-    obj_roll_to_match_yaw_turn(o->oPathedTargetYaw, 0x2000, 0x64);
-    obj_forward_vel_approach(10.0f, 0.2f);
+    cur_obj_roll_to_match_yaw_turn(o->oPathedTargetYaw, 0x2000, 0x64);
+    cur_obj_forward_vel_approach(10.0f, 0.2f);
     cur_obj_set_pos_via_transform();
 }
 
@@ -143,7 +143,7 @@ void bhv_unagi_subobject_loop(void) { // unagi collision segments & star
                 o->parentObj->oAnimState = UNAGI_ANIM_STATE_NO_STAR;
             }
         } else {
-            obj_check_attacks(&sUnagiHitbox, o->oAction);
+            cur_obj_check_attacks(&sUnagiHitbox, o->oAction);
             if (o->oBehParams2ndByte == UNAGI_PART_BP_CONTROL_DISTANCE) o->parentObj->oUnagiDistanceToMario = o->oDistanceToMario;
         }
     }

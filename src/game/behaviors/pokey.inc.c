@@ -43,12 +43,12 @@ void bhv_pokey_body_part_update(void) {
     // PARTIAL_UPDATE
     Angle offsetAngle;
     f32 baseHeight;
-    if (obj_update_standard_actions(3.0f)) {
+    if (cur_obj_update_standard_actions(3.0f)) {
         if (o->parentObj->oAction == POKEY_ACT_UNLOAD_PARTS) {
             obj_mark_for_deletion(o);
         } else {
             cur_obj_update_floor_and_walls();
-            obj_update_blinking(&o->oPokeyBodyPartBlinkTimer, 30, 60, 4);
+            cur_obj_update_blinking(&o->oPokeyBodyPartBlinkTimer, 30, 60, 4);
             // If the body part above us is dead, then decrease body part index
             // by one, since new parts are spawned from the bottom.
             //! It is possible to briefly get two body parts to have the same
@@ -86,7 +86,7 @@ void bhv_pokey_body_part_update(void) {
             o->oNumLootCoins = (o->oBehParams2ndByte == POKEY_PART_BP_HEAD);
             // If the body part was attacked, then die. If the head was killed,
             // then die after a delay.
-            if (obj_handle_attacks(&sPokeyBodyPartHitbox, o->oAction, sPokeyBodyPartAttackHandlers)) {
+            if (cur_obj_handle_attacks(&sPokeyBodyPartHitbox, o->oAction, sPokeyBodyPartAttackHandlers)) {
                 o->parentObj->oPokeyNumAliveBodyParts--;
                 if (o->oBehParams2ndByte == POKEY_PART_BP_HEAD) {
                     o->parentObj->oPokeyHeadWasKilled = TRUE;
@@ -99,7 +99,7 @@ void bhv_pokey_body_part_update(void) {
                 cur_obj_become_intangible();
                 if (--o->oPokeyBodyPartDeathDelayAfterHeadKilled < 0) {
                     o->parentObj->oPokeyNumAliveBodyParts--;
-                    obj_die_if_health_non_positive();
+                    cur_obj_die_if_health_non_positive();
                 }
             } else {
                 // Die in order from top to bottom
@@ -154,7 +154,7 @@ static void pokey_act_wander(void) {
         o->oAction     = POKEY_ACT_UNLOAD_PARTS;
         o->oForwardVel = 0.0f;
     } else {
-        treat_far_home_as_mario(1000.0f);
+        cur_obj_treat_far_home_as_mario(1000.0f);
         cur_obj_update_floor_and_walls();
         if (o->oPokeyHeadWasKilled) {
             o->oForwardVel = 0.0f;
@@ -179,16 +179,16 @@ static void pokey_act_wander(void) {
                 o->oTimer = 0;
             }
             if (o->oPokeyTurningAwayFromWall) {
-                o->oPokeyTurningAwayFromWall = obj_resolve_collisions_and_turn(o->oPokeyTargetYaw, 0x200);
+                o->oPokeyTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oPokeyTargetYaw, 0x200);
             } else {
                 // If far from home, turn back toward home
                 if (o->oDistanceToMario >= 25000.0f) o->oPokeyTargetYaw = o->oAngleToMario;
 
-                if (!(o->oPokeyTurningAwayFromWall = obj_bounce_off_walls_edges_objects(&o->oPokeyTargetYaw))) {
+                if (!(o->oPokeyTurningAwayFromWall = cur_obj_bounce_off_walls_edges_objects(&o->oPokeyTargetYaw))) {
                     if (o->oPokeyChangeTargetTimer != 0) {
                         o->oPokeyChangeTargetTimer--;
                     } else if (o->oDistanceToMario > 2000.0f) {
-                        o->oPokeyTargetYaw         = obj_random_fixed_turn(DEG(45));
+                        o->oPokeyTargetYaw         = cur_obj_random_fixed_turn(DEG(45));
                         o->oPokeyChangeTargetTimer = random_linear_offset(30, 50);
                     } else {
                         // The goal of this computation is to make pokey approach

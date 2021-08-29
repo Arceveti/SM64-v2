@@ -37,7 +37,7 @@ void dorrie_act_move(void) {
             targetSpeed = 5.0f;
         }
 
-        obj_forward_vel_approach(targetSpeed, 0.5f);
+        cur_obj_forward_vel_approach(targetSpeed, 0.5f);
         o->oDorrieYawVel = approach_s16_symmetric(o->oDorrieYawVel, ((Angle)(targetYaw - o->oMoveAngleYaw) / 50), 0x5);
         o->oMoveAngleYaw += o->oDorrieYawVel;
     }
@@ -91,7 +91,7 @@ void bhv_dorrie_update(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         o->oDorrieForwardDistToMario = o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw);
 
-        obj_perform_position_op(POS_OP_SAVE_POSITION);
+        cur_obj_perform_position_op(POS_OP_SAVE_POSITION);
         cur_obj_move_using_fvel_and_gravity();
 
         o->oDorrieAngleToHome = cur_obj_angle_to_home();
@@ -132,6 +132,6 @@ void bhv_dorrie_update(void) {
             case DORRIE_ACT_RAISE_HEAD: dorrie_act_raise_head(); break;
         }
 
-        obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
+        cur_obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
     }
 }

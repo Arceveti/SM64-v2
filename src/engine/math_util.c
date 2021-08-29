@@ -776,26 +776,26 @@ void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, Angle
     f32 sinPitch = sins(pitch);
     f32 cosMYaw  = coss(-yaw);
     f32 sinMYaw  = sins(-yaw);
-    f32 spsy = ( sinPitch * sinMYaw );
-    f32 spcy = (-sinPitch * cosMYaw );
-    f32 sycp = (-sinMYaw  * cosPitch);
-    f32 cpcm = ( cosPitch * cosMYaw );
+    f32 spsy = (sinPitch * sinMYaw );
+    f32 spcy = (sinPitch * cosMYaw );
+    f32 sycp = (sinMYaw  * cosPitch);
+    f32 cpcm = (cosPitch * cosMYaw );
     Vec3f v1, v2, v3;
     vec3s_to_vec3f(v1, vertex1);
     vec3s_to_vec3f(v2, vertex2);
     vec3s_to_vec3f(v3, vertex3);
 
-    vertex1[0] = ((v1[0] * cosMYaw ) + (v1[1] * spsy) + (v1[2] * sycp));
+    vertex1[0] = ((v1[0] * cosMYaw ) + (v1[1] * spsy) - (v1[2] * sycp));
     vertex1[1] = ((v1[1] * cosPitch) + (v1[2] * sinPitch));
-    vertex1[2] = ((v1[0] * sinMYaw ) + (v1[1] * spcy) + (v1[2] * cpcm));
+    vertex1[2] = ((v1[0] * sinMYaw ) - (v1[1] * spcy) + (v1[2] * cpcm));
 
-    vertex2[0] = ((v2[0] * cosMYaw ) + (v2[1] * spsy) + (v2[2] * sycp));
+    vertex2[0] = ((v2[0] * cosMYaw ) + (v2[1] * spsy) - (v2[2] * sycp));
     vertex2[1] = ((v2[1] * cosPitch) + (v2[2] * sinPitch));
-    vertex2[2] = ((v2[0] * sinMYaw ) + (v2[1] * spcy) + (v2[2] * cpcm));
+    vertex2[2] = ((v2[0] * sinMYaw ) - (v2[1] * spcy) + (v2[2] * cpcm));
 
-    vertex3[0] = ((v3[0] * cosMYaw ) + (v3[1] * spsy) + (v3[2] * sycp));
+    vertex3[0] = ((v3[0] * cosMYaw ) + (v3[1] * spsy) - (v3[2] * sycp));
     vertex3[1] = ((v3[1] * cosPitch) + (v3[2] * sinPitch));
-    vertex3[2] = ((v3[0] * sinMYaw ) + (v3[1] * spcy) + (v3[2] * cpcm));
+    vertex3[2] = ((v3[0] * sinMYaw ) - (v3[1] * spcy) + (v3[2] * cpcm));
 }
 
 /**
@@ -965,7 +965,6 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 
 /**
  * Creates a lookat matrix, but specifically from the perspective of the origin.
- * Rolls is only ever 0 in practice, and this is really only ever used once.
  *
  * Matrix has form-  | -(cz+sxy)/h sh  (cx-syz)/h 0 |
  *                   |  (sz-cxy)/h ch -(sx+cyz)/h 0 |
@@ -973,7 +972,6 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
  *                   |      0       0      0      1 |
  */
 void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
-    f32 invertedHMag;
     f32 radPerDeg = RAD_PER_DEG;
     Vec3f unit;
     vec3f_copy(unit, vec);
@@ -985,7 +983,7 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
         f32 c = cosd(roll);
         f32 su1 = (s * unit[1]);
         f32 cu1 = (s * unit[1]);
-        invertedHMag = (1.0f / hMag); //! fast invsqrt
+        f32 invertedHMag = (1.0f / hMag); //! fast invsqrt
         mtx[0][0] = (((-unit[2] * c) - (su1 * unit[0])) * invertedHMag);
         mtx[1][0] = ((( unit[2] * s) - (cu1 * unit[0])) * invertedHMag);
         mtx[2][0] =                          -unit[0];
@@ -1191,7 +1189,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     vec3f_copy(mtx[1], yColumn);
     vec3f_copy(mtx[2], zColumn);
     mtx[3][0] = pos[0];
-    mtx[3][1] = ((avgY < pos[1]) ? pos[1] : avgY);
+    mtx[3][1] = MAX(pos[1], avgY);
     mtx[3][2] = pos[2];
     mtxf_end(mtx);
 }

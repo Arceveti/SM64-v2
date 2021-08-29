@@ -59,7 +59,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
     Angle targetMoveYaw   = 0x0;
     cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY);
     // Face toward Mario
-    o->oFaceAnglePitch  = obj_turn_pitch_toward_mario(120.0f, 0x0);
+    o->oFaceAnglePitch  = cur_obj_turn_pitch_toward_mario(120.0f, 0x0);
     o->oFaceAngleYaw    = o->oAngleToMario;
     // After finishing dialog, fly away and despawn
     if (o->oCameraLakituFinishedDialog) {
@@ -99,11 +99,11 @@ static void camera_lakitu_intro_act_show_dialog(void) {
         }
     }
     o->oCameraLakituPitchVel = approach_s16_symmetric(o->oCameraLakituPitchVel, 0x7D0, 0x190);
-    obj_move_pitch_approach(targetMovePitch, o->oCameraLakituPitchVel);
+    cur_obj_move_pitch_approach(targetMovePitch, o->oCameraLakituPitchVel);
     o->oCameraLakituYawVel   = approach_s16_symmetric(o->oCameraLakituYawVel, 0x7D0, 0x64);
     cur_obj_rotate_yaw_toward(targetMoveYaw, o->oCameraLakituYawVel);
     // vel y is explicitly computed, so gravity doesn't apply
-    obj_compute_vel_from_move_pitch(o->oCameraLakituSpeed);
+    cur_obj_compute_vel_from_move_pitch(o->oCameraLakituSpeed);
     cur_obj_move_using_fvel_and_gravity();
 }
 
@@ -112,7 +112,7 @@ static void camera_lakitu_intro_act_show_dialog(void) {
  */
 void bhv_camera_lakitu_update(void) {
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        obj_update_blinking(&o->oCameraLakituBlinkTimer, 20, 40, 4);
+        cur_obj_update_blinking(&o->oCameraLakituBlinkTimer, 20, 40, 4);
         if (o->oBehParams2ndByte != CAMERA_LAKITU_BP_FOLLOW_CAMERA) {
             switch (o->oAction) {
                 case CAMERA_LAKITU_INTRO_ACT_TRIGGER_CUTSCENE: camera_lakitu_intro_act_trigger_cutscene(); break;

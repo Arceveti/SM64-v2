@@ -115,7 +115,7 @@ static void chain_chomp_restore_normal_chain_lengths(void) {
 static void chain_chomp_sub_act_turn(void) {
     o->oGravity = -4.0f;
     chain_chomp_restore_normal_chain_lengths();
-    obj_move_pitch_approach(0, 0x100);
+    cur_obj_move_pitch_approach(0, 0x100);
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
         if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < 0x800) {
@@ -132,7 +132,7 @@ static void chain_chomp_sub_act_turn(void) {
                         o->oForwardVel                             = 140.0f;
                         o->oVelY                                   =  20.0f;
                         o->oGravity                                =   0.0f;
-                        o->oChainChompTargetPitch                  = obj_get_pitch_from_vel();
+                        o->oChainChompTargetPitch                  = cur_obj_get_pitch_from_vel();
                     }
                 } else {
                     o->oTimer--;
@@ -152,7 +152,7 @@ static void chain_chomp_sub_act_turn(void) {
 }
 
 static void chain_chomp_sub_act_lunge(void) {
-    obj_face_pitch_approach(o->oChainChompTargetPitch, 0x400);
+    cur_obj_face_pitch_approach(o->oChainChompTargetPitch, 0x400);
     if (o->oForwardVel != 0.0f) {
         // f32 val04;
         if (o->oChainChompRestrictedByChain) {
@@ -326,7 +326,7 @@ static void chain_chomp_act_move(void) {
         }
         chain_chomp_update_chain_segments();
         // Begin a lunge if Mario tries to attack
-        if (obj_check_attacks(&sChainChompHitbox, o->oAction)) {
+        if (cur_obj_check_attacks(&sChainChompHitbox, o->oAction)) {
             o->oSubAction = CHAIN_CHOMP_SUB_ACT_LUNGE;
             // o->oChainChompMaxDistFromPivotPerChainPart = (900.0f / CHAIN_CHOMP_NUM_PARTS);
             o->oChainChompMaxDistFromPivotPerChainPart = 180.0f; // ((CHAIN_CHOMP_NUM_PARTS * 180.0f) / CHAIN_CHOMP_NUM_PARTS);

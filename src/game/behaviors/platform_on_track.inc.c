@@ -38,7 +38,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
         if (ballIndex != 0) {
             amountToMove = (300.0f * ballIndex);
         } else {
-            obj_perform_position_op(POS_OP_SAVE_POSITION);
+            cur_obj_perform_position_op(POS_OP_SAVE_POSITION);
             o->oPlatformOnTrackPrevWaypointFlags = 0;
             amountToMove = o->oForwardVel;
         }
@@ -85,7 +85,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
                 o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
             }
             vec3f_copy(&o->oPosVec, pos);
-            obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
+            cur_obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
             o->oPlatformOnTrackPitch = atan2s(sqrtf(sqr(o->oVelX) + sqr(o->oVelZ)), -o->oVelY);
             o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
         }
@@ -198,7 +198,7 @@ static void platform_on_track_act_move_along_track(void) {
         } else {
             // The ski lift accelerates, while the others instantly start
             if (!o->oPlatformOnTrackIsNotSkiLift) {
-                obj_forward_vel_approach(10.0f, 0.1f);
+                cur_obj_forward_vel_approach(10.0f, 0.1f);
             } else {
 #ifdef CONTROLLABLE_PLATFORM_SPEED
                 targetVel = ((gMarioObject->platform == o) ? ((o->oDistanceToMario * coss(o->oAngleToMario - o->oMoveAngleYaw)) - 10.0f) : 10.0f);
@@ -207,7 +207,7 @@ static void platform_on_track_act_move_along_track(void) {
                 } else if (targetVel > 16.0f) {
                     targetVel = 16.0f;
                 }
-                obj_forward_vel_approach(targetVel, 0.1f);
+                cur_obj_forward_vel_approach(targetVel, 0.1f);
 #else
                 o->oForwardVel = 10.0f;
 #endif
@@ -233,7 +233,7 @@ static void platform_on_track_act_move_along_track(void) {
             Angle yawSpeed = (abs_angle_diff(targetFaceYaw, o->oFaceAngleYaw) / 20);
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);
-            obj_face_yaw_approach(targetFaceYaw, yawSpeed);
+            cur_obj_face_yaw_approach(targetFaceYaw, yawSpeed);
             o->oAngleVelYaw = (Angle) o->oFaceAngleYaw - initialAngle;
         }
         // Turn face roll and compute roll vel
@@ -243,7 +243,7 @@ static void platform_on_track_act_move_along_track(void) {
             clamp_s16(&rollSpeed, 100, 500);
             //! If the platform is moving counterclockwise upward or
             //  clockwise downward, this will be backward
-            obj_face_roll_approach(o->oMoveAnglePitch, rollSpeed);
+            cur_obj_face_roll_approach(o->oMoveAnglePitch, rollSpeed);
             o->oAngleVelRoll = ((Angle) o->oFaceAngleRoll - initialAngle);
         }
     }

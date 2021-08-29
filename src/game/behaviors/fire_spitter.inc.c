@@ -13,13 +13,13 @@ static void fire_spitter_act_spit_fire(void) {
     // Increase scale by 0.05, 0.04, ..., -0.03. Then wait ~8 frames, then
     // starting moving scale by 0.05 each frame toward 0.1. The first time
     // it becomes below 0.15 during this latter portion, shoot fire.
-    scaleStatus = obj_grow_then_shrink(&o->oFireSpitterScaleVel, 0.15f, 0.1f);
+    scaleStatus = cur_obj_grow_then_shrink(&o->oFireSpitterScaleVel, 0.15f, 0.1f);
     if (scaleStatus != 0) {
         if (scaleStatus < 0) {
             o->oAction = FIRE_SPITTER_ACT_IDLE;
         } else {
             cur_obj_play_sound_2(SOUND_OBJ_FLAME_BLOWN);
-            obj_spit_fire(0, 0, 0, 5.0f, MODEL_RED_FLAME_SHADOW, 20.0f, 15.0f, 0x1000);
+            cur_obj_spit_fire(0, 0, 0, 5.0f, MODEL_RED_FLAME_SHADOW, 20.0f, 15.0f, 0x1000);
         }
     }
 }

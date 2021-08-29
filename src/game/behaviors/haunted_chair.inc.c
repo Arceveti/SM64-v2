@@ -79,18 +79,18 @@ void haunted_chair_act_fly(void) {
         if (o->oHauntedChairSpinTimer != 0) {
             if (--o->oHauntedChairSpinTimer == 0) {
                 cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SPIN);
-                o->oMoveAnglePitch = obj_turn_pitch_toward_mario(120.0f, 0x0);
+                o->oMoveAnglePitch = cur_obj_turn_pitch_toward_mario(120.0f, 0x0);
                 o->oMoveAngleYaw = o->oAngleToMario;
-                obj_compute_vel_from_move_pitch(50.0f);
+                cur_obj_compute_vel_from_move_pitch(50.0f);
             } else if (o->oHauntedChairSpinTimer > 20) {
                 if (!(gGlobalTimer & 0x3)) cur_obj_play_sound_2(SOUND_GENERAL_HAUNTED_CHAIR_SWISH_AIR);
                 o->oFaceAngleYaw += 0x2710;
             }
         } else if (o->oMoveFlags & (OBJ_MOVE_MASK_ON_GROUND | OBJ_MOVE_HIT_WALL)) {
-            obj_die_if_health_non_positive();
+            cur_obj_die_if_health_non_positive();
         }
     }
-    obj_check_attacks(&sHauntedChairHitbox, o->oAction);
+    cur_obj_check_attacks(&sHauntedChairHitbox, o->oAction);
     cur_obj_move_standard(78);
 }
 

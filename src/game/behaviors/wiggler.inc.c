@@ -91,7 +91,7 @@ void bhv_wiggler_body_part_update(void) {
     if (o->parentObj->oAction == WIGGLER_ACT_SHRINK) {
         cur_obj_become_intangible();
     } else {
-        obj_check_attacks(&sWigglerBodyPartHitbox, o->oAction);
+        cur_obj_check_attacks(&sWigglerBodyPartHitbox, o->oAction);
     }
 }
 
@@ -194,13 +194,13 @@ static void wiggler_act_walk(void) {
         // to 4 until after this runs the first time. It indexes out of bounds
         // and uses the value 113762.3 for one frame on US. This is fixed up
         // in wiggler_init_segments if AVOID_UB is defined.
-        obj_forward_vel_approach(sWigglerSpeeds[o->oHealth - 1], 1.0f);
+        cur_obj_forward_vel_approach(sWigglerSpeeds[o->oHealth - 1], 1.0f);
         if (o->oWigglerWalkAwayFromWallTimer != 0) {
             o->oWigglerWalkAwayFromWallTimer--;
         } else {
             // If >1200 away from home, turn to home
             if (o->oDistanceToMario >= 25000.0f) o->oWigglerTargetYaw = o->oAngleToMario;
-            if (obj_bounce_off_walls_edges_objects(&o->oWigglerTargetYaw)) {
+            if (cur_obj_bounce_off_walls_edges_objects(&o->oWigglerTargetYaw)) {
                 //! If the wiggler could self-intersect, or intersect a different
                 //  non-Mario object, this could potentially be used to force
                 //  the wiggler to walk straight - past his usual radius
@@ -220,12 +220,12 @@ static void wiggler_act_walk(void) {
         // in practice
         yawTurnSpeed = (Angle)(30.0f * o->oForwardVel);
         cur_obj_rotate_yaw_toward(o->oWigglerTargetYaw, yawTurnSpeed);
-        obj_face_yaw_approach(o->oMoveAngleYaw, (2 * yawTurnSpeed));
-        obj_face_pitch_approach(0, 0x320);
+        cur_obj_face_yaw_approach(o->oMoveAngleYaw, (2 * yawTurnSpeed));
+        cur_obj_face_pitch_approach(0, 0x320);
         // For the first two seconds of walking, stay invulnerable
         if (o->oTimer < 60) {
-            obj_check_attacks(&sWigglerHitbox, o->oAction);
-        } else if (obj_handle_attacks(&sWigglerHitbox, o->oAction, sWigglerAttackHandlers)) {
+            cur_obj_check_attacks(&sWigglerHitbox, o->oAction);
+        } else if (cur_obj_handle_attacks(&sWigglerHitbox, o->oAction, sWigglerAttackHandlers)) {
             if (o->oAction != WIGGLER_ACT_JUMPED_ON) o->oAction = WIGGLER_ACT_KNOCKBACK;
             o->oWigglerWalkAwayFromWallTimer = 0;
             o->oWigglerWalkAnimSpeed         = 0.0f;
@@ -268,7 +268,7 @@ static void wiggler_act_jumped_on(void) {
     } else {
         o->oTimer = 0;
     }
-    obj_check_attacks(&sWigglerHitbox, o->oAction);
+    cur_obj_check_attacks(&sWigglerHitbox, o->oAction);
 }
 
 /**
@@ -278,13 +278,13 @@ static void wiggler_act_knockback(void) {
     if (o->oVelY > 0.0f) {
         o->oFaceAnglePitch -= (o->oVelY * 30.0f);
     } else {
-        obj_face_pitch_approach(0, 0x190);
+        cur_obj_face_pitch_approach(0, 0x190);
     }
-    if (obj_forward_vel_approach(0.0f, 1.0f) && (o->oFaceAnglePitch == 0x0)) {
+    if (cur_obj_forward_vel_approach(0.0f, 1.0f) && (o->oFaceAnglePitch == 0x0)) {
         o->oAction       = WIGGLER_ACT_WALK;
         o->oMoveAngleYaw = o->oFaceAngleYaw;
     }
-    obj_check_attacks(&sWigglerHitbox, o->oAction);
+    cur_obj_check_attacks(&sWigglerHitbox, o->oAction);
 }
 
 /**
@@ -313,7 +313,7 @@ static void wiggler_act_fall_through_floor(void) {
         if (o->oPosY < o->oWigglerFallThroughFloorsHeight) {
             o->oAction         = WIGGLER_ACT_WALK;
         } else {
-            o->oFaceAnglePitch = obj_get_pitch_from_vel();
+            o->oFaceAnglePitch = cur_obj_get_pitch_from_vel();
         }
         cur_obj_move_using_fvel_and_gravity();
     }
@@ -341,7 +341,7 @@ void bhv_wiggler_update(void) {
         if (o->oAction == WIGGLER_ACT_FALL_THROUGH_FLOOR) {
             wiggler_act_fall_through_floor();
         } else {
-            treat_far_home_as_mario(1200.0f);
+            cur_obj_treat_far_home_as_mario(1200.0f);
             // Walking animation and sound
             cur_obj_init_animation_with_accel_and_sound(WIGGLER_ANIM_WALK, o->oWigglerWalkAnimSpeed);
             if (o->oWigglerWalkAnimSpeed != 0.0f) {
