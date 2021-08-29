@@ -1,5 +1,5 @@
-#ifndef TEXTURE_EDIT_H
-#define TEXTURE_EDIT_H
+#ifndef COLORS_H
+#define COLORS_H
 
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>

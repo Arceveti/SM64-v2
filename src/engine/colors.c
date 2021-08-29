@@ -4,7 +4,7 @@
 
 #include "math_util.h"
 // #include "gfx_dimensions.h"
-#include "texture_edit.h"
+#include "colors.h"
 
 // i4
 // A 0000 0000 0000 0000 0000 0000 0000 1111 >> 0x0  & 0xF  = 0-15 * (255/15 = 17)              = 0-255
@@ -45,134 +45,66 @@
 // P 0000 0000 0000 0000 0000 0000 1111 1111 >> 0x0  & 0xFF                                     = 0-255
 // RGBA16
 
-u32 clamp_u32(u32 val, u32 minimum, u32 maximum) {
-    return min(max(val, minimum), maximum);
-}
-s32 clamp_s32(s32 val, s32 minimum, s32 maximum) {
-    return min(max(val, minimum), maximum);
-}
-u32 clamp_0_u32(u32 val, u32 maximum) {
-    return clamp_u32(val, 0x0, maximum);
-}
-s32 clamp_0_s32(s32 val, s32 maximum) {
-    return clamp_s32(val, 0x0, maximum);
+#define BITMASK(size)   (u32)((1 << (size)) - 1)
+
+#define IDX_RGBA16_R 0xB
+#define IDX_RGBA16_G 0x6
+#define IDX_RGBA16_B 0x1
+#define SIZ_RGBA16_RGB 5
+#define MSK_RGBA16_RGB BITMASK(SIZ_RGBA16_RGB)
+#define IDX_RGBA16_A 0x0
+#define SIZ_RGBA16_A   1
+#define MSK_RGBA16_A BITMASK(SIZ_RGBA16_A)
+
+u32 clamp_bits(u32 val, u32 size) {
+    return MIN(val, BITMASK(size));
 }
 
-// rgba16 alpha
-u32 clamp_1bit(u32 val) {
-    return (val >= 0x1);
+Color component_to_color(CompositeColor src, u32 bitmask, u32 index) {
+    return ((((src >> index) & bitmask) * 255.0f) / bitmask);
 }
 
-//
-u32 clamp_2bits(u32 val) {
-    return clamp_0_u32(val, 0x3);
+CompositeColor color_to_component(Color src, u32 bitmask, u32 index) {
+    return (((u32)((src * bitmask) / 255.0f) & bitmask) << index);
 }
 
-// ia4 intensity
-u32 clamp_3bits(u32 val) {
-    return clamp_0_u32(val, 0x7);
+void rgba16_to_colorRGB(ColorRGB dst, RGBA16 src) {
+    dst[0] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_R);
+    dst[1] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_G);
+    dst[2] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_B);
 }
 
-// i4, ia8, ci4 palette
-u32 clamp_4bits(u32 val) {
-    return clamp_0_u32(val, 0xF);
+void rgba16_to_colorRGBA(ColorRGBA dst, RGBA16 src) {
+    dst[0] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_R);
+    dst[1] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_G);
+    dst[2] = component_to_color(src, MSK_RGBA16_RGB, IDX_RGBA16_B);
+    dst[3] = component_to_color(src, MSK_RGBA16_A  , IDX_RGBA16_A);
 }
 
-// rgba16 rgb
-u32 clamp_5bits(u32 val) {
-    return clamp_0_u32(val, 0x1F);
+RGBA16 colorRGB_to_rgba16(ColorRGB src) {
+    return (color_to_component(src[0], MSK_RGBA16_RGB, IDX_RGBA16_R)
+          | color_to_component(src[1], MSK_RGBA16_RGB, IDX_RGBA16_G)
+          | color_to_component(src[2], MSK_RGBA16_RGB, IDX_RGBA16_B)
+          | 0x1);
 }
 
-u32 clamp_6bits(u32 val) {
-    return clamp_0_u32(val, 0x3F);
+RGBA16 colorRGBA_to_rgba16(ColorRGBA src) {
+    return (color_to_component(src[0], MSK_RGBA16_RGB, IDX_RGBA16_R)
+          | color_to_component(src[1], MSK_RGBA16_RGB, IDX_RGBA16_G)
+          | color_to_component(src[2], MSK_RGBA16_RGB, IDX_RGBA16_B)
+          | color_to_component(src[2], MSK_RGBA16_A  , IDX_RGBA16_A));
 }
 
-u32 clamp_7bits(u32 val) {
-    return clamp_0_u32(val, 0x7F);
-}
-
-u32 clamp_byte(u32 val) {
-    return clamp_0_u32(val, 0xFF);
-}
-
-
-// f32 clamp_f32(f32 d, f32 min, f32 max) {
-//     const f32 t = d < min ? min : d;
-//     return t > max ? max : t;
+// void colorRGB_to_colorHSV(ColorHSV dst, ColorRGB src) {
+    
 // }
-
-// why not just shift & mask  ?
-
-// ia4 to 0-255
-u32 bits3_to_byte(u32 value) {
-    return (u32)(value * (255.0f / 7.0f));
-    return ((value & 0x7) << 0x5);
-}
-
-// ia8 to 0-255
-u32 bits4_to_byte(u32 value) {
-    // return value * 17; // 255/15
-    return ((value & 0xF) << 0x4);
-}
-
-// rgba16 to 0-255
-u32 bits5_to_byte(u32 value) {
-    // return (u32)(value * (255.0f / 31.0f));
-    return ((value & 0x1F) << 0x3);
-}
-
-// 0-255
-u32 bits6_to_byte(u32 value) {
-    // return (u32)(value * (255.0f / 63.0f));
-    return ((value & 0x3F) << 0x2);
-}
-
-// to 0-255
-u32 bits7_to_byte(u32 value) {
-    // return (u32)(value * (255.0f / 127.0f));
-    return ((value & 0x7F) << 0x1);
-}
-
-
-
-// 0-7 (0-255 to ia4)
-u32 byte_to_bits3(u32 value) {
-    // return (u32)((value * 7.0f) / 255.0f);
-    return ((value & 0xE0) >> 0x5);
-}
-
-// 0-15 (0-255 to ia8)
-u32 byte_to_bits4(u32 value) {
-    // return (u32)(value / 17.0f); // 255/15
-    return ((value & 0xF0) >> 0x4);
-}
-
-// 0-31 (0-255 to rgba16)
-u32 byte_to_bits5(u32 value) {
-    // return (u32)((value * 31.0f) / 255.0f);
-    return ((value & 0xF8) >> 0x3);
-}
-
-// 0-63
-u32 byte_to_bits6(u32 value) {
-    // return (u32)((value * 63.0f) / 255.0f);
-    return ((value & 0xFC) >> 0x2);
-}
-
-// 0-127
-u32 byte_to_bits7(u32 value) {
-    // return (u32)((value * 127.0f) / 255.0f);
-    return ((value & 0xFE) >> 0x1);
-}
-
-
 
 // rgba16 value
 u32 rgba16_set(u32 r, u32 g, u32 b, u32 a) {
-    return ((clamp_5bits(r) << 0xB) |
-            (clamp_5bits(g) << 0x6) |
-            (clamp_5bits(b) << 0x1) |
-              (a  & 0x1));
+    return ((clamp_bits(r, SIZ_RGBA16_RGB) << IDX_RGBA16_R) |
+            (clamp_bits(g, SIZ_RGBA16_RGB) << IDX_RGBA16_G) |
+            (clamp_bits(b, SIZ_RGBA16_RGB) << IDX_RGBA16_B) |
+            (a & SIZ_RGBA16_A));
 }
 
 // rgba16 value
@@ -417,7 +349,7 @@ void overlay_i8_on_rgba16_additive(u16 *dst, u16 *src, u32 width, u32 height) {
         if (srcI > 0x0) {
             dst[i] = rgba16_set((rgba16_get_red(  dstVal) + srcI),
                                 (rgba16_get_blue( dstVal) + srcI),
-                                (rgba16_get_green(dstVal) + srcI), 1);
+                                (rgba16_get_green(dstVal) + srcI), 0x1);
         }
     }
 }

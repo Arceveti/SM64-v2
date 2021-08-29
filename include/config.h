@@ -795,17 +795,19 @@
 #define CENTERED_COLLISION
 
 // Platform Displacement 2 for objects other than Mario & Bowser
+//! Moves or doesn't move certain objects at the wrong times, such as amps, boos, and coins
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
 
-// Fixes the guLookAtReflect call, but since vanilla's environment mapped textures
-// are sideways, they will appear as sideways in-game if this is enabled.
+// Fixes the guLookAtReflect call in geo_process_master_list_sub
+//! Since vanilla's environment mapped textures are sideways, they will appear as sideways in-game if this is enabled.
 // #define FIX_REFLECT_MTX
 
 // Fixes the inverse Z values in offset_rotated and other functions in camera.c
+//! Need to check every cutscene in the game for this lol
 // #define FIX_CAMERA_OFFSET_ROTATED
 
 // In vanilla, the skybox FOV is always 90 degrees.
-// FoV seems to control skybox rotation due to how skyboxes are
+//! FoV seems to control skybox rotation due to how skyboxes are set up
 // #define UNLOCK_SKYBOX_FOV
 
 #endif // CONFIG_H

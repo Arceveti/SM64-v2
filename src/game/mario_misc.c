@@ -27,7 +27,7 @@
 #include "sound_init.h"
 #ifdef METAL_CAP_REFLECTION
 #include "buffers/framebuffers.h"
-#include "engine/texture_edit.h"
+#include "engine/colors.h"
 #endif
 #ifdef PUPPYCAM
 #include "puppycam2.h"
