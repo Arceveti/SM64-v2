@@ -653,12 +653,12 @@ void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
 }
 
 /// Finds the horizontal distance and angles between two vectors.
-void vec3f_get_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
+void vec3f_get_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *lateralDist, Angle *pitch, Angle *yaw) {
     register f32 dx = (to[0] - from[0]);
     register f32 dy = (to[1] - from[1]);
     register f32 dz = (to[2] - from[2]);
-    *dist           = sqrtf(sqr(dx) + sqr(dz));
-    *pitch          = atan2s(*dist, dy);
+    *lateralDist    = sqrtf(sqr(dx) + sqr(dz));
+    *pitch          = atan2s(*lateralDist, dy);
     *yaw            = atan2s(dz, dx);
 }
 
@@ -674,6 +674,17 @@ void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Ang
     register f32 ld = (sqr(dx) + sqr(dz));
     *dist           = sqrtf(ld + sqr(dy));
     *pitch          = atan2s(sqrtf(ld), dy);
+    *yaw            = atan2s(dz, dx);
+}
+
+void vec3f_get_dist_and_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, f32 *lateralDist, Angle *pitch, Angle *yaw) {
+    register f32 dx = (to[0] - from[0]);
+    register f32 dy = (to[1] - from[1]);
+    register f32 dz = (to[2] - from[2]);
+    register f32 ld = (sqr(dx) + sqr(dz));
+    *dist           = sqrtf(ld + sqr(dy));
+    *lateralDist    = sqrtf(ld);
+    *pitch          = atan2s(*lateralDist, dy);
     *yaw            = atan2s(dz, dx);
 }
 

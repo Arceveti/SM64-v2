@@ -44,9 +44,9 @@
 struct Controller gControllers[3];
 
 // Gfx handlers
-struct SPTask *gGfxSPTask;
-Gfx *gDisplayListHead;
-u8 *gGfxPoolEnd;
+struct SPTask  *gGfxSPTask;
+       Gfx     *gDisplayListHead;
+       u8      *gGfxPoolEnd;
 struct GfxPool *gGfxPool;
 
 // OS Controllers
@@ -118,7 +118,7 @@ struct Controller *gPlayer3Controller = &gControllers[2]; // Probably debug only
 
 // Title Screen Demo Handler
 struct DemoInput *gCurrDemoInput     = NULL;
-u16               gDemoInputListID   =   0;
+       u16        gDemoInputListID   =   0;
 struct DemoInput  gRecordedDemoInput = { 0 };
 
 // Display
@@ -129,7 +129,7 @@ struct DemoInput  gRecordedDemoInput = { 0 };
  */
 void init_rdp(void) {
     gDPPipeSync(         gDisplayListHead++);
-    gDPPipelineMode(     gDisplayListHead++, G_PM_1PRIMITIVE);
+    gDPPipelineMode(     gDisplayListHead++, G_PM_NPRIMITIVE);
 
     gDPSetScissor(       gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gDPSetCombineMode(   gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);

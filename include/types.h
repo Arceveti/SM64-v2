@@ -18,7 +18,7 @@ struct Controller
   /*0x10*/ u16 buttonDown;
   /*0x12*/ u16 buttonPressed;
   /*0x14*/ OSContStatus *statusData;
-  /*0x18*/ OSContPad *controllerData;
+  /*0x18*/ OSContPad    *controllerData;
 #if ENABLE_RUMBLE
   /*0x1C*/ s32 port;
 #endif
@@ -346,10 +346,10 @@ struct MarioState
     /*0x60*/ struct Surface           *wall;
     /*0x64*/ struct Surface           *ceil;
     /*0x68*/ struct Surface           *floor;
-    /*0x6C*/ f32            ceilHeight;
-    /*0x70*/ f32            floorHeight;
-    /*0x74*/ Angle          floorAngle;
-    /*0x76*/ s16            waterLevel;
+    /*0x6C*/        f32                ceilHeight;
+    /*0x70*/        f32                floorHeight;
+    /*0x74*/        Angle              floorAngle;
+    /*0x76*/        s16                waterLevel;
     /*0x78*/ struct Object            *interactObj;
     /*0x7C*/ struct Object            *heldObj;
     /*0x80*/ struct Object            *usedObj;
@@ -380,10 +380,10 @@ struct MarioState
 #ifdef CENTERED_COLLISION
              f32            midY;
 #endif
-        //    Angle            movePitch;
-        //    Angle            moveYaw;
-        //      f32            lateralSpeed;
-        //      f32            moveSpeed;
+           Angle            movePitch;
+           Angle            moveYaw;
+             f32            lateralSpeed;
+             f32            moveSpeed;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
            Angle            floorPitch;
              f32            steepness;

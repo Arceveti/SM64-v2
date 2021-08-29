@@ -545,7 +545,7 @@ Bool32 take_damage_and_knock_back(struct MarioState *m, struct Object *o) {
 }
 
 void reset_mario_pitch(struct MarioState *m) {
-    if (m->action == ACT_WATER_JUMP || m->action == ACT_SHOT_FROM_CANNON || m->action == ACT_FLYING) {
+    if ((m->action == ACT_WATER_JUMP) || (m->action == ACT_SHOT_FROM_CANNON) || (m->action == ACT_FLYING)) {
         set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
         m->faceAngle[0] = 0x0;
     }
@@ -1138,11 +1138,10 @@ Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, str
 #if defined(VERSION_SH) || defined(POLE_SWING)
             f32 velConv = m->forwardVel; // conserve the velocity.
             struct Object *marioObj = m->marioObj;
-            Bool32 lowSpeed         = (velConv <= GROUND_SPEED_THRESHOLD_2);
-            Angle angleToPole       = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
-            if ((angleToPole < -DEG(60)) || (angleToPole > DEG(60))) return FALSE;
+            Angle dAngleToPole = (mario_obj_angle_to_object(m, o) - m->faceAngle[1]);
+            if ((dAngleToPole < -DEG(60)) || (dAngleToPole > DEG(60))) return FALSE;
 #else
-            Bool32 lowSpeed         = (m->forwardVel <= GROUND_SPEED_THRESHOLD_2);
+            Bool32 lowSpeed         = (m->forwardVel <= 10.0f);
             struct Object *marioObj = m->marioObj;
 #endif
             mario_stop_riding_and_holding(m);
@@ -1151,17 +1150,15 @@ Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, str
             m->vel[1]                  = 0.0f;
             m->forwardVel              = 0.0f;
             poleBottom                 = (-m->usedObj->hitboxDownOffset - 100.0f);
-            // marioObj->oMarioPoleUnused = 0x0;
-            marioObj->oMarioPoleYawVel = 0x0;
             marioObj->oMarioPolePos    = max(m->pos[1] - o->oPosY, poleBottom);
+#if defined(VERSION_SH) || defined(POLE_SWING)
+            m->angleVel[1] = (s32)((velConv * 0x80) + 0x1000);
+            if (dAngleToPole < 0x0) m->angleVel[1] = -m->angleVel[1];
+#else
             if (lowSpeed) return set_mario_action(m, ACT_GRAB_POLE_SLOW, 0);
             //! @bug Using m->forwardVel here is assumed to be 0.0f due to the set from earlier.
             //       This is fixed in the Shindou version.
-#if defined(VERSION_SH) || defined(POLE_SWING)
-            marioObj->oMarioPoleYawVel = (s32)((velConv       * 0x100) + 0x1000);
-            if (angleToPole < 0) marioObj->oMarioPoleYawVel = -marioObj->oMarioPoleYawVel;
-#else
-            marioObj->oMarioPoleYawVel = (s32)((m->forwardVel * 0x100) + 0x1000);
+            m->angleVel[1] = (s32)((m->forwardVel * 0x100) + 0x1000);
 #endif
             reset_mario_pitch(m);
 #if ENABLE_RUMBLE

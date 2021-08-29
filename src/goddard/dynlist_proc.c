@@ -89,7 +89,7 @@ void d_set_matgroup(            DynObjName name);
 void d_set_skinshape(           DynObjName name);
 void d_set_planegroup(          DynObjName name);
 void d_set_shapeptr(            DynObjName name);
-void d_set_ambient(f32 r, f32 g, f32 b);
+void d_set_ambient(ColorF r, ColorF g, ColorF b);
 void d_set_skin_weight(s32 vtxId, f32 percentWeight);
 void d_set_id(s32 id);
 void add_to_dynobj_list(struct GdObj *newObj, DynObjName name);
@@ -1155,7 +1155,7 @@ void d_set_id(s32 id) {
 /**
  * Set the ambient color of the current dynamic `ObjMaterial`.
  */
-void d_set_ambient(f32 r, f32 g, f32 b) {
+void d_set_ambient(ColorF r, ColorF g, ColorF b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Ka, r, g, b); break;
@@ -1166,7 +1166,7 @@ void d_set_ambient(f32 r, f32 g, f32 b) {
 /**
  * Set the diffuse color of the current dynamic `ObjMaterial` or `ObjLight`.
  */
-void d_set_diffuse(f32 r, f32 g, f32 b) {
+void d_set_diffuse(ColorF r, ColorF g, ColorF b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Kd,      r, g, b); break;

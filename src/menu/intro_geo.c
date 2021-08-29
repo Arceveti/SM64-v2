@@ -289,7 +289,7 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
     ImageTexture *image;
     s32 pixel;
     f32 size = (sampleW * sampleH);
-    f32 r, g, b;
+    ColorRGBf color;
     s32 iy, ix, sy, sx;
     s32 idy, idx, sdy;
     fb = gFrameBuffers[sRenderingFrameBuffer];
@@ -298,21 +298,21 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
     for ((iy = 0); (iy < imageH); (iy++)) {
         idy = ((sampleH * iy) + yOffset);
         for ((ix = 0); (ix < imageW); (ix++)) {
-            r = g = b = 0;
+            vec3f_zero(color);
             idx = ((sampleW * ix) + xOffset);
             for ((sy = 0); (sy < sampleH); (sy++)) {
                 sdy = ((SCREEN_WIDTH * (idy + sy)) + idx);
                 for ((sx = 0); (sx < sampleW); (sx++)) {
                     pixel = (sdy + sx);
-                    r += ((fb[pixel] >> 0xB) & 0x1F);
-                    g += ((fb[pixel] >> 0x6) & 0x1F);
-                    b += ((fb[pixel] >> 0x1) & 0x1F);
+                    color[0] += ((fb[pixel] >> 0xB) & 0x1F);
+                    color[1] += ((fb[pixel] >> 0x6) & 0x1F);
+                    color[2] += ((fb[pixel] >> 0x1) & 0x1F);
                 }
             }
             size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = ((((ImageTexture) (r / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
-                                        ((((ImageTexture) (g / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
-                                        ((((ImageTexture) (b / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 0x1;
+            image[(imageH * iy) + ix] = ((((ImageTexture) (color[0] / size + 0.5f) << 0xB) & 0xF800) & 0xffff) |
+                                        ((((ImageTexture) (color[1] / size + 0.5f) << 0x6) &  0x7C0) & 0xffff) |
+                                        ((((ImageTexture) (color[2] / size + 0.5f) << 0x1) &   0x3E) & 0xffff) | 0x1;
         }
     }
     return image;

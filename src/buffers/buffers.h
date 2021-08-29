@@ -15,7 +15,6 @@ extern u8 gDecompressionHeap[];
 extern u8 gAudioHeap[];
 
 extern u8 gIdleThreadStack[];
-// extern u8 gThread2Stack[];
 extern u8 gThread3Stack[];
 extern u8 gThread4Stack[];
 extern u8 gThread5Stack[];

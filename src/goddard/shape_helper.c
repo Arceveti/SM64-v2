@@ -66,7 +66,7 @@ struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
 }
 
 /* @ 245DF4 for 0xAC */
-struct ObjFace *make_face_with_colour(f32 r, f32 g, f32 b) {
+struct ObjFace *make_face_with_colour(ColorF r, ColorF g, ColorF b) {
     struct ObjFace *newFace = (struct ObjFace *) make_object(OBJ_TYPE_FACES);
     vec3f_set(newFace->colour, r, g, b);
     newFace->vtxCount =  0;

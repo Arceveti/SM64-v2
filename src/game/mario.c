@@ -343,6 +343,7 @@ void mario_set_forward_vel(struct MarioState *m, f32 forwardVel) {
     m->slideVelZ  = (coss(m->faceAngle[1]) * m->forwardVel);
     m->vel[0]     = m->slideVelX;
     m->vel[2]     = m->slideVelZ;
+    update_mario_move_angles(m);
 }
 
 /**
@@ -582,12 +583,9 @@ Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
 }
 
-// void update_mario_move_angles(struct MarioState *m) {
-//     register f32 ls = (sqr(m->vel[0]) + m->vel[2]);
-//     m->moveYaw      = atan2s(m->vel[2], m->vel[0]);
-//     m->lateralSpeed = sqrtf(ls);
-//     m->moveSpeed    = sqrtf(ls + sqr(m->vel[1]));
-// }
+void update_mario_move_angles(struct MarioState *m) {
+    vec3f_get_dist_and_lateral_dist_and_angle(gVec3fZero, m->vel, &m->moveSpeed, &m->lateralSpeed, &m->movePitch, &m->moveYaw);
+}
 
 /**
  * Adjusts Mario's camera and sound based on his action status.
@@ -1473,6 +1471,7 @@ Bool32 execute_mario_action(UNUSED struct Object *o) {
         update_mario_inputs(        gMarioState);
         mario_handle_special_floors(gMarioState);
         mario_process_interactions( gMarioState);
+        update_mario_move_angles(   gMarioState);
         // If Mario is OOB, stop executing actions.
         if (gMarioState->floor == NULL) return FALSE;
         // The function can loop through many action shifts in one frame,

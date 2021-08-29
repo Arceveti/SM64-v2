@@ -57,9 +57,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     f32 poleBottom          = (-m->usedObj->hitboxDownOffset - 100.0f);
     struct Object *marioObj =   m->marioObj;
     if (marioObj->oMarioPolePos > poleTop) marioObj->oMarioPolePos = poleTop;
-    m->pos[0]  =  m->usedObj->oPosX;
-    m->pos[2]  =  m->usedObj->oPosZ;
-    m->pos[1]  = (m->usedObj->oPosY + marioObj->oMarioPolePos + offsetY);
+    vec3f_copy_y_offset(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
     collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
 #ifdef CENTERED_COLLISION
@@ -122,10 +120,10 @@ Bool32 act_holding_pole(struct MarioState *m) {
         if ((poleBehavior != bhvGiantPole) && (m->controller->stickY > 50.0f)) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 0);
     }
     if (m->controller->stickY < -16.0f) {
-        marioObj->oMarioPoleYawVel -= (m->controller->stickY * 2);
-        if (marioObj->oMarioPoleYawVel > 0x1000) marioObj->oMarioPoleYawVel = 0x1000;
-        m->faceAngle[1] += marioObj->oMarioPoleYawVel;
-        marioObj->oMarioPolePos -= (marioObj->oMarioPoleYawVel / 0x100);
+        m->angleVel[1] -= (m->controller->stickY * 2);
+        if (m->angleVel[1] > 0x1000) m->angleVel[1] = 0x1000;
+        m->faceAngle[1] += m->angleVel[1];
+        marioObj->oMarioPolePos -= (m->angleVel[1] / 0x100);
         if (m->usedObj->behavior == segmented_to_virtual(bhvTree)) {
             f32 leafHeight = ((m->usedObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SSL_PALM_TREE]) ? 250.0f : 100.0f);
             if ((m->pos[1] - m->floorHeight) > leafHeight) m->particleFlags |= PARTICLE_LEAF;
@@ -134,9 +132,9 @@ Bool32 act_holding_pole(struct MarioState *m) {
 #if ENABLE_RUMBLE
         reset_rumble_timers_slip();
 #endif
-        set_sound_moving_speed(SOUND_BANK_MOVING, ((marioObj->oMarioPoleYawVel / 0x100) * 2));
+        set_sound_moving_speed(SOUND_BANK_MOVING, ((m->angleVel[1] / 0x100) * 2));
     } else {
-        marioObj->oMarioPoleYawVel = 0;
+        m->angleVel[1] = 0x0;
         m->faceAngle[1] -= (m->controller->stickX * 16.0f);
     }
     if (set_pole_position(m, 0.0f) == POLE_NONE) set_mario_animation(m, MARIO_ANIM_IDLE_ON_POLE);
@@ -163,7 +161,7 @@ Bool32 act_climbing_pole(struct MarioState *m) {
     }
     if (m->controller->stickY < 8.0f) return set_mario_action(m, ACT_HOLDING_POLE, 0);
     marioObj->oMarioPolePos   += (m->controller->stickY / 8.0f);
-    marioObj->oMarioPoleYawVel = 0x0;
+    m->angleVel[1] = 0x0;
     approach_s16_symmetric_bool(&m->faceAngle[1], cameraAngle, 0x400);
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         animSpeed = ((m->controller->stickY / 4.0f) * 0x10000);
@@ -201,10 +199,13 @@ Bool32 act_grab_pole_slow(struct MarioState *m) {
 }
 
 Bool32 act_grab_pole_fast(struct MarioState *m) {
-    struct Object *marioObj = m->marioObj;
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
-    m->faceAngle[1] += marioObj->oMarioPoleYawVel;
-    marioObj->oMarioPoleYawVel = ((marioObj->oMarioPoleYawVel * 8) / 10);
+    m->faceAngle[1] += m->angleVel[1];
+    if (ABSI(m->angleVel[1]) > 0x1) {
+        m->angleVel[1] *= 0.8f;
+    } else {
+        m->angleVel[1] = 0x0;
+    }
 #if defined(ACTION_CANCELS) || defined(POLE_SWING)
     if ((m->input & (INPUT_B_PRESSED | INPUT_Z_PRESSED)) || (m->health < 0x100)) {
         add_tree_leaf_particles(m);
@@ -222,14 +223,11 @@ Bool32 act_grab_pole_fast(struct MarioState *m) {
     }
 #endif
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
-        if (marioObj->oMarioPoleYawVel > 0x800) {
+        if (ABSI(m->angleVel[1]) > 0x800) {
             set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SWING_PART1);
         } else {
             set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SWING_PART2);
-            if (is_anim_at_end(m)) {
-                marioObj->oMarioPoleYawVel = 0;
-                set_mario_action(m, ACT_HOLDING_POLE, 0);
-            }
+            if (is_anim_at_end(m) || (m->angleVel[1] == 0x0)) set_mario_action(m, ACT_HOLDING_POLE, 0);
         }
         add_tree_leaf_particles(m);
     }
@@ -237,8 +235,7 @@ Bool32 act_grab_pole_fast(struct MarioState *m) {
 }
 
 Bool32 act_top_of_pole_transition(struct MarioState *m) {
-    struct Object *marioObj = m->marioObj;
-    marioObj->oMarioPoleYawVel = 0;
+    m->angleVel[1] = 0x0;
     if (m->actionArg == 0) {
         set_mario_animation(m, MARIO_ANIM_START_HANDSTAND);
         if (is_anim_at_end(m)) return set_mario_action(m, ACT_TOP_OF_POLE, 0);
@@ -253,7 +250,7 @@ Bool32 act_top_of_pole_transition(struct MarioState *m) {
 Bool32 act_top_of_pole(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED    ) return set_mario_action(m, ACT_TOP_OF_POLE_JUMP      , 0);
     if (m->controller->stickY < -16.0f) return set_mario_action(m, ACT_TOP_OF_POLE_TRANSITION, 1);
-    m->faceAngle[1] -= m->controller->stickX * 16.0f;
+    m->faceAngle[1] -= (m->controller->stickX * 16.0f);
     set_mario_animation(m, MARIO_ANIM_HANDSTAND_IDLE);
     set_pole_position(m, return_mario_anim_y_translation(m));
     return FALSE;

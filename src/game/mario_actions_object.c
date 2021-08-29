@@ -186,7 +186,7 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 Bool32 act_picking_up_bowser(struct MarioState *m) {
     if (m->actionState == 0) {
         m->actionState = 1;
-        m->angleVel[1] = 0;
+        m->angleVel[1] = 0x0;
         m->marioBodyState->grabPos = GRAB_POS_BOWSER;
         mario_grab_used_object(m);
 #if ENABLE_RUMBLE
