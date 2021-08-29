@@ -192,7 +192,7 @@ Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline
     if (gPuppyCam.splineIndex == 65000) gPuppyCam.splineIndex = index;
     if ((splinePos[gPuppyCam.splineIndex].index == -1) || (splinePos[gPuppyCam.splineIndex + 1].index == -1) || (splinePos[gPuppyCam.splineIndex + 2].index == -1)) return TRUE;
     if ((mode == PUPPYSPLINE_FOLLOW) && ((splineFocus[gPuppyCam.splineIndex].index == -1) || (splineFocus[gPuppyCam.splineIndex + 1].index == -1) || (splineFocus[gPuppyCam.splineIndex + 2].index == -1))) return TRUE;
-    vec3f_set(prevPos, gPuppyCam.pos[0], gPuppyCam.pos[1], gPuppyCam.pos[2]);
+    vec3s_to_vec3f(prevPos, gPuppyCam.pos);
     for ((i = 0); (i < 4); (i++)) vec3f_set(tempPoints[i], splinePos[gPuppyCam.splineIndex + i].pos[0], splinePos[gPuppyCam.splineIndex + i].pos[1], splinePos[gPuppyCam.splineIndex + i].pos[2]);
     vec3s_evaluate_cubic_spline(gPuppyCam.splineProgress, gPuppyCam.pos, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
     if (mode == PUPPYSPLINE_FOLLOW) {

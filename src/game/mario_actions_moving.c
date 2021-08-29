@@ -41,7 +41,11 @@ Mat4 sFloorAlignMatrix[2];
 Angle tilt_body_running(struct MarioState *m) {
     Angle pitch = 0x0;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+ #ifdef EXTRA_MARIO_STATE_FIELDS
+    if ((m->pos[1] <= m->floorHeight) && (m->steepness < COS1)) pitch = m->movePitch;
+ #else
     if ((m->pos[1] <= m->floorHeight) && (m->steepness < COS1)) pitch = m->floorPitch;
+ #endif
 #else
     if ((m->pos[1] <= m->floorHeight) && (m->floor->normal.y < COS1)) pitch = find_floor_slope(m, 0x0, 5.0f);
 #endif

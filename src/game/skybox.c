@@ -212,10 +212,10 @@ void draw_skybox_tile_grid(Gfx **dlist, s8 background, s8 player, s8 colorIndex)
 }
 
 void *create_skybox_ortho_matrix(s8 player) {
-    f32 left   = sSkyBoxInfo[player].scaledX;
+    f32 left   =  sSkyBoxInfo[player].scaledX;
     f32 right  = (sSkyBoxInfo[player].scaledX + SCREEN_WIDTH);
     f32 bottom = (sSkyBoxInfo[player].scaledY - SCREEN_HEIGHT);
-    f32 top    = sSkyBoxInfo[player].scaledY;
+    f32 top    =  sSkyBoxInfo[player].scaledY;
     Mtx *mtx   = alloc_display_list(sizeof(*mtx));
 #ifdef WIDESCREEN
     f32 half_width = (4.0f / 3.0f) / GFX_DIMENSIONS_ASPECT_RATIO * (SCREEN_WIDTH / 2);

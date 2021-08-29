@@ -343,7 +343,6 @@ void mario_set_forward_vel(struct MarioState *m, f32 forwardVel) {
     m->slideVelZ  = (coss(m->faceAngle[1]) * m->forwardVel);
     m->vel[0]     = m->slideVelX;
     m->vel[2]     = m->slideVelZ;
-    update_mario_move_angles(m);
 }
 
 /**
@@ -581,10 +580,6 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
 Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);
-}
-
-void update_mario_move_angles(struct MarioState *m) {
-    vec3f_get_dist_and_lateral_dist_and_angle(gVec3fZero, m->vel, &m->moveSpeed, &m->lateralSpeed, &m->movePitch, &m->moveYaw);
 }
 
 /**
@@ -1004,7 +999,12 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
                 print_text_fmt_int(210,  88,  "RY %d", ((m->faceAngle[1] * 45.0f) / 8192.0f));
                 print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
-                print_text_fmt_int(210,  56,  "MY %d", ((atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f));
+#ifdef EXTRA_MARIO_STATE_FIELDS
+                // print_text_fmt_int(210,  56,  "MY %d", ((m->moveYaw * 45.0f) / 8192.0f));
+                print_text_fmt_int(210,  56,  "MY %d", ((m->movePitch * 45.0f) / 8192.0f));
+#endif
+
+                // print_text_fmt_int(210,  56,  "MY %d", ((atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  40,  "MY %d", ((m->area->camera->yaw * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  56, "VEL", 0);
                 // STA short for "status," the official action name via SMS map.
@@ -1464,14 +1464,18 @@ void queue_rumble_particles(void) {
  * Main function for executing Mario's behavior.
  */
 Bool32 execute_mario_action(UNUSED struct Object *o) {
+    // struct MarioState *m = gMarioState;
     Bool32 inLoop = TRUE;
+#ifdef EXTRA_MARIO_STATE_FIELDS
+    vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
+    vec3f_copy(gMarioState->prevPos, gMarioState->pos);
+#endif
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(      gMarioState);
         update_mario_inputs(        gMarioState);
         mario_handle_special_floors(gMarioState);
         mario_process_interactions( gMarioState);
-        update_mario_move_angles(   gMarioState);
         // If Mario is OOB, stop executing actions.
         if (gMarioState->floor == NULL) return FALSE;
         // The function can loop through many action shifts in one frame,
@@ -1556,7 +1560,8 @@ void init_mario(void) {
     gMarioState->marioObj->header.gfx.animInfo.animID = -1;
     vec3a_copy(    gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
     vec3a_set(     gMarioState->angleVel , 0, 0, 0);
-    vec3s_to_vec3f(gMarioState->pos      , gMarioSpawnInfo->startPos);
+    vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
+    vec3f_copy(gMarioState->prevPos, gMarioState->pos);
     vec3f_zero(    gMarioState->vel);
 #ifdef CENTERED_COLLISION
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], (gMarioState->pos[1] + gMarioState->midY), gMarioState->pos[2], &gMarioState->floor);

@@ -51,6 +51,9 @@
 // Clear RAM on boot (UltraSM64)
 #define CLEARRAM
 
+// Unlocks FPS (not recommended for normal gameplay)
+// #define UNLOCK_FPS
+
 
 /********************************************************************************************************************************
  *                                                                                                                              *
@@ -570,6 +573,11 @@
  * Movement: General                                            *
  ****************************************************************/
 
+// Extra fields in the MarioState struct:
+// prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed
+// (Arceveti)
+#define EXTRA_MARIO_STATE_FIELDS
+
 // Decides whether you can exit course while moving
 // Has no effect if you disable exit course)
 // (HackerSM64)
@@ -781,8 +789,6 @@
  * -- Experimental/Unfinished Settingss --                                                                                      *
  *                                                                                                                              *
  ********************************************************************************************************************************/
-
-// #define UNLOCK_FPS
 
 #define CENTERED_COLLISION
 
