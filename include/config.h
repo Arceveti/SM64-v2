@@ -474,7 +474,9 @@
 // Reimplement the unused sad eye texture for the mother penguin
 #define PENGUIN_MOTHER_SAD_EYES
 
-// Makes bowser throws more lenient (Arceveti)
+// Makes bowser throws more lenient
+// If PUPPYCAM is enabled, the camera will center on the bomb you're looking at
+// (Arceveti)
 #define LENIENT_BOWSER_THROWS
 
 // The number of chain balls the Chain Chomp has

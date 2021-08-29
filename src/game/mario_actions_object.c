@@ -185,8 +185,8 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 
 Bool32 act_picking_up_bowser(struct MarioState *m) {
     if (m->actionState == 0) {
-        m->actionState = 1;
-        m->angleVel[1] = 0x0;
+        m->actionState             = 1;
+        m->angleVel[1]             = 0x0;
         m->marioBodyState->grabPos = GRAB_POS_BOWSER;
         mario_grab_used_object(m);
 #if ENABLE_RUMBLE
@@ -201,16 +201,29 @@ Bool32 act_picking_up_bowser(struct MarioState *m) {
 }
 
 Bool32 act_holding_bowser(struct MarioState *m) {
+    Bool8 spinningFast = ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00));
     Angle spin;
-    if (m->input & INPUT_B_PRESSED) {
 #ifdef LENIENT_BOWSER_THROWS
+#ifndef PUPPYCAM
+    if (m->input & INPUT_B_PRESSED) {
+#endif
         Angle camAngleToBomb;
+#ifdef PUPPYCAM
+        Angle camYaw = (gPuppyCam.yaw + DEG(180));
+#else
         Angle camYaw = (m->area->camera->yaw + DEG(180));
-        struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, DEG(90), &camAngleToBomb);
-        if ((bowserBomb != NULL) && ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) && (abs_angle_diff(m->faceAngle[1], camYaw) < DEG(90))) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
+#endif
+        struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, &camAngleToBomb);
+#ifdef PUPPYCAM
+        if (bowserBomb != NULL) approach_s16_asymptotic_bool(&gPuppyCam.yawTarget, (camAngleToBomb + DEG(180)), 0x10);
+    if (m->input & INPUT_B_PRESSED) {
+#endif
+        if ((bowserBomb != NULL) && spinningFast && (abs_angle_diff(m->faceAngle[1], camYaw) < DEG(90))) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
+#else
+    if (m->input & INPUT_B_PRESSED) {
 #endif
 #ifndef VERSION_JP
-        play_sound((((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00)) ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO), m->marioObj->header.gfx.cameraToObject);
+        play_sound((spinningFast ? SOUND_MARIO_SO_LONGA_BOWSER : SOUND_MARIO_HERE_WE_GO), m->marioObj->header.gfx.cameraToObject);
 #else
         play_sound(SOUND_MARIO_HERE_WE_GO, m->marioObj->header.gfx.cameraToObject);
 #endif
@@ -226,7 +239,7 @@ Bool32 act_holding_bowser(struct MarioState *m) {
     if (m->intendedMag > 20.0f) {
         if (m->actionArg == 0) {
             m->actionArg = 1;
-            m->twirlYaw = m->intendedYaw;
+            m->twirlYaw  = m->intendedYaw;
         } else {
             // spin = acceleration
             spin = ((Angle)(m->intendedYaw - m->twirlYaw) / 0x80);

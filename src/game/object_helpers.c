@@ -581,29 +581,29 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
     return closestObj;
 }
 
-// Finds the object closest to the line from [pos] toward [lookingYaw] within [yawRange]
-struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, Angle lookingYaw, Angle yawRange, Angle *yaw) {
+// Finds the object closest to the line from 'pos' in the 'lookYaw' direction
+struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, const Angle lookYaw, Angle *yaw) {
     uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    Angle minYaw = yawRange;
-    listHead     = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
-    obj          = (struct Object *) listHead->next;
+    UAngle minDYaw = 0x8000;
+    listHead       = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
+    obj            = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
-            f32 dx = (obj->oPosX - pos[0]);
-            f32 dz = (obj->oPosZ - pos[2]);
-            Angle objYaw  = atan2s(dz, dx);
-            Angle objDYaw = abs_angle_diff(lookingYaw, objYaw);
-            if ((objDYaw < yawRange) && (objDYaw < abs_angle_diff(lookingYaw, minYaw))) {
+            Angle objYaw;
+            vec3f_get_yaw(pos, &obj->oPosVec, &objYaw);
+            UAngle objDYaw = abs_angle_diff(lookYaw, objYaw);
+            if (objDYaw < minDYaw) {
                 closestObj = obj;
-                minYaw     = objYaw;
+                minDYaw    = objDYaw;
+                *yaw       = objYaw;
             }
+
         }
         obj = (struct Object *) obj->header.next;
     }
-    *yaw = minYaw;
     return closestObj;
 }
 

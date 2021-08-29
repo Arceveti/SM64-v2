@@ -94,7 +94,7 @@ void   cur_obj_scale(f32 scale);
 void   cur_obj_init_animation_with_sound(s32 animIndex);
 void   cur_obj_init_animation_with_accel_and_sound(s32 animIndex, f32 accel);
 void   cur_obj_init_animation(s32 animIndex);
-void   obj_init_animation_with_sound(struct Object *obj, const struct Animation * const* animations, s32 animIndex);
+void   obj_init_animation_with_sound(struct Object *obj, const struct Animation * const *animations, s32 animIndex);
 void   cur_obj_enable_rendering(  void);
 void   cur_obj_disable_rendering( void);
 void   cur_obj_unhide(            void);
@@ -108,7 +108,7 @@ struct Object *cur_obj_nearest_object_with_behavior(        const BehaviorScript
 f32            cur_obj_dist_to_nearest_object_with_behavior(const BehaviorScript *behavior);
 struct Object *cur_obj_find_nearest_object_with_behavior(   const BehaviorScript *behavior,            f32 *dist);
 struct Object *find_closest_obj_with_behavior_from_point(   const BehaviorScript *behavior, Vec3f pos, f32 *dist);
-struct Object *find_closest_obj_with_behavior_from_yaw(     const BehaviorScript *behavior, Vec3f pos, Angle lookingAngle, Angle yawRange, Angle *yaw);
+struct Object *find_closest_obj_with_behavior_from_yaw(     const BehaviorScript *behavior, Vec3f pos, const Angle lookAngle, Angle *yawToObj);
 struct Object *find_unimportant_object(  void);
 s32            count_unimportant_objects(void);
 s32            count_objects_with_behavior(   const BehaviorScript *behavior);
