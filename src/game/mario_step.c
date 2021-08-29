@@ -484,7 +484,11 @@ struct Surface *check_ledge_grab(struct MarioState *m, struct Surface *grabbedWa
     if (((displacementX * m->vel[0]) + (displacementZ * m->vel[2])) > 0.0f) returnedWall = grabbedWall;
     ledgePos[0] = (nextPos[0] - (wall->normal.x * 60.0f));
     ledgePos[2] = (nextPos[2] - (wall->normal.z * 60.0f));
+#ifdef CENTERED_COLLISION
+    ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + m->midY + MARIO_SHORT_HITBOX_HEIGHT), ledgePos[2], ledgeFloor);
+#else
     ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + MARIO_SHORT_HITBOX_HEIGHT), ledgePos[2], ledgeFloor);
+#endif
     if ((ledgeFloor == NULL)
      || (ledgePos[1] < (nextPos[1] + 80.0f))
      || ((*ledgeFloor)->normal.y < COS25)
@@ -498,7 +502,7 @@ Bool32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intend
     struct Surface *ledgeFloor;
     Vec3f ledgePos;
     if (m->vel[1] > 0) return FALSE;
-#ifdef LEDGE_GRAB_FIX
+#ifdef FIX_LEDGE_GRABS
     if ((m->action == ACT_WALL_SLIDE) || (m->action == ACT_FORWARD_ROLLOUT) || (m->action == ACT_BACKWARD_ROLLOUT) || analog_stick_held_back(m, DEG(90))) return FALSE;
 #endif
     f32 displacementX = (nextPos[0] - intendedPos[0]);
@@ -508,7 +512,7 @@ Bool32 check_ledge_grab(struct MarioState *m, struct Surface *wall, Vec3f intend
     if ((displacementX * m->vel[0]) + (displacementZ * m->vel[2]) > 0.0f) return FALSE;
     ledgePos[0] = (nextPos[0] - (wall->normal.x * 60.0f));
     ledgePos[2] = (nextPos[2] - (wall->normal.z * 60.0f));
-#ifdef LEDGE_GRAB_FIX
+#ifdef FIX_LEDGE_GRABS
     ledgePos[1] = find_floor(ledgePos[0], (nextPos[1] + MARIO_HALF_HITBOX_HEIGHT), ledgePos[2], &ledgeFloor);
     if ((ledgeFloor == NULL) || (ledgeFloor->normal.y < COS25) || (ledgeFloor->type == SURFACE_BURNING) || SURFACE_IS_QUICKSAND(ledgeFloor->type)) return FALSE;
 #else
@@ -651,6 +655,10 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         m->pos[1]      = floorHeight;
         m->floor       = floor;
         m->floorHeight = floorHeight;
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+        m->floorPitch = 0x0;
+        m->steepness  = floor->normal.y;
+#endif
         return AIR_STEP_LANDED;
     }
 #ifdef BETTER_CEILING_HANDLING
@@ -725,6 +733,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
             m->floorAngle   = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
             m->faceAngle[0] = 0x0;
             m->faceAngle[1] = (atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + DEG(180));
+            m->wall         = grabbedWall;
         } else {
             vec3f_copy(m->pos, nextPos);
             m->floor        = floor;

@@ -1,6 +1,6 @@
 // 0x070160D8 - 0x0701633C
 const MacroObject wdw_seg7_area_1_macro_objs[] = {
-    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/ -2077,  2816,  -660, /*behParam*/ DIALOG_081),
+    MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/ -2048,  2816,  -660, /*behParam*/ DIALOG_081),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/   740,  3060, -3680, /*behParam*/ DIALOG_053),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_circling_amp,                /*yaw*/   0, /*pos*/ -1360,  3880, -1340, /*behParam*/          2),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_circling_amp,                /*yaw*/   0, /*pos*/   640,   700,  3720, /*behParam*/          2),
@@ -30,7 +30,7 @@ const MacroObject wdw_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(               /*preset*/ macro_chuckya,                     /*yaw*/   0, /*pos*/ -2963,  3840, -3063                         ),
     MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/   943,  3830, -1779                         ),
     MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/ -2200,   384,  1145                         ),
-    MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/ -2075,  3000,  -524                         ),
+    MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/ -2048,  3000,  -512                         ),
     MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/ -3760,   650,  4120                         ),
     MACRO_OBJECT(               /*preset*/ macro_hidden_star_trigger,         /*yaw*/   0, /*pos*/ -3689,     0,  3205                         ),
     MACRO_OBJECT(               /*preset*/ macro_breakable_box_no_coins,      /*yaw*/   0, /*pos*/  1360,   205, -1384                         ),
@@ -47,19 +47,19 @@ const MacroObject wdw_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(               /*preset*/ macro_hidden_box,                  /*yaw*/   0, /*pos*/   470,  3100, -2110                         ),
     MACRO_OBJECT(               /*preset*/ macro_hidden_box,                  /*yaw*/   0, /*pos*/   470,  3100, -2310                         ),
     MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  3140,  1300,  2040                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/   -20,   400,  1520                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/ -1780,  1160,   -40                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/     0,   400,  1520                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/ -2048,  1160,     0                         ),
     MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/ -2280,  2320, -2280                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  1240,  2340, -3300                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/ -2240,  2320,  3820                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  -220,  3860,    60                         ),
-    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  -240,   400,  -440                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  1200,  2340, -3240                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/ -2120,  2320,  2500                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  -220,  3860,    64                         ),
+    MACRO_OBJECT(               /*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  -176,   400,  -432                         ),
     MACRO_OBJECT(               /*preset*/ macro_box_three_coins,             /*yaw*/   0, /*pos*/ -2200,  3060, -3700                         ),
-    MACRO_OBJECT(               /*preset*/ macro_box_three_coins,             /*yaw*/   0, /*pos*/  3388,  1600,  1155                         ),
-    MACRO_OBJECT(               /*preset*/ macro_box_ten_coins,               /*yaw*/   0, /*pos*/ -2075,  3050,  -524                         ),
-    MACRO_OBJECT(               /*preset*/ macro_box_ten_coins,               /*yaw*/   0, /*pos*/   943,  3880, -1779                         ),
+    MACRO_OBJECT(               /*preset*/ macro_box_three_coins,             /*yaw*/   0, /*pos*/  3388,  1600,  1155                         ), // box on bridge
+    MACRO_OBJECT(               /*preset*/ macro_box_ten_coins,               /*yaw*/   0, /*pos*/ -2048,  3050,  -512                         ),
+    MACRO_OBJECT(               /*preset*/ macro_box_ten_coins,               /*yaw*/   0, /*pos*/   944,  3880, -1779                         ),
     MACRO_OBJECT(               /*preset*/ macro_box_ten_coins,               /*yaw*/   0, /*pos*/ -3760,   700,  4120                         ),
-    MACRO_OBJECT(               /*preset*/ macro_box_star_1,                  /*yaw*/   0, /*pos*/ -2200,  2600,  3500                         ),
-    MACRO_OBJECT(               /*preset*/ macro_box_star_2,                  /*yaw*/   0, /*pos*/  1550,  4350,   100                         ),
+    MACRO_OBJECT(               /*preset*/ macro_box_star_1,                  /*yaw*/   0, /*pos*/ -2240,  2600,  3500                         ), // shocking arrow lifts
+    MACRO_OBJECT(               /*preset*/ macro_box_star_2,                  /*yaw*/   0, /*pos*/  1470,  4350,    90                         ), // top of the town
     MACRO_OBJECT_END(),
 };

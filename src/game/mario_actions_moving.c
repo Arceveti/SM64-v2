@@ -117,6 +117,7 @@ void check_ledge_climb_down(struct MarioState *m) {
                     m->pos[2]       = (wallCols.pos[2] - (20.0f * wall->normal.z));
                     m->faceAngle[0] = 0x0;
                     m->faceAngle[1] = (wallAngle + DEG(180));
+                    m->wall         = wall;
                     set_mario_action(m, ACT_LEDGE_CLIMB_DOWN, 0);
                     set_mario_animation(m, MARIO_ANIM_CLIMB_DOWN_LEDGE);
                 }

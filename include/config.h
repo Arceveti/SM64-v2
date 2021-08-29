@@ -553,7 +553,7 @@
 #define MIN_UNDERWATER_FLOOR_NORMAL_Y 0.1f
 
 // Minimum Y normal for floors (vanilla is 0.01f)
-#define MIN_FLOOR_NORMAL_Y 0.01f
+#define MIN_FLOOR_NORMAL_Y 0.02f
 
 // Minimum Y normal for ceilings (vanilla is -0.01f, -0.2f is recommended)
 #define MAX_CEIL_NORMAL_Y -0.2f
@@ -731,7 +731,7 @@
 // Properly fixes false ledge grabs
 // Does nothing if BETTER_WALL_COLLISION is enabled.
 // (Arceveti)
-#define LEDGE_GRAB_FIX
+#define FIX_LEDGE_GRABS
 
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)
@@ -784,7 +784,7 @@
 
 // #define UNLOCK_FPS
 
-// #define CENTERED_COLLISION
+#define CENTERED_COLLISION
 
 // Platform Displacement 2 for objects other than Mario & Bowser
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS
