@@ -1,7 +1,6 @@
 #include <PR/ultratypes.h>
 
 #include "gd_math.h"
-#include "gd_macros.h"
 #include "renderer.h"
 #include "engine/math_util.h"
 
@@ -14,49 +13,6 @@ void gd_rot_mat_about_vec3f(Mat4 *mtx, Vec3f vec) {
     if (vec[0] != 0.0f) gd_absrot_mat4(mtx, GD_X_AXIS, vec[0]);
     if (vec[1] != 0.0f) gd_absrot_mat4(mtx, GD_Y_AXIS, vec[1]);
     if (vec[2] != 0.0f) gd_absrot_mat4(mtx, GD_Z_AXIS, vec[2]);
-}
-
-/**
- * Creates a lookat matrix, but specifically from the perspective of the origin.
- * Rolls is only ever 0 in practice, and this is really only ever used once.
- *
- * Matrix has form-  | -(cz+sxy)/h sh  (cx-syz)/h 0 |
- *                   |  (sz-cxy)/h ch -(sx+cyz)/h 0 |
- *                   |     -x      -y     -z      0 |
- *                   |      0       0      0      1 |
- */
-void gd_create_origin_lookat(Mat4 *mtx, Vec3f vec, f32 roll) {
-    f32 invertedHMag;
-    f32 radPerDeg = RAD_PER_DEG;
-    Vec3f unit;
-    vec3f_copy(unit, vec);
-    vec3f_normalize(unit);
-    f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
-    roll *= radPerDeg; // convert roll from degrees to radians
-    if (hMag != 0.0f) {
-        f32 s = sind(roll);
-        f32 c = cosd(roll);
-        f32 su1 = (s * unit[1]);
-        f32 cu1 = (s * unit[1]);
-        invertedHMag = (1.0f / hMag); //! fast invsqrt
-        (*mtx)[0][0] = (((-unit[2] * c) - (su1 * unit[0])) * invertedHMag);
-        (*mtx)[1][0] = ((( unit[2] * s) - (cu1 * unit[0])) * invertedHMag);
-        (*mtx)[2][0] =                          -unit[0];
-
-        (*mtx)[0][1] = (s * hMag);
-        (*mtx)[1][1] = (c * hMag);
-        (*mtx)[2][1] = -unit[1];
-
-        (*mtx)[0][2] = ((( c * unit[0]) - (su1 * unit[2])) * invertedHMag);
-        (*mtx)[1][2] = (((-s * unit[0]) - (cu1 * unit[2])) * invertedHMag);
-        (*mtx)[2][2] =                          -unit[2];
-    } else {
-        vec3f_copy((*mtx)[0], gVec3fZ);
-        vec3f_copy((*mtx)[1], gVec3fX);
-        vec3f_copy((*mtx)[2], gVec3fY);
-    }
-    vec3f_zero((*mtx)[3]);
-    mtxf_end(*mtx);
 }
 
 /**

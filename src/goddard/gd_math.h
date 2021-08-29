@@ -24,7 +24,6 @@ enum GdRotAxis {
 void   gd_adjunct_mat4f(Mat4 *src, Mat4 *dst);
 f32    mtxf_det(Mat4 *mtx);
 void   gd_rot_mat_about_vec3f(      Mat4 *mtx, Vec3f vec);
-void   gd_create_origin_lookat(     Mat4 *mtx, Vec3f vec, f32 roll);
 void   gd_rot_2d_vec(f32 deg, f32 *x, f32 *y);
 void   gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang);
 void   gd_inverse_mat4f(Mat4 *src, Mat4 *dst);

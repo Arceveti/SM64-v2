@@ -204,6 +204,7 @@ void mtxf_end(                            Mat4 mtx);
 void mtxf_identity(                       Mat4  mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
 void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);
+void mtxf_origin_lookat(                  Mat4  mtx, Vec3f vec, f32 roll);
 void mtxf_rotate_zxy_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
 void mtxf_rotate_xyz_and_translate(       Mat4 dest, Vec3f translate, Vec3a rotate);
 void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset);

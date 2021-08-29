@@ -2,7 +2,6 @@
 
 #include "string_utils.h"
 #include "dynlist_proc.h"
-#include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
 #include "objects.h"
@@ -131,12 +130,12 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     sUseSelectedColor = FALSE;
 }
 
-void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 posZ) {
+void draw_shape_2d(struct ObjShape *shape, s32 flag, Vec3f in) {
     Vec3f pos;
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
     if (flag & 0x02) {
-        vec3f_set(pos, posX, posY, posZ);
+        vec3f_copy(pos, in);
         if (gViewUpdateCamera != NULL) gd_rotate_and_translate_vec3f(pos, &gViewUpdateCamera->lookatMtx);
         gd_dl_load_trans_matrix(pos[0], pos[1], pos[2]);
     }
@@ -144,24 +143,17 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, f32 posX, f32 posY, f32 pos
 }
 
 void draw_light(struct ObjLight *light) {
-    Vec3f vec;
-    Mat4 idMtx;
     struct ObjShape *shape;
     if (sSceneProcessType == FIND_PICKS) return;
     vec3f_copy(sLightColours[0], light->colour);
     if (light->flags & LIGHT_UNK02) {
-        mtxf_identity(idMtx); //! overwritten?
-        vec[0] = -light->unk80[0];
-        vec[1] = -light->unk80[1];
-        vec[2] = -light->unk80[2];
-        gd_create_origin_lookat(&idMtx, vec, 0.0f);
         shape = gSpotShape;
     } else {
         shape = light->unk9C;
         if (++sLightDlCounter >= 17) sLightDlCounter = 1;
         shape->unk50 = sLightDlCounter;
     }
-    draw_shape_2d(shape, 2, light->position[0], light->position[1], light->position[2]);
+    draw_shape_2d(shape, 2, light->position);
 }
 
 void draw_material(struct ObjMaterial *mtl) {
@@ -229,7 +221,8 @@ ColorRGBf *gd_get_colour(s32 idx) {
  */
 void draw_face(struct ObjFace *face) {
     struct ObjVertex *vtx;
-    f32 z, y, x;
+    // f32 z, y, x;
+    Vec3f pos;
     s32 i; // also used to store mtl's gddl number
     Vtx *gbiVtx;
     if (!sUseSelectedColor
@@ -244,11 +237,9 @@ void draw_face(struct ObjFace *face) {
     check_tri_display(face->vtxCount);
     for ((i = 0); (i < face->vtxCount); (i++)) {
         vtx = face->vertices[i];
-        x = vtx->pos[0];
-        y = vtx->pos[1];
-        z = vtx->pos[2];
+        vec3f_copy(pos, vtx->pos);
         set_Vtx_norm_buf_2(vtx->normal);
-        gbiVtx = gd_dl_make_vertex(x, y, z, vtx->alpha);
+        gbiVtx = gd_dl_make_vertex(pos[0], pos[1], pos[2], vtx->alpha);
         if (gbiVtx != NULL) vtx->gbiVerts = make_vtx_link(vtx->gbiVerts, gbiVtx);
     }
     func_8019FEF0();
@@ -261,7 +252,7 @@ void draw_net(struct ObjNet *self) {
     if (sSceneProcessType == FIND_PICKS) return;
     netColor = ((net->header.drawFlags & OBJ_HIGHLIGHTED) ? COLOUR_YELLOW : net->colourNum);
     if (net->shapePtr != NULL) draw_shape(net->shapePtr, 0x10, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, netColor, &net->rotationMtx);
-    if (net->nodeGrp   != NULL) draw_group(net->nodeGrp);
+    if (net->nodeGrp  != NULL) draw_group(net->nodeGrp);
 }
 
 /* 22803C -> 22829C */
@@ -416,9 +407,9 @@ void draw_particle(struct GdObj *obj) {
     }
     if (ptc->timeout > 0) {
         ptc->shapePtr->unk50 = ptc->timeout;
-        draw_shape_2d(ptc->shapePtr, 2, ptc->pos[0], ptc->pos[1], ptc->pos[2]);
+        draw_shape_2d(ptc->shapePtr, 2, ptc->pos);
     }
-    if (ptc->particleType == 3 && ptc->subParticlesGrp != NULL) draw_group(ptc->subParticlesGrp);
+    if ((ptc->particleType == 3) && (ptc->subParticlesGrp != NULL)) draw_group(ptc->subParticlesGrp);
 }
 
 /**
@@ -495,7 +486,7 @@ void update_shaders(struct ObjShape *shape, Vec3f offset) {
     stash_current_gddl();
     vec3f_copy(sLightPositionOffset, offset);
     sPhongLight = NULL;
-    if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS   , (applyproc_t) update_lighting  , gGdLightGroup  );
+    if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS,    (applyproc_t) update_lighting,   gGdLightGroup  );
     if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);
     pop_gddl_stash();
 }

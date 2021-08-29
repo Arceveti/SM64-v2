@@ -276,9 +276,9 @@ s32 random_sign(void) {
     return ((random_u16() >= 0x7FFF) ? 1 : -1);
 }
 
-// data
-static u32 sPrimarySeed   = 0x12345678; // @ 801A82A4
-static u32 sSecondarySeed = 0x58374895; // @ 801A82A8
+
+static u32 sPrimarySeed   = 0x12345678;
+static u32 sSecondarySeed = 0x58374895;
 
 /**
  * Returns a random floating point number between 0 and 1 (inclusive)
@@ -964,6 +964,49 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 }
 
 /**
+ * Creates a lookat matrix, but specifically from the perspective of the origin.
+ * Rolls is only ever 0 in practice, and this is really only ever used once.
+ *
+ * Matrix has form-  | -(cz+sxy)/h sh  (cx-syz)/h 0 |
+ *                   |  (sz-cxy)/h ch -(sx+cyz)/h 0 |
+ *                   |     -x      -y     -z      0 |
+ *                   |      0       0      0      1 |
+ */
+void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
+    f32 invertedHMag;
+    f32 radPerDeg = RAD_PER_DEG;
+    Vec3f unit;
+    vec3f_copy(unit, vec);
+    vec3f_normalize(unit);
+    f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
+    roll *= radPerDeg; // convert roll from degrees to radians
+    if (hMag != 0.0f) {
+        f32 s = sind(roll);
+        f32 c = cosd(roll);
+        f32 su1 = (s * unit[1]);
+        f32 cu1 = (s * unit[1]);
+        invertedHMag = (1.0f / hMag); //! fast invsqrt
+        mtx[0][0] = (((-unit[2] * c) - (su1 * unit[0])) * invertedHMag);
+        mtx[1][0] = ((( unit[2] * s) - (cu1 * unit[0])) * invertedHMag);
+        mtx[2][0] =                          -unit[0];
+
+        mtx[0][1] = (s * hMag);
+        mtx[1][1] = (c * hMag);
+        mtx[2][1] = -unit[1];
+
+        mtx[0][2] = ((( c * unit[0]) - (su1 * unit[2])) * invertedHMag);
+        mtx[1][2] = (((-s * unit[0]) - (cu1 * unit[2])) * invertedHMag);
+        mtx[2][2] =                          -unit[2];
+    } else {
+        vec3f_copy(mtx[0], gVec3fZ);
+        vec3f_copy(mtx[1], gVec3fX);
+        vec3f_copy(mtx[2], gVec3fY);
+    }
+    vec3f_zero(mtx[3]);
+    mtxf_end(mtx);
+}
+
+/**
  * Build a matrix that rotates around the z axis, then the x axis, then the y
  * axis, and then translates.
  */
@@ -1163,37 +1206,28 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
  */
 void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     Mat4 temp;
-    register f32 entry0, entry1, entry2;
+    Vec3f entry;
     // column 0
-    entry0     = a[0][0];
-    entry1     = a[0][1];
-    entry2     = a[0][2];
-    temp[0][0] = ((entry0 * b[0][0]) + (entry1 * b[1][0]) + (entry2 * b[2][0]));
-    temp[0][1] = ((entry0 * b[0][1]) + (entry1 * b[1][1]) + (entry2 * b[2][1]));
-    temp[0][2] = ((entry0 * b[0][2]) + (entry1 * b[1][2]) + (entry2 * b[2][2]));
+    vec3f_copy(entry, a[0]);
+    temp[0][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
+    temp[0][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
+    temp[0][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 1
-    entry0     = a[1][0];
-    entry1     = a[1][1];
-    entry2     = a[1][2];
-    temp[1][0] = ((entry0 * b[0][0]) + (entry1 * b[1][0]) + (entry2 * b[2][0]));
-    temp[1][1] = ((entry0 * b[0][1]) + (entry1 * b[1][1]) + (entry2 * b[2][1]));
-    temp[1][2] = ((entry0 * b[0][2]) + (entry1 * b[1][2]) + (entry2 * b[2][2]));
+    vec3f_copy(entry, a[1]);
+    temp[1][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
+    temp[1][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
+    temp[1][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 2
-    entry0     = a[2][0];
-    entry1     = a[2][1];
-    entry2     = a[2][2];
-    temp[2][0] = ((entry0 * b[0][0]) + (entry1 * b[1][0]) + (entry2 * b[2][0]));
-    temp[2][1] = ((entry0 * b[0][1]) + (entry1 * b[1][1]) + (entry2 * b[2][1]));
-    temp[2][2] = ((entry0 * b[0][2]) + (entry1 * b[1][2]) + (entry2 * b[2][2]));
+    vec3f_copy(entry, a[2]);
+    temp[2][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
+    temp[2][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
+    temp[2][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 3
-    entry0     = a[3][0];
-    entry1     = a[3][1];
-    entry2     = a[3][2];
-    temp[3][0] = ((entry0 * b[0][0]) + (entry1 * b[1][0]) + (entry2 * b[2][0]) + b[3][0]);
-    temp[3][1] = ((entry0 * b[0][1]) + (entry1 * b[1][1]) + (entry2 * b[2][1]) + b[3][1]);
-    temp[3][2] = ((entry0 * b[0][2]) + (entry1 * b[1][2]) + (entry2 * b[2][2]) + b[3][2]);
-    temp[0][3] = temp[1][3] = temp[2][3] = 0;
-    temp[3][3] = 1;
+    vec3f_copy(entry, a[3]);
+    temp[3][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]) + b[3][0]);
+    temp[3][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]) + b[3][1]);
+    temp[3][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]) + b[3][2]);
+    mtxf_end(temp);
     mtxf_copy(dest, temp);
 }
 

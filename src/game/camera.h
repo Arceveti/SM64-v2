@@ -7,6 +7,7 @@
 #include "area.h"
 #include "engine/geo_layout.h"
 #include "engine/graph_node.h"
+#include "cutscene.h"
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif
@@ -242,21 +243,6 @@ struct HandheldShakePoint
     /*0x08*/ Vec3s point;
 }; // size = 0x10
 
-// These are the same type, but the name that is used depends on context.
-/**
- * A function that is called by CameraTriggers and cutscene shots.
- * These are concurrent: multiple CameraEvents can occur on the same frame.
- */
-typedef void (*CameraEvent)(struct Camera *c);
-/**
- * The same type as a CameraEvent, but because these are generally longer, and happen in sequential
- * order, they're are called "shots," a term taken from cinematography.
- *
- * To further tell the difference: CutsceneShots usually call multiple CameraEvents at once, but only
- * one CutsceneShot is ever called on a given frame.
- */
-typedef CameraEvent CutsceneShot;
-
 /**
  * Defines a bounding box which activates an event while Mario is inside
  */
@@ -286,18 +272,6 @@ struct CameraTrigger
 };
 
 /**
- * A camera shot that is active for a number of frames.
- * Together, a sequence of shots makes up a cutscene.
- */
-struct Cutscene
-{
-    /// The function that gets called.
-    CutsceneShot shot;
-    /// How long the shot lasts.
-    s16 duration;
-};
-
-/**
  * Info for the camera's field of view and the FOV shake effect.
  */
 struct CameraFOVStatus
@@ -321,20 +295,6 @@ struct CameraFOVStatus
     /*0x16*/ s16 shakeSpeed;
     /// How much to decrease shakeAmplitude each frame.
     /*0x18*/ s16 decay;
-};
-
-/**
- * Information for a control point in a spline segment.
- */
-struct CutsceneSplinePoint
-{
-    /* The index of this point in the spline. Ignored except for -1, which ends the spline.
-       An index of -1 should come four points after the start of the last segment. */
-    s8 index;
-    /* Roughly controls the number of frames it takes to progress through the spline segment.
-       See move_point_along_spline() in camera.c */
-    u8 speed;
-    Vec3s point;
 };
 
 /**
@@ -408,20 +368,6 @@ struct CameraStoredInfo
     /*0x0C*/ Vec3f focus;
     /*0x18*/ f32 panDist;
     /*0x1C*/ f32 cannonYOffset;
-};
-
-/**
- * Struct used to store cutscene info, like the camera's target position/focus.
- *
- * See the sCutsceneVars[] array in camera.c for more details.
- */
-struct CutsceneVariable
-{
-    /// Perhaps an index
-    s32 unused1;
-    Vec3f point;
-    Vec3f unusedPoint;
-    Vec3a angle;
 };
 
 /**
@@ -584,12 +530,12 @@ void init_camera(                 struct Camera *c);
 void select_mario_cam_mode(void);
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context);
 Bool32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *splineSegment, f32 *progress);
-s32  cam_select_alt_mode(s32 angle);
-s32  set_cam_angle(      s32 mode);
-void set_handheld_shake(  u8 mode);
-void shake_camera_handheld(Vec3f pos, Vec3f focus);
-s32  find_c_buttons_pressed(u16 currentState, u16 buttonsPressed, u16 buttonsDown);
-s32  update_camera_hud_status(struct Camera *c);
+s32    cam_select_alt_mode(s32 angle);
+s32    set_cam_angle(      s32 mode);
+void   set_handheld_shake(  u8 mode);
+void   shake_camera_handheld(Vec3f pos, Vec3f focus);
+s32    find_c_buttons_pressed(u16 currentState, u16 buttonsPressed, u16 buttonsDown);
+s32    update_camera_hud_status(struct Camera *c);
 Bool32 is_point_within_radius_of_mario_cam_state(f32     posX,   f32   posY, f32 posZ, f32 maxDist);
 Bool32 set_or_approach_f32_asymptotic(    f32     *dst,   f32   goal, f32 scale);
 void   set_or_approach_vec3f_asymptotic(Vec3f      dst, Vec3f   goal, f32 xMul, f32 yMul, f32 zMul);

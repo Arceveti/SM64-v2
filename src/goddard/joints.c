@@ -2,7 +2,6 @@
 
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "gd_macros.h"
 #include "gd_main.h"
 #include "gd_math.h"
 #include "joints.h"

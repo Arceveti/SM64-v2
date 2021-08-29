@@ -100,4 +100,59 @@
 #define CAM_EVENT_START_END_WAVING      0x0C
 #define CAM_EVENT_START_CREDITS         0x0D
 
+// These are the same type, but the name that is used depends on context.
+/**
+ * A function that is called by CameraTriggers and cutscene shots.
+ * These are concurrent: multiple CameraEvents can occur on the same frame.
+ */
+typedef void (*CameraEvent)(struct Camera *c);
+/**
+ * The same type as a CameraEvent, but because these are generally longer, and happen in sequential
+ * order, they're are called "shots," a term taken from cinematography.
+ *
+ * To further tell the difference: CutsceneShots usually call multiple CameraEvents at once, but only
+ * one CutsceneShot is ever called on a given frame.
+ */
+typedef CameraEvent CutsceneShot;
+
+/**
+ * A camera shot that is active for a number of frames.
+ * Together, a sequence of shots makes up a cutscene.
+ */
+struct Cutscene
+{
+    /// The function that gets called.
+    CutsceneShot shot;
+    /// How long the shot lasts.
+    s16 duration;
+};
+
+/**
+ * Information for a control point in a spline segment.
+ */
+struct CutsceneSplinePoint
+{
+    /* The index of this point in the spline. Ignored except for -1, which ends the spline.
+       An index of -1 should come four points after the start of the last segment. */
+    s8 index;
+    /* Roughly controls the number of frames it takes to progress through the spline segment.
+       See move_point_along_spline() in camera.c */
+    u8 speed;
+    Vec3s point;
+};
+
+/**
+ * Struct used to store cutscene info, like the camera's target position/focus.
+ *
+ * See the sCutsceneVars[] array in camera.c for more details.
+ */
+struct CutsceneVariable
+{
+    /// Perhaps an index
+    s32 unused1;
+    Vec3f point;
+    Vec3f unusedPoint;
+    Vec3a angle;
+};
+
 #endif

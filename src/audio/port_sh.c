@@ -88,11 +88,11 @@ struct SPTask *create_next_audio_frame_task(void) {
     task->type             = M_AUDTASK;
     task->flags            = flags;
     task->ucode_boot       = rspbootTextStart;
-    task->ucode_boot_size  = (u8 *) rspbootTextEnd - (u8 *) rspbootTextStart;
+    task->ucode_boot_size  = ((u8 *) rspbootTextEnd - (u8 *) rspbootTextStart);
     task->ucode            = aspMainTextStart;
     task->ucode_data       = aspMainDataStart;
     task->ucode_size       = 0x1000;
-    task->ucode_data_size  = (aspMainDataEnd - aspMainDataStart) * sizeof(u64);
+    task->ucode_data_size  = ((aspMainDataEnd - aspMainDataStart) * sizeof(u64));
     task->dram_stack       = NULL;
     task->dram_stack_size  = 0;
     task->output_buff      = NULL;
@@ -139,21 +139,21 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
         gSoundMode = cmd->u2.as_s32;
         break;
     case 0xf1:
-        for (i = 0; i < 4; i++) {
-            gSequencePlayers[i].muted = TRUE;
+        for ((i = 0); (i < 4); (i++)) {
+            gSequencePlayers[i].muted             = TRUE;
             gSequencePlayers[i].recalculateVolume = TRUE;
         }
         break;
     case 0xf2:
         if (cmd->u2.as_s32 == 1) {
-            for (i = 0; i < gMaxSimultaneousNotes; i++) {
+            for ((i = 0); (i < gMaxSimultaneousNotes); (i++)) {
                 note = &gNotes[i];
                 sub  = &note->noteSubEu;
-                if (note->noteSubEu.enabled && note->unkSH34 == 0 && ((note->parentLayer->seqChannel->muteBehavior & 8) != 0) sub->finished = TRUE;
+                if (note->noteSubEu.enabled && (note->unkSH34 == 0) && ((note->parentLayer->seqChannel->muteBehavior & 8) != 0) sub->finished = TRUE;
             }
         }
-        for (i = 0; i < 4; i++) {
-            gSequencePlayers[i].muted = FALSE;
+        for ((i = 0); (i < 4); (i++)) {
+            gSequencePlayers[i].muted             = FALSE;
             gSequencePlayers[i].recalculateVolume = TRUE;
         }
         break;
@@ -209,7 +209,7 @@ void port_eu_init_queues(void) {
 extern struct EuAudioCmd sAudioCmd[0x100];
 void func_802ad6f0(s32 arg0, s32 *arg1) {
     struct EuAudioCmd *cmd = &sAudioCmd[D_SH_80350F18 & 0xff];
-    cmd->u.first = arg0;
+    cmd->u.first   =  arg0;
     cmd->u2.as_u32 = *arg1;
     D_SH_80350F18++;
     if (D_SH_80350F18 == D_SH_80350F19) D_SH_80350F18--;
