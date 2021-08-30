@@ -142,7 +142,7 @@ const char *credits20[] = { "1EXECUTIVE PRODUCER", "HIROSHI YAMAUCHI" };
 #endif
 
 struct CreditsEntry sCreditsSequence[] = {
-    { LEVEL_CASTLE_GROUNDS, 1,    1, -128, {     0,  8000,     0 }, CREDITS_POS_ONE,   NULL },
+    { LEVEL_CASTLE_GROUNDS, 1,    1, -128, {     0,  8000,     0 }, CREDITS_POS_ONE,   NULL      },
     // Start Level Credits Sequence
     { LEVEL_BOB,            1,    1,  117, {   713,  3918, -3889 }, CREDITS_POS_ONE,   credits01 },
     { LEVEL_WF,             1,   50,   46, {   347,  5376,   326 }, CREDITS_POS_FOUR,  credits02 },
@@ -377,6 +377,7 @@ void warp_credits(void) {
 
 void check_instant_warp(void) {
     Angle cameraAngle;
+    Vec3f disp;
     struct Surface *floor;
     if (gCurrLevelNum == LEVEL_CASTLE && save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 70) return;
     if ((floor = gMarioState->floor) != NULL) {
@@ -384,10 +385,8 @@ void check_instant_warp(void) {
         if ((index >= INSTANT_WARP_INDEX_START) && (index < INSTANT_WARP_INDEX_STOP) && (gCurrentArea->instantWarps != NULL)) {
             struct InstantWarp *warp = &gCurrentArea->instantWarps[index];
             if (warp->id != 0) {
-                //! vec3f/s sum/add?
-                gMarioState->pos[0] += warp->displacement[0];
-                gMarioState->pos[1] += warp->displacement[1];
-                gMarioState->pos[2] += warp->displacement[2];
+                vec3s_to_vec3f(disp, warp->displacement);
+                vec3f_add(gMarioState->pos, disp);
                 vec3f_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
 #ifdef INSTANT_WARP_OFFSET_FIX
                 vec3f_copy(gMarioObject->header.gfx.pos, gMarioState->pos);             
@@ -395,7 +394,7 @@ void check_instant_warp(void) {
                 cameraAngle = gMarioState->area->camera->yaw;
                 change_area(warp->area);
                 gMarioState->area = gCurrentArea;
-                warp_camera(warp->displacement[0], warp->displacement[1], warp->displacement[2]);
+                warp_camera(disp);
                 gMarioState->area->camera->yaw = cameraAngle;
             }
         }
@@ -476,7 +475,7 @@ struct WarpNode *get_painting_warp_node(void) {
  * Check is Mario has entered a painting, and if so, initiate a warp.
  */
 void initiate_painting_warp(void) {
-    if (gCurrentArea->paintingWarpNodes != NULL && gMarioState->floor != NULL) {
+    if ((gCurrentArea->paintingWarpNodes != NULL) && (gMarioState->floor != NULL)) {
         struct WarpNode warpNode;
         struct WarpNode *pWarpNode = get_painting_warp_node();
         if (pWarpNode != NULL) {
@@ -879,7 +878,7 @@ Bool32 init_level(void) {
     sDelayedWarpOp      = WARP_OP_NONE;
     sTransitionTimer    = 0;
     sSpecialWarpDest    = 0;
-    gHudDisplay.flags   = (gCurrCreditsEntry == NULL ? HUD_DISPLAY_DEFAULT : HUD_DISPLAY_NONE);
+    gHudDisplay.flags   = ((gCurrCreditsEntry == NULL) ? HUD_DISPLAY_DEFAULT : HUD_DISPLAY_NONE);
     sTimerRunning       = FALSE;
     if (sWarpDest.type != WARP_TYPE_NOT_WARPING) {
         if (sWarpDest.nodeId >= WARP_NODE_CREDITS_MIN) {

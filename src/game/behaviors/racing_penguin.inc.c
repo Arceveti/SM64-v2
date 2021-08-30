@@ -82,7 +82,7 @@ static void racing_penguin_act_finish_race(void) {
     if (o->oForwardVel != 0.0f) {
         if ((o->oTimer > 5) && (o->oMoveFlags & OBJ_MOVE_HIT_WALL)) {
             cur_obj_play_sound_2(SOUND_OBJ_POUNDING_LOUD);
-            set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
+            set_camera_shake_from_point(SHAKE_POS_SMALL, &o->oPosVec);
             o->oForwardVel = 0.0f;
         }
     } else if (cur_obj_init_anim_and_check_if_end(PENGUIN_ANIM_STAND_UP)) {

@@ -82,7 +82,7 @@ void volcano_trap_act_fall(void) {
         o->oVolcanoTrapPitchVel =  0x0;
         o->oAction = LLL_VOLCANO_TRAP_ACT_LAND;
         cur_obj_play_sound_2(SOUND_GENERAL_BIG_POUND);
-        set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
+        set_camera_shake_from_point(SHAKE_POS_LARGE, &o->oPosVec);
     }
 }
 

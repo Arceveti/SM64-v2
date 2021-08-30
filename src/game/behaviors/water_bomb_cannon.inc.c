@@ -23,7 +23,7 @@ void bhv_bubble_cannon_barrel_loop(void) {
                         waterBombObj->oForwardVel         = -100.0f;
                         waterBombObj->header.gfx.scale[1] =    1.7f;
                     }
-                    set_camera_shake_from_point(SHAKE_POS_MEDIUM, o->oPosX, o->oPosY, o->oPosZ);
+                    set_camera_shake_from_point(SHAKE_POS_MEDIUM, &o->oPosVec);
                 }
             } else {
                 o->oForwardVel = 0.0f;

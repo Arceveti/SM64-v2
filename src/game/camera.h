@@ -305,16 +305,16 @@ struct PlayerGeometry
 {
     /*0x00*/ struct Surface *currFloor;
     /*0x04*/ f32 currFloorHeight;
-    /*0x08*/ s16 currFloorType;
+    /*0x08*/ SurfaceType currFloorType;
     /*0x0C*/ struct Surface *currCeil;
-    /*0x10*/ s16 currCeilType;
+    /*0x10*/ SurfaceType currCeilType;
     /*0x14*/ f32 currCeilHeight;
     /*0x18*/ struct Surface *prevFloor;
     /*0x1C*/ f32 prevFloorHeight;
-    /*0x20*/ s16 prevFloorType;
+    /*0x20*/ SurfaceType prevFloorType;
     /*0x24*/ struct Surface *prevCeil;
     /*0x28*/ f32 prevCeilHeight;
-    /*0x2C*/ s16 prevCeilType;
+    /*0x2C*/ SurfaceType prevCeilType;
     /// Unused, but recalculated every frame
     /*0x30*/ f32 waterHeight;
 };
@@ -520,7 +520,7 @@ extern u8 gRecentCutscene;
 
 void set_camera_shake_from_hit(     s16 shake);
 void set_environmental_camera_shake(s16 shake);
-void set_camera_shake_from_point(   s16 shake, f32 posX, f32 posY, f32 posZ);
+void set_camera_shake_from_point(   s16 shake, Vec3f pos);
 void move_mario_head_c_up( UNUSED struct Camera *c);
 void transition_next_state(UNUSED struct Camera *c,           s16 frames);
 void set_camera_mode(             struct Camera *c, s16 mode, s16 frames);
@@ -546,7 +546,7 @@ void rotate_in_yz(Vec3f dst, Vec3f src, Angle pitch);
 void set_camera_pitch_shake(s16 mag, s16 decay, s16 inc);
 void set_camera_yaw_shake(  s16 mag, s16 decay, s16 inc);
 void set_camera_roll_shake( s16 mag, s16 decay, s16 inc);
-void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, f32 posX, f32 posY, f32 posZ);
+void set_pitch_shake_from_point(s16 mag, s16 decay, s16 inc, f32 maxDist, Vec3f pos);
 void shake_camera_pitch(Vec3f pos, Vec3f focus);
 void shake_camera_yaw(  Vec3f pos, Vec3f focus);
 void shake_camera_roll(Angle *roll);
@@ -564,7 +564,7 @@ s32  radial_camera_input(           struct Camera *c, UNUSED f32 unused);
 void handle_c_button_movement(      struct Camera *c);
 void start_cutscene(                struct Camera *c, u8 cutscene);
 u8   get_cutscene_from_mario_status(struct Camera *c);
-void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ);
+void warp_camera(Vec3f displacement);
 void approach_camera_height(        struct Camera *c, f32 goal, f32 inc);
 void offset_rotated(Vec3f dst, Vec3f from, Vec3f to, Vec3a rotation);
 Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, Vec3f oldPos, Vec3f oldFoc, Angle yaw);
@@ -583,7 +583,7 @@ void set_fov_shake(s16 amplitude, s16 decay, s16 shakeSpeed);
 
 void set_fov_function(u8 func);
 void cutscene_set_fov_shake_preset(  u8 preset);
-void set_fov_shake_from_point_preset(u8 preset, f32 posX, f32 posY, f32 posZ);
+void set_fov_shake_from_point_preset(u8 preset, Vec3f pos);
 void obj_rotate_towards_point(struct Object *o, Vec3f point, Angle pitchOff, Angle yawOff, Angle pitchDiv, Angle yawDiv);
 
 Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context);

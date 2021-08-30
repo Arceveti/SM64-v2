@@ -2009,7 +2009,7 @@ Bool32 mario_is_within_rectangle(s16 minX, s16 maxX, s16 minZ, s16 maxZ) {
 }
 
 void cur_obj_shake_screen(s32 shake) {
-    set_camera_shake_from_point(shake, o->oPosX, o->oPosY, o->oPosZ);
+    set_camera_shake_from_point(shake, &o->oPosVec);
 }
 
 Bool32 obj_attack_collided_from_other_object(struct Object *obj) {

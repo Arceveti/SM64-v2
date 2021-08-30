@@ -251,7 +251,7 @@ void bhv_big_bully_with_minions_loop(void) {
             if ((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED) o->oAction = BULLY_ACT_PATROL;
             if (collisionFlags == OBJ_COL_FLAG_GROUNDED) {
                 cur_obj_play_sound_2(SOUND_OBJ_THWOMP);
-                set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
+                set_camera_shake_from_point(SHAKE_POS_SMALL, &o->oPosVec);
                 spawn_mist_particles();
             }
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;

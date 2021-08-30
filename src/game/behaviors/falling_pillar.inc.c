@@ -87,7 +87,7 @@ void bhv_falling_pillar_loop(void) {
                 o->oPosX += (sins(o->oFaceAngleYaw) * 500.0f);
                 o->oPosZ += (coss(o->oFaceAngleYaw) * 500.0f);
                 // Make the camera shake and spawn dust clouds.
-                set_camera_shake_from_point(SHAKE_POS_MEDIUM, o->oPosX, o->oPosY, o->oPosZ);
+                set_camera_shake_from_point(SHAKE_POS_MEDIUM, &o->oPosVec);
                 spawn_mist_particles_variable(0, 0, 92.0f);
                 // Go invisible.
                 o->activeFlags = ACTIVE_FLAG_DEACTIVATED;

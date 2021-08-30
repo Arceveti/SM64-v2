@@ -104,7 +104,7 @@ void bhv_bowling_ball_loop(void) {
             bhv_bowling_ball_roll_loop();
             break;
     }
-    if (o->oBehParams2ndByte != BBALL_BP_STYPE_THI_SMALL) set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
+    if (o->oBehParams2ndByte != BBALL_BP_STYPE_THI_SMALL) set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, &o->oPosVec);
     set_object_visibility(o, 4000);
 }
 
@@ -154,7 +154,7 @@ void bhv_bob_pit_bowling_ball_loop(void) {
 #endif
     if ((floorGeometry->normalX == 0.0f) && (floorGeometry->normalZ == 0.0f)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();
-    set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
+    set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, &o->oPosVec);
     cur_obj_play_sound_1(SOUND_ENV_BOWLING_BALL_ROLL);
     set_object_visibility(o, 3000);
 }
@@ -172,7 +172,7 @@ void bhv_free_bowling_ball_roll_loop(void) {
     ColFlags collisionFlags = object_step();
     bowling_ball_set_hitbox();
     if (o->oForwardVel > 10.0f) {
-        set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, o->oPosX, o->oPosY, o->oPosZ);
+        set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, &o->oPosVec);
         cur_obj_play_sound_1(SOUND_ENV_BOWLING_BALL_ROLL);
     }
     if (collisionFlags & OBJ_COL_FLAG_GROUNDED) cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1_LOWPRIO);

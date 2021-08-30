@@ -142,7 +142,7 @@ static Bool32 eyerok_hand_check_attacked(void) {
 
 static void eyerok_hand_pound_ground(void) {
     cur_obj_play_sound_2(SOUND_OBJ_POUNDING_LOUD);
-    set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
+    set_camera_shake_from_point(SHAKE_POS_SMALL, &o->oPosVec);
     spawn_mist_from_global();
 }
 

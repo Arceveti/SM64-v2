@@ -95,7 +95,7 @@ static void water_bomb_act_drop(void) {
     // Explode if touched or if hit water
     if ((o->oInteractStatus & INT_STATUS_INTERACTED) || (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER)) {
         create_sound_spawner(SOUND_OBJ_DIVING_IN_WATER);
-        set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
+        set_camera_shake_from_point(SHAKE_POS_SMALL, &o->oPosVec);
         o->oAction = WATER_BOMB_ACT_EXPLODE;
     } else if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         // On impact with the ground, begin getting squished
@@ -106,7 +106,7 @@ static void water_bomb_act_drop(void) {
             } else {
                 create_sound_spawner(SOUND_OBJ_DIVING_IN_WATER);
             }
-            set_camera_shake_from_point(SHAKE_POS_SMALL, o->oPosX, o->oPosY, o->oPosZ);
+            set_camera_shake_from_point(SHAKE_POS_SMALL, &o->oPosVec);
             // Move toward Mario
             o->oMoveAngleYaw          = o->oAngleToMario;
             o->oForwardVel            =  10.0f;
