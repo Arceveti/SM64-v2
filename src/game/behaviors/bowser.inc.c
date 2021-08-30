@@ -1595,43 +1595,12 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
 
 #include "actors/bowser/vtx.h"
 
-void add_hue(ColorRGB color, Color hueAdd, Color s) {
-    Color min = min_3uc(color[0], color[1], color[2]);
-    Color max = max_3uc(color[0], color[1], color[2]);
-    if (min == max) return;
-    f32 hue = 0.0f;
-    if (       max == color[0]) { // red
-        hue = (       (color[1] - color[2]) / (f32)(max - min));
-    } else if (max == color[1]) { // green
-        hue = (2.0f + (color[2] - color[0]) / (f32)(max - min));
-    } else {                      // blue
-        hue = (4.0f + (color[0] - color[1]) / (f32)(max - min));
-    }
-    if (hue < 0.0f) hue += 6.0f;
-    // this is the algorithm to convert from RGB to HSV:
-    Color h  = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
-    Color i  =  (h >> 5);                                         // 0..5
-    Color f  = ((h & 0x1F) << 3);                                 // 'fractional' part of 'i' 0..248 in jumps
-    Color pv = (0xFF -   s                    );                  // pv will be in range 0 - 255
-    Color qv = (0xFF - ((s *         f ) >> 8));
-    Color tv = (0xFF - ((s * (0xFF - f)) >> 8));
-    switch (i) {
-        case 0: color[0] = 0xFF; color[1] =   tv; color[2] =   pv; break;
-        case 1: color[0] =   qv; color[1] = 0xFF; color[2] =   pv; break;
-        case 2: color[0] =   pv; color[1] = 0xFF; color[2] =   tv; break;
-        case 3: color[0] =   pv; color[1] =   qv; color[2] = 0xFF; break;
-        case 4: color[0] =   tv; color[1] =   pv; color[2] = 0xFF; break;
-        case 5: color[0] = 0xFF; color[1] =   pv; color[2] =   qv; break;
-    }
-}
-
-
 void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
     Vtx *verts;
     u16 j, i;
     for ((i = 0); (sBowserVertexGroups[i].vertexData != NULL); (i++)) {
         verts = segmented_to_virtual(sBowserVertexGroups[i].vertexData);
-        for ((j = 0); (j < sBowserVertexGroups[i].vertexCount); (j++)) add_hue(verts[j].v.cn, speed, sat);
+        for ((j = 0); (j < sBowserVertexGroups[i].vertexCount); (j++)) colorRGB_add_hue(verts[j].v.cn, speed, sat);
     }
 }
 

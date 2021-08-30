@@ -14,6 +14,7 @@
 #include "dialog_ids.h"
 #include "engine/behavior_script.h"
 #include "engine/graph_node.h"
+#include "engine/colors.h"
 #include "engine/math_util.h"
 #include "engine/surface_collision.h"
 #include "engine/surface_load.h"

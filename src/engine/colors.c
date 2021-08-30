@@ -57,9 +57,7 @@ void rgba16_to_colorRGB(ColorRGB dst, RGBA16 src) {
 }
 
 void rgba16_to_colorRGBA(ColorRGBA dst, RGBA16 src) {
-    dst[0] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_R);
-    dst[1] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_G);
-    dst[2] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_B);
+    rgba16_to_colorRGB(dst, src);
     dst[3] = composite_to_color(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
@@ -94,9 +92,7 @@ void rgba16_to_colorRGBf(ColorRGBf dst, RGBA16 src) {
 }
 
 void rgba16_to_colorRGBAf(ColorRGBAf dst, RGBA16 src) {
-    dst[0] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_R);
-    dst[1] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_G);
-    dst[2] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_B);
+    rgba16_to_colorRGBf(dst, src);
     dst[3] = composite_to_colorf(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
@@ -118,12 +114,39 @@ RGBA16 colorRGBAf_to_rgba16(ColorRGBAf src) {
           | colorf_to_composite(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
 }
 
-// void colorRGB_to_colorHSV(ColorHSV dst, ColorRGB src) {
+void colorRGB_to_colorRGBf(ColorRGBf dst, ColorRGB src) {
+    dst[0] = (src[0] / 255.0f);
+    dst[1] = (src[1] / 255.0f);
+    dst[2] = (src[2] / 255.0f);
+}
 
+void colorRGBA_to_colorRGBAf(ColorRGBf dst, ColorRGB src) {
+    colorRGB_to_colorRGBf(dst, src);
+    dst[3] = (src[3] / 255.0f);
+}
+
+void colorRGBf_to_colorRGB(ColorRGB dst, ColorRGBf src) {
+    dst[0] = (src[0] * 255.0f);
+    dst[1] = (src[1] * 255.0f);
+    dst[2] = (src[2] * 255.0f);
+}
+
+void colorRGBAf_to_colorRGBA(ColorRGBA dst, ColorRGBAf src) {
+    colorRGBf_to_colorRGB(dst, src);
+    dst[3] = (src[3] * 255.0f);
+}
+
+//! TODO:
+// void colorRGB_to_colorHSV(ColorHSV dst, ColorRGB src) {
 // }
 
 // void colorHSV_to_colorRGB(ColorRGB dst, ColorHSV src) {
+// }
 
+// void colorRGBf_to_colorHSVf(ColorHSVf dst, ColorRGBf src) {
+// }
+
+// void colorHSVf_to_colorRGBf(ColorRGBf dst, ColorHSVf src) {
 // }
 
 // rgba16 value
@@ -201,54 +224,46 @@ void generate_metal_texture(ImageTexture *dst, ImageTexture *src) {
 // 1 px dst y = dy px src y
 void copy_partial_image(ImageTexture *dst, ImageTexture *src,
                         s32 dstX,  s32 dstY,  // 16,  0,
-                        u32 dstW,  u32 dstH,  // 32, 32,
-                        u32 dstTW, u32 dstTH, // 64, 32,
+                        s32 dstW,  s32 dstH,  // 32, 32,
+                        s32 dstTW, s32 dstTH, // 64, 32,
                         UNUSED u32 dstFormat, UNUSED u32 dstPixelSize,
                         s32 srcX,  s32 srcY,  //  0,  0,
-                        u32 srcW,  u32 srcH,  // 64, 64,
-                        u32 srcTW, u32 srcTH, // 64, 64,
+                        s32 srcW,  s32 srcH,  // 64, 64,
+                        s32 srcTW, s32 srcTH, // 64, 64,
                         UNUSED u32 srcFormat, UNUSED u32 srcPixelSize) {
-    if (dstX > (s32)dstTW) return;
-    if (dstY > (s32)dstTH) return;
-    if (srcX > (s32)srcTW) return;
-    if (srcY > (s32)srcTH) return;
+    if (dstX > dstTW) return;
+    if (dstY > dstTH) return;
+    if (srcX > srcTW) return;
+    if (srcY > srcTH) return;
     if ((dst == NULL) || (src == NULL)) return;
-    u32 x, y;
-    f32 srcIndex = 0, dstIndex = 0;
+    s32 x, y;
+    s32 srcIndex = 0, dstIndex = 0;
     const u32 srcStartIndex = ((srcY * srcTW) + srcX);
     const u32 dstStartIndex = ((dstY * dstTW) + dstX);
-    const f32 dx = ((f32)srcW) / ((f32)dstW * 2.0f);
-    const f32 dy = ((f32)srcH) / ((f32)dstH * 2.0f);
-    u32 xdx, ydy;
-    u32 dstIndexY, srcIndexY;
-    u32 srcV, dstV;
-    u32 dstColor, dstAlpha;
-    u32 srcColor, srcAlpha;
-    u32 resultColor;
+    const f32 dx = ((srcW) / (dstW * 2.0f));
+    const f32 dy = ((srcH) / (dstH * 2.0f));
+    s32 xdx, ydy;
+    s32 dstIndexY, srcIndexY;
+    ColorF dstColor, srcColor;
+    AlphaF srcAlpha;
     for ((y = 0); (y < dstH); (y++)) {          // loop rows
         if ((dstY + y  ) > dstTH) break;        // bounds check
-        ydy = (y*dy);
+        ydy = (y * dy);
         if ((srcY + ydy) > srcTH) break;        // bounds check
         srcIndexY = (srcStartIndex + (ydy * srcTW));
         dstIndexY = (dstStartIndex + (y   * dstTW));
         for ((x = 0); (x < dstW); (x++)) {      // loop columns
-            if (dstX + x > dstTW) break;        // bounds check
+            if ((dstX + x) > dstTW) break;        // bounds check
             xdx = (x * dx);
             if ((srcX + xdx) > srcTW) break;    // bounds check
             srcIndex = (srcIndexY + xdx);
             dstIndex = (dstIndexY + x  );
-            dstV = dst[(s32)dstIndex];
-            srcV = src[(s32)srcIndex];
-            // 0001 11111
-            dstAlpha = ((dstV & 0x1) ? 0x1F : 0x0);
-            if (dstAlpha == 0x0) continue;
-            srcAlpha = (IA8_A(srcV) << 0x1);
-            if (srcAlpha == 0x0) continue;
-            dstColor = rgba16_get_average_color(dstV);
-            srcColor = (IA8_I(srcV) << 0x1);
+            srcAlpha = composite_to_colorf(src[srcIndex], MSK_IA8_C, IDX_IA8_A);
+            if (srcAlpha == 0.0f) continue;
+            srcColor = composite_to_colorf(src[srcIndex], MSK_IA8_C, IDX_IA8_I);
+            dstColor = composite_to_colorf(dst[dstIndex], MSK_RGBA16_C, IDX_RGBA16_B);
             if (srcColor == dstColor) continue;
-            resultColor        = ((srcColor * srcAlpha / 0x1F) + (dstColor * dstAlpha * (0x1F - srcAlpha) / (0x3C1)));
-            dst[(s32)dstIndex] = rgba16_set_grayscale(resultColor, 1);
+            dst[dstIndex] = rgba16_set_grayscale(colorf_to_composite(((srcColor * srcAlpha) + (dstColor * (1.0f - srcAlpha))), MSK_RGBA16_C, 0), 1);
         }
     }
 }
@@ -267,5 +282,35 @@ void overlay_i8_on_rgba16_additive(ImageTexture *dst, ImageTexture *src, u32 wid
                                 (RGBA16_G(dstVal) + srcI),
                                 (RGBA16_B(dstVal) + srcI), 0x1);
         }
+    }
+}
+
+void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s) {
+    Color min = min_3uc(color[0], color[1], color[2]);
+    Color max = max_3uc(color[0], color[1], color[2]);
+    if (min == max) return;
+    f32 hue = 0.0f;
+    if (       max == color[0]) { // red
+        hue = (       (color[1] - color[2]) / (f32)(max - min));
+    } else if (max == color[1]) { // green
+        hue = (2.0f + (color[2] - color[0]) / (f32)(max - min));
+    } else {                      // blue
+        hue = (4.0f + (color[0] - color[1]) / (f32)(max - min));
+    }
+    if (hue < 0.0f) hue += 6.0f;
+    // this is the algorithm to convert from RGB to HSV:
+    Color h  = (((u8)((hue * (128.0f/3.0f)) + hueAdd) >> 2) * 3); // needs to u8 cycle before multiplying. 0..191
+    Color i  =  (h >> 5);                                         // 0..5
+    Color f  = ((h & 0x1F) << 3);                                 // 'fractional' part of 'i' 0..248 in jumps
+    Color pv = (0xFF -   s                    );                  // pv will be in range 0 - 255
+    Color qv = (0xFF - ((s *         f ) >> 8));
+    Color tv = (0xFF - ((s * (0xFF - f)) >> 8));
+    switch (i) {
+        case 0: color[0] = 0xFF; color[1] =   tv; color[2] =   pv; break;
+        case 1: color[0] =   qv; color[1] = 0xFF; color[2] =   pv; break;
+        case 2: color[0] =   pv; color[1] = 0xFF; color[2] =   tv; break;
+        case 3: color[0] =   pv; color[1] =   qv; color[2] = 0xFF; break;
+        case 4: color[0] =   tv; color[1] =   pv; color[2] = 0xFF; break;
+        case 5: color[0] = 0xFF; color[1] =   pv; color[2] =   qv; break;
     }
 }

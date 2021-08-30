@@ -311,9 +311,9 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
                 }
             }
             size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = (((((ImageTexture)((color[0] / size) + 0.5f) << 0xB) & 0xF800) & 0xFFFF) |
-                                         ((((ImageTexture)((color[1] / size) + 0.5f) << 0x6) &  0x7C0) & 0xFFFF) |
-                                         ((((ImageTexture)((color[2] / size) + 0.5f) << 0x1) &   0x3E) & 0xFFFF) | 0x1);
+            image[(imageH * iy) + ix] = ((R_RGBA16((ImageTexture)((color[0] / size) + 0.5f)) & 0xFFFF) |
+                                         (G_RGBA16((ImageTexture)((color[1] / size) + 0.5f)) & 0xFFFF) |
+                                         (B_RGBA16((ImageTexture)((color[2] / size) + 0.5f)) & 0xFFFF) | 0x1);
         }
     }
     return image;
