@@ -158,6 +158,7 @@ void vec3i_add(                          Vec3i dest, Vec3i a);
 void vec3i_sub(                          Vec3i dest, Vec3i a);
 void vec3s_copy(                         Vec3s dest, Vec3s src);
 void vec3s_set(                          Vec3s dest, s16 x, s16 y, s16 z);
+void vec3s_zero(                         Vec3s v);
 void vec3s_sum(                          Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_diff(                         Vec3s dest, Vec3s a, Vec3s b);
 void vec3s_add(                          Vec3s dest, Vec3s a);

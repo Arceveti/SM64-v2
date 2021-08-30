@@ -358,7 +358,7 @@ void puppycam_check_pause_buttons() {
     }
     if (gPCOptionOpen) {
         if ((abss(gPlayer1Controller->rawStickY) > 60) || (gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD))) {
-            gPCOptionTimer -= 1;
+            gPCOptionTimer--;
             if (gPCOptionTimer <= 0) {
                 if (gPCOptionIndex == 0) {
                     gPCOptionIndex++;
@@ -376,7 +376,7 @@ void puppycam_check_pause_buttons() {
                 }
             }
         } else if ((abss(gPlayer1Controller->rawStickX) > 60) || (gPlayer1Controller->buttonDown & (L_JPAD | R_JPAD))) {
-            gPCOptionTimer -= 1;
+            gPCOptionTimer--;
             if (gPCOptionTimer <= 0) {
                 if (gPCOptionIndex == 0) {
                     gPCOptionIndex++;
@@ -395,8 +395,8 @@ void puppycam_check_pause_buttons() {
             gPCOptionTimer = 0;
             gPCOptionIndex = 0;
         }
-        while (((gPCOptionScroll - gPCOptionSelected) < -3) && (gPCOptionSelected > gPCOptionScroll)) gPCOptionScroll +=1;
-        while (((gPCOptionScroll + gPCOptionSelected) >  0) && (gPCOptionSelected < gPCOptionScroll)) gPCOptionScroll -=1;
+        while (((gPCOptionScroll - gPCOptionSelected) < -3) && (gPCOptionSelected > gPCOptionScroll)) gPCOptionScroll++;
+        while (((gPCOptionScroll + gPCOptionSelected) >  0) && (gPCOptionSelected < gPCOptionScroll)) gPCOptionScroll--;
     }
 }
 

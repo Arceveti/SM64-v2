@@ -27,6 +27,7 @@ enum CourseNum
 #undef DEFINE_COURSES_END
 #undef DEFINE_BONUS_COURSE
 
-#define COURSE_IS_MAIN_COURSE(cmd) ((cmd >= COURSE_MIN) && (cmd <= COURSE_STAGES_MAX))
+#define COURSE_IS_MAIN_COURSE(cmd) (((cmd) >= COURSE_MIN) && ((cmd) <= COURSE_STAGES_MAX))
+#define COURSE_NUM_TO_INDEX(cmd) ((cmd) - 1)
 
 #endif // COURSE_TABLE_H

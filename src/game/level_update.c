@@ -515,7 +515,8 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
         sDelayedWarpOp  = warpOp;
         switch (warpOp) {
             case WARP_OP_DEMO_NEXT:
-            case WARP_OP_DEMO_END: sDelayedWarpTimer = 20; // Must be one line to match on -O2
+            case WARP_OP_DEMO_END:
+                sDelayedWarpTimer = 20;
                 sSourceWarpNodeId = WARP_NODE_F0;
                 gSavedCourseNum   = COURSE_NONE;
                 fadeMusic         = FALSE;

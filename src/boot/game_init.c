@@ -34,7 +34,7 @@
 #if PUPPYPRINT_DEBUG
 #include "game/puppyprint.h"
 #endif
-#include <prevent_bss_reordering.h>
+// #include <prevent_bss_reordering.h>
 #ifdef PUPPYCAM
 #include "game/puppycam2.h"
 #endif
@@ -51,7 +51,7 @@ struct GfxPool *gGfxPool;
 
 // OS Controllers
 OSContStatus gControllerStatuses[4];
-OSContPad gControllerPads[4];
+OSContPad    gControllerPads[4];
 u8    gControllerBits;
 Bool8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
 u8    gBorderHeight;

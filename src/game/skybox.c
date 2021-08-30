@@ -262,12 +262,9 @@ Gfx *init_skybox_display_list(s8 player, s8 background, s8 colorIndex) {
  * @param posX,posY,posZ The camera's position
  * @param focX,focY,focZ The camera's focus.
  */
-Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov,
-                                    f32 posX, f32 posY, f32 posZ,
-                                    f32 focX, f32 focY, f32 focZ) {
-    f32 cameraFaceX = (focX - posX);
-    f32 cameraFaceY = (focY - posY);
-    f32 cameraFaceZ = (focZ - posZ);
+Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov, Vec3f pos, Vec3f foc) {
+    Vec3f cameraFace;
+    vec3f_diff(cameraFace, foc, pos);
     s8  colorIndex  = 1;
     // If the first star is collected in JRB, make the sky darker and slightly green
     if ((background == 8) && !(save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & 0x1)) colorIndex = 0;
@@ -278,8 +275,8 @@ Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov,
     //! the first frame, which causes a floating point divide by 0
     fov = (90.0f);// * (gFieldOfView / 100.0f));
 #endif
-    sSkyBoxInfo[player].yaw           = atan2s(cameraFaceZ, cameraFaceX);
-    sSkyBoxInfo[player].pitch         = atan2s(sqrtf(sqr(cameraFaceX) + sqr(cameraFaceZ)), cameraFaceY);
+    sSkyBoxInfo[player].yaw           = atan2s(cameraFace[2], cameraFace[0]);
+    sSkyBoxInfo[player].pitch         = atan2s(sqrtf(sqr(cameraFace[0]) + sqr(cameraFace[2])), cameraFace[1]);
     sSkyBoxInfo[player].scaledX       = calculate_skybox_scaled_x(player, fov);
     sSkyBoxInfo[player].scaledY       = calculate_skybox_scaled_y(player, fov);
     sSkyBoxInfo[player].upperLeftTile = get_top_left_tile_idx(player);

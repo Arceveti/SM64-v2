@@ -475,6 +475,11 @@ void vec3s_set(Vec3s dest, s16 x, s16 y, s16 z) {
     dest[2] = z;
 }
 
+/// Sets vector 'v' to zero
+void vec3s_zero(Vec3s v) {
+    v[0] = v[1] = v[2] = 0;
+}
+
 /// Make 'dest' the sum of vectors a and b.
 void vec3s_sum(Vec3s dest, Vec3s a, Vec3s b) {
     dest[0] = (a[0] + b[0]);

@@ -1071,7 +1071,7 @@ const Collision wf_seg7_collision_070102D8[] = {
     COL_TRI(  4,   7,   8),
     COL_TRI_STOP(),
     COL_SPECIAL_INIT(12),
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_null_start,   /*pos*/  2560,  256,  5120, /*yaw*/ 64), // unused, probably an early way to set intial position
+    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_null_start,   /*pos*/  2560,  256,  5120, /*yaw*/ 64), // unused, probably an early way to set initial position
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_03, /*pos*/  2304, 2432,  -256, /*yaw*/ 0), // small staircase
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_04, /*pos*/  3405, 1664, -1791, /*yaw*/ 0), // large staircase
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_05, /*pos*/  3840,    0, -2304, /*yaw*/ 0), // platform between sliding platforms 1

@@ -84,7 +84,7 @@ extern f32 gPaintingMarioYEntry;
 #define WDW_MOVTEX_AREA1_WATER                      (0x01 | MOVTEX_AREA_WDW             )
 #define WDW_MOVTEX_AREA2_WATER                      (0x02 | MOVTEX_AREA_WDW             )
 #define JRB_MOVTEX_WATER                            (0x01 | MOVTEX_AREA_JRB             )
-#define JRB_MOVTEX_INTIAL_MIST                      (0x05 | MOVTEX_AREA_JRB             )
+#define JRB_MOVTEX_INITIAL_MIST                      (0x05 | MOVTEX_AREA_JRB             )
 #define JRB_MOVTEX_SINKED_BOAT_WATER                (0x02 | MOVTEX_AREA_JRB             )
 #define THI_MOVTEX_AREA1_WATER                      (0x01 | MOVTEX_AREA_THI             )
 #define THI_MOVTEX_AREA2_WATER                      (0x02 | MOVTEX_AREA_THI             )

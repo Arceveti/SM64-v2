@@ -51,7 +51,7 @@ extern const Collision jrb_seg7_collision_unused_lid[];
 extern const Trajectory jrb_seg7_trajectory_unagi_ship[];
 extern const Trajectory jrb_seg7_trajectory_unagi_cave[];
 extern const struct MovtexQuadCollection jrb_movtex_water[];
-extern const struct MovtexQuadCollection jrb_movtex_intial_mist[];
+extern const struct MovtexQuadCollection jrb_movtex_initial_mist[];
 extern const Gfx jrb_seg7_dl_0700EF00[];
 extern const Gfx jrb_seg7_dl_0700FE48[];
 extern const Gfx jrb_seg7_dl_07010548[];

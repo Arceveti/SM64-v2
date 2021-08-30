@@ -19,7 +19,7 @@
 #include "sm64.h"
 #include "star_select.h"
 #include "text_strings.h"
-#include "prevent_bss_reordering.h"
+// #include "prevent_bss_reordering.h"
 #include "boot/game_init.h"
 
 /**

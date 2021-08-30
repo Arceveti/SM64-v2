@@ -6063,7 +6063,7 @@ const Gfx mario_right_hand_cap_wings_half_2_dl[] = {
 };
 
 // 0x0401B0E0 - 0x0401B138
-const Gfx mario_right_hand_cap_wings_intial_dl[] = {
+const Gfx mario_right_hand_cap_wings_initial_dl[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBFADEA, G_CC_MODULATERGBFADEA),
     gsSPClearGeometryMode(G_CULL_BACK | G_SHADING_SMOOTH),
@@ -6107,7 +6107,7 @@ const Gfx mario_right_hand_cap[] = {
 
 // 0x0401B1D8 - 0x0401B230
 const Gfx mario_right_hand_cap_wings[] = {
-    gsSPDisplayList(mario_right_hand_cap_wings_intial_dl),
+    gsSPDisplayList(mario_right_hand_cap_wings_initial_dl),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mario_texture_wings_half_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -6135,7 +6135,7 @@ const Gfx mario_metal_right_hand_cap_shared_dl[] = {
 
 // 0x0401B278 - 0x0401B2D0
 const Gfx mario_metal_right_hand_cap_shared_dl_wings[] = {
-    gsSPDisplayList(mario_right_hand_cap_wings_intial_dl),
+    gsSPDisplayList(mario_right_hand_cap_wings_initial_dl),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, mario_texture_metal_wings_half_1),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),

@@ -449,7 +449,7 @@ extern u8 sl_movtex_water[];
 extern u8 wdw_movtex_area1_water[];
 extern u8 wdw_movtex_area2_water[];
 extern u8 jrb_movtex_water[];
-extern u8 jrb_movtex_intial_mist[];
+extern u8 jrb_movtex_initial_mist[];
 extern u8 jrb_movtex_sinked_boat_water[];
 extern u8 thi_movtex_area1_water[];
 extern u8 thi_movtex_area2_water[];
@@ -479,7 +479,7 @@ void *get_quad_collection_from_id(u32 id) {
         case WDW_MOVTEX_AREA1_WATER:                    return wdw_movtex_area1_water;
         case WDW_MOVTEX_AREA2_WATER:                    return wdw_movtex_area2_water;
         case JRB_MOVTEX_WATER:                          return jrb_movtex_water;
-        case JRB_MOVTEX_INTIAL_MIST:                    return jrb_movtex_intial_mist;
+        case JRB_MOVTEX_INITIAL_MIST:                    return jrb_movtex_initial_mist;
         case JRB_MOVTEX_SINKED_BOAT_WATER:              return jrb_movtex_sinked_boat_water;
         case THI_MOVTEX_AREA1_WATER:                    return thi_movtex_area1_water;
         case THI_MOVTEX_AREA2_WATER:                    return thi_movtex_area2_water;
@@ -502,7 +502,7 @@ void movtex_change_texture_format(u32 quadCollectionId, Gfx **gfx) {
     switch (quadCollectionId) {
         case HMC_MOVTEX_TOXIC_MAZE_MIST:       gSPDisplayList((*gfx)++, dl_waterbox_ia16_begin  ); break;
         case SSL_MOVTEX_TOXBOX_QUICKSAND_MIST: gSPDisplayList((*gfx)++, dl_waterbox_ia16_begin  ); break;
-        case JRB_MOVTEX_INTIAL_MIST:           gSPDisplayList((*gfx)++, dl_waterbox_ia16_begin  ); break;
+        case JRB_MOVTEX_INITIAL_MIST:           gSPDisplayList((*gfx)++, dl_waterbox_ia16_begin  ); break;
         default:                               gSPDisplayList((*gfx)++, dl_waterbox_rgba16_begin); break;
     }
 }
@@ -533,7 +533,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
             gfx = gfxHead;
         }
         asGenerated = (struct GraphNodeGenerated *) node;
-        if (asGenerated->parameter == JRB_MOVTEX_INTIAL_MIST) {
+        if (asGenerated->parameter == JRB_MOVTEX_INITIAL_MIST) {
             if (gLakituState.goalPos[1] < 1024.0f) return NULL; // if camera under water
             if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 0x1) return NULL; // first star in JRB complete
         } else if (asGenerated->parameter == HMC_MOVTEX_TOXIC_MAZE_MIST) {
