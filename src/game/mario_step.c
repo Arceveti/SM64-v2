@@ -325,8 +325,8 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
          && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
          && analog_stick_held_back(m, 0x471C)) return GROUND_STEP_NONE;
 #endif
-        // If the next position would squish Mario, stop moving
-        if ((nextPos[1] + m->marioObj->hitboxHeight) >= ceilHeight) return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
+        // If Mario walks into a ceiling, fall down or stop moving
+        if ((nextPos[1] + m->marioObj->hitboxHeight) >= ceilHeight) return ((nextPos[1] > floorHeight) ? GROUND_STEP_LEFT_GROUND : GROUND_STEP_HIT_WALL_STOP_QSTEPS);
         // Set Mario's position and floor
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
