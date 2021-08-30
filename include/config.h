@@ -376,8 +376,12 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
+// Mario's eye height for the camera
+// Vanilla is 125.0f
+#define CAMERA_Y_OFFSET 125.0f
+
 // Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the dpad (HackerSM64)
-#define PARALLEL_LAKITU_CAM
+// #define PARALLEL_LAKITU_CAM
 
 // Remove course specific camera processing (HackerSM64)
 #define CAMERA_FIX
@@ -634,10 +638,7 @@
 #define MARIO_HALF_HITBOX_HEIGHT    (MARIO_HITBOX_HEIGHT / 2.0f)
 
 // Mario's hitbox height when in certain actions, such as crouching
-
 #define MARIO_SHORT_HITBOX_HEIGHT   100.0f
-// Mario's eye level for the camera
-#define MARIO_EYE_LEVEL             100.0f
 
 #define MARIO_HANGING_HITBOX_HEIGHT (MARIO_HITBOX_HEIGHT - 16.0f)
 

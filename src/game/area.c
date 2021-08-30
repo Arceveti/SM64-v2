@@ -370,7 +370,7 @@ void render_screen_overlay(void) {
 #ifdef PUPPYCAM
     f32 camHeight      = ((80.0f * coss(gPuppyCam.pitch)) + 125.0f);
 #else
-    f32 camHeight      = (-(gLakituState.oldPitch / 90.0f) + 125.0f);
+    f32 camHeight      = (-(gLakituState.oldAngle[0] / 90.0f) + 125.0f);
 #endif
     f32 waterLevel     = (find_water_level(     gLakituState.pos[0], gLakituState.pos[2]) + camHeight);
     f32 gasLevel       = (find_poison_gas_level(gLakituState.pos[0], gLakituState.pos[2]) + camHeight);

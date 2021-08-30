@@ -680,7 +680,7 @@ static void puppycam_view_panning(void) {
                 panFloor = gPuppyCam.targetObj->oPosY;
                 gPuppyCam.edgePitch = approach_s32(gPuppyCam.edgePitch, -DEG(45),  0x80,  0x80);
             } else {
-                gPuppyCam.edgePitch = approach_s32(gPuppyCam.edgePitch,            0, 0x100, 0x100);
+                gPuppyCam.edgePitch = approach_s32(gPuppyCam.edgePitch,      0x0, 0x100, 0x100);
             }
             gPuppyCam.pan[1] = approach_f32_asymptotic(gPuppyCam.pan[1], (panFloor - height), 0.025f);
         } else {
@@ -693,8 +693,8 @@ static void puppycam_view_panning(void) {
 
 void puppycam_terrain_angle(void) {
     f32 adjustSpeed;
-    s32 floor2 = find_floor_height(  gPuppyCam.pos[0], (gPuppyCam.pos[1] + MARIO_EYE_LEVEL), gPuppyCam.pos[2]);
-    s32 ceil   = 20000; // find_ceil(gPuppyCam.pos[0], (gPuppyCam.pos[1] + MARIO_EYE_LEVEL), gPuppyCam.pos[2]);
+    s32 floor2 = find_floor_height(  gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100.0f), gPuppyCam.pos[2]);
+    s32 ceil   = 20000; // find_ceil(gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100.0f), gPuppyCam.pos[2]);
     s32 farFromSurface;
     Angle floorPitch;
     s32 gotTheOkay = FALSE;
@@ -833,7 +833,15 @@ void puppycam_projection_behaviours(void) {
             if ((gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_INPUT_4DIR) && (gPuppyCam.yawTarget % DEG(90))) gPuppyCam.yawTarget += (DEG(90) - (gPuppyCam.yawTarget % DEG(90)));
         }
         // This is the base floor height when stood on the ground. It's used to set a baseline for where the camera sits while Mario remains a height from this point, so it keeps a consistent motion.
+#if COYOTE_TIME > 0
+        if ((gPuppyCam.targetObj != gMarioObject) || (gMarioState->coyoteTimer == 0)) {
+            gPuppyCam.targetFloorHeight = CLAMP(find_floor_height(gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP);
+        } else {
+            gPuppyCam.targetFloorHeight = gPuppyCam.lastTargetFloorHeight;
+        }
+#else
         gPuppyCam.targetFloorHeight = CLAMP(find_floor_height(gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP);
+#endif
         /* //! if (gMarioState->vel[1] <= 0.0f) */ gPuppyCam.lastTargetFloorHeight = CLAMP(approach_f32_asymptotic(gPuppyCam.lastTargetFloorHeight, gPuppyCam.targetFloorHeight, 0.1f), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), (gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP));
         if ((gMarioState->action == ACT_SLEEPING) || (gMarioState->action == ACT_START_SLEEPING)) {
             gPuppyCam.zoom = approach_f32_asymptotic(gPuppyCam.zoom,gPuppyCam.zoomPoints[0], 0.01f);
@@ -1064,14 +1072,14 @@ static void puppycam_apply(void) {
     vec3s_to_vec3f(gLakituState.curFocus,  gPuppyCam.focus);
     vec3s_to_vec3f(gCamera->focus,         gPuppyCam.focus);
     vec3s_to_vec3f(sOldFocus,              gPuppyCam.focus);
-    gCamera->yaw         = gPuppyCam.yaw;
-    gCamera->nextYaw     = gPuppyCam.yaw;
-    gLakituState.yaw     = gPuppyCam.yaw;
-    gLakituState.nextYaw = gPuppyCam.yaw;
-    gLakituState.oldYaw  = gPuppyCam.yaw;
-    gLakituState.mode    = gCamera->mode;
-    gLakituState.defMode = gCamera->defMode;
-    gLakituState.roll    = approach_s32(gLakituState.roll, 0, 0x80, 0x80);
+    gCamera->yaw             = gPuppyCam.yaw;
+    gCamera->nextYaw         = gPuppyCam.yaw;
+    gLakituState.yaw         = gPuppyCam.yaw;
+    gLakituState.nextYaw     = gPuppyCam.yaw;
+    gLakituState.oldAngle[1] = gPuppyCam.yaw;
+    gLakituState.mode        = gCamera->mode;
+    gLakituState.defMode     = gCamera->defMode;
+    gLakituState.roll        = approach_s32(gLakituState.roll, 0, 0x80, 0x80);
     // Commented out simply because vanilla SM64 has this always set sometimes, and relies on certain camera modes to apply secondary foci.
     // Uncomment to have fun with certain angles.
     // gPuppyCam.targetObj2 = ((gSecondCameraFocus != NULL) ? gSecondCameraFocus : NULL);

@@ -259,14 +259,10 @@ struct CameraTrigger
     /// A function that gets called while Mario is in the trigger bounds
     CameraEvent event;
     // The (x,y,z) position of the center of the bounding box
-    s16 centerX;
-    s16 centerY;
-    s16 centerZ;
+    Vec3s center;
     // The max displacement in x, y, and z from the center for a point to be considered inside the
     // bounding box
-    s16 boundsX;
-    s16 boundsY;
-    s16 boundsZ;
+    Vec3s bounds;
     /// This angle rotates Mario's offset from the box's origin, before it is checked for being inside.
     Angle boundsYaw;
 };
@@ -447,9 +443,11 @@ struct LakituState
     /*0x3E*/ u8 filler3E[10];
 
     /*0x48*/ f32 focusDistance; // unused
-    /*0x4C*/ Angle oldPitch;    // unused
-    /*0x4E*/ Angle oldYaw;      // unused
-    /*0x50*/ Angle oldRoll;     // unused
+
+    /*0x4C*/ Vec3a oldAngle;
+    // /*0x4C*/ Angle oldPitch;    // unused
+    // /*0x4E*/ Angle oldYaw;      // unused
+    // /*0x50*/ Angle oldRoll;     // unused
 
     /// The angular offsets added to lakitu's pitch, yaw, and roll
     /*0x52*/ Vec3s shakeMagnitude;
