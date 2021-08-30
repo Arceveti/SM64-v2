@@ -9,7 +9,7 @@
 #include "interaction.h"
 #include "engine/math_util.h"
 #include "rumble_init.h"
-#ifdef LENIENT_BOWSER_THROWS
+#if defined(BOWSER_BOMB_FOCUS) || defined(LENIENT_BOWSER_THROWS)
 #include "object_helpers.h"
 #include "behavior_data.h"
 #include "camera.h"
@@ -184,6 +184,9 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 }
 
 Bool32 act_picking_up_bowser(struct MarioState *m) {
+#ifdef CENTERED_COLLISION
+    if (m->pos[1] > m->floorHeight) m->pos[1] = m->floorHeight;
+#endif
     if (m->actionState == 0) {
         m->actionState             = 1;
         m->angleVel[1]             = 0x0;
@@ -203,7 +206,7 @@ Bool32 act_picking_up_bowser(struct MarioState *m) {
 Bool32 act_holding_bowser(struct MarioState *m) {
     Bool8 spinningFast = ((m->angleVel[1] <= -0xE00) || (m->angleVel[1] >= 0xE00));
     Angle spin;
-#ifdef LENIENT_BOWSER_THROWS
+#if defined(BOWSER_BOMB_FOCUS) || defined(LENIENT_BOWSER_THROWS)
 #ifndef PUPPYCAM
     if (m->input & INPUT_B_PRESSED) {
 #endif
@@ -215,10 +218,14 @@ Bool32 act_holding_bowser(struct MarioState *m) {
 #endif
         struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, &camAngleToBomb);
 #ifdef PUPPYCAM
+#ifdef BOWSER_BOMB_FOCUS
         if (bowserBomb != NULL) approach_s16_asymptotic_bool(&gPuppyCam.yawTarget, (camAngleToBomb + DEG(180)), 0x10);
+#endif
     if (m->input & INPUT_B_PRESSED) {
 #endif
+#ifdef LENIENT_BOWSER_THROWS
         if ((bowserBomb != NULL) && spinningFast && (abs_angle_diff(m->faceAngle[1], camYaw) < DEG(90))) m->faceAngle[1] = mario_obj_angle_to_object(m, bowserBomb);
+#endif
 #else
     if (m->input & INPUT_B_PRESSED) {
 #endif

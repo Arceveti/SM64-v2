@@ -385,6 +385,11 @@
 // Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified. (FazanaJ, HackerSM64)
 #define PUPPYCAM
 
+// The camera will center on the bomb you're looking at while spinning Bowser
+// Requires PUPPYCAM
+// (Arceveti)
+#define BOWSER_BOMB_FOCUS
+
 // Slightly modified version of Reonu Cam 3 (Reonu)
 // #define REONU_CAM_3
 
@@ -475,7 +480,6 @@
 #define PENGUIN_MOTHER_SAD_EYES
 
 // Makes bowser throws more lenient
-// If PUPPYCAM is enabled, the camera will center on the bomb you're looking at
 // (Arceveti)
 #define LENIENT_BOWSER_THROWS
 
