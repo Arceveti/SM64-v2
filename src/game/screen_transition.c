@@ -4,6 +4,7 @@
 #include "area.h"
 #include "camera.h"
 #include "engine/graph_node.h"
+#include "engine/colors.h"
 #include "engine/math_util.h"
 #include "boot/game_init.h"
 #include "geo_misc.h"
@@ -36,14 +37,13 @@ Alpha set_transition_color_fade_alpha(s8 fadeOut, s8 fadeTimer, u8 transTime) {
 
 Vtx *vertex_transition_color(struct WarpTransitionData *transData, Alpha alpha) {
     Vtx *verts = alloc_display_list(4 * sizeof(*verts));
-    Color r    = transData->red;
-    Color g    = transData->green;
-    Color b    = transData->blue;
+    ColorRGB color;
+    colorRGB_copy(color, transData->color);
     if (verts != NULL) {
-        make_vertex(verts, 0, GFX_DIMENSIONS_FROM_LEFT_EDGE (0),             0, -1, 0, 0, r, g, b, alpha);
-        make_vertex(verts, 1, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0),             0, -1, 0, 0, r, g, b, alpha);
-        make_vertex(verts, 2, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT, -1, 0, 0, r, g, b, alpha);
-        make_vertex(verts, 3, GFX_DIMENSIONS_FROM_LEFT_EDGE (0), SCREEN_HEIGHT, -1, 0, 0, r, g, b, alpha);
+        make_vertex(verts, 0, GFX_DIMENSIONS_FROM_LEFT_EDGE (0),             0, -1, 0, 0, color[0], color[1], color[2], alpha);
+        make_vertex(verts, 1, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0),             0, -1, 0, 0, color[0], color[1], color[2], alpha);
+        make_vertex(verts, 2, GFX_DIMENSIONS_FROM_RIGHT_EDGE(0), SCREEN_HEIGHT, -1, 0, 0, color[0], color[1], color[2], alpha);
+        make_vertex(verts, 3, GFX_DIMENSIONS_FROM_LEFT_EDGE (0), SCREEN_HEIGHT, -1, 0, 0, color[0], color[1], color[2], alpha);
     }
     return verts;
 }
@@ -103,15 +103,14 @@ s16 center_tex_transition_y(struct WarpTransitionData *transData, f32 texTransTi
 }
 
 void make_tex_transition_vertex(Vtx *verts, s32 n, s8 fadeTimer, struct WarpTransitionData *transData, s16 centerTransX, s16 centerTransY, s16 texRadius1, s16 texRadius2, TextureCoord tx, TextureCoord ty) {
-    Color r       = transData->red;
-    Color g       = transData->green;
-    Color b       = transData->blue;
+    ColorRGB color;
+    colorRGB_copy(color, transData->color);
     u16 zeroTimer = sTransitionTextureFadeCount[fadeTimer];
     f32 centerX   = ((texRadius1 * coss(zeroTimer)) - (texRadius2 * sins(zeroTimer)) + centerTransX);
     f32 centerY   = ((texRadius1 * sins(zeroTimer)) + (texRadius2 * coss(zeroTimer)) + centerTransY);
     s16 x         = round_float_to_short(centerX);
     s16 y         = round_float_to_short(centerY);
-    make_vertex(verts, n, x, y, -1, (tx * 32), (ty * 32), r, g, b, 255);
+    make_vertex(verts, n, x, y, -1, (tx * 32), (ty * 32), color[0], color[1], color[2], 255);
 }
 
 void load_tex_transition_vertex(Vtx *verts, s8 fadeTimer, struct WarpTransitionData *transData,
@@ -201,7 +200,7 @@ Gfx *render_cannon_circle_base(void) {
     Gfx *dlist = alloc_display_list(16 * sizeof(*dlist));
 #endif
     Gfx *g = dlist;
-    if (verts != NULL && dlist != NULL) {
+    if ((verts != NULL) && (dlist != NULL)) {
         make_vertex(verts, 0,            0,             0, -1, -1152, 1824, 0, 0, 0, 255);
         make_vertex(verts, 1, SCREEN_WIDTH,             0, -1,  1152, 1824, 0, 0, 0, 255);
         make_vertex(verts, 2, SCREEN_WIDTH, SCREEN_HEIGHT, -1,  1152,  192, 0, 0, 0, 255);

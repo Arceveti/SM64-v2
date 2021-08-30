@@ -513,10 +513,14 @@
 #define COLLISION_DATA_TYPE s16
 #define ROOM_DATA_TYPE      u8
 
+// Check for floors/ceilings from halfway up Mario's hitbox rather than from the bottom
+// (Arceveti)
+#define CENTERED_COLLISION
+
 // Platform displacement 2 also known as momentum patch.
 // Makes Mario keep the momemtum from moving platforms.
 // Doesn't break treadmills anymore!
-// (HackerSM64)
+// (Arthurtilly, HackerSM64)
 #define PLATFORM_DISPLACEMENT_2
 
 // Allow all surfaces types to have force.
@@ -795,8 +799,6 @@
  * -- Experimental/Unfinished Settingss --                                                                                      *
  *                                                                                                                              *
  ********************************************************************************************************************************/
-
-#define CENTERED_COLLISION
 
 // Platform Displacement 2 for objects other than Mario & Bowser
 //! Moves or doesn't move certain objects at the wrong times, such as amps, boos, and coins

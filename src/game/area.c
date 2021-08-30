@@ -10,6 +10,7 @@
 #include "object_list_processor.h"
 #include "engine/math_util.h"
 #include "engine/surface_load.h"
+#include "engine/colors.h"
 #include "ingame_menu.h"
 #include "screen_transition.h"
 #include "mario.h"
@@ -95,15 +96,15 @@ const char *gNoControllerMsg[] = {
 #endif
 
 void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
-    ImageTexture sp6 = (((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 0x1);
-    gFBSetColor       = ((sp6 << 16) | sp6);
+    RGBA16 color = (((c >> 3) << IDX_RGBA16_R) | ((d >> 3) << IDX_RGBA16_G) | ((e >> 3) << IDX_RGBA16_B) | MSK_RGBA16_A);
+    gFBSetColor       = ((color << 16) | color);
     gViewportOverride = a;
     gViewportClip     = b;
 }
 
 void set_warp_transition_rgb(Color red, Color green, Color blue) {
-    ImageTexture warpTransitionRGBA16 = (((red >> 3) << 11) | ((green >> 3) << 6) | ((blue >> 3) << 1) | 0x1);
-    gWarpTransFBSetColor = ((warpTransitionRGBA16 << 16) | warpTransitionRGBA16);
+    RGBA16 color = (((red >> 3) << IDX_RGBA16_R) | ((green >> 3) << IDX_RGBA16_G) | ((blue >> 3) << IDX_RGBA16_B) | MSK_RGBA16_A);
+    gWarpTransFBSetColor = ((color << 16) | color);
     gWarpTransRed   = red;
     gWarpTransGreen = green;
     gWarpTransBlue  = blue;
@@ -134,13 +135,13 @@ void print_intro_text(void) {
 u32 get_mario_spawn_type(struct Object *o) {
     s32 i;
     const BehaviorScript *behavior = virtual_to_segmented(0x13, o->behavior);
-    for (i = 0; i < 20; i++) if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
+    for ((i = 0); (i < 20); (i++)) if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
     return MARIO_SPAWN_NONE;
 }
 
 struct ObjectWarpNode *area_get_warp_node(u8 id) {
     struct ObjectWarpNode *node = NULL;
-    for (node = gCurrentArea->warpNodes; node != NULL; node = node->next) if (node->node.id == id) break;
+    for ((node = gCurrentArea->warpNodes); (node != NULL); (node = node->next)) if (node->node.id == id) break;
     return node;
 }
 
@@ -154,7 +155,7 @@ void load_obj_warp_nodes(void) {
     struct Object         *children = (struct Object *) gObjParentGraphNode.children;
     do {
         struct Object *obj = children;
-        if (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED && get_mario_spawn_type(obj) != 0) {
+        if ((obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (get_mario_spawn_type(obj) != 0)) {
             warpNode = area_get_warp_node_from_params(obj);
             if (warpNode != NULL) warpNode->object = obj;
         }
@@ -167,7 +168,7 @@ void clear_areas(void) {
     gWarpTransition.isActive       = FALSE;
     gWarpTransition.pauseRendering = FALSE;
     gMarioSpawnInfo->areaIndex     = -1;
-    for (i = 0; i < 8; i++) {
+    for ((i = 0); (i < 8); (i++)) {
         gAreaData[i].index             = i;
         gAreaData[i].flags             = 0;
         gAreaData[i].terrainType       = 0;
@@ -197,7 +198,7 @@ void clear_area_graph_nodes(void) {
         gCurrentArea             = NULL;
         gWarpTransition.isActive = FALSE;
     }
-    for (i = 0; i < 8; i++) {
+    for ((i = 0); (i < 8); (i++)) {
         if (gAreaData[i].graphNode != NULL) {
             geo_call_global_function_nodes(&gAreaData[i].graphNode->node, GEO_CONTEXT_AREA_INIT);
             gAreaData[i].graphNode = NULL;
@@ -272,19 +273,15 @@ void play_transition(s16 transType, s16 time, Color red, Color green, Color blue
     gWarpTransition.time           = time;
     gWarpTransition.pauseRendering = FALSE;
     // The lowest bit of transType determines if the transition is fading in or out.
-    if (transType & 1) {
+    if (transType & 0x1) {
         set_warp_transition_rgb(red, green, blue);
     } else {
         red = gWarpTransRed, green = gWarpTransGreen, blue = gWarpTransBlue;
     }
     if (transType < 8) { // if transition is RGB
-        gWarpTransition.data.red   = red;
-        gWarpTransition.data.green = green;
-        gWarpTransition.data.blue  = blue;
+        colorRGB_set(gWarpTransition.data.color, red, green, blue);
     } else { // if transition is textured
-        gWarpTransition.data.red   = red;
-        gWarpTransition.data.green = green;
-        gWarpTransition.data.blue  = blue;
+        colorRGB_set(gWarpTransition.data.color, red, green, blue);
         // Both the start and end textured transition are always located in the middle of the screen.
         // If you really wanted to, you could place the start at one corner and the end at
         // the opposite corner. This will make the transition image look like it is moving
@@ -335,7 +332,7 @@ const Gfx dl_draw_screen_shade_box[] = {
     gsSPEndDisplayList(),
 };
 
-void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
+void shade_screen_color(ColorRGBA color) {
     create_dl_translation_matrix(G_MTX_PUSH, GFX_DIMENSIONS_FROM_LEFT_EDGE(0), SCREEN_HEIGHT, 0);
     // This is a bit weird. It reuses the dialog text box (width 130, height -80),
     // so scale to at least fit the screen.
@@ -344,7 +341,7 @@ void shade_screen_color(u32 r, u32 g, u32 b, u32 a) {
 #else
     create_dl_scale_matrix(G_MTX_NOPUSH, ((GFX_DIMENSIONS_ASPECT_RATIO * SCREEN_HEIGHT) / 130.0f), 3.0f, 1.0f);
 #endif
-    gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
+    gDPSetEnvColor(gDisplayListHead++, color[0], color[1], color[2], color[3]);
     gSPDisplayList(gDisplayListHead++, dl_draw_screen_shade_box);
     gSPPopMatrix(  gDisplayListHead++, G_MTX_MODELVIEW);
 }
@@ -366,16 +363,8 @@ static const ColorRGB    snowOverlayColor = { 255, 255, 255};
 static const ColorRGB    darkOverlayColor = {   0,   0,   0};
 #endif
 
-//! find a better place for this?
-/// Copy ColorRGB vector src to dest
-void vec_rgb_copy(ColorRGB dest, const ColorRGB src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
-}
-
 void render_screen_overlay(void) {
-    if (gMarioState->area == NULL || gMarioObject == NULL) return;
+    if ((gMarioState->area == NULL) || (gMarioObject == NULL)) return;
 #ifdef ENVIRONMENT_SCREEN_TINT
     ColorRGBA colorEnv = {0, 0, 0, 0};
 #ifdef PUPPYCAM
@@ -391,14 +380,14 @@ void render_screen_overlay(void) {
     camHeight          = gLakituState.pos[1];
 #endif
     if (camHeight < waterLevel) {
-        if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv, waterOverlayColor);
+        if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) colorRGB_copy(colorEnv, waterOverlayColor);
     } else if (camHeight < gasLevel) {
-        if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) vec_rgb_copy(colorEnv,   gasOverlayColor);
+        if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) colorRGB_copy(colorEnv,   gasOverlayColor);
     } else if (gMarioState->action == ACT_QUICKSAND_DEATH) {
-        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) vec_rgb_copy(colorEnv, sandOverlayColor);
+        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) colorRGB_copy(colorEnv, sandOverlayColor);
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
-        if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) vec_rgb_copy(colorEnv, lavaOverlayColor);
+        if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) colorRGB_copy(colorEnv, lavaOverlayColor);
 #endif 
     }
 #endif
@@ -409,7 +398,7 @@ void render_screen_overlay(void) {
     } else if (gMarioState->hurtShadeAlpha >= 4) {
         gMarioState->hurtShadeAlpha -= 4;
     }
-    if ((damageColor[3] = gMarioState->hurtShadeAlpha) > 0) vec_rgb_copy(damageColor, (mario_is_shocked(gMarioState) ? shockedOverlayColor : damageOverlayColor));
+    if ((damageColor[3] = gMarioState->hurtShadeAlpha) > 0) colorRGB_copy(damageColor, (mario_is_shocked(gMarioState) ? shockedOverlayColor : damageOverlayColor));
 #endif
 #if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
     ColorRGBA color;
@@ -417,12 +406,12 @@ void render_screen_overlay(void) {
         color[0] = (((colorEnv[0] * colorEnv[3]) + (damageColor[0] * damageColor[3])) / color[3]);
         color[1] = (((colorEnv[1] * colorEnv[3]) + (damageColor[1] * damageColor[3])) / color[3]);
         color[2] = (((colorEnv[2] * colorEnv[3]) + (damageColor[2] * damageColor[3])) / color[3]);
-        shade_screen_color(color[0], color[1], color[2], color[3]);
+        shade_screen_color(color);
     }
 #elif defined(ENVIRONMENT_SCREEN_TINT)
-    shade_screen_color(colorEnv[0], colorEnv[1], colorEnv[2], colorEnv[3]);
+    shade_screen_color(colorEnv);
 #elif defined(DAMAGE_SCREEN_TINT)
-    shade_screen_color(damageColor[0], damageColor[1], damageColor[2], damageColor[3]);
+    shade_screen_color(damageColor);
 #endif
 }
 #endif

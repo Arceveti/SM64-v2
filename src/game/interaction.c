@@ -999,7 +999,7 @@ Bool32 interact_hit_from_below(struct MarioState *m, UNUSED InteractType interac
         bounce_back_from_attack(m, interaction);
         if (interaction & INT_HIT_FROM_BELOW) hit_object_from_below(m, o);
         if (interaction & INT_HIT_FROM_ABOVE) {
-            if (o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE || m->action == ACT_TWIRLING) {
+            if ((o->oInteractionSubtype & INT_SUBTYPE_TWIRL_BOUNCE) || (m->action == ACT_TWIRLING)) {
                 bounce_off_object(m, o, 80.0f);
                 reset_mario_pitch(m);
 #ifndef VERSION_JP

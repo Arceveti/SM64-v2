@@ -455,7 +455,7 @@ void vec3i_copy(Vec3i dest, Vec3i src) {
 }
 
 /// Copy vector src to dest
-void vec3uc_copy(Vec3c dest, Vec3c src) {
+void vec3c_copy(Vec3c dest, Vec3c src) {
     dest[0] = src[0];
     dest[1] = src[1];
     dest[2] = src[2];

@@ -169,7 +169,7 @@ void vec3i_to_vec3s(                     Vec3s dest, Vec3i a);
 void vec3s_to_vec3f(                     Vec3f dest, Vec3s a);
 void vec3i_to_vec3f(                     Vec3f dest, Vec3i a);
 void vec3f_to_vec3s(                     Vec3s dest, Vec3f a);
-void vec3uc_copy(                        Vec3c dest, Vec3c src);
+void vec3c_copy(                         Vec3c dest, Vec3c src);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 void vec3f_zero(                         Vec3f v);

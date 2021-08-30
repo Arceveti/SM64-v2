@@ -149,6 +149,20 @@ void colorRGBAf_to_colorRGBA(ColorRGBA dst, ColorRGBAf src) {
 // void colorHSVf_to_colorRGBf(ColorRGBf dst, ColorHSVf src) {
 // }
 
+/// Copy ColorRGB vector src to dest
+void colorRGB_set(ColorRGB dest, Color r, Color g, Color b) {
+    dest[0] = r;
+    dest[1] = g;
+    dest[2] = b;
+}
+
+/// Copy ColorRGB vector src to dest
+void colorRGB_copy(ColorRGB dest, const ColorRGB src) {
+    dest[0] = src[0];
+    dest[1] = src[1];
+    dest[2] = src[2];
+}
+
 // rgba16 value
 RGBA16 rgba16_set(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA16Component a) {
     return ((clamp_bits(r, SIZ_RGBA16_C) << IDX_RGBA16_R) |

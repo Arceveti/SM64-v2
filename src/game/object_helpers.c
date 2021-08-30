@@ -1185,8 +1185,8 @@ static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel,
 #else
     f32 spawnHeight = find_floor(obj->oPosX, obj->oPosY, obj->oPosZ, &floor);
 #endif
-    if (obj->oPosY - spawnHeight > 100.0f) spawnHeight = obj->oPosY;
-    for (i = 0; i < numCoins; i++) {
+    if ((obj->oPosY - spawnHeight) > 100.0f) spawnHeight = obj->oPosY;
+    for ((i = 0); (i < numCoins); (i++)) {
         if (obj->oNumLootCoins <= 0) break;
         obj->oNumLootCoins--;
         coin = spawn_object(obj, model, coinBehavior);

@@ -67,11 +67,14 @@ void bhv_coin_init(void) {
 }
 
 void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
+#ifndef PLATFORM_DISPLACEMENT_2_OBJECTS
     struct Surface *floor;
     Angle targetYaw;
+#endif
     cur_obj_update_floor_and_walls();
     cur_obj_if_hit_wall_bounce_away();
     cur_obj_move_standard(-62);
+#ifndef PLATFORM_DISPLACEMENT_2_OBJECTS
     if (((floor = o->oFloor) != NULL) && (o->oMoveFlags & OBJ_MOVE_ON_GROUND)) {
         o->oBounciness = 0;
         if (floor->normal.y < 0.9f) {
@@ -79,6 +82,7 @@ void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
             cur_obj_rotate_yaw_toward(targetYaw, 0x400);
         }
     }
+#endif
 #if defined(VERSION_US)
     if (o->oTimer == 0) cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT_US);
 #elif defined(VERSION_EU) || defined(VERSION_SH)
@@ -100,7 +104,6 @@ void bhv_coin_loop(void) { // bhvSingleCoinGetsSpawned, bhvMrIBlueCoin
         o->oCoinBounceTimer++;
     }
     if (cur_obj_wait_then_blink(400, 20))  obj_mark_for_deletion(o);
-
     bhv_coin_sparkles_init();
 }
 
@@ -112,7 +115,7 @@ void bhv_coin_formation_spawn_loop(void) {
         if (o->oCoinSnapToGround) {
             o->oPosY += 300.0f;
             cur_obj_update_floor_height();
-            if (o->oPosY < o->oFloorHeight || o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
+            if ((o->oPosY < o->oFloorHeight) || (o->oFloorHeight < FLOOR_LOWER_LIMIT_MISC)) {
                 obj_mark_for_deletion(o);
             } else {
                 o->oPosY = o->oFloorHeight;

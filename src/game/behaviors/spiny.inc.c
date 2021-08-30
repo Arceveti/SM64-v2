@@ -33,6 +33,10 @@ static u8 sSpinyWalkAttackHandlers[] = {
     /* ATTACK_FROM_BELOW:            */ ATTACK_HANDLER_KNOCKBACK,
 };
 
+#ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
+struct PlatformDisplacementInfo sSpinyDisplacementInfo;
+#endif
+
 /**
  * If the spiny was spawned by lakitu and Mario is far away, despawn.
  */
@@ -54,6 +58,7 @@ static void spiny_act_walk(void) {
         o->oGraphYOffset = -17.0f;
         cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
         if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
+#ifndef PLATFORM_DISPLACEMENT_2_OBJECTS
             // After touching the ground for the first time, stop. From now on,
             // ensure that face angle and move angle agree
             if (!(o->oFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW)) {
@@ -64,6 +69,7 @@ static void spiny_act_walk(void) {
             } else {
                 cur_obj_forward_vel_approach(1.0f, 0.2f);
             }
+#endif
             if (o->oSpinyTurningAwayFromWall) {
                 o->oSpinyTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oSpinyTargetYaw, 0x80);
             } else {
@@ -143,6 +149,14 @@ static void spiny_act_thrown_by_lakitu(void) {
  * Update function for bhvSpiny.
  */
 void bhv_spiny_update(void) {
+#ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
+    struct Object *platform;
+    Angle tmpOFaceAngleYaw = (Angle) o->oMoveAngleYaw;
+    if ((platform = o->platform) != NULL) {
+        apply_platform_displacement(&sSpinyDisplacementInfo, &o->oPosVec, &tmpOFaceAngleYaw, platform);
+        o->oMoveAngleYaw = tmpOFaceAngleYaw;
+    }
+#endif
     // PARTIAL_UPDATE
     switch (o->oAction) {
         case SPINY_ACT_WALK:             spiny_act_walk();                        break;
