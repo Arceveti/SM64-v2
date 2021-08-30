@@ -214,7 +214,7 @@ static void platform_on_track_act_move_along_track(void) {
             }
 
             // Spawn a new track ball if necessary
-            if (approach_f32_bool(&o->oPlatformOnTrackDistMovedSinceLastBall, 300.0f, o->oForwardVel)) {
+            if (approach_f32_ptr(&o->oPlatformOnTrackDistMovedSinceLastBall, 300.0f, o->oForwardVel)) {
                 o->oPlatformOnTrackDistMovedSinceLastBall -= 300.0f;
                 vec3f_copy(&o->oHomeVec, &o->oPosVec);
                 o->oPlatformOnTrackBaseBallIndex = (u16)(o->oPlatformOnTrackBaseBallIndex + 1);
@@ -321,13 +321,13 @@ void bhv_platform_on_track_update(void) {
         } else {
             targetRoll = 0x0;
         }
-        o->oFaceAngleRoll = approach_s32(o->oFaceAngleRoll, targetRoll, 0x100, 0x100);
+        o->oFaceAngleRoll = approach_s32_symmetric(o->oFaceAngleRoll, targetRoll, 0x100);
 #else
         if (!o->oPlatformOnTrackWasStoodOn && (gMarioObject->platform == o)) {
             o->oPlatformOnTrackOffsetY    = -8.0f;
             o->oPlatformOnTrackWasStoodOn = TRUE;
         }
-        approach_f32_bool(&o->oPlatformOnTrackOffsetY, 0.0f, 0.5f);
+        approach_f32_ptr(&o->oPlatformOnTrackOffsetY, 0.0f, 0.5f);
         o->oPosY += o->oPlatformOnTrackOffsetY;
 #endif
     }

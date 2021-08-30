@@ -65,7 +65,7 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
             vec3f_copy(scale, &scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3)]);
         } else {
             // disappeared
-            scale[0] = scale[1] = scale[2] = 0.0f;
+            vec3f_zero(scale);
         }
         guScale(scaleMat, scale[0], scale[1], scale[2]);
         gSPMatrix(        dlIter++, scaleMat, (G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH));
@@ -285,6 +285,7 @@ Gfx *intro_draw_face(ImageTexture *image, s32 imageW, s32 imageH) {
     return dl;
 }
 
+//! move to colors.c?
 ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
     ImageTexture *fb;
     ImageTexture *image;

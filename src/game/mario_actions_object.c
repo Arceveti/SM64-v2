@@ -258,8 +258,8 @@ Bool32 act_holding_bowser(struct MarioState *m) {
             if (m->angleVel[1] < -0x1000) m->angleVel[1] = -0x1000;
         }
     } else {
-        m->actionArg   = 0;
-        m->angleVel[1] = approach_s32(m->angleVel[1], 0, 64, 64);
+        m->actionArg = 0;
+        approach_s16_symmetric_bool(&m->angleVel[1], 0x0, 0x40);
     }
     // spin = starting yaw
     spin             = m->faceAngle[1];

@@ -20,7 +20,6 @@
 #include "ingame_menu.h"
 #include "obj_behaviors.h"
 #include "save_file.h"
-#include "debug_course.h"
 #if MULTILANG
 #include "boot/memory.h"
 #include "eu_translation.h"
@@ -982,7 +981,6 @@ Bool32 lvl_set_current_level(UNUSED Bool32 initOrUpdate, s32 levelNum) {
     }
     if (gSavedCourseNum != gCurrCourseNum) {
         gSavedCourseNum = gCurrCourseNum;
-        nop_change_course();
         disable_warp_checkpoint();
     }
     if ((gCurrCourseNum > COURSE_STAGES_MAX) || warpCheckpointActive) return FALSE;

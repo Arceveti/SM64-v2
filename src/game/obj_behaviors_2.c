@@ -205,11 +205,11 @@ Angle cur_obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
 
 //! use math_util functions directly for these?
 Bool32 cur_obj_forward_vel_approach(f32 target, f32 delta) {
-    return approach_f32_bool(&o->oForwardVel, target, delta);
+    return approach_f32_ptr(&o->oForwardVel, target, delta);
 }
 
 Bool32 cur_obj_y_vel_approach(f32 target, f32 delta) {
-    return approach_f32_bool(&o->oVelY, target, delta);
+    return approach_f32_ptr(&o->oVelY, target, delta);
 }
 
 Bool32 cur_obj_move_pitch_approach(Angle target, Angle delta) {
@@ -263,7 +263,7 @@ s32 cur_obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale) {
         o->header.gfx.scale[0] += *scaleVel;
         if ((*scaleVel -= 0.01f) > -0.03f) o->oTimer = 0;
     } else if (o->oTimer > 10) {
-        if (approach_f32_bool(&o->header.gfx.scale[0], endScale, 0.05f)) {
+        if (approach_f32_ptr(&o->header.gfx.scale[0], endScale, 0.05f)) {
             return -1;
         } else if ((*scaleVel != 0.0f) && (o->header.gfx.scale[0] < shootFireScale)) {
             *scaleVel = 0.0f;
@@ -479,7 +479,7 @@ void cur_obj_act_squished(f32 baseScale) {
     f32 targetScaleY = (baseScale * 0.3f);
     cur_obj_update_floor_and_walls();
     if (o->header.gfx.animInfo.curAnim != NULL) cur_obj_extend_animation_if_at_end();
-    if (approach_f32_bool(&o->header.gfx.scale[1], targetScaleY, (baseScale * 0.14f))) {
+    if (approach_f32_ptr(&o->header.gfx.scale[1], targetScaleY, (baseScale * 0.14f))) {
         o->header.gfx.scale[0] = o->header.gfx.scale[2] = ((baseScale * 2.0f) - o->header.gfx.scale[1]);
         if (o->oTimer >= 16) cur_obj_die_if_health_non_positive();
     }

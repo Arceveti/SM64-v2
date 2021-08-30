@@ -1827,7 +1827,7 @@ CameraTransitionAngle update_spiral_stairs_camera(struct Camera *c, Vec3f focus,
     floorHeight = find_floor(checkPos[0], (checkPos[1] + 50.0f), checkPos[2], &floor);
     if (floorHeight != FLOOR_LOWER_LIMIT) {
         if (floorHeight < sMarioGeometry.currFloorHeight) floorHeight = sMarioGeometry.currFloorHeight;
-        pos[1] = approach_f32(pos[1], (floorHeight += CAMERA_Y_OFFSET), 30.0f, 30.0f);
+        approach_f32_symmetric_bool(&pos[1], (floorHeight += CAMERA_Y_OFFSET), 30.0f);
     }
     approach_f32_symmetric_bool(&focus[1], focY, 30.0f);
     pos[0] = cPos[0];
@@ -2077,7 +2077,7 @@ void mode_cannon_camera(struct Camera *c) {
         sCannonYOffset = 0.0f;
         sStatusFlags &= ~CAM_FLAG_BLOCK_SMOOTH_MOVEMENT;
     } else {
-        sCannonYOffset = approach_f32(sCannonYOffset, 0.0f, 100.0f, 100.0f);
+        approach_f32_symmetric_bool(&sCannonYOffset, 0.0f, 100.0f);
     }
 }
 
@@ -2458,7 +2458,7 @@ void reset_camera(struct Camera *c) {
     set_fov_function(CAM_FOV_DEFAULT);
     sFOVState.fov                   = 45.0f;
     sFOVState.fovOffset             = 0.0f;
-    sFOVState.unusedIsSleeping      = 0;
+    // sFOVState.unusedIsSleeping      = FALSE;
     sFOVState.shakeAmplitude        = 0.0f;
     sFOVState.shakePhase            = 0;
     sObjectCutscene                 = CUTSCENE_NONE;
@@ -7652,7 +7652,7 @@ void cutscene_enter_cannon_raise(struct Camera *c) {
     approach_s16_symmetric_bool(&sCutsceneVars[2].angle[0], 0x0, 0x80);
     // Move the camera around the cannon, gradually rotating and moving closer
     vec3f_set_dist_and_angle(sCutsceneVars[0].point, c->pos, sCutsceneVars[1].point[2], sCutsceneVars[1].angle[0], sCutsceneVars[1].angle[1]);
-    sCutsceneVars[1].point[2] = approach_f32(sCutsceneVars[1].point[2], 400.0f, 5.0f, 5.0f);
+    approach_f32_symmetric_bool(&sCutsceneVars[1].point[2], 400.0f, 5.0f);
     sCutsceneVars[1].angle[1] += 0x40;
     sCutsceneVars[3].point[1] += 2.0f;
     c->pos[1] += sCutsceneVars[3].point[1];
@@ -8736,11 +8736,11 @@ void zoom_fov_30(UNUSED struct MarioState *m) {
 void fov_default(struct MarioState *m) {
     sStatusFlags &= ~CAM_FLAG_SLEEPING;
     if ((m->action == ACT_SLEEPING) || (m->action == ACT_START_SLEEPING)) {
-        approach_f32_symmetric_bool(&sFOVState.fov, 30.0f, ((30.0f - sFOVState.fov) / 30.0f));
+        approach_f32_symmetric_bool(&sFOVState.fov, 30.0f, absf((30.0f - sFOVState.fov) / 30.0f));
         sStatusFlags |= CAM_FLAG_SLEEPING;
     } else {
-        approach_f32_symmetric_bool(&sFOVState.fov, 45.0f, ((45.0f - sFOVState.fov) / 30.0f));
-        sFOVState.unusedIsSleeping = 0;
+        approach_f32_symmetric_bool(&sFOVState.fov, 45.0f, absf((45.0f - sFOVState.fov) / 30.0f));
+        // sFOVState.unusedIsSleeping = FALSE;
     }
     if (m->area->camera->cutscene == CUTSCENE_0F_UNUSED) sFOVState.fov = 45.0f;
 }
@@ -8767,7 +8767,7 @@ void approach_fov_80(UNUSED struct MarioState *m) {
  */
 void set_fov_bbh(struct MarioState *m) {
     f32 targetFoV = (((m->area->camera->mode == CAMERA_MODE_FIXED) && (m->area->camera->cutscene == 0)) ? 60.0f : 45.0f);
-    sFOVState.fov = approach_f32(sFOVState.fov, targetFoV, 2.0f, 2.0f);
+    approach_f32_symmetric_bool(&sFOVState.fov, targetFoV, 2.0f);
 }
 
 /**

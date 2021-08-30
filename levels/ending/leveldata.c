@@ -202,7 +202,7 @@ static const Gfx dl_cake_end_eu_end[] = {
 
 #ifndef EU_CUSTOM_CAKE_FIX
 // 0x070296F8 - 0x07029768
-const Gfx dl_cake_end_screen_eu_070296F8[] = {
+const Gfx dl_cake_end_screen_eu_english[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cake_end_texture_eu_38_the_end),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
@@ -216,7 +216,7 @@ const Gfx dl_cake_end_screen_eu_070296F8[] = {
 };
 
 // 0x07029768 - 0x070297D8
-const Gfx dl_cake_end_screen_eu_07029768[] = {
+const Gfx dl_cake_end_screen_eu_french[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cake_end_texture_eu_39_fin),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
@@ -230,7 +230,7 @@ const Gfx dl_cake_end_screen_eu_07029768[] = {
 };
 
 // 0x070297D8 - 0x07029848
-const Gfx dl_cake_end_screen_eu_070297D8[] = {
+const Gfx dl_cake_end_screen_eu_german[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cake_end_texture_eu_40_ende),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),

@@ -116,9 +116,6 @@
         - Including gd_math
     - Move to src/boot:
         - crash?
-        - nupiinitsram.c
-        - nupireadwritesram.c
-        - sram.h
     - Move to src/engine:
         - print?
         - printf?
@@ -172,7 +169,6 @@
             - crash_screen
             - crash
             - debug_box
-            - debug_course
             - debug
             - profiler
             - puppycam
@@ -193,6 +189,3 @@
             - shadow
             - skybox
             - texscroll
-        - keep in src/game?
-            - game_init
-

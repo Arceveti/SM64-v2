@@ -25,8 +25,6 @@
 #define GD_LOWER_29(addr) (((uintptr_t)(addr)))
 #endif
 
-#define MTX_INTPART_PACK( w1, w2) (( (w1)        & 0xFFFF0000) | (((w2) >> 16) & 0xFFFF))
-#define MTX_FRACPART_PACK(w1, w2) ((((w1) << 16) & 0xFFFF0000) | ( (w2)        & 0xFFFF))
 #define LOOKAT_PACK(c) ((s32) MIN(((c) * (128.0)), 127.0) & 0xff)
 
 // structs
@@ -960,34 +958,11 @@ u32 new_gddl_from(Gfx *dl) {
     return gddl->number;
 }
 
-/* 24D4C4 -> 24D63C; orig name: func_8019ECF4 */
-//! move to gd_math/math_util
-void mat4_to_mtx(Mat4 *src, Mtx *dst) {
-#ifndef GBI_FLOATS
-    s32 i, j;
-    s32 w1, w2;
-    s32 *mtxInt = (s32 *) dst->m[0]; // s32 part
-    s32 *mtxFrc = (s32 *) dst->m[2]; // frac part
-    for ((i = 0); (i < 4); (i++)) {
-        for ((j = 0); (j < 2); (j++)) {
-            w1 = (s32)((*src)[i][(j * 2)    ] * 65536.0f);
-            w2 = (s32)((*src)[i][(j * 2) + 1] * 65536.0f);
-            *mtxInt = MTX_INTPART_PACK(w1, w2);
-            mtxInt++;
-            *mtxFrc = MTX_FRACPART_PACK(w1, w2);
-            mtxFrc++;
-        }
-    }
-#else
-    guMtxF2L(*src, dst);
-#endif
-}
-
 /**
  * Adds a display list operation that multiplies the current matrix with `mtx`.
  */
 void gd_dl_mul_matrix(Mat4 *mtx) {
-    mat4_to_mtx(mtx, &DL_CURRENT_MTX(sCurrentGdDl));
+    mtxf_to_mtx(&DL_CURRENT_MTX(sCurrentGdDl), (*mtx));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)), sMtxParamType | G_MTX_MUL | G_MTX_NOPUSH);
     next_mtx();
 }
@@ -996,7 +971,7 @@ void gd_dl_mul_matrix(Mat4 *mtx) {
  * Adds a display list operation that replaces the current matrix with `mtx`.
  */
 void gd_dl_load_matrix(Mat4 *mtx) {
-    mat4_to_mtx(mtx, &DL_CURRENT_MTX(sCurrentGdDl));
+    mtxf_to_mtx(&DL_CURRENT_MTX(sCurrentGdDl), (*mtx));
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)), sMtxParamType | G_MTX_LOAD | G_MTX_NOPUSH);
     next_mtx();
 }
@@ -1066,7 +1041,7 @@ void gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY) {
     LookAt *lookat;
     colXY *= RAD_PER_DEG;
     mtxf_lookat(cam->lookatMtx, from, to, colXY);
-    mat4_to_mtx(&cam->lookatMtx, &DL_CURRENT_MTX(sCurrentGdDl));
+    mtxf_to_mtx(&DL_CURRENT_MTX(sCurrentGdDl), cam->lookatMtx);
     gSPMatrix(next_gfx(), osVirtualToPhysical(&DL_CURRENT_MTX(sCurrentGdDl)),  G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
     /*  col           colc          dir
         0  1  2   3   4  5  6   7   8  9  10  11
@@ -1492,7 +1467,7 @@ void parse_p1_controller(void) {
     }
     if (gdctrl->dragging) gdctrl->dragStartFrame = gdctrl->currFrame;
     gdctrl->currFrame++;
-    if (currInputs->button & START_BUTTON && !(prevInputs->button & START_BUTTON)) gdctrl->newStartPress ^= 1;
+    if ((currInputs->button & START_BUTTON) && !(prevInputs->button & START_BUTTON)) gdctrl->newStartPress ^= 1;
     // deadzone checks
     if (ABSI(gdctrl->stickX) >= 6) gdctrl->csrX += (gdctrl->stickX * 0.1f);
     if (ABSI(gdctrl->stickY) >= 6) gdctrl->csrY -= (gdctrl->stickY * 0.1f);
@@ -1516,11 +1491,9 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
             }
             break;
         case GD_PROP_AMB_COLOUR: vec3f_set(sAmbScaleColour, f1, f2, f3); break;
-        case GD_PROP_LIGHT_DIR:
-            sLightDirections[sLightId][0] = (s32)(f1 * 120.0f);
-            sLightDirections[sLightId][1] = (s32)(f2 * 120.0f);
-            sLightDirections[sLightId][2] = (s32)(f3 * 120.0f);
-            break;
+        case GD_PROP_LIGHT_DIR: vec3i_set(sLightDirections[sLightId], (s32)(f1 * 120.0f),
+                                                                      (s32)(f2 * 120.0f),
+                                                                      (s32)(f3 * 120.0f)); break;
         case GD_PROP_DIFUSE_COLOUR: vec3f_set(sLightScaleColours[sLightId], f1, f2, f3); break;
         case GD_PROP_CULLING:
             parm = (s32) f1;
@@ -1680,11 +1653,11 @@ void gd_init(void) {
     vec3f_zero(sAmbScaleColour);
     for ((i = 0); (i < ARRAY_COUNT(sLightScaleColours)); (i++)) {
         vec3f_set(sLightScaleColours[i], 1.0f, 0.0f, 0.0f);
-        vec3i_set(sLightDirections[i], 0, 120, 0);
+        vec3i_set(sLightDirections[i],      0,  120,    0);
     }
     sNumLights = NUMLIGHTS_2;
     mtxf_identity(sInitIdnMat4);
-    mat4_to_mtx(&sInitIdnMat4, &sIdnMtx);
+    mtxf_to_mtx(&sIdnMtx, sInitIdnMat4);
     // remove_all_memtrackers();
     null_obj_lists();
     // start_memtracker("total");

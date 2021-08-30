@@ -223,13 +223,13 @@ struct TransitionInfo
 {
     /*0x00*/ Angle posPitch;
     /*0x02*/ Angle posYaw;
-    /*0x04*/ f32 posDist;
+    /*0x04*/ f32   posDist;
     /*0x08*/ Angle focPitch;
     /*0x0A*/ Angle focYaw;
-    /*0x0C*/ f32 focDist;
-    /*0x10*/ s32 framesLeft;
+    /*0x0C*/ f32   focDist;
+    /*0x10*/ s32   framesLeft;
     /*0x14*/ Vec3f marioPos;
-    /*0x20*/ u8 pad; // for the structs to align, there has to be an extra unused variable here. type is unknown.
+    /*0x20*/ u8    pad; // for the structs to align, there has to be an extra unused variable here. type is unknown.
 };
 
 /**
@@ -445,9 +445,6 @@ struct LakituState
     /*0x48*/ f32 focusDistance; // unused
 
     /*0x4C*/ Vec3a oldAngle;
-    // /*0x4C*/ Angle oldPitch;    // unused
-    // /*0x4E*/ Angle oldYaw;      // unused
-    // /*0x50*/ Angle oldRoll;     // unused
 
     /// The angular offsets added to lakitu's pitch, yaw, and roll
     /*0x52*/ Vec3s shakeMagnitude;

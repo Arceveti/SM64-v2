@@ -240,9 +240,9 @@ static void wiggler_act_jumped_on(void) {
     // Text to show on first, second, and third attack.
     s32 attackText[3] = { DIALOG_152, DIALOG_168, DIALOG_151 };
     // Shrink until the squish speed becomes 0, then unisquish
-    if (approach_f32_bool(&o->oWigglerSquishSpeed, 0.0f, 0.05f)) {
+    if (approach_f32_ptr(&o->oWigglerSquishSpeed, 0.0f, 0.05f)) {
         // Note that 4 is the default scale
-        approach_f32_bool(&o->header.gfx.scale[1], 4.0f, 0.2f);
+        approach_f32_ptr(&o->header.gfx.scale[1], 4.0f, 0.2f);
     } else {
         o->header.gfx.scale[1] -= o->oWigglerSquishSpeed;
     }
@@ -294,7 +294,7 @@ static void wiggler_act_shrink(void) {
     if (o->oTimer >= 20) {
         if (o->oTimer == 20) cur_obj_play_sound_2(SOUND_OBJ_ENEMY_DEFEAT_SHRINK);
         // 4 is the default scale, so shrink to 1/4 of regular size
-        if (approach_f32_bool(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
+        if (approach_f32_ptr(&o->header.gfx.scale[0], 1.0f, 0.1f)) {
             spawn_default_star(0.0f, 2048.0f, 0.0f);
             o->oAction = WIGGLER_ACT_FALL_THROUGH_FLOOR;
         }

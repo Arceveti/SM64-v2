@@ -48,7 +48,7 @@ static void triplet_butterfly_act_wander(void) {
     if (o->oDistanceToMario > 1500.0f) {
         obj_mark_for_deletion(o);
     } else {
-        approach_f32_bool(&o->oTripletButterflySpeed, 8.0f, 0.5f);
+        approach_f32_ptr(&o->oTripletButterflySpeed, 8.0f, 0.5f);
         if (o->oTimer < 60) {
             o->oTripletButterflyTargetYaw = cur_obj_angle_to_home();
         } else {
@@ -109,7 +109,7 @@ static void triplet_butterfly_act_explode(void) {
             }
             o->oTripletButterflyScale += scaleIncrease;
         }
-        approach_f32_bool(&o->oTripletButterflySpeed, 20.0f, 1.0f);
+        approach_f32_ptr(&o->oTripletButterflySpeed, 20.0f, 1.0f);
         cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x320);
         cur_obj_turn_pitch_toward_mario(-100.0f, 0x320);
     }

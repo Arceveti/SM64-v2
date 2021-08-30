@@ -32,7 +32,7 @@ void bhv_ttc_cog_update(void) {
     switch (gTTCSpeedSetting) { // The speed that the cog moves on the slow and fast settings, respectively.
         case TTC_SPEED_SLOW:    o->oTTCCogSpeed = 200.0f; break;
         case TTC_SPEED_FAST:    o->oTTCCogSpeed = 400.0f; break;
-        case TTC_SPEED_RANDOM:  if (approach_f32_bool(&o->oTTCCogSpeed, o->oTTCCogTargetVel, 50.0f)) o->oTTCCogTargetVel = 200.0f * (random_u16() % 7) * random_sign(); // fall through
+        case TTC_SPEED_RANDOM:  if (approach_f32_ptr(&o->oTTCCogSpeed, o->oTTCCogTargetVel, 50.0f)) o->oTTCCogTargetVel = 200.0f * (random_u16() % 7) * random_sign(); // fall through
         case TTC_SPEED_STOPPED: break;
     }
     o->oAngleVelYaw   = (s32)(o->oTTCCogSpeed * o->oTTCCogDir);

@@ -17,7 +17,7 @@ void bubba_act_idle(void) {
     cur_obj_treat_far_home_as_mario(2000.0f);
     o->oAnimState        = BUBBA_ANIM_STATE_CLOSED_MOUTH;
     o->oBubbaTargetPitch = cur_obj_get_pitch_to_home(lateralDistToHome);
-    approach_f32_bool(&o->oBubbaMovePitch, 5.0f, 0.5f);
+    approach_f32_ptr(&o->oBubbaMovePitch, 5.0f, 0.5f);
     if (o->oBubbaHitWall != 0) {
         if (abs_angle_diff(o->oMoveAngleYaw, o->oBubbaTargetYaw) < 800) o->oBubbaHitWall = 0;
     } else {
@@ -76,7 +76,7 @@ void bubba_act_attack(void) {
             o->oBubbaMovePitch  = 0x0;
             o->oAnimState = BUBBA_ANIM_STATE_OPEN_MOUTH;
         } else {
-            approach_f32_bool(&o->oBubbaMovePitch, 20.0f, 0.5f);
+            approach_f32_ptr(&o->oBubbaMovePitch, 20.0f, 0.5f);
         }
     }
 }
@@ -103,7 +103,7 @@ void bhv_bubba_loop(void) {
             o->oBubbaAirVelY    = o->oVelY;
             o->oBubbaJumpHeight = 0.0f;
         } else {
-            approach_f32_bool(&o->oBubbaAirVelY, 0.0f, 4.0f);
+            approach_f32_ptr(&o->oBubbaAirVelY, 0.0f, 4.0f);
             if ((o->oBubbaJumpHeight -= o->oBubbaAirVelY) > 1.0f) {
                 Angle rand            = random_u16();
                 o->oBubbaJumpHeight  -= 1.0f;

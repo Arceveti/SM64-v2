@@ -236,23 +236,30 @@ f32    det_2x2(f32 a, f32 b, f32 c, f32 d);
 f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
                f32 r1c0, f32 r1c1, f32 r1c2,
                f32 r2c0, f32 r2c1, f32 r2c2);
-// Approach
-s32    approach_s32(                      s32  current,   s32 target,   s32 inc, s32 dec);
-f32    approach_f32(                      f32  current,   f32 target,   f32 inc, f32 dec);
-Bool32 approach_f32_bool(                  f32 *current,   f32 target,   f32 inc);
-Bool32 approach_f32_signed(               f32 *current,   f32 target,   f32 inc);
-f32    approach_f32_symmetric(            f32  current,   f32 target,   f32 inc);
-Bool32 approach_f32_symmetric_bool(       f32 *current,   f32 target,   f32 inc);
-s32    approach_s32_symmetric(            s32  current,   s32 target,   s32 inc);
-Bool32 approach_s32_symmetric_bool(       s32 *current,   s32 target,   s32 inc);
-s32    approach_s16_symmetric(            s16  current,   s16 target,   s16 inc);
-Bool32 approach_s16_symmetric_bool(       s16 *current,   s16 target,   s16 inc);
-Bool32 approach_f32_asymptotic_bool(      f32 *current,   f32 target,   f32 multiplier);
-f32    approach_f32_asymptotic(           f32  current,   f32 target,   f32 multiplier);
-Bool32 approach_s16_asymptotic_bool(      s16 *current,   s16 target,   s16 divisor);
-s32    approach_s16_asymptotic(           s16  current,   s16 target,   s16 divisor);
-void   approach_vec3f_asymptotic(       Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
-void   approach_vec3s_asymptotic(        Vec3s current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
+// Approach s32
+s32     approach_s32(                     s32  current,   s32 target,   s32 inc, s32 dec);
+Bool32  approach_s32_bool(                s32 *current,   s32 target,   s32 inc, s32 dec);
+#define approach_s32_symmetric(                current,       target,       inc) approach_s32(     (current), (target), (inc), (inc))
+#define approach_s32_symmetric_bool(           current,       target,       inc) approach_s32_bool((current), (target), (inc), (inc))
+// Approach s16
+s32     approach_s16(                     s16  current,   s16 target,   s16 inc, s16 dec);
+Bool32  approach_s16_bool(                s16 *current,   s16 target,   s16 inc, s16 dec);
+#define approach_s16_symmetric(                current,       target,       inc) approach_s16(     (current), (target), (inc), (inc))
+#define approach_s16_symmetric_bool(           current,       target,       inc) approach_s16_bool((current), (target), (inc), (inc))
+// Approach f32
+f32     approach_f32(                     f32  current,   f32 target,   f32 inc, f32 dec);
+Bool32  approach_f32_bool(                f32 *current,   f32 target,   f32 inc, f32 dec);
+#define approach_f32_symmetric(                current,       target,       inc) approach_f32(     (current), (target), (inc), (inc))
+#define approach_f32_symmetric_bool(           current,       target,       inc) approach_f32_bool((current), (target), (inc), (inc))
+Bool32  approach_f32_ptr(                 f32 *current,   f32 target,   f32 inc);
+Bool32  approach_f32_signed(              f32 *current,   f32 target,   f32 inc);
+// Approach asymptotic
+Bool32  approach_f32_asymptotic_bool(     f32 *current,   f32 target,   f32 multiplier);
+f32     approach_f32_asymptotic(          f32  current,   f32 target,   f32 multiplier);
+Bool32  approach_s16_asymptotic_bool(     s16 *current,   s16 target,   s16 divisor);
+s32     approach_s16_asymptotic(          s16  current,   s16 target,   s16 divisor);
+void    approach_vec3f_asymptotic(      Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
+void    approach_vec3s_asymptotic(      Vec3s  current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 // Trig
 f64   sind(f64 x);
 f64   cosd(f64 x);

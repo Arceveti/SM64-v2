@@ -1478,71 +1478,65 @@ f32 det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
  * Return the value 'current' after it tries to approach target, going up at
  * most 'inc' and going down at most 'dec'.
  */
+
+//! TODO: does symmetric need to be separate?
+//! The non-bool ones are also mostly unused
+
+// s32
 s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
-    //! If target is close to the max or min s32, then it's possible to overflow
-    // past it without stopping.
-    if (current < target) {
-        current += inc;
-        if (current > target) current = target;
-    } else {
-        current -= dec;
-        if (current < target) current = target;
-    }
-    return current;
-}
-
-s32 approach_s32_symmetric(s32 current, s32 target, s32 inc) {
     s32 dist = (target - current);
-    if (dist >= 0) { // target >= current
+    if (dist > 0) { // current < target
         current = ((dist >  inc) ? (current + inc) : target);
-    } else { // target < current
-        current = ((dist < -inc) ? (current - inc) : target);
+    } else if (dist < 0) { // current > target
+        current = ((dist < -dec) ? (current - dec) : target);
     }
     return current;
 }
 
-Bool32 approach_s32_symmetric_bool(s32 *current, s32 target, s32 inc) {
-    *current = approach_s32_symmetric(*current, target, inc);
+Bool32 approach_s32_bool(s32 *current, s32 target, s32 inc, s32 dec) {
+    *current = approach_s32(*current, target, inc, dec);
     return !(*current == target);
 }
 
-s32 approach_s16_symmetric(s16 current, s16 target, s16 inc) {
+
+// s16
+s32 approach_s16(s16 current, s16 target, s16 inc, s16 dec) {
     s16 dist = (target - current);
     if (dist >= 0) { // target >= current
         current = ((dist >  inc) ? (current + inc) : target);
     } else { // target < current
-        current = ((dist < -inc) ? (current - inc) : target);
+        current = ((dist < -dec) ? (current - dec) : target);
     }
     return current;
 }
 
-Bool32 approach_s16_symmetric_bool(s16 *current, s16 target, s16 inc) {
-    // *current = approach_s16_symmetric(*current, target, inc);
-    s16 dist = (target - *current);
-    if (dist >= 0) { // target >= current
-        *current = ((dist >  inc) ? (*current + inc) : target);
-    } else { // target < current
-        *current = ((dist < -inc) ? (*current - inc) : target);
-    }
+Bool32 approach_s16_bool(s16 *current, s16 target, s16 inc, s16 dec) {
+    *current = approach_s16(*current, target, inc, dec);
     return !(*current == target);
 }
 
-/**
- * Return the value 'current' after it tries to approach target, going up at
- * most 'inc' and going down at most 'dec'.
- */
+
+// f32
 f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
-    if (current < target) {
-        current += inc;
-        if (current > target) current = target;
-    } else if (current > target) {
-        current -= dec;
-        if (current < target) current = target;
+    f32 dist = (target - current);
+    if (dist >= 0.0f) { // target >= current
+        current = ((dist >  inc) ? (current + inc) : target);
+    } else { // target < current
+        current = ((dist < -dec) ? (current - dec) : target);
     }
     return current;
 }
 
-Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc) {
+Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc, f32 dec) {
+    *current = approach_f32(*current, target, inc, dec);
+    return !(*current == target);
+}
+
+
+
+//! TODO: why does this one look so different but seems to do the exact same as approach_f32_bool,
+// other than the bool returning TRUE only once when it reaches
+Bool32 approach_f32_ptr(f32 *current, f32 target, f32 inc) {
     if (*current > target) inc = -inc;
     *current += inc;
     if (((*current - target) * inc) >= 0) {
@@ -1552,22 +1546,8 @@ Bool32 approach_f32_bool(f32 *current, f32 target, f32 inc) {
     return FALSE;
 }
 
-f32 approach_f32_symmetric(f32 current, f32 target, f32 inc) {
-    f32 dist = (target - current);
-    if (inc < 0) inc = -inc;
-    if (dist >= 0.0f) { // target >= current
-        current = ((dist >  inc) ? (current + inc) : target);
-    } else { // target < current
-        current = ((dist < -inc) ? (current - inc) : target);
-    }
-    return current;
-}
-
-Bool32 approach_f32_symmetric_bool(f32 *current, f32 target, f32 inc) {
-    *current = approach_f32_symmetric(*current, target, inc);
-    return !(*current == target);
-}
-
+//! TODO: why is this one approach differently than the others?
+// It also returns TRUE only once when it reaches
 Bool32 approach_f32_signed(f32 *current, f32 target, f32 inc) {
     *current += inc;
     if (inc >= 0.0f) {

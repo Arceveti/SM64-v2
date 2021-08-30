@@ -95,7 +95,7 @@ void unagi_act_in_cave(void) { // act 3
                 }
             }
         }
-        approach_f32_bool(&o->oUnagiNextForwardVel, o->oUnagiTargetNextForwardVel, 4.0f);
+        approach_f32_ptr(&o->oUnagiNextForwardVel, o->oUnagiTargetNextForwardVel, 4.0f);
         if ((o->oUnagiDistFromHome += o->oUnagiNextForwardVel) < 0.0f) {
             o->oUnagiDistFromHome   = o->oUnagiNextForwardVel  = 0.0f;
             o->oTimer = 0;

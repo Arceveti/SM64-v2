@@ -157,7 +157,7 @@ void update_air_with_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
+        approach_f32_ptr(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
             intendedMag  = (m->intendedMag / 32.0f);
@@ -202,7 +202,7 @@ void update_air_without_turn(struct MarioState *m) {
     f32 intendedMag;
     if (!check_horizontal_wind(m)) {
         dragThreshold = ((m->action == ACT_LONG_JUMP) ? 48.0f : 32.0f);
-        approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
+        approach_f32_ptr(&m->forwardVel, 0.0f, 0.35f);
         if (m->input & INPUT_NONZERO_ANALOG) {
             intendedDYaw   = (m->intendedYaw - m->faceAngle[1]);
             intendedMag    = (m->intendedMag / 32.0f);
@@ -249,17 +249,17 @@ void update_flying_yaw(struct MarioState *m) {
             m->angleVel[1] += 0x40;
             if (m->angleVel[1] > 0x10) m->angleVel[1] = 0x10;
         } else {
-            m->angleVel[1] = approach_s32(m->angleVel[1], targetYawVel, 0x10, 0x20);
+            approach_s16_bool(&m->angleVel[1], targetYawVel, 0x10, 0x20);
         }
     } else if (targetYawVel < 0x0) {
         if (m->angleVel[1] > 0x0) {
             m->angleVel[1] -= 0x40;
             if (m->angleVel[1] < -0x10) m->angleVel[1] = -0x10;
         } else {
-            m->angleVel[1] = approach_s32(m->angleVel[1], targetYawVel, 0x20, 0x10);
+            approach_s16_bool(&m->angleVel[1], targetYawVel, 0x20, 0x10);
         }
     } else {
-        m->angleVel[1] = approach_s32(m->angleVel[1], 0x0, 0x40, 0x40);
+        approach_s16_symmetric_bool(&m->angleVel[1], 0x0, 0x40);
     }
     m->faceAngle[1] +=          m->angleVel[1];
     m->faceAngle[2]  = (0x14 * -m->angleVel[1]);
@@ -272,17 +272,17 @@ void update_flying_pitch(struct MarioState *m) {
             m->angleVel[0] += 0x40;
             if (m->angleVel[0] > 0x20) m->angleVel[0] = 0x20;
         } else {
-            m->angleVel[0] = approach_s32(m->angleVel[0], targetPitchVel, 0x20, 0x40);
+            approach_s16_bool(&m->angleVel[0], targetPitchVel, 0x20, 0x40);
         }
     } else if (targetPitchVel < 0x0) {
         if (m->angleVel[0] > 0x0) {
             m->angleVel[0] -= 0x40;
             if (m->angleVel[0] < -0x20) m->angleVel[0] = -0x20;
         } else {
-            m->angleVel[0] = approach_s32(m->angleVel[0], targetPitchVel, 0x40, 0x20);
+            approach_s16_bool(&m->angleVel[0], targetPitchVel, 0x40, 0x20);
         }
     } else {
-        m->angleVel[0] = approach_s32(m->angleVel[0], 0x0, 0x40, 0x40);
+        approach_s16_symmetric_bool(&m->angleVel[0], 0x0, 0x40);
     }
 }
 
@@ -609,7 +609,7 @@ Bool32 act_twirling(struct MarioState *m) {
     } else {
         yawVelTarget = DEG(33.75);
     }
-    m->angleVel[1] = approach_s32(m->angleVel[1], yawVelTarget, 0x200, 0x200);
+    approach_s16_symmetric_bool(&m->angleVel[1], yawVelTarget, 0x200);
     m->twirlYaw   += m->angleVel[1];
     set_mario_animation( m,  ((m->actionArg == 0) ? MARIO_ANIM_START_TWIRL : MARIO_ANIM_TWIRL));
     if (is_anim_past_end(m)) m->actionArg =  1;
@@ -1295,7 +1295,7 @@ Bool32 act_lava_boost(struct MarioState *m) {
         queue_rumble_data(5, 80);
     }
 #endif
-    if (!(m->input & INPUT_NONZERO_ANALOG)) approach_f32_bool(&m->forwardVel, 0.0f, 0.35f);
+    if (!(m->input & INPUT_NONZERO_ANALOG)) approach_f32_ptr(&m->forwardVel, 0.0f, 0.35f);
     update_lava_boost_or_twirling(m);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:

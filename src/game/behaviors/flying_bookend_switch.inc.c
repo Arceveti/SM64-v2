@@ -39,8 +39,8 @@ void flying_bookend_act_init(void) { // act 0
     if (cur_obj_is_near_to_and_facing_mario(400.0f, 0x3000)) {
         cur_obj_play_sound_2(SOUND_OBJ_DEFAULT_DEATH);
         o->oAction             = FLYING_BOOKEND_ACT_GROW;
-        o->oBookendTargetPitch = (o->oFaceAnglePitch + 0x7FFF);
-        o->oBookendTargetRoll  = (o->oFaceAngleRoll  - 0x7FFF);
+        o->oBookendTargetPitch = (o->oFaceAnglePitch + (DEG(180) - 1));
+        o->oBookendTargetRoll  = (o->oFaceAngleRoll  - (DEG(180) - 1));
         cur_obj_set_model(MODEL_BOOKEND_PART);
     }
 }
@@ -56,7 +56,7 @@ void flying_bookend_act_grow(void) { // act 1
                 cur_obj_face_pitch_approach(o->oBookendTargetPitch, 0x7D0);
                 if (o->oTimer >= 10) {
                     cur_obj_face_roll_approach(o->oBookendTargetRoll, 0x7D0);
-                    if (o->oTimer >= 20) approach_f32_bool(&o->header.gfx.scale[0], 3.0f, 0.2f);
+                    if (o->oTimer >= 20) approach_f32_ptr(&o->header.gfx.scale[0], 3.0f, 0.2f);
                 }
             }
         }
@@ -213,7 +213,7 @@ void bhv_book_switch_loop(void) {
             }
             o->oAction = BOOK_SWITCH_ACT_ACTIVE;
             if (o->oBookSwitchDistFromHome == 0.0f) cur_obj_play_sound_2(SOUND_OBJ_DEFAULT_DEATH);
-            if (approach_f32_bool(&o->oBookSwitchDistFromHome, 50.0f, 20.0f)) {
+            if (approach_f32_ptr(&o->oBookSwitchDistFromHome, 50.0f, 20.0f)) {
                 // Check for hits
                 if ((o->parentObj->oBookSwitchManagerNumCorrectChoices >= 0) && (o->oTimer > 60)
                  && ((attackType == ATTACK_PUNCH)
@@ -224,7 +224,7 @@ void bhv_book_switch_loop(void) {
             }
         } else {
             cur_obj_become_intangible();
-            if (approach_f32_bool(&o->oBookSwitchDistFromHome, 0.0f, 20.0f) && (o->oAction != BOOK_SWITCH_ACT_UNPRESSED)) {
+            if (approach_f32_ptr(&o->oBookSwitchDistFromHome, 0.0f, 20.0f) && (o->oAction != BOOK_SWITCH_ACT_UNPRESSED)) {
                 if (o->parentObj->oBookSwitchManagerNumCorrectChoices == o->oBehParams2ndByte) { // Correct choice
                     // Right answer sound
                     play_sound(SOUND_GENERAL2_RIGHT_ANSWER, gGlobalSoundSource);

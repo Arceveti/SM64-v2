@@ -21,6 +21,7 @@
 #include "mario.h"
 #include "mario_actions_cutscene.h"
 #include "boot/memory.h"
+#include "object_constants.h"
 #include "obj_behaviors.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"

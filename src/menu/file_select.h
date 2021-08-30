@@ -6,12 +6,12 @@
 
 #include "types.h"
 
-#define MENU_LAYER_MAIN    1
-#define MENU_LAYER_SUBMENU 2
+#define MENU_LAYER_MAIN         0x1
+#define MENU_LAYER_SUBMENU      0x2
 
-#define MENU_ERASE_HOVER_NONE 0
-#define MENU_ERASE_HOVER_YES  1
-#define MENU_ERASE_HOVER_NO   2
+#define MENU_ERASE_HOVER_NONE   0x0
+#define MENU_ERASE_HOVER_YES    0x1
+#define MENU_ERASE_HOVER_NO     0x2
 
 enum MainMenuButtonStates {
     MENU_BUTTON_STATE_DEFAULT,

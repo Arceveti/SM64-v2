@@ -43,19 +43,19 @@ void chuckya_act_moving(void) { // act 0
             }
             break;
         case CHUCKYA_SUB_ACT_ACCELERATE:
-            approach_f32_bool(&o->oForwardVel, 30.0f, 4.0f);
+            approach_f32_ptr(&o->oForwardVel, 30.0f, 4.0f);
             if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > DEG(90)) o->oSubAction = CHUCKYA_SUB_ACT_STOP;
             if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
             break;
         case CHUCKYA_SUB_ACT_STOP:
-            approach_f32_bool(&o->oForwardVel, 0, 4.0f);
+            approach_f32_ptr(&o->oForwardVel, 0, 4.0f);
             if (o->oChuckyaSubActionTimer > 48) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO;
             break;
         case CHUCKYA_SUB_ACT_TURN_TOWARD_HOME:
             if (cur_obj_lateral_dist_to_home() < 500.0f) {
                 o->oForwardVel = 0.0f;
             } else {
-                approach_f32_bool(&o->oForwardVel, 10.0f, 4.0f);
+                approach_f32_ptr(&o->oForwardVel, 10.0f, 4.0f);
                 o->oAngleToMario = cur_obj_angle_to_home();
                 cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
             }

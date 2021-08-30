@@ -22,10 +22,10 @@ extern void make_vertex(
     Vtx *vtx, s32 n, VtxPosF x, VtxPosF y, VtxPosF z, TextureCoord tx, TextureCoord ty, Color r, Color g, Color b, Alpha a
 );
 #endif
-extern Gfx *geo_exec_inside_castle_light(       s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]);
-extern Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]);
-extern Gfx *geo_exec_flying_carpet_create(      s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]);
-extern Gfx *geo_exec_cake_end_screen(           s32 callContext, struct GraphNode *node, UNUSED f32 mtx[4][4]);
+extern Gfx *geo_exec_inside_castle_light(       s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
+extern Gfx *geo_exec_flying_carpet_timer_update(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
+extern Gfx *geo_exec_flying_carpet_create(      s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
+extern Gfx *geo_exec_cake_end_screen(           s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx);
 
 #define gLoadBlockTexture(dl, width, height, format, image)                                                  \
 {                                                                                                            \

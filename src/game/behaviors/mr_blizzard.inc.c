@@ -146,7 +146,7 @@ static void mr_blizzard_act_rotate(void) {
             prevDizziness = o->oMrBlizzardDizziness;
             // Slowly move Dizziness back to 0 by making ChangeInDizziness positive if Dizziness
             // is negative, and making ChangeInDizziness negative if Dizziness is positive.
-            approach_f32_bool(&o->oMrBlizzardChangeInDizziness, ((o->oMrBlizzardDizziness < 0.0f) ? 1000.0f : -1000.0f), 80.0f);
+            approach_f32_ptr(&o->oMrBlizzardChangeInDizziness, ((o->oMrBlizzardDizziness < 0.0f) ? 1000.0f : -1000.0f), 80.0f);
             o->oMrBlizzardDizziness += o->oMrBlizzardChangeInDizziness;
             // If prevDizziness has a different sign than Dizziness,
             // set Dizziness and ChangeInDizziness to 0.
@@ -256,7 +256,7 @@ static void mr_blizzard_act_burrow(void) {
     }
     // Put Mr. Blizzard's graphical position back below ground
     // then move to action 0.
-    if (approach_f32_bool(&o->oMrBlizzardGraphYOffset, -200.0f, 4.0f)) {
+    if (approach_f32_ptr(&o->oMrBlizzardGraphYOffset, -200.0f, 4.0f)) {
         o->oAction = MR_BLIZZARD_ACT_SPAWN_SNOWBALL;
         cur_obj_init_animation_with_sound(MR_BLIZZARD_ANIM_THROW_SNOWBALL);
     }
