@@ -202,16 +202,19 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
 }
 
 static MarioStep perform_water_step(struct MarioState *m) {
-    MarioStep stepResult;
+    MarioStep stepResult = WATER_STEP_NONE;
     Vec3f nextPos;
     Vec3f step;
-    // Angle floorYaw;
-    // Angle floorTurn;
     struct Object *marioObj = m->marioObj;
     vec3f_copy(step, m->vel);
     if (m->action & ACT_FLAG_SWIMMING) apply_water_current(m, step);
 #if WATER_NUM_STEPS > 1
+ #ifdef VARIABLE_STEPS
+    const f32 speed = (m->moveSpeed / 8.0f);
+    const f32 numSteps = MAX(WATER_NUM_STEPS, speed);
+ #else
     const f32 numSteps = WATER_NUM_STEPS;
+ #endif
     u32 i;
     for (i = 0; i < numSteps; i++) {
         nextPos[0] = (m->pos[0] + (step[0] / numSteps));
@@ -225,12 +228,6 @@ static MarioStep perform_water_step(struct MarioState *m) {
         stepResult = perform_water_quarter_step(m, nextPos);
         if (stepResult == WATER_STEP_CANCELLED) break;
     }
-    // // Turn away from floors
-    // if (m->pos[1] <= (m->floorHeight) + 80.0f * (1.0f - m->floor->normal.y)) {
-    //     floorYaw = atan2s(m->floor->normal.z, m->floor->normal.x);
-    //     floorTurn = (1.0f - m->floor->normal.y) * 0x800;
-    //     m->faceAngle[1] = approach_s16_symmetric_bool(&m->faceAngle[1], floorYaw, floorTurn);
-    // }
 #else
     vec3f_sum(nextPos, m->pos, step);
     if (nextPos[1] > (m->waterLevel - 80)) {
@@ -408,10 +405,11 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
     update_swimming_speed(m, (swimStrength / 10.0f));
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
-            floorPitch = -find_floor_slope(m, -0x8000, 5.0f);
 #ifdef SMOOTH_WATER_FLOOR_PITCH
+            floorPitch = atan2s(1.0f, m->floor->normal.y);
             if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
 #else
+            floorPitch = -find_floor_slope(m, -0x8000, 5.0f);
             if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
 #endif
             break;
@@ -512,7 +510,8 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_GROUND_POUND);
         m->particleFlags |= PARTICLE_PLUNGE_BUBBLE;
         m->actionTimer++;
-        approach_f32_symmetric_bool(&m->vel[1], 0.0f, ((m->input & INPUT_Z_DOWN) ? 1.0f : 2.0f));
+        yOffset = ((m->input & INPUT_Z_DOWN) ? 1.0f : 2.0f); // Reuse yOffset var for y speed
+        approach_f32_symmetric_bool(&m->vel[1], 0.0f, yOffset);
         stepResult = perform_water_step(m);
         if ((m->vel[1] >= 0.0f) || (m->actionTimer > 120)) {
             switch (stateFlags) {

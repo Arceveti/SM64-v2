@@ -466,13 +466,16 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
             // c up is 250.0f
             dist -= 250.0f;
-            // dist /=  16.0f;
-            dist *= 0.0625;
-            dist    = max(min(dist, min(lakituMaxW, lakituMaxH)), 0.0f);
+            // dist   /=  16.0f;
+            dist   *= 0.0625;
+            dist    = MIN(dist, MIN(lakituMaxW, lakituMaxH));
+            if (dist < 0.0f) dist = 0.0f;
             lakituW = (lakituMaxW - (dist * 2.0f)); // * sins(pitch);
-            lakituH = (lakituMaxH - (dist       )); // * max(coss(yaw), 0.5f);
-            lakituX = max(((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        ), 0);
-            lakituY = max(((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f)), 0);
+            lakituH = (lakituMaxH - (dist       )); // * MAX(coss(yaw), 0.5f);
+            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        );
+            if (lakituX < 0) lakituX = 0;
+            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f));
+            if (lakituY < 0) lakituY = 0;
 #endif
             generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -495,13 +498,14 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
         if (find_closest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
             ImageTexture *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
-            dist -= 250.0f;
-            dist /= 16.0f;
-            dist = max(min(  dist, 32.0f), 0.0f);
-            lakituW = (64 - (dist       * 2.0f));
-            lakituH = (32 - (dist             ));
-            lakituX = (32 - (lakituW    * 0.5f));
-            lakituY = (lakituX - 16);
+            dist   -= 250.0f;
+            dist   /= 16.0f;
+            if (dist > 32.0f) dist = 32.0f;
+            if (dist <  0.0f) dist =  0.0f;
+            lakituW =  (64 - (dist    * 2.0f));
+            lakituH =  (32 - (dist          ));
+            lakituX =  (32 - (lakituW * 0.5f));
+            lakituY =  (lakituX - 16);
 #endif
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU

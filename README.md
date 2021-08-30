@@ -63,7 +63,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
-- Extra fields in the MarioState struct: prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed (Arceveti) *
+- Extra fields in the MarioState struct, based on Mario's movement: prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
 
 **HUD:**
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
@@ -111,7 +111,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Turn circle fix (Arceveti) *
 - Midair turn (Arceveti) *
 - Faster transitions between actions (Arceveti) *
-- The number of air/ground/water steps per frame are individually configurable
+- Increasses the subframe step count the faster Mario is moving (Arceveti) *
+- Water steps are split into quarter steps just like ground and air steps (Arceveti) *
+- The number of air/ground/water steps per frame are individually configurable (Arceveti) *
 - Don't fall after a star grab if the floor is too far below Mario (Arceveti) *
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
@@ -121,7 +123,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, less softlocks, etc. See config for more details (Arceveti) *
-- Water steps are split into quarter steps just like ground and air steps (Arceveti) *
 - Mario can move sideways on ledges (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
 - Configurable wall kick/slide angle (Arceveti) *

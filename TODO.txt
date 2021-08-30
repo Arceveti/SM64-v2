@@ -61,7 +61,6 @@
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor calls (and other collision checks)
-    - Replace m->floorPitch usage with getting an angle from m->steepness, to save an s16 entry in MarioState struct
 - Objects:
     - Make step height per-object
 - Physics/Movement:
@@ -70,6 +69,8 @@
     - Hanging quarter steps?
     - Gravity direction support
     - "Squished" death from any direction
+    - Update mario movement angles when m->pos is changed?
+        - Don't update m->prevPos except once per frame
 - Graphics
     - Proper Skyboxes like in SM64DS
         - https://jaxry.github.io/panorama-to-cubemap/

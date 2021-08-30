@@ -35,11 +35,11 @@ void bhv_bub_spawner_loop(void) {
     cur_obj_call_action_function(sBirdChirpChirpActions);
 }
 
-void bub_move_vertically(s32 a0) {
+void bub_move_vertically(s32 ySpeed) {
     f32 parentY = o->parentObj->oPosY;
     if (((parentY - 100.0f - o->oCheepCheepMaxYOffset) < o->oPosY)
         && (o->oPosY < (parentY + 1000.0f + o->oCheepCheepMaxYOffset))) {
-        approach_f32_symmetric_bool(&o->oPosY, o->oCheepCheepTargetY, a0);
+        approach_f32_symmetric_bool(&o->oPosY, o->oCheepCheepTargetY, ySpeed);
     }
 }
 

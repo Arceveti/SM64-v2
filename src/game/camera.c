@@ -3088,7 +3088,7 @@ void shake_camera_pitch(Vec3f pos, Vec3f focus) {
         pitch += (gLakituState.shakeMagnitude[0] * sins(gLakituState.shakePitchPhase));
         vec3f_set_dist_and_angle(pos, focus,  dist,  pitch,  yaw);
         increment_shake_offset(&gLakituState.shakePitchPhase, gLakituState.shakePitchVel);
-        if (!approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[0], 0x0, gLakituState.shakePitchDecay)) gLakituState.shakePitchPhase = 0;
+        if (!approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[0], 0x0, gLakituState.shakePitchDecay)) gLakituState.shakePitchPhase = 0x0;
     }
 }
 
@@ -3103,7 +3103,7 @@ void shake_camera_yaw(Vec3f pos, Vec3f focus) {
         yaw += (gLakituState.shakeMagnitude[1] * sins(gLakituState.shakeYawPhase));
         vec3f_set_dist_and_angle(pos, focus,  dist,  pitch,  yaw);
         increment_shake_offset(&gLakituState.shakeYawPhase, gLakituState.shakeYawVel);
-        if (!approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[1], 0x0, gLakituState.shakeYawDecay)) gLakituState.shakeYawPhase = 0;
+        if (!approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[1], 0x0, gLakituState.shakeYawDecay)) gLakituState.shakeYawPhase = 0x0;
     }
 }
 
@@ -3114,7 +3114,7 @@ void shake_camera_roll(Angle *roll) {
     if (gLakituState.shakeMagnitude[2] != 0) {
         increment_shake_offset(&gLakituState.shakeRollPhase, gLakituState.shakeRollVel);
         *roll += (gLakituState.shakeMagnitude[2] * sins(gLakituState.shakeRollPhase));
-        if (approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[2], 0x0, gLakituState.shakeRollDecay) == 0) gLakituState.shakeRollPhase = 0;
+        if (approach_s16_symmetric_bool(&gLakituState.shakeMagnitude[2], 0x0, gLakituState.shakeRollDecay) == 0) gLakituState.shakeRollPhase = 0x0;
     }
 }
 
@@ -5427,13 +5427,16 @@ void cutscene_grand_star_fly_move_to_mario(UNUSED struct Camera *c) {
  * cvar8.point[0] is the approach velocity.
  */
 void cutscene_grand_star_fly_mario_offscreen(UNUSED struct Camera *c) {
-    approach_f32_symmetric_bool(&sCutsceneVars[8].point[0],    15.0f,                              0.1f);
-    approach_f32_symmetric_bool(&sCutsceneVars[4].point[0], -2000.0f, sCutsceneVars[8].point[0]        );
-    approach_f32_symmetric_bool(&sCutsceneVars[4].point[1],  1200.0f, sCutsceneVars[8].point[0] / 10.0f);
-    approach_f32_symmetric_bool(&sCutsceneVars[4].point[2],  1000.0f, sCutsceneVars[8].point[0] / 10.0f);
-    approach_f32_symmetric_bool(&sCutsceneVars[5].point[0],     0.0f, sCutsceneVars[8].point[0]        );
-    approach_f32_symmetric_bool(&sCutsceneVars[5].point[1],  1200.0f, sCutsceneVars[8].point[0] /  2.0f);
-    approach_f32_symmetric_bool(&sCutsceneVars[5].point[2],  1000.0f, sCutsceneVars[8].point[0] /  1.5f);
+    approach_f32_symmetric_bool(&sCutsceneVars[8].point[0],    15.0f,                      0.1f);
+    f32 speed = (sCutsceneVars[8].point[0] / 10.0f);
+    approach_f32_symmetric_bool(&sCutsceneVars[4].point[0], -2000.0f, sCutsceneVars[8].point[0]);
+    approach_f32_symmetric_bool(&sCutsceneVars[4].point[1],  1200.0f,                     speed);
+    approach_f32_symmetric_bool(&sCutsceneVars[4].point[2],  1000.0f,                     speed);
+    approach_f32_symmetric_bool(&sCutsceneVars[5].point[0],     0.0f, sCutsceneVars[8].point[0]);
+    speed = (sCutsceneVars[8].point[0] / 2.0f);
+    approach_f32_symmetric_bool(&sCutsceneVars[5].point[1],  1200.0f,                     speed);
+    speed = (sCutsceneVars[8].point[0] / 1.5f);
+    approach_f32_symmetric_bool(&sCutsceneVars[5].point[2],  1000.0f,                     speed);
 }
 
 /**
@@ -8735,13 +8738,16 @@ void zoom_fov_30(UNUSED struct MarioState *m) {
  */
 void fov_default(struct MarioState *m) {
     sStatusFlags &= ~CAM_FLAG_SLEEPING;
+    f32 fov, speed;
     if ((m->action == ACT_SLEEPING) || (m->action == ACT_START_SLEEPING)) {
-        approach_f32_symmetric_bool(&sFOVState.fov, 30.0f, absf((30.0f - sFOVState.fov) / 30.0f));
+        fov = 30.0f;
         sStatusFlags |= CAM_FLAG_SLEEPING;
     } else {
-        approach_f32_symmetric_bool(&sFOVState.fov, 45.0f, absf((45.0f - sFOVState.fov) / 30.0f));
+        fov = 45.0f;
         // sFOVState.unusedIsSleeping = FALSE;
     }
+    speed = absf((fov - sFOVState.fov) / 30.0f);
+    approach_f32_symmetric_bool(&sFOVState.fov, fov, speed);
     if (m->area->camera->cutscene == CUTSCENE_0F_UNUSED) sFOVState.fov = 45.0f;
 }
 

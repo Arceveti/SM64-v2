@@ -1,15 +1,15 @@
 #include <ultra64.h>
 #include <PR/gs2dex.h>
 
-#define SCALE      "\x80" // SCALE (an integer percentage; 100 -> 100%, 25 -> 25%, etc.)
-#define ROTATE     "\x81" // ROTATE (degrees) // TODO: maybe add axis?
-#define TRANSLATE  "\x82" // TRANSLATE (x) (y)
-#define COLOR      "\x83" // COLOR (r) (g) (b) (a)
-#define DROPSHADOW "\x84" // DROPSHADOW (no args)
-#define BACKGROUND "\x85" // BACKGROUND (w) (h) (alpha)
-#define SEPARATOR  "\x86"
-#define RESET      "\x87"
-#define BUTTON     "\x88"
+#define SCALE         "\x80" // SCALE (an integer percentage; 100 -> 100%, 25 -> 25%, etc.)
+#define ROTATE        "\x81" // ROTATE (degrees) // TODO: maybe add axis?
+#define TRANSLATE     "\x82" // TRANSLATE (x) (y)
+#define COLOR         "\x83" // COLOR (r) (g) (b) (a)
+#define DROPSHADOW    "\x84" // DROPSHADOW (no args)
+#define BACKGROUND    "\x85" // BACKGROUND (w) (h) (alpha)
+#define SEPARATOR     "\x86"
+#define RESET         "\x87"
+#define BUTTON        "\x88"
 
 #define CH_SCALE      '\x80'
 #define CH_ROT        '\x81'
@@ -27,9 +27,9 @@
 #define CH_GET_NEXT(x) (*(++x))
 #define CH_SKIP(x) {x++;}
 
-#define ALIGN_LEFT 0
-#define ALIGN_CENTER 1
-#define ALIGN_RIGHT 2
+#define ALIGN_LEFT   0x0
+#define ALIGN_CENTER 0x1
+#define ALIGN_RIGHT  0x2
 
 extern void s2d_print_alloc(int x, int y, int align, const char *str);
 extern void s2d_type_print(int x, int y, int align, const char *str, uObjMtx *buf, int *pos);

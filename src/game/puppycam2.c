@@ -692,7 +692,7 @@ static void puppycam_view_panning(void) {
 }
 
 void puppycam_terrain_angle(void) {
-    f32 adjustSpeed;
+    f32 adjustSpeed, yawSpeed;
     s32 floor2 = find_floor_height(  gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100.0f), gPuppyCam.pos[2]);
     s32 ceil   = 20000; // find_ceil(gPuppyCam.pos[0], (gPuppyCam.pos[1] + 100.0f), gPuppyCam.pos[2]);
     s32 farFromSurface;
@@ -703,7 +703,10 @@ void puppycam_terrain_angle(void) {
         adjustSpeed = 0.25f;
         farFromSurface = TRUE;
     } else {
-        adjustSpeed = CLAMP(MAX((gMarioState->forwardVel / 480.0f), (gPuppyCam.yawAcceleration / 100.0f)), 0.05f, 1.0f);
+        yawSpeed    = (gPuppyCam.yawAcceleration / 100.0f);
+        adjustSpeed = (gMarioState->forwardVel   / 480.0f);
+        adjustSpeed = MAX(adjustSpeed, yawSpeed);
+        adjustSpeed = CLAMP(adjustSpeed, 0.05f, 1.0f);
         f32 x = gPuppyCam.targetObj->oPosX - (10 * sins(gPuppyCam.yaw));
         f32 z = gPuppyCam.targetObj->oPosZ - (10 * coss(gPuppyCam.yaw));
         f32 floorHeight = find_floor_height(x, (gPuppyCam.targetObj->oPosY + 100), z);
@@ -806,6 +809,7 @@ void puppycam_wall_angle(void) {
 
 void puppycam_projection_behaviours(void) {
     f32 turnRate = 1;
+    Angle yawSpeed;
     // This will only be executed if Mario's the target. If it's not, it'll reset the
     if (gPuppyCam.targetObj == gMarioState->marioObj) {
         if ((gPuppyCam.options.turnAggression > 0)
@@ -821,10 +825,11 @@ void puppycam_projection_behaviours(void) {
                 // It also scales with forward velocity, so it's a gradual effect as he speeds up.
                 if (((abss(gPlayer1Controller->rawStickX) > 20) && !(gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)) ||
                     (gMarioState->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE && (Angle)abss((((gPuppyCam.yaw + DEG(180)) % 0xFFFF) - DEG(180)) - (((gMarioState->faceAngle[1]) % 0xFFFF) - DEG(180))) < DEG(67.5))) {
-                // gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + DEG(180)) - approach_s32((Angle)((gMarioState->faceAngle[1] + DEG(180)) - gPuppyCam.yawTarget), 0,
-                // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
-                // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
-                    approach_s16_symmetric_bool(&gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + DEG(180)), ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
+                    // gPuppyCam.yawTarget = (gMarioState->faceAngle[1] + DEG(180)) - approach_s32((Angle)((gMarioState->faceAngle[1] + DEG(180)) - gPuppyCam.yawTarget), 0,
+                    // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate),
+                    // ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate));
+                    yawSpeed = ((gPuppyCam.options.turnAggression * 10) * absf(gMarioState->forwardVel / 32) * absf(gPlayer1Controller->rawStickX / 80.0f) * turnRate);
+                    approach_s16_symmetric_bool(&gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + DEG(180)), yawSpeed);
                 }
             }
         } else { // If none of the above is true, it'll attempt to do this instead.
@@ -846,8 +851,9 @@ void puppycam_projection_behaviours(void) {
         if ((gMarioState->action == ACT_SLEEPING) || (gMarioState->action == ACT_START_SLEEPING)) {
             gPuppyCam.zoom = approach_f32_asymptotic(gPuppyCam.zoom,gPuppyCam.zoomPoints[0], 0.01f);
         } else if ((gMarioState->action & ACT_FLAG_SWIMMING) && (((gMarioState->waterLevel - 100) - gMarioState->pos[1]) > 5)) {
-            // When moving underwater, the camera will zoom in on Mayro.
-            gPuppyCam.zoom = approach_f32_asymptotic(gPuppyCam.zoom, MAX((gPuppyCam.zoomTarget / 1.5f), gPuppyCam.zoomPoints[0]), 0.2f);
+            // When moving underwater, the camera will zoom in on Mario.
+            turnRate = (gPuppyCam.zoomTarget / 1.5f); // reuse turnRate for zoom
+            gPuppyCam.zoom = approach_f32_asymptotic(gPuppyCam.zoom, MAX(turnRate, gPuppyCam.zoomPoints[0]), 0.2f);
         } else {
             gPuppyCam.zoom = approach_f32_asymptotic(gPuppyCam.zoom,gPuppyCam.zoomTarget, 0.2f);
         }
@@ -865,7 +871,8 @@ void puppycam_projection_behaviours(void) {
         }
         // Applies a light outward zoom to the camera when moving. Sets it back to 0 when not moving.
         if (gMarioState->forwardVel > 0.0f) {
-            approach_s16_symmetric_bool(&gPuppyCam.moveZoom, (100.0f * (gMarioState->forwardVel / 32.0f)), (gMarioState->forwardVel / 10));
+            yawSpeed = (gMarioState->forwardVel / 10); // reuse yawSpeed for zoom
+            approach_s16_symmetric_bool(&gPuppyCam.moveZoom, (100.0f * (gMarioState->forwardVel / 32.0f)), yawSpeed);
         } else {
             approach_s16_symmetric_bool(&gPuppyCam.moveZoom, 0, 5);
         }
@@ -884,7 +891,8 @@ void puppycam_projection_behaviours(void) {
             gPuppyCam.targetFloorHeight     = gPuppyCam.targetObj->oPosY;
             gPuppyCam.lastTargetFloorHeight = gPuppyCam.targetObj->oPosY;
             // gPuppyCam.yawTarget             = ((gMarioState->faceAngle[1] + DEG(180)) - approach_s32((Angle)((gMarioState->faceAngle[1] + DEG(180)) - gPuppyCam.yawTarget), 0, (1000 * (gMarioState->forwardVel / 32)), (1000 * (gMarioState->forwardVel / 32))));
-            approach_s16_symmetric_bool(&gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + DEG(180)), (1000 * (gMarioState->forwardVel / 32)));
+            yawSpeed = (1000 * (gMarioState->forwardVel / 32));
+            approach_s16_symmetric_bool(&gPuppyCam.yawTarget, (gMarioState->faceAngle[1] + DEG(180)), yawSpeed);
             if ((((gMarioState->waterLevel - 100) - gMarioState->pos[1]) > 5) && (gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_PITCH_ROTATION)) {
                 gPuppyCam.swimPitch = approach_f32_asymptotic(gPuppyCam.swimPitch, (gMarioState->faceAngle[0] / 10), 0.05f);
             } else {

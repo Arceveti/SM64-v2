@@ -336,7 +336,7 @@ void puppyprint_render_profiler(void) {
             print_small_text(160, 160, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
             finish_blank_box();
         }
-        #define ADDTIMES MAX((collisionTime[NUM_PERF_ITERATIONS] + graphTime[NUM_PERF_ITERATIONS] + behaviourTime[NUM_PERF_ITERATIONS] + audioTime[NUM_PERF_ITERATIONS] + dmaTime[NUM_PERF_ITERATIONS])/80, 1)
+        #define ADDTIMES MAX((collisionTime[NUM_PERF_ITERATIONS] + graphTime[NUM_PERF_ITERATIONS] + behaviourTime[NUM_PERF_ITERATIONS] + audioTime[NUM_PERF_ITERATIONS] + dmaTime[NUM_PERF_ITERATIONS]) / 80, 1)
         perfPercentage[0] = MAX((collisionTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[1] = MAX((graphTime[    NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[2] = MAX((behaviourTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);

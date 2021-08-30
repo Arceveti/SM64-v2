@@ -587,10 +587,9 @@
  * Movement: General                                            *
  ****************************************************************/
 
-// Extra fields in the MarioState struct:
-// prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed
+// Increasses the subframe step count the faster Mario is moving
 // (Arceveti)
-#define EXTRA_MARIO_STATE_FIELDS
+#define VARIABLE_STEPS
 
 // Decides whether you can exit course while moving
 // Has no effect if you disable exit course)

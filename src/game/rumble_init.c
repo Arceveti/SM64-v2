@@ -143,11 +143,11 @@ void reset_rumble_timers_slip(void) {
     gCurrRumbleSettings.vibrate = 7;
 }
 
-void reset_rumble_timers_vibrate(s32 a0) {
+void reset_rumble_timers_vibrate(s32 level) {
     if (gCurrDemoInput != NULL) return;
     if (gCurrRumbleSettings.slip == 0) gCurrRumbleSettings.slip = 7;
     if (gCurrRumbleSettings.slip <  4) gCurrRumbleSettings.slip = 4;
-    switch (a0) {
+    switch (level) {
         case 0: gCurrRumbleSettings.vibrate = 5; break;
         case 1: gCurrRumbleSettings.vibrate = 4; break;
         case 2: gCurrRumbleSettings.vibrate = 3; break;
@@ -162,7 +162,7 @@ void queue_rumble_submerged(void) {
     gCurrRumbleSettings.vibrate = 4;
 }
 
-static void thread6_rumble_loop(UNUSED void *a0) {
+static void thread6_rumble_loop(UNUSED void *arg) {
     OSMesg msg;
 	osSyncPrintf("start motor thread\n");
     cancel_rumble();

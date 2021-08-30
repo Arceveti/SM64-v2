@@ -12,7 +12,7 @@
   #define SIZE_T_FORMAT "%zu"
 #endif
 
-#define KB 1024
+#define KB  1024
 #define MB (1024 * KB)
 
 // number of elements in statically declared array
@@ -30,19 +30,19 @@
 #define write_u32_be(buf, val) do { \
    (buf)[0] = ((val) >> 24) & 0xFF; \
    (buf)[1] = ((val) >> 16) & 0xFF; \
-   (buf)[2] = ((val) >> 8) & 0xFF; \
-   (buf)[3] = (val) & 0xFF; \
+   (buf)[2] = ((val) >>  8) & 0xFF; \
+   (buf)[3] =  (val)        & 0xFF; \
 } while(0)
 #define read_u16_be(buf) (((buf)[0] << 8) + ((buf)[1]))
 #define write_u16_be(buf, val) do { \
-   (buf)[0] = ((val) >> 8) & 0xFF; \
-   (buf)[1] = ((val)) & 0xFF; \
+   (buf)[0] = ((val) >> 8) & 0xFF;  \
+   (buf)[1] = ((val)     ) & 0xFF;  \
 } while(0)
 
 // print nibbles and bytes
 #define fprint_nibble(FP, NIB_) fputc((NIB_) < 10 ? ('0' + (NIB_)) : ('A' + (NIB_) - 0xA), FP)
-#define fprint_byte(FP, BYTE_) do { \
-    fprint_nibble(FP, (BYTE_) >> 4); \
+#define fprint_byte(FP, BYTE_) do {    \
+    fprint_nibble(FP, (BYTE_) >>   4); \
     fprint_nibble(FP, (BYTE_) & 0x0F); \
   } while(0)
 #define print_nibble(NIB_) fprint_nibble(stdout, NIB_)

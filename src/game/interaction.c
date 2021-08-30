@@ -1150,7 +1150,8 @@ Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, str
             m->vel[1]                  = 0.0f;
             m->forwardVel              = 0.0f;
             poleBottom                 = (-m->usedObj->hitboxDownOffset - 100.0f);
-            marioObj->oMarioPolePos    = max(m->pos[1] - o->oPosY, poleBottom);
+            marioObj->oMarioPolePos    = (m->pos[1] - o->oPosY);
+            marioObj->oMarioPolePos    = MAX(marioObj->oMarioPolePos, poleBottom);
 #if defined(VERSION_SH) || defined(POLE_SWING)
             m->angleVel[1] = (s32)((velConv * 0x80) + 0x1000);
             if (dAngleToPole < 0x0) m->angleVel[1] = -m->angleVel[1];

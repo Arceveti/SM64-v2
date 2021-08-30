@@ -377,7 +377,12 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
 #else
         aspect = (4.0f / 3.0f); // 1.33333f
 #endif
-        gWorldScale = (gCamera ? (MAX((sqr(gCamera->pos[0]) + sqr(gCamera->pos[1]) + sqr(gCamera->pos[2])) / sqr(0x2000), 1.0f)) : 1.0f);
+        if (gCamera) {
+            gWorldScale = ((sqr(gCamera->pos[0]) + sqr(gCamera->pos[1]) + sqr(gCamera->pos[2])) / sqr(0x2000));
+            gWorldScale = MAX(gWorldScale, 1.0f);
+        } else {
+            gWorldScale = 1.0f;
+        }
         guPerspective(mtx, &perspNorm, node->fov, aspect, ((node->near) / gWorldScale), ((node->far) / gWorldScale), 1.0f);
         gSPPerspNormalize(gDisplayListHead++, perspNorm);
         gSPMatrix(        gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
@@ -432,7 +437,7 @@ static void make_roll_matrix(Mtx *mtx, Angle angle) {
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    Vec3s marioPos3s;
+    Vec3s marioPos;
 #endif
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
     Mtx *mtx     = alloc_display_list(sizeof(*mtx));
@@ -452,12 +457,15 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     }
 #ifdef METAL_CAP_REFLECTION_LAKITU
     // Convert Mario's coordinates into vec3s so they can be used in mtxf_mul_vec3s
-    vec3f_to_vec3s(marioPos3s, gMarioState->pos);
+    vec3f_to_vec3s(marioPos, gMarioState->pos);
     // Transform Mario's coordinates into view frustrum
-    mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos3s);
+    mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos);
     // Perspective divide
-    gMarioScreenX = max(2 * (0.5f - marioPos3s[0] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->width ), 0);
-    gMarioScreenY = max(2 * (0.5f - marioPos3s[1] / (f32)marioPos3s[2]) * (gCurGraphNodeRoot->height), 0);
+    //? should ScreenPos be u32?
+    gMarioScreenX = (2 * (0.5f - marioPos[0] / (f32)marioPos[2]) * (gCurGraphNodeRoot->width ));
+    if (gMarioScreenX < 0) gMarioScreenX = 0;
+    gMarioScreenY = (2 * (0.5f - marioPos[1] / (f32)marioPos[2]) * (gCurGraphNodeRoot->height));
+    if (gMarioScreenY < 0) gMarioScreenY = 0;
 #endif
     gMatStackIndex--;
 }

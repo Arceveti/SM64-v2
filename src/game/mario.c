@@ -728,7 +728,7 @@ static MarioAction set_mario_action_airborne(struct MarioState *m, MarioAction a
 static MarioAction set_mario_action_moving(struct MarioState *m, MarioAction action, UNUSED u32 actionArg) {
     s16 floorClass = mario_get_floor_class(m);
     f32 forwardVel = m->forwardVel;
-    f32 mag        = min(m->intendedMag, 8.0f);
+    f32 mag        = MIN(m->intendedMag, 8.0f);
     switch (action) {
         case ACT_WALKING:
             if ((floorClass != SURFACE_CLASS_VERY_SLIPPERY) && (0.0f <= forwardVel) && (forwardVel < mag)) m->forwardVel = mag;
@@ -999,11 +999,9 @@ void debug_print_speed_action_normal(struct MarioState *m) {
 
                 print_text_fmt_int(210,  88,  "RY %d", ((m->faceAngle[1] * 45.0f) / 8192.0f));
                 print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
-#ifdef EXTRA_MARIO_STATE_FIELDS
-                // print_text_fmt_int(210,  56,  "MY %d", ((m->moveYaw * 45.0f) / 8192.0f));
-                print_text_fmt_int(210,  56,  "MY %d", ((m->movePitch * 45.0f) / 8192.0f));
-#endif
-
+                // print_text_fmt_int(210,  56,  "MY %d", ((m->moveYaw   * 45.0f) / 8192.0f));
+                // print_text_fmt_int(210,  56,  "MY %d", ((m->movePitch * 45.0f) / 8192.0f));
+                print_text_fmt_int(210,  56,  "MY %d",  (m->moveSpeed / 8.0f));
                 // print_text_fmt_int(210,  56,  "MY %d", ((atan2s(m->marioObj->oVelZ, m->marioObj->oVelX) * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  40,  "MY %d", ((m->area->camera->yaw * 45.0f) / 8192.0f));
                 // print_text_fmt_int(210,  56, "VEL", 0);
@@ -1466,10 +1464,9 @@ void queue_rumble_particles(void) {
 Bool32 execute_mario_action(UNUSED struct Object *o) {
     // struct MarioState *m = gMarioState;
     Bool32 inLoop = TRUE;
-#ifdef EXTRA_MARIO_STATE_FIELDS
+    // Update once per frame:
     vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
-#endif
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(      gMarioState);
@@ -1548,7 +1545,6 @@ void init_mario(void) {
     gMarioState->capTimer                             = 0;
     gMarioState->quicksandDepth                       = 0.0f;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-    gMarioState->floorPitch                           = 0x0;
     gMarioState->steepness                            = 1.0f;
 #endif
     gMarioState->heldObj                              = NULL;

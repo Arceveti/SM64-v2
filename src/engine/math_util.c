@@ -171,31 +171,32 @@ inline f64 absd(f64 x) { return ((x < 0.0 ) ? -x : x); }
  ***********************/
 
 /// Returns the lowest of three values.
-inline s8  min_3c (s8  a0, s8  a1,  s8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline u8  min_3uc(u8  a0, u8  a1,  u8 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline s16 min_3s (s16 a0, s16 a1, s16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline u16 min_3us(s16 a0, u16 a1, u16 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline s32 min_3i (s32 a0, s32 a1, s32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline u32 min_3ui(u32 a0, u32 a1, u32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline f32 min_3f (f32 a0, f32 a1, f32 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
-inline f64 min_3d (f64 a0, f64 a1, f64 a2) { if (a1 < a0) a0 = a1; if (a2 < a0) a0 = a2; return a0; }
+inline s8  min_3c (s8  a, s8  b,  s8 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline u8  min_3uc(u8  a, u8  b,  u8 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline s16 min_3s (s16 a, s16 b, s16 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline u16 min_3us(s16 a, u16 b, u16 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline s32 min_3i (s32 a, s32 b, s32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline u32 min_3ui(u32 a, u32 b, u32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline f32 min_3f (f32 a, f32 b, f32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
+inline f64 min_3d (f64 a, f64 b, f64 c) { if (b < a) a = b; if (c < a) a = c; return a; }
 
 /// Returns the highest of three values.
-inline s8  max_3c (s8  a0,  s8 a1,  s8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline u8  max_3uc(u8  a0,  u8 a1,  u8 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline s16 max_3s (s16 a0, s16 a1, s16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline u16 max_3us(u16 a0, u16 a1, u16 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline s32 max_3i (s32 a0, s32 a1, s32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline u32 max_3ui(u32 a0, u32 a1, u32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline f32 max_3f (f32 a0, f32 a1, f32 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
-inline f64 max_3d (f64 a0, f64 a1, f64 a2) { if (a1 > a0) a0 = a1; if (a2 > a0) a0 = a2; return a0; }
+inline s8  max_3c (s8  a,  s8 b,  s8 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline u8  max_3uc(u8  a,  u8 b,  u8 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline s16 max_3s (s16 a, s16 b, s16 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline u16 max_3us(u16 a, u16 b, u16 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline s32 max_3i (s32 a, s32 b, s32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline u32 max_3ui(u32 a, u32 b, u32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline f32 max_3f (f32 a, f32 b, f32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
+inline f64 max_3d (f64 a, f64 b, f64 c) { if (b > a) a = b; if (c > a) a = c; return a; }
 
 /*******************
  * Clamp functions *
  *******************/
 
 u32 clamp_bits(u32 val, u32 size) {
-    return MIN(val, (u32)((1 << (size)) - 1));
+    u32 mask = BITMASK(size);
+    return MIN(val, mask);
 }
 
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch) {
@@ -629,7 +630,8 @@ f32 vec3f_invmag(Vec3f v) {
 #ifdef FAST_INVSQRT
     return Q_invmagf(v);
 #else
-    return (1.0f / MAX(vec3f_mag(v), 0.00001f));
+    register f32 mag = vec3f_mag(v);
+    return (1.0f / MAX(mag, 0.00001f));
 #endif
 }
 
@@ -645,7 +647,8 @@ void vec3f_normalize_negative(Vec3f dest) {
 
 /// Scale vector 'dest' so it has at most length 'max'
 void vec3f_normalize_max(Vec3f dest, f32 max) {
-    register f32 mag = MAX(vec3f_mag(dest), 0.00001f);
+    register f32 mag = vec3f_mag(dest);
+    mag = MAX(mag, 0.00001f);
     if (mag > max) {
         mag = (max / mag); //! fast invsqrt?
         vec3f_mul_f32(dest, mag);
@@ -966,7 +969,8 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
 #ifdef FAST_INVSQRT
     register f32 invLength = -Q_rsqrtf(sqr(dx) + sqr(dz));
 #else
-    register f32 invLength = -(1.0f / MAX(sqrtf(sqr(dx) + sqr(dz)), 0.00001f));
+    register f32 invLength = sqrtf(sqr(dx) + sqr(dz));
+    invLength = -(1.0f / MAX(ld, 0.00001f));
 #endif
     dx *= invLength;
     dz *= invLength;

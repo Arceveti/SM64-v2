@@ -5,6 +5,7 @@
 
 #include "types.h"
 
+
 #define BITMASK(size) ((1 << (size)) - 1)
 
 /*
@@ -56,13 +57,13 @@ extern s16 gArctanTable[];
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
 #define atans(x) gArctanTable[(u16) (x) >> 4] //! is this correct?
 
-#define min(a, b) ((a) > (b) ? (b) : (a))
-#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) MIN((a), (b))
+#define max(a, b) MAX((a), (b))
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
 #define sqr(x)  ((x) * (x))
-#define cube(x) ((x) * (x) * (x))
+#define cube(x) (sqr(x) * (x))
 
 #define vec3a_copy(dst, src    ) (vec3s_copy((dst), (src)        ))
 #define vec3a_set( dst, x, y, z) (vec3s_set( (dst), (x), (y), (z)))
@@ -104,23 +105,23 @@ f64  Q_invmagd(Vec3d v);
 #endif
 f64  sqrtd(f64 x);
 // min_3
-s8   min_3c( s8  a0, s8  a1,  s8 a2);
-u8   min_3uc(u8  a0, u8  a1,  u8 a2);
-s16  min_3s( s16 a0, s16 a1, s16 a2);
-u16  min_3us(s16 a0, u16 a1, u16 a2);
-s32  min_3i( s32 a0, s32 a1, s32 a2);
-u32  min_3ui(u32 a0, u32 a1, u32 a2);
-f32  min_3f( f32 a0, f32 a1, f32 a2);
-f64  min_3d( f64 a0, f64 a1, f64 a2);
+s8   min_3c( s8  a, s8  b,  s8 c);
+u8   min_3uc(u8  a, u8  b,  u8 c);
+s16  min_3s( s16 a, s16 b, s16 c);
+u16  min_3us(s16 a, u16 b, u16 c);
+s32  min_3i( s32 a, s32 b, s32 c);
+u32  min_3ui(u32 a, u32 b, u32 c);
+f32  min_3f( f32 a, f32 b, f32 c);
+f64  min_3d( f64 a, f64 b, f64 c);
 // max_3
-s8   max_3c( s8  a0,  s8 a1,  s8 a2);
-u8   max_3uc(u8  a0,  u8 a1,  u8 a2);
-s16  max_3s( s16 a0, s16 a1, s16 a2);
-u16  max_3us(u16 a0, u16 a1, u16 a2);
-s32  max_3i( s32 a0, s32 a1, s32 a2);
-u32  max_3ui(u32 a0, u32 a1, u32 a2);
-f32  max_3f( f32 a0, f32 a1, f32 a2);
-f64  max_3d( f64 a0, f64 a1, f64 a2);
+s8   max_3c( s8  a,  s8 b,  s8 c);
+u8   max_3uc(u8  a,  u8 b,  u8 c);
+s16  max_3s( s16 a, s16 b, s16 c);
+u16  max_3us(u16 a, u16 b, u16 c);
+s32  max_3i( s32 a, s32 b, s32 c);
+u32  max_3ui(u32 a, u32 b, u32 c);
+f32  max_3f( f32 a, f32 b, f32 c);
+f64  max_3d( f64 a, f64 b, f64 c);
 // Clamp
 u32    clamp_bits(u32 val, u32 size);
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);

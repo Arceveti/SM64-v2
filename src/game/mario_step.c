@@ -350,16 +350,10 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     if ((m->pos[1] <= (m->floorHeight + MARIO_STEP_HEIGHT)) && (nextPos[1] <= (floorHeight + MARIO_STEP_HEIGHT))) {
         f32 dist;
         vec3f_get_lateral_dist(m->pos, nextPos, &dist);
-        if (dist == 0.0f) {
-            // if not moving, use the floor's y normal like vanilla
-            m->floorPitch = 0x0;
-            m->steepness  = floor->normal.y;
-        } else {
-            m->steepness  = coss(m->floorPitch = atan2s(dist, (floorHeight - m->floorHeight)));
-        }
+        // if not moving, use the floor's y normal like in vanilla
+        m->steepness = ((dist == 0.0f) ? (floor->normal.y) : coss(atan2s(dist, (floorHeight - m->floorHeight))));
     } else {
         // If doing ground steps in air (Coyote Time), assume a flat floor
-        m->floorPitch = 0x0;
         m->steepness  = 1.0f;
     }
 #endif
@@ -421,7 +415,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
 
 MarioStep perform_ground_step(struct MarioState *m) {
     Vec3f intendedPos;
-    MarioStep stepResult;
+    MarioStep stepResult = GROUND_STEP_NONE;
 // #ifdef BETTER_WALL_COLLISION
 //     m->wall = NULL;
 // #endif
@@ -431,7 +425,12 @@ MarioStep perform_ground_step(struct MarioState *m) {
     f32 steepness = m->floor->normal.y;
 #endif
 #if GROUND_NUM_STEPS > 1
+ #ifdef VARIABLE_STEPS
+    const f32 speed    = (m->moveSpeed / 8.0f);
+    const f32 numSteps = MAX(GROUND_NUM_STEPS, speed);
+ #else
     const f32 numSteps = GROUND_NUM_STEPS;
+ #endif
     s32 i;
     for ((i = 0); (i < numSteps); (i++)) {
         intendedPos[0] = (m->pos[0] + (steepness * (m->vel[0] / numSteps)));
@@ -656,7 +655,6 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         m->floor       = floor;
         m->floorHeight = floorHeight;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-        m->floorPitch = 0x0;
         m->steepness  = floor->normal.y;
 #endif
         return AIR_STEP_LANDED;
@@ -863,7 +861,12 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     MarioStep stepResult = AIR_STEP_NONE;
     // m->wall = NULL;
 #if AIR_NUM_STEPS > 1
-    const f32 numSteps = AIR_NUM_STEPS; /* max(4.0f, (s32)(sqrtf(sqr(m->vel[0]) + sqr(m->vel[1]) + sqr(m->vel[2])) / 50.0f));*/
+ #ifdef VARIABLE_STEPS
+    const f32 speed    = (m->moveSpeed / 8.0f);
+    const f32 numSteps = MAX(AIR_NUM_STEPS, speed);
+ #else
+    const f32 numSteps = AIR_NUM_STEPS; /* MAX(4.0f, (s32)(sqrtf(sqr(m->vel[0]) + sqr(m->vel[1]) + sqr(m->vel[2])) / 50.0f));*/
+ #endif
     s32 i;
     MarioStep quarterStepResult;
     for ((i = 0); (i < numSteps); (i++)) {

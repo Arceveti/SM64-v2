@@ -13,7 +13,7 @@
   #define SIZE_T_FORMAT "%zu"
 #endif
 
-#define KB 1024
+#define KB  1024
 #define MB (1024 * KB)
 
 // number of elements in statically declared array
@@ -31,13 +31,13 @@
 #define write_u32_be(buf, val) do { \
    (buf)[0] = ((val) >> 24) & 0xFF; \
    (buf)[1] = ((val) >> 16) & 0xFF; \
-   (buf)[2] = ((val) >> 8) & 0xFF; \
-   (buf)[3] = (val) & 0xFF; \
+   (buf)[2] = ((val) >>  8) & 0xFF; \
+   (buf)[3] =  (val)        & 0xFF; \
 } while(0)
 #define read_u16_be(buf) (((buf)[0] << 8) + ((buf)[1]))
 #define write_u16_be(buf, val) do { \
-   (buf)[0] = ((val) >> 8) & 0xFF; \
-   (buf)[1] = ((val)) & 0xFF; \
+   (buf)[0] = ((val) >> 8) & 0xFF;  \
+   (buf)[1] = ((val)     ) & 0xFF;  \
 } while(0)
 
 // Windows compatibility

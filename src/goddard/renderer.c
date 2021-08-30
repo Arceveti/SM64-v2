@@ -25,7 +25,7 @@
 #define GD_LOWER_29(addr) (((uintptr_t)(addr)))
 #endif
 
-#define LOOKAT_PACK(c) ((s32) MIN(((c) * (128.0)), 127.0) & 0xff)
+#define LOOKAT_PACK(c) ((s32) MIN(((c) * (128.0f)), 127.0f) & 0xff)
 
 // structs
 struct GdDisplayList {
