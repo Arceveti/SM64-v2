@@ -184,9 +184,7 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 }
 
 Bool32 act_picking_up_bowser(struct MarioState *m) {
-#ifdef CENTERED_COLLISION
     if (m->pos[1] > m->floorHeight) m->pos[1] = m->floorHeight;
-#endif
     if (m->actionState == 0) {
         m->actionState             = 1;
         m->angleVel[1]             = 0x0;

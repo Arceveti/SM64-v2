@@ -517,9 +517,6 @@
 #define COLLISION_DATA_TYPE s16
 #define ROOM_DATA_TYPE      u8
 
-// Check for floors/ceilings from halfway up Mario's hitbox rather than from the bottom
-// (Arceveti)
-#define CENTERED_COLLISION
 
 // Platform displacement 2 also known as momentum patch.
 // Makes Mario keep the momemtum from moving platforms.
@@ -541,20 +538,8 @@
 // Detect Mario's collision with lava regardless of action (Arceveti)
 #define FIX_LAVA_INTERACTION
 
-// The lower wall check in ground quarter steps is unused, so this skips it (Arceveti)
-// #define SKIP_GROUND_LOWER_WALL
-
 // Maximum number of walls to check (vanilla is 4, higher is recommended)
 #define MAX_REFEREMCED_WALLS 16
-
-// Improved wall collision detection, with rounded corners
-// Fixes Mario jittering when walking into multiple walls at once
-// (frameperfection/Frame#5375)
-#define BETTER_WALL_COLLISION
-
-// Ceiling margin from BWC
-// (frameperfection/Frame#5375)
-#define CEILING_MARGINS
 
 // Push Mario out of sloped ceilings instead of stopping or bonking
 // helps prevent unwanted bonks and softlocks
@@ -745,11 +730,6 @@
 
 // Don't fall after star grab if the floor is too far below (Arceveti)
 #define AIR_STAR_DANCE
-
-// Properly fixes false ledge grabs
-// Does nothing if BETTER_WALL_COLLISION is enabled.
-// (Arceveti)
-#define FIX_LEDGE_GRABS
 
 // Ground pound dive similar to SMO, can also be used to cancel
 // a ground pound if the analog stick is held back (Arceveti)

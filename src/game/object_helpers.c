@@ -845,18 +845,10 @@ void cur_obj_update_floor_height(void) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
-#ifdef CENTERED_COLLISION
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
-#else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
-#endif
     o->platform     = ((floor != NULL) && (floor->object != 0)) ? floor->object : NULL;
 #else
-#ifdef CENTERED_COLLISION
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
-#else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
-#endif
 #endif
 }
 
@@ -869,18 +861,10 @@ struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
-#ifdef CENTERED_COLLISION
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
-#else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
-#endif
     o->platform     = ((floor != NULL) && (floor->object != 0)) ? floor->object : NULL;
 #else
-#ifdef CENTERED_COLLISION
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
-#else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
-#endif
 #endif
     return floor;
 }
@@ -909,11 +893,7 @@ static Bool32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepS
     f32 intendedX           = (o->oPosX + o->oVelX);
     f32 intendedZ           = (o->oPosZ + o->oVelZ);
     gFindFloorIncludeSurfaceIntangible = TRUE;
-#ifdef CENTERED_COLLISION
     f32 intendedFloorHeight = find_floor(intendedX, o->oPosY + OBJ_STEP_HEIGHT, intendedZ, &intendedFloor); // find_room_floor?
-#else
-    f32 intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor); // find_room_floor?
-#endif
     f32 deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
     o->oMoveFlags           &= ~OBJ_MOVE_HIT_EDGE;
     if ((o->oRoom            != -1)
@@ -1181,11 +1161,7 @@ static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel,
     s32 i;
     struct Surface *floor;
     struct Object  *coin;
-#ifdef CENTERED_COLLISION
     f32 spawnHeight = find_floor(obj->oPosX, obj->oPosY + OBJ_STEP_HEIGHT, obj->oPosZ, &floor);
-#else
-    f32 spawnHeight = find_floor(obj->oPosX, obj->oPosY, obj->oPosZ, &floor);
-#endif
     if ((obj->oPosY - spawnHeight) > 100.0f) spawnHeight = obj->oPosY;
     for ((i = 0); (i < numCoins); (i++)) {
         if (obj->oNumLootCoins <= 0) break;
@@ -1241,11 +1217,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type
     if (o->oForwardVel != 0.0f) {
         intendedX           = (o->oPosX + o->oVelX);
         intendedZ           = (o->oPosZ + o->oVelZ);
-#ifdef CENTERED_COLLISION
-        intendedFloorHeight = find_floor(intendedX, o->oPosY + OBJ_STEP_HEIGHT, intendedZ, &intendedFloor);
-#else
-        intendedFloorHeight = find_floor(intendedX, o->oPosY, intendedZ, &intendedFloor);
-#endif
+        intendedFloorHeight = find_floor(intendedX, (o->oPosY + OBJ_STEP_HEIGHT), intendedZ, &intendedFloor);
         deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
         if (intendedFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
             o->oWallAngle = (o->oMoveAngleYaw + DEG(180));

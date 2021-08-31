@@ -40,11 +40,7 @@ void hoot_free_step(UNUSED Bool32 fastOscY, s32 speed) {
     o->oPosX             += o->oVelX;
     o->oPosY             -= (o->oVelY + (coss((s32)(animFrame * (fastOscY ? 6553.6f : 3276.8f))) * 50.0f / 4));
     o->oPosZ             += o->oVelZ;
-#ifdef CENTERED_COLLISION
     find_floor_height_and_data(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floorGeo);
-#else
-    find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
-#endif
     if (floorGeo == NULL) {
         o->oPosX = xPrev;
         o->oPosZ = zPrev;
@@ -89,11 +85,7 @@ void hoot_surface_collision(f32 xPrev, f32 zPrev) {
         vec3f_copy(&o->oPosVec, hitbox.pos);
         gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_FROM_HOOT; /* bit 7 */
     }
-#ifdef CENTERED_COLLISION
     f32 floorY = find_floor_height_and_data(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floorGeo);
-#else
-    f32 floorY = find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeo);
-#endif
     if (floorGeo == NULL) {
         o->oPosX = xPrev;
         o->oPosZ = zPrev;

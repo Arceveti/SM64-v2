@@ -147,11 +147,7 @@ void bhv_bob_pit_bowling_ball_init(void) {
 void bhv_bob_pit_bowling_ball_loop(void) {
     struct FloorGeometry *floorGeometry;
     object_step();
-#ifdef CENTERED_COLLISION
     find_floor_height_and_data(o->oPosX, (o->oPosY + (o->hitboxHeight / 2.0f)), o->oPosZ, &floorGeometry);
-#else
-    find_floor_height_and_data(o->oPosX, o->oPosY, o->oPosZ, &floorGeometry);
-#endif
     if ((floorGeometry->normalX == 0.0f) && (floorGeometry->normalZ == 0.0f)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();
     set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, &o->oPosVec);

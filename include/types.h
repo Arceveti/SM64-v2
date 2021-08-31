@@ -427,9 +427,7 @@ struct MarioState
            Angle            moveYaw;
              f32            lateralSpeed;
              f32            moveSpeed;
-#ifdef CENTERED_COLLISION
              f32            midY;
-#endif
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
              f32            steepness;
 #endif

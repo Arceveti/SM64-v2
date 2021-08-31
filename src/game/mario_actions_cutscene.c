@@ -457,9 +457,7 @@ Bool32 act_reading_sign(struct MarioState *m) {
 }
 
 Bool32 act_debug_free_move(struct MarioState *m) {
-#ifdef BETTER_WALL_COLLISION
     struct WallCollisionData wallData;
-#endif
     struct Surface *ceil;
     struct Surface *floor;
     f32 ceilHeight;
@@ -491,19 +489,10 @@ Bool32 act_debug_free_move(struct MarioState *m) {
         pos[0] += (2.0f * speed * sins(m->intendedYaw) * m->intendedMag);
         pos[2] += (2.0f * speed * coss(m->intendedYaw) * m->intendedMag);
     }
-#ifdef BETTER_WALL_COLLISION
     resolve_and_return_wall_collisions(pos, 60.0f, 50.0f, &wallData);
-    m->wall = ((wallData.numWalls > 0) ? wallData.walls[0] : NULL); //! only returns first wall
-#else
-    m->wall = resolve_and_return_wall_collisions(pos, 60.0f, 50.0f);
-#endif
-#ifdef CENTERED_COLLISION
+    m->wall = ((wallData.numWalls > 0) ? wallData.walls[0] : NULL); //! only uses first wall
     floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
-#else
-    floorHeight = find_floor(pos[0], pos[1], pos[2], &floor);
-    ceilHeight  = find_ceil( pos[0], pos[1], pos[2], &ceil);
-#endif
     if (floor == NULL) return FALSE;
     if ((ceilHeight - floorHeight) >= MARIO_HITBOX_HEIGHT) {
         if ((floor != NULL) && ( pos[1] < floorHeight)) pos[1] = floorHeight;

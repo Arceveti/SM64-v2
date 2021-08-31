@@ -118,11 +118,6 @@ static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ
     } else {
         listIndex = SPATIAL_PARTITION_WALLS;
         sortDir =  0; // insertion order
-#ifndef BETTER_WALL_COLLISION
-        // Vanilla is 0.707 ~cos(50)
-        // Why are these cos(50) instead of cos(45)?
-        if ((surface->normal.x < -COS50) || (surface->normal.x > COS50)) surface->flags |= SURFACE_FLAG_X_PROJECTION;
-#endif
     }
     surfacePriority  = (surface->upperY * sortDir);
     newNode->surface = surface;

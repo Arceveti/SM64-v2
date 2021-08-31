@@ -654,11 +654,7 @@ Angle look_down_slopes(Angle camYaw) {
     // x and z offsets towards the camera
     f32 xOff    = (sMarioCamState->pos[0] + (sins(camYaw) * 40.0f));
     f32 zOff    = (sMarioCamState->pos[2] + (coss(camYaw) * 40.0f));
-#ifdef CENTERED_COLLISION
     f32 floorDY = (find_floor(xOff, (sMarioCamState->pos[1] + gMarioState->midY), zOff, &floor) - sMarioCamState->pos[1]);
-#else
-    f32 floorDY = (find_floor(xOff, sMarioCamState->pos[1], zOff, &floor) - sMarioCamState->pos[1]);
-#endif
     if ((floor != NULL) && (floor->type != SURFACE_WALL_MISC) && (floorDY > 0)) {
         if ((floor->normal.z == 0.0f) && (floorDY < 100.0f)) {
             pitch = DEG(8);

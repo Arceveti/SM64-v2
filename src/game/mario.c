@@ -1127,26 +1127,16 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     f32 ceilToFloorDist;
     f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
-#ifdef CENTERED_COLLISION
     m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY),  m->pos[2], &m->floor);
-#else
-    m->floorHeight = find_floor(m->pos[0],  m->pos[1],  m->pos[2], &m->floor);
-#endif
     // If Mario is OOB, move his position to his graphical position (which was not updated)
     // and check for the floor there.
     // This can cause errant behavior when combined with astral projection,
     // since the graphical position was not Mario's previous location.
     if (m->floor == NULL) {
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
-#ifdef CENTERED_COLLISION
         m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->floor);
     }
     m->ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->ceil);
-#else
-        m->floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &m->floor);
-    }
-    m->ceilHeight = vec3f_find_ceil(m->pos, m->pos[1], &m->ceil);
-#endif
     gasLevel      = find_poison_gas_level(m->pos[0], m->pos[2]);
     m->waterLevel = find_water_level(     m->pos[0], m->pos[2]);
     if (m->floor != NULL) {
@@ -1429,9 +1419,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
     if (flags & MARIO_CAP_ON_HEAD) bodyState->capState  = ((flags & MARIO_WING_CAP) ? MARIO_HAS_WING_CAP_ON       : MARIO_HAS_DEFAULT_CAP_ON);
     // Short hitbox for crouching/crawling/etc.
     m->marioObj->hitboxHeight = ((m->action & ACT_FLAG_SHORT_HITBOX) ? MARIO_SHORT_HITBOX_HEIGHT : MARIO_HITBOX_HEIGHT);
-#ifdef CENTERED_COLLISION
     m->midY = ((m->action == ACT_SQUISHED) ? 0.0f : (m->marioObj->hitboxHeight / 2.0f));
-#endif
     if ((m->flags & MARIO_TELEPORTING) && (m->fadeWarpOpacity != 0xFF)) {
         bodyState->modelState &= ~MODEL_STATE_MASK;
         bodyState->modelState |= (MODEL_STATE_ALPHA | m->fadeWarpOpacity);
@@ -1565,11 +1553,7 @@ void init_mario(void) {
     vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
     vec3f_copy(gMarioState->prevPos, gMarioState->pos);
     vec3f_zero(    gMarioState->vel);
-#ifdef CENTERED_COLLISION
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], (gMarioState->pos[1] + gMarioState->midY), gMarioState->pos[2], &gMarioState->floor);
-#else
-    gMarioState->floorHeight = find_floor(gMarioState->pos[0], gMarioState->pos[1], gMarioState->pos[2], &gMarioState->floor);
-#endif
     if (gMarioState->pos[1] < gMarioState->floorHeight) gMarioState->pos[1] = gMarioState->floorHeight;
     gMarioState->marioObj->header.gfx.pos[1]          = gMarioState->pos[1];
     gMarioState->action = ((gMarioState->pos[1] <= (gMarioState->waterLevel - 100)) ? ACT_WATER_IDLE : ACT_IDLE);

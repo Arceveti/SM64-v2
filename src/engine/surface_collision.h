@@ -36,7 +36,7 @@ struct WallCollisionData
 struct FloorGeometry
 {
     f32 unused[4]; // possibly position data?
-    f32 normalX;
+    f32 normalX; //! Vec3f?
     f32 normalY;
     f32 normalZ;
     f32 originOffset;
@@ -45,18 +45,11 @@ struct FloorGeometry
 void move_towards_wall(struct MarioState *m, f32 amount);
 s32  f32_find_wall_collision(   f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 radius);
 s32  find_wall_collisions(struct WallCollisionData *colData);
-#ifdef BETTER_WALL_COLLISION
 void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData);
-#else
-struct Surface *resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius);
-#endif
 s32    collide_with_walls(               Vec3f pos, f32 offsetY, f32 radius);
 void   resolve_geometry_collisions(      Vec3f pos, UNUSED Vec3f lastGood);
 Bool32 find_wall_displacement(           Vec3f dist, f32 x, f32 y, f32 z, f32 radius);
 f32    find_ceil(                        f32  xPos, f32  yPos, f32  zPos, struct Surface **pceil);
-#ifndef CENTERED_COLLISION
-f32    vec3f_find_ceil(                  Vec3f pos, f32 height, struct Surface **ceil);
-#endif
 Bool32 floor_type_exists_in_current_cell(f32  xPos, f32  zPos, SurfaceType type, Bool32 dynamic);
 f32    find_floor_height_and_data(       f32  xPos, f32  yPos, f32  zPos, struct FloorGeometry **floorGeo);
 f32    find_floor_height(                f32  x,    f32  y,    f32  z);
