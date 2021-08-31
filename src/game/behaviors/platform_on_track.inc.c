@@ -53,10 +53,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
                     return;
                 }
             }
-            //! vec3f/s_diff(d, nextWaypoint->pos, pos);
-            d[0]               = (nextWaypoint->pos[0] - pos[0]);
-            d[1]               = (nextWaypoint->pos[1] - pos[1]);
-            d[2]               = (nextWaypoint->pos[2] - pos[2]);
+            vec3_diff(d, nextWaypoint->pos, pos);
             distToNextWaypoint = vec3f_mag(d);
             // Move directly to the next waypoint, even if it's farther away
             // than amountToMove

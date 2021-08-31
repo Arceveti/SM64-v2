@@ -76,6 +76,9 @@ extern Vec3f gVec3fZ;
 #define sqr(x)  (   (x) * (x))
 #define cube(x) (sqr(x) * (x))
 
+#define vec3_same(v, s) ((v[0]) = (v[1]) = (v[2]) = (s))
+#define vec3_zero(v)    (vec3_same(v, 0))
+
 #define vec3_set(dst, x, y, z)      \
     dst[0] = (x);                   \
     dst[1] = (y);                   \

@@ -170,10 +170,7 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
         if (isMario) gMarioStates[0].faceAngle[1] += rotation[1];
         vec3f_copy(platformPos, &platform->oPosVec);
         vec3f_diff(currentObjectOffset, objPos, platformPos);
-        //! vec3s/i diff:
-        rotation[0] = platform->oFaceAnglePitch - rotation[0];
-        rotation[1] = platform->oFaceAngleYaw   - rotation[1];
-        rotation[2] = platform->oFaceAngleRoll  - rotation[2];
+        vec3_diff(rotation, &platform->oFaceAngleVec, rotation);
         mtxf_rotate_zxy_and_translate(  displaceMatrix, currentObjectOffset, rotation);
         linear_mtxf_transpose_mul_vec3f(displaceMatrix,      relativeOffset, currentObjectOffset);
         vec3i_to_vec3s(rotation, &platform->oFaceAngleVec);

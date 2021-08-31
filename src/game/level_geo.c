@@ -41,9 +41,9 @@ Gfx *geo_envfx_main(s32 callContext, struct GraphNode *node, Mat4 mtxf) {
         }
     } else if (callContext == GEO_CONTEXT_AREA_INIT) {
         // Give these arguments some dummy values. Not used in ENVFX_MODE_NONE
-        vec3s_zero(camTo   );
-        vec3s_zero(camFrom );
-        vec3s_zero(marioPos);
+        vec3_zero(camTo   );
+        vec3_zero(camFrom );
+        vec3_zero(marioPos);
         envfx_update_particles(ENVFX_MODE_NONE, marioPos, camTo, camFrom);
     }
     return gfx;

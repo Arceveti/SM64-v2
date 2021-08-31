@@ -179,10 +179,8 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
         struct Whirlpool *whirlpool = gCurrentArea->whirlpools[i];
         if (whirlpool != NULL) {
             f32 strength           = 0.0f;
-            Vec3f d; //! vec3f/s diff?
-            d[0]                   = (whirlpool->pos[0] - m->pos[0]);
-            d[1]                   = (whirlpool->pos[1] - m->pos[1]);
-            d[2]                   = (whirlpool->pos[2] - m->pos[2]);
+            Vec3f d;
+            vec3_diff(d, whirlpool->pos, m->pos);
             f32 lateralDist        = sqrtf(sqr(d[0]) + sqr(d[2]));
             f32 distance           = sqrtf(sqr(lateralDist) + sqr(d[1]));
             Angle pitchToWhirlpool = atan2s(lateralDist, d[1]);
@@ -409,12 +407,12 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
             floorPitch = atan2s(1.0f, m->floor->normal.y);
             if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
 #else
-            floorPitch = -find_floor_slope(m, -0x8000, 5.0f);
+            floorPitch = -find_floor_slope(m, -DEG(180), 5.0f);
             if (m->faceAngle[0] < floorPitch) m->faceAngle[0] = floorPitch;
 #endif
             break;
         case WATER_STEP_HIT_CEILING:
-            if (m->faceAngle[0] > -0x3000) m->faceAngle[0] -= 0x100;
+            if (m->faceAngle[0] > -DEG(67.5)) m->faceAngle[0] -= 0x100;
             break;
         case WATER_STEP_HIT_WALL:
             if (m->controller->stickY == 0.0f) {
@@ -447,7 +445,7 @@ static Bool32 check_water_jump(struct MarioState *m) {
 #else
         if ((probe >= (m->waterLevel - 80)) && (  m->faceAngle[0] >= 0x0) &&  m->controller->stickY < -60.0f) {
 #endif
-            vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
+            vec3_zero(m->angleVel);
             m->vel[1] = 62.0f;
             return set_mario_action(m, ((m->heldObj == NULL) ? ACT_WATER_JUMP : ACT_HOLD_WATER_JUMP), 0);
         }
@@ -515,11 +513,11 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
         stepResult = perform_water_step(m);
         if ((m->vel[1] >= 0.0f) || (m->actionTimer > 120)) {
             switch (stateFlags) {
-                case 0: set_mario_action(m, ACT_WATER_ACTION_END,         0); break;
-                case 1: set_mario_action(m, ACT_HOLD_WATER_ACTION_END,    0); break;
-                case 2: set_mario_action(m, ACT_FLUTTER_KICK,             0); break;
-                case 3: set_mario_action(m, ACT_HOLD_FLUTTER_KICK,        0); break;
-                case 4: set_mario_action(m, ACT_METAL_WATER_FALLING,      0); break;
+                case 0: set_mario_action(m, ACT_WATER_ACTION_END        , 0); break;
+                case 1: set_mario_action(m, ACT_HOLD_WATER_ACTION_END   , 0); break;
+                case 2: set_mario_action(m, ACT_FLUTTER_KICK            , 0); break;
+                case 3: set_mario_action(m, ACT_HOLD_FLUTTER_KICK       , 0); break;
+                case 4: set_mario_action(m, ACT_METAL_WATER_FALLING     , 0); break;
                 case 5: set_mario_action(m, ACT_HOLD_METAL_WATER_FALLING, 0); break;
             }
         }
