@@ -1,22 +1,22 @@
 **TODO:**
 - Known Bugs:
-    - Clipping through JRB ship
+    - Possible to clip through the back wall of the JRB ship when jumping at it at certain angles
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar for some reason
-    - Goddard joints don't move properly on the Z axis
+    - Goddard joints don't get dragged properly on the Z axis
     - Audio is scuffed
         - Might be a HackerSM64 issue?
 - Crashes:
-    - Freezing when freefalling onto a slope
-    - Entering a level after being in another level sometimes whitescreens
+    - Entering a level after being in another level sometimes whitescreens (rare)
     - Properly fix HMC crash
         - Current fix is increasing the gfx pool
+        - Might be the same underlying issue as the above whitescreens?
     - Properly fix rumble "heavy object" crash
         - Current fix is '#define static' in rendering_graph_node.c
+            - How does this fix work?
     - Fix ending cutscene crash
 - Optimizations:
-    - Separate find_room function for geo_switch_area, and only check collision in current room
-    - Save space by similar textures/models using the same file/model/displaylist
+    - Save rom space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
             - Smooth
                 - Bobomb body
@@ -60,10 +60,10 @@
             - TOTWC
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
-    - Optimize/reduce find_floor calls (and other collision checks)
-- Objects:
-    - Make step height per-object
+    - Optimize/reduce find_floor/ceil/wall calls
 - Physics/Movement:
+    - Make step height per-object
+    - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?
     - Ability to move between walls that share an edge when ledge grab sidling
     - Hanging quarter steps?
@@ -82,8 +82,8 @@
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette
     - Metal cap effect:
-        - Use vanilla metal cap texture if framebuffer is not enabled
         - Make metal cap effect work on console, otherwise use vanilla
+            - Also use vanilla if framebuffer is not enabled
 - HUD:
     - Rearrange HUD
         - Top Left:
@@ -111,11 +111,11 @@
         - Separate (super low-poly) collision maps specifically for the camera?
     - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
+    - Combine/sort behavior actions, obj_behaviors, obj_behaviors_2, and object_helpers?
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
         - Including gd_math
-    - Move to src/boot:
-        - crash?
+    - Make vec3 functions type-independent
     - Move to src/engine:
         - print?
         - printf?

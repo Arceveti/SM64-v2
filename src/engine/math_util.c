@@ -1102,8 +1102,13 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
  * 'roll' rotates the object while still facing the camera.
  */
 void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
-    dest[0][0] = coss(roll);
-    dest[0][1] = sins(roll);
+    if (roll == 0x0) {
+        dest[0][0] = 1;
+        dest[0][1] = 0;
+    } else {
+        dest[0][0] = coss(roll);
+        dest[0][1] = sins(roll);
+    }
     dest[0][2] = 0;
     dest[0][3] = 0;
     dest[1][0] = -dest[0][1];

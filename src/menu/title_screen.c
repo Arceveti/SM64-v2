@@ -32,7 +32,9 @@ static char sLevelSelectStageNames[64][16] = {
 #undef STUB_LEVEL
 #undef DEFINE_LEVEL
 
+#ifndef DISABLE_DEMO
 static u16 sDemoCountdown = 0;
+#endif
 #ifndef VERSION_JP
 static s16 sPlayMarioGreeting = TRUE;
 static s16 sPlayMarioGameOver = TRUE;
@@ -40,6 +42,8 @@ static s16 sPlayMarioGameOver = TRUE;
 u8 gLevelSelectHoldKeyIndex = 0;
 u8 gLevelSelectHoldKeyTimer = 0;
 
+
+#ifndef DISABLE_DEMO
 #define PRESS_START_DEMO_TIMER 800
 
 /**
@@ -54,14 +58,11 @@ s32 run_level_id_or_demo(s32 level) {
             // start the demo. 800 frames has passed while
             // player is idle on PRESS START screen.
             if ((++sDemoCountdown) == PRESS_START_DEMO_TIMER) {
-
                 // start the Mario demo animation for the demo list.
                 load_patchable_table(&gDemoInputsBuf, gDemoInputListID);
-
                 // if the next demo sequence ID is the count limit, reset it back to
                 // the first sequence.
                 if (++gDemoInputListID == gDemoInputsBuf.dmaTable->count) gDemoInputListID = 0;
-
                 // add 1 (+4) to the pointer to skip the first 4 bytes
                 // Use the first 4 bytes to store level ID,
                 // then use the rest of the values for inputs
@@ -76,6 +77,7 @@ s32 run_level_id_or_demo(s32 level) {
     }
     return level;
 }
+#endif
 
 /**
  * Level select intro function, updates the selected stage
@@ -174,7 +176,11 @@ s32 intro_regular(void) {
         sPlayMarioGreeting = TRUE;
 #endif
     }
+#ifdef DISABLE_DEMO
+    return level;
+#else
     return run_level_id_or_demo(level);
+#endif
 }
 
 /**
@@ -201,7 +207,11 @@ s32 intro_game_over(void) {
         sPlayMarioGameOver = TRUE;
 #endif
     }
+#ifdef DISABLE_DEMO
+    return level;
+#else
     return run_level_id_or_demo(level);
+#endif
 }
 
 /**

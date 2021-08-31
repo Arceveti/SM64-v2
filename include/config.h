@@ -216,6 +216,9 @@
 // Uncomment this if you want to keep the Mario head and not skip it (HackerSM64)
 #define KEEP_MARIO_HEAD
 
+// Disables the demo that plays when idle on the start screen (Arceveti)
+#define DISABLE_DEMO
+
 // Fixes the castle music sometimes triggering after getting a dialog (HackerSM64)
 #define FIX_CASTLE_MUSIC
 

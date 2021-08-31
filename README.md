@@ -22,7 +22,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
-- Added a few bonus objects in some levels () (Arceveti) *
+- Added a few bonus objects in some levels (mostly just coins, 1-ups, and recovery hearts) (Arceveti) *
 - Fixed the "Impossible" coins' locations (Arceveti) *
 - Both 1-Ups in the CCM slide shortcut are actually collectible (Arceveti) *
 - The Blast Away The Wall star spawns from the wall instead of existing in the world already (AdyaGD) *
@@ -35,8 +35,9 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 **Optimizations:**
-- Most doubles are now floats where the extra percision isn't needed
+- Most doubles are now floats where the extra percision isn't needed (Arceveti)
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
+- find_floor only checks static surfaces when checking for rooms (Arceveti)
 - Some unecessary find_floor (collision) checks are removed (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
@@ -52,18 +53,20 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Some actor and behavior files have been moved around for consistency (Arceveti)
 - Hardcoded render layers are replaced with their defines (Arceveti)
 - Many object constants have been defined (Arceveti)
-- Most general use math functions moved to `math_util.c`
-- Expanded `math_util.c` with more general use math fuctions
+- Most general use math functions moved to `math_util.c` (Arceveti)
+- Expanded `math_util.c` with more general use math fuctions (Arceveti)
 - New render layer (LAYER_ALPHA_DECAL) when Silhouette is enabled (Arceveti) *
 - Extended debug info, with more info for [movement](https://i.imgur.com/ltr0cgZ.png), [input](https://i.imgur.com/ziv3lIz.png), and info for [floors](https://i.imgur.com/qYYqIau.png)/[ceilings](https://i.imgur.com/VZ9MaOC.png)/[walls](https://i.imgur.com/hKC4ibh.png) (Arceveti) *
 - Configurable terminal velocity for gravity (Arceveti) *
 - Z Offset for billboards, used for the star glow effect (Arceveti)
 - Defines for specific cos() values used through out the game, usually for checking the Y normal of surfaces (Arceveti)
-- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti)*
+- Include the English characters that were missing from US segment2 `J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key` [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS] (Arceveti) *
+- Backup segment2 characters for if the above isn't enabled (Arceveti)
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
 - Extra fields in the MarioState struct, based on Mario's movement: lastSafePos, prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
+- Disable the demo that plays when idle on the start screen (Arceveti) *
 
 **HUD:**
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *
@@ -73,6 +76,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [Air/Breath meter is separate from health meter when underwater](https://i.imgur.com/VuPOl1f.png) (Arceveti) *
 
 **Camera:**
+- Fix air jittering in Puppycam (Arceveti)
 - Slightly modified version of Reonu Cam 3 (Reonu) *
 - Camera approaches Mario's height much more quickly (Reonu) *
 
@@ -97,7 +101,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [Reimplemented the unused "sad" eye texture for the mother penguin in CCM](https://i.imgur.com/Uk8MNAe.png) *
 
 **Collision:**
-- Mario's collision with lava is detected regardless of his action *
+- Mario's collision with lava is detected regardless of his action (Arceveti) *
 - Vertical quicksand support (Wiseguy) *
 - Platform Displacement 2 is modified to work with static objects, such as TTC Treadmills (Arceveti)
 - Improved slope fix and exposed ceilings fix (Arceveti)
@@ -118,8 +122,8 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Hold A when bouncing on an enemy to jump higher (Arceveti) *
 - Hold Z while twirling to descend faster (Arceveti) *
 - Air steps while ground pounding, preventing stuff like clipping through whomps (Arceveti) *
-- Ground pound jump similar to SMO *
-- Underwater Ground pound similar to SMO *
+- Ground pound jump similar to SMO (Arceveti) *
+- Underwater Ground pound similar to SMO (Arceveti) *
 - Ground pound dive similar to SMO, but can also be used to cancel out of a ground pound if the analog stick is held back (Arceveti) *
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, less softlocks, etc. See config for more details (Arceveti) *
