@@ -24,6 +24,17 @@ extern f32 gSineTable[];
 #define gCosineTable (gSineTable + 0x400)
 extern s16 gArctanTable[];
 
+extern Vec3f gVec3fZero;
+extern Vec3s gVec3sZero;
+extern Vec3i gVec3iZero;
+extern Vec3f gVec3fOne;
+extern Vec3s gVec3sOne;
+
+extern Vec3f gVec3fX;
+extern Vec3f gVec3fY;
+extern Vec3f gVec3fZ;
+
+
 #define ABSF(x) ((x) > 0.0f ? (x) : -(x))
 #define ABSI(x) ((x) > 0    ? (x) : -(x))
 
@@ -62,21 +73,51 @@ extern s16 gArctanTable[];
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
-#define sqr(x)  ((x) * (x))
+#define sqr(x)  (   (x) * (x))
 #define cube(x) (sqr(x) * (x))
+
+#define vec3_set(dst, x, y, z)      \
+    dst[0] = (x);                   \
+    dst[1] = (y);                   \
+    dst[2] = (z);                   \
+
+#define vec3_copy(dst, src)         \
+    dst[0] = src[0];                \
+    dst[1] = src[1];                \
+    dst[2] = src[2];                \
+
+#define vec3_copy_negative(dst, src)\
+    dst[0] = -src[0];               \
+    dst[1] = -src[1];               \
+    dst[2] = -src[2];               \
+
+#define vec3_copy_inverse(dst, src) \
+    dst[0] = src[2];                \
+    dst[1] = src[1];                \
+    dst[2] = src[0];                \
+
+#define vec3_sum(dst, src1, src2)   \
+    dst[0] = (src1[0] + src2[0]);   \
+    dst[1] = (src1[1] + src2[1]);   \
+    dst[2] = (src1[2] + src2[2]);   \
+
+#define vec3_diff(dst, src1, src2)  \
+    dst[0] = (src1[0] - src2[0]);   \
+    dst[1] = (src1[1] - src2[1]);   \
+    dst[2] = (src1[2] - src2[2]);   \
+
+#define vec3_prod(dst, src1, src2)  \
+    dst[0] = (src1[0] * src2[0]);   \
+    dst[1] = (src1[1] * src2[1]);   \
+    dst[2] = (src1[2] * src2[2]);   \
+
+#define vec3_quot(dst, src1, src2)  \
+    dst[0] = (src1[0] / src2[0]);   \
+    dst[1] = (src1[1] / src2[1]);   \
+    dst[2] = (src1[2] / src2[2]);   \
 
 #define vec3a_copy(dst, src    ) (vec3s_copy((dst), (src)        ))
 #define vec3a_set( dst, x, y, z) (vec3s_set( (dst), (x), (y), (z)))
-
-extern Vec3f gVec3fZero;
-extern Vec3s gVec3sZero;
-extern Vec3i gVec3iZero;
-extern Vec3f gVec3fOne;
-extern Vec3s gVec3sOne;
-
-extern Vec3f gVec3fX;
-extern Vec3f gVec3fY;
-extern Vec3f gVec3fZ;
 
 // Kaze's float functions
 f32 slow_logf(f32 x);

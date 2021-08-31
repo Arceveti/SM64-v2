@@ -21,8 +21,8 @@ extern "C" {
 /*===========================================================================*
  *	Macro
  *===========================================================================*/
-#define	GS_CALC_DXT(line)	(((1<< G_TX_DXT_FRAC)-1)/(line)+1)
-#define	GS_PIX2TMEM(pix, siz)	((pix)>>(4-(siz)))
+#define	GS_CALC_DXT(line)	(((1 << G_TX_DXT_FRAC) - 1) / (line) + 1)
+#define	GS_PIX2TMEM(pix, siz)	((pix) >> (4 - (siz)))
 #define	GS_PIX2DXT( pix, siz)	GS_CALC_DXT(GS_PIX2TMEM((pix), (siz)))
 
 /*===========================================================================*
@@ -171,8 +171,8 @@ typedef union {
 #define	G_OBJLT_TXTRTILE	0x00fc1034
 #define	G_OBJLT_TLUT			0x00000030
 
-#define	GS_TB_TSIZE(pix,siz)	(GS_PIX2TMEM((pix),(siz))-1)
-#define	GS_TB_TLINE(pix,siz)	(GS_CALC_DXT(GS_PIX2TMEM((pix),(siz))))
+#define	GS_TB_TSIZE(pix,siz)	(GS_PIX2TMEM((pix), (siz)) - 1)
+#define	GS_TB_TLINE(pix,siz)	(GS_CALC_DXT(GS_PIX2TMEM((pix), (siz))))
 
 typedef	struct	{
   u32	type;						/* G_OBJLT_TXTRBLOCK divided into types */
@@ -185,8 +185,8 @@ typedef	struct	{
   u32	mask;						/* STATE mask  */
 } uObjTxtrBlock_t;		/* 24 bytes */
 
-#define	GS_TT_TWIDTH(pix,siz)	((GS_PIX2TMEM((pix), (siz))<<2)-1)
-#define	GS_TT_THEIGHT(pix,siz)	(((pix)<<2)-1)
+#define	GS_TT_TWIDTH(pix,siz)	((GS_PIX2TMEM((pix), (siz)) << 2) - 1)
+#define	GS_TT_THEIGHT(pix,siz)	(((pix) << 2) - 1)
 
 typedef	struct	{
   u32	type;					/* G_OBJLT_TXTRTILE divided into types */
@@ -268,9 +268,9 @@ typedef	struct	{
 #define	gSPBgRectangle(pkt, m, mptr)  gDma0p((pkt),(m),(mptr),0)
 #define	gsSPBgRectangle(m, mptr)      gsDma0p(     (m),(mptr),0)
 #define	gSPBgRectCopy(pkt, mptr)      gSPBgRectangle((pkt), G_BG_COPY, (mptr))
-#define	gsSPBgRectCopy(mptr)	      gsSPBgRectangle(      G_BG_COPY, (mptr))
+#define	gsSPBgRectCopy(mptr)          gsSPBgRectangle(      G_BG_COPY, (mptr))
 #define	gSPBgRect1Cyc(pkt, mptr)      gSPBgRectangle((pkt), G_BG_1CYC, (mptr))
-#define	gsSPBgRect1Cyc(mptr)	      gsSPBgRectangle(      G_BG_1CYC, (mptr))
+#define	gsSPBgRect1Cyc(mptr)          gsSPBgRectangle(      G_BG_1CYC, (mptr))
 
 /*---------------------------------------------------------------------------*
  *	2D Objects

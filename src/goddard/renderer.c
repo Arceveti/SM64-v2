@@ -1748,7 +1748,7 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
     gd_enddlsplist_parent();
     d_start_group("mouseg");
     net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));
-    d_set_init_pos(0.0f, 0.0f, 0.0f);
+    d_set_init_pos(gVec3fZero);
     d_set_type(3);
     d_set_shapeptrptr(&sHandShape);
     d_end_group("mouseg");

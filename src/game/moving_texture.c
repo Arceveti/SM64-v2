@@ -595,8 +595,8 @@ void movtex_write_vertex_first(Vtx *vtx, RawVertexData *movtexVerts, struct Movt
             break;
         case MOVTEX_LAYOUT_COLORED:
             vec3s_to_colorRGB(color, &movtexVerts[MOVTEX_ATTR_RGB_INDEX]);
-            s        = movtexVerts[MOVTEX_ATTR_COLORED_S];
-            t        = movtexVerts[MOVTEX_ATTR_COLORED_T];
+            s                       = movtexVerts[MOVTEX_ATTR_COLORED_S];
+            t                       = movtexVerts[MOVTEX_ATTR_COLORED_T];
             make_vertex(vtx, 0, pos[0], pos[1], pos[2], s, t, color[0], color[1], color[2], c->color[3]);
             break;
     }

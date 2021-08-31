@@ -367,9 +367,7 @@ void random_vec3s(Vec3s dest, s16 xRange, s16 yRange, s16 zRange) {
 
 /// Copy vector 'src' to 'dest'
 void vec3f_copy(Vec3f dest, Vec3f src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 /// Copy vector 'src' to 'dest'
@@ -450,23 +448,17 @@ void vec3i_sub(Vec3i dest, Vec3i a) {
 
 /// Copy vector src to dest
 void vec3i_copy(Vec3i dest, Vec3i src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 /// Copy vector src to dest
 void vec3c_copy(Vec3c dest, Vec3c src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 /// Copy vector src to dest
 void vec3s_copy(Vec3s dest, Vec3s src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 /// Set vector 'dest' to (x, y, z)

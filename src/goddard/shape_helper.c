@@ -124,7 +124,7 @@ void scale_obj_position(struct GdObj *obj) {
     d_get_rel_pos(pos);
     vec3f_mul_vec3f(pos, sVertexScaleFactor);
     d_set_rel_pos( pos[0], pos[1], pos[2]);
-    d_set_init_pos(pos[0], pos[1], pos[2]);
+    d_set_init_pos(pos);
 }
 
 /* @ 246B1C for 0x88 */

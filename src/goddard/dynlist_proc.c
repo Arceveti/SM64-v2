@@ -737,24 +737,24 @@ void d_use_integer_names(s32 isIntBool) {
  * Set the initial position of the current dynamic object
  * to `(x, y, z)`.
  */
-void d_set_init_pos(f32 x, f32 y, f32 z) {
+void d_set_init_pos(Vec3f pos) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            vec3f_set(((struct ObjJoint *) dynobj)->worldPos, x, y, z);
-            vec3f_set(((struct ObjJoint *) dynobj)->relPos,   x, y, z);
-            vec3f_set(((struct ObjJoint *) dynobj)->initPos,  x, y, z);
+            vec3f_copy(((struct ObjJoint *) dynobj)->worldPos, pos);
+            vec3f_copy(((struct ObjJoint *) dynobj)->relPos,   pos);
+            vec3f_copy(((struct ObjJoint *) dynobj)->initPos,  pos);
             break;
         case OBJ_TYPE_NETS:
-            vec3f_set(((struct ObjNet *) dynobj)->worldPos, x, y, z);
-            vec3f_set(((struct ObjNet *) dynobj)->initPos,  x, y, z);
+            vec3f_copy(((struct ObjNet *) dynobj)->worldPos, pos);
+            vec3f_copy(((struct ObjNet *) dynobj)->initPos,  pos);
             break;
-        case OBJ_TYPE_PARTICLES: vec3f_set(((struct ObjParticle *) dynobj)->pos,      x, y, z); break;
-        case OBJ_TYPE_CAMERAS:   vec3f_set(((struct ObjCamera   *) dynobj)->worldPos, x, y, z); break;
+        case OBJ_TYPE_PARTICLES: vec3f_copy(((struct ObjParticle *) dynobj)->pos,      pos); break;
+        case OBJ_TYPE_CAMERAS:   vec3f_copy(((struct ObjCamera   *) dynobj)->worldPos, pos); break;
         case OBJ_TYPE_VERTICES:
-            d_set_rel_pos(x, y, z);
-            vec3f_set(((struct ObjVertex *) dynobj)->initPos, x, y, z);
+            d_set_rel_pos(pos[0], pos[1], pos[2]);
+            vec3f_copy(((struct ObjVertex *) dynobj)->initPos, pos);
             break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetInitPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
@@ -825,6 +825,7 @@ void d_get_init_rot(Vec3f dst) {
  * @note This function automatically adjusts the three zoom levels
  *       for an `ObjCamera`.
  */
+//! Vec3f pos
 void d_set_rel_pos(f32 x, f32 y, f32 z) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
@@ -960,6 +961,7 @@ void d_vec3f_set_att_offset(Vec3f off) {
  *
  * @note Sets the upper left coordinates of an `ObjView`
  */
+//! Vec3f pos
 void d_set_world_pos(f32 x, f32 y, f32 z) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
@@ -1011,6 +1013,7 @@ void d_vec3f_get_world_pos(Vec3f dst) {
  *
  * @note Sets the lower right coordinates of an `ObjView`
  */
+//! Vec3f scale
 void d_set_scale(f32 x, f32 y, f32 z) {
     struct GdObj *initDynobj;
     if (sDynListCurObj == NULL) gd_exit();
@@ -1030,6 +1033,7 @@ void d_set_scale(f32 x, f32 y, f32 z) {
 /**
  * Set the rotation value of the current active dynamic object.
  */
+//! Vec3f rotation
 void d_set_rotation(f32 x, f32 y, f32 z) {
     struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
@@ -1166,6 +1170,7 @@ void d_set_ambient(ColorF r, ColorF g, ColorF b) {
 /**
  * Set the diffuse color of the current dynamic `ObjMaterial` or `ObjLight`.
  */
+//! ColorRGBf
 void d_set_diffuse(ColorF r, ColorF g, ColorF b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {

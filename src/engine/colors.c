@@ -158,15 +158,11 @@ void colorRGB_set(ColorRGB dest, Color r, Color g, Color b) {
 
 /// Copy ColorRGB vector src to dest
 void colorRGB_copy(ColorRGB dest, const ColorRGB src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 void vec3s_to_colorRGB(ColorRGB dest, Vec3s src) {
-    dest[0] = src[0];
-    dest[1] = src[1];
-    dest[2] = src[2];
+    vec3_copy(dest, src);
 }
 
 // rgba16 value

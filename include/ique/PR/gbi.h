@@ -26,11 +26,13 @@
  * Converts texture pixel coordinates to S and T values
  */
 // Bilerp/Average filter
-#define TC_B(p)		(((p) == 0) ? 0 : ((((p) > 0) ? ((p) - 1) : ((p) + 1)) * 32))
+#define TC_B_OFF	-0.5
+#define TC_B(p)		(((p) + TC_B_OFF) * 32)
 #define ST_B(s, t)	{TC_B(s), TC_B(t)}
 
 // Point filter
-#define TC_P(p)		(((p) + 0.25) * 32)
+#define TX_P_OFF	0.25
+#define TC_P(p)		(((p) + TX_P_OFF) * 32)
 #define ST_P(s, t)	{TC_P(s), TC_P(t)}
 
 /*
