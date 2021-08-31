@@ -7,24 +7,24 @@
 #include "types.h"
 
 // I4
-#define SIZ_I4  0x4
-#define MSK_I4  BITMASK(SIZ_I4)
+#define SIZ_I4      0x4
+#define MSK_I4      BITMASK(SIZ_I4)
 
 // I8
-#define SIZ_I8  0x8
-#define MSK_I8  BITMASK(SIZ_I8)
+#define SIZ_I8      0x8
+#define MSK_I8      BITMASK(SIZ_I8)
 
 // IA4
 #define SIZ_IA4_I   0x3
 #define MSK_IA4_I   BITMASK(SIZ_IA4_I)
 #define IDX_IA4_I   ((SIZ_IA4_I * 0) + 1)
 #define IA4_I(c)    (((c) >> IDX_IA4_I) & MSK_IA4_I)
-#define I_IA4(c)    (((c) & MSK_IA4) << IDX_IA4_I)
+#define I_IA4(c)    (((c) & MSK_IA4_I) << IDX_IA4_I)
 #define SIZ_IA4_A   0x1
 #define MSK_IA4_A   BITMASK(SIZ_IA4_A)
 #define IDX_IA4_A   ((SIZ_IA4_A * 0) + 0)
 #define IA4_A(c)    (((c) >> IDX_IA4_A) & MSK_IA4_A)
-#define A_IA4(c)    (((c) & MSK_IA4) << IDX_IA4_A)
+#define A_IA4(c)    (((c) & MSK_IA4_A) << IDX_IA4_A)
 
 // IA8
 #define SIZ_IA8_C   0x4
@@ -33,8 +33,8 @@
 #define IDX_IA8_A   ((SIZ_IA8_C * 0) + 0)
 #define IA8_I(c)    (((c) >> IDX_IA8_I) & MSK_IA8_C)
 #define IA8_A(c)    (((c) >> IDX_IA8_A) & MSK_IA8_C)
-#define I_IA8(c)    (((c) & MSK_IA8) << IDX_IA8_I)
-#define A_IA8(c)    (((c) & MSK_IA8) << IDX_IA8_A)
+#define I_IA8(c)    (((c) & MSK_IA8_C) << IDX_IA8_I)
+#define A_IA8(c)    (((c) & MSK_IA8_C) << IDX_IA8_A)
 
 // IA16
 #define SIZ_IA16_C  0x8
@@ -43,8 +43,8 @@
 #define IDX_IA16_A  ((SIZ_IA16_C * 0) + 0)
 #define IA16_I(c)   (((c) >> IDX_IA16_I) & MSK_IA16_C)
 #define IA16_A(c)   (((c) >> IDX_IA16_A) & MSK_IA16_C)
-#define I_IA16(c)   (((c) & MSK_IA16) << IDX_IA16_I)
-#define A_IA16(c)   (((c) & MSK_IA16) << IDX_IA16_A)
+#define I_IA16(c)   (((c) & MSK_IA16_C) << IDX_IA16_I)
+#define A_IA16(c)   (((c) & MSK_IA16_C) << IDX_IA16_A)
 
 // RGBA16
 #define SIZ_RGBA16_C 0x5
@@ -94,6 +94,7 @@
 
 void colorRGB_set(ColorRGB dest, Color r, Color g, Color b);
 void colorRGB_copy(ColorRGB dest, const ColorRGB src);
+void vec3s_to_colorRGB(ColorRGB dest, Vec3s src);
 void generate_metal_texture(u16 *dst,      u16 *src);
 void copy_partial_image(    u16 *dst,      u16 *src,
                             s32 dstX,      s32 dstY,

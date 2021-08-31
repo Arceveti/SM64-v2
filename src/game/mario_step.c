@@ -326,7 +326,14 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
          && analog_stick_held_back(m, 0x471C)) return GROUND_STEP_NONE;
 #endif
         // If Mario walks into a ceiling, fall down or stop moving
-        if ((nextPos[1] + m->marioObj->hitboxHeight) >= ceilHeight) return ((nextPos[1] > floorHeight) ? GROUND_STEP_LEFT_GROUND : GROUND_STEP_HIT_WALL_STOP_QSTEPS);
+        if ((nextPos[1] + m->marioObj->hitboxHeight) >= ceilHeight) {
+            if (nextPos[1] > floorHeight) {
+                m->coyoteTimer = 0;
+                return GROUND_STEP_LEFT_GROUND;
+            } else {
+                return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
+            }
+        }
         // Set Mario's position and floor
         vec3f_copy(m->pos, nextPos);
         m->floor       = floor;
