@@ -576,7 +576,7 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
 //     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 // }
 
-// default range is 0x471C
+// default range is 0x471C ~100 degrees
 Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
     return (abs_angle_diff(m->intendedYaw, m->faceAngle[1]) > range);

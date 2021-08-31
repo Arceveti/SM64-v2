@@ -7,6 +7,7 @@
 #include "geo_misc.h"
 #include "level_table.h"
 #include "boot/memory.h"
+#include "level_update.h"
 #include "object_list_processor.h"
 #include "rendering_graph_node.h"
 #include "segment2.h"
@@ -178,7 +179,7 @@ f32 get_water_level_below_shadow(struct Shadow *s, struct Surface **waterFloor) 
  * @param overwriteSolidity Flag for whether the existing shadow solidity should
  *                          be dimmed based on its distance to the floor
  */
-s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 overwriteSolidity) {
+Bool32 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 overwriteSolidity) {
     f32 waterLevel;
     f32 floorSteepness;
     struct FloorGeometry *floorGeometry;
@@ -186,7 +187,11 @@ s8 init_shadow(struct Shadow *s, f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, 
     s->parentX                 = xPos;
     s->parentY                 = yPos;
     s->parentZ                 = zPos;
+#ifdef CENTERED_COLLISION
+    s->floorHeight             = find_floor_height_and_data(s->parentX, (s->parentY + 80.0f), s->parentZ, &floorGeometry);
+#else
     s->floorHeight             = find_floor_height_and_data(s->parentX, s->parentY, s->parentZ, &floorGeometry);
+#endif
     waterLevel                 = get_water_level_below_shadow(s, &waterFloor);
     if (gShadowAboveWaterOrLava) {
         s->floorHeight = waterLevel;
@@ -345,7 +350,11 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
              */
             // Clamp this vertex's y-position to that of the floor directly below
             // it, which may differ from the floor below the center vertex.
+#ifdef CENTERED_COLLISION
+            case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor_height_and_data(*xPosVtx, (s.parentY + 80.0f), *zPosVtx, &dummy); break;
+#else
             case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor_height_and_data(*xPosVtx, s.parentY, *zPosVtx, &dummy); break;
+#endif
             // Do not clamp. Instead, extrapolate the y-position of this
             // vertex based on the floor directly below the parent object.
             case SHADOW_WITH_4_VERTS: *yPosVtx = extrapolate_vertex_y_position(s, *xPosVtx, *zPosVtx); break;
@@ -567,7 +576,11 @@ Gfx *create_shadow_circle_assuming_flat_ground(f32 xPos, f32 yPos, f32 zPos, s16
     Gfx *displayList;
     struct FloorGeometry *dummy; // only for calling find_floor_height_and_data
     f32 distBelowFloor;
+#ifdef CENTERED_COLLISION
+    f32 floorHeight = find_floor_height_and_data(xPos, (yPos + 80.0f), zPos, &dummy);
+#else
     f32 floorHeight = find_floor_height_and_data(xPos, yPos, zPos, &dummy);
+#endif
     f32 radius      = (shadowScale / 2);
     if (floorHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return NULL;
@@ -614,7 +627,11 @@ Gfx *create_shadow_rectangle(f32 halfWidth, f32 halfLength, f32 relY, u8 solidit
 s32 get_shadow_height_solidity(f32 xPos, f32 yPos, f32 zPos, f32 *shadowHeight, u8 *solidity) {
     struct FloorGeometry *dummy;
     f32 waterLevel;
+#ifdef CENTERED_COLLISION
+    *shadowHeight = find_floor_height_and_data(xPos, (yPos + 80.0f), zPos, &dummy);
+#else
     *shadowHeight = find_floor_height_and_data(xPos, yPos, zPos, &dummy);
+#endif
     if (*shadowHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return TRUE;
     } else {
@@ -682,7 +699,11 @@ Gfx *create_shadow_hardcoded_rectangle(f32 xPos, f32 yPos, f32 zPos, UNUSED s16 
 Gfx *create_shadow_below_xyz(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 shadowSolidity, s8 shadowType) {
     Gfx *displayList = NULL;
     struct Surface *pfloor;
+#ifdef CENTERED_COLLISION
+    find_floor(xPos, (yPos + 80.0f), zPos, &pfloor);
+#else
     find_floor(xPos, yPos, zPos, &pfloor);
+#endif
     gShadowAboveWaterOrLava = FALSE;
     gShadowAboveCustomWater = FALSE;
     gMarioOnIceOrCarpet     = FALSE;

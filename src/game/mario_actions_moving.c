@@ -350,7 +350,7 @@ void update_walking_speed(struct MarioState *m) {
         m->faceAngle[1] += DEG(180);
         m->forwardVel *= -1.0f;
     }
-    if (analog_stick_held_back(m, 0x471C) && (m->heldObj == NULL)) {
+    if (analog_stick_held_back(m, DEG(100)) && (m->heldObj == NULL)) {
         set_mario_action(m, ACT_TURNING_AROUND, 0);
         if (m->forwardVel < GROUND_SPEED_THRESHOLD) m->faceAngle[1] = m->intendedYaw;
     } else {
@@ -535,9 +535,8 @@ void anim_and_audio_for_heavy_walk(struct MarioState *m) {
 
 void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
     Angle wallAngle, dWallAngle;
-    f32 dx = (m->pos[0] - startPos[0]);
-    f32 dz = (m->pos[2] - startPos[2]);
-    f32 movedDistance = sqrtf(sqr(dx) + sqr(dz));
+    f32 movedDistance;
+    vec3f_get_lateral_dist(startPos, m->pos, &movedDistance);
     //! (Speed Crash) If a wall is after moving 16384 distance, this crashes.
     AnimAccel animSpeed = (AnimAccel)((movedDistance * 2.0f) * 0x10000);
     if (m->forwardVel > 6.0f) mario_set_forward_vel(m, 6.0f);
@@ -613,7 +612,7 @@ Bool32 act_walking(struct MarioState *m) {
     if (m->input & INPUT_A_PRESSED   ) return set_jump_from_landing(m);
     if (check_ground_dive_or_punch(m)) return TRUE;
     if (m->input & INPUT_IDLE        ) return begin_braking_action(m);
-    if (analog_stick_held_back(m, 0x471C) && (m->forwardVel >= GROUND_SPEED_THRESHOLD)) return set_mario_action(m, ACT_TURNING_AROUND, 0);
+    if (analog_stick_held_back(m, DEG(100)) && (m->forwardVel >= GROUND_SPEED_THRESHOLD)) return set_mario_action(m, ACT_TURNING_AROUND, 0);
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_CROUCH_SLIDE, 0);
     m->actionState = 0;
     vec3f_copy(startPos, m->pos);
@@ -689,11 +688,11 @@ Bool32 act_hold_heavy_walking(struct MarioState *m) {
 }
 
 Bool32 act_turning_around(struct MarioState *m) {
-    if (m->input & INPUT_ABOVE_SLIDE      ) return set_mario_action(    m, ACT_BEGIN_SLIDING, 0);
-    if (m->input & INPUT_A_PRESSED        ) return set_jumping_action(  m, ACT_SIDE_FLIP    , 0);
-    if (m->input & INPUT_IDLE             ) return set_mario_action(    m, ACT_BRAKING      , 0);
-    if (!analog_stick_held_back(m, 0x471C)) return set_mario_action(    m, ACT_WALKING      , 0);
-    if (apply_slope_decel(m, 2.0f)        ) return begin_walking_action(m, 8.0f, ACT_FINISH_TURNING_AROUND, 0);
+    if (m->input & INPUT_ABOVE_SLIDE        ) return set_mario_action(    m, ACT_BEGIN_SLIDING, 0);
+    if (m->input & INPUT_A_PRESSED          ) return set_jumping_action(  m, ACT_SIDE_FLIP    , 0);
+    if (m->input & INPUT_IDLE               ) return set_mario_action(    m, ACT_BRAKING      , 0);
+    if (!analog_stick_held_back(m, DEG(100))) return set_mario_action(    m, ACT_WALKING      , 0);
+    if (apply_slope_decel(m, 2.0f)          ) return begin_walking_action(m, 8.0f, ACT_FINISH_TURNING_AROUND, 0);
     play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
     adjust_sound_for_speed(m);
     switch (perform_ground_step(m)) {
@@ -1004,7 +1003,7 @@ Bool32 act_crouch_slide(struct MarioState *m) {
         m->actionTimer++;
         if (m->input & INPUT_A_PRESSED) {
 #ifdef ACTION_CANCELS
-            return set_jumping_action(m, ((m->forwardVel > 8.0f) && !analog_stick_held_back(m, 0x471C)) ? ACT_LONG_JUMP : ACT_BACKFLIP, 0);
+            return set_jumping_action(m, ((m->forwardVel > 8.0f) && !analog_stick_held_back(m, DEG(100))) ? ACT_LONG_JUMP : ACT_BACKFLIP, 0);
         }
     } else if (m->input & INPUT_A_PRESSED) {
         return set_jumping_action(m, ACT_JUMP, 0);

@@ -79,7 +79,7 @@ Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
 Bool32 check_kick_or_dive_in_air(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
 #ifdef ACTION_CANCELS
-        return set_mario_action(m, ((m->intendedMag > 28.0f) && !analog_stick_held_back(m, 0x471C)) ? ACT_DIVE : ACT_JUMP_KICK, 0);
+        return set_mario_action(m, ((m->intendedMag > 28.0f) && !analog_stick_held_back(m, DEG(100))) ? ACT_DIVE : ACT_JUMP_KICK, 0);
 #else
         return set_mario_action(m, ((m->forwardVel  > 28.0f) ? ACT_DIVE : ACT_JUMP_KICK, 0));
 #endif
@@ -818,7 +818,7 @@ Bool32 act_ground_pound(struct MarioState *m) {
         if (m->actionTimer == 0) play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
 #ifdef GROUND_POUND_DIVE
         if (m->input & INPUT_B_PRESSED) {
-            if (analog_stick_held_back(m, 0x471C)) {
+            if (analog_stick_held_back(m, DEG(100))) {
                 m->vel[1] = 0.0f;
                 return set_mario_action(m, ACT_BACKWARD_ROLLOUT, 0);
             } else {
@@ -841,7 +841,7 @@ Bool32 act_ground_pound(struct MarioState *m) {
         if (m->input & INPUT_B_PRESSED) {
             if (m->vel[1] < -60.0f) {
                 m->vel[1] = 0.0f;
-                return set_mario_action(m, analog_stick_held_back(m, 0x471C) ? ACT_BACKWARD_ROLLOUT : ACT_FORWARD_ROLLOUT, 0);
+                return set_mario_action(m, analog_stick_held_back(m, DEG(100)) ? ACT_BACKWARD_ROLLOUT : ACT_FORWARD_ROLLOUT, 0);
             } else {
                 m->vel[1] = 25.0f;
                 mario_set_forward_vel(m, 20.0f);
