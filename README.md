@@ -63,7 +63,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
-- Extra fields in the MarioState struct, based on Mario's movement: prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
+- Extra fields in the MarioState struct, based on Mario's movement: lastSafePos, prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
 
 **HUD:**
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *

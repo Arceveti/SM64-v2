@@ -421,6 +421,7 @@ struct MarioState
     /*0xBC*/ f32            peakHeight;
     /*0xC0*/ f32            quicksandDepth;
     /*0xC4*/ f32            windGravity;
+           Vec3f            lastSafePos;
            Vec3f            prevPos;
            Angle            movePitch;
            Angle            moveYaw;

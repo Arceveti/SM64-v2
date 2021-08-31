@@ -64,13 +64,13 @@
 - Objects:
     - Make step height per-object
 - Physics/Movement:
-    - Make Mario's collision based on the center of hitbox instead of the bottom
+    - Capsule/sphere shaped hitbox for Mario?
     - Ability to move between walls that share an edge when ledge grab sidling
     - Hanging quarter steps?
     - Gravity direction support
     - "Squished" death from any direction
     - Update mario movement angles when m->pos is changed?
-        - Don't update m->prevPos except once per frame
+        - Don't update m->prevPos more than once per frame
 - Graphics
     - Proper Skyboxes like in SM64DS
         - https://jaxry.github.io/panorama-to-cubemap/
@@ -107,7 +107,6 @@
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
     - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
 - Camera:
-    - Focus on nearest bomb to center of view when spinning Bowser
     - Make Puppycam collision not scuffed in certain areas
         - Separate (super low-poly) collision maps specifically for the camera?
     - Make the camera distance threshhold for Mario's transparency start closer

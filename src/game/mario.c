@@ -997,6 +997,12 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(210, 120,  "VY %d", m->vel[1]);
                 print_text_fmt_int(210, 104,  "VZ %d", m->vel[2]);
 
+                // print_text_fmt_int(16, 152,  "CY %d", m->coyoteTimer);
+
+                // print_text_fmt_int(16, 136,  "SX %d", m->lastSafePos[0]);
+                // print_text_fmt_int(16, 120,  "SY %d", m->lastSafePos[1]);
+                // print_text_fmt_int(16, 104,  "SZ %d", m->lastSafePos[2]);
+
                 print_text_fmt_int(210,  88,  "RY %d", ((m->faceAngle[1] * 45.0f) / 8192.0f));
                 print_text_fmt_int(210,  72, "FWD %d",  m->forwardVel);
                 // print_text_fmt_int(210,  56,  "MY %d", ((m->moveYaw   * 45.0f) / 8192.0f));
