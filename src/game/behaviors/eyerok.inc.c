@@ -154,7 +154,7 @@ static void eyerok_hand_act_sleep(void) {
             o->collisionData = segmented_to_virtual(&ssl_seg7_collision_eyerok_hand_closed);
         } else {
             approach_f32_ptr(&o->oPosX, o->oHomeX, 15.0f);
-            o->oPosY = (o->oHomeY + ((200 * o->oBehParams2ndByte + 400) * sins((s16)(absf(o->oPosX - o->oHomeX) / 724.0f * 0x8000))));
+            o->oPosY = (o->oHomeY + (((200 * o->oBehParams2ndByte) + 400) * sins((s16)(absf(o->oPosX - o->oHomeX) / 724.0f * 0x8000))));
             cur_obj_face_yaw_approach(o->oMoveAngleYaw, 400); // 0x190
         }
     } else {

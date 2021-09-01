@@ -554,6 +554,27 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
     }
 }
 
+// From Kaze
+void get_optimal_coll_dist(struct Object *o) {
+    register f32 thisVertDist, maxDist = 0.0f;
+    Vec3f v;
+    Collision *collisionData = gCurrentObject->collisionData;
+    o->oFlags |= OBJ_FLAG_DONT_CALC_COLL_DIST;
+    collisionData++;
+    register u32 vertsLeft = *(collisionData);
+    collisionData++;
+    // vertices = *data;
+    while (vertsLeft) {
+        vec3s_to_vec3f(v, collisionData);
+        vec3f_mul(v, o->header.gfx.scale);
+        thisVertDist = (sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
+        if (thisVertDist > maxDist) maxDist = thisVertDist;
+        collisionData += 3;
+        vertsLeft--;
+    }
+    o->oCollisionDistance = (sqrtf(maxDist) + 100.0f);
+}
+
 /**
  * Transform an object's vertices, reload them, and render the object.
  */
@@ -564,16 +585,15 @@ void load_object_collision_model(void) {
 #endif
     Collision *collisionData = gCurrentObject->collisionData;
     f32 marioDist            = gCurrentObject->oDistanceToMario;
-    f32 tangibleDist         = gCurrentObject->oCollisionDistance;
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
     if (gCurrentObject->oDistanceToMario == 19000.0f) marioDist = dist_between_objects(gCurrentObject, gMarioObject);
+    if (!(gCurrentObject->oFlags & OBJ_FLAG_DONT_CALC_COLL_DIST)) get_optimal_coll_dist(gCurrentObject);
     // If the object collision is supposed to be loaded more than the
     // drawing distance, extend the drawing range.
     if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
     // Update if no Time Stop, in range, and in the current room.
-    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDist < tangibleDist)
-        && !(gCurrentObject->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
+    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDist < gCurrentObject->oCollisionDistance) && !(gCurrentObject->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         collisionData++;
         transform_object_vertices(&collisionData, vertexData);
         // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.

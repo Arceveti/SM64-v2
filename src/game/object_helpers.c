@@ -192,16 +192,15 @@ void obj_set_held_state(struct Object *obj, const BehaviorScript *heldBehavior) 
 }
 
 f32 lateral_dist_between_objects(struct Object *obj1, struct Object *obj2) {
-    register f32 dx = (obj1->oPosX - obj2->oPosX);
-    register f32 dz = (obj1->oPosZ - obj2->oPosZ);
-    return sqrtf(sqr(dx) + sqr(dz));
+    f32 lateralDist;
+    vec3f_get_lateral_dist(&obj1->oPosVec, &obj2->oPosVec, &lateralDist);
+    return lateralDist;
 }
 
 f32 dist_between_objects(struct Object *obj1, struct Object *obj2) {
-    register f32 dx = (obj1->oPosX - obj2->oPosX);
-    register f32 dy = (obj1->oPosY - obj2->oPosY);
-    register f32 dz = (obj1->oPosZ - obj2->oPosZ);
-    return sqrtf(sqr(dx) + sqr(dy) + sqr(dz));
+    f32 dist;
+    vec3f_get_dist(&obj1->oPosVec, &obj2->oPosVec, &dist);
+    return dist;
 }
 
 void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
@@ -219,33 +218,19 @@ Bool32 cur_obj_rotate_yaw_toward(Angle target, Angle increment) {
 }
 
 Angle obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
-    register f32 z1 = obj1->oPosZ; register f32 z2 = obj2->oPosZ; // ordering of instructions...
-    register f32 x1 = obj1->oPosX; register f32 x2 = obj2->oPosX;
-    return atan2s((z2 - z1), (x2 - x1));
+    Angle yaw;
+    vec3f_get_yaw(&obj1->oPosVec, &obj2->oPosVec, &yaw);
+    return yaw;
 }
 
 Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleIndex, Angle turnAmount) {
-    register f32 a, b, c, d;
     Angle targetAngle = 0x0;
     Angle startAngle = o->rawData.asU32[angleIndex];
     switch (angleIndex) {
         case O_MOVE_ANGLE_PITCH_INDEX:
-        case O_FACE_ANGLE_PITCH_INDEX:
-            a = (target->oPosX - obj->oPosX);
-            c = (target->oPosZ - obj->oPosZ);
-            a = sqrtf(sqr(a) + sqr(c));
-            b =    -obj->oPosY;
-            d = -target->oPosY;
-            targetAngle = atan2s(a, (d - b));
-            break;
+        case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&obj->oPosVec, &target->oPosVec, &targetAngle); break;
         case O_MOVE_ANGLE_YAW_INDEX:
-        case O_FACE_ANGLE_YAW_INDEX:
-            a =     obj->oPosZ;
-            c =  target->oPosZ;
-            b =     obj->oPosX;
-            d =  target->oPosX;
-            targetAngle = atan2s((c - a), (d - b));
-            break;
+        case O_FACE_ANGLE_YAW_INDEX:   vec3f_get_yaw(  &obj->oPosVec, &target->oPosVec, &targetAngle); break;
     }
     o->rawData.asU32[angleIndex] = approach_s16_symmetric(startAngle, targetAngle, turnAmount);
     return targetAngle;
@@ -281,8 +266,7 @@ struct Object *spawn_object_abs_with_rot(struct Object *parent, s16 uselessArg, 
  * The rz argument is never used, and the z offset is used for z-rotation instead. This is most likely
  * a copy-paste typo by one of the programmers.
  */
-struct Object *spawn_object_rel_with_rot(struct Object *parent, ModelID32 model, const BehaviorScript *behavior,
-                                         s16 xOff, s16 yOff, s16 zOff, Angle rx, Angle ry, UNUSED Angle rz) {
+struct Object *spawn_object_rel_with_rot(struct Object *parent, ModelID32 model, const BehaviorScript *behavior, s16 xOff, s16 yOff, s16 zOff, Angle rx, Angle ry, UNUSED Angle rz) {
     struct Object *newObj = spawn_object_at_origin(parent, 0, model, behavior);
     newObj->oFlags |= OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT;
     obj_set_parent_relative_pos(newObj, xOff, yOff, zOff);
