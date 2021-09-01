@@ -7,6 +7,7 @@
 #include "extended_bounds.h"
 #include "trig_tables.inc.c"
 #include "game/rendering_graph_node.h"
+#include "boot/game_init.h"
 
 #include "config.h"
 
@@ -675,19 +676,19 @@ inline f32 vec4f_dot(Vec4f a, Vec4f b) { return ((a[0] * b[0]) + (a[1] * b[1]) +
  * [0][0]   x scale
  * [0][1]   y shear
  * [0][2]   z x shear?
- * [0][3]   width crop?
+ * [0][3]   x divisor?
  * [1][0]   x shear
  * [1][1]   y scale
  * [1][2]   z z shear?
- * [1][3]   y crop?
+ * [1][3]   y divisor?
  * [2][0]   z x shear?
  * [2][1]   z y shear?
  * [2][2]   z scale
- * [2][3]   z crop?
+ * [2][3]   z divisor?
  * [3][0]   x translation
  * [3][1]   y translation
  * [3][2]   z translation
- * [3][3]   translation scale?
+ * [3][3]   translation scale divisor
  **/
 
 /// Copy matrix 'src' to 'dest'
@@ -848,6 +849,31 @@ void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
     mtxf_end(dest);
 }
 
+void mtxf_rotate_xyz(Mat4 dest, Vec3a rotate) {
+    register f32 sx   = sins(rotate[0]);
+    register f32 cx   = coss(rotate[0]);
+    register f32 sy   = sins(rotate[1]);
+    register f32 cy   = coss(rotate[1]);
+    register f32 sz   = sins(rotate[2]);
+    register f32 cz   = coss(rotate[2]);
+    register f32 cxsz = (cx * sz);
+    register f32 cxcz = (cx * cz);
+    register f32 sxsz = (sx * sz);
+    register f32 sxcz = (sx * cz);
+    dest[0][0] = (   cy * cz        );
+    dest[0][1] = (   cy * sz        );
+    dest[0][2] = -sy;
+    dest[1][0] = ((sxcz * sy) - cxsz);
+    dest[1][1] = ((sxsz * sy) + cxcz);
+    dest[1][2] = (   sx * cy        );
+    dest[2][0] = ((cxcz * sy) + sxsz);
+    dest[2][1] = ((cxsz * sy) - sxcz);
+    dest[2][2] = (   cx * cy        );
+    dest[0][3] = 0;
+    dest[1][3] = 0;
+    dest[2][3] = 0;
+}
+
 /**
  * Build a matrix that rotates around the x axis, then the y axis, then the z
  * axis, and then translates.
@@ -908,41 +934,6 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
         dest[3][2] = ((mtx[0][2] * position[0]) + (mtx[1][2] * position[1]) + (mtx[2][2] * position[2]) + mtx[3][2]);
     }
     dest[3][3] = (((zOffset == 0) || (dest[3][2] == 0)) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
-}
-
-/**
- * Set 'dest' to a transformation matrix that turns an object to face directly at the camera
- * 'mtx' is the look-at matrix from the camera
- * 'position' is the position of the object in the world
- * 'roll' rotates the object while still facing the camera.
- */
-void mtxf_align_facing_view(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset) {
-    if ((position[0] == 0) && (position[1] == 0) && (position[2] == 0)) {
-        vec3f_copy(dest[3], mtx[3]);
-    } else {
-        dest[3][0] = ((mtx[0][0] * position[0]) + (mtx[1][0] * position[1]) + (mtx[2][0] * position[2]) + mtx[3][0]);
-        dest[3][1] = ((mtx[0][1] * position[0]) + (mtx[1][1] * position[1]) + (mtx[2][1] * position[2]) + mtx[3][1]);
-        dest[3][2] = ((mtx[0][2] * position[0]) + (mtx[1][2] * position[1]) + (mtx[2][2] * position[2]) + mtx[3][2]);
-    }
-    dest[3][3] = (((zOffset == 0) || (dest[3][2] == 0)) ? 1 : ((dest[3][2] - zOffset) / dest[3][2]));
-    // angle to camera pos
-    Angle xrot = -atan2s(dest[3][2], dest[3][0]);
-    Angle yrot =  atan2s(dest[3][2], dest[3][1]);
-    f32 cx     = coss(xrot);
-    f32 cy     = coss(yrot);
-    f32 cz     = coss(roll);
-    dest[2][0] = sins(xrot);
-    dest[0][2] = -dest[2][0];
-    dest[1][2] = sins(yrot);
-    dest[2][1] = -dest[1][2];
-    dest[0][1] = sins(roll);
-    dest[1][0] = -dest[0][1];
-    dest[0][0] = (-cx *  cz);
-    dest[1][1] = (-cy *  cz);
-    dest[2][2] = (-cx * -cy);
-    dest[0][3] = 0;
-    dest[1][3] = 0;
-    dest[2][3] = 0;
 }
 
 /**

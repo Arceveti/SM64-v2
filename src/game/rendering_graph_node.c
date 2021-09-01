@@ -558,11 +558,7 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
     gMatStackIndex++;
     vec3s_to_vec3f(translation, node->translation);
-    if (node->zOffset < 0) {
-        mtxf_align_facing_view(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
-    } else {
-        mtxf_billboard(        gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
-    }
+    mtxf_billboard(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
     if (gCurGraphNodeHeldObject != NULL) {
         mtxf_scale_self_vec3f(gMatStack[gMatStackIndex], gCurGraphNodeHeldObject->objNode->header.gfx.scale);
     } else if (gCurGraphNodeObject != NULL) {
