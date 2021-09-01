@@ -16,8 +16,8 @@ extern const GeoLayout jrb_geo_ship_back_left_part[];
 extern const GeoLayout jrb_geo_sunken_ship_back[];
 extern const GeoLayout jrb_geo_ship_right_half_part[];
 extern const GeoLayout jrb_geo_ship_back_right_part[];
-extern const GeoLayout jrb_geo_000A18[];
-extern const GeoLayout jrb_geo_000AFC[];
+extern const GeoLayout jrb_geo_area_1[];
+extern const GeoLayout jrb_geo_area_2[];
 
 // leveldata
 extern const Gfx jrb_seg7_dl_07002FD0[];

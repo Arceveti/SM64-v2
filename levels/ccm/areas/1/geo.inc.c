@@ -1,6 +1,6 @@
 // 0x0E00051C
 const GeoLayout ccm_geo_area_1[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -20,8 +20,8 @@ const GeoLayout ccm_geo_area_1[] = {
                GEO_DISPLAY_LIST(LAYER_OPAQUE,            ccm_seg7_dl_0700C380),
                GEO_DISPLAY_LIST(LAYER_ALPHA,             ccm_seg7_dl_area_1_alpha),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, ccm_seg7_dl_tree_shadows_and_exposed_ground),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x0501, geo_movtex_draw_water_regions),
+               GEO_ASM(                              0, geo_movtex_pause_control     ),
+               GEO_ASM(CCM_MOVTEX_PENGUIN_PUDDLE_WATER, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(   1, geo_envfx_main),
             GEO_CLOSE_NODE(),

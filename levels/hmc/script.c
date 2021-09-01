@@ -94,7 +94,7 @@ const LevelScript level_hmc_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_HMC_ROCK_SMALL_PIECE,     hmc_geo_rolling_rock_fragment_small),
     LOAD_MODEL_FROM_GEO(MODEL_HMC_RED_GRILLS,           hmc_geo_grill_door),
 
-    AREA(/*index*/ 1, hmc_geo_000B90),
+    AREA(/*index*/ 1, hmc_geo_area_1),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -7152,  3161, 7181, /*angle*/ 0, 135, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/  3351, -4690, 4773, /*angle*/ 0,   0, 0, /*behParam*/ 0x340B0000, /*beh*/ bhvWarp),
         WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_HMC,    /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),

@@ -5,16 +5,16 @@
 #include "game/moving_texture.h"
 
 // geo
-extern const GeoLayout ssl_geo_0005C0[];
-extern const GeoLayout ssl_geo_0005D8[];
+extern const GeoLayout ssl_geo_quicksand_pit_outside[];
+extern const GeoLayout ssl_geo_pyramid_quicksand_pit[];
 extern const GeoLayout ssl_geo_pyramid_top[];
 extern const GeoLayout ssl_geo_tox_box[];
-extern const GeoLayout ssl_geo_000648[];
+extern const GeoLayout ssl_geo_area_1[];
 extern const GeoLayout ssl_geo_grindel[];
 extern const GeoLayout ssl_geo_spindel[];
 extern const GeoLayout ssl_geo_moving_pyramid_wall[];
 extern const GeoLayout ssl_geo_pyramid_elevator[];
-extern const GeoLayout ssl_geo_0007CC[];
+extern const GeoLayout ssl_geo_area_2[];
 extern const GeoLayout ssl_geo_00088C[];
 
 // leveldata

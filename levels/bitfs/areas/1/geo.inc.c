@@ -1,6 +1,6 @@
 // 0x0E0007A0
-const GeoLayout bitfs_geo_0007A0[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout bitfs_geo_area_1[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -17,9 +17,9 @@ const GeoLayout bitfs_geo_0007A0[] = {
             GEO_OPEN_NODE(),
                GEO_DISPLAY_LIST(LAYER_ALPHA, bitfs_seg7_dl_07002118),
                GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x1901, geo_movtex_draw_nocolor),
-               GEO_ASM(0x1902, geo_movtex_draw_nocolor),
-               GEO_ASM(0x1903, geo_movtex_draw_nocolor),
+               GEO_ASM(MOVTEX_BITFS_LAVA_FIRST,  geo_movtex_draw_nocolor),
+               GEO_ASM(MOVTEX_BITFS_LAVA_SECOND, geo_movtex_draw_nocolor),
+               GEO_ASM(MOVTEX_BITFS_LAVA_FLOOR,  geo_movtex_draw_nocolor),
                GEO_RENDER_OBJ(),
                GEO_ASM(  12, geo_envfx_main),
             GEO_CLOSE_NODE(),

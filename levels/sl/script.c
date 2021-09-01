@@ -67,7 +67,7 @@ const LevelScript level_sl_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_SL_CRACKED_ICE_CHUNK,  sl_geo_ice_shard),
     LOAD_MODEL_FROM_GEO(MODEL_SL_SNOW_TREE,          snow_tree_geo),
 
-    AREA(/*index*/ 1, sl_geo_0003A8),
+    AREA(/*index*/ 1, sl_geo_area_1),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/  5541, 2024,   443, /*angle*/ 0, 270, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/   256, 2150,  1400, /*angle*/ 0, 290, 0, /*behParam*/ 0x000B0000, /*beh*/ bhvInstantActiveWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/   569, 2150,  1336, /*angle*/ 0,   0, 0, /*behParam*/ 0x060C0000, /*beh*/ bhvWarp),

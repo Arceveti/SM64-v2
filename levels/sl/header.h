@@ -8,7 +8,7 @@
 extern const GeoLayout sl_geo_cracked_ice[];
 extern const GeoLayout sl_geo_ice_shard[];
 extern const GeoLayout sl_geo_snow_mound[];
-extern const GeoLayout sl_geo_0003A8[];
+extern const GeoLayout sl_geo_area_1[];
 extern const GeoLayout sl_geo_000484[];
 
 // leveldata

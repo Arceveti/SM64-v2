@@ -1,6 +1,6 @@
 // 0x0E000E00
 const GeoLayout lll_geo_area_1[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -18,8 +18,8 @@ const GeoLayout lll_geo_area_1[] = {
                GEO_DISPLAY_LIST(LAYER_OPAQUE, lll_seg7_dl_area_1),
                GEO_DISPLAY_LIST(LAYER_ALPHA,  lll_seg7_dl_small_mesh_bridges),
                GEO_DISPLAY_LIST(LAYER_ALPHA,  lll_seg7_dl_corner_cage),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x2201, geo_movtex_draw_nocolor),
+               GEO_ASM(                    0, geo_movtex_pause_control),
+               GEO_ASM(MOVTEX_LLL_LAVA_FLOOR, geo_movtex_draw_nocolor ),
                GEO_RENDER_OBJ(),
                GEO_ASM(  12, geo_envfx_main),
             GEO_CLOSE_NODE(),

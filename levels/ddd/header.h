@@ -8,8 +8,8 @@
 extern const GeoLayout ddd_geo_pole[];
 extern const GeoLayout ddd_geo_sub_door[];
 extern const GeoLayout ddd_geo_submarine[];
-extern const GeoLayout ddd_geo_0004C0[];
-extern const GeoLayout ddd_geo_000570[];
+extern const GeoLayout ddd_geo_area_1[];
+extern const GeoLayout ddd_geo_area_2[];
 
 // leveldata
 extern const Gfx ddd_seg7_dl_07004D48[];

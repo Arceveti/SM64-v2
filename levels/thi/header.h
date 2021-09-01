@@ -8,9 +8,9 @@
 extern const GeoLayout thi_geo_huge_island_top[];
 extern const GeoLayout thi_geo_tiny_island_top[];
 extern const GeoLayout thi_geo_0005F0[];
-extern const GeoLayout thi_geo_000608[];
-extern const GeoLayout thi_geo_0006D4[];
-extern const GeoLayout thi_geo_00079C[];
+extern const GeoLayout thi_geo_area_1[];
+extern const GeoLayout thi_geo_area_2[];
+extern const GeoLayout thi_geo_area_3[];
 
 // leveldata
 extern const Gfx thi_seg7_dl_07005260[];

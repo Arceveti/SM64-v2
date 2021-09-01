@@ -1,6 +1,6 @@
 // 0x0E00073C
-const GeoLayout castle_grounds_geo_00073C[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout castle_grounds_geo_area_1[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -22,9 +22,9 @@ const GeoLayout castle_grounds_geo_00073C[] = {
                GEO_DISPLAY_LIST(LAYER_ALPHA,             castle_grounds_seg7_dl_windows_and_peach_window),
                GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,      castle_grounds_seg7_dl_door_frame_and_carpet_outside),
                GEO_DISPLAY_LIST(LAYER_OPAQUE,            castle_grounds_seg7_dl_cannon_platform),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x1601, geo_movtex_draw_nocolor),
-               GEO_ASM(0x1601, geo_movtex_draw_water_regions),
+               GEO_ASM(                          0, geo_movtex_pause_control     ),
+               GEO_ASM(MOVTEX_CASTLE_WATERFALL,     geo_movtex_draw_nocolor      ),
+               GEO_ASM(CASTLE_GROUNDS_MOVTEX_WATER, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),
             GEO_CLOSE_NODE(),

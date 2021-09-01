@@ -81,8 +81,8 @@ const LevelScript level_ssl_entry[] = {
     JUMP_LINK(script_func_global_1),
     JUMP_LINK(script_func_global_6),
     LOAD_MODEL_FROM_GEO(MODEL_SSL_PALM_TREE,           palm_tree_geo),
-    LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_03,       ssl_geo_0005C0),
-    LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_04,       ssl_geo_0005D8),
+    LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_03,       ssl_geo_quicksand_pit_outside),
+    LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_04,       ssl_geo_pyramid_quicksand_pit),
     LOAD_MODEL_FROM_GEO(MODEL_SSL_PYRAMID_TOP,         ssl_geo_pyramid_top),
     LOAD_MODEL_FROM_GEO(MODEL_SSL_GRINDEL,             ssl_geo_grindel),
     LOAD_MODEL_FROM_GEO(MODEL_SSL_SPINDEL,             ssl_geo_spindel),
@@ -90,7 +90,7 @@ const LevelScript level_ssl_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_SSL_PYRAMID_ELEVATOR,    ssl_geo_pyramid_elevator),
     LOAD_MODEL_FROM_GEO(MODEL_SSL_TOX_BOX,             ssl_geo_tox_box),
 
-    AREA(/*index*/ 1, ssl_geo_000648),
+    AREA(/*index*/ 1, ssl_geo_area_1),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/   653, 1038,  6566, /*angle*/ 0,  90, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -2048,    0,    56, /*angle*/ 0,   0, 0, /*behParam*/ 0x00140000, /*beh*/ bhvWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -2048,  768, -1024, /*angle*/ 0,   0, 0, /*behParam*/ 0x0F1E0000, /*beh*/ bhvWarp),
@@ -112,7 +112,7 @@ const LevelScript level_ssl_entry[] = {
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_SAND),
     END_AREA(),
 
-    AREA(/*index*/ 2, ssl_geo_0007CC),
+    AREA(/*index*/ 2, ssl_geo_area_2),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/    0,  300,  6451, /*angle*/ 0, 180, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/    0, 5500,   256, /*angle*/ 0, 180, 0, /*behParam*/ 0x00140000, /*beh*/ bhvAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ 3070, 1280,  2900, /*angle*/ 0, 180, 0, /*behParam*/ 0x00150000, /*beh*/ bhvFadingWarp),

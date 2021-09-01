@@ -40,7 +40,7 @@ extern const GeoLayout castle_geo_0016D8[];
 extern const GeoLayout castle_geo_001740[];
 extern const GeoLayout castle_geo_001798[];
 extern const GeoLayout castle_geo_001800[];
-extern const GeoLayout castle_geo_001858[];
+extern const GeoLayout castle_geo_area_2[];
 extern const GeoLayout castle_geo_water_level_pillar[];
 extern const GeoLayout castle_geo_001958[];
 extern const GeoLayout castle_geo_001980[];
@@ -52,7 +52,7 @@ extern const GeoLayout castle_geo_001AB8[];
 extern const GeoLayout castle_geo_001AF8[];
 extern const GeoLayout castle_geo_001B48[];
 extern const GeoLayout castle_geo_001BB0[];
-extern const GeoLayout castle_geo_001C10[];
+extern const GeoLayout castle_geo_area_3[];
 
 // leveldata
 extern const Gfx inside_castle_seg7_dl_ccm_fake_painting_1[];

@@ -269,7 +269,7 @@ const LevelScript level_castle_inside_entry[] = {
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),
 
-    AREA(/*index*/ 2, castle_geo_001858),
+    AREA(/*index*/ 2, castle_geo_area_2),
         OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/  -205, 2918, 7222, /*angle*/ 0, 180, 0, /*behParam*/ 0x00000000, /*beh*/ bhvClockMinuteHand),
         OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND,   /*pos*/  -205, 2918, 7222, /*angle*/ 0, 180, 0, /*behParam*/ 0x00000000, /*beh*/ bhvClockHourHand),
         OBJECT(/*model*/ MODEL_CASTLE_CLOCK_PENDULUM,    /*pos*/  -205, 2611, 7140, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvDecorativePendulum),
@@ -287,7 +287,7 @@ const LevelScript level_castle_inside_entry[] = {
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),
 
-    AREA(/*index*/ 3, castle_geo_001C10),
+    AREA(/*index*/ 3, castle_geo_area_3),
         OBJECT(/*model*/ MODEL_CASTLE_WATER_LEVEL_PILLAR, /*pos*/  7066, -1178,  -819, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWaterLevelPillar),
         OBJECT(/*model*/ MODEL_CASTLE_WATER_LEVEL_PILLAR, /*pos*/  7066, -1178,  -205, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWaterLevelPillar),
         OBJECT(/*model*/ MODEL_NONE,                      /*pos*/     0,     0,     0, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvDddWarp),

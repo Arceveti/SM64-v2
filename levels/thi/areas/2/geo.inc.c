@@ -1,8 +1,8 @@
 // SHARE_PATH: [level]/areas/1/1/, [level]/areas/1/2/, [level]/areas/1/3/, [level]/areas/1/4/
 
 // 0x0E0006D4
-const GeoLayout thi_geo_0006D4[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout thi_geo_area_2[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -19,14 +19,14 @@ const GeoLayout thi_geo_0006D4[] = {
             GEO_OPEN_NODE(),
                GEO_SCALE(LAYER_FORCE, 19660),
                GEO_OPEN_NODE(),
-                  GEO_DISPLAY_LIST(LAYER_OPAQUE, thi_seg7_dl_07005260),
-                  GEO_DISPLAY_LIST(LAYER_OPAQUE, thi_seg7_dl_07006968),
-                  GEO_DISPLAY_LIST(LAYER_ALPHA, thi_seg7_dl_07007008),
+                  GEO_DISPLAY_LIST(LAYER_OPAQUE,      thi_seg7_dl_07005260),
+                  GEO_DISPLAY_LIST(LAYER_OPAQUE,      thi_seg7_dl_07006968),
+                  GEO_DISPLAY_LIST(LAYER_ALPHA,       thi_seg7_dl_07007008),
                   GEO_DISPLAY_LIST(LAYER_TRANSPARENT, thi_seg7_dl_070072E8),
                GEO_CLOSE_NODE(),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, thi_seg7_dl_07007538),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x1302, geo_movtex_draw_water_regions),
+               GEO_ASM(                     0, geo_movtex_pause_control     ),
+               GEO_ASM(THI_MOVTEX_AREA2_WATER, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(   0, geo_envfx_main),
             GEO_CLOSE_NODE(),

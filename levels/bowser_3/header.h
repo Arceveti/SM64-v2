@@ -15,7 +15,7 @@ extern const GeoLayout bowser_3_geo_falling_platform_8[];
 extern const GeoLayout bowser_3_geo_falling_platform_9[];
 extern const GeoLayout bowser_3_geo_falling_platform_10[];
 extern const GeoLayout bowser_3_geo_000380[];
-extern const GeoLayout bowser_3_geo_000398[];
+extern const GeoLayout bowser_3_geo_area_1[];
 
 // leveldata
 extern const Gfx bowser_3_seg7_dl_070022A8[];

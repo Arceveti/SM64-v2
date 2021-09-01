@@ -35,7 +35,7 @@ extern const GeoLayout bitfs_geo_sliding_platform[];
 extern const GeoLayout bitfs_geo_platform_on_track[];
 extern const GeoLayout bitfs_geo_sinking_platforms[];
 extern const GeoLayout bitfs_geo_seesaw_platform[];
-extern const GeoLayout bitfs_geo_0007A0[];
+extern const GeoLayout bitfs_geo_area_1[];
 
 // leveldata
 extern const Gfx bitfs_seg7_dl_07002118[];

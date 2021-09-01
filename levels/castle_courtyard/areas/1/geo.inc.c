@@ -1,6 +1,6 @@
 // 0x0E000218
 const GeoLayout castle_courtyard_geo_000218[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -18,8 +18,8 @@ const GeoLayout castle_courtyard_geo_000218[] = {
                GEO_DISPLAY_LIST(LAYER_OPAQUE, castle_courtyard_seg7_dl_070048B8),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, castle_courtyard_seg7_dl_tree_shadows),
                GEO_DISPLAY_LIST(LAYER_ALPHA, castle_courtyard_seg7_dl_windows),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x2601, geo_movtex_draw_water_regions),
+               GEO_ASM(                                        0, geo_movtex_pause_control     ),
+               GEO_ASM(CASTLE_COURTYARD_MOVTEX_STAR_STATUE_WATER, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),
             GEO_CLOSE_NODE(),

@@ -251,7 +251,7 @@ struct MovtexObject gMovtexColored[] = {
 /**
  * Treated identically to gMovtexColored.
  */
-struct MovtexObject gMovtexColored2[] = {
+struct MovtexObject gMovtexColoredSSLSandPits[] = {
     { MOVTEX_SSL_SAND_PIT_OUTSIDE,       TEX_QUICKSAND_SSL,    8, ssl_movtex_tris_quicksand_pit,              ssl_dl_quicksand_pit_begin,              ssl_dl_quicksand_pit_end,              ssl_dl_quicksand_pit,                  { 0xff, 0xff, 0xff, 0xff }, LAYER_OPAQUE            },
     { MOVTEX_SSL_SAND_PIT_PYRAMID,       TEX_PYRAMID_SAND_SSL, 8, ssl_movtex_tris_pyramid_quicksand_pit,      ssl_dl_pyramid_quicksand_pit_begin,      ssl_dl_pyramid_quicksand_pit_end,      ssl_dl_quicksand_pit,                  { 0xff, 0xff, 0xff, 0xff }, LAYER_OPAQUE            },
     { 0x00000000,                        0x00000000,           0, NULL,                                       NULL,                                    NULL,                                  NULL,                                  { 0x00, 0x00, 0x00, 0x00 }, 0x00000000              },
@@ -481,7 +481,7 @@ void *get_quad_collection_from_id(u32 id) {
         case WDW_MOVTEX_AREA2_WATER:                    return wdw_movtex_area2_water;
         case JRB_MOVTEX_WATER:                          return jrb_movtex_water;
         case JRB_MOVTEX_INITIAL_MIST:                    return jrb_movtex_initial_mist;
-        case JRB_MOVTEX_SINKED_BOAT_WATER:              return jrb_movtex_sinked_boat_water;
+        case JRB_MOVTEX_SUNKEN_SHIP_WATER:              return jrb_movtex_sinked_boat_water;
         case THI_MOVTEX_AREA1_WATER:                    return thi_movtex_area1_water;
         case THI_MOVTEX_AREA2_WATER:                    return thi_movtex_area2_water;
         case CASTLE_GROUNDS_MOVTEX_WATER:               return castle_grounds_movtex_water;
@@ -514,9 +514,9 @@ void movtex_change_texture_format(u32 quadCollectionId, Gfx **gfx) {
  * collection is drawn, see moving_texture.h.
  */
 Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
-    Gfx *gfxHead = NULL;
-    Gfx *gfx     = NULL;
-    Gfx *subList;
+    Gfx  *gfxHead = NULL;
+    Gfx  *gfx     = NULL;
+    Gfx  *subList;
     void *quadCollection;
     struct GraphNodeGenerated *asGenerated;
     s16 numWaterBoxes;
@@ -741,7 +741,7 @@ Gfx *geo_movtex_draw_colored_no_update(s32 callContext, struct GraphNode *node, 
 }
 
 /**
- * Exact copy of geo_movtex_draw_colored_no_update, but now using the gMovtexColored2 array.
+ * Exact copy of geo_movtex_draw_colored_no_update, but now using the gMovtexColoredSSLSandPits array.
  * Used for the sand pits in SSL, both outside and inside the pyramid.
  */
 Gfx *geo_movtex_draw_colored_2_no_update(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
@@ -752,11 +752,11 @@ Gfx *geo_movtex_draw_colored_2_no_update(s32 callContext, struct GraphNode *node
     if (callContext == GEO_CONTEXT_RENDER) {
         i = 0;
         asGenerated = (struct GraphNodeGenerated *) node;
-        while (gMovtexColored2[i].movtexVerts != 0) {
-            if (gMovtexColored2[i].geoId == asGenerated->parameter) {
-                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColored2[i].layer << 8));
-                movtexVerts = segmented_to_virtual(gMovtexColored2[i].movtexVerts);
-                gfx = movtex_gen_list(movtexVerts, &gMovtexColored2[i], MOVTEX_LAYOUT_COLORED);
+        while (gMovtexColoredSSLSandPits[i].movtexVerts != 0) {
+            if (gMovtexColoredSSLSandPits[i].geoId == asGenerated->parameter) {
+                asGenerated->fnNode.node.flags = ((asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (gMovtexColoredSSLSandPits[i].layer << 8));
+                movtexVerts = segmented_to_virtual(gMovtexColoredSSLSandPits[i].movtexVerts);
+                gfx = movtex_gen_list(movtexVerts, &gMovtexColoredSSLSandPits[i], MOVTEX_LAYOUT_COLORED);
                 break;
             }
             i++;

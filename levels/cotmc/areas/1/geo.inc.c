@@ -1,6 +1,6 @@
 // 0x0E0001A0
-const GeoLayout cotmc_geo_0001A0[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout cotmc_geo_area_1[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -18,7 +18,7 @@ const GeoLayout cotmc_geo_0001A0[] = {
                GEO_DISPLAY_LIST(LAYER_OPAQUE, cotmc_seg7_dl_07007D48),
                GEO_DISPLAY_LIST(LAYER_OPAQUE, cotmc_seg7_dl_0700A160),
                GEO_ASM(    0, geo_movtex_pause_control),
-               GEO_ASM(0x2801, geo_movtex_draw_nocolor),
+               GEO_ASM(MOVTEX_COTMC_WATER, geo_movtex_draw_nocolor),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT, cotmc_seg7_dl_0700A4B8),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),

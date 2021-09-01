@@ -12,8 +12,8 @@ extern const GeoLayout wdw_geo_hidden_platform[];
 extern const GeoLayout wdw_geo_express_elevator[];
 extern const GeoLayout wdw_geo_rectangular_floating_platform[];
 extern const GeoLayout wdw_geo_rotating_platform[];
-extern const GeoLayout wdw_geo_000658[];
-extern const GeoLayout wdw_geo_000724[];
+extern const GeoLayout wdw_geo_area_1[];
+extern const GeoLayout wdw_geo_area_2[];
 
 // leveldata
 extern const Gfx wdw_seg7_dl_07009AB0[];

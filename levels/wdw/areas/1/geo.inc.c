@@ -1,6 +1,6 @@
 // 0x0E000658
-const GeoLayout wdw_geo_000658[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout wdw_geo_area_1[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -15,13 +15,13 @@ const GeoLayout wdw_geo_000658[] = {
          GEO_OPEN_NODE(),
             GEO_CAMERA(1, 0, 2000, 6000, -4352, 0, -4352, geo_camera_main),
             GEO_OPEN_NODE(),
-               GEO_DISPLAY_LIST(LAYER_OPAQUE, wdw_seg7_dl_07009AB0),
-               GEO_DISPLAY_LIST(LAYER_ALPHA, wdw_seg7_dl_0700A138),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wdw_seg7_dl_07012798),
+               GEO_DISPLAY_LIST(LAYER_OPAQUE,            wdw_seg7_dl_07009AB0),
+               GEO_DISPLAY_LIST(LAYER_ALPHA,             wdw_seg7_dl_0700A138),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT,       wdw_seg7_dl_07012798),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT_DECAL, wdw_seg7_dl_07012908),
-               GEO_ASM(   0, geo_wdw_set_initial_water_level),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x1101, geo_movtex_draw_water_regions),
+               GEO_ASM(                     0, geo_wdw_set_initial_water_level),
+               GEO_ASM(                     0, geo_movtex_pause_control       ),
+               GEO_ASM(WDW_MOVTEX_AREA1_WATER, geo_movtex_draw_water_regions  ),
                GEO_RENDER_OBJ(),
                GEO_ASM(   0, geo_envfx_main),
             GEO_CLOSE_NODE(),

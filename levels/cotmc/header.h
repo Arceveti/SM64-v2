@@ -4,7 +4,7 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout cotmc_geo_0001A0[];
+extern const GeoLayout cotmc_geo_area_1[];
 
 // leveldata
 extern const Gfx cotmc_seg7_dl_07007D48[];

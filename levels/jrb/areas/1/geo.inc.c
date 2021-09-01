@@ -1,6 +1,6 @@
 // 0x0E000A18
-const GeoLayout jrb_geo_000A18[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+const GeoLayout jrb_geo_area_1[] = {
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -22,9 +22,9 @@ const GeoLayout jrb_geo_000A18[] = {
                GEO_DISPLAY_LIST(LAYER_OPAQUE, jrb_seg7_dl_070069B0),
                GEO_DISPLAY_LIST(LAYER_OPAQUE, jrb_seg7_dl_07007570),
                GEO_DISPLAY_LIST(LAYER_ALPHA, jrb_seg7_dl_07007718),
-               GEO_ASM(   0, geo_movtex_pause_control),
-               GEO_ASM(0x1201, geo_movtex_draw_water_regions),
-               GEO_ASM(0x1205, geo_movtex_draw_water_regions),
+               GEO_ASM(                      0, geo_movtex_pause_control     ),
+               GEO_ASM(JRB_MOVTEX_WATER,        geo_movtex_draw_water_regions),
+               GEO_ASM(JRB_MOVTEX_INITIAL_MIST, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(  14, geo_envfx_main),
             GEO_CLOSE_NODE(),

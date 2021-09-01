@@ -92,7 +92,7 @@ const LevelScript level_wdw_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_WDW_RECTANGULAR_FLOATING_PLATFORM, wdw_geo_rectangular_floating_platform),
     LOAD_MODEL_FROM_GEO(MODEL_WDW_ROTATING_PLATFORM,             wdw_geo_rotating_platform),
 
-    AREA(/*index*/ 1, wdw_geo_000658),
+    AREA(/*index*/ 1, wdw_geo_area_1),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/  3395, 3580,  384, /*angle*/ 0, 180, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/   818,    0, 3634, /*angle*/ 0,  45, 0, /*behParam*/ 0x000B0000, /*beh*/ bhvFadingWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -2865, 3328, 3065, /*angle*/ 0,   0, 0, /*behParam*/ 0x000C0000, /*beh*/ bhvFadingWarp),
@@ -110,7 +110,7 @@ const LevelScript level_wdw_entry[] = {
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),
 
-    AREA(/*index*/ 2, wdw_geo_000724),
+    AREA(/*index*/ 2, wdw_geo_area_2),
         JUMP_LINK(script_func_local_4),
         JUMP_LINK(script_func_local_2),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x02, /*destNode*/ 0x32, /*flags*/ WARP_NO_CHECKPOINT),
@@ -124,7 +124,7 @@ const LevelScript level_wdw_entry[] = {
 
     FREE_LEVEL_POOL(),
     MARIO_POS(/*area*/ 1, /*yaw*/ 180, /*pos*/ 3395, 2580, 384),
-    CALL(/*arg*/ 0, /*func*/ lvl_init_or_update),
+    CALL(     /*arg*/ 0, /*func*/ lvl_init_or_update),
     CALL_LOOP(/*arg*/ 1, /*func*/ lvl_init_or_update),
     CLEAR_LEVEL(),
     SLEEP_BEFORE_EXIT(/*frames*/ 1),

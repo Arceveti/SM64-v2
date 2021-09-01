@@ -1,6 +1,6 @@
 // 0x0E000EC0
 const GeoLayout lll_geo_area_2[] = {
-   GEO_NODE_SCREEN_AREA(10, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2),
+   GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
       GEO_OPEN_NODE(),
@@ -20,9 +20,9 @@ const GeoLayout lll_geo_area_2[] = {
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT, lll_seg7_dl_volcano_upper_wall_shadow),
                GEO_DISPLAY_LIST(LAYER_OPAQUE,      lll_seg7_dl_volcano_exit),
                GEO_DISPLAY_LIST(LAYER_ALPHA,       lll_seg7_dl_fire_spitter_hole),
-               GEO_ASM(     0, geo_movtex_pause_control),
-               GEO_ASM(0x2202, geo_movtex_draw_nocolor),
-               GEO_ASM(0x2202, geo_movtex_draw_water_regions),
+               GEO_ASM(                            0, geo_movtex_pause_control     ),
+               GEO_ASM(MOVTEX_VOLCANO_LAVA_FALL,      geo_movtex_draw_nocolor      ),
+               GEO_ASM(LLL_MOVTEX_VOLCANO_FLOOR_LAVA, geo_movtex_draw_water_regions),
                GEO_RENDER_OBJ(),
                GEO_ASM(     0, geo_envfx_main),
             GEO_CLOSE_NODE(),

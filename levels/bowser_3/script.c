@@ -55,7 +55,7 @@ const LevelScript level_bowser_3_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_BOWSER_3_FALLING_PLATFORM_10, bowser_3_geo_falling_platform_10),
     LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_03,            bowser_3_geo_000380),
 
-    AREA(/*index*/ 1, bowser_3_geo_000398),
+    AREA(/*index*/ 1, bowser_3_geo_area_1),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ 0, 1307, 0, /*angle*/ 0, 183, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneCircleWarp),
         WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_BOWSER_3, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         JUMP_LINK(script_func_local_1),
@@ -67,7 +67,7 @@ const LevelScript level_bowser_3_entry[] = {
 
     FREE_LEVEL_POOL(),
     MARIO_POS(/*area*/ 1, /*yaw*/ 183, /*pos*/ 0, 307, 0),
-    CALL(/*arg*/ 0, /*func*/ lvl_init_or_update),
+    CALL(     /*arg*/ 0, /*func*/ lvl_init_or_update),
     CALL_LOOP(/*arg*/ 1, /*func*/ lvl_init_or_update),
     CLEAR_LEVEL(),
     SLEEP_BEFORE_EXIT(/*frames*/ 1),

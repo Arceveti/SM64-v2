@@ -30,7 +30,7 @@ extern const GeoLayout hmc_geo_000A18[];
 extern const GeoLayout hmc_geo_000A88[];
 extern const GeoLayout hmc_geo_000AE8[];
 extern const GeoLayout hmc_geo_000B48[];
-extern const GeoLayout hmc_geo_000B90[];
+extern const GeoLayout hmc_geo_area_1[];
 
 // leveldata
 extern const Gfx hmc_seg7_dl_070078B0[];

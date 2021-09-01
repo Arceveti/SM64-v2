@@ -70,7 +70,7 @@ extern f32 gPaintingMarioYEntry;
 #define MOVTEX_AREA_BOWSER_3         (0x34 << 8)
 #define MOVTEX_AREA_TTM              (0x36 << 8)
 
-// Quad collections
+// Quad collections, geo_movtex_draw_water_regions
 #define BBH_MOVTEX_MERRY_GO_ROUND_WATER_ENTRANCE    (0x00 | MOVTEX_AREA_BBH             )
 #define BBH_MOVTEX_MERRY_GO_ROUND_WATER_SIDE        (0x01 | MOVTEX_AREA_BBH             )
 #define CCM_MOVTEX_PENGUIN_PUDDLE_WATER             (0x01 | MOVTEX_AREA_CCM             )
@@ -85,7 +85,7 @@ extern f32 gPaintingMarioYEntry;
 #define WDW_MOVTEX_AREA2_WATER                      (0x02 | MOVTEX_AREA_WDW             )
 #define JRB_MOVTEX_WATER                            (0x01 | MOVTEX_AREA_JRB             )
 #define JRB_MOVTEX_INITIAL_MIST                     (0x05 | MOVTEX_AREA_JRB             )
-#define JRB_MOVTEX_SINKED_BOAT_WATER                (0x02 | MOVTEX_AREA_JRB             )
+#define JRB_MOVTEX_SUNKEN_SHIP_WATER                (0x02 | MOVTEX_AREA_JRB             )
 #define THI_MOVTEX_AREA1_WATER                      (0x01 | MOVTEX_AREA_THI             )
 #define THI_MOVTEX_AREA2_WATER                      (0x02 | MOVTEX_AREA_THI             )
 #define CASTLE_GROUNDS_MOVTEX_WATER                 (0x01 | MOVTEX_AREA_CASTLE_GROUNDS  )
@@ -96,7 +96,7 @@ extern f32 gPaintingMarioYEntry;
 #define CASTLE_COURTYARD_MOVTEX_STAR_STATUE_WATER   (0x01 | MOVTEX_AREA_CASTLE_COURTYARD)
 #define TTM_MOVTEX_PUDDLE                           (0x01 | MOVTEX_AREA_TTM             )
 
-// Non-colored, unique movtex meshes (drawn in level geo)
+// Non-colored, unique movtex meshes (drawn in level geo), geo_movtex_draw_nocolor
 #define MOVTEX_PYRAMID_SAND_PATHWAY_FRONT           (0x01 | MOVTEX_AREA_SSL             )
 #define MOVTEX_PYRAMID_SAND_PATHWAY_FLOOR           (0x02 | MOVTEX_AREA_SSL             )
 #define MOVTEX_PYRAMID_SAND_PATHWAY_SIDE            (0x03 | MOVTEX_AREA_SSL             )
@@ -107,7 +107,7 @@ extern f32 gPaintingMarioYEntry;
 #define MOVTEX_LLL_LAVA_FLOOR                       (0x01 | MOVTEX_AREA_LLL             )
 #define MOVTEX_VOLCANO_LAVA_FALL                    (0x02 | MOVTEX_AREA_LLL             )
 #ifdef DDD_WARP_CURRENT_TEXTURE
-#define MOVTEX_DDD_SUB_HOLE                         (0x02 | MOVTEX_AREA_DDD             )
+#define MOVTEX_DDD_SUB_HOLE                         (0x01 | MOVTEX_AREA_DDD             )
 #endif
 #define MOVTEX_COTMC_WATER                          (0x01 | MOVTEX_AREA_COTMC           )
 #define MOVTEX_TTM_BEGIN_WATERFALL                  (0x01 | MOVTEX_AREA_TTM             )
@@ -116,14 +116,16 @@ extern f32 gPaintingMarioYEntry;
 #define MOVTEX_TTM_END_PUDDLE_WATERFALL             (0x04 | MOVTEX_AREA_TTM             )
 #define MOVTEX_TTM_PUDDLE_WATERFALL                 (0x05 | MOVTEX_AREA_TTM             )
 
-// Colored, unique movtex meshes (drawn in level geo)
+// Colored, unique movtex meshes (drawn in level geo), geo_movtex_draw_colored
 #define MOVTEX_SSL_PYRAMID_SIDE                     (0x01 | MOVTEX_AREA_SSL             )
 #define MOVTEX_SSL_PYRAMID_CORNER                   (0x02 | MOVTEX_AREA_SSL             )
 #define MOVTEX_SSL_COURSE_EDGE                      (0x03 | MOVTEX_AREA_SSL             )
 
-// Shared movtex meshes (drawn in object geo)
+// Shared movtex meshes (drawn in object geo), geo_movtex_update_horizontal, 
+// geo_movtex_draw_colored_2_no_update
 #define MOVTEX_SSL_SAND_PIT_OUTSIDE                 (0x01 | MOVTEX_AREA_SSL             )
 #define MOVTEX_SSL_SAND_PIT_PYRAMID                 (0x02 | MOVTEX_AREA_SSL             )
+// geo_movtex_draw_colored_no_update
 #define MOVTEX_TREADMILL_BIG                        (0x00 | MOVTEX_AREA_TTC             )
 #define MOVTEX_TREADMILL_SMALL                      (0x01 | MOVTEX_AREA_TTC             )
 
@@ -135,6 +137,5 @@ Gfx *geo_movtex_draw_colored(            s32 callContext,        struct GraphNod
 Gfx *geo_movtex_draw_colored_no_update(  s32 callContext,        struct GraphNode *node, UNUSED Mat4 mtx);
 Gfx *geo_movtex_draw_colored_2_no_update(s32 callContext,        struct GraphNode *node, UNUSED Mat4 mtx);
 Gfx *geo_movtex_update_horizontal(       s32 callContext,        struct GraphNode *node, UNUSED Mat4 mtx);
-Gfx *geo_movtex_draw_colored_no_update(  s32 callContext,        struct GraphNode *node, UNUSED Mat4 mtx);
 
 #endif // MOVING_TEXTURE_H

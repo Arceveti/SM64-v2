@@ -9,7 +9,7 @@ extern const GeoLayout castle_grounds_geo_flag[];
 extern const GeoLayout castle_grounds_geo_tower[];
 extern const GeoLayout castle_grounds_geo_vcutm_grill[];
 extern const GeoLayout castle_grounds_geo_cannon_grill[];
-extern const GeoLayout castle_grounds_geo_00073C[];
+extern const GeoLayout castle_grounds_geo_area_1[];
 
 // leveldata
 extern const Gfx castle_grounds_seg7_dl_castle[];
