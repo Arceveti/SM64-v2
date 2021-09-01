@@ -137,11 +137,11 @@ static void platform_on_track_act_init(void) {
     o->oPlatformOnTrackPrevWaypoint      = o->oPlatformOnTrackStartWaypoint;
     o->oPlatformOnTrackPrevWaypointFlags = 0;
     o->oPlatformOnTrackBaseBallIndex     = 0;
-    o->oPosX = o->oHomeX = o->oPlatformOnTrackStartWaypoint->pos[0];
-    o->oPosY = o->oHomeY = o->oPlatformOnTrackStartWaypoint->pos[1];
-    o->oPosZ = o->oHomeZ = o->oPlatformOnTrackStartWaypoint->pos[2];
+    vec3s_to_vec3f(&o->oHomeVec, o->oPlatformOnTrackStartWaypoint->pos);
+    vec3f_copy(&o->oPosVec, &o->oHomeVec);
     o->oFaceAngleYaw = o->oBehParams2ndByte;
-    o->oForwardVel   = o->oVelX = o->oVelY = o->oVelZ = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
+    vec3f_zero(&o->oVelVec);
+    o->oForwardVel = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
     o->oPlatformOnTrackWasStoodOn = FALSE;
     if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0x0;
     // Spawn track balls

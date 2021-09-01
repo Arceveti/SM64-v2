@@ -72,7 +72,7 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
     vec3f_sub(posDifference, displaceInfo->prevPos);
     if ((platform == displaceInfo->prevPlatform) && (gGlobalTimer == (displaceInfo->prevTimer + 1))) {
         // Transform from relative positions to world positions
-        vec3f_scale_vec3f(scaledPos, displaceInfo->prevTransformedPos, platform->header.gfx.scale, FALSE);
+        vec3f_prod(scaledPos, displaceInfo->prevTransformedPos, platform->header.gfx.scale);
         linear_mtxf_mul_vec3f(*platform->header.gfx.throwMatrix, pos, scaledPos);
         // Add on how much Mario moved in the previous frame
         vec3f_add(pos, posDifference);
@@ -87,7 +87,7 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
     if (platform->behavior == segmented_to_virtual(bhvTTCTreadmill)) vec3f_add(pos, &platform->oVelVec);
     // Transform from world positions to relative positions for use next frame
     linear_mtxf_transpose_mul_vec3f(*platform->header.gfx.throwMatrix, scaledPos, pos);
-    vec3f_scale_vec3f(displaceInfo->prevTransformedPos, scaledPos, platform->header.gfx.scale, TRUE);
+    vec3f_quot(displaceInfo->prevTransformedPos, scaledPos, platform->header.gfx.scale);
     vec3f_add(pos, platformPos);
     // If the object is Mario, set inertia
     if (pos == gMarioState->pos) {

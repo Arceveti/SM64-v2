@@ -96,7 +96,7 @@ struct GdObj {
 struct ListNode {
     /* 0x00 */ struct ListNode *prev;
     /* 0x04 */ struct ListNode *next;
-    /* 0x08 */ struct GdObj *obj;
+    /* 0x08 */ struct GdObj    *obj;
 };
 
 // I think this is actually the same type as ListNode, and data is just a generic "void *" pointer.
@@ -164,15 +164,15 @@ struct ObjJoint {
     /* 0x0CC */ Vec3f unkCC;                            // unused
     /* 0x0D8 */ u8    padD8[4];
     /* 0x0DC */ Vec3f friction;
-    /* 0x0E8 */ Mat4 matE8;                             // matrix4x4
+    /* 0x0E8 */ Mat4 invMtx;                            // matrix4x4
     /* 0x128 */ Mat4 rotationMtx;                       // "rot matrix"
     /* 0x168 */ Mat4 idMtx;                             // "id matrix"
-    /* 0x1A8 */ Vec3f unk1A8;                           // set to 0 and unused?
+    /* 0x1A8 */ Vec3f unk1A8;                           // set to 0 and unused
     /* 0x1B4 */ s32  id;
     /* 0x1B8 */ u8   pad1B8[4];
     /* 0x1BC */ s32  flags;                             // "flags" - 0x2000 = grabbed
     /* 0x1C0 */ s32  unk1C0;                            // unused
-    /* 0x1C4 */ struct ObjGroup *unk1C4;                // bone group?
+    /* 0x1C4 */ struct ObjGroup *unk1C4;                // bone group? unused
     /* 0x1C8 */ s32 colourNum;
     /* 0x1CC */ s32 type;                               // 0 = normal joint, 5 = grabbable joint. seems to be set, but never used
     /* 0x1D0 */ struct ObjAnimator *rootAnimator;       // root animator? used by eye_joint_update_func
@@ -207,24 +207,24 @@ struct ObjParticle {
     /* 0x30 */ f32 unk30;                           // unused
     /* 0x34 */ u8  pad34[0x38-0x34];
     /* 0x38 */ Vec3f vel;                           // velocity?
-    /* 0x44 */ f32 unk44;                           // not vec?
-    /* 0x48 */ f32 unk48;                           // not vec?
+    /* 0x44 */ f32 unk44;                           // not vec? unused
+    /* 0x48 */ f32 unk48;                           // not vec? unused
     /* 0x4C */ u8  pad4C[0x50-0x4C];
     /* 0x50 */ s32 id;
     /* 0x54 */ u32 flags;                           // "dflags"?
     /* 0x58 */ s32 colourNum;
     /* 0x5C */ s32 timeout;                         // when this reaches zero, the particle disappears
     /* 0x60 */ s32 particleType;
-    /* 0x64 */ s32 unk64;                           // type? (1 = has 50 sub-particles, 2,3 = has 30 sub-particles
+    /* 0x64 */ s32 type;                            // type? (1 = has 50 sub-particles, 2,3 = has 30 sub-particles
     /* 0x68 */ u8  pad68[0x6C-0x68];
     /* 0x6C */ struct ObjGroup *subParticlesGrp;    // group of other Particles ?
     /* 0x70 */ u8  pad70[4];
-    /* 0x74 */ s32 unk74;
+    /* 0x74 */ s32 unk74;                           // unused
     /* 0x78 */ u8  unk78[4];
-    /* 0x7C */ struct ObjAnimator *unk7C;           // guessing on type; doesn't seem to be used in final code
+    /* 0x7C */ struct ObjAnimator *unk7C;           // unused. guessing on type; doesn't seem to be used in final code
     /* 0x80 */ struct ObjLight *objLight;           // could be a Net or Light; not seen as non-null in running code
     /* 0x84 */ u8 pad84[0xB0-0x84];
-    /* 0xB0 */ s32 unkB0;                           // state?
+    /* 0xB0 */ s32 state;                           // state?
     /* 0xB4 */ struct ObjGroup *attachedObjsGrp;    // attach group? unused group of particles
     /* 0xB8 */ s32 attachFlags;                     // attached arg0; "AttFlag"
     /* 0xBC */ struct GdObj *attachedToObj;         // object that this object is attached to. looks like can be a Light or Camera
@@ -249,7 +249,7 @@ struct ObjShape {
     /* 0x40 */ u32 id;
     /* 0x44 */ s32 flag;                            // what are the flag values? only from dynlists?
     /* 0x48 */ s32 dlNums[2];                       // gd dl number for each frame buffer (??) [0, 1]
-               s32 unk50;                           // frame number (index into dlNums)?
+               s32 frameIndex;                      // frame number (index into dlNums)?
     /* 0x54 */ u8  pad54[0x58-0x54];                // part of above array??
     /* 0x58 */ AlphaF alpha;                        // paramF? opacitiy? something with rendertype
     /* 0x5C */ char name[0x40];
@@ -281,15 +281,15 @@ struct ObjNet {
     /* 0x000 */ struct GdObj header;
     /* 0x014 */ Vec3f worldPos;                     // position? d_set_initpos + d_set_world_pos; print_net says world
     /* 0x020 */ Vec3f initPos;                      // position? d_set_initpos? attached offset? dynamic? scratch?
-    /* 0x02C */ u8  pad2c[0x34-0x2C];
-    /* 0x034 */ s32 flags;                          // "dflags"?
-    /* 0x038 */ u32 id;                             // some sort of id? from move_net
-    /* 0x03C */ s32 unk3C;                          // state flags? vertex info flags?
-    /* 0x040 */ s32 colourNum;
+    /* 0x02C */ u8    pad2c[0x34-0x2C];
+    /* 0x034 */ s32   flags;                        // "dflags"?
+    /* 0x038 */ u32   id;                           // some sort of id? from move_net
+    /* 0x03C */ s32   unk3C;                        // state flags? vertex info flags? unused
+    /* 0x040 */ s32   colourNum;
     /* 0x044 */ Vec3f unusedForce;                  // "force" (unused)
     /* 0x050 */ Vec3f velocity;
     /* 0x05C */ Vec3f rotation;                     // unused
-    /* 0x068 */ Vec3f unk68;                        // initial rotation?
+    /* 0x068 */ Vec3f initRotation;                 // initial rotation?
     /* 0x074 */ Vec3f collDisp;                     // what is this?
     /* 0x080 */ Vec3f collTorque;                   // what is this?
     /* 0x08C */ Vec3f unusedCollTorqueL;            // unused
@@ -298,29 +298,29 @@ struct ObjNet {
     /* 0x0B0 */ Vec3f centerOfGravity;              // "CofG" center of gravity?
     /* 0x0BC */ struct GdBoundingBox boundingBox;
     /* 0x0D4 */ Vec3f unusedCollDispOff;            // unused
-    /* 0x0E0 */ f32 unusedCollMaxD;                 // unused
-    /* 0x0E4 */ f32 maxRadius;
-    /* 0x0E8 */ Mat4 idMtx;
-    /* 0x128 */ Mat4 invMtx;
-    /* 0x168 */ Mat4 rotationMtx;                   // "rotation matrix"
+    /* 0x0E0 */ f32   unusedCollMaxD;               // unused
+    /* 0x0E4 */ f32   maxRadius;
+    /* 0x0E8 */ Mat4  idMtx;
+    /* 0x128 */ Mat4  invMtx;
+    /* 0x168 */ Mat4  rotationMtx;                  // "rotation matrix"
     /* 0x1A8 */ struct ObjShape *shapePtr;
     /* 0x1AC */ Vec3f scale;
-    /* 0x1B8 */ f32 unusedMass;                     // unused
-    /* 0x1BC */ s32 numModes;                       // unused
-    /* 0x1C0 */ struct ObjGroup *unk1C0;            // group of `ObjVertex` or `ObjParticle`, unused
+    /* 0x1B8 */ f32   unusedMass;                   // unused
+    /* 0x1BC */ s32   numModes;                     // unused
+    /* 0x1C0 */ struct ObjGroup *unk1C0;            // group of `ObjVertex` or `ObjParticle`. unused
     /* 0x1C4 */ struct ObjGroup *skinGrp;           // SkinGroup (from reset_weight) (joints and bones)
     /* 0x1C8 */ struct ObjGroup *nodeGrp;           // "node group" (joints, weights?)
     /* 0x1CC */ struct ObjGroup *faceGroup;         // plane group (only type 1?)
     /* 0x1D0 */ struct ObjGroup *vertexGrp;         // vertex group
     /* 0x1D4 */ struct ObjGroup *attachedObjsGrp;
     /* 0x1D8 */ Vec3f attachOffset;
-    /* 0x1E4 */ s32 attachFlags;                    // d_attach_to arg 0; "AttFlag"
+    /* 0x1E4 */ s32   attachFlags;                  // d_attach_to arg 0; "AttFlag"
     /* 0x1E8 */ struct GdObj *attachedToObj;        // object that this object is attached to
-    /* 0x1EC */ s32 netType;                        // from move_net
-    /* 0x1F0 */ struct ObjNet *unk1F0;              // or joint. guess from Unknown80192AD0
-    /* 0x1F4 */ Vec3f unk1F4;
-    /* 0x200 */ Vec3f unk200;
-    /* 0x20C */ struct ObjGroup *unk20C;
+    /* 0x1EC */ s32   netType;                      // from move_net
+    /* 0x1F0 */ struct ObjNet *unk1F0;              // or joint. guess from Unknown80192AD0. unused
+    /* 0x1F4 */ Vec3f unk1F4;                       // unused
+    /* 0x200 */ Vec3f unk200;                       // unused
+    /* 0x20C */ struct ObjGroup *unk20C;            // unused
     /* 0x210 */ s32 ctrlType;                       // has no purpose
 }; /* sizeof = 0x220 */
 
@@ -362,20 +362,20 @@ struct ObjCamera {
     /* 0x030 */ struct GdObj* dynObj;               // pointer to some type of object
     /* 0x034 */ Vec3f lookAt;                       // point that the camera faces
     /* 0x040 */ Vec3f relPos;                       // relative position related?
-    /* 0x04C */ Vec3f unk4C;
+    /* 0x04C */ Vec3f curZoomPosition;
     /* 0x058 */ Vec3f unk58;
-    /* 0x064 */ Mat4 unk64;                         // matrix4x4
-    /* 0x0A4 */ f32  unkA4;
-    /* 0x0A8 */ Mat4 unkA8;                         // matrix4x4
+    /* 0x064 */ Mat4 idMtx;                         // matrix4x4
+    /* 0x0A4 */ f32  colXY;
+    /* 0x0A8 */ Mat4 transformMtx;                  // matrix4x4, multiplied to nextPos in move_camera
     /* 0x0E8 */ Mat4 lookatMtx;
-    /* 0x128 */ Vec3f unk128;                       // possibly
-    /* 0x134 */ Vec3f unk134;
+    /* 0x128 */ Vec3f rotationAngle;
+    /* 0x134 */ Vec3f rotationSpeeds;
     /* 0x140 */ Vec3f zoomPositions[4];             // zoom positions (*1, *1.5, *2, empty fourth)
     /* 0x170 */ s32 maxZoomLevel;                   // max number of zoom positions
     /* 0x174 */ s32 zoomLevel;                      // index into zoomPositions array
-    /* 0x178 */ f32 unk178;
-    /* 0x17C */ f32 unk17C;
-    /* 0x180 */ Vec3f unk180;
+    /* 0x178 */ f32 unk178;                         // set to 0 and unused
+    /* 0x17C */ f32 multiplier;                     // always 0.25
+    /* 0x180 */ Vec3f unk180;                       // unused. only [1] wass used, 1.0f, 0.1f, 1.0f
     /* 0x18C */ struct ObjView *unk18C;             // view that has/is using this camera?
 }; /* sizeof = 0x190 */
 
@@ -443,7 +443,7 @@ struct ObjView {
     /* 0x38 */ s32 projectionType;              // enum? if 1 use guPerspective, if 0 (or 2?) use guOrtho (see `drawscene`)
     /* 0x3C */ Vec3f upperLeft;                 // position vec?
     /* 0x48 */ f32 unk48;                       // what are these? are they another vec?
-    /* 0x4C */ f32 unk4C;
+    /* 0x4C */ f32 unk4C;                       // set to 1 and unused?
     /* 0x50 */ u8  pad50[0x4];
     /* 0x54 */ Vec3f lowerRight;
     /* 0x60 */ Vec3f clipping;                  // z-coordinate of (x: near, y: far) clipping plane?
@@ -456,7 +456,7 @@ struct ObjView {
     /* 0x8C */ void *zbuf;
     /* 0x90 */ void *colourBufs[2];             // frame buffers?
     /* 0x98 */ void (*proc)(struct ObjView *);  // Never non-null in game...?
-    /* 0x9C */ s32 unk9C;
+    /* 0x9C */ s32 unk9C;                       // unused
 }; /* sizeof = 0xA0 */
 
 struct ObjAnimator {
@@ -517,21 +517,21 @@ struct ObjLight {
     /* 0x20 */ char name[8];
     /* 0x28 */ u8  pad28[4];
     /* 0x2C */ s32 flags;
-    /* 0x30 */ f32 diffuseFac;  // color (5C) = Kd (50) * 30
+    /* 0x30 */ f32 diffuseFac;      // color (5C) = Kd (50) * 30
     /* 0x34 */ u8  pad34[4];
-    /* 0x38 */ f32 unk38;       // calculated diffuse theta (in degrees?)
-    /* 0x3C */ s32 unk3C;
-    /* 0x40 */ s32 unk40;
+    /* 0x38 */ f32 diffuseTheta;    // calculated diffuse theta (in degrees?)
+    /* 0x3C */ s32 unk3C;           // unused
+    /* 0x40 */ s32 unk40;           // unused
     /* 0x44 */ u8  pad3[0x8];
-    /* 0x4C */ s32 unk4C;
+    /* 0x4C */ s32 unk4C;           // set to 0 and unused
     /* 0x50 */ ColorRGBf diffuse;
     /* 0x5C */ ColorRGBf colour;
-    /* 0x68 */ Vec3f unk68;     // unused
+    /* 0x68 */ Vec3f unk68;         // unused
     /* 0x74 */ Vec3f position;
-    /* 0x80 */ Vec3f unk80;
-    /* 0x8C */ Vec3f unk8C;
-    /* 0x98 */ s32   unk98;
-    /* 0x9C */ struct ObjShape *unk9C;
+    /* 0x80 */ Vec3f unk80;         // unused
+    /* 0x8C */ Vec3f unk8C;         // unused
+    /* 0x98 */ s32   unk98;         // unused
+    /* 0x9C */ struct ObjShape *shapePtr;
 }; /* sizeof = 0xA0 */
 
 #endif // GD_TYPES_H

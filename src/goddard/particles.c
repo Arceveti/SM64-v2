@@ -26,7 +26,7 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z)
     particle->flags     = flags | GD_PARTICLE_FLAG_8;
     particle->timeout   = -1;
     particle->shapePtr  = NULL;
-    particle->unkB0     =  1;
+    particle->state     =  1;
     return particle;
 }
 
@@ -75,7 +75,7 @@ void move_particle(struct ObjParticle *ptc) {
     }
     if (ptc->attachedToObj != NULL) {
         set_cur_dynobj(ptc->attachedToObj);
-        if ((ptc->particleType == 3) && (ptc->unk64 == 3)) {
+        if ((ptc->particleType == 3) && (ptc->type == 3)) {
             camera = (struct ObjCamera *) ptc->attachedToObj;
             // Camera->unk18C = ObjView here
             if (camera->unk18C->pickedObj != NULL) {
@@ -91,10 +91,10 @@ void move_particle(struct ObjParticle *ptc) {
     }
     vec3f_add(ptc->pos, ptc->vel);
     if (ptc->flags & GD_PARTICLE_FLAG_1) ptc->vel[1] -= 0.4f;
-    if (ptc->unkB0 == 1) {
-        ptc->unkB0 = 2;
+    if (ptc->state == 1) {
+        ptc->state = 2;
         if (ptc->particleType == 3) {
-            switch (ptc->unk64) {
+            switch (ptc->type) {
                 case 1:
                     ptc->subParticlesGrp = make_group(0);
                     for ((i = 0); (i < 50); (i++)) {
@@ -117,9 +117,9 @@ void move_particle(struct ObjParticle *ptc) {
             }
         }
     }
-    vec3f_mul_f32(ptc->vel, 0.9f);
+    vec3f_mul_val(ptc->vel, 0.9f);
     if (ptc->particleType == 3) {
-        switch (ptc->unk64) {
+        switch (ptc->type) {
             case 1:
                 break;
             case 3:

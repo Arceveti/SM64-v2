@@ -203,8 +203,8 @@ Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline
         for ((i = 0); (i < 4); (i++)) vec3f_set(tempPoints[i], splineFocus[gPuppyCam.splineIndex + i].pos[0], splineFocus[gPuppyCam.splineIndex + i].pos[1], splineFocus[gPuppyCam.splineIndex + i].pos[2]);
         vec3s_evaluate_cubic_spline(gPuppyCam.splineProgress, gPuppyCam.focus, tempPoints[0], tempPoints[1], tempPoints[2], tempPoints[3]);
     }
-    if (splinePos[gPuppyCam.splineIndex+1].speed != 0) tempProgress[0] = (1.0f / splinePos[gPuppyCam.splineIndex + 1].speed);
-    if (splinePos[gPuppyCam.splineIndex+2].speed != 0) tempProgress[1] = (1.0f / splinePos[gPuppyCam.splineIndex + 2].speed);
+    if (splinePos[gPuppyCam.splineIndex + 1].speed != 0) tempProgress[0] = (1.0f / splinePos[gPuppyCam.splineIndex + 1].speed);
+    if (splinePos[gPuppyCam.splineIndex + 2].speed != 0) tempProgress[1] = (1.0f / splinePos[gPuppyCam.splineIndex + 2].speed);
     progChange = (((tempProgress[1] - tempProgress[0]) * gPuppyCam.splineProgress) + tempProgress[0]);
     gPuppyCam.splineProgress += progChange;
     if (gPuppyCam.splineProgress >= 1.0f) {
@@ -1021,9 +1021,9 @@ static void puppycam_collision(void) {
     s32 dist[2];
     if (gPuppyCam.targetObj == NULL) return;
     // The ray, starting from the top
-    vec3f_copy_y_offset(target[0], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight - CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.targetFloorHeight), 0, PUPPYCAM_FLOOR_DIST_UP)));
+    vec3f_copy_y_off(target[0], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight - CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.targetFloorHeight), 0, PUPPYCAM_FLOOR_DIST_UP)));
     // The ray, starting from the bottom
-    vec3f_copy_y_offset(target[1], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight * 0.4f));
+    vec3f_copy_y_off(target[1], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight * 0.4f));
     camdir[0][0] = (LENSIN(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[0]);
     camdir[0][1] = (       LENCOS(gPuppyCam.zoomTarget,pitchTotal)                 + gPuppyCam.shake[1]);
     camdir[0][2] = (LENCOS(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[2]);

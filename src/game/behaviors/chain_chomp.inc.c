@@ -310,7 +310,7 @@ static void chain_chomp_act_move(void) {
         if (o->oChainChompDistToPivot > maxDistToPivot) {
             f32 ratio = (maxDistToPivot / o->oChainChompDistToPivot); //! vec3f_normalize_max?
             o->oChainChompDistToPivot = maxDistToPivot;
-            vec3f_mul_f32(o->oChainChompSegments[0].pos, ratio);
+            vec3f_mul_val(o->oChainChompSegments[0].pos, ratio);
             if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED) {
                 // Restrict chain chomp position
                 vec3f_sum(&o->oPosVec, &o->parentObj->oPosVec, o->oChainChompSegments[0].pos);

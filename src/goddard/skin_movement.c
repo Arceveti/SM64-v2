@@ -49,7 +49,7 @@ void func_80181894(struct ObjJoint *joint) {
             curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {
                 vec3f_copy(stackVec, curWeight->vec20);
-                gd_rotate_and_translate_vec3f(stackVec, &joint->matE8);
+                gd_rotate_and_translate_vec3f(stackVec, &joint->invMtx);
                 connectedVtx         = curWeight->vtx;
                 scaleFactor          = curWeight->weightVal;
                 connectedVtx->pos[0] += (stackVec[0] * scaleFactor);
@@ -87,6 +87,6 @@ void reset_weight(struct ObjWeight *weight) {
 
 void reset_joint_weights(struct ObjJoint *joint) {
     struct ObjGroup *group;
-    gd_inverse_mat4f(&joint->matE8, &D_801B9EA8);
+    mtxf_inverse(&D_801B9EA8, &joint->invMtx);
     if ((group = joint->weightGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_WEIGHTS, (applyproc_t) reset_weight, group);
 }

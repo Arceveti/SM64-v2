@@ -149,9 +149,9 @@ void draw_light(struct ObjLight *light) {
     if (light->flags & LIGHT_UNK02) {
         shape = gSpotShape;
     } else {
-        shape = light->unk9C;
+        shape = light->shapePtr;
         if (++sLightDlCounter >= 17) sLightDlCounter = 1;
-        shape->unk50 = sLightDlCounter;
+        shape->frameIndex = sLightDlCounter;
     }
     draw_shape_2d(shape, 2, light->position);
 }
@@ -266,7 +266,7 @@ void draw_camera(struct ObjCamera *cam) {
         vec3f_copy(pos, cam->lookAt);
     }
     if (absf(cam->worldPos[0] - pos[0]) + absf(cam->worldPos[2] - pos[2]) == 0.0f) return; // Zero view distance
-    gd_dl_lookat(cam, cam->worldPos, pos, cam->unkA4);
+    gd_dl_lookat(cam, cam->worldPos, pos, cam->colXY);
 }
 
 /* 22836C -> 228498 */
@@ -379,7 +379,7 @@ void draw_shape_faces(struct ObjShape *shape) {
     sUpdateViewState.mtlDlNum = 0;
     set_render_alpha(shape->alpha);
     if (shape->dlNums[gGdFrameBufNum] != 0) {
-        draw_indexed_dl(shape->dlNums[gGdFrameBufNum], shape->unk50);
+        draw_indexed_dl(shape->dlNums[gGdFrameBufNum], shape->frameIndex);
     } else if (shape->faceGroup != NULL) {
         gd_dl_reset_buffers();
         draw_group(shape->faceGroup);
@@ -406,7 +406,7 @@ void draw_particle(struct GdObj *obj) {
         vec3f_zero(sLightColours[0]);
     }
     if (ptc->timeout > 0) {
-        ptc->shapePtr->unk50 = ptc->timeout;
+        ptc->shapePtr->frameIndex = ptc->timeout;
         draw_shape_2d(ptc->shapePtr, 2, ptc->pos);
     }
     if ((ptc->particleType == 3) && (ptc->subParticlesGrp != NULL)) draw_group(ptc->subParticlesGrp);
@@ -448,11 +448,9 @@ void register_light(struct ObjLight *light) {
 /* 229180 -> 229564 */
 void update_lighting(struct ObjLight *light) {
     f32 diffuseFac; // diffuse factor?
-    f32 dot;
-    f32 sp1C;
-    light->colour[0] = (light->diffuse[0] * light->diffuseFac);
-    light->colour[1] = (light->diffuse[1] * light->diffuseFac);
-    light->colour[2] = (light->diffuse[2] * light->diffuseFac);
+    f32 facMul;
+    f32 diffuseThreshold;
+    vec3f_prod_val(light->colour, light->diffuse, light->diffuseFac);
     vec3f_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
     vec3f_normalize(sLightPositionCache[light->id]);
     if (light->flags & LIGHT_UNK20) {
@@ -461,19 +459,14 @@ void update_lighting(struct ObjLight *light) {
     }
     diffuseFac = light->diffuseFac;
     if (light->flags & LIGHT_UNK02) {
-        dot = -vec3f_dot(sLightPositionCache[light->id], light->unk80);
-        sp1C = (1.0f - (light->unk38 / 90.0f));
-        if (dot > sp1C) {
-            dot = ((dot - sp1C) * (1.0f / (1.0f - sp1C)));
-            if (dot > 1.0f) { // ternary?
-                dot = 1.0f;
-            } else if (dot < 0.0f) {
-                dot = 0.0f;
-            }
+        diffuseThreshold = (1.0f - (light->diffuseTheta / 90.0f));
+        if (diffuseThreshold < 0.0f) {
+            facMul = (-diffuseThreshold * (1.0f / (1.0f - diffuseThreshold)));
+            facMul = CLAMP(facMul, 0.0f, 1.0f);
         } else {
-            dot = 0.0f;
+            facMul = 0.0f;
         }
-        diffuseFac *= dot;
+        diffuseFac *= facMul;
     }
     set_light_id(light->id);
     gd_setproperty(GD_PROP_DIFUSE_COLOUR, (light->diffuse[0] * diffuseFac), (light->diffuse[1] * diffuseFac), (light->diffuse[2] * diffuseFac));

@@ -25,8 +25,8 @@ struct GdControl { // gGdCtrl
     /* 0x3C */ u8  pad3C[0x44-0x3C];
     /* 0x44 */ s32 trgL; // bool L trigger pressed
     /* 0x48 */ s32 trgR; // bool R trigger pressed
-    /* 0x4C */ s32 unk4C;
-    /* 0x50 */ s32 unk50;
+    /* 0x4C */ s32 unk4C;   // set to 0 and unused?
+    /* 0x50 */ s32 unk50;   // set to 0 and unused
     /* 0x54 */ s32 newStartPress; // toggle bit? start pressed?
     /* 0x58 */ u8  pad58[0x7C-0x58];
     /* 0x7C */ f32 stickXf;
@@ -44,10 +44,10 @@ struct GdControl { // gGdCtrl
         /* b80 */ Bool8 dragging        : TRUE; // bool (A) pressed
         /* b40 */ Bool8 unkD8b40        : TRUE; // set to FALSE and unused
         /* b20 */ Bool8 unkD8b20        : TRUE; // set to FALSE and unused
-        /* b10 */ Bool8 startedDragging : TRUE;  // bool new (A) press
-        /* b08 */ Bool8 unkD8b08        : TRUE;
-        /* b04 */ Bool8 unkD8b04        : TRUE;
-        /* b02 */ Bool8 AbtnPressWait   : TRUE;  // bool 10 frames between (A) presses (cursor cool down?)
+        /* b10 */ Bool8 startedDragging : TRUE; // bool new (A) press
+        /* b08 */ Bool8 unkD8b08        : TRUE; // set to TRUE and unused
+        /* b04 */ Bool8 unkD8b04        : TRUE; // set to TRUE and unused
+        /* b02 */ Bool8 AbtnPressWait   : TRUE; // bool 10 frames between (A) presses (cursor cool down?)
     /* 0xDC */ u32 dragStartFrame; // first frame of new a press
     /* 0xE0 */ u8  padE0[0xE8-0xE0];
     /* 0xE8 */ u32 currFrame; // frame count?

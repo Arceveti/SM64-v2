@@ -949,7 +949,7 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     norm[0] = 0;
     norm[1] = surface->normal.y;
     norm[2] = 0;
-    vec3f_mul_f32(norm, RAY_OFFSET);
+    vec3f_mul_val(norm, RAY_OFFSET);
     vec3s_to_vec3f(v0, surface->vertex1);
     vec3s_to_vec3f(v1, surface->vertex2);
     vec3s_to_vec3f(v2, surface->vertex3);
@@ -961,7 +961,7 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     vec3f_cross(h, dir, e2);
     // Check if we're perpendicular from the surface
     a = vec3f_dot(e1, h);
-    if ((a > -0.00001f) && (a < 0.00001f)) return FALSE;
+    if ((a > -NEAR_ZERO) && (a < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface
     f = (1.0f / a);
     vec3f_diff(s, orig, v0);
@@ -972,10 +972,10 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     if ((v < 0.0f) || ((u + v) > 1.0f)) return FALSE;
     // Get the length between our origin and the surface contact point
     *length = (f * vec3f_dot(e2, q));
-    if ((*length <= 0.00001) || (*length > dir_length)) return FALSE;
+    if ((*length <= NEAR_ZERO) || (*length > dir_length)) return FALSE;
     // Successful contact
     vec3f_copy(add_dir, dir);
-    vec3f_mul_f32(add_dir, *length);
+    vec3f_mul_val(add_dir, *length);
     vec3f_sum(hit_pos, orig, add_dir);
     return TRUE;
 }
@@ -1023,11 +1023,11 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
     // Skip if OOB
     if ((cellX >= 0) && (cellX <= (NUM_CELLS - 1)) && (cellZ >= 0) && (cellZ <= (NUM_CELLS - 1))) {
         // Iterate through each surface in this partition
-        if ((normalized_dir[1] > -0.99999f) && (flags & RAYCAST_FIND_CEIL)) {
+        if ((normalized_dir[1] > -NEAR_ONE) && (flags & RAYCAST_FIND_CEIL)) {
             find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
             find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
-        if ((normalized_dir[1] <  0.99999f) && (flags & RAYCAST_FIND_FLOOR)) {
+        if ((normalized_dir[1] <  NEAR_ONE) && (flags & RAYCAST_FIND_FLOOR)) {
             find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
             find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
@@ -1064,7 +1064,7 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     register CellIndex cellPrevX = cellX;
     register CellIndex cellPrevZ = cellZ;
     // Don't do DDA if straight down
-    if ((normalized_dir[1] >= 0.99999f) || (normalized_dir[1] <= -0.99999f)) {
+    if ((normalized_dir[1] >= NEAR_ONE) || (normalized_dir[1] <= -NEAR_ONE)) {
         find_surface_on_ray_cell(cellX, cellZ, orig, normalized_dir, dir_length, hit_surface, hit_pos, &max_length, flags);
         return;
     }

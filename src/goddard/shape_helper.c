@@ -99,20 +99,20 @@ struct ObjShape *make_shape(UNUSED const char *name) {
         newShape->nextShape     = curShapeHead;
         curShapeHead->prevShape = newShape;
     }
-    newShape->id        = sGdShapeCount;
-    newShape->flag      = 0;
-    newShape->vtxCount  = 0;
-    newShape->faceCount = 0;
-    newShape->dlNums[0] = 0;
-    newShape->dlNums[1] = 0;
-    newShape->cullFaces = FALSE;
-    newShape->faceGroup = NULL; /* whoops, NULL-ed twice */
-    newShape->alpha     = 1.0f;
-    newShape->vtxGroup  = NULL;
-    newShape->faceGroup = NULL;
-    newShape->mtlGroup  = NULL;
+    newShape->id         = sGdShapeCount;
+    newShape->flag       = 0;
+    newShape->vtxCount   = 0;
+    newShape->faceCount  = 0;
+    newShape->dlNums[0]  = 0;
+    newShape->dlNums[1]  = 0;
+    newShape->cullFaces  = FALSE;
+    newShape->faceGroup  = NULL; /* whoops, NULL-ed twice */
+    newShape->alpha      = 1.0f;
+    newShape->vtxGroup   = NULL;
+    newShape->faceGroup  = NULL;
+    newShape->mtlGroup   = NULL;
     // newShape->connectVerts = FALSE; // unused
-    newShape->unk50     = 0;
+    newShape->frameIndex = 0;
     return newShape;
 }
 
@@ -122,9 +122,9 @@ void scale_obj_position(struct GdObj *obj) {
     if (obj->type == OBJ_TYPE_GROUPS) return;
     set_cur_dynobj(obj);
     d_get_rel_pos(pos);
-    vec3f_mul_vec3f(pos, sVertexScaleFactor);
-    d_set_rel_pos( pos[0], pos[1], pos[2]);
-    d_set_init_pos(pos);
+    vec3f_mul(pos, sVertexScaleFactor);
+    d_set_rel_pos(  pos[0], pos[1], pos[2]);
+    d_set_init_pos( pos);
 }
 
 /* @ 246B1C for 0x88 */
@@ -255,19 +255,19 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     // Make sparkle particles
     particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
-    particle->unk64                 = 3;
+    particle->type                  = 3;
     particle->attachedToObj         = &camera->header;
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
     particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_WHITE, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
-    particle->unk64                 = 2;
+    particle->type                  = 2;
     particle->attachedToObj         = d_use_obj("N228l"); // DYNOBJ_SILVER_STAR_LIGHT
     particle->shapePtr              = gShapeSilverSpark;
     addto_group(gGdLightGroup, &particle->header);
     particle = make_particle(GD_PARTICLE_FLAGS_NONE, COLOUR_RED, 0.0f, 0.0f, 0.0f);
     particle->particleType          = 3;
-    particle->unk64                 = 2;
+    particle->type                  = 2;
     particle->attachedToObj         = d_use_obj("N231l"); // DYNOBJ_RED_STAR_LIGHT
     particle->shapePtr              = gShapeRedSpark;
     addto_group(gGdLightGroup, &particle->header);

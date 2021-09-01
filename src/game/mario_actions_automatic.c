@@ -57,7 +57,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     f32 poleBottom          = (-m->usedObj->hitboxDownOffset - 100.0f);
     struct Object *marioObj =   m->marioObj;
     if (marioObj->oMarioPolePos > poleTop) marioObj->oMarioPolePos = poleTop;
-    vec3f_copy_y_offset(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
+    vec3f_copy_y_off(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
     collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
     ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &ceil);
@@ -458,6 +458,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (m->actionTimer >= 0xFFFF) m->actionTimer = 10;
 #endif
 #ifdef LEDGE_SIDLE
+        //! TODO: check for wall collisions, if new wall is closer to m->intendedYaw, switch to that one.
         if (intendedDYaw >= -DEG(45) && intendedDYaw <= DEG(45)) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
         } else if (intendedDYaw <= -DEG(135) || intendedDYaw >= DEG(135)) {

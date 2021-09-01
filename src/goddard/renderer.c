@@ -1221,7 +1221,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     if (mag > 0.1f) {
         mag = 1.0f / mag;
 #endif
-        vec3f_mul_f32(vec, mag);
+        vec3f_mul_val(vec, mag);
         hilite->h.x1 = (((vec[2] * cam->lookatMtx[0][0]) + (vec[1] * cam->lookatMtx[1][0]) + (vec[0] * cam->lookatMtx[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
         hilite->h.y1 = (((vec[2] * cam->lookatMtx[0][1]) + (vec[1] * cam->lookatMtx[1][1]) + (vec[0] * cam->lookatMtx[2][1])) * yMul * 2.0f) + (yMul * 4.0f);
     } else {
@@ -1452,10 +1452,10 @@ void parse_p1_controller(void) {
     gdctrl->cup    = ((currInputs->button & U_CBUTTONS) != 0);
     gdctrl->cdown  = ((currInputs->button & D_CBUTTONS) != 0);
     // but not these buttons??
-    gdctrl->dleft  = currInputs->button & L_JPAD;
-    gdctrl->dright = currInputs->button & R_JPAD;
-    gdctrl->dup    = currInputs->button & U_JPAD;
-    gdctrl->ddown  = currInputs->button & D_JPAD;
+    gdctrl->dleft  = (currInputs->button & L_JPAD);
+    gdctrl->dright = (currInputs->button & R_JPAD);
+    gdctrl->dup    = (currInputs->button & U_JPAD);
+    gdctrl->ddown  = (currInputs->button & D_JPAD);
     gdctrl->startedDragging = (gdctrl->btnA && !gdctrl->dragging);
     // toggle if A is pressed? or is this just some seed for an rng?
     gdctrl->dragging      = gdctrl->btnA;

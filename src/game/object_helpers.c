@@ -411,9 +411,9 @@ void obj_init_animation(struct Object *obj, s32 animIndex) {
 }
 
 void obj_apply_scale_to_transform(struct Object *obj) {
-    vec3f_mul_f32(obj->transform[0], obj->header.gfx.scale[0]);
-    vec3f_mul_f32(obj->transform[1], obj->header.gfx.scale[1]);
-    vec3f_mul_f32(obj->transform[2], obj->header.gfx.scale[2]);
+    vec3f_mul_val(obj->transform[0], obj->header.gfx.scale[0]);
+    vec3f_mul_val(obj->transform[1], obj->header.gfx.scale[1]);
+    vec3f_mul_val(obj->transform[2], obj->header.gfx.scale[2]);
 }
 
 void obj_copy_scale(struct Object *dst, struct Object *src) {

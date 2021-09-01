@@ -151,19 +151,15 @@ struct ObjCamera *make_camera(void) {
     }
     newCam->flags  = CAMERA_FLAG_16;
     newCam->dynObj = NULL;
-    mtxf_identity(newCam->unk64);
-    mtxf_identity(newCam->unkA8);
-    newCam->unk180[0]    = 1.0f;
-    newCam->unk180[1]    = 0.1f;
-    newCam->unk180[2]    = 1.0f;
-    newCam->unk134[0]    = 4.0f;
-    newCam->unk134[1]    = 4.0f;
-    newCam->unk134[2]    = 4.0f;
-    newCam->unk178       = 0.0f;
-    newCam->unk17C       = 0.25f;
+    mtxf_identity(newCam->idMtx);
+    mtxf_identity(newCam->transformMtx);
+    // vec3f_set(newCam->unk180, 1.0f, 0.1f, 1.0f);
+    vec3f_same(newCam->rotationSpeeds, 4.0f);
+    // newCam->unk178       = 0.0f;
+    newCam->multiplier   = 0.25f;
     newCam->zoomLevel    = 0;
     newCam->maxZoomLevel = -1;
-    newCam->unkA4        = 0.0f;
+    newCam->colXY        = 0.0f;
     vec3f_zero(newCam->lookAt);
     vec3f_zero(newCam->worldPos);
     return newCam;
@@ -187,9 +183,9 @@ struct ObjLight *make_light(void) {
     // gd_strcpy(newLight->name, "x");
     newLight->id         = 0;
     newLight->diffuseFac = 1.0f;
-    newLight->unk4C      = 0;
+    // newLight->unk4C      = 0; // unused
     newLight->flags      = LIGHT_NEW_UNCOUNTED;
-    newLight->unk98      = 0;
+    // newLight->unk98      = 0; // unused
     // newLight->unk40      = 0; // unused
     // vec3f_zero(newLight->unk68); // unused
     return newLight;
@@ -210,11 +206,11 @@ struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 u
     newView->upperLeft[1]    = (f32) uly;
     newView->lowerRight[0]   = (f32) lrx;
     newView->lowerRight[1]   = (f32) lry;
-    newView->unk48           = 1.0f;
-    newView->unk4C           = 1.0f;
+    // newView->unk48           = 1.0f; // unused
+    // newView->unk4C           = 1.0f; // unused
     vec3f_set(newView->colour, (newView->id * 0.1f), 0.06f, 1.0f);
     newView->proc            = NULL;
-    newView->unk9C           = 0;
+    // newView->unk9C           = 0;    // unused
     if (name != NULL) newView->unk1C = setup_view_buffers(name, newView);
     newView->namePtr         = name;
     newView->lights          = NULL;
@@ -621,7 +617,6 @@ void move_animator(struct ObjAnimator *animObj) {
 void drag_picked_object(struct GdObj *inputObj) {
     Vec3f displacement;
     struct GdControl *ctrl = &gGdCtrl;
-    // Mat4 invMtx;
     Mat4 dispMtx;
     struct GdObj *obj;
     f32 dispMag;
@@ -630,7 +625,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     displacement[0] = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
     displacement[1] = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement[2] = 0.0f;
-    gd_inverse_mat4f(&gViewUpdateCamera->lookatMtx, &dispMtx);
+    mtxf_inverse(&dispMtx, &gViewUpdateCamera->lookatMtx);
     gd_mat4f_mult_vec3f(displacement, &dispMtx);
     obj = inputObj;
     if ((inputObj->drawFlags & OBJ_PICKED) && (gGdCtrl.dragging)) {
@@ -642,7 +637,6 @@ void drag_picked_object(struct GdObj *inputObj) {
                 vec3f_add(((struct ObjJoint *) obj)->rotationMtx[3], displacement);
                 break;
             case OBJ_TYPE_NETS:
-                // gd_inverse_mat4f(&((struct ObjNet *) obj)->invMtx, &invMtx);
                 vec3f_add(((struct ObjNet *) obj)->idMtx[3], displacement);
                 break;
             case OBJ_TYPE_PARTICLES:
@@ -677,11 +671,11 @@ void move_camera(struct ObjCamera *cam) {
         d_get_matrix(mtx);
         latPos[0]      = (mtx[2][0] - cam->unk58[0]);
         latPos[2]      = (mtx[2][2] - cam->unk58[2]);
-        cam->unk58[0] += (latPos[0] * cam->unk180[1]);
-        cam->unk58[2] += (latPos[2] * cam->unk180[1]);
+        cam->unk58[0] += (latPos[0] * 0.1f); // * cam->unk180[1]);
+        cam->unk58[2] += (latPos[2] * 0.1f); // * cam->unk180[1]);
     }
-    mtxf_identity(cam->unkA8);
-    idMtx = &cam->unk64;
+    mtxf_identity(cam->transformMtx);
+    idMtx = &cam->idMtx;
     if ((cam->flags & CAMERA_FLAG_CONTROLLABLE) != 0) {
         if (ctrl->btnB && !ctrl->prevFrame->btnB) {  // new B press
             cam->zoomLevel++;
@@ -692,25 +686,25 @@ void move_camera(struct ObjCamera *cam) {
                 case 2: gd_play_sfx(GD_SFX_CAM_ZOOM_OUT); break;
             }
         }
-        if (ctrl->cleft ) cam->unk128[1] += cam->unk134[1];
-        if (ctrl->cright) cam->unk128[1] -= cam->unk134[1];
-        if (ctrl->cup   ) cam->unk128[0] += cam->unk134[0];
-        if (ctrl->cdown ) cam->unk128[0] -= cam->unk134[0];
-        clamp_f32(&cam->unk128[0], -80.0f, 80.0f);
-        vec3f_copy(cam->unk4C, cam->zoomPositions[cam->zoomLevel]);
-        gd_rot_2d_vec( cam->unk128[0], &cam->unk4C[1], &cam->unk4C[2]);
-        gd_rot_2d_vec(-cam->unk128[1], &cam->unk4C[0], &cam->unk4C[2]);
-        cam->relPos[0] += ((cam->unk4C[0] - cam->relPos[0]) * cam->unk17C);
-        cam->relPos[1] += ((cam->unk4C[1] - cam->relPos[1]) * cam->unk17C);
-        cam->relPos[2] += ((cam->unk4C[2] - cam->relPos[2]) * cam->unk17C);
+        if (ctrl->cleft ) cam->rotationAngle[1] += cam->rotationSpeeds[1];
+        if (ctrl->cright) cam->rotationAngle[1] -= cam->rotationSpeeds[1];
+        if (ctrl->cup   ) cam->rotationAngle[0] += cam->rotationSpeeds[0];
+        if (ctrl->cdown ) cam->rotationAngle[0] -= cam->rotationSpeeds[0];
+        clamp_f32(&cam->rotationAngle[0], -80.0f, 80.0f);
+        vec3f_copy(cam->curZoomPosition, cam->zoomPositions[cam->zoomLevel]);
+        gd_rot_2d_vec( cam->rotationAngle[0], &cam->curZoomPosition[1], &cam->curZoomPosition[2]); // pitch
+        gd_rot_2d_vec(-cam->rotationAngle[1], &cam->curZoomPosition[0], &cam->curZoomPosition[2]); // yaw
+        cam->relPos[0] += ((cam->curZoomPosition[0] - cam->relPos[0]) * cam->multiplier);
+        cam->relPos[1] += ((cam->curZoomPosition[1] - cam->relPos[1]) * cam->multiplier);
+        cam->relPos[2] += ((cam->curZoomPosition[2] - cam->relPos[2]) * cam->multiplier);
     } else {
         mtxf_identity(*idMtx);
     }
     vec3f_copy(nextPos, cam->relPos);
-    gd_mult_mat4f(idMtx, &cam->unkA8, &cam->unkA8);
-    gd_mat4f_mult_vec3f(nextPos, &cam->unkA8);
-    vec3f_copy(cam->worldPos, nextPos);
-    vec3f_add( cam->worldPos, worldPos);
+    gd_mult_mat4f(idMtx, &cam->transformMtx, &cam->transformMtx);
+    gd_mat4f_mult_vec3f(nextPos, &cam->transformMtx);
+    vec3f_copy(    cam->worldPos, nextPos );
+    vec3f_add(cam->worldPos, worldPos);
 }
 
 /* @ 22F7A4 for 0x38; orig name: func_80180FD4 */

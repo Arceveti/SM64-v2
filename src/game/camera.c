@@ -595,9 +595,9 @@ void calc_y_to_curr_floor(f32 *posOff, f32 posMul, f32 posBound, f32 *focOff, f3
 
 void focus_on_mario(Vec3f focus, Vec3f pos, f32 posYOff, f32 focYOff, f32 dist, Angle pitch, Angle yaw) {
     Vec3f marioPos;
-    vec3f_copy_y_offset(marioPos, sMarioCamState->pos, posYOff);
+    vec3f_copy_y_off(marioPos, sMarioCamState->pos, posYOff);
     vec3f_set_dist_and_angle(marioPos, pos, dist, (pitch + sLakituPitch), yaw);
-    vec3f_copy_y_offset(focus, sMarioCamState->pos, focYOff);
+    vec3f_copy_y_off(focus, sMarioCamState->pos, focYOff);
 }
 
 /**
@@ -1182,8 +1182,8 @@ CameraTransitionAngle update_fixed_camera(struct Camera *c, Vec3f focus, UNUSED 
     focus[1] += (focusFloorOff + CAMERA_Y_OFFSET);
     vec3f_get_dist_and_angle(focus, c->pos, &distCamToFocus, &faceAngle[0], &faceAngle[1]);
     faceAngle[2] = 0x0;
-    vec3f_copy(basePos, sFixedModeBasePosition);
-    vec3f_add(basePos, sCastleEntranceOffset);
+    vec3f_copy(    basePos, sFixedModeBasePosition);
+    vec3f_add(basePos, sCastleEntranceOffset );
     if ((sMarioGeometry.currFloorType != SURFACE_DEATH_PLANE) && (sMarioGeometry.currFloorHeight != FLOOR_LOWER_LIMIT)) {
         goalHeight = (sMarioGeometry.currFloorHeight + basePos[1] + heightOffset);
     } else {
@@ -1662,7 +1662,7 @@ Angle update_default_camera(struct Camera *c) {
     cPos[1] += (posHeight + CAMERA_Y_OFFSET);
     // Move the camera away from walls and set the collision flag
     if (collide_with_walls(cPos, 10.0f, 80.0f) != 0) sStatusFlags |= CAM_FLAG_COLLIDED_WITH_WALL;
-    vec3f_copy_y_offset(c->focus, sMarioCamState->pos, (CAMERA_Y_OFFSET + focHeight));
+    vec3f_copy_y_off(c->focus, sMarioCamState->pos, (CAMERA_Y_OFFSET + focHeight));
     marioFloorHeight = (CAMERA_Y_OFFSET + sMarioGeometry.currFloorHeight);
     marioFloor       = sMarioGeometry.currFloor;
     camFloorHeight   = (find_floor(cPos[0], (cPos[1] + 50.0f), cPos[2], &cFloor) + CAMERA_Y_OFFSET);
@@ -1942,7 +1942,7 @@ s32 exit_c_up(struct Camera *c) {
             if (searching == 0) {
                 vec3f_set_dist_and_angle(checkFoc, sCameraStoreCUp.pos, gCameraZoomDist, 0, curYaw + checkYaw);
                 vec3f_copy(sCameraStoreCUp.focus, checkFoc);
-                vec3f_sub(sCameraStoreCUp.pos, sMarioCamState->pos);
+                vec3f_sub(sCameraStoreCUp.pos,   sMarioCamState->pos);
                 vec3f_sub(sCameraStoreCUp.focus, sMarioCamState->pos);
             }
             gCameraMovementFlags |= CAM_MOVE_STARTED_EXITING_C_UP;
@@ -2033,10 +2033,10 @@ Bool32 mode_c_up_camera(struct Camera *c) {
         // Exiting C-Up
         if (sStatusFlags & CAM_FLAG_TRANSITION_OUT_OF_C_UP) {
             // Retrieve the previous position and focus
-            vec3f_copy(c->pos,   sCameraStoreCUp.pos);
-            vec3f_add( c->pos,   sMarioCamState->pos);
-            vec3f_copy(c->focus, sCameraStoreCUp.focus);
-            vec3f_add( c->focus, sMarioCamState->pos);
+            vec3f_copy(    c->pos,   sCameraStoreCUp.pos  );
+            vec3f_add(c->pos,   sMarioCamState->pos  );
+            vec3f_copy(    c->focus, sCameraStoreCUp.focus);
+            vec3f_add(c->focus, sMarioCamState->pos  );
             // Make Mario look forward
             approach_s16_symmetric_bool(&sMarioCamState->headRotation[0], 0x0, 0x400);
             approach_s16_symmetric_bool(&sMarioCamState->headRotation[1], 0x0, 0x400);
@@ -2152,15 +2152,15 @@ void set_camera_mode(struct Camera *c, s16 mode, s16 frames) {
         vec3f_copy(end->focus, c->focus);
         vec3f_sub( end->focus, sMarioCamState->pos);
         vec3f_copy(end->pos, c->pos);
-        vec3f_sub( end->pos, sMarioCamState->pos);
+        vec3f_sub( end->pos,   sMarioCamState->pos);
         sAreaYaw = sModeTransitions[sModeInfo.newMode](c, end->focus, end->pos);
         // End was updated by sModeTransitions
-        vec3f_sub(   end->focus, sMarioCamState->pos);
-        vec3f_sub(   end->pos,   sMarioCamState->pos);
-        vec3f_copy(start->focus, gLakituState.curFocus);
-        vec3f_sub( start->focus, sMarioCamState->pos);
-        vec3f_copy(start->pos,   gLakituState.curPos);
-        vec3f_sub( start->pos,   sMarioCamState->pos);
+        vec3f_sub(  end->focus, sMarioCamState->pos  );
+        vec3f_sub(  end->pos,   sMarioCamState->pos  );
+        vec3f_copy(     start->focus, gLakituState.curFocus);
+        vec3f_sub(start->focus, sMarioCamState->pos  );
+        vec3f_copy(     start->pos,   gLakituState.curPos  );
+        vec3f_sub(start->pos,   sMarioCamState->pos  );
         vec3f_get_dist_and_angle(start->focus, start->pos, &start->dist, &start->pitch, &start->yaw);
         vec3f_get_dist_and_angle(  end->focus,   end->pos,   &end->dist,   &end->pitch,   &end->yaw);
     }
@@ -3493,15 +3493,15 @@ void warp_camera(Vec3f displacement) {
     struct LinearTransitionPoint *start = &sModeInfo.transitionStart;
     struct LinearTransitionPoint *end   = &sModeInfo.transitionEnd;
     gCurrLevelArea                      = ((gCurrLevelNum * 16) + gCurrentArea->index);
-    vec3f_add(gLakituState.curPos,        displacement);
-    vec3f_add(gLakituState.curFocus,      displacement);
-    vec3f_add(gLakituState.goalPos,       displacement);
-    vec3f_add(gLakituState.goalFocus,     displacement);
-    marioStates->waterLevel            += displacement[1];
-    vec3f_add(start->focus,               displacement);
-    vec3f_add(start->pos,                 displacement);
-    vec3f_add(end->focus,                 displacement);
-    vec3f_add(end->pos,                   displacement);
+    vec3f_add(gLakituState.curPos,    displacement);
+    vec3f_add(gLakituState.curFocus,  displacement);
+    vec3f_add(gLakituState.goalPos,   displacement);
+    vec3f_add(gLakituState.goalFocus, displacement);
+    marioStates->waterLevel             += displacement[1];
+    vec3f_add(start->focus,           displacement);
+    vec3f_add(start->pos,             displacement);
+    vec3f_add(end->focus,             displacement);
+    vec3f_add(end->pos,               displacement);
 }
 
 /**
@@ -5135,7 +5135,7 @@ void cutscene_ending_mario_land(struct Camera *c) {
 void cutscene_ending_peach_appear_closeup(struct Camera *c) {
     vec3f_set(c->pos, 179.0f, 2463.0f, -1216.0f);
     c->pos[1] = (gCutsceneFocus->oPosY + 35.0f);
-    vec3f_copy_y_offset(c->focus, &gCutsceneFocus->oPosVec, CAMERA_Y_OFFSET);
+    vec3f_copy_y_off(c->focus, &gCutsceneFocus->oPosVec, CAMERA_Y_OFFSET);
 }
 
 /**
@@ -5591,7 +5591,7 @@ void cutscene_dance_closeup_start(struct Camera *c) {
  */
 void cutscene_dance_closeup_focus_mario(struct Camera *c) {
     Vec3f marioPos;
-    vec3f_copy_y_offset(marioPos, sMarioCamState->pos, CAMERA_Y_OFFSET);
+    vec3f_copy_y_off(marioPos, sMarioCamState->pos, CAMERA_Y_OFFSET);
     approach_vec3f_asymptotic(sCutsceneVars[9].point, marioPos, 0.2f, 0.2f, 0.2f);
     vec3f_copy(c->focus, sCutsceneVars[9].point);
 }
@@ -5694,7 +5694,7 @@ void cutscene_dance_fly_away_approach_mario(struct Camera *c) {
 
 void cutscene_dance_fly_away_focus_mario(struct Camera *c) {
     Vec3f marioPos;
-    vec3f_copy_y_offset(marioPos, sMarioCamState->pos, CAMERA_Y_OFFSET);
+    vec3f_copy_y_off(marioPos, sMarioCamState->pos, CAMERA_Y_OFFSET);
     approach_vec3f_asymptotic(sCutsceneVars[9].point, marioPos, 0.2f, 0.2f, 0.2f);
     vec3f_copy(c->focus, sCutsceneVars[9].point);
 }
@@ -6381,7 +6381,7 @@ void cutscene_quicksand_death_goto_mario(struct Camera *c) {
  * Cutscene that plays when Mario dies in quicksand.
  */
 void cutscene_quicksand_death(struct Camera *c) {
-    vec3f_copy_y_offset(sCutsceneVars[3].point, sMarioCamState->pos, 20.0f);
+    vec3f_copy_y_off(sCutsceneVars[3].point, sMarioCamState->pos, 20.0f);
     cutscene_event(cutscene_quicksand_death_start,      c, 0,  0);
     cutscene_event(cutscene_quicksand_death_goto_mario, c, 0, -1);
     sStatusFlags |= CAM_FLAG_SMOOTH_MOVEMENT;
@@ -7085,11 +7085,11 @@ s32 intro_peach_move_camera_start_to_pipe(struct Camera *c, struct CutsceneSplin
     focusReturn = move_point_along_spline(c->focus,  focusSpline, &sCutsceneSplineSegment, &sCutsceneSplineSegmentProgress);
     //! The two splines used by this function are reflected in the horizontal plane for some reason,
     //! so they are rotated every frame. Why do this, Nintendo?
-    rotate_in_xz(c->focus, c->focus, DEG(-180));
-    rotate_in_xz(c->pos,   c->pos,   DEG(-180));
-    vec3f_set(   offset, -1328.0f, 260.0f, 4664.0f);
-    vec3f_add(   c->focus, offset);
-    vec3f_add(   c->pos,   offset);
+    rotate_in_xz(  c->focus, c->focus, DEG(-180));
+    rotate_in_xz(  c->pos,   c->pos,   DEG(-180));
+    vec3f_set(     offset, -1328.0f, 260.0f, 4664.0f);
+    vec3f_add(c->focus, offset);
+    vec3f_add(c->pos,   offset);
     posReturn += focusReturn; // Unused
     return focusReturn;
 }
@@ -7606,7 +7606,7 @@ void cutscene_unused_exit_start(struct Camera *c) {
  */
 void cutscene_unused_exit_focus_mario(struct Camera *c) {
     Vec3f focus;
-    vec3f_copy_y_offset(focus, sMarioCamState->pos, CAMERA_Y_OFFSET);
+    vec3f_copy_y_off(focus, sMarioCamState->pos, CAMERA_Y_OFFSET);
     set_focus_rel_mario(c, 0.0f, CAMERA_Y_OFFSET, 0.0f, 0);
     approach_vec3f_asymptotic(c->focus, focus, 0.02f, 0.001f, 0.02f);
     update_camera_yaw(c);

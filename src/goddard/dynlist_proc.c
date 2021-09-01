@@ -657,7 +657,7 @@ void d_set_shapeptrptr(struct ObjShape **shpPtrptr) {
             break;
         case OBJ_TYPE_NETS:      ((struct ObjNet      *) sDynListCurObj)->shapePtr = *shpPtrptr; break;
         case OBJ_TYPE_PARTICLES: ((struct ObjParticle *) sDynListCurObj)->shapePtr = *shpPtrptr; break;
-        case OBJ_TYPE_LIGHTS:    ((struct ObjLight    *) sDynListCurObj)->unk9C    = *shpPtrptr; break;
+        case OBJ_TYPE_LIGHTS:    ((struct ObjLight    *) sDynListCurObj)->shapePtr = *shpPtrptr; break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetShapePtrPtr()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -813,7 +813,7 @@ void d_get_init_rot(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS: vec3f_copy(dst, ((struct ObjJoint *) dynobj)->initRotation); break;
-        case OBJ_TYPE_NETS:   vec3f_copy(dst, ((struct ObjNet   *) dynobj)->unk68       ); break;
+        case OBJ_TYPE_NETS:   vec3f_copy(dst, ((struct ObjNet   *) dynobj)->initRotation); break;
         case OBJ_TYPE_LIGHTS: vec3f_zero(dst                                            ); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetInitRot()", sDynListCurInfo->name, sDynListCurObj->type);
     }
@@ -1040,7 +1040,7 @@ void d_set_rotation(f32 x, f32 y, f32 z) {
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS: vec3f_set(((struct ObjJoint *) dynobj)->initRotation, x, y, z); break;
-        case OBJ_TYPE_NETS:   vec3f_set(((struct ObjNet   *) dynobj)->unk68,        x, y, z); break;
+        case OBJ_TYPE_NETS:   vec3f_set(((struct ObjNet   *) dynobj)->initRotation, x, y, z); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRotation()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1189,7 +1189,7 @@ void d_get_matrix(Mat4 dst) {
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:      mtxf_copy(dst, ((struct ObjNet    *) dynobj)->invMtx   ); break;
-        case OBJ_TYPE_JOINTS:    mtxf_copy(dst, ((struct ObjJoint  *) dynobj)->matE8    ); break;
+        case OBJ_TYPE_JOINTS:    mtxf_copy(dst, ((struct ObjJoint  *) dynobj)->invMtx   ); break;
         case OBJ_TYPE_CAMERAS:   mtxf_copy(dst, ((struct ObjCamera *) dynobj)->lookatMtx); break;
         case OBJ_TYPE_PARTICLES: mtxf_identity(                                      dst); break;
         case OBJ_TYPE_SHAPES:    mtxf_identity(                                      dst); break;
@@ -1204,8 +1204,8 @@ UNUSED void d_set_matrix(Mat4 src) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:    mtxf_copy(((struct ObjNet    *) sDynListCurObj)->invMtx, src); break;
-        case OBJ_TYPE_JOINTS:  mtxf_copy(((struct ObjJoint  *) sDynListCurObj)->matE8,  src); break;
-        case OBJ_TYPE_CAMERAS: mtxf_copy(((struct ObjCamera *) sDynListCurObj)->unk64,  src); break;
+        case OBJ_TYPE_JOINTS:  mtxf_copy(((struct ObjJoint  *) sDynListCurObj)->invMtx, src); break;
+        case OBJ_TYPE_CAMERAS: mtxf_copy(((struct ObjCamera *) sDynListCurObj)->idMtx,  src); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetMatrix()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1259,8 +1259,8 @@ Mat4 *d_get_matrix_ptr(void) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_NETS:    return &((struct ObjNet    *) sDynListCurObj)->invMtx; break;
-        case OBJ_TYPE_CAMERAS: return &((struct ObjCamera *) sDynListCurObj)->unk64;  break;
-        case OBJ_TYPE_JOINTS:  return &((struct ObjJoint  *) sDynListCurObj)->matE8;  break;
+        case OBJ_TYPE_CAMERAS: return &((struct ObjCamera *) sDynListCurObj)->idMtx;  break;
+        case OBJ_TYPE_JOINTS:  return &((struct ObjJoint  *) sDynListCurObj)->invMtx; break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetMatrixPtr()", sDynListCurInfo->name, sDynListCurObj->type);
     } // No null return due to `fatal_printf()` being a non-returning function?
 }

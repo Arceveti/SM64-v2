@@ -112,6 +112,7 @@
     - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
     - Combine/sort behavior actions, obj_behaviors, obj_behaviors_2, and object_helpers?
+        - Should help VSC syntax issues
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
         - Including gd_math
