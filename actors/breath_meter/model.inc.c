@@ -65,10 +65,10 @@ const Texture *const breath_meter_segments_lut[] = {
 
 // 0x03029400
 static const Vtx vertex_breath_meter_base[] = {
-    {{{   -32,    -32,      0}, 0, ST_P(   0-1,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,    -32,      0}, 0, ST_P(    -1,     64), {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    -32,      0}, 0, ST_P(  32-1,     64), {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,     32,      0}, 0, ST_P(  32-1,      0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -32,     32,      0}, 0, ST_P(   0-1,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,     32,      0}, 0, ST_P(    -1,      0), {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,    -32,      0}, 0, ST_P(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
     {{{    32,    -32,      0}, 0, ST_P(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
     {{{    32,     32,      0}, 0, ST_P(    32,      0), {0xff, 0xff, 0xff, 0xff}}},

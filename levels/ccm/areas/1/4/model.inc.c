@@ -389,7 +389,7 @@ static const Gfx ccm_seg7_dl_0700D540[] = {
 };
 
 // 0x0700D578 - 0x0700D658
-const Gfx ccm_seg7_dl_0700D578[] = {
+const Gfx ccm_seg7_dl_area_1_alpha[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

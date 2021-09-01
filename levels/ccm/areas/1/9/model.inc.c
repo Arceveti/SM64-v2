@@ -40,7 +40,7 @@ static const Gfx ccm_seg7_dl_0700FC90[] = {
 };
 
 // 0x0700FD08 - 0x0700FD88
-const Gfx ccm_seg7_dl_0700FD08[] = {
+const Gfx ccm_seg7_dl_ice_column[] = {
     gsDPPipeSync(),
     gsDPSetEnvColor(255, 255, 255, 90),
     gsDPSetCombineMode(G_CC_MODULATERGBFADE, G_CC_MODULATERGBFADE),

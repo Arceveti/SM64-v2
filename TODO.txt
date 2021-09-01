@@ -19,33 +19,38 @@
     - Save rom space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
             - Smooth
-                - Bobomb body
-                - King Bobomb body
-                - King Bobomb hand
-                - Bobomb Buddy body
-                - Bully body
-                - Big Bully body
-                - Chuckya body
-                - Chuckya hand/antenna
-                - Fire Spitter
-                - Bowser bombs
-                - Amp
-                - Swoop body
-                - Goomba body
-                - Scuttlebug eyes
-                - Spindrift head
-                - Mr. I body
-                - Snufit body
-                - Snufit Bullets
-                - Wiggler segment
-                - Wiggler head
-                - Wiggler nose
-                - WF giant pole top
+                - 1 Part:
+                    - Amp
+                    - Chain chomp ball
+                    - Goomba body
+                    - King Bobomb hand
+                    - Scuttlebug eyes
+                    - Yellow Sphere/WF giant pole top
+                - 2 Part:
+                    - Bobomb body
+                    - Bobomb Buddy body
+                    - Bully body
+                    - Big Bully body
+                    - Bowser bombs
+                    - Chuckya hand/antenna
+                    - Fire Spitter
+                    - King Bobomb body
+                    - Wiggler head
+                    - Wiggler segment
+                    - Wiggler nose
+                    - Mr. I body
+                    - Spindrift head
+                    - Snufit body
+                    - Snufit Bullets
+                    - Swoop body
             - Textured:
-                - Chill Bully body
-                - Scuttlebug body
-                - Snowman part
-                - Whwomp hand
+                - 1 Part:
+                    - Whwomp hand
+                - 2 Part:
+                    - Chuckya body
+                    - Chill Bully body
+                    - Scuttlebug body
+                    - Snowman part
         - Light gray checker in various Levels
         - Various water & lava textures
         - Circular gradient:

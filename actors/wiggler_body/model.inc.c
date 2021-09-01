@@ -378,33 +378,28 @@ const Gfx wiggler_seg5_dl_0500C100[] = {
 };
 
 // 0x0500C188
-static const Vtx wiggler_seg5_vertex_segment_left_side[] = {
-    {{{     0,     21,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -21,    -21,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -21,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -21,     21,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0500C1C8
-static const Vtx wiggler_seg5_vertex_segment_right_side[] = {
-    {{{    21,     21,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     21,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -21,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    21,    -21,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx wiggler_seg5_vertex_segment[] = {
+    {{{     0,     21,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -21,    -21,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -21,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -21,     21,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    21,     21,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     21,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -21,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    21,    -21,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500C208 - 0x0500C240
 const Gfx wiggler_seg5_sub_dl_segment[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_left_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_segment_left_side, 4, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(wiggler_seg5_vertex_segment, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, wiggler_seg5_texture_segment_right_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(wiggler_seg5_vertex_segment_right_side, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSPEndDisplayList(),
 };
 

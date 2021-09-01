@@ -30,7 +30,7 @@ static const Gfx ccm_seg7_dl_07010AF8[] = {
 };
 
 // 0x07010B50 - 0x07010BD0
-const Gfx ccm_seg7_dl_07010B50[] = {
+const Gfx ccm_seg7_dl_wkww_ice[] = {
     gsDPPipeSync(),
     gsDPSetEnvColor(255, 255, 255, 90),
     gsDPSetCombineMode(G_CC_MODULATERGBFADE, G_CC_MODULATERGBFADE),

@@ -21,17 +21,17 @@ extern const Collision blue_coin_switch_seg8_collision_switch[];
 // bobomb
 extern const GeoLayout black_bobomb_geo[];
 extern const GeoLayout bobomb_buddy_geo[];
-extern const Gfx bobomb_seg8_dl_08022AC0[];
-extern const Gfx bobomb_seg8_dl_08022B08[];
+extern const Gfx bobomb_seg8_sub_dl_eyes_start[];
+extern const Gfx bobomb_seg8_sub_dl_eyes[];
 extern const Gfx bobomb_seg8_dl_eyes[];
 extern const Gfx bobomb_seg8_dl_eyes_blink[];
 extern const Gfx bobomb_seg8_sub_dl_body_black[];
 extern const Gfx bobomb_seg8_sub_dl_body_pink[];
 extern const Gfx bobomb_seg8_dl_body_black[];
 extern const Gfx bobomb_seg8_dl_body_pink[];
-extern const Gfx bobomb_seg8_dl_08023270[];
-extern const Gfx bobomb_seg8_dl_08023378[];
-extern const Gfx bobomb_seg8_dl_08023480[];
+extern const Gfx bobomb_seg8_dl_right_foot[];
+extern const Gfx bobomb_seg8_dl_eft_foot[];
+extern const Gfx bobomb_seg8_dl_cap[];
 extern const struct Animation *const bobomb_seg8_anims_0802396C[];
 
 // bowling_ball
@@ -55,8 +55,8 @@ extern const Gfx cannon_barrel_seg8_dl_08006660[];
 
 // cannon_base
 extern const GeoLayout cannon_base_geo[];
-extern const Gfx cannon_base_seg8_dl_08005658[];
-extern const Gfx cannon_base_seg8_dl_080056D0[];
+extern const Gfx cannon_base_seg8_sub_dl_faces[];
+extern const Gfx cannon_base_seg8_sub_dl_edges[];
 extern const Gfx cannon_base_seg8_dl_080057F8[];
 
 // cannon_lid

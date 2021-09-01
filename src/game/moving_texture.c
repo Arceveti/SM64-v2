@@ -547,7 +547,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         asGenerated->fnNode.node.flags = (asGenerated->fnNode.node.flags & GRAPH_NODE_TYPES_MASK) | (((asGenerated->parameter == LLL_MOVTEX_VOLCANO_FLOOR_LAVA) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_INTER) << 8);
         movtex_change_texture_format(asGenerated->parameter, &gfx);
         gMovetexLastTextureId = -1;
-        for (i = 0; i < numWaterBoxes; i++) {
+        for ((i = 0); (i < numWaterBoxes); (i++)) {
             waterId = gEnvironmentRegions[(i * 6) + 1];
             waterY  = gEnvironmentRegions[(i * 6) + 6];
             subList = movtex_gen_quads_id(waterId, waterY, quadCollection);

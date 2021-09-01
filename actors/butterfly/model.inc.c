@@ -18,11 +18,11 @@ ALIGNED8 static const Texture butterfly_seg3_texture_wing[] = {
 // 0x030053A8
 static const Vtx butterfly_seg3_vertex_wing_2[] = {
     {{{    80,      0,    -80}, 0, {   -56,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,     40}, 0, { 63<<5,   4024}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     40}, 0, { 63<<5,   4032}, {0xff, 0xff, 0xff, 0xff}}},
     {{{     0,      0,    -80}, 0, { 63<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    80,      0,    -80}, 0, {   -56,      0}, {0xff, 0xff, 0xff, 0xff}}},
     {{{    80,      0,     40}, 0, {   -80,   4032}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,     40}, 0, { 63<<5,   4024}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     40}, 0, { 63<<5,   4032}, {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x03005408 - 0x030054A0

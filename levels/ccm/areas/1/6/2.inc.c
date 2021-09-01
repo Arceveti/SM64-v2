@@ -50,7 +50,7 @@ static const Gfx ccm_seg7_dl_0700E928[] = {
 };
 
 // 0x0700E970 - 0x0700EA00
-const Gfx ccm_seg7_dl_0700E970[] = {
+const Gfx ccm_seg7_dl_upper_cabin_fence_and_icicles[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

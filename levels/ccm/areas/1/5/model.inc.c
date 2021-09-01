@@ -166,7 +166,7 @@ static const Gfx ccm_seg7_dl_0700DD28[] = {
 };
 
 // 0x0700DDF0 - 0x0700DE68
-const Gfx ccm_seg7_dl_0700DDF0[] = {
+const Gfx ccm_seg7_dl_tree_shadows_and_exposed_ground[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING),

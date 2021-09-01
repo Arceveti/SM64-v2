@@ -1,13 +1,13 @@
 /**************************************************************************
- *									  *
- *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
- *									  *
+ *																		  *
+ *		 Copyright (C) 1994, Silicon Graphics, Inc.						  *
+ *																		  *
  *  These coded instructions, statements, and computer programs  contain  *
  *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
  *  are protected by Federal copyright law.  They  may  not be disclosed  *
  *  to  third  parties  or copied or duplicated in any form, in whole or  *
  *  in part, without the prior written consent of Silicon Graphics, Inc.  *
- *									  *
+ *																		  *
  **************************************************************************/
 /**************************************************************************
  *
@@ -23,11 +23,12 @@
 #include <PR/ultratypes.h>
 
 /*
- * Converts texture pixel coordinates to S and T values
+ * Converts texel coordinates to S and T values
  */
 // Bilerp/Average filter
 #define TC_B_OFF	-0.5
 #define TC_B(p)		(((p) + TC_B_OFF) * 32)
+// #define TC_B(p)		((((p) > TC_B_OFF) ? ((p) - TC_B_OFF) : (p)) * 32)
 #define ST_B(s, t)	{TC_B(s), TC_B(t)}
 
 // Point filter

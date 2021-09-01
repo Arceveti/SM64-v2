@@ -24,11 +24,12 @@
 #include <config.h>
 
 /*
- * Converts texture pixel coordinates to S and T values
+ * Converts texel coordinates to S and T values
  */
 // Bilerp/Average filter
 #define TC_B_OFF	-0.5
 #define TC_B(p)		(((p) + TC_B_OFF) * 32)
+// #define TC_B(p)		((((p) > TC_B_OFF) ? ((p) - TC_B_OFF) : (p)) * 32)
 #define ST_B(s, t)	{TC_B(s), TC_B(t)}
 
 // Point filter

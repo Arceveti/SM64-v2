@@ -39,6 +39,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
 - find_floor only checks static surfaces when checking for rooms (Arceveti)
 - Some unecessary find_floor (collision) checks are removed (Arceveti)
+- Optimized some models to use the expanded vertex buffer in newer f3d versions (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - More particles use OBJ_LIST_UNIMPORTANT so they can be unloaded when needed (Arceveti) *
@@ -67,6 +68,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
 - Extra fields in the MarioState struct, based on Mario's movement and angles: ceilAngle, wallAngle, lastSafePos, prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
 - Disable the demo that plays when idle on the start screen (Arceveti) *
+- gbi.h defines (for point/bilerp sampling) to convert texel coordinates to internal s,t values (Arceveti)
 
 **HUD:**
 - Number of Red Coins collected is displayed on the HUD (Arceveti) *

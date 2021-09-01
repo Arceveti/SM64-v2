@@ -25,7 +25,7 @@ static const Gfx ccm_seg7_dl_0700F738[] = {
 };
 
 // 0x0700F780 - 0x0700F800
-const Gfx ccm_seg7_dl_0700F780[] = {
+const Gfx ccm_seg7_dl_cabin_window_glass_outside[] = {
     gsDPPipeSync(),
     gsDPSetEnvColor(255, 255, 255, 90),
     gsDPSetCombineMode(G_CC_MODULATERGBFADE, G_CC_MODULATERGBFADE),

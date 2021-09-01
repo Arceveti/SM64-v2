@@ -232,7 +232,7 @@ static const Gfx ccm_seg7_dl_07010610[] = {
 };
 
 // 0x07010660 - 0x070106D8
-const Gfx ccm_seg7_dl_07010660[] = {
+const Gfx ccm_seg7_dl_wall_kicks_will_work[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),

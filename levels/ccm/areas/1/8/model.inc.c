@@ -79,7 +79,7 @@ static const Gfx ccm_seg7_dl_0700FA70[] = {
 };
 
 // 0x0700FB00 - 0x0700FB78
-const Gfx ccm_seg7_dl_0700FB00[] = {
+const Gfx ccm_seg7_dl_snowman_platform[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

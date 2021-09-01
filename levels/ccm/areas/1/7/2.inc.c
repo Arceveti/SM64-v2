@@ -45,7 +45,7 @@ static const Gfx ccm_seg7_dl_0700F5F8[] = {
 };
 
 // 0x0700F650 - 0x0700F6E0
-const Gfx ccm_seg7_dl_0700F650[] = {
+const Gfx ccm_seg7_dl_lower_cabin_window_and_icicles[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),

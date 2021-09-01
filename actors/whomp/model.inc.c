@@ -28,45 +28,45 @@ static const Lights1 whomp_seg6_lights = gdSPDefLights1(
 
 // 0x0601F378
 static const Vtx whomp_seg6_vertex_sides[] = {
-    {{{   -51,    610,   -202}, 0, { 15<<5,  31<<5}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{   -51,    610,    202}, 0, {     0,  31<<5}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{  1559,    600,    202}, 0, {     0,  -1024}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{  1559,    600,   -202}, 0, {     0,  10<<5}, {0x7e, 0x00, 0x00, 0xff}}},
-    {{{  1551,   -610,    202}, 0, { 63<<5,  31<<5}, {0x7e, 0x00, 0x00, 0xff}}},
-    {{{  1551,   -610,   -202}, 0, { 63<<5,  10<<5}, {0x7e, 0x00, 0x00, 0xff}}},
-    {{{  1559,    600,    202}, 0, {     0,  31<<5}, {0x7e, 0x00, 0x00, 0xff}}},
-    {{{   -60,   -600,   -202}, 0, { 63<<5,  10<<5}, {0x82, 0x00, 0x00, 0xff}}},
-    {{{   -51,    610,    202}, 0, {     0,  31<<5}, {0x82, 0x00, 0x00, 0xff}}},
-    {{{   -51,    610,   -202}, 0, {     0,  10<<5}, {0x82, 0x00, 0x00, 0xff}}},
-    {{{   -60,   -600,    202}, 0, { 63<<5,  31<<5}, {0x82, 0x00, 0x00, 0xff}}},
-    {{{   -60,   -600,    202}, 0, {     0,  31<<5}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{   -60,   -600,   -202}, 0, { 15<<5,  31<<5}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{  1551,   -610,   -202}, 0, { 15<<5,  -1024}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{  1551,   -610,    202}, 0, {     0,  -1024}, {0x00, 0x82, 0x00, 0xff}}},
-    {{{  1559,    600,   -202}, 0, { 15<<5,  -1024}, {0x00, 0x7e, 0x00, 0xff}}},
+    {{{   -51,    610,   -202}, 0, ST_B(    16,     32), {0x00, 0x7e, 0x00, 0xff}}},
+    {{{   -51,    610,    202}, 0, ST_B(     0,     32), {0x00, 0x7e, 0x00, 0xff}}},
+    {{{  1559,    600,    202}, 0, ST_B(     0,    -32), {0x00, 0x7e, 0x00, 0xff}}},
+    {{{  1559,    600,   -202}, 0, ST_B(     0,     11), {0x7e, 0x00, 0x00, 0xff}}},
+    {{{  1551,   -610,    202}, 0, ST_B(    64,     32), {0x7e, 0x00, 0x00, 0xff}}},
+    {{{  1551,   -610,   -202}, 0, ST_B(    64,     11), {0x7e, 0x00, 0x00, 0xff}}},
+    {{{  1559,    600,    202}, 0, ST_B(     0,     32), {0x7e, 0x00, 0x00, 0xff}}},
+    {{{   -60,   -600,   -202}, 0, ST_B(    64,     11), {0x82, 0x00, 0x00, 0xff}}},
+    {{{   -51,    610,    202}, 0, ST_B(     0,     32), {0x82, 0x00, 0x00, 0xff}}},
+    {{{   -51,    610,   -202}, 0, ST_B(     0,     11), {0x82, 0x00, 0x00, 0xff}}},
+    {{{   -60,   -600,    202}, 0, ST_B(    64,     32), {0x82, 0x00, 0x00, 0xff}}},
+    {{{   -60,   -600,    202}, 0, ST_B(     0,     32), {0x00, 0x82, 0x00, 0xff}}},
+    {{{   -60,   -600,   -202}, 0, ST_B(    16,     32), {0x00, 0x82, 0x00, 0xff}}},
+    {{{  1551,   -610,   -202}, 0, ST_B(    16,    -32), {0x00, 0x82, 0x00, 0xff}}},
+    {{{  1551,   -610,    202}, 0, ST_B(     0,    -32), {0x00, 0x82, 0x00, 0xff}}},
+    {{{  1559,    600,   -202}, 0, ST_B(    16,    -32), {0x00, 0x7e, 0x00, 0xff}}},
 };
 
 // 0x0601F478
 static const Vtx whomp_seg6_vertex_back[] = {
-    {{{   -60,   -600,   -202}, 0, {     0,  63<<5}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{  1559,    600,   -202}, 0, { 31<<5,      0}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{  1551,   -610,   -202}, 0, {     0,      0}, {0x00, 0x00, 0x81, 0xff}}},
-    {{{   -51,    610,   -202}, 0, { 31<<5,  63<<5}, {0x00, 0x00, 0x81, 0xff}}},
+    {{{   -60,   -600,   -202}, 0, ST_B(     0,     64), {0x00, 0x00, 0x81, 0xff}}},
+    {{{  1559,    600,   -202}, 0, ST_B(    32,      0), {0x00, 0x00, 0x81, 0xff}}},
+    {{{  1551,   -610,   -202}, 0, ST_B(     0,      0), {0x00, 0x00, 0x81, 0xff}}},
+    {{{   -51,    610,   -202}, 0, ST_B(    32,     64), {0x00, 0x00, 0x81, 0xff}}},
 };
 
 // 0x0601F4B8
 static const Vtx whomp_seg6_vertex_face[] = {
-    {{{   -51,    610,    202}, 0, {     0,  63<<5}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{   -60,   -600,    202}, 0, { 31<<5,  63<<5}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{  1551,   -610,    202}, 0, { 31<<5,      0}, {0x00, 0x00, 0x7f, 0xff}}},
-    {{{  1559,    600,    202}, 0, {     0,      0}, {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   -51,    610,    202}, 0, ST_B(     0,     64), {0x00, 0x00, 0x7f, 0xff}}},
+    {{{   -60,   -600,    202}, 0, ST_B(    32,     64), {0x00, 0x00, 0x7f, 0xff}}},
+    {{{  1551,   -610,    202}, 0, ST_B(    32,      0), {0x00, 0x00, 0x7f, 0xff}}},
+    {{{  1559,    600,    202}, 0, ST_B(     0,      0), {0x00, 0x00, 0x7f, 0xff}}},
 };
 
 // 0x0601F4F8 - 0x0601F570
 const Gfx whomp_seg6_dl_sides[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights.l, 1),
     gsSPLight(&whomp_seg6_lights.a, 2),
     gsSPVertex(whomp_seg6_vertex_sides, 16, 0),
@@ -81,7 +81,7 @@ const Gfx whomp_seg6_dl_sides[] = {
 const Gfx whomp_seg6_dl_back[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_back),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(whomp_seg6_vertex_back, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
@@ -91,7 +91,7 @@ const Gfx whomp_seg6_dl_back[] = {
 const Gfx whomp_seg6_dl_face[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_face),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(whomp_seg6_vertex_face, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
@@ -102,15 +102,15 @@ const Gfx whomp_seg6_dl_body[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPDisplayList(whomp_seg6_dl_sides),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((64 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPDisplayList(whomp_seg6_dl_back),
     gsSPDisplayList(whomp_seg6_dl_face),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
@@ -172,11 +172,11 @@ const Gfx whomp_seg6_dl_0601F7F0[] = {
 const Gfx whomp_seg6_dl_0601F880[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPDisplayList(whomp_seg6_dl_0601F7F0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
@@ -218,7 +218,7 @@ static const Vtx whomp_seg6_vertex_0601F9E8[] = {
 const Gfx whomp_seg6_dl_0601FA58[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights.l, 1),
     gsSPLight(&whomp_seg6_lights.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601F8F8, 15, 0),
@@ -236,11 +236,11 @@ const Gfx whomp_seg6_dl_0601FA58[] = {
 const Gfx whomp_seg6_dl_0601FAE8[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPDisplayList(whomp_seg6_dl_0601FA58),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
@@ -249,34 +249,34 @@ const Gfx whomp_seg6_dl_0601FAE8[] = {
 };
 
 // 0x0601FB48
-static const Vtx whomp_seg6_vertex_0601FB48[] = {
-    {{{   -38,    -38,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,    -38,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,     38,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -38,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx whomp_seg6_vertex_hand_1[] = {
+    {{{   -38,    -38,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,    -38,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,     38,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,     38,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601FB88 - 0x0601FBC0
-const Gfx whomp_seg6_dl_0601FB88[] = {
+const Gfx whomp_seg6_sub_dl_hand_1[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_hand),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(whomp_seg6_vertex_0601FB48, 4, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(whomp_seg6_vertex_hand_1, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0601FBC0 - 0x0601FC30
-const Gfx whomp_seg6_dl_0601FBC0[] = {
+const Gfx whomp_seg6_dl_hand_1[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(whomp_seg6_dl_0601FB88),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
+    gsSPDisplayList(whomp_seg6_sub_dl_hand_1),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -285,34 +285,34 @@ const Gfx whomp_seg6_dl_0601FBC0[] = {
 };
 
 // 0x0601FC30
-static const Vtx whomp_seg6_vertex_0601FC30[] = {
-    {{{   -38,    -38,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,    -38,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    38,     38,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -38,     38,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx whomp_seg6_vertex_hand_2[] = {
+    {{{   -38,    -38,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,    -38,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    38,     38,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -38,     38,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601FC70 - 0x0601FCA8
-const Gfx whomp_seg6_dl_0601FC70[] = {
+const Gfx whomp_seg6_sub_dl_hand_2[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_hand),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(whomp_seg6_vertex_0601FC30, 4, 0),
+    gsSPVertex(whomp_seg6_vertex_hand_2, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0601FCA8 - 0x0601FD18
-const Gfx whomp_seg6_dl_0601FCA8[] = {
+const Gfx whomp_seg6_dl_hand_2[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(whomp_seg6_dl_0601FC70),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
+    gsSPDisplayList(whomp_seg6_sub_dl_hand_2),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -342,7 +342,7 @@ static const Vtx whomp_seg6_vertex_0601FD30[] = {
 const Gfx whomp_seg6_dl_0601FE10[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights.l, 1),
     gsSPLight(&whomp_seg6_lights.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601FD30, 14, 0),
@@ -387,7 +387,7 @@ static const Vtx whomp_seg6_vertex_0601FF20[] = {
 const Gfx whomp_seg6_dl_0601FFA0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, whomp_seg6_texture_surface),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&whomp_seg6_lights.l, 1),
     gsSPLight(&whomp_seg6_lights.a, 2),
     gsSPVertex(whomp_seg6_vertex_0601FF20, 8, 0),
@@ -404,11 +404,11 @@ const Gfx whomp_seg6_dl_0601FFA0[] = {
 const Gfx whomp_seg6_dl_06020038[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), 5, G_TX_NOLOD),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPDisplayList(whomp_seg6_dl_0601FFA0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),

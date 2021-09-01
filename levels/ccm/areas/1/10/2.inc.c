@@ -73,7 +73,7 @@ static const Gfx ccm_seg7_dl_07010940[] = {
 };
 
 // 0x070109D0 - 0x07010A60
-const Gfx ccm_seg7_dl_070109D0[] = {
+const Gfx ccm_seg7_dl_wkww_fence_and_icicles[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

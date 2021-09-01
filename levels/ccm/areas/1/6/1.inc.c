@@ -223,7 +223,7 @@ static const Gfx ccm_seg7_dl_0700E6C0[] = {
 };
 
 // 0x0700E708 - 0x0700E790
-const Gfx ccm_seg7_dl_0700E708[] = {
+const Gfx ccm_seg7_dl_upper_cabin_outside[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

@@ -71,10 +71,10 @@ void bhv_wiggler_body_part_update(void) {
     o->oFaceAngleYaw   = segment->angle[1];
     // TODO: What is this for?
     posOffset = (-37.5f * o->header.gfx.scale[0]);
-    d[1]      = (posOffset * (coss(o->oFaceAnglePitch) - posOffset));
-    dxz       = (posOffset *  sins(o->oFaceAnglePitch));
-    d[0]      = (      dxz *  sins(o->oFaceAngleYaw  ));
-    d[2]      = (      dxz *  coss(o->oFaceAngleYaw  ));
+    d[1]     = ((posOffset * coss(o->oFaceAnglePitch)) - posOffset);
+    dxz      =  (posOffset * sins(o->oFaceAnglePitch));
+    d[0]     =  (      dxz * sins(o->oFaceAngleYaw  ));
+    d[2]     =  (      dxz * coss(o->oFaceAngleYaw  ));
     vec3f_sum(&o->oPosVec, segment->pos, d);
     if (o->oPosY < o->parentObj->oWigglerFallThroughFloorsHeight) {
         //! Since position is recomputed each frame, tilting the wiggler up
@@ -101,8 +101,8 @@ void bhv_wiggler_body_part_update(void) {
 void wiggler_init_segments(void) {
     s32 i;
     struct ChainSegment *segments;
-    struct Object       *bodyPart;
-    segments = mem_pool_alloc(gObjectMemoryPool, WIGGLER_NUM_SEGMENTS * sizeof(struct ChainSegment));
+    struct Object *bodyPart;
+    segments = mem_pool_alloc(gObjectMemoryPool, (WIGGLER_NUM_SEGMENTS * sizeof(struct ChainSegment)));
     if (segments != NULL) {
         // Each segment represents the global position and orientation of each
         // object. Segment 0 represents the wiggler's head, and segment i>0
@@ -143,8 +143,7 @@ void wiggler_init_segments(void) {
     f32  dxz;
     Angle dpitch, dyaw;
     s32 i;
-    f32 segmentLength;
-    segmentLength = (35.0f * o->header.gfx.scale[0]);
+    f32 segmentLength = (35.0f * o->header.gfx.scale[0]);
     for ((i = 1); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
         prevBodyPart = &o->oWigglerSegments[i - 1];
         bodyPart     = &o->oWigglerSegments[i    ];
@@ -155,7 +154,7 @@ void wiggler_init_segments(void) {
         clamp_s16(&dyaw, -DEG(45), DEG(45));
         bodyPart->angle[1] = (prevBodyPart->angle[1] + dyaw);
         // As the head tilts, propagate the tilt backward
-        dxz = sqrtf(sqr(d[0]) + sqr(d[2]));
+        dxz    = sqrtf(sqr(d[0]) + sqr(d[2]));
         dpitch = (atan2s(dxz, d[1]) - prevBodyPart->angle[0]);
         clamp_s16(&dpitch, -DEG(45), DEG(45));
         bodyPart->angle[0] = (prevBodyPart->angle[0] + dpitch);
@@ -185,10 +184,7 @@ static void wiggler_act_walk(void) {
         }
         // If Mario is positioned below the wiggler, assume he entered through the
         // lower cave entrance, so don't display text.
-        if (gMarioObject->oPosY < o->oPosY || cur_obj_update_dialog_with_cutscene(
-            MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_NONE, CUTSCENE_DIALOG, DIALOG_150)) {
-            o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
-        }
+        if ((gMarioObject->oPosY < o->oPosY) || cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_NONE, CUTSCENE_DIALOG, DIALOG_150)) o->oWigglerTextStatus = WIGGLER_TEXT_STATUS_COMPLETED_DIALOG;
     } else {
         // Every object's health is initially 2048, and wiggler's doesn't change
         // to 4 until after this runs the first time. It indexes out of bounds
