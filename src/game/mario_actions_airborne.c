@@ -503,21 +503,24 @@ Bool32 act_side_flip(struct MarioState *m) {
 
 #ifdef WALL_SLIDE
 Bool32 act_wall_slide(struct MarioState *m) {
-    struct Surface *wall = m->wall;
-    Angle wallAngle, wallDintendedYaw;
+    Angle wallDintendedYaw;
     f32 slideVelXModifier, slideVelZModifier;
     f32 sideward;
     if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_JUMP_KICK    , 0);
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND , 0);
+    if ((m->ceil != NULL) && ((m->pos[1] + m->marioObj->hitboxHeight) >= m->ceilHeight)) {
+        m->pos[1] = (m->ceilHeight - m->marioObj->hitboxHeight);
+        m->forwardVel  *= 0.5f;
+        return set_mario_action(m, ACT_FREEFALL, 0);
+    }
     if (m->wall == NULL) {
         m->faceAngle[1] = m->intendedYaw;
         m->forwardVel  *= 0.5f;
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
     if (m->input & INPUT_NONZERO_ANALOG) {
-        wallAngle        = atan2s(wall->normal.z, wall->normal.x);
-        wallDintendedYaw = abs_angle_diff(wallAngle, m->intendedYaw);
+        wallDintendedYaw = abs_angle_diff(m->wallAngle, m->intendedYaw);
         if ((m->intendedMag > 16.0f) && (wallDintendedYaw <= DEG(45))) {
             m->faceAngle[1] = m->intendedYaw;
             m->forwardVel  *= abss(sins(wallDintendedYaw));
@@ -540,7 +543,7 @@ Bool32 act_wall_slide(struct MarioState *m) {
     play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
     switch (perform_air_step(m, 0)) {
         case AIR_STEP_LANDED:        return set_mario_action(m, ACT_FREEFALL_LAND, 0); break;
-        case AIR_STEP_HIT_WALL:      return set_mario_action(m, ACT_FREEFALL,      0); break;
+        case AIR_STEP_HIT_WALL:      return set_mario_action(m, ACT_FREEFALL,      0); break; //?
         case AIR_STEP_HIT_LAVA_WALL: return lava_boost_on_wall(m);                     break;
     }
 #if ENABLE_RUMBLE

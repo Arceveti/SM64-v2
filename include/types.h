@@ -423,23 +423,25 @@ struct MarioState
     /*0xC4*/ f32            windGravity;
            Vec3f            lastSafePos;
            Vec3f            prevPos;
-           Angle            movePitch;
-           Angle            moveYaw;
              f32            lateralSpeed;
              f32            moveSpeed;
+           Angle            movePitch;
+           Angle            moveYaw;
+           Angle            ceilAngle;
+           Angle            wallAngle;
              f32            midY;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
              f32            steepness;
-#endif
-#if COYOTE_TIME > 0
-             u8             coyoteTimer;
 #endif
 #ifdef BREATH_METER
              s16            breath;
              u8             breathCounter;
 #endif
+#if COYOTE_TIME > 0
+             u8             coyoteTimer;
+#endif
 #ifdef DAMAGE_SCREEN_TINT
-    /*0xC8*/ u8             hurtShadeAlpha;
+             u8             hurtShadeAlpha;
 #endif
 };
 

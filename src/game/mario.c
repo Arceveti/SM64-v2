@@ -606,7 +606,7 @@ void set_steep_jump_action(struct MarioState *m) {
     m->marioObj->oMarioSteepJumpYaw = m->faceAngle[1];
     if (m->forwardVel > 0.0f) {
         //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
-        // undefined behavior if m->floorAngle >= 0.
+        //! undefined behavior if m->floorAngle >= 0.
         Angle angleTemp     = (m->floorAngle + DEG(180));
         Angle faceAngleTemp = (m->faceAngle[1] - angleTemp);
         f32 y               = (sins(faceAngleTemp) * m->forwardVel);
@@ -1141,6 +1141,8 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     m->waterLevel = find_water_level(     m->pos[0], m->pos[2]);
     if (m->floor != NULL) {
         m->floorAngle         = atan2s(m->floor->normal.z, m->floor->normal.x);
+        if (m->ceil != NULL) m->ceilAngle = atan2s(m->ceil->normal.z, m->ceil->normal.x);
+        if (m->wall != NULL) m->wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
 
         if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;

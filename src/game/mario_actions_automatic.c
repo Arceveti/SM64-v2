@@ -434,6 +434,14 @@ Bool32 act_ledge_grab(struct MarioState *m) {
     f32 nextZ         = m->pos[2];
     UNUSED f32 nextFloorHeight = FLOOR_LOWER_LIMIT;
     struct Surface *nextFloor;
+    struct WallCollisionData wallCols;
+    struct Surface *floor;
+    f32 floorHeight;
+    struct Surface *oldWwall;
+    struct Surface *wall;
+    Angle oldWallAngle, oldWallDYaw;
+    Angle newWallAngle, newWallDYaw;
+    s32 i;
 #endif
     if (m->floor->normal.y < COS25                                      ) return let_go_of_ledge(m);
 #ifdef FIX_LEDGE_GRABS
@@ -458,7 +466,6 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (m->actionTimer >= 0xFFFF) m->actionTimer = 10;
 #endif
 #ifdef LEDGE_SIDLE
-        //! TODO: check for wall collisions, if new wall is closer to m->intendedYaw, switch to that one.
         if (intendedDYaw >= -DEG(45) && intendedDYaw <= DEG(45)) {
             if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
         } else if (intendedDYaw <= -DEG(135) || intendedDYaw >= DEG(135)) {
@@ -467,6 +474,37 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         sidewaysSpeed = ((m->intendedMag / 4.0f) * sins(intendedDYaw));
         nextX += (sidewaysSpeed * sins(m->faceAngle[1] + DEG(90)));
         nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + DEG(90)));
+        //! TODO: Fix this for concave wall angles
+        // Check for wall collisions, if new wall is closer to m->intendedYaw, switch to that one.
+        vec3f_copy(wallCols.pos, m->pos);
+        wallCols.pos[0] = nextX;
+        wallCols.pos[2] = nextZ;
+        wallCols.radius  =  10.0f;
+        wallCols.offsetY = -10.0f;
+        if (find_wall_collisions(&wallCols) != 0) {
+            floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
+            if ((floor != NULL) && ((wallCols.pos[1] - floorHeight) > MARIO_HITBOX_HEIGHT)) {
+                oldWwall = m->wall;
+                oldWallAngle = atan2s(oldWwall->normal.z, oldWwall->normal.x);
+                oldWallDYaw = abs_angle_diff(oldWallAngle, m->intendedYaw);
+                for (i = 0; i < wallCols.numWalls; i++) {
+                    wall = wallCols.walls[i];
+                    newWallAngle = atan2s(wall->normal.z, wall->normal.x);
+                    newWallDYaw  = abs_angle_diff(newWallAngle, m->intendedYaw);
+                    if (newWallDYaw < oldWallDYaw) {
+                        oldWwall = wall;
+                        oldWallAngle = newWallAngle;
+                        oldWallDYaw  = newWallDYaw;
+                    }
+                }
+                nextX           = (wallCols.pos[0] - (20.0f * oldWwall->normal.x));
+                nextZ           = (wallCols.pos[2] - (20.0f * oldWwall->normal.z));
+                m->faceAngle[0] = 0x0;
+                m->faceAngle[1] = (oldWallAngle + DEG(180));
+                m->wall         = oldWwall;
+            }
+        }
+        // Prevent moving OOB
         nextFloorHeight = find_floor(nextX, (m->pos[1] + 80.0f), nextZ, &nextFloor);
         if (nextFloor != NULL) {
             m->pos[0] = nextX;
