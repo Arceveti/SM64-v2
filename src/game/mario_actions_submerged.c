@@ -735,7 +735,7 @@ static Bool32 act_water_punch(struct MarioState *m) {
     update_water_pitch(m);
     approach_s16_symmetric_bool(&m->marioBodyState->headAngle[0], 0x0, 0x200);
     play_sound_if_no_flag(m, SOUND_ACTION_SWIM, MARIO_ACTION_SOUND_PLAYED);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             set_mario_animation(m, MARIO_ANIM_WATER_GRAB_OBJ_PART1);
             if (is_anim_at_end(m)) m->actionState = (check_water_grab(m) + 1);
@@ -799,7 +799,7 @@ static Bool32 act_water_shocked(struct MarioState *m) {
 }
 
 static Bool32 act_drowning(struct MarioState *m) {
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             set_mario_animation(m, MARIO_ANIM_DROWNING_PART1);
             m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
@@ -978,7 +978,7 @@ static Bool32 act_metal_water_standing(struct MarioState *m) {
     if (!(m->flags & MARIO_METAL_CAP)  ) return set_mario_action(m, ACT_WATER_IDLE         , 0);
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_METAL_WATER_JUMP   , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT  ); break;
         case 1: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT ); break;
         case 2: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER); break;

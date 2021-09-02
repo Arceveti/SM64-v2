@@ -425,7 +425,7 @@ Bool32 act_reading_sign(struct MarioState *m) {
     if (m->pos[1] < (m->floorHeight + MARIO_HITBOX_HEIGHT)) m->pos[1] = m->floorHeight; // Fixes sign on slopes
     struct Object *marioObj = m->marioObj;
     play_sound_if_no_flag(m, SOUND_ACTION_READ_SIGN, MARIO_ACTION_SOUND_PLAYED);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         // start dialog
         case 0:
             start_object_cutscene_without_focus(CUTSCENE_READ_MESSAGE);
@@ -702,7 +702,7 @@ Bool32 act_unlocking_key_door(struct MarioState *m) {
 }
 
 Bool32 act_unlocking_star_door(struct MarioState *m) {
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
             if (m->actionArg & 0x2) m->faceAngle[1] += DEG(180);
@@ -898,16 +898,14 @@ Bool32 act_exit_land_save_dialog(struct MarioState *m) {
     AnimFrame32 animFrame;
     stationary_ground_step(m);
     play_mario_landing_sound_once(m, SOUND_ACTION_TERRAIN_LANDING);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         // determine type of exit
         case 0:
             set_mario_animation(m, ((m->actionArg == 0) ? MARIO_ANIM_GENERAL_LAND : MARIO_ANIM_LAND_FROM_SINGLE_JUMP));
             if (is_anim_past_end(m)) {
                 if (gLastCompletedCourseNum != COURSE_BITDW && gLastCompletedCourseNum != COURSE_BITFS) enable_time_stop();
-
                 set_menu_mode(MENU_MODE_RENDER_COURSE_COMPLETE_SCREEN);
                 gSaveOptSelectIndex = MENU_OPT_NONE;
-
                 m->actionState = 3; // star exit with cap
                 if (!(m->flags & MARIO_CAP_ON_HEAD)) m->actionState = 2; // star exit without cap
                 if ((gLastCompletedCourseNum == COURSE_BITDW) || (gLastCompletedCourseNum == COURSE_BITFS)) m->actionState = 1; // key exit
@@ -961,6 +959,9 @@ Bool32 act_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         m->numLives--;
+#ifdef SAVE_NUM_LIVES
+        save_file_set_num_lives(m->numLives);
+#endif
         // restore 7.75 units of health
         m->healCounter   = 31;
 #ifdef BREATH_METER
@@ -980,6 +981,9 @@ Bool32 act_unused_death_exit(struct MarioState *m) {
         play_sound(SOUND_MARIO_OOOF2, m->marioObj->header.gfx.cameraToObject);
 #endif
         m->numLives--;
+#ifdef SAVE_NUM_LIVES
+        save_file_set_num_lives(m->numLives);
+#endif
         // restore 7.75 units of health
         m->healCounter   = 31;
 #ifdef BREATH_METER
@@ -1002,6 +1006,9 @@ Bool32 act_falling_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         m->numLives--;
+#ifdef SAVE_NUM_LIVES
+        save_file_set_num_lives(m->numLives);
+#endif
         // restore 7.75 units of health
         m->healCounter   = 31;
 #ifdef BREATH_METER
@@ -1048,6 +1055,9 @@ Bool32 act_special_death_exit(struct MarioState *m) {
         queue_rumble_data(5, 80);
 #endif
         m->numLives--;
+#ifdef SAVE_NUM_LIVES
+        save_file_set_num_lives(m->numLives);
+#endif
         m->healCounter   = 31;
 #ifdef BREATH_METER
         m->breathCounter = 31;
@@ -1085,7 +1095,7 @@ Bool32 act_bbh_enter_spin(struct MarioState *m) {
     f32 cageDist   = sqrtf(sqr(cageDX) + sqr(cageDZ)); //! fast invsqrt?
     f32 forwardVel = ((cageDist > 20.0f) ? 10.0f : (cageDist / 2.0f));
     if (forwardVel < 0.5f) forwardVel = 0.0f;
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             floorDist = (512.0f - (m->pos[1] - m->floorHeight));
             m->vel[1] = ((floorDist > 0) ? (sqrtf(4.0f * floorDist + 1.0f) - 1.0f) : 2.0f);
@@ -1231,7 +1241,7 @@ Bool32 act_squished(struct MarioState *m) {
     Vec3f nextScale;
 #endif
     if ((spaceUnderCeil = (m->ceilHeight - m->floorHeight)) < 0) spaceUnderCeil = 0;
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             if (spaceUnderCeil > m->marioObj->hitboxHeight) {
                 m->squishTimer = 0;
@@ -1563,7 +1573,7 @@ static void jumbo_star_cutscene_flying(struct MarioState *m) {
     Vec3f targetD;
     f32   targetHyp;
     Angle targetAngle;
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             set_mario_animation(m, MARIO_ANIM_WING_CAP_FLY);
             anim_spline_init(sJumboStarKeyframes);

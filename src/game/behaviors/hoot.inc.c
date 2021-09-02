@@ -12,7 +12,7 @@ void bhv_hoot_init(void) {
 f32 hoot_find_next_floor(struct FloorGeometry **floorGeo, f32 dist) {
     f32 nextX = ((dist * sins(o->oMoveAngleYaw)) + o->oPosX);
     f32 nextZ = ((dist * coss(o->oMoveAngleYaw)) + o->oPosZ);
-    return find_floor_height_and_data(nextX, CELL_HEIGHT_LIMIT, nextZ, floorGeo);;
+    return find_floor_height_and_data(nextX, CELL_HEIGHT_LIMIT, nextZ, floorGeo);
 }
 
 void hoot_floor_bounce(void) {

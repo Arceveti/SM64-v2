@@ -62,6 +62,18 @@ u8    gFlyingCamOverride;
 Bool8 gKeepCliffCam;
 s32   gCliffTimer;
 #endif
+#ifdef WIDE
+s16 gWidescreen;
+#endif
+#ifdef CUSTOM_FOV
+s16 gFieldOfView = DEFAULT_FOV_PERCENT;
+#endif
+#if SILHOUETTE
+s16 gSilhouette = TRUE;
+#endif
+// #ifndef DISABLE_AA
+// s16 gAntiAliasing = TRUE;
+// #endif
 #ifdef CUSTOM_DEBUG
 u8 gCustomDebugMode;
 #endif
@@ -91,18 +103,6 @@ struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
 u32 gGlobalTimer = 0;
-#ifdef WIDE
-s16 gWidescreen;
-#endif
-#ifdef CUSTOM_FOV
-s16 gFieldOfView = DEFAULT_FOV_PERCENT;
-#endif
-#if SILHOUETTE
-s16 gSilhouette = TRUE;
-#endif
-// #ifndef DISABLE_AA
-// s16 gAntiAliasing = TRUE;
-// #endif
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer  = 0;

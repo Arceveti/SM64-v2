@@ -141,7 +141,7 @@ Bool32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
 
 Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
     if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < DEG(90)) {
-        m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);;
+        m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);
         m->faceAngle[1] = m->floorAngle;
     } else {
         m->forwardVel   = -16.0f;// * (1.0f-m->floor->normal.y);

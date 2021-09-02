@@ -583,7 +583,7 @@ Bool32 act_in_cannon(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     Angle startFacePitch    = m->faceAngle[0];
     Angle startFaceYaw      = m->faceAngle[1];
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
             m->usedObj->oInteractStatus         = INT_STATUS_INTERACTED;

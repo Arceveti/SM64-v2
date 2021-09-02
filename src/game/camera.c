@@ -4824,7 +4824,7 @@ s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, DialogID dialogID
 }
 
 s16 cutscene_object_without_dialog(u8 cutscene, struct Object *o) {
-    return cutscene_object_with_dialog(cutscene, o, DIALOG_NONE);;
+    return cutscene_object_with_dialog(cutscene, o, DIALOG_NONE);
 }
 
 /**

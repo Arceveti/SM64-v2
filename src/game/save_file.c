@@ -316,7 +316,7 @@ void save_file_load_all(void) {
         case 1: restore_main_menu_data(0); break; // Slot 0 is correct and slot 1 is incorrect
         case 2: restore_main_menu_data(1); break; // Slot 1 is correct and slot 0 is incorrect
     }
-    for (file = 0; file < NUM_SAVE_FILES; file++) {
+    for ((file = 0); (file < NUM_SAVE_FILES); (file++)) {
         // Verify the save file and create a backup copy if only one of the slots is valid.
         validSlots  = verify_save_block_signature(&gSaveBuffer.files[file][0], sizeof(gSaveBuffer.files[file][0]), SAVE_FILE_MAGIC);
         validSlots |= verify_save_block_signature(&gSaveBuffer.files[file][1], sizeof(gSaveBuffer.files[file][1]), SAVE_FILE_MAGIC) << 1;
@@ -391,7 +391,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
     gLastCompletedStarNum       = (starIndex   + 1);
     sUnusedGotGlobalCoinHiScore = FALSE;
     gGotFileCoinHiScore         = FALSE;
-    if (courseIndex >= 0 && courseIndex < COURSE_STAGES_COUNT) {
+    if ((courseIndex >= 0) && (courseIndex < COURSE_STAGES_COUNT)) {
         //! Compares the coin score as a 16 bit value, but only writes the 8 bit
         // truncation. This can allow a high score to decrease.
         if (coinScore > ((u16) save_file_get_max_coin_score(courseIndex) & 0xFFFF)) sUnusedGotGlobalCoinHiScore = TRUE;
@@ -417,7 +417,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
 }
 
 s32 save_file_exists(s32 fileIndex) {
-    return (gSaveBuffer.files[fileIndex][0].flags & SAVE_FLAG_FILE_EXISTS) != 0;
+    return ((gSaveBuffer.files[fileIndex][0].flags & SAVE_FLAG_FILE_EXISTS) != 0);
 }
 
 /**
@@ -536,6 +536,20 @@ Bool32 save_file_get_cap_pos(Vec3s capPos) {
     }
     return FALSE;
 }
+
+#ifdef SAVE_NUM_LIVES
+void save_file_set_num_lives(s8 numLives) {
+    struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
+    saveFile->numLives = numLives;
+    saveFile->flags |= SAVE_FLAG_FILE_EXISTS;
+    gSaveFileModified = TRUE;
+}
+
+s8 save_file_get_num_lives(void) {
+    struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
+    return saveFile->numLives;
+}
+#endif
 
 void save_file_set_sound_mode(u16 mode) {
     set_sound_mode(mode);

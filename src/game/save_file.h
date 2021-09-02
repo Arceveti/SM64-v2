@@ -44,7 +44,9 @@ struct SaveFile
     u8 courseStars[COURSE_COUNT];
 
     u8 courseCoinScores[COURSE_STAGES_COUNT];
-
+#ifdef SAVE_NUM_LIVES
+    s8 numLives;
+#endif
     struct SaveBlockSignature signature;
 };
 
@@ -177,6 +179,10 @@ s32    save_file_is_cannon_unlocked( void);
 void   save_file_set_cannon_unlocked(void);
 void   save_file_set_cap_pos(s16 x, s16 y, s16 z);
 Bool32 save_file_get_cap_pos(Vec3s capPos);
+#ifdef SAVE_NUM_LIVES
+s8     save_file_get_num_lives(void);
+void   save_file_set_num_lives(s8 numLives);
+#endif
 void   save_file_set_sound_mode(u16 mode);
 u16    save_file_get_sound_mode(void);
 #ifdef REONU_CAM_3

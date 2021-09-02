@@ -188,7 +188,7 @@ static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or
     s16 outPos = 0;
     out = alloc_display_list((u32) width * (u32) height);
     if (out == NULL) return NULL;
-    for (inPos = 0; inPos < ((width * height) / 16); inPos++) {
+    for ((inPos = 0); (inPos < ((width * height) / 16)); (inPos++)) {
         bitMask = 0x8000;
         while (bitMask != 0) {
             out[outPos] = ((in[inPos] & bitMask) ? 0xFF : 0x00);
@@ -209,7 +209,7 @@ u8 *alloc_ia4_tex_from_i1(u8 *in, s16 width, s16 height) {
     outPos = 0;
     out = (u8 *) alloc_display_list(size);
     if (out == NULL) return NULL;
-    for (inPos = 0; inPos < (width * height) / 4; inPos++) {
+    for ((inPos = 0); (inPos < ((width * height) / 4)); (inPos++)) {
         bitMask = 0x80;
         while (bitMask != 0) {
             out[outPos] = ((in[inPos] & bitMask) ? 0xF0 : 0x00);
@@ -263,7 +263,7 @@ void render_multi_text_string(s8 multiTextID) {
         { 3, { TEXT_THE_RAW } },
         { 3, { TEXT_YOU_RAW } },
     };
-    for (i = 0; i < textLengths[multiTextID].length; i++) {
+    for ((i = 0); (i < textLengths[multiTextID].length); (i++)) {
         render_generic_char(textLengths[multiTextID].str[i]);
         create_dl_translation_matrix(G_MTX_NOPUSH, (f32)(gDialogCharWidths[textLengths[multiTextID].str[i]]), 0.0f, 0.0f);
     }
@@ -718,7 +718,7 @@ void render_multi_text_string_lines(s8 multiTextId, s8 lineNum, s16 *linePos, s8
     linePos += textLengths[multiTextId].length;
 }
 
-
+//! math_util?
 u32 ensure_nonnegative(s16 value) {
     if (value < 0) value = 0;
     return value;
@@ -1805,6 +1805,9 @@ s16 render_course_complete_screen(void) {
         case DIALOG_STATE_OPENING:
             render_course_complete_lvl_info_and_hud_str();
             if ((gCourseDoneMenuTimer > 100) && (gCourseCompleteCoinsEqual == 1)) {
+#ifdef SAVE_NUM_LIVES
+                save_file_set_num_lives(gMarioState->numLives);
+#endif
                 gDialogBoxState = DIALOG_STATE_VERTICAL;
                 level_set_transition(-1, NULL);
                 gDialogTextAlpha = 0;
@@ -1844,7 +1847,7 @@ s16 render_menus_and_dialogs(void) {
             case MENU_MODE_RENDER_COURSE_COMPLETE_SCREEN: index = render_course_complete_screen();   break;
             case MENU_MODE_UNUSED_3:                      index = render_course_complete_screen();   break;
         }
-        gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
+        gDialogColorFadeTimer = ((s16) gDialogColorFadeTimer + 0x1000);
     } else if (gDialogID != DIALOG_NONE) {
         // The Peach "Dear Mario" message needs to be repositioned separately
         if (gDialogID == DIALOG_020) {
@@ -1852,7 +1855,7 @@ s16 render_menus_and_dialogs(void) {
             return index;
         }
         render_dialog_entries();
-        gDialogColorFadeTimer = (s16) gDialogColorFadeTimer + 0x1000;
+        gDialogColorFadeTimer = ((s16) gDialogColorFadeTimer + 0x1000);
     }
     return index;
 }

@@ -1156,7 +1156,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
     m->marioObj->header.gfx.angle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
 #endif
 #endif
-    return set_mario_animation(m, MARIO_ANIM_START_WALLKICK);;
+    return set_mario_animation(m, MARIO_ANIM_START_WALLKICK);
 }
 
 Bool32 act_forward_rollout(struct MarioState *m) {

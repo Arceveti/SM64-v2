@@ -237,8 +237,8 @@ void load_level_init_text(u32 arg) {
     DialogID dialogID = gCurrentArea->dialog[arg];
     switch (dialogID) {
         case DIALOG_129: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP; break;
-        case DIALOG_130: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP ; break;
-        case DIALOG_131: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP  ; break;
+        case DIALOG_130: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP;  break;
+        case DIALOG_131: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP;   break;
         case (u8)DIALOG_NONE: // 255, cast value to u8 to match (-1)
             gotAchievement = TRUE;
             break;
@@ -354,10 +354,10 @@ void warp_level(void) {
 void warp_credits(void) {
     MarioAction marioAction = ACT_UNINITIALIZED;
     switch (sWarpDest.nodeId) {
-        case WARP_NODE_CREDITS_START: marioAction = ACT_END_PEACH_CUTSCENE ; break;
-        case WARP_NODE_CREDITS_NEXT:  marioAction = ACT_CREDITS_CUTSCENE   ; break;
+        case WARP_NODE_CREDITS_START: marioAction = ACT_END_PEACH_CUTSCENE;  break;
+        case WARP_NODE_CREDITS_NEXT:  marioAction = ACT_CREDITS_CUTSCENE;    break;
         case WARP_NODE_CREDITS_END:   marioAction = ACT_END_WAVING_CUTSCENE; break;
-        default:                      marioAction = ACT_CREDITS_CUTSCENE   ; break;
+        default:                      marioAction = ACT_CREDITS_CUTSCENE;    break;
     }
     gCurrLevelNum = sWarpDest.levelNum;
     load_area(sWarpDest.areaIdx);
@@ -508,6 +508,9 @@ void initiate_painting_warp(void) {
 s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
     Bool32 fadeMusic = TRUE;
     if (sDelayedWarpOp == WARP_OP_NONE) {
+#ifdef SAVE_NUM_LIVES
+        save_file_set_num_lives(m->numLives);
+#endif
         m->invincTimer  = -1;
         sDelayedWarpArg =  0;
         sDelayedWarpOp  = warpOp;
@@ -535,7 +538,7 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 break;
             case WARP_OP_DEATH:
 #ifndef DISABLE_LIVES
-                if (m->numLives == 0) sDelayedWarpOp = WARP_OP_GAME_OVER;
+                if (m->numLives <= 0) sDelayedWarpOp = WARP_OP_GAME_OVER;
 #endif
                 sDelayedWarpTimer = 48;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
@@ -546,7 +549,7 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 sSourceWarpNodeId = WARP_NODE_WARP_FLOOR;
                 if (area_get_warp_node(sSourceWarpNodeId) == NULL) {
 #ifndef DISABLE_LIVES
-                    if (m->numLives == 0) {
+                    if (m->numLives <= 0) {
                         sDelayedWarpOp    = WARP_OP_GAME_OVER;
                     } else {
                         sSourceWarpNodeId = WARP_NODE_DEATH;
@@ -673,12 +676,19 @@ void update_hud_values(void) {
             gHudDisplay.coins++;
             play_sound(coinSound, gMarioState->marioObj->header.gfx.cameraToObject);
         }
-        if (gMarioState->numLives > 100) gMarioState->numLives = 100;
-#if BUGFIX_MAX_LIVES
-        if (gMarioState->numCoins > 999) gMarioState->numCoins = 999;
-        if (gHudDisplay.coins     > 999) gHudDisplay.coins     = 999;
+#ifdef SAVE_NUM_LIVES
+        if (gMarioState->numLives > MAX_NUM_LIVES) {
+            gMarioState->numLives = MAX_NUM_LIVES;
+            save_file_set_num_lives(MAX_NUM_LIVES);
+        }
 #else
-        if (gMarioState->numCoins > 999) gMarioState->numLives = (s8) 999; //! Wrong variable
+        if (gMarioState->numLives > MAX_NUM_LIVES) gMarioState->numLives = MAX_NUM_LIVES;
+#endif
+#if BUGFIX_MAX_LIVES
+        if (gMarioState->numCoins > MAX_NUM_COINS) gMarioState->numCoins = MAX_NUM_COINS;
+        if (gHudDisplay.coins     > MAX_NUM_COINS) gHudDisplay.coins     = MAX_NUM_COINS;
+#else
+        if (gMarioState->numCoins > MAX_NUM_COINS) gMarioState->numLives = (s8) MAX_NUM_COINS; // Wrong variable
 #endif
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;

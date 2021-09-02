@@ -349,6 +349,15 @@
 // Disable lives and hide the lives counter (HackerSM64)
 // #define DISABLE_LIVES
 
+// Save number of lives to the save file (Arceveti)
+#define SAVE_NUM_LIVES
+// The number of lives Mario starts with after a game over or starting the game for the first time.
+#define DEFAULT_NUM_LIVES 4
+// This can be 0..127
+#define MAX_NUM_LIVES   100
+// This can be 0..32767
+#define MAX_NUM_COINS   999
+
 // Include the English characters that were missing from US segment2 (J, Q, V, X, Z, ¨, !, !!, ?, &, %, ., and the beta key) [MAKE SURE TO ALSO BUILD FROM JP/SH AND EU TO OBTAIN THE ASSETS]
 // #define COMPLETE_EN_US_SEGMENT2
 

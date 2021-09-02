@@ -462,7 +462,7 @@ void linearly_interpolate_solidity_negative(struct Shadow *s, u8 initialSolidity
 s8 correct_shadow_solidity_for_animations(UNUSED s32 isLuigi, u8 initialSolidity, struct Shadow *shadow) {
     AnimFrame16 animFrame = gMarioObject->header.gfx.animInfo.animFrame;
     switch (gMarioObject->header.gfx.animInfo.animID) {
-        case MARIO_ANIM_IDLE_ON_LEDGE:                                                                                        return SHADOW_SOLIDITY_NO_SHADOW  ;
+        case MARIO_ANIM_IDLE_ON_LEDGE:                                                                                        return SHADOW_SOLIDITY_NO_SHADOW;
         case MARIO_ANIM_FAST_LEDGE_CLIMB: linearly_interpolate_solidity_positive(shadow, initialSolidity, animFrame,  5, 14); return SHADOW_SOILDITY_ALREADY_SET;
         case MARIO_ANIM_SLOW_LEDGE_CLIMB: linearly_interpolate_solidity_positive(shadow, initialSolidity, animFrame, 21, 33); return SHADOW_SOILDITY_ALREADY_SET;
         case MARIO_ANIM_CLIMB_DOWN_LEDGE: linearly_interpolate_solidity_negative(shadow, initialSolidity, animFrame,  0,  5); return SHADOW_SOILDITY_ALREADY_SET;

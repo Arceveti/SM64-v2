@@ -72,7 +72,7 @@ Bool32 act_idle(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_STAND_AGAINST_WALL);
     } else {
         // set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT + m->actionState);
-        switch (m->actionState) {
+        switch (m->actionState) { //! define names
             case 0: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT  ); break;
             case 1: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT ); break;
             case 2: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER); break;
@@ -110,7 +110,7 @@ Bool32 act_start_sleeping(struct MarioState *m) {
     if (check_common_idle_cancels(m)) return TRUE;
     if (m->quicksandDepth > 30.0f) return set_mario_action(m, ACT_IN_QUICKSAND, 0);
     if (m->actionState == 4) return set_mario_action(m, ACT_SLEEPING, 0);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:  animFrame = set_mario_animation(m, MARIO_ANIM_START_SLEEP_IDLE   );                                                       break;
         case 1:  animFrame = set_mario_animation(m, MARIO_ANIM_START_SLEEP_SCRATCH);                                                       break;
         case 2:  animFrame = set_mario_animation(m, MARIO_ANIM_START_SLEEP_YAWN   ); m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED; break;
@@ -144,7 +144,7 @@ Bool32 act_sleeping(struct MarioState *m) {
     if (m->pos[1] - find_floor_height_relative_polar(m, -0x8000, 60.0f) > 24.0f) return set_mario_action(m, ACT_WAKING_UP, m->actionState);
     m->marioBodyState->eyeState = MARIO_EYES_CLOSED;
     stationary_ground_step(m);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             animFrame = set_mario_animation(m, MARIO_ANIM_SLEEP_IDLE);
             if ((animFrame == -1) && !m->actionTimer) lower_background_noise(2);
@@ -198,7 +198,7 @@ Bool32 act_shivering(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(m, ACT_BEGIN_SLIDING   , 0);
     if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE | INPUT_FIRST_PERSON | INPUT_STOMPED | INPUT_B_PRESSED | INPUT_Z_PRESSED)) m->actionState = 2;
     stationary_ground_step(m);
-    switch (m->actionState) {
+    switch (m->actionState) { //! define names
         case 0:
             animFrame = set_mario_animation(m, MARIO_ANIM_SHIVERING_WARMING_HAND);
             if (animFrame == 49) {
