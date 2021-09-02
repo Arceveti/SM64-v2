@@ -11,18 +11,27 @@
 
 #include "config.h"
 
-static const Mat4 identityMtx = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
-// UNUSED s16 zeroMtx[4][4]     = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
-
-Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
-Vec3s gVec3sZero = {    0,    0,    0 };
-Vec3i gVec3iZero = {    0,    0,    0 };
-Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
-Vec3s gVec3sOne  = {    1,    1,    1 }; // unused
+static const Mat4 identityMtx = {
+    { 1, 0, 0, 0 },
+    { 0, 1, 0, 0 },
+    { 0, 0, 1, 0 }, 
+    { 0, 0, 0, 1 }
+};
+// UNUSED s16 zeroMtx[4][4] = {
+//     { 0, 0, 0, 0 },
+//     { 0, 0, 0, 0 },
+//     { 0, 0, 0, 0 },
+//     { 0, 0, 0, 0 }
+// };
 
 Vec3f gVec3fX    = { 1.0f, 0.0f, 0.0f };
 Vec3f gVec3fY    = { 0.0f, 1.0f, 0.0f };
 Vec3f gVec3fZ    = { 0.0f, 0.0f, 1.0f };
+Vec3f gVec3fZero = { 0.0f, 0.0f, 0.0f };
+Vec3f gVec3fOne  = { 1.0f, 1.0f, 1.0f };
+Vec3s gVec3sZero = {    0,    0,    0 };
+Vec3i gVec3iZero = {    0,    0,    0 };
+Vec3s gVec3sOne  = {    1,    1,    1 }; // unused
 
 /**************************
  * Float functions (Kaze) *

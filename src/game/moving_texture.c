@@ -740,6 +740,7 @@ Gfx *geo_movtex_draw_colored_no_update(s32 callContext, struct GraphNode *node, 
     return gfx;
 }
 
+//! TODO: combine this with above
 /**
  * Exact copy of geo_movtex_draw_colored_no_update, but now using the gMovtexColoredSSLSandPits array.
  * Used for the sand pits in SSL, both outside and inside the pyramid.
