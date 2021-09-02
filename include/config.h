@@ -195,7 +195,7 @@
 #define EXPAND_AUDIO_HEAP
 
 // Use a much better implementation of reverb over vanilla's fake echo reverb. Great for caves or eerie levels, as well as just a better audio experience in general.
-// Reverb parameters can be configured in audio/synthesis.c to meet desired aesthetic/performance needs.
+// Reverb parameters can be configured in audio/synthesis.c to meet desired aesthetic/performance needs. Currently US/JP only.
 // (HackerSM64)
 // #define BETTER_REVERB
 
