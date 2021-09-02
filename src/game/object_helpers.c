@@ -148,31 +148,19 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
 
 //! move to math_util?
 void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
-    register f32 relX   = obj->oParentRelativePosX;
-    register f32 relY   = obj->oParentRelativePosY;
-    register f32 relZ   = obj->oParentRelativePosZ;
-    obj->oPosX = ((relX * mtx[0][0]) + (relY * mtx[1][0]) + (relZ * mtx[2][0]) + mtx[3][0]);
-    obj->oPosY = ((relX * mtx[0][1]) + (relY * mtx[1][1]) + (relZ * mtx[2][1]) + mtx[3][1]);
-    obj->oPosZ = ((relX * mtx[0][2]) + (relY * mtx[1][2]) + (relZ * mtx[2][2]) + mtx[3][2]);
+    Vec3f rel;
+    vec3f_copy(rel, &obj->oParentRelativePosVec);
+    obj->oPosX = ((rel[0] * mtx[0][0]) + (rel[1] * mtx[1][0]) + (rel[2] * mtx[2][0]) + mtx[3][0]);
+    obj->oPosY = ((rel[0] * mtx[0][1]) + (rel[1] * mtx[1][1]) + (rel[2] * mtx[2][1]) + mtx[3][1]);
+    obj->oPosZ = ((rel[0] * mtx[0][2]) + (rel[1] * mtx[1][2]) + (rel[2] * mtx[2][2]) + mtx[3][2]);
 }
 
 //! move to math_util?
 void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
-    dst[0][0] = (src[0][0] * obj->header.gfx.scale[0]);
-    dst[1][0] = (src[1][0] * obj->header.gfx.scale[1]);
-    dst[2][0] = (src[2][0] * obj->header.gfx.scale[2]);
-    dst[3][0] =  src[3][0];
-
-    dst[0][1] = (src[0][1] * obj->header.gfx.scale[0]);
-    dst[1][1] = (src[1][1] * obj->header.gfx.scale[1]);
-    dst[2][1] = (src[2][1] * obj->header.gfx.scale[2]);
-    dst[3][1] =  src[3][1];
-
-    dst[0][2] = (src[0][2] * obj->header.gfx.scale[0]);
-    dst[1][2] = (src[1][2] * obj->header.gfx.scale[1]);
-    dst[2][2] = (src[2][2] * obj->header.gfx.scale[2]);
-    dst[3][2] =  src[3][2];
-
+    vec3f_prod_val(dst[0], src[0], obj->header.gfx.scale[0]);
+    vec3f_prod_val(dst[1], src[1], obj->header.gfx.scale[1]);
+    vec3f_prod_val(dst[2], src[2], obj->header.gfx.scale[2]);
+    vec3f_copy(dst[3], src[3]);
     dst[0][3] = src[0][3];
     dst[1][3] = src[1][3];
     dst[2][3] = src[2][3];
@@ -342,7 +330,6 @@ static void obj_build_relative_transform(struct Object *obj) {
 struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,
                                      struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_at_origin(parent, 0, model, behavior);
-
     obj_copy_pos_and_angle(      obj, parent);
     obj_set_parent_relative_pos( obj, relativePosX, relativePosY, relativePosZ);
     obj_build_relative_transform(obj);
@@ -361,9 +348,7 @@ struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativeP
 
 // Unused
 UNUSED void cur_obj_move_using_vel(void) {
-    o->oPosX += o->oVelX;
-    o->oPosY += o->oVelY;
-    o->oPosZ += o->oVelZ;
+    vec3f_add(&o->oPosVec, &o->oVelVec);
 }
 
 // Used for beta trampoline
@@ -409,15 +394,11 @@ void obj_scale_xyz(struct Object *obj, f32 xScale, f32 yScale, f32 zScale) {
 }
 
 void obj_scale(struct Object *obj, f32 scale) {
-    obj->header.gfx.scale[0] = scale;
-    obj->header.gfx.scale[1] = scale;
-    obj->header.gfx.scale[2] = scale;
+    vec3f_same(obj->header.gfx.scale, scale);
 }
 
 void cur_obj_scale(f32 scale) {
-    o->header.gfx.scale[0] = scale;
-    o->header.gfx.scale[1] = scale;
-    o->header.gfx.scale[2] = scale;
+    vec3f_same(o->header.gfx.scale, scale);
 }
 
 void cur_obj_init_animation(s32 animIndex) {
@@ -1033,12 +1014,11 @@ void cur_obj_move_y_with_terminal_vel(void) {
 }
 
 void cur_obj_compute_vel_xz(void) {
-    // o->oVelX = LENSIN(o->oForwardVel, o->oMoveAngleYaw);
-    // o->oVelZ = LENCOS(o->oForwardVel, o->oMoveAngleYaw);
     o->oVelX = (o->oForwardVel * sins(o->oMoveAngleYaw));
     o->oVelZ = (o->oForwardVel * coss(o->oMoveAngleYaw));
 }
 
+//! approach_f32?
 f32 increment_velocity_toward_range(f32 value, f32 center, f32 zeroThreshold, f32 increment) {
     f32 relative;
     if ((relative = value - center) > 0) {
@@ -1071,15 +1051,15 @@ Bool32 obj_has_behavior(struct Object *obj, const BehaviorScript *behavior) {
 }
 
 f32 cur_obj_lateral_dist_from_mario_to_home(void) {
-    f32 dx = (o->oHomeX - gMarioObject->oPosX);
-    f32 dz = (o->oHomeZ - gMarioObject->oPosZ);
-    return sqrtf(sqr(dx) + sqr(dz));
+    f32 lateralDist;
+    vec3f_get_lateral_dist(&gMarioObject->oPosVec, &o->oHomeVec, &lateralDist);
+    return lateralDist;
 }
 
 f32 cur_obj_lateral_dist_to_home(void) {
-    f32 dx = (o->oHomeX - o->oPosX);
-    f32 dz = (o->oHomeZ - o->oPosZ);
-    return sqrtf(sqr(dx) + sqr(dz));
+    f32 lateralDist;
+    vec3f_get_lateral_dist(&o->oPosVec, &o->oHomeVec, &lateralDist);
+    return lateralDist;
 }
 
 Bool32 cur_obj_outside_home_square(f32 halfLength) {
@@ -1347,9 +1327,9 @@ void obj_set_pos_relative(struct Object *obj, struct Object *other, f32 dleft, f
 }
 
 Angle cur_obj_angle_to_home(void) {
-    f32 dx = (o->oHomeX - o->oPosX);
-    f32 dz = (o->oHomeZ - o->oPosZ);
-    return atan2s(dz, dx);
+    Angle yaw;
+    vec3f_get_yaw(&o->oPosVec, &o->oHomeVec, &yaw);
+    return yaw;
 }
 
 void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
@@ -1377,12 +1357,8 @@ void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateInd
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {
     f32 translate[3];
     Angle rotation[3];
-    translate[0] = obj->rawData.asF32[posIndex   + 0];
-    translate[1] = obj->rawData.asF32[posIndex   + 1];
-    translate[2] = obj->rawData.asF32[posIndex   + 2];
-    rotation[0]  = obj->rawData.asS32[angleIndex + 0];
-    rotation[1]  = obj->rawData.asS32[angleIndex + 1];
-    rotation[2]  = obj->rawData.asS32[angleIndex + 2];
+    vec3f_copy(translate, &obj->rawData.asF32[posIndex]);
+    vec3i_to_vec3s(rotation, &obj->rawData.asS32[angleIndex]);
     if ((translate != gVec3fZero) || (rotation != gVec3sZero)) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
 }
 
@@ -1477,13 +1453,11 @@ void obj_translate_xz_random(struct Object *obj, f32 rangeLength) {
 }
 
 static void obj_build_vel_from_transform(struct Object *obj) {
-    register f32 localY = obj->oUpVel;
-    register f32 localX = obj->oLeftVel;
-    register f32 localZ = obj->oForwardVel;
-    // localX and localY were swapped originally, fixed now
-    obj->oVelX = ((obj->transform[0][0] * localX) + (obj->transform[1][0] * localY) + (obj->transform[2][0] * localZ));
-    obj->oVelY = ((obj->transform[0][1] * localX) + (obj->transform[1][1] * localY) + (obj->transform[2][1] * localZ));
-    obj->oVelZ = ((obj->transform[0][2] * localX) + (obj->transform[1][2] * localY) + (obj->transform[2][2] * localZ));
+    Vec3f local;
+    vec3f_copy(local, &obj->oLocalVelVec);
+    obj->oVelX = ((obj->transform[0][0] * local[0]) + (obj->transform[1][0] * local[1]) + (obj->transform[2][0] * local[2]));
+    obj->oVelY = ((obj->transform[0][1] * local[0]) + (obj->transform[1][1] * local[1]) + (obj->transform[2][1] * local[2]));
+    obj->oVelZ = ((obj->transform[0][2] * local[0]) + (obj->transform[1][2] * local[1]) + (obj->transform[2][2] * local[2]));
 }
 
 void cur_obj_set_pos_via_transform(void) {
@@ -1506,7 +1480,7 @@ void cur_obj_spawn_particles(struct SpawnParticlesInfo *info) {
     // We're close to running out of object slots, so don't spawn particles at
     // all
     if (gPrevFrameObjectCount > (OBJECT_POOL_CAPACITY - 30)) numParticles = 0;
-    for (i = 0; i < numParticles; i++) {
+    for ((i = 0); (i < numParticles); (i++)) {
         scale                       = ((random_float() * info->sizeRange * 0.1f) + (info->sizeBase * 0.1f));
         particle                    = spawn_object(o, info->model, bhvWhitePuffExplosion);
         particle->oBehParams2ndByte = info->behParam;
@@ -1608,9 +1582,9 @@ s32 cur_obj_progress_direction_table(void) {
 
 void cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end) {
     f32 scale = (((end - start) * ((f32) o->oTimer / times)) + start);
-    if (axis & 0x01) o->header.gfx.scale[0] = scale;
-    if (axis & 0x02) o->header.gfx.scale[1] = scale;
-    if (axis & 0x04) o->header.gfx.scale[2] = scale;
+    if (axis & SCALE_AXIS_X) o->header.gfx.scale[0] = scale;
+    if (axis & SCALE_AXIS_Y) o->header.gfx.scale[1] = scale;
+    if (axis & SCALE_AXIS_Z) o->header.gfx.scale[2] = scale;
 }
 
 void cur_obj_set_pos_to_home_with_debug(void) {

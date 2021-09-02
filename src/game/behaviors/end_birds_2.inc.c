@@ -2,7 +2,6 @@
 
 void bhv_end_birds_2_loop(void) {
     Vec3f pos;
-    f32 dist;
     Angle pitch, yaw;
     gCurrentObject->oForwardVel = ((random_float() * 10.0f) + 25.0f);
     switch (gCurrentObject->oAction) {
@@ -11,7 +10,7 @@ void bhv_end_birds_2_loop(void) {
             gCurrentObject->oAction = END_BIRDS_ACT_ACTIVE;
             break;
         case END_BIRDS_ACT_ACTIVE:
-            vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &pitch, &yaw);
+            vec3f_get_angle(gCamera->pos, gCamera->focus, &pitch, &yaw);
             yaw += 0x1000;
             vec3f_set_dist_and_angle(gCamera->pos, pos, 14000.0f, pitch, yaw);
             obj_rotate_towards_point(gCurrentObject, pos, 0, 0, 8, 8);

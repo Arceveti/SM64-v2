@@ -420,17 +420,6 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
     if (selectedChild != NULL) geo_process_node_and_siblings(selectedChild);
 }
 
-//! move to math_util
-static void make_roll_matrix(Mtx *mtx, Angle angle) {
-    Mat4 temp;
-    mtxf_identity(temp);
-    temp[0][0] = coss(angle);
-    temp[0][1] = sins(angle);
-    temp[1][0] = -temp[0][1];
-    temp[1][1] =  temp[0][0];
-    guMtxF2L(temp, mtx);
-}
-
 /**
  * Process a camera node.
  */
@@ -442,7 +431,7 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
     Mtx *mtx     = alloc_display_list(sizeof(*mtx));
     if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
-    make_roll_matrix(rollMtx, node->rollScreen);
+    mtxf_rotate_xy(rollMtx, node->rollScreen, FALSE);
     gSPMatrix(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(rollMtx), (G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH));
     mtxf_lookat(cameraTransform, node->pos, node->focus, node->roll);
     mtxf_mul(gMatStack[gMatStackIndex + 1], cameraTransform, gMatStack[gMatStackIndex]);

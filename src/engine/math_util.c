@@ -488,39 +488,6 @@ void vec3f_normalize_max(Vec3f v, f32 max) {
     }
 }
 
-/**
- * Take the vector starting at 'from' pointed at 'to' an retrieve the length
- * of that vector, as well as the yaw and pitch angles.
- * Basically it converts the direction to spherical coordinates.
- * Given two points, return the vector from one to the other represented
- * as Euler angles and a length
- */
-void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    register f32 ld = (sqr(dx) + sqr(dz));
-    *dist           = sqrtf(ld + sqr(dy));
-    *pitch          = atan2s(sqrtf(ld), dy);
-    *yaw            = atan2s(dz, dx);
-}
-void vec3s_get_dist_and_angle(Vec3s from, Vec3s to, s16 *dist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    register f32 ld = (sqr(dx) + sqr(dz));
-    *dist           = sqrtf(ld + sqr(dy));
-    *pitch          = atan2s(sqrtf(ld), dy);
-    *yaw            = atan2s(dz, dx);
-}
-
-/**
- * Calculate the 'result' vector as the position of the 'origin' vector
- * with a vector added represented by radius, pitch and yaw.
- */
-void vec3s_set_dist_and_angle(Vec3s from, Vec3s to, s16 dist, Angle pitch, Angle yaw) {
-    register f32 dc  = (dist * coss(pitch));
-    to[0] = (from[0] + (  dc * sins(yaw  )));
-    to[1] = (from[1] + (dist * sins(pitch)));
-    to[2] = (from[2] + (  dc * coss(yaw  )));
-}
-
 /// Finds the horizontal distance between two vectors.
 void vec2f_get_lateral_dist(Vec2f from, Vec2f to, f32 *lateralDist) {
     Vec2f d;
@@ -537,6 +504,14 @@ void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
     Vec3f d;
     vec3f_diff(d, to, from);
     *dist = vec3f_mag(d);
+}
+
+/// Finds the distance between two vectors.
+void vec3f_get_dist_and_yaw(Vec3f from, Vec3f to, f32 *dist, Angle *yaw) {
+    Vec3f d;
+    vec3f_diff(d, to, from);
+    *dist = vec3f_mag(d);
+    *yaw  = atan2s(d[2], d[0]);
 }
 
 /// Finds the pitch between two vectors.
@@ -559,6 +534,13 @@ void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
 }
 
 /// Finds the horizontal distance and angles between two vectors.
+void vec3f_get_lateral_dist_and_yaw(Vec3f from, Vec3f to, f32 *lateralDist, Angle *yaw) {
+    MAKE_DXZ(from, to, f32)
+    *lateralDist = sqrtf(sqr(dx) + sqr(dz));
+    *yaw         = atan2s(dz, dx);
+}
+
+/// Finds the horizontal distance and angles between two vectors.
 void vec3f_get_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *lateralDist, Angle *pitch, Angle *yaw) {
     MAKE_DXYZ(from, to, f32)
     *lateralDist = sqrtf(sqr(dx) + sqr(dz));
@@ -576,9 +558,37 @@ void vec3f_get_dist_and_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, 
 }
 
 /**
+ * Take the vector starting at 'from' pointed at 'to' an retrieve the length
+ * of that vector, as well as the yaw and pitch angles.
+ * Basically it converts the direction to spherical coordinates.
+ * Given two points, return the vector from one to the other represented
+ * as Euler angles and a length
+ */
+void vec3s_get_dist_and_angle(Vec3s from, Vec3s to, s16 *dist, Angle *pitch, Angle *yaw) {
+    MAKE_DXYZ(from, to, f32)
+    register f32 ld = (sqr(dx) + sqr(dz));
+    *dist           = sqrtf(ld + sqr(dy));
+    *pitch          = atan2s(sqrtf(ld), dy);
+    *yaw            = atan2s(dz, dx);
+}
+void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
+    MAKE_DXYZ(from, to, f32)
+    register f32 ld = (sqr(dx) + sqr(dz));
+    *dist           = sqrtf(ld + sqr(dy));
+    *pitch          = atan2s(sqrtf(ld), dy);
+    *yaw            = atan2s(dz, dx);
+}
+
+/**
  * Construct the 'to' point which is distance 'dist' away from the 'from' position,
  * and has the angles pitch and yaw.
  */
+void vec3s_set_dist_and_angle(Vec3s from, Vec3s to, s16 dist, Angle pitch, Angle yaw) {
+    register f32 dc  = (dist * coss(pitch));
+    to[0] = (from[0] + (  dc * sins(yaw  )));
+    to[1] = (from[1] + (dist * sins(pitch)));
+    to[2] = (from[2] + (  dc * coss(yaw  )));
+}
 void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle yaw) {
     register f32 dc  = (dist * coss(pitch) );
     to[0] = (from[0] + (  dc * sins(yaw  )));
@@ -1134,11 +1144,9 @@ void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
  */
 void mtxf_to_mtx(Mtx *dest, Mat4 src) {
     Mat4 temp;
-    register s32 i, j;
+    register s32 i;
     for((i = 0); (i < 4); (i++)) {
-        for((j = 0); (j < 3); (j++)) {
-            temp[i][j] = (src[i][j] / gWorldScale);
-        }
+        vec3f_quot_val(temp[i], src[i], gWorldScale);
         temp[i][3] = src[i][3];
     }
     guMtxF2L(temp, dest);
@@ -1147,14 +1155,18 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
 /**
  * Set 'mtx' to a transformation matrix that rotates around the z axis.
  */
-void mtxf_rotate_xy(Mtx *mtx, Angle angle) {
+void mtxf_rotate_xy(Mtx *mtx, Angle angle, Bool32 doScale) {
     Mat4 temp;
     mtxf_identity(temp);
     temp[0][0] = coss(angle);
     temp[0][1] = sins(angle);
     temp[1][0] = -temp[0][1];
     temp[1][1] =  temp[0][0];
-    mtxf_to_mtx(mtx, temp);
+    if (doScale) {
+        mtxf_to_mtx(mtx, temp);
+    } else {
+        guMtxF2L(temp, mtx);
+    }
 }
 
 /**

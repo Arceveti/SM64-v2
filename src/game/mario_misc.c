@@ -449,7 +449,6 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
     ImageTexture *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
-    Angle pitch, yaw;
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -463,15 +462,14 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
         if ((bodyState->modelState & MODEL_STATE_METAL) && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
             ImageTexture *metalTexture = segmented_to_virtual(mario_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
-            vec3f_get_dist_and_angle(gLakituState.pos, gLakituState.focus, &dist, &pitch, &yaw);
+            vec3f_get_dist(gLakituState.pos, gLakituState.focus, &dist);
             // c up is 250.0f
-            dist -= 250.0f;
-            // dist   /=  16.0f;
+            dist   -= 250.0f;
             dist   *= 0.0625;
             dist    = MIN(dist, MIN(lakituMaxW, lakituMaxH));
             if (dist < 0.0f) dist = 0.0f;
-            lakituW = (lakituMaxW - (dist * 2.0f)); // * sins(pitch);
-            lakituH = (lakituMaxH - (dist       )); // * MAX(coss(yaw), 0.5f);
+            lakituW = (lakituMaxW - (dist * 2.0f));
+            lakituH = (lakituMaxH - (dist       ));
             lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        );
             if (lakituX < 0) lakituX = 0;
             lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f));

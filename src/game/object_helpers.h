@@ -199,6 +199,10 @@ Angle  cur_obj_reflect_move_angle_off_wall(void);
 #define PATH_REACHED_END      -1
 #define PATH_REACHED_WAYPOINT  1
 
+#define SCALE_AXIS_X    (1 << 0) // 0x01
+#define SCALE_AXIS_Y    (1 << 1) // 0x02
+#define SCALE_AXIS_Z    (1 << 2) // 0x04
+
 void   obj_set_hitbox(struct Object *obj, struct ObjectHitbox *hitbox);
 Bool32 cur_obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks);
 Bool32 cur_obj_is_mario_ground_pounding_platform(void);

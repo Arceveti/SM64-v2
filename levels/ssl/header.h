@@ -33,7 +33,7 @@ extern const Gfx ssl_seg7_dl_0700BA78[];
 extern const Gfx ssl_seg7_dl_0700BC18[];
 extern const Gfx ssl_seg7_dl_0700BD00[];
 extern const Gfx ssl_seg7_dl_0700BF18[];
-extern const Gfx ssl_seg7_dl_0700FCE0[];
+extern const Gfx ssl_seg7_dl_tox_box[];
 extern const Collision ssl_seg7_area_1_collision[];
 extern const MacroObject ssl_seg7_area_1_macro_objs[];
 extern const Collision ssl_seg7_collision_pyramid_top[];

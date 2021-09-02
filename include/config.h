@@ -397,6 +397,11 @@
 // (Arceveti)
 #define BOWSER_BOMB_FOCUS
 
+// The camera noclips through surfaces
+// Requires PUPPYCAM
+// (Arceveti)
+// #define CAMERA_NOCLIP
+
 // Slightly modified version of Reonu Cam 3 (Reonu)
 // #define REONU_CAM_3
 
@@ -431,9 +436,6 @@
 
 // Increase the maximum pole length (it will treat bparam1 and bparam2 as a single value) (HackerSM64)
 #define LONGER_POLES
-
-// Makes cur_obj_resolve_object_collisions work consistently (Arceveti)
-#define FIX_OBJ_COLLISIONS
 
 // Makes signs and NPCs easier to talk to (Arceveti)
 #define EASIER_DIALOG_TRIGGER

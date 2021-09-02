@@ -1012,6 +1012,7 @@ static void puppycam_script(void) {
 
 // Handles collision detection using ray casting.
 static void puppycam_collision(void) {
+#ifndef CAMERA_NOCLIP
     struct WallCollisionData wall0, wall1;
     struct Surface *surf[2];
     Vec3f camdir[2];
@@ -1051,6 +1052,7 @@ static void puppycam_collision(void) {
             }
         }
     }
+#endif
     // #define START_DIST 500
     // #define END_DIST   250
     // gPuppyCam.opacity = CLAMP((f32)(((gPuppyCam.zoom - END_DIST) / 255.0f) * (START_DIST - END_DIST)), 0, 255);
