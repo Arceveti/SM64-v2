@@ -196,7 +196,7 @@ static MarioStep perform_water_step(struct MarioState *m) {
     const f32 numSteps = WATER_NUM_STEPS;
  #endif
     u32 i;
-    for (i = 0; i < numSteps; i++) {
+    for ((i = 0); (i < numSteps); (i++)) {
         nextPos[0] = (m->pos[0] + (step[0] / numSteps));
         nextPos[1] = (m->pos[1] + (step[1] / numSteps));
         nextPos[2] = (m->pos[2] + (step[2] / numSteps));

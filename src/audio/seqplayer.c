@@ -2133,7 +2133,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                             case SEQUENCE_PLAYER_STATE_2:
                                 seqPlayer->fadeRemainingFrames = u16v;
                                 seqPlayer->state = cmd;
-                                seqPlayer->fadeVelocity = (0.0f - seqPlayer->fadeVolume) / (s32)(u16v & 0xFFFFu);
+                                seqPlayer->fadeVelocity = (-seqPlayer->fadeVolume) / (s32)(u16v & 0xFFFFu);
                                 break;
                         }
                         break;
@@ -2149,9 +2149,9 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
                             case SEQUENCE_PLAYER_STATE_0:
                                 seqPlayer->fadeRemainingFrames = seqPlayer->fadeTimerUnkEu;
                                 if (seqPlayer->fadeTimerUnkEu != 0) {
-                                    seqPlayer->fadeVelocity = (temp32 / 127.0f - seqPlayer->fadeVolume) / FLOAT_CAST(seqPlayer->fadeRemainingFrames);
+                                    seqPlayer->fadeVelocity = ((temp32 / 127.0f) - seqPlayer->fadeVolume) / FLOAT_CAST(seqPlayer->fadeRemainingFrames);
                                 } else {
-                                    seqPlayer->fadeVolume   =  temp32 / 127.0f;
+                                    seqPlayer->fadeVolume   =  (temp32 / 127.0f);
                                 }
                         }
                         break;

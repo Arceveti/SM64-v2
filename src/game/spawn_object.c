@@ -33,7 +33,7 @@ UNUSED void unused_init_free_list(struct LinkedList *usedList, struct LinkedList
     usedList->next          = usedList;
     usedList->prev          = usedList;
     *pFreeList              = pool;
-    for (i = 0; i < poolLength - 1; i++) {
+    for ((i = 0); (i < (poolLength - 1)); (i++)) {
         // Add next node to free list
         node       = (struct LinkedList *) ((u8 *) node + itemSize);
         pool->next = node;

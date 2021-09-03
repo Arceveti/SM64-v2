@@ -146,11 +146,11 @@ inline s32 round_double_to_int(  f64 num) { return (num + ((num >= 0.0 ) ? 0.5  
  */
 s8 normalize_component(f32 comp) {
     if (comp > 0.0) {
-        return comp * 127.0 + 0.5; // round up
+        return ((comp * 127.0) + 0.5); // round up
     } else if (comp < 0.0) {
-        return comp * 128.0 - 0.5; // round down
+        return ((comp * 128.0) - 0.5); // round down
     } else {
-        return 0;                  // don't round 0
+        return 0;                      // don't round 0
     }
 }
 

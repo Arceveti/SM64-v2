@@ -478,8 +478,8 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         //! TODO: Fix this for concave wall angles
         // Check for wall collisions, if new wall is closer to m->intendedYaw, switch to that one.
         vec3f_copy(wallCols.pos, m->pos);
-        wallCols.pos[0] = nextX;
-        wallCols.pos[2] = nextZ;
+        wallCols.pos[0]  = nextX;
+        wallCols.pos[2]  = nextZ;
         wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
         if (find_wall_collisions(&wallCols) != 0) {
@@ -487,13 +487,13 @@ Bool32 act_ledge_grab(struct MarioState *m) {
             if ((floor != NULL) && ((wallCols.pos[1] - floorHeight) > MARIO_HITBOX_HEIGHT)) {
                 oldWwall = m->wall;
                 oldWallAngle = atan2s(oldWwall->normal.z, oldWwall->normal.x);
-                oldWallDYaw = abs_angle_diff(oldWallAngle, m->intendedYaw);
-                for (i = 0; i < wallCols.numWalls; i++) {
-                    wall = wallCols.walls[i];
+                oldWallDYaw  = abs_angle_diff(oldWallAngle, m->intendedYaw);
+                for ((i = 0); (i < wallCols.numWalls); (i++)) {
+                    wall         = wallCols.walls[i];
                     newWallAngle = atan2s(wall->normal.z, wall->normal.x);
                     newWallDYaw  = abs_angle_diff(newWallAngle, m->intendedYaw);
                     if (newWallDYaw < oldWallDYaw) {
-                        oldWwall = wall;
+                        oldWwall     = wall;
                         oldWallAngle = newWallAngle;
                         oldWallDYaw  = newWallDYaw;
                     }

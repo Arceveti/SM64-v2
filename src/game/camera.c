@@ -1979,8 +1979,8 @@ void move_mario_head_c_up(UNUSED struct Camera *c) {
     if (sModeOffsetYaw  >  DEG(120)) sModeOffsetYaw  =  DEG(120);
     if (sModeOffsetYaw  < -DEG(120)) sModeOffsetYaw  = -DEG(120);
     // Give Mario's neck natural-looking constraints
-    sMarioCamState->headRotation[0] = (sCUpCameraPitch * 0.75f);// ((sCUpCameraPitch * 3) / 4);
-    sMarioCamState->headRotation[1] = (sModeOffsetYaw  * 0.75f);// ((sModeOffsetYaw  * 3) / 4);
+    sMarioCamState->headRotation[0] = (sCUpCameraPitch * 0.75f); // ((sCUpCameraPitch * 3) / 4);
+    sMarioCamState->headRotation[1] = (sModeOffsetYaw  * 0.75f); // ((sModeOffsetYaw  * 3) / 4);
 }
 
 /**
@@ -3359,7 +3359,7 @@ void handle_c_button_movement(struct Camera *c) {
  */
 void clear_cutscene_vars(UNUSED struct Camera *c) {
     s32 i;
-    for (i = 0; i < 10; i++) {
+    for ((i = 0); (i < 10); (i++)) {
         vec3f_set(sCutsceneVars[i].point, 0.0f, 0.0f, 0.0f);
         // vec3f_set(sCutsceneVars[i].unusedPoint, 0.0f, 0.0f, 0.0f);
         vec3a_set(sCutsceneVars[i].angle, 0x0, 0x0, 0x0);

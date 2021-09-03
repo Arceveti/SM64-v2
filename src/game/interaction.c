@@ -1372,7 +1372,7 @@ void mario_process_interactions(struct MarioState *m) {
     sInvulnerable     = ((m->action & ACT_FLAG_INVULNERABLE) || (m->invincTimer != 0));
     if (!(m->action & ACT_FLAG_INTANGIBLE) && (m->collidedObjInteractTypes != 0x0)) {
         s32 i;
-        for (i = 0; i < ARRAY_COUNT(sInteractionHandlers); i++) {
+        for ((i = 0); (i < ARRAY_COUNT(sInteractionHandlers)); (i++)) {
             InteractType interactType = sInteractionHandlers[i].interactType;
             if (m->collidedObjInteractTypes & interactType) {
                 struct Object *object = mario_get_collided_object(m, interactType);
@@ -1381,7 +1381,7 @@ void mario_process_interactions(struct MarioState *m) {
             }
         }
     }
-    if (m->invincTimer > 0 && !sDelayInvincTimer) m->invincTimer--;
+    if ((m->invincTimer > 0) && !sDelayInvincTimer) m->invincTimer--;
     //! If the kick/punch flags are set and an object collision changes Mario's
     // action, he will get the kick/punch wall speed anyway.
     check_kick_or_punch_wall(m);

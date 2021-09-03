@@ -230,7 +230,7 @@ u32 get_special_objects_size(Collision *data) {
     u8 presetID;
     s32 offset;
     numOfSpecialObjects = *data++;
-    for (i = 0; i < numOfSpecialObjects; i++) {
+    for ((i = 0); (i < numOfSpecialObjects); (i++)) {
         presetID = (u8) *data++;
         data  += 3;
         offset = 0;

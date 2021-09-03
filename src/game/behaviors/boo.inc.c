@@ -93,7 +93,7 @@ void bhv_courtyard_boo_triplet_init(void) {
     if (gHudDisplay.stars < 12) {
         obj_mark_for_deletion(o);
     } else {
-        for (i = 0; i < 3; i++) {
+        for ((i = 0); (i < 3); (i++)) {
             boo = spawn_object_relative(
                 BOO_BP_NORMAL,
                 sCourtyardBooTripletPositions[i][0],
@@ -119,7 +119,7 @@ static void boo_approach_target_opacity_and_update_scale(void) {
             if (o->oBooTargetOpacity > o->oOpacity) o->oOpacity = o->oBooTargetOpacity;
         }
     }
-    scale = (((o->oOpacity / 255.0f) * 0.4f) + 0.6f) * o->oBooBaseScale;
+    scale = ((((o->oOpacity / 255.0f) * 0.4f) + 0.6f) * o->oBooBaseScale);
     cur_obj_scale(scale);
 }
 

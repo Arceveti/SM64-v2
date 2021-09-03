@@ -519,7 +519,7 @@ UNUSED static s32 bhv_cmd_set_int_random_from_table(void) {
     s32 table[16];
     s32 i;
     // Construct the table from the behavior command.
-    for (i = 0; i <= tableSize; i += 2) {
+    for ((i = 0); (i <= tableSize); (i += 2)) {
         table[i    ] = BHV_CMD_GET_1ST_S16((i / 2) + 1);
         table[i + 1] = BHV_CMD_GET_2ND_S16((i / 2) + 1);
     }

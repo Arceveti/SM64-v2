@@ -272,6 +272,7 @@
 // when this is disabled, the game will still only try to find a new floor if there is
 // an intangible floor in the current cell
 // #define SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
+
 // Use fast inverse square root from Quake III
 // #define FAST_INVSQRT
 

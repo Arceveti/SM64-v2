@@ -710,7 +710,7 @@ void render_multi_text_string_lines(s8 multiTextId, s8 lineNum, s16 *linePos, s8
     };
     if (lineNum >= lowerBound && lineNum <= (lowerBound + linesPerBox)) {
         if ((linePos[0] != 0) || (xMatrix != 1)) create_dl_translation_matrix(G_MTX_NOPUSH, (gDialogCharWidths[DIALOG_CHAR_SPACE] * (xMatrix - 1)), 0, 0);
-        for (i = 0; i < textLengths[multiTextId].length; i++) {
+        for ((i = 0); (i < textLengths[multiTextId].length); (i++)) {
             render_generic_char(textLengths[multiTextId].str[i]);
             create_dl_translation_matrix(G_MTX_NOPUSH, (gDialogCharWidths[textLengths[multiTextId].str[i]]), 0, 0);
         }
@@ -1308,7 +1308,7 @@ void print_animated_red_coin(ScreenPos x, ScreenPos y) {
 
 void render_pause_red_coins(void) {
     s8 x;
-    for (x = 0; x < gRedCoinsCollected; x++) print_animated_red_coin((GFX_DIMENSIONS_FROM_RIGHT_EDGE(30) - (x * 20)), 16);
+    for ((x = 0); (x < gRedCoinsCollected); (x++)) print_animated_red_coin((GFX_DIMENSIONS_FROM_RIGHT_EDGE(30) - (x * 20)), 16);
 }
 
 /// By default, not needed as puppycamera has an option, but should you wish to revert that, you are legally allowed.
@@ -1389,10 +1389,10 @@ void render_pause_camera_options(ScreenPos x, ScreenPos y, s8 *index, s16 xIndex
     handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, index, 1, 2);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    print_generic_string((x + 14    ), (y +  2), textLakituMario);
+    print_generic_string((x + 14    ), (y +  2), textLakituMario  );
     print_generic_string((x + TXT1_X), (y - 13), textNormalUpClose);
-    print_generic_string((x + 124   ), (y +  2), textLakituStop);
-    print_generic_string((x + TXT2_X), (y - 13), textNormalFixed);
+    print_generic_string((x + 124   ), (y +  2), textLakituStop   );
+    print_generic_string((x + TXT2_X), (y - 13), textNormalFixed  );
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     create_dl_translation_matrix(G_MTX_PUSH, (((*index - 1) * xIndex) + x), (y + Y_VAL7), 0);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
@@ -1552,7 +1552,7 @@ void render_pause_castle_main_strings(ScreenPos x, ScreenPos y) {
         courseName = segmented_to_virtual(courseNameTbl[COURSE_MAX]);
         print_generic_string((x + 40), (y + 13), textStarX);
         int_to_str(save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_BONUS_STAGES - 1), (COURSE_MAX - 1)), strVal);
-        print_generic_string((x + 60), (y + 13), strVal);
+        print_generic_string((x + 60), (y + 13), strVal   );
     }
     print_generic_string((x - 9), (y + 30), courseName);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);

@@ -192,8 +192,8 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
     register const CellIndex maxCellX = upper_cell_index(maxX);
     register const CellIndex minCellZ = lower_cell_index(minZ);
     register const CellIndex maxCellZ = upper_cell_index(maxZ);
-    for (cellZ = minCellZ; cellZ <= maxCellZ; cellZ++) {
-        for (cellX = minCellX; cellX <= maxCellX; cellX++) {
+    for ((cellZ = minCellZ); (cellZ <= maxCellZ); (cellZ++)) {
+        for ((cellX = minCellX); (cellX <= maxCellX); (cellX++)) {
             add_surface_to_cell(dynamic, cellX, cellZ, surface);
         }
     }
@@ -206,63 +206,39 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
  */
 static struct Surface *read_surface_data(Collision *vertexData, Collision **vertexIndices) {
     struct Surface *surface;
-
-    register s32 offset1 = (3 * (*vertexIndices)[0]);
-    register s32 offset2 = (3 * (*vertexIndices)[1]);
-    register s32 offset3 = (3 * (*vertexIndices)[2]);
-
-    register s32 x1 = *(vertexData + offset1 + 0);
-    register s32 y1 = *(vertexData + offset1 + 1);
-    register s32 z1 = *(vertexData + offset1 + 2);
-
-    register s32 x2 = *(vertexData + offset2 + 0);
-    register s32 y2 = *(vertexData + offset2 + 1);
-    register s32 z2 = *(vertexData + offset2 + 2);
-
-    register s32 x3 = *(vertexData + offset3 + 0);
-    register s32 y3 = *(vertexData + offset3 + 1);
-    register s32 z3 = *(vertexData + offset3 + 2);
+    Vec3f n;
+    Vec3i offset; // data offset
+    Vec3i v1, v2, v3;
+    // vec3s_to_vec3i(offset, (*vertexIndices));
+    // vec3i_mul_val(offset, 3);
+    offset[0] = (3 * (*vertexIndices)[0]);
+    offset[1] = (3 * (*vertexIndices)[1]);
+    offset[2] = (3 * (*vertexIndices)[2]);
+    vec3s_to_vec3i(v1, (vertexData + offset[0]));
+    vec3s_to_vec3i(v2, (vertexData + offset[1]));
+    vec3s_to_vec3i(v3, (vertexData + offset[2]));
 
     // (v2 - v1) x (v3 - v2)
-    register f32 nx = ((y2 - y1) * (z3 - z2) - (z2 - z1) * (y3 - y2));
-    register f32 ny = ((z2 - z1) * (x3 - x2) - (x2 - x1) * (z3 - z2));
-    register f32 nz = ((x2 - x1) * (y3 - y2) - (y2 - y1) * (x3 - x2));
-
-#if defined(FAST_INVSQRT) && defined(FAST_INVSQRT_SURFACES)
-    //! Broken
-    register f32 mag = Q_rsqrtf(sqr(nx) + sqr(ny) + sqr(nz));
-#else
-    register f32 mag = sqrtf(sqr(nx) + sqr(ny) + sqr(nz));
-    // Checking to make sure no DIV/0
-    if (mag < 0.0001f) return NULL;
-    mag = (f32)(1.0f / mag);
-#endif
-    nx *= mag;
-    ny *= mag;
-    nz *= mag;
+    //! inverse cross product?
+    n[0] = ((v2[1] - v1[1]) * (v3[2] - v2[2]) - (v2[2] - v1[2]) * (v3[1] - v2[1]));
+    n[1] = ((v2[2] - v1[2]) * (v3[0] - v2[0]) - (v2[0] - v1[0]) * (v3[2] - v2[2]));
+    n[2] = ((v2[0] - v1[0]) * (v3[1] - v2[1]) - (v2[1] - v1[1]) * (v3[0] - v2[0]));
+    vec3f_normalize(n);
 
     surface = alloc_surface();
+    vec3i_to_vec3s(surface->vertex1, v1);
+    vec3i_to_vec3s(surface->vertex2, v2);
+    vec3i_to_vec3s(surface->vertex3, v3);
+    surface->normal.x   = n[0];
+    surface->normal.y   = n[1];
+    surface->normal.z   = n[2];
 
-    surface->vertex1[0] = x1;
-    surface->vertex2[0] = x2;
-    surface->vertex3[0] = x3;
+    // why does this only use the first vertex?
+    //! surface->originOffset = -vec3f_dot(n, v1); but v1 is s32
+    surface->originOffset = -((n[0] * v1[0]) + (n[1] * v1[1]) + (n[2] * v1[2]));
 
-    surface->vertex1[1] = y1;
-    surface->vertex2[1] = y2;
-    surface->vertex3[1] = y3;
-
-    surface->vertex1[2] = z1;
-    surface->vertex2[2] = z2;
-    surface->vertex3[2] = z3;
-
-    surface->normal.x   = nx;
-    surface->normal.y   = ny;
-    surface->normal.z   = nz;
-
-    surface->originOffset = -((nx * x1) + (ny * y1) + (nz * z1));
-
-    surface->lowerY = (min_3i(y1, y2, y3) - 5);
-    surface->upperY = (max_3i(y1, y2, y3) + 5);
+    surface->lowerY = (min_3i(v1[1], v2[1], v3[1]) - 5);
+    surface->upperY = (max_3i(v1[1], v2[1], v3[1]) + 5);
 
     return surface;
 }
@@ -309,7 +285,7 @@ static void load_static_surfaces(Collision **data, Collision *vertexData, Surfac
     Bool32 flags = surf_has_no_cam_collision(surfaceType);
     numSurfaces = *(*data);
     (*data)++;
-    for (i = 0; i < numSurfaces; i++) {
+    for ((i = 0); (i < numSurfaces); (i++)) {
         if (*surfaceRooms != NULL) room = *(*surfaceRooms)++;
         surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
@@ -464,7 +440,7 @@ void load_area_terrain(s32 index, Collision *data, RoomData *surfaceRooms, Macro
     gNumStaticSurfaceNodes = gSurfaceNodesAllocated;
     gNumStaticSurfaces     = gSurfacesAllocated;
 #if PUPPYPRINT_DEBUG
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
 }
 
@@ -484,8 +460,8 @@ void clear_dynamic_surfaces(void) {
  */
 void transform_object_vertices(Collision **data, Collision *vertexData) {
     register Collision *vertices;
-    register f32 vx, vy, vz;
     register Collision numVertices;
+    Vec3f v;
     Mat4 *objectTransform;
     Mat4 m;
     objectTransform = &gCurrentObject->transform;
@@ -499,18 +475,18 @@ void transform_object_vertices(Collision **data, Collision *vertexData) {
     obj_apply_scale_to_matrix(gCurrentObject, m, *objectTransform);
     // Go through all vertices, rotating and translating them to transform the object.
     while (numVertices--) {
-        vx = *(vertices++);
-        vy = *(vertices++);
-        vz = *(vertices++);
+        v[0] = *(vertices++);
+        v[1] = *(vertices++);
+        v[2] = *(vertices++);
         //! No bounds check on vertex data
-        if ((vx == 0) && (vy == 0) && (vz == 0)) {
+        if ((v[0] == 0) && (v[1] == 0) && (v[2] == 0)) {
             *vertexData++ = (Collision)(m[3][0]);
             *vertexData++ = (Collision)(m[3][1]);
             *vertexData++ = (Collision)(m[3][2]);
         } else {
-            *vertexData++ = (Collision)((vx * m[0][0]) + (vy * m[1][0]) + (vz * m[2][0]) + m[3][0]);
-            *vertexData++ = (Collision)((vx * m[0][1]) + (vy * m[1][1]) + (vz * m[2][1]) + m[3][1]);
-            *vertexData++ = (Collision)((vx * m[0][2]) + (vy * m[1][2]) + (vz * m[2][2]) + m[3][2]);
+            *vertexData++ = (Collision)((v[0] * m[0][0]) + (v[1] * m[1][0]) + (v[2] * m[2][0]) + m[3][0]);
+            *vertexData++ = (Collision)((v[0] * m[0][1]) + (v[1] * m[1][1]) + (v[2] * m[2][1]) + m[3][1]);
+            *vertexData++ = (Collision)((v[0] * m[0][2]) + (v[1] * m[1][2]) + (v[2] * m[2][2]) + m[3][2]);
         }
     }
     *data = vertices;
@@ -532,7 +508,7 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
     RoomData room = ((gCurrentObject->behavior == segmented_to_virtual(bhvDddWarp)) ? 5 : 0);
-    for (i = 0; i < numSurfaces; i++) {
+    for ((i = 0); (i < numSurfaces); (i++)) {
         struct Surface *surface = read_surface_data(vertexData, data);
         if (surface != NULL) {
             surface->object = gCurrentObject;
@@ -567,7 +543,7 @@ void get_optimal_coll_dist(struct Object *o) {
     while (vertsLeft) {
         vec3s_to_vec3f(v, collisionData);
         vec3f_mul(v, o->header.gfx.scale);
-        thisVertDist = (sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
+        thisVertDist = vec3f_sumsq(v);
         if (thisVertDist > maxDist) maxDist = thisVertDist;
         collisionData += 3;
         vertsLeft--;
@@ -605,6 +581,6 @@ void load_object_collision_model(void) {
         gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     }
 #if PUPPYPRINT_DEBUG
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
 }

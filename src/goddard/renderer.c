@@ -1090,7 +1090,7 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
     Vtx *vtx = NULL;
     s32 i;
     // Add the vertex index to the buffer if it doesn't already exist
-    for (i = sVertexBufStartIndex; i < (sVertexBufStartIndex + sVertexBufCount); i++) {
+    for ((i = sVertexBufStartIndex); (i < (sVertexBufStartIndex + sVertexBufCount)); (i++)) {
         if ((sCurrentGdDl->vtx[i].n.ob[0] == (RawVertexData) x)
          && (sCurrentGdDl->vtx[i].n.ob[1] == (RawVertexData) y)
          && (sCurrentGdDl->vtx[i].n.ob[2] == (RawVertexData) z)) {
@@ -1100,15 +1100,11 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
     }
     sVertexBufCount++;
     sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) sCurrentGdDl->curVtxIdx;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[0] = (RawVertexData) x;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[1] = (RawVertexData) y;
-    DL_CURRENT_VTX(sCurrentGdDl).n.ob[2] = (RawVertexData) z;
+    vec3s_set(DL_CURRENT_VTX(sCurrentGdDl).n.ob, x, y, z);
     DL_CURRENT_VTX(sCurrentGdDl).n.flag  = 0;
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[0] = sVtxCvrtTCBuf[0];
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[1] = sVtxCvrtTCBuf[1];
-    DL_CURRENT_VTX(sCurrentGdDl).n.n[0]  = sVtxCvrtNormBuf[0];
-    DL_CURRENT_VTX(sCurrentGdDl).n.n[1]  = sVtxCvrtNormBuf[1];
-    DL_CURRENT_VTX(sCurrentGdDl).n.n[2]  = sVtxCvrtNormBuf[2];
+    vec3c_copy(DL_CURRENT_VTX(sCurrentGdDl).n.n, sVtxCvrtNormBuf);
     DL_CURRENT_VTX(sCurrentGdDl).n.a     = (Alpha)(alpha * 255.0f);
     vtx = &DL_CURRENT_VTX(sCurrentGdDl);
     next_vtx();
@@ -1214,7 +1210,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     vec[1] = (cam->lookatMtx[1][2] + phongLightPosition[1]);
     vec[0] = (cam->lookatMtx[2][2] + phongLightPosition[2]);
 #ifdef FAST_INVSQRT
-    mag = Q_rsqrtf(sqr(vec[2]) + sqr(vec[1]) + sqr(vec[0]));
+    mag = Q_rsqrtf(vec3f_sumsq(vec));
     if (mag > 0.1f) {
 #else
     mag = vec3f_mag(vec);
@@ -1677,7 +1673,7 @@ void gd_init(void) {
     sActiveView           = sScreenView;
     // Zero out controller inputs
     data = (s8 *) &gGdCtrl;
-    for (i = 0; (u32) i < sizeof(struct GdControl); i++) *data++ = 0;
+    for ((i = 0); ((u32) i < sizeof(struct GdControl)); (i++)) *data++ = 0;
     // 801A5868
     gGdCtrl.newStartPress  = FALSE;
     gGdCtrl.prevFrame      = &gGdCtrlPrev;

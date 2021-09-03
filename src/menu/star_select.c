@@ -108,7 +108,7 @@ void render_100_coin_star(u8 stars) {
 void bhv_act_selector_init(void) {
     s16 i = 0;
     ModelID selectorModelIDs[10];
-    u8 stars = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+    u8 stars = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     sVisibleStars = 0;
     while (i != sObtainedStars) {
         if (stars & (1 << sVisibleStars)) { // Star has been collected
@@ -119,17 +119,17 @@ void bhv_act_selector_init(void) {
             // If this is the first star that has not been collected, set
             // the default selection to this star.
             if (sInitSelectedActNum == 0) {
-                sInitSelectedActNum  = sVisibleStars + 1;
-                sSelectableStarIndex = sVisibleStars;
+                sInitSelectedActNum  = (sVisibleStars + 1);
+                sSelectableStarIndex =  sVisibleStars;
             }
         }
         sVisibleStars++;
     }
     // If the stars have been collected in order so far, show the next star.
-    if (sVisibleStars == sObtainedStars && sVisibleStars != 6) {
+    if ((sVisibleStars == sObtainedStars) && (sVisibleStars != 6)) {
         selectorModelIDs[sVisibleStars] = MODEL_TRANSPARENT_STAR;
-        sInitSelectedActNum             = sVisibleStars + 1;
-        sSelectableStarIndex            = sVisibleStars;
+        sInitSelectedActNum             = (sVisibleStars + 1);
+        sSelectableStarIndex            =  sVisibleStars;
         sVisibleStars++;
     }
     // If all stars have been collected, set the default selection to the last star.
@@ -137,18 +137,18 @@ void bhv_act_selector_init(void) {
     // Render star selector objects
 #ifdef WIDE
     if (gWidescreen) {
-        for (i = 0; i < sVisibleStars; i++) {
+        for ((i = 0); (i < sVisibleStars); (i++)) {
             sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     } else {
-        for (i = 0; i < sVisibleStars; i++) {
+        for ((i = 0); (i < sVisibleStars); (i++)) {
             sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, 75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
         }
     }
 #else
-    for (i = 0; i < sVisibleStars; i++) {
+    for ((i = 0); (i < sVisibleStars); (i++)) {
         sStarSelectorModels[i] = spawn_object_abs_with_rot(gCurrentObject, 0, selectorModelIDs[i], bhvActSelectorStarType, 75 + sVisibleStars * -75 + i * 152, 248, -300, 0x0, 0x0, 0x0);
         sStarSelectorModels[i]->oStarSelectorSize = 1.0f;
     }
@@ -166,16 +166,16 @@ void bhv_act_selector_init(void) {
 void bhv_act_selector_loop(void) {
     s8 i;
     u8 starIndexCounter;
-    u8 stars = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+    u8 stars = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     if (sObtainedStars != 6) {
         // Sometimes, stars are not selectable even if they appear on the screen.
         // This code filters selectable and non-selectable stars.
         sSelectedActIndex = 0;
         handle_menu_scrolling(MENU_SCROLL_HORIZONTAL, &sSelectableStarIndex, 0, sObtainedStars);
         starIndexCounter = sSelectableStarIndex;
-        for (i = 0; i < sVisibleStars; i++) {
+        for ((i = 0); (i < sVisibleStars); (i++)) {
             // Can the star be selected (is it either already completed or the first non-completed mission)
-            if ((stars & (1 << i)) || i + 1 == sInitSelectedActNum) {
+            if ((stars & (1 << i)) || ((i + 1) == sInitSelectedActNum)) {
                 if (starIndexCounter == 0) { // We have reached the sSelectableStarIndex-th selectable star.
                     sSelectedActIndex = i;
                     break;
@@ -189,7 +189,7 @@ void bhv_act_selector_loop(void) {
         sSelectedActIndex = sSelectableStarIndex;
     }
     // Star selector type handler
-    for (i = 0; i < sVisibleStars; i++) sStarSelectorModels[i]->oStarSelectorType = (sSelectedActIndex == i ? STAR_SELECTOR_SELECTED : STAR_SELECTOR_NOT_SELECTED);
+    for ((i = 0); (i < sVisibleStars); (i++)) sStarSelectorModels[i]->oStarSelectorType = ((sSelectedActIndex == i) ? STAR_SELECTOR_SELECTED : STAR_SELECTOR_NOT_SELECTED);
 }
 
 /**
@@ -217,7 +217,7 @@ void print_course_number(void) {
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     int_to_str(gCurrCourseNum, courseNum);
-    print_hud_lut_string_centered(HUD_LUT_GLOBAL, ((SCREEN_WIDTH/2)-4), 158, courseNum); // was ((gCurrCourseNum < 10) ? 152 : 143), 1 or 2 digit number
+    print_hud_lut_string_centered(HUD_LUT_GLOBAL, ((SCREEN_WIDTH / 2) - 4), 158, courseNum); // was ((gCurrCourseNum < 10) ? 152 : 143), 1 or 2 digit number
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
 }
 
@@ -275,12 +275,12 @@ void print_act_selector_strings(void) {
     // Print the coin highscore.
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    print_hud_my_score_coins(TRUE, gCurrSaveFileNum - 1, gCurrCourseNum - 1, 155, 106);
+    print_hud_my_score_coins(TRUE, (gCurrSaveFileNum - 1), (gCurrCourseNum - 1), 155, 106);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
     // Print the "MY SCORE" text if the coin score is more than 0
-    if (save_file_get_course_coin_score(gCurrSaveFileNum - 1, gCurrCourseNum - 1) != 0) {
+    if (save_file_get_course_coin_score((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) != 0) {
 #ifdef VERSION_EU
         print_generic_string(95, 118, myScore[language]);
 #else
@@ -288,10 +288,10 @@ void print_act_selector_strings(void) {
 #endif
     }
 #ifdef VERSION_EU
-    print_generic_string(get_str_x_pos_from_center(160, currLevelName + 3, 10.0f), 33, currLevelName + 3);
+    print_generic_string(get_str_x_pos_from_center(160, (currLevelName + 3), 10.0f), 33, currLevelName + 3);
 #else
-    lvlNameX = get_str_x_pos_from_center(160, currLevelName + 3, 10.0f);
-    print_generic_string(lvlNameX, 33, currLevelName + 3);
+    lvlNameX = get_str_x_pos_from_center(160, (currLevelName + 3), 10.0f);
+    print_generic_string(lvlNameX, 33, (currLevelName + 3));
 #endif
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 #ifdef VERSION_EU
@@ -303,7 +303,7 @@ void print_act_selector_strings(void) {
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
     // Print the name of the selected act.
     if (sVisibleStars != 0) {
-        selectedActName = segmented_to_virtual(actNameTbl[(gCurrCourseNum - 1) * 6 + sSelectedActIndex]);
+        selectedActName = segmented_to_virtual(actNameTbl[((gCurrCourseNum - 1) * 6) + sSelectedActIndex]);
 #ifdef VERSION_EU
         print_menu_generic_string(get_str_x_pos_from_center(ACT_NAME_X, selectedActName, 8.0f), 81, selectedActName);
 #else
@@ -313,12 +313,12 @@ void print_act_selector_strings(void) {
     }
 
     // Print the numbers above each star.
-    for (i = 1; i <= sVisibleStars; i++) {
+    for ((i = 1); (i <= sVisibleStars); (i++)) {
         starNumbers[0] = i;
 #ifdef VERSION_EU
-        print_menu_generic_string(143 - sVisibleStars * 15 + i * 30, 38, starNumbers);
+        print_menu_generic_string(((143 - (sVisibleStars * 15)) + (i * 30)), 38, starNumbers);
 #else
-        print_menu_generic_string(139 - sVisibleStars * 17 + i * 34, 38, starNumbers);
+        print_menu_generic_string(((139 - (sVisibleStars * 17)) + (i * 34)), 38, starNumbers);
 #endif
     }
 
@@ -338,12 +338,12 @@ Gfx *geo_act_selector_strings(s16 callContext, UNUSED struct GraphNode *node, UN
  * Also load how much stars a course has, without counting the 100 coin star.
  */
 s32 lvl_init_act_selector_values_and_stars(UNUSED s32 arg, UNUSED s32 unused) {
-    u8 stars              = save_file_get_star_flags(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+    u8 stars              = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     sLoadedActNum         = 0;
     sInitSelectedActNum   = 0;
     sVisibleStars         = 0;
     sActSelectorMenuTimer = 0;
-    sObtainedStars = save_file_get_course_star_count(gCurrSaveFileNum - 1, gCurrCourseNum - 1);
+    sObtainedStars = save_file_get_course_star_count((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     // Don't count 100 coin star
     if (stars & (1 << 6)) sObtainedStars--;
     return 0;
@@ -372,8 +372,8 @@ s32 lvl_update_obj_and_load_act_button_actions(UNUSED s32 arg, UNUSED s32 unused
             queue_rumble_data(60, 70);
             queue_rumble_decay(1);
 #endif
-            sLoadedActNum       = (sInitSelectedActNum >= sSelectedActIndex + 1) ? (sSelectedActIndex + 1) : sInitSelectedActNum;
-            gDialogCourseActNum = sSelectedActIndex + 1;
+            sLoadedActNum       = ((sInitSelectedActNum >= (sSelectedActIndex + 1)) ? (sSelectedActIndex + 1) : sInitSelectedActNum);
+            gDialogCourseActNum = (sSelectedActIndex + 1);
         }
     }
     area_update_objects();

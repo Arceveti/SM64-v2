@@ -1459,7 +1459,7 @@ static int stbi__getn(stbi__context *s, stbi_uc *buffer, int n)
       }
    }
 
-   if (s->img_buffer+n <= s->img_buffer_end) {
+   if (s->img_buffer + n <= s->img_buffer_end) {
       memcpy(buffer, s->img_buffer, n);
       s->img_buffer += n;
       return 1;
@@ -1530,9 +1530,9 @@ static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int r
       return stbi__errpuc("outofmem", "Out of memory");
    }
 
-   for (j=0; j < (int) y; ++j) {
-      unsigned char *src  = data + j * x * img_n   ;
-      unsigned char *dest = good + j * x * req_comp;
+   for ((j = 0); (j < (int) y); (++j)) {
+      unsigned char *src  = (data + (j * x * img_n   ));
+      unsigned char *dest = (good + (j * x * req_comp));
 
       #define STBI__COMBO(a,b)  ((a)*8+(b))
       #define STBI__CASE(a,b)   case STBI__COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
@@ -4019,19 +4019,19 @@ static int stbi__parse_huffman_block(stbi__zbuf *a)
 
 static int stbi__compute_huffman_codes(stbi__zbuf *a)
 {
-   static const stbi_uc length_dezigzag[19] = { 16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15 };
+   static const stbi_uc length_dezigzag[19] = { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 };
    stbi__zhuffman z_codelength;
-   stbi_uc lencodes[286+32+137];//padding for maximum single op
+   stbi_uc lencodes[286 + 32 + 137]; // padding for maximum single op
    stbi_uc codelength_sizes[19];
    int i,n;
 
-   int hlit  = stbi__zreceive(a,5) + 257;
-   int hdist = stbi__zreceive(a,5) + 1;
-   int hclen = stbi__zreceive(a,4) + 4;
-   int ntot  = hlit + hdist;
+   int hlit  = stbi__zreceive(a, 5) + 257;
+   int hdist = stbi__zreceive(a, 5) + 1;
+   int hclen = stbi__zreceive(a, 4) + 4;
+   int ntot  = (hlit + hdist);
 
    memset(codelength_sizes, 0, sizeof(codelength_sizes));
-   for (i=0; i < hclen; ++i) {
+   for ((i = 0); (i < hclen); (++i)) {
       int s = stbi__zreceive(a,3);
       codelength_sizes[length_dezigzag[i]] = (stbi_uc) s;
    }
@@ -4046,14 +4046,14 @@ static int stbi__compute_huffman_codes(stbi__zbuf *a)
       else {
          stbi_uc fill = 0;
          if (c == 16) {
-            c = stbi__zreceive(a,2)+3;
+            c = (stbi__zreceive(a, 2) + 3);
             if (n == 0) return stbi__err("bad codelengths", "Corrupt PNG");
-            fill = lencodes[n-1];
+            fill = lencodes[n - 1];
          } else if (c == 17)
-            c = stbi__zreceive(a,3)+3;
+            c = (stbi__zreceive(a, 3) + 3);
          else {
             STBI_ASSERT(c == 18);
-            c = stbi__zreceive(a,7)+11;
+            c = (stbi__zreceive(a, 7) + 11);
          }
          if (ntot - n < c) return stbi__err("bad codelengths", "Corrupt PNG");
          memset(lencodes+n, fill, c);
@@ -4061,8 +4061,8 @@ static int stbi__compute_huffman_codes(stbi__zbuf *a)
       }
    }
    if (n != ntot) return stbi__err("bad codelengths","Corrupt PNG");
-   if (!stbi__zbuild_huffman(&a->z_length, lencodes, hlit)) return 0;
-   if (!stbi__zbuild_huffman(&a->z_distance, lencodes+hlit, hdist)) return 0;
+   if (!stbi__zbuild_huffman(&a->z_length,    lencodes,  hlit        )) return 0;
+   if (!stbi__zbuild_huffman(&a->z_distance, (lencodes + hlit), hdist)) return 0;
    return 1;
 }
 
@@ -4083,11 +4083,11 @@ static int stbi__parse_uncompressed_block(stbi__zbuf *a)
    // now fill header the normal way
    while (k < 4)
       header[k++] = stbi__zget8(a);
-   len  = header[1] * 256 + header[0];
-   nlen = header[3] * 256 + header[2];
+   len  = ((header[1] * 256) + header[0]);
+   nlen = ((header[3] * 256) + header[2]);
    if (nlen != (len ^ 0xffff)) return stbi__err("zlib corrupt","Corrupt PNG");
-   if (a->zbuffer + len > a->zbuffer_end) return stbi__err("read past buffer","Corrupt PNG");
-   if (a->zout + len > a->zout_end)
+   if ((a->zbuffer + len) > a->zbuffer_end) return stbi__err("read past buffer","Corrupt PNG");
+   if ((a->zout + len) > a->zout_end)
       if (!stbi__zexpand(a, a->zout, len)) return 0;
    memcpy(a->zout, a->zbuffer, len);
    a->zbuffer += len;
@@ -4102,8 +4102,8 @@ static int stbi__parse_zlib_header(stbi__zbuf *a)
    /* int cinfo = cmf >> 4; */
    int flg   = stbi__zget8(a);
    if ((cmf*256+flg) % 31 != 0) return stbi__err("bad zlib header","Corrupt PNG"); // zlib spec
-   if (flg & 32) return stbi__err("no preset dict","Corrupt PNG"); // preset dictionary not allowed in png
-   if (cm != 8) return stbi__err("bad compression","Corrupt PNG"); // DEFLATE required for png
+   if (flg & 32) return stbi__err("no preset dict",  "Corrupt PNG"); // preset dictionary not allowed in png
+   if (cm !=  8) return stbi__err("bad compression", "Corrupt PNG"); // DEFLATE required for png
    // window = 1 << (8 + cinfo)... but who cares, we fully buffer output
    return 1;
 }

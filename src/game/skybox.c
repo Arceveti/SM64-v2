@@ -269,11 +269,11 @@ Gfx *create_skybox_facing_camera(s8 player, s8 background, f32 fov, Vec3f pos, V
     // If the first star is collected in JRB, make the sky darker and slightly green
     if ((background == 8) && !(save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & 0x1)) colorIndex = 0;
 #ifdef UNLOCK_SKYBOX_FOV
-    if (fov == 0.0f) fov = (90.0f);// * (gFieldOfView / 100.0f));
+    if (fov == 0.0f) fov = (90.0f); // * (gFieldOfView / 100.0f));
 #else
     //! fov is always set to 90.0f. If this line is removed, then the game crashes because fov is 0 on
     //! the first frame, which causes a floating point divide by 0
-    fov = (90.0f);// * (gFieldOfView / 100.0f));
+    fov = (90.0f); // * (gFieldOfView / 100.0f));
 #endif
     sSkyBoxInfo[player].yaw           = atan2s(cameraFace[2], cameraFace[0]);
     sSkyBoxInfo[player].pitch         = atan2s(sqrtf(sqr(cameraFace[0]) + sqr(cameraFace[2])), cameraFace[1]);

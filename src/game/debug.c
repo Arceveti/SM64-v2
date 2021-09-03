@@ -179,7 +179,7 @@ void print_string_array_info(const char **strArr) {
     if (!sDebugStringArrPrinted) {
         sDebugStringArrPrinted = TRUE;
         // sDebugPage is assumed to be 4 or 5 here.
-        for (i = 0; i < 8; i++) print_debug_top_down_mapinfo(strArr[i], gDebugInfo[sDebugPage][i]);
+        for ((i = 0); (i < 8); (i++)) print_debug_top_down_mapinfo(strArr[i], gDebugInfo[sDebugPage][i]);
         // modify the cursor position so the cursor prints at the correct location.
         // this is equivalent to (sDebugSysCursor - 8)
         set_text_array_x_y(0, (-1 - (u32)(7 - sDebugSysCursor)));

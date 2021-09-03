@@ -53,7 +53,7 @@ void show_crash_screen_and_hang(void) {
         fb_print_str(80, 20, "AN ERROR HAS OCCURRED!");
         fb_print_int_hex(80, 30, errno, 8);
         fb_print_str(95, 30, szErrCodes[errno]);
-        if (errno >= 2 && errno <= 5) {
+        if ((errno >= 2) && (errno <= 5)) {
             /*
             2 UNMAPPED LOAD ADDR
             3 UNMAPPED STORE ADDR
@@ -80,7 +80,7 @@ void show_crash_screen_and_hang(void) {
     }
     fb_print_str(80, 50, "PC");
     fb_print_int_hex(95, 50, epc, 32);
-    fb_print_gpr_states(80, 70, szGPRegisters1, &exceptionRegContext[6 + 0]);
+    fb_print_gpr_states( 80, 70, szGPRegisters1, &exceptionRegContext[6 + 0]);
     fb_print_gpr_states(145, 70, szGPRegisters2, &exceptionRegContext[6 + (15 * 2)]);
     fb_swap();
     osWritebackDCacheAll();
@@ -199,7 +199,7 @@ int fb_print_uint(int x, int y, u32 value) {
 
 void fb_print_gpr_states(int x, int y, const char *regNames[], u32 *regContext) {
     int i;
-    for (i = 0;; i++) {
+    for ((i = 0); ; (i++)) {
         if (regNames[i] == NULL) break;
         fb_print_str(x, y, regNames[i]);
         fb_print_int_hex((x + 15), y, regContext[(i * 2) + 1], 32);

@@ -340,7 +340,7 @@ void draw_reset_bars(void) {
         }
         fbPtr  = (u64 *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[fbNum]);
         fbPtr += (gNmiResetBarsTimer++ * (SCREEN_WIDTH / 4));
-        for (width = 0; width < ((SCREEN_HEIGHT / 16) + 1); width++) {
+        for ((width = 0); (width < ((SCREEN_HEIGHT / 16) + 1)); (width++)) {
             // Loop must be one line to match on -O2
             for ((height = 0); (height < (SCREEN_WIDTH / 4)); (height++)) *fbPtr++ = 0;
             fbPtr += ((SCREEN_WIDTH / 4) * 14);

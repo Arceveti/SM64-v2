@@ -9,13 +9,13 @@ void bub_spawner_act_spawn_bubs(void) {
     s32 i;
     s32 amt = o->oCheepCheepSpawnerSpawnAmount;
     if (o->oDistanceToMario < 1500.0f) {
-        for (i = 0; i < amt; i++) spawn_object(o, MODEL_BUB, bhvBub);
+        for ((i = 0); (i < amt); (i++)) spawn_object(o, MODEL_BUB, bhvBub);
         o->oAction = BUB_SPAWNER_ACT_IDLE;
     }
 }
 
 void bub_spawner_act_idle(void) {
-    if (gMarioObject->oPosY - o->oPosY > 2000.0f) o->oAction = BUB_SPAWNER_ACT_REMOVE_BUBS;
+    if ((gMarioObject->oPosY - o->oPosY) > 2000.0f) o->oAction = BUB_SPAWNER_ACT_REMOVE_BUBS;
 }
 
 void bub_spawner_act_remove_bubs(void) {
@@ -37,8 +37,8 @@ void bhv_bub_spawner_loop(void) {
 
 void bub_move_vertically(s32 ySpeed) {
     f32 parentY = o->parentObj->oPosY;
-    if (((parentY - 100.0f - o->oCheepCheepMaxYOffset) < o->oPosY)
-        && (o->oPosY < (parentY + 1000.0f + o->oCheepCheepMaxYOffset))) {
+    if ((((parentY - 100.0f) - o->oCheepCheepMaxYOffset) < o->oPosY)
+        && (o->oPosY < ((parentY + 1000.0f) + o->oCheepCheepMaxYOffset))) {
         approach_f32_symmetric_bool(&o->oPosY, o->oCheepCheepTargetY, ySpeed);
     }
 }

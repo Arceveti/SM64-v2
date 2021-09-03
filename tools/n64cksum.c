@@ -72,9 +72,9 @@ void n64cksum_update_checksums(uint8_t *buf)
    n64cksum_calc_6102(buf, calc_cksum);
 
    // mimic the n64sums output
-   for (i = 0; i < 2; i++) {
+   for ((i = 0); (i < 2); (i++)) {
       read_cksum[i] = read_u32_be(&buf[cksum_offsets[i]]);
-      INFO("CRC%d: 0x%08X ", i+1, read_cksum[i]);
+      INFO("CRC%d: 0x%08X ", (i + 1), read_cksum[i]);
       INFO("Calculated: 0x%08X ", calc_cksum[i]);
       if (calc_cksum[i] == read_cksum[i]) {
          INFO("(Good)\n");

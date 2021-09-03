@@ -55,7 +55,7 @@ void calc_face_normal(struct ObjFace *face) {
 /* @ 245CDC for 0x118 */
 struct ObjVertex *gd_make_vertex(f32 x, f32 y, f32 z) {
     struct ObjVertex *vtx = (struct ObjVertex *) make_object(OBJ_TYPE_VERTICES);
-    vtx->id          = 0xD1D4;
+    vtx->id          = 0xD1D4; //?
     vec3f_set(vtx->pos,     x, y, z);
     vec3f_set(vtx->initPos, x, y, z);
     vtx->scaleFactor = 1.0f;
@@ -307,7 +307,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     grabberJoint                    = make_grabber_joint(sGrabJointTestShape, 0, -250.0f, -150.0f, 300.0f);
     faceJoint                       = d_use_obj("N149l");  // DYNOBJ_MARIO_LEFT_LIP_CORNER_JOINT_1
     grabberJoint->attachedObjsGrp   = make_group(1, faceJoint);
-    faceJoint                       = d_use_obj("N6l");  // DYNOBJ_MARIO_RIGHT_MUSTACHE_JOINT_1
+    faceJoint                       = d_use_obj("N6l"  );  // DYNOBJ_MARIO_RIGHT_MUSTACHE_JOINT_1
     addto_group(grabberJoint->attachedObjsGrp, faceJoint);
     // make the left eye follow cursor
     grabberJoint                    = make_grabber_joint(sGrabJointTestShape, 0,  100.0f,  200.0f, 400.0f);
@@ -318,7 +318,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     grabberJoint->header.drawFlags &= ~OBJ_IS_GRABBALE;
     // make the right eye follow cursor
     grabberJoint                    = make_grabber_joint(sGrabJointTestShape, 0, -100.0f,  200.0f, 400.0f);
-    faceJoint                       = d_use_obj("N96l");  // DYNOBJ_MARIO_LEFT_EYE_UNKNOWN_NET
+    faceJoint                       = d_use_obj("N96l" );  // DYNOBJ_MARIO_LEFT_EYE_UNKNOWN_NET
     grabberJoint->attachedObjsGrp   = make_group(1, faceJoint);
     grabberJoint->updateFunc        = eye_joint_update_func;
     grabberJoint->rootAnimator      = animator;

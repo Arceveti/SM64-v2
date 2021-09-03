@@ -21,7 +21,7 @@ static void cloud_act_spawn_parts(void) {
     struct Object *cloudPart;
     s32 i;
     // Spawn the pieces of the cloud itself
-    for (i = 0; i < 5; i++) {
+    for ((i = 0); (i < 5); (i++)) {
         cloudPart = spawn_object_relative(i, 0, 0, 0, o, MODEL_MIST, bhvCloudPart);
         if (cloudPart != NULL) obj_set_billboard(cloudPart);
     }

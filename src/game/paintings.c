@@ -609,7 +609,7 @@ void painting_generate_mesh(struct Painting *painting, PaintingData *mesh, Paint
     s16 i;
     gPaintingMesh = mem_pool_alloc(gEffectsMemoryPool, numTris * sizeof(struct PaintingMeshVertex));
     // accesses are off by 1 since the first entry is the number of vertices
-    for (i = 0; i < numTris; i++) {
+    for ((i = 0); (i < numTris); (i++)) {
         gPaintingMesh[i].pos[0] = mesh[(i * 3) + 1];
         gPaintingMesh[i].pos[1] = mesh[(i * 3) + 2];
         // The "z coordinate" of each vertex in the mesh is either 1 or 0. Instead of being an
@@ -636,7 +636,7 @@ void painting_generate_mesh(struct Painting *painting, PaintingData *mesh, Paint
 void painting_calculate_triangle_normals(PaintingData *mesh, PaintingData numVtx, PaintingData numTris) {
     s16 i;
     gPaintingTriNorms = mem_pool_alloc(gEffectsMemoryPool, numTris * sizeof(Vec3f));
-    for (i = 0; i < numTris; i++) {
+    for ((i = 0); (i < numTris); (i++)) {
         PaintingData tri = ((numVtx * 3) + (i * 3) + 2); // Add 2 because of the 2 length entries preceding the list
         PaintingData v0 = mesh[tri];
         PaintingData v1 = mesh[tri + 1];
@@ -723,7 +723,7 @@ Gfx *render_painting(Texture *img, TextureCoord tWidth, TextureCoord tHeight, Te
     Gfx *gfx         = dlist;
     gLoadBlockTexture(gfx++, tWidth, tHeight, G_IM_FMT_RGBA, img);
     // Draw the groups of 5 first
-    for (group = 0; group < triGroups; group++) {
+    for ((group = 0); (group < triGroups); (group++)) {
         // The triangle groups are the second part of the texture map.
         // Each group is a list of 15 mappings
         triGroup = ((mapVerts * 3) + (group * 15) + 2);

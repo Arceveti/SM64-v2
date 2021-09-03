@@ -451,18 +451,14 @@ void alloc_animdata(struct ObjAnimator *animator) {
             allocSpace = gd_malloc_perm(curAnimSrc->count * datasize); // gd_alloc_perm
             if (allocSpace == NULL) gd_exit(); // can't allocate animation data
             if (curAnimSrc->type == GD_ANIM_SCALE3S_POS3S_ROT3S) {
-                for (dataIdx = 0; dataIdx < curAnimSrc->count; dataIdx++) {
+                for ((dataIdx = 0); (dataIdx < curAnimSrc->count); (dataIdx++)) {
                     halfarr = &((s16(*)[9]) curAnimSrc->data)[dataIdx];
                     curMtxVec = &((struct AnimMtxVec *) allocSpace)[dataIdx];
-                    tri.p0[0] = ((f32)(*halfarr)[0] * allocMtxScale);
-                    tri.p0[1] = ((f32)(*halfarr)[1] * allocMtxScale);
-                    tri.p0[2] = ((f32)(*halfarr)[2] * allocMtxScale);
-                    tri.p1[0] = ((f32)(*halfarr)[3] * allocMtxScale);
-                    tri.p1[1] = ((f32)(*halfarr)[4] * allocMtxScale);
-                    tri.p1[2] = ((f32)(*halfarr)[5] * allocMtxScale);
-                    tri.p2[0] =  (f32)(*halfarr)[6];
-                    tri.p2[1] =  (f32)(*halfarr)[7];
-                    tri.p2[2] =  (f32)(*halfarr)[8];
+                    vec3s_to_vec3f(tri.p0, halfarr[0]);
+                    vec3f_mul_val(tri.p0, allocMtxScale);
+                    vec3s_to_vec3f(tri.p1, halfarr[3]);
+                    vec3f_mul_val(tri.p1, allocMtxScale);
+                    vec3s_to_vec3f(tri.p2, halfarr[6]);
                     mtxf_identity(curMtxVec->matrix);
                     gd_rot_mat_about_vec3f(&curMtxVec->matrix, tri.p1);
                     vec3f_add(curMtxVec->matrix[3], tri.p2);

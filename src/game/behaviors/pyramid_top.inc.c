@@ -62,7 +62,7 @@ void bhv_pyramid_top_explode(void) {
     s16 i;
     spawn_mist_particles_variable(0, 0, 690.0f);
     // Generate 30 pyramid fragments with random properties.
-    for (i = 0; i < 30; i++) {
+    for ((i = 0); (i < 30); (i++)) {
         pyramidFragment = spawn_object(o, MODEL_DIRT_ANIMATION, bhvPyramidTopFragment);
         pyramidFragment->oForwardVel               = ((random_float() * 50.0f) + 80.0f);
         pyramidFragment->oVelY                     = ((random_float() * 80.0f) + 20.0f);

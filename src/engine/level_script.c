@@ -319,7 +319,7 @@ static void level_cmd_free_level_pool(void) {
     s32 i;
     alloc_only_pool_resize(sLevelPool, sLevelPool->usedSpace);
     sLevelPool = NULL;
-    for (i = 0; i < 8; i++) {
+    for ((i = 0); (i < 8); (i++)) {
         if (gAreaData[i].terrainData != NULL) {
             alloc_surface_pools();
             break;
@@ -434,10 +434,10 @@ static void level_cmd_create_instant_warp(void) {
     struct InstantWarp *warp;
     if (sCurrAreaIndex != -1) {
         if (gAreas[sCurrAreaIndex].instantWarps == NULL) {
-            gAreas[sCurrAreaIndex].instantWarps = alloc_only_pool_alloc(sLevelPool, 4 * sizeof(struct InstantWarp));
-            for (i = INSTANT_WARP_INDEX_START; i < INSTANT_WARP_INDEX_STOP; i++) gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
+            gAreas[sCurrAreaIndex].instantWarps = alloc_only_pool_alloc(sLevelPool, (4 * sizeof(struct InstantWarp)));
+            for ((i = INSTANT_WARP_INDEX_START); (i < INSTANT_WARP_INDEX_STOP); (i++)) gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
         }
-        warp                    = gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2);
+        warp                    = (gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2));
         warp[0].id              = 1;
         warp[0].area            = CMD_GET(u8,  3);
         warp[0].displacement[0] = CMD_GET(s16, 4);
@@ -458,7 +458,7 @@ static void level_cmd_create_painting_warp_node(void) {
     if (sCurrAreaIndex != -1) {
         if (gAreas[sCurrAreaIndex].paintingWarpNodes == NULL) {
             gAreas[sCurrAreaIndex].paintingWarpNodes = alloc_only_pool_alloc(sLevelPool, 45 * sizeof(struct WarpNode));
-            for (i = 0; i < 45; i++) gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
+            for ((i = 0); (i < 45); (i++)) gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
         }
         node            = &gAreas[sCurrAreaIndex].paintingWarpNodes[CMD_GET(u8, 2)];
         node->id        = 1;
@@ -484,8 +484,8 @@ static void level_cmd_3A(void) {
 
 static void level_cmd_create_whirlpool(void) {
     struct Whirlpool *whirlpool;
-    s32 index       = CMD_GET(u8, 2);
-    s32 beatBowser2 = (save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) != 0;
+    s32    index       = CMD_GET(u8, 2);
+    Bool32 beatBowser2 = ((save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) != 0);
     if (CMD_GET(u8, 3) == 0
      || (CMD_GET(u8, 3) == 1 && !beatBowser2)
      || (CMD_GET(u8, 3) == 2 &&  beatBowser2)
@@ -508,7 +508,7 @@ static void level_cmd_set_blackout(void) {
 }
 
 static void level_cmd_set_gamma(void) {
-    osViSetSpecialFeatures(CMD_GET(u8, 2) == 0 ? OS_VI_GAMMA_OFF : OS_VI_GAMMA_ON);
+    osViSetSpecialFeatures((CMD_GET(u8, 2) == 0) ? OS_VI_GAMMA_OFF : OS_VI_GAMMA_ON);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -544,8 +544,8 @@ static void level_cmd_set_macro_objects(void) {
         MacroObject *data = segmented_to_virtual(CMD_GET(void *, 4));
         s32 len = 0;
         while (data[len++] != MACRO_OBJECT_END()) len += 4;
-        gAreas[sCurrAreaIndex].macroObjects = alloc_only_pool_alloc(sLevelPool, len * sizeof(MacroObject));
-        memcpy(gAreas[sCurrAreaIndex].macroObjects, data, len * sizeof(MacroObject));
+        gAreas[sCurrAreaIndex].macroObjects = alloc_only_pool_alloc(sLevelPool, (len * sizeof(MacroObject)));
+        memcpy(gAreas[sCurrAreaIndex].macroObjects, data, (len * sizeof(MacroObject)));
 #endif
     }
     sCurrentCmd = CMD_NEXT;

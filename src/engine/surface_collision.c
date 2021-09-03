@@ -740,13 +740,13 @@ s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
 #endif
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
-    waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
+    waterLevel = find_water_floor(x, (gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1]), z, &floor);
     if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
 #else
     if (p != NULL) {
 #endif
         numRegions = *p++;
-        for (i = 0; i < numRegions; i++) {
+        for ((i = 0); (i < numRegions); (i++)) {
             // Read the data
             val = *p++;
             loX = *p++;
@@ -770,7 +770,7 @@ s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
 #endif
     }
 #if PUPPYPRINT_DEBUG
-    collisionTime[perfIteration] += (osGetTime()-first);
+    collisionTime[perfIteration] += (osGetTime() - first);
 #endif
     return waterLevel;
 }
@@ -788,13 +788,13 @@ s32 find_water_level(s32 x, s32 z) {
 #endif
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor;
-    waterLevel = find_water_floor(x, gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1], z, &floor);
-    if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
+    waterLevel = find_water_floor(x, (gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1]), z, &floor);
+    if ((p != NULL) && (waterLevel == FLOOR_LOWER_LIMIT)) {
 #else
     if (p != NULL) {
 #endif
         numRegions = *p++;
-        for (i = 0; i < numRegions; i++) {
+        for ((i = 0); (i < numRegions); (i++)) {
             // Read the data
             val = *p++;
             loX = *p++;

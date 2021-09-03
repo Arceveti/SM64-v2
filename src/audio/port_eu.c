@@ -133,13 +133,13 @@ void eu_process_audio_cmd(struct EuAudioCmd *cmd) {
         gSoundMode = cmd->u2.as_s32;
         break;
     case 0xf1:
-        for (i = 0; i < 4; i++) {
+        for ((i = 0); (i < 4); (i++)) {
             gSequencePlayers[i].muted = TRUE;
             gSequencePlayers[i].recalculateVolume = TRUE;
         }
         break;
     case 0xf2:
-        for (i = 0; i < 4; i++) {
+        for ((i = 0); (i < 4); (i++)) {
             gSequencePlayers[i].muted = FALSE;
             gSequencePlayers[i].recalculateVolume = TRUE;
         }

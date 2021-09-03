@@ -31,7 +31,7 @@ s16 sTextLabelsCount = 0;
 s32 int_pow(s32 n, s32 exponent) {
     s32 result = 1;
     s32 i;
-    for (i = 0; i < exponent; i++) result *= n;
+    for ((i = 0); (i < exponent); (i++)) result *= n;
     return result;
 }
 
@@ -299,8 +299,8 @@ void render_text_labels(void) {
     gSPPerspNormalize((Gfx *) (gDisplayListHead++), 0xFFFF);
     gSPMatrix(                 gDisplayListHead++, VIRTUAL_TO_PHYSICAL(mtx), (G_MTX_PROJECTION | G_MTX_LOAD | G_MTX_NOPUSH));
     gSPDisplayList(            gDisplayListHead++, dl_hud_img_begin);
-    for (i = 0; i < sTextLabelsCount; i++) {
-        for (j = 0; j < sTextLabels[i]->length; j++) {
+    for ((i = 0); (i < sTextLabelsCount); (i++)) {
+        for ((j = 0); (j < sTextLabels[i]->length); (j++)) {
             glyphIndex = char_to_glyph_index(sTextLabels[i]->buffer[j]);
 
             if (glyphIndex != GLYPH_SPACE) {

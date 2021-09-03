@@ -140,10 +140,10 @@ Bool32 mario_update_quicksand(struct MarioState *m, f32 sinkingSpeed) {
 
 Bool32 mario_push_off_steep_floor(struct MarioState *m, MarioAction action, u32 actionArg) {
     if (abs_angle_diff(m->floorYaw, m->faceAngle[1]) < DEG(90)) {
-        m->forwardVel   =  16.0f;// * (1.0f-m->floor->normal.y);
+        m->forwardVel   =  16.0f; // * (1.0f-m->floor->normal.y);
         m->faceAngle[1] = m->floorYaw;
     } else {
-        m->forwardVel   = -16.0f;// * (1.0f-m->floor->normal.y);
+        m->forwardVel   = -16.0f; // * (1.0f-m->floor->normal.y);
         m->faceAngle[1] = (m->floorYaw + DEG(180));
     }
     return set_mario_action(m, action, actionArg);
@@ -461,7 +461,7 @@ s32 bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *wallDa
     if (wallData->numWalls == 0) {
         m->wall = NULL;
     } else {
-        for (i = 0; i < wallData->numWalls; i++) {
+        for ((i = 0); (i < wallData->numWalls); (i++)) {
             if (wallData->walls[i] != NULL) {
                 if (wallData->walls[i]->type == SURFACE_BURNING) {
                     m->wall = wallData->walls[i];

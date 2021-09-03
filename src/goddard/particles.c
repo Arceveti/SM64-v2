@@ -14,8 +14,8 @@ typedef union {
 } VtxPtc;
 
 // fn declarations
-void   move_particle(  struct ObjParticle *ptc);
-void   func_80182A08(  struct ObjParticle *ptc, Vec3f b);
+void   move_particle( struct ObjParticle *ptc);
+void   accel_particle(struct ObjParticle *ptc, Vec3f b);
 
 /* 230CC0 -> 230DCC */
 struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z) {
@@ -31,7 +31,7 @@ struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z)
 }
 
 /* 2311D8 -> 231454 */
-void func_80182A08(struct ObjParticle *ptc, Vec3f b) {
+void accel_particle(struct ObjParticle *ptc, Vec3f b) {
     register struct ListNode *link;
     struct ObjParticle *linkedPtc;
     if (ptc->subParticlesGrp != NULL) {
@@ -124,11 +124,11 @@ void move_particle(struct ObjParticle *ptc) {
                 break;
             case 3:
                 if ((ptc->flags & GD_PARTICLE_FLAG_B) && !(ptc->flags & GD_PARTICLE_FLAG_A)) {
-                    func_80182A08(ptc, vec1);
+                    accel_particle(ptc, vec1);
                     ptc->flags |= GD_PARTICLE_FLAG_A;
                 }
                 break;
-            case 2: func_80182A08(ptc, vec2); break;
+            case 2: accel_particle(ptc, vec2); break;
         }
         apply_to_obj_types_in_group(OBJ_TYPE_PARTICLES, (applyproc_t) move_particle, ptc->subParticlesGrp);
     }

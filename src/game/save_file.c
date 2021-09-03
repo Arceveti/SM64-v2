@@ -430,7 +430,7 @@ u32 save_file_get_max_coin_score(s32 courseIndex) {
     s32 maxCoinScore    = -1;
     s32 maxScoreAge     = -1;
     s32 maxScoreFileNum =  0;
-    for (fileIndex = 0; fileIndex < NUM_SAVE_FILES; fileIndex++) {
+    for ((fileIndex = 0); (fileIndex < NUM_SAVE_FILES); (fileIndex++)) {
         if (save_file_get_star_flags(fileIndex, courseIndex) != 0) {
             s32 coinScore = save_file_get_course_coin_score(fileIndex, courseIndex);
             s32 scoreAge = get_coin_score_age(fileIndex, courseIndex);
@@ -447,7 +447,7 @@ u32 save_file_get_max_coin_score(s32 courseIndex) {
 s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex) {
     s32 i;
     s32 count = 0;
-    u8  flag  = 1;
+    u8  flag  = 0x1;
     u8  starFlags = save_file_get_star_flags(fileIndex, courseIndex);
     for ((i = 0); (i < 7); ((i++), (flag <<= 1))) if (starFlags & flag) count++;
     return count;

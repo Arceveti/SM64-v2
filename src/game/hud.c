@@ -467,7 +467,7 @@ void render_hud_stars(void) {
  */
 void render_hud_keys(void) {
     s16 i;
-    for (i = 0; i < gHudDisplay.keys; i++) print_text(((i * 16) + 220), 142, "|"); // unused glyph - beta key
+    for ((i = 0); (i < gHudDisplay.keys); (i++)) print_text(((i * 16) + 220), 142, "|"); // unused glyph - beta key
 }
 
 #ifdef HUD_SECRETS

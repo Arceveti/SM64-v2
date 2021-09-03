@@ -80,7 +80,7 @@ static Vec4s sJumboStarKeyframes[27] = {
 s32 get_credits_str_width(char *str) {
     u32 c;
     s32 length = 0;
-    while ((c = *str++) != 0) length += ((c == ' ') ? 4 : 7);
+    while ((c = (*str++)) != 0) length += ((c == ' ') ? 4 : 7);
     return length;
 }
 
@@ -872,7 +872,7 @@ Bool32 act_exit_airborne(struct MarioState *m) {
 #ifdef BREATH_METER
     m->breath = 0x880;
 #endif
-    if ((15 < m->actionTimer++) && launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, -32.0f)) m->healCounter = 31; // heal Mario
+    if ((15 < (m->actionTimer++)) && launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, -32.0f)) m->healCounter = 31; // heal Mario
     // rotate him to face away from the entrance
     m->marioObj->header.gfx.angle[1] += 0x8000;
     m->particleFlags |= PARTICLE_SPARKLES;

@@ -318,7 +318,7 @@ void puppyprint_render_profiler(void) {
     if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16, 40);
 #ifdef USE_CYCLES
-        sprintf(textBytes, "CPU: %dcy (%d_)#RSP: %dus (%d_)#RDP: %dcy (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
+        sprintf(textBytes, "CPU: %dc (%d_)#RSP: %dus (%d_)#RDP: %dc (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
 #else
         sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, ((s32)OS_CYCLES_TO_USEC(cpuTime) / 333), (s32)OS_CYCLES_TO_USEC(rspTime), ((s32)OS_CYCLES_TO_USEC(rspTime) / 333), (s32)OS_CYCLES_TO_USEC(rdpTime), ((s32)OS_CYCLES_TO_USEC(rdpTime) / 333));
 #endif
@@ -339,8 +339,8 @@ void puppyprint_render_profiler(void) {
             benchmarkTimer--;
             prepare_blank_box();
 #ifdef USE_CYCLES
-            // sprintf(textBytes, "Benchmark: %dus#High: %dcy", (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
-            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dcy", ((f32)(benchmarkProgramTimer) * 0.000001f), (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
+            // sprintf(textBytes, "Benchmark: %dus#High: %dc", (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
+            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dc", ((f32)(benchmarkProgramTimer) * 0.000001f), (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
 #else
             // sprintf(textBytes, "Benchmark: %dus#High: %dus", (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
             sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dus", ((f32)(benchmarkProgramTimer) * 0.000001f), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
@@ -358,15 +358,15 @@ void puppyprint_render_profiler(void) {
         perfPercentage[4] = MAX((dmaTime[      NUM_PERF_ITERATIONS] / ADDTIMES), 1);
 #undef ADDTIMES
 #ifdef USE_CYCLES
-        sprintf(textBytes, "Collision: <COL_99505099>%dcy", (s32)(collisionTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes, "Collision: <COL_99505099>%dc", (s32)(collisionTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 40, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes,     "Graph: <COL_50509999>%dcy", (s32)(    graphTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,     "Graph: <COL_50509999>%dc", (s32)(    graphTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 52, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes, "Behaviour: <COL_50995099>%dcy", (s32)(behaviourTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes, "Behaviour: <COL_50995099>%dc", (s32)(behaviourTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 64, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes,     "Audio: <COL_99995099>%dcy", (s32)(    audioTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,     "Audio: <COL_99995099>%dc", (s32)(    audioTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 76, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes,       "DMA: <COL_99509999>%dcy", (s32)(      dmaTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,       "DMA: <COL_99509999>%dc", (s32)(      dmaTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 88, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
 #else
         sprintf(textBytes, "Collision: <COL_99505099>%dus", (s32)OS_CYCLES_TO_USEC(collisionTime[NUM_PERF_ITERATIONS]));
@@ -495,7 +495,7 @@ void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) { // Color types?
         currEnv[0] = r;
         currEnv[1] = g;
         currEnv[2] = b;
-        currEnv[3] = a >> 1;
+        currEnv[3] = a;
     }
 }
 
@@ -847,7 +847,7 @@ void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNU
     num = height;
     // Find the height remainder
     peakH  = (height - (height % imH));
-    cycles = (width * peakH) / (imW * imH);
+    cycles = ((width * peakH) / (imW * imH));
     // Pass 1
     for ((i = 0); (i < cycles); (i++)) {
         posW = 0;

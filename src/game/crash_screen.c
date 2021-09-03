@@ -85,7 +85,7 @@ void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     for ((i = 0); (i < 7); (i++)) {
         bit = (0x80000000U >> ((glyph % 5) * 6));
         rowMask = *data++;
-        for (j = 0; j < 6; j++) {
+        for ((j = 0); (j < 6); (j++)) {
             *ptr++ = ((bit & rowMask) ? 0xffff : 1);
             bit >>= 1;
         }
