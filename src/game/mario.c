@@ -459,7 +459,7 @@ Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
     // This is never used in practice, as turnYaw is
     // always passed as zero.
     // if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
-    faceAngleYaw = abs_angle_diff(m->floorAngle, faceAngleYaw);
+    faceAngleYaw = abs_angle_diff(m->floorYaw, faceAngleYaw);
     return (faceAngleYaw < DEG(90));
 }
 
@@ -541,6 +541,7 @@ f32 find_floor_height_relative_polar(struct MarioState *m, Angle angleFromMario,
     return find_floor((m->pos[0] + y), (m->pos[1] + 100.0f), (m->pos[2] + x), &floor);
 }
 
+#if !defined(FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT) || !defined (SMOOTH_WATER_FLOOR_PITCH) || !defined(FIX_WALL_SIDLE_SLOPE)
 /**
  * Returns the slope of the floor based off points around Mario.
  */
@@ -560,21 +561,7 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
     // return atan2s(distFromMario, (ABSF(forwardYDelta) < ABSF(backwardYDelta)) ? forwardYDelta : backwardYDelta);
     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
 }
-
-// Angle find_floor_pitch_from_floors(Vec3f oldPos, Vec3f newPos, f32 oldFloorHeight, f32 newFloorHeight) {
-//     // if ((oldPos[1] > (oldFloorHeight + MARIO_STEP_HEIGHT)) || (newPos[1] > (newFloorHeight + MARIO_STEP_HEIGHT))) return 0x0;
-//     if (oldPos[1] > (oldFloorHeight + MARIO_STEP_HEIGHT)) return 0x0;
-//     register f32 dx = (oldPos[0] - newPos[0]);
-//     register f32 dz = (oldPos[2] - newPos[2]);
-//     f32 distFromMario = sqrtf(sqr(dx) + sqr(dz));
-//     f32 forwardYDelta, backwardYDelta;
-//     //! If Mario is near OOB, these floorY's can sometimes be -11000.
-//     //  This will cause these to be off and give improper slopes.
-//     forwardYDelta  = (newFloorHeight - newPos[1]);
-//     backwardYDelta = (oldPos[1] - oldFloorHeight);
-//     // return atan2s(distFromMario, (ABSF(forwardYDelta) < ABSF(backwardYDelta)) ? forwardYDelta : backwardYDelta);
-//     return atan2s(distFromMario, (sqr(forwardYDelta) < sqr(backwardYDelta)) ? forwardYDelta : backwardYDelta);
-// }
+#endif
 
 // default range is 0x471C ~100 degrees
 Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
@@ -606,8 +593,8 @@ void set_steep_jump_action(struct MarioState *m) {
     m->marioObj->oMarioSteepJumpYaw = m->faceAngle[1];
     if (m->forwardVel > 0.0f) {
         //! ((s16)0x8000) has undefined behavior. Therefore, this downcast has
-        //! undefined behavior if m->floorAngle >= 0.
-        Angle angleTemp     = (m->floorAngle + DEG(180));
+        //! undefined behavior if m->floorYaw >= 0.
+        Angle angleTemp     = (m->floorYaw + DEG(180));
         Angle faceAngleTemp = (m->faceAngle[1] - angleTemp);
         f32 y               = (sins(faceAngleTemp) * m->forwardVel);
         f32 x               = (coss(faceAngleTemp) * m->forwardVel * 0.75f);
@@ -991,6 +978,10 @@ void debug_print_speed_action_normal(struct MarioState *m) {
         print_text_fmt_int(210, 152, "PZ %d", m->pos[2]);
         // print_text_fmt_int(210, 184, "SX %d", gMarioScreenX);
         // print_text_fmt_int(210, 168, "SY %d", gMarioScreenY);
+
+        // print_text_fmt_int(16, 136,  "RX %x", m->marioObj->header.gfx.angle[0]);
+        // print_text_fmt_int(16, 120,  "RY %x", m->marioObj->header.gfx.angle[1]);
+        // print_text_fmt_int(16, 104,  "RZ %x", m->marioObj->header.gfx.angle[2]);
         switch (sDebugMode) {
             case 0:
                 print_text_fmt_int(210, 136,  "VX %d", m->vel[0]);
@@ -1048,7 +1039,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 print_text_fmt_int(64,   40, "INP %016b", m->input);
                 break;
         }
-        // print_text_fmt_int(16, 112, "FA %d", m->floorAngle);
+        // print_text_fmt_int(16, 112, "FA %d", m->floorYaw);
         // print_text_fmt_int(16,  96, "FS %d", m->steepness * 1000);
         // print_text_fmt_int(16,  80, "FN %d", m->floor->normal.y * 1000);
         print_text_fmt_int(16,  64,  "F %d", gNumCalls.floor);
@@ -1140,9 +1131,9 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     gasLevel      = find_poison_gas_level(m->pos[0], m->pos[2]);
     m->waterLevel = find_water_level(     m->pos[0], m->pos[2]);
     if (m->floor != NULL) {
-        m->floorAngle         = atan2s(m->floor->normal.z, m->floor->normal.x);
-        if (m->ceil != NULL) m->ceilAngle = atan2s(m->ceil->normal.z, m->ceil->normal.x);
-        if (m->wall != NULL) m->wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
+        m->floorYaw                     = atan2s(m->floor->normal.z, m->floor->normal.x);
+        if (m->ceil != NULL) m->ceilYaw = atan2s( m->ceil->normal.z,  m->ceil->normal.x);
+        if (m->wall != NULL) m->wallYaw = atan2s( m->wall->normal.z,  m->wall->normal.x);
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
 
         if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;

@@ -487,6 +487,7 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
         if (floor != NULL) {
             m->pos[0]      = newMarioX;
             m->pos[2]      = newMarioZ;
+            if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
             m->floor       = floor;
             m->floorHeight = floorHeight;
         }

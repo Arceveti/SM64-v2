@@ -36,8 +36,9 @@ Bool32 mario_floor_is_slippery(              struct MarioState *m);
 Bool32 mario_floor_is_slope(                 struct MarioState *m);
 Bool32 mario_floor_is_steep(                 struct MarioState *m);
 f32    find_floor_height_relative_polar(     struct MarioState *m, Angle angleFromMario, f32 distFromMario);
+#if !defined(FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT) || !defined (SMOOTH_WATER_FLOOR_PITCH) || !defined(FIX_WALL_SIDLE_SLOPE)
 Angle  find_floor_slope(                     struct MarioState *m, Angle yawOffset,      f32 distFromMario);
-// Angle  find_floor_pitch_from_floors(Vec3f oldPos, Vec3f newPos, f32 oldFloorHeight, f32 newFloorHeight);
+#endif
 Bool32 analog_stick_held_back(               struct MarioState *m, Angle range);
 void   update_mario_sound_and_camera(        struct MarioState *m);
 void   set_steep_jump_action(                struct MarioState *m);

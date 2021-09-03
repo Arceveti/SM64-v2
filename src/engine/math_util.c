@@ -542,7 +542,15 @@ void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
     *yaw   = atan2s(dz, dx);
 }
 
-/// Finds the horizontal distance and angles between two vectors.
+/// Finds the horizontal distance and pitch between two vectors.
+void vec3f_get_lateral_dist_and_pitch(Vec3f from, Vec3f to, f32 *lateralDist, Angle *pitch) {
+    MAKE_DXYZ(from, to, f32)
+    *lateralDist = sqrtf(sqr(dx) + sqr(dz));
+    *pitch          = atan2s(*lateralDist, dy);
+}
+
+
+/// Finds the horizontal distance and yaw between two vectors.
 void vec3f_get_lateral_dist_and_yaw(Vec3f from, Vec3f to, f32 *lateralDist, Angle *yaw) {
     MAKE_DXZ(from, to, f32)
     *lateralDist = sqrtf(sqr(dx) + sqr(dz));

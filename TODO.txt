@@ -112,10 +112,12 @@
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
     - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
 - Camera:
+    - Fix TOTWC warp with Puppycam
     - Make Puppycam collision not scuffed in certain areas
         - Separate (super low-poly) collision maps specifically for the camera?
     - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
+    - Combine holding variants of actions with their non-holding variants, with checks for m->used/heldObj for the differences
     - Combine/sort behavior actions, obj_behaviors, obj_behaviors_2, and object_helpers?
         - Should help VSC syntax issues
     - Split camera file into camera and cutscene files

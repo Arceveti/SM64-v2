@@ -681,6 +681,9 @@
 // (Arceveti)
 #define FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
 
+// Optimizes sidling a wall while on a slope (Arceveti)
+#define FIX_WALL_SIDLE_SLOPE
+
 // Faster Crouching animation (Arceveti)
 #define FAST_CROUCHING
 

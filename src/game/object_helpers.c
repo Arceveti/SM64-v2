@@ -216,7 +216,7 @@ Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angl
     Angle startAngle = o->rawData.asU32[angleIndex];
     switch (angleIndex) {
         case O_MOVE_ANGLE_PITCH_INDEX:
-        case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&obj->oPosVec, &target->oPosVec, &targetAngle); break;
+        case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&obj->oPosVec, &target->oPosVec, &targetAngle); break; //! inverted for mr. I?
         case O_MOVE_ANGLE_YAW_INDEX:
         case O_FACE_ANGLE_YAW_INDEX:   vec3f_get_yaw(  &obj->oPosVec, &target->oPosVec, &targetAngle); break;
     }
@@ -1333,9 +1333,7 @@ Angle cur_obj_angle_to_home(void) {
 }
 
 void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
-    obj1->header.gfx.pos[0]   =  obj2->oPosX;
-    obj1->header.gfx.pos[1]   = (obj2->oPosY + obj2->oGraphYOffset);
-    obj1->header.gfx.pos[2]   =  obj2->oPosZ;
+    vec3f_copy_y_off(obj1->header.gfx.pos, &obj2->oPosVec, obj2->oGraphYOffset);
     obj1->header.gfx.angle[0] = (obj2->oMoveAnglePitch & 0xFFFF);
     obj1->header.gfx.angle[1] = (obj2->oMoveAngleYaw   & 0xFFFF);
     obj1->header.gfx.angle[2] = (obj2->oMoveAngleRoll  & 0xFFFF);
@@ -1346,12 +1344,11 @@ void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
  * coordinates, and then add it to the vector at posIndex.
  */
 void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateIndex) {
-    f32 dx = obj->rawData.asF32[localTranslateIndex + 0];
-    f32 dy = obj->rawData.asF32[localTranslateIndex + 1];
-    f32 dz = obj->rawData.asF32[localTranslateIndex + 2];
-    obj->rawData.asF32[posIndex + 0] += ((obj->transform[0][0] * dx) + (obj->transform[1][0] * dy) + (obj->transform[2][0] * dz));
-    obj->rawData.asF32[posIndex + 1] += ((obj->transform[0][1] * dx) + (obj->transform[1][1] * dy) + (obj->transform[2][1] * dz));
-    obj->rawData.asF32[posIndex + 2] += ((obj->transform[0][2] * dx) + (obj->transform[1][2] * dy) + (obj->transform[2][2] * dz));
+    Vec3f d;
+    vec3f_copy(d, &obj->rawData.asF32[localTranslateIndex]);
+    obj->rawData.asF32[posIndex + 0] += ((obj->transform[0][0] * d[0]) + (obj->transform[1][0] * d[1]) + (obj->transform[2][0] * d[2]));
+    obj->rawData.asF32[posIndex + 1] += ((obj->transform[0][1] * d[0]) + (obj->transform[1][1] * d[1]) + (obj->transform[2][1] * d[2]));
+    obj->rawData.asF32[posIndex + 2] += ((obj->transform[0][2] * d[0]) + (obj->transform[1][2] * d[1]) + (obj->transform[2][2] * d[2]));
 }
 
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {

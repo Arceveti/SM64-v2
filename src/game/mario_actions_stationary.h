@@ -5,6 +5,31 @@
 
 #include "types.h"
 
+// act_idle
+#define ACT_IDLE_STATE_HEAD_LEFT            0x0
+#define ACT_IDLE_STATE_HEAD_RIGHT           0x1
+#define ACT_IDLE_STATE_HEAD_CENTER          0x2
+#define ACT_IDLE_STATE_SLEEP                0x3
+// act_start_sleeping
+#define ACT_START_SLEEPING_STATE_IDLE       0x0
+#define ACT_START_SLEEPING_STATE_SCRATCH    0x1
+#define ACT_START_SLEEPING_STATE_YAWN       0x2
+#define ACT_START_SLEEPING_STATE_SITTING    0x3
+#define ACT_START_SLEEPING_STATE_SLEEP      0x4
+// act_sleeping
+#define ACT_SLEEPING_STATE_IDLE             0x0
+#define ACT_SLEEPING_STATE_START_LYING      0x1
+#define ACT_SLEEPING_STATE_LYING            0x2
+// act_shivering
+#define ACT_SHIVERING_STATE_WARMING_HAND    0x0
+#define ACT_SHIVERING_STATE_SHAKE           0x1
+#define ACT_SHIVERING_STATE_RETURN_TO_IDLE  0x2
+// act_twirl_land
+// act_ground_pound_land
+// act_first_person
+#define ACT_FIRST_PERSON_STATE_SET_MODE     0x0
+#define ACT_FIRST_PERSON_STATE_IDLE         0x1
+
 Bool32 check_common_idle_cancels(      struct MarioState *m);
 Bool32 check_common_hold_idle_cancels( struct MarioState *m);
 Bool32 act_idle(                       struct MarioState *m);

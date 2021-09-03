@@ -272,6 +272,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
     if (ceilOffset >  30.0f                                    ) return HANG_LEFT_CEIL;
     nextPos[1] = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
     vec3f_copy(m->pos, nextPos);
+    if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
     m->floor       = floor;
     m->floorHeight = floorHeight;
     m->ceil        = ceil;
@@ -583,8 +584,8 @@ Bool32 act_in_cannon(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
     Angle startFacePitch    = m->faceAngle[0];
     Angle startFaceYaw      = m->faceAngle[1];
-    switch (m->actionState) { //! define names
-        case 0:
+    switch (m->actionState) {
+        case ACT_IN_CANNON_STATE_INIT:
             m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
             m->usedObj->oInteractStatus         = INT_STATUS_INTERACTED;
             m->statusForCamera->cameraEvent     = CAM_EVENT_CANNON;
@@ -594,22 +595,22 @@ Bool32 act_in_cannon(struct MarioState *m) {
             m->pos[1]      = (m->usedObj->oPosY + 350.0f);
             m->pos[2]      =  m->usedObj->oPosZ;
             m->forwardVel  = 0.0f;
-            m->actionState = 1;
+            m->actionState = ACT_IN_CANNON_STATE_WAIT_FOR_CANNON;
             break;
-        case 1:
+        case ACT_IN_CANNON_STATE_WAIT_FOR_CANNON:
             if (m->usedObj->oAction == OPENED_CANNON_ACT_READY) {
                 m->faceAngle[0]                 = m->usedObj->oMoveAnglePitch;
                 m->faceAngle[1]                 = m->usedObj->oMoveAngleYaw;
                 marioObj->oMarioCannonObjectYaw = m->usedObj->oMoveAngleYaw;
                 marioObj->oMarioCannonInputYaw  = 0x0;
-                m->actionState                  = 2;
+                m->actionState                  = ACT_IN_CANNON_STATE_READY;
             }
             break;
-        case 2:
+        case ACT_IN_CANNON_STATE_READY:
             m->faceAngle[0]                -= (Angle)(m->controller->stickY * 10.0f);
             marioObj->oMarioCannonInputYaw -= (Angle)(m->controller->stickX * 10.0f);
             if (m->faceAngle[0] > DEG(80)) m->faceAngle[0] = DEG(80);
-            if (m->faceAngle[0] <         0x0) m->faceAngle[0] =         0x0;
+            if (m->faceAngle[0] <     0x0) m->faceAngle[0] =     0x0;
             if (marioObj->oMarioCannonInputYaw >  DEG(45)) marioObj->oMarioCannonInputYaw =  DEG(45);
             if (marioObj->oMarioCannonInputYaw < -DEG(45)) marioObj->oMarioCannonInputYaw = -DEG(45);
             m->faceAngle[1] = (marioObj->oMarioCannonObjectYaw + marioObj->oMarioCannonInputYaw);
@@ -668,6 +669,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
     f32_find_wall_collision(&nextPos[0], &nextPos[1], &nextPos[2], 60.0f, 50.0f);
     floorHeight = find_floor(nextPos[0],  nextPos[1],  nextPos[2], &floor);
     if (floor != NULL) {
+        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         vec3f_copy(m->pos, nextPos);

@@ -82,6 +82,7 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         nextPos[2] += (ceil->normal.z * ceilAmt);
         nextPos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
         vec3f_copy(m->pos, nextPos);
+        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
@@ -90,12 +91,14 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     if (nextPos[1] <= floorHeight) {
         nextPos[1]  = floorHeight;
         vec3f_copy(m->pos, nextPos);
+        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
         return WATER_STEP_HIT_FLOOR;
     }
     vec3f_copy(m->pos, nextPos);
+    if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
     m->floor       = floor;
     m->floorHeight = floorHeight;
     m->ceil        = ceil;
@@ -122,6 +125,7 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     if (nextPos[1] >= floorHeight) {
         if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {
             vec3f_copy(m->pos, nextPos);
+            if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
             m->floor       = floor;
             m->floorHeight = floorHeight;
             return ((wall != NULL) ? WATER_STEP_HIT_WALL : WATER_STEP_NONE);
@@ -129,12 +133,14 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         //! Water ceiling downwarp
         vec3f_set(m->pos, nextPos[0], (ceilHeight - MARIO_HITBOX_HEIGHT), nextPos[2]);
+        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_CEILING;
     } else {
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         vec3f_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
+        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_FLOOR;
@@ -380,6 +386,7 @@ static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
     switch (perform_water_step(m)) {
         case WATER_STEP_HIT_FLOOR:
 #ifdef SMOOTH_WATER_FLOOR_PITCH
+            // floorPitch = atan2s(sqrtf(sqr(m->floor->normal.x) + sqr(m->floor->normal.z)), m->floor->normal.y);
             floorPitch = atan2s(1.0f, m->floor->normal.y);
             if (m->faceAngle[0] < floorPitch) approach_s16_symmetric_bool(&m->faceAngle[0], floorPitch, 0x800);
 #else
@@ -441,8 +448,8 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
     } else if ((m->prevAction & ACT_FLAG_DIVING) || (m->input & INPUT_A_DOWN)) {
         stateFlags |= PLUNGE_FLAG_DIVING;
     }
-    if (m->actionArg == 1) m->actionState = 1;
-    if (m->actionState == 0) {
+    if (m->actionArg == 1) m->actionState = ACT_WATER_GROUND_POUND_STATE_FALL;
+    if (m->actionState == ACT_WATER_GROUND_POUND_STATE_SPIN) {
         play_sound(SOUND_GENERAL_WING_FLAP, m->marioObj->header.gfx.cameraToObject);
         if (m->actionTimer < 10) {
             yOffset = (20 - (2 * m->actionTimer));
@@ -466,7 +473,7 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
             } else {
                 play_sound(SOUND_ACTION_SWIM, m->marioObj->header.gfx.cameraToObject);
                 m->faceAngle[0] = 0x0;
-                m->actionState  = 1;
+                m->actionState  = ACT_WATER_GROUND_POUND_STATE_FALL;
             }
         }
 #if ENABLE_RUMBLE
@@ -515,7 +522,7 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
     return FALSE;
 }
 
-static Bool32 act_water_ground_pound_land(struct MarioState *m) {
+static Bool32 act_water_ground_pound_land(struct MarioState *m) { //! actionState name?
     m->actionState = 1;
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return set_mario_action(         m, ACT_WATER_ACTION_END, 0);
@@ -539,12 +546,12 @@ static Bool32 act_breaststroke(struct MarioState *m) {
     if (m->actionTimer <  6) m->forwardVel += 0.5f;
     if (m->actionTimer >= 9) m->forwardVel += 1.5f;
     if (m->actionTimer >= 2) {
-        if ((m->actionTimer < 6) && (m->input & INPUT_A_PRESSED)) m->actionState = 1;
-        if ((m->actionTimer == 9) && (m->actionState == 1)) {
+        if ((m->actionTimer <  6) && (m->input & INPUT_A_PRESSED)) m->actionState = ACT_BREASTSTROKE_STATE_CONTINUE;
+        if ((m->actionTimer == 9) && (m->actionState == ACT_BREASTSTROKE_STATE_CONTINUE)) {
             set_anim_to_frame(m, 0);
-            m->actionState = 0;
+            m->actionState =  ACT_BREASTSTROKE_STATE_START;
             m->actionTimer = 1;
-            sSwimStrength = MIN_SWIM_STRENGTH;
+            sSwimStrength  = MIN_SWIM_STRENGTH;
         }
     }
     if (m->actionTimer == 1) {
@@ -609,10 +616,10 @@ static Bool32 act_hold_breaststroke(struct MarioState *m) {
     if (m->actionTimer <  6) m->forwardVel += 0.5f;
     if (m->actionTimer >= 9) m->forwardVel += 1.5f;
     if (m->actionTimer >= 2) {
-        if ((m->actionTimer < 6) && (m->input & INPUT_A_PRESSED)) m->actionState = 1;
-        if ((m->actionTimer == 9) && (m->actionState == 1)) {
+        if ((m->actionTimer <  6) && (m->input & INPUT_A_PRESSED)) m->actionState = ACT_HOLD_BREASTSTROKE_STATE_CONTINUE;
+        if ((m->actionTimer == 9) && (m->actionState == ACT_HOLD_BREASTSTROKE_STATE_CONTINUE)) {
             set_anim_to_frame(m, 0);
-            m->actionState = 0;
+            m->actionState = ACT_HOLD_BREASTSTROKE_STATE_START;
             m->actionTimer = 1;
         }
     }
@@ -735,16 +742,16 @@ static Bool32 act_water_punch(struct MarioState *m) {
     update_water_pitch(m);
     approach_s16_symmetric_bool(&m->marioBodyState->headAngle[0], 0x0, 0x200);
     play_sound_if_no_flag(m, SOUND_ACTION_SWIM, MARIO_ACTION_SOUND_PLAYED);
-    switch (m->actionState) { //! define names
-        case 0:
+    switch (m->actionState) {
+        case ACT_WATER_PUNCH_STATE_START:
             set_mario_animation(m, MARIO_ANIM_WATER_GRAB_OBJ_PART1);
             if (is_anim_at_end(m)) m->actionState = (check_water_grab(m) + 1);
             break;
-        case 1:
+        case ACT_WATER_PUNCH_STATE_MISSED:
             set_mario_animation(m, MARIO_ANIM_WATER_GRAB_OBJ_PART2);
             if (is_anim_at_end(m)) set_mario_action(m, ACT_WATER_ACTION_END, 0);
             break;
-        case 2:
+        case ACT_WATER_PUNCH_STATE_PICK_UP:
             set_mario_animation(m, MARIO_ANIM_WATER_PICK_UP_OBJ);
             if (is_anim_at_end(m)) {
                 if (m->heldObj->behavior == segmented_to_virtual(bhvKoopaShellUnderwater)) {
@@ -799,13 +806,13 @@ static Bool32 act_water_shocked(struct MarioState *m) {
 }
 
 static Bool32 act_drowning(struct MarioState *m) {
-    switch (m->actionState) { //! define names
-        case 0:
+    switch (m->actionState) {
+        case ACT_DROWNING_STATE_EYES_HALF_CLOSED:
             set_mario_animation(m, MARIO_ANIM_DROWNING_PART1);
             m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
-            if (is_anim_at_end(m)) m->actionState = 1;
+            if (is_anim_at_end(m)) m->actionState = ACT_DROWNING_STATE_EYES_DEAD;
             break;
-        case 1:
+        case ACT_DROWNING_STATE_EYES_DEAD:
             set_mario_animation(m, MARIO_ANIM_DROWNING_PART2);
             m->marioBodyState->eyeState = MARIO_EYES_DEAD;
             if (m->marioObj->header.gfx.animInfo.animFrame == 30) level_trigger_warp(m, WARP_OP_DEATH);
@@ -845,11 +852,11 @@ static Bool32 act_water_plunge(struct MarioState *m) {
     m->actionTimer++;
     stationary_slow_down(m);
     stepResult = perform_water_step(m);
-    if (m->actionState == 0) {
+    if (m->actionState == ACT_WATER_PLUNGE_STATE_FALL) {
         play_sound(SOUND_ACTION_WATER_PLUNGE, m->marioObj->header.gfx.cameraToObject);
         if ((m->peakHeight - m->pos[1]) > FALL_DAMAGE_HEIGHT_SMALL) play_sound(SOUND_MARIO_HAHA_WATER, m->marioObj->header.gfx.cameraToObject);
         m->particleFlags |= PARTICLE_WATER_SPLASH;
-        m->actionState    = 1;
+        m->actionState    = ACT_WATER_PLUNGE_STATE_SINK;
 #if ENABLE_RUMBLE
         if (m->prevAction & ACT_FLAG_AIR) queue_rumble_data(5, 80);
 #endif
@@ -974,11 +981,11 @@ static Bool32 update_metal_water_jump_speed(struct MarioState *m) {
     return FALSE;
 }
 
-static Bool32 act_metal_water_standing(struct MarioState *m) {
+static Bool32 act_metal_water_standing(struct MarioState *m) { //! actionState names
     if (!(m->flags & MARIO_METAL_CAP)  ) return set_mario_action(m, ACT_WATER_IDLE         , 0);
     if (m->input & INPUT_A_PRESSED     ) return set_mario_action(m, ACT_METAL_WATER_JUMP   , 0);
     if (m->input & INPUT_NONZERO_ANALOG) return set_mario_action(m, ACT_METAL_WATER_WALKING, 0);
-    switch (m->actionState) { //! define names
+    switch (m->actionState) {
         case 0: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT  ); break;
         case 1: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_RIGHT ); break;
         case 2: set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_CENTER); break;

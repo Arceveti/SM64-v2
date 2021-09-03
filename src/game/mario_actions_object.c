@@ -36,7 +36,7 @@ Bool32 mario_update_punch_sequence(struct MarioState *m) {
     } else {
         endAction = ACT_IDLE,    crouchEndAction = ACT_CROUCHING;
     }
-    switch (m->actionArg) {
+    switch (m->actionArg) { //! actionArg name defines
         case 0: play_sound(SOUND_MARIO_PUNCH_YAH, m->marioObj->header.gfx.cameraToObject); // fall through
         case 1:
             set_mario_animation(m, MARIO_ANIM_FIRST_PUNCH);
@@ -87,8 +87,8 @@ Bool32 mario_update_punch_sequence(struct MarioState *m) {
 Bool32 act_punching(struct MarioState *m) {
     if (m->input & INPUT_STOMPED                                                                 ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m                         );
-    if ((m->actionState == 0) && (m->input & INPUT_A_DOWN)                                       ) return set_mario_action(         m, ACT_JUMP_KICK       , 0);
-    m->actionState = 1;
+    if ((m->actionState == ACT_PUNCHING_STATE_CAN_JUMP_KICK) && (m->input & INPUT_A_DOWN)        ) return set_mario_action(         m, ACT_JUMP_KICK       , 0);
+    m->actionState = ACT_PUNCHING_STATE_NO_JUMP_KICK;
     if (m->actionArg == 0) m->actionTimer = 7;
     mario_set_forward_vel(m, sPunchingForwardVelocities[m->actionTimer]);
     if (m->actionTimer > 0) m->actionTimer--;
@@ -100,12 +100,12 @@ Bool32 act_punching(struct MarioState *m) {
 Bool32 act_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED  ) return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     if (m->input & INPUT_OFF_FLOOR) return drop_and_set_mario_action(m, ACT_FREEFALL        , 0);
-    if ((m->actionState == 0) && is_anim_at_end(m) && (m->usedObj != NULL)) {
+    if ((m->actionState == ACT_PICKING_UP_STATE_GRAB) && is_anim_at_end(m) && (m->usedObj != NULL)) {
         mario_grab_used_object(m);
         play_sound_if_no_flag(m, SOUND_MARIO_HRMM, MARIO_MARIO_SOUND_PLAYED);
-        m->actionState = 1;
+        m->actionState = ACT_PICKING_UP_STATE_HAS_OBJ;
     }
-    if (m->actionState == 1) {
+    if (m->actionState == ACT_PICKING_UP_STATE_HAS_OBJ) {
         if (m->heldObj->oInteractionSubtype & INT_SUBTYPE_GRABS_MARIO) {
             m->marioBodyState->grabPos = GRAB_POS_HEAVY_OBJ;
             set_mario_animation(m, MARIO_ANIM_GRAB_HEAVY_OBJECT);
@@ -185,8 +185,8 @@ Bool32 act_stomach_slide_stop(struct MarioState *m) {
 
 Bool32 act_picking_up_bowser(struct MarioState *m) {
     if (m->pos[1] > m->floorHeight) m->pos[1] = m->floorHeight;
-    if (m->actionState == 0) {
-        m->actionState             = 1;
+    if (m->actionState == ACT_PICKING_UP_BOWSER_STATE_GRAB) {
+        m->actionState             = ACT_PICKING_UP_BOWSER_STATE_HOLDING;
         m->angleVel[1]             = 0x0;
         m->marioBodyState->grabPos = GRAB_POS_BOWSER;
         mario_grab_used_object(m);

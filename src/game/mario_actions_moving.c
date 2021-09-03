@@ -8,6 +8,7 @@
 #include "mario_step.h"
 #include "area.h"
 #include "interaction.h"
+#include "mario_actions_moving.h"
 #include "mario_actions_object.h"
 #include "boot/memory.h"
 #include "behavior_data.h"
@@ -67,11 +68,11 @@ void align_with_floor(struct MarioState *m) {
     struct Surface *floor = m->floor;
     Vec3f floorNormal;
     if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
-// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-//         if (floor->steepness > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
-// #else
-        if (floor->normal.y > COS45 && mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) {
-// #endif
+#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+        if ((m->steepness > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
+#else
+        if ((floor->normal.y > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
+#endif
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
             vec3f_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
@@ -240,7 +241,7 @@ void apply_slope_accel(struct MarioState *m) {
             default:                          slopeAccel = 1.7f; break;
             case SURFACE_CLASS_NOT_SLIPPERY:  slopeAccel = 0.0f; break;
         }
-        if (abs_angle_diff(m->floorAngle, m->faceAngle[1]) < DEG(90)) {
+        if (abs_angle_diff(m->floorYaw, m->faceAngle[1]) < DEG(90)) {
             m->forwardVel += (slopeAccel * steepness);
         } else {
             m->forwardVel -= (slopeAccel * steepness);
@@ -398,7 +399,7 @@ Bool32 check_ground_dive_or_punch(struct MarioState *m) {
 
 Bool32 begin_braking_action(struct MarioState *m) {
     mario_drop_held_object(m);
-    if (m->actionState == 1) {
+    if (m->actionState == ACT_WALKING_STATE_REACH_WALL) {
         m->faceAngle[1] = m->actionArg;
         return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
     }
@@ -530,31 +531,38 @@ void anim_and_audio_for_heavy_walk(struct MarioState *m) {
 }
 
 void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
-    Angle wallAngle, dWallAngle;
-    f32 movedDistance;
-    vec3f_get_lateral_dist(startPos, m->pos, &movedDistance);
+    Angle dWallAngle;
+    f32 speed;
+    vec3f_get_lateral_dist(startPos, m->pos, &speed);
     //! (Speed Crash) If a wall is after moving 16384 distance, this crashes.
-    AnimAccel animSpeed = (AnimAccel)((movedDistance * 2.0f) * 0x10000);
+    AnimAccel animSpeed = (AnimAccel)((speed * 2.0f) * 0x10000);
     if (m->forwardVel > 6.0f) mario_set_forward_vel(m, 6.0f);
-    if (m->wall != NULL) {
-        wallAngle = atan2s(m->wall->normal.z, m->wall->normal.x);
-        dWallAngle = abs_angle_diff(wallAngle, m->faceAngle[1]);
-    }
+    if (m->wall != NULL) dWallAngle = abs_angle_diff(m->wallYaw, m->faceAngle[1]);
     if ((m->wall == NULL) || (dWallAngle > DEG(160))) {
         m->flags |= MARIO_PUSHING;
         set_mario_animation(m, MARIO_ANIM_PUSHING);
         play_step_sound(m, 6, 18);
+#ifdef FIX_WALL_SIDLE_SLOPE
+        if (m->wall != NULL) {
+            m->marioObj->header.gfx.angle[1] = (m->wallYaw + DEG(180));
+            if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) m->marioObj->header.gfx.angle[2] = ((atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90)) * sins(m->wallYaw - m->floorYaw));
+        }
+#endif
     } else {
         set_mario_anim_with_accel(m, ((dWallAngle < 0) ? MARIO_ANIM_SIDESTEP_RIGHT : MARIO_ANIM_SIDESTEP_LEFT), animSpeed);
         if (m->marioObj->header.gfx.animInfo.animFrame < 20) {
             play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
             m->particleFlags |= PARTICLE_DUST;
         }
-        m->actionState                   = 1;
-        m->actionArg                     = (wallAngle + DEG(180));
-        //! TODO: Make these smooth:
-        m->marioObj->header.gfx.angle[1] = (wallAngle + DEG(180));
+        m->actionState                   = PUSH_OR_SIDLE_WALL_STATE_SIDLING;
+        m->actionArg                     = (m->wallYaw + DEG(180));
+        //! TODO: Make these smooth somehow:
+        m->marioObj->header.gfx.angle[1] = (m->wallYaw + DEG(180));
+#ifdef FIX_WALL_SIDLE_SLOPE
+        if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) m->marioObj->header.gfx.angle[2] = ((atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90)) * sins(m->wallYaw - m->floorYaw));
+#else
         m->marioObj->header.gfx.angle[2] = find_floor_slope(m, DEG(90), 5.0f);
+#endif
     }
 }
 
@@ -603,14 +611,14 @@ Bool32 act_walking(struct MarioState *m) {
     Vec3f startPos;
     Angle startYaw = m->faceAngle[1];
     mario_drop_held_object(m);
-    if (should_begin_sliding(m)      ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
-    if (m->input & INPUT_FIRST_PERSON) return begin_braking_action(m);
-    if (m->input & INPUT_A_PRESSED   ) return set_jump_from_landing(m);
-    if (check_ground_dive_or_punch(m)) return TRUE;
-    if (m->input & INPUT_IDLE        ) return begin_braking_action(m);
+    if (should_begin_sliding(m)                                                         ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
+    if (m->input & INPUT_FIRST_PERSON                                                   ) return begin_braking_action(m);
+    if (m->input & INPUT_A_PRESSED                                                      ) return set_jump_from_landing(m);
+    if (check_ground_dive_or_punch(m)                                                   ) return TRUE;
+    if (m->input & INPUT_IDLE                                                           ) return begin_braking_action(m);
     if (analog_stick_held_back(m, DEG(100)) && (m->forwardVel >= GROUND_SPEED_THRESHOLD)) return set_mario_action(m, ACT_TURNING_AROUND, 0);
-    if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_CROUCH_SLIDE, 0);
-    m->actionState = 0;
+    if (m->input & INPUT_Z_PRESSED                                                      ) return set_mario_action(m, ACT_CROUCH_SLIDE  , 0);
+    m->actionState = ACT_WALKING_STATE_NO_WALL;
     vec3f_copy(startPos, m->pos);
     update_walking_speed(m);
     switch (perform_ground_step(m)) {
@@ -629,13 +637,19 @@ Bool32 act_walking(struct MarioState *m) {
     }
     check_ledge_climb_down(m);
     tilt_body_walking(m, startYaw);
+#ifdef FIX_WALL_SIDLE_SLOPE
+    if ((m->wall != NULL) && (abs_angle_diff(m->wallYaw, m->faceAngle[1]) > DEG(135))) {
+        m->marioObj->header.gfx.angle[1] = (m->wallYaw + DEG(180));
+        if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) m->marioObj->header.gfx.angle[2] = ((atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90)) * sins(m->wallYaw - m->floorYaw));
+    }
+#endif
     return FALSE;
 }
 
 Bool32 act_move_punching(struct MarioState *m) {
-    if (should_begin_sliding(m)                         ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
-    if (m->actionState == 0 && (m->input & INPUT_A_DOWN)) return set_mario_action(m, ACT_JUMP_KICK    , 0);
-    m->actionState = 1;
+    if (should_begin_sliding(m)                                                               ) return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
+    if ((m->actionState == ACT_MOVE_PUNCHING_STATE_CAN_JUMP_KICK) && (m->input & INPUT_A_DOWN)) return set_mario_action(m, ACT_JUMP_KICK    , 0);
+    m->actionState = ACT_MOVE_PUNCHING_STATE_NO_JUMP_KICK;
     mario_update_punch_sequence(m);
     if (m->forwardVel >= 0.0f) {
         apply_slope_decel(m, 0.5f);
@@ -834,7 +848,7 @@ Bool32 act_riding_shell_ground(struct MarioState *m) {
         return set_mario_action(m, ACT_CROUCH_SLIDE, 0);
     }
     update_shell_speed(m);
-    set_mario_animation(m, m->actionArg == 0 ? MARIO_ANIM_START_RIDING_SHELL : MARIO_ANIM_RIDING_SHELL);
+    set_mario_animation(m, ((m->actionArg == 0) ? MARIO_ANIM_START_RIDING_SHELL : MARIO_ANIM_RIDING_SHELL));
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
             set_mario_action(m, ACT_RIDING_SHELL_FALL, 0);
@@ -846,7 +860,7 @@ Bool32 act_riding_shell_ground(struct MarioState *m) {
 //             } else {
 // #endif
                 mario_stop_riding_object(m);
-                play_sound(m->flags & MARIO_METAL_CAP ? SOUND_ACTION_METAL_BONK : SOUND_ACTION_BONK, m->marioObj->header.gfx.cameraToObject);
+                play_sound(((m->flags & MARIO_METAL_CAP) ? SOUND_ACTION_METAL_BONK : SOUND_ACTION_BONK), m->marioObj->header.gfx.cameraToObject);
                 m->particleFlags |= PARTICLE_VERTICAL_STAR;
                 set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0);
 // #ifdef LESS_GROUND_BONKS
@@ -855,7 +869,7 @@ Bool32 act_riding_shell_ground(struct MarioState *m) {
             break;
     }
     tilt_body_ground_shell(m, startYaw);
-    play_sound((m->floor->type == SURFACE_BURNING) ? SOUND_MOVING_RIDING_SHELL_LAVA : (SOUND_MOVING_TERRAIN_RIDING_SHELL + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
+    play_sound(((m->floor->type == SURFACE_BURNING) ? SOUND_MOVING_RIDING_SHELL_LAVA : (SOUND_MOVING_TERRAIN_RIDING_SHELL + m->terrainSoundAddend)), m->marioObj->header.gfx.cameraToObject);
     adjust_sound_for_speed(m);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
@@ -875,7 +889,7 @@ Bool32 act_crawling(struct MarioState *m) {
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND: set_mario_action(m, ACT_FREEFALL, 0); break;
         case GROUND_STEP_HIT_WALL:
-            if (m->forwardVel > 10.0f) mario_set_forward_vel(m, 10.0f);
+            if (m->forwardVel > GROUND_SPEED_THRESHOLD_2) mario_set_forward_vel(m, GROUND_SPEED_THRESHOLD_2);
             //! Possibly unintended missing break
             // fall through
         case GROUND_STEP_NONE: align_with_floor(m); break;

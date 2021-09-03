@@ -66,7 +66,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Extra segment2 characters/glyphs: `Red Coin, Blue Coin, Silver Coin, Minus Symbol` (Arceveti) *
 - Configurable amount of segments for [Chain Chomp](https://i.imgur.com/gJ41hJl.png), [Pokey](https://i.imgur.com/NnwAq22.png), and [Wiggler](https://i.imgur.com/O9aqPw1.png) (Arceveti) *
 - [LLL Fire Bars use oBehParams2ndByte to determine their length](https://i.imgur.com/SC3FK5J.png) (Arceveti)
-- Extra fields in the MarioState struct, based on Mario's movement and angles: ceilAngle, wallAngle, lastSafePos, prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
+- Extra fields in the MarioState struct, based on Mario's movement and angles: wallYaw, wallYaw, lastSafePos, prevPos, movePitch, moveYaw, lateralSpeed, moveSpeed. Updated once per frame. (Arceveti)
 - Disable the demo that plays when idle on the start screen (Arceveti) *
 - gbi.h defines (for point/bilerp sampling) to convert texel coordinates to internal s,t values (Arceveti)
 
@@ -130,6 +130,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Check past null floors for a safe floor on the other side, preventing most cases of invisible walls caused by small gaps in level geometry (Arceveti) *
 - General movement improvements, less softlocks, etc. See config for more details (Arceveti) *
 - Mario can move sideways on ledges (Arceveti) *
+- Fix wall sidle on slopes (Arceveti) *
 - [Unique wall slide which takes horizontal momentum into account](https://i.imgur.com/3RXfVKU.png) (Arceveti) *
 - Configurable wall kick/slide angle (Arceveti) *
 - Coyote time, allowing Mario to walk over small gaps [or make a jump for a few frames late after walking off a ledge](https://developer.amazon.com/blogs/appstore/post/9d2094ed-53cb-4a3a-a5cf-c7f34bca6cd3/coding-imprecise-controls-to-make-them-feel-more-precise), while also preventing most cases of ledge jittering (Arceveti) *

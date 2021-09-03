@@ -392,7 +392,7 @@ struct MarioState
     /*0x68*/ struct Surface           *floor;
     /*0x6C*/        f32                ceilHeight;
     /*0x70*/        f32                floorHeight;
-    /*0x74*/        Angle              floorAngle;
+    /*0x74*/        Angle              floorYaw;
     /*0x76*/        s16                waterLevel;
     /*0x78*/ struct Object            *interactObj;
     /*0x7C*/ struct Object            *heldObj;
@@ -427,8 +427,8 @@ struct MarioState
              f32            moveSpeed;
            Angle            movePitch;
            Angle            moveYaw;
-           Angle            ceilAngle;
-           Angle            wallAngle;
+           Angle            ceilYaw;
+           Angle            wallYaw;
              f32            midY;
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
              f32            steepness;
