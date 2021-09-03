@@ -197,25 +197,17 @@ Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
         default:                          accel =  7.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
         case SURFACE_CLASS_NOT_SLIPPERY:  accel =  5.0f; lossFactor = (((m->intendedMag / 32.0f) * forward * 0.02f) + 0.92f); break;
     }
-    oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ)); //! fast invsqrt?
+    oldSpeed          = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     sideward          = ((m->intendedMag / 32.0f) * sideward * 0.05f);
     slideVelXModifier = (m->slideVelZ * sideward);
     slideVelZModifier = (m->slideVelX * sideward);
     m->slideVelX     += slideVelXModifier;
     m->slideVelZ     -= slideVelZModifier;
-#ifdef FAST_INVSQRT
-    newSpeed = Q_rsqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
-    if ((oldSpeed > 0.0f) && (newSpeed > 0.0f)) {
-        m->slideVelX = (m->slideVelX * oldSpeed * newSpeed);
-        m->slideVelZ = (m->slideVelZ * oldSpeed * newSpeed);
-    }
-#else
     newSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
     if ((oldSpeed > 0.0f) && (newSpeed > 0.0f)) {
         m->slideVelX = ((m->slideVelX * oldSpeed) / newSpeed);
         m->slideVelZ = ((m->slideVelZ * oldSpeed) / newSpeed);
     }
-#endif
     update_sliding_angle(m, accel, lossFactor);
     if (!mario_floor_is_slope(m) && (sqr(m->forwardVel) < sqr(stopSpeed))) {
         mario_set_forward_vel(m, 0.0f);

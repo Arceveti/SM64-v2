@@ -206,36 +206,30 @@ static void add_surface(struct Surface *surface, s32 dynamic) {
  */
 static struct Surface *read_surface_data(Collision *vertexData, Collision **vertexIndices) {
     struct Surface *surface;
-    Vec3f n;
+    Vec3f v1, v2, v3, n;
     Vec3i offset; // data offset
-    Vec3i v1, v2, v3;
-    // vec3s_to_vec3i(offset, (*vertexIndices));
-    // vec3i_mul_val(offset, 3);
-    offset[0] = (3 * (*vertexIndices)[0]);
-    offset[1] = (3 * (*vertexIndices)[1]);
-    offset[2] = (3 * (*vertexIndices)[2]);
-    vec3s_to_vec3i(v1, (vertexData + offset[0]));
-    vec3s_to_vec3i(v2, (vertexData + offset[1]));
-    vec3s_to_vec3i(v3, (vertexData + offset[2]));
+
+    vec3s_to_vec3i(offset, (*vertexIndices));
+    vec3i_mul_val(offset, 3);
+
+    vec3s_to_vec3f(v1, (vertexData + offset[0]));
+    vec3s_to_vec3f(v2, (vertexData + offset[1]));
+    vec3s_to_vec3f(v3, (vertexData + offset[2]));
 
     // (v2 - v1) x (v3 - v2)
-    //! inverse cross product?
-    n[0] = ((v2[1] - v1[1]) * (v3[2] - v2[2]) - (v2[2] - v1[2]) * (v3[1] - v2[1]));
-    n[1] = ((v2[2] - v1[2]) * (v3[0] - v2[0]) - (v2[0] - v1[0]) * (v3[2] - v2[2]));
-    n[2] = ((v2[0] - v1[0]) * (v3[1] - v2[1]) - (v2[1] - v1[1]) * (v3[0] - v2[0]));
+    find_vector_perpendicular_to_plane(n, v1, v2, v3);
     vec3f_normalize(n);
 
     surface = alloc_surface();
-    vec3i_to_vec3s(surface->vertex1, v1);
-    vec3i_to_vec3s(surface->vertex2, v2);
-    vec3i_to_vec3s(surface->vertex3, v3);
+    vec3f_to_vec3s(surface->vertex1, v1);
+    vec3f_to_vec3s(surface->vertex2, v2);
+    vec3f_to_vec3s(surface->vertex3, v3);
     surface->normal.x   = n[0];
     surface->normal.y   = n[1];
     surface->normal.z   = n[2];
 
     // why does this only use the first vertex?
-    //! surface->originOffset = -vec3f_dot(n, v1); but v1 is s32
-    surface->originOffset = -((n[0] * v1[0]) + (n[1] * v1[1]) + (n[2] * v1[2]));
+    surface->originOffset = -vec3f_dot(n, v1);
 
     surface->lowerY = (min_3i(v1[1], v2[1], v3[1]) - 5);
     surface->upperY = (max_3i(v1[1], v2[1], v3[1]) + 5);

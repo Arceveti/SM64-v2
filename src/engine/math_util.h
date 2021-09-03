@@ -408,13 +408,7 @@ s16  abss(s16 x);
 s32  absi(s32 x);
 f32  absf(f32 x);
 f64  absd(f64 x);
-// Fast Inverse Square Root
-#ifdef FAST_INVSQRT
-f32  Q_rsqrtf( f32 number );
-f64  Q_rsqrtd( f64 number );
-f32  Q_invmagf(Vec3f v);
-f64  Q_invmagd(Vec3d v);
-#endif
+// Square Root
 f64  sqrtd(f64 x);
 // min_3
 s8   min_3c( s8  a, s8  b,  s8 c);

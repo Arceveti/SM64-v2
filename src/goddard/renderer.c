@@ -1209,14 +1209,9 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     vec[2] = (cam->lookatMtx[0][2] + phongLightPosition[0]);
     vec[1] = (cam->lookatMtx[1][2] + phongLightPosition[1]);
     vec[0] = (cam->lookatMtx[2][2] + phongLightPosition[2]);
-#ifdef FAST_INVSQRT
-    mag = Q_rsqrtf(vec3f_sumsq(vec));
-    if (mag > 0.1f) {
-#else
     mag = vec3f_mag(vec);
     if (mag > 0.1f) {
         mag = 1.0f / mag;
-#endif
         vec3f_mul_val(vec, mag);
         hilite->h.x1 = (((vec[2] * cam->lookatMtx[0][0]) + (vec[1] * cam->lookatMtx[1][0]) + (vec[0] * cam->lookatMtx[2][0])) * xMul * 2.0f) + (xMul * 4.0f);
         hilite->h.y1 = (((vec[2] * cam->lookatMtx[0][1]) + (vec[1] * cam->lookatMtx[1][1]) + (vec[0] * cam->lookatMtx[2][1])) * yMul * 2.0f) + (yMul * 4.0f);

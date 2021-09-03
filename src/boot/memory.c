@@ -327,7 +327,7 @@ void *load_segment(s32 segment, u8 *srcStart, u8 *srcEnd, u32 side, u8 *bssStart
     sSegmentROMTable[segment] = (uintptr_t) srcStart;
 #endif
 #if PUPPYPRINT_DEBUG
-    ramsizeSegment[segment + nameTable - 2] = ((s32)srcEnd - (s32)srcStart);
+    ramsizeSegment[(segment + nameTable) - 2] = ((s32)srcEnd - (s32)srcStart);
 #endif
     return addr;
 }
@@ -405,7 +405,7 @@ void *load_segment_decompress(s32 segment, u8 *srcStart, u8 *srcEnd) {
         }
     }
 #if PUPPYPRINT_DEBUG
-    ramsizeSegment[segment+nameTable - 2] = ((s32)srcEnd - (s32)srcStart);
+    ramsizeSegment[(segment + nameTable) - 2] = ((s32)srcEnd - (s32)srcStart);
 #endif
     return dest;
 }

@@ -129,7 +129,7 @@ Bool32 check_horizontal_wind(struct MarioState *m) {
         m->slideVelZ += (1.2f * coss(pushAngle));
         speed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
         if (speed > 48.0f) {
-            m->slideVelX = ((m->slideVelX * 48.0f) / speed); //! fast invsqrt?
+            m->slideVelX = ((m->slideVelX * 48.0f) / speed);
             m->slideVelZ = ((m->slideVelZ * 48.0f) / speed);
             speed = 48.0f;
         } else if (speed > 32.0f) {

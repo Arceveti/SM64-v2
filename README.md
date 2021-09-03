@@ -43,7 +43,6 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
 - More particles use OBJ_LIST_UNIMPORTANT so they can be unloaded when needed (Arceveti) *
-- [Fast inverse square root for normalizing float vectors :)](https://en.wikipedia.org/wiki/Fast_inverse_square_root) *
 - Use the floor's normal for alignment instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
 - Many smaller optimizations/bugfixes (Arceveti)
 

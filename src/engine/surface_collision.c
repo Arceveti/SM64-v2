@@ -124,7 +124,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_1_3;
-            invDenom = (offset / invDenom); // fast invsqrt?
+            invDenom = (offset / invDenom);
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -144,7 +144,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_2_3;
-            invDenom = (offset / invDenom); // fast invsqrt?
+            invDenom = (offset / invDenom);
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -170,7 +170,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) continue;
-            invDenom = (offset / invDenom); // fast invsqrt?
+            invDenom = (offset / invDenom);
             x += (d00 *= invDenom);
             z += (d01 *= invDenom);
             margin_radius += 0.01f;
@@ -361,11 +361,7 @@ static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
     register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
-#ifdef FAST_INVSQRT
-    register f32 invDenom = (margin * Q_rsqrtf(sqr(diff_x) + sqr(diff_z)));
-#else
     register f32 invDenom = (margin / sqrtf(sqr(diff_x) + sqr(diff_z)));
-#endif
     *x += (diff_x * invDenom);
     *z += (diff_z * invDenom);
 }

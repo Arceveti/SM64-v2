@@ -273,16 +273,6 @@
 // an intangible floor in the current cell
 // #define SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
 
-// Use fast inverse square root from Quake III
-// #define FAST_INVSQRT
-
-// Use fast inverse square root for surface normals (casues some noticable issues, including freezing, especially in slide levels)
-// TODO: check implementation?
-// #define FAST_INVSQRT_SURFACES
-
-// Use fast inverse square root for mtxf_lookat
-// #define FAST_INVSQRT_MTXF_LOOKAT
-
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
 

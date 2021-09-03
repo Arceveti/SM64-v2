@@ -1083,7 +1083,7 @@ Bool32 act_bbh_enter_spin(struct MarioState *m) {
     f32 floorDist;
     f32 cageDX     = (m->usedObj->oPosX - m->pos[0]);
     f32 cageDZ     = (m->usedObj->oPosZ - m->pos[2]);
-    f32 cageDist   = sqrtf(sqr(cageDX) + sqr(cageDZ)); //! fast invsqrt?
+    f32 cageDist   = sqrtf(sqr(cageDX) + sqr(cageDZ));
     f32 forwardVel = ((cageDist > 20.0f) ? 10.0f : (cageDist / 2.0f));
     if (forwardVel < 0.5f) forwardVel = 0.0f;
     switch (m->actionState) {

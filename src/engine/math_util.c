@@ -70,48 +70,6 @@ f32 slow_powf(f32 base, f32 exponent) {
     return slow_expf(exponent * slow_logf(base));
 }
 
-#ifdef FAST_INVSQRT
-
-/****************************
- * Fast Inverse Square Root *
- ****************************/
-
-f32 Q_rsqrtf(f32 number) {
-    long i;
-    f32 x2, y;
-    x2 = (number * 0.5f);
-    y  =  number;
-    i  = *(long *) &y;
-    i  = (0x5f3759df - (i >> 1));
-    y  = *(f32 *) &i;
-    y  = (y * (1.5f - (x2 * sqr(y)))); // 1st iteration
-    // y  = (y * (1.5f - (x2 * sqr(y)))); // 2nd iteration, this can be removed
-    return y;
-}
-
-f64 Q_rsqrtd(f64 number) {
-    long i;
-    f64 x2, y;
-    x2 = (number * 0.5);
-    y  =  number;
-    i  = *(long *) &y;
-    // The magic number is for doubles is from https://cs.uwaterloo.ca/~m32rober/rsqrt.pdf
-    i  = (0x5fe6eb50c7b537a9 - (i >> 1));
-    y  = *(f64 *) &i;
-    y  = (y * (1.5 - (x2 * sqr(y)))); // 1st iteration
-    // y  = (y * (1.5 - (x2 * sqr(y)))); // 2nd iteration, this can be removed
-    return y;
-}
-
-f32 Q_invmagf(Vec3f v) {
-    return Q_rsqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
-}
-
-f64 Q_invmagd(Vec3d v) {
-    return Q_rsqrtd(sqr(v[0]) + sqr(v[1]) + sqr(v[2]));
-}
-#endif
-
 f64 sqrtd(f64 x) {
     if (x < 1.0e-7) return 0.0;
     return sqrtf(x);
@@ -461,20 +419,12 @@ f32 vec4f_mag(Vec4f v) { return vec4_mag(v); }
 
 /// Get the inverse magnitude of vector 'v'
 f32 vec2f_invmag(Vec2f v) {
-#ifdef FAST_INVSQRT
-    return Q_invmagf(v);
-#else
     register f32 mag = vec2f_mag(v);
     return (1.0f / MAX(mag, NEAR_ZERO));
-#endif
 }
 f32 vec3f_invmag(Vec3f v) {
-#ifdef FAST_INVSQRT
-    return Q_invmagf(v);
-#else
     register f32 mag = vec3f_mag(v);
     return (1.0f / MAX(mag, NEAR_ZERO));
-#endif
 }
 
 /// Scale vector 'v' so it has length 1
@@ -490,7 +440,7 @@ void vec2f_normalize_max(Vec2f v, f32 max) {
     register f32 mag = vec3f_mag(v);
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
-        mag = (max / mag); //! fast invsqrt?
+        mag = (max / mag);
         vec2f_mul_val(v, mag);
     }
 }
@@ -498,7 +448,7 @@ void vec3f_normalize_max(Vec3f v, f32 max) {
     register f32 mag = vec3f_mag(v);
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
-        mag = (max / mag); //! fast invsqrt?
+        mag = (max / mag);
         vec3f_mul_val(v, mag);
     }
 }
@@ -774,12 +724,10 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     Vec3f colX, colY, colZ;
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
-#ifdef FAST_INVSQRT
-    register f32 invLength = -Q_rsqrtf(sqr(dx) + sqr(dz));
-#else
+
     register f32 invLength = sqrtf(sqr(dx) + sqr(dz));
     invLength = -(1.0f / MAX(invLength, NEAR_ZERO));
-#endif
+
     dx *= invLength;
     dz *= invLength;
     f32 sr  = sins(roll);
@@ -833,7 +781,7 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
         f32 c = cosd(roll);
         f32 su1 = (s * unit[1]);
         f32 cu1 = (s * unit[1]);
-        f32 invertedHMag = (1.0f / hMag); //! fast invsqrt
+        f32 invertedHMag = (1.0f / hMag);
         mtx[0][0] = (((-unit[2] * c) - (su1 * unit[0])) * invertedHMag);
         mtx[1][0] = ((( unit[2] * s) - (cu1 * unit[0])) * invertedHMag);
         mtx[2][0] =                          -unit[0];

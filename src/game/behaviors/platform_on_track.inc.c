@@ -67,7 +67,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
         // waypoints, which should never be that small). But this implies that
         // amountToMove - distToNextWaypoint <= 0, and amountToMove is at least
         // 0.1 (from platform on track behavior).
-        distToNextWaypoint = (amountToMove / distToNextWaypoint);  //! fast invsqrt?
+        distToNextWaypoint = (amountToMove / distToNextWaypoint);
         pos[0] += (d[0] * distToNextWaypoint);
         pos[1] += (d[1] * distToNextWaypoint);
         pos[2] += (d[2] * distToNextWaypoint);
