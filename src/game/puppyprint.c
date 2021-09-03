@@ -27,6 +27,8 @@ a modern game engine's developer's console.
 
 #ifdef PUPPYPRINT
 
+#define USE_CYCLES
+
 #include "config.h"
 #include "boot/game_init.h"
 #include "boot/memory.h"
@@ -50,8 +52,7 @@ Bool8 fDebug      = FALSE;
 #if PUPPYPRINT_DEBUG
 Bool8 benchViewer = FALSE;
 u8    benchOption = 0;
-s8    logViewer   = 0; // Bool8?
-
+s8    logViewer   = 0;
 // Profiler values
 s8  perfIteration         = 0;
 s16 benchmarkLoop         = 0;
@@ -101,11 +102,11 @@ extern u8 _goddardSegmentEnd[];
 
 // Here is stored the rom addresses of the global code segments. If you get rid of any, it's best to just write them as NULL.
 s32 ramP[5][2] = {
-    {&_buffersSegmentBssStart,      &_buffersSegmentBssEnd     },
-    {&_mainSegmentStart,            &_mainSegmentEnd           },
-    {&_engineSegmentStart,          &_engineSegmentEnd         },
-    {&_framebuffersSegmentBssStart, &_framebuffersSegmentBssEnd},
-    {&_goddardSegmentStart,         &_goddardSegmentEnd        },
+    {(s32)&_buffersSegmentBssStart,      (s32)&_buffersSegmentBssEnd     },
+    {(s32)&_mainSegmentStart,            (s32)&_mainSegmentEnd           },
+    {(s32)&_engineSegmentStart,          (s32)&_engineSegmentEnd         },
+    {(s32)&_framebuffersSegmentBssStart, (s32)&_framebuffersSegmentBssEnd},
+    {(s32)&_goddardSegmentStart,         (s32)&_goddardSegmentEnd        },
 };
 
 void puppyprint_calculate_ram_usage(void) {
@@ -122,7 +123,7 @@ void puppyprint_calculate_ram_usage(void) {
     ramsizeSegment[5] = (0x4000 + 0x800);
     ramsizeSegment[6] = (SURFACE_NODE_POOL_SIZE * sizeof(struct SurfaceNode)) + (SURFACE_POOL_SIZE * sizeof(struct Surface));
     ramsizeSegment[7] = (gAudioHeapSize + gAudioInitPoolSize);
-    ramsizeSegment[8] = (audioPool[0] + audioPool[1] + audioPool[2] + audioPool[3] + audioPool[4] + audioPool[5] +
+    ramsizeSegment[8] = (audioPool[0] + audioPool[1] + audioPool[2] + audioPool[3] + audioPool[ 4] + audioPool[ 5] +
                          audioPool[6] + audioPool[7] + audioPool[8] + audioPool[9] + audioPool[10] + audioPool[11]);
 }
 
@@ -137,44 +138,48 @@ void puppyprint_profiler_finished(void) {
         if (benchMark[i] > benchMark[NUM_BENCH_ITERATIONS + 1]) benchMark[NUM_BENCH_ITERATIONS + 1] = benchMark[i];
     }
     benchMark[NUM_BENCH_ITERATIONS] /= NUM_BENCH_ITERATIONS;
+#ifdef USE_CYCLES
+    benchmarkProgramTimer = (osGetTime() - benchmarkProgramTimer);
+#else
     benchmarkProgramTimer = OS_CYCLES_TO_USEC(osGetTime() - benchmarkProgramTimer);
+#endif
 }
 
 // RGB colour lookup table for colouring all the funny ram prints.
 ColorRGB colourChart[33] = {
-    { 255,    0,    0},
-    {   0,    0,  255},
-    {   0,  255,    0},
-    { 255,  255,    0},
-    { 255,    0,  255},
-    { 255,  127,    0},
-    {   0,  255,  255},
-    {  51,  255,   51},
-    { 255,  153,  153},
-    { 204,    0,  102},
-    {   0,  153,  153},
-    { 153,  255,  153},
-    {   0,    0,  128},
-    { 128,    0,  128},
-    { 218,  165,   32},
-    { 107,  142,   35},
-    { 188,  143,  143},
-    { 210,  105,   30},
-    { 154,  205,   50},
-    { 165,   42,   42},
-    { 255,  105,  180},
-    { 139,   69,   19},
-    { 250,  240,  230},
-    {  95,  158,  160},
-    {  60,  179,  113},
-    { 255,   69,    0},
-    { 128,    0,    0},
-    { 216,  191,  216},
-    { 244,  164,   96},
-    { 176,  196,  222},
-    { 255,  255,  255}};
+    { 255,   0,   0},
+    {   0,   0, 255},
+    {   0, 255,   0},
+    { 255, 255,   0},
+    { 255,   0, 255},
+    { 255, 127,   0},
+    {   0, 255, 255},
+    {  51, 255,  51},
+    { 255, 153, 153},
+    { 204,   0, 102},
+    {   0, 153, 153},
+    { 153, 255, 153},
+    {   0,   0, 128},
+    { 128,   0, 128},
+    { 218, 165,  32},
+    { 107, 142,  35},
+    { 188, 143, 143},
+    { 210, 105,  30},
+    { 154, 205,  50},
+    { 165,  42,  42},
+    { 255, 105, 180},
+    { 139,  69,  19},
+    { 250, 240, 230},
+    {  95, 158, 160},
+    {  60, 179, 113},
+    { 255,  69,   0},
+    { 128,   0,   0},
+    { 216, 191, 216},
+    { 244, 164,  96},
+    { 176, 196, 222},
+    { 255, 255, 255}};
 
-//Change this to alter the width of the bar at the bottom.
+// Change this to alter the width of the bar at the bottom.
 #define BAR_LENGTH 200
 
 void print_ram_bar(void) {
@@ -187,18 +192,18 @@ void print_ram_bar(void) {
     for ((i = 0); (i < 32); (i++)) {
         if (ramsizeSegment[i] == 0) continue;
         perfPercentage = ((f32)ramsizeSegment[i] / ramsize);
-        graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage)), 1, (160 + (BAR_LENGTH / 2)));
+        graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage), 1, (160 + (BAR_LENGTH / 2))));
         render_blank_box(prevGraph, 210, graphPos, 218, colourChart[i][0], colourChart[i][1], colourChart[i][2], 255);
         prevGraph      = graphPos;
     }
     perfPercentage = ((f32)ramsizeSegment[32] / ramsize);
-    graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage)), 1, (160 + (BAR_LENGTH / 2)));
+    graphPos       = (prevGraph + CLAMP((BAR_LENGTH * perfPercentage), 1, (160 + (BAR_LENGTH / 2))));
     render_blank_box(prevGraph, 210, graphPos, 218, 255, 255, 255, 255);
     prevGraph = graphPos;
     render_blank_box(prevGraph, 210, 160+(BAR_LENGTH/2), 218, 0, 0, 0, 255);
     finish_blank_box();
 }
-//Another epic lookup table, for text this time.
+// Another epic lookup table, for text this time.
 const char ramNames[9][32] = {
     "Buffers",
     "Main",
@@ -278,14 +283,11 @@ char consoleLogTable[LOG_BUFFER_SIZE][255];
 
 void append_puppyprint_log(char str[255]) {
     s32 i;
-    for ((i = 0); (i < (LOG_BUFFER_SIZE - 1)); (i++)) {
-        memcpy(consoleLogTable[i], consoleLogTable[i + 1], 255);
-    }
+    for ((i = 0); (i < (LOG_BUFFER_SIZE - 1)); (i++)) memcpy(consoleLogTable[i], consoleLogTable[i + 1], 255);
     memcpy(consoleLogTable[LOG_BUFFER_SIZE - 1], str, 255);
 }
 
 #define LINE_HEIGHT (8 + ((LOG_BUFFER_SIZE - 1) * 12))
-
 void print_console_log(void) {
     s32 i;
     prepare_blank_box();
@@ -293,10 +295,9 @@ void print_console_log(void) {
     finish_blank_box();
     for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) {
         if (consoleLogTable[i] == NULL) continue;
-        print_small_text(16, (LINE_HEIGHT) - (i * 12), consoleLogTable[i], PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
+        print_small_text(16, ((LINE_HEIGHT) - (i * 12)), consoleLogTable[i], PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
     }
 }
-
 #undef LINE_HEIGHT
 
 extern void print_fps(s32 x, s32 y);
@@ -305,18 +306,26 @@ void puppyprint_render_profiler(void) {
     s32 perfPercentage[5];
     s32 graphPos;
     s32 prevGraph;
-    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime+audioTime[NUM_PERF_ITERATIONS]+dmaAudioTime[NUM_PERF_ITERATIONS]);
+#ifdef USE_CYCLES
+    OSTime cpuCount = (cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS]);
+#else
+    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS]);
+#endif
     char textBytes[80];
     if (!fDebug) return;
     sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available() / (f32)mempool) * 100));
     print_small_text(160, 224, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
     if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16, 40);
-        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, (s32)OS_CYCLES_TO_USEC(cpuTime)/333, (s32)OS_CYCLES_TO_USEC(rspTime), (s32)OS_CYCLES_TO_USEC(rspTime)/333, (s32)OS_CYCLES_TO_USEC(rdpTime), (s32)OS_CYCLES_TO_USEC(rdpTime)/333);
+#ifdef USE_CYCLES
+        sprintf(textBytes, "CPU: %dcy (%d_)#RSP: %dus (%d_)#RDP: %dcy (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
+#else
+        sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, ((s32)OS_CYCLES_TO_USEC(cpuTime) / 333), (s32)OS_CYCLES_TO_USEC(rspTime), ((s32)OS_CYCLES_TO_USEC(rspTime) / 333), (s32)OS_CYCLES_TO_USEC(rdpTime), ((s32)OS_CYCLES_TO_USEC(rdpTime) / 333));
+#endif
         print_small_text(16, 52, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
         sprintf(textBytes, "OBJ: %d/%d", gObjectCounter, OBJECT_POOL_CAPACITY);
         print_small_text(16, 124, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
-        // Very little point printing useless info if Mayro doesn't even exist.
+        // Very little point printing useless info if Mario doesn't even exist.
         if (gMarioState->marioObj) {
             sprintf(textBytes, "Mario Pos#X: %d#Y: %d#Z: %d#D: %X", (s32)(gMarioState->pos[0]), (s32)(gMarioState->pos[1]), (s32)(gMarioState->pos[2]), (u16)(gMarioState->faceAngle[1]));
             print_small_text(16, 140, textBytes, PRINT_TEXT_ALIGN_LEFT, PRINT_ALL);
@@ -329,35 +338,51 @@ void puppyprint_render_profiler(void) {
         if (benchmarkTimer > 0) {
             benchmarkTimer--;
             prepare_blank_box();
-            //sprintf(textBytes, "Benchmark: %dus#High: %dus", (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS+1]));
-            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dus", (f32)(benchmarkProgramTimer) * 0.000001f, (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
+#ifdef USE_CYCLES
+            // sprintf(textBytes, "Benchmark: %dus#High: %dcy", (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
+            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dcy", ((f32)(benchmarkProgramTimer) * 0.000001f), (s32)(benchMark[NUM_BENCH_ITERATIONS]), (s32)(benchMark[NUM_BENCH_ITERATIONS + 1]));
+#else
+            // sprintf(textBytes, "Benchmark: %dus#High: %dus", (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
+            sprintf(textBytes, "Done in %0.000f seconds#Benchmark: %dus#High: %dus", ((f32)(benchmarkProgramTimer) * 0.000001f), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS]), (s32)OS_CYCLES_TO_USEC(benchMark[NUM_BENCH_ITERATIONS + 1]));
+#endif
             render_blank_box((160 - (get_text_width(textBytes) / 2) - 4), 158, (160 + (get_text_width(textBytes) / 2) + 4), 196, 0, 0, 0, 255);
             print_set_envcolour(255, 255, 255, 255);
             print_small_text(160, 160, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
             finish_blank_box();
         }
-        #define ADDTIMES MAX((collisionTime[NUM_PERF_ITERATIONS] + graphTime[NUM_PERF_ITERATIONS] + behaviourTime[NUM_PERF_ITERATIONS] + audioTime[NUM_PERF_ITERATIONS] + dmaTime[NUM_PERF_ITERATIONS]) / 80, 1)
+#define ADDTIMES MAX((collisionTime[NUM_PERF_ITERATIONS] + graphTime[NUM_PERF_ITERATIONS] + behaviourTime[NUM_PERF_ITERATIONS] + audioTime[NUM_PERF_ITERATIONS] + dmaTime[NUM_PERF_ITERATIONS]) / 80, 1)
         perfPercentage[0] = MAX((collisionTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[1] = MAX((graphTime[    NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[2] = MAX((behaviourTime[NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[3] = MAX((audioTime[    NUM_PERF_ITERATIONS] / ADDTIMES), 1);
         perfPercentage[4] = MAX((dmaTime[      NUM_PERF_ITERATIONS] / ADDTIMES), 1);
-        #undef ADDTIMES
-
+#undef ADDTIMES
+#ifdef USE_CYCLES
+        sprintf(textBytes, "Collision: <COL_99505099>%dcy", (s32)(collisionTime[NUM_PERF_ITERATIONS]));
+        print_small_text(304, 40, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
+        sprintf(textBytes,     "Graph: <COL_50509999>%dcy", (s32)(    graphTime[NUM_PERF_ITERATIONS]));
+        print_small_text(304, 52, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
+        sprintf(textBytes, "Behaviour: <COL_50995099>%dcy", (s32)(behaviourTime[NUM_PERF_ITERATIONS]));
+        print_small_text(304, 64, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
+        sprintf(textBytes,     "Audio: <COL_99995099>%dcy", (s32)(    audioTime[NUM_PERF_ITERATIONS]));
+        print_small_text(304, 76, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
+        sprintf(textBytes,       "DMA: <COL_99509999>%dcy", (s32)(      dmaTime[NUM_PERF_ITERATIONS]));
+        print_small_text(304, 88, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
+#else
         sprintf(textBytes, "Collision: <COL_99505099>%dus", (s32)OS_CYCLES_TO_USEC(collisionTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 40, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes, "Graph: <COL_50509999>%dus", (s32)OS_CYCLES_TO_USEC(graphTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,     "Graph: <COL_50509999>%dus", (s32)OS_CYCLES_TO_USEC(    graphTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 52, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
         sprintf(textBytes, "Behaviour: <COL_50995099>%dus", (s32)OS_CYCLES_TO_USEC(behaviourTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 64, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes, "Audio: <COL_99995099>%dus", (s32)OS_CYCLES_TO_USEC(audioTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,     "Audio: <COL_99995099>%dus", (s32)OS_CYCLES_TO_USEC(    audioTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 76, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-        sprintf(textBytes, "DMA: <COL_99509999>%dus", (s32)OS_CYCLES_TO_USEC(dmaTime[NUM_PERF_ITERATIONS]));
+        sprintf(textBytes,       "DMA: <COL_99509999>%dus", (s32)OS_CYCLES_TO_USEC(      dmaTime[NUM_PERF_ITERATIONS]));
         print_small_text(304, 88, textBytes, PRINT_TEXT_ALIGN_RIGHT, PRINT_ALL);
-
-        //Render CPU breakdown bar.
+#endif
+        // Render CPU breakdown bar.
         prepare_blank_box();
-        graphPos = 224 + perfPercentage[0];
+        graphPos = (224 + perfPercentage[0]);
         render_blank_box(224, 104, graphPos, 112, 255, 0, 0, 255);
         prevGraph = graphPos;
         graphPos += perfPercentage[1];
@@ -390,12 +415,12 @@ void get_average_perf_time(OSTime *time) {
     s32 i     = 0;
     s32 total = 0;
     for ((i = 0); (i < (NUM_PERF_ITERATIONS - 1)); (i++)) total += time[i];
-    time[NUM_PERF_ITERATIONS] = total/NUM_PERF_ITERATIONS;
+    time[NUM_PERF_ITERATIONS] = (total / NUM_PERF_ITERATIONS);
 }
 
 void puppyprint_profiler_process(void) {
-    bufferTime[perfIteration] = (IO_READ(DPC_BUFBUSY_REG));
-    tmemTime[  perfIteration] = (IO_READ(DPC_TMEM_REG));
+    bufferTime[perfIteration] = (IO_READ(DPC_BUFBUSY_REG ));
+    tmemTime[  perfIteration] = (IO_READ(DPC_TMEM_REG    ));
     busTime[   perfIteration] = (IO_READ(DPC_PIPEBUSY_REG));
     OSTime newTime = osGetTime();
     if ((gGlobalTimer % 15) == 0) {
@@ -422,7 +447,6 @@ void puppyprint_profiler_process(void) {
         rspTime = rspGenTime[NUM_PERF_ITERATIONS];
         puppyprint_calculate_ram_usage();
     }
-
     gLastOSTime = newTime;
     if (gGlobalTimer > 5) IO_WRITE(DPC_STATUS_REG, DPC_CLR_CLOCK_CTR | DPC_CLR_CMD_CTR | DPC_CLR_PIPE_CTR | DPC_CLR_TMEM_CTR);
     if (fDebug) {
@@ -461,17 +485,17 @@ void puppyprint_profiler_process(void) {
         benchViewer = FALSE;
         fDebug     ^= TRUE;
     }
-    if (perfIteration++ == NUM_PERF_ITERATIONS - 1) perfIteration = 0;
+    if (perfIteration++ == (NUM_PERF_ITERATIONS - 1)) perfIteration = 0;
 }
 #endif
 
-void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) {
+void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) { // Color types?
     if ((r != currEnv[0]) || (g != currEnv[1]) || (b != currEnv[2]) || (a != currEnv[3])) {
         gDPSetEnvColor(gDisplayListHead++, (Color)r, (Color)g, (Color)b, (Alpha)a);
         currEnv[0] = r;
         currEnv[1] = g;
         currEnv[2] = b;
-        currEnv[3] = a;
+        currEnv[3] = a >> 1;
     }
 }
 
@@ -504,18 +528,18 @@ void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b,
         }
         cycleadd = 0;
     }
-    gDPPipeSync(gDisplayListHead++);
-    gDPSetFillColor(gDisplayListHead++, GPACK_RGBA5551(r, g, b, 1) << 16 | GPACK_RGBA5551(r, g, b, 1));
+    gDPPipeSync(     gDisplayListHead++);
+    gDPSetFillColor( gDisplayListHead++, ((GPACK_RGBA5551(r, g, b, 1) << 16) | (GPACK_RGBA5551(r, g, b, 1))));
     print_set_envcolour(r, g, b, a);
     gDPFillRectangle(gDisplayListHead++, x1, y1, x2-cycleadd, y2-cycleadd);
 }
 
 
 u8 textLen[] = {
-    /*0*/ 6, /*1*/ 5, /*2*/ 7, /*3*/ 7, /*4*/ 7, /*5*/ 7, /*6*/ 8, /*7*/ 7, /*8*/ 7, /*9*/ 6, /*-*/ 8, /*+*/ 8, /*(*/ 5, /*)*/ 5, /*!*/ 4, /*?*/ 6,
-    /*A*/ 7, /*B*/ 7, /*C*/ 7, /*D*/ 7, /*E*/ 6, /*F*/ 5, /*G*/ 8, /*H*/ 6, /*I*/ 6, /*J*/ 5, /*K*/ 7, /*L*/ 6, /*M*/ 7, /*N*/ 7, /*O*/ 7, /*P*/ 6,
-    /*Q*/ 8, /*R*/ 6, /*S*/ 7, /*T*/ 7, /*U*/ 7, /*V*/ 7, /*W*/ 8, /*X*/ 7, /*Y*/ 7, /*Z*/ 7, /*"*/ 5, /*'*/ 2, /*:*/ 3, /*;*/ 3, /*.*/ 3, /*,*/ 3,
-    /*a*/ 7, /*b*/ 7, /*c*/ 6, /*d*/ 7, /*e*/ 7, /*f*/ 7, /*g*/ 7, /*h*/ 7, /*i*/ 3, /*j*/ 5, /*k*/ 8, /*l*/ 4, /*m*/ 7, /*n*/ 7, /*o*/ 7, /*p*/ 7,
+    /*0*/ 6, /*1*/ 5, /*2*/ 7, /*3*/ 7, /*4*/ 7, /*5*/ 7, /*6*/ 8, /*7*/ 7, /*8*/ 7, /*9*/ 6, /*-*/ 8,  /*+*/ 8, /*(*/ 5, /*)*/ 5, /*!*/ 4, /*?*/ 6,
+    /*A*/ 7, /*B*/ 7, /*C*/ 7, /*D*/ 7, /*E*/ 6, /*F*/ 5, /*G*/ 8, /*H*/ 6, /*I*/ 6, /*J*/ 5, /*K*/ 7,  /*L*/ 6, /*M*/ 7, /*N*/ 7, /*O*/ 7, /*P*/ 6,
+    /*Q*/ 8, /*R*/ 6, /*S*/ 7, /*T*/ 7, /*U*/ 7, /*V*/ 7, /*W*/ 8, /*X*/ 7, /*Y*/ 7, /*Z*/ 7, /*"*/ 5,  /*'*/ 2, /*:*/ 3, /*;*/ 3, /*.*/ 3, /*,*/ 3,
+    /*a*/ 7, /*b*/ 7, /*c*/ 6, /*d*/ 7, /*e*/ 7, /*f*/ 7, /*g*/ 7, /*h*/ 7, /*i*/ 3, /*j*/ 5, /*k*/ 8,  /*l*/ 4, /*m*/ 7, /*n*/ 7, /*o*/ 7, /*p*/ 7,
     /*q*/ 7, /*r*/ 6, /*s*/ 6, /*t*/ 6, /*u*/ 6, /*v*/ 7, /*w*/ 8, /*x*/ 6, /*y*/ 8, /*z*/ 7, /*~*/ 8, /*..*/ 7, /*^*/ 8, /*/*/ 8, /*%*/ 8, /*&*/ 8,
 };
 
@@ -548,28 +572,27 @@ void get_char_from_byte(u8 letter, s32 *textX, s32 *textY, s32 *spaceX, s32 *off
         *textY  = 0;
         *spaceX = 2;
     }
-
     switch (letter) {
-        case '-': *textX = 40; *textY = 0; *spaceX = textLen[10]; break; // Hyphen
-        case '+': *textX = 44; *textY = 0; *spaceX = textLen[11]; break; // Plus
-        case '(': *textX = 48; *textY = 0; *spaceX = textLen[12]; break; // Open Bracket
-        case ')': *textX = 52; *textY = 0; *spaceX = textLen[13]; break; // Close Bracket
-        case '!': *textX = 56; *textY = 0; *spaceX = textLen[14]; break; // Exclamation mark
-        case '?': *textX = 60; *textY = 0; *spaceX = textLen[15]; break; // Question mark
+        case '-':  *textX = 40; *textY =  0; *spaceX = textLen[10]; break; // Hyphen
+        case '+':  *textX = 44; *textY =  0; *spaceX = textLen[11]; break; // Plus
+        case '(':  *textX = 48; *textY =  0; *spaceX = textLen[12]; break; // Open Bracket
+        case ')':  *textX = 52; *textY =  0; *spaceX = textLen[13]; break; // Close Bracket
+        case '!':  *textX = 56; *textY =  0; *spaceX = textLen[14]; break; // Exclamation mark
+        case '?':  *textX = 60; *textY =  0; *spaceX = textLen[15]; break; // Question mark
 
-        case '"': *textX = 40; *textY = 12; *spaceX = textLen[42]; break; // Speech mark
-        case 0x27: *textX = 44; *textY = 12; *spaceX = textLen[43]; break; // Apostrophe.
-        case ':': *textX = 48; *textY = 12; *spaceX = textLen[44]; break; // Colon
-        case ';': *textX = 52; *textY = 12; *spaceX = textLen[45]; break; // Semicolon
-        case '.': *textX = 56; *textY = 12; *spaceX = textLen[46]; break; // Full stop
-        case ',': *textX = 60; *textY = 12; *spaceX = textLen[47]; break; // Comma
+        case '"':  *textX = 40; *textY = 12; *spaceX = textLen[42]; break; // Speech mark
+        case '\'': *textX = 44; *textY = 12; *spaceX = textLen[43]; break; // Apostrophe.
+        case ':':  *textX = 48; *textY = 12; *spaceX = textLen[44]; break; // Colon
+        case ';':  *textX = 52; *textY = 12; *spaceX = textLen[45]; break; // Semicolon
+        case '.':  *textX = 56; *textY = 12; *spaceX = textLen[46]; break; // Full stop
+        case ',':  *textX = 60; *textY = 12; *spaceX = textLen[47]; break; // Comma
 
-        case '~': *textX = 40; *textY = 24; *spaceX = textLen[74]; break; // Tilde
-        case '@': *textX = 44; *textY = 24; *spaceX = textLen[75]; break; // Umlaut
-        case '^': *textX = 48; *textY = 24; *spaceX = textLen[76]; break; // Caret
-        case '/': *textX = 52; *textY = 24; *spaceX = textLen[77]; break; // Slash
-        case '_': *textX = 56; *textY = 24; *spaceX = textLen[78]; break; // Percent
-        case '&': *textX = 60; *textY = 24; *spaceX = textLen[79]; break; // Ampersand
+        case '~':  *textX = 40; *textY = 24; *spaceX = textLen[74]; break; // Tilde
+        case '@':  *textX = 44; *textY = 24; *spaceX = textLen[75]; break; // Umlaut
+        case '^':  *textX = 48; *textY = 24; *spaceX = textLen[76]; break; // Caret
+        case '/':  *textX = 52; *textY = 24; *spaceX = textLen[77]; break; // Slash
+        case '_':  *textX = 56; *textY = 24; *spaceX = textLen[78]; break; // Percent
+        case '&':  *textX = 60; *textY = 24; *spaceX = textLen[79]; break; // Ampersand
 
         // This is for the letters that sit differently on the line. It just moves them down a bit.
         case 'g': *offsetY = 1; break;
@@ -580,47 +603,46 @@ void get_char_from_byte(u8 letter, s32 *textX, s32 *textY, s32 *spaceX, s32 *off
 }
 
 Bool8 shakeToggle = FALSE;
-Bool8  waveToggle = FALSE;
+Bool8 waveToggle  = FALSE;
 
 s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
     s32 len = 0;
     while ((str[i + len] != '>') && ((i + len) < (signed)strlen(str))) len++;
     len++;
-
     if (runCMD) {
-        if (strncmp(str+i, "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to 99 for each, so 99000000 is red.
+        if (strncmp((str + i), "<COL_xxxxxxxx>", 5) == 0) { // Simple text colour effect. goes up to 99 for each, so 99000000 is red.
             s32 r, g, b, a;
             // Each value is taken from the strong. The first is multiplied by 10, because it's a larger significant value, then it adds the next digit onto it.
             r  = ((str[i +  5] - '0') * 10);
-            r +=   str[i +  6] - '0';
+            r +=  (str[i +  6] - '0');
             g  = ((str[i +  7] - '0') * 10);
-            g +=   str[i +  8] - '0';
+            g +=  (str[i +  8] - '0');
             b  = ((str[i +  9] - '0') * 10);
-            b +=   str[i + 10] - '0';
+            b +=  (str[i + 10] - '0');
             a  = ((str[i + 11] - '0') * 10);
-            a +=   str[i + 12] - '0';
+            a +=  (str[i + 12] - '0');
             // Multiply each value afterwards by 2.575f to make 255.
             print_set_envcolour((r * 2.575f), (g * 2.575f), (b * 2.575f), (a * 2.575f));
         } else if (strncmp((str + i), "<FADE_xxxxxxxx,xxxxxxxx,xx>", 6) == 0) { // Same as above, except it fades between two colours. The third set of numbers is the speed it fades.
             s32 r, g, b, a, r2, g2, b2, a2, spd, r3, g3, b3, a3, r4, g4, b4, a4;
             r    = ((str[i +  6] - '0') * 10);
-            r   +=   str[i +  7] - '0';
+            r   +=  (str[i +  7] - '0');
             g    = ((str[i +  8] - '0') * 10);
-            g   +=   str[i +  9] - '0';
+            g   +=  (str[i +  9] - '0');
             b    = ((str[i + 10] - '0') * 10);
-            b   +=   str[i + 11] - '0';
+            b   +=  (str[i + 11] - '0');
             a    = ((str[i + 12] - '0') * 10);
-            a   +=   str[i + 13] - '0';
+            a   +=  (str[i + 13] - '0');
             r2   = ((str[i + 15] - '0') * 10);
-            r2  +=   str[i + 16] - '0';
+            r2  +=  (str[i + 16] - '0');
             g2   = ((str[i + 17] - '0') * 10);
-            g2  +=   str[i + 18] - '0';
+            g2  +=  (str[i + 18] - '0');
             b2   = ((str[i + 19] - '0') * 10);
-            b2  +=   str[i + 20] - '0';
+            b2  +=  (str[i + 20] - '0');
             a2   = ((str[i + 21] - '0') * 10);
-            a2  +=   str[i + 22] - '0';
+            a2  +=  (str[i + 22] - '0');
             spd  = ((str[i + 24] - '0') * 10);
-            spd +=   str[i + 25] - '0';
+            spd +=  (str[i + 25] - '0');
             // Find the median.
             r3 = ((r + r2) * 1.2875f);
             g3 = ((g + g2) * 1.2875f);
@@ -634,7 +656,7 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
             // Now start from the median, and wave from end to end with the difference, to create the fading effect.
             print_set_envcolour(r3 + ((sins(gGlobalTimer * spd * 50)) * r4), g3 + ((sins(gGlobalTimer * spd * 50)) * g4), b3 + ((sins(gGlobalTimer * spd * 50)) * b4), a3 + ((sins(gGlobalTimer * spd * 50)) * a4));
         } else if (strncmp((str + i), "<RAINBOW>", 8) == 0) { // Toggles the happy colours :o) Do it again to disable it.
-            s32 r, g, b;
+            s32 r, g, b; //? ColorRGB
             r = ((coss( gGlobalTimer * 600)          + 1) * 127);
             g = ((coss((gGlobalTimer * 600) + 21845) + 1) * 127);
             b = ((coss((gGlobalTimer * 600) - 21845) + 1) * 127);
@@ -642,7 +664,7 @@ s32 text_iterate_command(const char *str, s32 i, s32 runCMD) {
         } else if (strncmp((str + i), "<SHAKE>", 7) == 0) { // Toggles text that shakes on the spot. Do it again to disable it.
             shakeToggle ^= TRUE;
         } else if (strncmp((str + i), "<WAVE>",  6) == 0) { // Toggles text that waves around. Do it again to disable it.
-            waveToggle ^= TRUE;
+            waveToggle  ^= TRUE;
         }
     }
     return len;
@@ -692,17 +714,15 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
     s32 lines      = 0;
     s32 xlu        = currEnv[3];
     s32 prevxlu    = 256; // Set out of bounds, so it will *always* be different at first.
-
     shakeToggle = FALSE;
     waveToggle  = FALSE;
-
     if (amount == PRINT_ALL) tx = (signed)strlen(str);
     gDPSetCycleType(    gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetTexturePersp( gDisplayListHead++, G_TP_NONE);
     gDPSetCombineMode(  gDisplayListHead++, G_CC_FADEA, G_CC_FADEA);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
     if (align == PRINT_TEXT_ALIGN_CENTRE) {
-        for (i = 0; i < (signed)strlen(str); i++) {
+        for ((i = 0); (i < (signed)strlen(str)); (i++)) {
             if (str[i] == '#') {
                 i++;
                 textPos[0] = 0;
@@ -710,10 +730,10 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
             }
             if (str[i] == '<') i += text_iterate_command(str, i, FALSE);
             get_char_from_byte(str[i], &textX, &textY, &spaceX, &offsetY);
-            textPos[0]+=spaceX+1;
+            textPos[0] += (spaceX + 1);
             wideX[lines] = MAX(textPos[0], wideX[lines]);
         }
-        textPos[0] = -(wideX[0]/2);
+        textPos[0] = -(wideX[0] / 2);
     } else if (align == PRINT_TEXT_ALIGN_RIGHT) {
         for ((i = 0); (i < (signed)strlen(str)); (i++)) {
             if (str[i] == '#') {
@@ -721,7 +741,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
                 textPos[0] = 0;
                 lines++;
             } else {
-                textPos[0]+=spaceX+1;
+                textPos[0] += (spaceX + 1);
             }
             if (str[i] == '<') i += text_iterate_command(str, i, FALSE);
             get_char_from_byte(str[i], &textX, &textY, &spaceX, &offsetY);
@@ -730,7 +750,7 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
         textPos[0] = -wideX[0];
     }
     lines = 0;
-    gDPLoadTextureBlock_4b(gDisplayListHead++, segmented_to_virtual(small_font), G_IM_FMT_I, 128, 60, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 0, 0, 0, 0, 0);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, segmented_to_virtual(small_font), G_IM_FMT_I, 128, 60, (G_TX_NOMIRROR | G_TX_CLAMP), (G_TX_NOMIRROR | G_TX_CLAMP), 0, 0, 0, 0, 0);
     for ((i = 0); (i < tx); (i++)) {
         if (str[i] == '#') {
             i++;
@@ -802,12 +822,10 @@ void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNU
     }
     // Find the tile height
     imH = (64 / (imW / 32)); // This gets the vertical amount.
-
     num = 2;
     //Find the width mask
     while (TRUE) {
         if ((s32) num == imW) break;
-
         num *= 2;
         maskW++;
         if (maskW == 9) {
@@ -830,7 +848,6 @@ void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNU
     // Find the height remainder
     peakH  = (height - (height % imH));
     cycles = (width * peakH) / (imW * imH);
-
     // Pass 1
     for ((i = 0); (i < cycles); (i++)) {
         posW = 0;
@@ -851,7 +868,7 @@ void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNU
             posW = (i * imW);
             gDPLoadSync(            gDisplayListHead++);
             gDPLoadTextureTile(     gDisplayListHead++, image, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, height, posW, posH, (posW + imW - 1), (height - 1), 0, (G_TX_NOMIRROR | G_TX_WRAP), (G_TX_NOMIRROR | G_TX_WRAP), maskW, maskH, 0, 0);
-            gSPScisTextureRectangle(gDisplayListHead++, ((x + posW) << 2), ((y + posH) << 2), ((x + posW + imW - mOne) << 2), ((y + posH + imH-mOne) << 2), G_TX_RENDERTILE, 0, 0, (modeSC << 10), (1 << 10));
+            gSPScisTextureRectangle(gDisplayListHead++, ((x + posW) << 2), ((y + posH) << 2), ((x + posW + imW - mOne) << 2), ((y + posH + imH - mOne) << 2), G_TX_RENDERTILE, 0, 0, (modeSC << 10), (1 << 10));
         }
     }
 }

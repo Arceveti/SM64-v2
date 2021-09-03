@@ -112,9 +112,10 @@ Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *no
 void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 nZ, f32 *objYawX, f32 *objYawZ) {
     f32 nX2  =  sqr(nX);
     f32 nZ2  =  sqr(nZ);
-    f32 nXZ2 = (nX2 + nZ2);
-    *objYawX = ((((nZ2 - nX2) * velX) / nXZ2) - ((2 * velZ * (nX * nZ)) / nXZ2));
-    *objYawZ = ((((nX2 - nZ2) * velZ) / nXZ2) - ((2 * velX * (nX * nZ)) / nXZ2));
+    f32 nXZ  = (1.0f / (nX2 + nZ2));
+    f32 nXZ2 = (2 * (nX * nZ) * nXZ);
+    *objYawX = ((((nZ2 - nX2) * velX) * nXZ) - (velZ * nXZ2));
+    *objYawZ = ((((nX2 - nZ2) * velZ) * nXZ) - (velX * nXZ2));
 }
 
 /**
@@ -122,20 +123,16 @@ void turn_obj_away_from_surface(f32 velX, f32 velZ, f32 nX, UNUSED f32 nY, f32 n
  */
 Bool32 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVelZ) {
     struct WallCollisionData hitbox;
-    register f32 wall_nX, wall_nY, wall_nZ, objVelXCopy, objVelZCopy;
+    Vec3f wall_n;
     f32 objYawX, objYawZ;
     vec3f_set(hitbox.pos, objNewX, objY, objNewZ);
     hitbox.offsetY = (o->hitboxHeight / 2);
     hitbox.radius  =  o->hitboxRadius;
     if (find_wall_collisions(&hitbox) != 0) {
         vec3f_copy(&o->oPosVec, hitbox.pos);
-        wall_nX     = hitbox.walls[0]->normal.x;
-        wall_nY     = hitbox.walls[0]->normal.y;
-        wall_nZ     = hitbox.walls[0]->normal.z;
-        objVelXCopy = objVelX;
-        objVelZCopy = objVelZ;
+        vec3f_set(wall_n, hitbox.walls[0]->normal.x, hitbox.walls[0]->normal.y, hitbox.walls[0]->normal.z);
         // Turns away from the first wall only.
-        turn_obj_away_from_surface(objVelXCopy, objVelZCopy, wall_nX, wall_nY, wall_nZ, &objYawX, &objYawZ);
+        turn_obj_away_from_surface(objVelX, objVelZ, wall_n[0], wall_n[1], wall_n[2], &objYawX, &objYawZ);
         o->oMoveAngleYaw = atan2s(objYawZ, objYawX);
         return FALSE;
     }
@@ -190,7 +187,7 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
  * Determines an object's forward speed multiplier.
  */
 void calc_obj_friction(f32 *objFriction, f32 floor_nY) {
-    *objFriction = (((floor_nY < 0.2f) && (o->oFriction < 0.9999f)) ? 0 : o->oFriction);
+    *objFriction = (((floor_nY < 0.2f) && (o->oFriction < NEAR_ONE)) ? 0 : o->oFriction);
 }
 
 /**
@@ -198,9 +195,7 @@ void calc_obj_friction(f32 *objFriction, f32 floor_nY) {
  */
 void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 objVelX, f32 objVelZ) {
     f32 floor_nX2, floor_nZ2, floor_nXZ;
-    f32 floor_nX = objFloor->normal.x;
-    f32 floor_nY = objFloor->normal.y;
-    f32 floor_nZ = objFloor->normal.z;
+    Vec3f floor_n = { objFloor->normal.x, objFloor->normal.y, objFloor->normal.z };
     f32 objFriction;
     // Caps vertical speed with a terminal velocity.
     o->oVelY -= o->oGravity;
@@ -219,26 +214,24 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     }
     //! (Obj Position Crash) If you got an object with height past 2^31, the game would crash.
     if (((s32) o->oPosY >= (s32) objFloorY) && (s32) (o->oPosY < (s32) objFloorY + 37)) {
-        obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
-        floor_nX2 = sqr(floor_nX);
-        floor_nZ2 = sqr(floor_nZ);
-        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * o->oGravity * 2);
+        obj_orient_graph(o, floor_n[0], floor_n[1], floor_n[2]);
+        floor_nX2 = sqr(floor_n[0]);
+        floor_nZ2 = sqr(floor_n[2]);
+        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_n[1]) + floor_nZ2) * o->oGravity * 2);
         // Adds horizontal component of gravity for horizontal speed.
-        objVelX += floor_nX * floor_nXZ;
-        objVelZ += floor_nZ * floor_nXZ;
-        if ((objVelX < 0.000001f) && (objVelX > -0.000001f)) objVelX = 0;
-        if ((objVelZ < 0.000001f) && (objVelZ > -0.000001f)) objVelZ = 0;
+        objVelX  += (floor_n[0] * floor_nXZ);
+        objVelZ  += (floor_n[2] * floor_nXZ);
+        if ((objVelX < NEARER_ZERO) && (objVelX > -NEARER_ZERO)) objVelX = 0;
+        if ((objVelZ < NEARER_ZERO) && (objVelZ > -NEARER_ZERO)) objVelZ = 0;
         if ((objVelX != 0) || (objVelZ != 0)) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
-        calc_obj_friction(&objFriction, floor_nY);
+        calc_obj_friction(&objFriction, floor_n[1]);
         o->oForwardVel = (sqrtf(sqr(objVelX) + sqr(objVelZ)) * objFriction);
     }
 }
 
 void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ, f32 waterY) {
     f32 floor_nX2, floor_nZ2, floor_nXZ;
-    f32 floor_nX  = objFloor->normal.x;
-    f32 floor_nY  = objFloor->normal.y;
-    f32 floor_nZ  = objFloor->normal.z;
+    Vec3f floor_n = { objFloor->normal.x, objFloor->normal.y, objFloor->normal.z };
     f32 netYAccel = ((1.0f - o->oBuoyancy) * (-o->oGravity));
     o->oVelY -= netYAccel;
     // Caps vertical speed with a terminal velocity.
@@ -254,17 +247,17 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     // If moving fast near the surface of the water, flip vertical speed? To emulate skipping?
     if ((o->oForwardVel > 12.5f) && ((waterY + 30.0f) > o->oPosY) && ((waterY - 30.0f) < o->oPosY)) o->oVelY = -o->oVelY;
     if (((s32) o->oPosY >= (s32) floorY) && ((s32) o->oPosY < (s32) floorY + 37)) {
-        obj_orient_graph(o, floor_nX, floor_nY, floor_nZ);
-        floor_nX2 = sqr(floor_nX);
-        floor_nZ2 = sqr(floor_nZ);
-        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_nY) + floor_nZ2) * netYAccel * 2);
+        obj_orient_graph(o, floor_n[0], floor_n[1], floor_n[2]);
+        floor_nX2 = sqr(floor_n[0]);
+        floor_nZ2 = sqr(floor_n[2]);
+        floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_n[1]) + floor_nZ2) * netYAccel * 2);
         // Adds horizontal component of gravity for horizontal speed.
-        objVelX  += floor_nX * floor_nXZ;
-        objVelZ  += floor_nZ * floor_nXZ;
+        objVelX  += (floor_n[0] * floor_nXZ);
+        objVelZ  += (floor_n[2] * floor_nXZ);
     }
-    if (( objVelX < 0.000001f) && ( objVelX > -0.000001f))  objVelX = 0;
-    if (( objVelZ < 0.000001f) && ( objVelZ > -0.000001f))  objVelZ = 0;
-    if ((o->oVelY < 0.000001f) && (o->oVelY > -0.000001f)) o->oVelY = 0;
+    if (( objVelX < NEARER_ZERO) && ( objVelX > -NEARER_ZERO))  objVelX = 0;
+    if (( objVelZ < NEARER_ZERO) && ( objVelZ > -NEARER_ZERO))  objVelZ = 0;
+    if ((o->oVelY < NEARER_ZERO) && (o->oVelY > -NEARER_ZERO)) o->oVelY = 0;
     if ((objVelX != 0) || (objVelZ != 0)) o->oMoveAngleYaw = atan2s(objVelZ, objVelX);
     // Decreases both vertical velocity and forward velocity. Likely so that skips above
     // don't loop infinitely.

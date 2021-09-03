@@ -273,14 +273,14 @@
 // an intangible floor in the current cell
 // #define SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
 // Use fast inverse square root from Quake III
-#define FAST_INVSQRT
+// #define FAST_INVSQRT
 
 // Use fast inverse square root for surface normals (casues some noticable issues, including freezing, especially in slide levels)
 // TODO: check implementation?
 // #define FAST_INVSQRT_SURFACES
 
 // Use fast inverse square root for mtxf_lookat
-#define FAST_INVSQRT_MTXF_LOOKAT
+// #define FAST_INVSQRT_MTXF_LOOKAT
 
 // Use the floor's normal instead of a triangle of find_floor if the floor isn't steep (Arceveti)
 #define FAST_FLOOR_ALIGN
@@ -307,8 +307,8 @@
 // Include Puppyprint, a display library for text and large images.
 // Also includes a custom, enhanced performance profiler.
 // (FazanaJ, HackerSM64)
-// #define PUPPYPRINT
-#define PUPPYPRINT_DEBUG 0
+#define PUPPYPRINT
+#define PUPPYPRINT_DEBUG 1
 
 // Visual debug enables some collision visuals.
 // Tapping Right on the dpad will cycle between visual hitboxes, visual surfaces, both, and neither.
@@ -321,7 +321,7 @@
 // Enable debug info with info for velocity and info for floors/ceilings/walls
 // [COMPLETE_EN_US_SEGMENT2 is recommended]
 // (Arceveti)
-#define DEBUG_INFO
+// #define DEBUG_INFO
 
 // Debug Free Move by pressind Dpad up (Arceveti)
 #define ENABLE_DEBUG_FREE_MOVE

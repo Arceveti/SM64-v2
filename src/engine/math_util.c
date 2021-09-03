@@ -778,7 +778,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     register f32 invLength = -Q_rsqrtf(sqr(dx) + sqr(dz));
 #else
     register f32 invLength = sqrtf(sqr(dx) + sqr(dz));
-    invLength = -(1.0f / MAX(ld, NEAR_ZERO));
+    invLength = -(1.0f / MAX(invLength, NEAR_ZERO));
 #endif
     dx *= invLength;
     dz *= invLength;

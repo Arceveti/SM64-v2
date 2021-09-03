@@ -248,6 +248,9 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 #endif
     // Increment the debug tracker.
     gNumCalls.wall++;
+#if PUPPYPRINT_DEBUG
+    collisionTime[perfIteration] += (osGetTime() - first);
+#endif
     return numCollisions;
 }
 
@@ -276,6 +279,9 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     Vec3f newPos[4];
     s32 i;
     s32 numCollisions     = 0;
+#if PUPPYPRINT_DEBUG
+    OSTime first = osGetTime();
+#endif
     vec3f_copy(collisionData.pos, pos);
     collisionData.radius  = radius;
     collisionData.offsetY = offsetY;
@@ -349,7 +355,7 @@ Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
 
 // Find the height of the surface at a given location
 static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
-    return -((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y;
+    return (-((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y);
 }
 
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {

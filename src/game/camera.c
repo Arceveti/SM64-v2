@@ -842,7 +842,7 @@ void radial_camera_move(struct Camera *c) {
         } else {
             if (c->mode == CAMERA_MODE_RADIAL) {
                 // sModeOffsetYaw only updates when Mario is moving
-                rotateSpeed = gMarioStates[0].forwardVel / 32.0f * 128.0f;
+                rotateSpeed = (gMarioStates[0].forwardVel * 4.0f);
                 approach_s16_symmetric_bool(&sModeOffsetYaw, yawOffset, rotateSpeed);
             }
             if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) sModeOffsetYaw = offset_yaw_outward_radial(c, atan2s(areaDistZ, areaDistX));
@@ -3141,7 +3141,7 @@ s32 offset_yaw_outward_radial(struct Camera *c, Angle areaYaw) {
             yawGoal = 0x0;
             break;
     }
-    dYaw = ((gMarioStates[0].forwardVel / 32.0f) * 128.0f);
+    dYaw = (gMarioStates[0].forwardVel * 4.0f);
     if (sAreaYawChange < 0x0) approach_s16_symmetric_bool(&yaw, -yawGoal, dYaw);
     if (sAreaYawChange > 0x0) approach_s16_symmetric_bool(&yaw,  yawGoal, dYaw);
     // When the final yaw is out of [-60,60] degrees, approach yawGoal faster than dYaw will ever be,

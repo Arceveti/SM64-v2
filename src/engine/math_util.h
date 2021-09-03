@@ -8,8 +8,9 @@
 
 #define BITMASK(size) ((1 << (size)) - 1)
 
-#define NEAR_ZERO 0.00001f
-#define NEAR_ONE  0.99999f
+#define NEAR_ZERO   0.00001f
+#define NEARER_ZERO 0.000001f
+#define NEAR_ONE    0.99999f
 
 struct Row4 {
     f32 c0, c1, c2, c3;

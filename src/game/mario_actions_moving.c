@@ -211,7 +211,7 @@ Bool32 update_sliding(struct MarioState *m, f32 stopSpeed) {
     }
 #else
     newSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
-    if ((oldSpeed > 0.0f && newSpeed) > 0.0f) {
+    if ((oldSpeed > 0.0f) && (newSpeed > 0.0f)) {
         m->slideVelX = ((m->slideVelX * oldSpeed) / newSpeed);
         m->slideVelZ = ((m->slideVelZ * oldSpeed) / newSpeed);
     }

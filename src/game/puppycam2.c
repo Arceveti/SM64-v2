@@ -876,7 +876,7 @@ void puppycam_projection_behaviours(void) {
         } else {
             approach_s16_symmetric_bool(&gPuppyCam.moveZoom, 0, 5);
         }
-        // Zooms the camera in further when underwater.
+        // Zooms the camera in further when underwater. 0x38C0 = slightly under ~80 degrees
         if ((gPuppyCam.pitch > 0x38C0) && (ABSI(gPuppyCam.swimPitch)) < 100) gPuppyCam.zoom = approach_f32_asymptotic((f32)gPuppyCam.zoom, 250.0f, CLAMP((f32)((gPuppyCam.pitch - 0x38C0) / 3072.0f), 0.0f, 1.0f));
         if (!(gMarioState->action & ACT_FLAG_SWIMMING)) {
             // Not swimming
