@@ -14,7 +14,7 @@
 static const Mat4 identityMtx = {
     { 1, 0, 0, 0 },
     { 0, 1, 0, 0 },
-    { 0, 0, 1, 0 }, 
+    { 0, 0, 1, 0 },
     { 0, 0, 0, 1 }
 };
 // UNUSED s16 zeroMtx[4][4] = {
@@ -449,9 +449,15 @@ void vec3f_to_vec3i(Vec3i dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 f32 vec2f_average(Vec2f v) { return ((v[0] + v[1]       ) / 2.0f); }
 f32 vec3f_average(Vec3f v) { return ((v[0] + v[1] + v[2]) / 3.0f); }
 
+/// Get the squared magnitude of vector 'v'
+f32 vec2f_sumsq(Vec2f v) { return vec2_sumsq(v); }
+f32 vec3f_sumsq(Vec3f v) { return vec3_sumsq(v); }
+f32 vec4f_sumsq(Vec4f v) { return vec4_sumsq(v); }
+
 /// Get the magnitude of vector 'v'
 f32 vec2f_mag(Vec2f v) { return vec2_mag(v); }
 f32 vec3f_mag(Vec3f v) { return vec3_mag(v); }
+f32 vec4f_mag(Vec4f v) { return vec4_mag(v); }
 
 /// Get the inverse magnitude of vector 'v'
 f32 vec2f_invmag(Vec2f v) {

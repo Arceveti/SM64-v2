@@ -30,9 +30,9 @@ void set_home_to_mario(void) {
     vec3f_copy(&o->oHomeVec, &gMarioObject->oPosVec);
     o->oHomeY     += 250.0f;
     o->oPosY       =  o->oHomeY;
-    f32 dx         = (o->oHomeX - o->oPosX);
-    f32 dz         = (o->oHomeZ - o->oPosZ);
-    o->oForwardVel = (sqrtf(sqr(dx) + sqr(dz)) / 23.0f); //! fast invsqrt?
+    f32 lateralDist;
+    vec3f_get_lateral_dist(&o->oPosVec, &o->oHomeVec, &lateralDist);
+    o->oForwardVel = (lateralDist / 23.0f); //?
 }
 
 void bhv_spawned_star_no_level_exit_loop(void) {

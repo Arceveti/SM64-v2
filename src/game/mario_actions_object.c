@@ -214,7 +214,7 @@ Bool32 act_holding_bowser(struct MarioState *m) {
 #else
         Angle camYaw = (m->area->camera->yaw + DEG(180));
 #endif
-        struct Object *bowserBomb = find_closest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, &camAngleToBomb);
+        struct Object *bowserBomb = find_nearest_obj_with_behavior_from_yaw(bhvBowserBomb, m->pos, camYaw, &camAngleToBomb);
 #ifdef PUPPYCAM
 #ifdef BOWSER_BOMB_FOCUS
         if (bowserBomb != NULL) approach_s16_asymptotic_bool(&gPuppyCam.yawTarget, (camAngleToBomb + DEG(180)), 0x10);

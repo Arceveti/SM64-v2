@@ -556,16 +556,15 @@ s16 calculate_ripple_at_point(struct Painting *painting, f32 posX, f32 posY) {
     f32 dispersionFactor = painting->dispersionFactor;
     /// How far the ripple has spread
     f32 rippleTimer = painting->rippleTimer;
-    f32 distanceToOrigin;
     f32 rippleDistance;
     posX *= (painting->size / PAINTING_SIZE);
     posY *= (painting->size / PAINTING_SIZE);
     /// x and y ripple location
     f32 rippleDX = (posX - painting->rippleX);
     f32 rippleDY = (posY - painting->rippleY);
-    distanceToOrigin = sqrtf(sqr(rippleDX) + sqr(rippleDY));
+    f32 distanceToOrigin = sqrtf(sqr(rippleDX) + sqr(rippleDY));
     // A larger dispersionFactor makes the ripple spread slower
-    rippleDistance = distanceToOrigin / dispersionFactor; //! fast invsqrt?
+    rippleDistance = (distanceToOrigin / dispersionFactor); //! fast invsqrt?
     if (rippleTimer < rippleDistance) {
         // if the ripple hasn't reached the point yet, make the point magnitude 0
         return 0;

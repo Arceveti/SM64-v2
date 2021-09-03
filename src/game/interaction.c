@@ -475,9 +475,9 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     f32 minDistance = ((o->hitboxRadius + m->marioObj->hitboxRadius) + padding);
     f32 offsetX     = (m->pos[0] - o->oPosX);
     f32 offsetZ     = (m->pos[2] - o->oPosZ);
-    f32 distance    = sqrtf(sqr(offsetX) + sqr(offsetZ));
+    f32 distance    = (sqr(offsetX) + sqr(offsetZ));
     f32 floorHeight;
-    if (distance < minDistance) {
+    if (distance < sqr(minDistance)) {
         struct Surface *floor;
         Angle pushAngle = ((distance == 0.0f) ? m->faceAngle[1] : atan2s(offsetZ, offsetX));
         f32 newMarioX = (o->oPosX + (minDistance * sins(pushAngle)));
@@ -505,10 +505,10 @@ void bounce_back_from_attack(struct MarioState *m, MarioInteraction interaction)
 }
 
 u32 should_push_or_pull_door(struct MarioState *m, struct Object *o) {
-    f32   dx   = (o->oPosX - m->pos[0]);
-    f32   dz   = (o->oPosZ - m->pos[2]);
-    Angle dYaw = abs_angle_diff(o->oMoveAngleYaw, atan2s(dz, dx));
-    return ((dYaw <= DEG(90)) ? 0x00000001 : 0x00000002); //! names
+    Angle yaw;
+    vec3f_get_yaw(m->pos, &o->oPosVec, &yaw);
+    yaw = abs_angle_diff(o->oMoveAngleYaw, yaw);
+    return ((yaw <= DEG(90)) ? 0x00000001 : 0x00000002); //! names
 }
 
 u32 take_damage_from_interact_object(struct MarioState *m) {
@@ -1173,7 +1173,7 @@ Bool32 interact_pole(struct MarioState *m, UNUSED InteractType interactType, str
 }
 
 Bool32 interact_hoot(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
-    MarioAction actionId = m->action & ACT_ID_MASK;
+    MarioAction actionId = (m->action & ACT_ID_MASK);
     //! Can pause to advance the global timer without falling too far, allowing
     // you to regrab after letting go.
     if ((actionId >= 0x080)

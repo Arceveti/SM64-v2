@@ -1,5 +1,5 @@
 struct RacingPenguinData {
-    s16 text; //! DialogID16?
+    DialogID16 text;
     f32 radius;
     f32 height;
 };

@@ -203,7 +203,6 @@ Angle cur_obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
 }
 
 
-//! use math_util functions directly for these?
 Bool32 cur_obj_forward_vel_approach(f32 target, f32 delta) {
     return approach_f32_ptr(&o->oForwardVel, target, delta);
 }
@@ -293,7 +292,7 @@ Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle t
     struct Object *otherObject;
     f32 dx, dz;
     Angle angle;
-    f32 radius, otherRadius, relativeRadius, distance;
+    f32 radius, otherRadius, relativeRadius;
     s32 i;
     if (o->numCollidedObjs != 0) {
         for ((i = 0); (i < o->numCollidedObjs); (i++)) {
@@ -302,11 +301,10 @@ Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle t
             if (otherObject->oInteractType & INTERACT_MASK_NO_OBJ_COLLISIONS) continue;
             dx             = (o->oPosX - otherObject->oPosX);
             dz             = (o->oPosZ - otherObject->oPosZ);
-            distance       = sqrtf(sqr(dx) + sqr(dz));
             radius         = ((          o->hurtboxRadius > 0) ?           o->hurtboxRadius :           o->hitboxRadius);
             otherRadius    = ((otherObject->hurtboxRadius > 0) ? otherObject->hurtboxRadius : otherObject->hitboxRadius);
             relativeRadius = (radius + otherRadius);
-            if (distance > relativeRadius) continue;
+            if ((sqr(dx) + sqr(dz)) > sqr(relativeRadius)) continue;
             angle    = atan2s(dz, dx);
             o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
             o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
@@ -385,8 +383,7 @@ void cur_obj_set_squished_action(void) {
 
 Bool32 cur_obj_die_if_above_lava_and_health_non_positive(void) {
     if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND) {
-        if (((o->oGravity + o->oBuoyancy) > 0.0f)
-            || ((find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 150.0f)) return FALSE;
+        if (((o->oGravity + o->oBuoyancy) > 0.0f) || ((find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 150.0f)) return FALSE;
     } else if (!(o->oMoveFlags & OBJ_MOVE_ABOVE_LAVA)) {
         if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER) {
             if (o->oWallHitboxRadius < 200.0f) {

@@ -1,10 +1,10 @@
 // grand_star.c.inc
 
 s32 arc_to_goal_pos(Vec3f dest, Vec3f src, f32 yVel, f32 gravity) {
-    f32 dx           = (dest[0] - src[0]);
-    f32 dz           = (dest[2] - src[2]);
-    f32 planarDist   = sqrtf(sqr(dx) + sqr(dz));
-    o->oMoveAngleYaw = atan2s(dz, dx);
+    f32 planarDist;
+    Angle yaw;
+    vec3f_get_lateral_dist_and_yaw(src, dest, &planarDist, &yaw);
+    o->oMoveAngleYaw = yaw;
     o->oVelY         = yVel;
     o->oGravity      = gravity;
     s32 time         = (((-2.0f / o->oGravity) * yVel) - 1.0f);

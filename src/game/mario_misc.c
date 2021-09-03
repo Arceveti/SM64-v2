@@ -493,7 +493,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             overlay_i8_on_rgba16_additive(metalTexture, shineTexture, 64, 32);
 #endif
         }
-        if (find_closest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
+        if (find_nearest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
             ImageTexture *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             dist   -= 250.0f;

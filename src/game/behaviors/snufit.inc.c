@@ -39,10 +39,8 @@ Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
     if (callContext == GEO_CONTEXT_RENDER) {
         obj                       = (struct Object                       *) gCurGraphNodeObject;
         transNode                 = (struct GraphNodeTranslationRotation *) node->next;
-        //! oSnufitOffsetVec?
-        transNode->translation[0] = obj->oSnufitXOffset;
-        transNode->translation[1] = obj->oSnufitYOffset;
-        transNode->translation[2] = obj->oSnufitZOffset;
+        //! oSnufitOffsetVec? s16 though
+        vec3s_copy(transNode->translation, &obj->oSnufitOffsetVec);
     }
     return NULL;
 }

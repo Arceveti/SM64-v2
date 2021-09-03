@@ -215,9 +215,9 @@ Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angl
     Angle targetAngle = 0x0;
     Angle startAngle = o->rawData.asU32[angleIndex];
     switch (angleIndex) {
-        case O_MOVE_ANGLE_PITCH_INDEX:
-        case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&obj->oPosVec, &target->oPosVec, &targetAngle); break; //! inverted for mr. I?
-        case O_MOVE_ANGLE_YAW_INDEX:
+        case O_MOVE_ANGLE_PITCH_INDEX: // fall through
+        case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&target->oPosVec, &obj->oPosVec, &targetAngle); break; //! intentionally inverted?
+        case O_MOVE_ANGLE_YAW_INDEX:   // fall through
         case O_FACE_ANGLE_YAW_INDEX:   vec3f_get_yaw(  &obj->oPosVec, &target->oPosVec, &targetAngle); break;
     }
     o->rawData.asU32[angleIndex] = approach_s16_symmetric(startAngle, targetAngle, turnAmount);
@@ -486,7 +486,7 @@ void obj_set_face_angle_to_move_angle(struct Object *obj) {
 
 u32 get_object_list_from_behavior(const BehaviorScript *behavior) {
     // If the first behavior command is "begin", then get the object list header from there
-    if ((behavior[0] >> 24) == 0x0) return (behavior[0] >> 16) & 0xFFFF;
+    if ((behavior[0] >> 24) == 0x0) return ((behavior[0] >> 16) & 0xFFFF);
     return OBJ_LIST_DEFAULT;
 }
 
@@ -506,12 +506,14 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    f32 minDist = 0x20000;
+    f32 minDist = __FLT_MAX__;
+    Vec3f d;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (obj != o)) {
-            f32 objDist = dist_between_objects(o, obj);
+            vec3f_diff(d, &obj->oPosVec, &o->oPosVec);
+            f32 objDist = vec3f_sumsq(d);
             if (objDist < minDist) {
                 closestObj = obj;
                 minDist = objDist;
@@ -519,23 +521,23 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
         }
         obj = (struct Object *) obj->header.next;
     }
-    *dist = minDist;
+    *dist = sqrtf(minDist);
     return closestObj;
 }
 
-struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *behavior, Vec3f pos, f32 *dist) {
+struct Object *find_nearest_obj_with_behavior_from_point(const BehaviorScript *behavior, Vec3f pos, f32 *dist) {
     uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    f32 minDist = 0x20000;
+    f32 minDist = __FLT_MAX__;
     Vec3f d;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj         = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
             vec3f_diff(d, pos, &obj->oPosVec);
-            f32 objDist = vec3f_mag(d);
+            f32 objDist = vec3f_sumsq(d);
             if (objDist < minDist) {
                 closestObj = obj;
                 minDist    = objDist;
@@ -543,12 +545,12 @@ struct Object *find_closest_obj_with_behavior_from_point(const BehaviorScript *b
         }
         obj = (struct Object *) obj->header.next;
     }
-    *dist = minDist;
+    *dist = sqrtf(minDist);
     return closestObj;
 }
 
 // Finds the object closest to the line from 'pos' in the 'lookYaw' direction
-struct Object *find_closest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, const Angle lookYaw, Angle *yaw) {
+struct Object *find_nearest_obj_with_behavior_from_yaw(const BehaviorScript *behavior, Vec3f pos, const Angle lookYaw, Angle *yaw) {
     uintptr_t         *behaviorAddr = segmented_to_virtual(behavior);
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
@@ -991,7 +993,7 @@ void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {
 
 static Bool32 clear_move_flag(u32 *bitSet, s32 flag) {
     if (*bitSet & flag) {
-        *bitSet &= flag ^ 0xFFFFFFFF;
+        *bitSet &= (flag ^ 0xFFFFFFFF);
         return TRUE;
     } else {
         return FALSE;
@@ -1030,7 +1032,7 @@ f32 increment_velocity_toward_range(f32 value, f32 center, f32 zeroThreshold, f3
 
 Bool32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj2) {
     s32 i;
-    for (i = 0; i < obj1->numCollidedObjs; i++) if (obj1->collidedObjs[i] == obj2) return TRUE;
+    for ((i = 0); (i < obj1->numCollidedObjs); (i++)) if (obj1->collidedObjs[i] == obj2) return TRUE;
     return FALSE;
 }
 
@@ -1063,18 +1065,18 @@ f32 cur_obj_lateral_dist_to_home(void) {
 }
 
 Bool32 cur_obj_outside_home_square(f32 halfLength) {
-    if (o->oHomeX - halfLength > o->oPosX) return TRUE;
-    if (o->oHomeX + halfLength < o->oPosX) return TRUE;
-    if (o->oHomeZ - halfLength > o->oPosZ) return TRUE;
-    if (o->oHomeZ + halfLength < o->oPosZ) return TRUE;
+    if ((o->oHomeX - halfLength) > o->oPosX) return TRUE;
+    if ((o->oHomeX + halfLength) < o->oPosX) return TRUE;
+    if ((o->oHomeZ - halfLength) > o->oPosZ) return TRUE;
+    if ((o->oHomeZ + halfLength) < o->oPosZ) return TRUE;
     return FALSE;
 }
 
 Bool32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
-    if (o->oHomeX + minX > o->oPosX) return TRUE;
-    if (o->oHomeX + maxX < o->oPosX) return TRUE;
-    if (o->oHomeZ + minZ > o->oPosZ) return TRUE;
-    if (o->oHomeZ + maxZ < o->oPosZ) return TRUE;
+    if ((o->oHomeX + minX) > o->oPosX) return TRUE;
+    if ((o->oHomeX + maxX) < o->oPosX) return TRUE;
+    if ((o->oHomeZ + minZ) > o->oPosZ) return TRUE;
+    if ((o->oHomeZ + maxZ) < o->oPosZ) return TRUE;
     return FALSE;
 }
 
@@ -1221,7 +1223,7 @@ static void cur_obj_update_floor(void) {
     if (floor != NULL) {
         if (floor->type == SURFACE_BURNING) {
             o->oMoveFlags |= OBJ_MOVE_ABOVE_LAVA;
-        } else if (floor->type == SURFACE_DEATH_PLANE || floor->type == SURFACE_VERTICAL_WIND) {
+        } else if ((floor->type == SURFACE_DEATH_PLANE) || (floor->type == SURFACE_VERTICAL_WIND)) {
             //! This maybe misses SURFACE_WARP
             o->oMoveFlags |= OBJ_MOVE_ABOVE_DEATH_BARRIER;
         }

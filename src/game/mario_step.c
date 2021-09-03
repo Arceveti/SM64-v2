@@ -369,7 +369,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
                 oldWallDYaw = wallDYaw;
                 m->wall     = upperWall.walls[i];
             }
-            if ((wallDYaw >= DEG(60)) && (wallDYaw <= DEG(120))) continue; //! what's the first check for?
+            if ((wallDYaw >= DEG(60)) && (wallDYaw <= DEG(120))) continue; //! what's the first 60 degrees check for?
             return GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS;
         }
     }

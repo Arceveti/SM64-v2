@@ -156,7 +156,7 @@ void envfx_rotate_around_whirlpool(s32 *x, s32 *y, s32 *z) {
  */
 s32 envfx_is_whirlpool_bubble_alive(s32 index) {
     if ((gEnvFxBuffer + index)->bubbleY < (gEnvFxBubbleConfig[ENVFX_STATE_DEST_Y] - 100)) return FALSE;
-    return !((gEnvFxBuffer + index)->angleAndDist[1] < 10);
+    return !((gEnvFxBuffer + index)->whirlpoolDist < 10);
 }
 
 /**
@@ -168,24 +168,24 @@ void envfx_update_whirlpool(void) {
     for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_whirlpool_bubble_alive(i);
         if (!(gEnvFxBuffer + i)->isAlive) {
-            (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() *  1000.0f);
-            (gEnvFxBuffer + i)->angleAndDist[0] = (random_float() * 65536.0f);
-            (gEnvFxBuffer + i)->pos[0]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->pos[2]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->bubbleY         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 100.0f) - 50.0f));
-            (gEnvFxBuffer + i)->pos[1]          = (i + gEnvFxBuffer)->bubbleY;
+            (gEnvFxBuffer + i)->whirlpoolDist  = (random_float() *  1000.0f);
+            (gEnvFxBuffer + i)->whirlpoolAngle = (random_float() * 65536.0f);
+            (gEnvFxBuffer + i)->pos[0]         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->pos[2]         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->bubbleY        = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 100.0f) - 50.0f));
+            (gEnvFxBuffer + i)->pos[1]         = (i + gEnvFxBuffer)->bubbleY;
             // (gEnvFxBuffer + i)->unusedBubbleVar = 0;
-            (gEnvFxBuffer + i)->isAlive         = TRUE;
+            (gEnvFxBuffer + i)->isAlive        = TRUE;
             envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->pos[0],
                                           &(gEnvFxBuffer + i)->pos[1],
                                           &(gEnvFxBuffer + i)->pos[2]);
         } else {
-            (gEnvFxBuffer + i)->angleAndDist[1] -= 40;
-            (gEnvFxBuffer + i)->angleAndDist[0] += ((s16)(3000 - ((gEnvFxBuffer + i)->angleAndDist[1] * 2)) + 0x400);
-            (gEnvFxBuffer + i)->pos[0]           = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->pos[2]           = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->bubbleY         -= (40 - ((s16)(gEnvFxBuffer + i)->angleAndDist[1] / 100));
-            (gEnvFxBuffer + i)->pos[1]           = (i + gEnvFxBuffer)->bubbleY;
+            (gEnvFxBuffer + i)->whirlpoolDist  -= 40;
+            (gEnvFxBuffer + i)->whirlpoolAngle += ((s16)(3000 - ((gEnvFxBuffer + i)->whirlpoolDist * 2)) + 0x400);
+            (gEnvFxBuffer + i)->pos[0]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->pos[2]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->bubbleY        -= (40 - ((s16)(gEnvFxBuffer + i)->whirlpoolDist / 100));
+            (gEnvFxBuffer + i)->pos[1]          = (i + gEnvFxBuffer)->bubbleY;
             envfx_rotate_around_whirlpool(&(gEnvFxBuffer + i)->pos[0],
                                           &(gEnvFxBuffer + i)->pos[1],
                                           &(gEnvFxBuffer + i)->pos[2]);
@@ -213,16 +213,16 @@ void envfx_update_jetstream(void) {
     for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = envfx_is_jestream_bubble_alive(i);
         if (!(gEnvFxBuffer + i)->isAlive) {
-            (gEnvFxBuffer + i)->angleAndDist[1] = (random_float() * 300.0f);
-            (gEnvFxBuffer + i)->angleAndDist[0] = random_u16();
-            (gEnvFxBuffer + i)->pos[0]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->pos[2]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->angleAndDist[0]) * (gEnvFxBuffer + i)->angleAndDist[1]));
-            (gEnvFxBuffer + i)->pos[1]          = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 400.0f) - 200.0f));
+            (gEnvFxBuffer + i)->whirlpoolDist  = (random_float() * 300.0f);
+            (gEnvFxBuffer + i)->whirlpoolAngle = random_u16();
+            (gEnvFxBuffer + i)->pos[0]         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_X] + (sins((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->pos[2]         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Z] + (coss((gEnvFxBuffer + i)->whirlpoolAngle) * (gEnvFxBuffer + i)->whirlpoolDist));
+            (gEnvFxBuffer + i)->pos[1]         = (gEnvFxBubbleConfig[ENVFX_STATE_SRC_Y] + ((random_float() * 400.0f) - 200.0f));
         } else {
-            (gEnvFxBuffer + i)->angleAndDist[1] += 10;
-            (gEnvFxBuffer + i)->pos[0] += (sins((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
-            (gEnvFxBuffer + i)->pos[2] += (coss((gEnvFxBuffer + i)->angleAndDist[0]) * 10.0f);
-            (gEnvFxBuffer + i)->pos[1] -=     (((gEnvFxBuffer + i)->angleAndDist[1] / 30) - 50);
+            (gEnvFxBuffer + i)->whirlpoolDist += 10;
+            (gEnvFxBuffer + i)->pos[0] += (sins((gEnvFxBuffer + i)->whirlpoolAngle) * 10.0f);
+            (gEnvFxBuffer + i)->pos[2] += (coss((gEnvFxBuffer + i)->whirlpoolAngle) * 10.0f);
+            (gEnvFxBuffer + i)->pos[1] -=     (((gEnvFxBuffer + i)->whirlpoolDist / 30) - 50);
         }
     }
 }

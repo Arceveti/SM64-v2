@@ -982,7 +982,7 @@
 #define /*0x104*/ oSnufitBodyScalePeriod                        OBJECT_FIELD_S32(0x1F)
 #define /*0x108*/ oSnufitBodyBaseScale                          OBJECT_FIELD_S32(0x20)
 #define /*0x10C*/ oSnufitBullets                                OBJECT_FIELD_S32(0x21)
-//! should these be an s32 vector?
+#define /*0x1AC*/ oSnufitOffsetVec                              OBJECT_FIELD_S16(0x49,   0) // start pos of s16 vec
 #define /*0x1AC*/ oSnufitXOffset                                OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oSnufitYOffset                                OBJECT_FIELD_S16(0x49, + 1)
 #define /*0x1B0*/ oSnufitZOffset                                OBJECT_FIELD_S16(0x4A,   0)

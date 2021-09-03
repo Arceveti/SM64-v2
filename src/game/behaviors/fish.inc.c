@@ -141,7 +141,7 @@ static void fish_act_flee(void) {
  */
 static void fish_act_init(void) {
     cur_obj_init_animation_with_accel_and_sound(FISH_ANIM_DEFAULT, 1.0f);
-    o->header.gfx.animInfo.animFrame = (s16)(random_float() * 28.0f); //! AnimFrame16?
+    o->header.gfx.animInfo.animFrame = (AnimFrame16)(random_float() * 28.0f);
     o->oFishDepthDistance = (random_float() * 300.0f);
     cur_obj_scale((random_float() * 0.4f) + 0.8f);
     o->oAction = FISH_ACT_ROAM;

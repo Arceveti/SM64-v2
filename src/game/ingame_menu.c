@@ -122,7 +122,7 @@ f32 gDialogBoxOpenTimer   = DEFAULT_DIALOG_BOX_ANGLE;
 f32 gDialogBoxScale       = DEFAULT_DIALOG_BOX_SCALE;
 s16 gDialogScrollOffsetY  = 0;
 s8  gDialogBoxType        = DIALOG_TYPE_ROTATE;
-s16 gDialogID             = DIALOG_NONE;
+DialogID16 gDialogID      = DIALOG_NONE;
 s16 gLastDialogPageStrPos = 0;
 s16 gDialogTextPos        = 0;
 s8  gDialogLineNum        = 1;
@@ -570,14 +570,14 @@ DialogID get_dialog_id(void) {
     return gDialogID;
 }
 
-void create_dialog_box(s16 dialog) {
+void create_dialog_box(DialogID dialog) {
     if (gDialogID == DIALOG_NONE) {
         gDialogID      = dialog;
         gDialogBoxType = DIALOG_TYPE_ROTATE;
     }
 }
 
-void create_dialog_box_with_var(s16 dialog, s32 dialogVar) {
+void create_dialog_box_with_var(DialogID dialog, s32 dialogVar) {
     if (gDialogID == DIALOG_NONE) {
         gDialogID       = dialog;
         gDialogVariable = dialogVar;
@@ -585,14 +585,14 @@ void create_dialog_box_with_var(s16 dialog, s32 dialogVar) {
     }
 }
 
-void create_dialog_inverted_box(s16 dialog) {
+void create_dialog_inverted_box(DialogID dialog) {
     if (gDialogID == DIALOG_NONE) {
         gDialogID      = dialog;
         gDialogBoxType = DIALOG_TYPE_ZOOM;
     }
 }
 
-void create_dialog_box_with_response(s16 dialog) {
+void create_dialog_box_with_response(DialogID dialog) {
     if (gDialogID == DIALOG_NONE) {
         gDialogID           = dialog;
         gDialogBoxType      = DIALOG_TYPE_ROTATE;

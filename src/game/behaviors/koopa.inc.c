@@ -124,7 +124,7 @@ static void koopa_shelled_act_stopped(void) {
 static void koopa_walk_start(void) {
     cur_obj_forward_vel_approach((3.0f * o->oKoopaAgility), (0.3f * o->oKoopaAgility));
     if (cur_obj_init_anim_and_check_if_end(KOOPA_ANIM_WALK_START)) {
-        o->oSubAction = 1; //! KOOPA_SHELLED_SUB_ACT_WALK if shelled, KOOPA_THE_QUICK_SUB_ACT_RUN if KtQ
+        o->oSubAction = 1; // KOOPA_SHELLED_SUB_ACT_WALK if shelled, KOOPA_THE_QUICK_SUB_ACT_RUN if KtQ
         o->oKoopaCountdown = random_linear_offset(30, 100);
     }
 }

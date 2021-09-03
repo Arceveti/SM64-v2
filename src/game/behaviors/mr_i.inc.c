@@ -66,25 +66,22 @@ void bhv_mr_i_body_loop(void) {
 }
 
 void mr_i_act_spin_death(void) {
-    Angle startYaw;
-    f32 shakeY;
-    f32 baseScale;
     f32 BBHScaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
     s16 direction        = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
     f32 spinAmount       = ((o->oTimer + 1) / 96.0f);
     if (o->oTimer < 64) {
-        startYaw          = o->oMoveAngleYaw;
+        Angle startYaw    = o->oMoveAngleYaw;
         o->oMoveAngleYaw += (direction * coss(DEG(90) * spinAmount));
         if ((startYaw < 0x0) && (o->oMoveAngleYaw >= 0x0)) cur_obj_play_sound_2(SOUND_OBJ2_MRI_SPINNING);
         o->oMoveAnglePitch = ((1.0f - coss(DEG(90) * spinAmount)) * -DEG(90));
         cur_obj_shake_y(4.0f);
     } else if (o->oTimer < 96) {
         if (o->oTimer == 64) cur_obj_play_sound_2(SOUND_OBJ_MRI_DEATH);
-        shakeY = ((f32)(o->oTimer - 63) / 32);
+        f32 shakeY = ((f32)(o->oTimer - 63) / 32);
         o->oMoveAngleYaw  += (direction * coss(DEG(90) * spinAmount));
         o->oMoveAnglePitch =     ((1.0f - coss(DEG(90) * spinAmount)) * -DEG(90));
         cur_obj_shake_y((s32)((1.0f - shakeY) * 4)); // trucating the f32?
-        baseScale = ((coss(DEG(90) * shakeY) * 0.4f) + 0.6f);
+        f32 baseScale = ((coss(DEG(90) * shakeY) * 0.4f) + 0.6f);
         cur_obj_scale(baseScale * BBHScaleModifier);
     } else if (o->oTimer < 104) {
         // do nothing

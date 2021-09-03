@@ -1040,7 +1040,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
                 break;
         }
         // print_text_fmt_int(16, 112, "FA %d", m->floorYaw);
-        // print_text_fmt_int(16,  96, "FS %d", m->steepness * 1000);
+        // print_text_fmt_int(16,  96, "FS %d", m->steepness       * 1000);
         // print_text_fmt_int(16,  80, "FN %d", m->floor->normal.y * 1000);
         print_text_fmt_int(16,  64,  "F %d", gNumCalls.floor);
         print_text_fmt_int(16,  48,  "C %d", gNumCalls.ceil );

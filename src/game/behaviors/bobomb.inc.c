@@ -230,7 +230,7 @@ void bobomb_buddy_act_idle(void) {
  * dialogSecondText is called after Bob-omb Buddy has the cannon(s) ready and
  * then tells Mario that is "Ready for blastoff".
  */
-void bobomb_buddy_cannon_dialog(s16 dialogFirstText, s16 dialogSecondText) {
+void bobomb_buddy_cannon_dialog(DialogID dialogFirstText, DialogID dialogSecondText) {
     switch (o->oBobombBuddyCannonStatus) {
         case BOBOMB_BUDDY_CANNON_UNOPENED:
             if (cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogFirstText) != 0) {

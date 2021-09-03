@@ -105,9 +105,13 @@ extern Vec3f gVec3fZ;
 #define vec3_zero(v)    (vec3_same(v, 0))
 #define vec4_zero(v)    (vec4_same(v, 0))
 
-#define vec2_mag(v)     (sqrtf(sqr(v[0]) + sqr(v[1])                        ))
-#define vec3_mag(v)     (sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2])            ))
-#define vec4_mag(v)     (sqrtf(sqr(v[0]) + sqr(v[1]) + sqr(v[2]) + sqr(v[3])))
+#define vec2_sumsq(v)   (sqr(v[0]) + sqr(v[1])                        )
+#define vec3_sumsq(v)   (sqr(v[0]) + sqr(v[1]) + sqr(v[2])            )
+#define vec4_sumsq(v)   (sqr(v[0]) + sqr(v[1]) + sqr(v[2]) + sqr(v[3]))
+
+#define vec2_mag(v)     (sqrtf(vec2_sumsq(v)))
+#define vec3_mag(v)     (sqrtf(vec3_sumsq(v)))
+#define vec4_mag(v)     (sqrtf(vec4_sumsq(v)))
 
 
 #define vec2_set(dst, x, y)         \
@@ -491,8 +495,12 @@ void vec3f_to_vec3i(     Vec3i dst, Vec3f src);
 
 f32  vec2f_average(           Vec2f v);
 f32  vec3f_average(           Vec3f v);
+f32  vec2f_sumsq(             Vec2f v);
+f32  vec3f_sumsq(             Vec3f v);
+f32  vec4f_sumsq(             Vec4f v);
 f32  vec2f_mag(               Vec2f v);
 f32  vec3f_mag(               Vec3f v);
+f32  vec4f_mag(               Vec4f v);
 f32  vec2f_invmag(            Vec2f v);
 f32  vec3f_invmag(            Vec3f v);
 void vec2f_normalize(         Vec2f v);

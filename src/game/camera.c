@@ -129,7 +129,7 @@ extern s16   sSelectionFlags;
 extern s16   s2ndRotateFlags;
 extern s16   sCameraSoundFlags;
 extern u16   sCButtonsPressed;
-extern s16   sCutsceneDialogID;
+extern DialogID16 sCutsceneDialogID;
 extern struct LakituState gLakituState;
 extern Angle sAreaYaw;
 extern Angle sAreaYawChange;
@@ -255,7 +255,7 @@ u16 rButtonCounter;
 /**
  * A copy of gDialogID, the dialog displayed during the cutscene.
  */
-s16 sCutsceneDialogID;
+DialogID16 sCutsceneDialogID;
 /**
  * The currently playing shot in the cutscene.
  */

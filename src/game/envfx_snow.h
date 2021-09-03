@@ -18,13 +18,12 @@
 #define ENVFX_JETSTREAM_BUBBLES 0xE // JRB, DDD (submarine area)
 
 struct EnvFxParticle {
-    s8 isAlive;
+    Bool8 isAlive;
     AnimFrame16 animFrame; // lava bubbles and flowers have frame animations
     Vec3i pos;
-    // s32 xPos;
-    // s32 yPos;
-    // s32 zPos;
-    s32 angleAndDist[2]; // for whirpools, [0] = angle from center, [1] = distance from center
+    // for whirpools
+    s32 whirlpoolAngle;  // angle from center
+    s32 whirlpoolDist;   // distance from center
     s32 unusedBubbleVar; // set to zero for bubbles when respawning, never used elsewhere
     s32 bubbleY; // for Bubbles, yPos is always set to this
     s8  filler20[56 - 0x20];

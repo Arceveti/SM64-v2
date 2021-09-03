@@ -482,8 +482,8 @@ Bool32 current_mario_room_check(RoomData room) {
 /**
  * Triggers dialog when Mario is facing an object and controls it while in the dialog.
  */
-//! sBool32? DialogID16?
-s16 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s32 actionArg) {
+//! sBool32?
+s32 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s32 actionArg) {
     s16 dialogueResponse;
     if ((is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, (s32) dist)
       && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, (gMarioObject->header.gfx.angle[1] + DEG(180)), 0x1000)
@@ -520,7 +520,7 @@ void obj_check_floor_death(ColFlags collisionFlags, struct Surface *floor) {
  * Controls an object dying in lava by creating smoke, sinking the object, playing
  * audio, and eventually despawning it. Returns TRUE when the obj is dead.
  */
-s8 obj_lava_death(void) {
+Bool32 obj_lava_death(void) {
     struct Object *deathSmoke;
     if (o->oTimer >= 31) {
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
