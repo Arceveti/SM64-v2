@@ -50,6 +50,6 @@ extern Bool8 gMarioOnIceOrCarpet;
  * Given the (x, y, z) location of an object, create a shadow below that object
  * with the given initial solidity and "shadowType" (described above).
  */
-Gfx *create_shadow_below_xyz(f32 xPos, f32 yPos, f32 zPos, s16 shadowScale, u8 shadowSolidity, s8 shadowType);
+Gfx *create_shadow_below_xyz(Vec3f pos, s16 shadowScale, Alpha shadowSolidity, s8 shadowType);
 
 #endif // SHADOW_H

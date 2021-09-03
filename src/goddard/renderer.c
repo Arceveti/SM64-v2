@@ -212,9 +212,9 @@ static Gfx gd_dl_star_common[] = {
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
-    gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
+    gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPVertex(gd_vertex_star, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
@@ -382,9 +382,9 @@ ALIGNED8 static Texture gd_texture_sparkle_5[] = {
 };
 
 static Vtx_t gd_vertex_sparkle[] = {
-    {{   -32,      0,      0}, 0, ST_P(      0,     63), {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,      0,      0}, 0, ST_P(     63,     63), {  0x00, 0x00, 0x7F, 0x00}},
-    {{    32,     64,      0}, 0, ST_P(     63,      0), {  0x00, 0x00, 0x7F, 0x00}},
+    {{   -32,      0,      0}, 0, ST_P(      0,     64), {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,      0,      0}, 0, ST_P(     64,     64), {  0x00, 0x00, 0x7F, 0x00}},
+    {{    32,     64,      0}, 0, ST_P(     64,      0), {  0x00, 0x00, 0x7F, 0x00}},
     {{   -32,     64,      0}, 0, ST_P(      0,      0), {  0x00, 0x00, 0x7F, 0x00}},
 };
 
@@ -393,12 +393,10 @@ static Gfx gd_dl_sparkle[] = {
     gsSPClearGeometryMode(G_TEXTURE_GEN | G_TEXTURE_GEN_LINEAR),
     gsDPSetRenderMode(G_RM_AA_ZB_TEX_EDGE, G_RM_NOOP2),
     gsSPTexture(0x8000, 0x8000, 0, G_TX_RENDERTILE, G_ON),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, 
-                (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD, 
-                (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
+    gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD,  (G_TX_WRAP | G_TX_NOMIRROR), G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
     gsSPVertex(gd_vertex_sparkle, 4, 0),
     gsSP2Triangles(0,  1,  2, 0x0,  0,  2,  3, 0x0),
@@ -1120,19 +1118,6 @@ void func_8019FEF0(void) {
     }
 }
 
-/**
- * Adds a triange to the current display list.
- */
-void gd_dl_make_triangle(f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 x3, f32 y3, f32 z3) {
-    Vtx *vtx;
-    vtx = &DL_CURRENT_VTX(sCurrentGdDl);
-    gd_dl_make_vertex(x1, y1, z1, 1.0f);
-    gd_dl_make_vertex(x2, y2, z2, 1.0f);
-    gd_dl_make_vertex(x3, y3, z3, 1.0f);
-    gSPVertex(next_gfx(), osVirtualToPhysical(vtx), 3, 0);
-    gSP1Triangle(next_gfx(), 0, 1, 2, 0);
-}
-
 /* 24E808 -> 24E840 */
 void gd_dl_reset_buffers(void) {
     sVertexBufCount      = 0;
@@ -1250,16 +1235,10 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0]  = (colour[0] * 255.0f);
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1]  = (colour[1] * 255.0f);
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2]  = (colour[2] * 255.0f);
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[0] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0];
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[1] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1];
-            DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[2] = DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2];
+            vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc, DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col);
             // 801A0D04
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.col[0]  = 0;
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.col[1]  = 0;
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.col[2]  = 0;
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.colc[0] = 0;
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.colc[1] = 0;
-            DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.colc[2] = 0;
+            vec3_zero(DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.col );
+            vec3_zero(DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.colc);
             gSPNumLights(next_gfx(), NUMLIGHTS_1);
             gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l), LIGHT_1);
             gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).a), LIGHT_2);
@@ -1273,13 +1252,9 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
     scaledColours[1] = (s32)(colour[1] * sAmbScaleColour[1] * 255.0f);
     scaledColours[2] = (s32)(colour[2] * sAmbScaleColour[2] * 255.0f);
     // 801A0FE4
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[0] = scaledColours[0];
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1] = scaledColours[1];
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2] = scaledColours[2];
+    vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col, scaledColours);
     // 801A1068
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[0] = scaledColours[0];
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[1] = scaledColours[1];
-    DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc[2] = scaledColours[2];
+    vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc, scaledColours);
     // 801A10EC
     gSPNumLights(next_gfx(), numLights);
     for ((i = 0); (i < numLights); (i++)) { // L801A1134
@@ -1287,20 +1262,14 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
         scaledColours[1] = (colour[1] * sLightScaleColours[i][1] * 255.0f);
         scaledColours[2] = (colour[2] * sLightScaleColours[i][2] * 255.0f);
         // 801A1260
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col[0]  = scaledColours[0];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col[1]  = scaledColours[1];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col[2]  = scaledColours[2];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc[0] = scaledColours[0];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc[1] = scaledColours[1];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc[2] = scaledColours[2];
+        vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col,  scaledColours);
+        vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc, scaledColours);
         // 801A13B0
         lightDir[0] = (s8)sLightDirections[i][0];
         lightDir[1] = (s8)sLightDirections[i][1];
         lightDir[2] = (s8)sLightDirections[i][2];
         // 801A141C
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[0] = lightDir[0];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[1] = lightDir[1];
-        DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir[2] = lightDir[2];
+        vec3i_to_vec3c(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir, lightDir);
         // 801A14C4
         gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), (i + 1));
     }
@@ -1427,12 +1396,12 @@ void parse_p1_controller(void) {
     // stick values
     gdctrl->stickXf      = currInputs->stick_x;
     gdctrl->stickYf      = currInputs->stick_y;
-    gdctrl->stickDeltaX  = gdctrl->stickX;
-    gdctrl->stickDeltaY  = gdctrl->stickY;
+    gdctrl->stickDeltaX  =     gdctrl->stickX;
+    gdctrl->stickDeltaY  =     gdctrl->stickY;
     gdctrl->stickX       = currInputs->stick_x;
     gdctrl->stickY       = currInputs->stick_y;
-    gdctrl->stickDeltaX -= gdctrl->stickX;
-    gdctrl->stickDeltaY -= gdctrl->stickY;
+    gdctrl->stickDeltaX -=     gdctrl->stickX;
+    gdctrl->stickDeltaY -=     gdctrl->stickY;
     // button values (as bools)
     gdctrl->trgL   = ((currInputs->button & L_TRIG    ) != 0);
     gdctrl->trgR   = ((currInputs->button & R_TRIG    ) != 0);
@@ -1482,9 +1451,9 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
             }
             break;
         case GD_PROP_AMB_COLOUR: vec3f_set(sAmbScaleColour, f1, f2, f3); break;
-        case GD_PROP_LIGHT_DIR: vec3i_set(sLightDirections[sLightId], (s32)(f1 * 120.0f),
-                                                                      (s32)(f2 * 120.0f),
-                                                                      (s32)(f3 * 120.0f)); break;
+        case GD_PROP_LIGHT_DIR:  vec3i_set(sLightDirections[sLightId], (s32)(f1 * 120.0f),
+                                                                       (s32)(f2 * 120.0f),
+                                                                       (s32)(f3 * 120.0f)); break;
         case GD_PROP_DIFUSE_COLOUR: vec3f_set(sLightScaleColours[sLightId], f1, f2, f3); break;
         case GD_PROP_CULLING:
             parm = (s32) f1;
@@ -1546,7 +1515,7 @@ s32 setup_view_buffers(UNUSED const char *name, struct ObjView *view) {
             view->colourBufs[0] = (void *) ALIGN((uintptr_t) view->colourBufs[0], 64);
             view->colourBufs[1] = (void *) ALIGN((uintptr_t) view->colourBufs[1], 64);
             // stop_memtracker(memtrackerName);
-            if (view->colourBufs[0] == NULL || view->colourBufs[1] == NULL) gd_exit(); // Not enough DRAM for colour buffers
+            if ((view->colourBufs[0] == NULL) || (view->colourBufs[1] == NULL)) gd_exit(); // Not enough DRAM for colour buffers
             view->parent = view;
         } else {
             view->parent = sScreenView;

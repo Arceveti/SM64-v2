@@ -314,11 +314,10 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
  * @param lastGood unused, passed as the last position the camera was in
  */
 void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
-    f32 ceilY, floorY;
     struct Surface *surf;
     f32_find_wall_collision(&pos[0], &pos[1], &pos[2], 0.0f, 100.0f);
-    floorY = find_floor(pos[0], (pos[1] + 50.0f), pos[2], &surf);
-    ceilY  = find_ceil( pos[0], (pos[1] - 50.0f), pos[2], &surf);
+    f32 floorY = find_floor(pos[0], (pos[1] + 50.0f), pos[2], &surf);
+    f32 ceilY  = find_ceil( pos[0], (pos[1] - 50.0f), pos[2], &surf);
     if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT == ceilY) && pos[1] < (floorY += 125.0f)) pos[1] = floorY;
     if ((FLOOR_LOWER_LIMIT == floorY) && (CELL_HEIGHT_LIMIT != ceilY) && pos[1] > ( ceilY -= 125.0f)) pos[1] =  ceilY;
     if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT != ceilY)) {
@@ -511,9 +510,7 @@ f32 find_floor_height_and_data(f32 x, f32 y, f32 z, struct FloorGeometry **floor
     f32 floorHeight = find_floor(x, y, z, &floor);
     *floorGeo = NULL;
     if (floor != NULL) {
-        sFloorGeo.normalX      = floor->normal.x;
-        sFloorGeo.normalY      = floor->normal.y;
-        sFloorGeo.normalZ      = floor->normal.z;
+        vec3f_set(sFloorGeo.normal, floor->normal.x, floor->normal.y, floor->normal.z);
         sFloorGeo.originOffset = floor->originOffset;
         *floorGeo              = &sFloorGeo;
     }

@@ -291,7 +291,7 @@ struct GraphNodeShadow
 {
     /*0x00*/ struct GraphNode node;
     /*0x14*/ s16 shadowScale; // diameter (when a circle) or side (when a square) of shadow
-    /*0x16*/ u8 shadowSolidity; // opacity of shadow, 255 = opaque
+    /*0x16*/ Alpha shadowSolidity; // opacity of shadow, 255 = opaque
     /*0x17*/ u8 shadowType; // see ShadowType enum in shadow.h
 };
 

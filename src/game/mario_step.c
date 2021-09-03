@@ -376,6 +376,9 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     return GROUND_STEP_NONE;
 }
 
+// #ifdef FAST_FLOOR_ALIGN
+// extern void align_with_floor(struct MarioState *m, Bool32 smooth);
+// #endif
 MarioStep perform_ground_step(struct MarioState *m) {
     Vec3f intendedPos;
     MarioStep stepResult = GROUND_STEP_NONE;
@@ -410,6 +413,9 @@ MarioStep perform_ground_step(struct MarioState *m) {
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+// #ifdef FAST_FLOOR_ALIGN
+//     align_with_floor(m, TRUE);
+// #endif
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) stepResult = GROUND_STEP_HIT_WALL;
 #ifdef WALL_QUICKSAND
     // Handle wall quicksand

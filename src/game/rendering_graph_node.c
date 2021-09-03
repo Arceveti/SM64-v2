@@ -450,7 +450,6 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
     // Transform Mario's coordinates into view frustrum
     mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos);
     // Perspective divide
-    //? should ScreenPos be u32?
     gMarioScreenX = (2 * (0.5f - marioPos[0] / (f32)marioPos[2]) * (gCurGraphNodeRoot->width ));
     if (gMarioScreenX < 0) gMarioScreenX = 0;
     gMarioScreenY = (2 * (0.5f - marioPos[1] / (f32)marioPos[2]) * (gCurGraphNodeRoot->height));
@@ -713,7 +712,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             if ((gCurAnimType == ANIM_TYPE_TRANSLATION)
              || (gCurAnimType == ANIM_TYPE_LATERAL_TRANSLATION)) {
                 geo = node->node.children;
-                if (geo != NULL && geo->type == GRAPH_NODE_TYPE_SCALE) objScale = ((struct GraphNodeScale *) geo)->scale;
+                if ((geo != NULL) && (geo->type == GRAPH_NODE_TYPE_SCALE)) objScale = ((struct GraphNodeScale *) geo)->scale;
                 animOffset[0]       = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)] * gCurAnimTranslationMultiplier * objScale;
                 animOffset[1]       = 0.0f;
                 gCurrAnimAttribute += 2;
@@ -726,7 +725,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
                 shadowPos[2]       += ((-animOffset[0] * sinAng) + (animOffset[2] * cosAng));
             }
         }
-        shadowList = create_shadow_below_xyz(shadowPos[0], shadowPos[1], shadowPos[2], shadowScale, node->shadowSolidity, node->shadowType);
+        shadowList = create_shadow_below_xyz(shadowPos, shadowScale, node->shadowSolidity, node->shadowType);
         if (shadowList != NULL) {
             mtx = alloc_display_list(sizeof(*mtx));
             gMatStackIndex++;
@@ -734,7 +733,7 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             mtxf_mul(gMatStack[gMatStackIndex], mtxf, *gCurGraphNodeCamera->matrixPtr);
             mtxf_to_mtx(mtx, gMatStack[gMatStackIndex]);
             gMatStackFixed[gMatStackIndex] = mtx;
-            geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), (gShadowAboveWaterOrLava || gShadowAboveCustomWater || gMarioOnIceOrCarpet) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_DECAL);
+            geo_append_display_list((void *) VIRTUAL_TO_PHYSICAL(shadowList), ((gShadowAboveWaterOrLava || gShadowAboveCustomWater || gMarioOnIceOrCarpet) ? LAYER_TRANSPARENT : LAYER_TRANSPARENT_DECAL));
             gMatStackIndex--;
         }
     }
@@ -893,6 +892,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
     if ( node->fnNode.func != NULL)     node->fnNode.func(GEO_CONTEXT_RENDER, &node->fnNode.node, gMatStack[gMatStackIndex]);
     if ((node->objNode     != NULL) && (node->objNode->header.gfx.sharedChild != NULL)) {
         Bool32 hasAnimation = ((node->objNode->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0);
+        //!vec3f/s_quot_val
         translation[0] = (node->translation[0] / 4.0f);
         translation[1] = (node->translation[1] / 4.0f);
         translation[2] = (node->translation[2] / 4.0f);

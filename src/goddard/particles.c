@@ -18,12 +18,12 @@ void   move_particle( struct ObjParticle *ptc);
 void   accel_particle(struct ObjParticle *ptc, Vec3f b);
 
 /* 230CC0 -> 230DCC */
-struct ObjParticle *make_particle(u32 flags, s32 colourNum, f32 x, f32 y, f32 z) {
+struct ObjParticle *make_particle(u32 flags, s32 colourNum, Vec3f pos) {
     struct ObjParticle *particle = (struct ObjParticle *) make_object(OBJ_TYPE_PARTICLES);
-    vec3f_set(particle->pos, x, y, z);
+    vec3f_copy(particle->pos, pos);
     vec3f_zero(particle->vel);
     particle->colourNum = colourNum;
-    particle->flags     = flags | GD_PARTICLE_FLAG_8;
+    particle->flags     = (flags | GD_PARTICLE_FLAG_8);
     particle->timeout   = -1;
     particle->shapePtr  = NULL;
     particle->state     =  1;
@@ -98,7 +98,7 @@ void move_particle(struct ObjParticle *ptc) {
                 case 1:
                     ptc->subParticlesGrp = make_group(0);
                     for ((i = 0); (i < 50); (i++)) {
-                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos[0], ptc->pos[1], ptc->pos[2]);
+                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
                         particle->flags &= ~GD_PARTICLE_FLAG_8;
@@ -108,7 +108,7 @@ void move_particle(struct ObjParticle *ptc) {
                 case 3:
                     ptc->subParticlesGrp = make_group(0);
                     for ((i = 0); (i < 30); (i++)) {
-                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos[0], ptc->pos[1], ptc->pos[2]);
+                        particle = make_particle(GD_PARTICLE_FLAG_1, -1, ptc->pos);
                         particle->shapePtr = ptc->shapePtr;
                         addto_group(ptc->subParticlesGrp, &particle->header);
                         particle->flags &= ~GD_PARTICLE_FLAG_8;

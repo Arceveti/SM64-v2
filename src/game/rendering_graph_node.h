@@ -13,7 +13,7 @@ extern struct GraphNodeObject      *gCurGraphNodeObject;
 extern struct GraphNodeHeldObject  *gCurGraphNodeHeldObject;
 extern u16 gAreaUpdateCounter;
 #ifdef METAL_CAP_REFLECTION_LAKITU
-extern s16 gMarioScreenX, gMarioScreenY;
+extern ScreenPos gMarioScreenX, gMarioScreenY;
 #endif
 extern f32 gWorldScale;
 

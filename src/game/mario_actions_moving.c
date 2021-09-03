@@ -63,16 +63,17 @@ void play_step_sound(struct MarioState *m, AnimFrame16 frame1, AnimFrame16 frame
     }
 }
 
-void align_with_floor(struct MarioState *m) {
 #ifdef FAST_FLOOR_ALIGN
+void align_with_floor(struct MarioState *m, Bool32 smooth) {
     struct Surface *floor = m->floor;
     Vec3f floorNormal;
     if ((floor != NULL) && (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT))) {
-#ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
-        if ((m->steepness > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
-#else
-        if ((floor->normal.y > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
-#endif
+// #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
+//         if ((m->steepness > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
+// #else
+//         if ((floor->normal.y > COS45) && (mario_get_floor_class(m) == SURFACE_CLASS_NOT_SLIPPERY) && (m->forwardVel < GROUND_SPEED_THRESHOLD_2)) {
+// #endif
+        if (smooth) {
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
             vec3f_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
@@ -81,6 +82,7 @@ void align_with_floor(struct MarioState *m) {
         m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
     }
 #else
+void align_with_floor(struct MarioState *m) {
     m->pos[1] = m->floorHeight;
     mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
     m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
@@ -884,7 +886,11 @@ Bool32 act_crawling(struct MarioState *m) {
             if (m->forwardVel > GROUND_SPEED_THRESHOLD_2) mario_set_forward_vel(m, GROUND_SPEED_THRESHOLD_2);
             //! Possibly unintended missing break
             // fall through
+#ifdef FAST_FLOOR_ALIGN
+        case GROUND_STEP_NONE: align_with_floor(m, TRUE); break;
+#else
         case GROUND_STEP_NONE: align_with_floor(m); break;
+#endif
     }
     AnimAccel animSpeed = (AnimAccel)((m->intendedMag * 2.0f) * 0x10000);
     set_mario_anim_with_accel(m, MARIO_ANIM_CRAWLING, animSpeed);
@@ -951,7 +957,11 @@ void common_slide_action(struct MarioState *m, MarioAction endAction, MarioActio
 #else
             set_mario_animation(m, animation);
 #endif
+#ifdef FAST_FLOOR_ALIGN
+            align_with_floor(m, FALSE);
+#else
             align_with_floor(m);
+#endif
             m->particleFlags |= PARTICLE_DUST;
             break;
         case GROUND_STEP_HIT_WALL:
@@ -966,7 +976,11 @@ void common_slide_action(struct MarioState *m, MarioAction endAction, MarioActio
                 m->vel[0] = m->slideVelX = (slideSpeed * sins(m->slideYaw));
                 m->vel[2] = m->slideVelZ = (slideSpeed * coss(m->slideYaw));
             }
+#ifdef FAST_FLOOR_ALIGN
+            align_with_floor(m, FALSE);
+#else
             align_with_floor(m);
+#endif
             break;
     }
 }

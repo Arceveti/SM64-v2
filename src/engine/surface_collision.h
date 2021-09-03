@@ -36,9 +36,7 @@ struct WallCollisionData
 struct FloorGeometry
 {
     f32 unused[4]; // possibly position data?
-    f32 normalX; //! Vec3f?
-    f32 normalY;
-    f32 normalZ;
+    Vec3f normal;
     f32 originOffset;
 };
 

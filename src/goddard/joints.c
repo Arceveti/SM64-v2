@@ -12,9 +12,6 @@
 
 static s32 sJointCount;                   // @ 801BA974
 
-// forward declarations
-void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z);
-
 /**
  * Controls movement of grabbable joints
  */
@@ -100,16 +97,16 @@ void eye_joint_update_func(struct ObjJoint *self) {
 }
 
 /* 23D748 -> 23D818; orig name: func_8018EF78 */
-void set_joint_vecs(struct ObjJoint *j, f32 x, f32 y, f32 z) {
-    vec3f_set(j->worldPos,       x, y, z);
-    vec3f_set(j->pos,            x, y, z);
-    vec3f_set(j->relPos,         x, y, z);
-    vec3f_set(j->initPos,        x, y, z);
-    vec3f_set(j->rotationMtx[3], x, y, z);
+void set_joint_vecs(struct ObjJoint *j, Vec3f pos) {
+    vec3f_copy(j->worldPos,       pos);
+    vec3f_copy(j->pos,            pos);
+    vec3f_copy(j->relPos,         pos);
+    vec3f_copy(j->initPos,        pos);
+    vec3f_copy(j->rotationMtx[3], pos);
 }
 
 /* 23D818 -> 23DA18 */
-struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
+struct ObjJoint *make_joint(s32 flags, Vec3f pos) {
     struct ObjJoint *j; // sp24
     struct ObjJoint *oldhead;
     j = (struct ObjJoint *) make_object(OBJ_TYPE_JOINTS);
@@ -122,7 +119,7 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
     }
     mtxf_identity(j->invMtx);
     mtxf_identity(j->rotationMtx);
-    set_joint_vecs(j, x, y, z);
+    set_joint_vecs(j, pos);
     j->type       = 0;
     j->id         = sJointCount;
     j->flags      = flags;
@@ -142,7 +139,8 @@ struct ObjJoint *make_joint(s32 flags, f32 x, f32 y, f32 z) {
  */
 struct ObjJoint *make_grabber_joint(struct ObjShape *shape, s32 flags, f32 x, f32 y, f32 z) {
     struct ObjJoint *j;
-    j                    = make_joint(0, x, y, z);
+    Vec3f pos = {x, y, z};
+    j                    = make_joint(0, pos);
     j->shapePtr          = shape;
     j->type              = 5; //! type name
     j->flags            |= flags;

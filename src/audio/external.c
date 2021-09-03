@@ -415,7 +415,7 @@ static void update_background_music_after_sound(u8 bank, u8 soundIndex);
 static void update_game_sound(void);
 static void fade_channel_volume_scale(u8 player, u8 channelId, u8 targetScale, u16 fadeTimer);
 void process_level_music_dynamics(void);
-static u8 begin_background_music_fade(u16 fadeDuration);
+static u32 begin_background_music_fade(u16 fadeDuration);
 void func_80320ED8(void);
 
 // #ifndef VERSION_JP
@@ -1658,7 +1658,7 @@ void seq_player_unlower_volume(u8 player, u16 fadeDuration) {
  *
  * Called from threads: thread3_main, thread4_sound, thread5_game_loop
  */
-static u8 begin_background_music_fade(u16 fadeDuration) {
+static u32 begin_background_music_fade(u16 fadeDuration) {
     u8 targetVolume = 0xff;
     if (sCurrentBackgroundMusicSeqId == SEQUENCE_NONE || sCurrentBackgroundMusicSeqId == SEQ_EVENT_CUTSCENE_CREDITS) return 0xff;
     if (gSequencePlayers[SEQ_PLAYER_LEVEL].volume == 0.0f && fadeDuration) gSequencePlayers[SEQ_PLAYER_LEVEL].volume = gSequencePlayers[SEQ_PLAYER_LEVEL].fadeVolume;
@@ -1701,33 +1701,33 @@ void set_audio_muted(u8 muted) {
  */
 void sound_init(void) {
     u8 i, j;
-    for (i = 0; i < SOUND_BANK_COUNT; i++) {
+    for ((i = 0); (i < SOUND_BANK_COUNT); (i++)) {
         // Set each sound in the bank to STOPPED
-        for (j = 0; j < 40; j++) sSoundBanks[i][j].soundStatus = SOUND_STATUS_STOPPED;
+        for ((j = 0); (j < 40); (j++)) sSoundBanks[i][j].soundStatus = SOUND_STATUS_STOPPED;
         // Remove current sounds
-        for (j = 0; j < MAX_CHANNELS_PER_SOUND_BANK; j++) sCurrentSound[i][j] = 0xff;
+        for ((j = 0); (j < MAX_CHANNELS_PER_SOUND_BANK); (j++)) sCurrentSound[i][j] = 0xff;
         sSoundBankUsedListBack[i]  = 0;
         sSoundBankFreeListFront[i] = 1;
         sNumSoundsInBank[i]        = 0;
     }
-    for (i = 0; i < SOUND_BANK_COUNT; i++) {
+    for ((i = 0); (i < SOUND_BANK_COUNT); (i++)) {
         // Set used list to empty
         sSoundBanks[i][0].prev = 0xff;
         sSoundBanks[i][0].next = 0xff;
         // Set free list to contain every sound slot
-        for (j = 1; j < 40 - 1; j++) {
-            sSoundBanks[i][j].prev = j - 1;
-            sSoundBanks[i][j].next = j + 1;
+        for ((j = 1); (j < (40 - 1)); (j++)) {
+            sSoundBanks[i][j].prev = (j - 1);
+            sSoundBanks[i][j].next = (j + 1);
         }
-        sSoundBanks[i][j].prev = j - 1;
+        sSoundBanks[i][j].prev = (j - 1);
         sSoundBanks[i][j].next = 0xff;
     }
-    for (j = 0; j < 3; j++) {
-        for (i = 0; i < CHANNELS_MAX; i++) {
+    for ((j = 0); (j < 3); (j++)) {
+        for ((i = 0); (i < CHANNELS_MAX); (i++)) {
             D_80360928[j][i].remainingFrames = 0;
         }
     }
-    for (i = 0; i < MAX_BACKGROUND_MUSIC_QUEUE_SIZE; i++) sBackgroundMusicQueue[i].priority = 0;
+    for ((i = 0); (i < MAX_BACKGROUND_MUSIC_QUEUE_SIZE); (i++)) sBackgroundMusicQueue[i].priority = 0;
     sound_banks_enable(SEQ_PLAYER_SFX, SOUND_BANKS_ALL_BITS);
     // sUnused80332118                     = 0;
     sBackgroundMusicTargetVolume        = TARGET_VOLUME_UNSET;
@@ -1748,7 +1748,7 @@ void sound_init(void) {
 UNUSED void get_currently_playing_sound(u8 bank, u8 *numPlayingSounds, u8 *numSoundsInBank, u8 *soundId) {
     u8 i;
     u8 count = 0;
-    for (i = 0; i < sMaxChannelsForSoundBank[bank]; i++) if (sCurrentSound[bank][i] != 0xff) count++;
+    for ((i = 0); (i < sMaxChannelsForSoundBank[bank]); (i++)) if (sCurrentSound[bank][i] != 0xff) count++;
     *numPlayingSounds = count;
     *numSoundsInBank = sNumSoundsInBank[bank];
     if (sCurrentSound[bank][0] != 0xff) {

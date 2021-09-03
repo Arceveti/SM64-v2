@@ -581,14 +581,27 @@ void set_camera_shake_from_point(s16 shake, Vec3f pos) {
  *          Since focMul is 0.9, `focOff` is closer to the floor than `posOff`
  *      posOff and focOff are sometimes the same address, which just ignores the pos calculation
  */
+// struct Object *marioLastObj = 0;
+// f32 lastMarioFloorHeight;
 void calc_y_to_curr_floor(f32 *posOff, f32 posMul, f32 posBound, f32 *focOff, f32 focMul, f32 focBound) {
     f32 floorHeight = sMarioGeometry.currFloorHeight;
+    /*
+    f32 floorHeight = gMarioState->floorHeight;
+    f32 waterHeight;
+    if (gMarioState->pos[1] == floorHeight) {
+        if (gMarioState->floor) lastMarioFloorHeight = ((marioLastObj = gMarioState->floor->object) ? floorHeight : -999999.0f);
+    } else if ( marioLastObj && (marioLastObj->oDistanceToMario < marioLastObj->oCollisionDistance)) {
+        marioLastObj = 0;
+        lastMarioFloorHeight = -999999.0f;
+    }
+    if (floorHeight < lastMarioFloorHeight) floorHeight = lastMarioFloorHeight;
+    */
     if (!(sMarioCamState->action & ACT_FLAG_METAL_WATER) && (floorHeight < sMarioGeometry.waterHeight)) floorHeight = sMarioGeometry.waterHeight;
     if ( (sMarioCamState->action & ACT_FLAG_ON_POLE    ) && (sMarioGeometry.currFloorHeight >= gMarioStates[0].usedObj->oPosY) && (sMarioCamState->pos[1] < ((0.7f * gMarioStates[0].usedObj->hitboxHeight) + gMarioStates[0].usedObj->oPosY))) posBound = 1200;
-    *posOff = (floorHeight - sMarioCamState->pos[1]) * posMul;
+    *posOff = ((floorHeight - sMarioCamState->pos[1]) * posMul);
     if (*posOff >  posBound) *posOff =  posBound;
     if (*posOff < -posBound) *posOff = -posBound;
-    *focOff = (floorHeight - sMarioCamState->pos[1]) * focMul;
+    *focOff = ((floorHeight - sMarioCamState->pos[1]) * focMul);
     if (*focOff >  focBound) *focOff =  focBound;
     if (*focOff < -focBound) *focOff = -focBound;
 }

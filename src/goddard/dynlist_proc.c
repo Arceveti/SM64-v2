@@ -320,7 +320,7 @@ static char *integer_name_to_string(DynObjName name) {
 struct GdObj *d_makeobj(enum DObjTypes type, DynObjName name) {
     struct GdObj *dobj;
     switch (type) {
-        case D_JOINT:    dobj = &make_joint(0, 0.0f, 0.0f, 0.0f)->header;                break;
+        case D_JOINT:    dobj = &make_joint(0, gVec3fZero)->header;                      break;
         case D_NET:      dobj = &make_net(NULL)->header;                                 break;
         case D_GROUP:    dobj = &make_group(0)->header;                                  break;
         case D_DATA_GRP: d_makeobj(D_GROUP, name); ((struct ObjGroup *) sDynListCurObj)->linkType = 1; return NULL;
@@ -513,14 +513,14 @@ void chk_shapegen(struct ObjShape *shape) {
             vtxbuf     = gd_malloc_temp(VTX_BUF_SIZE * sizeof(struct ObjVertex *));
             oldObjHead = gGdObjectList;
             for ((i = 0); (i < vtxdata->count); (i++)) {
-                vtx = gd_make_vertex(vtxdata->data[i][0], vtxdata->data[i][1], vtxdata->data[i][2]);
+                vtx = gd_make_vertex(vtxdata->data[i]);
                 vec3f_zero(vtx->normal);
                 vtxbuf[i] = vtx;
             }
             madeVtx = make_group_of_type(OBJ_TYPE_VERTICES, oldObjHead);
             oldObjHead = gGdObjectList;
             for ((i = 0); (i < facedata->count); (i++)) {
-                face = make_face_with_colour(1.0f, 1.0f, 1.0f);
+                face = make_face_with_colour(gVec3fOne);
                 face->mtlId = (s32) facedata->data[i][0];
                 add_3_vtx_to_face(face, vtxbuf[facedata->data[i][1]],
                                         vtxbuf[facedata->data[i][2]],
@@ -858,7 +858,7 @@ UNUSED void d_addto_rel_pos(Vec3f src) {
 /**
  * Store the current dynamic object's position into `dst`.
  */
-void d_get_rel_pos(Vec3f dst) {
+UNUSED void d_get_rel_pos(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_VERTICES:  vec3f_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos   ); break;

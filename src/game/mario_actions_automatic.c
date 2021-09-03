@@ -422,6 +422,9 @@ void update_ledge_climb(struct MarioState *m, AnimID32 animation, MarioAction en
         set_mario_action(m, endAction, 0);
         if (endAction == ACT_IDLE) climb_up_ledge(m);
     }
+#ifdef LEDGE_SIDLE
+    if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) m->marioObj->header.gfx.angle[2] = ((atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90)) * sins(m->wallYaw - m->floorYaw));
+#endif
 }
 
 Bool32 act_ledge_grab(struct MarioState *m) {
@@ -530,6 +533,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
     stop_and_set_height_to_floor(m);
 #ifdef LEDGE_SIDLE
     set_mario_anim_with_accel(m, MARIO_ANIM_IDLE_ON_LEDGE, accel);
+    if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) m->marioObj->header.gfx.angle[2] = ((atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90)) * sins(m->wallYaw - m->floorYaw));
 #else
     set_mario_animation(m, MARIO_ANIM_IDLE_ON_LEDGE);
 #endif

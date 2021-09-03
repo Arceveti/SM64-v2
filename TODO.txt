@@ -102,8 +102,9 @@
         - Top Center:
             - Health meter
             - Breath meter
-                - Move health meter to the side when active to keep screen space balance, similar to SM63
-    - Replace breath meter with a small non-intrusive one that follows mario's posision on screen?
+                - Move health meter to the side when active to keep screen space balance, similar to SM63, or:
+                - Replace breath meter with a small non-intrusive one that follows mario's posision on screen?
+                - Mainly just need it to be unintrusive and to not be on the opposite side of the normal health meter
     - Move Puppycam menu to under Exit Course
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
