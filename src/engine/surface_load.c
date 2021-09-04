@@ -229,7 +229,7 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
     surface->normal.z   = n[2];
 
     // why does this only use the first vertex?
-    surface->originOffset = -vec3f_dot(n, v1);
+    surface->originOffset = -vec3_dot(n, v1);
 
     surface->lowerY = (min_3i(v1[1], v2[1], v3[1]) - 5);
     surface->upperY = (max_3i(v1[1], v2[1], v3[1]) + 5);
@@ -536,8 +536,8 @@ void get_optimal_coll_dist(struct Object *o) {
     // vertices = *data;
     while (vertsLeft) {
         vec3s_to_vec3f(v, collisionData);
-        vec3f_mul(v, o->header.gfx.scale);
-        thisVertDist = vec3f_sumsq(v);
+        vec3_mul(v, o->header.gfx.scale);
+        thisVertDist = vec3_sumsq(v);
         if (thisVertDist > maxDist) maxDist = thisVertDist;
         collisionData += 3;
         vertsLeft--;

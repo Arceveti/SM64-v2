@@ -1287,7 +1287,7 @@ f32 d_calc_world_dist_btwn(struct GdObj *obj1, struct GdObj *obj2) {
     set_cur_dynobj(obj2);
     d_vec3f_get_world_pos(obj2pos);
     vec3f_diff(posdiff, obj2pos, obj1pos);
-    return vec3f_mag(posdiff);
+    return vec3_mag(posdiff);
 }
 
 /**

@@ -512,8 +512,8 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
     obj = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (obj != o)) {
-            vec3f_diff(d, &obj->oPosVec, &o->oPosVec);
-            f32 objDist = vec3f_sumsq(d);
+            vec3_diff(d, &obj->oPosVec, &o->oPosVec);
+            f32 objDist = vec3_sumsq(d);
             if (objDist < minDist) {
                 closestObj = obj;
                 minDist = objDist;
@@ -536,8 +536,8 @@ struct Object *find_nearest_obj_with_behavior_from_point(const BehaviorScript *b
     obj         = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
-            vec3f_diff(d, pos, &obj->oPosVec);
-            f32 objDist = vec3f_sumsq(d);
+            vec3_diff(d, pos, &obj->oPosVec);
+            f32 objDist = vec3_sumsq(d);
             if (objDist < minDist) {
                 closestObj = obj;
                 minDist    = objDist;
@@ -1615,8 +1615,7 @@ void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
 Bool32 cur_obj_mario_far_away(void) {
     Vec3f d;
     vec3f_diff(d, &o->oHomeVec, &gMarioObject->oPosVec);
-    f32 marioDistToHome = vec3f_mag(d);
-    return ((o->oDistanceToMario > 2000.0f) && (marioDistToHome > 2000.0f));
+    return ((o->oDistanceToMario > 2000.0f) && (vec3_sumsq(d) > sqr(2000.0f)));
 }
 
 Bool32 is_mario_moving_fast_or_in_air(s32 speedThreshold) {

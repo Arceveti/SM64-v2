@@ -137,28 +137,20 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
 #ifndef GBI_FLOATS
     register RawVertexData *vtxcoords;
 #endif
-    register RawVertexData x, y, z;
+    Vec3vs pos;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;
     for (link = grp->firstMember; link != NULL; link = link->next) {
         obj = link->obj;
         vtx = (struct ObjVertex *) obj;
-        x = (RawVertexData) vtx->pos[0];
-        y = (RawVertexData) vtx->pos[1];
-        z = (RawVertexData) vtx->pos[2];
+        vec3f_to_vec3s(pos, vtx->pos);
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vtxcoords = vtxlink->data->v.ob;
-            // vec3s_set?
-            vtxcoords[0] = x;
-            vtxcoords[1] = y;
-            vtxcoords[2] = z;
+            vec3s_copy(vtxcoords, pos);
 #else
-            // vec3f_set?
-            vtxlink->data->v.ob[0] = x;
-            vtxlink->data->v.ob[1] = y;
-            vtxlink->data->v.ob[2] = z;
+            vec3s_to_vec3f(vtxlink->data->v.ob, pos);
 #endif
         }
     }

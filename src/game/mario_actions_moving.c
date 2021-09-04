@@ -737,6 +737,9 @@ Bool32 act_braking(struct MarioState *m) {
 #ifdef ACTION_CANCELS
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_CROUCH_SLIDE , 0);
 #endif
+#ifdef FIX_WALL_SIDLE_SLOPE
+    if ((m->wall != NULL) && (abs_angle_diff(m->wallYaw, m->faceAngle[1]) > DEG(135))) return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
+#endif
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND: set_mario_action(m, ACT_FREEFALL, 0); break;
         case GROUND_STEP_NONE:        m->particleFlags |= PARTICLE_DUST;    break;

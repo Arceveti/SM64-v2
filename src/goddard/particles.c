@@ -46,7 +46,7 @@ void accel_particle(struct ObjParticle *ptc, Vec3f b) {
                     linkedPtc->vel[0] = ((gd_rand_float() * 50.0f) - 25.0f);
                     linkedPtc->vel[1] = ((gd_rand_float() * 50.0f) - 25.0f);
                     linkedPtc->vel[2] = ((gd_rand_float() * 50.0f) - 25.0f);
-                } while (vec3f_mag(linkedPtc->vel) > 30.0f);
+                } while (vec3_sumsq(linkedPtc->vel) > sqr(30.0f));
                 vec3f_add(linkedPtc->vel, b);
                 linkedPtc->header.drawFlags &= ~OBJ_INVISIBLE;
                 linkedPtc->flags |= GD_PARTICLE_FLAG_8;

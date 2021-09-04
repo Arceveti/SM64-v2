@@ -84,7 +84,7 @@ void eye_joint_update_func(struct ObjJoint *self) {
     offset[1]  = -(gGdCtrl.csrY - pos[1]);
     offset[2]  = 0.0f;
     vec3f_mul_val(offset, 2.0f);
-    if (vec3f_mag(offset) > 30.0f) {
+    if (vec3_sumsq(offset) > sqr(30.0f)) {
         vec3f_normalize(offset);
         vec3f_mul_val(offset, 30.0f);
     }

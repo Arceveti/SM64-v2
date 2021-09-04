@@ -1098,11 +1098,11 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
     }
     sVertexBufCount++;
     sTriangleBuf[sTriangleBufCount][D_801BB0B4++] = (s16) sCurrentGdDl->curVtxIdx;
-    vec3s_set(DL_CURRENT_VTX(sCurrentGdDl).n.ob, x, y, z);
+    vec3_set(DL_CURRENT_VTX(sCurrentGdDl).n.ob, x, y, z);
     DL_CURRENT_VTX(sCurrentGdDl).n.flag  = 0;
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[0] = sVtxCvrtTCBuf[0];
     DL_CURRENT_VTX(sCurrentGdDl).n.tc[1] = sVtxCvrtTCBuf[1];
-    vec3c_copy(DL_CURRENT_VTX(sCurrentGdDl).n.n, sVtxCvrtNormBuf);
+    vec3_copy(DL_CURRENT_VTX(sCurrentGdDl).n.n, sVtxCvrtNormBuf);
     DL_CURRENT_VTX(sCurrentGdDl).n.a     = (Alpha)(alpha * 255.0f);
     vtx = &DL_CURRENT_VTX(sCurrentGdDl);
     next_vtx();
@@ -1194,7 +1194,7 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
     vec[2] = (cam->lookatMtx[0][2] + phongLightPosition[0]);
     vec[1] = (cam->lookatMtx[1][2] + phongLightPosition[1]);
     vec[0] = (cam->lookatMtx[2][2] + phongLightPosition[2]);
-    mag = vec3f_mag(vec);
+    mag = vec3_mag(vec);
     if (mag > 0.1f) {
         mag = 1.0f / mag;
         vec3f_mul_val(vec, mag);

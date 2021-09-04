@@ -586,7 +586,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     struct GdObj *obj;
     f32 dispMag;
     if (gViewUpdateCamera == NULL) return;
-    dispMag = (vec3f_mag(gViewUpdateCamera->relPos) / 1000.0f);
+    dispMag = (vec3_mag(gViewUpdateCamera->relPos) / 1000.0f);
     displacement[0] = (((f32)   (ctrl->csrX - ctrl->dragStartX)) * dispMag);
     displacement[1] = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement[2] = 0.0f;

@@ -2923,7 +2923,7 @@ s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, Vec3f pos) {
     // Direction from pos to (Lakitu's) goalPos
     Vec3f goalD;
     vec3f_diff(goalD, gLakituState.goalPos, pos);
-    f32 dist = vec3f_mag(goalD);
+    f32 dist = vec3_mag(goalD);
     if (maxDist > dist) {
         vec3f_get_dist_and_angle(gLakituState.goalPos, pos, &dist, &pitch, &yaw);
         if (dist < maxDist) {

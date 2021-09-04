@@ -110,11 +110,11 @@ static void puppycam_analogue_stick(void) {
     // I make the X axis negative, so that the movement reflects the Cbuttons.
     gPuppyCam.stick2[0] = -gPlayer2Controller->rawStickX;
     gPuppyCam.stick2[1] =  gPlayer2Controller->rawStickY;
-    if (absc(gPuppyCam.stick2[0]) < PUPPYCAM_DEADZONE) {
+    if (ABSI(gPuppyCam.stick2[0]) < PUPPYCAM_DEADZONE) {
         gPuppyCam.stick2[0] = 0;
         gPuppyCam.stickN[0] = 0;
     }
-    if (absc(gPuppyCam.stick2[1]) < PUPPYCAM_DEADZONE) {
+    if (ABSI(gPuppyCam.stick2[1]) < PUPPYCAM_DEADZONE) {
         gPuppyCam.stick2[1] = 0;
         gPuppyCam.stickN[1] = 0;
     }

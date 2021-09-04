@@ -21,7 +21,7 @@ void bhv_donut_platform_spawner_update(void) {
     for (((i = 0), (platformFlag = 1)); (i < 31); ((i++), (platformFlag = (platformFlag << 1)))) {
         if (!(o->oDonutPlatformSpawnerSpawnedPlatforms & platformFlag)) {
             vec3_diff(d, &gMarioObject->oPosVec, sDonutPlatformPositions[i]);
-            marioSqDist = vec3f_sumsq(d);
+            marioSqDist = vec3_sumsq(d);
             // dist > 1000 and dist < 2000
             if ((marioSqDist > 1000000.0f) && (marioSqDist < 4000000.0f)) {
                 if (spawn_object_relative(i, sDonutPlatformPositions[i][0],

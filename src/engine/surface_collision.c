@@ -962,18 +962,18 @@ Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surfa
     vec3f_diff(e2, v2, v0); // edge 2
     vec3f_cross(h, dir, e2);
     // Check if we're perpendicular from the surface
-    a = vec3f_dot(e1, h);
+    a = vec3_dot(e1, h);
     if ((a > -NEAR_ZERO) && (a < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface
     f = (1.0f / a); // inverse dot of edge 1
     vec3f_diff(s, orig, v0);
-    u = (f * vec3f_dot(s, h));
+    u = (f * vec3_dot(s, h));
     if ((u < 0.0f) || (u > 1.0f)) return FALSE;
     vec3f_cross(q, s, e1);
-    v = (f * vec3f_dot(dir, q));
+    v = (f * vec3_dot(dir, q));
     if ((v < 0.0f) || ((u + v) > 1.0f)) return FALSE;
     // Get the length between our origin and the surface contact point
-    *length = (f * vec3f_dot(e2, q));
+    *length = (f * vec3_dot(e2, q));
     if ((*length <= NEAR_ZERO) || (*length > dir_length)) return FALSE;
     // Successful contact
     vec3f_copy(add_dir, dir);
@@ -1054,7 +1054,7 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     *hit_surface = NULL;
     vec3f_sum(hit_pos, orig, dir);
     // Get normalized direction
-    register f32 dir_length = vec3f_mag(dir);
+    register f32 dir_length = vec3_mag(dir);
     f32 max_length = dir_length;
     vec3f_copy(normalized_dir, dir);
     vec3f_normalize(normalized_dir);

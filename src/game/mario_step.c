@@ -281,6 +281,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
          && (m->forwardVel < 32.0f)
          && !(m->action & ACT_FLAG_SHORT_HITBOX)
          && !(m->action & ACT_FLAG_BUTT_OR_STOMACH_SLIDE)
+         && (m->pos[1] <= m->floorHeight)
          && (mario_get_floor_class(m) != SURFACE_CLASS_VERY_SLIPPERY)
          && analog_stick_held_back(m, DEG(100))) return GROUND_STEP_NONE;
 #endif

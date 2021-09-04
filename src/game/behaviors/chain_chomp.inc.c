@@ -304,7 +304,7 @@ static void chain_chomp_act_move(void) {
         cur_obj_move_standard(78);
         // Segment 0 connects the pivot to the chain chomp itself
         vec3f_diff(o->oChainChompSegments[0].pos, &o->oPosVec, &o->parentObj->oPosVec);
-        o->oChainChompDistToPivot = vec3f_mag(o->oChainChompSegments[0].pos);
+        o->oChainChompDistToPivot = vec3_mag(o->oChainChompSegments[0].pos);
         // If the chain is fully stretched
         maxDistToPivot = (o->oChainChompMaxDistFromPivotPerChainPart * CHAIN_CHOMP_NUM_PARTS);
         if (o->oChainChompDistToPivot > maxDistToPivot) {

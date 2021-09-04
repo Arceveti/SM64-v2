@@ -69,7 +69,7 @@ Bool32 act_idle(struct MarioState *m) {
     if (check_common_idle_cancels(m)                ) return TRUE;
     if (m->actionState == ACT_IDLE_STATE_SLEEP      ) return set_mario_action(m, (((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW) ? ACT_SHIVERING : ACT_START_SLEEPING), 0);
 #ifdef FIX_WALL_SIDLE_SLOPE
-    if (m->wall != NULL && (abs_angle_diff(m->wallYaw, m->faceAngle[1]) > DEG(135))) return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
+    if ((m->wall != NULL) && (abs_angle_diff(m->wallYaw, m->faceAngle[1]) > DEG(135))) return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
 #endif
     if (m->actionArg & 0x1) {
         // set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
@@ -327,6 +327,9 @@ Bool32 act_braking_stop(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_PUNCHING        , 0);
 #ifdef ACTION_CANCELS
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_START_CROUCHING , 0);
+#endif
+#ifdef FIX_WALL_SIDLE_SLOPE
+    if ((m->wall != NULL) && (abs_angle_diff(m->wallYaw, m->faceAngle[1]) > DEG(135))) return set_mario_action(m, ACT_STANDING_AGAINST_WALL, 0);
 #endif
     if (!(m->input & INPUT_FIRST_PERSON) && m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE)) return check_common_action_exits(m);
     stopping_step(m, MARIO_ANIM_STOP_SKID, ACT_IDLE);

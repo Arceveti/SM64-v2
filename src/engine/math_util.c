@@ -162,11 +162,6 @@ inline f64 max_3d (f64 a, f64 b, f64 c) { if (b > a) a = b; if (c > a) a = c; re
  * Clamp functions *
  *******************/
 
-u32 clamp_bits(u32 val, u32 size) {
-    u32 mask = BITMASK(size);
-    return MIN(val, mask);
-}
-
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch) {
     Bool32 outOfRange = FALSE;
     Angle pitch, yaw;
@@ -245,13 +240,6 @@ inline f32 softClamp(f32 x, f32 a, f32 b) {
 /**********
  * Angles *
  **********/
-
-inline f32 angle_to_degrees(Angle x) { return ((x / 65536.0f) * 360.0f); }
-inline Angle degrees_to_angle(f32 x) { return ((x * 0x10000 ) / 360   ); }
-inline f32 angle_to_radians(Angle x) { return ((x * M_PI    ) / 0x8000); }
-inline Angle radians_to_angle(f32 x) { return ((x / M_PI    ) * 0x8000); }
-inline f32 degrees_to_radians(f32 x) { return ( x * RAD_PER_DEG); }
-inline f32 radians_to_degrees(f32 x) { return ( x * DEG_PER_RAD); }
 
 inline Angle abs_angle_diff(Angle angle1, Angle angle2) {
     Angle diff = (angle2 - angle1);
@@ -407,23 +395,13 @@ void vec3f_to_vec3i(Vec3i dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 f32 vec2f_average(Vec2f v) { return ((v[0] + v[1]       ) / 2.0f); }
 f32 vec3f_average(Vec3f v) { return ((v[0] + v[1] + v[2]) / 3.0f); }
 
-/// Get the squared magnitude of vector 'v'
-f32 vec2f_sumsq(Vec2f v) { return vec2_sumsq(v); }
-f32 vec3f_sumsq(Vec3f v) { return vec3_sumsq(v); }
-f32 vec4f_sumsq(Vec4f v) { return vec4_sumsq(v); }
-
-/// Get the magnitude of vector 'v'
-f32 vec2f_mag(Vec2f v) { return vec2_mag(v); }
-f32 vec3f_mag(Vec3f v) { return vec3_mag(v); }
-f32 vec4f_mag(Vec4f v) { return vec4_mag(v); }
-
 /// Get the inverse magnitude of vector 'v'
 f32 vec2f_invmag(Vec2f v) {
-    register f32 mag = vec2f_mag(v);
+    register f32 mag = vec2_mag(v);
     return (1.0f / MAX(mag, NEAR_ZERO));
 }
 f32 vec3f_invmag(Vec3f v) {
-    register f32 mag = vec3f_mag(v);
+    register f32 mag = vec3_mag(v);
     return (1.0f / MAX(mag, NEAR_ZERO));
 }
 
@@ -437,7 +415,7 @@ void vec3f_normalize_negative(Vec3f v) { vec3f_mul_val(v, -vec3f_invmag(v)); }
 
 /// Scale vector 'v' so it has at most length 'max'
 void vec2f_normalize_max(Vec2f v, f32 max) {
-    register f32 mag = vec3f_mag(v);
+    register f32 mag = vec3_mag(v);
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
         mag = (max / mag);
@@ -445,7 +423,7 @@ void vec2f_normalize_max(Vec2f v, f32 max) {
     }
 }
 void vec3f_normalize_max(Vec3f v, f32 max) {
-    register f32 mag = vec3f_mag(v);
+    register f32 mag = vec3_mag(v);
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
         mag = (max / mag);
@@ -457,7 +435,7 @@ void vec3f_normalize_max(Vec3f v, f32 max) {
 void vec2f_get_lateral_dist(Vec2f from, Vec2f to, f32 *lateralDist) {
     Vec2f d;
     vec2f_diff(d, to, from);
-    *lateralDist = vec2f_mag(d);
+    *lateralDist = vec2_mag(d);
 }
 void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *lateralDist) {
     MAKE_DXZ(from, to, f32)
@@ -468,14 +446,14 @@ void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *lateralDist) {
 void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
     Vec3f d;
     vec3f_diff(d, to, from);
-    *dist = vec3f_mag(d);
+    *dist = vec3_mag(d);
 }
 
 /// Finds the distance between two vectors.
 void vec3f_get_dist_and_yaw(Vec3f from, Vec3f to, f32 *dist, Angle *yaw) {
     Vec3f d;
     vec3f_diff(d, to, from);
-    *dist = vec3f_mag(d);
+    *dist = vec3_mag(d);
     *yaw  = atan2s(d[2], d[0]);
 }
 
@@ -569,6 +547,13 @@ void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle
     to[2] = (from[2] + (  dc * coss(yaw  )));
 }
 
+/// Make vector 'dest' the cross product of vectors a and b.
+void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
+    dest[0] = ((a[1] * b[2]) - (a[2] * b[1]));
+    dest[1] = ((a[2] * b[0]) - (a[0] * b[2]));
+    dest[2] = ((a[0] * b[1]) - (a[1] * b[0]));
+}
+
 /**
  * Set 'dest' the normal vector of a triangle with vertices a, b and c.
  * It is similar to vec3f_cross, but it calculates the vectors (c-b) and (b-a)
@@ -639,18 +624,6 @@ void scale_along_line(Vec3f dst, Vec3f from, Vec3f to, f32 scale) {
     dst[2] = (((to[2] - from[2]) * scale) + from[2]);
 }
 
-/// Make vector 'dest' the cross product of vectors a and b.
-void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
-    dest[0] = ((a[1] * b[2]) - (a[2] * b[1]));
-    dest[1] = ((a[2] * b[0]) - (a[0] * b[2]));
-    dest[2] = ((a[0] * b[1]) - (a[1] * b[0]));
-}
-
-/// Returns the dot product of 'a' and 'b'.
-inline f32 vec2f_dot(Vec3f a, Vec3f b) { return vec2_dot(a, b); }
-inline f32 vec3f_dot(Vec3f a, Vec3f b) { return vec3_dot(a, b); }
-inline f32 vec4f_dot(Vec4f a, Vec4f b) { return vec4_dot(a, b); }
-
 /*********************
  * Matrix Operations *
  *********************/
@@ -688,15 +661,8 @@ void mtxf_shift_up(Mat4 mtx) {
     Vec3f temp;
     for ((i = 0); (i < 3); (i++)) temp[i] = mtx[0][i + 1];
     for ((i = 1); (i < 4); (i++)) for ((j = 1); (j < 4); (j++)) mtx[i - 1][j - 1] = mtx[i][j];
-    mtxf_end(mtx);
+    MTXF_END(mtx);
     for ((i = 0); (i < 3); (i++)) mtx[3][i] = temp[i];
-}
-
-void mtxf_end(Mat4 mtx) {
-    mtx[0][3] = 0.0f;
-    mtx[1][3] = 0.0f;
-    mtx[2][3] = 0.0f;
-    mtx[3][3] = 1.0f;
 }
 
 /**
@@ -724,42 +690,33 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     Vec3f colX, colY, colZ;
     register f32 dx = (to[0] - from[0]);
     register f32 dz = (to[2] - from[2]);
-
     register f32 invLength = sqrtf(sqr(dx) + sqr(dz));
     invLength = -(1.0f / MAX(invLength, NEAR_ZERO));
-
     dx *= invLength;
     dz *= invLength;
     f32 sr  = sins(roll);
     colY[1] = coss(roll);
     colY[0] = ( sr * dz);
     colY[2] = (-sr * dx);
-
     vec3f_diff(colZ, to, from);
     vec3f_normalize_negative(colZ);
-
     vec3f_cross(colX, colY, colZ);
     vec3f_normalize(colX);
-
     vec3f_cross(colY, colZ, colX);
     vec3f_normalize(colY);
-
     mtx[0][0] = colX[0];
     mtx[1][0] = colX[1];
     mtx[2][0] = colX[2];
-
     mtx[0][1] = colY[0];
     mtx[1][1] = colY[1];
     mtx[2][1] = colY[2];
-
     mtx[0][2] = colZ[0];
     mtx[1][2] = colZ[1];
     mtx[2][2] = colZ[2];
-
-    mtx[3][0] = -vec3f_dot(from, colX);
-    mtx[3][1] = -vec3f_dot(from, colY);
-    mtx[3][2] = -vec3f_dot(from, colZ);
-    mtxf_end(mtx);
+    mtx[3][0] = -vec3_dot(from, colX);
+    mtx[3][1] = -vec3_dot(from, colY);
+    mtx[3][2] = -vec3_dot(from, colZ);
+    MTXF_END(mtx);
 }
 
 /**
@@ -799,7 +756,7 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
         vec3f_copy(mtx[2], gVec3fY);
     }
     vec3f_zero(mtx[3]);
-    mtxf_end(mtx);
+    MTXF_END(mtx);
 }
 
 /**
@@ -826,8 +783,8 @@ void mtxf_rotate_zxy_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
     dest[0][2] = ((sx * cysz) - sycz);
     dest[1][2] = ((sx * cycz) + sysz);
     dest[2][2] = ( cx * cy           );
-    vec3f_copy(dest[3], translate);
-    mtxf_end(dest);
+    vec3_copy(dest[3], translate);
+    MTXF_END(dest);
 }
 
 void mtxf_rotate_xyz(Mat4 dest, Vec3a rotate) {
@@ -879,8 +836,8 @@ void mtxf_rotate_xyz_and_translate(Mat4 dest, Vec3f translate, Vec3a rotate) {
     dest[2][0] = ((cxcz * sy) + sxsz);
     dest[2][1] = ((cxsz * sy) - sxcz);
     dest[2][2] = (   cx * cy        );
-    vec3f_copy(dest[3], translate);
-    mtxf_end(dest);
+    vec3_copy(dest[3], translate);
+    MTXF_END(dest);
 }
 
 /**
@@ -908,7 +865,7 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
     dest[2][2] = 1;
     dest[2][3] = 0;
     if ((position[0] == 0) && (position[1] == 0) && (position[2] == 0)) {
-        vec3f_copy(dest[3], mtx[3]);
+        vec3_copy(dest[3], mtx[3]);
     } else {
         dest[3][0] = ((mtx[0][0] * position[0]) + (mtx[1][0] * position[1]) + (mtx[2][0] * position[2]) + mtx[3][0]);
         dest[3][1] = ((mtx[0][1] * position[0]) + (mtx[1][1] * position[1]) + (mtx[2][1] * position[2]) + mtx[3][1]);
@@ -938,7 +895,7 @@ void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     dest[3][1] = pos[1];
     vec3f_copy(dest[2], forwardDir);
     dest[3][2] = pos[2];
-    mtxf_end(dest);
+    MTXF_END(dest);
 }
 
 /**
@@ -969,20 +926,20 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     if ((point1[1] - pos[1]) < minY) point1[1] = pos[1];
     if ((point2[1] - pos[1]) < minY) point2[1] = pos[1];
     avgY = ((point0[1] + point1[1] + point2[1]) / 3.0f);
-    vec3f_set(forward, sins(yaw), 0, coss(yaw));
+    vec3_set(forward, sins(yaw), 0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
     vec3f_normalize(                   yColumn                        );
     vec3f_cross(              xColumn, yColumn, forward               );
     vec3f_normalize(          xColumn                                 );
     vec3f_cross(     zColumn, xColumn, yColumn                        );
     vec3f_normalize( zColumn                                          );
-    vec3f_copy(mtx[0], xColumn);
-    vec3f_copy(mtx[1], yColumn);
-    vec3f_copy(mtx[2], zColumn);
+    vec3_copy(mtx[0], xColumn);
+    vec3_copy(mtx[1], yColumn);
+    vec3_copy(mtx[2], zColumn);
     mtx[3][0] = pos[0];
     mtx[3][1] = MAX(pos[1], avgY);
     mtx[3][2] = pos[2];
-    mtxf_end(mtx);
+    MTXF_END(mtx);
 }
 
 /**
@@ -1007,26 +964,26 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
     Mat4 temp;
     Vec3f entry;
     // column 0
-    vec3f_copy(entry, a[0]);
+    vec3_copy(entry, a[0]);
     temp[0][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
     temp[0][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
     temp[0][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 1
-    vec3f_copy(entry, a[1]);
+    vec3_copy(entry, a[1]);
     temp[1][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
     temp[1][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
     temp[1][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 2
-    vec3f_copy(entry, a[2]);
+    vec3_copy(entry, a[2]);
     temp[2][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
     temp[2][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
     temp[2][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
     // column 3
-    vec3f_copy(entry, a[3]);
+    vec3_copy(entry, a[3]);
     temp[3][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]) + b[3][0]);
     temp[3][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]) + b[3][1]);
     temp[3][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]) + b[3][2]);
-    mtxf_end(temp);
+    MTXF_END(temp);
     mtxf_copy(dest, temp);
 }
 
@@ -1047,9 +1004,9 @@ void mtxf_scale_vec3f(Mat4 dest, Mat4 mtx, Vec3f s) {
  * Scales a mat4f in each dimension by a vector.
  */
 void mtxf_scale_self_vec3f(Mat4 mtx, Vec3f vec) {
-    vec3f_mul_val(mtx[0], vec[0]);
-    vec3f_mul_val(mtx[1], vec[1]);
-    vec3f_mul_val(mtx[2], vec[2]);
+    vec3_mul_val(mtx[0], vec[0]);
+    vec3_mul_val(mtx[1], vec[1]);
+    vec3_mul_val(mtx[2], vec[2]);
 }
 
 /**
@@ -1117,7 +1074,7 @@ void mtxf_to_mtx(Mtx *dest, Mat4 src) {
     Mat4 temp;
     register s32 i;
     for((i = 0); (i < 4); (i++)) {
-        vec3f_quot_val(temp[i], src[i], gWorldScale);
+        vec3_quot_val(temp[i], src[i], gWorldScale);
         temp[i][3] = src[i][3];
     }
     guMtxF2L(temp, dest);
@@ -1149,25 +1106,25 @@ void mtxf_rotate_xy(Mtx *mtx, Angle angle, Bool32 doScale) {
  * the camera position.
  */
 void get_pos_from_transform_mtx(Vec3f dest, Mat4 objMtx, Mat4 camMtx) {
-    dest[0] = (vec3f_dot(objMtx[3], camMtx[0]) - vec3f_dot(camMtx[3], camMtx[0]));
-    dest[1] = (vec3f_dot(objMtx[3], camMtx[1]) - vec3f_dot(camMtx[3], camMtx[1]));
-    dest[2] = (vec3f_dot(objMtx[3], camMtx[2]) - vec3f_dot(camMtx[3], camMtx[2]));
+    dest[0] = (vec3_dot(objMtx[3], camMtx[0]) - vec3_dot(camMtx[3], camMtx[0]));
+    dest[1] = (vec3_dot(objMtx[3], camMtx[1]) - vec3_dot(camMtx[3], camMtx[1]));
+    dest[2] = (vec3_dot(objMtx[3], camMtx[2]) - vec3_dot(camMtx[3], camMtx[2]));
 }
 
 void create_transformation_from_matrices(Mat4 dst, Mat4 a1, Mat4 a2) {
-    dst[0][0] =  vec3f_dot(a1[0], a2[0]);
-    dst[0][1] =  vec3f_dot(a1[0], a2[1]);
-    dst[0][2] =  vec3f_dot(a1[0], a2[2]);
-    dst[1][0] =  vec3f_dot(a1[1], a2[0]);
-    dst[1][1] =  vec3f_dot(a1[1], a2[1]);
-    dst[1][2] =  vec3f_dot(a1[1], a2[2]);
-    dst[2][0] =  vec3f_dot(a1[2], a2[0]);
-    dst[2][1] =  vec3f_dot(a1[2], a2[1]);
-    dst[2][2] =  vec3f_dot(a1[2], a2[2]);
-    dst[3][0] = (vec3f_dot(a1[3], a2[0]) - vec3f_dot(a2[3], a2[0]));
-    dst[3][1] = (vec3f_dot(a1[3], a2[1]) - vec3f_dot(a2[3], a2[1]));
-    dst[3][2] = (vec3f_dot(a1[3], a2[2]) - vec3f_dot(a2[3], a2[2]));
-    mtxf_end(dst);
+    dst[0][0] =  vec3_dot(a1[0], a2[0]);
+    dst[0][1] =  vec3_dot(a1[0], a2[1]);
+    dst[0][2] =  vec3_dot(a1[0], a2[2]);
+    dst[1][0] =  vec3_dot(a1[1], a2[0]);
+    dst[1][1] =  vec3_dot(a1[1], a2[1]);
+    dst[1][2] =  vec3_dot(a1[1], a2[2]);
+    dst[2][0] =  vec3_dot(a1[2], a2[0]);
+    dst[2][1] =  vec3_dot(a1[2], a2[1]);
+    dst[2][2] =  vec3_dot(a1[2], a2[2]);
+    dst[3][0] = (vec3_dot(a1[3], a2[0]) - vec3_dot(a2[3], a2[0]));
+    dst[3][1] = (vec3_dot(a1[3], a2[1]) - vec3_dot(a2[3], a2[1]));
+    dst[3][2] = (vec3_dot(a1[3], a2[2]) - vec3_dot(a2[3], a2[2]));
+    MTXF_END(dst);
 }
 
 // Rotation/translation matrix inverse
@@ -1184,8 +1141,8 @@ void mtxf_inverse_rotate_translate(Mat4 in, Mat4 out) {
     invRot[2][0]    = in[0][2];
     invRot[2][1]    = in[1][2];
     invRot[2][2]    = in[2][2];
-    vec3f_zero(invRot[3]);
-    mtxf_end(invRot);
+    vec3_zero(invRot[3]);
+    MTXF_END(invRot);
     negTranslate[0] = -in[3][0];
     negTranslate[1] = -in[3][1];
     negTranslate[2] = -in[3][2];
@@ -1312,7 +1269,7 @@ void make_oblique(Mat4 toModify, Vec4f clipPlane) {
     q[2] = -1.0f;
     q[3] = (1.0f + toModify[2][2]) / toModify[3][2];
     // Calculate the scaled plane vector
-    vec4f_prod_val(c, clipPlane, (2.0f / vec4f_dot(clipPlane, q)));
+    vec4f_prod_val(c, clipPlane, (2.0f / vec4_dot(clipPlane, q)));
     // Replace the third row of the projection matrix
     toModify[0][2] =  c[0];
     toModify[1][2] =  c[1];

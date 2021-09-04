@@ -8,9 +8,13 @@
 
 #define BITMASK(size) ((1 << (size)) - 1)
 
+#define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
+
+
 #define NEAR_ZERO   0.00001f
 #define NEARER_ZERO 0.000001f
 #define NEAR_ONE    0.99999f
+
 
 struct Row4 {
     f32 c0, c1, c2, c3;
@@ -79,12 +83,21 @@ extern Vec3f gVec3fZ;
 #define DEG_PER_RAD 57.29577950560105
 #define RAD_PER_DEG (1.0 / DEG_PER_RAD)
 
+#define angle_to_degrees(  x) (f32)(((Angle)(x) / 65536.0f) * 360.0f)
+#define degrees_to_angle(  x) (Angle)(((f32)(x) * 0x10000 ) / 360   )
+#define angle_to_radians(  x) (f32)(((Angle)(x) * M_PI    ) / 0x8000)
+#define radians_to_angle(  x) (Angle)(((f32)(x) / M_PI    ) * 0x8000)
+#define degrees_to_radians(x) (f32)(   (f32)(x) * RAD_PER_DEG       )
+#define radians_to_degrees(x) (f32)(   (f32)(x) * DEG_PER_RAD       )
+
+
 #define CONST_EULER_D 2.71828182845904523536028747135266249775724709369995
 #define CONST_EULER_F 2.71828182845904523536028747135266249775724709369995f
 
 #define sins(x)  gSineTable[  (u16) (x) >> 4]
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
 #define atans(x) gArctanTable[(s32)((((x) * 1024) + 0.5f))] //! is this correct?
+
 
 #define min(a, b) MIN((a), (b))
 #define max(a, b) MAX((a), (b))
@@ -93,6 +106,8 @@ extern Vec3f gVec3fZ;
 // #define max_3(a, b, c)  ((((a) < (b)) || ((a) < (c))) ? (((b) < (c)) ? ((c) : (b))) : (a))
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
+#define SWAP(a, b)      { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); } 
 
 #define sqr(x)          (    (x) * (x))
 #define cube(x)         ( sqr(x) * (x))
@@ -393,6 +408,14 @@ extern Vec3f gVec3fZ;
     MAKE_DXZ((from), (to), fmt);    \
     fmt dy = ((to)[1] - (from)[1]);
 
+
+#define MTXF_END(mtx) { \
+    (mtx)[0][3] = 0.0f; \
+    (mtx)[1][3] = 0.0f; \
+    (mtx)[2][3] = 0.0f; \
+    (mtx)[3][3] = 1.0f; \
+}
+
 // Kaze's float functions
 f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
@@ -432,7 +455,6 @@ u32  max_3ui(u32 a, u32 b, u32 c);
 f32  max_3f( f32 a, f32 b, f32 c);
 f64  max_3d( f64 a, f64 b, f64 c);
 // Clamp
-u32    clamp_bits(u32 val, u32 size);
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
 Bool32 clamp_f32(f32 *value, f32 minimum, f32 maximum);
@@ -450,12 +472,6 @@ s16  random_mod_offset(s16 base, s16 step, s16 mod);
 f32  random_f32_around_zero(f32 diameter);
 void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16 zRange);
 // Angles
-f32 angle_to_degrees(Angle x);
-Angle degrees_to_angle(f32 x);
-f32 angle_to_radians(Angle x);
-Angle radians_to_angle(f32 x);
-f32 degrees_to_radians(f32 x);
-f32 radians_to_degrees(f32 x);
 Angle  abs_angle_diff(Angle angle1, Angle angle2);
 Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown);
 // Vector Operations
@@ -493,12 +509,6 @@ void vec3f_to_vec3i(     Vec3i dst, Vec3f src);
 
 f32  vec2f_average(           Vec2f v);
 f32  vec3f_average(           Vec3f v);
-f32  vec2f_sumsq(             Vec2f v);
-f32  vec3f_sumsq(             Vec3f v);
-f32  vec4f_sumsq(             Vec4f v);
-f32  vec2f_mag(               Vec2f v);
-f32  vec3f_mag(               Vec3f v);
-f32  vec4f_mag(               Vec4f v);
 f32  vec2f_invmag(            Vec2f v);
 f32  vec3f_invmag(            Vec3f v);
 void vec2f_normalize(         Vec2f v);
@@ -525,11 +535,6 @@ void vec3s_set_dist_and_angle(                 Vec3s from, Vec3s to, s16  dist, 
 void vec3f_set_dist_and_angle(                 Vec3f from, Vec3f to, f32  dist,                   Angle  pitch, Angle  yaw);
 
 void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
-
-f32  vec2f_dot(                          Vec3f a, Vec3f b);
-f32  vec3f_dot(                          Vec3f a, Vec3f b);
-f32  vec4f_dot(                          Vec4f a, Vec4f b);
-
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);
@@ -539,8 +544,7 @@ void scale_along_line(                   Vec3f dest, Vec3f from, Vec3f to, f32 s
 // Matrix operations
 void mtxf_copy(                           Mat4 dest, const Mat4 src);
 void mtxf_shift_up(                       Mat4 mtx);
-void mtxf_end(                            Mat4 mtx);
-void mtxf_identity(                       Mat4  mtx);
+void mtxf_identity(                       Mat4 mtx);
 void mtxf_translate(                      Mat4 dest, Vec3f b);
 void mtxf_lookat(                         Mat4  mtx,  Vec3f from, Vec3f to, Angle roll);
 void mtxf_origin_lookat(                  Mat4  mtx, Vec3f vec, f32 roll);

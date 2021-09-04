@@ -69,7 +69,7 @@ void gd_create_rot_matrix(Mat4 *mtx, Vec3f vec, f32 s, f32 c) {
     (*mtx)[2][1] = (omc10 - srev[2]);
     (*mtx)[2][2] = ((oneMinusCos * sqr(rev[0])) + c);
     vec3f_zero((*mtx)[3]);
-    mtxf_end(*mtx);
+    MTXF_END(*mtx);
 }
 
 /// Creates a rotation matrix about vector 'vec' with ang in degrees.

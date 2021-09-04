@@ -167,9 +167,9 @@ void vec3s_to_colorRGB(ColorRGB dest, Vec3s src) {
 
 // rgba16 value
 RGBA16 rgba16_set(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA16Component a) {
-    return ((clamp_bits(r, SIZ_RGBA16_C) << IDX_RGBA16_R) |
-            (clamp_bits(g, SIZ_RGBA16_C) << IDX_RGBA16_G) |
-            (clamp_bits(b, SIZ_RGBA16_C) << IDX_RGBA16_B) |
+    return ((CLAMP_BITS(r, SIZ_RGBA16_C) << IDX_RGBA16_R) |
+            (CLAMP_BITS(g, SIZ_RGBA16_C) << IDX_RGBA16_G) |
+            (CLAMP_BITS(b, SIZ_RGBA16_C) << IDX_RGBA16_B) |
             (a & SIZ_RGBA16_A));
 }
 
