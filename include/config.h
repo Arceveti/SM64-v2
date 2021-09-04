@@ -522,6 +522,8 @@
 #define COLLISION_DATA_TYPE s16
 #define ROOM_DATA_TYPE      u8
 
+// Automatically calculate the optimal collision distance for an object based on its vertices.
+#define AUTO_COLLISION_DISTANCE
 
 // Platform displacement 2 also known as momentum patch.
 // Makes Mario keep the momemtum from moving platforms.

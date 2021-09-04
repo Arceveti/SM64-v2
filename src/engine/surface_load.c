@@ -524,6 +524,7 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
     }
 }
 
+#ifdef AUTO_COLLISION_DISTANCE
 // From Kaze
 void get_optimal_coll_dist(struct Object *o) {
     register f32 thisVertDist, maxDist = 0.0f;
@@ -544,6 +545,7 @@ void get_optimal_coll_dist(struct Object *o) {
     }
     o->oCollisionDistance = (sqrtf(maxDist) + 100.0f);
 }
+#endif
 
 /**
  * Transform an object's vertices, reload them, and render the object.
@@ -558,7 +560,9 @@ void load_object_collision_model(void) {
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
     if (gCurrentObject->oDistanceToMario == 19000.0f) marioDist = dist_between_objects(gCurrentObject, gMarioObject);
+#ifdef AUTO_COLLISION_DISTANCE
     if (!(gCurrentObject->oFlags & OBJ_FLAG_DONT_CALC_COLL_DIST)) get_optimal_coll_dist(gCurrentObject);
+#endif
     // If the object collision is supposed to be loaded more than the
     // drawing distance, extend the drawing range.
     if (gCurrentObject->oCollisionDistance > gCurrentObject->oDrawingDistance) gCurrentObject->oDrawingDistance = gCurrentObject->oCollisionDistance;
