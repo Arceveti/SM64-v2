@@ -165,8 +165,8 @@ Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 
 /**
  * Orients an object with the given normals, typically the surface under the object.
  */
-void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ) {
-    Vec3f objVisualPosition, surfaceNormals;
+void obj_orient_graph(struct Object *obj, Vec3f normal) {
+    Vec3f objVisualPosition;
     Mat4 *throwMatrix;
     // Passes on orienting certain objects that shouldn't be oriented, like boulders.
     if (!sOrientObjWithFloor) return;
@@ -175,11 +175,8 @@ void obj_orient_graph(struct Object *obj, f32 normalX, f32 normalY, f32 normalZ)
     throwMatrix = alloc_display_list(sizeof(*throwMatrix));
     // If out of memory, fail to try orienting the object.
     if (throwMatrix == NULL) return;
-    objVisualPosition[0] =  obj->oPosX;
-    objVisualPosition[1] = (obj->oPosY + obj->oGraphYOffset);
-    objVisualPosition[2] =  obj->oPosZ;
-    vec3f_set(surfaceNormals, normalX, normalY, normalZ);
-    mtxf_align_terrain_normal(*throwMatrix, surfaceNormals, objVisualPosition, obj->oFaceAngleYaw);
+    vec3f_copy_y_off(objVisualPosition, &obj->oPosVec, obj->oGraphYOffset);
+    mtxf_align_terrain_normal(*throwMatrix, normal, objVisualPosition, obj->oFaceAngleYaw);
     obj->header.gfx.throwMatrix = throwMatrix;
 }
 
@@ -214,7 +211,7 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     }
     //! (Obj Position Crash) If you got an object with height past 2^31, the game would crash.
     if (((s32) o->oPosY >= (s32) objFloorY) && (s32) (o->oPosY < (s32) objFloorY + 37)) {
-        obj_orient_graph(o, floor_n[0], floor_n[1], floor_n[2]);
+        obj_orient_graph(o, floor_n);
         floor_nX2 = sqr(floor_n[0]);
         floor_nZ2 = sqr(floor_n[2]);
         floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_n[1]) + floor_nZ2) * o->oGravity * 2);
@@ -247,7 +244,7 @@ void calc_new_obj_vel_and_pos_y_underwater(struct Surface *objFloor, f32 floorY,
     // If moving fast near the surface of the water, flip vertical speed? To emulate skipping?
     if ((o->oForwardVel > 12.5f) && ((waterY + 30.0f) > o->oPosY) && ((waterY - 30.0f) < o->oPosY)) o->oVelY = -o->oVelY;
     if (((s32) o->oPosY >= (s32) floorY) && ((s32) o->oPosY < (s32) floorY + 37)) {
-        obj_orient_graph(o, floor_n[0], floor_n[1], floor_n[2]);
+        obj_orient_graph(o, floor_n);
         floor_nX2 = sqr(floor_n[0]);
         floor_nZ2 = sqr(floor_n[2]);
         floor_nXZ = ((floor_nX2 + floor_nZ2) / (floor_nX2 + sqr(floor_n[1]) + floor_nZ2) * netYAccel * 2);

@@ -788,6 +788,14 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
+// #define RAYCAST_COLLISION
+
+// // lol
+// #define DYNAMIC_GRAVITY
+
+// Requires FAST_FLOOR_ALIGN
+// #define FLOOR_ALIGNMENT
+
 // Platform Displacement 2 for objects other than Mario & Bowser
 //! Moves or doesn't move certain objects at the wrong times, such as amps, boos, and coins
 // #define PLATFORM_DISPLACEMENT_2_OBJECTS

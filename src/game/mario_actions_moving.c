@@ -885,10 +885,11 @@ Bool32 act_crawling(struct MarioState *m) {
         case GROUND_STEP_HIT_WALL:
             if (m->forwardVel > GROUND_SPEED_THRESHOLD_2) mario_set_forward_vel(m, GROUND_SPEED_THRESHOLD_2);
             //! Possibly unintended missing break
-            // fall through
 #ifdef FAST_FLOOR_ALIGN
+        // fall through
         case GROUND_STEP_NONE: align_with_floor(m, TRUE); break;
 #else
+        // fall through
         case GROUND_STEP_NONE: align_with_floor(m); break;
 #endif
     }

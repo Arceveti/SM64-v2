@@ -5,6 +5,7 @@
 #include <PR/gbi.h>
 
 #include "types.h"
+#include "math_util.h"
 
 // I4
 #define SIZ_I4      0x4
@@ -89,8 +90,8 @@
 #define MSK_CI8 BITMASK(SIZ_CI8)
 
 // Direct format conversions:
-#define I4_TO_RGBA16_C(c)   ((c << (SIZ_RGBA16_C - SIZ_I4)) & MSK_RGBA16_C)
-#define I8_TO_RGBA16_C(c)   ((c >> (SIZ_I8 - SIZ_RGBA16_C)) & MSK_RGBA16_C)
+#define I4_TO_RGBA16_C(c)   (((c) << (SIZ_RGBA16_C - SIZ_I4)) & MSK_RGBA16_C)
+#define I8_TO_RGBA16_C(c)   (((c) >> (SIZ_I8 - SIZ_RGBA16_C)) & MSK_RGBA16_C)
 
 void colorRGB_set(ColorRGB dest, Color r, Color g, Color b);
 void colorRGB_copy(ColorRGB dest, const ColorRGB src);

@@ -742,10 +742,7 @@ static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 inde
     if ((sPuppyVolumeStack[index]->room != gMarioCurrentRoom) && (sPuppyVolumeStack[index]->room != -1)) return FALSE;
     if (sPuppyVolumeStack[index]->shape == PUPPYVOLUME_SHAPE_BOX) {
         // Fetch the relative position. to the triggeree.
-        //! vec3 s/i/f diff
-        rel[0] = (sPuppyVolumeStack[index]->pos[0] - gPuppyCam.targetObj->oPosX);
-        rel[1] = (sPuppyVolumeStack[index]->pos[1] - gPuppyCam.targetObj->oPosY);
-        rel[2] = (sPuppyVolumeStack[index]->pos[2] - gPuppyCam.targetObj->oPosZ);
+        vec3_diff(rel, sPuppyVolumeStack[index]->pos, &gPuppyCam.targetObj->oPosVec);
         // Use the dark, forbidden arts of trig to rotate the volume.
         pos[0] = ((rel[2] * sins(sPuppyVolumeStack[index]->rot)) + (rel[0] * coss(sPuppyVolumeStack[index]->rot)));
         pos[1] = ((rel[2] * coss(sPuppyVolumeStack[index]->rot)) - (rel[0] * sins(sPuppyVolumeStack[index]->rot)));
@@ -766,10 +763,7 @@ static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 inde
     } else if (sPuppyVolumeStack[index]->shape == PUPPYVOLUME_SHAPE_CYLINDER) {
         // s16 dir;
         f32 dist;
-        //! vec3 i/s/f diff
-        rel[0] = (sPuppyVolumeStack[index]->pos[0] - gPuppyCam.targetObj->oPosX);
-        rel[1] = (sPuppyVolumeStack[index]->pos[1] - gPuppyCam.targetObj->oPosY);
-        rel[2] = (sPuppyVolumeStack[index]->pos[2] - gPuppyCam.targetObj->oPosZ);
+        vec3_diff(rel, sPuppyVolumeStack[index]->pos, &gPuppyCam.targetObj->oPosVec);
         dist   = sqrtf(sqr(rel[0]) + sqr(rel[2]));
 #ifdef VISUAL_DEBUG
         Vec3f debugPos[2];

@@ -503,10 +503,8 @@ void move_animator(struct ObjAnimator *animObj) {
                 d_get_init_pos(currTransform.pos);
                 vec3f_copy(nextTransform.pos, currTransform.pos);
                 // use animation rotation
-                vec3s_to_vec3f(currTransform.rotate, animData3s16[currKeyFrame]);
-                vec3f_mul_val(currTransform.rotate, scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(nextTransform.rotate, animData3s16[nextKeyFrame]);
-                vec3f_mul_val(nextTransform.rotate, scale); //! vec3f/s_prod_val?
+                vec3_prod_val(currTransform.rotate, animData3s16[currKeyFrame], scale);
+                vec3_prod_val(nextTransform.rotate, animData3s16[nextKeyFrame], scale);
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_POS3S: // data = s16(*)[3] - position only
@@ -528,10 +526,8 @@ void move_animator(struct ObjAnimator *animObj) {
                 d_get_scale(currTransform.scale);
                 vec3f_copy(nextTransform.scale, currTransform.scale);
                 // use animation rotation
-                vec3s_to_vec3f(currTransform.rotate, animData6s16[currKeyFrame]);
-                vec3f_mul_val(currTransform.rotate, scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(nextTransform.rotate, animData6s16[nextKeyFrame]);
-                vec3f_mul_val(nextTransform.rotate, scale); //! vec3f/s_prod_val?
+                vec3_prod_val(currTransform.rotate, animData6s16[currKeyFrame], scale);
+                vec3_prod_val(nextTransform.rotate, animData6s16[nextKeyFrame], scale);
                 // use animation position
                 vec3s_to_vec3f(currTransform.pos, &animData6s16[currKeyFrame][3]);
                 vec3s_to_vec3f(nextTransform.pos, &animData6s16[nextKeyFrame][3]);
@@ -539,16 +535,12 @@ void move_animator(struct ObjAnimator *animObj) {
                 break;
             case GD_ANIM_SCALE3S_POS3S_ROT3S: // data = s16(*)[9] - scale, position, and rotation
                 animData9s16 = (s16(*)[9]) animData->data;
-                vec3s_to_vec3f(currTransform.scale,  &animData9s16[currKeyFrame][0]);
-                vec3f_mul_val( currTransform.scale,  scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(currTransform.rotate, &animData9s16[currKeyFrame][3]);
-                vec3f_mul_val( currTransform.rotate, scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(currTransform.pos,    &animData9s16[currKeyFrame][6]);
-                vec3s_to_vec3f(nextTransform.scale,  &animData9s16[nextKeyFrame][0]);
-                vec3f_mul_val( nextTransform.scale,  scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(nextTransform.rotate, &animData9s16[nextKeyFrame][3]);
-                vec3f_mul_val( nextTransform.rotate, scale); //! vec3f/s_prod_val?
-                vec3s_to_vec3f(nextTransform.pos,    &animData9s16[nextKeyFrame][6]);
+                vec3_prod_val( currTransform.scale,  &animData9s16[currKeyFrame][0], scale);
+                vec3_prod_val( currTransform.rotate, &animData9s16[currKeyFrame][3], scale);
+                vec3s_to_vec3f(currTransform.pos,    &animData9s16[currKeyFrame][6]       );
+                vec3_prod_val( nextTransform.scale,  &animData9s16[nextKeyFrame][0], scale);
+                vec3_prod_val( nextTransform.rotate, &animData9s16[nextKeyFrame][3], scale);
+                vec3s_to_vec3f(nextTransform.pos,    &animData9s16[nextKeyFrame][6]       );
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_CAMERA_EYE3S_LOOKAT3S: // s16(*)[6]?

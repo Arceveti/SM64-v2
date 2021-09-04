@@ -23,13 +23,13 @@
  * Encapsulation of information about a shadow.
  */
 struct Shadow {
-    /* The (x, y, z) position of the object whose shadow this is. */ //! Vec3f?
+    /* The (x, y, z) position of the object whose shadow this is. */
     Vec3f parentPos;
     /* The y-position of the floor (or water or lava) underneath the object. */
     f32 floorHeight;
     /* Initial (unmodified) size of the shadow. */
     f32 shadowScale;
-    /* (nx, ny, nz) normal vector of the floor underneath the object. */ //! Vec3f?
+    /* (nx, ny, nz) normal vector of the floor underneath the object. */
     Vec3f floorNormal;
     /* "originOffset" of the floor underneath the object. */
     f32 floorOriginOffset;

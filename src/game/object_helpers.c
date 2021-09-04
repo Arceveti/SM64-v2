@@ -1416,10 +1416,7 @@ s32 cur_obj_follow_path(void) {
     }
     o->oPathedPrevWaypointFlags = lastWaypoint->flags | WAYPOINT_FLAGS_INITIALIZED;
     vec3s_diff(prevToNext, targetWaypoint->pos, lastWaypoint->pos);
-    //! vec3 s/i diff
-    objToNext[0]                = (targetWaypoint->pos[0] - o->oPosX);
-    objToNext[1]                = (targetWaypoint->pos[1] - o->oPosY);
-    objToNext[2]                = (targetWaypoint->pos[2] - o->oPosZ);
+    vec3_diff(objToNext, targetWaypoint->pos, &o->oPosVec);
     o->oPathedTargetYaw         = atan2s(objToNext[2], objToNext[0]);
     o->oPathedTargetPitch       = atan2s(sqrtf(sqr(objToNext[0]) + sqr(objToNext[2])), -objToNext[1]);
     // If dot(prevToNext, objToNext) <= 0 (i.e. reached other side of target waypoint)
@@ -1587,10 +1584,7 @@ void cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end) {
 }
 
 void cur_obj_set_pos_to_home_with_debug(void) {
-    //! vec3 f/s sum?
-    o->oPosX = (o->oHomeX + gDebugInfo[5][0]);
-    o->oPosY = (o->oHomeY + gDebugInfo[5][1]);
-    o->oPosZ = (o->oHomeZ + gDebugInfo[5][2]);
+    vec3_sum(&o->oPosVec, &o->oHomeVec, gDebugInfo[5]);
     cur_obj_scale((gDebugInfo[5][3] / 100.0f) + 1.0f); // was 1.0l
 }
 

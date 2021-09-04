@@ -434,6 +434,9 @@ struct MarioState
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
              f32            steepness;
 #endif
+#ifdef DYNAMIC_GRAVITY
+           Vec3f            gravityNormal;
+#endif
 #ifdef BREATH_METER
              s16            breath;
              u8             breathCounter;

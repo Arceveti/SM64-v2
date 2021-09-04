@@ -1272,6 +1272,7 @@ CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Ve
     // Find the floor of the arena
     pos[1] = find_floor(c->areaCenX, CELL_HEIGHT_LIMIT, c->areaCenZ, &floor);
     if (floor != NULL) {
+        // get floor height at pos
         pos[1] = (300.0f - (((floor->normal.x * pos[0]) + (floor->normal.z * pos[2]) + floor->originOffset) / floor->normal.y));
         switch (gCurrLevelArea) {
             case AREA_BOB: // fall through

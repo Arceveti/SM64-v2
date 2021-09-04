@@ -647,9 +647,9 @@ void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
 }
 
 /// Returns the dot product of 'a' and 'b'.
-inline f32 vec2f_dot(Vec3f a, Vec3f b) { return ((a[0] * b[0]) + (a[1] * b[1])                                ); }
-inline f32 vec3f_dot(Vec3f a, Vec3f b) { return ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2])                ); }
-inline f32 vec4f_dot(Vec4f a, Vec4f b) { return ((a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]) + (a[3] * b[3])); }
+inline f32 vec2f_dot(Vec3f a, Vec3f b) { return vec2_dot(a, b); }
+inline f32 vec3f_dot(Vec3f a, Vec3f b) { return vec3_dot(a, b); }
+inline f32 vec4f_dot(Vec4f a, Vec4f b) { return vec4_dot(a, b); }
 
 /*********************
  * Matrix Operations *

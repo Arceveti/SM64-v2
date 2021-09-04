@@ -939,15 +939,18 @@ Bool32 is_range_behind_surface(Vec3f from, Vec3f to, struct Surface *surf, s16 r
  *                   RAYCASTING                   *
  **************************************************/
 
-s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface *surface, Vec3f hit_pos, f32 *length) {
-    Vec3f v0, v1, v2, e1, e2, h, s, q;
+// Check if the ray intersects a specific surface
+Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface *surface, Vec3f hit_pos, f32 *length) {
+    Vec3f v0, v1, v2; // vertices
+    Vec3f e1, e2;     // edges
+    Vec3f h, s, q;
     register f32 a, f, u, v;
     Vec3f add_dir;
     Vec3n norm;
     // Get surface normal and some other stuff
-    norm[0] = 0;
+    norm[0] = surface->normal.x;
     norm[1] = surface->normal.y;
-    norm[2] = 0;
+    norm[2] = surface->normal.z;
     vec3f_mul_val(norm, RAY_OFFSET);
     vec3s_to_vec3f(v0, surface->vertex1);
     vec3s_to_vec3f(v1, surface->vertex2);
@@ -955,14 +958,14 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
     vec3f_add(v0, norm);
     vec3f_add(v1, norm);
     vec3f_add(v2, norm);
-    vec3f_diff(e1, v1, v0);
-    vec3f_diff(e2, v2, v0);
+    vec3f_diff(e1, v1, v0); // edge 1
+    vec3f_diff(e2, v2, v0); // edge 2
     vec3f_cross(h, dir, e2);
     // Check if we're perpendicular from the surface
     a = vec3f_dot(e1, h);
     if ((a > -NEAR_ZERO) && (a < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface
-    f = (1.0f / a);
+    f = (1.0f / a); // inverse dot of edge 1
     vec3f_diff(s, orig, v0);
     u = (f * vec3f_dot(s, h));
     if ((u < 0.0f) || (u > 1.0f)) return FALSE;
@@ -980,7 +983,7 @@ s32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surface 
 }
 
 void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f32 dir_length, struct Surface **hit_surface, Vec3f hit_pos, f32 *max_length) {
-    s32 hit;
+    Bool32 hit;
     f32 length;
     Vec3f chk_hit_pos;
     register f32 top, bottom;
@@ -1031,13 +1034,13 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
             find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
         if (flags & RAYCAST_FIND_WALL) {
-            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WALLS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
 #ifdef NEW_WATER_SURFACES
         if (flags & RAYCAST_FIND_WATER) {
-            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WATER].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
-            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gStaticSurfacePartition [cellZ][cellX][SPATIAL_PARTITION_WATER ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
+            find_surface_on_ray_list(gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next, orig, normalized_dir, dir_length, hit_surface, hit_pos, max_length);
         }
 #endif
     }
@@ -1116,8 +1119,8 @@ void debug_surface_list_info(f32 x, f32 z) {
     s32 numFloors = 0;
     s32 numWalls  = 0;
     s32 numCeils  = 0;
-    register const CellIndex cellX = (x + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
-    register const CellIndex cellZ = (z + LEVEL_BOUNDARY_MAX) / CELL_SIZE;
+    register const CellIndex cellX = ((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
+    register const CellIndex cellZ = ((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE);
     // Check static floors
     list = gStaticSurfacePartition[cellZ & NUM_CELLS_INDEX][cellX & NUM_CELLS_INDEX][SPATIAL_PARTITION_FLOORS].next;
     numFloors += surface_list_length(list);

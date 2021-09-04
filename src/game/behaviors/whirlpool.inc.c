@@ -24,14 +24,12 @@ void whirlpool_set_hitbox(void) {
 }
 
 void whirpool_orient_graph(void) {
-    f32 cosPitch = coss(o->oFaceAnglePitch);
-    f32 sinPitch = sins(o->oFaceAnglePitch);
-    f32 cosRoll  = coss(o->oFaceAngleRoll );
-    f32 sinRoll  = sins(o->oFaceAngleRoll );
-    f32 normalX  = (sinRoll  * cosPitch);
-    f32 normalY  = (cosPitch * cosRoll );
-    f32 normalZ  = sinPitch;
-    obj_orient_graph(o, normalX, normalY, normalZ);
+    Vec3f normal;
+    f32 cosPitch =             coss(o->oFaceAnglePitch);
+    normal[0]    = (cosPitch * sins(o->oFaceAngleRoll));
+    normal[1]    = (cosPitch * coss(o->oFaceAngleRoll));
+    normal[2]    =             sins(o->oFaceAnglePitch);
+    obj_orient_graph(o, normal);
 }
 
 void bhv_whirlpool_loop(void) {
