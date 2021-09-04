@@ -74,14 +74,14 @@ ALIGNED8 static const Texture flame_seg6_texture_bowser_flame_13[] = {
 
 // 0x0601C000
 static const Vtx flame_seg6_vertex_bowser_flame[] = {
-    {{{  -150,    150,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   150,    150,      0}, 0, { 63<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   150,    300,      0}, 0, { 63<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -150,    300,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -150,      0,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   150,      0,      0}, 0, { 63<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   150,    150,      0}, 0, { 63<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -150,    150,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -150,    150,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   150,    150,      0}, 0, ST_B(    64,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   150,    300,      0}, 0, ST_B(    64,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -150,    300,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -150,      0,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   150,      0,      0}, 0, ST_B(    64,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   150,    150,      0}, 0, ST_B(    64,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -150,    150,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601C080 - 0x0601C0B0

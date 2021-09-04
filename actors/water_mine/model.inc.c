@@ -22,19 +22,15 @@ ALIGNED8 static const Texture water_mine_seg6_texture_spike[] = {
 };
 
 // 0x0600CCF8
-static const Vtx water_mine_seg6_vertex_0600CCF8[] = {
-    {{{     0,     40,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,    -40,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -40,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,     40,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0600CD38
-static const Vtx water_mine_seg6_vertex_0600CD38[] = {
-    {{{    40,     40,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -40,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    40,    -40,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     40,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx water_mine_seg6_vertex_sphere[] = {
+    {{{     0,     40,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    -40,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -40,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,     40,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    40,     40,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -40,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    40,    -40,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     40,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0600CD78
@@ -130,17 +126,16 @@ static const Vtx water_mine_seg6_vertex_0600D138[] = {
 };
 
 // 0x0600D1F8 - 0x0600D230
-const Gfx water_mine_seg6_dl_0600D1F8[] = {
+const Gfx water_mine_seg6_sub_dl_sphere[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_mine_seg6_texture_left_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(water_mine_seg6_vertex_0600CCF8, 4, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(water_mine_seg6_vertex_sphere, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_mine_seg6_texture_right_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(water_mine_seg6_vertex_0600CD38, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -154,7 +149,7 @@ const Gfx water_mine_seg6_dl_0600D268[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(water_mine_seg6_dl_0600D1F8),
+    gsSPDisplayList(water_mine_seg6_sub_dl_sphere),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

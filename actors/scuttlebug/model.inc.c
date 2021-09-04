@@ -26,33 +26,28 @@ ALIGNED8 static const Texture scuttlebug_seg6_texture_leg[] = {
 };
 
 // 0x06013908
-static const Vtx scuttlebug_seg6_vertex_left_side[] = {
-    {{{   -44,    -44,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -44,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     44,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -44,     44,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x06013948
-static const Vtx scuttlebug_seg6_vertex_right_side[] = {
-    {{{     0,    -44,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    44,     44,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     44,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    44,    -44,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx scuttlebug_seg6_vertex_body[] = {
+    {{{   -44,    -44,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -44,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     44,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -44,     44,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -44,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    44,     44,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     44,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    44,    -44,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06013988 - 0x060139C0
 const Gfx scuttlebug_seg6_sub_dl_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, scuttlebug_seg6_texture_left_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(scuttlebug_seg6_vertex_left_side, 4, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(scuttlebug_seg6_vertex_body, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, scuttlebug_seg6_texture_right_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(scuttlebug_seg6_vertex_right_side, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -76,10 +71,10 @@ const Gfx scuttlebug_seg6_dl_body[] = {
 
 // 0x06013A70
 static const Vtx scuttlebug_seg6_vertex_06013A70[] = {
-    {{{    15,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,    -15,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -15,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,     15,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,     15,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,    -15,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,    -15,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06013AB0 - 0x06013AE8
@@ -112,10 +107,10 @@ const Gfx scuttlebug_seg6_dl_06013AE8[] = {
 
 // 0x06013B58
 static const Vtx scuttlebug_seg6_vertex_06013B58[] = {
-    {{{    15,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,    -15,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -15,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,     15,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,     15,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,    -15,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,    -15,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06013B98 - 0x06013BD0
@@ -148,10 +143,10 @@ const Gfx scuttlebug_seg6_dl_06013BD0[] = {
 
 // 0x06013C40
 static const Vtx scuttlebug_seg6_vertex_06013C40[] = {
-    {{{    60,    -32,     32}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,    -32,    -32}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,     32,    -32}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,     32,     32}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,    -32,     32}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,    -32,    -32}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,     32,    -32}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,     32,     32}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06013C80 - 0x06013CB8
@@ -184,10 +179,10 @@ const Gfx scuttlebug_seg6_dl_06013CB8[] = {
 
 // 0x06013D28
 static const Vtx scuttlebug_seg6_vertex_06013D28[] = {
-    {{{    60,    -32,     32}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,    -32,    -32}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,     32,    -32}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,     32,     32}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,    -32,     32}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,    -32,    -32}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,     32,    -32}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,     32,     32}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06013D68 - 0x06013DA0

@@ -2,18 +2,18 @@
 
 // 0x0601C9D0
 static const Vtx impact_ring_seg6_vertex_left_side[] = {
-    {{{     0,      0,     -5}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    -5,      0,      5}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    -5,      0,     -5}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     -5}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    -5,      0,      5}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    -5,      0,     -5}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601CA10
 static const Vtx impact_ring_seg6_vertex_right_side[] = {
-    {{{     5,      0,     -5}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     5,      0,      5}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,     -5}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,     -5}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,      5}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     -5}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0601CA50

@@ -1,97 +1,85 @@
 // Warp Pipe
 
 // 0x030079E8
-static const Lights1 warp_pipe_seg3_lights_030079E8 = gdSPDefLights1(
+static const Lights1 warp_pipe_seg3_lights_outside = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
 
 // 0x03007A00
-static const Vtx warp_pipe_seg3_vertex_03007A00[] = {
-    {{{  -102,      0,      0}, 0, { 31<<5,  63<<5}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{   -72,    205,     72}, 0, { -1056,      0}, {0x65, 0x00, 0xb4, 0xff}}},
-    {{{   -72,      0,     72}, 0, { -1056,  63<<5}, {0x4d, 0x00, 0x9c, 0xff}}},
-    {{{    72,      0,     72}, 0, { 31<<5,  63<<5}, {0x9b, 0x00, 0xb4, 0xff}}},
-    {{{    72,    205,     72}, 0, { 31<<5,      0}, {0xb4, 0x00, 0x9b, 0xff}}},
-    {{{   102,    205,      0}, 0, { -1056,      0}, {0x83, 0x00, 0xef, 0xff}}},
-    {{{   102,      0,      0}, 0, { -1056,  63<<5}, {0x83, 0x00, 0x11, 0xff}}},
-    {{{     0,      0,    102}, 0, { 31<<5,  63<<5}, {0xef, 0x00, 0x83, 0xff}}},
-    {{{     0,    205,    102}, 0, { 31<<5,      0}, {0x11, 0x00, 0x83, 0xff}}},
-    {{{    72,    205,     72}, 0, { -1056,      0}, {0xb4, 0x00, 0x9b, 0xff}}},
-    {{{    72,      0,     72}, 0, { -1056,  63<<5}, {0x9b, 0x00, 0xb4, 0xff}}},
-    {{{   -72,      0,     72}, 0, { 31<<5,  63<<5}, {0x4d, 0x00, 0x9c, 0xff}}},
-    {{{   -72,    205,     72}, 0, { 31<<5,      0}, {0x65, 0x00, 0xb4, 0xff}}},
-    {{{     0,    205,    102}, 0, { -1056,      0}, {0x11, 0x00, 0x83, 0xff}}},
-    {{{     0,      0,    102}, 0, { -1056,  63<<5}, {0xef, 0x00, 0x83, 0xff}}},
-};
-
-// 0x03007AF0
-static const Vtx warp_pipe_seg3_vertex_03007AF0[] = {
-    {{{    72,      0,    -72}, 0, { 31<<5,  63<<5}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{     0,    205,   -102}, 0, { -1056,      0}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{     0,      0,   -102}, 0, { -1056,  63<<5}, {0x11, 0x00, 0x7d, 0xff}}},
-    {{{  -102,      0,      0}, 0, { 31<<5,  63<<5}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{  -102,    205,      0}, 0, { 31<<5,      0}, {0x7d, 0x00, 0x11, 0xff}}},
-    {{{   -72,    205,     72}, 0, { -1056,      0}, {0x65, 0x00, 0xb4, 0xff}}},
-    {{{   -72,      0,    -72}, 0, { 31<<5,  63<<5}, {0x65, 0x00, 0x4c, 0xff}}},
-    {{{  -102,    205,      0}, 0, { -1056,      0}, {0x7d, 0x00, 0x11, 0xff}}},
-    {{{  -102,      0,      0}, 0, { -1056,  63<<5}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{   -72,    205,    -72}, 0, { 31<<5,      0}, {0x4c, 0x00, 0x65, 0xff}}},
-    {{{     0,      0,   -102}, 0, { 31<<5,  63<<5}, {0x11, 0x00, 0x7d, 0xff}}},
-    {{{   -72,    205,    -72}, 0, { -1056,      0}, {0x4c, 0x00, 0x65, 0xff}}},
-    {{{   -72,      0,    -72}, 0, { -1056,  63<<5}, {0x65, 0x00, 0x4c, 0xff}}},
-    {{{     0,    205,   -102}, 0, { 31<<5,      0}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{    72,    205,    -72}, 0, { 31<<5,      0}, {0x9c, 0x00, 0x4d, 0xff}}},
+static const Vtx warp_pipe_seg3_vertex_sides_1[] = {
+    {{{  -102,      0,      0}, 0, ST_B(    32,     64), {0x7d, 0x00, 0xef, 0xff}}},
+    {{{   -72,    205,     72}, 0, ST_B(   -32,      0), {0x65, 0x00, 0xb4, 0xff}}},
+    {{{   -72,      0,     72}, 0, ST_B(   -32,     64), {0x4d, 0x00, 0x9c, 0xff}}},
+    {{{    72,      0,     72}, 0, ST_B(    32,     64), {0x9b, 0x00, 0xb4, 0xff}}},
+    {{{    72,    205,     72}, 0, ST_B(    32,      0), {0xb4, 0x00, 0x9b, 0xff}}},
+    {{{   102,    205,      0}, 0, ST_B(   -32,      0), {0x83, 0x00, 0xef, 0xff}}},
+    {{{   102,      0,      0}, 0, ST_B(   -32,     64), {0x83, 0x00, 0x11, 0xff}}},
+    {{{     0,      0,    102}, 0, ST_B(    32,     64), {0xef, 0x00, 0x83, 0xff}}},
+    {{{     0,    205,    102}, 0, ST_B(    32,      0), {0x11, 0x00, 0x83, 0xff}}},
+    {{{    72,    205,     72}, 0, ST_B(   -32,      0), {0xb4, 0x00, 0x9b, 0xff}}},
+    {{{    72,      0,     72}, 0, ST_B(   -32,     64), {0x9b, 0x00, 0xb4, 0xff}}},
+    {{{   -72,      0,     72}, 0, ST_B(    32,     64), {0x4d, 0x00, 0x9c, 0xff}}},
+    {{{   -72,    205,     72}, 0, ST_B(    32,      0), {0x65, 0x00, 0xb4, 0xff}}},
+    {{{     0,    205,    102}, 0, ST_B(   -32,      0), {0x11, 0x00, 0x83, 0xff}}},
+    {{{     0,      0,    102}, 0, ST_B(   -32,     64), {0xef, 0x00, 0x83, 0xff}}},
+    {{{    72,      0,    -72}, 0, ST_B(    32,     64), {0xb4, 0x00, 0x65, 0xff}}},
+    {{{     0,    205,   -102}, 0, ST_B(   -32,      0), {0xef, 0x00, 0x7d, 0xff}}},
+    {{{     0,      0,   -102}, 0, ST_B(   -32,     64), {0x11, 0x00, 0x7d, 0xff}}},
+    {{{  -102,    205,      0}, 0, ST_B(    32,      0), {0x7d, 0x00, 0x11, 0xff}}},
+    {{{   -72,      0,    -72}, 0, ST_B(    32,     64), {0x65, 0x00, 0x4c, 0xff}}},
+    {{{  -102,    205,      0}, 0, ST_B(   -32,      0), {0x7d, 0x00, 0x11, 0xff}}},
+    {{{  -102,      0,      0}, 0, ST_B(   -32,     64), {0x7d, 0x00, 0xef, 0xff}}},
+    {{{   -72,    205,    -72}, 0, ST_B(    32,      0), {0x4c, 0x00, 0x65, 0xff}}},
+    {{{     0,      0,   -102}, 0, ST_B(    32,     64), {0x11, 0x00, 0x7d, 0xff}}},
+    {{{   -72,    205,    -72}, 0, ST_B(   -32,      0), {0x4c, 0x00, 0x65, 0xff}}},
+    {{{   -72,      0,    -72}, 0, ST_B(   -32,     64), {0x65, 0x00, 0x4c, 0xff}}},
+    {{{     0,    205,   -102}, 0, ST_B(    32,      0), {0xef, 0x00, 0x7d, 0xff}}},
+    {{{    72,    205,    -72}, 0, ST_B(    32,      0), {0x9c, 0x00, 0x4d, 0xff}}},
 };
 
 // 0x03007BE0
-static const Vtx warp_pipe_seg3_vertex_03007BE0[] = {
-    {{{     0,      0,    154}, 0, { 31<<5,  63<<5}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{     0,    205,    154}, 0, { 31<<5,      0}, {0x11, 0x00, 0x7d, 0xff}}},
-    {{{  -109,    205,    109}, 0, { -1056,      0}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{   102,      0,      0}, 0, { 31<<5,  63<<5}, {0x83, 0x00, 0x11, 0xff}}},
-    {{{   102,    205,      0}, 0, { 31<<5,      0}, {0x83, 0x00, 0xef, 0xff}}},
-    {{{    72,    205,    -72}, 0, { -1056,      0}, {0x9c, 0x00, 0x4d, 0xff}}},
-    {{{    72,      0,    -72}, 0, { -1056,  63<<5}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{   154,      0,      0}, 0, { 31<<5,  63<<5}, {0x7d, 0x00, 0x11, 0xff}}},
-    {{{   154,    205,      0}, 0, { 31<<5,      0}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{   109,    205,    109}, 0, { -1056,      0}, {0x65, 0x00, 0x4c, 0xff}}},
-    {{{   109,      0,    109}, 0, { -1056,  63<<5}, {0x4c, 0x00, 0x65, 0xff}}},
-    {{{   109,      0,    109}, 0, { 31<<5,  63<<5}, {0x4c, 0x00, 0x65, 0xff}}},
-    {{{   109,    205,    109}, 0, { 31<<5,      0}, {0x65, 0x00, 0x4c, 0xff}}},
-    {{{     0,    205,    154}, 0, { -1056,      0}, {0x11, 0x00, 0x7d, 0xff}}},
-    {{{     0,      0,    154}, 0, { -1056,  63<<5}, {0xef, 0x00, 0x7d, 0xff}}},
-};
-
-// 0x03007CD0
-static const Vtx warp_pipe_seg3_vertex_03007CD0[] = {
-    {{{  -109,      0,   -109}, 0, { 31<<5,  63<<5}, {0xb4, 0x00, 0x9b, 0xff}}},
-    {{{     0,    205,   -154}, 0, { -1056,      0}, {0xef, 0x00, 0x83, 0xff}}},
-    {{{     0,      0,   -154}, 0, { -1056,  63<<5}, {0x11, 0x00, 0x83, 0xff}}},
-    {{{     0,      0,    154}, 0, { 31<<5,  63<<5}, {0xef, 0x00, 0x7d, 0xff}}},
-    {{{  -109,    205,    109}, 0, { -1056,      0}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{  -109,      0,    109}, 0, { -1056,  63<<5}, {0x9b, 0x00, 0x4c, 0xff}}},
-    {{{  -109,      0,    109}, 0, { 31<<5,  63<<5}, {0x9b, 0x00, 0x4c, 0xff}}},
-    {{{  -109,    205,    109}, 0, { 31<<5,      0}, {0xb4, 0x00, 0x65, 0xff}}},
-    {{{  -154,    205,      0}, 0, { -1056,      0}, {0x83, 0x00, 0x11, 0xff}}},
-    {{{  -154,      0,      0}, 0, { -1056,  63<<5}, {0x83, 0x00, 0xef, 0xff}}},
-    {{{  -154,      0,      0}, 0, { 31<<5,  63<<5}, {0x83, 0x00, 0xef, 0xff}}},
-    {{{  -109,    205,   -109}, 0, { -1056,      0}, {0x9b, 0x00, 0xb4, 0xff}}},
-    {{{  -109,      0,   -109}, 0, { -1056,  63<<5}, {0xb4, 0x00, 0x9b, 0xff}}},
-    {{{  -154,    205,      0}, 0, { 31<<5,      0}, {0x83, 0x00, 0x11, 0xff}}},
-    {{{  -109,    205,   -109}, 0, { 31<<5,      0}, {0x9b, 0x00, 0xb4, 0xff}}},
+static const Vtx warp_pipe_seg3_vertex_sides_2[] = {
+    {{{     0,      0,    154}, 0, ST_B(    32,     64), {0xef, 0x00, 0x7d, 0xff}}},
+    {{{     0,    205,    154}, 0, ST_B(    32,      0), {0x11, 0x00, 0x7d, 0xff}}},
+    {{{  -109,    205,    109}, 0, ST_B(   -32,      0), {0xb4, 0x00, 0x65, 0xff}}},
+    {{{   102,      0,      0}, 0, ST_B(    32,     64), {0x83, 0x00, 0x11, 0xff}}},
+    {{{   102,    205,      0}, 0, ST_B(    32,      0), {0x83, 0x00, 0xef, 0xff}}},
+    {{{    72,    205,    -72}, 0, ST_B(   -32,      0), {0x9c, 0x00, 0x4d, 0xff}}},
+    {{{    72,      0,    -72}, 0, ST_B(   -32,     64), {0xb4, 0x00, 0x65, 0xff}}},
+    {{{   154,      0,      0}, 0, ST_B(    32,     64), {0x7d, 0x00, 0x11, 0xff}}},
+    {{{   154,    205,      0}, 0, ST_B(    32,      0), {0x7d, 0x00, 0xef, 0xff}}},
+    {{{   109,    205,    109}, 0, ST_B(   -32,      0), {0x65, 0x00, 0x4c, 0xff}}},
+    {{{   109,      0,    109}, 0, ST_B(   -32,     64), {0x4c, 0x00, 0x65, 0xff}}},
+    {{{   109,      0,    109}, 0, ST_B(    32,     64), {0x4c, 0x00, 0x65, 0xff}}},
+    {{{   109,    205,    109}, 0, ST_B(    32,      0), {0x65, 0x00, 0x4c, 0xff}}},
+    {{{     0,    205,    154}, 0, ST_B(   -32,      0), {0x11, 0x00, 0x7d, 0xff}}},
+    {{{     0,      0,    154}, 0, ST_B(   -32,     64), {0xef, 0x00, 0x7d, 0xff}}},
+    {{{  -109,      0,   -109}, 0, ST_B(    32,     64), {0xb4, 0x00, 0x9b, 0xff}}},
+    {{{     0,    205,   -154}, 0, ST_B(   -32,      0), {0xef, 0x00, 0x83, 0xff}}},
+    {{{     0,      0,   -154}, 0, ST_B(   -32,     64), {0x11, 0x00, 0x83, 0xff}}},
+    {{{  -109,      0,    109}, 0, ST_B(   -32,     64), {0x9b, 0x00, 0x4c, 0xff}}},
+    {{{  -109,      0,    109}, 0, ST_B(    32,     64), {0x9b, 0x00, 0x4c, 0xff}}},
+    {{{  -109,    205,    109}, 0, ST_B(    32,      0), {0xb4, 0x00, 0x65, 0xff}}},
+    {{{  -154,    205,      0}, 0, ST_B(   -32,      0), {0x83, 0x00, 0x11, 0xff}}},
+    {{{  -154,      0,      0}, 0, ST_B(   -32,     64), {0x83, 0x00, 0xef, 0xff}}},
+    {{{  -154,      0,      0}, 0, ST_B(    32,     64), {0x83, 0x00, 0xef, 0xff}}},
+    {{{  -109,    205,   -109}, 0, ST_B(   -32,      0), {0x9b, 0x00, 0xb4, 0xff}}},
+    {{{  -109,      0,   -109}, 0, ST_B(   -32,     64), {0xb4, 0x00, 0x9b, 0xff}}},
+    {{{  -154,    205,      0}, 0, ST_B(    32,      0), {0x83, 0x00, 0x11, 0xff}}},
+    {{{  -109,    205,   -109}, 0, ST_B(    32,      0), {0x9b, 0x00, 0xb4, 0xff}}},
 };
 
 // 0x03007DC0
-static const Vtx warp_pipe_seg3_vertex_03007DC0[] = {
-    {{{     0,      0,   -154}, 0, { 31<<5,  63<<5}, {0x11, 0x00, 0x83, 0xff}}},
-    {{{     0,    205,   -154}, 0, { 31<<5,      0}, {0xef, 0x00, 0x83, 0xff}}},
-    {{{   109,    205,   -109}, 0, { -1056,      0}, {0x4c, 0x00, 0x9b, 0xff}}},
-    {{{   109,      0,   -109}, 0, { -1056,  63<<5}, {0x65, 0x00, 0xb4, 0xff}}},
-    {{{   109,      0,   -109}, 0, { 31<<5,  63<<5}, {0x65, 0x00, 0xb4, 0xff}}},
-    {{{   109,    205,   -109}, 0, { 31<<5,      0}, {0x4c, 0x00, 0x9b, 0xff}}},
-    {{{   154,    205,      0}, 0, { -1056,      0}, {0x7d, 0x00, 0xef, 0xff}}},
-    {{{   154,      0,      0}, 0, { -1056,  63<<5}, {0x7d, 0x00, 0x11, 0xff}}},
+static const Vtx warp_pipe_seg3_vertex_sides_3[] = {
+    {{{     0,      0,   -154}, 0, ST_B(    32,     64), {0x11, 0x00, 0x83, 0xff}}},
+    {{{     0,    205,   -154}, 0, ST_B(    32,      0), {0xef, 0x00, 0x83, 0xff}}},
+    {{{   109,    205,   -109}, 0, ST_B(   -32,      0), {0x4c, 0x00, 0x9b, 0xff}}},
+    {{{   109,      0,   -109}, 0, ST_B(   -32,     64), {0x65, 0x00, 0xb4, 0xff}}},
+    {{{   109,      0,   -109}, 0, ST_B(    32,     64), {0x65, 0x00, 0xb4, 0xff}}},
+    {{{   109,    205,   -109}, 0, ST_B(    32,      0), {0x4c, 0x00, 0x9b, 0xff}}},
+    {{{   154,    205,      0}, 0, ST_B(   -32,      0), {0x7d, 0x00, 0xef, 0xff}}},
+    {{{   154,      0,      0}, 0, ST_B(   -32,     64), {0x7d, 0x00, 0x11, 0xff}}},
 };
 
 // 0x03007E40
@@ -103,30 +91,26 @@ ALIGNED8 static const Texture warp_pipe_seg3_texture_side[] = {
 const Gfx warp_pipe_seg3_sub_dl_sides[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&warp_pipe_seg3_lights_030079E8.l, 1),
-    gsSPLight(&warp_pipe_seg3_lights_030079E8.a, 2),
-    gsSPVertex(warp_pipe_seg3_vertex_03007A00, 15, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&warp_pipe_seg3_lights_outside.l, 1),
+    gsSPLight(&warp_pipe_seg3_lights_outside.a, 2),
+    gsSPVertex(warp_pipe_seg3_vertex_sides_1, 28, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle( 11, 13, 14, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007AF0, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle(  0, 14,  1, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007BE0, 15, 0),
+    gsSP2Triangles(11, 13, 14, 0x0, 15, 27, 16, 0x0),
+    gsSP2Triangles(15, 16, 17, 0x0,  0, 18,  1, 0x0),
+    gsSP2Triangles(19, 20, 21, 0x0, 19, 22, 20, 0x0),
+    gsSP2Triangles(23, 24, 25, 0x0, 23, 26, 24, 0x0),
+    gsSPVertex(warp_pipe_seg3_vertex_sides_2, 28, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle( 11, 13, 14, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007CD0, 15, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP2Triangles( 6,  7,  8, 0x0,  6,  8,  9, 0x0),
-    gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle(  0, 14,  1, 0x0),
-    gsSPVertex(warp_pipe_seg3_vertex_03007DC0, 8, 0),
+    gsSP2Triangles(11, 13, 14, 0x0, 15, 27, 16, 0x0),
+    gsSP2Triangles(15, 16, 17, 0x0,  0,  2, 18, 0x0),
+    gsSP2Triangles(19, 20, 21, 0x0, 19, 21, 22, 0x0),
+    gsSP2Triangles(23, 24, 25, 0x0, 23, 26, 24, 0x0),
+    gsSPVertex(warp_pipe_seg3_vertex_sides_3, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  6,  7, 0x0),
     gsSPEndDisplayList(),
@@ -149,13 +133,13 @@ const Gfx warp_pipe_seg3_dl_sides[] = {
 };
 
 // 0x03009010
-static const Lights1 warp_pipe_seg3_lights_03009010 = gdSPDefLights1(
+static const Lights1 warp_pipe_seg3_lights_inside = gdSPDefLights1(
     0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x28, 0x28, 0x28
 );
 
 // 0x03009028
-static const Vtx warp_pipe_seg3_vertex_03009028[] = {
+static const Vtx warp_pipe_seg3_vertex_top[] = {
     {{{   109,    205,   -109}, 0, {   400,   -176}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{     0,    205,   -154}, 0, {    16,     48}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{     0,    205,   -102}, 0, {  6<<5,   6<<5}, {0x00, 0x7f, 0x00, 0xff}}},
@@ -175,7 +159,7 @@ static const Vtx warp_pipe_seg3_vertex_03009028[] = {
 };
 
 // 0x03009128
-static const Vtx warp_pipe_seg3_vertex_03009128[] = {
+static const Vtx warp_pipe_seg3_vertex_inside[] = {
     {{{  -102,     10,    102}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{   102,     10,   -102}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  -102,     10,   -102}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
@@ -191,10 +175,10 @@ ALIGNED8 static const Texture warp_pipe_seg3_texture_top[] = {
 const Gfx warp_pipe_seg3_sub_dl_top[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, warp_pipe_seg3_texture_top),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&warp_pipe_seg3_lights_030079E8.l, 1),
-    gsSPLight(&warp_pipe_seg3_lights_030079E8.a, 2),
-    gsSPVertex(warp_pipe_seg3_vertex_03009028, 16, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&warp_pipe_seg3_lights_outside.l, 1),
+    gsSPLight(&warp_pipe_seg3_lights_outside.a, 2),
+    gsSPVertex(warp_pipe_seg3_vertex_top, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  3,  5, 0x0),
     gsSP2Triangles( 8,  4,  6, 0x0,  8,  9,  4, 0x0),
@@ -208,9 +192,9 @@ const Gfx warp_pipe_seg3_sub_dl_top[] = {
 
 // 0x03009A20 - 0x03009A50
 const Gfx warp_pipe_seg3_sub_dl_inside[] = {
-    gsSPLight(&warp_pipe_seg3_lights_03009010.l, 1),
-    gsSPLight(&warp_pipe_seg3_lights_03009010.a, 2),
-    gsSPVertex(warp_pipe_seg3_vertex_03009128, 4, 0),
+    gsSPLight(&warp_pipe_seg3_lights_inside.l, 1),
+    gsSPLight(&warp_pipe_seg3_lights_inside.a, 2),
+    gsSPVertex(warp_pipe_seg3_vertex_inside, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
 };

@@ -2,10 +2,10 @@
 
 // 0x0402A588
 static const Vtx water_splash_seg4_vertex_0402A588[] = {
-    {{{   -64,      0,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    64,      0,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    64,    256,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -64,    256,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -64,      0,      0}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,      0,      0}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    64,    256,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -64,    256,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0402A5C8

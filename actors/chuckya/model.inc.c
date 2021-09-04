@@ -22,18 +22,14 @@ ALIGNED8 static const Texture chuckya_seg8_texture_body_arm_right_side[] = {
 
 // 0x08009F78
 static const Vtx chuckya_seg8_vertex_08009F78[] = {
-    {{{     0,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -56,    -56,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -56,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -56,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x08009FB8
-static const Vtx chuckya_seg8_vertex_08009FB8[] = {
-    {{{    56,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -56,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    -56,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,    -56,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,     56,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,     56,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    -56,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x08009FF8 - 0x0800A030
@@ -41,13 +37,12 @@ const Gfx chuckya_seg8_dl_08009FF8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_08009F78, 4, 0),
+    gsSPVertex(chuckya_seg8_vertex_08009F78, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_08009FB8, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -71,18 +66,14 @@ const Gfx chuckya_seg8_dl_0800A068[] = {
 
 // 0x0800A0E0
 static const Vtx chuckya_seg8_vertex_0800A0E0[] = {
-    {{{     0,     13,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -13,    -13,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -13,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -13,     13,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0800A120
-static const Vtx chuckya_seg8_vertex_0800A120[] = {
-    {{{    13,     13,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -13,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    13,    -13,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     13,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     13,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -13,    -13,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -13,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -13,     13,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    13,     13,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -13,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    13,    -13,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     13,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0800A160 - 0x0800A198
@@ -90,13 +81,12 @@ const Gfx chuckya_seg8_dl_0800A160[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_0800A0E0, 4, 0),
+    gsSPVertex(chuckya_seg8_vertex_0800A0E0, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_0800A120, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -120,18 +110,14 @@ const Gfx chuckya_seg8_dl_0800A1D0[] = {
 
 // 0x0800A248
 static const Vtx chuckya_seg8_vertex_0800A248[] = {
-    {{{     0,     13,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -13,    -13,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -13,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -13,     13,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0800A288
-static const Vtx chuckya_seg8_vertex_0800A288[] = {
-    {{{    13,     13,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -13,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    13,    -13,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     13,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     13,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -13,    -13,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -13,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -13,     13,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    13,     13,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -13,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    13,    -13,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     13,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0800A2C8 - 0x0800A300
@@ -139,13 +125,12 @@ const Gfx chuckya_seg8_dl_0800A2C8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_0800A248, 4, 0),
+    gsSPVertex(chuckya_seg8_vertex_0800A248, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chuckya_seg8_texture_body_arm_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chuckya_seg8_vertex_0800A288, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -169,10 +154,10 @@ const Gfx chuckya_seg8_dl_0800A338[] = {
 
 // 0x0800A3B0
 static const Vtx chuckya_seg8_vertex_0800A3B0[] = {
-    {{{    24,     24,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -24,     24,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -24,    -24,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    24,    -24,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    24,     24,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -24,     24,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -24,    -24,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    24,    -24,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0800A3F0 - 0x0800A428
@@ -205,10 +190,10 @@ const Gfx chuckya_seg8_dl_0800A428[] = {
 
 // 0x0800A498
 static const Vtx chuckya_seg8_vertex_0800A498[] = {
-    {{{    24,     24,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -24,     24,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -24,    -24,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    24,    -24,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    24,     24,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -24,     24,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -24,    -24,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    24,    -24,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0800A4D8 - 0x0800A510
@@ -241,10 +226,10 @@ const Gfx chuckya_seg8_dl_0800A510[] = {
 
 // 0x0800A580
 static const Vtx chuckya_seg8_vertex_0800A580[] = {
-    {{{    25,     25,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,     25,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -25,    -25,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    25,    -25,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    25,     25,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,     25,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -25,    -25,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    25,    -25,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0800A5C0 - 0x0800A5F8

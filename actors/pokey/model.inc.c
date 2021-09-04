@@ -2,10 +2,10 @@
 
 // 0x05011710
 static const Vtx pokey_seg5_vertex_face[] = {
-    {{{    26,     26,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -26,     26,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -26,    -26,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,    -26,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     26,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -26,     26,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -26,    -26,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,    -26,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05011750
@@ -64,10 +64,10 @@ const Gfx pokey_seg5_dl_face_blink[] = {
 
 // 0x05012838
 static const Vtx pokey_seg5_vertex_body[] = {
-    {{{    26,     26,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -26,     26,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -26,    -26,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,    -26,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,     26,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -26,     26,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -26,    -26,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,    -26,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05012878

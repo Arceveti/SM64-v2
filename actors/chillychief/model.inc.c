@@ -141,38 +141,33 @@ const Gfx chilly_chief_seg6_dl_06002C60[] = {
 };
 
 // 0x06002C98
-static const Vtx chilly_chief_seg6_vertex_small_left_side[] = {
-    {{{     0,     67,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -67,    -67,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -67,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -67,     67,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x06002CD8
-static const Vtx chilly_chief_seg6_vertex_small_right_side[] = {
-    {{{    67,     67,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -67,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    67,    -67,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     67,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx chilly_chief_seg6_vertex_small_body[] = {
+    {{{     0,     67,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -67,    -67,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -67,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -67,     67,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    67,     67,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -67,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    67,    -67,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     67,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06002D18 - 0x06002D50
-const Gfx chilly_chief_seg6_sub_dl_small_sphere[] = {
+const Gfx chilly_chief_seg6_sub_dl_small_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chilly_chief_seg6_texture_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chilly_chief_seg6_vertex_small_left_side, 4, 0),
+    gsSPVertex(chilly_chief_seg6_vertex_small_body, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chilly_chief_seg6_texture_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chilly_chief_seg6_vertex_small_right_side, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x06002D88 - 0x06002E00
-const Gfx chilly_chief_seg6_dl_small_sphere[] = {
+const Gfx chilly_chief_seg6_dl_small_body[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -181,7 +176,7 @@ const Gfx chilly_chief_seg6_dl_small_sphere[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(chilly_chief_seg6_sub_dl_small_sphere),
+    gsSPDisplayList(chilly_chief_seg6_sub_dl_small_body),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -190,38 +185,33 @@ const Gfx chilly_chief_seg6_dl_small_sphere[] = {
 };
 
 // 0x06002E00
-static const Vtx chilly_chief_seg6_vertex_big_left_side[] = {
-    {{{     0,    135,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -135,   -135,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,   -135,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -135,    135,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x06002E40
-static const Vtx chilly_chief_seg6_vertex_big_right_side[] = {
-    {{{   135,    135,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,   -135,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   135,   -135,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    135,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx chilly_chief_seg6_vertex_big_body[] = {
+    {{{     0,    135,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -135,   -135,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,   -135,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -135,    135,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   135,    135,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,   -135,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   135,   -135,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    135,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06002E80 - 0x06002EB8
-const Gfx chilly_chief_seg6_sub_dl_big_sphere[] = {
+const Gfx chilly_chief_seg6_sub_dl_big_body[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chilly_chief_seg6_texture_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chilly_chief_seg6_vertex_big_left_side, 4, 0),
+    gsSPVertex(chilly_chief_seg6_vertex_big_body, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, chilly_chief_seg6_texture_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(chilly_chief_seg6_vertex_big_right_side, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x06002EF0 - 0x06002F68
-const Gfx chilly_chief_seg6_dl_big_sphere[] = {
+const Gfx chilly_chief_seg6_dl_big_body[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -230,7 +220,7 @@ const Gfx chilly_chief_seg6_dl_big_sphere[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 6, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (64 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(chilly_chief_seg6_sub_dl_big_sphere),
+    gsSPDisplayList(chilly_chief_seg6_sub_dl_big_body),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
@@ -240,12 +230,12 @@ const Gfx chilly_chief_seg6_dl_big_sphere[] = {
 
 // 0x06002F68
 static const Vtx chilly_chief_seg6_vertex_eyes[] = {
-    {{{   -36,    152,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,    136,     68}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    124,     68}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    60,    140,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    124,    -64}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -40,    136,    -64}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -36,    152,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    136,     68}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    124,     68}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    60,    140,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    124,    -64}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -40,    136,    -64}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06002FC8 - 0x06003010

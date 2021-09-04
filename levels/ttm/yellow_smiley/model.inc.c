@@ -1,9 +1,9 @@
 // 0x0702AA30 - 0x0702AA70
 static const Vtx ttm_seg7_vertex_yellow_smiley[] = {
-    {{{  1024,   2048,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -1024,   2048,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -1024,      0,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  1024,      0,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  1024,   2048,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -1024,   2048,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -1024,      0,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  1024,      0,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0702AA70 - 0x0702AAA8

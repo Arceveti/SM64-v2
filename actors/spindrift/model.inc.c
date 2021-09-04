@@ -23,10 +23,10 @@ ALIGNED8 static const Texture spindrift_seg5_texture_head[] = {
 
 // 0x050026D0
 static const Vtx spindrift_seg5_vertex_head[] = {
-    {{{   -56,    -56,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -56,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    -56,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,    -56,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,     56,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,     56,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    -56,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x05002710 - 0x05002748
@@ -59,10 +59,10 @@ const Gfx spindrift_seg5_dl_head[] = {
 
 // 0x050027B8
 static const Vtx spindrift_seg5_vertex_eyes[] = {
-    {{{    26,   -112,    -48}, 0, {   -32,    520}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    26,   -112,     48}, 0, { 31<<5,    520}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -32,   -112,    -48}, 0, {   -32,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -32,   -112,     48}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,   -112,    -48}, 0, ST_B(     0,     17), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    26,   -112,     48}, 0, ST_B(    32,     17), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,   -112,    -48}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -32,   -112,     48}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x050027F8 - 0x05002830

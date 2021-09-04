@@ -33,10 +33,10 @@ static const Lights1 snowman_seg5_lights_0500C470 = gdSPDefLights1(
 
 // 0x0500C488
 static const Vtx snowman_seg5_vertex_0500C488[] = {
-    {{{   -24,      0,     -6}, 0, {     0,      0}, {0x82, 0xfd, 0xfd, 0xff}}},
-    {{{    77,    -16,     -6}, 0, {     0,      0}, {0xea, 0x84, 0xf9, 0xff}}},
-    {{{    77,     16,     15}, 0, {     0,      0}, {0xe1, 0x36, 0x6e, 0xff}}},
-    {{{    77,     16,    -24}, 0, {     0,      0}, {0xe4, 0x42, 0x99, 0xff}}},
+    {{{   -24,      0,     -6}, 0, ST_B(     0,      0), {0x82, 0xfd, 0xfd, 0xff}}},
+    {{{    77,    -16,     -6}, 0, ST_B(     0,      0), {0xea, 0x84, 0xf9, 0xff}}},
+    {{{    77,     16,     15}, 0, ST_B(     0,      0), {0xe1, 0x36, 0x6e, 0xff}}},
+    {{{    77,     16,    -24}, 0, ST_B(     0,      0), {0xe4, 0x42, 0x99, 0xff}}},
 };
 
 // 0x0500C4C8 - 0x0500C500
@@ -61,18 +61,14 @@ const Gfx snowman_seg5_dl_0500C500[] = {
 
 // 0x0500C530
 static const Vtx snowman_seg5_vertex_0500C530[] = {
-    {{{     0,     77,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -77,    -77,      0}, 0, {     0,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -77,      0}, 0, { 31<<5,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -77,     77,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0500C570
-static const Vtx snowman_seg5_vertex_0500C570[] = {
-    {{{    77,     77,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -77,      0}, 0, {     0,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    77,    -77,      0}, 0, { 31<<5,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     77,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     77,      0}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -77,    -77,      0}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -77,      0}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -77,     77,      0}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    77,     77,      0}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -77,      0}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    77,    -77,      0}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     77,      0}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500C5B0 - 0x0500C5E8
@@ -80,13 +76,12 @@ const Gfx snowman_seg5_dl_0500C5B0[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snowman_seg5_texture_left_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(snowman_seg5_vertex_0500C530, 4, 0),
+    gsSPVertex(snowman_seg5_vertex_0500C530, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snowman_seg5_texture_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(snowman_seg5_vertex_0500C570, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -233,18 +228,14 @@ const Gfx snowman_seg5_dl_0500CAA8[] = {
 
 // 0x0500CB08
 static const Vtx snowman_seg5_vertex_0500CB08[] = {
-    {{{     0,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -56,    -56,      0}, 0, {     0,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -56,      0}, 0, { 31<<5,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -56,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0500CB48
-static const Vtx snowman_seg5_vertex_0500CB48[] = {
-    {{{    56,     56,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -56,      0}, 0, {     0,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    56,    -56,      0}, 0, { 31<<5,  64<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     56,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,    -56,      0}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -56,     56,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,     56,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -56,      0}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    56,    -56,      0}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     56,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500CB88 - 0x0500CBC0
@@ -257,8 +248,7 @@ const Gfx snowman_seg5_dl_0500CB88[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, snowman_seg5_texture_right_side),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(snowman_seg5_vertex_0500CB48, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 
@@ -282,10 +272,10 @@ const Gfx snowman_seg5_dl_0500CBF8[] = {
 
 // 0x0500CC70
 static const Vtx snowman_seg5_vertex_0500CC70[] = {
-    {{{   -90,    210,    -56}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -134,    182,    -56}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  -134,    182,     56}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -90,    210,     56}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -90,    210,    -56}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -134,    182,    -56}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  -134,    182,     56}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -90,    210,     56}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0500CCB0 - 0x0500CCE8

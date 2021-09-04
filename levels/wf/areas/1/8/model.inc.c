@@ -60,7 +60,7 @@ static const Vtx wf_seg7_vertex_meshes_3[] = {
 static const Vtx wf_seg7_vertex_meshes_4[] = {
     {{{ -3277,    384,  -1536}, 0, {159<<5,  -3104}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2048,    512,  -1536}, 0, {  -336,   1294}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3277,    512,  -1536}, 0, {143<<4,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3277,    512,  -1536}, 0, {143<<5,  -3608}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2048,   2560,  -2409}, 0, { 15<<5,  47<<5}, {0xff, 0xff, 0xff, 0xff}}},
     {{{  -274,   2662,  -2834}, 0, {261<<5,  -7386}, {0xff, 0xff, 0xff, 0xff}}},
     {{{ -2048,   2662,  -2409}, 0, {  -160,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
@@ -96,12 +96,12 @@ static const Vtx wf_seg7_vertex_meshes_5[] = {
 
 // 0x07006D38 - 0x07006D98
 static const Vtx wf_seg7_vertex_meshes_6[] = {
-    {{{ -2509,    384,    640}, 0, {543<<5, -10252}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2509,   1152,   3072}, 0, {150<<5,  -2368}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2509,   1024,   3072}, 0, {166<<5,  -1856}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2509,    512,    640}, 0, {526<<5, -10762}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2509,   1024,   4096}, 0, { 15<<5,  47<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2509,   1152,   4096}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,    384,    640}, 0, ST_B(   544,   -320), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,   1152,   3072}, 0, ST_B(   144,   -112), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,   1024,   3072}, 0, ST_B(   160,    -96), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,    512,    640}, 0, ST_B(   528,   -336), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,   1024,   4096}, 0, ST_B(    16,     48), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2509,   1152,   4096}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // WOOD
@@ -141,17 +141,17 @@ static const Vtx wf_seg7_vertex_fences_2[] = {
 
 // 0x07006F78 - 0x07006FB8
 static const Vtx wf_seg7_vertex_fences_3[] = {
-    {{{  2048,    256,   4096}, 0, {299<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2048,    384,   4096}, 0, {299<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2048,    384,   5120}, 0, {  -160,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2048,    256,   5120}, 0, {  -160,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2048,    256,   4096}, 0, ST_B(   300,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2048,    384,   4096}, 0, ST_B(   300,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2048,    384,   5120}, 0, ST_B(    -4,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2048,    256,   5120}, 0, ST_B(    -4,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07006FB8 - 0x07007168
 static const Gfx wf_seg7_sub_dl_meshes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_09000000_mesh),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wf_seg7_vertex_meshes_1, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
@@ -189,7 +189,7 @@ static const Gfx wf_seg7_sub_dl_meshes[] = {
 static const Gfx wf_seg7_sub_dl_fences[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, grass_0900A000_fence),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(wf_seg7_vertex_fences_1, 12, 0),
     gsSP2Triangles( 1,  0, 10, 0x0,  2,  3,  4, 0x0),
     gsSP2Triangles( 2,  5,  3, 0x0,  6,  7,  8, 0x0),

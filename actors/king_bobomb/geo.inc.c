@@ -12,7 +12,7 @@ const GeoLayout king_bobomb_geo[] = {
                GEO_OPEN_NODE(),
                   GEO_BILLBOARD(),
                   GEO_OPEN_NODE(),
-                     GEO_DISPLAY_LIST(LAYER_ALPHA, king_bobomb_seg5_dl_0500B188),
+                     GEO_DISPLAY_LIST(LAYER_ALPHA, king_bobomb_seg5_dl_body),
                   GEO_CLOSE_NODE(),
                GEO_CLOSE_NODE(),
                GEO_ANIMATED_PART(LAYER_OPAQUE, 0, -243, 0, NULL),

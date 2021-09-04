@@ -156,10 +156,10 @@ const Gfx dSwoopHeadDl[] = {
 
 // 0x06006808
 static const Vtx dSwoopBodyVertices[] = {
-    {{{    15,     15,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,     15,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -15,    -15,      0}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    15,    -15,      0}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,     15,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,     15,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -15,    -15,      0}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    15,    -15,      0}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006848 - 0x06006880
@@ -254,10 +254,10 @@ const Gfx dSwoopFaceEarsToothDl[] = {
 
 // 0x06006B58
 static const Vtx dSwoopWing1Vertices[] = {
-    {{{     0,      1,    133}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,   -133}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,   -133}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,    133}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,    133}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,   -133}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,   -133}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,    133}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006B98 - 0x06006BD0
@@ -290,10 +290,10 @@ const Gfx dSwoopWing1Dl[] = {
 
 // 0x06006C88
 static const Vtx dSwoopWing2Vertices[] = {
-    {{{   265,      1,   -133}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   265,      1,    133}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,    133}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      1,   -133}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,   -133}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   265,      1,    133}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,    133}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      1,   -133}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x06006CC8 - 0x06006D00

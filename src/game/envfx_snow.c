@@ -34,9 +34,9 @@ s16   gSnowParticleMaxCount;
 s8 gEnvFxMode = 0;
 
 /// Template for a snow particle triangle
-Vtx gSnowTempVtx[3] = { { { { -5,  5,  0 }, 0, {     0,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { { -5, -5,  0 }, 0, {     0, 30<<5 }, { 0x7F, 0x7F, 0x7F, 0xFF } } },
-                        { { {  5,  5,  0 }, 0, { 30<<5,     0 }, { 0x7F, 0x7F, 0x7F, 0xFF } } } };
+Vtx gSnowTempVtx[3] = { { { { -5,  5,  0 }, 0, ST_B(     0,     0 ), { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { { -5, -5,  0 }, 0, ST_B(     0,    32 ), { 0x7F, 0x7F, 0x7F, 0xFF } } },
+                        { { {  5,  5,  0 }, 0, ST_B(    32,     0 ), { 0x7F, 0x7F, 0x7F, 0xFF } } } };
 
 // Change these to make snowflakes smaller or bigger
 Vec3vs gSnowFlakeVertex1 = { -5,  5, 0 };
