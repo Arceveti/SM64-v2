@@ -30,11 +30,16 @@ struct SaveBlockSignature
 struct SaveFile
 {
     // Location of lost cap.
-    // Note: the coordinates get set, but are never actually used, since the
-    // cap can always be found in a fixed spot within the course
     u8 capLevel;
     u8 capArea;
+#ifdef SAVE_NUM_LIVES
+    s8 numLives;
+    u8 pad[5];
+#else
+    // Note: the coordinates get set, but are never actually used, since the
+    // cap can always be found in a fixed spot within the course
     Vec3s capPos;
+#endif
 
     u32 flags;
 
@@ -44,9 +49,6 @@ struct SaveFile
     u8 courseStars[COURSE_COUNT];
 
     u8 courseCoinScores[COURSE_STAGES_COUNT];
-#ifdef SAVE_NUM_LIVES
-    s8 numLives;
-#endif
     struct SaveBlockSignature signature;
 };
 

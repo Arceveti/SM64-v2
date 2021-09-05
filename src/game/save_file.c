@@ -519,11 +519,17 @@ void save_file_set_cannon_unlocked(void) {
     gSaveFileModified = TRUE;
 }
 
+#ifdef SAVE_NUM_LIVES
+void save_file_set_cap_pos(UNUSED s16 x, UNUSED s16 y, UNUSED s16 z) {
+#else
 void save_file_set_cap_pos(s16 x, s16 y, s16 z) {
+#endif
     struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
     saveFile->capLevel = gCurrLevelNum;
     saveFile->capArea  = gCurrAreaIndex;
+#ifndef SAVE_NUM_LIVES
     vec3s_set(saveFile->capPos, x, y, z);
+#endif
     save_file_set_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 
@@ -531,7 +537,11 @@ Bool32 save_file_get_cap_pos(Vec3s capPos) {
     struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
     s32 flags = save_file_get_flags();
     if ((saveFile->capLevel == gCurrLevelNum) && (saveFile->capArea == gCurrAreaIndex) && (flags & SAVE_FLAG_CAP_ON_GROUND)) {
+#ifdef SAVE_NUM_LIVES
+        vec3s_zero(capPos);
+#else
         vec3s_copy(capPos, saveFile->capPos);
+#endif
         return TRUE;
     }
     return FALSE;
