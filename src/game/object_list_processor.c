@@ -23,6 +23,9 @@
 #if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
+#ifdef VARIABLE_FRAMERATE
+#include "rendering_graph_node.h"
+#endif
 
 /**
  * Flags controlling what debug info is displayed.
@@ -516,6 +519,10 @@ void unload_deactivated_objects(void) {
  * and object surface management.
  */
 void update_objects(void) {
+#ifdef VARIABLE_FRAMERATE
+    s32 i = 0;
+    Mat4 zero = {0, 0, 0, 0};
+#endif
     // s64 cycleCounts[30];
 #if PUPPYPRINT_DEBUG
     OSTime first   = osGetTime();
@@ -568,6 +575,11 @@ void update_objects(void) {
         gTimeStopState &= ~TIME_STOP_ACTIVE;
     }
     gPrevFrameObjectCount = gObjectCounter;
+#ifdef VARIABLE_FRAMERATE
+    gThrowMatIndex = 0;
+    gThrowMatSwap ^= 1;
+    for ((i = 0); (i < THROWMATSTACK); (i++)) mtxf_copy(gThrowMatStack[gThrowMatSwap][i], zero);
+#endif
 #if PUPPYPRINT_DEBUG
     profiler_update(behaviourTime, first);
     behaviourTime[perfIteration] -= (collisionTime[perfIteration] + colTime);

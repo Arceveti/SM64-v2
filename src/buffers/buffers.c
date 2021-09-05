@@ -19,6 +19,9 @@ ALIGNED8 u8 gThread5Stack[0x2000];
 #if ENABLE_RUMBLE
 ALIGNED8 u8 gThread6Stack[0x2000];
 #endif
+#ifdef VARIABLE_FRAMERATE
+ALIGNED8 u8 gThread9Stack[0x2000];
+#endif
 // 0x400 bytes
 #if UNF
 ALIGNED16 u8 gGfxSPTaskStack[SP_DRAM_STACK_SIZE8];

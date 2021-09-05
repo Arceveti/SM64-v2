@@ -76,6 +76,9 @@ OSTime graphTime    [NUM_PERF_ITERATIONS + 1];
 OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
 OSTime dmaTime      [NUM_PERF_ITERATIONS + 1];
 OSTime dmaAudioTime [NUM_PERF_ITERATIONS + 1];
+#ifdef VARIABLE_FRAMERATE
+OSTime videoTime    [NUM_PERF_ITERATIONS + 1];
+#endif
 // RSP
 OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
 OSTime rspGenTime   [NUM_PERF_ITERATIONS + 1];
@@ -441,6 +444,9 @@ void puppyprint_profiler_process(void) {
         get_average_perf_time(    audioTime);
         get_average_perf_time(      dmaTime);
         get_average_perf_time( dmaAudioTime);
+#ifdef VARIABLE_FRAMERATE
+        get_average_perf_time(    videoTime);
+#endif
 
         dmaTime[NUM_PERF_ITERATIONS] += dmaAudioTime[NUM_PERF_ITERATIONS];
 
@@ -453,7 +459,11 @@ void puppyprint_profiler_process(void) {
         rdpTime =            bufferTime[NUM_PERF_ITERATIONS];
         rdpTime = MAX(rdpTime, tmemTime[NUM_PERF_ITERATIONS]);
         rdpTime = MAX(rdpTime,  busTime[NUM_PERF_ITERATIONS]);
+#ifdef VARIABLE_FRAMERATE
+        cpuTime =           (scriptTime[NUM_PERF_ITERATIONS] + videoTime[NUM_PERF_ITERATIONS]);
+#else
         cpuTime =            scriptTime[NUM_PERF_ITERATIONS];
+#endif
         rspTime =            rspGenTime[NUM_PERF_ITERATIONS];
         puppyprint_calculate_ram_usage();
     }

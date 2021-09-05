@@ -37,10 +37,15 @@ OSThread gIdleThread;
 OSThread gMainThread;
 OSThread gGameLoopThread;
 OSThread gSoundThread;
-// OSThread gRenderingThread;
+#ifdef VARIABLE_FRAMERATE
+OSThread gGraphicsLoopThread;
+#endif
 
 OSIoMesg gDmaIoMesg;
 OSMesg   gMainReceivedMesg;
+#ifdef VARIABLE_FRAMERATE
+OSMesg gVideoReceivedMesg;
+#endif
 
 OSMesgQueue gDmaMesgQueue;
 OSMesgQueue gSIEventMesgQueue;
@@ -58,8 +63,9 @@ OSViMode VI;
 
 struct VblankHandler *gVblankHandler1 = NULL;
 struct VblankHandler *gVblankHandler2 = NULL;
-#ifdef HVQM
 struct VblankHandler *gVblankHandler3 = NULL;
+#ifdef VARIABLE_FRAMERATE
+struct VblankHandler *gVblankHandler4 = NULL;
 #endif
 struct SPTask *gActiveSPTask          = NULL;
 struct SPTask *sCurrentAudioSPTask    = NULL;
@@ -240,8 +246,9 @@ void handle_vblank(void) {
     // Notify the game loop about the vblank.
     if (gVblankHandler1 != NULL) osSendMesg(gVblankHandler1->queue, gVblankHandler1->msg, OS_MESG_NOBLOCK);
     if (gVblankHandler2 != NULL) osSendMesg(gVblankHandler2->queue, gVblankHandler2->msg, OS_MESG_NOBLOCK);
-#ifdef HVQM
     if (gVblankHandler3 != NULL) osSendMesg(gVblankHandler3->queue, gVblankHandler3->msg, OS_MESG_NOBLOCK);
+#ifdef VARIABLE_FRAMERATE
+    if (gVblankHandler4 != NULL) osSendMesg(gVblankHandler4->queue, gVblankHandler4->msg, OS_MESG_NOBLOCK);
 #endif
 }
 
@@ -327,6 +334,9 @@ void thread3_main(UNUSED void *arg) {
     create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, (gThread5Stack + 0x2000), 10);
 #endif
     osStartThread(&gGameLoopThread);
+#ifdef VARIABLE_FRAMERATE
+    create_thread(&gGraphicsLoopThread, 9, thread9_graphics_loop, NULL, (gThread9Stack + 0x2000), 5);
+#endif
     while (TRUE) {
         OSMesg msg;
         osRecvMesg(&gIntrMesgQueue, &msg, OS_MESG_BLOCK);
@@ -346,8 +356,9 @@ void set_vblank_handler(s32 index, struct VblankHandler *handler, OSMesgQueue *q
     switch (index) {
         case 1: gVblankHandler1 = handler; break;
         case 2: gVblankHandler2 = handler; break;
-#ifdef HVQM
         case 3: gVblankHandler3 = handler; break;
+#ifdef VARIABLE_FRAMERATE
+        case 4: gVblankHandler4 = handler; break;
 #endif
     }
 }
@@ -358,7 +369,7 @@ void send_sp_task_message(OSMesg *msg) {
 }
 
 void dispatch_audio_sptask(struct SPTask *spTask) {
-    if (sAudioEnabled && spTask != NULL) {
+    if (sAudioEnabled && (spTask != NULL)) {
         osWritebackDCacheAll();
         osSendMesg(&gSPTaskMesgQueue, spTask, OS_MESG_NOBLOCK);
     }
@@ -410,7 +421,7 @@ void change_vi(OSViMode *mode, int width, int height){
  */
 void thread1_idle(UNUSED void *arg) {
     osCreateViManager(OS_PRIORITY_VIMGR);
-	switch ( osTvType ) {
+	switch (osTvType) {
         case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
         case OS_TV_MPAL: VI = osViModeTable[OS_VI_MPAL_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
         case OS_TV_PAL:  VI = osViModeTable[OS_VI_PAL_LAN1 ]; break; // osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);

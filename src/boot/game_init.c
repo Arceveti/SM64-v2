@@ -20,6 +20,7 @@
 #include "game/segment2.h"
 #include "segment_symbols.h"
 #include "game/rumble_init.h"
+#include "config.h"
 // #include "PR/os_convert.h"
 #ifdef HVQM
 #include <hvqm/hvqm.h>
@@ -39,6 +40,17 @@
 #include "game/puppycam2.h"
 #endif
 #include "game/debug_box.h"
+#ifdef VARIABLE_FRAMERATE
+#include "game/hud.h"
+
+#define SECONDS_PER_CYCLE 0.00000002133f
+
+s32 gGameTime  = 0;
+f32 gDelta     = 1;
+f32 jDelta     = 1;
+f32 lDelta     = 1;
+f32 gMoveSpeed = 1;
+#endif
 
 // First 3 controller slots
 struct Controller gControllers[3];
@@ -54,7 +66,7 @@ OSContStatus gControllerStatuses[4];
 OSContPad    gControllerPads[4];
 u8    gControllerBits;
 Bool8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
-u8    gBorderHeight;
+u8    gBorderHeight = 0;
 #ifdef REONU_CAM_3
 s8    gCameraSpeed = 2;
 u8    gWaterCamOverride;
@@ -85,11 +97,20 @@ s8 gSramProbe;
 #endif
 OSMesgQueue gGameVblankQueue;
 OSMesgQueue gGfxVblankQueue;
-OSMesg      gGameMesgBuf[1];
-OSMesg      gGfxMesgBuf[1];
+#ifdef VARIABLE_FRAMERATE
+OSMesgQueue gVideoVblankQueue;
+#endif
+OSMesg       gGameMesgBuf[1];
+OSMesg        gGfxMesgBuf[1];
+#ifdef VARIABLE_FRAMERATE
+OSMesg      gVideoMesgBuf[1];
+#endif
 
 // Vblank Handler
 struct VblankHandler gGameVblankHandler;
+#ifdef VARIABLE_FRAMERATE
+struct VblankHandler gVideoVblankHandler;
+#endif
 
 // Buffers
 uintptr_t gPhysicalFrameBuffers[3];
@@ -355,8 +376,10 @@ void draw_reset_bars(void) {
  * Initial settings for the first rendered frame.
  */
 void render_init(void) {
+#ifndef VARIABLE_FRAMERATE
     gIsConsole    = (IO_READ(DPC_PIPEBUSY_REG) != 0);
     gBorderHeight = (gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR);
+#endif
     gGfxPool      = &gGfxPools[0];
     set_segment_base_addr(1,  gGfxPool->buffer);
     gGfxSPTask       =       &gGfxPool->spTask;
@@ -373,14 +396,22 @@ void render_init(void) {
 #else
     if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
 #endif
+#ifdef VARIABLE_FRAMERATE
+    gGameTime++;
+#else
     gGlobalTimer++;
+#endif
 }
 
 /**
  * Selects the location of the F3D output buffer (gDisplayListHead).
  */
 void select_gfx_pool(void) {
+#ifdef VARIABLE_FRAMERATE
+    gGfxPool = &gGfxPools[gGameTime % ARRAY_COUNT(gGfxPools)];
+#else
     gGfxPool = &gGfxPools[gGlobalTimer % ARRAY_COUNT(gGfxPools)];
+#endif
     set_segment_base_addr(1,  gGfxPool->buffer);
     gGfxSPTask       =       &gGfxPool->spTask;
     gDisplayListHead =        gGfxPool->buffer;
@@ -395,10 +426,12 @@ void select_gfx_pool(void) {
  * - Selects which framebuffer will be rendered and displayed to next time.
  */
 void display_and_vsync(void) {
+#ifndef VARIABLE_FRAMERATE
     if (IO_READ(DPC_PIPEBUSY_REG) && !gIsConsole) {
         gIsConsole    = TRUE;
         gBorderHeight = BORDER_HEIGHT_CONSOLE;
     }
+#endif
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     // gIsConsole = (IO_READ(DPC_PIPEBUSY_REG) != 0);
 #ifndef UNLOCK_FPS
@@ -410,12 +443,12 @@ void display_and_vsync(void) {
     }
     exec_display_list(&gGfxPool->spTask);
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
-#ifndef UNLOCK_FPS
+#if !defined(UNLOCK_FPS) && !defined(VARIABLE_FRAMERATE)
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 #endif
     osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFrameBuffers[sRenderedFramebuffer]));
     profiler_log_thread5_time(THREAD5_END);
-#ifndef UNLOCK_FPS
+#if !defined(UNLOCK_FPS) && !defined(VARIABLE_FRAMERATE)
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 #endif
     // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
@@ -427,7 +460,11 @@ void display_and_vsync(void) {
 #ifndef VC_HACKS
     }
 #endif
+#ifdef VARIABLE_FRAMERATE
+    gGameTime++;
+#else
     gGlobalTimer++;
+#endif
 }
 
 // this function records distinct inputs over a 255-frame interval to RAM locations and was likely
@@ -627,8 +664,11 @@ void setup_game_memory(void) {
     // Setup general Segment 0
     set_segment_base_addr(0, (void *) 0x80000000);
     // Create Mesg Queues
-    osCreateMesgQueue(&gGfxVblankQueue,  gGfxMesgBuf,  ARRAY_COUNT(gGfxMesgBuf));
-    osCreateMesgQueue(&gGameVblankQueue, gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
+    osCreateMesgQueue(&gGfxVblankQueue,   gGfxMesgBuf,  ARRAY_COUNT( gGfxMesgBuf));
+    osCreateMesgQueue(&gGameVblankQueue,  gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
+#ifdef VARIABLE_FRAMERATE
+    osCreateMesgQueue(&gVideoVblankQueue, gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
+#endif
     // Setup z buffer and framebuffer
     gPhysicalZBuffer = VIRTUAL_TO_PHYSICAL(gZBuffer);
     gPhysicalFrameBuffers[0] = VIRTUAL_TO_PHYSICAL(gFrameBuffer0);
@@ -654,7 +694,12 @@ void setup_game_memory(void) {
 void thread5_game_loop(UNUSED void *arg) {
     struct LevelCommand *addr;
 #if PUPPYPRINT_DEBUG
-    OSTime lastTime = 0;
+    OSTime lastTime  = 0;
+#endif
+#ifdef VARIABLE_FRAMERATE
+    OSTime prevtime  = 0;
+    OSTime deltatime = 0;
+    s32 startThread  = 0;
 #endif
     setup_game_memory();
 #if ENABLE_RUMBLE
@@ -682,6 +727,9 @@ void thread5_game_loop(UNUSED void *arg) {
 #ifdef WIDE
     gWidescreen  = save_file_get_widescreen_mode();
 #endif
+#ifdef VARIABLE_FRAMERATE
+    while (TRUE) {
+#else
     render_init();
     while (TRUE) {
         // If the reset timer is active, run the process to reset the game.
@@ -689,6 +737,7 @@ void thread5_game_loop(UNUSED void *arg) {
             draw_reset_bars();
             continue;
         }
+#endif
         profiler_log_thread5_time(THREAD5_START);
 #if PUPPYPRINT_DEBUG
         while (TRUE) {
@@ -705,8 +754,15 @@ void thread5_game_loop(UNUSED void *arg) {
 #endif
                 osContStartReadData(&gSIEventMesgQueue);
             }
+#ifdef VARIABLE_FRAMERATE
+            deltatime = (osGetTime() - prevtime);
+            lDelta    = (1 / (deltatime * (SECONDS_PER_CYCLE)));
+            prevtime  = osGetTime();
+            audio_game_loop_tick();
+#else
             audio_game_loop_tick();
             select_gfx_pool();
+#endif
             read_controller_inputs();
             addr = level_script_execute(addr);
 #if PUPPYPRINT_DEBUG == 0 && defined(VISUAL_DEBUG)
@@ -727,6 +783,13 @@ void thread5_game_loop(UNUSED void *arg) {
         }
         puppyprint_profiler_process();
 #endif
+#ifdef VARIABLE_FRAMERATE
+        if (!startThread) osStartThread(&gGraphicsLoopThread);
+        startThread = TRUE;
+        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        gGlobalTimer++;
+#else
         display_and_vsync();
         // when debug info is enabled, print the "BUF %07d" information.
         if (gShowDebugText) {
@@ -738,5 +801,54 @@ void thread5_game_loop(UNUSED void *arg) {
             print_text_fmt_int(180, 20, "BUF %d",   (gGfxPoolEnd - (u8 *) gDisplayListHead));
 #endif
         }
+#endif
     }
 }
+
+#ifdef VARIABLE_FRAMERATE
+void thread9_graphics_loop(UNUSED void *arg) {
+    OSTime prevtime  = 0;
+    OSTime deltatime = 0;
+#ifdef PUPPYPRINT
+    OSTime lastTime  = 0;
+#endif
+    set_vblank_handler(4, &gVideoVblankHandler, &gVideoVblankQueue, (OSMesg) 1);
+    render_init();
+    while(TRUE) {
+#ifdef PUPPYPRINT
+        while(TRUE) {
+            lastTime   = osGetTime();
+#endif
+            deltatime  = (osGetTime() - prevtime);
+            gDelta     = (deltatime * 0.000000666667f);
+            jDelta     = (1 / (deltatime * (SECONDS_PER_CYCLE)));
+            gMoveSpeed = MIN(lDelta / jDelta, 1);
+            prevtime   = osGetTime();
+            if (gResetTimer) {
+                draw_reset_bars();
+                continue;
+            }
+            select_gfx_pool();
+            init_rcp();
+            render_game();
+            end_master_display_list();
+            alloc_display_list(0);
+#ifdef PUPPYPRINT
+            profiler_update(videoTime, lastTime);
+            if ((benchmarkLoop > 0) && (benchOption == 0)) {
+                benchmarkLoop--;
+                benchMark[benchmarkLoop] = (osGetTime() - lastTime);
+                if (benchmarkLoop == 0) {
+                    puppyprint_profiler_finished();
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+#endif
+        display_and_vsync();
+        osRecvMesg(&gVideoVblankQueue, &gVideoReceivedMesg, OS_MESG_BLOCK);
+    }
+}
+#endif

@@ -724,6 +724,9 @@ void cur_obj_update(void) {
     if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(gCurrentObject);
     if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   gCurrentObject);
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          gCurrentObject);
+#ifdef VARIABLE_FRAMERATE
+    if (gCurrentObject->header.gfx.animInfo.curAnim != NULL) gCurrentObject->header.gfx.animInfo.animFrame = geo_update_animation_frame(&gCurrentObject->header.gfx.animInfo, &gCurrentObject->header.gfx.animInfo.animFrameAccelAssist);
+#endif
     // Handle visibility of object
     if (gCurrentObject->oRoom != -1) {
         // If the object is in a room, only show it when Mario is in the room.

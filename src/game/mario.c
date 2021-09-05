@@ -161,7 +161,7 @@ Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
  */
 s16 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s translation) {
     struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
-    AnimFrame16 animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
+    AnimFrame32 animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
     AnimIndex  *animIndex  = segmented_to_virtual((void *) curAnim->index );
     AnimValue  *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = sins(yaw);

@@ -3,6 +3,12 @@
 
 #include "config.h"
 
+#ifdef VARIABLE_FRAMERATE
+extern OSThread gGraphicsLoopThread;
+// extern struct VblankHandler *gVblankHandler4;
+extern OSMesg gVideoReceivedMesg;
+#endif
+
 struct RumbleData {
     u8 comm;
     u8 level;

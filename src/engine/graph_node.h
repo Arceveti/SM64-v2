@@ -112,6 +112,9 @@ struct GraphNodePerspective
     /*0x1C*/ f32 fov;   // horizontal field of view in degrees
     /*0x20*/ s16 near;  // near clipping plane
     /*0x22*/ u16 far;   // far clipping plane
+#ifdef VARIABLE_FRAMERATE
+             f32 lerpFov[3];
+#endif
 };
 
 /** An entry in the master list. It is a linked list of display lists
@@ -190,6 +193,10 @@ struct GraphNodeCamera
     /*0x34*/ Mat4 *matrixPtr;  // pointer to look-at matrix of this camera as a Mat4
     /*0x38*/ Angle roll;       // roll in look at matrix. Doesn't account for light direction unlike rollScreen.
     /*0x3A*/ Angle rollScreen; // rolls screen while keeping the light direction consistent
+#ifdef VARIABLE_FRAMERATE
+             Vec3f lerpPos[3];
+             Vec3f lerpFocus[3];
+#endif
 };
 
 /** GraphNode that translates and rotates its children.
@@ -204,6 +211,10 @@ struct GraphNodeTranslationRotation
     /*0x14*/ void *displayList;
     /*0x18*/ Vec3s translation;
     /*0x1E*/ Vec3a rotation;
+#ifdef VARIABLE_FRAMERATE
+             Vec3f lerpPos[3];
+             Vec3a lerpRot[3];
+#endif
 };
 
 /** GraphNode that translates itself and its children.
@@ -215,7 +226,10 @@ struct GraphNodeTranslation
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *displayList;
     /*0x18*/ Vec3s translation;
-    u8 pad1E[2];
+             u8    pad1E[2];
+#ifdef VARIABLE_FRAMERATE
+             Vec3f lerpPos[3];
+#endif
 };
 
 /** GraphNode that rotates itself and its children.
@@ -228,7 +242,10 @@ struct GraphNodeRotation
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *displayList;
     /*0x18*/ Vec3a rotation;
-    u8 pad1E[2];
+             u8    pad1E[2];
+#ifdef VARIABLE_FRAMERATE
+             Vec3s lerpRot[3];
+#endif
 };
 
 /** GraphNode part that transforms itself and its children based on animation
@@ -243,6 +260,11 @@ struct GraphNodeAnimatedPart
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *displayList;
     /*0x18*/ Vec3s translation;
+#ifdef VARIABLE_FRAMERATE
+             Vec3f lerpPos[3];
+             Vec3f lerpTrans;
+             Vec3a lerpRot[3];
+#endif
 };
 
 /** A GraphNode that draws a display list rotated in a way to always face the
@@ -280,6 +302,9 @@ struct GraphNodeScale
     /*0x00*/ struct GraphNode node;
     /*0x14*/ void *displayList;
     /*0x18*/ f32 scale;
+#ifdef VARIABLE_FRAMERATE
+             f32 lerpScale[3];
+#endif
 };
 
 /** GraphNode that draws a shadow under an object.
@@ -336,6 +361,9 @@ struct GraphNodeHeldObject
     /*0x18*/ s32 playerIndex;
     /*0x1C*/ struct Object *objNode;
     /*0x20*/ Vec3s translation;
+#ifdef VARIABLE_FRAMERATE
+             Vec3f lerpPos[3];
+#endif
 };
 
 /** A node that allows an object to specify a different culling radius than the
@@ -400,7 +428,7 @@ void geo_obj_init_animation_accel(struct GraphNodeObject *graphNode, struct Anim
 
 s32  retrieve_animation_index(AnimFrame32 frame, u16 **attributes);
 
-s16  geo_update_animation_frame(        struct AnimInfo        *obj, s32 *accelAssist);
+AnimFrame32 geo_update_animation_frame(        struct AnimInfo        *obj, s32 *accelAssist);
 UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3f position);
 
 struct GraphNodeRoot *geo_find_root(struct GraphNode *graphNode);

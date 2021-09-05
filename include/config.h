@@ -790,11 +790,11 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
-// #define RAYCAST_COLLISION
+// Variable Framerate (Fazana)
+//! Not compatible with KEEP_MARIO_HEAD
+// #define VARIABLE_FRAMERATE
 
-// // lol
-// #define DYNAMIC_GRAVITY
-
+// Align mario to the floor
 // Requires FAST_FLOOR_ALIGN
 // #define FLOOR_ALIGNMENT
 
@@ -813,5 +813,11 @@
 // In vanilla, the skybox FOV is always 90 degrees.
 //! FoV seems to control skybox rotation due to how skyboxes are set up
 // #define UNLOCK_SKYBOX_FOV
+
+// Not yet implemented
+// #define RAYCAST_COLLISION
+
+// Not yet implemented
+// #define DYNAMIC_GRAVITY
 
 #endif // CONFIG_H

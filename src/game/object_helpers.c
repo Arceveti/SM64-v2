@@ -230,11 +230,21 @@ void obj_set_parent_relative_pos(struct Object *obj, s16 relX, s16 relY, s16 rel
 
 void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z) {
     vec3f_set(&obj->oPosVec, x, y, z);
+#ifdef VARIABLE_FRAMERATE
+    vec3f_set(obj->header.gfx.lerpPos[0], x, x, x);
+    vec3f_set(obj->header.gfx.lerpPos[1], y, y, y);
+    vec3f_set(obj->header.gfx.lerpPos[2], z, z, z);
+#endif
 }
 
 void obj_set_angle(struct Object *obj, Angle pitch, Angle yaw, Angle roll) {
     vec3i_set(&obj->oFaceAngleVec, pitch, yaw, roll);
     vec3i_set(&obj->oMoveAngleVec, pitch, yaw, roll);
+#ifdef VARIABLE_FRAMERATE
+    vec3s_set(obj->header.gfx.lerpAngle[0], pitch, pitch, pitch);
+    vec3s_set(obj->header.gfx.lerpAngle[1],   yaw,   yaw,   yaw);
+    vec3s_set(obj->header.gfx.lerpAngle[2],  roll,  roll,  roll);
+#endif
 }
 
 /*

@@ -21,6 +21,9 @@ extern u8 gThread5Stack[];
 #if ENABLE_RUMBLE
 extern u8 gThread6Stack[];
 #endif
+#ifdef VARIABLE_FRAMERATE
+extern u8 gThread9Stack[];
+#endif
 
 extern u8 gGfxSPTaskYieldBuffer[];
 

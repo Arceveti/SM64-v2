@@ -5,6 +5,17 @@
 
 #include "engine/graph_node.h"
 
+#ifdef VARIABLE_FRAMERATE
+#define THROWMATSTACK  0x400
+#define ANIMFRAMESTACK 0x100
+
+extern Mat4  gThrowMatStack[2][THROWMATSTACK];
+extern s32   gThrowMatIndex;
+extern u8    gThrowMatSwap;
+extern Vec3f interPos;
+extern Vec3f interFocus;
+#endif
+
 extern struct GraphNodeRoot        *gCurGraphNodeRoot;
 extern struct GraphNodeMasterList  *gCurGraphNodeMasterList;
 extern struct GraphNodePerspective *gCurGraphNodeCamFrustum;

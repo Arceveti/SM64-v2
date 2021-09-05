@@ -141,6 +141,14 @@ struct GraphNodeCamera *init_graph_node_camera(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->fnNode.node, GRAPH_NODE_TYPE_CAMERA);
         vec3f_copy(graphNode->pos, pos);
         vec3f_copy(graphNode->focus, focus);
+#ifdef VARIABLE_FRAMERATE
+        vec3f_copy(graphNode->lerpPos[0],   pos);
+        vec3f_copy(graphNode->lerpPos[1],   pos);
+        vec3f_copy(graphNode->lerpPos[2],   pos);
+        vec3f_copy(graphNode->lerpFocus[0], focus);
+        vec3f_copy(graphNode->lerpFocus[1], focus);
+        vec3f_copy(graphNode->lerpFocus[2], focus);
+#endif
         graphNode->fnNode.func = func;
         graphNode->config.mode = mode;
         graphNode->roll        = 0x0;
@@ -161,7 +169,21 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
         vec3s_copy(graphNode->translation, translation);
+#ifdef VARIABLE_FRAMERATE
+        Vec3s temp[3];
+        vec3s_copy(temp[0], translation);
+        vec3s_copy(temp[1], translation);
+        vec3s_copy(temp[2], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[0], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[1], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[2], translation);
+        vec3a_copy(graphNode->rotation,   rotation);
+        vec3a_copy(graphNode->lerpRot[0], rotation);
+        vec3a_copy(graphNode->lerpRot[1], rotation);
+        vec3a_copy(graphNode->lerpRot[2], rotation);
+#else
         vec3a_copy(graphNode->rotation, rotation);
+#endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -179,6 +201,15 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION);
         vec3s_copy(graphNode->translation, translation);
+#ifdef VARIABLE_FRAMERATE
+        Vec3s temp[3];
+        vec3s_copy(temp[0], translation);
+        vec3s_copy(temp[1], translation);
+        vec3s_copy(temp[2], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[0], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[1], translation);
+        vec3s_to_vec3f(graphNode->lerpPos[2], translation);
+#endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -196,6 +227,11 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
         vec3a_copy(graphNode->rotation, rotation);
+#ifdef VARIABLE_FRAMERATE
+        vec3a_copy(graphNode->lerpRot[0], rotation);
+        vec3a_copy(graphNode->lerpRot[1], rotation);
+        vec3a_copy(graphNode->lerpRot[2], rotation);
+#endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -213,6 +249,11 @@ struct GraphNodeScale *init_graph_node_scale(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_SCALE);
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->scale       = scale;
+#ifdef VARIABLE_FRAMERATE
+        graphNode->lerpScale[0] = scale;
+        graphNode->lerpScale[1] = scale;
+        graphNode->lerpScale[2] = scale;
+#endif
         graphNode->displayList = displayList;
     }
     return graphNode;
@@ -229,8 +270,22 @@ struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_OBJECT);
         vec3f_copy(graphNode->pos, pos);
+#ifdef VARIABLE_FRAMERATE
+        vec3f_copy(graphNode->lerpPos[0], pos);
+        vec3f_copy(graphNode->lerpPos[1], pos);
+        vec3f_copy(graphNode->lerpPos[2], pos);
+        vec3f_copy(graphNode->scale,        scale);
+        vec3f_copy(graphNode->lerpScale[0], scale);
+        vec3f_copy(graphNode->lerpScale[1], scale);
+        vec3f_copy(graphNode->lerpScale[2], scale);
+        vec3a_copy(graphNode->angle,        angle);
+        vec3a_copy(graphNode->lerpAngle[0], angle);
+        vec3a_copy(graphNode->lerpAngle[1], angle);
+        vec3a_copy(graphNode->lerpAngle[2], angle);
+#else
         vec3f_copy(graphNode->scale, scale);
         vec3a_copy(graphNode->angle, angle);
+#endif
         graphNode->sharedChild                   = sharedChild;
         graphNode->throwMatrix                   = NULL;
         graphNode->animInfo.animID               = 0; //? MARIO_ANIM_SLOW_LEDGE_CLIMB;
@@ -269,6 +324,15 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ANIMATED_PART);
         vec3s_copy(graphNode->translation, translation);
+#ifdef VARIABLE_FRAMERATE
+        vec3f_copy(graphNode->lerpPos[0], gVec3fZero);
+        vec3f_copy(graphNode->lerpPos[1], gVec3fZero);
+        vec3f_copy(graphNode->lerpPos[2], gVec3fZero);
+        vec3f_copy(graphNode->lerpTrans,  gVec3fZero);
+        vec3s_copy(graphNode->lerpRot[0], gVec3sZero);
+        vec3s_copy(graphNode->lerpRot[1], gVec3sZero);
+        vec3s_copy(graphNode->lerpRot[2], gVec3sZero);
+#endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
     }
@@ -526,6 +590,17 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
     vec3f_copy(graphNode->pos, pos);
     vec3a_copy(graphNode->angle, angle);
+#ifdef VARIABLE_FRAMERATE
+    vec3f_copy(graphNode->lerpPos[0],   pos);
+    vec3f_copy(graphNode->lerpPos[1],   pos);
+    vec3f_copy(graphNode->lerpPos[2],   pos);
+    vec3f_copy(graphNode->lerpScale[0], graphNode->scale);
+    vec3f_copy(graphNode->lerpScale[1], graphNode->scale);
+    vec3f_copy(graphNode->lerpScale[2], graphNode->scale);
+    vec3a_copy(graphNode->lerpAngle[0], angle);
+    vec3a_copy(graphNode->lerpAngle[1], angle);
+    vec3a_copy(graphNode->lerpAngle[2], angle);
+#endif
     graphNode->sharedChild      = sharedChild;
     graphNode->spawnInfo        = 0;
     graphNode->throwMatrix      = NULL;
@@ -543,6 +618,17 @@ void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo 
     vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
     vec3a_copy(graphNode->angle, spawn->startAngle);
     vec3s_to_vec3f(graphNode->pos, spawn->startPos);
+#ifdef VARIABLE_FRAMERATE
+    vec3f_copy(graphNode->lerpPos[0],   graphNode->pos);
+    vec3f_copy(graphNode->lerpPos[1],   graphNode->pos);
+    vec3f_copy(graphNode->lerpPos[2],   graphNode->pos);
+    vec3f_copy(graphNode->lerpScale[0], graphNode->scale);
+    vec3f_copy(graphNode->lerpScale[1], graphNode->scale);
+    vec3f_copy(graphNode->lerpScale[2], graphNode->scale);
+    vec3a_copy(graphNode->lerpAngle[0], spawn->startAngle);
+    vec3a_copy(graphNode->lerpAngle[1], spawn->startAngle);
+    vec3a_copy(graphNode->lerpAngle[2], spawn->startAngle);
+#endif
     graphNode->areaIndex        = spawn->areaIndex;
     graphNode->activeAreaIndex  = spawn->activeAreaIndex;
     graphNode->sharedChild      = spawn->modelNode;
@@ -607,7 +693,7 @@ s32 retrieve_animation_index(AnimFrame32 frame, u16 **attributes) {
  * whether it plays forwards or backwards, and whether it stops or loops at
  * the end etc.
  */
-s16 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
+AnimFrame32 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
     s32 result;
     struct Animation *anim;
     anim = obj->curAnim;
@@ -665,7 +751,7 @@ UNUSED void geo_retreive_animation_translation(struct GraphNodeObject *obj, Vec3
         position[1]          = (f32) values[retrieve_animation_index(frame, &attribute)];
         position[2]          = (f32) values[retrieve_animation_index(frame, &attribute)];
     } else {
-        vec3f_set(position, 0, 0, 0);
+        vec3_zero(position);
     }
 }
 

@@ -167,17 +167,30 @@ Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 
  */
 void obj_orient_graph(struct Object *obj, Vec3f normal) {
     Vec3f objVisualPosition;
+#ifdef VARIABLE_FRAMERATE
+    Mat4 *throwMatrix = &gThrowMatStack[gThrowMatSwap][gThrowMatIndex];
+#else
     Mat4 *throwMatrix;
+#endif
     // Passes on orienting certain objects that shouldn't be oriented, like boulders.
     if (!sOrientObjWithFloor) return;
     // Passes on orienting billboard objects, i.e. coins, trees, etc.
     if (obj->header.gfx.node.flags & GRAPH_RENDER_BILLBOARD) return;
+#ifdef VARIABLE_FRAMERATE
+    if (gThrowMatIndex > THROWMATSTACK) return;
+#else
     throwMatrix = alloc_display_list(sizeof(*throwMatrix));
     // If out of memory, fail to try orienting the object.
     if (throwMatrix == NULL) return;
+#endif
     vec3f_copy_y_off(objVisualPosition, &obj->oPosVec, obj->oGraphYOffset);
     mtxf_align_terrain_normal(*throwMatrix, normal, objVisualPosition, obj->oFaceAngleYaw);
+#ifdef VARIABLE_FRAMERATE
+    obj->header.gfx.matrixID[gThrowMatSwap] = gThrowMatIndex;
+    gThrowMatIndex++;
+#else
     obj->header.gfx.throwMatrix = throwMatrix;
+#endif
 }
 
 /**

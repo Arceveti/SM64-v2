@@ -231,7 +231,16 @@ struct GraphNodeObject
     /*0x38*/ struct AnimInfo animInfo;
     /*0x4C*/ struct SpawnInfo *spawnInfo;
     /*0x50*/ Mat4 *throwMatrix; // matrix ptr
+#ifdef VARIABLE_FRAMERATE
+             u16 matrixID[2];
+#endif
     /*0x54*/ Vec3f cameraToObject;
+#ifdef VARIABLE_FRAMERATE
+             Vec3a lerpAngle[3];
+             Vec3f lerpPos[3];
+             Vec3f lerpScale[3];
+             s8    firstBit;
+#endif
 };
 
 struct ObjectNode

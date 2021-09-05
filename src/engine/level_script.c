@@ -735,9 +735,11 @@ struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {
     sCurrentCmd   = cmd;
     while (sScriptStatus == SCRIPT_RUNNING) LevelScriptJumpTable[sCurrentCmd->type]();
     profiler_log_thread5_time(LEVEL_SCRIPT_EXECUTE);
+#ifndef VARIABLE_FRAMERATE
     init_rcp();
     render_game();
     end_master_display_list();
     alloc_display_list(0);
+#endif
     return sCurrentCmd;
 }

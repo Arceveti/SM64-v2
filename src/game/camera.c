@@ -2643,8 +2643,19 @@ void create_camera(struct GraphNodeCamera *gc, struct AllocOnlyPool *pool) {
     c->areaCenY       = gc->focus[1];
     c->areaCenZ       = gc->focus[2];
     c->yaw            = 0x0;
+#ifdef VARIABLE_FRAMERATE
+    vec3f_copy(c->pos,           gc->pos);
+    vec3f_copy(gc->lerpPos[0],   gc->pos);
+    vec3f_copy(gc->lerpPos[1],   gc->pos);
+    vec3f_copy(gc->lerpPos[2],   gc->pos);
+    vec3f_copy(c->focus,         gc->focus);
+    vec3f_copy(gc->lerpFocus[0], gc->focus);
+    vec3f_copy(gc->lerpFocus[1], gc->focus);
+    vec3f_copy(gc->lerpFocus[2], gc->focus);
+#else
     vec3f_copy(c->pos  , gc->pos  );
     vec3f_copy(c->focus, gc->focus);
+#endif
 }
 
 /**
