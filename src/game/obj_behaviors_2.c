@@ -308,8 +308,10 @@ Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle t
             angle    = atan2s(dz, dx);
             o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
             o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
-            if ((targetYaw != NULL) && (abs_angle_diff(o->oMoveAngleYaw, angle) < DEG(90))) *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEG(180));
-            return TRUE;
+            if ((targetYaw != NULL) && (abs_angle_diff(o->oMoveAngleYaw, angle) < DEG(90))) {
+                *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEG(180));
+                return TRUE;
+            }
         }
     }
     return FALSE;
