@@ -79,9 +79,7 @@ void approach_pos_vector(Vec3f *value, Vec3f orig, s32 index) {
     vec3_copy(value[2], tempPos[2]);
 }
 
-extern s16 abs_angle_diff(s16 x0, s16 x1);
-
-u16 angle_lerp(u16 current, u16 target) {
+UAngle angle_lerp(UAngle current, UAngle target) {
     if (absi(target - current) < (absi(target - current + 0x10000))) {
         if (absi(target - current) < (absi(target - current - 0x10000))) {
             return current + (target - current) * gMoveSpeed;

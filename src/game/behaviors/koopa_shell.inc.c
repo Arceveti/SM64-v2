@@ -76,7 +76,7 @@ void bhv_koopa_shell_loop(void) {
             if (absf(find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 10.0f) {
                 koopa_shell_spawn_water_drop();
             } else if (5.0f > absf(o->oPosY - o->oFloorHeight)) {
-                if (floor != NULL && floor->type == SURFACE_BURNING) {
+                if ((floor != NULL) && (floor->type == SURFACE_BURNING)) {
                     bhv_koopa_shell_flame_spawn();
                 } else {
                     koopa_shell_spawn_sparkles(10.0f);

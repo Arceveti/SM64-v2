@@ -8,7 +8,7 @@
  */
 void bhv_mips_init(void) {
     // Retrieve star flags for Castle Secret Stars on current save file.
-    u8 starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, -1);
+    u8 starFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), -1);
     // If the player has >= 15 stars and hasn't collected first MIPS star...
     if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) >= 15)
         && !(starFlags & SAVE_FLAG_TO_STAR_FLAG(SAVE_FLAG_COLLECTED_MIPS_STAR_1))) {
@@ -34,9 +34,9 @@ void bhv_mips_init(void) {
  * Helper function that finds the waypoint that is both within 800 units of MIPS
  * and furthest from Mario's current location.
  */
-s16 bhv_mips_find_furthest_waypoint_to_mario(void) {
+s32 bhv_mips_find_furthest_waypoint_to_mario(void) {
     s8 i;
-    s16 x, y, z;
+    Vec3s pos;
     s16 furthestWaypointIndex = -1;
     f32 furthestWaypointDistance = -10000.0f;
     f32 distanceToMario;
@@ -46,15 +46,13 @@ s16 bhv_mips_find_furthest_waypoint_to_mario(void) {
     // For each waypoint in MIPS path...
     for ((i = 0); (i < 10); (i++)) {
         waypoint = segmented_to_virtual(pathBase[i]);
-        x = waypoint->pos[0];
-        y = waypoint->pos[1];
-        z = waypoint->pos[2];
+        vec3s_copy(pos, waypoint->pos);
         // Is the waypoint within 800 units of MIPS?
-        if (is_point_close_to_object(o, x, y, z, 800)) {
+        if (is_point_close_to_object(o, pos[0], pos[1], pos[2], 800)) {
             // Is this further from Mario than the last waypoint?
-            f32 dx = (x - gMarioObject->header.gfx.pos[0]);
-            f32 dz = (z - gMarioObject->header.gfx.pos[2]);
-            distanceToMario = sqr(dx) + sqr(dz);
+            f32 dx = (pos[0] - gMarioObject->header.gfx.pos[0]);
+            f32 dz = (pos[2] - gMarioObject->header.gfx.pos[2]);
+            distanceToMario = (sqr(dx) + sqr(dz));
             if (furthestWaypointDistance < distanceToMario) {
                 furthestWaypointIndex    = i;
                 furthestWaypointDistance = distanceToMario;
@@ -63,7 +61,7 @@ s16 bhv_mips_find_furthest_waypoint_to_mario(void) {
     }
     // Set MIPS' next waypoint to be the closest waypoint to Mario.
     o->oMipsStartWaypointIndex = furthestWaypointIndex;
-    return (s16) o->oMipsStartWaypointIndex;
+    return o->oMipsStartWaypointIndex;
 }
 
 /**

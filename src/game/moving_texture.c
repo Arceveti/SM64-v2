@@ -362,26 +362,26 @@ Gfx *movtex_gen_from_quad(s16 y, struct MovtexQuad *quad) {
     s16 x4         = quad->x4;
     s16 z4         = quad->z4;
     s16 rotDir     = quad->rotDir;
-    s16 alpha      = quad->alpha; //! u8/Alpha type?
+    Alpha alpha    = quad->alpha; //! u8/Alpha type?
     s16 textureId  = quad->textureId;
     Vtx *verts     = alloc_display_list(4 * sizeof(*verts));
     Gfx *gfxHead;
     Gfx *gfx;
     gfxHead = alloc_display_list(((textureId == gMovetexLastTextureId) ? 3 : 8) * sizeof(*gfxHead));
-    if (gfxHead == NULL || verts == NULL) return NULL;
+    if ((gfxHead == NULL) || (verts == NULL)) return NULL;
     gfx = gfxHead;
     if (gMovtexCounter != gMovtexCounterPrev) quad->rot += rotspeed;
     rot = quad->rot;
     if (rotDir == ROTATE_CLOCKWISE) {
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0, scale, alpha);
-        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot,  16384, scale, alpha);
-        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
-        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, -16384, scale, alpha);
+        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0x0, scale, alpha);
+        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, DEG(-90), scale, alpha);
+        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, DEG(180), scale, alpha);
+        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, DEG( 90), scale, alpha);
     } else { // ROTATE_COUNTER_CLOCKWISE
-        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0, scale, alpha);
-        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, -16384, scale, alpha);
-        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, -32768, scale, alpha);
-        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot,  16384, scale, alpha);
+        movtex_make_quad_vertex(verts, 0, x1, y, z1, rot,      0x0, scale, alpha);
+        movtex_make_quad_vertex(verts, 1, x2, y, z2, rot, DEG(-90), scale, alpha);
+        movtex_make_quad_vertex(verts, 2, x3, y, z3, rot, DEG(180), scale, alpha);
+        movtex_make_quad_vertex(verts, 3, x4, y, z4, rot, DEG( 90), scale, alpha);
     }
     // Only add commands to change the texture when necessary
     if (textureId != gMovetexLastTextureId) {
@@ -535,7 +535,7 @@ Gfx *geo_movtex_draw_water_regions(s32 callContext, struct GraphNode *node, UNUS
         asGenerated = (struct GraphNodeGenerated *) node;
         if (asGenerated->parameter == JRB_MOVTEX_INITIAL_MIST) {
             if (gLakituState.goalPos[1] < 1024.0f) return NULL; // if camera under water
-            if (save_file_get_star_flags(gCurrSaveFileNum - 1, COURSE_JRB - 1) & 0x1) return NULL; // first star in JRB complete
+            if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_JRB - 1)) & 0x1) return NULL; // first star in JRB complete
         } else if (asGenerated->parameter == HMC_MOVTEX_TOXIC_MAZE_MIST) {
             gMovtexVtxColor = MOVTEX_VTX_COLOR_YELLOW;
         } else if (asGenerated->parameter == SSL_MOVTEX_TOXBOX_QUICKSAND_MIST) {

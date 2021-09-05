@@ -107,200 +107,237 @@ extern Vec3f gVec3fZ;
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
-#define SWAP(a, b)      { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); } 
+#define SWAP(a, b)          { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); } 
 
-#define sqr(x)          (    (x) * (x))
-#define cube(x)         ( sqr(x) * (x))
-#define quad(x)         (cube(x) * (x))
+#define sqr(x)              (    (x) * (x))
+#define cube(x)             ( sqr(x) * (x))
+#define quad(x)             (cube(x) * (x))
 
-#define vec2_same(v, s) (((v)[0]) = ((v)[1])                       = (s))
-#define vec3_same(v, s) (((v)[0]) = ((v)[1]) = ((v)[2])            = (s))
-#define vec4_same(v, s) (((v)[0]) = ((v)[1]) = ((v)[2]) = ((v)[3]) = (s))
+#define vec2_same(v, s)     (((v)[0]) = ((v)[1])                       = (s))
+#define vec3_same(v, s)     (((v)[0]) = ((v)[1]) = ((v)[2])            = (s))
+#define vec4_same(v, s)     (((v)[0]) = ((v)[1]) = ((v)[2]) = ((v)[3]) = (s))
 
-#define vec2_zero(v)    (vec2_same((v), 0))
-#define vec3_zero(v)    (vec3_same((v), 0))
-#define vec4_zero(v)    (vec4_same((v), 0))
+#define vec2_zero(v)        (vec2_same((v), 0))
+#define vec3_zero(v)        (vec3_same((v), 0))
+#define vec4_zero(v)        (vec4_same((v), 0))
 
-#define vec2_sumsq(v)   (  sqr((v)[0]) + sqr((v)[1]))
-#define vec3_sumsq(v)   (vec2_sumsq(v) + sqr((v)[2]))
-#define vec4_sumsq(v)   (vec3_sumsq(v) + sqr((v)[3]))
+#define vec2_sumsq(v)       (  sqr((v)[0]) + sqr((v)[1]))
+#define vec3_sumsq(v)       (vec2_sumsq(v) + sqr((v)[2]))
+#define vec4_sumsq(v)       (vec3_sumsq(v) + sqr((v)[3]))
 
-#define vec2_mag(v)     (sqrtf(vec2_sumsq(v)))
-#define vec3_mag(v)     (sqrtf(vec3_sumsq(v)))
-#define vec4_mag(v)     (sqrtf(vec4_sumsq(v)))
+#define vec2_mag(v)         (sqrtf(vec2_sumsq(v)))
+#define vec3_mag(v)         (sqrtf(vec3_sumsq(v)))
+#define vec4_mag(v)         (sqrtf(vec4_sumsq(v)))
 
-#define vec2_dot(a, b)    (((a)[0] * (b)[0]) + ((a)[1] * (b)[1]))
-#define vec3_dot(a, b)   (vec2_dot((a), (b)) + ((a)[2] * (b)[2]))
-#define vec4_dot(a, b)   (vec3_dot((a), (b)) + ((a)[3] * (b)[3]))
+#define vec2_dot(a, b)       (((a)[0] * (b)[0]) + ((a)[1] * (b)[1]))
+#define vec3_dot(a, b)      (vec2_dot((a), (b)) + ((a)[2] * (b)[2]))
+#define vec4_dot(a, b)      (vec3_dot((a), (b)) + ((a)[3] * (b)[3]))
 
-#define vec2_set(dst, x, y)             \
-    (dst)[0] = (x);                     \
-    (dst)[1] = (y);
-#define vec3_set(dst, x, y, z)          \
+#define vec2_set(dst, x, y) {           \
     (dst)[0] = (x);                     \
     (dst)[1] = (y);                     \
-    (dst)[2] = (z);
-#define vec4_set(dst, x, y, z, w)       \
-    (dst)[0] = (x);                     \
-    (dst)[1] = (y);                     \
+}
+#define vec3_set(dst, x, y, z) {        \
+    vec2_set((dst), (x), (y));          \
     (dst)[2] = (z);                     \
-    (dst)[3] = (w);
+}
+#define vec4_set(dst, x, y, z, w) {     \
+    vec3_set((dst), (x), (y), (z));     \
+    (dst)[3] = (w);                     \
+}
 
-#define vec2_copy(dst, src)             \
+#define vec2_copy(dst, src) {           \
     (dst)[0] = (src)[0];                \
-    (dst)[1] = (src)[1];
-#define vec3_copy(dst, src)             \
+    (dst)[1] = (src)[1];                \
+}
+#define vec3_copy(dst, src) {           \
     vec2_copy((dst), (src));            \
-    (dst)[2] = (src)[2];
-#define vec4_copy(dst, src)             \
+    (dst)[2] = (src)[2];                \
+}
+#define vec4_copy(dst, src) {           \
     vec3_copy((dst), (src));            \
-    (dst)[3] = (src)[3];
+    (dst)[3] = (src)[3];                \
+}
 
-#define vec3_copy_y_off(dst, src, y)    \
+#define vec3_copy_y_off(dst, src, y) {  \
     (dst)[0] =  (src)[0];               \
     (dst)[1] = ((src)[1] + (y));        \
-    (dst)[2] =  (src)[2];
+    (dst)[2] =  (src)[2];               \
+}
 
-#define vec2_copy_roundf(dst, src)      \
+#define vec2_copy_roundf(dst, src) {    \
     (dst)[0] = roundf((src)[0]);        \
-    (dst)[1] = roundf((src)[1]);
-#define vec3_copy_roundf(dst, src)      \
+    (dst)[1] = roundf((src)[1]);        \
+}
+#define vec3_copy_roundf(dst, src) {    \
     vec2_copy_roundf((dst), (src));     \
-    (dst)[2] = roundf((src)[2]);
-#define vec4_copy_roundf(dst, src)      \
+    (dst)[2] = roundf((src)[2]);        \
+}
+#define vec4_copy_roundf(dst, src) {    \
     vec3_copy_roundf((dst), (src));     \
-    (dst)[3] = roundf((src)[3]);
+    (dst)[3] = roundf((src)[3]);        \
+}
 
-#define vec2_copy_inverse(dst, src)     \
+#define vec2_copy_inverse(dst, src) {   \
     (dst)[0] = (src)[1];                \
-    (dst)[1] = (src)[0];
-#define vec3_copy_inverse(dst, src)     \
+    (dst)[1] = (src)[0];                \
+}
+#define vec3_copy_inverse(dst, src) {   \
     (dst)[0] = (src)[2];                \
     (dst)[1] = (src)[1];                \
-    (dst)[2] = (src)[0];
-#define vec4_copy_inverse(dst, src)     \
+    (dst)[2] = (src)[0];                \
+}
+#define vec4_copy_inverse(dst, src) {   \
     (dst)[0] = (src)[3];                \
     (dst)[1] = (src)[2];                \
     (dst)[2] = (src)[1];                \
-    (dst)[3] = (src)[0];
+    (dst)[3] = (src)[0];                \
+}
 
-#define vec2_copy_negative(dst, src)    \
+#define vec2_copy_negative(dst, src) {  \
     (dst)[0] = -(src)[0];               \
-    (dst)[1] = -(src)[1];
-#define vec3_copy_negative(dst, src)    \
+    (dst)[1] = -(src)[1];               \
+}
+#define vec3_copy_negative(dst, src) {  \
     vec2_copy_negative((dst), (src));   \
-    (dst)[2] = -(src)[2];
-#define vec4_copy_negative(dst, src)    \
+    (dst)[2] = -(src)[2];               \
+}
+#define vec4_copy_negative(dst, src) {  \
     vec3_copy_negative((dst), (src));   \
-    (dst)[3] = -(src)[3];
+    (dst)[3] = -(src)[3];               \
+}
 
-#define vec2_sum(dst, src1, src2)       \
+#define vec2_sum(dst, src1, src2) {     \
     (dst)[0] = ((src1)[0] + (src2)[0]); \
-    (dst)[1] = ((src1)[1] + (src2)[1]);
-#define vec3_sum(dst, src1, src2)       \
+    (dst)[1] = ((src1)[1] + (src2)[1]); \
+}
+#define vec3_sum(dst, src1, src2) {     \
     vec2_sum((dst), (src1), (src2));    \
-    (dst)[2] = ((src1)[2] + (src2)[2]);
-#define vec4_sum(dst, src1, src2)       \
+    (dst)[2] = ((src1)[2] + (src2)[2]); \
+}
+#define vec4_sum(dst, src1, src2) {     \
     vec3_sum((dst), (src1), (src2));    \
-    (dst)[3] = ((src1)[3] + (src2)[3]);
+    (dst)[3] = ((src1)[3] + (src2)[3]); \
+}
 
 #define vec2_add(dst, src) vec2_sum((dst), (dst), (src))
 #define vec3_add(dst, src) vec3_sum((dst), (dst), (src))
 #define vec4_add(dst, src) vec4_sum((dst), (dst), (src))
 
-#define vec2_sum_val(dst, src, x)       \
+#define vec2_sum_val(dst, src, x) {     \
     (dst)[0] = ((src)[0] + (x));        \
-    (dst)[1] = ((src)[1] + (x));
-#define vec3_sum_val(dst, src, x)       \
+    (dst)[1] = ((src)[1] + (x));        \
+}
+#define vec3_sum_val(dst, src, x) {     \
     vec2_sum_val((dst), (src), (x));    \
-    (dst)[2] = ((src)[2] + (x));
-#define vec4_sum_val(dst, src, x)       \
+    (dst)[2] = ((src)[2] + (x));        \
+}
+#define vec4_sum_val(dst, src, x) {     \
     vec3_sum_val((dst), (src), (x));    \
-    (dst)[3] = ((src)[2] + (x));
+    (dst)[3] = ((src)[2] + (x));        \
+}
 
 #define vec2_add_val(dst, x) vec2_sum_val((dst), (dst), (x))
 #define vec3_add_val(dst, x) vec3_sum_val((dst), (dst), (x))
 #define vec4_add_val(dst, x) vec4_sum_val((dst), (dst), (x))
 
-#define vec2_diff(dst, src1, src2)      \
+#define vec2_diff(dst, src1, src2) {    \
     (dst)[0] = ((src1)[0] - (src2)[0]); \
-    (dst)[1] = ((src1)[1] - (src2)[1]);
-#define vec3_diff(dst, src1, src2)      \
+    (dst)[1] = ((src1)[1] - (src2)[1]); \
+}
+#define vec3_diff(dst, src1, src2) {    \
     vec2_diff((dst), (src1), (src2));   \
-    (dst)[2] = ((src1)[2] - (src2)[2]);
-#define vec4_diff(dst, src1, src2)      \
+    (dst)[2] = ((src1)[2] - (src2)[2]); \
+}
+#define vec4_diff(dst, src1, src2) {    \
     vec3_diff((dst), (src1), (src2));   \
-    (dst)[3] = ((src1)[3] - (src2)[3]);
+    (dst)[3] = ((src1)[3] - (src2)[3]); \
+}
 
 #define vec2_sub(dst, src) vec2_diff((dst), (dst), (src))
 #define vec3_sub(dst, src) vec3_diff((dst), (dst), (src))
 #define vec4_sub(dst, src) vec4_diff((dst), (dst), (src))
 
-#define vec2_diff_val(dst, src, x)      \
+#define vec2_diff_val(dst, src, x) {    \
     (dst)[0] = ((src)[0] - (x));        \
-    (dst)[1] = ((src)[1] - (x));
-#define vec3_diff_val(dst, src, x)      \
+    (dst)[1] = ((src)[1] - (x));        \
+}
+#define vec3_diff_val(dst, src, x) {    \
     vec2_diff_val((dst), (src), (x));   \
-    (dst)[2] = ((src)[2] - (x));
-#define vec4_diff_val(dst, src, x)      \
+    (dst)[2] = ((src)[2] - (x));        \
+}
+#define vec4_diff_val(dst, src, x) {    \
     vec3_diff_val((dst), (src), (x));   \
-    (dst)[3] = ((src)[3] - (x));
+    (dst)[3] = ((src)[3] - (x));        \
+}
 
 #define vec2_sub_val(dst, x) vec2_diff_val((dst), (dst), (x))
 #define vec3_sub_val(dst, x) vec3_diff_val((dst), (dst), (x))
 #define vec4_sub_val(dst, x) vec4_diff_val((dst), (dst), (x))
 
-#define vec2_prod(dst, src1, src2)      \
+#define vec2_prod(dst, src1, src2) {    \
     (dst)[0] = ((src1)[0] * (src2)[0]); \
-    (dst)[1] = ((src1)[1] * (src2)[1]);
-#define vec3_prod(dst, src1, src2)      \
+    (dst)[1] = ((src1)[1] * (src2)[1]); \
+}
+#define vec3_prod(dst, src1, src2) {    \
     vec2_prod((dst), (src1), (src2));   \
-    (dst)[2] = ((src1)[2] * (src2)[2]);
-#define vec4_prod(dst, src1, src2)      \
+    (dst)[2] = ((src1)[2] * (src2)[2]); \
+}
+#define vec4_prod(dst, src1, src2) {    \
     vec3_prod((dst), (src1), (src2));   \
-    (dst)[3] = ((src1)[3] * (src2)[3]);
+    (dst)[3] = ((src1)[3] * (src2)[3]); \
+}
 
 #define vec2_mul(dst, src) vec2_prod((dst), (dst), (src))
 #define vec3_mul(dst, src) vec3_prod((dst), (dst), (src))
 #define vec4_mul(dst, src) vec4_prod((dst), (dst), (src))
 
-#define vec2_prod_val(dst, src, x)      \
+#define vec2_prod_val(dst, src, x) {    \
     (dst)[0] = ((src)[0] * (x));        \
-    (dst)[1] = ((src)[1] * (x));
-#define vec3_prod_val(dst, src, x)      \
+    (dst)[1] = ((src)[1] * (x));        \
+}
+#define vec3_prod_val(dst, src, x) {    \
     vec2_prod_val((dst), (src), (x));   \
-    (dst)[2] = ((src)[2] * (x));
-#define vec4_prod_val(dst, src, x)      \
+    (dst)[2] = ((src)[2] * (x));        \
+}
+#define vec4_prod_val(dst, src, x) {    \
     vec3_prod_val((dst), (src), (x));   \
-    (dst)[3] = ((src)[3] * (x));
+    (dst)[3] = ((src)[3] * (x));        \
+}
 
 #define vec2_mul_val(dst, x) vec2_prod_val(dst, dst, x)
 #define vec3_mul_val(dst, x) vec3_prod_val(dst, dst, x)
 #define vec4_mul_val(dst, x) vec4_prod_val(dst, dst, x)
 
-#define vec2_quot(dst, src1, src2)      \
+#define vec2_quot(dst, src1, src2) {    \
     (dst)[0] = ((src1)[0] / (src2)[0]); \
-    (dst)[1] = ((src1)[1] / (src2)[1]);
-#define vec3_quot(dst, src1, src2)      \
+    (dst)[1] = ((src1)[1] / (src2)[1]); \
+}
+#define vec3_quot(dst, src1, src2) {    \
     vec2_quot((dst), (src1), (src2));   \
-    (dst)[2] = ((src1)[2] / (src2)[2]);
-#define vec4_quot(dst, src1, src2)      \
+    (dst)[2] = ((src1)[2] / (src2)[2]); \
+}
+#define vec4_quot(dst, src1, src2) {    \
     vec3_quot((dst), (src1), (src2));   \
-    (dst)[3] = ((src1)[3] / (src2)[3]);
+    (dst)[3] = ((src1)[3] / (src2)[3]); \
+}
 
 #define vec2_div(dst, src) vec2_quot((dst), (dst), (src))
 #define vec3_div(dst, src) vec3_quot((dst), (dst), (src))
 #define vec4_div(dst, src) vec4_quot((dst), (dst), (src))
 
-#define vec2_quot_val(dst, src, x)      \
+#define vec2_quot_val(dst, src, x) {    \
     (dst)[0] = ((src)[0] / (x));        \
-    (dst)[1] = ((src)[1] / (x));
-#define vec3_quot_val(dst, src, x)      \
+    (dst)[1] = ((src)[1] / (x));        \
+}
+#define vec3_quot_val(dst, src, x) {    \
     vec2_quot_val((dst), (src), (x));   \
-    (dst)[2] = ((src)[2] / (x));
-#define vec4_quot_val(dst, src, x)      \
+    (dst)[2] = ((src)[2] / (x));        \
+}
+#define vec4_quot_val(dst, src, x) {    \
     vec3_quot_val((dst), (src), (x));   \
-    (dst)[3] = ((src)[3] / (x));
+    (dst)[3] = ((src)[3] / (x));        \
+}
 
 #define vec2_div_val(dst, x) vec2_quot_val((dst), (dst), (x))
 #define vec3_div_val(dst, x) vec3_quot_val((dst), (dst), (x))
@@ -517,7 +554,8 @@ void vec2f_normalize_negative(Vec2f v);
 void vec3f_normalize_negative(Vec3f v);
 void vec2f_normalize_max(     Vec2f v, f32 max);
 void vec3f_normalize_max(     Vec3f v, f32 max);
-
+Bool32 vec3f_are_coords_within_radius_of_point(Vec3f pos, f32 x, f32 y, f32 z, f32 dist);
+Bool32 vec3f_are_points_within_radius(         Vec3f pos1, Vec3f pos2,         f32 dist);
 void vec2f_get_lateral_dist(                   Vec2f from, Vec2f to,            f32 *lateralDist                          );
 void vec3f_get_lateral_dist(                   Vec3f from, Vec3f to,            f32 *lateralDist                          );
 void vec3f_get_dist(                           Vec3f from, Vec3f to, f32 *dist                                            );

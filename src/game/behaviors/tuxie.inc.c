@@ -26,7 +26,7 @@ void tuxies_mother_act_received_baby(void) { // act 2
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
     }
-    if (smallPenguinObj != NULL && dist < 300.0f && smallPenguinObj->oHeldState != HELD_FREE) {
+    if ((smallPenguinObj != NULL) && (dist < 300.0f) && (smallPenguinObj->oHeldState != HELD_FREE)) {
         o->oAction = MOTHER_PENGUIN_ACT_RECEIVE_BABY;
         smallPenguinObj->oSmallPenguinReturnedToMother = TRUE;
         o->prevObj = smallPenguinObj;

@@ -256,9 +256,10 @@ void get_texture_coords_4_vertices(s8 vertexNum, s16 *textureX, s16 *textureY) {
  * @param shadowVertexType One of SHADOW_WITH_9_VERTS or SHADOW_WITH_4_VERTS
  */
 void make_shadow_vertex_at_xyz(Vtx *vertices, s8 index, f32 relX, f32 relY, f32 relZ, Alpha alpha, s8 shadowVertexType) {
-    s16 vtxX     = round_float_to_short(relX);
-    s16 vtxY     = round_float_to_short(relY);
-    s16 vtxZ     = round_float_to_short(relZ);
+    Vec3vs vtx;
+    vtx[0]       = round_float_to_short(relX);
+    vtx[1]       = round_float_to_short(relY);
+    vtx[2]       = round_float_to_short(relZ);
     s16 textureX = 0;
     s16 textureY = 0;
     switch (shadowVertexType) {
@@ -267,18 +268,15 @@ void make_shadow_vertex_at_xyz(Vtx *vertices, s8 index, f32 relX, f32 relY, f32 
         default:                  get_texture_coords_4_vertices(index, &textureX, &textureY); break;
     }
     // Move the shadow up and over slightly while standing on a flying carpet.
-    if (sMarioOnFlyingCarpet) {
-        vtxX += 5;
-        vtxY += 5;
-        vtxZ += 5;
-    }
-    make_vertex(vertices, index, vtxX, vtxY, vtxZ, textureX << 5, textureY << 5, 255, 255, 255, alpha); // shadows are black
+    if (sMarioOnFlyingCarpet) vec3_add_val(vtx, 5);
+    make_vertex(vertices, index, vtx[0], vtx[1], vtx[2], (textureX << 5), (textureY << 5), 255, 255, 255, alpha); // shadows are black
 }
 
 /**
  * Given an (x, z)-position close to a shadow, extrapolate the y-position
  * according to the floor's normal vector.
  */
+//! get_surface_height_at_location?
 f32 extrapolate_vertex_y_position(struct Shadow s, f32 vtxX, f32 vtxZ) {
     return (-((s.floorNormal[0] * vtxX) + (s.floorNormal[2] * vtxZ) + s.floorOriginOffset) / s.floorNormal[1]);
 }
@@ -578,7 +576,7 @@ Gfx *create_shadow_rectangle(f32 halfWidth, f32 halfLength, f32 relY, Alpha soli
     Vtx *verts       = alloc_display_list(4 * sizeof(Vtx));
     Gfx *displayList = alloc_display_list(5 * sizeof(Gfx));
     f32 frontLeftX, frontLeftZ, frontRightX, frontRightZ, backLeftX, backLeftZ, backRightX, backRightZ;
-    if (verts == NULL || displayList == NULL) return NULL;
+    if ((verts == NULL) || (displayList == NULL)) return NULL;
     // Rotate the shadow based on the parent object's face angle.
     rotate_rectangle(&frontLeftZ,  &frontLeftX,  -halfLength, -halfWidth);
     rotate_rectangle(&frontRightZ, &frontRightX, -halfLength,  halfWidth);

@@ -182,7 +182,7 @@ void curr_obj_random_blink(s32 *blinkTimer) {
 
 void bhv_bobomb_loop(void) {
     s8 dustPeriodMinus1;
-    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 4000) != 0) {
+    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 4000)) {
         switch (o->oHeldState) {
             case HELD_FREE:    bobomb_free_loop();    break;
             case HELD_HELD:    bobomb_held_loop();    break;

@@ -1273,7 +1273,7 @@ CameraTransitionAngle update_boss_fight_camera(struct Camera *c, Vec3f focus, Ve
     pos[1] = find_floor(c->areaCenX, CELL_HEIGHT_LIMIT, c->areaCenZ, &floor);
     if (floor != NULL) {
         // get floor height at pos
-        pos[1] = (300.0f - (((floor->normal.x * pos[0]) + (floor->normal.z * pos[2]) + floor->originOffset) / floor->normal.y));
+        pos[1] = (300.0f + get_surface_height_at_location(pos[0], pos[2], floor));
         switch (gCurrLevelArea) {
             case AREA_BOB: // fall through
             case AREA_WF: pos[1] += CAMERA_Y_OFFSET; break;
@@ -1712,7 +1712,7 @@ Angle update_default_camera(struct Camera *c) {
     cPos[1] = camFloorHeight;
     vec3f_copy(tempPos, cPos);
     tempPos[1] -= CAMERA_Y_OFFSET;
-    if (marioFloor != NULL && camFloorHeight <= marioFloorHeight) {
+    if ((marioFloor != NULL) && (camFloorHeight <= marioFloorHeight)) {
         avoidStatus = is_range_behind_surface(c->focus, tempPos, marioFloor, 0, -1);
         if ((avoidStatus != 1) && (ceilHeight > marioFloorHeight)) camFloorHeight = marioFloorHeight;
     }
@@ -2928,7 +2928,7 @@ Bool32 set_or_approach_s16_symmetric(s16 *current, s16 target, s16 increment) {
  *
  * @return the reduced value
  */
-s16 reduce_by_dist_from_camera(s16 value, f32 maxDist, Vec3f pos) {
+s32 reduce_by_dist_from_camera(s16 value, f32 maxDist, Vec3f pos) {
     Angle pitch, yaw, goalPitch, goalYaw;
     s16 result = 0;
     // Direction from pos to (Lakitu's) goalPos
@@ -4594,7 +4594,7 @@ struct CutsceneSplinePoint sEndingLookAtSkyFocus[] = {
  *
  * @return the camera's mode after processing, although this is unused in the code
  */
-s16 camera_course_processing(struct Camera *c) {
+s32 camera_course_processing(struct Camera *c) {
     s16 level = gCurrLevelNum;
     // s16 mode;
     s8 area = gCurrentArea->index;
@@ -4823,7 +4823,7 @@ void start_object_cutscene_without_focus(u8 cutscene) {
     sCutsceneDialogResponse = DIALOG_RESPONSE_NONE;
 }
 
-s16 unused_dialog_cutscene_response(u8 cutscene) {
+s32 unused_dialog_cutscene_response(u8 cutscene) {
     // if not in a cutscene, start this one
     if ((gCamera->cutscene == CUTSCENE_NONE) && (sObjectCutscene == CUTSCENE_NONE)) sObjectCutscene = cutscene;
     // if playing this cutscene and Mario responded, return the response
@@ -4834,7 +4834,7 @@ s16 unused_dialog_cutscene_response(u8 cutscene) {
     }
 }
 
-s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, DialogID dialogID) {
+s32 cutscene_object_with_dialog(u8 cutscene, struct Object *o, DialogID dialogID) {
     s16 response = DIALOG_RESPONSE_NONE;
     if ((gCamera->cutscene == CUTSCENE_NONE) && (sObjectCutscene == CUTSCENE_NONE)) {
         if (gRecentCutscene != cutscene) {
@@ -4848,14 +4848,14 @@ s16 cutscene_object_with_dialog(u8 cutscene, struct Object *o, DialogID dialogID
     return response;
 }
 
-s16 cutscene_object_without_dialog(u8 cutscene, struct Object *o) {
+s32 cutscene_object_without_dialog(u8 cutscene, struct Object *o) {
     return cutscene_object_with_dialog(cutscene, o, DIALOG_NONE);
 }
 
 /**
  * @return 0 if not started, 1 if started, and -1 if finished
  */
-s16 cutscene_object(u8 cutscene, struct Object *o) {
+s32 cutscene_object(u8 cutscene, struct Object *o) {
     if ((gCamera->cutscene == CUTSCENE_NONE) && (sObjectCutscene == CUTSCENE_NONE)) {
         if (gRecentCutscene != cutscene) {
             start_object_cutscene(cutscene, o);
@@ -4923,7 +4923,7 @@ void copy_spline_segment(struct CutsceneSplinePoint dst[], struct CutsceneSpline
  *
  * @return if Mario left the dialog state, return CUTSCENE_LOOP, else return gCutsceneTimer
  */
-s16 cutscene_common_set_dialog_state(s32 state) {
+s32 cutscene_common_set_dialog_state(s32 state) {
     return ((set_mario_npc_dialog(state) == MARIO_DIALOG_STATUS_SPEAK) ? CUTSCENE_LOOP : gCutsceneTimer);
 }
 

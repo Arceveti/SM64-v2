@@ -60,8 +60,8 @@ static void beta_boo_key_dropped_loop(void) {
     // until it reaches a multiple of 0x10000, at which point &-ing with
     // 0xFFFF returns 0 and the key stops rotating in the roll direction.
     if (o->oFaceAngleRoll & 0xFFFF) {
-        o->oFaceAngleRoll &= 0xF800;
-        o->oFaceAngleRoll += 0x800;
+        o->oFaceAngleRoll &= 0xF800; // ~348.75 degrees
+        o->oFaceAngleRoll +=  0x800; //  ~11.25 degrees
     }
     // Once the key stops bouncing, stop its horizontal movement on the ground.
     if (o->oMoveFlags & OBJ_MOVE_ON_GROUND) {
@@ -97,7 +97,7 @@ static void beta_boo_key_dropped_loop(void) {
  * It immediately sets the action to BETA_BOO_KEY_ACT_DROPPED.
  */
 static void beta_boo_key_drop(void) {
-    s16 velocityDirection;
+    Angle velocityDirection;
     f32 velocityMagnitude;
     // Update the key to be inside the boo
     struct Object *parent = o->parentObj;
@@ -139,7 +139,9 @@ static void beta_boo_key_inside_boo_loop(void) {
     o->oFaceAngleYaw  += 0x200;
 }
 
-static void (*sBetaBooKeyActions[])(void) = { beta_boo_key_inside_boo_loop, beta_boo_key_drop, beta_boo_key_dropped_loop };
+static void (*sBetaBooKeyActions[])(void) = { beta_boo_key_inside_boo_loop,
+                                              beta_boo_key_drop,
+                                              beta_boo_key_dropped_loop };
 
 /**
  * Update function for bhvBetaBooKey.

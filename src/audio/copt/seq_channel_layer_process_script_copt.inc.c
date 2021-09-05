@@ -413,5 +413,5 @@ l13cc:
         init_synthetic_wave(layer->note, layer);
     }
     if (cmdSemitone) (*layer).note = alloc_note(layer);
-    if (layer->note != NULL && layer->note->parentLayer == layer) note_vibrato_init(layer->note);
+    if ((layer->note != NULL) && (layer->note->parentLayer == layer)) note_vibrato_init(layer->note);
 }

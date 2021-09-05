@@ -18,13 +18,12 @@ void water_level_pillar_undrained(void) {
             break;
         case WATER_PILLAR_ACT_POUNDED_1:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL && otherWaterPillar->oAction < WATER_PILLAR_ACT_POUNDED_1) o->oAction = WATER_PILLAR_ACT_POUNDED_2;
+            if ((otherWaterPillar != NULL) && (otherWaterPillar->oAction < WATER_PILLAR_ACT_POUNDED_1)) o->oAction = WATER_PILLAR_ACT_POUNDED_2;
             break;
         case WATER_PILLAR_ACT_POUNDED_2:
             otherWaterPillar = cur_obj_nearest_object_with_behavior(bhvWaterLevelPillar);
-            if (otherWaterPillar != NULL && otherWaterPillar->oAction > WATER_PILLAR_ACT_LOWER_SELF) {
+            if ((otherWaterPillar != NULL) && (otherWaterPillar->oAction > WATER_PILLAR_ACT_LOWER_SELF)) {
                 o->oAction = WATER_PILLAR_ACT_DRAIN_WATER;
-
                 save_file_set_flags(SAVE_FLAG_MOAT_DRAINED);
                 play_puzzle_jingle();
             }

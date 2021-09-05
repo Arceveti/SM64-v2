@@ -39,13 +39,10 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register struct Surface *surf;
     register f32 offset;
     register f32 radius = data->radius;
-    register f32 x      =  data->pos[0];
-    register f32 y      = (data->pos[1] + data->offsetY);
-    register f32 z      =  data->pos[2];
-    f32 v0x, v0y, v0z;
-    f32 v1x, v1y, v1z;
-    f32 v2x, v2y, v2z;
-    register f32 d00, d01, d11, d20, d21;
+    register Vec3f pos;
+    vec3_copy_y_off(pos, data->pos, data->offsetY);
+    register Vec3f v0, v1, v2;            // vertices
+    register f32 d00, d01, d11, d20, d21; // edges
     register f32 invDenom;
     register f32 v, w;
     register f32 margin_radius = (radius - 1.0f);
@@ -53,11 +50,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     s32 numCols = 0;
  #if EXTENDED_BOUNDS_MODE > 1
     const float down_scale = (1.0f / gWorldScale);
-    radius        *= down_scale;
-    x             *= down_scale;
-    y             *= down_scale;
-    z             *= down_scale;
-    margin_radius *= down_scale;
+    radius         *= down_scale;
+    vec3_mul_val(pos, down_scale);
+    margin_radius  *= down_scale;
  #endif
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
@@ -84,49 +79,43 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
                 if ((o == gMarioObject) && (gMarioState->flags & MARIO_VANISH_CAP)) continue;
             }
         }
-        if ((y < surf->lowerY) || (y > surf->upperY)) continue;
+        if ((pos[1] < surf->lowerY) || (pos[1] > surf->upperY)) continue;
  #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
         if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
  #endif
-        offset = ((surf->normal.x * x) + (surf->normal.y * y) + (surf->normal.z * z) + surf->originOffset);
+        offset = ((surf->normal.x * pos[0]) + (surf->normal.y * pos[1]) + (surf->normal.z * pos[2]) + surf->originOffset);
         if ((offset < -radius) || (offset > radius)) continue;
-        v0x = (f32)(surf->vertex2[0] -      surf->vertex1[0]);
-        v0y = (f32)(surf->vertex2[1] -      surf->vertex1[1]);
-        v0z = (f32)(surf->vertex2[2] -      surf->vertex1[2]);
-        v1x = (f32)(surf->vertex3[0] -      surf->vertex1[0]);
-        v1y = (f32)(surf->vertex3[1] -      surf->vertex1[1]);
-        v1z = (f32)(surf->vertex3[2] -      surf->vertex1[2]);
-        v2x =                      x - (f32)surf->vertex1[0];
-        v2y =                      y - (f32)surf->vertex1[1];
-        v2z =                      z - (f32)surf->vertex1[2];
+        vec3_diff(v0, surf->vertex2, surf->vertex1);
+        vec3_diff(v1, surf->vertex3, surf->vertex1);
+        vec3_diff(v2,           pos, surf->vertex1);
         // Face
-        d00 = (   sqr(v0x) +    sqr(v0y) +    sqr(v0z));
-        d01 = ((v0x * v1x) + (v0y * v1y) + (v0z * v1z));
-        d11 = (   sqr(v1x) +    sqr(v1y) +    sqr(v1z));
-        d20 = ((v2x * v0x) + (v2y * v0y) + (v2z * v0z));
-        d21 = ((v2x * v1x) + (v2y * v1y) + (v2z * v1z));
+        d00 = vec3_dot(v0, v0);
+        d01 = vec3_dot(v0, v1);
+        d11 = vec3_dot(v1, v1);
+        d20 = vec3_dot(v2, v0);
+        d21 = vec3_dot(v2, v1);
         invDenom = (1.0f / ((d00 * d11) - (d01 * d01)));
         v = (((d11 * d20) - (d01 * d21)) * invDenom);
         if ((v < 0.0f) || (v > 1.0f)) goto edge_1_2;
         w = (((d00 * d21) - (d01 * d20)) * invDenom);
         if ((w < 0.0f) || (w > 1.0f) || ((v + w) > 1.0f)) goto edge_1_2;
-        x += (surf->normal.x * (radius - offset));
-        z += (surf->normal.z * (radius - offset));
+        pos[0] += (surf->normal.x * (radius - offset));
+        pos[2] += (surf->normal.z * (radius - offset));
         goto hasCollision;
     edge_1_2:
         if (offset < 0) continue;
         // Edge 1-2
-        if (v0y != 0.0f) {
-            v = (v2y / v0y);
+        if (v0[1] != 0.0f) {
+            v = (v2[1] / v0[1]);
             if ((v < 0.0f) || (v > 1.0f)) goto edge_1_3;
-            d00 = ((v0x * v) - v2x);
-            d01 = ((v0z * v) - v2z);
+            d00 = ((v0[0] * v) - v2[0]);
+            d01 = ((v0[2] * v) - v2[2]);
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_1_3;
             invDenom = (offset / invDenom);
-            x += (d00 *= invDenom);
-            z += (d01 *= invDenom);
+            pos[0] += (d00 *= invDenom);
+            pos[2] += (d01 *= invDenom);
             margin_radius += 0.01f;
             if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
@@ -136,17 +125,17 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         }
     edge_1_3:
         // Edge 1-3
-        if (v1y != 0.0f) {
-            v = (v2y / v1y);
+        if (v1[1] != 0.0f) {
+            v = (v2[1] / v1[1]);
             if ((v < 0.0f) || (v > 1.0f)) goto edge_2_3;
-            d00 = ((v1x * v) - v2x);
-            d01 = ((v1z * v) - v2z);
+            d00 = ((v1[0] * v) - v2[0]);
+            d01 = ((v1[2] * v) - v2[2]);
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) goto edge_2_3;
             invDenom = (offset / invDenom);
-            x += (d00 *= invDenom);
-            z += (d01 *= invDenom);
+            pos[0] += (d00 *= invDenom);
+            pos[2] += (d01 *= invDenom);
             margin_radius += 0.01f;
             if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
@@ -156,23 +145,19 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         }
     edge_2_3:
         // Edge 2-3
-        v1x = (f32)(surf->vertex3[0] -      surf->vertex2[0]);
-        v1y = (f32)(surf->vertex3[1] -      surf->vertex2[1]);
-        v1z = (f32)(surf->vertex3[2] -      surf->vertex2[2]);
-        v2x =                      x - (f32)surf->vertex2[0];
-        v2y =                      y - (f32)surf->vertex2[1];
-        v2z =                      z - (f32)surf->vertex2[2];
-        if (v1y != 0.0f) {
-            v = (v2y / v1y);
+        vec3_diff(v1, surf->vertex3, surf->vertex2);
+        vec3_diff(v2, pos, surf->vertex2);
+        if (v1[1] != 0.0f) {
+            v = (v2[1] / v1[1]);
             if ((v < 0.0f) || (v > 1.0f)) continue;
-            d00 = ((v1x * v) - v2x);
-            d01 = ((v1z * v) - v2z);
+            d00 = ((v1[0] * v) - v2[0]);
+            d01 = ((v1[2] * v) - v2[2]);
             invDenom = sqrtf(sqr(d00) + sqr(d01));
             offset   = (invDenom - margin_radius);
             if (offset > 0.0f) continue;
             invDenom = (offset / invDenom);
-            x += (d00 *= invDenom);
-            z += (d01 *= invDenom);
+            pos[0] += (d00 *= invDenom);
+            pos[2] += (d01 *= invDenom);
             margin_radius += 0.01f;
             if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
                 continue;
@@ -187,30 +172,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         numCols++;
     }
  #if EXTENDED_BOUNDS_MODE > 1
-    x *= gWorldScale;
-    y *= gWorldScale;
-    z *= gWorldScale;
+    vec3_mul_val(pos, gWorldScale);
  #endif
-    data->pos[0] = x;
-    data->pos[2] = z;
+    data->pos[0] = pos[0];
+    data->pos[2] = pos[2];
     return numCols;
-}
-
-/**
- * Formats the position and wall search for find_wall_collisions.
- */
-s32 f32_find_wall_collision(f32 *xPtr, f32 *yPtr, f32 *zPtr, f32 offsetY, f32 radius) {
-    struct WallCollisionData collision;
-    s32 numCollisions  = 0;
-    collision.offsetY  = offsetY;
-    collision.radius   = radius;
-    vec3f_set(collision.pos, *xPtr, *yPtr, *zPtr);
-    collision.numWalls = 0;
-    numCollisions      = find_wall_collisions(&collision);
-    *xPtr              = collision.pos[0];
-    *yPtr              = collision.pos[1];
-    *zPtr              = collision.pos[2];
-    return numCollisions;
 }
 
 /**
@@ -255,6 +221,23 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 }
 
 /**
+ * Formats the position and wall search for find_wall_collisions.
+ */
+s32 f32_find_wall_collision(f32 *x, f32 *y, f32 *z, f32 offsetY, f32 radius) {
+    struct WallCollisionData collision;
+    s32 numCollisions  = 0;
+    collision.offsetY  = offsetY;
+    collision.radius   = radius;
+    vec3f_set(collision.pos, *x, *y, *z);
+    collision.numWalls = 0;
+    numCollisions      = find_wall_collisions(&collision);
+    *x                 = collision.pos[0];
+    *y                 = collision.pos[1];
+    *z                 = collision.pos[2];
+    return numCollisions;
+}
+
+/**
  * Collides with walls and returns the most recent wall.
  */
 void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
@@ -274,7 +257,8 @@ void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struc
 s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     struct WallCollisionData collisionData;
     struct Surface *wall = NULL;
-    register f32 normX, normY, normZ;
+    Vec3f norm;
+    // register f32 normX, normY, normZ;
     register f32 originOffset, offset, offsetAbsolute;
     Vec3f newPos[4];
     s32 i;
@@ -290,15 +274,13 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
         for ((i = 0); (i < collisionData.numWalls); (i++)) {
             wall = collisionData.walls[collisionData.numWalls - 1];
             vec3f_copy(newPos[i], pos);
-            normX          = wall->normal.x;
-            normY          = wall->normal.y;
-            normZ          = wall->normal.z;
+            vec3f_set(norm, wall->normal.x, wall->normal.y, wall->normal.z);
             originOffset   = wall->originOffset;
-            offset         = ((normX * newPos[i][0]) + (normY * newPos[i][1]) + (normZ * newPos[i][2]) + originOffset);
+            offset         = ((norm[0] * newPos[i][0]) + (norm[1] * newPos[i][1]) + (norm[2] * newPos[i][2]) + originOffset);
             offsetAbsolute = ABSF(offset);
             if (offsetAbsolute < radius) {
-                newPos[i][0] += (normX * (radius - offset));
-                newPos[i][2] += (normZ * (radius - offset));
+                newPos[i][0] += (norm[0] * (radius - offset));
+                newPos[i][2] += (norm[2] * (radius - offset));
                 vec3f_copy(pos, newPos[i]);
             }
         }
@@ -332,13 +314,13 @@ void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
 /**
  * Finds any wall collisions and returns what the displacement vector would be.
  */
+//? can xyz be a vec
 Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
     vec3f_set(hitbox.pos, x, y, z);
     hitbox.offsetY = 10.0f;
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
-        //? can xyz be a vec
         dist[0] = (hitbox.pos[0] - x);
         dist[1] = (hitbox.pos[1] - y);
         dist[2] = (hitbox.pos[2] - z);
@@ -353,7 +335,7 @@ Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
  **************************************************/
 
 // Find the height of the surface at a given location
-static f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
+f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
     return (-((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y);
 }
 
@@ -372,6 +354,7 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
     const f32 margin = 1.5f;
     register struct Surface *surf;
     f32 x1, z1, x2, z2, x3, z3;
+    // Vec3f x, z;
     f32 height;
     SurfaceType type = SURFACE_DEFAULT;
     struct Surface *ceil = NULL;
@@ -577,7 +560,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         s32 curBottomHeight = FLOOR_LOWER_LIMIT;
         surf                = bottomSurfaceNode->surface;
         bottomSurfaceNode   = bottomSurfaceNode->next;
-        if (surf->type != SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
+        if ((surf->type != SURFACE_NEW_WATER_BOTTOM) || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curBottomHeight = get_surface_height_at_location(x, z, surf);
         if (curBottomHeight < y) {
             if (curBottomHeight > topBottomHeight) topBottomHeight = curBottomHeight;
@@ -590,7 +573,7 @@ struct Surface *find_water_floor_from_list(struct SurfaceNode *surfaceNode, s32 
         s32 curHeight  = FLOOR_LOWER_LIMIT;
         surf           = topSurfaceNode->surface;
         topSurfaceNode = topSurfaceNode->next;
-        if (surf->type == SURFACE_NEW_WATER_BOTTOM || !check_within_floor_triangle_bounds(x, z, surf)) continue;
+        if ((surf->type == SURFACE_NEW_WATER_BOTTOM) || !check_within_floor_triangle_bounds(x, z, surf)) continue;
         curHeight = get_surface_height_at_location(x, z, surf);
         if ((bottomHeight != FLOOR_LOWER_LIMIT) && (curHeight > bottomHeight)) continue;
         if (curHeight > height) {
@@ -734,7 +717,7 @@ s32 find_water_level_and_floor(s32 x, s32 z, struct Surface **pfloor) {
 #ifdef NEW_WATER_SURFACES
     struct Surface *floor = NULL;
     waterLevel = find_water_floor(x, (gCheckingSurfaceCollisionsForCamera ? gLakituState.pos[1] : gMarioState->pos[1]), z, &floor);
-    if (p != NULL && waterLevel == FLOOR_LOWER_LIMIT) {
+    if ((p != NULL) && (waterLevel == FLOOR_LOWER_LIMIT)) {
 #else
     if (p != NULL) {
 #endif

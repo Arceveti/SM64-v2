@@ -362,20 +362,14 @@ void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
  * Checks if a point is within distance from Mario's graphical position. Test is exclusive.
  */
 Bool32 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
-    register f32 dx = (x - gMarioObject->header.gfx.pos[0]);
-    register f32 dy = (y - gMarioObject->header.gfx.pos[1]);
-    register f32 dz = (z - gMarioObject->header.gfx.pos[2]);
-    return ((sqr(dx) + sqr(dy) + sqr(dz)) < (f32)sqr(dist));
+    return vec3f_are_coords_within_radius_of_point(gMarioObject->header.gfx.pos, x, y, z, dist);
 }
 
 /**
  * Checks whether a point is within distance of a given point. Test is exclusive.
  */
 Bool32 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
-    register f32 dx = (x - obj->oPosX);
-    register f32 dy = (y - obj->oPosY);
-    register f32 dz = (z - obj->oPosZ);
-    return ((sqr(dx) + sqr(dy) + sqr(dz)) < (f32)sqr(dist));
+    return vec3f_are_coords_within_radius_of_point(&obj->oPosVec, x, y, z, dist);
 }
 
 /**

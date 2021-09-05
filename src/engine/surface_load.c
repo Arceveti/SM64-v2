@@ -257,7 +257,7 @@ static Bool32 surface_has_force(SurfaceType surfaceType) {
  * Returns whether a surface should have the
  * SURFACE_FLAG_NO_CAM_COLLISION flag.
  */
-static Bool32 surf_has_no_cam_collision(SurfaceType surfaceType) {
+static s32 surf_has_no_cam_collision(SurfaceType surfaceType) {
     if ((surfaceType == SURFACE_NO_CAM_COLLISION)
      || (surfaceType == SURFACE_NO_CAM_COLLISION_UNUSED)
      || (surfaceType == SURFACE_NO_CAM_COL_VERY_SLIPPERY)
@@ -276,7 +276,7 @@ static void load_static_surfaces(Collision **data, Collision *vertexData, Surfac
 #ifndef ALL_SURFACES_HAVE_FORCE
     Bool16 hasForce = surface_has_force(surfaceType);
 #endif
-    Bool32 flags = surf_has_no_cam_collision(surfaceType);
+    s8 flags = surf_has_no_cam_collision(surfaceType);
     numSurfaces = *(*data);
     (*data)++;
     for ((i = 0); (i < numSurfaces); (i++)) {
@@ -285,7 +285,7 @@ static void load_static_surfaces(Collision **data, Collision *vertexData, Surfac
         if (surface != NULL) {
             surface->room  = room;
             surface->type  = surfaceType;
-            surface->flags = (s8) flags;
+            surface->flags = flags;
 #ifdef ALL_SURFACES_HAVE_FORCE
             surface->force = *(*data + 3);
 #else
@@ -498,7 +498,7 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
 #ifndef ALL_SURFACES_HAVE_FORCE
     Bool16 hasForce = surface_has_force(surfaceType);
 #endif
-    s32 flags = (surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC);
+    s8 flags = (surf_has_no_cam_collision(surfaceType) | SURFACE_FLAG_DYNAMIC);
     // The DDD warp is initially loaded at the origin and moved to the proper
     // position in paintings.c and doesn't update its room, so set it here.
     RoomData room = ((o->behavior == segmented_to_virtual(bhvDddWarp)) ? 5 : 0);

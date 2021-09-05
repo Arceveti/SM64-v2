@@ -84,7 +84,7 @@ s32 run_level_id_or_demo(s32 level) {
  * count if an input was received. signals the stage to be started
  * or the level select to be exited if start or the quit combo is pressed.
  */
-s16 intro_level_select(void) {
+s32 intro_level_select(void) {
     u32 index = 0;
     if ((gPlayer1Controller->rawStickY < -60)
      || (gPlayer1Controller->rawStickX < -60)

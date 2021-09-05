@@ -419,7 +419,7 @@ void vec2f_normalize_max(Vec2f v, f32 max) {
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
         mag = (max / mag);
-        vec2f_mul_val(v, mag);
+        vec2_mul_val(v, mag);
     }
 }
 void vec3f_normalize_max(Vec3f v, f32 max) {
@@ -427,14 +427,26 @@ void vec3f_normalize_max(Vec3f v, f32 max) {
     mag = MAX(mag, NEAR_ZERO);
     if (mag > max) {
         mag = (max / mag);
-        vec3f_mul_val(v, mag);
+        vec3_mul_val(v, mag);
     }
+}
+
+Bool32 vec3f_are_coords_within_radius_of_point(Vec3f pos, f32 x, f32 y, f32 z, f32 dist) {
+    Vec3f d = { x, y, z };
+    vec3_sub(d, pos);
+    return(vec3_sumsq(d) < sqr(dist));
+}
+
+Bool32 vec3f_are_points_within_radius(Vec3f pos1, Vec3f pos2, f32 dist) {
+    Vec3f d;
+    vec3_diff(d, pos2, pos1);
+    return(vec3_sumsq(d) < sqr(dist));
 }
 
 /// Finds the horizontal distance between two vectors.
 void vec2f_get_lateral_dist(Vec2f from, Vec2f to, f32 *lateralDist) {
     Vec2f d;
-    vec2f_diff(d, to, from);
+    vec2_diff(d, to, from);
     *lateralDist = vec2_mag(d);
 }
 void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *lateralDist) {
@@ -445,22 +457,23 @@ void vec3f_get_lateral_dist(Vec3f from, Vec3f to, f32 *lateralDist) {
 /// Finds the distance between two vectors.
 void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
     Vec3f d;
-    vec3f_diff(d, to, from);
+    vec3_diff(d, to, from);
     *dist = vec3_mag(d);
 }
 
 /// Finds the distance between two vectors.
 void vec3f_get_dist_and_yaw(Vec3f from, Vec3f to, f32 *dist, Angle *yaw) {
     Vec3f d;
-    vec3f_diff(d, to, from);
+    vec3_diff(d, to, from);
     *dist = vec3_mag(d);
     *yaw  = atan2s(d[2], d[0]);
 }
 
 /// Finds the pitch between two vectors.
 void vec3f_get_pitch(Vec3f from, Vec3f to, Angle *pitch) {
-    MAKE_DXYZ(from, to, f32)
-    *pitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
+    Vec3f d;
+    vec3_diff(d, to, from);
+    *pitch = atan2s(sqrtf(sqr(d[0]) + sqr(d[2])), d[1]);
 }
 
 /// Finds the yaw between two vectors.
@@ -471,16 +484,18 @@ void vec3f_get_yaw(Vec3f from, Vec3f to, Angle *yaw) {
 
 /// Calculates the pitch and yaw between two vectors.
 void vec3f_get_angle(Vec3f from, Vec3f to, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32);
-    *pitch = atan2s(sqrtf(sqr(dx) + sqr(dz)), dy);
-    *yaw   = atan2s(dz, dx);
+    Vec3f d;
+    vec3_diff(d, to, from);
+    *pitch = atan2s(sqrtf(sqr(d[0]) + sqr(d[2])), d[1]);
+    *yaw   = atan2s(d[2], d[0]);
 }
 
 /// Finds the horizontal distance and pitch between two vectors.
 void vec3f_get_lateral_dist_and_pitch(Vec3f from, Vec3f to, f32 *lateralDist, Angle *pitch) {
-    MAKE_DXYZ(from, to, f32)
-    *lateralDist = sqrtf(sqr(dx) + sqr(dz));
-    *pitch          = atan2s(*lateralDist, dy);
+    Vec3f d;
+    vec3_diff(d, to, from);
+    *lateralDist = sqrtf(sqr(d[0]) + sqr(d[2]));
+    *pitch          = atan2s(*lateralDist, d[1]);
 }
 
 
@@ -493,19 +508,21 @@ void vec3f_get_lateral_dist_and_yaw(Vec3f from, Vec3f to, f32 *lateralDist, Angl
 
 /// Finds the horizontal distance and angles between two vectors.
 void vec3f_get_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *lateralDist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    *lateralDist = sqrtf(sqr(dx) + sqr(dz));
-    *pitch       = atan2s(*lateralDist, dy);
-    *yaw         = atan2s(dz, dx);
+    Vec3f d;
+    vec3_diff(d, to, from);
+    *lateralDist = sqrtf(sqr(d[0]) + sqr(d[2]));
+    *pitch       = atan2s(*lateralDist, d[1]);
+    *yaw         = atan2s(d[2], d[0]);
 }
 
 void vec3f_get_dist_and_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, f32 *lateralDist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    register f32 ld = (sqr(dx) + sqr(dz));
-    *dist           = sqrtf(ld + sqr(dy));
+    Vec3f d;
+    vec3_diff(d, to, from);
+    register f32 ld = (sqr(d[0]) + sqr(d[2]));
+    *dist           = sqrtf(ld + sqr(d[1]));
     *lateralDist    = sqrtf(ld);
-    *pitch          = atan2s(*lateralDist, dy);
-    *yaw            = atan2s(dz, dx);
+    *pitch          = atan2s(*lateralDist, d[1]);
+    *yaw            = atan2s(d[2], d[0]);
 }
 
 /**
@@ -516,18 +533,20 @@ void vec3f_get_dist_and_lateral_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, 
  * as Euler angles and a length
  */
 void vec3s_get_dist_and_angle(Vec3s from, Vec3s to, s16 *dist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    register f32 ld = (sqr(dx) + sqr(dz));
-    *dist           = sqrtf(ld + sqr(dy));
-    *pitch          = atan2s(sqrtf(ld), dy);
-    *yaw            = atan2s(dz, dx);
+    Vec3s d;
+    vec3_diff(d, to, from);
+    register f32 ld = (sqr(d[0]) + sqr(d[2]));
+    *dist           = sqrtf(ld + sqr(d[1]));
+    *pitch          = atan2s(sqrtf(ld), d[1]);
+    *yaw            = atan2s(d[2], d[0]);
 }
 void vec3f_get_dist_and_angle(Vec3f from, Vec3f to, f32 *dist, Angle *pitch, Angle *yaw) {
-    MAKE_DXYZ(from, to, f32)
-    register f32 ld = (sqr(dx) + sqr(dz));
-    *dist           = sqrtf(ld + sqr(dy));
-    *pitch          = atan2s(sqrtf(ld), dy);
-    *yaw            = atan2s(dz, dx);
+    Vec3f d;
+    vec3_diff(d, to, from);
+    register f32 ld = (sqr(d[0]) + sqr(d[2]));
+    *dist           = sqrtf(ld + sqr(d[1]));
+    *pitch          = atan2s(sqrtf(ld), d[1]);
+    *yaw            = atan2s(d[2], d[0]);
 }
 
 /**
@@ -732,8 +751,8 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
     vec3f_copy(unit, vec);
     vec3f_normalize(unit);
     f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
-    roll *= RAD_PER_DEG; // convert roll from degrees to radians
     if (hMag != 0.0f) {
+        roll *= RAD_PER_DEG; // convert roll from degrees to radians
         f32 s = sind(roll);
         f32 c = cosd(roll);
         f32 su1 = (s * unit[1]);
