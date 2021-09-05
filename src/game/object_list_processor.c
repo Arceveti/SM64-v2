@@ -24,7 +24,7 @@
 #include "puppyprint.h"
 #endif
 #ifdef VARIABLE_FRAMERATE
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #endif
 
 /**

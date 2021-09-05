@@ -6,7 +6,7 @@
 #include "surface_collision.h"
 #include "extended_bounds.h"
 #include "trig_tables.inc.c"
-#include "game/rendering_graph_node.h"
+#include "rendering_graph_node.h"
 #include "boot/game_init.h"
 
 #include "config.h"

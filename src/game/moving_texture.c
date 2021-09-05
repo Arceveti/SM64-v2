@@ -4,7 +4,7 @@
 #include "moving_texture.h"
 #include "area.h"
 #include "camera.h"
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #include "engine/math_util.h"
 #include "engine/colors.h"
 #include "boot/memory.h"
@@ -12,7 +12,6 @@
 #include "segment2.h"
 #include "engine/surface_collision.h"
 #include "geo_misc.h"
-#include "rendering_graph_node.h"
 #include "object_list_processor.h"
 
 /**

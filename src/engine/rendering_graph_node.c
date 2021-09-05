@@ -1,24 +1,24 @@
 #include <PR/ultratypes.h>
 
-#include "area.h"
-#include "engine/math_util.h"
+#include "game/area.h"
+#include "math_util.h"
 #include "boot/game_init.h"
 #include "gfx_dimensions.h"
 #ifdef METAL_CAP_REFLECTION_LAKITU
-#include "level_update.h"
+#include "game/level_update.h"
 #endif
 #include "boot/main.h"
 #include "boot/memory.h"
-#include "print.h"
+#include "game/print.h"
 #include "rendering_graph_node.h"
-#include "shadow.h"
+#include "game/shadow.h"
 #include "sm64.h"
 #include "boot/game_init.h"
-#include "engine/extended_bounds.h"
+#include "extended_bounds.h"
 #if PUPPYPRINT_DEBUG
-#include "puppyprint.h"
+#include "game/puppyprint.h"
 #endif
-#include "debug_box.h"
+#include "game/debug_box.h"
 #ifdef VARIABLE_FRAMERATE
 #include "lerp.h"
 #endif

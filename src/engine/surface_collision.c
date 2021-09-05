@@ -5,7 +5,7 @@
 #include "game/level_update.h"
 #include "game/mario.h"
 #include "game/object_list_processor.h"
-#include "game/rendering_graph_node.h"
+#include "rendering_graph_node.h"
 #include "surface_collision.h"
 #include "surface_load.h"
 #include "math_util.h"

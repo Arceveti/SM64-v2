@@ -39,7 +39,7 @@
 #include "object_list_processor.h"
 #include "paintings.h"
 #include "platform_displacement.h"
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #include "save_file.h"
 #include "seq_ids.h"
 #include "sm64.h"

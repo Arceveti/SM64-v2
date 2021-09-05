@@ -2,7 +2,7 @@
 #include "types.h"
 #include "boot/game_init.h"
 #include "engine/math_util.h"
-#include "camera.h"
+#include "game/camera.h"
 
 #ifdef VARIABLE_FRAMERATE
 

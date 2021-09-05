@@ -21,7 +21,7 @@
 #include "boot/memory.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #include "save_file.h"
 #include "skybox.h"
 #include "sound_init.h"

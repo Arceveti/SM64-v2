@@ -9,7 +9,7 @@
 #include "boot/memory.h"
 #include "level_update.h"
 #include "object_list_processor.h"
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #include "segment2.h"
 #include "shadow.h"
 #include "sm64.h"

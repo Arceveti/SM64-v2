@@ -19,7 +19,7 @@
 #include "hud.h"
 #include "audio/external.h"
 #include "area.h"
-#include "rendering_graph_node.h"
+#include "engine/rendering_graph_node.h"
 #include "level_update.h"
 #include "engine/geo_layout.h"
 #include "save_file.h"

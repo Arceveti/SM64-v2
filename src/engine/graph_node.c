@@ -5,7 +5,7 @@
 #include "math_util.h"
 #include "boot/memory.h"
 #include "graph_node.h"
-#include "game/rendering_graph_node.h"
+#include "rendering_graph_node.h"
 #include "game/area.h"
 #include "geo_layout.h"
 
