@@ -35,7 +35,7 @@ static char sLevelSelectStageNames[64][16] = {
 #ifndef DISABLE_DEMO
 static u16 sDemoCountdown = 0;
 #endif
-#ifndef VERSION_JP
+#if !defined(VERSION_JP) && defined(KEEP_MARIO_HEAD)
 static s16 sPlayMarioGreeting = TRUE;
 static s16 sPlayMarioGameOver = TRUE;
 #endif
@@ -122,7 +122,7 @@ s32 intro_level_select(void) {
         gLevelSelectHoldKeyTimer++;
         gLevelSelectHoldKeyIndex = index;
     }
-    if ((index & 3) == 0) gLevelSelectHoldKeyTimer = 0;
+    if ((index & 0x3) == 0) gLevelSelectHoldKeyTimer = 0;
     if (gCurrLevelNum > LEVEL_MAX) gCurrLevelNum = LEVEL_MIN; // exceeded max. set to min.
     if (gCurrLevelNum < LEVEL_MIN) gCurrLevelNum = LEVEL_MAX; // exceeded min. set to max.
     // Use file 4 and last act as a test
@@ -146,6 +146,7 @@ s32 intro_level_select(void) {
     return 0;
 }
 
+#ifdef KEEP_MARIO_HEAD
 /**
  * Regular intro function that handles Mario's greeting voice and game start.
  */
@@ -213,6 +214,7 @@ s32 intro_game_over(void) {
     return run_level_id_or_demo(level);
 #endif
 }
+#endif
 
 /**
  * Plays the casual "It's a me Mario" when the game stars.
@@ -228,12 +230,17 @@ s32 intro_play_its_a_me_mario(void) {
  * Returns a level ID after their criteria is met.
  */
 s32 lvl_intro_update(s16 arg, UNUSED s32 unusedArg) {
-    s32 retVar = 0;
+    s32 level = LEVEL_NONE;
     switch (arg) {
-        case LVL_INTRO_PLAY_ITS_A_ME_MARIO: retVar = intro_play_its_a_me_mario(); break;
-        case LVL_INTRO_REGULAR:             retVar = intro_regular();             break;
-        case LVL_INTRO_GAME_OVER:           retVar = intro_game_over();           break;
-        case LVL_INTRO_LEVEL_SELECT:        retVar = intro_level_select();        break;
+        case LVL_INTRO_PLAY_ITS_A_ME_MARIO: level = intro_play_its_a_me_mario(); break;
+#ifdef KEEP_MARIO_HEAD
+        case LVL_INTRO_REGULAR:             level = intro_regular();             break;
+        case LVL_INTRO_GAME_OVER:           level = intro_game_over();           break;
+#else
+        case LVL_INTRO_REGULAR:             // fall through
+        case LVL_INTRO_GAME_OVER:           level = (100 + gDebugLevelSelect);   break;
+#endif
+        case LVL_INTRO_LEVEL_SELECT:        level = intro_level_select();        break;
     }
-    return retVar;
+    return level;
 }
