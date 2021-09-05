@@ -834,12 +834,20 @@ void puppycam_projection_behaviours(void) {
         // This is the base floor height when stood on the ground. It's used to set a baseline for where the camera sits while Mario remains a height from this point, so it keeps a consistent motion.
 #if COYOTE_TIME > 0
         if ((gPuppyCam.targetObj != gMarioObject) || (gMarioState->coyoteTimer == 0)) {
-            gPuppyCam.targetFloorHeight = CLAMP(find_floor_height(gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP);
+        gPuppyCam.targetFloorHeight = CLAMP(find_floor_height(gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP);
+            // gPuppyCam.lastTargetFloorHeight = approach_f32_asymptotic(gPuppyCam.lastTargetFloorHeight,
+            //                                                           gPuppyCam.targetFloorHeight,
+            //                                                           CLAMP(((absf(gMarioState->vel[1]) - 17.0f) / 200.0f), 0, 0.1f)
+            //                                                         + CLAMP(((absf(gPuppyCam.targetFloorHeight - gPuppyCam.lastTargetFloorHeight) - 30.0f) / PUPPYCAM_FLOOR_DIST_UP), 0, 0.1f));
         } else {
             gPuppyCam.targetFloorHeight = gPuppyCam.lastTargetFloorHeight;
         }
 #else
         gPuppyCam.targetFloorHeight = CLAMP(find_floor_height(gPuppyCam.targetObj->oPosX, gPuppyCam.targetObj->oPosY, gPuppyCam.targetObj->oPosZ), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP);
+        // gPuppyCam.lastTargetFloorHeight = approach_f32_asymptotic(gPuppyCam.lastTargetFloorHeight,
+        //                                                          gPuppyCam.targetFloorHeight,
+        //                                                          CLAMP(((absf(gMarioState->vel[1]) - 17.0f) / 200.0f), 0, 0.1f)
+        //                                                        + CLAMP(((absf(gPuppyCam.targetFloorHeight - gPuppyCam.lastTargetFloorHeight) - 30.0f) / PUPPYCAM_FLOOR_DIST_UP), 0, 0.1f));
 #endif
         /* //! if (gMarioState->vel[1] <= 0.0f) */ gPuppyCam.lastTargetFloorHeight = CLAMP(approach_f32_asymptotic(gPuppyCam.lastTargetFloorHeight, gPuppyCam.targetFloorHeight, 0.1f), (gPuppyCam.targetObj->oPosY - PUPPYCAM_FLOOR_DIST_DOWN), (gPuppyCam.targetObj->oPosY + PUPPYCAM_FLOOR_DIST_UP));
         if ((gMarioState->action == ACT_SLEEPING) || (gMarioState->action == ACT_START_SLEEPING)) {

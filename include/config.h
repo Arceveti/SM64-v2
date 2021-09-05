@@ -292,6 +292,9 @@
 // Number of possible unique model ID's (keep it higher than 256)
 #define MODEL_ID_COUNT 256
 
+// Number of supported areas per level.
+#define AREA_COUNT 8
+
 // Custom debug mode. Press DPAD left to show the debug UI. Press DPAD right to enter the noclip mode. (HackerSM64)
 // #define CUSTOM_DEBUG
 

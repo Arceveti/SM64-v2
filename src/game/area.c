@@ -236,6 +236,9 @@ void load_mario_area(void) {
         gCurrentArea->flags |= AREA_FLAG_LOAD;
         spawn_objects_from_info(gMarioSpawnInfo);
     }
+    if (gAreaSkyboxStart[gCurrAreaIndex-1]) {
+        load_segment_decompress(0x0A, gAreaSkyboxStart[gCurrAreaIndex-1], gAreaSkyboxEnd[gCurrAreaIndex-1]);
+    }
 }
 
 void unload_mario_area(void) {

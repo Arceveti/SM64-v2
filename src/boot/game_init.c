@@ -40,6 +40,7 @@
 #include "game/puppycam2.h"
 #endif
 #include "game/debug_box.h"
+#include "vc_check.h"
 #ifdef VARIABLE_FRAMERATE
 #include "game/hud.h"
 
@@ -89,6 +90,8 @@ s16 gSilhouette = TRUE;
 #ifdef CUSTOM_DEBUG
 u8 gCustomDebugMode;
 #endif
+u8 *gAreaSkyboxStart[AREA_COUNT - 1];
+u8 *gAreaSkyboxEnd  [AREA_COUNT - 1];
 #ifdef EEP
 s8 gEepromProbe;
 #endif
@@ -391,11 +394,7 @@ void render_init(void) {
     exec_display_list(&gGfxPool->spTask);
     // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes
     // VC probably emulates osViSwapBuffer accurately so instant patch breaks VC compatibility
-#ifdef VC_HACKS
-    sRenderingFrameBuffer++;
-#else
     if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
-#endif
 #ifdef VARIABLE_FRAMERATE
     gGameTime++;
 #else
@@ -426,6 +425,7 @@ void select_gfx_pool(void) {
  * - Selects which framebuffer will be rendered and displayed to next time.
  */
 void display_and_vsync(void) {
+    gIsVC = IS_VC();
 #ifndef VARIABLE_FRAMERATE
     if (IO_READ(DPC_PIPEBUSY_REG) && !gIsConsole) {
         gIsConsole    = TRUE;
@@ -452,14 +452,10 @@ void display_and_vsync(void) {
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 #endif
     // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
-#ifndef VC_HACKS
-    if (gIsConsole) { // Read RDP Clock Register, has a value of zero on emulators
-#endif
+    if (gIsConsole || gIsVC) { // Read RDP Clock Register, has a value of zero on emulators
         if (++sRenderedFramebuffer  == 3) sRenderedFramebuffer  = 0;
         if (++sRenderingFrameBuffer == 3) sRenderingFrameBuffer = 0;
-#ifndef VC_HACKS
     }
-#endif
 #ifdef VARIABLE_FRAMERATE
     gGameTime++;
 #else
