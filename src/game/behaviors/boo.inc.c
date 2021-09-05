@@ -168,8 +168,7 @@ static void boo_set_move_yaw_for_during_hit(s32 hurt) {
     }
 }
 
-//! s16/Angle type for roll?
-static void boo_move_during_hit(Bool32 roll, f32 fVel) {
+static void boo_move_during_hit(Bool32 doRoll, f32 fVel) {
     // Boos seem to have been supposed to oscillate up then down then back again
     // when hit. However it seems the programmers forgot to scale the cosine,
     // so the Y velocity goes from 1 to -1 and back to 1 over 32 frames.
@@ -179,7 +178,7 @@ static void boo_move_during_hit(Bool32 roll, f32 fVel) {
     o->oForwardVel     = fVel;
     // o->oVelY           = coss(oscillationVel);
     o->oMoveAngleYaw   = o->oBooMoveYawDuringHit;
-    if (roll) {
+    if (doRoll) {
         o->oFaceAngleYaw  += sBooHitRotations[o->oTimer];
         o->oFaceAngleRoll += sBooHitRotations[o->oTimer];
     }

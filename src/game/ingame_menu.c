@@ -50,7 +50,7 @@ s16 gLoadedLanguage = 0;
 
 void *languageTable[][3] =
 {
-    {&seg2_dialog_table, &seg2_course_name_table, &seg2_act_name_table}, //In EU, this is just mirroring English.
+    {&seg2_dialog_table, &seg2_course_name_table, &seg2_act_name_table}, // In EU, this is just mirroring English.
     #if MULTILANG
     {&dialog_table_eu_en, &course_name_table_eu_en, &act_name_table_eu_en},
     {&dialog_table_eu_fr, &course_name_table_eu_fr, &act_name_table_eu_fr},

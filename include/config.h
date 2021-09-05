@@ -659,10 +659,10 @@
 // Prevent bonks when walking into a wall (Arceveti)
 #define LESS_GROUND_BONKS
 
-// Threshold for whether Mario is walking "fast"
-// Vanilla is 16.0f & 10.0f
-// (Arceveti)
+// Threshold for whether Mario is walking "fast" (Arceveti)
+// Vanilla is 16.0f
 #define GROUND_SPEED_THRESHOLD   10.0f
+// Vanilla is 10.0f
 #define GROUND_SPEED_THRESHOLD_2 10.0f
 
 // The minimum forward speed Mario should be moving to dive instead of punch
@@ -697,7 +697,6 @@
 
 // Number of air steps per frame (Vanilla is 4)
 #define AIR_NUM_STEPS    4
-
 
 // Disables the scream that Mario makes when falling off a great height.
 // This is separate from actual fall damage

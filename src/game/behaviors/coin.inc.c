@@ -189,9 +189,8 @@ void bhv_coin_formation_loop(void) {
             o->oAction = COIN_FORMATION_ACT_INACTIVE;
             break;
     }
-
     //? Casting to u8 doesn't seem to match
-    set_object_respawn_info_bits(o, o->oCoinRespawnBits & RESPAWN_INFO_DONT_RESPAWN);
+    set_object_respawn_info_bits(o, (o->oCoinRespawnBits & RESPAWN_INFO_DONT_RESPAWN));
 }
 
 void coin_inside_boo_act_dropped(void) {

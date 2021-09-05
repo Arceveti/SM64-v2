@@ -443,7 +443,7 @@ void linearly_interpolate_solidity_negative(struct Shadow *s, Alpha initialSolid
 /**
  * Change a shadow's solidity based on the player's current animation frame.
  */
-s8 correct_shadow_solidity_for_animations(UNUSED s32 isLuigi, Alpha initialSolidity, struct Shadow *shadow) {
+s32 correct_shadow_solidity_for_animations(UNUSED Bool32 isLuigi, Alpha initialSolidity, struct Shadow *shadow) {
     AnimFrame16 animFrame = gMarioObject->header.gfx.animInfo.animFrame;
     switch (gMarioObject->header.gfx.animInfo.animID) {
         case MARIO_ANIM_IDLE_ON_LEDGE:                                                                                        return SHADOW_SOLIDITY_NO_SHADOW;
@@ -476,11 +476,11 @@ void correct_lava_shadow_height(struct Shadow *s) {
  * Create a shadow under a player, correcting that shadow's opacity during
  * appropriate animations and other states.
  */
-Gfx *create_shadow_player(Vec3f pos, s16 shadowScale, Alpha solidity, s32 isLuigi) {
+Gfx *create_shadow_player(Vec3f pos, s16 shadowScale, Alpha solidity, Bool32 isLuigi) {
     Vtx *verts;
     Gfx *displayList;
     struct Shadow shadow;
-    s8 ret = 0;
+    Bool8 cancel = FALSE;
     s32 i;
     // Update global variables about whether Mario is on a flying carpet.
     if ((gCurrLevelNum == LEVEL_RR) && (sSurfaceTypeBelowShadow != SURFACE_DEATH_PLANE)) {
@@ -492,11 +492,11 @@ Gfx *create_shadow_player(Vec3f pos, s16 shadowScale, Alpha solidity, s32 isLuig
     }
     switch (correct_shadow_solidity_for_animations(isLuigi, solidity, &shadow)) {
         case SHADOW_SOLIDITY_NO_SHADOW: return NULL;
-        case SHADOW_SOILDITY_ALREADY_SET: ret = init_shadow(&shadow, pos, shadowScale, /* overwriteSolidity */ 0); break;
-        case SHADOW_SOLIDITY_NOT_YET_SET: ret = init_shadow(&shadow, pos, shadowScale,                  solidity); break;
+        case SHADOW_SOILDITY_ALREADY_SET: cancel = init_shadow(&shadow, pos, shadowScale, /* overwriteSolidity */ 0); break;
+        case SHADOW_SOLIDITY_NOT_YET_SET: cancel = init_shadow(&shadow, pos, shadowScale,                  solidity); break;
         default: return NULL;
     }
-    if (ret != 0) return NULL;
+    if (cancel) return NULL;
     verts       = alloc_display_list(9 * sizeof(Vtx));
     if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));
@@ -515,7 +515,7 @@ Gfx *create_shadow_circle_9_verts(Vec3f pos, s16 shadowScale, Alpha solidity) {
     Gfx *displayList;
     struct Shadow shadow;
     s32 i;
-    if (init_shadow(&shadow, pos, shadowScale, solidity) != 0) return NULL;
+    if (init_shadow(&shadow, pos, shadowScale, solidity)) return NULL;
     verts       = alloc_display_list(9 * sizeof(Vtx));
     if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));
@@ -533,7 +533,7 @@ Gfx *create_shadow_circle_4_verts(Vec3f pos, s16 shadowScale, Alpha solidity) {
     Gfx *displayList;
     struct Shadow shadow;
     s32 i;
-    if (init_shadow(&shadow, pos, shadowScale, solidity) != 0) return NULL;
+    if (init_shadow(&shadow, pos, shadowScale, solidity)) return NULL;
     verts       = alloc_display_list(4 * sizeof(Vtx));
     if (verts == NULL) return 0;
     displayList = alloc_display_list(5 * sizeof(Gfx));

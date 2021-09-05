@@ -2385,7 +2385,7 @@ void update_camera(struct Camera *c) {
         update_lakitu(c);
 #ifdef PUPPYCAM
     }
-    //Just a cute little bit that syncs puppycamera up to vanilla when playing a vanilla cutscene :3
+    // Just a cute little bit that syncs puppycamera up to vanilla when playing a vanilla cutscene :3
     if (c->cutscene != CUTSCENE_NONE) {
         gPuppyCam.yawTarget = gCamera->yaw;
         gPuppyCam.yaw       = gCamera->yaw;
@@ -2406,7 +2406,7 @@ void update_camera(struct Camera *c) {
         puppycam_loop();
         // Apply camera shakes
         shake_camera_pitch(gLakituState.pos, gLakituState.focus);
-        shake_camera_yaw(gLakituState.pos, gLakituState.focus);
+        shake_camera_yaw(  gLakituState.pos, gLakituState.focus);
         shake_camera_roll(&gLakituState.roll);
         shake_camera_handheld(gLakituState.pos, gLakituState.focus);
         if ((sMarioCamState->action == ACT_DIVE) && (gLakituState.lastFrameAction != ACT_DIVE)) set_camera_shake_from_hit(SHAKE_HIT_FROM_BELOW);

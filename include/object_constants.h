@@ -402,6 +402,11 @@
     #define BOWSER_BITS_PLAT_SUB_ACT_CHECK_RESET_TIMER      0x0
     #define BOWSER_BITS_PLAT_SUB_ACT_CHECK_DEBUG_FALL       0x1
 
+/* Bowser Flame */
+    /* oAction */
+    #define BOWSER_FLAME_ACT_FLOATING                       0x0
+    #define BOWSER_FLAME_ACT_LANDED                         0x1
+
 /* Blue Bowser Flame */
     /* oBehParams2ndByte */
     #define BOWSER_FLAME_BLUE_BP_SPAWN_RED_FLAMES           0x0

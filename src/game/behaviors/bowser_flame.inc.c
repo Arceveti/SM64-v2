@@ -60,11 +60,11 @@ void bhv_flame_bowser_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_move_standard(78);
     if (o->oVelY < -4.0f) o->oVelY = -4.0f;
-    if (o->oAction == 0) { //! action names
+    if (o->oAction == BOWSER_FLAME_ACT_FLOATING) {
         cur_obj_become_intangible();
         bowser_flame_move();
         if (o->oMoveFlags & OBJ_MOVE_LANDED) {
-            o->oAction = 1;
+            o->oAction = BOWSER_FLAME_ACT_LANDED;
             if (cur_obj_has_behavior(bhvFlameLargeBurningOut)) {
                 o->oFlameScale = 8.0f;
             } else {

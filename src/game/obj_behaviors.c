@@ -492,7 +492,7 @@ s32 trigger_obj_dialog_when_facing(s32 *inDialog, DialogID dialogID, f32 dist, s
       && obj_check_if_facing_toward_angle(o->oFaceAngleYaw, (gMarioObject->header.gfx.angle[1] + DEG(180)), 0x1000)
       && obj_check_if_facing_toward_angle(o->oMoveAngleYaw, o->oAngleToMario, 0x1000)) || (*inDialog)) {
         *inDialog = TRUE;
-        if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) { //If Mario is speaking.
+        if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) { // If Mario is speaking.
             dialogueResponse = cutscene_object_with_dialog(CUTSCENE_DIALOG, o, dialogID);
             if (dialogueResponse) {
                 set_mario_npc_dialog(MARIO_DIALOG_STOP);

@@ -56,7 +56,7 @@ struct DynObjInfo {
 // data
 static struct DynObjInfo *sGdDynObjList  = NULL;  // @ 801A8250; info for all loaded/made dynobjs
 static struct GdObj      *sDynListCurObj = NULL;  // @ 801A8254
-static s32 sUseIntegerNames              = FALSE; // if TRUE, then all DynNames are specified as integers
+static Bool32 sUseIntegerNames           = FALSE; // if TRUE, then all DynNames are specified as integers
 
 // bss
 static char sIntToStringBuf[DYNOBJ_NAME_SIZE];    ///< buffer for returning formated string from
@@ -725,7 +725,7 @@ void d_end_group(DynObjName name) {
  *
  * @param isIntBool `TRUE` to interpret ids as integers
  */
-void d_use_integer_names(s32 isIntBool) {
+void d_use_integer_names(Bool32 isIntBool) {
     sUseIntegerNames = isIntBool;
 }
 

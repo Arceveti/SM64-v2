@@ -53,7 +53,7 @@ struct GdObj *d_use_obj(                     DynObjName name);
 void set_cur_dynobj( struct GdObj *obj);
 void d_start_group(                          DynObjName name);
 void d_end_group(                            DynObjName name);
-void d_use_integer_names(s32 isIntBool);
+void d_use_integer_names(Bool32 isIntBool);
 void d_set_init_pos(Vec3f pos);
 void d_get_init_pos(Vec3f dst);
 void d_get_init_rot(Vec3f dst);

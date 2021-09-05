@@ -26,7 +26,7 @@ void handle_cap_ukiki_reset(void) {
  * Returns TRUE if Mario has his cap and ukiki is
  * the cap ukiki.
  */
-s32 is_cap_ukiki_and_mario_has_normal_cap_on_head(void) {
+Bool32 is_cap_ukiki_and_mario_has_normal_cap_on_head(void) {
     return (o->oBehParams2ndByte == UKIKI_CAP && does_mario_have_normal_cap_on_head(gMarioState));
 }
 

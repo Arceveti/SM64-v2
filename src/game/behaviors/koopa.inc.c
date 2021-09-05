@@ -89,8 +89,7 @@ void bhv_koopa_init(void) {
 /**
  * Play the appropriate footstep sound on the two provided animation frames.
  */
-//! AnimFrame type?
-static void koopa_play_footstep_sound(s8 animFrame1, s8 animFrame2) {
+static void koopa_play_footstep_sound(AnimFrame32 animFrame1, AnimFrame32 animFrame2) {
     cur_obj_play_sound_at_anim_range(animFrame1, animFrame2, ((o->header.gfx.scale[0] > 1.5f) ? SOUND_OBJ_KOOPA_THE_QUICK_WALK : SOUND_OBJ_KOOPA_WALK));
 }
 
@@ -276,7 +275,7 @@ static void koopa_unshelled_act_run(void) {
     f32 distToShell = 99999.0f;
     struct Object *shell;
     cur_obj_init_animation_with_sound(KOOPA_ANIM_UNSHELLED_RUN);
-    koopa_play_footstep_sound(0, 6);
+    koopa_play_footstep_sound(0,  6);
     if (o->oKoopaTurningAwayFromWall) {
         o->oKoopaTurningAwayFromWall = cur_obj_resolve_collisions_and_turn(o->oKoopaTargetYaw, 0x600);
     } else {

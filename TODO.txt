@@ -67,6 +67,7 @@
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor/ceil/wall calls
 - Physics/Movement:
+    - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?
@@ -77,6 +78,14 @@
     - Update mario movement angles when m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics
+    - Fix Variable Framerate bugs:
+        - crashes when Goddard is enabled
+        - build warning for a pointer
+        - title screen is 2x speed
+        - screen transitions are 2x speed
+        - Act selector crashes
+        - Pausing is broken
+            - Input is in graphics thread but read in game thread so it's read as being done twice in a frame
     - Proper Skyboxes like in SM64DS
         - https://jaxry.github.io/panorama-to-cubemap/
         - Requires some sort of distortion?

@@ -245,8 +245,8 @@ Gfx *geo_switch_tuxie_mother_eyes(s32 callContext, struct GraphNode *node, UNUSE
         switchCase = (struct GraphNodeSwitchCase *) node;
         switchCase->selectedCase = PENGUIN_ANIM_STATE_EYES_OPEN;
 #ifdef PENGUIN_MOTHER_SAD_EYES
-        u32 isMother = obj_has_behavior(obj, bhvTuxiesMother);
-        s32 babyDelivered = obj->oAction == MOTHER_PENGUIN_ACT_RECEIVED_BABY;
+        Bool32 isMother = obj_has_behavior(obj, bhvTuxiesMother);
+        Bool32 babyDelivered = obj->oAction == MOTHER_PENGUIN_ACT_RECEIVED_BABY;
         switchCase->selectedCase = ((!isMother || babyDelivered) ? PENGUIN_ANIM_STATE_EYES_OPEN : PENGUIN_ANIM_STATE_EYES_SAD);
 #endif
         // timer logic for blinking. uses cases 0-2.
