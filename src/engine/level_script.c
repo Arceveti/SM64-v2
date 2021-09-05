@@ -288,7 +288,7 @@ static void level_cmd_init_level(void) {
     clear_objects();
     clear_areas();
     main_pool_push_state();
-    for ((clearPointers = 0); (clearPointers < (AREA_COUNT - 1)); (clearPointers++)) {
+    for ((clearPointers = 0); (clearPointers < AREA_COUNT); (clearPointers++)) {
         gAreaSkyboxStart[clearPointers] = 0;
         gAreaSkyboxEnd[clearPointers]   = 0;
     }

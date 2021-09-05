@@ -90,8 +90,8 @@ s16 gSilhouette = TRUE;
 #ifdef CUSTOM_DEBUG
 u8 gCustomDebugMode;
 #endif
-u8 *gAreaSkyboxStart[AREA_COUNT - 1];
-u8 *gAreaSkyboxEnd  [AREA_COUNT - 1];
+u8 *gAreaSkyboxStart[AREA_COUNT];
+u8 *gAreaSkyboxEnd  [AREA_COUNT];
 #ifdef EEP
 s8 gEepromProbe;
 #endif
