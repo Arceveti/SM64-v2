@@ -10,13 +10,13 @@ struct OpenableGrill gOpenableGrills[] = { { 320, MODEL_BOB_BARS_GRILLS, bob_seg
                                            { 410, MODEL_HMC_RED_GRILLS,  hmc_seg7_collision_grill_door } };
 
 void bhv_openable_grill_door_loop(void) {
-    if (gCurrentObject->oAction == OPENABLE_GRILL_DOOR_ACT_CLOSED) {
-        if (gCurrentObject->parentObj->oOpenableGrillIsOpen) gCurrentObject->oAction = OPENABLE_GRILL_DOOR_ACT_OPENING;
-    } else if (gCurrentObject->oAction == OPENABLE_GRILL_DOOR_ACT_OPENING) {
-        if (gCurrentObject->oTimer < 64) {
-            gCurrentObject->oMoveAngleYaw -= (gCurrentObject->oBehParams2ndByte * 0x100);
+    if (o->oAction == OPENABLE_GRILL_DOOR_ACT_CLOSED) {
+        if (o->parentObj->oOpenableGrillIsOpen) o->oAction = OPENABLE_GRILL_DOOR_ACT_OPENING;
+    } else if (o->oAction == OPENABLE_GRILL_DOOR_ACT_OPENING) {
+        if (o->oTimer < 64) {
+            o->oMoveAngleYaw -= (o->oBehParams2ndByte * 0x100);
         } else {
-            gCurrentObject->oAction = OPENABLE_GRILL_DOOR_ACT_OPEN;
+            o->oAction = OPENABLE_GRILL_DOOR_ACT_OPEN;
         }
     }
 }

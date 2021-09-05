@@ -47,8 +47,6 @@
 #include "spawn_sound.h"
 #include "rumble_init.h"
 
-#define o gCurrentObject
-
 struct ModifiableVertexGroup {
     const Vtx *vertexData;
     const u16 vertexCount;

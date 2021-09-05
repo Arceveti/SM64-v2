@@ -235,23 +235,23 @@ struct ParticleProperties sParticleTypes[] = {
 void copy_mario_state_to_object(void) {
     s32 i = 0;
     // L is real
-    if (gCurrentObject != gMarioObject) i++;
-    vec3f_copy(&gCurrentObject->oVelVec, gMarioStates[i].vel);
-    vec3f_copy(&gCurrentObject->oPosVec, gMarioStates[i].pos);
-    vec3s_to_vec3i(&gCurrentObject->oMoveAngleVec, gCurrentObject->header.gfx.angle);
-    vec3s_to_vec3i(&gCurrentObject->oFaceAngleVec, gCurrentObject->header.gfx.angle);
-    vec3s_to_vec3i(&gCurrentObject->oAngleVelVec, gMarioStates[i].angleVel);
+    if (o != gMarioObject) i++;
+    vec3f_copy(&o->oVelVec, gMarioStates[i].vel);
+    vec3f_copy(&o->oPosVec, gMarioStates[i].pos);
+    vec3s_to_vec3i(&o->oMoveAngleVec, o->header.gfx.angle);
+    vec3s_to_vec3i(&o->oFaceAngleVec, o->header.gfx.angle);
+    vec3s_to_vec3i(&o->oAngleVelVec, gMarioStates[i].angleVel);
 }
 
 /**
- * Spawn a particle at gCurrentObject's location.
+ * Spawn a particle at o's location.
  */
 void spawn_particle(u32 activeParticleFlag, ModelID model, const BehaviorScript *behavior) {
-    if (!(gCurrentObject->oActiveParticleFlags & activeParticleFlag)) {
+    if (!(o->oActiveParticleFlags & activeParticleFlag)) {
         struct Object *particle;
-        gCurrentObject->oActiveParticleFlags |= activeParticleFlag;
-        particle = spawn_object_at_origin(gCurrentObject, 0, model, behavior);
-        obj_copy_pos_and_angle(particle, gCurrentObject);
+        o->oActiveParticleFlags |= activeParticleFlag;
+        particle = spawn_object_at_origin(o, 0, model, behavior);
+        obj_copy_pos_and_angle(particle, o);
     }
 }
 
@@ -260,8 +260,8 @@ void spawn_particle(u32 activeParticleFlag, ModelID model, const BehaviorScript 
  */
 void bhv_mario_update(void) {
     s32 i;
-    u32 particleFlags = execute_mario_action(gCurrentObject);
-    gCurrentObject->oMarioParticleFlags = particleFlags;
+    u32 particleFlags = execute_mario_action(o);
+    o->oMarioParticleFlags = particleFlags;
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object
     copy_mario_state_to_object();
@@ -283,8 +283,8 @@ void bhv_mario_update(void) {
 s32 update_objects_starting_at(struct ObjectNode *objList, struct ObjectNode *firstObj) {
     s32 count = 0;
     while (objList != firstObj) {
-        gCurrentObject = (struct Object *) firstObj;
-        gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
+        o = (struct Object *) firstObj;
+        o->header.gfx.node.flags |= GRAPH_RENDER_HAS_ANIMATION;
         cur_obj_update();
         firstObj = firstObj->next;
         count++;
@@ -305,20 +305,20 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
     s32 count = 0;
     s32 unfrozen;
     while (objList != firstObj) {
-        gCurrentObject = (struct Object *) firstObj;
+        o = (struct Object *) firstObj;
         unfrozen = FALSE;
         // Selectively unfreeze certain objects
         if (!(gTimeStopState & TIME_STOP_ALL_OBJECTS)) {
-            if (gCurrentObject == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
-            if ((gCurrentObject->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
-            if (gCurrentObject->activeFlags & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
+            if (o == gMarioObject && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
+            if ((o->oInteractType & (INTERACT_DOOR | INTERACT_WARP_DOOR)) && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) unfrozen = TRUE;
+            if (o->activeFlags & (ACTIVE_FLAG_UNIMPORTANT | ACTIVE_FLAG_INITIATED_TIME_STOP)) unfrozen = TRUE;
         }
         // Only update if unfrozen
         if (unfrozen) {
-            gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_HAS_ANIMATION;
+            o->header.gfx.node.flags |=  GRAPH_RENDER_HAS_ANIMATION;
             cur_obj_update();
         } else {
-            gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_HAS_ANIMATION;
+            o->header.gfx.node.flags &= ~GRAPH_RENDER_HAS_ANIMATION;
         }
         firstObj = firstObj->next;
         count++;
@@ -345,13 +345,13 @@ s32 update_objects_in_list(struct ObjectNode *objList) {
 void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
     struct ObjectNode *obj = objList->next;
     while (objList != obj) {
-        gCurrentObject = (struct Object *) obj;
+        o = (struct Object *) obj;
         obj            = obj->next;
-        if ((gCurrentObject->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
+        if ((o->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
             // Prevent object from respawning after exiting and re-entering the
             // area
-            if (!(gCurrentObject->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) set_object_respawn_info_bits(gCurrentObject, RESPAWN_INFO_DONT_RESPAWN);
-            unload_object(gCurrentObject);
+            if (!(o->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) set_object_respawn_info_bits(o, RESPAWN_INFO_DONT_RESPAWN);
+            unload_object(o);
         }
     }
 }

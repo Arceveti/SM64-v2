@@ -87,6 +87,8 @@ extern struct Object *gMarioObject;
 extern struct Object *gLuigiObject;
 extern struct Object *gCurrentObject;
 
+#define o gCurrentObject
+
 extern const BehaviorScript *gCurBhvCommand;
 extern s16 gPrevFrameObjectCount;
 

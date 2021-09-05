@@ -165,7 +165,7 @@ void bhv_end_peach_loop(void) {
 }
 
 void bhv_end_toad_loop(void) {
-    s32 toadAnimIndex = (gCurrentObject->oPosX >= 0.0f);
+    s32 toadAnimIndex = (o->oPosX >= 0.0f);
     cur_obj_init_animation_with_sound(sEndToadAnims[toadAnimIndex]);
     // 0-1, 2-3, 4, 5, 6, 7
     if (cur_obj_check_if_near_animation_end() && ((sEndToadAnims[toadAnimIndex] == 0) || (sEndToadAnims[toadAnimIndex] == 2))) sEndToadAnims[toadAnimIndex]++;
@@ -303,7 +303,7 @@ s32 set_mario_npc_dialog(s32 actionArg) {
             }
         }
     } else if ((actionArg != 0) && mario_ready_to_speak()) {
-        gMarioState->usedObj = gCurrentObject;
+        gMarioState->usedObj = o;
         set_mario_action(gMarioState, ACT_READING_NPC_DIALOG, actionArg);
         dialogState = MARIO_DIALOG_STATUS_START; // starting dialog
     }
@@ -1406,7 +1406,7 @@ static void intro_cutscene_hide_hud_and_mario(struct MarioState *m) {
 
 static void intro_cutscene_peach_lakitu_scene(struct MarioState *m) {
     if (((s16) m->statusForCamera->cameraEvent != CAM_EVENT_START_INTRO) && (m->actionTimer++ == TIMER_SPAWN_PIPE)) {
-        sIntroWarpPipeObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_CASTLE_GROUNDS_WARP_PIPE, bhvStaticObject, -1328, 60, 4664, 0x0, 0xB4, 0x0);
+        sIntroWarpPipeObj = spawn_object_abs_with_rot(o, 0, MODEL_CASTLE_GROUNDS_WARP_PIPE, bhvStaticObject, -1328, 60, 4664, 0x0, 0xB4, 0x0);
         advance_cutscene_step(m);
     }
 }
@@ -1606,9 +1606,9 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
     static s32 sSparkleGenPhi   = 0x0;
     Vec3s offset;
     vec3s_set_dist_and_angle(gVec3sZero, offset, radius, sSparkleGenTheta, sSparkleGenPhi);
-    spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, (x + offset[0]), (y + offset[1]), (z + offset[2]), 0x0, 0x0, 0x0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x + offset[0]), (y + offset[1]), (z + offset[2]), 0x0, 0x0, 0x0);
     vec3s_mul_val(offset, (4 / 3));
-    spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_NONE, bhvSparkleSpawn, (x - offset[0]), (y - offset[1]), (z - offset[2]), 0x0, 0x0, 0x0);
+    spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x - offset[0]), (y - offset[1]), (z - offset[2]), 0x0, 0x0, 0x0);
     sSparkleGenTheta += DEG(78.75);
     sSparkleGenPhi   += DEG(  135);
 }
@@ -1642,7 +1642,7 @@ static void end_peach_cutscene_mario_landing(struct MarioState *m) {
     if (is_anim_at_end(m)) {
         // make wing cap run out
         m->capTimer = 60;
-        sEndJumboStarObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_STAR, bhvStaticObject, 0, 2528, -1800, 0x0, 0x0, 0x0);
+        sEndJumboStarObj = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStaticObject, 0, 2528, -1800, 0x0, 0x0, 0x0);
         obj_scale(sEndJumboStarObj, 3.0f);
         advance_cutscene_step(m);
     }
@@ -1677,10 +1677,10 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
     if (m->actionTimer == 44) play_transition(WARP_TRANSITION_FADE_FROM_COLOR, 192, 255, 255, 255);
     if (m->actionTimer == 40) {
         obj_mark_for_deletion(sEndJumboStarObj);
-        sEndPeachObj     = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,   0, 2428, -1300, 0x0, 0x0, 0x0);
+        sEndPeachObj     = spawn_object_abs_with_rot(o, 0, MODEL_PEACH, bhvEndPeach,   0, 2428, -1300, 0x0, 0x0, 0x0);
         gCutsceneFocus   = sEndPeachObj;
-        sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  200,  906, -1290, 0x0, 0x0, 0x0);
-        sEndLeftToadObj  = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -200,  906, -1290, 0x0, 0x0, 0x0);
+        sEndRightToadObj = spawn_object_abs_with_rot(o, 0, MODEL_TOAD,  bhvEndToad,  200,  906, -1290, 0x0, 0x0, 0x0);
+        sEndLeftToadObj  = spawn_object_abs_with_rot(o, 0, MODEL_TOAD,  bhvEndToad, -200,  906, -1290, 0x0, 0x0, 0x0);
         sEndPeachObj->oOpacity     = 127;
         sEndRightToadObj->oOpacity = 255;
         sEndLeftToadObj->oOpacity  = 255;
@@ -2014,9 +2014,9 @@ static Bool32 act_credits_cutscene(struct MarioState *m) { // actionState is use
 static Bool32 act_end_waving_cutscene(struct MarioState *m) {
     if (m->actionState == ACT_END_WAVING_CUTSCENE_INIT) {
         m->statusForCamera->cameraEvent = CAM_EVENT_START_END_WAVING;
-        sEndPeachObj                    = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach,  60, 906, -1180, 0x0, 0x0, 0x0);
-        sEndRightToadObj                = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad,  180, 906, -1170, 0x0, 0x0, 0x0);
-        sEndLeftToadObj                 = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD,  bhvEndToad, -180, 906, -1170, 0x0, 0x0, 0x0);
+        sEndPeachObj                    = spawn_object_abs_with_rot(o, 0, MODEL_PEACH, bhvEndPeach,  60, 906, -1180, 0x0, 0x0, 0x0);
+        sEndRightToadObj                = spawn_object_abs_with_rot(o, 0, MODEL_TOAD,  bhvEndToad,  180, 906, -1170, 0x0, 0x0, 0x0);
+        sEndLeftToadObj                 = spawn_object_abs_with_rot(o, 0, MODEL_TOAD,  bhvEndToad, -180, 906, -1170, 0x0, 0x0, 0x0);
         sEndPeachObj->oOpacity          = 255;
         sEndRightToadObj->oOpacity      = 255;
         sEndLeftToadObj->oOpacity       = 255;

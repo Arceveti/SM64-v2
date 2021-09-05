@@ -162,7 +162,7 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
     if (isMario) {
         get_mario_pos(&objPos[0], &objPos[1], &objPos[2]);
     } else {
-        vec3f_copy(objPos, &gCurrentObject->oPosVec);
+        vec3f_copy(objPos, &o->oPosVec);
     }
     objPos[0] += platform->oVelX;
     objPos[2] += platform->oVelZ;
@@ -181,7 +181,7 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
     if (isMario) {
         set_mario_pos(objPos[0], objPos[1], objPos[2]);
     } else {
-        vec3f_copy(&gCurrentObject->oPosVec, objPos);
+        vec3f_copy(&o->oPosVec, objPos);
     }
 }
 

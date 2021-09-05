@@ -178,7 +178,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
             // If an unimportant object does exist, unload it and take its slot.
             unload_object(unimportantObj);
             obj = try_allocate_object(objList, &gFreeObjectList);
-            if (gCurrentObject == obj) {
+            if (o == obj) {
                 //! Uh oh, the unimportant object was in the middle of
                 //  updating! This could cause some interesting logic errors,
                 //  but I don't know of any unimportant objects that spawn

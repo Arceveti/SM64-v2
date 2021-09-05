@@ -2,16 +2,16 @@
 
 // called when WDW is loaded.
 void bhv_init_changing_water_level_loop(void) {
-    if (gCurrentObject->oAction == WATER_LEVEL_ACT_INIT) {
-        if (gEnvironmentRegions != NULL) gCurrentObject->oAction = WATER_LEVEL_ACT_IDLE;
-    } else if (gCurrentObject->oTimer < 10) {
+    if (o->oAction == WATER_LEVEL_ACT_INIT) {
+        if (gEnvironmentRegions != NULL) o->oAction = WATER_LEVEL_ACT_IDLE;
+    } else if (o->oTimer < 10) {
         *gEnvironmentLevels = gEnvironmentRegions[6];
     } else {
 #ifdef WDW_DISABLE_AMBIENT_WAVES
         gEnvironmentRegions[6] = *gEnvironmentLevels;
 #else
         gEnvironmentRegions[6] = (*gEnvironmentLevels + (sins(o->oWaterLevelTriggerAmbientWaves) * 20.0f));
-        gCurrentObject->oWaterLevelTriggerAmbientWaves += 0x200;
+        o->oWaterLevelTriggerAmbientWaves += 0x200;
 #endif
     }
 }

@@ -32,7 +32,7 @@
 // Unused function that directly jumps to a behavior command and resets the object's stack index.
 UNUSED static void goto_behavior_unused(const BehaviorScript *bhvAddr) {
     gCurBhvCommand                = segmented_to_virtual(bhvAddr);
-    gCurrentObject->bhvStackIndex = 0;
+    o->bhvStackIndex = 0;
 }
 
 // Update an object's graphical position and rotation to match its real position and rotation.
@@ -45,15 +45,15 @@ void obj_update_gfx_pos_and_angle(struct Object *obj) {
 
 // Push the address of a behavior command to the object's behavior stack.
 static void cur_obj_bhv_stack_push(uintptr_t bhvAddr) {
-    gCurrentObject->bhvStack[gCurrentObject->bhvStackIndex] = bhvAddr;
-    gCurrentObject->bhvStackIndex++;
+    o->bhvStack[o->bhvStackIndex] = bhvAddr;
+    o->bhvStackIndex++;
 }
 
 // Retrieve the last behavior command address from the object's behavior stack.
 static uintptr_t cur_obj_bhv_stack_pop(void) {
     uintptr_t bhvAddr;
-    gCurrentObject->bhvStackIndex--;
-    bhvAddr = gCurrentObject->bhvStack[gCurrentObject->bhvStackIndex];
+    o->bhvStackIndex--;
+    bhvAddr = o->bhvStack[o->bhvStackIndex];
     return bhvAddr;
 }
 
@@ -68,7 +68,7 @@ static s32 bhv_cmd_hide(void) {
 // Command 0x35: Disables rendering for the object.
 // Usage: DISABLE_RENDERING()
 static s32 bhv_cmd_disable_rendering(void) {
-    gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+    o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -76,7 +76,7 @@ static s32 bhv_cmd_disable_rendering(void) {
 // Command 0x21: Billboards the current object, making it always face the camera.
 // Usage: BILLBOARD()
 static s32 bhv_cmd_billboard(void) {
-    gCurrentObject->header.gfx.node.flags |= GRAPH_RENDER_BILLBOARD;
+    o->header.gfx.node.flags |= GRAPH_RENDER_BILLBOARD;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -84,7 +84,7 @@ static s32 bhv_cmd_billboard(void) {
 // Command 0x1B: Sets the current model ID of the object.
 // Usage: SET_MODEL(ModelID modelID)
 static s32 bhv_cmd_set_model(void) {
-    gCurrentObject->header.gfx.sharedChild = gLoadedGraphNodes[BHV_CMD_GET_2ND_S16(0)];
+    o->header.gfx.sharedChild = gLoadedGraphNodes[BHV_CMD_GET_2ND_S16(0)];
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -94,8 +94,8 @@ static s32 bhv_cmd_set_model(void) {
 static s32 bhv_cmd_spawn_child(void) {
     ModelID32             model    = BHV_CMD_GET_U32(1);
     const BehaviorScript *behavior = BHV_CMD_GET_VPTR(2);
-    struct Object        *child    = spawn_object_at_origin(gCurrentObject, 0, model, behavior);
-    obj_copy_pos_and_angle(child, gCurrentObject);
+    struct Object        *child    = spawn_object_at_origin(o, 0, model, behavior);
+    obj_copy_pos_and_angle(child, o);
     gCurBhvCommand += 3;
     return BHV_PROC_CONTINUE;
 }
@@ -105,10 +105,10 @@ static s32 bhv_cmd_spawn_child(void) {
 static s32 bhv_cmd_spawn_obj(void) {
     ModelID32             model    = BHV_CMD_GET_U32(1);
     const BehaviorScript *behavior = BHV_CMD_GET_VPTR(2);
-    struct Object        *object   = spawn_object_at_origin(gCurrentObject, 0, model, behavior);
-    obj_copy_pos_and_angle(object, gCurrentObject);
+    struct Object        *object   = spawn_object_at_origin(o, 0, model, behavior);
+    obj_copy_pos_and_angle(object, o);
     // TODO: Does this cmd need renaming? This line is the only difference between this and the above func.
-    gCurrentObject->prevObj = object;
+    o->prevObj = object;
     gCurBhvCommand += 3;
     return BHV_PROC_CONTINUE;
 }
@@ -119,8 +119,8 @@ static s32 bhv_cmd_spawn_child_with_param(void) {
     u32                   bhvParam = BHV_CMD_GET_2ND_S16(0);
     ModelID32             modelID  = BHV_CMD_GET_U32(1);
     const BehaviorScript *behavior = BHV_CMD_GET_VPTR(2);
-    struct Object *child = spawn_object_at_origin(gCurrentObject, 0, modelID, behavior);
-    obj_copy_pos_and_angle(child, gCurrentObject);
+    struct Object *child = spawn_object_at_origin(o, 0, modelID, behavior);
+    obj_copy_pos_and_angle(child, o);
     child->oBehParams2ndByte = bhvParam;
     gCurBhvCommand += 3;
     return BHV_PROC_CONTINUE;
@@ -129,7 +129,7 @@ static s32 bhv_cmd_spawn_child_with_param(void) {
 // Command 0x1D: Exits the behavior script and despawns the object.
 // Usage: DEACTIVATE()
 static s32 bhv_cmd_deactivate(void) {
-    gCurrentObject->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     return BHV_PROC_BREAK;
 }
 
@@ -166,10 +166,10 @@ static s32 bhv_cmd_return(void) {
 // Command 0x01: Delays the behavior script for a certain number of frames.
 // Usage: DELAY(s16 num)
 static s32 bhv_cmd_delay(void) {
-    if (gCurrentObject->bhvDelayTimer < BHV_CMD_GET_2ND_S16(0) - 1) {
-        gCurrentObject->bhvDelayTimer++; // Increment timer
+    if (o->bhvDelayTimer < BHV_CMD_GET_2ND_S16(0) - 1) {
+        o->bhvDelayTimer++; // Increment timer
     } else {
-        gCurrentObject->bhvDelayTimer = 0;
+        o->bhvDelayTimer = 0;
         gCurBhvCommand++; // Delay ended, move to next bhv command (note: following commands will not execute until next frame)
     }
     return BHV_PROC_BREAK;
@@ -178,10 +178,10 @@ static s32 bhv_cmd_delay(void) {
 // Command 0x25: Delays the behavior script for the number of frames given by the value of the specified field.
 // Usage: DELAY_VAR(u8 field)
 static s32 bhv_cmd_delay_var(void) {
-    if (gCurrentObject->bhvDelayTimer < cur_obj_get_int(BHV_CMD_GET_2ND_U8(0)) - 1) {
-        gCurrentObject->bhvDelayTimer++; // Increment timer
+    if (o->bhvDelayTimer < cur_obj_get_int(BHV_CMD_GET_2ND_U8(0)) - 1) {
+        o->bhvDelayTimer++; // Increment timer
     } else {
-        gCurrentObject->bhvDelayTimer = 0;
+        o->bhvDelayTimer = 0;
         gCurBhvCommand++; // Delay ended, move to next bhv command
     }
     return BHV_PROC_BREAK;
@@ -401,8 +401,8 @@ static s32 bhv_cmd_load_animations(void) {
 // Command 0x28: Begins animation and sets the object's current animation index to the specified value.
 // Usage: ANIMATE(s32 animIndex)
 static s32 bhv_cmd_animate(void) {
-    struct Animation **animations = gCurrentObject->oAnimations;
-    geo_obj_init_animation(&gCurrentObject->header.gfx, &animations[BHV_CMD_GET_2ND_U8(0)]);
+    struct Animation **animations = o->oAnimations;
+    geo_obj_init_animation(&o->header.gfx, &animations[BHV_CMD_GET_2ND_U8(0)]);
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -410,8 +410,8 @@ static s32 bhv_cmd_animate(void) {
 // Command 0x1E: Finds the floor triangle directly under the object and moves the object down to it.
 // Usage: DROP_TO_FLOOR()
 static s32 bhv_cmd_drop_to_floor(void) {
-    gCurrentObject->oPosY       = find_floor_height(gCurrentObject->oPosX, gCurrentObject->oPosY + 200.0f, gCurrentObject->oPosZ);
-    gCurrentObject->oMoveFlags |= OBJ_MOVE_ON_GROUND;
+    o->oPosY       = find_floor_height(o->oPosX, o->oPosY + 200.0f, o->oPosZ);
+    o->oMoveFlags |= OBJ_MOVE_ON_GROUND;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -459,8 +459,8 @@ static s32 bhv_cmd_sum_int(void) {
 // Command 0x23: Sets the size of the object's cylindrical hitbox.
 // Usage: SET_HITBOX(s16 radius, s16 height)
 static s32 bhv_cmd_set_hitbox(void) {
-    gCurrentObject->hitboxRadius = BHV_CMD_GET_1ST_S16(1);
-    gCurrentObject->hitboxHeight = BHV_CMD_GET_2ND_S16(1);
+    o->hitboxRadius = BHV_CMD_GET_1ST_S16(1);
+    o->hitboxHeight = BHV_CMD_GET_2ND_S16(1);
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -468,8 +468,8 @@ static s32 bhv_cmd_set_hitbox(void) {
 // Command 0x2E: Sets the size of the object's cylindrical hurtbox.
 // Usage: SET_HURTBOX(s16 radius, s16 height)
 static s32 bhv_cmd_set_hurtbox(void) {
-    gCurrentObject->hurtboxRadius = BHV_CMD_GET_1ST_S16(1);
-    gCurrentObject->hurtboxHeight = BHV_CMD_GET_2ND_S16(1);
+    o->hurtboxRadius = BHV_CMD_GET_1ST_S16(1);
+    o->hurtboxHeight = BHV_CMD_GET_2ND_S16(1);
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -477,9 +477,9 @@ static s32 bhv_cmd_set_hurtbox(void) {
 // Command 0x2B: Sets the size of the object's cylindrical hitbox, and applies a downwards offset.
 // Usage: SET_HITBOX_WITH_OFFSET(s16 radius, s16 height, s16 downOffset)
 static s32 bhv_cmd_set_hitbox_with_offset(void) {
-    gCurrentObject->hitboxRadius     = BHV_CMD_GET_1ST_S16(1);
-    gCurrentObject->hitboxHeight     = BHV_CMD_GET_2ND_S16(1);
-    gCurrentObject->hitboxDownOffset = BHV_CMD_GET_1ST_S16(2);
+    o->hitboxRadius     = BHV_CMD_GET_1ST_S16(1);
+    o->hitboxHeight     = BHV_CMD_GET_2ND_S16(1);
+    o->hitboxDownOffset = BHV_CMD_GET_1ST_S16(2);
     gCurBhvCommand += 3;
     return BHV_PROC_CONTINUE;
 }
@@ -504,7 +504,7 @@ static s32 bhv_cmd_begin(void) {
     if (cur_obj_has_behavior(bhvHauntedChair)) bhv_init_room();
     if (cur_obj_has_behavior(bhvMadPiano    )) bhv_init_room();
     // Set collision distance if the object is a message panel.
-    if (cur_obj_has_behavior(bhvMessagePanel)) gCurrentObject->oCollisionDistance = 150.0f;
+    if (cur_obj_has_behavior(bhvMessagePanel)) o->oCollisionDistance = 150.0f;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -533,7 +533,7 @@ UNUSED static s32 bhv_cmd_set_int_random_from_table(void) {
 // Usage: LOAD_COLLISION_DATA(u32 *collisionData)
 static s32 bhv_cmd_load_collision_data(void) {
     u32 *collisionData = segmented_to_virtual(BHV_CMD_GET_VPTR(1));
-    gCurrentObject->collisionData = collisionData;
+    o->collisionData = collisionData;
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -541,9 +541,9 @@ static s32 bhv_cmd_load_collision_data(void) {
 // Command 0x2D: Sets the home position of the object to its current position.
 // Usage: SET_HOME()
 static s32 bhv_cmd_set_home(void) {
-    gCurrentObject->oHomeX = gCurrentObject->oPosX;
-    gCurrentObject->oHomeY = gCurrentObject->oPosY;
-    gCurrentObject->oHomeZ = gCurrentObject->oPosZ;
+    o->oHomeX = o->oPosX;
+    o->oHomeY = o->oPosY;
+    o->oHomeZ = o->oPosZ;
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -551,7 +551,7 @@ static s32 bhv_cmd_set_home(void) {
 // Command 0x2F: Sets the object's interaction type.
 // Usage: SET_INTERACT_TYPE(u32 type)
 static s32 bhv_cmd_set_interact_type(void) {
-    gCurrentObject->oInteractType = BHV_CMD_GET_U32(1);
+    o->oInteractType = BHV_CMD_GET_U32(1);
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -559,7 +559,7 @@ static s32 bhv_cmd_set_interact_type(void) {
 // Command 0x31: Sets the object's interaction subtype. Unused.
 // Usage: SET_INTERACT_SUBTYPE(u32 subtype)
 static s32 bhv_cmd_set_interact_subtype(void) {
-    gCurrentObject->oInteractionSubtype = BHV_CMD_GET_U32(1);
+    o->oInteractionSubtype = BHV_CMD_GET_U32(1);
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -579,12 +579,12 @@ static s32 bhv_cmd_scale(void) {
 // Usage: SET_OBJ_PHYSICS(f32 wallHitboxRadius, f32 gravity, f32 bounciness, f32 dragStrength, f32 friction, f32 buoyancy, f32 unused1, f32 unused2)
 static s32 bhv_cmd_set_obj_physics(void) {
     // UNUSED f32 unused1, unused2;
-    gCurrentObject->oWallHitboxRadius = BHV_CMD_GET_1ST_S16(1);
-    gCurrentObject->oGravity          = BHV_CMD_GET_2ND_S16(1) / 100.0f;
-    gCurrentObject->oBounciness       = BHV_CMD_GET_1ST_S16(2) / 100.0f;
-    gCurrentObject->oDragStrength     = BHV_CMD_GET_2ND_S16(2) / 100.0f;
-    gCurrentObject->oFriction         = BHV_CMD_GET_1ST_S16(3) / 100.0f;
-    gCurrentObject->oBuoyancy         = BHV_CMD_GET_2ND_S16(3) / 100.0f;
+    o->oWallHitboxRadius = BHV_CMD_GET_1ST_S16(1);
+    o->oGravity          = BHV_CMD_GET_2ND_S16(1) / 100.0f;
+    o->oBounciness       = BHV_CMD_GET_1ST_S16(2) / 100.0f;
+    o->oDragStrength     = BHV_CMD_GET_2ND_S16(2) / 100.0f;
+    o->oFriction         = BHV_CMD_GET_1ST_S16(3) / 100.0f;
+    o->oBuoyancy         = BHV_CMD_GET_2ND_S16(3) / 100.0f;
     // unused1                           = BHV_CMD_GET_1ST_S16(4) / 100.0f;
     // unused2                           = BHV_CMD_GET_2ND_S16(4) / 100.0f;
     gCurBhvCommand += 5;
@@ -595,7 +595,7 @@ static s32 bhv_cmd_set_obj_physics(void) {
 // Used for clearing active particle flags fron Mario's object.
 // Usage: PARENT_BIT_CLEAR(u8 field, s32 value)
 static s32 bhv_cmd_parent_bit_clear(void) {
-    obj_and_int(gCurrentObject->parentObj, BHV_CMD_GET_2ND_U8(0), (BHV_CMD_GET_U32(1) ^ 0xFFFFFFFF));
+    obj_and_int(o->parentObj, BHV_CMD_GET_2ND_U8(0), (BHV_CMD_GET_U32(1) ^ 0xFFFFFFFF));
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -604,7 +604,7 @@ static s32 bhv_cmd_parent_bit_clear(void) {
 // Usage: SPAWN_WATER_DROPLET(WaterDropletParams *dropletParams)
 static s32 bhv_cmd_spawn_water_droplet(void) {
     struct WaterDropletParams *dropletParams = BHV_CMD_GET_VPTR(1);
-    spawn_water_droplet(gCurrentObject, dropletParams);
+    spawn_water_droplet(o, dropletParams);
     gCurBhvCommand += 2;
     return BHV_PROC_CONTINUE;
 }
@@ -682,65 +682,65 @@ static BhvCommandProc BehaviorCmdTable[] = {
 
 // Execute the behavior script of the current object, process the object flags, and other miscellaneous code for updating objects.
 void cur_obj_update(void) {
-    s16 objFlags = gCurrentObject->oFlags;
+    s16 objFlags = o->oFlags;
     f32 distanceFromMario;
     BhvCommandProc bhvCmdProc;
     s32 bhvProcResult;
     // Calculate the distance from the object to Mario.
-    // if (!(gCurrentObject->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) && (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO)) {
+    // if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM) && (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO)) {
     if (objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) {
-        gCurrentObject->oDistanceToMario = dist_between_objects(gCurrentObject, gMarioObject);
-        distanceFromMario = gCurrentObject->oDistanceToMario;
+        o->oDistanceToMario = dist_between_objects(o, gMarioObject);
+        distanceFromMario = o->oDistanceToMario;
     } else {
         distanceFromMario = 0.0f;
     }
     // Calculate the angle from the object to Mario.
-    if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) gCurrentObject->oAngleToMario = obj_angle_to_object(gCurrentObject, gMarioObject);
+    if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
     // If the object's action has changed, reset the action timer.
-    if (gCurrentObject->oAction != gCurrentObject->oPrevAction) {
-        (void) (gCurrentObject->oTimer = 0, gCurrentObject->oSubAction = 0,
-                gCurrentObject->oPrevAction = gCurrentObject->oAction);
+    if (o->oAction != o->oPrevAction) {
+        (void) (o->oTimer = 0, o->oSubAction = 0,
+                o->oPrevAction = o->oAction);
     }
     // Execute the behavior script.
-    gCurBhvCommand = gCurrentObject->curBhvCommand;
+    gCurBhvCommand = o->curBhvCommand;
     do {
         bhvCmdProc = BehaviorCmdTable[*gCurBhvCommand >> 24];
         bhvProcResult = bhvCmdProc();
     } while (bhvProcResult == BHV_PROC_CONTINUE);
-    gCurrentObject->curBhvCommand = gCurBhvCommand;
+    o->curBhvCommand = gCurBhvCommand;
     // Increment the object's timer.
-    if (gCurrentObject->oTimer < 0x3FFFFFFF) gCurrentObject->oTimer++;
+    if (o->oTimer < 0x3FFFFFFF) o->oTimer++;
     // If the object's action has changed, reset the action timer.
-    if (gCurrentObject->oAction != gCurrentObject->oPrevAction) {
-        (void) (gCurrentObject->oTimer = 0, gCurrentObject->oSubAction = 0,
-                gCurrentObject->oPrevAction = gCurrentObject->oAction);
+    if (o->oAction != o->oPrevAction) {
+        (void) (o->oTimer = 0, o->oSubAction = 0,
+                o->oPrevAction = o->oAction);
     }
     // Execute various code based on object flags.
-    objFlags = (s16) gCurrentObject->oFlags;
-    if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) obj_set_face_angle_to_move_angle(      gCurrentObject);
-    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) gCurrentObject->oFaceAngleYaw =        gCurrentObject->oMoveAngleYaw;
+    objFlags = (s16) o->oFlags;
+    if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) obj_set_face_angle_to_move_angle(      o);
+    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) o->oFaceAngleYaw =        o->oMoveAngleYaw;
     if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw(                  );
     if (objFlags & OBJ_FLAG_MOVE_Y_WITH_TERMINAL_VEL       ) cur_obj_move_y_with_terminal_vel(                    );
-    if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(gCurrentObject);
-    if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   gCurrentObject);
-    if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          gCurrentObject);
+    if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(o);
+    if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   o);
+    if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          o);
 #ifdef VARIABLE_FRAMERATE
-    if (gCurrentObject->header.gfx.animInfo.curAnim != NULL) gCurrentObject->header.gfx.animInfo.animFrame = geo_update_animation_frame(&gCurrentObject->header.gfx.animInfo, &gCurrentObject->header.gfx.animInfo.animFrameAccelAssist);
+    if (o->header.gfx.animInfo.curAnim != NULL) o->header.gfx.animInfo.animFrame = geo_update_animation_frame(&o->header.gfx.animInfo, &o->header.gfx.animInfo.animFrameAccelAssist);
 #endif
     // Handle visibility of object
-    if (gCurrentObject->oRoom != -1) {
+    if (o->oRoom != -1) {
         // If the object is in a room, only show it when Mario is in the room.
         cur_obj_enable_rendering_if_mario_in_room();
-    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && (gCurrentObject->collisionData == NULL) && !(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
+    } else if ((objFlags & OBJ_FLAG_COMPUTE_DIST_TO_MARIO) && (o->collisionData == NULL) && !(objFlags & OBJ_FLAG_ACTIVE_FROM_AFAR)) {
         // If the object has a render distance, check if it should be shown.
-        if (distanceFromMario > gCurrentObject->oDrawingDistance) {
+        if (distanceFromMario > o->oDrawingDistance) {
             // Out of render distance, hide the object.
-            gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-            gCurrentObject->activeFlags           |=  ACTIVE_FLAG_FAR_AWAY;
-        } else if (gCurrentObject->oHeldState == HELD_FREE) {
+            o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
+            o->activeFlags           |=  ACTIVE_FLAG_FAR_AWAY;
+        } else if (o->oHeldState == HELD_FREE) {
             // In render distance (and not being held), show the object.
-            gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE;
-            gCurrentObject->activeFlags           &= ~ACTIVE_FLAG_FAR_AWAY;
+            o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE;
+            o->activeFlags           &= ~ACTIVE_FLAG_FAR_AWAY;
         }
     }
 }

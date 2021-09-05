@@ -38,6 +38,7 @@
 #include "boot/memory.h"
 #include "obj_behaviors.h"
 #include "obj_behaviors_2.h"
+#include "object_collision.h"
 #include "object_constants.h"
 #include "object_helpers.h"
 #include "object_list_processor.h"
@@ -50,8 +51,6 @@
 #define POS_OP_SAVE_POSITION    0x0
 #define POS_OP_COMPUTE_VELOCITY 0x1
 #define POS_OP_RESTORE_POSITION 0x2
-
-#define o gCurrentObject
 
 /* BSS (declared to force order) */
 extern s32 sNumActiveFirePiranhaPlants;
@@ -279,60 +278,6 @@ void cur_obj_update_blinking(s32 *blinkTimer, s16 baseCycleLength, s16 cycleLeng
         *blinkTimer = random_linear_offset(baseCycleLength, cycleLengthRange);
     }
     o->oAnimState = !(*blinkTimer > blinkLength);
-}
-
-//! move to object_collision
-void cur_obj_rotate_yaw_and_bounce_off_walls(Angle targetYaw, Angle turnAmount) {
-    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) targetYaw = cur_obj_reflect_move_angle_off_wall();
-    cur_obj_rotate_yaw_toward(targetYaw, turnAmount);
-}
-
-//! move to object_collision
-Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle type?
-    struct Object *otherObject;
-    f32 dx, dz;
-    Angle angle;
-    f32 radius, otherRadius, relativeRadius;
-    s32 i;
-    if (o->numCollidedObjs != 0) {
-        for ((i = 0); (i < o->numCollidedObjs); (i++)) {
-            otherObject = o->collidedObjs[i];
-            if (otherObject == gMarioObject) continue;
-            if (otherObject->oInteractType & INTERACT_MASK_NO_OBJ_COLLISIONS) continue;
-            dx             = (o->oPosX - otherObject->oPosX);
-            dz             = (o->oPosZ - otherObject->oPosZ);
-            radius         = ((          o->hurtboxRadius > 0) ?           o->hurtboxRadius :           o->hitboxRadius);
-            otherRadius    = ((otherObject->hurtboxRadius > 0) ? otherObject->hurtboxRadius : otherObject->hitboxRadius);
-            relativeRadius = (radius + otherRadius);
-            if ((sqr(dx) + sqr(dz)) > sqr(relativeRadius)) continue;
-            angle    = atan2s(dz, dx);
-            o->oPosX = (otherObject->oPosX + (relativeRadius * sins(angle)));
-            o->oPosZ = (otherObject->oPosZ + (relativeRadius * coss(angle)));
-            if ((targetYaw != NULL) && (abs_angle_diff(o->oMoveAngleYaw, angle) < DEG(90))) {
-                *targetYaw = (Angle)((angle - o->oMoveAngleYaw) + angle + DEG(180));
-                return TRUE;
-            }
-        }
-    }
-    return FALSE;
-}
-
-//! move to object_collision
-Bool32 cur_obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
-    if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
-        *targetYaw = cur_obj_reflect_move_angle_off_wall();
-    } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {
-        *targetYaw = (Angle)(o->oMoveAngleYaw + DEG(180));
-    } else if (!cur_obj_resolve_object_collisions(targetYaw)) {
-        return FALSE;
-    }
-    return TRUE;
-}
-
-//! move to object_collision
-s32 cur_obj_resolve_collisions_and_turn(Angle targetYaw, Angle turnSpeed) {
-    cur_obj_resolve_object_collisions(NULL);
-    return (!cur_obj_rotate_yaw_toward(targetYaw, turnSpeed));
 }
 
 void cur_obj_die_if_health_non_positive(void) {

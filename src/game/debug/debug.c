@@ -372,14 +372,14 @@ void try_do_mario_debug_object_spawn(void) {
 // TODO: figure out what this is
 void debug_print_obj_move_flags(void) {
 #ifndef VERSION_EU // TODO: Is there a better way to diff this? static EU doesn't seem to work.
-    if (o->oMoveFlags & OBJ_MOVE_LANDED               ) print_debug_top_down_objectinfo(  "BOUND   %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_ON_GROUND            ) print_debug_top_down_objectinfo(  "TOUCH   %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_LEFT_GROUND          ) print_debug_top_down_objectinfo(  "TAKEOFF %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER        ) print_debug_top_down_objectinfo(  "DIVE    %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE     ) print_debug_top_down_objectinfo(  "S WATER %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_OFF_GROUND) print_debug_top_down_objectinfo(  "U WATER %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND ) print_debug_top_down_objectinfo(  "B WATER %x", o->oMoveFlags);
-    if (o->oMoveFlags & OBJ_MOVE_IN_AIR               ) print_debug_top_down_objectinfo(  "SKY     %x", o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_LANDED               ) print_debug_top_down_objectinfo("BOUND   %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_ON_GROUND            ) print_debug_top_down_objectinfo("TOUCH   %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_LEFT_GROUND          ) print_debug_top_down_objectinfo("TAKEOFF %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_ENTERED_WATER        ) print_debug_top_down_objectinfo("DIVE    %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE     ) print_debug_top_down_objectinfo("S WATER %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_OFF_GROUND) print_debug_top_down_objectinfo("U WATER %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_UNDERWATER_ON_GROUND ) print_debug_top_down_objectinfo("B WATER %x",   o->oMoveFlags);
+    if (o->oMoveFlags & OBJ_MOVE_IN_AIR               ) print_debug_top_down_objectinfo("SKY     %x",   o->oMoveFlags);
     if (o->oMoveFlags & OBJ_MOVE_OUT_SCOPE            ) print_debug_top_down_objectinfo("OUT SCOPE %x", o->oMoveFlags);
 #endif
 }

@@ -64,7 +64,7 @@ void stub_mario_step_1(UNUSED struct MarioState *m) {
  * or to set a variable with its intended additive Y vel.
  */
 void stub_mario_step_2(void) {
-    // sTrampoline = gCurrentObject;
+    // sTrampoline = o;
 }
 
 void transfer_bully_speed(struct BullyCollisionData *obj1, struct BullyCollisionData *obj2) {
