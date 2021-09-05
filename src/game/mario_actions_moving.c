@@ -372,16 +372,16 @@ Bool32 should_begin_sliding(struct MarioState *m) {
 Bool32 check_ground_dive_or_punch(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
         //! Speed kick (shoutouts to SimpleFlips)
-#ifdef ACTION_CANCELS
+#ifdef SUPER_RESPONSIVE_GROUND_DIVE
         if (!(m->input & INPUT_A_DOWN)
          && (m->forwardVel  >= GROUND_SPEED_THRESHOLD)
-         && (m->intendedMag >= 29.0f)
+         && (m->intendedMag >= GROUND_DIVE_THRESHOLD)
          && (m->controller->stickMag > 48.0f)
          && ((m->wall == NULL) || (m->wall->object == NULL))
         //  && !(m->input & INPUT_INTERACT_OBJ_GRABBABLE)) {
          && !(m->marioObj->collidedObjInteractTypes & INTERACT_GRABBABLE)) {
 #else
-        if ((m->forwardVel >= 29.0f) && (m->controller->stickMag > 48.0f)) {
+        if ((m->forwardVel >= GROUND_DIVE_THRESHOLD) && (m->controller->stickMag > 48.0f)) {
 #endif
             m->vel[1] = 20.0f;
             return set_mario_action(m, ACT_DIVE, 1);

@@ -665,6 +665,13 @@
 #define GROUND_SPEED_THRESHOLD   10.0f
 #define GROUND_SPEED_THRESHOLD_2 10.0f
 
+// The minimum forward speed Mario should be moving to dive instead of punch
+// Vanilla is 29.0f
+#define GROUND_DIVE_THRESHOLD  24.0f
+
+// Diving is based on the analog stick magnitude instead of Mario's speed (Arceveti)
+// #define SUPER_RESPONSIVE_GROUND_DIVE
+
 // Perform ground steps while standing still. This fixes several bugs. (Arceveti)
 #define STATIONARY_GROUND_STEPS
 
@@ -708,7 +715,14 @@
 #define NO_FALL_DAMAGE
 
 // Allows for turning in midair (Arceveti)
-#define AIR_TURN
+// #define AIR_TURN
+
+// The minimum forward speed Mario should be moving to dive instead of kick in midair
+// Vanilla is 28.0f
+#define AIR_DIVE_THRESHOLD 24.0f
+
+// Diving is based on the analog stick magnitude instead of Mario's speed (Arceveti)
+// #define SUPER_RESPONSIVE_AIR_DIVE
 
 // Mario's falling speed affects his horizontal movement speed.
 // This makes Mario's falling feel more realistic, but might occasionally feel restrictive.

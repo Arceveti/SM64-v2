@@ -79,10 +79,10 @@ Bool32 check_fall_damage(struct MarioState *m, MarioAction hardFallAction) {
 
 Bool32 check_kick_or_dive_in_air(struct MarioState *m) {
     if (m->input & INPUT_B_PRESSED) {
-#ifdef ACTION_CANCELS
-        return set_mario_action(m, ((m->intendedMag > 28.0f) && !analog_stick_held_back(m, DEG(100))) ? ACT_DIVE : ACT_JUMP_KICK, 0);
+#ifdef SUPER_RESPONSIVE_AIR_DIVE
+        return set_mario_action(m, ((m->intendedMag > AIR_DIVE_THRESHOLD) && !analog_stick_held_back(m, DEG(100))) ? ACT_DIVE : ACT_JUMP_KICK, 0);
 #else
-        return set_mario_action(m, ((m->forwardVel  > 28.0f) ? ACT_DIVE : ACT_JUMP_KICK, 0));
+        return set_mario_action(m, ((m->forwardVel  > AIR_DIVE_THRESHOLD) ? ACT_DIVE : ACT_JUMP_KICK), 0);
 #endif
     }
     return FALSE;
@@ -164,13 +164,12 @@ void update_air_with_turn(struct MarioState *m) {
             intendedMag  = (m->intendedMag / 32.0f);
             m->forwardVel += (1.5f * coss(intendedDYaw) * intendedMag);
 #ifdef AIR_TURN
+            sidewaysSpeed = (intendedMag * sins(intendedDYaw) * 10.0f);
             if ((m->forwardVel > 4.0f) || (absYVel > 36.0f)) {
-                absYVel = ((m->intendedMag - m->forwardVel) * absYVel); // reuse absYVel var for turn range calculation
-                turnRange = MIN(absYVel, DEG(90));
-                if (turnRange < 0x100) turnRange = 0x100;
+                absYVel = ((m->intendedMag - m->forwardVel) * absYVel); // Reuse absYVel var for turn range calculation
+                turnRange = CLAMP(absYVel, 0x100, DEG(90));
                 approach_s16_symmetric_bool(&m->faceAngle[1], m->intendedYaw, turnRange);
             }
-            sidewaysSpeed = (intendedMag * sins(intendedDYaw) * 10.0f);
 #else
             m->faceAngle[1] += (512.0f * sins(intendedDYaw) * intendedMag);
 #endif
