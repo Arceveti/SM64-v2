@@ -349,20 +349,20 @@ void shade_screen_color(ColorRGBA color) {
 }
 
 #ifdef ENVIRONMENT_SCREEN_TINT
-static const ColorRGB   waterOverlayColor = {   5,  80, 150};
-static const ColorRGB     gasOverlayColor = { 255, 255,   0};
-static const ColorRGB    sandOverlayColor = { 220, 169, 115};
+static const ColorRGB   waterOverlayColor = COLOR_RGB_WATER;
+static const ColorRGB     gasOverlayColor = COLOR_RGB_YELLOW;
+static const ColorRGB    sandOverlayColor = COLOR_RGB_SAND;
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-static const ColorRGB  damageOverlayColor = { 255,   0,   0};
-static const ColorRGB shockedOverlayColor = { 255, 238,   0};
+static const ColorRGB  damageOverlayColor = COLOR_RGB_RED;
+static const ColorRGB shockedOverlayColor = COLOR_RGB_ELECTRIC;
 #endif
 #if defined(LLL_VOLCANO_TINT) || defined(AREA_SCREEN_TINT)
-static const ColorRGB    lavaOverlayColor = { 143,   6,   0};
+static const ColorRGB    lavaOverlayColor = COLOR_RGB_LAVA;
 #endif
 #ifdef AREA_SCREEN_TINT
-static const ColorRGB    snowOverlayColor = { 255, 255, 255};
-static const ColorRGB    darkOverlayColor = {   0,   0,   0};
+static const ColorRGB    snowOverlayColor = COLOR_RGB_WHITE;
+static const ColorRGB    darkOverlayColor = COLOR_RGB_BLACK;
 #endif
 
 void render_screen_overlay(void) {

@@ -460,7 +460,7 @@ void alloc_animdata(struct ObjAnimator *animator) {
                     vec3f_mul_val(tri.p1, allocMtxScale);
                     vec3s_to_vec3f(tri.p2, halfarr[6]);
                     mtxf_identity(curMtxVec->matrix);
-                    gd_rot_mat_about_vec3f(&curMtxVec->matrix, tri.p1);
+                    gd_rot_mat_about_vec3f(curMtxVec->matrix, tri.p1);
                     vec3f_add(curMtxVec->matrix[3], tri.p2);
                     vec3f_copy(((struct AnimMtxVec *) allocSpace)[dataIdx].vec, tri.p0);
                 }

@@ -389,8 +389,8 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         rotMtx2 = (Mat4 *) d_get_rot_mtx_ptr();
         d_get_scale(scale);
         unkMtx = d_get_matrix_ptr();
-        gd_mult_mat4f(unkMtx, iMtx, parentUnkMtx);
-        gd_mult_mat4f(rotMtx2, iMtx, rotMtx);
+        mtxf_mul(*unkMtx, *iMtx, *parentUnkMtx);
+        mtxf_mul(*rotMtx2, *iMtx, *rotMtx);
         mtxf_scale_self_vec3f(*rotMtx2, scale);
     } else {
         set_cur_dynobj(obj);
@@ -434,12 +434,12 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
         transform.pos[1]    = (t1->pos[1] + ((t2->pos[1] - t1->pos[1]) * dt));
         transform.pos[2]    = (t1->pos[2] + ((t2->pos[2] - t1->pos[2]) * dt));
         // not going to interpolate scale?
-        mtxf_scale_self_vec3f(     mtx, t1->scale);
-        gd_rot_mat_about_vec3f(      &mtx, transform.rotate);
+        mtxf_scale_self_vec3f( mtx, t1->scale);
+        gd_rot_mat_about_vec3f(mtx, transform.rotate);
         vec3f_add(mtx[3], transform.pos);
     } else {
         d_set_scale(t1->scale[0], t1->scale[1], t1->scale[2]);
-        gd_rot_mat_about_vec3f(      &mtx, t1->rotate);
+        gd_rot_mat_about_vec3f(mtx, t1->rotate);
         vec3f_add(mtx[3], t1->pos);
     }
     d_set_i_matrix(&mtx);
@@ -564,8 +564,8 @@ void move_animator(struct ObjAnimator *animObj) {
             case GD_ANIM_SCALE3F_ROT3F_POS3F_2:  // similar to GD_ANIM_SCALE3F_ROT3F_POS3F, but no interpolation? what matrix does d_set_i_matrix set? Maybe Identity Matrix?
                 triPtr = (struct GdAnimTransform *) animData->data;
                 mtxf_identity(localMtx);
-                mtxf_scale_self_vec3f(  localMtx, triPtr->scale );
-                gd_rot_mat_about_vec3f(&localMtx, triPtr->rotate);
+                mtxf_scale_self_vec3f( localMtx, triPtr->scale );
+                gd_rot_mat_about_vec3f(localMtx, triPtr->rotate);
                 vec3f_add(localMtx[3], triPtr->pos);
                 d_set_i_matrix(&localMtx);
                 break;

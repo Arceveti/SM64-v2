@@ -7,7 +7,7 @@
 //! TODO: Combine this with math_util.c
 
 /// Rotates the matrix 'mtx' about the vector given.
-void gd_rot_mat_about_vec3f(Mat4 *mtx, Vec3f vec) {
+void gd_rot_mat_about_vec3f(Mat4 mtx, Vec3f vec) {
     if (vec[0] != 0.0f) gd_absrot_mat4(mtx, X_AXIS, vec[0]);
     if (vec[1] != 0.0f) gd_absrot_mat4(mtx, Y_AXIS, vec[1]);
     if (vec[2] != 0.0f) gd_absrot_mat4(mtx, Z_AXIS, vec[2]);
@@ -25,7 +25,7 @@ void gd_rot_2d_vec(f32 deg, f32 *x, f32 *y) {
 }
 
 /// Rotates a mat4f matrix about a given axis by a set angle in degrees.
-void gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang) {
+void gd_absrot_mat4(Mat4 mtx, s32 axisnum, f32 ang) {
     Mat4 rMat;
     Vec3f rot;
     switch (axisnum) {
@@ -35,7 +35,9 @@ void gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang) {
         default:     vec3f_copy(rot, gVec3fZero); break;
     }
     gd_create_rot_mat_angular(&rMat, rot, (ang / 2.0f));
-    gd_mult_mat4f(mtx, mtx, &rMat);
+    Mat4 temp;
+    mtxf_copy(temp, mtx);
+    mtxf_mul(mtx, temp, rMat);
 }
 
 /**

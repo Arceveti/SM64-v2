@@ -18,11 +18,6 @@ static struct GMemBlock *sFreeBlockListHead;
 static struct GMemBlock *sUsedBlockListHead;
 static struct GMemBlock *sEmptyBlockListHead;
 
-/* Forward Declarations */
-void empty_mem_block(struct GMemBlock *);
-struct GMemBlock *into_free_memblock(struct GMemBlock *);
-struct GMemBlock *make_mem_block(u32, u8);
-
 /**
  * Empty a `GMemBlock` into a default state. This empty block
  * doesn't point to any data, nor does it have any size. The

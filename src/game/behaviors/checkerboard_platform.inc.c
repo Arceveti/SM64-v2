@@ -60,8 +60,8 @@ void bhv_checkerboard_platform_loop(void) {
     o->oFaceAnglePitch += ABSI(o->oAngleVelPitch);
     o->oFaceAngleYaw = o->oMoveAngleYaw;
     if (o->oMoveAnglePitch != 0x0) {
-        o->oForwardVel = (signum_positive(o->oAngleVelPitch) * sins(o->oMoveAnglePitch) * radius);
-        o->oVelY       = (signum_positive(o->oAngleVelPitch) * coss(o->oMoveAnglePitch) * radius);
+        o->oForwardVel = (SIGNUM(o->oAngleVelPitch) * sins(o->oMoveAnglePitch) * radius);
+        o->oVelY       = (SIGNUM(o->oAngleVelPitch) * coss(o->oMoveAnglePitch) * radius);
     }
     // Prevent the lower platform from flipping
     if (o->oCheckerBoardPlatformRotateAction == CHECKERBOARD_PLATFORM_ACT_MOVE_UP) {

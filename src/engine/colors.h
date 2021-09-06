@@ -7,6 +7,44 @@
 #include "types.h"
 #include "math_util.h"
 
+#define COLOR_RGBA_WHITE            { 0xFF, 0xFF, 0xFF, 0xFF }
+// Grayscale color presets
+#define COLOR_RGB_WHITE             { 0xFF, 0xFF, 0xFF } // 255 255 255
+#define COLOR_RGB_LIGHT             { 0xBF, 0xBF, 0xBF } // 191 191 191
+#define COLOR_RGB_GRAY              { 0x7F, 0x7F, 0x7F } // 127 127 127
+#define COLOR_RGB_DARK              { 0x3F, 0x3F, 0x3F } //  63  63  63
+#define COLOR_RGB_BLACK             { 0x00, 0x00, 0x00 } //   0   0   0
+// Primary/secondary/tertiary color presets
+#define COLOR_RGB_RED               { 0xFF, 0x00, 0x00 } // 255   0   0
+#define COLOR_RGB_ORANGE            { 0xFF, 0x7F, 0x00 } // 255 127   0
+#define COLOR_RGB_YELLOW            { 0xFF, 0xFF, 0x00 } // 255 255   0
+#define COLOR_RGB_LIME              { 0x7F, 0xFF, 0x00 } // 127 255   0
+#define COLOR_RGB_GREEN             { 0x00, 0xFF, 0x00 } //   0 255   0
+#define COLOR_RGB_SPRING            { 0x00, 0xFF, 0x7F } //   0 255 127
+#define COLOR_RGB_CYAN              { 0x00, 0xFF, 0xFF } //   0 255 255
+#define COLOR_RGB_SKY               { 0x00, 0x7F, 0xFF } //   0 127 255
+#define COLOR_RGB_BLUE              { 0x00, 0x00, 0xFF } //   0   0 255
+#define COLOR_RGB_PURPLE            { 0x7F, 0x00, 0xFF } // 127   0 255
+#define COLOR_RGB_MAGENTA           { 0xFF, 0x00, 0xFF } // 255   0 255
+#define COLOR_RGB_PINK              { 0xFF, 0x00, 0x7F } // 255   0 127
+// Elemental color presets
+#define COLOR_RGB_JRB_SKY           { 0x50, 0x64, 0x5A } //  80 100  90
+#define COLOR_RGB_WATER             { 0x05, 0x50, 0x96 } //   5  80 150
+#define COLOR_RGB_LAVA              { 0x8F, 0x06, 0x00 } // 143   6   0
+#define COLOR_RGB_SAND              { 0xDC, 0xA9, 0x73 } // 220 169 115
+#define COLOR_RGB_ELECTRIC          { 0xFF, 0xEE, 0x00 } // 255 238   0
+// Goddard-specific
+#define COLOR_RGBF_WHITE            { 1.0f, 1.0f, 1.0f }
+#define COLOR_RGBF_RED              { 1.0f, 0.0f, 0.0f }
+#define COLOR_RGBF_GREEN            { 0.0f, 1.0f, 0.0f }
+#define COLOR_RGBF_BLUE             { 0.0f, 0.0f, 1.0f }
+#define COLOR_RGBF_ERR_DARK_BLUE    { 0.0f, 0.0f, 6.0f }
+#define COLOR_RGBF_PINK             { 1.0f, 0.0f, 1.0f }
+#define COLOR_RGBF_BLACK            { 0.0f, 0.0f, 0.0f }
+#define COLOR_RGBF_GREY             { 0.6f, 0.6f, 0.6f }
+#define COLOR_RGBF_DARK_GREY        { 0.4f, 0.4f, 0.4f }
+#define COLOR_RGBF_YELLOW           { 1.0f, 1.0f, 1.0f }
+
 // I4
 #define SIZ_I4      0x4
 #define MSK_I4      BITMASK(SIZ_I4)

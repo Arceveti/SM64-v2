@@ -11,12 +11,12 @@
 
 #include "config.h"
 
-static const Mat4 identityMtx = {
-    { 1, 0, 0, 0 },
-    { 0, 1, 0, 0 },
-    { 0, 0, 1, 0 },
-    { 0, 0, 0, 1 }
-};
+// UNUSED static const Mat4 identityMtx = {
+//     { 1, 0, 0, 0 },
+//     { 0, 1, 0, 0 },
+//     { 0, 0, 1, 0 },
+//     { 0, 0, 0, 1 }
+// };
 // UNUSED static const Mat4 zeroMtx = {
 //     { 0, 0, 0, 0 },
 //     { 0, 0, 0, 0 },
@@ -88,13 +88,9 @@ static __inline__ s32 roundf(f32 in) {
     return out;
 }
 
-inline f32 froundf(f32 in) {
-    return roundf(in);
-}
-
 /// Round `num` to the nearest integer.
-inline s16 round_float_to_short( f32 num) { return (num + ((num >= 0.0f) ? 0.5f : -0.5f)); }
-inline s32 round_float_to_int(   f32 num) { return (num + ((num >= 0.0f) ? 0.5f : -0.5f)); } //! use roundf instead?
+inline s16 round_float_to_short( f32 num) { return roundf(num); } // (num + ((num >= 0.0f) ? 0.5f : -0.5f)); }
+inline s32 round_float_to_int(   f32 num) { return roundf(num); } // (num + ((num >= 0.0f) ? 0.5f : -0.5f)); }
 inline s16 round_double_to_short(f64 num) { return (num + ((num >= 0.0 ) ? 0.5  : -0.5 )); }
 inline s32 round_double_to_int(  f64 num) { return (num + ((num >= 0.0 ) ? 0.5  : -0.5 )); }
 
@@ -112,21 +108,9 @@ s8 normalize_component(f32 comp) {
     }
 }
 
-/***********************************
- * Absolute value & sign functions *
- ***********************************/
-
-/// From Wiseguy
-// http://www.terathon.com/code/oblique.html
-inline f32 sgn(f32 a) {
-    if (a > 0.0f) return ( 1.0f);
-    if (a < 0.0f) return (-1.0f);
-    return (0.0f);
-}
-
-inline s32 signum_positive(s32 x) {
-    return ((x >= 0) ? 1 : -1);
-}
+/****************************
+ * Absolute value functions *
+ ****************************/
 
 inline s8  absc(s8  x) { return ((x < 0   ) ? -x : x); }
 inline s16 abss(s16 x) { return ((x < 0   ) ? -x : x); }
@@ -688,7 +672,12 @@ void mtxf_shift_up(Mat4 mtx) {
  * Set mtx to the identity matrix
  */
 void mtxf_identity(Mat4 mtx) {
-    mtxf_copy(mtx, identityMtx);
+    vec3_copy(mtx[0], gVec3fX);
+    vec3_copy(mtx[1], gVec3fY);
+    vec3_copy(mtx[2], gVec3fZ);
+    vec3_zero(mtx[3]);
+    MTXF_END(mtx);
+    // mtxf_copy(mtx, identityMtx);
 }
 
 /**
@@ -774,7 +763,7 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
         vec3f_copy(mtx[1], gVec3fX);
         vec3f_copy(mtx[2], gVec3fY);
     }
-    vec3f_zero(mtx[3]);
+    vec3_zero(mtx[3]);
     MTXF_END(mtx);
 }
 
@@ -1072,10 +1061,10 @@ void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
 }
 
 /// Multiplies two Mat4 matrices and puts it in dst.
-void gd_mult_mat4f(Mat4 *dst, const Mat4 *mA, const Mat4 *mB) {
+void gd_mult_mat4f(Mat4 dst, const Mat4 mA, const Mat4 mB) {
     Mat4 res;
-    MAT4_MULTIPLY(res, (*mA), (*mB));
-    mtxf_copy(*dst, res);
+    MAT4_MULTIPLY(res, mA, mB);
+    mtxf_copy(dst, res);
 }
 
 /**
@@ -1088,13 +1077,18 @@ void gd_mult_mat4f(Mat4 *dst, const Mat4 *mA, const Mat4 *mB) {
  * and no crashes occur.
  */
 void mtxf_to_mtx(Mtx *dest, Mat4 src) {
+#if EXTENDED_BOUNDS_MODE > 1
     Mat4 temp;
     register s32 i;
+    register f32 invScale = (1.0f / gWorldScale);
     for((i = 0); (i < 4); (i++)) {
-        vec3_quot_val(temp[i], src[i], gWorldScale);
+        vec3_prod_val(temp[i], src[i], invScale);
         temp[i][3] = src[i][3];
     }
     guMtxF2L(temp, dest);
+#else
+    guMtxF2L(src, dest);
+#endif
 }
 
 /**
@@ -1275,14 +1269,16 @@ void mtxf_inverse(Mat4 *dst, Mat4 *src) {
     for ((i = 0); (i < 4); (i++)) for ((j = 0); (j < 4); (j++)) (*dst)[i][j] /= determinant;
 }
 
+/// From Wiseguy
+/// http://www.terathon.com/code/oblique.html
 void make_oblique(Mat4 toModify, Vec4f clipPlane) {
     Vec4f q, c;
     // Calculate the clip-space corner point opposite the clipping plane
-    // as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
+    // as (SIGNUMF(clipPlane.x), SIGNUMF(clipPlane.y), 1, 1) and
     // transform it into camera space by multiplying it
     // by the inverse of the projection matrix
-    q[0] = (sgn(clipPlane[0]) / toModify[0][0]);
-    q[1] = (sgn(clipPlane[1]) / toModify[1][1]);
+    q[0] = (SIGNUMF(clipPlane[0]) / toModify[0][0]);
+    q[1] = (SIGNUMF(clipPlane[1]) / toModify[1][1]);
     q[2] = -1.0f;
     q[3] = (1.0f + toModify[2][2]) / toModify[3][2];
     // Calculate the scaled plane vector

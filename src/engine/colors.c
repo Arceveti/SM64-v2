@@ -115,9 +115,7 @@ RGBA16 colorRGBAf_to_rgba16(ColorRGBAf src) {
 }
 
 void colorRGB_to_colorRGBf(ColorRGBf dst, ColorRGB src) {
-    dst[0] = (src[0] / 255.0f);
-    dst[1] = (src[1] / 255.0f);
-    dst[2] = (src[2] / 255.0f);
+    vec3_quot_val(dst, src, 255.0f);
 }
 
 void colorRGBA_to_colorRGBAf(ColorRGBf dst, ColorRGB src) {
@@ -126,9 +124,7 @@ void colorRGBA_to_colorRGBAf(ColorRGBf dst, ColorRGB src) {
 }
 
 void colorRGBf_to_colorRGB(ColorRGB dst, ColorRGBf src) {
-    dst[0] = (src[0] * 255.0f);
-    dst[1] = (src[1] * 255.0f);
-    dst[2] = (src[2] * 255.0f);
+    vec3_prod_val(dst, src, 255.0f);
 }
 
 void colorRGBAf_to_colorRGBA(ColorRGBA dst, ColorRGBAf src) {

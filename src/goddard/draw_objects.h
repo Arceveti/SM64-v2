@@ -40,6 +40,9 @@ void draw_group(                struct ObjGroup  *grp);
 void apply_obj_draw_fn(         struct GdObj     *obj);
 void create_gddl_for_shapes(    struct ObjGroup  *grp);
 void map_face_materials(        struct ObjGroup  *faces, struct ObjGroup *mtls);
-void update_view(               struct ObjView  *view);
+void update_view(               struct ObjView   *view);
+void update_shaders(            struct ObjShape  *shape, Vec3f offset);
+void draw_shape_faces(          struct ObjShape  *shape);
+void register_light(            struct ObjLight  *light);
 
 #endif // GD_DRAW_OBJECTS_H

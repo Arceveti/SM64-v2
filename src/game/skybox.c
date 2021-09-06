@@ -2,6 +2,7 @@
 
 #include "area.h"
 #include "engine/math_util.h"
+#include "engine/colors.h"
 #include "geo_misc.h"
 #include "gfx_dimensions.h"
 #include "level_update.h"
@@ -91,8 +92,8 @@ SkyboxTexture *sSkyboxTextures[10] = {
  * The final color of each pixel is computed from the bitwise AND of the color and the texture.
  */
 ColorRGB sSkyboxColors[] = {
-    { 0x50, 0x64, 0x5A },
-    { 0xFF, 0xFF, 0xFF },
+    COLOR_RGB_JRB_SKY,
+    COLOR_RGB_WHITE,
 };
 
 /**

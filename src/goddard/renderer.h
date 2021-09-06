@@ -61,7 +61,7 @@ void  gd_dl_rotate(f32 angle, s8 axis);
 void  gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY);
 void  check_tri_display(s32 vtxcount);
 Vtx  *gd_dl_make_vertex(f32 x, f32 y, f32 z, AlphaF alpha);
-void  func_8019FEF0(void);
+void  flush_current_triangle_buffer(void);
 void  gd_dl_reset_buffers(void);
 void  gd_dl_flush_vertices(void);
 void  set_render_alpha(f32 alpha);

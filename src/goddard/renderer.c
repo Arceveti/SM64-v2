@@ -1030,7 +1030,7 @@ void gd_dl_scale(f32 x, f32 y, f32 z) {
 void gd_dl_rotate(f32 angle, s8 axis) {
     Mat4 mtx;
     mtxf_identity(mtx);
-    gd_absrot_mat4(      &mtx, (axis - 120), -angle);
+    gd_absrot_mat4(      mtx, (axis - 120), -angle);
     gd_dl_mul_matrix(    &mtx);
 }
 
@@ -1054,21 +1054,13 @@ void gd_dl_lookat(struct ObjCamera *cam, Vec3f from, Vec3f to, f32 colXY) {
     lookat->l[1].l.dir[0]  = LOOKAT_PACK(cam->lookatMtx[0][1]);
     lookat->l[1].l.dir[1]  = LOOKAT_PACK(cam->lookatMtx[1][1]);
     lookat->l[1].l.dir[2]  = LOOKAT_PACK(cam->lookatMtx[2][1]);
-    lookat->l[0].l.col[0]  = 0;
-    lookat->l[0].l.col[1]  = 0;
-    lookat->l[0].l.col[2]  = 0;
+    vec3_zero(lookat->l[0].l.col );
     lookat->l[0].l.pad1    = 0;
-    lookat->l[0].l.colc[0] = 0;
-    lookat->l[0].l.colc[1] = 0;
-    lookat->l[0].l.colc[2] = 0;
+    vec3_zero(lookat->l[0].l.colc);
     lookat->l[0].l.pad2    = 0;
-    lookat->l[1].l.col[0]  = 0;
-    lookat->l[1].l.col[1]  = 0x80;
-    lookat->l[1].l.col[2]  = 0;
+    vec3_set(lookat->l[1].l.col,  0x0, 0x80, 0x0);
     lookat->l[1].l.pad1    = 0;
-    lookat->l[1].l.colc[0] = 0;
-    lookat->l[1].l.colc[1] = 0x80;
-    lookat->l[1].l.colc[2] = 0;
+    vec3_set(lookat->l[1].l.colc, 0x0, 0x80, 0x0);
     lookat->l[1].l.pad2    = 0;
     gSPLookAt(next_gfx(), osVirtualToPhysical(&gGdLookAts[gGdFrameBufNum]));
     next_mtx();
@@ -1110,7 +1102,7 @@ Vtx *gd_dl_make_vertex(f32 x, f32 y, f32 z, f32 alpha) {
 }
 
 /* 24E6C0 -> 24E724 */
-void func_8019FEF0(void) {
+void flush_current_triangle_buffer(void) {
     sTriangleBufCount++;
     if (sVertexBufCount >= 12) {
         gd_dl_flush_vertices();
@@ -1282,9 +1274,7 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
 
 /* 24FE94 -> 24FF80; orig name: func_801A16C4; only from verts? */
 void set_Vtx_norm_buf_2(Vec3f norm) {
-    sVtxCvrtNormBuf[0] = (s8)(norm[0] * 127.0f);
-    sVtxCvrtNormBuf[1] = (s8)(norm[1] * 127.0f);
-    sVtxCvrtNormBuf[2] = (s8)(norm[2] * 127.0f);
+    vec3_prod_val(sVtxCvrtNormBuf, norm, 127.0f);
 }
 
 /* 24FF80 -> 24FFDC; orig name: func_801A17B0 */

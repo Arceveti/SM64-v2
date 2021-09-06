@@ -635,25 +635,17 @@ void painting_generate_mesh(struct Painting *painting, PaintingData *mesh, Paint
  */
 void painting_calculate_triangle_normals(PaintingData *mesh, PaintingData numVtx, PaintingData numTris) {
     s16 i;
+    Vec3vs v;
+    Vec3f vp0, vp1, vp2;
     gPaintingTriNorms = mem_pool_alloc(gEffectsMemoryPool, numTris * sizeof(Vec3f));
     for ((i = 0); (i < numTris); (i++)) {
         PaintingData tri = ((numVtx * 3) + (i * 3) + 2); // Add 2 because of the 2 length entries preceding the list
-        PaintingData v0 = mesh[tri];
-        PaintingData v1 = mesh[tri + 1];
-        PaintingData v2 = mesh[tri + 2];
-        f32 x0 = gPaintingMesh[v0].pos[0];
-        f32 y0 = gPaintingMesh[v0].pos[1];
-        f32 z0 = gPaintingMesh[v0].pos[2];
-        f32 x1 = gPaintingMesh[v1].pos[0];
-        f32 y1 = gPaintingMesh[v1].pos[1];
-        f32 z1 = gPaintingMesh[v1].pos[2];
-        f32 x2 = gPaintingMesh[v2].pos[0];
-        f32 y2 = gPaintingMesh[v2].pos[1];
-        f32 z2 = gPaintingMesh[v2].pos[2];
+        vec3_copy(v, &mesh[tri]);
+        vec3_copy(vp0, gPaintingMesh[v[0]].pos);
+        vec3_copy(vp1, gPaintingMesh[v[1]].pos);
+        vec3_copy(vp2, gPaintingMesh[v[2]].pos);
         // Cross product to find each triangle's normal vector
-        gPaintingTriNorms[i][0] = (((y1 - y0) * (z2 - z1)) - ((z1 - z0) * (y2 - y1)));
-        gPaintingTriNorms[i][1] = (((z1 - z0) * (x2 - x1)) - ((x1 - x0) * (z2 - z1)));
-        gPaintingTriNorms[i][2] = (((x1 - x0) * (y2 - y1)) - ((y1 - y0) * (x2 - x1)));
+        find_vector_perpendicular_to_plane(gPaintingTriNorms[i], vp0, vp1, vp2);
     }
 }
 
@@ -688,9 +680,7 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
         // Move to the next vertex's entry
         entry += (neighbors + 1);
         // average the surface normals from each neighboring tri
-        n[0] /= neighbors;
-        n[1] /= neighbors;
-        n[2] /= neighbors;
+        vec3_div_val(n, neighbors);
         vec3f_normalize(n);
         gPaintingMesh[i].norm[0] = normalize_component(n[0]);
         gPaintingMesh[i].norm[1] = normalize_component(n[1]);

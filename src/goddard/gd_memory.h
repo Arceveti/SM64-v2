@@ -30,5 +30,8 @@ extern u32 gd_free_mem(void *ptr);
 extern void             *gd_request_mem(    u32 size,             u8 permanence);
 extern struct GMemBlock *gd_add_mem_to_heap(u32 size, void *addr, u8 permanence);
 extern void init_mem_block_lists(void);
+void  empty_mem_block(struct GMemBlock *);
+struct GMemBlock *into_free_memblock(struct GMemBlock *);
+struct GMemBlock *make_mem_block(u32, u8);
 
 #endif // GD_MEMORY_H

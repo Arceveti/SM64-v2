@@ -9,17 +9,13 @@
 #include "shape_helper.h"
 #include "draw_objects.h"
 #include "engine/math_util.h"
+#include "engine/colors.h"
 
 /**
  * @file draw_objects.c
  * This file contains the functions and helpers for rendering the various
  * GdObj primitives to the screen.
  */
-
-// forward declarations
-void update_shaders(  struct ObjShape *, Vec3f offset);
-void draw_shape_faces(struct ObjShape *);
-void register_light(  struct ObjLight *);
 
 // types
 /**
@@ -31,42 +27,42 @@ enum SceneType {
 };
 
 // data
-static ColorRGBf sClrWhite        =   { 1.0f, 1.0f, 1.0f };   // @ 801A8070
-static ColorRGBf sClrRed          =   { 1.0f, 0.0f, 0.0f };   // @ 801A807C
-static ColorRGBf sClrGreen        =   { 0.0f, 1.0f, 0.0f };   // @ 801A8088
-static ColorRGBf sClrBlue         =   { 0.0f, 0.0f, 1.0f };   // @ 801A8094
-static ColorRGBf sClrErrDarkBlue  =   { 0.0f, 0.0f, 6.0f };   // @ 801A80A0
-static ColorRGBf sClrPink         =   { 1.0f, 0.0f, 1.0f };   // @ 801A80AC
-static ColorRGBf sClrBlack        =   { 0.0f, 0.0f, 0.0f };   // @ 801A80B8
-static ColorRGBf sClrGrey         =   { 0.6f, 0.6f, 0.6f };   // @ 801A80C4
-static ColorRGBf sClrDarkGrey     =   { 0.4f, 0.4f, 0.4f };   // @ 801A80D0
-static ColorRGBf sClrYellow       =   { 1.0f, 1.0f, 0.0f };   // @ 801A80DC
-static ColorRGBf sLightColours[1] = { { 1.0f, 1.0f, 0.0f } }; // @ 801A80E8
-static ColorRGBf *sSelectedColour = &sClrRed;                 // @ 801A80F4
-struct ObjCamera *gViewUpdateCamera = NULL;                  // @ 801A80F8
-static s32 sLightDlCounter = 1; // @ 801A81A0
+static ColorRGBf sClrWhite        =   COLOR_RGBF_WHITE;
+static ColorRGBf sClrRed          =   COLOR_RGBF_RED;
+static ColorRGBf sClrGreen        =   COLOR_RGBF_GREEN;
+static ColorRGBf sClrBlue         =   COLOR_RGBF_BLUE;
+static ColorRGBf sClrErrDarkBlue  =   COLOR_RGBF_ERR_DARK_BLUE;
+static ColorRGBf sClrPink         =   COLOR_RGBF_PINK;
+static ColorRGBf sClrBlack        =   COLOR_RGBF_BLACK;
+static ColorRGBf sClrGrey         =   COLOR_RGBF_GREY;
+static ColorRGBf sClrDarkGrey     =   COLOR_RGBF_DARK_GREY;
+static ColorRGBf sClrYellow       =   COLOR_RGBF_YELLOW;
+static ColorRGBf sLightColours[1] = { COLOR_RGBF_YELLOW };
+static ColorRGBf *sSelectedColour = &sClrRed;
+struct ObjCamera *gViewUpdateCamera = NULL;
+static s32 sLightDlCounter = 1;
 
 // bss
 struct ObjGroup *gGdLightGroup; // @ 801B9BB8; is this the main light group? only light group?
 
-static enum SceneType sSceneProcessType; // @ 801B9C00
-static Bool32 sUseSelectedColor;         // @ 801B9C04
+static enum SceneType sSceneProcessType;
+static Bool32 sUseSelectedColor;
 static s16 sPickBuffer[100];             ///< buffer of objects near click
 static s32 sPickDataTemp;                ///< now, only data is the object number of a selected joint
 static f32 sPickObjDistance;             ///< distance between object position and cursor click location
 static struct GdObj *sPickedObject;      ///< object selected with cursor
 /// Various counters and pointers set in update_view() and used in various `draw_XXX` functions
 static struct {
-    struct ObjView *view; // @ 801B9CE4
-    s32 mtlDlNum;         // @ 801B9CEC; name is a big guess
-    s32 shapesDrawn;      // @ 801B9CF0
+    struct ObjView *view;
+    s32 mtlDlNum; // name is a big guess
+    s32 shapesDrawn;
 } sUpdateViewState;
 static struct ObjLight *sPhongLight;    // material light? phong light?
-static Vec3f sPhongLightPosition;       // @ 801B9D00; guess; light source unit position for light
+static Vec3f sPhongLightPosition;       // guess; light source unit position for light
                                         // flagged 0x20 (sPhongLight)
-static Vec3f sLightPositionOffset;      // @ 801B9D10
-static Vec3f sLightPositionCache[8];    // @ 801B9D20; unit positions
-static s32 sNumActiveLights;            // @ 801B9D80; maybe?
+static Vec3f sLightPositionOffset;
+static Vec3f sLightPositionCache[8];    // unit positions
+static s32 sNumActiveLights;            // maybe?
 static Vec3f sGrabCords;                ///< x, y grabbable point near cursor
 
 /**
@@ -241,7 +237,7 @@ void draw_face(struct ObjFace *face) {
         gbiVtx = gd_dl_make_vertex(pos[0], pos[1], pos[2], vtx->alpha);
         if (gbiVtx != NULL) vtx->gbiVerts = make_vtx_link(vtx->gbiVerts, gbiVtx);
     }
-    func_8019FEF0();
+    flush_current_triangle_buffer();
 }
 
 /* 227DF8 -> 227F3C; orig name: Proc80179628 */

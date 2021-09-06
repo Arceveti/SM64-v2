@@ -62,6 +62,10 @@ extern Vec3f gVec3fZ;
 #define ABSF(x) ((x) > 0.0f ? (x) : -(x))
 #define ABSI(x) ((x) > 0    ? (x) : -(x))
 
+#define SIGNUM(x)   (((x) < 0) ? -1 : 1)
+#define SIGNUMF(x)  (((x) > 0.0f) ? 1.0f : (((x) < 0.0f) ? -1.0f : 0.0f))
+// #define SIGNUMF(x)  (((x) == 0.0f) ? 0.0f : (((x) < 0.0f) ? -1.0f : 1.0f))
+
 /**
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEG(90) == 0x4000
  * This should be used mainly to make camera code clearer at first glance.
@@ -477,6 +481,12 @@ extern Vec3f gVec3fZ;
     fmt dy = ((to)[1] - (from)[1]);
 
 
+#define MAT4_VEC_DOT_PROD(R, A, B, row, col)                    \
+    {                                                           \
+        (R)[(row)][(col)]  = ((A)[(row)][0] * (B)[0][(col)]);   \
+        (R)[(row)][(col)] += ((A)[(row)][1] * (B)[1][(col)]);   \
+        (R)[(row)][(col)] += ((A)[(row)][2] * (B)[2][(col)]);   \
+    }
 #define MAT4_DOT_PROD(R, A, B, row, col)                        \
     {                                                           \
         (R)[(row)][(col)]  = ((A)[(row)][0] * (B)[0][(col)]);   \
@@ -517,14 +527,12 @@ f32 slow_logf(f32 x);
 f32 slow_expf(f32 x);
 f32 slow_powf(f32 base, f32 exponent);
 // Rounding
-f32 froundf(f32 in);
 s16 round_float_to_short( f32 num);
 s32 round_float_to_int(   f32 num);
 s16 round_double_to_short(f64 num);
 s32 round_double_to_int(  f64 num);
 s8  normalize_component(  f32 comp);
-// Sign functions
-s32  signum_positive(s32 x);
+// Abs functions
 s8   absc(s8  x);
 s16  abss(s16 x);
 s32  absi(s32 x);
@@ -653,11 +661,11 @@ void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, A
 void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
 void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
-void gd_mult_mat4f(Mat4 *dst, const Mat4 *mA, const Mat4 *mB);
+void gd_mult_mat4f(                       Mat4 dst, const Mat4 mA, const Mat4 mB);
 void mtxf_transform_from_normals(         Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32 zNorm);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_scale_self_vec3f(               Mat4  mtx, Vec3f vec);
-void linear_mtxf_self_mul_vec3f_self(              Mat4 mtx, Vec3f b);
+void linear_mtxf_self_mul_vec3f_self(         Mat4 mtx, Vec3f b);
 void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b);
 void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);
 void linear_mtxf_mul_vec3f_and_translate( Mat4  mtx, Vec3f dst, Vec3f v);
