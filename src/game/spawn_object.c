@@ -216,7 +216,7 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->oDamageOrCoinValue     = 0;
     obj->oHealth                = 2048;
     obj->oCollisionDistance     = 1000.0f;
-    obj->oDrawingDistance       = ((gCurrLevelNum == LEVEL_TTC) ? 2000.0f : 4000.0f);
+    obj->oDrawingDistance       = 4500.0f;
     mtxf_identity(obj->transform);
     obj->respawnInfoType        = RESPAWN_INFO_TYPE_NULL;
     obj->respawnInfo            = NULL;
