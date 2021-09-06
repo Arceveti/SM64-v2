@@ -51,13 +51,13 @@
 #define MARIO_SPAWN_FADE_FROM_BLACK         0x27
 
 // Screen top left - Bottom text
-#define CREDITS_POS_ONE                     0x00
+#define CREDITS_POS_ONE                     (0 << 4) // 0x00
 // Screen top right - Bottom text
-#define CREDITS_POS_TWO                     0x10
+#define CREDITS_POS_TWO                     (1 << 4) // 0x10
 // Screen bottom left - Top text
-#define CREDITS_POS_THREE                   0x20
+#define CREDITS_POS_THREE                   (2 << 4) // 0x20
 // Screen bottom right - Top text
-#define CREDITS_POS_FOUR                    0x30
+#define CREDITS_POS_FOUR                    (3 << 4) // 0x30
 
 struct CreditsEntry
 {
@@ -114,21 +114,21 @@ extern struct HudDisplay gHudDisplay;
 extern Bool8 gNeverEnteredCastle;
 
 enum HUDDisplayFlag {
-    HUD_DISPLAY_FLAG_LIVES            = 0x0001,
-    HUD_DISPLAY_FLAG_COIN_COUNT       = 0x0002,
-    HUD_DISPLAY_FLAG_STAR_COUNT       = 0x0004,
-    HUD_DISPLAY_FLAG_CAMERA_AND_POWER = 0x0008,
-    HUD_DISPLAY_FLAG_KEYS             = 0x0010,
+    HUD_DISPLAY_FLAG_LIVES            = (1 <<  0), // 0x0001
+    HUD_DISPLAY_FLAG_COIN_COUNT       = (1 <<  1), // 0x0002
+    HUD_DISPLAY_FLAG_STAR_COUNT       = (1 <<  2), // 0x0004
+    HUD_DISPLAY_FLAG_CAMERA_AND_POWER = (1 <<  3), // 0x0008
+    HUD_DISPLAY_FLAG_KEYS             = (1 <<  4), // 0x0010
 #ifdef HUD_SECRETS
-    HUD_DISPLAY_FLAG_SECRETS          = 0x0020,
+    HUD_DISPLAY_FLAG_SECRETS          = (1 <<  5), // 0x0020
 #endif
-    HUD_DISPLAY_FLAG_TIMER            = 0x0040,
+    HUD_DISPLAY_FLAG_TIMER            = (1 <<  6), // 0x0040
 #ifdef BREATH_METER
-    HUD_DISPLAY_FLAG_BREATH_METER     = 0x4000,
+    HUD_DISPLAY_FLAG_BREATH_METER     = (1 << 14), // 0x4000
 #endif
-    HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = 0x8000,
+    HUD_DISPLAY_FLAG_EMPHASIZE_POWER  = (1 << 15), // 0x8000
 
-    HUD_DISPLAY_NONE                  = 0x0000,
+    HUD_DISPLAY_NONE                  = (0 <<  0), // 0x0000
     HUD_DISPLAY_DEFAULT               = (HUD_DISPLAY_FLAG_LIVES | HUD_DISPLAY_FLAG_COIN_COUNT | HUD_DISPLAY_FLAG_STAR_COUNT | HUD_DISPLAY_FLAG_CAMERA_AND_POWER | HUD_DISPLAY_FLAG_KEYS | HUD_DISPLAY_FLAG_SECRETS)
 };
 

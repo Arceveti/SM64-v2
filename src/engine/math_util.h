@@ -2,6 +2,8 @@
 #define MATH_UTIL_H
 
 #include <PR/ultratypes.h>
+// #include <math.h>
+// #include <limits.h>
 
 #include "types.h"
 
@@ -102,10 +104,39 @@ extern Vec3f gVec3fZ;
 #define min(a, b) MIN((a), (b))
 #define max(a, b) MAX((a), (b))
 
-// #define min_3(a, b, c)  ((((a) > (b)) || ((a) > (c))) ? (((b) > (c)) ? ((c) : (b))) : (a))
-// #define max_3(a, b, c)  ((((a) < (b)) || ((a) < (c))) ? (((b) < (c)) ? ((c) : (b))) : (a))
+#define min_3(a, b, c)  ((((a) > (b)) || ((a) > (c))) ? (((b) > (c)) ? (c) : (b)) : (a))
+#define max_3(a, b, c)  ((((a) < (b)) || ((a) < (c))) ? (((b) < (c)) ? (c) : (b)) : (a))
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
+// from limits.h
+#define S8_MAX __SCHAR_MAX__
+#define S8_MIN (-S8_MAX - 1)
+#define U8_MAX (S8_MAX * 2 + 1)
+#define S16_MAX __SHRT_MAX__
+#define S16_MIN (-S16_MAX - 1)
+#define U16_MAX (S16_MAX * 2 + 1)
+#define S32_MAX __INT_MAX__
+#define S32_MIN (-S32_MAX - 1)
+#define U32_MAX (S32_MAX * 2U + 1U)
+#define S64_MAX __LONG_LONG_MAX__
+#define S64_MIN (-S64_MAX - 1LL)
+#define U64_MAX (S64_MAX * 2ULL + 1ULL)
+#define F32_MAX __FLT_MAX__
+#define F32_MIN __FLT_MIN__
+#define F64_MAX __DBL_MAX__
+#define F64_MIN __DBL_MIN__
+
+#define CLAMP_U8( x)        CLAMP((x),     0x0,  U8_MAX)
+#define CLAMP_S8( x)        CLAMP((x),  S8_MIN,  S8_MAX)
+#define CLAMP_U16(x)        CLAMP((x),     0x0, U16_MAX)
+#define CLAMP_S16(x)        CLAMP((x), S16_MIN, S16_MAX)
+#define CLAMP_U32(x)        CLAMP((x),     0x0, U32_MAX)
+#define CLAMP_S32(x)        CLAMP((x), S32_MIN, S32_MAX)
+#define CLAMP_U64(x)        CLAMP((x),     0x0, U64_MAX)
+#define CLAMP_S64(x)        CLAMP((x), S64_MIN, S64_MAX)
+#define CLAMP_F32(x)        CLAMP((x), F32_MIN, F32_MAX)
+#define CLAMP_F64(x)        CLAMP((x), F64_MIN, F64_MAX)
 
 #define SWAP(a, b)          { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); } 
 
@@ -446,6 +477,34 @@ extern Vec3f gVec3fZ;
     fmt dy = ((to)[1] - (from)[1]);
 
 
+#define MAT4_DOT_PROD(R, A, B, row, col)                        \
+    {                                                           \
+        (R)[(row)][(col)]  = ((A)[(row)][0] * (B)[0][(col)]);   \
+        (R)[(row)][(col)] += ((A)[(row)][1] * (B)[1][(col)]);   \
+        (R)[(row)][(col)] += ((A)[(row)][2] * (B)[2][(col)]);   \
+        (R)[(row)][(col)] += ((A)[(row)][3] * (B)[3][(col)]);   \
+    }
+
+#define MAT4_MULTIPLY(R, A, B)                                  \
+    {                                                           \
+        MAT4_DOT_PROD((R), (A), (B), 0, 0);                     \
+        MAT4_DOT_PROD((R), (A), (B), 0, 1);                     \
+        MAT4_DOT_PROD((R), (A), (B), 0, 2);                     \
+        MAT4_DOT_PROD((R), (A), (B), 0, 3);                     \
+        MAT4_DOT_PROD((R), (A), (B), 1, 0);                     \
+        MAT4_DOT_PROD((R), (A), (B), 1, 1);                     \
+        MAT4_DOT_PROD((R), (A), (B), 1, 2);                     \
+        MAT4_DOT_PROD((R), (A), (B), 1, 3);                     \
+        MAT4_DOT_PROD((R), (A), (B), 2, 0);                     \
+        MAT4_DOT_PROD((R), (A), (B), 2, 1);                     \
+        MAT4_DOT_PROD((R), (A), (B), 2, 2);                     \
+        MAT4_DOT_PROD((R), (A), (B), 2, 3);                     \
+        MAT4_DOT_PROD((R), (A), (B), 3, 0);                     \
+        MAT4_DOT_PROD((R), (A), (B), 3, 1);                     \
+        MAT4_DOT_PROD((R), (A), (B), 3, 2);                     \
+        MAT4_DOT_PROD((R), (A), (B), 3, 3);                     \
+    }
+
 #define MTXF_END(mtx) { \
     (mtx)[0][3] = 0.0f; \
     (mtx)[1][3] = 0.0f; \
@@ -594,12 +653,14 @@ void mtxf_billboard(                      Mat4 dest, Mat4 mtx, Vec3f position, A
 void mtxf_align_terrain_normal(           Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw);
 void mtxf_align_terrain_triangle(         Mat4  mtx, Vec3f pos, Angle yaw, f32 radius);
 void mtxf_mul(                            Mat4 dest, Mat4 a, Mat4 b);
+void gd_mult_mat4f(Mat4 *dst, const Mat4 *mA, const Mat4 *mB);
 void mtxf_transform_from_normals(         Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32 zNorm);
 void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_scale_self_vec3f(               Mat4  mtx, Vec3f vec);
-void mtxf_mul_vec3s(                      Mat4  mtx, Vec3s b);
-void mtxf_mul_vec3f(                      Mat4  mtx, Vec3f b);
+void linear_mtxf_self_mul_vec3f_self(              Mat4 mtx, Vec3f b);
+void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b);
 void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);
+void linear_mtxf_mul_vec3f_and_translate( Mat4  mtx, Vec3f dst, Vec3f v);
 void linear_mtxf_transpose_mul_vec3f(     Mat4  mtx, Vec3f dst, Vec3f v);
 void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);

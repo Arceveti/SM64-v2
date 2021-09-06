@@ -593,9 +593,9 @@ void movtex_write_vertex_first(Vtx *vtx, RawVertexData *movtexVerts, struct Movt
             make_vertex(vtx, 0, pos[0], pos[1], pos[2], s, t, c->color[0], c->color[1], c->color[2], c->color[3]);
             break;
         case MOVTEX_LAYOUT_COLORED:
-            vec3s_to_colorRGB(color, &movtexVerts[MOVTEX_ATTR_RGB_INDEX]);
-            s                       = movtexVerts[MOVTEX_ATTR_COLORED_S];
-            t                       = movtexVerts[MOVTEX_ATTR_COLORED_T];
+            vec3_to_colorRGB(color, &movtexVerts[MOVTEX_ATTR_RGB_INDEX]);
+            s                      = movtexVerts[MOVTEX_ATTR_COLORED_S];
+            t                      = movtexVerts[MOVTEX_ATTR_COLORED_T];
             make_vertex(vtx, 0, pos[0], pos[1], pos[2], s, t, color[0], color[1], color[2], c->color[3]);
             break;
     }
@@ -631,7 +631,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, RawVertexData *movtexVerts
             offT  = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_T];
             s     = (baseS + ((offS * 32) * 32U));
             t     = (baseT + ((offT * 32) * 32U));
-            vec3s_to_colorRGB(color, &movtexVerts[(index * 8) + MOVTEX_ATTR_RGB_INDEX]);
+            vec3_to_colorRGB(color, &movtexVerts[(index * 8) + MOVTEX_ATTR_RGB_INDEX]);
             make_vertex(verts, index, pos[0], pos[1], pos[2], s, t, color[0], color[1], color[2], d->color[3]);
             break;
     }

@@ -149,24 +149,28 @@ void colorRGBAf_to_colorRGBA(ColorRGBA dst, ColorRGBAf src) {
 // void colorHSVf_to_colorRGBf(ColorRGBf dst, ColorHSVf src) {
 // }
 
-/// Copy ColorRGB vector src to dest
-void colorRGB_set(ColorRGB dest, Color r, Color g, Color b) {
-    dest[0] = r;
-    dest[1] = g;
-    dest[2] = b;
+Bool32 colorRGBA_average_2(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2) {
+    if ((dst[3] = (c1[3] + c2[3])) > 0) {
+        dst[0] = (((c1[0] * c1[3]) + (c2[0] * c2[3])) / dst[3]);
+        dst[1] = (((c1[1] * c1[3]) + (c2[1] * c2[3])) / dst[3]);
+        dst[2] = (((c1[2] * c1[3]) + (c2[2] * c2[3])) / dst[3]);
+        return TRUE;
+    }
+    return FALSE;
 }
 
-/// Copy ColorRGB vector src to dest
-void colorRGB_copy(ColorRGB dest, const ColorRGB src) {
-    vec3_copy(dest, src);
-}
-
-void vec3s_to_colorRGB(ColorRGB dest, Vec3s src) {
-    vec3_copy(dest, src);
+Bool32 colorRGBA_average_3(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2, ColorRGBA c3) {
+    if ((dst[3] = (c1[3] + c2[3] + c3[3])) > 0) {
+        dst[0] = (((c1[0] * c1[3]) + (c2[0] * c2[3]) + (c3[0] * c3[3])) / dst[3]);
+        dst[1] = (((c1[1] * c1[3]) + (c2[1] * c2[3]) + (c3[1] * c3[3])) / dst[3]);
+        dst[2] = (((c1[2] * c1[3]) + (c2[2] * c2[3]) + (c3[2] * c3[3])) / dst[3]);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 // rgba16 value
-RGBA16 rgba16_set(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA16Component a) {
+RGBA16 rgba16_composite(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA16Component a) {
     return ((CLAMP_BITS(r, SIZ_RGBA16_C) << IDX_RGBA16_R) |
             (CLAMP_BITS(g, SIZ_RGBA16_C) << IDX_RGBA16_G) |
             (CLAMP_BITS(b, SIZ_RGBA16_C) << IDX_RGBA16_B) |
@@ -174,12 +178,12 @@ RGBA16 rgba16_set(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA1
 }
 
 // rgba16 value
-RGBA16 rgba16_set_grayscale(RGBA16Component val, RGBA16Component alpha) {
-    return rgba16_set(val, val, val, alpha);
+RGBA16 rgba16_composite_grayscale(RGBA16Component val, RGBA16Component alpha) {
+    return rgba16_composite(val, val, val, alpha);
 }
 
 // 0-31
-RGBA16Component rgba16_get_average_color(RGBA16 rgba) {
+UNUSED RGBA16Component rgba16_get_average_component(RGBA16 rgba) {
     ColorRGBf color;
     ColorF avg;
     rgba16_to_colorRGBf(color, rgba);
@@ -279,7 +283,7 @@ void copy_partial_image(ImageTexture *dst, ImageTexture *src,
             srcColor = composite_to_colorf(src[srcIndex], MSK_IA8_C, IDX_IA8_I);
             dstColor = composite_to_colorf(dst[dstIndex], MSK_RGBA16_C, IDX_RGBA16_B);
             if (srcColor == dstColor) continue;
-            dst[dstIndex] = rgba16_set_grayscale(colorf_to_composite(((srcColor * srcAlpha) + (dstColor * (1.0f - srcAlpha))), MSK_RGBA16_C, 0), 1);
+            dst[dstIndex] = rgba16_composite_grayscale(colorf_to_composite(((srcColor * srcAlpha) + (dstColor * (1.0f - srcAlpha))), MSK_RGBA16_C, 0), 1);
         }
     }
 }
@@ -294,16 +298,16 @@ void overlay_i8_on_rgba16_additive(ImageTexture *dst, ImageTexture *src, u32 wid
         dstVal = dst[i     ];
         srcI = I8_TO_RGBA16_C(srcVal);
         if (srcI > 0x0) {
-            dst[i] = rgba16_set((RGBA16_R(dstVal) + srcI),
-                                (RGBA16_G(dstVal) + srcI),
-                                (RGBA16_B(dstVal) + srcI), 0x1);
+            dst[i] = rgba16_composite((RGBA16_R(dstVal) + srcI),
+                                      (RGBA16_G(dstVal) + srcI),
+                                      (RGBA16_B(dstVal) + srcI), 0x1);
         }
     }
 }
 
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s) {
-    Color min = min_3uc(color[0], color[1], color[2]);
-    Color max = max_3uc(color[0], color[1], color[2]);
+    Color min = min_3(color[0], color[1], color[2]);
+    Color max = max_3(color[0], color[1], color[2]);
     if (min == max) return;
     f32 hue = 0.0f;
     if (       max == color[0]) { // red

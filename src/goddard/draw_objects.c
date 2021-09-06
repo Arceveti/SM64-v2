@@ -135,8 +135,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, Vec3f in) {
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
     if (flag & 0x02) {
-        vec3f_copy(pos, in);
-        if (gViewUpdateCamera != NULL) gd_rotate_and_translate_vec3f(pos, &gViewUpdateCamera->lookatMtx);
+        if (gViewUpdateCamera != NULL) linear_mtxf_mul_vec3f_and_translate(gViewUpdateCamera->lookatMtx, pos, in);
         gd_dl_load_trans_matrix(pos[0], pos[1], pos[2]);
     }
     draw_shape_faces(shape);
@@ -271,7 +270,7 @@ void draw_camera(struct ObjCamera *cam) {
 
 /* 22836C -> 228498 */
 void world_pos_to_screen_coords(Vec3f pos, struct ObjCamera *cam, struct ObjView *view) {
-    gd_rotate_and_translate_vec3f(pos, &cam->lookatMtx);
+    linear_mtxf_mul_vec3f_self_and_translate(cam->lookatMtx, pos);
     if (pos[2] > -256.0f) return;
     pos[0] *= (256.0f / -pos[2]);
     pos[1] *= (256.0f /  pos[2]);

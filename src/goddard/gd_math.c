@@ -35,7 +35,7 @@ void gd_absrot_mat4(Mat4 *mtx, s32 axisnum, f32 ang) {
         default:     vec3f_copy(rot, gVec3fZero); break;
     }
     gd_create_rot_mat_angular(&rMat, rot, (ang / 2.0f));
-    gd_mult_mat4f(mtx, &rMat, mtx);
+    gd_mult_mat4f(mtx, mtx, &rMat);
 }
 
 /**
@@ -77,57 +77,3 @@ void gd_create_rot_mat_angular(Mat4 *mtx, Vec3f vec, f32 ang) {
     f32 rad = (ang / (DEG_PER_RAD / 2.0f));
     gd_create_rot_matrix(mtx, vec, sind(rad), cosd(rad));
 }
-
-/// Transforms a vec3f, rotating with the main 3x3 portion of the mat4f and translating with the 4th column.
-void gd_rotate_and_translate_vec3f(Vec3f vec, const Mat4 *mtx) {
-    Vec3f out;
-    out[0] = ((((*mtx)[0][0] * vec[0]) + ((*mtx)[1][0] * vec[1]) + ((*mtx)[2][0] * vec[2])) + (*mtx)[3][0]);
-    out[1] = ((((*mtx)[0][1] * vec[0]) + ((*mtx)[1][1] * vec[1]) + ((*mtx)[2][1] * vec[2])) + (*mtx)[3][1]);
-    out[2] = ((((*mtx)[0][2] * vec[0]) + ((*mtx)[1][2] * vec[1]) + ((*mtx)[2][2] * vec[2])) + (*mtx)[3][2]);
-    vec3f_copy(vec, out);
-}
-
-/// Multiples a vec3f by the main 3x3 portion of a mat4f matrix.
-void gd_mat4f_mult_vec3f(Vec3f vec, const Mat4 *mtx) {
-    vec[0] = (((*mtx)[0][0] * vec[0]) + ((*mtx)[1][0] * vec[1]) + ((*mtx)[2][0] * vec[2]));
-    vec[1] = (((*mtx)[0][1] * vec[0]) + ((*mtx)[1][1] * vec[1]) + ((*mtx)[2][1] * vec[2]));
-    vec[2] = (((*mtx)[0][2] * vec[0]) + ((*mtx)[1][2] * vec[1]) + ((*mtx)[2][2] * vec[2]));
-}
-
-#define MAT4_DOT_PROD(A, B, R, row, col)                                                               \
-    {                                                                                                  \
-        (R)[(row)][(col)]  = ((A)[(row)][0] * (B)[0][(col)]);                                          \
-        (R)[(row)][(col)] += ((A)[(row)][1] * (B)[1][(col)]);                                          \
-        (R)[(row)][(col)] += ((A)[(row)][2] * (B)[2][(col)]);                                          \
-        (R)[(row)][(col)] += ((A)[(row)][3] * (B)[3][(col)]);                                          \
-    }
-
-#define MAT4_MULTIPLY(A, B, R)                                                                         \
-    {                                                                                                  \
-        MAT4_DOT_PROD((A), (B), (R), 0, 0);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 0, 1);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 0, 2);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 0, 3);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 1, 0);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 1, 1);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 1, 2);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 1, 3);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 2, 0);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 2, 1);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 2, 2);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 2, 3);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 3, 0);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 3, 1);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 3, 2);                                                            \
-        MAT4_DOT_PROD((A), (B), (R), 3, 3);                                                            \
-    }
-
-/// Multiplies two Mat4 matrices and puts it in dst.
-void gd_mult_mat4f(const Mat4 *mA, const Mat4 *mB, Mat4 *dst) {
-    Mat4 res;
-    MAT4_MULTIPLY((*mA), (*mB), res);
-    mtxf_copy(*dst, res);
-}
-
-#undef MAT4_MULTIPLY
-#undef MAT4_DOT_PROD

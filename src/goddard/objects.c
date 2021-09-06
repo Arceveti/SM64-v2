@@ -389,8 +389,8 @@ s32 transform_child_objects_recursive(struct GdObj *obj, struct GdObj *parentObj
         rotMtx2 = (Mat4 *) d_get_rot_mtx_ptr();
         d_get_scale(scale);
         unkMtx = d_get_matrix_ptr();
-        gd_mult_mat4f(iMtx, parentUnkMtx, unkMtx);
-        gd_mult_mat4f(iMtx, rotMtx, rotMtx2);
+        gd_mult_mat4f(unkMtx, iMtx, parentUnkMtx);
+        gd_mult_mat4f(rotMtx2, iMtx, rotMtx);
         mtxf_scale_self_vec3f(*rotMtx2, scale);
     } else {
         set_cur_dynobj(obj);
@@ -591,7 +591,7 @@ void drag_picked_object(struct GdObj *inputObj) {
     displacement[1] = (((f32) - (ctrl->csrY - ctrl->dragStartY)) * dispMag);
     displacement[2] = 0.0f;
     mtxf_inverse(&dispMtx, &gViewUpdateCamera->lookatMtx);
-    gd_mat4f_mult_vec3f(displacement, &dispMtx);
+    linear_mtxf_self_mul_vec3f_self(dispMtx, displacement);
     obj = inputObj;
     if ((inputObj->drawFlags & OBJ_PICKED) && (gGdCtrl.dragging)) {
         gd_play_sfx(GD_SFX_PINCH_FACE);
@@ -625,7 +625,7 @@ void move_camera(struct ObjCamera *cam) {
     struct GdObj *obj;
     Vec3f worldPos, nextPos, latPos;
     Mat4 mtx;
-    Mat4 *idMtx;
+    Mat4 idMtx;
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
@@ -640,9 +640,9 @@ void move_camera(struct ObjCamera *cam) {
         cam->unk58[2] += (latPos[2] * 0.1f); // * cam->unk180[1]);
     }
     mtxf_identity(cam->transformMtx);
-    idMtx = &cam->idMtx;
+    mtxf_copy(idMtx, cam->idMtx);
     if (cam->flags & CAMERA_FLAG_CONTROLLABLE) {
-        if (ctrl->btnB && !ctrl->prevFrame->btnB) {  // new B press
+        if (ctrl->btnB && !ctrl->prevFrame->btnB) { // new B press
             cam->zoomLevel++;
             if (cam->zoomLevel > cam->maxZoomLevel) cam->zoomLevel = 0;
             switch (cam->zoomLevel) {
@@ -663,12 +663,11 @@ void move_camera(struct ObjCamera *cam) {
         cam->relPos[1] += ((cam->curZoomPosition[1] - cam->relPos[1]) * cam->multiplier);
         cam->relPos[2] += ((cam->curZoomPosition[2] - cam->relPos[2]) * cam->multiplier);
     } else {
-        mtxf_identity(*idMtx);
+        mtxf_identity(idMtx);
     }
+    mtxf_mul(cam->transformMtx, idMtx, cam->transformMtx);
     vec3f_copy(nextPos, cam->relPos);
-    gd_mult_mat4f(idMtx, &cam->transformMtx, &cam->transformMtx);
-    gd_mat4f_mult_vec3f(nextPos, &cam->transformMtx);
-    vec3f_copy(    cam->worldPos, nextPos );
+    linear_mtxf_mul_vec3f(cam->transformMtx, cam->worldPos, nextPos);
     vec3f_add(cam->worldPos, worldPos);
 }
 

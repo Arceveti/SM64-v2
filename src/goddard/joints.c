@@ -179,7 +179,7 @@ void reset_joint(struct ObjJoint *j) {
     vec3f_add(j->rotationMtx[3], j->initPos);
 
     vec3f_copy(j->nextPos, j->initPos); // storing "attached offset"?
-    gd_mat4f_mult_vec3f(j->nextPos, &gGdSkinNet->invMtx);
+    linear_mtxf_self_mul_vec3f_self(gGdSkinNet->invMtx, j->nextPos);
     vec3f_copy(j->relPos, j->nextPos);
     vec3f_copy(j->worldPos, gGdSkinNet->worldPos);
     vec3f_add(j->worldPos, j->relPos);

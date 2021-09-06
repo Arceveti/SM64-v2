@@ -17,7 +17,7 @@ static const Mat4 identityMtx = {
     { 0, 0, 1, 0 },
     { 0, 0, 0, 1 }
 };
-// UNUSED s16 zeroMtx[4][4] = {
+// UNUSED static const Mat4 zeroMtx = {
 //     { 0, 0, 0, 0 },
 //     { 0, 0, 0, 0 },
 //     { 0, 0, 0, 0 },
@@ -972,41 +972,6 @@ void mtxf_transform_from_normals(Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32
 }
 
 /**
- * Sets matrix 'dest' to the matrix product b * a assuming they are both
- * transformation matrices with a w-component of 1. Since the bottom row
- * is assumed to equal [0, 0, 0, 1], it saves some multiplications and
- * addition.
- * The resulting matrix represents first applying transformation b and
- * then a.
- */
-void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
-    Mat4 temp;
-    Vec3f entry;
-    // column 0
-    vec3_copy(entry, a[0]);
-    temp[0][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
-    temp[0][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
-    temp[0][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
-    // column 1
-    vec3_copy(entry, a[1]);
-    temp[1][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
-    temp[1][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
-    temp[1][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
-    // column 2
-    vec3_copy(entry, a[2]);
-    temp[2][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]));
-    temp[2][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]));
-    temp[2][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]));
-    // column 3
-    vec3_copy(entry, a[3]);
-    temp[3][0] = ((entry[0] * b[0][0]) + (entry[1] * b[1][0]) + (entry[2] * b[2][0]) + b[3][0]);
-    temp[3][1] = ((entry[0] * b[0][1]) + (entry[1] * b[1][1]) + (entry[2] * b[2][1]) + b[3][1]);
-    temp[3][2] = ((entry[0] * b[0][2]) + (entry[1] * b[1][2]) + (entry[2] * b[2][2]) + b[3][2]);
-    MTXF_END(temp);
-    mtxf_copy(dest, temp);
-}
-
-/**
  * Set matrix 'dest' to 'mtx' scaled by vector s
  */
 void mtxf_scale_vec3f(Mat4 dest, Mat4 mtx, Vec3f s) {
@@ -1029,32 +994,6 @@ void mtxf_scale_self_vec3f(Mat4 mtx, Vec3f vec) {
 }
 
 /**
- * Multiply a vector with a transformation matrix, which applies the transformation
- * to the point. Note that the bottom row is assumed to be [0, 0, 0, 1], which is
- * true for transformation matrices if the translation has a w component of 1.
- */
-void mtxf_mul_vec3s(Mat4 mtx, Vec3s b) {
-    register f32 x = b[0];
-    register f32 y = b[1];
-    register f32 z = b[2];
-    b[0] = ((x * mtx[0][0]) + (y * mtx[1][0]) + (z * mtx[2][0]) + mtx[3][0]);
-    b[1] = ((x * mtx[0][1]) + (y * mtx[1][1]) + (z * mtx[2][1]) + mtx[3][1]);
-    b[2] = ((x * mtx[0][2]) + (y * mtx[1][2]) + (z * mtx[2][2]) + mtx[3][2]);
-}
-
-/**
- * Need to be able to multiply a vec3f by a matrix for transformation, mostly the same as the above function.
- */
-void mtxf_mul_vec3f(Mat4 mtx, Vec3f b) {
-    register f32 x = b[0];
-    register f32 y = b[1];
-    register f32 z = b[2];
-    b[0] = ((x * mtx[0][0]) + (y * mtx[1][0]) + (z * mtx[2][0]) + mtx[3][0]);
-    b[1] = ((x * mtx[0][1]) + (y * mtx[1][1]) + (z * mtx[2][1]) + mtx[3][1]);
-    b[2] = ((x * mtx[0][2]) + (y * mtx[1][2]) + (z * mtx[2][2]) + mtx[3][2]);
-}
-
-/**
  * Multiply a vector by a matrix of the form
  * | ? ? ? 0 |
  * | ? ? ? 0 |
@@ -1063,8 +1002,18 @@ void mtxf_mul_vec3f(Mat4 mtx, Vec3f b) {
  * i.e. a matrix representing a linear transformation over 3 space.
  */
 void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
-    s32 i;
-    for ((i = 0); (i < 3); (i++)) dst[i] = ((mtx[0][i] * v[0]) + (mtx[1][i] * v[1]) + (mtx[2][i] * v[2]));
+    dst[0] = ((mtx[0][0] * v[0]) + (mtx[1][0] * v[1]) + (mtx[2][0] * v[2]));
+    dst[1] = ((mtx[0][1] * v[0]) + (mtx[1][1] * v[1]) + (mtx[2][1] * v[2]));
+    dst[2] = ((mtx[0][2] * v[0]) + (mtx[1][2] * v[1]) + (mtx[2][2] * v[2]));
+}
+
+void linear_mtxf_mul_vec3f_and_translate(Mat4 mtx, Vec3f dst, Vec3f v) {
+    dst[0] = ((mtx[0][0] * v[0]) + (mtx[1][0] * v[1]) + (mtx[2][0] * v[2]) + mtx[3][0]);
+    dst[1] = ((mtx[0][1] * v[0]) + (mtx[1][1] * v[1]) + (mtx[2][1] * v[2]) + mtx[3][1]);
+    dst[2] = ((mtx[0][2] * v[0]) + (mtx[1][2] * v[1]) + (mtx[2][2] * v[2]) + mtx[3][2]);
+    //? why is this different? When used in mtxf_mul, it makes held objects teleport somewhere:
+    // linear_mtxf_mul_vec3f(mtx, dst, v);
+    // vec3_add(dst, mtx[3]);
 }
 
 /**
@@ -1076,8 +1025,57 @@ void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
  * i.e. a matrix representing a linear transformation over 3 space.
  */
 void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
-    s32 i;
-    for ((i = 0); (i < 3); (i++)) dst[i] = ((mtx[i][0] * v[0]) + (mtx[i][1] * v[1]) + (mtx[i][2] * v[2]));
+    dst[0] = vec3_dot(mtx[0], v);
+    dst[1] = vec3_dot(mtx[1], v);
+    dst[2] = vec3_dot(mtx[2], v);
+}
+
+/**
+ * Multiply a vector with a transformation matrix, which applies the transformation
+ * to the point. Note that the bottom row is assumed to be [0, 0, 0, 1], which is
+ * true for transformation matrices if the translation has a w component of 1.
+ */
+void linear_mtxf_self_mul_vec3f_self(Mat4 mtx, Vec3f b) {
+    Vec3f tmp;
+    linear_mtxf_mul_vec3f(mtx, tmp, b);
+    vec3_copy(b, tmp);
+}
+
+/**
+ * Multiply a vector with a transformation matrix, which applies the transformation
+ * to the point. Note that the bottom row is assumed to be [0, 0, 0, 1], which is
+ * true for transformation matrices if the translation has a w component of 1.
+ */
+/// Transforms a vec3f, rotating with the main 3x3 portion of the mat4f and translating with the 4th column.
+void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b) {
+    Vec3f tmp;
+    // linear_mtxf_mul_vec3f(mtx, tmp, b);
+    // vec3_sum(b, tmp, mtx[3]);
+    linear_mtxf_mul_vec3f_and_translate(mtx, tmp, b);
+    vec3_copy(b, tmp);
+}
+
+/**
+ * Sets matrix 'dest' to the matrix product b * a assuming they are both
+ * transformation matrices with a w-component of 1. Since the bottom row
+ * is assumed to equal [0, 0, 0, 1], it saves some multiplications and
+ * addition.
+ * The resulting matrix represents first applying transformation b and
+ * then a.
+ */
+void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
+    linear_mtxf_mul_vec3f(              b, dest[0], a[0]);
+    linear_mtxf_mul_vec3f(              b, dest[1], a[1]);
+    linear_mtxf_mul_vec3f(              b, dest[2], a[2]);
+    linear_mtxf_mul_vec3f_and_translate(b, dest[3], a[3]);
+    MTXF_END(dest);
+}
+
+/// Multiplies two Mat4 matrices and puts it in dst.
+void gd_mult_mat4f(Mat4 *dst, const Mat4 *mA, const Mat4 *mB) {
+    Mat4 res;
+    MAT4_MULTIPLY(res, (*mA), (*mB));
+    mtxf_copy(*dst, res);
 }
 
 /**

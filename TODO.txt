@@ -5,7 +5,6 @@
     - Possible to clip through the back wall of the JRB ship when jumping at it at certain angles
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar for some reason
-    - Goddard joints don't get dragged properly on the Z axis
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare)
     - Properly fix HMC crash

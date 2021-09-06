@@ -281,10 +281,9 @@ void play_transition(s16 transType, s16 time, Color red, Color green, Color blue
     } else {
         red = gWarpTransRed, green = gWarpTransGreen, blue = gWarpTransBlue;
     }
+    colorRGB_set(gWarpTransition.data.color, red, green, blue);
     if (transType < 8) { // if transition is RGB
-        colorRGB_set(gWarpTransition.data.color, red, green, blue);
     } else { // if transition is textured
-        colorRGB_set(gWarpTransition.data.color, red, green, blue);
         // Both the start and end textured transition are always located in the middle of the screen.
         // If you really wanted to, you could place the start at one corner and the end at
         // the opposite corner. This will make the transition image look like it is moving
@@ -369,7 +368,7 @@ static const ColorRGB    darkOverlayColor = {   0,   0,   0};
 void render_screen_overlay(void) {
     if ((gMarioState->area == NULL) || (gMarioObject == NULL)) return;
 #ifdef ENVIRONMENT_SCREEN_TINT
-    ColorRGBA colorEnv = {0, 0, 0, 0};
+    ColorRGBA colorEnv = { 0, 0, 0, 0 };
 #ifdef PUPPYCAM
     f32 camHeight      = ((80.0f * coss(gPuppyCam.pitch)) + 125.0f);
 #else
@@ -395,7 +394,7 @@ void render_screen_overlay(void) {
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-    ColorRGBA damageColor = {0, 0, 0, 0};
+    ColorRGBA damageColor = { 0, 0, 0, 0 };
     if ((gMarioState->health < 0x100) && (gMarioState->hurtShadeAlpha > 0)) {
         gMarioState->hurtShadeAlpha--;
     } else if (gMarioState->hurtShadeAlpha >= 4) {
@@ -405,12 +404,7 @@ void render_screen_overlay(void) {
 #endif
 #if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
     ColorRGBA color;
-    if ((color[3] = (colorEnv[3] + damageColor[3])) > 0) {
-        color[0] = (((colorEnv[0] * colorEnv[3]) + (damageColor[0] * damageColor[3])) / color[3]);
-        color[1] = (((colorEnv[1] * colorEnv[3]) + (damageColor[1] * damageColor[3])) / color[3]);
-        color[2] = (((colorEnv[2] * colorEnv[3]) + (damageColor[2] * damageColor[3])) / color[3]);
-        shade_screen_color(color);
-    }
+    if (colorRGBA_average_2(color, colorEnv, damageColor)) shade_screen_color(color);
 #elif defined(ENVIRONMENT_SCREEN_TINT)
     shade_screen_color(colorEnv);
 #elif defined(DAMAGE_SCREEN_TINT)

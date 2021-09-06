@@ -438,7 +438,7 @@ static void geo_process_switch(struct GraphNodeSwitchCase *node) {
 static void geo_process_camera(struct GraphNodeCamera *node) {
     Mat4 cameraTransform;
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    Vec3s marioPos;
+    Vec3f marioPos;
 #endif
     Mtx *rollMtx = alloc_display_list(sizeof(*rollMtx));
     Mtx *mtx     = alloc_display_list(sizeof(*mtx));
@@ -464,14 +464,12 @@ static void geo_process_camera(struct GraphNodeCamera *node) {
         gCurGraphNodeCamera = NULL;
     }
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    // Convert Mario's coordinates into vec3s so they can be used in mtxf_mul_vec3s
-    vec3f_to_vec3s(marioPos, gMarioState->pos);
     // Transform Mario's coordinates into view frustrum
-    mtxf_mul_vec3s(gMatStack[gMatStackIndex], marioPos);
+    linear_mtxf_mul_vec3f(gMatStack[gMatStackIndex], marioPos, gMarioState->pos);
     // Perspective divide
-    gMarioScreenX = (2 * (0.5f - marioPos[0] / (f32)marioPos[2]) * (gCurGraphNodeRoot->width ));
+    gMarioScreenX = (2 * (0.5f - marioPos[0] / marioPos[2]) * (gCurGraphNodeRoot->width ));
     if (gMarioScreenX < 0) gMarioScreenX = 0;
-    gMarioScreenY = (2 * (0.5f - marioPos[1] / (f32)marioPos[2]) * (gCurGraphNodeRoot->height));
+    gMarioScreenY = (2 * (0.5f - marioPos[1] / marioPos[2]) * (gCurGraphNodeRoot->height));
     if (gMarioScreenY < 0) gMarioScreenY = 0;
 #endif
     gMatStackIndex--;

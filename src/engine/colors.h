@@ -93,9 +93,14 @@
 #define I4_TO_RGBA16_C(c)   (((c) << (SIZ_RGBA16_C - SIZ_I4)) & MSK_RGBA16_C)
 #define I8_TO_RGBA16_C(c)   (((c) >> (SIZ_I8 - SIZ_RGBA16_C)) & MSK_RGBA16_C)
 
-void colorRGB_set(ColorRGB dest, Color r, Color g, Color b);
-void colorRGB_copy(ColorRGB dest, const ColorRGB src);
-void vec3s_to_colorRGB(ColorRGB dest, Vec3s src);
+#define colorRGB_set(    dst, r, g, b) vec3_set( (dst), (r), (g), (b))
+#define colorRGB_copy(   dst, src    ) vec3_copy((dst), (src)        )
+#define colorRGB_to_vec3(dst, src    ) vec3_copy((dst), (src)        )
+#define vec3_to_colorRGB(dst, src    ) vec3_copy((dst), (src)        )
+
+Bool32 colorRGBA_average_2(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2);
+Bool32 colorRGBA_average_3(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2, ColorRGBA c3);
+
 void generate_metal_texture(u16 *dst,      u16 *src);
 void copy_partial_image(    u16 *dst,      u16 *src,
                             s32 dstX,      s32 dstY,

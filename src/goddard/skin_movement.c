@@ -10,7 +10,7 @@
 
 /* bss */
 struct ObjWeight *sResetCurWeight;
-static Mat4 D_801B9EA8; // TODO: rename to sHead2Mtx?
+static Mat4 sHead2Mtx; // TODO: rename to sHead2Mtx?
 
 s32 sResetWeightVtxNum;
 
@@ -48,8 +48,7 @@ void func_80181894(struct ObjJoint *joint) {
             linkedObj                = link->obj;
             curWeight                = (struct ObjWeight *) linkedObj;
             if (curWeight->weightVal > 0.0f) {
-                vec3f_copy(stackVec, curWeight->vec20);
-                gd_rotate_and_translate_vec3f(stackVec, &joint->invMtx);
+                linear_mtxf_mul_vec3f_and_translate(joint->invMtx, stackVec, curWeight->vec20);
                 connectedVtx         = curWeight->vtx;
                 scaleFactor          = curWeight->weightVal;
                 connectedVtx->pos[0] += (stackVec[0] * scaleFactor);
@@ -62,13 +61,11 @@ void func_80181894(struct ObjJoint *joint) {
 
 /* @ 2301A0 for 0x110 */
 void reset_weight_vtx(struct ObjVertex *vtx) {
-    Vec3f localVec;
+    // Vec3f localVec;
     if (sResetWeightVtxNum++ == sResetCurWeight->vtxId) {  // found matching vertex
-        sResetCurWeight->vtx     = vtx;
-        vec3f_copy(localVec, vtx->pos);
-        gd_rotate_and_translate_vec3f(localVec, &D_801B9EA8);
-        vec3f_copy(sResetCurWeight->vec20, localVec);
-        vtx->scaleFactor        -= sResetCurWeight->weightVal;
+        sResetCurWeight->vtx = vtx;
+        linear_mtxf_mul_vec3f_and_translate(sHead2Mtx, sResetCurWeight->vec20, vtx->pos);
+        vtx->scaleFactor    -= sResetCurWeight->weightVal;
     }
 }
 
@@ -87,6 +84,6 @@ void reset_weight(struct ObjWeight *weight) {
 
 void reset_joint_weights(struct ObjJoint *joint) {
     struct ObjGroup *group;
-    mtxf_inverse(&D_801B9EA8, &joint->invMtx);
+    mtxf_inverse(&sHead2Mtx, &joint->invMtx);
     if ((group = joint->weightGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_WEIGHTS, (applyproc_t) reset_weight, group);
 }

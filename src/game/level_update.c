@@ -46,15 +46,16 @@
 #define WARP_TYPE_CHANGE_AREA   0x02
 #define WARP_TYPE_SAME_AREA     0x03
 
-#define WARP_NODE_F0            0xF0
-#define WARP_NODE_DEATH         0xF1
-#define WARP_NODE_F2            0xF2
-#define WARP_NODE_WARP_FLOOR    0xF3
-#define WARP_NODE_CREDITS_START 0xF8
-#define WARP_NODE_CREDITS_NEXT  0xF9
-#define WARP_NODE_CREDITS_END   0xFA
+#define WARP_NODE               0xF0
+#define WARP_NODE_F0            (0x00 | WARP_NODE)
+#define WARP_NODE_DEATH         (0x01 | WARP_NODE)
+#define WARP_NODE_LOOK_UP       (0x02 | WARP_NODE)
+#define WARP_NODE_WARP_FLOOR    (0x03 | WARP_NODE)
+#define WARP_NODE_CREDITS_START (0x08 | WARP_NODE)
+#define WARP_NODE_CREDITS_NEXT  (0x09 | WARP_NODE)
+#define WARP_NODE_CREDITS_END   (0x0A | WARP_NODE)
 
-#define WARP_NODE_CREDITS_MIN   0xF8
+#define WARP_NODE_CREDITS_MIN   WARP_NODE_CREDITS_START
 
 // TODO: Make these ifdefs better
 const char *credits01[] = { "1GAME DIRECTOR", "SHIGERU MIYAMOTO" };
@@ -236,15 +237,11 @@ void load_level_init_text(u32 arg) {
     s32 gotAchievement;
     DialogID dialogID = gCurrentArea->dialog[arg];
     switch (dialogID) {
-        case DIALOG_129: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP; break;
-        case DIALOG_130: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP;  break;
-        case DIALOG_131: gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP;   break;
-        case (u8)DIALOG_NONE: // 255, cast value to u8 to match (-1)
-            gotAchievement = TRUE;
-            break;
-        default:
-            gotAchievement = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
-            break;
+        case DIALOG_129:      gotAchievement = (save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP);       break;
+        case DIALOG_130:      gotAchievement = (save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP );       break;
+        case DIALOG_131:      gotAchievement = (save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP  );       break;
+        case (u8)DIALOG_NONE: gotAchievement = TRUE;                                                      break; // 255, cast value to u8 to match (-1)
+        default: gotAchievement = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)); break;
     }
     if (!gotAchievement) {
         level_set_transition(-1, NULL);
@@ -521,20 +518,20 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
                 sSourceWarpNodeId = WARP_NODE_F0;
                 gSavedCourseNum   = COURSE_NONE;
                 fadeMusic         = FALSE;
-                play_transition(WARP_TRANSITION_FADE_INTO_STAR, 0x14, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_STAR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_CREDITS_END:
                 sDelayedWarpTimer = 60;
                 sSourceWarpNodeId = WARP_NODE_F0;
                 fadeMusic         = FALSE;
                 gSavedCourseNum   = COURSE_NONE;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x3C, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_STAR_EXIT:
                 sDelayedWarpTimer = 32;
                 sSourceWarpNodeId = WARP_NODE_F0;
                 gSavedCourseNum   = COURSE_NONE;
-                play_transition(WARP_TRANSITION_FADE_INTO_MARIO, 0x20, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_MARIO, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_DEATH:
 #ifndef DISABLE_LIVES
@@ -542,7 +539,7 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 #endif
                 sDelayedWarpTimer = 48;
                 sSourceWarpNodeId = WARP_NODE_DEATH;
-                play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, 0x30, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_BOWSER, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 play_sound(SOUND_MENU_BOWSER_LAUGH, gGlobalSoundSource);
                 break;
             case WARP_OP_WARP_FLOOR:
@@ -559,12 +556,12 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
 #endif
                 }
                 sDelayedWarpTimer = 20;
-                play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, 0x14, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_LOOK_UP: // enter totwc
                 sDelayedWarpTimer = 30;
-                sSourceWarpNodeId = WARP_NODE_F2;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x1E, 0xFF, 0xFF, 0xFF);
+                sSourceWarpNodeId = WARP_NODE_LOOK_UP;
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0xFF, 0xFF, 0xFF);
 #ifndef VERSION_JP
                 play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
 #endif
@@ -572,39 +569,34 @@ s32 level_trigger_warp(struct MarioState *m, s32 warpOp) {
             case WARP_OP_SPIN_SHRINK: // bbh enter
                 sDelayedWarpTimer = 30;
                 sSourceWarpNodeId = ((m->usedObj->oBehParams & 0x00FF0000) >> 16);
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x1E, 0xFF, 0xFF, 0xFF);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0xFF, 0xFF, 0xFF);
                 break;
             case WARP_OP_TELEPORT:
                 sDelayedWarpTimer = 20;
                 sSourceWarpNodeId = ((m->usedObj->oBehParams & 0x00FF0000) >> 16);
                 fadeMusic = !music_unchanged_through_warp(sSourceWarpNodeId);
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x14, 0xFF, 0xFF, 0xFF);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0xFF, 0xFF, 0xFF);
                 break;
             case WARP_OP_WARP_DOOR:
                 sDelayedWarpTimer = 20;
                 sDelayedWarpArg   = m->actionArg;
                 sSourceWarpNodeId = ((m->usedObj->oBehParams & 0x00FF0000) >> 16);
                 fadeMusic = !music_unchanged_through_warp(sSourceWarpNodeId);
-                play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, 0x14, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_CIRCLE, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_WARP_OBJECT:
                 sDelayedWarpTimer = 20;
                 sSourceWarpNodeId = ((m->usedObj->oBehParams & 0x00FF0000) >> 16);
                 fadeMusic = !music_unchanged_through_warp(sSourceWarpNodeId);
-                play_transition(WARP_TRANSITION_FADE_INTO_STAR, 0x14, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_STAR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_CREDITS_START:
                 sDelayedWarpTimer = 30;
-                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x1E, 0x00, 0x00, 0x00);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 break;
             case WARP_OP_CREDITS_NEXT:
-                if (gCurrCreditsEntry == &sCreditsSequence[0]) {
-                    sDelayedWarpTimer = 60;
-                    play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x3C, 0x00, 0x00, 0x00);
-                } else {
-                    sDelayedWarpTimer = 20;
-                    play_transition(WARP_TRANSITION_FADE_INTO_COLOR, 0x14, 0x00, 0x00, 0x00);
-                }
+                sDelayedWarpTimer = ((gCurrCreditsEntry == &sCreditsSequence[0]) ? 60 : 20);
+                play_transition(WARP_TRANSITION_FADE_INTO_COLOR, sDelayedWarpTimer, 0x00, 0x00, 0x00);
                 fadeMusic = FALSE;
                 break;
         }
@@ -728,9 +720,7 @@ Bool32 play_mode_normal(void) {
         print_intro_text();
         if (gPlayer1Controller->buttonPressed & END_DEMO) {
             level_trigger_warp(gMarioState, ((gCurrLevelNum == LEVEL_PSS) ? WARP_OP_DEMO_END : WARP_OP_DEMO_NEXT));
-        } else if (!gWarpTransition.isActive
-                   && (sDelayedWarpOp == WARP_OP_NONE)
-                   && (gPlayer1Controller->buttonPressed & START_BUTTON)) {
+        } else if (!gWarpTransition.isActive && (sDelayedWarpOp == WARP_OP_NONE) && (gPlayer1Controller->buttonPressed & START_BUTTON)) {
             level_trigger_warp(gMarioState, WARP_OP_DEMO_NEXT);
         }
     }
