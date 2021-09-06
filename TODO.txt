@@ -1,11 +1,11 @@
 **TODO:**
 - Known Bugs:
+    - Audio is scuffed
+        - Might be a HackerSM64 issue?
     - Possible to clip through the back wall of the JRB ship when jumping at it at certain angles
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar for some reason
     - Goddard joints don't get dragged properly on the Z axis
-    - Audio is scuffed
-        - Might be a HackerSM64 issue?
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare)
     - Properly fix HMC crash
@@ -83,7 +83,48 @@
         - build warning for a pointer
         - title screen is 2x speed
         - screen transitions are 2x speed
-        - Act selector crashes
+        - Debug level select text flickers
+        - Input is delayed 3(?) frames
+        - Camera sometimes jitters when rotating yaw (noticeable in WF)
+        - Certain billboards are scuffed in various ways:
+            - Dialog indicator bounces between frames
+            - Far coins (vanilla coins) texture load breaks?
+            - Envfx flickers
+        - Some levels whitescreen on load:
+            - Confirmed working levels:
+                - BBH
+                - Inside Castle
+                - SSL
+                - SL
+                - JRB
+                - TTC
+                - RR
+                - Castle Grounds
+                - BITDW
+                - VCUTM
+                - BITFS
+                - SA
+                - BITS
+                - LLL
+                - DDD Area 1
+                - WF
+                - Ending
+                - Courtyard
+                - Secret Slide
+                - COTMC
+                - TOTWC
+                - Bowser 1
+                - WMOTR
+                - Bowser 2
+                - Bowser 3
+                - TTM
+            - Confirmed not working levels:
+                - HMC (audio works)
+                - BOB (sometimes audio, emulator freezes, crashes on T3, EPC is in handle_sp_complete)
+                - WDW (audio works)
+                - THI (audio works)
+                - DDD Area 2 (instant crash, EPC is in geo_skybox_main)
+                - TTM 2nd slide area (instant crash, EPC is right before geo_process_shadow, in geo_process_animated_part?)
         - Pausing is broken
             - Input is in graphics thread but read in game thread so it's read as being done twice in a frame
     - Proper Skyboxes like in SM64DS
@@ -96,6 +137,7 @@
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette
     - Metal cap effect:
+        - Draw Lakitu from the actual displaylist/model instead of a texture
         - Make metal cap effect work on console, otherwise use vanilla
             - Also use vanilla if framebuffer is not enabled
 - HUD:

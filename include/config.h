@@ -836,4 +836,41 @@
 // Not yet implemented
 // #define DYNAMIC_GRAVITY
 
+
+/********************************************************************************************************************************
+ *                                                                                                                              *
+ * -- Define compatibility safeguards. Don't mess with these unless you know what you're doing.--                               *
+ *                                                                                                                              *
+ ********************************************************************************************************************************/
+
+#ifndef ENVIRONMENT_SCREEN_TINT
+#undef LLL_VOLCANO_TINT
+#endif
+
+#ifndef METAL_CAP_REFLECTION
+#undef METAL_CAP_REFLECTION_SHINE
+#undef METAL_CAP_REFLECTION_GRAYSCALE
+#undef METAL_CAP_REFLECTION_LAKITU
+#endif
+
+#ifdef PUPPYCAM
+#undef REONU_CAM_3
+#undef FAST_VERTICAL_CAMERA_MOVEMENT
+#else
+#undef BOWSER_BOMB_FOCUS
+#undef CAMERA_NOCLIP
+#endif
+
+#ifndef EASIER_DIALOG_TRIGGER
+#undef DIALOG_INDICATOR
+#endif
+
+#ifdef VARIABLE_FRAMERATE
+#undef KEEP_MARIO_HEAD
+#endif
+
+#ifndef FAST_FLOOR_ALIGN
+#undef FLOOR_ALIGNMENT
+#endif
+
 #endif // CONFIG_H
