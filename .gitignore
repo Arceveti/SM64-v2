@@ -74,18 +74,6 @@ errors.txt
 !/textures/crash_custom/*.png
 
 # Specific assets
-!/textures/segment2/segment2.02600.png
-!/textures/segment2/segment2.03400.png
-!/textures/segment2/segment2.03E00.png
-!/textures/segment2/segment2.04200.png
-!/textures/segment2/segment2.04600.png
-!/textures/segment2/segment2.04C00.png
-!/textures/segment2/segment2.04E00.png
-!/textures/segment2/segment2.05000.png
-!/textures/segment2/segment2.05200.png
-!/textures/segment2/segment2.05400.png
-!/textures/segment2/segment2.05E00.png
-
 !/textures/segment2/segment2.hud_char_j.rgba16.png
 !/textures/segment2/segment2.hud_char_q.rgba16.png
 !/textures/segment2/segment2.hud_char_v.rgba16.png
@@ -100,6 +88,7 @@ errors.txt
 !/textures/segment2/segment2.ampersand.rgba16.png
 !/textures/segment2/segment2.percent.rgba16.png
 !/textures/segment2/segment2.minus.rgba16.png
+!/textures/segment2/segment2.minus2.rgba16.png
 !/textures/segment2/segment2.yellow_coin.rgba16.png
 !/textures/segment2/segment2.blue_coin.rgba16.png
 !/textures/segment2/segment2.red_coin.rgba16.png
