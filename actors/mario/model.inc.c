@@ -1,5 +1,9 @@
 // Mario
 
+// #ifdef PUPPYLIGHTS
+// #define static
+// #endif
+
 // 0x04000000 # solid color blue - butt, left thigh, right thigh - all poly types
 static const Lights1 mario_blue_lights_group = gdSPDefLights1(
     0x00, 0x00, 0x7f,

@@ -806,6 +806,9 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
+// // Lightweight directional lighting engine by Fazana. Intended for giving proximity and positional pointlights to small objects.
+// #define PUPPYLIGHTS
+
 // Variable Framerate (Fazana)
 //! Not compatible with KEEP_MARIO_HEAD
 // #define VARIABLE_FRAMERATE

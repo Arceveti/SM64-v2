@@ -6,6 +6,6 @@
 #include "config.h"
 #include "macros.h"
 
-extern ImageTexture gZBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+extern RGBA16 gZBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 #endif // ZBUFFER_H
