@@ -115,7 +115,7 @@ void print_intro_text(void) {
     s32 language = eu_get_language();
 #endif
     if ((gGlobalTimer & 0x1F) < 20) {
-        if (gControllerBits == 0) {
+        if (!gControllerBits) {
 #ifdef VERSION_EU
             print_text_centered((SCREEN_WIDTH / 2), 20, gNoControllerMsg[language]);
 #else

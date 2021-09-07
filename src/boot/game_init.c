@@ -584,8 +584,7 @@ void read_controller_inputs(void) {
         if (controller->controllerData != NULL) {
             controller->rawStickX     = controller->controllerData->stick_x;
             controller->rawStickY     = controller->controllerData->stick_y;
-            controller->buttonPressed = controller->controllerData->button
-                                     & (controller->controllerData->button ^ controller->buttonDown);
+            controller->buttonPressed = controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown);
             // 0.5x A presses are a good meme
             controller->buttonDown = controller->controllerData->button;
             adjust_analog_stick(controller);
@@ -784,7 +783,7 @@ void thread5_game_loop(UNUSED void *arg) {
         startThread = TRUE;
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-        gGlobalTimer++;
+        gGlobalTimer++; //! Wasn't in Fazana's repo? no idea where this gets incremented otherwise
 #else
         display_and_vsync();
         // when debug info is enabled, print the "BUF %07d" information.

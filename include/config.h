@@ -843,6 +843,10 @@
  *                                                                                                                              *
  ********************************************************************************************************************************/
 
+#ifdef IA8_30FPS_COINS
+#undef IA8_COINS
+#endif
+
 #ifndef ENVIRONMENT_SCREEN_TINT
 #undef LLL_VOLCANO_TINT
 #endif

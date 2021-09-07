@@ -78,6 +78,12 @@
     - Update mario movement angles when m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics
+    - Fix/cleanup/redraw textures:
+        - Fix peach window edges
+        - Fix bubble tree edges
+        - Redraw/re-render near and far coins with better lighting
+            - Far coins ia8
+        - Make env textures right side up
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
         - build warning for a pointer
