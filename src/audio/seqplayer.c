@@ -2111,7 +2111,7 @@ void sequence_player_process_sequence(struct SequencePlayer *seqPlayer) {
 #endif
                         if (seqPlayer->tempo > gTempoInternalToExternal) seqPlayer->tempo = gTempoInternalToExternal;
                         // if (cmd){}
-                        if ((s16) seqPlayer->tempo <= 0) seqPlayer->tempo = 1;
+                        if ((s16) seqPlayer->tempo < 0) seqPlayer->tempo = 0;
                         break;
 #ifdef VERSION_SH
                     case 0xdc: // seq_addtempo (bpm)
