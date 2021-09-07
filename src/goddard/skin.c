@@ -92,41 +92,32 @@ void move_bonesnet(struct ObjNet *net) {
 /* 241768 -> 241AB4; orig name: func_80192F98 */
 void convert_gd_verts_to_Vn(struct ObjGroup *grp) {
     Vtx *vn;
-    u8 nx, ny, nz;
+    Vec3uc n;
+    Vec3vs pos;
     register struct VtxLink *vtxlink;
 #ifndef GBI_FLOATS
     register RawVertexData *vnPos;
 #endif
-    register RawVertexData x, y, z;
     register struct ObjVertex *vtx;
     register struct ListNode *link;
     struct GdObj *obj;
     for (link = grp->firstMember; link != NULL; link = link->next) {
         obj = link->obj;
         vtx = (struct ObjVertex *) obj;
-        x   = (RawVertexData) vtx->pos[0];
-        y   = (RawVertexData) vtx->pos[1];
-        z   = (RawVertexData) vtx->pos[2];
-        nx  = (u8)(vtx->normal[0] * 255.0f);
-        ny  = (u8)(vtx->normal[1] * 255.0f);
-        nz  = (u8)(vtx->normal[2] * 255.0f);
+        vec3f_to_vec3s(pos, vtx->pos);
+        vec3_prod_val(n, vtx->normal, 255.0f);
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vnPos    = vtxlink->data->n.ob;
             vn       = vtxlink->data;
-            *vnPos++ = x;
-            *vnPos++ = y;
-            *vnPos++ = z;
+            *vnPos++ = pos[0];
+            *vnPos++ = pos[1];
+            *vnPos++ = pos[2];
 #else
             vn = vtxlink->data;
-            // vec3f_set?
-            vn->n.ob[0] = x;
-            vn->n.ob[1] = y;
-            vn->n.ob[2] = z;
+            vec3_copy(vn->n.ob, pos);
 #endif
-            vn->n.n[0] = nx;
-            vn->n.n[1] = ny;
-            vn->n.n[2] = nz;
+            vec3_copy(vn->n.n, n);
         }
     }
 }

@@ -32,18 +32,21 @@ typedef u32 Bool32;
 
 // -- Vectors --
 
+typedef u8 Vec2uc[2];
 typedef s8  Vec2c[2];
 typedef s16 Vec2s[2];
 typedef s32 Vec2i[2];
 typedef f32 Vec2f[2];
 typedef f64 Vec2d[2];
 
+typedef u8 Vec3uc[3];
 typedef s8  Vec3c[3];
 typedef s16 Vec3s[3];
 typedef s32 Vec3i[3];
 typedef f32 Vec3f[3]; // X, Y, Z, where Y is up
 typedef f64 Vec3d[3];
 
+typedef u8 Vec4uc[4];
 typedef s8  Vec4c[4];
 typedef s16 Vec4s[4];
 typedef s32 Vec4i[4];

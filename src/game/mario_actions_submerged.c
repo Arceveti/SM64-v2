@@ -160,12 +160,12 @@ static void apply_water_current(struct MarioState *m, Vec3f step) {
     for ((i = 0); (i < 2); (i++)) {
         struct Whirlpool *whirlpool = gCurrentArea->whirlpools[i];
         if (whirlpool != NULL) {
-            f32 strength = 0.0f;
             Vec3f d;
             vec3_diff(d, whirlpool->pos, m->pos);
-            f32 lateralDist        = sqrtf(sqr(d[0]) + sqr(d[2]));
-            f32 distance           = sqrtf(sqr(lateralDist) + sqr(d[1]));
-            Angle pitchToWhirlpool = atan2s(lateralDist, d[1]);
+            f32 strength           = 0.0f;
+            f32 ld                 = (sqr(d[0]) + sqr(d[2]));
+            f32 distance           = sqrtf(ld + sqr(d[1]));
+            Angle pitchToWhirlpool = atan2s(sqrtf(ld), d[1]);
             Angle yawToWhirlpool   = atan2s(d[2], d[0]);
             yawToWhirlpool -= (Angle)(DEG(45) * (1000.0f / (distance + 1000.0f)));
             if (whirlpool->strength >= 0) {
@@ -353,7 +353,7 @@ static Bool32 act_hold_water_action_end(struct MarioState *m) {
 #ifdef WATER_GROUND_POUND
     if (m->input & INPUT_Z_PRESSED                                 ) return drop_and_set_mario_action(m, ACT_WATER_GROUND_POUND      , 0);
 #endif
-    common_idle_step(m, m->actionArg == 0 ? MARIO_ANIM_WATER_ACTION_END_WITH_OBJ : MARIO_ANIM_STOP_GRAB_OBJ_WATER, 0);
+    common_idle_step(m, ((m->actionArg == 0) ? MARIO_ANIM_WATER_ACTION_END_WITH_OBJ : MARIO_ANIM_STOP_GRAB_OBJ_WATER), 0);
     if (is_anim_at_end(m)) set_mario_action(m, ACT_HOLD_WATER_IDLE, 0);
     return FALSE;
 }

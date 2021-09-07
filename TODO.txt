@@ -66,6 +66,24 @@
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor/ceil/wall calls
+    - Change vanilla models to use new F3D features (like expanded vertex buffer)
+    - Skinned models for:
+        - Mario
+        - Bowser
+        - Toad
+        - Peach
+        - Unagi
+        - Klepto
+        - Fish
+        - Manta Ray
+        - Sushi (shark)
+        - Ukiki
+        - Lakitu
+        - Koopa (and KtQ)
+        - Chain Chomp
+        - Penguins
+        - Dorrie
+        - Moneybag
 - Physics/Movement:
     - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
@@ -84,6 +102,7 @@
         - Redraw/re-render near and far coins with better lighting
             - Far coins ia8
         - Make env textures right side up
+    - The leftmost column of pixels on billboards shouldn't get stretched at low resolution
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
         - build warning for a pointer
@@ -142,6 +161,7 @@
     - Silhouette:
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette
+    - Shadow shape based on Mario's model
     - Metal cap effect:
         - Draw Lakitu from the actual displaylist/model instead of a texture
         - Make metal cap effect work on console, otherwise use vanilla

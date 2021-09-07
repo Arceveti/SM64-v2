@@ -575,7 +575,7 @@ void vec3f_rotate(Mat4 mat, Vec3f in, Vec3f out) {
     out[2] = ((mat[0][2] * in[0]) + (mat[1][2] * in[1]) + (mat[2][2] * in[2]));
 }
 
-void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
+UNUSED void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
     s32 i, j;
     for ((i = 0); (i < 3); (i++)) {
         out[i] = (mat[3][i] * w);
@@ -583,10 +583,10 @@ void vec3f_transform(Mat4 mat, Vec3f in, f32 w, Vec3f out) {
     }
 }
 
-void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
+UNUSED void vec3f_transform_vtx(Mat4 mat, Vec3f in, f32 w, Vtx *out) {
     Vec3f temp;
     vec3f_transform(mat, in, w, temp);
-    vec3f_to_vec3s(out->v.ob, temp);
+    vec3_copy(out->v.ob, temp);
 }
 
 /**

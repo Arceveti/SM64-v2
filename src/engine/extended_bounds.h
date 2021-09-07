@@ -53,32 +53,29 @@
 #if EXTENDED_BOUNDS_MODE == 0 // Vanilla
     #undef LEVEL_BOUNDARY_MAX // Undefine the old value to avoid compiler warnings
     #define LEVEL_BOUNDARY_MAX      0x2000L
-    #define CELL_SIZE               0x400
+    #define CELL_SIZE               0x400 // num_cells = 16
     #define SURFACE_POOL_SIZE       4000
-    #define SURFACE_NODE_POOL_SIZE  12000
 #elif EXTENDED_BOUNDS_MODE == 1 // Vanilla size with performance but more RAM usage
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x2000L
-    #define CELL_SIZE               0x200
+    #define CELL_SIZE               0x200 // num cells = 32
     #define SURFACE_POOL_SIZE       4000
-    #define SURFACE_NODE_POOL_SIZE  16000
 #elif EXTENDED_BOUNDS_MODE == 2 // 2x bounds
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x4000L
-    #define CELL_SIZE               0x400
+    #define CELL_SIZE               0x400 // num cells = 16
     #define SURFACE_POOL_SIZE       8200
-    #define SURFACE_NODE_POOL_SIZE  22000
 #elif EXTENDED_BOUNDS_MODE == 3 // 4x bounds
     #undef LEVEL_BOUNDARY_MAX
     #define LEVEL_BOUNDARY_MAX      0x8000L
-    #define CELL_SIZE               0x400
+    #define CELL_SIZE               0x400 // num cells = 16
     #define SURFACE_POOL_SIZE       8200
-    #define SURFACE_NODE_POOL_SIZE  24600
 #endif
 
 STATIC_ASSERT(LEVEL_BOUNDARY_MAX != 0, "You must set a valid extended bounds mode!");
 
-#define NUM_CELLS (2 * LEVEL_BOUNDARY_MAX / CELL_SIZE)
+#define NUM_CELLS               ((2 * LEVEL_BOUNDARY_MAX) / CELL_SIZE)
+#define SURFACE_NODE_POOL_SIZE (((NUM_CELLS / 16) + 2) * SURFACE_POOL_SIZE)
 
 #define NOT_ENOUGH_ROOM_FOR_SURFACES (1 << 0)
 #define NOT_ENOUGH_ROOM_FOR_NODES    (1 << 1)
