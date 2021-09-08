@@ -334,7 +334,7 @@ static void koopa_unshelled_act_dive(void) {
         //  while Mario is riding it.
         if (!(gMarioState->action & ACT_FLAG_RIDING_SHELL)
          && (shell != NULL)
-         && (dist_between_objects(shell, gMarioObject) > 200.0f)
+         && (dist_between_objects_squared(shell, gMarioObject) > sqr(200.0f))
          && (distToShell < 50.0f)) {
             o->oKoopaMovementType = KOOPA_BP_NORMAL;
             o->oAction            = KOOPA_SHELLED_ACT_LYING;
@@ -627,7 +627,7 @@ static void koopa_the_quick_update(void) {
         case KOOPA_THE_QUICK_ACT_STOP:           koopa_the_quick_act_stop();             break;
         case KOOPA_THE_QUICK_ACT_AFTER_RACE:     koopa_the_quick_act_after_race();       break;
     }
-    if ((o->parentObj != o) && (dist_between_objects(o, o->parentObj) < 400.0f)) o->parentObj->oKoopaRaceEndpointKoopaFinished = TRUE;
+    if ((o->parentObj != o) && (dist_between_objects_squared(o, o->parentObj) < sqr(400.0f))) o->parentObj->oKoopaRaceEndpointKoopaFinished = TRUE;
     cur_obj_push_mario_away_from_cylinder(140.0f, 300.0f);
     cur_obj_move_standard(-78);
 }

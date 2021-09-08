@@ -56,9 +56,6 @@ void bhv_grand_star_loop(void) {
     } else { // act 2
         cur_obj_become_tangible();
         if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-#ifdef PUPPYLIGHTS
-            cur_obj_disable_light();
-#endif
             obj_mark_for_deletion(o);
             o->oInteractStatus = INT_STATUS_NONE;
         }
@@ -68,7 +65,7 @@ void bhv_grand_star_loop(void) {
     cur_obj_scale(2.0f);
     o->oGraphYOffset = 110.0f;
 #ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
     cur_obj_enable_light();
 #endif
 }

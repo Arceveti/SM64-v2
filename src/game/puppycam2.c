@@ -1028,9 +1028,10 @@ static void puppycam_collision(void) {
     vec3_copy_y_off(target[0], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight - CLAMP((gPuppyCam.targetObj->oPosY - gPuppyCam.targetFloorHeight), 0, PUPPYCAM_FLOOR_DIST_UP)));
     // The ray, starting from the bottom
     vec3_copy_y_off(target[1], &gPuppyCam.targetObj->oPosVec, (gPuppyCam.povHeight * 0.4f));
-    camdir[0][0] = (LENSIN(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[0]);
-    camdir[0][1] = (       LENCOS(gPuppyCam.zoomTarget,pitchTotal)                 + gPuppyCam.shake[1]);
-    camdir[0][2] = (LENCOS(LENSIN(gPuppyCam.zoomTarget,pitchTotal), gPuppyCam.yaw) + gPuppyCam.shake[2]);
+    s16 lenSinZoomPitch = LENSIN(gPuppyCam.zoomTarget, pitchTotal);
+    camdir[0][0] = (LENSIN(lenSinZoomPitch,   gPuppyCam.yaw) + gPuppyCam.shake[0]);
+    camdir[0][1] = (LENCOS(gPuppyCam.zoomTarget, pitchTotal) + gPuppyCam.shake[1]);
+    camdir[0][2] = (LENCOS(lenSinZoomPitch,   gPuppyCam.yaw) + gPuppyCam.shake[2]);
     vec3_copy(camdir[1], camdir[0]);
     gCheckingSurfaceCollisionsForCamera = TRUE;
     find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0], (RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL));
@@ -1047,9 +1048,9 @@ static void puppycam_collision(void) {
             gPuppyCam.zoom = MIN(gPuppyCam.collisionDistance, gPuppyCam.zoomTarget);
             if ((gPuppyCam.zoom - gPuppyCam.zoomTarget) < 5) {
                 if (dist[0] >= dist[1]) {
-                    vec3_copy(gPuppyCam.pos, hitpos[0]);
+                    vec3f_to_vec3s(gPuppyCam.pos, hitpos[0]);
                 } else {
-                    vec3_copy(gPuppyCam.pos, hitpos[1]);
+                    vec3f_to_vec3s(gPuppyCam.pos, hitpos[1]);
                     gPuppyCam.pos[1] += (gPuppyCam.povHeight * 0.6f);
                 }
             }

@@ -27,14 +27,16 @@ simply set the object flag OBJ_FLAG_EMIT_LIGHT and set some values to o->puppyli
 
 #ifdef PUPPYLIGHTS
 
-Lights1 gLevelLight; // Existing ambient light in the area. Will be set by the level script, though can always be changed afterwards if desired.
+Lights1 gLevelLight;                                       // Existing ambient light in the area. Will be set by the level script, though can always be changed afterwards if desired.
 Bool8 levelAmbient = FALSE;
-Lights1 *sLightBase; // The base value where lights are written to when worked with.
-Lights1 sDefaultLights = gdSPDefLights1(0x7F, 0x7F, 0x7F, 0xFE, 0xFE, 0xFE, 0x28, 0x28, 0x28); // Default lights default lights
-u16 gNumLights         = 0;                  // How many lights are loaded.
-u16 gDynLightStart     = 0;                  // Where the dynamic lights will start.
-struct PuppyLight *gPuppyLights[MAX_LIGHTS]; // This contains all the loaded data.
-struct MemoryPool *gLightsPool;              // The memory pool where the above is stored.
+Lights1 *sLightBase;                                       // The base value where lights are written to when worked with.
+Lights1 sDefaultLights = gdSPDefLights1(0x7F, 0x7F, 0x7F,
+                                        0xFE, 0xFE, 0xFE,
+                                        0x28, 0x28, 0x28); // Default lights default lights
+u16 gNumLights         = 0;                                // How many lights are loaded.
+u16 gDynLightStart     = 0;                                // Where the dynamic lights will start.
+struct PuppyLight *gPuppyLights[MAX_LIGHTS];               // This contains all the loaded data.
+struct MemoryPool *gLightsPool;                            // The memory pool where the above is stored.
 
 // Runs after an area load, allocates the dynamic light slots.
 void puppylights_allocate(void) {
@@ -179,7 +181,7 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
         }
     }
     memcpy(segmented_to_virtual(src), &sLightBase[0], sizeof(Lights1));
-    for ((i = 0); (i < gNumLights); (i++)) if ((gPuppyLights[i]->rgba[3] > 0) && (gPuppyLights[i]->active)) puppylights_iterate(gPuppyLights[i], src, obj);
+    for ((i = 0); (i < gNumLights); (i++)) if ((gPuppyLights[i]->rgba[3] > 0) && (gPuppyLights[i]->active) && (gPuppyLights[i]->area == gCurrAreaIndex) && ((gPuppyLights[i]->room == -1) || (gPuppyLights[i]->room == gMarioCurrentRoom))) puppylights_iterate(gPuppyLights[i], src, obj);
 }
 
 // Sets and updates dynamic lights from objects.
@@ -190,9 +192,7 @@ void puppylights_object_emit(struct Object *obj) {
     if (obj->oFlags & OBJ_FLAG_EMIT_LIGHT) {
         Vec3d d;
         vec3_diff(d, &obj->oPosVec, gMarioState->pos);
-        f64 dist      = vec3_sumsq(d);
-        f64 lightSize = vec3_sumsq(obj->puppylight.pos[1]);
-        if (dist > lightSize)
+        if (vec3_sumsq(d) > vec3_sumsq(obj->puppylight.pos[1]))
             goto deallocate; // That's right. I used a goto. Eat your heart out xkcd.
         if (obj->oLightID == 0xFFFF) {
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
@@ -200,7 +200,9 @@ void puppylights_object_emit(struct Object *obj) {
                 if (gPuppyLights[i]->active) continue;
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
-                obj->oLightID = i;
+                gPuppyLights[i]->area   = gCurrAreaIndex;
+                gPuppyLights[i]->room   = obj->oRoom;
+                obj->oLightID           = i;
                 goto updatepos;
             }
         } else {
@@ -216,15 +218,14 @@ void puppylights_object_emit(struct Object *obj) {
 
 // A bit unorthodox, but anything to avoid having to set up data to pass through in the original function.
 // Objects will completely ignore X, Y, Z and active though.
-void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 offsetX, s32 offsetY, s32 offsetZ, Angle32 yaw, s32 epicentre, RGBA32 colour, s32 flags, Bool32 active) {
+void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 offsetX, s32 offsetY, s32 offsetZ, Angle32 yaw, s32 epicentre, RGBA32 colour, s32 flags, RoomData room, Bool32 active) {
     light->active = active;
     vec3_set(light->pos[0], x, y, z);
     vec3_set(light->pos[1], MAX(offsetX, 10), MAX(offsetY, 10), MAX(offsetZ, 10));
-    light->rgba[0]   = RGBA32_R(colour); // ((colour >> 24) & 0xFF);
-    light->rgba[1]   = RGBA32_G(colour); // ((colour >> 16) & 0xFF);
-    light->rgba[2]   = RGBA32_B(colour); // ((colour >>  8) & 0xFF);
-    light->rgba[3]   = RGBA32_A(colour); // ((colour      ) & 0xFF);
+    RGBA32_TO_COLORRGBA(light->rgba, colour);
     light->yaw       = yaw;
+    light->area      = gCurrAreaIndex;
+    light->room      = room;
     light->epicentre = epicentre;
     if (!(flags & PUPPYLIGHT_SHAPE_CYLINDER) && (flags & PUPPYLIGHT_SHAPE_CUBE)) light->flags |= PUPPYLIGHT_SHAPE_CYLINDER;
     light->flags |= (flags | PUPPYLIGHT_DYNAMIC);
@@ -237,6 +238,7 @@ void cur_obj_enable_light(void) {
 
 void cur_obj_disable_light(void) {
     o->oFlags &= ~OBJ_FLAG_EMIT_LIGHT;
+    if (gPuppyLights[o->oLightID] && (o->oLightID != 0xFFFF)) gPuppyLights[o->oLightID]->active = FALSE;
 }
 
 void obj_enable_light(struct Object *obj) {
@@ -245,6 +247,7 @@ void obj_enable_light(struct Object *obj) {
 
 void obj_disable_light(struct Object *obj) {
     obj->oFlags &= ~OBJ_FLAG_EMIT_LIGHT;
+    if (gPuppyLights[obj->oLightID] && (obj->oLightID != 0xFFFF)) gPuppyLights[obj->oLightID]->active = FALSE;
 }
 
 #endif

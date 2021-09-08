@@ -28,6 +28,9 @@
 #include "engine/rendering_graph_node.h"
 #include "spawn_object.h"
 #include "spawn_sound.h"
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 #ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
 #include "platform_displacement.h"
 
@@ -186,6 +189,17 @@ f32 dist_between_objects(struct Object *obj1, struct Object *obj2) {
     f32 dist;
     vec3f_get_dist(&obj1->oPosVec, &obj2->oPosVec, &dist);
     return dist;
+}
+
+f32 lateral_dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {
+    MAKE_DXZ(&obj1->oPosVec, &obj2->oPosVec, f32)
+    return (sqr(dx) + sqr(dz));
+}
+
+f32 dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {
+    Vec3f d;
+    vec3_diff(d, &obj2->oPosVec, &obj1->oPosVec);
+    return vec3_sumsq(d);
 }
 
 void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
@@ -620,10 +634,11 @@ struct Object *cur_obj_find_nearby_held_actor(const BehaviorScript *behavior, f3
     listHead = &gObjectLists[OBJ_LIST_GENACTOR];
     obj      = (struct Object *) listHead->next;
     foundObj = NULL;
+    maxDist *= maxDist;
     while ((struct Object *) listHead != obj) {
         // This includes the dropped and thrown states. By combining instant
         // release, this allows us to activate mama penguin remotely
-        if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (obj->oHeldState != HELD_FREE) && (dist_between_objects(o, obj) < maxDist)) {
+        if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED) && (obj->oHeldState != HELD_FREE) && (dist_between_objects_squared(o, obj) < maxDist)) {
             foundObj = obj;
             break;
         }
@@ -777,11 +792,15 @@ Bool32 cur_obj_clear_interact_status_flag(s32 flag) {
  * Mark an object to be unloaded at the end of the frame.
  */
 void obj_mark_for_deletion(struct Object *obj) {
+#ifdef PUPPYLIGHTS
+    obj_disable_light(obj);
+#endif
     //! This clears all activeFlags. Since some of these flags disable behavior,
     //  setting it to 0 could potentially enable unexpected behavior. After an
     //  object is marked for deletion, it still updates on that frame (I think),
     //  so this is worth looking into.
-    obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    obj->activeFlags &= ~ACTIVE_FLAG_ACTIVE;
+    obj->activeFlags |= ACTIVE_FLAG_DEACTIVATED;
 }
 
 void cur_obj_disable(void) {
@@ -1007,7 +1026,7 @@ static Bool32 clear_move_flag(u32 *bitSet, s32 flag) {
     }
 }
 
-void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
+UNUSED void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
     if (radius > 0.1f) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius); // was 0.1l
 }
 

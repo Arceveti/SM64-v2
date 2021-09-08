@@ -21,14 +21,9 @@ void bhv_bowser_key_unlock_door_loop(void) {
     } else {
         o->oBowserKeyScale = 1.0f;
     }
-    if (o->oTimer > 150) {
+    if (o->oTimer > 150) obj_mark_for_deletion(o);
 #ifdef PUPPYLIGHTS
-        cur_obj_disable_light();
-#endif
-        obj_mark_for_deletion(o);
-    }
-#ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
     cur_obj_enable_light();
 #endif
 }
@@ -47,14 +42,9 @@ void bhv_bowser_key_course_exit_loop(void) {
     } else {
         o->oBowserKeyScale = 0.2f;
     }
-    if (o->oTimer > 138) {
+    if (o->oTimer > 138) obj_mark_for_deletion(o);
 #ifdef PUPPYLIGHTS
-        cur_obj_disable_light();
-#endif
-        obj_mark_for_deletion(o);
-    }
-#ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
     cur_obj_enable_light();
 #endif
 }

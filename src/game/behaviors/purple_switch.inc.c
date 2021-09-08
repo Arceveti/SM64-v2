@@ -17,7 +17,7 @@ void bhv_purple_switch_loop(void) {
             cur_obj_scale(1.5f);
             if ((gMarioObject->platform == o)
              && !(gMarioStates[0].action & MARIO_NO_PURPLE_SWITCH)
-             && (lateral_dist_between_objects(o, gMarioObject) < 127.5f)) o->oAction = PURPLE_SWITCH_ACT_PRESSED;
+             && (lateral_dist_between_objects_squared(o, gMarioObject) < sqr(127.5f))) o->oAction = PURPLE_SWITCH_ACT_PRESSED;
             break;
         /**
          * Collapse the switch downward, play a sound, and shake the screen.

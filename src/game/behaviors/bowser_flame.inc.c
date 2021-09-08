@@ -186,7 +186,7 @@ void bhv_flame_bouncing_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_move_standard(78);
     if (bowser_flame_should_despawn(300)) obj_mark_for_deletion(o);
-    if ((bowser != NULL) && (bowser->oHeldState == HELD_FREE) && (lateral_dist_between_objects(o, bowser) < 300.0f)) obj_mark_for_deletion(o);
+    if ((bowser != NULL) && (bowser->oHeldState == HELD_FREE) && (lateral_dist_between_objects_squared(o, bowser) < sqr(300.0f))) obj_mark_for_deletion(o);
 }
 
 void bhv_blue_flames_group_loop(void) {

@@ -18,6 +18,17 @@ void rgba16_to_colorRGBA(ColorRGBA dst, RGBA16 src) {
     dst[3] = COMPOSITE_TO_COLOR(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
+void rgba32_to_colorRGB(ColorRGBA dst, RGBA32 src) {
+    dst[0] = COMPOSITE_TO_COLOR(src, MSK_RGBA32_C, IDX_RGBA32_R);
+    dst[1] = COMPOSITE_TO_COLOR(src, MSK_RGBA32_C, IDX_RGBA32_G);
+    dst[2] = COMPOSITE_TO_COLOR(src, MSK_RGBA32_C, IDX_RGBA32_B);
+}
+
+void rgba32_to_colorRGBA(ColorRGBA dst, RGBA32 src) {
+    rgba32_to_colorRGB(dst, src);
+    dst[3] = COMPOSITE_TO_COLOR(src, MSK_RGBA32_A, IDX_RGBA32_A);
+}
+
 RGBA16 colorRGB_to_rgba16(ColorRGB src) {
     return (COLOR_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
           | COLOR_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
@@ -30,6 +41,20 @@ RGBA16 colorRGBA_to_rgba16(ColorRGBA src) {
           | COLOR_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
           | COLOR_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
           | COLOR_TO_COMPOSITE(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
+}
+
+RGBA32 colorRGB_to_rgba32(ColorRGB src) {
+    return (COLOR_TO_COMPOSITE(src[0], MSK_RGBA32_C, IDX_RGBA32_R)
+          | COLOR_TO_COMPOSITE(src[1], MSK_RGBA32_C, IDX_RGBA32_G)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA32_C, IDX_RGBA32_B)
+          | MSK_RGBA32_A);
+}
+
+RGBA32 colorRGBA_to_rgba32(ColorRGBA src) {
+    return (COLOR_TO_COMPOSITE(src[0], MSK_RGBA32_C, IDX_RGBA32_R)
+          | COLOR_TO_COMPOSITE(src[1], MSK_RGBA32_C, IDX_RGBA32_G)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA32_C, IDX_RGBA32_B)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA32_A, IDX_RGBA32_A));
 }
 
 // ColorRGBf
@@ -45,9 +70,16 @@ void rgba16_to_colorRGBAf(ColorRGBAf dst, RGBA16 src) {
     dst[3] = COMPOSITE_TO_COLORF(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
-// CompositeColor colorf_to_composite(ColorF src, u32 bitmask, u32 index) {
-//     return (((CompositeColor)(src * bitmask) & bitmask) << index);
-// }
+void rgba32_to_colorRGBf(ColorRGBf dst, RGBA32 src) {
+    dst[0] = COMPOSITE_TO_COLORF(src, MSK_RGBA32_C, IDX_RGBA32_R);
+    dst[1] = COMPOSITE_TO_COLORF(src, MSK_RGBA32_C, IDX_RGBA32_G);
+    dst[2] = COMPOSITE_TO_COLORF(src, MSK_RGBA32_C, IDX_RGBA32_B);
+}
+
+void rgba32_to_colorRGBAf(ColorRGBAf dst, RGBA32 src) {
+    rgba32_to_colorRGBf(dst, src);
+    dst[3] = COMPOSITE_TO_COLORF(src, MSK_RGBA32_A, IDX_RGBA32_A);
+}
 
 RGBA16 colorRGBf_to_rgba16(ColorRGBf src) {
     return (COLORF_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
@@ -61,6 +93,20 @@ RGBA16 colorRGBAf_to_rgba16(ColorRGBAf src) {
           | COLORF_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
           | COLORF_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
           | COLORF_TO_COMPOSITE(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
+}
+
+RGBA32 colorRGBf_to_rgba32(ColorRGBf src) {
+    return (COLORF_TO_COMPOSITE(src[0], MSK_RGBA32_C, IDX_RGBA32_R)
+          | COLORF_TO_COMPOSITE(src[1], MSK_RGBA32_C, IDX_RGBA32_G)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA32_C, IDX_RGBA32_B)
+          | MSK_RGBA32_A);
+}
+
+RGBA32 colorRGBAf_to_rgba32(ColorRGBAf src) {
+    return (COLORF_TO_COMPOSITE(src[0], MSK_RGBA32_C, IDX_RGBA32_R)
+          | COLORF_TO_COMPOSITE(src[1], MSK_RGBA32_C, IDX_RGBA32_G)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA32_C, IDX_RGBA32_B)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA32_A, IDX_RGBA32_A));
 }
 
 //! TODO:

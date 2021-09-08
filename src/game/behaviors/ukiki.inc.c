@@ -255,8 +255,8 @@ void ukiki_act_go_to_cage(void) {
     // Ultimately is checking the cage, as it points to the parent
     // of a dummy child object of the cage.
     if (obj != NULL) {
-        latDistToCage = lateral_dist_between_objects(o, obj->parentObj);
-        yawToCage = obj_angle_to_object(o, obj->parentObj);
+        latDistToCage = lateral_dist_between_objects_squared(o, obj->parentObj);
+        yawToCage     = obj_angle_to_object(o, obj->parentObj);
     }
     cur_obj_become_intangible();
     o->oFlags |= OBJ_FLAG_ACTIVE_FROM_AFAR;
@@ -303,7 +303,7 @@ void ukiki_act_go_to_cage(void) {
             break;
 
         case UKIKI_SUB_ACT_CAGE_LAND_ON_CAGE:
-            if (latDistToCage < 50.0f) o->oForwardVel = 0.0f;
+            if (latDistToCage < sqr(50.0f)) o->oForwardVel = 0.0f;
             if (o->oMoveFlags & OBJ_MOVE_LANDED) {
                 play_puzzle_jingle();
                 cur_obj_init_animation_with_sound(UKIKI_ANIM_JUMP_CLAP);

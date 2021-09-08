@@ -30,7 +30,7 @@ void bhv_homing_amp_init(void) {
     // They grow when they "appear" to Mario.
     cur_obj_scale(0.1f);
 #ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
 #endif
     // Hide the amp (until Mario gets near).
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
@@ -224,7 +224,7 @@ void bhv_circling_amp_init(void) {
     o->oMoveAngleYaw = random_u16();
     o->oAction       = AMP_ACT_IDLE;
 #ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
 #endif
 }
 

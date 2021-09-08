@@ -66,7 +66,7 @@
 #define A_RGBA16(c)  (((c) & MSK_RGBA16_A) << IDX_RGBA16_A)
 
 // RGBA32
-#define SIZ_RGBA32_C 0x08
+#define SIZ_RGBA32_C 0x8
 #define MSK_RGBA32_C BITMASK(SIZ_RGBA32_C)
 #define IDX_RGBA32_R ((SIZ_RGBA32_C * 3) + 0)
 #define IDX_RGBA32_G ((SIZ_RGBA32_C * 2) + 0)
@@ -80,6 +80,8 @@
 #define G_RGBA32(c)  (((c) & MSK_RGBA32_C) << IDX_RGBA32_G)
 #define B_RGBA32(c)  (((c) & MSK_RGBA32_C) << IDX_RGBA32_B)
 #define A_RGBA32(c)  (((c) & MSK_RGBA32_A) << IDX_RGBA32_A)
+#define SIZ_RGBA32_A SIZ_RGBA32_C
+#define MSK_RGBA32_A MSK_RGBA32_C
 
 // CI4
 #define SIZ_CI4 0x4
@@ -111,6 +113,15 @@
 #define colorRGB_copy(   dst, src    ) vec3_copy((dst), (src)        )
 #define colorRGB_to_vec3(dst, src    ) vec3_copy((dst), (src)        )
 #define vec3_to_colorRGB(dst, src    ) vec3_copy((dst), (src)        )
+
+#define RGBA32_TO_COLORRGBA(dst, src)   {   \
+    (dst)[0] = RGBA32_R(src);               \
+    (dst)[1] = RGBA32_G(src);               \
+    (dst)[2] = RGBA32_B(src);               \
+    (dst)[3] = RGBA32_A(src);               \
+}
+
+#define COLORRGBA_TO_RGBA32(dst, src) ((dst) = (R_RGBA32((src)[0]) | G_RGBA32((src)[1])) | B_RGBA32((src)[2])) | A_RGBA32((src)[3]))))
 
 #include "color_presets.h"
 

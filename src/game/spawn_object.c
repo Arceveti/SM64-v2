@@ -12,6 +12,9 @@
 #include "object_list_processor.h"
 #include "spawn_object.h"
 #include "types.h"
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 
 /**
  * An unused linked list struct that seems to have been replaced by ObjectNode.
@@ -283,6 +286,9 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
  * Mark an object to be unloaded at the end of the frame.
  */
 void mark_obj_for_deletion(struct Object *obj) {
+#ifdef PUPPYLIGHTS
+    obj_disable_light(obj);
+#endif
     //! Same issue as obj_mark_for_deletion
     obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
 }

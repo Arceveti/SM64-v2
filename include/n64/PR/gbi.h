@@ -1483,7 +1483,7 @@ typedef struct {
 	char			pad1;
 	unsigned char	colc[3];		/* copy of diffuse light value (rgba) */
 	char			pad2;
-	signed char	dir[3];				/* direction of light (normalized) */
+	signed char		dir[3];			/* direction of light (normalized) */
 	char			pad3;
 } Light_t;
 

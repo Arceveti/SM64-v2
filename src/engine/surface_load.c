@@ -556,10 +556,9 @@ void load_object_collision_model(void) {
     OSTime first = osGetTime();
 #endif
     Collision *collisionData = o->collisionData;
-    f32 marioDist            = o->oDistanceToMario;
     // On an object's first frame, the distance is set to 19000.0f.
     // If the distance hasn't been updated, update it now.
-    if (o->oDistanceToMario == 19000.0f) marioDist = dist_between_objects(o, gMarioObject);
+    f32 marioDistSq = ((o->oDistanceToMario == 19000.0f) ? dist_between_objects_squared(o, gMarioObject) : sqr(o->oDistanceToMario));
 #ifdef AUTO_COLLISION_DISTANCE
     if (!(o->oFlags & OBJ_FLAG_DONT_CALC_COLL_DIST)) get_optimal_coll_dist(o);
 #endif
@@ -567,13 +566,13 @@ void load_object_collision_model(void) {
     // drawing distance, extend the drawing range.
     if (o->oCollisionDistance > o->oDrawingDistance) o->oDrawingDistance = o->oCollisionDistance;
     // Update if no Time Stop, in range, and in the current room.
-    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDist < o->oCollisionDistance) && !(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
+    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDistSq < sqr(o->oCollisionDistance)) && !(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         collisionData++;
         transform_object_vertices(&collisionData, vertexData);
         // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
         while (*collisionData != TERRAIN_LOAD_CONTINUE) load_object_surfaces(&collisionData, vertexData);
     }
-    if (marioDist < o->oDrawingDistance) {
+    if (marioDistSq < sqr(o->oDrawingDistance)) {
         o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE;
     } else {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;

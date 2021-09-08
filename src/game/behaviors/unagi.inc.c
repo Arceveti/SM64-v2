@@ -138,7 +138,7 @@ void bhv_unagi_subobject_loop(void) { // unagi collision segments & star
         if (o->oBehParams2ndByte == UNAGI_PART_BP_BACK) {
 #ifdef PUPPYLIGHTS
             if (o->parentObj->oAnimState != UNAGI_ANIM_STATE_NO_STAR) {
-                set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+                set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
                 cur_obj_enable_light();
             }
 #endif

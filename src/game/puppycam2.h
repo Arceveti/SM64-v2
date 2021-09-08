@@ -134,7 +134,8 @@ struct sPuppyVolume
     s32 flagsRemove;             // Removes behaviour flags.
     u8  flagPersistance;         // Decides if adding or removing the flags is temporary or permanent.
     u8  shape;
-    s16 room;                    //! RoomData?
+    RoomData room;
+    u8  area;
 };
 
 enum gPuppyCamBeh

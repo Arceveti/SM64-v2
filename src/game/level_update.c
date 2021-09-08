@@ -447,13 +447,13 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3) {
     s32 i = 0;
 #endif
 #ifdef PUPPYCAM
-    if (sWarpDest.type != WARP_TYPE_SAME_AREA) {
+    if (sWarpDest.type == WARP_TYPE_CHANGE_LEVEL) {
         for ((i = 0); (i < gPuppyVolumeCount); (i++)) mem_pool_free(gPuppyMemoryPool, sPuppyVolumeStack[i]);
         gPuppyVolumeCount = 0;
     }
 #endif
 #ifdef PUPPYLIGHTS
-    if (sWarpDest.type != WARP_TYPE_SAME_AREA) {
+    if (sWarpDest.type == WARP_TYPE_CHANGE_LEVEL) {
         for ((i = 0); (i < gNumLights); (i++)) mem_pool_free(gLightsPool, gPuppyLights[i]);
         gNumLights   = 0;
         levelAmbient = FALSE;
