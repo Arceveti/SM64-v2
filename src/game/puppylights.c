@@ -7,6 +7,10 @@ Puppylights is generally intended to be used with things that don't directly use
 themselves. Inside the main function, you can pass through a colour to override the default light
 but it will not be affected by environmental tinting. If you wish for an object to emit a light,
 simply set the object flag OBJ_FLAG_EMIT_LIGHT and set some values to o->puppylight.
+
+For easy light modification, you can call set_light_properties, so set all the attributes of any
+given loaded puppylight struct. Objects will ignore x, y, z, active and room, as it will set all
+of these automatically. It will force the PUPPYLIGHT_DYNAMIC flag, too.
 **/
 
 #include <ultra64.h>
@@ -229,6 +233,10 @@ void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 off
     light->epicentre = epicentre;
     if (!(flags & PUPPYLIGHT_SHAPE_CYLINDER) && (flags & PUPPYLIGHT_SHAPE_CUBE)) light->flags |= PUPPYLIGHT_SHAPE_CYLINDER;
     light->flags |= (flags | PUPPYLIGHT_DYNAMIC);
+}
+
+void cur_obj_set_light_properties_default(s32 offset, RGBA32 colour) {
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, offset, offset, offset, 0x0, 0, colour, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
 }
 
 // You can run these in objects to enable or disable their light properties.

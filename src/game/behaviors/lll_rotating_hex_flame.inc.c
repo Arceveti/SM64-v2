@@ -39,7 +39,7 @@ void fire_bar_act_active(void) {
     o->oAngleVelYaw = -0x100;
     o->oMoveAngleYaw += o->oAngleVelYaw;
 #ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_FLAME_LIGHT, PUPPYLIGHTS_FLAME_LIGHT, PUPPYLIGHTS_FLAME_LIGHT, 0x0, 0, COLOR_RGBA32_FLAME_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
+    cur_obj_set_light_properties_default(PUPPYLIGHTS_FLAME_LIGHT, COLOR_RGBA32_FLAME_LIGHT);
     cur_obj_enable_light();
 #endif
     if (o->oDistanceToMario > 3200.0f) o->oAction = LLL_FIRE_BAR_ACT_REMOVE_FLAMES;
