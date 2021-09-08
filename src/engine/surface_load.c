@@ -209,12 +209,12 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
     Vec3f v1, v2, v3, n;
     Vec3i offset; // data offset
 
-    vec3s_to_vec3i(offset, (*vertexIndices));
-    vec3i_mul_val(offset, 3);
+    vec3_copy(offset, (*vertexIndices));
+    vec3_mul_val(offset, 3);
 
-    vec3s_to_vec3f(v1, (vertexData + offset[0]));
-    vec3s_to_vec3f(v2, (vertexData + offset[1]));
-    vec3s_to_vec3f(v3, (vertexData + offset[2]));
+    vec3_copy(v1, (vertexData + offset[0]));
+    vec3_copy(v2, (vertexData + offset[1]));
+    vec3_copy(v3, (vertexData + offset[2]));
 
     // (v2 - v1) x (v3 - v2)
     find_vector_perpendicular_to_plane(n, v1, v2, v3);
@@ -536,7 +536,7 @@ void get_optimal_coll_dist(struct Object *o) {
     collisionData++;
     // vertices = *data;
     while (vertsLeft) {
-        vec3s_to_vec3f(v, collisionData);
+        vec3_copy(v, collisionData);
         vec3_mul(v, o->header.gfx.scale);
         thisVertDist = vec3_sumsq(v);
         if (thisVertDist > maxDist) maxDist = thisVertDist;

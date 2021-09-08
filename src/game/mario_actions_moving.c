@@ -76,7 +76,7 @@ void align_with_floor(struct MarioState *m, Bool32 smooth) {
         if (smooth) {
             mtxf_align_terrain_triangle(sFloorAlignMatrix[m->floorAlignMatrixIndex], m->pos, m->faceAngle[1], 40.0f);
         } else {
-            vec3f_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
+            vec3_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
             mtxf_align_terrain_normal(sFloorAlignMatrix[m->floorAlignMatrixIndex], floorNormal, m->pos, m->faceAngle[1]);
         }
         m->marioObj->header.gfx.throwMatrix = &sFloorAlignMatrix[m->floorAlignMatrixIndex];
@@ -102,7 +102,7 @@ void check_ledge_climb_down(struct MarioState *m) {
     struct Surface *wall;
     Angle wallAngle, wallDYaw;
     if (m->forwardVel < GROUND_SPEED_THRESHOLD_2) {
-        vec3f_copy(wallCols.pos, m->pos);
+        vec3_copy(wallCols.pos, m->pos);
         wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
         if (find_wall_collisions(&wallCols) != 0) {
@@ -613,7 +613,7 @@ Bool32 act_walking(struct MarioState *m) {
     if (analog_stick_held_back(m, DEG(100)) && (m->forwardVel >= GROUND_SPEED_THRESHOLD)) return set_mario_action(m, ACT_TURNING_AROUND, 0);
     if (m->input & INPUT_Z_PRESSED                                                      ) return set_mario_action(m, ACT_CROUCH_SLIDE  , 0);
     m->actionState = ACT_WALKING_STATE_NO_WALL;
-    vec3f_copy(startPos, m->pos);
+    vec3_copy(startPos, m->pos);
     update_walking_speed(m);
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND:
@@ -729,7 +729,7 @@ Bool32 act_finish_turning_around(struct MarioState *m) {
 Bool32 act_braking(struct MarioState *m) {
 #ifdef LESS_GROUND_BONKS
     Vec3f startPos;
-    vec3f_copy(startPos, m->pos);
+    vec3_copy(startPos, m->pos);
 #endif
     if (!(m->input & INPUT_FIRST_PERSON) && (m->input & (INPUT_NONZERO_ANALOG | INPUT_A_PRESSED | INPUT_OFF_FLOOR | INPUT_ABOVE_SLIDE))) return check_common_action_exits(m);
     if (apply_slope_decel(m, 2.0f)) return set_mario_action(m, ACT_BRAKING_STOP , 0);
@@ -940,9 +940,7 @@ void tilt_body_butt_slide(struct MarioState *m) {
 }
 
 void common_slide_action(struct MarioState *m, MarioAction endAction, MarioAction airAction, AnimID32 animation) {
-    Vec3f pos;
-    vec3f_copy(pos, m->pos);
-    play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
+    play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

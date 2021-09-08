@@ -131,12 +131,12 @@ void king_whomp_on_ground(void) {
             if (o->oHealth == 0) {
                 o->oAction = WHOMP_ACT_DIE;
             } else {
-                vec3f_copy(pos, &o->oPosVec);
-                vec3f_copy(&o->oPosVec, &gMarioObject->oPosVec);
+                vec3_copy(pos, &o->oPosVec);
+                vec3_copy(&o->oPosVec, &gMarioObject->oPosVec);
                 spawn_mist_particles_variable(0, 0, 100.0f);
                 spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, 4);
                 cur_obj_shake_screen(SHAKE_POS_SMALL);
-                vec3f_copy(&o->oPosVec, pos);
+                vec3_copy(&o->oPosVec, pos);
             }
             o->oSubAction = WHOMP_SUB_ACT_GROUND_PREPARE_STAND_UP;
         }

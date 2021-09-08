@@ -156,16 +156,14 @@ void approach_angle(s16 *value[3], s16 orig) {
 }
 
 void warp_node(struct Object *node) {
-    vec3f_copy(node->header.gfx.lerpPos[0], node->header.gfx.pos);
-    vec3f_copy(node->header.gfx.lerpPos[1], node->header.gfx.pos);
-    vec3f_copy(node->header.gfx.lerpPos[2], node->header.gfx.pos);
-
-    vec3a_copy(node->header.gfx.lerpAngle[0], node->header.gfx.angle);
-    vec3a_copy(node->header.gfx.lerpAngle[1], node->header.gfx.angle);
-    vec3a_copy(node->header.gfx.lerpAngle[2], node->header.gfx.angle);
-
-    vec3f_copy(node->header.gfx.lerpScale[0], node->header.gfx.scale);
-    vec3f_copy(node->header.gfx.lerpScale[1], node->header.gfx.scale);
-    vec3f_copy(node->header.gfx.lerpScale[2], node->header.gfx.scale);
+    vec3_copy(node->header.gfx.lerpPos[0],   node->header.gfx.pos);
+    vec3_copy(node->header.gfx.lerpPos[1],   node->header.gfx.pos);
+    vec3_copy(node->header.gfx.lerpPos[2],   node->header.gfx.pos);
+    vec3_copy(node->header.gfx.lerpAngle[0], node->header.gfx.angle);
+    vec3_copy(node->header.gfx.lerpAngle[1], node->header.gfx.angle);
+    vec3_copy(node->header.gfx.lerpAngle[2], node->header.gfx.angle);
+    vec3_copy(node->header.gfx.lerpScale[0], node->header.gfx.scale);
+    vec3_copy(node->header.gfx.lerpScale[1], node->header.gfx.scale);
+    vec3_copy(node->header.gfx.lerpScale[2], node->header.gfx.scale);
 }
 #endif

@@ -57,7 +57,7 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     f32 poleBottom          = (-m->usedObj->hitboxDownOffset - 100.0f);
     struct Object *marioObj =   m->marioObj;
     if (marioObj->oMarioPolePos > poleTop) marioObj->oMarioPolePos = poleTop;
-    vec3f_copy_y_off(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
+    vec3_copy_y_off(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
     collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
     collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
     ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &ceil);
@@ -84,8 +84,8 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
             result = POLE_TOUCHED_FLOOR;
         }
     }
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set(m->marioObj->header.gfx.angle, m->usedObj->oMoveAnglePitch, m->faceAngle[1], m->usedObj->oMoveAngleRoll);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set(m->marioObj->header.gfx.angle, m->usedObj->oMoveAnglePitch, m->faceAngle[1], m->usedObj->oMoveAngleRoll);
     return result;
 }
 
@@ -271,7 +271,7 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
     if (ceilOffset < -30.0f                                    ) return HANG_HIT_CEIL_OR_OOB;
     if (ceilOffset >  30.0f                                    ) return HANG_LEFT_CEIL;
     nextPos[1] = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
-    vec3f_copy(m->pos, nextPos);
+    vec3_copy(m->pos, nextPos);
     if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
     m->floor       = floor;
     m->floorHeight = floorHeight;
@@ -305,8 +305,8 @@ MarioStep update_hang_moving(struct MarioState *m) {
     nextPos[2]   = (m->pos[2] - (m->ceil->normal.y * m->vel[2]));
     nextPos[1]   =  m->pos[1];
     stepResult   = perform_hanging_step(m, nextPos);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     return stepResult;
 }
 
@@ -315,10 +315,10 @@ void update_hang_stationary(struct MarioState *m) {
     m->slideVelX  = 0.0f;
     m->slideVelZ  = 0.0f;
     m->pos[1]     = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
-    vec3f_zero(m->vel);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_zero(m->vel);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
 #ifdef EASIER_HANGING
-    vec3a_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_set(m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #endif
 }
 
@@ -403,7 +403,7 @@ void climb_up_ledge(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
     m->pos[0] += (14.0f * sins(m->faceAngle[1]));
     m->pos[2] += (14.0f * coss(m->faceAngle[1]));
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
 }
 
 void update_ledge_climb_camera(struct MarioState *m) {
@@ -480,7 +480,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         nextZ += (sidewaysSpeed * coss(m->faceAngle[1] + DEG(90)));
         //! TODO: Fix this for concave wall angles
         // Check for wall collisions, if new wall is closer to m->intendedYaw, switch to that one.
-        vec3f_copy(wallCols.pos, m->pos);
+        vec3_copy(wallCols.pos, m->pos);
         wallCols.pos[0]  = nextX;
         wallCols.pos[2]  = nextZ;
         wallCols.radius  =  10.0f;
@@ -574,7 +574,7 @@ Bool32 act_grabbed(struct MarioState *m) {
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK2) {
         s32 thrown = ((m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK6) == 0);
         m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
-        vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
+        vec3_copy(m->pos, m->marioObj->header.gfx.pos);
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 60);
 #endif
@@ -594,10 +594,8 @@ Bool32 act_in_cannon(struct MarioState *m) {
             m->usedObj->oInteractStatus         = INT_STATUS_INTERACTED;
             m->statusForCamera->cameraEvent     = CAM_EVENT_CANNON;
             m->statusForCamera->usedObj         = m->usedObj;
-            vec3f_zero(m->vel);
-            m->pos[0]      =  m->usedObj->oPosX;
-            m->pos[1]      = (m->usedObj->oPosY + 350.0f);
-            m->pos[2]      =  m->usedObj->oPosZ;
+            vec3_zero(m->vel);
+            vec3_copy_y_off(m->pos, &m->usedObj->oPosVec, 350.0f);
             m->forwardVel  = 0.0f;
             m->actionState = ACT_IN_CANNON_STATE_WAIT_FOR_CANNON;
             break;
@@ -640,8 +638,8 @@ Bool32 act_in_cannon(struct MarioState *m) {
 #endif
             }
     }
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_DIVE);
     return FALSE;
 }
@@ -676,7 +674,7 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
-        vec3f_copy(m->pos, nextPos);
+        vec3_copy(m->pos, nextPos);
     } else {
         if (nextPos[1] >= m->floorHeight) {
             m->pos[1] = nextPos[1];
@@ -689,8 +687,8 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
     if (is_anim_past_end(m)) m->actionArg = 1;
     // Play sound on angle overflow
     if (prevTwirlYaw > m->twirlYaw) play_sound(SOUND_ACTION_TWIRL, m->marioObj->header.gfx.cameraToObject);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, (m->faceAngle[1] + m->twirlYaw), 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, (m->faceAngle[1] + m->twirlYaw), 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

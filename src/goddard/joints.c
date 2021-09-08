@@ -22,11 +22,9 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
     struct GdObj *attobj;
     // The joint acts somewhat like a spring in that the further it is moved
     // from its original position, the more resistance it has to moving further
-    vec3f_diff(offset, self->rotationMtx[3], self->initPos);
+    vec3_diff(offset, self->rotationMtx[3], self->initPos);
     if (self->header.drawFlags & OBJ_PICKED) {
-        self->velocity[0] = (offset[0] * -0.25f);
-        self->velocity[1] = (offset[1] * -0.25f);
-        self->velocity[2] = (offset[2] * -0.25f);
+        vec3_prod_val(self->velocity, offset, -0.25f);
         self->flags |= JOINT_FLAG_GRABBED;
     } else {
         if (!gGdCtrl.trgR) { // R trigger is released
@@ -40,29 +38,29 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
             // to its original position, stop its movement altogether
             if (((ABSF(self->velocity[0]) + ABSF(self->velocity[1]) + ABSF(self->velocity[2])) < 1.0f)
              && ((ABSF(offset[0]) + ABSF(offset[1]) + ABSF(offset[2])) < 1.0f)) {
-                vec3f_zero(self->velocity);
-                vec3f_sub(self->rotationMtx[3], offset);
+                vec3_zero(self->velocity);
+                vec3_sub(self->rotationMtx[3], offset);
             }
             if (self->flags & JOINT_FLAG_GRABBED) gd_play_sfx(GD_SFX_LET_GO_FACE);
             self->flags &= ~JOINT_FLAG_GRABBED;
         } else {
             // freeze position of joint
-            vec3f_zero(self->velocity);
+            vec3_zero(self->velocity);
         }
     }
     // update position
-    vec3f_add(self->rotationMtx[3], self->velocity);
+    vec3_add(self->rotationMtx[3], self->velocity);
     if (self->header.drawFlags & OBJ_PICKED) {
         gGdCtrl.csrX -= ((gGdCtrl.csrX - gGdCtrl.dragStartX) * 0.2f);
         gGdCtrl.csrY -= ((gGdCtrl.csrY - gGdCtrl.dragStartY) * 0.2f);
     }
     // update position of attached objects
-    vec3f_diff(offset, self->rotationMtx[3], self->initPos);
+    vec3_diff(offset, self->rotationMtx[3], self->initPos);
     for ((att = self->attachedObjsGrp->firstMember); (att != NULL); (att = att->next)) {
         attobj = att->obj;
         set_cur_dynobj(attobj);
         attObjMtx = d_get_matrix_ptr();
-        vec3f_add((*attObjMtx)[3], offset);
+        vec3_add((*attObjMtx)[3], offset);
     }
 }
 
@@ -78,7 +76,7 @@ void eye_joint_update_func(struct ObjJoint *self) {
     if ((sCurrentMoveCamera == NULL) || ((self->rootAnimator != NULL) && (self->rootAnimator->state != 7))) return;
     set_cur_dynobj((struct GdObj *)self);
     rotMtx = d_get_rot_mtx_ptr();
-    vec3f_copy(pos, (*rotMtx)[3]);
+    vec3_copy(pos, (*rotMtx)[3]);
     world_pos_to_screen_coords(pos, sCurrentMoveCamera, sCurrentMoveView);
     offset[0]  =  (gGdCtrl.csrX - pos[0]);
     offset[1]  = -(gGdCtrl.csrY - pos[1]);
@@ -126,8 +124,8 @@ struct ObjJoint *make_joint(s32 flags, Vec3f pos) {
     j->colourNum  = ((j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK);
     j->unk1C4     = NULL;
     j->shapePtr   = NULL;
-    vec3f_copy(j->scale, gVec3fOne);
-    vec3f_zero(j->friction);
+    vec3_copy(j->scale, gVec3fOne);
+    vec3_zero(j->friction);
     j->updateFunc = NULL;
     return j;
 }
@@ -163,27 +161,26 @@ Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx /* alwa
 
 /* 23FDD4 -> 23FFF4 */
 void reset_joint(struct ObjJoint *j) {
-    vec3f_copy(j->worldPos, j->initPos);
-    vec3f_copy(j->pos,      j->initPos);
-    vec3f_copy(j->relPos,   j->initPos);
-    vec3f_zero(j->velocity);
-    // vec3f_zero(j->unk84);  // unused
-    // vec3f_zero(j->unk90);  // unused
-    // vec3f_zero(j->unk1A8); // unused
+    vec3_copy(j->worldPos, j->initPos);
+    vec3_copy(j->pos,      j->initPos);
+    vec3_copy(j->relPos,   j->initPos);
+    vec3_zero(j->velocity);
+    // vec3_zero(j->unk84);  // unused
+    // vec3_zero(j->unk90);  // unused
+    // vec3_zero(j->unk1A8); // unused
     mtxf_identity(j->idMtx);
     mtxf_scale_self_vec3f( j->idMtx, j->scale);
     gd_rot_mat_about_vec3f(j->idMtx, j->initRotation);
-    vec3f_add(j->idMtx[3], j->attachOffset);
+    vec3_add(j->idMtx[3], j->attachOffset);
     mtxf_copy(j->invMtx, j->idMtx);
     mtxf_identity(j->rotationMtx);
-    vec3f_add(j->rotationMtx[3], j->initPos);
-
-    vec3f_copy(j->nextPos, j->initPos); // storing "attached offset"?
+    vec3_add(j->rotationMtx[3], j->initPos);
+    vec3_copy(j->nextPos, j->initPos); // storing "attached offset"?
     linear_mtxf_self_mul_vec3f_self(gGdSkinNet->invMtx, j->nextPos);
-    vec3f_copy(j->relPos, j->nextPos);
-    vec3f_copy(j->worldPos, gGdSkinNet->worldPos);
-    vec3f_add(j->worldPos, j->relPos);
-    // vec3f_zero(j->unk1A8); // unused
+    vec3_copy(j->relPos, j->nextPos);
+    vec3_copy(j->worldPos, gGdSkinNet->worldPos);
+    vec3_add(j->worldPos, j->relPos);
+    // vec3_zero(j->unk1A8); // unused
 }
 
 /* 2406B8 -> 2406E0; orig name: func_80191EE8 */

@@ -20,8 +20,8 @@ void   accel_particle(struct ObjParticle *ptc, Vec3f b);
 /* 230CC0 -> 230DCC */
 struct ObjParticle *make_particle(u32 flags, s32 colourNum, Vec3f pos) {
     struct ObjParticle *particle = (struct ObjParticle *) make_object(OBJ_TYPE_PARTICLES);
-    vec3f_copy(particle->pos, pos);
-    vec3f_zero(particle->vel);
+    vec3_copy(particle->pos, pos);
+    vec3_zero(particle->vel);
     particle->colourNum = colourNum;
     particle->flags     = (flags | GD_PARTICLE_FLAG_8);
     particle->timeout   = -1;
@@ -40,14 +40,14 @@ void accel_particle(struct ObjParticle *ptc, Vec3f b) {
             // FIXME: types
             linkedPtc = (struct ObjParticle *) link->obj;
             if (linkedPtc->timeout <= 0) {
-                vec3f_copy(linkedPtc->pos, ptc->pos);
+                vec3_copy(linkedPtc->pos, ptc->pos);
                 linkedPtc->timeout = (12.0f - (gd_rand_float() * 5.0f));
                 do {
                     linkedPtc->vel[0] = ((gd_rand_float() * 50.0f) - 25.0f);
                     linkedPtc->vel[1] = ((gd_rand_float() * 50.0f) - 25.0f);
                     linkedPtc->vel[2] = ((gd_rand_float() * 50.0f) - 25.0f);
                 } while (vec3_sumsq(linkedPtc->vel) > sqr(30.0f));
-                vec3f_add(linkedPtc->vel, b);
+                vec3_add(linkedPtc->vel, b);
                 linkedPtc->header.drawFlags &= ~OBJ_INVISIBLE;
                 linkedPtc->flags |= GD_PARTICLE_FLAG_8;
             }
@@ -87,9 +87,9 @@ void move_particle(struct ObjParticle *ptc) {
             }
         }
         d_vec3f_get_world_pos(worldPos);
-        vec3f_copy(ptc->pos, worldPos);
+        vec3_copy(ptc->pos, worldPos);
     }
-    vec3f_add(ptc->pos, ptc->vel);
+    vec3_add(ptc->pos, ptc->vel);
     if (ptc->flags & GD_PARTICLE_FLAG_1) ptc->vel[1] -= 0.4f;
     if (ptc->state == 1) {
         ptc->state = 2;

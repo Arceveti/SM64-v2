@@ -54,7 +54,7 @@ Bool32 cur_obj_resolve_object_collisions(s32 *targetYaw) { //! targetYaw Angle t
     return FALSE;
 }
 
-Bool32 cur_obj_bounce_off_walls_edges_objects(s32 *targetYaw) { //! Angle type?
+Bool32 cur_obj_bounce_off_walls_edges_objects(Angle32 *targetYaw) { //! Angle type?
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *targetYaw = cur_obj_reflect_move_angle_off_wall();
     } else if (o->oMoveFlags & OBJ_MOVE_HIT_EDGE) {

@@ -29,10 +29,10 @@ void gd_absrot_mat4(Mat4 mtx, s32 axisnum, f32 ang) {
     Mat4 rMat;
     Vec3f rot;
     switch (axisnum) {
-        case X_AXIS: vec3f_copy(rot, gVec3fX   ); break;
-        case Y_AXIS: vec3f_copy(rot, gVec3fY   ); break;
-        case Z_AXIS: vec3f_copy(rot, gVec3fZ   ); break;
-        default:     vec3f_copy(rot, gVec3fZero); break;
+        case X_AXIS: vec3_copy(rot, gVec3fX   ); break;
+        case Y_AXIS: vec3_copy(rot, gVec3fY   ); break;
+        case Z_AXIS: vec3_copy(rot, gVec3fZ   ); break;
+        default:     vec3_copy(rot, gVec3fZero); break;
     }
     gd_create_rot_mat_angular(&rMat, rot, (ang / 2.0f));
     Mat4 temp;
@@ -55,8 +55,8 @@ void gd_absrot_mat4(Mat4 mtx, s32 axisnum, f32 ang) {
 void gd_create_rot_matrix(Mat4 *mtx, Vec3f vec, f32 s, f32 c) {
     Vec3f rev, srev;
     vec3f_copy_inverse(rev, vec);
-    vec3f_copy(srev, rev);
-    vec3f_mul_val(srev, s);
+    vec3_copy(srev, rev);
+    vec3_mul_val(srev, s);
     register f32 oneMinusCos = (1.0f - c);
     register f32 omc10 = (oneMinusCos * rev[1] * rev[0]);
     register f32 omc20 = (oneMinusCos * rev[2] * rev[0]);
@@ -70,7 +70,7 @@ void gd_create_rot_matrix(Mat4 *mtx, Vec3f vec, f32 s, f32 c) {
     (*mtx)[2][0] = (omc20 + srev[1]);
     (*mtx)[2][1] = (omc10 - srev[2]);
     (*mtx)[2][2] = ((oneMinusCos * sqr(rev[0])) + c);
-    vec3f_zero((*mtx)[3]);
+    vec3_zero((*mtx)[3]);
     MTXF_END(*mtx);
 }
 

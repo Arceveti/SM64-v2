@@ -56,7 +56,7 @@ void yoshi_idle_loop(void) {
     if ((gPlayerCameraState->cameraEvent == CAM_EVENT_START_ENDING)
      || (gPlayerCameraState->cameraEvent == CAM_EVENT_START_END_WAVING)) {
         o->oAction = YOSHI_ACT_CREDITS;
-        vec3f_set(&o->oPosVec, -1798.0f, 3174.0f, -3644.0f);
+        vec3_set(&o->oPosVec, -1798.0f, 3174.0f, -3644.0f);
     }
 }
 

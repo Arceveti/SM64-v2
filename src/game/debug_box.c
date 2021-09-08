@@ -23,6 +23,7 @@
 #include "boot/game_init.h"
 #include "game/geo_misc.h"
 #include "engine/math_util.h"
+#include "engine/colors.h"
 #include "area.h"
 #include "level_update.h"
 #include "print.h"
@@ -39,7 +40,7 @@ Bool8 surfaceView = FALSE;
  * Internal struct containing box info
  */
 struct DebugBox {
-    u32 color;
+    RGBA32 color;
     Vec3s center;
     Vec3s bounds;
     Angle yaw;
@@ -60,16 +61,16 @@ extern Mat4 gMatStack[32]; //XXX: Hack
 /**
  * The debug boxes' default transparency
  */
-#define DBG_BOX_ALPHA     0x7F
+#define DBG_BOX_ALPHA     COLOR_RGBA32_DEBUG_ALPHA
 /**
  * The debug boxes' default color. sCurBoxColor is reset to this every frame.
  */
-#define DBG_BOX_DEF_COLOR 0xFF0000
+#define DBG_BOX_DEF_COLOR COLOR_RGBA32_DEBUG_DEFAULT
 
 /**
  * The color that new boxes will be drawn with.
  */
-u32 sCurBoxColor = ((DBG_BOX_ALPHA << 24) | DBG_BOX_DEF_COLOR);
+RGBA32 sCurBoxColor = ((DBG_BOX_ALPHA << 24) | DBG_BOX_DEF_COLOR);
 
 /**
  * The allocated size of a rotated box's dl
@@ -142,7 +143,7 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     struct SurfaceNode *node;
     struct Surface *surf;
     s32 i = 0;
-    s32 col[3] = {0xFF, 0x00, 0x00};
+    ColorRGB col = COLOR_RGB_RED;
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
      || (z <= -LEVEL_BOUNDARY_MAX)
@@ -151,21 +152,21 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for ((i = 0); (i < 8); (i++)) {
         switch (i) {
-            case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; col[0] = 0x00; col[1] = 0xFF; col[2] = 0x00; break;
-            case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; col[0] = 0x00; col[1] = 0xFF; col[2] = 0x00; break;
-            case 2: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; col[0] = 0x00; col[1] = 0x00; col[2] = 0xFF; break;
-            case 3: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; col[0] = 0x00; col[1] = 0x00; col[2] = 0xFF; break;
-            case 4: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; col[0] = 0xFF; col[1] = 0x00; col[2] = 0x00; break;
-            case 5: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; col[0] = 0xFF; col[1] = 0x00; col[2] = 0x00; break;
-            case 6: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; col[0] = 0xFF; col[1] = 0xFF; col[2] = 0x00; break;
-            case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; col[0] = 0xFF; col[1] = 0xFF; col[2] = 0x00; break;
+            case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_GREEN ); break;
+            case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_GREEN ); break;
+            case 2: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)COLOR_RGB_BLUE  ); break;
+            case 3: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)COLOR_RGB_BLUE  ); break;
+            case 4: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_RED   ); break;
+            case 5: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_RED   ); break;
+            case 6: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_YELLOW); break;
+            case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_YELLOW); break;
         }
         while (node != NULL) {
-            surf = node->surface;
+            surf = node->surface; 
             node = node->next;
-            make_vertex(verts,  gVisualSurfaceCount     , surf->vertex1[0], surf->vertex1[1], surf->vertex1[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, (gVisualSurfaceCount + 1), surf->vertex2[0], surf->vertex2[1], surf->vertex2[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, (gVisualSurfaceCount + 2), surf->vertex3[0], surf->vertex3[1], surf->vertex3[2], 0, 0, col[0], col[1], col[2], 0x80);
+            make_vertex(verts, (gVisualSurfaceCount + 0), surf->vertex1[0], surf->vertex1[1], surf->vertex1[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 1), surf->vertex2[0], surf->vertex2[1], surf->vertex2[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 2), surf->vertex3[0], surf->vertex3[1], surf->vertex3[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
             gVisualSurfaceCount+=3;
         }
     }
@@ -174,16 +175,16 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
 void iterate_surfaces_envbox(Vtx *verts) {
     Collision *p = gEnvironmentRegions;
     s32 i = 0;
-    s32 col[3] = {0xFF, 0xFF, 0x00};
+    ColorRGB col = COLOR_RGB_YELLOW;
     if (p != NULL) {
         s32 numRegions = *p++;
         for ((i = 0); (i < numRegions); (i++)) {
-            make_vertex(verts, gVisualSurfaceCount    , p[1], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 1, p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 2, p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 3, p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 4, p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
-            make_vertex(verts, gVisualSurfaceCount + 5, p[3], p[5], p[4], 0, 0, col[0], col[1], col[2], 0x80);
+            make_vertex(verts, (gVisualSurfaceCount + 0), p[1], p[5], p[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 1), p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 2), p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 3), p[3], p[5], p[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 4), p[1], p[5], p[4], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
+            make_vertex(verts, (gVisualSurfaceCount + 5), p[3], p[5], p[4], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
             gVisualSurfaceCount += 6;
             gVisualOffset       += 6;
             p                   += 6;
@@ -306,7 +307,7 @@ static void append_debug_box(Vec3f center, Vec3f bounds, Angle yaw, s32 type) {
  * If the alpha component is zero, DBG_BOX_ALPHA (0x7f) will be used instead.
  * Ex: 0xFF0000 becomes 0x7FFF0000
  */
-void debug_box_color(u32 color) {
+void debug_box_color(RGBA32 color) {
     if ((color >> 24) == 0) color |= (DBG_BOX_ALPHA << 24);
     sCurBoxColor = color;
 }
@@ -376,7 +377,7 @@ static void render_box(int index, Vtx *vbox, Vtx *vcylinder) {
     gSPMatrix(     gDisplayListHead++, translate,    (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
     gSPMatrix(     gDisplayListHead++, rotate,       (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
     gSPMatrix(     gDisplayListHead++, scale,        (G_MTX_MODELVIEW | G_MTX_MUL  | G_MTX_NOPUSH));
-    gDPSetEnvColor(gDisplayListHead++, (color >> 16) & 0xFF, (color >> 8) & 0xFF, (color) & 0xFF, (color >> 24) & 0xFF);
+    gDPSetEnvColor(gDisplayListHead++, ((color >> 16) & 0xFF), ((color >> 8) & 0xFF), ((color) & 0xFF), ((color >> 24) & 0xFF));
     if (box->type == DEBUG_SHAPE_BOX) {
         gSPVertex(    gDisplayListHead++, VIRTUAL_TO_PHYSICAL(vbox), 8, 0);
         gSP2Triangles(gDisplayListHead++, 5, 4, 6, 0x0, 5, 6, 7, 0x0); // front

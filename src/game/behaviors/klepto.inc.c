@@ -80,7 +80,7 @@ void bhv_klepto_init(void) {
         o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
 #endif
     } else {
-        vec3f_copy(&o->oKleptoStartPosVec, &o->oPosVec);
+        vec3_copy(&o->oKleptoStartPosVec, &o->oPosVec);
         if (save_file_get_flags() & SAVE_FLAG_CAP_ON_KLEPTO) {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_CAP;
         } else {
@@ -110,7 +110,7 @@ static void klepto_change_target(void) {
     }
     o->oKleptoHomeYOffset           = (400 * absi(newTarget - o->oKleptoTargetNumber));
     o->oKleptoTargetNumber          = newTarget;
-    vec3f_copy_y_off(&o->oHomeVec, sKleptoTargetPositions[o->oKleptoTargetNumber], o->oKleptoHomeYOffset);
+    vec3_copy_y_off(&o->oHomeVec, sKleptoTargetPositions[o->oKleptoTargetNumber], o->oKleptoHomeYOffset);
     o->oKleptoHalfLateralDistToHome = (cur_obj_lateral_dist_to_home() / 2);
 }
 
@@ -223,7 +223,7 @@ static void klepto_act_struck_by_mario(void) {
         o->oGravity        = 0.0f;
         o->oMoveAnglePitch = -cur_obj_get_pitch_from_vel();
         o->oKleptoSpeed    = sqrtf(sqr(o->oForwardVel) + sqr(o->oVelY));
-        vec3f_copy_y_off(&o->oHomeVec, &o->oPosVec, 500.0f);
+        vec3_copy_y_off(&o->oHomeVec, &o->oPosVec, 500.0f);
     }
 }
 
@@ -246,7 +246,7 @@ static void klepto_act_reset_position(void) {
     if (o->oTimer < 300) {
         klepto_circle_target(300.0f, 20.0f);
     } else if (o->oBehParams2ndByte != KLEPTO_BP_NO_STAR) {
-        vec3f_set(&o->oHomeVec, -2000.0f, 9999.0f, -1000.0f);
+        vec3_set(&o->oHomeVec, -2000.0f, 9999.0f, -1000.0f);
         o->oKleptoDistanceToTarget = o->oHomeY;
         if (o->oPosY > 5000.0f) {
             obj_mark_for_deletion(o);
@@ -255,7 +255,7 @@ static void klepto_act_reset_position(void) {
         }
     } else {
         o->oAction = KLEPTO_ACT_WAIT_FOR_MARIO;
-        vec3f_copy(&o->oHomeVec, &o->oKleptoStartPosVec);
+        vec3_copy(&o->oHomeVec, &o->oKleptoStartPosVec);
     }
 }
 

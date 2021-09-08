@@ -448,14 +448,14 @@ Bool32 act_shockwave_bounce(struct MarioState *m) {
     bounceAngle = ((m->actionTimer & 0xF) << 12);
     bounceAmt   = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
     mario_set_forward_vel(m, 0.0f);
-    vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
+    vec3_zero(m->vel);
     if (sins(bounceAngle) >= 0.0f) {
         m->pos[1] = ((sins(bounceAngle) * bounceAmt) + m->floorHeight);
     } else {
         m->pos[1] = (m->floorHeight - (sins(bounceAngle) * bounceAmt));
     }
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     set_mario_animation(m, MARIO_ANIM_A_POSE);
     return FALSE;
 }

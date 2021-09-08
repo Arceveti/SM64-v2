@@ -349,12 +349,12 @@ void shade_screen_color(ColorRGBA color) {
 }
 
 #ifdef ENVIRONMENT_SCREEN_TINT
-static const ColorRGB   waterOverlayColor = COLOR_RGB_WATER;
+static const ColorRGB   waterOverlayColor = COLOR_RGB_WATER ;
 static const ColorRGB     gasOverlayColor = COLOR_RGB_YELLOW;
-static const ColorRGB    sandOverlayColor = COLOR_RGB_SAND;
+static const ColorRGB    sandOverlayColor = COLOR_RGB_SAND  ;
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-static const ColorRGB  damageOverlayColor = COLOR_RGB_RED;
+static const ColorRGB  damageOverlayColor = COLOR_RGB_RED     ;
 static const ColorRGB shockedOverlayColor = COLOR_RGB_ELECTRIC;
 #endif
 #if defined(LLL_VOLCANO_TINT) || defined(AREA_SCREEN_TINT)

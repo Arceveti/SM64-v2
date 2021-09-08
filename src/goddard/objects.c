@@ -153,15 +153,15 @@ struct ObjCamera *make_camera(void) {
     newCam->dynObj = NULL;
     mtxf_identity(newCam->idMtx);
     mtxf_identity(newCam->transformMtx);
-    // vec3f_set(newCam->unk180, 1.0f, 0.1f, 1.0f);
-    vec3f_same(newCam->rotationSpeeds, 4.0f);
+    // vec3_set(newCam->unk180, 1.0f, 0.1f, 1.0f);
+    vec3_same(newCam->rotationSpeeds, 4.0f);
     // newCam->unk178       = 0.0f;
     newCam->multiplier   = 0.25f;
     newCam->zoomLevel    = 0;
     newCam->maxZoomLevel = -1;
     newCam->colXY        = 0.0f;
-    vec3f_zero(newCam->lookAt);
-    vec3f_zero(newCam->worldPos);
+    vec3_zero(newCam->lookAt);
+    vec3_zero(newCam->worldPos);
     return newCam;
 }
 
@@ -187,7 +187,7 @@ struct ObjLight *make_light(void) {
     newLight->flags      = LIGHT_NEW_UNCOUNTED;
     // newLight->unk98      = 0; // unused
     // newLight->unk40      = 0; // unused
-    // vec3f_zero(newLight->unk68); // unused
+    // vec3_zero(newLight->unk68); // unused
     return newLight;
 }
 
@@ -201,14 +201,14 @@ struct ObjView *make_view(const char *name, s32 flags, s32 projectionType, s32 u
     if ((newView->components = parts) != NULL) reset_nets_and_gadgets(parts);
     newView->unk78           = 0;
     newView->projectionType  = projectionType;
-    vec3f_set(newView->clipping, 30.0f, 5000.0f, 45.0f);
+    vec3_set(newView->clipping, 30.0f, 5000.0f, 45.0f);
     newView->upperLeft[0]    = (f32) ulx;
     newView->upperLeft[1]    = (f32) uly;
     newView->lowerRight[0]   = (f32) lrx;
     newView->lowerRight[1]   = (f32) lry;
     // newView->unk48           = 1.0f; // unused
     // newView->unk4C           = 1.0f; // unused
-    vec3f_set(newView->colour, (newView->id * 0.1f), 0.06f, 1.0f);
+    vec3_set(newView->colour, (newView->id * 0.1f), 0.06f, 1.0f);
     newView->proc            = NULL;
     // newView->unk9C           = 0;    // unused
     if (name != NULL) newView->unk1C = setup_view_buffers(name, newView);
@@ -629,7 +629,7 @@ void move_camera(struct ObjCamera *cam) {
     struct GdControl *ctrl;
     ctrl = &gGdCtrl;
     if (!(cam->flags & CAMERA_FLAG_16)) return;
-    vec3f_zero(worldPos);
+    vec3_zero(worldPos);
     if ((obj = cam->dynObj) != NULL) {
         set_cur_dynobj(obj);
         d_vec3f_get_world_pos(worldPos);

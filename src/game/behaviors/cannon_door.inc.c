@@ -6,7 +6,7 @@ void bhv_cannon_closed_init(void) {
         // If the cannon is open, spawn a cannon and despawn the object.
         cannon = spawn_object(o, MODEL_CANNON_BASE, bhvCannon);
         cannon->oBehParams2ndByte = o->oBehParams2ndByte;
-        vec3f_copy(&cannon->oPosVec, &o->oHomeVec);
+        vec3_copy(&cannon->oPosVec, &o->oHomeVec);
         o->oAction     = CANNON_TRAP_DOOR_ACT_OPEN;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }

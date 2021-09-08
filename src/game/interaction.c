@@ -699,13 +699,13 @@ Bool32 interact_warp(struct MarioState *m, UNUSED InteractType interactType, str
 
 Bool32 interact_warp_door(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     MarioAction doorAction = 0;
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
     u32 saveFlags  = save_file_get_flags();
     s16 warpDoorId = (o->oBehParams >> 24);
 #endif
     u32 actionArg;
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
         if ((warpDoorId == 1) && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
             if (!(saveFlags & SAVE_FLAG_HAVE_KEY_2)) {
                 if (!sDisplayingDoorText) set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, ((saveFlags & SAVE_FLAG_HAVE_KEY_1) ? DIALOG_023 : DIALOG_022));
@@ -751,30 +751,30 @@ u32 get_door_save_file_flag(struct Object *door) {
 
 Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, struct Object *o) {
     s16 requiredNumStars = (o->oBehParams >> 24);
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
     s16 numStars = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
 #endif
     if ((m->action == ACT_WALKING) || (m->action == ACT_DECELERATING)) {
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
         if (numStars >= requiredNumStars) {
 #endif
             u32 actionArg = should_push_or_pull_door(m, o);
             MarioAction enterDoorAction;
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             u32 doorSaveFileFlag;
 #endif
-            enterDoorAction = (actionArg & 0x1 ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
-#ifndef DEBUG_LEVEL_SELECT
+            enterDoorAction = ((actionArg & 0x1) ? ACT_PULLING_DOOR : ACT_PUSHING_DOOR);
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             doorSaveFileFlag = get_door_save_file_flag(o);
 #endif
             m->interactObj   = o;
             m->usedObj       = o;
             if (o->oInteractionSubtype & INT_SUBTYPE_STAR_DOOR) enterDoorAction = ACT_ENTERING_STAR_DOOR;
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
             if ((doorSaveFileFlag != 0) && !(save_file_get_flags() & doorSaveFileFlag)) enterDoorAction = ACT_UNLOCKING_STAR_DOOR;
 #endif
             return set_mario_action(m, enterDoorAction, actionArg);
-#ifndef DEBUG_LEVEL_SELECT
+#if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
         } else if (!sDisplayingDoorText) {
             u32 text = DIALOG_022 << 16;
             switch (requiredNumStars) {
@@ -785,7 +785,7 @@ Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, str
                 case 50: text = (DIALOG_028 << 16); break;
                 case 70: text = (DIALOG_029 << 16); break;
             }
-            text += requiredNumStars - numStars;
+            text += (requiredNumStars - numStars);
             sDisplayingDoorText = TRUE;
             return set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, text);
         }

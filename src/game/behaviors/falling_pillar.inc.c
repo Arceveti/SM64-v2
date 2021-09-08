@@ -103,10 +103,10 @@ void bhv_falling_pillar_loop(void) {
  */
 void bhv_falling_pillar_hitbox_loop(void) {
     // Get the state of the pillar.
-    s32 pitch   = o->parentObj->oFaceAnglePitch;
-    s32 yaw     = o->parentObj->oFaceAngleYaw;
+    Angle32 pitch = o->parentObj->oFaceAnglePitch;
+    Angle32 yaw   = o->parentObj->oFaceAngleYaw;
     Vec3f pos;
-    vec3f_copy(pos, &o->parentObj->oPosVec);
+    vec3_copy(pos, &o->parentObj->oPosVec);
     f32 yOffset = ((o->oBehParams2ndByte * 400) + 300);
     // Update position of hitboxes so they fall with the pillar.
     o->oPosX = ((sins(pitch) * sins(yaw) * yOffset) + pos[0]);

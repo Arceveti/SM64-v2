@@ -136,7 +136,7 @@ static void monty_mole_act_select_hole(void) {
         // Mark hole as unavailable
         o->oMontyMoleCurrentHole->oMontyMoleHoleCooldown = -1;
         // Position at hole
-        vec3f_copy(&o->oPosVec, &o->oMontyMoleCurrentHole->oPosVec);
+        vec3_copy(&o->oPosVec, &o->oMontyMoleCurrentHole->oPosVec);
         o->oFloorHeight    = o->oMontyMoleCurrentHole->oPosY;
         o->oFaceAnglePitch = 0x0;
         o->oMoveAngleYaw   = o->oMontyMoleCurrentHole->oAngleToMario;
@@ -297,7 +297,7 @@ void bhv_monty_mole_update(void) {
     if (cur_obj_check_attacks(&sMontyMoleHitbox, o->oAction)) {
         if (sMontyMoleKillStreak != 0) {
             Vec3f d;
-            vec3f_diff(d, &o->oPosVec, sMontyMoleLastKilledPos);
+            vec3_diff(d, &o->oPosVec, sMontyMoleLastKilledPos);
             //! The two farthest holes on the bottom level of TTM are more than
             //  1500 units away from each other, so the counter resets if you
             //  attack moles in these holes consecutively.
@@ -311,7 +311,7 @@ void bhv_monty_mole_update(void) {
             }
         }
         if (sMontyMoleKillStreak < (1 << 15)) sMontyMoleKillStreak++;
-        vec3f_copy(sMontyMoleLastKilledPos, &o->oPosVec);
+        vec3_copy(sMontyMoleLastKilledPos, &o->oPosVec);
         monty_mole_hide_in_hole();
         // Throw rock if holding one
         o->prevObj = NULL;
@@ -324,7 +324,7 @@ void bhv_monty_mole_update(void) {
  */
 static void monty_mole_rock_act_held(void) {
     // The position is offset since the monty mole is throwing it with its hand
-    vec3f_set(&o->oParentRelativePosVec, 80.0f, -50.0f, 0.0f);
+    vec3_set(&o->oParentRelativePosVec, 80.0f, -50.0f, 0.0f);
     if (o->parentObj->prevObj == NULL) {
         f32 distToMario = o->oDistanceToMario;
         if (distToMario > 600.0f) distToMario = 600.0f;

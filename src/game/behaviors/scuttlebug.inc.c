@@ -12,8 +12,7 @@ struct ObjectHitbox sScuttlebugHitbox = {
     /* hurtboxHeight:     */  60,
 };
 
-//! Angle type for param?
-s32 update_angle_from_move_flags(s32 *angle) {
+s32 update_angle_from_move_flags(Angle32 *angle) {
     if (o->oMoveFlags & OBJ_MOVE_HIT_WALL) {
         *angle = o->oWallAngle;
         return  1;
@@ -33,7 +32,7 @@ void bhv_scuttlebug_loop(void) {
         case SCUTTLEBUG_SUB_ACT_RESET:
             if (o->oMoveFlags & OBJ_MOVE_LANDED) cur_obj_play_sound_2(SOUND_OBJ_GOOMBA_ALERT);
             if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
-                vec3f_copy(&o->oHomeVec, &o->oPosVec);
+                vec3_copy(&o->oHomeVec, &o->oPosVec);
                 o->oSubAction = SCUTTLEBUG_SUB_ACT_MOVING;
             }
             break;

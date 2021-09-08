@@ -20,7 +20,7 @@ void spawn_child_obj_relative(struct Object *parent,
 
 void bhv_intro_scene_loop(void) {
     if (gCutsceneObjSpawn != CUTSCENE_OBJ_NONE) {
-        vec3f_copy(&o->oPosVec, gCamera->pos);
+        vec3_copy(&o->oPosVec, gCamera->pos);
         o->oMoveAnglePitch = 0x0;
         o->oMoveAngleYaw   = 0x0;
         switch (gCutsceneObjSpawn) {

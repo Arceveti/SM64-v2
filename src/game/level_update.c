@@ -34,6 +34,9 @@
 #if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 
 #define PLAY_MODE_NORMAL        0x00
 #define PLAY_MODE_PAUSED        0x02
@@ -358,8 +361,8 @@ void warp_credits(void) {
     }
     gCurrLevelNum = sWarpDest.levelNum;
     load_area(sWarpDest.areaIdx);
-    vec3s_copy(gPlayerSpawnInfos[0].startPos, gCurrCreditsEntry->marioPos);
-    vec3a_set(gPlayerSpawnInfos[0].startAngle, 0x0, (0x100 * gCurrCreditsEntry->marioAngle), 0x0);
+    vec3_copy(gPlayerSpawnInfos[0].startPos, gCurrCreditsEntry->marioPos);
+    vec3_set(gPlayerSpawnInfos[0].startAngle, 0x0, (0x100 * gCurrCreditsEntry->marioAngle), 0x0);
     gPlayerSpawnInfos[0].areaIndex = sWarpDest.areaIdx;
     load_mario_area();
     init_mario();
@@ -381,11 +384,11 @@ void check_instant_warp(void) {
         if ((index >= INSTANT_WARP_INDEX_START) && (index < INSTANT_WARP_INDEX_STOP) && (gCurrentArea->instantWarps != NULL)) {
             struct InstantWarp *warp = &gCurrentArea->instantWarps[index];
             if (warp->id != 0) {
-                vec3s_to_vec3f(disp, warp->displacement);
-                vec3f_add(gMarioState->pos, disp);
-                vec3f_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
+                vec3_copy(disp, warp->displacement);
+                vec3_add(gMarioState->pos, disp);
+                vec3_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
 #ifdef INSTANT_WARP_OFFSET_FIX
-                vec3f_copy(gMarioObject->header.gfx.pos, gMarioState->pos);             
+                vec3_copy(gMarioObject->header.gfx.pos, gMarioState->pos);
 #endif
                 cameraAngle = gMarioState->area->camera->yaw;
                 change_area(warp->area);
@@ -440,11 +443,20 @@ void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3) {
     sWarpDest.areaIdx  = destArea;
     sWarpDest.nodeId   = destWarpNode;
     sWarpDest.arg      = arg3;
-#ifdef PUPPYCAM
+#if defined(PUPPYCAM) || defined(PUPPYLIGHTS) // lol
     s32 i = 0;
+#endif
+#ifdef PUPPYCAM
     if (sWarpDest.type != WARP_TYPE_SAME_AREA) {
         for ((i = 0); (i < gPuppyVolumeCount); (i++)) mem_pool_free(gPuppyMemoryPool, sPuppyVolumeStack[i]);
         gPuppyVolumeCount = 0;
+    }
+#endif
+#ifdef PUPPYLIGHTS
+    if (sWarpDest.type != WARP_TYPE_SAME_AREA) {
+        for ((i = 0); (i < gNumLights); (i++)) mem_pool_free(gLightsPool, gPuppyLights[i]);
+        gNumLights   = 0;
+        levelAmbient = FALSE;
     }
 #endif
 }
@@ -919,6 +931,9 @@ Bool32 init_level(void) {
     if (gCurrDemoInput == NULL) cancel_rumble();
 #endif
     if (gMarioState->action == ACT_INTRO_CUTSCENE) sound_banks_disable(SEQ_PLAYER_SFX, SOUND_BANKS_DISABLED_DURING_INTRO_CUTSCENE);
+#ifdef PUPPYLIGHTS
+    puppylights_allocate();
+#endif
 #if PUPPYPRINT_DEBUG
     sprintf(textBytes, "Level loaded in %dus", (s32)(OS_CYCLES_TO_USEC(osGetTime() - first)));
     append_puppyprint_log(textBytes);

@@ -7,44 +7,6 @@
 #include "types.h"
 #include "math_util.h"
 
-#define COLOR_RGBA_WHITE            { 0xFF, 0xFF, 0xFF, 0xFF }
-// Grayscale color presets
-#define COLOR_RGB_WHITE             { 0xFF, 0xFF, 0xFF } // 255 255 255
-#define COLOR_RGB_LIGHT             { 0xBF, 0xBF, 0xBF } // 191 191 191
-#define COLOR_RGB_GRAY              { 0x7F, 0x7F, 0x7F } // 127 127 127
-#define COLOR_RGB_DARK              { 0x3F, 0x3F, 0x3F } //  63  63  63
-#define COLOR_RGB_BLACK             { 0x00, 0x00, 0x00 } //   0   0   0
-// Primary/secondary/tertiary color presets
-#define COLOR_RGB_RED               { 0xFF, 0x00, 0x00 } // 255   0   0
-#define COLOR_RGB_ORANGE            { 0xFF, 0x7F, 0x00 } // 255 127   0
-#define COLOR_RGB_YELLOW            { 0xFF, 0xFF, 0x00 } // 255 255   0
-#define COLOR_RGB_LIME              { 0x7F, 0xFF, 0x00 } // 127 255   0
-#define COLOR_RGB_GREEN             { 0x00, 0xFF, 0x00 } //   0 255   0
-#define COLOR_RGB_SPRING            { 0x00, 0xFF, 0x7F } //   0 255 127
-#define COLOR_RGB_CYAN              { 0x00, 0xFF, 0xFF } //   0 255 255
-#define COLOR_RGB_SKY               { 0x00, 0x7F, 0xFF } //   0 127 255
-#define COLOR_RGB_BLUE              { 0x00, 0x00, 0xFF } //   0   0 255
-#define COLOR_RGB_PURPLE            { 0x7F, 0x00, 0xFF } // 127   0 255
-#define COLOR_RGB_MAGENTA           { 0xFF, 0x00, 0xFF } // 255   0 255
-#define COLOR_RGB_PINK              { 0xFF, 0x00, 0x7F } // 255   0 127
-// Elemental color presets
-#define COLOR_RGB_JRB_SKY           { 0x50, 0x64, 0x5A } //  80 100  90
-#define COLOR_RGB_WATER             { 0x05, 0x50, 0x96 } //   5  80 150
-#define COLOR_RGB_LAVA              { 0x8F, 0x06, 0x00 } // 143   6   0
-#define COLOR_RGB_SAND              { 0xDC, 0xA9, 0x73 } // 220 169 115
-#define COLOR_RGB_ELECTRIC          { 0xFF, 0xEE, 0x00 } // 255 238   0
-// Goddard-specific
-#define COLOR_RGBF_WHITE            { 1.0f, 1.0f, 1.0f }
-#define COLOR_RGBF_RED              { 1.0f, 0.0f, 0.0f }
-#define COLOR_RGBF_GREEN            { 0.0f, 1.0f, 0.0f }
-#define COLOR_RGBF_BLUE             { 0.0f, 0.0f, 1.0f }
-#define COLOR_RGBF_ERR_DARK_BLUE    { 0.0f, 0.0f, 6.0f }
-#define COLOR_RGBF_PINK             { 1.0f, 0.0f, 1.0f }
-#define COLOR_RGBF_BLACK            { 0.0f, 0.0f, 0.0f }
-#define COLOR_RGBF_GREY             { 0.6f, 0.6f, 0.6f }
-#define COLOR_RGBF_DARK_GREY        { 0.4f, 0.4f, 0.4f }
-#define COLOR_RGBF_YELLOW           { 1.0f, 1.0f, 1.0f }
-
 // I4
 #define SIZ_I4      0x4
 #define MSK_I4      BITMASK(SIZ_I4)
@@ -131,24 +93,38 @@
 #define I4_TO_RGBA16_C(c)   (((c) << (SIZ_RGBA16_C - SIZ_I4)) & MSK_RGBA16_C)
 #define I8_TO_RGBA16_C(c)   (((c) >> (SIZ_I8 - SIZ_RGBA16_C)) & MSK_RGBA16_C)
 
+#define RGBA16_COMPOSITE(r, g, b, a) (R_RGBA16(r) | G_RGBA16(g) | B_RGBA16(b) | A_RGBA16(a))
+#define RGBA16_COMPOSITE_GRAYSCALE(val, alpha) RGBA16_COMPOSITE((val), (val), (val), (alpha))
+
+#define COMPOSITE_TO_COLOR(src, bitmask, index)     (((((src) >> (index)) & (bitmask)) * 255.0f) / (bitmask))
+#define COLOR_TO_COMPOSITE(src, bitmask, index)     (((CompositeColor)(((src) * (bitmask)) / 255.0f) & (bitmask)) << (index))
+
+#define COMPOSITE_TO_COLORF(src, bitmask, index)    ((ColorF)(((src) >> (index)) & (bitmask)) / (bitmask))
+#define COLORF_TO_COMPOSITE(src, bitmask, index)    (((CompositeColor)((src) * (bitmask)) & (bitmask)) << (index))
+
+#define COLORRGB_TO_COLORRGBF(  dst, src) vec3_quot_val((dst), (src), 255.0f)
+#define COLORRGBF_TO_COLORRGB(  dst, src) vec3_prod_val((dst), (src), 255.0f)
+#define COLORRGBA_TO_COLORRGBAF(dst, src) vec4_quot_val((dst), (src), 255.0f)
+#define COLORRGBAF_TO_COLORRGBA(dst, src) vec4_prod_val((dst), (src), 255.0f)
+
 #define colorRGB_set(    dst, r, g, b) vec3_set( (dst), (r), (g), (b))
 #define colorRGB_copy(   dst, src    ) vec3_copy((dst), (src)        )
 #define colorRGB_to_vec3(dst, src    ) vec3_copy((dst), (src)        )
 #define vec3_to_colorRGB(dst, src    ) vec3_copy((dst), (src)        )
 
+#include "color_presets.h"
+
 Bool32 colorRGBA_average_2(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2);
 Bool32 colorRGBA_average_3(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2, ColorRGBA c3);
 
-void generate_metal_texture(u16 *dst,      u16 *src);
-void copy_partial_image(    u16 *dst,      u16 *src,
+void generate_metal_texture(TexturePtr *dst, TexturePtr *src);
+void copy_partial_image(    TexturePtr *dst, TexturePtr *src,
                             s32 dstX,      s32 dstY,
                             s32 dstW,      s32 dstH,
                             s32 dstTW,     s32 dstTH,
-                            u32 dstFormat, u32 dstPixelSize,
                             s32 srcX,      s32 srcY,
                             s32 srcW,      s32 srcH,
-                            s32 srcTW,     s32 srcTH,
-                            u32 srcFormat, u32 srcPixelSize);
+                            s32 srcTW,     s32 srcTH);
 void overlay_i8_on_rgba16_additive(u16 *dst, u16 *src, u32 width, u32 height);
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s);
 

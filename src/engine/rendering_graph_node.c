@@ -2,6 +2,7 @@
 
 #include "game/area.h"
 #include "math_util.h"
+#include "colors.h"
 #include "boot/game_init.h"
 #include "gfx_dimensions.h"
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -485,7 +486,7 @@ static void geo_process_translation_rotation(struct GraphNodeTranslationRotation
     Mat4 mtxf;
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-    vec3s_to_vec3f(translation, node->translation);
+    vec3_copy(translation, node->translation);
 #ifdef VARIABLE_FRAMERATE
     approach_pos_vector(node->lerpPos, translation, 0);
     approach_angle_vector(node->lerpRot, node->rotation);
@@ -511,7 +512,7 @@ static void geo_process_translation(struct GraphNodeTranslation *node) {
     Mat4 mtxf;
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-    vec3s_to_vec3f(translation, node->translation);
+    vec3_copy(translation, node->translation);
 #ifdef VARIABLE_FRAMERATE
     approach_pos_vector(node->lerpPos, translation, 0);
     mtxf_rotate_zxy_and_translate(mtxf, node->lerpPos[0], gVec3sZero);
@@ -558,7 +559,7 @@ static void geo_process_rotation(struct GraphNodeRotation *node) {
 static void geo_process_scale(struct GraphNodeScale *node) {
     Vec3f scaleVec;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
-    vec3f_set(scaleVec, node->scale, node->scale, node->scale);
+    vec3_same(scaleVec, node->scale);
 // #ifdef VARIABLE_FRAMERATE
 //     approach_pos_vector(node->lerpScale, scaleVec, 1);
 // #endif
@@ -581,7 +582,7 @@ static void geo_process_billboard(struct GraphNodeBillboard *node) {
     Vec3f translation;
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
     gMatStackIndex++;
-    vec3s_to_vec3f(translation, node->translation);
+    vec3_copy(translation, node->translation);
     mtxf_billboard(gMatStack[gMatStackIndex], gMatStack[gMatStackIndex - 1], translation, gCurGraphNodeCamera->roll, node->zOffset);
 #ifdef VARIABLE_FRAMERATE
     if (gCurGraphNodeHeldObject != NULL) {
@@ -686,16 +687,16 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
             }
         }
     }
-    vec3f_copy(node->lerpPos[0], node->lerpTrans);
-    vec3f_copy(node->lerpPos[1], node->lerpTrans);
-    vec3f_copy(node->lerpPos[2], node->lerpTrans);
+    vec3_copy(node->lerpPos[0], node->lerpTrans);
+    vec3_copy(node->lerpPos[1], node->lerpTrans);
+    vec3_copy(node->lerpPos[2], node->lerpTrans);
     if (gCurAnimType == ANIM_TYPE_ROTATION) {
         vec3s_set(node->lerpRot[0], gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)],
         gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)], gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)]);
-        vec3s_copy(node->lerpRot[1], node->lerpRot[0]);
-        vec3s_copy(node->lerpRot[2], node->lerpRot[0]);
+        vec3_copy(node->lerpRot[1], node->lerpRot[0]);
+        vec3_copy(node->lerpRot[2], node->lerpRot[0]);
     } else {
-        vec3a_copy(node->lerpRot[0], gVec3sZero);
+        vec3_copy(node->lerpRot[0], gVec3sZero);
     }
     mtxf_rotate_xyz_and_translate(matrix, node->lerpPos[0], node->lerpRot[0]);
 #else
@@ -733,7 +734,7 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         rotation[1] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
     } else {
-        vec3a_copy(rotation, gVec3sZero);
+        vec3_copy(rotation, gVec3sZero);
     }
     mtxf_rotate_xyz_and_translate(matrix, translation, rotation);
 #endif
@@ -796,10 +797,10 @@ static void geo_process_shadow(struct GraphNodeShadow *node) {
             shadowScale = node->shadowScale;
         } else {
 #ifdef VARIABLE_FRAMERATE
-            vec3f_copy(shadowPos, gCurGraphNodeObject->lerpPos[0]);
+            vec3_copy(shadowPos, gCurGraphNodeObject->lerpPos[0]);
             shadowScale = (node->shadowScale * gCurGraphNodeObject->lerpScale[0][0]);
 #else
-            vec3f_copy(shadowPos, gCurGraphNodeObject->pos);
+            vec3_copy(shadowPos, gCurGraphNodeObject->pos);
             shadowScale = (node->shadowScale * gCurGraphNodeObject->scale[0]);
 #endif
         }
@@ -943,7 +944,7 @@ static void geo_process_object(struct Object *node) {
         mtxf_scale_self_vec3f(gMatStack[gMatStackIndex + 1], node->header.gfx.scale);
 #endif
         node->header.gfx.throwMatrix = &gMatStack[++gMatStackIndex];
-        vec3f_copy(node->header.gfx.cameraToObject, gMatStack[gMatStackIndex][3]);
+        vec3_copy(node->header.gfx.cameraToObject, gMatStack[gMatStackIndex][3]);
         // FIXME: correct types
 #ifdef VARIABLE_FRAMERATE
         if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo);
@@ -961,18 +962,18 @@ static void geo_process_object(struct Object *node) {
                     // This will create a cylinder that visualises their hitbox.
                     // If they do not have a hitbox, it will be a small white cube instead.
                     if (node->oIntangibleTimer != -1) {
-                        vec3f_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
-                        vec3f_set(bnds2, node->hitboxRadius, node->hitboxHeight-node->hitboxDownOffset, node->hitboxRadius);
-                        debug_box_color(0x800000FF);
+                        vec3_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
+                        vec3_set(bnds2, node->hitboxRadius, (node->hitboxHeight - node->hitboxDownOffset), node->hitboxRadius);
+                        debug_box_color(COLOR_RGBA32_DEBUG_HITBOX);
                         debug_box(bnds1, bnds2, DEBUG_SHAPE_CYLINDER);
-                        vec3f_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
-                        vec3f_set(bnds2, node->hurtboxRadius, node->hurtboxHeight, node->hurtboxRadius);
-                        debug_box_color(0x8FF00000);
+                        vec3_set(bnds1, node->oPosX, (node->oPosY - node->hitboxDownOffset), node->oPosZ);
+                        vec3_set(bnds2, node->hurtboxRadius, node->hurtboxHeight, node->hurtboxRadius);
+                        debug_box_color(COLOR_RGBA32_DEBUG_HURTBOX);
                         debug_box(bnds1, bnds2, DEBUG_SHAPE_CYLINDER);
                     } else {
-                        vec3f_set(bnds1, node->oPosX, (node->oPosY - 15), node->oPosZ);
-                        vec3f_set(bnds2, 30, 30, 30);
-                        debug_box_color(0x80FFFFFF);
+                        vec3_set(bnds1, node->oPosX, (node->oPosY - 15), node->oPosZ);
+                        vec3_set(bnds2, 30, 30, 30);
+                        debug_box_color(COLOR_RGBA32_DEBUG_POSITION);
                         debug_box(bnds1, bnds2, DEBUG_SHAPE_BOX);
                     }
                 }
@@ -1022,9 +1023,9 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
 #endif
         vec3_quot_val(translation, node->translation, 4.0f);
         mtxf_translate(mat, translation);
-        mtxf_copy(       gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
-        vec3f_copy(      gMatStack[gMatStackIndex + 1][3],     gMatStack[gMatStackIndex    ][3]);
-        mtxf_mul(        gMatStack[gMatStackIndex + 1], mat,   gMatStack[gMatStackIndex + 1]);
+        mtxf_copy(            gMatStack[gMatStackIndex + 1], *gCurGraphNodeObject->throwMatrix);
+        vec3_copy(            gMatStack[gMatStackIndex + 1][3],   gMatStack[gMatStackIndex    ][3]);
+        mtxf_mul(             gMatStack[gMatStackIndex + 1], mat, gMatStack[gMatStackIndex + 1]);
         mtxf_scale_self_vec3f(gMatStack[gMatStackIndex + 1], node->objNode->header.gfx.scale);
         if (node->fnNode.func != NULL) node->fnNode.func(GEO_CONTEXT_HELD_OBJ, &node->fnNode.node, (struct AllocOnlyPool *) gMatStack[gMatStackIndex + 1]);
         gMatStackIndex++;
@@ -1125,8 +1126,8 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
         initialMatrix    = alloc_display_list(sizeof(*initialMatrix));
         gMatStackIndex   = 0;
         gCurAnimType     = ANIM_TYPE_NONE;
-        vec3s_set(viewport->vp.vtrans, (node->x     * 4), (node->y      * 4), 511);
-        vec3s_set(viewport->vp.vscale, (node->width * 4), (node->height * 4), 511);
+        vec3_set(viewport->vp.vtrans, (node->x     * 4), (node->y      * 4), 511);
+        vec3_set(viewport->vp.vscale, (node->width * 4), (node->height * 4), 511);
         if (b != NULL) {
             clear_frame_buffer(clearColor);
             make_viewport_clip_rect(b);

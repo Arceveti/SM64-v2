@@ -454,15 +454,15 @@ void alloc_animdata(struct ObjAnimator *animator) {
                 for ((dataIdx = 0); (dataIdx < curAnimSrc->count); (dataIdx++)) {
                     halfarr = &((s16(*)[9]) curAnimSrc->data)[dataIdx];
                     curMtxVec = &((struct AnimMtxVec *) allocSpace)[dataIdx];
-                    vec3s_to_vec3f(tri.p0, halfarr[0]);
-                    vec3f_mul_val(tri.p0, allocMtxScale);
-                    vec3s_to_vec3f(tri.p1, halfarr[3]);
-                    vec3f_mul_val(tri.p1, allocMtxScale);
-                    vec3s_to_vec3f(tri.p2, halfarr[6]);
+                    vec3_copy(tri.p0, halfarr[0]);
+                    vec3_mul_val(tri.p0, allocMtxScale);
+                    vec3_copy(tri.p1, halfarr[3]);
+                    vec3_mul_val(tri.p1, allocMtxScale);
+                    vec3_copy(tri.p2, halfarr[6]);
                     mtxf_identity(curMtxVec->matrix);
                     gd_rot_mat_about_vec3f(curMtxVec->matrix, tri.p1);
-                    vec3f_add(curMtxVec->matrix[3], tri.p2);
-                    vec3f_copy(((struct AnimMtxVec *) allocSpace)[dataIdx].vec, tri.p0);
+                    vec3_add(curMtxVec->matrix[3], tri.p2);
+                    vec3_copy(((struct AnimMtxVec *) allocSpace)[dataIdx].vec, tri.p0);
                 }
                 curAnimSrc->type = GD_ANIM_MTX4x4F_SCALE3F;
             } else {
@@ -514,7 +514,7 @@ void chk_shapegen(struct ObjShape *shape) {
             oldObjHead = gGdObjectList;
             for ((i = 0); (i < vtxdata->count); (i++)) {
                 vtx = gd_make_vertex(vtxdata->data[i]);
-                vec3f_zero(vtx->normal);
+                vec3_zero(vtx->normal);
                 vtxbuf[i] = vtx;
             }
             madeVtx = make_group_of_type(OBJ_TYPE_VERTICES, oldObjHead);
@@ -525,13 +525,13 @@ void chk_shapegen(struct ObjShape *shape) {
                 add_3_vtx_to_face(face, vtxbuf[facedata->data[i][1]],
                                         vtxbuf[facedata->data[i][2]],
                                         vtxbuf[facedata->data[i][3]]);
-                vec3f_add(vtxbuf[facedata->data[i][1]]->normal, face->normal);
-                vec3f_add(vtxbuf[facedata->data[i][2]]->normal, face->normal);
-                vec3f_add(vtxbuf[facedata->data[i][3]]->normal, face->normal);
+                vec3_add(vtxbuf[facedata->data[i][1]]->normal, face->normal);
+                vec3_add(vtxbuf[facedata->data[i][2]]->normal, face->normal);
+                vec3_add(vtxbuf[facedata->data[i][3]]->normal, face->normal);
             }
             if (shape->flag & 0x10) { //! flag name
                 for ((i = 0); (i < vtxdata->count); (i++)) {
-                    vec3f_copy(vtxbuf[i]->normal, vtxbuf[i]->pos);
+                    vec3_copy(vtxbuf[i]->normal, vtxbuf[i]->pos);
                     vec3f_normalize(vtxbuf[i]->normal);
                 }
             } else {
@@ -738,19 +738,19 @@ void d_set_init_pos(Vec3f pos) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            vec3f_copy(((struct ObjJoint *) dynobj)->worldPos, pos);
-            vec3f_copy(((struct ObjJoint *) dynobj)->relPos,   pos);
-            vec3f_copy(((struct ObjJoint *) dynobj)->initPos,  pos);
+            vec3_copy(((struct ObjJoint *) dynobj)->worldPos, pos);
+            vec3_copy(((struct ObjJoint *) dynobj)->relPos,   pos);
+            vec3_copy(((struct ObjJoint *) dynobj)->initPos,  pos);
             break;
         case OBJ_TYPE_NETS:
-            vec3f_copy(((struct ObjNet *) dynobj)->worldPos, pos);
-            vec3f_copy(((struct ObjNet *) dynobj)->initPos,  pos);
+            vec3_copy(((struct ObjNet *) dynobj)->worldPos, pos);
+            vec3_copy(((struct ObjNet *) dynobj)->initPos,  pos);
             break;
-        case OBJ_TYPE_PARTICLES: vec3f_copy(((struct ObjParticle *) dynobj)->pos,      pos); break;
-        case OBJ_TYPE_CAMERAS:   vec3f_copy(((struct ObjCamera   *) dynobj)->worldPos, pos); break;
+        case OBJ_TYPE_PARTICLES: vec3_copy(((struct ObjParticle *) dynobj)->pos,      pos); break;
+        case OBJ_TYPE_CAMERAS:   vec3_copy(((struct ObjCamera   *) dynobj)->worldPos, pos); break;
         case OBJ_TYPE_VERTICES:
             d_set_rel_pos(pos[0], pos[1], pos[2]);
-            vec3f_copy(((struct ObjVertex *) dynobj)->initPos, pos);
+            vec3_copy(((struct ObjVertex *) dynobj)->initPos, pos);
             break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetInitPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
@@ -764,8 +764,8 @@ UNUSED void d_set_velocity(Vec3f vel) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_copy(((struct ObjJoint *) dynobj)->velocity, vel); break;
-        case OBJ_TYPE_NETS:   vec3f_copy(((struct ObjNet   *) dynobj)->velocity, vel); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(((struct ObjJoint *) dynobj)->velocity, vel); break;
+        case OBJ_TYPE_NETS:   vec3_copy(((struct ObjNet   *) dynobj)->velocity, vel); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetVelocity()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -779,9 +779,9 @@ UNUSED void d_get_velocity(Vec3f dst) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_copy(dst, ((struct ObjJoint *) dynobj)->velocity); break;
-        case OBJ_TYPE_NETS:   vec3f_copy(dst, ((struct ObjNet   *) dynobj)->velocity); break;
-        default: vec3f_zero(dst); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(dst, ((struct ObjJoint *) dynobj)->velocity); break;
+        case OBJ_TYPE_NETS:   vec3_copy(dst, ((struct ObjNet   *) dynobj)->velocity); break;
+        default: vec3_zero(dst); break;
     }
 }
 
@@ -793,9 +793,9 @@ void d_get_init_pos(Vec3f dst) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS:   vec3f_copy(dst, ((struct ObjJoint  *) dynobj)->initPos); break;
-        case OBJ_TYPE_NETS:     vec3f_copy(dst, ((struct ObjNet    *) dynobj)->initPos); break;
-        case OBJ_TYPE_VERTICES: vec3f_copy(dst, ((struct ObjVertex *) dynobj)->initPos); break;
+        case OBJ_TYPE_JOINTS:   vec3_copy(dst, ((struct ObjJoint  *) dynobj)->initPos); break;
+        case OBJ_TYPE_NETS:     vec3_copy(dst, ((struct ObjNet    *) dynobj)->initPos); break;
+        case OBJ_TYPE_VERTICES: vec3_copy(dst, ((struct ObjVertex *) dynobj)->initPos); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetInitPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -808,9 +808,9 @@ void d_get_init_rot(Vec3f dst) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_copy(dst, ((struct ObjJoint *) dynobj)->initRotation); break;
-        case OBJ_TYPE_NETS:   vec3f_copy(dst, ((struct ObjNet   *) dynobj)->initRotation); break;
-        case OBJ_TYPE_LIGHTS: vec3f_zero(dst                                            ); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(dst, ((struct ObjJoint *) dynobj)->initRotation); break;
+        case OBJ_TYPE_NETS:   vec3_copy(dst, ((struct ObjNet   *) dynobj)->initRotation); break;
+        case OBJ_TYPE_LIGHTS: vec3_zero(dst                                            ); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetInitRot()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -826,16 +826,16 @@ void d_set_rel_pos(f32 x, f32 y, f32 z) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS:  vec3f_set(((struct ObjJoint  *) dynobj)->relPos, x, y, z); break;
+        case OBJ_TYPE_JOINTS:  vec3_set(((struct ObjJoint  *) dynobj)->relPos, x, y, z); break;
         case OBJ_TYPE_CAMERAS:
-            vec3f_set(((struct ObjCamera *) dynobj)->relPos,            x,          y,          z        );
-            vec3f_set(((struct ObjCamera *) dynobj)->zoomPositions[0], (x       ), (y       ), (z       ));
-            vec3f_set(((struct ObjCamera *) dynobj)->zoomPositions[1], (x * 1.5f), (y * 1.5f), (z * 1.5f));
-            vec3f_set(((struct ObjCamera *) dynobj)->zoomPositions[2], (x * 2.0f), (y * 2.0f), (z * 2.0f));
+            vec3_set(((struct ObjCamera *) dynobj)->relPos,            x,          y,          z        );
+            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[0], (x       ), (y       ), (z       ));
+            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[1], (x * 1.5f), (y * 1.5f), (z * 1.5f));
+            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[2], (x * 2.0f), (y * 2.0f), (z * 2.0f));
             ((struct ObjCamera *) dynobj)->maxZoomLevel = 2;
             break;
-        case OBJ_TYPE_VERTICES:  vec3f_set(((struct ObjVertex   *) dynobj)->pos, x, y, z); break;
-        case OBJ_TYPE_PARTICLES: vec3f_set(((struct ObjParticle *) dynobj)->pos, x, y, z); break;
+        case OBJ_TYPE_VERTICES:  vec3_set(((struct ObjVertex   *) dynobj)->pos, x, y, z); break;
+        case OBJ_TYPE_PARTICLES: vec3_set(((struct ObjParticle *) dynobj)->pos, x, y, z); break;
         case OBJ_TYPE_NETS:                                                                break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRelPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
@@ -848,9 +848,9 @@ UNUSED void d_addto_rel_pos(Vec3f src) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_VERTICES:  vec3f_add(((struct ObjVertex   *) dynobj)->pos,    src); break;
-        case OBJ_TYPE_JOINTS:    vec3f_add(((struct ObjJoint    *) dynobj)->relPos, src); break;
-        case OBJ_TYPE_PARTICLES: vec3f_add(((struct ObjParticle *) dynobj)->pos,    src); break;
+        case OBJ_TYPE_VERTICES:  vec3_add(((struct ObjVertex   *) dynobj)->pos,    src); break;
+        case OBJ_TYPE_JOINTS:    vec3_add(((struct ObjJoint    *) dynobj)->relPos, src); break;
+        case OBJ_TYPE_PARTICLES: vec3_add(((struct ObjParticle *) dynobj)->pos,    src); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dAddToRelPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -861,10 +861,10 @@ UNUSED void d_addto_rel_pos(Vec3f src) {
 UNUSED void d_get_rel_pos(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_VERTICES:  vec3f_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos   ); break;
-        case OBJ_TYPE_JOINTS:    vec3f_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->relPos); break;
-        case OBJ_TYPE_CAMERAS:   vec3f_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->relPos); break;
-        case OBJ_TYPE_PARTICLES: vec3f_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos   ); break;
+        case OBJ_TYPE_VERTICES:  vec3_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos   ); break;
+        case OBJ_TYPE_JOINTS:    vec3_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->relPos); break;
+        case OBJ_TYPE_CAMERAS:   vec3_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->relPos); break;
+        case OBJ_TYPE_PARTICLES: vec3_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos   ); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetRelPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -902,9 +902,9 @@ void d_get_scale(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_copy(dst, ((struct ObjJoint *) dynobj)->scale); break;
-        case OBJ_TYPE_NETS:   vec3f_copy(dst, ((struct ObjNet   *) dynobj)->scale); break;
-        case OBJ_TYPE_LIGHTS: vec3f_copy(dst, gVec3fOne                          ); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(dst, ((struct ObjJoint *) dynobj)->scale); break;
+        case OBJ_TYPE_NETS:   vec3_copy(dst, ((struct ObjNet   *) dynobj)->scale); break;
+        case OBJ_TYPE_LIGHTS: vec3_copy(dst, gVec3fOne                          ); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetScale()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -918,12 +918,12 @@ void d_set_att_offset(Vec3f off) {
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            vec3f_copy(((struct ObjJoint *) dynobj)->attachOffset, off);
-            vec3f_copy(((struct ObjJoint *) dynobj)->initPos,      off);
+            vec3_copy(((struct ObjJoint *) dynobj)->attachOffset, off);
+            vec3_copy(((struct ObjJoint *) dynobj)->initPos,      off);
             break;
         case OBJ_TYPE_NETS:
-            vec3f_copy(((struct ObjNet   *) dynobj)->attachOffset, off);
-            vec3f_copy(((struct ObjNet   *) dynobj)->initPos,      off);
+            vec3_copy(((struct ObjNet   *) dynobj)->attachOffset, off);
+            vec3_copy(((struct ObjNet   *) dynobj)->initPos,      off);
             break;
         case OBJ_TYPE_PARTICLES: break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetAttOffset()", sDynListCurInfo->name, sDynListCurObj->type);
@@ -939,12 +939,12 @@ void d_vec3f_set_att_offset(Vec3f off) {
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
         case OBJ_TYPE_JOINTS:
-            vec3f_copy(((struct ObjJoint *) dynobj)->attachOffset, off);
-            vec3f_copy(((struct ObjJoint *) dynobj)->initPos,      off);
+            vec3_copy(((struct ObjJoint *) dynobj)->attachOffset, off);
+            vec3_copy(((struct ObjJoint *) dynobj)->initPos,      off);
             break;
         case OBJ_TYPE_NETS:
-            vec3f_copy(((struct ObjNet   *) dynobj)->attachOffset, off);
-            vec3f_copy(((struct ObjNet   *) dynobj)->initPos,      off);
+            vec3_copy(((struct ObjNet   *) dynobj)->attachOffset, off);
+            vec3_copy(((struct ObjNet   *) dynobj)->initPos,      off);
             break;
         case OBJ_TYPE_PARTICLES: break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetAttOffset()", sDynListCurInfo->name, sDynListCurObj->type);
@@ -961,11 +961,11 @@ void d_vec3f_set_att_offset(Vec3f off) {
 void d_set_world_pos(f32 x, f32 y, f32 z) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_CAMERAS:  vec3f_set(((struct ObjCamera *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_JOINTS:   vec3f_set(((struct ObjJoint  *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_NETS:     vec3f_set(((struct ObjNet    *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_VIEWS:    vec3f_set(((struct ObjView   *) sDynListCurObj)->upperLeft, x, y, z); break;
-        case OBJ_TYPE_VERTICES: vec3f_set(((struct ObjVertex *) sDynListCurObj)->pos,       x, y, z); break;
+        case OBJ_TYPE_CAMERAS:  vec3_set(((struct ObjCamera *) sDynListCurObj)->worldPos,  x, y, z); break;
+        case OBJ_TYPE_JOINTS:   vec3_set(((struct ObjJoint  *) sDynListCurObj)->worldPos,  x, y, z); break;
+        case OBJ_TYPE_NETS:     vec3_set(((struct ObjNet    *) sDynListCurObj)->worldPos,  x, y, z); break;
+        case OBJ_TYPE_VIEWS:    vec3_set(((struct ObjView   *) sDynListCurObj)->upperLeft, x, y, z); break;
+        case OBJ_TYPE_VERTICES: vec3_set(((struct ObjVertex *) sDynListCurObj)->pos,       x, y, z); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetWorldPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -976,13 +976,13 @@ void d_set_world_pos(f32 x, f32 y, f32 z) {
 UNUSED void d_get_world_pos(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_VERTICES:  vec3f_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos     ); break;
-        case OBJ_TYPE_JOINTS:    vec3f_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_NETS:      vec3f_copy(dst, ((struct ObjNet      *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_PARTICLES: vec3f_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos     ); break;
-        case OBJ_TYPE_CAMERAS:   vec3f_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_SHAPES:    vec3f_zero(dst                                                   ); break;
-        case OBJ_TYPE_LIGHTS:    vec3f_copy(dst, ((struct ObjLight    *) sDynListCurObj)->position); break;
+        case OBJ_TYPE_VERTICES:  vec3_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos     ); break;
+        case OBJ_TYPE_JOINTS:    vec3_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_NETS:      vec3_copy(dst, ((struct ObjNet      *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_PARTICLES: vec3_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos     ); break;
+        case OBJ_TYPE_CAMERAS:   vec3_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_SHAPES:    vec3_zero(dst                                                   ); break;
+        case OBJ_TYPE_LIGHTS:    vec3_copy(dst, ((struct ObjLight    *) sDynListCurObj)->position); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetWorldPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -993,13 +993,13 @@ UNUSED void d_get_world_pos(Vec3f dst) {
 void d_vec3f_get_world_pos(Vec3f dst) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_VERTICES:  vec3f_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos     ); break;
-        case OBJ_TYPE_JOINTS:    vec3f_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_NETS:      vec3f_copy(dst, ((struct ObjNet      *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_PARTICLES: vec3f_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos     ); break;
-        case OBJ_TYPE_CAMERAS:   vec3f_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->worldPos); break;
-        case OBJ_TYPE_SHAPES:    vec3f_zero(dst                                                   ); break;
-        case OBJ_TYPE_LIGHTS:    vec3f_copy(dst, ((struct ObjLight    *) sDynListCurObj)->position); break;
+        case OBJ_TYPE_VERTICES:  vec3_copy(dst, ((struct ObjVertex   *) sDynListCurObj)->pos     ); break;
+        case OBJ_TYPE_JOINTS:    vec3_copy(dst, ((struct ObjJoint    *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_NETS:      vec3_copy(dst, ((struct ObjNet      *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_PARTICLES: vec3_copy(dst, ((struct ObjParticle *) sDynListCurObj)->pos     ); break;
+        case OBJ_TYPE_CAMERAS:   vec3_copy(dst, ((struct ObjCamera   *) sDynListCurObj)->worldPos); break;
+        case OBJ_TYPE_SHAPES:    vec3_zero(dst                                                   ); break;
+        case OBJ_TYPE_LIGHTS:    vec3_copy(dst, ((struct ObjLight    *) sDynListCurObj)->position); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dGetWorldPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1016,9 +1016,9 @@ void d_set_scale(f32 x, f32 y, f32 z) {
     initDynobj = sDynListCurObj;
     d_stash_dynobj();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_set(((struct ObjJoint *) initDynobj)->scale,      x, y, z); break;
-        case OBJ_TYPE_NETS:   vec3f_set(((struct ObjNet   *) initDynobj)->scale,      x, y, z); break;
-        case OBJ_TYPE_VIEWS:  vec3f_set(((struct ObjView  *) initDynobj)->lowerRight, x, y, z); break;
+        case OBJ_TYPE_JOINTS: vec3_set(((struct ObjJoint *) initDynobj)->scale,      x, y, z); break;
+        case OBJ_TYPE_NETS:   vec3_set(((struct ObjNet   *) initDynobj)->scale,      x, y, z); break;
+        case OBJ_TYPE_VIEWS:  vec3_set(((struct ObjView  *) initDynobj)->lowerRight, x, y, z); break;
         case OBJ_TYPE_PARTICLES: break;
         case OBJ_TYPE_LIGHTS:    break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetScale()", sDynListCurInfo->name, sDynListCurObj->type);
@@ -1035,8 +1035,8 @@ void d_set_rotation(f32 x, f32 y, f32 z) {
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3f_set(((struct ObjJoint *) dynobj)->initRotation, x, y, z); break;
-        case OBJ_TYPE_NETS:   vec3f_set(((struct ObjNet   *) dynobj)->initRotation, x, y, z); break;
+        case OBJ_TYPE_JOINTS: vec3_set(((struct ObjJoint *) dynobj)->initRotation, x, y, z); break;
+        case OBJ_TYPE_NETS:   vec3_set(((struct ObjNet   *) dynobj)->initRotation, x, y, z); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRotation()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1158,7 +1158,7 @@ void d_set_id(s32 id) {
 void d_set_ambient(ColorF r, ColorF g, ColorF b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Ka, r, g, b); break;
+        case OBJ_TYPE_MATERIALS: vec3_set(((struct ObjMaterial *) sDynListCurObj)->Ka, r, g, b); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetAmbient()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1170,8 +1170,8 @@ void d_set_ambient(ColorF r, ColorF g, ColorF b) {
 void d_set_diffuse(ColorF r, ColorF g, ColorF b) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS: vec3f_set(((struct ObjMaterial *) sDynListCurObj)->Kd,      r, g, b); break;
-        case OBJ_TYPE_LIGHTS:    vec3f_set(((struct ObjLight    *) sDynListCurObj)->diffuse, r, g, b); break;
+        case OBJ_TYPE_MATERIALS: vec3_set(((struct ObjMaterial *) sDynListCurObj)->Kd,      r, g, b); break;
+        case OBJ_TYPE_LIGHTS:    vec3_set(((struct ObjLight    *) sDynListCurObj)->diffuse, r, g, b); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetDiffuse()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1241,9 +1241,9 @@ void d_set_i_matrix(Mat4 *src) {
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_NETS:   mtxf_copy( ((struct ObjNet   *) dynobj)->idMtx,    (*src)   ); break;
-        case OBJ_TYPE_JOINTS: mtxf_copy( ((struct ObjJoint *) dynobj)->idMtx,    (*src)   ); break;
-        case OBJ_TYPE_LIGHTS: vec3f_copy(((struct ObjLight *) dynobj)->position, (*src)[3]); break;
+        case OBJ_TYPE_NETS:   mtxf_copy(((struct ObjNet   *) dynobj)->idMtx,    (*src)   ); break;
+        case OBJ_TYPE_JOINTS: mtxf_copy(((struct ObjJoint *) dynobj)->idMtx,    (*src)   ); break;
+        case OBJ_TYPE_LIGHTS: vec3_copy(((struct ObjLight *) dynobj)->position, (*src)[3]); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetIMatrix()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1286,7 +1286,7 @@ f32 d_calc_world_dist_btwn(struct GdObj *obj1, struct GdObj *obj2) {
     d_vec3f_get_world_pos(obj1pos);
     set_cur_dynobj(obj2);
     d_vec3f_get_world_pos(obj2pos);
-    vec3f_diff(posdiff, obj2pos, obj1pos);
+    vec3_diff(posdiff, obj2pos, obj1pos);
     return vec3_mag(posdiff);
 }
 

@@ -354,7 +354,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
         if ((action != ACT_BUTT_SLIDE)
          && (action != ACT_HOLD_BUTT_SLIDE)
          && (action != ACT_WALKING)
-         && (action != ACT_RIDING_SHELL_GROUND)) vec3a_copy(bodyState->torsoAngle, gVec3sZero);
+         && (action != ACT_RIDING_SHELL_GROUND)) vec3_copy(bodyState->torsoAngle, gVec3sZero);
         // offset by -1
         rotNode->rotation[0] = bodyState->torsoAngle[1];
         rotNode->rotation[1] = bodyState->torsoAngle[2];
@@ -382,8 +382,8 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
             rotNode->rotation[1] = bodyState->headAngle[2];
             rotNode->rotation[2] = bodyState->headAngle[0];
         } else {
-            vec3a_set(bodyState->headAngle, 0x0, 0x0, 0x0);
-            vec3a_set(rotNode->rotation,    0x0, 0x0, 0x0);
+            vec3_zero(bodyState->headAngle);
+            vec3_zero(rotNode->rotation   );
         }
     }
     return NULL;
@@ -445,10 +445,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
 #ifdef METAL_CAP_REFLECTION
 #ifdef METAL_CAP_REFLECTION_SHINE
-    ImageTexture *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine);
+    TexturePtr *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine); //! should be I8 type
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    ImageTexture *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu);
+    TexturePtr *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu); //! should be IA8 type
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU
@@ -460,7 +460,7 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = (bodyState->modelState >> 8);
         if ((bodyState->modelState & MODEL_STATE_METAL) && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
-            ImageTexture *metalTexture = segmented_to_virtual(mario_texture_metal);
+            TexturePtr *metalTexture = segmented_to_virtual(mario_texture_metal);
             generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             vec3f_get_dist(gLakituState.pos, gLakituState.focus, &dist);
@@ -470,9 +470,9 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             if (dist < 0.0f) dist = 0.0f;
             lakituW = (lakituMaxW - (dist * 2.0f));
             lakituH = (lakituMaxH - (dist       ));
-            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - gMarioScreenY)) -  lakituW        );
+            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - (SCREEN_HEIGHT/10)/*gMarioScreenY*/)) -  lakituW        );
             if (lakituX < 0) lakituX = 0;
-            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                gMarioScreenX)) - (lakituH * 0.5f));
+            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                (SCREEN_WIDTH/2)/*gMarioScreenX*/)) - (lakituH * 0.5f));
             if (lakituY < 0) lakituY = 0;
             copy_partial_image(metalTexture, lakituTexture,
                                 // 16, 0,
@@ -480,18 +480,17 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
                                 lakituW, lakituH, // dst   wh
                                 // 64, 32,
                                 64, 32, // dst T wh
-                                G_IM_FMT_IA, G_IM_SIZ_8b,
                                  0,  0, // src   xy
                                 64, 64, // src   wh
-                                64, 64, // src T wh
-                                G_IM_FMT_RGBA, G_IM_SIZ_16b);
+                                64, 64  // src T wh
+                                );
 #endif
 #ifdef METAL_CAP_REFLECTION_SHINE
             overlay_i8_on_rgba16_additive(metalTexture, shineTexture, 64, 32);
 #endif
         }
         if (find_nearest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
-            ImageTexture *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
+            TexturePtr *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
             dist    = ((dist - 250.0f) * 0.0625);
@@ -504,11 +503,10 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
                                 lakituX, lakituY, // dst   xy
                                 lakituW, lakituH, // dst   wh
                                 64, 32, // dst T wh
-                                G_IM_FMT_IA, G_IM_SIZ_8b,
                                  0,  0, // src   xy
                                 64, 64, // src   wh
-                                64, 64, // src T wh
-                                G_IM_FMT_RGBA, G_IM_SIZ_16b);
+                                64, 64 // src T wh
+                                );
 #endif
 #ifdef METAL_CAP_REFLECTION_SHINE
             overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, 64, 32);
@@ -576,9 +574,9 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *node, Mat
         if (marioState->heldObj != NULL) {
             asHeldObj->objNode = marioState->heldObj;
             switch (marioState->marioBodyState->grabPos) {
-                case GRAB_POS_LIGHT_OBJ: vec3s_set(asHeldObj->translation,  50,    0, ((marioState->action & ACT_FLAG_THROWING) ? 0 : 100)); break;
-                case GRAB_POS_HEAVY_OBJ: vec3s_set(asHeldObj->translation, 145, -173,                                                  180); break;
-                case GRAB_POS_BOWSER:    vec3s_set(asHeldObj->translation,  80, -270,                                                 1260); break;
+                case GRAB_POS_LIGHT_OBJ: vec3_set(asHeldObj->translation,  50,    0, ((marioState->action & ACT_FLAG_THROWING) ? 0 : 100)); break;
+                case GRAB_POS_HEAVY_OBJ: vec3_set(asHeldObj->translation, 145, -173,                                                  180); break;
+                case GRAB_POS_BOWSER:    vec3_set(asHeldObj->translation,  80, -270,                                                 1260); break;
             }
         }
     } else if (callContext == GEO_CONTEXT_HELD_OBJ) {
@@ -615,9 +613,9 @@ Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat
                 // TODO: Is this a geo layout copy or a graph node copy?
                 gMirrorMario.sharedChild     = mario->header.gfx.sharedChild;
                 gMirrorMario.areaIndex       = mario->header.gfx.areaIndex;
-                vec3a_copy(gMirrorMario.angle, mario->header.gfx.angle);
-                vec3f_copy(gMirrorMario.pos,   mario->header.gfx.pos  );
-                vec3f_copy(gMirrorMario.scale, mario->header.gfx.scale);
+                vec3_copy(gMirrorMario.angle,  mario->header.gfx.angle);
+                vec3_copy(gMirrorMario.pos,    mario->header.gfx.pos  );
+                vec3_copy(gMirrorMario.scale,  mario->header.gfx.scale);
                 gMirrorMario.animInfo        = mario->header.gfx.animInfo;
                 mirroredX                    = (MIRROR_X - gMirrorMario.pos[0]);
                 gMirrorMario.pos[0]          = (mirroredX + MIRROR_X);

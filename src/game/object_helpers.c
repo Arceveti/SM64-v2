@@ -147,7 +147,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
 //! move to math_util?
 void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
     Vec3f rel;
-    vec3f_copy(rel, &obj->oParentRelativePosVec);
+    vec3_copy(rel, &obj->oParentRelativePosVec);
     obj->oPosX = ((rel[0] * mtx[0][0]) + (rel[1] * mtx[1][0]) + (rel[2] * mtx[2][0]) + mtx[3][0]);
     obj->oPosY = ((rel[0] * mtx[0][1]) + (rel[1] * mtx[1][1]) + (rel[2] * mtx[2][1]) + mtx[3][1]);
     obj->oPosZ = ((rel[0] * mtx[0][2]) + (rel[1] * mtx[1][2]) + (rel[2] * mtx[2][2]) + mtx[3][2]);
@@ -155,10 +155,10 @@ void obj_update_pos_from_parent_transformation(Mat4 mtx, struct Object *obj) {
 
 //! move to math_util?
 void obj_apply_scale_to_matrix(struct Object *obj, Mat4 dst, Mat4 src) {
-    vec3f_prod_val(dst[0], src[0], obj->header.gfx.scale[0]);
-    vec3f_prod_val(dst[1], src[1], obj->header.gfx.scale[1]);
-    vec3f_prod_val(dst[2], src[2], obj->header.gfx.scale[2]);
-    vec3f_copy(dst[3], src[3]);
+    vec3_prod_val(dst[0], src[0], obj->header.gfx.scale[0]);
+    vec3_prod_val(dst[1], src[1], obj->header.gfx.scale[1]);
+    vec3_prod_val(dst[2], src[2], obj->header.gfx.scale[2]);
+    vec3_copy(dst[3], src[3]);
     dst[0][3] = src[0][3];
     dst[1][3] = src[1][3];
     dst[2][3] = src[2][3];
@@ -223,25 +223,25 @@ Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angl
 }
 
 void obj_set_parent_relative_pos(struct Object *obj, s16 relX, s16 relY, s16 relZ) {
-    vec3f_set(&obj->oParentRelativePosVec, relX, relY, relZ);
+    vec3_set(&obj->oParentRelativePosVec, relX, relY, relZ);
 }
 
 void obj_set_pos(struct Object *obj, s16 x, s16 y, s16 z) {
-    vec3f_set(&obj->oPosVec, x, y, z);
+    vec3_set(&obj->oPosVec, x, y, z);
 #ifdef VARIABLE_FRAMERATE
-    vec3f_set(obj->header.gfx.lerpPos[0], x, x, x);
-    vec3f_set(obj->header.gfx.lerpPos[1], y, y, y);
-    vec3f_set(obj->header.gfx.lerpPos[2], z, z, z);
+    vec3_set(obj->header.gfx.lerpPos[0], x, x, x);
+    vec3_set(obj->header.gfx.lerpPos[1], y, y, y);
+    vec3_set(obj->header.gfx.lerpPos[2], z, z, z);
 #endif
 }
 
 void obj_set_angle(struct Object *obj, Angle pitch, Angle yaw, Angle roll) {
-    vec3i_set(&obj->oFaceAngleVec, pitch, yaw, roll);
-    vec3i_set(&obj->oMoveAngleVec, pitch, yaw, roll);
+    vec3_set(&obj->oFaceAngleVec, pitch, yaw, roll);
+    vec3_set(&obj->oMoveAngleVec, pitch, yaw, roll);
 #ifdef VARIABLE_FRAMERATE
-    vec3s_set(obj->header.gfx.lerpAngle[0], pitch, pitch, pitch);
-    vec3s_set(obj->header.gfx.lerpAngle[1],   yaw,   yaw,   yaw);
-    vec3s_set(obj->header.gfx.lerpAngle[2],  roll,  roll,  roll);
+    vec3_set(obj->header.gfx.lerpAngle[0], pitch, pitch, pitch);
+    vec3_set(obj->header.gfx.lerpAngle[1],   yaw,   yaw,   yaw);
+    vec3_set(obj->header.gfx.lerpAngle[2],  roll,  roll,  roll);
 #endif
 }
 
@@ -356,7 +356,7 @@ struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativeP
 
 // Unused
 UNUSED void cur_obj_move_using_vel(void) {
-    vec3f_add(&o->oPosVec, &o->oVelVec);
+    vec3_add(&o->oPosVec, &o->oVelVec);
 }
 
 // Used for beta trampoline
@@ -370,16 +370,16 @@ void obj_copy_pos_and_angle(struct Object *dst, struct Object *src) {
 }
 
 void obj_copy_pos(struct Object *dst, struct Object *src) {
-    vec3f_copy(&dst->oPosVec, &src->oPosVec);
+    vec3_copy(&dst->oPosVec, &src->oPosVec);
 }
 
 void obj_copy_angle(struct Object *dst, struct Object *src) {
-    vec3i_copy(&dst->oMoveAngleVec, &src->oMoveAngleVec);
-    vec3i_copy(&dst->oFaceAngleVec, &src->oFaceAngleVec);
+    vec3_copy(&dst->oMoveAngleVec, &src->oMoveAngleVec);
+    vec3_copy(&dst->oFaceAngleVec, &src->oFaceAngleVec);
 }
 
 void obj_set_gfx_pos_from_pos(struct Object *obj) {
-    vec3f_copy(obj->header.gfx.pos, &obj->oPosVec);
+    vec3_copy(obj->header.gfx.pos, &obj->oPosVec);
 }
 
 void obj_init_animation(struct Object *obj, s32 animIndex) {
@@ -388,25 +388,25 @@ void obj_init_animation(struct Object *obj, s32 animIndex) {
 }
 
 void obj_apply_scale_to_transform(struct Object *obj) {
-    vec3f_mul_val(obj->transform[0], obj->header.gfx.scale[0]);
-    vec3f_mul_val(obj->transform[1], obj->header.gfx.scale[1]);
-    vec3f_mul_val(obj->transform[2], obj->header.gfx.scale[2]);
+    vec3_mul_val(obj->transform[0], obj->header.gfx.scale[0]);
+    vec3_mul_val(obj->transform[1], obj->header.gfx.scale[1]);
+    vec3_mul_val(obj->transform[2], obj->header.gfx.scale[2]);
 }
 
 void obj_copy_scale(struct Object *dst, struct Object *src) {
-    vec3f_copy(dst->header.gfx.scale, src->header.gfx.scale);
+    vec3_copy(dst->header.gfx.scale, src->header.gfx.scale);
 }
 
 void obj_scale_xyz(struct Object *obj, f32 xScale, f32 yScale, f32 zScale) {
-    vec3f_set(obj->header.gfx.scale, xScale, yScale, zScale);
+    vec3_set(obj->header.gfx.scale, xScale, yScale, zScale);
 }
 
 void obj_scale(struct Object *obj, f32 scale) {
-    vec3f_same(obj->header.gfx.scale, scale);
+    vec3_same(obj->header.gfx.scale, scale);
 }
 
 void cur_obj_scale(f32 scale) {
-    vec3f_same(o->header.gfx.scale, scale);
+    vec3_same(o->header.gfx.scale, scale);
 }
 
 void cur_obj_init_animation(s32 animIndex) {
@@ -489,7 +489,7 @@ void cur_obj_unused_init_on_floor(void) {
 }
 
 void obj_set_face_angle_to_move_angle(struct Object *obj) {
-    vec3i_copy(&obj->oFaceAngleVec, &obj->oMoveAngleVec);
+    vec3_copy(&obj->oFaceAngleVec, &obj->oMoveAngleVec);
 }
 
 u32 get_object_list_from_behavior(const BehaviorScript *behavior) {
@@ -1089,7 +1089,7 @@ Bool32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
 }
 
 void cur_obj_set_pos_to_home(void) {
-    vec3f_copy(&o->oPosVec, &o->oHomeVec);
+    vec3_copy(&o->oPosVec, &o->oHomeVec);
 }
 
 void cur_obj_set_pos_to_home_and_stop(void) {
@@ -1213,10 +1213,10 @@ s32 cur_obj_resolve_wall_collisions(void) {
     if (radius > 0.1f) { // was 0.1l
         collisionData.offsetY = offsetY;
         collisionData.radius  = radius;
-        vec3f_copy(collisionData.pos, &o->oPosVec);
+        vec3_copy(collisionData.pos, &o->oPosVec);
         numCollisions         = find_wall_collisions(&collisionData);
         if (numCollisions != 0) {
-            vec3f_copy(&o->oPosVec, collisionData.pos);
+            vec3_copy(&o->oPosVec, collisionData.pos);
             wall              = collisionData.walls[collisionData.numWalls - 1];
             o->oWallAngle     = atan2s(wall->normal.z, wall->normal.x);
             return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEG(90));
@@ -1343,7 +1343,7 @@ Angle cur_obj_angle_to_home(void) {
 }
 
 void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
-    vec3f_copy_y_off(obj1->header.gfx.pos, &obj2->oPosVec, obj2->oGraphYOffset);
+    vec3_copy_y_off(obj1->header.gfx.pos, &obj2->oPosVec, obj2->oGraphYOffset);
     obj1->header.gfx.angle[0] = (obj2->oMoveAnglePitch & 0xFFFF);
     obj1->header.gfx.angle[1] = (obj2->oMoveAngleYaw   & 0xFFFF);
     obj1->header.gfx.angle[2] = (obj2->oMoveAngleRoll  & 0xFFFF);
@@ -1355,7 +1355,7 @@ void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {
  */
 void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateIndex) {
     Vec3f d;
-    vec3f_copy(d, &obj->rawData.asF32[localTranslateIndex]);
+    vec3_copy(d, &obj->rawData.asF32[localTranslateIndex]);
     obj->rawData.asF32[posIndex + 0] += ((obj->transform[0][0] * d[0]) + (obj->transform[1][0] * d[1]) + (obj->transform[2][0] * d[2]));
     obj->rawData.asF32[posIndex + 1] += ((obj->transform[0][1] * d[0]) + (obj->transform[1][1] * d[1]) + (obj->transform[2][1] * d[2]));
     obj->rawData.asF32[posIndex + 2] += ((obj->transform[0][2] * d[0]) + (obj->transform[1][2] * d[1]) + (obj->transform[2][2] * d[2]));
@@ -1364,8 +1364,8 @@ void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateInd
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {
     f32 translate[3];
     Angle rotation[3];
-    vec3f_copy(translate, &obj->rawData.asF32[posIndex]);
-    vec3i_to_vec3s(rotation, &obj->rawData.asS32[angleIndex]);
+    vec3_copy(translate, &obj->rawData.asF32[posIndex]);
+    vec3_copy(rotation, &obj->rawData.asS32[angleIndex]);
     if ((translate != gVec3fZero) || (rotation != gVec3sZero)) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
 }
 
@@ -1383,7 +1383,7 @@ void obj_build_transform_relative_to_parent(struct Object *obj) {
     obj_build_transform_from_pos_and_angle(obj, O_PARENT_RELATIVE_POS_INDEX, O_FACE_ANGLE_INDEX);
     obj_apply_scale_to_transform(obj);
     mtxf_mul(obj->transform, obj->transform, parent->transform);
-    vec3f_copy(&obj->oPosVec, obj->transform[3]);
+    vec3_copy(&obj->oPosVec, obj->transform[3]);
     obj->header.gfx.throwMatrix = &obj->transform;
     obj_scale(obj, 1.0f);
 }
@@ -1391,19 +1391,19 @@ void obj_build_transform_relative_to_parent(struct Object *obj) {
 void obj_create_transform_from_self(struct Object *obj) {
     obj->oFlags         &= ~OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT;
     obj->oFlags         |=  OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM;
-    vec3f_copy(obj->transform[3], &obj->oPosVec);
+    vec3_copy(obj->transform[3], &obj->oPosVec);
 }
 
 void cur_obj_rotate_move_angle_using_vel(void) {
-    vec3i_add(&o->oMoveAngleVec, &o->oAngleVelVec);
+    vec3_add(&o->oMoveAngleVec, &o->oAngleVelVec);
 }
 
 void cur_obj_rotate_face_angle_using_vel(void) {
-    vec3i_add(&o->oFaceAngleVec, &o->oAngleVelVec);
+    vec3_add(&o->oFaceAngleVec, &o->oAngleVelVec);
 }
 
 void cur_obj_set_face_angle_to_move_angle(void) {
-    vec3i_copy(&o->oFaceAngleVec, &o->oMoveAngleVec);
+    vec3_copy(&o->oFaceAngleVec, &o->oMoveAngleVec);
 }
 
 s32 cur_obj_follow_path(void) {
@@ -1436,8 +1436,8 @@ s32 cur_obj_follow_path(void) {
 }
 
 void chain_segment_init(struct ChainSegment *segment) {
-    vec3f_set(segment->pos, 0.0f, 0.0f, 0.0f);
-    vec3a_set(segment->angle, 0x0, 0x0, 0x0);
+    vec3_zero(segment->pos);
+    vec3_zero(segment->angle);
 }
 
 void obj_scale_random(struct Object *obj, f32 rangeLength, f32 minScale) {
@@ -1458,7 +1458,7 @@ void obj_translate_xz_random(struct Object *obj, f32 rangeLength) {
 
 static void obj_build_vel_from_transform(struct Object *obj) {
     Vec3f local;
-    vec3f_copy(local, &obj->oLocalVelVec);
+    vec3_copy(local, &obj->oLocalVelVec);
     obj->oVelX = ((obj->transform[0][0] * local[0]) + (obj->transform[1][0] * local[1]) + (obj->transform[2][0] * local[2]));
     obj->oVelY = ((obj->transform[0][1] * local[0]) + (obj->transform[1][1] * local[1]) + (obj->transform[2][1] * local[2]));
     obj->oVelZ = ((obj->transform[0][2] * local[0]) + (obj->transform[1][2] * local[1]) + (obj->transform[2][2] * local[2]));
@@ -1467,7 +1467,7 @@ static void obj_build_vel_from_transform(struct Object *obj) {
 void cur_obj_set_pos_via_transform(void) {
     obj_build_transform_from_pos_and_angle(o, O_PARENT_RELATIVE_POS_INDEX, O_MOVE_ANGLE_INDEX);
     obj_build_vel_from_transform(o);
-    vec3f_add(&o->oPosVec, &o->oVelVec);
+    vec3_add(&o->oPosVec, &o->oVelVec);
 }
 
 Angle cur_obj_reflect_move_angle_off_wall(void) {
@@ -1559,7 +1559,7 @@ void cur_obj_push_mario_away_from_cylinder(f32 radius, f32 extentY) {
 }
 
 void bhv_dust_smoke_loop(void) {
-    vec3f_add(&o->oPosVec, &o->oVelVec);
+    vec3_add(&o->oPosVec, &o->oVelVec);
     if (o->oSmokeTimer == 10) obj_mark_for_deletion(o);
     o->oSmokeTimer++;
 }
@@ -1622,7 +1622,7 @@ void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
 
 Bool32 cur_obj_mario_far_away(void) {
     Vec3f d;
-    vec3f_diff(d, &o->oHomeVec, &gMarioObject->oPosVec);
+    vec3_diff(d, &o->oHomeVec, &gMarioObject->oPosVec);
     return ((o->oDistanceToMario > 2000.0f) && (vec3_sumsq(d) > sqr(2000.0f)));
 }
 
@@ -1923,7 +1923,7 @@ void cur_obj_align_gfx_with_floor(void) {
     struct Surface *floor;
     Vec3f floorNormal;
     Vec3f position;
-    vec3f_copy(position, &o->oPosVec);
+    vec3_copy(position, &o->oPosVec);
     find_floor(position[0], position[1], position[2], &floor);
     if (floor != NULL) {
         floorNormal[0] = floor->normal.x;

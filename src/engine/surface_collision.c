@@ -228,7 +228,7 @@ s32 f32_find_wall_collision(f32 *x, f32 *y, f32 *z, f32 offsetY, f32 radius) {
     s32 numCollisions  = 0;
     collision.offsetY  = offsetY;
     collision.radius   = radius;
-    vec3f_set(collision.pos, *x, *y, *z);
+    vec3_set(collision.pos, *x, *y, *z);
     collision.numWalls = 0;
     numCollisions      = find_wall_collisions(&collision);
     *x                 = collision.pos[0];
@@ -241,11 +241,11 @@ s32 f32_find_wall_collision(f32 *x, f32 *y, f32 *z, f32 offsetY, f32 radius) {
  * Collides with walls and returns the most recent wall.
  */
 void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
-    vec3f_copy(collisionData->pos, pos);
+    vec3_copy(collisionData->pos, pos);
     collisionData->radius  = radius;
     collisionData->offsetY = offset;
     find_wall_collisions(collisionData);
-    vec3f_copy(pos, collisionData->pos);
+    vec3_copy(pos, collisionData->pos);
 }
 
 /**
@@ -266,22 +266,22 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
 #if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif
-    vec3f_copy(collisionData.pos, pos);
+    vec3_copy(collisionData.pos, pos);
     collisionData.radius  = radius;
     collisionData.offsetY = offsetY;
     numCollisions         = find_wall_collisions(&collisionData);
     if (numCollisions != 0) {
         for ((i = 0); (i < collisionData.numWalls); (i++)) {
             wall = collisionData.walls[collisionData.numWalls - 1];
-            vec3f_copy(newPos[i], pos);
-            vec3f_set(norm, wall->normal.x, wall->normal.y, wall->normal.z);
+            vec3_copy(newPos[i], pos);
+            vec3_set(norm, wall->normal.x, wall->normal.y, wall->normal.z);
             originOffset   = wall->originOffset;
             offset         = ((norm[0] * newPos[i][0]) + (norm[1] * newPos[i][1]) + (norm[2] * newPos[i][2]) + originOffset);
             offsetAbsolute = ABSF(offset);
             if (offsetAbsolute < radius) {
                 newPos[i][0] += (norm[0] * (radius - offset));
                 newPos[i][2] += (norm[2] * (radius - offset));
-                vec3f_copy(pos, newPos[i]);
+                vec3_copy(pos, newPos[i]);
             }
         }
     }
@@ -317,7 +317,7 @@ void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
 //? can xyz be a vec
 Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
-    vec3f_set(hitbox.pos, x, y, z);
+    vec3_set(hitbox.pos, x, y, z);
     hitbox.offsetY = 10.0f;
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
@@ -493,7 +493,7 @@ f32 find_floor_height_and_data(f32 x, f32 y, f32 z, struct FloorGeometry **floor
     f32 floorHeight = find_floor(x, y, z, &floor);
     *floorGeo = NULL;
     if (floor != NULL) {
-        vec3f_set(sFloorGeo.normal, floor->normal.x, floor->normal.y, floor->normal.z);
+        vec3_set(sFloorGeo.normal, floor->normal.x, floor->normal.y, floor->normal.z);
         sFloorGeo.originOffset = floor->originOffset;
         *floorGeo              = &sFloorGeo;
     }
@@ -934,22 +934,22 @@ Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surfa
     norm[0] = surface->normal.x;
     norm[1] = surface->normal.y;
     norm[2] = surface->normal.z;
-    vec3f_mul_val(norm, RAY_OFFSET);
-    vec3s_to_vec3f(v0, surface->vertex1);
-    vec3s_to_vec3f(v1, surface->vertex2);
-    vec3s_to_vec3f(v2, surface->vertex3);
-    vec3f_add(v0, norm);
-    vec3f_add(v1, norm);
-    vec3f_add(v2, norm);
-    vec3f_diff(e1, v1, v0); // edge 1
-    vec3f_diff(e2, v2, v0); // edge 2
+    vec3_mul_val(norm, RAY_OFFSET);
+    vec3_copy(v0, surface->vertex1);
+    vec3_copy(v1, surface->vertex2);
+    vec3_copy(v2, surface->vertex3);
+    vec3_add(v0, norm);
+    vec3_add(v1, norm);
+    vec3_add(v2, norm);
+    vec3_diff(e1, v1, v0); // edge 1
+    vec3_diff(e2, v2, v0); // edge 2
     vec3f_cross(h, dir, e2);
     // Check if we're perpendicular from the surface
     a = vec3_dot(e1, h);
     if ((a > -NEAR_ZERO) && (a < NEAR_ZERO)) return FALSE;
     // Check if we're making contact with the surface
     f = (1.0f / a); // inverse dot of edge 1
-    vec3f_diff(s, orig, v0);
+    vec3_diff(s, orig, v0);
     u = (f * vec3_dot(s, h));
     if ((u < 0.0f) || (u > 1.0f)) return FALSE;
     vec3f_cross(q, s, e1);
@@ -959,9 +959,9 @@ Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surfa
     *length = (f * vec3_dot(e2, q));
     if ((*length <= NEAR_ZERO) || (*length > dir_length)) return FALSE;
     // Successful contact
-    vec3f_copy(add_dir, dir);
-    vec3f_mul_val(add_dir, *length);
-    vec3f_sum(hit_pos, orig, add_dir);
+    vec3_copy(add_dir, dir);
+    vec3_mul_val(add_dir, *length);
+    vec3_sum(hit_pos, orig, add_dir);
     return TRUE;
 }
 
@@ -995,7 +995,7 @@ void find_surface_on_ray_list(struct SurfaceNode *list, Vec3f orig, Vec3f dir, f
         // Check intersection between the ray and this surface
         if (((hit = ray_surface_intersect(orig, dir, dir_length, list->surface, chk_hit_pos, &length)) != 0) && (length <= *max_length)) {
             *hit_surface = list->surface;
-            vec3f_copy(hit_pos, chk_hit_pos);
+            vec3_copy(hit_pos, chk_hit_pos);
             *max_length = length;
         }
     }
@@ -1035,11 +1035,11 @@ void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Ve
     s32 i;
     // Set that no surface has been hit
     *hit_surface = NULL;
-    vec3f_sum(hit_pos, orig, dir);
+    vec3_sum(hit_pos, orig, dir);
     // Get normalized direction
     register f32 dir_length = vec3_mag(dir);
     f32 max_length = dir_length;
-    vec3f_copy(normalized_dir, dir);
+    vec3_copy(normalized_dir, dir);
     vec3f_normalize(normalized_dir);
     // Get our cell coordinate
     register f32 fCellX          = ((orig[0] + LEVEL_BOUNDARY_MAX) / CELL_SIZE);

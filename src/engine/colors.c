@@ -5,131 +5,62 @@
 #include "math_util.h"
 #include "colors.h"
 
-// i4
-// A 0000 0000 0000 0000 0000 0000 0000 1111 >> 0x0  & 0xF  = 0-15 * (255/15 = 17)              = 0-255
-
-// i8
-// A 0000 0000 0000 0000 0000 0000 1111 1111 >> 0x0  & 0xFF                                     = 0-255
-
-// ia4
-// I 0000 0000 0000 0000 0000 0000 0000 1110 >> 0x1  & 0x7  = 0-7 * (255/7 = 36.4285714286)     = 0-255
-// A 0000 0000 0000 0000 0000 0000 0000 0001 >> 0x0  & 0x1  = 0-255
-
-// ia8
-// I 0000 0000 0000 0000 0000 0000 1111 0000 >> 0x4  & 0xF  = 0-15 * (255/15 = 17)              = 0-255
-// A 0000 0000 0000 0000 0000 0000 0000 1111 >> 0x0  & 0xF  = 0-15 * (255/15 = 17)              = 0-255
-
-// ia16
-// I 0000 0000 0000 0000 1111 1111 0000 0000 >> 0x8  & 0xFF                                     = 0-255
-// A 0000 0000 0000 0000 0000 0000 1111 1111 >> 0x0  & 0xFF                                     = 0-255
-
-// rgba16
-//   0000 0000 0000 0000 0000 0000 0001 1111
-// R 0000 0000 0000 0000 1111 1000 0000 0000 >> 0xB  & 0x1F = 0-31 * (255/31 = 8.22580645161)   = 0-255
-// G 0000 0000 0000 0000 0000 0111 1100 0000 >> 0x6  & 0x1F = 0-31 * (255/31 = 8.22580645161)   = 0-255
-// B 0000 0000 0000 0000 0000 0000 0011 1110 >> 0x1  & 0x1F = 0-31 * (255/31 = 8.22580645161)   = 0-255
-// A 0000 0000 0000 0000 0000 0000 0000 0001 >> 0x0  & 0x1  = 0-1
-
-// rgba32
-// R 1111 1111 0000 0000 0000 0000 0000 0000 >> 0x20 & 0xFF                                     = 0-255
-// G 0000 0000 1111 1111 0000 0000 0000 0000 >> 0x10 & 0xFF                                     = 0-255
-// B 0000 0000 0000 0000 1111 1111 0000 0000 >> 0x8  & 0xFF                                     = 0-255
-// A 0000 0000 0000 0000 0000 0000 1111 1111 >> 0x0  & 0xFF                                     = 0-255
-
-// ci4
-// P 0000 0000 0000 0000 0000 0000 0000 1111 >> 0x0  & 0xF  = 0-15 * (255/15 = 17)              = 0-255
-// RGBA16
-
-// ci8
-// P 0000 0000 0000 0000 0000 0000 1111 1111 >> 0x0  & 0xFF                                     = 0-255
-// RGBA16
-
 // ColorRGB
 
-Color composite_to_color(CompositeColor src, u32 bitmask, u32 index) {
-    return ((((src >> index) & bitmask) * 255.0f) / bitmask);
-}
-
 void rgba16_to_colorRGB(ColorRGB dst, RGBA16 src) {
-    dst[0] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_R);
-    dst[1] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_G);
-    dst[2] = composite_to_color(src, MSK_RGBA16_C, IDX_RGBA16_B);
+    dst[0] = COMPOSITE_TO_COLOR(src, MSK_RGBA16_C, IDX_RGBA16_R);
+    dst[1] = COMPOSITE_TO_COLOR(src, MSK_RGBA16_C, IDX_RGBA16_G);
+    dst[2] = COMPOSITE_TO_COLOR(src, MSK_RGBA16_C, IDX_RGBA16_B);
 }
 
 void rgba16_to_colorRGBA(ColorRGBA dst, RGBA16 src) {
     rgba16_to_colorRGB(dst, src);
-    dst[3] = composite_to_color(src, MSK_RGBA16_A, IDX_RGBA16_A);
-}
-
-CompositeColor color_to_composite(Color src, u32 bitmask, u32 index) {
-    return (((CompositeColor)((src * bitmask) / 255.0f) & bitmask) << index);
+    dst[3] = COMPOSITE_TO_COLOR(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
 RGBA16 colorRGB_to_rgba16(ColorRGB src) {
-    return (color_to_composite(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
-          | color_to_composite(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
-          | color_to_composite(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
+    return (COLOR_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
+          | COLOR_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
           | MSK_RGBA16_A);
 }
 
 RGBA16 colorRGBA_to_rgba16(ColorRGBA src) {
-    return (color_to_composite(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
-          | color_to_composite(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
-          | color_to_composite(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
-          | color_to_composite(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
+    return (COLOR_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
+          | COLOR_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
+          | COLOR_TO_COMPOSITE(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
 }
 
 // ColorRGBf
 
-ColorF composite_to_colorf(CompositeColor src, u32 bitmask, u32 index) {
-    return ((ColorF)((src >> index) & bitmask) / bitmask);
-}
-
 void rgba16_to_colorRGBf(ColorRGBf dst, RGBA16 src) {
-    dst[0] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_R);
-    dst[1] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_G);
-    dst[2] = composite_to_colorf(src, MSK_RGBA16_C, IDX_RGBA16_B);
+    dst[0] = COMPOSITE_TO_COLORF(src, MSK_RGBA16_C, IDX_RGBA16_R);
+    dst[1] = COMPOSITE_TO_COLORF(src, MSK_RGBA16_C, IDX_RGBA16_G);
+    dst[2] = COMPOSITE_TO_COLORF(src, MSK_RGBA16_C, IDX_RGBA16_B);
 }
 
 void rgba16_to_colorRGBAf(ColorRGBAf dst, RGBA16 src) {
     rgba16_to_colorRGBf(dst, src);
-    dst[3] = composite_to_colorf(src, MSK_RGBA16_A, IDX_RGBA16_A);
+    dst[3] = COMPOSITE_TO_COLORF(src, MSK_RGBA16_A, IDX_RGBA16_A);
 }
 
-CompositeColor colorf_to_composite(ColorF src, u32 bitmask, u32 index) {
-    return (((CompositeColor)(src * bitmask) & bitmask) << index);
-}
+// CompositeColor colorf_to_composite(ColorF src, u32 bitmask, u32 index) {
+//     return (((CompositeColor)(src * bitmask) & bitmask) << index);
+// }
 
 RGBA16 colorRGBf_to_rgba16(ColorRGBf src) {
-    return (colorf_to_composite(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
-          | colorf_to_composite(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
-          | colorf_to_composite(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
+    return (COLORF_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
+          | COLORF_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
           | MSK_RGBA16_A);
 }
 
 RGBA16 colorRGBAf_to_rgba16(ColorRGBAf src) {
-    return (colorf_to_composite(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
-          | colorf_to_composite(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
-          | colorf_to_composite(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
-          | colorf_to_composite(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
-}
-
-void colorRGB_to_colorRGBf(ColorRGBf dst, ColorRGB src) {
-    vec3_quot_val(dst, src, 255.0f);
-}
-
-void colorRGBA_to_colorRGBAf(ColorRGBf dst, ColorRGB src) {
-    colorRGB_to_colorRGBf(dst, src);
-    dst[3] = (src[3] / 255.0f);
-}
-
-void colorRGBf_to_colorRGB(ColorRGB dst, ColorRGBf src) {
-    vec3_prod_val(dst, src, 255.0f);
-}
-
-void colorRGBAf_to_colorRGBA(ColorRGBA dst, ColorRGBAf src) {
-    colorRGBf_to_colorRGB(dst, src);
-    dst[3] = (src[3] * 255.0f);
+    return (COLORF_TO_COMPOSITE(src[0], MSK_RGBA16_C, IDX_RGBA16_R)
+          | COLORF_TO_COMPOSITE(src[1], MSK_RGBA16_C, IDX_RGBA16_G)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA16_C, IDX_RGBA16_B)
+          | COLORF_TO_COMPOSITE(src[2], MSK_RGBA16_A, IDX_RGBA16_A));
 }
 
 //! TODO:
@@ -165,34 +96,21 @@ Bool32 colorRGBA_average_3(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2, ColorRGBA 
     return FALSE;
 }
 
-// rgba16 value
-RGBA16 rgba16_composite(RGBA16Component r, RGBA16Component g, RGBA16Component b, RGBA16Component a) {
-    return ((CLAMP_BITS(r, SIZ_RGBA16_C) << IDX_RGBA16_R) |
-            (CLAMP_BITS(g, SIZ_RGBA16_C) << IDX_RGBA16_G) |
-            (CLAMP_BITS(b, SIZ_RGBA16_C) << IDX_RGBA16_B) |
-            (a & SIZ_RGBA16_A));
-}
-
-// rgba16 value
-RGBA16 rgba16_composite_grayscale(RGBA16Component val, RGBA16Component alpha) {
-    return rgba16_composite(val, val, val, alpha);
-}
-
 // 0-31
 UNUSED RGBA16Component rgba16_get_average_component(RGBA16 rgba) {
     ColorRGBf color;
     ColorF avg;
     rgba16_to_colorRGBf(color, rgba);
-    avg = vec3f_average(color);
-    return colorf_to_composite(avg, MSK_RGBA16_C, 0);
+    avg = vec3_average(color);
+    return COLORF_TO_COMPOSITE(avg, MSK_RGBA16_C, 0);
 }
 
 RGBA16 rgba16_make_grayscale(RGBA16 rgba) {
     ColorRGBf color;
     ColorF avg;
     rgba16_to_colorRGBf(color, rgba);
-    avg = vec3f_average(color);
-    vec3f_set(color, avg, avg, avg);
+    avg = vec3_average(color);
+    vec3_set(color, avg, avg, avg);
     return colorRGBf_to_rgba16(color);
 }
 
@@ -205,7 +123,7 @@ RGBA16 rgba16_make_grayscale(RGBA16 rgba) {
 #define METALTEX_DX      960 // (trunc((SCREEN_HEIGHT - 1) / TEXTURE_WIDTH) * SCREEN_WIDTH)
 
 #ifdef METAL_CAP_REFLECTION_GRAYSCALE
-void generate_metal_texture(ImageTexture *dst, ImageTexture *src) {
+void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
     for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
@@ -217,7 +135,7 @@ void generate_metal_texture(ImageTexture *dst, ImageTexture *src) {
     }
 }
 #else
-void generate_metal_texture(ImageTexture *dst, ImageTexture *src) {
+void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
     for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
@@ -238,15 +156,14 @@ void generate_metal_texture(ImageTexture *dst, ImageTexture *src) {
 // srcTW, srcTH source texture size
 // 1 px dst x = dx px src x
 // 1 px dst y = dy px src y
-void copy_partial_image(ImageTexture *dst, ImageTexture *src,
+void copy_partial_image(TexturePtr *dst, TexturePtr *src,
                         s32 dstX,  s32 dstY,  // 16,  0,
                         s32 dstW,  s32 dstH,  // 32, 32,
                         s32 dstTW, s32 dstTH, // 64, 32,
-                        UNUSED u32 dstFormat, UNUSED u32 dstPixelSize,
                         s32 srcX,  s32 srcY,  //  0,  0,
                         s32 srcW,  s32 srcH,  // 64, 64,
-                        s32 srcTW, s32 srcTH, // 64, 64,
-                        UNUSED u32 srcFormat, UNUSED u32 srcPixelSize) {
+                        s32 srcTW, s32 srcTH  // 64, 64,
+                        ) {
     if (dstX > dstTW) return;
     if (dstY > dstTH) return;
     if (srcX > srcTW) return;
@@ -269,34 +186,41 @@ void copy_partial_image(ImageTexture *dst, ImageTexture *src,
         srcIndexY = (srcStartIndex + (ydy * srcTW));
         dstIndexY = (dstStartIndex + (y   * dstTW));
         for ((x = 0); (x < dstW); (x++)) {      // loop columns
-            if ((dstX + x) > dstTW) break;        // bounds check
+            if ((dstX + x) > dstTW) break;      // bounds check
             xdx = (x * dx);
             if ((srcX + xdx) > srcTW) break;    // bounds check
             srcIndex = (srcIndexY + xdx);
             dstIndex = (dstIndexY + x  );
-            srcAlpha = composite_to_colorf(src[srcIndex], MSK_IA8_C, IDX_IA8_A);
+            srcAlpha = COMPOSITE_TO_COLORF(src[srcIndex], MSK_IA8_C,    IDX_IA8_A);
             if (srcAlpha == 0.0f) continue;
-            srcColor = composite_to_colorf(src[srcIndex], MSK_IA8_C, IDX_IA8_I);
-            dstColor = composite_to_colorf(dst[dstIndex], MSK_RGBA16_C, IDX_RGBA16_B);
+            srcColor = COMPOSITE_TO_COLORF(src[srcIndex], MSK_IA8_C,    IDX_IA8_I);
+            dstColor = COMPOSITE_TO_COLORF(dst[dstIndex], MSK_RGBA16_C, IDX_RGBA16_B);
             if (srcColor == dstColor) continue;
-            dst[dstIndex] = rgba16_composite_grayscale(colorf_to_composite(((srcColor * srcAlpha) + (dstColor * (1.0f - srcAlpha))), MSK_RGBA16_C, 0), 1);
+            dst[dstIndex] = RGBA16_COMPOSITE_GRAYSCALE(COLORF_TO_COMPOSITE(((srcColor * srcAlpha) + (dstColor * (1.0f - srcAlpha))), MSK_RGBA16_C, 0), MSK_RGBA16_A);
         }
     }
 }
 
-void overlay_i8_on_rgba16_additive(ImageTexture *dst, ImageTexture *src, u32 width, u32 height) {
+//! src should be I8 type
+void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height) {
     const u32 size = (width * height);
     u32 i;
-    u32 srcI;
-    u32 srcVal, dstVal;
+    I8 srcVal;
+    RGBA16 dstVal;
+    RGBA16Component srcI;
+    RGBA16Component rgb[3];
     for ((i = 0); (i < size); (i++)) {
         srcVal = src[i >> 1];
-        dstVal = dst[i     ];
         srcI = I8_TO_RGBA16_C(srcVal);
         if (srcI > 0x0) {
-            dst[i] = rgba16_composite((RGBA16_R(dstVal) + srcI),
-                                      (RGBA16_G(dstVal) + srcI),
-                                      (RGBA16_B(dstVal) + srcI), 0x1);
+            dstVal = dst[i];
+            rgb[0] = (RGBA16_R(dstVal) + srcI);
+            rgb[1] = (RGBA16_G(dstVal) + srcI);
+            rgb[2] = (RGBA16_B(dstVal) + srcI);
+            rgb[0] = MIN(rgb[0], MSK_RGBA16_C);
+            rgb[1] = MIN(rgb[1], MSK_RGBA16_C);
+            rgb[2] = MIN(rgb[2], MSK_RGBA16_C);
+            dst[i] = RGBA16_COMPOSITE(rgb[0], rgb[1], rgb[2], MSK_RGBA16_A);
         }
     }
 }

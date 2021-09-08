@@ -136,11 +136,11 @@ void print_debug_top_down_normal(const char *str, s32 number) {
 
 void print_mapinfo(void) {
     struct Surface *pfloor;
-    s32 area  = (((s32) o->oPosX + 0x2000) / 1024)
-              + (((s32) o->oPosZ + 0x2000) /   64); // / 1024 * 16);
-    s32 angY  = (o->oMoveAngleYaw / DEG(1)); //! s16/Angle type?
-    f32 bgY   = find_floor(      o->oPosX, o->oPosY, o->oPosZ, &pfloor);
-    f32 water = find_water_level(o->oPosX,                        o->oPosZ);
+    s32 area     = (((s32) o->oPosX + 0x2000) / 1024)
+                 + (((s32) o->oPosZ + 0x2000) /   64); // / 1024 * 16);
+    Angle32 angY = (o->oMoveAngleYaw / DEG(1));
+    f32 bgY      = find_floor(      o->oPosX, o->oPosY, o->oPosZ, &pfloor);
+    f32 water    = find_water_level(o->oPosX,           o->oPosZ);
     print_debug_top_down_normal("mapinfo", 0);
     print_debug_top_down_mapinfo("area %x", area);
     print_debug_top_down_mapinfo("wx   %d", o->oPosX);

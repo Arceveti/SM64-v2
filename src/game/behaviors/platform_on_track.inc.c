@@ -58,7 +58,7 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
             // Move directly to the next waypoint, even if it's farther away
             // than amountToMove
             amountToMove -= distToNextWaypoint;
-            vec3f_add(pos, d);
+            vec3_add(pos, d);
         } while (amountToMove > 0.0f);
         // If we moved farther than amountToMove, move in the opposite direction
         // No risk of near-zero division: If distToNextWaypoint is close to
@@ -73,15 +73,13 @@ static void platform_on_track_update_pos_or_spawn_ball(s32 ballIndex, Vec3f pos)
         pos[2] += (d[2] * distToNextWaypoint);
         if (ballIndex != 0) {
             trackBall = spawn_object_relative(o->oPlatformOnTrackBaseBallIndex + ballIndex, 0, 0, 0, o, MODEL_TRAJECTORY_MARKER_BALL, bhvTrackBall);
-            if (trackBall != NULL) {
-                vec3f_copy(&trackBall->oPosVec, pos);
-            }
+            if (trackBall != NULL) vec3_copy(&trackBall->oPosVec, pos);
         } else {
             if (prevWaypoint != initialPrevWaypoint) {
                 if (o->oPlatformOnTrackPrevWaypointFlags == 0x0) o->oPlatformOnTrackPrevWaypointFlags = initialPrevWaypoint->flags;
                 o->oPlatformOnTrackPrevWaypoint = prevWaypoint;
             }
-            vec3f_copy(&o->oPosVec, pos);
+            vec3_copy(&o->oPosVec, pos);
             cur_obj_perform_position_op(POS_OP_COMPUTE_VELOCITY);
             o->oPlatformOnTrackPitch = atan2s(sqrtf(sqr(o->oVelX) + sqr(o->oVelZ)), -o->oVelY);
             o->oPlatformOnTrackYaw   = atan2s(o->oVelZ, o->oVelX);
@@ -137,10 +135,10 @@ static void platform_on_track_act_init(void) {
     o->oPlatformOnTrackPrevWaypoint      = o->oPlatformOnTrackStartWaypoint;
     o->oPlatformOnTrackPrevWaypointFlags = 0;
     o->oPlatformOnTrackBaseBallIndex     = 0;
-    vec3s_to_vec3f(&o->oHomeVec, o->oPlatformOnTrackStartWaypoint->pos);
-    vec3f_copy(&o->oPosVec, &o->oHomeVec);
+    vec3_copy(&o->oHomeVec, o->oPlatformOnTrackStartWaypoint->pos);
+    vec3_copy(&o->oPosVec, &o->oHomeVec);
     o->oFaceAngleYaw = o->oBehParams2ndByte;
-    vec3f_zero(&o->oVelVec);
+    vec3_zero(&o->oVelVec);
     o->oForwardVel = o->oPlatformOnTrackDistMovedSinceLastBall = 0.0f;
     o->oPlatformOnTrackWasStoodOn = FALSE;
     if (o->oPlatformOnTrackIsNotSkiLift) o->oFaceAngleRoll = 0x0;
@@ -213,7 +211,7 @@ static void platform_on_track_act_move_along_track(void) {
             // Spawn a new track ball if necessary
             if (approach_f32_ptr(&o->oPlatformOnTrackDistMovedSinceLastBall, 300.0f, o->oForwardVel)) {
                 o->oPlatformOnTrackDistMovedSinceLastBall -= 300.0f;
-                vec3f_copy(&o->oHomeVec, &o->oPosVec);
+                vec3_copy(&o->oHomeVec, &o->oPosVec);
                 o->oPlatformOnTrackBaseBallIndex = (u16)(o->oPlatformOnTrackBaseBallIndex + 1);
                 platform_on_track_update_pos_or_spawn_ball(5, &o->oHomeVec);
             }
@@ -231,7 +229,7 @@ static void platform_on_track_act_move_along_track(void) {
             initialAngle = o->oFaceAngleYaw;
             clamp_s16(&yawSpeed, 100, 500);
             cur_obj_face_yaw_approach(targetFaceYaw, yawSpeed);
-            o->oAngleVelYaw = (Angle) o->oFaceAngleYaw - initialAngle;
+            o->oAngleVelYaw = ((Angle) o->oFaceAngleYaw - initialAngle);
         }
         // Turn face roll and compute roll vel
         if (((u16)(o->oBehParams >> 16) & PLATFORM_ON_TRACK_BP_DONT_TURN_ROLL)) {

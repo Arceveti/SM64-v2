@@ -675,7 +675,7 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
         neighbors = neighborTris[entry];
         for ((j = 0); (j < neighbors); (j++)) {
             tri = neighborTris[(entry + j) + 1];
-            vec3f_add(n, gPaintingTriNorms[tri]);
+            vec3_add(n, gPaintingTriNorms[tri]);
         }
         // Move to the next vertex's entry
         entry += (neighbors + 1);
@@ -1067,7 +1067,7 @@ Gfx *geo_painting_update(s32 callContext, UNUSED struct GraphNode *node, UNUSED 
         gPaintingUpdateCounter     = gAreaUpdateCounter;
         // Store Mario's floor and position
         if (gMarioState->floor != NULL) gPaintingMarioFloorType = gMarioState->floor->type;
-        vec3f_copy(gPaintingMarioPos, &gMarioObject->oPosVec);
+        vec3_copy(gPaintingMarioPos, &gMarioObject->oPosVec);
     }
     return NULL;
 }

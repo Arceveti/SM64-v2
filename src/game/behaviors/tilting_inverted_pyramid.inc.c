@@ -10,7 +10,7 @@
  */
 void bhv_platform_normals_init(void) {
     Mat4 *transform = &o->transform;
-    vec3f_set(&o->oTiltingPyramidNormalVec,   0.0f, 1.0f, 0.0f);
+    vec3_copy(&o->oTiltingPyramidNormalVec, gVec3fY);
     mtxf_transform_from_normals(*transform, &o->oPosVec, 0.0f, 1.0f, 0.0f);
 }
 
@@ -32,13 +32,13 @@ void bhv_tilting_inverted_pyramid_loop(void) {
 #ifndef PLATFORM_DISPLACEMENT_2
         get_mario_pos(&mx, &my, &mz);
 #endif
-        vec3f_diff(dist, &gMarioObject->oPosVec, &o->oPosVec);
+        vec3_diff(dist, &gMarioObject->oPosVec, &o->oPosVec);
         linear_mtxf_mul_vec3f(*transform, posBeforeRotation, dist);
-        vec3f_diff(d, &gMarioObject->oPosVec, &o->oPosVec);
+        vec3_diff(d, &gMarioObject->oPosVec, &o->oPosVec);
         vec3f_normalize(d);
         o->oTiltingPyramidMarioOnPlatform = TRUE;
     } else {
-        vec3f_set(d, 0.0f, 1.0f, 0.0f);
+        vec3_copy(d, gVec3fY);
         o->oTiltingPyramidMarioOnPlatform = FALSE;
     }
     // Approach the normals by 0.01f towards the new goal, then create a transform matrix and orient the object. 

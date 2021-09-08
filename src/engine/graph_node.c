@@ -139,15 +139,15 @@ struct GraphNodeCamera *init_graph_node_camera(struct AllocOnlyPool *pool,
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeCamera));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->fnNode.node, GRAPH_NODE_TYPE_CAMERA);
-        vec3f_copy(graphNode->pos, pos);
-        vec3f_copy(graphNode->focus, focus);
+        vec3_copy(graphNode->pos, pos);
+        vec3_copy(graphNode->focus, focus);
 #ifdef VARIABLE_FRAMERATE
-        vec3f_copy(graphNode->lerpPos[0],   pos);
-        vec3f_copy(graphNode->lerpPos[1],   pos);
-        vec3f_copy(graphNode->lerpPos[2],   pos);
-        vec3f_copy(graphNode->lerpFocus[0], focus);
-        vec3f_copy(graphNode->lerpFocus[1], focus);
-        vec3f_copy(graphNode->lerpFocus[2], focus);
+        vec3_copy(graphNode->lerpPos[0],   pos);
+        vec3_copy(graphNode->lerpPos[1],   pos);
+        vec3_copy(graphNode->lerpPos[2],   pos);
+        vec3_copy(graphNode->lerpFocus[0], focus);
+        vec3_copy(graphNode->lerpFocus[1], focus);
+        vec3_copy(graphNode->lerpFocus[2], focus);
 #endif
         graphNode->fnNode.func = func;
         graphNode->config.mode = mode;
@@ -168,21 +168,21 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeTranslationRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
-        vec3s_copy(graphNode->translation, translation);
+        vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
         Vec3s temp[3];
-        vec3s_copy(temp[0], translation);
-        vec3s_copy(temp[1], translation);
-        vec3s_copy(temp[2], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[0], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[1], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[2], translation);
-        vec3a_copy(graphNode->rotation,   rotation);
-        vec3a_copy(graphNode->lerpRot[0], rotation);
-        vec3a_copy(graphNode->lerpRot[1], rotation);
-        vec3a_copy(graphNode->lerpRot[2], rotation);
+        vec3_copy(temp[0], translation);
+        vec3_copy(temp[1], translation);
+        vec3_copy(temp[2], translation);
+        vec3_to_vec3f(graphNode->lerpPos[0], translation);
+        vec3_to_vec3f(graphNode->lerpPos[1], translation);
+        vec3_to_vec3f(graphNode->lerpPos[2], translation);
+        vec3_copy(graphNode->rotation,   rotation);
+        vec3_copy(graphNode->lerpRot[0], rotation);
+        vec3_copy(graphNode->lerpRot[1], rotation);
+        vec3_copy(graphNode->lerpRot[2], rotation);
 #else
-        vec3a_copy(graphNode->rotation, rotation);
+        vec3_copy(graphNode->rotation, rotation);
 #endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
@@ -200,15 +200,15 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeTranslation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION);
-        vec3s_copy(graphNode->translation, translation);
+        vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
         Vec3s temp[3];
-        vec3s_copy(temp[0], translation);
-        vec3s_copy(temp[1], translation);
-        vec3s_copy(temp[2], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[0], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[1], translation);
-        vec3s_to_vec3f(graphNode->lerpPos[2], translation);
+        vec3_copy(temp[0], translation);
+        vec3_copy(temp[1], translation);
+        vec3_copy(temp[2], translation);
+        vec3_copy(graphNode->lerpPos[0], translation);
+        vec3_copy(graphNode->lerpPos[1], translation);
+        vec3_copy(graphNode->lerpPos[2], translation);
 #endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
@@ -226,11 +226,11 @@ struct GraphNodeRotation *init_graph_node_rotation(struct AllocOnlyPool *pool,
     if (pool != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeRotation));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ROTATION);
-        vec3a_copy(graphNode->rotation, rotation);
+        vec3_copy(graphNode->rotation, rotation);
 #ifdef VARIABLE_FRAMERATE
-        vec3a_copy(graphNode->lerpRot[0], rotation);
-        vec3a_copy(graphNode->lerpRot[1], rotation);
-        vec3a_copy(graphNode->lerpRot[2], rotation);
+        vec3_copy(graphNode->lerpRot[0], rotation);
+        vec3_copy(graphNode->lerpRot[1], rotation);
+        vec3_copy(graphNode->lerpRot[2], rotation);
 #endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
@@ -269,22 +269,22 @@ struct GraphNodeObject *init_graph_node_object(struct AllocOnlyPool *pool,
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeObject));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_OBJECT);
-        vec3f_copy(graphNode->pos, pos);
+        vec3_copy(graphNode->pos, pos);
 #ifdef VARIABLE_FRAMERATE
-        vec3f_copy(graphNode->lerpPos[0], pos);
-        vec3f_copy(graphNode->lerpPos[1], pos);
-        vec3f_copy(graphNode->lerpPos[2], pos);
-        vec3f_copy(graphNode->scale,        scale);
-        vec3f_copy(graphNode->lerpScale[0], scale);
-        vec3f_copy(graphNode->lerpScale[1], scale);
-        vec3f_copy(graphNode->lerpScale[2], scale);
-        vec3a_copy(graphNode->angle,        angle);
-        vec3a_copy(graphNode->lerpAngle[0], angle);
-        vec3a_copy(graphNode->lerpAngle[1], angle);
-        vec3a_copy(graphNode->lerpAngle[2], angle);
+        vec3_copy(graphNode->lerpPos[0], pos);
+        vec3_copy(graphNode->lerpPos[1], pos);
+        vec3_copy(graphNode->lerpPos[2], pos);
+        vec3_copy(graphNode->scale,        scale);
+        vec3_copy(graphNode->lerpScale[0], scale);
+        vec3_copy(graphNode->lerpScale[1], scale);
+        vec3_copy(graphNode->lerpScale[2], scale);
+        vec3_copy(graphNode->angle,        angle);
+        vec3_copy(graphNode->lerpAngle[0], angle);
+        vec3_copy(graphNode->lerpAngle[1], angle);
+        vec3_copy(graphNode->lerpAngle[2], angle);
 #else
-        vec3f_copy(graphNode->scale, scale);
-        vec3a_copy(graphNode->angle, angle);
+        vec3_copy(graphNode->scale, scale);
+        vec3_copy(graphNode->angle, angle);
 #endif
         graphNode->sharedChild                   = sharedChild;
         graphNode->throwMatrix                   = NULL;
@@ -323,15 +323,15 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeAnimatedPart));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ANIMATED_PART);
-        vec3s_copy(graphNode->translation, translation);
+        vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
-        vec3f_copy(graphNode->lerpPos[0], gVec3fZero);
-        vec3f_copy(graphNode->lerpPos[1], gVec3fZero);
-        vec3f_copy(graphNode->lerpPos[2], gVec3fZero);
-        vec3f_copy(graphNode->lerpTrans,  gVec3fZero);
-        vec3s_copy(graphNode->lerpRot[0], gVec3sZero);
-        vec3s_copy(graphNode->lerpRot[1], gVec3sZero);
-        vec3s_copy(graphNode->lerpRot[2], gVec3sZero);
+        vec3_copy(graphNode->lerpPos[0], gVec3fZero);
+        vec3_copy(graphNode->lerpPos[1], gVec3fZero);
+        vec3_copy(graphNode->lerpPos[2], gVec3fZero);
+        vec3_copy(graphNode->lerpTrans,  gVec3fZero);
+        vec3_copy(graphNode->lerpRot[0], gVec3sZero);
+        vec3_copy(graphNode->lerpRot[1], gVec3sZero);
+        vec3_copy(graphNode->lerpRot[2], gVec3sZero);
 #endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
@@ -349,7 +349,7 @@ struct GraphNodeBillboard *init_graph_node_billboard(struct AllocOnlyPool *pool,
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeBillboard));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_BILLBOARD);
-        vec3s_copy(graphNode->translation, translation);
+        vec3_copy(graphNode->translation, translation);
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
         graphNode->zOffset     = zOffset;
@@ -423,7 +423,7 @@ struct GraphNodeGenerated *init_graph_node_generated(struct AllocOnlyPool *pool,
  */
 struct GraphNodeBackground *init_graph_node_background(struct AllocOnlyPool *pool,
                                                        struct GraphNodeBackground *graphNode,
-                                                       u16 background, GraphNodeFunc backgroundFunc,
+                                                       RGBA16 background, GraphNodeFunc backgroundFunc,
                                                        UNUSED s32 zero) {
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeBackground));
     if (graphNode != NULL) {
@@ -446,7 +446,7 @@ struct GraphNodeHeldObject *init_graph_node_held_object(struct AllocOnlyPool *po
     if (pool      != NULL) graphNode = alloc_only_pool_alloc(pool, sizeof(struct GraphNodeHeldObject));
     if (graphNode != NULL) {
         init_scene_graph_node_links(&graphNode->fnNode.node, GRAPH_NODE_TYPE_HELD_OBJ);
-        vec3s_copy(graphNode->translation, translation);
+        vec3_copy(graphNode->translation, translation);
         graphNode->objNode     = objNode;
         graphNode->fnNode.func = nodeFunc;
         graphNode->playerIndex = playerIndex;
@@ -587,19 +587,19 @@ void geo_reset_object_node(struct GraphNodeObject *graphNode) {
  * Initialize an object node using the given parameters
  */
 void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3a angle) {
-    vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
-    vec3f_copy(graphNode->pos, pos);
-    vec3a_copy(graphNode->angle, angle);
+    vec3_copy(graphNode->scale, gVec3fOne);
+    vec3_copy(graphNode->pos,   pos);
+    vec3_copy(graphNode->angle, angle);
 #ifdef VARIABLE_FRAMERATE
-    vec3f_copy(graphNode->lerpPos[0],   pos);
-    vec3f_copy(graphNode->lerpPos[1],   pos);
-    vec3f_copy(graphNode->lerpPos[2],   pos);
-    vec3f_copy(graphNode->lerpScale[0], graphNode->scale);
-    vec3f_copy(graphNode->lerpScale[1], graphNode->scale);
-    vec3f_copy(graphNode->lerpScale[2], graphNode->scale);
-    vec3a_copy(graphNode->lerpAngle[0], angle);
-    vec3a_copy(graphNode->lerpAngle[1], angle);
-    vec3a_copy(graphNode->lerpAngle[2], angle);
+    vec3_copy(graphNode->lerpPos[0],   pos);
+    vec3_copy(graphNode->lerpPos[1],   pos);
+    vec3_copy(graphNode->lerpPos[2],   pos);
+    vec3_copy(graphNode->lerpScale[0], graphNode->scale);
+    vec3_copy(graphNode->lerpScale[1], graphNode->scale);
+    vec3_copy(graphNode->lerpScale[2], graphNode->scale);
+    vec3_copy(graphNode->lerpAngle[0], angle);
+    vec3_copy(graphNode->lerpAngle[1], angle);
+    vec3_copy(graphNode->lerpAngle[2], angle);
 #endif
     graphNode->sharedChild      = sharedChild;
     graphNode->spawnInfo        = 0;
@@ -615,19 +615,19 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
  * Initialize and object node using the given SpawnInfo struct
  */
 void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo *spawn) {
-    vec3f_set(graphNode->scale, 1.0f, 1.0f, 1.0f);
-    vec3a_copy(graphNode->angle, spawn->startAngle);
-    vec3s_to_vec3f(graphNode->pos, spawn->startPos);
+    vec3_copy(graphNode->scale, gVec3fOne);
+    vec3_copy(graphNode->angle, spawn->startAngle);
+    vec3_copy(graphNode->pos, spawn->startPos);
 #ifdef VARIABLE_FRAMERATE
-    vec3f_copy(graphNode->lerpPos[0],   graphNode->pos);
-    vec3f_copy(graphNode->lerpPos[1],   graphNode->pos);
-    vec3f_copy(graphNode->lerpPos[2],   graphNode->pos);
-    vec3f_copy(graphNode->lerpScale[0], graphNode->scale);
-    vec3f_copy(graphNode->lerpScale[1], graphNode->scale);
-    vec3f_copy(graphNode->lerpScale[2], graphNode->scale);
-    vec3a_copy(graphNode->lerpAngle[0], spawn->startAngle);
-    vec3a_copy(graphNode->lerpAngle[1], spawn->startAngle);
-    vec3a_copy(graphNode->lerpAngle[2], spawn->startAngle);
+    vec3_copy(graphNode->lerpPos[0],   graphNode->pos);
+    vec3_copy(graphNode->lerpPos[1],   graphNode->pos);
+    vec3_copy(graphNode->lerpPos[2],   graphNode->pos);
+    vec3_copy(graphNode->lerpScale[0], graphNode->scale);
+    vec3_copy(graphNode->lerpScale[1], graphNode->scale);
+    vec3_copy(graphNode->lerpScale[2], graphNode->scale);
+    vec3_copy(graphNode->lerpAngle[0], spawn->startAngle);
+    vec3_copy(graphNode->lerpAngle[1], spawn->startAngle);
+    vec3_copy(graphNode->lerpAngle[2], spawn->startAngle);
 #endif
     graphNode->areaIndex        = spawn->areaIndex;
     graphNode->activeAreaIndex  = spawn->activeAreaIndex;

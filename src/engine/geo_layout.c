@@ -369,15 +369,15 @@ void geo_layout_cmd_node_translation_rotation(void) {
             break;
         case 0x1:
             cmdPos = read_vec3s(translation, &cmdPos[1]);
-            vec3a_copy(rotation, gVec3sZero);
+            vec3_copy(rotation, gVec3sZero);
             break;
         case 0x2:
             cmdPos = read_vec3s_angle(rotation, &cmdPos[1]);
-            vec3s_copy(translation, gVec3sZero);
+            vec3_copy(translation, gVec3sZero);
             break;
         case 0x3:
-            vec3s_copy(translation, gVec3sZero);
-            vec3s_set(rotation, 0, ((cmdPos[1] << 15) / 180), 0);
+            vec3_copy(translation, gVec3sZero);
+            vec3_set(rotation, 0, ((cmdPos[1] << 15) / 180), 0);
             cmdPos += (0x02 << CMD_SIZE_SHIFT);
             break;
     }

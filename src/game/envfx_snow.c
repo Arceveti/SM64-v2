@@ -234,9 +234,9 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
     Vec3vs vertex1, vertex2, vertex3;
     Gfx *gfxStart;
     Gfx *gfx;
-    vec3s_copy(vertex1, gSnowFlakeVertex1);
-    vec3s_copy(vertex2, gSnowFlakeVertex2);
-    vec3s_copy(vertex3, gSnowFlakeVertex3);
+    vec3_copy(vertex1, gSnowFlakeVertex1);
+    vec3_copy(vertex2, gSnowFlakeVertex2);
+    vec3_copy(vertex3, gSnowFlakeVertex3);
     gfxStart = ((Gfx *) alloc_display_list(((gSnowParticleCount * 6) + 3) * sizeof(Gfx)));
     gfx      = gfxStart;
     if (gfxStart == NULL) return NULL;

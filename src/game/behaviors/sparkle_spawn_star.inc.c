@@ -27,7 +27,7 @@ void set_sparkle_spawn_star_hitbox(void) {
 }
 
 void set_home_to_mario(void) {
-    vec3f_copy(&o->oHomeVec, &gMarioObject->oPosVec);
+    vec3_copy(&o->oHomeVec, &gMarioObject->oPosVec);
     o->oHomeY     += 250.0f;
     o->oPosY       =  o->oHomeY;
     f32 lateralDist;

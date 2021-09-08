@@ -56,7 +56,7 @@ struct {
     u64 stack[0x800 / sizeof(u64)];
     OSMesgQueue mesgQueue;
     OSMesg mesg;
-    RGBA16 *framebuffer;
+    TexturePtr *framebuffer;
     u16 width;
     u16 height;
 } gCrashScreen;
@@ -216,20 +216,20 @@ void thread2_crash_screen(UNUSED void *arg) {
     do {
         osRecvMesg(&gCrashScreen.mesgQueue, &mesg, 1);
         thread = get_crashed_thread();
-        gCrashScreen.framebuffer = (RGBA16 *) gFrameBuffers[sRenderedFramebuffer];
+        gCrashScreen.framebuffer = (TexturePtr *) gFrameBuffers[sRenderedFramebuffer];
     } while (thread == NULL);
     draw_crash_screen(thread);
     for (;;) {}
 }
 
-void crash_screen_set_framebuffer(ImageTexture *framebuffer, u16 width, u16 height) {
+void crash_screen_set_framebuffer(TexturePtr *framebuffer, u16 width, u16 height) {
     gCrashScreen.framebuffer = framebuffer;
     gCrashScreen.width       = width;
     gCrashScreen.height      = height;
 }
 
 void crash_screen_init(void) {
-    gCrashScreen.framebuffer = (RGBA16 *) gFrameBuffers[sRenderedFramebuffer];
+    gCrashScreen.framebuffer = (TexturePtr *) gFrameBuffers[sRenderedFramebuffer];
     gCrashScreen.width       = SCREEN_WIDTH;
     gCrashScreen.height      = SCREEN_HEIGHT;
     osCreateMesgQueue(&gCrashScreen.mesgQueue, &gCrashScreen.mesg, 1);

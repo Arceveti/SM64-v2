@@ -24,11 +24,9 @@ void scale_verts(struct ObjGroup *group) {
     for ((link = group->firstMember); (link != NULL); (link = link->next)) {
         vtx = (struct ObjVertex *) link->obj;
         if ((scaleFac = vtx->scaleFactor) != 0.0f) {
-            vtx->pos[0] = (vtx->initPos[0] * scaleFac);
-            vtx->pos[1] = (vtx->initPos[1] * scaleFac);
-            vtx->pos[2] = (vtx->initPos[2] * scaleFac);
+            vec3_prod_val(vtx->pos, vtx->initPos, scaleFac);
         } else {
-            vec3f_zero(vtx->pos);
+            vec3_zero(vtx->pos);
         }
     }
 }

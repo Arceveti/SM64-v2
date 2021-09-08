@@ -583,7 +583,7 @@ void update_moving_texture_offset(RawVertexData *movtexVerts, s32 attr) {
  */
 void movtex_write_vertex_first(Vtx *vtx, RawVertexData *movtexVerts, struct MovtexObject *c, s8 attrLayout) {
     Vec3vs pos;
-    vec3s_copy(pos, &movtexVerts[MOVTEX_ATTR_POS_INDEX]);
+    vec3_copy(pos, &movtexVerts[MOVTEX_ATTR_POS_INDEX]);
     ColorRGB color;
     TextureCoord s, t;
     switch (attrLayout) {
@@ -614,7 +614,7 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, RawVertexData *movtexVerts
     ColorRGB color;
     switch (attrLayout) {
         case MOVTEX_LAYOUT_NOCOLOR:
-            vec3s_copy(pos, &movtexVerts[(index * 5) + MOVTEX_ATTR_POS_INDEX]);
+            vec3_copy(pos, &movtexVerts[(index * 5) + MOVTEX_ATTR_POS_INDEX]);
             baseS = movtexVerts[              MOVTEX_ATTR_NOCOLOR_S];
             baseT = movtexVerts[              MOVTEX_ATTR_NOCOLOR_T];
             offS  = movtexVerts[(index * 5) + MOVTEX_ATTR_NOCOLOR_S];
@@ -624,14 +624,14 @@ void movtex_write_vertex_index(Vtx *verts, s32 index, RawVertexData *movtexVerts
             make_vertex(verts, index, pos[0], pos[1], pos[2], s, t, d->color[0], d->color[1], d->color[2], d->color[3]);
             break;
         case MOVTEX_LAYOUT_COLORED:
-            vec3s_copy(pos, &movtexVerts[(index * 8) + MOVTEX_ATTR_POS_INDEX]);
+            vec3_copy(pos, &movtexVerts[(index * 8) + MOVTEX_ATTR_POS_INDEX]);
             baseS = movtexVerts[              MOVTEX_ATTR_COLORED_S];
             baseT = movtexVerts[              MOVTEX_ATTR_COLORED_T];
             offS  = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_S];
             offT  = movtexVerts[(index * 8) + MOVTEX_ATTR_COLORED_T];
             s     = (baseS + ((offS * 32) * 32U));
             t     = (baseT + ((offT * 32) * 32U));
-            vec3_to_colorRGB(color, &movtexVerts[(index * 8) + MOVTEX_ATTR_RGB_INDEX]);
+            vec3_copy(color, &movtexVerts[(index * 8) + MOVTEX_ATTR_RGB_INDEX]);
             make_vertex(verts, index, pos[0], pos[1], pos[2], s, t, color[0], color[1], color[2], d->color[3]);
             break;
     }

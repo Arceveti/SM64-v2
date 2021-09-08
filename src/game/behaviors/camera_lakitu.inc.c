@@ -43,7 +43,7 @@ static void camera_lakitu_intro_act_trigger_cutscene(void) {
 static void camera_lakitu_intro_act_spawn_cloud(void) {
     if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_UP) == MARIO_DIALOG_STATUS_SPEAK) {
         o->oAction                   = CAMERA_LAKITU_INTRO_ACT_SHOW_DIALOG;
-        vec3f_set(&o->oPosVec, 1800.0f, 2400.0f, -2400.0f);
+        vec3_set(&o->oPosVec, 1800.0f, 2400.0f, -2400.0f);
         o->oMoveAnglePitch           =  DEG(90);
         o->oCameraLakituSpeed        =   60.0f;
         o->oCameraLakituCircleRadius = 1000.0f;
@@ -125,7 +125,7 @@ void bhv_camera_lakitu_update(void) {
                 cur_obj_hide();
             } else {
                 cur_obj_unhide();
-                vec3f_copy(&o->oPosVec, gLakituState.curPos);
+                vec3_copy(&o->oPosVec, gLakituState.curPos);
                 o->oHomeX          = gLakituState.curFocus[0];
                 o->oHomeZ          = gLakituState.curFocus[2];
                 o->oFaceAngleYaw   = -cur_obj_angle_to_home();

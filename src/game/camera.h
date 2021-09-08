@@ -525,7 +525,7 @@ void init_camera(                 struct Camera *c);
 void select_mario_cam_mode(void);
 Gfx *geo_camera_main(s32 callContext, struct GraphNode *g, void *context);
 Bool32 move_point_along_spline(Vec3f p, struct CutsceneSplinePoint spline[], s16 *splineSegment, f32 *progress);
-s32    cam_select_alt_mode(s32 angle);
+s32    cam_select_alt_mode(Angle32 angle);
 s32    set_cam_angle(      s32 mode);
 void   set_handheld_shake(  u8 mode);
 void   shake_camera_handheld(Vec3f pos, Vec3f focus);

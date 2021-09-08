@@ -159,7 +159,7 @@ Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
  * Rotates the animation's translation into the global coordinate system
  * and returns the animation's flags.
  */
-s32 find_mario_anim_flags_and_translation(struct Object *obj, s32 yaw, Vec3s translation) {
+s32 find_mario_anim_flags_and_translation(struct Object *obj, Angle32 yaw, Vec3s translation) {
     struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
     AnimFrame32 animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
     AnimIndex  *animIndex  = segmented_to_virtual((void *) curAnim->index );
@@ -873,7 +873,7 @@ Bool32 check_common_hold_action_exits(struct MarioState *m) {
  */
 Bool32 transition_submerged_to_walking(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3_zero(m->angleVel);
     return set_mario_action(m, (m->heldObj == NULL) ? ACT_WALKING : ACT_HOLD_WALKING, 0);
 }
 
@@ -883,7 +883,7 @@ Bool32 transition_submerged_to_walking(struct MarioState *m) {
  */
 Bool32 transition_submerged_to_airborne(struct MarioState *m) {
     set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
-    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3_zero(m->angleVel);
     if (m->heldObj == NULL) {
         return set_mario_action(m, ((m->input & INPUT_A_DOWN) ? ACT_DIVE      : ACT_FREEFALL     ), 0);
     } else {
@@ -899,7 +899,7 @@ Bool32 set_water_plunge_action(struct MarioState *m) {
     m->forwardVel   = (m->forwardVel / 4.0f);
     m->vel[1]       = (m->vel[1]     / 2.0f);
     m->faceAngle[2] = 0x0;
-    vec3a_set(m->angleVel, 0x0, 0x0, 0x0);
+    vec3_zero(m->angleVel);
     if (!(m->action & ACT_FLAG_DIVING)) m->faceAngle[0] = 0x0;
     if (m->area->camera->mode != CAMERA_MODE_WATER_SURFACE) set_camera_mode(m->area->camera, CAMERA_MODE_WATER_SURFACE, 1);
 #ifdef WATER_GROUND_POUND
@@ -929,7 +929,7 @@ void squish_mario_model(struct MarioState *m) {
     if (m->squishTimer != 0xFF) {
         // If no longer squished, scale back to default.
         if (m->squishTimer == 0) {
-            vec3f_set(m->marioObj->header.gfx.scale, 1.0f, 1.0f, 1.0f);
+            vec3_copy(m->marioObj->header.gfx.scale, gVec3fOne);
         // If timer is less than 16, rubber-band Mario's size scale up and down.
         } else if (m->squishTimer <= 16) {
             m->squishTimer--;
@@ -938,7 +938,7 @@ void squish_mario_model(struct MarioState *m) {
             m->marioObj->header.gfx.scale[2] = m->marioObj->header.gfx.scale[0];
         } else {
             m->squishTimer--;
-            vec3f_set(m->marioObj->header.gfx.scale, 1.4f, 0.4f, 1.4f);
+            vec3_set(m->marioObj->header.gfx.scale, 1.4f, 0.4f, 1.4f);
         }
     }
 }
@@ -1124,7 +1124,7 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     // This can cause errant behavior when combined with astral projection,
     // since the graphical position was not Mario's previous location.
     if (m->floor == NULL) {
-        vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
+        vec3_copy(m->pos, m->marioObj->header.gfx.pos);
         m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->floor);
     }
     m->ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->ceil);
@@ -1331,8 +1331,8 @@ void update_mario_breath(struct MarioState *m) {
 void update_mario_info_for_cam(struct MarioState *m) {
     m->marioBodyState->action  = m->action;
     m->statusForCamera->action = m->action;
-    vec3a_copy(m->statusForCamera->faceAngle, m->faceAngle);
-    if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) vec3f_copy(m->statusForCamera->pos, m->pos);
+    vec3_copy(m->statusForCamera->faceAngle, m->faceAngle);
+    if (!(m->flags & MARIO_LEDGE_CLIMB_CAMERA)) vec3_copy(m->statusForCamera->pos, m->pos);
 }
 
 /**
@@ -1444,7 +1444,6 @@ void queue_rumble_particles(void) {
     if (gMarioState->heldObj && gMarioState->heldObj->behavior == segmented_to_virtual(bhvBobomb)) reset_rumble_timers_slip();
 }
 #endif
-
 /**
  * Main function for executing Mario's behavior.
  */
@@ -1453,7 +1452,7 @@ Bool32 execute_mario_action(UNUSED struct Object *o) {
     Bool32 inLoop = TRUE;
     // Update once per frame:
     vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);
-    vec3f_copy(gMarioState->prevPos, gMarioState->pos);
+    vec3_copy(gMarioState->prevPos, gMarioState->pos);
     if (gMarioState->action) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(      gMarioState);
@@ -1541,11 +1540,11 @@ void init_mario(void) {
     gMarioState->area                                 = gCurrentArea;
     gMarioState->marioObj                             = gMarioObject;
     gMarioState->marioObj->header.gfx.animInfo.animID = -1;
-    vec3a_copy(    gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
-    vec3_zero(     gMarioState->angleVel);
-    vec3s_to_vec3f(gMarioState->pos, gMarioSpawnInfo->startPos);
-    vec3f_copy(gMarioState->prevPos, gMarioState->pos);
-    vec3f_zero(    gMarioState->vel);
+    vec3_copy(gMarioState->faceAngle, gMarioSpawnInfo->startAngle);
+    vec3_zero(gMarioState->angleVel);
+    vec3_copy(gMarioState->pos, gMarioSpawnInfo->startPos);
+    vec3_copy(gMarioState->prevPos, gMarioState->pos);
+    vec3_zero(gMarioState->vel);
     gMarioState->floorHeight = find_floor(gMarioState->pos[0], (gMarioState->pos[1] + gMarioState->midY), gMarioState->pos[2], &gMarioState->floor);
     if (gMarioState->pos[1] < gMarioState->floorHeight) gMarioState->pos[1] = gMarioState->floorHeight;
     gMarioState->marioObj->header.gfx.pos[1]          = gMarioState->pos[1];
@@ -1553,13 +1552,13 @@ void init_mario(void) {
     mario_reset_bodystate(    gMarioState);
     update_mario_info_for_cam(gMarioState);
     gMarioState->marioBodyState->punchState           = 0;
-    vec3f_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
-    vec3s_to_vec3i(&gMarioState->marioObj->oMoveAngleVec, gMarioState->faceAngle);
-    vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-    vec3a_set( gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
+    vec3_copy(&gMarioState->marioObj->oPosVec, gMarioState->pos);
+    vec3_copy(&gMarioState->marioObj->oMoveAngleVec, gMarioState->faceAngle);
+    vec3_copy( gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
+    vec3_set(  gMarioState->marioObj->header.gfx.angle, 0x0, gMarioState->faceAngle[1], 0x0);
     if (save_file_get_cap_pos(capPos) && (count_objects_with_behavior(bhvNormalCap) > 1)) {
         capObject                                     = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
-        vec3s_to_vec3f(&capObject->oPosVec, capPos);
+        vec3_copy(&capObject->oPosVec, capPos);
         capObject->oForwardVel                        = 0.0f;
         capObject->oMoveAngleYaw                      = 0x0;
     }

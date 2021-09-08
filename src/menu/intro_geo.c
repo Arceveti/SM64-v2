@@ -56,16 +56,16 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
         // determine scale based on the frame counter
         if ((sIntroFrameCounter >= 0) && (sIntroFrameCounter < INTRO_STEPS_ZOOM_IN)) {
             // zooming in
-            vec3f_copy(scale, &scaleTable1[(sIntroFrameCounter * 3)]);
+            vec3_copy(scale, &scaleTable1[(sIntroFrameCounter * 3)]);
         } else if ((sIntroFrameCounter >= INTRO_STEPS_ZOOM_IN) && (sIntroFrameCounter < INTRO_STEPS_HOLD_1)) {
             // holding
             scale[0] = scale[1] = scale[2] = 1.0f;
         } else if ((sIntroFrameCounter >= INTRO_STEPS_HOLD_1)  && (sIntroFrameCounter < INTRO_STEPS_ZOOM_OUT)) {
             // zooming out
-            vec3f_copy(scale, &scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3)]);
+            vec3_copy(scale, &scaleTable2[((sIntroFrameCounter - INTRO_STEPS_HOLD_1) * 3)]);
         } else {
             // disappeared
-            vec3f_zero(scale);
+            vec3_zero(scale);
         }
         guScale(scaleMat, scale[0], scale[1], scale[2]);
         gSPMatrix(        dlIter++, scaleMat, (G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH));
@@ -268,7 +268,7 @@ void intro_gen_face_texrect(Gfx **dlIter, s32 imageW, s32 imageH) {
     }
 }
 
-Gfx *intro_draw_face(ImageTexture *image, s32 imageW, s32 imageH) {
+Gfx *intro_draw_face(TexturePtr *image, s32 imageW, s32 imageH) {
     Gfx *dl;
     Gfx *dlIter;
     dl = alloc_display_list(130 * sizeof(Gfx));
@@ -286,21 +286,21 @@ Gfx *intro_draw_face(ImageTexture *image, s32 imageW, s32 imageH) {
 }
 
 //! move to colors.c?
-ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
-    ImageTexture *fb;
-    ImageTexture *image;
+TexturePtr *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
+    TexturePtr *fb;
+    TexturePtr *image;
     s32 pixel;
     f32 size = (sampleW * sampleH);
     ColorRGBf color;
     s32 iy, ix, sy, sx;
     s32 idy, idx, sdy;
     fb = gFrameBuffers[sRenderingFrameBuffer];
-    image = alloc_display_list((imageW * imageH) * sizeof(ImageTexture));
+    image = alloc_display_list((imageW * imageH) * sizeof(TexturePtr));
     if (image == NULL) return NULL;
     for ((iy = 0); (iy < imageH); (iy++)) {
         idy = ((sampleH * iy) + yOffset);
         for ((ix = 0); (ix < imageW); (ix++)) {
-            vec3f_zero(color);
+            vec3_zero(color);
             idx = ((sampleW * ix) + xOffset);
             for ((sy = 0); (sy < sampleH); (sy++)) {
                 sdy = ((SCREEN_WIDTH * (idy + sy)) + idx);
@@ -312,9 +312,9 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
                 }
             }
             size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = ((R_RGBA16((ImageTexture)((color[0] / size) + 0.5f)) & 0xFFFF) |
-                                         (G_RGBA16((ImageTexture)((color[1] / size) + 0.5f)) & 0xFFFF) |
-                                         (B_RGBA16((ImageTexture)((color[2] / size) + 0.5f)) & 0xFFFF) | 0x1);
+            image[(imageH * iy) + ix] = ((R_RGBA16((RGBA16)((color[0] / size) + 0.5f)) & 0xFFFF) |
+                                         (G_RGBA16((RGBA16)((color[1] / size) + 0.5f)) & 0xFFFF) |
+                                         (B_RGBA16((RGBA16)((color[2] / size) + 0.5f)) & 0xFFFF) | MSK_RGBA16_A);
         }
     }
     return image;
@@ -322,7 +322,7 @@ ImageTexture *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32
 
 Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *genNode = (struct GraphNodeGenerated *)node;
-    ImageTexture *image;
+    TexturePtr *image;
     Gfx *dl = NULL;
     s32 i;
     if (state != 1) {

@@ -23,7 +23,7 @@ extern Bool8 hitboxView;
 extern Bool8 surfaceView;
 extern void debug_box_input(void);
 
-void debug_box_color(u32 color);
+void debug_box_color(RGBA32 color);
 void debug_box(        Vec3f center, Vec3f bounds,            s32 type);
 void debug_box_rot(    Vec3f center, Vec3f bounds, Angle yaw, s32 type);
 

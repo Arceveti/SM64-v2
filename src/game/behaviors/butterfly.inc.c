@@ -4,7 +4,7 @@ void bhv_butterfly_init(void) {
     cur_obj_init_animation(BUTTERFLY_ANIM_RESTING);
     o->oButterflyYPhase              = (random_float() * 100.0f);
     o->header.gfx.animInfo.animFrame = (random_float() *   7.0f);
-    vec3f_copy(&o->oHomeVec, &o->oPosVec);
+    vec3_copy(&o->oHomeVec, &o->oPosVec);
 }
 
 // sp28 = speed
@@ -58,16 +58,16 @@ void butterfly_act_follow_mario(void) {
 
 void butterfly_act_return_home(void) {
     Vec3f homeDist;
-    vec3f_diff(homeDist, &o->oHomeVec, &o->oPosVec);
+    vec3_diff(homeDist, &o->oHomeVec, &o->oPosVec);
     Angle hAngleToHome = atan2s(homeDist[2], homeDist[0]);
     Angle vAngleToHome = atan2s(sqrtf(sqr(homeDist[0]) + sqr(homeDist[2])), -homeDist[1]);
     o->oMoveAngleYaw   = approach_s16_symmetric(o->oMoveAngleYaw  , hAngleToHome, 0x800);
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, vAngleToHome,  0x50);
     butterfly_step(7);
-    if ((sqr(homeDist[0]) + sqr(homeDist[1]) + sqr(homeDist[2])) < 144.0f) {
+    if (vec3_sumsq(homeDist) < 144.0f) {
         cur_obj_init_animation(BUTTERFLY_ANIM_RESTING);
         o->oAction = BUTTERFLY_ACT_RESTING;
-        vec3f_copy(&o->oPosVec, &o->oHomeVec);
+        vec3_copy(&o->oPosVec, &o->oHomeVec);
     }
 }
 

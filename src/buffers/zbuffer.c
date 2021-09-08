@@ -4,4 +4,4 @@
 #include "types.h"
 #include "zbuffer.h"
 
-ALIGNED8 ImageTexture gZBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+ALIGNED8 RGBA16 gZBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];

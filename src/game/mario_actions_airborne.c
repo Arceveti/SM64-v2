@@ -808,7 +808,7 @@ Bool32 act_ground_pound(struct MarioState *m) {
             if (((m->pos[1] + MARIO_HITBOX_HEIGHT) + yOffset) < m->ceilHeight) {
                 m->pos[1]    += yOffset;
                 m->peakHeight = m->pos[1];
-                vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+                vec3_copy(m->marioObj->header.gfx.pos, m->pos);
             }
         }
 #ifdef GROUND_POUND_WALL_FIX
@@ -1538,9 +1538,7 @@ Bool32 act_riding_hoot(struct MarioState *m) {
 #endif
         return set_mario_action(m, ACT_FREEFALL, 0);
     }
-    m->pos[0]       =  m->usedObj->oPosX;
-    m->pos[1]       = (m->usedObj->oPosY - 92.5f);
-    m->pos[2]       =  m->usedObj->oPosZ;
+    vec3_copy_y_off(m->pos, &m->usedObj->oPosVec, -92.5f);
     m->faceAngle[1] = (DEG(90) - m->usedObj->oMoveAngleYaw);
     if (m->actionState == ACT_RIDING_HOOT_STATE_GRABBING) {
         set_mario_animation(m, MARIO_ANIM_HANG_ON_CEILING);
@@ -1549,9 +1547,9 @@ Bool32 act_riding_hoot(struct MarioState *m) {
             m->actionState = ACT_RIDING_HOOT_STATE_HANGING;
         }
     }
-    vec3f_set(m->vel, 0.0f, 0.0f, 0.0f);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set(m->marioObj->header.gfx.angle, 0x0, (DEG(90) - m->faceAngle[1]), 0x0);
+    vec3_zero(m->vel);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set(m->marioObj->header.gfx.angle, 0x0, (DEG(90) - m->faceAngle[1]), 0x0);
     return FALSE;
 }
 

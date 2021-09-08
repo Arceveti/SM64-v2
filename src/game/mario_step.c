@@ -194,8 +194,8 @@ void stop_and_set_height_to_floor(struct MarioState *m) {
     m->vel[1] = 0.0f;
     //? This is responsible for some downwarps.
     if (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT)) m->pos[1] = m->floorHeight;
-    vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(marioObj->header.gfx.pos, m->pos);
+    vec3_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 }
 
 MarioStep stationary_ground_step(struct MarioState *m) {
@@ -214,8 +214,8 @@ MarioStep stationary_ground_step(struct MarioState *m) {
         stepResult = perform_ground_step(m);
     } else {
         if (m->pos[1] < (m->floorHeight + MARIO_STEP_HEIGHT)) m->pos[1] = m->floorHeight;
-        vec3f_copy(marioObj->header.gfx.pos, m->pos);
-        vec3a_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+        vec3_copy(marioObj->header.gfx.pos, m->pos);
+        vec3_set( marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     }
     return stepResult;
 #endif
@@ -239,7 +239,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     // m->wall     = NULL;
 #if NULL_FLOOR_STEPS > 0
     // Save the current position in case the next position is a null floor
-    vec3f_copy(startPos, nextPos);
+    vec3_copy(startPos, nextPos);
     // Check for null floors
     while ((floor == NULL) && (missedFloors < NULL_FLOOR_STEPS)) {
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
@@ -261,7 +261,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     // If the next floor is null, return to the first position
     if (floor == NULL) {
 #if NULL_FLOOR_STEPS > 0
-        vec3f_copy(nextPos, startPos);
+        vec3_copy(nextPos, startPos);
         ceilHeight = find_ceil(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
         waterLevel = find_water_level(nextPos[0], nextPos[2]);
 #endif
@@ -297,7 +297,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
             }
         }
         // Set Mario's position and floor
-        vec3f_copy(m->pos, nextPos);
+        vec3_copy(m->pos, nextPos);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -351,8 +351,8 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     if ((floorHeight + MARIO_HITBOX_HEIGHT) >= ceilHeight) return GROUND_STEP_HIT_WALL_STOP_QSTEPS;
 #endif
     // Set mario's height to the floor
-    vec3f_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
-    if (!SURFACE_IS_QUICKSAND(floor->type) && (floor->type != SURFACE_BURNING)) vec3f_copy(m->lastSafePos, m->pos);
+    vec3_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
+    if (!SURFACE_IS_QUICKSAND(floor->type) && (floor->type != SURFACE_BURNING)) vec3_copy(m->lastSafePos, m->pos);
     if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
     m->floor       = floor;
     m->floorHeight = floorHeight;
@@ -412,8 +412,8 @@ MarioStep perform_ground_step(struct MarioState *m) {
     stepResult     = perform_ground_quarter_step(m, intendedPos);
 #endif
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #ifdef FLOOR_ALIGNMENT
     align_with_floor(m, TRUE);
 #endif
@@ -505,7 +505,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     Vec3f nextPos;
     struct Surface *ceil, *floor;
     f32 ceilHeight, floorHeight, waterLevel;
-    vec3f_copy(nextPos, intendedPos);
+    vec3_copy(nextPos, intendedPos);
     s16 i;
     MarioStep stepResult = AIR_STEP_NONE;
     struct WallCollisionData upperWall, lowerWall;
@@ -517,7 +517,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     resolve_and_return_wall_collisions(nextPos,  30.0f, 50.0f, &lowerWall);
     floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
 #if NULL_FLOOR_STEPS > 0
-    // vec3f_copy(startPos, nextPos); // why does this crash the game when ledge grabbing?
+    // vec3_copy(startPos, nextPos); // why does this crash the game when ledge grabbing?
     while ((floor == NULL) && (missedFloors < NULL_FLOOR_STEPS)) {
         nextPos[0] += (m->vel[0] / GROUND_NUM_STEPS);
         nextPos[2] += (m->vel[2] / GROUND_NUM_STEPS);
@@ -589,7 +589,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
             }
         }
         nextPos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
-        vec3f_copy(m->pos, nextPos);
+        vec3_copy(m->pos, nextPos);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -623,7 +623,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     if ((stepArg & AIR_STEP_CHECK_LEDGE_GRAB) && (upperWall.numWalls == 0) && (lowerWall.numWalls != 0)) {
         for ((i = 0); (i < lowerWall.numWalls); (i++)) if ((grabbedWall = check_ledge_grab(m, grabbedWall, lowerWall.walls[i], intendedPos, nextPos, ledgePos, &ledgeFloor)) != NULL) stepResult = AIR_STEP_GRABBED_LEDGE;
         if ((stepResult == AIR_STEP_GRABBED_LEDGE) && (grabbedWall != NULL) && (ledgeFloor != NULL) && (ledgePos != NULL)) {
-            vec3f_copy(m->pos, ledgePos);
+            vec3_copy(m->pos, ledgePos);
             m->floor        = ledgeFloor;
             m->floorHeight  = ledgePos[1];
             m->floorYaw     = atan2s(ledgeFloor->normal.z, ledgeFloor->normal.x);
@@ -631,13 +631,13 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
             m->faceAngle[1] = (atan2s(grabbedWall->normal.z, grabbedWall->normal.x) + DEG(180));
             m->wall         = grabbedWall;
         } else {
-            vec3f_copy(m->pos, nextPos);
+            vec3_copy(m->pos, nextPos);
             m->floor        = floor;
             m->floorHeight  = floorHeight;
         }
         return stepResult;
     }
-    vec3f_copy(m->pos, nextPos);
+    vec3_copy(m->pos, nextPos);
     m->floor        = floor;
     m->floorHeight  = floorHeight;
     if (upperWall.numWalls > 0) {
@@ -784,8 +784,8 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     if (m->action != ACT_FLYING) apply_gravity(m);
     apply_vertical_wind(m);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
     /*if ((stepResult == AIR_STEP_HIT_WALL) && (m->wall != NULL)) {
         wallDYaw = atan2s(m->wall->normal.z, m->wall->normal.x) - m->faceAngle[1];
         if ((stepArg & AIR_STEP_CHECK_BONK) && ((wallDYaw < -DEG(135)) || (wallDYaw > DEG(135)))) {

@@ -35,17 +35,17 @@ void calc_face_normal(struct ObjFace *face) {
     // f32 mul = 1000.0f;
     if (face->vtxCount >= 3) {  // need at least three points to compute a normal
         vtx1  = face->vertices[0];
-        vec3f_copy(p1, vtx1->pos);
+        vec3_copy(p1, vtx1->pos);
         vtx2  = face->vertices[1];
-        vec3f_copy(p2, vtx2->pos);
+        vec3_copy(p2, vtx2->pos);
         vtx3  = face->vertices[2];
-        vec3f_copy(p3, vtx3->pos);
+        vec3_copy(p3, vtx3->pos);
         // calculate the cross product of edges (p2 - p1) and (p3 - p2)
         find_vector_perpendicular_to_plane(normal, p1, p2, p3);
         // not sure why each component is multiplied by 1000. maybe to avoid loss of precision when normalizing?
-        vec3f_mul_val(normal, 1000.0f);
+        vec3_mul_val(normal, 1000.0f);
         vec3f_normalize(normal);
-        vec3f_copy(face->normal, normal);
+        vec3_copy(face->normal, normal);
     }
 }
 
@@ -58,14 +58,14 @@ struct ObjVertex *gd_make_vertex(Vec3s pos) {
     vtx->scaleFactor = 1.0f;
     vtx->gbiVerts    = NULL;
     vtx->alpha       = 1.0f;
-    vec3f_copy(vtx->normal, gVec3fY);
+    vec3_copy(vtx->normal, gVec3fY);
     return vtx;
 }
 
 /* @ 245DF4 for 0xAC */
 struct ObjFace *make_face_with_colour(ColorRGBf color) {
     struct ObjFace *newFace = (struct ObjFace *) make_object(OBJ_TYPE_FACES);
-    vec3f_copy(newFace->colour, color);
+    vec3_copy(newFace->colour, color);
     newFace->vtxCount =  0;
     newFace->mtlId    = -1;
     newFace->mtl      = NULL;
@@ -228,7 +228,7 @@ s32 load_mario_head(void (*aniFn)(struct ObjAnimator *)) {
     d_set_rel_pos(  0.0f, 200.0f, 2000.0f);
     d_set_world_pos(0.0f, 200.0f, 2000.0f);
     d_set_flags(4);
-    vec3f_set(camera->lookAt, 0.0f, 200.0f, 0.0f);
+    vec3_set(camera->lookAt, 0.0f, 200.0f, 0.0f);
     addto_group(gMarioFaceGrp, &camera->header);
     addto_group(gMarioFaceGrp, &animator->header);
     d_set_name_suffix(NULL); // stop adding "l" to generated dynobj names

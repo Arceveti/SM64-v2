@@ -81,7 +81,7 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
         nextPos[0] += (ceil->normal.x * ceilAmt);
         nextPos[2] += (ceil->normal.z * ceilAmt);
         nextPos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
-        vec3f_copy(m->pos, nextPos);
+        vec3_copy(m->pos, nextPos);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -90,14 +90,14 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     }
     if (nextPos[1] <= floorHeight) {
         nextPos[1]  = floorHeight;
-        vec3f_copy(m->pos, nextPos);
+        vec3_copy(m->pos, nextPos);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
         return WATER_STEP_HIT_FLOOR;
     }
-    vec3f_copy(m->pos, nextPos);
+    vec3_copy(m->pos, nextPos);
     if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
     m->floor       = floor;
     m->floorHeight = floorHeight;
@@ -124,7 +124,7 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if (nextPos[1] >= floorHeight) {
         if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {
-            vec3f_copy(m->pos, nextPos);
+            vec3_copy(m->pos, nextPos);
             if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
             m->floor       = floor;
             m->floorHeight = floorHeight;
@@ -132,14 +132,14 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
         }
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         //! Water ceiling downwarp
-        vec3f_set(m->pos, nextPos[0], (ceilHeight - MARIO_HITBOX_HEIGHT), nextPos[2]);
+        vec3_set(m->pos, nextPos[0], (ceilHeight - MARIO_HITBOX_HEIGHT), nextPos[2]);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
         return WATER_STEP_HIT_CEILING;
     } else {
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
-        vec3f_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
+        vec3_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
         if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
         m->floor       = floor;
         m->floorHeight = floorHeight;
@@ -186,7 +186,7 @@ static MarioStep perform_water_step(struct MarioState *m) {
     Vec3f nextPos;
     Vec3f step;
     struct Object *marioObj = m->marioObj;
-    vec3f_copy(step, m->vel);
+    vec3_copy(step, m->vel);
     if (m->action & ACT_FLAG_SWIMMING) apply_water_current(m, step);
 #if WATER_NUM_STEPS > 1
  #ifdef VARIABLE_STEPS
@@ -209,15 +209,15 @@ static MarioStep perform_water_step(struct MarioState *m) {
         if (stepResult == WATER_STEP_CANCELLED) break;
     }
 #else
-    vec3f_sum(nextPos, m->pos, step);
+    vec3_sum(nextPos, m->pos, step);
     if (nextPos[1] > (m->waterLevel - 80)) {
         nextPos[1] = (m->waterLevel - 80);
         m->vel[1]  = 0.0f;
     }
     stepResult = perform_water_full_step(m, nextPos);
 #endif
-    vec3f_copy(marioObj->header.gfx.pos, m->pos);
-    vec3a_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
+    vec3_copy(marioObj->header.gfx.pos, m->pos);
+    vec3_set( marioObj->header.gfx.angle, -m->faceAngle[0], m->faceAngle[1], m->faceAngle[2]);
     return stepResult;
 }
 
@@ -455,7 +455,7 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
             yOffset = (20 - (2 * m->actionTimer));
             if (((m->pos[1] + yOffset + MARIO_HITBOX_HEIGHT) < m->ceilHeight) && ((m->pos[1] + yOffset + MARIO_HITBOX_HEIGHT) < m->waterLevel)) {
                 m->pos[1] += yOffset;
-                vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+                vec3_copy(m->marioObj->header.gfx.pos, m->pos);
             }
         }
         m->vel[1] = -32.0f;
@@ -922,8 +922,8 @@ static Bool32 act_caught_in_whirlpool(struct MarioState *m) {
     m->pos[1]       = (whirlpool->oPosY + marioObj->oMarioWhirlpoolPosY);
     m->faceAngle[1] = (atan2s(dz, dx) + DEG(180));
     set_mario_animation(m, MARIO_ANIM_GENERAL_FALL);
-    vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
-    vec3a_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
+    vec3_copy(m->marioObj->header.gfx.pos, m->pos);
+    vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #if ENABLE_RUMBLE
     reset_rumble_timers_slip();
 #endif

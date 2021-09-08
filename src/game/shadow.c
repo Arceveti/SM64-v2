@@ -180,13 +180,13 @@ Bool32 init_shadow(struct Shadow *s, Vec3f pos, s16 shadowScale, Bool8 overwrite
     f32 floorSteepness;
     struct FloorGeometry *floorGeometry;
     struct Surface *waterFloor = NULL;
-    vec3f_copy(s->parentPos, pos);
+    vec3_copy(s->parentPos, pos);
     s->floorHeight             = find_floor_height_and_data(s->parentPos[0], (s->parentPos[1] + 80.0f), s->parentPos[2], &floorGeometry);
     waterLevel                 = get_water_level_below_shadow(s, &waterFloor);
     if (gShadowAboveWaterOrLava) {
         s->floorHeight = waterLevel;
         if (waterFloor != NULL) {
-            vec3f_set(s->floorNormal, waterFloor->normal.x, waterFloor->normal.y, waterFloor->normal.z);
+            vec3_set(s->floorNormal, waterFloor->normal.x, waterFloor->normal.y, waterFloor->normal.z);
             s->floorOriginOffset    = waterFloor->originOffset;
             gShadowAboveWaterOrLava = FALSE;
             gShadowAboveCustomWater = TRUE;
@@ -194,14 +194,14 @@ Bool32 init_shadow(struct Shadow *s, Vec3f pos, s16 shadowScale, Bool8 overwrite
         } else {
             gShadowAboveCustomWater = FALSE;
             // Assume that the water is flat.
-            vec3f_copy(s->floorNormal, gVec3fY);
+            vec3_copy(s->floorNormal, gVec3fY);
             s->floorOriginOffset    = -waterLevel;
         }
     } else {
         // Don't draw a shadow if the floor is lower than expected possible,
         // or if the y-normal is negative (an unexpected result).
         if ((s->floorHeight < FLOOR_LOWER_LIMIT_SHADOW) || (floorGeometry->normal[1] <= 0.0f)) return TRUE;
-        vec3f_copy(s->floorNormal, floorGeometry->normal);
+        vec3_copy(s->floorNormal, floorGeometry->normal);
         s->floorOriginOffset = floorGeometry->originOffset;
     }
     if (overwriteSolidity) s->solidity = dim_shadow_with_distance(overwriteSolidity, (pos[1] - s->floorHeight));
@@ -382,12 +382,11 @@ void make_shadow_vertex(Vtx *vertices, s8 index, struct Shadow s, s8 shadowVerte
      * The gShadowAboveWaterOrLava check is redundant, since `floor_local_tilt`
      * will always be 0 over water or lava (since they are always flat).
      */
-    if ((shadowVertexType == SHADOW_WITH_9_VERTS) && !gShadowAboveWaterOrLava
-        && (floor_local_tilt(s, pos[0], pos[1], pos[2]) != 0x0)) {
+    if ((shadowVertexType == SHADOW_WITH_9_VERTS) && !gShadowAboveWaterOrLava && (floor_local_tilt(s, pos[0], pos[1], pos[2]) != 0x0)) {
         pos[1] = extrapolate_vertex_y_position(s, pos[0], pos[2]);
         solidity = 0;
     }
-    vec3f_diff(rel, pos, s.parentPos);
+    vec3_diff(rel, pos, s.parentPos);
     make_shadow_vertex_at_xyz(vertices, index, rel[0], rel[1], rel[2], solidity, shadowVertexType);
 }
 

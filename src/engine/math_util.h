@@ -10,7 +10,7 @@
 
 #define BITMASK(size) ((1 << (size)) - 1)
 
-#define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
+// #define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
 
 
 #define NEAR_ZERO   0.00001f
@@ -167,6 +167,10 @@ extern Vec3f gVec3fZ;
 #define vec2_dot(a, b)       (((a)[0] * (b)[0]) + ((a)[1] * (b)[1]))
 #define vec3_dot(a, b)      (vec2_dot((a), (b)) + ((a)[2] * (b)[2]))
 #define vec4_dot(a, b)      (vec3_dot((a), (b)) + ((a)[3] * (b)[3]))
+
+#define vec2_average(v)     (vec2_sumsq(v) / 2.0f)
+#define vec3_average(v)     (vec3_sumsq(v) / 3.0f)
+#define vec4_average(v)     (vec4_sumsq(v) / 4.0f)
 
 #define vec2_set(dst, x, y) {           \
     (dst)[0] = (x);                     \
@@ -470,8 +474,6 @@ extern Vec3f gVec3fZ;
     VEC_FUNC_DECLARATION_VVN(name1##_val)                                                   \
     VEC_FUNC_DECLARATION_VN( name2##_val)                                                   \
 
-#define vec3a_copy(dst, src    ) (vec3s_copy((dst), (src)        ))
-#define vec3a_set( dst, x, y, z) (vec3s_set( (dst), (x), (y), (z)))
 
 #define MAKE_DXZ(from, to, fmt)     \
     fmt dx = ((to)[0] - (from)[0]); \
@@ -593,10 +595,6 @@ void vec3s_set(       Vec3s dst, s16 x, s16 y, s16 z       );
 void vec3i_set(       Vec3i dst, s32 x, s32 y, s32 z       );
 void vec3f_set(       Vec3f dst, f32 x, f32 y, f32 z       );
 void vec4f_set(       Vec4f dst, f32 x, f32 y, f32 z, f32 w);
-void vec3c_copy_y_off(Vec3c dst, Vec3c src, s8  offset);
-void vec3s_copy_y_off(Vec3s dst, Vec3s src, s16 offset);
-void vec3i_copy_y_off(Vec3i dst, Vec3i src, s32 offset);
-void vec3f_copy_y_off(Vec3f dst, Vec3f src, f32 offset);
 
 void vec3c_to_vec3s(     Vec3s dst, Vec3c src);
 void vec3c_to_vec3i(     Vec3i dst, Vec3c src);
@@ -611,8 +609,6 @@ void vec3f_to_vec3c(     Vec3c dst, Vec3f src);
 void vec3f_to_vec3s(     Vec3s dst, Vec3f src);
 void vec3f_to_vec3i(     Vec3i dst, Vec3f src);
 
-f32  vec2f_average(           Vec2f v);
-f32  vec3f_average(           Vec3f v);
 f32  vec2f_invmag(            Vec2f v);
 f32  vec3f_invmag(            Vec3f v);
 void vec2f_normalize(         Vec2f v);
@@ -675,13 +671,13 @@ void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void create_transformation_from_matrices( Mat4  dst, Mat4 a1, Mat4 a2);
 void mtxf_inverse_rotate_translate(       Mat4   in, Mat4 out);
 
-f32    det_2x2(f32 a, f32 b, f32 c, f32 d);
-f32    det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
-               f32 r1c0, f32 r1c1, f32 r1c2,
-               f32 r2c0, f32 r2c1, f32 r2c2);
-void   mtxf_adjunct(                      Mat4 *src, Mat4 *dst);
-f32    mtxf_det(                          Mat4 *mtx);
-void   mtxf_inverse(                      Mat4 *dst, Mat4 *src);
+f32  det_2x2(f32 a, f32 b, f32 c, f32 d);
+f32  det_3x3(f32 r0c0, f32 r0c1, f32 r0c2,
+             f32 r1c0, f32 r1c1, f32 r1c2,
+             f32 r2c0, f32 r2c1, f32 r2c2);
+void mtxf_adjunct(                      Mat4 *src, Mat4 *dst);
+f32  mtxf_det(                          Mat4 *mtx);
+void mtxf_inverse(                      Mat4 *dst, Mat4 *src);
 
 void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 

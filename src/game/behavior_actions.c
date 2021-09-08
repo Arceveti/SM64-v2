@@ -46,6 +46,9 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 #include "rumble_init.h"
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 
 struct ModifiableVertexGroup {
     const Vtx *vertexData;

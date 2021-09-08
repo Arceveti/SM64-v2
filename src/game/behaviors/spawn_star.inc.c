@@ -29,11 +29,14 @@ void bhv_collect_star_init(void) {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
     }
     obj_set_hitbox(o, &sCollectStarHitbox);
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, 400, 400, 400, 0x0, 0, 0xFFFF00FF, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }
 
 void bhv_collect_star_loop(void) {
     o->oFaceAngleYaw += 0x800;
-
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
         mark_obj_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
@@ -110,7 +113,7 @@ struct Object *spawn_star(struct Object *starObj, f32 x, f32 y, f32 z) {
                                         o->oPosX, o->oPosY, o->oPosZ,
                                         0x0, 0x0, 0x0);
     starObj->oBehParams      = o->oBehParams;
-    vec3f_set(&starObj->oHomeVec, x, y, z);
+    vec3_set(&starObj->oHomeVec, x, y, z);
     starObj->oFaceAnglePitch = 0x0;
     starObj->oFaceAngleRoll  = 0x0;
     return starObj;

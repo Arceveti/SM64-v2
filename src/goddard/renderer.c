@@ -11,6 +11,7 @@
 #include "shape_helper.h"
 #include "skin.h"
 #include "engine/math_util.h"
+#include "engine/colors.h"
 
 #define MAX_GD_DLS 1000
 #define OS_MESG_SI_COMPLETE 0x33333333
@@ -577,7 +578,7 @@ void update_cursor(void);
 void update_view_and_dl(struct ObjView *view);
 static void update_render_mode(void);
 void gddl_is_loading_shine_dl(Bool32 dlLoad);
-void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy);
+void gd_put_sprite(TexturePtr *sprite, s32 x, s32 y, s32 wx, s32 wy);
 void reset_cur_dl_indices(void);
 
 // TODO: make a gddl_num_t?
@@ -1440,11 +1441,11 @@ void gd_setproperty(enum GdProperty prop, f32 f1, f32 f2, f32 f3) {
                 case 0: gSPClearGeometryMode(next_gfx(), G_LIGHTING); break;
             }
             break;
-        case GD_PROP_AMB_COLOUR: vec3f_set(sAmbScaleColour, f1, f2, f3); break;
-        case GD_PROP_LIGHT_DIR:  vec3i_set(sLightDirections[sLightId], (s32)(f1 * 120.0f),
-                                                                       (s32)(f2 * 120.0f),
-                                                                       (s32)(f3 * 120.0f)); break;
-        case GD_PROP_DIFUSE_COLOUR: vec3f_set(sLightScaleColours[sLightId], f1, f2, f3); break;
+        case GD_PROP_AMB_COLOUR: vec3_set(sAmbScaleColour, f1, f2, f3); break;
+        case GD_PROP_LIGHT_DIR:  vec3_set(sLightDirections[sLightId], (s32)(f1 * 120.0f),
+                                                                      (s32)(f2 * 120.0f),
+                                                                      (s32)(f3 * 120.0f)); break;
+        case GD_PROP_DIFUSE_COLOUR: vec3_set(sLightScaleColours[sLightId], f1, f2, f3); break;
         case GD_PROP_CULLING:
             parm = (s32) f1;
             switch (parm) {
@@ -1572,7 +1573,7 @@ void update_cursor(void) {
     sHandView->upperLeft[1] = (f32) gGdCtrl.csrY;
     // Make hand display list
     begin_gddl(sHandShape->dlNums[gGdFrameBufNum]);
-    gd_put_sprite((u16 *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft[0], sHandView->upperLeft[1], 0x20, 0x20);
+    gd_put_sprite((TexturePtr *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft[0], sHandView->upperLeft[1], 0x20, 0x20);
     gd_enddlsplist_parent();
     if (sHandView->upperLeft[0] <  sHandView->parent->upperLeft[0]                                    ) sHandView->upperLeft[0] =  sHandView->parent->upperLeft[0];
     if (sHandView->upperLeft[0] > (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0])) sHandView->upperLeft[0] = (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0]);
@@ -1600,10 +1601,11 @@ void gd_init(void) {
     gGdFrameBufNum    = 0;
     sGdDlCount        = 0;
     sLightId          = 0;
-    vec3f_zero(sAmbScaleColour);
+    vec3_zero(sAmbScaleColour);
+    const ColorRGBf redVec = COLOR_RGBF_RED;
     for ((i = 0); (i < ARRAY_COUNT(sLightScaleColours)); (i++)) {
-        vec3f_set(sLightScaleColours[i], 1.0f, 0.0f, 0.0f);
-        vec3i_set(sLightDirections[i],      0,  120,    0);
+        vec3_copy(sLightScaleColours[i], redVec);
+        vec3_set(sLightDirections[i], 0, 120, 0);
     }
     sNumLights = NUMLIGHTS_2;
     mtxf_identity(sInitIdnMat4);
@@ -1621,7 +1623,7 @@ void gd_init(void) {
         sViewDls[i][1] = create_child_gdl(1, sDynamicMainDls[1]);
     }
     sScreenView           = make_view("screenview2", (VIEW_2_COL_BUF | VIEW_UNK_1000 | VIEW_COLOUR_BUF | VIEW_Z_BUF), 0, 0, 0, 320, 240, NULL);
-    vec3f_zero(sScreenView->colour);
+    vec3_zero(sScreenView->colour);
     sScreenView->parent   = sScreenView;
     sScreenView->flags   &= ~VIEW_UPDATE;
     sActiveView           = sScreenView;
@@ -1667,7 +1669,7 @@ s32 get_cur_pickbuf_offset(void) {
 }
 
 /* 254AC0 -> 254DFC; orig name: PutSprite */
-void gd_put_sprite(ImageTexture *sprite, s32 x, s32 y, s32 wx, s32 wy) {
+void gd_put_sprite(TexturePtr *sprite, s32 x, s32 y, s32 wx, s32 wy) {
     s32 c, r;
     gSPDisplayList(next_gfx(), osVirtualToPhysical(gd_dl_sprite_start_tex_block));
     for ((r = 0); (r < wy); (r += 32)) {
@@ -1691,10 +1693,10 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
     UNUSED struct ObjNet *net;
     sHandShape = make_shape("mouse");
     sHandShape->dlNums[0] = gd_startdisplist(7);
-    gd_put_sprite((ImageTexture *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((TexturePtr *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     sHandShape->dlNums[1] = gd_startdisplist(7);
-    gd_put_sprite((ImageTexture *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((TexturePtr *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     d_start_group("mouseg");
     net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));

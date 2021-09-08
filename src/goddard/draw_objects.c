@@ -84,7 +84,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     Vec3f vec;
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
-    vec3f_zero(vec);
+    vec3_zero(vec);
     if (flag & 0x02) {
         gd_dl_load_trans_matrix(f, g, h);
         vec[0] += f;
@@ -93,7 +93,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     }
     if ((flag & 0x10) && rotMtx != NULL) {
         gd_dl_load_matrix(rotMtx);
-        vec3f_add(vec, (*rotMtx)[3]);
+        vec3_add(vec, (*rotMtx)[3]);
     }
     if (flag & 0x08) {
         if (m != 0.0f) gd_dl_rotate(m, 121);
@@ -114,9 +114,9 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
     }
     if ((sNumActiveLights != 0) && (shape->mtlGroup != NULL)) {
         if (rotMtx != NULL) {
-            vec3f_copy(vec, (*rotMtx)[3]);
+            vec3_copy(vec, (*rotMtx)[3]);
         } else {
-            vec3f_zero(vec);
+            vec3_zero(vec);
         }
         update_shaders(shape, vec);
     }
@@ -140,7 +140,7 @@ void draw_shape_2d(struct ObjShape *shape, s32 flag, Vec3f in) {
 void draw_light(struct ObjLight *light) {
     struct ObjShape *shape;
     if (sSceneProcessType == FIND_PICKS) return;
-    vec3f_copy(sLightColours[0], light->colour);
+    vec3_copy(sLightColours[0], light->colour);
     if (light->flags & LIGHT_UNK02) {
         shape = gSpotShape;
     } else {
@@ -232,7 +232,7 @@ void draw_face(struct ObjFace *face) {
     check_tri_display(face->vtxCount);
     for ((i = 0); (i < face->vtxCount); (i++)) {
         vtx = face->vertices[i];
-        vec3f_copy(pos, vtx->pos);
+        vec3_copy(pos, vtx->pos);
         set_Vtx_norm_buf_2(vtx->normal);
         gbiVtx = gd_dl_make_vertex(pos[0], pos[1], pos[2], vtx->alpha);
         if (gbiVtx != NULL) vtx->gbiVerts = make_vtx_link(vtx->gbiVerts, gbiVtx);
@@ -256,9 +256,9 @@ void draw_camera(struct ObjCamera *cam) {
     if (cam->dynObj != NULL) {
         set_cur_dynobj(cam->dynObj);
         d_vec3f_get_world_pos(pos);
-        vec3f_add(pos, cam->lookAt);
+        vec3_add(pos, cam->lookAt);
     } else {
-        vec3f_copy(pos, cam->lookAt);
+        vec3_copy(pos, cam->lookAt);
     }
     if (absf(cam->worldPos[0] - pos[0]) + absf(cam->worldPos[2] - pos[2]) == 0.0f) return; // Zero view distance
     gd_dl_lookat(cam, cam->worldPos, pos, cam->colXY);
@@ -294,7 +294,7 @@ void check_grabable_click(struct GdObj *input) {
     if (!(obj->drawFlags & OBJ_IS_GRABBALE)) return;
     set_cur_dynobj(obj);
     mtx = d_get_rot_mtx_ptr();
-    vec3f_copy(objPos, (*mtx)[3]);
+    vec3_copy(objPos, (*mtx)[3]);
     world_pos_to_screen_coords(objPos, gViewUpdateCamera, sUpdateViewState.view);
     if ((absf(gGdCtrl.csrX - objPos[0]) < 20.0f)
      && (absf(gGdCtrl.csrY - objPos[1]) < 20.0f)) {
@@ -391,14 +391,14 @@ void draw_particle(struct GdObj *obj) {
     ColorRGBf black;
     f32 brightness;
     if (ptc->timeout > 0) {
-        vec3f_copy(white, sClrWhite);
-        vec3f_copy(black, sClrBlack);
+        vec3_copy(white, sClrWhite);
+        vec3_copy(black, sClrBlack);
         brightness = (ptc->timeout / 10.0f);
         sLightColours[0][0] = (((white[0] - black[0]) * brightness) + black[0]);
         sLightColours[0][1] = (((white[1] - black[1]) * brightness) + black[1]);
         sLightColours[0][2] = (((white[2] - black[2]) * brightness) + black[2]);
     } else {
-        vec3f_zero(sLightColours[0]);
+        vec3_zero(sLightColours[0]);
     }
     if (ptc->timeout > 0) {
         ptc->shapePtr->frameIndex = ptc->timeout;
@@ -445,11 +445,11 @@ void update_lighting(struct ObjLight *light) {
     f32 diffuseFac; // diffuse factor?
     f32 facMul;
     f32 diffuseThreshold;
-    vec3f_prod_val(light->colour, light->diffuse, light->diffuseFac);
-    vec3f_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
+    vec3_prod_val(light->colour, light->diffuse, light->diffuseFac);
+    vec3_diff(sLightPositionCache[light->id], light->position, sLightPositionOffset);
     vec3f_normalize(sLightPositionCache[light->id]);
     if (light->flags & LIGHT_UNK20) {
-        vec3f_copy(sPhongLightPosition, sLightPositionCache[light->id]);
+        vec3_copy(sPhongLightPosition, sLightPositionCache[light->id]);
         sPhongLight = light;
     }
     diffuseFac = light->diffuseFac;
@@ -472,7 +472,7 @@ void update_lighting(struct ObjLight *light) {
 /* 229568 -> 229658; orig name: func_8017AD98 */
 void update_shaders(struct ObjShape *shape, Vec3f offset) {
     stash_current_gddl();
-    vec3f_copy(sLightPositionOffset, offset);
+    vec3_copy(sLightPositionOffset, offset);
     sPhongLight = NULL;
     if (gGdLightGroup   != NULL) apply_to_obj_types_in_group(OBJ_TYPE_LIGHTS,    (applyproc_t) update_lighting,   gGdLightGroup  );
     if (shape->mtlGroup != NULL) apply_to_obj_types_in_group(OBJ_TYPE_MATERIALS, (applyproc_t) apply_obj_draw_fn, shape->mtlGroup);

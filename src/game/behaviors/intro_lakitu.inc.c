@@ -13,18 +13,18 @@ void intro_lakitu_set_offset_from_camera(struct Object *o, Vec3f offset) {
     f32 dist;
     Vec3a focusAngles;
     Angle offsetPitch, offsetYaw;
-    vec3f_add(offset, gCamera->pos);
+    vec3_add(offset, gCamera->pos);
     vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &focusAngles[0],                &focusAngles[1]);
     vec3f_get_dist_and_angle(gCamera->pos,         offset, &dist, &offsetPitch,                   &offsetYaw);
     vec3f_set_dist_and_angle(gCamera->pos,         offset,  dist, (focusAngles[0] + offsetPitch), (focusAngles[1] + offsetYaw));
-    vec3f_copy(&o->oPosVec, offset);
+    vec3_copy(&o->oPosVec, offset);
 }
 
 void intro_lakitu_set_focus(struct Object *o, Vec3f newFocus) {
     Vec3f origin;
     Angle pitch, yaw;
     // newFocus is an offset from lakitu's origin, not a point in the world.
-    vec3f_set(origin, 0.0f, 0.0f, 0.0f);
+    vec3_zero(origin);
     vec3f_get_angle(origin, newFocus, &pitch, &yaw);
     o->oFaceAnglePitch = pitch;
     o->oFaceAngleYaw   = yaw;
@@ -59,7 +59,7 @@ void bhv_intro_lakitu_loop(void) {
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_INTRO_1:
             cur_obj_enable_rendering();
-            if ((gCutsceneTimer > 350) && (gCutsceneTimer < 458)) vec3f_copy_y_off(&o->oPosVec, gCamera->pos, 500.0f);
+            if ((gCutsceneTimer > 350) && (gCutsceneTimer < 458)) vec3_copy_y_off(&o->oPosVec, gCamera->pos, 500.0f);
             if (gCutsceneTimer > 52) cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
             if (intro_lakitu_set_pos_and_focus(o, gIntroLakituStartToPipeOffsetFromCamera, gIntroLakituStartToPipeFocus)) o->oAction = INTRO_LAKITU_ACT_CUTSCENE_INTRO_2;
             switch (o->oTimer) {
@@ -96,7 +96,7 @@ void bhv_intro_lakitu_loop(void) {
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_INTRO_3:
             cur_obj_play_sound_1(SOUND_AIR_LAKITU_FLY_HIGHPRIO);
-            vec3f_set(fromPoint, -1128.0f, 560.0f, 4664.0f);
+            vec3_set(fromPoint, -1128.0f, 560.0f, 4664.0f);
             o->oMoveAngleYaw             += 0x200;
             approach_f32_asymptotic_bool(&o->oIntroLakituDistToBirdsX, 100.0f, 0.03f);
             o->oFaceAnglePitch            = atan2s(200.0f, (o->oPosY - 400.0f));
@@ -107,7 +107,7 @@ void bhv_intro_lakitu_loop(void) {
             approach_f32_asymptotic_bool(&o->oIntroLakituEndBirds1DestZ, 512.0f, 0.05f);
             toPoint[0] += o->oIntroLakituEndBirds1DestY;
             approach_f32_asymptotic_bool(&o->oIntroLakituEndBirds1DestY,   0.0f, 0.05f);
-            vec3f_copy(&o->oPosVec, toPoint);
+            vec3_copy(&o->oPosVec, toPoint);
             if (o->oTimer == 31) {
                 o->oPosY -= 158.0f;
                 // Spawn white ground particles
@@ -129,9 +129,9 @@ void bhv_intro_lakitu_loop(void) {
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_1:
             cur_obj_enable_rendering();
-            vec3f_set(offset, -100.0f, 100.0f, 300.0f);
+            vec3_set(offset, -100.0f, 100.0f, 300.0f);
             offset_rotated(toPoint, gCamera->pos, offset, sMarioCamState->faceAngle);
-            vec3f_copy(&o->oPosVec, toPoint);
+            vec3_copy(&o->oPosVec, toPoint);
             o->oMoveAnglePitch = DEG(22.5);
             o->oMoveAngleYaw   = 0x9000; // DEG(-157.5);
             o->oFaceAnglePitch = (o->oMoveAnglePitch / 2);
@@ -139,7 +139,7 @@ void bhv_intro_lakitu_loop(void) {
             o->oAction         = INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2;
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_2:
-            vec3f_copy(toPoint, &o->oPosVec);
+            vec3_copy(toPoint, &o->oPosVec);
             if (o->oTimer > 60) {
                 approach_f32_asymptotic_bool(&o->oForwardVel, -10.0f, 0.05f);
                 o->oMoveAngleYaw   += 0x78;
@@ -155,7 +155,7 @@ void bhv_intro_lakitu_loop(void) {
             cur_obj_set_pos_via_transform();
             break;
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3:
-            vec3f_copy(toPoint, &o->oPosVec);
+            vec3_copy(toPoint, &o->oPosVec);
             approach_f32_asymptotic_bool(&o->oForwardVel, 60.0f, 0.05f);
             vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
             o->oFaceAngleYaw   = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, 0x200);

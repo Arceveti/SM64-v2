@@ -88,14 +88,14 @@ static void chain_chomp_update_chain_segments(void) {
         if ((segment->pos[1] += segmentVelY) < 0.0f) segment->pos[1] = 0.0f;
         // Cap distance to previous chain part (so that the tail follows the
         // chomp)
-        vec3f_diff(offset, segment->pos, prevSegment->pos);
+        vec3_diff(offset, segment->pos, prevSegment->pos);
         vec3f_normalize_max(offset, o->oChainChompMaxDistBetweenChainParts);
         // Cap distance to pivot (so that it stretches when the chomp moves far
         // from the wooden post)
-        vec3f_add(offset, prevSegment->pos);
+        vec3_add(offset, prevSegment->pos);
         maxTotalOffset = (o->oChainChompMaxDistFromPivotPerChainPart * (CHAIN_CHOMP_NUM_PARTS - i));
         vec3f_normalize_max(offset, maxTotalOffset);
-        vec3f_copy(segment->pos, offset);
+        vec3_copy(segment->pos, offset);
     }
 }
 
@@ -303,22 +303,22 @@ static void chain_chomp_act_move(void) {
         }
         cur_obj_move_standard(78);
         // Segment 0 connects the pivot to the chain chomp itself
-        vec3f_diff(o->oChainChompSegments[0].pos, &o->oPosVec, &o->parentObj->oPosVec);
+        vec3_diff(o->oChainChompSegments[0].pos, &o->oPosVec, &o->parentObj->oPosVec);
         o->oChainChompDistToPivot = vec3_mag(o->oChainChompSegments[0].pos);
         // If the chain is fully stretched
         maxDistToPivot = (o->oChainChompMaxDistFromPivotPerChainPart * CHAIN_CHOMP_NUM_PARTS);
         if (o->oChainChompDistToPivot > maxDistToPivot) {
             f32 ratio = (maxDistToPivot / o->oChainChompDistToPivot); //! vec3f_normalize_max?
             o->oChainChompDistToPivot = maxDistToPivot;
-            vec3f_mul_val(o->oChainChompSegments[0].pos, ratio);
+            vec3_mul_val(o->oChainChompSegments[0].pos, ratio);
             if (o->oChainChompReleaseStatus == CHAIN_CHOMP_NOT_RELEASED) {
                 // Restrict chain chomp position
-                vec3f_sum(&o->oPosVec, &o->parentObj->oPosVec, o->oChainChompSegments[0].pos);
+                vec3_sum(&o->oPosVec, &o->parentObj->oPosVec, o->oChainChompSegments[0].pos);
                 o->oChainChompRestrictedByChain = TRUE;
             } else {
                 // Move pivot like the chain chomp is pulling it along
                 f32 oldPivotY = o->parentObj->oPosY;
-                vec3f_diff(&o->parentObj->oPosVec, &o->oPosVec, o->oChainChompSegments[0].pos);
+                vec3_diff(&o->parentObj->oPosVec, &o->oPosVec, o->oChainChompSegments[0].pos);
                 o->parentObj->oVelY = (o->parentObj->oPosY - oldPivotY);
             }
         } else {

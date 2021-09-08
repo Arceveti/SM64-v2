@@ -35,15 +35,15 @@ void compute_net_bounding_box(struct ObjNet *net) {
 /* 240894 -> 240A64; orig name: func_801920C4 */
 void reset_net(struct ObjNet *net) {
     struct ObjGroup *grp;
-    vec3f_copy(net->worldPos, net->initPos);
-    vec3f_zero(net->velocity);
-    // vec3f_zero(net->torque); // unused
+    vec3_copy(net->worldPos, net->initPos);
+    vec3_zero(net->velocity);
+    // vec3_zero(net->torque); // unused
     compute_net_bounding_box(net);
     gGdSkinNet = net;
     mtxf_identity(net->rotationMtx);
     mtxf_identity(net->idMtx);
     gd_rot_mat_about_vec3f(net->idMtx,    net->initRotation); // set rot mtx to initial rotation?
-    vec3f_add(         net->idMtx[3], net->worldPos    ); // set to initial position?
+    vec3_add(              net->idMtx[3], net->worldPos    ); // set to initial position?
     mtxf_copy(net->invMtx, net->idMtx);
     if ((grp = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint, grp);
 }
@@ -68,9 +68,9 @@ struct ObjNet *make_net(struct ObjGroup *group) {
     struct ObjNet *net;
     net            = (struct ObjNet *) make_object(OBJ_TYPE_NETS);
     mtxf_identity(net->invMtx);
-    vec3f_zero(net->initPos);
+    vec3_zero(net->initPos);
     net->id        = ++sNetCount;
-    vec3f_zero(net->scale);
+    vec3_zero(net->scale);
     net->shapePtr  = NULL;
     net->nodeGrp   = group;
     net->faceGroup = NULL;
@@ -139,9 +139,9 @@ void convert_gd_verts_to_Vtx(struct ObjGroup *grp) {
         for (vtxlink = vtx->gbiVerts; vtxlink != NULL; vtxlink = vtxlink->prev) {
 #ifndef GBI_FLOATS
             vtxcoords = vtxlink->data->v.ob;
-            vec3s_copy(vtxcoords, pos);
+            vec3_copy(vtxcoords, pos);
 #else
-            vec3s_to_vec3f(vtxlink->data->v.ob, pos);
+            vec3_copy(vtxlink->data->v.ob, pos);
 #endif
         }
     }

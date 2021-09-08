@@ -14,7 +14,7 @@ static struct ObjectHitbox sRollingSphereHitbox = {
 
 void bhv_snowmans_bottom_init(void) {
     struct Object *headObj;
-    vec3f_copy(&o->oHomeVec, &o->oPosVec);
+    vec3_copy(&o->oHomeVec, &o->oPosVec);
     o->oGravity    = 10.0f;
     o->oFriction   = 0.999f;
     o->oBuoyancy   = 2.0f;
@@ -129,7 +129,7 @@ void bhv_snowmans_head_init(void) {
     o->oBuoyancy = 2.0f;
     if ((starFlags & (1 << behParams)) && (gCurrActNum != (behParams + 1))) {
         spawn_object_abs_with_rot(o, 0, MODEL_CCM_SNOWMAN_BASE, bhvBigSnowmanWhole, -4230, -1344, 1813, 0x0, 0x0, 0x0);
-        vec3f_set(&o->oPosVec, -4230.0f, -992.0f, 1813.0f);
+        vec3_set(&o->oPosVec, -4230.0f, -992.0f, 1813.0f);
         o->oAction = SNOWMANS_HEAD_ACT_NONE;
     }
 }

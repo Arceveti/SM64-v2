@@ -14,6 +14,9 @@
 #include "graph_node.h"
 #include "surface_collision.h"
 #include "math_util.h"
+#ifdef PUPPYLIGHTS
+#include "game/puppylights.h"
+#endif
 
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8( index) (u8    )((gCurBhvCommand[index] >> 24) & 0xFF) // unused
@@ -37,7 +40,7 @@ UNUSED static void goto_behavior_unused(const BehaviorScript *bhvAddr) {
 
 // Update an object's graphical position and rotation to match its real position and rotation.
 void obj_update_gfx_pos_and_angle(struct Object *obj) {
-    vec3f_copy_y_off(obj->header.gfx.pos, &obj->oPosVec, obj->oGraphYOffset);
+    vec3_copy_y_off(obj->header.gfx.pos, &obj->oPosVec, obj->oGraphYOffset);
     obj->header.gfx.angle[0] = (obj->oFaceAnglePitch & 0xFFFF);
     obj->header.gfx.angle[1] = (obj->oFaceAngleYaw   & 0xFFFF);
     obj->header.gfx.angle[2] = (obj->oFaceAngleRoll  & 0xFFFF);
@@ -726,6 +729,9 @@ void cur_obj_update(void) {
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          o);
 #ifdef VARIABLE_FRAMERATE
     if (o->header.gfx.animInfo.curAnim != NULL) o->header.gfx.animInfo.animFrame = geo_update_animation_frame(&o->header.gfx.animInfo, &o->header.gfx.animInfo.animFrameAccelAssist);
+#endif
+#ifdef PUPPYLIGHTS
+    puppylights_object_emit(gCurrentObject);
 #endif
     // Handle visibility of object
     if (o->oRoom != -1) {

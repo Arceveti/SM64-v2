@@ -22,7 +22,7 @@ void bhv_checkerboard_elevator_group_init(void) {
         relativePosZ = ((i == 0) ? -sCheckerBoardPlatformInitPositions[type].relPosZ : sCheckerBoardPlatformInitPositions[type].relPosZ);
         platformObj = spawn_object_relative(i, 0, (i * relativePosY), relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM, bhvCheckerboardPlatformSub);
         platformObj->oCheckerBoardPlatformRadius  = sCheckerBoardPlatformInitPositions[type].radius;
-        vec3f_copy(platformObj->header.gfx.scale,   sCheckerBoardPlatformInitPositions[type].scaleVec);
+        vec3_copy(platformObj->header.gfx.scale,   sCheckerBoardPlatformInitPositions[type].scaleVec);
     }
 }
 

@@ -312,6 +312,9 @@
 // Enable debug level select (doesn't work if Goddard is skipped)
 #define DEBUG_LEVEL_SELECT
 
+// Open all courses and doors. Used for debugging purposes to unlock all content.
+#define UNLOCK_ALL
+
 // Enable debug info with info for velocity and info for floors/ceilings/walls
 // [COMPLETE_EN_US_SEGMENT2 is recommended]
 // (Arceveti)
@@ -807,7 +810,7 @@
  ********************************************************************************************************************************/
 
 // // Lightweight directional lighting engine by Fazana. Intended for giving proximity and positional pointlights to small objects.
-// #define PUPPYLIGHTS
+#define PUPPYLIGHTS
 
 // Variable Framerate (Fazana)
 //! Not compatible with KEEP_MARIO_HEAD

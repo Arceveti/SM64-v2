@@ -26,6 +26,9 @@
 #ifdef VARIABLE_FRAMERATE
 #include "engine/rendering_graph_node.h"
 #endif
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 
 /**
  * Flags controlling what debug info is displayed.
@@ -236,11 +239,11 @@ void copy_mario_state_to_object(void) {
     s32 i = 0;
     // L is real
     if (o != gMarioObject) i++;
-    vec3f_copy(&o->oVelVec, gMarioStates[i].vel);
-    vec3f_copy(&o->oPosVec, gMarioStates[i].pos);
-    vec3s_to_vec3i(&o->oMoveAngleVec, o->header.gfx.angle);
-    vec3s_to_vec3i(&o->oFaceAngleVec, o->header.gfx.angle);
-    vec3s_to_vec3i(&o->oAngleVelVec, gMarioStates[i].angleVel);
+    vec3_copy(&o->oVelVec, gMarioStates[i].vel);
+    vec3_copy(&o->oPosVec, gMarioStates[i].pos);
+    vec3_copy(&o->oMoveAngleVec, o->header.gfx.angle);
+    vec3_copy(&o->oFaceAngleVec, o->header.gfx.angle);
+    vec3_copy(&o->oAngleVelVec, gMarioStates[i].angleVel);
 }
 
 /**
@@ -255,6 +258,12 @@ void spawn_particle(u32 activeParticleFlag, ModelID model, const BehaviorScript 
     }
 }
 
+extern Lights1 mario_blue_lights_group;
+extern Lights1 mario_red_lights_group;
+extern Lights1 mario_white_lights_group;
+extern Lights1 mario_brown1_lights_group;
+extern Lights1 mario_beige_lights_group;
+extern Lights1 mario_brown2_lights_group;
 /**
  * Mario's primary behavior update function.
  */
@@ -265,6 +274,12 @@ void bhv_mario_update(void) {
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object
     copy_mario_state_to_object();
+    puppylights_run(&mario_blue_lights_group,   gMarioState->marioObj, 0, 0x0000FF00);
+    puppylights_run(&mario_red_lights_group,    gMarioState->marioObj, 0, 0xFF000000);
+    puppylights_run(&mario_white_lights_group,  gMarioState->marioObj, 0, 0xFFFFFF00);
+    puppylights_run(&mario_brown1_lights_group, gMarioState->marioObj, 0, 0x721C0E00);
+    puppylights_run(&mario_beige_lights_group,  gMarioState->marioObj, 0, 0xFEC17900);
+    puppylights_run(&mario_brown2_lights_group, gMarioState->marioObj, 0, 0x73060000);
     i = 0;
     while (sParticleTypes[i].particleFlag != 0x0) {
         if (particleFlags & sParticleTypes[i].particleFlag) {
@@ -425,9 +440,9 @@ void spawn_objects_from_info(struct SpawnInfo *spawnInfo) {
                 geo_make_first_child(&object->header.gfx.node);
             }
             geo_obj_init_spawninfo(&object->header.gfx, spawnInfo);
-            vec3s_to_vec3f(&object->oPosVec, spawnInfo->startPos);
-            vec3s_to_vec3i(&object->oFaceAngleVec, spawnInfo->startAngle);
-            vec3s_to_vec3i(&object->oMoveAngleVec, spawnInfo->startAngle);
+            vec3_copy(&object->oPosVec, spawnInfo->startPos);
+            vec3_copy(&object->oFaceAngleVec, spawnInfo->startAngle);
+            vec3_copy(&object->oMoveAngleVec, spawnInfo->startAngle);
         }
         spawnInfo = spawnInfo->next;
     }

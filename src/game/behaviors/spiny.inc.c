@@ -110,7 +110,7 @@ static void spiny_act_walk(void) {
 static void spiny_act_held_by_lakitu(void) {
     o->oGraphYOffset = 15.0f;
     cur_obj_init_animation_with_sound(SPINY_ANIM_DEFAULT);
-    vec3f_set(&o->oParentRelativePosVec, -50.0f, 35.0f, -100.0f);
+    vec3_set(&o->oParentRelativePosVec, -50.0f, 35.0f, -100.0f);
     if (o->parentObj->prevObj == NULL) {
         o->oAction       = SPINY_ACT_THROWN_BY_LAKITU;
         o->oMoveAngleYaw = o->parentObj->oFaceAngleYaw;

@@ -110,7 +110,7 @@ void wiggler_init_segments(void) {
         o->oWigglerSegments = segments;
         for ((i = 0); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
             chain_segment_init(segments + i);
-            vec3f_copy((segments + i)->pos, &o->oPosVec);
+            vec3_copy((segments + i)->pos, &o->oPosVec);
             (segments + i)->angle[0] = o->oFaceAnglePitch;
             (segments + i)->angle[1] = o->oFaceAngleYaw;
         }
@@ -147,7 +147,7 @@ void wiggler_init_segments(void) {
     for ((i = 1); (i < WIGGLER_NUM_SEGMENTS); (i++)) {
         prevBodyPart = &o->oWigglerSegments[i - 1];
         bodyPart     = &o->oWigglerSegments[i    ];
-        vec3f_diff(d, bodyPart->pos, prevBodyPart->pos);
+        vec3_diff(d, bodyPart->pos, prevBodyPart->pos);
         // As the head turns, propagate this rotation backward if the difference
         // is more than 45 degrees
         dyaw = (atan2s(-d[2], -d[0]) - prevBodyPart->angle[1]);
@@ -356,7 +356,7 @@ void bhv_wiggler_update(void) {
             cur_obj_move_standard(-78);
         }
         // Update segment 0 with data from the wiggler object
-        vec3f_copy(o->oWigglerSegments[0].pos, &o->oPosVec);
+        vec3_copy(o->oWigglerSegments[0].pos, &o->oPosVec);
         o->oWigglerSegments[0].angle[0] = o->oFaceAnglePitch;
         o->oWigglerSegments[0].angle[1] = o->oFaceAngleYaw;
         // Update the rest of the segments to follow segment 0

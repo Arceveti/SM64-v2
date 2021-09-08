@@ -33,6 +33,9 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 #include "rumble_init.h"
+#ifdef PUPPYLIGHTS
+#include "puppylights.h"
+#endif
 
 /**
  * @file obj_behaviors.c
@@ -123,12 +126,12 @@ Bool32 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVel
     struct WallCollisionData hitbox;
     Vec3f wall_n;
     f32 objYawX, objYawZ;
-    vec3f_set(hitbox.pos, objNewX, objY, objNewZ);
+    vec3_set(hitbox.pos, objNewX, objY, objNewZ);
     hitbox.offsetY = (o->hitboxHeight / 2);
     hitbox.radius  =  o->hitboxRadius;
     if (find_wall_collisions(&hitbox) != 0) {
-        vec3f_copy(&o->oPosVec, hitbox.pos);
-        vec3f_set(wall_n, hitbox.walls[0]->normal.x, hitbox.walls[0]->normal.y, hitbox.walls[0]->normal.z);
+        vec3_copy(&o->oPosVec, hitbox.pos);
+        vec3_set(wall_n, hitbox.walls[0]->normal.x, hitbox.walls[0]->normal.y, hitbox.walls[0]->normal.z);
         // Turns away from the first wall only.
         turn_obj_away_from_surface(objVelX, objVelZ, wall_n[0], wall_n[1], wall_n[2], &objYawX, &objYawZ);
         o->oMoveAngleYaw = atan2s(objYawZ, objYawX);
@@ -181,7 +184,7 @@ void obj_orient_graph(struct Object *obj, Vec3f normal) {
     // If out of memory, fail to try orienting the object.
     if (throwMatrix == NULL) return;
 #endif
-    vec3f_copy_y_off(objVisualPosition, &obj->oPosVec, obj->oGraphYOffset);
+    vec3_copy_y_off(objVisualPosition, &obj->oPosVec, obj->oGraphYOffset);
     mtxf_align_terrain_normal(*throwMatrix, normal, objVisualPosition, obj->oFaceAngleYaw);
 #ifdef VARIABLE_FRAMERATE
     obj->header.gfx.matrixID[gThrowMatSwap] = gThrowMatIndex;

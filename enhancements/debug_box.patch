@@ -159,7 +159,7 @@ index 00000000..1ffe0288
 + * If the alpha component is zero, DBG_BOX_ALPHA (0x7f) will be used instead.
 + * Ex: 0xFF0000 becomes 0x7FFF0000
 + */
-+void debug_box_color(u32 color)
++void debug_box_color(RGBA32 color)
 +{
 +    if ((color >> 24) == 0) color |= (DBG_BOX_ALPHA << 24);
 +    sCurBoxColor = color;
@@ -328,7 +328,7 @@ index 00000000..540c85e4
 + */
 +#define MAX_DEBUG_BOXES 512
 +
-+void debug_box_color(u32 color);
++void debug_box_color(RGBA32 color);
 +void debug_box(Vec3f center, Vec3f bounds);
 +void debug_box_rot(Vec3f center, Vec3f bounds, Angle yaw);
 +

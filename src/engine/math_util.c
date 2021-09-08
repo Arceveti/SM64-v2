@@ -349,12 +349,6 @@ void vec3i_set(Vec3i dst, s32 x, s32 y, s32 z       ) { vec3_set(dst, x, y, z   
 void vec3f_set(Vec3f dst, f32 x, f32 y, f32 z       ) { vec3_set(dst, x, y, z   ); }
 void vec4f_set(Vec4f dst, f32 x, f32 y, f32 z, f32 w) { vec4_set(dst, x, y, z, w); }
 
-/// Copy vector 'src' to 'dst' with a y offset
-void vec3c_copy_y_off(Vec3c dst, Vec3c src, s8  offset) { vec3_copy_y_off(dst, src, offset); }
-void vec3s_copy_y_off(Vec3s dst, Vec3s src, s16 offset) { vec3_copy_y_off(dst, src, offset); }
-void vec3i_copy_y_off(Vec3i dst, Vec3i src, s32 offset) { vec3_copy_y_off(dst, src, offset); }
-void vec3f_copy_y_off(Vec3f dst, Vec3f src, f32 offset) { vec3_copy_y_off(dst, src, offset); }
-
 /// Convert char vector 'src' to vector 'dst'
 void vec3c_to_vec3s(Vec3s dst, Vec3c src) { vec3_copy(dst, src); }
 void vec3c_to_vec3i(Vec3i dst, Vec3c src) { vec3_copy(dst, src); }
@@ -374,10 +368,6 @@ void vec3i_to_vec3f(Vec3f dst, Vec3i src) { vec3_copy(dst, src); }
 void vec3f_to_vec3c(Vec3c dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 void vec3f_to_vec3s(Vec3s dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 void vec3f_to_vec3i(Vec3i dst, Vec3f src) { vec3_copy_roundf(dst, src); }
-
-/// Get the average of vector 'v'
-f32 vec2f_average(Vec2f v) { return ((v[0] + v[1]       ) / 2.0f); }
-f32 vec3f_average(Vec3f v) { return ((v[0] + v[1] + v[2]) / 3.0f); }
 
 /// Get the inverse magnitude of vector 'v'
 f32 vec2f_invmag(Vec2f v) {
@@ -603,15 +593,15 @@ void rotate_triangle_vertices(Vec3s vertex1, Vec3s vertex2, Vec3s vertex3, Angle
     f32 sycp = (sinMYaw  * cosPitch);
     f32 cpcm = (cosPitch * cosMYaw );
     Vec3f v1, v2, v3;
-    vec3s_to_vec3f(v1, vertex1);
+    vec3_copy(v1, vertex1);
     vertex1[0] = ((v1[0] * cosMYaw ) + (v1[1] * spsy) - (v1[2] * sycp));
     vertex1[1] = ((v1[1] * cosPitch) + (v1[2] * sinPitch));
     vertex1[2] = ((v1[0] * sinMYaw ) - (v1[1] * spcy) + (v1[2] * cpcm));
-    vec3s_to_vec3f(v2, vertex2);
+    vec3_copy(v2, vertex2);
     vertex2[0] = ((v2[0] * cosMYaw ) + (v2[1] * spsy) - (v2[2] * sycp));
     vertex2[1] = ((v2[1] * cosPitch) + (v2[2] * sinPitch));
     vertex2[2] = ((v2[0] * sinMYaw ) - (v2[1] * spcy) + (v2[2] * cpcm));
-    vec3s_to_vec3f(v3, vertex3);
+    vec3_copy(v3, vertex3);
     vertex3[0] = ((v3[0] * cosMYaw ) + (v3[1] * spsy) - (v3[2] * sycp));
     vertex3[1] = ((v3[1] * cosPitch) + (v3[2] * sinPitch));
     vertex3[2] = ((v3[0] * sinMYaw ) - (v3[1] * spcy) + (v3[2] * cpcm));
@@ -685,7 +675,7 @@ void mtxf_identity(Mat4 mtx) {
  */
 void mtxf_translate(Mat4 dest, Vec3f b) {
     mtxf_identity(dest);
-    vec3f_copy(dest[3], b);
+    vec3_copy(dest[3], b);
 }
 
 /**
@@ -706,7 +696,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     colY[1] = coss(roll);
     colY[0] = ( sr * dz);
     colY[2] = (-sr * dx);
-    vec3f_diff(colZ, to, from);
+    vec3_diff(colZ, to, from);
     vec3f_normalize_negative(colZ);
     vec3f_cross(colX, colY, colZ);
     vec3f_normalize(colX);
@@ -737,7 +727,7 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
  */
 void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
     Vec3f unit;
-    vec3f_copy(unit, vec);
+    vec3_copy(unit, vec);
     vec3f_normalize(unit);
     f32 hMag = sqrtf(sqr(unit[0]) + sqr(unit[2]));
     if (hMag != 0.0f) {
@@ -759,9 +749,9 @@ void mtxf_origin_lookat(Mat4 mtx, Vec3f vec, f32 roll) {
         mtx[1][2] = (((-s * unit[0]) - (cu1 * unit[2])) * invertedHMag);
         mtx[2][2] =                          -unit[2];
     } else {
-        vec3f_copy(mtx[0], gVec3fZ);
-        vec3f_copy(mtx[1], gVec3fX);
-        vec3f_copy(mtx[2], gVec3fY);
+        vec3_copy(mtx[0], gVec3fZ);
+        vec3_copy(mtx[1], gVec3fX);
+        vec3_copy(mtx[2], gVec3fY);
     }
     vec3_zero(mtx[3]);
     MTXF_END(mtx);
@@ -891,17 +881,17 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
  */
 void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     Vec3f lateralDir, leftDir, forwardDir;
-    vec3f_set(                                  lateralDir, sins(yaw), 0x0, coss(yaw));
+    vec3_set(                                   lateralDir, sins(yaw), 0x0, coss(yaw));
     vec3f_normalize(                     upDir                                       );
     vec3f_cross(                leftDir, upDir, lateralDir                           );
     vec3f_normalize(            leftDir                                              );
     vec3f_cross(    forwardDir, leftDir, upDir                                       );
     vec3f_normalize(forwardDir                                                       );
-    vec3f_copy(dest[0], leftDir);
+    vec3_copy(dest[0], leftDir);
     dest[3][0] = pos[0];
-    vec3f_copy(dest[1], upDir);
+    vec3_copy(dest[1], upDir);
     dest[3][1] = pos[1];
-    vec3f_copy(dest[2], forwardDir);
+    vec3_copy(dest[2], forwardDir);
     dest[3][2] = pos[2];
     MTXF_END(dest);
 }
@@ -956,7 +946,7 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
  */
 void mtxf_transform_from_normals(Mat4 dest, Vec3f pos, f32 xNorm, f32 yNorm, f32 zNorm) {
     Vec3n normal;
-    vec3f_set(normal, xNorm, yNorm, zNorm);
+    vec3_set(normal, xNorm, yNorm, zNorm);
     mtxf_align_terrain_normal(dest, normal, pos, 0);
 }
 
@@ -1634,7 +1624,7 @@ Bool32 anim_spline_poll(Vec3f result) {
     Vec4f weights;
     s32 i;
     Bool32 hasEnded = FALSE;
-    vec3f_zero(result);
+    vec3_zero(result);
     spline_get_weights(weights, gSplineKeyframeFraction, gSplineState);
     for ((i = 0); (i < 4); (i++)) {
         result[0] += (weights[i] * gSplineKeyframe[i][1]);
