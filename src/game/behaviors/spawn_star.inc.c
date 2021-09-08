@@ -30,7 +30,7 @@ void bhv_collect_star_init(void) {
     }
     obj_set_hitbox(o, &sCollectStarHitbox);
 #ifdef PUPPYLIGHTS
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, 400, 400, 400, 0x0, 0, 0xFFFF00FF, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, 0xFFFF00FF, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
     cur_obj_enable_light();
 #endif
 }
@@ -38,6 +38,9 @@ void bhv_collect_star_init(void) {
 void bhv_collect_star_loop(void) {
     o->oFaceAngleYaw += 0x800;
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
         mark_obj_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
     }
@@ -55,6 +58,10 @@ void bhv_star_spawn_arc_init(void) {
     set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
     o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
     cur_obj_become_intangible();
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, 0xFFFF00FF, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }
 
 void bhv_star_spawn_arc_loop(void) {
@@ -101,6 +108,9 @@ void bhv_star_spawn_arc_loop(void) {
                 o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
             }
             if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+#ifdef PUPPYLIGHTS
+                cur_obj_disable_light();
+#endif
                 mark_obj_for_deletion(o);
                 o->oInteractStatus = INT_STATUS_NONE;
             }

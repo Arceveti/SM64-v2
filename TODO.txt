@@ -2,12 +2,14 @@
 - Known Bugs:
     - Audio is scuffed
         - Might be a HackerSM64 issue?
+    - Puppylights break if the player leaves area 1 of a level
     - Possible to clip through the back wall of the JRB ship when jumping at it at certain angles
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar because of the super steep floor
     - The camera goes too low when entering a painting
+    - The outline of Mario's silhouette is sometimes visible at low resolutions
 - Crashes:
-    - Entering a level after being in another level sometimes whitescreens (rare)
+    - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
     - Properly fix HMC crash
         - Current fix is increasing the gfx pool
         - Might be the same underlying issue as the above whitescreens?
@@ -96,11 +98,26 @@
     - Update mario movement angles when m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics
+    - 
+    - Add/check Puppylights light sources:
+        - Objects:
+            - Star
+                - Klepto/Unagi star
+            - Bowser Key
+            - Amp
+            - Bob-ombs during explosion
+            - Bowser bombs during explosion
+            - Moving flames/fire bars/spitters
+        - Level geo:
+            - HMC/PSS/etc. lanterns
+            - BITDW/COTMC crystals
+            - Lava in general
+            - SA windows
     - Fix/cleanup/redraw textures:
         - Fix peach window edges
         - Fix bubble tree edges
         - Redraw/re-render near and far coins with better lighting
-            - Far coins ia8
+            - Far coins as ia8
         - Make env textures right side up
     - The leftmost column of pixels on billboards shouldn't get stretched at low resolution
     - Fix Variable Framerate bugs:

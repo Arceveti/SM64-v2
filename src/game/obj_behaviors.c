@@ -12,6 +12,7 @@
 #include "engine/behavior_script.h"
 #include "engine/math_util.h"
 #include "engine/surface_collision.h"
+#include "engine/colors.h"
 #include "envfx_bubbles.h"
 #include "boot/game_init.h"
 #include "ingame_menu.h"

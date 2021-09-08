@@ -29,6 +29,9 @@ void bhv_homing_amp_init(void) {
     // Homing amps start at 1/10th their normal size.
     // They grow when they "appear" to Mario.
     cur_obj_scale(0.1f);
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+#endif
     // Hide the amp (until Mario gets near).
     o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
 }
@@ -70,6 +73,9 @@ static void homing_amp_appear_loop(void) {
         cur_obj_scale(0.1f + (0.9f * (f32)(o->oTimer / 30.0f)));
     } else {
         o->oAnimState = AMP_ANIM_STATE_ON;
+#ifdef PUPPYLIGHTS
+        cur_obj_enable_light();
+#endif
     }
     // Once the timer becomes greater than 90, i.e. 91 frames have passed,
     // reset the amp's size and start chasing Mario.
@@ -134,6 +140,9 @@ static void homing_amp_give_up_loop(void) {
         o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
         o->oAction        = HOMING_AMP_ACT_INACTIVE;
         o->oAnimState     = AMP_ANIM_STATE_OFF;
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
         o->oForwardVel    = 0.0f;
         o->oHomingAmpAvgY = o->oHomeY;
     }
@@ -147,9 +156,17 @@ static void amp_attack_cooldown_loop(void) {
     o->header.gfx.animInfo.animFrame += 2;
     o->oForwardVel                    = 0.0f;
     cur_obj_become_intangible();
-    if (o->oTimer >= 31) o->oAnimState = AMP_ANIM_STATE_OFF;
+    if (o->oTimer >= 31) {
+        o->oAnimState = AMP_ANIM_STATE_OFF;
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
+    }
     if (o->oTimer >= 91) {
         o->oAnimState = AMP_ANIM_STATE_ON;
+#ifdef PUPPYLIGHTS
+        cur_obj_enable_light();
+#endif
         cur_obj_become_tangible();
         o->oAction    = HOMING_AMP_ACT_CHASE;
     }
@@ -192,6 +209,9 @@ void bhv_homing_amp_loop(void) {
 void bhv_circling_amp_init(void) {
     vec3_copy(&o->oHomeVec, &o->oPosVec);
     o->oAnimState = AMP_ANIM_STATE_ON;
+#ifdef PUPPYLIGHTS
+    cur_obj_enable_light();
+#endif
     // Determine the radius of the circling amp's circle
     switch (o->oBehParams2ndByte) {
         case AMP_BP_ROT_RADIUS_200: o->oAmpRadiusOfRotation = 200.0f; break;
@@ -203,6 +223,9 @@ void bhv_circling_amp_init(void) {
     // The amp's move angle represents its angle along the circle.
     o->oMoveAngleYaw = random_u16();
     o->oAction       = AMP_ACT_IDLE;
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, PUPPYLIGHTS_AMP_LIGHT, 0x0, 0, COLOR_RGBA32_AMP_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+#endif
 }
 
 /**

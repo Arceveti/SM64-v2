@@ -258,12 +258,14 @@ void spawn_particle(u32 activeParticleFlag, ModelID model, const BehaviorScript 
     }
 }
 
+#ifdef PUPPYLIGHTS
 extern Lights1 mario_blue_lights_group;
 extern Lights1 mario_red_lights_group;
 extern Lights1 mario_white_lights_group;
 extern Lights1 mario_brown1_lights_group;
 extern Lights1 mario_beige_lights_group;
 extern Lights1 mario_brown2_lights_group;
+#endif
 /**
  * Mario's primary behavior update function.
  */
@@ -274,12 +276,15 @@ void bhv_mario_update(void) {
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object
     copy_mario_state_to_object();
+#ifdef PUPPYLIGHTS
+    //! TODO: move the color values to color_presets.h
     puppylights_run(&mario_blue_lights_group,   gMarioState->marioObj, 0, 0x0000FF00);
     puppylights_run(&mario_red_lights_group,    gMarioState->marioObj, 0, 0xFF000000);
     puppylights_run(&mario_white_lights_group,  gMarioState->marioObj, 0, 0xFFFFFF00);
     puppylights_run(&mario_brown1_lights_group, gMarioState->marioObj, 0, 0x721C0E00);
     puppylights_run(&mario_beige_lights_group,  gMarioState->marioObj, 0, 0xFEC17900);
     puppylights_run(&mario_brown2_lights_group, gMarioState->marioObj, 0, 0x73060000);
+#endif
     i = 0;
     while (sParticleTypes[i].particleFlag != 0x0) {
         if (particleFlags & sParticleTypes[i].particleFlag) {

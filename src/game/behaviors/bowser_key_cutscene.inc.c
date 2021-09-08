@@ -13,7 +13,7 @@ void bhv_bowser_key_unlock_door_loop(void) {
     } else if (animTimer < 49) {
         o->oBowserKeyScale = 0.2f;
     } else if (animTimer < 58) {
-        o->oBowserKeyScale = (((animTimer - 53) * 0.11875f) + 0.2f); // TODO 0.11875f 19/160? 
+        o->oBowserKeyScale = (((animTimer - 53) * (19.0f / 160.0f)) + 0.2f); // TODO 0.11875f 19/160? 
     } else if (animTimer < 59) {
         o->oBowserKeyScale = 1.1f;
     } else if (animTimer < 60) {
@@ -21,7 +21,16 @@ void bhv_bowser_key_unlock_door_loop(void) {
     } else {
         o->oBowserKeyScale = 1.0f;
     }
-    if (o->oTimer > 150) obj_mark_for_deletion(o);
+    if (o->oTimer > 150) {
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
+        obj_mark_for_deletion(o);
+    }
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }
 
 void bhv_bowser_key_course_exit_loop(void) {
@@ -30,13 +39,22 @@ void bhv_bowser_key_course_exit_loop(void) {
     if (animTimer < 38) {
         o->oBowserKeyScale = 0.2f;
     } else if (animTimer < 52) {
-        o->oBowserKeyScale = (((animTimer -  42) * 0.042857f) + 0.2f); // TODO 3/70?
+        o->oBowserKeyScale = (((animTimer -  42) * (3.0f / 70.0f)) + 0.2f);
     } else if (animTimer < 94) {
         o->oBowserKeyScale = 0.8f;
     } else if (animTimer < 101) {
-        o->oBowserKeyScale = (((101 - animTimer) * 0.085714f) + 0.2f); // TODO 6/70?
+        o->oBowserKeyScale = (((101 - animTimer) * (6.0f / 70.0f)) + 0.2f);
     } else {
         o->oBowserKeyScale = 0.2f;
     }
-    if (o->oTimer > 138) obj_mark_for_deletion(o);
+    if (o->oTimer > 138) {
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
+        obj_mark_for_deletion(o);
+    }
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }

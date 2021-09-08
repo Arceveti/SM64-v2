@@ -961,7 +961,7 @@ Bool32 interact_shock(struct MarioState *m, UNUSED InteractType interactType, st
     if (!sInvulnerable && !(m->flags & MARIO_VANISH_CAP)
         && !(o->oInteractionSubtype & INT_SUBTYPE_DELAY_INVINCIBILITY)) {
         u32 actionArg      = !(m->action & (ACT_FLAG_AIR | ACT_FLAG_ON_POLE | ACT_FLAG_HANGING));
-        o->oInteractStatus = INT_STATUS_INTERACTED | INT_STATUS_ATTACKED_MARIO;
+        o->oInteractStatus = (INT_STATUS_INTERACTED | INT_STATUS_ATTACKED_MARIO);
         m->interactObj     = o;
         take_damage_from_interact_object(m);
         play_sound(SOUND_MARIO_ATTACKED, m->marioObj->header.gfx.cameraToObject);

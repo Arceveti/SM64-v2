@@ -26,6 +26,10 @@ void bhv_celebration_star_init(void) {
     o->oFaceAnglePitch = 0x0;
     o->oFaceAngleRoll  = 0x0;
 #endif
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }
 
 void celeb_star_act_spin_around_mario(void) {

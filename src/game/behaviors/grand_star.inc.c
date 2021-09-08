@@ -19,8 +19,7 @@ void grand_star_zero_velocity(void) {
 }
 
 void bhv_grand_star_loop(void) {
-    Vec3f dest;
-    dest[0] = dest[1] = dest[2] = 0.0f;
+    Vec3f dest = { 0.0f, 0.0f, 0.0f };
     if (o->oAction == GRAND_STAR_ACT_APPEAR) {
         if (o->oTimer == 0) {
             obj_set_angle(o, 0x0, 0x0, 0x0);
@@ -44,8 +43,8 @@ void bhv_grand_star_loop(void) {
                 o->oSubAction  = GRAND_STAR_SUB_ACT_CONTINUE_JUMP;
                 cur_obj_play_sound_2(SOUND_GENERAL_GRAND_STAR_JUMP);
             }
-        } else if (o->oVelY < 0.0f && o->oPosY < o->oHomeY + 200.0f) {
-            o->oPosY = o->oHomeY + 200.0f;
+        } else if ((o->oVelY < 0.0f) && (o->oPosY < (o->oHomeY + 200.0f))) {
+            o->oPosY = (o->oHomeY + 200.0f);
             grand_star_zero_velocity();
             gObjCutsceneDone = TRUE;
             set_mario_npc_dialog(MARIO_DIALOG_STOP);
@@ -57,6 +56,9 @@ void bhv_grand_star_loop(void) {
     } else { // act 2
         cur_obj_become_tangible();
         if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+#ifdef PUPPYLIGHTS
+            cur_obj_disable_light();
+#endif
             obj_mark_for_deletion(o);
             o->oInteractStatus = INT_STATUS_NONE;
         }
@@ -65,4 +67,8 @@ void bhv_grand_star_loop(void) {
     o->oFaceAngleYaw += o->oAngleVelYaw;
     cur_obj_scale(2.0f);
     o->oGraphYOffset = 110.0f;
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, PUPPYLIGHTS_GRAND_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }

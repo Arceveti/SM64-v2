@@ -39,4 +39,8 @@ void bhv_bowser_key_loop(void) {
         mark_obj_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
     }
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }

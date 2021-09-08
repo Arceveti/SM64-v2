@@ -127,7 +127,6 @@ void bhv_unagi_loop(void) {
 
 void bhv_unagi_subobject_loop(void) { // unagi collision segments & star
     f32 offset;
-
     if (!o->parentObj->oUnagiHasStar) {
         obj_mark_for_deletion(o);
     } else {
@@ -137,10 +136,19 @@ void bhv_unagi_subobject_loop(void) { // unagi collision segments & star
         o->oPosX = (o->parentObj->oPosX + (offset * sins(o->parentObj->oFaceAngleYaw)));
         o->oPosZ = (o->parentObj->oPosZ + (offset * coss(o->parentObj->oFaceAngleYaw)));
         if (o->oBehParams2ndByte == UNAGI_PART_BP_BACK) {
+#ifdef PUPPYLIGHTS
+            if (o->parentObj->oAnimState != UNAGI_ANIM_STATE_NO_STAR) {
+                set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+                cur_obj_enable_light();
+            }
+#endif
             if ((o->parentObj->oAnimState != UNAGI_ANIM_STATE_NO_STAR) && (o->oDistanceToMario < 150.0f)) {
                 o->oBehParams = o->parentObj->oBehParams;
                 spawn_default_star(6833.0f, -3654.0f, 2230.0f);
                 o->parentObj->oAnimState = UNAGI_ANIM_STATE_NO_STAR;
+#ifdef PUPPYLIGHTS
+                cur_obj_disable_light();
+#endif
             }
         } else {
             cur_obj_check_attacks(&sUnagiHitbox, o->oAction);

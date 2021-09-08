@@ -79,6 +79,11 @@ void bhv_klepto_init(void) {
 #else
         o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
 #endif
+#ifdef PUPPYLIGHTS
+        //! down offset?
+        set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+        cur_obj_enable_light();
+#endif
     } else {
         vec3_copy(&o->oKleptoStartPosVec, &o->oPosVec);
         if (save_file_get_flags() & SAVE_FLAG_CAP_ON_KLEPTO) {
@@ -287,6 +292,9 @@ void bhv_klepto_update(void) {
                 save_file_clear_flags(SAVE_FLAG_CAP_ON_KLEPTO);
                 spawn_object(o, MODEL_MARIOS_CAP, bhvNormalCap);
             } else if ((o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_STAR) || (o->oAnimState == KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR)) {
+#ifdef PUPPYLIGHTS
+                cur_obj_disable_light();
+#endif
                 spawn_default_star(-5550.0f, 300.0f, -930.0f);
             }
             o->oAnimState    = KLEPTO_ANIM_STATE_HOLDING_NOTHING;

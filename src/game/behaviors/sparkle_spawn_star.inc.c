@@ -16,11 +16,18 @@ void bhv_spawned_star_init(void) {
     if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) o->oBehParams = o->parentObj->oBehParams;
     if (save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) & (1 << ((o->oBehParams >> 24) & 0xFF))) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
+#ifdef PUPPYLIGHTS
+    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, PUPPYLIGHTS_STAR_LIGHT, 0x0, 0, COLOR_RGBA32_STAR_LIGHT, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), TRUE);
+    cur_obj_enable_light();
+#endif
 }
 
 void set_sparkle_spawn_star_hitbox(void) {
     obj_set_hitbox(o, &sSparkleSpawnStarHitbox);
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+#ifdef PUPPYLIGHTS
+        cur_obj_disable_light();
+#endif
         mark_obj_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
     }
@@ -29,7 +36,7 @@ void set_sparkle_spawn_star_hitbox(void) {
 void set_home_to_mario(void) {
     vec3_copy(&o->oHomeVec, &gMarioObject->oPosVec);
     o->oHomeY     += 250.0f;
-    o->oPosY       =  o->oHomeY;
+    o->oPosY       = o->oHomeY;
     f32 lateralDist;
     vec3f_get_lateral_dist(&o->oPosVec, &o->oHomeVec, &lateralDist);
     o->oForwardVel = (lateralDist / 23.0f); //?

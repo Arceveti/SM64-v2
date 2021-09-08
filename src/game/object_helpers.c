@@ -34,7 +34,6 @@
 struct PlatformDisplacementInfo sObjectDisplacementInfo;
 #endif
 
-static s8 sBbhStairJiggleOffsets[] = { -8, 8, -4, 4 };
 static s8 sLevelsWithRooms[]       = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
 static Bool32 clear_move_flag(u32 *, s32);
@@ -1609,12 +1608,6 @@ Bool32 cur_obj_shake_y_until(s32 cycles, s32 amount) {
     return (o->oTimer == (cycles * 2));
 }
 
-Bool32 jiggle_bbh_stair(s32 timer) {
-    if ((timer >= 4) || (timer < 0)) return TRUE;
-    o->oPosY += sBbhStairJiggleOffsets[timer];
-    return FALSE;
-}
-
 void cur_obj_call_action_function(void (*actionFunctions[])(void)) {
     void (*actionFunction)(void) = actionFunctions[o->oAction];
     actionFunction();
@@ -1640,9 +1633,8 @@ Bool32 is_item_in_array(s8 item, s8 *array) {
 
 void bhv_init_room(void) {
     struct Surface *floor = NULL;
-    UNUSED f32 floorHeight;
     if (is_item_in_array(gCurrLevelNum, sLevelsWithRooms)) {
-        floorHeight = find_room_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
+        find_room_floor(o->oPosX, o->oPosY, o->oPosZ, &floor);
         if (floor != NULL) o->oRoom = floor->room;
     } else {
         o->oRoom = -1;
@@ -1713,12 +1705,9 @@ Bool32 cur_obj_hide_if_mario_far_away_y(f32 distY) {
     }
 }
 
+//! move to behaviors/klepto.inc.c
 Gfx *geo_offset_klepto_held_object(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
-    if (callContext == GEO_CONTEXT_RENDER) {
-        ((struct GraphNodeTranslationRotation *) node->next)->translation[0] = 300;
-        ((struct GraphNodeTranslationRotation *) node->next)->translation[1] = 300;
-        ((struct GraphNodeTranslationRotation *) node->next)->translation[2] = 0;
-    }
+    if (callContext == GEO_CONTEXT_RENDER) vec3_set(((struct GraphNodeTranslationRotation *) node->next)->translation, 300, 300, 0);
     return NULL;
 }
 

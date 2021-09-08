@@ -132,6 +132,15 @@
 // Fixes the game reading the ia8 burn smoke texture as an rgba16
 #define BURN_SMOKE_FIX
 
+// Lightweight directional lighting engine by Fazana. Intended for giving proximity and positional pointlights to small objects.
+#define PUPPYLIGHTS
+
+// Intensities for puppylights light sources:
+#define PUPPYLIGHTS_GRAND_STAR_LIGHT 1600
+#define PUPPYLIGHTS_STAR_LIGHT        800
+#define PUPPYLIGHTS_FLAME_LIGHT       800
+#define PUPPYLIGHTS_AMP_LIGHT         400
+
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW
 
@@ -808,9 +817,6 @@
  * -- Experimental/Unfinished Settingss --                                                                                      *
  *                                                                                                                              *
  ********************************************************************************************************************************/
-
-// // Lightweight directional lighting engine by Fazana. Intended for giving proximity and positional pointlights to small objects.
-#define PUPPYLIGHTS
 
 // Variable Framerate (Fazana)
 //! Not compatible with KEEP_MARIO_HEAD

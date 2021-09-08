@@ -504,8 +504,7 @@ static s32 bhv_cmd_begin(void) {
     // instead of in the respective behavior scripts.
 
     // Initiate the room if the object is a haunted chair or the mad piano.
-    if (cur_obj_has_behavior(bhvHauntedChair)) bhv_init_room();
-    if (cur_obj_has_behavior(bhvMadPiano    )) bhv_init_room();
+    if (cur_obj_has_behavior(bhvHauntedChair) || cur_obj_has_behavior(bhvMadPiano)) bhv_init_room();
     // Set collision distance if the object is a message panel.
     if (cur_obj_has_behavior(bhvMessagePanel)) o->oCollisionDistance = 150.0f;
     gCurBhvCommand++;

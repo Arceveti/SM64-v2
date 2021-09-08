@@ -215,7 +215,6 @@ s32    cur_obj_progress_direction_table(void);
 void   cur_obj_scale_over_time(s32 axis, s32 times, f32 start, f32 end);
 void   cur_obj_set_pos_to_home_with_debug(void);
 Bool32 cur_obj_is_mario_on_platform(void);
-Bool32 jiggle_bbh_stair(s32 timer);
 void   cur_obj_call_action_function(void (*actionFunctions[])(void));
 Bool32 cur_obj_mario_far_away(void);
 Bool32 is_mario_moving_fast_or_in_air(s32 speedThreshold);

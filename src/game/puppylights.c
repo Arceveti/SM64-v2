@@ -188,16 +188,16 @@ void puppylights_object_emit(struct Object *obj) {
     s32 i;
     if (gCurrLevelNum < 4) return;
     if (obj->oFlags & OBJ_FLAG_EMIT_LIGHT) {
-        f64 dist = ((obj->oPosX - gMarioState->pos[0]) * (obj->oPosX - gMarioState->pos[0])) +
-                   ((obj->oPosY - gMarioState->pos[1]) * (obj->oPosY - gMarioState->pos[1])) +
-                   ((obj->oPosZ - gMarioState->pos[2]) * (obj->oPosZ - gMarioState->pos[2]));
+        Vec3d d;
+        vec3_diff(d, &obj->oPosVec, gMarioState->pos);
+        f64 dist      = vec3_sumsq(d);
         f64 lightSize = vec3_sumsq(obj->puppylight.pos[1]);
         if (dist > lightSize)
             goto deallocate; // That's right. I used a goto. Eat your heart out xkcd.
         if (obj->oLightID == 0xFFFF) {
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
             for ((i = gDynLightStart); (i < MAX_LIGHTS); (i++)) {
-                if (gPuppyLights[i]->active == TRUE) continue;
+                if (gPuppyLights[i]->active) continue;
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
                 obj->oLightID = i;
@@ -232,11 +232,11 @@ void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 off
 
 // You can run these in objects to enable or disable their light properties.
 void cur_obj_enable_light(void) {
-    gCurrentObject->oFlags |= OBJ_FLAG_EMIT_LIGHT;
+    o->oFlags |= OBJ_FLAG_EMIT_LIGHT;
 }
 
 void cur_obj_disable_light(void) {
-    gCurrentObject->oFlags &= ~OBJ_FLAG_EMIT_LIGHT;
+    o->oFlags &= ~OBJ_FLAG_EMIT_LIGHT;
 }
 
 void obj_enable_light(struct Object *obj) {
