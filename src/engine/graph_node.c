@@ -325,13 +325,13 @@ struct GraphNodeAnimatedPart *init_graph_node_animated_part(struct AllocOnlyPool
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_ANIMATED_PART);
         vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
-        vec3_copy(graphNode->lerpPos[0], gVec3fZero);
-        vec3_copy(graphNode->lerpPos[1], gVec3fZero);
-        vec3_copy(graphNode->lerpPos[2], gVec3fZero);
-        vec3_copy(graphNode->lerpTrans,  gVec3fZero);
-        vec3_copy(graphNode->lerpRot[0], gVec3sZero);
-        vec3_copy(graphNode->lerpRot[1], gVec3sZero);
-        vec3_copy(graphNode->lerpRot[2], gVec3sZero);
+        vec3_zero(graphNode->lerpPos[0]);
+        vec3_zero(graphNode->lerpPos[1]);
+        vec3_zero(graphNode->lerpPos[2]);
+        vec3_zero(graphNode->lerpTrans );
+        vec3_zero(graphNode->lerpRot[0]);
+        vec3_zero(graphNode->lerpRot[1]);
+        vec3_zero(graphNode->lerpRot[2]);
 #endif
         graphNode->node.flags  = ((drawingLayer << 8) | (graphNode->node.flags & GRAPH_NODE_TYPES_MASK));
         graphNode->displayList = displayList;
@@ -587,7 +587,7 @@ void geo_reset_object_node(struct GraphNodeObject *graphNode) {
  * Initialize an object node using the given parameters
  */
 void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f pos, Vec3a angle) {
-    vec3_copy(graphNode->scale, gVec3fOne);
+    vec3_same(graphNode->scale, 1.0f);
     vec3_copy(graphNode->pos,   pos);
     vec3_copy(graphNode->angle, angle);
 #ifdef VARIABLE_FRAMERATE
@@ -615,9 +615,9 @@ void geo_obj_init(struct GraphNodeObject *graphNode, void *sharedChild, Vec3f po
  * Initialize and object node using the given SpawnInfo struct
  */
 void geo_obj_init_spawninfo(struct GraphNodeObject *graphNode, struct SpawnInfo *spawn) {
-    vec3_copy(graphNode->scale, gVec3fOne);
+    vec3_same(graphNode->scale, 1.0f);
     vec3_copy(graphNode->angle, spawn->startAngle);
-    vec3_copy(graphNode->pos, spawn->startPos);
+    vec3_copy(graphNode->pos,   spawn->startPos);
 #ifdef VARIABLE_FRAMERATE
     vec3_copy(graphNode->lerpPos[0],   graphNode->pos);
     vec3_copy(graphNode->lerpPos[1],   graphNode->pos);

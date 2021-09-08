@@ -252,7 +252,7 @@ void draw_net(struct ObjNet *self) {
 
 /* 22803C -> 22829C */
 void draw_camera(struct ObjCamera *cam) {
-    Vec3f pos = {0.0f, 0.0f, 0.0f};
+    Vec3f pos = { 0.0f, 0.0f, 0.0f };
     if (cam->dynObj != NULL) {
         set_cur_dynobj(cam->dynObj);
         d_vec3f_get_world_pos(pos);

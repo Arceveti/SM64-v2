@@ -339,17 +339,17 @@ void geo_layout_cmd_node_camera(void) {
     cmd+0x02: s16 xTranslation
     cmd+0x04: s16 yTranslation
     cmd+0x06: s16 zTranslation
-    (rotation gets copied from gVec3sZero)
+    (rotation gets set to 0)
 
    fieldLayout == 2:
     cmd+0x02: s16 xRotation
     cmd+0x04: s16 yRotation
     cmd+0x06: s16 zRotation
-    (translation gets copied from gVec3sZero)
+    (translation gets set to 0)
 
    fieldLayout == 3:
     cmd+0x02: s16 yRotation
-    (translation gets copied from gVec3sZero)
+    (translation gets set to 0)
     (x and z translation are set to 0)
 
    [cmd+var: void *displayList]
@@ -369,14 +369,14 @@ void geo_layout_cmd_node_translation_rotation(void) {
             break;
         case 0x1:
             cmdPos = read_vec3s(translation, &cmdPos[1]);
-            vec3_copy(rotation, gVec3sZero);
+            vec3_zero(rotation);
             break;
         case 0x2:
             cmdPos = read_vec3s_angle(rotation, &cmdPos[1]);
-            vec3_copy(translation, gVec3sZero);
+            vec3_zero(translation);
             break;
         case 0x3:
-            vec3_copy(translation, gVec3sZero);
+            vec3_zero(translation);
             vec3_set(rotation, 0, ((cmdPos[1] << 15) / 180), 0);
             cmdPos += (0x02 << CMD_SIZE_SHIFT);
             break;

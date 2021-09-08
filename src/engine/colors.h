@@ -121,7 +121,9 @@
     (dst)[3] = RGBA32_A(src);               \
 }
 
-#define COLORRGBA_TO_RGBA32(dst, src) ((dst) = (R_RGBA32((src)[0]) | G_RGBA32((src)[1])) | B_RGBA32((src)[2])) | A_RGBA32((src)[3]))))
+#define COLORRGB0_TO_RGBA32(src) (R_RGBA32((src)[0]) | G_RGBA32((src)[1]) | B_RGBA32((src)[2]))
+#define COLORRGB1_TO_RGBA32(src) (R_RGBA32((src)[0]) | G_RGBA32((src)[1]) | B_RGBA32((src)[2]) | MSK_RGBA32_A))
+#define COLORRGBA_TO_RGBA32(src) (R_RGBA32((src)[0]) | G_RGBA32((src)[1]) | B_RGBA32((src)[2]) | A_RGBA32((src)[3]))
 
 #include "color_presets.h"
 

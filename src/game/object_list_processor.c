@@ -27,6 +27,7 @@
 #include "engine/rendering_graph_node.h"
 #endif
 #ifdef PUPPYLIGHTS
+#include "engine/colors.h"
 #include "puppylights.h"
 #endif
 
@@ -277,13 +278,12 @@ void bhv_mario_update(void) {
     // to sync it with the Mario object
     copy_mario_state_to_object();
 #ifdef PUPPYLIGHTS
-    //! TODO: move the color values to color_presets.h
-    puppylights_run(&mario_blue_lights_group,   gMarioState->marioObj, 0, 0x0000FF00);
-    puppylights_run(&mario_red_lights_group,    gMarioState->marioObj, 0, 0xFF000000);
-    puppylights_run(&mario_white_lights_group,  gMarioState->marioObj, 0, 0xFFFFFF00);
-    puppylights_run(&mario_brown1_lights_group, gMarioState->marioObj, 0, 0x721C0E00);
-    puppylights_run(&mario_beige_lights_group,  gMarioState->marioObj, 0, 0xFEC17900);
-    puppylights_run(&mario_brown2_lights_group, gMarioState->marioObj, 0, 0x73060000);
+    puppylights_run(&mario_blue_lights_group,   gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_BLUE  );
+    puppylights_run(&mario_red_lights_group,    gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_RED   );
+    puppylights_run(&mario_white_lights_group,  gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_WHITE );
+    puppylights_run(&mario_brown1_lights_group, gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_BROWN1);
+    puppylights_run(&mario_beige_lights_group,  gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_BEIGE );
+    puppylights_run(&mario_brown2_lights_group, gMarioState->marioObj, 0x0, COLOR_RGBA32_MARIO_LIGHTS_BROWN2);
 #endif
     i = 0;
     while (sParticleTypes[i].particleFlag != 0x0) {

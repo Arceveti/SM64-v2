@@ -696,7 +696,7 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         vec3_copy(node->lerpRot[1], node->lerpRot[0]);
         vec3_copy(node->lerpRot[2], node->lerpRot[0]);
     } else {
-        vec3_copy(node->lerpRot[0], gVec3sZero);
+        vec3_zero(node->lerpRot[0]);
     }
     mtxf_rotate_xyz_and_translate(matrix, node->lerpPos[0], node->lerpRot[0]);
 #else
@@ -734,7 +734,7 @@ static void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         rotation[1] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[2] = gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
     } else {
-        vec3_copy(rotation, gVec3sZero);
+        vec3_zero(rotation);
     }
     mtxf_rotate_xyz_and_translate(matrix, translation, rotation);
 #endif

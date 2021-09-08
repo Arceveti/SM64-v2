@@ -124,7 +124,7 @@ struct ObjJoint *make_joint(s32 flags, Vec3f pos) {
     j->colourNum  = ((j->flags & 0x1) ? COLOUR_RED : COLOUR_PINK);
     j->unk1C4     = NULL;
     j->shapePtr   = NULL;
-    vec3_copy(j->scale, gVec3fOne);
+    vec3_same(j->scale, 1.0f);
     vec3_zero(j->friction);
     j->updateFunc = NULL;
     return j;

@@ -670,7 +670,7 @@ void painting_average_vertex_normals(s16 *neighborTris, s16 numVtx) {
     s16 neighbors;
     s16 entry = 0;
     for ((i = 0); (i < numVtx); (i++)) {
-        Vec3n n = {0.0f, 0.0f, 0.0f};
+        Vec3n n = { 0.0f, 0.0f, 0.0f };
         // The first number of each entry is the number of adjacent tris
         neighbors = neighborTris[entry];
         for ((j = 0); (j < neighbors); (j++)) {
