@@ -98,7 +98,6 @@
     - Update mario movement angles when m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics
-    - 
     - Add/check Puppylights light sources:
         - Objects:
             - Star

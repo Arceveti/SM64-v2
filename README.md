@@ -19,6 +19,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - [King Bob-omb blinks](https://i.imgur.com/Gnhu2CV.png)
 - [Reflective metal cap texture using the framebuffer](https://i.imgur.com/IixJWBy.png) (mks#2512, Rovert, Arceveti) *
 - FoV slider in Puppycam's menu (Arceveti) *
+- Lightweight directional lighting engine, intended for giving proximity and positional pointlights to small objects (Fazana) *
 
 **Vanilla level changes:**
 - Fixed various models which had misaligned vertices/UVs (Arceveti)
