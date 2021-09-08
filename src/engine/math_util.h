@@ -156,6 +156,14 @@ extern Vec3f gVec3fZ;
 #define vec3_zero(v)        (vec3_same((v), 0))
 #define vec4_zero(v)        (vec4_same((v), 0))
 
+#define vec2_c(v)           (   (v)[0] + (v)[1])
+#define vec3_c(v)           (vec2_c(v) + (v)[2])
+#define vec4_c(v)           (vec3_c(v) + (v)[3])
+
+#define vec2_average(v)     (vec2_c(v) / 2.0f)
+#define vec3_average(v)     (vec3_c(v) / 3.0f)
+#define vec4_average(v)     (vec4_c(v) / 4.0f)
+
 #define vec2_sumsq(v)       (  sqr((v)[0]) + sqr((v)[1]))
 #define vec3_sumsq(v)       (vec2_sumsq(v) + sqr((v)[2]))
 #define vec4_sumsq(v)       (vec3_sumsq(v) + sqr((v)[3]))
@@ -167,10 +175,6 @@ extern Vec3f gVec3fZ;
 #define vec2_dot(a, b)       (((a)[0] * (b)[0]) + ((a)[1] * (b)[1]))
 #define vec3_dot(a, b)      (vec2_dot((a), (b)) + ((a)[2] * (b)[2]))
 #define vec4_dot(a, b)      (vec3_dot((a), (b)) + ((a)[3] * (b)[3]))
-
-#define vec2_average(v)     (vec2_sumsq(v) / 2.0f)
-#define vec3_average(v)     (vec3_sumsq(v) / 3.0f)
-#define vec4_average(v)     (vec4_sumsq(v) / 4.0f)
 
 #define vec2_set(dst, x, y) {           \
     (dst)[0] = (x);                     \

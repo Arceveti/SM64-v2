@@ -463,11 +463,6 @@ Bool32 floor_type_exists_in_current_cell(f32 x, f32 z, SurfaceType type, Bool32 
     return FALSE;
 }
 
-/**
- * Basically a local variable that passes through floor geo info.
- */
-struct FloorGeometry sFloorGeo;
-
 static Bool32 check_within_floor_triangle_bounds(f32 x, f32 z, struct Surface *surf) {
     register f32 x1 = surf->vertex1[0];
     register f32 z1 = surf->vertex1[2];
@@ -481,23 +476,6 @@ static Bool32 check_within_floor_triangle_bounds(f32 x, f32 z, struct Surface *s
     if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0.0f) return FALSE; // 23
     if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0.0f) return FALSE; // 31
     return TRUE;
-}
-
-/**
- * Return the floor height underneath (x, y, z) and populate `floorGeo`
- * with data about the floor's normal vector and origin offset. Also update
- * sFloorGeo.
- */
-f32 find_floor_height_and_data(f32 x, f32 y, f32 z, struct FloorGeometry **floorGeo) {
-    struct Surface *floor;
-    f32 floorHeight = find_floor(x, y, z, &floor);
-    *floorGeo = NULL;
-    if (floor != NULL) {
-        vec3_set(sFloorGeo.normal, floor->normal.x, floor->normal.y, floor->normal.z);
-        sFloorGeo.originOffset = floor->originOffset;
-        *floorGeo              = &sFloorGeo;
-    }
-    return floorHeight;
 }
 
 /**

@@ -514,7 +514,7 @@ struct Object *cur_obj_find_nearest_object_with_behavior(const BehaviorScript *b
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    f32 minDist = __FLT_MAX__;
+    f32 minDist = F32_MAX;
     Vec3f d;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj = (struct Object *) listHead->next;
@@ -538,7 +538,7 @@ struct Object *find_nearest_obj_with_behavior_from_point(const BehaviorScript *b
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    f32 minDist = __FLT_MAX__;
+    f32 minDist = F32_MAX;
     Vec3f d;
     listHead    = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj         = (struct Object *) listHead->next;

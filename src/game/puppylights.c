@@ -31,10 +31,10 @@ Lights1 gLevelLight; // Existing ambient light in the area. Will be set by the l
 Bool8 levelAmbient = FALSE;
 Lights1 *sLightBase; // The base value where lights are written to when worked with.
 Lights1 sDefaultLights = gdSPDefLights1(0x7F, 0x7F, 0x7F, 0xFE, 0xFE, 0xFE, 0x28, 0x28, 0x28); // Default lights default lights
-u16 gNumLights         = 0; // How many lights are loaded.
-u16 gDynLightStart     = 0; // Where the dynamic lights will start.
+u16 gNumLights         = 0;                  // How many lights are loaded.
+u16 gDynLightStart     = 0;                  // Where the dynamic lights will start.
 struct PuppyLight *gPuppyLights[MAX_LIGHTS]; // This contains all the loaded data.
-struct MemoryPool *gLightsPool; // The memory pool where the above is stored.
+struct MemoryPool *gLightsPool;              // The memory pool where the above is stored.
 
 // Runs after an area load, allocates the dynamic light slots.
 void puppylights_allocate(void) {
@@ -85,7 +85,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
             (-light->pos[1][1] < lightRelative[1]) && (lightRelative[1] < light->pos[1][1]) &&
             (-light->pos[1][2] <      lightPos[1]) && (     lightPos[1] < light->pos[1][2])) {
             scale = sqr(lightPos[0]) + sqr(lightRelative[1]) + sqr(lightPos[1]);
-            scaleVal = vec3_average(light->pos[1]);
+            scaleVal  = vec3_average(light->pos[1]);
             scaleVal *= scaleVal;
         } else {
             return;
@@ -126,9 +126,9 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     // Get the direction numbers we want by applying some maths to the relative positions. We use 64 because light directions range from -64 to 63.
     // Note: can this be optimised further? Simply squaring lightRelative and then dividing it by preScale doesn't work.
     if (light->flags & PUPPYLIGHT_DIRECTIONAL) {
-        lightDir[0] = ((lightRelative[0]) * 64.0f) / light->pos[1][0];
-        lightDir[1] = ((lightRelative[1]) * 64.0f) / light->pos[1][1];
-        lightDir[2] = ((lightRelative[2]) * 64.0f) / light->pos[1][2];
+        lightDir[0] = (((lightRelative[0]) * 64.0f) / light->pos[1][0]);
+        lightDir[1] = (((lightRelative[1]) * 64.0f) / light->pos[1][1]);
+        lightDir[2] = (((lightRelative[2]) * 64.0f) / light->pos[1][2]);
     }
     // Get direction if applicable.
     for ((i = 0); (i < 3); (i++)) {
@@ -155,7 +155,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
 
 // Main function. Run this in the object you wish to illuminate, and just give it its light, object pointer and any potential flags if you want to use them.
 // If the object has multiple lights, then you run this for each light.
-void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, u32 baseColour) {
+void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 baseColour) {
     s32 i;
     if (gCurrLevelNum < 4) return;
     // Checks if there's a hardset colour. Colours are only the first 3 bytes, so you can really put whatever you want in the last.
@@ -196,7 +196,7 @@ void puppylights_object_emit(struct Object *obj) {
             goto deallocate; // That's right. I used a goto. Eat your heart out xkcd.
         if (obj->oLightID == 0xFFFF) {
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
-            for ((i = gDynLightStart); (i < MAX_LIGHTS); i++) {
+            for ((i = gDynLightStart); (i < MAX_LIGHTS); (i++)) {
                 if (gPuppyLights[i]->active == TRUE) continue;
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
@@ -220,11 +220,11 @@ void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 off
     light->active = active;
     vec3_set(light->pos[0], x, y, z);
     vec3_set(light->pos[1], MAX(offsetX, 10), MAX(offsetY, 10), MAX(offsetZ, 10));
-    light->rgba[0] = RGBA32_R(colour); // ((colour >> 24) & 0xFF);
-    light->rgba[1] = RGBA32_G(colour); // ((colour >> 16) & 0xFF);
-    light->rgba[2] = RGBA32_B(colour); // ((colour >>  8) & 0xFF);
-    light->rgba[3] = RGBA32_A(colour); // ( colour        & 0xFF);
-    light->yaw = yaw;
+    light->rgba[0]   = RGBA32_R(colour); // ((colour >> 24) & 0xFF);
+    light->rgba[1]   = RGBA32_G(colour); // ((colour >> 16) & 0xFF);
+    light->rgba[2]   = RGBA32_B(colour); // ((colour >>  8) & 0xFF);
+    light->rgba[3]   = RGBA32_A(colour); // ((colour      ) & 0xFF);
+    light->yaw       = yaw;
     light->epicentre = epicentre;
     if (!(flags & PUPPYLIGHT_SHAPE_CYLINDER) && (flags & PUPPYLIGHT_SHAPE_CUBE)) light->flags |= PUPPYLIGHT_SHAPE_CYLINDER;
     light->flags |= (flags | PUPPYLIGHT_DYNAMIC);

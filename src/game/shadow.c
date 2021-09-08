@@ -178,10 +178,10 @@ f32 get_water_level_below_shadow(struct Shadow *s, struct Surface **waterFloor) 
 Bool32 init_shadow(struct Shadow *s, Vec3f pos, s16 shadowScale, Bool8 overwriteSolidity) {
     f32 waterLevel;
     f32 floorSteepness;
-    struct FloorGeometry *floorGeometry;
+    struct Surface *floor;
     struct Surface *waterFloor = NULL;
     vec3_copy(s->parentPos, pos);
-    s->floorHeight             = find_floor_height_and_data(s->parentPos[0], (s->parentPos[1] + 80.0f), s->parentPos[2], &floorGeometry);
+    s->floorHeight             = find_floor(s->parentPos[0], (s->parentPos[1] + 80.0f), s->parentPos[2], &floor);
     waterLevel                 = get_water_level_below_shadow(s, &waterFloor);
     if (gShadowAboveWaterOrLava) {
         s->floorHeight = waterLevel;
@@ -200,9 +200,9 @@ Bool32 init_shadow(struct Shadow *s, Vec3f pos, s16 shadowScale, Bool8 overwrite
     } else {
         // Don't draw a shadow if the floor is lower than expected possible,
         // or if the y-normal is negative (an unexpected result).
-        if ((s->floorHeight < FLOOR_LOWER_LIMIT_SHADOW) || (floorGeometry->normal[1] <= 0.0f)) return TRUE;
-        vec3_copy(s->floorNormal, floorGeometry->normal);
-        s->floorOriginOffset = floorGeometry->originOffset;
+        if ((s->floorHeight < FLOOR_LOWER_LIMIT_SHADOW) || (floor->normal.y <= 0.0f)) return TRUE;
+        vec3_set(s->floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
+        s->floorOriginOffset = floor->originOffset;
     }
     if (overwriteSolidity) s->solidity = dim_shadow_with_distance(overwriteSolidity, (pos[1] - s->floorHeight));
     s->shadowScale                     = scale_shadow_with_distance(shadowScale, (pos[1] - s->floorHeight));
@@ -315,7 +315,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
     f32 downwardAngle = (s.floorDownwardAngle * M_PI / 180.0f);
     f32 halfScale, halfTiltedScale;
     s8 xCoordUnit, zCoordUnit;
-    struct FloorGeometry *dummy;
+    UNUSED struct Surface *floor;
     // This makes xCoordUnit and yCoordUnit each one of -1, 0, or 1.
     get_vertex_coords(index, shadowVertexType, &xCoordUnit, &zCoordUnit);
     halfScale       = ((xCoordUnit * s.shadowScale) / 2.0f);
@@ -332,7 +332,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
              */
             // Clamp this vertex's y-position to that of the floor directly below
             // it, which may differ from the floor below the center vertex.
-            case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor_height_and_data(*xPosVtx, (s.parentPos[1] + 80.0f), *zPosVtx, &dummy); break;
+            case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor(*xPosVtx, (s.parentPos[1] + 80.0f), *zPosVtx, &floor); break;
             // Do not clamp. Instead, extrapolate the y-position of this
             // vertex based on the floor directly below the parent object.
             case SHADOW_WITH_4_VERTS: *yPosVtx = extrapolate_vertex_y_position(s, *xPosVtx, *zPosVtx); break;
@@ -349,7 +349,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
  * perpendicular, meaning the ground is locally flat. It returns nonzero
  * in most cases where `vtxY` is on a different floor triangle from the
  * center vertex, as in the case with SHADOW_WITH_9_VERTS, which sets
- * the y-value from `find_floor_height_and_data`. (See the bottom of
+ * the y-value from `find_floor`. (See the bottom of
  * `calculate_vertex_xyz`.)
  */
 Angle floor_local_tilt(struct Shadow s, f32 vtxX, f32 vtxY, f32 vtxZ) {
@@ -373,9 +373,8 @@ void make_shadow_vertex(Vtx *vertices, s8 index, struct Shadow s, s8 shadowVerte
      * GameShark code in this video: https://youtu.be/MSIh4rtNGF0. The code in
      * the video makes `extrapolate_vertex_y_position` return the same value as
      * the last-called function that returns a float; in this case, that's
-     * `find_floor_height_and_data`, which this if-statement was designed to
-     * overwrite in the first place. Thus, this if-statement is disabled by that
-     * code.
+     * `find_floor`, which this if-statement was designed to overwrite in the
+     * first place. Thus, this if-statement is disabled by that code.
      *
      * The last condition here means the y-position calculated previously
      * was probably on a different floor triangle from the center vertex.
@@ -547,9 +546,9 @@ Gfx *create_shadow_circle_4_verts(Vec3f pos, s16 shadowScale, Alpha solidity) {
 Gfx *create_shadow_circle_assuming_flat_ground(Vec3f pos, s16 shadowScale, Alpha solidity) {
     Vtx *verts;
     Gfx *displayList;
-    struct FloorGeometry *dummy; // only for calling find_floor_height_and_data
+    UNUSED struct Surface *floor; // only for calling find_floor
     f32 distBelowFloor;
-    f32 floorHeight = find_floor_height_and_data(pos[0], (pos[1] + 80.0f), pos[2], &dummy);
+    f32 floorHeight = find_floor(pos[0], (pos[1] + 80.0f), pos[2], &floor);
     f32 radius      = (shadowScale / 2);
     if (floorHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return NULL;
@@ -593,10 +592,10 @@ Gfx *create_shadow_rectangle(f32 halfWidth, f32 halfLength, f32 relY, Alpha soli
  * Populate `shadowHeight` and `solidity` appropriately; the default solidity
  * value is 200. Return 0 if a shadow should be drawn, 1 if not.
  */
-s32 get_shadow_height_solidity(f32 x, f32 y, f32 z, f32 *shadowHeight, Alpha *solidity) {
-    struct FloorGeometry *dummy;
+Bool32 get_shadow_height_solidity(f32 x, f32 y, f32 z, f32 *shadowHeight, Alpha *solidity) {
+    UNUSED struct Surface *floor;
     f32 waterLevel;
-    *shadowHeight = find_floor_height_and_data(x, (y + 80.0f), z, &dummy);
+    *shadowHeight = find_floor(x, (y + 80.0f), z, &floor);
     if (*shadowHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return TRUE;
     } else {

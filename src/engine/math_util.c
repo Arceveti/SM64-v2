@@ -41,7 +41,7 @@ f32 slow_logf(f32 x) {
     f32 p = 0.0f;
     f32 r = 0.0f, c = -1.0f;
     s32 i;
-    if (x == 0.0f) return __FLT_MIN__;
+    if (x == 0.0f) return F32_MIN;
     while (x < 0.5f) {
         x *= CONST_EULER_F;
         ++p;

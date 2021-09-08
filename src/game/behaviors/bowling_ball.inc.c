@@ -145,10 +145,10 @@ void bhv_bob_pit_bowling_ball_init(void) {
 }
 
 void bhv_bob_pit_bowling_ball_loop(void) {
-    struct FloorGeometry *floorGeometry;
+    struct Surface *floor;
     object_step();
-    find_floor_height_and_data(o->oPosX, (o->oPosY + (o->hitboxHeight / 2.0f)), o->oPosZ, &floorGeometry);
-    if ((floorGeometry->normal[0] == 0.0f) && (floorGeometry->normal[2] == 0.0f)) o->oForwardVel = 28.0f;
+    find_floor(o->oPosX, (o->oPosY + (o->hitboxHeight / 2.0f)), o->oPosZ, &floor);
+    if ((floor != NULL) && (floor->normal.x == 0.0f) && (floor->normal.z == 0.0f)) o->oForwardVel = 28.0f;
     bowling_ball_set_hitbox();
     set_camera_shake_from_point(SHAKE_POS_BOWLING_BALL, &o->oPosVec);
     cur_obj_play_sound_1(SOUND_ENV_BOWLING_BALL_ROLL);

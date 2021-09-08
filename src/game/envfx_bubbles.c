@@ -64,15 +64,13 @@ s32 random_flower_offset(void) {
  */
 void envfx_update_flower(Vec3s centerPos) {
     s32 i;
-    struct FloorGeometry *floorGeo; // unused
     s32 timer   = gGlobalTimer;
     for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = particle_is_laterally_close(i, centerPos[0], centerPos[2], 3000);
         if (!(gEnvFxBuffer + i)->isAlive) {
             (gEnvFxBuffer + i)->pos[0] = (random_flower_offset() + centerPos[0]);
             (gEnvFxBuffer + i)->pos[2] = (random_flower_offset() + centerPos[2]);
-            (gEnvFxBuffer + i)->pos[1] = find_floor_height_and_data((gEnvFxBuffer + i)->pos[0], 10000.0f,
-                                                                    (gEnvFxBuffer + i)->pos[2], &floorGeo);
+            (gEnvFxBuffer + i)->pos[1] = find_floor_height((gEnvFxBuffer + i)->pos[0], CELL_HEIGHT_LIMIT, (gEnvFxBuffer + i)->pos[2]);
             (gEnvFxBuffer + i)->isAlive   = TRUE;
             (gEnvFxBuffer + i)->animFrame = (random_float() * 5.0f);
         } else if (!(timer & 0x03)) {

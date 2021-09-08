@@ -95,7 +95,7 @@ static void klepto_change_target(void) {
     f32 dx, dz;
     f32 sqTargetDist, minTargetDist;
     if (o->oDistanceToMario > 2000.0f) {
-        minTargetDist = __FLT_MAX__;
+        minTargetDist = F32_MAX;
         for ((i = 0); (i < 3); (i++)) {
             dx = (gMarioObject->oPosX - sKleptoTargetPositions[i][0]);
             dz = (gMarioObject->oPosZ - sKleptoTargetPositions[i][2]);
