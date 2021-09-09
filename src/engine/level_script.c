@@ -351,12 +351,12 @@ static void level_cmd_begin_area(void) {
     u8 areaIndex = CMD_GET(u8, 2);
     void *geoLayoutAddr = CMD_GET(void *, 4);
     if (areaIndex < AREA_COUNT) {
-        struct GraphNodeRoot   *screenArea = (struct GraphNodeRoot *) process_geo_layout(sLevelPool, geoLayoutAddr);
+        struct GraphNodeRoot   *screenArea = (struct GraphNodeRoot   *) process_geo_layout(sLevelPool, geoLayoutAddr);
         struct GraphNodeCamera *node       = (struct GraphNodeCamera *) screenArea->views[0];
         sCurrAreaIndex                     = areaIndex;
         screenArea->areaIndex              = areaIndex;
         gAreas[areaIndex].graphNode        = screenArea;
-        gAreas[areaIndex].camera           = (node != NULL) ? ((struct Camera *) node->config.camera) : NULL;
+        gAreas[areaIndex].camera           = ((node != NULL) ? ((struct Camera *) node->config.camera) : NULL);
     }
     sCurrentCmd = CMD_NEXT;
 }
@@ -686,7 +686,6 @@ static void level_cmd_puppyvolume(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
-#ifdef PUPPYLIGHTS
 static void level_cmd_puppylight_environment(void) {
 #ifdef PUPPYLIGHTS
     Lights1 temp = gdSPDefLights1(CMD_GET(u8, 2), CMD_GET(u8, 3), CMD_GET(u8, 4), CMD_GET(u8, 5), CMD_GET(u8, 6), CMD_GET(u8, 7), CMD_GET(u8, 8), CMD_GET(u8, 9), CMD_GET(u8, 10));
@@ -717,7 +716,7 @@ static void level_cmd_puppylight_node(void) {
     gPuppyLights[gNumLights]->pos[1][2] = CMD_GET(s16, 16);
     gPuppyLights[gNumLights]->yaw       = CMD_GET(s16, 18);
     gPuppyLights[gNumLights]->epicentre = CMD_GET(u8,  20);
-    gPuppyLights[gNumLights]->flags    |= CMD_GET(u8,  21);
+    gPuppyLights[gNumLights]->flags     = CMD_GET(u8,  21);
     gPuppyLights[gNumLights]->active    = TRUE;
     gPuppyLights[gNumLights]->area      = sCurrAreaIndex;
     gPuppyLights[gNumLights]->room      = CMD_GET(s16, 22);
@@ -725,7 +724,6 @@ static void level_cmd_puppylight_node(void) {
 #endif
     sCurrentCmd = CMD_NEXT;
 }
-#endif
 
 static void (*LevelScriptJumpTable[])(void) = {
     /*00*/ level_cmd_load_and_execute,
@@ -791,10 +789,8 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*3C*/ level_cmd_get_or_set_var,
     /*3D*/ level_cmd_puppyvolume,
     /*3E*/ level_cmd_change_area_skybox,
-#ifdef PUPPYLIGHTS
     /*3F*/ level_cmd_puppylight_environment,
     /*40*/ level_cmd_puppylight_node,
-#endif
 };
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {

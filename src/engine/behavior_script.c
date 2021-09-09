@@ -720,9 +720,9 @@ void cur_obj_update(void) {
     // Execute various code based on object flags.
     objFlags = (s16) o->oFlags;
     if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) obj_set_face_angle_to_move_angle(      o);
-    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) o->oFaceAngleYaw =        o->oMoveAngleYaw;
-    if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw(                  );
-    if (objFlags & OBJ_FLAG_MOVE_Y_WITH_TERMINAL_VEL       ) cur_obj_move_y_with_terminal_vel(                    );
+    if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) o->oFaceAngleYaw = o->oMoveAngleYaw;
+    if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw(     );
+    if (objFlags & OBJ_FLAG_MOVE_Y_WITH_TERMINAL_VEL       ) cur_obj_move_y_with_terminal_vel(       );
     if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(o);
     if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   o);
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          o);
@@ -730,7 +730,7 @@ void cur_obj_update(void) {
     if (o->header.gfx.animInfo.curAnim != NULL) o->header.gfx.animInfo.animFrame = geo_update_animation_frame(&o->header.gfx.animInfo, &o->header.gfx.animInfo.animFrameAccelAssist);
 #endif
 #ifdef PUPPYLIGHTS
-    puppylights_object_emit(gCurrentObject);
+    puppylights_object_emit(o);
 #endif
     // Handle visibility of object
     if (o->oRoom != -1) {

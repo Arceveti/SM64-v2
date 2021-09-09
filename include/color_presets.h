@@ -118,8 +118,6 @@
 #define COLOR_RGBA32_MAGENTA                0xFF00FFFF // 255   0 255 255
 #define COLOR_RGBA32_PINK                   0xFF007FFF // 255   0 127 255
 
-#define COLOR_RGBA32_ACYAN                  0x00FFFF00 //   0 255 255   0
-#define COLOR_RGBA32_ABLUE                  0x0000FF00 //   0   0 255   0
 
 // Elemental
 #define COLOR_RGBA32_JRB_SKY                0x50645AFF //  80 100  90 255
@@ -147,6 +145,8 @@
 #define COLOR_RGBA32_DEBUG_POSITION         0x80FFFFFF // 128 255 255 255
 #define COLOR_RGBA32_DEBUG_HITBOX           0x800000FF // 128   0   0 255
 #define COLOR_RGBA32_DEBUG_HURTBOX          0x8FF00000 // 143 240   0   0
+#define COLOR_RGBA32_DEBUG_PUPPYVOLUME      0x0000FF00 //   0   0 255   0
+#define COLOR_RGBA32_DEBUG_LIGHT            0x00FF0040 //   0 255 255  64
 
 
 // Color RGB(A) Arrays:

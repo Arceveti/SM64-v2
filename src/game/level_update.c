@@ -724,6 +724,9 @@ void update_hud_values(void) {
 void basic_update(UNUSED s16 *arg) {
     area_update_objects();
     update_hud_values();
+#ifdef PUPPYLIGHTS
+    delete_lights();
+#endif
     if (gCurrentArea != NULL) update_camera(gCurrentArea->camera);
 }
 
@@ -741,6 +744,9 @@ Bool32 play_mode_normal(void) {
     if (sTimerRunning && (gHudDisplay.timer < 17999)) gHudDisplay.timer++;
     area_update_objects();
     update_hud_values();
+#ifdef PUPPYLIGHTS
+    delete_lights();
+#endif
     if (gCurrentArea != NULL) update_camera(gCurrentArea->camera);
     initiate_painting_warp();
     initiate_delayed_warp();
@@ -882,7 +888,6 @@ Bool32 update_level(void) {
 Bool32 init_level(void) {
     Bool32 fadeFromColor = FALSE;
 #if PUPPYPRINT_DEBUG
-    char textBytes[64];
     OSTime first = osGetTime();
 #endif
     set_play_mode(PLAY_MODE_NORMAL);
@@ -935,8 +940,7 @@ Bool32 init_level(void) {
     puppylights_allocate();
 #endif
 #if PUPPYPRINT_DEBUG
-    sprintf(textBytes, "Level loaded in %dus", (s32)(OS_CYCLES_TO_USEC(osGetTime() - first)));
-    append_puppyprint_log(textBytes);
+    append_puppyprint_log("Level loaded in %dus", (s32)(OS_CYCLES_TO_USEC(osGetTime() - first)));
 #endif
     return TRUE;
 }

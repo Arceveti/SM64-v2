@@ -751,7 +751,7 @@ static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 inde
         Vec3f debugPos[2];
         vec3_copy(debugPos[0], sPuppyVolumeStack[index]->pos   );
         vec3_copy(debugPos[1], sPuppyVolumeStack[index]->radius);
-        debug_box_color(COLOR_RGBA32_ABLUE);
+        debug_box_color(COLOR_RGBA32_DEBUG_PUPPYVOLUME);
         debug_box_rot(debugPos[0], debugPos[1], sPuppyVolumeStack[index]->rot, DEBUG_SHAPE_BOX);
 #endif
         // Now compare values.
@@ -770,7 +770,7 @@ static Bool32 puppycam_check_volume_bounds(struct sPuppyVolume *volume, s32 inde
         Vec3f debugPos[2];
         vec3_copy(debugPos[0], sPuppyVolumeStack[index]->pos   );
         vec3_copy(debugPos[1], sPuppyVolumeStack[index]->radius);
-        debug_box_color(COLOR_RGBA32_ABLUE);
+        debug_box_color(COLOR_RGBA32_DEBUG_PUPPYVOLUME);
         debug_box_rot(debugPos[0], debugPos[1], sPuppyVolumeStack[index]->rot, DEBUG_SHAPE_CYLINDER);
 #endif
         distCheck = (dist < sPuppyVolumeStack[index]->radius[0]);
