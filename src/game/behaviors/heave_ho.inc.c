@@ -4,9 +4,7 @@ s16 sHeaveHoTimings[][2] = { { 30, 0 }, { 42, 1 }, {  52, 0 }, {  64, 1 }, { 74,
                              { 86, 1 }, { 96, 0 }, { 108, 1 }, { 118, 0 }, { -1, 0 }, };
 
 void bhv_heave_ho_throw_mario_loop(void) {
-    o->oParentRelativePosX = 200.0f;
-    o->oParentRelativePosY = -50.0f;
-    o->oParentRelativePosZ =   0.0f;
+    vec3_set(&o->oParentRelativePosVec, 200.0f, -50.0f, 0.0f);
     o->oMoveAngleYaw = o->parentObj->oMoveAngleYaw;
     if (o->parentObj->oHeaveHoThrowState) {
         cur_obj_play_sound_2(SOUND_OBJ_HEAVEHO_TOSSED);

@@ -81,8 +81,8 @@ void apply_platform_displacement(struct PlatformDisplacementInfo *displaceInfo, 
         // First frame of standing on the platform, don't calculate a new position
         vec3_sub(pos, platformPos);
     }
-    //! Apply displacement specifically for TTC Treadmills
-    if (platform->behavior == segmented_to_virtual(bhvTTCTreadmill)) vec3_add(pos, &platform->oVelVec);
+    // Apply velocity-based displacement for specific objects like TTC Treadmills
+    if (platform->oFlags & OBJ_FLAG_VELOCITY_PLATFORM) vec3_add(pos, &platform->oVelVec);
     // Transform from world positions to relative positions for use next frame
     linear_mtxf_transpose_mul_vec3f(*platform->header.gfx.throwMatrix, scaledPos, pos);
     vec3_quot(displaceInfo->prevTransformedPos, scaledPos, platform->header.gfx.scale);
