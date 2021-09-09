@@ -1602,7 +1602,7 @@ void gd_init(void) {
     sGdDlCount        = 0;
     sLightId          = 0;
     vec3_zero(sAmbScaleColour);
-    const ColorRGBf redVec = COLOR_RGBF_RED;
+    const ColorRGBf redVec = ARR(COLOR_RGBF_RED);
     for ((i = 0); (i < ARRAY_COUNT(sLightScaleColours)); (i++)) {
         vec3_copy(sLightScaleColours[i], redVec);
         vec3_set(sLightDirections[i], 0, 120, 0);

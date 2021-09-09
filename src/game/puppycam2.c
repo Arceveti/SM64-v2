@@ -796,7 +796,7 @@ void puppycam_wall_angle(void) {
     } else {
         return;
     }
-    wallYaw = atan2s(wall->normal.z, wall->normal.x) + DEG(90);
+    wallYaw  = (SURFACE_YAW(wall) + DEG(90));
     wallYaw -= gPuppyCam.yawTarget;
     if (wallYaw & (DEG(90) - 1)) wallYaw += (DEG(90) - (wallYaw & (DEG(90) - 1)));
     gPuppyCam.yawTarget = approach_s32_symmetric(gPuppyCam.yawTarget, wallYaw, 0x200);
@@ -1037,8 +1037,8 @@ static void puppycam_collision(void) {
     find_surface_on_ray(target[0], camdir[0], &surf[0], hitpos[0], (RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL));
     find_surface_on_ray(target[1], camdir[1], &surf[1], hitpos[1], (RAYCAST_FIND_FLOOR | RAYCAST_FIND_CEIL | RAYCAST_FIND_WALL));
     gCheckingSurfaceCollisionsForCamera = FALSE;
-    resolve_and_return_wall_collisions(hitpos[0], 0.0f, 25.0f, &wall0);
-    resolve_and_return_wall_collisions(hitpos[1], 0.0f, 25.0f, &wall1);
+    resolve_and_return_wall_collision_data(hitpos[0], 0.0f, 25.0f, &wall0);
+    resolve_and_return_wall_collision_data(hitpos[1], 0.0f, 25.0f, &wall1);
     dist[0] = (sqr(target[0][0] - hitpos[0][0]) + sqr(target[0][1] - hitpos[0][1]) + sqr(target[0][2] - hitpos[0][2]));
     dist[1] = (sqr(target[1][0] - hitpos[1][0]) + sqr(target[1][1] - hitpos[1][1]) + sqr(target[1][2] - hitpos[1][2]));
     gPuppyCam.collisionDistance = gPuppyCam.zoomTarget;

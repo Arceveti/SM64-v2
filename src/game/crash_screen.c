@@ -62,7 +62,7 @@ struct {
 } gCrashScreen;
 
 void crash_screen_draw_rect(s32 x, s32 y, s32 w, s32 h) {
-    u16 *ptr;
+    TexturePtr *ptr;
     s32 i, j;
     ptr = (gCrashScreen.framebuffer + (gCrashScreen.width * y) + x);
     for ((i = 0); (i < h); (i++)) {
@@ -77,7 +77,7 @@ void crash_screen_draw_rect(s32 x, s32 y, s32 w, s32 h) {
 
 void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     const u32 *data;
-    u16 *ptr;
+    TexturePtr *ptr;
     u32 bit;
     u32 rowMask;
     s32 i, j;

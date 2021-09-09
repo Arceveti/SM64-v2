@@ -58,8 +58,8 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     struct Object *marioObj =   m->marioObj;
     if (marioObj->oMarioPolePos > poleTop) marioObj->oMarioPolePos = poleTop;
     vec3_copy_y_off(m->pos, &m->usedObj->oPosVec, (marioObj->oMarioPolePos + offsetY));
-    collided   = f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
-    collided  |= f32_find_wall_collision(&m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
+    collided   = resolve_wall_collisions(m->pos, 60.0f, 50.0f);
+    collided  |= resolve_wall_collisions(m->pos, 30.0f, 24.0f);
     ceilHeight = find_ceil(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &ceil);
     if (m->pos[1] > (ceilHeight - MARIO_HITBOX_HEIGHT)) {
         m->pos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
@@ -256,27 +256,21 @@ s32 perform_hanging_step(struct MarioState *m, Vec3f nextPos) {
     struct WallCollisionData wallData;
     struct Surface *ceil;
     struct Surface *floor;
-    f32 ceilHeight;
-    f32 floorHeight;
-    f32 ceilOffset;
-    resolve_and_return_wall_collisions(nextPos, 50.0f, 50.0f, &wallData);
-    m->wall     = wallData.walls[0];
-    floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
-    ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
-    if (floor == NULL                                          ) return HANG_HIT_CEIL_OR_OOB;
-    if (ceil  == NULL                                          ) return HANG_LEFT_CEIL;
-    if (ceilHeight - floorHeight <= MARIO_HANGING_HITBOX_HEIGHT) return HANG_HIT_CEIL_OR_OOB;
-    if (ceil->type != SURFACE_HANGABLE                         ) return HANG_LEFT_CEIL;
-    ceilOffset = (ceilHeight - (nextPos[1] + MARIO_HANGING_HITBOX_HEIGHT));
-    if (ceilOffset < -30.0f                                    ) return HANG_HIT_CEIL_OR_OOB;
-    if (ceilOffset >  30.0f                                    ) return HANG_LEFT_CEIL;
+    resolve_and_return_wall_collision_data(nextPos, 50.0f, 50.0f, &wallData);
+    set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
+    f32 floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
+    f32 ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+    if (floor == NULL                                            ) return HANG_HIT_CEIL_OR_OOB;
+    if (ceil  == NULL                                            ) return HANG_LEFT_CEIL;
+    if ((ceilHeight - floorHeight) <= MARIO_HANGING_HITBOX_HEIGHT) return HANG_HIT_CEIL_OR_OOB;
+    if (ceil->type != SURFACE_HANGABLE                           ) return HANG_LEFT_CEIL;
+    f32 ceilOffset = (ceilHeight - (nextPos[1] + MARIO_HANGING_HITBOX_HEIGHT));
+    if (ceilOffset < -30.0f                                      ) return HANG_HIT_CEIL_OR_OOB;
+    if (ceilOffset >  30.0f                                      ) return HANG_LEFT_CEIL;
     nextPos[1] = (m->ceilHeight - MARIO_HANGING_HITBOX_HEIGHT);
     vec3_copy(m->pos, nextPos);
-    if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-    m->floor       = floor;
-    m->floorHeight = floorHeight;
-    m->ceil        = ceil;
-    m->ceilHeight  = ceilHeight;
+    set_mario_floor(m, floor, floorHeight);
+    set_mario_ceil(m, ceil, ceilHeight);
     return HANG_NONE;
 }
 
@@ -441,7 +435,7 @@ Bool32 act_ledge_grab(struct MarioState *m) {
     struct WallCollisionData wallCols;
     struct Surface *floor;
     f32 floorHeight;
-    struct Surface *oldWwall;
+    struct Surface *oldWall;
     struct Surface *wall;
     Angle oldWallAngle, oldWallDYaw;
     Angle newWallAngle, newWallDYaw;
@@ -488,24 +482,24 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (find_wall_collisions(&wallCols) != 0) {
             floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
             if ((floor != NULL) && ((wallCols.pos[1] - floorHeight) > MARIO_HITBOX_HEIGHT)) {
-                oldWwall = m->wall;
-                oldWallAngle = atan2s(oldWwall->normal.z, oldWwall->normal.x);
+                oldWall = m->wall;
+                oldWallAngle = SURFACE_YAW(oldWall);
                 oldWallDYaw  = abs_angle_diff(oldWallAngle, m->intendedYaw);
                 for ((i = 0); (i < wallCols.numWalls); (i++)) {
                     wall         = wallCols.walls[i];
-                    newWallAngle = atan2s(wall->normal.z, wall->normal.x);
+                    newWallAngle = SURFACE_YAW(wall);
                     newWallDYaw  = abs_angle_diff(newWallAngle, m->intendedYaw);
                     if (newWallDYaw < oldWallDYaw) {
-                        oldWwall     = wall;
+                        oldWall      = wall;
                         oldWallAngle = newWallAngle;
                         oldWallDYaw  = newWallDYaw;
                     }
                 }
-                nextX           = (wallCols.pos[0] - (20.0f * oldWwall->normal.x));
-                nextZ           = (wallCols.pos[2] - (20.0f * oldWwall->normal.z));
+                nextX           = (wallCols.pos[0] - (20.0f * oldWall->normal.x));
+                nextZ           = (wallCols.pos[2] - (20.0f * oldWall->normal.z));
                 m->faceAngle[0] = 0x0;
                 m->faceAngle[1] = (oldWallAngle + DEG(180));
-                m->wall         = oldWwall;
+                set_mario_wall(m, oldWall);
             }
         }
         // Prevent moving OOB
@@ -668,13 +662,11 @@ Bool32 act_tornado_twirling(struct MarioState *m) {
     nextPos[0]   = (usedObj->oPosX + (dx * cosAngleVel) + (dz * sinAngleVel));
     nextPos[2]   = (usedObj->oPosZ - (dx * sinAngleVel) + (dz * cosAngleVel));
     nextPos[1]   = (usedObj->oPosY + marioObj->oMarioTornadoPosY);
-    f32_find_wall_collision(&nextPos[0], &nextPos[1], &nextPos[2], 60.0f, 50.0f);
+    resolve_wall_collisions(nextPos, 60.0f, 50.0f);
     floorHeight = find_floor(nextPos[0],  nextPos[1],  nextPos[2], &floor);
     if (floor != NULL) {
-        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-        m->floor       = floor;
-        m->floorHeight = floorHeight;
         vec3_copy(m->pos, nextPos);
+        set_mario_floor(m, floor, floorHeight);
     } else {
         if (nextPos[1] >= m->floorHeight) {
             m->pos[1] = nextPos[1];

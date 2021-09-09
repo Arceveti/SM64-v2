@@ -480,16 +480,16 @@ void push_mario_out_of_object(struct MarioState *m, struct Object *o, f32 paddin
     if (distance < sqr(minDistance)) {
         struct Surface *floor;
         Angle pushAngle = ((distance == 0.0f) ? m->faceAngle[1] : atan2s(offsetZ, offsetX));
-        f32 newMarioX = (o->oPosX + (minDistance * sins(pushAngle)));
-        f32 newMarioZ = (o->oPosZ + (minDistance * coss(pushAngle)));
-        f32_find_wall_collision(&newMarioX, &m->pos[1], &newMarioZ, 60.0f, 50.0f);
-        floorHeight = find_floor(newMarioX,  m->pos[1],  newMarioZ, &floor);
+        Vec3f newMarioPos;
+        newMarioPos[0] = (o->oPosX + (minDistance * sins(pushAngle)));
+        newMarioPos[1] = m->pos[1];
+        newMarioPos[2] = (o->oPosZ + (minDistance * coss(pushAngle)));
+        resolve_wall_collisions(newMarioPos, 60.0f, 50.0f);
+        floorHeight = find_floor(newMarioPos[0], newMarioPos[1], newMarioPos[2], &floor);
         if (floor != NULL) {
-            m->pos[0]      = newMarioX;
-            m->pos[2]      = newMarioZ;
-            if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-            m->floor       = floor;
-            m->floorHeight = floorHeight;
+            m->pos[0]      = newMarioPos[0];
+            m->pos[2]      = newMarioPos[2];
+            set_mario_floor(m, floor, floorHeight);
         }
     }
 }
@@ -776,7 +776,7 @@ Bool32 interact_door(struct MarioState *m, UNUSED InteractType interactType, str
             return set_mario_action(m, enterDoorAction, actionArg);
 #if !defined(DEBUG_LEVEL_SELECT) && !defined(UNLOCK_ALL)
         } else if (!sDisplayingDoorText) {
-            u32 text = DIALOG_022 << 16;
+            u32 text = (DIALOG_022 << 16);
             switch (requiredNumStars) {
                 case  1: text = (DIALOG_024 << 16); break;
                 case  3: text = (DIALOG_025 << 16); break;
@@ -1351,7 +1351,7 @@ void check_kick_or_punch_wall(struct MarioState *m) {
         detector[0] = (m->pos[0] + (50.0f * sins(m->faceAngle[1])));
         detector[2] = (m->pos[2] + (50.0f * coss(m->faceAngle[1])));
         detector[1] =  m->pos[1];
-        resolve_and_return_wall_collisions(detector, 80.0f, 5.0f, &wallData);
+        resolve_and_return_wall_collision_data(detector, 80.0f, 5.0f, &wallData);
         if (wallData.numWalls > 0) {
             if ((m->action != ACT_MOVE_PUNCHING) || (m->forwardVel >= 0.0f)) {
                 if (m->action == ACT_PUNCHING) m->action = ACT_MOVE_PUNCHING;

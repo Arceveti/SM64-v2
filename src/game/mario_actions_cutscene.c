@@ -485,8 +485,8 @@ Bool32 act_debug_free_move(struct MarioState *m) {
         pos[0] += (2.0f * speed * sins(m->intendedYaw) * m->intendedMag);
         pos[2] += (2.0f * speed * coss(m->intendedYaw) * m->intendedMag);
     }
-    resolve_and_return_wall_collisions(pos, 60.0f, 50.0f, &wallData);
-    m->wall = ((wallData.numWalls > 0) ? wallData.walls[0] : NULL); //! only uses first wall
+    resolve_and_return_wall_collision_data(pos, 60.0f, 50.0f, &wallData);
+    set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
     floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
     ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
     if (floor == NULL) return FALSE;
@@ -1287,7 +1287,7 @@ Bool32 act_squished(struct MarioState *m) {
         // steep floor
         if ((m->floor != NULL) && (m->floor->normal.y < 0.5f)) {
 #endif
-            surfAngle = atan2s(m->floor->normal.z, m->floor->normal.x);
+            surfAngle = m->floorYaw;
             underSteepSurf = TRUE;
         }
         // steep ceiling
@@ -1296,7 +1296,7 @@ Bool32 act_squished(struct MarioState *m) {
 #else
         if ((m->ceil != NULL) && (-0.5f < m->ceil->normal.y)) {
 #endif
-            surfAngle      = atan2s(m->ceil->normal.z, m->ceil->normal.x);
+            surfAngle      = m->ceilYaw;
             underSteepSurf = TRUE;
         }
         if (underSteepSurf) {

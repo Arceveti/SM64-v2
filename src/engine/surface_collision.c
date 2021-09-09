@@ -223,27 +223,24 @@ s32 find_wall_collisions(struct WallCollisionData *colData) {
 /**
  * Formats the position and wall search for find_wall_collisions.
  */
-s32 f32_find_wall_collision(f32 *x, f32 *y, f32 *z, f32 offsetY, f32 radius) {
+s32 resolve_wall_collisions(Vec3f pos, f32 offsetY, f32 radius) {
     struct WallCollisionData collision;
-    s32 numCollisions  = 0;
     collision.offsetY  = offsetY;
     collision.radius   = radius;
-    vec3_set(collision.pos, *x, *y, *z);
+    vec3_copy(collision.pos, pos);
     collision.numWalls = 0;
-    numCollisions      = find_wall_collisions(&collision);
-    *x                 = collision.pos[0];
-    *y                 = collision.pos[1];
-    *z                 = collision.pos[2];
+    s32 numCollisions  = find_wall_collisions(&collision);
+    vec3_copy(pos, collision.pos);
     return numCollisions;
 }
 
 /**
  * Collides with walls and returns the most recent wall.
  */
-void resolve_and_return_wall_collisions(Vec3f pos, f32 offset, f32 radius, struct WallCollisionData *collisionData) {
+void resolve_and_return_wall_collision_data(Vec3f pos, f32 offsetY, f32 radius, struct WallCollisionData *collisionData) {
     vec3_copy(collisionData->pos, pos);
     collisionData->radius  = radius;
-    collisionData->offsetY = offset;
+    collisionData->offsetY = offsetY;
     find_wall_collisions(collisionData);
     vec3_copy(pos, collisionData->pos);
 }
@@ -258,7 +255,6 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     struct WallCollisionData collisionData;
     struct Surface *wall = NULL;
     Vec3f norm;
-    // register f32 normX, normY, normZ;
     register f32 originOffset, offset, offsetAbsolute;
     Vec3f newPos[4];
     s32 i;
@@ -297,7 +293,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
  */
 void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
     struct Surface *surf;
-    f32_find_wall_collision(&pos[0], &pos[1], &pos[2], 0.0f, 100.0f);
+    resolve_wall_collisions(pos, 0.0f, 100.0f);
     f32 floorY = find_floor(pos[0], (pos[1] + 50.0f), pos[2], &surf);
     f32 ceilY  = find_ceil( pos[0], (pos[1] - 50.0f), pos[2], &surf);
     if ((FLOOR_LOWER_LIMIT != floorY) && (CELL_HEIGHT_LIMIT == ceilY) && pos[1] < (floorY += 125.0f)) pos[1] = floorY;
@@ -314,16 +310,14 @@ void resolve_geometry_collisions(Vec3f pos, UNUSED Vec3f lastGood) {
 /**
  * Finds any wall collisions and returns what the displacement vector would be.
  */
-//? can xyz be a vec
 Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
     struct WallCollisionData hitbox;
     vec3_set(hitbox.pos, x, y, z);
     hitbox.offsetY = 10.0f;
     hitbox.radius  = radius;
     if (find_wall_collisions(&hitbox) != 0) {
-        dist[0] = (hitbox.pos[0] - x);
-        dist[1] = (hitbox.pos[1] - y);
-        dist[2] = (hitbox.pos[2] - z);
+        Vec3f pos = { x, y, z };
+        vec3_diff(dist, hitbox.pos, pos);
         return TRUE;
     } else {
         return FALSE;

@@ -64,46 +64,38 @@ static u32 perform_water_quarter_step(struct MarioState *m, Vec3f nextPos) {
     struct WallCollisionData wallData;
     struct Surface *ceil;
     struct Surface *floor;
-    f32 ceilHeight;
-    f32 floorHeight;
     f32 ceilAmt;
     // f32 floorAmt;
     m->wall = NULL;
 #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
     gIncludeSteepFloorsInWallCollisionCheck = TRUE;
 #endif
-    resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f, &wallData);
-    floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
-    ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+    resolve_and_return_wall_collision_data(nextPos, 10.0f, 110.0f, &wallData);
+    f32 floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
+    f32 ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if ((ceil != NULL) && (((nextPos[1] + MARIO_HITBOX_HEIGHT) >= ceilHeight) || ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT))) {
         ceilAmt = ((nextPos[1] + MARIO_HITBOX_HEIGHT) - ceilHeight);
         nextPos[0] += (ceil->normal.x * ceilAmt);
-        nextPos[2] += (ceil->normal.z * ceilAmt);
         nextPos[1] = (ceilHeight - MARIO_HITBOX_HEIGHT);
+        nextPos[2] += (ceil->normal.z * ceilAmt);
         vec3_copy(m->pos, nextPos);
-        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-        m->floor       = floor;
-        m->floorHeight = floorHeight;
-        if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
+        set_mario_floor(m, floor, floorHeight);
+        set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
         return WATER_STEP_HIT_CEILING;
     }
     if (nextPos[1] <= floorHeight) {
         nextPos[1]  = floorHeight;
         vec3_copy(m->pos, nextPos);
-        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-        m->floor       = floor;
-        m->floorHeight = floorHeight;
-        if (wallData.numWalls > 0) m->wall = wallData.walls[0]; //! only returns the first wall
+        set_mario_floor(m, floor, floorHeight);
+        set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
         return WATER_STEP_HIT_FLOOR;
     }
     vec3_copy(m->pos, nextPos);
-    if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-    m->floor       = floor;
-    m->floorHeight = floorHeight;
-    m->ceil        = ceil;
+    set_mario_floor(m, floor, floorHeight);
+    set_mario_ceil( m,  ceil,  ceilHeight);
     if (wallData.numWalls > 0) {
-        m->wall = wallData.walls[0]; //! only returns the first wall
+        set_mario_wall(m, wallData.walls[0]); //! only returns the first wall
         return WATER_STEP_HIT_WALL;
     } else {
         return WATER_STEP_NONE;
@@ -115,34 +107,26 @@ static u32 perform_water_full_step(struct MarioState *m, Vec3f nextPos) {
     struct Surface *wall;
     struct Surface *ceil;
     struct Surface *floor;
-    f32 ceilHeight;
-    f32 floorHeight;
-    resolve_and_return_wall_collisions(nextPos, 10.0f, 110.0f, &wallData);
-    wall = wallData.walls[0]; //! only uses first wall
-    floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
-    ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
+    resolve_and_return_wall_collision_data(nextPos, 10.0f, 110.0f, &wallData);
+    set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
+    f32 floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
+    f32 ceilHeight  = find_ceil( nextPos[0], (nextPos[1] + m->midY), nextPos[2], &ceil);
     if (floor == NULL) return WATER_STEP_CANCELLED;
     if (nextPos[1] >= floorHeight) {
         if ((ceilHeight - nextPos[1]) >= MARIO_HITBOX_HEIGHT) {
             vec3_copy(m->pos, nextPos);
-            if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-            m->floor       = floor;
-            m->floorHeight = floorHeight;
+            set_mario_floor(m, floor, floorHeight);
             return ((wall != NULL) ? WATER_STEP_HIT_WALL : WATER_STEP_NONE);
         }
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         //! Water ceiling downwarp
         vec3_set(m->pos, nextPos[0], (ceilHeight - MARIO_HITBOX_HEIGHT), nextPos[2]);
-        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-        m->floor       = floor;
-        m->floorHeight = floorHeight;
+        set_mario_floor(m, floor, floorHeight);
         return WATER_STEP_HIT_CEILING;
     } else {
         if ((ceilHeight - floorHeight) < MARIO_HITBOX_HEIGHT) return WATER_STEP_CANCELLED;
         vec3_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
-        if (m->floor != floor) m->floorYaw = atan2s(floor->normal.z, floor->normal.x);
-        m->floor       = floor;
-        m->floorHeight = floorHeight;
+        set_mario_floor(m, floor, floorHeight);
         return WATER_STEP_HIT_FLOOR;
     }
 }

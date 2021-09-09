@@ -1027,7 +1027,7 @@ static Bool32 clear_move_flag(u32 *bitSet, s32 flag) {
 }
 
 UNUSED void cur_obj_unused_resolve_wall_collisions(f32 offsetY, f32 radius) {
-    if (radius > 0.1f) f32_find_wall_collision(&o->oPosX, &o->oPosY, &o->oPosZ, offsetY, radius); // was 0.1l
+    if (radius > 0.1f) resolve_wall_collisions(&o->oPosVec, offsetY, radius); // was 0.1l
 }
 
 void cur_obj_move_xz_using_fvel_and_yaw(void) {
@@ -1215,7 +1215,7 @@ static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type
             o->oWallAngle = (o->oMoveAngleYaw + DEG(180));
             return 2;
         } else if ((intendedFloor->normal.y < steepNormalY) && (deltaFloorHeight > 0) && (intendedFloorHeight > o->oPosY)) {
-            o->oWallAngle = atan2s(intendedFloor->normal.z, intendedFloor->normal.x);
+            o->oWallAngle = SURFACE_YAW(intendedFloor);
             return 1;
         }
     }
@@ -1236,7 +1236,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
         if (numCollisions != 0) {
             vec3_copy(&o->oPosVec, collisionData.pos);
             wall              = collisionData.walls[collisionData.numWalls - 1];
-            o->oWallAngle     = atan2s(wall->normal.z, wall->normal.x);
+            o->oWallAngle     = SURFACE_YAW(wall);
             return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEG(90));
         }
     }

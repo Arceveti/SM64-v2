@@ -146,7 +146,7 @@ typedef u8  IA8;
 typedef u16 IA16;
 typedef u8  IA16Component;
 typedef u16 RGBA16;
-typedef u8  RGBA16Component;    // u5 & u1
+typedef u8  RGBA16Component;    // components u5 & u1
 typedef u32 RGBA32;
 typedef u8  RGBA32Component;
 typedef u8  CI4;                // u4

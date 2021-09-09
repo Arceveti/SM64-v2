@@ -138,7 +138,7 @@ void copy_partial_image(    TexturePtr *dst, TexturePtr *src,
                             s32 srcX,      s32 srcY,
                             s32 srcW,      s32 srcH,
                             s32 srcTW,     s32 srcTH);
-void overlay_i8_on_rgba16_additive(u16 *dst, u16 *src, u32 width, u32 height);
+void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height);
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s);
 
 #endif // SHADOW_H

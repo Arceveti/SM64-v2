@@ -42,7 +42,7 @@ void play_knockback_sound(struct MarioState *m) {
 }
 
 Bool32 lava_boost_on_wall(struct MarioState *m) {
-    m->faceAngle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
+    m->faceAngle[1] = m->wallYaw;
     if (m->forwardVel < 24.0f) m->forwardVel = 24.0f;
     if (!(m->flags & MARIO_METAL_CAP)) m->hurtCounter += ((m->flags & MARIO_CAP_ON_HEAD) ? 12 : 18);
     play_sound(SOUND_MARIO_ON_FIRE, m->marioObj->header.gfx.cameraToObject);
@@ -1121,7 +1121,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
         } else {
             if ((m->prevAction != ACT_WALL_SLIDE)
              && (m->intendedMag > 16.0f)
-             && abs_angle_diff(atan2s(m->wall->normal.z, m->wall->normal.x), m->intendedYaw) <= DEG(45)) {
+             && abs_angle_diff(m->wallYaw, m->intendedYaw) <= DEG(45)) {
                 m->faceAngle[1] = (m->intendedYaw + DEG(180));
                 m->forwardVel   = 0.0f;
                 return set_mario_action(m, ACT_FREEFALL, 0);
@@ -1151,7 +1151,7 @@ AnimFrame32 act_air_hit_wall(struct MarioState *m) {
         return set_mario_action(m, ACT_SOFT_BONK, 0);
     }
 #if FIRSTY_LAST_FRAME > 1
-    m->marioObj->header.gfx.angle[1] = atan2s(m->wall->normal.z, m->wall->normal.x);
+    m->marioObj->header.gfx.angle[1] = m->wallYaw;
 #endif
 #endif
     return set_mario_animation(m, MARIO_ANIM_START_WALLKICK);

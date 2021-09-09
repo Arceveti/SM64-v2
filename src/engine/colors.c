@@ -257,7 +257,7 @@ void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, 
     RGBA16Component rgb[3];
     for ((i = 0); (i < size); (i++)) {
         srcVal = src[i >> 1];
-        srcI = I8_TO_RGBA16_C(srcVal);
+        srcI   = I8_TO_RGBA16_C(srcVal);
         if (srcI > 0x0) {
             dstVal = dst[i];
             rgb[0] = (RGBA16_R(dstVal) + srcI);

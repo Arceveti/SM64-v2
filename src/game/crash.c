@@ -2,6 +2,7 @@
 /* SM64 Crash Handler */
 #include <sm64.h>
 #include "crash.h"
+#include "engine/colors.h"
 extern u32 exceptionRegContext[];
 extern char *pAssertFile;
 extern int nAssertLine;
@@ -48,7 +49,7 @@ void show_crash_screen_and_hang(void) {
     epc   = cop0_get_epc();
     errno = ((cause >> 2) & 0x1F);
     if (nAssertStopProgram == 0) {
-        fbFillColor = 0x6253;
+        fbFillColor = COLOR_RGBA16_CRASH_ERROR;
         fb_fill(10, 10, 300, 220);
         fb_print_str(80, 20, "AN ERROR HAS OCCURRED!");
         fb_print_int_hex(80, 30, errno, 8);
@@ -67,7 +68,7 @@ void show_crash_screen_and_hang(void) {
     } else {
         int afterFileX;
         int exprBoxWidth;
-        fbFillColor = 0x5263;
+        fbFillColor = COLOR_RGBA16_CRASH_ASSERT;
         fb_fill(10, 10, 300, 220);
         fb_print_str(80, 20, "ASSERTION FAILED!");
         afterFileX = fb_print_str(80, 30, pAssertFile);
@@ -131,9 +132,9 @@ void fb_draw_char(int x, int y, u8 idx) {
 }
 
 void fb_draw_char_shaded(int x, int y, u8 idx) {
-    fbFillColor = 0x0001;
+    fbFillColor = COLOR_RGBA16_CRASH_BLACK;
     fb_draw_char((x - 1), (y + 1), idx);
-    fbFillColor = 0xFFFF;
+    fbFillColor = COLOR_RGBA16_CRASH_WHITE;
     fb_draw_char(x, y, idx);
 }
 

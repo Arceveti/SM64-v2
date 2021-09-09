@@ -143,7 +143,7 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     struct SurfaceNode *node;
     struct Surface *surf;
     s32 i = 0;
-    ColorRGB col = COLOR_RGB_RED;
+    ColorRGB col = ARR(COLOR_RGB_RED);
     if ((x <= -LEVEL_BOUNDARY_MAX)
      || (x >=  LEVEL_BOUNDARY_MAX)
      || (z <= -LEVEL_BOUNDARY_MAX)
@@ -152,14 +152,14 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for ((i = 0); (i < 8); (i++)) {
         switch (i) {
-            case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_GREEN ); break;
-            case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_GREEN ); break;
-            case 2: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)COLOR_RGB_BLUE  ); break;
-            case 3: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)COLOR_RGB_BLUE  ); break;
-            case 4: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_RED   ); break;
-            case 5: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_RED   ); break;
-            case 6: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_YELLOW); break;
-            case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)COLOR_RGB_YELLOW); break;
+            case 0: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_GREEN )); break;
+            case 1: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WALLS ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_GREEN )); break;
+            case 2: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_BLUE  )); break;
+            case 3: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_FLOORS].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_BLUE  )); break;
+            case 4: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_RED   )); break;
+            case 5: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_CEILS ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_RED   )); break;
+            case 6: node = gDynamicSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_YELLOW)); break;
+            case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_YELLOW)); break;
         }
         while (node != NULL) {
             surf = node->surface; 
@@ -175,7 +175,7 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
 void iterate_surfaces_envbox(Vtx *verts) {
     Collision *p = gEnvironmentRegions;
     s32 i = 0;
-    ColorRGB col = COLOR_RGB_YELLOW;
+    ColorRGB col = ARR(COLOR_RGB_YELLOW);
     if (p != NULL) {
         s32 numRegions = *p++;
         for ((i = 0); (i < numRegions); (i++)) {

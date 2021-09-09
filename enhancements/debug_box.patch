@@ -66,7 +66,7 @@ index 00000000..1ffe0288
 + * Internal struct containing box info
 + */
 +struct DebugBox {
-+    u32 color;
++    RGBA32 color;
 +    Vec3s center;
 +    Vec3s bounds;
 +    Angle yaw;
@@ -89,7 +89,7 @@ index 00000000..1ffe0288
 +/**
 + * The color that new boxes will be drawn with.
 + */
-+u32 sCurBoxColor = DBG_BOX_ALPHA << 24 | DBG_BOX_DEF_COLOR;
++RGBA32 sCurBoxColor = ((DBG_BOX_ALPHA << 24) | DBG_BOX_DEF_COLOR);
 +
 +/**
 + * The allocated size of a rotated box's dl
@@ -220,7 +220,7 @@ index 00000000..1ffe0288
 +    Mtx *rotate;
 +    Mtx *translateback;
 +    struct DebugBox *box = &sBoxes[index];
-+    u32 color = box->color;
++    RGBA32 color = box->color;
 +
 +    s32 x0 = box->center[0],
 +        y0 = box->center[1],

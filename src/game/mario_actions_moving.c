@@ -109,14 +109,14 @@ void check_ledge_climb_down(struct MarioState *m) {
             floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
             if ((floor != NULL) && (((wallCols.pos[1] - floorHeight) > MARIO_SHORT_HITBOX_HEIGHT))) {
                 wall = wallCols.walls[wallCols.numWalls - 1];
-                wallAngle = atan2s(wall->normal.z, wall->normal.x);
+                wallAngle = SURFACE_YAW(wall);
                 wallDYaw  = abs_angle_diff(wallAngle, m->faceAngle[1]);
                 if (wallDYaw < DEG(90)) {
                     m->pos[0]       = (wallCols.pos[0] - (20.0f * wall->normal.x));
                     m->pos[2]       = (wallCols.pos[2] - (20.0f * wall->normal.z));
                     m->faceAngle[0] = 0x0;
                     m->faceAngle[1] = (wallAngle + DEG(180));
-                    m->wall         = wall;
+                    set_mario_wall(m, wall);
                     set_mario_action(m, ACT_LEDGE_CLIMB_DOWN, 0);
                     set_mario_animation(m, MARIO_ANIM_CLIMB_DOWN_LEDGE);
                 }
@@ -150,7 +150,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     s32 newFacingDYaw; //! not s16?
     Angle facingDYaw;
     struct Surface *floor = m->floor;
-    Angle slopeAngle = atan2s(floor->normal.z, floor->normal.x);
+    Angle slopeAngle = m->floorYaw;
     f32 steepness    = sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z));
     m->slideVelX += (accel * steepness * sins(slopeAngle));
     m->slideVelZ += (accel * steepness * coss(slopeAngle));
@@ -255,7 +255,7 @@ Bool32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
     apply_slope_accel(m);
     if (!mario_floor_is_slope(m)) {
         m->forwardVel *= frictionFactor;
-        if ((m->forwardVel * m->forwardVel) < 1.0f) {
+        if (sqr(m->forwardVel) < 1.0f) {
             mario_set_forward_vel(m, 0.0f);
             return TRUE;
         }
@@ -266,8 +266,7 @@ Bool32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
 void update_shell_speed(struct MarioState *m) {
     f32 maxTargetSpeed, targetSpeed;
     if (m->floorHeight < m->waterLevel) {
-        m->floorHeight         = m->waterLevel;
-        m->floor               = &gWaterSurfacePseudoFloor;
+        set_mario_floor(m, &gWaterSurfacePseudoFloor, m->waterLevel);
         m->floor->originOffset = -m->waterLevel;
     }
     maxTargetSpeed  = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 48.0f : 64.0f);
@@ -971,8 +970,8 @@ void common_slide_action(struct MarioState *m, MarioAction endAction, MarioActio
                 if (m->forwardVel > 16.0f) m->particleFlags |= PARTICLE_VERTICAL_STAR;
                 slide_bonk(m, ACT_GROUND_BONK, endAction);
             } else if (m->wall != NULL) {
-                Angle wallAngle  = atan2s(m->wall->normal.z, m->wall->normal.x);
-                f32 slideSpeed = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
+                Angle wallAngle  = m->wallYaw;
+                f32 slideSpeed   = sqrtf(sqr(m->slideVelX) + sqr(m->slideVelZ));
                 if ((slideSpeed *= 0.9f) < 4.0f) slideSpeed = 4.0f;
                 m->slideYaw = (wallAngle - ((Angle)(m->slideYaw - wallAngle) + DEG(180)));
                 m->vel[0] = m->slideVelX = (slideSpeed * sins(m->slideYaw));

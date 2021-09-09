@@ -563,6 +563,32 @@ Angle find_floor_slope(struct MarioState *m, Angle yawOffset, f32 distFromMario)
 }
 #endif
 
+Bool32 set_mario_wall(struct MarioState *m, struct Surface *wall) {
+    if (m->wall != wall) {
+        m->wall  = wall;
+        if (m->wall != NULL) m->wallYaw = SURFACE_YAW(wall);
+    }
+    return (m->wall != NULL);
+}
+
+Bool32 set_mario_ceil(struct MarioState *m, struct Surface *ceil, f32 ceilHeight) {
+    if (m->ceil != ceil) {
+        m->ceil  = ceil;
+        if (m->ceil != NULL) m->ceilYaw = SURFACE_YAW(ceil);
+    }
+    m->ceilHeight = ceilHeight;
+    return (m->ceil != NULL);
+}
+
+Bool32 set_mario_floor(struct MarioState *m, struct Surface *floor, f32 floorHeight) {
+    if (m->floor != floor) {
+        m->floor  = floor;
+        if (m->floor != NULL) m->floorYaw = SURFACE_YAW(floor);
+    }
+    m->floorHeight = floorHeight;
+    return (m->floor != NULL);
+}
+
 // default range is 0x471C ~100 degrees
 Bool32 analog_stick_held_back(struct MarioState *m, Angle range) {
     if (!(m->input & INPUT_NONZERO_ANALOG)) return FALSE;
@@ -1025,7 +1051,7 @@ void debug_print_speed_action_normal(struct MarioState *m) {
             case 3:
                 if (m->wall != NULL) {
                     debug_print_surface_info(m->wall);
-                    print_text_fmt_int(210,  88,  "WRY %d", ((atan2s(m->wall->normal.z, m->wall->normal.x) * 45.0f) / 8192.0f));
+                    print_text_fmt_int(210,  88,  "WRY %d", ((m->wallYaw * 45.0f) / 8192.0f));
                 }
                 print_text_fmt_int(16, 80, "WALL", 0);
                 print_text_fmt_int(16, 32, "W %d", gNumCalls.wall );
@@ -1116,9 +1142,12 @@ void update_mario_joystick_inputs(struct MarioState *m) {
 void update_mario_geometry_inputs(struct MarioState *m) {
     f32 gasLevel;
     f32 ceilToFloorDist;
-    f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 60.0f, 50.0f);
-    f32_find_wall_collision(   &m->pos[0], &m->pos[1], &m->pos[2], 30.0f, 24.0f);
-    m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY),  m->pos[2], &m->floor);
+    resolve_wall_collisions(m->pos, 60.0f, 50.0f);
+    resolve_wall_collisions(m->pos, 30.0f, 24.0f);
+    // struct WallCollisionData upperWall, lowerWall;
+    // resolve_and_return_wall_collision_data(m->pos, 60.0f, 50.0f, &upperWall);
+    // resolve_and_return_wall_collision_data(m->pos, 30.0f, 24.0f, &lowerWall);
+    m->floorHeight = find_floor(m->pos[0], (m->pos[1] + m->midY), m->pos[2], &m->floor);
     // If Mario is OOB, move his position to his graphical position (which was not updated)
     // and check for the floor there.
     // This can cause errant behavior when combined with astral projection,
@@ -1131,11 +1160,10 @@ void update_mario_geometry_inputs(struct MarioState *m) {
     gasLevel      = find_poison_gas_level(m->pos[0], m->pos[2]);
     m->waterLevel = find_water_level(     m->pos[0], m->pos[2]);
     if (m->floor != NULL) {
-        m->floorYaw                     = atan2s(m->floor->normal.z, m->floor->normal.x);
-        if (m->ceil != NULL) m->ceilYaw = atan2s( m->ceil->normal.z,  m->ceil->normal.x);
-        if (m->wall != NULL) m->wallYaw = atan2s( m->wall->normal.z,  m->wall->normal.x);
+        m->floorYaw                     = SURFACE_YAW(m->floor);
+        if (m->ceil != NULL) m->ceilYaw = SURFACE_YAW( m->ceil);
+        if (m->wall != NULL) m->wallYaw = SURFACE_YAW( m->wall);
         m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
-
         if ((m->pos[1] > (m->waterLevel - 40.0f)) && mario_floor_is_slippery(m)) m->input |= INPUT_ABOVE_SLIDE;
         if ((m->floor->flags & SURFACE_FLAG_DYNAMIC) || (m->ceil && (m->ceil->flags & SURFACE_FLAG_DYNAMIC))) {
             ceilToFloorDist = (m->ceilHeight - m->floorHeight);

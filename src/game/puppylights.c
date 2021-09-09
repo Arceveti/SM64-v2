@@ -34,9 +34,10 @@ of these automatically. It will force the PUPPYLIGHT_DYNAMIC flag, too.
 Lights1 gLevelLight;                                       // Existing ambient light in the area. Will be set by the level script, though can always be changed afterwards if desired.
 Bool8 levelAmbient = FALSE;
 Lights1 *sLightBase;                                       // The base value where lights are written to when worked with.
-Lights1 sDefaultLights = gdSPDefLights1(0x7F, 0x7F, 0x7F,
-                                        0xFE, 0xFE, 0xFE,
-                                        0x28, 0x28, 0x28); // Default lights default lights
+// Default lights default lights
+Lights1 sDefaultLights = gdSPDefLights1(DEFAULT_LIGHT_AMB, DEFAULT_LIGHT_AMB, DEFAULT_LIGHT_AMB,
+                                        DEFAULT_LIGHT_COL, DEFAULT_LIGHT_COL, DEFAULT_LIGHT_COL,
+                                        DEFAULT_LIGHT_DIR, DEFAULT_LIGHT_DIR, DEFAULT_LIGHT_DIR);
 u16 gNumLights         = 0;                                // How many lights are loaded.
 u16 gDynLightStart     = 0;                                // Where the dynamic lights will start.
 struct PuppyLight *gPuppyLights[MAX_LIGHTS];               // This contains all the loaded data.
@@ -44,7 +45,7 @@ struct MemoryPool *gLightsPool;                            // The memory pool wh
 
 // Runs after an area load, allocates the dynamic light slots.
 void puppylights_allocate(void) {
-    s32 numAllocate = MIN(MAX_LIGHTS - gNumLights, MAX_LIGHTS_DYNAMIC);
+    s32 numAllocate = MIN((MAX_LIGHTS - gNumLights), MAX_LIGHTS_DYNAMIC);
     s32 i;
     gDynLightStart = gNumLights;
     if (numAllocate <= 0) return; // If this happens you've allocated too many static lights and therefore cucked dynamic.
@@ -65,7 +66,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     Lights1 *tempLight;
     s32 lightPos[2];
     Vec3i lightRelative;
-    Vec3i lightDir = { 0, 0, 0 };
+    Vec3i lightDir = { 0x00, 0x00, 0x00 };
     s32 lightIntensity = 0;
     s32 i;
     s32 colour;
@@ -181,7 +182,7 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
             sLightBase->l[0].l.colc[i] = colour;
             sLightBase->a.l.col[i]     = (colour / 2);
             sLightBase->a.l.colc[i]    = (colour / 2);
-            sLightBase->l->l.dir[i]    = 0x28;
+            sLightBase->l->l.dir[i]    = DEFAULT_LIGHT_DIR;
         }
     }
     memcpy(segmented_to_virtual(src), &sLightBase[0], sizeof(Lights1));

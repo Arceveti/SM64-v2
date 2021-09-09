@@ -1922,7 +1922,7 @@ s32 exit_c_up(struct Camera *c) {
             for ((sector = 0); ((sector < 16) && (searching == 1)); (sector++)) {
                 vec3f_set_dist_and_angle(checkFoc, curPos, curDist, 0, curYaw + checkYaw);
                 // If there are no walls this way,
-                if (f32_find_wall_collision(&curPos[0], &curPos[1], &curPos[2], 20.0f, 50.0f) == 0) {
+                if (resolve_wall_collisions(curPos, 20.0f, 50.0f) == 0) {
                     // Start close to Mario, check for walls, floors, and ceilings all the way to the
                     // zoomed out distance
                     for ((d = curDist); (d < gCameraZoomDist); (d += 20.0f)) {
@@ -1933,7 +1933,7 @@ s32 exit_c_up(struct Camera *c) {
                         floorHeight  = (find_floor(curPos[0], (curPos[1] + 150.0f), curPos[2], &surface) +  10.0f);
                         if ((surface != NULL) && (floorHeight > curPos[1])) break;
                         // Stop checking this direction if there is a wall blocking the way
-                        if (f32_find_wall_collision(&curPos[0], &curPos[1], &curPos[2], 20.0f, 50.0f) == 1) break;
+                        if (resolve_wall_collisions(curPos, 20.0f, 50.0f) > 0) break;
                     }
                     // If there was no collision found all the way to the max distance, it's an opening
                     if (d >= gCameraZoomDist) searching = FALSE;
@@ -3677,7 +3677,7 @@ Angle next_lakitu_state(Vec3f newPos, Vec3f newFoc, Vec3f curPos, Vec3f curFoc, 
         if ((gCamera->cutscene != CUTSCENE_NONE) || !(gCameraMovementFlags & CAM_MOVE_C_UP_MODE)) {
             floorHeight = find_floor(newPos[0],  newPos[1],  newPos[2], &floor);
             if (floorHeight != FLOOR_LOWER_LIMIT && (floorHeight += CAMERA_Y_OFFSET) > newPos[1]) newPos[1] = floorHeight;
-            f32_find_wall_collision(&newPos[0], &newPos[1], &newPos[2], 0.0f, 100.0f);
+            resolve_wall_collisions(newPos, 0.0f, 100.0f);
         }
         sModeTransition.framesLeft--;
         vec3f_get_yaw(newFoc, newPos, &yaw);
@@ -4744,7 +4744,7 @@ s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoid
                     status   = 1;
                     wall      = colData.walls[colData.numWalls - 1];
                     // wallYaw is parallel to the wall, not perpendicular
-                    wallYaw   = (atan2s(wall->normal.z, wall->normal.x) + DEG( 90));
+                    wallYaw   = (SURFACE_YAW(wall) + DEG( 90));
                     // Calculate the avoid direction. The function returns the opposite direction so add 180 degrees.
                     *avoidYaw = (calc_avoid_yaw(yawFromMario, wallYaw) + DEG(180));
                 }
@@ -4757,7 +4757,7 @@ s32 rotate_camera_around_walls(UNUSED struct Camera *c, Vec3f cPos, Angle *avoid
             approach_f32_symmetric_bool(&fineRadius, 200.0f, 20.0f);
             if (find_wall_collisions(&colData) != 0) {
                 wall        = colData.walls[colData.numWalls - 1];
-                horWallNorm = atan2s(wall->normal.z, wall->normal.x);
+                horWallNorm = SURFACE_YAW(wall);
                 wallYaw     = (horWallNorm + DEG(90));
                 // If Mario would be blocked by the surface, then avoid it
                 if ((!is_range_behind_surface(sMarioCamState->pos, cPos, wall, yawRange, SURFACE_WALL_MISC)) && (is_behind_surface(sMarioCamState->pos, wall))

@@ -123,7 +123,7 @@ extern s32 gDialogResponse;
 extern u16 gDialogColorFadeTimer;
 extern s8  gLastDialogLineNum;
 extern s32 gDialogVariable;
-extern u16 gDialogTextAlpha;
+extern Alpha gDialogTextAlpha;
 extern s16 gCutsceneMsgXOffset;
 extern s16 gCutsceneMsgYOffset;
 extern s8  gRedCoinsCollected;

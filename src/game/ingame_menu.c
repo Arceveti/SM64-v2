@@ -31,7 +31,7 @@
 u16 gDialogColorFadeTimer;
 s8  gLastDialogLineNum;
 s32 gDialogVariable;
-u16 gDialogTextAlpha;
+Alpha gDialogTextAlpha;
 ScreenPos gCutsceneMsgXOffset;
 ScreenPos gCutsceneMsgYOffset;
 s8  gRedCoinsCollected;
@@ -1562,7 +1562,7 @@ s16 render_pause_courses_and_castle(void) {
         switch (gDialogBoxState) {
             case DIALOG_STATE_OPENING:
                 gDialogLineNum   = MENU_OPT_DEFAULT;
-                gDialogTextAlpha = 0;
+                gDialogTextAlpha = 0x0;
                 level_set_transition(-1, NULL);
                 play_sound(SOUND_MENU_PAUSE_OPEN, gGlobalSoundSource);
                 if ((gCurrCourseNum >= COURSE_MIN) && (gCurrCourseNum <= COURSE_MAX)) {
@@ -1641,7 +1641,7 @@ s16 render_pause_courses_and_castle(void) {
 #if defined(WIDE) && !defined(PUPPYCAM)
         render_widescreen_setting();
 #endif
-        if (gDialogTextAlpha < 250) gDialogTextAlpha += 25;
+        gDialogTextAlpha = approach_s32(gDialogTextAlpha, 255, 25, 0);
 #ifdef PUPPYCAM
     } else {
         shade_screen();
@@ -1803,7 +1803,7 @@ s16 render_course_complete_screen(void) {
 #endif
                 gDialogBoxState = DIALOG_STATE_VERTICAL;
                 level_set_transition(-1, NULL);
-                gDialogTextAlpha = 0;
+                gDialogTextAlpha = 0x0;
                 gDialogLineNum = MENU_OPT_DEFAULT;
             }
             break;
@@ -1825,7 +1825,7 @@ s16 render_course_complete_screen(void) {
             }
             break;
     }
-    if (gDialogTextAlpha < 250) gDialogTextAlpha += 25;
+    gDialogTextAlpha = approach_s32(gDialogTextAlpha, 255, 25, 0);
     gCourseDoneMenuTimer++;
     return MENU_OPT_NONE;
 }
