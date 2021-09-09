@@ -234,10 +234,6 @@ void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 off
     light->flags |= (flags | PUPPYLIGHT_DYNAMIC);
 }
 
-void cur_obj_set_light_properties_default(s32 offset, RGBA32 colour) {
-    set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, offset, offset, offset, 0x0, 0, colour, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE);
-}
-
 // You can run these in objects to enable or disable their light properties.
 void cur_obj_enable_light(void) {
     o->oFlags |= OBJ_FLAG_EMIT_LIGHT;

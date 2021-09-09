@@ -15,6 +15,9 @@
 #define ATTACK_HANDLER_SPECIAL_HUGE_GOOMBA_WEAKLY_ATTACKED  0x7
 #define ATTACK_HANDLER_SQUISHED_WITH_BLUE_COIN              0x8
 
+#define cur_obj_forward_vel_approach(target, delta) approach_f32_ptr(&o->oForwardVel, (target), (delta))
+#define cur_obj_y_vel_approach(      target, delta) approach_f32_ptr(&o->oVelY,       (target), (delta))
+
 Bool32 cur_obj_is_rendering_enabled(void);
 Angle  cur_obj_get_pitch_from_vel(void);
 s32    cur_obj_update_race_proposition_dialog(DialogID dialogID);
@@ -30,8 +33,6 @@ Bool32 cur_obj_init_anim_check_frame(     s32 animIndex, AnimFrame32 frame);
 Bool32 cur_obj_set_anim_if_at_end(        s32 animIndex);
 Bool32 cur_obj_play_sound_at_anim_range(AnimFrame32 startFrame1, AnimFrame32 startFrame2, u32 sound);
 Angle  cur_obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount);
-Bool32 cur_obj_forward_vel_approach(f32 target, f32 delta);
-Bool32 cur_obj_y_vel_approach(      f32 target, f32 delta);
 Bool32 cur_obj_move_pitch_approach(Angle target,      Angle delta     );
 Bool32 cur_obj_face_pitch_approach(Angle targetPitch, Angle deltaPitch);
 Bool32 cur_obj_face_yaw_approach(  Angle targetYaw,   Angle deltaYaw  );

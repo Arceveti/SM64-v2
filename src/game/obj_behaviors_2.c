@@ -205,15 +205,6 @@ Angle cur_obj_turn_pitch_toward_mario(f32 targetOffsetY, Angle turnAmount) {
     return targetPitch;
 }
 
-
-Bool32 cur_obj_forward_vel_approach(f32 target, f32 delta) {
-    return approach_f32_ptr(&o->oForwardVel, target, delta);
-}
-
-Bool32 cur_obj_y_vel_approach(f32 target, f32 delta) {
-    return approach_f32_ptr(&o->oVelY, target, delta);
-}
-
 Bool32 cur_obj_move_pitch_approach(Angle target, Angle delta) {
     o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, target, delta);
     return ((Angle) o->oMoveAnglePitch == target);

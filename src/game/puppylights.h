@@ -35,6 +35,8 @@
 // How much RAM is allocated to puppylights
 #define PUPPYLIGHTS_POOL (sizeof(struct PuppyLight) * MAX_LIGHTS)
 
+#define cur_obj_set_light_properties_default(offset, color) set_light_properties(&o->puppylight, o->oPosX, o->oPosY, o->oPosZ, (offset), (offset), (offset), 0x0, 0, (color), (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), o->oRoom, TRUE)
+
 extern Lights1 gLevelLight;
 extern u16 gNumLights;
 extern Bool8 levelAmbient;
@@ -47,7 +49,6 @@ extern void cur_obj_disable_light(void);
 extern void obj_enable_light( struct Object *obj);
 extern void obj_disable_light(struct Object *obj);
 extern void set_light_properties(struct PuppyLight *light, s32 x, s32 y, s32 z, s32 offsetX, s32 offsetY, s32 offsetZ, Angle32 yaw, s32 epicentre, RGBA32 colour, s32 flags, RoomData room, Bool32 active);
-extern void cur_obj_set_light_properties_default(s32 offset, RGBA32 colour);
 extern void puppylights_allocate(void);
 extern void delete_lights(void);
 

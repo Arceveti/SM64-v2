@@ -7,6 +7,11 @@
 #include "macros.h"
 #include "types.h"
 
+// Checks if a point is within distance from Mario's graphical position. Test is exclusive.
+#define is_point_within_radius_of_mario(x, y, z, dist) vec3f_are_coords_within_radius_of_point(gMarioObject->header.gfx.pos, (x), (y), (z), (dist))
+// Checks whether a point is within distance of a given point. Test is exclusive.
+#define is_point_close_to_object(obj, x, y, z, dist) vec3f_are_coords_within_radius_of_point(&obj->oPosVec, (x), (y), (z), (dist))
+
 void set_yoshi_as_not_dead(void);
 Bool32 coin_step(ColFlags *collisionFlagsPtr);
 void moving_coin_flicker(void);

@@ -20,7 +20,7 @@ void bhv_beta_trampoline_spring_loop(void) {
     f32 yDisplacement;
     // Update to be 75 units under the trampoline top
     obj_copy_pos_and_angle( o, o->parentObj);
-    obj_copy_graph_y_offset(o, o->parentObj);
+    o->oGraphYOffset = o->parentObj->oGraphYOffset;
     o->oPosY -= 75.0f;
     // If the trampoline top is above its original position,
     // scale the spring by (the displacement)/10 + 1.

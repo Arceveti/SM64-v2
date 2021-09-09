@@ -363,20 +363,6 @@ void obj_move_xyz_using_fvel_and_yaw(struct Object *obj) {
 }
 
 /**
- * Checks if a point is within distance from Mario's graphical position. Test is exclusive.
- */
-Bool32 is_point_within_radius_of_mario(f32 x, f32 y, f32 z, s32 dist) {
-    return vec3f_are_coords_within_radius_of_point(gMarioObject->header.gfx.pos, x, y, z, dist);
-}
-
-/**
- * Checks whether a point is within distance of a given point. Test is exclusive.
- */
-Bool32 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
-    return vec3f_are_coords_within_radius_of_point(&obj->oPosVec, x, y, z, dist);
-}
-
-/**
  * Sets an object as visible if within a certain distance of Mario's graphical position.
  */
 void set_object_visibility(struct Object *obj, s32 dist) {

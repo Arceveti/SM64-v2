@@ -367,34 +367,6 @@ struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativeP
     return obj;
 }
 
-// Unused
-UNUSED void cur_obj_move_using_vel(void) {
-    vec3_add(&o->oPosVec, &o->oVelVec);
-}
-
-// Used for beta trampoline
-void obj_copy_graph_y_offset(struct Object *dst, struct Object *src) {
-    dst->oGraphYOffset = src->oGraphYOffset;
-}
-
-void obj_copy_pos_and_angle(struct Object *dst, struct Object *src) {
-    obj_copy_pos(  dst, src);
-    obj_copy_angle(dst, src);
-}
-
-void obj_copy_pos(struct Object *dst, struct Object *src) {
-    vec3_copy(&dst->oPosVec, &src->oPosVec);
-}
-
-void obj_copy_angle(struct Object *dst, struct Object *src) {
-    vec3_copy(&dst->oMoveAngleVec, &src->oMoveAngleVec);
-    vec3_copy(&dst->oFaceAngleVec, &src->oFaceAngleVec);
-}
-
-void obj_set_gfx_pos_from_pos(struct Object *obj) {
-    vec3_copy(obj->header.gfx.pos, &obj->oPosVec);
-}
-
 void obj_init_animation(struct Object *obj, s32 animIndex) {
     struct Animation **anims = obj->oAnimations;
     geo_obj_init_animation(&obj->header.gfx, &anims[animIndex]);
@@ -406,19 +378,11 @@ void obj_apply_scale_to_transform(struct Object *obj) {
     vec3_mul_val(obj->transform[2], obj->header.gfx.scale[2]);
 }
 
-void obj_copy_scale(struct Object *dst, struct Object *src) {
-    vec3_copy(dst->header.gfx.scale, src->header.gfx.scale);
-}
-
-void obj_scale_xyz(struct Object *obj, f32 xScale, f32 yScale, f32 zScale) {
-    vec3_set(obj->header.gfx.scale, xScale, yScale, zScale);
-}
-
-void obj_scale(struct Object *obj, f32 scale) {
+void obj_scale(struct Object *obj, f32 scale) { //!
     vec3_same(obj->header.gfx.scale, scale);
 }
 
-void cur_obj_scale(f32 scale) {
+void cur_obj_scale(f32 scale) { //!
     vec3_same(o->header.gfx.scale, scale);
 }
 
@@ -452,44 +416,19 @@ void cur_obj_enable_rendering_and_become_tangible(struct Object *obj) {
     obj->oIntangibleTimer       = 0;
 }
 
-void cur_obj_enable_rendering(void) {
-    o->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
-}
-
 void cur_obj_disable_rendering_and_become_intangible(struct Object *obj) {
     obj->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
     obj->oIntangibleTimer       = -1;
 }
 
-void cur_obj_disable_rendering(void) {
-    o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;
-}
-
-void cur_obj_unhide(void) {
-    o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-}
-
-void cur_obj_hide(void) {
-    o->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
-}
-
 void cur_obj_set_pos_relative(struct Object *other, f32 dleft, f32 dy, f32 dforward) {
     f32 facingZ      = coss(other->oMoveAngleYaw);
     f32 facingX      = sins(other->oMoveAngleYaw);
-    f32 dz           = ((dforward * facingZ) - (dleft * facingX));
-    f32 dx           = ((dforward * facingX) + (dleft * facingZ));
+    Vec3f d = {((dforward * facingZ) - (dleft * facingX)),
+               dy,
+               ((dforward * facingX) + (dleft * facingZ))};
+    vec3_sum(&o->oPosVec, &other->oPosVec, d);
     o->oMoveAngleYaw = other->oMoveAngleYaw;
-    o->oPosX         = (other->oPosX + dx);
-    o->oPosY         = (other->oPosY + dy);
-    o->oPosZ         = (other->oPosZ + dz);
-}
-
-void cur_obj_set_pos_relative_to_parent(f32 dleft, f32 dy, f32 dforward) {
-    cur_obj_set_pos_relative(o->parentObj, dleft, dy, dforward);
-}
-
-void cur_obj_enable_rendering_2(void) {
-    cur_obj_enable_rendering();
 }
 
 void cur_obj_unused_init_on_floor(void) {
@@ -499,10 +438,6 @@ void cur_obj_unused_init_on_floor(void) {
         cur_obj_set_pos_relative_to_parent(0.0f, 0.0f, -70.0f);
         o->oPosY = find_floor_height(o->oPosX, o->oPosY, o->oPosZ);
     }
-}
-
-void obj_set_face_angle_to_move_angle(struct Object *obj) {
-    vec3_copy(&obj->oFaceAngleVec, &obj->oMoveAngleVec);
 }
 
 u32 get_object_list_from_behavior(const BehaviorScript *behavior) {
@@ -703,14 +638,6 @@ Bool32 cur_obj_check_frame_prior_current_frame(AnimFrame16 *frame) {
     return FALSE;
 }
 
-Bool32 mario_is_in_air_action(void) {
-    return (gMarioStates[0].action & ACT_FLAG_AIR);
-}
-
-Bool32 mario_is_dive_sliding(void) {
-    return (gMarioStates[0].action == ACT_DIVE_SLIDE);
-}
-
 void cur_obj_set_y_vel_and_animation(f32 yVel, s32 animIndex) {
     o->oVelY = yVel;
     cur_obj_init_animation_with_sound(animIndex);
@@ -760,26 +687,6 @@ void cur_obj_get_dropped(void) {
     cur_obj_move_after_thrown_or_dropped(0.0f, 0.0f);
 }
 
-void cur_obj_set_model(ModelID modelID) {
-    o->header.gfx.sharedChild = gLoadedGraphNodes[modelID];
-}
-
-void obj_set_model(struct Object *obj, ModelID modelID) {
-    obj->header.gfx.sharedChild = gLoadedGraphNodes[modelID];
-}
-
-Bool32 cur_obj_has_model(ModelID modelID) {
-    return (o->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
-}
-
-Bool32 obj_has_model(struct Object *obj, ModelID modelID) {
-    return (obj->header.gfx.sharedChild == gLoadedGraphNodes[modelID]);
-}
-
-void mario_set_flag(s32 flag) {
-    gMarioStates[0].flags |= flag;
-}
-
 Bool32 cur_obj_clear_interact_status_flag(s32 flag) {
     if (o->oInteractStatus & flag) {
         o->oInteractStatus &= (flag ^ ~(0));
@@ -801,32 +708,6 @@ void obj_mark_for_deletion(struct Object *obj) {
     //  so this is worth looking into.
     obj->activeFlags &= ~ACTIVE_FLAG_ACTIVE;
     obj->activeFlags |= ACTIVE_FLAG_DEACTIVATED;
-}
-
-void cur_obj_disable(void) {
-    cur_obj_disable_rendering();
-    cur_obj_hide();
-    cur_obj_become_intangible();
-}
-
-void cur_obj_become_intangible(void) {
-    // When the timer is negative, the object is intangible and the timer
-    // doesn't count down
-    o->oIntangibleTimer = -1;
-}
-
-void obj_become_intangible(struct Object *obj) {
-    // When the timer is negative, the object is intangible and the timer
-    // doesn't count down
-    obj->oIntangibleTimer = -1;
-}
-
-void cur_obj_become_tangible(void) {
-    o->oIntangibleTimer = 0;
-}
-
-void obj_become_tangible(struct Object *obj) {
-    obj->oIntangibleTimer = 0;
 }
 
 void cur_obj_update_floor_height(void) {
@@ -904,7 +785,7 @@ static Bool32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepS
             o->oPosX = intendedX;
             o->oPosZ = intendedZ;
             return TRUE;
-        } else if (deltaFloorHeight < -50.0f && (o->oMoveFlags & OBJ_MOVE_ON_GROUND)) {
+        } else if ((deltaFloorHeight < -50.0f) && (o->oMoveFlags & OBJ_MOVE_ON_GROUND)) {
             // Don't walk off an edge
             o->oMoveFlags |= OBJ_MOVE_HIT_EDGE;
             return FALSE;
@@ -918,7 +799,7 @@ static Bool32 cur_obj_move_xz(f32 steepSlopeNormalY, s32 careAboutEdgesAndSteepS
             o->oMoveFlags |= OBJ_MOVE_HIT_EDGE;
             return FALSE;
         }
-    } else if (intendedFloor->normal.y > steepSlopeNormalY || o->oPosY > intendedFloorHeight) {
+    } else if ((intendedFloor->normal.y > steepSlopeNormalY) || (o->oPosY > intendedFloorHeight)) {
         // Allow movement upward, provided either:
         // - The target floor is flat enough (e.g. walking up stairs)
         // - We are above the target floor (most likely in the air)
@@ -1062,22 +943,6 @@ Bool32 obj_check_if_collided_with_object(struct Object *obj1, struct Object *obj
     return FALSE;
 }
 
-void cur_obj_set_behavior(const BehaviorScript *behavior) {
-    o->behavior = segmented_to_virtual(behavior);
-}
-
-void obj_set_behavior(struct Object *obj, const BehaviorScript *behavior) {
-    obj->behavior = segmented_to_virtual(behavior);
-}
-
-Bool32 cur_obj_has_behavior(const BehaviorScript *behavior) {
-    return (o->behavior == segmented_to_virtual(behavior));
-}
-
-Bool32 obj_has_behavior(struct Object *obj, const BehaviorScript *behavior) {
-    return (obj->behavior == segmented_to_virtual(behavior));
-}
-
 UNUSED f32 cur_obj_lateral_dist_from_mario_to_home(void) {
     f32 lateralDist;
     vec3f_get_lateral_dist(&gMarioObject->oPosVec, &o->oHomeVec, &lateralDist);
@@ -1114,11 +979,6 @@ Bool32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
          || ((o->oHomeZ + maxZ) < o->oPosZ));
 }
 
-//! redundant
-void cur_obj_set_pos_to_home(void) {
-    vec3_copy(&o->oPosVec, &o->oHomeVec);
-}
-
 void cur_obj_set_pos_to_home_and_stop(void) {
     vec3_copy(&o->oPosVec, &o->oHomeVec);
     o->oForwardVel = 0.0f;
@@ -1137,11 +997,6 @@ void cur_obj_shake_y(f32 amount) {
 void cur_obj_start_cam_event(UNUSED struct Object *obj, s32 cameraEvent) {
     gPlayerCameraState->cameraEvent = (s16) cameraEvent;
     gSecondCameraFocus = o;
-}
-
-// unused, self explanatory, maybe oInteractStatus originally had TRUE/FALSE statements
-UNUSED void set_mario_interact_true_if_in_range(f32 range) {
-    if (o->oDistanceToMario < range) gMarioObject->oInteractStatus = TRUE;
 }
 
 void obj_set_billboard(struct Object *obj) {
@@ -1285,7 +1140,7 @@ static void cur_obj_update_floor_and_resolve_wall_collisions(s16 steepSlopeDegre
     }
 }
 
-void cur_obj_update_floor_and_walls(void) {
+void cur_obj_update_floor_and_walls(void) { //! redundant?
     cur_obj_update_floor_and_resolve_wall_collisions(60);
 }
 
@@ -1355,12 +1210,11 @@ void cur_obj_move_using_fvel_and_gravity(void) {
 void obj_set_pos_relative(struct Object *obj, struct Object *other, f32 dleft, f32 dy, f32 dforward) {
     f32 facingZ        = coss(other->oMoveAngleYaw);
     f32 facingX        = sins(other->oMoveAngleYaw);
-    f32 dz             = ((dforward * facingZ) - (dleft * facingX));
-    f32 dx             = ((dforward * facingX) + (dleft * facingZ));
+    Vec3f d = { ((dforward * facingZ) - (dleft * facingX)),
+                dy,
+                ((dforward * facingX) + (dleft * facingZ)) };
+    vec3_sum(&obj->oPosVec, &other->oPosVec, d);
     obj->oMoveAngleYaw = other->oMoveAngleYaw;
-    obj->oPosX         = (other->oPosX + dx);
-    obj->oPosY         = (other->oPosY + dy);
-    obj->oPosZ         = (other->oPosZ + dz);
 }
 
 Angle cur_obj_angle_to_home(void) {
@@ -1421,16 +1275,8 @@ void obj_create_transform_from_self(struct Object *obj) {
     vec3_copy(obj->transform[3], &obj->oPosVec);
 }
 
-void cur_obj_rotate_move_angle_using_vel(void) {
-    vec3_add(&o->oMoveAngleVec, &o->oAngleVelVec);
-}
-
-void cur_obj_rotate_face_angle_using_vel(void) {
+void cur_obj_rotate_face_angle_using_vel(void) { //! redundant?
     vec3_add(&o->oFaceAngleVec, &o->oAngleVelVec);
-}
-
-void cur_obj_set_face_angle_to_move_angle(void) {
-    vec3_copy(&o->oFaceAngleVec, &o->oMoveAngleVec);
 }
 
 s32 cur_obj_follow_path(void) {
@@ -1737,26 +1583,6 @@ Bool32 cur_obj_hide_if_mario_far_away_y(f32 distY) {
 Gfx *geo_offset_klepto_held_object(s32 callContext, struct GraphNode *node, UNUSED Mat4 mtx) {
     if (callContext == GEO_CONTEXT_RENDER) vec3_set(((struct GraphNodeTranslationRotation *) node->next)->translation, 300, 300, 0);
     return NULL;
-}
-
-Bool32 obj_is_hidden(struct Object *obj) {
-    return (obj->header.gfx.node.flags & GRAPH_RENDER_INVISIBLE);
-}
-
-void enable_time_stop(void) {
-    gTimeStopState |= TIME_STOP_ENABLED;
-}
-
-void disable_time_stop(void) {
-    gTimeStopState &= ~TIME_STOP_ENABLED;
-}
-
-void set_time_stop_flags(s32 flags) {
-    gTimeStopState |= flags;
-}
-
-void clear_time_stop_flags(s32 flags) {
-    gTimeStopState = gTimeStopState & (flags ^ 0xFFFFFFFF);
 }
 
 s32 cur_obj_can_mario_activate_textbox(f32 radius, f32 height, UNUSED s32 unused) {
