@@ -53,14 +53,11 @@ void whomp_turn(void) {
 }
 
 void whomp_patrol(void) {
-    Angle marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-    f32 distWalked = cur_obj_lateral_dist_to_home();
-    f32 patrolDist = ((gCurrLevelNum == LEVEL_BITS) ? 200.0f : 700.0f); // should be a param?
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
-    if (distWalked > patrolDist) {
+    if (cur_obj_lateral_dist_to_home_squared() > ((gCurrLevelNum == LEVEL_BITS) ? 40000.0f : 490000.0f)) { // 200 or 700
         o->oAction = WHOMP_ACT_TURN;
-    } else if (marioAngle < DEG(45)) {
+    } else if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(45)) {
         if (o->oDistanceToMario < 1500.0f) {
             o->oForwardVel = 9.0f;
             cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);
@@ -71,13 +68,11 @@ void whomp_patrol(void) {
 }
 
 void king_whomp_chase(void) {
-    Angle marioAngle;
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
     if (o->oTimer > 30) {
-        marioAngle = abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw);
-        if (marioAngle < DEG(45)) {
+        if (abs_angle_diff(o->oAngleToMario, o->oMoveAngleYaw) < DEG(45)) {
             if (o->oDistanceToMario < 1500.0f) {
                 o->oForwardVel = 9.0f;
                 cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 3.0f);

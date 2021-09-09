@@ -38,7 +38,7 @@ void bhv_scuttlebug_loop(void) {
             break;
         case SCUTTLEBUG_SUB_ACT_MOVING:
             o->oForwardVel = 5.0f;
-            if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f) {
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(1000.0f)) {
                 o->oAngleToMario = cur_obj_angle_to_home();
             } else if (!o->oScuttlebugIsAtttacking) {
                 o->oScuttlebugTimer = 0;

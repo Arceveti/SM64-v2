@@ -1078,10 +1078,15 @@ Bool32 obj_has_behavior(struct Object *obj, const BehaviorScript *behavior) {
     return (obj->behavior == segmented_to_virtual(behavior));
 }
 
-f32 cur_obj_lateral_dist_from_mario_to_home(void) {
+UNUSED f32 cur_obj_lateral_dist_from_mario_to_home(void) {
     f32 lateralDist;
     vec3f_get_lateral_dist(&gMarioObject->oPosVec, &o->oHomeVec, &lateralDist);
     return lateralDist;
+}
+
+f32 cur_obj_lateral_dist_from_mario_to_home_squared(void) {
+    MAKE_DXZ(&o->oHomeVec, &gMarioObject->oPosVec, f32)
+    return (sqr(dx) + sqr(dz));
 }
 
 f32 cur_obj_lateral_dist_to_home(void) {
@@ -1090,28 +1095,32 @@ f32 cur_obj_lateral_dist_to_home(void) {
     return lateralDist;
 }
 
+f32 cur_obj_lateral_dist_to_home_squared(void) {
+    MAKE_DXZ(&o->oHomeVec, &o->oPosVec, f32)
+    return (sqr(dx) + sqr(dz));
+}
+
 Bool32 cur_obj_outside_home_square(f32 halfLength) {
-    if ((o->oHomeX - halfLength) > o->oPosX) return TRUE;
-    if ((o->oHomeX + halfLength) < o->oPosX) return TRUE;
-    if ((o->oHomeZ - halfLength) > o->oPosZ) return TRUE;
-    if ((o->oHomeZ + halfLength) < o->oPosZ) return TRUE;
-    return FALSE;
+    return (((o->oHomeX - halfLength) > o->oPosX)
+         || ((o->oHomeX + halfLength) < o->oPosX)
+         || ((o->oHomeZ - halfLength) > o->oPosZ)
+         || ((o->oHomeZ + halfLength) < o->oPosZ));
 }
 
 Bool32 cur_obj_outside_home_rectangle(f32 minX, f32 maxX, f32 minZ, f32 maxZ) {
-    if ((o->oHomeX + minX) > o->oPosX) return TRUE;
-    if ((o->oHomeX + maxX) < o->oPosX) return TRUE;
-    if ((o->oHomeZ + minZ) > o->oPosZ) return TRUE;
-    if ((o->oHomeZ + maxZ) < o->oPosZ) return TRUE;
-    return FALSE;
+    return (((o->oHomeX + minX) > o->oPosX)
+         || ((o->oHomeX + maxX) < o->oPosX)
+         || ((o->oHomeZ + minZ) > o->oPosZ)
+         || ((o->oHomeZ + maxZ) < o->oPosZ));
 }
 
+//! redundant
 void cur_obj_set_pos_to_home(void) {
     vec3_copy(&o->oPosVec, &o->oHomeVec);
 }
 
 void cur_obj_set_pos_to_home_and_stop(void) {
-    cur_obj_set_pos_to_home();
+    vec3_copy(&o->oPosVec, &o->oHomeVec);
     o->oForwardVel = 0.0f;
     o->oVelY       = 0.0f;
 }

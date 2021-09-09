@@ -15,12 +15,12 @@ void tuxies_mother_act_received_baby(void) { // act 2
         if (o->oSubAction == MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO) {
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_WALK);
             o->oForwardVel = 10.0f;
-            if (800.0f < cur_obj_lateral_dist_from_mario_to_home()) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(800.0f)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_STOP_CHASING_MARIO;
             cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
         } else {
             o->oForwardVel = 0.0f;
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
-            if (cur_obj_lateral_dist_from_mario_to_home() < 700.0f) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() < sqr(700.0f)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_CHASE_MARIO;
         }
     } else {
         o->oForwardVel = 0.0f;

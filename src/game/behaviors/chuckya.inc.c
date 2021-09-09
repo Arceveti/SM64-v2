@@ -8,13 +8,13 @@ void common_anchor_mario_behavior(f32 forwardVel, f32 velY, s32 flag) {
             obj_set_gfx_pos_at_obj_pos(gMarioObject, o);
             break;
         case COMMON_ANCHOR_ACT_THROW_MARIO:
-            gMarioObject->oInteractStatus |= (flag + INT_STATUS_MARIO_UNK2);
+            gMarioObject->oInteractStatus |= (flag + INT_STATUS_MARIO_THROWN_BY_OBJ);
             gMarioStates[0].forwardVel = forwardVel;
             gMarioStates[0].vel[1]     = velY;
             o->parentObj->oCommonAnchorAction = COMMON_ANCHOR_ACT_INACTIVE;
             break;
         case COMMON_ANCHOR_ACT_DROP_MARIO:
-            gMarioObject->oInteractStatus |= (INT_STATUS_MARIO_UNK2 + INT_STATUS_MARIO_UNK6); // loads 2 interactions at once?
+            gMarioObject->oInteractStatus |= (INT_STATUS_MARIO_THROWN_BY_OBJ + INT_STATUS_MARIO_DROPPED_BY_OBJ); // loads 2 interactions at once?
             gMarioStates[0].forwardVel = 10.0f;
             gMarioStates[0].vel[1]     = 10.0f;
             o->parentObj->oCommonAnchorAction = COMMON_ANCHOR_ACT_INACTIVE;
@@ -25,7 +25,7 @@ void common_anchor_mario_behavior(f32 forwardVel, f32 velY, s32 flag) {
 }
 
 void bhv_chuckya_anchor_mario_loop(void) {
-    common_anchor_mario_behavior(40.0f, 40.0f, INT_STATUS_MARIO_UNK6);
+    common_anchor_mario_behavior(40.0f, 40.0f, INT_STATUS_MARIO_DROPPED_BY_OBJ);
 }
 
 void chuckya_act_moving(void) { // act 0
@@ -35,7 +35,7 @@ void chuckya_act_moving(void) { // act 0
     switch (initialSubAction = o->oSubAction) {
         case CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO:
             o->oForwardVel = 0.0f;
-            if (cur_obj_lateral_dist_from_mario_to_home() < 2000.0f) {
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() < sqr(2000.0f)) {
                 cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x400);
                 if ((o->oChuckyaSubActionTimer > 40) || (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) < 0x1000)) o->oSubAction = CHUCKYA_SUB_ACT_ACCELERATE;
             } else {
@@ -45,21 +45,21 @@ void chuckya_act_moving(void) { // act 0
         case CHUCKYA_SUB_ACT_ACCELERATE:
             approach_f32_ptr(&o->oForwardVel, 30.0f, 4.0f);
             if (abs_angle_diff(o->oMoveAngleYaw, o->oAngleToMario) > DEG(90)) o->oSubAction = CHUCKYA_SUB_ACT_STOP;
-            if (cur_obj_lateral_dist_from_mario_to_home() > 2000.0f) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(2000.0f)) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_HOME;
             break;
         case CHUCKYA_SUB_ACT_STOP:
             approach_f32_ptr(&o->oForwardVel, 0, 4.0f);
             if (o->oChuckyaSubActionTimer > 48) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO;
             break;
         case CHUCKYA_SUB_ACT_TURN_TOWARD_HOME:
-            if (cur_obj_lateral_dist_to_home() < 500.0f) {
+            if (cur_obj_lateral_dist_to_home_squared() < sqr(500.0f)) {
                 o->oForwardVel = 0.0f;
             } else {
                 approach_f32_ptr(&o->oForwardVel, 10.0f, 4.0f);
                 o->oAngleToMario = cur_obj_angle_to_home();
                 cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x800);
             }
-            if (cur_obj_lateral_dist_from_mario_to_home() < 1900.0f) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO;
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() < sqr(1900.0f)) o->oSubAction = CHUCKYA_SUB_ACT_TURN_TOWARD_MARIO;
             break;
     }
     if (o->oSubAction != initialSubAction) {

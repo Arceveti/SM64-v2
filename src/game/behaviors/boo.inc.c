@@ -286,7 +286,7 @@ static void boo_chase_mario(f32 minDY, Angle yawIncrement, f32 mul) {
     Angle targetYaw;
     if (boo_vanish_or_appear()) {
         o->oInteractType = INTERACT_BOUNCE_TOP;
-        targetYaw        = ((cur_obj_lateral_dist_from_mario_to_home() > 1500.0f) ? cur_obj_angle_to_home() : o->oAngleToMario);
+        targetYaw        = ((cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(1500.0f)) ? cur_obj_angle_to_home() : o->oAngleToMario);
         cur_obj_rotate_yaw_toward(targetYaw, yawIncrement);
         o->oVelY         = 0.0f;
         if (!mario_is_in_air_action()) {

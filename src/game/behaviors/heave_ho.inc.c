@@ -10,7 +10,7 @@ void bhv_heave_ho_throw_mario_loop(void) {
     o->oMoveAngleYaw = o->parentObj->oMoveAngleYaw;
     if (o->parentObj->oHeaveHoThrowState) {
         cur_obj_play_sound_2(SOUND_OBJ_HEAVEHO_TOSSED);
-        gMarioObject->oInteractStatus |= INT_STATUS_MARIO_UNK2;
+        gMarioObject->oInteractStatus |= INT_STATUS_MARIO_THROWN_BY_OBJ;
         gMarioStates[0].forwardVel       = -45.0f;
         gMarioStates[0].vel[1]           =  95.0f;
         o->parentObj->oHeaveHoThrowState = FALSE;
@@ -36,9 +36,9 @@ void heave_ho_act_winding_up(void) { // act 1
 
 void heave_ho_act_moving(void) { // act 2
     Angle angleVel;
-    if (1000.0f < cur_obj_lateral_dist_from_mario_to_home()) o->oAngleToMario = cur_obj_angle_to_home();
+    if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(1000.0f)) o->oAngleToMario = cur_obj_angle_to_home();
     if (o->oTimer > 150) {
-        o->oHeaveHoTimedSpeed = (302 - o->oTimer) / 152.0f;
+        o->oHeaveHoTimedSpeed = ((302 - o->oTimer) / 152.0f);
         if (o->oHeaveHoTimedSpeed < 0.1f) {
             o->oHeaveHoTimedSpeed = 0.1f;
             o->oAction = HEAVE_HO_ACT_WINDING_UP;
@@ -47,8 +47,8 @@ void heave_ho_act_moving(void) { // act 2
         o->oHeaveHoTimedSpeed = 1.0f;
     }
     cur_obj_init_animation_with_accel_and_sound(HEAVE_HO_ANIM_MOVING, o->oHeaveHoTimedSpeed);
-    o->oForwardVel = o->oHeaveHoTimedSpeed * 10.0f;
-    angleVel       = o->oHeaveHoTimedSpeed * 0x400;
+    o->oForwardVel = (o->oHeaveHoTimedSpeed * 10.0f);
+    angleVel       = (o->oHeaveHoTimedSpeed * 0x400);
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, angleVel);
 }
 

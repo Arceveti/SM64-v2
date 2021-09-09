@@ -73,8 +73,8 @@ static void bird_act_fly(void) {
             o->oBirdSpeed       = ((0.04f * dist_between_objects(o, o->parentObj)) + 20.0f);
         }
         // Approach to match the bird's target yaw and pitch.
-        cur_obj_move_pitch_approach( o->oBirdTargetPitch,  0x8C);
-        cur_obj_rotate_yaw_toward( o->oBirdTargetYaw, 0x320);
+        cur_obj_move_pitch_approach(   o->oBirdTargetPitch,        0x8C);
+        cur_obj_rotate_yaw_toward(     o->oBirdTargetYaw,         0x320);
         cur_obj_roll_to_match_yaw_turn(o->oBirdTargetYaw, 0x3000, 0x258);
     }
     // The bird has no gravity, so this function only

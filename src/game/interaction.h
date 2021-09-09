@@ -88,11 +88,11 @@
 // Mario Interaction Status
 #define INT_STATUS_MARIO_STUNNED         (1 <<  0) /* 0x00000001 */
 #define INT_STATUS_MARIO_KNOCKBACK_DMG   (1 <<  1) /* 0x00000002 */
-#define INT_STATUS_MARIO_UNK2            (1 <<  2) /* 0x00000004 */
+#define INT_STATUS_MARIO_THROWN_BY_OBJ   (1 <<  2) /* 0x00000004 */
 #define INT_STATUS_MARIO_DROP_OBJECT     (1 <<  3) /* 0x00000008 */
 #define INT_STATUS_MARIO_SHOCKWAVE       (1 <<  4) /* 0x00000010 */
 #define INT_STATUS_MARIO_UNK5            (1 <<  5) /* 0x00000020 */
-#define INT_STATUS_MARIO_UNK6            (1 <<  6) /* 0x00000040 */
+#define INT_STATUS_MARIO_DROPPED_BY_OBJ  (1 <<  6) /* 0x00000040 */
 #define INT_STATUS_MARIO_DROP_FROM_HOOT  (1 <<  7) /* 0x00000080 */
 
 // Object Interaction Status

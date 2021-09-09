@@ -63,7 +63,7 @@ void bub_act_swimming_towards_mario(void) {
         o->oPosY = (o->oCheepCheepWaterLevel - 50.0f);
         if (dy > 300.0f) o->oPosY -= 1.0f;
     }
-    if (800.0f < cur_obj_lateral_dist_from_mario_to_home()) o->oAngleToMario = cur_obj_angle_to_home();
+    if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(800.0f)) o->oAngleToMario = cur_obj_angle_to_home();
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x100);
     if ((o->oDistanceToMario < 200.0f) && (o->oCheepCheepRandomSwimAway < 0.5f)) o->oAction = BUB_ACT_SWIMMING_AWAY_FROM_MARIO;
     if (o->oInteractStatus & INT_STATUS_INTERACTED)                              o->oAction = BUB_ACT_SWIMMING_AWAY_FROM_MARIO;
@@ -86,7 +86,7 @@ void bub_act_swimming_away_from_mario(void) {
         o->oPosY = (o->oCheepCheepWaterLevel - 50.0f);
         if (dy > 300.0f) o->oPosY -= 1.0f;
     }
-    if (cur_obj_lateral_dist_from_mario_to_home() > 800.0f) o->oAngleToMario = cur_obj_angle_to_home();
+    if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(800.0f)) o->oAngleToMario = cur_obj_angle_to_home();
     cur_obj_rotate_yaw_toward((o->oAngleToMario + DEG(180)), 0x400);
     if ((o->oTimer > 200) && (o->oDistanceToMario > 600.0f)) o->oAction = BUB_ACT_SWIMMING_TOWARDS_MARIO;
 }

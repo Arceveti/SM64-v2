@@ -129,7 +129,7 @@ void bhv_camera_lakitu_update(void) {
                 o->oHomeX          = gLakituState.curFocus[0];
                 o->oHomeZ          = gLakituState.curFocus[2];
                 o->oFaceAngleYaw   = -cur_obj_angle_to_home();
-                o->oFaceAnglePitch = atan2s(cur_obj_lateral_dist_to_home(), o->oPosY - gLakituState.curFocus[1]);
+                o->oFaceAnglePitch = atan2s(cur_obj_lateral_dist_to_home(), (o->oPosY - gLakituState.curFocus[1]));
                 o->oPosX           = (((f32) 0x875C3D / 0x800) + val0C);
             }
         }

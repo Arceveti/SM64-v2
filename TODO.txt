@@ -95,6 +95,7 @@
     - Hanging quarter steps?
     - Gravity direction support
     - "Squished" death from any direction
+    - Heave-Ho's should be able to throw mario regardless of Mario's action
     - Update mario movement angles when m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics

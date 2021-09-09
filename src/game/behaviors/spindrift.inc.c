@@ -19,7 +19,7 @@ void bhv_spindrift_loop(void) {
     switch (o->oAction) {
         case SPINDRIFT_ACT_ACTIVE:
             approach_f32_ptr(&o->oForwardVel, 4.0f, 1.0f);
-            if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f) {
+            if (cur_obj_lateral_dist_from_mario_to_home_squared() > sqr(1000.0f)) {
                 o->oAngleToMario = cur_obj_angle_to_home();
             } else if (o->oDistanceToMario > 300.0f) {
                 o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
