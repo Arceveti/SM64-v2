@@ -424,9 +424,9 @@ void cur_obj_disable_rendering_and_become_intangible(struct Object *obj) {
 void cur_obj_set_pos_relative(struct Object *other, f32 dleft, f32 dy, f32 dforward) {
     f32 facingZ      = coss(other->oMoveAngleYaw);
     f32 facingX      = sins(other->oMoveAngleYaw);
-    Vec3f d = {((dforward * facingZ) - (dleft * facingX)),
-               dy,
-               ((dforward * facingX) + (dleft * facingZ))};
+    Vec3f d = { ((dforward * facingX) + (dleft * facingZ)),
+                dy,
+                ((dforward * facingZ) - (dleft * facingX)) };
     vec3_sum(&o->oPosVec, &other->oPosVec, d);
     o->oMoveAngleYaw = other->oMoveAngleYaw;
 }

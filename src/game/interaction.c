@@ -248,9 +248,7 @@ void mario_drop_held_object(struct MarioState *m) {
     if (m->heldObj != NULL) {
         if (m->heldObj->behavior == segmented_to_virtual(bhvKoopaShellUnderwater)) stop_shell_music();
         obj_set_held_state(m->heldObj, bhvCarrySomethingDropped);
-        m->heldObj->oPosX         = m->marioBodyState->heldObjLastPosition[0];
-        m->heldObj->oPosY         = m->marioBodyState->heldObjLastPosition[1];
-        m->heldObj->oPosZ         = m->marioBodyState->heldObjLastPosition[2];
+        vec3_copy(&m->heldObj->oPosVec, m->marioBodyState->heldObjLastPosition);
         m->heldObj->oMoveAngleYaw = m->faceAngle[1];
         m->heldObj                = NULL;
     }
