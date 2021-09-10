@@ -88,7 +88,6 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     // Get the position based off the rotation of the box.
     lightPos[0] = ((lightRelative[2] * sins(-light->yaw)) + (lightRelative[0] * coss(-light->yaw)));
     lightPos[1] = ((lightRelative[2] * coss(-light->yaw)) - (lightRelative[0] * sins(-light->yaw)));
-
 #ifdef VISUAL_DEBUG
     Vec3f debugPos[2];
     vec3_copy(debugPos[0], light->pos[0]);

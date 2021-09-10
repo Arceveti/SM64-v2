@@ -31,12 +31,10 @@ void bhv_flamethrower_flame_loop(void) {
     } else {
         cur_obj_move_using_fvel_and_gravity();
     }
-    if (o->oTimer > remainingTime) {
 #ifdef PUPPYLIGHTS
-        obj_disable_light(o->parentObj);
+    if (remainingTime < 15) obj_disable_light(o->parentObj);
 #endif
-        obj_mark_for_deletion(o);
-    }
+    if (o->oTimer > remainingTime) obj_mark_for_deletion(o);
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
@@ -48,17 +46,14 @@ void bhv_flamethrower_init(void) {
 
 void bhv_flamethrower_loop(void) {
     struct Object *flame;
-    f32 flameVel;
-    s32 flameTimeRemaining;
-    ModelID32 model;
     if (o->oAction == FLAMETHROWER_ACT_IDLE) {
         if (((gCurrLevelNum != LEVEL_BBH) || gMarioOnMerryGoRound) && (o->oDistanceToMario < 2000.0f)) o->oAction = FLAMETHROWER_ACT_BLOW_FIRE;
     } else if (o->oAction == FLAMETHROWER_ACT_BLOW_FIRE) {
-        model    = MODEL_RED_FLAME;
-        flameVel = 95.0f;
+        ModelID32 model = MODEL_RED_FLAME;
+        f32 flameVel   = 95.0f;
         if (o->oBehParams2ndByte == FLAMETHROWER_BP_BLUE) model    = MODEL_BLUE_FLAME;
         if (o->oBehParams2ndByte == FLAMETHROWER_BP_SLOW) flameVel = 50.0f;
-        flameTimeRemaining = 1;
+        s32 flameTimeRemaining = 1;
         if (o->oTimer < 60) {
             flameTimeRemaining = 15;
         } else if (o->oTimer < 74) {

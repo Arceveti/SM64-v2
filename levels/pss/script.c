@@ -30,7 +30,7 @@ const LevelScript level_pss_entry[] = {
 
     AREA(/*index*/ 1, pss_geo_000100),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ 5632, 6751, -5631, /*angle*/ 0, 270, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvAirborneWarp),
-        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_PSS, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
+        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_PSS,    /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF3, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x20, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x26, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x23, /*flags*/ WARP_NO_CHECKPOINT),
@@ -38,6 +38,27 @@ const LevelScript level_pss_entry[] = {
         MACRO_OBJECTS(/*objList*/ pss_seg7_macro_objs),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_SLIDE),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0001, /*seq*/ SEQ_LEVEL_SLIDE),
+#ifdef PUPPYLIGHTS
+    #define LANTERN_SIZE 1600
+    #define LANTERN_LIGHT(x, y, z) PUPPYLIGHT_NODE(255,  85,   0, 255, (x), (y), (z), LANTERN_SIZE, LANTERN_SIZE, LANTERN_SIZE, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1)
+        LANTERN_LIGHT( 2920,  6460, -5170),
+        LANTERN_LIGHT( 2920,  6460, -6092),
+        LANTERN_LIGHT(-3600,  4960, -6092),
+        LANTERN_LIGHT(-5720,  4740, -5448),
+        LANTERN_LIGHT(-6660,  4380, -3100),
+        LANTERN_LIGHT(-6660,  3970,     0),
+        LANTERN_LIGHT(-5076,  3535,  2390),
+        LANTERN_LIGHT(  552, -1880, -5330),
+        LANTERN_LIGHT(-4560, -3300, -3300),
+        LANTERN_LIGHT(-5900, -3900,   900),
+        LANTERN_LIGHT(-6820, -3900,   900),
+        LANTERN_LIGHT(-5900, -4032,  2300),
+        LANTERN_LIGHT(-6820, -4032,  2300),
+        LANTERN_LIGHT(-5900, -4164,  3700),
+        LANTERN_LIGHT(-6820, -4164,  3700),
+    #undef LANTERN_SIZE
+    #undef LANTERN_LIGHT
+#endif
     END_AREA(),
 
     FREE_LEVEL_POOL(),

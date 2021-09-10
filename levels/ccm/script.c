@@ -110,6 +110,9 @@ const LevelScript level_ccm_entry[] = {
         MACRO_OBJECTS(/*objList*/ ccm_seg7_area_2_macro_objs),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0001, /*seq*/ SEQ_LEVEL_SLIDE),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_SLIDE),
+#ifdef PUPPYLIGHTS
+        PUPPYLIGHT_NODE(0xBB, 0xB0, 0xFF, 0xFF, -7680, -5650, -6767, 800, 800, 800, 0x4000, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1),
+#endif
     END_AREA(),
 
     FREE_LEVEL_POOL(),

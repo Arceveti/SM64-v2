@@ -760,7 +760,7 @@ void thread5_game_loop(UNUSED void *arg) {
 #endif
             read_controller_inputs();
             addr = level_script_execute(addr);
-#if PUPPYPRINT_DEBUG == 0 && defined(VISUAL_DEBUG)
+#if /*PUPPYPRINT_DEBUG == 0 &&*/ defined(VISUAL_DEBUG)
             debug_box_input();
 #endif
 #if PUPPYPRINT_DEBUG

@@ -11,7 +11,7 @@ extern const Gfx pss_seg7_dl_0700A7C0[];
 extern const Gfx pss_seg7_dl_0700AFA8[];
 extern const Gfx pss_seg7_dl_0700B3F0[];
 extern const Gfx pss_seg7_dl_0700D338[];
-extern const Gfx pss_seg7_dl_0700DAD8[];
+extern const Gfx pss_seg7_dl_lantern_glow[];
 extern const Gfx pss_seg7_dl_0700E2B0[];
 extern const Gfx pss_seg7_dl_0700E3E8[];
 extern const Collision pss_seg7_collision[];

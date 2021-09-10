@@ -502,11 +502,11 @@ void puppyprint_profiler_process(void) {
             ramViewer    = FALSE;
             benchViewer  = FALSE;
         }
-#ifdef VISUAL_DEBUG
-        else if (!benchViewer && !ramViewer && !logViewer) {
-            debug_box_input();
-        }
-#endif
+// #ifdef VISUAL_DEBUG
+//         else if (!benchViewer && !ramViewer && !logViewer) {
+//             debug_box_input();
+//         }
+// #endif
         if (benchViewer) {
             if (gPlayer1Controller->buttonPressed & R_JPAD) benchOption++;
             if (gPlayer1Controller->buttonPressed & L_JPAD) benchOption--;

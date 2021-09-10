@@ -127,10 +127,8 @@ void debug_box_input(void) {
     if (gPlayer1Controller->buttonPressed & R_JPAD) {
         viewCycle++;
         if (viewCycle > 3) viewCycle = 0;
-        hitboxView  = FALSE;
-        surfaceView = FALSE;
-        if ((viewCycle == 1) || (viewCycle == 3)) hitboxView  = TRUE;
-        if ((viewCycle == 2) || (viewCycle == 3)) surfaceView = TRUE;
+        hitboxView  = ((viewCycle == 1) || (viewCycle == 3));
+        surfaceView = ((viewCycle == 2) || (viewCycle == 3));
     }
 }
 
