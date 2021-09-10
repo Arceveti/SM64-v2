@@ -84,9 +84,15 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     f64 scaleVal = 1.0f;
     // Relative positions of the object vs the centre of the node.
     vec3_diff(lightRelative, light->pos[0], &obj->oPosVec);
-    // Get the position based off the rotation of the box.
-    lightPos[0] = ((lightRelative[2] * sins(-light->yaw)) + (lightRelative[0] * coss(-light->yaw)));
-    lightPos[1] = ((lightRelative[2] * coss(-light->yaw)) - (lightRelative[0] * sins(-light->yaw)));
+    Angle32 checkRot = ((light->pos[1][0] == light->pos[1][2]) ? 0x3FFF : 0x7FFF);
+    if (!(light->yaw & checkRot) || ((light->flags & PUPPYLIGHT_SHAPE_CYLINDER) && (checkRot == 0x3FFF))) {
+        lightPos[0] = lightRelative[0];
+        lightPos[1] = lightRelative[2];
+    } else {
+        // Get the position based off the rotation of the box.
+        lightPos[0] = ((lightRelative[2] * sins(-light->yaw)) + (lightRelative[0] * coss(-light->yaw)));
+        lightPos[1] = ((lightRelative[2] * coss(-light->yaw)) - (lightRelative[0] * sins(-light->yaw)));
+    }
 #ifdef VISUAL_DEBUG
     Vec3f debugPos[2];
     vec3_copy(debugPos[0], light->pos[0]);
@@ -95,17 +101,17 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     debug_box_rot(debugPos[0], debugPos[1], light->yaw, ((light->flags & PUPPYLIGHT_SHAPE_CYLINDER) ? DEBUG_SHAPE_CYLINDER : DEBUG_SHAPE_BOX));
 #endif
     // Check if the object is inside the box, after correcting it for rotation.
-    if ((-light->pos[1][0] <      lightPos[0]) && (     lightPos[0] < light->pos[1][0]) &&
-        (-light->pos[1][1] < lightRelative[1]) && (lightRelative[1] < light->pos[1][1]) &&
-        (-light->pos[1][2] <      lightPos[1]) && (     lightPos[1] < light->pos[1][2])) {
+    if ((-light->pos[1][0] <      lightPos[0]) && (     lightPos[0] < light->pos[1][0])
+     && (-light->pos[1][1] < lightRelative[1]) && (lightRelative[1] < light->pos[1][1])
+     && (-light->pos[1][2] <      lightPos[1]) && (     lightPos[1] < light->pos[1][2])) {
         // If so, then start making preparations to see how alongside they're in.
         // This takes the largest side of the box and multiplies the other axis to match the numbers.
         // This way, the colour value will scale correctly, no matter which side is entered.
         // Because positions are a vector, and Y is up, it means tempID needs to be multiplied
         // By 2 in order to reach the X and Z axis. Thanks SM64.
         s32 lightPos2[2];
-        lightPos2[0] = light->pos[1][2] * sins(-light->yaw) + light->pos[1][0] * coss(-light->yaw);
-        lightPos2[1] = light->pos[1][2] * coss(-light->yaw) - light->pos[1][0] * sins(-light->yaw);
+        lightPos2[0] = ((light->pos[1][2] * sins(-light->yaw)) + (light->pos[1][0] * coss(-light->yaw)));
+        lightPos2[1] = ((light->pos[1][2] * coss(-light->yaw)) - (light->pos[1][0] * sins(-light->yaw)));
         s32 tempID = ((ABSI(lightPos2[0]) > ABSI(lightPos2[1])) ? 0 : 1);
         f32 scaleFac = (f32)light->pos[1][(tempID ^ 1) * 2] / (f32)light->pos[1][tempID * 2];
         lightPos[tempID] *= scaleFac;
@@ -159,18 +165,15 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
 void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 baseColour) {
     s32 i;
     s32 numlights = 0;
+    s32 colour;
     if (gCurrLevelNum < 4) return;
     // Checks if there's a hardset colour. Colours are only the first 3 bytes, so you can really put whatever you want in the last.
     // If there isn't a colour, then it decides whether to apply the ambient lighting, or the default lighting as the baseline.
     // Otherwise, it hardsets a colour to begin with. I don't recommend you use this, simply because it's intended to be used
-    // As a hacky quick-fix for models coloured by lights. Lightcoloured models don't blend nearly as nicely as ones coloured
-    // By other means.
-    if (baseColour < 0x100) {
-        sLightBase = (levelAmbient ? &gLevelLight : &sDefaultLights);
-    } else {
-        s32 colour;
-        Lights1 tempLight;
-        sLightBase = &tempLight;
+    // as a hacky quick-fix for models coloured by lights. Lightcoloured models don't blend nearly as nicely as ones coloured
+    // by other means.
+    sLightBase = (levelAmbient ? &gLevelLight : &sDefaultLights);
+    if (baseColour >= 0x100) {
         for ((i = 0); (i < 3); (i++)) {
             colour = (((baseColour >> (24 - (i * 8)))) & 0xFF);
             sLightBase->l[0].l.col[i]  = colour;

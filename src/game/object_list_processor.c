@@ -368,7 +368,9 @@ void unload_deactivated_objects_in_list(struct ObjectNode *objList) {
         o = (struct Object *) obj;
         obj = obj->next;
         if ((o->activeFlags & ACTIVE_FLAG_ACTIVE) != ACTIVE_FLAG_ACTIVE) {
+#ifdef PUPPYLIGHTS
             if (o->oLightID != 0xFFFF) obj_disable_light(o);
+#endif
             // Prevent object from respawning after exiting and re-entering the area
             if (!(o->oFlags & OBJ_FLAG_PERSISTENT_RESPAWN)) set_object_respawn_info_bits(o, RESPAWN_INFO_DONT_RESPAWN);
             unload_object(o);

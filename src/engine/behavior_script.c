@@ -132,7 +132,9 @@ static s32 bhv_cmd_spawn_child_with_param(void) {
 // Command 0x1D: Exits the behavior script and despawns the object.
 // Usage: DEACTIVATE()
 static s32 bhv_cmd_deactivate(void) { //! does this need to change gCurBhvCommand?
+#ifdef PUPPYLIGHTS
     cur_obj_disable_light();
+#endif
     o->activeFlags &= ~ACTIVE_FLAG_ACTIVE;
     o->activeFlags |=  ACTIVE_FLAG_DEACTIVATED;
     return BHV_PROC_BREAK;
