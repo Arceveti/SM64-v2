@@ -136,10 +136,12 @@
 #define PUPPYLIGHTS
 
 // Intensities for puppylights light sources:
-#define PUPPYLIGHTS_GRAND_STAR_LIGHT 1600
-#define PUPPYLIGHTS_STAR_LIGHT        800
-#define PUPPYLIGHTS_FLAME_LIGHT       800
-#define PUPPYLIGHTS_AMP_LIGHT         400
+#define PUPPYLIGHTS_GRAND_STAR_LIGHT       1600
+#define PUPPYLIGHTS_STAR_LIGHT              800
+#define PUPPYLIGHTS_FLAME_LIGHT             800
+#define PUPPYLIGHTS_AMP_LIGHT               400
+#define PUPPYLIGHTS_SMALL_EXPLOSION_LIGHT   800
+#define PUPPYLIGHTS_LARGE_EXPLOSION_LIGHT  3200
 
 // Glowing effect on power stars (Arceveti)
 #define STAR_GLOW

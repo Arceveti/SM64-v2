@@ -315,6 +315,12 @@ MarioStep common_air_action_step(struct MarioState *m, MarioAction landAction, A
 UNUSED
 #endif
 u32 withTurn) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
     MarioStep stepResult;
 #ifdef AIR_TURN
     if (withTurn) {
@@ -601,6 +607,12 @@ Bool32 act_riding_shell_air(struct MarioState *m) {
 }
 
 Bool32 act_twirling(struct MarioState *m) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
     Angle startTwirlYaw = m->twirlYaw;
     Angle yawVelTarget;
 #ifdef Z_TWIRL
@@ -632,6 +644,12 @@ Bool32 act_twirling(struct MarioState *m) {
 }
 
 Bool32 act_dive(struct MarioState *m) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
     if (m->actionArg == 0) {
         play_mario_sound(m, SOUND_ACTION_THROW, SOUND_MARIO_HOOHOO);
     } else {
@@ -979,6 +997,12 @@ Bool32 act_crazy_box_bounce(struct MarioState *m) {
 }
 
 MarioStep common_air_knockback_step(struct MarioState *m, MarioAction landAction, MarioAction hardFallAction, AnimID32 animation, f32 speed) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
     mario_set_forward_vel(m, speed);
     MarioStep stepResult = perform_air_step(m, 0);
     switch (stepResult) {

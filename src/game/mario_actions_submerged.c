@@ -270,6 +270,13 @@ static void update_swimming_pitch(struct MarioState *m) {
 }
 
 static void common_idle_step(struct MarioState *m, AnimID32 animation, AnimAccel animSpeed) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+        return;
+    }
+#endif
     update_swimming_yaw(m);
     update_swimming_pitch(m);
     update_swimming_speed(m, MIN_SWIM_SPEED);
@@ -363,6 +370,13 @@ static void surface_swim_bob(struct MarioState *m) {
 }
 
 static void common_swimming_step(struct MarioState *m, s16 swimStrength) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+        return;
+    }
+#endif
     Angle floorPitch;
     update_swimming_yaw(m);
     update_swimming_pitch(m);
@@ -751,6 +765,13 @@ static Bool32 act_water_punch(struct MarioState *m) {
 }
 
 static void common_water_knockback_step(struct MarioState *m, AnimID32 animation, MarioAction endAction, s32 arg3) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+        return;
+    }
+#endif
     stationary_slow_down(m);
     perform_water_step(m);
     set_mario_animation(m, animation);

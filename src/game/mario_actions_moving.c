@@ -15,6 +15,9 @@
 #include "rumble_init.h"
 
 #include "config.h"
+#ifdef ENABLE_DEBUG_FREE_MOVE
+#include "boot/game_init.h"
+#endif
 
 struct LandingAction {
     s16 numFrames;
@@ -1270,6 +1273,12 @@ MarioStep common_landing_action(struct MarioState *m, AnimID16 animation, MarioA
 }
 
 Bool32 common_landing_cancels(struct MarioState *m, struct LandingAction *landingAction, Bool32 (*setAPressAction)(struct MarioState *m, MarioAction action, u32 actionArg)) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
 #ifdef ACTION_CANCELS
     if (m->input & INPUT_Z_PRESSED                  ) return set_mario_action(          m, ACT_CROUCH_SLIDE              , 0);
 #endif

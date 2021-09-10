@@ -2,10 +2,13 @@
 - Known Bugs:
     - Audio is scuffed
         - Might be a HackerSM64 issue?
-    - Possible to clip through the back wall of the JRB ship when jumping at it at certain angles
+    - Bowser appears offset to the side when thrown
+        - Doesn't happen when throwing other objects
+    - The edges of Mario's silhouette is sometimes visible at low resolutions
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar because of the super steep floor
-    - The outline of Mario's silhouette is sometimes visible at low resolutions
+    - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
+        - Might be same underlying issue as the SSL pillars issue?
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
     - Properly fix HMC crash
@@ -90,34 +93,42 @@
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?
     - Ability to move between walls that share an edge when ledge grab sidling
-    - Hanging quarter steps?
     - Gravity direction support
     - "Squished" death from any direction
     - Heave-Ho's should be able to throw mario regardless of Mario's action
-    - Update mario movement angles when m->pos is changed?
+        - With a cooldown to prevent getting stuck in loops
+    - Update mario movement angles every time m->pos is changed?
         - Don't update m->prevPos more than once per frame
 - Graphics
     - Add/check Puppylights light sources:
         - Objects:
             - Star
                 - Klepto/Unagi star
+                - Monkey cage star
+                - Blue star should have blue glow?
             - Bowser Key
             - Amp
             - Bob-ombs during explosion
             - Bowser bombs during explosion
             - Moving flames/fire bars/spitters
+            - Bowser 3 (rainbow)
+            - Secrets?
+            - Water level diamond?
+            - TTM slide billboards?
         - Level geo:
-            - HMC/PSS/etc. lanterns
+            - BBH/HMC/PSS/etc. lanterns
+            - Castle lobby
             - BITDW/COTMC crystals
             - Lava in general
             - SA windows
+            - Fireplace in RR big house
     - Fix/cleanup/redraw textures:
         - Fix peach window edges
         - Fix bubble tree edges
         - Redraw/re-render near and far coins with better lighting
             - Far coins as ia8
         - Make env textures right side up
-    - The leftmost column of pixels on billboards shouldn't get stretched at low resolution
+    - The leftmost column of pixels on billboards shouldn't get stretched at low resolution (Angrylion)
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
         - build warning for a pointer
@@ -131,6 +142,13 @@
             - Far coins (vanilla coins) texture load breaks?
             - Envfx flickers
         - Some levels whitescreen on load:
+            - Confirmed not working levels:
+                - HMC (audio works)
+                - BOB (sometimes audio, emulator freezes, crashes on T3, EPC is in handle_sp_complete)
+                - WDW (audio works)
+                - THI (audio works)
+                - DDD Area 2 (instant crash, EPC is in geo_skybox_main)
+                - TTM 2nd slide area (instant crash, EPC is right before geo_process_shadow, in geo_process_animated_part?)
             - Confirmed working levels:
                 - BBH
                 - Inside Castle
@@ -158,13 +176,6 @@
                 - Bowser 2
                 - Bowser 3
                 - TTM
-            - Confirmed not working levels:
-                - HMC (audio works)
-                - BOB (sometimes audio, emulator freezes, crashes on T3, EPC is in handle_sp_complete)
-                - WDW (audio works)
-                - THI (audio works)
-                - DDD Area 2 (instant crash, EPC is in geo_skybox_main)
-                - TTM 2nd slide area (instant crash, EPC is right before geo_process_shadow, in geo_process_animated_part?)
         - Pausing is broken
             - Input is in graphics thread but read in game thread so it's read as being done twice in a frame
     - Proper Skyboxes like in SM64DS
@@ -176,9 +187,11 @@
     - Silhouette:
         - Silhouette for Mario's held/riding object
         - Mirror Mario should not have silhouette
-    - Shadow shape based on Mario's model
+    - Shadow shape based on the outline of Mario's model viewed from above
+        - Render new depth buffer to a texture?
+        - 2nd Mario model but colored like the silhouette and squished?
     - Metal cap effect:
-        - Draw Lakitu from the actual displaylist/model instead of a texture
+        - Draw Lakitu from the actual displaylist/model instead of from a texture
         - Make metal cap effect work on console, otherwise use vanilla
             - Also use vanilla if framebuffer is not enabled
 - HUD:
@@ -203,26 +216,28 @@
     - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
     - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
+    - Gradient transparency for edges of water/lava going out to the horizon
     - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
+    - Make SSL pyramid and LLL volcano use gsSPFogPosition?
 - Camera:
     - Fix TOTWC warp with Puppycam
-    - Make Puppycam collision not scuffed in certain areas
+    - Make Puppycam not scuffed in certain areas
         - Separate (super low-poly) collision maps specifically for the camera?
-    - Make the camera distance threshhold for Mario's transparency start closer
 - Files/Hacking QOL
+    - Centralized place for common gdSPDefLights1 defines/colors, so the data isn't duplicated throughout every model.inc.c file
+        - Default lights is (0x7F, 0x7F, 0x7F, 0xFF, 0xFF, 0xFF, 0x28, 0x28, 0x28)
     - Combine holding variants of actions with their non-holding variants, with checks for m->used/heldObj for the differences
     - Combine/sort behavior actions, obj_behaviors, obj_behaviors_2, and object_helpers?
         - Should help VSC syntax issues
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
         - Including gd_math
-    - Make vec3 functions type-independent
+    - Make all vec3 functions type-independent
     - Move to src/engine:
         - print?
         - printf?
         - object_collision?
         - platform_displacement?
-        - rendering_graph_node?
     - Move to src/menu?
         - segment7.h
         - hud
@@ -238,7 +253,7 @@
     - Move to src/audio?
         - sound_init
         - spawn_sound?
-    - New /src/ folders:
+    - Sort /src/game into subfolders:
         - src/mario or src/player
             - interaction?
             - mario_actions_airborne

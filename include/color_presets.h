@@ -130,6 +130,7 @@
 #define COLOR_RGBA32_AMP_LIGHT              COLOR_RGBA32_ELECTRIC
 #define COLOR_RGBA32_STAR_LIGHT             0xFFF000FF
 #define COLOR_RGBA32_FLAME_LIGHT            COLOR_RGBA32_LAVA
+#define COLOR_RGBA32_EXPLOSION_LIGHT        0xFFFF7FFF
 
 // Mario body lights - these should match the light groups in actors/mario/model.inc.c
 #define COLOR_RGBA32_MARIO_LIGHTS_BLUE      0x0000FF00 //   0   0 255   0

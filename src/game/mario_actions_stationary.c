@@ -21,6 +21,12 @@
 #include "rumble_init.h"
 
 Bool32 check_common_idle_cancels(struct MarioState *m) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        return set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+    }
+#endif
     mario_drop_held_object(m);
     if (m->floor->normal.y < COS73   ) return mario_push_off_steep_floor(m, ACT_FREEFALL        , 0);
     if (m->input & INPUT_STOMPED     ) return set_mario_action(          m, ACT_SHOCKWAVE_BOUNCE, 0);
@@ -316,6 +322,13 @@ Bool32 act_hold_panting_unused(struct MarioState *m) {
 }
 
 void stopping_step(struct MarioState *m, AnimID32 animID, MarioAction action) {
+#ifdef ENABLE_DEBUG_FREE_MOVE
+    if (gPlayer1Controller->buttonDown & U_JPAD) {
+        set_camera_mode(m->area->camera, CAMERA_MODE_8_DIRECTIONS, 1);
+        set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+        return;
+    }
+#endif
     stationary_ground_step(m);
     set_mario_animation(m, animID);
     if (is_anim_at_end(m)) set_mario_action(m, action, 0);
