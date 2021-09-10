@@ -27,7 +27,7 @@ const Gfx hmc_seg7_dl_07019368[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
+    gsSPFogPosition(HMC_FOG_MIN, HMC_FOG_MAX),
     gsSPSetGeometryMode(G_FOG),
     gsDPSetEnvColor(255, 255, 255, 100),
     gsDPSetCombineMode(G_CC_MODULATERGBFADE, G_CC_PASS2),

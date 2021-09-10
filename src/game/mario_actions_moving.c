@@ -102,6 +102,7 @@ void check_ledge_climb_down(struct MarioState *m) {
     struct Surface *wall;
     Angle wallAngle, wallDYaw;
     if (m->forwardVel < GROUND_SPEED_THRESHOLD_2) {
+        //! Why doesn't this work: if ((m->floor == NULL) || (m->floor->normal.y < COS25)) return;
         vec3_copy(wallCols.pos, m->pos);
         wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
@@ -150,10 +151,10 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     s32 newFacingDYaw; //! not s16?
     Angle facingDYaw;
     struct Surface *floor = m->floor;
-    Angle slopeAngle = m->floorYaw;
-    f32 steepness    = sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z));
-    m->slideVelX += (accel * steepness * sins(slopeAngle));
-    m->slideVelZ += (accel * steepness * coss(slopeAngle));
+    Angle slopeAngle      = m->floorYaw;
+    f32 accelSteepness    = (accel * sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z)));
+    m->slideVelX += (accelSteepness * sins(slopeAngle));
+    m->slideVelZ += (accelSteepness * coss(slopeAngle));
     m->slideVelX *= lossFactor;
     m->slideVelZ *= lossFactor;
     m->slideYaw   = atan2s(m->slideVelZ, m->slideVelX);
@@ -165,7 +166,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
         if ((newFacingDYaw += 0x200) >           0x0) newFacingDYaw =           0x0;
     } else if (newFacingDYaw >   DEG( 90) && newFacingDYaw <  DEG(180)) {
         if ((newFacingDYaw += 0x200) >  DEG(180)) newFacingDYaw =  DEG(180);
-    } else if (newFacingDYaw >  -DEG(180) && newFacingDYaw < -0x4000) {
+    } else if (newFacingDYaw >  -DEG(180) && newFacingDYaw < -DEG( 90)) {
         if ((newFacingDYaw -= 0x200) < -DEG(180)) newFacingDYaw = -DEG(180);
     }
     m->faceAngle[1] = (m->slideYaw + newFacingDYaw);

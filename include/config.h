@@ -267,6 +267,31 @@
 // (Arceveti)
 #define BONUS_OBJECTS
 
+// Min/max pairs for fog
+#define HMC_FOG_MIN         980 // vanilla is 960
+#define HMC_FOG_MAX         1000
+#define BOB_FOG_MIN         980
+#define BOB_FOG_MAX         1000
+#define JRB_FOG_MIN         900
+#define JRB_FOG_MAX         1000
+#define TTC_FOG_MIN         970 // vanilla is 900
+#define TTC_FOG_MAX         1000
+#define INF_STAIRS_FOG_MIN  950
+#define INF_STAIRS_FOG_MAX  1000
+#define PSS_FOG_MIN         980
+#define PSS_FOG_MAX         1000
+#define COTMC_FOG_MIN       980
+#define COTMC_FOG_MAX       1000
+#define TTM_SLIDE_FOG_MIN   980
+#define TTM_SLIDE_FOG_MAX   1000
+#define BOWSER_2_FOG_MIN    960
+#define BOWSER_2_FOG_MAX    1000
+// This isn't gsSPFogPosition since there is no valid min/max pair that corresponds to 0x0E49F2B7
+#define SSL_PYRAMID_FOG_FM  0x0E49
+#define SSL_PYRAMID_FOG_FO  0xF2B7
+ //! This isn't gsSPFogPosition since there is no valid min/max pair that corresponds to 0x0855F8AB
+#define LLL_VOLCANO_FOG_FM  0x0855
+#define LLL_VOLCANO_FOG_FO  0xF8AB
 
 /********************************************************************************************************************************
  *                                                                                                                              *

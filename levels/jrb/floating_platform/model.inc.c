@@ -69,7 +69,7 @@ const Gfx jrb_seg7_dl_floating_platform[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(5, 80, 75, 255),
-    gsSPFogPosition(900, 1000),
+    gsSPFogPosition(JRB_FOG_MIN, JRB_FOG_MAX),
     gsSPSetGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

@@ -180,7 +180,7 @@ const Gfx bowser_2_seg7_dl_07001930[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(200, 50, 0, 255),
-    gsSPFogPosition(960, 1000),
+    gsSPFogPosition(BOWSER_2_FOG_MIN, BOWSER_2_FOG_MAX),
     gsSPSetGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
     gsSPClearGeometryMode(G_LIGHTING),

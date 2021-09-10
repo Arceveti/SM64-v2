@@ -69,7 +69,7 @@ const Gfx hmc_seg7_dl_controllable_arrow_platform_button[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(960, 1000),
+    gsSPFogPosition(HMC_FOG_MIN, HMC_FOG_MAX),
     gsSPSetGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

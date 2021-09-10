@@ -1895,7 +1895,7 @@ const Gfx lll_seg7_dl_area_2[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogFactor(0x0855, 0xF8AB), //! This isn't gsSPFogPosition since there is no valid min/max pair that corresponds to 0x0855F8AB
+    gsSPFogFactor(LLL_VOLCANO_FOG_FM, LLL_VOLCANO_FOG_FO), //! This isn't gsSPFogPosition since there is no valid min/max pair that corresponds to 0x0855F8AB
     gsSPSetGeometryMode(G_FOG),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_PASS2),
     gsSPClearGeometryMode(G_LIGHTING),

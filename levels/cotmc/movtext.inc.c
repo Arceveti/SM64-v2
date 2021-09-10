@@ -5,7 +5,7 @@ const Gfx cotmc_dl_water_begin[] = {
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_INTER2),
     gsDPSetDepthSource(G_ZS_PIXEL),
     gsDPSetFogColor(0, 0, 0, 255),
-    gsSPFogPosition(980, 1000),
+    gsSPFogPosition(COTMC_FOG_MIN, COTMC_FOG_MAX),
     gsSPSetGeometryMode(G_FOG),
     gsDPSetEnvColor(255, 255, 255, 140),
     gsDPSetCombineMode(G_CC_DECALFADE, G_CC_PASS2),

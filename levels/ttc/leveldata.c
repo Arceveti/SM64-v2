@@ -8,6 +8,10 @@
 #include "textures.h"
 
 #include "make_const_nonconst.h"
+
+// #define TTC_FOG_MIN 970
+// #define TTC_FOG_MAX 1000
+
 // LEVEL DATA
 #include "levels/ttc/texture.inc.c"
 #include "levels/ttc/areas/1/1/model.inc.c"

@@ -395,6 +395,7 @@ Bool32 let_go_of_ledge(struct MarioState *m) {
 
 void climb_up_ledge(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
+    //! why is ledge climb like this
     m->pos[0] += (14.0f * sins(m->faceAngle[1]));
     m->pos[2] += (14.0f * coss(m->faceAngle[1]));
     vec3_copy(m->marioObj->header.gfx.pos, m->pos);
@@ -464,10 +465,12 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (m->actionTimer >= 0xFFFF) m->actionTimer = 10;
 #endif
 #ifdef LEDGE_SIDLE
-        if (intendedDYaw >= -DEG(45) && intendedDYaw <= DEG(45)) {
-            if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
-        } else if (intendedDYaw <= -DEG(135) || intendedDYaw >= DEG(135)) {
-            return let_go_of_ledge(m);
+        if (m->intendedMag > 16.0f) {
+            if ((intendedDYaw >= -DEG(45)) && (intendedDYaw <= DEG(45))) {
+                if (hasSpaceForMario) return set_mario_action(m, ACT_LEDGE_CLIMB_SLOW_1, 0);
+            } else if ((intendedDYaw <= -DEG(135)) || (intendedDYaw >= DEG(135))) {
+                return let_go_of_ledge(m);
+            }
         }
         sidewaysSpeed = ((m->intendedMag / 4.0f) * sins(intendedDYaw));
         nextX += (sidewaysSpeed * sins(m->faceAngle[1] + DEG(90)));
