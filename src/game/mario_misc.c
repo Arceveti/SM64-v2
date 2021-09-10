@@ -326,7 +326,7 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
 }
 
 /**
- * 
+ *
  */
 Gfx *geo_move_mario_part_from_parent(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
     Mat4 mtx2;

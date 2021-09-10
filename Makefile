@@ -196,7 +196,7 @@ endif
 
 # UNF - whether to use UNFLoader flashcart library
 #   1 - includes code in ROM
-#   0 - does not 
+#   0 - does not
 UNF ?= 0
 $(eval $(call validate-option,UNF,0 1))
 ifeq ($(UNF),1)
@@ -208,7 +208,7 @@ endif
 # ISVPRINT - whether to fake IS-Viewer presence,
 # allowing for usage of CEN64 (and possibly Project64) to print messages to terminal.
 #   1 - includes code in ROM
-#   0 - does not 
+#   0 - does not
 ISVPRINT ?= 0
 $(eval $(call validate-option,ISVPRINT,0 1))
 ifeq ($(ISVPRINT),1)
@@ -226,7 +226,7 @@ endif
 
 # HVQM - whether to use HVQM fmv library
 #   1 - includes code in ROM
-#   0 - does not 
+#   0 - does not
 HVQM ?= 0
 $(eval $(call validate-option,HVQM,0 1))
 ifeq ($(HVQM),1)
@@ -236,7 +236,7 @@ endif
 
 # GODDARD - whether to use libgoddard (Mario Head)
 #   1 - includes code in ROM
-#   0 - does not 
+#   0 - does not
 GODDARD ?= 0
 $(eval $(call validate-option,GODDARD,0 1))
 ifeq ($(GODDARD),1)
@@ -479,7 +479,7 @@ else
 endif
 ENDIAN_BITWIDTH       := $(BUILD_DIR)/endian-and-bitwidth
 EMULATOR = ~/Downloads/mupen64plus/mupen64plus-gui
-EMU_FLAGS = 
+EMU_FLAGS =
 LOADER = loader64
 LOADER_FLAGS = -vwf
 SHA1SUM = sha1sum

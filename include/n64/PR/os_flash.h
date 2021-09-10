@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo.
-        
+
         $RCSfile: os_flash.h,v $
         $Revision: 1.1 $
         $Date: 2000/06/15 06:24:55 $
@@ -17,7 +17,7 @@ extern "C" {
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)
 
-/* 
+/*
  * defines for FLASH
  */
 #define FLASH_START_ADDR	0x08000000
@@ -44,7 +44,7 @@ extern "C" {
 #define	FLASH_STATUS_ERASE_ERROR	-1
 #define FLASH_STATUS_ERASE_OK		0
 
-extern OSPiHandle *osFlashReInit(u8 latency, u8 pulse, 
+extern OSPiHandle *osFlashReInit(u8 latency, u8 pulse,
 				 u8 page_size, u8 rel_duration, u32 start);
 extern OSPiHandle *osFlashInit(void);
 extern void    osFlashReadStatus(u8 *flash_status);
@@ -52,10 +52,10 @@ extern void    osFlashReadId(u32 *flash_type, u32 *flash_maker);
 extern void    osFlashClearStatus(void);
 extern s32     osFlashAllErase(void);
 extern s32     osFlashSectorErase(u32 page_num);
-extern s32     osFlashWriteBuffer(OSIoMesg *mb, s32 priority, 
+extern s32     osFlashWriteBuffer(OSIoMesg *mb, s32 priority,
 				void *dramAddr, OSMesgQueue *mq);
 extern s32     osFlashWriteArray(u32 page_num);
-extern s32     osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num, 
+extern s32     osFlashReadArray(OSIoMesg *mb, s32 priority, u32 page_num,
 				void *dramAddr, u32 n_pages, OSMesgQueue *mq);
 extern void    osFlashChange(u32 flash_num);
 extern void    osFlashAllEraseThrough(void);

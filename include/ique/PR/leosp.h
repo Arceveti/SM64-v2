@@ -28,8 +28,8 @@ extern "C" {
 #define LEO_CONTROL_LONG              0x01 /* do long read/write */
 
 
-#define LEO_ERROR_RTC_NOT_SET_CORRECTLY		   48
-#define LEO_ERROR_ILLEGAL_SECTOR_SIZE              91
+#define LEO_ERROR_RTC_NOT_SET_CORRECTLY 48
+#define LEO_ERROR_ILLEGAL_SECTOR_SIZE   91
 
 #if defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS)
 
@@ -40,7 +40,7 @@ extern  s32 LeoSectorRead(LEOCmd *cmdBlock, s32 LBA, void *vAddr,
                           u32 nLBAs, OSMesgQueue *mq);
 extern  s32 LeoSysReadWrite(LEOCmd *cmdBlock, s32 direction,
                             s32 LBA, void *vAddr, u32 nLBAs, OSMesgQueue *mq);
- 
+
 #endif  /* defined(_LANGUAGE_C) || defined(_LANGUAGE_C_PLUS_PLUS) */
 
 #ifdef _LANGUAGE_C_PLUS_PLUS

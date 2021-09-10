@@ -161,7 +161,7 @@ struct Painting *sHmcPaintings[] = {
 struct Painting *sInsideCastlePaintings[] = {
     &bob_painting, &ccm_painting, &wf_painting,  &jrb_painting,      &lll_painting,
     &ssl_painting, &hmc_painting, &ddd_painting, &wdw_painting,      &thi_tiny_painting,
-    &ttm_painting, &ttc_painting, &sl_painting,  &thi_huge_painting, 
+    &ttm_painting, &ttc_painting, &sl_painting,  &thi_huge_painting,
 #ifdef PSS_PAINTING
     &pss_painting,
 #else

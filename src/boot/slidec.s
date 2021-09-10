@@ -11,7 +11,7 @@
 .set noat      # allow manual use of $at
 .set gp=64
 .include "macros.inc"
-	
+
 .align	4
 
 .text

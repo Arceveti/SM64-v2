@@ -390,7 +390,7 @@ void render_screen_overlay(void) {
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
         if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) colorRGB_copy(colorEnv, lavaOverlayColor);
-#endif 
+#endif
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT

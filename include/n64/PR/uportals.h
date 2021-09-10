@@ -49,7 +49,7 @@ extern "C" {
 #define UP_MAXCELLS		50		/* max number of cells		*/
 #define UP_CELLNL		32		/* max length of cell names 	*/
 #define UP_OBNL			32		/* max length of obejct names 	*/
-    
+
 typedef struct
 {
     vec3	min, max;		/* min and max pts of the box	*/

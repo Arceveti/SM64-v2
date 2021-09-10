@@ -13,7 +13,7 @@ void bhv_bowser_key_unlock_door_loop(void) {
     } else if (animTimer < 49) {
         o->oBowserKeyScale = 0.2f;
     } else if (animTimer < 58) {
-        o->oBowserKeyScale = (((animTimer - 53) * (19.0f / 160.0f)) + 0.2f); // TODO 0.11875f 19/160? 
+        o->oBowserKeyScale = (((animTimer - 53) * (19.0f / 160.0f)) + 0.2f); // TODO 0.11875f 19/160?
     } else if (animTimer < 59) {
         o->oBowserKeyScale = 1.1f;
     } else if (animTimer < 60) {

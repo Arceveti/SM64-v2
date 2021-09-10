@@ -1,8 +1,8 @@
-/* 
+/*
  *  HVQmd.h: MACHINE DEPENDENT DECLARATIONS.  [ For Nintendo64 ]
- * 
+ *
  *  Copyright (C) 1998,1999 NINTENDO Co.,Ltd.
- * 
+ *
  */
 
 /*  revision 1.0  1998-10-14  */

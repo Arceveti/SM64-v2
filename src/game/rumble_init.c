@@ -28,9 +28,9 @@ s32 sRumblePakActive       = FALSE;
 s32 sRumblePakErrorCount   = 0;
 s32 gRumblePakTimer        = 0;
 
-#define	RUMBLE_EVENT_NOMESG	    0x0
-#define	RUMBLE_EVENT_CONSTON    0x1
-#define	RUMBLE_EVENT_LEVELON    0x2
+#define RUMBLE_EVENT_NOMESG     0x0
+#define RUMBLE_EVENT_CONSTON    0x1
+#define RUMBLE_EVENT_LEVELON    0x2
 
 void init_rumble_pak_scheduler_queue(void) {
     osCreateMesgQueue(&gRumblePakSchedulerMesgQueue, gRumblePakSchedulerMesgBuf, 1);
@@ -164,10 +164,10 @@ void queue_rumble_submerged(void) {
 
 static void thread6_rumble_loop(UNUSED void *arg) {
     OSMesg msg;
-	osSyncPrintf("start motor thread\n");
+    osSyncPrintf("start motor thread\n");
     cancel_rumble();
     sRumblePakThreadActive = TRUE;
-	osSyncPrintf("go motor thread\n");
+    osSyncPrintf("go motor thread\n");
     while (TRUE) {
         // Block until VI
         osRecvMesg(&gRumbleThreadVIMesgQueue, &msg, OS_MESG_BLOCK);

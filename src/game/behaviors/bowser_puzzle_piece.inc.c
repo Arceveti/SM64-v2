@@ -181,7 +181,6 @@ void bhv_lll_bowser_puzzle_piece_move(f32 xOffset, f32 zOffset, s32 duration, UN
     }
 }
 
-
 // For the first 24 frames, do nothing then advance to the next action.
 void bhv_lll_bowser_puzzle_piece_idle(void) { if (o->oTimer >= 24) o->oBowserPuzzlePieceContinuePerformingAction = FALSE; }
 

@@ -32,8 +32,8 @@
 #define SK_API_CALL_KEEP_ALIVE        14
 
 /*
- * the calls below are for test purpose, not for default or 
- * production build 
+ * the calls below are for test purpose, not for default or
+ * production build
  */
 
 #define SK_API_CALL_GET_RAND          15
@@ -71,7 +71,7 @@
 
 /*
  * Function call declarations.
- *  NOTE: max number of args is 4, and they must fit into a0-a3.  
+ *  NOTE: max number of args is 4, and they must fit into a0-a3.
  */
 
 #if defined(_LANGUAGE_C)
@@ -84,7 +84,7 @@
 typedef struct {
     BbCrlHead *head;
     BbServerSuffix *list; /* the actual names of revoked SNs */
-    
+
     /* each pointer points to a cert object */
     BbCertBase *certChain[BB_CERT_CHAIN_MAXLEN];
 } BbCrlBundle;
@@ -100,8 +100,8 @@ typedef struct {
     BbCrlBundle carl;  /* certificate authority revocation list */
     BbCrlBundle cprl;  /* content publishing server revocation list */
 } BbAppLaunchCrls;
-    
-    
+
+
 /*
  * The actual sk api function declarations. All functions
  * return SK_API_ return codes defined above. Any return
@@ -167,7 +167,7 @@ int skDumpVirage(u8 *virage2data);
 int skTest2(int a,int b);
 int skTest3(int a,int b);
 int skResetWindow(void);
-int skValidateRls(BbCrlBundle *carl, BbCrlBundle *cprl, 
+int skValidateRls(BbCrlBundle *carl, BbCrlBundle *cprl,
 		  BbCrlBundle *tsrl, u32 *versions);
 
 #endif

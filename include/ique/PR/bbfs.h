@@ -26,12 +26,12 @@
 #define BB_FL_BLOCK_LINK_SIZE   2
 #define BB_FL_SEQ_OFF		(514-512)
 
-/* 
+/*
  * FAT entries are 16-bit block numbers, each pointing to the
  * next block in a file or a system-specific code
  * Block numbers are relative to the start of the device.
  */
-typedef u16 BbFatEntry;	
+typedef u16 BbFatEntry;
 
 #define BB_FAT_AVAIL		0x0000	/* available block */
 #define BB_FAT_LAST		0xFFFF	/* last block of a file */
@@ -54,7 +54,7 @@ typedef u16 BbFatEntry;
 #define BB_BIG_FILE_THRESHOLD	0x100000	/* allocation hint */
 
 /*
- * Inode entries contain the file name, type, first block address 
+ * Inode entries contain the file name, type, first block address
  * and file size.  There are a fixed number of inodes immediately
  * following the FAT entries.
  */

@@ -160,7 +160,7 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
             case 7: node =  gStaticSurfacePartition[cellZ][cellX][SPATIAL_PARTITION_WATER ].next; vec3_copy(col, (ColorRGB)ARR(COLOR_RGB_YELLOW)); break;
         }
         while (node != NULL) {
-            surf = node->surface; 
+            surf = node->surface;
             node = node->next;
             make_vertex(verts, (gVisualSurfaceCount + 0), surf->vertex1[0], surf->vertex1[1], surf->vertex1[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);
             make_vertex(verts, (gVisualSurfaceCount + 1), surf->vertex2[0], surf->vertex2[1], surf->vertex2[2], 0, 0, col[0], col[1], col[2], DBG_BOX_ALPHA);

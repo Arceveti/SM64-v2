@@ -59,7 +59,6 @@ void bhv_pokey_body_part_update(void) {
                 o->parentObj->oPokeyAliveBodyPartFlags |=   1 << (o->oBehParams2ndByte  -  1);
                 o->parentObj->oPokeyAliveBodyPartFlags &= ((1 <<  o->oBehParams2ndByte) ^ ~0);
                 o->oBehParams2ndByte--;
-    
             // Set the bottom body part size, and gradually increase it.
             //! This "else if" means that if a body part above the expanding
             //  one dies, then the expanding will pause for one frame.

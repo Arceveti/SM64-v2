@@ -545,7 +545,7 @@ static Gfx gd_dl_mario_face_shine[] = {
     gsDPSetTexturePersp(G_TP_PERSP),
     gsDPSetTextureFilter(G_TF_DEFAULT),
     gsDPSetCombineMode(G_CC_HILITERGBA, G_CC_HILITERGBA),
-    gsDPLoadTextureBlock(gd_texture_mario_face_shine, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0, 
+    gsDPLoadTextureBlock(gd_texture_mario_face_shine, G_IM_FMT_IA, G_IM_SIZ_8b, 32, 32, 0,
                         (G_TX_WRAP | G_TX_NOMIRROR), (G_TX_WRAP | G_TX_NOMIRROR), 5, 5, G_TX_NOLOD, G_TX_NOLOD),
     gsDPPipeSync(),
     gsSPEndDisplayList(),
@@ -784,7 +784,7 @@ void gd_vblank(void) {
 }
 
 /**
- * Copies the player1 controller data from p1cont to sGdContPads[0]. 
+ * Copies the player1 controller data from p1cont to sGdContPads[0].
  */
 void gd_copy_p1_contpad(OSContPad *p1cont) {
     u32 i;
@@ -1377,7 +1377,7 @@ void parse_p1_controller(void) {
     struct GdControl *gdctrl = &gGdCtrl;
     OSContPad *currInputs;
     OSContPad *prevInputs;
-    // Copy current inputs to previous 
+    // Copy current inputs to previous
     u8 *src  = (u8 *) gdctrl;
     u8 *dest = (u8 *) gdctrl->prevFrame;
     for ((i = 0); (i < sizeof(struct GdControl)); (i++)) *dest++ = *src++;
@@ -1643,7 +1643,7 @@ void gd_init(void) {
  * functions from IRIS GL.
  * @param buf  pointer to an array of 16-bit values
  * @param len  maximum number of values to store
- */ 
+ */
 void init_pick_buf(s16 *buf, s32 len) {
     buf[0]           = 0;
     buf[1]           = 0;
@@ -1737,7 +1737,7 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     s32 i = -1;
     uintptr_t dynlistSegStart = (uintptr_t) _gd_dynlistsSegmentRomStart;
     uintptr_t dynlistSegEnd   = (uintptr_t) _gd_dynlistsSegmentRomEnd;
-#define PAGE_SIZE 65536  // size of a 64K TLB page 
+#define PAGE_SIZE 65536  // size of a 64K TLB page
     u32 segSize   = (dynlistSegEnd - dynlistSegStart);
     u8 *allocSegSpace = gd_malloc_temp(segSize + PAGE_SIZE);
     if ((allocPtr = (void *) allocSegSpace) == NULL) gd_exit(); // Not enough DRAM for DATA segment

@@ -103,7 +103,7 @@
 #define MODEL_CCM_SNOWMAN_HEAD                 0x37        // ccm_geo_snowman_head
 
 // castle
-#define MODEL_CASTLE_BOWSER_TRAP               0x35        // 
+#define MODEL_CASTLE_BOWSER_TRAP               0x35        // castle_geo_bowser_trap_door
 #define MODEL_CASTLE_WATER_LEVEL_PILLAR        0x36        // castle_geo_water_level_pillar
 #define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x37        // castle_geo_clock_minute_hand
 #define MODEL_CASTLE_CLOCK_HOUR_HAND           0x38        // castle_geo_clock_hour_hand

@@ -1,9 +1,9 @@
 /*---------------------------------------------------------------------*
         Copyright (C) 1997-1998, Nintendo.
-        
+
         File            gzsort.h
         Coded    by     Yoshitaka Yasumoto.     Jun 16, 1997.
-        
+
         $Id: gzsort.h,v 1.11 1998/01/06 01:28:21 yasu Exp $
  *---------------------------------------------------------------------*/
 #ifndef _GZSORT_H_
@@ -394,7 +394,7 @@ extern "C" {
 
 #define	G_ZOBJ_NONE	0x80000000
 
-/* ZObject IDs */ 
+/* ZObject IDs */
 #define	ZH_NULL		0
 #define	ZH_SHTRI	1
 #define	ZH_TXTRI	2
@@ -510,7 +510,7 @@ typedef	struct	{
   Gfx		*rdpcmd1;
   u32		xy0, clr0;
   u32		xy1, clr1;
-  u32		xy2, clr2;  
+  u32		xy2, clr2;
 } zShTri_w;
 
 typedef	union	{
@@ -532,7 +532,7 @@ typedef	struct	{
   Gfx		*rdpcmd1;
   u32		xy0, clr0;
   u32		xy1, clr1;
-  u32		xy2, clr2;  
+  u32		xy2, clr2;
   u32		xy3, clr3;
 } zShQuad_w;
 
@@ -615,7 +615,7 @@ typedef	union	{
 } zSignal;
 
 /*===========================================================================*
- *      External functions 
+ *      External functions
  *===========================================================================*/
 extern  u64     gspZSort_fifoTextStart[],		 gspZSort_fifoTextEnd[];
 extern  u64     gspZSort_fifoDataStart[],		 gspZSort_fifoDataEnd[];

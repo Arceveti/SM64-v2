@@ -70,8 +70,8 @@ typedef struct _Client {
  *
  * Events from Game (emulator writes events on private socket)
  *
- * Commands to Game (daemon receives commands from host side clients, 
- * arbitrates for control of ramrom, writes the command into ramrom, 
+ * Commands to Game (daemon receives commands from host side clients,
+ * arbitrates for control of ramrom, writes the command into ramrom,
  * sends a signal to the game to tell it to read the ramrom arena, then
  * waits for an acknowledge to come back from the game indicating that the
  * command has been accepted (so that the daemon could begin a new command

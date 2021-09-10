@@ -2,13 +2,11 @@
 
 #ifndef FIX_WATER_RINGS
 f32 water_ring_calc_mario_dist(void) {
-    f32 marioDistX = (o->oPosX -  gMarioObject->header.gfx.pos[0]);
-    f32 marioDistY = (o->oPosY - (gMarioObject->header.gfx.pos[1] + MARIO_HALF_HITBOX_HEIGHT));
-    f32 marioDistZ = (o->oPosZ -  gMarioObject->header.gfx.pos[2]);
-    f32 marioDistInFront = ((marioDistX * o->oWaterRingNormalX)
-                          + (marioDistY * o->oWaterRingNormalY)
-                          + (marioDistZ * o->oWaterRingNormalZ));
-    return marioDistInFront;
+    Vec3f marioDist;
+    vec3_diff(marioDist, &o->oPosVec, gMarioObject->header.gfx.pos);
+    marioDist[1] += MARIO_HALF_HITBOX_HEIGHT;
+    vec3_mul(marioDist, &o->oWaterRingNormalVec);
+    return vec3_c(marioDist);
 }
 #endif
 
@@ -89,12 +87,10 @@ void water_ring_check_collection(f32 avgScale, struct Object *ringManager) {
 }
 
 void water_ring_set_scale(f32 avgScale) {
-    o->header.gfx.scale[0]    = ((sins(o->oWaterRingScalePhaseX) * 0.1f) + avgScale);
-    o->header.gfx.scale[1]    = ((sins(o->oWaterRingScalePhaseY) * 0.5f) + avgScale);
-    o->header.gfx.scale[2]    = ((sins(o->oWaterRingScalePhaseZ) * 0.1f) + avgScale);
-    o->oWaterRingScalePhaseX += 0x1700;
-    o->oWaterRingScalePhaseY += 0x1700;
-    o->oWaterRingScalePhaseZ += 0x1700;
+    o->header.gfx.scale[0] = ((sins(o->oWaterRingScalePhaseX) * 0.1f) + avgScale);
+    o->header.gfx.scale[1] = ((sins(o->oWaterRingScalePhaseY) * 0.5f) + avgScale);
+    o->header.gfx.scale[2] = ((sins(o->oWaterRingScalePhaseZ) * 0.1f) + avgScale);
+    vec3_add_val(&o->oWaterRingScalePhaseVec, 0x1700);
 }
 
 void water_ring_act_collected(void) {

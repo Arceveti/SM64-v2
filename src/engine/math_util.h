@@ -142,7 +142,7 @@ extern Vec3f gVec3fZ;
 #define CLAMP_F32(x)        CLAMP((x), F32_MIN, F32_MAX)
 #define CLAMP_F64(x)        CLAMP((x), F64_MIN, F64_MAX)
 
-#define SWAP(a, b)          { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); } 
+#define SWAP(a, b)          { ((a) ^= (b)); ((b) ^= (a)); ((a) ^= (b)); }
 
 #define sqr(x)              (    (x) * (x))
 #define cube(x)             ( sqr(x) * (x))

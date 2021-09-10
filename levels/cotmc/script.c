@@ -64,7 +64,7 @@ const LevelScript level_cotmc_entry[] = {
         CRYSTAL_LIGHT(   0,  363, -6144),
         CRYSTAL_LIGHT( 1320, 640, -5730),
         CRYSTAL_LIGHT(-1048, 640, -6920),
-    #undef CRYSTAL_LIGHT_SIZE 
+    #undef CRYSTAL_LIGHT_SIZE
     #undef CRYSTAL_LIGHT
 #endif
     END_AREA(),

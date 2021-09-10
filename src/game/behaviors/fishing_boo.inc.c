@@ -32,6 +32,6 @@ void bhv_beta_moving_flames_spawn_loop(void) {
 
 void bhv_beta_moving_flames_loop(void) {
     cur_obj_scale(5.0f);
-    o->oForwardVel        = (sins(o->oMovingFlameTimer) * 70.0f);
-    o->oMovingFlameTimer += 0x800;
+    o->oForwardVel = (sins(o->oBetaMovingFlameTimer) * 70.0f);
+    o->oBetaMovingFlameTimer += 0x800;
 }

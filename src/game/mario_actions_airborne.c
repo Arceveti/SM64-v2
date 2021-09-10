@@ -1596,7 +1596,7 @@ Bool32 act_flying_triple_jump(struct MarioState *m) {
     }
     if ((m->actionState == ACT_FLYING_TRIPLE_JUMP_STATE_SPIN) && (m->marioObj->header.gfx.animInfo.animFrame == 1)) play_sound(SOUND_ACTION_SPIN, m->marioObj->header.gfx.cameraToObject);
     if (m->vel[1] < 4.0f) {
-        
+
 #ifdef REONU_CAM_3
         if ((m->area->camera->mode != CAMERA_MODE_BEHIND_MARIO) && !gFlyingCamOverride) set_camera_mode(m->area->camera, CAMERA_MODE_BEHIND_MARIO, 1);
 #else

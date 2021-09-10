@@ -26,8 +26,7 @@ void whomp_init(void) {
                 cur_obj_set_pos_to_home();
                 o->oHealth = 3;
             }
-        } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-            DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_114)) {
+        } else if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_114)) {
             o->oAction = WHOMP_ACT_KING_CHASE;
         }
     } else if (o->oDistanceToMario < 500.0f) {
@@ -195,8 +194,7 @@ void whomp_on_ground_general(void) {
 
 void whomp_die(void) {
     if (o->oBehParams2ndByte != WHOMP_BP_NORMAL) {
-        if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-            DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_115)) {
+        if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_115)) {
             obj_set_angle(o, 0x0, 0x0, 0x0);
             cur_obj_hide();
             cur_obj_become_intangible();

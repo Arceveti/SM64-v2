@@ -54,7 +54,7 @@ typedef struct {
 
 	unsigned int	frameBuffer0Addr;	/* 0x38 */
 	unsigned int	frameBuffer1Addr;	/* 0x3c */
-	
+
 	unsigned int	zBufferAddr;		/* 0x40 */
 
 	unsigned long	magicNumber;		/* 0x44 */
@@ -62,9 +62,9 @@ typedef struct {
 
 	unsigned int	frameBufferFormat;	/* 0x4c */
 	unsigned int	frameBufferSize;	/* 0x50 */
-	
-        unsigned int    staticSegAddr;          /* 0x54 */
-        unsigned int    staticSegSize;          /* 0x58 */
+
+	unsigned int    staticSegAddr;          /* 0x54 */
+	unsigned int    staticSegSize;          /* 0x58 */
 
 } VerifyInfo;
 
@@ -79,7 +79,7 @@ struct CVGHeader {
   unsigned char  format;
   unsigned char  size;
   unsigned short width;
-  unsigned short height;        
+  unsigned short height;
 };
 
 #endif /* _LANGUAGE_C */

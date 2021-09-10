@@ -564,15 +564,15 @@
 /* Blue Flame */
 #define /*0x0F8*/ oBlueFlameNextScale                           OBJECT_FIELD_F32(0x1C)
 
-/* Small Piranha Flame */
-#define /*0x0F4*/ oSmallPiranhaFlameStartSpeed                  OBJECT_FIELD_F32(0x1B)
-#define /*0x0F8*/ oSmallPiranhaFlameEndSpeed                    OBJECT_FIELD_F32(0x1C)
-#define /*0x0FC*/ oSmallPiranhaFlameModel                       OBJECT_FIELD_S32(0x1D)
-#define /*0x100*/ oSmallPiranhaFlameNextFlameTimer              OBJECT_FIELD_S32(0x1E)
-#define /*0x104*/ oSmallPiranhaFlameSpeed                       OBJECT_FIELD_F32(0x1F)
-
 /* Moving Flame */
-#define /*0x0F4*/ oMovingFlameTimer                             OBJECT_FIELD_S32(0x1B)
+#define /*0x0F4*/ oMovingFlameStartSpeed                        OBJECT_FIELD_F32(0x1B)
+#define /*0x0F8*/ oMovingFlameEndSpeed                          OBJECT_FIELD_F32(0x1C)
+#define /*0x0FC*/ oMovingFlameModel                             OBJECT_FIELD_S32(0x1D)
+#define /*0x100*/ oMovingFlameNextFlameTimer                    OBJECT_FIELD_S32(0x1E)
+#define /*0x104*/ oMovingFlameSpeed                             OBJECT_FIELD_F32(0x1F)
+
+/* Fishing Boo Flame */
+#define /*0x0F4*/ oBetaMovingFlameTimer                         OBJECT_FIELD_S32(0x1B)
 
 /* Flamethrower */
 #define /*0x110*/ oFlameThowerTimeRemaining                     OBJECT_FIELD_S32(0x22)

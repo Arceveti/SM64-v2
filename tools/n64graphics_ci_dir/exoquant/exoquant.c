@@ -42,7 +42,7 @@ exq_data *exq_init()
 	exq_data *pExq;
 
 	pExq = (exq_data*)malloc(sizeof(exq_data));
-	
+
 	for(i = 0; i < EXQ_HASH_SIZE; i++)
 		pExq->pHash[i] = NULL;
 
@@ -163,7 +163,7 @@ void exq_quantize_ex(exq_data *pExq, int nColors, int hq)
 				pCur->pNext = pExq->node[0].pHistogram;
 				pExq->node[0].pHistogram = pCur;
 			}
-		
+
 		exq_sum_node(&pExq->node[0]);
 
 		pExq->numColors = 1;

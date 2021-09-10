@@ -23,7 +23,7 @@
 
 /*
  * Defines for the GIO card in the Nintendo Development Station
- * 
+ *
  * The RAM on the GIO card acts as ROM for the game
  * Interrupts available between the game and the Indy host
  *

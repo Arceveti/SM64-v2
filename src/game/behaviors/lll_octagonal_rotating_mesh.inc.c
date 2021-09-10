@@ -1,10 +1,10 @@
 // lll_octagonal_rotating_mesh.c.inc
 
 enum {
-	LLL_OCTMESH_CHANGE_DIR = 1, // 1
-	LLL_OCTMESH_LINEAR_MOVE,    // 2
-	LLL_OCTMESH_RESET,          // 3
-	LLL_OCTMESH_WAIT_FOR_MARIO  // 4
+    LLL_OCTMESH_CHANGE_DIR = 1, // 1
+    LLL_OCTMESH_LINEAR_MOVE,    // 2
+    LLL_OCTMESH_RESET,          // 3
+    LLL_OCTMESH_WAIT_FOR_MARIO  // 4
 };
 
 //! Note: useless zero at the reset instruction, there's no accesses beyond that anyway
@@ -19,25 +19,25 @@ struct LllOctagonalMeshAction {
 // Path for big bullies platforms
 static struct LllOctagonalMeshAction gLllOctagonalMeshAction0[] = {
     // instruction                time  moveAngle  forwardVel
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x4000,          0 }, // 90 degrees
-	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,   -0x4000,          0 }, // 90 degrees
-	{ LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_RESET,             0,         0,          0 }
+    { LLL_OCTMESH_LINEAR_MOVE,      30,    0x4000,          0 }, // 90 degrees
+    { LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
+    { LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+    { LLL_OCTMESH_LINEAR_MOVE,      30,   -0x4000,          0 }, // 90 degrees
+    { LLL_OCTMESH_CHANGE_DIR,      220,       900,         30 },
+    { LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+    { LLL_OCTMESH_RESET,             0,         0,          0 }
 };
 
 // Path for rolling log
 static struct LllOctagonalMeshAction gLllOctagonalMeshAction1[] = {
     // instruction                time  moveAngle  forwardVel
-	{ LLL_OCTMESH_WAIT_FOR_MARIO,    0,         0,          0 },
-	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_LINEAR_MOVE,      30,    0x8000,          0 }, // 180 degrees
-	{ LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
-	{ LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
-	{ LLL_OCTMESH_RESET,             0,         0,          0 }
+    { LLL_OCTMESH_WAIT_FOR_MARIO,    0,         0,          0 },
+    { LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
+    { LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+    { LLL_OCTMESH_LINEAR_MOVE,      30,    0x8000,          0 }, // 180 degrees
+    { LLL_OCTMESH_CHANGE_DIR,      475,       900,         30 },
+    { LLL_OCTMESH_CHANGE_DIR,       30,         0,        -30 },
+    { LLL_OCTMESH_RESET,             0,         0,          0 }
 };
 
 // picked by oBehParams2ndByte
@@ -78,7 +78,7 @@ s32 lll_octagonal_mesh_move(struct LllOctagonalMeshAction *actionTable, s32 acti
 }
 
 s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, f32 *posOffset, s32 standTimerInc, s32 moveDownAmount) {
-	// if Mario is on the platform...
+    // if Mario is on the platform...
     if (cur_obj_is_mario_on_platform()) {
         if (cur_obj_is_mario_ground_pounding_platform()) standTimerInc <<= 2;
         if (standTimer[0] < 0x4000) {
@@ -105,12 +105,12 @@ void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     } else {
         o->oLllOctmeshActionOffset = lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctmeshActionOffset);
     }
-	// prints the current actionOffset to the screen
+    // prints the current actionOffset to the screen
     print_debug_top_down_objectinfo("number %d\n", o->oLllOctmeshActionOffset);
     cur_obj_move_using_fvel_and_gravity();
     // are we transitioning between Mario standing and not standing?
     if (lll_octagonal_mesh_find_y_offset(&o->oLllOctmeshStandTimer, &o->oLllOctmeshWaveOffset2, 0x400, -80)) {
-		// nope, wave as usual
+        // nope, wave as usual
         o->oLllOctmeshWaveTimer   += 0x800;
         o->oLllOctmeshWaveOffset1 -= (sins(o->oLllOctmeshWaveTimer) * 2);
     }

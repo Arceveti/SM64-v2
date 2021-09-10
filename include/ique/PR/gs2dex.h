@@ -1,11 +1,11 @@
 /*---------------------------------------------------------------------
 	Copyright (C) 1997, Nintendo.
-	
+
 	File		gs2dex.h
 	Coded    by	Yoshitaka Yasumoto.	Jul 31, 1997.
-	Modified by	
+	Modified by
 	Comments	Header file for S2DEX ucode.
-	
+
 	$Id: gs2dex.h,v 1.1.1.1 2002/05/02 03:28:24 blythe Exp $
   ---------------------------------------------------------------------*/
 
@@ -40,12 +40,12 @@ extern "C" {
 
 /* Non scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* �ƥ�������κ������ X ��ɸ (u10.5)        */ 
+  u16   imageX;		/* �ƥ�������κ������ X ��ɸ (u10.5)        */
   u16	imageW;		/* �ƥ����������              (u10.2)        */
   s16	frameX;		/* ž�������ե졼��κ������(s10.2)        */
   u16	frameW;		/* ž�������ե졼�����      (u10.2)        */
 
-  u16   imageY; 	/* �ƥ�������κ������ Y ��ɸ (u10.5)        */ 
+  u16   imageY; 	/* �ƥ�������κ������ Y ��ɸ (u10.5)        */
   u16	imageH;		/* �ƥ�������ι⤵            (u10.2)        */
   s16	frameY;		/* ž�������ե졼��κ������(s10.2)        */
   u16	frameH;		/* ž�������ե졼��ι⤵    (u10.2)        */
@@ -71,21 +71,21 @@ typedef	struct	{
   u16	tmemLoadTH;	/* TH �� or Stride ��
 			   LoadBlock �λ� GS_CALC_DXT(tmemW)
 			   LoadTile  �λ� tmemH-1                     */
-  u16	tmemSizeW;	/* image 1 �饤��ʬ�� imagePtr �Υ����å��� 
+  u16	tmemSizeW;	/* image 1 �饤��ʬ�� imagePtr �Υ����å���
 			   LoadBlock �λ� tmemW*2
                            LoadTile  �λ� GS_PIX2TMEM(imageW/4,imageSiz)*2 */
-  u16	tmemSize;	/* �����ɰ��ʬ�� imagePtr �Υ����å��� 
+  u16	tmemSize;	/* �����ɰ��ʬ�� imagePtr �Υ����å���
 			   = tmemSizeW*tmemH                          */
 } uObjBg_t;		/* 40 bytes */
 
 /* Scalable background plane */
 typedef	struct	{
-  u16   imageX;		/* �ƥ�������κ������ X ��ɸ (u10.5)        */ 
+  u16   imageX;		/* �ƥ�������κ������ X ��ɸ (u10.5)        */
   u16	imageW;		/* �ƥ����������              (u10.2)        */
   s16	frameX;		/* ž�������ե졼��κ������(s10.2)        */
   u16	frameW;		/* ž�������ե졼�����      (u10.2)        */
 
-  u16   imageY; 	/* �ƥ�������κ������ Y ��ɸ (u10.5)        */ 
+  u16   imageY; 	/* �ƥ�������κ������ Y ��ɸ (u10.5)        */
   u16	imageH;		/* �ƥ�������ι⤵            (u10.2)        */
   s16	frameY;		/* ž�������ե졼��κ������(s10.2)        */
   u16	frameH;		/* ž�������ե졼��ι⤵    (u10.2)        */
@@ -100,9 +100,9 @@ typedef	struct	{
   u16	scaleW;		/* X ��������������               (u5.10)     */
   u16	scaleH;		/* Y ��������������               (u5.10)     */
   s32	imageYorig;	/* image �ˤ������������         (s20.5)     */
-  
+
   u8	padding[4];
-  
+
 } uObjScaleBg_t;	/* 40 bytes */
 
 typedef union {
@@ -127,7 +127,7 @@ typedef struct {
   u16  imageH;		/* u10.5 �ƥ�������ι⤵ (T ������Ĺ��)   */
   u16  paddingY;	/* ̤���� ��� 0                           */
   u16  imageStride;	/* �ƥ�������ޤ��֤���        (64bit word ñ��) */
-  u16  imageAdrs;	/* TMEM ��Υƥ���������Ƭ���� (64bit word ñ��) */  
+  u16  imageAdrs;	/* TMEM ��Υƥ���������Ƭ���� (64bit word ñ��) */
   u8   imageFmt;	/* �ƥ�����Υե����ޥå� G_IM_FMT_*       */
   u8   imageSiz;	/* �ƥ�����Υ�����       G_IM_SIZ_*       */
   u8   imagePal;	/* �ѥ�å��ֹ� 0-7                        */
@@ -363,7 +363,7 @@ typedef	struct	{
 #define G_RM_AA_XLU_SPRITE2	G_RM_AA_XLU_SURF2
 
 /*===========================================================================*
- *	External functions 
+ *	External functions
  *===========================================================================*/
 extern	u64	gspS2DEX_fifoTextStart[], gspS2DEX_fifoTextEnd[];
 extern	u64	gspS2DEX_fifoDataStart[], gspS2DEX_fifoDataEnd[];

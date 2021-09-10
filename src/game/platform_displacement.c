@@ -24,10 +24,10 @@ void update_mario_platform(void) {
     if (gMarioObject == NULL) return;
     floor = gMarioState->floor;
     if ((absf(gMarioState->pos[1] - gMarioState->floorHeight) < 4.0f) && (floor != NULL) && (floor->object != NULL)) {
-        gMarioPlatform 		   = floor->object;
+        gMarioPlatform         = floor->object;
         gMarioObject->platform = floor->object;
     } else {
-        gMarioPlatform 		   = NULL;
+        gMarioPlatform         = NULL;
         gMarioObject->platform = NULL;
     }
 }

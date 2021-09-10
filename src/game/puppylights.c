@@ -78,8 +78,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     Vec3i lightDir = { 0x00, 0x00, 0x00 };
     s32 lightIntensity = 0;
     s32 i;
-    s32 colour;
-    s32 ambient;
+    s32 colour, ambient;
     f64 scale = 1.0f;
     f32 scale2;
     f64 scaleVal = 1.0f;
@@ -137,15 +136,12 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     }
     // Get direction if applicable.
     for ((i = 0); (i < 3); (i++)) {
-        //So it works by starting from the final colour, and then lerping to the original colour, by a factor of the epicentre corrected scale. Light opacity affects this further.
+        // So it works by starting from the final colour, and then lerping to the original colour, by a factor of the epicentre corrected scale. Light opacity affects this further.
         colour = approach_f32_asymptotic(light->rgba[i], sLightBase->l[0].l.col[i], scale2 * ((f32)light->rgba[3] / 255.0f));
-        //If it's a directional light, then increase the current ambient by 50%, to give the effect better.
-        //Otherwise, just normalise the brightness to keep it in line with the current ambient.
-        if (light->flags & PUPPYLIGHT_DIRECTIONAL) {
-            ambient = approach_f32_asymptotic(MIN((tempLight->a.l.col[i] * 1.5f), 0xFF), tempLight->a.l.col[i], (scale * ((f32)light->rgba[3] / 255.0f)));
-        } else {
-            ambient = approach_f32_asymptotic(lightIntensity, tempLight->a.l.col[i], (scale * ((f32)light->rgba[3] / 255.0f)));
-        }
+        // If it's a directional light, then increase the current ambient by 50%, to give the effect better.
+        // Otherwise, just normalise the brightness to keep it in line with the current ambient.
+        if (light->flags & PUPPYLIGHT_DIRECTIONAL) lightIntensity = MIN((tempLight->a.l.col[i] * 1.5f), 0xFF);
+        ambient = approach_f32_asymptotic(lightIntensity, tempLight->a.l.col[i], (scale * ((f32)light->rgba[3] / 255.0f)));
         // And now to apply the values.
         tempLight->l[0].l.col[i]  = colour;
         tempLight->l[0].l.colc[i] = colour;
@@ -154,7 +150,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
         tempLight->a.l.colc[i] = ambient;
         // Apply direction. It takes the relative positions, and then multiplies them with the perspective matrix to get a correct direction.
         // Index 1 of the first dimension of gMatStack is perspective. Note that if you ever decide to cheat your way into rendering things after the game does :^)
-        if (light->flags & PUPPYLIGHT_DIRECTIONAL) tempLight->l->l.dir[i] = approach_f32_asymptotic((s8)(lightDir[0] * gMatStack[1][0][i] + lightDir[1] * gMatStack[1][1][i] + lightDir[2] * gMatStack[1][2][i]), tempLight->l->l.dir[i], scale);
+        if (light->flags & PUPPYLIGHT_DIRECTIONAL) tempLight->l->l.dir[i] = approach_f32_asymptotic((s8)((lightDir[0] * gMatStack[1][0][i]) + (lightDir[1] * gMatStack[1][1][i]) + (lightDir[2] * gMatStack[1][2][i])), tempLight->l->l.dir[i], scale);
     }
 }
 
@@ -205,7 +201,7 @@ void puppylights_object_emit(struct Object *obj) {
         if (obj->oLightID == 0xFFFF) {
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
             for ((i = gDynLightStart); (i < MIN((gDynLightStart + MAX_LIGHTS_DYNAMIC), MAX_LIGHTS)); (i++)) {
-                if (gPuppyLights[i]->active)continue;
+                if (gPuppyLights[i]->active) continue;
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
                 gPuppyLights[i]->area   = gCurrAreaIndex;

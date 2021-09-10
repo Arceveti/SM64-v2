@@ -44,8 +44,7 @@ void tuxies_mother_act_receiving_baby(void) { // act 1
                 motherParam = (o->oBehParams >> 0x10) & 0xFF;
                 babyParam = (o->prevObj->oBehParams >> 0x10) & 0xFF;
                 dialogID = (motherParam == babyParam) ? DIALOG_058 : DIALOG_059;
-                if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-                        DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, dialogID)) {
+                if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, dialogID)) {
                     o->oSubAction = (dialogID == DIALOG_058) ? MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY : MOTHER_PENGUIN_SUB_ACT_WRONG_BABY;
                     o->prevObj->oInteractionSubtype |= INT_SUBTYPE_DROP_IMMEDIATELY;
                 }
@@ -87,10 +86,7 @@ void tuxies_mother_act_idle(void) { // act 0
                 if (cur_obj_can_mario_activate_textbox_2(300.0f, 100.0f) && !nearBaby) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY;
                 break;
             case MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY:
-                if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-                    DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_057)) { // "have you seen my baby"
-                    o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED;
-                }
+                if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_057)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED; // "have you seen my baby"
                 break;
             case MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED:
                 if (o->oDistanceToMario > 450.0f) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_READY_TO_ASK;

@@ -87,7 +87,7 @@ static int s2d_snprint(int x, int y, int align, const char *str, uObjMtx *buf, i
 
 				s2d_blue = s2d_atoi(p, &p);
 				CH_SKIP(p);	CH_SKIP(p);
-				
+
 				s2d_alpha = s2d_atoi(p, &p);
 				break;
 			case CH_DROPSHADOW:
@@ -237,7 +237,7 @@ void s2d_type_print(int x, int y, int align, const char *str, uObjMtx *buf, int 
 
 	if (s2d_check_align(align) != 0) return;
 	if (s2d_check_str(str)     != 0) return;
-	
+
 	len = s2d_strlen(str);
 
 	s2d_snprint(x, y, align, str, buf, *pos, MODE_DRAW_DROPSHADOW);

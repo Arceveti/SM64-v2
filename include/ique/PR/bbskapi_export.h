@@ -6,7 +6,7 @@
 #define __BB_SK_API_HDR__
 
 #if defined(_LANGUAGE_C)
-    
+
 typedef u32  BbId;                 /* 32-bit Player identity */
 typedef u32  BbContentId;          /* 32-bit content identity */
 

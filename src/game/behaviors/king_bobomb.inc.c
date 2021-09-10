@@ -157,8 +157,7 @@ void king_bobomb_act_hit_ground(void) { // act 6
 
 void king_bobomb_act_death(void) { // act 7
     cur_obj_init_animation_with_sound(KING_BOBOMB_ANIM_HIT_GROUND);
-    if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
-        DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_116)) {
+    if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_116)) {
         create_sound_spawner(SOUND_OBJ_KING_WHOMP_DEATH);
         cur_obj_hide();
         cur_obj_become_intangible();
@@ -238,7 +237,7 @@ void king_bobomb_act_return_home(void) { // act 5
             if (cur_obj_can_mario_activate_textbox_2(500.0f, 100.0f)) o->oSubAction = KING_BOBOMB_SUB_ACT_RETURN_HOME_DIALOG;
             break;
         case KING_BOBOMB_SUB_ACT_RETURN_HOME_DIALOG:
-            if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, 
+            if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP,
                 DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_128)) {
                 o->oAction = KING_BOBOMB_ACT_ACTIVE;
             }

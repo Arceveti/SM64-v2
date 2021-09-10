@@ -1,9 +1,9 @@
 /*---------------------------------------------------------------------*
 	Copyright (C) 1998, Nintendo.
-	
+
 	File		ucode_debug.h
 	Coded    by	Yoshitaka Yasumoto.	Nov 15, 1998.
-	
+
 	$Id: ucode_debug.h,v 1.1.1.1 2002/05/02 03:28:25 blythe Exp $
  *---------------------------------------------------------------------*/
 #ifndef _UCODE_DEBUG_H_

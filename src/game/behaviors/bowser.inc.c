@@ -190,7 +190,6 @@ s32 bowser_set_anim_look_down_stop_walk(void) {
     return cur_obj_check_if_near_animation_end();
 }
 
-
 /**
  * Set Bowser an action depending of the CamAct value
  * CamAct changes value on the cutscene itself (cutscene_bowser_arena)
@@ -1165,11 +1164,11 @@ struct BowserTiltPlatformInfo {
     //  0 = Don't move
     //  1 = Move angle behind Bowser
     // -1 = Move angle in front of Bowser
-	s16	flag;
+    s16   flag;
     // Sets platform's tilt angle speed (pattern: positive then negative)
-	Angle	angSpeed;
+    Angle angSpeed;
     // Sets how much time the platform can tilt, increases each move
- 	s16	time;
+    s16   time;
 };
 
 /**

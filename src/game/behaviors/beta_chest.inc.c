@@ -53,7 +53,7 @@ void bhv_beta_chest_lid_loop(void) {
             // Rotate the lid 0x400 (1024) angle units per frame backwards.
             // When the lid becomes vertical, stop rotating.
             o->oFaceAnglePitch -= 0x400;
-            if (o->oFaceAnglePitch < -DEG(90)) o->oAction = BETA_CHEST_ACT_IDLE_OPEN; 
+            if (o->oFaceAnglePitch < -DEG(90)) o->oAction = BETA_CHEST_ACT_IDLE_OPEN;
             // Fall-through
         case BETA_CHEST_ACT_IDLE_OPEN:
             break;

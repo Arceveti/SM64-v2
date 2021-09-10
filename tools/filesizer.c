@@ -12,7 +12,7 @@ void* data;
 FILE* try_open(char* file, char* mode)
 {
 	FILE* f = fopen(file, mode);
-	
+
 	if (!f)
 		perror("fopen() failed");
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[argc + 1])
 	fout = try_open(argv[2], "wb");
 	if (!fout)
 		return EXIT_FAILURE;
-	
+
 	insize = get_file_size(fin);
 
 	// align to 16 bytes
@@ -70,7 +70,7 @@ int main(int argc, char *argv[argc + 1])
 
 	size_stored = data + outsize - 4;
 	*size_stored = __bswap_32(atoi(argv[3]));
-	
+
 	fwrite(data, outsize, 1, fout);
 
 	free(data);

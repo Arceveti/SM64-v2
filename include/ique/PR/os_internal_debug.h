@@ -12,7 +12,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo. (Originated by SGI)
-        
+
         $RCSfile: os_internal_debug.h,v $
         $Revision: 1.1.1.1 $
         $Date: 2002/05/02 03:28:24 $

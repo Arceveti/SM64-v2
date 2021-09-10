@@ -26,13 +26,13 @@
 #define RSP_SCRATCH_BASE	0x20000000	/* for sim use only */
 
 #define DCACHEBASEHI	0x0400
-#define DCACHEBASELO	0x0000	
+#define DCACHEBASELO	0x0000
 
 #define RSPBOOTBASEHI	0x0400
 #define RSPBOOTBASELO	0x1000
 
 #define TASKBASEHI	0x0400
-#define TASKBASELO	0x1080	
+#define TASKBASELO	0x1080
 
 #define HOSTSEMADDRHI	0x0000	# semaphore address
 #define HOSTSEMADDRLO	0x1ffc	# semaphore address
@@ -45,8 +45,8 @@
 #define DRAM_STACK_HI	0x001f
 #define DRAM_STACK_LO	0xfc00	/* a 1K stack... */
 
-/* 
- * this is a hack; we need a place in DRAM for the RSP to 
+/*
+ * this is a hack; we need a place in DRAM for the RSP to
  * use as a stack.
  */
 #define rsp_DRAM_STACK_HI	0x0020

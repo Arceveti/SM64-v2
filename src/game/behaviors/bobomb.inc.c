@@ -43,7 +43,6 @@ void bobomb_act_explode(void) {
     }
 }
 
-
 void bobomb_check_interactions(void) {
     obj_set_hitbox(o, &sBobombHitbox);
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {

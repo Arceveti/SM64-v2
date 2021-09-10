@@ -121,7 +121,7 @@ extern f32 gPaintingMarioYEntry;
 #define MOVTEX_SSL_PYRAMID_CORNER                   (0x02 | MOVTEX_AREA_SSL             )
 #define MOVTEX_SSL_COURSE_EDGE                      (0x03 | MOVTEX_AREA_SSL             )
 
-// Shared movtex meshes (drawn in object geo), geo_movtex_update_horizontal, 
+// Shared movtex meshes (drawn in object geo), geo_movtex_update_horizontal,
 // geo_movtex_draw_colored_2_no_update
 #define MOVTEX_SSL_SAND_PIT_OUTSIDE                 (0x01 | MOVTEX_AREA_SSL             )
 #define MOVTEX_SSL_SAND_PIT_PYRAMID                 (0x02 | MOVTEX_AREA_SSL             )

@@ -30,7 +30,7 @@ struct ObjectHitbox sSnufitBulletHitbox = {
 };
 
 /**
- * This geo function shifts snufit's mask when it shrinks down, 
+ * This geo function shifts snufit's mask when it shrinks down,
  * since the parts move independently.
  */
 Gfx *geo_snufit_move_mask(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {

@@ -1,7 +1,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo.
-        
+
         $RCSfile: leo.h,v $
         $Revision: 1.1.1.1 $
         $Date: 2002/05/02 03:28:24 $
@@ -107,7 +107,7 @@ typedef struct
       u8	    sleep_time;
       u32	    reserve3;
     } modeselect;
-    
+
   } data;
 
 } LEOCmd;

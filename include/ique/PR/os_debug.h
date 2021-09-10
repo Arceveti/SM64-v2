@@ -21,7 +21,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo. (Originated by SGI)
-        
+
         $RCSfile: os_debug.h,v $
         $Revision: 1.1.1.2 $
         $Date: 2002/10/29 08:06:34 $
@@ -45,7 +45,7 @@ extern "C" {
  */
 
 /*
- * Structure for Profiler 
+ * Structure for Profiler
  */
 typedef struct {
 	u16	*histo_base;		/* histogram base */

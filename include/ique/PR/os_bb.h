@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------*
         Copyright (C) 2002 BroadOn Communications.
-        
+
         $RCSfile: os_bb.h,v $
         $Revision: 1.13 $
         $Date: 2004/06/28 22:34:42 $

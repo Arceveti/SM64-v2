@@ -48,7 +48,7 @@ typedef struct {
 typedef struct {
     s32                 revision;
     s32                 fileSize;
-    s32                 objectCount;            
+    s32                 objectCount;
 } ALSymFile;
 
 

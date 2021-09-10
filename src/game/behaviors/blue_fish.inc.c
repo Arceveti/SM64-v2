@@ -36,11 +36,11 @@ void bhv_blue_fish_movement_loop(void) {
             cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 2.0f);
             o->oMoveAngleYaw = (s32)(o->oBlueFishRandomAngle + o->oMoveAngleYaw);
             if (o->oTimer == 15) o->oAction = BLUE_FISH_ACT_ASCEND;
-            break;  
+            break;
         // Animates and adjusts pitch to an upward direction.
         case BLUE_FISH_ACT_ASCEND:
             cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 1.0f);
-            // Progresses oAction to BLUE_FISH_ACT_TURN_BACK after elapsed time. 
+            // Progresses oAction to BLUE_FISH_ACT_TURN_BACK after elapsed time.
             if (o->oTimer >= (o->oBlueFishRandomTime + 60)) o->oAction = BLUE_FISH_ACT_TURN_BACK;
             // Adjusts pitch angle. Direction relies on time not passed.
             if (o->oTimer < ((o->oBlueFishRandomTime + 60) / 2)) {
@@ -48,7 +48,7 @@ void bhv_blue_fish_movement_loop(void) {
             } else {
                 o->oFaceAnglePitch += o->oAngleVelPitch;
             }
-            break; 
+            break;
         // Animates and turns fish around
         case BLUE_FISH_ACT_TURN_BACK:
             cur_obj_init_animation_with_accel_and_sound(BLUE_FISH_ANIM_DEFAULT, 2.0f);

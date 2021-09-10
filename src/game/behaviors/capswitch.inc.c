@@ -40,9 +40,9 @@ void cap_switch_act_being_pressed(void) {
         }
     } else {
         //! Neither of these flags are defined in this function so they do nothing.
-        //  On an extra note, there's a specific check for this cutscene and 
+        //  On an extra note, there's a specific check for this cutscene and
         //  there's no dialog defined since the cutscene itself calls the dialog.
-        if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_FRONT, 
+        if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_FRONT,
             (DIALOG_FLAG_TEXT_RESPONSE | DIALOG_FLAG_UNK_CAPSWITCH), CUTSCENE_CAP_SWITCH_PRESS, 0)) o->oAction = CAP_SWITCH_ACT_DONE;
     }
 }

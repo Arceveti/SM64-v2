@@ -1266,10 +1266,6 @@
     /* Animations */
     #define FLY_GUY_ANIM_FLYING                             0x0
 
-/* Fly Guy Flame */
-    /* oBehParams2ndByte */
-    #define FLY_GUY_FLAME_BP_UNK1                           0x1
-
 /* Goomba triplet spawner */
     /* oBehParams2ndByte */
     #define GOOMBA_TRIPLET_SPAWNER_BP_SIZE_MASK             0x00000003
@@ -1879,15 +1875,19 @@
     #define FIRE_PIRANHA_PLANT_ANIM_UNUSED_3                0x3
     #define FIRE_PIRANHA_PLANT_ANIM_GROW                    0x4
 
-/* Small Piranha Flame */
-    /* oBehParams2ndByte */
-    #define SMALL_PIRANHA_FLAME_BP_1FRAME                   0x0
-    #define SMALL_PIRANHA_FLAME_BP_MOVE                     0x1
-
 /* Fire spitter */
     /* oAction */
     #define FIRE_SPITTER_ACT_IDLE                           0x0
     #define FIRE_SPITTER_ACT_SPIT_FIRE                      0x1
+
+/* Moving Flame */
+    /* oBehParams2ndByte */
+    #define MOVING_FLAME_BP_1FRAME                          0x0
+    #define MOVING_FLAME_BP_MOVE                            0x1
+
+/* Fly Guy Flame */
+    /* oBehParams2ndByte */
+    #define MOVING_FLAME_PARTICLE_BP_UNK1                   0x1
 
 /* Flamethrower */
     /* oBehParams2ndByte */

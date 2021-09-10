@@ -427,11 +427,11 @@ void change_vi(OSViMode *mode, int width, int height){
  */
 void thread1_idle(UNUSED void *arg) {
     osCreateViManager(OS_PRIORITY_VIMGR);
-	switch (osTvType) {
+    switch (osTvType) {
         case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
         case OS_TV_MPAL: VI = osViModeTable[OS_VI_MPAL_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
         case OS_TV_PAL:  VI = osViModeTable[OS_VI_PAL_LAN1 ]; break; // osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
-	}
+    }
     change_vi(  &VI, SCREEN_WIDTH, SCREEN_HEIGHT);
     osViSetMode(&VI);
     osViBlack(TRUE);

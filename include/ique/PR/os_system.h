@@ -21,7 +21,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo. (Originated by SGI)
-        
+
         $RCSfile: os_system.h,v $
         $Revision: 1.1.1.1 $
         $Date: 2002/05/02 03:28:25 $
@@ -54,7 +54,7 @@ extern "C" {
  */
 
 /*
- * Values for osTvType 
+ * Values for osTvType
  */
 #define	OS_TV_PAL		0
 #define	OS_TV_NTSC		1

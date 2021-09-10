@@ -1,8 +1,8 @@
-/* 
+/*
  *  HVQM2File.h: HVQM2(YUV 4:2:2/4:1:1) file format header file.
- * 
+ *
  *  Copyright (C) 1998,1999 NINTENDO Co., Ltd.
- * 
+ *
  */
 
 /*  revision 1.1  1999-02-12  */

@@ -80,7 +80,6 @@ void elevator_act_landed(void) { // nearly identical to action 2
     if (!mario_is_in_air_action() && !cur_obj_is_mario_on_platform()) o->oAction = ELEVATOR_ACT_IDLE;
 }
 
-
 void bhv_elevator_init(void) {
     s32 index = o->oBehParams2ndByte;
     if (sElevatorHeights[index][1] == 0) {

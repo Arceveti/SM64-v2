@@ -96,7 +96,7 @@ void tweester_act_hide(void) {
 void (*sTweesterActions[])(void) = { tweester_act_idle, tweester_act_chase, tweester_act_hide };
 
 /**
- * Loop behavior for Tweester. 
+ * Loop behavior for Tweester.
  * Loads the hitbox and calls its relevant action.
  */
 void bhv_tweester_loop(void) {

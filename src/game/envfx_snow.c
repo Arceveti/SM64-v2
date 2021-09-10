@@ -275,7 +275,7 @@ Gfx *envfx_update_snow(s32 snowMode, Vec3s marioPos, Vec3s camFrom, Vec3s camTo)
             break;
     }
     rotate_triangle_vertices((RawVertexData *) &vertex1, (RawVertexData *) &vertex2, (RawVertexData *) &vertex3, pitch, yaw);
-    gSPDisplayList(gfx++, (((snowMode == ENVFX_SNOW_NORMAL) || (snowMode == ENVFX_SNOW_BLIZZARD)) ? &tiny_bubble_dl_gray : &tiny_bubble_dl_blue)); 
+    gSPDisplayList(gfx++, (((snowMode == ENVFX_SNOW_NORMAL) || (snowMode == ENVFX_SNOW_BLIZZARD)) ? &tiny_bubble_dl_gray : &tiny_bubble_dl_blue));
     for ((i = 0); (i < gSnowParticleCount); (i += 5)) {
         append_snowflake_vertex_buffer(gfx++, i, (RawVertexData *) &vertex1, (RawVertexData *) &vertex2, (RawVertexData *) &vertex3);
         gSP1Triangle(gfx++,  0,  1,  2, 0);

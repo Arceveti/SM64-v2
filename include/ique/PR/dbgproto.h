@@ -184,7 +184,7 @@ typedef struct __KKRegisterContextStruct {
 	sregs[38] = DMAfull
 	sregs[39] = DMAbusy
 */
-	
+
 
 
 typedef struct __KKCpScalarSetStruct {
@@ -232,7 +232,7 @@ typedef struct __KKLogStatusStruct {
 
 /* process usage data */
 typedef struct __KKProcUsageStruct {
-    TVid		pid;	
+    TVid		pid;
     KKTimeStruct	states[10];
 } KKProcUsage;
 
@@ -460,7 +460,7 @@ typedef KKClrBkptRequest KKClrTrptRequest;
 
 /*
  * Macros for manipulating sets of flags.
- * sp must be a pointer to KKSysCallSet. 
+ * sp must be a pointer to KKSysCallSet.
  * flag must be a member of the enumeration corresponding to *sp.
  */
 

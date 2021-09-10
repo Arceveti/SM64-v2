@@ -446,7 +446,7 @@ void alloc_animdata(struct ObjAnimator *animator) {
                 case GD_ANIM_SCALE3F_ROT3F_POS3F:   datasize = sizeof(f32[3][3]);         break;
                 case GD_ANIM_SCALE3S_POS3S_ROT3S:   datasize = sizeof(struct AnimMtxVec); break; // This function will convert the s16[9] array into a struct AnimMtxVec
                 case GD_ANIM_MTX4x4:                datasize = sizeof(Mat4);              break;
-                default:                            gd_exit();                            break; // unknown anim type for allocation       
+                default:                            gd_exit();                            break; // unknown anim type for allocation
             }
             allocSpace = gd_malloc_perm(curAnimSrc->count * datasize); // gd_alloc_perm
             if (allocSpace == NULL) gd_exit(); // can't allocate animation data

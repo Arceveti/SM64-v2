@@ -1,6 +1,6 @@
-/* 
+/*
  *  hvqm2dec.h - N64-HVQM2 library header file
- * 
+ *
  *  Copyright (C) 1998,1999 NINTENDO Co.,Ltd.
  */
 

@@ -21,7 +21,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo. (Originated by SGI)
-        
+
         $RCSfile: os_cont.h,v $
         $Revision: 1.2 $
         $Date: 2004/10/29 00:51:42 $
@@ -47,7 +47,7 @@ extern "C" {
  */
 
 /*
- * Structure for controllers 
+ * Structure for controllers
  */
 
 typedef struct {
@@ -108,7 +108,7 @@ typedef struct {
 #ifdef _HW_VERSION_1
 #define CONT_FRAME_ERROR                0x2
 #define CONT_COLLISION_ERROR            0x1
-#endif 
+#endif
 
 /* Controller type */
 

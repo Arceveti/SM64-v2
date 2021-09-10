@@ -3,14 +3,12 @@
 void bhv_hidden_star_init(void) {
     s16 remainingTriggers;
     struct Object *starObj;
-
     remainingTriggers = count_objects_with_behavior(bhvHiddenStarTrigger);
     if (remainingTriggers == 0) {
         starObj             = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0x0, 0x0, 0x0);
         starObj->oBehParams = o->oBehParams;
         o->activeFlags      = ACTIVE_FLAG_DEACTIVATED;
     }
-
     o->oHiddenStarTriggerCounter = 5 - remainingTriggers;
 }
 
@@ -22,7 +20,6 @@ void bhv_hidden_star_loop(void) {
         case HIDDEN_STAR_ACT_INACTIVE:
             if (o->oHiddenStarTriggerCounter == 5) o->oAction = HIDDEN_STAR_ACT_ACTIVE;
             break;
-
         case HIDDEN_STAR_ACT_ACTIVE:
             if (o->oTimer > 2) {
                 spawn_red_coin_cutscene_star(o->oPosX, o->oPosY, o->oPosZ);
@@ -57,7 +54,6 @@ void bhv_bowser_course_red_coin_star_loop(void) {
         case HIDDEN_STAR_ACT_INACTIVE:
             if (o->oHiddenStarTriggerCounter == 8) o->oAction = HIDDEN_STAR_ACT_ACTIVE;
             break;
-
         case HIDDEN_STAR_ACT_ACTIVE:
             if (o->oTimer > 2) {
                 spawn_no_exit_star(o->oPosX, o->oPosY, o->oPosZ);

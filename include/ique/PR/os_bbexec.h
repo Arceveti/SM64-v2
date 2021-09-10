@@ -28,7 +28,7 @@ typedef struct {
     u32 memSize;
     u32 errataSize;
     u32 errataAddress;
-    
+
     u32 magic;
 } OSBbLaunchMetaData;
 

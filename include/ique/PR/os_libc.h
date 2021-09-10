@@ -21,7 +21,7 @@
 
 /*---------------------------------------------------------------------*
         Copyright (C) 1998 Nintendo. (Originated by SGI)
-        
+
         $RCSfile: os_libc.h,v $
         $Revision: 1.5 $
         $Date: 2004/11/16 01:47:19 $
