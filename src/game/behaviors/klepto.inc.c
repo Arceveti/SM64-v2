@@ -73,15 +73,22 @@ void bhv_klepto_init(void) {
 #ifdef HELD_TRANSPARENT_STAR
         if (save_file_get_star_flags((gCurrSaveFileNum - 1), (COURSE_SSL - 1)) & 0x1) {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_TRANSPARENT_STAR;
+#ifdef PUPPYLIGHTS
+            cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_TRANSPARENT_STAR_LIGHT);
+#endif
         } else {
             o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
+#ifdef PUPPYLIGHTS
+            cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
+#endif
         }
 #else
         o->oAnimState = KLEPTO_ANIM_STATE_HOLDING_STAR;
+#ifdef PUPPYLIGHTS
+        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
+#endif
 #endif
 #ifdef PUPPYLIGHTS
-        //! down offset?
-        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
         cur_obj_enable_light();
 #endif
     } else {

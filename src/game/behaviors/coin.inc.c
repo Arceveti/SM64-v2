@@ -136,7 +136,7 @@ void spawn_coin_in_formation(s32 index, s32 shape) {
     Vec3i pos;
     Bool32 spawnCoin    = TRUE;
     Bool32 snapToGround = TRUE;
-    pos[0] = pos[1] = pos[2] = 0;
+    vec3_zero(pos);
     switch (shape & 0x7) {
         case COIN_FORMATION_BP_HORIZONTAL_LINE:
             pos[2] = (160 * (index - 2));
@@ -237,6 +237,10 @@ void bhv_coin_sparkles_loop(void) {
 }
 
 void bhv_coin_sparkles_spawner_loop(void) {
+#ifdef PUPPYLIGHTS
+    cur_obj_set_light_properties_default(160, COLOR_RGBA32_COIN_YELLOW_LIGHT);
+    cur_obj_enable_light();
+#endif
     struct Object *sparkleObj;
     sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvCoinSparkles);
     sparkleObj->oPosX += ((random_float() * 30.0f) - 15.0f);

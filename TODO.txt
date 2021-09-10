@@ -2,8 +2,6 @@
 - Known Bugs:
     - Audio is scuffed
         - Might be a HackerSM64 issue?
-    - Bowser appears offset to the side when thrown
-        - Doesn't happen when throwing other objects
     - The edges of Mario's silhouette is sometimes visible at low resolutions
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar because of the super steep floor

@@ -118,7 +118,6 @@
 #define COLOR_RGBA32_MAGENTA                0xFF00FFFF // 255   0 255 255
 #define COLOR_RGBA32_PINK                   0xFF007FFF // 255   0 127 255
 
-
 // Elemental
 #define COLOR_RGBA32_JRB_SKY                0x50645AFF //  80 100  90 255
 #define COLOR_RGBA32_WATER                  0x055096FF //   5  80 150 255
@@ -128,9 +127,15 @@
 
 // Lights
 #define COLOR_RGBA32_AMP_LIGHT              COLOR_RGBA32_ELECTRIC
-#define COLOR_RGBA32_STAR_LIGHT             0xFFF000FF
+#define COLOR_RGBA32_STAR_LIGHT             0xFFF000FF // 255 240   0 255
+#define COLOR_RGBA32_TRANSPARENT_STAR_LIGHT 0x0F1973FF //  15  25 115 255 // 0x1E32E6FF //  30  50 230 255
 #define COLOR_RGBA32_FLAME_LIGHT            COLOR_RGBA32_LAVA
-#define COLOR_RGBA32_EXPLOSION_LIGHT        0xFFFF7FFF
+#define COLOR_RGBA32_EXPLOSION_LIGHT        0xFFFF7FFF // 255 255 127 255
+
+// Coins
+#define COLOR_RGBA32_COIN_YELLOW_LIGHT      0x7F7F007F // 127 127   0 127
+#define COLOR_RGBA32_COIN_BLUE_LIGHT        0x40407F7F //  64  64 127 127
+#define COLOR_RGBA32_COIN_RED_LIGHT         0x7F00007F // 127   0   0 127
 
 // Mario body lights - these should match the light groups in actors/mario/model.inc.c
 #define COLOR_RGBA32_MARIO_LIGHTS_BLUE      0x0000FF00 //   0   0 255   0

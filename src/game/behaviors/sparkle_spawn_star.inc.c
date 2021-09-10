@@ -14,10 +14,18 @@ struct ObjectHitbox sSparkleSpawnStarHitbox = {
 
 void bhv_spawned_star_init(void) {
     if (!(o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT)) o->oBehParams = o->parentObj->oBehParams;
+#ifdef PUPPYLIGHTS
+    if (save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) & (1 << ((o->oBehParams >> 24) & 0xFF))) {
+        cur_obj_set_model(MODEL_TRANSPARENT_STAR);
+        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_TRANSPARENT_STAR_LIGHT);
+    } else {
+        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
+    }
+#else
     if (save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1)) & (1 << ((o->oBehParams >> 24) & 0xFF))) cur_obj_set_model(MODEL_TRANSPARENT_STAR);
+#endif
     cur_obj_play_sound_2(SOUND_GENERAL2_STAR_APPEARS);
 #ifdef PUPPYLIGHTS
-    cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
     cur_obj_enable_light();
 #endif
 }

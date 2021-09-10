@@ -25,12 +25,17 @@ void bhv_collect_star_init(void) {
     if (currentLevelStarFlags & (1 << starId)) {
 #endif
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+#ifdef PUPPYLIGHTS
+        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_TRANSPARENT_STAR_LIGHT);
+#endif
     } else {
         o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+#ifdef PUPPYLIGHTS
+        cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
+#endif
     }
     obj_set_hitbox(o, &sCollectStarHitbox);
 #ifdef PUPPYLIGHTS
-    cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
     cur_obj_enable_light();
 #endif
 }
