@@ -45,10 +45,10 @@ const LevelScript level_cotmc_entry[] = {
     JUMP_LINK(script_func_global_1),
 
     AREA(/*index*/ 1, cotmc_geo_area_1),
-        OBJECT(/*model*/ MODEL_NONE, /*pos*/ -4185, 1020, -47, /*angle*/ 0, 90, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvAirborneWarp),
-        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_COTMC, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
-        WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x03, /*destNode*/ 0x34, /*flags*/ WARP_NO_CHECKPOINT),
-        WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x03, /*destNode*/ 0x66, /*flags*/ WARP_NO_CHECKPOINT),
+        OBJECT(/*model*/ MODEL_NONE, /*pos*/ -4185, 1020, -48, /*angle*/ 0, 90, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvAirborneWarp),
+        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_COTMC,          /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
+        WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE,         /*destArea*/ 0x03, /*destNode*/ 0x34, /*flags*/ WARP_NO_CHECKPOINT),
+        WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE,         /*destArea*/ 0x03, /*destNode*/ 0x66, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF3, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x14, /*flags*/ WARP_NO_CHECKPOINT),
         JUMP_LINK(script_func_local_2),
         JUMP_LINK(script_func_local_1),
@@ -57,11 +57,21 @@ const LevelScript level_cotmc_entry[] = {
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_130),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0004, /*seq*/ SEQ_LEVEL_UNDERGROUND),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
+#ifdef PUPPYLIGHTS
+    #define CRYSTAL_LIGHT_SIZE  1600
+    #define CRYSTAL_LIGHT(x, y, z) PUPPYLIGHT_NODE(0x3F, 0x3F, 0x3F, 0xFF, (x), (y), (z), CRYSTAL_LIGHT_SIZE, CRYSTAL_LIGHT_SIZE, CRYSTAL_LIGHT_SIZE, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1)
+        CRYSTAL_LIGHT(  944, 560, -3742),
+        CRYSTAL_LIGHT(   0,  363, -6144),
+        CRYSTAL_LIGHT( 1320, 640, -5730),
+        CRYSTAL_LIGHT(-1048, 640, -6920),
+    #undef CRYSTAL_LIGHT_SIZE 
+    #undef CRYSTAL_LIGHT
+#endif
     END_AREA(),
 
     FREE_LEVEL_POOL(),
-    MARIO_POS(/*area*/ 1, /*yaw*/ 90, /*pos*/ -4185, 20, -47),
-    CALL(/*arg*/ 0, /*func*/ lvl_init_or_update),
+    MARIO_POS(/*area*/ 1, /*yaw*/ 90, /*pos*/ -4185, 20, -48),
+    CALL(     /*arg*/ 0, /*func*/ lvl_init_or_update),
     CALL_LOOP(/*arg*/ 1, /*func*/ lvl_init_or_update),
     CLEAR_LEVEL(),
     SLEEP_BEFORE_EXIT(/*frames*/ 1),

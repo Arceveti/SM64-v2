@@ -203,7 +203,7 @@ const Gfx capswitch_seg5_dl_05003280[] = {
 };
 
 // 0x05003350 - 0x05003370
-const Gfx capswitch_seg5_dl_05003350[] = {
+const Gfx capswitch_seg5_dl_red[] = {
     gsSPLight(&capswitch_seg5_lights_red.l, 1),
     gsSPLight(&capswitch_seg5_lights_red.a, 2),
     gsSPDisplayList(capswitch_seg5_dl_05003280),
@@ -211,7 +211,7 @@ const Gfx capswitch_seg5_dl_05003350[] = {
 };
 
 // 0x05003370 - 0x05003390
-const Gfx capswitch_seg5_dl_05003370[] = {
+const Gfx capswitch_seg5_dl_green[] = {
     gsSPLight(&capswitch_seg5_lights_green.l, 1),
     gsSPLight(&capswitch_seg5_lights_green.a, 2),
     gsSPDisplayList(capswitch_seg5_dl_05003280),
@@ -219,7 +219,7 @@ const Gfx capswitch_seg5_dl_05003370[] = {
 };
 
 // 0x05003390 - 0x050033B0
-const Gfx capswitch_seg5_dl_05003390[] = {
+const Gfx capswitch_seg5_dl_blue[] = {
     gsSPLight(&capswitch_seg5_lights_blue.l, 1),
     gsSPLight(&capswitch_seg5_lights_blue.a, 2),
     gsSPDisplayList(capswitch_seg5_dl_05003280),
@@ -227,7 +227,7 @@ const Gfx capswitch_seg5_dl_05003390[] = {
 };
 
 // 0x050033B0 - 0x050033D0
-const Gfx capswitch_seg5_dl_050033B0[] = {
+const Gfx capswitch_seg5_dl_yellow[] = {
     gsSPLight(&capswitch_seg5_lights_yellow.l, 1),
     gsSPLight(&capswitch_seg5_lights_yellow.a, 2),
     gsSPDisplayList(capswitch_seg5_dl_05003280),
