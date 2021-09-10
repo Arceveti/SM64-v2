@@ -162,6 +162,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
 // If the object has multiple lights, then you run this for each light.
 void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 baseColour) {
     s32 i;
+    s32 numlights = 0;
     if (gCurrLevelNum < 4) return;
     // Checks if there's a hardset colour. Colours are only the first 3 bytes, so you can really put whatever you want in the last.
     // If there isn't a colour, then it decides whether to apply the ambient lighting, or the default lighting as the baseline.
@@ -184,7 +185,12 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
         }
     }
     memcpy(segmented_to_virtual(src), &sLightBase[0], sizeof(Lights1));
-    for ((i = 0); (i < gNumLights); (i++)) if ((gPuppyLights[i]->rgba[3] > 0) && (gPuppyLights[i]->active) && (gPuppyLights[i]->area == gCurrAreaIndex) && ((gPuppyLights[i]->room == -1) || (gPuppyLights[i]->room == gMarioCurrentRoom))) puppylights_iterate(gPuppyLights[i], src, obj);
+    for ((i = 0); (i < gNumLights); (i++)) {
+        if ((gPuppyLights[i]->rgba[3] > 0) && (gPuppyLights[i]->active) && (gPuppyLights[i]->area == gCurrAreaIndex) && ((gPuppyLights[i]->room == -1) || (gPuppyLights[i]->room == gMarioCurrentRoom))) {
+            puppylights_iterate(gPuppyLights[i], src, obj);
+            numlights++;
+        }
+    }
 }
 
 // Sets and updates dynamic lights from objects.
@@ -198,8 +204,8 @@ void puppylights_object_emit(struct Object *obj) {
         if (vec3_sumsq(d) > vec3_sumsq(obj->puppylight.pos[1])) goto deallocate; // That's right. I used a goto. Eat your heart out xkcd.
         if (obj->oLightID == 0xFFFF) {
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
-            for ((i = gDynLightStart); (i < MAX_LIGHTS); (i++)) {
-                if (gPuppyLights[i]->active) continue;
+            for ((i = gDynLightStart); (i < MIN((gDynLightStart + MAX_LIGHTS_DYNAMIC), MAX_LIGHTS)); (i++)) {
+                if (gPuppyLights[i]->active)continue;
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
                 gPuppyLights[i]->area   = gCurrAreaIndex;
@@ -213,7 +219,10 @@ void puppylights_object_emit(struct Object *obj) {
         }
     } else {
         deallocate:
-        if (obj->oLightID != 0xFFFF) gPuppyLights[obj->oLightID]->active = FALSE;
+        if (obj->oLightID != 0xFFFF) {
+            gPuppyLights[obj->oLightID]->active = FALSE;
+            gPuppyLights[obj->oLightID]->flags  = 0x0;
+        }
         obj->oLightID = 0xFFFF;
     }
 }
