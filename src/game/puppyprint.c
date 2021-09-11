@@ -78,6 +78,8 @@ OSTime graphTime    [NUM_PERF_ITERATIONS + 1];
 OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
 OSTime dmaTime      [NUM_PERF_ITERATIONS + 1];
 OSTime dmaAudioTime [NUM_PERF_ITERATIONS + 1];
+OSTime faultTime    [NUM_PERF_ITERATIONS + 1];
+OSTime taskTime     [NUM_PERF_ITERATIONS + 1];
 #ifdef VARIABLE_FRAMERATE
 OSTime videoTime    [NUM_PERF_ITERATIONS + 1];
 #endif
@@ -339,9 +341,9 @@ void puppyprint_render_profiler(void) {
     s32 graphPos;
     s32 prevGraph;
 #ifdef USE_CYCLES
-    OSTime cpuCount = (cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS]);
+    OSTime cpuCount = (cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS] + faultTime[NUM_PERF_ITERATIONS] + taskTime[NUM_PERF_ITERATIONS]);
 #else
-    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS]);
+    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS] + faultTime[NUM_PERF_ITERATIONS] + taskTime[NUM_PERF_ITERATIONS]);
 #endif
     char textBytes[80];
     if (!fDebug) return;
@@ -463,6 +465,8 @@ void puppyprint_profiler_process(void) {
         get_average_perf_time(    audioTime);
         get_average_perf_time(      dmaTime);
         get_average_perf_time( dmaAudioTime);
+        get_average_perf_time(    faultTime);
+        get_average_perf_time(     taskTime);
 #ifdef VARIABLE_FRAMERATE
         get_average_perf_time(    videoTime);
 #endif

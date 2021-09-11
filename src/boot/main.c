@@ -335,11 +335,7 @@ void thread3_main(UNUSED void *arg) {
     create_thread(&gSoundThread, 4, thread4_sound, NULL, (gThread4Stack + 0x2000), 20);
     osStartThread(&gSoundThread);
 #ifdef USE_EXT_RAM
-    if (!gNotEnoughMemory) {
-        create_thread(&gGameLoopThread, 5, thread5_game_loop             , NULL, (gThread5Stack + 0x2000), 10);
-    } else {
-        create_thread(&gGameLoopThread, 5, thread5_mem_error_message_loop, NULL, (gThread5Stack + 0x2000), 10);
-    }
+    create_thread(&gGameLoopThread, 5, (gNotEnoughMemory ? thread5_mem_error_message_loop : thread5_game_loop), NULL, (gThread5Stack + 0x2000), 10);
 #else
     create_thread(&gGameLoopThread, 5, thread5_game_loop, NULL, (gThread5Stack + 0x2000), 10);
 #endif
@@ -350,6 +346,9 @@ void thread3_main(UNUSED void *arg) {
 #endif
     while (TRUE) {
         OSMesg msg;
+#if PUPPYPRINT_DEBUG
+        OSTime first = osGetTime();
+#endif
         osRecvMesg(&gIntrMesgQueue, &msg, OS_MESG_BLOCK);
         switch ((uintptr_t) msg) {
             case MESG_VI_VBLANK:        handle_vblank();      break;
@@ -358,6 +357,9 @@ void thread3_main(UNUSED void *arg) {
             case MESG_START_GFX_SPTASK: start_gfx_sptask();   break;
             case MESG_NMI_REQUEST:      handle_nmi_request(); break;
         }
+#if PUPPYPRINT_DEBUG
+        profiler_update(taskTime, first);
+#endif
     }
 }
 

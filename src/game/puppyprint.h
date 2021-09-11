@@ -40,20 +40,22 @@ extern s32 benchMark[       NUM_BENCH_ITERATIONS + 2];
 // CPU
 extern OSTime collisionTime[NUM_PERF_ITERATIONS + 1];
 extern OSTime behaviourTime[NUM_PERF_ITERATIONS + 1];
-extern OSTime scriptTime[   NUM_PERF_ITERATIONS + 1];
-extern OSTime graphTime[    NUM_PERF_ITERATIONS + 1];
-extern OSTime audioTime[    NUM_PERF_ITERATIONS + 1];
-extern OSTime dmaTime[      NUM_PERF_ITERATIONS + 1];
-extern OSTime dmaAudioTime[ NUM_PERF_ITERATIONS + 1];
+extern OSTime scriptTime   [NUM_PERF_ITERATIONS + 1];
+extern OSTime graphTime    [NUM_PERF_ITERATIONS + 1];
+extern OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
+extern OSTime dmaTime      [NUM_PERF_ITERATIONS + 1];
+extern OSTime dmaAudioTime [NUM_PERF_ITERATIONS + 1];
+extern OSTime faultTime    [NUM_PERF_ITERATIONS + 1];
+extern OSTime taskTime     [NUM_PERF_ITERATIONS + 1];
 #ifdef VARIABLE_FRAMERATE
-extern OSTime videoTime[    NUM_PERF_ITERATIONS + 1];
+extern OSTime videoTime    [NUM_PERF_ITERATIONS + 1];
 #endif
 // RSP
-extern OSTime rspGenTime[   NUM_PERF_ITERATIONS + 1];
+extern OSTime rspGenTime   [NUM_PERF_ITERATIONS + 1];
 // RDP
-extern OSTime bufferTime[   NUM_PERF_ITERATIONS + 1];
-extern OSTime tmemTime[     NUM_PERF_ITERATIONS + 1];
-extern OSTime busTime[      NUM_PERF_ITERATIONS + 1];
+extern OSTime bufferTime   [NUM_PERF_ITERATIONS + 1];
+extern OSTime tmemTime     [NUM_PERF_ITERATIONS + 1];
+extern OSTime busTime      [NUM_PERF_ITERATIONS + 1];
 
 extern void profiler_update(OSTime *time, OSTime time2);
 extern void puppyprint_profiler_process( void);
