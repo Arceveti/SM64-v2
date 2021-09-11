@@ -101,21 +101,18 @@ Bool32 begin_walking_action(struct MarioState *m, f32 forwardVel, MarioAction ac
 void check_ledge_climb_down(struct MarioState *m) {
     struct WallCollisionData wallCols;
     struct Surface *floor;
-    f32 floorHeight;
     struct Surface *wall;
-    Angle wallAngle, wallDYaw;
     if (m->forwardVel < GROUND_SPEED_THRESHOLD_2) {
         //! Why doesn't this work: if ((m->floor == NULL) || (m->floor->normal.y < COS25)) return;
         vec3_copy(wallCols.pos, m->pos);
         wallCols.radius  =  10.0f;
         wallCols.offsetY = -10.0f;
         if (find_wall_collisions(&wallCols) != 0) {
-            floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
+            f32 floorHeight = find_floor(wallCols.pos[0], (wallCols.pos[1] + m->midY), wallCols.pos[2], &floor);
             if ((floor != NULL) && (((wallCols.pos[1] - floorHeight) > MARIO_SHORT_HITBOX_HEIGHT))) {
                 wall = wallCols.walls[wallCols.numWalls - 1];
-                wallAngle = SURFACE_YAW(wall);
-                wallDYaw  = abs_angle_diff(wallAngle, m->faceAngle[1]);
-                if (wallDYaw < DEG(90)) {
+                Angle wallAngle = SURFACE_YAW(wall);
+                if (abs_angle_diff(wallAngle, m->faceAngle[1]) < DEG(90)) {
                     m->pos[0]       = (wallCols.pos[0] - (20.0f * wall->normal.x));
                     m->pos[2]       = (wallCols.pos[2] - (20.0f * wall->normal.z));
                     m->faceAngle[0] = 0x0;
@@ -700,7 +697,7 @@ Bool32 act_turning_around(struct MarioState *m) {
     if (m->input & INPUT_IDLE               ) return set_mario_action(    m, ACT_BRAKING      , 0);
     if (!analog_stick_held_back(m, DEG(100))) return set_mario_action(    m, ACT_WALKING      , 0);
     if (apply_slope_decel(m, 2.0f)          ) return begin_walking_action(m, 8.0f, ACT_FINISH_TURNING_AROUND, 0);
-    play_sound(SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend, m->marioObj->header.gfx.cameraToObject);
+    play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
     adjust_sound_for_speed(m);
     switch (perform_ground_step(m)) {
         case GROUND_STEP_LEFT_GROUND: set_mario_action(m, ACT_FREEFALL, 0); break;
@@ -710,7 +707,7 @@ Bool32 act_turning_around(struct MarioState *m) {
         set_mario_animation(m, MARIO_ANIM_TURNING_PART1);
     } else {
         set_mario_animation(m, MARIO_ANIM_TURNING_PART2);
-        if (is_anim_at_end(m)) begin_walking_action(m, (m->forwardVel > 0.0f) ? -m->forwardVel : 8.0f, ACT_WALKING, 0);
+        if (is_anim_at_end(m)) begin_walking_action(m, ((m->forwardVel > 0.0f) ? -m->forwardVel : 8.0f), ACT_WALKING, 0);
     }
     return FALSE;
 }
@@ -725,6 +722,7 @@ Bool32 act_finish_turning_around(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_TURNING_PART2);
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) set_mario_action(m, ACT_FREEFALL, 0);
     if (is_anim_at_end(m)) set_mario_action(m, ACT_WALKING, 0);
+    //! TODO: fix this for FLOOR_ALIGNMENT
     m->marioObj->header.gfx.angle[1] += 0x8000;
     return FALSE;
 }

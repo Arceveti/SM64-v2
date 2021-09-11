@@ -727,6 +727,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
  #endif
     s32 i;
     MarioStep quarterStepResult;
+    // TODO: rotate vel to use custom up/down vector for FLOOR_ALIGNMENT & potentially gravity stuff
     for ((i = 0); (i < numSteps); (i++)) {
         intendedPos[0] = (m->pos[0] + (m->vel[0] / numSteps));
         intendedPos[1] = (m->pos[1] + (m->vel[1] / numSteps));
