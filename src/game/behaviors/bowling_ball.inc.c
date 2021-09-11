@@ -73,7 +73,7 @@ void bhv_bowling_ball_roll_loop(void) {
             spawn_mist_particles();
             spawn_mist_particles_variable(0, 0, 92.0f);
         }
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) && (o->oVelY > 5.0f)) cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1_LOWPRIO);
 }

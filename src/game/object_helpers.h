@@ -54,6 +54,9 @@ struct SpawnParticlesInfo
     /*0x10*/ f32     sizeRange;
 };
 
+// Mark an object to be unloaded at the end of the frame.
+#define obj_mark_for_deletion(obj) ((obj)->activeFlags &= ~ACTIVE_FLAG_ACTIVE)
+
 #define obj_copy_pos(  dstObj, srcObj) vec3_copy(&(dstObj)->oPosVec, &(srcObj)->oPosVec)
 #define obj_copy_angle(dstObj, srcObj) {                            \
     vec3_copy(&(dstObj)->oMoveAngleVec, &(srcObj)->oMoveAngleVec);  \
@@ -70,8 +73,8 @@ struct SpawnParticlesInfo
 // #define obj_scale(obj, scale) vec3_same((obj)->header.gfx.scale, (scale))
 // #define cur_obj_scale(scale) vec3_same(o->header.gfx.scale, (scale))
 
-#define cur_obj_enable_rendering()  (o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE)
-#define cur_obj_disable_rendering() (o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE)
+#define cur_obj_enable_rendering()  (o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE   )
+#define cur_obj_disable_rendering() (o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE   )
 #define cur_obj_unhide()            (o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE)
 #define cur_obj_hide()              (o->header.gfx.node.flags |=  GRAPH_RENDER_INVISIBLE)
 #define obj_is_hidden(obj)      ((obj)->header.gfx.node.flags &   GRAPH_RENDER_INVISIBLE)
@@ -174,7 +177,6 @@ void            cur_obj_unrender_set_action_and_anim(     s32 animIndex, ObjActi
 void            cur_obj_get_thrown_or_placed(f32 forwardVel, f32 velY, ObjAction thrownAction);
 void            cur_obj_get_dropped(void);
 Bool32          cur_obj_clear_interact_status_flag(s32 flag);
-void            obj_mark_for_deletion(struct Object *obj);
 void            cur_obj_update_floor_height(void);
 struct Surface *cur_obj_update_floor_height_and_get_floor(void);
 void            cur_obj_apply_drag_xz(f32 dragStrength);

@@ -85,7 +85,7 @@ void bhv_idle_water_wave_loop(void) {
     o->oPosY = (gMarioStates[0].waterLevel + 5.0f);
     if (!(gMarioObject->oMarioParticleFlags & ACTIVE_PARTICLE_IDLE_WATER_WAVE)) {
         gMarioObject->oActiveParticleFlags &= (u16)~ACTIVE_PARTICLE_IDLE_WATER_WAVE;
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 

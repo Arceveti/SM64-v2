@@ -60,9 +60,7 @@ void bhv_mr_i_body_loop(void) {
         o->oAnimState++;
         if (o->oAnimState == 15) o->parentObj->oMrIBlinking = FALSE;
     }
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-        obj_mark_for_deletion(o);
-    }
+    if (!(o->parentObj->activeFlags & ACTIVE_FLAG_ACTIVE)) obj_mark_for_deletion(o);
 }
 
 void mr_i_act_spin_death(void) {

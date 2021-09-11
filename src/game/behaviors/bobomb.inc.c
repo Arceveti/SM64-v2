@@ -39,7 +39,7 @@ void bobomb_act_explode(void) {
         explosion->oGraphYOffset += 100.0f;
         bobomb_spawn_coin();
         create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 
@@ -95,7 +95,7 @@ void generic_bobomb_free_loop(void) {
             if (obj_lava_death()) create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
             break;
         case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
             create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
             break;
     }
@@ -111,7 +111,7 @@ void stationary_bobomb_free_loop(void) {
             if (obj_lava_death()) create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
             break;
         case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
             create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
             break;
     }

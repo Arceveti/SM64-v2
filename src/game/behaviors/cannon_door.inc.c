@@ -8,7 +8,7 @@ void bhv_cannon_closed_init(void) {
         cannon->oBehParams2ndByte = o->oBehParams2ndByte;
         vec3_copy(&cannon->oPosVec, &o->oHomeVec);
         o->oAction     = CANNON_TRAP_DOOR_ACT_OPEN;
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 

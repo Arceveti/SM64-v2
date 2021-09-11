@@ -190,7 +190,7 @@ void bhv_bully_loop(void) {
         case BULLY_ACT_KNOCKBACK:       bully_act_knockback();      bully_step(); break;
         case BULLY_ACT_BACK_UP:         bully_act_back_up();        bully_step(); break;
         case OBJ_ACT_LAVA_DEATH:        bully_act_level_death();                  break;
-        case OBJ_ACT_DEATH_PLANE_DEATH: o->activeFlags = ACTIVE_FLAG_DEACTIVATED; break;
+        case OBJ_ACT_DEATH_PLANE_DEATH: obj_mark_for_deletion(o);                 break;
     }
     set_object_visibility(o, 3000);
 }
@@ -257,7 +257,7 @@ void bhv_big_bully_with_minions_loop(void) {
             o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
             cur_obj_become_tangible();
             break;
-        case OBJ_ACT_LAVA_DEATH:        big_bully_spawn_star();                   break;
-        case OBJ_ACT_DEATH_PLANE_DEATH: o->activeFlags = ACTIVE_FLAG_DEACTIVATED; break;
+        case OBJ_ACT_LAVA_DEATH:        big_bully_spawn_star();   break;
+        case OBJ_ACT_DEATH_PLANE_DEATH: obj_mark_for_deletion(o); break;
     }
 }

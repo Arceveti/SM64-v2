@@ -90,7 +90,7 @@ void bhv_scuttlebug_loop(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) set_obj_anim_with_accel_and_sound(SCUTTLEBUG_ANIM_WALK, 23, SOUND_OBJ2_SCUTTLEBUG_WALK);
     if (o->parentObj != o) {
         if (obj_is_hidden(o)) obj_mark_for_deletion(o);
-        if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) o->parentObj->oScuttlebugSpawnerIsDeactivated = TRUE;
+        if (!(o->activeFlags & ACTIVE_FLAG_ACTIVE)) o->parentObj->oScuttlebugSpawnerIsDeactivated = TRUE;
     }
     cur_obj_move_standard(-50);
 }

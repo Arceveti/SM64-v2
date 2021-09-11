@@ -35,12 +35,12 @@ void bhv_controllable_platform_sub_loop(void) {
     }
     o->oVelX = o->parentObj->oVelX;
     o->oVelZ = o->parentObj->oVelZ;
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if (!(o->parentObj->activeFlags & ACTIVE_FLAG_ACTIVE)) obj_mark_for_deletion(o);
 }
 
 void bhv_controllable_platform_init(void) {
     struct Object *buttonObj;
-    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformButton,    0, 51,  205, 0x0,           0x0, 0x0);
+    buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformButton,    0, 51,  205, 0x0,       0x0, 0x0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_SOUTH;
     buttonObj = spawn_object_rel_with_rot(o, MODEL_HMC_METAL_ARROW_PLATFORM, bhvControllablePlatformButton,    0, 51, -205, 0x0, -DEG(180), 0x0);
     buttonObj->oBehParams2ndByte = DIRECTION_STATE_NORTH;

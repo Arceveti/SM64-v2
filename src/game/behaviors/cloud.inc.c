@@ -86,7 +86,6 @@ static void cloud_fwoosh_update(void) {
         cur_obj_scale(o->header.gfx.scale[0]);
     }
 }
-
 /**
  * Main update function for bhvCloud. This controls the cloud's movement, when it
  * unloads, and when fwoosh blows wind.
@@ -97,13 +96,13 @@ static void cloud_act_main(void) {
     localOffsetPhase = (0x800 * gGlobalTimer);
     if (o->parentObj != o) {
         // Despawn if the parent lakitu does
-        if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
-            o->oAction = CLOUD_ACT_UNLOAD;
-        } else {
+        if (o->parentObj->activeFlags & ACTIVE_FLAG_ACTIVE) {
             o->oCloudCenterX = o->parentObj->oPosX;
             o->oCloudCenterY = o->parentObj->oPosY;
             o->oPosZ         = o->parentObj->oPosZ;
             o->oMoveAngleYaw = o->parentObj->oFaceAngleYaw;
+        } else {
+            o->oAction = CLOUD_ACT_UNLOAD;
         }
     } else if (o->oBehParams2ndByte != CLOUD_BP_FWOOSH) {
         // This code should never run, since a lakitu cloud should always have

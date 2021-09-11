@@ -9,19 +9,19 @@ void common_anchor_mario_behavior(f32 forwardVel, f32 velY, s32 flag) {
             break;
         case COMMON_ANCHOR_ACT_THROW_MARIO:
             gMarioObject->oInteractStatus |= (flag + INT_STATUS_MARIO_THROWN_BY_OBJ);
-            gMarioStates[0].forwardVel = forwardVel;
-            gMarioStates[0].vel[1]     = velY;
+            gMarioStates[0].forwardVel        = forwardVel;
+            gMarioStates[0].vel[1]            = velY;
             o->parentObj->oCommonAnchorAction = COMMON_ANCHOR_ACT_INACTIVE;
             break;
         case COMMON_ANCHOR_ACT_DROP_MARIO:
             gMarioObject->oInteractStatus |= (INT_STATUS_MARIO_THROWN_BY_OBJ + INT_STATUS_MARIO_DROPPED_BY_OBJ); // loads 2 interactions at once?
-            gMarioStates[0].forwardVel = 10.0f;
-            gMarioStates[0].vel[1]     = 10.0f;
+            gMarioStates[0].forwardVel        = 10.0f;
+            gMarioStates[0].vel[1]            = 10.0f;
             o->parentObj->oCommonAnchorAction = COMMON_ANCHOR_ACT_INACTIVE;
             break;
     }
     o->oMoveAngleYaw = o->parentObj->oMoveAngleYaw;
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) obj_mark_for_deletion(o);
+    if (!(o->parentObj->activeFlags & ACTIVE_FLAG_ACTIVE)) obj_mark_for_deletion(o);
 }
 
 void bhv_chuckya_anchor_mario_loop(void) {

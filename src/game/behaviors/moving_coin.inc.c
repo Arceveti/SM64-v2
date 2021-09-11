@@ -42,7 +42,7 @@ void moving_coin_flicker(void) {
 
 void coin_collected(void) {
     spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
-    o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    obj_mark_for_deletion(o);
 }
 
 void bhv_moving_yellow_coin_init(void) {
@@ -71,11 +71,11 @@ void bhv_moving_yellow_coin_loop(void) {
 #ifdef COIN_LAVA_FLICKER
             moving_coin_flicker();
 #else
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
 #endif
             break;
         case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
             break;
     }
 #ifdef COIN_LAVA_FLICKER
@@ -166,11 +166,11 @@ void bhv_blue_coin_sliding_loop(void) {
 #ifdef COIN_LAVA_FLICKER
             o->oAction = MOV_BCOIN_ACT_FLICKERING;
 #else
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
 #endif
             break;
         case OBJ_ACT_DEATH_PLANE_DEATH:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
             break;
     }
     if (o->oInteractStatus & INT_STATUS_INTERACTED) { /* bit 15 */

@@ -36,7 +36,7 @@ void bhv_bowser_key_loop(void) {
     }
     obj_set_hitbox(o, &sBowserKeyHitbox);
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        mark_obj_for_deletion(o);
+        obj_mark_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
     }
 #ifdef PUPPYLIGHTS

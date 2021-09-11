@@ -95,7 +95,7 @@ void water_ring_set_scale(f32 avgScale) {
 
 void water_ring_act_collected(void) {
     f32 avgScale = (((f32) o->oTimer * 0.2f) + o->oWaterRingAvgScale);
-    if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if (o->oTimer >= 21) obj_mark_for_deletion(o);
     o->oOpacity -= 10;
     if (o->oOpacity < 0) o->oOpacity = 0;
     water_ring_set_scale(avgScale);
@@ -108,7 +108,7 @@ void water_ring_act_not_collected(void) { // jet stream
         o->oOpacity -= 2;
         if (o->oOpacity < 3) {
             if ((o->oWaterRingIndex == (ringSpawner->oWaterRingMgrLastRingCollected + 1)) && (ringSpawner->oWaterRingSpawnerRingsCollected < 5)) ringSpawner->oWaterRingSpawnerRingsCollected = 0;
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
         }
     }
     water_ring_check_collection(avgScale, ringSpawner);
@@ -182,7 +182,7 @@ void manta_water_ring_act_not_collected(void) { // for manta ray
                 ringSpawner->oWaterRingSpawnerRingsCollected = 0;
                 ringManager->oWaterRingSpawnerRingsCollected = 0;
             }
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
         }
     }
     water_ring_check_collection(avgScale, ringManager);

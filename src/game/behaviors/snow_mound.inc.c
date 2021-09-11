@@ -14,7 +14,7 @@ void bhv_sliding_snow_mound_loop(void) {
             o->oVelY  = -10.0f;
             o->oPosY += o->oVelY;
             o->oPosZ  = (o->oHomeZ - 2.0f);
-            if (o->oTimer > 50) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            if (o->oTimer > 50) obj_mark_for_deletion(o);
             break;
     }
 }

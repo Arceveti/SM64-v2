@@ -21,7 +21,7 @@ void bhv_mips_init(void) {
         o->oMipsForwardVelocity = 45.0f;
     } else {
         // No MIPS stars are available, hide MIPS.
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
     o->oInteractionSubtype = INT_SUBTYPE_HOLDABLE_NPC;
     o->oGravity  = 15.0f;

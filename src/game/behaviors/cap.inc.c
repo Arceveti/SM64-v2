@@ -15,7 +15,7 @@ static struct ObjectHitbox sCapHitbox = {
 Bool32 cap_set_hitbox(void) {
     obj_set_hitbox(o, &sCapHitbox);
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
-        o->activeFlags     = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
         o->oInteractStatus = INT_STATUS_NONE;
         return TRUE;
     }
@@ -30,7 +30,7 @@ void cap_check_quicksand(void) {
     if (sObjFloor == NULL) return;
     switch (sObjFloor->type) {
         case SURFACE_DEATH_PLANE:
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
             break;
         case SURFACE_SHALLOW_QUICKSAND:
         case SURFACE_DEEP_QUICKSAND:
@@ -71,11 +71,11 @@ void cap_sink_quicksand(void) {
             break;
         case CAP_ACT_INSTANT_QUICKSAND:
             o->oGraphYOffset -= 1.0f;
-            if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            if (o->oTimer >= 21) obj_mark_for_deletion(o);
             break;
         case CAP_ACT_INSTANT_MOVING_QUICKSAND:
             o->oGraphYOffset -= 6.0f;
-            if (o->oTimer >= 21) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            if (o->oTimer >= 21) obj_mark_for_deletion(o);
             o->oFaceAnglePitch = DEG(45);
             break;
     }
@@ -186,7 +186,7 @@ void bhv_normal_cap_loop(void) {
         cap_sink_quicksand();
     }
     if ((s32) o->oForwardVel != 0) save_file_set_cap_pos(o->oPosX, o->oPosY, o->oPosZ);
-    if (o->activeFlags == ACTIVE_FLAG_DEACTIVATED) normal_cap_set_save_flags();
+    if (!(o->activeFlags & ACTIVE_FLAG_ACTIVE)) normal_cap_set_save_flags();
     if (cap_set_hitbox()) save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND);
 }
 

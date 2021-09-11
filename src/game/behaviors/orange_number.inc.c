@@ -16,11 +16,11 @@ void bhv_orange_number_loop(void) {
         if (o->oTimer == 35) {
             sparkleObj = spawn_object(o, MODEL_SPARKLES, bhvCoinSparklesSpawner);
             sparkleObj->oPosY -= 30.0f;
-            o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+            obj_mark_for_deletion(o);
         }
 #ifdef DIALOG_INDICATOR
     } else if (o->oTimer >= 1 || gMarioState->action == ACT_READING_SIGN) {
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 #endif
 }

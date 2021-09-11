@@ -7,5 +7,5 @@ void bhv_object_water_wave_init(void) {
 
 void bhv_object_water_wave_loop(void) {
     s32 globalTimer = gGlobalTimer;
-    if (!(globalTimer & 0xF)) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if (!(globalTimer & 0xF)) obj_mark_for_deletion(o);
 }

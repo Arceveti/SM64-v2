@@ -695,21 +695,6 @@ Bool32 cur_obj_clear_interact_status_flag(s32 flag) {
     return FALSE;
 }
 
-/**
- * Mark an object to be unloaded at the end of the frame.
- */
-void obj_mark_for_deletion(struct Object *obj) {
-#ifdef PUPPYLIGHTS
-    obj_disable_light(obj);
-#endif
-    //! This clears all activeFlags. Since some of these flags disable behavior,
-    //  setting it to 0 could potentially enable unexpected behavior. After an
-    //  object is marked for deletion, it still updates on that frame (I think),
-    //  so this is worth looking into.
-    obj->activeFlags &= ~ACTIVE_FLAG_ACTIVE;
-    obj->activeFlags |= ACTIVE_FLAG_DEACTIVATED;
-}
-
 void cur_obj_update_floor_height(void) {
     struct Surface *floor;
 #ifdef PLATFORM_DISPLACEMENT_2_OBJECTS
@@ -719,7 +704,7 @@ void cur_obj_update_floor_height(void) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
+    o->oFloorHeight = find_floor(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floor);
     o->platform     = ((floor != NULL) && (floor->object != 0)) ? floor->object : NULL;
 #else
     o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);

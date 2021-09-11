@@ -16,6 +16,6 @@ void bhv_object_bubble_loop(void) {
             bubbleSplash->oPosY = (bubbleY + 5.0f);
             bubbleSplash->oPosZ = o->oPosZ;
         }
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }

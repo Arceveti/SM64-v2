@@ -68,5 +68,5 @@ void bhv_pyramid_elevator_loop(void) {
 void bhv_pyramid_elevator_trajectory_marker_ball_loop(void) {
     cur_obj_scale(0.15f);
     struct Object *elevator = cur_obj_nearest_object_with_behavior(bhvPyramidElevator);
-    if ((elevator != NULL) && (elevator->oAction != PYRAMID_ELEVATOR_IDLE)) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if ((elevator != NULL) && (elevator->oAction != PYRAMID_ELEVATOR_IDLE)) obj_mark_for_deletion(o);
 }

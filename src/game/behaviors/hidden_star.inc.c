@@ -7,7 +7,7 @@ void bhv_hidden_star_init(void) {
     if (remainingTriggers == 0) {
         starObj             = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0x0, 0x0, 0x0);
         starObj->oBehParams = o->oBehParams;
-        o->activeFlags      = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
     o->oHiddenStarTriggerCounter = 5 - remainingTriggers;
 }
@@ -24,7 +24,7 @@ void bhv_hidden_star_loop(void) {
             if (o->oTimer > 2) {
                 spawn_red_coin_cutscene_star(o->oPosX, o->oPosY, o->oPosZ);
                 spawn_mist_particles();
-                o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+                obj_mark_for_deletion(o);
             }
             break;
     }
@@ -44,7 +44,7 @@ void bhv_hidden_star_trigger_loop(void) {
             play_sound(SOUND_MENU_COLLECT_SECRET + (((u8) hiddenStar->oHiddenStarTriggerCounter - 1) << 16), gGlobalSoundSource);
 #endif
         }
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 
@@ -58,7 +58,7 @@ void bhv_bowser_course_red_coin_star_loop(void) {
             if (o->oTimer > 2) {
                 spawn_no_exit_star(o->oPosX, o->oPosY, o->oPosZ);
                 spawn_mist_particles();
-                o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+                obj_mark_for_deletion(o);
             }
             break;
     }

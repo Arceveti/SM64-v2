@@ -18,7 +18,7 @@ void bhv_yoshi_init(void) {
     o->oFriction           = 0.9f;
     o->oBuoyancy           = 1.3f;
     o->oInteractionSubtype = INT_SUBTYPE_NPC;
-    if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) < 120) || sYoshiDead) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if ((save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1)) < 120) || sYoshiDead) obj_mark_for_deletion(o);
 }
 
 void yoshi_walk_loop(void) {
@@ -32,7 +32,7 @@ void yoshi_walk_loop(void) {
     if (o->oInteractStatus == INT_STATUS_INTERACTED) o->oAction = YOSHI_ACT_TALK;
     if (o->oPosY < 2100.0f) {
         create_respawner(MODEL_YOSHI, bhvYoshi, 3000);
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 
@@ -108,7 +108,7 @@ void yoshi_finish_jumping_and_despawn_loop(void) {
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
         gObjCutsceneDone = TRUE;
         sYoshiDead       = TRUE;
-        o->activeFlags   = ACTIVE_FLAG_DEACTIVATED;
+        obj_mark_for_deletion(o);
     }
 }
 

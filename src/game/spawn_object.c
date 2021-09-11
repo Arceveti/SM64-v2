@@ -281,17 +281,3 @@ struct Object *create_object(const BehaviorScript *bhvScript) {
     }
     return obj;
 }
-
-/**
- * Mark an object to be unloaded at the end of the frame.
- */
-void mark_obj_for_deletion(struct Object *obj) {
-#ifdef PUPPYLIGHTS
-    obj_disable_light(obj);
-#endif
-    //! Same issue as obj_mark_for_deletion
-#ifdef PUPPYLIGHTS
-    obj_disable_light(obj);
-#endif
-    obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
-}

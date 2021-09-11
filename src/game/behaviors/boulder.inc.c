@@ -13,7 +13,7 @@ void boulder_act_roll_loop(void) {
         spawn_mist_particles();
     }
     if (o->oForwardVel > 70.0f) o->oForwardVel = 70.0f;
-    if (o->oPosY    < -1000.0f) o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+    if (o->oPosY    < -1000.0f) obj_mark_for_deletion(o);
 }
 
 void bhv_big_boulder_loop(void) {
