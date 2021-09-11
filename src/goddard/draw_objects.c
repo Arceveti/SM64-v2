@@ -127,7 +127,7 @@ void draw_shape(struct ObjShape *shape, s32 flag, f32 c, f32 d, f32 e, // "sweep
 }
 
 void draw_shape_2d(struct ObjShape *shape, s32 flag, Vec3f in) {
-    Vec3f pos;
+    Vec3f pos = { 0.0f, 0.0f, 0.0f };
     sUpdateViewState.shapesDrawn++;
     if (shape == NULL) return;
     if (flag & 0x02) {

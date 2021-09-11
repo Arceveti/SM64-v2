@@ -6,7 +6,7 @@
 
 // geo
 extern const GeoLayout castle_courtyard_geo_000200[];
-extern const GeoLayout castle_courtyard_geo_000218[];
+extern const GeoLayout castle_courtyard_geo_area_1[];
 
 // leveldata
 extern const Gfx castle_courtyard_seg7_dl_070048B8[];

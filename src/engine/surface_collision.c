@@ -910,12 +910,12 @@ Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surfa
     vec3_copy(v0, surface->vertex1);
     vec3_copy(v1, surface->vertex2);
     vec3_copy(v2, surface->vertex3);
-    vec3_add(v0, norm);
-    vec3_add(v1, norm);
-    vec3_add(v2, norm);
+    vec3_add( v0, norm);
+    vec3_add( v1, norm);
+    vec3_add( v2, norm);
     vec3_diff(e1, v1, v0); // edge 1
     vec3_diff(e2, v2, v0); // edge 2
-    vec3f_cross(h, dir, e2);
+    vec3_cross(h, dir, e2);
     // Check if we're perpendicular from the surface
     a = vec3_dot(e1, h);
     if ((a > -NEAR_ZERO) && (a < NEAR_ZERO)) return FALSE;
@@ -924,7 +924,7 @@ Bool32 ray_surface_intersect(Vec3f orig, Vec3f dir, f32 dir_length, struct Surfa
     vec3_diff(s, orig, v0);
     u = (f * vec3_dot(s, h));
     if ((u < 0.0f) || (u > 1.0f)) return FALSE;
-    vec3f_cross(q, s, e1);
+    vec3_cross(q, s, e1);
     v = (f * vec3_dot(dir, q));
     if ((v < 0.0f) || ((u + v) > 1.0f)) return FALSE;
     // Get the length between our origin and the surface contact point

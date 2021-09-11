@@ -940,7 +940,11 @@ Bool32 init_level(void) {
     puppylights_allocate();
 #endif
 #if PUPPYPRINT_DEBUG
+#ifdef USE_CYCLES
+    append_puppyprint_log("Level loaded in %dc", (s32)(osGetTime() - first));
+#else
     append_puppyprint_log("Level loaded in %dus", (s32)(OS_CYCLES_TO_USEC(osGetTime() - first)));
+#endif
 #endif
     return TRUE;
 }

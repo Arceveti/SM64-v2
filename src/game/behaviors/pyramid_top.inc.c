@@ -30,7 +30,7 @@ void bhv_pyramid_top_spinning(void) {
     o->oPosX = (o->oHomeX + (sins(o->oTimer * 0x4000) * 40.0f));
     // At first, move upward smoothly without rotating.
     if (o->oTimer < 60) {
-        o->oPosY = o->oHomeY + absf(sins(o->oTimer * 0x2000) * 10.0f);
+        o->oPosY = (o->oHomeY + absf(sins(o->oTimer * 0x2000) * 10.0f));
     } else {
         // Then, rotate at an accelerating rate, and move upward at a constant rate.
         o->oAngleVelYaw += 0x100;
@@ -68,7 +68,7 @@ void bhv_pyramid_top_explode(void) {
         pyramidFragment->oVelY                     = ((random_float() * 80.0f) + 20.0f);
         pyramidFragment->oMoveAngleYaw             = random_u16();
         pyramidFragment->oPyramidTopFragmentsScale = 3.0f;
-        pyramidFragment->oGravity                  = ((random_float() * 2.0f) + 5.0f);
+        pyramidFragment->oGravity                  = ((random_float() *  2.0f) + 5.0f);
     }
 #ifdef SSL_PILLARS_CUTSCENE
     if (gMarioState->action & ACT_FLAG_RIDING_SHELL) disable_time_stop_including_mario();

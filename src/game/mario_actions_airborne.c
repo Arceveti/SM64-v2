@@ -511,7 +511,7 @@ Bool32 act_side_flip(struct MarioState *m) {
 Bool32 act_wall_slide(struct MarioState *m) {
     Angle wallDintendedYaw;
     f32 slideVelXModifier, slideVelZModifier;
-    f32 sideward;
+    f32 speed;
     if (m->input & INPUT_A_PRESSED) return set_mario_action(m, ACT_WALL_KICK_AIR, 0);
     if (m->input & INPUT_B_PRESSED) return set_mario_action(m, ACT_JUMP_KICK    , 0);
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND , 0);
@@ -529,13 +529,14 @@ Bool32 act_wall_slide(struct MarioState *m) {
         wallDintendedYaw = abs_angle_diff(m->wallYaw, m->intendedYaw);
         if ((m->intendedMag > 16.0f) && (wallDintendedYaw <= DEG(45))) {
             m->faceAngle[1] = m->intendedYaw;
-            m->forwardVel  *= abss(sins(wallDintendedYaw));
+            speed = sins(wallDintendedYaw);
+            m->forwardVel  *= ABSI(speed);
             return set_mario_action(m, ACT_FREEFALL, 0);
         } else {
-            sideward = ((m->intendedMag / 32.0f) * sins((Angle)(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX))) * 0.05f);
+            speed = ((m->intendedMag / 32.0f) * sins((Angle)(m->intendedYaw - atan2s(m->slideVelZ, m->slideVelX))) * 0.05f);
             move_towards_wall(m, (m->vel[1] + m->forwardVel));
-            slideVelXModifier = (m->slideVelZ * sideward);
-            slideVelZModifier = (m->slideVelX * sideward);
+            slideVelXModifier = (m->slideVelZ * speed);
+            slideVelZModifier = (m->slideVelX * speed);
             m->slideVelX     += slideVelXModifier;
             m->slideVelZ     -= slideVelZModifier;
         }

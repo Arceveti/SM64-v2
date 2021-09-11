@@ -350,7 +350,7 @@ void puppyprint_render_profiler(void) {
     if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16, 40);
 #ifdef USE_CYCLES
-        sprintf(textBytes, "CPU: %dc (%d_)#RSP: %dus (%d_)#RDP: %dc (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
+        sprintf(textBytes, "CPU: %dc (%d_)#RSP: %dc (%d_)#RDP: %dc (%d_)", (s32)cpuCount, ((s32)(cpuTime) / 333), (s32)(rspTime), ((s32)(rspTime) / 333), (s32)(rdpTime), ((s32)(rdpTime) / 333));
 #else
         sprintf(textBytes, "CPU: %dus (%d_)#RSP: %dus (%d_)#RDP: %dus (%d_)", (s32)cpuCount, ((s32)OS_CYCLES_TO_USEC(cpuTime) / 333), (s32)OS_CYCLES_TO_USEC(rspTime), ((s32)OS_CYCLES_TO_USEC(rspTime) / 333), (s32)OS_CYCLES_TO_USEC(rdpTime), ((s32)OS_CYCLES_TO_USEC(rdpTime) / 333));
 #endif
@@ -415,19 +415,19 @@ void puppyprint_render_profiler(void) {
         // Render CPU breakdown bar.
         prepare_blank_box();
         graphPos = (224 + perfPercentage[0]);
-        render_blank_box(      224, 104, graphPos, 112, 255,   0,   0, 255);
+        render_blank_box(      224, 104, graphPos, 112, 0xFF, 0x00, 0x00, 0xFF);
         prevGraph = graphPos;
         graphPos += perfPercentage[1];
-        render_blank_box(prevGraph, 104, graphPos, 112,   0,   0, 255, 255);
+        render_blank_box(prevGraph, 104, graphPos, 112, 0x00, 0x00, 0xFF, 0xFF);
         prevGraph = graphPos;
         graphPos += perfPercentage[2];
-        render_blank_box(prevGraph, 104, graphPos, 112,   0, 255,   0, 255);
+        render_blank_box(prevGraph, 104, graphPos, 112, 0x00, 0xFF, 0x00, 0xFF);
         prevGraph = graphPos;
         graphPos += perfPercentage[3];
-        render_blank_box(prevGraph, 104, graphPos, 112, 255, 255,   0, 255);
+        render_blank_box(prevGraph, 104, graphPos, 112, 0xFF, 0xFF, 0x00, 0xFF);
         prevGraph = graphPos;
         graphPos += perfPercentage[4];
-        render_blank_box(prevGraph, 104,      304, 112, 255,   0, 255, 255);
+        render_blank_box(prevGraph, 104,      304, 112, 0xFF, 0x00, 0xFF, 0xFF);
     } else if (ramViewer) {
         print_ram_overview();
     } else if (logViewer) {
@@ -531,10 +531,7 @@ void puppyprint_profiler_process(void) {
 void print_set_envcolour(s32 r, s32 g, s32 b, s32 a) { // Color types?
     if ((r != currEnv[0]) || (g != currEnv[1]) || (b != currEnv[2]) || (a != currEnv[3])) {
         gDPSetEnvColor(gDisplayListHead++, (Color)r, (Color)g, (Color)b, (Alpha)a);
-        currEnv[0] = r;
-        currEnv[1] = g;
-        currEnv[2] = b;
-        currEnv[3] = a;
+        vec4_set(currEnv, r, g, b, a);
     }
 }
 
@@ -830,11 +827,11 @@ void print_small_text(s32 x, s32 y, const char *str, s32 align, s32 amount) {
 }
 
 void render_multi_image(Texture *image, s32 x, s32 y, s32 width, s32 height, UNUSED s32 scaleX, UNUSED s32 scaleY, s32 mode) {
-    s32 posW, posH, imW, imH, peakH, maskW, maskH, cycles, num, i, modeSC, mOne;
-    i     =   0;
-    num   = 256;
-    maskW =   1;
-    maskH =   1;
+    s32 posW, posH, imW, imH, peakH, cycles, modeSC, mOne;
+    s32 i     =   0;
+    s32 num   = 256;
+    s32 maskW =   1;
+    s32 maskH =   1;
     if (mode == G_CYC_COPY) {
         gDPSetCycleType( gDisplayListHead++, mode);
         gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);

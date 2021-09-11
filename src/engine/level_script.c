@@ -285,7 +285,7 @@ static void level_cmd_load_yay0_texture(void) {
 static void level_cmd_change_area_skybox(void) { // int area, u8 *start, u8 *end) {
     u8 areaCheck = CMD_GET(s16, 2);
     gAreaSkyboxStart[areaCheck - 1] = CMD_GET(void *, 4);
-    gAreaSkyboxEnd[areaCheck - 1]   = CMD_GET(void *, 8);
+    gAreaSkyboxEnd[  areaCheck - 1] = CMD_GET(void *, 8);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -514,7 +514,7 @@ static void level_cmd_create_whirlpool(void) {
                 whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
                 gAreas[sCurrAreaIndex].whirlpools[index] = whirlpool;
             }
-            vec3s_set(whirlpool->pos, CMD_GET(s16, 4), CMD_GET(s16, 6), CMD_GET(s16, 8));
+            vec3_set(whirlpool->pos, CMD_GET(s16, 4), CMD_GET(s16, 6), CMD_GET(s16, 8));
             whirlpool->strength = CMD_GET(s16, 10);
         }
     }
@@ -585,11 +585,11 @@ static void level_cmd_unload_area(void) {
 static void level_cmd_set_mario_start_pos(void) {
     gMarioSpawnInfo->areaIndex = CMD_GET(u8, 2);
 #if IS_64_BIT
-    vec3s_set(gMarioSpawnInfo->startPos, CMD_GET(s16, 6), CMD_GET(s16, 8), CMD_GET(s16, 10));
+    vec3_set(gMarioSpawnInfo->startPos, CMD_GET(s16, 6), CMD_GET(s16, 8), CMD_GET(s16, 10));
 #else
     vec3s_copy(gMarioSpawnInfo->startPos, CMD_GET(Vec3s, 6));
 #endif
-    vec3s_set(gMarioSpawnInfo->startAngle, 0x0, (CMD_GET(s16, 4) * 0x8000 / 180), 0x0);
+    vec3_set(gMarioSpawnInfo->startAngle, 0x0, (CMD_GET(s16, 4) * 0x8000 / 180), 0x0);
     sCurrentCmd = CMD_NEXT;
 }
 

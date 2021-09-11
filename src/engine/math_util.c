@@ -118,30 +118,6 @@ inline s32 absi(s32 x) { return ((x < 0   ) ? -x : x); }
 inline f32 absf(f32 x) { return ((x < 0.0f) ? -x : x); }
 inline f64 absd(f64 x) { return ((x < 0.0 ) ? -x : x); }
 
-/***********************
- * Min/Max 3 functions *
- ***********************/
-
-/// Returns the lowest of three values.
-inline s8  min_3c (s8  a, s8  b,  s8 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline u8  min_3uc(u8  a, u8  b,  u8 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline s16 min_3s (s16 a, s16 b, s16 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline u16 min_3us(s16 a, u16 b, u16 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline s32 min_3i (s32 a, s32 b, s32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline u32 min_3ui(u32 a, u32 b, u32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline f32 min_3f (f32 a, f32 b, f32 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-inline f64 min_3d (f64 a, f64 b, f64 c) { if (b < a) a = b; if (c < a) a = c; return a; }
-
-/// Returns the highest of three values.
-inline s8  max_3c (s8  a,  s8 b,  s8 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline u8  max_3uc(u8  a,  u8 b,  u8 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline s16 max_3s (s16 a, s16 b, s16 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline u16 max_3us(u16 a, u16 b, u16 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline s32 max_3i (s32 a, s32 b, s32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline u32 max_3ui(u32 a, u32 b, u32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline f32 max_3f (f32 a, f32 b, f32 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-inline f64 max_3d (f64 a, f64 b, f64 c) { if (b > a) a = b; if (c > a) a = c; return a; }
-
 /*******************
  * Clamp functions *
  *******************/
@@ -228,7 +204,7 @@ inline f32 softClamp(f32 x, f32 a, f32 b) {
 inline Angle abs_angle_diff(Angle angle1, Angle angle2) {
     Angle diff = (angle2 - angle1);
     if (diff == -0x8000) diff = -0x7FFF;
-    return abss(diff);
+    return ABSI(diff);
 }
 
 Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown) {
@@ -294,8 +270,8 @@ f32 gd_rand_float(void) {
     sPrimarySeed += 4;
     /* Seed Switch */
     if ((sPrimarySeed ^= osGetTime()) & 0x1) {
-        temp = sPrimarySeed;
-        sPrimarySeed = sSecondarySeed;
+        temp           = sPrimarySeed;
+        sPrimarySeed   = sSecondarySeed;
         sSecondarySeed = temp;
     }
     return ((sPrimarySeed & 0xFFFF) / 65535.0f);
@@ -340,29 +316,6 @@ VEC_FUNC_ARITHMETIC( sum, add)  /// Add a vector or value to 'dst'
 VEC_FUNC_ARITHMETIC(diff, sub)  /// Subtract a vector or value from 'dst'
 VEC_FUNC_ARITHMETIC(prod, mul)  /// Multiply 'dst' with a vector or value
 VEC_FUNC_ARITHMETIC(quot, div)  /// Divide 'dst' with a vector or value
-
-/// Set vector 'dest' to (x, y, z)
-void vec2f_set(Vec2f dst, f32 x, f32 y              ) { vec2_set(dst, x, y      ); }
-void vec3c_set(Vec3c dst, s8  x, s8  y, s8  z       ) { vec3_set(dst, x, y, z   ); }
-void vec3s_set(Vec3s dst, s16 x, s16 y, s16 z       ) { vec3_set(dst, x, y, z   ); }
-void vec3i_set(Vec3i dst, s32 x, s32 y, s32 z       ) { vec3_set(dst, x, y, z   ); }
-void vec3f_set(Vec3f dst, f32 x, f32 y, f32 z       ) { vec3_set(dst, x, y, z   ); }
-void vec4f_set(Vec4f dst, f32 x, f32 y, f32 z, f32 w) { vec4_set(dst, x, y, z, w); }
-
-/// Convert char vector 'src' to vector 'dst'
-void vec3c_to_vec3s(Vec3s dst, Vec3c src) { vec3_copy(dst, src); }
-void vec3c_to_vec3i(Vec3i dst, Vec3c src) { vec3_copy(dst, src); }
-void vec3c_to_vec3f(Vec3f dst, Vec3c src) { vec3_copy(dst, src); }
-
-/// Convert short vector 'src' to vector 'dst'
-void vec3s_to_vec3c(Vec3c dst, Vec3s src) { vec3_copy(dst, src); }
-void vec3s_to_vec3i(Vec3i dst, Vec3s src) { vec3_copy(dst, src); }
-void vec3s_to_vec3f(Vec3f dst, Vec3s src) { vec3_copy(dst, src); }
-
-/// Convert int vector 'src' to vector 'dst'
-void vec3i_to_vec3c(Vec3c dst, Vec3i src) { vec3_copy(dst, src); }
-void vec3i_to_vec3s(Vec3s dst, Vec3i src) { vec3_copy(dst, src); }
-void vec3i_to_vec3f(Vec3f dst, Vec3i src) { vec3_copy(dst, src); }
 
 /// Convert float vector 'src' to vector 'dst' by rounding the components to the nearest integer.
 void vec3f_to_vec3c(Vec3c dst, Vec3f src) { vec3_copy_roundf(dst, src); }
@@ -540,16 +493,9 @@ void vec3f_set_dist_and_angle(Vec3f from, Vec3f to, f32 dist, Angle pitch, Angle
     to[2] = (from[2] + (  dc * coss(yaw  )));
 }
 
-/// Make vector 'dest' the cross product of vectors a and b.
-void vec3f_cross(Vec3f dest, Vec3f a, Vec3f b) {
-    dest[0] = ((a[1] * b[2]) - (a[2] * b[1]));
-    dest[1] = ((a[2] * b[0]) - (a[0] * b[2]));
-    dest[2] = ((a[0] * b[1]) - (a[1] * b[0]));
-}
-
 /**
  * Set 'dest' the normal vector of a triangle with vertices a, b and c.
- * It is similar to vec3f_cross, but it calculates the vectors (c-b) and (b-a)
+ * It is similar to vec3_cross, but it calculates the vectors (c-b) and (b-a)
  * at the same time.
  */
 void find_vector_perpendicular_to_plane(Vec3f dest, Vec3f a, Vec3f b, Vec3f c) {
@@ -698,9 +644,9 @@ void mtxf_lookat(Mat4 mtx, Vec3f from, Vec3f to, Angle roll) {
     colY[2] = (-sr * dx);
     vec3_diff(colZ, to, from);
     vec3f_normalize_negative(colZ);
-    vec3f_cross(colX, colY, colZ);
+    vec3_cross(colX, colY, colZ);
     vec3f_normalize(colX);
-    vec3f_cross(colY, colZ, colX);
+    vec3_cross(colY, colZ, colX);
     vec3f_normalize(colY);
     mtx[0][0] = colX[0];
     mtx[1][0] = colX[1];
@@ -881,18 +827,16 @@ void mtxf_billboard(Mat4 dest, Mat4 mtx, Vec3f position, Angle roll, s32 zOffset
  */
 void mtxf_align_terrain_normal(Mat4 dest, Vec3f upDir, Vec3f pos, Angle yaw) {
     Vec3f lateralDir, leftDir, forwardDir;
-    vec3_set(                                   lateralDir, sins(yaw), 0x0, coss(yaw));
-    vec3f_normalize(                     upDir                                       );
-    vec3f_cross(                leftDir, upDir, lateralDir                           );
-    vec3f_normalize(            leftDir                                              );
-    vec3f_cross(    forwardDir, leftDir, upDir                                       );
-    vec3f_normalize(forwardDir                                                       );
+    vec3_set(lateralDir, sins(yaw), 0x0, coss(yaw));
+    vec3f_normalize(upDir);
+    vec3_cross(leftDir, upDir, lateralDir);
+    vec3f_normalize(leftDir);
+    vec3_cross(forwardDir, leftDir, upDir);
+    vec3f_normalize(forwardDir);
     vec3_copy(dest[0], leftDir);
-    dest[3][0] = pos[0];
     vec3_copy(dest[1], upDir);
-    dest[3][1] = pos[1];
     vec3_copy(dest[2], forwardDir);
-    dest[3][2] = pos[2];
+    vec3_copy(dest[3], pos);
     MTXF_END(dest);
 }
 
@@ -923,14 +867,14 @@ void mtxf_align_terrain_triangle(Mat4 mtx, Vec3f pos, Angle yaw, f32 radius) {
     if ((point0[1] - pos[1]) < minY) point0[1] = pos[1];
     if ((point1[1] - pos[1]) < minY) point1[1] = pos[1];
     if ((point2[1] - pos[1]) < minY) point2[1] = pos[1];
-    avgY = ((point0[1] + point1[1] + point2[1]) / 3.0f);
+    avgY = average_3(point0[1], point1[1], point2[1]);
     vec3_set(forward, sins(yaw), 0, coss(yaw));
     find_vector_perpendicular_to_plane(yColumn, point0, point1, point2);
-    vec3f_normalize(                   yColumn                        );
-    vec3f_cross(              xColumn, yColumn, forward               );
-    vec3f_normalize(          xColumn                                 );
-    vec3f_cross(     zColumn, xColumn, yColumn                        );
-    vec3f_normalize( zColumn                                          );
+    vec3f_normalize(yColumn);
+    vec3_cross(xColumn, yColumn, forward);
+    vec3f_normalize(xColumn);
+    vec3_cross(zColumn, xColumn, yColumn);
+    vec3f_normalize(zColumn);
     vec3_copy(mtx[0], xColumn);
     vec3_copy(mtx[1], yColumn);
     vec3_copy(mtx[2], zColumn);
@@ -973,43 +917,6 @@ void mtxf_scale_self_vec3f(Mat4 mtx, Vec3f vec) {
 }
 
 /**
- * Multiply a vector by a matrix of the form
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | 0 0 0 1 |
- * i.e. a matrix representing a linear transformation over 3 space.
- */
-void linear_mtxf_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
-    dst[0] = ((mtx[0][0] * v[0]) + (mtx[1][0] * v[1]) + (mtx[2][0] * v[2]));
-    dst[1] = ((mtx[0][1] * v[0]) + (mtx[1][1] * v[1]) + (mtx[2][1] * v[2]));
-    dst[2] = ((mtx[0][2] * v[0]) + (mtx[1][2] * v[1]) + (mtx[2][2] * v[2]));
-}
-
-void linear_mtxf_mul_vec3f_and_translate(Mat4 mtx, Vec3f dst, Vec3f v) {
-    dst[0] = ((mtx[0][0] * v[0]) + (mtx[1][0] * v[1]) + (mtx[2][0] * v[2]) + mtx[3][0]);
-    dst[1] = ((mtx[0][1] * v[0]) + (mtx[1][1] * v[1]) + (mtx[2][1] * v[2]) + mtx[3][1]);
-    dst[2] = ((mtx[0][2] * v[0]) + (mtx[1][2] * v[1]) + (mtx[2][2] * v[2]) + mtx[3][2]);
-    //? why is this different? When used in mtxf_mul, it makes held objects teleport somewhere:
-    // linear_mtxf_mul_vec3f(mtx, dst, v);
-    // vec3_add(dst, mtx[3]);
-}
-
-/**
- * Multiply a vector by the transpose of a matrix of the form
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | ? ? ? 0 |
- * | 0 0 0 1 |
- * i.e. a matrix representing a linear transformation over 3 space.
- */
-void linear_mtxf_transpose_mul_vec3f(Mat4 mtx, Vec3f dst, Vec3f v) {
-    dst[0] = vec3_dot(mtx[0], v);
-    dst[1] = vec3_dot(mtx[1], v);
-    dst[2] = vec3_dot(mtx[2], v);
-}
-
-/**
  * Multiply a vector with a transformation matrix, which applies the transformation
  * to the point. Note that the bottom row is assumed to be [0, 0, 0, 1], which is
  * true for transformation matrices if the translation has a w component of 1.
@@ -1028,8 +935,6 @@ void linear_mtxf_self_mul_vec3f_self(Mat4 mtx, Vec3f b) {
 /// Transforms a vec3f, rotating with the main 3x3 portion of the mat4f and translating with the 4th column.
 void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b) {
     Vec3f tmp;
-    // linear_mtxf_mul_vec3f(mtx, tmp, b);
-    // vec3_sum(b, tmp, mtx[3]);
     linear_mtxf_mul_vec3f_and_translate(mtx, tmp, b);
     vec3_copy(b, tmp);
 }

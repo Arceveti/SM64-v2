@@ -503,10 +503,7 @@ void bounce_back_from_attack(struct MarioState *m, MarioInteraction interaction)
 }
 
 u32 should_push_or_pull_door(struct MarioState *m, struct Object *o) {
-    Angle yaw;
-    vec3f_get_yaw(m->pos, &o->oPosVec, &yaw);
-    yaw = abs_angle_diff(o->oMoveAngleYaw, yaw);
-    return ((yaw <= DEG(90)) ? 0x00000001 : 0x00000002); //! names
+    return ((abs_angle_diff(o->oMoveAngleYaw, vec3_yaw(m->pos, &o->oPosVec)) <= DEG(90)) ? 0x00000001 : 0x00000002); //! names
 }
 
 u32 take_damage_from_interact_object(struct MarioState *m) {

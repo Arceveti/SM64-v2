@@ -5,7 +5,7 @@
 
 // geo
 extern const GeoLayout vcutm_geo_seesaw[];
-extern const GeoLayout vcutm_geo_000208[];
+extern const GeoLayout vcutm_geo_area_1[];
 
 // leveldata
 extern const Gfx vcutm_seg7_dl_07007E88[];

@@ -15,7 +15,7 @@ extern const GeoLayout ssl_geo_spindel[];
 extern const GeoLayout ssl_geo_moving_pyramid_wall[];
 extern const GeoLayout ssl_geo_pyramid_elevator[];
 extern const GeoLayout ssl_geo_area_2[];
-extern const GeoLayout ssl_geo_00088C[];
+extern const GeoLayout ssl_geo_area_3[];
 
 // leveldata
 extern const Texture ssl_pyramid_sand[];

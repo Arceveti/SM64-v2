@@ -96,11 +96,11 @@ void eye_joint_update_func(struct ObjJoint *self) {
 
 /* 23D748 -> 23D818; orig name: func_8018EF78 */
 void set_joint_vecs(struct ObjJoint *j, Vec3f pos) {
-    vec3f_copy(j->worldPos,       pos);
-    vec3f_copy(j->pos,            pos);
-    vec3f_copy(j->relPos,         pos);
-    vec3f_copy(j->initPos,        pos);
-    vec3f_copy(j->rotationMtx[3], pos);
+    vec3_copy(j->worldPos,       pos);
+    vec3_copy(j->pos,            pos);
+    vec3_copy(j->relPos,         pos);
+    vec3_copy(j->initPos,        pos);
+    vec3_copy(j->rotationMtx[3], pos);
 }
 
 /* 23D818 -> 23DA18 */

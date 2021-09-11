@@ -691,8 +691,9 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     vec3_copy(node->lerpPos[1], node->lerpTrans);
     vec3_copy(node->lerpPos[2], node->lerpTrans);
     if (gCurAnimType == ANIM_TYPE_ROTATION) {
-        vec3s_set(node->lerpRot[0], gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)],
-        gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)], gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)]);
+        vec3_set(node->lerpRot[0], gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)],
+                                   gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)],
+                                   gCurAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)]);
         vec3_copy(node->lerpRot[1], node->lerpRot[0]);
         vec3_copy(node->lerpRot[2], node->lerpRot[0]);
     } else {

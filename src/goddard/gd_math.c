@@ -54,7 +54,7 @@ void gd_absrot_mat4(Mat4 mtx, s32 axisnum, f32 ang) {
  */
 void gd_create_rot_matrix(Mat4 *mtx, Vec3f vec, f32 s, f32 c) {
     Vec3f rev, srev;
-    vec3f_copy_inverse(rev, vec);
+    vec3_copy_inverse(rev, vec);
     vec3_copy(srev, rev);
     vec3_mul_val(srev, s);
     register f32 oneMinusCos = (1.0f - c);

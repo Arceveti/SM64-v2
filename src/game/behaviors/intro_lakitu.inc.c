@@ -144,7 +144,7 @@ void bhv_intro_lakitu_loop(void) {
                 approach_f32_asymptotic_bool(&o->oForwardVel, -10.0f, 0.05f);
                 o->oMoveAngleYaw   += 0x78;
                 o->oMoveAnglePitch += 0x40;
-                vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
+                targetYaw = vec3_yaw(toPoint, gCamera->pos);
                 o->oFaceAngleYaw    = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, 0x200);
             }
             if (o->oTimer > 105) {
@@ -157,7 +157,7 @@ void bhv_intro_lakitu_loop(void) {
         case INTRO_LAKITU_ACT_CUTSCENE_END_WAVING_3:
             vec3_copy(toPoint, &o->oPosVec);
             approach_f32_asymptotic_bool(&o->oForwardVel, 60.0f, 0.05f);
-            vec3f_get_yaw(toPoint, gCamera->pos, &targetYaw);
+            targetYaw = vec3_yaw(toPoint, gCamera->pos);
             o->oFaceAngleYaw   = approach_s16_symmetric(o->oFaceAngleYaw, targetYaw, 0x200);
             if (o->oTimer < 62) o->oMoveAngleYaw = approach_s16_asymptotic(o->oMoveAngleYaw, 0x1800, 0x1E);
             o->oMoveAnglePitch = approach_s16_symmetric(o->oMoveAnglePitch, -0x2000, 0x5A);

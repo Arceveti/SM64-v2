@@ -1,5 +1,5 @@
 // 0x0E0009D0
-const GeoLayout rr_geo_0009D0[] = {
+const GeoLayout rr_geo_area_1[] = {
    GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),

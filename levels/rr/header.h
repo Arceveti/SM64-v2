@@ -40,7 +40,7 @@ extern const GeoLayout rr_geo_tricky_triangles_frame_1[];
 extern const GeoLayout rr_geo_tricky_triangles_frame_2[];
 extern const GeoLayout rr_geo_tricky_triangles_frame_3[];
 extern const GeoLayout rr_geo_tricky_triangles_frame_4[];
-extern const GeoLayout rr_geo_0009D0[];
+extern const GeoLayout rr_geo_area_1[];
 
 // leveldata
 extern const Gfx dl_cruiser_metal_holes[];

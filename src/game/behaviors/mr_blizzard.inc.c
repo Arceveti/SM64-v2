@@ -307,7 +307,6 @@ static void mr_blizzard_act_jump(void) {
 
 void bhv_mr_blizzard_update(void) {
     cur_obj_update_floor_and_walls();
-
     // Behavior loop
     switch (o->oAction) {
         case MR_BLIZZARD_ACT_SPAWN_SNOWBALL:   mr_blizzard_act_spawn_snowball();   break;

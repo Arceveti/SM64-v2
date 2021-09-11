@@ -36,6 +36,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - PSS Painting uses painting data instead of being part of the level model (Arceveti) *
 
 **Optimizations:**
+- Uses -Ofast compiler flag
 - Most doubles are now floats where the extra percision isn't needed (Arceveti)
 - Almost all unused code/data from the Goddard folder is removed (Arceveti)
 - find_floor only checks static surfaces when checking for rooms (Arceveti)
@@ -43,6 +44,7 @@ This is a fork of HackerSM64 by Reonu, with the following additional features, f
 - Optimized some models to use the expanded vertex buffer in newer f3d versions (Arceveti)
 - Optimized DDD Bowser's Submarine collision model (Arceveti)
 - Many stubbed/unused/duplicate functions/variables are removed (Arceveti)
+- Many functions replaced by #define versions to reduce function call overhead (Arceveti)
 - More particles use OBJ_LIST_UNIMPORTANT so they can be unloaded when needed (Arceveti) *
 - Use the floor's normal for alignment instead of a triangle of find_floor if the floor isn't steep (Arceveti) *
 - Many smaller optimizations/bugfixes (Arceveti)

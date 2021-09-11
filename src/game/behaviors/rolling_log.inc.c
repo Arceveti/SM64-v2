@@ -59,8 +59,8 @@ void bhv_rolling_log_loop(void) {
     o->oForwardVel = (o->oAngleVelPitch / 0x40);
     o->oVelX       = (o->oForwardVel * sins(o->oMoveAngleYaw));
     o->oVelZ       = (o->oForwardVel * coss(o->oMoveAngleYaw));
-    o->oPosX += o->oVelX;
-    o->oPosZ += o->oVelZ;
+    o->oPosX      += o->oVelX;
+    o->oPosZ      += o->oVelZ;
     if (o->oRollingLogMaxDist < (sqr(o->oPosX - o->oRollingLogX) + sqr(o->oPosZ - o->oRollingLogZ))) {
         o->oForwardVel = 0.0f;
         o->oPosX       = prevX;

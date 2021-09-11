@@ -510,8 +510,9 @@ Bool32 act_ledge_grab(struct MarioState *m) {
         if (nextFloor != NULL) {
             m->pos[0] = nextX;
             m->pos[2] = nextZ;
-            accel *= ABSF(sidewaysSpeed);
-            if ((m->actionTimer % (u32)absf(sidewaysSpeed * 2.0f)) == 0) {
+            sidewaysSpeed = ABSF(sidewaysSpeed);
+            accel *= sidewaysSpeed;
+            if ((m->actionTimer % (u32)(sidewaysSpeed * 2.0f)) == 0) {
                 play_sound((SOUND_MOVING_TERRAIN_SLIDE + m->terrainSoundAddend), m->marioObj->header.gfx.cameraToObject);
                 m->particleFlags |= PARTICLE_DUST;
             }

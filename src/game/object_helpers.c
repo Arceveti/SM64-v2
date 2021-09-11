@@ -216,10 +216,8 @@ Bool32 cur_obj_rotate_yaw_toward(Angle target, Angle increment) {
     return ((o->oAngleVelYaw = (Angle)((Angle) o->oMoveAngleYaw - startYaw)) == 0);
 }
 
-Angle obj_angle_to_object(struct Object *obj1, struct Object *obj2) {
-    Angle yaw;
-    vec3f_get_yaw(&obj1->oPosVec, &obj2->oPosVec, &yaw);
-    return yaw;
+Angle obj_angle_to_object(struct Object *obj1, struct Object *obj2) { //! redundant?
+    return vec3_yaw(&obj1->oPosVec, &obj2->oPosVec);
 }
 
 Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angleIndex, Angle turnAmount) {
@@ -229,7 +227,7 @@ Angle obj_turn_toward_object(struct Object *obj, struct Object *target, s16 angl
         case O_MOVE_ANGLE_PITCH_INDEX: // fall through
         case O_FACE_ANGLE_PITCH_INDEX: vec3f_get_pitch(&target->oPosVec, &obj->oPosVec, &targetAngle); break; //! intentionally inverted?
         case O_MOVE_ANGLE_YAW_INDEX:   // fall through
-        case O_FACE_ANGLE_YAW_INDEX:   vec3f_get_yaw(  &obj->oPosVec, &target->oPosVec, &targetAngle); break;
+        case O_FACE_ANGLE_YAW_INDEX:   targetAngle = vec3_yaw(&obj->oPosVec, &target->oPosVec); break;
     }
     o->rawData.asU32[angleIndex] = approach_s16_symmetric(startAngle, targetAngle, turnAmount);
     return targetAngle;
@@ -516,8 +514,7 @@ struct Object *find_nearest_obj_with_behavior_from_yaw(const BehaviorScript *beh
     obj            = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
         if ((obj->behavior == behaviorAddr) && (obj->activeFlags != ACTIVE_FLAG_DEACTIVATED)) {
-            Angle objYaw;
-            vec3f_get_yaw(pos, &obj->oPosVec, &objYaw);
+            Angle objYaw = vec3_yaw(pos, &obj->oPosVec);
             UAngle objDYaw = abs_angle_diff(lookYaw, objYaw);
             if (objDYaw < minDYaw) {
                 closestObj = obj;
@@ -1202,10 +1199,8 @@ void obj_set_pos_relative(struct Object *obj, struct Object *other, f32 dleft, f
     obj->oMoveAngleYaw = other->oMoveAngleYaw;
 }
 
-Angle cur_obj_angle_to_home(void) {
-    Angle yaw;
-    vec3f_get_yaw(&o->oPosVec, &o->oHomeVec, &yaw);
-    return yaw;
+Angle cur_obj_angle_to_home(void) { //! redunant?
+    return vec3_yaw(&o->oPosVec, &o->oHomeVec);
 }
 
 void obj_set_gfx_pos_at_obj_pos(struct Object *obj1, struct Object *obj2) {

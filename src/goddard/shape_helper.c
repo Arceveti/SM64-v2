@@ -53,8 +53,8 @@ void calc_face_normal(struct ObjFace *face) {
 struct ObjVertex *gd_make_vertex(Vec3s pos) {
     struct ObjVertex *vtx = (struct ObjVertex *) make_object(OBJ_TYPE_VERTICES);
     vtx->id          = 0xD1D4; //?
-    vec3s_to_vec3f(vtx->pos,     pos);
-    vec3s_to_vec3f(vtx->initPos, pos);
+    vec3_copy(vtx->pos,     pos);
+    vec3_copy(vtx->initPos, pos);
     vtx->scaleFactor = 1.0f;
     vtx->gbiVerts    = NULL;
     vtx->alpha       = 1.0f;

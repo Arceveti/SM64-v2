@@ -17,7 +17,7 @@
 #include "levels/totwc/header.h"
 
 static const LevelScript script_func_local_1[] = {
-    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   0, -2047, 10, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvCapSwitch),
+    OBJECT(/*model*/ MODEL_CAP_SWITCH, /*pos*/   0, -2048, 10, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvCapSwitch),
     RETURN(),
 };
 
@@ -28,22 +28,22 @@ static const LevelScript script_func_local_2[] = {
 
 const LevelScript level_totwc_entry[] = {
     INIT_LEVEL(),
-    LOAD_YAY0(        /*seg*/ 0x07, _totwc_segment_7SegmentRomStart, _totwc_segment_7SegmentRomEnd),
+    LOAD_YAY0(        /*seg*/ 0x07,         _totwc_segment_7SegmentRomStart,         _totwc_segment_7SegmentRomEnd),
     LOAD_YAY0(        /*seg*/ 0x0A, _cloud_floor_skybox_yay0SegmentRomStart, _cloud_floor_skybox_yay0SegmentRomEnd),
-    LOAD_YAY0_TEXTURE(/*seg*/ 0x09, _sky_yay0SegmentRomStart, _sky_yay0SegmentRomEnd),
-    LOAD_YAY0(        /*seg*/ 0x05, _group8_yay0SegmentRomStart, _group8_yay0SegmentRomEnd),
-    LOAD_RAW(         /*seg*/ 0x0C, _group8_geoSegmentRomStart,  _group8_geoSegmentRomEnd),
-    LOAD_YAY0(        /*seg*/ 0x08, _common0_yay0SegmentRomStart, _common0_yay0SegmentRomEnd),
-    LOAD_RAW(         /*seg*/ 0x0F, _common0_geoSegmentRomStart,  _common0_geoSegmentRomEnd),
+    LOAD_YAY0_TEXTURE(/*seg*/ 0x09,                _sky_yay0SegmentRomStart,                _sky_yay0SegmentRomEnd),
+    LOAD_YAY0(        /*seg*/ 0x05,             _group8_yay0SegmentRomStart,             _group8_yay0SegmentRomEnd),
+    LOAD_RAW(         /*seg*/ 0x0C,              _group8_geoSegmentRomStart,              _group8_geoSegmentRomEnd),
+    LOAD_YAY0(        /*seg*/ 0x08,            _common0_yay0SegmentRomStart,            _common0_yay0SegmentRomEnd),
+    LOAD_RAW(         /*seg*/ 0x0F,             _common0_geoSegmentRomStart,             _common0_geoSegmentRomEnd),
     ALLOC_LEVEL_POOL(),
     MARIO(/*model*/ MODEL_MARIO, /*behParam*/ 0x00000001, /*beh*/ bhvMario),
     JUMP_LINK(script_func_global_1),
     JUMP_LINK(script_func_global_9),
     LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_03, totwc_geo_000160),
 
-    AREA(/*index*/ 1, totwc_geo_000188),
-        OBJECT(/*model*/ MODEL_NONE, /*pos*/ -4095, 2935, 0, /*angle*/ 0, 90, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvFlyingWarp),
-        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_TOTWC, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
+    AREA(/*index*/ 1, totwc_geo_area_1),
+        OBJECT(/*model*/ MODEL_NONE, /*pos*/ -4096, 2935, 0, /*angle*/ 0, 90, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvFlyingWarp),
+        WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_TOTWC,  /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF3, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x20, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x26, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x23, /*flags*/ WARP_NO_CHECKPOINT),
@@ -57,8 +57,8 @@ const LevelScript level_totwc_entry[] = {
     END_AREA(),
 
     FREE_LEVEL_POOL(),
-    MARIO_POS(/*area*/ 1, /*yaw*/ 90, /*pos*/ -4095, 2935, 0),
-    CALL(/*arg*/ 0, /*func*/ lvl_init_or_update),
+    MARIO_POS(/*area*/ 1, /*yaw*/ 90, /*pos*/ -4096, 2935, 0),
+    CALL(     /*arg*/ 0, /*func*/ lvl_init_or_update),
     CALL_LOOP(/*arg*/ 1, /*func*/ lvl_init_or_update),
     CLEAR_LEVEL(),
     SLEEP_BEFORE_EXIT(/*frames*/ 1),

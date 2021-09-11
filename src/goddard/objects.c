@@ -498,10 +498,10 @@ void move_animator(struct ObjAnimator *animObj) {
                 animData3s16 = (s16(*)[3]) animData->data;
                 // keep current object scale
                 d_get_scale(currTransform.scale);
-                vec3f_copy(nextTransform.scale, currTransform.scale);
+                vec3_copy(nextTransform.scale, currTransform.scale);
                 // keep current object position
                 d_get_init_pos(currTransform.pos);
-                vec3f_copy(nextTransform.pos, currTransform.pos);
+                vec3_copy(nextTransform.pos, currTransform.pos);
                 // use animation rotation
                 vec3_prod_val(currTransform.rotate, animData3s16[currKeyFrame], scale);
                 vec3_prod_val(nextTransform.rotate, animData3s16[nextKeyFrame], scale);
@@ -511,45 +511,45 @@ void move_animator(struct ObjAnimator *animObj) {
                 animData3s16 = (s16(*)[3]) animData->data;
                 // keep current object scale
                 d_get_scale(currTransform.scale);
-                vec3f_copy(nextTransform.scale, currTransform.scale);
+                vec3_copy(nextTransform.scale, currTransform.scale);
                 // keep current object rotation
                 d_get_init_rot(currTransform.rotate);
-                vec3f_copy(nextTransform.rotate, currTransform.rotate);
+                vec3_copy(nextTransform.rotate, currTransform.rotate);
                 // use animation position
-                vec3s_to_vec3f(currTransform.pos, animData3s16[currKeyFrame]);
-                vec3s_to_vec3f(nextTransform.pos, animData3s16[nextKeyFrame]);
+                vec3_copy(currTransform.pos, animData3s16[currKeyFrame]);
+                vec3_copy(nextTransform.pos, animData3s16[nextKeyFrame]);
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_ROT3S_POS3S: // data = s16(*)[6] - rotation and position
                 animData6s16 = (s16(*)[6]) animData->data;
                 // keep current object scale
                 d_get_scale(currTransform.scale);
-                vec3f_copy(nextTransform.scale, currTransform.scale);
+                vec3_copy(nextTransform.scale, currTransform.scale);
                 // use animation rotation
                 vec3_prod_val(currTransform.rotate, animData6s16[currKeyFrame], scale);
                 vec3_prod_val(nextTransform.rotate, animData6s16[nextKeyFrame], scale);
                 // use animation position
-                vec3s_to_vec3f(currTransform.pos, &animData6s16[currKeyFrame][3]);
-                vec3s_to_vec3f(nextTransform.pos, &animData6s16[nextKeyFrame][3]);
+                vec3_copy(currTransform.pos, &animData6s16[currKeyFrame][3]);
+                vec3_copy(nextTransform.pos, &animData6s16[nextKeyFrame][3]);
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_SCALE3S_POS3S_ROT3S: // data = s16(*)[9] - scale, position, and rotation
                 animData9s16 = (s16(*)[9]) animData->data;
                 vec3_prod_val( currTransform.scale,  &animData9s16[currKeyFrame][0], scale);
                 vec3_prod_val( currTransform.rotate, &animData9s16[currKeyFrame][3], scale);
-                vec3s_to_vec3f(currTransform.pos,    &animData9s16[currKeyFrame][6]       );
+                vec3_copy(currTransform.pos,    &animData9s16[currKeyFrame][6]       );
                 vec3_prod_val( nextTransform.scale,  &animData9s16[nextKeyFrame][0], scale);
                 vec3_prod_val( nextTransform.rotate, &animData9s16[nextKeyFrame][3], scale);
-                vec3s_to_vec3f(nextTransform.pos,    &animData9s16[nextKeyFrame][6]       );
+                vec3_copy(nextTransform.pos,    &animData9s16[nextKeyFrame][6]       );
                 interpolate_animation_transform(&currTransform, &nextTransform, dt);
                 break;
             case GD_ANIM_CAMERA_EYE3S_LOOKAT3S: // s16(*)[6]?
                 if (linkedObj->type == OBJ_TYPE_CAMERAS) {
                     animDataCam = animData->data;
-                    vec3s_to_vec3f(currTransform.pos, &animDataCam[currKeyFrame][0]); // eye position
-                    vec3s_to_vec3f(nextTransform.pos, &animDataCam[nextKeyFrame][3]); // lookat position, was currKeyFrame
-                    vec3f_copy(((struct ObjCamera *) linkedObj)->worldPos, currTransform.pos);
-                    vec3f_copy(((struct ObjCamera *) linkedObj)->lookAt,   nextTransform.pos);
+                    vec3_copy(currTransform.pos, &animDataCam[currKeyFrame][0]); // eye position
+                    vec3_copy(nextTransform.pos, &animDataCam[nextKeyFrame][3]); // lookat position, was currKeyFrame
+                    vec3_copy(((struct ObjCamera *) linkedObj)->worldPos, currTransform.pos);
+                    vec3_copy(((struct ObjCamera *) linkedObj)->lookAt,   nextTransform.pos);
                 }
                 break;
             case GD_ANIM_SCALE3F_ROT3F_POS3F: // scale, rotation, and position (as floats)
@@ -566,7 +566,7 @@ void move_animator(struct ObjAnimator *animObj) {
                 mtxf_identity(localMtx);
                 mtxf_scale_self_vec3f( localMtx, triPtr->scale );
                 gd_rot_mat_about_vec3f(localMtx, triPtr->rotate);
-                vec3f_add(localMtx[3], triPtr->pos);
+                vec3_add(localMtx[3], triPtr->pos);
                 d_set_i_matrix(&localMtx);
                 break;
             case GD_ANIM_STUB: //!?
@@ -656,7 +656,7 @@ void move_camera(struct ObjCamera *cam) {
         if (ctrl->cup   ) cam->rotationAngle[0] += cam->rotationSpeeds[0];
         if (ctrl->cdown ) cam->rotationAngle[0] -= cam->rotationSpeeds[0];
         clamp_f32(&cam->rotationAngle[0], -80.0f, 80.0f);
-        vec3f_copy(cam->curZoomPosition, cam->zoomPositions[cam->zoomLevel]);
+        vec3_copy(cam->curZoomPosition, cam->zoomPositions[cam->zoomLevel]);
         gd_rot_2d_vec( cam->rotationAngle[0], &cam->curZoomPosition[1], &cam->curZoomPosition[2]); // pitch
         gd_rot_2d_vec(-cam->rotationAngle[1], &cam->curZoomPosition[0], &cam->curZoomPosition[2]); // yaw
         cam->relPos[0] += ((cam->curZoomPosition[0] - cam->relPos[0]) * cam->multiplier);
@@ -666,7 +666,7 @@ void move_camera(struct ObjCamera *cam) {
         mtxf_identity(idMtx);
     }
     mtxf_mul(cam->transformMtx, idMtx, cam->transformMtx);
-    vec3f_copy(nextPos, cam->relPos);
+    vec3_copy(nextPos, cam->relPos);
     linear_mtxf_mul_vec3f(cam->transformMtx, cam->worldPos, nextPos);
     vec3f_add(cam->worldPos, worldPos);
 }

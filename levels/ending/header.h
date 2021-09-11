@@ -4,7 +4,7 @@
 #include "types.h"
 
 // geo
-extern const GeoLayout ending_geo_000050[];
+extern const GeoLayout ending_geo_area_1[];
 
 // leveldata
 extern const Gfx dl_cake_end_screen[];

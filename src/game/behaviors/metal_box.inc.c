@@ -17,8 +17,8 @@ Bool32 check_if_moving_over_floor(f32 maxDist, f32 offset) {
     struct Surface *floor;
     f32 xPos        = (o->oPosX + (sins(o->oMoveAngleYaw) * offset));
     f32 zPos        = (o->oPosZ + (coss(o->oMoveAngleYaw) * offset));
-    f32 floorHeight = find_floor(xPos, (o->oPosY + OBJ_STEP_HEIGHT), zPos, &floor);
-    return (absf(floorHeight - o->oPosY) < maxDist);
+    f32 floorHeight = (find_floor(xPos, (o->oPosY + OBJ_STEP_HEIGHT), zPos, &floor) - o->oPosY);
+    return (ABSF(floorHeight) < maxDist);
 }
 
 void bhv_pushable_loop(void) {

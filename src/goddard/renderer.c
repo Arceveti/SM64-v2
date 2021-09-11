@@ -1262,7 +1262,7 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
         lightDir[1] = (s8)sLightDirections[i][1];
         lightDir[2] = (s8)sLightDirections[i][2];
         // 801A141C
-        vec3i_to_vec3c(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir, lightDir);
+        vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir, lightDir);
         // 801A14C4
         gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), (i + 1));
     }

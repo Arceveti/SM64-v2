@@ -5,7 +5,7 @@
 
 // geo
 extern const GeoLayout totwc_geo_000160[];
-extern const GeoLayout totwc_geo_000188[];
+extern const GeoLayout totwc_geo_area_1[];
 
 // leveldata
 extern const Gfx totwc_seg7_dl_07005D28[];

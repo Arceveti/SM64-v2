@@ -148,6 +148,10 @@ extern Vec3f gVec3fZ;
 #define cube(x)             ( sqr(x) * (x))
 #define quad(x)             (cube(x) * (x))
 
+#define average_2(a, b      )   (((a) + (b)            ) / 2.0f)
+#define average_3(a, b, c   )   (((a) + (b) + (c)      ) / 3.0f)
+#define average_4(a, b, c, d)   (((a) + (b) + (c) + (d)) / 4.0f)
+
 #define vec2_same(v, s)     (((v)[0]) = ((v)[1])                       = (s))
 #define vec3_same(v, s)     (((v)[0]) = ((v)[1]) = ((v)[2])            = (s))
 #define vec4_same(v, s)     (((v)[0]) = ((v)[1]) = ((v)[2]) = ((v)[3]) = (s))
@@ -172,9 +176,49 @@ extern Vec3f gVec3fZ;
 #define vec3_mag(v)         (sqrtf(vec3_sumsq(v)))
 #define vec4_mag(v)         (sqrtf(vec4_sumsq(v)))
 
+#define vec3_yaw(from, to)  (atan2s(((to)[2] - (from)[2]), ((to)[0] - (from)[0])))
+
 #define vec2_dot(a, b)       (((a)[0] * (b)[0]) + ((a)[1] * (b)[1]))
 #define vec3_dot(a, b)      (vec2_dot((a), (b)) + ((a)[2] * (b)[2]))
 #define vec4_dot(a, b)      (vec3_dot((a), (b)) + ((a)[3] * (b)[3]))
+
+/// Make vector 'dest' the cross product of vectors a and b.
+#define vec3_cross(dst, a, b) {                         \
+    (dst)[0] = (((a)[1] * (b)[2]) - ((a)[2] * (b)[1])); \
+    (dst)[1] = (((a)[2] * (b)[0]) - ((a)[0] * (b)[2])); \
+    (dst)[2] = (((a)[0] * (b)[1]) - ((a)[1] * (b)[0])); \
+}
+
+/**
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | ? ? ? 0 |
+ * | 0 0 0 1 |
+ * i.e. a matrix representing a linear transformation over 3 space.
+ */
+// Multiply a vector by a matrix of the form
+#define linear_mtxf_mul_vec3f(mtx, dstV, srcV) {                                                    \
+    (dstV)[0] = (((mtx)[0][0] * (srcV)[0]) + ((mtx)[1][0] * (srcV)[1]) + ((mtx)[2][0] * (srcV)[2]));\
+    (dstV)[1] = (((mtx)[0][1] * (srcV)[0]) + ((mtx)[1][1] * (srcV)[1]) + ((mtx)[2][1] * (srcV)[2]));\
+    (dstV)[2] = (((mtx)[0][2] * (srcV)[0]) + ((mtx)[1][2] * (srcV)[1]) + ((mtx)[2][2] * (srcV)[2]));\
+}
+
+//? why is this different? When used in mtxf_mul, it makes held objects teleport somewhere:
+// #define linear_mtxf_mul_vec3f_and_translate(mtx, dstV, srcV) {  
+//     linear_mtxf_mul_vec3f((mtx), (dstV), (srcV));               
+//     vec3_add((dstV), (mtx)[3]);                                 
+// }
+#define linear_mtxf_mul_vec3f_and_translate(mtx, dstV, srcV) {                                                      \
+    (dstV)[0] = (((mtx)[0][0] * (srcV)[0]) + ((mtx)[1][0] * (srcV)[1]) + ((mtx)[2][0] * (srcV)[2]) + (mtx)[3][0]);  \
+    (dstV)[1] = (((mtx)[0][1] * (srcV)[0]) + ((mtx)[1][1] * (srcV)[1]) + ((mtx)[2][1] * (srcV)[2]) + (mtx)[3][1]);  \
+    (dstV)[2] = (((mtx)[0][2] * (srcV)[0]) + ((mtx)[1][2] * (srcV)[1]) + ((mtx)[2][2] * (srcV)[2]) + (mtx)[3][2]);  \
+}
+// Multiply a vector by the transpose of a matrix of the form
+#define linear_mtxf_transpose_mul_vec3f(mtx, dstV, srcV) {  \
+    (dstV)[0] = vec3_dot((mtx)[0], (srcV));                 \
+    (dstV)[1] = vec3_dot((mtx)[1], (srcV));                 \
+    (dstV)[2] = vec3_dot((mtx)[2], (srcV));                 \
+}
 
 #define vec2_set(dst, x, y) {           \
     (dst)[0] = (x);                     \
@@ -546,24 +590,6 @@ f32  absf(f32 x);
 f64  absd(f64 x);
 // Square Root
 f64  sqrtd(f64 x);
-// min_3
-s8   min_3c( s8  a, s8  b,  s8 c);
-u8   min_3uc(u8  a, u8  b,  u8 c);
-s16  min_3s( s16 a, s16 b, s16 c);
-u16  min_3us(s16 a, u16 b, u16 c);
-s32  min_3i( s32 a, s32 b, s32 c);
-u32  min_3ui(u32 a, u32 b, u32 c);
-f32  min_3f( f32 a, f32 b, f32 c);
-f64  min_3d( f64 a, f64 b, f64 c);
-// max_3
-s8   max_3c( s8  a,  s8 b,  s8 c);
-u8   max_3uc(u8  a,  u8 b,  u8 c);
-s16  max_3s( s16 a, s16 b, s16 c);
-u16  max_3us(u16 a, u16 b, u16 c);
-s32  max_3i( s32 a, s32 b, s32 c);
-u32  max_3ui(u32 a, u32 b, u32 c);
-f32  max_3f( f32 a, f32 b, f32 c);
-f64  max_3d( f64 a, f64 b, f64 c);
 // Clamp
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
@@ -593,22 +619,7 @@ VEC_FUNC_DECLARATION_ARITHMETIC( sum, add)
 VEC_FUNC_DECLARATION_ARITHMETIC(diff, sub)
 VEC_FUNC_DECLARATION_ARITHMETIC(prod, mul)
 VEC_FUNC_DECLARATION_ARITHMETIC(quot, div)
-void vec2f_set(       Vec2f dst, f32 x, f32 y              );
-void vec3c_set(       Vec3c dst, s8  x, s8  y, s8  z       );
-void vec3s_set(       Vec3s dst, s16 x, s16 y, s16 z       );
-void vec3i_set(       Vec3i dst, s32 x, s32 y, s32 z       );
-void vec3f_set(       Vec3f dst, f32 x, f32 y, f32 z       );
-void vec4f_set(       Vec4f dst, f32 x, f32 y, f32 z, f32 w);
 
-void vec3c_to_vec3s(     Vec3s dst, Vec3c src);
-void vec3c_to_vec3i(     Vec3i dst, Vec3c src);
-void vec3c_to_vec3f(     Vec3f dst, Vec3c src);
-void vec3s_to_vec3c(     Vec3c dst, Vec3s src);
-void vec3s_to_vec3i(     Vec3i dst, Vec3s src);
-void vec3s_to_vec3f(     Vec3f dst, Vec3s src);
-void vec3i_to_vec3c(     Vec3c dst, Vec3i src);
-void vec3i_to_vec3s(     Vec3s dst, Vec3i src);
-void vec3i_to_vec3f(     Vec3f dst, Vec3i src);
 void vec3f_to_vec3c(     Vec3c dst, Vec3f src);
 void vec3f_to_vec3s(     Vec3s dst, Vec3f src);
 void vec3f_to_vec3i(     Vec3i dst, Vec3f src);
@@ -639,7 +650,6 @@ void vec3f_get_dist_and_angle(                 Vec3f from, Vec3f to, f32 *dist, 
 void vec3s_set_dist_and_angle(                 Vec3s from, Vec3s to, s16  dist,                   Angle  pitch, Angle  yaw);
 void vec3f_set_dist_and_angle(                 Vec3f from, Vec3f to, f32  dist,                   Angle  pitch, Angle  yaw);
 
-void vec3f_cross(                        Vec3f dest, Vec3f a, Vec3f b);
 void find_vector_perpendicular_to_plane( Vec3f dest, Vec3f a, Vec3f b, Vec3f c);
 void vec3f_rotate(                        Mat4 mat, Vec3f in, Vec3f out);
 void vec3f_transform(                     Mat4 mat, Vec3f in, f32 w, Vec3f out);
@@ -667,9 +677,6 @@ void mtxf_scale_vec3f(                    Mat4 dest, Mat4 mtx, Vec3f s);
 void mtxf_scale_self_vec3f(               Mat4  mtx, Vec3f vec);
 void linear_mtxf_self_mul_vec3f_self(         Mat4 mtx, Vec3f b);
 void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b);
-void linear_mtxf_mul_vec3f(               Mat4  mtx, Vec3f dst, Vec3f v);
-void linear_mtxf_mul_vec3f_and_translate( Mat4  mtx, Vec3f dst, Vec3f v);
-void linear_mtxf_transpose_mul_vec3f(     Mat4  mtx, Vec3f dst, Vec3f v);
 void mtxf_to_mtx(                         Mtx *dest, Mat4 src);
 void get_pos_from_transform_mtx(         Vec3f dest, Mat4 objMtx, Mat4 camMtx);
 void create_transformation_from_matrices( Mat4  dst, Mat4 a1, Mat4 a2);

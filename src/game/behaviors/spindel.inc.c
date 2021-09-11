@@ -48,7 +48,7 @@ void bhv_spindel_loop(void) {
         }
         o->oPosZ += o->oVelZ;
         o->oMoveAnglePitch += o->oAngleVelPitch;
-        if ((absf(o->oMoveAnglePitch & 0x1fff) < 800.0f) && (o->oAngleVelPitch != 0x0)) cur_obj_play_sound_2(SOUND_GENERAL2_SPINDEL_ROLL);
+        if ((absf(o->oMoveAnglePitch & 0x1FFF) < 800.0f) && (o->oAngleVelPitch != 0x0)) cur_obj_play_sound_2(SOUND_GENERAL2_SPINDEL_ROLL);
         homeYOffset = (sins(o->oMoveAnglePitch * 4) * 23.0f);
         if (homeYOffset < 0.0f) homeYOffset *= -1.0f;
         o->oPosY = (o->oHomeY + homeYOffset);

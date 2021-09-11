@@ -35,7 +35,7 @@ extern const GeoLayout bits_geo_staircase_1[];
 extern const GeoLayout bits_geo_staircase_2[];
 extern const GeoLayout bits_geo_staircase_3[];
 extern const GeoLayout bits_geo_staircase_4[];
-extern const GeoLayout bits_geo_000718[];
+extern const GeoLayout bits_geo_area_1[];
 
 // leveldata
 extern const Gfx bits_seg7_dl_07002918[];

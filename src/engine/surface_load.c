@@ -184,10 +184,10 @@ static CellIndex upper_cell_index(s32 coord) {
  */
 static void add_surface(struct Surface *surface, s32 dynamic) {
     register CellIndex cellZ, cellX;
-    register const s32       minX     = min_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s32       minZ     = min_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
-    register const s32       maxX     = max_3s(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
-    register const s32       maxZ     = max_3s(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s32       minX     = min_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32       minZ     = min_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
+    register const s32       maxX     = max_3(surface->vertex1[0], surface->vertex2[0], surface->vertex3[0]);
+    register const s32       maxZ     = max_3(surface->vertex1[2], surface->vertex2[2], surface->vertex3[2]);
     register const CellIndex minCellX = lower_cell_index(minX);
     register const CellIndex maxCellX = upper_cell_index(maxX);
     register const CellIndex minCellZ = lower_cell_index(minZ);
@@ -231,8 +231,8 @@ static struct Surface *read_surface_data(Collision *vertexData, Collision **vert
     // why does this only use the first vertex?
     surface->originOffset = -vec3_dot(n, v1);
 
-    surface->lowerY = (min_3i(v1[1], v2[1], v3[1]) - 5);
-    surface->upperY = (max_3i(v1[1], v2[1], v3[1]) + 5);
+    surface->lowerY = (min_3(v1[1], v2[1], v3[1]) - 5);
+    surface->upperY = (max_3(v1[1], v2[1], v3[1]) + 5);
 
     return surface;
 }
@@ -474,14 +474,11 @@ void transform_object_vertices(Collision **data, Collision *vertexData) {
         v[2] = *(vertices++);
         //! No bounds check on vertex data
         if ((v[0] == 0) && (v[1] == 0) && (v[2] == 0)) {
-            *vertexData++ = (Collision)(m[3][0]);
-            *vertexData++ = (Collision)(m[3][1]);
-            *vertexData++ = (Collision)(m[3][2]);
+            vec3_copy(vertexData, m[3]);
         } else {
-            *vertexData++ = (Collision)((v[0] * m[0][0]) + (v[1] * m[1][0]) + (v[2] * m[2][0]) + m[3][0]);
-            *vertexData++ = (Collision)((v[0] * m[0][1]) + (v[1] * m[1][1]) + (v[2] * m[2][1]) + m[3][1]);
-            *vertexData++ = (Collision)((v[0] * m[0][2]) + (v[1] * m[1][2]) + (v[2] * m[2][2]) + m[3][2]);
+            linear_mtxf_mul_vec3f_and_translate(m, vertexData, v);
         }
+        vertexData += 3;
     }
     *data = vertices;
 }
@@ -508,7 +505,7 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
             surface->object = o;
             surface->type   = surfaceType;
 #ifdef ALL_SURFACES_HAVE_FORCE
-            surface->force = *(*data + 3);
+            surface->force  = *(*data + 3);
 #else
             surface->force  = (hasForce ? *(*data + 3) : 0);
 #endif

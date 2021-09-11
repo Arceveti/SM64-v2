@@ -1,5 +1,5 @@
 // 0x0E00088C
-const GeoLayout ssl_geo_00088C[] = {
+const GeoLayout ssl_geo_area_3[] = {
    GEO_NODE_SCREEN_AREA(10, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2), (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2)),
    GEO_OPEN_NODE(),
       GEO_ZBUFFER(0),
