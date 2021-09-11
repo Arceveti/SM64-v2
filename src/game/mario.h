@@ -55,7 +55,10 @@ Bool32 check_common_hold_action_exits(       struct MarioState *m);
 Bool32 transition_submerged_to_walking(      struct MarioState *m);
 Bool32 transition_submerged_to_airborne(     struct MarioState *m);
 Bool32 set_water_plunge_action(              struct MarioState *m);
-Bool32 execute_mario_action(          UNUSED struct Object     *o);
+Bool32 execute_mario_action(                 struct MarioState *m);
+#ifdef VARIABLE_FRAMERATE
+void   debug_print_speed_action_normal(      struct MarioState *m);
+#endif
 void   init_mario(void);
 void   init_mario_from_save_file(void);
 

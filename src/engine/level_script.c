@@ -30,10 +30,10 @@
 #include "game/puppycam2.h"
 #endif
 #if PUPPYPRINT_DEBUG
-#include "string.h"
 #include "game/puppyprint.h"
 #endif
 #ifdef PUPPYLIGHTS
+#include "string.h"
 #include "game/puppylights.h"
 #endif
 

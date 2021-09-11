@@ -41,12 +41,14 @@ OSThread gMainThread;
 OSThread gGameLoopThread;
 OSThread gSoundThread;
 #ifdef VARIABLE_FRAMERATE
+OSThread gInputLoopThread;
 OSThread gGraphicsLoopThread;
 #endif
 
 OSIoMesg gDmaIoMesg;
 OSMesg   gMainReceivedMesg;
 #ifdef VARIABLE_FRAMERATE
+OSMesg gInputReceivedMesg;
 OSMesg gVideoReceivedMesg;
 #endif
 
@@ -68,7 +70,8 @@ struct VblankHandler *gVblankHandler1 = NULL;
 struct VblankHandler *gVblankHandler2 = NULL;
 struct VblankHandler *gVblankHandler3 = NULL;
 #ifdef VARIABLE_FRAMERATE
-struct VblankHandler *gVblankHandler4 = NULL;
+struct VblankHandler *gVblankHandler7 = NULL;
+struct VblankHandler *gVblankHandler9 = NULL;
 #endif
 struct SPTask *gActiveSPTask          = NULL;
 struct SPTask *sCurrentAudioSPTask    = NULL;
@@ -254,7 +257,8 @@ void handle_vblank(void) {
     if (gVblankHandler2 != NULL) osSendMesg(gVblankHandler2->queue, gVblankHandler2->msg, OS_MESG_NOBLOCK);
     if (gVblankHandler3 != NULL) osSendMesg(gVblankHandler3->queue, gVblankHandler3->msg, OS_MESG_NOBLOCK);
 #ifdef VARIABLE_FRAMERATE
-    if (gVblankHandler4 != NULL) osSendMesg(gVblankHandler4->queue, gVblankHandler4->msg, OS_MESG_NOBLOCK);
+    if (gVblankHandler7 != NULL) osSendMesg(gVblankHandler7->queue, gVblankHandler7->msg, OS_MESG_NOBLOCK);
+    if (gVblankHandler9 != NULL) osSendMesg(gVblankHandler9->queue, gVblankHandler9->msg, OS_MESG_NOBLOCK);
 #endif
 }
 
@@ -341,6 +345,7 @@ void thread3_main(UNUSED void *arg) {
 #endif
     osStartThread(&gGameLoopThread);
 #ifdef VARIABLE_FRAMERATE
+    create_thread(&gInputLoopThread,    7, thread7_input_loop,    NULL, (gThread7Stack + 0x2000), 7);
     create_thread(&gGraphicsLoopThread, 9, thread9_graphics_loop, NULL, (gThread9Stack + 0x2000), 5);
 #endif
     while (TRUE) {
@@ -364,7 +369,8 @@ void set_vblank_handler(s32 index, struct VblankHandler *handler, OSMesgQueue *q
         case 2: gVblankHandler2 = handler; break;
         case 3: gVblankHandler3 = handler; break;
 #ifdef VARIABLE_FRAMERATE
-        case 4: gVblankHandler4 = handler; break;
+        case 7: gVblankHandler7 = handler; break;
+        case 9: gVblankHandler9 = handler; break;
 #endif
     }
 }

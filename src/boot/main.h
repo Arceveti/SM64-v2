@@ -4,8 +4,9 @@
 #include "config.h"
 
 #ifdef VARIABLE_FRAMERATE
+extern OSThread gInputLoopThread;
 extern OSThread gGraphicsLoopThread;
-// extern struct VblankHandler *gVblankHandler4;
+extern OSMesg gInputReceivedMesg;
 extern OSMesg gVideoReceivedMesg;
 #endif
 

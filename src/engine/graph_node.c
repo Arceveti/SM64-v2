@@ -170,13 +170,13 @@ init_graph_node_translation_rotation(struct AllocOnlyPool *pool,
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION_ROTATION);
         vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
-        Vec3s temp[3];
-        vec3_copy(temp[0], translation);
-        vec3_copy(temp[1], translation);
-        vec3_copy(temp[2], translation);
-        vec3_to_vec3f(graphNode->lerpPos[0], translation);
-        vec3_to_vec3f(graphNode->lerpPos[1], translation);
-        vec3_to_vec3f(graphNode->lerpPos[2], translation);
+        // Vec3s temp[3];
+        // vec3_copy(temp[0], translation);
+        // vec3_copy(temp[1], translation);
+        // vec3_copy(temp[2], translation);
+        vec3_copy(graphNode->lerpPos[0], translation);
+        vec3_copy(graphNode->lerpPos[1], translation);
+        vec3_copy(graphNode->lerpPos[2], translation);
         vec3_copy(graphNode->rotation,   rotation);
         vec3_copy(graphNode->lerpRot[0], rotation);
         vec3_copy(graphNode->lerpRot[1], rotation);
@@ -202,10 +202,10 @@ struct GraphNodeTranslation *init_graph_node_translation(struct AllocOnlyPool *p
         init_scene_graph_node_links(&graphNode->node, GRAPH_NODE_TYPE_TRANSLATION);
         vec3_copy(graphNode->translation, translation);
 #ifdef VARIABLE_FRAMERATE
-        Vec3s temp[3];
-        vec3_copy(temp[0], translation);
-        vec3_copy(temp[1], translation);
-        vec3_copy(temp[2], translation);
+        // Vec3s temp[3];
+        // vec3_copy(temp[0], translation);
+        // vec3_copy(temp[1], translation);
+        // vec3_copy(temp[2], translation);
         vec3_copy(graphNode->lerpPos[0], translation);
         vec3_copy(graphNode->lerpPos[1], translation);
         vec3_copy(graphNode->lerpPos[2], translation);

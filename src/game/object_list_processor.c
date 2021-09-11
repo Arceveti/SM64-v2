@@ -272,7 +272,7 @@ extern Lights1 mario_brown2_lights_group;
  */
 void bhv_mario_update(void) {
     s32 i;
-    u32 particleFlags = execute_mario_action(o);
+    u32 particleFlags = execute_mario_action(gMarioState);
     o->oMarioParticleFlags = particleFlags;
     // Mario code updates MarioState's versions of position etc, so we need
     // to sync it with the Mario object

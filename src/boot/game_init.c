@@ -101,6 +101,7 @@ s8 gSramProbe;
 OSMesgQueue gGameVblankQueue;
 OSMesgQueue gGfxVblankQueue;
 #ifdef VARIABLE_FRAMERATE
+OSMesgQueue gInputVblankQueue;
 OSMesgQueue gVideoVblankQueue;
 #endif
 OSMesg       gGameMesgBuf[1];
@@ -112,6 +113,7 @@ OSMesg      gVideoMesgBuf[1];
 // Vblank Handler
 struct VblankHandler gGameVblankHandler;
 #ifdef VARIABLE_FRAMERATE
+struct VblankHandler gInputVblankHandler;
 struct VblankHandler gVideoVblankHandler;
 #endif
 
@@ -153,7 +155,11 @@ struct DemoInput  gRecordedDemoInput = { 0 };
  */
 void init_rdp(void) {
     gDPPipeSync(         gDisplayListHead++);
+#ifdef DISABLE_AA
     gDPPipelineMode(     gDisplayListHead++, G_PM_NPRIMITIVE);
+#else
+    gDPPipelineMode(     gDisplayListHead++, G_PM_1PRIMITIVE);
+#endif
 
     gDPSetScissor(       gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     gDPSetCombineMode(   gDisplayListHead++, G_CC_SHADE, G_CC_SHADE);
@@ -463,6 +469,7 @@ void display_and_vsync(void) {
 #endif
 }
 
+#ifndef DISABLE_DEMO
 // this function records distinct inputs over a 255-frame interval to RAM locations and was likely
 // used to record the demo sequences seen in the final game. This function is unused.
 UNUSED static void record_demo(void) {
@@ -489,30 +496,6 @@ UNUSED static void record_demo(void) {
     gRecordedDemoInput.timer++;
 }
 
-/**
- * Take the updated controller struct and calculate the new x, y, and distance floats.
- */
-void adjust_analog_stick(struct Controller *controller) {
-    // Reset the controller's x and y floats.
-    controller->stickX = 0;
-    controller->stickY = 0;
-    // Modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
-    if (controller->rawStickX <= -8) controller->stickX = (controller->rawStickX + 6);
-    if (controller->rawStickX >=  8) controller->stickX = (controller->rawStickX - 6);
-    if (controller->rawStickY <= -8) controller->stickY = (controller->rawStickY + 6);
-    if (controller->rawStickY >=  8) controller->stickY = (controller->rawStickY - 6);
-    // Calculate f32 magnitude from the center by vector length.
-    controller->stickMag = sqrtf(sqr(controller->stickX) + sqr(controller->stickY));
-    // Magnitude cannot exceed 64.0f: if it does, modify the values
-    // appropriately to flatten the values down to the allowed maximum value.
-    if (controller->stickMag >  64) {
-        controller->stickX  *= (64 / controller->stickMag);
-        controller->stickY  *= (64 / controller->stickMag);
-        controller->stickMag =  64;
-    }
-}
-
-#ifndef DISABLE_DEMO
 /**
  * If a demo sequence exists, this will run the demo input list until it is complete.
  */
@@ -563,10 +546,35 @@ void run_demo_inputs(void) {
 #endif
 
 /**
+ * Take the updated controller struct and calculate the new x, y, and distance floats.
+ */
+void adjust_analog_stick(struct Controller *controller) {
+    // Reset the controller's x and y floats.
+    controller->stickX = 0;
+    controller->stickY = 0;
+    // Modulate the rawStickX and rawStickY to be the new f32 values by adding/subtracting 6.
+    if (controller->rawStickX <= -8) controller->stickX = (controller->rawStickX + 6);
+    if (controller->rawStickX >=  8) controller->stickX = (controller->rawStickX - 6);
+    if (controller->rawStickY <= -8) controller->stickY = (controller->rawStickY + 6);
+    if (controller->rawStickY >=  8) controller->stickY = (controller->rawStickY - 6);
+    // Calculate f32 magnitude from the center by vector length.
+    controller->stickMag = sqrtf(sqr(controller->stickX) + sqr(controller->stickY));
+    // Magnitude cannot exceed 64.0f: if it does, modify the values
+    // appropriately to flatten the values down to the allowed maximum value.
+    if (controller->stickMag >  64) {
+        controller->stickX  *= (64 / controller->stickMag);
+        controller->stickY  *= (64 / controller->stickMag);
+        controller->stickMag =  64;
+    }
+}
+
+/**
  * Update the controller struct with available inputs if present.
  */
 void read_controller_inputs(void) {
+#ifndef VARIABLE_FRAMERATE
     s32 i;
+#endif
     // If any controllers are plugged in, update the controller information.
     if (gControllerBits) {
         osRecvMesg(&gSIEventMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
@@ -578,15 +586,20 @@ void read_controller_inputs(void) {
 #ifndef DISABLE_DEMO
     run_demo_inputs();
 #endif
+#ifdef VARIABLE_FRAMERATE
+}
+
+void uptate_controller_inputs(void) {
+#endif
     for ((i = 0); (i < 2); (i++)) {
         struct Controller *controller = &gControllers[i];
         // if we're receiving inputs, update the controller struct with the new button info.
         if (controller->controllerData != NULL) {
-            controller->rawStickX     = controller->controllerData->stick_x;
-            controller->rawStickY     = controller->controllerData->stick_y;
-            controller->buttonPressed = controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown);
+            controller->rawStickX     =  controller->controllerData->stick_x;
+            controller->rawStickY     =  controller->controllerData->stick_y;
+            controller->buttonPressed = (controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown));
             // 0.5x A presses are a good meme
-            controller->buttonDown = controller->controllerData->button;
+            controller->buttonDown    =  controller->controllerData->button;
             adjust_analog_stick(controller);
         } else { // otherwise, if the controllerData is NULL, 0 out all of the inputs.
             controller->rawStickX     = 0;
@@ -662,10 +675,11 @@ void setup_game_memory(void) {
     osCreateMesgQueue(&gGfxVblankQueue,   gGfxMesgBuf,  ARRAY_COUNT( gGfxMesgBuf));
     osCreateMesgQueue(&gGameVblankQueue,  gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
 #ifdef VARIABLE_FRAMERATE
+    osCreateMesgQueue(&gInputVblankQueue, gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
     osCreateMesgQueue(&gVideoVblankQueue, gGameMesgBuf, ARRAY_COUNT(gGameMesgBuf));
 #endif
     // Setup z buffer and framebuffer
-    gPhysicalZBuffer = VIRTUAL_TO_PHYSICAL(gZBuffer);
+    gPhysicalZBuffer         = VIRTUAL_TO_PHYSICAL(gZBuffer);
     gPhysicalFrameBuffers[0] = VIRTUAL_TO_PHYSICAL(gFrameBuffer0);
     gPhysicalFrameBuffers[1] = VIRTUAL_TO_PHYSICAL(gFrameBuffer1);
     gPhysicalFrameBuffers[2] = VIRTUAL_TO_PHYSICAL(gFrameBuffer2);
@@ -689,18 +703,20 @@ void setup_game_memory(void) {
 void thread5_game_loop(UNUSED void *arg) {
     struct LevelCommand *addr;
 #if PUPPYPRINT_DEBUG
-    OSTime lastTime  = 0;
+    OSTime lastTime    = 0;
 #endif
 #ifdef VARIABLE_FRAMERATE
-    OSTime prevtime  = 0;
-    OSTime deltatime = 0;
-    s32 startThread  = 0;
+    OSTime prevtime    = 0;
+    OSTime deltatime   = 0;
+    Bool32 startThread = FALSE;
 #endif
     setup_game_memory();
 #if ENABLE_RUMBLE
     init_rumble_pak_scheduler_queue();
 #endif
+#ifndef VARIABLE_FRAMERATE
     init_controllers();
+#endif
 #if ENABLE_RUMBLE
     create_thread_6();
 #endif
@@ -741,6 +757,12 @@ void thread5_game_loop(UNUSED void *arg) {
             behaviourTime[perfIteration] = 0;
             dmaTime[perfIteration]       = 0;
 #endif
+#ifdef VARIABLE_FRAMERATE
+            deltatime = (osGetTime() - prevtime);
+            lDelta    = (1 / (deltatime * (SECONDS_PER_CYCLE)));
+            prevtime  = osGetTime();
+            audio_game_loop_tick();
+#else
             // If any controllers are plugged in, start read the data for when
             // read_controller_inputs is called later.
             if (gControllerBits) {
@@ -749,16 +771,14 @@ void thread5_game_loop(UNUSED void *arg) {
 #endif
                 osContStartReadData(&gSIEventMesgQueue);
             }
-#ifdef VARIABLE_FRAMERATE
-            deltatime = (osGetTime() - prevtime);
-            lDelta    = (1 / (deltatime * (SECONDS_PER_CYCLE)));
-            prevtime  = osGetTime();
-            audio_game_loop_tick();
-#else
             audio_game_loop_tick();
             select_gfx_pool();
 #endif
+#ifdef VARIABLE_FRAMERATE
+            uptate_controller_inputs();
+#else
             read_controller_inputs();
+#endif
             addr = level_script_execute(addr);
 #if /*PUPPYPRINT_DEBUG == 0 &&*/ defined(VISUAL_DEBUG)
             debug_box_input();
@@ -779,11 +799,14 @@ void thread5_game_loop(UNUSED void *arg) {
         puppyprint_profiler_process();
 #endif
 #ifdef VARIABLE_FRAMERATE
-        if (!startThread) osStartThread(&gGraphicsLoopThread);
+        if (!startThread) {
+            osStartThread(&gInputLoopThread);
+            osStartThread(&gGraphicsLoopThread);
+        }
         startThread = TRUE;
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-        gGlobalTimer++; //! Wasn't in Fazana's repo? no idea where this gets incremented otherwise
+        gGlobalTimer++; //! Wasn't in Fazana's repo. no idea where this gets incremented otherwise
 #else
         display_and_vsync();
         // when debug info is enabled, print the "BUF %07d" information.
@@ -801,17 +824,34 @@ void thread5_game_loop(UNUSED void *arg) {
 }
 
 #ifdef VARIABLE_FRAMERATE
+void thread7_input_loop(UNUSED void *arg) {
+    init_controllers();
+    set_vblank_handler(7, &gInputVblankHandler, &gInputVblankQueue, (OSMesg) 1);
+    while (TRUE) {
+        // If any controllers are plugged in, start read the data for when
+        // read_controller_inputs is called later.
+        if (gControllerBits) {
+#if ENABLE_RUMBLE
+            block_until_rumble_pak_free();
+#endif
+            osContStartReadData(&gSIEventMesgQueue);
+        }
+        read_controller_inputs();
+        osRecvMesg(&gInputVblankQueue, &gInputReceivedMesg, OS_MESG_BLOCK);
+    }
+}
+
 void thread9_graphics_loop(UNUSED void *arg) {
     OSTime prevtime  = 0;
     OSTime deltatime = 0;
 #ifdef PUPPYPRINT
     OSTime lastTime  = 0;
 #endif
-    set_vblank_handler(4, &gVideoVblankHandler, &gVideoVblankQueue, (OSMesg) 1);
+    set_vblank_handler(9, &gVideoVblankHandler, &gVideoVblankQueue, (OSMesg) 1);
     render_init();
-    while(TRUE) {
+    while (TRUE) {
 #ifdef PUPPYPRINT
-        while(TRUE) {
+        while (TRUE) {
             lastTime   = osGetTime();
 #endif
             deltatime  = (osGetTime() - prevtime);

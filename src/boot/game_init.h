@@ -17,6 +17,7 @@
 #endif
 
 #ifdef VARIABLE_FRAMERATE
+extern void thread7_input_loop(   UNUSED void *arg);
 extern void thread9_graphics_loop(UNUSED void *arg);
 extern f32 gMoveSpeed;
 #endif

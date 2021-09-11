@@ -20,6 +20,7 @@ ALIGNED8 u8 gThread5Stack[0x2000];
 ALIGNED8 u8 gThread6Stack[0x2000];
 #endif
 #ifdef VARIABLE_FRAMERATE
+ALIGNED8 u8 gThread7Stack[0x2000];
 ALIGNED8 u8 gThread9Stack[0x2000];
 #endif
 // 0x400 bytes

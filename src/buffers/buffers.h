@@ -22,6 +22,7 @@ extern u8 gThread5Stack[];
 extern u8 gThread6Stack[];
 #endif
 #ifdef VARIABLE_FRAMERATE
+extern u8 gThread7Stack[];
 extern u8 gThread9Stack[];
 #endif
 

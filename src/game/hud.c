@@ -20,6 +20,9 @@
 #if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
+#ifdef DEBUG_INFO
+#include "mario.h"
+#endif
 
 #include "config.h"
 
@@ -609,8 +612,11 @@ void render_hud(void) {
 #ifdef CUSTOM_DEBUG
         if (gCustomDebugMode) render_debug_mode();
 #endif
+#if defined(DEBUG_INFO) && defined(VARIABLE_FRAMERATE)
+        debug_print_speed_action_normal(gMarioState);
+#endif
 #if PUPPYPRINT_DEBUG
-    print_set_envcolour(255,255,255,255);
+    print_set_envcolour(255, 255, 255, 255);
 #endif
     }
 }
