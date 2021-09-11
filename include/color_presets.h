@@ -152,7 +152,7 @@
 #define COLOR_RGBA32_DEBUG_HITBOX           0x800000FF // 128   0   0 255
 #define COLOR_RGBA32_DEBUG_HURTBOX          0x8FF00000 // 143 240   0   0
 #define COLOR_RGBA32_DEBUG_PUPPYVOLUME      0x0000FF00 //   0   0 255   0
-#define COLOR_RGBA32_DEBUG_LIGHT            0x00FF0040 //   0 255 255  64
+#define COLOR_RGBA32_DEBUG_LIGHT            0x08FF00FF //   8 255   0 255
 
 
 // Color RGB(A) Arrays:

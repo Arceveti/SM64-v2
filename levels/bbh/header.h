@@ -45,7 +45,7 @@ extern const GeoLayout geo_bbh_000DF0[];
 extern const GeoLayout geo_bbh_000E40[];
 extern const GeoLayout geo_bbh_000E80[];
 extern const GeoLayout geo_bbh_000EB0[];
-extern const GeoLayout geo_bbh_000F00[];
+extern const GeoLayout geo_bbh_area_1[];
 
 // leveldata
 extern const Gfx bbh_seg7_dl_070075A8[];

@@ -267,7 +267,7 @@ const LevelScript level_castle_inside_entry[] = {
         MACRO_OBJECTS(/*objList*/ inside_castle_seg7_area_1_macro_objs),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0001, /*seq*/ SEQ_LEVEL_INSIDE_CASTLE),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
-        //! TODO: Lobby light
+        //! TODO: Lobby light, room 1
     END_AREA(),
 
     AREA(/*index*/ 2, castle_geo_area_2),
