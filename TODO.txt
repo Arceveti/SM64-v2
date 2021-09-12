@@ -1,6 +1,5 @@
 **TODO:**
 - General Bugs:
-    - Audio is scuffed in areas with high reverb
     - The edges of Mario's silhouette are sometimes visible at low resolutions
     - Far clipping plane is too close
     - BOB door switch clicks on a timer like invisible box switches
@@ -18,7 +17,6 @@
     - Lights don't get cleared properly when leaving a level
     - Multiple light sources cause direction overflow?
     - PUPPYLIGHT_ENVIRONMENT doesn't work
-    - 
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
     - Properly fix HMC crash

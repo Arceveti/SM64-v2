@@ -142,21 +142,21 @@ void set_sound_mode(u16 soundMode) {
  */
 void play_menu_sounds(s16 soundMenuFlags) {
     if (soundMenuFlags & SOUND_MENU_FLAG_HANDAPPEAR) {
-        play_sound(SOUND_MENU_HAND_APPEAR,       gGlobalSoundSource);
+        play_sound(SOUND_MENU_HAND_APPEAR,        gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_HANDISAPPEAR) {
-        play_sound(SOUND_MENU_HAND_DISAPPEAR,    gGlobalSoundSource);
-    // } else if (soundMenuFlags & SOUND_MENU_FLAG_UNKNOWN1) {
-    //     play_sound(SOUND_MENU_UNK0C_FLAG_UNKNOW1, gGlobalSoundSource);
+        play_sound(SOUND_MENU_HAND_DISAPPEAR,     gGlobalSoundSource);
+    } else if (soundMenuFlags & SOUND_MENU_FLAG_UNKNOWN1) {
+        play_sound(SOUND_MENU_UNK0C_FLAG_UNKNOW1, gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE) {
-        play_sound(SOUND_MENU_PINCH_MARIO_FACE,  gGlobalSoundSource);
+        play_sound(SOUND_MENU_PINCH_MARIO_FACE,   gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_PINCHMARIOFACE2) {
-        play_sound(SOUND_MENU_PINCH_MARIO_FACE,  gGlobalSoundSource);
+        play_sound(SOUND_MENU_PINCH_MARIO_FACE,   gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_LETGOMARIOFACE) {
-        play_sound(SOUND_MENU_LET_GO_MARIO_FACE, gGlobalSoundSource);
+        play_sound(SOUND_MENU_LET_GO_MARIO_FACE,  gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_CAMERAZOOMIN) {
-        play_sound(SOUND_MENU_CAMERA_ZOOM_IN,    gGlobalSoundSource);
+        play_sound(SOUND_MENU_CAMERA_ZOOM_IN,     gGlobalSoundSource);
     } else if (soundMenuFlags & SOUND_MENU_FLAG_CAMERAZOOMOUT) {
-        play_sound(SOUND_MENU_CAMERA_ZOOM_OUT,   gGlobalSoundSource);
+        play_sound(SOUND_MENU_CAMERA_ZOOM_OUT,    gGlobalSoundSource);
     }
     if (soundMenuFlags & 0x100) play_menu_sounds_extra(20, NULL);
 #if ENABLE_RUMBLE
@@ -205,7 +205,7 @@ void play_infinite_stairs_music(void) {
  * Called from threads: thread5_game_loop
  */
 void set_background_music(u16 a, u16 seqArgs, s16 fadeTimer) {
-    if (gResetTimer == 0 && seqArgs != sCurrentMusic) {
+    if ((gResetTimer == 0) && (seqArgs != sCurrentMusic)) {
         sound_reset((gCurrCreditsEntry != NULL) ? 7 : a);
         if (!gNeverEnteredCastle || (seqArgs != SEQ_LEVEL_INSIDE_CASTLE)) {
             play_music(SEQ_PLAYER_LEVEL, seqArgs, fadeTimer);
@@ -290,7 +290,6 @@ void stop_cap_music(void) {
  * Called from threads: thread5_game_loop
  */
 void play_menu_sounds_extra(s32 soundIndex, void *b) {
-    // soundIndex = 20, b = NULL
     play_sound(sMenuSoundsExtra[soundIndex], b);
 }
 

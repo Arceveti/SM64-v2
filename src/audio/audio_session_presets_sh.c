@@ -23,7 +23,6 @@ struct AudioSessionSettingsEU gAudioSessionPresets[] = {
     { 0x00007d00, 0x01, 0x14, 0x01, 0x00, &sReverbSettings[5], 0x7fff, 0x0000, 0x00003500, 0x00006280, 0x00000000, 0x00004000, 0x00001b00, 0x00000000, 0x00000000, 0x00000000 }
 };
 
-// s8  gUnusedCount80333EE8 = UNUSED_COUNT_80333EE8;
 s16 gTatumsPerBeat       = TATUMS_PER_BEAT;
 s32 gAudioHeapSize       = DOUBLE_SIZE_ON_64_BIT(AUDIO_HEAP_SIZE);
 s32 gAudioInitPoolSize   = DOUBLE_SIZE_ON_64_BIT(AUDIO_INIT_POOL_SIZE);

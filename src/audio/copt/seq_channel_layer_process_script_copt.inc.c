@@ -128,7 +128,7 @@ void seq_channel_layer_process_script(struct SequenceChannelLayer *layer) {
     u8  cmdSemitone;                    // sp3D, t0
     u16 sp3A = 0;                       // t2, a0, a1
     f32 tuning;                         // f0
-    s32 vel = 0;                        // sp30, t3
+    s32 vel  = 0;                       // sp30, t3
     s32 usedSemitone;                   // a1
     f32 freqScale = 0.0f;               // sp28, f0
     f32 sp24      = 0.0f;
@@ -301,11 +301,11 @@ l1090:
                     goto l1138;
             }
 l1138:
-            cmdSemitone = cmd - (cmd & 0xc0);
+            cmdSemitone = (cmd - (cmd & 0xc0));
         }
         layer->delay    = sp3A;
         layer->duration = (layer->noteDuration * sp3A / 256);
-        if ((seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_STOP_NOTES) != 0) || seqChannel->stopSomething2 || !seqChannel->hasInstrument) {
+        if ((seqPlayer->muted && (seqChannel->muteBehavior & MUTE_BEHAVIOR_STOP_NOTES) != 0) || seqChannel->stopSomething2 || !seqChannel->hasInstrument ) {
             layer->stopSomething = TRUE;
         } else {
             if (seqChannel->instOrWave == 0) { // drum
@@ -340,7 +340,6 @@ l1138:
                     if (instrument == NULL) instrument = seqChannel->instrument;
                     if (layer->portamento.mode != 0) {
                         usedSemitone = ((layer->portamentoTargetNote < cmdSemitone) ? cmdSemitone : layer->portamentoTargetNote);
-
                         if (instrument != NULL) {
                             sound = (u8) usedSemitone < instrument->normalRangeLo ? &instrument->lowNotesSound
                                   : (u8) usedSemitone <= instrument->normalRangeHi ?
@@ -352,8 +351,8 @@ l1138:
                             layer->sound = NULL;
                             tuning = 1.0f;
                         }
-                        temp_f2  = gNoteFrequencies[cmdSemitone] * tuning;
-                        temp_f12 = gNoteFrequencies[layer->portamentoTargetNote] * tuning;
+                        temp_f2  = (gNoteFrequencies[cmdSemitone                ] * tuning);
+                        temp_f12 = (gNoteFrequencies[layer->portamentoTargetNote] * tuning);
                         portamento = &layer->portamento;
                         switch (PORTAMENTO_MODE(layer->portamento)) {
                             case PORTAMENTO_MODE_1:
@@ -381,15 +380,15 @@ l13cc:
                         layer->freqScale = freqScale;
                         if (PORTAMENTO_MODE((*layer).portamento) == PORTAMENTO_MODE_5) layer->portamentoTargetNote = cmdSemitone;
                     } else if (instrument != NULL) {
-                        sound = cmdSemitone < instrument->normalRangeLo ?
-                                         &instrument->lowNotesSound : cmdSemitone <= instrument->normalRangeHi ?
-                                         &instrument->normalNotesSound : &instrument->highNotesSound;
+                        sound = ((cmdSemitone < instrument->normalRangeLo) ?
+                                         &instrument->lowNotesSound : ((cmdSemitone <= instrument->normalRangeHi) ?
+                                         &instrument->normalNotesSound : &instrument->highNotesSound));
 
-                        sameSound = (sound == (*layer).sound);
-                        layer->sound = sound;
+                        sameSound        = (sound == (*layer).sound);
+                        layer->sound     = sound;
                         layer->freqScale = gNoteFrequencies[cmdSemitone] * (*sound).tuning;
                     } else {
-                        layer->sound = NULL;
+                        layer->sound     = NULL;
                         layer->freqScale = gNoteFrequencies[cmdSemitone];
                     }
                 }
@@ -398,13 +397,13 @@ l13cc:
         }
     }
     if (layer->stopSomething == TRUE) {
-        if (layer->note != NULL || layer->continuousNotes) seq_channel_layer_note_decay(layer);
+        if ((layer->note != NULL) || layer->continuousNotes) seq_channel_layer_note_decay(layer);
         return;
     }
     cmdSemitone = FALSE;
     if (!layer->continuousNotes) {
         cmdSemitone = TRUE;
-    } else if (layer->note == NULL || layer->status == SOUND_LOAD_STATUS_NOT_LOADED) {
+    } else if ((layer->note == NULL) || (layer->status == SOUND_LOAD_STATUS_NOT_LOADED)) {
         cmdSemitone = TRUE;
     } else if (!sameSound) {
         seq_channel_layer_note_decay(layer);

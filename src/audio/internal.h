@@ -19,14 +19,14 @@
 #endif
 #endif
 
-#define LAYERS_MAX                    0x04
-#define CHANNELS_MAX                  0x10
+#define LAYERS_MAX         4
+#define CHANNELS_MAX      16
 
 #define NO_LAYER ((struct SequenceChannelLayer *)(-1))
 
-#define MUTE_BEHAVIOR_STOP_SCRIPT     0x80 // stop processing sequence/channel scripts
-#define MUTE_BEHAVIOR_STOP_NOTES      0x40 // prevent further notes from playing
-#define MUTE_BEHAVIOR_SOFTEN          0x20 // lower volume, by default to half
+#define MUTE_BEHAVIOR_STOP_SCRIPT (1 << 7) // 0x80 // stop processing sequence/channel scripts
+#define MUTE_BEHAVIOR_STOP_NOTES  (1 << 6) // 0x40 // prevent further notes from playing
+#define MUTE_BEHAVIOR_SOFTEN      (1 << 5) // 0x20 // lower volume, by default to half
 
 #define SEQUENCE_PLAYER_STATE_0        0x0
 #define SEQUENCE_PLAYER_STATE_FADE_OUT 0x1
@@ -879,7 +879,6 @@ struct UnkStruct80343D00 {
 };
 
 // in external.c
-// extern s32 D_SH_80343CF0;
 extern struct UnkStruct80343D00 D_SH_80343D00;
 #endif
 

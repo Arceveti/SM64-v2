@@ -6,19 +6,19 @@
 #include "internal.h"
 #include "platform_info.h"
 
-#define ADSR_STATE_DISABLED   0
-#define ADSR_STATE_INITIAL    1
-#define ADSR_STATE_START_LOOP 2
-#define ADSR_STATE_LOOP       3
-#define ADSR_STATE_FADE       4
-#define ADSR_STATE_HANG       5
-#define ADSR_STATE_DECAY      6
-#define ADSR_STATE_RELEASE    7
-#define ADSR_STATE_SUSTAIN    8
+#define ADSR_STATE_DISABLED   0x0
+#define ADSR_STATE_INITIAL    0x1
+#define ADSR_STATE_START_LOOP 0x2
+#define ADSR_STATE_LOOP       0x3
+#define ADSR_STATE_FADE       0x4
+#define ADSR_STATE_HANG       0x5
+#define ADSR_STATE_DECAY      0x6
+#define ADSR_STATE_RELEASE    0x7
+#define ADSR_STATE_SUSTAIN    0x8
 
-#define ADSR_ACTION_RELEASE 0x10
-#define ADSR_ACTION_DECAY   0x20
-#define ADSR_ACTION_HANG    0x40
+#define ADSR_ACTION_RELEASE (1 << 4) // 0x10
+#define ADSR_ACTION_DECAY   (1 << 5) // 0x20
+#define ADSR_ACTION_HANG    (1 << 6) // 0x40
 
 #define ADSR_DISABLE  0
 #define ADSR_HANG    -1

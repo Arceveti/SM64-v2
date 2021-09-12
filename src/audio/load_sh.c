@@ -15,7 +15,7 @@ struct SharedDma {
     /*0x4*/ uintptr_t source; // device address
     /*0x8*/ u16 sizeUnused;   // set to bufSize, never read
     /*0xA*/ u16 bufSize;      // size of buffer
-    /*0xC*/ u8 unused2;       //! set to 0, never read
+    /*0xC*/ u8 unused2;       // set to 0, never read
     /*0xD*/ u8 reuseIndex;    // position in sSampleDmaReuseQueue1/2, if ttl == 0
     /*0xE*/ u8 ttl;           // duration after which the DMA can be discarded
 };                            // size = 0x10
@@ -26,11 +26,9 @@ void *func_802f3f08(s32 poolIdx, s32 idx, s32 numChunks, s32 arg3, OSMesgQueue *
 
 struct Note *gNotes;
 
-// UNUSED static u32 pad;
-
-struct SequencePlayer       gSequencePlayers[SEQUENCE_PLAYERS];
+struct SequencePlayer       gSequencePlayers [SEQUENCE_PLAYERS ];
 struct SequenceChannel      gSequenceChannels[SEQUENCE_CHANNELS];
-struct SequenceChannelLayer gSequenceLayers[SEQUENCE_LAYERS];
+struct SequenceChannelLayer gSequenceLayers  [SEQUENCE_LAYERS  ];
 
 struct SequenceChannel gSequenceChannelNone;
 struct AudioListItem   gLayerFreeList;
@@ -64,7 +62,7 @@ OSMesgQueue gUnkQueue2;
 OSMesg      gUnkMesgBufs2[0x10];
 
 OSMesgQueue gCurrAudioFrameDmaQueue;
-OSMesg      gCurrAudioFrameDmaMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
+OSMesg      gCurrAudioFrameDmaMesgBufs  [AUDIO_FRAME_DMA_QUEUE_SIZE];
 OSIoMesg    gCurrAudioFrameDmaIoMesgBufs[AUDIO_FRAME_DMA_QUEUE_SIZE];
 
 OSMesgQueue gAudioDmaMesgQueue;
@@ -74,7 +72,6 @@ OSIoMesg    gAudioDmaIoMesg;
 struct SharedDma *sSampleDmas;
 u32 gSampleDmaNumListItems;
 u32 sSampleDmaListSize1;
-// u32 sUnused80226B40; // set to 0, never read
 
 // Circular buffer of DMAs with ttl = 0. tail <= head, wrapping around mod 256.
 u8 sSampleDmaReuseQueue1[256];
@@ -114,30 +111,28 @@ ALSeqFile *get_audio_file_header(s32 arg0);
 
 void *func_sh_802f3688(s32 bankId);
 void *get_bank_or_seq_wrapper(s32 arg0, s32 arg1);
-void  func_sh_802f3d78(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3);
+void  func_sh_802f3d78(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium);
 void  func_sh_802f3c38(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium);
 s32   func_sh_802f3dd0(OSIoMesg *m, s32 pri, s32 direction, uintptr_t devAddr,
         void *dramAddr, s32 size, OSMesgQueue *retQueue, s32 medium, UNUSED const char *reason);
 void  func_sh_802f4a4c(s32 audioResetStatus);
 void  func_sh_802f4bd8(struct PendingDmaSample *arg0, s32 len);
-void  func_sh_802f4c5c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3);
+void  func_sh_802f4c5c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium);
 struct PendingDmaAudioBank *func_sh_802f4cb4(uintptr_t devAddr, void *vAddr, s32 size,
         s32 medium, s32 numChunks, OSMesgQueue *retQueue, s32 encodedInfo);
 void  func_sh_802f4dcc(s32 audioResetStatus);
 void  func_sh_802f4e50(struct PendingDmaAudioBank *audioBank, s32 audioResetStatus);
 void  func_sh_802f50ec(struct PendingDmaAudioBank *audioBank, size_t len);
-void  func_sh_802f517c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3);
+void  func_sh_802f517c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium);
 void  func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *patchInfo, s32 arg3);
 s32   func_sh_802f573c(s32 audioResetStatus);
 void *func_sh_802f3564(s32 seqId);
-// s32   func_sh_802f3ec4(s32 arg0, uintptr_t *arg1);
-// void  func_sh_802f3ed4(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED void *vAddr, UNUSED size_t nbytes);
 
 s32 canonicalize_index(s32 poolIdx, s32 idx);
 
 void decrease_sample_dma_ttls() {
     u32 i;
-    for (i = 0; i < sSampleDmaListSize1; i++) {
+    for ((i = 0); (i < sSampleDmaListSize1); (i++)) {
         struct SharedDma *temp = &sSampleDmas[i];
         if (temp->ttl != 0) {
             temp->ttl--;
@@ -147,7 +142,7 @@ void decrease_sample_dma_ttls() {
             }
         }
     }
-    for (i = sSampleDmaListSize1; i < gSampleDmaNumListItems; i++) {
+    for ((i = sSampleDmaListSize1); (i < gSampleDmaNumListItems); (i++)) {
         struct SharedDma *temp = &sSampleDmas[i];
         if (temp->ttl != 0) {
             temp->ttl--;
@@ -157,27 +152,24 @@ void decrease_sample_dma_ttls() {
             }
         }
     }
-    // sUnused80226B40 = 0;
 }
 
 extern char shindouDebugPrint62[]; // "SUPERDMA"
 void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef, s32 medium) {
-    // UNUSED s32 sp60;
     struct SharedDma *dma;
     s32 hasDma = FALSE;
     uintptr_t dmaDevAddr;
-    // UNUSED u32 pad;
     u32 dmaIndex;
     u32 transfer;
     ssize_t bufferPos;
     u32 i;
-    if (arg2 != 0 || *dmaIndexRef >= sSampleDmaListSize1) {
-        for (i = sSampleDmaListSize1; i < gSampleDmaNumListItems; i++) {
-            dma = &sSampleDmas[i];
-            bufferPos = devAddr - dma->source;
-            if (0 <= bufferPos && (size_t) bufferPos <= dma->bufSize - size) {
+    if ((arg2 != 0) || (*dmaIndexRef >= sSampleDmaListSize1)) {
+        for ((i = sSampleDmaListSize1); (i < gSampleDmaNumListItems); (i++)) {
+            dma       = &sSampleDmas[i];
+            bufferPos = (devAddr - dma->source);
+            if ((0 <= bufferPos) && ((size_t) bufferPos <= (dma->bufSize - size))) {
                 // We already have a DMA request for this memory range.
-                if (dma->ttl == 0 && sSampleDmaReuseQueueTail2 != sSampleDmaReuseQueueHead2) {
+                if ((dma->ttl == 0) && (sSampleDmaReuseQueueTail2 != sSampleDmaReuseQueueHead2)) {
                     // Move the DMA out of the reuse queue, by swapping it with the
                     // tail, and then incrementing the tail.
                     if (dma->reuseIndex != sSampleDmaReuseQueueTail2) {
@@ -191,18 +183,18 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef, s3
                 return &dma->buffer[(devAddr - dma->source)];
             }
         }
-        if (sSampleDmaReuseQueueTail2 != sSampleDmaReuseQueueHead2 && arg2 != 0) {
+        if ((sSampleDmaReuseQueueTail2 != sSampleDmaReuseQueueHead2) && (arg2 != 0)) {
             // Allocate a DMA from reuse queue 2. This queue can be empty, since
             // TTL 60 is pretty large.
             dmaIndex = sSampleDmaReuseQueue2[sSampleDmaReuseQueueTail2];
             sSampleDmaReuseQueueTail2++;
-            dma    = (sSampleDmas + dmaIndex);
-            hasDma = TRUE;
+            dma      = (sSampleDmas + dmaIndex);
+            hasDma   = TRUE;
         }
     } else {
-        dma = sSampleDmas + *dmaIndexRef;
-        bufferPos = devAddr - dma->source;
-        if (0 <= bufferPos && (size_t) bufferPos <= dma->bufSize - size) {
+        dma       = (sSampleDmas + *dmaIndexRef);
+        bufferPos = (devAddr - dma->source);
+        if ((0 <= bufferPos) && ((size_t) bufferPos <= (dma->bufSize - size))) {
             // We already have DMA for this memory range.
             if (dma->ttl == 0) {
                 // Move the DMA out of the reuse queue, by swapping it with the
@@ -214,75 +206,74 @@ void *dma_sample_data(uintptr_t devAddr, u32 size, s32 arg2, u8 *dmaIndexRef, s3
                 sSampleDmaReuseQueueTail1++;
             }
             dma->ttl = 2;
-            return dma->buffer + (devAddr - dma->source);
+            return (dma->buffer + (devAddr - dma->source));
         }
     }
     if (!hasDma) {
-        // if (TRUE) {}
         // Allocate a DMA from reuse queue 1. This queue will hopefully never
         // be empty, since TTL 2 is so small.
         dmaIndex = sSampleDmaReuseQueue1[sSampleDmaReuseQueueTail1++];
-        dma = sSampleDmas + dmaIndex;
-        hasDma = TRUE;
+        dma      = (sSampleDmas + dmaIndex);
+        hasDma   = TRUE;
     }
     transfer        = dma->bufSize;
-    dmaDevAddr      = devAddr & ~0xF;
+    dmaDevAddr      = (devAddr & ~0xF);
     dma->ttl        = 2;
     dma->source     = dmaDevAddr;
-    // dma->sizeUnused = transfer;
+    dma->sizeUnused = transfer;
     func_sh_802f3dd0(&gCurrAudioFrameDmaIoMesgBufs[gCurrAudioFrameDmaCount++], OS_MESG_PRI_NORMAL, OS_READ,
          dmaDevAddr, dma->buffer, transfer, &gCurrAudioFrameDmaQueue, medium, shindouDebugPrint62);
     *dmaIndexRef = dmaIndex;
-    return (devAddr - dmaDevAddr) + dma->buffer;
+    return ((devAddr - dmaDevAddr) + dma->buffer);
 }
 
 void init_sample_dma_buffers(UNUSED s32 arg0) {
     s32 i;
     sDmaBufSize = 0x2D0;
-    sSampleDmas = sound_alloc_uninitialized(&gNotesAndBuffersPool, gMaxSimultaneousNotes * 4 * sizeof(struct SharedDma) * gAudioBufferParameters.presetUnk4);
+    sSampleDmas = sound_alloc_uninitialized(&gNotesAndBuffersPool, (gMaxSimultaneousNotes * 4 * sizeof(struct SharedDma) * gAudioBufferParameters.presetUnk4));
     for (i = 0; i < gMaxSimultaneousNotes * 3 * gAudioBufferParameters.presetUnk4; i++) {
         if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) break;
-        sSampleDmas[gSampleDmaNumListItems].bufSize     = sDmaBufSize;
-        sSampleDmas[gSampleDmaNumListItems].source      = 0;
-        // sSampleDmas[gSampleDmaNumListItems].sizeUnused  = 0;
-        // sSampleDmas[gSampleDmaNumListItems].unused2     = 0;
-        sSampleDmas[gSampleDmaNumListItems].ttl         = 0;
+        sSampleDmas[gSampleDmaNumListItems].bufSize    = sDmaBufSize;
+        sSampleDmas[gSampleDmaNumListItems].source     = 0;
+        sSampleDmas[gSampleDmaNumListItems].sizeUnused = 0;
+        sSampleDmas[gSampleDmaNumListItems].unused2    = 0;
+        sSampleDmas[gSampleDmaNumListItems].ttl        = 0;
         gSampleDmaNumListItems++;
     }
-    for (i = 0; (u32) i < gSampleDmaNumListItems; i++) {
+    for ((i = 0); ((u32) i < gSampleDmaNumListItems); (i++)) {
         sSampleDmaReuseQueue1[i]  = (u8) i;
         sSampleDmas[i].reuseIndex = (u8) i;
     }
-    for (i = gSampleDmaNumListItems; i < 0x100; i++) sSampleDmaReuseQueue1[i] = 0;
+    for ((i = gSampleDmaNumListItems); (i < 0x100); (i++)) sSampleDmaReuseQueue1[i] = 0;
     sSampleDmaReuseQueueTail1 = 0;
     sSampleDmaReuseQueueHead1 = (u8) gSampleDmaNumListItems;
     sSampleDmaListSize1       =      gSampleDmaNumListItems;
     sDmaBufSize               = 0x2D0;
-    for (i = 0; i < gMaxSimultaneousNotes; i++) {
+    for ((i = 0); (i < gMaxSimultaneousNotes); (i++)) {
         if ((sSampleDmas[gSampleDmaNumListItems].buffer = sound_alloc_uninitialized(&gNotesAndBuffersPool, sDmaBufSize)) == NULL) break;
         sSampleDmas[gSampleDmaNumListItems].bufSize     = sDmaBufSize;
         sSampleDmas[gSampleDmaNumListItems].source      = 0;
-        // sSampleDmas[gSampleDmaNumListItems].sizeUnused  = 0;
-        // sSampleDmas[gSampleDmaNumListItems].unused2     = 0;
+        sSampleDmas[gSampleDmaNumListItems].sizeUnused  = 0;
+        sSampleDmas[gSampleDmaNumListItems].unused2     = 0;
         sSampleDmas[gSampleDmaNumListItems].ttl         = 0;
         gSampleDmaNumListItems++;
     }
-    for (i = sSampleDmaListSize1; (u32) i < gSampleDmaNumListItems; i++) {
+    for ((i = sSampleDmaListSize1); ((u32) i < gSampleDmaNumListItems); (i++)) {
         sSampleDmaReuseQueue2[i - sSampleDmaListSize1] = (u8) i;
         sSampleDmas[i].reuseIndex = (u8)(i - sSampleDmaListSize1);
     }
     // This probably meant to touch the range size1..size2 as well... but it
     // doesn't matter, since these values are never read anyway.
-    for (i = gSampleDmaNumListItems; i < 0x100; i++) sSampleDmaReuseQueue2[i] = sSampleDmaListSize1;
+    for ((i = gSampleDmaNumListItems); (i < 0x100); (i++)) sSampleDmaReuseQueue2[i] = sSampleDmaListSize1;
     sSampleDmaReuseQueueTail2 = 0;
-    sSampleDmaReuseQueueHead2 = gSampleDmaNumListItems - sSampleDmaListSize1;
+    sSampleDmaReuseQueueHead2 = (gSampleDmaNumListItems - sSampleDmaListSize1);
 }
 
 void patch_seq_file(ALSeqFile *seqFile, u8 *data, u16 arg2) {
     s32 i;
     seqFile->unk2 = arg2;
     seqFile->data = data;
-    for (i = 0; i < seqFile->seqCount; i++) if (seqFile->seqArray[i].len != 0 && seqFile->seqArray[i].medium == 2) seqFile->seqArray[i].offset += (uintptr_t)data;
+    for ((i = 0); (i < seqFile->seqCount); (i++)) if (seqFile->seqArray[i].len != 0 && seqFile->seqArray[i].medium == 2) seqFile->seqArray[i].offset += (uintptr_t)data;
 }
 
 struct AudioBank *load_banks_immediate(s32 seqId, s32 *outDefaultBank) {
@@ -290,25 +281,24 @@ struct AudioBank *load_banks_immediate(s32 seqId, s32 *outDefaultBank) {
     void *ret;
     s32 offset = ((u16 *)gAlBankSets)[canonicalize_index(0, seqId)];
     u8 bank = 0xFF;
-    for (i = gAlBankSets[offset++]; i > 0; i--) {
+    for ((i = gAlBankSets[offset++]); (i > 0); (i--)) {
         bank = gAlBankSets[offset++];
-        ret = func_sh_802f3688(bank);
+        ret  = func_sh_802f3688(bank);
     }
     *outDefaultBank = bank;
     return ret;
 }
 
 void preload_sequence(u32 seqId, s32 preloadMask) {
-    // UNUSED s32 pad;
     s32 temp;
     seqId = canonicalize_index(0, seqId);
-    if (preloadMask & PRELOAD_BANKS)    load_banks_immediate(seqId, &temp);
+    if (preloadMask & PRELOAD_BANKS   ) load_banks_immediate(seqId, &temp);
     if (preloadMask & PRELOAD_SEQUENCE) func_sh_802f3564(seqId);
 }
 
 s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
     u8 *sp24;
-    if (sample->isPatched == TRUE && sample->medium != 0) {
+    if ((sample->isPatched == TRUE) && (sample->medium != 0)) {
         sp24 = func_sh_802f1d90(sample->size, bankId, sample->sampleAddr, sample->medium);
         if (sp24 == NULL) return -1;
         if (sample->medium == 1) {
@@ -316,12 +306,10 @@ s32 func_sh_802f2f38(struct AudioBankSample *sample, s32 bankId) {
         } else {
             func_sh_802f3c38((uintptr_t) sample->sampleAddr, sp24, sample->size, sample->medium);
         }
-        sample->medium = 0;
+        sample->medium     = 0;
         sample->sampleAddr = sp24;
     }
-// #ifdef AVOID_UB
     return 0;
-// #endif
 }
 
 s32 func_sh_802f3024(s32 bankId, s32 instId, s32 arg2) {
@@ -333,17 +321,14 @@ s32 func_sh_802f3024(s32 bankId, s32 instId, s32 arg2) {
         if (instr->normalRangeLo != 0) func_sh_802f2f38(instr->lowNotesSound.sample, bankId);
         func_sh_802f2f38(instr->normalNotesSound.sample, bankId);
         if (instr->normalRangeHi != 0x7F) func_sh_802f2f38(instr->highNotesSound.sample, bankId);
-        //+ @bug missing return
-        return 0;
+        //! @bug missing return
     } else if (instId == 0x7F) {
         drum = get_drum(bankId, arg2);
         if (drum == NULL) return -1;
         func_sh_802f2f38(drum->sound.sample, bankId);
         return 0;
     }
-// #ifdef AVOID_UB
     return 0;
-// #endif
 }
 
 void func_sh_802f30f4(s32 arg0, s32 arg1, s32 arg2, OSMesgQueue *arg3) {
@@ -352,7 +337,7 @@ void func_sh_802f30f4(s32 arg0, s32 arg1, s32 arg2, OSMesgQueue *arg3) {
 
 void func_sh_802f3158(s32 seqId, s32 numChunks, s32 arg2, OSMesgQueue *retQueue) {
     s32 val = ((u16 *) gAlBankSets)[canonicalize_index(0, seqId)];
-    s32 v = gAlBankSets[val++];
+    s32 v   = gAlBankSets[val++];
     while (v > 0) {
         func_802f3f08(1, canonicalize_index(1, gAlBankSets[val++]), numChunks, arg2, retQueue);
         v--;
@@ -392,7 +377,7 @@ void func_sh_802f3368(s32 bankId) {
         temporary->entries[1].id = -1;
     }
     persistent = &pool->persistent;
-    for (i = 0; i < persistent->numEntries; i++) if (persistent->entries[i].id == bankId) persistent->entries[i].id = -1;
+    for ((i = 0); (i < persistent->numEntries); (i++)) if (persistent->entries[i].id == bankId) persistent->entries[i].id = -1;
     discard_bank(bankId);
 }
 
@@ -427,8 +412,6 @@ void load_sequence_internal(s32 player, s32 seqId, UNUSED s32 loadAsync) {
     seqPlayer->scriptState.depth = 0;
     seqPlayer->delay             = 0;
     seqPlayer->finished          = 0;
-    // for (i = 0; i < 0x10; i++) {
-    // }
 }
 
 void *func_sh_802f3564(s32 seqId) {
@@ -494,7 +477,6 @@ void *func_sh_802f3764(s32 poolIdx, s32 idx, s32 *arg2) {
     ALSeqFile *f;
     void *vAddr;
     s32 medium;
-    // UNUSED u32 pad2;
     u8 *devAddr;
     s8 loadStatus;
     s32 sp18;
@@ -538,7 +520,7 @@ void *func_sh_802f3764(s32 poolIdx, s32 idx, s32 *arg2) {
     }
 
     switch (poolIdx) {
-        case 0: if (gSeqLoadStatus [idx] != SOUND_LOAD_STATUS_5) gSeqLoadStatus[ idx] = loadStatus; break;
+        case 0: if (gSeqLoadStatus [idx] != SOUND_LOAD_STATUS_5) gSeqLoadStatus [idx] = loadStatus; break;
         case 1: if (gBankLoadStatus[idx] != SOUND_LOAD_STATUS_5) gBankLoadStatus[idx] = loadStatus; break;
         case 2: if (gUnkLoadStatus [idx] != SOUND_LOAD_STATUS_5) gUnkLoadStatus [idx] = loadStatus; break;
     }
@@ -586,14 +568,10 @@ void patch_audio_bank(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
 #define PATCH_MEM(x) x = PATCH(x, mem)
     numDrums       = gCtlEntries[bankId].numDrums;
     numInstruments = gCtlEntries[bankId].numInstruments;
-    itInstrs       = (void **) mem->drums;
-    // if (mem->drums) {
-    // }
-    if (itInstrs != NULL && numDrums != 0) {
-        // if (TRUE) {
+    itInstrs = (void **) mem->drums;
+    if ((itInstrs != NULL) && (numDrums != 0)) {
         mem->drums = PATCH(itInstrs, mem);
-        // }
-        for (i = 0; i < numDrums; i++) {
+        for ((i = 0); (i < numDrums); (i++)) {
             patched = mem->drums[i];
             if (patched != NULL) {
                 drum = PATCH(patched, mem);
@@ -609,7 +587,7 @@ void patch_audio_bank(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
     }
     if (numInstruments > 0) {
         itInstrs = (void **) mem->instruments;
-        end      = numInstruments + (struct Instrument **) itInstrs;
+        end      = (numInstruments + (struct Instrument **) itInstrs);
         do {
             if (*itInstrs != NULL) {
                 *itInstrs  = BASE_OFFSET(*itInstrs, mem);
@@ -623,10 +601,10 @@ void patch_audio_bank(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
                     instrument->loaded   = 1;
                 }
             }
-            itInstrs = (void **) ((struct Instrument **) itInstrs) + 1;
+            itInstrs = ((void **) ((struct Instrument **) itInstrs) + 1);
         } while ((struct Instrument **) itInstrs != ((void) 0, end)); //! This is definitely fake
     }
-    gCtlEntries[bankId].drums = mem->drums;
+    gCtlEntries[bankId].drums       = mem->drums;
     gCtlEntries[bankId].instruments = mem->instruments;
 #undef PATCH_MEM
 #undef PATCH
@@ -644,9 +622,9 @@ again:
     if (nbytes >= 0x400U) {
         func_sh_802f3dd0(&gAudioDmaIoMesg, 1, 0, devAddr, vAddr, 0x400, &gAudioDmaMesgQueue, medium, shindouDebugPrint81);
         osRecvMesg(&gAudioDmaMesgQueue, NULL, 1);
-        nbytes  =     nbytes - 0x400;
-        devAddr =    devAddr + 0x400;
-        vAddr   = (u8*)vAddr + 0x400;
+        nbytes  = (nbytes     - 0x400);
+        devAddr = (devAddr    + 0x400);
+        vAddr   = ((u8*)vAddr + 0x400);
         goto again;
     }
     if (nbytes != 0) {
@@ -655,10 +633,9 @@ again:
     }
 }
 
-void func_sh_802f3d78(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3) {
+void func_sh_802f3d78(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium) {
     uintptr_t sp1C = devAddr;
     osInvalDCache(vAddr, nbytes);
-    // func_sh_802f3ed4(func_sh_802f3ec4(arg3, &sp1C), sp1C, vAddr, nbytes);
 }
 
 s32 func_sh_802f3dd0(OSIoMesg *m, s32 pri, s32 direction, uintptr_t devAddr, void *dramAddr, s32 size, OSMesgQueue *retQueue, s32 medium, UNUSED const char *reason) {
@@ -669,7 +646,7 @@ s32 func_sh_802f3dd0(OSIoMesg *m, s32 pri, s32 direction, uintptr_t devAddr, voi
     } else {
         return 0;
     }
-    if ((size & 0xf) != 0) size = ALIGN16(size);
+    if (size & 0xf) size = ALIGN16(size);
     m->hdr.pri                   = pri;
     m->hdr.retQueue              = retQueue;
     m->dramAddr                  = dramAddr;
@@ -679,13 +656,6 @@ s32 func_sh_802f3dd0(OSIoMesg *m, s32 pri, s32 direction, uintptr_t devAddr, voi
     osEPiStartDma(handle, m, direction);
     return 0;
 }
-
-// s32 func_sh_802f3ec4(UNUSED s32 arg0, UNUSED uintptr_t *arg1) {
-//     return 0;
-// }
-
-// void func_sh_802f3ed4(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED void *vAddr, UNUSED size_t nbytes) {
-// }
 
 void *func_sh_802f3ee8(s32 poolIdx, s32 idx) {
     s32 temp;
@@ -718,26 +688,13 @@ void *func_802f3f08(s32 poolIdx, s32 idx, s32 numChunks, s32 arg3, OSMesgQueue *
         devAddr    = (uintptr_t) f->seqArray[idx].offset;
         loadStatus = 2;
         switch (sp18) {
-            case 0:
-                vAddr = unk_pool1_alloc(poolIdx, idx, size);
-                if (vAddr == NULL) return vAddr;
-                loadStatus = SOUND_LOAD_STATUS_5;
-                break;
-            case 1:
-                vAddr = alloc_bank_or_seq(poolIdx, size, 1, idx);
-                if (vAddr == NULL) return vAddr;
-                break;
-            case 2:
-                vAddr = alloc_bank_or_seq(poolIdx, size, 0, idx);
-                if (vAddr == NULL) return vAddr;
-                break;
-            case 4:
-            case 3:
-                vAddr = alloc_bank_or_seq(poolIdx, size, 2, idx);
-                if (vAddr == NULL) return vAddr;
-                break;
+            case 0: vAddr = unk_pool1_alloc  (poolIdx, idx,    size); if (vAddr == NULL) return vAddr; loadStatus = SOUND_LOAD_STATUS_5; break;
+            case 1: vAddr = alloc_bank_or_seq(poolIdx, size, 1, idx); if (vAddr == NULL) return vAddr; break;
+            case 2: vAddr = alloc_bank_or_seq(poolIdx, size, 0, idx); if (vAddr == NULL) return vAddr; break;
+            case 4: // fall through
+            case 3: vAddr = alloc_bank_or_seq(poolIdx, size, 2, idx); if (vAddr == NULL) return vAddr; break;
         }
-        func_sh_802f4cb4(devAddr, vAddr, size, medium, numChunks, retQueue, (arg3 << 0x18) | (poolIdx << 0x10) | (idx << 8) | loadStatus);
+        func_sh_802f4cb4(devAddr, vAddr, size, medium, numChunks, retQueue, ((arg3 << 0x18) | (poolIdx << 0x10) | (idx << 8) | loadStatus));
         loadStatus = SOUND_LOAD_STATUS_IN_PROGRESS;
     }
     switch (poolIdx) {
@@ -774,23 +731,21 @@ u8 gShindouSequencesHeader[] = {
 
 // (void) must be omitted from parameters
 void audio_init() {
-    // UNUSED s8 pad[0x34];
     s32 i, j, k;
     s32 lim;
     u64 *ptr64;
     void *data;
-    // UNUSED u8 pad2[4];
     s32 seqCount;
     gAudioLoadLockSH = 0;
-    for (i = 0; i < gAudioHeapSize / 8; i++) ((u64 *) gAudioHeap)[i] = 0;
+    for ((i = 0); (i < (gAudioHeapSize / 8)); (i++)) ((u64 *) gAudioHeap)[i] = 0;
 #ifdef TARGET_N64
     // It seems boot.s doesn't clear the .bss area for audio, so do it here.
     lim = ((uintptr_t) &gAudioGlobalsEndMarker - (uintptr_t) &gAudioGlobalsStartMarker) / 8;
     ptr64 = &gAudioGlobalsStartMarker;
-    for (k = lim; k >= 0; k--) *ptr64++ = 0;
+    for ((k = lim); (k >= 0); (k--)) *ptr64++ = 0;
 #endif
     D_EU_802298D0 = 16.713f;
-    gRefreshRate = 60;
+    gRefreshRate  = 60;
     port_eu_init();
 #ifdef TARGET_N64
     eu_stubbed_printf_3("Clear Workarea %x -%x size %x \n",
@@ -800,7 +755,7 @@ void audio_init() {
     );
 #endif
     eu_stubbed_printf_1("AudioHeap is %x\n", gAudioHeapSize);
-    for (i = 0; i < NUMAIBUFFERS; i++) gAiBufferLengths[i] = 0xa0;
+    for ((i = 0); (i < NUMAIBUFFERS); (i++)) gAiBufferLengths[i] = 0xa0;
     gAudioFrameCount                = 0;
     gAudioTaskIndex                 = 0;
     gCurrAiBufferIndex              = 0;
@@ -815,9 +770,9 @@ void audio_init() {
     gCurrAudioFrameDmaCount = 0;
     gSampleDmaNumListItems  = 0;
     sound_init_main_pools(gAudioInitPoolSize);
-    for (i = 0; i < NUMAIBUFFERS; i++) {
+    for ((i = 0); (i < NUMAIBUFFERS); (i++)) {
         gAiBuffers[i] = sound_alloc_uninitialized(&gAudioInitPool, AIBUFFER_LEN);
-        for (j = 0; j < (s32) (AIBUFFER_LEN / sizeof(s16)); j++) gAiBuffers[i][j] = 0;
+        for ((j = 0); (j < (s32) (AIBUFFER_LEN / sizeof(s16))); (j++)) gAiBuffers[i][j] = 0;
     }
     gAudioResetPresetIdToLoad = 0;
     gAudioResetStatus         = 1;
@@ -832,16 +787,16 @@ void audio_init() {
     gAlTbl         = (ALSeqFile *) gShindouSampleBanksHeader;
     gAlBankSets    = gBankSetsData;
     gSequenceCount = (s16) gSeqFileHeader->seqCount;
-    patch_seq_file(gSeqFileHeader, gMusicData, D_SH_80315EF4);
-    patch_seq_file(gAlCtlHeader, gSoundDataADSR, D_SH_80315EF8);
-    patch_seq_file(gAlTbl, gSoundDataRaw, D_SH_80315EFC);
+    patch_seq_file(gSeqFileHeader, gMusicData,     D_SH_80315EF4);
+    patch_seq_file(gAlCtlHeader,   gSoundDataADSR, D_SH_80315EF8);
+    patch_seq_file(gAlTbl,         gSoundDataRaw,  D_SH_80315EFC);
     seqCount = gAlCtlHeader->seqCount;
     gCtlEntries = sound_alloc_uninitialized(&gAudioInitPool, seqCount * sizeof(struct CtlEntry));
-    for (i = 0; i < seqCount; i++) {
-        gCtlEntries[i].bankId1        = (u8) ((gAlCtlHeader->seqArray[i].ctl.as_s16.bankAndFf >> 8)              & 0xff);
-        gCtlEntries[i].bankId2        = (u8)  (gAlCtlHeader->seqArray[i].ctl.as_s16.bankAndFf                    & 0xff);
+    for ((i = 0); (i < seqCount); (i++)) {
+        gCtlEntries[i].bankId1        = (u8) ((gAlCtlHeader->seqArray[i].ctl.as_s16.bankAndFf              >> 8) & 0xff);
+        gCtlEntries[i].bankId2        = (u8) ( gAlCtlHeader->seqArray[i].ctl.as_s16.bankAndFf                    & 0xff);
         gCtlEntries[i].numInstruments = (u8) ((gAlCtlHeader->seqArray[i].ctl.as_s16.numInstrumentsAndDrums >> 8) & 0xff);
-        gCtlEntries[i].numDrums       = (u8)  (gAlCtlHeader->seqArray[i].ctl.as_s16.numInstrumentsAndDrums       & 0xff);
+        gCtlEntries[i].numDrums       = (u8) ( gAlCtlHeader->seqArray[i].ctl.as_s16.numInstrumentsAndDrums       & 0xff);
     }
     data = sound_alloc_uninitialized(&gAudioInitPool, D_SH_80315EF0);
     if (data == NULL) D_SH_80315EF0 = 0;
@@ -863,10 +818,10 @@ s32 func_sh_802f47c8(s32 bankId, u8 idx, s8 *io) {
     temp = &D_SH_80343D00.arr[D_SH_80343D00.someIndex];
     if (temp->state == 3) temp->state = 0;
     temp->sample = *sample;
-    temp->io = io;
-    temp->vAddr = func_sh_802f1d40(sample->size, bankId, sample->sampleAddr, sample->medium);
+    temp->io     = io;
+    temp->vAddr  = func_sh_802f1d40(sample->size, bankId, sample->sampleAddr, sample->medium);
     if (temp->vAddr == NULL) {
-        if (sample->medium == 1 || sample->codec == CODEC_SKIP) {
+        if ((sample->medium == 1) || (sample->codec == CODEC_SKIP)) {
             *io = 0;
             return -1;
         } else {
@@ -894,15 +849,15 @@ struct AudioBankSample *func_sh_802f4978(s32 bankId, s32 idx) {
         if (inst == 0) return NULL;
         ret = inst->normalNotesSound.sample;
     } else {
-        drum = get_drum(bankId, idx - 128);
+        drum = get_drum(bankId, (idx - 128));
         if (drum == 0) return NULL;
         ret = drum->sound.sample;
     }
     return ret;
 }
 
-// void stub_sh_802f49dc(void) {
-// }
+void stub_sh_802f49dc(void) {
+}
 
 void func_sh_802f49e4(struct PendingDmaSample *arg0) {
     struct AudioBankSample *sample = func_sh_802f4978(arg0->bankId, arg0->idx);
@@ -918,7 +873,7 @@ void func_sh_802f4a4c(s32 audioResetStatus) {
     struct PendingDmaSample *entry;
     s32 i;
     alTbl = gAlTbl;
-    for (i = 0; i < 2; i++) {
+    for ((i = 0); (i < 2); (i++)) {
         entry = &D_SH_80343D00.arr[i];
         switch (entry->state) {
             case 2:
@@ -948,8 +903,8 @@ void func_sh_802f4a4c(s32 audioResetStatus) {
                         func_sh_802f4bd8(entry, 0x1000);
                     }
                     entry->remaining = (s32) (entry->remaining - 0x1000);
-                    entry->vAddr     = (u8 *) entry->vAddr     + 0x1000;
-                    entry->devAddr   =        entry->devAddr   + 0x1000;
+                    entry->vAddr     = ((u8 *) entry->vAddr   + 0x1000);
+                    entry->devAddr   = (       entry->devAddr + 0x1000);
                 }
                 break;
         }
@@ -963,10 +918,9 @@ void func_sh_802f4bd8(struct PendingDmaSample *arg0, s32 len) { // len must be s
     func_sh_802f3dd0(&arg0->ioMesg, 0, 0, arg0->devAddr, arg0->vAddr, len, &arg0->queue, arg0->medium, shindouDebugPrint102);
 }
 
-void func_sh_802f4c5c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3) {
+void func_sh_802f4c5c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium) {
     uintptr_t sp1C = devAddr;
     osInvalDCache(vAddr, nbytes);
-    // func_sh_802f3ed4(func_sh_802f3ec4(arg3, &sp1C), sp1C, vAddr, nbytes);
 }
 
 struct PendingDmaAudioBank *func_sh_802f4cb4(uintptr_t devAddr, void *vAddr, s32 size, s32 medium, s32 numChunks, OSMesgQueue *retQueue, s32 encodedInfo) {
@@ -987,7 +941,7 @@ struct PendingDmaAudioBank *func_sh_802f4cb4(uintptr_t devAddr, void *vAddr, s32
     if (numChunks == 0) {
         item->transferSize = 0x1000;
     } else {
-        item->transferSize = ((size / numChunks) + 0xFF) & ~0xFF;
+        item->transferSize = (((size / numChunks) + 0xFF) & ~0xFF);
         if (item->transferSize < 0x100) item->transferSize = 0x100;
     }
     item->retQueue    = retQueue;
@@ -1000,11 +954,7 @@ struct PendingDmaAudioBank *func_sh_802f4cb4(uintptr_t devAddr, void *vAddr, s32
 
 void func_sh_802f4dcc(s32 audioResetStatus) {
     s32 i;
-    if (gAudioLoadLockSH != 1) {
-        for (i = 0; i < ARRAY_COUNT(sPendingDmaAudioBanks); i++) {
-            if (sPendingDmaAudioBanks[i].inProgress == 1) func_sh_802f4e50(&sPendingDmaAudioBanks[i], audioResetStatus);
-        }
-    }
+    if (gAudioLoadLockSH != 1) for ((i = 0); (i < ARRAY_COUNT(sPendingDmaAudioBanks)); (i++)) if (sPendingDmaAudioBanks[i].inProgress == 1) func_sh_802f4e50(&sPendingDmaAudioBanks[i], audioResetStatus);
 }
 
 void func_sh_802f4e50(struct PendingDmaAudioBank *audioBank, s32 audioResetStatus) {
@@ -1050,10 +1000,8 @@ void func_sh_802f4e50(struct PendingDmaAudioBank *audioBank, s32 audioResetStatu
                 break;
             case 1:
                 if (gBankLoadStatus[bankId] != SOUND_LOAD_STATUS_5) gBankLoadStatus[bankId] = (u8) (temp & 0xFF);
-                bankId1 = gCtlEntries[bankId].bankId1;
-                bankId2 = gCtlEntries[bankId].bankId2;
-                patchStruct.bankId1 = bankId1;
-                patchStruct.bankId2 = bankId2;
+                patchStruct.bankId1 = bankId1 = gCtlEntries[bankId].bankId1;
+                patchStruct.bankId2 = bankId2 = gCtlEntries[bankId].bankId2;
                 if (bankId1 != 0xFF) {
                     patchStruct.baseAddr1 = func_sh_802f3598(bankId1, &patchStruct.medium1);
                 } else {
@@ -1099,10 +1047,9 @@ void func_sh_802f50ec(struct PendingDmaAudioBank *arg0, size_t len) {
 }
 
 
-void func_sh_802f517c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 arg3) {
+void func_sh_802f517c(uintptr_t devAddr, void *vAddr, size_t nbytes, s32 medium) {
     uintptr_t sp1C = devAddr;
     osInvalDCache(vAddr, nbytes);
-    // func_sh_802f3ed4(func_sh_802f3ec4(arg3, &sp1C), sp1C, vAddr, nbytes);
 }
 
 void patch_sound(struct AudioBankSound *sound, struct AudioBank *memBase, struct PatchStruct *patchInfo) {
@@ -1135,33 +1082,24 @@ void patch_sound(struct AudioBankSound *sound, struct AudioBank *memBase, struct
 }
 
 void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *patchInfo, s32 arg3) {
-    // UNUSED u32 pad[2];
     u8 *addr;
-    // UNUSED u32 pad1[3];
-    s32 sp4C = 0;
     struct AudioBankSample *temp_s0;
     s32 i;
     uintptr_t count;
     s32 temp;
+    s32 sp4C = 0;
     if (D_SH_8034F68C != 0) sp4C = 1;
-    // if (D_SH_8034F68C != 0) {
-    //     sp4C = 1;
-    // } else {
-    //     D_SH_80343CF0 = 0;
-    // }
     D_SH_8034F688 = 0;
     patch_audio_bank(bankId, mem, patchInfo);
     count = 0;
-    for (i = 0; i < D_SH_8034F688; i++) count += ALIGN16(D_SH_8034EA88[i]->size);
-    for (i = 0; i < D_SH_8034F688; i++) {
+    for ((i = 0); (i < D_SH_8034F688); (i++)) count += ALIGN16(D_SH_8034EA88[i]->size);
+    for ((i = 0); (i < D_SH_8034F688); (i++)) { //! duplicate?
         if (D_SH_8034F68C != 0x78) {
             temp_s0 = D_SH_8034EA88[i];
             switch (arg3) {
                 case 0:
                     temp = temp_s0->medium = patchInfo->medium1;
                     if (temp != 0) {
-                        // if (temp_s0->size) {
-                        // }
                         addr = func_sh_802f1d90(temp_s0->size, patchInfo->bankId1, temp_s0->sampleAddr, temp_s0->medium);
                     } else {
                         temp = temp_s0->medium = patchInfo->medium2;
@@ -1196,11 +1134,11 @@ void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
                         break;
 
                     case 1:
-                        D_SH_8034EC88[D_SH_8034F68C].sample = temp_s0;
-                        D_SH_8034EC88[D_SH_8034F68C].ramAddr = addr;
-                        D_SH_8034EC88[D_SH_8034F68C].encodedInfo = (D_SH_8034F68C << 24) | 0xffffff;
-                        D_SH_8034EC88[D_SH_8034F68C].isFree = FALSE;
-                        D_SH_8034EC88[D_SH_8034F68C].endAndMediumIdentification = temp_s0->sampleAddr + temp_s0->size + temp_s0->medium;
+                        D_SH_8034EC88[D_SH_8034F68C].sample                     = temp_s0;
+                        D_SH_8034EC88[D_SH_8034F68C].ramAddr                    = addr;
+                        D_SH_8034EC88[D_SH_8034F68C].encodedInfo                = ((D_SH_8034F68C << 24) | 0xffffff);
+                        D_SH_8034EC88[D_SH_8034F68C].isFree                     = FALSE;
+                        D_SH_8034EC88[D_SH_8034F68C].endAndMediumIdentification = (temp_s0->sampleAddr + temp_s0->size + temp_s0->medium);
                         D_SH_8034F68C++;
                         break;
                 }
@@ -1210,9 +1148,9 @@ void func_sh_802f5310(s32 bankId, struct AudioBank *mem, struct PatchStruct *pat
         break;
     }
     D_SH_8034F688 = 0;
-    if (D_SH_8034F68C != 0 && sp4C == 0) {
+    if ((D_SH_8034F68C != 0) && (sp4C == 0)) {
         temp_s0 = D_SH_8034EC88[D_SH_8034F68C - 1].sample;
-        temp = (temp_s0->size >> 12);
+        temp    = (temp_s0->size >> 12);
         temp++;
         count = (uintptr_t) temp_s0->sampleAddr;
         func_sh_802f4cb4(
@@ -1235,9 +1173,7 @@ s32 func_sh_802f573c(s32 audioResetStatus) {
     u8 *added;
     if (D_SH_8034F68C > 0) {
         if (audioResetStatus != 0) {
-            osRecvMesg(&gUnkQueue2, (OSMesg *) &idx, OS_MESG_NOBLOCK); //!?
-            // if (osRecvMesg(&gUnkQueue2, (OSMesg *) &idx, OS_MESG_NOBLOCK)){
-            // }
+            osRecvMesg(&gUnkQueue2, (OSMesg *) &idx, OS_MESG_NOBLOCK);
             D_SH_8034F68C = 0;
             return 0;
         }
@@ -1248,7 +1184,7 @@ s32 func_sh_802f573c(s32 audioResetStatus) {
             added = (sample->sampleAddr + sample->size + sample->medium);
             if (added == D_SH_8034EC88[idx].endAndMediumIdentification) {
                 sample->sampleAddr = D_SH_8034EC88[idx].ramAddr;
-                sample->medium = 0;
+                sample->medium     = 0;
             }
             D_SH_8034EC88[idx].isFree = TRUE;
         }
@@ -1258,10 +1194,10 @@ next:
                 D_SH_8034F68C--;
                 goto next;
             }
-            sample = D_SH_8034EC88[D_SH_8034F68C - 1].sample;
+            sample     = D_SH_8034EC88[D_SH_8034F68C - 1].sample;
             sampleAddr = sample->sampleAddr;
-            size = sample->size;
-            unk = size >> 0xC;
+            size       = sample->size;
+            unk        = (size >> 0xC);
             unk++;
             added = ((sampleAddr + size) + sample->medium);
             if (added != D_SH_8034EC88[D_SH_8034F68C - 1].endAndMediumIdentification) {
@@ -1278,7 +1214,7 @@ next:
 
 s32 func_sh_802f5900(struct AudioBankSample *sample, s32 numLoaded, struct AudioBankSample *arg2[]) {
     s32 i;
-    for (i = 0; i < numLoaded; i++) if (sample->sampleAddr == arg2[i]->sampleAddr) break;
+    for ((i = 0); (i < numLoaded); (i++)) if (sample->sampleAddr == arg2[i]->sampleAddr) break;
     if (i == numLoaded) arg2[numLoaded++] = sample;
     return numLoaded;
 }
@@ -1290,12 +1226,12 @@ s32 func_sh_802f5948(s32 bankId, struct AudioBankSample *list[]) {
     s32 numLoaded      = 0;
     s32 numDrums       = gCtlEntries[bankId].numDrums;
     s32 numInstruments = gCtlEntries[bankId].numInstruments;
-    for (i = 0; i < numDrums; i++) {
+    for ((i = 0); (i < numDrums); (i++)) {
         drum = get_drum(bankId, i);
         if (drum == NULL) continue;
         numLoaded = func_sh_802f5900(drum->sound.sample, numLoaded, list);
     }
-    for (i = 0; i < numInstruments; i++) {
+    for ((i = 0); (i < numInstruments); (i++)) {
         inst = get_instrument_inner(bankId, i);
         if (inst == NULL) continue;
         if (inst->normalRangeLo !=   0) numLoaded = func_sh_802f5900(inst->lowNotesSound.sample, numLoaded, list);
