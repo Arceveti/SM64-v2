@@ -168,10 +168,11 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
             ambient = approach_f32_asymptotic((light->rgba[i] / 2), tempLight->a.l.col[i], (scale * fac));
             tempLight->a.l.col[i]  = ambient;
             tempLight->a.l.colc[i] = ambient;
-        } else if (flags & LIGHTFLAG_DIRECTIONAL_OFFSET) {
-            // A slightly hacky way to offset the ambient lighting in order to prevent directional lighting from having a noticeable change in ambient brightness.
-            ambient = (tempLight->a.l.col[i] * 1.5f);
-            ambient = approach_f32_asymptotic(MIN(ambient, 0xFF), tempLight->a.l.col[i], (scale * fac));
+        }
+        // A slightly hacky way to offset the ambient lighting in order to prevent directional lighting from having a noticeable change in ambient brightness.
+        if (flags & LIGHTFLAG_DIRECTIONAL_OFFSET) {
+            ambient = (tempLight->a.l.col[i] * 2);
+            ambient = approach_f32_asymptotic(MIN(ambient, 0xFF), tempLight->a.l.col[i], (scale2 * fac));
             tempLight->a.l.col[i]  = ambient;
             tempLight->a.l.colc[i] = ambient;
         }
@@ -186,6 +187,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
 void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 baseColour) {
     s32 i;
     s32 numlights = 0;
+    Bool32 offsetPlaced = FALSE;
     s32 lightFlags = flags;
     s32 colour;
     if (gCurrLevelNum < 4) return;
@@ -209,8 +211,9 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
     memcpy(segmented_to_virtual(src), &sLightBase[0], sizeof(Lights1));
     for ((i = 0); (i < gNumLights); (i++)) {
         if ((gPuppyLights[i]->rgba[3] > 0) && (gPuppyLights[i]->active) && (gPuppyLights[i]->area == gCurrAreaIndex) && ((gPuppyLights[i]->room == -1) || (gPuppyLights[i]->room == gMarioCurrentRoom))) {
-            if (i == gDynLightStart) {
-                lightFlags |=  LIGHTFLAG_DIRECTIONAL_OFFSET;
+            if ((gPuppyLights[i]->flags & PUPPYLIGHT_DIRECTIONAL) && !offsetPlaced) {
+                lightFlags  |= LIGHTFLAG_DIRECTIONAL_OFFSET;
+                offsetPlaced = TRUE;
             } else {
                 lightFlags &= ~LIGHTFLAG_DIRECTIONAL_OFFSET;
             }
@@ -230,15 +233,32 @@ void puppylights_object_emit(struct Object *obj) {
         vec3_diff(d, &obj->oPosVec, gMarioState->pos);
         if (vec3_sumsq(d) > vec3_sumsq(obj->puppylight.pos[1])) goto deallocate; // That's right. I used a goto. Eat your heart out xkcd.
         if (obj->oLightID == 0xFFFF) {
+            Bool32 fadingExists = FALSE;
             if (ABSI(gNumLights - gDynLightStart) < MAX_LIGHTS_DYNAMIC) goto deallocate;
             for ((i = gDynLightStart); (i < MIN((gDynLightStart + MAX_LIGHTS_DYNAMIC), MAX_LIGHTS)); (i++)) {
-                if (gPuppyLights[i]->active) continue;
+                if (gPuppyLights[i]->active) {
+                    if (gPuppyLights[i]->flags & PUPPYLIGHT_DELETE) fadingExists = TRUE;
+                    continue;
+                }
                 memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
                 gPuppyLights[i]->active = TRUE;
                 gPuppyLights[i]->area   = gCurrAreaIndex;
                 gPuppyLights[i]->room   = obj->oRoom;
                 obj->oLightID           = i;
                 goto updatepos;
+            }
+            // Go through all the lights again, now this time, ignore the fading light flag and overwrite them.
+            if (fadingExists) {
+                for ((i = gDynLightStart); (i < MIN((gDynLightStart + MAX_LIGHTS_DYNAMIC), MAX_LIGHTS)); (i++)) {
+                    if ((gPuppyLights[i]->active) && !(gPuppyLights[i]->flags & PUPPYLIGHT_DELETE)) continue;
+                    memcpy(gPuppyLights[i], &obj->puppylight, sizeof(struct PuppyLight));
+                    gPuppyLights[i]->active = TRUE;
+                    gPuppyLights[i]->area   = gCurrAreaIndex;
+                    gPuppyLights[i]->room   = obj->oRoom;
+                    gPuppyLights[i]->flags &= ~PUPPYLIGHT_DELETE;
+                    obj->oLightID = i;
+                    goto updatepos;
+                }
             }
         } else {
             updatepos:

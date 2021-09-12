@@ -3,6 +3,10 @@
 #include <stdarg.h>
 #include <string.h>
 #include "buffers/framebuffers.h"
+#include "types.h"
+#if PUPPYPRINT_DEBUG
+#include "puppyprint.h"
+#endif
 
 #include "sm64.h"
 
@@ -214,9 +218,15 @@ void thread2_crash_screen(UNUSED void *arg) {
     osSetEventMesg(OS_EVENT_CPU_BREAK, &gCrashScreen.mesgQueue, (OSMesg) 1);
     osSetEventMesg(OS_EVENT_FAULT,     &gCrashScreen.mesgQueue, (OSMesg) 2);
     do {
+#if PUPPYPRINT_DEBUG
+        OSTime first = osGetTime();
+#endif
         osRecvMesg(&gCrashScreen.mesgQueue, &mesg, 1);
         thread = get_crashed_thread();
         gCrashScreen.framebuffer = (TexturePtr *) gFrameBuffers[sRenderedFramebuffer];
+#if PUPPYPRINT_DEBUG
+        profiler_update(faultTime, first);
+#endif
     } while (thread == NULL);
     draw_crash_screen(thread);
     for (;;) {}
