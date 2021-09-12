@@ -100,7 +100,6 @@ void bhv_squishable_platform_loop(void);
 void bhv_beta_moving_flames_spawn_loop(void);
 void bhv_beta_moving_flames_loop(void);
 void bhv_rr_rotating_bridge_platform_loop(void);
-void bhv_flamethrower_init(void);
 void bhv_flamethrower_loop(void);
 void bhv_flamethrower_flame_loop(void);
 void bhv_bouncing_fireball_spawner_loop(void);

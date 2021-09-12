@@ -170,7 +170,7 @@ static u16 calc_checksum(u8 *data, s32 size) {
 /**
  * Verify the signature at the end of the block to check if the data is valid.
  */
-static s32 verify_save_block_signature(void *buffer, s32 size, u16 magic) {
+static Bool32 verify_save_block_signature(void *buffer, s32 size, u16 magic) {
     struct SaveBlockSignature *sig = (struct SaveBlockSignature *) ((size - 4) + (u8 *) buffer);
     if (sig->magic  != magic) return FALSE;
     if (sig->chksum != calc_checksum(buffer, size)) return FALSE;
@@ -235,11 +235,10 @@ static void set_coin_score_age(s32 fileIndex, s32 courseIndex, s32 age) {
  */
 static void touch_coin_score_age(s32 fileIndex, s32 courseIndex) {
     s32 i;
-    u32 age;
     u32 currentAge = get_coin_score_age(fileIndex, courseIndex);
     if (currentAge != 0) {
         for ((i = 0); (i < NUM_SAVE_FILES); (i++)) {
-            age = get_coin_score_age(i, courseIndex);
+            u32 age = get_coin_score_age(i, courseIndex);
             if (age < currentAge) set_coin_score_age(i, courseIndex, (age + 1));
         }
         set_coin_score_age(fileIndex, courseIndex, 0);
@@ -303,14 +302,13 @@ void save_file_copy(s32 srcFileIndex, s32 destFileIndex) {
 
 void save_file_load_all(void) {
     s32 file;
-    s32 validSlots;
     gMainMenuDataModified = FALSE;
     gSaveFileModified     = FALSE;
     bzero(           &gSaveBuffer, sizeof(gSaveBuffer));
     read_eeprom_data(&gSaveBuffer, sizeof(gSaveBuffer));
     // Verify the main menu data and create a backup copy if only one of the slots is valid.
-    validSlots  = verify_save_block_signature(&gSaveBuffer.menuData[0], sizeof(gSaveBuffer.menuData[0]), MENU_DATA_MAGIC);
-    // validSlots |= verify_save_block_signature(&gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]), MENU_DATA_MAGIC) << 1;
+    s32 validSlots =  verify_save_block_signature(&gSaveBuffer.menuData[0], sizeof(gSaveBuffer.menuData[0]), MENU_DATA_MAGIC);
+    // validSlots |= (verify_save_block_signature(&gSaveBuffer.menuData[1], sizeof(gSaveBuffer.menuData[1]), MENU_DATA_MAGIC) << 1);
     switch (validSlots) {
         case 0: wipe_main_menu_data();     break; // Neither copy is correct
         case 1: restore_main_menu_data(0); break; // Slot 0 is correct and slot 1 is incorrect
@@ -318,8 +316,8 @@ void save_file_load_all(void) {
     }
     for ((file = 0); (file < NUM_SAVE_FILES); (file++)) {
         // Verify the save file and create a backup copy if only one of the slots is valid.
-        validSlots  = verify_save_block_signature(&gSaveBuffer.files[file][0], sizeof(gSaveBuffer.files[file][0]), SAVE_FILE_MAGIC);
-        validSlots |= verify_save_block_signature(&gSaveBuffer.files[file][1], sizeof(gSaveBuffer.files[file][1]), SAVE_FILE_MAGIC) << 1;
+        validSlots  =  verify_save_block_signature(&gSaveBuffer.files[file][0], sizeof(gSaveBuffer.files[file][0]), SAVE_FILE_MAGIC);
+        validSlots |= (verify_save_block_signature(&gSaveBuffer.files[file][1], sizeof(gSaveBuffer.files[file][1]), SAVE_FILE_MAGIC) << 1);
         switch (validSlots) {
             case 0: save_file_erase(       file   ); break; // Neither copy is correct
             case 1: restore_save_file_data(file, 0); break; // Slot 0 is correct and slot 1 is incorrect
@@ -406,17 +404,15 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
         case LEVEL_BOWSER_1: if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) save_file_set_flags(SAVE_FLAG_HAVE_KEY_1); break;
         case LEVEL_BOWSER_2: if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) save_file_set_flags(SAVE_FLAG_HAVE_KEY_2); break;
         case LEVEL_BOWSER_3: break;
-        default:
 #ifdef GLOBAL_STAR_IDS
-            if (!(save_file_get_star_flags(fileIndex, starByte) & starFlag)) save_file_set_star_flags(fileIndex, starByte, starFlag);
+        default:             if (!(save_file_get_star_flags(fileIndex,    starByte) & starFlag)) save_file_set_star_flags(fileIndex,    starByte, starFlag); break;
 #else
-            if (!(save_file_get_star_flags(fileIndex, courseIndex) & starFlag)) save_file_set_star_flags(fileIndex, courseIndex, starFlag);
+        default:             if (!(save_file_get_star_flags(fileIndex, courseIndex) & starFlag)) save_file_set_star_flags(fileIndex, courseIndex, starFlag); break;
 #endif
-            break;
     }
 }
 
-s32 save_file_exists(s32 fileIndex) {
+Bool32 save_file_exists(s32 fileIndex) {
     return ((gSaveBuffer.files[fileIndex][0].flags & SAVE_FLAG_FILE_EXISTS) != 0);
 }
 
@@ -441,7 +437,7 @@ u32 save_file_get_max_coin_score(s32 courseIndex) {
             }
         }
     }
-    return (maxScoreFileNum << 16) + MAX(maxCoinScore, 0);
+    return ((maxScoreFileNum << 16) + MAX(maxCoinScore, 0));
 }
 
 s32 save_file_get_course_star_count(s32 fileIndex, s32 courseIndex) {

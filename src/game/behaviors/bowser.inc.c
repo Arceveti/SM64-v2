@@ -1592,8 +1592,8 @@ Gfx *geo_switch_bowser_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4
     return NULL;
 }
 
+#ifdef RAINBOW_BOWSER
 #include "actors/bowser/vtx.h"
-
 void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
     Vtx *verts;
     u16 j, i;
@@ -1602,6 +1602,7 @@ void bowser_cycle_rainbow(s32 speed, s32 sat, UNUSED s32 val) {
         for ((j = 0); (j < sBowserVertexGroups[i].vertexCount); (j++)) colorRGB_add_hue(verts[j].v.cn, speed, sat);
     }
 }
+#endif
 
 /**
  * Geo switch that sets Bowser's Rainbow coloring (in BITS)

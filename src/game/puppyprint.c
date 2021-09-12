@@ -69,27 +69,27 @@ OSTime ramTime     = 0;
 OSTime loadTime    = 0;
 OSTime gLastOSTime = 0;
 OSTime rspDelta    = 0;
-s32 benchMark[NUM_BENCH_ITERATIONS + 2];
+s32        benchMark[NUM_BENCH_ITERATIONS + 2];
 // CPU
 OSTime collisionTime[NUM_PERF_ITERATIONS + 1];
 OSTime behaviourTime[NUM_PERF_ITERATIONS + 1];
-OSTime scriptTime   [NUM_PERF_ITERATIONS + 1];
-OSTime graphTime    [NUM_PERF_ITERATIONS + 1];
-OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
-OSTime dmaTime      [NUM_PERF_ITERATIONS + 1];
-OSTime dmaAudioTime [NUM_PERF_ITERATIONS + 1];
-OSTime faultTime    [NUM_PERF_ITERATIONS + 1];
-OSTime taskTime     [NUM_PERF_ITERATIONS + 1];
+OSTime    scriptTime[NUM_PERF_ITERATIONS + 1];
+OSTime     graphTime[NUM_PERF_ITERATIONS + 1];
+OSTime     audioTime[NUM_PERF_ITERATIONS + 1];
+OSTime       dmaTime[NUM_PERF_ITERATIONS + 1];
+OSTime  dmaAudioTime[NUM_PERF_ITERATIONS + 1];
+OSTime     faultTime[NUM_PERF_ITERATIONS + 1];
+OSTime      taskTime[NUM_PERF_ITERATIONS + 1];
 #ifdef VARIABLE_FRAMERATE
-OSTime videoTime    [NUM_PERF_ITERATIONS + 1];
+OSTime     videoTime[NUM_PERF_ITERATIONS + 1];
 #endif
 // RSP
-OSTime audioTime    [NUM_PERF_ITERATIONS + 1];
-OSTime rspGenTime   [NUM_PERF_ITERATIONS + 1];
+OSTime     audioTime[NUM_PERF_ITERATIONS + 1];
+OSTime    rspGenTime[NUM_PERF_ITERATIONS + 1];
 // RDP
-OSTime bufferTime   [NUM_PERF_ITERATIONS + 1];
-OSTime tmemTime     [NUM_PERF_ITERATIONS + 1];
-OSTime busTime      [NUM_PERF_ITERATIONS + 1];
+OSTime    bufferTime[NUM_PERF_ITERATIONS + 1];
+OSTime      tmemTime[NUM_PERF_ITERATIONS + 1];
+OSTime       busTime[NUM_PERF_ITERATIONS + 1];
 // RAM
 Bool8 ramViewer = FALSE;
 s32 ramsizeSegment[33] = { 0, 0, 0,

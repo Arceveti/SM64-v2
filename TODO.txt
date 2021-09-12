@@ -1,14 +1,24 @@
 **TODO:**
-- Known Bugs:
-    - Audio is scuffed
-        - Might be a HackerSM64 issue?
+- General Bugs:
+    - Audio is scuffed in areas with high reverb
     - The edges of Mario's silhouette are sometimes visible at low resolutions
-    - Instant warps freeze for a second, and teleport the camera downward
+    - Far clipping plane is too close
+    - BOB door switch clicks on a timer like invisible box switches
+    - Bob-Ombs get upwarped slightly when walking near certain walls
+        - Noticeable on BOB door when it's opening
+    - Puppycamera sometimes downwarps
+        - Happens on a slope in Castle Grounds and between areas in TTM slide:
+    - Instant warps freeze for a second
         - Most noticeable on TTM slide
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar because of the super steep floor
     - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
         - Might be same underlying issue as the SSL pillars issue?
+- Puppylights bugs:
+    - Lights don't get cleared properly when leaving a level
+    - Multiple light sources cause direction overflow?
+    - PUPPYLIGHT_ENVIRONMENT doesn't work
+    - 
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
     - Properly fix HMC crash
@@ -18,6 +28,9 @@
         - Current fix is '#define static' in rendering_graph_node.c
             - How does this fix work?
     - Fix ending cutscene crash
+- Things that happened but haven't been able to reproduce:
+    - Freeze when falling onto a sideways slope in HMC
+    - Mario said "haha" while swimming underwater
 - Optimizations:
     - Save rom space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:
@@ -128,7 +141,8 @@
         - Redraw/re-render near and far coins with better lighting
             - Far coins as ia8
         - Make env textures right side up
-    - The leftmost column of pixels on billboards shouldn't get stretched at low resolution (Angrylion)
+    - The leftmost column and topmost row of pixels on billboards shouldn't get stretched at low resolution (Angrylion)
+    - Damage flash should be blue when "lava" boosting on the ice in SL
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
         - build warning for a pointer
@@ -194,6 +208,10 @@
         - Draw Lakitu from the actual displaylist/model instead of from a texture
         - Make metal cap effect work on console, otherwise use vanilla
             - Also use vanilla if framebuffer is not enabled
+- Audio:
+    - Fix scuffed audio
+    - Fix pole swing sound
+    - Better wall jump sound?
 - HUD:
     - Rearrange HUD
         - Top Left:

@@ -27,10 +27,6 @@ void bhv_bouncing_fireball_flame_loop(void) {
 void bhv_bouncing_fireball_spawner_loop(void) {
     struct Object *flameObj;
     f32 scale;
-// #ifdef PUPPYLIGHTS
-//     cur_obj_set_light_properties_default(PUPPYLIGHTS_FLAME_LIGHT, COLOR_RGBA32_FLAME_LIGHT);
-//     cur_obj_enable_light();
-// #endif
     switch (o->oAction) {
         case BOUNCING_FIREBALL_SPAWNER_ACT_IDLE:
             if (o->oDistanceToMario < 2000.0f) o->oAction = BOUNCING_FIREBALL_SPAWNER_ACT_SPAWN_FLAME;

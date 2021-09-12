@@ -134,6 +134,9 @@ const LevelScript level_rr_entry[] = {
         MACRO_OBJECTS(/*objList*/ rr_seg7_macro_objs),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_SLIDE),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
+#ifdef PUPPYLIGHTS
+        PUPPYLIGHT_NODE(0x8F, 0x06, 0x00, 0xFF, -4192, 3200, -6440, 1600, 1600, 1600, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1),
+#endif
     END_AREA(),
 
     FREE_LEVEL_POOL(),

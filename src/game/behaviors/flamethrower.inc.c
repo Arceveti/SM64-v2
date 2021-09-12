@@ -38,12 +38,6 @@ void bhv_flamethrower_flame_loop(void) {
     o->oInteractStatus = INT_STATUS_NONE;
 }
 
-void bhv_flamethrower_init(void) {
-#ifdef PUPPYLIGHTS
-    cur_obj_set_light_properties_default(PUPPYLIGHTS_FLAME_LIGHT, COLOR_RGBA32_FLAME_LIGHT);
-#endif
-}
-
 void bhv_flamethrower_loop(void) {
     struct Object *flame;
     if (o->oAction == FLAMETHROWER_ACT_IDLE) {
@@ -65,9 +59,6 @@ void bhv_flamethrower_loop(void) {
         flame = spawn_object_relative(o->oBehParams2ndByte, 0, 0, 0, o, model, bhvFlamethrowerFlame);
         flame->oForwardVel = flameVel;
         cur_obj_play_sound_1(SOUND_AIR_BLOW_FIRE);
-#ifdef PUPPYLIGHTS
-        cur_obj_enable_light();
-#endif
     } else if (o->oTimer > 60) {
         o->oAction = FLAMETHROWER_ACT_IDLE;
     }

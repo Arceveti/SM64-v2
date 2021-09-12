@@ -2,7 +2,7 @@
 
 void bhv_flame_init(void) {
 #ifdef PUPPYLIGHTS
-    cur_obj_set_light_properties_default(PUPPYLIGHTS_FLAME_LIGHT, COLOR_RGBA32_FLAME_LIGHT);
+    cur_obj_set_light_properties_default(PUPPYLIGHTS_FLAME_LIGHT, (cur_obj_has_model(MODEL_BLUE_FLAME) ? COLOR_RGBA32_BLUE_FLAME_LIGHT : COLOR_RGBA32_RED_FLAME_LIGHT));
     cur_obj_enable_light();
 #endif
 }

@@ -89,7 +89,7 @@ void set_yoshi_as_not_dead(void) {
  * of the opacity of an object to something else. Perhaps like, giving a parent object the same
  * opacity?
  */
-Gfx UNUSED *geo_obj_transparency_something(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+UNUSED Gfx *geo_obj_transparency_something(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     Gfx *gfxHead;
     Gfx *gfx;
     struct Object *heldObject;

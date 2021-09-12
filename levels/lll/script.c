@@ -205,6 +205,11 @@ const LevelScript level_lll_entry[] = {
         MACRO_OBJECTS(/*objList*/ lll_seg7_area_2_macro_objs),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0004, /*seq*/ SEQ_LEVEL_HOT),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
+#ifdef PUPPYLIGHTS
+        // PUPPYLIGHT_ENVIRONMENT(0x7F, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x28, 0x28, 0x28),
+        PUPPYLIGHT_NODE(0x8F, 0x06, 0x00, 0xFF, 0, -2048,     0, 8192, 8192, 8192, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1),
+        PUPPYLIGHT_NODE(0x8F, 0x06, 0x00, 0xFF, 0,  2048, -2900, 2048, 8192, 2048, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1),
+#endif
     END_AREA(),
 
     FREE_LEVEL_POOL(),

@@ -77,7 +77,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     Vec3i lightRelative;
     Vec3i lightDir = { 0x00, 0x00, 0x00 };
     s32 i;
-    s32 colour, ambient;
+    RGBA32 colour, ambient;
     f64 scaleOrig;
     f32 scale, scale2;
     f64 scaleVal = 1.0f;
@@ -137,14 +137,14 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     } else {
         return;
     }
-    f32 epc = (f32)(light->epicentre / 100.0f);
+    f32 fac = (f32)(light->epicentre / 100.0f);
     tempLight = segmented_to_virtual(src);
     // Now we have a scale value and a scale factor, we can start lighting things up.
     // Convert to a percentage.
     scale = (scaleOrig / scaleVal);
     scale = CLAMP(scale, 0.0f, 1.0f);
     // Reduce scale2 by the epicentre.
-    scale2 = ((scale - epc) * (1 + epc));
+    scale2 = ((scale - fac) * (1 + fac));
     scale2 = CLAMP(scale2, 0.0f, 1.0f);
     // Get the direction numbers we want by applying some maths to the relative positions. We use 64 because light directions range from -64 to 63.
     // Note: can this be optimised further? Simply squaring lightRelative and then dividing it by preScale doesn't work.
@@ -155,8 +155,9 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     }
     // Get direction if applicable.
     for ((i = 0); (i < 3); (i++)) {
+        fac = (light->rgba[3] / 255.0f);
         // So it works by starting from the final colour, and then lerping to the original colour, by a factor of the epicentre corrected scale. Light opacity affects this further.
-        colour = approach_f32_asymptotic(light->rgba[i], tempLight->l[0].l.col[i], (scale2 * ((f32)light->rgba[3] / 255.0f)));
+        colour = approach_f32_asymptotic(light->rgba[i], tempLight->l[0].l.col[i], (scale2 * fac));
         // If it's a directional light, then increase the current ambient by 50%, to give the effect better.
         // Otherwise, just normalise the brightness to keep it in line with the current ambient.
         // And now to apply the values.
@@ -164,14 +165,15 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
         tempLight->l[0].l.colc[i] = colour;
         // Ambient, too.
         if (!(light->flags & PUPPYLIGHT_DIRECTIONAL)) {
-            ambient = approach_f32_asymptotic((light->rgba[i] / 2), tempLight->a.l.col[i], (scale * ((f32)light->rgba[3] / 255.0f)));
+            ambient = approach_f32_asymptotic((light->rgba[i] / 2), tempLight->a.l.col[i], (scale * fac));
             tempLight->a.l.col[i]  = ambient;
             tempLight->a.l.colc[i] = ambient;
-        }
-        // A slightly hacky way to offset the ambient lighting in order to prevent directional lighting from having a noticeable change in ambient brightness.
-        if (flags & LIGHTFLAG_DIRECTIONAL_OFFSET) {
-            tempLight->a.l.col[i]  *= 1.5f;
-            tempLight->a.l.colc[i] *= 1.5f;
+        } else if (flags & LIGHTFLAG_DIRECTIONAL_OFFSET) {
+            // A slightly hacky way to offset the ambient lighting in order to prevent directional lighting from having a noticeable change in ambient brightness.
+            ambient = (tempLight->a.l.col[i] * 1.5f);
+            ambient = approach_f32_asymptotic(MIN(ambient, 0xFF), tempLight->a.l.col[i], (scale * fac));
+            tempLight->a.l.col[i]  = ambient;
+            tempLight->a.l.colc[i] = ambient;
         }
         // Apply direction. It takes the relative positions, and then multiplies them with the perspective matrix to get a correct direction.
         // Index 1 of the first dimension of gMatStack is perspective. Note that if you ever decide to cheat your way into rendering things after the game does :^)
@@ -193,6 +195,7 @@ void puppylights_run(Lights1 *src, struct Object *obj, UNUSED s32 flags, RGBA32 
     // as a hacky quick-fix for models coloured by lights. Lightcoloured models don't blend nearly as nicely as ones coloured
     // by other means.
     sLightBase = (levelAmbient ? &gLevelLight : &sDefaultLights);
+    // sLightBase = (levelAmbient ? &gLevelLight : segmented_to_virtual(src));
     if (baseColour >= 0x100) {
         for ((i = 0); (i < 3); (i++)) {
             colour = (((baseColour >> (24 - (i * 8)))) & 0xFF);

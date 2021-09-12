@@ -114,11 +114,16 @@
 #define colorRGB_to_vec3(dst, src    ) vec3_copy((dst), (src)        )
 #define vec3_to_colorRGB(dst, src    ) vec3_copy((dst), (src)        )
 
-#define RGBA32_TO_COLORRGBA(dst, src)   {   \
-    (dst)[0] = RGBA32_R(src);               \
-    (dst)[1] = RGBA32_G(src);               \
-    (dst)[2] = RGBA32_B(src);               \
-    (dst)[3] = RGBA32_A(src);               \
+#define RGBA32_TO_COLORRGB(dst, src) {  \
+    (dst)[0] = RGBA32_R(src);           \
+    (dst)[1] = RGBA32_G(src);           \
+    (dst)[2] = RGBA32_B(src);           \
+}
+#define RGBA32_TO_COLORRGBA(dst, src) { \
+    (dst)[0] = RGBA32_R(src);           \
+    (dst)[1] = RGBA32_G(src);           \
+    (dst)[2] = RGBA32_B(src);           \
+    (dst)[3] = RGBA32_A(src);           \
 }
 
 #define COLORRGB0_TO_RGBA32(src) (R_RGBA32((src)[0]) | G_RGBA32((src)[1]) | B_RGBA32((src)[2]))
