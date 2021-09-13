@@ -391,7 +391,8 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
         aspect = (4.0f / 3.0f); // 1.33333f
 #endif
         if (gCamera) {
-            gWorldScale = (vec3_sumsq(gCamera->pos) / sqr(LEVEL_BOUNDARY_MAX));
+            //! is there a way to simplify out the sqrtf?
+            gWorldScale = sqrtf(vec3_sumsq(gCamera->pos) / (sqr(LEVEL_BOUNDARY_MAX) * 2));
             gWorldScale = MAX(gWorldScale, 1.0f);
         } else {
             gWorldScale = 1.0f;

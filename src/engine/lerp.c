@@ -31,6 +31,13 @@ void approach_pos(f32 *value[3], f32 orig) {
 }
 
 void approach_pos_vector(Vec3f *value, Vec3f orig, s32 index) {
+    // If gMoveSpeed is high enough, just skip this entire malarchy.
+	if (gMoveSpeed >= 1.0f) {
+		vec3_copy(value[0], orig);
+		vec3_copy(value[1], orig);
+		vec3_copy(value[2], orig);
+		return;
+	}
     Vec3f tempPos[3];
     // Set a temporary place to store the value, and copy it over.
     vec3_copy(tempPos[0], value[0]);
@@ -92,6 +99,13 @@ UAngle angle_lerp(UAngle current, UAngle target) {
 }
 
 void approach_angle_vector(Vec3s *value, Vec3s orig) {
+	// If gMoveSpeed is high enough, just skip this entire malarchy.
+	if (gMoveSpeed >= 1.0f) {
+		vec3_copy(value[0], orig);
+		vec3_copy(value[1], orig);
+		vec3_copy(value[2], orig);
+		return;
+	}
     Vec3a tempAngle[3];
     // Set a temporary place to store the value, and copy it over.
     vec3_copy(tempAngle[0], value[0]);

@@ -173,9 +173,7 @@ void init_rdp(void) {
     gDPSetColorDither(   gDisplayListHead++, G_CD_MAGICSQ);
     gDPSetCycleType(     gDisplayListHead++, G_CYC_FILL  );
 
-#ifdef VERSION_SH
     gDPSetAlphaDither(   gDisplayListHead++, G_AD_PATTERN);
-#endif
     gDPPipeSync(         gDisplayListHead++);
 }
 
@@ -795,6 +793,7 @@ void thread5_game_loop(UNUSED void *arg) {
         puppyprint_profiler_process();
 #endif
 #ifdef VARIABLE_FRAMERATE
+        gGlobalTimer++;
         if (!startThread) {
             osStartThread(&gInputLoopThread);
             osStartThread(&gGraphicsLoopThread);
@@ -802,7 +801,6 @@ void thread5_game_loop(UNUSED void *arg) {
         startThread = TRUE;
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-        gGlobalTimer++; //! Wasn't in Fazana's repo. no idea where this gets incremented otherwise
 #else
         display_and_vsync();
         // when debug info is enabled, print the "BUF %07d" information.
