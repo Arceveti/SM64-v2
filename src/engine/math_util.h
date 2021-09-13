@@ -281,6 +281,12 @@ extern Vec3f gVec3fZ;
     (dst)[3] = (src)[0];                \
 }
 
+#define vec3_copy_offset_m1(dst, src) { \
+    (dst)[0] = (src)[1];                \
+    (dst)[1] = (src)[2];                \
+    (dst)[2] = (src)[0];                \
+}
+
 #define vec2_copy_negative(dst, src) {  \
     (dst)[0] = -(src)[0];               \
     (dst)[1] = -(src)[1];               \
@@ -690,6 +696,10 @@ void mtxf_adjunct(                      Mat4 *src, Mat4 *dst);
 f32  mtxf_det(                          Mat4 *mtx);
 void mtxf_inverse(                      Mat4 *dst, Mat4 *src);
 
+void mtxf_absrot(            Mat4 mtx, s32 axisnum, f32 ang);
+void mtxf_create_rot_angular(Mat4 mtx, Vec3f vec,   f32 ang);
+void mtxf_rot_about_vec3f(   Mat4 mtx, Vec3f vec           );
+
 void make_oblique(                        Mat4 toModify, Vec4f clipPlane);
 
 // Approach s32
@@ -724,6 +734,7 @@ s16   LENCOS(s16 length, Angle direction);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);
 f32   atan2_deg(f32 a, f32 b);
+void  rot_xy_deg(f32 deg, f32 *x, f32 *y);
 // Curves
 void spline_get_weights(Vec4f result, f32 t, UNUSED s32 c);
 void anim_spline_init(Vec4s *keyFrames);

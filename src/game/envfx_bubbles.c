@@ -268,27 +268,27 @@ void envfx_bubbles_update_switch(s32 mode, Vec3s camTo, Vec3s vertex1, Vec3s ver
     switch (mode) {
         case ENVFX_FLOWERS:
             envfx_update_flower(camTo);
-            vertex1[0] =  50; vertex1[1] =  0; vertex1[2] = 0;
-            vertex2[0] =   0; vertex2[1] = 75; vertex2[2] = 0;
-            vertex3[0] = -50; vertex3[1] =  0; vertex3[2] = 0;
+            vec3_set(vertex1,   50,    0,    0);
+            vec3_set(vertex2,    0,   75,    0);
+            vec3_set(vertex3,  -50,    0,    0);
             break;
         case ENVFX_LAVA_BUBBLES:
             envfx_update_lava(camTo);
-            vertex1[0] =  100; vertex1[1] =   0; vertex1[2] = 0;
-            vertex2[0] =    0; vertex2[1] = 150; vertex2[2] = 0;
-            vertex3[0] = -100; vertex3[1] =   0; vertex3[2] = 0;
+            vec3_set(vertex1,  100,    0,    0);
+            vec3_set(vertex2,    0,  150,    0);
+            vec3_set(vertex3, -100,    0,    0);
             break;
         case ENVFX_WHIRLPOOL_BUBBLES:
             envfx_update_whirlpool();
-            vertex1[0] =  40; vertex1[1] =  0; vertex1[2] = 0;
-            vertex2[0] =   0; vertex2[1] = 60; vertex2[2] = 0;
-            vertex3[0] = -40; vertex3[1] =  0; vertex3[2] = 0;
+            vec3_set(vertex1,   40,    0,    0);
+            vec3_set(vertex2,    0,   60,    0);
+            vec3_set(vertex3,  -40,    0,    0);
             break;
         case ENVFX_JETSTREAM_BUBBLES:
             envfx_update_jetstream();
-            vertex1[0] =  40; vertex1[1] =  0; vertex1[2] = 0;
-            vertex2[0] =   0; vertex2[1] = 60; vertex2[2] = 0;
-            vertex3[0] = -40; vertex3[1] =  0; vertex3[2] = 0;
+            vec3_set(vertex1,   40,    0,    0);
+            vec3_set(vertex2,    0,   60,    0);
+            vec3_set(vertex3,  -40,    0,    0);
             break;
     }
 }

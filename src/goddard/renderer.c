@@ -3,7 +3,6 @@
 #include "draw_objects.h"
 #include "dynlist_proc.h"
 #include "gd_main.h"
-#include "gd_math.h"
 #include "gd_memory.h"
 #include "objects.h"
 #include "renderer.h"
@@ -1031,7 +1030,7 @@ void gd_dl_scale(f32 x, f32 y, f32 z) {
 void gd_dl_rotate(f32 angle, s8 axis) {
     Mat4 mtx;
     mtxf_identity(mtx);
-    gd_absrot_mat4(      mtx, (axis - 120), -angle);
+    mtxf_absrot(      mtx, (axis - 120), -angle);
     gd_dl_mul_matrix(    &mtx);
 }
 

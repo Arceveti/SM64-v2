@@ -3,7 +3,7 @@
 #include "string_utils.h"
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "gd_math.h"
+#include "engine/math_util.h"
 #include "joints.h"
 #include "objects.h"
 #include "renderer.h"
@@ -460,7 +460,7 @@ void alloc_animdata(struct ObjAnimator *animator) {
                     vec3_mul_val(tri.p1, allocMtxScale);
                     vec3_copy(tri.p2, halfarr[6]);
                     mtxf_identity(curMtxVec->matrix);
-                    gd_rot_mat_about_vec3f(curMtxVec->matrix, tri.p1);
+                    mtxf_rot_about_vec3f(curMtxVec->matrix, tri.p1);
                     vec3_add(curMtxVec->matrix[3], tri.p2);
                     vec3_copy(((struct AnimMtxVec *) allocSpace)[dataIdx].vec, tri.p0);
                 }

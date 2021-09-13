@@ -23,6 +23,9 @@
 #define RAYCAST_FIND_WATER  (1 << 3) // 0x8
 #define RAYCAST_FIND_ALL    (0xFFFFFFFF)
 
+
+#define is_outside_level_bounds(x, z) (((x) <= -LEVEL_BOUNDARY_MAX) || ((x) >=  LEVEL_BOUNDARY_MAX) || ((z) <= -LEVEL_BOUNDARY_MAX) || ((z) >=  LEVEL_BOUNDARY_MAX))
+
 #define SURFACE_YAW(s) (atan2s(((s)->normal.z), ((s)->normal.x)))
 
 struct WallCollisionData

@@ -70,8 +70,8 @@ struct SpawnParticlesInfo
 #define obj_set_gfx_pos_from_pos(obj)             vec3_copy(   (obj)->header.gfx.pos, &(obj)->oPosVec)
 #define obj_copy_scale(dstObj, srcObj)            vec3_copy((dstObj)->header.gfx.scale, (srcObj)->header.gfx.scale)
 #define obj_scale_xyz(obj, xScale, yScale, zScale) vec3_set(   (obj)->header.gfx.scale, (xScale), (yScale), (zScale))
-// #define obj_scale(obj, scale) vec3_same((obj)->header.gfx.scale, (scale))
-// #define cur_obj_scale(scale) vec3_same(o->header.gfx.scale, (scale))
+// #define obj_scale(obj, scale) vec3_same(((obj)->header.gfx.scale), (scale)) //!
+// #define cur_obj_scale(scale) vec3_same((o->header.gfx.scale), (scale)) //!
 
 #define cur_obj_enable_rendering()  (o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE   )
 #define cur_obj_disable_rendering() (o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE   )

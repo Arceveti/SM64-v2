@@ -1,6 +1,6 @@
 #include <PR/ultratypes.h>
 
-#include "gd_math.h"
+#include "engine/math_util.h"
 #include "objects.h"
 #include "renderer.h"
 #include "skin.h"

@@ -2,7 +2,7 @@
 
 #include "draw_objects.h"
 #include "dynlist_proc.h"
-#include "gd_math.h"
+#include "engine/math_util.h"
 #include "objects.h"
 #include "particles.h"
 #include "skin.h"

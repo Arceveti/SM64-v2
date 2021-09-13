@@ -1,7 +1,7 @@
 #include <PR/ultratypes.h>
 
+#include "engine/math_util.h"
 #include "draw_objects.h"
-#include "gd_math.h"
 #include "joints.h"
 #include "objects.h"
 #include "renderer.h"
@@ -42,7 +42,7 @@ void reset_net(struct ObjNet *net) {
     gGdSkinNet = net;
     mtxf_identity(net->rotationMtx);
     mtxf_identity(net->idMtx);
-    gd_rot_mat_about_vec3f(net->idMtx,    net->initRotation); // set rot mtx to initial rotation?
+    mtxf_rot_about_vec3f(net->idMtx,    net->initRotation); // set rot mtx to initial rotation?
     vec3_add(              net->idMtx[3], net->worldPos    ); // set to initial position?
     mtxf_copy(net->invMtx, net->idMtx);
     if ((grp = net->nodeGrp) != NULL) apply_to_obj_types_in_group(OBJ_TYPE_JOINTS, (applyproc_t) reset_joint, grp);

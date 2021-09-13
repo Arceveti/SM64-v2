@@ -3,7 +3,6 @@
 #include "draw_objects.h"
 #include "dynlist_proc.h"
 #include "gd_main.h"
-#include "gd_math.h"
 #include "joints.h"
 #include "objects.h"
 #include "sfx.h"
@@ -170,7 +169,7 @@ void reset_joint(struct ObjJoint *j) {
     // vec3_zero(j->unk1A8); // unused
     mtxf_identity(j->idMtx);
     mtxf_scale_self_vec3f( j->idMtx, j->scale);
-    gd_rot_mat_about_vec3f(j->idMtx, j->initRotation);
+    mtxf_rot_about_vec3f(j->idMtx, j->initRotation);
     vec3_add(j->idMtx[3], j->attachOffset);
     mtxf_copy(j->invMtx, j->idMtx);
     mtxf_identity(j->rotationMtx);

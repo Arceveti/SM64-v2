@@ -300,10 +300,8 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
 Gfx *geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
-    if (callContext == GEO_CONTEXT_RENDER) {
-        // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = (!(bodyState->action & ACT_FLAG_STATIONARY));
-    }
+    // assign result. 0 if moving, 1 if stationary.
+    if (callContext == GEO_CONTEXT_RENDER) switchCase->selectedCase = (!(bodyState->action & ACT_FLAG_STATIONARY));
     return NULL;
 }
 
@@ -316,7 +314,7 @@ Gfx *geo_switch_mario_eyes(s32 callContext, struct GraphNode *node, UNUSED Mat4 
     s16 blinkFrame;
     if (callContext == GEO_CONTEXT_RENDER) {
         if (bodyState->eyeState == 0) {
-            blinkFrame = (((switchCase->numCases * 32 + gAreaUpdateCounter) >> 1) & 0x1F);
+            blinkFrame = ((((switchCase->numCases * 32) + gAreaUpdateCounter) >> 1) & 0x1F);
             switchCase->selectedCase = ((blinkFrame < 7) ? gMarioBlinkAnimation[blinkFrame] : 0);
         } else {
             switchCase->selectedCase = (bodyState->eyeState - 1);
@@ -355,10 +353,7 @@ Gfx *geo_mario_tilt_torso(s32 callContext, struct GraphNode *node, UNUSED Mat4 *
          && (action != ACT_HOLD_BUTT_SLIDE)
          && (action != ACT_WALKING)
          && (action != ACT_RIDING_SHELL_GROUND)) vec3_zero(bodyState->torsoAngle);
-        // offset by -1
-        rotNode->rotation[0] = bodyState->torsoAngle[1];
-        rotNode->rotation[1] = bodyState->torsoAngle[2];
-        rotNode->rotation[2] = bodyState->torsoAngle[0];
+        vec3_copy_offset_m1(rotNode->rotation, bodyState->torsoAngle);
     }
     return NULL;
 }
@@ -377,10 +372,7 @@ Gfx *geo_mario_head_rotation(s32 callContext, struct GraphNode *node, UNUSED Mat
             rotNode->rotation[0] = gPlayerCameraState->headRotation[1];
             rotNode->rotation[2] = gPlayerCameraState->headRotation[0];
         } else if (action & ACT_FLAG_WATER_OR_TEXT) {
-            // offset by -1
-            rotNode->rotation[0] = bodyState->headAngle[1];
-            rotNode->rotation[1] = bodyState->headAngle[2];
-            rotNode->rotation[2] = bodyState->headAngle[0];
+            vec3_copy_offset_m1(rotNode->rotation, bodyState->headAngle);
         } else {
             vec3_zero(bodyState->headAngle);
             vec3_zero(rotNode->rotation   );
@@ -470,20 +462,17 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             if (dist < 0.0f) dist = 0.0f;
             lakituW = (lakituMaxW - (dist * 2.0f));
             lakituH = (lakituMaxH - (dist       ));
-            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - (SCREEN_HEIGHT/10)/*gMarioScreenY*/)) -  lakituW        );
+            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - (SCREEN_HEIGHT / 10)/*gMarioScreenY*/)) -  lakituW        );
             if (lakituX < 0) lakituX = 0;
-            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                (SCREEN_WIDTH/2)/*gMarioScreenX*/)) - (lakituH * 0.5f));
+            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                (SCREEN_WIDTH  /  2)/*gMarioScreenX*/)) - (lakituH * 0.5f));
             if (lakituY < 0) lakituY = 0;
-            copy_partial_image(metalTexture, lakituTexture,
-                                // 16, 0,
-                                lakituX, lakituY, // dst   xy
-                                lakituW, lakituH, // dst   wh
-                                // 64, 32,
-                                64, 32, // dst T wh
-                                 0,  0, // src   xy
-                                64, 64, // src   wh
-                                64, 64  // src T wh
-                                );
+            copy_partial_image(metalTexture, lakituTexture, // rgba16, ia8
+                                    lakituX,       lakituY, // dst   xy
+                                    lakituW,       lakituH, // dst   wh
+                                         64,            32, // dst T wh
+                                          0,             0, // src   xy
+                                         64,            64, // src   wh
+                                         64,            64);// src T wh
 #endif
 #ifdef METAL_CAP_REFLECTION_SHINE
             overlay_i8_on_rgba16_additive(metalTexture, shineTexture, 64, 32);
@@ -492,22 +481,6 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
         if (find_nearest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
             TexturePtr *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
-#ifdef METAL_CAP_REFLECTION_LAKITU
-            dist    = ((dist - 250.0f) * 0.0625);
-            dist    = CLAMP(dist, 0.0f, 32.0f);
-            lakituW =  (64 - (dist    * 2.0f));
-            lakituH =  (32 - (dist          ));
-            lakituX =  (32 - (lakituW * 0.5f));
-            lakituY =  (lakituX - 16);
-            copy_partial_image(metalCapTexture, lakituTexture,
-                                lakituX, lakituY, // dst   xy
-                                lakituW, lakituH, // dst   wh
-                                64, 32, // dst T wh
-                                 0,  0, // src   xy
-                                64, 64, // src   wh
-                                64, 64 // src T wh
-                                );
-#endif
 #ifdef METAL_CAP_REFLECTION_SHINE
             overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, 64, 32);
 #endif

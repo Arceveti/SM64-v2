@@ -6,7 +6,6 @@
 #include "draw_objects.h"
 #include "dynlist_proc.h"
 #include "gd_main.h"
-#include "gd_math.h"
 #include "joints.h"
 #include "particles.h"
 #include "renderer.h"
@@ -435,11 +434,11 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
         transform.pos[2]    = (t1->pos[2] + ((t2->pos[2] - t1->pos[2]) * dt));
         // not going to interpolate scale?
         mtxf_scale_self_vec3f( mtx, t1->scale);
-        gd_rot_mat_about_vec3f(mtx, transform.rotate);
+        mtxf_rot_about_vec3f(mtx, transform.rotate);
         vec3f_add(mtx[3], transform.pos);
     } else {
         d_set_scale(t1->scale[0], t1->scale[1], t1->scale[2]);
-        gd_rot_mat_about_vec3f(mtx, t1->rotate);
+        mtxf_rot_about_vec3f(mtx, t1->rotate);
         vec3f_add(mtx[3], t1->pos);
     }
     d_set_i_matrix(&mtx);
@@ -565,7 +564,7 @@ void move_animator(struct ObjAnimator *animObj) {
                 triPtr = (struct GdAnimTransform *) animData->data;
                 mtxf_identity(localMtx);
                 mtxf_scale_self_vec3f( localMtx, triPtr->scale );
-                gd_rot_mat_about_vec3f(localMtx, triPtr->rotate);
+                mtxf_rot_about_vec3f(localMtx, triPtr->rotate);
                 vec3_add(localMtx[3], triPtr->pos);
                 d_set_i_matrix(&localMtx);
                 break;
@@ -657,8 +656,8 @@ void move_camera(struct ObjCamera *cam) {
         if (ctrl->cdown ) cam->rotationAngle[0] -= cam->rotationSpeeds[0];
         clamp_f32(&cam->rotationAngle[0], -80.0f, 80.0f);
         vec3_copy(cam->curZoomPosition, cam->zoomPositions[cam->zoomLevel]);
-        gd_rot_2d_vec( cam->rotationAngle[0], &cam->curZoomPosition[1], &cam->curZoomPosition[2]); // pitch
-        gd_rot_2d_vec(-cam->rotationAngle[1], &cam->curZoomPosition[0], &cam->curZoomPosition[2]); // yaw
+        rot_xy_deg( cam->rotationAngle[0], &cam->curZoomPosition[1], &cam->curZoomPosition[2]); // pitch
+        rot_xy_deg(-cam->rotationAngle[1], &cam->curZoomPosition[0], &cam->curZoomPosition[2]); // yaw
         cam->relPos[0] += ((cam->curZoomPosition[0] - cam->relPos[0]) * cam->multiplier);
         cam->relPos[1] += ((cam->curZoomPosition[1] - cam->relPos[1]) * cam->multiplier);
         cam->relPos[2] += ((cam->curZoomPosition[2] - cam->relPos[2]) * cam->multiplier);

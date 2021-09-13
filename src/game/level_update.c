@@ -296,9 +296,7 @@ void init_mario_after_warp(void) {
     u32 marioSpawnType = get_mario_spawn_type(spawnNode->object);
     if (gMarioState->action != ACT_UNINITIALIZED) {
         vec3f_to_vec3s(gPlayerSpawnInfos[0].startPos, &spawnNode->object->oPosVec);
-        gPlayerSpawnInfos[0].startAngle[0] = 0x0;
-        gPlayerSpawnInfos[0].startAngle[1] = spawnNode->object->oMoveAngleYaw;
-        gPlayerSpawnInfos[0].startAngle[2] = 0x0;
+        vec3_set(gPlayerSpawnInfos[0].startAngle, 0x0, spawnNode->object->oMoveAngleYaw, 0x0);
         if (marioSpawnType == MARIO_SPAWN_DOOR_WARP) init_door_warp(&gPlayerSpawnInfos[0], sWarpDest.arg);
         if ((sWarpDest.type == WARP_TYPE_CHANGE_LEVEL) || (sWarpDest.type == WARP_TYPE_CHANGE_AREA)) {
             gPlayerSpawnInfos[0].areaIndex = sWarpDest.areaIdx;

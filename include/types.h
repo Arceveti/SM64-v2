@@ -396,7 +396,7 @@ struct MarioBodyState
 
 struct MarioState
 {
-    /*0x00*/ u16            floorAlignMatrixIndex;
+    /*0x00*/ u16            playerID;
     /*0x02*/ u16            input;
     /*0x04*/ u32            flags;
     /*0x08*/ u32            particleFlags;

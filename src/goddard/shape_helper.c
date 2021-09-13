@@ -4,7 +4,7 @@
 #include "dynlist_proc.h"
 #include "dynlists/dynlists.h"
 #include "gd_main.h"
-#include "gd_math.h"
+#include "engine/math_util.h"
 #include "joints.h"
 #include "objects.h"
 #include "particles.h"

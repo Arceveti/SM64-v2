@@ -17,13 +17,6 @@
  *                      WALLS                     *
  **************************************************/
 
-static Bool32 is_outside_level_bounds(f32 x, f32 z) {
-    return ((x <= -LEVEL_BOUNDARY_MAX)
-         || (x >=  LEVEL_BOUNDARY_MAX)
-         || (z <= -LEVEL_BOUNDARY_MAX)
-         || (z >=  LEVEL_BOUNDARY_MAX));
-}
-
 void move_towards_wall(struct MarioState *m, f32 amount) {
     m->vel[0] += (m->wall->normal.x * amount);
     m->vel[1] += (m->wall->normal.y * amount);

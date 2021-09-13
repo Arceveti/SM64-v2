@@ -142,10 +142,7 @@ void iterate_surfaces_visual(s32 x, s32 z, Vtx *verts) {
     struct Surface *surf;
     s32 i = 0;
     ColorRGB col = ARR(COLOR_RGB_RED);
-    if ((x <= -LEVEL_BOUNDARY_MAX)
-     || (x >=  LEVEL_BOUNDARY_MAX)
-     || (z <= -LEVEL_BOUNDARY_MAX)
-     || (z >=  LEVEL_BOUNDARY_MAX)) return;
+    if (is_outside_level_bounds(x, z)) return;
     register const CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for ((i = 0); (i < 8); (i++)) {
@@ -232,10 +229,7 @@ s32 iterate_surface_count(s32 x, s32 z) {
     s32 i = 0, j = 0;
     Collision *p = gEnvironmentRegions;
     s32 numRegions;
-    if ((x <= -LEVEL_BOUNDARY_MAX)
-     || (x >=  LEVEL_BOUNDARY_MAX)
-     || (z <= -LEVEL_BOUNDARY_MAX)
-     || (z >=  LEVEL_BOUNDARY_MAX)) return 0;
+    if (is_outside_level_bounds(x, z)) return 0;
     register const CellIndex cellX = (((x + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     register const CellIndex cellZ = (((z + LEVEL_BOUNDARY_MAX) / CELL_SIZE) & NUM_CELLS_INDEX);
     for ((i = 0); (i < 8); (i++)) {
@@ -342,9 +336,8 @@ void debug_box_pos(Vec3f pMin, Vec3f pMax, s32 type) {
  */
 void debug_box_pos_rot(Vec3f pMin, Vec3f pMax, Angle yaw, s32 type) {
     Vec3f center, bounds;
-    bounds[0] = ((pMax[0] - pMin[0]) / 2.0f);
-    bounds[1] = ((pMax[1] - pMin[1]) / 2.0f);
-    bounds[2] = ((pMax[2] - pMin[2]) / 2.0f);
+    vec3_diff(bounds, pMax, pMin);
+    vec3_div_val(bounds, 2.0f);
     vec3f_sum(center, pMin, bounds);
     append_debug_box(center, bounds, yaw, type);
 }

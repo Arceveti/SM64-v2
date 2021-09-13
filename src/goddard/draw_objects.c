@@ -3,7 +3,6 @@
 #include "string_utils.h"
 #include "dynlist_proc.h"
 #include "gd_main.h"
-#include "gd_math.h"
 #include "objects.h"
 #include "renderer.h"
 #include "shape_helper.h"
