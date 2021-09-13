@@ -1289,10 +1289,10 @@ void print_animated_red_coin(ScreenPos x, ScreenPos y) {
     }
 #else
     switch (timer & 0x6) {
-        case 0: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_front_0     ); break;
-        case 2: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_tilt_right_0); break;
-        case 4: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_side_0      ); break;
-        case 6: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_tilt_left_0 ); break;
+        case 0: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_front     ); break;
+        case 2: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_tilt_right); break;
+        case 4: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_side      ); break;
+        case 6: gSPDisplayList(gDisplayListHead++, coin_seg3_dl_red_tilt_left ); break;
     }
 #endif
     gDPSetRenderMode(gDisplayListHead++, G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2);

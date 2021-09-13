@@ -161,19 +161,19 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
         // If it's a directional light, then increase the current ambient by 50%, to give the effect better.
         // Otherwise, just normalise the brightness to keep it in line with the current ambient.
         // And now to apply the values.
-        tempLight->l[0].l.col[i]  = colour;
+        tempLight->l[0].l.col [i] = colour;
         tempLight->l[0].l.colc[i] = colour;
         // Ambient, too.
         if (!(light->flags & PUPPYLIGHT_DIRECTIONAL)) {
             ambient = approach_f32_asymptotic((light->rgba[i] / 2), tempLight->a.l.col[i], (scale * fac));
-            tempLight->a.l.col[i]  = ambient;
+            tempLight->a.l.col [i] = ambient;
             tempLight->a.l.colc[i] = ambient;
         }
         // A slightly hacky way to offset the ambient lighting in order to prevent directional lighting from having a noticeable change in ambient brightness.
         if (flags & LIGHTFLAG_DIRECTIONAL_OFFSET) {
             ambient = (tempLight->a.l.col[i] * 2);
             ambient = approach_f32_asymptotic(MIN(ambient, 0xFF), tempLight->a.l.col[i], (scale2 * fac));
-            tempLight->a.l.col[i]  = ambient;
+            tempLight->a.l.col [i] = ambient;
             tempLight->a.l.colc[i] = ambient;
         }
         // Apply direction. It takes the relative positions, and then multiplies them with the perspective matrix to get a correct direction.

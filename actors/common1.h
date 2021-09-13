@@ -71,6 +71,11 @@ extern const Gfx coin_seg3_dl_secret_67_5_r[];
 extern const Gfx coin_seg3_dl_secret_45_r[];
 extern const Gfx coin_seg3_dl_secret_22_5_r[];
 
+#else
+
+extern const Gfx coin_seg3_dl_begin[];
+extern const Gfx coin_seg3_dl_end[];
+
 extern const Gfx coin_seg3_dl_yellow_front[];
 extern const Gfx coin_seg3_dl_yellow_tilt_right[];
 extern const Gfx coin_seg3_dl_yellow_side[];
@@ -86,25 +91,6 @@ extern const Gfx coin_seg3_dl_red_tilt_right[];
 extern const Gfx coin_seg3_dl_red_side[];
 extern const Gfx coin_seg3_dl_red_tilt_left[];
 
-extern const Gfx coin_seg3_dl_secret_front[];
-extern const Gfx coin_seg3_dl_secret_tilt_right[];
-extern const Gfx coin_seg3_dl_secret_side[];
-extern const Gfx coin_seg3_dl_secret_tilt_left[];
-#else
-extern const Gfx coin_seg3_dl_begin_0[];
-extern const Gfx coin_seg3_dl_end_0[];
-extern const Gfx coin_seg3_dl_yellow_front_0[];
-extern const Gfx coin_seg3_dl_yellow_tilt_right_0[];
-extern const Gfx coin_seg3_dl_yellow_side_0[];
-extern const Gfx coin_seg3_dl_yellow_tilt_left_0[];
-extern const Gfx coin_seg3_dl_blue_front_0[];
-extern const Gfx coin_seg3_dl_blue_tilt_right_0[];
-extern const Gfx coin_seg3_dl_blue_side_0[];
-extern const Gfx coin_seg3_dl_blue_tilt_left_0[];
-extern const Gfx coin_seg3_dl_red_front_0[];
-extern const Gfx coin_seg3_dl_red_tilt_right_0[];
-extern const Gfx coin_seg3_dl_red_side_0[];
-extern const Gfx coin_seg3_dl_red_tilt_left_0[];
 #endif
 
 // dirt
