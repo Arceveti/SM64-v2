@@ -322,7 +322,9 @@ void thread3_main(UNUSED void *arg) {
     setup_mesg_queues();
     alloc_pool();
     load_engine_code_segment();
-#ifndef UNF
+#ifdef UNF
+    debug_initialize();
+#else
     crash_screen_init();
 #endif
 #ifdef DEBUG
@@ -446,9 +448,6 @@ void thread1_idle(UNUSED void *arg) {
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
     osCreatePiManager(OS_PRIORITY_PIMGR, &gPIMesgQueue, gPIMesgBuf, ARRAY_COUNT(gPIMesgBuf));
-#ifdef UNF
-    debug_initialize();
-#endif
     create_thread(&gMainThread, 3, thread3_main, NULL, (gThread3Stack + 0x2000), 100);
     osStartThread(&gMainThread);
     osSetThreadPri(NULL, 0);
