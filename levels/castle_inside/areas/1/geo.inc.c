@@ -279,7 +279,7 @@ const GeoLayout castle_geo_area_1[] = {
          GEO_OPEN_NODE(),
             GEO_CAMERA(13, 0, 2000, 6000, 0, 0, 0, geo_camera_main),
             GEO_OPEN_NODE(),
-               GEO_SWITCH_CASE(17, geo_switch_area),
+               GEO_SWITCH_CASE(17, geo_switch_room),
                GEO_OPEN_NODE(),
                   GEO_BRANCH(1, castle_geo_area_1_room_lobby),                            // 0x0E000F30 - Lobby
                   GEO_BRANCH(1, castle_geo_area_1_room_back_hallway),                     // 0x0E000F70 - Hallway to Courtyard

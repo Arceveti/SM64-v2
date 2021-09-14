@@ -381,19 +381,19 @@ static void level_cmd_load_model_from_geo(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
-static void level_cmd_23(void) {
+static void level_cmd_load_model_from_dl_with_scale(void) {
     union {
         s32 i;
         f32 f;
-    } arg2;
+    } scale;
     ModelID model =      (CMD_GET(ModelID, 2) & 0x0FFF);
-    s16   arg0H   = ((u16)CMD_GET(s16, 2)) >> 12;
-    void *arg1    =       CMD_GET(void *, 4);
-    // load an f32, but using an integer load instruction for some reason (hence the union)
-    arg2.i = CMD_GET(s32, 8);
+    s16   node    = ((u16)CMD_GET(s16, 2)) >> 12;
+    void *dl_ptr  =       CMD_GET(void *, 4);
+    //! load an f32, but using an integer load instruction for some reason (hence the union)
+    scale.i = CMD_GET(s32, 8);
     // GraphNodeScale has a GraphNode at the top. This
     // is being stored to the array, so cast the pointer.
-    if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, arg0H, arg1, arg2.f);
+    if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_scale(sLevelPool, 0, node, dl_ptr, scale.f);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -420,9 +420,9 @@ static void level_cmd_place_object(void) {
         spawnInfo->startPos[0]                  =  CMD_GET(s16, 4);
         spawnInfo->startPos[1]                  =  CMD_GET(s16, 6);
         spawnInfo->startPos[2]                  =  CMD_GET(s16, 8);
-        spawnInfo->startAngle[0]                = (CMD_GET(s16, 10) * 0x8000 / 180);
-        spawnInfo->startAngle[1]                = (CMD_GET(s16, 12) * 0x8000 / 180);
-        spawnInfo->startAngle[2]                = (CMD_GET(s16, 14) * 0x8000 / 180);
+        spawnInfo->startAngle[0]                = (CMD_GET(Angle, 10) * 0x8000 / 180);
+        spawnInfo->startAngle[1]                = (CMD_GET(Angle, 12) * 0x8000 / 180);
+        spawnInfo->startAngle[2]                = (CMD_GET(Angle, 14) * 0x8000 / 180);
         spawnInfo->areaIndex                    = sCurrAreaIndex;
         spawnInfo->activeAreaIndex              = sCurrAreaIndex;
         spawnInfo->behaviorArg                  = CMD_GET(u32, 16);
@@ -593,12 +593,12 @@ static void level_cmd_set_mario_start_pos(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
-static void level_cmd_2C(void) {
+static void level_cmd_unload_mario_area(void) {
     unload_mario_area();
     sCurrentCmd = CMD_NEXT;
 }
 
-static void level_cmd_2D(void) {
+static void level_cmd_area_update_objects(void) {
     area_update_objects();
     sCurrentCmd = CMD_NEXT;
 }
@@ -630,7 +630,7 @@ static void level_cmd_set_menu_music(void) {
     sCurrentCmd = CMD_NEXT;
 }
 
-static void level_cmd_38(void) {
+static void level_cmd_fadeout_music(void) {
     fadeout_music(CMD_GET(s16, 2));
     sCurrentCmd = CMD_NEXT;
 }
@@ -689,7 +689,8 @@ static void level_cmd_puppyvolume(void) {
 static void level_cmd_puppylight_environment(void) {
 #ifdef PUPPYLIGHTS
     Lights1 temp = gdSPDefLights1(CMD_GET(u8, 2), CMD_GET(u8, 3), CMD_GET(u8, 4), CMD_GET(u8, 5), CMD_GET(u8, 6), CMD_GET(u8, 7), CMD_GET(u8, 8), CMD_GET(u8, 9), CMD_GET(u8, 10));
-    memcpy(&gLevelLight, &temp, sizeof(Lights1));
+    gLevelLight = temp;
+    // memcpy(&gLevelLight, &temp, sizeof(Lights1));
     levelAmbient = TRUE;
 #endif
     sCurrentCmd = CMD_NEXT;
@@ -761,7 +762,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*20*/ level_cmd_end_area,
     /*21*/ level_cmd_load_model_from_dl,
     /*22*/ level_cmd_load_model_from_geo,
-    /*23*/ level_cmd_23,
+    /*23*/ level_cmd_load_model_from_dl_with_scale,
     /*24*/ level_cmd_place_object,
     /*25*/ level_cmd_init_mario,
     /*26*/ level_cmd_create_warp_node,
@@ -770,8 +771,8 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*29*/ level_cmd_load_area,
     /*2A*/ level_cmd_unload_area,
     /*2B*/ level_cmd_set_mario_start_pos,
-    /*2C*/ level_cmd_2C,
-    /*2D*/ level_cmd_2D,
+    /*2C*/ level_cmd_unload_mario_area,
+    /*2D*/ level_cmd_area_update_objects,
     /*2E*/ level_cmd_set_terrain_data,
     /*2F*/ level_cmd_set_rooms,
     /*30*/ level_cmd_show_dialog,
@@ -782,7 +783,7 @@ static void (*LevelScriptJumpTable[])(void) = {
     /*35*/ level_cmd_set_gamma,
     /*36*/ level_cmd_set_music,
     /*37*/ level_cmd_set_menu_music,
-    /*38*/ level_cmd_38,
+    /*38*/ level_cmd_fadeout_music,
     /*39*/ level_cmd_set_macro_objects,
     /*3A*/ level_cmd_3A,
     /*3B*/ level_cmd_create_whirlpool,

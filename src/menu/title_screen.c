@@ -138,12 +138,12 @@ s32 intro_level_select(void) {
         // is the case, quit the menu instead.
         if (gPlayer1Controller->buttonDown == (Z_TRIG | START_BUTTON | L_TRIG)) { // quit level select
             gDebugLevelSelect = FALSE;
-            return -1;
+            return LEVEL_RESTART_GAME;
         }
         play_sound(SOUND_MENU_STAR_SOUND, gGlobalSoundSource);
         return gCurrLevelNum;
     }
-    return 0;
+    return LEVEL_NONE;
 }
 
 #ifdef KEEP_MARIO_HEAD
@@ -172,7 +172,7 @@ s32 intro_regular(void) {
         // calls level ID 100 (or 101 adding level select bool value)
         // defined in level_intro_mario_head_regular JUMP_IF commands
         // 100 is File Select - 101 is Level Select
-        level = (100 + gDebugLevelSelect);
+        level = (LEVEL_FILE_SELECT + gDebugLevelSelect);
 #ifndef VERSION_JP
         sPlayMarioGreeting = TRUE;
 #endif
@@ -203,7 +203,7 @@ s32 intro_game_over(void) {
         queue_rumble_decay(1);
 #endif
         // same criteria as intro_regular
-        level = (100 + gDebugLevelSelect);
+        level = (LEVEL_FILE_SELECT + gDebugLevelSelect);
 #ifndef VERSION_JP
         sPlayMarioGameOver = TRUE;
 #endif
@@ -238,7 +238,7 @@ s32 lvl_intro_update(s16 arg, UNUSED s32 unusedArg) {
         case LVL_INTRO_GAME_OVER:           level = intro_game_over();           break;
 #else
         case LVL_INTRO_REGULAR:             // fall through
-        case LVL_INTRO_GAME_OVER:           level = (100 + gDebugLevelSelect);   break;
+        case LVL_INTRO_GAME_OVER:           level = (LEVEL_FILE_SELECT + gDebugLevelSelect);   break;
 #endif
         case LVL_INTRO_LEVEL_SELECT:        level = intro_level_select();        break;
     }

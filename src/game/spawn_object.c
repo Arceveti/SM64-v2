@@ -148,6 +148,9 @@ void clear_object_lists(struct ObjectNode *objLists) {
  * Free the given object.
  */
 void unload_object(struct Object *obj) {
+#ifdef PUPPYLIGHTS
+    obj_disable_light(obj);
+#endif
     obj->activeFlags            = ACTIVE_FLAG_DEACTIVATED;
     obj->prevObj                = NULL;
     obj->header.gfx.throwMatrix = NULL;

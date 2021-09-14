@@ -113,7 +113,7 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
     return NULL;
 }
 
-Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *context) {
+Gfx *geo_switch_room(s32 callContext, struct GraphNode *node, UNUSED void *context) {
     s16 areaCase;
     struct Surface *floor;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
@@ -121,7 +121,7 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node, UNUSED void *conte
         if (gMarioObject == NULL) {
             switchCase->selectedCase = 0;
         } else {
-#ifdef SWITCH_AREA_ALWAYS_USES_MARIO_FLOOR
+#ifdef SWITCH_ROOM_ALWAYS_USES_MARIO_FLOOR
             floor = gMarioState->floor; // Use Mario's floor instead of finding a new one. This skips intangible floors
 #else
             // Check if there is an intangible floor in the current cell
@@ -185,15 +185,15 @@ f32 lateral_dist_between_objects(struct Object *obj1, struct Object *obj2) {
     return lateralDist;
 }
 
+f32 lateral_dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {
+    MAKE_DXZ(&obj1->oPosVec, &obj2->oPosVec, f32)
+    return (sqr(dx) + sqr(dz));
+}
+
 f32 dist_between_objects(struct Object *obj1, struct Object *obj2) {
     f32 dist;
     vec3f_get_dist(&obj1->oPosVec, &obj2->oPosVec, &dist);
     return dist;
-}
-
-f32 lateral_dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {
-    MAKE_DXZ(&obj1->oPosVec, &obj2->oPosVec, f32)
-    return (sqr(dx) + sqr(dz));
 }
 
 f32 dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {

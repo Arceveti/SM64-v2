@@ -206,10 +206,10 @@ void append_snowflake_vertex_buffer(Gfx *gfx, s32 index, Vec3s vertex1, Vec3s ve
     Vtx *vertBuf = (Vtx *) alloc_display_list(15 * sizeof(Vtx));
     if (vertBuf == NULL) return;
     for ((i = 0); (i < 15); (i += 3)) {
-        vertBuf[i] = gSnowTempVtx[0];
-        (vertBuf + i    )->v.ob[0] = ((gEnvFxBuffer + (index + i / 3))->pos[0] + vertex1[0]);
-        (vertBuf + i    )->v.ob[1] = ((gEnvFxBuffer + (index + i / 3))->pos[1] + vertex1[1]);
-        (vertBuf + i    )->v.ob[2] = ((gEnvFxBuffer + (index + i / 3))->pos[2] + vertex1[2]);
+        vertBuf[i + 0] = gSnowTempVtx[0];
+        (vertBuf + i + 0)->v.ob[0] = ((gEnvFxBuffer + (index + i / 3))->pos[0] + vertex1[0]);
+        (vertBuf + i + 0)->v.ob[1] = ((gEnvFxBuffer + (index + i / 3))->pos[1] + vertex1[1]);
+        (vertBuf + i + 0)->v.ob[2] = ((gEnvFxBuffer + (index + i / 3))->pos[2] + vertex1[2]);
         vertBuf[i + 1] = gSnowTempVtx[1];
         (vertBuf + i + 1)->v.ob[0] = ((gEnvFxBuffer + (index + i / 3))->pos[0] + vertex2[0]);
         (vertBuf + i + 1)->v.ob[1] = ((gEnvFxBuffer + (index + i / 3))->pos[1] + vertex2[1]);

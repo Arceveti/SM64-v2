@@ -1137,11 +1137,11 @@ CameraTransitionAngle update_parallel_tracking_camera(struct Camera *c, Vec3f fo
         // get Mario's distance to the next path
         vec3f_get_angle(sParTrackPath[sParTrackIndex + 1].pos, sParTrackPath[sParTrackIndex + 2].pos, &nextPitch, &nextYaw);
         vec3f_set_dist_and_angle(sParTrackPath[sParTrackIndex + 1].pos, nextPathPos, 400.0f, nextPitch, nextYaw);
-        vec3f_get_dist(marioPos, nextPathPos, &distToPrev);
+        vec3f_get_dist_squared(marioPos, nextPathPos, &distToPrev);
         // get Mario's distance to the previous path
         vec3f_get_angle(sParTrackPath[sParTrackIndex + 1].pos, sParTrackPath[sParTrackIndex].pos, &prevPitch, &prevYaw);
         vec3f_set_dist_and_angle(sParTrackPath[sParTrackIndex + 1].pos, prevPathPos, 400.0f, prevPitch, prevYaw);
-        vec3f_get_dist(marioPos, prevPathPos, &distToNext);
+        vec3f_get_dist_squared(marioPos, prevPathPos, &distToNext);
         if (distToPrev < distToNext) {
             sParTrackIndex++;
             sStatusFlags |= CAM_FLAG_CHANGED_PARTRACK_INDEX;
@@ -1152,11 +1152,11 @@ CameraTransitionAngle update_parallel_tracking_camera(struct Camera *c, Vec3f fo
         // get Mario's distance to the next path
         vec3f_get_angle((*(sParTrackPath + sParTrackIndex)).pos, (*(sParTrackPath + sParTrackIndex + 1)).pos, &nextPitch, &nextYaw);
         vec3f_set_dist_and_angle(sParTrackPath[sParTrackIndex].pos, nextPathPos, 700.0f, nextPitch, nextYaw);
-        vec3f_get_dist(marioPos, nextPathPos, &distToPrev);
+        vec3f_get_dist_squared(marioPos, nextPathPos, &distToPrev);
         // get Mario's distance to the previous path
         vec3f_get_angle((*(sParTrackPath + sParTrackIndex)).pos, (*(sParTrackPath + sParTrackIndex - 1)).pos, &prevPitch, &prevYaw);
         vec3f_set_dist_and_angle(sParTrackPath[sParTrackIndex].pos, prevPathPos, 700.0f, prevPitch, prevYaw);
-        vec3f_get_dist(marioPos, prevPathPos, &distToNext);
+        vec3f_get_dist_squared(marioPos, prevPathPos, &distToNext);
         if (distToPrev > distToNext) {
             sParTrackIndex--;
             sStatusFlags |= CAM_FLAG_CHANGED_PARTRACK_INDEX;
@@ -3139,8 +3139,8 @@ s32 offset_yaw_outward_radial(struct Camera *c, Angle areaYaw) {
             areaCenter[0] = c->areaCenX;
             areaCenter[1] = sMarioCamState->pos[1];
             areaCenter[2] = c->areaCenZ;
-            vec3f_get_dist(areaCenter, sMarioCamState->pos, &distFromAreaCenter);
-            if (800.0f > distFromAreaCenter) yawGoal = 0x3800;
+            vec3f_get_dist_squared(areaCenter, sMarioCamState->pos, &distFromAreaCenter);
+            if (sqr(800.0f) > distFromAreaCenter) yawGoal = 0x3800;
             break;
         case AREA_SSL_PYRAMID:
             // This mask splits the 360 degrees of yaw into 4 corners. It adds 45 degrees so that the yaw
@@ -6235,8 +6235,8 @@ void cannon_approach_prev(f32 *value, f32 target) {
  */
 void cutscene_prepare_cannon_fly_back(struct Camera *c) {
     f32 distToPrevPos;
-    vec3f_get_dist(c->pos, sCameraStoreCutscene.pos, &distToPrevPos);
-    if (distToPrevPos < 8000.0f) {
+    vec3f_get_dist_squared(c->pos, sCameraStoreCutscene.pos, &distToPrevPos);
+    if (distToPrevPos < sqr(8000.0f)) {
         cannon_approach_prev(&c->pos[0],   sCameraStoreCutscene.pos[0]);
         cannon_approach_prev(&c->pos[1],   sCameraStoreCutscene.pos[1]);
         cannon_approach_prev(&c->pos[2],   sCameraStoreCutscene.pos[2]);

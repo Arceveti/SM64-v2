@@ -43,8 +43,8 @@ Gfx *geo_intro_super_mario_64_logo(s32 state, struct GraphNode *node, UNUSED voi
     Gfx *dl     = NULL;
     Gfx *dlIter = NULL;
     Mtx *scaleMat;
-    f32 *scaleTable1 = segmented_to_virtual(intro_seg7_table_0700C790);
-    f32 *scaleTable2 = segmented_to_virtual(intro_seg7_table_0700C880);
+    f32 *scaleTable1 = segmented_to_virtual(intro_seg7_table_scale_1);
+    f32 *scaleTable2 = segmented_to_virtual(intro_seg7_table_scale_2);
     Vec3f scale;
     if (state != 1) {
         sIntroFrameCounter = 0;

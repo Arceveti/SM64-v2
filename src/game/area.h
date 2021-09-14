@@ -36,7 +36,7 @@ struct InstantWarp
 struct SpawnInfo
 {
     /*0x00*/ Vec3s startPos;
-    /*0x06*/ Vec3s startAngle;
+    /*0x06*/ Vec3a startAngle;
     /*0x0C*/ s8 areaIndex;
     /*0x0D*/ s8 activeAreaIndex;
     /*0x10*/ u32 behaviorArg;

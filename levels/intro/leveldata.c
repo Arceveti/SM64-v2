@@ -3388,7 +3388,7 @@ const Gfx intro_seg7_dl_copyright_trademark[] = {
 };
 
 // 0x0700C790
-const f32 intro_seg7_table_0700C790[] = {
+const f32 intro_seg7_table_scale_1[] = {
     0.016000f, 0.052000f, 0.002500f, 0.148300f,
     0.189200f, 0.035200f, 0.471600f, 0.525300f,
     0.116600f, 0.875800f, 0.947000f, 0.222100f,
@@ -3407,7 +3407,7 @@ const f32 intro_seg7_table_0700C790[] = {
 };
 
 // 0x0700C880
-const f32 intro_seg7_table_0700C880[] = {
+const f32 intro_seg7_table_scale_2[] = {
     1.000000f, 1.000000f, 1.000000f, 0.987300f,
     0.987300f, 0.987300f, 0.951400f, 0.951400f,
     0.951400f, 0.896000f, 0.896000f, 0.896000f,

@@ -389,6 +389,13 @@ void vec3f_get_dist(Vec3f from, Vec3f to, f32 *dist) {
 }
 
 /// Finds the distance between two vectors.
+void vec3f_get_dist_squared(Vec3f from, Vec3f to, f32 *dist) {
+    Vec3f d;
+    vec3_diff(d, to, from);
+    *dist = vec3_sumsq(d);
+}
+
+/// Finds the distance between two vectors.
 void vec3f_get_dist_and_yaw(Vec3f from, Vec3f to, f32 *dist, Angle *yaw) {
     Vec3f d;
     vec3_diff(d, to, from);

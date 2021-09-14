@@ -48,12 +48,9 @@ void make_vertex(Vtx *vtx, s32 n, VtxPosS x, VtxPosS y, VtxPosS z, TextureCoord 
 void make_vertex(Vtx *vtx, s32 n, VtxPosF x, VtxPosF y, VtxPosF z, TextureCoord tx, TextureCoord ty, Color r, Color g, Color b, Alpha a) {
 #endif
     vec3_set(vtx[n].v.ob, x, y, z);
-
     vtx[n].v.flag  = 0;
-
     vtx[n].v.tc[0] = tx;
     vtx[n].v.tc[1] = ty;
-
     vec4_set(vtx[n].v.cn, r, g, b, a);
 }
 

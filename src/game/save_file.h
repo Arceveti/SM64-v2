@@ -114,6 +114,8 @@ extern u8    gCurrCourseStarFlags;
 extern Bool8 gSpecialTripleJump;
 extern s8    gLevelToCourseNumTable[];
 
+#define COURSE_FLAG_CANNON_UNLOCKED      /* 0x00000080 */ (1 <<  7)
+
 // game progress flags
 #define SAVE_FLAG_FILE_EXISTS            /* 0x00000001 */ (1 <<  0)
 #define SAVE_FLAG_HAVE_WING_CAP          /* 0x00000002 */ (1 <<  1)

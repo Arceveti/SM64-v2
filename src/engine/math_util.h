@@ -643,6 +643,7 @@ Bool32 vec3f_are_points_within_radius(         Vec3f pos1, Vec3f pos2,         f
 void vec2f_get_lateral_dist(                   Vec2f from, Vec2f to,            f32 *lateralDist                          );
 void vec3f_get_lateral_dist(                   Vec3f from, Vec3f to,            f32 *lateralDist                          );
 void vec3f_get_dist(                           Vec3f from, Vec3f to, f32 *dist                                            );
+void vec3f_get_dist_squared(                   Vec3f from, Vec3f to, f32 *dist                                            );
 void vec3f_get_dist_and_yaw(                   Vec3f from, Vec3f to, f32 *dist,                                 Angle *yaw);
 void vec3f_get_pitch(                          Vec3f from, Vec3f to,                              Angle *pitch            );
 void vec3f_get_yaw(                            Vec3f from, Vec3f to,                                            Angle *yaw);

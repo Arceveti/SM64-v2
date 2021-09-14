@@ -114,7 +114,7 @@ const LevelScript level_main_scripts_entry[] = {
     FREE_LEVEL_POOL(),
     CALL(/*arg*/ 0, /*func*/ lvl_init_from_save_file),
     LOOP_BEGIN(),
-        EXECUTE(/*seg*/ 0x14, _menuSegmentRomStart, _menuSegmentRomEnd, level_main_menu_entry_2),
+        EXECUTE(/*seg*/ 0x14, _menuSegmentRomStart, _menuSegmentRomEnd, level_main_menu_entry_act_select),
         JUMP_LINK(script_exec_level_table),
         SLEEP(/*frames*/ 1),
     LOOP_UNTIL(/*op*/ OP_LT, /*arg*/ 0),

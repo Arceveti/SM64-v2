@@ -192,6 +192,9 @@ const LevelScript level_lll_entry[] = {
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_097),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_HOT),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
+// #ifdef PUPPYLIGHTS
+//         PUPPYLIGHT_ENVIRONMENT(0x7F, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x28, 0x28, 0x28),
+// #endif
     END_AREA(),
 
     AREA(/*index*/ 2, lll_geo_area_2),

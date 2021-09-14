@@ -41,7 +41,7 @@ shaped and rotated correctly, for accurate representation of their properties.
 #ifdef PUPPYLIGHTS
 
 Lights1 gLevelLight;                         // Existing ambient light in the area. Will be set by the level script, though can always be changed afterwards if desired.
-Bool8 levelAmbient = FALSE;
+Bool8 levelAmbient     = FALSE;
 Lights1 *sLightBase;                         // The base value where lights are written to when worked with.
 // Default lights default lights
 Lights1 sDefaultLights = gdSPDefLights1(DEFAULT_LIGHT_AMB, DEFAULT_LIGHT_AMB, DEFAULT_LIGHT_AMB,

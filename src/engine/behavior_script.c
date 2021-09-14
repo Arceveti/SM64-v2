@@ -714,8 +714,7 @@ void cur_obj_update(void) {
     if (o->oTimer < 0x3FFFFFFF) o->oTimer++;
     // If the object's action has changed, reset the action timer.
     if (o->oAction != o->oPrevAction) {
-        (void) (o->oTimer = 0, o->oSubAction = 0,
-                o->oPrevAction = o->oAction);
+        (void) (o->oTimer = 0, o->oSubAction = 0, o->oPrevAction = o->oAction);
     }
     // Execute various code based on object flags.
     objFlags = (s16) o->oFlags;
