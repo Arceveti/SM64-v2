@@ -36,11 +36,11 @@ void bhv_mr_i_particle_loop(void) {
 }
 
 void spawn_mr_i_particle(void) {
-    f32 scaleY = o->header.gfx.scale[1];
+    f32 yScale = o->header.gfx.scale[1];
     struct Object *particle = spawn_object(o, MODEL_PURPLE_MARBLE, bhvMrIParticle);
-    particle->oPosY += (                         50.0f * scaleY);
-    particle->oPosX += (sins(o->oMoveAngleYaw) * 90.0f * scaleY);
-    particle->oPosZ += (coss(o->oMoveAngleYaw) * 90.0f * scaleY);
+    particle->oPosY += (                         50.0f * yScale);
+    particle->oPosX += (sins(o->oMoveAngleYaw) * 90.0f * yScale);
+    particle->oPosZ += (coss(o->oMoveAngleYaw) * 90.0f * yScale);
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
 }
 

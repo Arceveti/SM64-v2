@@ -116,41 +116,41 @@ void cur_obj_perform_position_op(s32 op) {
 
 // Used for Haunted Chair
 void cur_obj_spin_all_dimensions(f32 pitchSpeed, f32 rollSpeed) {
-    register f32 roll, yaw, pitch;
+    Vec3f angle;
     register f32 c, s;
-    register f32 px, ny, nz, nx, pz;
+    register f32 nx, ny, nz, px, pz;
     if (o->oForwardVel == 0.0f) {
-        roll = yaw = pitch = 0.0f;
+        vec3_zero(angle);
         if (o->oMoveFlags & OBJ_MOVE_IN_AIR) {
-            yaw = 50.0f;
+            angle[1] = 50.0f;
         } else {
             if (o->oFaceAnglePitch < 0x0) {
-                pitch = -pitchSpeed;
+                angle[0] = -pitchSpeed;
             } else if (o->oFaceAnglePitch > 0x0) {
-                pitch =  pitchSpeed;
+                angle[0] =  pitchSpeed;
             }
             if (o->oFaceAngleRoll < 0x0) {
-                roll = -rollSpeed;
+                angle[2] = -rollSpeed;
             } else if (o->oFaceAngleRoll > 0x0) {
-                roll =  rollSpeed;
+                angle[2] =  rollSpeed;
             }
         }
         c  = coss(o->oFaceAnglePitch);
         s  = sins(o->oFaceAnglePitch);
-        nz = ((pitch * c) + (yaw   * s));
-        ny = ((yaw   * c) - (pitch * s));
+        nz = ((angle[0] * c) + (angle[1] * s));
+        ny = ((angle[1] * c) - (angle[0] * s));
         c  = coss(o->oFaceAngleRoll);
         s  = sins(o->oFaceAngleRoll);
-        nx = ((roll  * c) + (ny   * s));
-        ny = ((ny    * c) - (roll * s));
+        nx = ((angle[2] * c) + (      ny * s));
+        ny = ((      ny * c) - (angle[2] * s));
         c  = coss(o->oFaceAngleYaw);
         s  = sins(o->oFaceAngleYaw);
-        px = ((nx    * c) - (nz    * s));
-        nz = ((nz    * c) + (nx    * s));
-        nx = ((roll  * c) - (pitch * s));
-        pz = ((pitch * c) + (roll  * s));
+        px = ((      nx * c) - (      nz * s));
+        nz = ((      nz * c) + (      nx * s));
+        nx = ((angle[2] * c) - (angle[0] * s));
+        pz = ((angle[0] * c) + (angle[2] * s));
         o->oPosX         = (o->oHomeX - nx + px);
-        o->oGraphYOffset = (yaw - ny);
+        o->oGraphYOffset = ( angle[1] - ny);
         o->oPosZ         = (o->oHomeZ + pz - nz);
     }
 }

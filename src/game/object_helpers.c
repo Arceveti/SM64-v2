@@ -114,7 +114,7 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
 }
 
 Gfx *geo_switch_room(s32 callContext, struct GraphNode *node, UNUSED void *context) {
-    s16 areaCase;
+    s16 roomCase;
     struct Surface *floor;
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     if (callContext == GEO_CONTEXT_RENDER) {
@@ -135,9 +135,9 @@ Gfx *geo_switch_room(s32 callContext, struct GraphNode *node, UNUSED void *conte
 #endif
             if (floor) {
                 gMarioCurrentRoom =  floor->room;
-                areaCase          = (floor->room - 1);
+                roomCase          = (floor->room - 1);
                 print_debug_top_down_objectinfo("areainfo %d", floor->room);
-                if (areaCase >= 0) switchCase->selectedCase = areaCase;
+                if (roomCase >= 0) switchCase->selectedCase = roomCase;
             }
         }
     } else {
@@ -602,7 +602,7 @@ void cur_obj_reverse_animation(void) {
 
 void cur_obj_extend_animation_if_at_end(void) {
     AnimFrame32 frame =  o->header.gfx.animInfo.animFrame;
-    s32 end   = (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    AnimFrame32 end   = (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     if (frame == end) o->header.gfx.animInfo.animFrame--;
 }
 

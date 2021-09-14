@@ -404,10 +404,9 @@ Bool32 begin_braking_action(struct MarioState *m) {
 void anim_and_audio_for_walk(struct MarioState *m) {
     AnimAccel animSpeed;
     struct Object *marioObj = m->marioObj;
-    Bool32 loop = TRUE;
+    Bool32 inLoop = TRUE;
     Angle targetPitch       = 0x0;
-    f32 intendedSpeed;
-    intendedSpeed           = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
+    f32 intendedSpeed       = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
     if (intendedSpeed < 4.0f) intendedSpeed = 4.0f;
     if (m->quicksandDepth > 50.0f) {
         animSpeed = (AnimAccel)((intendedSpeed / 4.0f) * 0x10000);
@@ -415,7 +414,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
         play_step_sound(m, 19, 93);
         m->actionTimer = 0;
     } else {
-        while (loop) {
+        while (inLoop) {
             switch (m->actionTimer) {
                 case 0:
                     if (intendedSpeed > 8.0f) {
@@ -426,7 +425,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         set_mario_anim_with_accel(m, MARIO_ANIM_START_TIPTOE, animSpeed);
                         play_step_sound(m, 7, 22);
                         if (is_anim_past_frame(m, 23)) m->actionTimer = 2;
-                        loop = FALSE;
+                        inLoop = FALSE;
                     }
                     break;
                 case 1:
@@ -437,7 +436,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         if ((animSpeed = (AnimAccel)(intendedSpeed * 0x10000)) < 0x1000) animSpeed = 0x1000;
                         set_mario_anim_with_accel(m, MARIO_ANIM_TIPTOE, animSpeed);
                         play_step_sound(m, 14, 72);
-                        loop = FALSE;
+                        inLoop = FALSE;
                     }
                     break;
                 case 2:
@@ -450,7 +449,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         animSpeed = (AnimAccel)((intendedSpeed / 4.0f) * 0x10000);
                         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, animSpeed);
                         play_step_sound(m, 10, 49);
-                        loop = FALSE;
+                        inLoop = FALSE;
                     }
                     break;
                 case 3:
@@ -462,7 +461,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                         set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, animSpeed);
                         play_step_sound(m, 9, 45);
                         targetPitch = tilt_body_running(m);
-                        loop = FALSE;
+                        inLoop = FALSE;
                     }
                     break;
             }
@@ -474,10 +473,10 @@ void anim_and_audio_for_walk(struct MarioState *m) {
 
 void anim_and_audio_for_hold_walk(struct MarioState *m) {
     AnimAccel animSpeed;
-    Bool32 loop = TRUE;
+    Bool32 inLoop = TRUE;
     f32 intendedSpeed = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
     if (intendedSpeed < 2.0f) intendedSpeed = 2.0f;
-    while (loop) {
+    while (inLoop) {
         switch (m->actionTimer) {
             case 0:
                 if (intendedSpeed > 6.0f) {
@@ -487,7 +486,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     animSpeed = (AnimAccel)(intendedSpeed * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_SLOW_WALK_WITH_LIGHT_OBJ, animSpeed);
                     play_step_sound(m, 12, 62);
-                    loop = FALSE;
+                    inLoop = FALSE;
                 }
                 break;
             case 1:
@@ -500,7 +499,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     animSpeed = (AnimAccel)(intendedSpeed * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, animSpeed);
                     play_step_sound(m, 12, 62);
-                    loop = FALSE;
+                    inLoop = FALSE;
                 }
                 break;
             case 2:
@@ -511,7 +510,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     animSpeed = (AnimAccel)((intendedSpeed / 2.0f) * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_RUN_WITH_LIGHT_OBJ, animSpeed);
                     play_step_sound(m, 10, 49);
-                    loop = FALSE;
+                    inLoop = FALSE;
                 }
                 break;
         }
