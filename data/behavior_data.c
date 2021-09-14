@@ -243,6 +243,8 @@
 #define BEGIN_REPEAT_UNUSED(count) \
     BC_BB(0x26, count)
 
+#define OR_LONG(field, value) LOAD_ANIMATIONS(field, value)
+
 // Loads the animations for the object. <field> is always set to oAnimations.
 #define LOAD_ANIMATIONS(field, anims) \
     BC_BB(0x27, field), \
