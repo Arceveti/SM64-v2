@@ -7,6 +7,7 @@
 #if PUPPYPRINT_DEBUG
 #include "puppyprint.h"
 #endif
+#include "audio/external.h"
 
 #include "sm64.h"
 
@@ -162,11 +163,16 @@ void draw_crash_screen(OSThread *thread) {
     if (cause == 23) cause = 16; // EXC_WATCH
     if (cause == 31) cause = 17; // EXC_VCED
     osWritebackDCacheAll();
-    crash_screen_sleep(2000);
+    crash_screen_sleep(500);
     crash_screen_draw_rect(25, 20, 270, 25);
     crash_screen_print(30, 25, "THREAD:%d  (%s)", thread->id, gCauseDesc[cause]);
+#if !PUPPYPRINT_DEBUG
     crash_screen_print(30, 35, "PC:%08XH   SR:%08XH   VA:%08XH", tc->pc, tc->sr, tc->badvaddr);
+#else
+    crash_screen_print(30, 35, "PC:%08XH   SR:%08XH   RA:%08XH", tc->pc, tc->sr, (u32) tc->ra);
+#endif
     crash_screen_draw_rect(25, 45, 270, 185);
+#if !PUPPYPRINT_DEBUG
     crash_screen_print(30,  50, "AT:%08XH   V0:%08XH   V1:%08XH", (u32) tc->at, (u32) tc->v0, (u32) tc->v1);
     crash_screen_print(30,  60, "A0:%08XH   A1:%08XH   A2:%08XH", (u32) tc->a0, (u32) tc->a1, (u32) tc->a2);
     crash_screen_print(30,  70, "A3:%08XH   T0:%08XH   T1:%08XH", (u32) tc->a3, (u32) tc->t0, (u32) tc->t1);
@@ -195,6 +201,12 @@ void draw_crash_screen(OSThread *thread) {
     crash_screen_print_float_reg(120, 210, 26, &tc->fp26.f.f_even);
     crash_screen_print_float_reg(210, 210, 28, &tc->fp28.f.f_even);
     crash_screen_print_float_reg( 30, 220, 30, &tc->fp30.f.f_even);
+#else
+    s32 i;
+#define LINE_HEIGHT (60 + ((LOG_BUFFER_SIZE - 1) * 10))
+    for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) crash_screen_print(30, ((LINE_HEIGHT) - (i * 10)), consoleLogTable[i]);
+#undef LINE_HEIGHT
+#endif
     osWritebackDCacheAll();
     osViBlack(FALSE);
     osViSwapBuffer(gCrashScreen.framebuffer);
@@ -211,6 +223,9 @@ OSThread *get_crashed_thread(void) {
 }
 
 extern u16 sRenderedFramebuffer;
+extern void audio_signal_game_loop_tick(void);
+extern void stop_sounds_in_continuous_banks(void);
+extern struct SequenceQueueItem sBackgroundMusicQueue[6];
 
 void thread2_crash_screen(UNUSED void *arg) {
     OSMesg mesg;
@@ -228,7 +243,13 @@ void thread2_crash_screen(UNUSED void *arg) {
         profiler_update(faultTime, first);
 #endif
     } while (thread == NULL);
+    gCrashScreen.thread.priority = 15;
+    stop_sounds_in_continuous_banks();
+    stop_background_music(sBackgroundMusicQueue[0].seqId);
+    audio_signal_game_loop_tick();
     draw_crash_screen(thread);
+    play_sound(SOUND_MARIO_WAAAOOOW, gGlobalSoundSource);
+    audio_signal_game_loop_tick();
     for (;;) {}
 }
 
@@ -243,8 +264,6 @@ void crash_screen_init(void) {
     gCrashScreen.width       = SCREEN_WIDTH;
     gCrashScreen.height      = SCREEN_HEIGHT;
     osCreateMesgQueue(&gCrashScreen.mesgQueue, &gCrashScreen.mesg, 1);
-    osCreateThread(&gCrashScreen.thread, 2, thread2_crash_screen, NULL,
-                   (u8 *) gCrashScreen.stack + sizeof(gCrashScreen.stack),
-                   OS_PRIORITY_APPMAX);
+    osCreateThread(&gCrashScreen.thread, 2, thread2_crash_screen, NULL, (u8 *) gCrashScreen.stack + sizeof(gCrashScreen.stack), OS_PRIORITY_APPMAX);
     osStartThread(&gCrashScreen.thread);
 }

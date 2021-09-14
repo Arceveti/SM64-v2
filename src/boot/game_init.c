@@ -71,9 +71,6 @@ u8    gFlyingCamOverride;
 Bool8 gKeepCliffCam;
 s32   gCliffTimer;
 #endif
-#ifdef WIDE
-s16 gWidescreen;
-#endif
 #ifdef CUSTOM_FOV
 s16 gFieldOfView = DEFAULT_FOV_PERCENT;
 #endif
@@ -727,10 +724,10 @@ void thread5_game_loop(UNUSED void *arg) {
     play_music(SEQ_PLAYER_SFX, SEQUENCE_ARGS(0, SEQ_SOUND_PLAYER), 0);
     set_sound_mode(save_file_get_sound_mode());
 #ifdef REONU_CAM_3
-    gCameraSpeed = save_file_get_camera_speed();
+    gCameraSpeed       = save_file_get_camera_speed();
 #endif
 #ifdef WIDE
-    gWidescreen  = save_file_get_widescreen_mode();
+    gConfig.widescreen = save_file_get_widescreen_mode();
 #endif
 #ifdef VARIABLE_FRAMERATE
     while (TRUE) {

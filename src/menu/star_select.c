@@ -20,7 +20,7 @@
 #include "star_select.h"
 #include "text_strings.h"
 // #include "prevent_bss_reordering.h"
-#include "boot/game_init.h"
+#include "boot/main.h"
 
 /**
  * @file star_select.c
@@ -90,9 +90,9 @@ void render_100_coin_star(u8 stars) {
     if (stars & (1 << 6)) {
         // If the 100 coin star has been collected, create a new star selector next to the coin score.
 #ifdef WIDE
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvActSelectorStarType, gWidescreen ? ((370 * 4.0f) / 3.0f) : 370, 24, -300, 0x0, 0x0, 0x0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvActSelectorStarType, (gConfig.widescreen ? ((370 * 4.0f) / 3.0f) : 370), 24, -300, 0x0, 0x0, 0x0);
 #else
-        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvActSelectorStarType,                                       370, 24, -300, 0x0, 0x0, 0x0);
+        sStarSelectorModels[6] = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvActSelectorStarType,                                                370, 24, -300, 0x0, 0x0, 0x0);
 #endif
         sStarSelectorModels[6]->oStarSelectorSize = 0.8f;
         sStarSelectorModels[6]->oStarSelectorType = STAR_SELECTOR_100_COINS;
@@ -136,7 +136,7 @@ void bhv_act_selector_init(void) {
     if (sObtainedStars == 6) sInitSelectedActNum = sVisibleStars;
     // Render star selector objects
 #ifdef WIDE
-    if (gWidescreen) {
+    if (gConfig.widescreen) {
         for ((i = 0); (i < sVisibleStars); (i++)) {
             sStarSelectorModels[i] = spawn_object_abs_with_rot(o, 0, selectorModelIDs[i], bhvActSelectorStarType, (((75 + sVisibleStars * -75 + i * 152)*4.0f)/3), 248, -300, 0x0, 0x0, 0x0);
             sStarSelectorModels[i]->oStarSelectorSize = 1.0f;

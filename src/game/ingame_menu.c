@@ -27,6 +27,7 @@
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif
+#include "boot/main.h"
 
 u16 gDialogColorFadeTimer;
 s8  gLastDialogLineNum;
@@ -1313,12 +1314,12 @@ void render_widescreen_setting(void) {
     uchar textPressL[]       = { TEXT_HUD_PRESS_L           };
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-    print_generic_string(10, 20, (gWidescreen ? textCurrRatio169 : textCurrRatio43));
+    print_generic_string(10, 20, (gConfig.widescreen ? textCurrRatio169 : textCurrRatio43));
     print_generic_string(10,  7, textPressL);
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     if (gPlayer1Controller->buttonPressed & L_TRIG){
-        gWidescreen ^= TRUE;
-        save_file_set_widescreen_mode(gWidescreen);
+        gConfig.widescreen ^= TRUE;
+        save_file_set_widescreen_mode(gConfig.widescreen);
     }
 }
 #endif

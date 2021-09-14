@@ -27,6 +27,7 @@ struct RumbleSettings {
     s16 vibrate;
     s16 decay;
 };
+extern struct Config gConfig;
 
 // extern OSThread D_80339210;
 extern OSThread gIdleThread;

@@ -25,6 +25,7 @@
 #include "mario.h"
 #include "puppyprint.h"
 #include "debug_box.h"
+#include "boot/main.h"
 
 #ifdef PUPPYCAM
 
@@ -86,7 +87,7 @@ static const struct gPCOptionStruct gPCOptions[] = {
 //     {/*Option Name*/ 10, /*Option Variable*/ &gAntiAliasing,                    /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
 // #endif
 #ifdef WIDE
-    {/*Option Name*/  7, /*Option Variable*/ &gWidescreen,                      /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
+    {/*Option Name*/  7, /*Option Variable*/ &gConfig.widescreen,               /*Option Value Text Start*/   0, /*Option Minimum*/ FALSE, /*Option Maximum*/ TRUE},
 #endif
 #ifdef CUSTOM_FOV
     {/*Option Name*/  9, /*Option Variable*/ &gFieldOfView,                     /*Option Value Text Start*/ 255, /*Option Minimum*/    10, /*Option Maximum*/  290},

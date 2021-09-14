@@ -813,7 +813,7 @@ void load_sequence_internal(u32 player, u32 seqId, s32 loadAsync) {
         }
         if (sequenceData == NULL) return;
     }
-    eu_stubbed_printf_1("SEQ  %d ALREADY CACHED\n", seqId);
+    eu_stubbed_printf_1("SEQ  %d ALREADY CACHED2\n", seqId);
     init_sequence_player(player);
     seqPlayer->scriptState.depth = 0;
     seqPlayer->delay             = 0;
@@ -833,7 +833,7 @@ void audio_init() {
 #if defined(VERSION_JP) || defined(VERSION_US)
     u8 buf[0x10];
 #endif
-    s32 i, j, k;
+    s32 i, /*j,*/ k;
 #if defined(VERSION_EU)
     UNUSED u8 buf[0x10];
     s32 UNUSED lim2, lim3;
@@ -878,7 +878,7 @@ void audio_init() {
     );
 #endif
     eu_stubbed_printf_1("AudioHeap is %x\n", gAudioHeapSize);
-    for ((i = 0); (i < NUMAIBUFFERS); (i++)) gAiBufferLengths[i] = 0xa0;
+    for ((i = 0); (i < NUMAIBUFFERS); (i++)) gAiBufferLengths[i] = 10;
     gAudioFrameCount                = 0;
     gAudioTaskIndex                 = 0;
     gCurrAiBufferIndex              = 0;
@@ -891,16 +891,17 @@ void audio_init() {
     gCurrAudioFrameDmaCount = 0;
     gSampleDmaNumListItems  = 0;
     sound_init_main_pools(gAudioInitPoolSize);
+    bzero(&gAiBuffers, sizeof(gAiBuffers));
     for ((i = 0); (i < NUMAIBUFFERS); (i++)) {
         gAiBuffers[i] = soundAlloc(&gAudioInitPool, AIBUFFER_LEN);
-        for ((j = 0); (j < (s32) (AIBUFFER_LEN / sizeof(s16))); (j++)) gAiBuffers[i][j] = 0;
+        // for ((j = 0); (j < (s32) (AIBUFFER_LEN / sizeof(s16))); (j++)) gAiBuffers[i][j] = 0;
     }
 #if defined(VERSION_EU)
     gAudioResetPresetIdToLoad = 0;
     gAudioResetStatus         = 1;
     audio_shut_down_and_reset_step();
 #else
-    audio_reset_session(&gAudioSessionPresets[0]);
+    audio_reset_session(&gAudioSessionPresets[0], 0);
 #endif
     // Not sure about these prints
     eu_stubbed_printf_1("Heap reset.Synth Change %x \n", 0);

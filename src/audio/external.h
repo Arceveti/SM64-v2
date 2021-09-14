@@ -18,6 +18,11 @@
 #define SEQ_PLAYER_ENV              0x1  // Misc music like the puzzle jingle
 #define SEQ_PLAYER_SFX              0x2  // Sound effects
 
+struct SequenceQueueItem {
+    u8 seqId;
+    u8 priority;
+}; // size = 0x2
+
 extern s32 gAudioErrorFlags;
 extern f32 gGlobalSoundSource[3];
 

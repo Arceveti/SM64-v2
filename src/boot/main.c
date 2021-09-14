@@ -66,6 +66,8 @@ OSMesg gUnknownMesgBuf[16];
 
 OSViMode VI;
 
+struct Config gConfig;
+
 struct VblankHandler *gVblankHandler1 = NULL;
 struct VblankHandler *gVblankHandler2 = NULL;
 struct VblankHandler *gVblankHandler3 = NULL;
@@ -432,17 +434,32 @@ void change_vi(OSViMode *mode, int width, int height){
     }
 }
 
+void get_audio_frequency(void) {
+    switch (gConfig.tvType) {
+#if defined(VERSION_JP) || defined(VERSION_US)
+    case MODE_NTSC: gConfig.audioFrequency = 1.0f;    break;
+    case MODE_MPAL: gConfig.audioFrequency = 0.9915f; break;
+    case MODE_PAL:  gConfig.audioFrequency = 0.9876f; break;
+#else
+    case MODE_NTSC: gConfig.audioFrequency = 1.0126f; break;
+    case MODE_MPAL: gConfig.audioFrequency = 1.0086f; break;
+    case MODE_PAL:  gConfig.audioFrequency = 1.0f;    break;
+#endif
+    }
+}
+
 /**
  * Initialize hardware, start main thread, then idle.
  */
 void thread1_idle(UNUSED void *arg) {
     osCreateViManager(OS_PRIORITY_VIMGR);
-    switch (osTvType) {
-        case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
-        case OS_TV_MPAL: VI = osViModeTable[OS_VI_MPAL_LAN1]; break; // osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
-        case OS_TV_PAL:  VI = osViModeTable[OS_VI_PAL_LAN1 ]; break; // osViSetMode(&osViModeTable[OS_VI_PAL_LAN1]);
+    switch ( osTvType ) {
+    case OS_TV_NTSC: VI = osViModeTable[OS_VI_NTSC_LAN1]; gConfig.tvType = MODE_NTSC; break; // osViSetMode(&osViModeTable[OS_VI_NTSC_LAN1]);
+    case OS_TV_MPAL: VI = osViModeTable[OS_VI_NTSC_LAN1]; gConfig.tvType = MODE_MPAL; break; // osViSetMode(&osViModeTable[OS_VI_MPAL_LAN1]);
+    case OS_TV_PAL:  VI = osViModeTable[OS_VI_NTSC_LAN1]; gConfig.tvType = MODE_PAL;  break; // osViSetMode(&osViModeTable[OS_VI_PAL_LAN1 ]);
     }
-    change_vi(  &VI, SCREEN_WIDTH, SCREEN_HEIGHT);
+    get_audio_frequency();
+    change_vi(&VI, SCREEN_WIDTH, SCREEN_HEIGHT);
     osViSetMode(&VI);
     osViBlack(TRUE);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);

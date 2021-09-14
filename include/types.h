@@ -8,6 +8,16 @@
 #include "macros.h"
 #include "config.h"
 
+
+struct Config
+{
+    f32 audioFrequency;
+#ifdef WIDE
+    s16 widescreen;
+#endif
+    u8 tvType;
+};
+
 struct Controller
 {
   /*0x00*/ s16 rawStickX;       //
