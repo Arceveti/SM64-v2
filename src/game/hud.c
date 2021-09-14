@@ -14,6 +14,7 @@
 #include "save_file.h"
 #include "print.h"
 #include "engine/surface_load.h"
+#include "engine/math_util.h"
 #ifdef PUPPYCAM
 #include "puppycam2.h"
 #endif

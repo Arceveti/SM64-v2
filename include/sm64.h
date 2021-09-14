@@ -40,6 +40,7 @@
 #endif
 
 // Common cos values for degrees, often used for surface Y normals
+// These are different than coss()
 #define COS1    0.9998477f
 #define COS5    0.9961947f
 #define COS10   0.9848077f

@@ -488,7 +488,7 @@
 // Fade warps have a particle effect to show where they are (Arceveti)
 #define VISIBLE_FADE_WARPS
 
-// Step height for objects. Comment out the define to use vanilla behavior. (Arceveti)
+// Step height for objects. (Arceveti)
 #define OBJ_STEP_HEIGHT 40.0f
 
 // Fix DDD water rings (Arceveti)

@@ -39,7 +39,7 @@ struct PlatformDisplacementInfo sObjectDisplacementInfo;
 
 static s8 sLevelsWithRooms[]       = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
 
-static Bool32 clear_move_flag(u32 *, s32);
+static Bool32 clear_move_flag(u32 *bitSet, s32 flag);
 
 Gfx *geo_update_projectile_pos_from_parent(s32 callContext, UNUSED struct GraphNode *node, Mat4 mtx) {
     Mat4 mtx2;
@@ -303,7 +303,6 @@ struct Object *spawn_water_droplet(struct Object *parent, struct WaterDropletPar
     return newObj;
 }
 
-//! ModelID?
 struct Object *spawn_object_at_origin(struct Object *parent, UNUSED s32 unusedArg, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj;
     const BehaviorScript *behaviorAddr;
@@ -607,9 +606,9 @@ void cur_obj_extend_animation_if_at_end(void) {
 }
 
 Bool32 cur_obj_check_if_near_animation_end(void) {
-    u32 animFlags         = (s32) o->header.gfx.animInfo.curAnim->flags;
+    u32         animFlags = (s32) o->header.gfx.animInfo.curAnim->flags;
     AnimFrame32 animFrame =       o->header.gfx.animInfo.animFrame;
-    s32 nearLoopEnd       =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    s32       nearLoopEnd =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     return (((animFlags & ANIM_FLAG_NOLOOP) && ((nearLoopEnd + 1) == animFrame)) || (animFrame == nearLoopEnd));
 }
 
@@ -843,7 +842,7 @@ static f32 cur_obj_move_y_and_get_water_level(f32 gravity, f32 buoyancy) {
 void cur_obj_move_y(f32 gravity, f32 bounciness, f32 buoyancy) {
     f32 waterLevel;
     o->oMoveFlags &= ~OBJ_MOVE_LEFT_GROUND;
-    if (o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE && o->oVelY > 5.0f) {
+    if ((o->oMoveFlags & OBJ_MOVE_AT_WATER_SURFACE) && (o->oVelY > 5.0f)) {
         o->oMoveFlags &= ~OBJ_MOVE_MASK_IN_WATER;
         o->oMoveFlags |=  OBJ_MOVE_LEAVING_WATER;
     }
@@ -999,7 +998,7 @@ static void obj_spawn_loot_coins(struct Object *obj, s32 numCoins, f32 baseYVel,
     s32 i;
     struct Surface *floor;
     struct Object  *coin;
-    f32 spawnHeight = find_floor(obj->oPosX, obj->oPosY + OBJ_STEP_HEIGHT, obj->oPosZ, &floor);
+    f32 spawnHeight = find_floor(obj->oPosX, (obj->oPosY + OBJ_STEP_HEIGHT), obj->oPosZ, &floor);
     if ((obj->oPosY - spawnHeight) > 100.0f) spawnHeight = obj->oPosY;
     for ((i = 0); (i < numCoins); (i++)) {
         if (obj->oNumLootCoins <= 0) break;
@@ -1020,11 +1019,10 @@ void obj_spawn_loot_yellow_coins(struct Object *obj, s32 numCoins, f32 baseYVel)
 }
 
 void cur_obj_spawn_loot_coin_at_mario_pos(void) {
-    struct Object *coin;
     if (o->oNumLootCoins <= 0) return;
     o->oNumLootCoins--;
-    coin        = spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
-    coin->oVelY = 30.0f;
+    struct Object *coin = spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
+    coin->oVelY         = 30.0f;
     obj_copy_pos(coin, gMarioObject);
 }
 
@@ -1036,7 +1034,7 @@ f32 cur_obj_abs_y_dist_to_home(void) {
 
 UNUSED AnimFrame32 cur_obj_advance_looping_anim(void) {
     AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
-    s32 loopEnd   = o->header.gfx.animInfo.curAnim->loopEnd;
+    s32         loopEnd   = o->header.gfx.animInfo.curAnim->loopEnd;
     if (animFrame < 0) {
         animFrame = 0;
     } else if ((loopEnd - 1) == animFrame) {
@@ -1047,20 +1045,16 @@ UNUSED AnimFrame32 cur_obj_advance_looping_anim(void) {
     return ((animFrame << 16) / loopEnd);
 }
 
-static s32 cur_obj_detect_steep_floor(s16 steepAngleDegrees) { // not Angle type because it's in degrees
+static s32 cur_obj_detect_steep_floor(UNUSED s16 steepAngleDegrees) { // not Angle type because it's in degrees
     struct Surface *intendedFloor;
-    f32 intendedX, intendedFloorHeight, intendedZ;
-    f32 deltaFloorHeight;
-    f32 steepNormalY = coss(DEG(steepAngleDegrees));
+    // f32 steepNormalY = coss(DEG(steepAngleDegrees)); // always 60
     if (o->oForwardVel != 0.0f) {
-        intendedX           = (o->oPosX + o->oVelX);
-        intendedZ           = (o->oPosZ + o->oVelZ);
-        intendedFloorHeight = find_floor(intendedX, (o->oPosY + OBJ_STEP_HEIGHT), intendedZ, &intendedFloor);
-        deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
+        f32 intendedFloorHeight = find_floor((o->oPosX + o->oVelX), (o->oPosY + OBJ_STEP_HEIGHT), (o->oPosZ + o->oVelZ), &intendedFloor);
+        f32 deltaFloorHeight    = (intendedFloorHeight - o->oFloorHeight);
         if (intendedFloorHeight < FLOOR_LOWER_LIMIT_MISC) {
             o->oWallAngle = (o->oMoveAngleYaw + DEG(180));
             return 2;
-        } else if ((intendedFloor->normal.y < steepNormalY) && (deltaFloorHeight > 0) && (intendedFloorHeight > o->oPosY)) {
+        } else if ((intendedFloor->normal.y < 0.5f) && (deltaFloorHeight > 0) && (intendedFloorHeight > o->oPosY)) {
             o->oWallAngle = SURFACE_YAW(intendedFloor);
             return 1;
         }
@@ -1073,7 +1067,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
     struct Surface *wall;
     struct WallCollisionData collisionData;
     f32 offsetY = 10.0f;
-    f32 radius = o->oWallHitboxRadius;
+    f32 radius  = o->oWallHitboxRadius;
     if (radius > 0.1f) { // was 0.1l
         collisionData.offsetY = offsetY;
         collisionData.radius  = radius;
@@ -1081,7 +1075,7 @@ s32 cur_obj_resolve_wall_collisions(void) {
         numCollisions         = find_wall_collisions(&collisionData);
         if (numCollisions != 0) {
             vec3_copy(&o->oPosVec, collisionData.pos);
-            wall              = collisionData.walls[collisionData.numWalls - 1];
+            wall              = collisionData.walls[collisionData.numWalls - 1]; //! only uses last wall
             o->oWallAngle     = SURFACE_YAW(wall);
             return (abs_angle_diff(o->oWallAngle, o->oMoveAngleYaw) > DEG(90));
         }
@@ -1107,7 +1101,7 @@ static void cur_obj_update_floor(void) {
     }
 }
 
-static void cur_obj_update_floor_and_resolve_wall_collisions(s16 steepSlopeDegrees) {
+void cur_obj_update_floor_and_walls(void) {
     o->oMoveFlags &= ~(OBJ_MOVE_ABOVE_LAVA | OBJ_MOVE_ABOVE_DEATH_BARRIER);
     if (o->activeFlags & (ACTIVE_FLAG_FAR_AWAY | ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         cur_obj_update_floor();
@@ -1118,12 +1112,8 @@ static void cur_obj_update_floor_and_resolve_wall_collisions(s16 steepSlopeDegre
         if (cur_obj_resolve_wall_collisions()) o->oMoveFlags |= OBJ_MOVE_HIT_WALL;
         cur_obj_update_floor();
         if (o->oPosY > o->oFloorHeight) o->oMoveFlags |= OBJ_MOVE_IN_AIR;
-        if (cur_obj_detect_steep_floor(steepSlopeDegrees)) o->oMoveFlags |= OBJ_MOVE_HIT_WALL;
+        if (cur_obj_detect_steep_floor(60)) o->oMoveFlags |= OBJ_MOVE_HIT_WALL;
     }
-}
-
-void cur_obj_update_floor_and_walls(void) { //! redundant?
-    cur_obj_update_floor_and_resolve_wall_collisions(60);
 }
 
 void cur_obj_move_standard(s16 steepSlopeAngleDegrees) { // not Angle type because it's in degrees
@@ -1289,7 +1279,7 @@ s32 cur_obj_follow_path(void) {
 }
 
 void chain_segment_init(struct ChainSegment *segment) {
-    vec3_zero(segment->pos);
+    vec3_zero(segment->pos  );
     vec3_zero(segment->angle);
 }
 
@@ -1398,8 +1388,7 @@ void cur_obj_push_mario_away(f32 radius) {
     f32 marioRelZ = (gMarioObject->oPosZ - o->oPosZ);
     f32 marioDist = sqrtf(sqr(marioRelX) + sqr(marioRelZ));
     if (marioDist < radius) {
-        //! If this function pushes Mario out of bounds, it will trigger Mario's
-        //  oob failsafe
+        //! If this function pushes Mario out of bounds, it will trigger Mario's oob failsafe
         gMarioStates[0].pos[0] += (((radius - marioDist) / radius) * marioRelX);
         gMarioStates[0].pos[2] += (((radius - marioDist) / radius) * marioRelZ);
     }
@@ -1616,9 +1605,7 @@ s32 cur_obj_update_dialog(s32 actionArg, s32 dialogFlags, DialogID dialogID, UNU
 #endif
         case DIALOG_STATUS_INTERRUPT:
             // Interrupt until Mario is actually speaking with the NPC
-            if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) {
-                o->oDialogState++;
-            }
+            if (set_mario_npc_dialog(actionArg) == MARIO_DIALOG_STATUS_SPEAK) o->oDialogState++;
             break;
         case DIALOG_STATUS_START_DIALOG:
             // Starts dialog, depending of the flag defined, it calls
@@ -1749,17 +1736,14 @@ void cur_obj_align_gfx_with_floor(void) {
     vec3_copy(position, &o->oPosVec);
     find_floor(position[0], position[1], position[2], &floor);
     if (floor != NULL) {
-        floorNormal[0] = floor->normal.x;
-        floorNormal[1] = floor->normal.y;
-        floorNormal[2] = floor->normal.z;
+        vec3_set(floorNormal, floor->normal.x, floor->normal.y, floor->normal.z);
         mtxf_align_terrain_normal(o->transform, floorNormal, position, o->oFaceAngleYaw);
         o->header.gfx.throwMatrix = &o->transform;
     }
 }
 
 Bool32 mario_is_within_rectangle(s16 minX, s16 maxX, s16 minZ, s16 maxZ) {
-    return !((gMarioObject->oPosX < minX) || (maxX < gMarioObject->oPosX)
-          || (gMarioObject->oPosZ < minZ) || (maxZ < gMarioObject->oPosZ));
+    return !((gMarioObject->oPosX < minX) || (maxX < gMarioObject->oPosX) || (gMarioObject->oPosZ < minZ) || (maxZ < gMarioObject->oPosZ));
 }
 
 void cur_obj_shake_screen(s32 shake) {
@@ -1782,8 +1766,7 @@ Bool32 obj_attack_collided_from_other_object(struct Object *obj) {
 
 Bool32 cur_obj_was_attacked_or_ground_pounded(void) {
     Bool32 attacked = FALSE;
-    if ((o->oInteractStatus & INT_STATUS_INTERACTED)
-        && (o->oInteractStatus & INT_STATUS_WAS_ATTACKED)) attacked = TRUE;
+    if ((o->oInteractStatus & INT_STATUS_INTERACTED) && (o->oInteractStatus & INT_STATUS_WAS_ATTACKED)) attacked = TRUE;
     if (cur_obj_is_mario_ground_pounding_platform()) attacked = TRUE;
     o->oInteractStatus = INT_STATUS_NONE;
     return attacked;
@@ -1824,7 +1807,7 @@ Bool32 player_performed_grab_escape_action(void) {
     if (gPlayer1Controller->stickMag < 30.0f) grabReleaseState = FALSE;
     if ((!grabReleaseState) && (gPlayer1Controller->stickMag > 40.0f)) {
         grabReleaseState = TRUE;
-        result = TRUE;
+        result           = TRUE;
     }
     if (gPlayer1Controller->buttonPressed & (A_BUTTON | B_BUTTON | Z_TRIG)) return TRUE;
     return result;

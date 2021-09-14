@@ -1,9 +1,6 @@
 **TODO:**
 - General Bugs:
     - The edges of Mario's silhouette are sometimes visible at low resolutions
-    - BOB door switch clicks on a timer like invisible box switches
-    - Bob-Ombs get upwarped slightly when walking near certain walls
-        - Noticeable on BOB door when it's opening
     - Puppycamera sometimes downwarps
         - Happens on a slope in Castle Grounds and between areas in TTM slide:
     - Instant warps freeze for a second
@@ -16,6 +13,8 @@
     - Lights don't get cleared properly when leaving a level
     - Multiple light sources cause direction overflow?
     - PUPPYLIGHT_ENVIRONMENT doesn't work
+    - Lights don't work outside of area 1
+        - Have a potential fix, but it still doesn't fix PUPPYLIGHT_NODE lights in non-area-1 areas
 - Crashes:
     - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
     - Properly fix HMC crash
@@ -100,6 +99,7 @@
 - Physics/Movement:
     - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
+    - Handle small steps differently from slopes?
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?
     - Ability to move between walls that share an edge when ledge grab sidling

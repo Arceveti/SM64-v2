@@ -131,7 +131,8 @@ Bool32 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVel
     hitbox.offsetY = (o->hitboxHeight / 2);
     hitbox.radius  =  o->hitboxRadius;
     if (find_wall_collisions(&hitbox) != 0) {
-        vec3_copy(&o->oPosVec, hitbox.pos);
+        o->oPosX = hitbox.pos[0];
+        o->oPosZ = hitbox.pos[2];
         vec3_set(wall_n, hitbox.walls[0]->normal.x, hitbox.walls[0]->normal.y, hitbox.walls[0]->normal.z);
         // Turns away from the first wall only.
         turn_obj_away_from_surface(objVelX, objVelZ, wall_n[0], wall_n[1], wall_n[2], &objYawX, &objYawZ);
@@ -145,19 +146,15 @@ Bool32 obj_find_wall(f32 objNewX, f32 objY, f32 objNewZ, f32 objVelX, f32 objVel
  * Turns an object away from steep floors, similarly to walls.
  */
 Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 objVelX, f32 objVelZ) {
-    f32 floor_nY, objVelXCopy, objVelZCopy, objYawX, objYawZ;
+    f32 floor_nY, objYawX, objYawZ;
     if (objFloor == NULL) {
-        //! (OOB Object Crash) TRUNC overflow exception after 36 minutes
         o->oMoveAngleYaw += DEG(180); // vanilla was 32767.999200000002; /* ¯\_(ツ)_/¯ */
         return FALSE;
     }
     floor_nY = objFloor->normal.y;
     // If the floor is steep and we are below it (i.e. walking into it), turn away from the floor.
     if ((floor_nY < 0.5f) && (floorY > o->oPosY)) {
-        //? are these needed?
-        objVelXCopy = objVelX;
-        objVelZCopy = objVelZ;
-        turn_obj_away_from_surface(objVelXCopy, objVelZCopy, objFloor->normal.x, floor_nY, objFloor->normal.z, &objYawX, &objYawZ);
+        turn_obj_away_from_surface(objVelX, objVelZ, objFloor->normal.x, floor_nY, objFloor->normal.z, &objYawX, &objYawZ);
         o->oMoveAngleYaw = atan2s(objYawZ, objYawX);
         return FALSE;
     }
@@ -215,11 +212,7 @@ void calc_new_obj_vel_and_pos_y(struct Surface *objFloor, f32 objFloorY, f32 obj
     if (o->oVelY < -TERMINAL_GRAVITY_VELOCITY) o->oVelY = -TERMINAL_GRAVITY_VELOCITY;
     o->oPosY += o->oVelY;
     // Snap the object up to the floor.
-#ifdef OBJ_STEP_HEIGHT
     if (absf(o->oPosY - objFloorY) < OBJ_STEP_HEIGHT) {
-#else
-    if (o->oPosY < objFloorY) {
-#endif
         o->oPosY = objFloorY;
         // Bounces an object if the ground is hit fast enough.
         o->oVelY = ((o->oVelY < -17.5f) ? -(o->oVelY / 2.0f) : 0.0f);
@@ -310,12 +303,11 @@ ColFlags object_step(void) {
     f32 nextY   =  o->oPosY;
     f32 nextZ   = (o->oPosZ + objVelZ);
     f32 waterY  = FLOOR_LOWER_LIMIT_MISC;
-    f32 floorY;
     f32 midY = (nextY + (o->hitboxHeight / 2.0f));
     ColFlags collisionFlags = OBJ_COL_FLAGS_NONE;
     // Find any wall collisions, receive the push, and set the flag.
     if (!obj_find_wall(nextX, midY, nextZ, objVelX, objVelZ)) collisionFlags |= OBJ_COL_FLAG_HIT_WALL;
-    floorY = find_floor(nextX, midY, nextZ, &sObjFloor);
+    f32 floorY = find_floor(nextX, midY, nextZ, &sObjFloor);
     if (turn_obj_away_from_steep_floor(sObjFloor, floorY, objVelX, objVelZ)) {
         waterY = find_water_level(nextX, nextZ);
         if (waterY > nextY) {
