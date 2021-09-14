@@ -333,7 +333,7 @@ void update_walking_speed(struct MarioState *m) {
     }
     if (m->forwardVel > 48.0f) m->forwardVel = 48.0f;
 #ifdef FIX_GROUND_TURN_RADIUS
-    if ((m->forwardVel < 0.0f) && (m->heldObj == NULL)) {
+    if ((m->forwardVel < 0.0f) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
         m->faceAngle[1] += DEG(180);
         m->forwardVel *= -1.0f;
     }
@@ -689,6 +689,9 @@ Bool32 act_hold_heavy_walking(struct MarioState *m) {
 Bool32 act_turning_around(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE        ) return set_mario_action(    m, ACT_BEGIN_SLIDING, 0);
     if (m->input & INPUT_A_PRESSED          ) return set_jumping_action(  m, ACT_SIDE_FLIP    , 0);
+#ifdef ACTION_CANCELS
+    if (m->input & INPUT_B_PRESSED          ) return set_mario_action(    m, ACT_MOVE_PUNCHING, 0);
+#endif
     if (m->input & INPUT_IDLE               ) return set_mario_action(    m, ACT_BRAKING      , 0);
     if (!analog_stick_held_back(m, DEG(100))) return set_mario_action(    m, ACT_WALKING      , 0);
     if (apply_slope_decel(m, 2.0f)          ) return begin_walking_action(m, 8.0f, ACT_FINISH_TURNING_AROUND, 0);
@@ -711,6 +714,7 @@ Bool32 act_finish_turning_around(struct MarioState *m) {
     if (m->input & INPUT_ABOVE_SLIDE) return set_mario_action(         m, ACT_BEGIN_SLIDING, 0);
     if (m->input & INPUT_A_PRESSED  ) return set_jumping_action(       m, ACT_SIDE_FLIP    , 0);
 #ifdef ACTION_CANCELS
+    if (m->input & INPUT_B_PRESSED  ) return set_mario_action(         m, ACT_MOVE_PUNCHING, 0);
     if (m->input & INPUT_Z_PRESSED  ) return drop_and_set_mario_action(m, ACT_CROUCH_SLIDE , 0);
 #endif
     update_walking_speed(m);
@@ -1286,6 +1290,9 @@ Bool32 common_landing_cancels(struct MarioState *m, struct LandingAction *landin
     if (m->input & INPUT_FIRST_PERSON               ) return set_mario_action(          m, landingAction->endAction      , 0);
     if (++m->actionTimer >= landingAction->numFrames) return set_mario_action(          m, landingAction->endAction      , 0);
     if (m->input & INPUT_A_PRESSED                  ) return setAPressAction(           m, landingAction->aPressedAction , 0);
+#ifdef ACTION_CANCELS
+    if (m->input & INPUT_B_PRESSED                  ) return set_mario_action(          m, ACT_MOVE_PUNCHING             , 0);
+#endif
     return FALSE;
 }
 
@@ -1436,7 +1443,7 @@ Bool32 mario_execute_moving_action(struct MarioState *m) {
     }
     /* clang-format on */
     if (!cancel && (m->input & INPUT_IN_WATER)) {
-        m->particleFlags |= PARTICLE_WAVE_TRAIL;
+        m->particleFlags |=  PARTICLE_WAVE_TRAIL;
         m->particleFlags &= ~PARTICLE_DUST;
     }
     return cancel;

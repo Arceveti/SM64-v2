@@ -845,7 +845,7 @@ Bool32 set_jump_from_landing(struct MarioState *m) {
  */
 Bool32 set_jumping_action(struct MarioState *m, MarioAction action, u32 actionArg) {
     // Checks whether Mario is holding an object or not.
-    if (m->quicksandDepth >= 11.0f) return set_mario_action(m, (m->heldObj == NULL) ? ACT_QUICKSAND_JUMP_LAND : ACT_HOLD_QUICKSAND_JUMP_LAND, 0);
+    if (m->quicksandDepth >= 11.0f) return set_mario_action(m, ((m->heldObj == NULL) ? ACT_QUICKSAND_JUMP_LAND : ACT_HOLD_QUICKSAND_JUMP_LAND), 0);
     if (mario_floor_is_steep(m)) {
         set_steep_jump_action(m);
     } else {

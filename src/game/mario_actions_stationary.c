@@ -496,26 +496,26 @@ Bool32 check_common_landing_cancels(struct MarioState *m, MarioAction action) {
 }
 
 Bool32 act_jump_land_stop(struct MarioState *m) {
-    if (check_common_landing_cancels(m, 0)) return TRUE;
+    if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_LAND_FROM_SINGLE_JUMP, ACT_IDLE);
     return FALSE;
 }
 
 Bool32 act_double_jump_land_stop(struct MarioState *m) {
-    if (check_common_landing_cancels(m, 0)) return TRUE;
+    if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_LAND_FROM_DOUBLE_JUMP, ACT_IDLE);
     return FALSE;
 }
 
 Bool32 act_side_flip_land_stop(struct MarioState *m) {
-    if (check_common_landing_cancels(m, 0)) return TRUE;
+    if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_SLIDEFLIP_LAND, ACT_IDLE);
     m->marioObj->header.gfx.angle[1] += 0x8000;
     return FALSE;
 }
 
 Bool32 act_freefall_land_stop(struct MarioState *m) {
-    if (check_common_landing_cancels(m, 0)) return TRUE;
+    if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_GENERAL_LAND, ACT_IDLE);
     return FALSE;
 }
@@ -535,7 +535,7 @@ Bool32 act_backflip_land_stop(struct MarioState *m) {
 
 Bool32 act_lava_boost_land(struct MarioState *m) {
     m->input &= ~(INPUT_FIRST_PERSON | INPUT_B_PRESSED);
-    if (check_common_landing_cancels(m, 0)) return TRUE;
+    if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_STAND_UP_FROM_LAVA_BOOST, ACT_IDLE);
     return FALSE;
 }

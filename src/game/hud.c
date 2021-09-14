@@ -426,7 +426,7 @@ void render_debug_mode(void) {
 void render_hud_coins(void) {
     print_text( GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X)      , HUD_TOP_Y, "$"); // 'Coin' glyph
     print_text((GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 16), HUD_TOP_Y, "*"); // 'X' glyph
-
+    // print_text_fmt_int(210,  40, "STA %x", (gMarioState->action & ACT_ID_MASK));
 #ifdef HUD_LEADING_ZEROES
     print_text_fmt_int(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(HUD_COINS_X) + 30, HUD_TOP_Y, "%03d", gHudDisplay.coins);
 #else

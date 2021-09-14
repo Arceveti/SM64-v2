@@ -406,7 +406,7 @@ Bool32 act_jump(struct MarioState *m) {
 }
 
 Bool32 act_double_jump(struct MarioState *m) {
-    AnimID32 animation = (m->vel[1] >= 0.0f) ? MARIO_ANIM_DOUBLE_JUMP_RISE : MARIO_ANIM_DOUBLE_JUMP_FALL;
+    AnimID32 animation = ((m->vel[1] >= 0.0f) ? MARIO_ANIM_DOUBLE_JUMP_RISE : MARIO_ANIM_DOUBLE_JUMP_FALL);
     if (check_kick_or_dive_in_air(m)) return TRUE;
     if (m->input & INPUT_Z_PRESSED) return set_mario_action(m, ACT_GROUND_POUND, 0);
     play_mario_sound(m, SOUND_ACTION_TERRAIN_JUMP, SOUND_MARIO_HOOHOO);

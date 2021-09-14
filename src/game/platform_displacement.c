@@ -116,17 +116,17 @@ static Bool8 sInertiaFirstFrame  = FALSE;
 /**
  * Apply inertia based on Mario's last platform.
  */
-static void apply_mario_inertia(void) {
+static void apply_mario_inertia(struct MarioState *m) {
     // On the first frame of leaving the ground, boost Mario's y velocity
-    if (sInertiaFirstFrame) gMarioState->vel[1] += sMarioAmountDisplaced[1];
+    if (sInertiaFirstFrame) m->vel[1] += sMarioAmountDisplaced[1];
     // Apply sideways inertia
-    gMarioState->pos[0]                         += sMarioAmountDisplaced[0];
-    gMarioState->pos[2]                         += sMarioAmountDisplaced[2];
+    m->pos[0]                         += sMarioAmountDisplaced[0];
+    m->pos[2]                         += sMarioAmountDisplaced[2];
     // Drag
     sMarioAmountDisplaced[0]                    *= 0.97f;
     sMarioAmountDisplaced[2]                    *= 0.97f;
     // Stop applying inertia once Mario has landed, or when ground pounding
-    if (!(gMarioState->action & ACT_FLAG_AIR) || (gMarioState->action == ACT_GROUND_POUND)) sShouldApplyInertia = FALSE;
+    if (!(m->action & ACT_FLAG_AIR) || (m->action == ACT_GROUND_POUND)) sShouldApplyInertia = FALSE;
 }
 
 /**
@@ -141,7 +141,7 @@ void apply_mario_platform_displacement(void) {
             sShouldApplyInertia = TRUE;
             sInertiaFirstFrame  = TRUE;
         } else if (sShouldApplyInertia && gDoInertia) {
-            apply_mario_inertia();
+            apply_mario_inertia(gMarioState);
             sInertiaFirstFrame = FALSE;
         }
     }
@@ -155,7 +155,7 @@ void apply_platform_displacement(u32 isMario, struct Object *platform) {
     Vec3f objPos, platformPos;
     Vec3f currentObjectOffset, relativeOffset, newObjectOffset;
     Vec3a rotation;
-    f32 displaceMatrix[4][4];
+    Mat4  displaceMatrix;
     vec3_copy(rotation, &platform->oAngleVelVec);
     if (isMario) {
         get_mario_pos(&objPos[0], &objPos[1], &objPos[2]);

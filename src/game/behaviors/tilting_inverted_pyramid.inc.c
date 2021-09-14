@@ -21,16 +21,16 @@ void bhv_platform_normals_init(void) {
 void bhv_tilting_inverted_pyramid_loop(void) {
     Vec3f d;
 #ifndef PLATFORM_DISPLACEMENT_2
-    Vec3f dist;
-    Vec3f posBeforeRotation;
-    Vec3f posAfterRotation;
+    Vec3f dist              = { 0.0f, 0.0f, 0.0f };
+    Vec3f posBeforeRotation = { 0.0f, 0.0f, 0.0f };
+    Vec3f posAfterRotation  = { 0.0f, 0.0f, 0.0f };
     // Mario's position
-    f32 mx, my, mz;
+    Vec3f m                 = { 0.0f, 0.0f, 0.0f };
 #endif
     Mat4 *transform = &o->transform;
     if (gMarioObject->platform == o) {
 #ifndef PLATFORM_DISPLACEMENT_2
-        get_mario_pos(&mx, &my, &mz);
+        get_mario_pos(&m[0], &m[1], &m[2]);
         vec3_diff(dist, &gMarioObject->oPosVec, &o->oPosVec);
         linear_mtxf_mul_vec3f(*transform, posBeforeRotation, dist);
 #endif
@@ -51,10 +51,10 @@ void bhv_tilting_inverted_pyramid_loop(void) {
     // If Mario is on the platform, adjust his position for the platform tilt.
     if (o->oTiltingPyramidMarioOnPlatform) {
         linear_mtxf_mul_vec3f(*transform, posAfterRotation, dist);
-        mx += (posAfterRotation[0] - posBeforeRotation[0]);
-        my += (posAfterRotation[1] - posBeforeRotation[1]);
-        mz += (posAfterRotation[2] - posBeforeRotation[2]);
-        set_mario_pos(mx, my, mz);
+        m[0] += (posAfterRotation[0] - posBeforeRotation[0]);
+        m[1] += (posAfterRotation[1] - posBeforeRotation[1]);
+        m[2] += (posAfterRotation[2] - posBeforeRotation[2]);
+        set_mario_pos(m[0], m[1], m[2]);
     }
 #endif
     o->header.gfx.throwMatrix = transform;
