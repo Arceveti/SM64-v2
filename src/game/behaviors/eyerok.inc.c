@@ -360,12 +360,11 @@ static void eyerok_hand_act_fist_sweep(void) {
 }
 
 static void eyerok_hand_act_begin_double_pound(void) {
-    f32 homeXOffset;
     if ((o->parentObj->oEyerokBossAttackCountdown < 0) || (o->parentObj->oEyerokBossActiveHand == o->oBehParams2ndByte)) {
         o->oAction       = EYEROK_HAND_ACT_DOUBLE_POUND;
         o->oMoveAngleYaw = (s32)(o->oFaceAngleYaw - (DEG(90) * o->parentObj->oEyerokBossFightSideZ));
     } else {
-        homeXOffset = (o->parentObj->oPosX + (400.0f * o->parentObj->oEyerokBossFightSideZ) - (180.0f * o->oBehParams2ndByte));
+        f32 homeXOffset = (o->parentObj->oPosX + (400.0f * o->parentObj->oEyerokBossFightSideZ) - (180.0f * o->oBehParams2ndByte));
         o->oPosX = (o->oHomeX + (                              (homeXOffset - o->oHomeX) * o->parentObj->oEyerokBossOffsetFromHome));
         o->oPosY = (o->oHomeY + (                                                 300.0f * o->parentObj->oEyerokBossOffsetFromHome));
         o->oPosZ = (o->oHomeZ + ((o->parentObj->oEyerokBossClampedMarioPosZ - o->oHomeZ) * o->parentObj->oEyerokBossOffsetFromHome));

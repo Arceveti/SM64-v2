@@ -209,7 +209,7 @@ void coin_inside_boo_act_dropped(void) {
 }
 
 void coin_inside_boo_act_carried(void) {
-    s16 marioMoveYaw;
+    Angle marioMoveYaw;
     struct Object *parent = o->parentObj;
     cur_obj_become_intangible();
     if ((o->oTimer == 0) && (gCurrLevelNum == LEVEL_BBH)) {

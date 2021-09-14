@@ -15,7 +15,7 @@ struct ObjectHitbox sSkeeterHitbox = {
     /* hurtboxHeight:     */  90,
 };
 
-struct SkeeterRelPos sSkeeterRelPos[] = {
+struct SkeeterRelPos sSkeeterRelPositions[] = {
     { 0xFF7E, 0xFF42 },
     { 0x0082, 0xFF42 },
     { 0xFF4C, 0x0082 },
@@ -24,7 +24,7 @@ struct SkeeterRelPos sSkeeterRelPos[] = {
 
 static void skeeter_spawn_waves(void) {
     s32 i;
-    for ((i = 0); (i < 4); (i++)) spawn_object_relative_with_scale(OBJ_BP_NONE, sSkeeterRelPos[i].relPosX, 0, sSkeeterRelPos[i].relPosZ, 0.8f, o, MODEL_IDLE_WATER_WAVE, bhvSkeeterWave);
+    for ((i = 0); (i < 4); (i++)) spawn_object_relative_with_scale(OBJ_BP_NONE, sSkeeterRelPositions[i].relPosX, 0, sSkeeterRelPositions[i].relPosZ, 0.8f, o, MODEL_IDLE_WATER_WAVE, bhvSkeeterWave);
 }
 
 static void skeeter_act_idle(void) {

@@ -103,9 +103,9 @@ void moneybag_act_move_around(void) {
 }
 
 void moneybag_act_return_home(void) {
-    Angle yawToHome = vec3_yaw(&o->oPosVec, &o->oHomeVec);
-    o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
-    ColFlags collisionFlags   = object_step();
+    Angle yawToHome         = vec3_yaw(&o->oPosVec, &o->oHomeVec);
+    o->oMoveAngleYaw        = approach_s16_symmetric(o->oMoveAngleYaw, yawToHome, 0x800);
+    ColFlags collisionFlags = object_step();
     if (((collisionFlags & OBJ_COL_FLAGS_LANDED) == OBJ_COL_FLAGS_LANDED) && (o->oMoneybagJumpState == MONEYBAG_JUMP_LANDING)) o->oMoneybagJumpState = MONEYBAG_JUMP_WALK_HOME;
     moneybag_jump(collisionFlags);
     moneybag_check_mario_collision();

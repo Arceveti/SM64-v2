@@ -601,15 +601,15 @@ void cur_obj_reverse_animation(void) {
 }
 
 void cur_obj_extend_animation_if_at_end(void) {
-    AnimFrame32 frame =  o->header.gfx.animInfo.animFrame;
-    AnimFrame32 end   = (o->header.gfx.animInfo.curAnim->loopEnd - 2);
-    if (frame == end) o->header.gfx.animInfo.animFrame--;
+    AnimFrame32 animFrame      =  o->header.gfx.animInfo.animFrame;
+    AnimFrame32 nearLoopEnd    = (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    if (animFrame == nearLoopEnd) o->header.gfx.animInfo.animFrame--;
 }
 
 Bool32 cur_obj_check_if_near_animation_end(void) {
-    u32 animFlags   = (s32) o->header.gfx.animInfo.curAnim->flags;
-    AnimFrame32 animFrame   =       o->header.gfx.animInfo.animFrame;
-    s32 nearLoopEnd =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    u32 animFlags         = (s32) o->header.gfx.animInfo.curAnim->flags;
+    AnimFrame32 animFrame =       o->header.gfx.animInfo.animFrame;
+    s32 nearLoopEnd       =      (o->header.gfx.animInfo.curAnim->loopEnd - 2);
     return (((animFlags & ANIM_FLAG_NOLOOP) && ((nearLoopEnd + 1) == animFrame)) || (animFrame == nearLoopEnd));
 }
 

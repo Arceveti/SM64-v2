@@ -26,8 +26,7 @@ void bhv_ship_part_3_loop(void) {
 
 void bhv_jrb_sliding_box_loop(void) {
     Mat4 mtx;
-    Vec3f shipToBoxPos1;
-    Vec3f shipToBoxPos2;
+    Vec3f shipToBoxPos1, shipToBoxPos2;
     Vec3a shipRotation;
     struct Object *shipObj;
     if (o->oJrbSlidingBoxShip == NULL) {

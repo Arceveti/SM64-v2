@@ -1,15 +1,14 @@
 // hidden_star.c.inc
 
 void bhv_hidden_star_init(void) {
-    s16 remainingTriggers;
     struct Object *starObj;
-    remainingTriggers = count_objects_with_behavior(bhvHiddenStarTrigger);
+    s16 remainingTriggers = count_objects_with_behavior(bhvHiddenStarTrigger);
     if (remainingTriggers == 0) {
         starObj             = spawn_object_abs_with_rot(o, 0, MODEL_STAR, bhvStar, o->oPosX, o->oPosY, o->oPosZ, 0x0, 0x0, 0x0);
         starObj->oBehParams = o->oBehParams;
         obj_mark_for_deletion(o);
     }
-    o->oHiddenStarTriggerCounter = 5 - remainingTriggers;
+    o->oHiddenStarTriggerCounter = (5 - remainingTriggers);
 }
 
 void bhv_hidden_star_loop(void) {

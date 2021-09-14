@@ -7,8 +7,6 @@ void bhv_butterfly_init(void) {
     vec3_copy(&o->oHomeVec, &o->oPosVec);
 }
 
-// sp28 = speed
-
 void butterfly_step(s32 speed) {
     Angle yaw   = o->oMoveAngleYaw;
     Angle pitch = o->oMoveAnglePitch;

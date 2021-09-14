@@ -55,7 +55,7 @@ void bhv_controllable_platform_init(void) {
 void controllable_platform_hit_wall(s8 nextDirection) {
     o->oControllablePlatformWallHitDirection = nextDirection;
     o->oTimer                                = 0;
-    sControllablePlatformDirectionState = DIRECTION_STATE_HIT_WALL;
+    sControllablePlatformDirectionState      = DIRECTION_STATE_HIT_WALL;
     cur_obj_play_sound_2(SOUND_GENERAL_QUIET_POUND1);
 #if ENABLE_RUMBLE
     queue_rumble_data(50, 80);
@@ -88,9 +88,9 @@ void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3],
     }
 
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 400)) {
-        sControllablePlatformDirectionState = DIRECTION_STATE_DISAPPEARING;
+        sControllablePlatformDirectionState    = DIRECTION_STATE_DISAPPEARING;
         o->oControllablePlatformIsFarFromMario = TRUE;
-        o->oTimer = 0;
+        o->oTimer                              = 0;
     }
 }
 

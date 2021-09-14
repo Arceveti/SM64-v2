@@ -64,9 +64,9 @@ void bhv_mr_i_body_loop(void) {
 }
 
 void mr_i_act_spin_death(void) {
-    f32 BBHScaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
-    s16 direction        = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
-    f32 spinAmount       = ((o->oTimer + 1) / 96.0f);
+    f32 scaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
+    s16 direction     = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
+    f32 spinAmount    = ((o->oTimer + 1) / 96.0f);
     if (o->oTimer < 64) {
         Angle startYaw    = o->oMoveAngleYaw;
         o->oMoveAngleYaw += (direction * coss(DEG(90) * spinAmount));
@@ -80,14 +80,14 @@ void mr_i_act_spin_death(void) {
         o->oMoveAnglePitch =     ((1.0f - coss(DEG(90) * spinAmount)) * -DEG(90));
         cur_obj_shake_y((s32)((1.0f - shakeY) * 4)); // trucating the f32?
         f32 baseScale = ((coss(DEG(90) * shakeY) * 0.4f) + 0.6f);
-        cur_obj_scale(baseScale * BBHScaleModifier);
+        cur_obj_scale(baseScale * scaleModifier);
     } else if (o->oTimer < 104) {
         // do nothing
     } else if (o->oTimer < 168) {
         if (o->oTimer == 104) {
             cur_obj_become_intangible();
             spawn_mist_particles();
-            o->oMrISize = (BBHScaleModifier * 0.6f);
+            o->oMrISize = (scaleModifier * 0.6f);
             if (o->oBehParams2ndByte) {
                 o->oPosY += 100.0f;
                 spawn_default_star(1370, 2000.0f, -320.0f);
@@ -96,7 +96,7 @@ void mr_i_act_spin_death(void) {
                 cur_obj_spawn_loot_blue_coin();
             }
         }
-        o->oMrISize -= (0.2f * BBHScaleModifier);
+        o->oMrISize -= (0.2f * scaleModifier);
         if (o->oMrISize < 0) o->oMrISize = 0; // Prevent negative scale
         cur_obj_scale(o->oMrISize);
     } else {

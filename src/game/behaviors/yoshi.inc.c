@@ -37,9 +37,8 @@ void yoshi_walk_loop(void) {
 }
 
 void yoshi_idle_loop(void) {
-    s16 chosenHome;
     if (o->oTimer > 90) {
-        chosenHome = (random_float() * 3.99f);
+        s16 chosenHome = (random_float() * 3.99f);
         if (o->oYoshiChosenHome == chosenHome) {
             return;
         } else {

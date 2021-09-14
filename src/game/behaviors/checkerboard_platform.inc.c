@@ -11,13 +11,12 @@ struct CheckerBoardPlatformInitPosition sCheckerBoardPlatformInitPositions[] = {
 
 void bhv_checkerboard_elevator_group_init(void) {
     s32 relativePosY, relativePosZ;
-    s32 type;
     s32 i;
     struct Object *platformObj;
     // oBehParams2ndByte determines the relative height of the platforms
     if (o->oBehParams2ndByte == CHECKERBOARD_PLATFORM_GROUP_BP_SET_DEFAULT) o->oBehParams2ndByte = CHECKERBOARD_PLATFORM_GROUP_BP_DEFAULT_MAX;
     relativePosY = (o->oBehParams2ndByte * 10);
-    type = ((o->oBehParams >> 24) & 0xFF);
+    s32 type = ((o->oBehParams >> 24) & 0xFF);
     for ((i = 0); (i < 2); (i++)) {
         relativePosZ = ((i == 0) ? -sCheckerBoardPlatformInitPositions[type].relPosZ : sCheckerBoardPlatformInitPositions[type].relPosZ);
         platformObj = spawn_object_relative(i, 0, (i * relativePosY), relativePosZ, o, MODEL_CHECKERBOARD_PLATFORM, bhvCheckerboardPlatformSub);

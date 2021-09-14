@@ -1,7 +1,7 @@
 // animated_floor_switch.inc.c
 
 struct FloorSwitchTriggeredAnimationFrame {
-    const void *collisionData;
+    const void *collisionDataPtr;
     ModelID model;
 };
 
@@ -53,6 +53,6 @@ void bhv_animates_on_floor_switch_press_loop(void) {
         o->oFloorSwitchPressAnimationDoubleFrame = 0;
         o->oFloorSwitchPressAnimationDoResetTime = TRUE;
     }
-    o->collisionData = segmented_to_virtual(sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].collisionData);
-    cur_obj_set_model(                      sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].model        );
+    o->collisionData = segmented_to_virtual(sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].collisionDataPtr);
+    cur_obj_set_model(                      sFloorSwitchTriggeredAnimationFrames[o->oBehParams2ndByte][o->oFloorSwitchPressAnimationDoubleFrame / 2].model           );
 }

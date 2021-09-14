@@ -24,7 +24,6 @@ s32 update_angle_from_move_flags(Angle32 *angle) {
 }
 
 void bhv_scuttlebug_loop(void) {
-    f32 accel;
     cur_obj_update_floor_and_walls();
     if ((o->oSubAction != SCUTTLEBUG_SUB_ACT_RESET) && cur_obj_set_hitbox_and_die_if_attacked(&sScuttlebugHitbox, SOUND_OBJ_DYING_ENEMY1, o->oScuttlebugHasNoLootCoins)) o->oSubAction = SCUTTLEBUG_SUB_ACT_ALERT;
     if (o->oSubAction != SCUTTLEBUG_SUB_ACT_MOVING) o->oScuttlebugIsAtttacking = FALSE;
@@ -85,7 +84,7 @@ void bhv_scuttlebug_loop(void) {
             if (o->oScuttlebugTimer > 30) o->oSubAction = SCUTTLEBUG_SUB_ACT_RESET;
             break;
     }
-    accel = ((o->oForwardVel < 10.0f) ? 1.0f : 3.0f);
+    f32 accel = ((o->oForwardVel < 10.0f) ? 1.0f : 3.0f);
     cur_obj_init_animation_with_accel_and_sound(SCUTTLEBUG_ANIM_JUMP, accel);
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) set_obj_anim_with_accel_and_sound(SCUTTLEBUG_ANIM_WALK, 23, SOUND_OBJ2_SCUTTLEBUG_WALK);
     if (o->parentObj != o) {

@@ -44,7 +44,7 @@ void bhv_flamethrower_loop(void) {
         if (((gCurrLevelNum != LEVEL_BBH) || gMarioOnMerryGoRound) && (o->oDistanceToMario < 2000.0f)) o->oAction = FLAMETHROWER_ACT_BLOW_FIRE;
     } else if (o->oAction == FLAMETHROWER_ACT_BLOW_FIRE) {
         ModelID32 model = MODEL_RED_FLAME;
-        f32 flameVel   = 95.0f;
+        f32 flameVel    = 95.0f;
         if (o->oBehParams2ndByte == FLAMETHROWER_BP_BLUE) model    = MODEL_BLUE_FLAME;
         if (o->oBehParams2ndByte == FLAMETHROWER_BP_SLOW) flameVel = 50.0f;
         s32 flameTimeRemaining = 1;

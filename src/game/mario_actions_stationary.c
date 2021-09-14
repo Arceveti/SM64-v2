@@ -443,8 +443,8 @@ Bool32 act_stop_crawling(struct MarioState *m) {
 }
 
 Bool32 act_shockwave_bounce(struct MarioState *m) {
-    Angle bounceAngle;
-    f32 bounceAmt;
+    Angle bounceTimer;
+    f32   bounceAmt;
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_SHOCKWAVE) {
 #if ENABLE_RUMBLE
         queue_rumble_data(70, 40);
@@ -458,14 +458,14 @@ Bool32 act_shockwave_bounce(struct MarioState *m) {
         if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_KNOCKBACK_DMG) return hurt_and_set_mario_action(m, ACT_BACKWARD_GROUND_KB, 0, 0xc);
     }
     if (++m->actionTimer == 48) return set_mario_action(m, ACT_IDLE, 0);
-    bounceAngle = ((m->actionTimer & 0xF) << 12);
+    bounceTimer = ((m->actionTimer & 0xF) << 12);
     bounceAmt   = (f32)(((f32)(6 - m->actionTimer / 8) * 8.0f) + 4.0f);
     mario_set_forward_vel(m, 0.0f);
     vec3_zero(m->vel);
-    if (sins(bounceAngle) >= 0.0f) {
-        m->pos[1] = ((sins(bounceAngle) * bounceAmt) + m->floorHeight);
+    if (sins(bounceTimer) >= 0.0f) {
+        m->pos[1] = ((sins(bounceTimer) * bounceAmt) + m->floorHeight);
     } else {
-        m->pos[1] = (m->floorHeight - (sins(bounceAngle) * bounceAmt));
+        m->pos[1] = (m->floorHeight - (sins(bounceTimer) * bounceAmt));
     }
     vec3_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
