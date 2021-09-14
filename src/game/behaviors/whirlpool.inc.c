@@ -24,7 +24,7 @@ void whirlpool_set_hitbox(void) {
 }
 
 void whirpool_orient_graph(void) {
-    Vec3f normal;
+    Vec3n normal;
     f32 cosPitch =             coss(o->oFaceAnglePitch);
     normal[0]    = (cosPitch * sins(o->oFaceAngleRoll));
     normal[1]    = (cosPitch * coss(o->oFaceAngleRoll));

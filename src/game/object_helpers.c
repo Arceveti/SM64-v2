@@ -1034,7 +1034,7 @@ f32 cur_obj_abs_y_dist_to_home(void) {
 
 UNUSED AnimFrame32 cur_obj_advance_looping_anim(void) {
     AnimFrame32 animFrame = o->header.gfx.animInfo.animFrame;
-    s32         loopEnd   = o->header.gfx.animInfo.curAnim->loopEnd;
+    AnimFrame32 loopEnd   = o->header.gfx.animInfo.curAnim->loopEnd;
     if (animFrame < 0) {
         animFrame = 0;
     } else if ((loopEnd - 1) == animFrame) {
@@ -1213,10 +1213,10 @@ void obj_translate_local(struct Object *obj, s16 posIndex, s16 localTranslateInd
 }
 
 void obj_build_transform_from_pos_and_angle(struct Object *obj, s16 posIndex, s16 angleIndex) {
-    f32 translate[3];
-    Angle rotation[3];
-    vec3_copy(translate, &obj->rawData.asF32[posIndex]);
-    vec3_copy(rotation, &obj->rawData.asS32[angleIndex]);
+    Vec3f translate;
+    Vec3a rotation;
+    vec3_copy(translate, &obj->rawData.asF32[  posIndex]);
+    vec3_copy(rotation,  &obj->rawData.asS32[angleIndex]);
     if ((translate != gVec3fZero) || (rotation != gVec3sZero)) mtxf_rotate_zxy_and_translate(obj->transform, translate, rotation);
 }
 

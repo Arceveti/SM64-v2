@@ -317,12 +317,8 @@ Bool32 update_decelerating_speed(struct MarioState *m) {
 }
 
 void update_walking_speed(struct MarioState *m) {
-    f32 maxTargetSpeed, targetSpeed;
-#ifdef FIX_GROUND_TURN_RADIUS
-    Angle turnRange;
-#endif
-    maxTargetSpeed = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 24.0f : 32.0f);
-    targetSpeed    = ((m->intendedMag < maxTargetSpeed) ? m->intendedMag : maxTargetSpeed);
+    f32 maxTargetSpeed = (((m->floor != NULL) && (m->floor->type == SURFACE_SLOW)) ? 24.0f : 32.0f);
+    f32 targetSpeed    = ((m->intendedMag < maxTargetSpeed) ? m->intendedMag : maxTargetSpeed);
     if (m->quicksandDepth > 10.0f) targetSpeed *= (6.25f / m->quicksandDepth);
     if (m->forwardVel <= 0.0f) {
         m->forwardVel += 1.1f;
@@ -341,11 +337,11 @@ void update_walking_speed(struct MarioState *m) {
         m->faceAngle[1] += DEG(180);
         m->forwardVel *= -1.0f;
     }
-    if (analog_stick_held_back(m, DEG(100)) && (m->heldObj == NULL)) {
+    if (analog_stick_held_back(m, DEG(100)) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
         set_mario_action(m, ACT_TURNING_AROUND, 0);
         if (m->forwardVel < GROUND_SPEED_THRESHOLD) m->faceAngle[1] = m->intendedYaw;
     } else {
-        turnRange = (0xFFF - (m->forwardVel * 0x20));
+        Angle turnRange = (0xFFF - (m->forwardVel * 0x20));
         if (turnRange < 0x800) {
             turnRange = 0x800;
             set_mario_action(m, ACT_TURNING_AROUND, 0);

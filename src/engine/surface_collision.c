@@ -247,7 +247,7 @@ void resolve_and_return_wall_collision_data(Vec3f pos, f32 offsetY, f32 radius, 
 s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     struct WallCollisionData collisionData;
     struct Surface *wall = NULL;
-    Vec3f norm;
+    Vec3n norm;
     register f32 originOffset, offset, offsetAbsolute;
     Vec3f newPos[4];
     s32 i;
@@ -995,7 +995,7 @@ void find_surface_on_ray_cell(CellIndex cellX, CellIndex cellZ, Vec3f orig, Vec3
 }
 
 void find_surface_on_ray(Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags) {
-    Vec3f normalized_dir;
+    Vec3n normalized_dir;
     register f32 step, dx, dz;
     s32 i;
     // Set that no surface has been hit

@@ -120,7 +120,7 @@ struct Painting
  */
 struct PaintingMeshVertex {
     /*0x00*/ Vec3vs pos;
-    /*0x06*/ s8 norm[3];
+    /*0x06*/ Vec3c norm;
 };
 
 extern SurfaceType gPaintingMarioFloorType;

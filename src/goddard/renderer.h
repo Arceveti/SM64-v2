@@ -71,7 +71,7 @@ s32   create_mtl_gddl(void);
 void  branch_to_gddl(s32 dlNum);
 void  gd_dl_hilite(s32 idx, struct ObjCamera *cam, Vec3f phongLightPosition, ColorRGBf colour);
 s32   gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material);
-void  set_Vtx_norm_buf_2(Vec3f norm);
+void  set_Vtx_norm_buf_2(Vec3n norm);
 void  set_gd_mtx_parameters(s32 params);
 void  gd_set_one_cycle(void);
 void  start_view_dl(struct ObjView *view);

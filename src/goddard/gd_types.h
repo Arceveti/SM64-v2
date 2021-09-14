@@ -328,7 +328,7 @@ struct ObjVertex {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ Vec3f initPos;
     /* 0x20 */ Vec3f pos;                           // new position after being moved by joints?
-    /* 0x2C */ Vec3f normal;                        // normal? also color (like gbi?)
+    /* 0x2C */ Vec3n normal;                        // normal? also color (like gbi?)
     /* 0x38 */ s16 id;
     /* 0x3C */ f32 scaleFactor;
     /* 0x40 */ f32 alpha;
@@ -342,7 +342,7 @@ struct ObjFace {
     /* 0x00 */ struct GdObj header;
     /* 0x14 */ ColorRGBf colour;
     /* 0x20 */ s32 colourNum;                       // "colour" index
-    /* 0x24 */ Vec3f normal;
+    /* 0x24 */ Vec3n normal;
     /* 0x30 */ s32 vtxCount;
     /* 0x34 */ struct ObjVertex *vertices[4];       // these can also be s32 indices? which are then replaced by `find_thisface_verts`
     /* 0x44 */ s32 mtlId;                           // from compressed GdFaceData; -1 == coloured face?

@@ -164,7 +164,7 @@ Bool32 turn_obj_away_from_steep_floor(struct Surface *objFloor, f32 floorY, f32 
 /**
  * Orients an object with the given normals, typically the surface under the object.
  */
-void obj_orient_graph(struct Object *obj, Vec3f normal) {
+void obj_orient_graph(struct Object *obj, Vec3n normal) {
     Vec3f objVisualPosition;
 #ifdef VARIABLE_FRAMERATE
     Mat4 *throwMatrix = &gThrowMatStack[gThrowMatSwap][gThrowMatIndex];

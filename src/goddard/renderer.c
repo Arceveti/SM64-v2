@@ -1204,8 +1204,8 @@ void gd_dl_hilite(s32 idx, // material GdDl number; offsets into hilite array
 s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
     s32 i;
     s32 numLights = sNumLights;
-    s32 scaledColours[3];
-    s32 lightDir[3];
+    Vec3i scaledColours;
+    Vec3i lightDir;
     if (id > 0) begin_gddl(id);
     switch (material) {
         case GD_MTL_TEX_OFF:
@@ -1228,7 +1228,6 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[1]  = (colour[1] * 255.0f);
             DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col[2]  = (colour[2] * 255.0f);
             vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc, DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col);
-            // 801A0D04
             vec3_zero(DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.col );
             vec3_zero(DL_CURRENT_LIGHT(sCurrentGdDl).l[0].l.colc);
             gSPNumLights(next_gfx(), NUMLIGHTS_1);
@@ -1239,33 +1238,24 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
             return 0;
             break;
     }
-    // L801A0EF4
     scaledColours[0] = (s32)(colour[0] * sAmbScaleColour[0] * 255.0f);
     scaledColours[1] = (s32)(colour[1] * sAmbScaleColour[1] * 255.0f);
     scaledColours[2] = (s32)(colour[2] * sAmbScaleColour[2] * 255.0f);
-    // 801A0FE4
-    vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col, scaledColours);
-    // 801A1068
+    vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.col,  scaledColours);
     vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).a.l.colc, scaledColours);
-    // 801A10EC
     gSPNumLights(next_gfx(), numLights);
-    for ((i = 0); (i < numLights); (i++)) { // L801A1134
+    for ((i = 0); (i < numLights); (i++)) {
         scaledColours[0] = (colour[0] * sLightScaleColours[i][0] * 255.0f);
         scaledColours[1] = (colour[1] * sLightScaleColours[i][1] * 255.0f);
         scaledColours[2] = (colour[2] * sLightScaleColours[i][2] * 255.0f);
-        // 801A1260
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.col,  scaledColours);
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.colc, scaledColours);
-        // 801A13B0
         lightDir[0] = (s8)sLightDirections[i][0];
         lightDir[1] = (s8)sLightDirections[i][1];
         lightDir[2] = (s8)sLightDirections[i][2];
-        // 801A141C
         vec3_copy(DL_CURRENT_LIGHT(sCurrentGdDl).l[i].l.dir, lightDir);
-        // 801A14C4
         gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl).l[i]), (i + 1));
     }
-    // L801A1550
     gSPLight(next_gfx(), osVirtualToPhysical(&DL_CURRENT_LIGHT(sCurrentGdDl)), (i + 1));
     next_light();
     gd_enddlsplist();
@@ -1273,7 +1263,7 @@ s32 gd_dl_material_lighting(s32 id, ColorRGBf colour, s32 material) {
 }
 
 /* 24FE94 -> 24FF80; orig name: func_801A16C4; only from verts? */
-void set_Vtx_norm_buf_2(Vec3f norm) {
+void set_Vtx_norm_buf_2(Vec3n norm) {
     vec3_prod_val(sVtxCvrtNormBuf, norm, 127.0f);
 }
 
