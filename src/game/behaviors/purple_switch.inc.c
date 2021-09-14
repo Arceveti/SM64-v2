@@ -39,8 +39,14 @@ void bhv_purple_switch_loop(void) {
          * up. When time is up, move to a waiting-while-pressed state.
          */
         case PURPLE_SWITCH_ACT_TICKING:
-            play_sound(((o->oTimer < 360) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW), gGlobalSoundSource);
-            if (o->oTimer > 400) o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
+            if (o->oBehParams2ndByte != PURPLE_SWITCH_BP_NO_TICK) {
+                if ((o->oBehParams2ndByte == PURPLE_SWITCH_BP_ANIMATES) && (gMarioObject->platform != o)) {
+                    o->oAction = PURPLE_SWITCH_ACT_UNPRESSED;
+                } else {
+                    play_sound(((o->oTimer < 360) ? SOUND_GENERAL2_SWITCH_TICK_FAST : SOUND_GENERAL2_SWITCH_TICK_SLOW), gGlobalSoundSource);
+                    if (o->oTimer > 400) o->oAction = PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF;
+                }
+            }
             break;
         /**
          * Make the switch look unpressed again, and transition back to the

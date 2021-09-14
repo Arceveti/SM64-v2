@@ -37,7 +37,7 @@ void bhv_animates_on_floor_switch_press_loop(void) {
     if (o->oFloorSwitchPressAnimationSwitchNotTicking) {
         if (o->parentObj->oAction != PURPLE_SWITCH_ACT_TICKING) o->oFloorSwitchPressAnimationSwitchNotTicking = FALSE;
         if (o->oFloorSwitchPressAnimationDoResetTime != 0) {
-            o->oFloorSwitchPressAnimationTickTimer = o->parentObj->oTimer;
+            o->oFloorSwitchPressAnimationTickTimer = ((o->oBehParams2ndByte == ANIMATES_ON_FLOOR_SWITCH_BP_BITS_STAIRS) ? 250 : 200);
         } else {
             o->oFloorSwitchPressAnimationTickTimer = 0;
         }

@@ -498,6 +498,7 @@
 
 /* Purple switch */
     /* oBehParams2ndByte */
+    #define PURPLE_SWITCH_BP_NO_TICK                        0x0
     #define PURPLE_SWITCH_BP_ANIMATES                       0x1
     #define PURPLE_SWITCH_BP_REVEAL_HIDDEN                  0x2
     /* oAction */
@@ -506,6 +507,12 @@
     #define PURPLE_SWITCH_ACT_TICKING                       0x2
     #define PURPLE_SWITCH_ACT_UNPRESSED                     0x3
     #define PURPLE_SWITCH_ACT_WAIT_FOR_MARIO_TO_GET_OFF     0x4
+
+/* Animates on Floor Switch */
+    /* oBehParams2ndByte */
+    #define ANIMATES_ON_FLOOR_SWITCH_BP_BITS_STAIRS         0x0
+    #define ANIMATES_ON_FLOOR_SWITCH_BP_BITDW_STAIRS        0x1
+    #define ANIMATES_ON_FLOOR_SWITCH_BP_RR_TRIGANGLES       0x2
 
 /* Openable Grill */
     /* oBehParams2ndByte */
