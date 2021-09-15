@@ -70,7 +70,8 @@ extern Vec3f gVec3fZ;
  * Converts an angle in degrees to sm64's s16 angle units. For example, DEG(90) == 0x4000
  * This should be used mainly to make camera code clearer at first glance.
  */
-#define DEG( x) (Angle)((x) * 0x10000 / 360)
+// #define DEG(x) (Angle)((x) * 0x10000 / 360)
+#define DEG(x) (Angle)((x) *  0x2000 /  45)
 
 // #define DEG30   0x1555
 // #define DEG45   0x2000

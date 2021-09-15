@@ -228,22 +228,12 @@ ScreenPos gMarioScreenX, gMarioScreenY;
 LookAt lookAt;
 #endif
 
-#if SILHOUETTE
-#define SIL_CVG_THRESHOLD    0x3F                   // 32..255
-#define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA // Last silhouette layer
-#define NUM_EXTRA_SIL_LAYERS 1                      // Number of silhouette layers - 1
-#define SCHWA (AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL)
-#endif
-
 /**
  * Process a master list node.
  */
 static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     struct DisplayListNode *currList;
     s32 i;
-#if SILHOUETTE
-    s32 j;
-#endif
     s32 enableZBuffer                     = ((node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0);
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
@@ -260,50 +250,59 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
 #if SILHOUETTE
+#define SIL_CVG_THRESHOLD    0x3F                   // 32..255
+#define LAST_SIL_LAYER       LAYER_SILHOUETTE_ALPHA // Last silhouette layer
+#define NUM_EXTRA_SIL_LAYERS 1                      // Number of silhouette layers - 1
+#define SCHWA (AA_EN | IM_RD | CLR_ON_CVG | CVG_DST_WRAP | CVG_X_ALPHA | FORCE_BL)
     for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) {
         if ((currList = node->listHeads[i]) != NULL) {
             while (currList != NULL) {
                 // check if the current layer is a silhouette layer
                 if (gSilhouette && ((i == LAYER_SILHOUETTE_OPAQUE) || (i == LAYER_SILHOUETTE_ALPHA))) {
                     // Set render modes for the silhouette
-                    gDPSetRenderMode(   gDisplayListHead++, (SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)),
-                                                            (SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)));
+                    gDPSetRenderMode(  gDisplayListHead++, (SCHWA | GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)),
+                                                           (SCHWA | GBL_c2(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_MEM, G_BL_1MA)));
                     // Enable fog for silhouette models
-                    gSPSetGeometryMode( gDisplayListHead++, G_FOG);
-                    gSPFogPosition(     gDisplayListHead++, 0, 1 );
-                    gDPSetFogColor(     gDisplayListHead++, 0, 0, 0, SILHOUETTE); // silhouette color & alpha
-                    gDPSetEnvColor(     gDisplayListHead++, 0, 0, 0, SIL_CVG_THRESHOLD); // silhouette env transparency
+                    gSPSetGeometryMode(gDisplayListHead++, G_FOG);
+                    gSPFogPosition(    gDisplayListHead++, 0, 1 );
+                    gDPSetFogColor(    gDisplayListHead++, 0, 0, 0, SILHOUETTE       ); // silhouette color & alpha
+                    gDPSetEnvColor(    gDisplayListHead++, 0, 0, 0, SIL_CVG_THRESHOLD); // silhouette env transparency
                 } else {
                     // use only the normal mode list for non-silhouette layers
-                    gDPSetRenderMode(gDisplayListHead++, mode1List->modes[i],
-                                                         mode2List->modes[i]);
+                    gDPSetRenderMode(  gDisplayListHead++, mode1List->modes[i],
+                                                           mode2List->modes[i]);
                 }
-                gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                    (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
-                gSPDisplayList( gDisplayListHead++, currList->displayList);
+                gSPMatrix(     gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+                                                   (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
+                gSPDisplayList(gDisplayListHead++, currList->displayList);
                 currList = currList->next;
             }
         }
         // When reaching the last silhouette layer, render the "normal" versions of the silhouette layers:
         if (gSilhouette && (i == LAST_SIL_LAYER)) {
+            s32 j;
             for ((j = (i - NUM_EXTRA_SIL_LAYERS)); (j <= LAST_SIL_LAYER); (j++)) {
                 // Disable fog for the non-silhouette versions
-                gSPClearGeometryMode(   gDisplayListHead++, G_FOG);
+                gSPClearGeometryMode(  gDisplayListHead++, G_FOG);
                 // reset the env color & alpha
-                gDPSetEnvColor(         gDisplayListHead++, 255, 255, 255, 255);
+                gDPSetEnvColor(        gDisplayListHead++, 255, 255, 255, 255);
                 // use the normal mode list, but without anti-aliasing
-                gDPSetRenderMode(       gDisplayListHead++, (mode1List->modes[j] & ~IM_RD),
-                                                            (mode2List->modes[j] & ~IM_RD));
+                gDPSetRenderMode(      gDisplayListHead++, (mode1List->modes[j] & ~IM_RD),
+                                                           (mode2List->modes[j] & ~IM_RD));
                 currList = node->listHeads[j];
                 while (currList != NULL) {
-                    gSPMatrix(      gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
-                                                        (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
-                    gSPDisplayList( gDisplayListHead++, currList->displayList);
+                    gSPMatrix(     gDisplayListHead++, VIRTUAL_TO_PHYSICAL(currList->transform),
+                                                       (G_MTX_MODELVIEW | G_MTX_LOAD | G_MTX_NOPUSH));
+                    gSPDisplayList(gDisplayListHead++, currList->displayList);
                     currList = currList->next;
                 }
             }
         }
     }
+#undef SIL_CVG_THRESHOLD
+#undef LAST_SIL_LAYER
+#undef NUM_EXTRA_SIL_LAYERS
+#undef SCHWA
 #else
     for ((i = 0); (i < GFX_NUM_MASTER_LISTS); (i++)) {
         if ((currList = node->listHeads[i]) != NULL) {

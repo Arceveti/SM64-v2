@@ -4,6 +4,7 @@
 #endif
 
 #include "sm64.h"
+#include "level_commands.h"
 #include "audio/external.h"
 #include "buffers/framebuffers.h"
 #include "buffers/zbuffer.h"
@@ -72,14 +73,14 @@ static struct LevelCommand *sCurrentCmd;
 static s32 eval_script_op(s8 op, s32 arg) {
     s32 result = 0;
     switch (op) {
-        case 0: result =   sRegister &  arg;  break;
-        case 1: result = !(sRegister &  arg); break;
-        case 2: result =   sRegister == arg;  break;
-        case 3: result =   sRegister != arg;  break;
-        case 4: result =   sRegister <  arg;  break;
-        case 5: result =   sRegister <= arg;  break;
-        case 6: result =   sRegister >  arg;  break;
-        case 7: result =   sRegister >= arg;  break;
+        case OP_AND:  result =  (sRegister &  arg); break;
+        case OP_NAND: result = !(sRegister &  arg); break;
+        case OP_EQ:   result =  (sRegister == arg); break;
+        case OP_NEQ:  result =  (sRegister != arg); break;
+        case OP_LT:   result =  (sRegister <  arg); break;
+        case OP_LEQ:  result =  (sRegister <= arg); break;
+        case OP_GT:   result =  (sRegister >  arg); break;
+        case OP_GEQ:  result =  (sRegister >= arg); break;
     }
     return result;
 }
@@ -114,7 +115,7 @@ static void level_cmd_sleep(void) {
     if (sDelayFrames == 0) {
         sDelayFrames = CMD_GET(s16, 2);
     } else if (--sDelayFrames == 0) {
-        sCurrentCmd = CMD_NEXT;
+        sCurrentCmd   = CMD_NEXT;
         sScriptStatus = SCRIPT_RUNNING;
     }
 }
@@ -124,7 +125,7 @@ static void level_cmd_sleep2(void) {
     if (sDelayFrames2 == 0) {
         sDelayFrames2 = CMD_GET(s16, 2);
     } else if (--sDelayFrames2 == 0) {
-        sCurrentCmd = CMD_NEXT;
+        sCurrentCmd   = CMD_NEXT;
         sScriptStatus = SCRIPT_RUNNING;
     }
 }
@@ -269,7 +270,7 @@ static void level_cmd_load_mario_head(void) {
     if (addr != NULL) {
         gdm_init(addr, DOUBLE_SIZE_ON_64_BIT(0xE1000));
         gd_add_to_heap(gZBuffer, sizeof(gZBuffer)); // 0x25800
-        gd_add_to_heap(gFrameBuffer0, 3 * sizeof(gFrameBuffer0)); // 0x70800
+        gd_add_to_heap(gFrameBuffer0, (3 * sizeof(gFrameBuffer0))); // 0x70800
         gdm_setup();
         gdm_maketestdl(CMD_GET(s16, 2));
     }
@@ -285,7 +286,7 @@ static void level_cmd_load_yay0_texture(void) {
 static void level_cmd_change_area_skybox(void) {
     u8 areaCheck = CMD_GET(s16, 2);
     gAreaSkyboxStart[areaCheck - 1] = CMD_GET(void *, 4);
-    gAreaSkyboxEnd[  areaCheck - 1] = CMD_GET(void *, 8);
+    gAreaSkyboxEnd  [areaCheck - 1] = CMD_GET(void *, 8);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -297,13 +298,13 @@ static void level_cmd_init_level(void) {
     main_pool_push_state();
     for ((clearPointers = 0); (clearPointers < AREA_COUNT); (clearPointers++)) {
         gAreaSkyboxStart[clearPointers] = 0;
-        gAreaSkyboxEnd[clearPointers]   = 0;
+        gAreaSkyboxEnd  [clearPointers] = 0;
     }
     sCurrentCmd = CMD_NEXT;
 }
 
 extern s32 gTlbEntries;
-extern u8 gTlbSegments[32];
+extern u8  gTlbSegments[32];
 
 // This clears all the temporary bank TLB maps. group0, common1 and behavourdata are always loaded,
 // and they're also loaded first, so that means we just leave the first 3 indexes mapped.
@@ -376,7 +377,7 @@ static void level_cmd_load_model_from_dl(void) {
 
 static void level_cmd_load_model_from_geo(void) {
     ModelID model = CMD_GET(ModelID, 2);
-    void *geo     = CMD_GET(void *, 4);
+    void *geo     = CMD_GET(void *,  4);
     if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = process_geo_layout(sLevelPool, geo);
     sCurrentCmd = CMD_NEXT;
 }
@@ -388,7 +389,7 @@ static void level_cmd_load_model_from_dl_with_scale(void) {
     } scale;
     ModelID model =      (CMD_GET(ModelID, 2) & 0x0FFF);
     s16   node    = ((u16)CMD_GET(s16, 2)) >> 12;
-    void *dl_ptr  =       CMD_GET(void *, 4);
+    void *dl_ptr  =       CMD_GET(void *,  4);
     //! load an f32, but using an integer load instruction for some reason (hence the union)
     scale.i = CMD_GET(s32, 8);
     // GraphNodeScale has a GraphNode at the top. This
@@ -417,15 +418,11 @@ static void level_cmd_place_object(void) {
     if ((sCurrAreaIndex != -1) && ((CMD_GET(u8, 2) & val7) || (CMD_GET(u8, 2) == 0x1F))) {
         model                                   = CMD_GET(u32, 0x18);
         spawnInfo                               = alloc_only_pool_alloc(sLevelPool, sizeof(struct SpawnInfo));
-        spawnInfo->startPos[0]                  =  CMD_GET(s16, 4);
-        spawnInfo->startPos[1]                  =  CMD_GET(s16, 6);
-        spawnInfo->startPos[2]                  =  CMD_GET(s16, 8);
-        spawnInfo->startAngle[0]                = (CMD_GET(Angle, 10) * 0x8000 / 180);
-        spawnInfo->startAngle[1]                = (CMD_GET(Angle, 12) * 0x8000 / 180);
-        spawnInfo->startAngle[2]                = (CMD_GET(Angle, 14) * 0x8000 / 180);
+        vec3_set(spawnInfo->startPos,       CMD_GET(s16,    4),      CMD_GET(s16,    6),      CMD_GET(s16,    8));
+        vec3_set(spawnInfo->startAngle, DEG(CMD_GET(Angle, 10)), DEG(CMD_GET(Angle, 12)), DEG(CMD_GET(Angle, 14)));
         spawnInfo->areaIndex                    = sCurrAreaIndex;
         spawnInfo->activeAreaIndex              = sCurrAreaIndex;
-        spawnInfo->behaviorArg                  = CMD_GET(u32, 16);
+        spawnInfo->behaviorArg                  = CMD_GET(u32,    16);
         spawnInfo->behaviorScript               = CMD_GET(void *, 20);
         spawnInfo->modelNode                    = gLoadedGraphNodes[model];
         spawnInfo->next                         = gAreas[sCurrAreaIndex].objectSpawnInfos;
@@ -437,10 +434,10 @@ static void level_cmd_place_object(void) {
 static void level_cmd_create_warp_node(void) {
     if (sCurrAreaIndex != -1) {
         struct ObjectWarpNode *warpNode  = alloc_only_pool_alloc(sLevelPool, sizeof(struct ObjectWarpNode));
-        warpNode->node.id                = CMD_GET(u8, 2);
-        warpNode->node.destLevel         = CMD_GET(u8, 3) + CMD_GET(u8, 6);
-        warpNode->node.destArea          = CMD_GET(u8, 4);
-        warpNode->node.destNode          = CMD_GET(u8, 5);
+        warpNode->node.id                =  CMD_GET(u8, 2);
+        warpNode->node.destLevel         = (CMD_GET(u8, 3) + CMD_GET(u8, 6));
+        warpNode->node.destArea          =  CMD_GET(u8, 4);
+        warpNode->node.destNode          =  CMD_GET(u8, 5);
         warpNode->object                 = NULL;
         warpNode->next                   = gAreas[sCurrAreaIndex].warpNodes;
         gAreas[sCurrAreaIndex].warpNodes = warpNode;
@@ -456,12 +453,10 @@ static void level_cmd_create_instant_warp(void) {
             gAreas[sCurrAreaIndex].instantWarps = alloc_only_pool_alloc(sLevelPool, (4 * sizeof(struct InstantWarp)));
             for ((i = INSTANT_WARP_INDEX_START); (i < INSTANT_WARP_INDEX_STOP); (i++)) gAreas[sCurrAreaIndex].instantWarps[i].id = 0;
         }
-        warp                    = (gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2));
-        warp[0].id              = 1;
-        warp[0].area            = CMD_GET(u8,  3);
-        warp[0].displacement[0] = CMD_GET(s16, 4);
-        warp[0].displacement[1] = CMD_GET(s16, 6);
-        warp[0].displacement[2] = CMD_GET(s16, 8);
+        warp         = (gAreas[sCurrAreaIndex].instantWarps + CMD_GET(u8, 2));
+        warp[0].id   = 1;
+        warp[0].area = CMD_GET(u8,  3);
+        vec3_set(warp[0].displacement, CMD_GET(s16, 4), CMD_GET(s16, 6), CMD_GET(s16, 8));
     }
     sCurrentCmd = CMD_NEXT;
 }
@@ -505,11 +500,11 @@ static void level_cmd_create_whirlpool(void) {
     struct Whirlpool *whirlpool;
     s32    index       = CMD_GET(u8, 2);
     Bool32 beatBowser2 = ((save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) != 0);
-    if (CMD_GET(u8, 3) == 0
-     || (CMD_GET(u8, 3) == 1 && !beatBowser2)
-     || (CMD_GET(u8, 3) == 2 &&  beatBowser2)
-     || (CMD_GET(u8, 3) == 3 && gCurrActNum >= 2)) {
-        if (sCurrAreaIndex != -1 && index < 2) {
+    if ((CMD_GET(u8, 3) == WHIRLPOOL_COND_ALWAYS              )
+    || ((CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_NOT_BEATEN  ) && !beatBowser2)
+    || ((CMD_GET(u8, 3) == WHIRLPOOL_COND_BOWSER2_BEATEN      ) &&  beatBowser2)
+    || ((CMD_GET(u8, 3) == WHIRLPOOL_COND_AT_LEAST_SECOND_STAR) && (gCurrActNum >= 2))) {
+        if ((sCurrAreaIndex != -1) && (index < 2)) {
             if ((whirlpool = gAreas[sCurrAreaIndex].whirlpools[index]) == NULL) {
                 whirlpool = alloc_only_pool_alloc(sLevelPool, sizeof(struct Whirlpool));
                 gAreas[sCurrAreaIndex].whirlpools[index] = whirlpool;
@@ -589,7 +584,7 @@ static void level_cmd_set_mario_start_pos(void) {
 #else
     vec3s_copy(gMarioSpawnInfo->startPos, CMD_GET(Vec3s, 6));
 #endif
-    vec3_set(gMarioSpawnInfo->startAngle, 0x0, (CMD_GET(s16, 4) * 0x8000 / 180), 0x0);
+    vec3_set(gMarioSpawnInfo->startAngle, 0x0, DEG(CMD_GET(s16, 4)), 0x0);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -613,7 +608,7 @@ static void level_cmd_nop(void) {
 }
 
 static void level_cmd_show_dialog(void) {
-    if (sCurrAreaIndex != -1 && CMD_GET(u8, 2) < 2) gAreas[sCurrAreaIndex].dialog[CMD_GET(u8, 2)] = CMD_GET(u8, 3);
+    if ((sCurrAreaIndex != -1) && (CMD_GET(u8, 2) < 2)) gAreas[sCurrAreaIndex].dialog[CMD_GET(u8, 2)] = CMD_GET(u8, 3);
     sCurrentCmd = CMD_NEXT;
 }
 
@@ -636,21 +631,21 @@ static void level_cmd_fadeout_music(void) {
 }
 
 static void level_cmd_get_or_set_var(void) {
-    if (CMD_GET(u8, 2) == 0) {
+    if (CMD_GET(u8, 2) == OP_SET) {
         switch (CMD_GET(u8, 3)) {
-            case 0: gCurrSaveFileNum = sRegister; break;
-            case 1: gCurrCourseNum   = sRegister; break;
-            case 2: gCurrActNum      = sRegister; break;
-            case 3: gCurrLevelNum    = sRegister; break;
-            case 4: gCurrAreaIndex   = sRegister; break;
+            case VAR_CURR_SAVE_FILE_NUM: gCurrSaveFileNum = sRegister; break;
+            case VAR_CURR_COURSE_NUM:    gCurrCourseNum   = sRegister; break;
+            case VAR_CURR_ACT_NUM:       gCurrActNum      = sRegister; break;
+            case VAR_CURR_LEVEL_NUM:     gCurrLevelNum    = sRegister; break;
+            case VAR_CURR_AREA_INDEX:    gCurrAreaIndex   = sRegister; break;
         }
     } else {
         switch (CMD_GET(u8, 3)) {
-            case 0: sRegister = gCurrSaveFileNum; break;
-            case 1: sRegister = gCurrCourseNum;   break;
-            case 2: sRegister = gCurrActNum;      break;
-            case 3: sRegister = gCurrLevelNum;    break;
-            case 4: sRegister = gCurrAreaIndex;   break;
+            case VAR_CURR_SAVE_FILE_NUM: sRegister = gCurrSaveFileNum; break;
+            case VAR_CURR_COURSE_NUM:    sRegister = gCurrCourseNum;   break;
+            case VAR_CURR_ACT_NUM:       sRegister = gCurrActNum;      break;
+            case VAR_CURR_LEVEL_NUM:     sRegister = gCurrLevelNum;    break;
+            case VAR_CURR_AREA_INDEX:    sRegister = gCurrAreaIndex;   break;
         }
     }
     sCurrentCmd = CMD_NEXT;
@@ -666,13 +661,9 @@ static void level_cmd_puppyvolume(void) {
 #endif
         return;
     }
-    sPuppyVolumeStack[gPuppyVolumeCount]->pos[0]          = CMD_GET(s16,  2);
-    sPuppyVolumeStack[gPuppyVolumeCount]->pos[1]          = CMD_GET(s16,  4);
-    sPuppyVolumeStack[gPuppyVolumeCount]->pos[2]          = CMD_GET(s16,  6);
-    sPuppyVolumeStack[gPuppyVolumeCount]->radius[0]       = CMD_GET(s16,  8);
-    sPuppyVolumeStack[gPuppyVolumeCount]->radius[1]       = CMD_GET(s16, 10);
-    sPuppyVolumeStack[gPuppyVolumeCount]->radius[2]       = CMD_GET(s16, 12);
-    sPuppyVolumeStack[gPuppyVolumeCount]->rot             = CMD_GET(s16, 14);
+    vec3_set(sPuppyVolumeStack[gPuppyVolumeCount]->pos,     CMD_GET(s16,     2), CMD_GET(s16,  4), CMD_GET(s16,  6));
+    vec3_set(sPuppyVolumeStack[gPuppyVolumeCount]->radius,  CMD_GET(s16,     8), CMD_GET(s16, 10), CMD_GET(s16, 12));
+    sPuppyVolumeStack[gPuppyVolumeCount]->rot             = CMD_GET(Angle,  14);
     sPuppyVolumeStack[gPuppyVolumeCount]->func            = CMD_GET(void *, 16);
     sPuppyVolumeStack[gPuppyVolumeCount]->angles          = segmented_to_virtual(CMD_GET(void *, 20));
     sPuppyVolumeStack[gPuppyVolumeCount]->flagsAdd        = CMD_GET(s32, 24);
@@ -689,11 +680,11 @@ static void level_cmd_puppyvolume(void) {
 static void level_cmd_puppylight_environment(void) {
 #ifdef PUPPYLIGHTS
     Lights1 temp = gdSPDefLights1(CMD_GET(u8, 2), CMD_GET(u8, 3), CMD_GET(u8, 4), CMD_GET(u8, 5), CMD_GET(u8, 6), CMD_GET(u8, 7), CMD_GET(u8, 8), CMD_GET(u8, 9), CMD_GET(u8, 10));
-    gLevelLight = temp;
+    gLevelLight  = temp;
     // memcpy(&gLevelLight, &temp, sizeof(Lights1));
     levelAmbient = TRUE;
 #endif
-    sCurrentCmd = CMD_NEXT;
+    sCurrentCmd  = CMD_NEXT;
 }
 
 static void level_cmd_puppylight_node(void) {
@@ -705,22 +696,15 @@ static void level_cmd_puppylight_node(void) {
         sCurrentCmd = CMD_NEXT;
         return;
     }
-    gPuppyLights[gNumLights]->rgba[0]   = CMD_GET(u8,   2);
-    gPuppyLights[gNumLights]->rgba[1]   = CMD_GET(u8,   3);
-    gPuppyLights[gNumLights]->rgba[2]   = CMD_GET(u8,   4);
-    gPuppyLights[gNumLights]->rgba[3]   = CMD_GET(u8,   5);
-    gPuppyLights[gNumLights]->pos[0][0] = CMD_GET(s16,  6);
-    gPuppyLights[gNumLights]->pos[0][1] = CMD_GET(s16,  8);
-    gPuppyLights[gNumLights]->pos[0][2] = CMD_GET(s16, 10);
-    gPuppyLights[gNumLights]->pos[1][0] = CMD_GET(s16, 12);
-    gPuppyLights[gNumLights]->pos[1][1] = CMD_GET(s16, 14);
-    gPuppyLights[gNumLights]->pos[1][2] = CMD_GET(s16, 16);
-    gPuppyLights[gNumLights]->yaw       = CMD_GET(s16, 18);
-    gPuppyLights[gNumLights]->epicentre = CMD_GET(u8,  20);
-    gPuppyLights[gNumLights]->flags     = CMD_GET(u8,  21);
+    vec4_set(gPuppyLights[gNumLights]->rgba,   CMD_GET(u8,   2), CMD_GET(u8,   3), CMD_GET(u8,   4), CMD_GET(u8, 5));
+    vec3_set(gPuppyLights[gNumLights]->pos[0], CMD_GET(s16,  6), CMD_GET(s16,  8), CMD_GET(s16, 10));
+    vec3_set(gPuppyLights[gNumLights]->pos[1], CMD_GET(s16, 12), CMD_GET(s16, 14), CMD_GET(s16, 16));
+    gPuppyLights[gNumLights]->yaw       = CMD_GET(Angle, 18);
+    gPuppyLights[gNumLights]->epicentre = CMD_GET(u8,    20);
+    gPuppyLights[gNumLights]->flags     = CMD_GET(u8,    21);
     gPuppyLights[gNumLights]->active    = TRUE;
     gPuppyLights[gNumLights]->area      = sCurrAreaIndex;
-    gPuppyLights[gNumLights]->room      = CMD_GET(s16, 22);
+    gPuppyLights[gNumLights]->room      = CMD_GET(s16,   22);
     gNumLights++;
 #endif
     sCurrentCmd = CMD_NEXT;

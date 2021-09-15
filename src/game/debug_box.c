@@ -1,7 +1,5 @@
 #include <ultra64.h>
 
-#ifdef VISUAL_DEBUG
-
 /**
  * @file debug_box.c
  * Draws 3D boxes for debugging purposes
@@ -32,6 +30,8 @@
 #include "object_list_processor.h"
 
 #include "debug_box.h"
+
+#ifdef VISUAL_DEBUG
 
 Bool8  hitboxView = FALSE;
 Bool8 surfaceView = FALSE;
@@ -112,7 +112,7 @@ static const Gfx dl_debug_box_end[] = {
 
 static const Gfx dl_visual_surface[] = {
     gsDPPipeSync(),
-    gsDPSetRenderMode(G_RM_ZB_XLU_DECAL, G_RM_NOOP2),
+    gsDPSetRenderMode(G_RM_ADD, G_RM_NOOP2), // G_RM_ZB_XLU_DECAL
     gsSPClearGeometryMode(G_LIGHTING),
     gsSPSetGeometryMode(G_ZBUFFER | G_SHADE | G_SHADING_SMOOTH),
     gsSPTexture(0, 0, 0, 0, G_OFF),
