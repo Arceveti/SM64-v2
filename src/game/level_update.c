@@ -932,9 +932,9 @@ Bool32 init_level(void) {
     if (gCurrDemoInput == NULL) cancel_rumble();
 #endif
     if (gMarioState->action == ACT_INTRO_CUTSCENE) sound_banks_disable(SEQ_PLAYER_SFX, SOUND_BANKS_DISABLED_DURING_INTRO_CUTSCENE);
-#ifdef PUPPYLIGHTS
-    puppylights_allocate(); //!! Doesn't work outside of area 1
-#endif
+// #ifdef PUPPYLIGHTS
+//     puppylights_allocate(); //!! Doesn't work outside of area 1
+// #endif
 #if PUPPYPRINT_DEBUG
 #ifdef USE_CYCLES
     append_puppyprint_log("Level loaded in %dc", (s32)(osGetTime() - first));

@@ -122,7 +122,7 @@ void bhv_lll_bowser_puzzle_loop(void) {
             // If both completion flags are set and Mario is within 1000 units...
             if ((o->oBowserPuzzleCompletionFlags == (BOWSER_PUZZLE_COMPLETION_FLAG_MARIO_ON_PLATFORM | BOWSER_PUZZLE_COMPLETION_FLAG_PUZZLE_COMPLETE)) && (o->oDistanceToMario < 1000.0f)) {
                 // Spawn 5 coins.
-                for ((i = 0); (i < 5); (i++)) spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned);
+                for ((i = 0); (i < 5); (i++)) spawn_object(o, MODEL_YELLOW_COIN, bhvSingleCoinGetsSpawned); //! spawns coins too low, causing them to fall through the puzzle
                 // Reset completion flags (even though they never get checked again).
                 o->oBowserPuzzleCompletionFlags = BOWSER_PUZZLE_COMPLETION_FLAGS_NONE;
                 // Go to next action so we don't spawn 5 coins ever again.

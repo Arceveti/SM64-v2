@@ -86,10 +86,10 @@ void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     u32 bit;
     u32 rowMask;
     s32 i, j;
-    data = &gCrashScreenFont[glyph / 5 * 7];
+    data = &gCrashScreenFont[(glyph / 5) * 7];
     ptr  = (gCrashScreen.framebuffer + (gCrashScreen.width * y) + x);
     for ((i = 0); (i < 7); (i++)) {
-        bit = (0x80000000U >> ((glyph % 5) * 6));
+        bit     = (0x80000000U >> ((glyph % 5) * 6));
         rowMask = *data++;
         for ((j = 0); (j < 6); (j++)) {
             *ptr++ = ((bit & rowMask) ? 0xffff : 1);
@@ -108,7 +108,7 @@ void crash_screen_print(s32 x, s32 y, const char *fmt, ...) {
     u32 glyph;
     s32 size;
     char buf[0x108];
-    // s32 i = 0;
+    // UNUSED s32 i = 0;
     memset(buf, 0, sizeof(buf));
     va_list args;
     va_start(args, fmt);
@@ -133,8 +133,7 @@ void crash_screen_sleep(s32 ms) {
 
 void crash_screen_print_float_reg(s32 x, s32 y, s32 regNum, void *addr) {
     u32 bits = *(u32 *) addr;
-    s32 exponent;
-    exponent = (((bits & 0x7f800000U) >> 0x17) - 0x7f);
+    s32 exponent = (((bits & 0x7f800000U) >> 0x17) - 0x7f);
     if (((exponent >= -0x7e) && (exponent <= 0x7f)) || (bits == 0)) {
         crash_screen_print(x, y, "F%02d:%.3e", regNum, *(f32 *) addr);
     } else {

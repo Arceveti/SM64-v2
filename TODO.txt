@@ -9,24 +9,27 @@
         - Reads a null floor when hitting the pillar because of the super steep floor
     - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
         - Might be same underlying issue as the SSL pillars issue?
+    - LLL puzzle spawns coins too low
 - Puppylights bugs:
     - Lights don't get cleared properly when leaving a level
     - Multiple light sources cause direction overflow?
     - PUPPYLIGHT_ENVIRONMENT doesn't work
     - Lights don't work outside of area 1
-        - Have a potential fix, but it still doesn't fix PUPPYLIGHT_NODE lights in non-area-1 areas
+        - Have a temp fix, but it still doesn't fix PUPPYLIGHT_NODE lights in non-area-1 areas
 - Crashes:
-    - Entering a level after being in another level sometimes whitescreens (rare, hard to reproduce)
+    - The 6th time you enter a level in debug level select without restarting the game causes the game to whitescreen or crash, depending on the emulator being used
+        - Some data in memory not being cleared?
+        - Consistently the 6th entered level?
     - Properly fix HMC crash
         - Current fix is increasing the gfx pool
-        - Might be the same underlying issue as the above whitescreens?
     - Properly fix rumble "heavy object" crash
         - Current fix is '#define static' in rendering_graph_node.c
             - How does this fix work?
     - Fix ending cutscene crash
 - Things that happened but haven't been able to reproduce:
-    - Freeze when falling onto a sideways slope in HMC
+    - Freeze when falling onto a sideways slope in HMC (happened twice in the same area actually)
     - Mario said "haha" while swimming underwater
+    - Crashed in LLL after long jumping into a red coin
 - Optimizations:
     - Save rom space by similar textures/models using the same file/model/displaylist
         - Billboard Spheres:

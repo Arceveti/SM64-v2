@@ -240,9 +240,9 @@ void load_mario_area(void) {
         spawn_objects_from_info(gMarioSpawnInfo);
     }
     if (gAreaSkyboxStart[gCurrAreaIndex - 1]) load_segment_decompress(0x0A, gAreaSkyboxStart[gCurrAreaIndex - 1], gAreaSkyboxEnd[gCurrAreaIndex - 1]);
-// #ifdef PUPPYLIGHTS
-//     puppylights_allocate(); //!! doesn't work with PUPPYLIGHT_NODE outside of area 1
-// #endif
+#ifdef PUPPYLIGHTS
+    puppylights_allocate(); //!! doesn't work with PUPPYLIGHT_NODE outside of area 1
+#endif
 }
 
 void unload_mario_area(void) {
