@@ -1,6 +1,6 @@
 **TODO:**
 - General Bugs:
-    - The edges of Mario's silhouette are sometimes visible at low resolutions
+    - The edges of Mario's silhouette are visible at low resolutions
     - Puppycamera sometimes downwarps
         - Happens on a slope in Castle Grounds and between areas in TTM slide:
     - Instant warps freeze for a second
@@ -96,9 +96,11 @@
         - Penguins
         - Dorrie
         - Moneybag
+        - MIPS
 - Physics/Movement:
     - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
+    - Jumping up through a floor shouldn't stop Mario's vertical momentum
     - Handle small steps differently from slopes?
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?

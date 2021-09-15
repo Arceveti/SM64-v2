@@ -6,20 +6,20 @@ void bhv_black_smoke_upward_loop(void) {
 
 void bhv_black_smoke_bowser_loop(void) {
     if (o->oTimer == 0) {
-        o->oForwardVel   = random_float() * 2.0f + 0.5f;
+        o->oForwardVel   = ((random_float() * 2.0f) + 0.5f);
         o->oMoveAngleYaw = random_u16();
         o->oVelY         = 8.0f;
         o->oFlameScale   = o->header.gfx.scale[0];
     }
     o->oMoveAngleYaw += o->oAngleVelYaw;
-    o->oPosY += o->oVelY;
+    o->oPosY         += o->oVelY;
 }
 
 void bhv_black_smoke_mario_loop(void) {
     if (o->oTimer == 0) {
         cur_obj_set_pos_relative(gMarioObject, 0.0f, 0.0f, -30.0f);
-        o->oForwardVel   = random_float() * 2.0f + 0.5f;
-        o->oMoveAngleYaw = (gMarioObject->oMoveAngleYaw + 0x7000) + random_float() * 8192.0f;
+        o->oForwardVel   = ((random_float() * 2.0f) + 0.5f);
+        o->oMoveAngleYaw = ((gMarioObject->oMoveAngleYaw + 0x7000) + (random_float() * 8192.0f));
         o->oVelY         = 8.0f;
     }
     o->oMoveAngleYaw += o->oAngleVelYaw;

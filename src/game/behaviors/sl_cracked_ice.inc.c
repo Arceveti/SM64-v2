@@ -16,7 +16,7 @@ void bhv_sl_cracked_ice_loop(void) {
     if (cur_obj_is_mario_ground_pounding_platform()) {
         gMarioStates[0].vel[1] = 0.0f;
         spawn_mist_particles();
-        spawn_triangle_break_particles(20, MODEL_SL_CRACKED_ICE_CHUNK, 3.0f, 0);
+        spawn_triangle_break_particles(20, MODEL_SL_CRACKED_ICE_CHUNK, 3.0f, OBJ_ANIM_STATE_DEFAULT);
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
         obj_mark_for_deletion(o);
     } else {

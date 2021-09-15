@@ -38,7 +38,7 @@ void breakable_box_small_act_move(void) {
     }
     if (collisionFlags & OBJ_COL_FLAG_HIT_WALL) {
         spawn_mist_particles();
-        spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 0.7f, 3);
+        spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 0.7f, TINY_DIRT_PARTICLE_ANIM_STATE_DIRT);
         obj_spawn_yellow_coins(o, 3);
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
         obj_mark_for_deletion(o);

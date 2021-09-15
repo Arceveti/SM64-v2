@@ -70,10 +70,10 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
         dlHead        = dlStart;
         if (objectOpacity == 0xFF) {
             currentGraphNode->fnNode.node.flags = ((((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_OPAQUE     ) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK));
-            objectGraphNode->oAnimState = 0;
+            objectGraphNode->oAnimState = TRANSPARENCY_ANIM_STATE_OPAQUE;
         } else {
             currentGraphNode->fnNode.node.flags = ((((currentGraphNode->parameter == 20) ? LAYER_TRANSPARENT_DECAL : LAYER_TRANSPARENT) << 8) | (currentGraphNode->fnNode.node.flags & GRAPH_NODE_TYPES_MASK));
-            objectGraphNode->oAnimState = 1;
+            objectGraphNode->oAnimState = TRANSPARENCY_ANIM_STATE_TRANSPARENT;
 #ifdef VERSION_JP
             if (currentGraphNode->parameter == 10) {
                 if (gDebugInfo[DEBUG_PAGE_ENEMYINFO][3]) gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
@@ -81,7 +81,7 @@ Gfx *geo_update_layer_transparency(s32 callContext, struct GraphNode *node, UNUS
                 if (objectGraphNode->activeFlags & ACTIVE_FLAG_DITHERED_ALPHA) gDPSetAlphaCompare(dlHead++, G_AC_DITHER);
             }
 #else // gDebugInfo accesses were removed in all non-JP versions.
-            if ((objectOpacity == 0) && (segmented_to_virtual(bhvBowser) == objectGraphNode->behavior)) objectGraphNode->oAnimState = 2;
+            if ((objectOpacity == 0) && (segmented_to_virtual(bhvBowser) == objectGraphNode->behavior)) objectGraphNode->oAnimState = BOWSER_ANIM_STATE_INVISIBLE;
             // the debug info check was removed in US. so we need to
             // perform the only necessary check instead of the debuginfo
             // one.
@@ -104,8 +104,7 @@ Gfx *geo_switch_anim_state(s32 callContext, struct GraphNode *node, UNUSED void 
         // cast the pointer.
         switchCase = (struct GraphNodeSwitchCase *) node;
         if (gCurGraphNodeHeldObject != NULL) obj = gCurGraphNodeHeldObject->objNode;
-        // if the case is greater than the number of cases, set to 0 to avoid overflowing
-        // the switch.
+        // if the case is greater than the number of cases, set to 0 to avoid overflowing the switch.
         if (obj->oAnimState >= switchCase->numCases) obj->oAnimState = 0;
         // assign the case number for execution.
         switchCase->selectedCase = obj->oAnimState;
@@ -1521,7 +1520,7 @@ Bool32 cur_obj_set_hitbox_and_die_if_attacked(struct ObjectHitbox *hitbox, s32 d
 
 void obj_explode_and_spawn_coins(f32 mistSize, s32 coinType) {
     spawn_mist_particles_variable(0, 0, mistSize);
-    spawn_triangle_break_particles(30, MODEL_DIRT_ANIMATION, 3.0f, 4);
+    spawn_triangle_break_particles(30, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
     obj_mark_for_deletion(o);
     if (coinType == COIN_TYPE_YELLOW) {
         obj_spawn_loot_yellow_coins(o, o->oNumLootCoins, 20.0f);

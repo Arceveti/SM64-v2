@@ -55,7 +55,7 @@ void bhv_mr_i_body_loop(void) {
         o->oGraphYOffset   = (o->header.gfx.scale[1] * 100.0f);
     }
     if (!o->parentObj->oMrIBlinking) {
-        o->oAnimState = -1;
+        o->oAnimState = OBJ_ANIM_STATE_INIT_ANIM;
     } else {
         o->oAnimState++;
         if (o->oAnimState == 15) o->parentObj->oMrIBlinking = FALSE;

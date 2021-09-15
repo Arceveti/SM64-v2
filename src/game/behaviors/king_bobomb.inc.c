@@ -162,7 +162,7 @@ void king_bobomb_act_death(void) { // act 7
         cur_obj_hide();
         cur_obj_become_intangible();
         spawn_mist_particles_variable(0, 0, 200.0f);
-        spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, 4);
+        spawn_triangle_break_particles(20, MODEL_DIRT_ANIMATION, 3.0f, TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
         cur_obj_spawn_star_at_y_offset(2000.0f, 4500.0f, -4500.0f, 200.0f);
         o->oAction = KING_BOBOMB_ACT_STOP_MUSIC;

@@ -1075,7 +1075,7 @@ Bool32 bowser_dead_default_stage_ending(void) {
     // Hide Bowser and spawn collectable once done twirling
     } else if (bowser_dead_twirl_up()) {
         bowser_dead_hide();
-        spawn_triangle_break_particles(20, MODEL_YELLOW_COIN, 1.0f, 0);
+        spawn_triangle_break_particles(20, MODEL_YELLOW_COIN, 1.0f, OBJ_ANIM_STATE_DEFAULT);
         bowser_spawn_collectable();
         set_mario_npc_dialog(MARIO_DIALOG_STOP);
         return TRUE;

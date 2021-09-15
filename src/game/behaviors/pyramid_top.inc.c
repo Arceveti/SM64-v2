@@ -116,7 +116,7 @@ void bhv_pyramid_top_loop(void) {
 void bhv_pyramid_top_fragment_init(void) {
     o->oFriction  = 0.999f;
     o->oBuoyancy  = 2.0f;
-    o->oAnimState = 3;
+    o->oAnimState = TINY_DIRT_PARTICLE_ANIM_STATE_DIRT;
     cur_obj_scale(o->oPyramidTopFragmentsScale);
 }
 

@@ -1,5 +1,5 @@
 // 0x0D0000D8
-const GeoLayout bowser_geo_0000D8[] = {
+const GeoLayout bowser_geo_normal[] = {
    GEO_SHADOW(SHADOW_CIRCLE_9_VERTS, 0x9B, 400),
    GEO_OPEN_NODE(),
       GEO_ANIMATED_PART(LAYER_OPAQUE, 0, 0, 0, bowser_seg6_dl_06040210),
@@ -98,7 +98,7 @@ const GeoLayout bowser_geo_0000D8[] = {
 };
 
 // 0x0D000424
-const GeoLayout bowser_geo_000424[] = {
+const GeoLayout bowser_geo_transparent[] = {
    GEO_SHADOW(SHADOW_CIRCLE_9_VERTS, 0x9B, 400),
    GEO_OPEN_NODE(),
 #if BUGFIX_BOWSER_FADING_OUT
@@ -205,7 +205,7 @@ const GeoLayout bowser_geo_000424[] = {
 };
 
 // 0x0D000770
-const GeoLayout bowser_geo_000770[] = {
+const GeoLayout bowser_geo_transparent_no_shadow[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
 #if BUGFIX_BOWSER_FADING_OUT
@@ -312,7 +312,7 @@ const GeoLayout bowser_geo_000770[] = {
 };
 
 // 0x0D000AB8
-const GeoLayout bowser_shadow_geo[] = {
+const GeoLayout bowser_invisible_geo[] = {
    GEO_SHADOW(SHADOW_CIRCLE_9_VERTS, 0x9B, 400),
    GEO_RETURN(),
 };
@@ -328,19 +328,19 @@ const GeoLayout bowser_geo[] = {
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_geo_0000D8),
+            GEO_BRANCH(1, bowser_geo_normal),
          GEO_CLOSE_NODE(),
 
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_geo_000424),
+            GEO_BRANCH(1, bowser_geo_transparent),
          GEO_CLOSE_NODE(),
 
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_shadow_geo),
+            GEO_BRANCH(1, bowser_invisible_geo),
          GEO_CLOSE_NODE(),
 
       GEO_CLOSE_NODE(),
@@ -360,19 +360,19 @@ const GeoLayout bowser_geo_no_shadow[] = {
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_geo_0000D8),
+            GEO_BRANCH(1, bowser_geo_normal),
          GEO_CLOSE_NODE(),
 
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_geo_000770),
+            GEO_BRANCH(1, bowser_geo_transparent_no_shadow),
          GEO_CLOSE_NODE(),
 
          GEO_NODE_START(),
          GEO_OPEN_NODE(),
             GEO_ASM(0, geo_bits_bowser_coloring),
-            GEO_BRANCH(1, bowser_shadow_geo),
+            GEO_BRANCH(1, bowser_invisible_geo),
          GEO_CLOSE_NODE(),
 
       GEO_CLOSE_NODE(),

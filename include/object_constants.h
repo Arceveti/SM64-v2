@@ -131,6 +131,13 @@
 #define OBJ_ACT_VERTICAL_KNOCKBACK                          101
 #define OBJ_ACT_SQUISHED                                    102
 
+/* oAnimState */
+#define OBJ_ANIM_STATE_INIT_ANIM                           -0x1
+#define OBJ_ANIM_STATE_DEFAULT                              0x0
+    /* cur_obj_update_blinking */
+#define OBJ_BLINKING_ANIM_STATE_EYES_OPEN                   0x0
+#define OBJ_BLINKING_ANIM_STATE_EYES_CLOSED                 0x1
+
 /* Animations */
 #define OBJ_ANIM_NONE                                      -0x1
 
@@ -139,6 +146,10 @@
 #define TTC_SPEED_FAST                                      0x1
 #define TTC_SPEED_RANDOM                                    0x2
 #define TTC_SPEED_STOPPED                                   0x3
+
+/* geo_update_layer_transparency */
+#define TRANSPARENCY_ANIM_STATE_OPAQUE                      0x0
+#define TRANSPARENCY_ANIM_STATE_TRANSPARENT                 0x1
 
 /* Orange Number */
     /* oBehParams2ndByte, oAnimState */
@@ -234,8 +245,8 @@
     #define BOBOMB_ACT_CHASE_MARIO                          0x2
     #define BOBOMB_ACT_EXPLODE                              0x3
     /* oAnimState */
-    #define BOBOMB_ANIM_STATE_EYES_OPEN                     0x0
-    #define BOBOMB_ANIM_STATE_EYES_CLOSED                   0x1
+    #define BOBOMB_ANIM_STATE_EYES_OPEN                     OBJ_BLINKING_ANIM_STATE_EYES_OPEN
+    #define BOBOMB_ANIM_STATE_EYES_CLOSED                   OBJ_BLINKING_ANIM_STATE_EYES_CLOSED
     /* Animations */
     #define BOBOMB_ANIM_WALKING                             0x0
     #define BOBOMB_ANIM_HELD                                0x1
@@ -292,6 +303,10 @@
     #define BOWSER_ACT_QUICK_JUMP                           0x11
     #define BOWSER_ACT_UNUSED_SLOW_WALK                     0x12
     #define BOWSER_ACT_TILT_LAVA_PLATFORM                   0x13
+    /* oAnimState */
+    #define BOWSER_ANIM_STATE_OPAQUE                        TRANSPARENCY_ANIM_STATE_OPAQUE
+    #define BOWSER_ANIM_STATE_TRANSPARENT                   TRANSPARENCY_ANIM_STATE_TRANSPARENT
+    #define BOWSER_ANIM_STATE_INVISIBLE                     0x02
     /* Animations */
     #define BOWSER_ANIM_STAND_UP                            0x00
     #define BOWSER_ANIM_STAND_UP_UNUSED                     0x01 // slightly different
@@ -1181,8 +1196,8 @@
     #define KOOPA_BP_KOOPA_THE_QUICK_THI                    (KOOPA_BP_KOOPA_THE_QUICK_BASE + KOOPA_THE_QUICK_THI_INDEX)
     #define KOOPA_BP_TINY                                   0x4
     /* oAnimState */
-    #define KOOPA_ANIM_STATE_EYES_OPEN                      0x0
-    #define KOOPA_ANIM_STATE_EYES_CLOSED                    0x1
+    #define KOOPA_ANIM_STATE_EYES_OPEN                      OBJ_BLINKING_ANIM_STATE_EYES_OPEN
+    #define KOOPA_ANIM_STATE_EYES_CLOSED                    OBJ_BLINKING_ANIM_STATE_EYES_CLOSED
     /* Animations */
     #define KOOPA_ANIM_SHELLED_UNUSED3                      0x0
     #define KOOPA_ANIM_SHELLED_RUN_AWAY                     0x1
@@ -1293,6 +1308,9 @@
     #define GOOMBA_ACT_WALK                                 0x0
     #define GOOMBA_ACT_ATTACKED_MARIO                       0x1
     #define GOOMBA_ACT_JUMP                                 0x2
+    /* oAnimState */
+    #define GOOMBA_ANIM_STATE_EYES_OPEN                     OBJ_BLINKING_ANIM_STATE_EYES_OPEN
+    #define GOOMBA_ANIM_STATE_EYES_CLOSED                   OBJ_BLINKING_ANIM_STATE_EYES_CLOSED
     /* Animations */
     #define GOOMBA_ANIM_DEFAULT                             0x0
 
@@ -2363,10 +2381,22 @@
     #define WHITE_PUFF_EXPLODE_BP_FAST_FADE                 0x2
     #define WHITE_PUFF_EXPLODE_BP_SLOW_FADE                 0x3
 
-/* Collide Particles */
+/* Dirt Particle */
     /* oAnimState */
-    #define COLLIDE_PARTICLE_ANIM_STATE_TINY_STAR       0x4
-    #define COLLIDE_PARTICLE_ANIM_STATE_TINY_TRIANGLE   0x5
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_RED               0x0
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_GREEN             0x1
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_BLUE              0x2
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_DIRT              0x3
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW            0x4
+    #define TINY_DIRT_PARTICLE_ANIM_STATE_BILLBOARD         0x5
+    
+/* Cartoon Star Particle */
+    /* oAnimState */
+    #define CARTOON_STAR_PARTICLE_ANIM_STATE_RED            0x0
+    #define CARTOON_STAR_PARTICLE_ANIM_STATE_GREEN          0x1
+    #define CARTOON_STAR_PARTICLE_ANIM_STATE_BLUE           0x2
+    #define CARTOON_STAR_PARTICLE_ANIM_STATE_YELLOW         0x3
+    #define CARTOON_STAR_PARTICLE_ANIM_STATE_BILLBOARD      0x4
 
 /* Music Touch */
     /* oAction */

@@ -21,7 +21,7 @@ extern const BehaviorScript bhvBetaChestLid[];
 extern const BehaviorScript bhvBubbleParticleSpawner[];
 extern const BehaviorScript bhvBubbleMaybe[];
 extern const BehaviorScript bhvSmallWaterWave[];
-extern const BehaviorScript bhvSmallWaterWave398[];
+extern const BehaviorScript bhvSmallWaterWaveScale[];
 extern const BehaviorScript bhvWaterAirBubble[];
 extern const BehaviorScript bhvSmallParticle[];
 extern const BehaviorScript bhvPlungeBubble[];

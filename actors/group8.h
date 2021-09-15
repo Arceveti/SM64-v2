@@ -5,11 +5,11 @@
 
 // capswitch
 extern const GeoLayout cap_switch_geo[];
-extern const Gfx capswitch_seg5_dl_05002D88[];
-extern const Gfx cap_switch_exclamation_seg5_dl_05002E00[];
-extern const Gfx capswitch_seg5_dl_05003020[];
-extern const Gfx cap_switch_base_seg5_dl_05003120[];
-extern const Gfx capswitch_seg5_dl_05003280[];
+extern const Gfx cap_switch_exclamation_seg5_sub_dl_exclamation_mark[];
+extern const Gfx cap_switch_exclamation_seg5_dl_exclamation_mark[];
+extern const Gfx cap_switch_base_seg5_sub_dl_base[];
+extern const Gfx cap_switch_base_seg5_dl_base[];
+extern const Gfx capswitch_seg5_sub_dl_switch[];
 extern const Gfx capswitch_seg5_dl_red[];
 extern const Gfx capswitch_seg5_dl_green[];
 extern const Gfx capswitch_seg5_dl_blue[];

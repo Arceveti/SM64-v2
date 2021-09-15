@@ -23,7 +23,7 @@ void bhv_punch_tiny_triangle_loop(void) {
         o->oMoveAngleYaw = yaw;
     }
     cur_obj_move_using_fvel_and_gravity();
-    o->oAnimState = COLLIDE_PARTICLE_ANIM_STATE_TINY_TRIANGLE;
+    o->oAnimState = TINY_DIRT_PARTICLE_ANIM_STATE_BILLBOARD;
     cur_obj_scale(o->oCollisionParticleScale);
     o->oCollisionParticleScale -= 0.2f;
     if ((gDebugInfo[4][0] + 6) < o->oTimer) obj_mark_for_deletion(o);
@@ -58,7 +58,7 @@ void bhv_wall_tiny_star_particle_loop(void) {
         o->oMoveAngleYaw = yaw;
     }
     cur_obj_move_using_fvel_and_gravity();
-    o->oAnimState = COLLIDE_PARTICLE_ANIM_STATE_TINY_STAR;
+    o->oAnimState = TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW;
     cur_obj_scale(o->oCollisionParticleScale);
     o->oCollisionParticleScale -= 0.015f;
 }
@@ -82,7 +82,7 @@ void bhv_pound_tiny_star_particle_loop(void) {
         o->oVelY                   = 14.0f;
     }
     cur_obj_move_using_fvel_and_gravity();
-    o->oAnimState = COLLIDE_PARTICLE_ANIM_STATE_TINY_STAR;
+    o->oAnimState = TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW;
     cur_obj_scale(o->oCollisionParticleScale);
     o->oCollisionParticleScale -= 0.015f;
 }

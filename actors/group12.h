@@ -11,10 +11,10 @@ extern const Gfx bomb_seg6_sub_dl_spikes[];
 extern const Gfx bomb_seg6_dl_spikes[];
 
 // bowser
-extern const GeoLayout bowser_geo_0000D8[];
-extern const GeoLayout bowser_geo_000424[];
-extern const GeoLayout bowser_geo_000770[];
-extern const GeoLayout bowser_shadow_geo[];
+extern const GeoLayout bowser_geo_normal[];
+extern const GeoLayout bowser_geo_transparent[];
+extern const GeoLayout bowser_geo_transparent_no_shadow[];
+extern const GeoLayout bowser_invisible_geo[];
 extern const GeoLayout bowser_geo[];
 extern const GeoLayout bowser_geo_no_shadow[];
 extern const Gfx bowser_seg6_dl_06039110[];

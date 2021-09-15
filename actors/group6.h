@@ -39,7 +39,7 @@ extern const Gfx monty_mole_seg5_dl_05004D30[];
 extern const struct Animation *const monty_mole_seg5_anims_05007248[];
 
 // monty_mole_hole
-extern const Gfx monty_mole_hole_seg5_dl_05000840[];
+extern const Gfx monty_mole_hole_seg5_dl_hole[];
 
 // smoke
 extern const Gfx smoke_seg5_dl_05007AC0[];

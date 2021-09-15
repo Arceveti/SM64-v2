@@ -364,7 +364,7 @@
 #define MODEL_EYEROK_RIGHT_HAND           0x59        // eyerok_right_hand_geo
 
 // group 6
-#define MODEL_DL_MONTY_MOLE_HOLE          0x54        // monty_mole_hole_seg5_dl_05000840
+#define MODEL_DL_MONTY_MOLE_HOLE          0x54        // monty_mole_hole_seg5_dl_hole
 #define MODEL_MONTY_MOLE                  0x55        // monty_mole_geo
 #define MODEL_UKIKI                       0x56        // ukiki_geo
 #define MODEL_FWOOSH                      0x57        // fwoosh_geo
@@ -376,9 +376,9 @@
 #define MODEL_PENGUIN                     0x57        // penguin_geo
 
 // group 8
-#define MODEL_CAP_SWITCH_EXCLAMATION      0x54        // cap_switch_exclamation_seg5_dl_05002E00
+#define MODEL_CAP_SWITCH_EXCLAMATION      0x54        // cap_switch_exclamation_seg5_dl_exclamation_mark
 #define MODEL_CAP_SWITCH                  0x55        // cap_switch_geo
-#define MODEL_CAP_SWITCH_BASE             0x56        // cap_switch_base_seg5_dl_05003120
+#define MODEL_CAP_SWITCH_BASE             0x56        // cap_switch_base_seg5_dl_base
 
 // group 9
 #define MODEL_BOO                         0x54        // boo_geo

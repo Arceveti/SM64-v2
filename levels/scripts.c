@@ -117,12 +117,12 @@ const LevelScript level_main_scripts_entry[] = {
         EXECUTE(/*seg*/ 0x14, _menuSegmentRomStart, _menuSegmentRomEnd, level_main_menu_entry_act_select),
         JUMP_LINK(script_exec_level_table),
         SLEEP(/*frames*/ 1),
-    LOOP_UNTIL(/*op*/ OP_LT, /*arg*/ 0),
-    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -1, goto_ending),
-    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -2, goto_mario_head_regular),
-    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -3, goto_mario_head_dizzy),
-    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -8, goto_intro_splash_screen),
-    JUMP_IF(/*op*/ OP_EQ, /*arg*/ -9, goto_debug_level_select),
+    LOOP_UNTIL(/*op*/ OP_LT, /*arg*/  0),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -1, goto_ending),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -2, goto_mario_head_regular),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -3, goto_mario_head_dizzy),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -8, goto_intro_splash_screen),
+    JUMP_IF(   /*op*/ OP_EQ, /*arg*/ -9, goto_debug_level_select),
 };
 
 static const LevelScript goto_intro_splash_screen[] = {
@@ -239,7 +239,7 @@ const LevelScript script_func_global_6[] = {
 };
 
 const LevelScript script_func_global_7[] = {
-    LOAD_MODEL_FROM_DL (MODEL_DL_MONTY_MOLE_HOLE,      monty_mole_hole_seg5_dl_05000840, LAYER_TRANSPARENT_DECAL),
+    LOAD_MODEL_FROM_DL (MODEL_DL_MONTY_MOLE_HOLE,      monty_mole_hole_seg5_dl_hole, LAYER_TRANSPARENT_DECAL),
     LOAD_MODEL_FROM_GEO(MODEL_MONTY_MOLE,              monty_mole_geo),
     LOAD_MODEL_FROM_GEO(MODEL_UKIKI,                   ukiki_geo),
     LOAD_MODEL_FROM_GEO(MODEL_FWOOSH,                  fwoosh_geo),
@@ -255,9 +255,9 @@ const LevelScript script_func_global_8[] = {
 };
 
 const LevelScript script_func_global_9[] = {
-    LOAD_MODEL_FROM_DL (MODEL_CAP_SWITCH_EXCLAMATION,  cap_switch_exclamation_seg5_dl_05002E00, LAYER_ALPHA),
+    LOAD_MODEL_FROM_DL (MODEL_CAP_SWITCH_EXCLAMATION,  cap_switch_exclamation_seg5_dl_exclamation_mark, LAYER_ALPHA),
     LOAD_MODEL_FROM_GEO(MODEL_CAP_SWITCH,              cap_switch_geo),
-    LOAD_MODEL_FROM_DL (MODEL_CAP_SWITCH_BASE,         cap_switch_base_seg5_dl_05003120,        LAYER_OPAQUE),
+    LOAD_MODEL_FROM_DL (MODEL_CAP_SWITCH_BASE,         cap_switch_base_seg5_dl_base,                    LAYER_OPAQUE),
     RETURN(),
 };
 

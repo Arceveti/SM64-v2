@@ -14,7 +14,7 @@ ALIGNED8 static const Texture monty_mole_hole_seg5_texture_hole[] = {
 };
 
 // 0x05000840 - 0x050008D8
-const Gfx monty_mole_hole_seg5_dl_05000840[] = {
+const Gfx monty_mole_hole_seg5_dl_hole[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),

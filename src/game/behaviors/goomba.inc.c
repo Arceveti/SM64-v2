@@ -241,7 +241,7 @@ void bhv_goomba_update(void) {
         cur_obj_scale(o->oGoombaScale);
         cur_obj_update_blinking(&o->oGoombaBlinkTimer, 30, 50, 5);
         cur_obj_update_floor_and_walls();
-        if ((animSpeed = o->oForwardVel / o->oGoombaScale * 0.4f) < 1.0f) animSpeed = 1.0f;
+        if ((animSpeed = ((o->oForwardVel / o->oGoombaScale) * 0.4f)) < 1.0f) animSpeed = 1.0f;
         cur_obj_init_animation_with_accel_and_sound(GOOMBA_ANIM_DEFAULT, animSpeed);
         switch (o->oAction) {
             case GOOMBA_ACT_WALK:           goomba_act_walk();           break;
@@ -251,6 +251,6 @@ void bhv_goomba_update(void) {
         if (cur_obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO, sGoombaAttackHandlers[o->oGoombaSize & 0x1]) && (o->oAction != GOOMBA_ACT_ATTACKED_MARIO)) mark_goomba_as_dead();
         cur_obj_move_standard(-78);
     } else {
-        o->oAnimState = TRUE;
+        o->oAnimState = GOOMBA_ANIM_STATE_EYES_CLOSED;
     }
 }

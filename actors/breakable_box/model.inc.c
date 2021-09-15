@@ -1,7 +1,7 @@
 // Breakable Box
 
 // 0x08011A78
-static const Lights1 breakable_box_seg8_lights_08011A80 = gdSPDefLights1(
+static const Lights1 breakable_box_seg8_lights = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
@@ -17,7 +17,7 @@ ALIGNED8 static const Texture breakable_box_seg8_texture_cork_box_surface[] = {
 };
 
 // 0x08012A90
-static const Vtx breakable_box_seg8_vertex_08012A90[] = {
+static const Vtx breakable_box_seg8_vertex[] = {
     {{{  -100,      0,   -100}, 0, ST_B(    32,      0), {0x81, 0x00, 0x00, 0xff}}},
     {{{  -100,      0,    100}, 0, ST_B(    32,     32), {0x81, 0x00, 0x00, 0xff}}},
     {{{  -100,    200,    100}, 0, ST_B(     0,     32), {0x81, 0x00, 0x00, 0xff}}},
@@ -48,9 +48,9 @@ static const Vtx breakable_box_seg8_vertex_08012A90[] = {
 
 // 0x08012C30 - 0x08012CD8
 const Gfx breakable_box_seg8_dl_end[] = {
-    gsSPLight(&breakable_box_seg8_lights_08011A80.l, 1),
-    gsSPLight(&breakable_box_seg8_lights_08011A80.a, 2),
-    gsSPVertex(breakable_box_seg8_vertex_08012A90, 26, 0),
+    gsSPLight(&breakable_box_seg8_lights.l, 1),
+    gsSPLight(&breakable_box_seg8_lights.a, 2),
+    gsSPVertex(breakable_box_seg8_vertex, 26, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7,  9, 10, 0x0, 11, 12, 13, 0x0),
