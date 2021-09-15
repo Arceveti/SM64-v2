@@ -52,16 +52,18 @@ struct LevelCommand {
     /*02*/ // variable sized argument data
 };
 
-enum ScriptStatus { SCRIPT_RUNNING = 1, SCRIPT_PAUSED = 0, SCRIPT_PAUSED2 = -1 };
+enum ScriptStatus { SCRIPT_RUNNING =  1,
+                    SCRIPT_PAUSED  =  0,
+                    SCRIPT_PAUSED2 = -1 };
 
 static uintptr_t sStack[32];
 
 static struct AllocOnlyPool *sLevelPool = NULL;
 
-static u16 sDelayFrames  = 0;
-static u16 sDelayFrames2 = 0;
+static u16 sDelayFrames      = 0;
+static u16 sDelayFrames2     = 0;
 
-static s16 sCurrAreaIndex = -1;
+static s16 sCurrAreaIndex    = -1;
 
 static uintptr_t *sStackTop  = sStack;
 static uintptr_t *sStackBase = NULL;
@@ -113,7 +115,7 @@ static void level_cmd_exit(void) {
 static void level_cmd_sleep(void) {
     sScriptStatus = SCRIPT_PAUSED;
     if (sDelayFrames == 0) {
-        sDelayFrames = CMD_GET(s16, 2);
+        sDelayFrames  = CMD_GET(s16, 2);
     } else if (--sDelayFrames == 0) {
         sCurrentCmd   = CMD_NEXT;
         sScriptStatus = SCRIPT_RUNNING;
@@ -146,7 +148,7 @@ static void level_cmd_return(void) {
 static void level_cmd_jump_and_link_push_arg(void) {
     *sStackTop++ = (uintptr_t) NEXT_CMD;
     *sStackTop++ = CMD_GET(s16, 2);
-    sCurrentCmd = CMD_NEXT;
+    sCurrentCmd  = CMD_NEXT;
 }
 
 static void level_cmd_jump_repeat(void) {
@@ -198,7 +200,7 @@ static void level_cmd_skip_if(void) {
     if (eval_script_op(CMD_GET(u8, 2), CMD_GET(s32, 4)) == 0) {
         do {
             sCurrentCmd = CMD_NEXT;
-        } while (sCurrentCmd->type == 0x0F || sCurrentCmd->type == 0x10);
+        } while ((sCurrentCmd->type == 0x0F) || (sCurrentCmd->type == 0x10));
     }
     sCurrentCmd = CMD_NEXT;
 }
@@ -369,7 +371,7 @@ static void level_cmd_end_area(void) {
 
 static void level_cmd_load_model_from_dl(void) {
     ModelID model = CMD_GET(ModelID, 0xA);
-    s16 layer     = CMD_GET(u16, 0x8);
+    s16 layer     = CMD_GET(u16,     0x8);
     void *dl_ptr  = CMD_GET(void *, 4);
     if (model < MODEL_ID_COUNT) gLoadedGraphNodes[model] = (struct GraphNode *) init_graph_node_display_list(sLevelPool, 0, layer, dl_ptr);
     sCurrentCmd = CMD_NEXT;
@@ -387,9 +389,9 @@ static void level_cmd_load_model_from_dl_with_scale(void) {
         s32 i;
         f32 f;
     } scale;
-    ModelID model =      (CMD_GET(ModelID, 2) & 0x0FFF);
-    s16   node    = ((u16)CMD_GET(s16, 2)) >> 12;
-    void *dl_ptr  =       CMD_GET(void *,  4);
+    ModelID model =       (CMD_GET(ModelID, 2) & 0x0FFF);
+    s16   node    = (((u16)CMD_GET(s16, 2)) >> 12);
+    void *dl_ptr  =        CMD_GET(void *,  4);
     //! load an f32, but using an integer load instruction for some reason (hence the union)
     scale.i = CMD_GET(s32, 8);
     // GraphNodeScale has a GraphNode at the top. This
@@ -471,7 +473,7 @@ static void level_cmd_create_painting_warp_node(void) {
     struct WarpNode *node;
     if (sCurrAreaIndex != -1) {
         if (gAreas[sCurrAreaIndex].paintingWarpNodes == NULL) {
-            gAreas[sCurrAreaIndex].paintingWarpNodes = alloc_only_pool_alloc(sLevelPool, 45 * sizeof(struct WarpNode));
+            gAreas[sCurrAreaIndex].paintingWarpNodes = alloc_only_pool_alloc(sLevelPool, (45 * sizeof(struct WarpNode)));
             for ((i = 0); (i < 45); (i++)) gAreas[sCurrAreaIndex].paintingWarpNodes[i].id = 0;
         }
         node            = &gAreas[sCurrAreaIndex].paintingWarpNodes[CMD_GET(u8, 2)];

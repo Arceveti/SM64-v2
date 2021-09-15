@@ -129,6 +129,9 @@
 // (Arceveti)
 #define IA8_30FPS_COINS
 
+// Allows Mario's shadow to be transparent on top of transparent surfaces, such as water, lava, and ice
+#define FIX_SHADOW_TRANSPARENCY
+
 // Fixes the game reading the ia8 burn smoke texture as an rgba16
 #define BURN_SMOKE_FIX
 
