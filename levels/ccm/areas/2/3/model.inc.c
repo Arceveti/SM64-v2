@@ -6,17 +6,17 @@ static const Lights1 ccm_seg7_lights_0701E610 = gdSPDefLights1(
 
 // 0x0701E628 - 0x0701E668
 static const Vtx ccm_seg7_vertex_0701E628[] = {
-    {{{ -6296,  -5836,  -6501}, 0, {  3034,    990}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{ -6706,  -5836,  -6297}, 0, { -1052,  -1054}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{ -6296,  -5836,  -6297}, 0, {  3034,  -1054}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{ -6706,  -5836,  -6501}, 0, { -1052,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{ -6296,  -5836,  -6501}, 0, ST_B(    96,     32), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{ -6706,  -5836,  -6297}, 0, ST_B(   -32,    -32), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{ -6296,  -5836,  -6297}, 0, ST_B(    96,    -32), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{ -6706,  -5836,  -6501}, 0, ST_B(   -32,     32), {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0701E668 - 0x0701E6B0
 static const Gfx ccm_seg7_dl_0701E668[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ccm_seg7_texture_slide_race_checker),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ccm_seg7_lights_0701E610.l, 1),
     gsSPLight(&ccm_seg7_lights_0701E610.a, 2),
     gsSPVertex(ccm_seg7_vertex_0701E628, 4, 0),

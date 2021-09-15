@@ -233,9 +233,8 @@
     - Move Puppycam menu to under Exit Course
 - Vanilla Levels:
     - Make the back of castle roof not an eternal void
-    - Fix vanilla's scuffed platform im CCM Wall Kicks Will Work area
     - Replace SSL pyramid secrets with a puzzle to control the flow of sand
-    - Gradient transparency at bottom of sky levels, just like TOTWC and the mushrooms in TTM
+    - Gradient transparency at bottom of sky & mountain levels, just like TOTWC and the mushrooms in TTM
     - Gradient transparency for edges of water/lava going out to the horizon
     - Failsafe for if Mario explodes all the bombs in a bowser arena before finishing the fight
     - Make SSL pyramid and LLL volcano use gsSPFogPosition?
