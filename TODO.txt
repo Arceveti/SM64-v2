@@ -100,7 +100,6 @@
 - Physics/Movement:
     - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
-    - Jumping up through a floor shouldn't stop Mario's vertical momentum
     - Handle small steps differently from slopes?
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?

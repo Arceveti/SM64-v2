@@ -529,6 +529,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     // out of bounds, so it won't detect you as landing.
     if (floor == NULL) {
         if (nextPos[1] <= m->floorHeight) {
+            // return to previous floor's height
             m->pos[1] = m->floorHeight;
             return AIR_STEP_LANDED;
         }
@@ -540,7 +541,6 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         floor               = &gWaterSurfacePseudoFloor;
         floor->originOffset = -floorHeight;
     }
-    //! This check uses f32, but findFloor uses short (overflow jumps)
     if (nextPos[1] <= floorHeight) {
         if ((ceilHeight - floorHeight) > m->marioObj->hitboxHeight) {
             m->pos[0]      = nextPos[0];
@@ -555,7 +555,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
 #ifdef FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT
         m->steepness  = floor->normal.y;
 #endif
-        return AIR_STEP_LANDED;
+        return ((m->vel[1] > 0.0f) ? AIR_STEP_NONE :  AIR_STEP_LANDED);
     }
 #ifdef BETTER_CEILING_HANDLING
     if ((ceil != NULL) && ((nextPos[1] + MARIO_HITBOX_HEIGHT) > ceilHeight)) {
