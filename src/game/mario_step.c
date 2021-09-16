@@ -352,11 +352,7 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     vec3_set(m->pos, nextPos[0], floorHeight, nextPos[2]);
     if (!SURFACE_IS_QUICKSAND(floor->type) && (floor->type != SURFACE_BURNING)) vec3_copy(m->lastSafePos, m->pos);
     set_mario_floor(m, floor, floorHeight);
-    if (m->wall != NULL) {
-        oldWallDYaw = abs_angle_diff(m->wallYaw, m->faceAngle[1]);
-    } else {
-        oldWallDYaw = 0x0;
-    }
+    oldWallDYaw = ((m->wall != NULL) ? abs_angle_diff(m->wallYaw, m->faceAngle[1]) : 0x0);
     if (upperWall.numWalls == 0) {
         m->wall = NULL;
     } else {
@@ -373,9 +369,9 @@ static MarioStep perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos
     return GROUND_STEP_NONE;
 }
 
-#ifdef FLOOR_ALIGNMENT
-extern void align_with_floor(struct MarioState *m, Bool32 smooth);
-#endif
+// #ifdef FLOOR_ALIGNMENT
+// extern void align_with_floor(struct MarioState *m, Bool32 smooth);
+// #endif
 MarioStep perform_ground_step(struct MarioState *m) {
     Vec3f intendedPos;
     MarioStep stepResult = GROUND_STEP_NONE;
@@ -411,7 +407,12 @@ MarioStep perform_ground_step(struct MarioState *m) {
     vec3_copy(m->marioObj->header.gfx.pos, m->pos);
     vec3_set( m->marioObj->header.gfx.angle, 0x0, m->faceAngle[1], 0x0);
 #ifdef FLOOR_ALIGNMENT
-    align_with_floor(m, TRUE);
+    // align_with_floor(m, TRUE);
+    if ((m->floor != NULL) && (m->floor->normal.y < NEAR_ONE)) {
+        Angle floorAngle = -(atan2s(sqrtf(sqr(m->floor->normal.z) + sqr(m->floor->normal.x)), m->floor->normal.y) - DEG(90));
+        m->marioObj->header.gfx.angle[0] += (floorAngle * coss(m->faceAngle[1] - m->floorYaw));
+        m->marioObj->header.gfx.angle[2] += (floorAngle * sins(m->faceAngle[1] - m->floorYaw));
+    }
 #endif
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) stepResult = GROUND_STEP_HIT_WALL;
 #ifdef WALL_QUICKSAND
