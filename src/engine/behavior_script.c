@@ -527,7 +527,7 @@ UNUSED static s32 bhv_cmd_set_int_random_from_table(void) {
     }
     // Set the field to a random entry of the table.
     cur_obj_set_int(field, table[(s32)(tableSize * random_float())]);
-    gCurBhvCommand += (tableSize / 2) + 1;
+    gCurBhvCommand += ((tableSize / 2) + 1);
     return BHV_PROC_CONTINUE;
 }
 
@@ -543,9 +543,7 @@ static s32 bhv_cmd_load_collision_data(void) {
 // Command 0x2D: Sets the home position of the object to its current position.
 // Usage: SET_HOME()
 static s32 bhv_cmd_set_home(void) {
-    o->oHomeX = o->oPosX;
-    o->oHomeY = o->oPosY;
-    o->oHomeZ = o->oPosZ;
+    vec3_copy(&o->oHomeVec, &o->oPosVec);
     gCurBhvCommand++;
     return BHV_PROC_CONTINUE;
 }
@@ -581,12 +579,12 @@ static s32 bhv_cmd_scale(void) {
 // Usage: SET_OBJ_PHYSICS(f32 wallHitboxRadius, f32 gravity, f32 bounciness, f32 dragStrength, f32 friction, f32 buoyancy, f32 unused1, f32 unused2)
 static s32 bhv_cmd_set_obj_physics(void) {
     // UNUSED f32 unused1, unused2;
-    o->oWallHitboxRadius = BHV_CMD_GET_1ST_S16(1);
-    o->oGravity          = BHV_CMD_GET_2ND_S16(1) / 100.0f;
-    o->oBounciness       = BHV_CMD_GET_1ST_S16(2) / 100.0f;
-    o->oDragStrength     = BHV_CMD_GET_2ND_S16(2) / 100.0f;
-    o->oFriction         = BHV_CMD_GET_1ST_S16(3) / 100.0f;
-    o->oBuoyancy         = BHV_CMD_GET_2ND_S16(3) / 100.0f;
+    o->oWallHitboxRadius =  BHV_CMD_GET_1ST_S16(1);
+    o->oGravity          = (BHV_CMD_GET_2ND_S16(1) / 100.0f);
+    o->oBounciness       = (BHV_CMD_GET_1ST_S16(2) / 100.0f);
+    o->oDragStrength     = (BHV_CMD_GET_2ND_S16(2) / 100.0f);
+    o->oFriction         = (BHV_CMD_GET_1ST_S16(3) / 100.0f);
+    o->oBuoyancy         = (BHV_CMD_GET_2ND_S16(3) / 100.0f);
     // unused1                           = BHV_CMD_GET_1ST_S16(4) / 100.0f;
     // unused2                           = BHV_CMD_GET_2ND_S16(4) / 100.0f;
     gCurBhvCommand += 5;
@@ -684,7 +682,7 @@ static BhvCommandProc BehaviorCmdTable[] = {
 
 // Execute the behavior script of the current object, process the object flags, and other miscellaneous code for updating objects.
 void cur_obj_update(void) {
-    s16 objFlags = o->oFlags;
+    s32 objFlags = o->oFlags;
     f32 distanceFromMario;
     BhvCommandProc bhvCmdProc;
     s32 bhvProcResult;
@@ -717,7 +715,7 @@ void cur_obj_update(void) {
         (void) (o->oTimer = 0, o->oSubAction = 0, o->oPrevAction = o->oAction);
     }
     // Execute various code based on object flags.
-    objFlags = (s16) o->oFlags;
+    objFlags = o->oFlags;
     if (objFlags & OBJ_FLAG_SET_FACE_ANGLE_TO_MOVE_ANGLE   ) vec3_copy(&o->oFaceAngleVec, &o->oMoveAngleVec);;
     if (objFlags & OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW       ) o->oFaceAngleYaw = o->oMoveAngleYaw;
     if (objFlags & OBJ_FLAG_MOVE_XZ_USING_FVEL             ) cur_obj_move_xz_using_fvel_and_yaw(     );

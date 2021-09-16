@@ -18,7 +18,7 @@ struct WFRotatingPlatformData sWFRotatingPlatformData[] = {
 void bhv_wf_rotating_wooden_platform_loop(void) {
     if (o->oAction == ROTATING_PLATFORM_ACT_STOPPED) {
         o->oAngleVelYaw = 0;
-        if (o->oTimer > 60) o->oAction = ROTATING_PLATFORM_ACT_MOVING;
+        if (o->oTimer >  60) o->oAction = ROTATING_PLATFORM_ACT_MOVING;
     } else {
         o->oAngleVelYaw = 0x100;
         if (o->oTimer > 126) o->oAction = ROTATING_PLATFORM_ACT_STOPPED;

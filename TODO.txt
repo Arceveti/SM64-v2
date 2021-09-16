@@ -5,11 +5,11 @@
         - Happens on a slope in Castle Grounds and between areas in TTM slide:
     - Instant warps freeze for a second
         - Most noticeable on TTM slide
+        - Also downwarps camera for a split second
     - Using a shell to go up the side of SSL pillars doesn't work with FIX_RELATIVE_SLOPE_ANGLE_MOVEMENT enabled
         - Reads a null floor when hitting the pillar because of the super steep floor
     - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
         - Might be same underlying issue as the SSL pillars issue?
-    - LLL puzzle spawns coins too low
 - Puppylights bugs:
     - Lights don't get cleared properly when leaving a level
     - Multiple light sources cause direction overflow?
@@ -101,6 +101,8 @@
         - Moneybag
         - MIPS
 - Physics/Movement:
+    - Fix walking down a slope or stairs causing Mario to butt slide even if it's not a slide or steep slope
+    - Fix bonking into steep part of TTM slide
     - Implement Kaze's raycasting quarterstep replacement
     - Make step height per-object
     - Handle small steps differently from slopes?
@@ -211,7 +213,6 @@
         - Make metal cap effect work on console, otherwise use vanilla
             - Also use vanilla if framebuffer is not enabled
 - Audio:
-    - Fix scuffed audio
     - Fix pole swing sound
     - Better wall jump sound?
 - HUD:

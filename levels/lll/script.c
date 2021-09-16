@@ -48,7 +48,7 @@ static const LevelScript script_func_local_2[] = {
     OBJECT(          /*model*/ MODEL_LLL_TILTING_SQUARE_PLATFORM,        /*pos*/  1741, -154,  1741, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLllTiltingInvertedPyramid),
     OBJECT(          /*model*/ MODEL_LLL_TILTING_SQUARE_PLATFORM,        /*pos*/  1741, -154,  2560, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLllTiltingInvertedPyramid),
     OBJECT(          /*model*/ MODEL_LLL_TILTING_SQUARE_PLATFORM,        /*pos*/  2100, -154,  -307, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLllTiltingInvertedPyramid),
-    OBJECT(          /*model*/ MODEL_NONE,                               /*pos*/ -5120,  102,  1024, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLllBowserPuzzle),
+    OBJECT(          /*model*/ MODEL_NONE,                               /*pos*/ -5120,  154,  1024, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLllBowserPuzzle),
     RETURN(),
 };
 

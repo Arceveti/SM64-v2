@@ -702,7 +702,7 @@ void cur_obj_update_floor_height(void) {
     o->oFloorHeight = find_floor(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floor);
     o->platform     = ((floor != NULL) && (floor->object != 0)) ? floor->object : NULL;
 #else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
+    o->oFloorHeight = find_floor(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floor);
 #endif
 }
 
@@ -715,10 +715,10 @@ struct Surface *cur_obj_update_floor_height_and_get_floor(void) {
         apply_platform_displacement(&sObjectDisplacementInfo, &o->oPosVec, &nextYaw, platform);
         o->oFaceAngleYaw = nextYaw;
     }
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
+    o->oFloorHeight = find_floor(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floor);
     o->platform     = ((floor != NULL) && (floor->object != 0)) ? floor->object : NULL;
 #else
-    o->oFloorHeight = find_floor(o->oPosX, o->oPosY + OBJ_STEP_HEIGHT, o->oPosZ, &floor);
+    o->oFloorHeight = find_floor(o->oPosX, (o->oPosY + OBJ_STEP_HEIGHT), o->oPosZ, &floor);
 #endif
     return floor;
 }

@@ -562,14 +562,14 @@ void load_object_collision_model(void) {
     // If the object collision is supposed to be loaded more than the
     // drawing distance, extend the drawing range.
     if (o->oCollisionDistance > o->oDrawingDistance) o->oDrawingDistance = o->oCollisionDistance;
-    // Update if no Time Stop, in range, and in the current room.
-    if (!(gTimeStopState & TIME_STOP_ACTIVE) && (marioDistSq < sqr(o->oCollisionDistance)) && !(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
-        collisionData++;
-        transform_object_vertices(&collisionData, vertexData);
-        // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
-        while (*collisionData != TERRAIN_LOAD_CONTINUE) load_object_surfaces(&collisionData, vertexData);
-    }
     if (marioDistSq < sqr(o->oDrawingDistance)) {
+        if (!(gTimeStopState & TIME_STOP_ACTIVE) && !(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
+            // Update if no Time Stop, in range, and in the current room.
+            collisionData++;
+            transform_object_vertices(&collisionData, vertexData);
+            // TERRAIN_LOAD_CONTINUE acts as an "end" to the terrain data.
+            while (*collisionData != TERRAIN_LOAD_CONTINUE) load_object_surfaces(&collisionData, vertexData);
+        }
         o->header.gfx.node.flags |=  GRAPH_RENDER_ACTIVE;
     } else {
         o->header.gfx.node.flags &= ~GRAPH_RENDER_ACTIVE;

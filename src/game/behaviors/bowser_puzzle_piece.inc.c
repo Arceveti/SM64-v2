@@ -87,7 +87,6 @@ static struct BowserPuzzlePiece sBowserPuzzlePieces[] = {
 void bhv_lll_bowser_puzzle_spawn_piece(ModelID model, const BehaviorScript *behavior, f32 xOffset, f32 zOffset, ObjAction8 initialAction, ObjAction8 *actionList) {
     struct Object *puzzlePiece                = spawn_object(o, model, behavior);
     puzzlePiece->oPosX                       += xOffset;
-    puzzlePiece->oPosY                       += 51.0f;
     puzzlePiece->oPosZ                       += zOffset;
     puzzlePiece->oAction                      = initialAction; // This action never gets executed.
     puzzlePiece->oBowserPuzzlePieceActionList = actionList;
@@ -101,8 +100,8 @@ void bhv_lll_bowser_puzzle_spawn_pieces(f32 pieceWidth) {
     s32 i;
     // Spawn all 14 puzzle pieces.
     for ((i = 0); (i < 14); (i++)) bhv_lll_bowser_puzzle_spawn_piece(sBowserPuzzlePieces[i].model, bhvLllBowserPuzzlePiece,
-                                                                    (sBowserPuzzlePieces[i].xOffset * pieceWidth / 10.0f),
-                                                                    (sBowserPuzzlePieces[i].zOffset * pieceWidth / 10.0f),
+                                                                   ((sBowserPuzzlePieces[i].xOffset * pieceWidth) / 10.0f),
+                                                                   ((sBowserPuzzlePieces[i].zOffset * pieceWidth) / 10.0f),
                                                                      sBowserPuzzlePieces[i].initialAction,
                                                                      sBowserPuzzlePieces[i].actionList);
     // The pieces should only be spawned once so go to the next action.
