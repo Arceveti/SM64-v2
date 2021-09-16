@@ -453,7 +453,7 @@ https://github.com/buu342/N64-UNFLoader
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
         volatile char crash;
-        
+
         // Set the assert data
         assert_expr = expression;
         assert_line = line;

@@ -256,7 +256,7 @@ Requirements are the same as regular SM64, however a GCC MIPS cross compiler is 
 
 BinPNG (the CI texture converter) requires some python3 dependencies. Use pip to install them.
 
-``pip install pypng bitstring`` 
+``pip install pypng bitstring``
 
 ## UNFLoader support
 

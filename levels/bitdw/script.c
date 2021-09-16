@@ -17,18 +17,18 @@
 #include "levels/bitdw/header.h"
 
 static const LevelScript script_func_local_1[] = {
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1966, -3154,  3586, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1352, -3154,  4200, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2963,  1017, -2464, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2349,  1017, -1849, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2349,  1017, -1235, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
-    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1735,  1017,  -621, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1966, -3154,  3586, /*angle*/ 0,  0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1352, -3154,  4200, /*angle*/ 0,  0, 0, /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2963,  1017, -2464, /*angle*/ 0,  0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2349,  1017, -1849, /*angle*/ 0,  0, 0, /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -2349,  1017, -1235, /*angle*/ 0,  0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSquarishPathMoving),
+    OBJECT(/*model*/ MODEL_BITDW_SQUARE_PLATFORM,   /*pos*/ -1735,  1017,  -621, /*angle*/ 0,  0, 0, /*behParam*/ 0x00020000, /*beh*/ bhvSquarishPathMoving),
     OBJECT(/*model*/ MODEL_BITDW_SEESAW_PLATFORM,   /*pos*/  1491,  1273,   512, /*angle*/ 0, 90, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSeesawPlatform),
     OBJECT(/*model*/ MODEL_BITDW_SEESAW_PLATFORM,   /*pos*/  -147,   894,   512, /*angle*/ 0, 90, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSeesawPlatform),
-    OBJECT(/*model*/ MODEL_BITDW_SLIDING_PLATFORM,  /*pos*/ -5728,   819, -2151, /*angle*/ 0, 0, 0,  /*behParam*/ 0x03CE0000, /*beh*/ bhvSlidingPlatform2),
-    OBJECT(/*model*/ MODEL_BITDW_FERRIS_WHEEL_AXLE, /*pos*/  -205, -1924,  3381, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00010000, /*beh*/ bhvFerrisWheelAxle),
-    OBJECT(/*model*/ MODEL_BITDW_STAIRCASE,         /*pos*/  5279,  1741,     0, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00010000, /*beh*/ bhvAnimatesOnFloorSwitchPress),
-    OBJECT(/*model*/ MODEL_PURPLE_SWITCH,           /*pos*/  3922,  1741,     0, /*angle*/ 0, 0, 0,  /*behParam*/ 0x00000000, /*beh*/ bhvFloorSwitchAnimatesObject),
+    OBJECT(/*model*/ MODEL_BITDW_SLIDING_PLATFORM,  /*pos*/ -5728,   819, -2151, /*angle*/ 0,  0, 0, /*behParam*/ 0x03CE0000, /*beh*/ bhvSlidingPlatform2),
+    OBJECT(/*model*/ MODEL_BITDW_FERRIS_WHEEL_AXLE, /*pos*/  -205, -1924,  3381, /*angle*/ 0,  0, 0, /*behParam*/ 0x00010000, /*beh*/ bhvFerrisWheelAxle),
+    OBJECT(/*model*/ MODEL_BITDW_STAIRCASE,         /*pos*/  5279,  1741,     0, /*angle*/ 0,  0, 0, /*behParam*/ 0x00010000, /*beh*/ bhvAnimatesOnFloorSwitchPress),
+    OBJECT(/*model*/ MODEL_PURPLE_SWITCH,           /*pos*/  3922,  1741,     0, /*angle*/ 0,  0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvFloorSwitchAnimatesObject),
     RETURN(),
 };
 
@@ -101,7 +101,7 @@ const LevelScript level_bitdw_entry[] = {
         MACRO_OBJECTS(/*objList*/ bitdw_seg7_macro_objs),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_090),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_KOOPA_ROAD),
-        TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),  
+        TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
 #ifdef PUPPYLIGHTS
     #define CRYSTAL_LIGHT_SIZE  400
     #define CRYSTAL_LIGHT(x, y, z) PUPPYLIGHT_NODE(0xB6, 0xCD, 0xF6, 0xFF, (x), (y), (z), CRYSTAL_LIGHT_SIZE, CRYSTAL_LIGHT_SIZE, CRYSTAL_LIGHT_SIZE, 0x0, 0, (PUPPYLIGHT_SHAPE_CYLINDER | PUPPYLIGHT_DIRECTIONAL), -1)

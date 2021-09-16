@@ -79,10 +79,10 @@
         The first byte contains the data type, the next 3 the number of bytes left to read
         @return The data header, or 0
     ==============================*/
-    
+
     extern unsigned long usb_poll();
-    
-    
+
+
     /*==============================
         usb_read
         Reads bytes from USB into the provided buffer

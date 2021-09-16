@@ -698,13 +698,12 @@ void cur_obj_update(void) {
     if (objFlags & OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO) o->oAngleToMario = obj_angle_to_object(o, gMarioObject);
     // If the object's action has changed, reset the action timer.
     if (o->oAction != o->oPrevAction) {
-        (void) (o->oTimer = 0, o->oSubAction = 0,
-                o->oPrevAction = o->oAction);
+        (void) (o->oTimer = 0, o->oSubAction = 0, o->oPrevAction = o->oAction);
     }
     // Execute the behavior script.
     gCurBhvCommand = o->curBhvCommand;
     do {
-        bhvCmdProc = BehaviorCmdTable[*gCurBhvCommand >> 24];
+        bhvCmdProc    = BehaviorCmdTable[*gCurBhvCommand >> 24];
         bhvProcResult = bhvCmdProc();
     } while (bhvProcResult == BHV_PROC_CONTINUE);
     o->curBhvCommand = gCurBhvCommand;

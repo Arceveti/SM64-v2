@@ -2389,7 +2389,7 @@
     #define TINY_DIRT_PARTICLE_ANIM_STATE_DIRT              0x3
     #define TINY_DIRT_PARTICLE_ANIM_STATE_YELLOW            0x4
     #define TINY_DIRT_PARTICLE_ANIM_STATE_BILLBOARD         0x5
-    
+
 /* Cartoon Star Particle */
     /* oAnimState */
     #define CARTOON_STAR_PARTICLE_ANIM_STATE_RED            0x0
