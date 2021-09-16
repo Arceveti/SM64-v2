@@ -19,10 +19,10 @@ static const Vtx hmc_seg7_vertex_070079E8[] = {
 };
 
 // 0x07007AE8 - 0x07007B50
-static const Gfx hmc_seg7_dl_07007AE8[] = {
+static const Gfx hmc_seg7_sub_dl_entrance_hanging_grass[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003000_hanging_grass),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_070079E8, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
@@ -32,7 +32,7 @@ static const Gfx hmc_seg7_dl_07007AE8[] = {
 };
 
 // 0x07007B50 - 0x07007C08
-const Gfx hmc_seg7_dl_07007B50[] = {
+const Gfx hmc_seg7_dl_entrance_hanging_grass[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -47,7 +47,7 @@ const Gfx hmc_seg7_dl_07007B50[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_07007AE8),
+    gsSPDisplayList(hmc_seg7_sub_dl_entrance_hanging_grass),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

@@ -172,7 +172,7 @@ static const Gfx hmc_seg7_dl_07017C08[] = {
 };
 
 // 0x07017C98 - 0x07017D70
-const Gfx hmc_seg7_dl_07017C98[] = {
+const Gfx hmc_seg7_dl_black_hole_room_alpha[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),

@@ -249,17 +249,17 @@ static const Lights1 flyguy_seg8_lights_08010AE0 = gdSPDefLights1(
 
 // 0x08010AF8
 static const Vtx flyguy_seg8_vertex_08010AF8[] = {
-    {{{    40,   -104,   -104}, 0, {   990,    990}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{    40,    106,    105}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{    40,   -104,    105}, 0, {     0,    990}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{    40,    106,   -104}, 0, {   990,      0}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{    40,   -104,   -104}, 0, ST_B(    32,     32), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{    40,    106,    105}, 0, ST_B(     0,      0), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{    40,   -104,    105}, 0, ST_B(     0,     32), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{    40,    106,   -104}, 0, ST_B(    32,      0), {0x7f, 0x00, 0x00, 0xff}}},
 };
 
 // 0x08010B38 - 0x08010B80
 const Gfx flyguy_seg8_dl_08010B38[] = {
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_propeller),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&flyguy_seg8_lights_08010AE0.l, 1),
     gsSPLight(&flyguy_seg8_lights_08010AE0.a, 2),
     gsSPVertex(flyguy_seg8_vertex_08010AF8, 4, 0),
@@ -460,7 +460,7 @@ static const Vtx flyguy_seg8_vertex_08011348[] = {
 const Gfx flyguy_seg8_dl_080113A8[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_face),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&flyguy_seg8_lights_08010AE0.l, 1),
     gsSPLight(&flyguy_seg8_lights_08010AE0.a, 2),
     gsSPVertex(flyguy_seg8_vertex_08010C38, 9, 0),
@@ -475,7 +475,7 @@ const Gfx flyguy_seg8_dl_080113A8[] = {
 const Gfx flyguy_seg8_dl_08011420[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, flyguy_seg8_texture_cloth_wrinkle),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(64, 32), CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&flyguy_seg8_lights_08010C08.l, 1),
     gsSPLight(&flyguy_seg8_lights_08010C08.a, 2),
     gsSPVertex(flyguy_seg8_vertex_08010CC8, 6, 0),

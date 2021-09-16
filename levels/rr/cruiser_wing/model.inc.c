@@ -1,16 +1,16 @@
 // 0x0701A608 - 0x0701A648
 static const Vtx rr_seg7_vertex_0701A608[] = {
-    {{{   227,      4,      5}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -79,      0,     -1}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   214,   -397,    947}, 0, {  2012,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -93,   -402,    940}, 0, {  2012,    990}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{   227,      4,      5}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -79,      0,     -1}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   214,   -397,    947}, 0, ST_B(    64,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -93,   -402,    940}, 0, ST_B(    64,     32), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0701A648 - 0x0701A680
 static const Gfx rr_seg7_dl_0701A648[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, rr_seg7_texture_cruiser_wing),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(64, 32), CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(rr_seg7_vertex_0701A608, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  1,  3,  2, 0x0),
     gsSPEndDisplayList(),

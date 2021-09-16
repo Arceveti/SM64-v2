@@ -1248,7 +1248,7 @@ static const Gfx hmc_seg7_dl_07013C78[] = {
 };
 
 // 0x07013CA8 - 0x07013DB8
-const Gfx hmc_seg7_dl_07013CA8[] = {
+const Gfx hmc_seg7_dl_toxic_maze_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

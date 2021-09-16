@@ -145,7 +145,7 @@ static const Gfx hmc_seg7_dl_07021630[] = {
 };
 
 // 0x07021760 - 0x07021828
-const Gfx hmc_seg7_dl_07021760[] = {
+const Gfx hmc_seg7_dl_metal_mario_can_move_opaque[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

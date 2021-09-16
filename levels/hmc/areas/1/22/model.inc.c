@@ -271,7 +271,7 @@ static const Gfx hmc_seg7_dl_07019F70[] = {
 };
 
 // 0x0701A080 - 0x0701A150
-const Gfx hmc_seg7_dl_0701A080[] = {
+const Gfx hmc_seg7_dl_maze_exit_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

@@ -6,18 +6,18 @@ static const Lights1 jrb_seg7_lights_falling_pillar_base = gdSPDefLights1(
 
 // 0x0700AF08 - 0x0700AF58
 static const Vtx jrb_seg7_vertex_falling_pillar_base[] = {
-    {{{   102,      0,   -102}, 0, { 63<<5,  -1056}, {0x33, 0x67, 0xcc, 0xff}}},
-    {{{     0,    102,      0}, 0, { 31<<5,      0}, {0x00, 0x7e, 0x00, 0xff}}},
-    {{{   102,      0,    102}, 0, { 63<<5,  31<<5}, {0x33, 0x67, 0x33, 0xff}}},
-    {{{  -102,      0,   -102}, 0, {     0,  -1056}, {0xcc, 0x67, 0xcc, 0xff}}},
-    {{{  -102,      0,    102}, 0, {     0,  31<<5}, {0xcc, 0x67, 0x33, 0xff}}},
+    {{{   102,      0,   -102}, 0, ST_B(    64,    -32), {0x33, 0x67, 0xcc, 0xff}}},
+    {{{     0,    102,      0}, 0, ST_B(    32,      0), {0x00, 0x7e, 0x00, 0xff}}},
+    {{{   102,      0,    102}, 0, ST_B(    64,     32), {0x33, 0x67, 0x33, 0xff}}},
+    {{{  -102,      0,   -102}, 0, ST_B(     0,    -32), {0xcc, 0x67, 0xcc, 0xff}}},
+    {{{  -102,      0,    102}, 0, ST_B(     0,     32), {0xcc, 0x67, 0x33, 0xff}}},
 };
 
 // 0x0700AF58 - 0x0700AFB0
 static const Gfx jrb_seg7_sub_dl_falling_pillar_base[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, water_09001800_rock),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 64 * 32 - 1, CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(64, 32), CALC_DXT(64, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&jrb_seg7_lights_falling_pillar_base.l, 1),
     gsSPLight(&jrb_seg7_lights_falling_pillar_base.a, 2),
     gsSPVertex(jrb_seg7_vertex_falling_pillar_base, 5, 0),

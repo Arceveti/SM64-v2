@@ -1,156 +1,156 @@
 // 0x0E0005E8
-const GeoLayout hmc_geo_0005E8[] = {
+const GeoLayout hmc_geo_room_entrance[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070078B0),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07007B50),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_070080E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070093F0),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_entrance_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_entrance_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_lanterns),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000618
-const GeoLayout hmc_geo_000618[] = {
+const GeoLayout hmc_geo_room_red_coins[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700E448),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0700EF00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700F3E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700FA40),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700FEF0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_07010070),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_red_coins_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_flame_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_grass_floor_for_red_coins_star),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000658
-const GeoLayout hmc_geo_000658[] = {
+const GeoLayout hmc_geo_room_toxic_maze[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07013CA8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07013E80),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014300),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014B08),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07014C00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014E48),
-      GEO_ASM(   0, geo_movtex_pause_control),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_toxic_maze_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_wall_flames),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_map),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_toxic_drip),
+      GEO_ASM(                         0, geo_movtex_pause_control),
       GEO_ASM(HMC_MOVTEX_TOXIC_MAZE_MIST, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E0006A8
-const GeoLayout hmc_geo_0006A8[] = {
+const GeoLayout hmc_geo_room_black_hole[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070173A8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07017C98),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07018200),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07019248),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07019368),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_black_hole_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_black_hole_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_rolling_rocks_arrow),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E0006E0
-const GeoLayout hmc_geo_0006E0[] = {
+const GeoLayout hmc_geo_room_maze_exit[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701A080),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701A400),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_maze_exit_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_maze_exit_meshes),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000700
-const GeoLayout hmc_geo_000700[] = {
+const GeoLayout hmc_geo_room_lake[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701E820),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701F1B0),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F690),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F818),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701FD58),
-      GEO_ASM(   0, geo_movtex_pause_control),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_lake_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_sky_lights),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_lanterns),
+      GEO_ASM(                           0, geo_movtex_pause_control),
       GEO_ASM(HMC_MOVTEX_DORRIE_POOL_WATER, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000748
-const GeoLayout hmc_geo_000748[] = {
+const GeoLayout hmc_geo_room_cotmc[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07020FD0),
-      GEO_ASM(0, geo_painting_update),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_room_cotmc),
+      GEO_ASM(                0, geo_painting_update),
       GEO_ASM(PAINTING_ID(0, 0), geo_painting_draw),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000770
-const GeoLayout hmc_geo_000770[] = {
+const GeoLayout hmc_geo_room_metal_mario_can_move[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07021760),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07021BA0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070228A0),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_metal_mario_can_move_opaque),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_metal_mario_can_move_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_metal_mario_can_move_lanterns),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000798
-const GeoLayout hmc_geo_000798[] = {
+const GeoLayout hmc_geo_door_room_entrance_and_red_coins[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070078B0),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07007B50),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_070080E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070093F0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700E448),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0700EF00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700F3E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700FA40),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700FEF0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_07010070),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_entrance_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_entrance_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_lanterns),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_red_coins_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_flame_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_grass_floor_for_red_coins_star),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E0007F8
-const GeoLayout hmc_geo_0007F8[] = {
+const GeoLayout hmc_geo_door_room_entrance_and_black_hole[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070078B0),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07007B50),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_070080E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070093F0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070173A8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07017C98),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07018200),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07019248),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07019368),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_entrance_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_entrance_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_entrance_lanterns),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_black_hole_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_black_hole_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_rolling_rocks_arrow),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000850
-const GeoLayout hmc_geo_000850[] = {
+const GeoLayout hmc_geo_door_room_red_coins_and_toxic_maze[] = { //! doesn't include a certain door
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700E448),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0700EF00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700F3E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700FA40),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700FEF0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_07010070),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07013CA8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07013E80),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014300),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014B08),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07014C00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014E48),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_red_coins_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_flame_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_grass_floor_for_red_coins_star),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_toxic_maze_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_wall_flames),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_map),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_toxic_drip),
       GEO_ASM(                         0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_TOXIC_MAZE_MIST, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
@@ -158,36 +158,36 @@ const GeoLayout hmc_geo_000850[] = {
 };
 
 // 0x0E0008D0
-const GeoLayout hmc_geo_0008D0[] = {
+const GeoLayout hmc_geo_door_room_red_coins_and_black_hole[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700E448),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0700EF00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700F3E8),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0700FA40),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0700FEF0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_07010070),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070173A8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07017C98),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07018200),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07019248),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07019368),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_red_coins_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_red_coins_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_red_coins_room_flame_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE_DECAL,   hmc_seg7_dl_grass_floor_for_red_coins_star),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_black_hole_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_black_hole_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_rolling_rocks_arrow),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
 
 // 0x0E000938
-const GeoLayout hmc_geo_000938[] = {
+const GeoLayout hmc_geo_door_room_toxic_maze_and_maze_exit[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07013CA8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07013E80),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014300),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014B08),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07014C00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014E48),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701A080),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701A400),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_toxic_maze_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_wall_flames),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_map),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_toxic_drip),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_maze_exit_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_maze_exit_meshes),
       GEO_ASM(                         0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_TOXIC_MAZE_MIST, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
@@ -195,20 +195,20 @@ const GeoLayout hmc_geo_000938[] = {
 };
 
 // 0x0E000998
-const GeoLayout hmc_geo_000998[] = {
+const GeoLayout hmc_geo_door_room_toxic_maze_and_lake[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07013CA8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07013E80),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014300),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014B08),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07014C00),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07014E48),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701E820),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701F1B0),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F690),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F818),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701FD58),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_toxic_maze_hanging_grass),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_wall_flames),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_toxic_maze_map),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_toxic_maze_toxic_drip),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_lake_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_sky_lights),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_lanterns),
       GEO_ASM(                           0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_DORRIE_POOL_WATER, geo_movtex_draw_water_regions),
       GEO_ASM(HMC_MOVTEX_TOXIC_MAZE_MIST,   geo_movtex_draw_water_regions),
@@ -217,19 +217,19 @@ const GeoLayout hmc_geo_000998[] = {
 };
 
 // 0x0E000A18
-const GeoLayout hmc_geo_000A18[] = {
+const GeoLayout hmc_geo_door_room_black_hole_and_lake[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070173A8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_07017C98),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07018200),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07019248),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07019368),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701E820),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701F1B0),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F690),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F818),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701FD58),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_black_hole_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_black_hole_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_black_hole_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_rolling_rocks_arrow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_lake_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_sky_lights),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_lanterns),
       GEO_ASM(                           0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_DORRIE_POOL_WATER, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
@@ -237,17 +237,17 @@ const GeoLayout hmc_geo_000A18[] = {
 };
 
 // 0x0E000A88
-const GeoLayout hmc_geo_000A88[] = {
+const GeoLayout hmc_geo_door_room_lake_and_cotmc[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701E820),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701F1B0),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F690),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F818),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701FD58),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07020FD0),
-      GEO_ASM(   0, geo_painting_update),
-      GEO_ASM(   PAINTING_ID(0, 0), geo_painting_draw),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_lake_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_sky_lights),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_lanterns),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_room_cotmc),
+      GEO_ASM(                           0, geo_painting_update),
+      GEO_ASM(           PAINTING_ID(0, 0), geo_painting_draw),
       GEO_ASM(                           0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_DORRIE_POOL_WATER, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
@@ -255,17 +255,17 @@ const GeoLayout hmc_geo_000A88[] = {
 };
 
 // 0x0E000AE8
-const GeoLayout hmc_geo_000AE8[] = {
+const GeoLayout hmc_geo_door_room_lake_and_metal_mario_can_move[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701E820),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_0701F1B0),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F690),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_0701F818),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_0701FD58),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_07021760),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_07021BA0),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_070228A0),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,          hmc_seg7_dl_lake_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_sky_lights),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_lake_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_lake_lanterns),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_metal_mario_can_move_opaque),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT,    hmc_seg7_dl_metal_mario_can_move_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,         hmc_seg7_dl_metal_mario_can_move_lanterns),
       GEO_ASM(                           0, geo_movtex_pause_control     ),
       GEO_ASM(HMC_MOVTEX_DORRIE_POOL_WATER, geo_movtex_draw_water_regions),
    GEO_CLOSE_NODE(),
@@ -273,16 +273,16 @@ const GeoLayout hmc_geo_000AE8[] = {
 };
 
 // 0x0E000B48
-const GeoLayout hmc_geo_000B48[] = {
+const GeoLayout hmc_geo_door_room_black_hole_and_maze_exit[] = {
    GEO_NODE_START(),
    GEO_OPEN_NODE(),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_070173A8),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,       hmc_seg7_dl_07017C98),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT, hmc_seg7_dl_07018200),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_07019248),
-      GEO_DISPLAY_LIST(LAYER_TRANSPARENT, hmc_seg7_dl_07019368),
-      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_0701A080),
-      GEO_DISPLAY_LIST(LAYER_ALPHA,       hmc_seg7_dl_0701A400),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_black_hole_room_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,       hmc_seg7_dl_black_hole_room_alpha),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT, hmc_seg7_dl_black_hole_room_lanterns_glow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_black_hole_room_lanterns),
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT, hmc_seg7_dl_rolling_rocks_arrow),
+      GEO_DISPLAY_LIST(LAYER_OPAQUE,      hmc_seg7_dl_maze_exit_surfaces),
+      GEO_DISPLAY_LIST(LAYER_ALPHA,       hmc_seg7_dl_maze_exit_meshes),
    GEO_CLOSE_NODE(),
    GEO_RETURN(),
 };
@@ -306,24 +306,24 @@ const GeoLayout hmc_geo_area_1[] = {
             GEO_OPEN_NODE(),
                GEO_SWITCH_CASE(18, geo_switch_room),
                GEO_OPEN_NODE(),
-                  GEO_BRANCH(1, hmc_geo_0005E8), // 0x0E0005E8
-                  GEO_BRANCH(1, hmc_geo_000618), // 0x0E000618
-                  GEO_BRANCH(1, hmc_geo_000658), // 0x0E000658
-                  GEO_BRANCH(1, hmc_geo_0006A8), // 0x0E0006A8
-                  GEO_BRANCH(1, hmc_geo_0006E0), // 0x0E0006E0
-                  GEO_BRANCH(1, hmc_geo_000700), // 0x0E000700
-                  GEO_BRANCH(1, hmc_geo_000748), // 0x0E000748
-                  GEO_BRANCH(1, hmc_geo_000770), // 0x0E000770
-                  GEO_BRANCH(1, hmc_geo_000798), // 0x0E000798
-                  GEO_BRANCH(1, hmc_geo_0007F8), // 0x0E0007F8
-                  GEO_BRANCH(1, hmc_geo_000850), // 0x0E000850
-                  GEO_BRANCH(1, hmc_geo_0008D0), // 0x0E0008D0
-                  GEO_BRANCH(1, hmc_geo_000938), // 0x0E000938
-                  GEO_BRANCH(1, hmc_geo_000998), // 0x0E000998
-                  GEO_BRANCH(1, hmc_geo_000A18), // 0x0E000A18
-                  GEO_BRANCH(1, hmc_geo_000A88), // 0x0E000A88
-                  GEO_BRANCH(1, hmc_geo_000AE8), // 0x0E000AE8
-                  GEO_BRANCH(1, hmc_geo_000B48), // 0x0E000B48
+                  GEO_BRANCH(1, hmc_geo_room_entrance                          ), // 0x0E0005E8 //  1
+                  GEO_BRANCH(1, hmc_geo_room_red_coins                         ), // 0x0E000618 //  2
+                  GEO_BRANCH(1, hmc_geo_room_toxic_maze                        ), // 0x0E000658 //  3
+                  GEO_BRANCH(1, hmc_geo_room_black_hole                        ), // 0x0E0006A8 //  4
+                  GEO_BRANCH(1, hmc_geo_room_maze_exit                         ), // 0x0E0006E0 //  5
+                  GEO_BRANCH(1, hmc_geo_room_lake                              ), // 0x0E000700 //  6
+                  GEO_BRANCH(1, hmc_geo_room_cotmc                             ), // 0x0E000748 //  7
+                  GEO_BRANCH(1, hmc_geo_room_metal_mario_can_move              ), // 0x0E000770 //  8
+                  GEO_BRANCH(1, hmc_geo_door_room_entrance_and_red_coins       ), // 0x0E000798 //  9
+                  GEO_BRANCH(1, hmc_geo_door_room_entrance_and_black_hole      ), // 0x0E0007F8 // 10
+                  GEO_BRANCH(1, hmc_geo_door_room_red_coins_and_toxic_maze     ), // 0x0E000850 // 11
+                  GEO_BRANCH(1, hmc_geo_door_room_red_coins_and_black_hole     ), // 0x0E0008D0 // 12
+                  GEO_BRANCH(1, hmc_geo_door_room_toxic_maze_and_maze_exit     ), // 0x0E000938 // 13
+                  GEO_BRANCH(1, hmc_geo_door_room_toxic_maze_and_lake          ), // 0x0E000998 // 14
+                  GEO_BRANCH(1, hmc_geo_door_room_black_hole_and_lake          ), // 0x0E000A18 // 15
+                  GEO_BRANCH(1, hmc_geo_door_room_lake_and_cotmc               ), // 0x0E000A88 // 16
+                  GEO_BRANCH(1, hmc_geo_door_room_lake_and_metal_mario_can_move), // 0x0E000AE8 // 17
+                  GEO_BRANCH(1, hmc_geo_door_room_black_hole_and_maze_exit     ), // 0x0E000B48 // 18
                GEO_CLOSE_NODE(),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),

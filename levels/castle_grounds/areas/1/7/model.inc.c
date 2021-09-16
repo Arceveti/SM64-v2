@@ -2,21 +2,21 @@
 
 // 0x0700BAB8 - 0x0700BB38
 static const Vtx castle_grounds_seg7_vertex_moat_grills[] = {
-    {{{ -3533,  -1331,  -6070}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4045,  -1331,  -5558}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3533,  -1331,  -5558}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -4045,  -1331,  -6070}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3226,   -563,  -2179}, 0, { 31<<5,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3533,   -563,  -2179}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3226,   -563,  -1872}, 0, {     0,  31<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -3533,   -563,  -1872}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3533,  -1331,  -6070}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4045,  -1331,  -5558}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3533,  -1331,  -5558}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -4045,  -1331,  -6070}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3226,   -563,  -2179}, 0, ST_B(    32,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3533,   -563,  -2179}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3226,   -563,  -1872}, 0, ST_B(     0,     32), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -3533,   -563,  -1872}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700BB38 - 0x0700BB80
 static const Gfx castle_grounds_seg7_sub_dl_moat_grills[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, outside_09005800_mesh),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_moat_grills, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  5,  7,  6, 0x0),

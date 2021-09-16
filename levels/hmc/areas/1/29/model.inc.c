@@ -336,7 +336,7 @@ static const Gfx hmc_seg7_dl_07020F90[] = {
 };
 
 // 0x07020FD0 - 0x070210E0
-const Gfx hmc_seg7_dl_07020FD0[] = {
+const Gfx hmc_seg7_dl_room_cotmc[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

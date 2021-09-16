@@ -6,21 +6,21 @@ static const Lights1 ddd_seg7_lights_0700AF78 = gdSPDefLights1(
 
 // 0x0700AF90 - 0x0700B010
 static const Vtx ddd_seg7_vertex_0700AF90[] = {
-    {{{  3804,    776,     61}, 0, { 31<<5,  63<<5}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  3804,   1134,   -296}, 0, {     0,      0}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  3804,    776,   -296}, 0, {     0,  63<<5}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  3804,   1134,     61}, 0, { 31<<5,      0}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  4029,    776,   -296}, 0, {     0,  63<<5}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  4029,   1134,     61}, 0, { 31<<5,      0}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  4029,    776,     61}, 0, { 31<<5,  63<<5}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{  4029,   1134,   -296}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  3804,    776,     61}, 0, ST_B(    32,     64), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  3804,   1134,   -296}, 0, ST_B(     0,      0), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  3804,    776,   -296}, 0, ST_B(     0,     64), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  3804,   1134,     61}, 0, ST_B(    32,      0), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  4029,    776,   -296}, 0, ST_B(     0,     64), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  4029,   1134,     61}, 0, ST_B(    32,      0), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  4029,    776,     61}, 0, ST_B(    32,     64), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{  4029,   1134,   -296}, 0, ST_B(     0,      0), {0x7f, 0x00, 0x00, 0xff}}},
 };
 
 // 0x0700B010 - 0x0700B068
 static const Gfx ddd_seg7_dl_0700B010[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, ddd_seg7_texture_bowser_face_cutout),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&ddd_seg7_lights_0700AF78.l, 1),
     gsSPLight(&ddd_seg7_lights_0700AF78.a, 2),
     gsSPVertex(ddd_seg7_vertex_0700AF90, 8, 0),

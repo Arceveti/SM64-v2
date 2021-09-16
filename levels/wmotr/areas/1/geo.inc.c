@@ -17,7 +17,7 @@ const GeoLayout wmotr_geo_area_1[] = {
             GEO_OPEN_NODE(),
                GEO_DISPLAY_LIST(LAYER_OPAQUE,      wmotr_seg7_dl_0700C1F8),
                GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wmotr_seg7_dl_0700EFD8),
-               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wmotr_seg7_dl_07010608),
+               GEO_DISPLAY_LIST(LAYER_TRANSPARENT, wmotr_seg7_dl_rainbows),
                GEO_RENDER_OBJ(),
                GEO_ASM(0, geo_envfx_main),
             GEO_CLOSE_NODE(),

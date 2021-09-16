@@ -2,18 +2,18 @@
 
 // 0x0700C968 - 0x0700C9A8
 static const Vtx castle_grounds_seg7_vertex_peach_letter_left_side[] = {
-    {{{     0,     82,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -72,    -82,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -82,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{   -72,     82,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     82,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -72,    -82,      0}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -82,      0}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{   -72,     82,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700C9A8 - 0x0700C9E8
 static const Vtx castle_grounds_seg7_vertex_peach_letter_right_side[] = {
-    {{{    72,     82,      0}, 0, { 31<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,    -82,      0}, 0, {     0,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{    72,    -82,      0}, 0, { 31<<5,  63<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,     82,      0}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{    72,     82,      0}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,    -82,      0}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    72,    -82,      0}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,     82,      0}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x0700C9E8 - 0x0700D9E8
@@ -30,7 +30,7 @@ ALIGNED8 static const Texture castle_grounds_seg7_texture_peach_letter_right_sid
 static const Gfx castle_grounds_seg7_dl_peach_letter_left_side[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, castle_grounds_seg7_texture_peach_letter_left_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_peach_letter_left_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),
@@ -40,7 +40,7 @@ static const Gfx castle_grounds_seg7_dl_peach_letter_left_side[] = {
 static const Gfx castle_grounds_seg7_dl_peach_letter_right_side[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, castle_grounds_seg7_texture_peach_letter_right_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(castle_grounds_seg7_vertex_peach_letter_right_side, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSPEndDisplayList(),

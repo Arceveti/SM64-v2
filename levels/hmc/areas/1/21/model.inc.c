@@ -1,27 +1,27 @@
 // 0x070192B8 - 0x07019328
-static const Vtx hmc_seg7_vertex_070192B8[] = {
-    {{{ -6041,   2247,  -7797}, 0, {   990,    478}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6348,   2094,  -7797}, 0, {     0,    990}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6041,   2145,  -7797}, 0, {   990,    820}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -5733,   2196,  -7797}, 0, {  2012,    650}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6041,   2401,  -7797}, 0, {   990,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6041,   1991,  -7797}, 0, {   990,   1328}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -6348,   2298,  -7797}, 0, {     0,    308}, {0xff, 0xff, 0xff, 0xff}}},
+static const Vtx hmc_seg7_vertex_rolling_rocks_arrow[] = {
+    {{{ -6041,   2247,  -7797}, 0, ST_B(    32,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6348,   2094,  -7797}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6041,   2145,  -7797}, 0, ST_B(    32,     26), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -5733,   2196,  -7797}, 0, ST_B(    64,     21), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6041,   2401,  -7797}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6041,   1991,  -7797}, 0, ST_B(    32,     42), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -6348,   2298,  -7797}, 0, ST_B(     0,     10), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07019328 - 0x07019368
-static const Gfx hmc_seg7_dl_07019328[] = {
+static const Gfx hmc_seg7_sub_dl_rolling_rocks_arrow[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09009800_light_beige_floor),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(hmc_seg7_vertex_070192B8, 7, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(hmc_seg7_vertex_rolling_rocks_arrow, 7, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
-    gsSP1Triangle( 0,  6,  1, 0x0),
+    gsSP1Triangle(  0,  6,  1, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x07019368 - 0x07019430
-const Gfx hmc_seg7_dl_07019368[] = {
+const Gfx hmc_seg7_dl_rolling_rocks_arrow[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_XLU_SURF2),
@@ -37,7 +37,7 @@ const Gfx hmc_seg7_dl_07019368[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_07019328),
+    gsSPDisplayList(hmc_seg7_sub_dl_rolling_rocks_arrow),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

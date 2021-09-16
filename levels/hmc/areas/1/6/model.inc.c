@@ -143,10 +143,10 @@ static const Vtx hmc_seg7_vertex_0700EC30[] = {
 };
 
 // 0x0700ECB0 - 0x0700EE38
-static const Gfx hmc_seg7_dl_0700ECB0[] = {
+static const Gfx hmc_seg7_sub_dl_red_coins_room_meshes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000_mesh),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700E5B0, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  5,  6, 0x0,  7,  8,  9, 0x0),
@@ -157,7 +157,7 @@ static const Gfx hmc_seg7_dl_0700ECB0[] = {
     gsSP2Triangles( 2,  3,  4, 0x0,  5,  6,  7, 0x0),
     gsSP2Triangles( 5,  8,  6, 0x0,  9, 10, 11, 0x0),
     gsSP2Triangles(12, 13, 14, 0x0, 10,  5,  7, 0x0),
-    gsSP1Triangle(10,  7, 11, 0x0),
+    gsSP1Triangle( 10,  7, 11, 0x0),
     gsSPVertex(hmc_seg7_vertex_0700E7A0, 14, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  0,  2, 0x0),
     gsSP2Triangles( 4,  3,  2, 0x0,  4,  2,  5, 0x0),
@@ -172,25 +172,25 @@ static const Gfx hmc_seg7_dl_0700ECB0[] = {
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSP2Triangles( 3,  4,  5, 0x0,  3,  2,  4, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  9, 10, 11, 0x0),
-    gsSP1Triangle( 6, 12,  7, 0x0),
+    gsSP1Triangle(  6, 12,  7, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0700EE38 - 0x0700EF00
-static const Gfx hmc_seg7_dl_0700EE38[] = {
+static const Gfx hmc_seg7_sub_dl_red_coins_room_hanging_grass[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09003000_hanging_grass),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0700EA50, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
     gsSP2Triangles( 7, 10,  8, 0x0, 11, 12, 13, 0x0),
-    gsSP1Triangle(11, 14, 12, 0x0),
+    gsSP1Triangle( 11, 14, 12, 0x0),
     gsSPVertex(hmc_seg7_vertex_0700EB40, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 6,  7,  8, 0x0,  6,  9,  7, 0x0),
     gsSP2Triangles(10, 11, 12, 0x0, 10, 13, 11, 0x0),
-    gsSP1Triangle( 0,  2, 14, 0x0),
+    gsSP1Triangle(  0,  2, 14, 0x0),
     gsSPVertex(hmc_seg7_vertex_0700EC30, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
@@ -198,7 +198,7 @@ static const Gfx hmc_seg7_dl_0700EE38[] = {
 };
 
 // 0x0700EF00 - 0x0700EFD8
-const Gfx hmc_seg7_dl_0700EF00[] = {
+const Gfx hmc_seg7_dl_red_coins_room_alpha[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -213,11 +213,11 @@ const Gfx hmc_seg7_dl_0700EF00[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_0700ECB0),
+    gsSPDisplayList(hmc_seg7_sub_dl_red_coins_room_meshes),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_0700EE38),
+    gsSPDisplayList(hmc_seg7_sub_dl_red_coins_room_hanging_grass),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

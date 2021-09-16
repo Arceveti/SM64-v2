@@ -1,29 +1,29 @@
 // 0x0700FF70 - 0x0700FF88
-static const Lights1 hmc_seg7_lights_0700FF70 = gdSPDefLights1(
+static const Lights1 hmc_seg7_lights_grass_floor_for_red_coins_star = gdSPDefLights1(
     0x79, 0x79, 0x79,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
 
 // 0x0700FF88 - 0x07010008
-static const Vtx hmc_seg7_vertex_0700FF88[] = {
-    {{{  3891,      0,   4608}, 0, {  1756,   -798}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  4403,      0,   4813}, 0, {  2522,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+static const Vtx hmc_seg7_vertex_grass_floor_for_red_coins_star[] = {
+    {{{  3891,      0,   4608}, 0, {  1756,   -800}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  4403,      0,   4813}, 0, {  2522,    992}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  4198,      0,   4608}, 0, {  2522,      0}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  4403,      0,   5120}, 0, {  1756,   1754}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  4198,      0,   5325}, 0, {   734,   1754}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  3891,      0,   5325}, 0, {     0,    990}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  4198,      0,   5325}, 0, {   736,   1754}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  3891,      0,   5325}, 0, {     0,    992}, {0x00, 0x7f, 0x00, 0xff}}},
     {{{  3686,      0,   5120}, 0, {     0,      0}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  3686,      0,   4813}, 0, {   734,   -798}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  3686,      0,   4813}, 0, {   736,   -800}, {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x07010008 - 0x07010070
-static const Gfx hmc_seg7_dl_07010008[] = {
+static const Gfx hmc_seg7_sub_dl_grass_floor_for_red_coins_star[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09006800_grass_floor),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&hmc_seg7_lights_0700FF70.l, 1),
-    gsSPLight(&hmc_seg7_lights_0700FF70.a, 2),
-    gsSPVertex(hmc_seg7_vertex_0700FF88, 8, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPLight(&hmc_seg7_lights_grass_floor_for_red_coins_star.l, 1),
+    gsSPLight(&hmc_seg7_lights_grass_floor_for_red_coins_star.a, 2),
+    gsSPVertex(hmc_seg7_vertex_grass_floor_for_red_coins_star, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 0,  4,  3, 0x0,  0,  5,  4, 0x0),
     gsSP2Triangles( 0,  6,  5, 0x0,  0,  7,  6, 0x0),
@@ -31,7 +31,7 @@ static const Gfx hmc_seg7_dl_07010008[] = {
 };
 
 // 0x07010070 - 0x07010118
-const Gfx hmc_seg7_dl_07010070[] = {
+const Gfx hmc_seg7_dl_grass_floor_for_red_coins_star[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_DECAL2),
@@ -45,7 +45,7 @@ const Gfx hmc_seg7_dl_07010070[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_07010008),
+    gsSPDisplayList(hmc_seg7_sub_dl_grass_floor_for_red_coins_star),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

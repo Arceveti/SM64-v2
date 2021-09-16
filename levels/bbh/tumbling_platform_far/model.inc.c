@@ -6,25 +6,25 @@ static const Lights1 bbh_seg7_lights_tumbling_platform_far = gdSPDefLights1(
 
 // 0x0701F6C0 - 0x0701F780
 static const Vtx bbh_seg7_vertex_tumbling_platform_far[] = {
-    {{{  -102,      0,   -461}, 0, { 31<<5,   9168}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  -102,   -102,    461}, 0, {     0,      0}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  -102,      0,    461}, 0, { 31<<5,      0}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{  -102,   -102,   -461}, 0, {     0,   9168}, {0x81, 0x00, 0x00, 0xff}}},
-    {{{   102,      0,    461}, 0, { 31<<5,      0}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{   102,   -102,   -461}, 0, {     0,   9168}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{   102,      0,   -461}, 0, { 31<<5,   9168}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{   102,   -102,    461}, 0, {     0,      0}, {0x7f, 0x00, 0x00, 0xff}}},
-    {{{   102,      0,   -461}, 0, { 31<<5,  -8208}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -102,      0,    461}, 0, {     0,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{   102,      0,    461}, 0, { 31<<5,  31<<5}, {0x00, 0x7f, 0x00, 0xff}}},
-    {{{  -102,      0,   -461}, 0, {     0,  -8208}, {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,   -461}, 0, ST_B(    32,    287), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  -102,   -102,    461}, 0, ST_B(     0,      0), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  -102,      0,    461}, 0, ST_B(    32,      0), {0x81, 0x00, 0x00, 0xff}}},
+    {{{  -102,   -102,   -461}, 0, ST_B(     0,    287), {0x81, 0x00, 0x00, 0xff}}},
+    {{{   102,      0,    461}, 0, ST_B(    32,      0), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{   102,   -102,   -461}, 0, ST_B(     0,    287), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{   102,      0,   -461}, 0, ST_B(    32,    287), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{   102,   -102,    461}, 0, ST_B(     0,      0), {0x7f, 0x00, 0x00, 0xff}}},
+    {{{   102,      0,   -461}, 0, ST_B(    32,   -256), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,    461}, 0, ST_B(     0,     32), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{   102,      0,    461}, 0, ST_B(    32,     32), {0x00, 0x7f, 0x00, 0xff}}},
+    {{{  -102,      0,   -461}, 0, ST_B(     0,   -256), {0x00, 0x7f, 0x00, 0xff}}},
 };
 
 // 0x0701F780 - 0x0701F7E8
 static const Gfx bbh_seg7_sub_dl_tumbling_platform_far[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09004800_pattern_block),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_tumbling_platform_far.l, 1),
     gsSPLight(&bbh_seg7_lights_tumbling_platform_far.a, 2),
     gsSPVertex(bbh_seg7_vertex_tumbling_platform_far, 12, 0),

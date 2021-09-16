@@ -1688,7 +1688,7 @@ static const Gfx hmc_seg7_dl_0700E428[] = {
 };
 
 // 0x0700E448 - 0x0700E5B0
-const Gfx hmc_seg7_dl_0700E448[] = {
+const Gfx hmc_seg7_dl_red_coins_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

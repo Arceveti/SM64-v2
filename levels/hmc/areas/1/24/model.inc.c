@@ -1424,7 +1424,7 @@ static const Gfx hmc_seg7_dl_0701E718[] = {
 };
 
 // 0x0701E820 - 0x0701E958
-const Gfx hmc_seg7_dl_0701E820[] = {
+const Gfx hmc_seg7_dl_lake_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_OPA_SURF2),

@@ -38,10 +38,10 @@ static const Vtx hmc_seg7_vertex_0701A240[] = {
 };
 
 // 0x0701A340 - 0x0701A400
-static const Gfx hmc_seg7_dl_0701A340[] = {
+static const Gfx hmc_seg7_sub_dl_maze_exit_meshes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, cave_09001000_mesh),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(hmc_seg7_vertex_0701A150, 15, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  8,  9, 0x0),
@@ -57,7 +57,7 @@ static const Gfx hmc_seg7_dl_0701A340[] = {
 };
 
 // 0x0701A400 - 0x0701A4B8
-const Gfx hmc_seg7_dl_0701A400[] = {
+const Gfx hmc_seg7_dl_maze_exit_meshes[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetRenderMode(G_RM_FOG_SHADE_A, G_RM_AA_ZB_TEX_EDGE2),
@@ -72,7 +72,7 @@ const Gfx hmc_seg7_dl_0701A400[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(hmc_seg7_dl_0701A340),
+    gsSPDisplayList(hmc_seg7_sub_dl_maze_exit_meshes),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
