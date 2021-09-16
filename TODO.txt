@@ -10,6 +10,8 @@
         - Reads a null floor when hitting the pillar because of the super steep floor
     - It's Possible to clip through certain moving walls like the back wall of the JRB ship when jumping at it at certain angles
         - Might be same underlying issue as the SSL pillars issue?
+    - Auto collision distance causes objects to fall through platforms if Mario isn't nearby.
+        - Adding OBJ_FLAG_DONT_CALC_COLL_DIST to oFlags using OR_INT in the behavior script somehow doesn't work
 - Puppylights bugs:
     - Lights don't get cleared properly when leaving a level
     - Multiple light sources cause direction overflow?
