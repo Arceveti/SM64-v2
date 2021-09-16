@@ -89,6 +89,9 @@ Bool32 check_kick_or_dive_in_air(struct MarioState *m) {
 }
 
 Bool32 should_get_stuck_in_ground(struct MarioState *m) {
+#ifdef NO_GETTING_BURIED
+    return FALSE;
+#else
     u32 terrainType       = (m->area->terrainType & TERRAIN_MASK);
     struct Surface *floor = m->floor;
     SurfaceType type      = floor->type;
@@ -99,6 +102,7 @@ Bool32 should_get_stuck_in_ground(struct MarioState *m) {
      && !(floor->flags & SURFACE_FLAG_DYNAMIC)
      && ((m->peakHeight - m->pos[1]) > 1000.0f)
      && (floor->normal.y >= COS30));
+#endif
 }
 
 Bool32 check_fall_damage_or_get_stuck(struct MarioState *m, MarioAction hardFallAction) {

@@ -758,6 +758,9 @@
 // (HackerSM64)
 #define NO_FALL_DAMAGE
 
+// Disables Mario getting stuck in snow and sand when falling
+// #define NO_GETTING_BURIED
+
 // Allows for turning in midair (Arceveti)
 // #define AIR_TURN
 
