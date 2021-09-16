@@ -145,6 +145,7 @@ struct Object  *try_to_spawn_object(s16 offsetY, f32 scale, struct Object *paren
 struct Object  *spawn_object_with_scale(                    struct Object *parent,                       ModelID32 model, const BehaviorScript *behavior, f32 scale);
 struct Object  *spawn_object_relative(           s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ,            struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
 struct Object  *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, struct Object *parent, ModelID32 model, const BehaviorScript *behavior);
+ModelID32       obj_get_model_id(              struct Object *obj);
 void            obj_apply_scale_to_transform(  struct Object *obj);
 void            obj_scale(                     struct Object *obj, f32 scale); //!
 void            cur_obj_scale(f32 scale); //!

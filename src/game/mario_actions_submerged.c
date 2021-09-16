@@ -262,11 +262,7 @@ static void update_swimming_yaw(struct MarioState *m) {
 static void update_swimming_pitch(struct MarioState *m) {
     Angle targetPitch = -(Angle)(256.0f * m->controller->stickY);
     Angle pitchVel    = ((m->faceAngle[0] < 0x0) ? 0x100 : 0x200);
-    if (m->faceAngle[0] < targetPitch) {
-        if ((m->faceAngle[0] += pitchVel) > targetPitch) m->faceAngle[0] = targetPitch;
-    } else if (m->faceAngle[0] > targetPitch) {
-        if ((m->faceAngle[0] -= pitchVel) < targetPitch) m->faceAngle[0] = targetPitch;
-    }
+    approach_s16_symmetric_bool(&m->faceAngle[0], targetPitch, pitchVel);
 }
 
 static void common_idle_step(struct MarioState *m, AnimID32 animation, AnimAccel animSpeed) {
@@ -286,7 +282,7 @@ static void common_idle_step(struct MarioState *m, AnimID32 animation, AnimAccel
     if (m->faceAngle[0] > 0x0) {
         approach_s16_bool(&m->marioBodyState->headAngle[0], (m->faceAngle[0] / 0x2), 0x80, 0x200);
     } else {
-        approach_s16_bool(&m->marioBodyState->headAngle[0], 0, 0x200, 0x200);
+        approach_s16_symmetric_bool(&m->marioBodyState->headAngle[0], 0, 0x200);
     }
     if (animSpeed == 0x0) {
         set_mario_animation(m, animation);
@@ -463,8 +459,7 @@ static Bool32 act_water_ground_pound(struct MarioState *m) {
         m->actionTimer++;
         if (m->actionTimer >= (m->marioObj->header.gfx.animInfo.curAnim->loopEnd + 4)) {
             if (m->input & INPUT_A_DOWN) {
-                play_sound(sSwimStrength == MIN_SWIM_STRENGTH ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST,
-                   m->marioObj->header.gfx.cameraToObject);
+                play_sound(((sSwimStrength == MIN_SWIM_STRENGTH) ? SOUND_ACTION_SWIM : SOUND_ACTION_SWIM_FAST), m->marioObj->header.gfx.cameraToObject);
                 m->vel[1] = 25.0f;
                 mario_set_forward_vel(m, 20.0f);
                 return set_mario_action(m, ACT_BREASTSTROKE, 0);
@@ -547,7 +542,7 @@ static Bool32 act_breaststroke(struct MarioState *m) {
         if ((m->actionTimer <  6) && (m->input & INPUT_A_PRESSED)) m->actionState = ACT_BREASTSTROKE_STATE_CONTINUE;
         if ((m->actionTimer == 9) && (m->actionState == ACT_BREASTSTROKE_STATE_CONTINUE)) {
             set_anim_to_frame(m, 0);
-            m->actionState =  ACT_BREASTSTROKE_STATE_START;
+            m->actionState = ACT_BREASTSTROKE_STATE_START;
             m->actionTimer = 1;
             sSwimStrength  = MIN_SWIM_STRENGTH;
         }
@@ -754,7 +749,7 @@ static Bool32 act_water_punch(struct MarioState *m) {
             if (is_anim_at_end(m)) {
                 if (m->heldObj->behavior == segmented_to_virtual(bhvKoopaShellUnderwater)) {
                     play_shell_music();
-                    set_mario_action(m, ACT_WATER_SHELL_SWIMMING, 0);
+                    set_mario_action(m, ACT_WATER_SHELL_SWIMMING,  0);
                 } else {
                     set_mario_action(m, ACT_HOLD_WATER_ACTION_END, 1);
                 }

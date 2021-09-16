@@ -263,7 +263,7 @@ index 25b27983..2ff11930 100644
  }
 
  void play_sound_button_change_blocked(void) {
-@@ -5013,7 +5074,7 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
+@@ -5013,7 +5074,7 @@ void radial_camera_input(struct Camera *c, UNUSED f32 unused) {
      }
 
      // Zoom in / enter C-Up
@@ -272,7 +272,7 @@ index 25b27983..2ff11930 100644
          if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
              gCameraMovementFlags &= ~CAM_MOVE_ZOOMED_OUT;
              play_sound_cbutton_up();
-@@ -5023,7 +5084,7 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
+@@ -5023,7 +5084,7 @@ void radial_camera_input(struct Camera *c, UNUSED f32 unused) {
      }
 
      // Zoom out
@@ -281,7 +281,7 @@ index 25b27983..2ff11930 100644
          if (gCameraMovementFlags & CAM_MOVE_ZOOMED_OUT) {
              gCameraMovementFlags |= CAM_MOVE_ALREADY_ZOOMED_OUT;
  #ifndef VERSION_JP
-@@ -5035,6 +5096,12 @@ s32 radial_camera_input(struct Camera *c, UNUSED f32 unused) {
+@@ -5035,6 +5096,12 @@ void radial_camera_input(struct Camera *c, UNUSED f32 unused) {
          }
      }
 
@@ -290,9 +290,6 @@ index 25b27983..2ff11930 100644
 +    } else  {
 +        stickReset = 1;
 +    }
-+
-     //! returning uninitialized variable
-     return dummy;
  }
 @@ -5600,7 +5667,7 @@ void set_camera_mode_8_directions(struct Camera *c) {
      if (c->mode != CAMERA_MODE_8_DIRECTIONS) {

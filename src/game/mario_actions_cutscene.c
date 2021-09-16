@@ -456,8 +456,6 @@ Bool32 act_debug_free_move(struct MarioState *m) {
     struct WallCollisionData wallData;
     struct Surface *ceil;
     struct Surface *floor;
-    f32 ceilHeight;
-    f32 floorHeight;
     Vec3f pos;
     f32 speed = ((gPlayer1Controller->buttonDown & B_BUTTON) ? 4.0f : 1.0f);
     if (gPlayer1Controller->buttonDown & Z_TRIG) speed = 0.01f;
@@ -487,8 +485,8 @@ Bool32 act_debug_free_move(struct MarioState *m) {
     }
     resolve_and_return_wall_collision_data(pos, 60.0f, 50.0f, &wallData);
     set_mario_wall(m, ((wallData.numWalls > 0) ? wallData.walls[0] : NULL)); //! only returns the first wall
-    floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
-    ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
+    f32 floorHeight = find_floor(pos[0], (pos[1] + m->midY), pos[2], &floor);
+    f32 ceilHeight  = find_ceil( pos[0], (pos[1] + m->midY), pos[2], &ceil);
     if (floor == NULL) return FALSE;
     if ((ceilHeight - floorHeight) >= MARIO_HITBOX_HEIGHT) {
         if ((floor != NULL) && ( pos[1] < floorHeight)) pos[1] = floorHeight;

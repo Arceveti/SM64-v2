@@ -247,7 +247,7 @@ void copy_partial_image(TexturePtr *dst, TexturePtr *src,
     }
 }
 
-//! src should be I8 type
+// src should be I8 type?
 void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height) {
     const u32 size = (width * height);
     u32 i;

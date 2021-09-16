@@ -146,8 +146,7 @@ static CellIndex lower_cell_index(s32 coord) {
     // [0, 16)
     index = (coord / CELL_SIZE);
     // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
+    //! Some wall checks are larger than the buffer, meaning wall checks can miss walls that are near a cell border.
     if ((coord % CELL_SIZE) < 50) index--;
     if (index < 0) index = 0;
     // Potentially > 15, but since the upper index is <= 15, not exploitable
@@ -167,8 +166,7 @@ static CellIndex upper_cell_index(s32 coord) {
     // [0, 16)
     index = (coord / CELL_SIZE);
     // Include extra cell if close to boundary
-    //! Some wall checks are larger than the buffer, meaning wall checks can
-    //  miss walls that are near a cell border.
+    //! Some wall checks are larger than the buffer, meaning wall checks can miss walls that are near a cell border.
     if ((coord % CELL_SIZE) > (CELL_SIZE - 50)) index++;
     if (index > NUM_CELLS_INDEX) index = NUM_CELLS_INDEX;
     // Potentially < 0, but since lower index is >= 0, not exploitable

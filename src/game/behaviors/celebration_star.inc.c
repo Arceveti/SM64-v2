@@ -8,20 +8,20 @@ void bhv_celebration_star_init(void) {
     o->oCelebStarDiameterOfRotation = 100;
 #if BUGFIX_STAR_BOWSER_KEY
     if ((gCurrLevelNum == LEVEL_BOWSER_1) || (gCurrLevelNum == LEVEL_BOWSER_2)) {
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_BOWSER_KEY];
+        cur_obj_set_model(MODEL_BOWSER_KEY);
         o->oFaceAnglePitch = 0x0;
         o->oFaceAngleRoll  = DEG(-90);
         cur_obj_scale(0.1f);
         o->oCelebStarIsBowserKey = TRUE;
     } else {
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+        cur_obj_set_model(MODEL_STAR);
         o->oFaceAnglePitch = 0x0;
         o->oFaceAngleRoll  = 0x0;
         cur_obj_scale(0.4f);
         o->oCelebStarIsBowserKey = FALSE;
     }
 #else
-    o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+    cur_obj_set_model(MODEL_STAR);
     cur_obj_scale(0.4f);
     o->oFaceAnglePitch = 0x0;
     o->oFaceAngleRoll  = 0x0;

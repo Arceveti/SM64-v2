@@ -24,12 +24,12 @@ void bhv_collect_star_init(void) {
     currentLevelStarFlags = save_file_get_star_flags((gCurrSaveFileNum - 1), (gCurrCourseNum - 1));
     if (currentLevelStarFlags & (1 << starId)) {
 #endif
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_TRANSPARENT_STAR];
+        cur_obj_set_model(MODEL_TRANSPARENT_STAR);
 #ifdef PUPPYLIGHTS
         cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_TRANSPARENT_STAR_LIGHT);
 #endif
     } else {
-        o->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_STAR];
+        cur_obj_set_model(MODEL_STAR);
 #ifdef PUPPYLIGHTS
         cur_obj_set_light_properties_default(PUPPYLIGHTS_STAR_LIGHT, COLOR_RGBA32_STAR_LIGHT);
 #endif
@@ -49,10 +49,9 @@ void bhv_collect_star_loop(void) {
 }
 
 void bhv_star_spawn_arc_init(void) {
-    f32 dx                   = (o->oHomeX - o->oPosX);
-    f32 dz                   = (o->oHomeZ - o->oPosZ);
-    o->oMoveAngleYaw         = atan2s(   dz,       dx);
-    o->oStarSpawnDisFromHome = sqrtf(sqr(dx) + sqr(dz));
+    Angle yaw;
+    vec3f_get_lateral_dist_and_yaw(&o->oPosVec, &o->oHomeVec, &o->oStarSpawnDisFromHome, &yaw);
+    o->oMoveAngleYaw         = yaw;
     o->oVelY                 = ((o->oHomeY - o->oPosY)   / 30.0f);
     o->oForwardVel           = (o->oStarSpawnDisFromHome / 30.0f);
     o->oStarSpawnVelY        = o->oPosY;

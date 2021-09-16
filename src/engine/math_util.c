@@ -1266,7 +1266,7 @@ void make_oblique(Mat4 toModify, Vec4f clipPlane) {
  */
 
 //! TODO: does symmetric need to be separate?
-//! The non-bool ones are also mostly unused
+//! The non-bool ones are also mostly unused on their own
 
 // s32
 s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {

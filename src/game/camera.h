@@ -388,20 +388,16 @@ struct Camera
     /*0x04*/ Vec3f focus;
     /*0x10*/ Vec3f pos;
     /*0x1C*/ Vec3f unusedVec1;
-    /// The x coordinate of the "center" of the area. The camera will rotate around this point.
+    /// The x and z coordinates of the "center" of the area. The camera will rotate around this point.
     /// For example, this is what makes the camera rotate around the hill in BoB
-    /*0x28*/ f32 areaCenX;
-    /// The z coordinate of the "center" of the area. The camera will rotate around this point.
-    /// For example, this is what makes the camera rotate around the hill in BoB
-    /*0x2C*/ f32 areaCenZ;
+    /// The y coordinate of the "center" of the area. Unlike x and z, this is only used
+    /// when paused. See zoom_out_if_paused_and_outside
+             Vec3f areaCen;
     /*0x30*/ u8 cutscene;
     /*0x31*/ u8 filler31[0x8];
     /*0x3A*/ Angle nextYaw;
     /*0x3C*/ u8 filler3C[0x28];
     /*0x64*/ u8 doorStatus;
-    /// The y coordinate of the "center" of the area. Unlike areaCenX and areaCenZ, this is only used
-    /// when paused. See zoom_out_if_paused_and_outside
-    /*0x68*/ f32 areaCenY;
 };
 
 /**

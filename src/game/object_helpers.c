@@ -355,12 +355,17 @@ struct Object *spawn_object_relative(s16 behaviorParam, s16 relativePosX, s16 re
     return obj;
 }
 
-//! ModelID
 struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale,
                                                 struct Object *parent, ModelID32 model, const BehaviorScript *behavior) {
     struct Object *obj = spawn_object_relative(behaviorParam, relativePosX, relativePosY, relativePosZ, parent, model, behavior);
     obj_scale(obj, scale);
     return obj;
+}
+
+UNUSED ModelID32 obj_get_model_id(struct Object *obj) {
+    ModelID32 i;
+    for ((i = 0); (i < MODEL_ID_COUNT); (i++)) if (obj_has_model(obj, i)) return i;
+    return MODEL_NONE;
 }
 
 void obj_init_animation(struct Object *obj, s32 animIndex) {

@@ -193,8 +193,8 @@ s32 check_clicked_button(ScreenPos x, ScreenPos y, f32 depth) {
  * Grow from main menu, used by selecting files and menus.
  */
 void bhv_menu_button_growing_from_main_menu(struct Object *button) {
-    if (button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += 0x800;
-    if (button->oMenuButtonTimer <  8) button->oFaceAnglePitch += 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   += 0x800;
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch += 0x800;
     if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch -= 0x800;
     button->oParentRelativePosX -= (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY -= (button->oMenuButtonOrigPosY / 16.0f);
@@ -212,8 +212,8 @@ void bhv_menu_button_growing_from_main_menu(struct Object *button) {
  * Shrink back to main menu, used to return back while inside menus.
  */
 void bhv_menu_button_shrinking_to_main_menu(struct Object *button) {
-    if (button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
-    if (button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
     if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += 0x800;
     button->oParentRelativePosX += (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY += (button->oMenuButtonOrigPosY / 16.0f);
@@ -250,8 +250,8 @@ void bhv_menu_button_growing_from_submenu(struct Object *button) {
  * Shrink back to submenu, used to return back while inside a score save menu.
  */
 void bhv_menu_button_shrinking_to_submenu(struct Object *button) {
-    if (button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
-    if (button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
+    if ( button->oMenuButtonTimer < 16) button->oFaceAngleYaw   -= 0x800;
+    if ( button->oMenuButtonTimer <  8) button->oFaceAnglePitch -= 0x800;
     if ((button->oMenuButtonTimer >= 8) && (button->oMenuButtonTimer < 16)) button->oFaceAnglePitch += 0x800;
     button->oParentRelativePosX += (button->oMenuButtonOrigPosX / 16.0f);
     button->oParentRelativePosY += (button->oMenuButtonOrigPosY / 16.0f);
@@ -504,8 +504,8 @@ void copy_action_file_button(struct Object *copyButton, s32 copyFileButtonID) {
                 queue_rumble_data(5, 80);
 #endif
                 sMainMenuButtons[copyFileButtonID]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_IN;
-                sSelectedFileIndex = (copyFileButtonID - MENU_BUTTON_COPY_MIN);
-                copyButton->oMenuButtonActionPhase = COPY_PHASE_COPY_WHERE;
+                sSelectedFileIndex                                   = (copyFileButtonID - MENU_BUTTON_COPY_MIN);
+                copyButton->oMenuButtonActionPhase                   = COPY_PHASE_COPY_WHERE;
                 sFadeOutText   = TRUE;
                 sMainMenuTimer = 0;
             } else {
@@ -533,8 +533,8 @@ void copy_action_file_button(struct Object *copyButton, s32 copyFileButtonID) {
                 sFadeOutText   = TRUE;
                 sMainMenuTimer = 0;
                 save_file_copy(sSelectedFileIndex, (copyFileButtonID - MENU_BUTTON_COPY_MIN));
-                sMainMenuButtons[copyFileButtonID]->header.gfx.sharedChild                        = gLoadedGraphNodes[MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE];
-                sMainMenuButtons[copyFileButtonID - MENU_BUTTON_COPY_MIN]->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE];
+                obj_set_model(sMainMenuButtons[copyFileButtonID                       ], MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE);
+                obj_set_model(sMainMenuButtons[copyFileButtonID - MENU_BUTTON_COPY_MIN], MODEL_MAIN_MENU_MARIO_SAVE_BUTTON_FADE);
             } else {
                 // If clicked in a existing save file, play buzz sound
                 if ((MENU_BUTTON_COPY_FILE_A + sSelectedFileIndex) == copyFileButtonID) {
@@ -592,8 +592,7 @@ void check_copy_menu_clicked_buttons(struct Object *copyButton) {
             }
         }
         // After copy is complete, return to main copy phase
-        if (copyButton->oMenuButtonActionPhase == COPY_PHASE_COPY_COMPLETE
-            && sMainMenuTimer >= MAIN_RETURN_TIMER) {
+        if ((copyButton->oMenuButtonActionPhase == COPY_PHASE_COPY_COMPLETE) && (sMainMenuTimer >= MAIN_RETURN_TIMER)) {
             copyButton->oMenuButtonActionPhase = COPY_PHASE_MAIN;
             sMainMenuButtons[MENU_BUTTON_COPY_MIN + sSelectedFileIndex]->oMenuButtonState = MENU_BUTTON_STATE_ZOOM_OUT;
         }
@@ -877,8 +876,7 @@ void load_copy_menu_from_submenu(s16 prevMenuButtonID, struct Object *sourceButt
     s32 buttonID;
     // If the source button is in default state and the previous menu in full screen,
     // play zoom out sound and shrink previous menu
-    if (sourceButton->oMenuButtonState == MENU_BUTTON_STATE_DEFAULT
-        && sMainMenuButtons[prevMenuButtonID]->oMenuButtonState == MENU_BUTTON_STATE_FULLSCREEN) {
+    if ((sourceButton->oMenuButtonState == MENU_BUTTON_STATE_DEFAULT) && (sMainMenuButtons[prevMenuButtonID]->oMenuButtonState == MENU_BUTTON_STATE_FULLSCREEN)) {
         play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gGlobalSoundSource);
         sMainMenuButtons[prevMenuButtonID]->oMenuButtonState = MENU_BUTTON_STATE_SHRINKING;
         sCurrentMenuLevel = MENU_LAYER_MAIN;
@@ -1112,7 +1110,6 @@ void bhv_menu_button_manager_loop(void) {
         case MENU_BUTTON_MONO:    return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_MONO   ]); break;
         case MENU_BUTTON_HEADSET: return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_HEADSET]); break;
     }
-
     sClickPos[0] = -10000;
     sClickPos[1] = -10000;
 }
@@ -1177,8 +1174,7 @@ void print_menu_cursor(void) {
     if (sCursorClickingTimer != 0) gSPDisplayList(gDisplayListHead++, dl_menu_grabbing_hand); // Grabbing
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
     if (sCursorClickingTimer != 0) {
-        sCursorClickingTimer++; // This is a very strange way to implement a timer? It counts up and
-                                // then resets to 0 instead of just counting down to 0.
+        sCursorClickingTimer++; // This is a very strange way to implement a timer? It counts up and then resets to 0 instead of just counting down to 0.
         if (sCursorClickingTimer == 5) sCursorClickingTimer = 0;
     }
 }
@@ -1391,15 +1387,15 @@ void copy_menu_update_message(void) {
     switch (sMainMenuButtons[MENU_BUTTON_COPY]->oMenuButtonActionPhase) {
         case COPY_PHASE_MAIN:
             if (sMainMenuTimer == FADEOUT_TIMER) sFadeOutText = TRUE;
-            if (update_text_fade_out()) sStatusMessageID = (sStatusMessageID == COPY_MSG_MAIN_TEXT ? COPY_MSG_NOSAVE_EXISTS : COPY_MSG_MAIN_TEXT);
+            if (update_text_fade_out()) sStatusMessageID = ((sStatusMessageID == COPY_MSG_MAIN_TEXT) ? COPY_MSG_NOSAVE_EXISTS : COPY_MSG_MAIN_TEXT);
             break;
         case COPY_PHASE_COPY_WHERE:
-            if (sMainMenuTimer == FADEOUT_TIMER && sStatusMessageID == COPY_MSG_SAVE_EXISTS) sFadeOutText = TRUE;
+            if ((sMainMenuTimer == FADEOUT_TIMER) && (sStatusMessageID == COPY_MSG_SAVE_EXISTS)) sFadeOutText = TRUE;
             if (update_text_fade_out()) sStatusMessageID = (sStatusMessageID != COPY_MSG_COPY_WHERE ? COPY_MSG_COPY_WHERE : COPY_MSG_SAVE_EXISTS);
             break;
         case COPY_PHASE_COPY_COMPLETE:
             if (sMainMenuTimer == FADEOUT_TIMER) sFadeOutText = TRUE;
-            if (update_text_fade_out()) sStatusMessageID = (sStatusMessageID != COPY_MSG_COPY_COMPLETE ? COPY_MSG_COPY_COMPLETE : COPY_MSG_MAIN_TEXT);
+            if (update_text_fade_out()) sStatusMessageID = ((sStatusMessageID != COPY_MSG_COPY_COMPLETE) ? COPY_MSG_COPY_COMPLETE : COPY_MSG_MAIN_TEXT);
             break;
     }
 }
@@ -1483,11 +1479,11 @@ void print_erase_menu_prompt(ScreenPos x, ScreenPos y) {
             queue_rumble_data(5, 80);
 #endif
             sMainMenuButtons[MENU_BUTTON_ERASE]->oMenuButtonActionPhase = ERASE_PHASE_MARIO_ERASED;
-            sFadeOutText = TRUE;
+            sFadeOutText   = TRUE;
             sMainMenuTimer = 0;
             save_file_erase(sSelectedFileIndex);
-            sMainMenuButtons[MENU_BUTTON_ERASE_MIN + sSelectedFileIndex]->header.gfx.sharedChild = gLoadedGraphNodes[MODEL_MAIN_MENU_MARIO_NEW_BUTTON_FADE];
-            sMainMenuButtons[sSelectedFileIndex]->header.gfx.sharedChild                         = gLoadedGraphNodes[MODEL_MAIN_MENU_MARIO_NEW_BUTTON_FADE];
+            obj_set_model(sMainMenuButtons[MENU_BUTTON_ERASE_MIN + sSelectedFileIndex], MODEL_MAIN_MENU_MARIO_NEW_BUTTON_FADE);
+            obj_set_model(sMainMenuButtons[                        sSelectedFileIndex], MODEL_MAIN_MENU_MARIO_NEW_BUTTON_FADE);
             sEraseYesNoHoverState = MENU_ERASE_HOVER_NONE;
             // ..and is hovering "NO", return back to main phase
         } else if (sEraseYesNoHoverState == MENU_ERASE_HOVER_NO) {

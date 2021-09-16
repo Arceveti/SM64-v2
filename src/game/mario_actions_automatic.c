@@ -13,6 +13,7 @@
 #include "save_file.h"
 #include "engine/surface_collision.h"
 #include "interaction.h"
+#include "object_helpers.h"
 #include "camera.h"
 #include "cutscene.h"
 #include "level_table.h"
@@ -29,10 +30,9 @@
 #define HANG_LEFT_CEIL          0x2
 
 void add_tree_leaf_particles(struct MarioState *m) {
-    f32 leafHeight;
     if (m->usedObj->behavior == segmented_to_virtual(bhvTree)) {
         // make leaf effect spawn higher on the Shifting Sand Land palm tree
-        leafHeight = ((m->usedObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SSL_PALM_TREE]) ? 250.0f : 100.0f);
+        f32 leafHeight = (obj_has_model(m->usedObj, MODEL_SSL_PALM_TREE) ? 250.0f : 100.0f);
         if ((m->pos[1] - m->floorHeight) > leafHeight) m->particleFlags |= PARTICLE_LEAF;
     }
 }
@@ -120,10 +120,7 @@ Bool32 act_holding_pole(struct MarioState *m) {
         if (m->angleVel[1] > 0x1000) m->angleVel[1] = 0x1000;
         m->faceAngle[1] += m->angleVel[1];
         marioObj->oMarioPolePos -= (m->angleVel[1] / 0x100);
-        if (m->usedObj->behavior == segmented_to_virtual(bhvTree)) {
-            f32 leafHeight = ((m->usedObj->header.gfx.sharedChild == gLoadedGraphNodes[MODEL_SSL_PALM_TREE]) ? 250.0f : 100.0f);
-            if ((m->pos[1] - m->floorHeight) > leafHeight) m->particleFlags |= PARTICLE_LEAF;
-        }
+        add_tree_leaf_particles(m);
         play_climbing_sounds(m, FALSE);
 #if ENABLE_RUMBLE
         reset_rumble_timers_slip();

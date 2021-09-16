@@ -7,8 +7,8 @@
 
 #include "types.h"
 
-
-#define BITMASK(size) ((1 << (size)) - 1)
+#define BIT(i)  (1 << (i))
+#define BITMASK(size) ((BIT(size)) - 1)
 
 // #define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
 
