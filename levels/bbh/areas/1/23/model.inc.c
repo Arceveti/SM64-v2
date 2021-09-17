@@ -30,7 +30,7 @@ static const Gfx bbh_seg7_dl_07013B80[] = {
 };
 
 // 0x07013BE8 - 0x07013C58
-const Gfx bbh_seg7_dl_07013BE8[] = {
+const Gfx bbh_seg7_dl_coffins_room_flames_glow[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING),

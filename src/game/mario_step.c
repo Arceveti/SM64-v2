@@ -697,15 +697,10 @@ void apply_gravity(struct MarioState *m) {
 }
 
 void apply_vertical_wind(struct MarioState *m) {
-    f32 maxVelY;
     if (m->action != ACT_GROUND_POUND) {
         f32 offsetY = (m->pos[1] + 1500.0f);
         if ((m->floor->type == SURFACE_VERTICAL_WIND) && (-3000.0f < offsetY) && (offsetY < 2000.0f)) {
-            if (offsetY >= 0.0f) {
-                maxVelY = (10000.0f / (offsetY + 200.0f));
-            } else {
-                maxVelY = 50.0f;
-            }
+            f32 maxVelY = ((offsetY > 0.0f) ? (10000.0f / (offsetY + 200.0f)) : 50.0f);
             if (m->vel[1] < maxVelY) if ((m->vel[1] += maxVelY / 8.0f) > maxVelY) m->vel[1] = maxVelY;
 #ifdef VERSION_JP
             play_sound(SOUND_ENV_WIND2, m->marioObj->header.gfx.cameraToObject);

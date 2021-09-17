@@ -425,7 +425,7 @@ static const Gfx bbh_seg7_dl_07013838[] = {
 };
 
 // 0x070139A8 - 0x07013AA0
-const Gfx bbh_seg7_dl_070139A8[] = {
+const Gfx bbh_seg7_dl_coffins_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

@@ -40,7 +40,7 @@ static const Gfx bbh_seg7_dl_0701EE90[] = {
 };
 
 // 0x0701EEC8 - 0x0701EF58
-const Gfx bbh_seg7_dl_0701EEC8[] = {
+const Gfx bbh_seg7_dl_outside_flames_glow[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING),

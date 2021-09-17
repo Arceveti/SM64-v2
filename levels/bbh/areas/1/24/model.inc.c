@@ -438,7 +438,7 @@ static const Gfx bbh_seg7_dl_07014D10[] = {
 };
 
 // 0x07014FD8 - 0x07015098
-const Gfx bbh_seg7_dl_07014FD8[] = {
+const Gfx bbh_seg7_dl_mesh_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

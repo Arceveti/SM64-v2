@@ -55,7 +55,7 @@ static const Gfx bbh_seg7_dl_0700F7A8[] = {
 };
 
 // 0x0700F848 - 0x0700F8B8
-const Gfx bbh_seg7_dl_0700F848[] = {
+const Gfx bbh_seg7_dl_bridge_room_railing[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

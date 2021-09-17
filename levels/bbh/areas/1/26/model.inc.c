@@ -64,7 +64,7 @@ static const Gfx bbh_seg7_dl_07015628[] = {
 };
 
 // 0x070156E0 - 0x07015750
-const Gfx bbh_seg7_dl_070156E0[] = {
+const Gfx bbh_seg7_dl_mesh_room_lights_glow[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING),

@@ -6,21 +6,21 @@ static const Lights1 bbh_seg7_lights_07017480 = gdSPDefLights1(
 
 // 0x07017498 - 0x07017518
 static const Vtx bbh_seg7_vertex_07017498[] = {
-    {{{   102,   2372,   1132}, 0, {     0,  31<<5}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  -307,   2676,    858}, 0, { 31<<5,      0}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{   102,   2676,    858}, 0, {     0,      0}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  -307,   2372,   1132}, 0, { 31<<5,  31<<5}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  1638,   2372,   1132}, 0, {     0,  31<<5}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  1229,   2676,    858}, 0, { 31<<5,      0}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  1638,   2676,    858}, 0, {     0,      0}, {0x00, 0xab, 0xa2, 0xff}}},
-    {{{  1229,   2372,   1132}, 0, { 31<<5,  31<<5}, {0x00, 0xab, 0xa2, 0xff}}},
+    {{{   102,   2372,   1132}, 0, ST_B(     0,     32), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  -307,   2676,    858}, 0, ST_B(    32,      0), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{   102,   2676,    858}, 0, ST_B(     0,      0), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  -307,   2372,   1132}, 0, ST_B(    32,     32), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  1638,   2372,   1132}, 0, ST_B(     0,     32), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  1229,   2676,    858}, 0, ST_B(    32,      0), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  1638,   2676,    858}, 0, ST_B(     0,      0), {0x00, 0xab, 0xa2, 0xff}}},
+    {{{  1229,   2372,   1132}, 0, ST_B(    32,     32), {0x00, 0xab, 0xa2, 0xff}}},
 };
 
 // 0x07017518 - 0x07017570
-static const Gfx bbh_seg7_dl_07017518[] = {
+static const Gfx bbh_seg7_sub_dl_attic_windows[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09006000_window),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPLight(&bbh_seg7_lights_07017480.l, 1),
     gsSPLight(&bbh_seg7_lights_07017480.a, 2),
     gsSPVertex(bbh_seg7_vertex_07017498, 8, 0),
@@ -30,7 +30,7 @@ static const Gfx bbh_seg7_dl_07017518[] = {
 };
 
 // 0x07017570 - 0x070175E0
-const Gfx bbh_seg7_dl_07017570[] = {
+const Gfx bbh_seg7_dl_attic_windows[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
@@ -39,7 +39,7 @@ const Gfx bbh_seg7_dl_07017570[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD, G_TX_WRAP | G_TX_NOMIRROR, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bbh_seg7_dl_07017518),
+    gsSPDisplayList(bbh_seg7_sub_dl_attic_windows),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

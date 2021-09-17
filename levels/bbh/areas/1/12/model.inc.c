@@ -452,7 +452,7 @@ static const Gfx bbh_seg7_dl_0700CFE0[] = {
 };
 
 // 0x0700D080 - 0x0700D178
-const Gfx bbh_seg7_dl_0700D080[] = {
+const Gfx bbh_seg7_dl_piano_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

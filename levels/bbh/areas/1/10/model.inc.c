@@ -85,7 +85,7 @@ static const Vtx bbh_seg7_vertex_0700B848[] = {
 };
 
 // 0x0700B8A8 - 0x0700B9E0
-static const Gfx bbh_seg7_dl_0700B8A8[] = {
+static const Gfx bbh_seg7_sub_dl_study_lamps[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, spooky_09006800_lamp),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
@@ -114,7 +114,7 @@ static const Gfx bbh_seg7_dl_0700B8A8[] = {
 };
 
 // 0x0700B9E0 - 0x0700BA50
-const Gfx bbh_seg7_dl_0700B9E0[] = {
+const Gfx bbh_seg7_dl_study_lamps[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_LIGHTING),
@@ -123,7 +123,7 @@ const Gfx bbh_seg7_dl_0700B9E0[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bbh_seg7_dl_0700B8A8),
+    gsSPDisplayList(bbh_seg7_sub_dl_study_lamps),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

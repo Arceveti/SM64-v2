@@ -180,7 +180,7 @@ static const Gfx bbh_seg7_dl_0701A748[] = {
 };
 
 // 0x0701A850 - 0x0701A920
-const Gfx bbh_seg7_dl_0701A850[] = {
+const Gfx bbh_seg7_dl_basement_hallway[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

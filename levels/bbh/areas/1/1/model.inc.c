@@ -974,7 +974,7 @@ static const Gfx bbh_seg7_dl_070074F0[] = {
 };
 
 // 0x070075A8 - 0x070076C0
-const Gfx bbh_seg7_dl_070075A8[] = {
+const Gfx bbh_seg7_dl_foyer_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

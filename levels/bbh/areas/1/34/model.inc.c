@@ -325,7 +325,7 @@ static const Gfx bbh_seg7_dl_0701B678[] = {
 };
 
 // 0x0701B6D0 - 0x0701B7A8
-const Gfx bbh_seg7_dl_0701B6D0[] = {
+const Gfx bbh_seg7_dl_shed_with_elevator[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

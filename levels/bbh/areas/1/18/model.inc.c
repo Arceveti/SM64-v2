@@ -572,7 +572,7 @@ static const Gfx bbh_seg7_dl_070110E8[] = {
 };
 
 // 0x07011120 - 0x07011228
-const Gfx bbh_seg7_dl_07011120[] = {
+const Gfx bbh_seg7_dl_back_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

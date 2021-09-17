@@ -618,7 +618,7 @@ static const Gfx bbh_seg7_dl_0700F3D8[] = {
 };
 
 // 0x0700F510 - 0x0700F5C8
-const Gfx bbh_seg7_dl_0700F510[] = {
+const Gfx bbh_seg7_dl_bridge_room_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

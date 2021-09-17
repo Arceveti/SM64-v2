@@ -38,10 +38,10 @@ static const Vtx bbh_seg7_vertex_07008CC8[] = {
 };
 
 // 0x07008DB8 - 0x07008EA8
-static const Gfx bbh_seg7_dl_07008DB8[] = {
+static const Gfx bbh_seg7_sub_dl_foyer_window_light[] = {
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, spooky_0900B000_light_linear),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 32 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(bbh_seg7_vertex_07008BC8, 16, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  3,  4,  5, 0x0),
     gsSP2Triangles( 3,  6,  4, 0x0,  7,  6,  3, 0x0),
@@ -60,7 +60,7 @@ static const Gfx bbh_seg7_dl_07008DB8[] = {
 };
 
 // 0x07008EA8 - 0x07008F18
-const Gfx bbh_seg7_dl_07008EA8[] = {
+const Gfx bbh_seg7_dl_foyer_window_light[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATEIA, G_CC_MODULATEIA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
@@ -69,7 +69,7 @@ const Gfx bbh_seg7_dl_07008EA8[] = {
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, G_TX_CLAMP, 5, G_TX_NOLOD, G_TX_CLAMP, 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, (32 - 1) << G_TEXTURE_IMAGE_FRAC, (32 - 1) << G_TEXTURE_IMAGE_FRAC),
-    gsSPDisplayList(bbh_seg7_dl_07008DB8),
+    gsSPDisplayList(bbh_seg7_sub_dl_foyer_window_light),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),

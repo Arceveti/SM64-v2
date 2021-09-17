@@ -73,7 +73,7 @@ static const Gfx bbh_seg7_dl_0701E810[] = {
 };
 
 // 0x0701E8D8 - 0x0701E948
-const Gfx bbh_seg7_dl_0701E8D8[] = {
+const Gfx bbh_seg7_dl_outside_cage_walls[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
     gsSPClearGeometryMode(G_CULL_BACK | G_SHADING_SMOOTH),

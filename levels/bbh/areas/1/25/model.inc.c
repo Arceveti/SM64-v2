@@ -62,7 +62,7 @@ static const Gfx bbh_seg7_dl_07015298[] = {
 };
 
 // 0x07015398 - 0x07015408
-const Gfx bbh_seg7_dl_07015398[] = {
+const Gfx bbh_seg7_dl_mesh_room_meshes[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

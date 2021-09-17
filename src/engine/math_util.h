@@ -48,15 +48,17 @@ extern f32 gSineTable[];
 #define gCosineTable (gSineTable + 0x400)
 extern s16 gArctanTable[];
 
+extern Vec3f gVec3fX;
+extern Vec3f gVec3fY;
+extern Vec3f gVec3fZ;
+extern Vec3f gVec3fMX;
+extern Vec3f gVec3fMY;
+extern Vec3f gVec3fMZ;
 extern Vec3f gVec3fZero;
 extern Vec3s gVec3sZero;
 extern Vec3i gVec3iZero;
 extern Vec3f gVec3fOne;
 extern Vec3s gVec3sOne;
-
-extern Vec3f gVec3fX;
-extern Vec3f gVec3fY;
-extern Vec3f gVec3fZ;
 
 
 #define ABSF(x) ((x) > 0.0f ? (x) : -(x))

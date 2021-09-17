@@ -718,7 +718,7 @@ static const Gfx bbh_seg7_dl_0700AF40[] = {
 };
 
 // 0x0700AFF0 - 0x0700B0D8
-const Gfx bbh_seg7_dl_0700AFF0[] = {
+const Gfx bbh_seg7_dl_study_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

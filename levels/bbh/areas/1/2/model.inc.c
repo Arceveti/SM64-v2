@@ -55,7 +55,7 @@ static const Gfx bbh_seg7_dl_070078A0[] = {
 };
 
 // 0x07007940 - 0x070079B0
-const Gfx bbh_seg7_dl_07007940[] = {
+const Gfx bbh_seg7_dl_foyer_railings[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_DECALRGBA),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),

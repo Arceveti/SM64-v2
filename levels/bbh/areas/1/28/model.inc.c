@@ -554,7 +554,7 @@ static const Gfx bbh_seg7_dl_07017148[] = {
 };
 
 // 0x07017378 - 0x07017480
-const Gfx bbh_seg7_dl_07017378[] = {
+const Gfx bbh_seg7_dl_attic_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),

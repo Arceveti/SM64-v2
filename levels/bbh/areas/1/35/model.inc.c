@@ -1004,7 +1004,7 @@ static const Gfx bbh_seg7_dl_0701E4B0[] = {
 };
 
 // 0x0701E4E0 - 0x0701E5D8
-const Gfx bbh_seg7_dl_0701E4E0[] = {
+const Gfx bbh_seg7_dl_outside_surfaces[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGB, G_CC_MODULATERGB),
     gsSPClearGeometryMode(G_SHADING_SMOOTH),
