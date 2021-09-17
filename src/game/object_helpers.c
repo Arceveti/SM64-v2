@@ -364,7 +364,7 @@ struct Object *spawn_object_relative_with_scale(s16 behaviorParam, s16 relativeP
 
 UNUSED ModelID32 obj_get_model_id(struct Object *obj) {
     ModelID32 i;
-    for ((i = 0); (i < MODEL_ID_COUNT); (i++)) if (obj_has_model(obj, i)) return i;
+    if (!obj->header.gfx.sharedChild) for ((i = 0); (i < MODEL_ID_COUNT); (i++)) if (obj_has_model(obj, i)) return i;
     return MODEL_NONE;
 }
 
