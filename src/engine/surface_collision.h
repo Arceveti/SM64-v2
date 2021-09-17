@@ -35,7 +35,7 @@ struct WallCollisionData
     /*0x10*/ f32 radius;
     /*0x14*/ s16 unused;
     /*0x16*/ s16 numWalls;
-    /*0x18*/ struct Surface *walls[4];
+    /*0x18*/ struct Surface *walls[MAX_REFEREMCED_WALLS];
 };
 
 void move_towards_wall(struct MarioState *m, f32 amount);

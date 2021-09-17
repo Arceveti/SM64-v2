@@ -391,8 +391,13 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
 #endif
         if (gCamera) {
             //! is there a way to simplify out the sqrtf?
-            // gWorldScale = sqrtf(vec3_sumsq(gCamera->pos) / (sqr(LEVEL_BOUNDARY_MAX) * 2));
-            gWorldScale = sqrtf(vec3_sumsq(gCamera->pos) * 2) / (LEVEL_BOUNDARY_MAX * 2);
+            // gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) / (sqr(LEVEL_BOUNDARY_MAX) * 2)));
+            // gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) * 2) / (LEVEL_BOUNDARY_MAX * 2));
+            gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) * 2) / 0x4000);
+
+            //! Why does this give a different result from HackerSM64, which has the exact same thing?:
+            // gWorldScale = ((gCamera->pos[0] * gCamera->pos[0]) + (gCamera->pos[1] * gCamera->pos[1]) + (gCamera->pos[2] * gCamera->pos[2]))/67108864;
+
             gWorldScale = MAX(gWorldScale, 1.0f);
         } else {
             gWorldScale = 1.0f;
@@ -489,7 +494,7 @@ static void geo_process_translation_rotation(struct GraphNodeTranslationRotation
     Mtx *mtx = alloc_display_list(sizeof(*mtx));
     vec3_copy(translation, node->translation);
 #ifdef VARIABLE_FRAMERATE
-    approach_pos_vector(node->lerpPos, translation, 0);
+    approach_pos_vector(  node->lerpPos, translation, 0);
     approach_angle_vector(node->lerpRot, node->rotation);
     mtxf_rotate_zxy_and_translate(mtxf, node->lerpPos[0], node->lerpRot[0]);
 #else

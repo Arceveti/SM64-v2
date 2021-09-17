@@ -203,7 +203,7 @@ f32 dist_between_objects_squared(struct Object *obj1, struct Object *obj2) {
 
 void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
     if (o->oForwardVel >= target) {
-        o->oForwardVel = target;
+        o->oForwardVel  = target;
     } else {
         o->oForwardVel += increment;
     }

@@ -249,7 +249,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
     struct Surface *wall = NULL;
     Vec3n norm;
     register f32 originOffset, offset, offsetAbsolute;
-    Vec3f newPos[4];
+    Vec3f newPos[MAX_REFEREMCED_WALLS];
     s32 i;
     s32 numCollisions     = 0;
 #if PUPPYPRINT_DEBUG

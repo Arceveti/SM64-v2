@@ -115,7 +115,7 @@ void mr_i_act_looking_at_mario(void) {
     }
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_YAW_INDEX,   0x800);
     obj_turn_toward_object(o, gMarioObject, O_MOVE_ANGLE_PITCH_INDEX, 0x400);
-    dYaw = startYaw - (Angle)(o->oMoveAngleYaw);
+    dYaw = (startYaw - (Angle)(o->oMoveAngleYaw));
     if (!dYaw) {
         o->oMrISpinAmount    = 0;
         o->oMrISpinDirection = 0;

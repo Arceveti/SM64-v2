@@ -492,13 +492,6 @@ MarioStep bonk_or_hit_lava_wall(struct MarioState *m, struct WallCollisionData *
 }
 
 MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 stepArg) {
-#ifdef BETTER_CEILING_HANDLING
-    f32 ceilSteepness;
-#endif
-#if NULL_FLOOR_STEPS > 0
-    u32 missedFloors = 0;
-    // Vec3f startPos;
-#endif
     Vec3f nextPos;
     struct Surface *ceil, *floor;
     f32 ceilHeight, floorHeight, waterLevel;
@@ -514,6 +507,8 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
     resolve_and_return_wall_collision_data(nextPos,  30.0f, 50.0f, &lowerWall);
     floorHeight = find_floor(nextPos[0], (nextPos[1] + m->midY), nextPos[2], &floor);
 #if NULL_FLOOR_STEPS > 0
+    u32 missedFloors = 0;
+    // Vec3f startPos;
     // vec3_copy(startPos, nextPos); // why does this crash the game when ledge grabbing?
     while ((floor == NULL) && (missedFloors < NULL_FLOOR_STEPS)) {
         nextPos[0] += (m->vel[0] / GROUND_NUM_STEPS);
@@ -568,7 +563,7 @@ MarioStep perform_air_quarter_step(struct MarioState *m, Vec3f intendedPos, u32 
         if (-COS25 >= ceil->normal.y) {
             if (m->vel[1] > 0.0f) m->vel[1] = 0.0f;
         } else {
-            ceilSteepness = sqrtf(sqr(ceil->normal.x) + sqr(ceil->normal.z));
+            f32 ceilSteepness = sqrtf(sqr(ceil->normal.x) + sqr(ceil->normal.z));
             if (abs_angle_diff(SURFACE_YAW(ceil), m->marioObj->oMoveAngleYaw) <= DEG(90)) {
                 if (m->vel[1] > 0.0f) {
                     m->slideVelX += (ceil->normal.x * m->vel[1] * ceilSteepness);
@@ -710,7 +705,6 @@ void apply_vertical_wind(struct MarioState *m) {
 }
 
 MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
-    // Angle wallDYaw;
     Vec3f intendedPos;
     MarioStep stepResult = AIR_STEP_NONE;
     // m->wall = NULL;
