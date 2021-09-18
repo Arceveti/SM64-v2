@@ -68,18 +68,78 @@
                     - Chill Bully body
                     - Scuttlebug body
                     - Snowman part
-        - Light gray checker in various Levels
-        - Various water & lava textures
-        - Circular gradient:
-            - Star glow
-            - BBH lanterns' glow
-            - HMC lanterns' glow
-            - PSS lanterns' glow
-            - Castle basement fire glow?
+        - Grass
+            - textures/outside/castle_grounds_textures.03800.rgba16.png
+            - textures/outside/castle_grounds_textures.04000.rgba16.png
+        - Light gray diagonal checker
+            - textures/fire/lll_textures.04000.rgba16.png
+            - textures/grass/wf_textures.07800.rgba16.png
+        - Tri tile
+            - textures/inside/inside_castle_textures.0B000.rgba16.png
+            - textures/outside/castle_grounds_textures.0A000.rgba16.png
+        - Diamond mesh:
+            - levels/ddd/1.rgba16.png
+            - levels/jrb/0.rgba16.png
+            - textures/cave/hmc_textures.01000.rgba16.png
+        - Black/white checker:
+            - levels/ccm/11.rgba16.png
+            - levels/pss/2.rgba16.png
+            - textures/inside/inside_castle_textures.04000.rgba16.png (kinda more grayish)
+            - textures/inside/rr_textures.08000.rgba16.png (also kinda grayish)
+        - Env boxes
+            - Water
+                - textures/segment2/segment2.11C58.rgba16.png
+                - textures/segment2/segment2.12C58.rgba16.png (greenish)
+                - textures/segment2/segment2.12458.rgba16.png (cyanish)
+            - Lava
+                - levels/bowser_2/0.rgba16.png
+                - textures/segment2/segment2.13C58.rgba16.png
+                - textures/fire/lll_textures.09000.rgba16.png
+        - Metal:
+            - levels/castle_inside/29.rgba16.png
+            - levels/hmc/7.rgba16.png
         - Rainbow
             - RR
             - WMOTR
             - TOTWC
+        - Shadow:
+            - Radial (full)
+                - textures/generic/bob_textures.0B000.ia16.png
+                - textures/grass/wf_textures.0B000.ia16.png
+                - textures/outside/castle_grounds_textures.0BC00.ia16.png
+            - Radial (quarter)
+                - textures/segment2/shadow_quarter_circle.ia8.png
+                - textures/segment2/shadow_quarter_circle_64.ia8.png
+            - Square (quarter)
+                - textures/segment2/shadow_quarter_square.ia8.png
+                - textures/segment2/shadow_quarter_square_64.ia8.png
+                - levels/wf/5.ia8.png
+        - Gradients:
+            - transparency
+                - Linear
+                    - levels/castle_inside/castle_light.ia16.png
+                    - levels/ccm/8.ia16.png (small, inverted)
+                    - levels/lll/27.ia16.png (small, inverted)
+                    - textures/cave/hmc_textures.0B800.ia16.png
+                    - textures/spooky/bbh_textures.0B000.ia16/png
+                - Radial
+                    - Star glow
+                    - PSS lanterns' glow
+                    - Castle basement fire glow?
+                    - levels/pss/1.ia16.png (lower transparency)
+                    - textures/cave/hmc_textures.0C000.ia16.png
+                    - textures/spooky/bbh_textures.0A800.ia16.png
+                - Radial long
+                    - levels/castle_inside/2.ia16.png
+                    - textures/spooky/bbh_textures.0B800.ia16.png
+        - Rainbow:
+            - levels/wmotr/3.rgba16.png
+            - textures/sky/rr_textures.05800.rgba16.png
+        - Snow Skybox:
+            - levels/ccm/10.rgba16.png
+        - Question mark
+            - segment2
+            - levels/menu
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor/ceil/wall calls

@@ -175,10 +175,10 @@ void create_dl_ortho_matrix(void) {
 #if !defined(VERSION_JP) && !defined(VERSION_SH)
 UNUSED
 #endif
-static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or Texture?
+static IA8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or Texture?
     s32 inPos;
     u16 bitMask;
-    u8 *out;
+    IA8 *out;
     s16 outPos = 0;
     out = alloc_display_list((u32) width * (u32) height);
     if (out == NULL) return NULL;
@@ -194,9 +194,9 @@ static u8 *alloc_ia8_text_from_i1(u16 *in, s16 width, s16 height) { //! uchar or
     return out;
 }
 
-u8 *alloc_ia4_tex_from_i1(u8 *in, s16 width, s16 height) {
+IA4 *alloc_ia4_tex_from_i1(u8 *in, s16 width, s16 height) {
     u32 size = (u32) width * (u32) height;
-    u8 *out;
+    IA4 *out;
     s32 inPos;
     s16 outPos;
     u8 bitMask;
@@ -411,13 +411,13 @@ void print_menu_generic_string(ScreenPos x, ScreenPos y, const uchar *str) {
             default:
                 gDPSetTextureImage( gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 1, fontLUT[str[strPos]]);
                 gDPLoadSync(        gDisplayListHead++);
-                gDPLoadBlock(       gDisplayListHead++, G_TX_LOADTILE, 0, 0, ((8 * 8) - 1), CALC_DXT(8, G_IM_SIZ_8b_BYTES));
+                gDPLoadBlock(       gDisplayListHead++, G_TX_LOADTILE, 0, 0, CALC_LRS(8, 8), CALC_DXT(8, G_IM_SIZ_8b_BYTES));
                 gSPTextureRectangle(gDisplayListHead++, (curX << 2), (curY << 2), ((curX + 8) << 2),
                                     ((curY + 8) << 2), G_TX_RENDERTILE, 0, 0, (1 << 10), (1 << 10));
                 if (mark != DIALOG_MARK_NONE) {
                     gDPSetTextureImage( gDisplayListHead++, G_IM_FMT_IA, G_IM_SIZ_8b, 1, fontLUT[mark + 0xEF]);
                     gDPLoadSync(        gDisplayListHead++);
-                    gDPLoadBlock(       gDisplayListHead++, G_TX_LOADTILE, 0, 0, ((8 * 8) - 1), CALC_DXT(8, G_IM_SIZ_8b_BYTES));
+                    gDPLoadBlock(       gDisplayListHead++, G_TX_LOADTILE, 0, 0, CALC_LRS(8, 8), CALC_DXT(8, G_IM_SIZ_8b_BYTES));
                     gSPTextureRectangle(gDisplayListHead++, ((curX + 6) << 2), ((curY - 7) << 2),
                                         (((curX + 6) + 8) << 2), (((curY - 7) + 8) << 2), G_TX_RENDERTILE, 0, 0, (1 << 10), (1 << 10));
                     mark = DIALOG_MARK_NONE;

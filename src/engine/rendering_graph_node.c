@@ -264,10 +264,14 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     Bool32 enableZBuffer                  = ((node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0);
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
     struct RenderModeContainer *mode2List = &renderModeTable_2Cycle[enableZBuffer];
-    if (enableZBuffer) {
-        gDPPipeSync(       gDisplayListHead++           );
-        gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
-    }
+#ifdef F3DEX_GBI_2
+    Mtx lMtx;
+#ifdef FIX_REFLECT_MTX
+    guLookAtReflect(&lMtx, &lookAt, 0.0f, 0.0f, 0.0f, /* eye */ 0.0f, 0.0f, 1.0f, /* at */ 0.0f, 1.0f, 0.0f /* up */);
+#else
+    guLookAtReflect(&lMtx, &lookAt, 0.0f, 0.0f, 0.0f, /* eye */ 0.0f, 0.0f, 1.0f, /* at */ 1.0f, 0.0f, 0.0f /* up */);
+#endif
+#endif
     loopBegin:
     switch (renderPhase) {
 #if SILHOUETTE
@@ -303,15 +307,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gDPPipeSync(       gDisplayListHead++           );
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
-#endif
-//!! This is broken:
-#ifdef F3DEX_GBI_2
-    Mtx lMtx;
-#ifdef FIX_REFLECT_MTX
-    guLookAtReflect(&lMtx, &lookAt, 0.0f, 0.0f, 0.0f, /* eye */ 0.0f, 0.0f, 1.0f, /* at */ 0.0f, 1.0f, 0.0f /* up */);
-#else
-    guLookAtReflect(&lMtx, &lookAt, 0.0f, 0.0f, 0.0f, /* eye */ 0.0f, 0.0f, 1.0f, /* at */ 1.0f, 0.0f, 0.0f /* up */);
-#endif
+    gSPLookAt(gDisplayListHead++, &lookAt);
 #endif
     for ((currLayer = startLayer); (currLayer <= endLayer); (currLayer++)) {
         currList = node->listHeads[headsIndex][currLayer];

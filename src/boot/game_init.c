@@ -850,7 +850,7 @@ void thread9_graphics_loop(UNUSED void *arg) {
                 continue;
             }
             select_gfx_pool();
-            init_rcp();
+            init_rcp(KEEP_ZBUFFER);
             render_game();
             end_master_display_list();
             alloc_display_list(0);
