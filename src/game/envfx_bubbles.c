@@ -64,7 +64,7 @@ s32 random_flower_offset(void) {
  */
 void envfx_update_flower(Vec3s centerPos) {
     s32 i;
-    s32 timer   = gGlobalTimer;
+    s32 timer = gGlobalTimer;
     for ((i = 0); (i < sBubbleParticleMaxCount); (i++)) {
         (gEnvFxBuffer + i)->isAlive = particle_is_laterally_close(i, centerPos[0], centerPos[2], 3000);
         if (!(gEnvFxBuffer + i)->isAlive) {

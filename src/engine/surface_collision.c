@@ -5,7 +5,7 @@
 #include "game/level_update.h"
 #include "game/mario.h"
 #include "game/object_list_processor.h"
-#include "rendering_graph_node.h"
+// #include "game/rendering_graph_node.h"
 #include "surface_collision.h"
 #include "surface_load.h"
 #include "math_util.h"
@@ -41,12 +41,12 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 margin_radius = (radius - 1.0f);
     register SurfaceType type = SURFACE_DEFAULT;
     s32 numCols = 0;
- #if EXTENDED_BOUNDS_MODE > 1
-    const float down_scale = (1.0f / gWorldScale);
-    radius         *= down_scale;
-    vec3_mul_val(pos, down_scale);
-    margin_radius  *= down_scale;
- #endif
+//  #if EXTENDED_BOUNDS_MODE > 1
+//     const float down_scale = (1.0f / gWorldScale);
+//     radius         *= down_scale;
+//     vec3_mul_val(pos, down_scale);
+//     margin_radius  *= down_scale;
+//  #endif
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
     // Stay in this loop until out of walls.
@@ -164,9 +164,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
- #if EXTENDED_BOUNDS_MODE > 1
-    vec3_mul_val(pos, gWorldScale);
- #endif
+//  #if EXTENDED_BOUNDS_MODE > 1
+//     vec3_mul_val(pos, gWorldScale);
+//  #endif
     data->pos[0] = pos[0];
     data->pos[2] = pos[2];
     return numCols;

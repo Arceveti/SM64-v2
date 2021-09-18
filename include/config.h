@@ -590,7 +590,7 @@
 // Detect Mario's collision with lava regardless of action (Arceveti)
 #define FIX_LAVA_INTERACTION
 
-// Maximum number of walls to check (vanilla is 4, higher is recommended)
+// Number of walls that can push Mario at once. (vanilla is 4, higher is recommended)
 #define MAX_REFEREMCED_WALLS 16
 
 // Push Mario out of sloped ceilings instead of stopping or bonking

@@ -315,7 +315,6 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
     f32 downwardAngle = (s.floorDownwardAngle * M_PI / 180.0f);
     f32 halfScale, halfTiltedScale;
     s8 xCoordUnit, zCoordUnit;
-    UNUSED struct Surface *floor;
     // This makes xCoordUnit and yCoordUnit each one of -1, 0, or 1.
     get_vertex_coords(index, shadowVertexType, &xCoordUnit, &zCoordUnit);
     halfScale       = ((xCoordUnit * s.shadowScale) / 2.0f);
@@ -332,7 +331,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
              */
             // Clamp this vertex's y-position to that of the floor directly below
             // it, which may differ from the floor below the center vertex.
-            case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor(*xPosVtx, (s.parentPos[1] + 80.0f), *zPosVtx, &floor); break;
+            case SHADOW_WITH_9_VERTS: *yPosVtx = find_floor_height(*xPosVtx, (s.parentPos[1] + 80.0f), *zPosVtx); break;
             // Do not clamp. Instead, extrapolate the y-position of this
             // vertex based on the floor directly below the parent object.
             case SHADOW_WITH_4_VERTS: *yPosVtx = extrapolate_vertex_y_position(s, *xPosVtx, *zPosVtx); break;
@@ -349,8 +348,7 @@ void calculate_vertex_xyz(s8 index, struct Shadow s, f32 *xPosVtx, f32 *yPosVtx,
  * perpendicular, meaning the ground is locally flat. It returns nonzero
  * in most cases where `vtxY` is on a different floor triangle from the
  * center vertex, as in the case with SHADOW_WITH_9_VERTS, which sets
- * the y-value from `find_floor`. (See the bottom of
- * `calculate_vertex_xyz`.)
+ * the y-value from `find_floor`. (See the bottom of `calculate_vertex_xyz`.)
  */
 Angle floor_local_tilt(struct Shadow s, f32 vtxX, f32 vtxY, f32 vtxZ) {
     register f32 relX = (vtxX - s.parentPos[0]);
@@ -546,9 +544,8 @@ Gfx *create_shadow_circle_4_verts(Vec3f pos, s16 shadowScale, Alpha solidity) {
 Gfx *create_shadow_circle_assuming_flat_ground(Vec3f pos, s16 shadowScale, Alpha solidity) {
     Vtx *verts;
     Gfx *displayList;
-    UNUSED struct Surface *floor; // only for calling find_floor
     f32 distBelowFloor;
-    f32 floorHeight = find_floor(pos[0], (pos[1] + 80.0f), pos[2], &floor);
+    f32 floorHeight = find_floor_height(pos[0], (pos[1] + 80.0f), pos[2]);
     f32 radius      = (shadowScale / 2);
     if (floorHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return NULL;
@@ -593,9 +590,8 @@ Gfx *create_shadow_rectangle(f32 halfWidth, f32 halfLength, f32 relY, Alpha soli
  * value is 200. Return 0 if a shadow should be drawn, 1 if not.
  */
 Bool32 get_shadow_height_solidity(f32 x, f32 y, f32 z, f32 *shadowHeight, Alpha *solidity) {
-    UNUSED struct Surface *floor;
     f32 waterLevel;
-    *shadowHeight = find_floor(x, (y + 80.0f), z, &floor);
+    *shadowHeight = find_floor_height(x, (y + 80.0f), z);
     if (*shadowHeight < FLOOR_LOWER_LIMIT_SHADOW) {
         return TRUE;
     } else {

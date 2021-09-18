@@ -111,13 +111,13 @@ static void add_surface_to_cell(Bool32 dynamic, CellIndex cellX, CellIndex cellZ
     if (surface->normal.y > MIN_FLOOR_NORMAL_Y) {
         listIndex = SPATIAL_PARTITION_FLOORS;
 #endif
-        sortDir =  1; // highest to lowest, then insertion order
+        sortDir   =  1; // highest to lowest, then insertion order
     } else if (surface->normal.y < MAX_CEIL_NORMAL_Y) {
         listIndex = SPATIAL_PARTITION_CEILS;
-        sortDir = -1; // lowest to highest, then insertion order
+        sortDir   = -1; // lowest to highest, then insertion order
     } else {
         listIndex = SPATIAL_PARTITION_WALLS;
-        sortDir =  0; // insertion order
+        sortDir   =  0; // insertion order
     }
     surfacePriority  = (surface->upperY * sortDir);
     newNode->surface = surface;

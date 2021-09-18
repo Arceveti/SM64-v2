@@ -165,7 +165,7 @@
 #define SURFACE_CLASS_SLIPPERY          0x0014
 #define SURFACE_CLASS_NOT_SLIPPERY      0x0015
 
-#define SURFACE_FLAG_NONE             (0 << 0)
+#define SURFACE_FLAG_NONE             (0 << 0) // 0x0000
 #define SURFACE_FLAG_DYNAMIC          (1 << 0) // 0x0001
 #define SURFACE_FLAG_NO_CAM_COLLISION (1 << 1) // 0x0002
 #define SURFACE_FLAG_X_PROJECTION     (1 << 3) // 0x0008
