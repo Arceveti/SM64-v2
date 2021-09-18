@@ -287,7 +287,11 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
 #ifdef F3DZEX_GBI_2
     // Load rejection on pass 2. ZEX is loaded afterwards.
     if (headsIndex == LIST_HEADS_REJ) {
-        gSPLoadUcodeL(gDisplayListHead++, gspF3DEX2_Rej_fifo);
+        if (gIsConsole) {
+            gSPLoadUcodeL(gDisplayListHead++, gspF3DLX2_Rej_fifo);
+        } else {
+            gSPLoadUcodeL(gDisplayListHead++, gspF3DEX2_Rej_fifo);
+        }
         init_rcp(KEEP_ZBUFFER);
         gSPClipRatio(gDisplayListHead++, FRUSTRATIO_2);
     } else {

@@ -1186,7 +1186,7 @@ void update_mario_inputs(struct MarioState *m) {
     m->collidedObjInteractTypes = m->marioObj->collidedObjInteractTypes;
     m->flags                   &= 0xFFFFFF;
 #ifdef PUPPYCAM
-    if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ENTER_FIRST_PERSON) {
+    if ((gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ENTER_FIRST_PERSON) || ((gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE) && (gPuppyCam.debugFlags & PUPPYDEBUG_LOCK_CONTROLS))) {
         m->input = INPUT_FIRST_PERSON;
         return;
     }
@@ -1484,7 +1484,11 @@ Bool32 execute_mario_action(struct MarioState *m) {
         m->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(      m);
         update_mario_inputs(        m);
+#ifdef PUPPYCAM
+        if (!(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE)) mario_handle_special_floors(m);
+#else 
         mario_handle_special_floors(m);
+#endif
         mario_process_interactions( m);
         // If Mario is OOB, stop executing actions.
         if (m->floor == NULL) return FALSE;
