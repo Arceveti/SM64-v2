@@ -361,6 +361,8 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
 #ifdef NEW_WATER_SURFACES
         if ((type == SURFACE_NEW_WATER) || (type == SURFACE_NEW_WATER_BOTTOM)) continue;
 #endif
+        // Skip if ceil is too low
+        if (y > surf->upperY) continue;
         x1 = surf->vertex1[0];
         z1 = surf->vertex1[2];
         if (type != SURFACE_HANGABLE) add_ceil_margin(&x1, &z1, surf->vertex2, surf->vertex3, margin);
@@ -491,6 +493,8 @@ static struct Surface *find_floor_from_list(struct SurfaceNode *surfaceNode, f32
 #endif
         // If we are not checking for the camera, ignore camera only floors.
         } else if (type == SURFACE_CAMERA_BOUNDARY) continue;
+        // Skip if floor is too high
+        if (y < (surf->lowerY - 30)) continue; //! why 30?
         // Check if point is within tri laterally
         if (!check_within_floor_triangle_bounds(x, z, surf)) continue;
         // Get the height of the point on the tri

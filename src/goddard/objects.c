@@ -265,10 +265,10 @@ struct ObjGroup *make_group(s32 count, ...) {
     newGroup->id          = ++gGdGroupCount;
     newGroup->memberCount = 0;
     newGroup->firstMember = newGroup->lastMember = NULL;
-    oldGroupListHead = gGdGroupList;
-    gGdGroupList = newGroup;
+    oldGroupListHead      = gGdGroupList;
+    gGdGroupList          = newGroup;
     if (oldGroupListHead != NULL) {
-        newGroup->next = oldGroupListHead;
+        newGroup->next         = oldGroupListHead;
         oldGroupListHead->prev = newGroup;
     }
     if (count == 0) return newGroup;
@@ -299,7 +299,7 @@ void addto_group(struct ObjGroup *group, struct GdObj *obj) {
     // Add object to the end of group's member list
     if (group->firstMember == NULL) {
         group->firstMember = make_link_to_obj(NULL, obj);
-        group->lastMember = group->firstMember;
+        group->lastMember  = group->firstMember;
     } else {
         group->lastMember = make_link_to_obj(group->lastMember, obj);
     }

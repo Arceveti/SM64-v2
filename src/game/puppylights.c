@@ -108,7 +108,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
     vec3_copy(debugPos[0], light->pos[0]);
     vec3_copy(debugPos[1], light->pos[1]);
     debug_box_color(COLOR_RGBA32_DEBUG_LIGHT);
-    debug_box_rot(debugPos[0], debugPos[1], light->yaw, ((light->flags & PUPPYLIGHT_SHAPE_CYLINDER) ? DEBUG_SHAPE_CYLINDER : DEBUG_SHAPE_BOX));
+    debug_box_rot(debugPos[0], debugPos[1], light->yaw, (((light->flags & PUPPYLIGHT_SHAPE_CYLINDER) ? DEBUG_SHAPE_CYLINDER : DEBUG_SHAPE_BOX) | DEBUG_UCODE_DEFAULT));
 #endif
     // Check if the object is inside the box, after correcting it for rotation.
     if ((-light->pos[1][0] <      lightPos[0]) && (     lightPos[0] < light->pos[1][0])
@@ -131,7 +131,7 @@ void puppylights_iterate(struct PuppyLight *light, Lights1 *src, struct Object *
         } else {
             scaleOrig = (sqr(lightPos[0]) + sqr(lightRelative[1]) + sqr(lightPos[1]));
         }
-        scaleVal = (light->pos[1][2] * light->pos[1][2]);
+        scaleVal = sqr(light->pos[1][2]);
         // If it's a cylinder, then bin anything outside it.
         if ((light->flags & PUPPYLIGHT_SHAPE_CYLINDER) && (scaleOrig > scaleVal)) return;
     } else {

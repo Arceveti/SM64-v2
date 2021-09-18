@@ -420,10 +420,6 @@ void render_screen_overlay(void) {
 void render_game(void) {
     if ((gCurrentArea != NULL) && !gWarpTransition.pauseRendering) {
         geo_process_root(gCurrentArea->graphNode, gViewportOverride, gViewportClip, gFBSetColor);
-#ifdef VISUAL_DEBUG
-        if ( hitboxView) render_debug_boxes();
-        if (surfaceView) visual_surface_loop();
-#endif
         gSPViewport(  gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&gViewport));
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
         render_hud();

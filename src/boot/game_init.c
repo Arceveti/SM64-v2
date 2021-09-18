@@ -20,8 +20,6 @@
 #include "game/segment2.h"
 #include "segment_symbols.h"
 #include "game/rumble_init.h"
-#include "config.h"
-// #include "PR/os_convert.h"
 #ifdef HVQM
 #include <hvqm/hvqm.h>
 #endif
@@ -61,30 +59,28 @@ struct GfxPool *gGfxPool;
 // OS Controllers
 OSContStatus gControllerStatuses[4];
 OSContPad    gControllerPads[4];
-u8    gControllerBits;
-Bool8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
-u8    gBorderHeight = 0;
+u8           gControllerBits;
+Bool8        gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
+u8           gBorderHeight = 0;
 #ifdef REONU_CAM_3
-s8    gCameraSpeed = 2;
-u8    gWaterCamOverride;
-u8    gFlyingCamOverride;
-Bool8 gKeepCliffCam;
-s32   gCliffTimer;
+s8           gCameraSpeed = 2;
+u8           gWaterCamOverride;
+u8           gFlyingCamOverride;
+Bool8        gKeepCliffCam;
+s32          gCliffTimer;
 #endif
 #ifdef CUSTOM_FOV
-s16 gFieldOfView = DEFAULT_FOV_PERCENT;
+s16          gFieldOfView = DEFAULT_FOV_PERCENT;
 #endif
 #if SILHOUETTE
-s16 gSilhouette = TRUE;
+s16          gSilhouette = TRUE;
 #endif
 // #ifndef DISABLE_AA
-// s16 gAntiAliasing = TRUE;
+// s16          gAntiAliasing = TRUE;
 // #endif
 #ifdef CUSTOM_DEBUG
-u8 gCustomDebugMode;
+u8              gCustomDebugMode;
 #endif
-u8 *gAreaSkyboxStart[AREA_COUNT];
-u8 *gAreaSkyboxEnd  [AREA_COUNT];
 #ifdef EEP
 s8 gEepromProbe;
 #endif
@@ -97,8 +93,8 @@ OSMesgQueue gGfxVblankQueue;
 OSMesgQueue gInputVblankQueue;
 OSMesgQueue gVideoVblankQueue;
 #endif
-OSMesg       gGameMesgBuf[1];
-OSMesg        gGfxMesgBuf[1];
+OSMesg      gGameMesgBuf[1];
+OSMesg      gGfxMesgBuf[1];
 #ifdef VARIABLE_FRAMERATE
 OSMesg      gVideoMesgBuf[1];
 #endif
@@ -122,6 +118,8 @@ struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
 u32 gGlobalTimer = 0;
+u8 *gAreaSkyboxStart[AREA_COUNT];
+u8 *gAreaSkyboxEnd  [AREA_COUNT];
 
 // Framebuffer rendering values (max 3)
 u16 sRenderedFramebuffer  = 0;
@@ -192,11 +190,12 @@ void init_rsp(void) {
 /**
  * Initialize the z buffer for the current frame.
  */
-void init_z_buffer(void) {
+void init_z_buffer(Bool32 resetZB) {
     gDPPipeSync(      gDisplayListHead++);
     gDPSetDepthSource(gDisplayListHead++, G_ZS_PIXEL);
     gDPSetDepthImage( gDisplayListHead++, gPhysicalZBuffer);
     gDPSetColorImage( gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, SCREEN_WIDTH, gPhysicalZBuffer);
+    if (!resetZB) return;
     gDPSetFillColor(  gDisplayListHead++, ((GPACK_ZDZ(G_MAXFBZ, 0) << 16) | GPACK_ZDZ(G_MAXFBZ, 0)));
     gDPFillRectangle( gDisplayListHead++, 0, gBorderHeight, (SCREEN_WIDTH - 1), ((SCREEN_HEIGHT - 1) - gBorderHeight));
 }
@@ -222,7 +221,7 @@ void clear_frame_buffer(s32 color) {
     gDPSetFillColor( gDisplayListHead++, color);
     gDPFillRectangle(gDisplayListHead++,
                      GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), gBorderHeight,
-                     (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), ((SCREEN_HEIGHT - gBorderHeight) - 1));
+                    (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), ((SCREEN_HEIGHT - gBorderHeight) - 1));
     gDPPipeSync(     gDisplayListHead++);
     gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
 }
@@ -261,7 +260,7 @@ void draw_screen_borders(void) {
         gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0,
                         (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (gBorderHeight - 1));
         gDPFillRectangle(gDisplayListHead++,
-                        GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), (SCREEN_HEIGHT - gBorderHeight),
+                         GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), (SCREEN_HEIGHT - gBorderHeight),
                         (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (SCREEN_HEIGHT - 1));
     }
 }
@@ -289,7 +288,7 @@ void create_gfx_task_structure(void) {
     gGfxSPTask->task.t.type             = M_GFXTASK;
     gGfxSPTask->task.t.ucode_boot       =                                 rspbootTextStart;
     gGfxSPTask->task.t.ucode_boot_size  = ((u8 *) rspbootTextEnd - (u8 *) rspbootTextStart);
-    gGfxSPTask->task.t.flags            = 0x0;
+    gGfxSPTask->task.t.flags            = (OS_TASK_LOADABLE | OS_TASK_DP_WAIT);
 #ifdef  L3DEX2_ALONE
     gGfxSPTask->task.t.ucode            = gspL3DEX2_fifoTextStart;
     gGfxSPTask->task.t.ucode_data       = gspL3DEX2_fifoDataStart;
@@ -327,11 +326,11 @@ void create_gfx_task_structure(void) {
 /**
  * Set default RCP (Reality Co-Processor) settings.
  */
-void init_rcp(void) {
+void init_rcp(Bool32 resetZB) {
     move_segment_table_to_dmem();
     init_rdp();
     init_rsp();
-    init_z_buffer();
+    init_z_buffer(resetZB);
     select_frame_buffer();
 }
 
@@ -377,21 +376,21 @@ void draw_reset_bars(void) {
  */
 void render_init(void) {
 #ifndef VARIABLE_FRAMERATE
-    gIsConsole    = (IO_READ(DPC_PIPEBUSY_REG) != 0);
-    gBorderHeight = (gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR);
+    gIsConsole       = (IO_READ(DPC_PIPEBUSY_REG) != 0);
+    gBorderHeight    = (gIsConsole ? BORDER_HEIGHT_CONSOLE : BORDER_HEIGHT_EMULATOR);
 #endif
-    gGfxPool      = &gGfxPools[0];
+    gGfxPool         = &gGfxPools[0];
     set_segment_base_addr(1,  gGfxPool->buffer);
     gGfxSPTask       =       &gGfxPool->spTask;
     gDisplayListHead =        gGfxPool->buffer;
     gGfxPoolEnd      = (u8 *)(gGfxPool->buffer + GFX_POOL_SIZE);
-    init_rcp();
+    init_rcp(CLEAR_ZBUFFER);
     clear_frame_buffer(0);
     end_master_display_list();
     exec_display_list(&gGfxPool->spTask);
     // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes
     // VC probably emulates osViSwapBuffer accurately so instant patch breaks VC compatibility
-    if (gIsConsole) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
+    if (gIsConsole || gIsVC) sRenderingFrameBuffer++; // Read RDP Clock Register, has a value of zero on emulators
 #ifdef VARIABLE_FRAMERATE
     gGameTime++;
 #else
@@ -432,7 +431,7 @@ void display_and_vsync(void) {
     profiler_log_thread5_time(BEFORE_DISPLAY_LISTS);
     // gIsConsole = (IO_READ(DPC_PIPEBUSY_REG) != 0);
 #ifndef UNLOCK_FPS
-    osRecvMesg(&gGfxVblankQueue,  &gMainReceivedMesg, OS_MESG_BLOCK);
+    osRecvMesg(&gGfxVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
 #endif
     if (gGoddardVblankCallback != NULL) {
         gGoddardVblankCallback();
@@ -465,8 +464,7 @@ void display_and_vsync(void) {
 // used to record the demo sequences seen in the final game. This function is unused.
 UNUSED static void record_demo(void) {
     // record the player's button mask and current rawStickX and rawStickY.
-    u8 buttonMask = ((gPlayer1Controller->buttonDown & (A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON)) >> 8)
-                  |  (gPlayer1Controller->buttonDown & (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS));
+    u8 buttonMask = ((gPlayer1Controller->buttonDown & (A_BUTTON | B_BUTTON | Z_TRIG | START_BUTTON)) >> 8) | (gPlayer1Controller->buttonDown & (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS));
     s8 rawStickX = gPlayer1Controller->rawStickX;
     s8 rawStickY = gPlayer1Controller->rawStickY;
     // If the stick is in deadzone, set its value to 0 to
@@ -648,7 +646,7 @@ void init_controllers(void) {
             gControllers[cont].port = port;
 #endif
             gControllers[cont  ].statusData     = &gControllerStatuses[port];
-            gControllers[cont++].controllerData = &gControllerPads[port];
+            gControllers[cont++].controllerData = &gControllerPads    [port];
         }
     }
 }
@@ -746,13 +744,14 @@ void thread5_game_loop(UNUSED void *arg) {
             lastTime = osGetTime();
             collisionTime[perfIteration] = 0;
             behaviourTime[perfIteration] = 0;
-            dmaTime[perfIteration]       = 0;
+            dmaTime      [perfIteration] = 0;
 #endif
 #ifdef VARIABLE_FRAMERATE
             deltatime = (osGetTime() - prevtime);
             lDelta    = (1 / (deltatime * (SECONDS_PER_CYCLE)));
             prevtime  = osGetTime();
             audio_game_loop_tick();
+            uptate_controller_inputs();
 #else
             // If any controllers are plugged in, start read the data for when
             // read_controller_inputs is called later.
@@ -764,10 +763,6 @@ void thread5_game_loop(UNUSED void *arg) {
             }
             audio_game_loop_tick();
             select_gfx_pool();
-#endif
-#ifdef VARIABLE_FRAMERATE
-            uptate_controller_inputs();
-#else
             read_controller_inputs();
 #endif
             addr = level_script_execute(addr);
