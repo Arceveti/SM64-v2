@@ -521,24 +521,24 @@ void load_object_surfaces(Collision **data, Collision *vertexData) {
 
 #ifdef AUTO_COLLISION_DISTANCE
 // From Kaze
-void get_optimal_coll_dist(struct Object *o) {
+void get_optimal_coll_dist(struct Object *obj) {
     register f32 thisVertDist, maxDist = 0.0f;
     Vec3f v;
-    Collision *collisionData = o->collisionData;
-    o->oFlags |= OBJ_FLAG_DONT_CALC_COLL_DIST;
+    Collision *collisionData = obj->collisionData;
+    obj->oFlags |= OBJ_FLAG_DONT_CALC_COLL_DIST;
     collisionData++;
     register u32 vertsLeft = *(collisionData);
     collisionData++;
     // vertices = *data;
     while (vertsLeft) {
         vec3_copy(v, collisionData);
-        vec3_mul(v, o->header.gfx.scale);
+        vec3_mul(v, obj->header.gfx.scale);
         thisVertDist = vec3_sumsq(v);
         if (thisVertDist > maxDist) maxDist = thisVertDist;
         collisionData += 3;
         vertsLeft--;
     }
-    o->oCollisionDistance = (sqrtf(maxDist) + 100.0f);
+    obj->oCollisionDistance = (sqrtf(maxDist) + 100.0f);
 }
 #endif
 

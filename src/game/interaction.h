@@ -109,14 +109,14 @@
 #define INT_STATUS_TOUCHED_BOB_OMB       (1 << 23) /* 0x00800000 */
 
 
-Angle mario_obj_angle_to_object(          struct MarioState *m, struct Object *o);
-void mario_stop_riding_object(            struct MarioState *m                  );
-void mario_grab_used_object(              struct MarioState *m                  );
-void mario_drop_held_object(              struct MarioState *m                  );
-void mario_throw_held_object(             struct MarioState *m                  );
-void mario_stop_riding_and_holding(       struct MarioState *m                  );
-Bool32 does_mario_have_normal_cap_on_head(struct MarioState *m                  );
-void mario_blow_off_cap(                  struct MarioState *m, f32 capSpeed    );
+Angle mario_obj_angle_to_object(          struct MarioState *m, struct Object *obj);
+void mario_stop_riding_object(            struct MarioState *m                    );
+void mario_grab_used_object(              struct MarioState *m                    );
+void mario_drop_held_object(              struct MarioState *m                    );
+void mario_throw_held_object(             struct MarioState *m                    );
+void mario_stop_riding_and_holding(       struct MarioState *m                    );
+Bool32 does_mario_have_normal_cap_on_head(struct MarioState *m                    );
+void mario_blow_off_cap(                  struct MarioState *m, f32 capSpeed      );
 #ifdef DEBUG_LEVEL_SELECT
 Bool32 mario_lose_cap_to_enemy(UNUSED u32 enemyType);
 #else

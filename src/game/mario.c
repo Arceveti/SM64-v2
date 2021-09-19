@@ -159,9 +159,9 @@ Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
  * Rotates the animation's translation into the global coordinate system
  * and returns the animation's flags.
  */
-s32 find_mario_anim_flags_and_translation(struct Object *obj, Angle32 yaw, Vec3s translation) {
-    struct Animation *curAnim = (void *) obj->header.gfx.animInfo.curAnim;
-    AnimFrame32 animFrame  = geo_update_animation_frame(&obj->header.gfx.animInfo, NULL);
+s32 find_mario_anim_flags_and_translation(struct Object *marioObj, Angle32 yaw, Vec3s translation) {
+    struct Animation *curAnim = (void *) marioObj->header.gfx.animInfo.curAnim;
+    AnimFrame32 animFrame  = geo_update_animation_frame(&marioObj->header.gfx.animInfo, NULL);
     AnimIndex  *animIndex  = segmented_to_virtual((void *) curAnim->index );
     AnimValue  *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = sins(yaw);

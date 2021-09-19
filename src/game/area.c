@@ -135,9 +135,9 @@ void print_intro_text(void) {
     }
 }
 
-u32 get_mario_spawn_type(struct Object *o) {
+u32 get_mario_spawn_type(struct Object *obj) {
     s32 i;
-    const BehaviorScript *behavior = virtual_to_segmented(0x13, o->behavior);
+    const BehaviorScript *behavior = virtual_to_segmented(0x13, obj->behavior);
     for ((i = 0); (i < 20); (i++)) if (sWarpBhvSpawnTable[i] == behavior) return sSpawnTypeFromWarpBhv[i];
     return MARIO_SPAWN_NONE;
 }
@@ -148,8 +148,8 @@ struct ObjectWarpNode *area_get_warp_node(u8 id) {
     return node;
 }
 
-struct ObjectWarpNode *area_get_warp_node_from_params(struct Object *o) {
-    u8 id = ((o->oBehParams & 0x00FF0000) >> 16);
+struct ObjectWarpNode *area_get_warp_node_from_params(struct Object *obj) {
+    u8 id = ((obj->oBehParams & 0x00FF0000) >> 16);
     return area_get_warp_node(id);
 }
 

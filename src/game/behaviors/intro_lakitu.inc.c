@@ -9,7 +9,7 @@
  * Add the camera's position to `offset`, rotate the point to be relative to the camera's focus, then
  * set lakitu's location.
  */
-void intro_lakitu_set_offset_from_camera(struct Object *o, Vec3f offset) {
+void intro_lakitu_set_offset_from_camera(struct Object *obj, Vec3f offset) {
     f32 dist;
     Vec3a focusAngles;
     Angle offsetPitch, offsetYaw;
@@ -17,32 +17,32 @@ void intro_lakitu_set_offset_from_camera(struct Object *o, Vec3f offset) {
     vec3f_get_dist_and_angle(gCamera->pos, gCamera->focus, &dist, &focusAngles[0],                &focusAngles[1]);
     vec3f_get_dist_and_angle(gCamera->pos,         offset, &dist, &offsetPitch,                   &offsetYaw);
     vec3f_set_dist_and_angle(gCamera->pos,         offset,  dist, (focusAngles[0] + offsetPitch), (focusAngles[1] + offsetYaw));
-    vec3_copy(&o->oPosVec, offset);
+    vec3_copy(&obj->oPosVec, offset);
 }
 
-void intro_lakitu_set_focus(struct Object *o, Vec3f newFocus) {
+void intro_lakitu_set_focus(struct Object *obj, Vec3f newFocus) {
     Vec3f origin;
     Angle pitch, yaw;
     // newFocus is an offset from lakitu's origin, not a point in the world.
     vec3_zero(origin);
     vec3f_get_angle(origin, newFocus, &pitch, &yaw);
-    o->oFaceAnglePitch = pitch;
-    o->oFaceAngleYaw   = yaw;
+    obj->oFaceAnglePitch = pitch;
+    obj->oFaceAngleYaw   = yaw;
 }
 
 /**
  * Move lakitu along the spline `offset`, relative to the camera, and face him towards the corresponding
  * location along the spline `focus`.
  */
-Bool32 intro_lakitu_set_pos_and_focus(struct Object *o, struct CutsceneSplinePoint offset[], struct CutsceneSplinePoint focus[]) {
+Bool32 intro_lakitu_set_pos_and_focus(struct Object *obj, struct CutsceneSplinePoint offset[], struct CutsceneSplinePoint focus[]) {
     Vec3f newOffset, newFocus;
     Bool32 splineFinished = FALSE;
-    s16 splineSegment  = o->oIntroLakituSplineSegment;
-    if (move_point_along_spline(newFocus, offset, &splineSegment, &(o->oIntroLakituSplineSegmentProgress))
-     || move_point_along_spline(newOffset, focus, &splineSegment, &(o->oIntroLakituSplineSegmentProgress))) splineFinished = TRUE;
-    o->oIntroLakituSplineSegment = splineSegment;
-    intro_lakitu_set_offset_from_camera(o, newOffset);
-    intro_lakitu_set_focus(             o, newFocus );
+    s16 splineSegment  = obj->oIntroLakituSplineSegment;
+    if (move_point_along_spline(newFocus, offset, &splineSegment, &(obj->oIntroLakituSplineSegmentProgress))
+     || move_point_along_spline(newOffset, focus, &splineSegment, &(obj->oIntroLakituSplineSegmentProgress))) splineFinished = TRUE;
+    obj->oIntroLakituSplineSegment = splineSegment;
+    intro_lakitu_set_offset_from_camera(obj, newOffset);
+    intro_lakitu_set_focus(             obj, newFocus );
     return splineFinished;
 }
 

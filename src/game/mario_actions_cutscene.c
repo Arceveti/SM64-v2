@@ -241,10 +241,10 @@ void handle_save_menu(struct MarioState *m) {
  * and yaw plus relative yaw.
  */
 struct Object *spawn_obj_at_mario_rel_yaw(struct MarioState *m, ModelID32 model, const BehaviorScript *behavior, Angle relYaw) {
-    struct Object *o = spawn_object(m->marioObj, model, behavior);
-    o->oFaceAngleYaw = (m->faceAngle[1] + relYaw);
-    vec3_copy(&o->oPosVec, m->pos);
-    return o;
+    struct Object *obj = spawn_object(m->marioObj, model, behavior);
+    obj->oFaceAngleYaw = (m->faceAngle[1] + relYaw);
+    vec3_copy(&obj->oPosVec, m->pos);
+    return obj;
 }
 
 /**
@@ -294,8 +294,9 @@ s32 set_mario_npc_dialog(s32 actionArg) {
     s32 dialogState = MARIO_DIALOG_STATUS_NONE;
     // in dialog
     if (gMarioState->action == ACT_READING_NPC_DIALOG) { // actionState is used as a timer
-        if (gMarioState->actionState <  8) dialogState = MARIO_DIALOG_STATUS_START; // starting dialog
-        if (gMarioState->actionState == 8) {
+        if (gMarioState->actionState <  8) {
+            dialogState = MARIO_DIALOG_STATUS_START; // starting dialog
+        } else if (gMarioState->actionState == 8) {
             if (actionArg == MARIO_DIALOG_STOP) {
                 gMarioState->actionState++; // exit dialog
             } else {
@@ -1614,11 +1615,11 @@ void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
 
 // not sure what this does, returns the height of the floor.
 // (animation related?)
-static f32 end_obj_set_visual_pos(struct Object *o) {
+static f32 end_obj_set_visual_pos(struct Object *obj) {
     struct Surface *surf;
     Vec3s translation;
-    find_mario_anim_flags_and_translation(o, o->header.gfx.angle[1], translation);
-    return find_floor((o->header.gfx.pos[0] + translation[0]), (o->header.gfx.pos[1] + 10.0f), (o->header.gfx.pos[2] + translation[2]), &surf);
+    find_mario_anim_flags_and_translation(obj, obj->header.gfx.angle[1], translation);
+    return find_floor((obj->header.gfx.pos[0] + translation[0]), (obj->header.gfx.pos[1] + 10.0f), (obj->header.gfx.pos[2] + translation[2]), &surf);
 }
 
 // make Mario fall and soften wing cap gravity
