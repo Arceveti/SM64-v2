@@ -1183,7 +1183,7 @@ const BehaviorScript bhvRrElevatorPlatform[] = {
 
 const BehaviorScript bhvHmcElevatorPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_LONG(oFlags, (OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_UCODE_LARGE)),
     LOAD_COLLISION_DATA(hmc_seg7_collision_elevator),
     SET_HOME(),
     CALL_NATIVE(bhv_elevator_init),
@@ -2145,7 +2145,7 @@ const BehaviorScript bhvWaterLevelPillar[] = {
 
 const BehaviorScript bhvDddWarp[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    OR_LONG(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_UCODE_LARGE)),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_FLOAT(oCollisionDistance, 30000),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_ddd_warp_loop),
@@ -5291,7 +5291,7 @@ const BehaviorScript bhvWaterBombSpawner[] = {
 
 const BehaviorScript bhvWaterBomb[] = {
     BEGIN(OBJ_LIST_GENACTOR),
-    OR_LONG(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_UCODE_LARGE)),
+    OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_OBJ_PHYSICS(/*Wall hitbox radius*/ 120, /*Gravity*/ -400, /*Bounciness*/ 0, /*Drag strength*/ 1000, /*Friction*/ 1000, /*Buoyancy*/ 200, /*Unused*/ 0, 0),
     BEGIN_LOOP(),
         CALL_NATIVE(bhv_water_bomb_update),

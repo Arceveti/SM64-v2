@@ -1131,6 +1131,14 @@
 #define	G_RM_FOG_PRIM_A		GBL_c1(G_BL_CLR_FOG, G_BL_A_FOG, G_BL_CLR_IN, G_BL_1MA)
 #define	G_RM_PASS			GBL_c1(G_BL_CLR_IN, G_BL_0, G_BL_CLR_IN, G_BL_1)
 
+#define G_RM_ZB_1C_FOG_SHADE_A \
+    Z_CMP | Z_UPD | CVG_DST_FULL | ALPHA_CVG_SEL | ZMODE_OPA | \
+    GBL_c1(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA)
+
+#define G_RM_ZB_1C_FOG_SHADE_A2 \
+   CVG_DST_FULL | FORCE_BL | ZMODE_OPA | \
+    GBL_c2(G_BL_CLR_FOG, G_BL_A_SHADE, G_BL_CLR_IN, G_BL_1MA)
+
 /*
  * G_SETCONVERT: K0-5
  */
@@ -1139,7 +1147,7 @@
 #define	G_CV_K2		-89
 #define	G_CV_K3		222
 #define	G_CV_K4		114
-#define	G_CV_K5		42
+#define	G_CV_K5		 42
 
 /*
  * G_SETSCISSOR: interlace mode

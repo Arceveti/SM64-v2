@@ -150,8 +150,10 @@
 #define STAR_GLOW
 
 // Mario's silhouette when behind solid objects/surfaces
-// Also enables new render layers
+// Also enables new render layers, such as LAYER_ALPHA_DECAL.
 // The number is the intensity of the silhouette, from 0-255.
+// NOTE: The overlap between Mario's model parts is visible on certain HLE plugins.
+// Also, this also disables anti-aliasing on Mario, and the outermost pixel edges of the silhouette are slightly visible on Mario's normal model at lower resolutions.
 // (Frame#5375, Axollyon, AloXado320, Wiseguy, Arceveti)
 #define SILHOUETTE 127
 
@@ -698,7 +700,7 @@
 // Allows Mario to jump kick on steep surfaces that are set to be non slippery, instead of being forced to dive (HackerSM64)
 #define JUMP_KICK_FIX
 
-// Fixes turning around on the ground (Arceveti)
+// Fixes Mario's turn radius by making it dependent on forward speed. (Arceveti)
 #define FIX_GROUND_TURN_RADIUS
 
 // Prevent bonks when walking into a wall (Arceveti)

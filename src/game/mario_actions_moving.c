@@ -335,7 +335,7 @@ void update_walking_speed(struct MarioState *m) {
 #ifdef FIX_GROUND_TURN_RADIUS
     if ((m->forwardVel < 0.0f) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
         m->faceAngle[1] += DEG(180);
-        m->forwardVel *= -1.0f;
+        m->forwardVel   *= -1.0f;
     }
     if (analog_stick_held_back(m, DEG(100)) && (m->heldObj == NULL) && !(m->action & ACT_FLAG_SHORT_HITBOX)) {
         set_mario_action(m, ACT_TURNING_AROUND, 0);
