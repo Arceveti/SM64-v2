@@ -1077,7 +1077,7 @@ const Collision wf_seg7_collision_070102D8[] = {
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_05, /*pos*/  3840,    0, -2304, /*yaw*/  0), // platform between sliding platforms 1
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_05, /*pos*/  3840,    0, -1280, /*yaw*/  0), // platform between sliding platforms 2
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_06, /*pos*/     0,    0,     0, /*yaw*/  0), // fences
-    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_07, /*pos*/  1757, 3519, -3151, /*yaw*/  0), // floating brick platform
+    SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_07, /*pos*/  1741, 3520, -3120, /*yaw*/  0), // floating brick platform
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_0C, /*pos*/  1408, 2522,  2431, /*yaw*/  0), // platform with wooden bridge
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_0E, /*pos*/  3584,  154,  4864, /*yaw*/  0), // grass with tree
     SPECIAL_OBJECT_WITH_YAW(/*preset*/ special_level_geo_0F, /*pos*/  4608,  256,  1792, /*yaw*/  0), // grass with flowers
