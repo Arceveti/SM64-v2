@@ -560,13 +560,13 @@ void adjust_analog_stick(struct Controller *controller) {
 /**
  * Update the controller struct with available inputs if present.
  */
-void read_controller_inputs(void) {
+void read_controller_inputs(s32 threadID) {
 #ifndef VARIABLE_FRAMERATE
     s32 i;
 #endif
     // If any controllers are plugged in, update the controller information.
     if (gControllerBits) {
-        osRecvMesg(&gSIEventMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+        if (threadID == 5) osRecvMesg(&gSIEventMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
         osContGetReadData(&gControllerPads[0]);
 #if ENABLE_RUMBLE
         release_rumble_pak_control();
@@ -763,7 +763,7 @@ void thread5_game_loop(UNUSED void *arg) {
             }
             audio_game_loop_tick();
             select_gfx_pool();
-            read_controller_inputs();
+            read_controller_inputs(5);
 #endif
             addr = level_script_execute(addr);
 #if /*PUPPYPRINT_DEBUG == 0 &&*/ defined(VISUAL_DEBUG)
@@ -822,7 +822,7 @@ void thread7_input_loop(UNUSED void *arg) {
 #endif
             osContStartReadData(&gSIEventMesgQueue);
         }
-        read_controller_inputs();
+        read_controller_inputs(7);
         osRecvMesg(&gInputVblankQueue, &gInputReceivedMesg, OS_MESG_BLOCK);
     }
 }
@@ -830,13 +830,13 @@ void thread7_input_loop(UNUSED void *arg) {
 void thread9_graphics_loop(UNUSED void *arg) {
     OSTime prevtime  = 0;
     OSTime deltatime = 0;
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
     OSTime lastTime  = 0;
 #endif
     set_vblank_handler(9, &gVideoVblankHandler, &gVideoVblankQueue, (OSMesg) 1);
     render_init();
     while (TRUE) {
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
         while (TRUE) {
             lastTime   = osGetTime();
 #endif
@@ -854,7 +854,7 @@ void thread9_graphics_loop(UNUSED void *arg) {
             render_game();
             end_master_display_list();
             alloc_display_list(0);
-#ifdef PUPPYPRINT
+#if PUPPYPRINT_DEBUG
             profiler_update(videoTime, lastTime);
             if ((benchmarkLoop > 0) && (benchOption == 0)) {
                 benchmarkLoop--;
