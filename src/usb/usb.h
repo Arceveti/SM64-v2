@@ -1,5 +1,4 @@
-#ifndef UNFL_USB_H
-#define UNFL_USB_H
+#pragma once
 
     /*********************************
              DataType macros
@@ -117,5 +116,3 @@
     ==============================*/
 
     extern void usb_purge();
-
-#endif

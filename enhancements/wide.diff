@@ -579,7 +579,6 @@ index 521b4ef..58d4e75 100644
  void basic_update(UNUSED s16 *arg);
 +void lvl_set_widescreen(void);
 
- #endif // LEVEL_UPDATE_H
 diff --git a/src/game/rendering_graph_node.c b/src/game/rendering_graph_node.c
 index 58238e8..09a6c87 100644
 --- a/src/game/rendering_graph_node.c

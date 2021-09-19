@@ -1,5 +1,5 @@
-#ifndef _ULTRA64_LIBAUDIO_H_
-#define _ULTRA64_LIBAUDIO_H_
+#pragma once
+// _ULTRA64_LIBAUDIO_H_
 
 #include "abi.h"
 
@@ -47,5 +47,3 @@ typedef struct
 } ALSeqFile;
 
 void alSeqFileNew(ALSeqFile *f, u8 *base);
-
-#endif

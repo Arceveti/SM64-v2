@@ -50,11 +50,11 @@
 // Clear RAM on boot (UltraSM64)
 #define CLEARRAM
 
-// Unlocks FPS (not recommended for normal gameplay)
-// #define UNLOCK_FPS
-
 // disables 'static' in many files. Useful for debugging purposes.
 #define NONSTATIC
+
+// Unlocks FPS (not recommended for normal gameplay)
+// #define UNLOCK_FPS
 
 /********************************************************************************************************************************
  *                                                                                                                              *

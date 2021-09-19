@@ -9,8 +9,7 @@
 	$Id: gs2dex.h,v 1.1.1.1 2002/05/02 03:28:24 blythe Exp $
   ---------------------------------------------------------------------*/
 
-#ifndef	_GS2DEX_H_
-#define	_GS2DEX_H_
+#pragma once
 
 #ifdef _LANGUAGE_C_PLUS_PLUS
 extern "C" {
@@ -388,6 +387,5 @@ extern	void	guS2DInitBg(uObjBg *);
 #ifdef _LANGUAGE_C_PLUS_PLUS
 }
 #endif
-#endif /* _GS2DEX_H_ */
 
 /*======== End of gs2dex.h ========*/

@@ -26,8 +26,7 @@
  *
  **************************************************************************/
 
-#ifndef __log__
-#define __log__
+#pragma once
 
 #ifdef _LANGUAGE_C_PLUS_PLUS
 extern "C" {
@@ -69,6 +68,4 @@ extern void osDelay(int count);
 
 #ifdef _LANGUAGE_C_PLUS_PLUS
 }
-#endif
-
 #endif

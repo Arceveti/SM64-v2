@@ -452,8 +452,8 @@ index 00000000..1386930d
 --- /dev/null
 +++ b/src/game/crash.h
 @@ -0,0 +1,28 @@
-+#ifndef _CRASH_H_
-+#define _CRASH_H_
++#pragma once
++#pragma once
 +
 +#include <types.h>
 +
@@ -479,4 +479,3 @@ index 00000000..1386930d
 +void fb_print_int_hex(int x, int y, u32 value, int nbits);
 +void fb_print_gpr_states(int x, int y, const char* regStrs[], u32 *regContext);
 +
-+#endif /* _CRASH_H_ */

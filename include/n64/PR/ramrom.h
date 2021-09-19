@@ -1,5 +1,4 @@
-#ifndef _RAMROM_H
-#define	_RAMROM_H
+#pragma once
 
 /**************************************************************************
  *																		  *
@@ -41,12 +40,12 @@
 #define RAMROM_MSG_HDR_SIZE		(3*sizeof(long))
 #define RAMROM_USER_DATA_SIZE	(RAMROM_MSG_SIZE-RAMROM_MSG_HDR_SIZE)
 
-#define RAMROM_APP_READ_ADDR	(RAMROM_MSG_ADDR + (0*RAMROM_BUF_SIZE))
-#define RAMROM_APP_WRITE_ADDR	(RAMROM_MSG_ADDR + (1*RAMROM_BUF_SIZE))
-#define RAMROM_RMON_READ_ADDR	(RAMROM_MSG_ADDR + (2*RAMROM_BUF_SIZE))
-#define RAMROM_RMON_WRITE_ADDR	(RAMROM_MSG_ADDR + (3*RAMROM_BUF_SIZE))
-#define RAMROM_PRINTF_ADDR		(RAMROM_MSG_ADDR + (4*RAMROM_BUF_SIZE))
-#define RAMROM_LOG_ADDR			(RAMROM_MSG_ADDR + (5*RAMROM_BUF_SIZE))
+#define RAMROM_APP_READ_ADDR	(RAMROM_MSG_ADDR + (0 * RAMROM_BUF_SIZE))
+#define RAMROM_APP_WRITE_ADDR	(RAMROM_MSG_ADDR + (1 * RAMROM_BUF_SIZE))
+#define RAMROM_RMON_READ_ADDR	(RAMROM_MSG_ADDR + (2 * RAMROM_BUF_SIZE))
+#define RAMROM_RMON_WRITE_ADDR	(RAMROM_MSG_ADDR + (3 * RAMROM_BUF_SIZE))
+#define RAMROM_PRINTF_ADDR		(RAMROM_MSG_ADDR + (4 * RAMROM_BUF_SIZE))
+#define RAMROM_LOG_ADDR			(RAMROM_MSG_ADDR + (5 * RAMROM_BUF_SIZE))
 
 /*#define RAMROM_GIO_INTERRUPT	(RAMROM_MSG_ADDR + RAMROM_MSG_SIZE - 4)*/
 
@@ -87,15 +86,15 @@ typedef struct {
  * and those initiated by the target start with GAME.
  */
 
-#define	HOST_PIACCESS_REQ	1
-#define	HOST_DBG_CMD_READY	2
-#define	GAME_DBG_DATA_SEND	3
-#define	HOST_DBG_DATA_ACK	4
-#define	GAME_PRINTF_SEND	5
-#define	HOST_PRINTF_ACK		6
-#define	GAME_LOG_SEND		7
-#define	HOST_LOG_ACK		8
-#define	HOST_APP_CMD_READY	9
+#define	HOST_PIACCESS_REQ	 1
+#define	HOST_DBG_CMD_READY	 2
+#define	GAME_DBG_DATA_SEND	 3
+#define	HOST_DBG_DATA_ACK	 4
+#define	GAME_PRINTF_SEND	 5
+#define	HOST_PRINTF_ACK		 6
+#define	GAME_LOG_SEND		 7
+#define	HOST_LOG_ACK		 8
+#define	HOST_APP_CMD_READY	 9
 #define	GAME_APP_DATA_READY	10
 #define	HOST_PROF_REQ		11
 #define	GAME_PROF_SEND		12
@@ -109,5 +108,3 @@ typedef struct {
 void __RamRomInit(int key, void *romaddr);
 void __RamRomDestroy(int key);
 #endif /* _EMULATOR */
-
-#endif /* !_RAMROM_H */

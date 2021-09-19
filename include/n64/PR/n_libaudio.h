@@ -17,8 +17,7 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#ifndef __N_LIBAUDIO__
-#define __N_LIBAUDIO__
+#pragma once
 
 #include <PR/libaudio.h>
 
@@ -348,5 +347,3 @@ extern long long int    n_aspMainDataStart[], n_aspMainDataEnd[];
 #ifdef _LANGUAGE_C_PLUS_PLUS
 }
 #endif
-
-#endif /* __N_LIBAUDIO__ */

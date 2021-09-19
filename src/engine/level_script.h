@@ -1,5 +1,4 @@
-#ifndef LEVEL_SCRIPT_H
-#define LEVEL_SCRIPT_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -11,5 +10,3 @@ extern LevelScript level_script_entry_error_screen[];
 #endif
 
 struct LevelCommand *level_script_execute(struct LevelCommand *cmd);
-
-#endif // LEVEL_SCRIPT_H

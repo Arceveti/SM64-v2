@@ -1,5 +1,4 @@
-#ifndef _EM_H_
-#define	_EM_H_
+#pragma once
 
 /**************************************************************************
  *									  *
@@ -96,7 +95,4 @@ extern void	emPause(void);
 #define SHM_CART_INT_REGISTER	(RAMROM_MSG_SIZE - 4)
 #define SHM_MSG_BUFFER_ADDRESS	(RAMROM_MSG_SIZE - 8)
 
-
 #endif /* _LANGUAGE_C */
-
-#endif /* !_EM_H_ */

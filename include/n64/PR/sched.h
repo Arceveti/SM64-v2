@@ -28,8 +28,7 @@
  *
  **************************************************************************/
 
-#ifndef __sched__
-#define __sched__
+#pragma once
 
 #include <ultra64.h>
 
@@ -110,6 +109,3 @@ void            osCreateScheduler(OSSched *s, void *stack, OSPri priority,
 void            osScAddClient(OSSched *s, OSScClient *c, OSMesgQueue *msgQ);
 void            osScRemoveClient(OSSched *s, OSScClient *c);
 OSMesgQueue     *osScGetCmdQ(OSSched *s);
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef INTRO_HEADER_H
-#define INTRO_HEADER_H
+#pragma once
 
 #include "types.h"
 #include "segments.h"
@@ -31,6 +30,4 @@ extern const LevelScript script_intro_splash_screen[];
 extern const GeoLayout intro_geo_error_screen[];
 extern const LevelScript level_intro_entry_error_screen[];
 extern Gfx *geo18_display_error_message(u32 callContext, UNUSED struct GraphNode *node, UNUSED u32 context);
-#endif
-
 #endif
