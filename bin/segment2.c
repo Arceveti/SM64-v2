@@ -238,6 +238,7 @@ ALIGNED8 static const Texture texture_hud_char_double_exclamation[] = {
 
 ALIGNED8 static const Texture texture_hud_char_question[] = {
 #include "textures/segment2/segment2.question.rgba16.inc.c"// JP ?
+// #include "levels/menu/main_menu_seg7.0A1D0.rgba16.png"
 };
 
 ALIGNED8 static const Texture texture_hud_char_ampersand[] = {

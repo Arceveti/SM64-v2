@@ -35,7 +35,7 @@ extern const Collision dorrie_seg6_collision_head_raised[];
 extern const Collision dorrie_seg6_collision_head_lowered[];
 
 // mr_i_eyeball
-extern const GeoLayout mr_i_geo[];
+extern const GeoLayout mr_i_body_geo[];
 extern const Gfx mr_i_eyeball_seg6_dl_body[];
 
 // mr_i_iris

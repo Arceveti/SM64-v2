@@ -44,7 +44,7 @@ void spawn_mr_i_particle(void) {
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
 }
 
-void bhv_mr_i_body_loop(void) {
+void bhv_mr_i_iris_loop(void) {
     obj_copy_pos_and_angle(o, o->parentObj);
     if (!(o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM)) {
         obj_copy_scale(o, o->parentObj);
