@@ -1,8 +1,8 @@
-#ifndef SM64_H
-#define SM64_H
+#pragma once
 
 // Global header for Super Mario 64
 
+#include "make_static_nonstatic.h"
 #include "types.h"
 #include "config.h"
 #include "object_fields.h"
@@ -511,5 +511,3 @@
 #define C_BUTTONS     (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS   )
 
 #define JPAD_BUTTONS  (U_JPAD     | D_JPAD     | L_JPAD     | R_JPAD       )
-
-#endif // SM64_H

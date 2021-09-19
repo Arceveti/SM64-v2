@@ -1,5 +1,4 @@
-#ifndef COMMON0_H
-#define COMMON0_H
+#pragma once
 
 #include "types.h"
 
@@ -187,5 +186,3 @@ extern const Collision purple_switch_seg8_collision_purple_switch[];
 extern const GeoLayout test_platform_geo[];
 extern const Gfx unknown_seg8_dl_test_platform[];
 extern const Collision unknown_seg8_collision_test_platform[];
-
-#endif

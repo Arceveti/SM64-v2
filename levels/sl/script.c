@@ -16,31 +16,31 @@
 #include "levels/sl/header.h"
 
 
-static const LevelScript script_func_local_1[] = {
-    OBJECT_WITH_ACTS(/*model*/ MODEL_STAR, /*pos*/  700, 4500,  690, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStar,                 /*acts*/ ALL_ACTS),
-    OBJECT_WITH_ACTS(/*model*/ MODEL_STAR, /*pos*/ 4377, 1350, 4361, /*angle*/ 0, 0, 0, /*behParam*/ 0x02000000, /*beh*/ bhvStar,                 /*acts*/ ALL_ACTS),
+static const LevelScript script_func_local_sl_area_1_stars[] = {
+    OBJECT_WITH_ACTS(/*model*/ MODEL_STAR, /*pos*/  700, 4500,  690, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvStar,              /*acts*/ ALL_ACTS),
+    OBJECT_WITH_ACTS(/*model*/ MODEL_STAR, /*pos*/ 4377, 1350, 4361, /*angle*/ 0, 0, 0, /*behParam*/ 0x02000000, /*beh*/ bhvStar,              /*acts*/ ALL_ACTS),
     OBJECT_WITH_ACTS(/*model*/ MODEL_NONE, /*pos*/ 5000, 1200,    0, /*angle*/ 0, 0, 0, /*behParam*/ 0x04000000, /*beh*/ bhvHiddenRedCoinStar, /*acts*/ ALL_ACTS),
     RETURN(),
 };
 
-static const LevelScript script_func_local_2[] = {
-#ifdef DEEP_FREEZE_CRACKED_ICE
-    OBJECT(/*model*/ MODEL_SL_CRACKED_ICE,  /*pos*/ 4378, 1843, 4362, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSlCrackedIce),
-#endif
-    OBJECT(/*model*/ MODEL_NONE,            /*pos*/  976, 1024, 2075, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSnowMoundSpawn),
+static const LevelScript script_func_local_sl_area_1_snow_mound_spawner[] = {
+    OBJECT(/*model*/ MODEL_NONE,               /*pos*/  976, 1024, 2075, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSnowMoundSpawn),
     RETURN(),
 };
 
-static const LevelScript script_func_local_3[] = {
+static const LevelScript script_func_local_sl_area_1_characters[] = {
     OBJECT(/*model*/ MODEL_PENGUIN,            /*pos*/ 1715, 3328,   518, /*angle*/ 0, -51, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSLWalkingPenguin),
     OBJECT(/*model*/ MODEL_NONE,               /*pos*/  700, 3428,   700, /*angle*/ 0,  30, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSLSnowmanWind),
     OBJECT(/*model*/ MODEL_NONE,               /*pos*/  480, 2300,  1370, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvIgloo),
     OBJECT(/*model*/ MODEL_BIG_CHILL_BULLY,    /*pos*/  315, 1331, -4852, /*angle*/ 0,   0, 0, /*behParam*/ 0x01000000, /*beh*/ bhvBigChillBully),
     OBJECT(/*model*/ MODEL_MR_BLIZZARD_HIDDEN, /*pos*/ 2954,  970,   750, /*angle*/ 0,   0, 0, /*behParam*/ 0x00020000, /*beh*/ bhvMrBlizzard),
+#ifdef DEEP_FREEZE_CRACKED_ICE
+    OBJECT(/*model*/ MODEL_SL_CRACKED_ICE,     /*pos*/ 4378, 1843,  4362, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSlCrackedIce),
+#endif
     RETURN(),
 };
 
-static const LevelScript script_func_local_4[] = {
+static const LevelScript script_func_local_sl_area_2_stars[] = {
     OBJECT_WITH_ACTS(/*model*/ MODEL_STAR, /*pos*/ 0, 500, 1000, /*angle*/ 0, 0, 0, /*behParam*/ 0x05000000, /*beh*/ bhvStar, /*acts*/ ALL_ACTS),
     RETURN(),
 };
@@ -78,9 +78,9 @@ const LevelScript level_sl_entry[] = {
         WARP_NODE(/*id*/ 0x0C, /*destLevel*/ LEVEL_SL,     /*destArea*/ 0x02, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0x0D, /*destLevel*/ LEVEL_SL,     /*destArea*/ 0x01, /*destNode*/ 0x0E, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0x0E, /*destLevel*/ LEVEL_SL,     /*destArea*/ 0x01, /*destNode*/ 0x0D, /*flags*/ WARP_NO_CHECKPOINT),
-        JUMP_LINK(script_func_local_1),
-        JUMP_LINK(script_func_local_2),
-        JUMP_LINK(script_func_local_3),
+        JUMP_LINK(script_func_local_sl_area_1_stars),
+        JUMP_LINK(script_func_local_sl_area_1_snow_mound_spawner),
+        JUMP_LINK(script_func_local_sl_area_1_characters),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x02, /*destNode*/ 0x36, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x02, /*destNode*/ 0x68, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ sl_seg7_area_1_collision),
@@ -94,7 +94,7 @@ const LevelScript level_sl_entry[] = {
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ 0, 0, 3277, /*angle*/ 0,   0, 0, /*behParam*/ 0x140B0000, /*beh*/ bhvWarp),
         WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_SL,     /*destArea*/ 0x02, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0x0B, /*destLevel*/ LEVEL_SL,     /*destArea*/ 0x01, /*destNode*/ 0x0B, /*flags*/ WARP_NO_CHECKPOINT),
-        JUMP_LINK(script_func_local_4),
+        JUMP_LINK(script_func_local_sl_area_2_stars),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x02, /*destNode*/ 0x36, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x02, /*destNode*/ 0x68, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ sl_seg7_area_2_collision),

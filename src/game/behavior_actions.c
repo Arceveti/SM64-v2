@@ -130,17 +130,18 @@ void spawn_mist_particles_variable(s32 count, s32 offsetY, f32 size) {
 #include "behaviors/jumping_box.inc.c"
 #include "behaviors/boo_cage.inc.c"
 
+static Angle sSpawnSparkleParticleAngle = 0x0;
 // not in behavior file
 // n is the number of objects to spawn, r if the rate of change of phase (frequency?)
 void spawn_sparkle_particles(s32 n, s32 radius, s32 height, s32 r) {
-    static Angle angle;
     s32 i;
     Angle separation = (0x10000 / n); // Evenly spread around a circle
     for ((i = 0); (i < n); (i++)) {
-        spawn_object_relative(OBJ_BP_NONE, (sins(angle + (i * separation)) * radius), ((i + 1) * height),
-                                           (coss(angle + (i * separation)) * radius), o, MODEL_NONE, bhvSparkleSpawn);
+        separation = (sSpawnSparkleParticleAngle + (i * separation));
+        spawn_object_relative(OBJ_BP_NONE, (sins(separation) * radius), ((i + 1) * height),
+                                           (coss(separation) * radius), o, MODEL_NONE, bhvSparkleSpawn);
     }
-    angle += (r * 0x100);
+    sSpawnSparkleParticleAngle += (r * 0x100);
 }
 
 #include "behaviors/warp.inc.c"

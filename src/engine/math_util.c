@@ -73,11 +73,6 @@ f32 slow_powf(f32 base, f32 exponent) {
     return slow_expf(exponent * slow_logf(base));
 }
 
-f64 sqrtd(f64 x) {
-    if (x < 1.0e-7) return 0.0;
-    return sqrtf(x);
-}
-
 /************
  * Rounding *
  ************/
@@ -311,15 +306,6 @@ void random_vec3s(Vec3s dest, s16 xRange, s16 yRange, s16 zRange) {
  * Vector Operations *
  *********************/
 
-VEC_FUNC_V(zero)                /// Sets vector 'v' to zero
-VEC_FUNC_VN(same)               /// Sets vector 'v' to 'val'
-VEC_FUNC_VV(copy)               /// Copy vector 'src' to 'dst'
-VEC_FUNC_VV(copy_inverse)       /// Copy vector 'src' to 'dst' in inverse order
-VEC_FUNC_ARITHMETIC( sum, add)  /// Add a vector or value to 'dst'
-VEC_FUNC_ARITHMETIC(diff, sub)  /// Subtract a vector or value from 'dst'
-VEC_FUNC_ARITHMETIC(prod, mul)  /// Multiply 'dst' with a vector or value
-VEC_FUNC_ARITHMETIC(quot, div)  /// Divide 'dst' with a vector or value
-
 /// Convert float vector 'src' to vector 'dst' by rounding the components to the nearest integer.
 void vec3f_to_vec3c(Vec3c dst, Vec3f src) { vec3_copy_roundf(dst, src); }
 void vec3f_to_vec3s(Vec3s dst, Vec3f src) { vec3_copy_roundf(dst, src); }
@@ -336,12 +322,12 @@ f32 vec3f_invmag(Vec3f v) {
 }
 
 /// Scale vector 'v' so it has length 1
-void vec2f_normalize(Vec2f v) { vec2f_mul_val(v, vec2f_invmag(v)); }
-void vec3f_normalize(Vec3f v) { vec3f_mul_val(v, vec3f_invmag(v)); }
+void vec2f_normalize(Vec2f v) { f32 invMag = vec2f_invmag(v); vec2_mul_val(v, invMag); }
+void vec3f_normalize(Vec3f v) { f32 invMag = vec3f_invmag(v); vec3_mul_val(v, invMag); }
 
 /// Scale vector 'v' so it has length -1
-void vec2f_normalize_negative(Vec2f v) { vec2f_mul_val(v, -vec2f_invmag(v)); }
-void vec3f_normalize_negative(Vec3f v) { vec3f_mul_val(v, -vec3f_invmag(v)); }
+void vec2f_normalize_negative(Vec2f v) { f32 invMag = -vec2f_invmag(v); vec2_mul_val(v, invMag); }
+void vec3f_normalize_negative(Vec3f v) { f32 invMag = -vec3f_invmag(v); vec3_mul_val(v, invMag); }
 
 /// Scale vector 'v' so it has at most length 'max'
 void vec2f_normalize_max(Vec2f v, f32 max) {
@@ -1250,7 +1236,8 @@ void make_oblique(Mat4 toModify, Vec4f clipPlane) {
     q[2] = -1.0f;
     q[3] = (1.0f + toModify[2][2]) / toModify[3][2];
     // Calculate the scaled plane vector
-    vec4f_prod_val(c, clipPlane, (2.0f / vec4_dot(clipPlane, q)));
+    f32 scale = (2.0f / vec4_dot(clipPlane, q));
+    vec4_prod_val(c, clipPlane, scale);
     // Replace the third row of the projection matrix
     toModify[0][2] =  c[0];
     toModify[1][2] =  c[1];
@@ -1422,21 +1409,22 @@ void approach_vec3s_asymptotic(Vec3s current, Vec3s target, s16 xMul, s16 yMul, 
  * Trig Functions *
  ******************/
 
-// Uses radians
-inline f64 sind(f64 x) { return sinf(x); }
-inline f64 cosd(f64 x) { return cosf(x); }
+// // Uses radians
+// inline f64 sind(f64 x) { return sinf(x); }
+// inline f64 cosd(f64 x) { return cosf(x); }
 
-// From Puppycam
-inline s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
-inline s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
+// // From Puppycam
+// inline s16 LENSIN(s16 length, Angle direction) { return (length * sins(direction)); }
+// inline s16 LENCOS(s16 length, Angle direction) { return (length * coss(direction)); }
 
 /**
  * Helper function for atan2s. Does a look up of the arctangent of y/x assuming
  * the resulting angle is in range [0, 0x2000] (1/8 of a circle).
  */
-static inline u16 atan2_lookup(f32 y, f32 x) {
-    return ((x == 0) ? 0x0 : atans(y / x));
-}
+// static inline u16 atan2_lookup(f32 y, f32 x) {
+//     return ((x == 0) ? 0x0 : atans(y / x));
+// }
+#define atan2_lookup(y, x) ((x == 0) ? 0x0 : atans((y) / (x)))
 
 /**
  * Compute the angle from (0, 0) to (x, y) as a s16. Given that terrain is in
@@ -1478,6 +1466,8 @@ Angle atan2s(f32 y, f32 x) {
     }
     return ret;
 }
+
+#undef atan2_lookup
 
 /**
  * Compute the atan2 in radians by calling atan2s and converting the result.

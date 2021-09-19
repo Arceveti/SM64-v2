@@ -1,5 +1,4 @@
-#ifndef MEMORY_H
-#define MEMORY_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -88,5 +87,3 @@ Bool32 load_patchable_table(struct DmaHandlerList *list, s32 index);
 #ifdef SEGMENT_ROM_TABLE
 extern uintptr_t sSegmentROMTable[32];
 #endif
-
-#endif // MEMORY_H

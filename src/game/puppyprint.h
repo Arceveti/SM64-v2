@@ -1,5 +1,4 @@
-#ifndef PUPPYPRINT_H
-#define PUPPYPRINT_H
+#pragma once
 
 #ifdef PUPPYPRINT
 
@@ -72,9 +71,8 @@ extern s32  get_text_width( const char *str);
 extern void prepare_blank_box(void);
 extern void finish_blank_box(void);
 extern void render_blank_box(s16 x1, s16 y1, s16 x2, s16 y2, Color r, Color g, Color b, Alpha a);
+extern char *write_to_buf(char *buffer, const char *data, size_t size);
 extern void append_puppyprint_log(const char *str, ...);
 extern char consoleLogTable[LOG_BUFFER_SIZE][255];
 
 #endif
-
-#endif // PUPPYPRINT_H

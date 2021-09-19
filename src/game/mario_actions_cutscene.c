@@ -872,7 +872,7 @@ Bool32 act_exit_airborne(struct MarioState *m) {
 #endif
     if ((15 < (m->actionTimer++)) && launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, -32.0f)) m->healCounter = 31; // heal Mario
     // rotate him to face away from the entrance
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     m->particleFlags |= PARTICLE_SPARKLES;
     return FALSE;
 }
@@ -883,7 +883,7 @@ Bool32 act_falling_exit_airborne(struct MarioState *m) {
 #endif
     if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_GENERAL_FALL, 0.0f)) m->healCounter = 31; // heal Mario
     // rotate Mario to face away from the entrance
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     m->particleFlags |= PARTICLE_SPARKLES;
     return FALSE;
 }
@@ -933,7 +933,7 @@ Bool32 act_exit_land_save_dialog(struct MarioState *m) {
             handle_save_menu(m);
             break;
     }
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     return FALSE;
 }
 
@@ -1028,7 +1028,7 @@ Bool32 act_special_exit_airborne(struct MarioState *m) {
     }
     m->particleFlags |= PARTICLE_SPARKLES;
     // rotate Mario to face away from the entrance
-    marioObj->header.gfx.angle[1] += 0x8000;
+    marioObj->header.gfx.angle[1] += DEG(180);
     // show Mario
     marioObj->header.gfx.node.flags |= GRAPH_RENDER_ACTIVE;
     return FALSE;
@@ -1599,13 +1599,14 @@ static Bool32 act_jumbo_star_cutscene(struct MarioState *m) {
     return FALSE;
 }
 
+s32 sSparkleGenTheta = 0x0;
+s32 sSparkleGenPhi   = 0x0;
+
 void generate_yellow_sparkles(s16 x, s16 y, s16 z, f32 radius) {
-    static s32 sSparkleGenTheta = 0x0;
-    static s32 sSparkleGenPhi   = 0x0;
     Vec3s offset;
     vec3s_set_dist_and_angle(gVec3sZero, offset, radius, sSparkleGenTheta, sSparkleGenPhi);
     spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x + offset[0]), (y + offset[1]), (z + offset[2]), 0x0, 0x0, 0x0);
-    vec3s_mul_val(offset, (4 / 3));
+    vec3_mul_val(offset, (4 / 3));
     spawn_object_abs_with_rot(o, 0, MODEL_NONE, bhvSparkleSpawn, (x - offset[0]), (y - offset[1]), (z - offset[2]), 0x0, 0x0, 0x0);
     sSparkleGenTheta += DEG(78.75);
     sSparkleGenPhi   += DEG(  135);

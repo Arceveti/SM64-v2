@@ -1,5 +1,4 @@
-#ifndef COLORS_H
-#define COLORS_H
+#pragma once
 
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
@@ -145,5 +144,3 @@ void copy_partial_image(    TexturePtr *dst, TexturePtr *src,
                             s32 srcTW,     s32 srcTH);
 void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height);
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s);
-
-#endif // SHADOW_H

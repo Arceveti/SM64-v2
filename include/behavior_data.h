@@ -1,5 +1,4 @@
-#ifndef BEHAVIOR_DATA_H
-#define BEHAVIOR_DATA_H
+#pragma once
 
 #include "types.h"
 
@@ -522,5 +521,3 @@ extern const BehaviorScript bhvEndBirds1[];
 extern const BehaviorScript bhvEndBirds2[];
 extern const BehaviorScript bhvIntroScene[];
 extern const BehaviorScript bhvUnusedFakeStar[];
-
-#endif // BEHAVIOR_DATA_H

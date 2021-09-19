@@ -1,5 +1,4 @@
-#ifndef PUPPYCAM2_H
-#define PUPPYCAM2_H
+#pragma once
 
 #ifdef PUPPYCAM
 
@@ -192,5 +191,3 @@ extern void puppycam_warp(f32 displacementX, f32 displacementY, f32 displacement
 extern Bool32 puppycam_move_spline(struct sPuppySpline splinePos[], struct sPuppySpline splineFocus[], s32 mode, s32 index);
 
 #endif
-
-#endif // PUPPYCAM2_H

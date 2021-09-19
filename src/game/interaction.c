@@ -517,7 +517,7 @@ u32 take_damage_from_interact_object(struct MarioState *m) {
         shake = SHAKE_SMALL_DAMAGE;
     }
     if (!(m->flags & MARIO_CAP_ON_HEAD)) damage += ((damage + 1) / 2);
-    if   (m->flags & MARIO_METAL_CAP) damage = 0;
+    if (  m->flags & MARIO_METAL_CAP   ) damage  = 0;
     m->hurtCounter += (4 * damage);
 #if ENABLE_RUMBLE
     queue_rumble_data(5, 80);
@@ -878,8 +878,7 @@ Bool32 interact_flame(struct MarioState *m, UNUSED InteractType interactType, st
 #endif
         o->oInteractStatus = INT_STATUS_INTERACTED;
         m->interactObj     = o;
-        if ((m->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER))
-            || (m->waterLevel - m->pos[1]) > 50.0f) {
+        if ((m->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) || (m->waterLevel - m->pos[1]) > 50.0f) {
             play_sound(SOUND_GENERAL_FLAME_OUT, m->marioObj->header.gfx.cameraToObject);
         } else {
             m->marioObj->oMarioBurnTimer = 0;

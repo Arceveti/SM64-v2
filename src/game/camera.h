@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -578,5 +577,3 @@ void set_fov_shake_from_point_preset(u8 preset, Vec3f pos);
 void obj_rotate_towards_point(struct Object *o, Vec3f point, Angle pitchOff, Angle yawOff, Angle pitchDiv, Angle yawDiv);
 
 Gfx *geo_camera_fov(s32 callContext, struct GraphNode *g, UNUSED void *context);
-
-#endif // CAMERA_H

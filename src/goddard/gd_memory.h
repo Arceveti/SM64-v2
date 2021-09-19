@@ -1,5 +1,4 @@
-#ifndef GD_MEMORY_H
-#define GD_MEMORY_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -33,5 +32,3 @@ extern void init_mem_block_lists(void);
 void  empty_mem_block(struct GMemBlock *);
 struct GMemBlock *into_free_memblock(struct GMemBlock *);
 struct GMemBlock *make_mem_block(u32, u8);
-
-#endif // GD_MEMORY_H

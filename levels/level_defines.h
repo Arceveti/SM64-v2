@@ -1,4 +1,3 @@
-
 // Define lists for list of level for macros. Each of the following fields are described:
 // Argument 1: Internal ROM name of the level.
 // Argument 2: Level enumerator for enum used to identify the level ID.

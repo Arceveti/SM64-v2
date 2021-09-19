@@ -1,5 +1,4 @@
-#ifndef COMMON1_H
-#define COMMON1_H
+#pragma once
 
 #include "types.h"
 
@@ -302,5 +301,3 @@ extern const Gfx wooden_signpost_seg3_dl_back_sides[];
 extern const Gfx wooden_signpost_seg3_dl_front[];
 extern const Gfx wooden_signpost_seg3_dl_sign[];
 extern const Collision wooden_signpost_seg3_collision_signpost[];
-
-#endif

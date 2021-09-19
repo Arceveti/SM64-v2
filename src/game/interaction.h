@@ -1,5 +1,4 @@
-#ifndef INTERACTION_H
-#define INTERACTION_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -129,5 +128,3 @@ Bool32 mario_check_object_grab(           struct MarioState *m                  
 u32 get_door_save_file_flag(              struct Object     *door                        );
 void mario_process_interactions(          struct MarioState *m                           );
 void mario_handle_special_floors(         struct MarioState *m                           );
-
-#endif // INTERACTION_H

@@ -1,5 +1,4 @@
-#ifndef MACROS_H
-#define MACROS_H
+#pragma once
 
 #include "platform_info.h"
 
@@ -72,5 +71,3 @@
 #define MODE_NTSC 0x0
 #define MODE_MPAL 0x1
 #define MODE_PAL  0x2
-
-#endif // MACROS_H

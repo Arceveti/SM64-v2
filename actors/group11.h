@@ -1,5 +1,4 @@
-#ifndef GROUP11_H
-#define GROUP11_H
+#pragma once
 
 #include "types.h"
 
@@ -91,5 +90,3 @@ extern const Gfx wiggler_seg5_dl_flower[];
 extern const Gfx wiggler_seg5_sub_dl_head[];
 extern const Gfx wiggler_seg5_dl_head[];
 extern const struct Animation *const wiggler_seg5_anims_0500EC8C[];
-
-#endif

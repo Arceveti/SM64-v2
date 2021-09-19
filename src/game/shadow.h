@@ -1,5 +1,4 @@
-#ifndef SHADOW_H
-#define SHADOW_H
+#pragma once
 
 #include <PR/ultratypes.h>
 #include <PR/gbi.h>
@@ -51,5 +50,3 @@ extern Bool8 gMarioOnIceOrCarpet;
  * with the given initial solidity and "shadowType" (described above).
  */
 Gfx *create_shadow_below_xyz(Vec3f pos, s16 shadowScale, Alpha shadowSolidity, s8 shadowType);
-
-#endif // SHADOW_H

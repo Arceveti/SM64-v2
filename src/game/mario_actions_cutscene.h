@@ -1,5 +1,4 @@
-#ifndef MARIO_ACTIONS_CUTSCENE_H
-#define MARIO_ACTIONS_CUTSCENE_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -91,5 +90,3 @@ Gfx *geo_switch_peach_eyes(s32 callContext, struct GraphNode *node, UNUSED s32 c
 s32  mario_ready_to_speak(          void);
 s32  set_mario_npc_dialog(s32 actionArg);
 Bool32 mario_execute_cutscene_action(struct MarioState *m);
-
-#endif // MARIO_ACTIONS_CUTSCENE_H

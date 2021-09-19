@@ -1,5 +1,4 @@
-#ifndef LEVEL_UPDATE_H
-#define LEVEL_UPDATE_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -144,5 +143,3 @@ Bool32 lvl_init_from_save_file(      UNUSED Bool32 initOrUpdate,        s32 leve
 Bool32 lvl_set_current_level(        UNUSED Bool32 initOrUpdate,        s32 levelNum);
 Bool32 lvl_play_the_end_screen_sound(UNUSED Bool32 initOrUpdate, UNUSED s32 levelNum);
 void   basic_update(UNUSED s16 *arg);
-
-#endif // LEVEL_UPDATE_H

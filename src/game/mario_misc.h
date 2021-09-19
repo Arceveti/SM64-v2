@@ -1,5 +1,4 @@
-#ifndef MARIO_MISC_H
-#define MARIO_MISC_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -31,5 +30,3 @@ Gfx *geo_mario_rotate_wing_cap_wings(  s32 callContext,        struct GraphNode 
 Gfx *geo_switch_mario_hand_grab_pos(   s32 callContext,        struct GraphNode *node,        Mat4 *mtx);
 Gfx *geo_render_mirror_mario(          s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
 Gfx *geo_mirror_mario_backface_culling(s32 callContext,        struct GraphNode *node, UNUSED Mat4 *mtx);
-
-#endif // MARIO_MISC_H

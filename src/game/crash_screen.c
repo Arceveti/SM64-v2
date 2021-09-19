@@ -110,9 +110,9 @@ void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     }
 }
 
-static char *write_to_buf(char *buffer, const char *data, size_t size) {
-    return ((char *) memcpy(buffer, data, size) + size);
-}
+// static char *write_to_buf(char *buffer, const char *data, size_t size) {
+//     return ((char *) memcpy(buffer, data, size) + size);
+// }
 
 void crash_screen_print(s32 x, s32 y, const char *fmt, ...) {
     char *ptr;
@@ -202,13 +202,13 @@ void draw_crash_stack(OSThread *thread, s32 cause) {
     crash_screen_print_float_reg( 30, 220, 30, &tc->fp30.f.f_even);
 }
 
-void draw_crash_log(OSThread *thread, s32 cause) {
+void draw_crash_log(UNUSED OSThread *thread, UNUSED s32 cause) {
 #if PUPPYPRINT_DEBUG
     s32 i;
     crash_screen_draw_rect(25, 20, 270, 210);
     osWritebackDCacheAll();
 #define LINE_HEIGHT (25 + ((LOG_BUFFER_SIZE - 1) * 10))
-    for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) crash_screen_print(30, (LINE_HEIGHT)-(i*10), consoleLogTable[i]);
+    for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) crash_screen_print(30, ((LINE_HEIGHT) - (i * 10)), consoleLogTable[i]);
 #undef LINE_HEIGHT
 #endif
 }
@@ -263,7 +263,7 @@ extern struct SequenceQueueItem sBackgroundMusicQueue[6];
 
 void thread2_crash_screen(UNUSED void *arg) {
     OSMesg mesg;
-    OSThread *thread;
+    OSThread *thread = NULL;
     osSetEventMesg(OS_EVENT_CPU_BREAK, &gCrashScreen.mesgQueue, (OSMesg) 1);
     osSetEventMesg(OS_EVENT_FAULT,     &gCrashScreen.mesgQueue, (OSMesg) 2);
     goto finished;

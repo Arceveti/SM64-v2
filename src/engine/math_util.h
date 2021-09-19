@@ -1,9 +1,6 @@
-#ifndef MATH_UTIL_H
-#define MATH_UTIL_H
+#pragma once
 
 #include <PR/ultratypes.h>
-// #include <math.h>
-// #include <limits.h>
 
 #include "types.h"
 
@@ -11,7 +8,6 @@
 #define BITMASK(size) ((BIT(size)) - 1)
 
 // #define CLAMP_BITS(val, size) (MIN((val), BITMASK((u32)(size))))
-
 
 #define NEAR_ZERO   0.00001f
 #define NEARER_ZERO 0.000001f
@@ -105,7 +101,7 @@ extern Vec3s gVec3sOne;
 
 #define sins(x)  gSineTable[  (u16) (x) >> 4]
 #define coss(x)  gCosineTable[(u16) (x) >> 4]
-#define atans(x) gArctanTable[(s32)((((x) * 1024) + 0.5f))] //! is this correct?
+#define atans(x) gArctanTable[(s32)((((x) * 1024) + 0.5f))] //! is this correct? used for atan2_lookup
 
 
 #define min(a, b) MIN((a), (b))
@@ -115,6 +111,14 @@ extern Vec3s gVec3sOne;
 #define max_3(a, b, c)  ((((a) < (b)) || ((a) < (c))) ? (((b) < (c)) ? (c) : (b)) : (a))
 
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
+#define sind(x)  sinf(x)
+#define cosd(x)  cosf(x)
+#define sqrtd(x) sqrtf(x)
+
+// From Puppycam
+#define LENSIN(length, direction) ((length) * sins((direction)))
+#define LENCOS(length, direction) ((length) * coss((direction)))
 
 // from limits.h
 #define S8_MAX __SCHAR_MAX__
@@ -439,99 +443,6 @@ extern Vec3s gVec3sOne;
 #define vec3_div_val(dst, x) vec3_quot_val((dst), (dst), (x))
 #define vec4_div_val(dst, x) vec4_quot_val((dst), (dst), (x))
 
-#define VEC_FUNC_V(name)                                                                            \
-    void vec2f_##name(Vec2f dst) { vec2_##name((dst)); }                                            \
-    void vec3c_##name(Vec3c dst) { vec3_##name((dst)); }                                            \
-    void vec3s_##name(Vec3s dst) { vec3_##name((dst)); }                                            \
-    void vec3i_##name(Vec3i dst) { vec3_##name((dst)); }                                            \
-    void vec3f_##name(Vec3f dst) { vec3_##name((dst)); }                                            \
-    void vec4f_##name(Vec4f dst) { vec4_##name((dst)); }                                            \
-
-#define VEC_FUNC_VN(name)                                                                           \
-    void vec2f_##name(Vec2f dst, f32 val) { vec2_##name((dst), (val)); }                            \
-    void vec3c_##name(Vec3c dst, s8  val) { vec3_##name((dst), (val)); }                            \
-    void vec3s_##name(Vec3s dst, s16 val) { vec3_##name((dst), (val)); }                            \
-    void vec3i_##name(Vec3i dst, s32 val) { vec3_##name((dst), (val)); }                            \
-    void vec3f_##name(Vec3f dst, f32 val) { vec3_##name((dst), (val)); }                            \
-    void vec4f_##name(Vec4f dst, f32 val) { vec4_##name((dst), (val)); }                            \
-
-#define VEC_FUNC_VV(name)                                                                           \
-    void vec2f_##name(Vec2f dst, Vec2f src) { vec2_##name((dst), (src)); }                          \
-    void vec3c_##name(Vec3c dst, Vec3c src) { vec3_##name((dst), (src)); }                          \
-    void vec3s_##name(Vec3s dst, Vec3s src) { vec3_##name((dst), (src)); }                          \
-    void vec3i_##name(Vec3i dst, Vec3i src) { vec3_##name((dst), (src)); }                          \
-    void vec3f_##name(Vec3f dst, Vec3f src) { vec3_##name((dst), (src)); }                          \
-    void vec4f_##name(Vec4f dst, Vec4f src) { vec4_##name((dst), (src)); }                          \
-
-#define VEC_FUNC_VVN(name)                                                                          \
-    void vec2f_##name(Vec2f dst, Vec2f src, f32 val) { vec2_##name((dst), (src), (val)); }          \
-    void vec3c_##name(Vec3c dst, Vec3c src, s8  val) { vec3_##name((dst), (src), (val)); }          \
-    void vec3s_##name(Vec3s dst, Vec3s src, s16 val) { vec3_##name((dst), (src), (val)); }          \
-    void vec3i_##name(Vec3i dst, Vec3i src, s32 val) { vec3_##name((dst), (src), (val)); }          \
-    void vec3f_##name(Vec3f dst, Vec3f src, f32 val) { vec3_##name((dst), (src), (val)); }          \
-    void vec4f_##name(Vec4f dst, Vec4f src, f32 val) { vec4_##name((dst), (src), (val)); }          \
-
-#define VEC_FUNC_VVV(name)                                                                          \
-    void vec2f_##name(Vec2f dst, Vec2f src1, Vec2f src2) { vec2_##name((dst), (src1), (src2)); }    \
-    void vec3c_##name(Vec3c dst, Vec3c src1, Vec3c src2) { vec3_##name((dst), (src1), (src2)); }    \
-    void vec3s_##name(Vec3s dst, Vec3s src1, Vec3s src2) { vec3_##name((dst), (src1), (src2)); }    \
-    void vec3i_##name(Vec3i dst, Vec3i src1, Vec3i src2) { vec3_##name((dst), (src1), (src2)); }    \
-    void vec3f_##name(Vec3f dst, Vec3f src1, Vec3f src2) { vec3_##name((dst), (src1), (src2)); }    \
-    void vec4f_##name(Vec4f dst, Vec4f src1, Vec4f src2) { vec4_##name((dst), (src1), (src2)); }    \
-
-#define VEC_FUNC_ARITHMETIC(name1, name2)                                                   \
-    VEC_FUNC_VVV(name1)                                                                     \
-    VEC_FUNC_VV( name2)                                                                     \
-    VEC_FUNC_VVN(name1##_val)                                                               \
-    VEC_FUNC_VN( name2##_val)
-
-#define VEC_FUNC_DECLARATION_V(name)                                                        \
-    void vec2f_##name(Vec2f dst);                                                           \
-    void vec3c_##name(Vec3c dst);                                                           \
-    void vec3s_##name(Vec3s dst);                                                           \
-    void vec3i_##name(Vec3i dst);                                                           \
-    void vec3f_##name(Vec3f dst);                                                           \
-    void vec4f_##name(Vec4f dst);                                                           \
-
-#define VEC_FUNC_DECLARATION_VN(name)                                                       \
-    void vec2f_##name(Vec2f dst, f32 val);                                                  \
-    void vec3c_##name(Vec3c dst, s8  val);                                                  \
-    void vec3s_##name(Vec3s dst, s16 val);                                                  \
-    void vec3i_##name(Vec3i dst, s32 val);                                                  \
-    void vec3f_##name(Vec3f dst, f32 val);                                                  \
-    void vec4f_##name(Vec4f dst, f32 val);                                                  \
-
-#define VEC_FUNC_DECLARATION_VV(name)                                                       \
-    void vec2f_##name(Vec2f dst, Vec2f src);                                                \
-    void vec3c_##name(Vec3c dst, Vec3c src);                                                \
-    void vec3s_##name(Vec3s dst, Vec3s src);                                                \
-    void vec3i_##name(Vec3i dst, Vec3i src);                                                \
-    void vec3f_##name(Vec3f dst, Vec3f src);                                                \
-    void vec4f_##name(Vec4f dst, Vec4f src);                                                \
-
-#define VEC_FUNC_DECLARATION_VVN(name)                                                      \
-    void vec2f_##name(Vec2f dst, Vec2f src, f32 val);                                       \
-    void vec3c_##name(Vec3c dst, Vec3c src, s8  val);                                       \
-    void vec3s_##name(Vec3s dst, Vec3s src, s16 val);                                       \
-    void vec3i_##name(Vec3i dst, Vec3i src, s32 val);                                       \
-    void vec3f_##name(Vec3f dst, Vec3f src, f32 val);                                       \
-    void vec4f_##name(Vec4f dst, Vec4f src, f32 val);                                       \
-
-#define VEC_FUNC_DECLARATION_VVV(name)                                                      \
-    void vec2f_##name(Vec2f dst, Vec2f src1, Vec2f src2);                                   \
-    void vec3c_##name(Vec3c dst, Vec3c src1, Vec3c src2);                                   \
-    void vec3s_##name(Vec3s dst, Vec3s src1, Vec3s src2);                                   \
-    void vec3i_##name(Vec3i dst, Vec3i src1, Vec3i src2);                                   \
-    void vec3f_##name(Vec3f dst, Vec3f src1, Vec3f src2);                                   \
-    void vec4f_##name(Vec4f dst, Vec4f src1, Vec4f src2);                                   \
-
-#define VEC_FUNC_DECLARATION_ARITHMETIC(name1, name2)                                       \
-    VEC_FUNC_DECLARATION_VVV(name1)                                                         \
-    VEC_FUNC_DECLARATION_VV( name2)                                                         \
-    VEC_FUNC_DECLARATION_VVN(name1##_val)                                                   \
-    VEC_FUNC_DECLARATION_VN( name2##_val)                                                   \
-
-
 #define MAKE_DXZ(from, to, fmt)     \
     fmt dx = ((to)[0] - (from)[0]); \
     fmt dz = ((to)[2] - (from)[2]);
@@ -597,8 +508,6 @@ s16  abss(s16 x);
 s32  absi(s32 x);
 f32  absf(f32 x);
 f64  absd(f64 x);
-// Square Root
-f64  sqrtd(f64 x);
 // Clamp
 Bool32 clamp_pitch(Vec3f from, Vec3f to, Angle maxPitch, Angle minPitch);
 Bool32 clamp_s16(s16 *value, s16 minimum, s16 maximum);
@@ -619,15 +528,6 @@ void random_vec3s(                       Vec3s dest, s16 xRange, s16 yRange, s16
 // Angles
 Angle  abs_angle_diff(Angle angle1, Angle angle2);
 Bool32 oscillate_toward(s32 *value, f32 *vel, s32 target, f32 velCloseToZero, f32 accel, f32 slowdown);
-// Vector Operations
-VEC_FUNC_DECLARATION_V(zero)
-VEC_FUNC_DECLARATION_VN(same)
-VEC_FUNC_DECLARATION_VV(copy)
-VEC_FUNC_DECLARATION_VV(copy_inverse)
-VEC_FUNC_DECLARATION_ARITHMETIC( sum, add)
-VEC_FUNC_DECLARATION_ARITHMETIC(diff, sub)
-VEC_FUNC_DECLARATION_ARITHMETIC(prod, mul)
-VEC_FUNC_DECLARATION_ARITHMETIC(quot, div)
 
 void vec3f_to_vec3c(     Vec3c dst, Vec3f src);
 void vec3f_to_vec3s(     Vec3s dst, Vec3f src);
@@ -731,10 +631,10 @@ Bool32  approach_f32_asymptotic_bool(     f32 *current,   f32 target,   f32 mult
 void    approach_vec3s_asymptotic(      Vec3s  current, Vec3s target, s16 xMul, s16 yMul, s16 zMul);
 void    approach_vec3f_asymptotic(      Vec3f  current, Vec3f target, f32 xMul, f32 yMul, f32 zMul);
 // Trig
-f64   sind(f64 x);
-f64   cosd(f64 x);
-s16   LENSIN(s16 length, Angle direction);
-s16   LENCOS(s16 length, Angle direction);
+// f64   sind(f64 x);
+// f64   cosd(f64 x);
+// s16   LENSIN(s16 length, Angle direction);
+// s16   LENCOS(s16 length, Angle direction);
 Angle atan2s(f32 y, f32 x);
 f32   atan2f(f32 a, f32 b);
 f32   atan2_deg(f32 a, f32 b);
@@ -745,5 +645,3 @@ void anim_spline_init(Vec4s *keyFrames);
 Bool32 anim_spline_poll( Vec3f result);
 void vec3s_evaluate_cubic_spline(f32 u, Vec3s Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4);
 void vec3f_evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f s1, Vec3f s2, Vec3f s3, Vec3f s4);
-
-#endif // MATH_UTIL_H

@@ -458,7 +458,7 @@ Bool32 mario_facing_downhill(struct MarioState *m, UNUSED Bool32 turnYaw) {
     Angle faceAngleYaw = m->faceAngle[1];
     // This is never used in practice, as turnYaw is
     // always passed as zero.
-    // if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += 0x8000;
+    // if (turnYaw && (m->forwardVel < 0.0f)) faceAngleYaw += DEG(180);
     faceAngleYaw = abs_angle_diff(m->floorYaw, faceAngleYaw);
     return (faceAngleYaw < DEG(90));
 }

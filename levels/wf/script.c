@@ -18,12 +18,12 @@
 
 // Unlike most levels, some of the level geometry objects in WF are defined as regular objects instead of terrain objects.
 // Some of them are still terrain objects, however.
-static const LevelScript script_func_local_1[] = {
+static const LevelScript script_func_local_wf_level_geometry[] = {
     OBJECT(/*model*/ MODEL_LEVEL_GEOMETRY_0D,           /*pos*/ -2560, 2560,  -256, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvGiantPole),
     RETURN(),
 };
 
-static const LevelScript script_func_local_2[] = {
+static const LevelScript script_func_local_wf_platforms[] = {
     OBJECT(/*model*/ MODEL_WF_SMALL_BOMP,               /*pos*/  3300, 1070,     0, /*angle*/ 0,  90, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSmallBomp),
     OBJECT(/*model*/ MODEL_WF_SMALL_BOMP,               /*pos*/  3300, 1070,  1280, /*angle*/ 0,  90, 0, /*behParam*/ 0x00000000, /*beh*/ bhvSmallBomp),
     OBJECT(/*model*/ MODEL_WF_LARGE_BOMP,               /*pos*/  3300, 1070,   640, /*angle*/ 0,   0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvLargeBomp),
@@ -47,7 +47,7 @@ static const LevelScript script_func_local_2[] = {
     RETURN(),
 };
 
-static const LevelScript script_func_local_3[] = {
+static const LevelScript script_func_local_wf_characters[] = {
     OBJECT(          /*model*/ MODEL_THWOMP,            /*pos*/  3462, 1939, -1545, /*angle*/ 0,  180, 0, /*behParam*/ 0x00000000, /*beh*/ bhvThwomp),
     OBJECT(          /*model*/ MODEL_THWOMP,            /*pos*/  3462, 1075, -3314, /*angle*/ 0,   90, 0, /*behParam*/ 0x00000000, /*beh*/ bhvThwomp),
     // OBJECT(          /*model*/ MODEL_NONE,              /*pos*/  -856,  922,  3819, /*angle*/ 0,    0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvBetaFishSplashSpawner),
@@ -77,7 +77,7 @@ static const LevelScript script_func_local_3[] = {
     RETURN(),
 };
 
-static const LevelScript script_func_local_4[] = {
+static const LevelScript script_func_local_wf_stars[] = {
     OBJECT_WITH_ACTS(/*model*/ MODEL_WHOMP, /*pos*/     0, 3584,    0, /*angle*/ 0, 0, 0, /*behParam*/ 0x00000000, /*beh*/ bhvWhompKingBoss,     /*acts*/ ACT_1),
     OBJECT_WITH_ACTS(/*model*/ MODEL_STAR,  /*pos*/   300, 5550,    0, /*angle*/ 0, 0, 0, /*behParam*/ 0x01000000, /*beh*/ bhvStar,              /*acts*/ ACT_2 | ACT_3 | ACT_4 | ACT_5 | ACT_6),
     OBJECT_WITH_ACTS(/*model*/ MODEL_STAR,  /*pos*/ -2500, 1500, -750, /*angle*/ 0, 0, 0, /*behParam*/ 0x02000000, /*beh*/ bhvStar,              /*acts*/ ALL_ACTS),
@@ -144,10 +144,10 @@ const LevelScript level_wf_entry[] = {
         WARP_NODE(/*id*/ 0x0C, /*destLevel*/ LEVEL_WF,     /*destArea*/ 0x01, /*destNode*/ 0x0B, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x34, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x66, /*flags*/ WARP_NO_CHECKPOINT),
-        JUMP_LINK(script_func_local_1),
-        JUMP_LINK(script_func_local_2),
-        JUMP_LINK(script_func_local_3),
-        JUMP_LINK(script_func_local_4),
+        JUMP_LINK(script_func_local_wf_level_geometry),
+        JUMP_LINK(script_func_local_wf_platforms),
+        JUMP_LINK(script_func_local_wf_characters),
+        JUMP_LINK(script_func_local_wf_stars),
         TERRAIN(/*terrainData*/ wf_seg7_collision_070102D8),
         MACRO_OBJECTS(/*objList*/ wf_seg7_macro_objs),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_030),

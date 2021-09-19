@@ -722,7 +722,7 @@ Bool32 act_finish_turning_around(struct MarioState *m) {
     if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) set_mario_action(m, ACT_FREEFALL, 0);
     if (is_anim_at_end(m)) set_mario_action(m, ACT_WALKING, 0);
     //! TODO: fix this for FLOOR_ALIGNMENT
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     return FALSE;
 }
 
@@ -1307,7 +1307,7 @@ Bool32 act_freefall_land(struct MarioState *m) {
 }
 
 Bool32 act_side_flip_land(struct MarioState *m) {
-    if (common_landing_action(m, MARIO_ANIM_SLIDEFLIP_LAND, ACT_FREEFALL) != GROUND_STEP_HIT_WALL) m->marioObj->header.gfx.angle[1] += 0x8000;
+    if (common_landing_action(m, MARIO_ANIM_SLIDEFLIP_LAND, ACT_FREEFALL) != GROUND_STEP_HIT_WALL) m->marioObj->header.gfx.angle[1] += DEG(180);
     return (common_landing_cancels(m, &sSideFlipLandAction, set_jumping_action));
 }
 

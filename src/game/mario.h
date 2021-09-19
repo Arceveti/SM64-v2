@@ -1,5 +1,4 @@
-#ifndef MARIO_H
-#define MARIO_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -61,5 +60,3 @@ void   debug_print_speed_action_normal(      struct MarioState *m);
 #endif
 void   init_mario(void);
 void   init_mario_from_save_file(void);
-
-#endif // MARIO_H

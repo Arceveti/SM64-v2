@@ -1,5 +1,4 @@
-#ifndef GD_JOINTS_H
-#define GD_JOINTS_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -11,5 +10,3 @@ Bool32 set_skin_weight(struct ObjJoint *j, s32 id, struct ObjVertex *vtx, f32 we
 void   reset_joint(   struct ObjJoint *j);
 void   reset_joint_counts(void);
 void   set_joint_vecs(struct ObjJoint *j, Vec3f pos);
-
-#endif // GD_JOINTS_H

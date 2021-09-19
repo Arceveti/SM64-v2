@@ -302,8 +302,8 @@ void print_which_benchmark(void) {
 
 char consoleLogTable[LOG_BUFFER_SIZE][255];
 
-static char *write_to_buf(char *buffer, const char *data, size_t size) {
-    return (char *) memcpy(buffer, data, size) + size;
+char *write_to_buf(char *buffer, const char *data, size_t size) {
+    return ((char *) memcpy(buffer, data, size) + size);
 }
 
 void append_puppyprint_log(const char *str, ...) {

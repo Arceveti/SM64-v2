@@ -4962,7 +4962,7 @@ void player2_rotate_cam(struct Camera *c, Angle minPitch, Angle maxPitch, Angle 
     pitch += sCreditsPlayer2Pitch;
     yaw   += sCreditsPlayer2Yaw;
     vec3f_set_dist_and_angle(c->pos, sPlayer2FocusOffset, distCamToFocus, pitch, yaw);
-    vec3f_sub(sPlayer2FocusOffset, c->focus);
+    vec3_sub(sPlayer2FocusOffset, c->focus);
 }
 
 /**

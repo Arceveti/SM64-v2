@@ -1,5 +1,4 @@
-#ifndef CUTSCENE_H
-#define CUTSCENE_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -154,5 +153,3 @@ struct CutsceneVariable
     Vec3f unusedPoint;
     Vec3a angle;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 /**
  * @file config.h
@@ -54,6 +53,8 @@
 // Unlocks FPS (not recommended for normal gameplay)
 // #define UNLOCK_FPS
 
+// disables 'static' in many files. Useful for debugging purposes.
+#define NONSTATIC
 
 /********************************************************************************************************************************
  *                                                                                                                              *
@@ -923,5 +924,3 @@
 #ifndef FAST_FLOOR_ALIGN
 #undef FLOOR_ALIGNMENT
 #endif
-
-#endif // CONFIG_H

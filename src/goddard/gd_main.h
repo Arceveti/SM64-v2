@@ -1,5 +1,4 @@
-#ifndef GD_MAIN_H
-#define GD_MAIN_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -58,5 +57,3 @@ struct GdControl { // gGdCtrl
 // bss
 extern struct GdControl gGdCtrl;
 extern struct GdControl gGdCtrlPrev;
-
-#endif // GD_MAIN_H

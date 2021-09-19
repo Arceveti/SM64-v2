@@ -1,6 +1,4 @@
-#ifndef SRAM_H
-#define SRAM_H
-
+#pragma once
 
 /*----------------------------------------------------------------------*/
 /*	nuPiSramInit  - Initialization of handle for SRAM					*/
@@ -24,5 +22,3 @@ extern int nuPiReadWriteSram(u32 addr, void* buf_ptr, u32 size, s32 flag);
 /*	nuPiWriteSram - Write to SRAM										*/
 /*----------------------------------------------------------------------*/
 #define nuPiWriteSram(addr, buf_ptr, size) nuPiReadWriteSram(addr, buf_ptr, size, OS_WRITE)
-
-#endif // SRAM_H

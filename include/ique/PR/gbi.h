@@ -17,8 +17,7 @@
  *
  **************************************************************************/
 
-#ifndef _GBI_H_
-#define _GBI_H_
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -4825,6 +4824,3 @@ typedef union {
 #endif
 
 #endif /* _LANGUAGE_C */
-
-
-#endif /* _GBI_H_ */

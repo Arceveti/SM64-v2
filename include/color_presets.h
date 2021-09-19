@@ -1,5 +1,4 @@
-#ifndef COLOR_PRESETS_H
-#define COLOR_PRESETS_H
+#pragma once
 
 // Texture formats:
 // NOTE: IA4 and RGBA16 formats are tricky, because while their
@@ -217,6 +216,3 @@
 #define COLOR_RGBF_YELLOW           1.0f, 1.0f, 1.0f // 0xFF 0xFF 0xFF | 255 255 255
 
 #define ARR(a) { a }
-
-#endif // COLOR_PRESETS_H
-

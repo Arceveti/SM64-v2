@@ -744,7 +744,7 @@ MarioStep perform_air_step(struct MarioState *m, u32 stepArg) {
     }
 #else
     // Step once
-    vec3f_sum(intendedPos, m->pos, m->vel);
+    vec3_sum(intendedPos, m->pos, m->vel);
     stepResult = perform_air_quarter_step(m, intendedPos, stepArg);
  #ifdef WALL_QUICKSAND
     if ((quarterStepResult == AIR_STEP_HIT_WALL) && (m->wall) && (m->wall->type == SURFACE_INSTANT_QUICKSAND)) {

@@ -1,5 +1,4 @@
-#ifndef TYPES_H
-#define TYPES_H
+#pragma once
 
 // This file contains various data types used in Super Mario 64 that don't yet
 // have an appropriate header.
@@ -493,5 +492,3 @@ struct MarioState
              u8             hurtShadeAlpha;
 #endif
 };
-
-#endif // TYPES_H

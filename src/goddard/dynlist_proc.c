@@ -359,7 +359,7 @@ void d_attach_to(s32 flag, struct GdObj *obj) {
         d_vec3f_get_world_pos(currObjPos);
         set_cur_dynobj(obj);
         d_vec3f_get_world_pos(objPos);
-        vec3f_sub(currObjPos, objPos);
+        vec3_sub(currObjPos, objPos);
     }
     d_unstash_dynobj();
     switch (sDynListCurObj->type) {

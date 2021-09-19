@@ -1,5 +1,4 @@
-#ifndef GD_TYPES_H
-#define GD_TYPES_H
+#pragma once
 
 #include <PR/ultratypes.h>
 #include <ultra64.h>
@@ -533,5 +532,3 @@ struct ObjLight {
     /* 0x98 */ s32   unk98;         // unused
     /* 0x9C */ struct ObjShape *shapePtr;
 }; /* sizeof = 0xA0 */
-
-#endif // GD_TYPES_H

@@ -1,5 +1,4 @@
-#ifndef AREA_H
-#define AREA_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -180,5 +179,3 @@ void play_transition(            s16 transType, s16 time, Color red, Color green
 void play_transition_after_delay(s16 transType, s16 time, Color red, Color green, Color blue, s16 delay);
 void shade_screen_color(ColorRGBA color);
 void render_game(void);
-
-#endif // AREA_H

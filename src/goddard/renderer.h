@@ -1,5 +1,4 @@
-#ifndef GD_RENDERER_H
-#define GD_RENDERER_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -86,5 +85,3 @@ void  init_pick_buf(s16 *buf, s32 len);
 void  store_in_pickbuf(s16 data);
 s32   get_cur_pickbuf_offset(void);
 struct GdObj *load_dynlist(struct DynList *dynlist);
-
-#endif // GD_RENDERER_H

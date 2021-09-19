@@ -117,7 +117,7 @@ void move_particle(struct ObjParticle *ptc) {
             }
         }
     }
-    vec3f_mul_val(ptc->vel, 0.9f);
+    vec3_mul_val(ptc->vel, 0.9f);
     if (ptc->particleType == 3) {
         switch (ptc->type) {
             case 1:

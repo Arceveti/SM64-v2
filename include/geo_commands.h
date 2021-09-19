@@ -1,5 +1,4 @@
-#ifndef GEO_COMMANDS_H
-#define GEO_COMMANDS_H
+#pragma once
 
 #include "command_macros_base.h"
 
@@ -431,5 +430,3 @@
  */
 #define GEO_CULLING_RADIUS(cullingRadius) \
     CMD_BBH(0x20, 0x00, cullingRadius)
-
-#endif // GEO_COMMANDS_H

@@ -1,5 +1,4 @@
-#ifndef GD_DRAW_OBJECTS_H
-#define GD_DRAW_OBJECTS_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -44,5 +43,3 @@ void update_view(               struct ObjView   *view);
 void update_shaders(            struct ObjShape  *shape, Vec3f offset);
 void draw_shape_faces(          struct ObjShape  *shape);
 void register_light(            struct ObjLight  *light);
-
-#endif // GD_DRAW_OBJECTS_H

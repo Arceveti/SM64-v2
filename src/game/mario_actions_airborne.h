@@ -1,5 +1,4 @@
-#ifndef MARIO_ACTIONS_AIRBORNE_H
-#define MARIO_ACTIONS_AIRBORNE_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -55,5 +54,3 @@
 #define ACT_SPECIAL_TRIPLE_JUMP_STATE_LANDING       0x1
 
 Bool32 mario_execute_airborne_action(struct MarioState *m);
-
-#endif // MARIO_ACTIONS_AIRBORNE_H

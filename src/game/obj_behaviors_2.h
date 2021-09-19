@@ -1,5 +1,4 @@
-#ifndef OBJ_BEHAVIORS_2_H
-#define OBJ_BEHAVIORS_2_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -59,5 +58,3 @@ void   cur_obj_treat_far_home_as_mario(f32 threshold);
 void   shelled_koopa_attack_handler(s32 attackType);
 void   cur_obj_spit_fire(s16 relativePosX, s16 relativePosY, s16 relativePosZ, f32 scale, ModelID32 model, f32 startSpeed, f32 endSpeed, Angle movePitch);
 void   obj_set_speed_to_zero(void);
-
-#endif // OBJ_BEHAVIORS_2_H

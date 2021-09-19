@@ -1,5 +1,4 @@
-#ifndef MARIO_ACTIONS_STATIONARY
-#define MARIO_ACTIONS_STATIONARY
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -71,5 +70,3 @@ Bool32 act_ground_pound_land(          struct MarioState *m);
 Bool32 act_first_person(               struct MarioState *m);
 Bool32 check_common_stationary_cancels(struct MarioState *m);
 Bool32 mario_execute_stationary_action(struct MarioState *m);
-
-#endif // MARIO_ACTIONS_STATIONARY

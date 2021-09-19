@@ -435,11 +435,11 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
         // not going to interpolate scale?
         mtxf_scale_self_vec3f( mtx, t1->scale);
         mtxf_rot_about_vec3f(mtx, transform.rotate);
-        vec3f_add(mtx[3], transform.pos);
+        vec3_add(mtx[3], transform.pos);
     } else {
         d_set_scale(t1->scale[0], t1->scale[1], t1->scale[2]);
         mtxf_rot_about_vec3f(mtx, t1->rotate);
-        vec3f_add(mtx[3], t1->pos);
+        vec3_add(mtx[3], t1->pos);
     }
     d_set_i_matrix(&mtx);
 }
@@ -597,12 +597,8 @@ void drag_picked_object(struct GdObj *inputObj) {
         // Note: this second sfx won't play, as it is "overwritten" by the first
         if (ABSI(ctrl->stickDeltaX) + ABSI(ctrl->stickDeltaY) >= 11) gd_play_sfx(GD_SFX_PINCH_FACE_2);
         switch (inputObj->type) {
-            case OBJ_TYPE_JOINTS:
-                vec3f_add(((struct ObjJoint *) obj)->rotationMtx[3], displacement);
-                break;
-            case OBJ_TYPE_NETS:
-                vec3f_add(((struct ObjNet *) obj)->idMtx[3], displacement);
-                break;
+            case OBJ_TYPE_JOINTS: vec3_add(((struct ObjJoint *) obj)->rotationMtx[3], displacement); break;
+            case OBJ_TYPE_NETS:   vec3_add(((struct ObjNet   *) obj)->idMtx[3],       displacement); break;
             case OBJ_TYPE_PARTICLES:
             default:;
         }
@@ -667,7 +663,7 @@ void move_camera(struct ObjCamera *cam) {
     mtxf_mul(cam->transformMtx, idMtx, cam->transformMtx);
     vec3_copy(nextPos, cam->relPos);
     linear_mtxf_mul_vec3f(cam->transformMtx, cam->worldPos, nextPos);
-    vec3f_add(cam->worldPos, worldPos);
+    vec3_add(cam->worldPos, worldPos);
 }
 
 /* @ 22F7A4 for 0x38; orig name: func_80180FD4 */

@@ -1,6 +1,3 @@
-#ifndef TEXSCROLL_H
-#define TEXSCROLL_H
+#pragma once
 
 extern void scroll_textures();
-
-#endif

@@ -510,7 +510,7 @@ Bool32 act_double_jump_land_stop(struct MarioState *m) {
 Bool32 act_side_flip_land_stop(struct MarioState *m) {
     if (check_common_landing_cancels(m, ACT_UNINITIALIZED)) return TRUE;
     landing_step(m, MARIO_ANIM_SLIDEFLIP_LAND, ACT_IDLE);
-    m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->marioObj->header.gfx.angle[1] += DEG(180);
     return FALSE;
 }
 

@@ -1,5 +1,4 @@
-#ifndef SCRIPTS_H
-#define SCRIPTS_H
+#pragma once
 
 #include "types.h"
 #ifdef PUPPYCAM
@@ -26,5 +25,3 @@ extern const LevelScript script_func_global_15[];
 extern const LevelScript script_func_global_16[];
 extern const LevelScript script_func_global_17[];
 extern const LevelScript script_func_global_18[];
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef OBJECT_HELPERS_H
-#define OBJECT_HELPERS_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -280,7 +279,4 @@ void   enable_time_stop_including_mario(   void);
 void   disable_time_stop_including_mario(  void);
 Bool32 cur_obj_check_interacted(           void);
 void   cur_obj_spawn_loot_blue_coin(       void);
-
-void cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 offsetY);
-
-#endif // OBJECT_HELPERS_H
+void   cur_obj_spawn_star_at_y_offset(f32 targetX, f32 targetY, f32 targetZ, f32 offsetY);

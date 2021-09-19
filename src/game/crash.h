@@ -1,6 +1,5 @@
+#pragma once
 
-#ifndef _CRASH_H_
-#define _CRASH_H_
 #include <types.h>
 #define CRASH_SCREEN_INCLUDED 1
 extern u32 cop0_get_cause(   void);
@@ -19,4 +18,3 @@ int  fb_print_str(       int x, int y, const char *str);
 int  fb_print_uint(      int x, int y, u32 value);
 void fb_print_int_hex(   int x, int y, u32 value, int nbits);
 void fb_print_gpr_states(int x, int y, const char* regStrs[], u32 *regContext);
-#endif /* _CRASH_H_ */

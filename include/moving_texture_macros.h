@@ -1,5 +1,4 @@
-#ifndef MOVING_TEXTURE_MACROS_H
-#define MOVING_TEXTURE_MACROS_H
+#pragma once
 
 #include "game/moving_texture.h"
 
@@ -62,11 +61,7 @@
     x, y, z, 0, light, 0, param1, param2
 
 // End of moving texture load
-#define MOV_TEX_END() \
-    0
+#define MOV_TEX_END() 0
 
 // End of moving texture load if movTexRotTris was used, only used in SSL
-#define MOV_TEX_ROT_END() \
-    0, 0
-
-#endif // MOVING_TEXTURE_MACROS_H
+#define MOV_TEX_ROT_END() 0, 0

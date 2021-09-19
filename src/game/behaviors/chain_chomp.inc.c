@@ -33,7 +33,7 @@ void bhv_chain_chomp_chain_part_update(void) {
     } else if (o->oBehParams2ndByte != CHAIN_CHOMP_CHAIN_PART_BP_PIVOT) {
         struct ChainSegment *segment = &o->parentObj->oChainChompSegments[o->oBehParams2ndByte];
         // Set position relative to the pivot
-        vec3f_sum(&o->oPosVec, &o->parentObj->parentObj->oPosVec, segment->pos);
+        vec3_sum(&o->oPosVec, &o->parentObj->parentObj->oPosVec, segment->pos);
     } else if (o->parentObj->oChainChompReleaseStatus != CHAIN_CHOMP_NOT_RELEASED) {
         cur_obj_update_floor_and_walls();
         cur_obj_move_standard(78);

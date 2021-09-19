@@ -199,5 +199,5 @@ void (*sBowserPuzzlePieceActions[])(void) = {
 void bhv_lll_bowser_puzzle_piece_loop(void) {
     bhv_lll_bowser_puzzle_piece_update();
     cur_obj_call_action_function(sBowserPuzzlePieceActions);
-    vec3f_sum(&o->oPosVec, &o->oBowserPuzzlePieceOffsetVec, &o->oHomeVec);
+    vec3_sum(&o->oPosVec, &o->oBowserPuzzlePieceOffsetVec, &o->oHomeVec);
 }

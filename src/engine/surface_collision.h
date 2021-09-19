@@ -1,5 +1,4 @@
-#ifndef SURFACE_COLLISION_H
-#define SURFACE_COLLISION_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -59,5 +58,3 @@ Bool32 is_behind_surface(           Vec3f  pos, struct Surface *surf);
 Bool32 is_range_behind_surface(     Vec3f from, Vec3f to,  struct Surface *surf, s16 range, SurfaceType surfType);
 void find_surface_on_ray(           Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags);
 void debug_surface_list_info(                       f32 x,        f32 z);
-
-#endif // SURFACE_COLLISION_H

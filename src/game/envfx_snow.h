@@ -1,5 +1,4 @@
-#ifndef ENVFX_SNOW_H
-#define ENVFX_SNOW_H
+#pragma once
 
 #include <PR/ultratypes.h>
 #include "types.h"
@@ -36,5 +35,3 @@ extern Vec3i gSnowCylinderLastPos;
 extern s16   gSnowParticleCount;
 
 Gfx *envfx_update_particles(s32 snowMode, Vec3s marioPos, Vec3s camTo, Vec3s camFrom);
-
-#endif // ENVFX_SNOW_H

@@ -512,7 +512,7 @@ struct Object *find_nearest_obj_with_behavior_from_yaw(const BehaviorScript *beh
     struct Object     *closestObj   = NULL;
     struct Object     *obj;
     struct ObjectNode *listHead;
-    UAngle minDYaw = 0x8000;
+    UAngle minDYaw = DEG(180);
     listHead       = &gObjectLists[get_object_list_from_behavior(behaviorAddr)];
     obj            = (struct Object *) listHead->next;
     while (obj != (struct Object *) listHead) {
@@ -1270,12 +1270,12 @@ s32 cur_obj_follow_path(void) {
         targetWaypoint = startWaypoint;
     }
     o->oPathedPrevWaypointFlags = lastWaypoint->flags | WAYPOINT_FLAGS_INITIALIZED;
-    vec3s_diff(prevToNext, targetWaypoint->pos, lastWaypoint->pos);
+    vec3_diff(prevToNext, targetWaypoint->pos, lastWaypoint->pos);
     vec3_diff(objToNext, targetWaypoint->pos, &o->oPosVec);
     o->oPathedTargetYaw         = atan2s(objToNext[2], objToNext[0]);
     o->oPathedTargetPitch       = atan2s(sqrtf(sqr(objToNext[0]) + sqr(objToNext[2])), -objToNext[1]);
     // If dot(prevToNext, objToNext) <= 0 (i.e. reached other side of target waypoint)
-    if (((prevToNext[0] * objToNext[0]) + (prevToNext[1] * objToNext[1]) + (prevToNext[2] * objToNext[2])) <= 0) {
+    if (vec3_dot(prevToNext, objToNext) <= 0) {
         o->oPathedPrevWaypoint = targetWaypoint;
         return (((targetWaypoint + 1)->flags == WAYPOINT_FLAGS_END) ? PATH_REACHED_END : PATH_REACHED_WAYPOINT);
     }
@@ -1805,13 +1805,14 @@ Bool32 cur_obj_check_grabbed_mario(void) {
     return FALSE;
 }
 
+Bool32 sPlayerGrabReleaseState;
+
 Bool32 player_performed_grab_escape_action(void) {
-    static Bool32 grabReleaseState;
     Bool32 result = FALSE;
-    if (gPlayer1Controller->stickMag < 30.0f) grabReleaseState = FALSE;
-    if ((!grabReleaseState) && (gPlayer1Controller->stickMag > 40.0f)) {
-        grabReleaseState = TRUE;
-        result           = TRUE;
+    if (gPlayer1Controller->stickMag < 30.0f) sPlayerGrabReleaseState = FALSE;
+    if ((!sPlayerGrabReleaseState) && (gPlayer1Controller->stickMag > 40.0f)) {
+        sPlayerGrabReleaseState = TRUE;
+        result                  = TRUE;
     }
     if (gPlayer1Controller->buttonPressed & (A_BUTTON | B_BUTTON | Z_TRIG)) return TRUE;
     return result;

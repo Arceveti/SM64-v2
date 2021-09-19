@@ -32,7 +32,7 @@ void grabbable_joint_update_func(struct ObjJoint *self) {
             self->velocity[1] -= (offset[1] * 0.5f);
             self->velocity[2] -= (offset[2] * 0.5f);
             // Decay the velocity
-            vec3f_mul_val(self->velocity, 0.8f);
+            vec3_mul_val(self->velocity, 0.8f);
             // If the joint's velocity has decayed enough and it is very close
             // to its original position, stop its movement altogether
             if (((ABSF(self->velocity[0]) + ABSF(self->velocity[1]) + ABSF(self->velocity[2])) < 1.0f)
@@ -80,16 +80,16 @@ void eye_joint_update_func(struct ObjJoint *self) {
     offset[0]  =  (gGdCtrl.csrX - pos[0]);
     offset[1]  = -(gGdCtrl.csrY - pos[1]);
     offset[2]  = 0.0f;
-    vec3f_mul_val(offset, 2.0f);
+    vec3_mul_val(offset, 2.0f);
     if (vec3_sumsq(offset) > sqr(30.0f)) {
         vec3f_normalize(offset);
-        vec3f_mul_val(offset, 30.0f);
+        vec3_mul_val(offset, 30.0f);
     }
     for ((att = self->attachedObjsGrp->firstMember); (att != NULL); (att = att->next)) {
         attobj = att->obj;
         set_cur_dynobj(attobj);
         rotMtx = d_get_rot_mtx_ptr();
-        vec3f_add((*rotMtx)[3], offset);
+        vec3_add((*rotMtx)[3], offset);
     }
 }
 

@@ -86,25 +86,25 @@ void bhv_monty_mole_hole_update(void) {
     }
 }
 
+static struct SpawnParticlesInfo sMontyMoleRiseFromGroundParticles = {
+    /* behParam:        */  0,
+    /* count:           */  3,
+    /* model:           */ MODEL_SAND_DUST,
+    /* offsetY:         */  0,
+    /* forwardVelBase:  */  4,
+    /* forwardVelRange: */  4,
+    /* velYBase:        */ 10,
+    /* velYRange:       */ 15,
+    /* gravity:         */ -4,
+    /* dragStrength:    */  0,
+    /* sizeBase:        */ 10.0f,
+    /* sizeRange:       */  7.0f,
+};
+
 /**
  * Spawn dirt particles when rising out of the ground.
  */
 void monty_mole_spawn_dirt_particles(s8 offsetY, s8 velYBase) {
-    static struct SpawnParticlesInfo sMontyMoleRiseFromGroundParticles = {
-        /* behParam:        */  0,
-        /* count:           */  3,
-        /* model:           */ MODEL_SAND_DUST,
-        /* offsetY:         */  0,
-        /* forwardVelBase:  */  4,
-        /* forwardVelRange: */  4,
-        /* velYBase:        */ 10,
-        /* velYRange:       */ 15,
-        /* gravity:         */ -4,
-        /* dragStrength:    */  0,
-        /* sizeBase:        */ 10.0f,
-        /* sizeRange:       */  7.0f,
-    };
-
     sMontyMoleRiseFromGroundParticles.offsetY  = offsetY;
     sMontyMoleRiseFromGroundParticles.velYBase = velYBase;
     cur_obj_spawn_particles(&sMontyMoleRiseFromGroundParticles);

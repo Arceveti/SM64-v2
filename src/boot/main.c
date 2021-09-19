@@ -96,12 +96,13 @@ Bool8 gShowDebugText                  = TRUE;
 Bool8 gShowDebugText                  = FALSE;
 #endif
 
+UNUSED static u16 sProfilerKeySequence[]  = { U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
+UNUSED static u16 sDebugTextKeySequence[] = { D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
+UNUSED static s16 sProfilerKey  = 0;
+UNUSED static s16 sDebugTextKey = 0;
+
 // unused
 UNUSED void handle_debug_key_sequences(void) {
-    static u16 sProfilerKeySequence[]  = { U_JPAD, U_JPAD, D_JPAD, D_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
-    static u16 sDebugTextKeySequence[] = { D_JPAD, D_JPAD, U_JPAD, U_JPAD, L_JPAD, R_JPAD, L_JPAD, R_JPAD };
-    static s16 sProfilerKey  = 0;
-    static s16 sDebugTextKey = 0;
     if (gPlayer3Controller->buttonPressed != 0) {
         if (sProfilerKeySequence[sProfilerKey++] == gPlayer3Controller->buttonPressed) {
             if (sProfilerKey == ARRAY_COUNT(sProfilerKeySequence)) {

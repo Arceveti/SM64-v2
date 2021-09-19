@@ -1,5 +1,4 @@
-#ifndef GROUP1_H
-#define GROUP1_H
+#pragma once
 
 #include "types.h"
 
@@ -89,5 +88,3 @@ extern const Gfx yoshi_egg_seg5_dl_3[];
 extern const Gfx yoshi_egg_seg5_dl_2[];
 extern const Gfx yoshi_egg_seg5_dl_1[];
 extern const Gfx yoshi_egg_seg5_dl_0[];
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef OBJECT_CONSTANTS_H
-#define OBJECT_CONSTANTS_H
+#pragma once
 
 // This file contains macros that provide descriptive names for
 // field-specific and object-specific constants, e.g. actions.
@@ -2411,5 +2410,3 @@
     #define CUTSCENE_OBJ_7_END_BIRDS_1                      0x7
     #define CUTSCENE_OBJ_5_END_BIRDS_2                      0x8
     #define CUTSCENE_OBJ_2_END_BIRDS_1                      0x9
-
-#endif // OBJECT_CONSTANTS_H

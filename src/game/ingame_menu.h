@@ -1,5 +1,4 @@
-#ifndef INGAME_MENU_H
-#define INGAME_MENU_H
+#pragma once
 
 #include <PR/ultratypes.h>
 
@@ -167,6 +166,4 @@ void set_cutscene_message(ScreenPos xOffset, ScreenPos yOffset, s16 msgIndex, s1
 void do_cutscene_handler(      void);
 void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
-s16 render_menus_and_dialogs(  void);
-
-#endif // INGAME_MENU_H
+s16  render_menus_and_dialogs(  void);
