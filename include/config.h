@@ -859,6 +859,7 @@
 
 // Variable Framerate (Fazana)
 //! Not compatible with KEEP_MARIO_HEAD
+//! Completely broken now, lol
 // #define VARIABLE_FRAMERATE
 
 // Align mario to the floor

@@ -22,6 +22,7 @@
 #include "game/debug_box.h"
 #ifdef VARIABLE_FRAMERATE
 #include "lerp.h"
+#include "game/level_update.h"
 #endif
 
 #include "config.h"
@@ -711,6 +712,8 @@ static void geo_process_background(struct GraphNodeBackground *node) {
  * but set in global variables. If an animated part is skipped, everything afterwards desyncs.
  */
 #ifdef VARIABLE_FRAMERATE
+u8 gMarioLoadedAnim = 1;
+
 void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     Mat4  matrix;
     Mtx   *matrixPtr = alloc_display_list(sizeof(*matrixPtr));
@@ -852,14 +855,24 @@ static void geo_process_bone(struct GraphNodeBone *node) {
  * object's animation.
  */
 #ifdef VARIABLE_FRAMERATE
-void geo_set_animation_globals(struct AnimInfo *node) {
-    struct Animation *anim            = node->curAnim;
+void geo_set_animation_globals(struct AnimInfo *node, s32 marioCheck) {
+    struct Animation *anim;
+    if (marioCheck && gMarioLoadedAnim) {
+        anim = gMarioState->prevAnim.curAnim;
+    } else {
+        anim = node->curAnim;
+    }
+    if (marioCheck && gMarioLoadedAnim) {
+        gMarioState->prevAnim.animTimer = gAreaUpdateCounter;
+    } else {
+        node->animTimer = gAreaUpdateCounter;
+    }
 #else
 void geo_set_animation_globals(struct AnimInfo *node, Bool32 hasAnimation) {
     struct Animation *anim            = node->curAnim;
     if (hasAnimation) node->animFrame = geo_update_animation_frame(node, &node->animFrameAccelAssist);
-#endif
     node->animTimer = gAreaUpdateCounter;
+#endif
     if (anim->flags & ANIM_FLAG_HOR_TRANS) {
         gCurAnimType = ANIM_TYPE_VERTICAL_TRANSLATION;
     } else if (anim->flags & ANIM_FLAG_VERT_TRANS) {
@@ -869,11 +882,31 @@ void geo_set_animation_globals(struct AnimInfo *node, Bool32 hasAnimation) {
     } else {
         gCurAnimType = ANIM_TYPE_TRANSLATION;
     }
+#ifdef VARIABLE_FRAMERATE
+    if (marioCheck && gMarioLoadedAnim) {
+        gCurrAnimFrame = gMarioState->prevAnim.animFrame;
+    } else {
+        gCurrAnimFrame = node->animFrame;
+    }
+#else
     gCurrAnimFrame                = node->animFrame;
+#endif
     gCurAnimEnabled               = (!(anim->flags & ANIM_FLAG_DISABLED));
     gCurrAnimAttribute            = segmented_to_virtual((void *) anim->index );
     gCurAnimData                  = segmented_to_virtual((void *) anim->values);
+#ifdef VARIABLE_FRAMERATE
+    if (anim->animYTransDivisor == 0) {
+        gCurAnimTranslationMultiplier = 1.0f;
+    } else {
+        if (marioCheck && gMarioLoadedAnim) {
+            gCurAnimTranslationMultiplier = (f32) gMarioState->prevAnim.animYTrans / (f32) anim->animYTransDivisor;
+        } else {
+            gCurAnimTranslationMultiplier = (f32) node->animYTrans / (f32) anim->animYTransDivisor;
+        }
+    }
+#else
     gCurAnimTranslationMultiplier = ((anim->animYTransDivisor == 0) ? 1.0f : ((f32) node->animYTrans / (f32) anim->animYTransDivisor));
+#endif
 }
 
 /**
@@ -1057,7 +1090,7 @@ static void geo_process_object(struct Object *node) {
         vec3_copy(node->header.gfx.cameraToObject, gMatStack[gMatStackIndex][3]);
         // FIXME: correct types
 #ifdef VARIABLE_FRAMERATE
-        if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo);
+        if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo, (node == gMarioState->marioObj));
 #else
         if (node->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->header.gfx.animInfo, hasAnimation);
 #endif
@@ -1150,7 +1183,7 @@ void geo_process_held_object(struct GraphNodeHeldObject *node) {
         gCurAnimType                        = ANIM_TYPE_NONE;
         gCurGraphNodeHeldObject             = (void *) node;
 #ifdef VARIABLE_FRAMERATE
-        if (node->objNode->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->objNode->header.gfx.animInfo);
+        if (node->objNode->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->objNode->header.gfx.animInfo, 0);
 #else
         if (node->objNode->header.gfx.animInfo.curAnim != NULL) geo_set_animation_globals(&node->objNode->header.gfx.animInfo, hasAnimation);
 #endif

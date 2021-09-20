@@ -449,7 +449,11 @@ struct MarioState
     /*0x94*/ struct PlayerCameraState *statusForCamera;
     /*0x98*/ struct MarioBodyState    *marioBodyState;
     /*0x9C*/ struct Controller        *controller;
+#ifdef VARIABLE_FRAMERATE
+    /*0xA0*/ struct DmaHandlerList    *animList[2];
+#else
     /*0xA0*/ struct DmaHandlerList    *animList;
+#endif
     /*0xA4*/ u32            collidedObjInteractTypes;
     /*0xA8*/ s16            numCoins;
     /*0xAA*/ s16            numStars;
@@ -466,6 +470,10 @@ struct MarioState
     /*0xBC*/ f32            peakHeight;
     /*0xC0*/ f32            quicksandDepth;
     /*0xC4*/ f32            windGravity;
+#ifdef VARIABLE_FRAMERATE
+    /*0x38*/ struct AnimInfo prevAnim;
+    s32 curAnimID;
+#endif
            Vec3f            lastSafePos;
            Vec3f            prevPos;
              f32            lateralSpeed;

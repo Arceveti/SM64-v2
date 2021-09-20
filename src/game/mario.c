@@ -32,6 +32,10 @@
 #include "save_file.h"
 #include "sound_init.h"
 #include "rumble_init.h"
+#ifdef VARIABLE_FRAMERATE
+#include "string.h"
+extern u8 gMarioLoadedAnim;
+#endif
 
 u32 sDebugMode;
 
@@ -44,7 +48,15 @@ u32 sDebugMode;
  */
 Bool32 is_anim_at_end(struct MarioState *m) {
     struct Object *o = m->marioObj;
+#ifdef VARIABLE_FRAMERATE
+    if (!gMarioLoadedAnim) {
+        return (o->header.gfx.animInfo.animFrame + 1) == o->header.gfx.animInfo.curAnim->loopEnd;
+    } else {
+        return (gMarioState->prevAnim.animFrame + 1) == gMarioState->prevAnim.curAnim->loopEnd;
+    }
+#else
     return ((o->header.gfx.animInfo.animFrame + 1) == o->header.gfx.animInfo.curAnim->loopEnd);
+#endif
 }
 
 /**
@@ -52,7 +64,15 @@ Bool32 is_anim_at_end(struct MarioState *m) {
  */
 Bool32 is_anim_past_end(struct MarioState *m) {
     struct Object *o = m->marioObj;
+#ifdef VARIABLE_FRAMERATE
+    if (!gMarioLoadedAnim) {
+        return o->header.gfx.animInfo.animFrame >= (o->header.gfx.animInfo.curAnim->loopEnd - 2);
+    } else {
+        return gMarioState->prevAnim.animFrame >= (gMarioState->prevAnim.curAnim->loopEnd - 2);
+    }
+#else
     return (o->header.gfx.animInfo.animFrame >= (o->header.gfx.animInfo.curAnim->loopEnd - 2));
+#endif
 }
 
 /**
@@ -60,6 +80,34 @@ Bool32 is_anim_past_end(struct MarioState *m) {
  */
 AnimFrame16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
     struct Object    *o          = m->marioObj;
+#ifdef VARIABLE_FRAMERATE
+    Bool32 swi = FALSE;
+    if (gMarioState->curAnimID != targetAnimID) swi = TRUE;
+    struct Animation *targetAnim = m->animList[gMarioLoadedAnim]->bufTarget;
+    struct AnimInfo  *changeAnim = (gMarioLoadedAnim ? &o->header.gfx.animInfo : &gMarioState->prevAnim);
+    if (load_patchable_table(m->animList[gMarioLoadedAnim], targetAnimID)) {
+        targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
+        targetAnim->index  = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
+        gMarioState->curAnimID = targetAnimID;
+    }
+    if (changeAnim->animID != targetAnimID) {
+        changeAnim->animID     = targetAnimID;
+        changeAnim->curAnim    = targetAnim;
+        changeAnim->animAccel  = 0;
+        changeAnim->animYTrans = m->animYTrans;
+        if (targetAnim->flags & ANIM_FLAG_NO_ACCEL) {
+            changeAnim->animFrame = targetAnim->startFrame;
+        } else {
+            if (targetAnim->flags & ANIM_FLAG_FORWARD) {
+                changeAnim->animFrame = (targetAnim->startFrame + 1);
+            } else {
+                changeAnim->animFrame = (targetAnim->startFrame - 1);
+            }
+        }
+    }
+    if (swi) gMarioLoadedAnim ^= 1;
+    return changeAnim->animFrame;
+#else
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
@@ -81,6 +129,7 @@ AnimFrame16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
         }
     }
     return o->header.gfx.animInfo.animFrame;
+#endif
 }
 
 /**
@@ -89,6 +138,35 @@ AnimFrame16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
  */
 AnimFrame16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimID, AnimAccel accel) {
     struct Object *o = m->marioObj;
+#ifdef VARIABLE_FRAMERATE
+    Bool32 swi = FALSE;
+    if (gMarioState->curAnimID != targetAnimID) swi = TRUE;
+    struct Animation *targetAnim = m->animList[gMarioLoadedAnim]->bufTarget;
+    struct AnimInfo *changeAnim  = (gMarioLoadedAnim ? &o->header.gfx.animInfo: &gMarioState->prevAnim);
+    if (load_patchable_table(m->animList[gMarioLoadedAnim], targetAnimID)) {
+        targetAnim->values     = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
+        targetAnim->index      = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->index);
+        gMarioState->curAnimID = targetAnimID;
+    }
+    if (changeAnim->animID != targetAnimID) {
+        changeAnim->animID     = targetAnimID;
+        changeAnim->curAnim    = targetAnim;
+        changeAnim->animYTrans = m->animYTrans;
+        if (targetAnim->flags & ANIM_FLAG_NO_ACCEL) {
+            changeAnim->animFrameAccelAssist = (targetAnim->startFrame << 0x10);
+        } else {
+            if (targetAnim->flags & ANIM_FLAG_FORWARD) {
+                changeAnim->animFrameAccelAssist = ((targetAnim->startFrame << 0x10) + accel);
+            } else {
+                changeAnim->animFrameAccelAssist = ((targetAnim->startFrame << 0x10) - accel);
+            }
+        }
+        changeAnim->animFrame = (changeAnim->animFrameAccelAssist >> 0x10);
+    }
+    changeAnim->animAccel = accel;
+    if (swi) gMarioLoadedAnim ^= 1;
+    return changeAnim->animFrame;
+#else
     struct Animation *targetAnim = m->animList->bufTarget;
     if (load_patchable_table(m->animList, targetAnimID)) {
         targetAnim->values = (void *) VIRTUAL_TO_PHYSICAL((u8 *) targetAnim + (uintptr_t) targetAnim->values);
@@ -111,13 +189,18 @@ AnimFrame16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimI
     }
     o->header.gfx.animInfo.animAccel = accel;
     return o->header.gfx.animInfo.animFrame;
+#endif
 }
 
 /**
  * Sets the animation to a specific "next" frame from the frame given.
  */
 void set_anim_to_frame(struct MarioState *m, AnimFrame16 animFrame) {
+#ifdef VARIABLE_FRAMERATE
+    struct AnimInfo *animInfo = (gMarioLoadedAnim ? &m->prevAnim : &m->marioObj->header.gfx.animInfo);
+#else
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;
+#endif
     struct Animation *curAnim = animInfo->curAnim;
     if (animInfo->animAccel) {
         if (curAnim->flags & ANIM_FLAG_FORWARD) {
@@ -137,7 +220,11 @@ void set_anim_to_frame(struct MarioState *m, AnimFrame16 animFrame) {
 Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
     Bool32 isPastFrame;
     s32 acceleratedFrame = (animFrame << 0x10);
+#ifdef VARIABLE_FRAMERATE
+    struct AnimInfo *animInfo = (gMarioLoadedAnim ? &m->prevAnim : &m->marioObj->header.gfx.animInfo);
+#else
     struct AnimInfo *animInfo = &m->marioObj->header.gfx.animInfo;
+#endif
     struct Animation *curAnim = animInfo->curAnim;
     if (animInfo->animAccel) {
         if (curAnim->flags & ANIM_FLAG_FORWARD) {
@@ -160,8 +247,20 @@ Bool32 is_anim_past_frame(struct MarioState *m, AnimFrame16 animFrame) {
  * and returns the animation's flags.
  */
 s32 find_mario_anim_flags_and_translation(struct Object *marioObj, Angle32 yaw, Vec3s translation) {
+#ifdef VARIABLE_FRAMERATE
+    struct Animation *curAnim;
+    AnimFrame16 animFrame;
+    if (!gMarioLoadedAnim) {
+        curAnim   = (void *) marioObj->header.gfx.animInfo.curAnim;
+        animFrame = geo_update_animation_frame(&marioObj->header.gfx.animInfo, NULL);
+    } else {
+        curAnim   = gMarioState->prevAnim.curAnim;
+        animFrame = geo_update_animation_frame(&gMarioState->prevAnim, NULL);
+    }
+#else
     struct Animation *curAnim = (void *) marioObj->header.gfx.animInfo.curAnim;
     AnimFrame32 animFrame  = geo_update_animation_frame(&marioObj->header.gfx.animInfo, NULL);
+#endif
     AnimIndex  *animIndex  = segmented_to_virtual((void *) curAnim->index );
     AnimValue  *animValues = segmented_to_virtual((void *) curAnim->values);
     f32 s           = sins(yaw);
@@ -1603,7 +1702,12 @@ void init_mario_from_save_file(void) {
     gMarioState->statusForCamera       = &gPlayerCameraState[0];
     gMarioState->marioBodyState        = &gBodyStates[0];
     gMarioState->controller            = &gControllers[0];
+#ifdef VARIABLE_FRAMERATE
+    gMarioState->animList[0]           = &gMarioAnimsBuf[0];
+    gMarioState->animList[1]           = &gMarioAnimsBuf[1];
+#else
     gMarioState->animList              = &gMarioAnimsBuf;
+#endif
     gMarioState->numCoins              = 0;
     gMarioState->numStars              = save_file_get_total_star_count((gCurrSaveFileNum - 1), (COURSE_MIN - 1), (COURSE_MAX - 1));
     gMarioState->numKeys               = 0;

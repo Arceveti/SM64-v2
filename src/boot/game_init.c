@@ -111,9 +111,17 @@ uintptr_t gPhysicalFrameBuffers[3];
 uintptr_t gPhysicalZBuffer;
 
 // Mario Anims and Demo allocation
+#ifdef VARIABLE_FRAMERATE
+void *gMarioAnimsMemAlloc[2];
+#else
 void *gMarioAnimsMemAlloc;
+#endif
 void *gDemoInputsMemAlloc;
+#ifdef VARIABLE_FRAMERATE
+struct DmaHandlerList gMarioAnimsBuf[2];
+#else
 struct DmaHandlerList gMarioAnimsBuf;
+#endif
 struct DmaHandlerList gDemoInputsBuf;
 
 // General timer that runs as the game starts
@@ -561,9 +569,6 @@ void adjust_analog_stick(struct Controller *controller) {
  * Update the controller struct with available inputs if present.
  */
 void read_controller_inputs(s32 threadID) {
-#ifndef VARIABLE_FRAMERATE
-    s32 i;
-#endif
     // If any controllers are plugged in, update the controller information.
     if (gControllerBits) {
         if (threadID == 5) osRecvMesg(&gSIEventMesgQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
@@ -578,8 +583,9 @@ void read_controller_inputs(s32 threadID) {
 #ifdef VARIABLE_FRAMERATE
 }
 
-void uptate_controller_inputs(void) {
+void update_controller_inputs(void) {
 #endif
+    s32 i;
     for ((i = 0); (i < 2); (i++)) {
         struct Controller *controller = &gControllers[i];
         // if we're receiving inputs, update the controller struct with the new button info.
@@ -673,9 +679,19 @@ void setup_game_memory(void) {
     gPhysicalFrameBuffers[1] = VIRTUAL_TO_PHYSICAL(gFrameBuffer1);
     gPhysicalFrameBuffers[2] = VIRTUAL_TO_PHYSICAL(gFrameBuffer2);
     // Setup Mario Animations
+#ifdef VARIABLE_FRAMERATE
+    gMarioAnimsMemAlloc[0] = main_pool_alloc(0x4000, MEMORY_POOL_LEFT);
+    gMarioAnimsMemAlloc[1] = main_pool_alloc(0x4000, MEMORY_POOL_LEFT);
+#else
     gMarioAnimsMemAlloc = main_pool_alloc(0x4000, MEMORY_POOL_LEFT);
+#endif
     set_segment_base_addr(17, (void *) gMarioAnimsMemAlloc);
+#ifdef VARIABLE_FRAMERATE
+    setup_dma_table_list(&gMarioAnimsBuf[0], gMarioAnims, gMarioAnimsMemAlloc[0]);
+    setup_dma_table_list(&gMarioAnimsBuf[1], gMarioAnims, gMarioAnimsMemAlloc[1]);
+#else
     setup_dma_table_list(&gMarioAnimsBuf, gMarioAnims, gMarioAnimsMemAlloc);
+#endif
     // Setup Demo Inputs List
     gDemoInputsMemAlloc = main_pool_alloc(0x800, MEMORY_POOL_LEFT);
     set_segment_base_addr(24, (void *) gDemoInputsMemAlloc);
@@ -751,7 +767,7 @@ void thread5_game_loop(UNUSED void *arg) {
             lDelta    = (1 / (deltatime * (SECONDS_PER_CYCLE)));
             prevtime  = osGetTime();
             audio_game_loop_tick();
-            uptate_controller_inputs();
+            update_controller_inputs();
 #else
             // If any controllers are plugged in, start read the data for when
             // read_controller_inputs is called later.

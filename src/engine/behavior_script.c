@@ -17,6 +17,9 @@
 #ifdef PUPPYLIGHTS
 #include "game/puppylights.h"
 #endif
+#ifdef VARIABLE_FRAMERATE
+#include "game/level_update.h"
+#endif
 
 // Macros for retrieving arguments from behavior scripts.
 #define BHV_CMD_GET_1ST_U8( index) (u8    )((gCurBhvCommand[index] >> 24) & 0xFF) // unused
@@ -680,6 +683,10 @@ static BhvCommandProc BehaviorCmdTable[] = {
     bhv_cmd_spawn_water_droplet,
 };
 
+#ifdef VARIABLE_FRAMERATE
+extern u8 gMarioLoadedAnim;
+#endif
+
 // Execute the behavior script of the current object, process the object flags, and other miscellaneous code for updating objects.
 void cur_obj_update(void) {
     u32 objFlags = o->oFlags;
@@ -724,7 +731,12 @@ void cur_obj_update(void) {
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          o);
     o->header.gfx.uCode = ((objFlags & OBJ_FLAG_UCODE_LARGE) ? UCODE_DEFAULT : UCODE_REJ);
 #ifdef VARIABLE_FRAMERATE
-    if (o->header.gfx.animInfo.curAnim != NULL) o->header.gfx.animInfo.animFrame = geo_update_animation_frame(&o->header.gfx.animInfo, &o->header.gfx.animInfo.animFrameAccelAssist);
+    if ((gCurrentObject != gMarioState->marioObj) || !gMarioLoadedAnim) {
+        if (gCurrentObject->header.gfx.animInfo.curAnim != NULL)
+            gCurrentObject->header.gfx.animInfo.animFrame = geo_update_animation_frame(&gCurrentObject->header.gfx.animInfo, &gCurrentObject->header.gfx.animInfo.animFrameAccelAssist);
+    } else {
+        if (gMarioState->prevAnim.curAnim != NULL) gMarioState->prevAnim.animFrame = geo_update_animation_frame(&gMarioState->prevAnim, &gMarioState->prevAnim.animFrameAccelAssist);
+    }
 #endif
 #ifdef PUPPYLIGHTS
     puppylights_object_emit(o);
