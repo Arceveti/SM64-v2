@@ -12,7 +12,7 @@ void whomp_play_sfx_from_pound_animation(void) {
     if (playSound) cur_obj_play_sound_2(SOUND_OBJ_POUNDING1);
 }
 
-void whomp_init(void) {
+void whomp_act_init(void) {
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     cur_obj_set_pos_to_home();
     if (o->oBehParams2ndByte != WHOMP_BP_NORMAL) {
@@ -35,7 +35,7 @@ void whomp_init(void) {
     whomp_play_sfx_from_pound_animation();
 }
 
-void whomp_turn(void) {
+void whomp_act_turn(void) {
     if (o->oSubAction == WHOMP_SUB_ACT_TURN_TURNING) {
         o->oForwardVel = 0.0f;
         cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
@@ -51,7 +51,7 @@ void whomp_turn(void) {
     whomp_play_sfx_from_pound_animation();
 }
 
-void whomp_patrol(void) {
+void whomp_act_patrol(void) {
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
     if (cur_obj_lateral_dist_to_home_squared() > ((gCurrLevelNum == LEVEL_BITS) ? 40000.0f : 490000.0f)) { // 200 or 700
@@ -66,7 +66,7 @@ void whomp_patrol(void) {
     whomp_play_sfx_from_pound_animation();
 }
 
-void king_whomp_chase(void) {
+void whomp_act_king_chase(void) {
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_WALK, 1.0f);
     o->oForwardVel = 3.0f;
     cur_obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
@@ -86,13 +86,13 @@ void king_whomp_chase(void) {
     }
 }
 
-void whomp_prepare_jump(void) {
+void whomp_act_prepare_jump(void) {
     o->oForwardVel = 0.0f;
     cur_obj_init_animation_with_accel_and_sound(WHOMP_ANIM_JUMP, 1.0f);
     if (cur_obj_check_if_near_animation_end()) o->oAction = WHOMP_ACT_JUMP;
 }
 
-void whomp_jump(void) {
+void whomp_act_jump(void) {
     if (o->oTimer == 0) o->oVelY = 40.0f;
     if (o->oTimer >= 8) {
         o->oAngleVelPitch += 0x100;
@@ -105,7 +105,7 @@ void whomp_jump(void) {
     }
 }
 
-void whomp_land(void) {
+void whomp_act_land(void) {
     if (o->oSubAction == WHOMP_SUB_ACT_LAND_EFFECTS && o->oMoveFlags & OBJ_MOVE_LANDED) {
         cur_obj_play_sound_2(SOUND_OBJ_WHOMP_LOWPRIO);
         cur_obj_shake_screen(SHAKE_POS_SMALL);
@@ -166,7 +166,7 @@ void whomp_on_ground(void) {
     }
 }
 
-void whomp_on_ground_general(void) {
+void whomp_act_on_ground_general(void) {
     if (o->oSubAction != WHOMP_SUB_ACT_GROUND_STAND_UP) {
         o->oForwardVel = 0.0f;
         vec3_copy(&o->oAngleVelVec, gVec3iZero);
@@ -192,7 +192,7 @@ void whomp_on_ground_general(void) {
     }
 }
 
-void whomp_die(void) {
+void whomp_act_death(void) {
     if (o->oBehParams2ndByte != WHOMP_BP_NORMAL) {
         if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TEXT_DEFAULT, CUTSCENE_DIALOG, DIALOG_115)) {
             obj_set_angle(o, 0x0, 0x0, 0x0);
@@ -204,7 +204,7 @@ void whomp_die(void) {
             o->oPosY += 100.0f;
             spawn_default_star(180.0f, 3880.0f, 340.0f);
             cur_obj_play_sound_2(SOUND_OBJ_KING_WHOMP_DEATH);
-            o->oAction = WHOMP_ACT_STOP_MUSIC;
+            o->oAction = WHOMP_ACT_STOP_BOSS_MUSIC;
         }
     } else {
         spawn_mist_particles_variable(0, 0, 100.0f);
@@ -215,21 +215,21 @@ void whomp_die(void) {
     }
 }
 
-void king_whomp_stop_music(void) {
+void whomp_act_stop_boss_music(void) {
     if (o->oTimer == 60) stop_background_music(SEQUENCE_ARGS(4, SEQ_EVENT_BOSS));
 }
 
 void (*sWhompActions[])(void) = {
-    whomp_init,
-    whomp_patrol,
-    king_whomp_chase,
-    whomp_prepare_jump,
-    whomp_jump,
-    whomp_land,
-    whomp_on_ground_general,
-    whomp_turn,
-    whomp_die,
-    king_whomp_stop_music
+    whomp_act_init,
+    whomp_act_patrol,
+    whomp_act_king_chase,
+    whomp_act_prepare_jump,
+    whomp_act_jump,
+    whomp_act_land,
+    whomp_act_on_ground_general,
+    whomp_act_turn,
+    whomp_act_death,
+    whomp_act_stop_boss_music
 };
 
 // MM
@@ -237,7 +237,7 @@ void bhv_whomp_loop(void) {
     cur_obj_update_floor_and_walls();
     cur_obj_call_action_function(sWhompActions);
     cur_obj_move_standard(-20);
-    if (o->oAction != WHOMP_ACT_STOP_MUSIC) {
+    if (o->oAction != WHOMP_ACT_STOP_BOSS_MUSIC) {
         cur_obj_hide_if_mario_far_away_y((o->oBehParams2ndByte != WHOMP_BP_NORMAL) ? 2000.0f : 1000.0f);
         load_object_collision_model();
     }

@@ -2345,7 +2345,7 @@
     #define WHOMP_ACT_ON_GROUND_GENERAL                     0x6
     #define WHOMP_ACT_TURN                                  0x7
     #define WHOMP_ACT_DIE                                   0x8
-    #define WHOMP_ACT_STOP_MUSIC                            0x9
+    #define WHOMP_ACT_STOP_BOSS_MUSIC                       0x9
     /* oSubAction */
         /* WHOMP_ACT_INIT */
     #define WHOMP_SUB_ACT_INIT_IDLE                         0x0

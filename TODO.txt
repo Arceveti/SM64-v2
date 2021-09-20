@@ -12,10 +12,11 @@
         - Might be same underlying issue as the SSL pillars issue?
 - Puppylights bugs:
     - Lights don't get cleared properly when leaving a level
-    - Multiple light sources cause direction overflow?
+    - Lights from flamethrower flames flicker
     - PUPPYLIGHT_ENVIRONMENT doesn't work
     - Lights don't work outside of area 1
         - Have a temp fix, but it still doesn't fix PUPPYLIGHT_NODE lights in non-area-1 areas
+    - Sometimes lights just breaks globally
 - Crashes:
     - The 6th time you enter a level in debug level select without restarting the game causes the game to whitescreen or crash, depending on the emulator being used
         - Some data in memory not being cleared?
@@ -164,7 +165,6 @@
     - Fix walking down a slope or stairs causing Mario to butt slide even if it's not a slide or steep slope
     - Fix bonking into steep part of TTM slide
     - Implement Kaze's raycasting quarterstep replacement
-    - Make step height per-object
     - Handle small steps differently from slopes?
     - Fix demo inputs for new movement stuff
     - Capsule/sphere shaped hitbox for Mario?
@@ -172,10 +172,17 @@
         - Convex angles work, still need to make concave angles work
     - Gravity direction support
     - "Squished" death from any direction
-    - Heave-Ho's should be able to throw mario regardless of Mario's action
-        - With a cooldown to prevent getting stuck in loops
     - Update mario movement angles every time m->pos is changed?
         - Don't update m->prevPos more than once per frame
+    - Animation for transitioning from water ground pound to swimming
+- Objects:
+    - Make step height per-object
+    - Puunching/Kicking a Whomp from behind should get its attention
+    - Fix clipping through Whomps
+        - Would raycast collision fix this?
+        - Also happens when climbing up a ledge (BITS whomp)
+    - Heave-Ho's should be able to throw mario regardless of Mario's action
+        - With a cooldown to prevent getting stuck in loops
 - Graphics
     - Add/check Puppylights light sources:
         - Objects:
@@ -301,8 +308,10 @@
     - Make SSL pyramid and LLL volcano use gsSPFogPosition?
 - Camera:
     - Fix TOTWC warp with Puppycam
+    - Fix camera being too low on poles
     - Make Puppycam not scuffed in certain areas
         - Separate (super low-poly) collision maps specifically for the camera?
+    - When wall sliding, raycast in the direction of the wall's yaw, and if another wall is within distance and parallel, and Mario's yaw is within range of the wall's yaw, then move the camera's yaw to the nearest perpendicular angle to the wall yaw, if no other walls are in the way.
 - Files/Hacking QOL
     - Centralized place for common gdSPDefLights1 defines/colors, so the data isn't duplicated throughout every model.inc.c file
         - Default lights is (0x7F, 0x7F, 0x7F, 0xFF, 0xFF, 0xFF, 0x28, 0x28, 0x28)
