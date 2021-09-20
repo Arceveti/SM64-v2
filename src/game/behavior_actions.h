@@ -22,7 +22,7 @@ void bhv_koopa_shell_underwater_loop(void);
 void bhv_door_init(void);
 void bhv_door_loop(void);
 void bhv_star_door_loop(void);
-void bhv_mr_i_loop(void);
+void bhv_mr_i_body_loop(void);
 void bhv_mr_i_iris_loop(void);
 void bhv_mr_i_particle_loop(void);
 void bhv_piranha_particle_loop(void);

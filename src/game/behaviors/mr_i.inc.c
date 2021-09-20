@@ -12,6 +12,10 @@ void bhv_piranha_particle_loop(void) {
 }
 
 void mr_i_piranha_particle_act_move(void) {
+    o->oVelX = (o->oForwardVel *  coss(o->oMoveAnglePitch) * sins(o->oMoveAngleYaw));
+    o->oVelY = (o->oForwardVel * -sins(o->oMoveAnglePitch)                         );
+    o->oVelZ = (o->oForwardVel *  coss(o->oMoveAnglePitch) * coss(o->oMoveAngleYaw));
+    vec3_add(&o->oPosVec, &o->oVelVec);
     cur_obj_scale(3.0f);
     o->oForwardVel = 20.0f;
     cur_obj_update_floor_and_walls();
@@ -38,9 +42,9 @@ void bhv_mr_i_particle_loop(void) {
 void spawn_mr_i_particle(void) {
     f32 yScale = o->header.gfx.scale[1];
     struct Object *particle = spawn_object(o, MODEL_PURPLE_MARBLE, bhvMrIParticle);
-    particle->oPosY += (                         50.0f * yScale);
-    particle->oPosX += (sins(o->oMoveAngleYaw) * 90.0f * yScale);
-    particle->oPosZ += (coss(o->oMoveAngleYaw) * 90.0f * yScale);
+    particle->oPosX += ((90.0f * yScale) *  coss(o->oMoveAnglePitch) * sins(o->oMoveAngleYaw));
+    particle->oPosY += ((90.0f * yScale) * -sins(o->oMoveAnglePitch) + (50.0f * yScale)      );
+    particle->oPosZ += ((90.0f * yScale) *  coss(o->oMoveAnglePitch) * coss(o->oMoveAngleYaw));
     cur_obj_play_sound_2(SOUND_OBJ_MRI_SHOOT);
 }
 
@@ -63,7 +67,7 @@ void bhv_mr_i_iris_loop(void) {
     if (!(o->parentObj->activeFlags & ACTIVE_FLAG_ACTIVE)) obj_mark_for_deletion(o);
 }
 
-void mr_i_act_spin_death(void) {
+void mr_i_body_act_spin_death(void) {
     f32 scaleModifier = ((o->oBehParams2ndByte) ? 2.0f : 1.0f);
     s16 direction     = ((o->oMrISpinDirection < 0) ? 0x1000 : -0x1000);
     f32 spinAmount    = ((o->oTimer + 1) / 96.0f);
@@ -104,7 +108,7 @@ void mr_i_act_spin_death(void) {
     }
 }
 
-void mr_i_act_looking_at_mario(void) {
+void mr_i_body_act_looking_at_mario(void) {
     Angle dYaw;
     Angle startYaw = o->oMoveAngleYaw;
     if (o->oTimer == 0) {
@@ -135,7 +139,7 @@ void mr_i_act_looking_at_mario(void) {
         o->oMrISpinDirection = -1;
     }
     if (!o->oMrISpinAmount) o->oMrISpinAngle = 120;
-    if (o->oMrISpinAmount > (1 << 16)) o->oAction = MR_I_ACT_SPIN_DEATH;
+    if (o->oMrISpinAmount > (1 << 16)) o->oAction = MR_I_BODY_ACT_SPIN_DEATH;
     o->oMrISpinAngle--;
     if (!o->oMrISpinAngle) {
         o->oMrISpinAngle  = 120;
@@ -153,10 +157,10 @@ void mr_i_act_looking_at_mario(void) {
         o->oMrIParticleTimer = 0;
         o->oMrIParticleTimerTarget = (s32)((random_float() * 50.0f) + 50.0f);
     }
-    if (o->oDistanceToMario > 800.0f) o->oAction = MR_I_ACT_IDLE;
+    if (o->oDistanceToMario > 800.0f) o->oAction = MR_I_BODY_ACT_IDLE;
 }
 
-void mr_i_act_idle(void) {
+void mr_i_body_act_idle(void) {
     Angle angleToMario                   = obj_angle_to_object(o, gMarioObject);
     Angle angleDiffMoveYawToMario        = abs_angle_diff(o->oMoveAngleYaw, angleToMario);
     Angle angleDiffMoveYawToMarioFaceYaw = abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oFaceAngleYaw);
@@ -169,7 +173,7 @@ void mr_i_act_idle(void) {
     }
     if ((angleDiffMoveYawToMario < 0x400) && (angleDiffMoveYawToMarioFaceYaw > DEG(90))) {
         if (o->oDistanceToMario < 700.0f) {
-            o->oAction = MR_I_ACT_LOOKING_AT_MARIO;
+            o->oAction = MR_I_BODY_ACT_LOOKING_AT_MARIO;
         } else {
             o->oMrIParticleTimer++;
         }
@@ -185,14 +189,14 @@ void mr_i_act_idle(void) {
     }
 }
 
-void mr_i_act_far_away(void) {
-    obj_set_angle(o, 0x0, 0x0, 0x0);
+void mr_i_body_act_far_away(void) {
+    vec3_zero(&o->oFaceAngleVec);
     cur_obj_scale(o->oBehParams2ndByte + 1);
     if (o->oTimer == 0) cur_obj_set_pos_to_home();
-    if (o->oDistanceToMario < 1500.0f) o->oAction = MR_I_ACT_IDLE;
+    if (o->oDistanceToMario < 1500.0f) o->oAction = MR_I_BODY_ACT_IDLE;
 }
 
-void (*sMrIActions[])(void) = { mr_i_act_far_away, mr_i_act_idle, mr_i_act_looking_at_mario, mr_i_act_spin_death };
+void (*sMrIBodyActions[])(void) = { mr_i_body_act_far_away, mr_i_body_act_idle, mr_i_body_act_looking_at_mario, mr_i_body_act_spin_death };
 
 struct ObjectHitbox sMrIHitbox = {
     /* interactType:      */ INTERACT_DAMAGE,
@@ -206,9 +210,9 @@ struct ObjectHitbox sMrIHitbox = {
     /* hurtboxHeight:     */   0,
 };
 
-void bhv_mr_i_loop(void) {
+void bhv_mr_i_body_loop(void) {
     obj_set_hitbox(o, &sMrIHitbox);
-    cur_obj_call_action_function(sMrIActions);
-    if ((o->oAction != MR_I_ACT_SPIN_DEATH) && ((o->oDistanceToMario > 3000.0f) || (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM))) o->oAction = MR_I_ACT_FAR_AWAY;
+    cur_obj_call_action_function(sMrIBodyActions);
+    if ((o->oAction != MR_I_BODY_ACT_SPIN_DEATH) && ((o->oDistanceToMario > 3000.0f) || (o->activeFlags & ACTIVE_FLAG_IN_DIFFERENT_ROOM))) o->oAction = MR_I_BODY_ACT_FAR_AWAY;
     o->oInteractStatus = INT_STATUS_NONE;
 }

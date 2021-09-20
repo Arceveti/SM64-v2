@@ -361,7 +361,7 @@ const BehaviorScript bhvMrI[] = {
     BILLBOARD(),
     CALL_NATIVE(bhv_init_room),
     BEGIN_LOOP(),
-        CALL_NATIVE(bhv_mr_i_loop),
+        CALL_NATIVE(bhv_mr_i_body_loop),
     END_LOOP(),
 };
 
@@ -377,7 +377,7 @@ const BehaviorScript bhvMrIIris[] = {
 const BehaviorScript bhvMrIParticle[] = {
     BEGIN(OBJ_LIST_LEVEL),
     BILLBOARD(),
-    OR_INT(oFlags, (OBJ_FLAG_MOVE_XZ_USING_FVEL | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
+    OR_INT(oFlags, (OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
     SET_INT(oIntangibleTimer, 0),
     SET_HITBOX(50, 50),
     SET_INT(oDamageOrCoinValue, 1),

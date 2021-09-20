@@ -2306,10 +2306,10 @@
     #define MR_I_BP_NORMAL                                  0x0
     #define MR_I_BP_LARGE_WITH_STAR                         0x1
     /* oAction */
-    #define MR_I_ACT_FAR_AWAY                               0x0
-    #define MR_I_ACT_IDLE                                   0x1
-    #define MR_I_ACT_LOOKING_AT_MARIO                       0x2
-    #define MR_I_ACT_SPIN_DEATH                             0x3
+    #define MR_I_BODY_ACT_FAR_AWAY                          0x0
+    #define MR_I_BODY_ACT_IDLE                              0x1
+    #define MR_I_BODY_ACT_LOOKING_AT_MARIO                  0x2
+    #define MR_I_BODY_ACT_SPIN_DEATH                        0x3
 
 /* Mr I & Piranha Plant Particle */
     /* oAction */
