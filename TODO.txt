@@ -139,6 +139,15 @@
         - Question mark
             - segment2
             - levels/menu
+    - Triangle instead of square for billboards/decals:
+        - Small spheres (see above)
+        - Coins
+        - Particles in general
+        - Lantern/Flame light glow
+        - Star glow?
+        - Castle windows
+        - BBH windows
+    - HUD elements use texrects
     - Cubic/3D collision cells
     - Only load collision for the current room (?)
     - Optimize/reduce find_floor/ceil/wall calls
@@ -184,36 +193,38 @@
     - Heave-Ho's should be able to throw mario regardless of Mario's action
         - With a cooldown to prevent getting stuck in loops
 - Graphics
-    - Add/check Puppylights light sources:
+    - Add/check Puppylights light sources (* means added):
         - Objects:
             - Star
-                - Klepto/Unagi star
+                - Klepto/Unagi star*
                 - Monkey cage star
                 - Blue star should have blue glow?
-            - Bowser Key
-            - Amp
-            - Bob-ombs during explosion
-            - Bowser bombs during explosion
-            - Moving flames/fire bars/spitters
+            - Bowser Key*
+            - Amp*
+            - Bob-ombs during explosion*
+            - Bowser bombs during explosion*
+            - Moving flames/fire bars/spitters*
             - Bowser 3 (rainbow)
             - Secrets?
             - Water level diamond?
             - TTM slide billboards?
         - Level geo:
-            - BBH/HMC/PSS/etc. lanterns
+            - BBH lanterns
+            - HMC lanterns
+            - PSS lanterns*
+            - etc. lanterns
             - Castle lobby
-            - BITDW/COTMC crystals
+            - BITDW/COTMC crystals*
             - Lava in general
             - SA windows
-            - Fireplace in RR big house
+            - Fireplace in RR big house*
     - Fix/cleanup/redraw textures:
         - Fix peach window edges
         - Fix bubble tree edges
-        - Redraw/re-render near and far coins with better lighting
-            - Far coins as ia8
+        - Coins with better lighting
         - Make env textures right side up
     - The leftmost column and topmost row of pixels on billboards shouldn't get stretched at low resolution (Angrylion)
-    - Damage flash should be blue when "lava" boosting on the ice in SL
+    - Use painting ripple effect for splashing into water
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
         - build warning for a pointer

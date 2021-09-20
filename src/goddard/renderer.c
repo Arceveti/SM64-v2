@@ -1533,7 +1533,7 @@ void gd_init_controllers(void) {
 }
 
 /* 253018 -> 253084 */
-void func_801A4848(s32 linkDl) {
+void link_cur_dl_to_num(s32 linkDl) {
     struct GdDisplayList *curDl;
     curDl        = sCurrentGdDl;
     sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
@@ -1577,7 +1577,7 @@ void update_view_and_dl(struct ObjView *view) {
     update_view(view);
     if (prevFlags & VIEW_UPDATE) {
         sCurrentGdDl = sMHeadMainDls[gGdFrameBufNum];
-        if (view->gdDlNum != 0) func_801A4848(view->gdDlNum);
+        if (view->gdDlNum != 0) link_cur_dl_to_num(view->gdDlNum);
     }
 }
 
@@ -1591,10 +1591,10 @@ void gd_init(void) {
     sGdDlCount        = 0;
     sLightId          = 0;
     vec3_zero(sAmbScaleColour);
-    const ColorRGBf redVec = ARR(COLOR_RGBF_RED);
+    const ColorRGBf redVec = COLOR_RGBF_RED;
     for ((i = 0); (i < ARRAY_COUNT(sLightScaleColours)); (i++)) {
         vec3_copy(sLightScaleColours[i], redVec);
-        vec3_set(sLightDirections[i], 0, 120, 0);
+        vec3_set( sLightDirections[i], 0x00, 0x78, 0x00);
     }
     sNumLights = NUMLIGHTS_2;
     mtxf_identity(sInitIdnMat4);
@@ -1739,9 +1739,9 @@ struct GdObj *load_dynlist(struct DynList *dynlist) {
     // Map virtual address 0x04000000 to `allocSegSpace`
     for ((i = 0); (i < tlbEntries); (i++)) {
         osMapTLB(i, OS_PM_64K,
-            (void *) (uintptr_t) (0x04000000 + (i * 2 * PAGE_SIZE)),  // virtual address to map
-            GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) +         0),  // even page address
-            GD_LOWER_24(((uintptr_t) allocSegSpace) + (i * 2 * PAGE_SIZE) + PAGE_SIZE),  // odd page address
+                (void *) (uintptr_t) (0x04000000    + ((i * 2) * PAGE_SIZE)            ),  // virtual address to map
+            GD_LOWER_24(((uintptr_t) allocSegSpace) + ((i * 2) * PAGE_SIZE) +         0),  // even page address
+            GD_LOWER_24(((uintptr_t) allocSegSpace) + ((i * 2) * PAGE_SIZE) + PAGE_SIZE),  // odd page address
             -1);
     }
 #undef PAGE_SIZE

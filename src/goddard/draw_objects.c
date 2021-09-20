@@ -26,17 +26,17 @@ enum SceneType {
 };
 
 // data
-static ColorRGBf sClrWhite        =   ARR(COLOR_RGBF_WHITE);
-static ColorRGBf sClrRed          =   ARR(COLOR_RGBF_RED);
-static ColorRGBf sClrGreen        =   ARR(COLOR_RGBF_GREEN);
-static ColorRGBf sClrBlue         =   ARR(COLOR_RGBF_BLUE);
-static ColorRGBf sClrErrDarkBlue  =   ARR(COLOR_RGBF_ERR_DARK_BLUE);
-static ColorRGBf sClrPink         =   ARR(COLOR_RGBF_PINK);
-static ColorRGBf sClrBlack        =   ARR(COLOR_RGBF_BLACK);
-static ColorRGBf sClrGrey         =   ARR(COLOR_RGBF_GREY);
-static ColorRGBf sClrDarkGrey     =   ARR(COLOR_RGBF_DARK_GREY);
-static ColorRGBf sClrYellow       =   ARR(COLOR_RGBF_YELLOW);
-static ColorRGBf sLightColours[1] = { ARR(COLOR_RGBF_YELLOW) };
+static ColorRGBf sClrWhite        =   COLOR_RGBF_WHITE;
+static ColorRGBf sClrRed          =   COLOR_RGBF_RED;
+static ColorRGBf sClrGreen        =   COLOR_RGBF_GREEN;
+static ColorRGBf sClrBlue         =   COLOR_RGBF_BLUE;
+static ColorRGBf sClrErrDarkBlue  =   COLOR_RGBF_ERR_DARK_BLUE;
+static ColorRGBf sClrPink         =   COLOR_RGBF_PINK;
+static ColorRGBf sClrBlack        =   COLOR_RGBF_BLACK;
+static ColorRGBf sClrGrey         =   COLOR_RGBF_GREY;
+static ColorRGBf sClrDarkGrey     =   COLOR_RGBF_DARK_GREY;
+static ColorRGBf sClrYellow       =   COLOR_RGBF_YELLOW;
+static ColorRGBf sLightColours[1] = { COLOR_RGBF_YELLOW };
 static ColorRGBf *sSelectedColour = &sClrRed;
 struct ObjCamera *gViewUpdateCamera = NULL;
 static s32 sLightDlCounter = 1;

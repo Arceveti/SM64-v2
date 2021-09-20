@@ -92,8 +92,8 @@ SkyboxTexture *sSkyboxTextures[10] = {
  * The final color of each pixel is computed from the bitwise AND of the color and the texture.
  */
 ColorRGB sSkyboxColors[] = {
-    ARR(COLOR_RGB_JRB_SKY),
-    ARR(COLOR_RGB_WHITE  ),
+    COLOR_RGB_JRB_SKY,
+    COLOR_RGB_WHITE,
 };
 
 /**

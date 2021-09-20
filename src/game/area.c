@@ -353,26 +353,27 @@ void shade_screen_color(ColorRGBA color) {
 }
 
 #ifdef ENVIRONMENT_SCREEN_TINT
-static const ColorRGB   waterOverlayColor = ARR(COLOR_RGB_WATER );
-static const ColorRGB     gasOverlayColor = ARR(COLOR_RGB_YELLOW);
-static const ColorRGB    sandOverlayColor = ARR(COLOR_RGB_SAND  );
+static const ColorRGB   waterOverlayColor = COLOR_RGB_WATER;
+static const ColorRGB     gasOverlayColor = COLOR_RGB_YELLOW;
+static const ColorRGB    sandOverlayColor = COLOR_RGB_SAND;
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-static const ColorRGB  damageOverlayColor = ARR(COLOR_RGB_RED     );
-static const ColorRGB shockedOverlayColor = ARR(COLOR_RGB_ELECTRIC);
+static const ColorRGB  damageOverlayColor = COLOR_RGB_RED;
+static const ColorRGB shockedOverlayColor = COLOR_RGB_ELECTRIC;
 #endif
 #if defined(LLL_VOLCANO_TINT) || defined(AREA_SCREEN_TINT)
-static const ColorRGB    lavaOverlayColor = ARR(COLOR_RGB_LAVA);
+static const ColorRGB    lavaOverlayColor = COLOR_RGB_LAVA;
 #endif
 #ifdef AREA_SCREEN_TINT
-static const ColorRGB    snowOverlayColor = ARR(COLOR_RGB_WHITE);
-static const ColorRGB    darkOverlayColor = ARR(COLOR_RGB_BLACK);
+static const ColorRGB    snowOverlayColor = COLOR_RGB_WHITE;
+static const ColorRGB    darkOverlayColor = COLOR_RGB_BLACK;
 #endif
 
 void render_screen_overlay(void) {
-    if ((gMarioState->area == NULL) || (gMarioObject == NULL)) return;
+    struct MarioState *m = gMarioState;
+    if ((m->area == NULL) || (m == NULL)) return;
 #ifdef ENVIRONMENT_SCREEN_TINT
-    ColorRGBA colorEnv = { 0, 0, 0, 0 };
+    ColorRGBA colorEnv = COLOR_RGBA_NONE;
 #ifdef PUPPYCAM
     f32 camHeight      = ((80.0f * coss(gPuppyCam.pitch)) + 125.0f);
 #else
@@ -389,8 +390,8 @@ void render_screen_overlay(void) {
         if ((colorEnv[3] = CLAMP((waterLevel - camHeight), 0, 64)) > 0) colorRGB_copy(colorEnv, waterOverlayColor);
     } else if (camHeight < gasLevel) {
         if ((colorEnv[3] = CLAMP((  gasLevel - camHeight), 0, 64)) > 0) colorRGB_copy(colorEnv,   gasOverlayColor);
-    } else if (gMarioState->action == ACT_QUICKSAND_DEATH) {
-        if ((colorEnv[3] = CLAMP((gMarioState->quicksandDepth * 2), 0, 255)) > 0) colorRGB_copy(colorEnv, sandOverlayColor);
+    } else if (m->action == ACT_QUICKSAND_DEATH) {
+        if ((colorEnv[3] = CLAMP((m->quicksandDepth * 2), 0, 255)) > 0) colorRGB_copy(colorEnv, sandOverlayColor);
 #ifdef LLL_VOLCANO_TINT
     } else if ((gCurrLevelNum == LEVEL_LLL) && (gCurrAreaIndex == 2)) {
         if ((colorEnv[3] = CLAMP((64 - ((s32)camHeight >> 6)), 0, 255)) > 0) colorRGB_copy(colorEnv, lavaOverlayColor);
@@ -398,13 +399,21 @@ void render_screen_overlay(void) {
     }
 #endif
 #ifdef DAMAGE_SCREEN_TINT
-    ColorRGBA damageColor = { 0, 0, 0, 0 };
-    if ((gMarioState->health < 0x100) && (gMarioState->hurtShadeAlpha > 0)) {
-        gMarioState->hurtShadeAlpha--;
-    } else if (gMarioState->hurtShadeAlpha >= 4) {
-        gMarioState->hurtShadeAlpha -= 4;
+    ColorRGBA damageColor = COLOR_RGBA_NONE;
+    if ((m->health < 0x100) && (m->hurtShadeAlpha > 0)) {
+        m->hurtShadeAlpha--;
+    } else if (m->hurtShadeAlpha >= 4) {
+        m->hurtShadeAlpha -= 4;
     }
-    if ((damageColor[3] = gMarioState->hurtShadeAlpha) > 0) colorRGB_copy(damageColor, (mario_is_shocked(gMarioState) ? shockedOverlayColor : damageOverlayColor));
+    if ((damageColor[3] = m->hurtShadeAlpha) > 0) {
+        if (mario_is_shocked(m)) {
+            colorRGB_copy(damageColor, shockedOverlayColor);
+        } else if (mario_is_burning(m) && ((m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW)) {
+            colorRGB_copy(damageColor, waterOverlayColor);
+        } else {
+            colorRGB_copy(damageColor, damageOverlayColor);
+        }
+    }
 #endif
 #if defined(ENVIRONMENT_SCREEN_TINT) && defined(DAMAGE_SCREEN_TINT)
     ColorRGBA color;
