@@ -437,25 +437,29 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
     struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
     struct MarioBodyState      *bodyState  = &gBodyStates[switchCase->numCases];
 #ifdef METAL_CAP_REFLECTION
+#define METAL_W  64
+#define METAL_H  32
 #ifdef METAL_CAP_REFLECTION_SHINE
-    TexturePtr *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine); //! should be I8 type
+    I8 *shineTexture  = segmented_to_virtual(mario_texture_metal_reflection_shine); //! should be I8 type
 #endif
 #ifdef METAL_CAP_REFLECTION_LAKITU
-    TexturePtr *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu); //! should be IA8 type
+    IA8 *lakituTexture = segmented_to_virtual(mario_texture_metal_reflection_lakitu); //! should be IA8 type
 #endif
     f32 dist;
 #ifdef METAL_CAP_REFLECTION_LAKITU
     s32 lakituX, lakituY;
     u32 lakituW, lakituH;
-    const u32 lakituMaxW = 56;
-    const u32 lakituMaxH = (lakituMaxW >> 1);
 #endif
     if (callContext == GEO_CONTEXT_RENDER) {
         switchCase->selectedCase = (bodyState->modelState >> 8);
         if ((bodyState->modelState & MODEL_STATE_METAL) && (gFrameBuffers[sRenderingFrameBuffer] != NULL)) {
-            TexturePtr *metalTexture = segmented_to_virtual(mario_texture_metal);
+            RGBA16 *metalTexture = segmented_to_virtual(mario_texture_metal);
             generate_metal_texture(metalTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_LAKITU
+#define lakituMaxW 56
+#define lakituMaxH (lakituMaxW >> 1)
+#define LAKITU_W 64
+#define LAKITU_H 64
             vec3f_get_dist(gLakituState.pos, gLakituState.focus, &dist);
             // c up is 250.0f
             dist    = ((dist - 250.0f) * 0.0625);
@@ -463,30 +467,36 @@ Gfx *geo_switch_mario_cap_effect(s32 callContext, struct GraphNode *node, UNUSED
             if (dist < 0.0f) dist = 0.0f;
             lakituW = (lakituMaxW - (dist * 2.0f));
             lakituH = (lakituMaxH - (dist       ));
-            lakituX = ((( 64.0f / SCREEN_HEIGHT) * (SCREEN_HEIGHT - (SCREEN_HEIGHT / 10)/*gMarioScreenY*/)) -  lakituW        );
+            lakituX = ((((f32)METAL_W / SCREEN_HEIGHT) * (SCREEN_HEIGHT - (SCREEN_HEIGHT / 10)/*gMarioScreenY*/)) -  lakituW        );
             if (lakituX < 0) lakituX = 0;
-            lakituY = ((( 32.0f / SCREEN_WIDTH ) * (                (SCREEN_WIDTH  /  2)/*gMarioScreenX*/)) - (lakituH * 0.5f));
+            lakituY = ((((f32)METAL_H / SCREEN_WIDTH ) * (                (SCREEN_WIDTH  /  2)/*gMarioScreenX*/)) - (lakituH * 0.5f));
             if (lakituY < 0) lakituY = 0;
+#undef lakituMaxW
+#undef lakituMaxH
             copy_partial_image(metalTexture, lakituTexture, // rgba16, ia8
                                     lakituX,       lakituY, // dst   xy
                                     lakituW,       lakituH, // dst   wh
-                                         64,            32, // dst T wh
+                                    METAL_W,       METAL_H, // dst T wh
                                           0,             0, // src   xy
-                                         64,            64, // src   wh
-                                         64,            64);// src T wh
+                                   LAKITU_W,      LAKITU_H, // src   wh
+                                   LAKITU_W,      LAKITU_H);// src T wh
+#define LAKITU_W 64
+#define LAKITU_H 64
 #endif
 #ifdef METAL_CAP_REFLECTION_SHINE
-            overlay_i8_on_rgba16_additive(metalTexture, shineTexture, 64, 32);
+            overlay_i8_on_rgba16_additive(metalTexture, shineTexture, METAL_W, METAL_H);
 #endif
         }
         if (find_nearest_obj_with_behavior_from_point(bhvMetalCap, gLakituState.pos, &dist) != NULL) {
-            TexturePtr *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
+            RGBA16 *metalCapTexture = segmented_to_virtual(mario_cap_seg3_texture_metal);
             generate_metal_texture(metalCapTexture, gFrameBuffers[sRenderingFrameBuffer]);
 #ifdef METAL_CAP_REFLECTION_SHINE
-            overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, 64, 32);
+            overlay_i8_on_rgba16_additive(metalCapTexture, shineTexture, METAL_W, METAL_H);
 #endif
         }
     }
+#define METAL_W 64
+#define METAL_H 32
 #else
     if (callContext == GEO_CONTEXT_RENDER) switchCase->selectedCase = (bodyState->modelState >> 8);
 #endif

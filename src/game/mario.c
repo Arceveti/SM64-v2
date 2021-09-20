@@ -70,7 +70,7 @@ AnimFrame16 set_mario_animation(struct MarioState *m, AnimID32 targetAnimID) {
         o->header.gfx.animInfo.curAnim    = targetAnim;
         o->header.gfx.animInfo.animAccel  = 0x0;
         o->header.gfx.animInfo.animYTrans = m->animYTrans;
-        if (targetAnim->flags & ANIM_FLAG_2) {
+        if (targetAnim->flags & ANIM_FLAG_NO_ACCEL) {
             o->header.gfx.animInfo.animFrame = targetAnim->startFrame;
         } else {
             if (targetAnim->flags & ANIM_FLAG_FORWARD) {
@@ -98,7 +98,7 @@ AnimFrame16 set_mario_anim_with_accel(struct MarioState *m, AnimID32 targetAnimI
         o->header.gfx.animInfo.animID     = targetAnimID;
         o->header.gfx.animInfo.curAnim    = targetAnim;
         o->header.gfx.animInfo.animYTrans = m->animYTrans;
-        if (targetAnim->flags & ANIM_FLAG_2) {
+        if (targetAnim->flags & ANIM_FLAG_NO_ACCEL) {
             o->header.gfx.animInfo.animFrameAccelAssist = (targetAnim->startFrame << 0x10);
         } else {
             if (targetAnim->flags & ANIM_FLAG_FORWARD) {
@@ -180,11 +180,11 @@ s32 find_mario_anim_flags_and_translation(struct Object *marioObj, Angle32 yaw, 
 void update_mario_pos_for_anim(struct MarioState *m) {
     Vec3s translation;
     s16 flags = find_mario_anim_flags_and_translation(m->marioObj, m->faceAngle[1], translation);
-    if (flags & (ANIM_FLAG_HOR_TRANS | ANIM_FLAG_6)) {
+    if (flags & (ANIM_FLAG_HOR_TRANS | ANIM_FLAG_NO_TRANS)) {
         m->pos[0] += (f32) translation[0];
         m->pos[2] += (f32) translation[2];
     }
-    if (flags & (ANIM_FLAG_VERT_TRANS | ANIM_FLAG_6)) m->pos[1] += (f32) translation[1];
+    if (flags & (ANIM_FLAG_VERT_TRANS | ANIM_FLAG_NO_TRANS)) m->pos[1] += (f32) translation[1];
 }
 
 /**

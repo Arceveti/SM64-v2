@@ -268,7 +268,7 @@ void intro_gen_face_texrect(Gfx **dlIter, s32 imageW, s32 imageH) {
     }
 }
 
-Gfx *intro_draw_face(TexturePtr *image, s32 imageW, s32 imageH) {
+Gfx *intro_draw_face(RGBA16 *imagePtr, s32 imageW, s32 imageH) {
     Gfx *dl;
     Gfx *dlIter;
     dl = alloc_display_list(130 * sizeof(Gfx));
@@ -278,7 +278,7 @@ Gfx *intro_draw_face(TexturePtr *image, s32 imageW, s32 imageH) {
         dlIter = dl;
     }
     gSPDisplayList(         dlIter++, title_screen_bg_dl_face_easter_egg_begin);
-    gDPLoadTextureBlock(    dlIter++, VIRTUAL_TO_PHYSICAL(image), G_IM_FMT_RGBA, G_IM_SIZ_16b, imageW, imageH, 0, (G_TX_CLAMP | G_TX_NOMIRROR), (G_TX_CLAMP | G_TX_NOMIRROR), 6, 6, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(    dlIter++, VIRTUAL_TO_PHYSICAL(imagePtr), G_IM_FMT_RGBA, G_IM_SIZ_16b, imageW, imageH, 0, (G_TX_CLAMP | G_TX_NOMIRROR), (G_TX_CLAMP | G_TX_NOMIRROR), 6, 6, G_TX_NOLOD, G_TX_NOLOD);
     intro_gen_face_texrect(&dlIter, imageW, imageH);
     gSPDisplayList(         dlIter++, title_screen_bg_dl_face_easter_egg_end);
     gSPEndDisplayList(      dlIter++);
@@ -286,16 +286,14 @@ Gfx *intro_draw_face(TexturePtr *image, s32 imageW, s32 imageH) {
 }
 
 //! move to colors.c?
-TexturePtr *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
-    TexturePtr *fb;
-    TexturePtr *image;
-    s32 pixel;
+RGBA16 *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 sampleH, s32 xOffset, s32 yOffset) {
+    RGBA16 pixel;
     f32 size = (sampleW * sampleH);
     ColorRGBf color;
     s32 iy, ix, sy, sx;
     s32 idy, idx, sdy;
-    fb = gFrameBuffers[sRenderingFrameBuffer];
-    image = alloc_display_list((imageW * imageH) * sizeof(TexturePtr));
+    RGBA16 *fb = gFrameBuffers[sRenderingFrameBuffer];
+    RGBA16 *image = alloc_display_list((imageW * imageH) * sizeof(RGBA16));
     if (image == NULL) return NULL;
     for ((iy = 0); (iy < imageH); (iy++)) {
         idy = ((sampleH * iy) + yOffset);
@@ -305,16 +303,16 @@ TexturePtr *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 s
             for ((sy = 0); (sy < sampleH); (sy++)) {
                 sdy = ((SCREEN_WIDTH * (idy + sy)) + idx);
                 for ((sx = 0); (sx < sampleW); (sx++)) {
-                    pixel = (sdy + sx);
-                    color[0] += RGBA16_R(fb[pixel]);
-                    color[1] += RGBA16_G(fb[pixel]);
-                    color[2] += RGBA16_B(fb[pixel]);
+                    pixel = fb[sdy + sx];
+                    color[0] += RGBA16_R(pixel);
+                    color[1] += RGBA16_G(pixel);
+                    color[2] += RGBA16_B(pixel);
                 }
             }
-            size = (sampleW * sampleH);
-            image[(imageH * iy) + ix] = ((R_RGBA16((RGBA16)((color[0] / size) + 0.5f)) & 0xFFFF) |
-                                         (G_RGBA16((RGBA16)((color[1] / size) + 0.5f)) & 0xFFFF) |
-                                         (B_RGBA16((RGBA16)((color[2] / size) + 0.5f)) & 0xFFFF) | MSK_RGBA16_A);
+            size = (1.0f / (sampleW * sampleH));
+            image[(imageH * iy) + ix] = ((R_RGBA16((RGBA16)((color[0] * size) + 0.5f)) & 0xFFFF) |
+                                         (G_RGBA16((RGBA16)((color[1] * size) + 0.5f)) & 0xFFFF) |
+                                         (B_RGBA16((RGBA16)((color[2] * size) + 0.5f)) & 0xFFFF) | MSK_RGBA16_A);
         }
     }
     return image;
@@ -322,7 +320,7 @@ TexturePtr *intro_sample_frame_buffer(s32 imageW, s32 imageH, s32 sampleW, s32 s
 
 Gfx *geo_intro_face_easter_egg(s32 state, struct GraphNode *node, UNUSED void *context) {
     struct GraphNodeGenerated *genNode = (struct GraphNodeGenerated *)node;
-    TexturePtr *image;
+    RGBA16 *image;
     Gfx *dl = NULL;
     s32 i;
     if (state != 1) {

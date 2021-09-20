@@ -169,7 +169,7 @@ RGBA16 rgba16_make_grayscale(RGBA16 rgba) {
 #define METALTEX_DX      960 // (trunc((SCREEN_HEIGHT - 1) / TEXTURE_WIDTH) * SCREEN_WIDTH)
 
 #ifdef METAL_CAP_REFLECTION_GRAYSCALE
-void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
+void generate_metal_texture(RGBA16 *dst, RGBA16 *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
     for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
@@ -181,7 +181,7 @@ void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
     }
 }
 #else
-void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
+void generate_metal_texture(RGBA16 *dst, RGBA16 *src) {
     u32 srcIndex = 0, dstIndex = 0;
     u32 y, x;
     for ((y = METALTEX_Y_MIN); (y < METALTEX_Y_MAX); (y += METALTEX_DY)) {
@@ -202,7 +202,7 @@ void generate_metal_texture(TexturePtr *dst, TexturePtr *src) {
 // srcTW, srcTH source texture size
 // 1 px dst x = dx px src x
 // 1 px dst y = dy px src y
-void copy_partial_image(TexturePtr *dst, TexturePtr *src,
+void copy_partial_image(RGBA16 *dst, IA8 *src,
                         s32 dstX,  s32 dstY,  // 16,  0,
                         s32 dstW,  s32 dstH,  // 32, 32,
                         s32 dstTW, s32 dstTH, // 64, 32,
@@ -219,8 +219,8 @@ void copy_partial_image(TexturePtr *dst, TexturePtr *src,
     s32 srcIndex = 0, dstIndex = 0;
     const u32 srcStartIndex = ((srcY * srcTW) + srcX);
     const u32 dstStartIndex = ((dstY * dstTW) + dstX);
-    const f32 dx = ((srcW) / (dstW * 2.0f));
-    const f32 dy = ((srcH) / (dstH * 2.0f));
+    const f32 dx = (srcW / (f32)dstW);
+    const f32 dy = (srcH / (f32)dstH);
     s32 xdx, ydy;
     s32 dstIndexY, srcIndexY;
     ColorF dstColor, srcColor;
@@ -248,16 +248,14 @@ void copy_partial_image(TexturePtr *dst, TexturePtr *src,
 }
 
 // src should be I8 type?
-void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height) {
+void overlay_i8_on_rgba16_additive(RGBA16 *dst, I8 *src, u32 width, u32 height) {
     const u32 size = (width * height);
     u32 i;
-    I8 srcVal;
     RGBA16 dstVal;
     RGBA16Component srcI;
     RGBA16Component rgb[3];
     for ((i = 0); (i < size); (i++)) {
-        srcVal = src[i >> 1];
-        srcI   = I8_TO_RGBA16_C(srcVal);
+        srcI   = I8_TO_RGBA16_C(src[i]);
         if (srcI > 0x0) {
             dstVal = dst[i];
             rgb[0] = (RGBA16_R(dstVal) + srcI);
@@ -272,16 +270,15 @@ void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, 
 }
 
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s) {
-    Color min = min_3(color[0], color[1], color[2]);
-    Color max = max_3(color[0], color[1], color[2]);
-    if (min == max) return;
     f32 hue = 0.0f;
-    if (       max == color[0]) { // red
-        hue = (       (color[1] - color[2]) / (f32)(max - min));
-    } else if (max == color[1]) { // green
-        hue = (2.0f + (color[2] - color[0]) / (f32)(max - min));
-    } else {                      // blue
-        hue = (4.0f + (color[0] - color[1]) / (f32)(max - min));
+    if ((color[0] < color[1]) || (color[0] < color[2])) {
+        if (color[1] < color[2]) {
+            hue = (4.0f + (color[0] - color[1]) / (f32)(color[2] - MIN(color[0], color[1]))); // blue
+        } else {
+            hue = (2.0f + (color[2] - color[0]) / (f32)(color[1] - MIN(color[0], color[2]))); // green
+        }
+    } else {
+        hue = (0.0f + (color[1] - color[2]) / (f32)(color[0] - MIN(color[1], color[2]))); // red
     }
     if (hue < 0.0f) hue += 6.0f;
     // this is the algorithm to convert from RGB to HSV:

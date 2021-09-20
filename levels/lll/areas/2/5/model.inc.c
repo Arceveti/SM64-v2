@@ -1,24 +1,24 @@
 // 0x07025AC0 - 0x07025B80
 static const Vtx lll_seg7_vertex_fire_spitter_hole[] = {
-    {{{ -2732,   2391,  -1140}, 0, { 15<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2773,   2309,  -1069}, 0, {     0,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2732,   2309,  -1140}, 0, { 15<<5,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2773,   2391,  -1069}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2446,   2391,  -1636}, 0, { 15<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2487,   2309,  -1565}, 0, {     0,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2446,   2309,  -1636}, 0, { 15<<5,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{ -2487,   2391,  -1565}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2937,    518,    -30}, 0, {     0,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2937,    436,     51}, 0, { 15<<5,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2937,    518,     51}, 0, { 15<<5,      0}, {0xff, 0xff, 0xff, 0xff}}},
-    {{{  2937,    436,    -30}, 0, {     0,  15<<5}, {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2732,   2391,  -1140}, 0, ST_B(    16,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2773,   2309,  -1069}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2732,   2309,  -1140}, 0, ST_B(    16,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2773,   2391,  -1069}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2446,   2391,  -1636}, 0, ST_B(    16,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2487,   2309,  -1565}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2446,   2309,  -1636}, 0, ST_B(    16,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{ -2487,   2391,  -1565}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2937,    518,    -30}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2937,    436,     51}, 0, ST_B(    16,     16), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2937,    518,     51}, 0, ST_B(    16,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{  2937,    436,    -30}, 0, ST_B(     0,     16), {0xff, 0xff, 0xff, 0xff}}},
 };
 
 // 0x07025B80 - 0x07025BD8
 static const Gfx lll_seg7_sub_dl_fire_spitter_hole[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, lll_seg7_texture_fire_spitter),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 16 * 16 - 1, CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(16, 16), CALC_DXT(16, G_IM_SIZ_16b_BYTES)),
     gsSPVertex(lll_seg7_vertex_fire_spitter_hole, 12, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),

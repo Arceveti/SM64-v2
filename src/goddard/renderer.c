@@ -577,7 +577,7 @@ void update_cursor(void);
 void update_view_and_dl(struct ObjView *view);
 static void update_render_mode(void);
 void gddl_is_loading_shine_dl(Bool32 dlLoad);
-void gd_put_sprite(TexturePtr *sprite, s32 x, s32 y, s32 wx, s32 wy);
+void gd_put_sprite(RGBA16 *sprite, s32 x, s32 y, s32 wx, s32 wy);
 void reset_cur_dl_indices(void);
 
 // TODO: make a gddl_num_t?
@@ -1562,7 +1562,7 @@ void update_cursor(void) {
     sHandView->upperLeft[1] = (f32) gGdCtrl.csrY;
     // Make hand display list
     begin_gddl(sHandShape->dlNums[gGdFrameBufNum]);
-    gd_put_sprite((TexturePtr *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft[0], sHandView->upperLeft[1], 0x20, 0x20);
+    gd_put_sprite((RGBA16 *) (gGdCtrl.dragging ? gd_texture_hand_closed : gd_texture_hand_open), sHandView->upperLeft[0], sHandView->upperLeft[1], 0x20, 0x20);
     gd_enddlsplist_parent();
     if (sHandView->upperLeft[0] <  sHandView->parent->upperLeft[0]                                    ) sHandView->upperLeft[0] =  sHandView->parent->upperLeft[0];
     if (sHandView->upperLeft[0] > (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0])) sHandView->upperLeft[0] = (sHandView->parent->upperLeft[0] + sHandView->parent->lowerRight[0]);
@@ -1658,7 +1658,7 @@ s32 get_cur_pickbuf_offset(void) {
 }
 
 /* 254AC0 -> 254DFC; orig name: PutSprite */
-void gd_put_sprite(TexturePtr *sprite, s32 x, s32 y, s32 wx, s32 wy) {
+void gd_put_sprite(RGBA16 *sprite, s32 x, s32 y, s32 wx, s32 wy) {
     s32 c, r;
     gSPDisplayList(next_gfx(), osVirtualToPhysical(gd_dl_sprite_start_tex_block));
     for ((r = 0); (r < wy); (r += 32)) {
@@ -1682,10 +1682,10 @@ void gd_setup_cursor(struct ObjGroup *parentgrp) {
     UNUSED struct ObjNet *net;
     sHandShape = make_shape("mouse");
     sHandShape->dlNums[0] = gd_startdisplist(7);
-    gd_put_sprite((TexturePtr *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((RGBA16 *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     sHandShape->dlNums[1] = gd_startdisplist(7);
-    gd_put_sprite((TexturePtr *) gd_texture_hand_open, 100, 100, 32, 32);
+    gd_put_sprite((RGBA16 *) gd_texture_hand_open, 100, 100, 32, 32);
     gd_enddlsplist_parent();
     d_start_group("mouseg");
     net = (struct ObjNet *) d_makeobj(D_NET, AsDynName(0));

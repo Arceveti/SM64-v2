@@ -437,7 +437,7 @@ void interpolate_animation_transform(struct GdAnimTransform *t1, struct GdAnimTr
         mtxf_rot_about_vec3f(mtx, transform.rotate);
         vec3_add(mtx[3], transform.pos);
     } else {
-        d_set_scale(t1->scale[0], t1->scale[1], t1->scale[2]);
+        d_set_scale(t1->scale);
         mtxf_rot_about_vec3f(mtx, t1->rotate);
         vec3_add(mtx[3], t1->pos);
     }
@@ -558,7 +558,7 @@ void move_animator(struct ObjAnimator *animObj) {
             case GD_ANIM_MTX4x4F_SCALE3F: // AnimMtxVec[]
                 mtxVec = &((struct AnimMtxVec *) animData->data)[currKeyFrame];
                 d_set_i_matrix(&mtxVec->matrix);
-                d_set_scale(mtxVec->vec[0], mtxVec->vec[1], mtxVec->vec[2]);
+                d_set_scale(mtxVec->vec);
                 break;
             case GD_ANIM_SCALE3F_ROT3F_POS3F_2:  // similar to GD_ANIM_SCALE3F_ROT3F_POS3F, but no interpolation? what matrix does d_set_i_matrix set? Maybe Identity Matrix?
                 triPtr = (struct GdAnimTransform *) animData->data;

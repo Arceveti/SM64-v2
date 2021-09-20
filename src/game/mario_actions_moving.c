@@ -148,8 +148,6 @@ Bool32 set_triple_jump_action(struct MarioState *m, UNUSED MarioAction action, U
 }
 
 void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
-    s32 newFacingDYaw; //! not s16?
-    Angle facingDYaw;
     struct Surface *floor = m->floor;
     Angle slopeAngle      = m->floorYaw;
     f32 accelSteepness    = (accel * sqrtf(sqr(floor->normal.x) + sqr(floor->normal.z)));
@@ -158,12 +156,12 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     m->slideVelX *= lossFactor;
     m->slideVelZ *= lossFactor;
     m->slideYaw   = atan2s(m->slideVelZ, m->slideVelX);
-    facingDYaw    = (m->faceAngle[1] - m->slideYaw);
-    newFacingDYaw = facingDYaw; //! cast to s32 for some reason
+    Angle facingDYaw  = (m->faceAngle[1] - m->slideYaw);
+    s32 newFacingDYaw = facingDYaw; //! cast to s32 for some reason
     if (newFacingDYaw > 0x0 && newFacingDYaw <= DEG(90)) {
-        if ((newFacingDYaw -= 0x200) <           0x0) newFacingDYaw =           0x0;
+        if ((newFacingDYaw -= 0x200) <      0x0 ) newFacingDYaw =      0x0;
     } else if (newFacingDYaw >= -DEG( 90) && newFacingDYaw <  0x0) {
-        if ((newFacingDYaw += 0x200) >           0x0) newFacingDYaw =           0x0;
+        if ((newFacingDYaw += 0x200) >      0x0 ) newFacingDYaw =      0x0;
     } else if (newFacingDYaw >   DEG( 90) && newFacingDYaw <  DEG(180)) {
         if ((newFacingDYaw += 0x200) >  DEG(180)) newFacingDYaw =  DEG(180);
     } else if (newFacingDYaw >  -DEG(180) && newFacingDYaw < -DEG( 90)) {
@@ -468,7 +466,6 @@ void anim_and_audio_for_walk(struct MarioState *m) {
 }
 
 void anim_and_audio_for_hold_walk(struct MarioState *m) {
-    AnimAccel animSpeed;
     Bool32 inLoop = TRUE;
     f32 intendedSpeed = ((m->intendedMag > m->forwardVel) ? m->intendedMag : m->forwardVel);
     if (intendedSpeed < 2.0f) intendedSpeed = 2.0f;
@@ -479,8 +476,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     m->actionTimer = 1;
                 } else {
                     //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
-                    animSpeed = (AnimAccel)(intendedSpeed * 0x10000);
-                    set_mario_anim_with_accel(m, MARIO_ANIM_SLOW_WALK_WITH_LIGHT_OBJ, animSpeed);
+                    set_mario_anim_with_accel(m, MARIO_ANIM_SLOW_WALK_WITH_LIGHT_OBJ, (intendedSpeed * 0x10000));
                     play_step_sound(m, 12, 62);
                     inLoop = FALSE;
                 }
@@ -492,8 +488,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     m->actionTimer = 2;
                 } else {
                     //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
-                    animSpeed = (AnimAccel)(intendedSpeed * 0x10000);
-                    set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, animSpeed);
+                    set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, (intendedSpeed * 0x10000));
                     play_step_sound(m, 12, 62);
                     inLoop = FALSE;
                 }
@@ -503,8 +498,7 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                     m->actionTimer = 1;
                 } else {
                     //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^16.
-                    animSpeed = (AnimAccel)((intendedSpeed / 2.0f) * 0x10000);
-                    set_mario_anim_with_accel(m, MARIO_ANIM_RUN_WITH_LIGHT_OBJ, animSpeed);
+                    set_mario_anim_with_accel(m, MARIO_ANIM_RUN_WITH_LIGHT_OBJ, ((intendedSpeed / 2.0f) * 0x10000));
                     play_step_sound(m, 10, 49);
                     inLoop = FALSE;
                 }
@@ -934,9 +928,8 @@ Bool32 act_burning_ground(struct MarioState *m) {
 
 void tilt_body_butt_slide(struct MarioState *m) {
     Angle intendedDYaw = (m->intendedYaw - m->faceAngle[1]);
-    //! s32?
-    m->marioBodyState->torsoAngle[0] = (s32)( (5461.3335f * (m->intendedMag / 32.0f) * coss(intendedDYaw)));
-    m->marioBodyState->torsoAngle[2] = (s32)(-(5461.3335f * (m->intendedMag / 32.0f) * sins(intendedDYaw)));
+    m->marioBodyState->torsoAngle[0] = (Angle32)( (5461.3335f * (m->intendedMag / 32.0f) * coss(intendedDYaw)));
+    m->marioBodyState->torsoAngle[2] = (Angle32)(-(5461.3335f * (m->intendedMag / 32.0f) * sins(intendedDYaw)));
 }
 
 void common_slide_action(struct MarioState *m, MarioAction endAction, MarioAction airAction, AnimID32 animation) {

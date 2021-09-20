@@ -23,6 +23,20 @@ void move_towards_wall(struct MarioState *m, f32 amount) {
     m->vel[2] += (m->wall->normal.z * amount);
 }
 
+#define CALC_OFFSET(vert, next_step) {          \
+    if ((vert)[1] != 0.0f) {                    \
+        v = (v2[1] / (vert)[1]);                \
+        if ((v < 0.0f) || (v > 1.0f)) next_step;\
+        d00 = (((vert)[0] * v) - v2[0]);        \
+        d01 = (((vert)[2] * v) - v2[2]);        \
+        invDenom = sqrtf(sqr(d00) + sqr(d01));  \
+        offset   = (invDenom - margin_radius);  \
+        if (offset > 0.0f) next_step;           \
+        goto check_collision;                   \
+    }                                           \
+    next_step;                                  \
+}
+
 /**
  * Iterate through the list of walls until all walls are checked and
  * have given their wall push.
@@ -76,6 +90,7 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
  #ifdef UNDERWATER_STEEP_FLOORS_AS_WALLS
         if (gIncludeSteepFloorsInWallCollisionCheck && (surf->normal.y > MIN_UNDERWATER_FLOOR_NORMAL_Y)) continue;
  #endif
+        // Dot of normal and pos, + originOffset
         offset = ((surf->normal.x * pos[0]) + (surf->normal.y * pos[1]) + (surf->normal.z * pos[2]) + surf->originOffset);
         if ((offset < -radius) || (offset > radius)) continue;
         vec3_diff(v0, surf->vertex2, surf->vertex1);
@@ -97,69 +112,19 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         goto hasCollision;
     edge_1_2:
         if (offset < 0) continue;
-        // Edge 1-2
-        if (v0[1] != 0.0f) {
-            v = (v2[1] / v0[1]);
-            if ((v < 0.0f) || (v > 1.0f)) goto edge_1_3;
-            d00 = ((v0[0] * v) - v2[0]);
-            d01 = ((v0[2] * v) - v2[2]);
-            invDenom = sqrtf(sqr(d00) + sqr(d01));
-            offset   = (invDenom - margin_radius);
-            if (offset > 0.0f) goto edge_1_3;
-            invDenom = (offset / invDenom);
-            pos[0] += (d00 *= invDenom);
-            pos[2] += (d01 *= invDenom);
-            margin_radius += 0.01f;
-            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
-                continue;
-            } else {
-                goto hasCollision;
-            }
-        }
+        CALC_OFFSET(v0, goto edge_1_3);
     edge_1_3:
-        // Edge 1-3
-        if (v1[1] != 0.0f) {
-            v = (v2[1] / v1[1]);
-            if ((v < 0.0f) || (v > 1.0f)) goto edge_2_3;
-            d00 = ((v1[0] * v) - v2[0]);
-            d01 = ((v1[2] * v) - v2[2]);
-            invDenom = sqrtf(sqr(d00) + sqr(d01));
-            offset   = (invDenom - margin_radius);
-            if (offset > 0.0f) goto edge_2_3;
-            invDenom = (offset / invDenom);
-            pos[0] += (d00 *= invDenom);
-            pos[2] += (d01 *= invDenom);
-            margin_radius += 0.01f;
-            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
-                continue;
-            } else {
-                goto hasCollision;
-            }
-        }
+        CALC_OFFSET(v1, goto edge_2_3);
     edge_2_3:
-        // Edge 2-3
         vec3_diff(v1, surf->vertex3, surf->vertex2);
         vec3_diff(v2, pos, surf->vertex2);
-        if (v1[1] != 0.0f) {
-            v = (v2[1] / v1[1]);
-            if ((v < 0.0f) || (v > 1.0f)) continue;
-            d00 = ((v1[0] * v) - v2[0]);
-            d01 = ((v1[2] * v) - v2[2]);
-            invDenom = sqrtf(sqr(d00) + sqr(d01));
-            offset   = (invDenom - margin_radius);
-            if (offset > 0.0f) continue;
-            invDenom = (offset / invDenom);
-            pos[0] += (d00 *= invDenom);
-            pos[2] += (d01 *= invDenom);
-            margin_radius += 0.01f;
-            if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) {
-                continue;
-            } else {
-                goto hasCollision;
-            }
-        } else {
-            continue;
-        }
+        CALC_OFFSET(v1, continue);
+    check_collision:
+        invDenom = (offset / invDenom);
+        pos[0] += (d00 *= invDenom);
+        pos[2] += (d01 *= invDenom);
+        margin_radius += 0.01f;
+        if ((d00 * surf->normal.x) + (d01 * surf->normal.z) < (corner_threshold * offset)) continue;
     hasCollision:
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
@@ -171,6 +136,8 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     data->pos[2] = pos[2];
     return numCols;
 }
+
+#undef CALC_OFFSET
 
 /**
  * Find wall collisions and receive their push.

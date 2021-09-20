@@ -697,7 +697,7 @@ AnimFrame32 geo_update_animation_frame(struct AnimInfo *obj, s32 *accelAssist) {
     s32 result;
     struct Animation *anim;
     anim = obj->curAnim;
-    if ((obj->animTimer == gAreaUpdateCounter) || (anim->flags & ANIM_FLAG_2)) {
+    if ((obj->animTimer == gAreaUpdateCounter) || (anim->flags & ANIM_FLAG_NO_ACCEL)) {
         if (accelAssist != NULL) accelAssist[0] = obj->animFrameAccelAssist;
         return obj->animFrame;
     }

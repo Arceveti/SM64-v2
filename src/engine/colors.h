@@ -134,13 +134,13 @@
 Bool32 colorRGBA_average_2(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2);
 Bool32 colorRGBA_average_3(ColorRGBA dst, ColorRGBA c1, ColorRGBA c2, ColorRGBA c3);
 
-void generate_metal_texture(TexturePtr *dst, TexturePtr *src);
-void copy_partial_image(    TexturePtr *dst, TexturePtr *src,
+void generate_metal_texture(RGBA16 *dst, RGBA16 *src);
+void copy_partial_image(    RGBA16 *dst,   IA8  *src,
                             s32 dstX,      s32 dstY,
                             s32 dstW,      s32 dstH,
                             s32 dstTW,     s32 dstTH,
                             s32 srcX,      s32 srcY,
                             s32 srcW,      s32 srcH,
                             s32 srcTW,     s32 srcTH);
-void overlay_i8_on_rgba16_additive(TexturePtr *dst, TexturePtr *src, u32 width, u32 height);
+void overlay_i8_on_rgba16_additive(RGBA16 *dst, I8 *src, u32 width, u32 height);
 void colorRGB_add_hue(ColorRGB color, Color hueAdd, Color s);

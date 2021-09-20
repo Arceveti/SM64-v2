@@ -79,7 +79,7 @@ void d_end_net_with_subgroup(   DynObjName name);
 void d_attach_joint_to_net(     DynObjName name);
 void d_link_with(               DynObjName name);
 void d_link_with_ptr(void *ptr);
-void d_set_rotation(f32 x, f32 y, f32 z);
+void d_set_rotation(Vec3f rotation);
 void d_attach_to(     s32 flag, struct GdObj *obj);
 void d_attachto_dynid(s32 flag, DynObjName name);
 void d_set_att_offset(      Vec3f off);
@@ -89,7 +89,7 @@ void d_set_matgroup(            DynObjName name);
 void d_set_skinshape(           DynObjName name);
 void d_set_planegroup(          DynObjName name);
 void d_set_shapeptr(            DynObjName name);
-void d_set_ambient(ColorF r, ColorF g, ColorF b);
+void d_set_ambient(ColorRGBf color);
 void d_set_skin_weight(s32 vtxId, f32 percentWeight);
 void d_set_id(s32 id);
 void add_to_dynobj_list(struct GdObj *newObj, DynObjName name);
@@ -120,33 +120,33 @@ struct GdObj *proc_dynlist(struct DynList *dylist) {
     if (dylist++->cmd != 0xD1D4) gd_exit(); // not a valid dyn list
     while (dylist->cmd != 58) {
         switch (dylist->cmd) {
-            case 15: d_makeobj(          Dyn2AsInt(dylist), Dyn1AsName(dylist)                               ); break;
-            case 46: d_add_net_with_subgroup(               Dyn1AsName(dylist)                               ); break;
-            case 48: d_end_net_with_subgroup(               Dyn1AsName(dylist)                               ); break;
-            case 47: d_attach_joint_to_net(                 Dyn1AsName(dylist)                               ); break;
-            case 16: d_start_group(                         Dyn1AsName(dylist)                               ); break;
-            case 17: d_end_group(                           Dyn1AsName(dylist)                               ); break;
-            case 30: d_use_obj(                             Dyn1AsName(dylist)                               ); break;
-            case 28: d_link_with(                           Dyn1AsName(dylist)                               ); break;
-            case 29: d_link_with_ptr(    Dyn1AsPtr(dylist)                                                   ); break;
-            case 12: proc_dynlist(       Dyn1AsPtr(dylist)                                                   ); break;
-            case  0: d_use_integer_names(Dyn2AsInt(dylist)                                                   ); break;
-            case  5: d_set_scale(                           DynVecX(dylist), DynVecY(dylist), DynVecZ(dylist)); break;
-            case  6: d_set_rotation(                        DynVecX(dylist), DynVecY(dylist), DynVecZ(dylist)); break;
-            case  8: d_set_flags(        Dyn2AsInt(dylist)                                                   ); break;
-            case 40: d_attachto_dynid(   Dyn2AsInt(dylist), Dyn1AsName(dylist)                               ); break;
-            case 41: d_set_att_offset(      DynVec(dylist)                                                   ); break;
-            case 21: d_set_nodegroup(                       Dyn1AsName(dylist)                               ); break;
-            case 20: d_set_matgroup(                        Dyn1AsName(dylist)                               ); break;
-            case 22: d_set_skinshape(                       Dyn1AsName(dylist)                               ); break;
-            case 23: d_set_planegroup(                      Dyn1AsName(dylist)                               ); break;
-            case 24: d_set_shapeptrptr(  Dyn1AsPtr(dylist)                                                   ); break;
-            case 25: d_set_shapeptr(                        Dyn1AsName(dylist)                               ); break;
-            case 19: d_set_type(         Dyn2AsInt(dylist)                                                   ); break;
-            case 33: d_set_ambient(                         DynVecX(dylist), DynVecY(dylist), DynVecZ(dylist)); break;
-            case 34: d_set_diffuse(                         DynVecX(dylist), DynVecY(dylist), DynVecZ(dylist)); break;
-            case 32: d_set_skin_weight(  Dyn2AsInt(dylist), DynVecX(dylist)                                  ); break;
-            case 35: d_set_id(           Dyn2AsInt(dylist)                                                   ); break;
+            case 15: d_makeobj(        Dyn2AsInt(dylist), Dyn1AsName(dylist)); break;
+            case 46: d_add_net_with_subgroup(             Dyn1AsName(dylist)); break;
+            case 48: d_end_net_with_subgroup(             Dyn1AsName(dylist)); break;
+            case 47: d_attach_joint_to_net(               Dyn1AsName(dylist)); break;
+            case 16: d_start_group(                       Dyn1AsName(dylist)); break;
+            case 17: d_end_group(                         Dyn1AsName(dylist)); break;
+            case 30: d_use_obj(                           Dyn1AsName(dylist)); break;
+            case 28: d_link_with(                         Dyn1AsName(dylist)); break;
+            case 29: d_link_with_ptr(  Dyn1AsPtr(dylist)                    ); break;
+            case 12: proc_dynlist(     Dyn1AsPtr(dylist)                    ); break;
+            case  0: d_use_int_names(  Dyn2AsInt(dylist)                    ); break;
+            case  5: d_set_scale(         DynVec(dylist)                    ); break;
+            case  6: d_set_rotation(      DynVec(dylist)                    ); break;
+            case  8: d_set_flags(      Dyn2AsInt(dylist)                    ); break;
+            case 40: d_attachto_dynid( Dyn2AsInt(dylist), Dyn1AsName(dylist)); break;
+            case 41: d_set_att_offset(    DynVec(dylist)                    ); break;
+            case 21: d_set_nodegroup(                     Dyn1AsName(dylist)); break;
+            case 20: d_set_matgroup(                      Dyn1AsName(dylist)); break;
+            case 22: d_set_skinshape(                     Dyn1AsName(dylist)); break;
+            case 23: d_set_planegroup(                    Dyn1AsName(dylist)); break;
+            case 24: d_set_shapeptrptr(Dyn1AsPtr(dylist)                    ); break;
+            case 25: d_set_shapeptr(                      Dyn1AsName(dylist)); break;
+            case 19: d_set_type(       Dyn2AsInt(dylist)                    ); break;
+            case 33: d_set_ambient(       DynVec(dylist)                    ); break;
+            case 34: d_set_diffuse(       DynVec(dylist)                    ); break;
+            case 32: d_set_skin_weight(Dyn2AsInt(dylist), DynVecX(dylist)   ); break;
+            case 35: d_set_id(         Dyn2AsInt(dylist)                    ); break;
             default: gd_exit(); // unkown command
         }
         dylist++;
@@ -725,7 +725,7 @@ void d_end_group(DynObjName name) {
  *
  * @param isIntBool `TRUE` to interpret ids as integers
  */
-void d_use_integer_names(Bool32 isIntBool) {
+void d_use_int_names(Bool32 isIntBool) {
     sUseIntegerNames = isIntBool;
 }
 
@@ -749,7 +749,7 @@ void d_set_init_pos(Vec3f pos) {
         case OBJ_TYPE_PARTICLES: vec3_copy(((struct ObjParticle *) dynobj)->pos,      pos); break;
         case OBJ_TYPE_CAMERAS:   vec3_copy(((struct ObjCamera   *) dynobj)->worldPos, pos); break;
         case OBJ_TYPE_VERTICES:
-            d_set_rel_pos(pos[0], pos[1], pos[2]);
+            d_set_rel_pos(pos);
             vec3_copy(((struct ObjVertex *) dynobj)->initPos, pos);
             break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetInitPos()", sDynListCurInfo->name, sDynListCurObj->type);
@@ -821,22 +821,21 @@ void d_get_init_rot(Vec3f dst) {
  * @note This function automatically adjusts the three zoom levels
  *       for an `ObjCamera`.
  */
-//! Vec3f pos
-void d_set_rel_pos(f32 x, f32 y, f32 z) {
+void d_set_rel_pos(Vec3f pos) {
     struct GdObj *dynobj = sDynListCurObj;
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS:  vec3_set(((struct ObjJoint  *) dynobj)->relPos, x, y, z); break;
+        case OBJ_TYPE_JOINTS:  vec3_copy(((struct ObjJoint  *) dynobj)->relPos, pos); break;
         case OBJ_TYPE_CAMERAS:
-            vec3_set(((struct ObjCamera *) dynobj)->relPos,            x,          y,          z        );
-            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[0], (x       ), (y       ), (z       ));
-            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[1], (x * 1.5f), (y * 1.5f), (z * 1.5f));
-            vec3_set(((struct ObjCamera *) dynobj)->zoomPositions[2], (x * 2.0f), (y * 2.0f), (z * 2.0f));
+            vec3_copy(    ((struct ObjCamera *) dynobj)->relPos,           pos      );
+            vec3_prod_val(((struct ObjCamera *) dynobj)->zoomPositions[0], pos, 1.0f);
+            vec3_prod_val(((struct ObjCamera *) dynobj)->zoomPositions[1], pos, 1.5f);
+            vec3_prod_val(((struct ObjCamera *) dynobj)->zoomPositions[2], pos, 2.0f);
             ((struct ObjCamera *) dynobj)->maxZoomLevel = 2;
             break;
-        case OBJ_TYPE_VERTICES:  vec3_set(((struct ObjVertex   *) dynobj)->pos, x, y, z); break;
-        case OBJ_TYPE_PARTICLES: vec3_set(((struct ObjParticle *) dynobj)->pos, x, y, z); break;
-        case OBJ_TYPE_NETS:                                                                break;
+        case OBJ_TYPE_VERTICES:  vec3_copy(((struct ObjVertex   *) dynobj)->pos, pos); break;
+        case OBJ_TYPE_PARTICLES: vec3_copy(((struct ObjParticle *) dynobj)->pos, pos); break;
+        case OBJ_TYPE_NETS:                                                            break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRelPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -957,15 +956,14 @@ void d_vec3f_set_att_offset(Vec3f off) {
  *
  * @note Sets the upper left coordinates of an `ObjView`
  */
-//! Vec3f pos
-void d_set_world_pos(f32 x, f32 y, f32 z) {
+void d_set_world_pos(Vec3f pos) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_CAMERAS:  vec3_set(((struct ObjCamera *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_JOINTS:   vec3_set(((struct ObjJoint  *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_NETS:     vec3_set(((struct ObjNet    *) sDynListCurObj)->worldPos,  x, y, z); break;
-        case OBJ_TYPE_VIEWS:    vec3_set(((struct ObjView   *) sDynListCurObj)->upperLeft, x, y, z); break;
-        case OBJ_TYPE_VERTICES: vec3_set(((struct ObjVertex *) sDynListCurObj)->pos,       x, y, z); break;
+        case OBJ_TYPE_CAMERAS:  vec3_copy(((struct ObjCamera *) sDynListCurObj)->worldPos,  pos); break;
+        case OBJ_TYPE_JOINTS:   vec3_copy(((struct ObjJoint  *) sDynListCurObj)->worldPos,  pos); break;
+        case OBJ_TYPE_NETS:     vec3_copy(((struct ObjNet    *) sDynListCurObj)->worldPos,  pos); break;
+        case OBJ_TYPE_VIEWS:    vec3_copy(((struct ObjView   *) sDynListCurObj)->upperLeft, pos); break;
+        case OBJ_TYPE_VERTICES: vec3_copy(((struct ObjVertex *) sDynListCurObj)->pos,       pos); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetWorldPos()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1009,16 +1007,15 @@ void d_vec3f_get_world_pos(Vec3f dst) {
  *
  * @note Sets the lower right coordinates of an `ObjView`
  */
-//! Vec3f scale
-void d_set_scale(f32 x, f32 y, f32 z) {
+void d_set_scale(Vec3f pos) {
     struct GdObj *initDynobj;
     if (sDynListCurObj == NULL) gd_exit();
     initDynobj = sDynListCurObj;
     d_stash_dynobj();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3_set(((struct ObjJoint *) initDynobj)->scale,      x, y, z); break;
-        case OBJ_TYPE_NETS:   vec3_set(((struct ObjNet   *) initDynobj)->scale,      x, y, z); break;
-        case OBJ_TYPE_VIEWS:  vec3_set(((struct ObjView  *) initDynobj)->lowerRight, x, y, z); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(((struct ObjJoint *) initDynobj)->scale,      pos); break;
+        case OBJ_TYPE_NETS:   vec3_copy(((struct ObjNet   *) initDynobj)->scale,      pos); break;
+        case OBJ_TYPE_VIEWS:  vec3_copy(((struct ObjView  *) initDynobj)->lowerRight, pos); break;
         case OBJ_TYPE_PARTICLES: break;
         case OBJ_TYPE_LIGHTS:    break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetScale()", sDynListCurInfo->name, sDynListCurObj->type);
@@ -1030,13 +1027,13 @@ void d_set_scale(f32 x, f32 y, f32 z) {
  * Set the rotation value of the current active dynamic object.
  */
 //! Vec3f rotation
-void d_set_rotation(f32 x, f32 y, f32 z) {
+void d_set_rotation(Vec3f rotation) {
     struct GdObj *dynobj;
     if (sDynListCurObj == NULL) gd_exit();
     dynobj = sDynListCurObj;
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_JOINTS: vec3_set(((struct ObjJoint *) dynobj)->initRotation, x, y, z); break;
-        case OBJ_TYPE_NETS:   vec3_set(((struct ObjNet   *) dynobj)->initRotation, x, y, z); break;
+        case OBJ_TYPE_JOINTS: vec3_copy(((struct ObjJoint *) dynobj)->initRotation, rotation); break;
+        case OBJ_TYPE_NETS:   vec3_copy(((struct ObjNet   *) dynobj)->initRotation, rotation); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetRotation()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1155,10 +1152,10 @@ void d_set_id(s32 id) {
 /**
  * Set the ambient color of the current dynamic `ObjMaterial`.
  */
-void d_set_ambient(ColorF r, ColorF g, ColorF b) {
+void d_set_ambient(ColorRGBf color) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS: vec3_set(((struct ObjMaterial *) sDynListCurObj)->Ka, r, g, b); break;
+        case OBJ_TYPE_MATERIALS: vec3_copy(((struct ObjMaterial *) sDynListCurObj)->Ka, color); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetAmbient()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }
@@ -1167,11 +1164,11 @@ void d_set_ambient(ColorF r, ColorF g, ColorF b) {
  * Set the diffuse color of the current dynamic `ObjMaterial` or `ObjLight`.
  */
 //! ColorRGBf
-void d_set_diffuse(ColorF r, ColorF g, ColorF b) {
+void d_set_diffuse(ColorRGBf color) {
     if (sDynListCurObj == NULL) gd_exit();
     switch (sDynListCurObj->type) {
-        case OBJ_TYPE_MATERIALS: vec3_set(((struct ObjMaterial *) sDynListCurObj)->Kd,      r, g, b); break;
-        case OBJ_TYPE_LIGHTS:    vec3_set(((struct ObjLight    *) sDynListCurObj)->diffuse, r, g, b); break;
+        case OBJ_TYPE_MATERIALS: vec3_copy(((struct ObjMaterial *) sDynListCurObj)->Kd,      color); break;
+        case OBJ_TYPE_LIGHTS:    vec3_copy(((struct ObjLight    *) sDynListCurObj)->diffuse, color); break;
         default: gd_exit(); // fatal_printf("%s: Object '%s'(%x) does not support this function.", "dSetDiffuse()", sDynListCurInfo->name, sDynListCurObj->type);
     }
 }

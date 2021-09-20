@@ -22,7 +22,6 @@ static const Vtx bbh_seg7_vertex_outside_windows_roof[] = {
     {{{   102,   2750,   1037}, 0, ST_B(    32,     32), {0x00, 0x5f, 0x54, 0xff}}},
 };
 
-//! TODO: combine these:
 // 0x0701E9F8 - 0x0701EAE8
 static const Vtx bbh_seg7_vertex_0701E9F8[] = {
     {{{  1843,   1536,   2161}, 0, ST_B(    32,      0), {0x00, 0x00, 0x7f, 0xff}}},

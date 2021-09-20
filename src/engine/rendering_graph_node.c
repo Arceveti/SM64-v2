@@ -430,15 +430,7 @@ static void geo_process_perspective(struct GraphNodePerspective *node) {
         aspect = (4.0f / 3.0f); // 1.33333f
 #endif
         if (gCamera) {
-            // gWorldScale = MAX((sqr(gCamera->pos[0]) + sqr(gCamera->pos[1]) + sqr(gCamera->pos[2])) / 67108864, 1.0f);
-            //! is there a way to simplify out the sqrtf?
-            // gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) / (sqr(LEVEL_BOUNDARY_MAX) * 2)));
-            // gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) * 2) / (LEVEL_BOUNDARY_MAX * 2));
-            gWorldScale = (sqrtf(vec3_sumsq(gCamera->pos) * 2) / 0x4000);
-
-            //! Why does this give a different result from HackerSM64, which has the exact same thing?:
-            // gWorldScale = ((gCamera->pos[0] * gCamera->pos[0]) + (gCamera->pos[1] * gCamera->pos[1]) + (gCamera->pos[2] * gCamera->pos[2]))/67108864;
-
+            gWorldScale = (vec3_sumsq(gCamera->pos) / sqr(0x4000));
             gWorldScale = MAX(gWorldScale, 1.0f);
         } else {
             gWorldScale = 1.0f;
@@ -824,14 +816,14 @@ void geo_set_animation_globals(struct AnimInfo *node, Bool32 hasAnimation) {
         gCurAnimType = ANIM_TYPE_VERTICAL_TRANSLATION;
     } else if (anim->flags & ANIM_FLAG_VERT_TRANS) {
         gCurAnimType = ANIM_TYPE_LATERAL_TRANSLATION;
-    } else if (anim->flags & ANIM_FLAG_6) {
+    } else if (anim->flags & ANIM_FLAG_NO_TRANS) {
         gCurAnimType = ANIM_TYPE_NO_TRANSLATION;
     } else {
         gCurAnimType = ANIM_TYPE_TRANSLATION;
     }
     gCurrAnimFrame                = node->animFrame;
-    gCurAnimEnabled               = ((anim->flags & ANIM_FLAG_5) == 0); //! name anim flag?
-    gCurrAnimAttribute            = segmented_to_virtual((void *) anim->index);
+    gCurAnimEnabled               = (!(anim->flags & ANIM_FLAG_DISABLED));
+    gCurrAnimAttribute            = segmented_to_virtual((void *) anim->index );
     gCurAnimData                  = segmented_to_virtual((void *) anim->values);
     gCurAnimTranslationMultiplier = ((anim->animYTransDivisor == 0) ? 1.0f : ((f32) node->animYTrans / (f32) anim->animYTransDivisor));
 }
