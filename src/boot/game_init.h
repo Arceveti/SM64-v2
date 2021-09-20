@@ -106,8 +106,8 @@ extern u32 gGlobalTimer;
 
 void setup_game_memory(void);
 void thread5_game_loop(UNUSED void *arg);
-void clear_frame_buffer(                   s32 color); //! RGBA32?
-void clear_viewport(         Vp *viewport, s32 color); //! RGBA32?
+void clear_frame_buffer(                   RGBA16FILL color);
+void clear_viewport(         Vp *viewport, RGBA16FILL color);
 void make_viewport_clip_rect(Vp *viewport);
 void init_rcp(Bool32 resetZB);
 void end_master_display_list(void);

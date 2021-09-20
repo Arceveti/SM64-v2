@@ -54,13 +54,13 @@ struct CreditsEntry *gCurrCreditsEntry = NULL;
 Vp *gViewportOverride    = NULL;
 Vp *gViewportClip        = NULL;
 s16 gWarpTransDelay      = 0;
-u32 gFBSetColor          = 0;
-u32 gWarpTransFBSetColor = 0;
-Color gWarpTransRed      = 0;
-Color gWarpTransGreen    = 0;
-Color gWarpTransBlue     = 0;
-s16 gCurrSaveFileNum     = 1;
-s16 gCurrLevelNum        = LEVEL_MIN;
+RGBA16FILL gFBSetColor          = 0x0;
+RGBA16FILL gWarpTransFBSetColor = 0x0;
+Color      gWarpTransRed        = 0x0;
+Color      gWarpTransGreen      = 0x0;
+Color      gWarpTransBlue       = 0x0;
+s16        gCurrSaveFileNum     = 1;
+s16        gCurrLevelNum        = LEVEL_MIN;
 
 /*
  * The following two tables are used in get_mario_spawn_type() to determine spawn type

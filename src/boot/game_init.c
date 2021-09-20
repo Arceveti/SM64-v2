@@ -214,7 +214,7 @@ void select_frame_buffer(void) {
  * Clear the framebuffer and fill it with a 32-bit color.
  * Information about the color argument: https://jrra.zone/n64/doc/n64man/gdp/gDPSetFillColor.htm
  */
-void clear_frame_buffer(s32 color) {
+void clear_frame_buffer(RGBA16FILL color) {
     gDPPipeSync(     gDisplayListHead++);
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
@@ -229,7 +229,7 @@ void clear_frame_buffer(s32 color) {
 /**
  * Resets the viewport, readying it for the final image.
  */
-void clear_viewport(Vp *viewport, s32 color) {
+void clear_viewport(Vp *viewport, RGBA16FILL color) {
     s16 vpUlx = (((viewport->vp.vtrans[0] - viewport->vp.vscale[0]) / 4) + 1);
     s16 vpUly = (((viewport->vp.vtrans[1] - viewport->vp.vscale[1]) / 4) + 1);
     s16 vpLrx = (((viewport->vp.vtrans[0] + viewport->vp.vscale[0]) / 4) - 2);
@@ -385,7 +385,7 @@ void render_init(void) {
     gDisplayListHead =        gGfxPool->buffer;
     gGfxPoolEnd      = (u8 *)(gGfxPool->buffer + GFX_POOL_SIZE);
     init_rcp(CLEAR_ZBUFFER);
-    clear_frame_buffer(0);
+    clear_frame_buffer(0x00000000);
     end_master_display_list();
     exec_display_list(&gGfxPool->spTask);
     // Skip incrementing the initial framebuffer index on emulators so that they display immediately as the Gfx task finishes

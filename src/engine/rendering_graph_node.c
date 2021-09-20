@@ -1185,7 +1185,7 @@ void geo_process_node_and_siblings(struct GraphNode *firstNode) {
  * The root node itself sets up the viewport, then all its children are processed
  * to set up the projection and draw display lists.
  */
-void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) {
+void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, RGBA16FILL clearColor) {
 #if PUPPYPRINT_DEBUG
     OSTime first = osGetTime();
 #endif

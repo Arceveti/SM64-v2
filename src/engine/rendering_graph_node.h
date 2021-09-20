@@ -64,4 +64,4 @@ extern f32 gWorldScale;
 #define RENDER_PHASE_LAST  RENDER_PHASE_REJ_NON_ZB
 
 void geo_process_node_and_siblings(struct GraphNode *firstNode);
-void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor);
+void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, RGBA16FILL clearColor);

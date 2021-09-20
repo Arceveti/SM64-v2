@@ -152,17 +152,18 @@ typedef u8  I4;                 // u4
 typedef u8  I8;
 typedef u8  IA4;                // u4, components u3 & u1
 typedef u8  IA8;
-typedef u16 IA16;
 typedef u8  IA16Component;
-typedef u16 RGBA16;
+typedef u16 IA16;
 typedef u8  RGBA16Component;    // components u5 & u1
-typedef u32 RGBA32;
+typedef u16 RGBA16;
+typedef u32 RGBA16FILL;         // RGBA16 but twice, Used for gDPSetFillColor
 typedef u8  RGBA32Component;
+typedef u32 RGBA32;
 typedef u8  CI4;                // u4
 typedef u8  CI8;
 
 typedef Color Texture;
-typedef u16 TexturePtr;
+typedef u16   TexturePtr;
 
 
 enum SpTaskState {
