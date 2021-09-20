@@ -144,6 +144,16 @@ SECTIONS
    . = _hvqbufSegmentBssEnd;
 #endif
 
+/* hardcoded symbols to satisfy preliminary link for map parser */
+#ifndef DEBUG_MAP_STACKTRACE
+      parse_map = 0x80345678;
+      find_function_in_stack = 0x80345678;
+      _mapDataSegmentRomStart = 0;
+      gMapEntries = 0;
+      gMapEntrySize = 0;
+      gMapStrings = 0;
+#endif
+
    BEGIN_SEG(main, .) SUBALIGN(16)
    {
       KEEP(BUILD_DIR/asm/entry.o(.text));
@@ -152,6 +162,7 @@ SECTIONS
 #ifdef HVQM
       BUILD_DIR/src/hvqm*.o(.text);
 #endif
+      BUILD_DIR/src/usb*.o(.text);
       BUILD_DIR/src/audio*.o(.text);
 #ifdef S2DEX_TEXT_ENGINE
       lib/libs2d_engine.a:*(.text);
@@ -167,9 +178,11 @@ SECTIONS
       */libhvqm2.a:*.o(.text);
       BUILD_DIR/lib/rsp.o(.text);
       lib/PR/hvqm/hvqm2sp1.o(.text);
+      _mainSegmentTextEnd = .;
 
       /* data */
       BUILD_DIR/src/boot*.o(.*data*);
+      BUILD_DIR/src/usb*.o(.*data*);
       BUILD_DIR/src/audio*.o(.*data*);
 #ifdef S2DEX_TEXT_ENGINE
       lib/libs2d_engine.a:*(.*data*);
@@ -187,6 +200,7 @@ SECTIONS
 
       /* rodata */
       BUILD_DIR/src/boot*.o(.rodata*);
+      BUILD_DIR/src/usb*.o(.rodata*);
       BUILD_DIR/src/audio*.o(.rodata*);
 #ifdef S2DEX_TEXT_ENGINE
       lib/libs2d_engine.a:*(.rodata*);
@@ -203,13 +217,11 @@ SECTIONS
       lib/PR/hvqm/hvqm2sp1.o(.rodata*);
    }
    END_SEG(main)
-#ifndef PRELIMINARY
-   ASSERT((_mainSegmentRomEnd <= 0x101000), "Error: Please shrink your main segment to under 1MB.")
-#endif
    BEGIN_NOLOAD(main)
    {
       BUILD_DIR/src/boot*.o(.*bss*);
       BUILD_DIR/src/hvqm*.o(.*bss*);
+      BUILD_DIR/src/usb*.o(.*bss*);
       BUILD_DIR/src/audio*.o(.*bss*);
 #ifdef S2DEX_TEXT_ENGINE
       lib/libs2d_engine.a:*(.*bss*);
@@ -235,23 +247,20 @@ SECTIONS
    {
       BUILD_DIR/src/game*.o(.text);
       BUILD_DIR/src/engine*.o(.text);
-      BUILD_DIR/src/usb*.o(.text);
+      _engineSegmentTextEnd = .;
       /* data */
       BUILD_DIR/src/game*.o(.*data*);
       BUILD_DIR/src/engine*.o(.data*);
       BUILD_DIR/src/engine*.o(.sdata*);
-      BUILD_DIR/src/usb*.o(.*data*);
       /* rodata */
       BUILD_DIR/src/game*.o(.rodata*);
       BUILD_DIR/src/engine*.o(.rodata*);
-      BUILD_DIR/src/usb*.o(.rodata*);
    }
    END_SEG(engine)
    BEGIN_NOLOAD(engine)
    {
       BUILD_DIR/src/game*.o(.*bss*);
       BUILD_DIR/src/engine*.o(.bss*);
-      BUILD_DIR/src/usb*.o(.*bss*);
       . = ALIGN(0x40);
    }
    END_NOLOAD(engine)
@@ -336,6 +345,7 @@ SECTIONS
 #endif */
    {
       KEEP(BUILD_DIR/src/menu*.o(.text));
+      _goddardSegmentTextEnd = .;
       KEEP(BUILD_DIR/src/menu*.o(.data*));
       KEEP(BUILD_DIR/src/menu*.o(.rodata*));
 #ifdef KEEP_MARIO_HEAD
@@ -497,6 +507,13 @@ SECTIONS
       KEEP(BUILD_DIR/data/hvqm.o(.data));
    }
 	END_SEG(hvqm)
+#endif
+
+#ifdef DEBUG_MAP_STACKTRACE
+   BEGIN_SEG(mapData, 0x80700000) {
+      KEEP(BUILD_DIR/asm/debug/map.o(.data*));
+   }
+   END_SEG(mapData)
 #endif
    /* DWARF debug sections.
       Symbols in the DWARF debugging sections are relative to the beginning

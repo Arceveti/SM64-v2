@@ -8,6 +8,7 @@
 #include "puppyprint.h"
 #endif
 #include "audio/external.h"
+#include "farcall.h"
 #include "boot/game_init.h"
 #include "boot/main.h"
 
@@ -18,8 +19,9 @@
 #include "printf.h"
 
 enum crashPages {
-    PAGE_STACK,
+    PAGE_CONTEXT,
     PAGE_LOG,
+    PAGE_STACKTRACE,
     PAGE_COUNT
 };
 
@@ -66,6 +68,9 @@ char *gFpcsrDesc[6] = {
 };
 
 extern u64 osClockRate;
+extern far char *parse_map(u32);
+extern far void map_data_init(void);
+extern far char *find_function_in_stack(u32 *);
 
 struct {
     OSThread thread;
@@ -147,7 +152,7 @@ void crash_screen_print_float_reg(s32 x, s32 y, s32 regNum, void *addr) {
     if (((exponent >= -0x7E) && (exponent <= 0x7F)) || (bits == 0)) {
         crash_screen_print(x, y, "F%02d:%.3e", regNum, *(f32 *) addr);
     } else {
-        crash_screen_print(x, y, "F%02d:---------", regNum);
+        crash_screen_print(x, y, "F%02d:%08XD", regNum, *(u32 *) addr);
     }
 }
 
@@ -164,7 +169,7 @@ void crash_screen_print_fpcsr(u32 fpcsr) {
     }
 }
 
-void draw_crash_stack(OSThread *thread, s32 cause) {
+void draw_crash_context(OSThread *thread, s32 cause) {
     __OSThreadContext *tc = &thread->context;
     // u32 gfx = (((u32) &gGfxPool->spTask - (u32) gDisplayListHead)/8);
     crash_screen_draw_rect(25, 20, 270, 25);
@@ -172,7 +177,13 @@ void draw_crash_stack(OSThread *thread, s32 cause) {
     crash_screen_print(30, 35, "PC:%08XH   SR:%08XH   VA:%08XH", tc->pc, tc->sr, tc->badvaddr);
     osWritebackDCacheAll();
     crash_screen_draw_rect(25, 45, 270, 185);
-    crash_screen_print(30,  50, "AT:%08XH   V0:%08XH   V1:%08XH", (u32) tc->at, (u32) tc->v0, (u32) tc->v1);
+    if ((u32)parse_map == 0x80345678) {
+        crash_screen_print(30, 50, "AT:%08XH   V0:%08XH   V1:%08XH", (u32) tc->at, (u32) tc->v0, (u32) tc->v1);
+    } else {
+        char *fname = parse_map(tc->pc);
+        crash_screen_print(30, 50, "CRASH AT: %s", fname == NULL ? "UNKNOWN" : fname);
+    }
+    // crash_screen_print(30, 50, "AT:%08XH   V0:%08XH   V1:%08XH", (u32) tc->at, (u32) tc->v0, (u32) tc->v1);
     crash_screen_print(30,  60, "A0:%08XH   A1:%08XH   A2:%08XH", (u32) tc->a0, (u32) tc->a1, (u32) tc->a2);
     crash_screen_print(30,  70, "A3:%08XH   T0:%08XH   T1:%08XH", (u32) tc->a3, (u32) tc->t0, (u32) tc->t1);
     crash_screen_print(30,  80, "T2:%08XH   T3:%08XH   T4:%08XH", (u32) tc->t2, (u32) tc->t3, (u32) tc->t4);
@@ -213,6 +224,38 @@ void draw_crash_log(UNUSED OSThread *thread, UNUSED s32 cause) {
 #endif
 }
 
+
+// prints any function pointers it finds in the stack
+// format:
+// SP address: function name
+void draw_stacktrace(OSThread *thread, UNUSED s32 cause) {
+    __OSThreadContext *tc = &thread->context;
+    u32 temp_sp = (tc->sp + 0x14);
+    crash_screen_draw_rect(25, 20, 270, 25);
+    crash_screen_print(30, 25, "STACK TRACE FROM %08X:", temp_sp);
+    if ((u32) parse_map == 0x80345678) {
+        crash_screen_print(30, 35, "CURRFUNC: NONE");
+    } else {
+        crash_screen_print(30, 35, "CURRFUNC: %s", parse_map(tc->pc));
+    }
+    osWritebackDCacheAll();
+    int i;
+    for ((i = 0); (i < 18); (i++)) {
+        if ((u32) find_function_in_stack == 0x80345678) {
+            crash_screen_print(30, (45 + (i * 10)), "STACK TRACE DISABLED");
+            break;
+        } else {
+            if ((u32) find_function_in_stack == 0x80345678) return;
+            char *fname = find_function_in_stack(&temp_sp);
+            if ((fname == NULL) || ((*(u32*)temp_sp & 0x80000000) == 0)) {
+                crash_screen_print(30, (45 + (i * 10)), "%08X: UNKNOWN", temp_sp);
+            } else {
+                crash_screen_print(30, (45 + (i * 10)), "%08X: %s", temp_sp, fname);
+            }
+        }
+    }
+}
+
 void draw_crash_screen(OSThread *thread) {
     s32 cause;
     __OSThreadContext *tc = &thread->context;
@@ -235,8 +278,9 @@ void draw_crash_screen(OSThread *thread) {
     if (updateBuffer) {
         crash_screen_print(15, 10, "Page:%d   L/Z: Left   R: Right", crashPage);
         switch (crashPage) {
-            case PAGE_STACK: draw_crash_stack(thread, cause); break;
-            case PAGE_LOG:   draw_crash_log(  thread, cause); break;
+            case PAGE_CONTEXT:    draw_crash_context(thread, cause); break;
+            case PAGE_LOG:        draw_crash_log    (thread, cause); break;
+            case PAGE_STACKTRACE: draw_stacktrace   (thread, cause); break;
         }
         osWritebackDCacheAll();
         osViBlack(FALSE);
@@ -268,6 +312,7 @@ void thread2_crash_screen(UNUSED void *arg) {
     osSetEventMesg(OS_EVENT_FAULT,     &gCrashScreen.mesgQueue, (OSMesg) 2);
     goto finished;
     reset:
+    if ((u32) map_data_init != 0x80345678) map_data_init();
     gCrashScreen.thread.priority = 15;
     stop_sounds_in_continuous_banks();
     stop_background_music(sBackgroundMusicQueue[0].seqId);
