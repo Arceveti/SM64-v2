@@ -22,6 +22,9 @@ const GeoLayout red_flame_geo[] = {
          GEO_DISPLAY_LIST(LAYER_TRANSPARENT, flame_seg3_dl_red_6),
          GEO_DISPLAY_LIST(LAYER_TRANSPARENT, flame_seg3_dl_red_7),
       GEO_CLOSE_NODE(),
+#if FLAME_GLOW
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, flame_seg3_dl_red_glow),
+#endif
    GEO_CLOSE_NODE(),
    GEO_END(),
 };
@@ -41,6 +44,9 @@ const GeoLayout blue_flame_geo[] = {
          GEO_DISPLAY_LIST(LAYER_TRANSPARENT, flame_seg3_dl_blue_6),
          GEO_DISPLAY_LIST(LAYER_TRANSPARENT, flame_seg3_dl_blue_7),
       GEO_CLOSE_NODE(),
+#if FLAME_GLOW
+      GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, flame_seg3_dl_blue_glow),
+#endif
    GEO_CLOSE_NODE(),
    GEO_END(),
 };

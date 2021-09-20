@@ -27,12 +27,12 @@ const GeoLayout unagi_geo[] = {
                               GEO_OPEN_NODE(),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, 2000, 0, 0, 0, 0, 0, star_seg3_dl_body),
                                  GEO_TRANSLATE_ROTATE_WITH_DL(LAYER_OCCLUDE_SILHOUETTE_ALPHA, 2000, 0, 0, 0, 0, 0, star_seg3_dl_eyes),
-#ifdef STAR_GLOW
+#if STAR_GLOW
                                  GEO_TRANSLATE_ROTATE(LAYER_FORCE, 2000, 0, 0, 0, 0, 0),
                                  GEO_OPEN_NODE(),
                                     GEO_BILLBOARD_WITH_ZOFFSET(-48),
                                     GEO_OPEN_NODE(),
-                                       GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, star_seg3_dl_shine),
+                                       GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, star_seg3_dl_glow),
                                     GEO_CLOSE_NODE(),
                                  GEO_CLOSE_NODE(),
 #endif

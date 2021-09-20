@@ -4,7 +4,15 @@
 #include "macros.h"
 #include "surface_terrains.h"
 #include "types.h"
+#include "color_presets.h"
 #include "make_const_nonconst.h"
+
+#if defined(STAR_GLOW) || defined(FLAME_GLOW)
+// 0x0302BA88
+ALIGNED8 static const Texture seg3_texture_radial_light[] = {
+#include "actors/star/light_quarter_circle.ia16.inc.c"
+};
+#endif
 
 #include "mist/model.inc.c"
 UNUSED static const u64 binid_0 = 0;

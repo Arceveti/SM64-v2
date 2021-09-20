@@ -139,7 +139,7 @@ void bhv_bowser_body_anchor_loop(void) {
 Bool32 bowser_spawn_shockwave(void) {
     struct Object *wave;
     if (o->oBehParams2ndByte == BOWSER_BP_BITS) {
-        wave        = spawn_object(o, MODEL_BOWSER_WAVE, bhvBowserShockWave);
+        wave        = spawn_object(o, MODEL_BOWSER_IMPACT_RING, bhvBowserShockWave);
         wave->oPosY = o->oFloorHeight;
         return TRUE;
     }

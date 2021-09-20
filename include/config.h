@@ -147,8 +147,11 @@
 #define PUPPYLIGHTS_SMALL_EXPLOSION_LIGHT   800
 #define PUPPYLIGHTS_LARGE_EXPLOSION_LIGHT  3200
 
-// Glowing effect on power stars (Arceveti)
-#define STAR_GLOW
+// Glowing effect for Power Stars and Flames.
+// The number is the size of the glow. Set to 0 to disable.
+// (Arceveti)
+#define STAR_GLOW 144
+#define FLAME_GLOW 48
 
 // Mario's silhouette when behind solid objects/surfaces
 // Also enables new render layers, such as LAYER_ALPHA_DECAL.

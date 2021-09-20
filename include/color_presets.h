@@ -164,61 +164,95 @@
 // Color RGB(A) Arrays:
 
 // RGBA [0..255]
-#define COLOR_RGBA_NONE             { 0x00, 0x00, 0x00, 0x00 } //   0   0   0   0
-#define COLOR_RGBA_BLACK            { 0x00, 0x00, 0x00, 0xFF } //   0   0   0 255
-#define COLOR_RGBA_DARK             { 0x3F, 0x3F, 0x3F, 0xFF } //  63  63  63 255
-#define COLOR_RGBA_GRAY             { 0x7F, 0x7F, 0x7F, 0xFF } // 127 127 127 255
-#define COLOR_RGBA_LIGHT            { 0xBF, 0xBF, 0xBF, 0xFF } // 191 191 191 255
-#define COLOR_RGBA_WHITE            { 0xFF, 0xFF, 0xFF, 0xFF } // 255 255 255 255
+#define COLOR_RGBA_NONE                     { 0x00, 0x00, 0x00, 0x00 } //   0   0   0   0
+#define COLOR_RGBA_BLACK                    { 0x00, 0x00, 0x00, 0xFF } //   0   0   0 255
+#define COLOR_RGBA_DARK                     { 0x3F, 0x3F, 0x3F, 0xFF } //  63  63  63 255
+#define COLOR_RGBA_GRAY                     { 0x7F, 0x7F, 0x7F, 0xFF } // 127 127 127 255
+#define COLOR_RGBA_LIGHT                    { 0xBF, 0xBF, 0xBF, 0xFF } // 191 191 191 255
+#define COLOR_RGBA_WHITE                    { 0xFF, 0xFF, 0xFF, 0xFF } // 255 255 255 255
+
+// Primary/secondary/tertiary
+#define COLOR_RGBA_RED                      { 0xFF, 0x00, 0x00, 0xFF } // 255   0   0 255
+#define COLOR_RGBA_ORANGE                   { 0xFF, 0x7F, 0x00, 0xFF } // 255 127   0 255
+#define COLOR_RGBA_YELLOW                   { 0xFF, 0xFF, 0x00, 0xFF } // 255 255   0 255
+#define COLOR_RGBA_LIME                     { 0x7F, 0xFF, 0x00, 0xFF } // 127 255   0 255
+#define COLOR_RGBA_GREEN                    { 0x00, 0xFF, 0x00, 0xFF } //   0 255   0 255
+#define COLOR_RGBA_SPRING                   { 0x00, 0xFF, 0x7F, 0xFF } //   0 255 127 255
+#define COLOR_RGBA_CYAN                     { 0x00, 0xFF, 0xFF, 0xFF } //   0 255 255 255
+#define COLOR_RGBA_SKY                      { 0x00, 0x7F, 0xFF, 0xFF } //   0 127 255 255
+#define COLOR_RGBA_BLUE                     { 0x00, 0x00, 0xFF, 0xFF } //   0   0 255 255
+#define COLOR_RGBA_PURPLE                   { 0x7F, 0x00, 0xFF, 0xFF } // 127   0 255 255
+#define COLOR_RGBA_MAGENTA                  { 0xFF, 0x00, 0xFF, 0xFF } // 255   0 255 255
+#define COLOR_RGBA_PINK                     { 0xFF, 0x00, 0x7F, 0xFF } // 255   0 127 255
+
+// Elemental
+#define COLOR_RGBA_JRB_SKY                  { 0x50, 0x64, 0x5A, 0xFF } //  80 100  90 255
+#define COLOR_RGBA_WATER                    { 0x05, 0x50, 0x96, 0xFF } //   5  80 150 255
+#define COLOR_RGBA_ICE                      { 0x7D, 0x9A, 0xD0, 0xFF } // 125 154 208 255
+#define COLOR_RGBA_LAVA                     { 0x8F, 0x06, 0x00, 0xFF } // 143   6   0 255
+#define COLOR_RGBA_SAND                     { 0xDC, 0xA9, 0x73, 0xFF } // 220 169 115 255
+#define COLOR_RGBA_ELECTRIC                 { 0xFF, 0xEE, 0x00, 0xFF } // 255 238   0 255
+
+// Lights
+#define COLOR_RGBA_AMP_LIGHT                COLOR_RGBA_ELECTRIC
+#define COLOR_RGBA_STAR_LIGHT               { 0xFF, 0xF0, 0x00, 0xFF } // 255 240   0 255
+#define COLOR_RGBA_TRANSPARENT_STAR_LIGHT   { 0x0F, 0x19, 0x73, 0xFF } //  15  25 115 255 // 0x1E32E6FF //  30  50 230 255
+#define COLOR_RGBA_RED_FLAME_LIGHT          { 0xFF, 0x32, 0x00, 0xC8 } // 255  50   0 200
+#define COLOR_RGBA_BLUE_FLAME_LIGHT         { 0x64, 0x64, 0xFF, 0xFF } // 100 100 255 255
+#define COLOR_RGBA_EXPLOSION_LIGHT          { 0xFF, 0xFF, 0x7F, 0xFF } // 255 255 127 255
+
+#define COLOR_RGBA_COIN_YELLOW              COLOR_RGBA_YELLOW
+#define COLOR_RGBA_COIN_BLUE                { 0x80, 0x80, 0xFF, 0xFF } // 128 128 255 255
+#define COLOR_RGBA_COIN_RED                 COLOR_RGBA_RED
 
 // RGB [0..255]
 
 // Grayscale
-#define COLOR_RGB_BLACK             { 0x00, 0x00, 0x00 } //   0   0   0
-#define COLOR_RGB_DARK              { 0x3F, 0x3F, 0x3F } //  63  63  63
-#define COLOR_RGB_GRAY              { 0x7F, 0x7F, 0x7F } // 127 127 127
-#define COLOR_RGB_LIGHT             { 0xBF, 0xBF, 0xBF } // 191 191 191
-#define COLOR_RGB_WHITE             { 0xFF, 0xFF, 0xFF } // 255 255 255
+#define COLOR_RGB_BLACK                     { 0x00, 0x00, 0x00 } //   0   0   0
+#define COLOR_RGB_DARK                      { 0x3F, 0x3F, 0x3F } //  63  63  63
+#define COLOR_RGB_GRAY                      { 0x7F, 0x7F, 0x7F } // 127 127 127
+#define COLOR_RGB_LIGHT                     { 0xBF, 0xBF, 0xBF } // 191 191 191
+#define COLOR_RGB_WHITE                     { 0xFF, 0xFF, 0xFF } // 255 255 255
 
 // Primary/secondary/tertiary
-#define COLOR_RGB_RED               { 0xFF, 0x00, 0x00 } // 255   0   0
-#define COLOR_RGB_ORANGE            { 0xFF, 0x7F, 0x00 } // 255 127   0
-#define COLOR_RGB_YELLOW            { 0xFF, 0xFF, 0x00 } // 255 255   0
-#define COLOR_RGB_LIME              { 0x7F, 0xFF, 0x00 } // 127 255   0
-#define COLOR_RGB_GREEN             { 0x00, 0xFF, 0x00 } //   0 255   0
-#define COLOR_RGB_SPRING            { 0x00, 0xFF, 0x7F } //   0 255 127
-#define COLOR_RGB_CYAN              { 0x00, 0xFF, 0xFF } //   0 255 255
-#define COLOR_RGB_SKY               { 0x00, 0x7F, 0xFF } //   0 127 255
-#define COLOR_RGB_BLUE              { 0x00, 0x00, 0xFF } //   0   0 255
-#define COLOR_RGB_PURPLE            { 0x7F, 0x00, 0xFF } // 127   0 255
-#define COLOR_RGB_MAGENTA           { 0xFF, 0x00, 0xFF } // 255   0 255
-#define COLOR_RGB_PINK              { 0xFF, 0x00, 0x7F } // 255   0 127
+#define COLOR_RGB_RED                       { 0xFF, 0x00, 0x00 } // 255   0   0
+#define COLOR_RGB_ORANGE                    { 0xFF, 0x7F, 0x00 } // 255 127   0
+#define COLOR_RGB_YELLOW                    { 0xFF, 0xFF, 0x00 } // 255 255   0
+#define COLOR_RGB_LIME                      { 0x7F, 0xFF, 0x00 } // 127 255   0
+#define COLOR_RGB_GREEN                     { 0x00, 0xFF, 0x00 } //   0 255   0
+#define COLOR_RGB_SPRING                    { 0x00, 0xFF, 0x7F } //   0 255 127
+#define COLOR_RGB_CYAN                      { 0x00, 0xFF, 0xFF } //   0 255 255
+#define COLOR_RGB_SKY                       { 0x00, 0x7F, 0xFF } //   0 127 255
+#define COLOR_RGB_BLUE                      { 0x00, 0x00, 0xFF } //   0   0 255
+#define COLOR_RGB_PURPLE                    { 0x7F, 0x00, 0xFF } // 127   0 255
+#define COLOR_RGB_MAGENTA                   { 0xFF, 0x00, 0xFF } // 255   0 255
+#define COLOR_RGB_PINK                      { 0xFF, 0x00, 0x7F } // 255   0 127
 
 // Elemental
-#define COLOR_RGB_JRB_SKY           { 0x50, 0x64, 0x5A } //  80 100  90
-#define COLOR_RGB_WATER             { 0x05, 0x50, 0x96 } //   5  80 150
-#define COLOR_RGB_ICE               { 0x7D, 0x9A, 0xD0 } // 125 154 208
-#define COLOR_RGB_LAVA              { 0x8F, 0x06, 0x00 } // 143   6   0
-#define COLOR_RGB_SAND              { 0xDC, 0xA9, 0x73 } // 220 169 115
-#define COLOR_RGB_ELECTRIC          { 0xFF, 0xEE, 0x00 } // 255 238   0
+#define COLOR_RGB_JRB_SKY                   { 0x50, 0x64, 0x5A } //  80 100  90
+#define COLOR_RGB_WATER                     { 0x05, 0x50, 0x96 } //   5  80 150
+#define COLOR_RGB_ICE                       { 0x7D, 0x9A, 0xD0 } // 125 154 208
+#define COLOR_RGB_LAVA                      { 0x8F, 0x06, 0x00 } // 143   6   0
+#define COLOR_RGB_SAND                      { 0xDC, 0xA9, 0x73 } // 220 169 115
+#define COLOR_RGB_ELECTRIC                  { 0xFF, 0xEE, 0x00 } // 255 238   0
 
-#define COLOR_RGB_COIN_YELLOW       COLOR_RGB_YELLOW
-#define COLOR_RGB_COIN_BLUE         { 0x80, 0x80, 0xFF } // 128 128 255
-#define COLOR_RGB_COIN_RED          COLOR_RGB_RED
+#define COLOR_RGB_COIN_YELLOW               COLOR_RGB_YELLOW
+#define COLOR_RGB_COIN_BLUE                 { 0x80, 0x80, 0xFF } // 128 128 255
+#define COLOR_RGB_COIN_RED                  COLOR_RGB_RED
 
 // Lights
-#define DEFAULT_LIGHT_AMB           0x7F
-#define DEFAULT_LIGHT_COL           0xFE
-#define DEFAULT_LIGHT_DIR           0x28
+#define DEFAULT_LIGHT_AMB                   0x7F
+#define DEFAULT_LIGHT_COL                   0xFE
+#define DEFAULT_LIGHT_DIR                   0x28
 
 // RGBF [0..1]
-#define COLOR_RGBF_WHITE            { 1.0f, 1.0f, 1.0f } // 0xFF 0xFF 0xFF | 255 255 255
-#define COLOR_RGBF_RED              { 1.0f, 0.0f, 0.0f } // 0xFF 0x00 0x00 | 255   0   0
-#define COLOR_RGBF_GREEN            { 0.0f, 1.0f, 0.0f } // 0x00 0xFF 0x00 |   0 255   0
-#define COLOR_RGBF_BLUE             { 0.0f, 0.0f, 1.0f } // 0x00 0x00 0xFF |   0   0 255
-#define COLOR_RGBF_ERR_DARK_BLUE    { 0.0f, 0.0f, 6.0f } // 0x00 0x00 0x5FF? |   0   0 1535?
-#define COLOR_RGBF_PINK             { 1.0f, 0.0f, 1.0f } // 0xFF 0x00 0xFF | 255   0 255
-#define COLOR_RGBF_BLACK            { 0.0f, 0.0f, 0.0f } // 0x00 0x00 0x00 |   0   0   0
-#define COLOR_RGBF_GREY             { 0.6f, 0.6f, 0.6f } // 0x99 0x99 0x99 | 153 153 153
-#define COLOR_RGBF_DARK_GREY        { 0.4f, 0.4f, 0.4f } // 0x66 0x66 0x66 | 102 102 102
-#define COLOR_RGBF_YELLOW           { 1.0f, 1.0f, 1.0f } // 0xFF 0xFF 0xFF | 255 255 255
+#define COLOR_RGBF_WHITE                    { 1.0f, 1.0f, 1.0f } // 0xFF 0xFF 0xFF | 255 255 255
+#define COLOR_RGBF_RED                      { 1.0f, 0.0f, 0.0f } // 0xFF 0x00 0x00 | 255   0   0
+#define COLOR_RGBF_GREEN                    { 0.0f, 1.0f, 0.0f } // 0x00 0xFF 0x00 |   0 255   0
+#define COLOR_RGBF_BLUE                     { 0.0f, 0.0f, 1.0f } // 0x00 0x00 0xFF |   0   0 255
+#define COLOR_RGBF_ERR_DARK_BLUE            { 0.0f, 0.0f, 6.0f } // 0x00 0x00 0x5FF? |   0   0 1535?
+#define COLOR_RGBF_PINK                     { 1.0f, 0.0f, 1.0f } // 0xFF 0x00 0xFF | 255   0 255
+#define COLOR_RGBF_BLACK                    { 0.0f, 0.0f, 0.0f } // 0x00 0x00 0x00 |   0   0   0
+#define COLOR_RGBF_GREY                     { 0.6f, 0.6f, 0.6f } // 0x99 0x99 0x99 | 153 153 153
+#define COLOR_RGBF_DARK_GREY                { 0.4f, 0.4f, 0.4f } // 0x66 0x66 0x66 | 102 102 102
+#define COLOR_RGBF_YELLOW                   { 1.0f, 1.0f, 1.0f } // 0xFF 0xFF 0xFF | 255 255 255

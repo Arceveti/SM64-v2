@@ -112,7 +112,7 @@ extern const Gfx flame_seg6_dl_12[];
 extern const Gfx flame_seg6_dl_13[];
 
 // impact_ring
-extern const GeoLayout invisible_bowser_accessory_geo[];
+extern const GeoLayout bowser_impact_ring_geo[];
 extern const Gfx impact_ring_seg6_sub_dl_ring[];
 extern const Gfx impact_ring_seg6_dl_ring[];
 

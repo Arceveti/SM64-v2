@@ -1,21 +1,5 @@
 // Impact Ring
 
-// 0x0601C9D0
-static const Vtx impact_ring_seg6_vertex_left_side[] = {
-    {{{     0,      0,     -5}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{    -5,      0,      5}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
-    {{{    -5,      0,     -5}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
-};
-
-// 0x0601CA10
-static const Vtx impact_ring_seg6_vertex_right_side[] = {
-    {{{     5,      0,     -5}, 0, ST_B(    32,      0), {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,      5}, 0, ST_B(     0,     64), {0xff, 0xff, 0xff, 0xff}}},
-    {{{     5,      0,      5}, 0, ST_B(    32,     64), {0xff, 0xff, 0xff, 0xff}}},
-    {{{     0,      0,     -5}, 0, ST_B(     0,      0), {0xff, 0xff, 0xff, 0xff}}},
-};
-
 // 0x0601CA50
 ALIGNED8 static const Texture impact_ring_seg6_texture_left_side[] = {
 #include "actors/impact_ring/impact_ring_left_side.ia16.inc.c"
@@ -26,18 +10,29 @@ ALIGNED8 static const Texture impact_ring_seg6_texture_right_side[] = {
 #include "actors/impact_ring/impact_ring_right_side.ia16.inc.c"
 };
 
+// 0x0601C9D0
+static const Vtx impact_ring_seg6_vertex[] = {
+    {{{     0,      0,     -5}, 0, ST_B(32-0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    -5,      0,      5}, 0, ST_B(  -0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, ST_B(32-0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{    -5,      0,     -5}, 0, ST_B(  -0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,     -5}, 0, ST_B(32+0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,      5}, 0, ST_B(   0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     5,      0,      5}, 0, ST_B(32+0.5,     64), {0xff, 0xff, 0xff, 0xff}}},
+    {{{     0,      0,     -5}, 0, ST_B(   0.5,      0), {0xff, 0xff, 0xff, 0xff}}},
+};
+
 // 0x0601EA50 - 0x0601EA88
 const Gfx impact_ring_seg6_sub_dl_ring[] = {
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, impact_ring_seg6_texture_left_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(impact_ring_seg6_vertex_left_side, 4, 0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSPVertex(impact_ring_seg6_vertex, 8, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, impact_ring_seg6_texture_right_side),
     gsDPLoadSync(),
-    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, 32 * 64 - 1, CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(impact_ring_seg6_vertex_right_side, 4, 0),
-    gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
+    gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 64), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
+    gsSP2Triangles( 4,  5,  6, 0x0,  4,  7,  5, 0x0),
     gsSPEndDisplayList(),
 };
 

@@ -224,6 +224,7 @@
         - Coins with better lighting
         - Make env textures right side up
     - The leftmost column and topmost row of pixels on billboards shouldn't get stretched at low resolution (Angrylion)
+    - Radial light for flames (like star)
     - Use painting ripple effect for splashing into water
     - Fix Variable Framerate bugs:
         - crashes when Goddard is enabled
@@ -332,6 +333,8 @@
     - Split camera file into camera and cutscene files
     - Finish moving general-use math functions into math_util.c
     - Make all vec3 functions type-independent
+    - Rename files/folders:
+        - actors/bowser_flame -> actors/bowser_bomb_explosion
     - Move to src/engine:
         - print?
         - printf?

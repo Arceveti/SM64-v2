@@ -194,6 +194,11 @@ extern const Gfx flame_seg3_dl_blue_4[];
 extern const Gfx flame_seg3_dl_blue_5[];
 extern const Gfx flame_seg3_dl_blue_6[];
 extern const Gfx flame_seg3_dl_blue_7[];
+#if FLAME_GLOW
+extern const Gfx flame_seg3_sub_dl_glow[];
+extern const Gfx flame_seg3_dl_red_glow[];
+extern const Gfx flame_seg3_dl_blue_glow[];
+#endif
 
 // leaves
 extern const GeoLayout leaves_geo[];
@@ -259,9 +264,9 @@ extern const Gfx star_seg3_sub_dl_body[];
 extern const Gfx star_seg3_dl_body[];
 extern const Gfx star_seg3_sub_dl_eyes[];
 extern const Gfx star_seg3_dl_eyes[];
-#ifdef STAR_GLOW
-extern const Gfx star_seg3_sub_dl_shine[];
-extern const Gfx star_seg3_dl_shine[];
+#if STAR_GLOW
+extern const Gfx star_seg3_sub_dl_glow[];
+extern const Gfx star_seg3_dl_glow[];
 #endif
 
 // transparent_star

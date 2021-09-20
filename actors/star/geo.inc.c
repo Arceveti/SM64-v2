@@ -6,10 +6,10 @@ const GeoLayout star_geo[] = {
       GEO_OPEN_NODE(),
          GEO_DISPLAY_LIST(LAYER_OCCLUDE_SILHOUETTE_OPAQUE, star_seg3_dl_body),
          GEO_DISPLAY_LIST(LAYER_OCCLUDE_SILHOUETTE_ALPHA, star_seg3_dl_eyes),
-#ifdef STAR_GLOW
+#if STAR_GLOW
          GEO_BILLBOARD_WITH_ZOFFSET(-48),
          GEO_OPEN_NODE(),
-            GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, star_seg3_dl_shine),
+            GEO_DISPLAY_LIST(LAYER_TRANSPARENT_INTER, star_seg3_dl_glow),
          GEO_CLOSE_NODE(),
 #endif
       GEO_CLOSE_NODE(),

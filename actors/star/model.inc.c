@@ -1,7 +1,7 @@
 // Star
 
 // 0x0302A6D8
-static const Lights1 star_seg3_lights_0302A6D8 = gdSPDefLights1(
+static const Lights1 star_seg3_lights = gdSPDefLights1(
     0x3f, 0x3f, 0x3f,
     0xff, 0xff, 0xff, 0x28, 0x28, 0x28
 );
@@ -17,7 +17,7 @@ ALIGNED8 static const Texture star_seg3_texture_eye[] = {
 };
 
 // 0x0302B6F0
-static const Vtx star_seg3_vertex_0302B6F0[] = {
+static const Vtx star_seg3_vertex_body[] = {
     {{{     0,      8,    -90}, 0, ST_B(     0,      0), {0x00, 0x07, 0x82, 0xff}}},
     {{{   190,   -201,      0}, 0, ST_B(     0,      0), {0x55, 0xa3, 0x00, 0xff}}},
     {{{     0,   -128,      0}, 0, ST_B(     0,      0), {0x00, 0x82, 0x00, 0xff}}},
@@ -34,9 +34,9 @@ static const Vtx star_seg3_vertex_0302B6F0[] = {
 
 // 0x0302B7B0 - 0x0302B870
 const Gfx star_seg3_sub_dl_body[] = {
-    gsSPLight(&star_seg3_lights_0302A6D8.l, 1),
-    gsSPLight(&star_seg3_lights_0302A6D8.a, 2),
-    gsSPVertex(star_seg3_vertex_0302B6F0, 12, 0),
+    gsSPLight(&star_seg3_lights.l, 1),
+    gsSPLight(&star_seg3_lights.a, 2),
+    gsSPVertex(star_seg3_vertex_body, 12, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 2,  1,  4, 0x0,  1,  3,  4, 0x0),
     gsSP2Triangles( 5,  3,  0, 0x0,  4,  3,  5, 0x0),
@@ -68,7 +68,7 @@ const Gfx star_seg3_dl_body[] = {
 };
 
 // 0x0302B920
-static const Vtx star_seg3_vertex_0302B920[] = {
+static const Vtx star_seg3_vertex_eyes[] = {
     {{{    67,     86,     63}, 0, ST_B(    32,      0), {0x18, 0x15, 0x7a, 0xff}}},
     {{{     0,    -27,     96}, 0, ST_B(     0,     32), {0x18, 0x15, 0x7a, 0xff}}},
     {{{    67,    -29,     83}, 0, ST_B(    32,     32), {0x18, 0x15, 0x7a, 0xff}}},
@@ -86,9 +86,9 @@ const Gfx star_seg3_sub_dl_eyes[] = {
     gsDPSetTextureImage(G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, star_seg3_texture_eye),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPLight(&star_seg3_lights_0302A6D8.l, 1),
-    gsSPLight(&star_seg3_lights_0302A6D8.a, 2),
-    gsSPVertex(star_seg3_vertex_0302B920, 10, 0),
+    gsSPLight(&star_seg3_lights.l, 1),
+    gsSPLight(&star_seg3_lights.a, 2),
+    gsSPVertex(star_seg3_vertex_eyes, 10, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  3,  1, 0x0),
     gsSP2Triangles( 4,  5,  6, 0x0,  7,  8,  9, 0x0),
     gsSPEndDisplayList(),
@@ -111,44 +111,39 @@ const Gfx star_seg3_dl_eyes[] = {
     gsSPSetGeometryMode(G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };
-#ifdef STAR_GLOW
-// 0x0302BA88
-ALIGNED8 static const Texture star_seg3_texture_shine[] = {
-#include "actors/star/light_quarter_circle.ia16.inc.c"
-};
-
+#if STAR_GLOW
 // 0x0302C288 - 0x0302C2C8
-const Vtx star_seg3_vertex_shine[] = {
-    {{{  -144,   -144,      0}, 0, ST_B(     0,     64), {0xff, 0xf0, 0x00, 0xff}}},
-    {{{   144,   -144,      0}, 0, ST_B(    64,     64), {0xff, 0xf0, 0x00, 0xff}}},
-    {{{   144,    144,      0}, 0, ST_B(    64,      0), {0xff, 0xf0, 0x00, 0xff}}},
-    {{{  -144,    144,      0}, 0, ST_B(     0,      0), {0xff, 0xf0, 0x00, 0xff}}},
+const Vtx star_seg3_vertex_glow[] = {
+    {{{ -STAR_GLOW, -STAR_GLOW,      0}, 0, ST_B(     0,     64), COLOR_RGBA_STAR_LIGHT}},
+    {{{  STAR_GLOW, -STAR_GLOW,      0}, 0, ST_B(    64,     64), COLOR_RGBA_STAR_LIGHT}},
+    {{{  STAR_GLOW,  STAR_GLOW,      0}, 0, ST_B(    64,      0), COLOR_RGBA_STAR_LIGHT}},
+    {{{ -STAR_GLOW,  STAR_GLOW,      0}, 0, ST_B(     0,      0), COLOR_RGBA_STAR_LIGHT}},
 };
 
 // 0x0302C2C8 - 0x0302C300
-const Gfx star_seg3_sub_dl_shine[] = {
-    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, star_seg3_texture_shine),
+const Gfx star_seg3_sub_dl_glow[] = {
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_16b, 1, seg3_texture_radial_light),
     gsDPLoadSync(),
     gsDPLoadBlock(G_TX_LOADTILE, 0, 0, CALC_LRS(32, 32), CALC_DXT(32, G_IM_SIZ_16b_BYTES)),
-    gsSPVertex(star_seg3_vertex_shine, 4, 0),
+    gsSPVertex(star_seg3_vertex_glow, 4, 0),
     gsSP2Triangles( 0,  1,  2, 0x0,  0,  2,  3, 0x0),
     gsSPEndDisplayList(),
 };
 
 // 0x0302C300 - 0x0302C
-const Gfx star_seg3_dl_shine[] = {
+const Gfx star_seg3_dl_glow[] = {
     gsDPPipeSync(),
     gsDPSetCombineMode(G_CC_MODULATERGBA, G_CC_MODULATERGBA),
-    gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsSPClearGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0, (G_TX_WRAP | G_TX_MIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_MIRROR), 5, G_TX_NOLOD),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPTileSync(),
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 8, 0, G_TX_RENDERTILE, 0, (G_TX_WRAP | G_TX_MIRROR), 5, G_TX_NOLOD, (G_TX_WRAP | G_TX_MIRROR), 5, G_TX_NOLOD),
     gsDPSetTileSize(0, 0, 0, ((32 - 1) << G_TEXTURE_IMAGE_FRAC), ((32 - 1) << G_TEXTURE_IMAGE_FRAC)),
-    gsSPDisplayList(star_seg3_sub_dl_shine),
+    gsSPDisplayList(star_seg3_sub_dl_glow),
     gsDPTileSync(),
     gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
-    gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsSPSetGeometryMode(G_LIGHTING | G_SHADING_SMOOTH),
     gsSPEndDisplayList(),
 };
 #endif
