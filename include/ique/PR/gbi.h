@@ -308,9 +308,32 @@
  */
 #define	G_MAXFBZ		0x3fff	/* 3b exp, 11b mantissa */
 
-#define	GPACK_RGBA5551(r, g, b, a)	((((r)<<8) & 0xf800) | 		\
-					 (((g)<<3) & 0x7c0) |		\
-					 (((b)>>2) & 0x3e) | ((a) & 0x1))
+// 0..255
+
+// I4
+#define	GPACK_I4(			 i   )	 (((a) >>  4) & 0x0000000F)
+// I8
+#define	GPACK_I8(			 i   )	 (((a)      ) & 0x000000FF)
+// IA4
+#define	GPACK_IA31(			 i, a)	((((r)      ) & 0x0000000E) |	\
+									 (((a) >>  3) & 0x00000001))
+// IA8
+#define	GPACK_IA44(			 i, a)	((((r)      ) & 0x000000F0) |	\
+									 (((a) >>  4) & 0x0000000F))
+// IA16
+#define	GPACK_IA88(			 i, a)	((((r) <<  8) & 0x0000FF00) |	\
+									  ((a)        & 0x000000FF))
+// RGBA16
+#define	GPACK_RGBA5551(r, g, b, a)	((((r) <<  8) & 0x0000F800) |	\
+									 (((g) <<  3) & 0x000007C0) |	\
+									 (((b) >>  2) & 0x0000003E) |	\
+									 (((a)      ) & 0x00000001)) //! 0..1
+// RGBA32
+#define	GPACK_RGBA8888(r, g, b, a)	((((r) << 24) & 0xFF000000) |	\
+									 (((g) << 16) & 0x00FF0000) |	\
+									 (((b) <<  8) & 0x0000FF00) |	\
+									 (((a)      ) & 0x000000FF))
+
 #define	GPACK_ZDZ(z, dz)		((z) << 2 | (dz))
 
 /*
