@@ -29,14 +29,14 @@ void bhv_jrb_sliding_box_loop(void) {
     Vec3f shipToBoxPos1, shipToBoxPos2;
     Vec3a shipRotation;
     struct Object *shipObj;
-    if (o->oJrbSlidingBoxShip == NULL) {
+    if (o->oJrbSlidingBoxShipObj == NULL) {
         shipObj = cur_obj_nearest_object_with_behavior(bhvJrbFloatingShipCollision);
         if (shipObj != NULL) {
-            o->oJrbSlidingBoxShip = shipObj;
+            o->oJrbSlidingBoxShipObj = shipObj;
             vec3_diff(&o->oParentRelativePosVec, &o->oPosVec, &shipObj->oPosVec);
         }
     } else {
-        shipObj = o->oJrbSlidingBoxShip;
+        shipObj = o->oJrbSlidingBoxShipObj;
         vec3_copy(shipRotation, &shipObj->oFaceAngleVec);
         vec3_copy(shipToBoxPos1, &o->oParentRelativePosVec);
         mtxf_rotate_zxy_and_translate(mtx, shipToBoxPos1, shipRotation);

@@ -247,7 +247,6 @@ struct GraphNodeObject
              u16 matrixID[2];
 #endif
     /*0x54*/ Vec3f cameraToObject;
-             u8    uCode;
 #ifdef VARIABLE_FRAMERATE
              Vec3a lerpAngle[3];
              Vec3f lerpPos[3];

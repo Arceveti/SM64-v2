@@ -38,7 +38,7 @@ Gfx *geo_update_projectile_pos_from_parent_copy(s32 callContext, UNUSED struct G
     struct Object* obj;
     if (callContext == GEO_CONTEXT_RENDER) {
         // TODO: change global type to Object pointer
-        obj = (struct Object*)gCurGraphNodeObject;
+        obj = (struct Object *) gCurGraphNodeObject;
         if (obj->prevObj != NULL) {
             create_transformation_from_matrices(mtx2, mtx, *gCurGraphNodeCamera->matrixPtr);
             obj_update_pos_from_parent_transformation(mtx2, obj->prevObj);

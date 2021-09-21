@@ -55,12 +55,12 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
     register f32 margin_radius = (radius - 1.0f);
     register SurfaceType type = SURFACE_DEFAULT;
     s32 numCols = 0;
-//  #if EXTENDED_BOUNDS_MODE > 1
+// #if EXTENDED_BOUNDS_MODE > 1
 //     const float down_scale = (1.0f / gWorldScale);
 //     radius         *= down_scale;
 //     vec3_mul_val(pos, down_scale);
 //     margin_radius  *= down_scale;
-//  #endif
+// #endif
     // Max collision radius = 200
     if (radius > 200.0f) radius = 200.0f;
     // Stay in this loop until out of walls.
@@ -129,9 +129,9 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode, struc
         if (data->numWalls < MAX_REFEREMCED_WALLS) data->walls[data->numWalls++] = surf;
         numCols++;
     }
-//  #if EXTENDED_BOUNDS_MODE > 1
+// #if EXTENDED_BOUNDS_MODE > 1
 //     vec3_mul_val(pos, gWorldScale);
-//  #endif
+// #endif
     data->pos[0] = pos[0];
     data->pos[2] = pos[2];
     return numCols;
@@ -232,7 +232,7 @@ s32 collide_with_walls(Vec3f pos, f32 offsetY, f32 radius) {
             vec3_copy(newPos[i], pos);
             vec3_set(norm, wall->normal.x, wall->normal.y, wall->normal.z);
             originOffset   = wall->originOffset;
-            offset         = ((norm[0] * newPos[i][0]) + (norm[1] * newPos[i][1]) + (norm[2] * newPos[i][2]) + originOffset);
+            offset         = (vec3_dot(norm, newPos[i]) + originOffset);
             offsetAbsolute = ABSF(offset);
             if (offsetAbsolute < radius) {
                 newPos[i][0] += (norm[0] * (radius - offset));
@@ -288,11 +288,6 @@ Bool32 find_wall_displacement(Vec3f dist, f32 x, f32 y, f32 z, f32 radius) {
  *                     CEILINGS                   *
  **************************************************/
 
-// Find the height of the surface at a given location
-f32 get_surface_height_at_location(f32 x, f32 z, struct Surface *surf) {
-    return (-((x * surf->normal.x) + (surf->normal.z * z) + surf->originOffset) / surf->normal.y);
-}
-
 void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
     register f32 diff_x   = (target1[0] - *x + target2[0] - *x);
     register f32 diff_z   = (target1[2] - *z + target2[2] - *z);
@@ -307,8 +302,7 @@ void add_ceil_margin(f32 *x, f32 *z, Vec3s target1, Vec3s target2, f32 margin) {
 static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 x, f32 y, f32 z, f32 *pheight) {
     const f32 margin = 1.5f;
     register struct Surface *surf;
-    f32 x1, z1, x2, z2, x3, z3;
-    // Vec3f x, z;
+    Vec3f vx, vz;
     f32 height;
     SurfaceType type = SURFACE_DEFAULT;
     struct Surface *ceil = NULL;
@@ -330,20 +324,20 @@ static struct Surface *find_ceil_from_list(struct SurfaceNode *surfaceNode, f32 
 #endif
         // Skip if ceil is too low
         if (y > surf->upperY) continue;
-        x1 = surf->vertex1[0];
-        z1 = surf->vertex1[2];
-        if (type != SURFACE_HANGABLE) add_ceil_margin(&x1, &z1, surf->vertex2, surf->vertex3, margin);
-        z2 = surf->vertex2[2];
-        x2 = surf->vertex2[0];
-        if (type != SURFACE_HANGABLE) add_ceil_margin(&x2, &z2, surf->vertex3, surf->vertex1, margin);
+        vx[0] = surf->vertex1[0];
+        vz[0] = surf->vertex1[2];
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&vx[0], &vz[0], surf->vertex2, surf->vertex3, margin);
+        vz[1] = surf->vertex2[2];
+        vx[1] = surf->vertex2[0];
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&vx[1], &vz[1], surf->vertex3, surf->vertex1, margin);
         // Checking if point is in bounds of the triangle laterally.
-        if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) > 0) continue;
+        if ((vz[0] - z) * (vx[1] - vx[0]) - (vx[0] - x) * (vz[1] - vz[0]) > 0) continue;
         // Slight optimization by checking these later.
-        x3 = surf->vertex3[0];
-        z3 = surf->vertex3[2];
-        if (type != SURFACE_HANGABLE) add_ceil_margin(&x3, &z3, surf->vertex1, surf->vertex2, margin);
-        if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) > 0) continue;
-        if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) > 0) continue;
+        vx[2] = surf->vertex3[0];
+        vz[2] = surf->vertex3[2];
+        if (type != SURFACE_HANGABLE) add_ceil_margin(&vx[2], &vz[2], surf->vertex1, surf->vertex2, margin);
+        if ((vz[1] - z) * (vx[2] - vx[1]) - (vx[1] - x) * (vz[2] - vz[1]) > 0) continue;
+        if ((vz[2] - z) * (vx[0] - vx[2]) - (vx[2] - x) * (vz[0] - vz[2]) > 0) continue;
         // Find the ceil height at the specific point.
         height = get_surface_height_at_location(x, z, surf);
         if (height >= *pheight) continue;
@@ -420,17 +414,18 @@ Bool32 floor_type_exists_in_current_cell(f32 x, f32 z, SurfaceType type, Bool32 
 }
 
 static Bool32 check_within_floor_triangle_bounds(f32 x, f32 z, struct Surface *surf) {
-    register f32 x1 = surf->vertex1[0];
-    register f32 z1 = surf->vertex1[2];
-    register f32 x2 = surf->vertex2[0];
-    register f32 z2 = surf->vertex2[2];
+    register Vec3f vx, vz;
+    vx[0] = surf->vertex1[0];
+    vz[0] = surf->vertex1[2];
+    vx[1] = surf->vertex2[0];
+    vz[1] = surf->vertex2[2];
     // Checking if point is in bounds of the triangle laterally.
-    if ((z1 - z) * (x2 - x1) - (x1 - x) * (z2 - z1) < 0.0f) return FALSE; // 12
+    if ((vz[0] - z) * (vx[1] - vx[0]) - (vx[0] - x) * (vz[1] - vz[0]) < 0.0f) return FALSE; // 12
     // Slight optimization by checking these later.
-    register f32 x3 = surf->vertex3[0];
-    register f32 z3 = surf->vertex3[2];
-    if ((z2 - z) * (x3 - x2) - (x2 - x) * (z3 - z2) < 0.0f) return FALSE; // 23
-    if ((z3 - z) * (x1 - x3) - (x3 - x) * (z1 - z3) < 0.0f) return FALSE; // 31
+    vx[2] = surf->vertex3[0];
+    vz[2] = surf->vertex3[2];
+    if ((vz[1] - z) * (vx[2] - vx[1]) - (vx[1] - x) * (vz[2] - vz[1]) < 0.0f) return FALSE; // 23
+    if ((vz[2] - z) * (vx[0] - vx[2]) - (vx[2] - x) * (vz[0] - vz[2]) < 0.0f) return FALSE; // 31
     return TRUE;
 }
 

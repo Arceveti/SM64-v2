@@ -243,7 +243,7 @@ static void klepto_act_retreat(void) {
     cur_obj_init_animation_with_sound(KLEPTO_ANIM_DIVE_0);
     approach_f32_ptr(&o->oKleptoSpeed, 40.0f, 10.0f);
     cur_obj_move_pitch_approach(o->oKleptoPitchToTarget, 1000);
-    cur_obj_face_pitch_approach(o->oMoveAnglePitch, 1000);
+    cur_obj_face_pitch_approach(o->oMoveAnglePitch,      1000);
     cur_obj_rotate_yaw_and_bounce_off_walls(o->oKleptoYawToTarget, 600);
     if (cur_obj_face_yaw_approach(o->oMoveAngleYaw, 1000) && abs_angle_diff(o->oFaceAnglePitch, o->oMoveAnglePitch) == 0x0) {
         o->oAction          = KLEPTO_ACT_RESET_POSITION;

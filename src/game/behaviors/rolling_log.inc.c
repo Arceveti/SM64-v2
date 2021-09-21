@@ -119,7 +119,7 @@ void bhv_lll_rolling_log_init(void) {
     o->oRollingLogX       = 5120.0f;
     o->oRollingLogZ       = 6016.0f;
     o->oRollingLogMaxDist = 1048576.0f;
-    o->oMoveAngleYaw      = 0x3FFF;
+    o->oMoveAngleYaw      = (DEG(90) - 1);
     o->oForwardVel        =   0.0f;
     o->oVelX              =   0.0f;
     o->oVelZ              =   0.0f;

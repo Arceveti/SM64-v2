@@ -213,7 +213,7 @@ void draw_crash_context(OSThread *thread, s32 cause) {
     crash_screen_print_float_reg( 30, 220, 30, &tc->fp30.f.f_even);
 }
 
-void draw_crash_log(UNUSED OSThread *thread, UNUSED s32 cause) {
+void draw_crash_log(void) {
 #if PUPPYPRINT_DEBUG
     s32 i;
     crash_screen_draw_rect(25, 20, 270, 210);
@@ -221,6 +221,8 @@ void draw_crash_log(UNUSED OSThread *thread, UNUSED s32 cause) {
 #define LINE_HEIGHT (25 + ((LOG_BUFFER_SIZE - 1) * 10))
     for ((i = 0); (i < LOG_BUFFER_SIZE); (i++)) crash_screen_print(30, ((LINE_HEIGHT) - (i * 10)), consoleLogTable[i]);
 #undef LINE_HEIGHT
+#else
+    crashPage++;
 #endif
 }
 
@@ -270,16 +272,14 @@ void draw_crash_screen(OSThread *thread) {
         crashPage--;
         updateBuffer = TRUE;
     }
-#if !PUPPYPRINT_DEBUG
-    if (crashPage == PAGE_LOG) crashPage++;
-#endif
-    if (crashPage >= PAGE_COUNT) crashPage = 0;
+    if ((crashPage >= PAGE_COUNT) && (crashPage != 255)) crashPage = 0;
     if (crashPage == 255) crashPage = (PAGE_COUNT - 1);
     if (updateBuffer) {
-        crash_screen_print(15, 10, "Page:%d   L/Z: Left   R: Right", crashPage);
+        crash_screen_draw_rect(25, 8, 270, 12);
+        crash_screen_print(30, 10, "Page:%02d                L/Z: Left   R: Right", crashPage);
         switch (crashPage) {
             case PAGE_CONTEXT:    draw_crash_context(thread, cause); break;
-            case PAGE_LOG:        draw_crash_log    (thread, cause); break;
+            case PAGE_LOG: 		  draw_crash_log    (             ); break;
             case PAGE_STACKTRACE: draw_stacktrace   (thread, cause); break;
         }
         osWritebackDCacheAll();

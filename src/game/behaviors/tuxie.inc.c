@@ -1,9 +1,8 @@
 // tuxie.c.inc
 
 void play_penguin_walking_sound(s32 walk) {
-    s32 sound;
     if (o->oSoundStateID == 0) {
-        sound = ((walk == PENGUIN_SOUND_WALK_BABY) ? SOUND_OBJ_BABY_PENGUIN_WALK : SOUND_OBJ_BIG_PENGUIN_WALK);
+        s32 sound = ((walk == PENGUIN_SOUND_WALK_BABY) ? SOUND_OBJ_BABY_PENGUIN_WALK : SOUND_OBJ_BIG_PENGUIN_WALK);
         set_obj_anim_with_accel_and_sound(1, 11, sound);
     }
 }
@@ -41,11 +40,11 @@ void tuxies_mother_act_receiving_baby(void) { // act 1
         case MOTHER_PENGUIN_SUB_ACT_RECEIVE_BABY:
             cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
             if (!cur_obj_is_mario_on_platform()) {
-                motherParam = (o->oBehParams >> 0x10) & 0xFF;
-                babyParam = (o->prevObj->oBehParams >> 0x10) & 0xFF;
-                dialogID = (motherParam == babyParam) ? DIALOG_058 : DIALOG_059;
+                motherParam = ((o->oBehParams >> 0x10) & 0xFF);
+                babyParam   = ((o->prevObj->oBehParams >> 0x10) & 0xFF);
+                dialogID    = ((motherParam == babyParam) ? DIALOG_058 : DIALOG_059);
                 if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, dialogID)) {
-                    o->oSubAction = (dialogID == DIALOG_058) ? MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY : MOTHER_PENGUIN_SUB_ACT_WRONG_BABY;
+                    o->oSubAction = ((dialogID == DIALOG_058) ? MOTHER_PENGUIN_SUB_ACT_CORRECT_BABY : MOTHER_PENGUIN_SUB_ACT_WRONG_BABY);
                     o->prevObj->oInteractionSubtype |= INT_SUBTYPE_DROP_IMMEDIATELY;
                 }
             } else {
@@ -75,7 +74,6 @@ void tuxies_mother_act_idle(void) { // act 0
     struct Object *smallPenguinObj = cur_obj_find_nearest_object_with_behavior(bhvSmallPenguin, &dist);
     cur_obj_scale(4.0f);
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
-    Bool32 nearBaby = (dist < 500.0f);
     if ((smallPenguinObj != NULL) && (dist < 300.0f) && (smallPenguinObj->oHeldState != HELD_FREE)) {
         o->oAction = MOTHER_PENGUIN_ACT_RECEIVE_BABY;
         smallPenguinObj->oSmallPenguinReturnedToMother = TRUE;
@@ -83,7 +81,7 @@ void tuxies_mother_act_idle(void) { // act 0
     } else {
         switch (o->oSubAction) {
             case MOTHER_PENGUIN_SUB_ACT_READY_TO_ASK:
-                if (cur_obj_can_mario_activate_textbox_2(300.0f, 100.0f) && !nearBaby) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY;
+                if (cur_obj_can_mario_activate_textbox_2(300.0f, 100.0f) && !(dist < 500.0f)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY;
                 break;
             case MOTHER_PENGUIN_SUB_ACT_ASK_FOR_BABY:
                 if (cur_obj_update_dialog_with_cutscene(MARIO_DIALOG_LOOK_UP, DIALOG_FLAG_TURN_TO_MARIO, CUTSCENE_DIALOG, DIALOG_057)) o->oSubAction = MOTHER_PENGUIN_SUB_ACT_ALREADY_ASKED; // "have you seen my baby"
@@ -153,7 +151,7 @@ void small_penguin_act_dive_sliding_stop(void) { // act 4
 }
 
 void small_penguin_act_walking(void) { // act 0
-    s32 nearMother = FALSE;
+    Bool32 nearMother = FALSE;
     cur_obj_init_animation_with_sound(PENGUIN_ANIM_IDLE);
     if (o->oTimer == 0) {
         o->oSmallPenguinYawIncrement        = (s32)(random_float() * 0x400);

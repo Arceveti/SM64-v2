@@ -93,7 +93,7 @@ void controllable_platform_check_walls(s8 nextDirection, Vec3c wallDisplacement,
 }
 
 void controllable_platform_shake_on_wall_hit(void) {
-    if (o->oControllablePlatformWallHitDirection == 1 || o->oControllablePlatformWallHitDirection == 2) {
+    if ((o->oControllablePlatformWallHitDirection == MOVE_DIRECTION_NORTH) || (o->oControllablePlatformWallHitDirection == MOVE_DIRECTION_SOUTH)) {
         o->oFaceAnglePitch = (sins(o->oTimer * 0x1000) * DEG(1) * 10.0f);
         o->oPosY           = (o->oControllablePlatformInitPosY + (sins(o->oTimer * 0x2000) * 20.0f));
     } else {
@@ -133,7 +133,7 @@ void bhv_controllable_platform_loop(void) {
         case DIRECTION_STATE_STOPPED:
             o->oFaceAnglePitch /= 2;
             o->oFaceAngleRoll  /= 2;
-            if ((o->oControllablePlatformIsFarFromMario == 1) && (o->oTimer > 30)) {
+            if ((o->oControllablePlatformIsFarFromMario) && (o->oTimer > 30)) {
                 sControllablePlatformDirectionState = 6;
                 o->oTimer = 0;
             }

@@ -229,11 +229,9 @@ struct Object *allocate_object(struct ObjectNode *objList) {
     obj->oDistanceToMario       = 19000.0f;
     obj->oRoom                  = -1;
     obj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
-    obj->header.gfx.pos[0]      = -10000.0f;
-    obj->header.gfx.pos[1]      = -10000.0f;
-    obj->header.gfx.pos[2]      = -10000.0f;
+    obj->header.gfx.node.flags |=  GRAPH_RENDER_UCODE_REJ;
+    vec3_same(obj->header.gfx.pos, -10000.0f);
     obj->header.gfx.throwMatrix = NULL;
-    obj->header.gfx.uCode       = UCODE_REJ;
 #ifdef PUPPYLIGHTS
     obj->oLightID = 0xFFFF;
 #endif

@@ -22,8 +22,9 @@
 #define RAYCAST_FIND_WATER  (1 << 3) // 0x8
 #define RAYCAST_FIND_ALL    (0xFFFFFFFF)
 
+#define is_outside_level_bounds(xPos, zPos) (((xPos) <= -LEVEL_BOUNDARY_MAX) || ((xPos) >=  LEVEL_BOUNDARY_MAX) || ((zPos) <= -LEVEL_BOUNDARY_MAX) || ((zPos) >=  LEVEL_BOUNDARY_MAX))
 
-#define is_outside_level_bounds(x, z) (((x) <= -LEVEL_BOUNDARY_MAX) || ((x) >=  LEVEL_BOUNDARY_MAX) || ((z) <= -LEVEL_BOUNDARY_MAX) || ((z) >=  LEVEL_BOUNDARY_MAX))
+#define get_surface_height_at_location(xPos, zPos, surf) (-((xPos) * (surf)->normal.x + (surf)->normal.z * (zPos) + (surf)->originOffset) / (surf)->normal.y)
 
 #define SURFACE_YAW(s) (atan2s(((s)->normal.z), ((s)->normal.x)))
 
@@ -37,14 +38,13 @@ struct WallCollisionData
     /*0x18*/ struct Surface *walls[MAX_REFEREMCED_WALLS];
 };
 
-void move_towards_wall(struct MarioState *m, f32 amount);
-s32  resolve_wall_collisions(Vec3f pos, f32 offsetY, f32 radius);
-s32  find_wall_collisions(struct WallCollisionData *colData);
-void resolve_and_return_wall_collision_data(Vec3f pos, f32 offsetY, f32 radius, struct WallCollisionData *collisionData);
+void   move_towards_wall(struct MarioState *m, f32 amount);
+s32    resolve_wall_collisions(Vec3f pos, f32 offsetY, f32 radius);
+s32    find_wall_collisions(struct WallCollisionData *colData);
+void   resolve_and_return_wall_collision_data(Vec3f pos, f32 offsetY, f32 radius, struct WallCollisionData *collisionData);
 s32    collide_with_walls(              Vec3f pos, f32 offsetY, f32 radius);
 void   resolve_geometry_collisions(     Vec3f pos, UNUSED Vec3f lastGood);
 Bool32 find_wall_displacement(          Vec3f dist, f32 x, f32 y, f32 z, f32 radius);
-f32    get_surface_height_at_location(              f32 x,        f32 z, struct Surface *surf);
 f32    find_ceil(                                   f32 x, f32 y, f32 z, struct Surface **pceil);
 Bool32 floor_type_exists_in_current_cell(           f32 x,        f32 z, SurfaceType type, Bool32 dynamic);
 f32    find_floor_height(                           f32 x, f32 y, f32 z);
@@ -56,5 +56,5 @@ s32    find_poison_gas_level(                       s32 x,        s32 z);
 Bool32 is_surf_within_bounding_box(struct Surface *surf, f32 xMax, f32 yMax, f32 zMax);
 Bool32 is_behind_surface(           Vec3f  pos, struct Surface *surf);
 Bool32 is_range_behind_surface(     Vec3f from, Vec3f to,  struct Surface *surf, s16 range, SurfaceType surfType);
-void find_surface_on_ray(           Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags);
-void debug_surface_list_info(                       f32 x,        f32 z);
+void   find_surface_on_ray(         Vec3f orig, Vec3f dir, struct Surface **hit_surface, Vec3f hit_pos, s32 flags);
+void   debug_surface_list_info(                       f32 x,        f32 z);

@@ -31,12 +31,9 @@ void floating_platform_act_move_to_home(void) {
             o->oFloatingPlatformMarioWeightWobbleOffset = 0.0f;
         }
     }
-
     o->oPosY = (((o->oHomeY - 64.0f) - o->oFloatingPlatformMarioWeightWobbleOffset) + (sins(o->oFloatingPlatformWaterSurfaceWobbleOffset * 0x800) * 10.0f));
     o->oFloatingPlatformWaterSurfaceWobbleOffset++;
-    if (o->oFloatingPlatformWaterSurfaceWobbleOffset == 32) {
-        o->oFloatingPlatformWaterSurfaceWobbleOffset = 0;
-    }
+    if (o->oFloatingPlatformWaterSurfaceWobbleOffset == 32) o->oFloatingPlatformWaterSurfaceWobbleOffset = 0;
 }
 
 void bhv_floating_platform_loop(void) {

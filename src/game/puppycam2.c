@@ -559,41 +559,47 @@ static void puppycam_input_hold_preset3(void) {
 
         if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_MED) approach_s16_symmetric_bool(&gPuppyCam.pitchTarget, DEG(78.75), 0x200);
         if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_OUT) approach_s16_symmetric_bool(&gPuppyCam.pitchTarget, DEG(67.5 ), 0x200);
-        if (gPlayer1Controller->buttonPressed & L_CBUTTONS) {
+        if (((gPlayer1Controller->buttonPressed & L_CBUTTONS) && !gPuppyCam.options.analogue) || ((gPuppyCam.stick2[0] > PUPPYCAM_DEADZONE) && !gPuppyCam.stickN[0])) {
+            gPuppyCam.stickN[0] = 1;
             gPuppyCam.yawTarget -= DEG(45);
             play_sound(SOUND_MENU_CAMERA_TURN,gGlobalSoundSource);
         }
-        if (gPlayer1Controller->buttonPressed & R_CBUTTONS) {
+        if (((gPlayer1Controller->buttonPressed & R_CBUTTONS) && !gPuppyCam.options.analogue) || ((gPuppyCam.stick2[0] < -PUPPYCAM_DEADZONE) && !gPuppyCam.stickN[0])) {
+            gPuppyCam.stickN[0]  = 1;
             gPuppyCam.yawTarget += DEG(45);
             play_sound(SOUND_MENU_CAMERA_TURN,gGlobalSoundSource);
         }
     }
     // Handles zooming in. Works just like vanilla.
-    if (gPlayer1Controller->buttonPressed & U_CBUTTONS) {
+    if (((gPlayer1Controller->buttonPressed & U_CBUTTONS) && !gPuppyCam.options.analogue) || ((gPuppyCam.stick2[1] > PUPPYCAM_DEADZONE) && !gPuppyCam.stickN[1])) {
         if ((gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_MED)
          && !(gMarioState->action & ACT_FLAG_AIR)
          && !(gMarioState->action & ACT_FLAG_SWIMMING)) {
+            gPuppyCam.stickN[1] = 1;
             gPuppyCam.mode3Flags |= PUPPYCAM_MODE3_ZOOMED_IN;
             gPuppyCam.mode3Flags &= ~PUPPYCAM_MODE3_ZOOMED_MED;
             gPuppyCam.zoomTarget  = 200;
             gPuppyCam.mode3Flags |= PUPPYCAM_MODE3_ENTER_FIRST_PERSON;
             play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gGlobalSoundSource);
         } else if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_OUT) {
+            gPuppyCam.stickN[1] = 1;
             gPuppyCam.mode3Flags |= PUPPYCAM_MODE3_ZOOMED_MED;
             gPuppyCam.mode3Flags &= ~PUPPYCAM_MODE3_ZOOMED_OUT;
             gPuppyCam.zoomTarget  = gPuppyCam.zoomPoints[1];
             play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gGlobalSoundSource);
         }
-    } else if (gPlayer1Controller->buttonPressed & D_CBUTTONS) { // Otherwise handle zooming out.
+    } else if (((gPlayer1Controller->buttonPressed & D_CBUTTONS) && !gPuppyCam.options.analogue) || ((gPuppyCam.stick2[1] < -PUPPYCAM_DEADZONE) && !gPuppyCam.stickN[1])) { // Otherwise handle zooming out.
         if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_MED) {
+            gPuppyCam.stickN[1] = 1;
             gPuppyCam.mode3Flags |= PUPPYCAM_MODE3_ZOOMED_OUT;
             gPuppyCam.mode3Flags &= ~PUPPYCAM_MODE3_ZOOMED_MED;
             gPuppyCam.zoomTarget  = gPuppyCam.zoomPoints[2];
             play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gGlobalSoundSource);
         }
     }
-    if (gPlayer1Controller->buttonPressed & (D_CBUTTONS | B_BUTTON | A_BUTTON)) {
+    if (((gPlayer1Controller->buttonPressed & D_CBUTTONS) && !gPuppyCam.options.analogue) || (gPuppyCam.stick2[1] < -PUPPYCAM_DEADZONE && !gPuppyCam.stickN[1]) || gPlayer1Controller->buttonPressed & (A_BUTTON | B_BUTTON)) {
         if (gPuppyCam.mode3Flags & PUPPYCAM_MODE3_ZOOMED_IN) {
+            gPuppyCam.stickN[1] = 1;
             gPuppyCam.mode3Flags |= PUPPYCAM_MODE3_ZOOMED_MED;
             gPuppyCam.mode3Flags &= ~PUPPYCAM_MODE3_ZOOMED_IN;
             gPuppyCam.zoomTarget  = gPuppyCam.zoomPoints[1];
@@ -616,7 +622,7 @@ static void puppycam_input_hold(void) {
     }
     // In theory this shouldn't be necessary, but it's nice to cover all bases.
     if (!(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_YAW_ROTATION)) return;
-    if (!gPuppyCam.options.analogue && !(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE)) {
+    if ((!gPuppyCam.options.analogue || (gPuppyCam.options.inputType == 2)) && !(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE)) {
         switch (gPuppyCam.options.inputType) {
             default: puppycam_input_hold_preset1(ivX); puppycam_input_pitch(); puppycam_input_zoom(); puppycam_input_centre(); break;
             case 1:  puppycam_input_hold_preset2(ivX); puppycam_input_pitch(); puppycam_input_zoom(); puppycam_input_centre(); break;

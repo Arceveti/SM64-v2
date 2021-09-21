@@ -729,7 +729,16 @@ void cur_obj_update(void) {
     if (objFlags & OBJ_FLAG_TRANSFORM_RELATIVE_TO_PARENT   ) obj_build_transform_relative_to_parent(o);
     if (objFlags & OBJ_FLAG_SET_THROW_MATRIX_FROM_TRANSFORM) obj_set_throw_matrix_from_transform(   o);
     if (objFlags & OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE       ) obj_update_gfx_pos_and_angle(          o);
-    o->header.gfx.uCode = ((objFlags & OBJ_FLAG_UCODE_LARGE) ? UCODE_DEFAULT : UCODE_REJ);
+    if (objFlags & OBJ_FLAG_UCODE_LARGE) {
+        gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_UCODE_REJ;
+    } else {
+        gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_UCODE_REJ;
+    }
+    if (objFlags & OBJ_FLAG_SILHOUETTE) {
+        gCurrentObject->header.gfx.node.flags |=  GRAPH_RENDER_SILHOUETTE;
+    } else {
+        gCurrentObject->header.gfx.node.flags &= ~GRAPH_RENDER_SILHOUETTE;
+    }
 #ifdef VARIABLE_FRAMERATE
     if ((gCurrentObject != gMarioState->marioObj) || !gMarioLoadedAnim) {
         if (gCurrentObject->header.gfx.animInfo.curAnim != NULL)

@@ -231,7 +231,6 @@
 
 /* Arrow Lift */
 #define /*0x0F4*/ oArrowLiftDisplacement                        OBJECT_FIELD_F32(0x1B)
-#define /*0x100*/ oArrowLiftUnusedRandom                        OBJECT_FIELD_S32(0x1E) // unused
 
 /* Back-and-Forth Platform */
 #define /*0x0F4*/ oBackAndForthPlatformDirection                OBJECT_FIELD_F32(0x1B)
@@ -632,19 +631,12 @@
 #define /*0x0F4*/ oHootAvailability                             OBJECT_FIELD_S32(0x1B)
 #define /*0x110*/ oHootMarioReleaseTime                         OBJECT_FIELD_S32(0x22)
 
-/* Horizontal Movement */
-#define /*0x0F4*/ oHorizontalMovementLavaWobbleTimer            OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oHorizontalMovementPosIndex                   OBJECT_FIELD_S32(0x1C)
-#define /*0x100*/ oHorizontalMovementLavaWobbleYOffset          OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oHorizontalMovementLavaSinkTimer              OBJECT_FIELD_S32(0x1F)
-#define /*0x108*/ oHorizontalMovementYOffsetFromHome            OBJECT_FIELD_F32(0x20)
-
 /* LLL Octagonal Rotating Mesh */
-#define /*0x0F4*/ oLllOctmeshWaveTimer                          OBJECT_FIELD_S32(0x1B)
-#define /*0x0F8*/ oLllOctmeshActionOffset                       OBJECT_FIELD_S32(0x1C)
-#define /*0x100*/ oLllOctmeshWaveOffset1                        OBJECT_FIELD_F32(0x1E)
-#define /*0x104*/ oLllOctmeshStandTimer                         OBJECT_FIELD_S32(0x1F)
-#define /*0x108*/ oLllOctmeshWaveOffset2                        OBJECT_FIELD_F32(0x20)
+#define /*0x0F4*/ oLllOctMeshWaveTimer                          OBJECT_FIELD_S32(0x1B)
+#define /*0x0F8*/ oLllOctMeshActionOffset                       OBJECT_FIELD_S32(0x1C)
+#define /*0x100*/ oLllOctMeshWaveYOffset                        OBJECT_FIELD_F32(0x1E)
+#define /*0x104*/ oLllOctMeshStandTimer                         OBJECT_FIELD_S32(0x1F)
+#define /*0x108*/ oLllOctMeshYOffsetFromHome                    OBJECT_FIELD_F32(0x20)
 
 /* Kickable Board */
 #define /*0x0F4*/ oKickableBoardRockingAngleAmount              OBJECT_FIELD_S32(0x1B)
@@ -709,7 +701,7 @@
 #define /*0x0FC*/ oCameraLakituCircleRadius                     OBJECT_FIELD_F32(0x1D)
 #define /*0x100*/ oCameraLakituFinishedDialog                   OBJECT_FIELD_S32(0x1E)
 #define /*0x104*/ oCameraLakituIntroMusicPlayed                 OBJECT_FIELD_S32(0x1F)
-#define /*0x1AC*/ oCameraLakituPitchVel                         OBJECT_FIELD_S16(0x49, 0)
+#define /*0x1AC*/ oCameraLakituPitchVel                         OBJECT_FIELD_S16(0x49,   0)
 #define /*0x1AE*/ oCameraLakituYawVel                           OBJECT_FIELD_S16(0x49, + 1)
 
 /* Evil Lakitu */
@@ -728,9 +720,9 @@
 #define /*0x10C*/ O_INTRO_LAKITU_END_BIRDS_DEST_Y_INDEX         (O_INTRO_LAKITU_END_BIRDS_DEST_INDEX + 1) // 0x21
 #define /*0x110*/ O_INTRO_LAKITU_END_BIRDS_DEST_X_INDEX         (O_INTRO_LAKITU_END_BIRDS_DEST_INDEX + 2) // 0x22
 #define /*0x108*/ oIntroLakituEndBirds1DestVec                  OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_INDEX)
-#define /*0x108*/ oIntroLakituEndBirds1DestZ                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Z_INDEX)
-#define /*0x10C*/ oIntroLakituEndBirds1DestY                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Y_INDEX)
 #define /*0x110*/ oIntroLakituEndBirds1DestX                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_X_INDEX)
+#define /*0x10C*/ oIntroLakituEndBirds1DestY                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Y_INDEX)
+#define /*0x108*/ oIntroLakituEndBirds1DestZ                    OBJECT_FIELD_F32(O_INTRO_LAKITU_END_BIRDS_DEST_Z_INDEX)
 #define /*0x1AC*/ oIntroLakituCloud                             OBJECT_FIELD_OBJ(0x49)
 
 /* Main Menu Button */
@@ -954,7 +946,7 @@
 #define /*0x1AC*/ oSkeeterAngleVel                              OBJECT_FIELD_S16(0x49, 0)
 
 /* Jrb Sliding Box */
-#define /*0x0F4*/ oJrbSlidingBoxShip                            OBJECT_FIELD_OBJ(0x1B)
+#define /*0x0F4*/ oJrbSlidingBoxShipObj                         OBJECT_FIELD_OBJ(0x1B)
 #define /*0x0F8*/ oJrbSlidingBoxAngle                           OBJECT_FIELD_S32(0x1C)
 #define /*0x0FC*/ oJrbSlidingBoxAdditiveZ                       OBJECT_FIELD_F32(0x1D)
 
@@ -1308,7 +1300,6 @@ os16112*/
 #define /*0x10C*/ o10C                                          OBJECT_FIELD_S32(0x21)
 #define /*0x110*/ o110                                          OBJECT_FIELD_S32(0x22)
 
-
 #define /*0x0F4*/ oFloatF4                                      OBJECT_FIELD_F32(0x1B)
 #define /*0x0F8*/ oFloatF8                                      OBJECT_FIELD_F32(0x1C)
 #define /*0x0FC*/ oFloatFC                                      OBJECT_FIELD_F32(0x1D)
@@ -1327,14 +1318,14 @@ os16112*/
 #define /*0x10C*/ oObj10C                                       OBJECT_FIELD_OBJ(0x21)
 #define /*0x110*/ oObj110                                       OBJECT_FIELD_OBJ(0x22)
 
-#define /*0x0F4*/ oSurfF4                                       OBJECT_FIELD_SURFACE(0x1B)
-#define /*0x0F8*/ oSurfF8                                       OBJECT_FIELD_SURFACE(0x1C)
-#define /*0x0FC*/ oSurfFC                                       OBJECT_FIELD_SURFACE(0x1D)
-#define /*0x100*/ oSurf100                                      OBJECT_FIELD_SURFACE(0x1E)
-#define /*0x104*/ oSurf104                                      OBJECT_FIELD_SURFACE(0x1F)
-#define /*0x108*/ oSurf108                                      OBJECT_FIELD_SURFACE(0x20)
-#define /*0x10C*/ oSurf10C                                      OBJECT_FIELD_SURFACE(0x21)
-#define /*0x110*/ oSurf110                                      OBJECT_FIELD_SURFACE(0x22)
+#define /*0x0F4*/ oSurfF4                                   OBJECT_FIELD_SURFACE(0x1B)
+#define /*0x0F8*/ oSurfF8                                   OBJECT_FIELD_SURFACE(0x1C)
+#define /*0x0FC*/ oSurfFC                                   OBJECT_FIELD_SURFACE(0x1D)
+#define /*0x100*/ oSurf100                                  OBJECT_FIELD_SURFACE(0x1E)
+#define /*0x104*/ oSurf104                                  OBJECT_FIELD_SURFACE(0x1F)
+#define /*0x108*/ oSurf108                                  OBJECT_FIELD_SURFACE(0x20)
+#define /*0x10C*/ oSurf10C                                  OBJECT_FIELD_SURFACE(0x21)
+#define /*0x110*/ oSurf110                                  OBJECT_FIELD_SURFACE(0x22)
 
 #define /*0x0F4*/ os16F4                                        OBJECT_FIELD_S16(0x1B, 0)
 #define /*0x0F6*/ os16F6                                        OBJECT_FIELD_S16(0x1B, 1)

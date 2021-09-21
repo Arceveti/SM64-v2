@@ -100,19 +100,19 @@ s32 lll_octagonal_mesh_find_y_offset(s32 *standTimer, f32 *posOffset, s32 standT
 void bhv_lll_moving_octagonal_mesh_platform_loop(void) {
     if (o->oAction == LLL_OCTAGONAL_ROTATING_MESH_ACT_RESET) {
         // reset the platform (when initting?)
-        o->oLllOctmeshActionOffset = 0;
+        o->oLllOctMeshActionOffset = 0;
         o->oAction                 = LLL_OCTAGONAL_ROTATING_MESH_ACT_MOVE;
     } else {
-        o->oLllOctmeshActionOffset = lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctmeshActionOffset);
+        o->oLllOctMeshActionOffset = lll_octagonal_mesh_move(gLllOctagonalMeshActionList[o->oBehParams2ndByte], o->oLllOctMeshActionOffset);
     }
     // prints the current actionOffset to the screen
-    print_debug_top_down_objectinfo("number %d\n", o->oLllOctmeshActionOffset);
+    print_debug_top_down_objectinfo("number %d\n", o->oLllOctMeshActionOffset);
     cur_obj_move_using_fvel_and_gravity();
     // are we transitioning between Mario standing and not standing?
-    if (lll_octagonal_mesh_find_y_offset(&o->oLllOctmeshStandTimer, &o->oLllOctmeshWaveOffset2, 0x400, -80)) {
+    if (lll_octagonal_mesh_find_y_offset(&o->oLllOctMeshStandTimer, &o->oLllOctMeshYOffsetFromHome, 0x400, -80)) {
         // nope, wave as usual
-        o->oLllOctmeshWaveTimer   += 0x800;
-        o->oLllOctmeshWaveOffset1 -= (sins(o->oLllOctmeshWaveTimer) * 2);
+        o->oLllOctMeshWaveTimer   += 0x800;
+        o->oLllOctMeshWaveYOffset -= (sins(o->oLllOctMeshWaveTimer) * 2);
     }
-    o->oPosY = o->oLllOctmeshWaveOffset1 + o->oLllOctmeshWaveOffset2;
+    o->oPosY = (o->oLllOctMeshWaveYOffset/* + o->oHomeY*/ + o->oLllOctMeshYOffsetFromHome);
 }

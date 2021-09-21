@@ -244,7 +244,6 @@ void bhv_book_switch_loop(void) {
                                                             0x0, ((DEG(180) * rand01) + DEG(90)), 0x0);
                     // Set its action
                     if (bookendObj != NULL) bookendObj->oAction = FLYING_BOOKEND_ACT_FLY_FORWARD;
-
                     // Reset the counter
                     o->parentObj->oBookSwitchManagerNumCorrectChoices = -1;
                 }
