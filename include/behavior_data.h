@@ -250,7 +250,6 @@ extern const BehaviorScript bhvBbhTiltingTrapPlatform[];
 extern const BehaviorScript bhvHauntedBookshelf[];
 extern const BehaviorScript bhvBbhMeshElevator[];
 extern const BehaviorScript bhvMerryGoRound[];
-extern const BehaviorScript bhvInsideCannon[];
 extern const BehaviorScript bhvBetaBowserAnchor[];
 extern const BehaviorScript bhvUnusedStaticCheckeredPlatform[];
 extern const BehaviorScript bhvStar[];

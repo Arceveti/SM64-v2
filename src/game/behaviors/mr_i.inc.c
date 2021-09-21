@@ -192,6 +192,7 @@ void mr_i_body_act_idle(void) {
 void mr_i_body_act_far_away(void) {
     vec3_zero(&o->oFaceAngleVec);
     cur_obj_scale(o->oBehParams2ndByte + 1);
+    o->oGraphYOffset = (100.0f * o->header.gfx.scale[1]);
     if (o->oTimer == 0) cur_obj_set_pos_to_home();
     if (o->oDistanceToMario < 1500.0f) o->oAction = MR_I_BODY_ACT_IDLE;
 }
