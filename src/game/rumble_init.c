@@ -129,7 +129,7 @@ void queue_rumble_decay(s16 decay) {
 }
 
 Bool32 is_rumble_finished_and_queue_empty(void) {
-    if (gCurrRumbleSettings.start + gCurrRumbleSettings.timer >= 4) return FALSE;
+    if ((gCurrRumbleSettings.start + gCurrRumbleSettings.timer) >= 4) return FALSE;
     if (gRumbleDataQueue[0].comm != RUMBLE_EVENT_NOMESG) return FALSE;
     if (gRumbleDataQueue[1].comm != RUMBLE_EVENT_NOMESG) return FALSE;
     if (gRumbleDataQueue[2].comm != RUMBLE_EVENT_NOMESG) return FALSE;

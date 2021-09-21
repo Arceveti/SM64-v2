@@ -12,13 +12,13 @@ struct ChainSegment
     Vec3a angle;
 };
 
-#define WATER_DROPLET_FLAG_RAND_ANGLE                   (1 << 1) // 0x02
-#define WATER_DROPLET_FLAG_RAND_OFFSET_XZ               (1 << 2) // 0x04 // Unused
-#define WATER_DROPLET_FLAG_RAND_OFFSET_XYZ              (1 << 3) // 0x08 // Unused
-#define WATER_DROPLET_FLAG_UNUSED                       (1 << 4) // 0x10 // Unused
-#define WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL         (1 << 5) // 0x20
-#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD     (1 << 6) // 0x40
-#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD      (1 << 7) // 0x80 // Unused
+#define WATER_DROPLET_FLAG_RAND_ANGLE               (1 << 1) // 0x02
+#define WATER_DROPLET_FLAG_RAND_OFFSET_XZ           (1 << 2) // 0x04 // Unused
+#define WATER_DROPLET_FLAG_RAND_OFFSET_XYZ          (1 << 3) // 0x08 // Unused
+#define WATER_DROPLET_FLAG_UNUSED                   (1 << 4) // 0x10 // Unused
+#define WATER_DROPLET_FLAG_SET_Y_TO_WATER_LEVEL     (1 << 5) // 0x20
+#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_BACKWARD (1 << 6) // 0x40
+#define WATER_DROPLET_FLAG_RAND_ANGLE_INCR_FORWARD  (1 << 7) // 0x80 // Unused
 
 // Call spawn_water_droplet with this struct to spawn an object.
 struct WaterDropletParams

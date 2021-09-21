@@ -98,11 +98,11 @@ const char *gNoControllerMsg[] = {
 };
 #endif
 
-void override_viewport_and_clip(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
-    RGBA16 color = (((c >> 3) << IDX_RGBA16_R) | ((d >> 3) << IDX_RGBA16_G) | ((e >> 3) << IDX_RGBA16_B) | MSK_RGBA16_A);
+void override_viewport_and_clip(Vp *vpOverride, Vp *vpClip, u8 red, u8 green, u8 blue) {
+    RGBA16 color = (((red >> 3) << IDX_RGBA16_R) | ((green >> 3) << IDX_RGBA16_G) | ((blue >> 3) << IDX_RGBA16_B) | MSK_RGBA16_A);
     gFBSetColor       = ((color << 16) | color);
-    gViewportOverride = a;
-    gViewportClip     = b;
+    gViewportOverride = vpOverride;
+    gViewportClip     = vpClip;
 }
 
 void set_warp_transition_rgb(Color red, Color green, Color blue) {

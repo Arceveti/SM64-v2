@@ -10,8 +10,8 @@ extern OSMesg gVideoReceivedMesg;
 #endif
 
 struct RumbleData {
-    u8 comm;
-    u8 level;
+    u8  comm;
+    u8  level;
     s16 time;
     s16 decay;
 };
@@ -28,7 +28,7 @@ struct RumbleSettings {
 };
 extern struct Config gConfig;
 
-// extern OSThread D_80339210;
+// extern OSThread gUnkThread;
 extern OSThread gIdleThread;
 extern OSThread gMainThread;
 extern OSThread gGameLoopThread;

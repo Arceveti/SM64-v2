@@ -280,7 +280,7 @@ Gfx *geo_vanish_mario_set_alpha(s32 callContext, struct GraphNode *node, UNUSED 
     struct MarioBodyState     *bodyState   = &gBodyStates[asGenerated->parameter];
     Alpha alpha;
     if (callContext == GEO_CONTEXT_RENDER) {
-        alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & 0xFF) : 0xFF);
+        alpha = ((bodyState->modelState & MODEL_STATE_ALPHA) ? (bodyState->modelState & MODEL_STATE_MASK) : 0xFF);
 #ifdef PUPPYCAM
         if (alpha > gPuppyCam.opacity) {
             alpha = gPuppyCam.opacity;

@@ -1141,10 +1141,10 @@ Bool32 act_bbh_enter_jump(struct MarioState *m) {
         f32 cageDist;
         Angle cageYaw;
         vec3f_get_lateral_dist_and_yaw(m->pos, &m->usedObj->oPosVec, &cageDist, &cageYaw);
-        m->vel[1] = 60.0f;
+        m->vel[1]       = 60.0f;
         m->faceAngle[1] = cageYaw;
         mario_set_forward_vel(m, (cageDist / 20.0f));
-        m->flags &= ~MARIO_JUMPING;
+        m->flags      &= ~MARIO_JUMPING;
         m->actionState = ACT_BBH_ENTER_JUMP_STATE_MOVE;
     }
     set_mario_animation(m, MARIO_ANIM_DOUBLE_JUMP_RISE);
@@ -1981,7 +1981,6 @@ static Bool32 act_end_peach_cutscene(struct MarioState *m) {
 #endif
 
 static Bool32 act_credits_cutscene(struct MarioState *m) { // actionState is used as a timer
-    s32 width, height;
     m->statusForCamera->cameraEvent = CAM_EVENT_START_CREDITS;
     // checks if Mario is underwater (JRB, DDD, SA, etc.)
     if (m->pos[1] < m->waterLevel - 100) {
@@ -1997,8 +1996,8 @@ static Bool32 act_credits_cutscene(struct MarioState *m) { // actionState is use
     }
     if (m->actionTimer >= TIMER_CREDITS_SHOW) {
         if (m->actionState < 40) m->actionState += 2;
-        width                       = ((m->actionState * (SCREEN_WIDTH  * 2)) / 100);
-        height                      = ((m->actionState * (SCREEN_HEIGHT * 2)) / 100);
+        s32 width                   = ((m->actionState * (SCREEN_WIDTH  * 2)) / 100);
+        s32 height                  = ((m->actionState * (SCREEN_HEIGHT * 2)) / 100);
         sEndCutsceneVp.vp.vscale[0] = ((SCREEN_WIDTH  * 2) - width);
         sEndCutsceneVp.vp.vscale[1] = ((SCREEN_HEIGHT * 2) - height);
         sEndCutsceneVp.vp.vtrans[0] = (((gCurrCreditsEntry->posVpAndText & CREDITS_POS_TWO  ) ? width  : -width ) * 56 / 100) + (SCREEN_WIDTH  * 2);
