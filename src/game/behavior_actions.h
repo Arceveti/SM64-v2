@@ -397,7 +397,7 @@ void bhv_1up_hidden_in_pole_trigger_loop(void);
 void bhv_1up_hidden_in_pole_spawner_loop(void);
 void bhv_controllable_platform_init(void);
 void bhv_controllable_platform_loop(void);
-void bhv_controllable_platform_sub_loop(void);
+void bhv_controllable_platform_button_loop(void);
 void bhv_breakable_box_small_init(void);
 void bhv_breakable_box_small_loop(void);
 void bhv_sliding_snow_mound_loop(void);

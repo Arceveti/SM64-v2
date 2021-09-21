@@ -210,16 +210,11 @@ extern Vec3s gVec3sOne;
     (dstV)[2] = (((mtx)[0][2] * (srcV)[0]) + ((mtx)[1][2] * (srcV)[1]) + ((mtx)[2][2] * (srcV)[2]));\
 }
 
-//? why is this different? When used in mtxf_mul, it makes held objects teleport somewhere:
-// #define linear_mtxf_mul_vec3f_and_translate(mtx, dstV, srcV) {  
-//     linear_mtxf_mul_vec3f((mtx), (dstV), (srcV));               
-//     vec3_add((dstV), (mtx)[3]);                                 
-// }
-#define linear_mtxf_mul_vec3f_and_translate(mtx, dstV, srcV) {                                                      \
-    (dstV)[0] = (((mtx)[0][0] * (srcV)[0]) + ((mtx)[1][0] * (srcV)[1]) + ((mtx)[2][0] * (srcV)[2]) + (mtx)[3][0]);  \
-    (dstV)[1] = (((mtx)[0][1] * (srcV)[0]) + ((mtx)[1][1] * (srcV)[1]) + ((mtx)[2][1] * (srcV)[2]) + (mtx)[3][1]);  \
-    (dstV)[2] = (((mtx)[0][2] * (srcV)[0]) + ((mtx)[1][2] * (srcV)[1]) + ((mtx)[2][2] * (srcV)[2]) + (mtx)[3][2]);  \
+#define linear_mtxf_mul_vec3f_and_translate(mtx, dstV, srcV) {  \
+    linear_mtxf_mul_vec3f((mtx), (dstV), (srcV));               \
+    vec3_add((dstV), (mtx)[3]);                                 \
 }
+
 // Multiply a vector by the transpose of a matrix of the form
 #define linear_mtxf_transpose_mul_vec3f(mtx, dstV, srcV) {  \
     (dstV)[0] = vec3_dot((mtx)[0], (srcV));                 \

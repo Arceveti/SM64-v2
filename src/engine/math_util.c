@@ -944,11 +944,13 @@ void linear_mtxf_mul_vec3f_self_and_translate(Mat4 mtx, Vec3f b) {
  * then a.
  */
 void mtxf_mul(Mat4 dest, Mat4 a, Mat4 b) {
-    linear_mtxf_mul_vec3f(              b, dest[0], a[0]);
-    linear_mtxf_mul_vec3f(              b, dest[1], a[1]);
-    linear_mtxf_mul_vec3f(              b, dest[2], a[2]);
-    linear_mtxf_mul_vec3f_and_translate(b, dest[3], a[3]);
-    MTXF_END(dest);
+    Mat4 temp;
+    linear_mtxf_mul_vec3f(              b, temp[0], a[0]);
+    linear_mtxf_mul_vec3f(              b, temp[1], a[1]);
+    linear_mtxf_mul_vec3f(              b, temp[2], a[2]);
+    linear_mtxf_mul_vec3f_and_translate(b, temp[3], a[3]);
+    MTXF_END(temp);
+    mtxf_copy(dest, temp);
 }
 
 /// Multiplies two Mat4 matrices and puts it in dst.

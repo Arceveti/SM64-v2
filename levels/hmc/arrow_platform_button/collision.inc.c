@@ -1,5 +1,5 @@
 // 0x0702B7F4 - 0x0702B86C
-const Collision hmc_seg7_collision_controllable_platform_sub[] = {
+const Collision hmc_seg7_collision_controllable_platform_button[] = {
     COL_INIT(),
     COL_VERTEX_INIT(0x8),
     COL_VERTEX( 38, 11,  38),

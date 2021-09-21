@@ -6,32 +6,32 @@ void controllable_platform_button_act_pressed(void) {
     o->oParentRelativePosY -= 4.0f;
     if (o->oParentRelativePosY < 41.0f) {
         o->oParentRelativePosY = 41.0f;
-        o->oAction = CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS;
+        o->oAction             = CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS;
     }
 }
 
-void controllable_platform_act_check_unpress(void) {
+void controllable_platform_button_act_check_unpress(void) {
     if (o->oBehParams2ndByte == sControllablePlatformDirectionState) return;
     o->oParentRelativePosY += 4.0f;
     if (o->oParentRelativePosY > 51.0f) {
         o->oParentRelativePosY = 51.0f;
-        o->oAction = CONTROLLABLE_PLATFORM_ACT_UNPRESSED;
+        o->oAction             = CONTROLLABLE_PLATFORM_ACT_UNPRESSED;
     }
 }
 
-void bhv_controllable_platform_sub_loop(void) {
+void bhv_controllable_platform_button_loop(void) {
     switch (o->oAction) {
         case CONTROLLABLE_PLATFORM_ACT_UNPRESSED:
             if (o->oTimer < 30) break;
             if (gMarioObject->platform == o) {
-                sControllablePlatformDirectionState = o->oBehParams2ndByte;
+                sControllablePlatformDirectionState  = o->oBehParams2ndByte;
                 o->parentObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
                 o->oAction = CONTROLLABLE_PLATFORM_BUTTON_ACT_PRESSED;
                 cur_obj_play_sound_2(SOUND_GENERAL_MOVING_PLATFORM_SWITCH);
             }
             break;
-        case CONTROLLABLE_PLATFORM_BUTTON_ACT_PRESSED:       controllable_platform_button_act_pressed(); break;
-        case CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS: controllable_platform_act_check_unpress();  break;
+        case CONTROLLABLE_PLATFORM_BUTTON_ACT_PRESSED:       controllable_platform_button_act_pressed();        break;
+        case CONTROLLABLE_PLATFORM_BUTTON_ACT_CHECK_UNPRESS: controllable_platform_button_act_check_unpress();  break;
     }
     o->oVelX = o->parentObj->oVelX;
     o->oVelZ = o->parentObj->oVelZ;
@@ -62,7 +62,7 @@ void controllable_platform_hit_wall(s8 nextDirection) {
 #endif
 }
 
-void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3], Vec3f dist1, UNUSED Vec3f dist2, Vec3f dist3) {
+void controllable_platform_check_walls(s8 nextDirection, Vec3c wallDisplacement, Vec3f dist1, UNUSED Vec3f dist2, Vec3f dist3) {
     if ((wallDisplacement[1] == 1) || ((wallDisplacement[0] == 1) && (wallDisplacement[2] == 1))) {
         controllable_platform_hit_wall(nextDirection);
     } else {
@@ -75,7 +75,6 @@ void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3],
                 o->oPosZ += dist1[2];
             }
         }
-
         if (wallDisplacement[2] == 1) {
             if ((((nextDirection == MOVE_DIRECTION_SOUTH) || (nextDirection == MOVE_DIRECTION_NORTH)) && (s32) dist3[2] != 0)
              || (((nextDirection == MOVE_DIRECTION_WEST ) || (nextDirection == MOVE_DIRECTION_EAST )) && (s32) dist3[0] != 0)) {
@@ -86,7 +85,6 @@ void controllable_platform_check_walls(s8 nextDirection, s8 wallDisplacement[3],
             }
         }
     }
-
     if (!is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 400)) {
         sControllablePlatformDirectionState    = DIRECTION_STATE_DISAPPEARING;
         o->oControllablePlatformIsFarFromMario = TRUE;
@@ -125,7 +123,7 @@ void controllable_platform_tilt_from_mario(void) {
 }
 
 void bhv_controllable_platform_loop(void) {
-    s8 wallDisplacement[3];
+    Vec3c wallDisplacement;
     Vec3f dist1, dist2, dist3;
     o->oAngleVelRoll  = 0x0;
     o->oAngleVelPitch = 0x0;
