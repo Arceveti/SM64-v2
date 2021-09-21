@@ -80,6 +80,8 @@ OSTime       dmaTime[NUM_PERF_ITERATIONS + 1];
 OSTime  dmaAudioTime[NUM_PERF_ITERATIONS + 1];
 OSTime     faultTime[NUM_PERF_ITERATIONS + 1];
 OSTime      taskTime[NUM_PERF_ITERATIONS + 1];
+OSTime  profilerTime[NUM_PERF_ITERATIONS + 1];
+OSTime profilerTime2[NUM_PERF_ITERATIONS + 1];
 #ifdef VARIABLE_FRAMERATE
 OSTime     videoTime[NUM_PERF_ITERATIONS + 1];
 #endif
@@ -344,13 +346,27 @@ void puppyprint_render_profiler(void) {
     s32 graphPos;
     s32 prevGraph;
 #ifdef USE_CYCLES
-    OSTime cpuCount = (cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS] + faultTime[NUM_PERF_ITERATIONS] + taskTime[NUM_PERF_ITERATIONS]);
+    OSTime cpuCount = (cpuTime +     audioTime[NUM_PERF_ITERATIONS]
+                               +  dmaAudioTime[NUM_PERF_ITERATIONS]
+                               +     faultTime[NUM_PERF_ITERATIONS]
+                               +      taskTime[NUM_PERF_ITERATIONS]
+                               -  profilerTime[NUM_PERF_ITERATIONS]
+                               - profilerTime2[NUM_PERF_ITERATIONS]);
 #else
-    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime + audioTime[NUM_PERF_ITERATIONS] + dmaAudioTime[NUM_PERF_ITERATIONS] + faultTime[NUM_PERF_ITERATIONS] + taskTime[NUM_PERF_ITERATIONS]);
+    OSTime cpuCount = OS_CYCLES_TO_USEC(cpuTime +     audioTime[NUM_PERF_ITERATIONS]
+                                                +  dmaAudioTime[NUM_PERF_ITERATIONS]
+                                                +     faultTime[NUM_PERF_ITERATIONS]
+                                                +      taskTime[NUM_PERF_ITERATIONS]
+                                                -  profilerTime[NUM_PERF_ITERATIONS]
+                                                - profilerTime2[NUM_PERF_ITERATIONS]);
 #endif
+    OSTime first = osGetTime();
     char textBytes[80];
-    if (!fDebug) return;
-    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available() / (f32)mempool) * 100));
+    if (!fDebug) {
+        profiler_update(profilerTime, first);
+        return;
+    }
+    sprintf(textBytes, "RAM: %06X /%06X (%d_)", main_pool_available(), mempool, (s32)(((f32)main_pool_available()/(f32)mempool)*100));
     print_small_text(160, 224, textBytes, PRINT_TEXT_ALIGN_CENTRE, PRINT_ALL);
     if (!ramViewer && !benchViewer && !logViewer) {
         print_fps(16,40);
@@ -441,6 +457,7 @@ void puppyprint_render_profiler(void) {
         print_which_benchmark();
     }
     print_ram_bar();
+    profiler_update(profilerTime, first);
 }
 
 void profiler_update(OSTime *time, OSTime time2) {
@@ -473,6 +490,8 @@ void puppyprint_profiler_process(void) {
 #ifdef VARIABLE_FRAMERATE
         get_average_perf_time(    videoTime);
 #endif
+        get_average_perf_time( profilerTime);
+        get_average_perf_time( profilerTime2);
 
         dmaTime[NUM_PERF_ITERATIONS] += dmaAudioTime[NUM_PERF_ITERATIONS];
 
@@ -532,6 +551,7 @@ void puppyprint_profiler_process(void) {
         fDebug     ^= TRUE;
     }
     if (perfIteration++ == (NUM_PERF_ITERATIONS - 1)) perfIteration = 0;
+    profiler_update(profilerTime2, newTime);
 }
 #endif
 
