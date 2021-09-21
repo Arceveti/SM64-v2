@@ -22,11 +22,10 @@ OSMesgQueue gRumbleThreadVIMesgQueue;
 struct RumbleData     gRumbleDataQueue[3];
 struct RumbleSettings gCurrRumbleSettings;
 
-//! Bool32?
-s32 sRumblePakThreadActive = FALSE;
-s32 sRumblePakActive       = FALSE;
-s32 sRumblePakErrorCount   = 0;
-s32 gRumblePakTimer        = 0;
+Bool32 sRumblePakThreadActive = FALSE;
+Bool32 sRumblePakActive       = FALSE;
+s32    sRumblePakErrorCount   = 0;
+s32    gRumblePakTimer        = 0;
 
 #define RUMBLE_EVENT_NOMESG     0x0
 #define RUMBLE_EVENT_CONSTON    0x1
