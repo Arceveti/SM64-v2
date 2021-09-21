@@ -151,7 +151,7 @@
 // The number is the size of the glow. Set to 0 to disable.
 // (Arceveti)
 #define STAR_GLOW 144
-#define FLAME_GLOW 48
+#define FLAME_GLOW 32
 
 // Mario's silhouette when behind solid objects/surfaces
 // Also enables new render layers, such as LAYER_ALPHA_DECAL.

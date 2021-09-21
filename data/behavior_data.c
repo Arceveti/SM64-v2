@@ -2200,9 +2200,10 @@ const BehaviorScript bhvMacroUkiki[] = {
 
 const BehaviorScript bhvLllRotatingHexagonalPlatform[] = {
     BEGIN(OBJ_LIST_SURFACE),
-    OR_LONG(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_UCODE_LARGE)),
+    OR_LONG(oFlags, (OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_DONT_CALC_COLL_DIST | OBJ_FLAG_UCODE_LARGE)),
     LOAD_COLLISION_DATA(lll_seg7_collision_rotating_hexagonal_platform),
     SET_HOME(),
+    SET_FLOAT(oCollisionDistance, 20000),
     BEGIN_LOOP(),
         SET_INT(oAngleVelYaw,  0x100),
         ADD_INT(oMoveAngleYaw, 0x100),
