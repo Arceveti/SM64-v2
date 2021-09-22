@@ -22,8 +22,8 @@
 #include "game/debug_box.h"
 #ifdef VARIABLE_FRAMERATE
 #include "lerp.h"
-#include "game/level_update.h"
 #endif
+#include "game/level_update.h"
 
 #include "config.h"
 
@@ -248,6 +248,14 @@ LookAt lookAt;
 }
 #endif
 
+void reset_clipping(void) {
+    if (gMarioState->action == ACT_CREDITS_CUTSCENE) {
+        make_viewport_clip_rect(&sEndCutsceneVp);
+    } else {
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH, (SCREEN_HEIGHT - gBorderHeight));
+    }
+}
+
 /**
  * Process a master list node. This has been modified, so now it runs twice, for each microcode.
  * It iterates through the first 5 layers of if the first index using F3DLX2.Rej, then it switches
@@ -259,7 +267,7 @@ LookAt lookAt;
 static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     struct DisplayListNode *currList;
     DrawingLayer startLayer, endLayer, currLayer = LAYER_FORCE;
-    s32 headsIndex;
+    s32 headsIndex                        = LIST_HEADS_REJ;
     s32 renderPhase                       = RENDER_PHASE_FIRST;
     Bool32 enableZBuffer                  = ((node->node.flags & GRAPH_RENDER_Z_BUFFER) != 0);
     struct RenderModeContainer *mode1List = &renderModeTable_1Cycle[enableZBuffer];
@@ -308,6 +316,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
         gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
     }
     gSPLookAt(gDisplayListHead++, &lookAt);
+    reset_clipping();
 #endif
     for ((currLayer = startLayer); (currLayer <= endLayer); (currLayer++)) {
         currList = node->listHeads[headsIndex][currLayer];
@@ -344,7 +353,7 @@ static void geo_process_master_list_sub(struct GraphNodeMasterList *node) {
     gSPLoadUcodeL(gDisplayListHead++, gspF3DZEX2_PosLight_fifo);
     init_rcp(KEEP_ZBUFFER);
     gSPClipRatio(gDisplayListHead++, FRUSTRATIO_1);
-
+    reset_clipping();
 #ifdef VISUAL_DEBUG
     if ( hitboxView) render_debug_boxes(DEBUG_UCODE_DEFAULT | DEBUG_BOX_CLEAR);
     if (surfaceView) visual_surface_loop();

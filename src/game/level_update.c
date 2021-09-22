@@ -353,7 +353,13 @@ void warp_credits(void) {
     MarioAction marioAction = ACT_UNINITIALIZED;
     switch (sWarpDest.nodeId) {
         case WARP_NODE_CREDITS_START: marioAction = ACT_END_PEACH_CUTSCENE;  break;
-        case WARP_NODE_CREDITS_NEXT:  marioAction = ACT_CREDITS_CUTSCENE;    break;
+        case WARP_NODE_CREDITS_NEXT:  
+            sEndCutsceneVp.vp.vscale[0] = 640;
+            sEndCutsceneVp.vp.vscale[1] = 360;
+            sEndCutsceneVp.vp.vtrans[0] = 640;
+            sEndCutsceneVp.vp.vtrans[1] = 480;
+            marioAction = ACT_CREDITS_CUTSCENE;
+            break;
         case WARP_NODE_CREDITS_END:   marioAction = ACT_END_WAVING_CUTSCENE; break;
         default:                      marioAction = ACT_CREDITS_CUTSCENE;    break;
     }

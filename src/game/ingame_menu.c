@@ -1100,9 +1100,17 @@ void set_cutscene_message(ScreenPos xOffset, ScreenPos yOffset, s16 msgIndex, s1
 
 void do_cutscene_handler(void) {
     ScreenPos x;
+    create_dl_ortho_matrix();
+    if ((gMarioState->action == ACT_CREDITS_CUTSCENE) || (gMarioState->action == ACT_END_PEACH_CUTSCENE) || (gMarioState->action == ACT_END_WAVING_CUTSCENE)) {
+        gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
+        gDPSetCycleType( gDisplayListHead++, G_CYC_FILL);
+        gDPSetFillColor( gDisplayListHead++, ((GPACK_RGBA5551(0, 0, 0, 0) << 16) | GPACK_RGBA5551(0, 0, 0, 0)));
+        gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), 0, (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (32 - 1));
+        gDPFillRectangle(gDisplayListHead++, GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(0), (SCREEN_HEIGHT - 32), (GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(0) - 1), (SCREEN_HEIGHT - 1));
+        gDPSetCycleType( gDisplayListHead++, G_CYC_1CYCLE);
+    }
     // is a cutscene playing? do not perform this handler's actions if so.
     if (gCutsceneMsgIndex == -1) return;
-    create_dl_ortho_matrix();
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
     // get the x coordinate of where the cutscene string starts.

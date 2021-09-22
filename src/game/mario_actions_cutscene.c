@@ -38,9 +38,9 @@ static struct Object *sEndJumboStarObj;
 static s16 sEndPeachAnimation;
 static s16 sEndToadAnims[2];
 
-static Vp sEndCutsceneVp = { { { 640, 480, 511, 0 },
-                               { 640, 480, 511, 0 } } };
-static struct CreditsEntry *sDispCreditsEntry = NULL;
+Vp sEndCutsceneVp = { { { 640, 480, 511, 0 },
+                        { 640, 480, 511, 0 } } };
+struct CreditsEntry *sDispCreditsEntry = NULL;
 
 // related to peach gfx?
 static s8 sPeachManualBlinkTime   = 0;
@@ -1399,35 +1399,21 @@ static void intro_cutscene_hide_hud_and_mario(struct MarioState *m) {
     advance_cutscene_step(m);
 }
 
-#ifdef VERSION_EU
-    #define TIMER_SPAWN_PIPE 47
-#else
-    #define TIMER_SPAWN_PIPE 37
-#endif
-
 static void intro_cutscene_peach_lakitu_scene(struct MarioState *m) {
-    if (((s16) m->statusForCamera->cameraEvent != CAM_EVENT_START_INTRO) && (m->actionTimer++ == TIMER_SPAWN_PIPE)) {
+    if (((s16) m->statusForCamera->cameraEvent != CAM_EVENT_START_INTRO) && (m->actionTimer++ == 37)) { // TIMER_SPAWN_PIPE
         sIntroWarpPipeObj = spawn_object_abs_with_rot(o, 0, MODEL_CASTLE_GROUNDS_WARP_PIPE, bhvStaticObject, -1328, 60, 4664, 0x0, 0xB4, 0x0);
         advance_cutscene_step(m);
     }
 }
-#undef TIMER_SPAWN_PIPE
-
-#ifdef VERSION_EU
-    #define TIMER_RAISE_PIPE 28
-#else
-    #define TIMER_RAISE_PIPE 38
-#endif
 
 static void intro_cutscene_raise_pipe(struct MarioState *m) {
     approach_f32_symmetric_bool(&sIntroWarpPipeObj->oPosY, 260.0f, 10.0f);
     if (m->actionTimer == 0) play_sound(SOUND_MENU_EXIT_PIPE, sIntroWarpPipeObj->header.gfx.cameraToObject);
-    if (m->actionTimer++ == TIMER_RAISE_PIPE) {
+    if (m->actionTimer++ == 38) { // TIMER_RAISE_PIPE
         m->vel[1] = 60.0f;
         advance_cutscene_step(m);
     }
 }
-#undef TIMER_RAISE_PIPE
 
 static void intro_cutscene_jump_out_of_pipe(struct MarioState *m) {
     if (m->actionTimer   ==  25) gHudDisplay.flags = HUD_DISPLAY_DEFAULT;
@@ -1661,10 +1647,7 @@ static void end_peach_cutscene_summon_jumbo_star(struct MarioState *m) {
     play_sound(SOUND_AIR_PEACH_TWINKLE, sEndJumboStarObj->header.gfx.cameraToObject);
 }
 
-#if defined(VERSION_EU)
-    #define TIMER_FADE_IN_PEACH 201
-    #define TIMER_DESCEND_PEACH 280
-#elif defined(VERSION_SH)
+#if defined(VERSION_SH)
     #define TIMER_FADE_IN_PEACH 276
     #define TIMER_DESCEND_PEACH 400
 #else
@@ -1698,12 +1681,6 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
     if (m->actionTimer >= 40) play_sound(SOUND_AIR_PEACH_TWINKLE, sEndPeachObj->header.gfx.cameraToObject);
 }
 
-#ifdef VERSION_EU
-    #define TIMER_RUN_TO_PEACH 531
-#else
-    #define TIMER_RUN_TO_PEACH 584
-#endif
-
 // descend peach
 static void end_peach_cutscene_descend_peach(struct MarioState *m) { // actionState is used as a timer
     generate_yellow_sparkles(0, sEndPeachObj->oPosY, -1300, 150.0f);
@@ -1715,10 +1692,8 @@ static void end_peach_cutscene_descend_peach(struct MarioState *m) { // actionSt
     }
     if ((sEndPeachObj->oPosY -= (m->actionState / 10)) <= 907.0f) sEndPeachObj->oPosY = 906.0f;
     play_sound(SOUND_AIR_PEACH_TWINKLE, sEndPeachObj->header.gfx.cameraToObject);
-    if (m->actionTimer >= TIMER_RUN_TO_PEACH) advance_cutscene_step(m);
+    if (m->actionTimer >= 584) advance_cutscene_step(m); // TIMER_RUN_TO_PEACH
 }
-
-#undef TIMER_RUN_TO_PEACH
 
 // Mario runs to peach
 static void end_peach_cutscene_run_to_peach(struct MarioState *m) {
@@ -1777,10 +1752,7 @@ static void end_peach_cutscene_dialog_1(struct MarioState *m) {
     }
 }
 
-#if defined(VERSION_EU)
-    #define TIMER_SOMETHING_SPECIAL 150
-    #define TIMER_PEACH_KISS        260
-#elif defined(VERSION_SH)
+#if defined(VERSION_SH)
     #define TIMER_SOMETHING_SPECIAL 170
     #define TIMER_PEACH_KISS        250
 #else
@@ -1968,11 +1940,7 @@ static Bool32 act_end_peach_cutscene(struct MarioState *m) {
     return FALSE;
 }
 
-#if defined(VERSION_EU)
-    #define TIMER_CREDITS_SHOW      51
-    #define TIMER_CREDITS_PROGRESS  80
-    #define TIMER_CREDITS_WARP     160
-#elif defined(VERSION_SH)
+#if defined(VERSION_SH)
     #define TIMER_CREDITS_SHOW      61
     #define TIMER_CREDITS_PROGRESS  90
     #define TIMER_CREDITS_WARP     204
